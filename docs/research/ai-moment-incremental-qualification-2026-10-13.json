@@ -1,0 +1,59 @@
+{
+  "scope": "Experimental native AI fragment moment observer; production sampling unchanged",
+  "decision": "Adopt admitted per-bit token lookup and incremental XOR index; reject additional stored slot hash due mixed work results and extra storage",
+  "tests": {
+    "passed": 223,
+    "failed": 0,
+    "ignored": 12
+  },
+  "regression": "8192 toggles over all4096 bits against independent full recomputation; deliberate identical-hash distinct keys remain separate; exhausted budget preserves entries",
+  "pixels": [
+    {
+      "pixel": [
+        147,
+        59
+      ],
+      "baseline_work": 47480544,
+      "incremental_compute_tokens": 48001763,
+      "incremental_admitted_tokens": 44317504,
+      "slot_hash_experiment": 43567188,
+      "fragments": 924352,
+      "buckets": 4582,
+      "fallback": 6,
+      "adopted_work_reduction_percent": 6.661760235940006
+    },
+    {
+      "pixel": [
+        145,
+        50
+      ],
+      "baseline_work": 16744430,
+      "incremental_compute_tokens": 16936817,
+      "incremental_admitted_tokens": 15626072,
+      "slot_hash_experiment": 15644417,
+      "fragments": 328037,
+      "buckets": 2627,
+      "fallback": 1240,
+      "adopted_work_reduction_percent": 6.678985190896314
+    }
+  ],
+  "geometry_budget_unchanged": 40000000,
+  "diagnostic_color_budget": 16000000,
+  "baseline_and_adopted_native_pixels_and_moment_results_identical": true,
+  "additional_token_bytes": [
+    5672,
+    6072
+  ],
+  "peak_admitted_bytes": 239197736,
+  "limitations": [
+    "Diagnostic observer still44.3M and15.6M work, above working4M",
+    "No production coalescing or measured throughput gain",
+    "Original full-page, independent color and normal viewer integration unresolved"
+  ],
+  "logs": [
+    "ai-moment-incremental-token-suite-2026-10-13.log",
+    "ai-moment-incremental-token-original-2026-10-13.log",
+    "ai-moment-incremental-token-controls-2026-10-13.log",
+    "ai-moment-slot-hash-original-2026-10-13.log"
+  ]
+}

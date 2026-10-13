@@ -1,0 +1,73 @@
+{
+  "production": "inline covering-byte reader with same-byte fast path enabled",
+  "baseline_retained": "checked original bitwise reader for paired regression",
+  "paired_rounds": [
+    {
+      "round": 0,
+      "reference_ms": 531.091,
+      "candidate_ms": 430.85,
+      "all_16110080_samples_exact": true
+    },
+    {
+      "round": 1,
+      "reference_ms": 522.902,
+      "candidate_ms": 416.638,
+      "all_16110080_samples_exact": true
+    },
+    {
+      "round": 2,
+      "reference_ms": 509.165,
+      "candidate_ms": 417.562,
+      "all_16110080_samples_exact": true
+    },
+    {
+      "round": 3,
+      "reference_ms": 508.004,
+      "candidate_ms": 422.248,
+      "all_16110080_samples_exact": true
+    },
+    {
+      "round": 4,
+      "reference_ms": 517.305,
+      "candidate_ms": 429.266,
+      "all_16110080_samples_exact": true
+    },
+    {
+      "round": 5,
+      "reference_ms": 516.84,
+      "candidate_ms": 419.296,
+      "all_16110080_samples_exact": true
+    }
+  ],
+  "median_reference_ms": 517.0725,
+  "median_candidate_ms": 420.772,
+  "median_time_reduction_percent": 18.624177460607555,
+  "verification": [
+    "3 entropy unit tests passed",
+    "12 ORF format tests passed",
+    "9-source Metal with 90 disk restores passed"
+  ],
+  "logs": {
+    "paired": {
+      "path": "docs/research/orf-short-inline-paired-2026-10-11.log",
+      "sha256": "4efb157bab7a006f414334bb64950d0adbaaa83d2969d9fbb369cc5d646e67c9"
+    },
+    "tests": {
+      "path": "docs/research/orf-short-inline-tests-2026-10-11.log",
+      "sha256": "4e55ff70a5ea081552ace9faed6c3ea4ae3bbf2b1dfad0f801251f2a7da1e7d7"
+    },
+    "metal": {
+      "path": "docs/research/orf-short-inline-metal-2026-10-11.log",
+      "sha256": "b34c5a8672fca88610ca358e6549dedd30a8acd0c3a3edf701cf5ccf9a94455d"
+    },
+    "format-tests": {
+      "path": "docs/research/orf-short-inline-format-tests-2026-10-11.log",
+      "sha256": "00f507d6fe99e606e9947166ec42c10ce66a4d9a3598bac372f9ec39068ff7ef"
+    }
+  },
+  "limits": [
+    "one real ORF stream",
+    "timing covers complete entropy reconstruction, not container I/O allocation GPU or display",
+    "does not restore earlier withdrawn 2.8x claim"
+  ]
+}

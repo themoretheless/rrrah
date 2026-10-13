@@ -1,0 +1,28 @@
+{
+  "runs": {
+    "uncaptured": {
+      "passed": 139,
+      "failed": 0,
+      "ignored": 13,
+      "verified": false,
+      "suites": 7,
+      "report": "docs/research/metal-post-prefetch-uncaptured-2026-10-11/report.json"
+    },
+    "captured": {
+      "passed": 139,
+      "failed": 0,
+      "ignored": 13,
+      "verified": true,
+      "suites": 7,
+      "report": "docs/research/metal-post-prefetch-captured-2026-10-11/report.json"
+    }
+  },
+  "change": "GPU-all uses captured --show-output instead of --nocapture, avoiding parallel stderr splitting exact named harness results. Strict named-test regex unchanged.",
+  "numeric_negative_cases_rejected": 16,
+  "source_sha256": {
+    "scripts/qualify-viewer-storage-gpu.py": "9cd821a86da175200053152781961b72602a8e1cef0596c0b5b54c593cfa1bd5",
+    "crates/rrrah-app/src/gallery.rs": "7e094f37cd48b31b8765faefb6a52eca7476948eafb9c11672eeb2be2b793aa1",
+    "crates/rrrah-gpu/tests/compute_readback.rs": "bdc0d349668cb9321abc54e8bf2792076ed5bf945434d72d2afc712f1faee521"
+  },
+  "limitations": "Selected offscreen/native-worker gate. Explicit ignores and overlapping tests remain. Not all100 formats, physical HDR, slow physical disk or NVIDIA."
+}

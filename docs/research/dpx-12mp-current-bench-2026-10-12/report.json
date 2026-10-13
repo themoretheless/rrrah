@@ -1,0 +1,45 @@
+{
+  "path": "/tmp/rrrah-dpx-12mp-current-20261012.dpx",
+  "index": 0,
+  "iterations": 11,
+  "load_p50_ms": 299.73445799999996,
+  "load_p95_ms": 369.827708,
+  "prepare_p50_ms": 79.915167,
+  "prepare_p95_ms": 91.098833,
+  "cpu_ready_p50_ms": 379.649625,
+  "cpu_ready_p95_ms": 454.485583,
+  "display_blake3": "cb0ca43e87a4066ca8311e6d44e18d2a20a42a44cbab7f1b9f1f662c83c1ffd8",
+  "cache": "warm filesystem; process warm; no decoded image cache",
+  "source": {
+    "width": 4000,
+    "height": 3000,
+    "bits": 8,
+    "channels": 3,
+    "sha256": "2c8a8165d53dc08afcad0c9f5945a1014d7f03ca399e590340d1318586b25fc9",
+    "payload": "each row is byte sequence index modulo 256"
+  },
+  "build_profile": "dev: own workspace opt-level=1; dependencies opt-level=3",
+  "device": "Apple M4 Max local Mac",
+  "warmup_iterations": 3,
+  "managed_budget_limit_bytes": 536870912,
+  "managed_peak_bytes": 240000000,
+  "managed_final_bytes": 0,
+  "benchmark_self_tests_passed": 1,
+  "limits": [
+    "No matched before/after baseline; no speedup claim",
+    "Warm OS filesystem and in-process CPU decode/preparation; no image cache, GPU submission or presentation",
+    "Shared host background load not controlled",
+    "One authored 12MP DPX, not universal image throughput"
+  ],
+  "preliminary_run_note": "Preliminary run overlapped benchmark test build; final result reran after its confirmed process exit",
+  "sha256": {
+    "memory.log": "766af8ba350169b7e5c6e6d3003dd4096ab0aa34257818f2e4f2372b3bdb3a60",
+    "result.json": "d241eb4ba48af4c7e5db93b6609fb4c431835b10e3e7ae622f22ee3f150ac989",
+    "source.json": "5c6558b97c284b08938ea18fbc9b802943758a1ff6702cf1756262aa86cf05b3",
+    "generate.py": "760facd817c355c55e8aa223be6e016902e58551d9da0d8f22133641533ef45c",
+    "bench-tests.log": "9b30d6007911b424b62fad4c06ca968996ab4db2edb5cdb109ed9f808502e39d",
+    "preliminary-memory.log": "766af8ba350169b7e5c6e6d3003dd4096ab0aa34257818f2e4f2372b3bdb3a60",
+    "preliminary.json": "21fce530639df048c0bca862ab7643dcf6e79c7ce1a77f57a33554e508f4d784",
+    "build.log": "7dc12f48948ac97a14e7537f687db74fcc6943a16a9ca55f14cb7972dfbf50cf"
+  }
+}

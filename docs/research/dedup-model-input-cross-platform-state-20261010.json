@@ -1,0 +1,24 @@
+{
+  "status": "verified_native_macos_and_aarch64_linux",
+  "tests_per_platform": 8,
+  "test_names": [
+    "every_checkpoint_including_heap_and_final_observes_one_shot_cancellation",
+    "every_one_shot_cancellation_checkpoint_releases_all_output_credit",
+    "heap_selection_matches_stable_reference_with_ties_boundaries_and_both_side_collisions",
+    "invalid_caps_and_unsupported_pixels_refuse_atomically",
+    "malformed_inputs_and_each_work_limit_refuse_without_a_partial_result",
+    "managed_payload_credit_survives_clones_and_all_cancellation_paths_release_it",
+    "odd_edges_match_independent_continuous_area_reference_and_credit_tracks_owners",
+    "tiny_inputs_are_explicitly_upsampled_and_linear_gray_is_srgb_encoded"
+  ],
+  "pins": {
+    "docs/research/dedup-model-input-snapshot-20261010.json": "1982f3185d2234e50431354023781a475b9620214af3cf4d2a3f74959cb91be3",
+    "docs/research/dedup-model-input-tests-20261010.log": "cf7368d361d1da23423c25625ef142e40d04a13b5163b4e0fcfcf47c23894692",
+    "docs/research/dedup-model-input-linux-20261010.log": "524408e7171a1ef1275c3466451c113e9304159344672147538db481f6d92eae",
+    "crates/rrrah-dedup/src/model_input.rs": "d8bb13c13515e6fa287230be169efec38386677f12abe43968a3ac592b92c239",
+    "crates/rrrah-dedup/tests/model_input.rs": "efce8889d83ae97a9b7e3dd48895792039a0571919ef1f148b21cd22010f7021",
+    "scripts/run-dedup-linux-local-rank.sh": "246dd44735a5a1c1e5ba3bccbe98d68d5d1edfe3d54cc5bb229feb895cf24755"
+  },
+  "snapshot_files_verified": 2988,
+  "scope": "Four model-input and four scored-proposal tests. Odd-edge independent continuous-area reference, tiny-image upsample/sRGB conversion, all one-shot cancellation checkpoints, payload lifetime/clones, malformed/work/count/memory and unsupported-alpha/HDR refusal. Linux old dependency snapshot/current dedup. No real-file, inference or collection qualification."
+}

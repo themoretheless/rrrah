@@ -1,0 +1,13 @@
+{
+  "source_url": "https://raw.githubusercontent.com/darktable-org/rawspeed/develop/src/librawspeed/decoders/MefDecoder.cpp",
+  "sha256": "3db68fec6d3fc8608a25d6015f6447bd1a51b073450c0307009d83c6d061b3f8",
+  "snapshot": "docs/research/mef-rawspeed-metadata-2026-10-13.cpp.txt",
+  "observed": "MEF decoder metadata override calls only setMetaData(meta, empty mode, ISO 0); no explicit as-shot WB extraction in this file",
+  "scope": "Source inspection of this decoder only, not proof other software lacks MEF WB support",
+  "result": "Does not supply an independent as-shot white-balance reference for enabling native viewer MEF route",
+  "next_evidence_needed": [
+    "Documented original MakerNote WB fields or original Mamiya software development parameters",
+    "Independent source-file camera WB comparison before enabling viewer color"
+  ],
+  "production_changes": false
+}

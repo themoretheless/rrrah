@@ -1,0 +1,34 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+    Finished `test` profile [optimized + debuginfo] target(s) in 28.55s
+     Running tests/projected_portfolio.rs (target/debug/deps/projected_portfolio-5d1e2dc12bc6ffbe)
+
+running 12 tests
+test aggregate_and_constituent_work_refuse_before_io_and_cancel_wins ... ok
+test native_alpha_refusal_recovers_with_projected_original_support_in_both_orders ... ok
+test provider_and_source_weight_failures_after_native_inconclusive_remain_terminal ... ok
+test collection_unknown_does_not_swallow_late_source_or_provider_failure ... ok
+test alpha_collision_exhausts_projected_and_preserves_typed_native_inconclusive ... ok
+test global_and_both_owner_generations_cancel_first_middle_and_last_checkpoints ... ok
+test hdr_regions_recover_after_whole_miss_and_exhaust_before_native_negative ... ok
+test collection_retains_supported_and_explicit_unknown_pairs_in_both_orders ... ok
+test collection_work_admission_precedes_iterator_and_unknown_reports_keep_final_source_guards ... ok
+test final_callback_source_and_weight_mutations_precede_support_and_inconclusive ... ok
+test native_early_support_avoids_inference_and_projected_exhaustion_can_recover_natively ... ok
+test native_anchor_inconclusive_recovers_or_stays_inconclusive_after_projected_exhaustion ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 59.10s
+

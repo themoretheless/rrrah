@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-exact-portfolio-fixed-generic-20261011.py", line 72, in <module>
+    if __name__=='__main__':main()
+  File "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-exact-portfolio-fixed-generic-20261011.py", line 20, in main
+    manifest=json.loads(MANIFEST.read_text());snapshot=Path(manifest['snapshot'])
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/pathlib.py", line 1256, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/pathlib.py", line 1242, in open
+    return io.open(self, mode, buffering, encoding, errors, newline,
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/pathlib.py", line 1110, in _opener
+    return self._accessor.open(self, flags, mode)
+FileNotFoundError: [Errno 2] No such file or directory: '/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exact-portfolio-fixed-snapshot-20261011.json'

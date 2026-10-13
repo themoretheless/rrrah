@@ -1,0 +1,20 @@
+{
+  "backend": "metal",
+  "optional": false,
+  "command": "RRRAH_GPU_BACKEND=metal RRRAH_GPU_OPTIONAL=0 cargo test -p rrrah-gpu --test raster_readback hdr_ --locked --offline --target-dir target -- --ignored --nocapture",
+  "passed": 3,
+  "failed": 0,
+  "ignored": 0,
+  "tests": [
+    "hdr_exposure_saturates_to_finite_binary16_range",
+    "hdr_opposite_extreme_samples_interpolate_without_nan",
+    "large_hdr_area_lod_preserves_all_output_samples_and_metal_frame"
+  ],
+  "log": "docs/research/metal-hdr-extremes-2026-10-11.log",
+  "sha256": "ad180af567b5487520d77c43908119e185ba3fe6f76940657b6ab8dac0930754",
+  "limitations": [
+    "Empirical Metal result; extreme binary16 conversion is not a portable caller guarantee.",
+    "Offscreen readback does not qualify physical HDR display.",
+    "36 MP authored raster is not an original RAW color oracle."
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "status": "verified_fixed_real_loftr_diagnostics_controls",
+  "executed": 2,
+  "source_files_verified": 3742,
+  "torch_dylibs_verified": 7,
+  "rows": [
+    {
+      "kind": "fixed_negative_index0",
+      "support": null,
+      "diagnostics": {
+        "attempts": 25,
+        "confirmed_transform": false,
+        "geometry_candidates": 0,
+        "pixel_attempts": 0,
+        "pixel_geometry_refusals": 0,
+        "pixel_rejections": 0,
+        "raw_proposals": 384,
+        "selected_points": 384
+      },
+      "rss_bytes": 1079001088,
+      "elapsed_seconds": 172.02008975,
+      "decisions_and_other_json_equal_baseline": true,
+      "managed_report_size_delta_bytes": 368
+    },
+    {
+      "kind": "publisher_positive_baseline_index0",
+      "support": true,
+      "diagnostics": null,
+      "rss_bytes": 307200000,
+      "elapsed_seconds": 23.641713375000023,
+      "decisions_and_other_json_equal_baseline": true,
+      "managed_report_size_delta_bytes": 368
+    }
+  ],
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-real-model-miss-diagnostics-20261013.json": "d953d70c6c8ab19d208066b66da6e03872dcb28cdce672972c1e9b65632632f8",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-real-model-miss-preparation-20261013.json": "37d63788abdb8b0a1cc6840fbca92450e0700544290262634f8ee8c2d8161d7f",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-real-model-miss-diagnostics-v2-20261013.py": "92d3ff76a7378827462cdf03acdf662da05b190271776776c9dc549ba4e9841b",
+    "/Users/themoretheless/.codex/tmp/rrrah-real-model-miss-diagnostics-20261013/fixed_negative_index0.json": "2df37b201bba224c5e740ec8129d98ccadbc40be481ee2a171e416755fb3881a",
+    "/Users/themoretheless/.codex/tmp/rrrah-real-model-miss-diagnostics-20261013/publisher_positive_baseline_index0.json": "d764b8aee36b8dc9ff67a43454578161b241209a6f45c9b066b6b02b4dff694c"
+  },
+  "scope": "One fixed published-label negative and one fixed publisher positive with same original policy/runtime. Complete diagnostic addition and unchanged decisions/JSON apart from declared managed size/peak fields. No general negative precision, performance improvement, hardRSS bound or full458 qualification."
+}

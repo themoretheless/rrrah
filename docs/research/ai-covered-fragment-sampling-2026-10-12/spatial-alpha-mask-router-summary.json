@@ -1,0 +1,19 @@
+{
+  "implementation": "constant native alpha-mask scenes routed automatically using point evaluation before area averaging",
+  "verified": [
+    "actual PDF alpha0.5 and original transfer square produce routed alpha0.25 in unoccluded blue region",
+    "mask path and clip boundaries included in parent geometry",
+    "parent mask captured once on group entry and restored on exit by shared evaluator",
+    "unsupported luminosity mask refuses before scratch allocation"
+  ],
+  "ordinary_passed": 164,
+  "ignored": 12,
+  "limits": [
+    "mask source restricted to constant filled-path scenes",
+    "nested mask/raster/shading mask scenes and luminosity unsupported",
+    "mask preparation per sample requires performance refinement",
+    "full AI production qualification pending"
+  ],
+  "log": "docs/research/ai-covered-fragment-sampling-2026-10-12/spatial-alpha-mask-router-final-tests.log",
+  "sha256": "4408a88063c318850f56441f806d5c13d83651ab25d21a0c14646931d5a54118"
+}

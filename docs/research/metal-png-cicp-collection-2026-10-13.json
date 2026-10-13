@@ -1,0 +1,39 @@
+{
+  "backend": "Metal / Apple M4 Max",
+  "exit_code": 0,
+  "collection": {
+    "sources": 110,
+    "selections": 139,
+    "storage_cases": 278
+  },
+  "new_sources": [
+    "linear-2020",
+    "linear-p3",
+    "pq-2020",
+    "hlg-2020"
+  ],
+  "scope": "Four authored RGB16 cICP PNG files, native/prepared cache membership and swap, all sample bits and color metadata, admitted cancellation/retry, full-pressure refusal, full 64x64 SDR/HDR frame equality before/after restore; final root and queue zero.",
+  "controls": "Original linear16 codes exact; wide red retains red>1 and green<0; alpha exact tolerance1e-7; white endpoint 1/100/10 for linear/PQ/HLG. PQ white=100 nits, HLG white=100/peak=1000/gamma=1.2.",
+  "verifier": {
+    "accepted_current_log": true,
+    "unit_tests_passed": 8,
+    "requires_all_four_new_sources": true
+  },
+  "limitations": [
+    "Authored subset controls and same-renderer transport, not independent producer/color qualification",
+    "PNG narrow-range display remains unsupported",
+    "No physical HDR calibration or NVIDIA claim",
+    "Collection fixture count is not supported format count"
+  ],
+  "sha256": {
+    "docs/research/metal-png-cicp-collection-2026-10-13.log": "b656e8488310951b2766db694bd25753540a5fcc5f73e2b9a505f3589ca32be1",
+    "tests/fixtures/raster/cicp-linear-2020.png": "39acd9670e8f4025d1e2e30fd0b3fdf7d18cf75251e4c020f2759b93a526ba48",
+    "tests/fixtures/raster/cicp-linear-p3.png": "525d375415707b5424c6ace856d11f795af5b01cf1bf8db6713ca816a010f144",
+    "tests/fixtures/raster/cicp-pq-2020.png": "ac3e59600a8f3b6fb9725db3a18d8114a56c340e6863f0a838f8b7b641149c62",
+    "tests/fixtures/raster/cicp-hlg-2020.png": "954859234e7b2251a76a8858f829e3991b434c6d1588257e86d06c4931657410",
+    "scripts/generate-png-cicp-fixtures.py": "eb44740d9b5f7e43716747379215a0271a70135cacd77331167b0a0bf9b0cc40",
+    "crates/rrrah-app/tests/raster_collection_metal.rs": "50d1b9750cfffeae9531e8032cb0252efaae9633444ef04577b6c2fcd15b47d3",
+    "scripts/qualify-viewer-storage-gpu.py": "dc386a842cdbff96a896c4f62bd856851c0e5da2a429d29416797929832e8f17",
+    "scripts/test-viewer-storage-gpu-evidence.py": "634f3e4ac5d783341db64c7c5983863bcc2d39258e6114b6dc6fb0d60a54d759"
+  }
+}

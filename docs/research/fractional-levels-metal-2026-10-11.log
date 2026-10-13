@@ -1,0 +1,50 @@
+   Compiling rrrah-gpu v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-gpu)
+    Finished `test` profile [optimized + debuginfo] target(s) in 1.18s
+     Running tests/camera_color_readback.rs (target/debug/deps/camera_color_readback-4692fa6fd663bc99)
+
+running 12 tests
+test color_thumbnail_uses_crop_and_oriented_dimensions ... ok
+test real_camera_profiles_match_independent_linear_transforms ... ok
+Bayer boundary qualification adapter: Metal Apple M4 Max
+Oriented Bayer qualification adapter: Metal Apple M4 Max
+six GPR camera color adapter: Metal Apple M4 Max
+Minified Bayer qualification adapter: Metal Apple M4 Max
+HERO9 neutral matrix adapter: Metal Apple M4 Max
+RAW color qualification adapter: Metal Apple M4 Max
+Affine demosaic qualification adapter: Metal Apple M4 Max
+test minification_integrates_all_sensor_cells_instead_of_aliasing_the_stride ... ok
+test distinct_green_wb_is_applied_before_demosaic ... ok
+test sensor_clipped_near_white_is_neutral_but_chromatic_highlights_keep_color ... ok
+HERO5: four independent fields passed
+test hero9_dual_illuminant_colors_match_independent_adobe_matrix_on_gpu ... ok
+test all_bayer_phases_reconstruct_affine_color_fields_on_metal ... ok
+HERO6: four independent fields passed
+HERO7: four independent fields passed
+HERO9: four independent fields passed
+test bayer_sensor_boundaries_and_small_tiles_match_cpu_preview ... ok
+Fusion-back: four independent fields passed
+Fusion-front: four independent fields passed
+test six_official_gpr_camera_fields_match_independent_color_oracles_on_metal ... ok
+test real_camera_colors_match_gpu_readback ... ok
+test minified_cropped_bayer_all_orientations_match_cpu_and_tiled_metal ... ok
+test cropped_bayer_all_orientations_match_cpu_and_tiled_metal ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.53s
+
+     Running tests/raw_linear_readback.rs (target/debug/deps/raw_linear_readback-9fd8b6185e48ed18)
+
+running 2 tests
+test binary16_reference_covers_signed_hdr_and_subnormals ... ok
+RAW linear adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+RAW above file white: Rgba16Float; encoded=3989; black=15; white=3967; exposure=1; all channels retain HDR headroom
+RAW invalid levels: Rgba16Float; phases=4; equal/inverted refused; previous HDR frame exact; credit unchanged
+RAW fractional levels: Rgba16Float; black=.75 white=1.25 sample=1 exposure=1; RGB=1
+RAW repeat grid: Rgba16Float; 3x5 odd boundaries; independent neutral exact; extra credit=60; invalid last cell preserves frame; fast path releases grid
+RAW above file white: Rgba32Float; encoded=3989; black=15; white=3967; exposure=1; all channels retain HDR headroom
+RAW invalid levels: Rgba32Float; phases=4; equal/inverted refused; previous HDR frame exact; credit unchanged
+RAW fractional levels: Rgba32Float; black=.75 white=1.25 sample=1 exposure=1; RGB=1
+RAW repeat grid: Rgba32Float; 3x5 odd boundaries; independent neutral exact; extra credit=60; invalid last cell preserves frame; fast path releases grid
+test raw_linear_float_target_preserves_hdr_and_negative_rgbe_color ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.18s
+

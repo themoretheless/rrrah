@@ -1,0 +1,78 @@
+{
+  "index": 23,
+  "repository": "sreedevk/deduplicator",
+  "commit": "245e910c39747ff4fcbf332c14666d9f4c778ae1",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Rust recursive scanner and full/initial-page u128 hashing; preserve sampled hash only as a filter.",
+  "license_metadata": "MIT",
+  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "available_source_evidence": [
+    {
+      "path": "src/scanner.rs",
+      "local": "02-scanner.rs",
+      "url": "https://github.com/sreedevk/deduplicator/blob/245e910c39747ff4fcbf332c14666d9f4c778ae1/src/scanner.rs",
+      "sha256": "4f512a07fba2c46224863684bc92d28b287abf53487179c3cc9a341daa3217d4",
+      "truncated": false,
+      "lines": 260,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/fileinfo.rs",
+      "local": "03-fileinfo.rs",
+      "url": "https://github.com/sreedevk/deduplicator/blob/245e910c39747ff4fcbf332c14666d9f4c778ae1/src/fileinfo.rs",
+      "sha256": "57348656977e366e271874b5993c66432cb7c73a9c81942eb9af7daa98d6fcf5",
+      "truncated": false,
+      "lines": 104,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/formatter.rs",
+      "local": "04-formatter.rs",
+      "url": "https://github.com/sreedevk/deduplicator/blob/245e910c39747ff4fcbf332c14666d9f4c778ae1/src/formatter.rs",
+      "sha256": "a4dc266acde001ee2ae01321204d39c8c9b2fca75b18c7cfd84bdfb099c17f14",
+      "truncated": false,
+      "lines": 80,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/interactive.rs",
+      "local": "05-interactive.rs",
+      "url": "https://github.com/sreedevk/deduplicator/blob/245e910c39747ff4fcbf332c14666d9f4c778ae1/src/interactive.rs",
+      "sha256": "71a1afe757831cb999be8b2fe8b407cfafa60192d737d2470d4c72a33be7e6a9",
+      "truncated": false,
+      "lines": 137,
+      "source": true,
+      "test": false
+    }
+  ],
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/sreedevk/deduplicator/blob/245e910c39747ff4fcbf332c14666d9f4c778ae1/README.md",
+      "sha256": "8bed876c7d575155f2a7b199c9d7a1c493ba4f58e56631b85f3fd5c501ef6838",
+      "truncated": false,
+      "lines": 216,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/sreedevk/deduplicator/blob/245e910c39747ff4fcbf332c14666d9f4c778ae1/LICENSE",
+      "sha256": "12a28441a7ca8c30d26aadb5a07021f99ad3a120769785ebdc49e2e862ea64b7",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

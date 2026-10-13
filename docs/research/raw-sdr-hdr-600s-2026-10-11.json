@@ -1,0 +1,208 @@
+{
+  "gpu_backend": "metal",
+  "gpu_optional": false,
+  "storage_soak_seconds_per_mode": 0,
+  "gpu_policy_cycles": 0,
+  "large_hdr_policy_cycles": 0,
+  "metal_collection_seconds": 0,
+  "metal_raw_collection_seconds": 600,
+  "metal_raw_collection_manifest": "/tmp/rrrah-raw-neighbors-current-20261011.txt",
+  "metal_prefetch_navigation": false,
+  "metal_raw_worker_navigation": false,
+  "metal_large_float_hdr": false,
+  "metal_viewer_ttl_prefetch": false,
+  "metal_large_upload_cancel": false,
+  "metal_compute_cache": false,
+  "metal_model_swap_cycles": 0,
+  "large_hdr_policy": false,
+  "full_sensor_compute": false,
+  "suites": [
+    {
+      "suite": "gpu-all",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-gpu",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/Users/themoretheless/Documents/Sources/rrrah/target",
+        "--",
+        "--nocapture"
+      ],
+      "exit_code": 0,
+      "passed": 124,
+      "failed": 0,
+      "ignored": 13,
+      "ignored_tests": [
+        "test pinned_native_ai_planes_survive_managed_metal_display ... ignored, requires pinned RRRAH_AI_METAL_ROOT replay/source corpus and actual Metal",
+        "test full_sensor_linear_exposure_chunked_readback ... ignored, allocates about 0.8 GB of GPU buffers; full-resolution local qualification",
+        "test full_sensor_managed_exposure_budgets_and_checks_every_pixel ... ignored, full-resolution managed compute uses about 2 GB of tracked buffers",
+        "test fusion_back_full_frame_developed_raw_matches_metal_display_transport ... ignored, requires corrected production Fusion linear dumps; display transport qualification",
+        "test fusion_front_full_frame_developed_raw_matches_metal_display_transport ... ignored, requires corrected production Fusion linear dumps; display transport qualification",
+        "test hdr_exposure_saturates_to_finite_binary16_range ... ignored, Metal-specific empirical range edge; outside portable binary16 caller contract",
+        "test hdr_opposite_extreme_samples_interpolate_without_nan ... ignored, Metal-specific empirical range edge; outside portable binary16 caller contract",
+        "test hero9_full_frame_developed_raw_matches_metal_display_transport ... ignored, requires production HERO9 scene-linear dump; transport qualification, not demosaic/color oracle",
+        "test large_cancelled_upload_validation_and_admission_preserve_visible_texture ... ignored, manual 12 MP Metal upload cancellation qualification",
+        "test large_hdr_area_lod_preserves_all_output_samples_and_metal_frame ... ignored, manual 36 MP HDR area LOD and actual Metal qualification",
+        "test qualified_sd10_linear_raster_full_frame_display_readback ... ignored, requires qualified X3F linear sRGB PPM and a physical GPU",
+        "test raster_single_layer_gpu_timestamp_timing ... ignored, manual actual-GPU timestamp comparison; 4096-square input / 2048-square HDR target",
+        "test full_f828_managed_rgbe_matches_cpu_reference ... ignored, requires independent DSC-F828 full-sensor dump; authored four-channel normalization, not as-shot color qualification"
+      ],
+      "log": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/raw-sdr-hdr-600s-current-20261011/gpu-all.log",
+      "log_sha256": "a9486d83ec01353d9fe20138a459e2a4f5c800fc8904e49a748b7892562e6c95",
+      "verified_execution": true,
+      "preserved_log": "docs/research/raw-sdr-hdr-600s-gpu-all-2026-10-11.log"
+    },
+    {
+      "suite": "gpu-real-raw-collection",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah",
+        "--test",
+        "raw_collection_metal",
+        "real_raw_collection_eviction_and_swap_preserve_metal_frames",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/Users/themoretheless/Documents/Sources/rrrah/target",
+        "--",
+        "--exact",
+        "--ignored",
+        "--nocapture"
+      ],
+      "exit_code": 0,
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "ignored_tests": [],
+      "log": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/raw-sdr-hdr-600s-current-20261011/gpu-real-raw-collection.log",
+      "log_sha256": "8a50ab5a53d151bb13a78edb1c26b0c833a8ea3ef74bb00ee999acd937946fcf",
+      "verified_execution": true,
+      "workload_evidence_valid": true,
+      "preserved_log": "docs/research/raw-sdr-hdr-600s-gpu-real-raw-collection-2026-10-11.log"
+    }
+  ],
+  "complete_suite_execution": true,
+  "limitations": [
+    "Passing host CUDA tests does not qualify NVIDIA hardware.",
+    "Metal readback does not qualify physical HDR display.",
+    "Ignored tests are unverified, not passing.",
+    "These regression suites do not prove all 100 formats or sustained slow-disk workloads.",
+    "Local disk and managed memory limits, not physical slow disk or OS memory-pressure testing.",
+    "Native source/display transport checked; independent camera appearance and physical HDR not established."
+  ],
+  "invocation": [
+    "/Library/Developer/CommandLineTools/usr/bin/python3",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/qualify-viewer-storage-gpu.py",
+    "--target-dir",
+    "target",
+    "--gpu-only",
+    "--gpu-backend",
+    "metal",
+    "--metal-raw-collection-manifest",
+    "/tmp/rrrah-raw-neighbors-current-20261011.txt",
+    "--metal-raw-collection-seconds",
+    "600",
+    "--output-dir",
+    "tests/fixtures/data/metal-recovery/raw-sdr-hdr-600s-current-20261011"
+  ],
+  "requested_options": {
+    "target_dir": "target",
+    "output_dir": "tests/fixtures/data/metal-recovery/raw-sdr-hdr-600s-current-20261011",
+    "gpu_backend": "metal",
+    "storage_soak_seconds": 0,
+    "metal_policy_cycles": 0,
+    "metal_large_policy_cycles": 0,
+    "metal_collection_seconds": 0,
+    "metal_raw_collection_manifest": "/tmp/rrrah-raw-neighbors-current-20261011.txt",
+    "metal_raw_collection_seconds": 600,
+    "metal_mixed_raw_workers": false,
+    "metal_raster_collection": false,
+    "metal_prefetch_navigation": false,
+    "metal_linear_import": false,
+    "metal_raw_worker_navigation": false,
+    "metal_large_float_hdr": false,
+    "metal_viewer_ttl_prefetch": false,
+    "metal_large_upload_cancel": false,
+    "metal_compute_cache": false,
+    "metal_model_upload_worker": false,
+    "metal_model_swap_cycles": 0,
+    "full_sensor_compute": false,
+    "external_viewer_corpus": false,
+    "gpr_corpus": null,
+    "gpr_hero9_sensor_oracle": null,
+    "gpu_only": true,
+    "full_camera_transport": false,
+    "srf_sensor_oracle": null,
+    "mef_sensor_source": null,
+    "ai_native_root": null
+  },
+  "metal_model_upload_worker": false,
+  "metal_swapped_residency_required": false,
+  "ai_native_metal_transport": false,
+  "ai_ram_swap_metal": false,
+  "mef_full_sensor_metal": false,
+  "metal_raster_collection": false,
+  "metal_linear_import": false,
+  "metal_required_viewer_cases": [],
+  "external_viewer_inputs": {
+    "raw_collection": [
+      {
+        "path": "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/1294.cr2",
+        "sha256": "8f28465cee09844ffad95dbd3ec91923717a329c5ec4f3f405f5b4fce83aaea3"
+      },
+      {
+        "path": "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/898.nef",
+        "sha256": "f90deb2819863f5a6ca9913c255fdd83a94963f4284eb88df9d389da7a6c7665"
+      },
+      {
+        "path": "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/2414.arw",
+        "sha256": "250784580ea527442c09004417bb0eead484f2bf3ee8f9121a776ac65bb50d0f"
+      },
+      {
+        "path": "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/1084.orf",
+        "sha256": "b2221977cbc6eba0d3b363351072092e5647eaa0d02a5d8432b5d985b29f669f"
+      },
+      {
+        "path": "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/831.pef",
+        "sha256": "51a3f22d702353b246684dca79f83c79cfdbdf9892702ae5ac55dd469e239bb6"
+      },
+      {
+        "path": "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/5025.rw2",
+        "sha256": "87516d28f8594dcfd20b0577883ad0d35662efc503674b1e3688aa894d32a2c0"
+      },
+      {
+        "path": "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/2883.raf",
+        "sha256": "58ad687b23138c3c49ebeb6c1f80daf13185349be364b947e2bf27e39a462d2f"
+      },
+      {
+        "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/IMG_9043.CR3",
+        "sha256": "d06cbb10e84882cf130430bdc88ed2652c2622b96dea8d6a854c09e3bee37e59"
+      },
+      {
+        "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/IMG_9074.CR3",
+        "sha256": "9c0d47cc2dd550eb6dc26c4ba2b2874b67f5c89e79dff5c472abf0ac6b2f6178"
+      }
+    ]
+  },
+  "metal_mixed_raw_workers": false,
+  "all_executed_suites_verified": true,
+  "rss_monitor": {
+    "log": "docs/research/raw-sdr-hdr-600s-rss-2026-10-11.jsonl",
+    "sha256": "5d72b918b50d664d9f314ce33addab49c10be159315cad50a1a849fcf42e03af",
+    "samples": 50,
+    "min_kib": 933232,
+    "max_kib": 1384384,
+    "first_kib": 1379280,
+    "last_kib": 992528,
+    "limits": "Sampling began after test start; RSS does not isolate GPU/driver allocations and these samples do not prove absence of all leaks."
+  },
+  "sources": {
+    "crates/rrrah-app/tests/raw_collection_metal.rs": "6a8215b941b996493d89764d7016745b990e14d9d7bb7539c695d8086fca9258",
+    "scripts/qualify-viewer-storage-gpu.py": "493091bccfdac6459cf0d9d125f11b196adb884fd4d2b29d28c3b0ce11d79e52"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "status": "complete_seven_standalone_projection_checks_not_integrated",
+  "recipe": "CompositeReinhardV1: straight-alpha linear composition over explicit nonnegative background; negative channel clipping; positive exposure; stable per-channel x/(1+x). Existing opaque SDR is a separate variant.",
+  "tests": 7,
+  "pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-model-projection-draft-20261011/model_projection.rs": "392bf359bffb6b02198084093691e1212c7f7f3bde487af9f70dcdb249d67694",
+    "/Users/themoretheless/.codex/tmp/rrrah-model-projection-draft-20261011/harness.rs": "67dd430dbb8f1cb5fe0ca3c395c53ae206d21a802116d2d630ee07e33cabd69e",
+    "/Users/themoretheless/.codex/tmp/rrrah-model-projection-draft-20261011/tests-v2": "1c508cf8a8e70871c4f27ca343ee970ad8e98c1136ad9370d37163384227f84b",
+    "docs/research/dedup-model-projection-draft-v2-20261011.log": "9aaede95e54628a923310369dc0f4f4cc0c13dbdd0a98db574507666af21df63",
+    "/Users/themoretheless/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc": "766eda9d8f53afd6fc7f27b3cd2e444dd22afacb5afa710a5625fc8e45b8c941"
+  },
+  "scope": "Finite pure-std projection algebra and invalid/extreme/invisible-pixel cases. The harness uses a small error-enum stub and does not compile rrrah-dedup. No model runtime, grayscale area reduction, file lifecycle or original pixel proof is qualified.",
+  "next_required": "Integrate the explicit recipe into managed area preparation and file-source lifecycle, then add a separate original-linear-RGBA projective confirmation path. Keep existing opaque SDR model/rank behavior unchanged. Projected equality must never establish original identity.",
+  "production_integrated": false
+}

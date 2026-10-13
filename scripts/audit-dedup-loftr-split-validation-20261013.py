@@ -1,0 +1,25 @@
+#!/usr/bin/env python3
+import json,hashlib,math
+from pathlib import Path
+import numpy as np
+R=Path(__file__).resolve().parents[1];D=R/'docs/research';sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()
+P=D/'dedup-loftr-split-validation-v2-plan-20261013.json';O=D/'dedup-loftr-split-validation-20261013.json';plan=json.loads(P.read_text());data=json.loads(O.read_text());assert data['status']=='complete_fixed12_split_validation' and data['completed']==data['required']==12 and data['source_unchanged'] and data['harness_unchanged'];assert data['plan_sha256']==sha(P)
+A=Path(plan['source_audit']);a=json.loads(A.read_text());S=Path(a['source']);assert sha(A)==data['source_audit_sha256'] and all(sha(S/p)==h for p,h in a['source_sha256'].items());H=Path(plan['harness']);assert all(sha(H/p)==h for p,h in plan['harness_sha256'].items());assert all(sha(p)==h for p,h in plan['pins'].items());assert sha(H/'Cargo.lock')==data['lock_sha256'];assert sha(data['executable'])==data['executable_sha256'] and sha(data['build_log'])==data['build_log_sha256']
+rows=[]
+for c,r in zip(plan['cases'],data['results']):
+ assert c['label']==r['label'] and sha(c['plan'])==c['plan_sha256'] and sha(r['report'])==r['report_sha256'];case=json.loads(Path(r['report']).read_text());assert case['returncode']==0;v=json.loads(case['stdout']);assert v['managed_used']==0 and v['dimensions']==c['dimensions'];points=np.asarray(v['selected_points'],dtype=np.float64);assert np.isfinite(points).all();n=len(points);assert n<=5000 and v['split_sizes']==[(n+1)//2,n//2];assert r['terminal']==v['result']['terminal']=='fit_and_validation'
+ for side in [0,1]:assert (points[:,side]>=0).all() and (points[:,side]<np.asarray(c['dimensions'][side])).all()
+ m=np.asarray(v['result']['matrix'],dtype=np.float64);inv=np.linalg.inv(m)
+ def residual(p):
+  def apply(mat,xy):
+   z=np.column_stack([xy,np.ones(len(xy))])@mat.T;return z[:,:2]/z[:,2,None]
+  forward=np.linalg.norm(apply(m,p[:,0])-p[:,1],axis=1);reverse=np.linalg.norm(apply(inv,p[:,1])-p[:,0],axis=1);return forward,reverse
+ train=points[::2];held=points[1::2];f,b=residual(held);reported=v['result']['validation'];fa=f<=2.;ba=b<=c['source_tolerance'];assert reported['points']==len(held) and reported['forward_inliers']==int(fa.sum()) and reported['reverse_inliers']==int(ba.sum()) and reported['joint_inliers']==int((fa&ba).sum());assert math.isclose(reported['maximum_forward_error'],float(f.max()),rel_tol=1e-8,abs_tol=1e-8) and math.isclose(reported['maximum_reverse_error'],float(b.max()),rel_tol=1e-8,abs_tol=1e-8);assert reported['separation_checks']==n*(n-1)//2 and reported['projection_checks']==2*len(held)
+ f,b=residual(train);indices=np.flatnonzero((f<=2.)&(b<=c['source_tolerance'])).tolist();assert indices==v['result']['fitting_inliers'];assert v['result']['hypotheses']==1000000
+ rows.append(dict(label=c['label'],raw_proposals=v['raw_proposals'],selected_points=n,split_sizes=v['split_sizes'],fitting_inliers=len(indices),validation_joint_inliers=reported['joint_inliers'],validation_points=len(held),independent_numpy_residual_check=True,rss_bytes=case['rss_bytes'],elapsed_seconds=case['elapsed_seconds'],case_report_sha256=r['report_sha256']))
+# Trace the actual older cascade that produced the known false acceptance.
+old_gate=json.loads((D/'dedup-current-decode-gate-20261012.json').read_text());old_source=Path(old_gate['source']);trace={}
+for rel in ['crates/rrrah-dedup/src/search_portfolio.rs','crates/rrrah-dedup/src/model_banks.rs']:
+ p=old_source/rel;assert sha(p)==old_gate['source_hashes'][rel];trace[rel]=sha(p)
+text=(old_source/'crates/rrrah-dedup/src/search_portfolio.rs').read_text();start=text.index('pub fn search_native_bank_recovery_files_with(');block=text[start:];assert 'search_model_banks_coverage_files_with' in block and 'NativeBankRecoveryTerminal::Model(e.comparison)' in block
+out=D/'dedup-loftr-split-validation-audit-20261013.json';assert not out.exists();out.write_text(json.dumps(dict(status='verified12_native_full_frame_split_diagnostics_not_acceptance_fix',plan_sha256=sha(P),producer_report_sha256=sha(O),source_files=len(a['source_sha256']),source_audit_sha256=sha(A),executable_sha256=data['executable_sha256'],manifest_sha256=sha(H/'Cargo.toml'),lock_sha256=data['lock_sha256'],build_log_sha256=data['build_log_sha256'],independent_verifier_numpy_version=np.__version__,rows=rows,original_cascade_source_pins=trace,original_cascade_trace='Frozen executed native/opposite cascade calls model_banks::search_model_banks_coverage_files_with; terminal Model(e.comparison) is bank comparison evidence, not proof of a direct primary full-frame accept.',scope='Actual full-frame provider plus predeclared even/odd train/validation, all12 native executions and saved original-coordinate proposals; independent NumPy residual recomputation. Does not reproduce 25-bank aggregation or prove pixel/descriptor/statistical independence, calibrated precision, acceptance fix or preservation of all458 positives.'),indent=2)+'\n');print(out);print([(r['label'],r['fitting_inliers'],r['validation_joint_inliers'],r['validation_points']) for r in rows])

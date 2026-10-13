@@ -1,0 +1,36 @@
+{
+  "sd10": {
+    "source_url": "https://raw.pixls.us/getfile.php/571/nice/Sigma%20-%20Sigma%20SD10.X3F",
+    "source_sha256": "ea436ba459a7478d7b338428656fae905469de269f928749f3388db2b7b0d53f",
+    "converter_sha256": "d18d9e43a096eea04eee2148e53068f8fa45ce95395d97128b1aa37b477eab43",
+    "converter_command": "dcraw-reference -4 -W -o 1, with source rotation field set0 as original qualification script",
+    "linear_sha256": "00f64dc46ad86366f7da089c9ba37d4aec3462dd49595c2d2049ba0e0d0b68ff",
+    "matches_historical_pin": true,
+    "dimensions": [
+      2267,
+      1513
+    ],
+    "metal_full_frame_max_rgb8_deviation": 1,
+    "result": "passed"
+  },
+  "f828": {
+    "source_sha256": "07739f94bcab0c7e198d418ac65172d0dce04bb84a7683ecffd0bfe4b32f6d79",
+    "source_url": "https://raw.pixls.us/getfile.php/1351/nice/Sony%20-%20DSC-F828%20-%204%3A3.SRF",
+    "oracle_tool": "isolated test-only raw-fixture-oracle linked against installed LibRaw0.22.2-Release; production remains native",
+    "oracle_sha256": "b3fc3d395950407a35d33392a97181fa51aac1afb0aa6b96d94a7eba00e95d42",
+    "matches_historical_pin": true,
+    "metal_channel_values_checked": 33062400,
+    "final_tracked_cpu_gpu": 0,
+    "result": "passed"
+  },
+  "full_input_audit": {
+    "verified": true,
+    "all_five_original_pins_match": true,
+    "directory": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery"
+  },
+  "scope_limits": [
+    "SD10 full display transport does not independently requalify every production X3F color/decode path",
+    "F828 uses authored gains; not as-shot WB/color qualification",
+    "Physical HDR, physical slow disks, NVIDIA,100 formats and broader3D scope remain open"
+  ]
+}

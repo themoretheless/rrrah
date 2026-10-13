@@ -1,0 +1,26 @@
+{
+  "status": "adopted_full_attention_mask_fix",
+  "changed_files": [
+    "vendor/loftr/src/linear_attention.rs",
+    "vendor/loftr/src/linear_attention/tests.rs"
+  ],
+  "before_hashes": {
+    "vendor/loftr/src/linear_attention.rs": "905288a0f333d277be238463499783855f9bf9a5cd63ad6608146929b5016a33",
+    "vendor/loftr/src/linear_attention/tests.rs": "ac060dac3e28d773c878aa0ca377ffa69bbf23c2e4110d59c75844cf797c658d"
+  },
+  "after_hashes": {
+    "vendor/loftr/src/linear_attention.rs": "8cfa884dbcbf99d5e5b234401973508403cc642781d30844d01578cc3446a524",
+    "vendor/loftr/src/linear_attention/tests.rs": "d84f207a15c95430e8c340ebbc0249d708f22907d2005a73ce0930ddcc8ebb06"
+  },
+  "passed": 55,
+  "ignored": 0,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-loftr-full-masks-verification-20261012.json": "4bf0ad4874c48915590767ab7562d6762224b0a5f12df4e56ca0c16f5ac7237b",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-loftr-full-masks-source-20261012.json": "0d1095ac9ce135fdfdb59a479eff6f53e3d9c6a992e50b52a1ecd201378b941c",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-loftr-masked-values-source-20261012.json": "feca8cf19e30c5205ec87ae2e8717b892323bb71e8623bb04a50f771dbbc9424",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/adopt-dedup-loftr-full-masks-20261012.py": "c6564376d493371f2eb64ae50166f022204cdfa7c56096297df3f915d382003d",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-full-masks-adoption-before-20261012/vendor/loftr/src/linear_attention.rs": "905288a0f333d277be238463499783855f9bf9a5cd63ad6608146929b5016a33",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-full-masks-adoption-before-20261012/vendor/loftr/src/linear_attention/tests.rs": "ac060dac3e28d773c878aa0ca377ffa69bbf23c2e4110d59c75844cf797c658d"
+  },
+  "scope": "Independent FullAttention masks validated; unsupported rows produce finite zero outputs and gradients. Four pre-fix failures, full55nativebackendunitpasses, exact source reconstruction and preserved pre-adoption files. Existing unmasked arithmetic and all other dedup/LoFTR source unchanged. No commit/push, other platforms/fullformats/full500/corpus or total memory cap qualification."
+}

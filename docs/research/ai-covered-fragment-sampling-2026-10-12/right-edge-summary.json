@@ -1,0 +1,54 @@
+{
+  "change": "Binary search sorted row-edge prefix; exclude wholly-right edges without allocations; retain left winding edges",
+  "tests": {
+    "passed": 140,
+    "ignored": 10,
+    "regression": "300 right-disjoint contours, exact covered area1 within5000 work; all-right pixel area0"
+  },
+  "real_replay": [
+    {
+      "fixture": "VectorApple.ai",
+      "page": 0,
+      "native_completed": false,
+      "capture_failed": false,
+      "deadline_expired": false,
+      "final_admitted_bytes": 0,
+      "native_replay_ms": 66584.231625
+    },
+    {
+      "fixture": "one.ai",
+      "page": 0,
+      "native_completed": true,
+      "capture_failed": false,
+      "deadline_expired": false,
+      "final_admitted_bytes": 0,
+      "native_replay_ms": 25251.582875
+    },
+    {
+      "fixture": "one.ai",
+      "page": 1,
+      "native_completed": true,
+      "capture_failed": false,
+      "deadline_expired": false,
+      "final_admitted_bytes": 0,
+      "native_replay_ms": 477.256083
+    }
+  ],
+  "remaining_refusal": {
+    "pixel": [
+      138,
+      39
+    ],
+    "triangles": 263,
+    "work_left": 215,
+    "requested": 265,
+    "per_pixel_work_limit": 20000000
+  },
+  "qualification": "Incomplete opt-in native AI; dense fragment processing needs structural change",
+  "hashes": {
+    "right-edge-tests.log": "8a43f7fef99b71587d75491eced30d18809c550056fb722b2c3d4be4d2d5936f",
+    "right-edge-replay.log": "2625aee037859869b945ffeadb5b45ce0b75d89dfe1ea7bd94345453b1dc712d",
+    "right-edge-report.json": "947020619cd3fb834f7e79ba628abe118898a839c6668c8ffefe43da5973bd5f",
+    "polygon_coverage.rs": "90793671c743f2995259dc0eec1c11360795d1276b1824548406274b8b0aeeef"
+  }
+}

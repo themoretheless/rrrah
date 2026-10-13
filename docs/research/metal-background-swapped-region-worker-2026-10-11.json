@@ -1,0 +1,23 @@
+{
+  "scope": "Shared application worker supports asynchronous verified swap-region restore",
+  "adapter": "Metal Apple M4 Max",
+  "result": "passed",
+  "validation": {
+    "application_units_passed": 207,
+    "application_manual_ignored": 44,
+    "integration_and_worker_controls_passed": 4
+  },
+  "controls": [
+    "paused first request with second replaced by third; only latest native crop published",
+    "complete source CPU allocation released before submissions",
+    "independent native crop coordinate samples",
+    "memory pressure error and successful retry",
+    "generation change after publication drops output",
+    "fresh generation succeeds and all managed/index/disk credits zero",
+    "background worker crop exact SDR HDR Metal references aspects0.5 1 2"
+  ],
+  "remaining": [
+    "production viewer calls and source ownership migration",
+    "physical HDR NVIDIA full100-format acceptance"
+  ]
+}

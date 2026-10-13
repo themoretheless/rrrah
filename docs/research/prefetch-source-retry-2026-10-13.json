@@ -1,0 +1,23 @@
+{
+  "problem": "Plain duplicate request followed by source-change validation retry overwrote an explicit or disabled prefetch plan with None, enabling automatic folder planning.",
+  "fix": "Remove stale duplicate plan snapshot; enqueue source-change retry with current shared identity plan.",
+  "regression": "Changed-source retry for explicit neighbor list and Some(empty) disable; replacement generation and preserved active/retry plans asserted.",
+  "verification": {
+    "reproduced_before": true,
+    "foreground_loader_passed": 77,
+    "foreground_loader_ignored": 13,
+    "app_passed": 221,
+    "app_ignored": 62
+  },
+  "limitations": [
+    "Plan transfer and existing app regressions; no new GPU/color/original-format qualification",
+    "Initial exact-filter invocation ran zero tests; retained separately and not counted"
+  ],
+  "sha256": {
+    "docs/research/prefetch-source-retry-before-2026-10-13.log": "6fcb6e090e032f32a7911a3cec7cbaaef5e46bd310b0c75fc40ff2ef61eba1c3",
+    "docs/research/prefetch-source-retry-reproduced-2026-10-13.log": "3f1c2c12d6132f07da30cdad150b42ccfcfcc60e7019225daad5e58985769c84",
+    "docs/research/prefetch-source-retry-viewer-2026-10-13.log": "810a297b228c210aa6e08ccd3f03f3b7eda4e60f511df784677c030fc0e6ce7e",
+    "docs/research/prefetch-source-retry-app-2026-10-13.log": "010976fcf001ae917b655c967d74a8af6ba4f3a28fca3559f4828b0de16aafa2",
+    "crates/rrrah-app/src/main.rs": "69138f5f95302f39cb6736b62315bf69729c75a38a94420b320e20bf08340bc1"
+  }
+}

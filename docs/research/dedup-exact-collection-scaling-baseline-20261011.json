@@ -1,0 +1,95 @@
+{
+  "status": "complete_frozen_all_copy_collection_scaling_baseline",
+  "producer_pid": 8211,
+  "source_manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exact-collection-scaling-baseline-snapshot-20261011.json",
+  "source_manifest_sha256": "cecc14734a906c391e6d98d329afa843bf3beb10ef2d67065f9df907da36daa6",
+  "build_command": [
+    "cargo",
+    "test",
+    "--manifest-path",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-collection-scaling-baseline-snapshot-20261011/Cargo.toml",
+    "--target-dir",
+    "/Users/themoretheless/Documents/Sources/rrrah/target",
+    "-p",
+    "rrrah-dedup",
+    "--locked",
+    "--offline",
+    "--features",
+    "decode",
+    "--test",
+    "projected_portfolio",
+    "--no-run",
+    "--message-format=json"
+  ],
+  "build_pid": 8213,
+  "build_returncode": 0,
+  "command": [
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-collection-scaling-baseline-qualified-20261011/projected_portfolio",
+    "exact_collection_scaling_latency_probe",
+    "--exact",
+    "--ignored",
+    "--nocapture"
+  ],
+  "binary": "/Users/themoretheless/.codex/tmp/rrrah-exact-collection-scaling-baseline-qualified-20261011/projected_portfolio",
+  "binary_sha256": "58033b812c9ddd8a0ccde9acb557d29fcc4d97e4e34e9152a6d1b1e30bf5525f",
+  "process_pid": 8472,
+  "returncode": 0,
+  "controls": 3,
+  "samples": 9,
+  "rows": [
+    {
+      "files": 8,
+      "families": 1,
+      "pairs": 28,
+      "exact_pairs": 28,
+      "file_bytes": 1048576,
+      "analytical_source_bytes": 209715200,
+      "elapsed_ns": [
+        183158625,
+        189476583,
+        173358875
+      ],
+      "managed_peak": 12992,
+      "median_seconds": 0.183158625
+    },
+    {
+      "files": 32,
+      "families": 1,
+      "pairs": 496,
+      "exact_pairs": 496,
+      "file_bytes": 1048576,
+      "analytical_source_bytes": 3254779904,
+      "elapsed_ns": [
+        2511327334,
+        2347677333,
+        2257856166
+      ],
+      "managed_peak": 174848,
+      "median_seconds": 2.347677333
+    },
+    {
+      "files": 64,
+      "families": 1,
+      "pairs": 2016,
+      "exact_pairs": 2016,
+      "file_bytes": 1048576,
+      "analytical_source_bytes": 12952010752,
+      "elapsed_ns": [
+        8896842792,
+        8631943000,
+        11218525083
+      ],
+      "managed_peak": 677376,
+      "median_seconds": 8.896842792
+    }
+  ],
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exact-collection-scaling-baseline-snapshot-20261011.json": "cecc14734a906c391e6d98d329afa843bf3beb10ef2d67065f9df907da36daa6",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-exact-collection-scaling-baseline-20261011.py": "c042f322496aec6c187b1cda1df8b53a6986b39aee1df73100462cd133763702",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-collection-scaling-baseline-qualified-20261011/build.jsonl": "0c838cf56a641386c4486ba6213f3d32a77b2957a84032a56c338ebe37c8133d",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-collection-scaling-baseline-qualified-20261011/build.log": "4d4073565fdae4794509e6d39c44cae8641efe0f0ab212ea501612f148bafc70",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-collection-scaling-baseline-qualified-20261011/scaling.log": "6157118b1f3349fb1bbf73e86ffca3c37e743d0be49631bd094247da27f6eba4",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-collection-scaling-baseline-qualified-20261011/projected_portfolio": "58033b812c9ddd8a0ccde9acb557d29fcc4d97e4e34e9152a6d1b1e30bf5525f"
+  },
+  "scope": "macOS all-copy exhaustive pair reports on frozen production; latency measured, source payload bytes analytically derived; no device-I/O/RSS, mixed visual collection or universal performance claim"
+}

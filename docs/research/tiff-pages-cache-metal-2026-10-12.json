@@ -1,0 +1,42 @@
+{
+  "scope": "Selected TIFF metadata and explicit assumed-sRGB display through native RAM/TTL/swap and actual Metal",
+  "adapter": "Metal Apple M4 Max",
+  "decoder_passed": 1012,
+  "decoder_ignored": 72,
+  "manual_metal_passed": 1,
+  "variants": 4,
+  "pages_per_variant": 2,
+  "reverse_restores_per_variant": 3,
+  "sdr_hdr_output": [
+    63,
+    65
+  ],
+  "final_managed_and_queue_bytes": 0,
+  "fixes": [
+    "Correct selected index and bounded total-page count for all TIFF pages",
+    "DICOM full signature precedes arbitrary TIFF-like preamble"
+  ],
+  "test_corrections": [
+    "Explicit sRGB preparation required before GPU upload",
+    "TTL-expired membership correctly refuses new lease; test separates live RAM hit from expired visible pin"
+  ],
+  "limitations": [
+    "Authored uncompressed gray8 pages",
+    "No page-specific ICC/alpha or compressed16/float qualification",
+    "No whole100-format or physicalHDR claim"
+  ],
+  "sources": {
+    "crates/rrrah-decode/src/raster.rs": "a03a74902f788af8bb5216ee28cf6a71f3259730f8d75b53f47a72a95ce58dd9",
+    "crates/rrrah-decode/src/tiff_pages.rs": "063778dec0ea02a732f42cb07dfd926a1a08052da519c63d4f22e68effdb1651",
+    "crates/rrrah-app/tests/tiff_pages_metal.rs": "2c6d24dccb95af237e5e2a891f4a5d70184085be2ab08d75b5c5ccb9221270eb",
+    "tests/fixtures/data/tiff-pages-manifest.json": "8adbb3d7fd5b5eba6bc633824ff705b198df98522c5cb9caae8fcad762900329"
+  },
+  "logs": {
+    "docs/research/tiff-pages-cache-metal-2026-10-12/rrrah-tiff-page-metadata-20261011.log": "11260fa253e62588a92a0fe1b438c50daf9be13649f032be0e1a1c02baba0db8",
+    "docs/research/tiff-pages-cache-metal-2026-10-12/rrrah-tiff-metadata-all-fixed-20261012.log": "953d505c933d705c671f1c817ef5c19d21c647773e49b8dd42125b740b8c89ec",
+    "docs/research/tiff-pages-cache-metal-2026-10-12/rrrah-tiff-metadata-all-20261012.log": "7423973dbacc04451eb1f4073681b5e8fe79af9f061a609b8ff5e38239381292",
+    "docs/research/tiff-pages-cache-metal-2026-10-12/rrrah-tiff-pages-metal-prepared-20261012.log": "74c45c78de4106a729cf9a7681789dc59af2076a603a58f4c9e54d2eeac62a8d",
+    "docs/research/tiff-pages-cache-metal-2026-10-12/rrrah-tiff-pages-metal-policy-20261012.log": "a8bd39a9047b488b16e5465549b61f8f577769a307f6b689637511f36071323e",
+    "docs/research/tiff-pages-cache-metal-2026-10-12/rrrah-tiff-pages-metal-20261012.log": "6fae590d2633b107d2b5c6fbd3c5d1fec26a3794292b17fc0e3914b7bb6b3208"
+  }
+}

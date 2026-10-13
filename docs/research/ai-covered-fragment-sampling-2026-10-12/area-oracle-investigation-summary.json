@@ -1,0 +1,189 @@
+{
+  "finding": "Largest1x comparison errors at4 sampled pixels mostly reflect1x edge/patch sampling; independent16x/64x means close to native; supersampled whole-interior comparison shows real improvement",
+  "full_area_comparison": {
+    "scope": "Interior300x245 pixel ROI; fractional final page row/column excluded; unrounded box averages from independently rendered high-resolution original PDF using same native ICC profile",
+    "rows": [
+      {
+        "scale": 8,
+        "region": [
+          0,
+          0,
+          300,
+          245
+        ],
+        "command": [
+          "/tmp/rrrah-poppler-profile-oracle-20261012/build/utils/pdftoppm",
+          "-r",
+          "576",
+          "-f",
+          "1",
+          "-l",
+          "1",
+          "-singlefile",
+          "-x",
+          "0",
+          "-y",
+          "0",
+          "-W",
+          "2400",
+          "-H",
+          "1960",
+          "-defaultcmykprofile",
+          "vendor/hayro-interpret/assets/CGATS001Compat-v2-micro.icc",
+          "tests/fixtures/data/metal-recovery/ai-corpus/VectorApple.ai",
+          "docs/research/ai-covered-fragment-sampling-2026-10-12/full-area-oracle/area-8x"
+        ],
+        "sha256": "a744058e0359b0070abedbfc8e186c4a684d266654c927b9ca992698536662aa",
+        "stderr": "",
+        "comparisons": {
+          "before": {
+            "mean_absolute_component_error": 0.81396804138322,
+            "max_component_error": 153.203125,
+            "pixels_any_component_error_over_2": 7195,
+            "pixels_any_component_error_over_10": 2155
+          },
+          "after": {
+            "mean_absolute_component_error": 0.7463057681405896,
+            "max_component_error": 153.203125,
+            "pixels_any_component_error_over_2": 7123,
+            "pixels_any_component_error_over_10": 1975
+          }
+        }
+      },
+      {
+        "scale": 16,
+        "region": [
+          0,
+          0,
+          300,
+          245
+        ],
+        "command": [
+          "/tmp/rrrah-poppler-profile-oracle-20261012/build/utils/pdftoppm",
+          "-r",
+          "1152",
+          "-f",
+          "1",
+          "-l",
+          "1",
+          "-singlefile",
+          "-x",
+          "0",
+          "-y",
+          "0",
+          "-W",
+          "4800",
+          "-H",
+          "3920",
+          "-defaultcmykprofile",
+          "vendor/hayro-interpret/assets/CGATS001Compat-v2-micro.icc",
+          "tests/fixtures/data/metal-recovery/ai-corpus/VectorApple.ai",
+          "docs/research/ai-covered-fragment-sampling-2026-10-12/full-area-oracle/area-16x"
+        ],
+        "sha256": "3d6640d0a843a1d26a7dab8297579bde7006dbf2c2d095b26b854cac80505202",
+        "stderr": "",
+        "comparisons": {
+          "before": {
+            "mean_absolute_component_error": 0.8006134318310658,
+            "max_component_error": 154.44140625,
+            "pixels_any_component_error_over_2": 7193,
+            "pixels_any_component_error_over_10": 2101
+          },
+          "after": {
+            "mean_absolute_component_error": 0.729054368622449,
+            "max_component_error": 154.44140625,
+            "pixels_any_component_error_over_2": 7055,
+            "pixels_any_component_error_over_10": 1896
+          }
+        }
+      }
+    ],
+    "oracle_convergence": {
+      "mean_absolute_component_difference": 0.19355369543650794,
+      "max_component_difference": 29.34375
+    }
+  },
+  "confirmed_remaining_green_edge": [
+    {
+      "pixel": [
+        163,
+        39
+      ],
+      "scale": 64,
+      "mean_rgb": [
+        192.3203125,
+        226.0712890625,
+        210.249755859375
+      ],
+      "sha256": "98b0fded50255778f2bc6c55e34262e07b9bd1b20ccd14d7fc99a878bc36f810",
+      "command": [
+        "/tmp/rrrah-poppler-profile-oracle-20261012/build/utils/pdftoppm",
+        "-r",
+        "4608",
+        "-f",
+        "1",
+        "-l",
+        "1",
+        "-singlefile",
+        "-x",
+        "10432",
+        "-y",
+        "2496",
+        "-W",
+        "64",
+        "-H",
+        "64",
+        "-defaultcmykprofile",
+        "vendor/hayro-interpret/assets/CGATS001Compat-v2-micro.icc",
+        "tests/fixtures/data/metal-recovery/ai-corpus/VectorApple.ai",
+        "docs/research/ai-covered-fragment-sampling-2026-10-12/remaining-error-crops/pixel-163-39-scale-64"
+      ],
+      "stderr": ""
+    },
+    {
+      "pixel": [
+        161,
+        47
+      ],
+      "scale": 64,
+      "mean_rgb": [
+        193.56005859375,
+        226.658935546875,
+        211.15380859375
+      ],
+      "sha256": "be34cf8db0cea32be0ebc64885792620ae340145c309bb5623716ea81e9176bb",
+      "command": [
+        "/tmp/rrrah-poppler-profile-oracle-20261012/build/utils/pdftoppm",
+        "-r",
+        "4608",
+        "-f",
+        "1",
+        "-l",
+        "1",
+        "-singlefile",
+        "-x",
+        "10304",
+        "-y",
+        "3008",
+        "-W",
+        "64",
+        "-H",
+        "64",
+        "-defaultcmykprofile",
+        "vendor/hayro-interpret/assets/CGATS001Compat-v2-micro.icc",
+        "tests/fixtures/data/metal-recovery/ai-corpus/VectorApple.ai",
+        "docs/research/ai-covered-fragment-sampling-2026-10-12/remaining-error-crops/pixel-161-47-scale-64"
+      ],
+      "stderr": ""
+    }
+  ],
+  "next": "Trace original native shading replay at163,39; determine coverage handling when pixel center is inside mesh but full pixel is only partially covered",
+  "qualification": "Interior ROI only; no full AI parity claim; 8x/16x oracle not converged uniformly (max29.34componentdifference); physicalHDR/NVIDIA/full100formats still incomplete",
+  "hashes": {
+    "docs/research/ai-covered-fragment-sampling-2026-10-12/remaining-largest-errors.json": "ddfe986ef89ff42f71cefa8bcceee55b6c37b4eef3067257b69b42d561f39e9a",
+    "docs/research/ai-covered-fragment-sampling-2026-10-12/remaining-error-crops/report.json": "1c6c84926318fd6af7f45f82a8f8d7047945e184cee7313fc4bef5b49b5d7a35",
+    "docs/research/ai-covered-fragment-sampling-2026-10-12/remaining-error-crops/green-edge-64x-report.json": "55bd6f5f9fece684b0a5fb42c047f2aabfffc2f5913e8f8d94a21055729ed5a0",
+    "docs/research/ai-covered-fragment-sampling-2026-10-12/full-area-oracle/report.json": "1f91e18c15afeee3a37480048da90f4261df7e25bbe6e2c9c4c4760f11e45926",
+    "docs/research/ai-covered-fragment-sampling-2026-10-12/full-area-oracle/largest-errors.json": "495363abd2611d717fdd5b38f56b908fc13cc921612cb66c0c6605a9a74afd3a"
+  }
+}

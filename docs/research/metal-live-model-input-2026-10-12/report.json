@@ -1,0 +1,56 @@
+{
+  "scope": "ordinary current viewer, authored concave OBJ, actual CUA drag/wheel/F; HDR surface requested; no physical color qualification",
+  "source": "tests/fixtures/models/obj-concave-u.obj",
+  "actions": [
+    "drag 800,650 to1050,520",
+    "wheel up one page at800,650",
+    "F reset"
+  ],
+  "shots": {
+    "baseline": {
+      "sha256": "a2fb99e35adaa59d11acfc0426277d4655a823a2f8162545ae74a93ad42264fe",
+      "model_bbox_crop": [
+        413,
+        145,
+        986,
+        982
+      ],
+      "model_pixels": 289657
+    },
+    "orbit": {
+      "sha256": "57f3489aad1df37eae67cd8c731f1bbba84a7e4321bdc000132563e86476ce0c",
+      "model_bbox_crop": [
+        339,
+        324,
+        1060,
+        803
+      ],
+      "model_pixels": 267725
+    },
+    "zoom": {
+      "sha256": "3bd5397dc9221075f0e73f9116d968185ddeeefe52ad544d20689bc216a27a09",
+      "model_bbox_crop": [
+        689,
+        542,
+        717,
+        569
+      ],
+      "model_pixels": 227
+    },
+    "reset": {
+      "sha256": "0ed7c7d7fe5345204b59ee78176e6970c0e4e8c25e3ad2d2a5003ac6e425be30",
+      "model_bbox_crop": [
+        413,
+        145,
+        986,
+        982
+      ],
+      "model_pixels": 289887
+    }
+  },
+  "orbit_visibly_changes_geometry": true,
+  "wheel_visibly_increases_scale": true,
+  "F_visibly_restores_initial_geometry": true,
+  "bundle_window_closed": true,
+  "direct_initial_process_cleanup": "SIGTERM own initial process; not normal-close qualification"
+}

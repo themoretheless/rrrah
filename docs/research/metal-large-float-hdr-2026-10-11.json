@@ -1,0 +1,129 @@
+{
+  "date": "2026-10-11",
+  "scope": "Full 12 MP linear HDR float attachment, independent binary16 constant-region oracle, and disk-swap preservation",
+  "adapter": "Metal Apple M4 Max",
+  "dimensions": [
+    4000,
+    3000
+  ],
+  "source_format": "RGBA32Float LinearSrgb",
+  "attachment_format": "RGBA16Float",
+  "exposure_stops": 1,
+  "source_colors": [
+    [
+      4,
+      2,
+      -0.5,
+      1
+    ],
+    [
+      0.25,
+      8,
+      2,
+      1
+    ],
+    [
+      16,
+      -1,
+      0.5,
+      1
+    ],
+    [
+      -0.25,
+      0,
+      32,
+      1
+    ]
+  ],
+  "expected_binary16_hex": [
+    [
+      "4800",
+      "4400",
+      "bc00",
+      "3c00"
+    ],
+    [
+      "3800",
+      "4c00",
+      "4400",
+      "3c00"
+    ],
+    [
+      "5000",
+      "c000",
+      "3c00",
+      "3c00"
+    ],
+    [
+      "b800",
+      "0000",
+      "5400",
+      "3c00"
+    ]
+  ],
+  "checks": [
+    "Independent expected half-float encoding for every pixel outside three-pixel quadrant boundary strips",
+    "All 48 million original float components bit-exact after disk restore",
+    "Every binary16 output component including boundary strips identical before and after disk swap",
+    "One successful write/read, zero swap errors",
+    "CPU root, queue and retained GPU upload credit released"
+  ],
+  "limits": {
+    "source_bytes": 192000000,
+    "root_bytes": 192000000,
+    "queue_bytes": 192000000
+  },
+  "logs": [
+    {
+      "path": "/tmp/rrrah-metal-large-float-hdr-20261011.log",
+      "sha256": "27ced2caeb91b780edddfb372f771aa8420439622bdb3ccd355438995641ec74",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "path": "/tmp/rrrah-metal-float-hdr-regression-20261011.log",
+      "sha256": "7dd9f22d01633d25ad948564342e30ddbad3b62dadf71e05d46a11384af342d3",
+      "passed": 13,
+      "failed": 0,
+      "ignored": 2
+    }
+  ],
+  "live_display_probe": {
+    "metal_device": "Apple M4 Max",
+    "scope": "read-only live NSScreen EDR capability/headroom; not measured luminance or calibration",
+    "screens": [
+      {
+        "color_space": "Color LCD",
+        "edr_current_max": 1,
+        "edr_potential_max": 16,
+        "edr_reference_max": 0,
+        "frame": [
+          2056,
+          1329
+        ],
+        "name": "Built-in Retina Display"
+      }
+    ]
+  },
+  "source_sha256": {
+    "crates/rrrah-app/tests/hdr_raster_swap.rs": "8c1b037b2a745a065864520091bb166875a4823d0ef9fe47456c8a5c50da50b4",
+    "scripts/qualify-viewer-storage-gpu.py": "6b97bb28eb091f9fa6192532bfe4a7b3e9d40dcf6ab5e540c622285f54b747b2"
+  },
+  "reproduce": {
+    "environment": {
+      "RRRAH_GPU_OPTIONAL": "0",
+      "RRRAH_GPU_BACKEND": "metal"
+    },
+    "command": "cargo test --locked --offline --target-dir /tmp/rrrah-required-corpus-target -p rrrah --test hdr_raster_swap large_float_hdr_swap_preserves_full_metal_attachment -- --exact --ignored --nocapture",
+    "integrated_runner_flag": "--metal-large-float-hdr"
+  },
+  "limitations": [
+    "Offscreen float attachment does not prove physical HDR brightness, calibration or screen presentation",
+    "Current NSScreen headroom is 1 despite potential 16; this capability probe is not physical HDR qualification",
+    "Four authored constant quadrants are not arbitrary content, all 100 formats or independent full color-management proof",
+    "Independent region oracle excludes interpolation boundary strips; full before/after comparison includes them",
+    "Oracle arrays/readback texture and driver memory are outside managed source/queue accounting",
+    "Two ignored ordinary suite tests are not counted as passing; new large test executed separately"
+  ]
+}

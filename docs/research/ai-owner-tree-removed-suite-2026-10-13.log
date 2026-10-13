@@ -1,0 +1,756 @@
+   Compiling hayro v0.7.1 (/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-ai-white-probe-20261013-ub6zt2hk/hayro)
+warning: unnecessary qualification
+  --> src/knockout_interpreter.rs:11:21
+   |
+11 |     NativeColor(Box<super::native_paint::NativePaint>),
+   |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: requested on the command line with `-W unused-qualifications`
+help: remove the unnecessary path segments
+   |
+11 -     NativeColor(Box<super::native_paint::NativePaint>),
+11 +     NativeColor(Box<native_paint::NativePaint>),
+   |
+
+warning: unnecessary qualification
+  --> src/knockout_interpreter.rs:66:87
+   |
+66 |     native_mask_transfers: Vec<(usize, Option<hayro_interpret::TransferFunction>, Box<super::native_paint::NativePaint>, bool)>,
+   |                                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+help: remove the unnecessary path segments
+   |
+66 -     native_mask_transfers: Vec<(usize, Option<hayro_interpret::TransferFunction>, Box<super::native_paint::NativePaint>, bool)>,
+66 +     native_mask_transfers: Vec<(usize, Option<hayro_interpret::TransferFunction>, Box<native_paint::NativePaint>, bool)>,
+   |
+
+warning: unnecessary qualification
+   --> src/knockout_interpreter.rs:446:100
+    |
+446 | ...   if !self.capture(Some(size_of::<(usize, Option<hayro_interpret::TransferFunction>, Box<super::native_paint::NativePaint>, boo...
+    |                                                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+help: remove the unnecessary path segments
+    |
+446 -             if !self.capture(Some(size_of::<(usize, Option<hayro_interpret::TransferFunction>, Box<super::native_paint::NativePaint>, bool)>())) { return; }
+446 +             if !self.capture(Some(size_of::<(usize, Option<hayro_interpret::TransferFunction>, Box<native_paint::NativePaint>, bool)>())) { return; }
+    |
+
+warning: unnecessary qualification
+   --> src/knockout_interpreter.rs:448:41
+    |
+448 |             let Some(native_backdrop) = super::native_paint::NativePaint::capture(&mask.background_color(),&cancel,&admit) else {
+    |                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+help: remove the unnecessary path segments
+    |
+448 -             let Some(native_backdrop) = super::native_paint::NativePaint::capture(&mask.background_color(),&cancel,&admit) else {
+448 +             let Some(native_backdrop) = native_paint::NativePaint::capture(&mask.background_color(),&cancel,&admit) else {
+    |
+
+warning: unnecessary qualification
+   --> src/knockout_interpreter.rs:569:35
+    |
+569 |                 let Some(paint) = super::native_paint::NativePaint::capture(
+    |                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+help: remove the unnecessary path segments
+    |
+569 -                 let Some(paint) = super::native_paint::NativePaint::capture(
+569 +                 let Some(paint) = native_paint::NativePaint::capture(
+    |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:4928:25
+     |
+4928 |             let clear = super::native_blend::Pixel::from_native(super::native_blend::Model::Cmyk, &[0.;4], 0.).unwrap();
+     |                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+4928 -             let clear = super::native_blend::Pixel::from_native(super::native_blend::Model::Cmyk, &[0.;4], 0.).unwrap();
+4928 +             let clear = native_blend::Pixel::from_native(super::native_blend::Model::Cmyk, &[0.;4], 0.).unwrap();
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:4928:65
+     |
+4928 |             let clear = super::native_blend::Pixel::from_native(super::native_blend::Model::Cmyk, &[0.;4], 0.).unwrap();
+     |                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+4928 -             let clear = super::native_blend::Pixel::from_native(super::native_blend::Model::Cmyk, &[0.;4], 0.).unwrap();
+4928 +             let clear = super::native_blend::Pixel::from_native(native_blend::Model::Cmyk, &[0.;4], 0.).unwrap();
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:4929:29
+     |
+4929 |             let mut frame = super::native_frame::PaintFrame::admitted(&[clear], target, false, true,
+     |                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+4929 -             let mut frame = super::native_frame::PaintFrame::admitted(&[clear], target, false, true,
+4929 +             let mut frame = native_frame::PaintFrame::admitted(&[clear], target, false, true,
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:4963:13
+     |
+4963 | ) -> Option<super::native_frame::Buffer> {
+     |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+4963 - ) -> Option<super::native_frame::Buffer> {
+4963 + ) -> Option<native_frame::Buffer> {
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:5108:15
+     |
+5108 |     let row = super::polygon_coverage::admitted_selected_polygon_domain_budget(&regions, y, rect.y0, rect.y1, remaining, cancelled...
+     |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+5108 -     let row = super::polygon_coverage::admitted_selected_polygon_domain_budget(&regions, y, rect.y0, rect.y1, remaining, cancelled, admit)
+5108 +     let row = polygon_coverage::admitted_selected_polygon_domain_budget(&regions, y, rect.y0, rect.y1, remaining, cancelled, admit)
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:5216:59
+     |
+5216 |     space: &hayro_interpret::color::ColorSpace, backdrop: super::native_blend::Pixel,
+     |                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+5216 -     space: &hayro_interpret::color::ColorSpace, backdrop: super::native_blend::Pixel,
+5216 +     space: &hayro_interpret::color::ColorSpace, backdrop: native_blend::Pixel,
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:5219:13
+     |
+5219 | ) -> Option<super::native_frame::Buffer> {
+     |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+5219 - ) -> Option<super::native_frame::Buffer> {
+5219 + ) -> Option<native_frame::Buffer> {
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:5225:59
+     |
+5225 |     space: &hayro_interpret::color::ColorSpace, backdrop: super::native_blend::Pixel,
+     |                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+5225 -     space: &hayro_interpret::color::ColorSpace, backdrop: super::native_blend::Pixel,
+5225 +     space: &hayro_interpret::color::ColorSpace, backdrop: native_blend::Pixel,
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:5229:13
+     |
+5229 | ) -> Option<super::native_frame::Buffer> {
+     |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+5229 - ) -> Option<super::native_frame::Buffer> {
+5229 + ) -> Option<native_frame::Buffer> {
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:5255:62
+     |
+5255 |     let _backdrop_credit = admit(count.checked_mul(size_of::<super::native_blend::Pixel>())?)?;
+     |                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+5255 -     let _backdrop_credit = admit(count.checked_mul(size_of::<super::native_blend::Pixel>())?)?;
+5255 +     let _backdrop_credit = admit(count.checked_mul(size_of::<native_blend::Pixel>())?)?;
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:6450:79
+     |
+6450 |         let paints:Vec<_>=indices.iter().zip(&sources).map(|(regions,&source)|super::native_spatial::SpatialPaint {
+     |                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+6450 -         let paints:Vec<_>=indices.iter().zip(&sources).map(|(regions,&source)|super::native_spatial::SpatialPaint {
+6450 +         let paints:Vec<_>=indices.iter().zip(&sources).map(|(regions,&source)|native_spatial::SpatialPaint {
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:6453:19
+     |
+6453 |         let pixel=super::native_spatial::compose_polygon_pixel(&regions,&paints,clear,0,0,
+     |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+6453 -         let pixel=super::native_spatial::compose_polygon_pixel(&regions,&paints,clear,0,0,
+6453 +         let pixel=native_spatial::compose_polygon_pixel(&regions,&paints,clear,0,0,
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:6832:72
+     |
+6832 |     scene:&Recorder,space:&hayro_interpret::color::ColorSpace,backdrop:super::native_blend::Pixel,
+     |                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+6832 -     scene:&Recorder,space:&hayro_interpret::color::ColorSpace,backdrop:super::native_blend::Pixel,
+6832 +     scene:&Recorder,space:&hayro_interpret::color::ColorSpace,backdrop:native_blend::Pixel,
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:6835:11
+     |
+6835 | )->Option<super::native_blend::Pixel> {
+     |           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+6835 - )->Option<super::native_blend::Pixel> {
+6835 + )->Option<native_blend::Pixel> {
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:6848:64
+     |
+6848 | type SpatialRasterCache<'a>=(&'a Recorder,usize,std::sync::Arc<super::native_spatial::RasterCells>,
+     |                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+6848 - type SpatialRasterCache<'a>=(&'a Recorder,usize,std::sync::Arc<super::native_spatial::RasterCells>,
+6848 + type SpatialRasterCache<'a>=(&'a Recorder,usize,std::sync::Arc<native_spatial::RasterCells>,
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:6849:27
+     |
+6849 |     Option<std::sync::Arc<super::native_spatial::RasterCells>>);
+     |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+6849 -     Option<std::sync::Arc<super::native_spatial::RasterCells>>);
+6849 +     Option<std::sync::Arc<native_spatial::RasterCells>>);
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:6857:72
+     |
+6857 |     scene:&Recorder,space:&hayro_interpret::color::ColorSpace,backdrop:super::native_blend::Pixel,
+     |                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+6857 -     scene:&Recorder,space:&hayro_interpret::color::ColorSpace,backdrop:super::native_blend::Pixel,
+6857 +     scene:&Recorder,space:&hayro_interpret::color::ColorSpace,backdrop:native_blend::Pixel,
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:6860:11
+     |
+6860 | )->Option<super::native_blend::Pixel> {
+     |           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+6860 - )->Option<super::native_blend::Pixel> {
+6860 + )->Option<native_blend::Pixel> {
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:6886:24
+     |
+6886 |         std::sync::Arc<super::native_spatial::RasterCells>,Option<std::sync::Arc<super::native_spatial::RasterCells>>);
+     |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+6886 -         std::sync::Arc<super::native_spatial::RasterCells>,Option<std::sync::Arc<super::native_spatial::RasterCells>>);
+6886 +         std::sync::Arc<native_spatial::RasterCells>,Option<std::sync::Arc<super::native_spatial::RasterCells>>);
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:6886:82
+     |
+6886 |         std::sync::Arc<super::native_spatial::RasterCells>,Option<std::sync::Arc<super::native_spatial::RasterCells>>);
+     |                                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+6886 -         std::sync::Arc<super::native_spatial::RasterCells>,Option<std::sync::Arc<super::native_spatial::RasterCells>>);
+6886 +         std::sync::Arc<super::native_spatial::RasterCells>,Option<std::sync::Arc<native_spatial::RasterCells>>);
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:6898:22
+     |
+6898 |         2*(size_of::<super::native_spatial::RasterCells>()+2*size_of::<usize>()))?)?;
+     |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+6898 -         2*(size_of::<super::native_spatial::RasterCells>()+2*size_of::<usize>()))?)?;
+6898 +         2*(size_of::<native_spatial::RasterCells>()+2*size_of::<usize>()))?)?;
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:6907:65
+     |
+6907 |                 let (mw,mh)=alpha.dimensions();let (color,mask)=super::native_spatial::admitted_raster_mask_cells(
+     |                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+6907 -                 let (mw,mh)=alpha.dimensions();let (color,mask)=super::native_spatial::admitted_raster_mask_cells(
+6907 +                 let (mw,mh)=alpha.dimensions();let (color,mask)=native_spatial::admitted_raster_mask_cells(
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:6909:22
+     |
+6909 |             } else {(super::native_spatial::admitted_raster_pixel_cells(w,h,*transform,rect,100_000,cancelled,admit)?,None)};
+     |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+6909 -             } else {(super::native_spatial::admitted_raster_pixel_cells(w,h,*transform,rect,100_000,cancelled,admit)?,None)};
+6909 +             } else {(native_spatial::admitted_raster_pixel_cells(w,h,*transform,rect,100_000,cancelled,admit)?,None)};
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:6956:34
+     |
+6956 |                 let (color,mask)=super::native_spatial::admitted_raster_mask_cells(w,h,mw,mh,*transform,rect,
+     |                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+6956 -                 let (color,mask)=super::native_spatial::admitted_raster_mask_cells(w,h,mw,mh,*transform,rect,
+6956 +                 let (color,mask)=native_spatial::admitted_raster_mask_cells(w,h,mw,mh,*transform,rect,
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:6958:22
+     |
+6958 |             } else {(super::native_spatial::admitted_raster_pixel_cells(w,h,*transform,rect,100_000,cancelled,admit)?,None)};
+     |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+6958 -             } else {(super::native_spatial::admitted_raster_pixel_cells(w,h,*transform,rect,100_000,cancelled,admit)?,None)};
+6958 +             } else {(native_spatial::admitted_raster_pixel_cells(w,h,*transform,rect,100_000,cancelled,admit)?,None)};
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:7010:27
+     |
+7010 |                 let cells=super::native_spatial::admitted_line_partition_cells(&lines,rect,1000,cancelled,admit)?;
+     |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7010 -                 let cells=super::native_spatial::admitted_line_partition_cells(&lines,rect,1000,cancelled,admit)?;
+7010 +                 let cells=native_spatial::admitted_line_partition_cells(&lines,rect,1000,cancelled,admit)?;
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:7123:75
+     |
+7123 |         .checked_add(paints.checked_mul(size_of::<Vec<usize>>()+size_of::<super::native_blend::Pixel>())?)?
+     |                                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7123 -         .checked_add(paints.checked_mul(size_of::<Vec<usize>>()+size_of::<super::native_blend::Pixel>())?)?
+7123 +         .checked_add(paints.checked_mul(size_of::<Vec<usize>>()+size_of::<Pixel>())?)?
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:7218:5
+     |
+7218 |     super::native_spatial::deduplicate_regions(&mut regions,&mut requirements,cancelled,admit)?;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7218 -     super::native_spatial::deduplicate_regions(&mut regions,&mut requirements,cancelled,admit)?;
+7218 +     native_spatial::deduplicate_regions(&mut regions,&mut requirements,cancelled,admit)?;
+     |
+
+warning: unused import: `kurbo::Shape`
+    --> src/knockout_interpreter.rs:7249:17
+     |
+7249 |             use kurbo::Shape;
+     |                 ^^^^^^^^^^^^
+     |
+     = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:7295:5
+     |
+7295 |     super::native_spatial::prune_empty_groups(&mut commands,cancelled)?;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7295 -     super::native_spatial::prune_empty_groups(&mut commands,cancelled)?;
+7295 +     native_spatial::prune_empty_groups(&mut commands,cancelled)?;
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:7296:17
+     |
+7296 |     let cleared=super::native_spatial::prune_redundant_mask_clears(&mut commands,remaining,cancelled)?;
+     |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7296 -     let cleared=super::native_spatial::prune_redundant_mask_clears(&mut commands,remaining,cancelled)?;
+7296 +     let cleared=native_spatial::prune_redundant_mask_clears(&mut commands,remaining,cancelled)?;
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:7298:19
+     |
+7298 |     let flattened=super::native_spatial::flatten_neutral_groups(&mut commands,remaining,cancelled)?;
+     |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7298 -     let flattened=super::native_spatial::flatten_neutral_groups(&mut commands,remaining,cancelled)?;
+7298 +     let flattened=native_spatial::flatten_neutral_groups(&mut commands,remaining,cancelled)?;
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:7301:5
+     |
+7301 |     super::native_spatial::coalesce_opaque_paints(&mut commands,space,cancelled)?;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7301 -     super::native_spatial::coalesce_opaque_paints(&mut commands,space,cancelled)?;
+7301 +     native_spatial::coalesce_opaque_paints(&mut commands,space,cancelled)?;
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:7304:16
+     |
+7304 |     let result=super::native_spatial::compose_grouped_polygon_impl(&regions,&commands,space,backdrop,x,y,point,
+     |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7304 -     let result=super::native_spatial::compose_grouped_polygon_impl(&regions,&commands,space,backdrop,x,y,point,
+7304 +     let result=native_spatial::compose_grouped_polygon_impl(&regions,&commands,space,backdrop,x,y,point,
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:7373:30
+     |
+7373 |                     let area=super::polygon_coverage::polygon_pixel_area(&regions,x,y,20_000_000,&||cancelled(),admission.as_ref());
+     |                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7373 -                     let area=super::polygon_coverage::polygon_pixel_area(&regions,x,y,20_000_000,&||cancelled(),admission.as_ref());
+7373 +                     let area=polygon_coverage::polygon_pixel_area(&regions,x,y,20_000_000,&||cancelled(),admission.as_ref());
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:7390:42
+     |
+7390 |         let white_rgb=result.and_then(|p|super::native_frame::convert_group_pixel(p,&space,rgb.color_space()))
+     |                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7390 -         let white_rgb=result.and_then(|p|super::native_frame::convert_group_pixel(p,&space,rgb.color_space()))
+7390 +         let white_rgb=result.and_then(|p|native_frame::convert_group_pixel(p,&space,rgb.color_space()))
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:7412:21
+     |
+7412 |                     super::native_frame::convert_group_pixel(p, &space, rgb.color_space()))
+     |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7412 -                     super::native_frame::convert_group_pixel(p, &space, rgb.color_space()))
+7412 +                     native_frame::convert_group_pixel(p, &space, rgb.color_space()))
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:7453:50
+     |
+7453 |                 let converted=result.and_then(|p|super::native_frame::convert_group_pixel(p,&space,rgb.color_space()))
+     |                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7453 -                 let converted=result.and_then(|p|super::native_frame::convert_group_pixel(p,&space,rgb.color_space()))
+7453 +                 let converted=result.and_then(|p|native_frame::convert_group_pixel(p,&space,rgb.color_space()))
+     |
+
+warning: unused variable: `paint`
+    --> src/knockout_interpreter.rs:7139:62
+     |
+7139 |         if let Event::Path(path,_,RecordedPaint::NativeColor(paint),clips,PathDrawMode::Fill(rule))=event {
+     |                                                              ^^^^^ help: if this is intentional, prefix it with an underscore: `_paint`
+     |
+     = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `pixel_incremental_selected_rect_fragments` is never used
+   --> src/polygon_coverage.rs:395:19
+    |
+316 | impl PolygonRow {
+    | --------------- method in this implementation
+...
+395 |     pub(super) fn pixel_incremental_selected_rect_fragments(
+    |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `hayro` (lib test) generated 45 warnings (run `cargo fix --lib -p hayro --tests` to apply 44 suggestions)
+    Finished `test` profile [optimized + debuginfo] target(s) in 7.37s
+     Running unittests src/lib.rs (target/ai-white-probe-20261013/debug/deps/hayro-028233655b833e03)
+
+running 215 tests
+test knockout_compositor::authored_curve_tile_translation_reproducer ... ignored, explicit backend translation diagnostic requires fresh report path
+test knockout_compositor::absent_shape_preserves_previous_result ... ok
+test knockout_compositor::bounded_stroke::independently_authored_dash_runs_preserve_phase_zero_dots_and_closed_metadata ... ok
+test knockout_compositor::bounded_stroke::odd_dash_cycle_and_negative_offset_match_independent_intervals ... ok
+test knockout_compositor::bounded_stroke::dash_plan_refusal_cancellation_and_dense_pattern_release_all_storage ... ok
+test knockout_compositor::bounded_stroke::curved_run_keeps_authored_endpoints_and_retains_only_plan_credit ... ok
+test knockout_compositor::admitted_global_contour_releases_storage_at_every_cancel_checkpoint ... ok
+test knockout_compositor::bounded_stroke_outline::closed_seam_joins_and_device_hairline_preserve_independent_pixels ... ok
+test knockout_compositor::bounded_stroke_outline::zero_length_dash_square_orientation_differs_from_degenerate_subpath ... ok
+test knockout_compositor::cancelled_or_invalid_buffer_releases_admission_without_partial_output ... ok
+test knockout_compositor::coverage_invariant_survives_all_source_shape_and_alpha_pairs ... ok
+test knockout_compositor::engine_shape_refuses_pixel_storage_before_backend_work ... ok
+test knockout_compositor::engine_shape_preserves_transformed_fractional_edge_and_clip ... ok
+test knockout_compositor::engine_shape_respects_evenodd_hole_without_erasing_its_backdrop ... ok
+test knockout_compositor::engine_shape_stroke_keeps_width_and_dash_gaps ... ok
+test knockout_compositor::engine_shapes_and_buffer_compositor_reproduce_full_overlap_fixture ... ok
+test knockout_compositor::fractional_shape_preserves_uncovered_previous_result ... ok
+test knockout_compositor::group_constant_opacity_preserves_shape_unless_alpha_is_shape ... ok
+test knockout_compositor::inconsistent_backdrop_result_is_rejected_instead_of_hiding_invalid_color ... ok
+test knockout_compositor::half_opacity_child_uses_initial_backdrop ... ok
+test knockout_compositor::bounded_stroke_outline::independently_authored_cap_and_corner_areas ... ok
+test knockout_compositor::admitted_global_contour_preserves_cubic_area_and_refuses_vertex_exhaustion ... ok
+test knockout_compositor::interpreter_tests::actual_pdf_dashed_stroke_keeps_knockout_shape_separate_from_alpha ... ok
+test knockout_compositor::interpreter_tests::actual_pdf_clip_is_restored_after_knockout_group ... ok
+test knockout_compositor::bounded_stroke_outline::outline_refusal_cancellation_and_vertex_limit_release_all_output_credit ... ok
+test knockout_compositor::interpreter_tests::actual_pdf_evenodd_hole_preserves_previous_knockout_content ... ok
+test knockout_compositor::global_curve_preflatten_matches_independent_cubic_area_at_reproducer ... ok
+test knockout_compositor::interpreter_tests::actual_pdf_image_interpolation_oracle_dump ... ignored, requires fresh raster oracle diagnostic output directory
+test knockout_compositor::interpreter_tests::actual_native_soft_image_replay_preserves_float_color_alpha_and_coordinates ... ok
+test knockout_compositor::interpreter_tests::actual_pdf_callbacks_replay_knockout_and_normal_overlap ... ok
+test knockout_compositor::interpreter_tests::actual_pdf_rgb_image_records_owned_pixels_and_transform ... ok
+test knockout_compositor::interpreter_tests::actual_pdf_radial_shading_matches_concentric_radius ... ok
+test knockout_compositor::interpreter_tests::actual_pdf_outline_text_records_fill_stroke_and_ignores_invisible_mode ... ok
+test knockout_compositor::interpreter_tests::actual_pdf_nearest_rgb_image_composes_knockout_in_tiles ... ok
+test knockout_compositor::interpreter_tests::actual_pdf_alpha_source_group_opacity_preserves_knockout_backdrop_and_restores_state ... ok
+test knockout_compositor::interpreter_tests::actual_native_axial_shading_replay_preserves_original_cmyk ... ok
+test knockout_compositor::interpreter_tests::actual_native_triangle_shading_stream_replay_preserves_original_cmyk ... ok
+test knockout_compositor::interpreter_tests::actual_pdf_isolated_gray_child_routes_native_space_and_preserves_opacity ... ok
+test knockout_compositor::interpreter_tests::actual_native_tensor_shading_stream_replay_preserves_original_cmyk ... ok
+test knockout_compositor::interpreter_tests::actual_pdf_stencil_holes_preserve_previous_knockout_content ... ok
+test knockout_compositor::interpreter_tests::actual_pdf_replay_scales_geometry_and_admitted_frames ... ok
+test knockout_compositor::interpreter_tests::actual_pdf_axial_shading_records_and_replays_in_knockout_tiles ... ok
+test knockout_compositor::interpreter_tests::actual_pdf_stream_retains_native_16bit_components_and_decode ... ok
+test knockout_compositor::interpreter_tests::actual_pdf_alpha_source_path_and_group_constants_each_apply_once ... ok
+test knockout_compositor::interpreter_tests::authored_cmyk_knockout_fade_full_shape_obeys_iso_topmost_element ... ok
+test knockout_compositor::interpreter_tests::authored_native_cmyk_mesh_samples_on_spatial_cell_centroids ... ok
+test knockout_compositor::interpreter_tests::authored_pdf_alpha_transfer_mask_applies_once_to_spatial_group ... ok
+test knockout_compositor::interpreter_tests::authored_pdf_axial_extent_boundaries_partition_before_color_average ... ok
+test knockout_compositor::interpreter_tests::authored_pdf_distinct_16bit_alpha_grid_composes_before_averaging ... ok
+test knockout_compositor::interpreter_tests::authored_pdf_16bit_raster_integrates_original_texels_spatially ... ok
+test knockout_compositor::interpreter_tests::actual_pdf_type3_shape_glyph_replays_through_knockout_tiles ... ok
+test knockout_compositor::interpreter_tests::actual_pdf_alpha_source_mask_changes_group_shape_once ... ok
+test knockout_compositor::interpreter_tests::authored_pdf_groups_compose_on_spatial_cells_before_edge_averaging ... ok
+test knockout_compositor::interpreter_tests::actual_pdf_axial_shading_bbox_clips_across_tiles ... ok
+test knockout_compositor::interpreter_tests::authored_pdf_mesh_luminosity_mask_routes_original_gray_before_area_average ... ok
+test knockout_compositor::interpreter_tests::canonical_global_vertices_preserve_independent_cubic_area_control ... ok
+test knockout_compositor::interpreter_tests::correlated_fractional_edges_require_compositing_before_area_reduction ... ok
+test knockout_compositor::interpreter_tests::direct_page_keeps_unpainted_area_transparent_and_paint_unassociated ... ok
+test knockout_compositor::interpreter_tests::empty_native_path_preserves_zero_pixels_and_rejects_unsupported_blend ... ok
+test knockout_compositor::interpreter_tests::device_conversion_functions_follow_precedence_and_restore_after_form ... ok
+test knockout_compositor::interpreter_tests::external_authored_pdf_replay_diagnostic ... ignored, requires explicit authored PDF fixture directory and fresh diagnostic output path
+test knockout_compositor::interpreter_tests::global_stroke_outline_transform_diagnostic ... ignored, explicit unadmitted stroke-outline oracle experiment; fresh report path required
+test knockout_compositor::interpreter_tests::half_area_dash_outline_raster_diagnostic ... ignored, explicit independently authored half-area stroke raster diagnostic; fresh report path required
+test knockout_compositor::interpreter_tests::native_gray_group_external_oracle_export ... ignored, exports authored native Gray-group PDF and RGB pixels for independent oracle
+test knockout_compositor::interpreter_tests::group_spaces_preserve_page_form_resources_and_unresolved_declarations ... ok
+test knockout_compositor::interpreter_tests::interpreter_preserves_nested_knockout_group_properties ... ok
+test knockout_compositor::interpreter_tests::interpolated_raster_bypasses_last_sample_cache ... ok
+test knockout_compositor::interpreter_tests::isolated_gray_group_converts_to_rgb_without_byte_quantization ... ok
+test knockout_compositor::interpreter_tests::interpreter_stops_operator_only_stream_before_any_scene_capture ... ok
+test knockout_compositor::interpreter_tests::every_replay_admission_refusal_releases_frames_and_scratch ... ok
+test knockout_compositor::interpreter_tests::native_alpha_mask_uses_original_transfer_without_lookup_quantization ... ok
+test knockout_compositor::interpreter_tests::every_native_image_capture_cancellation_latches_and_releases_credit ... ok
+test knockout_compositor::interpreter_tests::native_device_n_axial_preserves_source_and_applies_nonlinear_calculator_tint ... ok
+test knockout_compositor::interpreter_tests::native_image_mask_refusal_preserves_reason_and_compatibility_alpha ... ok
+test knockout_compositor::interpreter_tests::native_device_luminosity_masks_preserve_gray_rgb_cmyk_background_components ... ok
+test knockout_compositor::interpreter_tests::actual_pdf_separable_group_blends_use_colored_knockout_initial_backdrop ... ok
+test knockout_compositor::interpreter_tests::dense_native_mesh_pixel_subdivides_without_losing_area_or_color ... ok
+test knockout_compositor::interpreter_tests::native_raster_sampling_expands_palette_before_premultiplied_filtering ... ok
+test knockout_compositor::interpreter_tests::native_separation_raster_uses_explicit_float_tint_and_cancels ... ok
+test knockout_compositor::interpreter_tests::native_solid_paint_preparation_benchmark ... ignored, diagnostic timing; no performance assertion under shared CPU load
+test knockout_compositor::interpreter_tests::native_soft_image_alpha_preserves_16bit_precision_and_refuses_matte ... ok
+test knockout_compositor::interpreter_tests::native_raster_inside_luminosity_mask_preserves_original_samples ... ok
+test knockout_compositor::interpreter_tests::nearest_raster_last_sample_cache_matches_uncached_coordinates_and_refusals ... ok
+test knockout_compositor::interpreter_tests::native_triangle_edge_with_outside_pixel_center_keeps_covered_color ... ok
+test knockout_compositor::interpreter_tests::nonisolated_pdf_gray_declaration_inherits_rgb_for_multiply ... ok
+test knockout_compositor::interpreter_tests::padded_tile_refusal_and_cancellation_release_all_credit ... ok
+test knockout_compositor::interpreter_tests::precise_group_refuses_original_small_budget_without_retaining_credit ... ok
+test knockout_compositor::interpreter_tests::prepared_clips_share_only_identical_geometry_and_preserve_fill_rule ... ok
+test knockout_compositor::interpreter_tests::native_solid_event_replay_retains_original_color_and_nested_group_math ... ok
+test knockout_compositor::interpreter_tests::native_invalid_mask_transfer_refuses_instead_of_using_identity_and_releases_credit ... ok
+test knockout_compositor::interpreter_tests::prepared_fill_capture_refusal_releases_geometry_before_partial_replay ... ok
+test knockout_compositor::interpreter_tests::real_ai_compositor_capture_and_replay_diagnostic ... ignored, requires explicit real AI corpus and fresh diagnostic output directory
+test knockout_compositor::interpreter_tests::real_ai_spatial_scene_problem_pixel_diagnostic ... ignored, requires explicit VectorApple corpus; diagnostic completion is reported separately
+test knockout_compositor::interpreter_tests::repeated_and_disjoint_opaque_edges_compare_native_spatial_composition ... ignored, Diagnostic for correlated edge coverage; scalar replay is known incomplete
+test knockout_compositor::interpreter_tests::spatial_tile_scene_reuse_benchmark ... ignored, explicit prototype benchmark with fresh report destination required
+test knockout_compositor::interpreter_tests::stencil_opacity_external_oracle_dump ... ignored, requires fresh stencil oracle diagnostic output directory
+test knockout_compositor::interpreter_tests::production_stencil_opacity_is_applied_once_at_image_group ... ok
+test knockout_compositor::interpreter_tests::raster_interpolation_preserves_premultiplied_transparent_edges ... ok
+test knockout_compositor::interpreter_tests::raster_capture_retains_original_gray_rgb_cmyk_coordinates ... ok
+test knockout_compositor::interpreter_tests::recorded_scene_admission_refusal_prevents_partial_replay_and_releases_credit ... ok
+test knockout_compositor::interpreter_tests::spatial_scene_preflight_refuses_mask_before_geometry_admission ... ok
+test knockout_compositor::interpreter_tests::type3_cancellation_stops_classification_and_shape_program_without_drawing ... ok
+test knockout_compositor::invalid_premultiplication_or_alpha_above_shape_is_rejected ... ok
+test knockout_compositor::interpreter_tests::stencil_paint_opacity_does_not_replace_mask_shape ... ok
+test knockout_compositor::interpreter_tests::shading_bbox_capture_and_replay_transforms_agree ... ok
+test knockout_compositor::native_blend::gray_and_rgb_match_independent_scalar_and_existing_rgb_algebra ... ok
+test knockout_compositor::native_blend::independent_cmyk_normal_overlap_and_transparent_knockout ... ok
+test knockout_compositor::native_blend::invalid_native_samples_spaces_and_modes_refuse ... ok
+test knockout_compositor::native_blend::subtractive_modes_complement_all_four_channels ... ok
+test knockout_compositor::native_frame::admitted_cmyk_frame_keeps_shape_and_alpha_separate_and_releases_background ... ok
+test knockout_compositor::native_frame::cached_paint_transition_matches_fresh_execution_and_refuses_changed_input ... ok
+test knockout_compositor::native_blend::native_group_removal_and_opacity_preserve_unquantized_contribution ... ok
+test knockout_compositor::knockout_tracks_zero_opacity_shape_independently ... ok
+test knockout_compositor::native_frame::nested_paint_frames_preserve_backdrop_opacity_shape_and_failure_latch ... ok
+test knockout_compositor::native_frame::paint_frame_metadata_credit_and_conversion_failure_are_atomic ... ok
+test knockout_compositor::native_frame::prepared_paint_applies_leaf_alpha_source_once ... ok
+test knockout_compositor::native_global_polygon_mask_intersects_regions_before_area_quantization ... ok
+test knockout_compositor::native_frame::retained_group_reuse_matches_fresh_children_with_masks_knockout_and_blends ... ok
+test knockout_compositor::native_paint::original_paint_credit_and_cancellation_preserve_native_precision ... ok
+test knockout_compositor::native_global_polygon_mask_retains_output_credit_and_releases_every_refusal ... ok
+test knockout_compositor::native_frame::native_frame_all_admission_and_cancel_paths_release_storage_and_latch_failure ... ok
+test knockout_compositor::native_spatial::affine_sampled_paint_integrates_spatial_centroid_through_group_opacity ... ok
+test knockout_compositor::native_spatial::cached_constant_groups_preserve_affine_sources_after_group_exit ... ok
+test knockout_compositor::native_spatial::cached_geometry_routes_resample_affine_colors_at_each_fragment ... ok
+test knockout_compositor::native_spatial::canonical_regions_preserve_fill_rules_and_distinct_geometry ... ok
+test knockout_compositor::native_spatial::budgeted_mask_shares_work_across_commands_and_rejects_budget_growth ... ok
+test knockout_compositor::native_spatial::cached_nonisolated_groups_preserve_affine_sources_after_group_exit ... ok
+test knockout_compositor::interpreter_tests::spatial_tiles_match_whole_pdf_composition_with_fractional_edges ... ok
+test knockout_compositor::interpreter_tests::recorded_scene_cancellation_stops_capture_and_prevents_partial_replay ... ok
+test knockout_compositor::native_spatial::affine_spatial_mask_modulates_sampled_paint_before_area_averaging ... ok
+test knockout_compositor::native_spatial::constant_rectangle_certificate_rejects_boundary_contact_and_nonrectangles ... ok
+test knockout_compositor::native_spatial::constant_routes_preserve_repeated_coverage_and_group_opacity_across_partitions ... ok
+test knockout_compositor::native_spatial::deduplicated_mesh_owner_regions_keep_latest_source_index ... ok
+test knockout_compositor::native_spatial::distinct_raster_mask_grid_preserves_color_alpha_correlation ... ok
+test knockout_compositor::interpreter_tests::every_pdf_replay_checkpoint_returns_no_partial_image_on_cancellation ... ok
+test knockout_compositor::native_spatial::empty_groups_prune_masks_but_preserve_painted_nested_groups ... ok
+test knockout_compositor::native_spatial::cached_paint_runs_preserve_following_affine_sources ... ok
+test knockout_compositor::native_spatial::indexed_owner_masks_match_independent_winding_priority_across_words ... ok
+test knockout_compositor::native_spatial::incremental_coverage_crosses_word_boundaries_and_preserves_fill_rules ... ok
+test knockout_compositor::native_spatial::native_mask_point_keeps_partial_geometry_before_parent_averaging ... ok
+test knockout_compositor::native_spatial::native_empty_sample_cannot_mint_work_or_hide_cancellation ... ok
+test knockout_compositor::native_spatial::native_raster_cells_preserve_texel_color_alpha_and_repeat_correlation ... ok
+test knockout_compositor::native_spatial::neutral_ais_group_preserves_sampled_sources_in_hardlight_parent ... ok
+test knockout_compositor::native_spatial::neutral_group_flattening_preserves_alpha_colors_and_protected_boundaries ... ok
+test knockout_compositor::native_spatial::nonisolated_group_cache_rejects_changed_affine_backdrops ... ok
+test knockout_compositor::native_spatial::opaque_coalescing_preserves_mask_accumulation_and_fractional_coverage ... ok
+test knockout_compositor::native_spatial::opaque_sibling_overwrite_preserves_knockout_shape_and_blend_boundaries ... ok
+test knockout_compositor::native_spatial::lazy_mask_skips_replaced_source_and_reuses_only_within_one_fragment ... ok
+test knockout_compositor::native_spatial::raster_geometry_refuses_dense_or_invalid_queries_and_releases_cancelled_storage ... ok
+test knockout_compositor::native_spatial::owner_plan_refusal_and_every_cancellation_release_capacity ... ok
+test knockout_compositor::native_spatial::redundant_mask_clears_preserve_parent_mask_restore_and_explicit_clear ... ok
+test knockout_compositor::native_spatial::route_signature_ignores_hidden_geometry_but_keeps_invisibility_witness ... ok
+test knockout_compositor::native_spatial::indexed_routes_preserve_color_and_coverage_across_repeated_eviction ... ok
+test knockout_compositor::native_spatial::sampled_refusal_absence_work_and_post_sample_cancellation_return_no_partial_pixel ... ok
+test knockout_compositor::native_spatial::sampled_raster_alpha_is_shape_preserves_knockout_uncovered_backdrop ... ok
+test knockout_compositor::native_spatial::shared_coverage_group_guard_preserves_repeated_alpha_and_distinct_coverage ... ok
+test knockout_compositor::native_spatial::spatial_clips_native_cmyk_and_refusals_keep_admission_bounded ... ok
+test knockout_compositor::native_spatial::spatial_group_isolation_changes_multiply_backdrop_without_spreading_edge ... ok
+test knockout_compositor::native_spatial::spatial_group_opacity_isolation_knockout_and_nesting_preserve_partial_area ... ok
+test knockout_compositor::native_spatial::spatial_mask_errors_budget_cancellation_and_admission_release_every_frame ... ok
+test knockout_compositor::native_spatial::sparse_routing_preserves_highest_word_and_coverage_changes ... ok
+test knockout_compositor::native_spatial::spatial_opaque_and_translucent_overlap_preserves_coverage_and_source_order ... ok
+test knockout_compositor::native_spatial::spatial_parent_mask_applies_once_to_group_and_is_restored_after_exit ... ok
+test knockout_compositor::native_spatial::unsorted_mesh_owner_priority_is_refused_before_sampling ... ok
+test knockout_compositor::nested_clips_intersect_and_evenodd_clip_hole_remains_uncovered ... ok
+test knockout_compositor::nested_group_backdrop_selection_keeps_initial_and_current_distinct ... ok
+test knockout_compositor::opacity_mask_changes_alpha_without_erasing_knockout_shape ... ok
+test knockout_compositor::opacity_mask_releases_credit_at_every_cancel_checkpoint ... ok
+test knockout_compositor::opaque_backdrop_does_not_hide_group_alpha_or_color_contribution ... ok
+test knockout_compositor::one_ai_source_cubic_boundary_matches_independent_area_oracle ... ok
+test knockout_compositor::output_credit_is_retained_until_buffer_drop_and_refusal_preserves_input ... ok
+test knockout_compositor::partially_transparent_and_isolated_backdrops_are_removed_consistently ... ok
+test knockout_compositor::polygon_coverage::adjacent_representable_scanline_cuts_retain_independent_rectangle_area ... ok
+test knockout_compositor::polygon_coverage::admitted_row_reuses_edges_and_retains_credit_across_pixels ... ok
+test knockout_compositor::polygon_coverage::incremental_owner_matches_full_scan_and_tracks_every_winding_update ... ok
+test knockout_compositor::polygon_coverage::independent_polygon_areas_cover_winding_holes_overlap_and_clipping ... ok
+test knockout_compositor::polygon_coverage::coincident_edges_skip_zero_area_owner_scans ... ok
+test knockout_compositor::polygon_coverage::left_chain_prepare_refusal_and_every_cancellation_release_credit ... ok
+test knockout_compositor::polygon_coverage::outside_vertices_preserve_winding_and_border_crossings ... ok
+test knockout_compositor::polygon_coverage::left_chain_compression_preserves_nonmonotone_winding_and_fill_parity ... ok
+test knockout_compositor::polygon_coverage::pixel_fragment_refusals_and_every_cancellation_release_scratch ... ok
+test knockout_compositor::polygon_coverage::pixel_fragments_integrate_affine_color_when_pixel_center_is_outside ... ok
+test knockout_compositor::polygon_coverage::pixel_fragments_keep_disconnected_coverage_outside_an_evenodd_hole ... ok
+test knockout_compositor::polygon_coverage::pixel_row_right_edge_culling_avoids_irrelevant_active_edge_cap ... ok
+test knockout_compositor::polygon_coverage::polygon_active_edge_exhaustion_refuses_before_admission ... ok
+test knockout_compositor::polygon_coverage::narrow_preparation_preserves_fragments_and_excludes_other_vertical_domains ... ok
+test knockout_compositor::polygon_coverage::polygon_area_global_translation_preserves_independent_fractional_reference ... ok
+test knockout_compositor::polygon_coverage::selected_pixel_fragment_refusal_and_cancel_release_scratch ... ok
+test knockout_compositor::polygon_coverage::selected_pixel_fragments_apply_evenodd_clip_before_source_union ... ok
+test knockout_compositor::polygon_coverage::selected_pixel_fragments_integrate_visible_triangles_in_source_order ... ok
+test knockout_compositor::polygon_coverage::selected_pixel_regions_cover_real_candidate_count_without_lifting_ordinary_cap ... ok
+test knockout_compositor::polygon_coverage::shared_polygon_budget_spans_preparation_and_subrectangles_without_reset ... ok
+test knockout_compositor::native_spatial::spatial_group_failures_release_nested_frames_and_do_not_return_partial_pixels ... ok
+test knockout_compositor::polygon_coverage::right_disjoint_edges_do_not_consume_pixel_subdivision_work ... ok
+test knockout_compositor::precise_spatial_reduction_avoids_double_rounding_and_rejects_nonfinite_samples ... ok
+test knockout_compositor::precise_groups_avoid_false_negative_backdrop_contribution ... ok
+test knockout_compositor::separable_blends_use_initial_backdrop_and_keep_shape_independent ... ok
+test knockout_compositor::shape_mask_preserves_previous_knockout_child_when_mask_is_zero ... ok
+test knockout_compositor::polygon_coverage::polygon_area_refusal_cancellation_and_work_exhaustion_release_scratch ... ok
+test knockout_compositor::soft_mask_alpha_and_device_luminosity_preserve_premultiplication ... ok
+test knockout_compositor::shape_mask_stops_at_every_cancellation_checkpoint ... ok
+test knockout_compositor::soft_mask_conversion_cancellation_releases_credit ... ok
+test knockout_compositor::spatial_reduction_cancellation_and_invalid_samples_release_credit ... ok
+test knockout_compositor::spatial_reduction_preserves_premultiplication_and_checks_admission ... ok
+test knockout_compositor::precise_tiles_release_credit_at_every_refusal_and_cancellation ... ok
+test knockout_compositor::transparent_child_replaces_prior_inside_its_shape ... ok
+test renderer::renderer_cancellation_tests::texture_cancellation_never_returns_partial_pixels ... ok
+test knockout_compositor::native_spatial::opaque_single_paint_group_matches_unoptimized_duplicate_paints ... ok
+test knockout_compositor::spatial_tiles_release_all_credit_at_every_failure_and_cancellation ... ok
+test knockout_compositor::polygon_coverage::pixel_owner_triangles_exceed_reusable_row_capacity_with_bounded_storage ... ok
+test knockout_compositor::interpreter_tests::native_solid_scene_refusals_and_cancellations_release_all_replay_credit ... ok
+test knockout_compositor::one_ai_curve_tolerance_against_source_area_oracle ... ok
+test knockout_compositor::interpreter_tests::admitted_stroke_capture_refusal_and_cancel_never_replay_partial_geometry ... ok
+test knockout_compositor::interpreter_tests::actual_pdf_soft_mask_group_is_captured_on_transparent_backdrop ... ok
+test knockout_compositor::interpreter_tests::prepared_global_scene_matches_tiles_at_capture_scales_and_rotations ... ok
+
+test result: ok. 203 passed; 0 failed; 12 ignored; 0 measured; 0 filtered out; finished in 1.66s
+

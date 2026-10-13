@@ -1,0 +1,52 @@
+{
+  "backend": "Metal",
+  "device": "Apple M4 Max",
+  "dimensions": [
+    4000,
+    3000
+  ],
+  "source_count": 1,
+  "storage_cases": 2,
+  "storage": [
+    "native RGBA8",
+    "prepared float"
+  ],
+  "checks": [
+    "all native pixels equal independently authored oracle",
+    "all SDR pixels exact before/after swap",
+    "all RGBA16Float pixels exact before/after swap",
+    "lease prevents spill",
+    "restore cancellation after allocation admission releases root",
+    "full managed budget refuses restore; retry succeeds",
+    "final managed root and queue zero"
+  ],
+  "result": "passed",
+  "seconds": 13.81,
+  "log": "../metal-dpx-12mp-full-frame-2026-10-12.log",
+  "ordinary_collection_regression": {
+    "sources": 106,
+    "selections": 135,
+    "storage_cases": 270,
+    "result": "passed",
+    "seconds": 23.17,
+    "log": "../metal-collection-after-large-dpx-2026-10-12.log"
+  },
+  "files": [
+    {
+      "path": "/tmp/rrrah-dpx-12mp-current-20261012.dpx",
+      "bytes": 36002048,
+      "sha256": "2c8a8165d53dc08afcad0c9f5945a1014d7f03ca399e590340d1318586b25fc9"
+    },
+    {
+      "path": "/tmp/rrrah-dpx-12mp-current-20261012.dpx.u8",
+      "bytes": 48000000,
+      "sha256": "63c4efae830ef16165790423bcf5c363f5b44b559ac6d24494f07285ad989f03"
+    }
+  ],
+  "limits": [
+    "authored RGB8 source; HDR output-format transport, not above-one scene qualification",
+    "same renderer before/after tests transport fidelity",
+    "managed budgets are not OS RSS or physical slow-disk pressure",
+    "physical HDR luminance/color uncalibrated; NVIDIA deferred"
+  ]
+}

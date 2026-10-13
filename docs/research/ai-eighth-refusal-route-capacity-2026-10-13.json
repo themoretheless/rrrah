@@ -1,0 +1,36 @@
+{
+  "target": [
+    195,
+    37
+  ],
+  "baseline": {
+    "regions": 72,
+    "routing_regions": 58,
+    "fragments": 98587,
+    "route_misses": 192,
+    "native_source_work": 1320503,
+    "source_1023_calls": 98587,
+    "source_1023_work": 1084446,
+    "source_1023_coordinates_work": 98586,
+    "final_credit": 0
+  },
+  "experiment": {
+    "name": "256 routes for small-command streams with over64regions; 512-slot lookup",
+    "retained": false,
+    "fragments": 99878,
+    "route_misses": 169,
+    "completed": false,
+    "reason": "Only1.31percent extra fragments; increased admitted cache not justified"
+  },
+  "final_suite": {
+    "passed": 203,
+    "ignored": 12,
+    "failed": 0
+  },
+  "next_action": "Inspect exact axial shading function evaluation and repeated group reuse checks",
+  "sha256": {
+    "docs/research/ai-eighth-refusal-localized-2026-10-13.log": "39ce631ee80b328a87bcdecd2af509dd4290375cd7fad62748aa0e1933ed2d6a",
+    "docs/research/ai-route-capacity-original-2026-10-13.log": "a2c5385287e8776f3a28f4ca4582579eb71d4cc4979bbc5f8da7dd3d9c9c1af9",
+    "docs/research/ai-route-capacity-removed-suite-2026-10-13.log": "6f28a9a59dd97e346cb7cf127863d17015ce06f8cd3877563728b70a869a3d49"
+  }
+}

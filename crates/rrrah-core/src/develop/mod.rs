@@ -420,10 +420,15 @@ pub fn develop_raw(
                 4 if quad.is_some() => md.white_level.0[(y % 2) * 2 + x % 2],
                 _ => return Err(DevelopError::Invalid("unsupported white grid")),
             };
-            if white <= black {
-                return Err(DevelopError::Invalid("white level must exceed black"));
+            let range = white - black;
+            if !range.is_finite() || range <= 0. {
+                return Err(DevelopError::Invalid("white-minus-black range must be finite and positive"));
             }
-            samples[y * w + x] = (samples[y * w + x] - black).max(0.0) / (white - black);
+            let normalized = (samples[y * w + x] - black).max(0.0) / range;
+            if !normalized.is_finite() {
+                return Err(DevelopError::Invalid("non-finite normalized sensor samples"));
+            }
+            samples[y * w + x] = normalized;
         }
     }
     // Capture clipping in sensor units before gain maps or WB. Corrected HDR
@@ -874,6 +879,43 @@ mod pipeline_tests {
             .collect::<Vec<_>>();
         DecodedMosaic::new(md, std::sync::Arc::new(data)).unwrap()
     }
+    #[test]
+    fn overflowing_level_range_is_refused_and_releases_scratch() {
+        let mut mosaic = sensor();
+        mosaic.metadata.black_level.values[0] = -f32::MAX;
+        mosaic.metadata.white_level.0[0] = f32::MAX;
+        let budget = MemoryBudget::new(16 * 1024 * 1024);
+        let result = develop_raw(&mosaic, &DevelopOptions::default(),
+            &OpcodeLists::default(), Some(&budget), &|| false);
+        assert!(matches!(result,
+            Err(DevelopError::Invalid("white-minus-black range must be finite and positive"))), "{result:?}");
+        assert_eq!(budget.used(), 0);
+    }
+
+    #[test]
+    fn normalization_and_gain_overflows_are_refused_with_complete_rollback() {
+        let budget = MemoryBudget::new(16 * 1024 * 1024);
+        let mut tiny_range = sensor();
+        tiny_range.metadata.white_level.0[0] = f32::from_bits(1);
+        assert!(matches!(develop_raw(&tiny_range, &DevelopOptions::default(),
+            &OpcodeLists::default(), Some(&budget), &|| false),
+            Err(DevelopError::Invalid("non-finite normalized sensor samples"))));
+        assert_eq!(budget.used(), 0);
+        let mut overflowing_gain = sensor();
+        overflowing_gain.metadata.white_level.0[0] = 100.;
+        overflowing_gain.metadata.white_balance = [f32::MAX; 4];
+        assert!(matches!(develop_raw(&overflowing_gain, &DevelopOptions::default(),
+            &OpcodeLists::default(), Some(&budget), &|| false),
+            Err(DevelopError::Invalid("non-finite corrected sensor samples"))));
+        assert_eq!(budget.used(), 0);
+        // Refusals must leave the same budget immediately usable by a valid HDR decode.
+        let valid = develop_raw(&sensor(), &DevelopOptions::default(),
+            &OpcodeLists::default(), Some(&budget), &|| false).unwrap();
+        assert!(budget.used() > 0);
+        drop(valid);
+        assert_eq!(budget.used(), 0);
+    }
+
     #[test]
     fn rgbe_full_development_preserves_emerald_color_crop_and_budget() {
         use crate::CfaColor;

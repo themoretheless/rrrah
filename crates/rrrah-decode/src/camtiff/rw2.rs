@@ -696,8 +696,8 @@ fn white_level(ifd0: &CameraDirectory<'_>, bits: u8) -> Result<WhiteLevel, Decod
                 value.ok_or_else(|| camera_error(FORMAT, "partial Panasonic RGB linearity limits"))?;
             let value = u16::try_from(value)
                 .map_err(|_| camera_error(FORMAT, "Panasonic linearity limit exceeds u16"))?;
-            if value == 0 {
-                return Err(camera_error(FORMAT, "Panasonic linearity limit is zero"));
+            if value == 0 || u32::from(value) > (1_u32 << bits) - 1 {
+                return Err(camera_error(FORMAT, "Panasonic linearity limit is outside the sensor bit depth"));
             }
             Ok(f32::from(value))
         })
@@ -1442,6 +1442,11 @@ mod tests {
         );
         for limits in [
             vec![short(pana::LINEARITY_LIMIT_RED, 3900)],
+            vec![
+                short(pana::LINEARITY_LIMIT_RED, 4096),
+                short(pana::LINEARITY_LIMIT_GREEN, 4000),
+                short(pana::LINEARITY_LIMIT_BLUE, 3800),
+            ],
             vec![
                 short(pana::LINEARITY_LIMIT_RED, 0),
                 short(pana::LINEARITY_LIMIT_GREEN, 4000),

@@ -1,0 +1,728 @@
+warning: unnecessary qualification
+  --> src/knockout_interpreter.rs:11:21
+   |
+11 |     NativeColor(Box<super::native_paint::NativePaint>),
+   |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: requested on the command line with `-W unused-qualifications`
+help: remove the unnecessary path segments
+   |
+11 -     NativeColor(Box<super::native_paint::NativePaint>),
+11 +     NativeColor(Box<native_paint::NativePaint>),
+   |
+
+warning: unnecessary qualification
+  --> src/knockout_interpreter.rs:66:87
+   |
+66 |     native_mask_transfers: Vec<(usize, Option<hayro_interpret::TransferFunction>, Box<super::native_paint::NativePaint>, bool)>,
+   |                                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+help: remove the unnecessary path segments
+   |
+66 -     native_mask_transfers: Vec<(usize, Option<hayro_interpret::TransferFunction>, Box<super::native_paint::NativePaint>, bool)>,
+66 +     native_mask_transfers: Vec<(usize, Option<hayro_interpret::TransferFunction>, Box<native_paint::NativePaint>, bool)>,
+   |
+
+warning: unnecessary qualification
+   --> src/knockout_interpreter.rs:446:100
+    |
+446 | ...   if !self.capture(Some(size_of::<(usize, Option<hayro_interpret::TransferFunction>, Box<super::native_paint::NativePaint>, boo...
+    |                                                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+help: remove the unnecessary path segments
+    |
+446 -             if !self.capture(Some(size_of::<(usize, Option<hayro_interpret::TransferFunction>, Box<super::native_paint::NativePaint>, bool)>())) { return; }
+446 +             if !self.capture(Some(size_of::<(usize, Option<hayro_interpret::TransferFunction>, Box<native_paint::NativePaint>, bool)>())) { return; }
+    |
+
+warning: unnecessary qualification
+   --> src/knockout_interpreter.rs:448:41
+    |
+448 |             let Some(native_backdrop) = super::native_paint::NativePaint::capture(&mask.background_color(),&cancel,&admit) else {
+    |                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+help: remove the unnecessary path segments
+    |
+448 -             let Some(native_backdrop) = super::native_paint::NativePaint::capture(&mask.background_color(),&cancel,&admit) else {
+448 +             let Some(native_backdrop) = native_paint::NativePaint::capture(&mask.background_color(),&cancel,&admit) else {
+    |
+
+warning: unnecessary qualification
+   --> src/knockout_interpreter.rs:569:35
+    |
+569 |                 let Some(paint) = super::native_paint::NativePaint::capture(
+    |                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+help: remove the unnecessary path segments
+    |
+569 -                 let Some(paint) = super::native_paint::NativePaint::capture(
+569 +                 let Some(paint) = native_paint::NativePaint::capture(
+    |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:4928:25
+     |
+4928 |             let clear = super::native_blend::Pixel::from_native(super::native_blend::Model::Cmyk, &[0.;4], 0.).unwrap();
+     |                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+4928 -             let clear = super::native_blend::Pixel::from_native(super::native_blend::Model::Cmyk, &[0.;4], 0.).unwrap();
+4928 +             let clear = native_blend::Pixel::from_native(super::native_blend::Model::Cmyk, &[0.;4], 0.).unwrap();
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:4928:65
+     |
+4928 |             let clear = super::native_blend::Pixel::from_native(super::native_blend::Model::Cmyk, &[0.;4], 0.).unwrap();
+     |                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+4928 -             let clear = super::native_blend::Pixel::from_native(super::native_blend::Model::Cmyk, &[0.;4], 0.).unwrap();
+4928 +             let clear = super::native_blend::Pixel::from_native(native_blend::Model::Cmyk, &[0.;4], 0.).unwrap();
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:4929:29
+     |
+4929 |             let mut frame = super::native_frame::PaintFrame::admitted(&[clear], target, false, true,
+     |                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+4929 -             let mut frame = super::native_frame::PaintFrame::admitted(&[clear], target, false, true,
+4929 +             let mut frame = native_frame::PaintFrame::admitted(&[clear], target, false, true,
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:4963:13
+     |
+4963 | ) -> Option<super::native_frame::Buffer> {
+     |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+4963 - ) -> Option<super::native_frame::Buffer> {
+4963 + ) -> Option<native_frame::Buffer> {
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:5108:15
+     |
+5108 |     let row = super::polygon_coverage::admitted_selected_polygon_domain_budget(&regions, y, rect.y0, rect.y1, remaining, cancelled...
+     |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+5108 -     let row = super::polygon_coverage::admitted_selected_polygon_domain_budget(&regions, y, rect.y0, rect.y1, remaining, cancelled, admit)
+5108 +     let row = polygon_coverage::admitted_selected_polygon_domain_budget(&regions, y, rect.y0, rect.y1, remaining, cancelled, admit)
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:5216:59
+     |
+5216 |     space: &hayro_interpret::color::ColorSpace, backdrop: super::native_blend::Pixel,
+     |                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+5216 -     space: &hayro_interpret::color::ColorSpace, backdrop: super::native_blend::Pixel,
+5216 +     space: &hayro_interpret::color::ColorSpace, backdrop: native_blend::Pixel,
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:5219:13
+     |
+5219 | ) -> Option<super::native_frame::Buffer> {
+     |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+5219 - ) -> Option<super::native_frame::Buffer> {
+5219 + ) -> Option<native_frame::Buffer> {
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:5225:59
+     |
+5225 |     space: &hayro_interpret::color::ColorSpace, backdrop: super::native_blend::Pixel,
+     |                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+5225 -     space: &hayro_interpret::color::ColorSpace, backdrop: super::native_blend::Pixel,
+5225 +     space: &hayro_interpret::color::ColorSpace, backdrop: native_blend::Pixel,
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:5229:13
+     |
+5229 | ) -> Option<super::native_frame::Buffer> {
+     |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+5229 - ) -> Option<super::native_frame::Buffer> {
+5229 + ) -> Option<native_frame::Buffer> {
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:5255:62
+     |
+5255 |     let _backdrop_credit = admit(count.checked_mul(size_of::<super::native_blend::Pixel>())?)?;
+     |                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+5255 -     let _backdrop_credit = admit(count.checked_mul(size_of::<super::native_blend::Pixel>())?)?;
+5255 +     let _backdrop_credit = admit(count.checked_mul(size_of::<native_blend::Pixel>())?)?;
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:6384:79
+     |
+6384 |         let paints:Vec<_>=indices.iter().zip(&sources).map(|(regions,&source)|super::native_spatial::SpatialPaint {
+     |                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+6384 -         let paints:Vec<_>=indices.iter().zip(&sources).map(|(regions,&source)|super::native_spatial::SpatialPaint {
+6384 +         let paints:Vec<_>=indices.iter().zip(&sources).map(|(regions,&source)|native_spatial::SpatialPaint {
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:6387:19
+     |
+6387 |         let pixel=super::native_spatial::compose_polygon_pixel(&regions,&paints,clear,0,0,
+     |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+6387 -         let pixel=super::native_spatial::compose_polygon_pixel(&regions,&paints,clear,0,0,
+6387 +         let pixel=native_spatial::compose_polygon_pixel(&regions,&paints,clear,0,0,
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:6766:72
+     |
+6766 |     scene:&Recorder,space:&hayro_interpret::color::ColorSpace,backdrop:super::native_blend::Pixel,
+     |                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+6766 -     scene:&Recorder,space:&hayro_interpret::color::ColorSpace,backdrop:super::native_blend::Pixel,
+6766 +     scene:&Recorder,space:&hayro_interpret::color::ColorSpace,backdrop:native_blend::Pixel,
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:6769:11
+     |
+6769 | )->Option<super::native_blend::Pixel> {
+     |           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+6769 - )->Option<super::native_blend::Pixel> {
+6769 + )->Option<native_blend::Pixel> {
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:6782:64
+     |
+6782 | type SpatialRasterCache<'a>=(&'a Recorder,usize,std::sync::Arc<super::native_spatial::RasterCells>,
+     |                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+6782 - type SpatialRasterCache<'a>=(&'a Recorder,usize,std::sync::Arc<super::native_spatial::RasterCells>,
+6782 + type SpatialRasterCache<'a>=(&'a Recorder,usize,std::sync::Arc<native_spatial::RasterCells>,
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:6783:27
+     |
+6783 |     Option<std::sync::Arc<super::native_spatial::RasterCells>>);
+     |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+6783 -     Option<std::sync::Arc<super::native_spatial::RasterCells>>);
+6783 +     Option<std::sync::Arc<native_spatial::RasterCells>>);
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:6791:72
+     |
+6791 |     scene:&Recorder,space:&hayro_interpret::color::ColorSpace,backdrop:super::native_blend::Pixel,
+     |                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+6791 -     scene:&Recorder,space:&hayro_interpret::color::ColorSpace,backdrop:super::native_blend::Pixel,
+6791 +     scene:&Recorder,space:&hayro_interpret::color::ColorSpace,backdrop:native_blend::Pixel,
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:6794:11
+     |
+6794 | )->Option<super::native_blend::Pixel> {
+     |           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+6794 - )->Option<super::native_blend::Pixel> {
+6794 + )->Option<native_blend::Pixel> {
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:6820:24
+     |
+6820 |         std::sync::Arc<super::native_spatial::RasterCells>,Option<std::sync::Arc<super::native_spatial::RasterCells>>);
+     |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+6820 -         std::sync::Arc<super::native_spatial::RasterCells>,Option<std::sync::Arc<super::native_spatial::RasterCells>>);
+6820 +         std::sync::Arc<native_spatial::RasterCells>,Option<std::sync::Arc<super::native_spatial::RasterCells>>);
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:6820:82
+     |
+6820 |         std::sync::Arc<super::native_spatial::RasterCells>,Option<std::sync::Arc<super::native_spatial::RasterCells>>);
+     |                                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+6820 -         std::sync::Arc<super::native_spatial::RasterCells>,Option<std::sync::Arc<super::native_spatial::RasterCells>>);
+6820 +         std::sync::Arc<super::native_spatial::RasterCells>,Option<std::sync::Arc<native_spatial::RasterCells>>);
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:6832:22
+     |
+6832 |         2*(size_of::<super::native_spatial::RasterCells>()+2*size_of::<usize>()))?)?;
+     |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+6832 -         2*(size_of::<super::native_spatial::RasterCells>()+2*size_of::<usize>()))?)?;
+6832 +         2*(size_of::<native_spatial::RasterCells>()+2*size_of::<usize>()))?)?;
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:6841:65
+     |
+6841 |                 let (mw,mh)=alpha.dimensions();let (color,mask)=super::native_spatial::admitted_raster_mask_cells(
+     |                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+6841 -                 let (mw,mh)=alpha.dimensions();let (color,mask)=super::native_spatial::admitted_raster_mask_cells(
+6841 +                 let (mw,mh)=alpha.dimensions();let (color,mask)=native_spatial::admitted_raster_mask_cells(
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:6843:22
+     |
+6843 |             } else {(super::native_spatial::admitted_raster_pixel_cells(w,h,*transform,rect,100_000,cancelled,admit)?,None)};
+     |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+6843 -             } else {(super::native_spatial::admitted_raster_pixel_cells(w,h,*transform,rect,100_000,cancelled,admit)?,None)};
+6843 +             } else {(native_spatial::admitted_raster_pixel_cells(w,h,*transform,rect,100_000,cancelled,admit)?,None)};
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:6890:34
+     |
+6890 |                 let (color,mask)=super::native_spatial::admitted_raster_mask_cells(w,h,mw,mh,*transform,rect,
+     |                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+6890 -                 let (color,mask)=super::native_spatial::admitted_raster_mask_cells(w,h,mw,mh,*transform,rect,
+6890 +                 let (color,mask)=native_spatial::admitted_raster_mask_cells(w,h,mw,mh,*transform,rect,
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:6892:22
+     |
+6892 |             } else {(super::native_spatial::admitted_raster_pixel_cells(w,h,*transform,rect,100_000,cancelled,admit)?,None)};
+     |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+6892 -             } else {(super::native_spatial::admitted_raster_pixel_cells(w,h,*transform,rect,100_000,cancelled,admit)?,None)};
+6892 +             } else {(native_spatial::admitted_raster_pixel_cells(w,h,*transform,rect,100_000,cancelled,admit)?,None)};
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:6924:27
+     |
+6924 |                 let cells=super::native_spatial::admitted_line_partition_cells(&lines,rect,1000,cancelled,admit)?;
+     |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+6924 -                 let cells=super::native_spatial::admitted_line_partition_cells(&lines,rect,1000,cancelled,admit)?;
+6924 +                 let cells=native_spatial::admitted_line_partition_cells(&lines,rect,1000,cancelled,admit)?;
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:7028:75
+     |
+7028 |         .checked_add(paints.checked_mul(size_of::<Vec<usize>>()+size_of::<super::native_blend::Pixel>())?)?
+     |                                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7028 -         .checked_add(paints.checked_mul(size_of::<Vec<usize>>()+size_of::<super::native_blend::Pixel>())?)?
+7028 +         .checked_add(paints.checked_mul(size_of::<Vec<usize>>()+size_of::<Pixel>())?)?
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:7123:5
+     |
+7123 |     super::native_spatial::deduplicate_regions(&mut regions,&mut requirements,cancelled,admit)?;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7123 -     super::native_spatial::deduplicate_regions(&mut regions,&mut requirements,cancelled,admit)?;
+7123 +     native_spatial::deduplicate_regions(&mut regions,&mut requirements,cancelled,admit)?;
+     |
+
+warning: unused import: `kurbo::Shape`
+    --> src/knockout_interpreter.rs:7154:17
+     |
+7154 |             use kurbo::Shape;
+     |                 ^^^^^^^^^^^^
+     |
+     = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:7200:5
+     |
+7200 |     super::native_spatial::prune_empty_groups(&mut commands,cancelled)?;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7200 -     super::native_spatial::prune_empty_groups(&mut commands,cancelled)?;
+7200 +     native_spatial::prune_empty_groups(&mut commands,cancelled)?;
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:7201:17
+     |
+7201 |     let cleared=super::native_spatial::prune_redundant_mask_clears(&mut commands,remaining,cancelled)?;
+     |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7201 -     let cleared=super::native_spatial::prune_redundant_mask_clears(&mut commands,remaining,cancelled)?;
+7201 +     let cleared=native_spatial::prune_redundant_mask_clears(&mut commands,remaining,cancelled)?;
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:7203:19
+     |
+7203 |     let flattened=super::native_spatial::flatten_neutral_groups(&mut commands,remaining,cancelled)?;
+     |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7203 -     let flattened=super::native_spatial::flatten_neutral_groups(&mut commands,remaining,cancelled)?;
+7203 +     let flattened=native_spatial::flatten_neutral_groups(&mut commands,remaining,cancelled)?;
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:7206:5
+     |
+7206 |     super::native_spatial::coalesce_opaque_paints(&mut commands,space,cancelled)?;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7206 -     super::native_spatial::coalesce_opaque_paints(&mut commands,space,cancelled)?;
+7206 +     native_spatial::coalesce_opaque_paints(&mut commands,space,cancelled)?;
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:7209:16
+     |
+7209 |     let result=super::native_spatial::compose_grouped_polygon_impl(&regions,&commands,space,backdrop,x,y,point,
+     |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7209 -     let result=super::native_spatial::compose_grouped_polygon_impl(&regions,&commands,space,backdrop,x,y,point,
+7209 +     let result=native_spatial::compose_grouped_polygon_impl(&regions,&commands,space,backdrop,x,y,point,
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:7278:30
+     |
+7278 |                     let area=super::polygon_coverage::polygon_pixel_area(&regions,x,y,20_000_000,&||cancelled(),admission.as_ref());
+     |                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7278 -                     let area=super::polygon_coverage::polygon_pixel_area(&regions,x,y,20_000_000,&||cancelled(),admission.as_ref());
+7278 +                     let area=polygon_coverage::polygon_pixel_area(&regions,x,y,20_000_000,&||cancelled(),admission.as_ref());
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:7295:42
+     |
+7295 |         let white_rgb=result.and_then(|p|super::native_frame::convert_group_pixel(p,&space,rgb.color_space()))
+     |                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7295 -         let white_rgb=result.and_then(|p|super::native_frame::convert_group_pixel(p,&space,rgb.color_space()))
+7295 +         let white_rgb=result.and_then(|p|native_frame::convert_group_pixel(p,&space,rgb.color_space()))
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:7317:21
+     |
+7317 |                     super::native_frame::convert_group_pixel(p, &space, rgb.color_space()))
+     |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7317 -                     super::native_frame::convert_group_pixel(p, &space, rgb.color_space()))
+7317 +                     native_frame::convert_group_pixel(p, &space, rgb.color_space()))
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:7358:50
+     |
+7358 |                 let converted=result.and_then(|p|super::native_frame::convert_group_pixel(p,&space,rgb.color_space()))
+     |                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+7358 -                 let converted=result.and_then(|p|super::native_frame::convert_group_pixel(p,&space,rgb.color_space()))
+7358 +                 let converted=result.and_then(|p|native_frame::convert_group_pixel(p,&space,rgb.color_space()))
+     |
+
+warning: unused variable: `paint`
+    --> src/knockout_interpreter.rs:7044:62
+     |
+7044 |         if let Event::Path(path,_,RecordedPaint::NativeColor(paint),clips,PathDrawMode::Fill(rule))=event {
+     |                                                              ^^^^^ help: if this is intentional, prefix it with an underscore: `_paint`
+     |
+     = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `winding`
+   --> src/native_spatial.rs:386:23
+    |
+386 |     let mut evaluate=|winding:&[i32],point:kurbo::Point,coverage:&[u64;64]| {
+    |                       ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_winding`
+
+warning: unused variable: `owners`
+   --> src/native_spatial.rs:647:60
+    |
+647 |                 SpatialCommand::NativeSampledPaint {sample,owners,alpha_is_shape,mode,..}=>{
+    |                                                            ^^^^^^ help: try ignoring the field: `owners: _`
+
+warning: method `pixel_incremental_selected_rect_fragments` is never used
+   --> src/polygon_coverage.rs:389:19
+    |
+310 | impl PolygonRow {
+    | --------------- method in this implementation
+...
+389 |     pub(super) fn pixel_incremental_selected_rect_fragments(
+    |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `hayro` (lib test) generated 47 warnings (run `cargo fix --lib -p hayro --tests` to apply 46 suggestions)
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.05s
+     Running unittests src/lib.rs (target/ai-white-probe-20261013/debug/deps/hayro-028233655b833e03)
+
+running 1 test
+REAL_AI_MASK_SOURCE event=13 luminosity=true events=21 nested=0 shading=1 rasters=0
+REAL_AI_MASK_BOUNDS event=13 source_paths=Some(Rect { x0: -17.097, y0: -22.541999999999973, x1: 302.904, y1: 309.95700000000005 }) next_main_path=Some(Rect { x0: 231.52551572265628, y0: 93.72296190795899, x1: 233.01636711111067, y1: 96.28964438750447 })
+REAL_AI_MASK_SOURCE event=20 luminosity=true events=25 nested=0 shading=0 rasters=1
+REAL_AI_MASK_BOUNDS event=20 source_paths=None next_main_path=Some(Rect { x0: 231.52551572265628, y0: 93.72296190795899, x1: 233.01636711111067, y1: 96.28964438750447 })
+REAL_AI_MASK_SOURCE event=1003 luminosity=true events=25 nested=0 shading=0 rasters=1
+REAL_AI_MASK_BOUNDS event=1003 source_paths=None next_main_path=Some(Rect { x0: 225.036, y0: 15.383999999999986, x1: 225.04410000000001, y1: 15.395999999999987 })
+REAL_AI_MASK_SOURCE event=1012 luminosity=true events=21 nested=0 shading=1 rasters=0
+REAL_AI_MASK_BOUNDS event=1012 source_paths=Some(Rect { x0: -17.097, y0: -22.541999999999973, x1: 302.904, y1: 309.95700000000005 }) next_main_path=Some(Rect { x0: 225.036, y0: 15.383999999999986, x1: 225.04410000000001, y1: 15.395999999999987 })
+REAL_AI_MASK_SOURCE event=1220 luminosity=true events=15 nested=0 shading=0 rasters=1
+REAL_AI_MASK_BOUNDS event=1220 source_paths=None next_main_path=Some(Rect { x0: 203.23120797212513, y0: 17.020999999999987, x1: 203.24912937875126, y1: 17.034999999999997 })
+REAL_AI_MASK_SOURCE event=2300 luminosity=true events=15 nested=0 shading=0 rasters=1
+REAL_AI_MASK_BOUNDS event=2300 source_paths=None next_main_path=Some(Rect { x0: 121.3237253440857, y0: 28.71946306422296, x1: 133.44371855331826, y1: 47.222527703857416 })
+REAL_AI_SPATIAL_PREFLIGHT=Ok(())
+SPATIAL_MESH_SOURCE event=9 source=Some(Cmyk) destination=Some(Cmyk) axial=false
+SPATIAL_MESH_SOURCE event=1017 source=None destination=Some(Cmyk) axial=true
+SPATIAL_MESH_SOURCE event=1023 source=Some(Cmyk) destination=Some(Cmyk) axial=true
+SPATIAL_MESH_SOURCE event=1207 source=Some(Cmyk) destination=Some(Cmyk) axial=true
+SPATIAL_MESH_SOURCE event=1230 source=None destination=Some(Cmyk) axial=true
+SPATIAL_MESH_SOURCE event=1236 source=None destination=Some(Cmyk) axial=true
+SPATIAL_MESH_SOURCE event=2097 source=Some(Cmyk) destination=Some(Cmyk) axial=true
+SPATIAL_MESH_SOURCE event=2103 source=Some(Cmyk) destination=Some(Cmyk) axial=true
+SPATIAL_MESH_SOURCE event=2287 source=Some(Cmyk) destination=Some(Cmyk) axial=true
+SPATIAL_MESH_SOURCE event=2664 source=Some(Cmyk) destination=Some(Cmyk) axial=true
+SPATIAL_MESH_SOURCE event=2670 source=Some(Cmyk) destination=Some(Cmyk) axial=false
+SPATIAL_MESH_SOURCE event=2676 source=Some(Cmyk) destination=Some(Cmyk) axial=false
+SPATIAL_MESH_SOURCE event=2742 source=None destination=Some(Cmyk) axial=true
+SPATIAL_LIVE_MASKS total=6 live=0
+SPATIAL_EXCLUDED_MESH_REGIONS count=0
+SPATIAL_REGION_DEDUP original=418 unique=394
+SPATIAL_REDUNDANT_MASK_CLEARS_REMOVED=158
+SPATIAL_NEUTRAL_GROUP_BOUNDARIES_REMOVED=0
+SPATIAL_PAINT_COALESCE before=12 after=12
+SPATIAL_GROUP_PROPERTIES command=0 isolated=false knockout=false opacity=0.5 ais=false mode=HardLight
+SPATIAL_GROUP_PROPERTIES command=1 isolated=false knockout=false opacity=1 ais=true mode=Normal
+SPATIAL_GROUP_PROPERTIES command=6 isolated=false knockout=false opacity=0.5 ais=false mode=HardLight
+SPATIAL_GROUP_PROPERTIES command=7 isolated=false knockout=false opacity=1 ais=true mode=Normal
+SPATIAL_PREPARED_KINDS retained=0 paint=0 native=4 sampled=0 begin=4 end=4 clear_mask=0 set_mask=0
+SPATIAL_CONSTANT_RECTANGLE_REGIONS=5
+SPATIAL_ROUTING_REGIONS total=394 used=4
+SPATIAL_BUDGET_SPENT key=225968 lookup=16089 route_preparation=241 native_source=862218 backdrop_comparison=0
+SPATIAL_DISPATCH_KINDS retained=0 paint=0 native=92931 sampled=0 begin=126672 end=126672 clear_mask=0 set_mask=0
+SPATIAL_WORK_COUNTS fragments=31668 route_hits=31665 route_misses=3 dispatch=346275 groups=126672 native_samples=92931 fixed_samples=0 mask_samples=0 constant_hits=0 group_hits=0 paint_run_hits=0 hidden_commands=0 local_signature_hits=30594
+REAL_AI_SPATIAL_ROUTE_ADMISSIONS pixel=(138,34) count=665073
+REAL_AI_SPATIAL_PIXEL pixel=(138,34) captured=true events=2755 shading_events=13 mask_events=6 completed=true alpha=Some(0.4473354104716791) components=Some([0.2323576653621876, 0.664123608278963, 0.8537717680043353, 0.1279215125441031]) white_rgb=Some([219.4483649179116, 185.49523329477617, 166.50881305396837]) deadline=false peak_bytes=239197736
+SPATIAL_MESH_SOURCE event=9 source=Some(Cmyk) destination=Some(Cmyk) axial=false
+SPATIAL_MESH_SOURCE event=1017 source=None destination=Some(Cmyk) axial=true
+SPATIAL_MESH_SOURCE event=1023 source=Some(Cmyk) destination=Some(Cmyk) axial=true
+SPATIAL_MESH_SOURCE event=1207 source=Some(Cmyk) destination=Some(Cmyk) axial=true
+SPATIAL_MESH_SOURCE event=1230 source=None destination=Some(Cmyk) axial=true
+SPATIAL_MESH_SOURCE event=1236 source=None destination=Some(Cmyk) axial=true
+SPATIAL_MESH_SOURCE event=2097 source=Some(Cmyk) destination=Some(Cmyk) axial=true
+SPATIAL_MESH_SOURCE event=2103 source=Some(Cmyk) destination=Some(Cmyk) axial=true
+SPATIAL_MESH_SOURCE event=2287 source=Some(Cmyk) destination=Some(Cmyk) axial=true
+SPATIAL_MESH_SOURCE event=2664 source=Some(Cmyk) destination=Some(Cmyk) axial=true
+SPATIAL_MESH_SOURCE event=2670 source=Some(Cmyk) destination=Some(Cmyk) axial=false
+SPATIAL_MESH_SOURCE event=2676 source=Some(Cmyk) destination=Some(Cmyk) axial=false
+SPATIAL_MESH_SOURCE event=2742 source=None destination=Some(Cmyk) axial=true
+SPATIAL_LIVE_MASKS total=6 live=0
+SPATIAL_EXCLUDED_MESH_REGIONS count=0
+SPATIAL_REGION_DEDUP original=98 unique=52
+SPATIAL_REDUNDANT_MASK_CLEARS_REMOVED=269
+SPATIAL_NEUTRAL_GROUP_BOUNDARIES_REMOVED=0
+SPATIAL_PAINT_COALESCE before=58 after=58
+SPATIAL_GROUP_PROPERTIES command=1 isolated=false knockout=true opacity=1 ais=false mode=Normal
+SPATIAL_GROUP_PROPERTIES command=2 isolated=false knockout=false opacity=0 ais=false mode=Normal
+SPATIAL_GROUP_PROPERTIES command=5 isolated=false knockout=false opacity=0.021896399557590485 ais=false mode=Normal
+SPATIAL_GROUP_PROPERTIES command=8 isolated=false knockout=false opacity=0.04370120167732239 ais=false mode=Normal
+SPATIAL_GROUP_PROPERTIES command=11 isolated=false knockout=false opacity=0.06559749692678452 ais=false mode=Normal
+SPATIAL_GROUP_PROPERTIES command=14 isolated=false knockout=false opacity=0.087493896484375 ais=false mode=Normal
+SPATIAL_GROUP_PROPERTIES command=17 isolated=false knockout=false opacity=0.1094060018658638 ais=false mode=Normal
+SPATIAL_GROUP_PROPERTIES command=20 isolated=false knockout=false opacity=0.13119499385356903 ais=false mode=Normal
+SPATIAL_GROUP_PROPERTIES command=23 isolated=false knockout=false opacity=0.15310700237751007 ais=false mode=Normal
+SPATIAL_GROUP_PROPERTIES command=26 isolated=false knockout=false opacity=0.17500300705432892 ais=false mode=Normal
+SPATIAL_GROUP_PROPERTIES command=29 isolated=false knockout=false opacity=0.19689899682998657 ais=false mode=Normal
+SPATIAL_GROUP_PROPERTIES command=32 isolated=false knockout=false opacity=0.2187959998846054 ais=false mode=Normal
+SPATIAL_GROUP_PROPERTIES command=35 isolated=false knockout=false opacity=0.24060100317001343 ais=false mode=Normal
+SPATIAL_GROUP_PROPERTIES command=38 isolated=false knockout=false opacity=0.2624970078468323 ais=false mode=Normal
+SPATIAL_GROUP_PROPERTIES command=41 isolated=false knockout=false opacity=0.2843930125236511 ais=false mode=Normal
+SPATIAL_GROUP_PROPERTIES command=44 isolated=false knockout=false opacity=0.3063049912452698 ais=false mode=Normal
+SPATIAL_GROUP_PROPERTIES command=47 isolated=false knockout=false opacity=0.3280940055847168 ais=false mode=Normal
+SPATIAL_GROUP_PROPERTIES command=52 isolated=false knockout=false opacity=0.5 ais=false mode=HardLight
+SPATIAL_GROUP_PROPERTIES command=53 isolated=false knockout=false opacity=1 ais=true mode=Normal
+SPATIAL_PREPARED_KINDS retained=16 paint=0 native=4 sampled=0 begin=19 end=19 clear_mask=0 set_mask=0
+SPATIAL_CONSTANT_RECTANGLE_REGIONS=14
+SPATIAL_ROUTING_REGIONS total=52 used=27
+SPATIAL_BUDGET_SPENT key=17599 lookup=28514 route_preparation=11556 native_source=332224 backdrop_comparison=22856
+SPATIAL_DISPATCH_KINDS retained=0 paint=0 native=34368 sampled=0 begin=180188 end=34357 clear_mask=0 set_mask=0
+SPATIAL_WORK_COUNTS fragments=11456 route_hits=11428 route_misses=28 dispatch=248913 groups=34357 native_samples=34368 fixed_samples=0 mask_samples=0 constant_hits=0 group_hits=11 paint_run_hits=0 hidden_commands=0 local_signature_hits=5312
+REAL_AI_SPATIAL_ROUTE_ADMISSIONS pixel=(105,33) count=194752
+REAL_AI_SPATIAL_PIXEL pixel=(105,33) captured=true events=2755 shading_events=13 mask_events=6 completed=true alpha=Some(0.9999999999999988) components=Some([0.9351232815663919, 0.2596741408031866, 0.8425726707372792, 0.1337093472489289]) white_rgb=Some([3.114175584073564e-13, 124.74997356534018, 82.04518228769322]) deadline=false peak_bytes=239197736
+SPATIAL_MESH_SOURCE event=9 source=Some(Cmyk) destination=Some(Cmyk) axial=false
+SPATIAL_MESH_SOURCE event=1017 source=None destination=Some(Cmyk) axial=true
+SPATIAL_MESH_SOURCE event=1023 source=Some(Cmyk) destination=Some(Cmyk) axial=true
+SPATIAL_MESH_SOURCE event=1207 source=Some(Cmyk) destination=Some(Cmyk) axial=true
+SPATIAL_MESH_SOURCE event=1230 source=None destination=Some(Cmyk) axial=true
+SPATIAL_MESH_SOURCE event=1236 source=None destination=Some(Cmyk) axial=true
+SPATIAL_MESH_SOURCE event=2097 source=Some(Cmyk) destination=Some(Cmyk) axial=true
+SPATIAL_MESH_SOURCE event=2103 source=Some(Cmyk) destination=Some(Cmyk) axial=true
+SPATIAL_MESH_SOURCE event=2287 source=Some(Cmyk) destination=Some(Cmyk) axial=true
+SPATIAL_MESH_SOURCE event=2664 source=Some(Cmyk) destination=Some(Cmyk) axial=true
+SPATIAL_MESH_SOURCE event=2670 source=Some(Cmyk) destination=Some(Cmyk) axial=false
+SPATIAL_MESH_SOURCE event=2676 source=Some(Cmyk) destination=Some(Cmyk) axial=false
+SPATIAL_MESH_SOURCE event=2742 source=None destination=Some(Cmyk) axial=true
+SPATIAL_LIVE_MASKS total=6 live=0
+SPATIAL_EXCLUDED_MESH_REGIONS count=0
+SPATIAL_REGION_DEDUP original=122 unique=64
+SPATIAL_REDUNDANT_MASK_CLEARS_REMOVED=345
+SPATIAL_NEUTRAL_GROUP_BOUNDARIES_REMOVED=0
+SPATIAL_PAINT_COALESCE before=78 after=78
+SPATIAL_GROUP_PROPERTIES command=2 isolated=false knockout=false opacity=0.5 ais=false mode=HardLight
+SPATIAL_GROUP_PROPERTIES command=3 isolated=false knockout=false opacity=1 ais=true mode=Normal
+SPATIAL_GROUP_PROPERTIES command=7 isolated=false knockout=true opacity=1 ais=false mode=Normal
+SPATIAL_GROUP_PROPERTIES command=8 isolated=false knockout=false opacity=0 ais=false mode=Normal
+SPATIAL_GROUP_PROPERTIES command=11 isolated=false knockout=false opacity=0.01249689981341362 ais=false mode=Normal
+SPATIAL_GROUP_PROPERTIES command=14 isolated=false knockout=false opacity=0.0249939002096653 ais=false mode=Normal
+SPATIAL_GROUP_PROPERTIES command=17 isolated=false knockout=false opacity=0.0375060997903347 ais=false mode=Normal
+SPATIAL_GROUP_PROPERTIES command=20 isolated=false knockout=false opacity=0.05000310018658638 ais=false mode=Normal
+SPATIAL_GROUP_PROPERTIES command=23 isolated=false knockout=false opacity=0.0625 ais=false mode=Normal
+SPATIAL_GROUP_PROPERTIES command=26 isolated=false knockout=false opacity=0.07499690353870392 ais=false mode=Normal
+SPATIAL_GROUP_PROPERTIES command=29 isolated=false knockout=false opacity=0.087493896484375 ais=false mode=Normal
+SPATIAL_GROUP_PROPERTIES command=32 isolated=false knockout=false opacity=0.10000599920749664 ais=false mode=Normal
+SPATIAL_GROUP_PROPERTIES command=35 isolated=false knockout=false opacity=0.11250299960374832 ais=false mode=Normal
+SPATIAL_GROUP_PROPERTIES command=38 isolated=false knockout=false opacity=0.125 ais=false mode=Normal
+SPATIAL_GROUP_PROPERTIES command=41 isolated=false knockout=false opacity=0.13749699294567108 ais=false mode=Normal
+SPATIAL_GROUP_PROPERTIES command=44 isolated=false knockout=false opacity=0.14999400079250336 ais=false mode=Normal
+SPATIAL_GROUP_PROPERTIES command=47 isolated=false knockout=false opacity=0.16250599920749664 ais=false mode=Normal
+SPATIAL_GROUP_PROPERTIES command=50 isolated=false knockout=false opacity=0.17500300705432892 ais=false mode=Normal
+SPATIAL_GROUP_PROPERTIES command=53 isolated=false knockout=false opacity=0.1875 ais=false mode=Normal
+SPATIAL_GROUP_PROPERTIES command=56 isolated=false knockout=false opacity=0.19999699294567108 ais=false mode=Normal
+SPATIAL_GROUP_PROPERTIES command=59 isolated=false knockout=false opacity=0.2344059944152832 ais=false mode=Normal
+SPATIAL_GROUP_PROPERTIES command=62 isolated=false knockout=false opacity=0.2687990069389343 ais=false mode=Normal
+SPATIAL_GROUP_PROPERTIES command=65 isolated=false knockout=false opacity=0.3031010031700134 ais=false mode=Normal
+SPATIAL_GROUP_PROPERTIES command=68 isolated=false knockout=false opacity=0.33749398589134216 ais=false mode=Normal
+SPATIAL_GROUP_PROPERTIES command=71 isolated=false knockout=false opacity=0.3719019889831543 ais=false mode=Normal
+SPATIAL_GROUP_PROPERTIES command=74 isolated=false knockout=false opacity=0.4062960147857666 ais=false mode=Normal
+SPATIAL_PREPARED_KINDS retained=23 paint=0 native=3 sampled=0 begin=26 end=26 clear_mask=0 set_mask=0
+SPATIAL_CONSTANT_RECTANGLE_REGIONS=21
+SPATIAL_ROUTING_REGIONS total=64 used=32
+SPATIAL_BUDGET_SPENT key=75770 lookup=332645 route_preparation=116238 native_source=788614 backdrop_comparison=78962
+SPATIAL_DISPATCH_KINDS retained=0 paint=0 native=83012 sampled=0 begin=648171 end=122628 clear_mask=0 set_mask=0
+SPATIAL_WORK_COUNTS fragments=41506 route_hits=41364 route_misses=142 dispatch=853811 groups=122628 native_samples=83012 fixed_samples=0 mask_samples=0 constant_hits=0 group_hits=3 paint_run_hits=0 hidden_commands=0 local_signature_hits=7241
+REAL_AI_SPATIAL_ROUTE_ADMISSIONS pixel=(199,25) count=698086
+REAL_AI_SPATIAL_PIXEL pixel=(199,25) captured=true events=2755 shading_events=13 mask_events=6 completed=true alpha=Some(1.0) components=Some([0.7135069188516239, 0.17809831327578418, 0.9554537787768727, 0.0549916907975484]) white_rgb=Some([81.60994604229927, 151.66586726903915, 70.53911849856377]) deadline=false peak_bytes=239197736
+SPATIAL_MESH_SOURCE event=9 source=Some(Cmyk) destination=Some(Cmyk) axial=false
+SPATIAL_MESH_SOURCE event=1017 source=None destination=Some(Cmyk) axial=true
+SPATIAL_MESH_SOURCE event=1023 source=Some(Cmyk) destination=Some(Cmyk) axial=true
+SPATIAL_MESH_SOURCE event=1207 source=Some(Cmyk) destination=Some(Cmyk) axial=true
+SPATIAL_MESH_SOURCE event=1230 source=None destination=Some(Cmyk) axial=true
+SPATIAL_MESH_SOURCE event=1236 source=None destination=Some(Cmyk) axial=true
+SPATIAL_MESH_SOURCE event=2097 source=Some(Cmyk) destination=Some(Cmyk) axial=true
+SPATIAL_MESH_SOURCE event=2103 source=Some(Cmyk) destination=Some(Cmyk) axial=true
+SPATIAL_MESH_SOURCE event=2287 source=Some(Cmyk) destination=Some(Cmyk) axial=true
+SPATIAL_MESH_SOURCE event=2664 source=Some(Cmyk) destination=Some(Cmyk) axial=true
+SPATIAL_MESH_SOURCE event=2670 source=Some(Cmyk) destination=Some(Cmyk) axial=false
+SPATIAL_MESH_SOURCE event=2676 source=Some(Cmyk) destination=Some(Cmyk) axial=false
+SPATIAL_MESH_SOURCE event=2742 source=None destination=Some(Cmyk) axial=true
+SPATIAL_LIVE_MASKS total=6 live=0
+SPATIAL_EXCLUDED_MESH_REGIONS count=0
+SPATIAL_REGION_DEDUP original=116 unique=95
+SPATIAL_REDUNDANT_MASK_CLEARS_REMOVED=158
+SPATIAL_NEUTRAL_GROUP_BOUNDARIES_REMOVED=0
+SPATIAL_PAINT_COALESCE before=13 after=13
+SPATIAL_GROUP_PROPERTIES command=2 isolated=false knockout=false opacity=0.5 ais=false mode=HardLight
+SPATIAL_GROUP_PROPERTIES command=3 isolated=false knockout=false opacity=1 ais=true mode=Normal
+SPATIAL_GROUP_PROPERTIES command=7 isolated=false knockout=false opacity=0.5 ais=false mode=HardLight
+SPATIAL_GROUP_PROPERTIES command=8 isolated=false knockout=false opacity=1 ais=true mode=Normal
+SPATIAL_PREPARED_KINDS retained=0 paint=0 native=5 sampled=0 begin=4 end=4 clear_mask=0 set_mask=0
+SPATIAL_CONSTANT_RECTANGLE_REGIONS=5
+SPATIAL_ROUTING_REGIONS total=95 used=6
+SPATIAL_BUDGET_SPENT key=10636 lookup=3351 route_preparation=533 native_source=116212 backdrop_comparison=0
+SPATIAL_DISPATCH_KINDS retained=0 paint=0 native=14161 sampled=0 begin=20296 end=20296 clear_mask=0 set_mask=0
+SPATIAL_WORK_COUNTS fragments=5074 route_hits=5068 route_misses=6 dispatch=54753 groups=20296 native_samples=14161 fixed_samples=0 mask_samples=0 constant_hits=0 group_hits=0 paint_run_hits=0 hidden_commands=0 local_signature_hits=4585
+REAL_AI_SPATIAL_ROUTE_ADMISSIONS pixel=(149,56) count=106599
+REAL_AI_SPATIAL_PIXEL pixel=(149,56) captured=true events=2755 shading_events=13 mask_events=6 completed=true alpha=Some(0.2144258053457203) components=Some([0.3285820137140102, 0.8614814398605593, 0.9346276847653973, 0.24747745057283443]) white_rgb=Some([230.74855138884664, 212.56374303909544, 208.50489577871127]) deadline=false peak_bytes=239197736
+REAL_AI_SPATIAL_FINAL_CREDIT=0
+test knockout_compositor::interpreter_tests::real_ai_spatial_scene_problem_pixel_diagnostic ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 207 filtered out; finished in 4.56s
+

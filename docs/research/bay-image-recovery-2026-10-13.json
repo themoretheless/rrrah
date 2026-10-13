@@ -1,0 +1,57 @@
+{
+  "date": "2026-10-13",
+  "scope": "BAY stream recovery for full-storage and image-only sensor decoding",
+  "cases": [
+    {
+      "layout": "QV-2000UX",
+      "image_only": false
+    },
+    {
+      "layout": "QV-3000EX",
+      "image_only": true
+    },
+    {
+      "layout": "QV-5700",
+      "image_only": false
+    },
+    {
+      "layout": "QV-5700",
+      "image_only": true
+    }
+  ],
+  "cancel_checkpoints": [
+    "first row",
+    "middle row",
+    "last row",
+    "EOF check"
+  ],
+  "admitted_cancellations": 16,
+  "same_budget_retries": 16,
+  "source_truncation_growth_refusals": 8,
+  "checks": [
+    "allocation admitted before cancellation",
+    "cancelled result not published",
+    "partial-output credit released",
+    "same managed root admits successful retry",
+    "retry dimensions/sample count and retained output weight correct",
+    "final ownership zero"
+  ],
+  "focused": {
+    "passed": 9,
+    "failed": 0,
+    "ignored": 0,
+    "log": "bay-image-recovery-final-2026-10-13.log"
+  },
+  "decoder": {
+    "passed": 1024,
+    "failed": 0,
+    "ignored": 73,
+    "log": "decode-bay-recovery-final-2026-10-13.log"
+  },
+  "source_sha256": "8fe12390a355b9d95d64b2bf6028f8bcb6b3bfcecc96690afebd66363128aa70",
+  "limits": [
+    "same-budget retry checks success, sample count and ownership; independent exact pixel oracle is a separate passing test",
+    "authored stream errors do not qualify original camera CFA/WB/color or viewer route",
+    "catalogue status unchanged"
+  ]
+}

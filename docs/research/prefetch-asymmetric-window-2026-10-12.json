@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-12",
+  "test": "foreground_prefetch_respects_asymmetric_and_disabled_windows",
+  "cases": [
+    "forward asymmetric ahead=3 behind=1",
+    "upper collection boundary",
+    "backward asymmetric lower boundary",
+    "ahead=0 behind=0"
+  ],
+  "viewer_suite": {
+    "passed": 219,
+    "failed": 0,
+    "ignored": 62
+  },
+  "logs": {
+    "prefetch-asymmetric-window-2026-10-12.log": "d01353ae2eb9fa51d44f2ce88fa24490d0365ac489a2a99ce9ce67a9a3cefaaf",
+    "viewer-prefetch-window-regression-2026-10-12.log": "a9a209faa9e3272357b918c4d2c728e9257d0b77919d86308cfb339778e18061"
+  },
+  "limits": [
+    "Tests cover foreground neighbour planning; do not establish physical disk performance or universal decoder support"
+  ],
+  "ui_change": "Initial window title loading replaces RAW-specific status for all file kinds"
+}

@@ -1,0 +1,66 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+warning: unused imports: `ProjectedModelError` and `compare_projected_model_files_with`
+  --> crates/rrrah-dedup/tests/model_projected_tiles.rs:10:9
+   |
+10 |         compare_projected_model_files_with, ProjectedModelError, ProjectedModelPolicy,
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-dedup` (test "model_projected_tiles") generated 1 warning (run `cargo fix --test "model_projected_tiles" -p rrrah-dedup` to apply 1 suggestion)
+    Finished `test` profile [optimized + debuginfo] target(s) in 37.50s
+     Running tests/model_projected_compare.rs (target/debug/deps/model_projected_compare-4e390d9d2ef936a0)
+
+running 8 tests
+test work_and_invalid_thresholds_refuse_before_provider ... ok
+test transparent_black_collision_is_rejected_by_original_alpha ... ok
+test identity_candidate_recovers_noisy_self_geometry_without_loosening_pixel_policy ... ok
+test each_request_generation_and_tiny_memory_refusal_release_all_owners ... ok
+test source_and_weights_mutation_in_provider_never_publish_evidence ... ok
+test hdr_original_proof_accepts_copy_and_rejects_equal_projection_collision ... ok
+test rejected_identity_continues_fitted_proof_and_charges_both_grids_for_each_mapping ... ok
+test cancellation_and_final_checkpoint_mutations_discard_result ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/model_projected_tiles.rs (target/debug/deps/model_projected_tiles-2efed78c9940b26c)
+
+running 7 tests
+test all_seven_work_caps_and_ledger_refuse_before_missing_io_and_cancel_wins ... ok
+test source_weights_and_provider_failures_after_a_miss_remain_terminal_and_release ... ok
+test hdr_regions_recover_after_whole_miss_with_original_domain_mapping_and_shared_ledger ... FAILED
+test alpha_copies_support_and_equal_black_projections_with_different_alpha_exhaust ... ok
+test all_25_equal_hdr_projections_are_rejected_by_originals ... ok
+test last_caller_source_and_weight_mutations_cannot_publish_a_negative_ledger ... ok
+test global_and_both_owner_generations_cancel_first_middle_and_final_checkpoints ... ok
+
+failures:
+
+---- hdr_regions_recover_after_whole_miss_with_original_domain_mapping_and_shared_ledger stdout ----
+
+thread 'hdr_regions_recover_after_whole_miss_with_original_domain_mapping_and_shared_ledger' (90429064) panicked at crates/rrrah-dedup/tests/model_projected_tiles.rs:141:5:
+assertion failed: result.supported()
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    hdr_regions_recover_after_whole_miss_with_original_domain_mapping_and_shared_ledger
+
+test result: FAILED. 6 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.42s
+
+error: test failed, to rerun pass `-p rrrah-dedup --test model_projected_tiles`

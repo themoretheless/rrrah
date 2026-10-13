@@ -203,16 +203,43 @@ impl GpuReadback {
     /// viewport - 32`, `scale = fit * zoom`) so every target pixel lands
     /// inside the image: no background-clear pixels pollute the readback.
     pub fn render(&self, mosaic: &DecodedMosaic, size: [u32; 2]) -> RgbaFrame {
+        let mut renderer = RawRenderer::new(&self.device, READBACK_FORMAT);
+        self.render_replacing_raw(&mut renderer, mosaic, size)
+    }
+
+    pub fn render_replacing_raw(&self, renderer: &mut RawRenderer, mosaic: &DecodedMosaic, size: [u32; 2]) -> RgbaFrame {
+        let view = Self::raw_cover_view(mosaic, size);
+        renderer.upload_mosaic(&self.device, &self.queue, mosaic).unwrap();
+        renderer.update_view(&self.queue, view);
+        self.render_existing_raw(renderer, size)
+    }
+
+    fn raw_cover_view(mosaic: &DecodedMosaic, size: [u32; 2]) -> ViewParameters {
         let (crop_width, crop_height) = mosaic.metadata.display_dimensions();
         let fit = (size[0].saturating_sub(32).max(1) as f32 / crop_width as f32)
             .min(size[1].saturating_sub(32).max(1) as f32 / crop_height as f32);
         let cover = (size[0] as f32 / crop_width as f32).max(size[1] as f32 / crop_height as f32);
-        let view = ViewParameters {
+        ViewParameters {
             viewport: [size[0] as f32, size[1] as f32],
             zoom: cover / fit,
             ..ViewParameters::default()
-        };
-        self.render_with_view(mosaic, view, size)
+        }
+    }
+
+    pub fn render_raw_half(&self, mosaic: &DecodedMosaic, size: [u32; 2]) -> Vec<u16> {
+        let mut renderer = RawRenderer::new(&self.device, wgpu::TextureFormat::Rgba16Float);
+        renderer.set_output_mode(&self.queue, rrrah_gpu::RawOutputMode::SceneLinear).unwrap();
+        self.render_replacing_raw_half(&mut renderer, mosaic, size)
+    }
+
+    pub fn render_replacing_raw_half(&self, renderer: &mut RawRenderer, mosaic: &DecodedMosaic, size: [u32; 2]) -> Vec<u16> {
+        renderer.upload_mosaic(&self.device, &self.queue, mosaic).unwrap();
+        renderer.update_view(&self.queue, Self::raw_cover_view(mosaic, size));
+        self.read_half_frame(size, |encoder, target| renderer.encode(encoder, target))
+    }
+
+    pub fn render_existing_raw_half(&self, renderer: &RawRenderer, size: [u32; 2]) -> Vec<u16> {
+        self.read_half_frame(size, |encoder, target| renderer.encode(encoder, target))
     }
 
     /// Renders `mosaic` into a `size` offscreen target with an explicit view
@@ -231,6 +258,18 @@ impl GpuReadback {
         self.read_frame(size, |encoder, target| renderer.encode(encoder, target))
     }
 
+    pub fn render_existing_raster_half(
+        &self,
+        renderer: &rrrah_gpu::RasterRenderer,
+        size: [u32; 2],
+    ) -> Vec<u16> {
+        self.read_half_frame(size, |encoder, target| renderer.encode(encoder, target))
+    }
+
+    pub fn render_existing_raster(&self, renderer: &rrrah_gpu::RasterRenderer, size: [u32; 2]) -> RgbaFrame {
+        self.read_frame(size, |encoder, target| renderer.encode(encoder, target))
+    }
+
     pub fn render_raster(
         &self,
         raster: &rrrah_core::DecodedRaster,
@@ -243,6 +282,124 @@ impl GpuReadback {
             .expect("prepared raster must upload");
         renderer.update_view(&self.queue, view);
         self.read_frame(size, |encoder, target| renderer.encode(encoder, target))
+    }
+
+    /// Linear HDR attachment readback, retaining signed/above-one binary16 values.
+    /// Reuses this device so a collection does not create one device per frame.
+    pub fn render_raster_half(
+        &self,
+        raster: &rrrah_core::DecodedRaster,
+        view: ViewParameters,
+        size: [u32; 2],
+    ) -> Vec<u16> {
+        let budget = rrrah_core::MemoryBudget::new(
+            rrrah_gpu::RasterRenderer::texture_bytes_for_extent(
+                &self.device,
+                raster.width(),
+                raster.height(),
+            )
+            .unwrap(),
+        );
+        let mut renderer =
+            rrrah_gpu::RasterRenderer::new_linear_hdr_with_budget(&self.device, budget.clone());
+        renderer.upload(&self.device, &self.queue, raster).unwrap();
+        renderer.update_view(&self.queue, view);
+        let result = self.read_half_frame(size, |encoder, target| renderer.encode(encoder, target));
+        drop(renderer);
+        assert_eq!(
+            budget.used(),
+            0,
+            "HDR renderer credit must return after completed submission"
+        );
+        result
+    }
+
+    pub fn render_model_half<T: Copy + Into<f64>>(
+        &self,
+        triangles: &[[[T; 3]; 3]],
+        size: [u32; 2],
+        yaw: f32,
+        pitch: f32,
+    ) -> Vec<u16> {
+        let mut renderer = rrrah_gpu::ModelRenderer::new(&self.device, wgpu::TextureFormat::Rgba16Float);
+        renderer
+            .upload(&self.device, triangles.iter().copied())
+            .expect("model uploads");
+        renderer.resize(&self.device, size).expect("depth fits");
+        renderer.update_view(&self.queue, size[0] as f32 / size[1] as f32, yaw, pitch, 1.0);
+        self.read_half_frame(size, |encoder, target| renderer.encode(encoder, target))
+    }
+
+    pub(crate) fn read_half_frame(
+        &self,
+        size: [u32; 2],
+        encode: impl FnOnce(&mut wgpu::CommandEncoder, &wgpu::TextureView),
+    ) -> Vec<u16> {
+        let extent = wgpu::Extent3d {
+            width: size[0],
+            height: size[1],
+            depth_or_array_layers: 1,
+        };
+        let target = self.device.create_texture(&wgpu::TextureDescriptor {
+            label: Some("collection linear HDR readback"),
+            size: extent,
+            mip_level_count: 1,
+            sample_count: 1,
+            dimension: wgpu::TextureDimension::D2,
+            format: wgpu::TextureFormat::Rgba16Float,
+            usage: wgpu::TextureUsages::RENDER_ATTACHMENT | wgpu::TextureUsages::COPY_SRC,
+            view_formats: &[],
+        });
+        let row_bytes = (size[0] * 8).div_ceil(256) * 256;
+        let readback = self.device.create_buffer(&wgpu::BufferDescriptor {
+            label: Some("collection HDR mapped buffer"),
+            size: u64::from(row_bytes) * u64::from(size[1]),
+            usage: wgpu::BufferUsages::COPY_DST | wgpu::BufferUsages::MAP_READ,
+            mapped_at_creation: false,
+        });
+        let mut encoder = self.device.create_command_encoder(&Default::default());
+        encode(&mut encoder, &target.create_view(&Default::default()));
+        encoder.copy_texture_to_buffer(
+            wgpu::TexelCopyTextureInfo {
+                texture: &target,
+                mip_level: 0,
+                origin: wgpu::Origin3d::ZERO,
+                aspect: wgpu::TextureAspect::All,
+            },
+            wgpu::TexelCopyBufferInfo {
+                buffer: &readback,
+                layout: wgpu::TexelCopyBufferLayout {
+                    offset: 0,
+                    bytes_per_row: Some(row_bytes),
+                    rows_per_image: Some(size[1]),
+                },
+            },
+            extent,
+        );
+        let submission = self.queue.submit([encoder.finish()]);
+        let (tx, rx) = mpsc::channel();
+        readback
+            .slice(..)
+            .map_async(wgpu::MapMode::Read, move |result| tx.send(result).unwrap());
+        self.device
+            .poll(wgpu::PollType::Wait {
+                submission_index: Some(submission),
+                timeout: None,
+            })
+            .unwrap();
+        rx.recv().unwrap().unwrap();
+        let mapped = readback.slice(..).get_mapped_range().unwrap();
+        let result = mapped
+            .chunks_exact(row_bytes as usize)
+            .flat_map(|row| {
+                row[..size[0] as usize * 8]
+                    .chunks_exact(2)
+                    .map(|v| u16::from_le_bytes([v[0], v[1]]))
+            })
+            .collect();
+        drop(mapped);
+        readback.unmap();
+        result
     }
 
     pub fn render_raster_with_aspect(
@@ -307,42 +464,96 @@ impl GpuReadback {
         replacement: &rrrah_core::DecodedRaster,
         view: ViewParameters,
         size: [u32; 2],
+        hdr_centers: [[u16; 4]; 2],
     ) {
-        let first_bytes = u64::from(first.width()) * u64::from(first.height()) * 16;
-        let replacement_bytes = u64::from(replacement.width()) * u64::from(replacement.height()) * 16;
-        let gpu = rrrah_core::MemoryBudget::new(first_bytes + replacement_bytes);
-        let uploads = rrrah_core::MemoryBudget::new(1024 * 1024);
-        let mut renderer =
-            rrrah_gpu::RasterRenderer::new_with_budget(&self.device, READBACK_FORMAT, gpu.clone())
-                .with_upload_queue_budget(uploads.clone());
-        renderer.upload(&self.device, &self.queue, first).unwrap();
-        renderer.update_view(&self.queue, view);
-        let before = self.read_frame(size, |encoder, target| renderer.encode(encoder, target));
-        assert_eq!((gpu.used(), uploads.used()), (first_bytes, 0));
-        // Initial check, three validation blocks, before admission and after admission.
-        for checkpoint in 1..=6 {
-            let mut polls = 0;
-            assert!(matches!(
-                renderer.upload_with_cancel(&self.device, &self.queue, replacement, || {
-                    polls += 1;
-                    polls == checkpoint
-                }),
-                Err(rrrah_gpu::RasterUploadError::Cancelled)
-            ));
+        for format in [READBACK_FORMAT, wgpu::TextureFormat::Rgba16Float] {
+            let read = |renderer: &rrrah_gpu::RasterRenderer| -> Vec<u16> {
+                if format == wgpu::TextureFormat::Rgba16Float {
+                    self.read_half_frame(size, |encoder, target| renderer.encode(encoder, target))
+                } else {
+                    self.read_frame(size, |encoder, target| renderer.encode(encoder, target))
+                        .pixels.into_iter().map(u16::from).collect()
+                }
+            };
+            let first_bytes = u64::from(first.width()) * u64::from(first.height()) * 16;
+            let replacement_bytes = u64::from(replacement.width()) * u64::from(replacement.height()) * 16;
+            let gpu = rrrah_core::MemoryBudget::new(first_bytes + replacement_bytes);
+            let upload_bytes =
+                (u64::from(replacement.width()) * 16).div_ceil(256) * 256 * u64::from(replacement.height());
+            let uploads = rrrah_core::MemoryBudget::new(upload_bytes.max(1024 * 1024));
+            let mut renderer = if format == wgpu::TextureFormat::Rgba16Float {
+                rrrah_gpu::RasterRenderer::new_linear_hdr_with_budget(&self.device, gpu.clone())
+            } else {
+                rrrah_gpu::RasterRenderer::new_with_budget(&self.device, format, gpu.clone())
+            }.with_upload_queue_budget(uploads.clone());
+            renderer.upload(&self.device, &self.queue, first).unwrap();
+            renderer.update_view(&self.queue, view);
+            let before = read(&renderer);
+            let center = ((size[1] / 2 * size[0] + size[0] / 2) * 4) as usize;
+            if format == wgpu::TextureFormat::Rgba16Float {
+                assert_eq!(&before[center..center + 4], &hdr_centers[0]);
+            }
             assert_eq!((gpu.used(), uploads.used()), (first_bytes, 0));
-            let after = self.read_frame(size, |encoder, target| renderer.encode(encoder, target));
-            assert_eq!(before.pixels, after.pixels);
+            // Each admission must fail independently before replacing the visible texture.
+            for (budget, pressure_bytes) in [
+                (&gpu, 1),
+                (&uploads, upload_bytes.max(1024 * 1024) - upload_bytes + 1),
+            ] {
+                let pressure = budget.try_reserve(pressure_bytes).unwrap();
+                let retained = (gpu.used(), uploads.used());
+                assert!(matches!(
+                    renderer.upload_with_cancel(&self.device, &self.queue, replacement, || false),
+                    Err(rrrah_gpu::RasterUploadError::Memory(_))
+                ));
+                assert_eq!((gpu.used(), uploads.used()), retained);
+                let after = read(&renderer);
+                assert_eq!(before, after);
+                drop(pressure);
+                assert_eq!((gpu.used(), uploads.used()), (first_bytes, 0));
+            }
+            eprintln!("raster upload pressure: texture-and-queue-refused; previous-frame-exact; temporary-credit-zero");
+            let blocks = (replacement.width() as usize * replacement.height() as usize).div_ceil(4096);
+            let total = blocks + 3; // Initial check, validation blocks, before/after admission.
+            let checkpoints: Vec<_> = if total <= 64 {
+                (1..=total).collect()
+            } else {
+                vec![1, 2, 1 + blocks / 2, 1 + blocks, 2 + blocks, 3 + blocks]
+            };
+            eprintln!(
+                "raster upload cancellation: total_checkpoints={total}; exercised={checkpoints:?}; upload_budget={upload_bytes}"
+            );
+            for checkpoint in checkpoints {
+                let mut polls = 0;
+                assert!(matches!(
+                    renderer.upload_with_cancel(&self.device, &self.queue, replacement, || {
+                        polls += 1;
+                        polls == checkpoint
+                    }),
+                    Err(rrrah_gpu::RasterUploadError::Cancelled)
+                ));
+                assert_eq!((gpu.used(), uploads.used()), (first_bytes, 0));
+                let after = read(&renderer);
+                assert_eq!(before, after);
+            }
+            renderer
+                .upload_with_cancel(&self.device, &self.queue, replacement, || false)
+                .unwrap();
+            renderer.update_view(&self.queue, view);
+            let after = read(&renderer);
+            assert_ne!(before, after);
+            let expected_center = if format == wgpu::TextureFormat::Rgba16Float {
+                hdr_centers[1]
+            } else {
+                [0, 0, 255, 255]
+            };
+            assert_eq!(&after[center..center + 4], &expected_center);
+            eprintln!("raster replacement values: format={format:?}; initial_center={:?}; retry_center={:?}",
+                &before[center..center + 4], &after[center..center + 4]);
+            assert_eq!((gpu.used(), uploads.used()), (replacement_bytes, 0));
+            drop(renderer);
+            assert_eq!((gpu.used(), uploads.used()), (0, 0));
+            eprintln!("raster replacement recovery: format={format:?}; pressure/cancellation previous frame exact; retry blue exact; final GPU/queue credit=0");
         }
-        renderer
-            .upload_with_cancel(&self.device, &self.queue, replacement, || false)
-            .unwrap();
-        renderer.update_view(&self.queue, view);
-        let after = self.read_frame(size, |encoder, target| renderer.encode(encoder, target));
-        assert_ne!(before.pixels, after.pixels);
-        assert_eq!(after.center(), [0, 0, 255, 255]);
-        assert_eq!((gpu.used(), uploads.used()), (replacement_bytes, 0));
-        drop(renderer);
-        assert_eq!((gpu.used(), uploads.used()), (0, 0));
     }
 
     pub fn render_resident_exposure(
@@ -367,7 +578,10 @@ impl GpuReadback {
     ) -> RgbaFrame {
         let bytes = pixels.len() as u64 * 16;
         let compute_root = rrrah_core::MemoryBudget::new(bytes * 2 + 16);
-        let texture_root = rrrah_core::MemoryBudget::new(bytes + 16);
+        let texture_bytes =
+            rrrah_gpu::RasterRenderer::texture_bytes_for_extent(&self.device, dimensions[0], dimensions[1])
+                .unwrap();
+        let texture_root = rrrah_core::MemoryBudget::new(texture_bytes + 16);
         let queue_root = rrrah_core::MemoryBudget::new(bytes.max(256));
         let compute = rrrah_gpu::LinearExposureCompute::new(&self.device);
         let result = compute
@@ -432,11 +646,39 @@ impl GpuReadback {
             let after = self.read_frame(size, |e, t| renderer.encode(e, t));
             assert_eq!(before.pixels, after.pixels);
         }
-        let row_polls = if (dimensions[0] * 16).is_multiple_of(wgpu::COPY_BYTES_PER_ROW_ALIGNMENT) {
-            1
-        } else {
-            dimensions[1].div_ceil(256)
-        };
+        let pressure = texture_root.try_reserve(1).unwrap();
+        assert!(matches!(
+            renderer.upload_resident_with_aspect(
+                &self.device,
+                &self.queue,
+                &result,
+                dimensions,
+                aspect,
+                || false
+            ),
+            Err(rrrah_gpu::RasterUploadError::Memory(_))
+        ));
+        assert_eq!((texture_root.used(), queue_root.used()), (17, 0));
+        assert_eq!(
+            self.read_frame(size, |e, t| renderer.encode(e, t)).pixels,
+            before.pixels
+        );
+        drop(pressure);
+        let columns = dimensions[0].div_ceil(self.device.limits().max_texture_dimension_2d);
+        let rows = dimensions[1].div_ceil(self.device.limits().max_texture_dimension_2d);
+        let tile_height = dimensions[1].div_ceil(rows);
+        let row_polls = columns * rows
+            + columns
+                * (0..rows)
+                    .map(|row| {
+                        let height = tile_height.min(dimensions[1] - row * tile_height);
+                        if (dimensions[0] * 16).is_multiple_of(wgpu::COPY_BYTES_PER_ROW_ALIGNMENT) {
+                            1
+                        } else {
+                            height.div_ceil(256)
+                        }
+                    })
+                    .sum::<u32>();
         for checkpoint in 1..=3 + row_polls {
             let mut polls = 0;
             assert!(matches!(
@@ -465,7 +707,7 @@ impl GpuReadback {
         let frame = self.read_frame(size, |e, t| renderer.encode(e, t));
         assert_eq!(
             (compute_root.used(), texture_root.used(), queue_root.used()),
-            (0, bytes, 0)
+            (0, texture_bytes, 0)
         );
         drop(renderer);
         assert_eq!(texture_root.used(), 0);
@@ -502,7 +744,7 @@ impl GpuReadback {
         self.read_frame(size, |encoder, target| renderer.encode(encoder, target))
     }
 
-    fn read_frame(
+    pub(crate) fn read_frame(
         &self,
         size: [u32; 2],
         encode: impl FnOnce(&mut wgpu::CommandEncoder, &wgpu::TextureView),

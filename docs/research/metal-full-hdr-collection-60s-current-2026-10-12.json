@@ -1,0 +1,30 @@
+{
+  "backend": "Metal",
+  "device": "Apple M4 Max",
+  "frames": 8,
+  "dimensions": [
+    4000,
+    3000
+  ],
+  "payload_bytes_per_frame": 192000000,
+  "duration_requested_seconds": 60,
+  "duration_completed_seconds": 61.703,
+  "test_seconds": 77.89,
+  "cycles": 37,
+  "reads": 37,
+  "writes": 8,
+  "admitted_mid_batch_cancellations": 37,
+  "full_sdr_comparisons": 37,
+  "full_hdr_comparisons": 37,
+  "final_root": 0,
+  "final_queue": 0,
+  "runner_workload_evidence_valid": true,
+  "log": "metal-full-hdr-collection-60s-current-2026-10-12.log",
+  "limits": [
+    "local disk without injected delay",
+    "one-minute soak does not establish hours-long reliability",
+    "managed cache accounting excludes retained GPU-frame reference arrays and OS RSS",
+    "same-renderer frame comparisons verify transport; no physical HDR calibration",
+    "NVIDIA deferred"
+  ]
+}

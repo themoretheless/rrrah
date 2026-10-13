@@ -1,0 +1,17 @@
+{
+  "scope": "Selected 1-bit grayscale,2-bit palette plus transparency,4-bit grayscale APNG source/reverse frames; independent linear sample and actual Metal SDR/HDR swap oracles",
+  "report": "docs/research/apng-packed-metal-2026-10-11/report.json",
+  "decoder_log_sha256": "a9479af49fb11baa00a4a0a76d8d896d09793c8a3f3984a2d518afcc342bdbe2",
+  "source_fixture_hashes": {
+    "crates/rrrah-decode/src/apng.rs": "65947d375b2245dc056f80e5c942bcac0fc866e86e7a2a2712725f7b6a907ef8",
+    "crates/rrrah-app/tests/png_physical_aspect.rs": "47e190bf640806385f27d2d70f4141e9acb3f63e49539a21a6a6c83db0edc9f1",
+    "scripts/qualify-viewer-storage-gpu.py": "7b9c4f00c979cfc2c07db7d8f3695161c2a896dd38886cbebc25881e174af434",
+    "tests/fixtures/data/apng-1bit-packed.png": "c9d1c78b576f73f66aa2aabba5ee21a4e1e18aeb45c5ddb6096cd57e7a31aaf6",
+    "tests/fixtures/data/apng-2bit-packed.png": "59f05a795e5d1c98077f28a2e260d593fc4d3e620a25bf0050ba9c1a53bbec1c",
+    "tests/fixtures/data/apng-4bit-packed.png": "d99ed608e230df542d8bdbee6c63480731b34768c72994ad70521b220a82d069"
+  },
+  "limitations": [
+    "Authored narrow fixtures do not qualify all packed variants or animation playback",
+    "Private PNG scratch not charged to shared budget"
+  ]
+}

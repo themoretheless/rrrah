@@ -1,0 +1,53 @@
+{
+  "runs": [
+    {
+      "seconds": 60.059589291,
+      "cycles": 520,
+      "pressure_refusals": 520,
+      "root_peak": 2097152,
+      "queue_peak": 262144,
+      "disk_peak_bytes": 786624,
+      "disk_peak_objects": 3,
+      "mode": "bytes",
+      "log": "docs/research/swap-independent-bytes-60s-2026-10-13.log",
+      "final_managed_bytes": 0
+    },
+    {
+      "seconds": 60.058196625,
+      "cycles": 528,
+      "pressure_refusals": 528,
+      "root_peak": 2097152,
+      "queue_peak": 262144,
+      "disk_peak_bytes": 786624,
+      "disk_peak_objects": 3,
+      "mode": "count",
+      "log": "docs/research/swap-independent-count-60s-2026-10-13.log",
+      "final_managed_bytes": 0
+    }
+  ],
+  "scope": "Independent byte and count limits with 2ms delay per IO call and at most 64KiB per call; physical file usage checked after every completed write, evicted key absent, full restored raster exact, managed full-pressure refusal then same-key retry",
+  "limits": {
+    "bytes_mode": {
+      "max_bytes": 786624,
+      "max_objects": 100,
+      "ttl_seconds": 3600
+    },
+    "count_mode": {
+      "max_bytes": 8388608,
+      "max_objects": 3,
+      "ttl_seconds": 3600
+    }
+  },
+  "limitations": [
+    "Local disk with injected delay, not a physical slow drive",
+    "Concurrent Metal collection workload; throughput is descriptive",
+    "Managed accounting is not process RSS or OS memory pressure",
+    "Does not qualify 100 formats or NVIDIA"
+  ],
+  "sha256": {
+    "docs/research/swap-independent-bytes-60s-2026-10-13.log": "b89525019aa773e8fb4a86463d69e6f9fc9ea24014a4d8cccfdaf1d76938e4ce",
+    "docs/research/swap-independent-count-60s-2026-10-13.log": "a7e1447ef79bd42605fcc79716e4a8476bd1a0fbcd247dfc7cf44474e508504b",
+    "crates/rrrah-cache/tests/sustained_swap.rs": "197ab3b22b188b8fabf1d0d886240c257475ae8a103241f242b13466ec56314a",
+    "target/debug/deps/sustained_swap-16217ab17c614679": "16380a646b2cc5462cdd20afd43d9f55dae5312fc4e9f7455c8fec43979be5dd"
+  }
+}

@@ -1,0 +1,20 @@
+warning: function `fallible_zeroed_bytes` is never used
+   --> crates/rrrah-cache/src/mosaic_payload_v1.rs:728:4
+    |
+728 | fn fallible_zeroed_bytes(len: usize) -> Result<Box<[u8]>, MosaicPayloadError> {
+    |    ^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-cache` (lib) generated 1 warning
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 13.54s
+     Running unittests src/main.rs (target/debug/deps/rrrah-0b4921b829754900)
+
+running 1 test
+viewer Metal full extent: portable=8192; supported=16384; width=8193; height=128; every_SDR_HDR_pixel_valid; root=0; texture=0; portable_texture=0
+viewer Metal full extent: portable=8192; supported=16384; width=16384; height=128; every_SDR_HDR_pixel_valid; root=0; texture=0; portable_texture=0
+test linear_pfm_viewer_tests::viewer_uses_supported_metal_texture_extent_above_default ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 254 filtered out; finished in 2.79s
+

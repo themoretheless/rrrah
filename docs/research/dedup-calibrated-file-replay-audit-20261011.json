@@ -1,0 +1,41 @@
+{
+  "status": "verified_strong_calibrated_file_api_rejects_known_misplaced_candidate",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-disc21-overlap-calibrated-strong-audit-20261011.json": "4c18cfb9c38430e8da9c74a3451c7578e6beefd82ca094dd6cf73da61afb04c9",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exposure-anchor-files-snapshot-20261011.json": "49a594cba3dc655ebd14641f7387ef04269269e6ee88dbd0ef2b894ad8d4f833",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exposure-replay-input-20261011.json": "bb6ff4ba02ad8f7e2a40345864783e400ada5cb1e0e7f2099cd922bdbda29cd1",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-calibrated-file-replay-output-20261011.json": "5e289480c2443aeb7e5b50e6688148b0e757e07e71b35c138c8817c005670502",
+    "/Users/themoretheless/.codex/tmp/rrrah-calibrated-file-replay-harness-20261011/src/main.rs": "1cfd97a836b540ece5ed840c1d6cbb3dd60be4a3b5495f61b65a869cfe416d67",
+    "/Users/themoretheless/.codex/tmp/rrrah-calibrated-file-replay-harness-20261011/Cargo.toml": "f89591fbd3e465122630d6fd4183aae574cf53fc8a18040961f34c3caff3e1f1",
+    "/Users/themoretheless/.codex/tmp/rrrah-calibrated-file-replay-harness-20261011/Cargo.lock": "c45ae89c1750d049ae6d31a42163de3d770514b33143dc3351ab4f716dcd934d",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-calibrated-file-replay-build-20261011.log": "2644083deefd40ea051853406b2c03668324b6ee03b1dcc3d876001ce160e40f",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-calibrated-file-replay-runtime-20261011.log": "5dd600b1a6681af00b59fbc469530a4b12ad839b3f44f0b47bab6275191c6dd6",
+    "/Users/themoretheless/.codex/tmp/rrrah-calibrated-file-replay-qualified-20261011/dedup-calibrated-file-replay": "afc6385a52be61aeddcc8bae906658606656afddbe3fff149131a49526c6087d",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-calibrated-file-replay-20261011.py": "b3c34dffd838bce65e785c3ebfa0c13d5fdde4e15ca29d10cf5cb49df0be8892"
+  },
+  "evidence": {
+    "managed_peak": 43823984,
+    "managed_used": 0,
+    "rows": [
+      {
+        "case": "overlap_bank6",
+        "result": "Err(Rank(InsufficientGeometry))",
+        "supported": false,
+        "witnesses": 12
+      },
+      {
+        "case": "overlap_bank7",
+        "result": "Ok(ExposureAnchorRankEvidence { anchors: AnchorRankEvidence { forward_anchors: 24, reverse_anchors: 24, source_window_bounds: [206, 758, 181, 101], target_window_bounds: [166, 309, 731, 413], forward: RankRegionEvidence { sites: 600, valid_sites: 600, informative_pairs: 1244, agreeing_pairs: 1226, pixel_reads: 130680 }, reverse: RankRegionEvidence { sites: 600, valid_sites: 475, informative_pairs: 1545, agreeing_pairs: 1494, pixel_reads: 130680 }, supported: true }, exposures: [RankExposure { peak_rgb: 0.021219009533524513, gain: 47.12755316972132, pixel_reads: 1769472 }, RankExposure { peak_rgb: 1.0, gain: 1.0, pixel_reads: 2334720 }] })",
+        "supported": true,
+        "witnesses": 24
+      },
+      {
+        "case": "rejected_bank12",
+        "result": "Err(Rank(InsufficientGeometry))",
+        "supported": false,
+        "witnesses": 11
+      }
+    ]
+  },
+  "scope": "Actual guarded file API on saved original JPEG candidates. Min20 refuses known misplaced11-witness bank12 and smaller12-witness bank6 explicitly;24-witness bank7 retains automatic positive counts. Development-selected minimum, not held-out precision evidence or proof all false matches have fewer20 witnesses. No default adoption/all-case claim."
+}

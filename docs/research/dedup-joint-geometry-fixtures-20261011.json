@@ -1,0 +1,39 @@
+{
+  "source_report": "docs/research/dedup-joint-geometry-bits-20261011.json",
+  "source_report_sha256": "b0eb71d4ab4fcbb3c606a9140ecf6ff3aeb3396fe275f051bc4fa7193cf9f988",
+  "fixtures": [
+    {
+      "group": 204100,
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-joint-geometry-bits-qualified-20261011/204100_direct.json",
+      "input_sha256": "0bae87a77dbd9adf4c824ea8bff0e641406ad964e7426c9983e1c4cee79c75a3",
+      "fixture": "crates/rrrah-dedup/tests/fixtures/joint-geometry-204100.bits.rs",
+      "points": 211,
+      "provenance": {
+        "case": "204100_direct",
+        "input": "/Users/themoretheless/.codex/tmp/rrrah-joint-geometry-bits-qualified-20261011/204100_direct.json",
+        "trace_report": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-native-direction-trace-204100-20261011.json",
+        "trace_index": 1,
+        "provenance": "captured actual caller-direction native descriptor proposals"
+      }
+    },
+    {
+      "group": 211900,
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-joint-geometry-bits-qualified-20261011/211900_direct.json",
+      "input_sha256": "f7975ff36e10ddec7f26610337cfc040d9b0417bf3ab283f9d9d14378b29eb89",
+      "fixture": "crates/rrrah-dedup/tests/fixtures/joint-geometry-211900.bits.rs",
+      "points": 113,
+      "provenance": {
+        "case": "211900_direct",
+        "input": "/Users/themoretheless/.codex/tmp/rrrah-joint-geometry-bits-qualified-20261011/211900_direct.json",
+        "trace_report": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-native-direction-trace-211900-20261011.json",
+        "trace_index": 1,
+        "provenance": "captured actual caller-direction native descriptor proposals"
+      }
+    }
+  ],
+  "pins": {
+    "crates/rrrah-dedup/tests/fixtures/joint-geometry-204100.bits.rs": "dc7d959391fb4dbd3c6405b1f38610f17368ee3b6b251cfcf1cebde4ccbe1901",
+    "crates/rrrah-dedup/tests/fixtures/joint-geometry-211900.bits.rs": "24e872135357046370bb7ea1a922e86bce1cc3479d78524a1fb115b9f338caa5"
+  },
+  "scope": "Real native caller-direction points, exact-bit serialization. Geometry-only regression inputs, no standalone image identity claim."
+}

@@ -1,0 +1,22 @@
+{
+  "scope": "Explicit distinction between QV5700 image samples and legacy full-row BAY unpack storage",
+  "source": "https://www.inweb.ch/foto/rawformat.html",
+  "source_fact": "QV5700 row is3232bytes:2576image pixels10bit plus12trailer bytes. Headerless camera dumps do not independently establish color interpretation.",
+  "production_change": "BaySensorLayout::image_samples_per_row returns2576forQV5700; legacyfullrowdimensions remain2585x1924 for independent storageoracles. Otherlayouts retain full documented sample width. No opticalblack crop inferred.",
+  "regression": "Mutate all12trailerbytes on everyrow; every image-bearing sample remains unchanged, some unpacked trailerpositions change; both managedoutputs released tozero",
+  "validation": {
+    "bay_tests_passed": 7,
+    "failed": 0,
+    "ignored": 1,
+    "scope": "focused BAY library tests; full decoder not rerun"
+  },
+  "limits": [
+    "No camera-produced original BAY fixture found",
+    "CFA/WB/calibration/nativeviewer still pending",
+    "No LibRaw production dependency introduced"
+  ],
+  "sha256": {
+    "docs/research/bay-row-image-boundary-2026-10-12/focused.log": "76f70bd171508e91500a04d8febcf982089dad3483418691a3fd4ab61466ba6e",
+    "crates/rrrah-decode/src/bay.rs": "0988f79edaf08f874e1eea4cabe2c853d217a6179723c3db38c3ccbcebcf10ce"
+  }
+}

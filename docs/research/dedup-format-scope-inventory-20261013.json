@@ -1,0 +1,173 @@
+{
+  "status": "partial_explicit_format_scope_inventory",
+  "source_sha256": {
+    "crates/rrrah-dedup/src/decode.rs": "724a4cb9d59fe761679e6d36ec11ae3f84387313ca099f049ca150392d949fd2",
+    "crates/rrrah-dedup/src/animated.rs": "08ebb4f8d614ab1f076ce3de77cc3b1dc74cff43456eda09b37290ae22d2a6e4",
+    "crates/rrrah-dedup/src/pages.rs": "4bd77478771d1de1249d84d5c42bf0bd13aab20ee4dcbf175a342ff25c468f7b",
+    "crates/rrrah-dedup/tests/decode.rs": "18bb1d80b57b7f5278f3a5a40b33c12c6ef998df8eb89f1281ab46e3027a007b",
+    "crates/rrrah-dedup/tests/animated.rs": "a4b12430ff80db1d1020c5def0295b36aebfb8d364a20ead16c25bd30093032c",
+    "crates/rrrah-dedup/tests/pages.rs": "183b6b25213fc74c4e475741f1fbdf8f0a0b33d4a3ad0fba7721ad5f7d68d52e",
+    "crates/rrrah-dedup/tests/container.rs": "624bd4a83ea02b0bfa15bb786751b32b923fa6ebe682c495e245de100f00d533",
+    "crates/rrrah-dedup/tests/raster_equality.rs": "c8e70733afa179328b00af132ac8666b3325dab849546cd2530e06174da77407"
+  },
+  "rows": [
+    {
+      "format": "png",
+      "scope": "selected normalized frame",
+      "evidence_test": "raster_equality::independent_lossless_encodings_preserve_pixels_alpha_and_one_code_negatives",
+      "opaque_variants": [
+        "base",
+        "changed"
+      ],
+      "alpha_variants": [
+        "base",
+        "hidden",
+        "changed"
+      ],
+      "status": "source_and_fixture_inventory_latest_runtime_pending103_gate"
+    },
+    {
+      "format": "tiff",
+      "scope": "selected normalized frame",
+      "evidence_test": "raster_equality::independent_lossless_encodings_preserve_pixels_alpha_and_one_code_negatives",
+      "opaque_variants": [
+        "base",
+        "changed"
+      ],
+      "alpha_variants": [
+        "base",
+        "hidden",
+        "changed"
+      ],
+      "status": "source_and_fixture_inventory_latest_runtime_pending103_gate"
+    },
+    {
+      "format": "bmp",
+      "scope": "selected normalized frame",
+      "evidence_test": "raster_equality::independent_lossless_encodings_preserve_pixels_alpha_and_one_code_negatives",
+      "opaque_variants": [
+        "base",
+        "changed"
+      ],
+      "alpha_variants": [],
+      "status": "source_and_fixture_inventory_latest_runtime_pending103_gate"
+    },
+    {
+      "format": "ppm",
+      "scope": "selected normalized frame",
+      "evidence_test": "raster_equality::independent_lossless_encodings_preserve_pixels_alpha_and_one_code_negatives",
+      "opaque_variants": [
+        "base",
+        "changed"
+      ],
+      "alpha_variants": [],
+      "status": "source_and_fixture_inventory_latest_runtime_pending103_gate"
+    },
+    {
+      "format": "tga",
+      "scope": "selected normalized frame",
+      "evidence_test": "raster_equality::independent_lossless_encodings_preserve_pixels_alpha_and_one_code_negatives",
+      "opaque_variants": [
+        "base",
+        "changed"
+      ],
+      "alpha_variants": [
+        "base",
+        "hidden",
+        "changed"
+      ],
+      "status": "source_and_fixture_inventory_latest_runtime_pending103_gate"
+    },
+    {
+      "format": "webp",
+      "scope": "selected normalized frame",
+      "evidence_test": "raster_equality::independent_lossless_encodings_preserve_pixels_alpha_and_one_code_negatives",
+      "opaque_variants": [
+        "base",
+        "changed"
+      ],
+      "alpha_variants": [
+        "base",
+        "hidden",
+        "changed"
+      ],
+      "status": "source_and_fixture_inventory_latest_runtime_pending103_gate"
+    },
+    {
+      "format": "qoi",
+      "scope": "selected normalized frame",
+      "evidence_test": "raster_equality::independent_lossless_encodings_preserve_pixels_alpha_and_one_code_negatives",
+      "opaque_variants": [
+        "base",
+        "changed"
+      ],
+      "alpha_variants": [
+        "base",
+        "hidden",
+        "changed"
+      ],
+      "status": "source_and_fixture_inventory_latest_runtime_pending103_gate"
+    },
+    {
+      "format": "gif",
+      "scope": "whole timeline",
+      "evidence_test": "animated::independent_cross_container_timeline_splits_and_negatives",
+      "status": "executed_in_frozen_combined_prefix",
+      "evidence": "docs/research/dedup-current-combined-finished-prefix-audit-20261013.json"
+    },
+    {
+      "format": "apng",
+      "scope": "whole timeline",
+      "evidence_test": "animated::independent_cross_container_timeline_splits_and_negatives",
+      "status": "executed_in_frozen_combined_prefix",
+      "evidence": "docs/research/dedup-current-combined-finished-prefix-audit-20261013.json"
+    },
+    {
+      "format": "webp",
+      "scope": "whole timeline",
+      "evidence_test": "animated::independent_cross_container_timeline_splits_and_negatives",
+      "status": "executed_in_frozen_combined_prefix",
+      "evidence": "docs/research/dedup-current-combined-finished-prefix-audit-20261013.json"
+    },
+    {
+      "format": "tiff",
+      "scope": "ordered whole pages/resources",
+      "evidence_test": "container::complete_page_comparison_rejects_last_page_changes_and_limits",
+      "status": "executed_in_container_fixture_repair_snapshot",
+      "evidence": "docs/research/dedup-container-writable-tests-audit-20261013.json"
+    },
+    {
+      "format": "dcx",
+      "scope": "ordered whole pages/resources",
+      "evidence_test": "container::dcx_icon_and_cursor_page_modes_use_existing_full_decoders",
+      "status": "executed_in_container_fixture_repair_snapshot",
+      "evidence": "docs/research/dedup-container-writable-tests-audit-20261013.json"
+    },
+    {
+      "format": "ico",
+      "scope": "ordered whole pages/resources",
+      "evidence_test": "container::dcx_icon_and_cursor_page_modes_use_existing_full_decoders",
+      "status": "executed_in_container_fixture_repair_snapshot",
+      "evidence": "docs/research/dedup-container-writable-tests-audit-20261013.json"
+    },
+    {
+      "format": "cur",
+      "scope": "ordered whole pages/resources",
+      "evidence_test": "container::dcx_icon_and_cursor_page_modes_use_existing_full_decoders",
+      "status": "executed_in_container_fixture_repair_snapshot",
+      "evidence": "docs/research/dedup-container-writable-tests-audit-20261013.json"
+    }
+  ],
+  "limits": [
+    "Source and test inventory is not execution proof for current root.",
+    "Selected-frame success does not establish whole animation/page equivalence.",
+    "Lossless fixture matrix omits JPEG, HDR, sensor RAW and many native formats; no current complete per-format matrix.",
+    "Platform execution here is macOS ARM64; other platforms not qualified.",
+    "Recent visual/local publication fixes absent from combined prefix/container execution sources."
+  ],
+  "next_required": [
+    "Finish103-target gate and pin exact raster_equality/pages execution snapshots.",
+    "Qualify latest shared decoding/publication source together.",
+    "Expand explicit format/color/frame/malformed/resource/platform matrix beyond named fixtures."
+  ]
+}

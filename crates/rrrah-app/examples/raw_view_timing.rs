@@ -1,6 +1,10 @@
 //! RAW decode -> completed offscreen GPU frame, and resident zoom/pan timing.
 //! This is not a swapchain/physical-display measurement. --swap-view measures
 //! complete session-swap restore, upload and GPU completion instead of decode.
+//! With --raster-view --swap-view it restores a prepared raster, checks every
+//! sample bit and metadata outside timing, and does not include source decode
+//! or display preparation in the measured restore path. Reference vectors and
+//! offscreen targets are outside the managed CPU/renderer texture budgets.
 //! Optional RRRAH_VIEW_CPU_MB budgets decode and transient RAW upload packing;
 //! RRRAH_VIEW_GPU_MB budgets renderer-owned atlas textures. These apply to view
 //! timing only. --cache-only uses RRRAH_CACHE_CPU_MB (default 512 MiB) for
@@ -159,7 +163,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         .or_else(|| swap_view.then(|| rrrah_core::MemoryBudget::new(512 * 1024 * 1024)));
     let gpu_budget = env_budget("RRRAH_VIEW_GPU_MB")?;
     if raster_view {
-        if cache_only || swap_view || compare_upload_submit {
+        if cache_only || compare_upload_submit {
             return Err("raster mode cannot combine with RAW modes".into());
         }
         return raster_view_timing(
@@ -172,6 +176,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             gpu_budget,
             cuda,
             compute_stops,
+            swap_view,
         );
     }
     let mut renderer = match &gpu_budget {
@@ -577,6 +582,7 @@ fn raster_view_timing(
     gpu: Option<rrrah_core::MemoryBudget>,
     cuda: Option<(rrrah_cuda::CudaExposure, f32, rrrah_core::MemoryBudget)>,
     compute_stops: Option<f32>,
+    swap_view: bool,
 ) -> Result<(), Box<dyn Error>> {
     let cpu = cpu.unwrap_or_else(|| rrrah_core::MemoryBudget::new(512 * 1024 * 1024));
     let gpu = gpu.unwrap_or_else(|| rrrah_core::MemoryBudget::new(128 * 1024 * 1024));
@@ -584,12 +590,45 @@ fn raster_view_timing(
     if cuda.is_some() && compute_stops.is_some() {
         return Err("select one exposure backend".into());
     }
+    if swap_view && (cuda.is_some() || compute_stops.is_some()) {
+        return Err("raster swap timing measures prepared restore; select exposure timing separately".into());
+    }
     let compute = compute_stops.map(|stops| (rrrah_gpu::LinearExposureCompute::new(device), stops));
     for path in paths {
+        let swap_source = if swap_view {
+            let mut request = rrrah_decode::DecodeRequest::new(path);
+            request.memory_budget = Some(cpu.clone());
+            if rrrah_decode::image_source_kind(&request)? != rrrah_decode::ImageSourceKind::Raster {
+                return Err("raster mode requires a raster source".into());
+            }
+            let source = rrrah_decode::decode_raster(&request)?;
+            let raster = rrrah_decode::prepare_raster_for_display_with_budget(&source, Some(&cpu))?;
+            drop(source);
+            let expected = raster_sample_bits(&raster);
+            let metadata = (raster.width(), raster.height(), raster.color_space().clone(),
+                raster.image_index(), raster.image_count(), raster.hotspot(),
+                raster.pixel_aspect().map(f32::to_bits), raster.sample_scale().to_bits());
+            let weight = raster.capacity_bytes();
+            let directory = tempfile::tempdir()?;
+            let swap = rrrah_cache::RasterSwapCache::<u8>::new_with_budgets(directory.path(),
+                rrrah_cache::ImageSwapConfig {
+                    limits: rrrah_cache::CacheLimits { max_bytes: weight.saturating_mul(2), max_entries: Some(1), ttl: None },
+                    queue_bytes: weight, queue_count: 1, restore_bytes: weight,
+                }, rrrah_core::MemoryBudget::new(weight), cpu.clone())?;
+            swap.enqueue(1, raster);
+            swap.wait_idle()?;
+            assert_eq!(swap.stats().writes, 1);
+            assert_eq!(cpu.used(), 0, "seed allocation must leave RAM before timing restores");
+            Some((directory, swap, expected, metadata))
+        } else { None };
         let mut times = Vec::new();
         let mut stage_times = [Vec::new(), Vec::new(), Vec::new(), Vec::new()];
         for iteration in 0..18 {
             let started = Instant::now();
+            let (raster, decode_ms, prepare_ms) = if let Some((_, swap, _, _)) = &swap_source {
+                let raster = swap.try_get(&1, || false)?.ok_or("raster swap restore missed")?;
+                (raster, ms(started), 0.)
+            } else {
             let mut request = rrrah_decode::DecodeRequest::new(path);
             request.memory_budget = Some(cpu.clone());
             if rrrah_decode::image_source_kind(&request)? != rrrah_decode::ImageSourceKind::Raster {
@@ -604,6 +643,8 @@ fn raster_view_timing(
                 })?;
             drop(source);
             let prepare_ms = ms(prepare_started);
+            (raster, decode_ms, prepare_ms)
+            };
             let transfer_started = Instant::now();
             let raster = if let Some((compute, stops, cuda_gpu)) = &cuda {
                 let rrrah_core::RasterPixels::Rgba32Float(pixels) = raster.pixels() else {
@@ -662,12 +703,20 @@ fn raster_view_timing(
                 timeout: None,
             })?;
             let elapsed = ms(started);
+            let frame_ms = ms(frame_started);
+            // Identity verification and reference copies are outside timed intervals.
+            if let Some((_, _, expected, metadata)) = &swap_source {
+                assert_eq!(&raster_sample_bits(&raster), expected);
+                assert_eq!(&(raster.width(), raster.height(), raster.color_space().clone(),
+                    raster.image_index(), raster.image_count(), raster.hotspot(),
+                    raster.pixel_aspect().map(f32::to_bits), raster.sample_scale().to_bits()), metadata);
+            }
             if iteration >= 3 {
                 times.push(elapsed);
                 for (samples, value) in
                     stage_times
                         .iter_mut()
-                        .zip([decode_ms, prepare_ms, transfer_ms, ms(frame_started)])
+                        .zip([decode_ms, prepare_ms, transfer_ms, frame_ms])
                 {
                     samples.push(value);
                 }
@@ -676,8 +725,9 @@ fn raster_view_timing(
             assert_eq!(cpu.used(), 0);
         }
         println!(
-            "{} raster decode+prepare{}+upload+completed-frame p50={:.3} p95={:.3} ms n={}",
+            "{} raster {}{}+upload+completed-frame p50={:.3} p95={:.3} ms n={}",
             path.display(),
+            if swap_view { "swap-restore" } else { "decode+prepare" },
             if cuda.is_some() {
                 "+CUDA-exposure-transfers"
             } else if compute.is_some() {
@@ -689,7 +739,7 @@ fn raster_view_timing(
             percentile(&times, 0.95),
             times.len()
         );
-        for (name, samples) in ["decode", "prepare", "exposure+transfer-submit", "completed-frame"]
+        for (name, samples) in [if swap_view { "swap-restore" } else { "decode" }, "prepare", "exposure+transfer-submit", "completed-frame"]
             .into_iter()
             .zip(&stage_times)
         {
@@ -699,6 +749,11 @@ fn raster_view_timing(
                 percentile(samples, 0.95),
                 samples.len()
             );
+        }
+        if let Some((_, swap, _, _)) = &swap_source {
+            let stats = swap.stats();
+            assert_eq!((stats.writes, stats.reads, stats.errors, stats.queued_bytes), (1, 18, 0, 0));
+            eprintln!("raster swap {}: 18 restores exact; writes=1 errors=0 queue=0; managed CPU=0", path.display());
         }
     }
     drop(renderer);
@@ -714,4 +769,12 @@ fn raster_view_timing(
         gpu.peak()
     );
     Ok(())
+}
+
+fn raster_sample_bits(raster: &rrrah_core::DecodedRaster) -> Vec<u32> {
+    match raster.pixels() {
+        rrrah_core::RasterPixels::Rgba8(p) => p.iter().map(|v| u32::from(*v)).collect(),
+        rrrah_core::RasterPixels::Rgba16(p) => p.iter().map(|v| u32::from(*v)).collect(),
+        rrrah_core::RasterPixels::Rgba32Float(p) => p.iter().map(|v| v.to_bits()).collect(),
+    }
 }

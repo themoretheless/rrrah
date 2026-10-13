@@ -1,0 +1,17 @@
+{
+  "scope": "actual delayed file read paused after admitted allocation and >=64KiB progress, TTL index prune while active, exact finish and reclamation",
+  "passed": 151,
+  "failed": 0,
+  "ignored": 6,
+  "test": "ttl_prune_during_admitted_restore_keeps_blob_until_reader_finishes",
+  "buffer_bytes": 262144,
+  "read_progress_before_pause_min": 65536,
+  "ttl_ms": 200,
+  "expired_pause_ms": 250,
+  "active_reader_disk_objects": 1,
+  "after_reader_disk_objects": 0,
+  "after_reader_physical_files": 0,
+  "final_managed_bytes": 0,
+  "log": "docs/research/cache-active-reader-ttl-regression-2026-10-12.log",
+  "sha256": "f2a3e1b7242240041204de9b325464038d2463d36ae1fbec4404d047f2419f56"
+}

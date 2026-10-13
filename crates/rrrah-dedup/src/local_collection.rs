@@ -39,6 +39,7 @@ pub struct LocalCollectionReport<E = crate::local_scan::LocalFileEvidence> {
 fn mapped(error: &LocalError) -> ScanError {
     match error {
         LocalError::Invalid => ScanError::InvalidPolicy,
+        LocalError::UnsupportedPixels => ScanError::UnsupportedPixels,
         LocalError::Budget => ScanError::Budget,
         LocalError::Cancelled => ScanError::Cancelled,
     }
@@ -287,7 +288,7 @@ fn scan_collection_with_typed_extractor<E, F>(
             }
         }
     }
-    let invalid = verify_sources(snapshots, &mut local, cancelled)?;
+    let invalid = verify_sources(&snapshots, &mut local, cancelled)?;
     local
         .pairs
         .retain(|p| !invalid.contains(&p.left) && !invalid.contains(&p.right));
@@ -297,6 +298,9 @@ fn scan_collection_with_typed_extractor<E, F>(
     if cancelled() {
         return Err(ScanError::Cancelled);
     }
+    verify_publication_sources(&snapshots, &invalid, || {
+        generations.iter().any(|token| token.is_cancelled())
+    })?;
     Ok(LocalCollectionReport {
         analysed,
         insufficient_features,
@@ -418,7 +422,7 @@ fn extract_file_with<F>(
     Ok(features)
 }
 fn verify_sources<E>(
-    snapshots: Vec<(u64, ContentSnapshot)>,
+    snapshots: &[(u64, ContentSnapshot)],
     report: &mut LocalFileReport<E>,
     cancel: impl Fn() -> bool,
 ) -> Result<HashSet<u64>, ScanError> {
@@ -431,7 +435,7 @@ fn verify_sources<E>(
         .len()
         .checked_add(snapshots.len())
         .ok_or(ScanError::Budget)?;
-    for (id, source) in snapshots {
+    for &(id, ref source) in snapshots {
         let result = source.verify(&cancel);
         if cancel() {
             return Err(ScanError::Cancelled);
@@ -445,6 +449,28 @@ fn verify_sources<E>(
     }
     report.source_issues.sort_by_key(|(id, _)| *id);
     Ok(invalid)
+}
+
+// No caller callback may follow this guard. Previously attributed source failures
+// remain isolated; a newly stale observation invalidates publication as a whole.
+fn verify_publication_sources(
+    snapshots: &[(u64, ContentSnapshot)],
+    invalid: &HashSet<u64>,
+    owners: impl Fn() -> bool,
+) -> Result<(), ScanError> {
+    for (id, source) in snapshots {
+        if invalid.contains(id) {
+            continue;
+        }
+        source.verify(&owners).map_err(|error| match error {
+            crate::exact::SnapshotError::Cancelled => ScanError::Cancelled,
+            error => ScanError::Source { id: *id, error },
+        })?;
+    }
+    if owners() {
+        return Err(ScanError::Cancelled);
+    }
+    Ok(())
 }
 
 fn preverify(
@@ -606,10 +632,8 @@ fn scan_roots_with_collection<E>(
         }
         requests.push((*id, request));
     }
+    // The inner scan owns the last caller checkpoint and final source guard.
     let indexed = scan(requests, &cancel)?;
-    if cancel() {
-        return Err(ScanError::Cancelled);
-    }
     Ok(DirectoryLocalCollectionReport {
         files,
         aliases: discovery.aliases,
@@ -851,7 +875,7 @@ fn scan_reflected_collection_selected(
             }
         }
     }
-    let invalid = verify_sources(snapshots, &mut observations, cancelled)?;
+    let invalid = verify_sources(&snapshots, &mut observations, cancelled)?;
     pairs.retain(|p| !invalid.contains(&p.left) && !invalid.contains(&p.right));
     analysed.retain(|id| !invalid.contains(id));
     let mut insufficient_features = retrieved.insufficient_features;
@@ -859,6 +883,9 @@ fn scan_reflected_collection_selected(
     if cancelled() {
         return Err(ScanError::Cancelled);
     }
+    verify_publication_sources(&snapshots, &invalid, || {
+        requests.values().any(|request| request.cancellation.as_ref().is_some_and(rrrah_decode::GenerationToken::is_cancelled))
+    })?;
     Ok(ReflectedCollectionReport {
         analysed,
         insufficient_features,
@@ -2589,7 +2616,18 @@ fn scan_gradient_collection_with_confirmation<E>(
     cancel: impl Fn() -> bool,
     confirm: impl Fn(&DecodeRequest, &DecodeRequest, &dyn Fn() -> bool) -> Result<E, LocalFileError>,
 ) -> Result<LocalCollectionReport<E>, ScanError> {
-    scan_gradient_collection_with_confirmation_selected(files, config, spatial, scales, area_taps, candidate_union, None, budget, cancel, confirm)
+    scan_gradient_collection_with_confirmation_selected(
+        files,
+        config,
+        spatial,
+        scales,
+        area_taps,
+        candidate_union,
+        None,
+        budget,
+        cancel,
+        confirm,
+    )
 }
 
 fn scan_gradient_collection_with_confirmation_selected<E>(
@@ -2759,28 +2797,29 @@ fn scan_gradient_collection_with_confirmation_selected<E>(
             }
             let r = if let Some(limit) = reflection_bins {
                 crate::gradient_index::gradient_file_pair_report_with_reflection(
-                &entries,
-                &owners,
-                config.recipe,
-                config.search.matching.max_squared_distance,
-                config.max_retrieval_comparisons,
-                config.budgets.max_hits,
-                config.budgets.max_pairs.min(config.budgets.max_pair_counts),
-                budget,
-                limit, &cancel,
-            )
+                    &entries,
+                    &owners,
+                    config.recipe,
+                    config.search.matching.max_squared_distance,
+                    config.max_retrieval_comparisons,
+                    config.budgets.max_hits,
+                    config.budgets.max_pairs.min(config.budgets.max_pair_counts),
+                    budget,
+                    limit,
+                    &cancel,
+                )
             } else {
                 crate::gradient_index::gradient_file_pair_report(
-                &entries,
-                &owners,
-                config.recipe,
-                config.search.matching.max_squared_distance,
-                config.max_retrieval_comparisons,
-                config.budgets.max_hits,
-                config.budgets.max_pairs.min(config.budgets.max_pair_counts),
-                budget,
-                &cancel,
-            )
+                    &entries,
+                    &owners,
+                    config.recipe,
+                    config.search.matching.max_squared_distance,
+                    config.max_retrieval_comparisons,
+                    config.budgets.max_hits,
+                    config.budgets.max_pairs.min(config.budgets.max_pair_counts),
+                    budget,
+                    &cancel,
+                )
             }
             .map_err(|e| mapped(&e))?;
             Ok(crate::local_index::DescriptorFilePairs {
@@ -4176,26 +4215,33 @@ fn extract_candidate_union_proposals(
     };
     let original = extract(view, config.low_contrast_corner_score)?;
     let smoothed = {
-        let samples = crate::gradient_scale::smooth_gradient_candidates_managed(
-            view,
-            config.smoothing_radius,
-            config.max_smoothing_taps_per_image,
-            budget,
-            cancel,
-        )?;
+        let samples = if config.smoothing_radius == 0 {
+            crate::gradient_scale::validate_unsmoothed_gradient_candidates(
+                view,
+                config.max_smoothing_taps_per_image,
+                cancel,
+            )?;
+            None
+        } else {
+            Some(crate::gradient_scale::smooth_gradient_candidates_managed(
+                view,
+                config.smoothing_radius,
+                config.max_smoothing_taps_per_image,
+                budget,
+                cancel,
+            )?)
+        };
         let (w, h) = view.dimensions();
-        let smooth = crate::linear::LinearRgbaView::new(
-            w,
-            h,
-            &samples,
-            gradient.search.local.decode.max_pixels,
-            cancel,
-        )
-        .map_err(|e| match e {
-            crate::pixels::PixelError::Layout => LocalError::Invalid,
-            crate::pixels::PixelError::Budget => LocalError::Budget,
-            crate::pixels::PixelError::Cancelled => LocalError::Cancelled,
-        })?;
+        let smooth = if let Some(samples) = &samples {
+            crate::linear::LinearRgbaView::new(w, h, samples, gradient.search.local.decode.max_pixels, cancel)
+                .map_err(|e| match e {
+                    crate::pixels::PixelError::Layout => LocalError::Invalid,
+                    crate::pixels::PixelError::Budget => LocalError::Budget,
+                    crate::pixels::PixelError::Cancelled => LocalError::Cancelled,
+                })?
+        } else {
+            *view
+        };
         extract(&smooth, gradient.search.local.extract.minimum_corner_score)?
     };
     let count = original
@@ -4304,20 +4350,32 @@ fn extract_candidate_union_portfolio_proposals(
     for &radius in additional_radii {
         // Pixel scratch is needed only for extraction, not descriptor merging.
         let batch = {
-            let samples = crate::gradient_scale::smooth_gradient_candidates_managed(
-                view,
-                radius,
-                config.max_smoothing_taps_per_image,
-                budget,
-                cancel,
-            )?;
-            let smooth =
-                crate::linear::LinearRgbaView::new(w, h, &samples, g.search.local.decode.max_pixels, cancel)
+            let samples = if radius == 0 {
+                crate::gradient_scale::validate_unsmoothed_gradient_candidates(
+                    view,
+                    config.max_smoothing_taps_per_image,
+                    cancel,
+                )?;
+                None
+            } else {
+                Some(crate::gradient_scale::smooth_gradient_candidates_managed(
+                    view,
+                    radius,
+                    config.max_smoothing_taps_per_image,
+                    budget,
+                    cancel,
+                )?)
+            };
+            let smooth = if let Some(samples) = &samples {
+                crate::linear::LinearRgbaView::new(w, h, samples, g.search.local.decode.max_pixels, cancel)
                     .map_err(|e| match e {
                         crate::pixels::PixelError::Layout => LocalError::Invalid,
                         crate::pixels::PixelError::Budget => LocalError::Budget,
                         crate::pixels::PixelError::Cancelled => LocalError::Cancelled,
-                    })?;
+                    })?
+            } else {
+                *view
+            };
             crate::gradient_scale::extract_spatial_gradient_scales_area_managed(
                 &smooth,
                 crate::pyramid::PyramidPolicy {
@@ -4353,10 +4411,7 @@ pub fn scan_anchor_rank_collection(
     anchors: crate::anchor_rank::AnchorRankPolicy,
     budget: &MemoryBudget,
     cancel: impl Fn() -> bool,
-) -> Result<
-    LocalCollectionReport<crate::anchor_rank_file::AnchorCandidateSearchEvidence>,
-    ScanError,
-> {
+) -> Result<LocalCollectionReport<crate::anchor_rank_file::AnchorCandidateSearchEvidence>, ScanError> {
     admit_anchor_collection(config.search.max_union_points, anchors, &cancel)?;
     crate::local_scan::validate_candidate_union_regions_file_policy(config.search, factors, &cancel)
         .map_err(|e| match e {
@@ -4384,8 +4439,15 @@ pub fn scan_anchor_rank_collection(
         cancel,
         |left, right, cancel| {
             crate::anchor_rank_file::search_anchor_rank_files(
-                left, right, config.search, factors, anchors, budget, cancel,
-            ).map_err(|error| match error {
+                left,
+                right,
+                config.search,
+                factors,
+                anchors,
+                budget,
+                cancel,
+            )
+            .map_err(|error| match error {
                 crate::anchor_rank_file::AnchorRankFileError::Cancelled => LocalFileError::Cancelled,
                 crate::anchor_rank_file::AnchorRankFileError::Source(e) => LocalFileError::Source(e),
                 crate::anchor_rank_file::AnchorRankFileError::Decode(e) => LocalFileError::Decode(e),
@@ -4406,10 +4468,7 @@ pub fn scan_anchor_rank_geometry_collection(
     anchors: crate::anchor_rank::AnchorRankPolicy,
     budget: &MemoryBudget,
     cancel: impl Fn() -> bool,
-) -> Result<
-    LocalCollectionReport<crate::anchor_rank_file::AnchorGeometrySearchEvidence>,
-    ScanError,
-> {
+) -> Result<LocalCollectionReport<crate::anchor_rank_file::AnchorGeometrySearchEvidence>, ScanError> {
     admit_anchor_collection(config.search.max_union_points, anchors, &cancel)?;
     crate::local_scan::validate_candidate_union_regions_file_policy(config.search, factors, &cancel)
         .map_err(|e| match e {
@@ -4437,8 +4496,15 @@ pub fn scan_anchor_rank_geometry_collection(
         cancel,
         |left, right, cancel| {
             crate::anchor_rank_file::search_anchor_rank_geometry_files(
-                left, right, config.search, factors, anchors, budget, cancel,
-            ).map_err(|error| match error {
+                left,
+                right,
+                config.search,
+                factors,
+                anchors,
+                budget,
+                cancel,
+            )
+            .map_err(|error| match error {
                 crate::anchor_rank_file::AnchorRankFileError::Cancelled => LocalFileError::Cancelled,
                 crate::anchor_rank_file::AnchorRankFileError::Source(e) => LocalFileError::Source(e),
                 crate::anchor_rank_file::AnchorRankFileError::Decode(e) => LocalFileError::Decode(e),
@@ -4453,21 +4519,45 @@ fn admit_anchor_collection(
     anchors: crate::anchor_rank::AnchorRankPolicy,
     cancel: &dyn Fn() -> bool,
 ) -> Result<(), ScanError> {
-    if cancel() { return Err(ScanError::Cancelled); }
-    crate::anchor_rank::validate_anchor_rank_policy(anchors)
-        .map_err(|_| ScanError::InvalidPolicy)?;
+    if cancel() {
+        return Err(ScanError::Cancelled);
+    }
+    crate::anchor_rank::validate_anchor_rank_policy(anchors).map_err(|_| ScanError::InvalidPolicy)?;
     // Admit the complete configured union bound before consuming file input.
     let n = u64::try_from(union_bound).map_err(|_| ScanError::Budget)?;
-    let pairs = n.checked_mul(n.saturating_sub(1)).and_then(|v|v.checked_div(2)).ok_or(ScanError::Budget)?;
-    let size = anchors.window_radius.checked_mul(2).and_then(|v|v.checked_add(1)).ok_or(ScanError::Budget)?;
-    let pad = anchors.local.rank.radius.checked_add(anchors.local.filter_radius).ok_or(ScanError::Budget)?;
-    let extent = u64::from(size).checked_add(2*u64::from(pad)).ok_or(ScanError::Budget)?;
-    let sites = n.checked_mul(2).and_then(|v|v.checked_mul(extent)).and_then(|v|v.checked_mul(extent)).ok_or(ScanError::Budget)?;
+    let pairs = n
+        .checked_mul(n.saturating_sub(1))
+        .and_then(|v| v.checked_div(2))
+        .ok_or(ScanError::Budget)?;
+    let size = anchors
+        .window_radius
+        .checked_mul(2)
+        .and_then(|v| v.checked_add(1))
+        .ok_or(ScanError::Budget)?;
+    let pad = anchors
+        .local
+        .rank
+        .radius
+        .checked_add(anchors.local.filter_radius)
+        .ok_or(ScanError::Budget)?;
+    let extent = u64::from(size)
+        .checked_add(2 * u64::from(pad))
+        .ok_or(ScanError::Budget)?;
+    let sites = n
+        .checked_mul(2)
+        .and_then(|v| v.checked_mul(extent))
+        .and_then(|v| v.checked_mul(extent))
+        .ok_or(ScanError::Budget)?;
     if union_bound > anchors.local.maximum_points
         || pairs.checked_add(n).ok_or(ScanError::Budget)? > anchors.local.maximum_point_checks
-        || pairs.checked_mul(3).and_then(|v|v.checked_add(n)).ok_or(ScanError::Budget)? > anchors.maximum_selection_checks
+        || pairs
+            .checked_mul(3)
+            .and_then(|v| v.checked_add(n))
+            .ok_or(ScanError::Budget)?
+            > anchors.maximum_selection_checks
         || sites > anchors.local.rank.maximum_sites
-        || sites.checked_mul(5).ok_or(ScanError::Budget)? > anchors.local.rank.maximum_pixel_reads {
+        || sites.checked_mul(5).ok_or(ScanError::Budget)? > anchors.local.rank.maximum_pixel_reads
+    {
         return Err(ScanError::Budget);
     }
     Ok(())
@@ -4482,10 +4572,7 @@ pub fn scan_anchor_rank_fallback_collection(
     anchors: crate::anchor_rank::AnchorRankPolicy,
     budget: &MemoryBudget,
     cancel: impl Fn() -> bool,
-) -> Result<
-    LocalCollectionReport<crate::anchor_rank_file::AnchorFallbackSearchEvidence>,
-    ScanError,
-> {
+) -> Result<LocalCollectionReport<crate::anchor_rank_file::AnchorFallbackSearchEvidence>, ScanError> {
     admit_anchor_collection(config.search.search.max_union_points, anchors, &cancel)?;
     crate::local_scan::validate_candidate_union_fallback_file_policy(config.search, factors, &cancel)
         .map_err(|e| match e {
@@ -4515,8 +4602,15 @@ pub fn scan_anchor_rank_fallback_collection(
         cancel,
         |left, right, cancel| {
             crate::anchor_rank_file::search_anchor_rank_fallback_files(
-                left, right, config.search, factors, anchors, budget, cancel,
-            ).map_err(|error| match error {
+                left,
+                right,
+                config.search,
+                factors,
+                anchors,
+                budget,
+                cancel,
+            )
+            .map_err(|error| match error {
                 crate::anchor_rank_file::AnchorRankFileError::Cancelled => LocalFileError::Cancelled,
                 crate::anchor_rank_file::AnchorRankFileError::Source(e) => LocalFileError::Source(e),
                 crate::anchor_rank_file::AnchorRankFileError::Decode(e) => LocalFileError::Decode(e),
@@ -4544,16 +4638,19 @@ pub fn scan_anchor_rank_geometry_fallback_collection(
     factors: &[f64],
     budget: &MemoryBudget,
     cancel: impl Fn() -> bool,
-) -> Result<
-    LocalCollectionReport<crate::anchor_rank_file::AnchorGeometryFallbackEvidence>,
-    ScanError,
-> {
-    admit_anchor_collection(config.search.search.search.max_union_points, config.search.anchors, &cancel)?;
+) -> Result<LocalCollectionReport<crate::anchor_rank_file::AnchorGeometryFallbackEvidence>, ScanError> {
+    admit_anchor_collection(
+        config.search.search.search.max_union_points,
+        config.search.anchors,
+        &cancel,
+    )?;
     crate::anchor_rank_file::validate_anchor_geometry_fallback_policy(config.search, factors, &cancel)
         .map_err(|e| match e {
             crate::anchor_rank_file::AnchorRankFileError::Cancelled => ScanError::Cancelled,
             crate::anchor_rank_file::AnchorRankFileError::Rank(crate::local_rank::LocalRankError::Budget)
-            | crate::anchor_rank_file::AnchorRankFileError::Search(LocalFileError::Features(LocalError::Budget)) => ScanError::Budget,
+            | crate::anchor_rank_file::AnchorRankFileError::Search(LocalFileError::Features(
+                LocalError::Budget,
+            )) => ScanError::Budget,
             _ => ScanError::InvalidPolicy,
         })?;
     let union = config.search.search.search;
@@ -4576,8 +4673,14 @@ pub fn scan_anchor_rank_geometry_fallback_collection(
         cancel,
         |left, right, cancel| {
             crate::anchor_rank_file::search_anchor_rank_geometry_fallback_files(
-                left, right, config.search, factors, budget, cancel,
-            ).map_err(|error| match error {
+                left,
+                right,
+                config.search,
+                factors,
+                budget,
+                cancel,
+            )
+            .map_err(|error| match error {
                 crate::anchor_rank_file::AnchorRankFileError::Cancelled => LocalFileError::Cancelled,
                 crate::anchor_rank_file::AnchorRankFileError::Source(e) => LocalFileError::Source(e),
                 crate::anchor_rank_file::AnchorRankFileError::Decode(e) => LocalFileError::Decode(e),
@@ -4605,25 +4708,30 @@ pub fn scan_anchor_rank_reflection_fallback_collection(
     factors: &[f64],
     budget: &MemoryBudget,
     cancel: impl Fn() -> bool,
-) -> Result<
-    LocalCollectionReport<crate::anchor_rank_file::AnchorReflectionFallbackEvidence>,
-    ScanError,
-> {
-    admit_anchor_collection(config.search.search.search.search.max_union_points, config.search.search.anchors, &cancel)?;
+) -> Result<LocalCollectionReport<crate::anchor_rank_file::AnchorReflectionFallbackEvidence>, ScanError> {
+    admit_anchor_collection(
+        config.search.search.search.search.max_union_points,
+        config.search.search.anchors,
+        &cancel,
+    )?;
     crate::anchor_rank_file::validate_anchor_reflection_fallback_policy(config.search, factors, &cancel)
         .map_err(|e| match e {
             crate::anchor_rank_file::AnchorRankFileError::Cancelled => ScanError::Cancelled,
             crate::anchor_rank_file::AnchorRankFileError::Rank(crate::local_rank::LocalRankError::Budget)
-            | crate::anchor_rank_file::AnchorRankFileError::Search(LocalFileError::Features(LocalError::Budget)) => ScanError::Budget,
+            | crate::anchor_rank_file::AnchorRankFileError::Search(LocalFileError::Features(
+                LocalError::Budget,
+            )) => ScanError::Budget,
             _ => ScanError::InvalidPolicy,
         })?;
     // Prepay the declared collection feature ceiling before reading the iterator.
     let maximum_features = u64::try_from(config.budgets.max_features).map_err(|_| ScanError::Budget)?;
-    let comparisons = maximum_features.checked_mul(maximum_features)
-        .and_then(|n| n.checked_mul(2)).ok_or(ScanError::Budget)?;
+    let comparisons = maximum_features
+        .checked_mul(maximum_features)
+        .and_then(|n| n.checked_mul(2))
+        .ok_or(ScanError::Budget)?;
     let reflection = maximum_features.checked_mul(128).ok_or(ScanError::Budget)?;
-    if comparisons > config.max_retrieval_comparisons
-        || reflection > config.maximum_retrieval_reflection_bins {
+    if comparisons > config.max_retrieval_comparisons || reflection > config.maximum_retrieval_reflection_bins
+    {
         return Err(ScanError::Budget);
     }
     let union = config.search.search.search.search;
@@ -4647,8 +4755,14 @@ pub fn scan_anchor_rank_reflection_fallback_collection(
         cancel,
         |left, right, cancel| {
             crate::anchor_rank_file::search_anchor_rank_reflection_fallback_files(
-                left, right, config.search, factors, budget, cancel,
-            ).map_err(|error| match error {
+                left,
+                right,
+                config.search,
+                factors,
+                budget,
+                cancel,
+            )
+            .map_err(|error| match error {
                 crate::anchor_rank_file::AnchorRankFileError::Cancelled => LocalFileError::Cancelled,
                 crate::anchor_rank_file::AnchorRankFileError::Source(e) => LocalFileError::Source(e),
                 crate::anchor_rank_file::AnchorRankFileError::Decode(e) => LocalFileError::Decode(e),
@@ -4667,30 +4781,73 @@ mod feature_release_tests {
         let directory = std::env::temp_dir().join(format!(
             "rrrah-feature-release-{}-{}",
             std::process::id(),
-            std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_nanos()
+            std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)
+                .unwrap()
+                .as_nanos()
         ));
         std::fs::create_dir(&directory).unwrap();
         let paths = [directory.join("left.bin"), directory.join("right.bin")];
-        for path in &paths { std::fs::write(path, [1, 2, 3]).unwrap(); }
+        for path in &paths {
+            std::fs::write(path, [1, 2, 3]).unwrap();
+        }
         let policy = LocalCollectionPolicy {
             search: crate::local_scan::LocalFilePolicy {
-                decode: crate::animated::AnimationBudget { max_frames: 1, max_pixels: 16, max_file_bytes: 1024 },
-                extract: crate::local::LocalPolicy { max_pixels: 16, max_candidates: 16, max_features: 8, minimum_corner_score: 0.001 },
-                matching: crate::local::MatchPolicy { max_comparisons: 64, max_distance: 64 },
-                geometry: crate::geometry::GeometryPolicy { tolerance: 2., min_inliers: 4, max_points: 8, max_hypotheses: 8 },
-                pixels: crate::warp::WarpPolicy { tolerance: 0.01, max_source_pixels: 16 },
+                decode: crate::animated::AnimationBudget {
+                    max_frames: 1,
+                    max_pixels: 16,
+                    max_file_bytes: 1024,
+                },
+                extract: crate::local::LocalPolicy {
+                    max_pixels: 16,
+                    max_candidates: 16,
+                    max_features: 8,
+                    minimum_corner_score: 0.001,
+                },
+                matching: crate::local::MatchPolicy {
+                    max_comparisons: 64,
+                    max_distance: 64,
+                },
+                geometry: crate::geometry::GeometryPolicy {
+                    tolerance: 2.,
+                    min_inliers: 4,
+                    max_points: 8,
+                    max_hypotheses: 8,
+                },
+                pixels: crate::warp::WarpPolicy {
+                    tolerance: 0.01,
+                    max_source_pixels: 16,
+                },
                 minimum_compared_pixels: 1,
                 minimum_coverage_fraction: 0.3,
                 minimum_matched_fraction: 0.9,
-            }.into(),
-            budgets: FileFeatureBudgets { max_files: 2, max_features: 512, max_hits: 1, max_pair_counts: 1, max_pairs: 1 },
+            }
+            .into(),
+            budgets: FileFeatureBudgets {
+                max_files: 2,
+                max_features: 512,
+                max_hits: 1,
+                max_pair_counts: 1,
+                max_pairs: 1,
+            },
         };
         for needs_precheck in [false, true] {
             let budget = MemoryBudget::new(528);
             let report = scan_collection_with_typed_extractor(
-                paths.iter().enumerate().map(|(n, p)| (n as u64 + 1, DecodeRequest::new(p))),
-                &policy, Some(&budget), || false,
-                |_, _, _| Ok(budget.try_reserve(256).unwrap().try_adopt(vec![9u8; 256]).unwrap()),
+                paths
+                    .iter()
+                    .enumerate()
+                    .map(|(n, p)| (n as u64 + 1, DecodeRequest::new(p))),
+                &policy,
+                Some(&budget),
+                || false,
+                |_, _, _| {
+                    Ok(budget
+                        .try_reserve(256)
+                        .unwrap()
+                        .try_adopt(vec![9u8; 256])
+                        .unwrap())
+                },
                 needs_precheck,
                 |left, right, _| {
                     assert!(needs_precheck, "fresh-only path must skip feature precheck");
@@ -4700,8 +4857,14 @@ mod feature_release_tests {
                 },
                 |_, _, _| {
                     assert!(!needs_precheck);
-                    assert_eq!(budget.used(), 16, "feature credits must be released before fresh decoding");
-                    let scratch = budget.try_reserve(512).expect("fresh confirmation can reuse both banks' credit");
+                    assert_eq!(
+                        budget.used(),
+                        16,
+                        "feature credits must be released before fresh decoding"
+                    );
+                    let scratch = budget
+                        .try_reserve(512)
+                        .expect("fresh confirmation can reuse both banks' credit");
                     assert_eq!(budget.used(), 528);
                     drop(scratch);
                     Ok(7u8)
@@ -4709,9 +4872,15 @@ mod feature_release_tests {
                 |banks, _| {
                     assert_eq!(banks.len(), 2);
                     assert_eq!(budget.used(), 528);
-                    Ok(crate::local_index::DescriptorFilePairs { pairs: vec![(1, 2)], indexed_features: 512, descriptor_hits: 1, insufficient_features: Vec::new() })
+                    Ok(crate::local_index::DescriptorFilePairs {
+                        pairs: vec![(1, 2)],
+                        indexed_features: 512,
+                        descriptor_hits: 1,
+                        insufficient_features: Vec::new(),
+                    })
                 },
-            ).unwrap();
+            )
+            .unwrap();
             assert_eq!(report.local.pairs.len(), 1);
             assert_eq!(report.local.pairs[0].evidence, 7);
             assert_eq!(report.pixel_verification_pairs, usize::from(!needs_precheck));
@@ -4719,5 +4888,326 @@ mod feature_release_tests {
             assert_eq!(budget.used(), 0);
         }
         std::fs::remove_dir_all(directory).unwrap();
+    }
+}
+
+#[cfg(test)]
+mod zero_collection_candidate_tests {
+    use super::*;
+
+    use crate::{
+        animated::AnimationBudget,
+        geometry::{GeometryPolicy, ProjectiveSamplingPolicy},
+        gradient::{GradientCellRecipe, GradientMatchPolicy},
+        local::{LocalPolicy, MatchPolicy},
+        local_scan::{
+            LocalFilePolicy, ProjectiveGradientPyramidFilePolicy, ProjectivePyramidPhotometricFilePolicy,
+        },
+        warp::{
+            ColorFilterPolicy, FilterColorSpace, FilterPolicy, PhotometricFitMode, PhotometricPolicy,
+            WarpPolicy,
+        },
+    };
+    fn policy() -> ProjectiveGradientPyramidFilePolicy {
+        let warp = WarpPolicy {
+            tolerance: 0.03,
+            max_source_pixels: 409600,
+        };
+        ProjectiveGradientPyramidFilePolicy {
+            search: ProjectivePyramidPhotometricFilePolicy {
+                local: LocalFilePolicy {
+                    decode: AnimationBudget {
+                        max_frames: 1,
+                        max_pixels: 200000,
+                        max_file_bytes: 1048576,
+                    },
+                    extract: LocalPolicy {
+                        max_pixels: 200000,
+                        max_candidates: 200000,
+                        max_features: 500,
+                        minimum_corner_score: 0.0001,
+                    },
+                    matching: MatchPolicy {
+                        max_comparisons: 4000000,
+                        max_distance: 64,
+                    },
+                    geometry: GeometryPolicy {
+                        tolerance: 2.,
+                        min_inliers: 10,
+                        max_points: 2000,
+                        max_hypotheses: 4096,
+                    },
+                    pixels: warp,
+                    minimum_compared_pixels: 1000,
+                    minimum_coverage_fraction: 0.3,
+                    minimum_matched_fraction: 0.9,
+                },
+                max_levels: 4,
+                max_total_pixels: 400000,
+                max_total_features: 2000,
+                sampling: ProjectiveSamplingPolicy {
+                    trials: 4096,
+                    seed: 0x1234abcd,
+                },
+                photometric: PhotometricPolicy {
+                    residual: warp,
+                    minimum_samples: 16,
+                    minimum_variance: 1e-5,
+                    minimum_gain: 0.2,
+                    maximum_gain: 5.,
+                    maximum_offset: 0.1,
+                },
+                filter: ColorFilterPolicy {
+                    filter: FilterPolicy {
+                        radius: 3,
+                        max_sample_pairs: 32000000,
+                    },
+                    color_space: FilterColorSpace::LinearSrgb,
+                },
+                fit_mode: PhotometricFitMode::ConstrainedLeastSquares,
+            },
+            matching: GradientMatchPolicy {
+                max_comparisons: 4000000,
+                max_squared_distance: 0.5,
+                squared_ratio: 0.64,
+            },
+            max_total_gradient_samples: 1024000,
+        }
+    }
+    use crate::local_scan::{
+        ProjectiveCandidateUnionRegionsFilePolicy, ProjectiveDistinctScaleRegionsFilePolicy,
+        SpatialFeaturePolicy,
+    };
+    fn config() -> ProjectiveCandidateUnionRegionsFilePolicy {
+        let mut gradient = policy();
+        gradient.matching.max_comparisons = 8000000;
+        ProjectiveCandidateUnionRegionsFilePolicy {
+            search: ProjectiveDistinctScaleRegionsFilePolicy {
+                gradient,
+                recipe: GradientCellRecipe::Interpolated,
+                spatial: SpatialFeaturePolicy {
+                    columns: 4,
+                    rows: 4,
+                    max_per_cell: 32,
+                },
+                competitor_radius: 2.,
+                grid: (2, 2),
+                max_regions: 8,
+                max_total_sample_pairs: 320000000,
+            },
+            low_contrast_corner_score: 0.000001,
+            smoothing_radius: 2,
+            max_smoothing_taps_per_image: 2000000,
+            max_area_taps_per_extraction: 4000000,
+            max_total_gradient_samples: 4096000,
+            max_total_match_comparisons: 16000000,
+            max_union_points: 4000,
+            max_union_comparisons: 8000000,
+        }
+    }
+    fn factors() -> [f64; 4] {
+        [1., std::f64::consts::SQRT_2, 2., 2. * std::f64::consts::SQRT_2]
+    }
+
+    fn baseline_union(
+        view: &crate::linear::LinearRgbaView<'_>,
+        config: crate::local_scan::ProjectiveCandidateUnionRegionsFilePolicy,
+        factors: &[f64],
+        budget: &MemoryBudget,
+        cancel: &dyn Fn() -> bool,
+    ) -> Result<rrrah_core::SharedBuffer<crate::gradient::GradientFeature>, LocalError> {
+        let gradient = config.search.gradient;
+        let grid = config.search.spatial;
+        let extract = |view: &crate::linear::LinearRgbaView<'_>, score: f64| {
+            let mut local = gradient.search.local.extract;
+            local.minimum_corner_score = score;
+            crate::gradient_scale::extract_spatial_gradient_scales_area_managed(
+                view,
+                crate::pyramid::PyramidPolicy {
+                    local,
+                    max_levels: gradient.search.max_levels,
+                    max_total_pixels: gradient.search.max_total_pixels,
+                    max_total_features: gradient.search.max_total_features,
+                },
+                factors,
+                gradient.max_total_gradient_samples,
+                config.search.recipe,
+                (grid.columns, grid.rows, grid.max_per_cell),
+                config.max_area_taps_per_extraction,
+                budget,
+                cancel,
+            )
+        };
+        let original = extract(view, config.low_contrast_corner_score)?;
+        let smoothed = {
+            let samples = crate::gradient_scale::smooth_gradient_candidates_managed(
+                view,
+                config.smoothing_radius,
+                config.max_smoothing_taps_per_image,
+                budget,
+                cancel,
+            )?;
+            let (w, h) = view.dimensions();
+            let smooth = crate::linear::LinearRgbaView::new(
+                w,
+                h,
+                &samples,
+                gradient.search.local.decode.max_pixels,
+                cancel,
+            )
+            .map_err(|e| match e {
+                crate::pixels::PixelError::Layout => LocalError::Invalid,
+                crate::pixels::PixelError::Budget => LocalError::Budget,
+                crate::pixels::PixelError::Cancelled => LocalError::Cancelled,
+            })?;
+            extract(&smooth, gradient.search.local.extract.minimum_corner_score)?
+        };
+        let count = original
+            .len()
+            .checked_add(smoothed.len())
+            .ok_or(LocalError::Budget)?;
+        let bytes = count
+            .checked_mul(std::mem::size_of::<crate::gradient::GradientFeature>())
+            .and_then(|n| u64::try_from(n).ok())
+            .ok_or(LocalError::Budget)?;
+        let credit = budget.try_reserve(bytes).map_err(|_| LocalError::Budget)?;
+        let mut combined = Vec::new();
+        combined
+            .try_reserve_exact(count)
+            .map_err(|_| LocalError::Budget)?;
+        for feature in original.iter().chain(smoothed.iter()) {
+            if cancel() {
+                return Err(LocalError::Cancelled);
+            }
+            combined.push(*feature);
+        }
+        if cancel() {
+            return Err(LocalError::Cancelled);
+        }
+        credit.try_adopt(combined).map_err(|_| LocalError::Budget)
+    }
+    fn baseline_portfolio(
+        view: &crate::linear::LinearRgbaView<'_>,
+        config: crate::local_scan::ProjectiveCandidateUnionRegionsFilePolicy,
+        additional_radii: &[u32],
+        factors: &[f64],
+        budget: &MemoryBudget,
+        cancel: &dyn Fn() -> bool,
+    ) -> Result<rrrah_core::SharedBuffer<crate::gradient::GradientFeature>, LocalError> {
+        let base = baseline_union(view, config, factors, budget, cancel)?;
+        if additional_radii.is_empty() {
+            return Ok(base);
+        }
+        let mut values = Vec::new();
+        let mut retained = budget.try_reserve(0).map_err(|_| LocalError::Budget)?;
+        append_portfolio_batch(&mut values, &mut retained, base.iter().copied(), budget, cancel)?;
+        drop(base);
+        let g = config.search.gradient;
+        let grid = config.search.spatial;
+        let (w, h) = view.dimensions();
+        for &radius in additional_radii {
+            // Pixel scratch is needed only for extraction, not descriptor merging.
+            let batch = {
+                let samples = crate::gradient_scale::smooth_gradient_candidates_managed(
+                    view,
+                    radius,
+                    config.max_smoothing_taps_per_image,
+                    budget,
+                    cancel,
+                )?;
+                let smooth = crate::linear::LinearRgbaView::new(
+                    w,
+                    h,
+                    &samples,
+                    g.search.local.decode.max_pixels,
+                    cancel,
+                )
+                .map_err(|e| match e {
+                    crate::pixels::PixelError::Layout => LocalError::Invalid,
+                    crate::pixels::PixelError::Budget => LocalError::Budget,
+                    crate::pixels::PixelError::Cancelled => LocalError::Cancelled,
+                })?;
+                crate::gradient_scale::extract_spatial_gradient_scales_area_managed(
+                    &smooth,
+                    crate::pyramid::PyramidPolicy {
+                        local: g.search.local.extract,
+                        max_levels: g.search.max_levels,
+                        max_total_pixels: g.search.max_total_pixels,
+                        max_total_features: g.search.max_total_features,
+                    },
+                    factors,
+                    g.max_total_gradient_samples,
+                    config.search.recipe,
+                    (grid.columns, grid.rows, grid.max_per_cell),
+                    config.max_area_taps_per_extraction,
+                    budget,
+                    cancel,
+                )?
+            };
+            append_portfolio_batch(&mut values, &mut retained, batch.iter().copied(), budget, cancel)?;
+        }
+        if cancel() {
+            return Err(LocalError::Cancelled);
+        }
+        retained.try_adopt(values).map_err(|_| LocalError::Budget)
+    }
+
+    #[test]
+    fn zero_collection_features_equal_owned_recipe_for_base_and_portfolio() {
+        for (w, h) in [(32u32, 32u32), (48, 33), (33, 48)] {
+            let pixels: Vec<f32> = (0..w * h)
+                .flat_map(|i| {
+                    let x = i % w;
+                    let y = i / w;
+                    let v = ((x * 17 + y * 31 + x * y * 7) % 251) as f32 / 125.;
+                    [v, v * 0.8 - 0.2, v * 1.3, 1.]
+                })
+                .collect();
+            let view = crate::linear::LinearRgbaView::new(w, h, &pixels, u64::from(w * h), || false).unwrap();
+            for radius in [0, 2] {
+                let mut p = config();
+                p.smoothing_radius = radius;
+                for radii in [&[][..], &[0][..], &[4, 0][..]] {
+                    let a = rrrah_core::MemoryBudget::new(64 * 1024 * 1024);
+                    let b = rrrah_core::MemoryBudget::new(64 * 1024 * 1024);
+                    let expected = baseline_portfolio(&view, p, radii, &factors(), &a, &|| false).unwrap();
+                    let actual = super::extract_candidate_union_portfolio_proposals(
+                        &view,
+                        p,
+                        radii,
+                        &factors(),
+                        &b,
+                        &|| false,
+                    )
+                    .unwrap();
+                    assert!(!actual.is_empty());
+                    assert_eq!(&*expected, &*actual, "{w}x{h},base={radius},radii={radii:?}");
+                    drop((expected, actual));
+                    assert_eq!((a.used(), b.used()), (0, 0));
+                }
+            }
+        }
+    }
+    #[test]
+    fn zero_collection_refusals_release_original_feature_credit() {
+        let pixels = vec![1f32; 32 * 32 * 4];
+        let view = crate::linear::LinearRgbaView::new(32, 32, &pixels, 1024, || false).unwrap();
+        let budget = rrrah_core::MemoryBudget::new(64 * 1024 * 1024);
+        let mut p = config();
+        p.smoothing_radius = 0;
+        p.max_smoothing_taps_per_image = 2047;
+        assert!(matches!(
+            super::extract_candidate_union_proposals(&view, p, &factors(), &budget, &|| false),
+            Err(crate::local::LocalError::Budget)
+        ));
+        assert_eq!(budget.used(), 0);
+        assert!(matches!(
+            super::extract_candidate_union_proposals(&view, p, &factors(), &budget, &|| true),
+            Err(crate::local::LocalError::Cancelled)
+        ));
+        assert_eq!(budget.used(), 0);
+        p.max_smoothing_taps_per_image = 2048;
+        drop(super::extract_candidate_union_proposals(&view, p, &factors(), &budget, &|| false).unwrap());
+        assert_eq!(budget.used(), 0);
     }
 }

@@ -1,0 +1,21 @@
+{
+  "status": "verified_native_stage_rss_exceeds_payload_budget_without_model_attempt",
+  "run_index": 163,
+  "baseline_index": 162,
+  "terminal": "joint_opposite_native",
+  "model_attempted": false,
+  "process_peak_rss_bytes": 1004994560,
+  "managed_peak_bytes": 377266064,
+  "managed_payload_cap_bytes": 536870912,
+  "managed_used_after_report_drop": 0,
+  "wall_seconds": 1290.9321200840004,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-native-bank-all-positives-prefix-0164-audit-20261011.json": "402873b5c1bb1ec4d59efb84459034d95f4cffc6d5acc1db8692cfe30a9c39e7",
+    "/Users/themoretheless/.codex/tmp/dedup-native-bank-all-positives-prefix-0164-20261011.json": "d93bf16829f840f2750a5422464dc66e3972c21760fad4d57eb818bd08a76055",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-native-bank-outcome-native-snapshot-20261011.json": "3c63225b7df7bb70b6fe5f932c50802b0c06dd89c4b72e9c3e1676228a8f742c",
+    "/Users/themoretheless/.codex/tmp/rrrah-native-bank-outcome-native-snapshot-20261011/scripts/dedup-loftr-native-probe/src/bin/native_bank_outcome_files.rs": "8d26b659e1a6f9e0f36a563d2f9a4fd198089a524fdaca64a64f567d844fd1a6",
+    "/Users/themoretheless/.codex/tmp/rrrah-native-bank-all-positives-qualified-20261011/0163.log": "a67f607cbd61efeaa662aec7a99410352b8adeedc88a7fb14ac5b7dc2ba01e40",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-native-resource-gap-20261012.py": "35dc218d82405ac9ba2b138c4ab46dc337115f3268a51402b9c660bc454bd367"
+  },
+  "scope": "Actual completed frozen Copydays native/opposite support, model stage not attempted. Loaded native runtime/process allocator and unaccounted workspaces remain possible contributors; this is not a no-libtorch-loaded claim or memory-leak diagnosis. Payload512MiB admission does not bound total RSS even on this native path. Wall time is observed under concurrent host workload, not an exclusive performance benchmark. Total-resource admission/profile remains open."
+}

@@ -1,0 +1,64 @@
+{
+  "date": "2026-10-11",
+  "backend": "Metal",
+  "adapter": "Apple M4 Max",
+  "api": "DecodedRaster::downsample_linear_with_budget_and_cancel",
+  "implementation": [
+    "Native Rust area box filter, fractional footprints for odd source/target dimensions",
+    "Filter premultiplied RGB and coverage in f64, return straight linear RGBA32F",
+    "Preserve signed and above-one scene-linear HDR; no tone mapping or integer quantization",
+    "Preserve physical image aspect through adjusted target pixel aspect; scale hotspot and retain image selection/sample scale",
+    "Managed output admitted before allocation, no intermediate full-source copy or uncharged output scratch",
+    "Cancellation before/during/after filter releases output reservation; invalid finite/alpha/color/dimensions rejected"
+  ],
+  "validation": {
+    "core_units_passed": 109,
+    "core_units_ignored": 2,
+    "core_color_precision_integration_passed": 3,
+    "new_lod_unit_tests": 4,
+    "integer_overlap_oracle_shapes": 48,
+    "metal_small_control_passed": 1,
+    "metal_large_control_passed": 1,
+    "checks": [
+      "Independent integer overlap oracle across48 odd/fractional shapes",
+      "Analytic transparent-RGB/sign/brightness and coverage oracle",
+      "Exact-size output admission, one-byte-under refusal and mid-filter cancellation",
+      "Metadata physical aspect/hotspot/image selection",
+      "Both SDR and HDR Metal frames equal independently authored constant-area controls"
+    ]
+  },
+  "large_control": {
+    "source_extent": [
+      6000,
+      6000
+    ],
+    "source_float_bytes": 576000000,
+    "target_extent": [
+      1000,
+      1000
+    ],
+    "target_managed_float_bytes": 16000000,
+    "verified_output_pixels": 1000000,
+    "expected_rgba": [
+      -2,
+      8,
+      0.5,
+      0.375
+    ],
+    "filter_wall_ms_observation": 141.271042,
+    "timing_scope": "One optimized-test CPU observation; allocation/filter included, authored input generation and GPU excluded; not a formal performance benchmark",
+    "output_managed_after_drop": 0
+  },
+  "limits": [
+    "Filter is implemented and Metal-qualified; automatic viewer LOD sizing/admission, cache ownership, initial-fit fallback and region-to-LOD switching remain to connect",
+    "Whole CPU source remains required and is outside output-only budget in these tests",
+    "No physical HDR display luminance/color claim",
+    "CPU implementation; no GPU-compute area filter benchmark or accelerated resampler claim",
+    "NVIDIA, slow physical disks, streaming and full100-format acceptance remain open"
+  ],
+  "sha256": {
+    "crates/rrrah-core/src/raster_lod.rs": "1d476866e61504b8c022dc33ebc144558f764ff05f4adba53a1548f2d7f6b15c",
+    "crates/rrrah-core/src/lib.rs": "f7bb99d5ad68cb900434b73eb80e36ea6ccbcb5c9d60e03230253773559ae990",
+    "crates/rrrah-gpu/tests/raster_readback.rs": "86391325555710344fd42faf368d299cac1df88fa71515101494e76c3b56e918"
+  }
+}

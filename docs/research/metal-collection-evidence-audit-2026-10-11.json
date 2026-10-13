@@ -1,0 +1,31 @@
+{
+  "scope": "Stricter evidence revalidation of existing actual-Metal logs; GPU workload unchanged",
+  "cases": [
+    {
+      "log": "docs/research/metal-full-hdr-collection-2026-10-11/sustained.log",
+      "seconds": 120,
+      "full_hdr": true,
+      "verified": true,
+      "sha256": "5a0ceaf58be820b0b9e45f8998e69d758a50f72947dfe039c12351d8cc9b151e"
+    },
+    {
+      "log": "docs/research/metal-full-hdr-collection-2026-10-11/gpu-collection-long-lived.log",
+      "seconds": 10,
+      "full_hdr": true,
+      "verified": true,
+      "sha256": "964590f02a40fa8d3ecbfd60549112f773c23aa0c4b0690e3f64219b95559f3e"
+    },
+    {
+      "log": "docs/research/metal-collection-priority-refresh-2026-10-11/gpu-collection-long-lived.log",
+      "seconds": 120,
+      "full_hdr": false,
+      "verified": true,
+      "sha256": "39bc7486811da38e261eca81c852ce2217e1e0de0354d3271f79a8f91977798a"
+    }
+  ],
+  "regressions": "4 tests passed; missing/duplicate/wrong duration, output, counts, accounting, backend and skipped tests rejected",
+  "sources": {
+    "scripts/qualify-viewer-storage-gpu.py": "594e7eaf1cf63b1f8ee3d5adee2d10cc83af3582b58420d6d818bd204cb91098",
+    "scripts/test_viewer_collection_evidence.py": "e48eb42c8ac5205bfb4b0f14be39bab662bef9a5ca4d68e6e3961423d26d071c"
+  }
+}

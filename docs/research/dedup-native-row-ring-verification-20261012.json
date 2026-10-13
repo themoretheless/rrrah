@@ -1,0 +1,27 @@
+{
+  "status": "verified_six_smoothing_controls_and_stage_rss_reduction",
+  "tests": [
+    "row_ring_admits_only_window_scratch_and_refuses_one_byte_short",
+    "smoothing_matches_independent_footprints_and_exact_last_owner_credit",
+    "zero_radius_exact_bits_half_memory_and_all_cancellation_points",
+    "row_ring_wrap_cancellation_and_late_alpha_never_retain_partial_output",
+    "work_memory_opacity_and_every_cancellation_refuse_without_retained_output",
+    "row_ring_is_bitwise_full_two_pass_for_wraps_borders_and_hdr"
+  ],
+  "bitwise_reference_cases": 35,
+  "all_cancellation_checkpoints": 272,
+  "stage_baseline_rss_bytes": 152764416,
+  "stage_ring_rss_bytes": 102727680,
+  "stage_rss_reduction_bytes": 50036736,
+  "managed_baseline_peak_bytes": 100663296,
+  "managed_ring_peak_bytes": 50626560,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-native-row-ring-snapshot-20261012.json": "e913283c6e2504ed4c121b97d4209c628282fd293aa5b9d1220247cf9245962d",
+    "/Users/themoretheless/.codex/tmp/rrrah-native-row-ring-raster-tests-20261012.log": "81fca9c8d9683547d9dadb26ea1bb436ccaa6052f247997d62459948da1842c1",
+    "/Users/themoretheless/.codex/tmp/rrrah-native-row-ring-raster-executable-20261012": "a4417cd594252b4304d50af53f7c15971aa80746ff62299760166067dc2693f8",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-native-row-ring-memory-20261012.json": "7c8aad2f79d28bc48fb1b6bdf54f3dbc21902556bcbf26752340e67c35af2f4b",
+    "/Users/themoretheless/.codex/tmp/rrrah-native-row-ring-memory-harness-20261012/src/main.rs": "7f10705884ed49053b4b131c9bf1cbcb004d2dd426d763924160b14d77b1be02",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-native-row-ring-20261012.py": "e45c060f6f0a1fc18596443d1dbf129d815218f1df0db0f68bc425065ee842cd"
+  },
+  "scope": "Current-identical smoothing implementation; independent full two-pass bitwise oracle on35 shapes/radii/HDR cases, exact window/output admission, one-byte/work short refusals, all272 cancellation checkpoints, late opacity and last-owner release. Real separate-process 2048x1536 radius4 smoothing stage has identical full output digest and lower RSS. Whole native portfolio control and broader integration gate remain pending; no process-wide cap or universal speedup."
+}

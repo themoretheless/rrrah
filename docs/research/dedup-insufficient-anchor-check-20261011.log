@@ -1,0 +1,87 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+error[E0282]: type annotations needed for `Result<ModelTileEvidence, _>`
+   --> crates/rrrah-dedup/src/model_tiles.rs:394:9
+    |
+394 |     let verified = (|| {
+    |         ^^^^^^^^
+...
+398 |         Ok(evidence)
+    |         ------------ type must be known at this point
+    |
+help: consider giving `verified` an explicit type, where the type for type parameter `E` is specified
+    |
+394 |     let verified: Result<_, E> = (|| {
+    |                 ++++++++++++++
+
+error[E0283]: type annotations needed for `Result<ModelTileEvidence, _>`
+   --> crates/rrrah-dedup/src/model_tiles.rs:394:9
+    |
+394 |     let verified = (|| {
+    |         ^^^^^^^^
+...
+403 |         let evidence = verified?;
+    |                                - type must be known at this point
+    |
+note: multiple `impl`s satisfying `ModelTileError: From<_>` found
+   --> crates/rrrah-dedup/src/model_tiles.rs:124:14
+    |
+124 |     Memory(#[from] BufferError),
+    |              ^^^^
+125 |     #[error(transparent)]
+126 |     Source(#[from] SnapshotError),
+    |              ^^^^
+127 |     #[error(transparent)]
+128 |     Comparison(#[from] ModelComparisonError),
+    |                  ^^^^
+    = note: and another `impl` found in the `core` crate: `impl<T> From<T> for T;`
+help: consider giving `verified` an explicit type, where the placeholders `_` are specified
+    |
+394 |     let verified: Result<_, E> = (|| {
+    |                 ++++++++++++++
+
+error[E0282]: type annotations needed for `Result<Result<SearchPortfolioEvidence, InsufficientAnchorStage>, _>`
+   --> crates/rrrah-dedup/src/search_portfolio.rs:421:9
+    |
+421 |     let verified = (|| {
+    |         ^^^^^^^^
+...
+425 |         Ok(evidence)
+    |         ------------ type must be known at this point
+    |
+help: consider giving `verified` an explicit type, where the type for type parameter `E` is specified
+    |
+421 |     let verified: Result<_, E> = (|| {
+    |                 ++++++++++++++
+
+error[E0283]: type annotations needed for `Result<Result<SearchPortfolioEvidence, InsufficientAnchorStage>, _>`
+   --> crates/rrrah-dedup/src/search_portfolio.rs:421:9
+    |
+421 |     let verified = (|| {
+    |         ^^^^^^^^
+...
+430 |         verified?.map_err(SearchPortfolioError::InsufficientAnchorGeometry)
+    |                 - type must be known at this point
+    |
+note: multiple `impl`s satisfying `SearchPortfolioError: From<_>` found
+   --> crates/rrrah-dedup/src/search_portfolio.rs:186:14
+    |
+186 |     Source(#[from] SnapshotError),
+    |              ^^^^
+187 |     #[error(transparent)]
+188 |     Native(#[from] AnchorRankFileError),
+    |              ^^^^
+189 |     #[error(transparent)]
+190 |     Model(#[from] ModelComparisonError),
+    |             ^^^^
+191 |     #[error(transparent)]
+192 |     ModelTiles(#[from] ModelTileError),
+    |                  ^^^^
+    = note: and another `impl` found in the `core` crate: `impl<T> From<T> for T;`
+help: consider giving `verified` an explicit type, where the placeholders `_` are specified
+    |
+421 |     let verified: Result<_, E> = (|| {
+    |                 ++++++++++++++
+
+Some errors have detailed explanations: E0282, E0283.
+For more information about an error, try `rustc --explain E0282`.
+error: could not compile `rrrah-dedup` (lib) due to 4 previous errors

@@ -1,0 +1,32 @@
+{
+  "status": "passed",
+  "adapter": "Metal Apple M4 Max",
+  "paths": 100000,
+  "unique_sources": 4,
+  "formats": [
+    "PNG",
+    "GIF",
+    "EXR",
+    "HDR"
+  ],
+  "steps": 512,
+  "navigation_seconds_excluding_path_creation_and_cleanup": 5.874807,
+  "managed_cpu_peak_bytes": 1048576,
+  "managed_cpu_final_bytes": 0,
+  "checks": [
+    "exact visible float bits",
+    "exact SDR and RGBA16Float frames versus fresh same-renderer reference",
+    "nearest prefetch retained under count=2",
+    "resident bytes <=65536",
+    "ready visible hit under full managed pressure",
+    "stale generation prefetch rejected without retained allocation",
+    "HDR renderer budget returns to zero after submission"
+  ],
+  "limits": [
+    "100000 hard links to four source fixtures, not 100000 unique images",
+    "Managed budgets do not establish OS RSS or physical slow-disk behaviour",
+    "GPU readback is not live HDR display or calibrated color qualification"
+  ],
+  "exit_code": 0,
+  "log_sha256": "d663fcb54065b780ee585ed084c91a51959dee063388a3a03e2bcc7a149cb339"
+}

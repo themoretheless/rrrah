@@ -59,6 +59,8 @@ vectors = list(product([0, 65535], repeat=3))
 vectors += [(v, v, v) for v in [round(i * 65535 / 16) for i in range(17)]]
 rng = random.Random(20842020)
 vectors += [tuple(rng.randrange(65536) for _ in range(3)) for _ in range(64)]
+# HEIF 12-bit mixed control expanded independently to full-range u16.
+vectors += [tuple((v * 65535 + 2047) // 4095 for v in (2048, 3072, 1024))]
 lines = []
 if "--hlg" in sys.argv:
     def scene(code):

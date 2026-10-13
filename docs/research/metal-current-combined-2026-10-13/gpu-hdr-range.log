@@ -1,0 +1,15 @@
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.24s
+     Running tests/raster_readback.rs (target/debug/deps/raster_readback-96fa399a25885f6d)
+
+running 2 tests
+test hdr_exposure_saturates_to_finite_binary16_range ... HDR finite-range adapter: Metal Apple M4 Max
+HDR finite-range: exposure=-10; all4096 pixels exact; finite signed binary16
+HDR finite-range: exposure=0; all4096 pixels exact; finite signed binary16
+HDR finite-range: exposure=10; all4096 pixels exact; finite signed binary16
+ok
+test hdr_opposite_extreme_samples_interpolate_without_nan ... HDR opposite-extreme adapter: Metal Apple M4 Max
+HDR opposite-extreme: 63x65; symmetric center exact; all components finite
+ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 23 filtered out; finished in 1.81s
+

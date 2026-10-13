@@ -1,0 +1,40 @@
+{
+  "status": "failed_projected_collection_dependency_generic_gate",
+  "producer_pid": 83948,
+  "command": [
+    "cargo",
+    "test",
+    "--manifest-path",
+    "/Users/themoretheless/.codex/tmp/rrrah-projected-collection-dependency-snapshot-20261011/Cargo.toml",
+    "--target-dir",
+    "/Users/themoretheless/Documents/Sources/rrrah/target",
+    "-p",
+    "rrrah-dedup",
+    "--locked",
+    "--offline",
+    "--no-default-features",
+    "--features",
+    "decode",
+    "--no-run",
+    "--message-format=json",
+    "--test",
+    "projected_collection"
+  ],
+  "source_manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-projected-collection-dependency-snapshot-20261011.json",
+  "source_manifest_sha256": "270f77e7227afec57372e4106c85e73c91b1abfd76d6cb11b8c90a9b49567af0",
+  "results": [
+    {
+      "suite": "projected_collection",
+      "status": "running",
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-projected-collection-dependency-generic-qualified-20261011/projected_collection",
+      "binary_sha256": "fb55f69dc1edc022cac9467f41f65d24ce4ec03b3e512347678525911a854e2b",
+      "process_pid": 84562,
+      "returncode": 101,
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-projected-collection-dependency-generic-qualified-20261011/projected_collection.log",
+      "log_sha256": "258c567fa751a030269dd56e9366680fc0c3967a9202b9eebbb287d9bbe55a8c"
+    }
+  ],
+  "build_pid": 84000,
+  "build_returncode": 0,
+  "error": "('projected_collection', \"\\nrunning 8 tests\\ntest cumulative_work_and_cancellation_refuse_before_iterator_consumption ... ok\\ntest collection_admission_never_truncates_and_empty_batch_still_guards_weights ... ok\\ntest external_palette_mutation_or_removal_discards_prior_support_and_final_collection ... FAILED\\ntest source_weights_and_provider_failures_discard_prior_supported_pairs ... ok\\ntest all_pairs_recover_regions_in_id_order_and_keep_managed_ledgers ... ok\\ntest different_hdr_originals_remain_negative_in_complete_collection ... ok\\ntest last_collection_checkpoint_cannot_publish_mutated_inputs_or_weights ... ok\\ntest global_and_every_selected_owner_cancel_at_first_middle_and_final_checkpoint ... ok\\n\\nfailures:\\n\\n---- external_palette_mutation_or_removal_discards_prior_support_and_final_collection stdout ----\\n\\nthread 'external_palette_mutation_or_removal_discards_prior_support_and_final_collection' (92297781) panicked at crates/rrrah-dedup/tests/projected_collection.rs:549:14:\\ncalled `Result::unwrap()` on an `Err` value: Pair { left: 1, right: 9, error: Comparison(Pixels(Budget)) }\\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\\n\\n\\nfailures:\\n    external_palette_mutation_or_removal_discards_prior_support_and_final_collection\\n\\ntest result: FAILED. 7 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.34s\\n\\n\", '')"
+}

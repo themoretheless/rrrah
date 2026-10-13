@@ -12,7 +12,8 @@ pub use optio_s4::{
 mod bay;
 mod jpeg_cmyk;
 pub use bay::{
-    BayReadError, BaySensorError, BaySensorLayout, read_bay_sensor_with_budget, unpack_bay_sensor,
+    BayReadError, BaySensorError, BaySensorLayout, read_bay_sensor_with_budget,
+    read_bay_image_sensor_with_budget, unpack_bay_sensor,
 };
 
 mod ciff;
@@ -212,8 +213,11 @@ pub struct DecodeRequest {
     pub assume_untagged_srgb: bool,
     /// Explicit sRGB primaries/white point for samples already declared linear
     /// but lacking primaries (e.g. PFM). Defaults to false; tagged color/ICC and
-    /// unspecified encoded samples are never overridden. Does not apply a transfer curve.
+    /// unspecified integer samples are never overridden. Unprofiled float TIFF
+    /// may explicitly use linear sRGB. Does not apply a transfer curve.
     pub assume_untagged_linear_srgb: bool,
+    /// Explicit Adobe-style PFM storage order. Default is bottom-up.
+    pub pfm_top_down: bool,
     pub cancellation: Option<GenerationToken>,
     /// Optional admission for supported native decoder output allocations.
     pub memory_budget: Option<rrrah_core::MemoryBudget>,
@@ -232,6 +236,7 @@ impl DecodeRequest {
             hlg_display: None,
             assume_untagged_srgb: false,
             assume_untagged_linear_srgb: false,
+            pfm_top_down: false,
             cancellation: None,
             memory_budget: None,
         }
@@ -459,6 +464,7 @@ mod tests {
             image_index: 0,
             assume_untagged_srgb: false,
             assume_untagged_linear_srgb: false,
+            pfm_top_down: false,
             cancellation: Some(GenerationToken::new(generation, 11)),
             memory_budget: None,
         };

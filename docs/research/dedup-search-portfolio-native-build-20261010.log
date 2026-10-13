@@ -1,0 +1,46 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: method `forward_t` is never used
+   --> /Users/themoretheless/Documents/Sources/rrrah/vendor/loftr/src/backbone.rs:274:12
+    |
+221 | impl ResNetFpn8_2 {
+    | ----------------- method in this implementation
+...
+274 |     pub fn forward_t(&self, x: &Tensor, train: bool) -> Result<(Tensor, Tensor), LoftrError> {
+    |            ^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `forward_t` is never used
+   --> /Users/themoretheless/Documents/Sources/rrrah/vendor/loftr/src/backbone.rs:329:12
+    |
+328 | impl Backbone {
+    | ------------- method in this implementation
+329 |     pub fn forward_t(&self, x: &Tensor, train: bool) -> Result<(Tensor, Tensor), LoftrError> {
+    |            ^^^^^^^^^
+
+warning: method `forward` is never used
+   --> /Users/themoretheless/Documents/Sources/rrrah/vendor/loftr/src/transformer.rs:166:12
+    |
+147 | impl LocalFeatureTransformer {
+    | ---------------------------- method in this implementation
+...
+166 |     pub fn forward(
+    |            ^^^^^^^
+
+warning: `loftr` (lib) generated 3 warnings
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+   Compiling dedup-loftr-native-probe v0.0.0 (/Users/themoretheless/Documents/Sources/rrrah/scripts/dedup-loftr-native-probe)
+    Finished `dev` profile [optimized + debuginfo] target(s) in 32.68s

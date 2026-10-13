@@ -3,8 +3,8 @@
   "repository": "aaronshaf/phashin",
   "commit": "c1cb04727239439e09c151cbea40dbf050f348c9",
   "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
-  "decision": "reference",
-  "finding": "Screenshot perceptual-hash comparator with test; UI regression tolerance differs from photo identity.",
+  "decision": "capture-service-reference-only",
+  "finding": "All implementation/config read: screenshot capture service, no active perceptual comparator; manual phash script has no assertions, fixture absent and no npm test. Syntax checked only; no browser/runtime execution.",
   "available_source_evidence": [
     {
       "path": "index.js",
@@ -53,6 +53,14 @@
       "lines": 21,
       "source": false,
       "test": false
+    }
+  ],
+  "incremental_reviews": [
+    {
+      "audit": "docs/research/dedup-500/phashin-source-review-audit-20261013.json",
+      "whole_implementation_complete": true,
+      "whole_repo_complete": false,
+      "runtime_behavior_executed": false
     }
   ]
 }

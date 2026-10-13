@@ -1,0 +1,70 @@
+{
+  "change": "On512-candidate overflow before polygon work, process4 nonoverlapping half-pixel quarters sequentially; original source order retained; area and premultiplied native-color integrals added in global units",
+  "bounds": {
+    "candidate_capacity_per_tile": 512,
+    "root_prepare_work": 20000000,
+    "root_fragment_work": 20000000,
+    "per_quarter_prepare_work": 5000000,
+    "per_quarter_fragment_work": 5000000,
+    "max_subdivision_depth": 1,
+    "query_work_upper_bound": 500000
+  },
+  "regression": {
+    "source_triangles": 600,
+    "native_color_constant": true,
+    "exact_decoded_geometry_area": 0.18676470033824444,
+    "tolerance": 1e-12,
+    "note": "PDF coordinate decode f32; analytic expectation uses decoded coordinate values"
+  },
+  "tests": {
+    "passed": 142,
+    "ignored": 10
+  },
+  "real_replay": [
+    {
+      "fixture": "VectorApple.ai",
+      "page": 0,
+      "native_completed": false,
+      "capture_failed": false,
+      "deadline_expired": false,
+      "final_admitted_bytes": 0,
+      "native_replay_ms": 43649.052875
+    },
+    {
+      "fixture": "one.ai",
+      "page": 0,
+      "native_completed": true,
+      "capture_failed": false,
+      "deadline_expired": false,
+      "final_admitted_bytes": 0,
+      "native_replay_ms": 17757.895584
+    },
+    {
+      "fixture": "one.ai",
+      "page": 1,
+      "native_completed": true,
+      "capture_failed": false,
+      "deadline_expired": false,
+      "final_admitted_bytes": 0,
+      "native_replay_ms": 414.66125
+    }
+  ],
+  "remaining_refusal": {
+    "pixel": [
+      147,
+      61
+    ],
+    "phase": "quarter fragment work",
+    "candidates": 410,
+    "work_left": 3970,
+    "requested": 7040
+  },
+  "qualification": "Still incomplete opt-in AI; no completed goal claim",
+  "hashes": {
+    "subpixel-final-tests.log": "6564f94b461e16142442780bdd683dae11e5b2c8fb3f6e9d1ccb9d2e22f7a4f8",
+    "subpixel-replay.log": "fa1c361e81236d3e9292b4f6a25f0c5728a2ddbf307b2abfc39230b70ed4b3d1",
+    "subpixel-report.json": "b968e016ef59c204b546372769f0de5d772eb06609545e2fe974337d42911dbf",
+    "polygon_coverage.rs": "3f4d367b827b29e2a03690327a615d6eace5680582fecc7b37a7d9071754bd9c",
+    "knockout_interpreter.rs": "d4a7554f5a34bc591ce672772e1a4a57921ff5d43c092887a2b5cb2d7c792987"
+  }
+}

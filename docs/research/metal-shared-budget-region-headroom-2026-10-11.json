@@ -1,0 +1,38 @@
+{
+  "date": "2026-10-11",
+  "backend": "Metal",
+  "hardware": "Apple M4 Max",
+  "change": "Advisory simultaneous MemoryBudget pair admission sums texture and aligned queue costs at each shared ancestor without reserving or altering peaks",
+  "checks": {
+    "memory_units_passed": 39,
+    "memory_ttl_integration_passed": 1,
+    "memory_doctest_passed": 1,
+    "app_units_passed": 206,
+    "app_units_ignored": 44,
+    "gpu_units_passed": 51,
+    "explicit_metal_tests_passed": 5,
+    "pan_frames_exact": 192,
+    "independent_budget_bytes_each": 1048576,
+    "shared_parent_bytes": 600000,
+    "independent_replacement_uploads_per48frames": 2,
+    "shared_replacement_uploads_per48frames": 4,
+    "query_boundary": "100x100 texture plus aligned queue refuses300000-byte shared root, admits400000; two copies refuse both",
+    "query_stats": "no reservations or peak changes",
+    "final_texture_queue_shared_parent_credits": 0,
+    "memory_cases": [
+      "deep siblings",
+      "same budget",
+      "ancestor/descendant",
+      "independent roots",
+      "used ancestor",
+      "overflow"
+    ]
+  },
+  "limits": [
+    "Advisory snapshots remain racy under concurrent reservations; actual upload admission remains authoritative",
+    "No native-window or physical HDR measurement in this run",
+    "CPU full source remains retained",
+    "NVIDIA postponed by user",
+    "Full100-format qualification remains open"
+  ]
+}

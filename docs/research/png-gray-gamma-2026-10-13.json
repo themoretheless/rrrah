@@ -1,0 +1,49 @@
+{
+  "scope": "Gray-alpha16 PNG gAMA-only full 65536-code ramps; metadata tests gray and gray-alpha; RGB gamma-only unchanged",
+  "gamma": [
+    50000,
+    45455,
+    100000
+  ],
+  "maximum_absolute_errors": [
+    8.583963417851947e-08,
+    6.677955935452395e-07,
+    2.9801867640344426e-08
+  ],
+  "checks": [
+    "native codes and alpha exact",
+    "admitted cancellation releases credit",
+    "same-root retry and final zero credit",
+    "sRGB precedence",
+    "unrepresentable exponent refusal"
+  ],
+  "limitations": [
+    "No claim of all PNG variants or producer interoperability",
+    "Metal frame transport is not independent physical HDR calibration"
+  ],
+  "sha256": {
+    "crates/rrrah-decode/src/png_color.rs": "4523988ae1c197436a60ed9dc125d0c4105205b63426611179880f68dbf5f5c0",
+    "crates/rrrah-decode/src/raster.rs": "7c2b1ef8cde24df8c4631c9545ef4d46aa8d4cdb22478add225acad8ff9627ad",
+    "docs/research/png-gray-gamma-focused-2026-10-13.log": "6eb9d9a50d0a65e9ecde390f0b9e01c114acdc02084b0f66c301944054ad3ffb",
+    "docs/research/png-gray-gamma-suite-2026-10-13.log": "988e250d9ef46254f0f38a454eddba8004fe613027eefd653baff2850f4986fb",
+    "docs/research/png-gray-gamma-metal-2026-10-13.log": "732bb18efe7061a90d40f2fe0404784085d772ecb10ed707386c9d331877de32",
+    "crates/rrrah-app/tests/raster_collection_metal.rs": "e18ff92c3d177dd82ff46e87c943d08e041b286f9f8911cd96cc87046fd95620",
+    "scripts/generate-png-cicp-fixtures.py": "af9faf184108ac6a2ae53b5a7756012f81e0d2e1e0a07498e87f8cdb00374aba",
+    "scripts/qualify-viewer-storage-gpu.py": "d9cf55e0252aead2a9c8bb8e6cfcf165499cded526ee5d5ba98da1f0bc8330bc",
+    "scripts/test-viewer-storage-gpu-evidence.py": "fbeae7481b264970eb2b363e2abc24694223daaf53cc0bb942e86222252775b3",
+    "tests/fixtures/raster/gamma-gray.png": "6674a9a541bd9e9070f129a284b971fa61e0c59cf0df4802e41ab52931e3f440"
+  },
+  "decoder_lib_suite": {
+    "passed": 1031,
+    "failed": 0,
+    "ignored": 73,
+    "log": "docs/research/png-gray-gamma-suite-2026-10-13.log"
+  },
+  "metal_collection": {
+    "sources": 115,
+    "selections": 144,
+    "storage_cases": 288,
+    "verified": true,
+    "log": "docs/research/png-gray-gamma-metal-2026-10-13.log"
+  }
+}

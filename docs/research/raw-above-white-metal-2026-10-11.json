@@ -1,0 +1,34 @@
+{
+  "backend": "Metal Apple M4 Max",
+  "passed": 2,
+  "failed": 0,
+  "ignored": 0,
+  "authored_field": {
+    "encoded": 3989,
+    "black": 15,
+    "white": 3967,
+    "exposure_stops": 1,
+    "expected_linear_rgb": [
+      2.0111336032388665,
+      2.0111336032388665,
+      2.0111336032388665
+    ]
+  },
+  "attachments": [
+    "Rgba16Float",
+    "Rgba32Float"
+  ],
+  "checks": [
+    "independent normalization arithmetic within attachment precision",
+    "all HDR channels above2",
+    "SDR output bounded",
+    "switch back to HDR exactly restores output",
+    "managed GPU budget released"
+  ],
+  "scope": "authored constant sensor field using original GH2 file levels; identity color transform",
+  "limits": [
+    "not photographic GH2 camera color qualification",
+    "not physical display HDR calibration"
+  ],
+  "log_sha256": "e3241537744b8f3424ad4b62a0edc77e62e2c905f9b95e11d73f8517c2fd45d1"
+}

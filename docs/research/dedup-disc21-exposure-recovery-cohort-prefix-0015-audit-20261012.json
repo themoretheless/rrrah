@@ -1,0 +1,176 @@
+{
+  "status": "verified_actual_composed_recovery_completed_prefix_only",
+  "completed": 15,
+  "required": 24,
+  "totals": {
+    "copy": {
+      "supported": 8,
+      "inconclusive": 0,
+      "execution_failed": 0
+    },
+    "no_reference_match": {
+      "supported": 0,
+      "inconclusive": 7,
+      "execution_failed": 0
+    }
+  },
+  "rows": [
+    {
+      "query": "Q00061",
+      "reference": "R020965",
+      "published_label": "copy",
+      "index": 0,
+      "status": "supported",
+      "primary_supported": true,
+      "recovery_attempted": false,
+      "recovery_supported": null
+    },
+    {
+      "query": "Q00324",
+      "reference": "R044970",
+      "published_label": "copy",
+      "index": 1,
+      "status": "supported",
+      "primary_supported": true,
+      "recovery_attempted": false,
+      "recovery_supported": null
+    },
+    {
+      "query": "Q00338",
+      "reference": "R003142",
+      "published_label": "copy",
+      "index": 2,
+      "status": "supported",
+      "primary_supported": true,
+      "recovery_attempted": false,
+      "recovery_supported": null
+    },
+    {
+      "query": "Q00748",
+      "reference": "R007851",
+      "published_label": "copy",
+      "index": 3,
+      "status": "supported",
+      "primary_supported": true,
+      "recovery_attempted": false,
+      "recovery_supported": null
+    },
+    {
+      "query": "Q00814",
+      "reference": "R032607",
+      "published_label": "copy",
+      "index": 4,
+      "status": "supported",
+      "primary_supported": true,
+      "recovery_attempted": false,
+      "recovery_supported": null
+    },
+    {
+      "query": "Q00846",
+      "reference": "R033260",
+      "published_label": "copy",
+      "index": 5,
+      "status": "supported",
+      "primary_supported": true,
+      "recovery_attempted": false,
+      "recovery_supported": null
+    },
+    {
+      "query": "Q00906",
+      "reference": "R014120",
+      "published_label": "copy",
+      "index": 6,
+      "status": "supported",
+      "primary_supported": false,
+      "recovery_attempted": true,
+      "recovery_supported": true
+    },
+    {
+      "query": "Q00911",
+      "reference": "R044290",
+      "published_label": "copy",
+      "index": 7,
+      "status": "supported",
+      "primary_supported": true,
+      "recovery_attempted": false,
+      "recovery_supported": null
+    },
+    {
+      "query": "Q00000",
+      "reference": "R020965",
+      "published_label": "no_reference_match",
+      "index": 8,
+      "status": "inconclusive",
+      "primary_supported": false,
+      "recovery_attempted": true,
+      "recovery_supported": false
+    },
+    {
+      "query": "Q00001",
+      "reference": "R044970",
+      "published_label": "no_reference_match",
+      "index": 9,
+      "status": "inconclusive",
+      "primary_supported": false,
+      "recovery_attempted": true,
+      "recovery_supported": false
+    },
+    {
+      "query": "Q00002",
+      "reference": "R003142",
+      "published_label": "no_reference_match",
+      "index": 10,
+      "status": "inconclusive",
+      "primary_supported": false,
+      "recovery_attempted": true,
+      "recovery_supported": false
+    },
+    {
+      "query": "Q00005",
+      "reference": "R007851",
+      "published_label": "no_reference_match",
+      "index": 11,
+      "status": "inconclusive",
+      "primary_supported": false,
+      "recovery_attempted": true,
+      "recovery_supported": false
+    },
+    {
+      "query": "Q00006",
+      "reference": "R032607",
+      "published_label": "no_reference_match",
+      "index": 12,
+      "status": "inconclusive",
+      "primary_supported": false,
+      "recovery_attempted": true,
+      "recovery_supported": false
+    },
+    {
+      "query": "Q00007",
+      "reference": "R033260",
+      "published_label": "no_reference_match",
+      "index": 13,
+      "status": "inconclusive",
+      "primary_supported": false,
+      "recovery_attempted": true,
+      "recovery_supported": false
+    },
+    {
+      "query": "Q00009",
+      "reference": "R014120",
+      "published_label": "no_reference_match",
+      "index": 14,
+      "status": "inconclusive",
+      "primary_supported": false,
+      "recovery_attempted": true,
+      "recovery_supported": false
+    }
+  ],
+  "pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-disc21-exposure-recovery-prefix-0015-20261012.json": "e888a5b8a86f2a5836fd1968306e35167c4341e69c6df8b025fc9f23424a2d02",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-disc21-exposure-recovery-cohort-prefix-20261012.py": "c98892ecb01d9996bb9c761b288dd1f448c6b14007d5b6fc9ae66a44124f2fe1",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-disc21-exposure-recovery-api-audit-20261012.json": "4fc4ec37d7c2c56fe436727ada31a1cde590711ddc70d55fa0aba50d202eac8e"
+  },
+  "source_pins_verified": 3296,
+  "scope": "Direct public composed CPU API results, primary25/min10 then recovery9/min20 only on primary miss. Completed prefix only. Previously observed development cohort; no held-out hard-negative precision, localization/full-format/platform/RSS/all500 qualification or default adoption."
+}

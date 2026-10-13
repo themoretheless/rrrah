@@ -1,0 +1,417 @@
+{
+  "status": "observed_publisher_positive_reverse_rejected",
+  "forward": {
+    "plan": {
+      "original_id": 35,
+      "query_id": 209,
+      "group_id": 203500,
+      "original": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/203500.jpg",
+      "query": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/203502.jpg",
+      "direction": "forward",
+      "left": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/203500.jpg",
+      "right": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/203502.jpg",
+      "source_tolerance": 7.224420807234307,
+      "gradient_minimum_distance": 0.19068231807512986,
+      "radius_0_1_proposed": false
+    },
+    "result": {
+      "index": 66,
+      "plan_index": 66,
+      "status": "publisher_positive_supported",
+      "command": [
+        "/usr/bin/time",
+        "-l",
+        "/usr/bin/env",
+        "DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+        "/Users/themoretheless/.codex/tmp/rrrah-loftr-publisher-positives-qualified-20261011/scheduled_outcome_collection_files",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+        "640",
+        "7.224420807234307",
+        "model-first",
+        "-",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/203500.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/203502.jpg"
+      ],
+      "pid": 81467,
+      "returncode": 0,
+      "elapsed_seconds": 8.690817166999977,
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-loftr-publisher-positives-qualified-20261011/0066.log",
+      "log_sha256": "741b1aeb8aedf80d1ac0496e6e2cb3abd5a94c2b94051dca0897730d5214d992",
+      "stdout": "{\"files\":[0,1],\"managed_peak\":121266888,\"managed_retained_before_drop\":7784,\"managed_used\":0,\"pairs\":[{\"attempted_stages\":1,\"evidence\":{\"attempts\":[{\"evidence\":{\"geometry_inliers\":0,\"hypotheses\":20000,\"model_digest\":[251,248,128,60,113,119,49,0,204,125,138,137,62,0,255,47,68,141,150,91,38,37,242,55,0,75,47,168,45,71,4,147],\"original_dimensions\":[[3008,2000],[800,600]],\"pixels\":null,\"raw_proposals\":65,\"selected_points\":65,\"supported\":false,\"transform\":null},\"left_rectangle\":[0,0,3008,2000],\"right_rectangle\":[0,0,800,600]},{\"evidence\":{\"geometry_inliers\":0,\"hypotheses\":20000,\"model_digest\":[251,248,128,60,113,119,49,0,204,125,138,137,62,0,255,47,68,141,150,91,38,37,242,55,0,75,47,168,45,71,4,147],\"original_dimensions\":[[3008,2000],[800,600]],\"pixels\":null,\"raw_proposals\":17,\"selected_points\":17,\"supported\":false,\"transform\":null},\"left_rectangle\":[0,0,3008,2000],\"right_rectangle\":[0,0,400,300]},{\"evidence\":{\"geometry_inliers\":0,\"hypotheses\":20000,\"model_digest\":[251,248,128,60,113,119,49,0,204,125,138,137,62,0,255,47,68,141,150,91,38,37,242,55,0,75,47,168,45,71,4,147],\"original_dimensions\":[[3008,2000],[800,600]],\"pixels\":null,\"raw_proposals\":20,\"selected_points\":20,\"supported\":false,\"transform\":null},\"left_rectangle\":[0,0,3008,2000],\"right_rectangle\":[400,0,400,300]},{\"evidence\":{\"geometry_inliers\":80,\"hypotheses\":20000,\"model_digest\":[251,248,128,60,113,119,49,0,204,125,138,137,62,0,255,47,68,141,150,91,38,37,242,55,0,75,47,168,45,71,4,147],\"original_dimensions\":[[3008,2000],[800,600]],\"pixels\":{\"anchors\":[67,67],\"directions\":[{\"agreeing_pairs\":2321,\"informative_pairs\":2322,\"sites\":1675,\"valid_sites\":1437},{\"agreeing_pairs\":1780,\"informative_pairs\":1786,\"sites\":1675,\"valid_sites\":1675}],\"supported\":true},\"raw_proposals\":146,\"selected_points\":146,\"supported\":true,\"transform\":[[0.16856248291527776,0.07773610078728946,176.94464870681483],[-0.09087163081867743,0.0881522199607988,348.14744880585675],[0.000051892270846566926,-0.00009202792039603023,1.115398547053579]]},\"left_rectangle\":[0,0,3008,2000],\"right_rectangle\":[0,300,400,300]}],\"supported\":true,\"terminal\":\"model_tiles\"},\"first_miss\":null,\"left\":0,\"right\":1}],\"proposal_pairs\":[],\"scope\":\"Proposal-first exhaustive fallback, no retrieval pruning or transitive grouping; diagnostic assumes untagged input linear sRGB. Metadata slot capacities and managed inputs/evidence are admitted; provider tensors/workspaces remain outside total RSS admission. Final caller cancellation checkpoint is followed by read-only source revalidation with generation checks.\",\"source_paths\":[\"/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/203500.jpg\",\"/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/203502.jpg\"],\"status\":\"ok\"}\n",
+      "stderr": "        8.68 real         9.67 user         0.44 sys\n          1527857152  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n               94005  page reclaims\n                   9  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                   0  voluntary context switches\n               21631  involuntary context switches\n         70368477328  instructions retired\n         22675795743  cycles elapsed\n          1477461744  peak memory footprint\n",
+      "managed_peak": 121266888,
+      "rss_bytes": 1527857152,
+      "evidence": {
+        "attempts": [
+          {
+            "evidence": {
+              "geometry_inliers": 0,
+              "hypotheses": 20000,
+              "model_digest": [
+                251,
+                248,
+                128,
+                60,
+                113,
+                119,
+                49,
+                0,
+                204,
+                125,
+                138,
+                137,
+                62,
+                0,
+                255,
+                47,
+                68,
+                141,
+                150,
+                91,
+                38,
+                37,
+                242,
+                55,
+                0,
+                75,
+                47,
+                168,
+                45,
+                71,
+                4,
+                147
+              ],
+              "original_dimensions": [
+                [
+                  3008,
+                  2000
+                ],
+                [
+                  800,
+                  600
+                ]
+              ],
+              "pixels": null,
+              "raw_proposals": 65,
+              "selected_points": 65,
+              "supported": false,
+              "transform": null
+            },
+            "left_rectangle": [
+              0,
+              0,
+              3008,
+              2000
+            ],
+            "right_rectangle": [
+              0,
+              0,
+              800,
+              600
+            ]
+          },
+          {
+            "evidence": {
+              "geometry_inliers": 0,
+              "hypotheses": 20000,
+              "model_digest": [
+                251,
+                248,
+                128,
+                60,
+                113,
+                119,
+                49,
+                0,
+                204,
+                125,
+                138,
+                137,
+                62,
+                0,
+                255,
+                47,
+                68,
+                141,
+                150,
+                91,
+                38,
+                37,
+                242,
+                55,
+                0,
+                75,
+                47,
+                168,
+                45,
+                71,
+                4,
+                147
+              ],
+              "original_dimensions": [
+                [
+                  3008,
+                  2000
+                ],
+                [
+                  800,
+                  600
+                ]
+              ],
+              "pixels": null,
+              "raw_proposals": 17,
+              "selected_points": 17,
+              "supported": false,
+              "transform": null
+            },
+            "left_rectangle": [
+              0,
+              0,
+              3008,
+              2000
+            ],
+            "right_rectangle": [
+              0,
+              0,
+              400,
+              300
+            ]
+          },
+          {
+            "evidence": {
+              "geometry_inliers": 0,
+              "hypotheses": 20000,
+              "model_digest": [
+                251,
+                248,
+                128,
+                60,
+                113,
+                119,
+                49,
+                0,
+                204,
+                125,
+                138,
+                137,
+                62,
+                0,
+                255,
+                47,
+                68,
+                141,
+                150,
+                91,
+                38,
+                37,
+                242,
+                55,
+                0,
+                75,
+                47,
+                168,
+                45,
+                71,
+                4,
+                147
+              ],
+              "original_dimensions": [
+                [
+                  3008,
+                  2000
+                ],
+                [
+                  800,
+                  600
+                ]
+              ],
+              "pixels": null,
+              "raw_proposals": 20,
+              "selected_points": 20,
+              "supported": false,
+              "transform": null
+            },
+            "left_rectangle": [
+              0,
+              0,
+              3008,
+              2000
+            ],
+            "right_rectangle": [
+              400,
+              0,
+              400,
+              300
+            ]
+          },
+          {
+            "evidence": {
+              "geometry_inliers": 80,
+              "hypotheses": 20000,
+              "model_digest": [
+                251,
+                248,
+                128,
+                60,
+                113,
+                119,
+                49,
+                0,
+                204,
+                125,
+                138,
+                137,
+                62,
+                0,
+                255,
+                47,
+                68,
+                141,
+                150,
+                91,
+                38,
+                37,
+                242,
+                55,
+                0,
+                75,
+                47,
+                168,
+                45,
+                71,
+                4,
+                147
+              ],
+              "original_dimensions": [
+                [
+                  3008,
+                  2000
+                ],
+                [
+                  800,
+                  600
+                ]
+              ],
+              "pixels": {
+                "anchors": [
+                  67,
+                  67
+                ],
+                "directions": [
+                  {
+                    "agreeing_pairs": 2321,
+                    "informative_pairs": 2322,
+                    "sites": 1675,
+                    "valid_sites": 1437
+                  },
+                  {
+                    "agreeing_pairs": 1780,
+                    "informative_pairs": 1786,
+                    "sites": 1675,
+                    "valid_sites": 1675
+                  }
+                ],
+                "supported": true
+              },
+              "raw_proposals": 146,
+              "selected_points": 146,
+              "supported": true,
+              "transform": [
+                [
+                  0.16856248291527776,
+                  0.07773610078728946,
+                  176.94464870681483
+                ],
+                [
+                  -0.09087163081867743,
+                  0.0881522199607988,
+                  348.14744880585675
+                ],
+                [
+                  5.1892270846566926e-05,
+                  -9.202792039603023e-05,
+                  1.115398547053579
+                ]
+              ]
+            },
+            "left_rectangle": [
+              0,
+              0,
+              3008,
+              2000
+            ],
+            "right_rectangle": [
+              0,
+              300,
+              400,
+              300
+            ]
+          }
+        ],
+        "supported": true,
+        "terminal": "model_tiles"
+      }
+    }
+  },
+  "reverse": {
+    "plan": {
+      "original_id": 35,
+      "query_id": 209,
+      "group_id": 203500,
+      "original": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/203500.jpg",
+      "query": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/203502.jpg",
+      "direction": "reverse",
+      "left": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/203502.jpg",
+      "right": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/203500.jpg",
+      "source_tolerance": 0.5536776036072714,
+      "gradient_minimum_distance": 0.19068231807512986,
+      "radius_0_1_proposed": false
+    },
+    "result": {
+      "index": 67,
+      "plan_index": 67,
+      "status": "publisher_positive_rejected",
+      "command": [
+        "/usr/bin/time",
+        "-l",
+        "/usr/bin/env",
+        "DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+        "/Users/themoretheless/.codex/tmp/rrrah-loftr-publisher-positives-qualified-20261011/scheduled_outcome_collection_files",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+        "640",
+        "0.5536776036072714",
+        "model-first",
+        "-",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/203502.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/203500.jpg"
+      ],
+      "pid": 81538,
+      "returncode": 0,
+      "elapsed_seconds": 358.52436275000014,
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-loftr-publisher-positives-qualified-20261011/0067.log",
+      "log_sha256": "57b9619a605ef109a0fa5ff597ab73600192179926570e8659db89bb7bf2378b",
+      "stdout": "{\"files\":[0,1],\"managed_peak\":361787840,\"managed_retained_before_drop\":1856,\"managed_used\":0,\"pairs\":[{\"attempted_stages\":2,\"evidence\":{\"candidate_points\":44,\"native_recipes\":6,\"pixels\":null,\"reflected_source\":true,\"supported\":false,\"terminal\":\"native\",\"transform\":null},\"first_miss\":{\"attempts\":25,\"model_digest\":[251,248,128,60,113,119,49,0,204,125,138,137,62,0,255,47,68,141,150,91,38,37,242,55,0,75,47,168,45,71,4,147],\"raw_proposals\":27,\"selected_points\":27,\"stage\":\"model_tiles\"},\"left\":0,\"right\":1}],\"proposal_pairs\":[],\"scope\":\"Proposal-first exhaustive fallback, no retrieval pruning or transitive grouping; diagnostic assumes untagged input linear sRGB. Metadata slot capacities and managed inputs/evidence are admitted; provider tensors/workspaces remain outside total RSS admission. Final caller cancellation checkpoint is followed by read-only source revalidation with generation checks.\",\"source_paths\":[\"/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/203502.jpg\",\"/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/203500.jpg\"],\"status\":\"ok\"}\n",
+      "stderr": "      358.51 real       230.49 user         2.76 sys\n          1445085184  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n              430191  page reclaims\n                  10  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                   1  voluntary context switches\n              198170  involuntary context switches\n       2286725074782  instructions retired\n        544906845674  cycles elapsed\n          1404978976  peak memory footprint\n",
+      "managed_peak": 361787840,
+      "rss_bytes": 1445085184,
+      "evidence": {
+        "candidate_points": 44,
+        "native_recipes": 6,
+        "pixels": null,
+        "reflected_source": true,
+        "supported": false,
+        "terminal": "native",
+        "transform": null
+      }
+    }
+  },
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-loftr-publisher-positives-ordering-prefix-0130-audit-20261011.json": "44a473b3cb8d0b26cc6ee6530b9189b47a05830dd21227a2284627c86da765e2",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-publisher-positives-qualified-20261011/audits/ordering-prefix-0130.json": "26bc447a8cfff1926c21f8fc62106f0628a34b9a98fb0f4d5b42d1accb702cd7",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-publisher-positives-qualified-20261011/0066.log": "741b1aeb8aedf80d1ac0496e6e2cb3abd5a94c2b94051dca0897730d5214d992",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/203500.jpg": "e22cba724438643ac01eb2516eab2ab466d51544218f9096c2a99fbbf07c4aac",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/203502.jpg": "bf1d351e0a8259716fe65e0eb3c37a55e25bfa3d1d06042c8a50f8935b31dd1c",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-publisher-positives-qualified-20261011/0067.log": "57b9619a605ef109a0fa5ff597ab73600192179926570e8659db89bb7bf2378b"
+  },
+  "scope": "Actual frozen-baseline recall miss; forward supports, reverse complete stage result unsupported, not relabelled unknown or omitted. No current-source recovery for this pair qualified yet; preserve the original replay."
+}

@@ -1,0 +1,51 @@
+{
+  "adapter": "Metal Apple M4 Max",
+  "passed": 2,
+  "failed": 0,
+  "ignored": 0,
+  "source_dimensions": [
+    4000,
+    3000
+  ],
+  "source_bytes": 192000000,
+  "hdr_initial_center": [
+    4,
+    -0.5,
+    0,
+    1
+  ],
+  "hdr_replacement_center": [
+    -0.25,
+    0,
+    4,
+    1
+  ],
+  "hdr_initial_binary16": [
+    17408,
+    47104,
+    0,
+    15360
+  ],
+  "hdr_replacement_binary16": [
+    46080,
+    0,
+    17408,
+    15360
+  ],
+  "verified": [
+    "Whole-frame binary16 equality after texture pressure, queue pressure and six cancellation checkpoints",
+    "Exact signed/above-one HDR center values before and after valid retry",
+    "SDR clips signed/above-one colors as expected",
+    "All owned GPU and upload queue credits return to zero"
+  ],
+  "limitations": [
+    "Authored uniform-color source, no decoder/independent-producer qualification",
+    "Offscreen actual Metal, no physical HDR display or live window evidence",
+    "Existing ordinary raster suite was passed before this test-only source/expectation strengthening; current focused small+large tests rerun"
+  ],
+  "sha256": {
+    "docs/research/metal-signed-hdr-upload-recovery-2026-10-12/tests.log": "ce5980a2340374f50571b170c8f24b61622a089aa5d468d8349c680ec55d036d",
+    "crates/rrrah-gpu/tests/common/mod.rs": "72db670bd9838590dcb677d51c1f7bc8c69999726204e8a4109799fde89ee63b",
+    "crates/rrrah-gpu/tests/raster_readback.rs": "db3ac2ad512794f46922982dc3deb4e8ab556336555ea83fac3a8d7d05ddd941"
+  }
+}

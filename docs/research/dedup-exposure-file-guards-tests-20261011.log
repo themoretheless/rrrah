@@ -1,0 +1,28 @@
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> /Users/themoretheless/.codex/tmp/rrrah-exposure-anchor-files-qualified-20261011/crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+   Compiling dedup-exposure-file-guards v0.0.0 (/Users/themoretheless/.codex/tmp/rrrah-exposure-file-guards-harness-20261011)
+    Finished `test` profile [optimized + debuginfo] target(s) in 37.28s
+     Running tests/exposure_files.rs (/Users/themoretheless/.codex/tmp/rrrah-opposite-native-snapshot-20261011/target/debug/build/dedup-exposure-file-guards/823d8b7aeb37868f/out/exposure_files-823d8b7aeb37868f)
+
+running 6 tests
+test file_calibration_budget_overflow_and_cancel_precede_missing_sources ... ok
+test zero_exposure_file_is_explicitly_uninformative_and_releases_scratch ... ok
+test both_request_owners_cancel_mid_calibration_and_at_final_publication ... ok
+test late_file_calibration_cancellation_and_source_mutation_discard_evidence ... ok
+test calibrated_scratch_admission_fails_after_successful_legacy_decode_and_releases_credit ... ok
+test explicit_file_calibration_recovers_dark_rank_and_rejects_inversion ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+

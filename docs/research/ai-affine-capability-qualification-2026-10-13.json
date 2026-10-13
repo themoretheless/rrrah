@@ -1,0 +1,55 @@
+{
+  "scope": "source capability and ignored diagnostic eligibility only; no fragment coalescing enabled",
+  "source_tests": {
+    "passed": 117,
+    "ignored": 1
+  },
+  "compositor_tests": {
+    "passed": 215,
+    "ignored": 12
+  },
+  "source_capability_guards": [
+    "retained triangle mesh",
+    "no function",
+    "native channel count matches layout",
+    "finite bounded constant opacity",
+    "identity destination coordinates"
+  ],
+  "remaining_required_guards": [
+    "per-executed-route lifecycle",
+    "clipped winning owner",
+    "constant raster/alpha cell key",
+    "admitted area and first-moment accumulation",
+    "f64/f32 rounding bound"
+  ],
+  "original_five_pixels_exact": true,
+  "candidate_147_59": {
+    "eligible": true,
+    "affine_meshes": 2,
+    "constant_rasters": 2
+  },
+  "candidate_145_50": {
+    "eligible": false,
+    "blocking_event": 2103,
+    "blocking_event_sampler_calls": 0,
+    "next_step": "qualify actual active routes rather than inactive source list"
+  },
+  "baseline_command_work": {
+    "total": 14107965,
+    "mesh_source_2670": 4569787,
+    "working_limit": 4000000
+  },
+  "production_acceleration_enabled": false,
+  "speed_claim": null,
+  "final_credit": 0,
+  "source_sha256": {
+    "vendor/hayro-interpret/src/encode/native_source.rs": "88e564c4e6e15f11bf6c303cff2743fe9abf54745330212e8ee9cd636d230887",
+    "vendor/hayro/src/knockout_interpreter.rs": "6b797e5ec6a8708ba726af6e4fb6bf079a48a23a30b7e585b6f19374afb94d18"
+  },
+  "logs": {
+    "ai-affine-capability-source-suite-2026-10-13.log": "46a282be8ab6dcad018c241eb093ea7215f2cb8457d45662f2d4cd0f508f6b1b",
+    "ai-affine-route-source-suite-2026-10-13.log": "07a4156dcb0b5b6b50818776f675bf322a733fb263c66e1647bbf511b92d6be6",
+    "ai-affine-route-candidate-original-2026-10-13.log": "15785d8aeac81e8e9c9137910610e3194c1f642f7d63364ee472375cbfeafcb3",
+    "ai-affine-route-source-original-2026-10-13.log": "f1b30b1fd29bb185b22af4c246177915ad96b4d28d929c9a05105105b64e4e3b"
+  }
+}

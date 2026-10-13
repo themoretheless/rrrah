@@ -1,0 +1,206 @@
+{
+  "finding": "Premature scalar area averaging demonstrably loses spatial correlation before composition",
+  "native_controls": [
+    {
+      "case": "same_edge",
+      "scale": 1,
+      "alpha": 0.9926483609520756,
+      "components": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "case": "same_edge",
+      "scale": 16,
+      "alpha": 0.25,
+      "components": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "case": "same_edge",
+      "scale": 64,
+      "alpha": 0.25,
+      "components": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "case": "disjoint_edges",
+      "scale": 1,
+      "alpha": 0.4389696270665129,
+      "components": [
+        0.0,
+        0.4282511210762332,
+        0.5717488789237668
+      ]
+    },
+    {
+      "case": "disjoint_edges",
+      "scale": 16,
+      "alpha": 0.5,
+      "components": [
+        0.0,
+        0.5,
+        0.5
+      ]
+    },
+    {
+      "case": "disjoint_edges",
+      "scale": 64,
+      "alpha": 0.5,
+      "components": [
+        0.0,
+        0.5,
+        0.5
+      ]
+    }
+  ],
+  "independent_oracle": [
+    {
+      "case": "same_edge",
+      "scale": 16,
+      "mean_rgb": [
+        191.25,
+        255.0,
+        191.25
+      ],
+      "sha256": "c51c6a6f395100c82446f9f57b47799d1bef0e34e3ad71bf4c1552f798f74b17",
+      "command": [
+        "/tmp/rrrah-poppler-profile-oracle-20261012/build/utils/pdftoppm",
+        "-r",
+        "1152",
+        "-singlefile",
+        "-f",
+        "1",
+        "-l",
+        "1",
+        "-x",
+        "0",
+        "-y",
+        "240",
+        "-W",
+        "16",
+        "-H",
+        "16",
+        "docs/research/ai-covered-fragment-sampling-2026-10-12/correlated-edge-control/same_edge.pdf",
+        "docs/research/ai-covered-fragment-sampling-2026-10-12/correlated-edge-control/same_edge-16x"
+      ],
+      "stderr": ""
+    },
+    {
+      "case": "same_edge",
+      "scale": 64,
+      "mean_rgb": [
+        191.25,
+        255.0,
+        191.25
+      ],
+      "sha256": "a42b2388c6d17a0c00df1dcbb80a58fc057ff5c3f4a1bd0aa9bcf15868cad328",
+      "command": [
+        "/tmp/rrrah-poppler-profile-oracle-20261012/build/utils/pdftoppm",
+        "-r",
+        "4608",
+        "-singlefile",
+        "-f",
+        "1",
+        "-l",
+        "1",
+        "-x",
+        "0",
+        "-y",
+        "960",
+        "-W",
+        "64",
+        "-H",
+        "64",
+        "docs/research/ai-covered-fragment-sampling-2026-10-12/correlated-edge-control/same_edge.pdf",
+        "docs/research/ai-covered-fragment-sampling-2026-10-12/correlated-edge-control/same_edge-64x"
+      ],
+      "stderr": ""
+    },
+    {
+      "case": "disjoint_edges",
+      "scale": 16,
+      "mean_rgb": [
+        127.5,
+        191.25,
+        191.25
+      ],
+      "sha256": "b5c5c2c38ca79a504c2bc5c27bcbebc0980e13f43f19be3c950d499fe3d91be8",
+      "command": [
+        "/tmp/rrrah-poppler-profile-oracle-20261012/build/utils/pdftoppm",
+        "-r",
+        "1152",
+        "-singlefile",
+        "-f",
+        "1",
+        "-l",
+        "1",
+        "-x",
+        "0",
+        "-y",
+        "240",
+        "-W",
+        "16",
+        "-H",
+        "16",
+        "docs/research/ai-covered-fragment-sampling-2026-10-12/correlated-edge-control/disjoint_edges.pdf",
+        "docs/research/ai-covered-fragment-sampling-2026-10-12/correlated-edge-control/disjoint_edges-16x"
+      ],
+      "stderr": ""
+    },
+    {
+      "case": "disjoint_edges",
+      "scale": 64,
+      "mean_rgb": [
+        127.5,
+        191.25,
+        191.25
+      ],
+      "sha256": "c611eacac924a2e74d2ea1da8807f1e0f100ee72da8fcfa0778755fef0341bc1",
+      "command": [
+        "/tmp/rrrah-poppler-profile-oracle-20261012/build/utils/pdftoppm",
+        "-r",
+        "4608",
+        "-singlefile",
+        "-f",
+        "1",
+        "-l",
+        "1",
+        "-x",
+        "0",
+        "-y",
+        "960",
+        "-W",
+        "64",
+        "-H",
+        "64",
+        "docs/research/ai-covered-fragment-sampling-2026-10-12/correlated-edge-control/disjoint_edges.pdf",
+        "docs/research/ai-covered-fragment-sampling-2026-10-12/correlated-edge-control/disjoint_edges-64x"
+      ],
+      "stderr": ""
+    }
+  ],
+  "tests": {
+    "ordinary_passed": 144,
+    "ordinary_ignored": 11,
+    "manual_diagnostic_passed": 1,
+    "meaning": "Diagnostic confirms known incorrect1x scalar behavior and correct aligned16x/64x controls; not a production correctness pass"
+  },
+  "next": "Compose ordered native paints on spatial fragments before area averaging; preserve groups, clips, opacity, blend and original color space; bounded tile work/admission/cancellation. Do not clamp alpha or substitute whole-page supersampling as completed solution.",
+  "qualification": "Root mechanism reproduced; implementation fix remains open",
+  "hashes": {
+    "docs/research/ai-covered-fragment-sampling-2026-10-12/correlated-edge-control.log": "be49202f910c5e32a47b2941fb657f84de5a9698ebe2bad9e2a565655b6aa814",
+    "docs/research/ai-covered-fragment-sampling-2026-10-12/correlated-control-full-tests.log": "289be438e28532ed633f1a51e24d67e3ac5ab44ac41c645c917defbe3257e0b6",
+    "docs/research/ai-covered-fragment-sampling-2026-10-12/correlated-edge-control/independent-oracle-report.json": "e46e761215bfd540ab8affe784eeb36481add66ea8142b647de29c27089ef03a",
+    "docs/research/ai-covered-fragment-sampling-2026-10-12/correlated-edge-control/same_edge.pdf": "bec36d29975a40c5f8df689d4203cd21ba4c66023b8e5b8b83bb5892526ac041",
+    "docs/research/ai-covered-fragment-sampling-2026-10-12/correlated-edge-control/disjoint_edges.pdf": "0b70e2d5d64363f28d45849eabd2bf42c346787e90d5c8db8fa60ef429e2d5ab"
+  }
+}

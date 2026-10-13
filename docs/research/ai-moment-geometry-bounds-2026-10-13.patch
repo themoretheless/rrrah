@@ -1,0 +1,217 @@
+--- a/vendor/hayro/src/native_moments.rs
++++ b/vendor/hayro/src/native_moments.rs
+@@ -12,6 +12,43 @@
+         (total.is_finite() && error.is_finite()).then_some(Self {value:total,error})
+     }
+ }
++#[derive(Clone,Copy,Default)]
++struct GeometryBounds {area:[f64;2],x:[f64;2],y:[f64;2]}
++/// Exact reported-fragment area/centroid sum enclosure, not polygon clipping error.
++#[derive(Clone,Copy,Debug,PartialEq)]
++pub(super) struct GeometryRoundingBounds {
++    pub(super) area:[f64;2],
++    pub(super) centroid:[[f64;2];2],
++    pub(super) area_error:f64,
++    pub(super) centroid_error:[f64;2],
++}
++impl GeometryBounds {
++    fn added(self,area:f64,centroid:Point,origin:Point,work:&mut usize,cancelled:&dyn Fn()->bool)->Option<Self> {
++        debit(work,14,cancelled)?;
++        let sum=|a:[f64;2],b:[f64;2]|[(a[0]+b[0]).next_down(),(a[1]+b[1]).next_up()];
++        let moment=|point:f64,origin:f64| {
++            let difference=[(point-origin).next_down(),(point-origin).next_up()];
++            [(area*difference[0]).next_down(),(area*difference[1]).next_up()]
++        };
++        let out=Self {area:sum(self.area,[area;2]),x:sum(self.x,moment(centroid.x,origin.x)),y:sum(self.y,moment(centroid.y,origin.y))};
++        [out.area,out.x,out.y].iter().flatten().all(|v|v.is_finite()).then_some(out)
++    }
++    fn finish(self,origin:Point,area:f64,centroid:Point)->Option<GeometryRoundingBounds> {
++        if self.area[0]<=0. {return None;}
++        let coordinate=|moment:[f64;2],origin:f64| {
++            let ratios=[moment[0]/self.area[0],moment[0]/self.area[1],moment[1]/self.area[0],moment[1]/self.area[1]];
++            let lo=ratios.iter().copied().fold(f64::INFINITY,f64::min).next_down();
++            let hi=ratios.iter().copied().fold(f64::NEG_INFINITY,f64::max).next_up();
++            [(origin+lo).next_down(),(origin+hi).next_up()]
++        };
++        let bounds=[coordinate(self.x,origin.x),coordinate(self.y,origin.y)];
++        if bounds.iter().flatten().any(|v|!v.is_finite()) {return None;}
++        let error=|value:f64,bounds:[f64;2]|(value-bounds[0]).abs().max((value-bounds[1]).abs()).next_up();
++        let out=GeometryRoundingBounds {area:self.area,centroid:bounds,area_error:error(area,self.area),centroid_error:[error(centroid.x,bounds[0]),error(centroid.y,bounds[1])]};
++        (out.area_error.is_finite() && out.centroid_error.iter().all(|e|e.is_finite())).then_some(out)
++    }
++}
++
+ struct Entry<const N:usize,const K:usize,const W:usize> {key:[u64;N],words:usize,witness:[u64;W],area:Sum,x:Sum,y:Sum,reference:[Sum;K]}
+ pub(super) struct MomentTable<const N:usize,const K:usize=0,const W:usize=0> {
+     entries:Vec<Entry<N,K,W>>,
+@@ -20,6 +57,8 @@
+     words:usize,
+     origin:Point,
+     total:Sum,
++    geometry_bounds:Option<Vec<GeometryBounds>>,
++    _geometry_credit:Option<Box<dyn std::any::Any+Send+Sync>>,
+     _credit:Box<dyn std::any::Any+Send+Sync>,
+ }
+ fn debit(remaining:&mut usize,count:usize,cancelled:&dyn Fn()->bool)->Option<()> {
+@@ -46,7 +85,25 @@
+         let mut entries=Vec::new();entries.try_reserve_exact(capacity).ok()?;
+         let mut index=Vec::new();index.try_reserve_exact(slots).ok()?;index.resize(slots,usize::MAX);
+         if entries.capacity()>capacity || index.capacity()>slots {return None;}
+-        Some(Self {entries,slots:index,capacity,words,origin,total:Sum::default(),_credit:credit})
++        Some(Self {entries,slots:index,capacity,words,origin,total:Sum::default(),geometry_bounds:None,_geometry_credit:None,_credit:credit})
++    }
++    /// Opt-in separately admitted geometry interval storage. Ordinary tables
++    /// retain their original entry size and perform no interval arithmetic.
++    pub(super) fn admitted_prefix_with_geometry_bounds(capacity:usize,origin:Point,words:usize,
++        admit:&dyn Fn(usize)->Option<Box<dyn std::any::Any+Send+Sync>>,
++    )->Option<Self> {
++        let mut table=Self::admitted_prefix(capacity,origin,words,admit)?;
++        let credit=admit(capacity.checked_mul(size_of::<GeometryBounds>())?)?;
++        let mut bounds=Vec::new();bounds.try_reserve_exact(capacity).ok()?;
++        if bounds.capacity()>capacity {return None;}
++        table.geometry_bounds=Some(bounds);table._geometry_credit=Some(credit);Some(table)
++    }
++    pub(super) fn geometry_rounding_bounds(&self,index:usize,remaining:&mut usize,cancelled:&dyn Fn()->bool)->Option<GeometryRoundingBounds> {
++        debit(remaining,32,cancelled)?;
++        let entry=self.entries.get(index)?;
++        let centroid=Point::new(self.origin.x+entry.x.value/entry.area.value,self.origin.y+entry.y.value/entry.area.value);
++        let bounds=self.geometry_bounds.as_ref()?.get(index)?.finish(self.origin,entry.area.value,centroid)?;
++        if cancelled() {return None;}Some(bounds)
+     }
+     pub(super) fn add(&mut self,key:[u64;N],area:f64,centroid:Point,
+         remaining:&mut usize,cancelled:&dyn Fn()->bool,
+@@ -115,8 +172,10 @@
+                 let mut stored=[0u64;N];stored[..key.len()].copy_from_slice(key);
+                 let entry=Entry {key:stored,words:key.len(),witness:*witness,area:Sum::default().added(area)?,
+                     x:Sum::default().added(area*x)?,y:Sum::default().added(area*y)?,reference:values};
++                let geometry=if self.geometry_bounds.is_some() {Some(GeometryBounds::default().added(area,centroid,self.origin,remaining,cancelled)?)} else {None};
+                 if cancelled() {return None;}
+                 self.slots[slot]=self.entries.len();self.entries.push(entry);self.total=total;
++                if let (Some(bounds),Some(geometry))=(&mut self.geometry_bounds,geometry) {bounds.push(geometry);}
+                 return Some(());
+             }
+             debit(remaining,1,cancelled)?;
+@@ -128,8 +187,10 @@
+                 let a=entry.area.added(area)?;let sx=entry.x.added(area*x)?;let sy=entry.y.added(area*y)?;
+                 let mut values=entry.reference;
+                 for (sum,value) in values.iter_mut().zip(reference) {*sum=sum.added(area*value)?;}
++                let geometry=if let Some(bounds)=&self.geometry_bounds {Some(bounds[index].added(area,centroid,self.origin,remaining,cancelled)?)} else {None};
+                 if cancelled() {return None;}
+                 let entry=&mut self.entries[index];entry.area=a;entry.x=sx;entry.y=sy;entry.reference=values;self.total=total;
++                if let (Some(bounds),Some(geometry))=(&mut self.geometry_bounds,geometry) {bounds[index]=geometry;}
+                 return Some(());
+             }
+             slot=(slot+1)&(self.slots.len()-1);
+@@ -308,3 +369,79 @@
+     let after=table.iter_with_witness().collect::<Vec<_>>();assert_eq!(after[0].1,0.25);assert_eq!(after[0].4,[1]);
+     for e in after {assert!(e.0[e.5..].iter().all(|&v|v==0));}
+ }
++
++#[test]
++fn geometry_interval_moments_enclose_reported_weighted_centroids_and_do_not_change_values() {
++    let admit=|_|Some(Box::new(()) as Box<dyn std::any::Any+Send+Sync>);
++    let origin=Point::new(1000.,-2000.);
++    let mut bounded=MomentTable::<2>::admitted_prefix_with_geometry_bounds(2,origin,2,&admit).unwrap();
++    let mut plain=MomentTable::<2>::admitted_prefix(2,origin,2,&admit).unwrap();
++    for i in 0..4096 {
++        let point=Point::new(1000.+(i as f64+0.5)/4096.,-1999.5);
++        bounded.add([1,7],1./4096.,point,&mut 1_000_000,&||false).unwrap();
++        plain.add([1,7],1./4096.,point,&mut 1_000_000,&||false).unwrap();
++    }
++    assert_eq!(bounded.iter().collect::<Vec<_>>(),plain.iter().collect::<Vec<_>>());
++    let bound=bounded.geometry_rounding_bounds(0,&mut 32,&||false).unwrap();
++    assert!(bound.area[0]<=1. && bound.area[1]>=1.);
++    for (value,[lo,hi]) in [1000.5,-1999.5].into_iter().zip(bound.centroid) {assert!(lo<=value && value<=hi);}
++    assert!(bound.area_error<1e-10);assert!(bound.centroid_error.iter().all(|e|*e<1e-8));
++    assert!(plain.geometry_rounding_bounds(0,&mut 32,&||false).is_none());
++}
++#[test]
++fn geometry_interval_mutation_refusal_and_cancellation_preserve_both_moment_states() {
++    let admit=|_|Some(Box::new(()) as Box<dyn std::any::Any+Send+Sync>);
++    let make=|| {let mut t=MomentTable::<1>::admitted_prefix_with_geometry_bounds(1,Point::ZERO,1,&admit).unwrap();t.add([1],0.25,Point::new(0.25,0.5),&mut 1000,&||false).unwrap();t};
++    let mut probe=make();let mut work=1000;probe.add([1],0.25,Point::new(0.75,0.5),&mut work,&||false).unwrap();let cost=1000-work;
++    for budget in 0..cost {
++        let mut table=make();let before=table.geometry_rounding_bounds(0,&mut 32,&||false).unwrap();let values=table.iter().collect::<Vec<_>>();
++        assert!(table.add([1],0.25,Point::new(0.75,0.5),&mut {budget},&||false).is_none());
++        assert_eq!(table.geometry_rounding_bounds(0,&mut 32,&||false),Some(before));assert_eq!(table.iter().collect::<Vec<_>>(),values);
++    }
++    let polls=std::cell::Cell::new(0);let mut probe=make();probe.add([1],0.25,Point::new(0.75,0.5),&mut 1000,&||{polls.set(polls.get()+1);false}).unwrap();
++    for stop in 1..=polls.get() {
++        let mut table=make();let before=table.geometry_rounding_bounds(0,&mut 32,&||false).unwrap();
++        let count=std::cell::Cell::new(0);assert!(table.add([1],0.25,Point::new(0.75,0.5),&mut 1000,&||{count.set(count.get()+1);count.get()>=stop}).is_none());
++        assert_eq!(table.geometry_rounding_bounds(0,&mut 32,&||false),Some(before));
++    }
++}
++
++#[test]
++fn geometry_interval_side_storage_admission_releases_on_refusal_and_drop() {
++    use std::sync::{Arc,atomic::{AtomicUsize,Ordering}};
++    struct Credit(Arc<AtomicUsize>,usize);
++    impl Drop for Credit {fn drop(&mut self){self.0.fetch_sub(self.1,Ordering::Relaxed);}}
++    let used=Arc::new(AtomicUsize::new(0));let calls=std::cell::Cell::new(0);
++    let deny_side=|bytes| {calls.set(calls.get()+1);if calls.get()==2 {return None;}used.fetch_add(bytes,Ordering::Relaxed);Some(Box::new(Credit(used.clone(),bytes)) as Box<dyn std::any::Any+Send+Sync>)};
++    assert!(MomentTable::<1>::admitted_prefix_with_geometry_bounds(2,Point::ZERO,1,&deny_side).is_none());
++    assert_eq!(used.load(Ordering::Relaxed),0);
++    let admit=|bytes| {used.fetch_add(bytes,Ordering::Relaxed);Some(Box::new(Credit(used.clone(),bytes)) as Box<dyn std::any::Any+Send+Sync>)};
++    let table=MomentTable::<1>::admitted_prefix_with_geometry_bounds(2,Point::ZERO,1,&admit).unwrap();
++    let side=table.geometry_bounds.as_ref().unwrap();assert_eq!(side.capacity(),2);assert!(side.is_empty());
++    assert!(used.load(Ordering::Relaxed)>=2*size_of::<GeometryBounds>());
++    drop(table);assert_eq!(used.load(Ordering::Relaxed),0);
++}
++
++#[test]
++fn geometry_interval_first_insertion_refusal_is_transactional_and_retry_succeeds() {
++    let admit=|_|Some(Box::new(()) as Box<dyn std::any::Any+Send+Sync>);
++    let make=||MomentTable::<1>::admitted_prefix_with_geometry_bounds(1,Point::ZERO,1,&admit).unwrap();
++    let mut probe=make();let mut work=1000;
++    probe.add([1],0.25,Point::new(0.25,0.5),&mut work,&||false).unwrap();
++    let cost=1000-work;
++    for budget in 0..cost {
++        let mut table=make();
++        assert!(table.add([1],0.25,Point::new(0.25,0.5),&mut {budget},&||false).is_none());
++        assert!(table.entries.is_empty());assert!(table.geometry_bounds.as_ref().unwrap().is_empty());
++        assert!(table.slots.iter().all(|i|*i==usize::MAX));
++        table.add([1],0.25,Point::new(0.25,0.5),&mut 1000,&||false).unwrap();
++        assert!(table.geometry_rounding_bounds(0,&mut 32,&||false).is_some());
++    }
++    let polls=std::cell::Cell::new(0);let mut probe=make();probe.add([1],0.25,Point::new(0.25,0.5),&mut 1000,&||{polls.set(polls.get()+1);false}).unwrap();
++    for stop in 1..=polls.get() {
++        let count=std::cell::Cell::new(0);let mut table=make();
++        assert!(table.add([1],0.25,Point::new(0.25,0.5),&mut 1000,&||{count.set(count.get()+1);count.get()>=stop}).is_none());
++        assert!(table.entries.is_empty());assert!(table.geometry_bounds.as_ref().unwrap().is_empty());
++        assert!(table.slots.iter().all(|i|*i==usize::MAX));
++    }
++}
+--- a/vendor/hayro/src/native_spatial.rs
++++ b/vendor/hayro/src/native_spatial.rs
+@@ -83,7 +83,12 @@
+     let field_moments=observe_moments && source_key.is_some() && std::env::var_os("RRRAH_AI_SOURCE_FIELD_MOMENTS").is_some();
+     let fingerprint_moments=observe_moments && !field_moments;
+     let key_words=if field_moments {16} else {(regions.len()+63)/64};
+-    let mut moments=if observe_moments {super::native_moments::MomentTable::<64,5,64>::admitted_prefix(8192,kurbo::Point::new(f64::from(x),f64::from(y)),key_words,admit)} else {None};
++    let geometry_moment_bounds=observe_moments && std::env::var_os("RRRAH_AI_MOMENT_ROUNDING_BOUNDS").is_some();
++    let mut moments=if observe_moments {
++        let origin=kurbo::Point::new(f64::from(x),f64::from(y));
++        if geometry_moment_bounds {super::native_moments::MomentTable::<64,5,64>::admitted_prefix_with_geometry_bounds(8192,origin,key_words,admit)}
++        else {super::native_moments::MomentTable::<64,5,64>::admitted_prefix(8192,origin,key_words,admit)}
++    } else {None};
+     let mut moment_complete=moments.is_some();let mut moment_work=256_000_000usize;
+     // Credit precedes the vector so storage is dropped before credit release.
+     let _token_credit=if fingerprint_moments {Some(admit(regions.len().checked_mul(size_of::<u64>())?)?)} else {None};
+@@ -193,6 +198,16 @@
+         eprintln!("SPATIAL_MOMENT_IDENTITY source_fields={field_moments} key_words={key_words}");
+         let buckets=moments.as_ref().map_or(0,|m|m.iter().count());
+         let area=moments.as_ref().map_or(0.,|m|m.iter().map(|(_,a,_)|a).sum::<f64>());
++        if geometry_moment_bounds {
++            let mut certified=0;let mut unavailable=0;let mut max_area_error=0f64;let mut max_centroid_error=0f64;
++            if let Some(table)=&moments {for index in 0..buckets {
++                if let Some(bounds)=table.geometry_rounding_bounds(index,&mut moment_work,cancelled) {
++                    certified+=1;max_area_error=max_area_error.max(bounds.area_error);
++                    max_centroid_error=max_centroid_error.max(bounds.centroid_error.into_iter().fold(0.,f64::max));
++                } else {unavailable+=1;}
++            }}
++            eprintln!("SPATIAL_MOMENT_ROUNDING certified={certified} unavailable={unavailable} max_area_error={max_area_error:?} max_centroid_error={max_centroid_error:?}");
++        }
+         eprintln!("SPATIAL_FRAGMENT_MOMENTS complete={moment_complete} fragments={moment_fragments} buckets={buckets} area={area:?} fallback_fragments={fallback_fragments} diagnostic_work={}",256_000_000-moment_work);
+         if moment_complete {
+             let mut grouped_alpha=0.;let mut grouped_integral=[0.;4];let mut compared=0usize;

@@ -2,7 +2,7 @@
   "index": 7,
   "repository": "tomnomnom/anew",
   "commit": "d67d68db0d56469fdea7505c5a9209c0a465effa",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "Existing prior full/partial source-review artifacts linked after current pin verification; original limits retained. This reconciliation is not a new full-source reading or new runtime execution, except the explicit blockhash-js runtime refresh.",
   "decision": "reject-domain",
   "finding": "Line-set insertion deduplicates text lines, not files or visual images.",
   "license_metadata": "MIT",
@@ -44,5 +44,22 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "prior_selected_review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "linked_review_artifacts": [
+    {
+      "review_artifact": "anew-full-review-20261012.json",
+      "status": "verified_existing_pins_not_new_execution",
+      "pin_errors": [],
+      "original_scope": "Original unchanged CLI executed in six temporary-file/stdin controls. This is line-set membership, not byte-confirmed duplicate files or image matching. Scanner token limits/errors unchecked cause silent truncation and missed membership after long existing line; complete CLI counterexamples, no concurrent mutation/race/wholeRSS/platform assertion. Source map grows with unique lines; no resource bound reproduced. All6files read for this one registry row, not full500completion."
+    },
+    {
+      "review_artifact": "anew-full-review-audit-20261012.json",
+      "status": "verified_existing_pins_not_new_execution",
+      "pin_errors": [],
+      "original_scope": "Original unchanged CLI executed in six temporary-file/stdin controls. This is line-set membership, not byte-confirmed duplicate files or image matching. Scanner token limits/errors unchecked cause silent truncation and missed membership after long existing line; complete CLI counterexamples, no concurrent mutation/race/wholeRSS/platform assertion. Source map grows with unique lines; no resource bound reproduced. All6files read for this one registry row, not full500completion."
+    }
+  ],
+  "artifact_pin_reconciliation_audit": "unlinked-reviews-pin-audit-20261013.json",
+  "prior_registry_review": "prior-registry-007-unlinked-reconciliation-20261013.json"
 }

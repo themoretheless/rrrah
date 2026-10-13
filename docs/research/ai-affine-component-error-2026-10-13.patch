@@ -1,0 +1,150 @@
+--- a/vendor/hayro-interpret/src/encode/native_source.rs
++++ b/vendor/hayro-interpret/src/encode/native_source.rs
+@@ -795,6 +795,16 @@
+     /// This does not certify that caller fragment centroids lie in that hull.
+     pub fn mesh_triangle_weight_bounds_over_vertices(&self,index:usize,vertices:&[Point],
+         cancelled:&dyn Fn()->bool,remaining:&mut usize)->Result<[[f64;2];3],NativeShadingError> {
++        let fields=self.mesh_triangle_affine_weight_fields(index,vertices,cancelled,remaining)?;
++        let mut bounds=[[0.;2];3];
++        for (out,field) in bounds.iter_mut().zip(fields) {
++            *out=field.over_vertices(vertices,remaining,cancelled).ok_or_else(||if cancelled() {NativeShadingError::Cancelled} else if *remaining==0 {NativeShadingError::WorkLimit} else {NativeShadingError::Invalid})?;
++        }
++        if cancelled() {return Err(NativeShadingError::Cancelled);}
++        Ok(bounds)
++    }
++    fn mesh_triangle_affine_weight_fields(&self,index:usize,vertices:&[Point],
++        cancelled:&dyn Fn()->bool,remaining:&mut usize)->Result<[AffineMeshWeight;3],NativeShadingError> {
+         use NativeShadingError::*;
+         if cancelled() {return Err(Cancelled);}
+         *remaining=remaining.checked_sub(1).ok_or(WorkLimit)?;
+@@ -825,10 +835,64 @@
+             let u=op(dy,constant(b.x)?,2)?;let v=op(dx,constant(b.y)?,2)?;
+             let wc=op(u,v,1)?;let wc=op(wc,constant(denominator)?,3)?;
+             let wa=op(constant(1.)?,wb,1)?;let wa=op(wa,wc,1)?;
+-            Some([wa.over_vertices(vertices,remaining,cancelled)?,wb.over_vertices(vertices,remaining,cancelled)?,wc.over_vertices(vertices,remaining,cancelled)?])
++            Some([wa,wb,wc])
+         })();
+         if cancelled() {return Err(Cancelled);}
+         result.ok_or(if *remaining==0 {WorkLimit} else {Invalid})
++    }
++
++    /// Pointwise absolute component error versus the corresponding exact affine
++    /// expression over a supplied vertex hull. Includes raw-weight evaluation,
++    /// negative-weight projection, normalization and source f32 rounding.
++    /// Native coordinate identity and finite0..1vertex components are required.
++    /// Caller must separately prove fragment/centroid domain membership and
++    /// propagate these bounds through composition and moment accumulation.
++    pub fn mesh_native_affine_component_error_bounds(&self,index:usize,vertices:&[Point],
++        destination:&ColorSpace,cancelled:&dyn Fn()->bool,remaining:&mut usize,
++    )->Result<[f64;4],NativeShadingError> {
++        use NativeShadingError::*;
++        if cancelled() {return Err(Cancelled);}
++        if !self.mesh_has_affine_native_field(destination) {return Err(Unsupported);}
++        let fields=self.mesh_triangle_affine_weight_fields(index,vertices,cancelled,remaining)?;
++        let add=|a:f64,b:f64|(a+b).next_up();
++        let mul=|a:f64,b:f64|(a*b).next_up();
++        let div=|a:f64,b:f64|(a/b).next_up();
++        let mut evaluation=0.;let mut deficit=0.;let mut positive=0.;
++        for field in fields {
++            let bound=field.over_vertices(vertices,remaining,cancelled).ok_or_else(||if cancelled() {Cancelled} else if *remaining==0 {WorkLimit} else {Invalid})?;
++            evaluation=add(evaluation,field.error);
++            deficit=add(deficit,(-bound[0]).max(0.));
++            positive=add(positive,bound[1].max(0.));
++        }
++        *remaining=remaining.checked_sub(32).ok_or(WorkLimit)?;
++        // Exact affine weights sum to1. Their computed sum differs by at most
++        // evaluation; clipping adds deficit. Bound the rounded positive sum,
++        // then the L1 error from division by that rounded sum.
++        let tiny=f64::from_bits(1);
++        let sum_error=add(mul(4.*f64::EPSILON,positive),4.*tiny);
++        let total_lower=((1.-evaluation).next_down()-sum_error).next_down();
++        if !total_lower.is_finite() || total_lower<=0.5 {return Err(Unsupported);}
++        let normalized_error=add(div(sum_error,total_lower),add(mul(6.*f64::EPSILON,div(positive,total_lower)),3.*tiny));
++        let l1=add(mul(2.,add(evaluation,deficit)),normalized_error);
++        let arithmetic=mul(16.*f64::EPSILON,add(add(div(positive,total_lower),normalized_error),1.));
++        let triangle=&self.mesh.as_ref().ok_or(Unsupported)?.triangles[index];
++        let mut result=[0.;4];
++        for (channel,out) in result.iter_mut().enumerate().take(self.count) {
++            if cancelled() {return Err(Cancelled);}
++            *remaining=remaining.checked_sub(3).ok_or(WorkLimit)?;
++            let values=triangle.colors.map(|c|c[channel]);
++            if values.iter().any(|v|!v.is_finite() || !(0. ..=1.).contains(v)) {return Err(Invalid);}
++            let low=values.iter().copied().fold(f32::INFINITY,f32::min);
++            let high=values.iter().copied().fold(f32::NEG_INFINITY,f32::max);
++            let span=(f64::from(high)-f64::from(low)).next_up();
++            // Subtract one constant vertex color before applying the L1 bound;
++            // only normalization affects that constant. A whole f32 ulp at1
++            // conservatively includes final rounding of every successful sample.
++            *out=add(add(mul(span,l1),normalized_error),add(arithmetic,f64::from(f32::EPSILON)));
++            if !out.is_finite() {return Err(Invalid);}
++        }
++        if cancelled() {return Err(Cancelled);}
++        Ok(result)
+     }
+ 
+     /// Sum of negative computed barycentric weights before selected-owner
+@@ -1343,6 +1407,35 @@
+             let count=std::cell::Cell::new(0);
+             assert!(source.mesh_triangle_weight_bounds_over_vertices(0,&points,&||{count.set(count.get()+1);count.get()>=stop},&mut 1000).is_err());
+         }
++    }
++
++    #[test]
++    fn affine_component_error_bounds_cover_projection_rounding_and_refuse_short_work() {
++        let mut pattern=axial();
++        Arc::make_mut(&mut pattern.shading).shading_type=Arc::new(ShadingType::TriangleMesh {triangles:vec![native_triangle([[0.,0.5,0.125,1.],[1.,0.5,0.875,0.],[0.,0.5,0.125,1.]],4)],function:None});
++        let source=NativeShadingSource::capture(&pattern,&||false,&no_credit).unwrap();
++        for vertices in [[Point::ZERO,Point::new(8.,0.),Point::new(0.,8.)],[Point::new(-4.,0.),Point::new(4.,0.),Point::new(0.,4.)]] {
++            let mut work=1000;
++            let bounds=source.mesh_native_affine_component_error_bounds(0,&vertices,&source.color_space,&||false,&mut work).unwrap();
++            let used=1000-work;
++            for y in 0..=32 {for x in 0..=32-y {
++                let u=f64::from(x)/32.;let v=f64::from(y)/32.;
++                let point=vertices[0]+(vertices[1]-vertices[0])*u+(vertices[2]-vertices[0])*v;
++                let sample=source.sample_mesh_triangle(0,point,&||false).unwrap();
++                let wb=point.x/8.;let ideal=[wb,0.5,0.125+0.75*wb,1.-wb];
++                for i in 0..4 {assert!((f64::from(sample.components[i])-ideal[i]).abs()<=bounds[i]);}
++            }}
++            for budget in 0..used {assert!(source.mesh_native_affine_component_error_bounds(0,&vertices,&source.color_space,&||false,&mut {budget}).is_err());}
++            assert!(bounds[1]<2e-7); // Constant channel only needs rounding/normalization allowance.
++            let polls=std::cell::Cell::new(0);
++            source.mesh_native_affine_component_error_bounds(0,&vertices,&source.color_space,&||{polls.set(polls.get()+1);false},&mut 1000).unwrap();
++            for stop in 1..=polls.get() {
++                let count=std::cell::Cell::new(0);
++                assert!(source.mesh_native_affine_component_error_bounds(0,&vertices,&source.color_space,&||{count.set(count.get()+1);count.get()>=stop},&mut 1000).is_err());
++            }
++
++        }
++        assert!(matches!(source.mesh_native_affine_component_error_bounds(0,&[Point::ZERO],&source.color_space,&||true,&mut 1000),Err(NativeShadingError::Cancelled)));
+     }
+ 
+     #[test]
+--- a/vendor/hayro/src/knockout_interpreter.rs
++++ b/vendor/hayro/src/knockout_interpreter.rs
+@@ -7197,8 +7197,10 @@
+     let mut mesh_samples=Vec::new();mesh_samples.try_reserve_exact(mesh_count).ok()?;
+     let trace_point_sources=point.is_some() && std::env::var_os("RRRAH_AI_TRACE_POINT_SOURCES").is_some();
+     for (event,source,geometry) in &meshes {
+-        if std::env::var_os("RRRAH_AI_MESH_AFFINE_BOUNDS").is_some() {
++        let component_error=std::env::var_os("RRRAH_AI_MESH_COMPONENT_ERROR").is_some();
++        if component_error || std::env::var_os("RRRAH_AI_MESH_AFFINE_BOUNDS").is_some() {
+             let mut work=4_000_000;let mut accepted=0;let mut refused=0;let mut max_deficit=0f64;
++            let mut max_component_error=0f64;let mut component_refused=0;
+             for (&owner,path) in geometry.owners.iter().zip(&geometry.paths) {
+                 let mut vertices=[kurbo::Point::ZERO;3];let mut count=0;let mut valid=true;
+                 for element in path.elements() {match element {
+@@ -7210,8 +7212,14 @@
+                 if let Ok(bounds)=source.mesh_triangle_weight_bounds_over_vertices(owner,&vertices,cancelled,&mut work) {
+                     accepted+=1;let deficit=bounds.iter().fold(0f64,|sum,[lo,_]|(sum+(-lo).max(0.)).next_up());max_deficit=max_deficit.max(deficit);
+                 } else {refused+=1;}
++                if component_error {
++                    if let Ok(bounds)=source.mesh_native_affine_component_error_bounds(owner,&vertices,space,cancelled,&mut work) {
++                        max_component_error=max_component_error.max(bounds.into_iter().fold(0.,f64::max));
++                    } else {component_refused+=1;}
++                }
+             }
+             eprintln!("SPATIAL_MESH_AFFINE_BOUNDS event={event} accepted={accepted} refused={refused} max_deficit={max_deficit:?} work={}",4_000_000-work);
++            if component_error {eprintln!("SPATIAL_MESH_COMPONENT_ERROR event={event} refused={component_refused} max_error={max_component_error:?}");}
+         }
+         if std::env::var_os("RRRAH_AI_MESH_WEIGHT_BOUNDS").is_some() {
+             let mut work=4_000_000;let mut accepted=0;let mut refused=0;let mut inside=0;let mut max_deficit=0f64;

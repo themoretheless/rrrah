@@ -1,0 +1,15 @@
+{
+  "backend": "Metal",
+  "passed": 4,
+  "failed": 0,
+  "ignored": 0,
+  "log_sha256": "8f29ba64fc6d4ee8ba7237a5235b327a28449c40820fed317c5c8f3e48d67d96",
+  "sources": {
+    "crates/rrrah-gpu/src/lib.rs": "9b77f5c7ad35db5f9397cb9717ace7dab2f727ed118657c58d0557c84820aadf",
+    "crates/rrrah-gpu/tests/raw_linear_readback.rs": "37f39c66e77529f48fa18ae8d7510d6c19351d5b76ae6b54c7360d41154b7403"
+  },
+  "behavior": "NaN/positive infinity/negative infinity view components retain previous finite values independently. Valid exposure updates still apply in mixed valid/invalid requests.",
+  "limits": [
+    "Center-pixel regression for RGBA16Float and RGBA32Float; live window and all finite extreme view geometries not qualified."
+  ]
+}

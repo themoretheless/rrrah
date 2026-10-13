@@ -1,0 +1,43 @@
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+    Finished `test` profile [optimized + debuginfo] target(s) in 1.72s
+     Running tests/gradient_index.rs (target/debug/deps/gradient_index-c4f5630608fadfba)
+
+running 13 tests
+test actual_work_preserves_reflected_hits_and_transform_admission ... ok
+test actual_work_counts_rejected_coordinate_candidates_and_never_returns_partial_pairs ... ok
+test invalid_vectors_exact_memory_and_build_cancellation ... ok
+test admission_cancel_recipe_and_owned_reservation ... ok
+test actual_work_minimum_self_work_and_late_refusal ... ok
+test proposal_scratch_and_retained_report_admit_exact_peak ... ok
+test actual_work_admits_sparse_pairs_without_quadratic_prepayment ... ok
+test actual_work_every_cancel_checkpoint_discards_even_previous_pairs ... ok
+test file_proposal_cancellation_never_returns_partial_pairs ... ok
+test file_proposals_equal_exhaustive_without_ambiguity_loss ... ok
+test repeated_descriptor_hits_retain_one_pair_with_bounded_memory ... ok
+test actual_work_pair_union_matches_independent_exhaustive_oracle ... ok
+test retrieval_equals_exhaustive_including_boundaries_and_collisions ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+     Running tests/gradient_index_reflection.rs (target/debug/deps/gradient_index_reflection-5597f583519ad968)
+
+running 2 tests
+test reflected_pair_union_prepays_both_domains_and_keeps_all_hits ... ok
+test reflected_query_matches_independent_permutation_and_releases_index ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

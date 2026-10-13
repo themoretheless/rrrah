@@ -1,0 +1,42 @@
+{
+  "status": "complete_bounded_frozen_original_publisher_positive_audit",
+  "controls": 2,
+  "publisher_pair": "200000/200001",
+  "directions": [
+    "forward",
+    "reverse"
+  ],
+  "empty_proposals_force_fallback": true,
+  "results": [
+    {
+      "direction": "forward",
+      "elapsed_seconds": 14.154389541,
+      "managed_peak": 109096136,
+      "observed_maximum_resident_bytes": 1691844608,
+      "model_anchors": [
+        147,
+        147
+      ],
+      "geometry_inliers": 147,
+      "tile_attempts": 1
+    },
+    {
+      "direction": "reverse",
+      "elapsed_seconds": 11.301699999999999,
+      "managed_peak": 126172912,
+      "observed_maximum_resident_bytes": 1605074944,
+      "model_anchors": [
+        43,
+        43
+      ],
+      "geometry_inliers": 110,
+      "tile_attempts": 1
+    }
+  ],
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-scheduled-loftr-original-positive-20261011.json": "c10b236c6bdbeb5ad21ea04161b1982a68ec3ce025df14a9dadad0df5d6315c1",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-scheduled-loftr-snapshot-20261011.json": "16ac09aeff00955b7329c41573fea6dfeb73f953da1bbc20aa76a6c9ebc231e3",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-scheduled-loftr-original-positive-20261011.py": "f5c133fa0cd51b70373a56c12b58a14c34ea9f0c331c055100f28c0364f320a6"
+  },
+  "limits": "One published original-resolution positive, model side640, diagnostic untagged-linear assumption. Local geometry and direct pixel-rank evidence; not whole-file identity, full corpus recall/precision, hard RSS or other platforms."
+}

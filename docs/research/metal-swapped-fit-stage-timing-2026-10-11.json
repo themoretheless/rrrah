@@ -1,0 +1,87 @@
+{
+  "scope": "Measured swapped-source fit recovery through actual Metal HDR render and synchronous GPU readback",
+  "source": [
+    512,
+    320
+  ],
+  "source_format": "RGBA32F scene-linear",
+  "source_bytes": 2621440,
+  "lod": [
+    64,
+    40
+  ],
+  "framebuffer": [
+    64,
+    64
+  ],
+  "samples": [
+    [
+      3.1017089999999996,
+      0.707208,
+      3.809042
+    ],
+    [
+      3.211709,
+      0.799709,
+      4.011500000000001
+    ],
+    [
+      3.032833,
+      0.7032079999999999,
+      3.736125
+    ],
+    [
+      3.0282500000000003,
+      0.7502500000000001,
+      3.778583
+    ],
+    [
+      3.044459,
+      0.791834,
+      3.836375
+    ],
+    [
+      3.093292,
+      0.496667,
+      3.590083
+    ],
+    [
+      3.004542,
+      0.7142090000000001,
+      3.718833
+    ],
+    [
+      3.066792,
+      0.507875,
+      3.57475
+    ]
+  ],
+  "statistics": {
+    "worker_preparation": {
+      "min_ms": 3.004542,
+      "median_ms": 3.0556254999999997,
+      "max_ms": 3.211709
+    },
+    "publish_render_readback": {
+      "min_ms": 0.496667,
+      "median_ms": 0.7107085,
+      "max_ms": 0.799709
+    },
+    "total": {
+      "min_ms": 3.57475,
+      "median_ms": 3.757354,
+      "max_ms": 4.011500000000001
+    }
+  },
+  "checks": [
+    "Each timed HDR frame exactly matches original-source reference",
+    "Full source CPU allocation remains released",
+    "Repeated pressure/recovery and final all-resource zero accounting pass"
+  ],
+  "limits": [
+    "Warm filesystem, small source, eight samples",
+    "Includes GPU readback; does not measure physical display presentation",
+    "Not a 36MP, cold-cache, slow-disk or UI event-loop latency qualification",
+    "No universal viewer FPS or latency claim"
+  ]
+}

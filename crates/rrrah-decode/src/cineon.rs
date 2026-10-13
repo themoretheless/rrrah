@@ -91,7 +91,14 @@ pub(crate) fn decode(b: &[u8], request: &DecodeRequest) -> Result<DecodedRaster,
     if b.len() - start > MAX_RASTER_BYTES as usize {
         return Err(RasterDecodeError::OutputTooLarge);
     }
-    let mut envelope = vec![0u8; 2048];
+    let envelope_bytes = 2048 + b.len() - start;
+    let _envelope_credit = request.memory_budget.as_ref()
+        .map(|budget| budget.try_reserve(envelope_bytes as u64)).transpose()
+        .map_err(crate::DecodeError::Memory)?;
+    request.check_cancelled()?;
+    let mut envelope = Vec::new();
+    envelope.try_reserve_exact(envelope_bytes).map_err(|_| RasterDecodeError::OutputTooLarge)?;
+    envelope.resize(2048, 0u8);
     envelope[..4].copy_from_slice(if be { b"SDPX" } else { b"XPDS" });
     envelope[8..12].copy_from_slice(b"V2.0");
     let put = |dst: &mut [u8], at, value: u32| {
@@ -130,6 +137,31 @@ pub(crate) fn decode(b: &[u8], request: &DecodeRequest) -> Result<DecodedRaster,
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn envelope_and_decoded_output_share_budget_and_release_on_refusal() {
+        for bytes in [
+            include_bytes!("../../../tests/fixtures/raster/cineon-8-be-3-p1.cin").as_slice(),
+            include_bytes!("../../../tests/fixtures/raster/cineon-16-be-3-p3.cin").as_slice(),
+        ] {
+            let reference = decode(bytes, &DecodeRequest::new("image.cin")).unwrap();
+            let weight = reference.pixel_capacity_bytes();
+            let start = u32::from_be_bytes(bytes[4..8].try_into().unwrap()) as usize;
+            let working = (2048 + bytes.len() - start) as u64;
+            let total = working + weight;
+            let budget = rrrah_core::MemoryBudget::new(total - 1);
+            let mut request = DecodeRequest::new("image.cin");
+            request.memory_budget = Some(budget.clone());
+            assert!(matches!(decode(bytes, &request), Err(RasterDecodeError::Source(crate::DecodeError::Memory(_)))));
+            assert_eq!(budget.used(), 0);
+            let budget = rrrah_core::MemoryBudget::new(total);
+            request.memory_budget = Some(budget.clone());
+            let frame = decode(bytes, &request).unwrap();
+            assert_eq!(budget.peak(), total);
+            assert_eq!(budget.used(), weight);
+            drop(frame);
+            assert_eq!(budget.used(), 0);
+        }
+    }
     #[test]
     fn header_bounds_channel_consistency_and_orientation() {
         let original = include_bytes!("../../../tests/fixtures/raster/cineon-10-be-3-p5.cin");

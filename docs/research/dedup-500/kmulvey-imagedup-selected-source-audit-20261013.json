@@ -1,0 +1,70 @@
+{
+  "status": "verified_selected_source_static_review_no_go_runtime",
+  "repository": "kmulvey/imagedup",
+  "commit": "385bd25bc2a4536f6a7374783a61b0305237e066",
+  "source": "/Users/themoretheless/.codex/tmp/rrrah-kmulvey-imagedup-selected-20261013",
+  "saved_git_blobs": 19,
+  "source_sha256": {
+    "LICENSE": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+    "README.md": "3c0b31082685f4de6fe0f9b3af0e3a177a3266abfa93069ab534738126c0d8e4",
+    "cmd/nsquared/main.go": "554837f10b47a1208824f701b41d9febf50538f5d3bd195225c11a8c0290eb76",
+    "cmd/uniqdirs/main.go": "fdf08b3b6fc2556bbb655dcef7f8d87401aaeab8972fd82fb5b748b589099f0c",
+    "cmd/verify/main.go": "0a94bfef7ccf4cfade7a6bccf18885394ebcbab8fe0217dc778e75fb3f07057c",
+    "go.mod": "cb1c28f2a6013a62eae2af1894b6331bc49a363130068d294100ec25db67e838",
+    "go.sum": "9ac6256645efc17a59a930c33016145ff05173aa2f021e044aa93030c385ae67",
+    "internal/app/imagedup/files.go": "f9ae8cae8920b3604cd68905be760d85b723f2483cd2f1a41ef55cb3619a39ce",
+    "internal/app/imagedup/files_test.go": "864687fd1c3c9dadc65af6cc12f45908aaeb9f9ab8059fc99c5fba3a06252e30",
+    "internal/app/imagedup/hash/cache.go": "f343a0f49fe5cb78aff9977ab39e0fffdc6439c3f2488acb73bff4028c8a5e90",
+    "internal/app/imagedup/hash/cache_test.go": "9274b945814bbb5f8b403f7341b31b49a962bf8b660f4086396260e6024ed020",
+    "internal/app/imagedup/hash/differ.go": "e527be6aa3fe9e77c0395078452e6321c69df2812ac61a5a6a803785e59cca31",
+    "internal/app/imagedup/hash/differ_test.go": "676f182dba33836f7a7d2d5fed54b1c70e7468716b237aa7576072312764d9ae",
+    "internal/app/imagedup/imagedup.go": "c2683e4204724589c55dcbdc20b00f47aa83e0e42ed66fc0f3f456746508a053",
+    "internal/app/imagedup/imagedup_test.go": "11e9ff11fcc4f3dee8a9067ce90b3b48f83ad18dfe503168efc17e1e042a8bd4",
+    "internal/app/imagedup/stats.go": "240817c577a4047f0e2171fc520cc3c2076d2dfc3211a33904c8ba67947b77ec",
+    "pkg/imagedup/logger/logger.go": "8a63ce85004aea66d4428e947b82da5ebeb7741a0234f1b3df28c7f00e981568",
+    "pkg/imagedup/logger/logger_test.go": "5c105e55973d23252d3e2a75facabfc1c052289878d840256aace12d81f234e4",
+    "pkg/imagedup/types/pair.go": "65903b386dff20e523d6dd979018c746fde575caa9a517a0ca2432661c2977b3"
+  },
+  "commit_evidence_sha256": "1cefe682e7f1bb3e58a107387835221104cbe9eebf8e473260f5198817a137d9",
+  "fully_read": [
+    "internal/app/imagedup/imagedup.go",
+    "internal/app/imagedup/files.go",
+    "internal/app/imagedup/stats.go",
+    "internal/app/imagedup/imagedup_test.go",
+    "internal/app/imagedup/files_test.go",
+    "internal/app/imagedup/hash/cache.go",
+    "internal/app/imagedup/hash/cache_test.go",
+    "internal/app/imagedup/hash/differ.go",
+    "internal/app/imagedup/hash/differ_test.go",
+    "pkg/imagedup/types/pair.go",
+    "README.md"
+  ],
+  "inventory_only": [
+    "cmd/nsquared/main.go",
+    "cmd/uniqdirs/main.go",
+    "cmd/verify/main.go",
+    "pkg/imagedup/logger/logger.go",
+    "pkg/imagedup/logger/logger_test.go",
+    "go.sum"
+  ],
+  "partial_read": [
+    "go.mod",
+    "LICENSE"
+  ],
+  "whole_repository_complete": false,
+  "whole_implementation_complete": false,
+  "upstream_tests_run": false,
+  "runtime_executed": false,
+  "runtime_limit": "No Go on PATH; original go.mod requires Go1.26.0. No dependency installation attempted.",
+  "findings": [
+    "GetHash returns path-keyed cached Image without observing current content or metadata; stale path reuse is possible. Static only.",
+    "Persist saves map[path]uint64, NewCache restores empty image.Config: cached-hit width/height become zero. Static only.",
+    "GetHash calls jpeg.Decode and jpeg.DecodeConfig despite ImageExtensionRegex accepting PNG/WebP; no generic image decoder dispatch. Static only.",
+    "Channel send/receive operations use blocking operations inside select default branch, outside ctx cancellation alternatives; stopped consumers can prevent cancellation. No deadlock execution performed.",
+    "Pair cache concatenates filenames with a space, which is ambiguous for paths containing spaces; typed tuple identities are preferable. Static only.",
+    "publishStats loops indefinitely and Shutdown unregisters collectors but has no stop signal for stats goroutine. Static only.",
+    "Pair generation uses n*(n-1) work and retains reverse-pair keys when dedupPairs enabled; memory scales with pairs.",
+    "Specs test basic cache reload count, but not restored dimensions or changed-path content; stream helper checks expected-set deletion without rejecting duplicate extras."
+  ],
+  "decision": "Reference only; no code adoption. Keep rrrah content-bound cache recipes, typed pair identities, explicit decode dispatch and cancellable bounded work."
+}

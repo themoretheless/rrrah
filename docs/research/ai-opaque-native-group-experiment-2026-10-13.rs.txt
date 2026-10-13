@@ -1,0 +1,2402 @@
+//! Test-only spatial native composition in caller-verified blending coordinates.
+//! Constant paints/groups and centroid-sampled fields; nonlinear integration,
+//! masks, cross-space boundaries and full scene routing remain unqualified.
+//! No display-color round trip.
+use super::native_blend::Pixel;
+use super::polygon_coverage::admitted_selected_polygon_pixel_row_budget;
+use hayro_interpret::BlendMode;
+use kurbo::{BezPath,Shape};
+use vello_cpu::peniko::Fill;
+
+#[derive(Clone,Copy)]
+pub(super) struct SpatialPaint<'a> {
+    /// Intersection of path and clip regions, indexed in the caller region list.
+    pub(super) regions:&'a [usize],
+    pub(super) source:Pixel,
+    pub(super) mode:BlendMode,
+}
+
+/// Partition the whole pixel, compose ordered native paints per spatial cell,
+/// then average premultiplied components. Refusal returns no partial result.
+/// Polygon work and caller paint work have separate, explicit finite budgets.
+pub(super) fn compose_polygon_pixel(
+    regions:&[(&BezPath,Fill)],paints:&[SpatialPaint<'_>],backdrop:Pixel,
+    x:i32,y:i32,polygon_work:usize,paint_work:usize,cancelled:&dyn Fn()->bool,
+    admit:&dyn Fn(usize)->Option<Box<dyn std::any::Any+Send+Sync>>,
+)->Option<Pixel> {
+    if cancelled() || regions.len()>4095 || paints.len()>4096 || !backdrop.valid()
+        || x.abs_diff(0)>1_048_576 || y.abs_diff(0)>1_048_576 {return None;}
+    for paint in paints {
+        if cancelled() || paint.regions.is_empty() || paint.regions.len()>4096 || !paint.source.valid()
+            || !matches!(paint.mode,BlendMode::Normal|BlendMode::Multiply|BlendMode::Screen|BlendMode::HardLight)
+            || paint.source.model()!=backdrop.model()
+            || paint.regions.iter().any(|&i|i>=regions.len()) {return None;}
+    }
+    let mut paint_remaining=paint_work;
+    compose_cells(regions,backdrop,x,y,polygon_work,cancelled,admit,&mut |winding,_point,_coverage,_occupied_words| {
+        let mut pixel=backdrop;
+        for paint in paints {
+            paint_remaining=paint_remaining.checked_sub(paint.regions.len().checked_add(1)?)?;
+            if cancelled() {return None;}
+            let covered=paint.regions.iter().all(|&i|match regions[i].1 {
+                Fill::NonZero=>winding[i]!=0,Fill::EvenOdd=>winding[i]%2!=0,
+            });
+            if covered {pixel=Pixel::composite(pixel,pixel,paint.source,1.,paint.mode)?;}
+        }
+        Some(pixel)
+    })
+}
+
+fn compose_cells(
+    regions:&[(&BezPath,Fill)],backdrop:Pixel,x:i32,y:i32,polygon_work:usize,
+    cancelled:&dyn Fn()->bool,admit:&dyn Fn(usize)->Option<Box<dyn std::any::Any+Send+Sync>>,
+    evaluate:&mut dyn FnMut(&[i32],kurbo::Point,&[u64;64],u64)->Option<Pixel>,
+)->Option<Pixel> {
+    let bytes=(regions.len()+1).checked_mul(size_of::<(&BezPath,Fill)>())?
+        .checked_add(5*size_of::<kurbo::PathEl>())?
+        .checked_add(regions.len().checked_mul(size_of::<i32>())?)?;
+    let _credit=admit(bytes)?;
+    let unit=kurbo::Rect::new(f64::from(x),f64::from(y),f64::from(x)+1.,f64::from(y)+1.).to_path(0.1);
+    let mut all=Vec::new();all.try_reserve_exact(regions.len()+1).ok()?;
+    all.push((&unit,Fill::NonZero));all.extend_from_slice(regions);
+    let mut remaining=polygon_work;
+    let row=admitted_selected_polygon_pixel_row_budget(&all,x,y,&mut remaining,cancelled,admit).or_else(|| {
+        if std::env::var_os("RRRAH_TRACE_SPATIAL_ROUTE").is_some() {eprintln!("SPATIAL_POLYGON_PREPARE_REFUSAL regions={} remaining={remaining}",all.len());}None
+    })?;
+    let mut saved=Vec::new();saved.try_reserve_exact(regions.len()).ok()?;
+    saved.resize(regions.len(),0i32);
+    let saved=std::cell::RefCell::new(saved);
+    let coverage=std::cell::RefCell::new([0u64;64]);
+    let occupied_words=std::cell::Cell::new(0u64);
+    let mut alpha=0.;let mut integral=[0.;4];
+    row.pixel_incremental_selected_fragments(&all,x,y,remaining,cancelled,admit,6,&mut |winding,changed| {
+        if cancelled() {return None;}
+        let mut values=saved.borrow_mut();
+        let mut bits=coverage.borrow_mut();
+        let mut update=|i:usize| {
+            values[i]=winding[i+1];
+            let inside=match regions[i].1 {Fill::NonZero=>values[i]!=0,Fill::EvenOdd=>values[i]%2!=0};
+            let mask=1u64<<(i%64);
+            if inside {bits[i/64]|=mask;} else {bits[i/64]&=!mask;}
+            let word_mask=1u64<<(i/64);
+            occupied_words.set(if bits[i/64]!=0 {occupied_words.get()|word_mask}
+                else {occupied_words.get()&!word_mask});
+        };
+        if let Some(region)=changed {
+            if region>0 {update(region-1);}
+        } else {
+            for i in 0..regions.len() {update(i);}
+        }
+        Some(Some(0))
+    },&mut |fragment| {
+        let pixel=evaluate(&saved.borrow(),fragment.centroid,&coverage.borrow(),occupied_words.get()).or_else(|| {
+            if std::env::var_os("RRRAH_TRACE_SPATIAL_ROUTE").is_some() {eprintln!("SPATIAL_CELL_EVALUATION_REFUSAL point={:?}",fragment.centroid);}None
+        })?;
+        if pixel.model()!=backdrop.model() || !pixel.valid() {return None;}
+        let weight=fragment.area*pixel.alpha();alpha+=weight;
+        for (sum,value) in integral.iter_mut().zip(pixel.native_components()?) {*sum+=weight*value;}
+        Some(())
+    }).or_else(|| {
+        if std::env::var_os("RRRAH_TRACE_SPATIAL_ROUTE").is_some() {eprintln!("SPATIAL_POLYGON_FRAGMENTS_REFUSAL regions={}",all.len());}None
+    })?;
+    if !alpha.is_finite() || !(0. ..=1.+1e-12).contains(&alpha) {return None;}
+    let components=if alpha==0. {[0.;4]} else {integral.map(|v|v/alpha)};
+    Pixel::from_native(backdrop.model(),&components[..backdrop.model().channels()],alpha.min(1.))
+}
+
+pub(super) type SpatialSampler<'a>=dyn Fn(kurbo::Point,&dyn Fn()->bool)->Option<Option<Pixel>>+'a;
+
+pub(super) type SpatialMaskSampler<'a>=dyn Fn(kurbo::Point,&dyn Fn()->bool)->Option<f64>+'a;
+
+pub(super) struct NativeSpatialSample<'a> {
+    pub(super) pixel:Pixel,
+    pub(super) space:&'a hayro_interpret::color::ColorSpace,
+}
+pub(super) type NativeSpatialSampler<'a>=dyn Fn(kurbo::Point,&dyn Fn()->bool,&mut usize,Option<usize>)->Option<Option<NativeSpatialSample<'a>>>+'a;
+
+/// A mask shares the caller's remaining work; it must debit before doing work.
+pub(super) type BudgetedMaskSampler<'a>=dyn Fn(kurbo::Point,&dyn Fn()->bool,&mut usize)->Option<f64>+'a;
+
+#[derive(Clone,Copy)]
+pub(super) enum SpatialCommand<'a> {
+    RetainedPaint {regions:&'a [usize],paint:&'a super::native_paint::NativePaint,mode:BlendMode},
+    // Owners must be ordered by descending original triangle index.
+    NativeSampledPaint {regions:&'a [usize],sample:&'a NativeSpatialSampler<'a>,owners:&'a [(usize,usize)],alpha_is_shape:bool,mode:BlendMode},
+    BeginInSpace {space:&'a hayro_interpret::color::ColorSpace,knockout:bool,opacity:f64,alpha_is_shape:bool,mode:BlendMode},
+    /// Mask sampler supplies native alpha or separately verified luminosity;
+    /// all mask boundaries must be included in the spatial arrangement.
+    SetMask {sample:&'a SpatialMaskSampler<'a>,sample_cost:usize},
+    SetBudgetedMask {sample:&'a BudgetedMaskSampler<'a>},
+    ClearMask,
+    Paint(SpatialPaint<'a>),
+    /// Caller must include every source boundary in the region arrangement.
+    /// Centroid integration is exact only for affine final premultiplied fields;
+    /// nonlinear functions/blending need further integration, not qualified here.
+    SampledPaint {regions:&'a [usize],sample:&'a SpatialSampler<'a>,sample_cost:usize,alpha_is_shape:bool,mode:BlendMode},
+    Begin {isolated:bool,knockout:bool,opacity:f64,alpha_is_shape:bool,mode:BlendMode},
+    End,
+}
+
+/// Remove groups with no paint commands, preserving all state outside them.
+/// Uses the existing admitted command storage and a bounded stack.
+pub(super) fn prune_empty_groups(commands:&mut Vec<SpatialCommand<'_>>,cancelled:&dyn Fn()->bool)->Option<()> {
+    let mut stack=[(0usize,false);32];let mut depth=0usize;let mut out=0usize;
+    for index in 0..commands.len() {
+        if cancelled() {return None;}
+        let command=commands[index];
+        match command {
+            SpatialCommand::Begin {..}|SpatialCommand::BeginInSpace {..}=>{
+                if depth==stack.len() {return None;}
+                stack[depth]=(out,false);depth+=1;
+            },
+            SpatialCommand::End=>{
+                depth=depth.checked_sub(1)?;
+                let (start,painted)=stack[depth];
+                if !painted {out=start;continue;}
+                if depth>0 {stack[depth-1].1=true;}
+            },
+            SpatialCommand::Paint(_)|SpatialCommand::RetainedPaint {..}|
+            SpatialCommand::SampledPaint {..}|SpatialCommand::NativeSampledPaint {..}=>{
+                if depth>0 {stack[depth-1].1=true;}
+            },
+            _=>{},
+        }
+        commands[out]=command;out+=1;
+    }
+    if depth!=0 {return None;}
+    commands.truncate(out);Some(())
+}
+
+/// Native group lifecycle is evaluated independently in each spatial cell.
+/// Sources and group space must already share verified blending coordinates.
+/// Native mask source/transfer construction and cross-space boundaries require
+/// their separate scene router. Begin captures the parent mask for group exit,
+/// resets the child mask, and End restores the parent mask.
+pub(super) fn compose_grouped_polygon_pixel(
+    regions:&[(&BezPath,Fill)],commands:&[SpatialCommand<'_>],
+    space:&hayro_interpret::color::ColorSpace,backdrop:Pixel,x:i32,y:i32,
+    polygon_work:usize,command_work:usize,cancelled:&dyn Fn()->bool,
+    admit:&dyn Fn(usize)->Option<Box<dyn std::any::Any+Send+Sync>>,
+)->Option<Pixel> {
+    compose_grouped_polygon_impl(regions,commands,space,backdrop,x,y,None,polygon_work,&mut {command_work},cancelled,admit)
+}
+/// Evaluate native source/group state at one point without area averaging.
+/// Mask callers must include the mask's geometry in the parent partition.
+pub(super) fn compose_grouped_polygon_point(
+    regions:&[(&BezPath,Fill)],commands:&[SpatialCommand<'_>],
+    space:&hayro_interpret::color::ColorSpace,backdrop:Pixel,point:kurbo::Point,
+    geometry_work:usize,command_work:usize,cancelled:&dyn Fn()->bool,
+    admit:&dyn Fn(usize)->Option<Box<dyn std::any::Any+Send+Sync>>,
+)->Option<Pixel> {
+    compose_grouped_polygon_impl(regions,commands,space,backdrop,0,0,Some(point),geometry_work,&mut {command_work},cancelled,admit)
+}
+
+pub(super) fn compose_grouped_polygon_impl(
+    regions:&[(&BezPath,Fill)],commands:&[SpatialCommand<'_>],
+    space:&hayro_interpret::color::ColorSpace,backdrop:Pixel,x:i32,y:i32,point_override:Option<kurbo::Point>,
+    polygon_work:usize,remaining:&mut usize,cancelled:&dyn Fn()->bool,
+    admit:&dyn Fn(usize)->Option<Box<dyn std::any::Any+Send+Sync>>,
+)->Option<Pixel> {
+    use super::native_frame::PaintFrame;
+    struct WorkTrace {enabled:bool,counts:[std::cell::Cell<usize>;13],dispatch:[std::cell::Cell<usize>;8],spent:[std::cell::Cell<usize>;8]}
+    impl WorkTrace {
+        fn measure<T>(&self,index:usize,remaining:&mut usize,run:impl FnOnce(&mut usize)->Option<T>)->Option<T> {
+            if !self.enabled {return run(remaining);}
+            let before=*remaining;let result=run(remaining);
+            let used=before.checked_sub(*remaining).unwrap_or(0);
+            self.spent[index].set(self.spent[index].get()+used);result
+        }
+        fn kind(command:&SpatialCommand<'_>)->usize {
+            match command {
+                SpatialCommand::RetainedPaint {..}=>0,SpatialCommand::Paint(_)=>1,
+                SpatialCommand::NativeSampledPaint {..}=>2,SpatialCommand::SampledPaint {..}=>3,
+                SpatialCommand::Begin {..}|SpatialCommand::BeginInSpace {..}=>4,
+                SpatialCommand::End=>5,SpatialCommand::ClearMask=>6,_=>7,
+            }
+        }
+        fn command(&self,command:&SpatialCommand<'_>) {
+            if self.enabled {let index=Self::kind(command);self.dispatch[index].set(self.dispatch[index].get()+1);}
+        }
+        fn hit(&self,index:usize) {if self.enabled {self.counts[index].set(self.counts[index].get()+1);}}
+    }
+    impl Drop for WorkTrace {
+        fn drop(&mut self) {
+            if self.enabled {
+                let b=self.spent.each_ref().map(|v|v.get());
+                eprintln!("SPATIAL_BUDGET_SPENT key={} lookup={} route_preparation={} native_source={} backdrop_comparison={}",b[0],b[1],b[2],b[3],b[4]);
+                eprintln!("SPATIAL_NATIVE_SOURCE_SPENT owner_lookup={} sample_and_coordinates={} no_owner_sample={}",b[5],b[6],b[7]);
+                let c=self.counts.each_ref().map(|v|v.get());
+                let d=self.dispatch.each_ref().map(|v|v.get());
+                eprintln!("SPATIAL_DISPATCH_KINDS retained={} paint={} native={} sampled={} begin={} end={} clear_mask={} set_mask={}",d[0],d[1],d[2],d[3],d[4],d[5],d[6],d[7]);
+                eprintln!("SPATIAL_WORK_COUNTS fragments={} route_hits={} route_misses={} dispatch={} groups={} native_samples={} fixed_samples={} mask_samples={} constant_hits={} group_hits={} paint_run_hits={} hidden_commands={} local_signature_hits={}",c[0],c[1],c[2],c[3],c[4],c[5],c[6],c[7],c[8],c[9],c[10],c[11],c[12]);
+            }
+        }
+    }
+    let work_trace=WorkTrace {enabled:std::env::var_os("RRRAH_TRACE_SPATIAL_ROUTE").is_some(),
+        counts:std::array::from_fn(|_|std::cell::Cell::new(0)),dispatch:std::array::from_fn(|_|std::cell::Cell::new(0)),spent:std::array::from_fn(|_|std::cell::Cell::new(0))};
+    if work_trace.enabled {
+        let mut kinds=[0usize;8];
+        for (index,command) in commands.iter().enumerate() {
+            kinds[WorkTrace::kind(command)]+=1;
+            match command {
+                SpatialCommand::Begin {isolated,knockout,opacity,alpha_is_shape,mode}=>
+                    eprintln!("SPATIAL_GROUP_PROPERTIES command={index} isolated={isolated} knockout={knockout} opacity={opacity} ais={alpha_is_shape} mode={mode:?}"),
+                SpatialCommand::BeginInSpace {knockout,opacity,alpha_is_shape,mode,..}=>
+                    eprintln!("SPATIAL_GROUP_PROPERTIES command={index} isolated=true explicit_space=true knockout={knockout} opacity={opacity} ais={alpha_is_shape} mode={mode:?}"),_=>{},
+            }
+        }
+        eprintln!("SPATIAL_PREPARED_KINDS retained={} paint={} native={} sampled={} begin={} end={} clear_mask={} set_mask={}",kinds[0],kinds[1],kinds[2],kinds[3],kinds[4],kinds[5],kinds[6],kinds[7]);
+    }
+    if cancelled() || regions.len()>4095 || commands.len()>4096 || !backdrop.valid()
+        || x.abs_diff(0)>1_048_576 || y.abs_diff(0)>1_048_576 {return None;}
+    let valid_mode=|mode| {
+        let valid=matches!(mode,BlendMode::Normal|BlendMode::Multiply|BlendMode::Screen|BlendMode::HardLight);
+        if !valid && std::env::var_os("RRRAH_TRACE_SPATIAL_ROUTE").is_some() {eprintln!("SPATIAL_UNSUPPORTED_BLEND mode={mode:?}");}
+        valid
+    };
+    let mut depth=0usize;let mut maximum=0;
+    for command in commands {
+        if cancelled() {return None;}
+        match command {
+            SpatialCommand::SetMask {sample_cost,..}=>{
+                if !(1..=1_000_000).contains(sample_cost) {return None;}
+            },
+            SpatialCommand::ClearMask|SpatialCommand::SetBudgetedMask {..}=>{},
+            SpatialCommand::Begin {opacity,mode,..}|SpatialCommand::BeginInSpace {opacity,mode,..}=>{
+                if !opacity.is_finite() || !(0. ..=1.).contains(opacity) || !valid_mode(*mode) {return None;}
+                depth+=1;if depth>32 {return None;}maximum=maximum.max(depth);
+            },
+            SpatialCommand::End=>{depth=depth.checked_sub(1)?;},
+            SpatialCommand::SampledPaint {regions:required,sample_cost,mode,..}=>{
+                if required.is_empty() || required.len()>4096 || !valid_mode(*mode)
+                    || !(1..=1_000_000).contains(sample_cost)
+                    || required.iter().any(|&i|i>=regions.len()) {return None;}
+            },
+            SpatialCommand::RetainedPaint {regions:required,mode,..}|
+            SpatialCommand::NativeSampledPaint {regions:required,mode,..}=>{
+                if required.is_empty() || required.len()>4096 || !valid_mode(*mode)
+                    || required.iter().any(|&i|i>=regions.len()) {return None;}
+            },
+            SpatialCommand::Paint(paint)=>{
+                if paint.regions.is_empty() || paint.regions.len()>4096 || !paint.source.valid()
+                    || paint.source.model()!=backdrop.model() || !valid_mode(paint.mode)
+                    || paint.regions.iter().any(|&i|i>=regions.len()) {return None;}
+            },
+        }
+    }
+    struct OwnerWord {word:usize,mask:u64,indices:[usize;64]}
+    struct OwnerPlan {words:Vec<OwnerWord>,positions:[usize;64],word_mask:u64,monotonic:bool,_credit:Box<dyn std::any::Any+Send+Sync>}
+    let _owner_plan_credit=admit(commands.len().checked_mul(size_of::<Option<OwnerPlan>>())?)?;
+    let mut owner_plans=Vec::new();owner_plans.try_reserve_exact(commands.len()).ok()?;
+    owner_plans.resize_with(commands.len(),||None);
+    for (command_index,command) in commands.iter().enumerate() {
+        if let SpatialCommand::NativeSampledPaint {owners,..}=command {
+            let mut previous=None;let mut masks=[0u64;64];
+            for &(region,index) in *owners {
+                if cancelled() {return None;}*remaining=remaining.checked_sub(1)?;
+                if region>=regions.len() || previous.is_some_and(|old|old<index) {return None;}
+                previous=Some(index);masks[region/64]|=1u64<<(region%64);
+            }
+            if owners.is_empty() {continue;}
+            let owner_words=(regions.len()+63)/64;
+            *remaining=remaining.checked_sub(owner_words)?;
+            let count=masks[..owner_words].iter().filter(|&&v|v!=0).count();
+            let credit=admit(count.checked_mul(size_of::<OwnerWord>())?)?;
+            let mut words=Vec::new();words.try_reserve_exact(count).ok()?;
+            let mut positions=[usize::MAX;64];
+            for (word,&mask) in masks[..owner_words].iter().enumerate() {
+                if cancelled() {return None;}*remaining=remaining.checked_sub(1)?;
+                if mask!=0 {positions[word]=words.len();words.push(OwnerWord {word,mask,indices:[0;64]});}
+            }
+            for &(region,index) in *owners {
+                if cancelled() {return None;}*remaining=remaining.checked_sub(1)?;
+                let slot=&mut words[positions[region/64]].indices[region%64];
+                *slot=(*slot).max(index);
+            }
+            let mut word_mask=0u64;
+            for word in &words {
+                if cancelled() {return None;}*remaining=remaining.checked_sub(1)?;
+                word_mask|=1u64<<word.word;
+            }
+            let mut previous=None;let mut monotonic=true;
+            for word in &words {
+                let mut bits=word.mask;
+                while bits!=0 {
+                    if cancelled() {return None;}*remaining=remaining.checked_sub(1)?;
+                    let bit=bits.trailing_zeros() as usize;bits&=bits-1;
+                    let index=word.indices[bit];
+                    if previous.is_some_and(|old|old>index) {monotonic=false;}
+                    previous=Some(index);
+                }
+            }
+            owner_plans[command_index]=Some(OwnerPlan {words,positions,word_mask,monotonic,_credit:credit});
+        }
+    }
+    if depth!=0 {return None;}
+    let words=regions.len().checked_add(63)?/64;
+    let _ends_credit=admit(commands.len().checked_mul(size_of::<usize>())?)?;
+    let mut ends=Vec::new();ends.try_reserve_exact(commands.len()).ok()?;ends.resize(commands.len(),0usize);
+    let mut routing_bits=[0u64;64];
+    let mut ancestors=[0usize;32];let mut ancestor_depth=0usize;
+    for (index,command) in commands.iter().enumerate() {
+        if cancelled() {return None;}*remaining=remaining.checked_sub(1)?;
+        match command {
+            SpatialCommand::Begin {..}|SpatialCommand::BeginInSpace {..}=>{ancestors[ancestor_depth]=index;ancestor_depth+=1;},
+            SpatialCommand::End=>{ancestor_depth=ancestor_depth.checked_sub(1)?;ends[ancestors[ancestor_depth]]=index;},
+            SpatialCommand::Paint(_)|SpatialCommand::RetainedPaint {..}|SpatialCommand::SampledPaint {..}|SpatialCommand::NativeSampledPaint {..}=>{
+                let required=match command {SpatialCommand::Paint(p)=>p.regions,
+                    SpatialCommand::RetainedPaint {regions,..}|SpatialCommand::SampledPaint {regions,..}|
+                    SpatialCommand::NativeSampledPaint {regions,..}=>*regions,_=>return None};
+                for &region in required {*remaining=remaining.checked_sub(1)?;routing_bits[region/64]|=1u64<<(region%64);}
+            },_=>{},
+        }
+    }
+    let mut constant_key=[0u64;64];let mut constant_regions=0usize;
+    if point_override.is_none() {
+        for word in 0..words {
+            let mut needed=routing_bits[word];
+            while needed!=0 {
+                if cancelled() {return None;}*remaining=remaining.checked_sub(1)?;
+                let bit=needed.trailing_zeros() as usize;needed&=needed-1;
+                if rectangle_strictly_contains_pixel(regions[word*64+bit].0,x,y) {
+                    routing_bits[word]&=!(1u64<<bit);constant_key[word]|=1u64<<bit;constant_regions+=1;
+                }
+            }
+        }
+    }
+    if work_trace.enabled {eprintln!("SPATIAL_CONSTANT_RECTANGLE_REGIONS={constant_regions}");}
+    if std::env::var_os("RRRAH_TRACE_SPATIAL_ROUTE").is_some() {
+        eprintln!("SPATIAL_ROUTING_REGIONS total={} used={}",regions.len(),routing_bits.iter().map(|v|v.count_ones() as usize).sum::<usize>());
+    }
+    let mut routing_word_mask=0u64;
+    for word in 0..words {
+        if cancelled() {return None;}*remaining=remaining.checked_sub(1)?;
+        if routing_bits[word]!=0 {routing_word_mask|=1u64<<word;}
+    }
+    type State=super::native_frame::SinglePixelState;
+    type Credit=Box<dyn std::any::Any+Send+Sync>;
+    struct Transition {input:State,output:State,_credit:Credit}
+    struct GroupSlot {end:Option<usize>,frame:Option<Box<PaintFrame>>,
+        run_end:Option<usize>,transition:Option<Box<Transition>>}
+    struct Route {key:[u64;64],commands:Vec<usize>,groups:Vec<GroupSlot>,constant:bool,result:Option<Pixel>,hash:u64,reuse_bits:Vec<u64>,reuse_word_mask:u64}
+    const ROUTE_INDEX_SIZE:usize=128;
+    type Index=[Option<(u64,usize)>;ROUTE_INDEX_SIZE];
+    fn insert_index(table:&mut Index,hash:u64,index:usize,remaining:&mut usize,cancelled:&dyn Fn()->bool)->Option<()> {
+        let mut slot=hash as usize%ROUTE_INDEX_SIZE;
+        for _ in 0..ROUTE_INDEX_SIZE {
+            if cancelled() {return None;}*remaining=remaining.checked_sub(1)?;
+            if table[slot].is_none() {table[slot]=Some((hash,index));return Some(());}
+            slot=(slot+1)%ROUTE_INDEX_SIZE;
+        }
+        None
+    }
+    let _index_credit=admit(size_of::<Index>())?;let mut route_lookup:Index=[None;ROUTE_INDEX_SIZE];
+    const ROUTE_LIMIT:usize=64;
+    let route_bytes=ROUTE_LIMIT.checked_mul(size_of::<Route>().checked_add(commands.len().checked_mul(size_of::<usize>().checked_add(size_of::<GroupSlot>())?)?)?.checked_add(words.checked_mul(size_of::<u64>())?)?)?
+        .checked_add(commands.len().checked_mul(2)?)?;
+    let _route_credit=admit(route_bytes)?;
+    let mut routes=Vec::<Route>::new();routes.try_reserve_exact(ROUTE_LIMIT).ok()?;
+    let mut keep=Vec::new();keep.try_reserve_exact(commands.len()).ok()?;keep.resize(commands.len(),true);
+    let mut ignored=Vec::new();ignored.try_reserve_exact(commands.len()).ok()?;ignored.resize(commands.len(),false);
+    type Entry=(Box<PaintFrame>,Option<(f64,bool,BlendMode,Option<usize>,usize)>);
+    let _mask_cache_credit=admit(commands.len().checked_mul(size_of::<Option<f64>>())?)?;
+    let mut mask_cache=Vec::new();mask_cache.try_reserve_exact(commands.len()).ok()?;
+    mask_cache.resize(commands.len(),None);
+    // Each command has a fixed enclosing group-space lifecycle. Keep its
+    // constant native conversion across fragments; apply_prepared still verifies
+    // the destination space on every use. Sampled sources are never cached here.
+    let _paint_cache_credit=admit(commands.len().checked_mul(size_of::<Option<super::native_frame::PreparedPaint>>())?)?;
+    let mut paint_cache=Vec::new();paint_cache.try_reserve_exact(commands.len()).ok()?;
+    paint_cache.resize_with(commands.len(),||None);
+    // Point mode builds the coverage bits once below. Cell mode charges each
+    // incremental update through the polygon selector's declared work cost.
+    if point_override.is_some() {*remaining=remaining.checked_sub(regions.len())?;}
+    let mut last_route:Option<usize>=None;
+    let mut evaluate=|_winding:&[i32],point:kurbo::Point,coverage:&[u64;64],occupied_words:u64| {
+        work_trace.hit(0);
+        let local=work_trace.measure(0,remaining,|remaining| {
+            let Some(index)=last_route else {return Some(None);};
+            let route=&routes[index];
+            let mut needed_words=route.reuse_word_mask;
+            while needed_words!=0 {
+                if cancelled() {return None;}*remaining=remaining.checked_sub(1)?;
+                let word=needed_words.trailing_zeros() as usize;needed_words&=needed_words-1;
+                if (coverage[word]^route.key[word]) & route.reuse_bits[word] & routing_bits[word] != 0 {
+                    return Some(None);
+                }
+            }
+            Some(Some(index))
+        })?;
+        let route_index=if let Some(index)=local {work_trace.hit(1);work_trace.hit(12);index} else {
+        let key=work_trace.measure(0,remaining,|remaining| {
+        let mut key=constant_key;
+        let mut needed_words=routing_word_mask;
+        while needed_words!=0 {
+            if cancelled() {return None;}*remaining=remaining.checked_sub(1)?;
+            let word=needed_words.trailing_zeros() as usize;needed_words&=needed_words-1;
+            key[word]|=coverage[word]&routing_bits[word];
+        }
+            Some(key)
+        })?;
+        let (hash,route_index)=work_trace.measure(1,remaining,|remaining| {
+        let mut hash=0xcbf29ce484222325u64;
+        for &word in &key[..words] {
+            if cancelled() {return None;}*remaining=remaining.checked_sub(1)?;
+            hash=(hash^word).wrapping_mul(0x100000001b3);hash^=hash>>32;
+        }
+        let mut route_index=None;let mut slot=hash as usize%ROUTE_INDEX_SIZE;
+        for _ in 0..ROUTE_INDEX_SIZE {
+            if cancelled() {return None;}*remaining=remaining.checked_sub(1)?;
+            let Some((candidate,index))=route_lookup[slot] else {break;};
+            if candidate==hash {
+                *remaining=remaining.checked_sub(words)?;
+                if routes[index].key[..words]==key[..words] {route_index=Some(index);break;}
+            }
+            slot=(slot+1)%ROUTE_INDEX_SIZE;
+        }
+            Some((hash,route_index))
+        })?;
+        let route_index=if let Some(index)=route_index {work_trace.hit(1);index} else {
+            work_trace.hit(2);
+            work_trace.measure(2,remaining,|remaining| {
+            if routes.len()==ROUTE_LIMIT {
+                routes.remove(0);
+                *remaining=remaining.checked_sub(ROUTE_INDEX_SIZE)?;route_lookup.fill(None);
+                for (index,route) in routes.iter().enumerate() {
+                    insert_index(&mut route_lookup,route.hash,index,remaining,cancelled)?;
+                }
+            }
+            keep.fill(true);let mut groups=[(0usize,false);32];let mut depth=0usize;
+            for (index,command) in commands.iter().enumerate() {
+                if cancelled() {return None;}*remaining=remaining.checked_sub(1)?;
+                match command {
+                    SpatialCommand::Begin {..}|SpatialCommand::BeginInSpace {..}=>{groups[depth]=(index,false);depth+=1;},
+                    SpatialCommand::End=>{
+                        depth=depth.checked_sub(1)?;let (begin,painted)=groups[depth];keep[begin]=painted;keep[index]=painted;
+                        if painted && depth>0 {groups[depth-1].1=true;}
+                    },
+                    SpatialCommand::Paint(_)|SpatialCommand::RetainedPaint {..}|SpatialCommand::SampledPaint {..}|
+                    SpatialCommand::NativeSampledPaint {..}=>{
+                        let required=match command {SpatialCommand::Paint(p)=>p.regions,
+                            SpatialCommand::RetainedPaint {regions,..}|SpatialCommand::SampledPaint {regions,..}|
+                            SpatialCommand::NativeSampledPaint {regions,..}=>*regions,_=>return None};
+                        *remaining=remaining.checked_sub(required.len())?;
+                        let visible=required.iter().all(|&i|key[i/64]&(1u64<<(i%64))!=0);
+                        keep[index]=visible;if visible && depth>0 {groups[depth-1].1=true;}
+                    },_=>{},
+                }
+            }
+            let hidden=prune_overwritten_route(commands,&mut keep,&mut ignored,&ends,remaining,cancelled)?;
+            if work_trace.enabled {work_trace.counts[11].set(work_trace.counts[11].get()+hidden);}
+            let mut route=Vec::new();route.try_reserve_exact(commands.len()).ok()?;
+            let mut slots=Vec::new();slots.try_reserve_exact(commands.len()).ok()?;
+            let mut static_groups=[(0usize,true,false);32];let mut static_depth=0usize;
+            let mut route_mask=false;let mut saved_masks=[false;32];
+            let mut index=0;let mut constant=true;let mut paint_run=None;
+            while index<commands.len() {
+                if cancelled() {return None;}*remaining=remaining.checked_sub(1)?;
+                if matches!(commands[index],SpatialCommand::Begin {..}|SpatialCommand::BeginInSpace {..}) && !keep[index] {
+                    index=ends[index]+1;continue;
+                }
+                if keep[index] {
+                    if matches!(commands[index],SpatialCommand::ClearMask) && !route_mask {
+                        index+=1;continue;
+                    }
+                    if matches!(commands[index],SpatialCommand::NativeSampledPaint {..}|
+                        SpatialCommand::SampledPaint {..}|SpatialCommand::SetMask {..}|
+                        SpatialCommand::SetBudgetedMask {..}) {constant=false;}
+                    let position=route.len();slots.push(GroupSlot {end:None,frame:None,run_end:None,transition:None});
+                    if matches!(commands[index],SpatialCommand::Paint(_)|SpatialCommand::RetainedPaint {..}) {
+                        if paint_run.is_none() {paint_run=Some(position);}
+                    } else if let Some(begin)=paint_run.take() {
+                        if position>begin+1 {slots[begin].run_end=Some(position-1);}
+                    }
+                    match commands[index] {
+                        SpatialCommand::Begin {isolated,..}=>{
+                            saved_masks[static_depth]=route_mask;route_mask=false;
+                            static_groups[static_depth]=(position,true,isolated);static_depth+=1;
+                        },
+                        SpatialCommand::BeginInSpace {..}=>{
+                            saved_masks[static_depth]=route_mask;route_mask=false;
+                            static_groups[static_depth]=(position,true,true);static_depth+=1;
+                        },
+                        SpatialCommand::End=>{
+                            static_depth=static_depth.checked_sub(1)?;
+                            route_mask=saved_masks[static_depth];
+                            let (begin,fixed,_isolated)=static_groups[static_depth];
+                            if fixed {slots[begin].end=Some(position);}
+                            if !fixed && static_depth>0 {static_groups[static_depth-1].1=false;}
+                        },
+                        SpatialCommand::NativeSampledPaint {..}|SpatialCommand::SampledPaint {..}|
+                        SpatialCommand::SetMask {..}|SpatialCommand::SetBudgetedMask {..}=>{
+                            if matches!(commands[index],SpatialCommand::SetMask {..}|SpatialCommand::SetBudgetedMask {..}) {route_mask=true;}
+                            if static_depth>0 {static_groups[static_depth-1].1=false;}
+                        },SpatialCommand::ClearMask=>route_mask=false,_=>{},
+                    }
+                    route.push(index);
+                }index+=1;
+            }
+            if let Some(begin)=paint_run {if route.len()>begin+1 {slots[begin].run_end=Some(route.len()-1);}}
+            let signature=if point_override.is_none() {
+                route_membership_signature(commands,&keep,&ignored,&key,remaining,cancelled)?
+            } else {[0u64;64]};
+            let mut reuse_bits=Vec::new();reuse_bits.try_reserve_exact(words).ok()?;
+            reuse_bits.extend_from_slice(&signature[..words]);
+            let mut reuse_word_mask=0u64;
+            for word in 0..words {
+                if cancelled() {return None;}*remaining=remaining.checked_sub(1)?;
+                if signature[word]&routing_bits[word]!=0 {reuse_word_mask|=1u64<<word;}
+            }
+            if work_trace.enabled && work_trace.counts[2].get()<=2 {
+                let mut depth=0usize;
+                for (position,&index) in route.iter().enumerate() {
+                    match &commands[index] {
+                        SpatialCommand::Begin {isolated,knockout,opacity,alpha_is_shape,mode}=>{
+                            eprintln!("SPATIAL_ROUTE_STRUCTURE position={position} depth={depth} begin isolated={isolated} knockout={knockout} opacity={opacity} ais={alpha_is_shape} mode={mode:?}");depth+=1;
+                        },
+                        SpatialCommand::BeginInSpace {..}=>{eprintln!("SPATIAL_ROUTE_STRUCTURE position={position} depth={depth} explicit_space");depth+=1;},
+                        SpatialCommand::End=>{depth=depth.checked_sub(1)?;eprintln!("SPATIAL_ROUTE_STRUCTURE position={position} depth={depth} end");},
+                        SpatialCommand::RetainedPaint {paint,mode,..}=>eprintln!("SPATIAL_ROUTE_STRUCTURE position={position} depth={depth} retained opacity={} mode={mode:?}",paint.opacity),
+                        other=>eprintln!("SPATIAL_ROUTE_STRUCTURE position={position} depth={depth} kind={}",WorkTrace::kind(other)),
+                    }
+                }
+            }
+            let index=routes.len();routes.push(Route {key,commands:route,groups:slots,constant,result:None,hash,reuse_bits,reuse_word_mask});
+            insert_index(&mut route_lookup,hash,index,remaining,cancelled)?;Some(index)
+            })?
+        };
+            route_index
+        };
+        last_route=Some(route_index);
+        if let Some(pixel)=routes[route_index].result {
+            if cancelled() {return None;}*remaining=remaining.checked_sub(1)?;
+            work_trace.hit(8);return Some(pixel);
+        }
+        mask_cache.fill(None);
+        let mut resolve_mask=|handle:Option<usize>,remaining:&mut usize|->Option<f64> {
+            let Some(index)=handle else {return Some(1.);};
+            if let Some(value)=mask_cache[index] {return Some(value);}
+            work_trace.hit(7);
+            let value=match &commands[index] {
+                SpatialCommand::SetMask {sample,sample_cost}=>{
+                    *remaining=remaining.checked_sub(*sample_cost).or_else(|| {
+                        if std::env::var_os("RRRAH_TRACE_SPATIAL_ROUTE").is_some() {
+                            eprintln!("SPATIAL_SAMPLE_BUDGET_REFUSAL remaining={remaining} cost={sample_cost}");
+                        }None
+                    })?;
+                    sample(point,cancelled)?
+                },
+                SpatialCommand::SetBudgetedMask {sample}=>{
+                    let before=*remaining;let value=sample(point,cancelled,remaining)?;
+                    if *remaining>before {return None;}value
+                },
+                _=>return None,
+            };
+            if cancelled() || !value.is_finite() || !(0. ..=1.).contains(&value) {return None;}
+            mask_cache[index]=Some(value);Some(value)
+        };
+        let mut resolve_native=|command_index:usize,remaining:&mut usize| {
+            let SpatialCommand::NativeSampledPaint {sample,..}=&commands[command_index] else {return None;};
+                work_trace.measure(3,remaining,|remaining| {
+                        let before=*remaining;
+                        let owner=work_trace.measure(5,remaining,|remaining| {
+                        let mut owner:Option<usize>=None;
+                        if let Some(plan)=&owner_plans[command_index] {
+                            let mut needed=plan.word_mask&occupied_words;
+                            while needed!=0 {
+                                if cancelled() {return None;}*remaining=remaining.checked_sub(1)?;
+                                let slot=if plan.monotonic {63-needed.leading_zeros() as usize} else {needed.trailing_zeros() as usize};
+                                needed&=!(1u64<<slot);
+                                let word=&plan.words[plan.positions[slot]];
+                                let mut covered=word.mask&coverage[word.word];
+                                if plan.monotonic && covered!=0 {
+                                    *remaining=remaining.checked_sub(1)?;
+                                    let bit=63-covered.leading_zeros() as usize;
+                                    owner=Some(word.indices[bit]);break;
+                                }
+                                while covered!=0 {
+                                    *remaining=remaining.checked_sub(1)?;
+                                    let bit=covered.trailing_zeros() as usize;covered&=covered-1;
+                                    let index=word.indices[bit];
+                                    owner=Some(owner.map_or(index,|old|old.max(index)));
+                                }
+                            }
+                        }
+                        Some(owner)
+                        })?;
+                        work_trace.hit(5);
+                        let source=work_trace.measure(6,remaining,|remaining| {
+                            if owner.is_none() {work_trace.measure(7,remaining,|remaining| sample(point,cancelled,remaining,owner))}
+                            else {sample(point,cancelled,remaining,owner)}
+                        })?;
+                        if *remaining>before || cancelled() {return None;}
+                            Some(source)
+                        })
+        };
+        *remaining=remaining.checked_sub(1)?;
+        let _credit=admit((maximum+1).checked_mul(size_of::<Entry>())?)?;
+        let mut stack=Vec::<Entry>::new();stack.try_reserve_exact(maximum+1).ok()?;
+        stack.push((PaintFrame::admitted(&[backdrop],space,false,false,cancelled,admit)?,None));
+        let mut active_mask=None;
+        let mut pending_native=None;
+        let mut position=0usize;let mut pending_run:Option<(usize,State,Credit)>=None;
+        while position<routes[route_index].commands.len() {
+            let command_index=routes[route_index].commands[position];
+            work_trace.hit(3);
+            let command=&commands[command_index];
+            work_trace.command(command);
+            if cancelled() {return None;}
+            // Route construction already proved coverage for every retained paint.
+            let cost=1;
+            *remaining=remaining.checked_sub(cost).or_else(|| {
+                if std::env::var_os("RRRAH_TRACE_SPATIAL_ROUTE").is_some() {
+                    eprintln!("SPATIAL_COMMAND_BUDGET_REFUSAL command={command_index} remaining={remaining} cost={cost}");
+                }
+                None
+            })?;
+            // An opaque native Normal sample has full shape and replaces the
+            // child's backdrop, so its group exit can be applied directly.
+            if let SpatialCommand::Begin {opacity,alpha_is_shape,mode,..}=command {
+                let route=&routes[route_index].commands;
+                if position+2<route.len() && matches!(commands[route[position+2]],SpatialCommand::End) &&
+                    matches!(commands[route[position+1]],SpatialCommand::NativeSampledPaint {mode:BlendMode::Normal,..}) {
+                    let paint_index=route[position+1];
+                    let source=resolve_native(paint_index,remaining)?;
+                    if let Some(source)=source.as_ref().filter(|source|source.pixel.alpha()==1.) {
+                        let mask=resolve_mask(active_mask,remaining)?;
+                        let frame=&mut stack.last_mut()?.0;
+                        let prepared=frame.prepare_native_pixel(source.pixel,source.space,cancelled)?;
+                        frame.apply_prepared_masked(0,&prepared,1.,*alpha_is_shape,*opacity*mask,*mode,cancelled)?;
+                        position+=3;continue;
+                    }
+                    pending_native=Some((paint_index,source));
+                }
+            }
+            // A single opaque Normal paint completely replaces its child
+            // backdrop. Apply the group's opacity/shape directly, without
+            // allocating or comparing a backdrop-dependent child frame.
+            if let SpatialCommand::Begin {opacity,alpha_is_shape,mode:BlendMode::Normal,..} = command {
+                let route = &routes[route_index].commands;
+                if position + 2 < route.len() && matches!(commands[route[position+2]], SpatialCommand::End) {
+                    let paint_index = route[position+1];
+                    if let SpatialCommand::RetainedPaint {paint,mode:BlendMode::Normal,..} = &commands[paint_index] {
+                        if paint.opacity == 1. {
+                            let mask = resolve_mask(active_mask,remaining)?;
+                            let frame = &mut stack.last_mut()?.0;
+                            if paint_cache[paint_index].is_none() {
+                                paint_cache[paint_index] = Some(frame.prepare_paint(paint,cancelled)?);
+                            }
+                            frame.apply_prepared_masked(0,paint_cache[paint_index].as_ref()?,1.,
+                                *alpha_is_shape,*opacity*mask,BlendMode::Normal,cancelled)?;
+                            position += 3;
+                            continue;
+                        }
+                    }
+                }
+            }
+            if active_mask.is_none() && routes[route_index].groups[position].run_end.is_some() {
+                let slot=&mut routes[route_index].groups[position];
+                if let Some(transition)=slot.transition.as_ref() {
+                    if stack.last_mut()?.0.restore_cached_transition(&transition.input,&transition.output,cancelled,remaining)? {
+                        work_trace.hit(10);position=slot.run_end?.checked_add(1)?;continue;
+                    }
+                }
+                slot.transition=None;
+                let credit=admit(size_of::<Transition>())?;
+                pending_run=Some((position,stack.last()?.0.single_pixel_state(cancelled)?,credit));
+            }
+            let reuse=work_trace.measure(4,remaining,|remaining| {
+                Some(if let Some(child)=routes[route_index].groups[position].frame.as_ref() {
+                match command {
+                    SpatialCommand::Begin {isolated:false,..}=>
+                        stack.last()?.0.matches_child_backdrop(child,cancelled,remaining)?,
+                    _=>true,
+                }
+            } else {false})
+            })?;
+            if reuse {
+                let child=routes[route_index].groups[position].frame.as_ref()?;
+                let (opacity,ais,mode)=match command {
+                    SpatialCommand::Begin {opacity,alpha_is_shape,mode,..}|
+                    SpatialCommand::BeginInSpace {opacity,alpha_is_shape,mode,..}=>(*opacity,*alpha_is_shape,*mode),
+                    _=>return None,
+                };
+                stack.last_mut()?.0.apply_retained_group_masked(child,opacity,ais,
+                    Some(&[resolve_mask(active_mask,remaining)?]),mode,cancelled)?;
+                work_trace.hit(9);
+                position=routes[route_index].groups[position].end?.checked_add(1)?;
+                continue;
+            }
+            // Release a mismatched retained frame before admitting its replacement.
+            routes[route_index].groups[position].frame=None;
+            match command {
+                SpatialCommand::SetMask {..}|SpatialCommand::SetBudgetedMask {..}=>active_mask=Some(command_index),
+                SpatialCommand::ClearMask=>active_mask=None,
+                SpatialCommand::Begin {isolated,knockout,opacity,alpha_is_shape,mode}=>{
+                    work_trace.hit(4);
+                    let child=stack.last_mut()?.0.child(*isolated,*knockout,cancelled,admit)?;
+                    stack.push((child,Some((*opacity,*alpha_is_shape,*mode,active_mask,position))));
+                    active_mask=None;
+                },
+                SpatialCommand::BeginInSpace {space:target,knockout,opacity,alpha_is_shape,mode}=>{
+                    work_trace.hit(4);
+                    let child=stack.last_mut()?.0.isolated_child_in_space(target,*knockout,cancelled,admit)?;
+                    stack.push((child,Some((*opacity,*alpha_is_shape,*mode,active_mask,position))));active_mask=None;
+                },
+                SpatialCommand::RetainedPaint {paint,mode,..}=>{
+                    {
+                        let frame=&mut stack.last_mut()?.0;
+                        if paint_cache[command_index].is_none() {
+                            paint_cache[command_index]=Some(frame.prepare_paint(paint,cancelled)?);
+                        }
+                        frame.apply_prepared_masked(0,paint_cache[command_index].as_ref()?,1.,false,
+                            resolve_mask(active_mask,remaining)?,*mode,cancelled)?;
+                    }
+                },
+                SpatialCommand::NativeSampledPaint {sample,alpha_is_shape,mode,..}=>{
+                    {
+                        let source=if let Some((index,source))=pending_native.take() {
+                            if index!=command_index {return None;}source
+                        } else {resolve_native(command_index,remaining)?};
+                        if let Some(source)=source {
+                            let frame=&mut stack.last_mut()?.0;let prepared=frame.prepare_native_pixel(source.pixel,source.space,cancelled)?;
+                            frame.apply_prepared_masked(0,&prepared,1.,*alpha_is_shape,resolve_mask(active_mask,remaining)?,*mode,cancelled)?;
+                        }
+                    }
+                },
+                SpatialCommand::End=>{
+                    if stack.len()<=1 {return None;}
+                    let (child,options)=stack.pop()?;let (opacity,ais,mode,mask,begin)=options?;
+                    stack.last_mut()?.0.apply_retained_group_masked(&child,opacity,ais,Some(&[resolve_mask(mask,remaining)?]),mode,cancelled)?;
+                    if routes[route_index].groups[begin].end.is_some() {
+                        routes[route_index].groups[begin].frame=Some(child);
+                    }
+                    active_mask=mask;
+                },
+                SpatialCommand::SampledPaint {sample,sample_cost,alpha_is_shape,mode,..}=>{
+                    {
+                        *remaining=remaining.checked_sub(*sample_cost).or_else(|| {
+                        if std::env::var_os("RRRAH_TRACE_SPATIAL_ROUTE").is_some() {
+                            eprintln!("SPATIAL_SAMPLE_BUDGET_REFUSAL remaining={remaining} cost={sample_cost}");
+                        }None
+                    })?;
+                        work_trace.hit(6);
+                        if let Some(source)=sample(point,cancelled)? {
+                            if cancelled() {return None;}
+                            let frame=&mut stack.last_mut()?.0;
+                            let prepared=frame.prepare_native_pixel(source,space,cancelled)?;
+                            frame.apply_prepared_masked(0,&prepared,1.,*alpha_is_shape,resolve_mask(active_mask,remaining)?,*mode,cancelled)?;
+                        }
+                    }
+                },
+                SpatialCommand::Paint(paint)=>{
+                    {
+                        let frame=&mut stack.last_mut()?.0;
+                        let prepared=frame.prepare_native_pixel(paint.source,space,cancelled)?;
+                        frame.apply_prepared_masked(0,&prepared,1.,false,resolve_mask(active_mask,remaining)?,paint.mode,cancelled)?;
+                    }
+                },
+            }
+            if point_override.is_some() && std::env::var_os("RRRAH_AI_TRACE_POINT_STATES").is_some() {
+                let (kind,options)=match command {
+                    SpatialCommand::Begin {isolated,knockout,opacity,alpha_is_shape,mode}=>
+                        ("begin",Some((*isolated,*knockout,*opacity,*alpha_is_shape,*mode))),
+                    SpatialCommand::BeginInSpace {knockout,opacity,alpha_is_shape,mode,..}=>
+                        ("begin_space",Some((true,*knockout,*opacity,*alpha_is_shape,*mode))),
+                    SpatialCommand::End=>("end",None),
+                    SpatialCommand::RetainedPaint {..}=>("retained",None),
+                    SpatialCommand::NativeSampledPaint {..}=>("native",None),
+                    SpatialCommand::SampledPaint {..}=>("sampled",None),
+                    SpatialCommand::Paint(_)=>("paint",None),
+                    SpatialCommand::ClearMask=>("clear_mask",None),
+                    _=>("set_mask",None),
+                };
+                let current=stack.last()?.0.diagnostic_current_pixel()?;
+                eprintln!("REAL_AI_POINT_STATE point={point:?} command={command_index} depth={} kind={kind} options={options:?} alpha={} native={:?}",
+                    stack.len(),current.alpha(),current.native_components());
+            }
+            if pending_run.as_ref().is_some_and(|(begin,_,_)|
+                routes[route_index].groups[*begin].run_end==Some(position)) {
+                let (begin,input,credit)=pending_run.take()?;
+                let output=stack.last()?.0.single_pixel_state(cancelled)?;
+                routes[route_index].groups[begin].transition=Some(Box::new(Transition {input,output,_credit:credit}));
+            }
+            position+=1;
+        }
+        if stack.len()!=1 {return None;}
+        let buffer=stack.pop()?.0.finish(cancelled)?;
+        let pixel=buffer.pixels.first().copied()?;
+        if routes[route_index].constant {routes[route_index].result=Some(pixel);}
+        Some(pixel)
+    };
+    if let Some(point)=point_override {
+        if !point.x.is_finite() || !point.y.is_finite() || point.x.abs()>1_048_576. || point.y.abs()>1_048_576. {return None;}
+        let _credit=admit(regions.len().checked_mul(size_of::<i32>())?)?;
+        let mut winding=Vec::new();winding.try_reserve_exact(regions.len()).ok()?;
+        let mut work=polygon_work;
+        for (path,_) in regions {
+            if cancelled() {return None;}
+            work=work.checked_sub(path.elements().len().checked_add(1)?)?;
+            winding.push(path.winding(point));
+            if cancelled() {return None;}
+        }
+        let mut coverage=[0u64;64];
+        let mut occupied_words=0u64;
+        for (i,value) in winding.iter().enumerate() {
+            if match regions[i].1 {Fill::NonZero=>*value!=0,Fill::EvenOdd=>*value%2!=0} {
+                coverage[i/64]|=1u64<<(i%64);occupied_words|=1u64<<(i/64);
+            }
+        }
+        evaluate(&winding,point,&coverage,occupied_words)
+    } else {compose_cells(regions,backdrop,x,y,polygon_work,cancelled,admit,&mut evaluate)}
+}
+
+#[test]
+fn spatial_opaque_and_translucent_overlap_preserves_coverage_and_source_order() {
+    use super::native_blend::Model;
+    let green=Pixel::from_native(Model::Rgb,&[0.,1.,0.],1.).unwrap();
+    let blue=Pixel::from_native(Model::Rgb,&[0.,0.,1.],1.).unwrap();
+    let clear=Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap();
+    let left=kurbo::Rect::new(0.,0.,0.25,1.).to_path(0.1);
+    let right=kurbo::Rect::new(0.25,0.,0.5,1.).to_path(0.1);
+    let regions=[(&left,Fill::NonZero),(&right,Fill::NonZero)];
+    let admit=|_|Some(Box::new(()) as Box<dyn std::any::Any+Send+Sync>);
+    let run=|paints:&[SpatialPaint<'_>]|compose_polygon_pixel(&regions,paints,clear,0,0,
+        1_000_000,1_000_000,&||false,&admit).unwrap();
+    for opacity in [1.,0.5] {
+        let paints:Vec<_>=(0..17).map(|_|SpatialPaint {regions:&[0],source:green.scale_opacity(opacity).unwrap(),mode:BlendMode::Normal}).collect();
+        let pixel=run(&paints);
+        assert!((pixel.alpha()-0.25*(1.-(1.-opacity).powi(17))).abs()<1e-12);
+        assert_eq!(pixel.native_components().unwrap()[..3],[0.,1.,0.]);
+    }
+    let pixel=run(&[SpatialPaint {regions:&[0],source:green,mode:BlendMode::Normal},
+        SpatialPaint {regions:&[1],source:blue,mode:BlendMode::Normal}]);
+    assert_eq!(pixel.alpha(),0.5);assert_eq!(pixel.native_components().unwrap()[..3],[0.,0.5,0.5]);
+    let pixel=run(&[SpatialPaint {regions:&[0],source:green,mode:BlendMode::Normal},
+        SpatialPaint {regions:&[0],source:blue,mode:BlendMode::Normal}]);
+    assert_eq!(pixel.alpha(),0.25);assert_eq!(pixel.native_components().unwrap()[..3],[0.,0.,1.]);
+}
+
+#[test]
+fn spatial_clips_native_cmyk_and_refusals_keep_admission_bounded() {
+    use super::native_blend::Model;
+    use std::sync::{Arc,atomic::{AtomicUsize,Ordering}};
+    struct Credit(Arc<AtomicUsize>,usize);
+    impl Drop for Credit {fn drop(&mut self) {self.0.fetch_sub(self.1,Ordering::Relaxed);}}
+    let used=Arc::new(AtomicUsize::new(0));
+    let requests=std::cell::Cell::new(0);let deny=std::cell::Cell::new(usize::MAX);
+    let admit=|bytes| {requests.set(requests.get()+1);if requests.get()==deny.get() {return None;}
+        used.fetch_add(bytes,Ordering::Relaxed);Some(Box::new(Credit(used.clone(),bytes)) as Box<dyn std::any::Any+Send+Sync>)};
+    let path=kurbo::Rect::new(0.,0.,1.,1.).to_path(0.1);
+    let clip=kurbo::Rect::new(0.1,0.,0.6,1.).to_path(0.1);
+    let regions=[(&path,Fill::NonZero),(&clip,Fill::EvenOdd)];
+    let source=Pixel::from_native(Model::Cmyk,&[0.25,0.5,0.75,0.125],0.5).unwrap();
+    let clear=Pixel::from_native(Model::Cmyk,&[0.;4],0.).unwrap();
+    let paints=[SpatialPaint {regions:&[0,1],source,mode:BlendMode::Normal}];
+    let run=|polygon,paint,cancelled:&dyn Fn()->bool|compose_polygon_pixel(&regions,&paints,clear,
+        0,0,polygon,paint,cancelled,&admit);
+    let polls=std::cell::Cell::new(0);
+    let pixel=run(1_000_000,1_000_000,&||{polls.set(polls.get()+1);false}).unwrap();
+    assert!((pixel.alpha()-0.25).abs()<1e-12);
+    assert_eq!(pixel.native_components().unwrap(),[0.25,0.5,0.75,0.125]);
+    assert_eq!(used.load(Ordering::Relaxed),0);
+    let total=requests.get();
+    for failure in 1..=total {
+        requests.set(0);deny.set(failure);assert!(run(1_000_000,1_000_000,&||false).is_none());
+        assert_eq!(used.load(Ordering::Relaxed),0);
+    }
+    deny.set(usize::MAX);
+    for stop in 1..=polls.get() {
+        let current=std::cell::Cell::new(0);
+        assert!(run(1_000_000,1_000_000,&||{current.set(current.get()+1);current.get()==stop}).is_none());
+        assert_eq!(used.load(Ordering::Relaxed),0);
+    }
+    assert!(run(2,1_000_000,&||false).is_none());
+    assert!(run(1_000_000,0,&||false).is_none());
+    assert_eq!(used.load(Ordering::Relaxed),0);
+}
+
+#[test]
+fn spatial_group_opacity_isolation_knockout_and_nesting_preserve_partial_area() {
+    use super::native_blend::Model;
+    use hayro_interpret::color::{AlphaColor,Color};
+    let rgb=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
+    let clear=Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap();
+    let source=Pixel::from_native(Model::Rgb,&[0.,1.,0.],0.5).unwrap();
+    let path=kurbo::Rect::new(0.,0.,0.25,1.).to_path(0.1);
+    let regions=[(&path,Fill::NonZero)];let admit=|_|Some(Box::new(()) as Box<dyn std::any::Any+Send+Sync>);
+    for isolated in [false,true] {for knockout in [false,true] {
+        let mut commands=vec![SpatialCommand::Begin {isolated,knockout,opacity:0.5,alpha_is_shape:false,mode:BlendMode::Normal}];
+        for _ in 0..17 {commands.push(SpatialCommand::Paint(SpatialPaint {regions:&[0],source,mode:BlendMode::Normal}));}
+        commands.push(SpatialCommand::End);
+        let pixel=compose_grouped_polygon_pixel(&regions,&commands,rgb.color_space(),clear,0,0,
+            1_000_000,1_000_000,&||false,&admit).unwrap();
+        let expected=0.25*0.5*if knockout {0.5} else {1.-0.5f64.powi(17)};
+        assert!((pixel.alpha()-expected).abs()<1e-12);
+        assert_eq!(pixel.native_components().unwrap()[..3],[0.,1.,0.]);
+    }}
+    let nested=[SpatialCommand::Begin {isolated:true,knockout:false,opacity:0.5,alpha_is_shape:false,mode:BlendMode::Normal},
+        SpatialCommand::Begin {isolated:false,knockout:true,opacity:0.5,alpha_is_shape:false,mode:BlendMode::Normal},
+        SpatialCommand::Paint(SpatialPaint {regions:&[0],source,mode:BlendMode::Normal}),
+        SpatialCommand::Paint(SpatialPaint {regions:&[0],source,mode:BlendMode::Normal}),
+        SpatialCommand::End,SpatialCommand::End];
+    let pixel=compose_grouped_polygon_pixel(&regions,&nested,rgb.color_space(),clear,0,0,
+        1_000_000,1_000_000,&||false,&admit).unwrap();
+    assert_eq!(pixel.alpha(),0.03125);assert_eq!(pixel.native_components().unwrap()[..3],[0.,1.,0.]);
+}
+
+#[test]
+fn spatial_group_failures_release_nested_frames_and_do_not_return_partial_pixels() {
+    use super::native_blend::Model;
+    use hayro_interpret::color::{AlphaColor,Color};
+    use std::sync::{Arc,atomic::{AtomicUsize,Ordering}};
+    struct Credit(Arc<AtomicUsize>,usize);
+    impl Drop for Credit {fn drop(&mut self) {self.0.fetch_sub(self.1,Ordering::Relaxed);}}
+    let used=Arc::new(AtomicUsize::new(0));let requests=std::cell::Cell::new(0);
+    let deny=std::cell::Cell::new(usize::MAX);
+    let admit=|bytes| {requests.set(requests.get()+1);if requests.get()==deny.get() {return None;}
+        used.fetch_add(bytes,Ordering::Relaxed);Some(Box::new(Credit(used.clone(),bytes)) as Box<dyn std::any::Any+Send+Sync>)};
+    let rgb=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
+    let clear=Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap();
+    let source=Pixel::from_native(Model::Rgb,&[0.25,0.5,0.75],0.5).unwrap();
+    let path=kurbo::Rect::new(0.,0.,0.5,1.).to_path(0.1);let regions=[(&path,Fill::NonZero)];
+    let commands=[SpatialCommand::Begin {isolated:true,knockout:false,opacity:0.75,alpha_is_shape:false,mode:BlendMode::Normal},
+        SpatialCommand::Paint(SpatialPaint {regions:&[0],source,mode:BlendMode::Normal}),SpatialCommand::End];
+    let run=|work,cancelled:&dyn Fn()->bool|compose_grouped_polygon_pixel(&regions,&commands,rgb.color_space(),clear,
+        0,0,1_000_000,work,cancelled,&admit);
+    let polls=std::cell::Cell::new(0);
+    let pixel=run(1_000_000,&||{polls.set(polls.get()+1);false}).unwrap();
+    assert_eq!(pixel.alpha(),0.1875);assert_eq!(used.load(Ordering::Relaxed),0);
+    let total=requests.get();
+    for failure in 1..=total {requests.set(0);deny.set(failure);
+        assert!(run(1_000_000,&||false).is_none());assert_eq!(used.load(Ordering::Relaxed),0);
+    }
+    deny.set(usize::MAX);
+    for stop in 1..=polls.get() {let current=std::cell::Cell::new(0);
+        assert!(run(1_000_000,&||{current.set(current.get()+1);current.get()==stop}).is_none());
+        assert_eq!(used.load(Ordering::Relaxed),0);
+    }
+    assert!(run(0,&||false).is_none());assert_eq!(used.load(Ordering::Relaxed),0);
+    assert!(compose_grouped_polygon_pixel(&regions,&[SpatialCommand::End],rgb.color_space(),clear,
+        0,0,1_000_000,1_000_000,&||false,&admit).is_none());
+}
+
+#[test]
+fn spatial_group_isolation_changes_multiply_backdrop_without_spreading_edge() {
+    use super::native_blend::Model;
+    use hayro_interpret::color::{AlphaColor,Color};
+    let rgb=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
+    let red=Pixel::from_native(Model::Rgb,&[1.,0.,0.],1.).unwrap();
+    let green=Pixel::from_native(Model::Rgb,&[0.,1.,0.],0.5).unwrap();
+    let path=kurbo::Rect::new(0.,0.,0.25,1.).to_path(0.1);let regions=[(&path,Fill::NonZero)];
+    for isolated in [false,true] {for knockout in [false,true] {
+        let mut commands=vec![SpatialCommand::Begin {isolated,knockout,opacity:1.,alpha_is_shape:false,mode:BlendMode::Normal}];
+        for _ in 0..17 {commands.push(SpatialCommand::Paint(SpatialPaint {regions:&[0],source:green,mode:BlendMode::Multiply}));}
+        commands.push(SpatialCommand::End);
+        let pixel=compose_grouped_polygon_pixel(&regions,&commands,rgb.color_space(),red,0,0,
+            1_000_000,1_000_000,&||false,&|_|Some(Box::new(()))).unwrap();
+        let residual=if knockout {0.5} else {0.5f64.powi(17)};
+        let expected=[0.75+0.25*residual,if isolated {0.25*(1.-residual)} else {0.},0.];
+        assert_eq!(pixel.alpha(),1.);
+        for (a,b) in pixel.native_components().unwrap().into_iter().zip(expected) {assert!((a-b).abs()<1e-12);}
+    }}
+}
+
+#[test]
+fn affine_sampled_paint_integrates_spatial_centroid_through_group_opacity() {
+    use super::native_blend::Model;
+    use hayro_interpret::color::{AlphaColor,Color};
+    let rgb=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
+    let clear=Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap();
+    let mut triangle=BezPath::new();triangle.move_to((0.,0.));triangle.line_to((1.,0.));triangle.line_to((0.,1.));triangle.close_path();
+    let regions=[(&triangle,Fill::NonZero)];
+    let calls=std::cell::Cell::new(0);
+    let sample=|point:kurbo::Point,cancelled:&dyn Fn()->bool| {
+        if cancelled() {return None;}
+        calls.set(calls.get()+1);
+        Some(Some(Pixel::from_native(Model::Rgb,&[point.x,point.y,0.],1.)?))
+    };
+    let mut commands=vec![SpatialCommand::Begin {isolated:true,knockout:false,opacity:0.5,alpha_is_shape:false,mode:BlendMode::Normal}];
+    for _ in 0..17 {commands.push(SpatialCommand::SampledPaint {regions:&[0],sample:&sample,sample_cost:8,alpha_is_shape:false,mode:BlendMode::Normal});}
+    commands.push(SpatialCommand::End);
+    let pixel=compose_grouped_polygon_pixel(&regions,&commands,rgb.color_space(),clear,0,0,
+        1_000_000,1_000_000,&||false,&|_|Some(Box::new(()))).unwrap();
+    assert!((pixel.alpha()-0.25).abs()<1e-12);
+    let components=pixel.native_components().unwrap();
+    assert!((components[0]-1./3.).abs()<1e-12 && (components[1]-1./3.).abs()<1e-12);
+    assert_eq!(components[2],0.);assert!(calls.get()>=17);
+}
+
+#[test]
+fn sampled_refusal_absence_work_and_post_sample_cancellation_return_no_partial_pixel() {
+    use super::native_blend::Model;
+    use hayro_interpret::color::{AlphaColor,Color};
+    let rgb=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
+    let clear=Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap();
+    let path=kurbo::Rect::new(0.,0.,1.,1.).to_path(0.1);let regions=[(&path,Fill::NonZero)];
+    let admit=|_|Some(Box::new(()) as Box<dyn std::any::Any+Send+Sync>);
+    let run=|sample:&SpatialSampler<'_>,work,cancelled:&dyn Fn()->bool| {
+        compose_grouped_polygon_pixel(&regions,&[SpatialCommand::SampledPaint {regions:&[0],sample,sample_cost:16,alpha_is_shape:false,mode:BlendMode::Normal}],
+            rgb.color_space(),clear,0,0,1_000_000,work,cancelled,&admit)
+    };
+    assert!(run(&|_,_|None,1_000_000,&||false).is_none());
+    let absent=run(&|_,_|Some(None),1_000_000,&||false).unwrap();assert_eq!(absent.alpha(),0.);
+    let calls=std::cell::Cell::new(0);
+    let source=Pixel::from_native(Model::Rgb,&[0.,1.,0.],1.).unwrap();
+    let sample=|_:kurbo::Point,_:&dyn Fn()->bool| {calls.set(calls.get()+1);Some(Some(source))};
+    assert!(run(&sample,3,&||false).is_none());assert_eq!(calls.get(),0);
+    let cancelled=std::cell::Cell::new(false);
+    let sample=|_:kurbo::Point,_:&dyn Fn()->bool| {cancelled.set(true);Some(Some(source))};
+    assert!(run(&sample,1_000_000,&||cancelled.get()).is_none());
+    let gray=Pixel::from_native(Model::Gray,&[0.5],1.).unwrap();
+    assert!(run(&|_,_|Some(Some(gray)),1_000_000,&||false).is_none());
+}
+
+#[test]
+fn spatial_parent_mask_applies_once_to_group_and_is_restored_after_exit() {
+    use super::native_blend::Model;
+    use hayro_interpret::color::{AlphaColor,Color};
+    let rgb=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
+    let clear=Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap();
+    let green=Pixel::from_native(Model::Rgb,&[0.,1.,0.],1.).unwrap();
+    let blue=Pixel::from_native(Model::Rgb,&[0.,0.,1.],1.).unwrap();
+    let unit=kurbo::Rect::new(0.,0.,1.,1.).to_path(0.1);
+    let edge=kurbo::Rect::new(0.,0.,0.25,1.).to_path(0.1);
+    let regions=[(&unit,Fill::NonZero),(&edge,Fill::NonZero)];
+    let mask=|point:kurbo::Point,cancelled:&dyn Fn()->bool| {
+        if cancelled() {None} else {Some(if point.x<0.25 {0.5} else {0.})}
+    };
+    let mut commands=vec![SpatialCommand::SetMask {sample:&mask,sample_cost:2},
+        SpatialCommand::Begin {isolated:true,knockout:false,opacity:1.,alpha_is_shape:false,mode:BlendMode::Normal},
+        SpatialCommand::ClearMask];
+    for _ in 0..17 {commands.push(SpatialCommand::Paint(SpatialPaint {regions:&[0],source:green,mode:BlendMode::Normal}));}
+    commands.push(SpatialCommand::End);
+    let admit=|_|Some(Box::new(()) as Box<dyn std::any::Any+Send+Sync>);
+    let before=compose_grouped_polygon_pixel(&regions,&commands,rgb.color_space(),clear,0,0,
+        1_000_000,1_000_000,&||false,&admit).unwrap();
+    assert_eq!(before.alpha(),0.125);assert_eq!(before.native_components().unwrap()[..3],[0.,1.,0.]);
+    commands.push(SpatialCommand::Paint(SpatialPaint {regions:&[0],source:blue,mode:BlendMode::Normal}));
+    let pixel=compose_grouped_polygon_pixel(&regions,&commands,rgb.color_space(),clear,0,0,
+        1_000_000,1_000_000,&||false,&admit).unwrap();
+    assert_eq!(pixel.alpha(),0.1875);
+    let components=pixel.native_components().unwrap();
+    assert!((components[1]-1./3.).abs()<1e-12 && (components[2]-2./3.).abs()<1e-12);
+}
+
+#[test]
+fn affine_spatial_mask_modulates_sampled_paint_before_area_averaging() {
+    use super::native_blend::Model;
+    use hayro_interpret::color::{AlphaColor,Color};
+    let rgb=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
+    let clear=Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap();
+    let green=Pixel::from_native(Model::Rgb,&[0.,1.,0.],1.).unwrap();
+    let mut triangle=BezPath::new();triangle.move_to((0.,0.));triangle.line_to((1.,0.));triangle.line_to((0.,1.));triangle.close_path();
+    let regions=[(&triangle,Fill::NonZero)];
+    let mask=|point:kurbo::Point,_:&dyn Fn()->bool|Some(point.x);
+    let sample=|_:kurbo::Point,_:&dyn Fn()->bool|Some(Some(green));
+    let commands=[SpatialCommand::SetMask {sample:&mask,sample_cost:1},
+        SpatialCommand::SampledPaint {regions:&[0],sample:&sample,sample_cost:1,alpha_is_shape:false,mode:BlendMode::Normal}];
+    let pixel=compose_grouped_polygon_pixel(&regions,&commands,rgb.color_space(),clear,0,0,
+        1_000_000,1_000_000,&||false,&|_|Some(Box::new(()))).unwrap();
+    assert!((pixel.alpha()-1./6.).abs()<1e-12);
+    assert_eq!(pixel.native_components().unwrap()[..3],[0.,1.,0.]);
+}
+
+#[test]
+fn spatial_mask_errors_budget_cancellation_and_admission_release_every_frame() {
+    use super::native_blend::Model;
+    use hayro_interpret::color::{AlphaColor,Color};
+    use std::sync::{Arc,atomic::{AtomicUsize,Ordering}};
+    struct Credit(Arc<AtomicUsize>,usize);
+    impl Drop for Credit {fn drop(&mut self) {self.0.fetch_sub(self.1,Ordering::Relaxed);}}
+    let used=Arc::new(AtomicUsize::new(0));let requests=std::cell::Cell::new(0);let deny=std::cell::Cell::new(usize::MAX);
+    let admit=|bytes| {requests.set(requests.get()+1);if requests.get()==deny.get() {return None;}
+        used.fetch_add(bytes,Ordering::Relaxed);Some(Box::new(Credit(used.clone(),bytes)) as Box<dyn std::any::Any+Send+Sync>)};
+    let rgb=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
+    let clear=Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap();
+    let green=Pixel::from_native(Model::Rgb,&[0.,1.,0.],1.).unwrap();
+    let path=kurbo::Rect::new(0.,0.,1.,1.).to_path(0.1);let regions=[(&path,Fill::NonZero)];
+    let run=|sample:&SpatialMaskSampler<'_>,work,cancelled:&dyn Fn()->bool| {
+        let commands=[SpatialCommand::SetMask {sample,sample_cost:16},
+            SpatialCommand::Paint(SpatialPaint {regions:&[0],source:green,mode:BlendMode::Normal})];
+        compose_grouped_polygon_pixel(&regions,&commands,rgb.color_space(),clear,0,0,
+            1_000_000,work,cancelled,&admit)
+    };
+    let valid=|_:kurbo::Point,_:&dyn Fn()->bool|Some(0.5);
+    let polls=std::cell::Cell::new(0);
+    assert_eq!(run(&valid,1_000_000,&||{polls.set(polls.get()+1);false}).unwrap().alpha(),0.5);
+    let total=requests.get();assert_eq!(used.load(Ordering::Relaxed),0);
+    for failure in 1..=total {requests.set(0);deny.set(failure);assert!(run(&valid,1_000_000,&||false).is_none());assert_eq!(used.load(Ordering::Relaxed),0);}
+    deny.set(usize::MAX);
+    for stop in 1..=polls.get() {let current=std::cell::Cell::new(0);
+        assert!(run(&valid,1_000_000,&||{current.set(current.get()+1);current.get()==stop}).is_none());assert_eq!(used.load(Ordering::Relaxed),0);
+    }
+    for value in [f64::NAN,f64::INFINITY,-0.1,1.1] {assert!(run(&|_,_|Some(value),1_000_000,&||false).is_none());assert_eq!(used.load(Ordering::Relaxed),0);}
+    assert!(run(&|_,_|None,1_000_000,&||false).is_none());
+    let calls=std::cell::Cell::new(0);let sample=|_:kurbo::Point,_:&dyn Fn()->bool| {calls.set(calls.get()+1);Some(0.5)};
+    assert!(run(&sample,3,&||false).is_none());assert_eq!(calls.get(),0);
+    let cancelled=std::cell::Cell::new(false);
+    assert!(run(&|_,_|{cancelled.set(true);Some(0.5)},1_000_000,&||cancelled.get()).is_none());
+    assert_eq!(used.load(Ordering::Relaxed),0);
+}
+
+pub(super) struct RasterCells {
+    /// First path is the image footprint; remaining paths partition texels.
+    pub(super) paths:Vec<BezPath>,
+    _credit:Box<dyn std::any::Any+Send+Sync>,
+}
+/// Nearest-neighbor raster geometry, conservatively selected by inverse bounds.
+/// Original component storage stays with the source. Bilinear/nonlinear source
+/// integration is separate; callers must not use this as its qualification.
+pub(super) fn admitted_raster_pixel_cells(
+    width:u32,height:u32,transform:kurbo::Affine,rect:kurbo::Rect,work_limit:usize,
+    cancelled:&dyn Fn()->bool,admit:&dyn Fn(usize)->Option<Box<dyn std::any::Any+Send+Sync>>,
+ )->Option<RasterCells> {
+    admitted_raster_pixel_cells_budget(width,height,transform,rect,&mut {work_limit},cancelled,admit)
+}
+fn admitted_raster_pixel_cells_budget(
+    width:u32,height:u32,transform:kurbo::Affine,rect:kurbo::Rect,remaining:&mut usize,
+    cancelled:&dyn Fn()->bool,admit:&dyn Fn(usize)->Option<Box<dyn std::any::Any+Send+Sync>>,
+)->Option<RasterCells> {
+    if cancelled() || width==0 || height==0
+        || [rect.x0,rect.y0,rect.x1,rect.y1].iter().any(|v|!v.is_finite())
+        || rect.width()<=0. || rect.height()<=0. {return None;}
+    let determinant=transform.determinant();
+    if !determinant.is_finite() || determinant==0. {return None;}
+    let query=transform.inverse().transform_rect_bbox(rect);
+    if [query.x0,query.y0,query.x1,query.y1].iter().any(|v|!v.is_finite()) {return None;}
+    let x0=query.x0.floor().clamp(0.,f64::from(width)) as u32;
+    let x1=query.x1.ceil().clamp(0.,f64::from(width)) as u32;
+    let y0=query.y0.floor().clamp(0.,f64::from(height)) as u32;
+    let y1=query.y1.ceil().clamp(0.,f64::from(height)) as u32;
+    let count=usize::try_from(x1.checked_sub(x0)?).ok()?.checked_mul(usize::try_from(y1.checked_sub(y0)?).ok()?)?.checked_add(1)?;
+    if count>4095 {return None;}
+    let bytes=count.checked_mul(size_of::<BezPath>().checked_add(5*size_of::<kurbo::PathEl>())?)?;
+    let credit=admit(bytes)?;
+    let mut paths=Vec::new();paths.try_reserve_exact(count).ok()?;
+    let mut emit=|bounds:kurbo::Rect|->Option<()> {
+        if cancelled() {return None;}
+        *remaining=remaining.checked_sub(1)?;
+        let mut elements=Vec::new();elements.try_reserve_exact(5).ok()?;
+        for point in [kurbo::Point::new(bounds.x0,bounds.y0),kurbo::Point::new(bounds.x1,bounds.y0),
+            kurbo::Point::new(bounds.x1,bounds.y1),kurbo::Point::new(bounds.x0,bounds.y1)] {
+            *remaining=remaining.checked_sub(1)?;if cancelled() {return None;}
+            let point=transform*point;
+            if !point.x.is_finite() || !point.y.is_finite() || point.x.abs()>1_048_576. || point.y.abs()>1_048_576. {return None;}
+            elements.push(if elements.is_empty() {kurbo::PathEl::MoveTo(point)} else {kurbo::PathEl::LineTo(point)});
+        }
+        elements.push(kurbo::PathEl::ClosePath);paths.push(BezPath::from_vec(elements));Some(())
+    };
+    emit(kurbo::Rect::new(0.,0.,f64::from(width),f64::from(height)))?;
+    for y in y0..y1 {for x in x0..x1 {emit(kurbo::Rect::new(f64::from(x),f64::from(y),f64::from(x)+1.,f64::from(y)+1.))?;}}
+    Some(RasterCells {paths,_credit:credit})
+}
+
+#[test]
+fn native_raster_cells_preserve_texel_color_alpha_and_repeat_correlation() {
+    use super::native_blend::Model;
+    use hayro_interpret::color::{AlphaColor,Color};
+    let rgb=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
+    let clear=Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap();
+    let transform=kurbo::Affine::new([0.5,0.,0.,1.,0.,0.]);
+    let cells=admitted_raster_pixel_cells(2,1,transform,kurbo::Rect::new(0.,0.,1.,1.),1000,
+        &||false,&|_|Some(Box::new(()))).unwrap();assert_eq!(cells.paths.len(),3);
+    let regions:Vec<_>=cells.paths.iter().map(|path|(path,Fill::NonZero)).collect();
+    let inverse=transform.inverse();
+    let sample=|point:kurbo::Point,_:&dyn Fn()->bool| {
+        let p=inverse*point;
+        Some(Some(if p.x<1. {Pixel::from_native(Model::Rgb,&[0.,1.,0.],0.5)?}
+            else {Pixel::from_native(Model::Rgb,&[0.,0.,1.],1.)?}))
+    };
+    let commands=[SpatialCommand::SampledPaint {regions:&[0],sample:&sample,sample_cost:4,alpha_is_shape:false,mode:BlendMode::Normal}];
+    let pixel=compose_grouped_polygon_pixel(&regions,&commands,rgb.color_space(),clear,0,0,
+        1_000_000,1_000_000,&||false,&|_|Some(Box::new(()))).unwrap();
+    assert_eq!(pixel.alpha(),0.75);
+    let c=pixel.native_components().unwrap();assert!((c[1]-1./3.).abs()<1e-12 && (c[2]-2./3.).abs()<1e-12);
+    // Repeated paints correlate at each texel, before area averaging.
+    // The translucent green half accumulates; the opaque blue half stays opaque.
+    let commands:Vec<_>=(0..17).map(|_|SpatialCommand::SampledPaint {
+        regions:&[0],sample:&sample,sample_cost:4,alpha_is_shape:false,mode:BlendMode::Normal}).collect();
+    let repeated=compose_grouped_polygon_pixel(&regions,&commands,rgb.color_space(),clear,0,0,
+        1_000_000,1_000_000,&||false,&|_|Some(Box::new(()))).unwrap();
+    let green_alpha=1.-0.5_f64.powi(17);
+    let expected_alpha=0.5*(green_alpha+1.);
+    assert!((repeated.alpha()-expected_alpha).abs()<1e-12);
+    let c=repeated.native_components().unwrap();
+    assert!((c[1]-0.5*green_alpha/expected_alpha).abs()<1e-12);
+    assert!((c[2]-0.5/expected_alpha).abs()<1e-12);
+}
+
+#[test]
+fn raster_geometry_refuses_dense_or_invalid_queries_and_releases_cancelled_storage() {
+    use std::sync::{Arc,atomic::{AtomicUsize,Ordering}};
+    struct Credit(Arc<AtomicUsize>,usize);
+    impl Drop for Credit {fn drop(&mut self) {self.0.fetch_sub(self.1,Ordering::Relaxed);}}
+    let used=Arc::new(AtomicUsize::new(0));let requests=std::cell::Cell::new(0);
+    let admit=|bytes| {requests.set(requests.get()+1);used.fetch_add(bytes,Ordering::Relaxed);
+        Some(Box::new(Credit(used.clone(),bytes)) as Box<dyn std::any::Any+Send+Sync>)};
+    let rect=kurbo::Rect::new(0.,0.,1.,1.);let transform=kurbo::Affine::new([0.5,0.1,0.25,1.,0.,0.]);
+    let polls=std::cell::Cell::new(0);
+    let cells=admitted_raster_pixel_cells(2,2,transform,rect,1000,&||{polls.set(polls.get()+1);false},&admit).unwrap();
+    assert!(used.load(Ordering::Relaxed)>0);drop(cells);assert_eq!(used.load(Ordering::Relaxed),0);
+    for stop in 1..=polls.get() {let current=std::cell::Cell::new(0);
+        assert!(admitted_raster_pixel_cells(2,2,transform,rect,1000,&||{current.set(current.get()+1);current.get()==stop},&admit).is_none());
+        assert_eq!(used.load(Ordering::Relaxed),0);
+    }
+    assert!(admitted_raster_pixel_cells(2,2,transform,rect,2,&||false,&admit).is_none());
+    assert_eq!(used.load(Ordering::Relaxed),0);
+    assert!(admitted_raster_pixel_cells(2,2,transform,rect,1000,&||false,&|_|None).is_none());
+    let before=requests.get();
+    assert!(admitted_raster_pixel_cells(100,100,kurbo::Affine::scale(0.01),rect,100000,&||false,&admit).is_none());
+    assert!(admitted_raster_pixel_cells(1,1,kurbo::Affine::scale(0.),rect,1000,&||false,&admit).is_none());
+    assert_eq!(requests.get(),before,"dense/singular requests refuse before allocation");
+}
+
+
+/// Retain both source grids under one aggregate geometry-work allowance.
+/// The mask maps to the same footprint even when its resolution differs.
+pub(super) fn admitted_raster_mask_cells(
+    width:u32,height:u32,mask_width:u32,mask_height:u32,transform:kurbo::Affine,
+    rect:kurbo::Rect,work_limit:usize,cancelled:&dyn Fn()->bool,
+    admit:&dyn Fn(usize)->Option<Box<dyn std::any::Any+Send+Sync>>,
+)->Option<(RasterCells,RasterCells)> {
+    if width==0 || height==0 || mask_width==0 || mask_height==0 {return None;}
+    let mut work=work_limit;
+    let color=admitted_raster_pixel_cells_budget(width,height,transform,rect,&mut work,cancelled,admit)?;
+    let mask_transform=transform*kurbo::Affine::scale_non_uniform(
+        f64::from(width)/f64::from(mask_width),f64::from(height)/f64::from(mask_height));
+    let mask=admitted_raster_pixel_cells_budget(mask_width,mask_height,mask_transform,rect,&mut work,cancelled,admit)?;
+    if color.paths.len().checked_add(mask.paths.len())?>4095 {return None;}
+    Some((color,mask))
+}
+
+#[test]
+fn distinct_raster_mask_grid_preserves_color_alpha_correlation() {
+    use super::native_blend::Model;
+    use hayro_interpret::color::{AlphaColor,Color};
+    let rgb=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
+    let transform=kurbo::Affine::scale_non_uniform(0.5,1.);
+    let (color,mask)=admitted_raster_mask_cells(2,1,4,1,transform,kurbo::Rect::new(0.,0.,1.,1.),1000,
+        &||false,&|_|Some(Box::new(()))).unwrap();
+    let regions:Vec<_>=color.paths.iter().chain(mask.paths.iter()).map(|p|(p,Fill::NonZero)).collect();
+    let sample=|point:kurbo::Point,_:&dyn Fn()->bool| {
+        let alpha=[0.,1.,0.5,1.][(point.x*4.).floor() as usize];
+        Some(Some(Pixel::from_native(Model::Rgb,if point.x<0.5 {&[0.,1.,0.]} else {&[0.,0.,1.]},alpha)?))
+    };
+    let commands=[SpatialCommand::SampledPaint {regions:&[0],sample:&sample,sample_cost:4,alpha_is_shape:false,mode:BlendMode::Normal}];
+    let pixel=compose_grouped_polygon_pixel(&regions,&commands,rgb.color_space(),
+        Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap(),0,0,1_000_000,1_000_000,
+        &||false,&|_|Some(Box::new(()))).unwrap();
+    assert_eq!(pixel.alpha(),0.625);
+    assert_eq!(pixel.native_components().unwrap()[..3],[0.,0.4,0.6]);
+    // Three color paths and five mask paths each cost five work units.
+    assert!(admitted_raster_mask_cells(2,1,4,1,transform,kurbo::Rect::new(0.,0.,1.,1.),39,
+        &||false,&|_|Some(Box::new(()))).is_none());
+    assert!(admitted_raster_mask_cells(2,1,4,1,transform,kurbo::Rect::new(0.,0.,1.,1.),40,
+        &||false,&|_|Some(Box::new(()))).is_some());
+}
+
+
+#[test]
+fn native_mask_point_keeps_partial_geometry_before_parent_averaging() {
+    use super::native_blend::Model;
+    use hayro_interpret::color::{AlphaColor,Color};
+    let rgb=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
+    let clear=Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap();
+    let green=Pixel::from_native(Model::Rgb,&[0.,1.,0.],1.).unwrap();
+    let path=kurbo::Rect::new(0.,0.,0.25,1.).to_path(0.1);let regions=[(&path,Fill::NonZero)];
+    let mask=|_:kurbo::Point,_:&dyn Fn()->bool|Some(0.25);
+    let commands=[SpatialCommand::SetMask {sample:&mask,sample_cost:1},
+        SpatialCommand::Begin {isolated:true,knockout:false,opacity:1.,alpha_is_shape:false,mode:BlendMode::Normal},
+        SpatialCommand::Paint(SpatialPaint {regions:&[0],source:green,mode:BlendMode::Normal}),SpatialCommand::End];
+    for (x,alpha) in [(0.125,0.25),(0.5,0.)] {
+        let pixel=compose_grouped_polygon_point(&regions,&commands,rgb.color_space(),clear,kurbo::Point::new(x,0.5),
+            1000,1000,&||false,&|_|Some(Box::new(()))).unwrap();assert_eq!(pixel.alpha(),alpha);
+    }
+    let averaged=compose_grouped_polygon_pixel(&regions,&commands,rgb.color_space(),clear,0,0,
+        10000,10000,&||false,&|_|Some(Box::new(()))).unwrap();assert_eq!(averaged.alpha(),0.0625);
+    assert!(compose_grouped_polygon_point(&regions,&commands,rgb.color_space(),clear,kurbo::Point::new(0.125,0.5),
+        1,1000,&||false,&|_|Some(Box::new(()))).is_none());
+}
+
+#[test]
+fn sampled_raster_alpha_is_shape_preserves_knockout_uncovered_backdrop() {
+    use super::native_blend::Model;
+    use hayro_interpret::color::{AlphaColor,Color};
+    let rgb=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
+    let clear=Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap();
+    let green=Pixel::from_native(Model::Rgb,&[0.,1.,0.],1.).unwrap();
+    let blue=Pixel::from_native(Model::Rgb,&[0.,0.,1.],0.5).unwrap();
+    let path=kurbo::Rect::new(0.,0.,1.,1.).to_path(0.1);let regions=[(&path,Fill::NonZero)];
+    let sample=|_:kurbo::Point,_:&dyn Fn()->bool|Some(Some(blue));
+    for ais in [false,true] {
+        let commands=[SpatialCommand::Begin {isolated:true,knockout:true,opacity:1.,alpha_is_shape:false,mode:BlendMode::Normal},
+            SpatialCommand::Paint(SpatialPaint {regions:&[0],source:green,mode:BlendMode::Normal}),
+            SpatialCommand::SampledPaint {regions:&[0],sample:&sample,sample_cost:1,alpha_is_shape:ais,mode:BlendMode::Normal},
+            SpatialCommand::End];
+        let pixel=compose_grouped_polygon_pixel(&regions,&commands,rgb.color_space(),clear,0,0,
+            100000,100000,&||false,&|_|Some(Box::new(()))).unwrap();
+        assert_eq!(pixel.alpha(),if ais {1.} else {0.5});
+        assert_eq!(pixel.native_components().unwrap()[..3],if ais {[0.,0.5,0.5]} else {[0.,0.,1.]});
+    }
+}
+
+impl RasterCells {
+    pub(super) fn into_parts(self)->(Vec<BezPath>,Box<dyn std::any::Any+Send+Sync>) {
+        (self.paths,self._credit)
+    }
+}
+/// Partition a finite pixel rectangle by infinite source boundary lines.
+/// Each path is one clipped half-plane; there is no implied source footprint.
+pub(super) fn admitted_line_partition_cells(
+    lines:&[[kurbo::Point;2]],rect:kurbo::Rect,work_limit:usize,cancelled:&dyn Fn()->bool,
+    admit:&dyn Fn(usize)->Option<Box<dyn std::any::Any+Send+Sync>>,
+)->Option<RasterCells> {
+    if cancelled() || lines.len()>64 || rect.width()<=0. || rect.height()<=0.
+        || [rect.x0,rect.x1,rect.y0,rect.y1].iter().any(|v|!v.is_finite() || v.abs()>1_048_576.) {return None;}
+    let credit=admit(lines.len().checked_mul(size_of::<BezPath>()+6*size_of::<kurbo::PathEl>())?)?;
+    let mut paths=Vec::new();paths.try_reserve_exact(lines.len()).ok()?;
+    let mut work=work_limit;
+    for [a,b] in lines {
+        if cancelled() {return None;}
+        work=work.checked_sub(20)?;
+        let d=*b-*a;
+        if [a.x,a.y,b.x,b.y,d.x,d.y].iter().any(|v|!v.is_finite()) || d.hypot2()==0. {return None;}
+        let corners=[kurbo::Point::new(rect.x0,rect.y0),kurbo::Point::new(rect.x1,rect.y0),
+            kurbo::Point::new(rect.x1,rect.y1),kurbo::Point::new(rect.x0,rect.y1)];
+        let side=|p:kurbo::Point|{let q=p-*a;d.x*q.y-d.y*q.x};
+        let mut points=[kurbo::Point::ZERO;8];let mut count=0;
+        for index in 0..4 {
+            if cancelled() {return None;}
+            let p=corners[index];let q=corners[(index+1)%4];let sp=side(p);let sq=side(q);
+            if !sp.is_finite() || !sq.is_finite() {return None;}
+            if sp>=0. {points[count]=p;count+=1;}
+            if (sp<0. && sq>0.) || (sp>0. && sq<0.) {
+                let t=sp/(sp-sq);let crossing=p+(q-p)*t;
+                if !t.is_finite() || !crossing.x.is_finite() || !crossing.y.is_finite() {return None;}
+                points[count]=crossing;count+=1;
+            }
+        }
+        let mut elements=Vec::new();elements.try_reserve_exact(6).ok()?;
+        if count>=3 {
+            for (index,p) in points[..count].iter().enumerate() {elements.push(if index==0 {kurbo::PathEl::MoveTo(*p)} else {kurbo::PathEl::LineTo(*p)});}
+            elements.push(kurbo::PathEl::ClosePath);
+        }
+        paths.push(BezPath::from_vec(elements));
+    }
+    Some(RasterCells {paths,_credit:credit})
+}
+
+#[test]
+fn budgeted_mask_shares_work_across_commands_and_rejects_budget_growth() {
+    use super::native_blend::Model;
+    use hayro_interpret::color::{AlphaColor,Color};
+    let rgb=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
+    let clear=Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap();
+    let green=Pixel::from_native(Model::Rgb,&[0.,1.,0.],1.).unwrap();
+    let path=kurbo::Rect::new(0.,0.,1.,1.).to_path(0.1);
+    let regions=[(&path,Fill::NonZero)];
+    let mask_cost=std::cell::Cell::new(7usize);
+    let mask=|_:kurbo::Point,_:&dyn Fn()->bool,remaining:&mut usize| {
+        *remaining=remaining.checked_sub(mask_cost.get())?;Some(0.5)
+    };
+    let commands=[SpatialCommand::SetBudgetedMask {sample:&mask},
+        SpatialCommand::Paint(SpatialPaint {regions:&[0],source:green,mode:BlendMode::Normal}),
+        SpatialCommand::SetBudgetedMask {sample:&mask},
+        SpatialCommand::Paint(SpatialPaint {regions:&[0],source:green,mode:BlendMode::Normal})];
+    let run=|commands:&[SpatialCommand<'_>],work|compose_grouped_polygon_point(
+        &regions,commands,rgb.color_space(),clear,kurbo::Point::new(0.5,0.5),
+        100,work,&||false,&|_|Some(Box::new(())));
+    // Discover the preparation boundary, then verify both masks draw from
+    // the same allowance independently of the current route implementation.
+    let required=(1..1000).find(|&work|run(&commands,work).is_some()).unwrap();
+    assert!(run(&commands,required-1).is_none());
+    assert_eq!(run(&commands,required).unwrap().alpha(),0.75);
+    mask_cost.set(8);
+    assert!(run(&commands,required+1).is_none());
+    assert_eq!(run(&commands,required+2).unwrap().alpha(),0.75);
+    let minted=std::cell::Cell::new(false);
+    let mint=|_:kurbo::Point,_:&dyn Fn()->bool,remaining:&mut usize| {minted.set(true);*remaining+=1;Some(1.)};
+    assert!(run(&[SpatialCommand::SetBudgetedMask {sample:&mint},SpatialCommand::Paint(SpatialPaint {regions:&[0],source:green,mode:BlendMode::Normal})],10000).is_none());
+    assert!(minted.get());
+}
+
+#[test]
+fn empty_groups_prune_masks_but_preserve_painted_nested_groups() {
+    use super::native_blend::Model;
+    use hayro_interpret::color::{AlphaColor,Color};
+    let rgb=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
+    let clear=Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap();
+    let green=Pixel::from_native(Model::Rgb,&[0.,1.,0.],1.).unwrap();
+    let path=kurbo::Rect::new(0.,0.,1.,1.).to_path(0.1);let regions=[(&path,Fill::NonZero)];
+    let mask=|_:kurbo::Point,_:&dyn Fn()->bool|Some(0.25);
+    for isolated in [false,true] {for knockout in [false,true] {
+        let begin=SpatialCommand::Begin {isolated,knockout,opacity:1.,alpha_is_shape:false,mode:BlendMode::Normal};
+        let mut commands=vec![begin,begin,SpatialCommand::SetMask {sample:&mask,sample_cost:7},
+            SpatialCommand::End,SpatialCommand::End,begin,begin,
+            SpatialCommand::Paint(SpatialPaint {regions:&[0],source:green,mode:BlendMode::Normal}),
+            SpatialCommand::End,SpatialCommand::End];
+        let run=|commands:&[SpatialCommand<'_>]|compose_grouped_polygon_point(&regions,commands,
+            rgb.color_space(),clear,kurbo::Point::new(0.5,0.5),100,100,&||false,&|_|Some(Box::new(()))).unwrap();
+        let before=run(&commands);prune_empty_groups(&mut commands,&||false).unwrap();
+        assert_eq!(commands.len(),5);let after=run(&commands);
+        assert_eq!(before.alpha(),after.alpha());assert_eq!(before.native_components(),after.native_components());
+    }}
+    assert!(prune_empty_groups(&mut vec![SpatialCommand::End],&||false).is_none());
+    assert!(prune_empty_groups(&mut vec![SpatialCommand::ClearMask],&||true).is_none());
+}
+
+#[test]
+fn lazy_mask_skips_replaced_source_and_reuses_only_within_one_fragment() {
+    use super::native_blend::Model;
+    use hayro_interpret::color::{AlphaColor,Color};
+    let rgb=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
+    let clear=Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap();
+    let green=Pixel::from_native(Model::Rgb,&[0.,1.,0.],1.).unwrap();
+    let path=kurbo::Rect::new(0.,0.,1.,1.).to_path(0.1);let regions=[(&path,Fill::NonZero)];
+    let unused=|_:kurbo::Point,_:&dyn Fn()->bool|->Option<f64>{panic!("replaced mask sampled")};
+    let calls=std::cell::Cell::new(0);
+    let used=|p:kurbo::Point,_:&dyn Fn()->bool|{calls.set(calls.get()+1);Some(p.x)};
+    let paint=SpatialCommand::Paint(SpatialPaint {regions:&[0],source:green,mode:BlendMode::Normal});
+    let commands=[SpatialCommand::SetMask {sample:&unused,sample_cost:100},
+        SpatialCommand::SetMask {sample:&used,sample_cost:7},paint,paint];
+    for x in [0.25,0.75] {
+        let pixel=compose_grouped_polygon_point(&regions,&commands,rgb.color_space(),clear,
+            kurbo::Point::new(x,0.5),100,36,&||false,&|_|Some(Box::new(()))).unwrap();
+        assert_eq!(pixel.alpha(),1.-(1.-x)*(1.-x));
+    }
+    assert_eq!(calls.get(),2);
+}
+
+/// Canonicalize only structurally equal paths with the same fill rule.
+/// Hash collisions are checked by full equality and never merge distinct paths.
+pub(super) fn deduplicate_regions(
+    regions:&mut Vec<(&BezPath,Fill)>,requirements:&mut [Vec<usize>],
+    cancelled:&dyn Fn()->bool,admit:&dyn Fn(usize)->Option<Box<dyn std::any::Any+Send+Sync>>,
+)->Option<()> {
+    use std::hash::{Hash,Hasher};
+    let count=regions.len();if count>4095 {return None;}
+    let _credit=admit(count.checked_mul(size_of::<(u64,usize)>()+2*size_of::<usize>())?)?;
+    let mut order=Vec::<(u64,usize)>::new();order.try_reserve_exact(count).ok()?;
+    let mut map=Vec::new();map.try_reserve_exact(count).ok()?;map.resize(count,0);
+    let mut representatives=Vec::new();representatives.try_reserve_exact(count).ok()?;
+    let mut work=4_000_000usize;
+    for (index,(path,fill)) in regions.iter().enumerate() {
+        if let Some(&(hash,_))=order.iter().find(|&&(_,other)|
+            std::ptr::eq(regions[other].0,*path) && regions[other].1==*fill) {
+            order.push((hash,index));continue;
+        }
+        let mut hash=std::collections::hash_map::DefaultHasher::new();
+        matches!(fill,Fill::EvenOdd).hash(&mut hash);
+        for element in path.elements() {
+            if cancelled() {return None;}let Some(next)=work.checked_sub(1) else {return Some(());};work=next;
+            let mut point=|p:kurbo::Point|{p.x.to_bits().hash(&mut hash);p.y.to_bits().hash(&mut hash);};
+            match element {
+                kurbo::PathEl::MoveTo(p)=>{point(*p);0u8.hash(&mut hash);},
+                kurbo::PathEl::LineTo(p)=>{point(*p);1u8.hash(&mut hash);},
+                kurbo::PathEl::QuadTo(a,b)=>{point(*a);point(*b);2u8.hash(&mut hash);},
+                kurbo::PathEl::CurveTo(a,b,c)=>{point(*a);point(*b);point(*c);3u8.hash(&mut hash);},
+                kurbo::PathEl::ClosePath=>4u8.hash(&mut hash),
+            }
+        }
+        order.push((hash.finish(),index));
+    }
+    order.sort_unstable();let mut bucket_start=0;
+    for position in 0..order.len() {
+        if cancelled() {return None;}
+        if position==0 || order[position].0!=order[position-1].0 {bucket_start=position;}
+        let index=order[position].1;let mut existing=None;
+        for &(_,other) in &order[bucket_start..position] {
+            if !std::ptr::eq(regions[index].0,regions[other].0) {
+                let Some(next)=work.checked_sub(regions[index].0.elements().len().checked_add(1)?) else {return Some(());};work=next;
+            }
+            if regions[index].1==regions[other].1 && regions[index].0.elements()==regions[other].0.elements() {
+                existing=Some(map[other]);break;
+            }
+        }
+        map[index]=if let Some(existing)=existing {existing} else {
+            let target=representatives.len();representatives.push(index);target
+        };
+    }
+    // Hash buckets find duplicates, but retained representatives follow input
+    // order so source-priority triangle ordering survives deduplication. Reuse
+    // the admitted sort and representative buffers for the inverse permutation.
+    let n=representatives.len();let levels=usize::BITS-n.leading_zeros();
+    let Some(_remaining_preparation_work)=work.checked_sub(n.checked_mul(levels as usize+1)?) else {return Some(());};
+    for (old,&index) in representatives.iter().enumerate() {if cancelled() {return None;}order[old]=(index as u64,old);}
+    order.truncate(n);if cancelled() {return None;}order.sort_unstable();if cancelled() {return None;}
+    for (new,&(_,old)) in order.iter().enumerate() {if cancelled() {return None;}representatives[old]=new;}
+    for required in requirements {
+        for index in required.iter_mut() {if cancelled() {return None;}*index=*representatives.get(*map.get(*index)?)?;}
+        required.sort_unstable();required.dedup();
+    }
+    // Copy representatives before compacting; source input order is preserved.
+    let _copy_credit=admit(representatives.len().checked_mul(size_of::<(&BezPath,Fill)>())?)?;
+    let mut unique=Vec::new();unique.try_reserve_exact(representatives.len()).ok()?;
+    for (index,_) in order {if cancelled() {return None;}unique.push(regions[index as usize]);}
+    regions.clear();regions.extend(unique);Some(())
+}
+
+#[test]
+fn canonical_regions_preserve_fill_rules_and_distinct_geometry() {
+    let a=kurbo::Rect::new(0.,0.,0.25,1.).to_path(0.1);let copy=a.clone();
+    let b=kurbo::Rect::new(0.25,0.,0.5,1.).to_path(0.1);
+    let mut regions=vec![(&a,Fill::NonZero),(&copy,Fill::NonZero),(&a,Fill::EvenOdd),(&b,Fill::NonZero)];
+    let mut requirements=vec![vec![0,1],vec![2],vec![3]];
+    deduplicate_regions(&mut regions,&mut requirements,&||false,&|_|Some(Box::new(()))).unwrap();
+    assert_eq!(regions.len(),3);assert_eq!(requirements[0].len(),1);
+    assert!(std::ptr::eq(regions[0].0,&a));assert_eq!(regions[0].1,Fill::NonZero);
+    assert!(std::ptr::eq(regions[1].0,&a));assert_eq!(regions[1].1,Fill::EvenOdd);
+    assert!(std::ptr::eq(regions[2].0,&b));
+    assert_eq!(requirements,vec![vec![0],vec![1],vec![2]]);
+    for (point,expected) in [(kurbo::Point::new(0.125,0.5),[true,true,false]),
+        (kurbo::Point::new(0.375,0.5),[false,false,true])] {
+        for (required,expected) in requirements.iter().zip(expected) {
+            let covered=required.iter().all(|&i|{let w=regions[i].0.winding(point);
+                match regions[i].1 {Fill::NonZero=>w!=0,Fill::EvenOdd=>w%2!=0}});
+            assert_eq!(covered,expected);
+        }
+    }
+    assert!(deduplicate_regions(&mut regions,&mut requirements,&||true,&|_|Some(Box::new(()))).is_none());
+}
+
+#[test]
+fn native_empty_sample_cannot_mint_work_or_hide_cancellation() {
+    use super::native_blend::Model;
+    use hayro_interpret::color::{AlphaColor,Color};
+    let rgb=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
+    let clear=Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap();
+    let path=kurbo::Rect::new(0.,0.,1.,1.).to_path(0.1);let regions=[(&path,Fill::NonZero)];
+    let mint=|_:kurbo::Point,_:&dyn Fn()->bool,remaining:&mut usize,_:Option<usize>| {*remaining+=1;Some(None)};
+    let command=|sample|SpatialCommand::NativeSampledPaint {regions:&[0],sample,owners:&[],alpha_is_shape:false,mode:BlendMode::Normal};
+    assert!(compose_grouped_polygon_point(&regions,&[command(&mint)],rgb.color_space(),clear,
+        kurbo::Point::new(0.5,0.5),100,100,&||false,&|_|Some(Box::new(()))).is_none());
+    let cancelled=std::cell::Cell::new(false);
+    let empty=|_:kurbo::Point,_:&dyn Fn()->bool,_:&mut usize,_:Option<usize>| {cancelled.set(true);Some(None)};
+    assert!(compose_grouped_polygon_point(&regions,&[command(&empty)],rgb.color_space(),clear,
+        kurbo::Point::new(0.5,0.5),100,100,&||cancelled.get(),&|_|Some(Box::new(()))).is_none());
+}
+
+/// Consecutive opaque normal paints are idempotent only without a soft mask
+/// and when original components already share the active blending coordinates.
+pub(super) fn coalesce_opaque_paints(commands:&mut Vec<SpatialCommand<'_>>,
+    space:&hayro_interpret::color::ColorSpace,cancelled:&dyn Fn()->bool)->Option<()> {
+    let mut spaces=[space;33];let mut masks=[false;33];let mut depth=0usize;let mut out=0;
+    let mut previous:Option<SpatialCommand<'_>>=None;
+    for index in 0..commands.len() {
+        if cancelled() {return None;}
+        let command=commands[index];
+        let duplicate=match (previous,command) {
+            (Some(SpatialCommand::RetainedPaint {regions:a,paint:p,mode:BlendMode::Normal}),
+                SpatialCommand::RetainedPaint {regions:b,paint:q,mode:BlendMode::Normal})=>{
+                !masks[depth] && p.opacity==1. && q.opacity==1. && a==b && p.components==q.components
+                    && p.color_space.shares_blending_coordinates(spaces[depth])
+                    && q.color_space.shares_blending_coordinates(spaces[depth])
+            },_=>false,
+        };
+        if duplicate {continue;}
+        match command {
+            SpatialCommand::Begin {..}=>{
+                if depth==32 {return None;}spaces[depth+1]=spaces[depth];depth+=1;masks[depth]=false;
+            },
+            SpatialCommand::BeginInSpace {space,..}=>{
+                if depth==32 {return None;}depth+=1;spaces[depth]=space;masks[depth]=false;
+            },
+            SpatialCommand::End=>depth=depth.checked_sub(1)?,
+            SpatialCommand::SetMask {..}|SpatialCommand::SetBudgetedMask {..}=>masks[depth]=true,
+            SpatialCommand::ClearMask=>masks[depth]=false,
+            _=>{},
+        }
+        commands[out]=command;out+=1;previous=Some(command);
+    }
+    if depth!=0 {return None;}commands.truncate(out);Some(())
+}
+
+#[test]
+fn opaque_coalescing_preserves_mask_accumulation_and_fractional_coverage() {
+    use super::native_blend::Model;
+    use hayro_interpret::color::{AlphaColor,Color};
+    let color=Color::from_rgba(AlphaColor::new([0.,1.,0.,1.]));
+    let paint=super::native_paint::NativePaint::capture(&color,&||false,&|_|Some(Box::new(()))).unwrap();
+    let clear=Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap();
+    let path=kurbo::Rect::new(0.,0.,0.25,1.).to_path(0.1);let regions=[(&path,Fill::NonZero)];
+    let mask=|_:kurbo::Point,_:&dyn Fn()->bool|Some(0.5);
+    for masked in [false,true] {
+        let source=SpatialCommand::RetainedPaint {regions:&[0],paint:&paint,mode:BlendMode::Normal};
+        let mut commands=if masked {vec![SpatialCommand::SetMask {sample:&mask,sample_cost:1},source,source]}
+            else {vec![source,source]};
+        let run=|commands:&[SpatialCommand<'_>]|compose_grouped_polygon_pixel(&regions,commands,
+            color.color_space(),clear,0,0,10000,10000,&||false,&|_|Some(Box::new(()))).unwrap();
+        let before=run(&commands);coalesce_opaque_paints(&mut commands,color.color_space(),&||false).unwrap();
+        assert_eq!(commands.len(),if masked {3}else {1});let after=run(&commands);
+        assert_eq!(before.alpha(),after.alpha());assert_eq!(after.alpha(),if masked {0.1875}else {0.25});
+        assert_eq!(before.native_components(),after.native_components());
+    }
+}
+
+#[test]
+fn shared_coverage_group_guard_preserves_repeated_alpha_and_distinct_coverage() {
+    use super::native_blend::Model;
+    use hayro_interpret::color::{AlphaColor,Color};
+    let rgb=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
+    let clear=Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap();
+    let green=Pixel::from_native(Model::Rgb,&[0.,1.,0.],0.5).unwrap();
+    let a=kurbo::Rect::new(0.,0.,0.25,1.).to_path(0.1);
+    let b=kurbo::Rect::new(0.25,0.,0.5,1.).to_path(0.1);let regions=[(&a,Fill::NonZero),(&b,Fill::NonZero)];
+    let calls=std::cell::Cell::new(0);
+    let sample=|_:kurbo::Point,_:&dyn Fn()->bool|{calls.set(calls.get()+1);Some(Some(green))};
+    for distinct in [false,true] {
+        let commands=[SpatialCommand::Begin {isolated:true,knockout:false,opacity:1.,alpha_is_shape:false,mode:BlendMode::Normal},
+            SpatialCommand::SampledPaint {regions:&[0],sample:&sample,sample_cost:1,alpha_is_shape:false,mode:BlendMode::Normal},
+            SpatialCommand::SampledPaint {regions:if distinct {&[1]}else {&[0]},sample:&sample,sample_cost:1,alpha_is_shape:false,mode:BlendMode::Normal},SpatialCommand::End];
+        for (x,expected) in [(0.125,if distinct {0.5}else {0.75}),(0.375,if distinct {0.5}else {0.}),(0.75,0.)] {
+            let pixel=compose_grouped_polygon_point(&regions,&commands,rgb.color_space(),clear,
+                kurbo::Point::new(x,0.5),100,1000,&||false,&|_|Some(Box::new(()))).unwrap();
+            assert_eq!(pixel.alpha(),expected);
+        }
+    }
+    assert_eq!(calls.get(),4);
+}
+
+#[test]
+fn cached_geometry_routes_resample_affine_colors_at_each_fragment() {
+    use super::native_blend::Model;
+    use hayro_interpret::color::{AlphaColor,Color};
+    let rgb=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
+    let clear=Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap();
+    let full=kurbo::Rect::new(0.,0.,1.,1.).to_path(0.1);
+    let mut triangle=BezPath::new();triangle.move_to((0.1,0.1));triangle.line_to((0.9,0.3));triangle.line_to((0.3,0.9));triangle.close_path();
+    let regions=[(&full,Fill::NonZero),(&triangle,Fill::NonZero)];
+    let calls=std::cell::Cell::new(0);
+    let sample=|p:kurbo::Point,_:&dyn Fn()->bool|{calls.set(calls.get()+1);
+        Some(Some(Pixel::from_native(Model::Rgb,&[p.x,0.,0.],1.).unwrap()))};
+    let commands=[SpatialCommand::SampledPaint {regions:&[0],sample:&sample,sample_cost:1,alpha_is_shape:false,mode:BlendMode::Normal}];
+    let pixel=compose_grouped_polygon_pixel(&regions,&commands,rgb.color_space(),clear,
+        0,0,100000,100000,&||false,&|_|Some(Box::new(()))).unwrap();
+    assert!(calls.get()>2);assert!((pixel.alpha()-1.).abs()<1e-12);
+    assert!((pixel.native_components().unwrap()[0]-0.5).abs()<1e-12);
+}
+
+#[test]
+fn deduplicated_mesh_owner_regions_keep_latest_source_index() {
+    use super::native_blend::Model;
+    use hayro_interpret::color::{AlphaColor,Color};
+    let rgb=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
+    let clear=Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap();
+    let green=Pixel::from_native(Model::Rgb,&[0.,1.,0.],1.).unwrap();
+    let path=kurbo::Rect::new(0.,0.,1.,1.).to_path(0.1);let regions=[(&path,Fill::NonZero)];
+    let sample=|_:kurbo::Point,_:&dyn Fn()->bool,_:&mut usize,owner:Option<usize>| {
+        assert_eq!(owner,Some(7));Some(Some(NativeSpatialSample {pixel:green,space:rgb.color_space()}))
+    };
+    let commands=[SpatialCommand::NativeSampledPaint {regions:&[0],sample:&sample,owners:&[(0,7),(0,2)],alpha_is_shape:false,mode:BlendMode::Normal}];
+    let pixel=compose_grouped_polygon_point(&regions,&commands,rgb.color_space(),clear,
+        kurbo::Point::new(0.5,0.5),100,100,&||false,&|_|Some(Box::new(()))).unwrap();
+    assert_eq!(pixel.alpha(),1.);assert_eq!(pixel.native_components().unwrap()[..3],[0.,1.,0.]);
+}
+
+#[test]
+fn unsorted_mesh_owner_priority_is_refused_before_sampling() {
+    use super::native_blend::Model;
+    use hayro_interpret::color::{AlphaColor,Color};
+    let rgb=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
+    let clear=Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap();
+    let path=kurbo::Rect::new(0.,0.,1.,1.).to_path(0.1);
+    let sample=|_:kurbo::Point,_:&dyn Fn()->bool,_:&mut usize,_:Option<usize>| {
+        panic!("invalid owner ordering must refuse before source sampling")
+    };
+    let commands=[SpatialCommand::NativeSampledPaint {regions:&[0],sample:&sample,
+        owners:&[(0,2),(0,7)],alpha_is_shape:false,mode:BlendMode::Normal}];
+    assert!(compose_grouped_polygon_point(&[(&path,Fill::NonZero)],&commands,
+        rgb.color_space(),clear,kurbo::Point::new(0.5,0.5),100,100,
+        &||false,&|_|Some(Box::new(()))).is_none());
+}
+
+#[test]
+fn constant_routes_preserve_repeated_coverage_and_group_opacity_across_partitions() {
+    use super::native_blend::Model;
+    use hayro_interpret::color::{AlphaColor,Color};
+    let rgb=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
+    let clear=Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap();
+    let green=Pixel::from_native(Model::Rgb,&[0.,1.,0.],1.).unwrap();
+    let mut paths=vec![kurbo::Rect::new(0.,0.,0.5,0.5).to_path(0.1)];
+    for i in 1..16 {paths.push(kurbo::Rect::new(0.,0.,i as f64/16.,1.).to_path(0.1));}
+    let regions:Vec<_>=paths.iter().map(|p|(p,Fill::NonZero)).collect();
+    let mut commands=vec![SpatialCommand::Begin {isolated:true,knockout:false,
+        opacity:0.5,alpha_is_shape:false,mode:BlendMode::Normal}];
+    for _ in 0..17 {commands.push(SpatialCommand::Paint(SpatialPaint {
+        regions:&[0],source:green,mode:BlendMode::Normal}));}
+    commands.push(SpatialCommand::End);
+    let pixel=compose_grouped_polygon_pixel(&regions,&commands,rgb.color_space(),clear,
+        0,0,100000,100000,&||false,&|_|Some(Box::new(()))).unwrap();
+    assert!((pixel.alpha()-0.125).abs()<1e-12);
+    assert_eq!(pixel.native_components().unwrap()[..3],[0.,1.,0.]);
+}
+
+#[test]
+fn cached_constant_groups_preserve_affine_sources_after_group_exit() {
+    use super::native_blend::Model;
+    use hayro_interpret::color::{AlphaColor,Color};
+    let rgb=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
+    let clear=Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap();
+    let green=Pixel::from_native(Model::Rgb,&[0.,1.,0.],1.).unwrap();
+    let mut paths=vec![kurbo::Rect::new(0.,0.,1.,1.).to_path(0.1)];
+    for i in 1..16 {paths.push(kurbo::Rect::new(0.,0.,i as f64/16.,1.).to_path(0.1));}
+    let regions:Vec<_>=paths.iter().map(|p|(p,Fill::NonZero)).collect();
+    let calls=std::cell::Cell::new(0);
+    let sample=|p:kurbo::Point,_:&dyn Fn()->bool| {
+        calls.set(calls.get()+1);Some(Pixel::from_native(Model::Rgb,&[p.x,0.,0.],0.5))
+    };
+    let mut commands=vec![SpatialCommand::Begin {isolated:true,knockout:false,
+        opacity:0.5,alpha_is_shape:false,mode:BlendMode::Normal}];
+    for _ in 0..17 {commands.push(SpatialCommand::Paint(SpatialPaint {
+        regions:&[0],source:green,mode:BlendMode::Normal}));}
+    commands.push(SpatialCommand::End);
+    commands.push(SpatialCommand::SampledPaint {regions:&[0],sample:&sample,sample_cost:1,
+        alpha_is_shape:false,mode:BlendMode::Normal});
+    let pixel=compose_grouped_polygon_pixel(&regions,&commands,rgb.color_space(),clear,
+        0,0,100000,100000,&||false,&|_|Some(Box::new(()))).unwrap();
+    assert!(calls.get()>2);assert!((pixel.alpha()-0.75).abs()<1e-12);
+    let c=pixel.native_components().unwrap();
+    assert!((c[0]-1./3.).abs()<1e-12);assert!((c[1]-1./3.).abs()<1e-12);assert_eq!(c[2],0.);
+}
+#[test]
+fn cached_nonisolated_groups_preserve_affine_sources_after_group_exit() {
+    use super::native_blend::Model;
+    use hayro_interpret::color::{AlphaColor,Color};
+    let rgb=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
+    let clear=Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap();
+    let green=Pixel::from_native(Model::Rgb,&[0.,1.,0.],1.).unwrap();
+    let mut paths=vec![kurbo::Rect::new(0.,0.,1.,1.).to_path(0.1)];
+    for i in 1..16 {paths.push(kurbo::Rect::new(0.,0.,i as f64/16.,1.).to_path(0.1));}
+    let regions:Vec<_>=paths.iter().map(|p|(p,Fill::NonZero)).collect();
+    let calls=std::cell::Cell::new(0);
+    let sample=|p:kurbo::Point,_:&dyn Fn()->bool| {
+        calls.set(calls.get()+1);Some(Pixel::from_native(Model::Rgb,&[p.x,0.,0.],0.5))
+    };
+    let mut commands=vec![SpatialCommand::Begin {isolated:false,knockout:false,
+        opacity:0.5,alpha_is_shape:false,mode:BlendMode::Normal}];
+    for _ in 0..17 {commands.push(SpatialCommand::Paint(SpatialPaint {
+        regions:&[0],source:green,mode:BlendMode::Normal}));}
+    commands.push(SpatialCommand::End);
+    commands.push(SpatialCommand::SampledPaint {regions:&[0],sample:&sample,sample_cost:1,
+        alpha_is_shape:false,mode:BlendMode::Normal});
+    let pixel=compose_grouped_polygon_pixel(&regions,&commands,rgb.color_space(),clear,
+        0,0,100000,100000,&||false,&|_|Some(Box::new(()))).unwrap();
+    assert!(calls.get()>2);assert!((pixel.alpha()-0.75).abs()<1e-12);
+    let c=pixel.native_components().unwrap();
+    assert!((c[0]-1./3.).abs()<1e-12);assert!((c[1]-1./3.).abs()<1e-12);assert_eq!(c[2],0.);
+}
+
+#[test]
+fn nonisolated_group_cache_rejects_changed_affine_backdrops() {
+    use super::native_blend::Model;
+    use hayro_interpret::color::{AlphaColor,Color};
+    let rgb=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
+    let clear=Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap();
+    let green=Pixel::from_native(Model::Rgb,&[0.,1.,0.],1.).unwrap();
+    let mut paths=vec![kurbo::Rect::new(0.,0.,1.,1.).to_path(0.1)];
+    for i in 1..16 {paths.push(kurbo::Rect::new(0.,0.,i as f64/16.,1.).to_path(0.1));}
+    let regions:Vec<_>=paths.iter().map(|p|(p,Fill::NonZero)).collect();
+    let sample=|p:kurbo::Point,_:&dyn Fn()->bool|Some(Pixel::from_native(Model::Rgb,&[p.x,0.,0.],0.5));
+    let commands=[SpatialCommand::SampledPaint {regions:&[0],sample:&sample,sample_cost:1,
+        alpha_is_shape:false,mode:BlendMode::Normal},
+        SpatialCommand::Begin {isolated:false,knockout:false,opacity:0.4,alpha_is_shape:false,mode:BlendMode::Normal},
+        SpatialCommand::Paint(SpatialPaint {regions:&[0],source:green,mode:BlendMode::Normal}),SpatialCommand::End];
+    let pixel=compose_grouped_polygon_pixel(&regions,&commands,rgb.color_space(),clear,
+        0,0,100000,100000,&||false,&|_|Some(Box::new(()))).unwrap();
+    assert!((pixel.alpha()-0.7).abs()<1e-12);
+    let c=pixel.native_components().unwrap();
+    assert!((c[0]-3./14.).abs()<1e-12);assert!((c[1]-4./7.).abs()<1e-12);assert_eq!(c[2],0.);
+}
+
+#[test]
+fn cached_paint_runs_preserve_following_affine_sources() {
+    use super::native_blend::Model;
+    use hayro_interpret::color::{AlphaColor,Color};
+    let rgb=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
+    let clear=Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap();
+    let green=Pixel::from_native(Model::Rgb,&[0.,1.,0.],1.).unwrap();
+    let mut paths=vec![kurbo::Rect::new(0.,0.,1.,1.).to_path(0.1)];
+    for i in 1..16 {paths.push(kurbo::Rect::new(0.,0.,i as f64/16.,1.).to_path(0.1));}
+    let regions:Vec<_>=paths.iter().map(|p|(p,Fill::NonZero)).collect();
+    let calls=std::cell::Cell::new(0);
+    let sample=|p:kurbo::Point,_:&dyn Fn()->bool| {
+        calls.set(calls.get()+1);Some(Pixel::from_native(Model::Rgb,&[p.x,0.,0.],0.5))
+    };
+    let mut commands=Vec::new();
+    for _ in 0..17 {commands.push(SpatialCommand::Paint(SpatialPaint {
+        regions:&[0],source:green,mode:BlendMode::Normal}));}
+    commands.push(SpatialCommand::SampledPaint {regions:&[0],sample:&sample,sample_cost:1,
+        alpha_is_shape:false,mode:BlendMode::Normal});
+    let pixel=compose_grouped_polygon_pixel(&regions,&commands,rgb.color_space(),clear,
+        0,0,100000,100000,&||false,&|_|Some(Box::new(()))).unwrap();
+    assert!(calls.get()>2);assert!((pixel.alpha()-1.).abs()<1e-12);
+    let c=pixel.native_components().unwrap();
+    assert!((c[0]-0.25).abs()<1e-12);assert!((c[1]-0.5).abs()<1e-12);assert_eq!(c[2],0.);
+}
+#[test]
+fn redundant_mask_clears_preserve_parent_mask_restore_and_explicit_clear() {
+    use super::native_blend::Model;
+    use hayro_interpret::color::{AlphaColor,Color};
+    let rgb=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
+    let clear=Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap();
+    let green=Pixel::from_native(Model::Rgb,&[0.,1.,0.],1.).unwrap();
+    let blue=Pixel::from_native(Model::Rgb,&[0.,0.,1.],0.5).unwrap();
+    let path=kurbo::Rect::new(0.,0.,1.,1.).to_path(0.1);
+    let mask=|_:kurbo::Point,_:&dyn Fn()->bool|Some(0.5);
+    let mut commands=vec![SpatialCommand::ClearMask,SpatialCommand::SetMask {sample:&mask,sample_cost:1},
+        SpatialCommand::Begin {isolated:true,knockout:false,opacity:1.,alpha_is_shape:false,mode:BlendMode::Normal}];
+    for _ in 0..50 {commands.push(SpatialCommand::ClearMask);}
+    commands.push(SpatialCommand::Paint(SpatialPaint {regions:&[0],source:green,mode:BlendMode::Normal}));
+    commands.push(SpatialCommand::End);
+    for _ in 0..50 {commands.push(SpatialCommand::ClearMask);}
+    commands.push(SpatialCommand::Paint(SpatialPaint {regions:&[0],source:blue,mode:BlendMode::Normal}));
+    assert_eq!(prune_redundant_mask_clears(&mut commands,&mut 100000,&||false),Some(100));
+    assert_eq!(commands.len(),6);
+    let pixel=compose_grouped_polygon_point(&[(&path,Fill::NonZero)],&commands,rgb.color_space(),clear,
+        kurbo::Point::new(0.5,0.5),100000,100000,&||false,&|_|Some(Box::new(()))).unwrap();
+    assert!((pixel.alpha()-0.75).abs()<1e-12);
+    let c=pixel.native_components().unwrap();assert_eq!(c[0],0.);
+    assert!((c[1]-1./3.).abs()<1e-12);assert!((c[2]-2./3.).abs()<1e-12);
+}
+
+#[test]
+fn indexed_routes_preserve_color_and_coverage_across_repeated_eviction() {
+    use super::native_blend::Model;
+    use hayro_interpret::color::{AlphaColor,Color};
+    let rgb=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
+    let clear=Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap();
+    let mut paths=Vec::new();
+    for i in 0..64 {paths.push(kurbo::Rect::new(0.,0.,(i+1) as f64/65.,1.).to_path(0.1));}
+    for i in 1..4 {paths.push(kurbo::Rect::new(0.,0.,1.,i as f64/4.).to_path(0.1));}
+    let regions:Vec<_>=paths.iter().map(|p|(p,Fill::NonZero)).collect();
+    let requirements:Vec<_>=(0..64).map(|i|[i]).collect();
+    let commands:Vec<_>=(0..64).rev().map(|i|SpatialCommand::Paint(SpatialPaint {
+        regions:&requirements[i],source:Pixel::from_native(Model::Rgb,&[i as f64/63.,1.-i as f64/63.,0.],1.).unwrap(),
+        mode:BlendMode::Normal})).collect();
+    let pixel=compose_grouped_polygon_pixel(&regions,&commands,rgb.color_space(),clear,
+        0,0,1000000,1000000,&||false,&|_|Some(Box::new(()))).unwrap();
+    assert!((pixel.alpha()-64./65.).abs()<1e-12);
+    let c=pixel.native_components().unwrap();assert!((c[0]-0.5).abs()<1e-12);
+    assert!((c[1]-0.5).abs()<1e-12);assert_eq!(c[2],0.);
+}
+
+/// Flatten only inherited non-knockout neutral groups in a mask-free command
+/// stream and non-knockout parent. All other object boundaries remain intact.
+pub(super) fn flatten_neutral_groups(
+    commands:&mut Vec<SpatialCommand<'_>>,remaining:&mut usize,cancelled:&dyn Fn()->bool,
+)->Option<usize> {
+    for command in commands.iter() {
+        if cancelled() {return None;}*remaining=remaining.checked_sub(1)?;
+        if matches!(command,SpatialCommand::SetMask {..}|SpatialCommand::SetBudgetedMask {..}) {return Some(0);}
+    }
+    let mut stack=[(false,false);33];let mut depth=0usize;let mut out=0usize;let mut removed=0usize;
+    for index in 0..commands.len() {
+        if cancelled() {return None;}*remaining=remaining.checked_sub(1)?;
+        let command=commands[index];
+        let skip=match command {
+            SpatialCommand::Begin {isolated,knockout,opacity,mode,..}=>{
+                // Without a mask, AIS multiplies group shape by opacity.
+                // At opacity one it is the same shape for either AIS value.
+                let flatten=!stack[depth].0 && !isolated && !knockout && opacity==1.
+                    && mode==BlendMode::Normal;
+                depth+=1;if depth>=stack.len() {return None;}stack[depth]=(knockout,flatten);flatten
+            },
+            SpatialCommand::BeginInSpace {knockout,..}=>{
+                depth+=1;if depth>=stack.len() {return None;}stack[depth]=(knockout,false);false
+            },
+            SpatialCommand::End=>{
+                if depth==0 {return None;}let skip=stack[depth].1;depth-=1;skip
+            },_=>false,
+        };
+        if skip {removed+=1;} else {commands[out]=command;out+=1;}
+    }
+    if depth!=0 {return None;}commands.truncate(out);Some(removed)
+}
+
+#[test]
+fn neutral_group_flattening_preserves_alpha_colors_and_protected_boundaries() {
+    use super::native_blend::Model;
+    use hayro_interpret::color::{AlphaColor,Color};
+    let rgb=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
+    let clear=Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap();
+    let green=Pixel::from_native(Model::Rgb,&[0.,1.,0.],0.4).unwrap();
+    let blue=Pixel::from_native(Model::Rgb,&[0.,0.,1.],0.6).unwrap();
+    let path=kurbo::Rect::new(0.,0.,0.75,0.5).to_path(0.1);let regions=[(&path,Fill::NonZero)];
+    let paint=|source|SpatialCommand::Paint(SpatialPaint {regions:&[0],source,mode:BlendMode::Normal});
+    let begin=|isolated,knockout,opacity,alpha_is_shape,mode|SpatialCommand::Begin {isolated,knockout,opacity,alpha_is_shape,mode};
+    let run=|commands:&[SpatialCommand<'_>]|compose_grouped_polygon_pixel(&regions,commands,
+        rgb.color_space(),clear,0,0,100000,100000,&||false,&|_|Some(Box::new(()))).unwrap();
+    for (isolated,knockout,opacity,ais,mode,expected) in [
+        (false,false,1.,false,BlendMode::Normal,2),
+        (true,false,1.,false,BlendMode::Normal,0),
+        (false,true,1.,false,BlendMode::Normal,0),
+        (false,false,0.5,false,BlendMode::Normal,0),
+        (false,false,1.,true,BlendMode::Normal,2),
+        (false,false,1.,false,BlendMode::HardLight,0),
+    ] {
+        let mut commands=vec![paint(blue),begin(isolated,knockout,opacity,ais,mode),paint(green),paint(blue),SpatialCommand::End];
+        let before=run(&commands);
+        assert_eq!(flatten_neutral_groups(&mut commands,&mut 100000,&||false),Some(expected));
+        let after=run(&commands);assert!((before.alpha()-after.alpha()).abs()<1e-12);
+        for (a,b) in before.native_components().unwrap().iter().zip(after.native_components().unwrap()) {assert!((a-b).abs()<1e-12);}
+    }
+    let mask=|_:kurbo::Point,_:&dyn Fn()->bool|Some(0.5);
+    let mut masked=vec![SpatialCommand::SetMask {sample:&mask,sample_cost:1},begin(false,false,1.,false,BlendMode::Normal),paint(green),SpatialCommand::End];
+    assert_eq!(flatten_neutral_groups(&mut masked,&mut 100000,&||false),Some(0));
+    let mut knockout=vec![begin(false,true,1.,false,BlendMode::Normal),
+        begin(false,false,1.,false,BlendMode::Normal),paint(green),SpatialCommand::End,SpatialCommand::End];
+    assert_eq!(flatten_neutral_groups(&mut knockout,&mut 100000,&||false),Some(0));
+}
+
+/// Drop only objects hidden by a certified opaque Normal overwrite at this
+/// exact coverage route. A child's certificate also requires neutral exit.
+pub(super) fn prune_overwritten_route(
+    commands:&[SpatialCommand<'_>],keep:&mut [bool],ignored:&mut [bool],ends:&[usize],
+    remaining:&mut usize,cancelled:&dyn Fn()->bool,
+)->Option<usize> {
+    if commands.len()!=keep.len() || commands.len()!=ends.len() || commands.len()!=ignored.len() {return None;}
+    ignored.fill(false);
+    for command in commands {
+        if cancelled() {return None;}*remaining=remaining.checked_sub(1)?;
+        if matches!(command,SpatialCommand::SetMask {..}|SpatialCommand::SetBudgetedMask {..}) {return Some(0);}
+    }
+    // Earliest remaining object, group begin, knockout, independent opaque state.
+    let mut frames=[(0usize,0usize,false,false);33];let mut depth=0usize;
+    let mut index=0usize;let mut removed=0usize;
+    while index<commands.len() {
+        if cancelled() {return None;}*remaining=remaining.checked_sub(1)?;
+        if !keep[index] {
+            if matches!(commands[index],SpatialCommand::Begin {..}|SpatialCommand::BeginInSpace {..}) {
+                index=ends[index].checked_add(1)?;continue;
+            }
+            index+=1;continue;
+        }
+        let mut overwrite=None;let mut overwrite_independent=true;
+        match commands[index] {
+            SpatialCommand::Begin {knockout,..}|SpatialCommand::BeginInSpace {knockout,..}=>{
+                depth+=1;if depth>=frames.len() {return None;}
+                frames[depth]=(index+1,index,knockout,false);
+            },
+            SpatialCommand::End=>{
+                if depth==0 {return None;}
+                let (_,begin,_,independent)=frames[depth];depth-=1;
+                let neutral=match commands[begin] {
+                    SpatialCommand::Begin {opacity,mode,..}|SpatialCommand::BeginInSpace {opacity,mode,..}=>
+                        opacity==1. && mode==BlendMode::Normal,_=>false,
+                };
+                let full_knockout_shape=frames[depth].2 && match commands[begin] {
+                    SpatialCommand::Begin {alpha_is_shape:false,mode:BlendMode::Normal,..}|
+                    SpatialCommand::BeginInSpace {alpha_is_shape:false,mode:BlendMode::Normal,..}=>true,
+                    _=>false,
+                };
+                // An independent opaque child has full shape. AIS=false keeps
+                // that shape even when group opacity reduces its alpha. In a
+                // knockout parent it therefore erases earlier sibling objects.
+                if independent && (neutral || full_knockout_shape) {overwrite=Some(begin);overwrite_independent=neutral;}
+                else if frames[depth].2 {frames[depth].3=false;}
+            },
+            SpatialCommand::RetainedPaint {paint,mode,..}=>{
+                if paint.opacity==1. && mode==BlendMode::Normal {overwrite=Some(index);}
+                else if frames[depth].2 {frames[depth].3=false;}
+            },
+            SpatialCommand::Paint(paint)=>{
+                if paint.source.alpha()==1. && paint.mode==BlendMode::Normal {overwrite=Some(index);}
+                else if frames[depth].2 {frames[depth].3=false;}
+            },
+            SpatialCommand::SampledPaint {..}|SpatialCommand::NativeSampledPaint {..}=>{
+                if frames[depth].2 {frames[depth].3=false;}
+            },_=>{},
+        }
+        if let Some(start)=overwrite {
+            for (index,flag) in keep.get_mut(frames[depth].0..start)?.iter_mut().enumerate() {
+                if cancelled() {return None;}*remaining=remaining.checked_sub(1)?;
+                ignored[frames[depth].0+index]=true;
+                if *flag {*flag=false;removed+=1;}
+            }
+            frames[depth].0=start;frames[depth].3=overwrite_independent;
+        }
+        index+=1;
+    }
+    if depth!=0 {return None;}Some(removed)
+}
+
+#[test]
+fn opaque_sibling_overwrite_preserves_knockout_shape_and_blend_boundaries() {
+    use super::native_blend::Model;
+    use hayro_interpret::color::{AlphaColor,Color};
+    let rgb=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
+    let clear=Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap();
+    let path=kurbo::Rect::new(0.,0.,0.5,0.5).to_path(0.1);
+    let group=|opacity,knockout,mode|SpatialCommand::Begin {isolated:false,knockout,opacity,alpha_is_shape:false,mode};
+    let paint=|components:&[f64],alpha|SpatialCommand::Paint(SpatialPaint {regions:&[0],
+        source:Pixel::from_native(Model::Rgb,components,alpha).unwrap(),mode:BlendMode::Normal});
+    for (opacity,alpha,mode,expected) in [(1.,1.,BlendMode::Normal,6),
+        (0.5,1.,BlendMode::Normal,6),(0.,1.,BlendMode::Normal,6),(1.,0.5,BlendMode::Normal,3),(1.,1.,BlendMode::HardLight,3)] {
+        let commands=vec![group(1.,true,BlendMode::Normal),group(0.25,false,BlendMode::Normal),
+            paint(&[0.,1.,0.],1.),SpatialCommand::End,group(0.5,false,BlendMode::Normal),
+            paint(&[0.,0.,1.],1.),SpatialCommand::End,group(opacity,false,mode),
+            paint(&[1.,0.,0.],alpha),SpatialCommand::End,SpatialCommand::End];
+        let mut keep=vec![true;commands.len()];let mut ends=vec![0;commands.len()];
+        ends[0]=10;ends[1]=3;ends[4]=6;ends[7]=9;
+        assert_eq!(prune_overwritten_route(&commands,&mut keep,&mut vec![false;commands.len()],&ends,&mut 100000,&||false),Some(expected));
+        let selected:Vec<_>=commands.iter().zip(keep).filter_map(|(&c,k)|k.then_some(c)).collect();
+        let pixel=compose_grouped_polygon_pixel(&[(&path,Fill::NonZero)],&selected,rgb.color_space(),clear,
+            0,0,100000,100000,&||false,&|_|Some(Box::new(()))).unwrap();
+        assert!((pixel.alpha()-0.25*alpha*opacity).abs()<1e-12);
+        if alpha*opacity>0. {assert_eq!(pixel.native_components().unwrap()[..3],[1.,0.,0.]);}
+    }
+}
+
+/// Remove globally redundant clears before per-coverage route preparation.
+pub(super) fn prune_redundant_mask_clears(
+    commands:&mut Vec<SpatialCommand<'_>>,remaining:&mut usize,cancelled:&dyn Fn()->bool,
+)->Option<usize> {
+    let mut saved=[false;33];let mut depth=0usize;let mut active=false;let mut out=0usize;
+    for index in 0..commands.len() {
+        if cancelled() {return None;}*remaining=remaining.checked_sub(1)?;
+        let command=commands[index];
+        match command {
+            SpatialCommand::Begin {..}|SpatialCommand::BeginInSpace {..}=>{
+                depth+=1;if depth>=saved.len() {return None;}saved[depth]=active;active=false;
+            },
+            SpatialCommand::End=>{if depth==0 {return None;}active=saved[depth];depth-=1;},
+            SpatialCommand::SetMask {..}|SpatialCommand::SetBudgetedMask {..}=>active=true,
+            SpatialCommand::ClearMask=>{if !active {continue;}active=false;},_=>{},
+        }
+        commands[out]=command;out+=1;
+    }
+    if depth!=0 {return None;}let removed=commands.len()-out;commands.truncate(out);Some(removed)
+}
+
+fn rectangle_strictly_contains_pixel(path:&BezPath,x:i32,y:i32)->bool {
+    use kurbo::{PathEl,Point};
+    let elements=path.elements();
+    if !(5..=6).contains(&elements.len()) {return false;}
+    let (PathEl::MoveTo(a),PathEl::LineTo(b),PathEl::LineTo(c),PathEl::LineTo(d))=
+        (elements[0],elements[1],elements[2],elements[3]) else {return false;};
+    if elements.len()==5 {
+        if elements[4]!=PathEl::ClosePath {return false;}
+    } else if elements[4]!=PathEl::LineTo(a) || elements[5]!=PathEl::ClosePath {return false;}
+    if ![a,b,c,d].iter().all(|p|p.x.is_finite() && p.y.is_finite()) || a.x==c.x || a.y==c.y {return false;}
+    if !((b==Point::new(a.x,c.y) && d==Point::new(c.x,a.y))
+        || (d==Point::new(a.x,c.y) && b==Point::new(c.x,a.y))) {return false;}
+    a.x.min(c.x)<f64::from(x) && a.x.max(c.x)>f64::from(x)+1.
+        && a.y.min(c.y)<f64::from(y) && a.y.max(c.y)>f64::from(y)+1.
+}
+
+#[test]
+fn constant_rectangle_certificate_rejects_boundary_contact_and_nonrectangles() {
+    use kurbo::{PathEl,Point};
+    assert!(rectangle_strictly_contains_pixel(&kurbo::Rect::new(-1.,-1.,2.,2.).to_path(0.1),0,0));
+    assert!(!rectangle_strictly_contains_pixel(&kurbo::Rect::new(0.,0.,1.,1.).to_path(0.1),0,0));
+    let diagonal=BezPath::from_vec(vec![PathEl::MoveTo(Point::new(-1.,-1.)),PathEl::LineTo(Point::new(2.,2.)),
+        PathEl::LineTo(Point::new(-1.,2.)),PathEl::LineTo(Point::new(2.,-1.)),PathEl::ClosePath]);
+    assert!(!rectangle_strictly_contains_pixel(&diagonal,0,0));
+    assert!(!rectangle_strictly_contains_pixel(&kurbo::Rect::new(-1.,-1.,2.,2.).to_path(0.1),3,0));
+}
+
+fn route_membership_signature(
+    commands:&[SpatialCommand<'_>],keep:&[bool],ignored:&[bool],key:&[u64;64],
+    remaining:&mut usize,cancelled:&dyn Fn()->bool,
+)->Option<[u64;64]> {
+    let mut signature=[0u64;64];
+    for (index,command) in commands.iter().enumerate() {
+        if cancelled() {return None;}*remaining=remaining.checked_sub(1)?;
+        if ignored[index] {continue;}
+        let required=match command {
+            SpatialCommand::Paint(p)=>p.regions,
+            SpatialCommand::RetainedPaint {regions,..}|SpatialCommand::SampledPaint {regions,..}|
+            SpatialCommand::NativeSampledPaint {regions,..}=>*regions,_=>continue,
+        };
+        let mut witnessed=false;
+        for &region in required {
+            *remaining=remaining.checked_sub(1)?;
+            if region>=4096 {return None;}
+            if keep[index] {signature[region/64]|=1u64<<(region%64);}
+            else if key[region/64]&(1u64<<(region%64))==0 {
+                signature[region/64]|=1u64<<(region%64);witnessed=true;break;
+            }
+        }
+        if !keep[index] && !witnessed {return None;}
+    }
+    Some(signature)
+}
+
+#[test]
+fn route_signature_ignores_hidden_geometry_but_keeps_invisibility_witness() {
+    use super::native_blend::Model;
+    let source=Pixel::from_native(Model::Rgb,&[0.,1.,0.],1.).unwrap();
+    let paint=|regions|SpatialCommand::Paint(SpatialPaint {regions,source,mode:BlendMode::Normal});
+    let commands=[paint(&[0]),paint(&[1,2]),paint(&[3])];
+    let mut key=[0u64;64];key[0]=(1<<2)|(1<<3);
+    let signature=route_membership_signature(&commands,&[false,false,true],&[true,false,false],
+        &key,&mut 100,&||false).unwrap();
+    assert_eq!(signature[0],(1<<1)|(1<<3));
+    // A false paint with no false required region cannot certify invisibility.
+    key[0]|=1<<1;
+    assert!(route_membership_signature(&commands,&[false,false,true],&[true,false,false],
+        &key,&mut 100,&||false).is_none());
+}
+
+#[test]
+fn opaque_single_paint_group_matches_unoptimized_duplicate_paints() {
+    use super::{native_blend::Model,native_paint::NativePaint};
+    use hayro_interpret::color::{AlphaColor,Color};
+    let admit=|_:usize|Some(Box::new(()) as Box<dyn std::any::Any+Send+Sync>);
+    let color=Color::from_rgba(AlphaColor::new([0.2,0.7,0.4,1.]));
+    let paint=NativePaint::capture(&color,&||false,&admit).unwrap();
+    let path=kurbo::Rect::new(0.,0.,1.,1.).to_path(0.1);
+    let regions=[(&path,Fill::NonZero)];
+    let backdrop=Pixel::from_native(Model::Rgb,&[0.8,0.3,0.1],0.7).unwrap();
+    for parent_knockout in [false,true] {for isolated in [false,true] {
+        for child_knockout in [false,true] {for ais in [false,true] {
+            for opacity in [0.,0.4,1.] {for mask in [0.,0.3,1.] {
+                let sample=|_:kurbo::Point,_:&dyn Fn()->bool|Some(mask);
+                let begin=SpatialCommand::Begin {isolated,knockout:child_knockout,
+                    opacity,alpha_is_shape:ais,mode:BlendMode::Normal};
+                let retained=SpatialCommand::RetainedPaint {regions:&[0],paint:&paint,mode:BlendMode::Normal};
+                let mut commands=vec![SpatialCommand::Begin {isolated:false,
+                    knockout:parent_knockout,opacity:1.,alpha_is_shape:false,mode:BlendMode::Normal},
+                    SpatialCommand::SetMask {sample:&sample,sample_cost:1},begin,retained,
+                    SpatialCommand::End,SpatialCommand::ClearMask,SpatialCommand::End];
+                let actual=compose_grouped_polygon_pixel(&regions,&commands,&paint.color_space,
+                    backdrop,0,0,100000,100000,&||false,&admit).unwrap();
+                // Two identical opaque paints are algebraically equivalent,
+                // but force the ordinary child-frame execution path.
+                commands.insert(4,retained);
+                let expected=compose_grouped_polygon_pixel(&regions,&commands,&paint.color_space,
+                    backdrop,0,0,100000,100000,&||false,&admit).unwrap();
+                assert!((actual.alpha()-expected.alpha()).abs()<1e-12);
+                for (a,b) in actual.native_components().unwrap().iter().zip(expected.native_components().unwrap()) {
+                    assert!((a-b).abs()<1e-12,"{a} != {b}");
+                }
+            }}
+        }}
+    }}
+}
+
+#[test]
+fn incremental_coverage_crosses_word_boundaries_and_preserves_fill_rules() {
+    use super::native_blend::Model;
+    use hayro_interpret::color::{AlphaColor,Color};
+    let rgb=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
+    let mut paths=vec![kurbo::Rect::new(0.,0.,1.,1.).to_path(0.1);129];
+    paths[64]=kurbo::Rect::new(0.,0.,0.75,1.).to_path(0.1);
+    paths[64].extend(kurbo::Rect::new(0.25,0.,1.,1.).to_path(0.1).elements().iter().copied());
+    paths[128]=BezPath::from_vec(vec![kurbo::PathEl::MoveTo((0.,0.).into()),
+        kurbo::PathEl::LineTo((0.,1.).into()),kurbo::PathEl::LineTo((1.,1.).into()),
+        kurbo::PathEl::LineTo((1.,0.).into()),kurbo::PathEl::ClosePath]);
+    let regions:Vec<_>=paths.iter().enumerate().map(|(i,p)|
+        (p,if i==64 {Fill::EvenOdd} else {Fill::NonZero})).collect();
+    let clear=Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap();
+    let green=Pixel::from_native(Model::Rgb,&[0.,1.,0.],1.).unwrap();
+    let red=Pixel::from_native(Model::Rgb,&[1.,0.,0.],1.).unwrap();
+    let commands=[SpatialCommand::Paint(SpatialPaint {regions:&[0],source:green,mode:BlendMode::Normal}),
+        SpatialCommand::Paint(SpatialPaint {regions:&[0,64,128],source:red,mode:BlendMode::Normal})];
+    let result=compose_grouped_polygon_pixel(&regions,&commands,rgb.color_space(),clear,
+        0,0,10_000_000,100000,&||false,&|_|Some(Box::new(()))).unwrap();
+    assert_eq!(result.alpha(),1.);
+    assert_eq!(&result.native_components().unwrap()[..3],&[0.5,0.5,0.]);
+}
+
+
+#[test]
+fn indexed_owner_masks_match_independent_winding_priority_across_words() {
+    use super::native_blend::Model;
+    use hayro_interpret::color::{AlphaColor,Color};
+    let rgb=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
+    let clear=Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap();
+    let mut paths=vec![kurbo::Rect::new(2.,0.,3.,1.).to_path(0.1);4095];
+    paths[0]=kurbo::Rect::new(0.,0.,1.,1.).to_path(0.1);
+    paths[128]=paths[0].clone();
+    paths[4094]=kurbo::Rect::new(0.,0.,0.5,1.).to_path(0.1);
+    paths[1]=kurbo::Rect::new(0.,0.,0.75,1.).to_path(0.1);
+    paths[64]=kurbo::Rect::new(0.25,0.,1.,1.).to_path(0.1);
+    paths[2]=paths[64].clone();
+    paths[3]=kurbo::Rect::new(0.,0.,0.25,1.).to_path(0.1);
+    paths[3].extend(kurbo::Rect::new(0.75,0.,1.,1.).to_path(0.1).elements().iter().copied());
+    let duplicate=paths[128].clone();paths[128].extend(duplicate.elements().iter().copied());
+    let regions:Vec<_>=paths.iter().enumerate().map(|(i,p)|
+        (p,if i==128 {Fill::EvenOdd} else {Fill::NonZero})).collect();
+    for (owners,expected_red) in [
+        (vec![(128,200),(64,100),(1,42),(1,0)],0.0855),
+        (vec![(1,300),(128,200),(64,100),(1,0)],0.25),
+        (vec![(4094,300),(128,200),(64,100),(1,42),(1,0)],0.2),
+        (vec![(2,150),(64,100),(1,42),(1,0)],0.123),
+    ] {
+    let calls=std::cell::Cell::new(0);
+    let sample=|point:kurbo::Point,_:&dyn Fn()->bool,_:&mut usize,owner:Option<usize>| {
+        let expected=owners.iter().find(|&&(region,_)| {
+            let w=regions[region].0.winding(point);
+            match regions[region].1 {Fill::NonZero=>w!=0,Fill::EvenOdd=>w%2!=0}
+        }).map(|&(_,index)|index);
+        assert_eq!(owner,expected);calls.set(calls.get()+1);
+        let value=owner.unwrap() as f64/1000.;
+        Some(Some(NativeSpatialSample {pixel:Pixel::from_native(Model::Rgb,&[value,0.,0.],1.).unwrap(),space:rgb.color_space()}))
+    };
+    let commands=[SpatialCommand::NativeSampledPaint {regions:&[0],sample:&sample,owners:&owners,
+        alpha_is_shape:false,mode:BlendMode::Normal}];
+    let result=compose_grouped_polygon_pixel(&regions,&commands,rgb.color_space(),clear,
+        0,0,10_000_000,100000,&||false,&|_|Some(Box::new(()))).unwrap();
+    assert!(calls.get()>1);assert_eq!(result.alpha(),1.);
+    assert!((result.native_components().unwrap()[0]-expected_red).abs()<1e-12);
+    if owners.first()==Some(&(2,150)) {
+        // The source is skipped in the middle; pending changes must survive
+        // until its next invocation on the right-hand visible interval.
+        let clipped=[SpatialCommand::NativeSampledPaint {regions:&[0,3],sample:&sample,owners:&owners,
+            alpha_is_shape:false,mode:BlendMode::Normal}];
+        let result=compose_grouped_polygon_pixel(&regions,&clipped,rgb.color_space(),clear,
+            0,0,10_000_000,100000,&||false,&|_|Some(Box::new(()))).unwrap();
+        assert!((result.alpha()-0.5).abs()<1e-12);
+        assert!((result.native_components().unwrap()[0]-0.096).abs()<1e-12);
+    }
+    }
+}
+
+#[test]
+fn owner_plan_refusal_and_every_cancellation_release_capacity() {
+    use super::native_blend::Model;
+    use hayro_interpret::color::{AlphaColor,Color};
+    use std::cell::Cell;
+    use std::sync::{Arc,atomic::{AtomicUsize,Ordering}};
+    struct Credit(Arc<AtomicUsize>,usize);
+    impl Drop for Credit {fn drop(&mut self){self.0.fetch_sub(self.1,Ordering::Relaxed);}}
+    let used=Arc::new(AtomicUsize::new(0));let requests=Cell::new(0);let deny=Cell::new(usize::MAX);
+    let admit=|bytes| {
+        requests.set(requests.get()+1);
+        if requests.get()==deny.get() {return None;}
+        used.fetch_add(bytes,Ordering::Relaxed);
+        Some(Box::new(Credit(used.clone(),bytes)) as Box<dyn std::any::Any+Send+Sync>)
+    };
+    let rgb=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
+    let clear=Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap();
+    let source=Pixel::from_native(Model::Rgb,&[0.,1.,0.],1.).unwrap();
+    let path=kurbo::Rect::new(0.,0.,1.,1.).to_path(0.1);let regions=[(&path,Fill::NonZero)];
+    let sample=|_:kurbo::Point,_:&dyn Fn()->bool,_:&mut usize,owner:Option<usize>| {
+        assert_eq!(owner,Some(7));Some(Some(NativeSpatialSample {pixel:source,space:rgb.color_space()}))
+    };
+    let commands=[SpatialCommand::NativeSampledPaint {regions:&[0],sample:&sample,owners:&[(0,7),(0,2)],
+        alpha_is_shape:false,mode:BlendMode::Normal}];
+    let run=|cancelled:&dyn Fn()->bool|compose_grouped_polygon_point(&regions,&commands,rgb.color_space(),clear,
+        kurbo::Point::new(0.5,0.5),10000,10000,cancelled,&admit);
+    let polls=Cell::new(0);
+    assert!(run(&||{polls.set(polls.get()+1);false}).is_some());
+    let allocations=requests.get();let checkpoints=polls.get();
+    assert_eq!(used.load(Ordering::Relaxed),0);
+    for target in 1..=allocations {
+        requests.set(0);deny.set(target);
+        assert!(run(&||false).is_none());
+        assert_eq!(used.load(Ordering::Relaxed),0);
+    }
+    deny.set(usize::MAX);
+    for target in 1..=checkpoints {
+        polls.set(0);
+        assert!(run(&||{polls.set(polls.get()+1);polls.get()>=target}).is_none());
+        assert_eq!(used.load(Ordering::Relaxed),0);
+    }
+    assert!(run(&||false).is_some());assert_eq!(used.load(Ordering::Relaxed),0);
+}
+
+#[test]
+fn sparse_routing_preserves_highest_word_and_coverage_changes() {
+    use super::native_blend::Model;
+    use hayro_interpret::color::{AlphaColor,Color};
+    let rgb=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
+    let clear=Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap();
+    let mut paths=vec![kurbo::Rect::new(2.,0.,3.,1.).to_path(0.1);4095];
+    paths[0]=kurbo::Rect::new(0.,0.,1.,1.).to_path(0.1);
+    paths[4094]=kurbo::Rect::new(0.,0.,0.5,1.).to_path(0.1);
+    let regions:Vec<_>=paths.iter().map(|p|(p,Fill::NonZero)).collect();
+    let commands=[
+        SpatialCommand::Paint(SpatialPaint {regions:&[0],source:Pixel::from_native(Model::Rgb,&[0.,1.,0.],1.).unwrap(),mode:BlendMode::Normal}),
+        SpatialCommand::Paint(SpatialPaint {regions:&[0,4094],source:Pixel::from_native(Model::Rgb,&[1.,0.,0.],1.).unwrap(),mode:BlendMode::Normal}),
+    ];
+    let result=compose_grouped_polygon_pixel(&regions,&commands,rgb.color_space(),clear,
+        0,0,2_000_000,10000,&||false,&|_|Some(Box::new(()))).unwrap();
+    assert_eq!(result.alpha(),1.);
+    assert_eq!(&result.native_components().unwrap()[..3],&[0.5,0.5,0.]);
+}
+
+#[test]
+fn neutral_ais_group_preserves_sampled_sources_in_hardlight_parent() {
+    use super::native_blend::Model;
+    use hayro_interpret::color::{AlphaColor,Color};
+    let rgb=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
+    let backdrop=Pixel::from_native(Model::Rgb,&[0.2,0.3,0.8],0.7).unwrap();
+    let path=kurbo::Rect::new(0.,0.,1.,1.).to_path(0.1);let regions=[(&path,Fill::NonZero)];
+    let sample=|p:kurbo::Point,_:&dyn Fn()->bool,remaining:&mut usize,_:Option<usize>| {
+        *remaining=remaining.checked_sub(1)?;
+        Some(Some(NativeSpatialSample {pixel:Pixel::from_native(Model::Rgb,&[p.x,p.y,0.2],0.4).unwrap(),space:rgb.color_space()}))
+    };
+    let other=|p:kurbo::Point,_:&dyn Fn()->bool,remaining:&mut usize,_:Option<usize>| {
+        *remaining=remaining.checked_sub(1)?;
+        Some(Some(NativeSpatialSample {pixel:Pixel::from_native(Model::Rgb,&[0.3,p.x,0.8],0.6).unwrap(),space:rgb.color_space()}))
+    };
+    for source_ais in [false,true] {
+        let mut commands=vec![
+            SpatialCommand::Begin {isolated:false,knockout:false,opacity:0.5,alpha_is_shape:false,mode:BlendMode::HardLight},
+            SpatialCommand::Begin {isolated:false,knockout:false,opacity:1.,alpha_is_shape:true,mode:BlendMode::Normal},
+            SpatialCommand::NativeSampledPaint {regions:&[0],sample:&sample,owners:&[],alpha_is_shape:source_ais,mode:BlendMode::Normal},
+            SpatialCommand::NativeSampledPaint {regions:&[0],sample:&other,owners:&[],alpha_is_shape:source_ais,mode:BlendMode::Normal},
+            SpatialCommand::End,SpatialCommand::End,
+        ];
+        let run=|commands:&[SpatialCommand<'_>]|compose_grouped_polygon_pixel(&regions,commands,rgb.color_space(),backdrop,
+            0,0,100000,100000,&||false,&|_|Some(Box::new(()))).unwrap();
+        let before=run(&commands);
+        assert_eq!(flatten_neutral_groups(&mut commands,&mut 100000,&||false),Some(2));
+        let after=run(&commands);
+        assert!((before.alpha()-after.alpha()).abs()<1e-12);
+        for (a,b) in before.native_components().unwrap().iter().zip(after.native_components().unwrap()) {
+            assert!((a-b).abs()<1e-12);
+        }
+    }
+}
+
+#[test]
+fn knockout_full_shape_pruning_requires_parent_knockout_and_ais_false() {
+    use super::native_blend::Model;
+    let source=Pixel::from_native(Model::Rgb,&[1.,0.,0.],1.).unwrap();
+    for knockout in [false,true] {for ais in [false,true] {
+        let group=|opacity,knockout,alpha_is_shape|SpatialCommand::Begin {isolated:false,knockout,opacity,alpha_is_shape,mode:BlendMode::Normal};
+        let paint=SpatialCommand::Paint(SpatialPaint {regions:&[0],source,mode:BlendMode::Normal});
+        let commands=[group(1.,knockout,false),group(0.4,false,ais),paint,SpatialCommand::End,
+            group(0.6,false,ais),paint,SpatialCommand::End,SpatialCommand::End];
+        let mut keep=[true;8];let mut ignored=[false;8];let ends=[7,3,0,0,6,0,0,0];
+        assert_eq!(prune_overwritten_route(&commands,&mut keep,&mut ignored,&ends,&mut 10000,&||false),
+            Some(if knockout && !ais {3} else {0}));
+        if knockout && !ais {assert!(ignored[1..4].iter().all(|&v|v));}
+    }}
+}
+
+#[test]
+fn opaque_native_group_shortcut_matches_general_sampled_group() {
+    use super::native_blend::Model;
+    use hayro_interpret::color::{AlphaColor,Color};
+    let rgb=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
+    let path=kurbo::Rect::new(0.,0.,1.,1.).to_path(0.1);let regions=[(&path,Fill::NonZero)];
+    let mask=|_:kurbo::Point,_:&dyn Fn()->bool|Some(0.3);
+    for parent_knockout in [false,true] {for isolated in [false,true] {for child_knockout in [false,true] {
+    for ais in [false,true] {for source_alpha in [0.,0.4,1.] {for opacity in [0.,0.4,1.] {
+    for masked in [false,true] {for mode in [BlendMode::Normal,BlendMode::Multiply,BlendMode::Screen,BlendMode::HardLight] {
+        let backdrop=Pixel::from_native(Model::Rgb,&[0.2,0.7,0.4],0.6).unwrap();
+        let pixel=Pixel::from_native(Model::Rgb,&[0.8,0.3,0.9],source_alpha).unwrap();
+        let native=|_:kurbo::Point,_:&dyn Fn()->bool,remaining:&mut usize,_:Option<usize>| {
+            *remaining=remaining.checked_sub(1)?;
+            Some(Some(NativeSpatialSample {pixel,space:rgb.color_space()}))
+        };
+        let generic=|_:kurbo::Point,_:&dyn Fn()->bool|Some(Some(pixel));
+        let run=|native_path| {
+            let mut commands=vec![SpatialCommand::Begin {isolated:false,knockout:parent_knockout,opacity:1.,alpha_is_shape:false,mode:BlendMode::Normal}];
+            if masked {commands.push(SpatialCommand::SetMask {sample:&mask,sample_cost:1});}
+            commands.push(SpatialCommand::Begin {isolated,knockout:child_knockout,opacity,alpha_is_shape:ais,mode});
+            commands.push(if native_path {SpatialCommand::NativeSampledPaint {regions:&[0],sample:&native,owners:&[],alpha_is_shape:ais,mode:BlendMode::Normal}}
+                else {SpatialCommand::SampledPaint {regions:&[0],sample:&generic,sample_cost:1,alpha_is_shape:ais,mode:BlendMode::Normal}});
+            commands.extend([SpatialCommand::End,SpatialCommand::End]);
+            compose_grouped_polygon_pixel(&regions,&commands,rgb.color_space(),backdrop,0,0,100000,100000,&||false,&|_|Some(Box::new(()))).unwrap()
+        };
+        let actual=run(true);let expected=run(false);
+        assert!((actual.alpha()-expected.alpha()).abs()<1e-12,"alpha parent={parent_knockout} isolated={isolated} child={child_knockout} ais={ais} source={source_alpha} opacity={opacity} mask={masked} mode={mode:?}");
+        for (a,b) in actual.native_components().unwrap().iter().zip(expected.native_components().unwrap()) {assert!((a-b).abs()<1e-12);}
+    }}}}}}}}
+}

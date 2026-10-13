@@ -1,0 +1,22 @@
+{
+  "status": "complete_pinned3file_review_and8_original_key_controls",
+  "repository": "alexander-marquardt/deduplicate-elasticsearch",
+  "commit": "b352e7c16796eb1e2f7836c3b5263b478a220f22",
+  "fully_read_files": [
+    "LICENSE",
+    "README.md",
+    "deduplicate-elaticsearch.py"
+  ],
+  "license": "MIT Copyright2020AlexanderMarquardt",
+  "upstream_tests": 0,
+  "authored_controls": 8,
+  "adopted": false,
+  "findings": [
+    "Delimiter-free str concatenation erases field boundaries/types before hashing; not an MD5 collision.",
+    "Global grouping retains duplicate IDs on repeated calls; no reset, bounded state or cancellation.",
+    "Only selected fields are key scope by design. Missing field raises KeyError; no attributed aggregate error contract.",
+    "Equality confirmation and DELETE are comments/TODO; implementation only prints mget results. Module main executes unconditionally; no network operations executed in this review."
+  ],
+  "extraction": "Unchanged original2Assign and1FunctionDef; real hashlib, no client/module-main execution.",
+  "scope": "Original key grouping only: structural key collisions and repeated-id behavior. No Elasticsearch/scan/mget/delete, external server or full module qualification; source does not implement equality confirmation or DELETE."
+}

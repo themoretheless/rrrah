@@ -1,0 +1,103 @@
+{
+  "scope": "Interior300x245 pixel ROI; fractional final page row/column excluded; unrounded box averages from independently rendered high-resolution original PDF using same native ICC profile",
+  "rows": [
+    {
+      "scale": 8,
+      "region": [
+        0,
+        0,
+        300,
+        245
+      ],
+      "command": [
+        "/tmp/rrrah-poppler-profile-oracle-20261012/build/utils/pdftoppm",
+        "-r",
+        "576",
+        "-f",
+        "1",
+        "-l",
+        "1",
+        "-singlefile",
+        "-x",
+        "0",
+        "-y",
+        "0",
+        "-W",
+        "2400",
+        "-H",
+        "1960",
+        "-defaultcmykprofile",
+        "vendor/hayro-interpret/assets/CGATS001Compat-v2-micro.icc",
+        "tests/fixtures/data/metal-recovery/ai-corpus/VectorApple.ai",
+        "docs/research/ai-covered-fragment-sampling-2026-10-12/full-area-oracle/area-8x"
+      ],
+      "sha256": "a744058e0359b0070abedbfc8e186c4a684d266654c927b9ca992698536662aa",
+      "stderr": "",
+      "comparisons": {
+        "before": {
+          "mean_absolute_component_error": 0.81396804138322,
+          "max_component_error": 153.203125,
+          "pixels_any_component_error_over_2": 7195,
+          "pixels_any_component_error_over_10": 2155
+        },
+        "after": {
+          "mean_absolute_component_error": 0.7463057681405896,
+          "max_component_error": 153.203125,
+          "pixels_any_component_error_over_2": 7123,
+          "pixels_any_component_error_over_10": 1975
+        }
+      }
+    },
+    {
+      "scale": 16,
+      "region": [
+        0,
+        0,
+        300,
+        245
+      ],
+      "command": [
+        "/tmp/rrrah-poppler-profile-oracle-20261012/build/utils/pdftoppm",
+        "-r",
+        "1152",
+        "-f",
+        "1",
+        "-l",
+        "1",
+        "-singlefile",
+        "-x",
+        "0",
+        "-y",
+        "0",
+        "-W",
+        "4800",
+        "-H",
+        "3920",
+        "-defaultcmykprofile",
+        "vendor/hayro-interpret/assets/CGATS001Compat-v2-micro.icc",
+        "tests/fixtures/data/metal-recovery/ai-corpus/VectorApple.ai",
+        "docs/research/ai-covered-fragment-sampling-2026-10-12/full-area-oracle/area-16x"
+      ],
+      "sha256": "3d6640d0a843a1d26a7dab8297579bde7006dbf2c2d095b26b854cac80505202",
+      "stderr": "",
+      "comparisons": {
+        "before": {
+          "mean_absolute_component_error": 0.8006134318310658,
+          "max_component_error": 154.44140625,
+          "pixels_any_component_error_over_2": 7193,
+          "pixels_any_component_error_over_10": 2101
+        },
+        "after": {
+          "mean_absolute_component_error": 0.729054368622449,
+          "max_component_error": 154.44140625,
+          "pixels_any_component_error_over_2": 7055,
+          "pixels_any_component_error_over_10": 1896
+        }
+      }
+    }
+  ],
+  "oracle_convergence": {
+    "mean_absolute_component_difference": 0.19355369543650794,
+    "max_component_difference": 29.34375
+  }
+}

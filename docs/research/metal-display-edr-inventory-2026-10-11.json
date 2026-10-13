@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-11",
+  "scope": "Read-only local display capability and dynamic EDR snapshot; not physical HDR calibration",
+  "hardware": [
+    {
+      "gpu": "Apple M4 Max",
+      "displays": [
+        {
+          "_name": "Color LCD",
+          "spdisplays_display_type": "spdisplays_built-in-liquid-retina-xdr",
+          "spdisplays_connection_type": "spdisplays_internal",
+          "spdisplays_online": "spdisplays_yes",
+          "spdisplays_pixelresolution": "spdisplays_3456x2234Retina",
+          "_spdisplays_resolution": "2056 x 1329 @ 120.00Hz"
+        }
+      ]
+    }
+  ],
+  "edr": {
+    "displays": [
+      {
+        "currentEDR": 1,
+        "name": "Built-in Retina Display",
+        "potentialEDR": 16,
+        "referenceEDR": 0
+      }
+    ],
+    "observedAt": "2026-10-11T01:02:03Z",
+    "schemaVersion": 1
+  },
+  "reproduce": "swift scripts/inspect-metal-display.swift",
+  "script_sha256": "044b271d0bbba66f663bbae33aa92d0206ccee507b6c4036c13a5c26c4d6287b",
+  "finding": "Built-in Liquid Retina XDR is online; potential EDR=16 and current EDR=1 at this snapshot. Active viewer HDR presentation and physical luminance/color remain unverified.",
+  "limitations": [
+    "NSScreen values are OS metadata, not a photometric/colorimetric measurement",
+    "Current EDR changes with active content, brightness and system policy",
+    "Probe does not change display settings or force EDR availability"
+  ]
+}

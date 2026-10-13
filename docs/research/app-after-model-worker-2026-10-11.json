@@ -1,0 +1,218 @@
+{
+  "passed": 208,
+  "failed": 0,
+  "ignored": 52,
+  "ignored_tests": [
+    [
+      "foreground_loader_tests::hundred_thousand_valid_sources_navigate_with_bounded_prefetch_and_pressure",
+      "manual 100000 valid file paths with mixed-format cache navigation"
+    ],
+    [
+      "foreground_loader_tests::metal_upload_retains_raw_lease_until_submission_completion",
+      "requires Metal device and RRRAH_SONY_SR2_CORPUS pinned source"
+    ],
+    [
+      "foreground_loader_tests::mixed_gallery_reversals_preserve_metal_frames_and_prefetch_pressure",
+      "requires actual GPU for mixed-format prefetch navigation readback"
+    ],
+    [
+      "foreground_loader_tests::queued_ai_page_reversal_cancels_stale_preload_and_preserves_metal",
+      "requires pinned AI corpus and actual Metal for queued page navigation"
+    ],
+    [
+      "foreground_loader_tests::queued_navigation_cancels_x3f_preload_and_decodes_latest_raster",
+      "requires external SD10 source"
+    ],
+    [
+      "foreground_loader_tests::raw_thumbnail_source_and_preview_share_managed_root",
+      "requires external Sony DSC-F828 SRF fixture"
+    ],
+    [
+      "foreground_loader_tests::real_ai_cached_pages_preserve_metal_sdr_hdr_under_full_pressure",
+      "requires pinned AI corpus and actual Metal for cached production-page transport"
+    ],
+    [
+      "foreground_loader_tests::real_ai_cancel_after_render_scratch_admission_recovers_metal",
+      "requires pinned VectorApple original and actual Metal; observes render scratch admission"
+    ],
+    [
+      "foreground_loader_tests::real_ai_pages_use_shared_ram_hits_and_independent_prefetch_keys",
+      "requires pinned AI source corpus; set RRRAH_AI_CORPUS"
+    ],
+    [
+      "foreground_loader_tests::real_x3f_generation_cancellation_after_sensor_allocation_recovers",
+      "requires external SD10 source"
+    ],
+    [
+      "foreground_loader_tests::real_x3f_neighbour_windows_preserve_visible_and_reuse_preload",
+      "requires external SD10 source"
+    ],
+    [
+      "foreground_loader_tests::source_kind_pressure_preserves_visible_then_releases_unpinned_raw",
+      "requires local EOS R8 tests/IMG_9043.CR3 fixture"
+    ],
+    [
+      "fusion_warp_tests::fusion_warp_triggers_quality_and_changes_corrected_channels",
+      "requires pinned official Fusion GPR"
+    ],
+    [
+      "gallery::tests::eip_prefetch_restores_exact_sensor_and_fingerprints_complete_package",
+      "requires authored EIP pair and local EOS R8 CR3"
+    ],
+    [
+      "gallery::tests::folder_scan_retains_all_hundred_thousand_supported_files",
+      "manual 100000 actual directory entries; enumeration without image decode"
+    ],
+    [
+      "gallery::tests::mixed_camera_worker_prefetch_preserves_full_metal_frames",
+      "requires real RAW manifest and actual Metal"
+    ],
+    [
+      "gallery::tests::multi_neighbor_raw_worker_preserves_metal_frames",
+      "requires real RAW manifest and actual Metal"
+    ],
+    [
+      "gallery::tests::navigation_reversal_cancels_blocked_forward_and_warms_backward_raw",
+      "manual real EOS R8 navigation reversal qualification"
+    ],
+    [
+      "gallery::tests::navigation_reversal_worker_preserves_full_raw_metal_frames",
+      "requires real EOS R8 sources and actual Metal for worker navigation qualification"
+    ],
+    [
+      "gallery::tests::raster_selection_warms_real_crw_neighbour",
+      "requires pinned EOS 10D via RRRAH_CRW_SOURCE"
+    ],
+    [
+      "gallery::tests::raster_selection_warms_real_raw_neighbour_without_nonraw_failures",
+      "requires local EOS R8 tests/IMG_9043.CR3 fixture"
+    ],
+    [
+      "gallery::tests::raw_prefetch_byte_limit_preserves_present_priority_neighbour",
+      "requires local EOS R8 tests/IMG_9043.CR3 fixture"
+    ],
+    [
+      "gallery::tests::raw_prefetch_count_limit_counts_retained_neighbours_after_missing_file",
+      "requires external Sony DSC-F828 SRF fixture"
+    ],
+    [
+      "gallery::tests::raw_prefetch_count_limit_preserves_highest_priority_neighbour",
+      "requires local EOS R8 tests/IMG_9043.CR3 fixture"
+    ],
+    [
+      "gallery::tests::raw_prefetch_respects_shared_budget_and_recovers_after_release",
+      "requires local EOS R8 tests/IMG_9043.CR3 fixture"
+    ],
+    [
+      "gpr_development_tests::gpr_opcodes_trigger_default_quality_development",
+      "requires pinned HERO9 GPR"
+    ],
+    [
+      "gpr_development_tests::navigation_cancels_gpr_quality_development_after_float_admission",
+      "requires pinned HERO9 GPR"
+    ],
+    [
+      "gpr_preload_tests::gpr_neighbour_windows_preserve_visible_and_bound_count_and_bytes",
+      "requires pinned HERO9 GPR"
+    ],
+    [
+      "gpr_preload_tests::gpr_preload_hits_ram_and_disk_and_cancels_stale_generation",
+      "requires pinned HERO9 GPR"
+    ],
+    [
+      "linear_pfm_viewer_tests::linear_cli_astc_hdr_preload_swap_preserves_metal_sdr_and_hdr",
+      "requires actual Metal device"
+    ],
+    [
+      "linear_pfm_viewer_tests::linear_cli_dpx_preload_swap_preserves_metal_sdr_and_hdr",
+      "requires actual Metal device"
+    ],
+    [
+      "linear_pfm_viewer_tests::linear_cli_ktx2_hdr_preload_swap_preserves_metal_sdr_and_hdr",
+      "requires actual Metal device"
+    ],
+    [
+      "linear_pfm_viewer_tests::linear_cli_pfm_preload_swap_preserves_metal_sdr_and_hdr",
+      "requires actual Metal device"
+    ],
+    [
+      "linear_pfm_viewer_tests::pfm_top_down_cli_swap_preserves_metal_sdr_hdr_rows",
+      "requires actual Metal device"
+    ],
+    [
+      "linear_pfm_viewer_tests::photographic_heif_preload_cache_hit_under_full_pressure_and_metal",
+      "requires external 24 MP Canon DPP PQ HEIF and actual Metal"
+    ],
+    [
+      "linear_pfm_viewer_tests::viewer_uses_supported_metal_texture_extent_above_default",
+      "requires Metal adapter supporting textures wider than portable default"
+    ],
+    [
+      "model_upload_worker::swap_tests::native_models_swap_through_worker_preserve_sdr_hdr",
+      "requires actual GPU for model swap-to-worker SDR/HDR qualification"
+    ],
+    [
+      "model_upload_worker::tests::latest_model_upload_wins_and_cancel_releases_worker_credit",
+      "requires actual GPU for bounded model worker qualification"
+    ],
+    [
+      "raster_lod_worker::tests::navigation_discards_delayed_old_swap_and_presents_only_new_hdr_source",
+      "actual Metal navigation while old swapped region worker is delayed"
+    ],
+    [
+      "raster_swap_viewer_tests::real_x3f_display_ram_hit_and_swap_restore_exact",
+      "requires external SD10 source"
+    ],
+    [
+      "raster_swap_viewer_tests::repeated_hdr_ttl_viewer_prefetch_restore_preserves_metal_frames",
+      "requires actual Metal for viewer TTL swap and prefetch readback"
+    ],
+    [
+      "raster_viewport::tests::cancelled_generation_lod_filter_and_upload_preserve_old_frame_and_release_credit",
+      "actual Metal stale-generation LOD filtering and queued upload cancellation"
+    ],
+    [
+      "raster_viewport::tests::large_swapped_hdr_lod_reaches_exact_metal_frame",
+      "actual Metal 36MP original-swap HDR LOD latency and bounded workspace"
+    ],
+    [
+      "raster_viewport::tests::panning_reuses_margin_with_replacement_headroom_and_exact_frames",
+      "actual Metal panning overscan residency and exact SDR/HDR frames"
+    ],
+    [
+      "raster_viewport::tests::swapped_residency_releases_full_source_and_preserves_detail_and_fit",
+      "actual Metal swapped source residency, worker panning and fit preview"
+    ],
+    [
+      "raster_viewport::tests::viewer_automatically_opens_hdr_lod_switches_to_source_and_reuses_cached_level",
+      "actual Metal automatic fit HDR LOD and source-region switching"
+    ],
+    [
+      "raster_viewport::tests::viewer_region_fallback_retains_source_reuses_and_retries",
+      "actual Metal viewer region fallback and managed source lifetime"
+    ],
+    [
+      "raster_viewport::tests::worker_prepared_level_installs_without_filtering_or_scanning_full_source_on_ui",
+      "actual Metal worker-prepared managed HDR level publication"
+    ],
+    [
+      "raw_load_policy::tests::real_3fr_decode_admission_refusal_recovers_disk_and_swap",
+      "requires pinned Hasselblad X1D 3FR source"
+    ],
+    [
+      "raw_ram_preload_tests::idle_timer_spills_real_raw_and_restores_sensor_values",
+      "requires local EOS R8 tests/IMG_9043.CR3 fixture"
+    ],
+    [
+      "raw_ram_preload_tests::native_raw_preload_hits_ram_and_disk_without_transferring_visible_pin",
+      "requires local EOS R8 tests/IMG_9043.CR3 fixture"
+    ],
+    [
+      "thumbnail_retry_tests::thumbnail_budget_callbacks_progress_without_surface_redraw",
+      "requires actual Metal device"
+    ]
+  ],
+  "scope": "All ordinary rrrah application binary tests after model event-loop/worker integration. Manual GPU/external-fixture tests remain explicitly separate.",
+  "log": "docs/research/app-after-model-worker-2026-10-11.log",
+  "sha256": "721392e2c90f2a5c556fd3caf5d453271b73312041a53e39e8ed42d3a0f44cfb"
+}

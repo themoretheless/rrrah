@@ -20,6 +20,11 @@ pub struct AnchorRankPolicy {
 pub struct AnchorRankEvidence {
     pub forward_anchors: usize,
     pub reverse_anchors: usize,
+    /// Bounding rectangles [x,y,width,height] of the selected center windows,
+    /// in original source/target coordinates. Context padding is excluded;
+    /// gaps between windows are not evidence of compared pixels.
+    pub source_window_bounds: [u32; 4],
+    pub target_window_bounds: [u32; 4],
     pub forward: RankRegionEvidence,
     pub reverse: RankRegionEvidence,
     pub supported: bool,
@@ -135,6 +140,8 @@ pub fn compare_anchor_rank(
     let bc = budget.try_reserve(bytes).map_err(|_| LocalRankError::Budget)?;
     let mut aw = Vec::new();
     let mut bw = Vec::new();
+    let mut source_bounds=None::<[u32;4]>;
+    let mut target_bounds=None::<[u32;4]>;
     aw.try_reserve_exact(points.len())
         .map_err(|_| LocalRankError::Budget)?;
     bw.try_reserve_exact(points.len())
@@ -173,9 +180,9 @@ pub fn compare_anchor_rank(
         {
             continue;
         }
-        for (xy, d, windows) in [
-            (point.source, source.dimensions(), &mut aw),
-            (point.target, target.dimensions(), &mut bw),
+        for (xy, d, windows, bounds) in [
+            (point.source, source.dimensions(), &mut aw, &mut source_bounds),
+            (point.target, target.dimensions(), &mut bw, &mut target_bounds),
         ] {
             if let Some(rect) = window(xy, d, policy.window_radius, size) {
                 let mut conflict = false;
@@ -189,6 +196,18 @@ pub fn compare_anchor_rank(
                     }
                 }
                 if !conflict {
+                    // All endpoints were checked by `window`; the union stays
+                    // within the same image. Piggyback on admitted selection,
+                    // with no second pass or retained allocation.
+                    *bounds=Some(match *bounds {
+                        None=>rect,
+                        Some(prior)=>{
+                            let x=prior[0].min(rect[0]);let y=prior[1].min(rect[1]);
+                            let right=(prior[0]+prior[2]).max(rect[0]+rect[2]);
+                            let bottom=(prior[1]+prior[3]).max(rect[1]+rect[3]);
+                            [x,y,right-x,bottom-y]
+                        }
+                    });
                     windows.push(rect)
                 }
             }
@@ -263,6 +282,8 @@ pub fn compare_anchor_rank(
     Ok(AnchorRankEvidence {
         forward_anchors: bw.len(),
         reverse_anchors: aw.len(),
+        source_window_bounds: source_bounds.ok_or(LocalRankError::InsufficientGeometry)?,
+        target_window_bounds: target_bounds.ok_or(LocalRankError::InsufficientGeometry)?,
         forward,
         reverse,
         supported: passes(forward) && passes(reverse),

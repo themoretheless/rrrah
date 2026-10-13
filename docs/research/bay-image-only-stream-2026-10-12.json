@@ -1,0 +1,65 @@
+{
+  "change": "native streaming image-bearing BAY sensor API excludes documented QV5700 trailer positions; no full storage buffer or crop copy",
+  "api": "read_bay_image_sensor_with_budget",
+  "geometry_api": "BaySensorLayout::image_dimensions",
+  "layouts": [
+    {
+      "name": "QV-2000UX",
+      "dimensions": [
+        1632,
+        1211
+      ],
+      "managed_peak_bytes": 3954336
+    },
+    {
+      "name": "QV-3000EX",
+      "dimensions": [
+        2080,
+        1547
+      ],
+      "managed_peak_bytes": 6437600
+    },
+    {
+      "name": "QV-5700",
+      "dimensions": [
+        2576,
+        1924
+      ],
+      "managed_peak_bytes": 9915680
+    }
+  ],
+  "checks": [
+    "every image sample equals pinned independent test-only LibRaw oracle after excluding trailer columns",
+    "ordinary self-contained authored packing verifies every output sample",
+    "exact output+one-row admission succeeds",
+    "one-byte-short admission refuses and releases all credits",
+    "legacy full-row storage API unchanged; its authored oracle still exact",
+    "shared row-reader cancellation/truncation/growth regressions pass",
+    "final managed ownership zero"
+  ],
+  "focused": {
+    "passed": 9,
+    "failed": 0,
+    "ignored": 0,
+    "log": "bay-image-only-stream-final-2026-10-12.log"
+  },
+  "decoder": {
+    "passed": 1024,
+    "failed": 0,
+    "ignored": 73,
+    "log": "decode-after-bay-image-stream-2026-10-12.log"
+  },
+  "manifest": "tests/fixtures/bay-authored-oracles.json",
+  "primary_layout_reference": "https://www.inweb.ch/foto/rawformat.html",
+  "source_hashes": {
+    "crates/rrrah-decode/src/bay.rs": "21e96144898ceccdb8974ec4bac10af1ee833746bdeec4008d77e980b1afb21a",
+    "crates/rrrah-decode/src/lib.rs": "1229063382282165977fb8ba36fc9a90cbbbe763db992129ae660b596d0f5b18"
+  },
+  "limitations": [
+    "authored sensor packing; original camera files, CFA, WB, black/white/color and normal viewer route remain unqualified",
+    "image-bearing geometry is not an optical-black crop",
+    "managed peak excludes OS RSS",
+    "initial focused run failed because oracle corpus path was wrong; corrected to explicit external-corpus environment and retained failed log",
+    "format catalogue remains94 implemented subsets/6Pending; no full format qualification claim"
+  ]
+}

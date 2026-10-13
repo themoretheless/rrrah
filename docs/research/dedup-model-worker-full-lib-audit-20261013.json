@@ -1,0 +1,36 @@
+{
+  "status": "verified_decode_full_lib107_with5_manual_ignored",
+  "passed": 107,
+  "failed": 0,
+  "ignored": [
+    [
+      "gradient::batch_tests::alternating_matcher_timing",
+      "manual alternating exact matcher timing control"
+    ],
+    [
+      "gradient::batch_tests::real_photo_matcher_timing",
+      "manual real-photo exact matcher timing and parity"
+    ],
+    [
+      "gradient::matching_tests::alternating_matcher_timing",
+      "manual alternating exact matcher timing control"
+    ],
+    [
+      "gradient::matching_tests::real_photo_matcher_timing",
+      "manual real-photo exact matcher timing and parity"
+    ],
+    [
+      "gradient_index::row_major_tests::row_major_index_build_latency_probe",
+      "explicit alternating index construction measurement"
+    ]
+  ],
+  "source_files_verified": 3746,
+  "executable": "/Users/themoretheless/.codex/tmp/rrrah-model-worker-failure-credit-20261013/full-lib-test",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-model-worker-full-lib-20261013.json": "5a793d088fb87743e4b6d60d8a0681e0c508e3487c47ec4f6284a946a08e322e",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-model-worker-failure-credit-20261013.json": "dcb133d95e01c61324a0ca1143ff12ae0af6a06a1dd6ebcf22b3ace27acd03f9",
+    "/Users/themoretheless/.codex/tmp/rrrah-model-worker-failure-credit-20261013/full-lib.log": "ffc3fbef814367b342073c2469f4e6df082d120cb50d0661bcc2a8ea7dd42769",
+    "/Users/themoretheless/.codex/tmp/rrrah-model-worker-failure-credit-20261013/full-lib-test": "918dca6fb632f879c8a0d8f2db2c187595a05a2934610924c68eec85442a50cd"
+  },
+  "scope": "All lib tests under decode on frozen model-worker failure-credit snapshot. Excludes later mesh contrast change, full integration targets, realTorch qualification and other platforms."
+}

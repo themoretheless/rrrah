@@ -1,0 +1,20 @@
+{
+  "scope": "Production raster cache/prefetch retention helper regression: count2 and byte80 policies after real truncated PNG neighbor refusal",
+  "ordinary_app_passed": 210,
+  "ignored": 57,
+  "log": "docs/research/rrrah-raster-prefetch-count-byte-failure-20261011.log",
+  "log_sha256": "c27109ec6461d3c5e0f2f185604a4f7b1518e87dc89907d3434ae1b430b5c1c8",
+  "source_sha256": "864ecff085b2ddc3c92ed1c3e2b104d435116ebf56d49529db8052a2dca62e02",
+  "checks": [
+    "Corrupt neighbor leaves selected16byte frame and count1 only",
+    "Nearest64byte frame retained against farther64byte candidate",
+    "Nearest hit bypasses decoding",
+    "Lease release permits farther replacement",
+    "Final managed credit0"
+  ],
+  "limitations": [
+    "Test exercises loader/cache helpers, not complete worker scheduling",
+    "No new Metal run because production code unchanged from preceding verified Metal run",
+    "Model and foreground RAW branches still need equivalent scoped prefetch protection audit"
+  ]
+}

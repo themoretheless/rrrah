@@ -1,0 +1,134 @@
+{
+  "passed": 3,
+  "failed": 0,
+  "ignored": 0,
+  "parallel_scenarios": 3,
+  "seconds_per_scenario": 600,
+  "total_writes": 13388,
+  "total_exact_restores": 13388,
+  "total_pressure_refusals_and_retries": 13388,
+  "cases": [
+    {
+      "seconds": 600.046821292,
+      "cycles": 4462,
+      "pressure_refusals": 4462,
+      "root_peak": 2097152,
+      "queue_peak": 262144,
+      "disk_peak_bytes": 786624,
+      "disk_peak_objects": 3,
+      "final": 0,
+      "test": "sustained_byte_cap_evicts_without_count_or_ttl_pressure"
+    },
+    {
+      "seconds": 600.052864458,
+      "cycles": 4462,
+      "pressure_refusals": 4462,
+      "root_peak": 2097152,
+      "queue_peak": 262144,
+      "disk_peak_bytes": 4195328,
+      "disk_peak_objects": 16,
+      "final": 0,
+      "test": "sustained_large_keyspace_delayed_swap_pressure_and_retry"
+    },
+    {
+      "seconds": 600.132017208,
+      "cycles": 4464,
+      "pressure_refusals": 4464,
+      "root_peak": 2097152,
+      "queue_peak": 262144,
+      "disk_peak_bytes": 786624,
+      "disk_peak_objects": 3,
+      "final": 0,
+      "test": "sustained_count_cap_evicts_without_byte_or_ttl_pressure"
+    }
+  ],
+  "checks": [
+    "256x256 RGBA payload and color space exact after restore",
+    "full managed root pressure refuses restore, then retries without lost entry",
+    "independent byte quota reaches exactly 786624 bytes with spare count/TTL capacity",
+    "independent count quota reaches 3 objects with spare byte/TTL capacity",
+    "logical and physical disk file quotas checked each cycle",
+    "count-evicted keys absent",
+    "zero swap errors and queued bytes",
+    "final root and queue reservations zero"
+  ],
+  "sampled_process_memory": {
+    "samples": [
+      {
+        "elapsed": "02:28",
+        "rss_kib": 5632
+      },
+      {
+        "elapsed": "02:58",
+        "rss_kib": 5664
+      },
+      {
+        "elapsed": "03:28",
+        "rss_kib": 5680
+      },
+      {
+        "elapsed": "03:58",
+        "rss_kib": 5680
+      },
+      {
+        "elapsed": "04:28",
+        "rss_kib": 5680
+      },
+      {
+        "elapsed": "04:58",
+        "rss_kib": 5680
+      },
+      {
+        "elapsed": "05:28",
+        "rss_kib": 5680
+      },
+      {
+        "elapsed": "05:58",
+        "rss_kib": 5680
+      },
+      {
+        "elapsed": "06:28",
+        "rss_kib": 5680
+      },
+      {
+        "elapsed": "06:58",
+        "rss_kib": 5680
+      },
+      {
+        "elapsed": "07:28",
+        "rss_kib": 5808
+      },
+      {
+        "elapsed": "07:58",
+        "rss_kib": 5808
+      },
+      {
+        "elapsed": "08:28",
+        "rss_kib": 5824
+      },
+      {
+        "elapsed": "08:58",
+        "rss_kib": 5824
+      },
+      {
+        "elapsed": "09:28",
+        "rss_kib": 5824
+      },
+      {
+        "elapsed": "09:58",
+        "rss_kib": 5824
+      }
+    ],
+    "max_sampled_rss_kib": 5824,
+    "scope": "30-second samples, not an exact process peak"
+  },
+  "log_sha256": "9c6f499e741610731023ee2e98038e3c84a5f18d85e65a271d6029ed1c1387cd",
+  "rss_sha256": "fb209e8ce18a3c767ffd1531c3992b54dffe7aca532c6b0278434a1bdba01fe6",
+  "limits": [
+    "Delayed local file I/O simulates latency; not a measured physical slow drive",
+    "Managed root exhaustion is not OS-wide pressure",
+    "RSS samples begin after startup and are not an exact high-water mark",
+    "Combined scenario has TTL enabled but does not independently prove TTL eviction dominance",
+    "These storage tests do not exercise GPU display during the ten-minute interval"
+  ]
+}

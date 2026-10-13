@@ -1,0 +1,52 @@
+{
+  "date": "2026-10-11",
+  "scope": "Exhaustive admitted cancellation checkpoints of the 8200-pixel managed/interleaved Metal compute readback fixture",
+  "adapter": "Metal Apple M4 Max",
+  "pixels": 8200,
+  "components": 4,
+  "layouts": [
+    "managed pixel arrays",
+    "interleaved floats"
+  ],
+  "admitted_checkpoints_per_layout": 6,
+  "cancel_cases": 12,
+  "successful_retries": 12,
+  "stages": [
+    "after resource admission",
+    "before command submission",
+    "readback copy chunk 1",
+    "readback copy chunk 2",
+    "readback copy chunk 3",
+    "before result publication"
+  ],
+  "checks": [
+    "Each exercised checkpoint returns ExposureError::Cancelled",
+    "CPU/GPU credit returns to zero after every canceled call",
+    "Every retry after cancellation matches every expected CPU exposure pixel",
+    "CPU/GPU credit returns to zero after retry result drop"
+  ],
+  "test_suite": {
+    "passed": 4,
+    "failed": 0,
+    "ignored": 2
+  },
+  "log": {
+    "path": "/tmp/rrrah-metal-compute-cancel-all-20261011.log",
+    "sha256": "8d01490291a7ecd5f24e7c4b06e821adca9abd7ec4c40657fb57031e1201862c"
+  },
+  "source_sha256": "53ce460aa4203320e4f336e3d09bf9c40e5d677e6ece738f93efaa3aeb2cadc7",
+  "source_capture_note": "Only whitespace indentation was corrected after the verified run",
+  "reproduce": {
+    "environment": {
+      "RRRAH_GPU_OPTIONAL": "0",
+      "RRRAH_GPU_BACKEND": "metal"
+    },
+    "command": "cargo test --locked --offline --target-dir /tmp/rrrah-required-corpus-target -p rrrah-gpu --test compute_readback -- --nocapture --test-threads=1"
+  },
+  "limitations": [
+    "This small fixture covers all its admitted checkpoints, not every large image copy checkpoint or concurrent race",
+    "Driver submission and GPU execution are not interrupted mid-command",
+    "No physical HDR display or NVIDIA qualification",
+    "Two full-sensor tests are ignored by this ordinary suite and have separate explicit execution evidence in metal-current-manual-followups-2026-10-11.json"
+  ]
+}

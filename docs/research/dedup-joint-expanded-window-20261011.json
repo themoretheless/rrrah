@@ -1,0 +1,65 @@
+{
+  "status": "running",
+  "producer_pid": 93652,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-joint-window-roster-audit-20261011.json": "68a014aeacdc2b5f439dccb8f97eea58681193ac9629b3c783a0f5ab47e16b51",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-joint-model-window-roster-controls-20261011.json": "381d3518f92597a78ecb539c29e7c6cc433af311fa170c38075b9a70c77101ee",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-exact-portfolio-20261011/debug/joint_model_expanded_window": "0d6d5eb2095650bf40208f75f4375892765eec6d1b6d494c032834c516f0b70e",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-expanded-window-qualified-20261011/joint_model_expanded_window": "0d6d5eb2095650bf40208f75f4375892765eec6d1b6d494c032834c516f0b70e",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-joint-expanded-window-20261011.py": "65e79037237815174e96ab8178727f83448a946fe855b7f0d5c7ddeaceb70418",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-expanded-window-harness-20261011/Cargo.toml": "fe2a0d7e7d7a05294a5368bc85bae2ab763a46bcc68ba0c46473ce10eea9a8f6",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-expanded-window-harness-20261011/Cargo.lock": "cc5b54756fe7ede0b3d9b671f3b3b57ee56054f5197ccfbd58d4ebdb6964baca",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-expanded-window-harness-20261011/src/bin/joint_model_expanded_window.rs": "1fe1c32dd3dd4244f6d77176f8a8b9e81f6cf59b54b477b21c1be48639ec6aef",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-joint-model-tiles-native-fixed-audit-20261011.json": "2c307fd4d1412edd6836f257638f9464cb5311736f6dee6b2a2ae6169998310b",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-exact-portfolio-20261011/debug/joint_model_window_roster": "d7694afe8d988aefd23f757d58a148ff3dee3caea1b20f4800ee1bfe5d2c655b",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-model-window-roster-controls-qualified-20261011/joint_model_tiles_files": "d7694afe8d988aefd23f757d58a148ff3dee3caea1b20f4800ee1bfe5d2c655b",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-publisher-positives-qualified-20261011/audits/ordering-prefix-0458.json": "a790769341341700f9abba71a364a888851021be78ee0417badbdc0a89387707",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors": "59e55bf0ecd047db9c513672d121a3ea677529ad448bdc3a359e92862c74ddd7",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-joint-window-roster-controls-20261011.py": "a6be9ff290171b3910426a96dd00f4f85849631edf2a89e1b1758080abc2e616",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200301.jpg": "b807d0390bcd90c257cc4dff03d1b9da23aa68c57b2b22151401e67762cec839",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200300.jpg": "0573729209c9ce6c109ea1175079960165b915dd5579121f0e15653d56f755d0",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/203502.jpg": "bf1d351e0a8259716fe65e0eb3c37a55e25bfa3d1d06042c8a50f8935b31dd1c",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/203500.jpg": "e22cba724438643ac01eb2516eab2ab466d51544218f9096c2a99fbbf07c4aac"
+  },
+  "plan": {
+    "original_id": 35,
+    "query_id": 209,
+    "group_id": 203500,
+    "original": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/203500.jpg",
+    "query": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/203502.jpg",
+    "direction": "reverse",
+    "left": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/203502.jpg",
+    "right": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/203500.jpg",
+    "source_tolerance": 0.5536776036072714,
+    "gradient_minimum_distance": 0.19068231807512986,
+    "radius_0_1_proposed": false,
+    "baseline_index": 67
+  },
+  "results": [
+    {
+      "window_radius": 6,
+      "command": [
+        "/usr/bin/time",
+        "-l",
+        "/usr/bin/env",
+        "DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+        "/Users/themoretheless/.codex/tmp/rrrah-joint-model-window-roster-controls-qualified-20261011/joint_model_tiles_files",
+        "/Users/themoretheless/.codex/tmp/rrrah-joint-expanded-window-qualified-20261011/joint_model_expanded_window",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/203500.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+        "640",
+        "0.5536776036072714",
+        "6"
+      ],
+      "status": "running",
+      "pid": 93654,
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "Error: \"usage: joint_model_tiles_files source target weights max_side source_tolerance\"\n        0.20 real         0.13 user         0.02 sys\n           103759872  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n                7015  page reclaims\n                  14  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                 494  voluntary context switches\n                  11  involuntary context switches\n          1630960576  instructions retired\n           449194036  cycles elapsed\n            60834368  peak memory footprint\n",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-joint-expanded-window-qualified-20261011/radius6.log",
+      "log_sha256": "edc1bf2bebca92ee8715c82957bd5a402037ab8e91f624b0393b9edc61707a44",
+      "elapsed_seconds": 0.20614670799999998
+    }
+  ],
+  "scope": "Reverse203502→203500 fixed filter12,1m hypotheses, window radii6/12. Only center-window coverage changes; contrast/agreement/minimum1000 pairs unchanged. Diagnostic not automatic policy or precision qualification."
+}

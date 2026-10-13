@@ -1,0 +1,59 @@
+{
+  "status": "verified_bounded_diagnostic_joint_score_support",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-joint-geometry-bits-20261011.json": "b0eb71d4ab4fcbb3c606a9140ecf6ff3aeb3396fe275f051bc4fa7193cf9f988",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-joint-geometry-bits-harness-20261011.json": "7f65368e6cca3c1f126391ac8a98ab340539c3b4ff67702e3b4e025416b3d361",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-joint-geometry-bits-20261011.py": "0c2b04c9e555ad823d9eb6c12a057af9d764d4e5f303ecbd2c73d69447c2a0a3",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-geometry-bits-qualified-20261011/204100_opposite.log": "45bf43dcfb71a522646c36ccdd462cf07d72f809938a614ed686772c7af6e93a",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-geometry-bits-qualified-20261011/204100_direct.log": "e430f0ea9024b8b454cfbb40a6de44e4089b4090007e11635d33f05ce0b76855",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-geometry-bits-qualified-20261011/211900_opposite.log": "7eca111a26adecf73c23c414f95780b1c0fb76d34d4851c059c57d1fd65fcf07",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-geometry-bits-qualified-20261011/211900_direct.log": "0d40be2cd7b9ed604afc940ab28344d08b466c512792dceb700232485e7c0fcf"
+  },
+  "results": [
+    {
+      "case": "204100_opposite",
+      "points": 213,
+      "joint_inliers": 12,
+      "anchors": [
+        11,
+        11
+      ],
+      "decimal_parser_bit_differences": 72,
+      "elapsed_seconds": 0.940948334
+    },
+    {
+      "case": "204100_direct",
+      "points": 211,
+      "joint_inliers": 14,
+      "anchors": [
+        13,
+        13
+      ],
+      "decimal_parser_bit_differences": 79,
+      "elapsed_seconds": 0.22375954200000026
+    },
+    {
+      "case": "211900_opposite",
+      "points": 113,
+      "joint_inliers": 12,
+      "anchors": [
+        12,
+        12
+      ],
+      "decimal_parser_bit_differences": 15,
+      "elapsed_seconds": 0.22152245799999992
+    },
+    {
+      "case": "211900_direct",
+      "points": 113,
+      "joint_inliers": 11,
+      "anchors": [
+        11,
+        11
+      ],
+      "decimal_parser_bit_differences": 17,
+      "elapsed_seconds": 0.22321174999999993
+    }
+  ],
+  "scope": "Four exact-binary64 actual native point sets from two original publisher pairs; joint-scored sampled transforms independently satisfy strict caller residuals and original-pixel anchors. No production integration/refinement/managed RANSAC scratch/cancellation/RSS or full-corpus claim. Initial decimal replay is superseded for204100 because endpoint precision was not preserved."
+}

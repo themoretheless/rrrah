@@ -1,0 +1,32 @@
+Upstream: loftr 0.1.1, https://github.com/thomedw/loftr-rs
+Upstream package license declaration: Apache-2.0.
+Source: locally cached published Cargo package; original file SHA-256 inventory
+is docs/research/dedup-loftr-lazy-debug-upstream-20261010.json.
+No upstream NOTICE or standalone license file was present in that package.
+The Apache-2.0 text is included here; original source and README attribution retained.
+
+rrrah modifications, 2026-10-10:
+- Ordinary inference skips debug tensor summaries; forward_debug retains them.
+- Backbone 3x3 convolution computes 32 output rows at a time, reading overlapping
+  input halos. Full image dimensions, kernel weights/names, padding and stride
+  remain unchanged. This reduces measured CPU RSS, not a hard inference limit.
+- Regression tests cover ordinary/debug parity and strip seams/borders.
+- Standalone Cargo workspace metadata added; registry checksum metadata removed.
+
+Qualification: all 37 module tests passed on macOS ARM64/libtorch 2.10 CPU.
+Six real comparisons retained all native evidence fields exactly. Broad corpus,
+other backends/platforms, hard tensor admission and in-forward cancellation
+remain unqualified. No model weights are redistributed here.
+
+- Added cooperative inference cancellation at stage, transformer evaluation and
+  convolution strip boundaries. Individual libtorch kernels are not preempted.
+
+- Convolution padding now copies only the requested input strip and halo,
+  rather than a padded full feature map. Zero borders apply only at global
+  image edges. Qualification: 41 module tests and six unchanged real native
+  comparison decisions; all 18 real-model cancellation checks still pass.
+
+- Release consumed backbone tensors and coarse similarity scratch after use.
+- Inference reuses one softmax output for the confidence product; autograd
+  retains the original out-of-place expression. Forward values and backward
+  gradients are regression checked. No hard total RSS bound is claimed.

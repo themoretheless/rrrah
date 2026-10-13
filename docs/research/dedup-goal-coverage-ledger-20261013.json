@@ -1,0 +1,78 @@
+{
+  "status": "incomplete",
+  "objective": "library covers all cases",
+  "scope": "Original exact plus visual library,500-source review, positive/negative quality, formats/platforms, mutation/cancellation/cache, resources and scale; no reduction to implemented subset",
+  "requirements": [
+    {
+      "requirement": "exact_identity",
+      "status": "partial_verified",
+      "evidence": "docs/research/dedup-exact-full-controls-audit-20261013.json",
+      "evidence_sha256": "b225dc14380262264eed36b1abb096b7ee61fff6794d437621d028d55884d79b",
+      "remaining_or_scope": "25 tests on prior focused snapshot; latest combined gate pending; other-platform execution remains separate"
+    },
+    {
+      "requirement": "pixel_publication",
+      "status": "partial_verified",
+      "evidence": "docs/research/dedup-indexed-publication-audit-20261013.json",
+      "evidence_sha256": "1c433387774356a315422af53a4671bd7f865d9f9cd9ead47b67fead3d26dbda",
+      "remaining_or_scope": "39 integration tests plus forced collision on frozen focused source; full combined run pending"
+    },
+    {
+      "requirement": "verified_group_scaling",
+      "status": "partial_verified",
+      "evidence": "docs/research/dedup-verified-group-scaling-audit-20261013.json",
+      "evidence_sha256": "6f6722d6ba849466548969863e022bd8a2050f6e043fcf7711523387417e561a",
+      "remaining_or_scope": "8/32/64/2561MiB files; does not prove million-file scalability or hard memory cap"
+    },
+    {
+      "requirement": "exhaustive_pair_scaling",
+      "status": "open",
+      "evidence": "docs/research/dedup-exact-collection-scaling-audit-20261013.json",
+      "evidence_sha256": "844d44cbc00d67b2b50d274c45b44d327fc3108e22ec4f998014fc3a72fd1d26",
+      "remaining_or_scope": "Quadratic repeated full reads remain; previously rejected cache not readopted"
+    },
+    {
+      "requirement": "worker_control",
+      "status": "partial_verified",
+      "evidence": "docs/research/dedup-model-worker-decode-parent-audit-20261013.json",
+      "evidence_sha256": "0571dae364957635717d6c693b391c80fbadf1e20896bec17eb11fab8e44eca2",
+      "remaining_or_scope": "Actual child model identity/deadline controls; no hard RSS/descendants bound or persistent reuse"
+    },
+    {
+      "requirement": "negative_quality",
+      "status": "open",
+      "evidence": "docs/research/dedup-current-heldout-negatives-complete-audit-20261013.json",
+      "evidence_sha256": "40bfc272a5f0313f89b07cb2de32d256d574e88b28470f436e9b256506ed8363",
+      "remaining_or_scope": "Fixed16 have no false accepts but all inconclusive; independent semantic-near negatives and calibrated precision missing"
+    },
+    {
+      "requirement": "source_review500",
+      "status": "open",
+      "evidence": "docs/research/dedup-500/registry-coverage-audit-20261013.json",
+      "evidence_sha256": "e56223f3eb935b158db20d361f8bf2fb3b0153d24b4f54508749345b5cc22dee",
+      "remaining_or_scope": "All500 registry/2938 stored evidence pins verified; only17 entries reference detailed reports, not17 completed whole repos"
+    },
+    {
+      "requirement": "combined_decode",
+      "status": "running",
+      "evidence": "docs/research/dedup-current-combined-gate-20261013.json",
+      "evidence_sha256": "e40bc7915be586b6b5d30194d134d6e3d281aa3e0085f1a5e5745866736cc201",
+      "remaining_or_scope": "Fresh3771-file snapshot; test execution not yet terminal"
+    },
+    {
+      "requirement": "native458",
+      "status": "running",
+      "evidence": "docs/research/dedup-current-native-bank-prefix-0250-audit-20261012.json",
+      "evidence_sha256": "bc4fad96a9fbd43ed6bd10c0d9235265defe86cd7ad945c5e505aae70c3c1a27",
+      "remaining_or_scope": "250 independently audited supported directions; full458 current campaign unfinished"
+    },
+    {
+      "requirement": "formats_and_platforms",
+      "status": "open",
+      "evidence": "docs/DUPLICATE_LIBRARY_CONTRACT.md",
+      "evidence_sha256": "6b09c651c20edc2cc17b3d52a53854d483f3e1573b2d90117ec0b1470e50315b",
+      "remaining_or_scope": "Existing many fixtures and historical platform checks do not prove latest complete matrix; format interpretation, frame selection and platform-specific IO require explicit qualification"
+    }
+  ],
+  "completion_proven": false
+}

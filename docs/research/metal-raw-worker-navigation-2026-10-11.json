@@ -1,0 +1,77 @@
+{
+  "date": "2026-10-11",
+  "scope": "Actual RAW prefetch background worker cancellation, direction changes, disk count eviction and Metal frame preservation with two real EOS R8 CR3 sources",
+  "adapter": "Metal Apple M4 Max",
+  "sensor_dimensions": [
+    6188,
+    4120
+  ],
+  "sensor_samples": 25494560,
+  "successful_worker_plans": 3,
+  "disk_count_limit": 1,
+  "disk_size_limit_bytes": 134217728,
+  "managed_decode_root_limit_bytes": 100663296,
+  "initial_root_peak_bytes": 72357586,
+  "final_managed_bytes": 0,
+  "checks": [
+    "Foreground ticket holds decoder permit while forward prefetch enters Checking",
+    "begin_foreground invalidates old forward generation before any RAW decode/publication",
+    "Backward RAW is actually decoded and persisted by production rrrah-raw-prefetch thread",
+    "Canceled forward source absent from disk after first backward plan",
+    "Persisted source matches independent native Rust decode in all original samples and metadata",
+    "Initial 1920x1080 and full 6188x4120 Metal frame bytes exact",
+    "Same worker and disk cache retained through next forward and backward plans",
+    "Each subsequent plan stores one source, evicts the opposite source, retains exactly one disk entry, and matches every full Metal pixel",
+    "Root and independent reference admission return to zero after each verification"
+  ],
+  "sources_sha256": {
+    "tests/IMG_9043.CR3": "d06cbb10e84882cf130430bdc88ed2652c2622b96dea8d6a854c09e3bee37e59",
+    "tests/IMG_9074.CR3": "9c0d47cc2dd550eb6dc26c4ba2b2874b67f5c89e79dff5c472abf0ac6b2f6178"
+  },
+  "source_sha256": {
+    "crates/rrrah-app/src/gallery.rs": "5eca69bc327529108afde5f0967ae547424b679150ecf733ed1c6e2a719202f7",
+    "crates/rrrah-app/src/main.rs": "17baa66b6fe17a61e937b9755f1eb50fa92c358f9bac30213ad28bc0d3282cc9",
+    "scripts/qualify-viewer-storage-gpu.py": "80fb8e9a789bd7e9730da1dedb38d37e7eae7e28333b8569aa715bc7a6407686"
+  },
+  "logs": [
+    {
+      "path": "/tmp/rrrah-metal-raw-worker-navigation-20261011.log",
+      "sha256": "abb92621b2ac586fbd65303f2172d1aab85772aec8849be3b7870c611cecffb0",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "path": "/tmp/rrrah-metal-raw-worker-gallery-20261011.log",
+      "sha256": "298fe15ffbd4df51466e787839070abe71a583c6853281bffd315a441ee70fe5",
+      "passed": 34,
+      "failed": 0,
+      "ignored": 10
+    },
+    {
+      "path": "/tmp/rrrah-metal-raw-worker-gate-20261011.log",
+      "sha256": "d778df7f2d515f1660c33ca8f7d97dcdf6e23af9814199a7814988d2ff05f160",
+      "passed": 11,
+      "failed": 0,
+      "ignored": 0
+    }
+  ],
+  "reproduce": {
+    "environment": {
+      "RRRAH_GPU_OPTIONAL": "0",
+      "RRRAH_GPU_BACKEND": "metal"
+    },
+    "command": "cargo test --locked --offline --target-dir /tmp/rrrah-required-corpus-target -p rrrah --bin rrrah navigation_reversal -- --include-ignored --nocapture --test-threads=1",
+    "integrated_runner_flag": "--metal-raw-worker-navigation"
+  },
+  "limitations": [
+    "Two EOS R8 CR3 files do not qualify all cameras or all 100 formats",
+    "Three successful worker plans are not a sustained large-collection soak",
+    "Cancellation is forced before decode while waiting for foreground permit; this does not test every mid-decode/mid-write race",
+    "Uses disk mosaic cache, not RAM swap or TTL, which have separate tests",
+    "Offscreen Metal frame comparison proves preservation relative to native decode, not independent color accuracy or physical HDR display",
+    "No surface presentation/window timing measured",
+    "NVIDIA deferred by user",
+    "Ignored external corpus tests in ordinary gallery suite are not counted as passing"
+  ]
+}

@@ -1,0 +1,24 @@
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+    Finished `test` profile [optimized + debuginfo] target(s) in 3.28s
+     Running tests/model_readback.rs (target/debug/deps/model_readback-cb73a0cd6a7f5d18)
+
+running 11 tests
+model budget adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+model adapter: Metal Apple M4 Max
+test model_budget_admits_vertices_and_depth_transactionally ... ok
+test cancelled_model_upload_preserves_resident_geometry_and_credit ... ok
+test raster_and_model_resources_share_parent_admission ... ok
+prepared model lifetime: old encoded geometry/depth credit retained across replacement/drop; submission completed; final zero
+test prepared_model_replacement_keeps_submitted_resource_credit_until_completion ... ok
+test model_linear_hdr_target_matches_analytic_material_and_releases_budget ... ok
+test depth_resolves_overlapping_facets_independent_of_submission_order ... ok
+test model_depth_stays_on_renderer_device_with_foreign_resize_argument ... ok
+test model_has_coverage_orbits_and_fits_extreme_coordinates ... ok
+test refused_depth_resize_preserves_sdr_hdr_frame_and_retries ... ok
+test float64_translation_and_scale_preserve_small_geometry ... ok
+model replacement failures: SDR/HDR; nine cancellations and memory refusal retain exact frame; retry changes frame; final credit zero
+test cancelled_model_replacement_keeps_sdr_and_hdr_pixels_exact ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.81s
+

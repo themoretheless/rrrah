@@ -175,7 +175,7 @@ fn unsupported_pixels_uninformative_regions_and_overflow_refuse_explicitly() {
     let alpha = LinearRgbaView::new(32, 32, &translucent, 1024, || false).unwrap();
     assert_eq!(
         compare_local_rank_region(&alpha, &view, model(), &pts, rect, rect, policy(), || false),
-        Err(LocalRankError::Rank(RankRegionError::Invalid))
+        Err(LocalRankError::Rank(RankRegionError::UnsupportedPixels))
     );
     let mut huge = policy();
     huge.filter_radius = u32::MAX;

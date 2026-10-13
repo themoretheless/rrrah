@@ -1,0 +1,16 @@
+#!/usr/bin/env python3
+import json,hashlib,subprocess,os
+from pathlib import Path
+R=Path(__file__).resolve().parents[1];D=R/'docs/research';T=Path('/Users/themoretheless/.codex/tmp');M=D/'dedup-worker-group-v2-source-manifest-20261013.json';m=json.loads(M.read_text());S=Path(m['source']);sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest();assert all(sha(S/k)==h for k,h in m['source_sha256'].items());W=T/'rrrah-worker-group-v2-linux-20261013';assert not W.exists();W.mkdir();P=D/'dedup-worker-group-v2-linux-20261013.json';assert not P.exists();docker=['docker','--context','colima'];info=json.loads(subprocess.check_output([*docker,'image','inspect','rust:1.98.1-bookworm','--format','{{json .}}'],text=True));image={k:info[k] for k in ['Id','Architecture','Os','RepoDigests']};assert image['Architecture']=='arm64' and image['Os']=='linux';(W/'image.json').write_text(json.dumps(image,indent=2)+'\n');running=subprocess.check_output([*docker,'ps','--format','{{.ID}}'],text=True);assert not running.strip(),'unrelated container active; keep runtime state separate';script=W/'entry.sh';script.write_text('''#!/bin/sh
+set -eu
+rustc -vV > /out/compiler.txt
+cargo -V > /out/cargo.txt
+uname -a > /out/kernel.txt
+cargo test -p rrrah-dedup --lib --test worker --test worker_group --offline --locked --no-fail-fast --jobs 2 --target-dir /out/target > /out/test.log 2>&1
+''');name='rrrah-worker-group-v2-linux-20261013';cmd=[*docker,'run','--name',name,'--network','none','--platform','linux/arm64','--env','RUSTUP_TOOLCHAIN=1.98.1','--env','CARGO_NET_OFFLINE=true','--mount','type=bind,src='+str(S)+',dst=/source,readonly','--mount','type=bind,src=/Users/themoretheless/.cargo/registry,dst=/usr/local/cargo/registry,readonly','--mount','type=bind,src='+str(W)+',dst=/out','--workdir','/source','--entrypoint','/bin/sh',image['Id'],'/out/entry.sh'];d=dict(status='running',producer_pid=os.getpid(),source=str(S),source_manifest=str(M),source_manifest_sha256=sha(M),image=image,container_name=name,command=cmd,entry_script_sha256=sha(script),output_directory=str(W),scope='Actual LinuxARM64 default-feature library/single-worker/group tests under native ARM64 ColimaVM with pinned official Rust1.98.1bookworm image. Source and host registry mounted read-only; container network disabled and Cargo offline/locked. No decode/LoFTR/Linuxformat/fullworkspace/RSS/escaped-group/hard scheduling qualification. Mac quiescence-specific unit/helper excluded by cfg. Existing defaultVM was stopped before this goal started it; no unrelated containers running at launch.')
+def save():
+ q=P.with_suffix('.tmp');q.write_text(json.dumps(d,indent=2)+'\n');q.replace(P)
+save()
+with (W/'docker.stdout').open('x') as out,(W/'docker.stderr').open('x') as err:
+ c=subprocess.Popen(cmd,stdout=out,stderr=err);d['child_pid']=c.pid;save();code=c.wait()
+state=json.loads(subprocess.check_output([*docker,'inspect',name,'--format','{{json .State}}'],text=True));(W/'container-state.json').write_text(json.dumps(state,indent=2)+'\n');d.update(status='passed_pending_audit' if code==0 else 'terminal_failure',returncode=code,container_state=state,source_unchanged=all(sha(S/k)==h for k,h in m['source_sha256'].items()),output_sha256={str(p.relative_to(W)):sha(p) for p in W.iterdir() if p.is_file()});save();print(d['status'])

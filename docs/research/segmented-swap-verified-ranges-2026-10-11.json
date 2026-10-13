@@ -1,0 +1,41 @@
+{
+  "date": "2026-10-11",
+  "component": "rrrah-swap",
+  "change": "Single-file segmented immutable swap with managed BLAKE3 block digest index and verified range reads",
+  "block_bytes": 65536,
+  "disk_objects_per_handle": 1,
+  "checks": {
+    "swap_units_passed": 14,
+    "integration_tests_passed": 6,
+    "doctest_passed": 1,
+    "new_controls_passed": 3,
+    "generated_source_bytes": 8388609,
+    "generated_source_full_buffer_allocated": false,
+    "index_peak_bytes": 4128,
+    "scratch_peak_bytes": 65536,
+    "selected_output_peak_bytes": 8,
+    "final_managed_credits_and_disk_quota": 0,
+    "cases": [
+      "unaligned cross-block ranges",
+      "float bit-pattern bytes including signed HDR/negative zero/NaN payload",
+      "corrupt unread block does not require scan",
+      "corrupt requested block refuses publication",
+      "quota exhaustion",
+      "partial input",
+      "extra input",
+      "write/read cancellation",
+      "scratch admission refusal",
+      "invalid/overflowing range",
+      "foreign store",
+      "empty EOF range",
+      "last cloned owner releases index and disk"
+    ]
+  },
+  "limits": [
+    "Byte-range primitive only; image tile decoding and viewer/GPU connection not implemented",
+    "Integrity checks requested blocks; unread payload is not rehashed",
+    "Managed buffer peaks exclude existing fixed stream stack, Entry/Arc bookkeeping, driver and OS page cache",
+    "No physical slow-disk benchmark or physical HDR qualification",
+    "NVIDIA and full100-format scope remain open"
+  ]
+}

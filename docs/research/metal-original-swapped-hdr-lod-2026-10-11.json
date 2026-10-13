@@ -1,0 +1,34 @@
+{
+  "scope": "Area-filter HDR LOD directly from original swapped source without complete restore",
+  "result": "passed",
+  "changes": [
+    "SwappedRaster downsample_linear verifies metadata and streams selected full source rows",
+    "f64 premultiplied linear area weights preserve exact native core accumulation order per output pixel",
+    "managed allocations: output f32 pixels, one f64 accumulator row, one source byte row and verified swap scratch",
+    "original-source hotspot scale image selection and rounded-target pixel aspect retained",
+    "separate SwapLod worker operation used by swapped viewer fit fallback instead of filtering cached preview"
+  ],
+  "controls": [
+    "five source129x73 targets1x1,3x2,17x11,64x37,129x73 bit-exact against original native area filter",
+    "odd extents transparency signed above-one HDR and metadata exact",
+    "memory refusal cancellation invalid size roll back all credits",
+    "36MP6000x6000 source576MB released before17x11 LOD; original native reference exact",
+    "large LOD workspace peak165072 bytes, index281280 bytes separately, scratch peak65536; retained output2992",
+    "actual Metal fit pressure result matches pre-release original-source filtered HDR reference; ready upload retry retains frame",
+    "final managed and disk credits zero"
+  ],
+  "validation": {
+    "ordinary_app_passed": 208,
+    "manual_app_ignored": 46,
+    "ordinary_cache_passed": 144,
+    "manual_cache_ignored": 4,
+    "large_manual_control_separately_passed": 1,
+    "explicit_metal_viewport_passed": 6
+  },
+  "limits": [
+    "initial complete decode still needed before source swap write",
+    "row restores reopen file and can reverify overlapping blocks; no throughput benchmark claim",
+    "native36MP storage/filter control separate from Metal512x320 viewer reference",
+    "physical HDR NVIDIA physical slowdisk OSwide pressure full100-format qualification remain open"
+  ]
+}

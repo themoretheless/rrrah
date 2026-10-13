@@ -1,0 +1,41 @@
+
+running 1 test
+REAL_AI_DIAGNOSTIC_SECONDS=180
+REAL_AI_MASK_SOURCE event=13 luminosity=true events=21 nested=0 shading=1 rasters=0
+REAL_AI_MASK_BOUNDS event=13 source_paths=Some(Rect { x0: -17.097, y0: -22.541999999999973, x1: 302.904, y1: 309.95700000000005 }) next_main_path=Some(Rect { x0: 231.52551572265628, y0: 93.72296190795899, x1: 233.01636711111067, y1: 96.28964438750447 })
+REAL_AI_MASK_SOURCE event=20 luminosity=true events=25 nested=0 shading=0 rasters=1
+REAL_AI_MASK_BOUNDS event=20 source_paths=None next_main_path=Some(Rect { x0: 231.52551572265628, y0: 93.72296190795899, x1: 233.01636711111067, y1: 96.28964438750447 })
+REAL_AI_MASK_SOURCE event=1003 luminosity=true events=25 nested=0 shading=0 rasters=1
+REAL_AI_MASK_BOUNDS event=1003 source_paths=None next_main_path=Some(Rect { x0: 225.036, y0: 15.383999999999986, x1: 225.04410000000001, y1: 15.395999999999987 })
+REAL_AI_MASK_SOURCE event=1012 luminosity=true events=21 nested=0 shading=1 rasters=0
+REAL_AI_MASK_BOUNDS event=1012 source_paths=Some(Rect { x0: -17.097, y0: -22.541999999999973, x1: 302.904, y1: 309.95700000000005 }) next_main_path=Some(Rect { x0: 225.036, y0: 15.383999999999986, x1: 225.04410000000001, y1: 15.395999999999987 })
+REAL_AI_MASK_SOURCE event=1220 luminosity=true events=15 nested=0 shading=0 rasters=1
+REAL_AI_MASK_BOUNDS event=1220 source_paths=None next_main_path=Some(Rect { x0: 203.23120797212513, y0: 17.020999999999987, x1: 203.24912937875126, y1: 17.034999999999997 })
+REAL_AI_MASK_SOURCE event=2300 luminosity=true events=15 nested=0 shading=0 rasters=1
+REAL_AI_MASK_BOUNDS event=2300 source_paths=None next_main_path=Some(Rect { x0: 121.3237253440857, y0: 28.71946306422296, x1: 133.44371855331826, y1: 47.222527703857416 })
+REAL_AI_SPATIAL_PREFLIGHT=Ok(())
+REAL_AI_DIAGNOSTIC_WORK_LIMIT=16000000
+SPATIAL_RASTER_TRANSITIONS active=true
+SPATIAL_MOMENT_IDENTITY source_fields=true key_words=16
+SPATIAL_FRAGMENT_MOMENTS complete=true fragments=924352 buckets=1659 area=1.0000000000000013 fallback_fragments=6 diagnostic_work=66719457
+SPATIAL_FIELD_CENTROID_GUARD accepted=1659 fallback_buckets=0 generation_only=0
+SPATIAL_FRAGMENT_MOMENT_COMPARISON complete=true samples=1659 alpha_delta=1.3444800828210646e-13 premultiplied_component_delta=3.685026728206253e-10
+SPATIAL_GEOMETRY_FIELD_KEYS checks=1852034 mismatches=0
+REAL_AI_DIAGNOSTIC_WORK_USED pixel=(147,59) spent=14135333 remaining=1864667
+REAL_AI_SPATIAL_ROUTE_ADMISSIONS pixel=(147,59) count=62
+REAL_AI_SPATIAL_PIXEL pixel=(147,59) captured=true events=2755 shading_events=13 mask_events=6 completed=true alpha=Some(0.6737398252860465) components=Some([0.1874715304800365, 0.6583002923535491, 0.7777743789530881, 0.1361266559336537]) white_rgb=Some([205.4139990826125, 151.15068671224302, 127.7102347702531]) deadline=false peak_bytes=239197736
+SPATIAL_RASTER_TRANSITIONS active=true
+SPATIAL_MOMENT_IDENTITY source_fields=true key_words=16
+SPATIAL_FRAGMENT_MOMENTS complete=true fragments=328037 buckets=2192 area=0.9997909658095748 fallback_fragments=1240 diagnostic_work=23841608
+SPATIAL_FIELD_CENTROID_IDENTITY_FALLBACK expected=[2, 11, 1, 180388626570, 180388626570, 5, 1047972020360, 1047972020360, 7, 19984, 18446744073709551615] actual=[3, 11, 1, 180388626570, 180388626570, 5, 1047972020360, 1047972020360, 7, 19984, 18446744073709551615] centroid=(145.79904743024505, 50.855240635791034)
+SPATIAL_FIELD_CENTROID_GUARD accepted=2191 fallback_buckets=1 generation_only=1
+SPATIAL_FRAGMENT_MOMENT_COMPARISON complete=true samples=2192 alpha_delta=2.4713564528155985e-13 premultiplied_component_delta=2.0484036689083496e-10
+SPATIAL_GEOMETRY_FIELD_KEYS checks=662938 mismatches=0
+REAL_AI_DIAGNOSTIC_WORK_USED pixel=(145,50) spent=5369894 remaining=10630106
+REAL_AI_SPATIAL_ROUTE_ADMISSIONS pixel=(145,50) count=62
+REAL_AI_SPATIAL_PIXEL pixel=(145,50) captured=true events=2755 shading_events=13 mask_events=6 completed=true alpha=Some(0.8096532393236858) components=Some([0.20310728056289207, 0.6760439382217595, 0.8160367895482937, 0.14729895492537737]) white_rgb=Some([191.88108968353617, 126.89235218733398, 97.05497446912305]) deadline=false peak_bytes=239197736
+REAL_AI_SPATIAL_FINAL_CREDIT=0
+test knockout_compositor::interpreter_tests::real_ai_spatial_scene_problem_pixel_diagnostic ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 244 filtered out; finished in 2.56s
+

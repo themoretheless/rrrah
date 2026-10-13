@@ -1,0 +1,73 @@
+warning: function `fallible_zeroed_bytes` is never used
+   --> crates/rrrah-cache/src/mosaic_payload_v1.rs:728:4
+    |
+728 | fn fallible_zeroed_bytes(len: usize) -> Result<Box<[u8]>, MosaicPayloadError> {
+    |    ^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-cache` (lib) generated 1 warning
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+warning: methods `submit` and `submit_image` are never used
+    --> crates/rrrah-app/src/main.rs:1377:8
+     |
+1085 | impl ForegroundLoader {
+     | --------------------- methods in this implementation
+...
+1377 |     fn submit(&self, path: PathBuf) -> Result<u64> {
+     |        ^^^^^^
+...
+1380 |     fn submit_image(&self, path: PathBuf, image_index: usize) -> Result<u64> {
+     |        ^^^^^^^^^^^^
+     |
+     = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: associated items `install_with_cancel`, `refresh`, and `refresh_with_cancel` are never used
+   --> crates/rrrah-app/src/raster_viewport.rs:396:19
+    |
+ 26 | impl ResidentSource {
+    | ------------------- associated items in this implementation
+...
+396 |     pub(crate) fn install_with_cancel<F: FnMut() -> bool>(
+    |                   ^^^^^^^^^^^^^^^^^^^
+...
+483 |     pub(crate) fn refresh(
+    |                   ^^^^^^^
+...
+503 |     pub(crate) fn refresh_with_cancel<F: FnMut() -> bool>(
+    |                   ^^^^^^^^^^^^^^^^^^^
+
+warning: `rrrah` (bin "rrrah") generated 2 warnings
+    Finished `test` profile [optimized + debuginfo] target(s) in 5.36s
+     Running tests/hdr_raster_swap.rs (target/debug/deps/hdr_raster_swap-6e84ed1ddcd47ad6)
+
+running 1 test
+Declared linear gamut adapter: Metal Apple M4 Max
+Declared linear gamut 0: arbitrary-custom-chroma.exr; declared source preserved; pressure/cancel/swap retry; SDR/HDR analytical frame exact; root=0
+Declared linear gamut adapter: Metal Apple M4 Max
+Declared linear gamut 0: arbitrary-custom-neutral-match.exr; declared source preserved; pressure/cancel/swap retry; SDR/HDR analytical frame exact; root=0
+Declared linear gamut adapter: Metal Apple M4 Max
+Declared linear gamut 0: arbitrary-ap1-chroma.exr; declared source preserved; pressure/cancel/swap retry; SDR/HDR analytical frame exact; root=0
+Declared linear gamut adapter: Metal Apple M4 Max
+Declared linear gamut 0: arbitrary-ap1-neutral-match.exr; declared source preserved; pressure/cancel/swap retry; SDR/HDR analytical frame exact; root=0
+Declared linear gamut adapter: Metal Apple M4 Max
+Declared linear gamut 0: arbitrary-ap1-id.exr; declared source preserved; pressure/cancel/swap retry; SDR/HDR analytical frame exact; root=0
+Declared linear gamut adapter: Metal Apple M4 Max
+Declared linear gamut 0: arbitrary-ap1-both.exr; declared source preserved; pressure/cancel/swap retry; SDR/HDR analytical frame exact; root=0
+Declared linear gamut adapter: Metal Apple M4 Max
+Declared linear gamut 0: arbitrary-ap0-chroma.exr; declared source preserved; pressure/cancel/swap retry; SDR/HDR analytical frame exact; root=0
+Declared linear gamut adapter: Metal Apple M4 Max
+Declared linear gamut 0: arbitrary-ap0-neutral-match.exr; declared source preserved; pressure/cancel/swap retry; SDR/HDR analytical frame exact; root=0
+Declared linear gamut adapter: Metal Apple M4 Max
+Declared linear gamut 0: arbitrary-ap0-aces.exr; declared source preserved; pressure/cancel/swap retry; SDR/HDR analytical frame exact; root=0
+Declared linear gamut adapter: Metal Apple M4 Max
+Declared linear gamut 0: arbitrary-ap0-id.exr; declared source preserved; pressure/cancel/swap retry; SDR/HDR analytical frame exact; root=0
+Declared linear gamut adapter: Metal Apple M4 Max
+Declared linear gamut 0: arbitrary-ap0-both.exr; declared source preserved; pressure/cancel/swap retry; SDR/HDR analytical frame exact; root=0
+Declared linear gamut adapter: Metal Apple M4 Max
+Declared linear gamut 0: arbitrary-ap0-aces-id.exr; declared source preserved; pressure/cancel/swap retry; SDR/HDR analytical frame exact; root=0
+EXR arbitrary color: accepted=12; refused=8; unknown=6; independent full matrix; native/swap/Metal SDR/HDR exact; root=0
+test exr_arbitrary_primaries_and_aces_ids_preserve_color_through_metal_swap ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 23 filtered out; finished in 0.78s
+

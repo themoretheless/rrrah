@@ -1,0 +1,21 @@
+{
+  "change": "ORF scalar black offset validated as single finite nonnegative value below declared white",
+  "refusal_cases": [
+    "empty",
+    "multiple offsets",
+    "black equal white",
+    "black greater than white"
+  ],
+  "valid_nonzero_black_test": true,
+  "test_results": [
+    "test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 1056 filtered out; finished in 0.02s"
+  ],
+  "original_sensor_samples_unchanged": 16110080,
+  "original_sensor_sha256": "70bacb72d5afc198efa2f7fd1230812b5b6ff0eaf3b2ebb7d8fe599afd014611",
+  "independent_reference": "nine-raw-independent-sensors-2026-10-11.json",
+  "log_sha256": "397e660519d27b87409c9515440ef1a7a9c85cd7b2d682e973c5af7c4b5e1caf",
+  "limits": [
+    "explicit scalar black only; per-coordinate metadata needs separate implementation",
+    "camera calibration remains open"
+  ]
+}

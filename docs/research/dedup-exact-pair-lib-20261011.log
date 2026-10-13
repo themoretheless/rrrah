@@ -1,0 +1,38 @@
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.33s
+     Running unittests src/lib.rs (/Users/themoretheless/.codex/tmp/rrrah-dedup-exact-pair-20261011/debug/deps/rrrah_dedup-e1c451b346790d9e)
+
+running 31 tests
+test gradient::batch_tests::alternating_matcher_timing ... ignored, manual alternating exact matcher timing control
+test gradient::matching_tests::alternating_matcher_timing ... ignored, manual alternating exact matcher timing control
+test exact::collision_tests::read_buffer_capacity_failure_is_explicit_and_retry_succeeds ... ok
+test gradient::batch_tests::every_cancellation_checkpoint_and_work_refusal_matches_scalar ... ok
+test gradient::batch_tests::four_lane_distances_are_bitwise_scalar_for_every_tail_length ... ok
+test gradient::matching_tests::bounded_distance_preserves_order_and_strict_ties ... ok
+test gradient::matching_tests::every_cancellation_checkpoint_and_work_refusal_matches_exhaustive ... ok
+test local_index::owner_count_cancellation_tests::legacy_owner_materialization_honors_cancellation ... ok
+test exact::observed_snapshot_policy_tests::replacement_after_initial_metadata_cannot_bypass_observed_size_limit ... ok
+test tests::collision_membership_keeps_arbitrary_order_and_pair_identity ... ok
+test gradient_scale::area_tests::footprint_average_removes_stripe_alias_and_matches_fractional_oracle ... ok
+test local_index::owner_count_cancellation_tests::descriptor_pair_entry_cancellation_does_not_consume_input ... ok
+test local_index::owner_count_cancellation_tests::legacy_owner_count_stops_when_iterator_requests_cancellation ... ok
+test exact::collision_tests::verified_observations_detect_metadata_invisible_pruned_mutations ... ok
+test exact::collision_tests::final_content_validation_rejects_change_even_when_metadata_matches ... ok
+test tests::empty_and_duplicate_fingerprints ... ok
+test exact::collision_tests::pair_comparison_confirms_bytes_and_refuses_digest_collision ... ok
+test cache::publication_tests::directory_sync_failure_reports_already_published_complete_cache ... ok
+test tests::traversal_work_exhaustion_is_distinct_from_failure ... ok
+test visual::distinct_variant_tests::repeated_complete_variants_preserve_all_ids_and_exact_metric ... ok
+test warp::encoded_signal_tests::extended_srgb_landmarks_match_independent_decimal_oracle_without_clipping ... ok
+test warp::encoded_signal_tests::transfer_precedes_premultiplication_and_bilinear_sampling ... ok
+test warp::bounded_fit_tests::boundary_fit_matches_exhaustive_rectangle_and_beats_independent_clipping ... ok
+test exact::collision_tests::pair_comparison_rejects_last_checkpoint_mutations_on_both_outcomes ... ok
+test warp::regional_reuse_tests::reused_whole_evidence_preserves_regions_and_reduces_observed_work ... ok
+test tests::indexed_search_matches_independent_exhaustive_scan ... ok
+test exact::collision_tests::colliding_samples_and_full_hashes_still_partition_by_bytes ... ok
+test exact::collision_tests::pair_comparison_checks_policy_and_cancellation_at_every_checkpoint ... ok
+test gradient::batch_tests::exact_matching_agrees_with_exhaustive_positive_negative_ties_and_spatial_chains ... ok
+test gradient::matching_tests::exact_matching_agrees_with_exhaustive_positive_negative_ties_and_spatial_chains ... ok
+test gradient::matching_tests::production_mutual_competitors_match_exhaustive_at_every_checkpoint ... ok
+
+test result: ok. 29 passed; 0 failed; 2 ignored; 0 measured; 0 filtered out; finished in 8.35s
+

@@ -1,0 +1,46 @@
+{
+  "status": "complete_macos_minimal_feature_exact_pair_gate",
+  "source": {
+    "path": "/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup/src/exact.rs",
+    "sha256": "a2483680aded3fbe03e46ffb69f192ccccb1d050475d5890071c59fb97ff8a44",
+    "bytes": 40031
+  },
+  "test_suites": [
+    {
+      "log": {
+        "path": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exact-pair-lib-20261011.log",
+        "sha256": "cce902abc422ae40b124d751d1de4ff9ce8d4dc97cfb65a6f4d85c02b26c698d",
+        "bytes": 3456
+      },
+      "passed": 29,
+      "ignored": 2
+    },
+    {
+      "log": {
+        "path": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exact-pair-files-20261011.log",
+        "sha256": "043e81b932f9b41906651c2ae6a2b7d3f6e21019eff6279e552530e7cb8b7018",
+        "bytes": 1488
+      },
+      "passed": 16,
+      "ignored": 0
+    }
+  ],
+  "passed": 45,
+  "executables": [
+    {
+      "path": "/Users/themoretheless/.codex/tmp/rrrah-dedup-exact-pair-20261011/debug/deps/exact_files-2ee295f0e15ba296",
+      "sha256": "7b103456c98720c3e328a7680e89589b8a6b7dd745984d10b8a7a3a28c1f24d7",
+      "bytes": 3005312
+    },
+    {
+      "path": "/Users/themoretheless/.codex/tmp/rrrah-dedup-exact-pair-20261011/debug/deps/rrrah_dedup-e1c451b346790d9e",
+      "sha256": "625e3f7e5dcf9fc57713f74614e72116754a918703b58d0616055f28a6d48615",
+      "bytes": 2141008
+    }
+  ],
+  "limits": [
+    "Current root checkout; no frozen full-workspace snapshot",
+    "No decoder/model/visual-fallback integration or Linux/Windows qualification",
+    "Observation contract; external concurrent filesystem mutation is not atomic"
+  ]
+}

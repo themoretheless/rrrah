@@ -1,0 +1,32 @@
+   Compiling rrrah-gpu v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-gpu)
+    Finished `test` profile [optimized + debuginfo] target(s) in 11.56s
+     Running tests/raster_readback.rs (target/debug/deps/raster_readback-96fa399a25885f6d)
+
+running 2 tests
+upload cancellation adapter: Metal Apple M4 Max
+large upload cancellation adapter: Metal Apple M4 Max
+raster upload pressure: texture-and-queue-refused; previous-frame-exact; temporary-credit-zero
+raster upload cancellation: total_checkpoints=6; exercised=[1, 2, 3, 4, 5, 6]; upload_budget=179200
+raster replacement recovery: format=Rgba8UnormSrgb; pressure/cancellation previous frame exact; retry blue exact; final GPU/queue credit=0
+
+thread 'cancelled_upload_validation_and_admission_preserve_visible_texture' (33934692) panicked at crates/rrrah-gpu/src/raster.rs:136:9:
+raster target must be sRGB
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test cancelled_upload_validation_and_admission_preserve_visible_texture ... FAILED
+raster upload pressure: texture-and-queue-refused; previous-frame-exact; temporary-credit-zero
+raster upload cancellation: total_checkpoints=2933; exercised=[1, 2, 1466, 2931, 2932, 2933]; upload_budget=192000000
+raster replacement recovery: format=Rgba8UnormSrgb; pressure/cancellation previous frame exact; retry blue exact; final GPU/queue credit=0
+
+thread 'large_cancelled_upload_validation_and_admission_preserve_visible_texture' (33934693) panicked at crates/rrrah-gpu/src/raster.rs:136:9:
+raster target must be sRGB
+test large_cancelled_upload_validation_and_admission_preserve_visible_texture ... FAILED
+
+failures:
+
+failures:
+    cancelled_upload_validation_and_admission_preserve_visible_texture
+    large_cancelled_upload_validation_and_admission_preserve_visible_texture
+
+test result: FAILED. 0 passed; 2 failed; 0 ignored; 0 measured; 23 filtered out; finished in 4.12s
+
+error: test failed, to rerun pass `-p rrrah-gpu --test raster_readback`

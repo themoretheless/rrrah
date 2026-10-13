@@ -1,0 +1,21 @@
+{
+  "status": "complete_pinned4file_review_with6_mocked_dependency_controls",
+  "repository": "Mikerah/perceptual-hashes-benchmark",
+  "commit": "ccbdbca27731635bac97d3da797549230d40966c",
+  "fully_read_files": [
+    ".gitignore",
+    "LICENSE",
+    "README.md",
+    "index.js"
+  ],
+  "license": "MIT Copyright2020Mikerah",
+  "upstream_tests": 0,
+  "authored_controls": 6,
+  "adopted": false,
+  "findings": [
+    "Three exported algorithms are empty placeholders.",
+    "aHash does not return promise/hash. Callback builds boolean words in undeclared global bitStr then references undefined bitSt; caught error is only logged.",
+    "No package/lock manifest, image fixtures, benchmark runner/timing results, tests, identity confirmation, mutation guards or resource contracts."
+  ],
+  "scope": "Unchanged pinned JS module, explicit mocked Sharp/mean/iterator adapters. Six observed language/control-flow behaviors; no actual image decode, Sharp API, dependency or benchmark qualification. No adoption."
+}

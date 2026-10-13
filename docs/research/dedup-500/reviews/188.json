@@ -2,9 +2,9 @@
   "index": 188,
   "repository": "go-dedup/fsimilar",
   "commit": "6653eab22f21eb09e23aa96a04addc4f03aa679f",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
-  "decision": "reference",
-  "finding": "File-similarity Hamming CLI with tests; hash generation and image normalization still need inspection.",
+  "review_scope": "All71entries accounted for:35complete text reads including all8Go files/docs/config,1symlink Git payload/target verified,35generated fixture files fully structurally reviewed.7controls pass; original TestExec runs21comparisons,20exactmatches and1order-onlyfailure. No shell recommendation execution.",
+  "decision": "filename_candidate_reference_not_content_identity_or_image_matching",
+  "finding": "Source and runtime confirm filename-token/optional-size recommendation semantics. Scanner/reader errors discarded by sim/vec, missingstat warns thenpanics, int16collection length wraps at32768, size-weighted score can be negative, vector chaining groups zero-related endpoints.20/21original comparisons exact;1tied-order mismatch retained. No byte/image verification or production adoption.",
   "available_source_evidence": [
     {
       "path": "fsimilar_cliDef.go",
@@ -48,9 +48,9 @@
     }
   ],
   "license_metadata": "MIT",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "Complete MIT LICENSE read, go-dedup2017; no production implementation or fixture copying.",
   "tests_detected": 9,
-  "upstream_tests_run": false,
+  "upstream_tests_run": true,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
   "tree_truncated": false,
   "available_readme_license_evidence": [
@@ -74,5 +74,21 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_review_complete": true,
+  "whole_repo_complete": true,
+  "total_files": 71,
+  "fully_read_files": 35,
+  "symlink_entries_reviewed": 1,
+  "structured_generated_fixture_files_reviewed": 35,
+  "fully_reviewed_files": 71,
+  "complete_source_review": "fsimilar-complete-source-review-20261013.json",
+  "complete_runtime_audit": "fsimilar-complete-runtime-audit-20261013.json",
+  "prior_registry_review": "fsimilar-prior-registry-188-20261013.json",
+  "upstream_test_functions_failed": 1,
+  "upstream_test_functions_passed": 0,
+  "upstream_output_comparisons": 21,
+  "upstream_exact_output_matches": 20,
+  "upstream_order_only_mismatches": 1,
+  "authored_controls_passed": 7
 }

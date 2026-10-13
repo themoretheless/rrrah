@@ -1,0 +1,638 @@
+{
+  "status": "complete71entry_review36direct_reads35structured_generated_fixture_reads",
+  "repository": "go-dedup/fsimilar",
+  "commit": "6653eab22f21eb09e23aa96a04addc4f03aa679f",
+  "source": "/Users/themoretheless/.codex/tmp/rrrah-fsimilar-source-20261013",
+  "files": [
+    {
+      "path": ".gitignore",
+      "git_blob": "52b3dfb167cd20857477fecfeb6f6033f666844a",
+      "sha256": "8ec0cb338fe4b40cb2be33495b1d3abc8c94465f74735664af5852c038676fa2",
+      "bytes": 284,
+      "kind": "file",
+      "lines": 15
+    },
+    {
+      "path": ".travis.yml",
+      "git_blob": "743dac8ad302b987175cd80cd09b78d4eb6f4cc4",
+      "sha256": "c77fa9cc40db0a695f1b4ed590b7357b810eccd144221b685d96243e7112583f",
+      "bytes": 1157,
+      "kind": "file",
+      "lines": 50
+    },
+    {
+      "path": "LICENSE",
+      "git_blob": "8ea5c46d8517327aab666378d68315a3998e7779",
+      "sha256": "66694ee2cb86f35fe361024a53051fec8ae1f288f4cf38a84cde8ee67bdaece2",
+      "bytes": 1065,
+      "kind": "file",
+      "lines": 21
+    },
+    {
+      "path": "Makefile",
+      "git_blob": "36ac6e3f9e8684fd236de7ae8d10d8c417f60fce",
+      "sha256": "fc9a006c741905ad51a8e3ae48a4524a32762b6d4882917c77d3be97a5e42b83",
+      "bytes": 813,
+      "kind": "file",
+      "lines": 40
+    },
+    {
+      "path": "README.e.md",
+      "git_blob": "f2497322c532cbce140e39317669594d1ba4e2d7",
+      "sha256": "b5c08b0f7e92e1a596c41d019e2a1389f2c3418982bafdc834924028a1efd167",
+      "bytes": 18479,
+      "kind": "file",
+      "lines": 259
+    },
+    {
+      "path": "README.md",
+      "git_blob": "28a313b6047c31af610af57b165a5740f99c9dc5",
+      "sha256": "7d5e145e46b19588aed19d77a206d75bf04e95f733b66d39c9e08f080d93e437",
+      "bytes": 30393,
+      "kind": "file",
+      "lines": 492
+    },
+    {
+      "path": "bintray-bin.json",
+      "git_blob": "f03385186a09fc05a1baf57863a772aa60cd5b66",
+      "sha256": "f3eaf33da093f9e0f4464b5d04f8dce009482bb9ebaa69b5b89c58f6e9cd9d87",
+      "bytes": 665,
+      "kind": "file",
+      "lines": 27
+    },
+    {
+      "path": "bintray-pkg.json",
+      "git_blob": "f9c520e0e04574a0e31f73c5ee903e2d99149158",
+      "sha256": "a951cc143648d7353f95b70c38c3cf1ce76fc8df5f8d9bc9cd000d0bd139da2f",
+      "bytes": 922,
+      "kind": "file",
+      "lines": 34
+    },
+    {
+      "path": "cmd_sim.go",
+      "git_blob": "4dda917893b33d60d5c1b4c8c34abd2c8a19aa87",
+      "sha256": "b80e4e463cfe9f3d9d866a076b66ec76fef39c2991fffe1bf256c071b687047e",
+      "bytes": 4816,
+      "kind": "file",
+      "lines": 191
+    },
+    {
+      "path": "cmd_vec.go",
+      "git_blob": "2e9d01989702926abc99aec4a7da08ae13bd607d",
+      "sha256": "bca8ec36c7dbe562a6915a06f8bc6e4bd8e5f1c0cd6d50f90ee48cf4c8b00c99",
+      "bytes": 2420,
+      "kind": "file",
+      "lines": 95
+    },
+    {
+      "path": "fcollection.go",
+      "git_blob": "7a38b4777015dc88e7195029056953cd8699001b",
+      "sha256": "1b57b453eb07f822bc28134511aa82e2c05e5db5f7dd4801fa01186f35d488c5",
+      "bytes": 2505,
+      "kind": "file",
+      "lines": 105
+    },
+    {
+      "path": "fsimilar_cli.yaml",
+      "git_blob": "03dadcf7a96cc8b992c62bddd9b42939729f047d",
+      "sha256": "49daea445c4718527ee8a29e4c78c8ff21a148cd7af863eec9c9962bbd51a6bd",
+      "bytes": 2104,
+      "kind": "file",
+      "lines": 84
+    },
+    {
+      "path": "fsimilar_cliDef.go",
+      "git_blob": "aa7a536276bb2a9a67a9bfe3cfa454fcca66a986",
+      "sha256": "836ee4d22505a4dffadd92d155fe81d6c45bdf22ff4b0197e92880d42b200bbd",
+      "bytes": 5186,
+      "kind": "file",
+      "lines": 153
+    },
+    {
+      "path": "fsimilar_cliGen.sh",
+      "git_blob": "1a29b51f2601a3bbac1e69316e74c48a104846ee",
+      "sha256": "55eeadd699063df120a5f97a0179e48c4568b6967145e00b9b632309a5a8944a",
+      "bytes": 80,
+      "kind": "file",
+      "lines": 1
+    },
+    {
+      "path": "fsimilar_main.go",
+      "git_blob": "d0a8d0a86f1ca9f960cab2d055b40c25735a73d2",
+      "sha256": "64d59c68bfd44ea6b2d2336cdb9e954cb084756de15e333add86a8092b7dc9b3",
+      "bytes": 3729,
+      "kind": "file",
+      "lines": 162
+    },
+    {
+      "path": "fsimilar_plain.tmpl",
+      "git_blob": "0ca4539d5a837ea41c515e510e3e5f4377f02950",
+      "sha256": "825f458717a479a931c7c4da9af1ec1c83f65f70d70964d25110f0cf856fd1b1",
+      "bytes": 115,
+      "kind": "file",
+      "lines": 4
+    },
+    {
+      "path": "fsimilar_proj.yaml",
+      "git_blob": "181489d9f07da9f87e905ebfd6e43d990a1283bf",
+      "sha256": "782c7696726aa270e1f3a74eb0c73c1def8b06ba0df4e32b05ff223efbc5d6bd",
+      "bytes": 140,
+      "kind": "file",
+      "lines": 8
+    },
+    {
+      "path": "fsimilar_std.tmpl",
+      "git_blob": "1fbd193468e04252f005660c535d02d3b39c364f",
+      "sha256": "682b4fccd2ce7e79c8c630eea403a7fead2007f184ea872c17c82cb2c6a8040c",
+      "bytes": 126,
+      "kind": "file",
+      "lines": 4
+    },
+    {
+      "path": "fsimilar_test.go",
+      "git_blob": "c84b626f53c0b573ee749e7a3672412bd6d52493",
+      "sha256": "ec56ac670b48e302ee4a1b608e4410c92a10b9285b2b9e4e63775cc9780e342b",
+      "bytes": 3277,
+      "kind": "file",
+      "lines": 105
+    },
+    {
+      "path": "shell_cp.tmpl",
+      "git_blob": "295c81c6b2e8a1d3f51da1ac1d310f05ae28e308",
+      "sha256": "e34c2bc862d96866d76068b2168138f74cdc6722a1bc1286d4cb0b8e66003573",
+      "bytes": 306,
+      "kind": "file",
+      "lines": 6
+    },
+    {
+      "path": "shell_ln.tmpl",
+      "git_blob": "154126a796d8416e627f2446e9a2eed6192efc96",
+      "sha256": "291bb091b9858ae807d56eb4c35fd1271739693007d9f909efdd712917e5111f",
+      "bytes": 399,
+      "kind": "file",
+      "lines": 4
+    },
+    {
+      "path": "shell_mv.tmpl",
+      "git_blob": "66100a79ff98f1b463aa5c55d209327e948c3fb0",
+      "sha256": "e5c34ec54a0c9eb922ae67e184db121e0690e179b9dabbdcb5c0e0b49fc83244",
+      "bytes": 373,
+      "kind": "file",
+      "lines": 4
+    },
+    {
+      "path": "shell_mv.tmpl.real",
+      "git_blob": "504023aaaddc7a815ad2a4a13f6a3c5665ffcf22",
+      "sha256": "8fb1d46c24d6794bc6c7977a86ba1f0c729b17556a0b436d414bc00aa6f212b0",
+      "bytes": 235,
+      "kind": "file",
+      "lines": 4
+    },
+    {
+      "path": "shell_rm.tmpl",
+      "git_blob": "ebdbc4a866a63e9b2a5778983a37a9db22855229",
+      "sha256": "dc287bc5b361038bb219040a81485b19871ea3cc92abd1c619b676fa62579f6b",
+      "bytes": 212,
+      "kind": "file",
+      "lines": 4
+    },
+    {
+      "path": "template.go",
+      "git_blob": "1e370929bfb8f1c3c3706da9d2510039ae22d438",
+      "sha256": "14c6526d401e0c93e73b8e45ba464e056716cd3f7aee44e4a82cc251655550b6",
+      "bytes": 3311,
+      "kind": "file",
+      "lines": 123
+    },
+    {
+      "path": "test/fsimilar_plain.tmpl",
+      "git_blob": "50e2f65b09a1fcc9baa40543ff7ea0b529a54ca6",
+      "sha256": "825f458717a479a931c7c4da9af1ec1c83f65f70d70964d25110f0cf856fd1b1",
+      "bytes": 22,
+      "kind": "symlink",
+      "symlink_target": "../fsimilar_plain.tmpl",
+      "git_payload_sha256": "a62f8799d3a97cbcfa2d3eb54f0ebae292d0b1cd00bb9f24126c45142a5cb3fe"
+    },
+    {
+      "path": "test/shell_cp.tmpl.sh",
+      "git_blob": "0eabd057c8dab20bbae97402ea1367091c5d33eb",
+      "sha256": "566d350bf7325c2485420021134477113b75bca3880ca554fd74a077a1c80971",
+      "bytes": 28994,
+      "kind": "file",
+      "lines": 465
+    },
+    {
+      "path": "test/shell_ln.tmpl.sh",
+      "git_blob": "31e02f37f84f7d6375a29d2a63d2fcd9b033f6c3",
+      "sha256": "dfb10085ca885d4373761e3556e5074abb4ade989cb270c1674241954d61e036",
+      "bytes": 18345,
+      "kind": "file",
+      "lines": 203
+    },
+    {
+      "path": "test/shell_ln.tmpl_mkv.sh",
+      "git_blob": "43e7a4db645223a9f45dce60670395988a90b7d1",
+      "sha256": "87a601dd534986f3c074ea77404e3cdbeda54a5d90ec25b20485ca862f32c68e",
+      "bytes": 18328,
+      "kind": "file",
+      "lines": 203
+    },
+    {
+      "path": "test/shell_mv.tmpl.sh",
+      "git_blob": "9904d977afe3853020a8a210214301c8e6b28072",
+      "sha256": "27b830dbebafb0d0c7122f2efd6a44475d926df301fb3b3245938d1ddb005e8f",
+      "bytes": 12862,
+      "kind": "file",
+      "lines": 203
+    },
+    {
+      "path": "test/shell_rm.tmpl.sh",
+      "git_blob": "e65da72add8cfe1bb44e69d3f9c9a515e9438d0a",
+      "sha256": "8549b70e65fbb20ec724e44fbe338a7c56961dc12f12baf0542f3eddbb855b84",
+      "bytes": 13503,
+      "kind": "file",
+      "lines": 203
+    },
+    {
+      "path": "test/shell_test.ref",
+      "git_blob": "a4df0673b58d9244a0b912c2ddf8236f377d403c",
+      "sha256": "9f1bb338c9366be4378d7dc05156cf5d85a6cdb13e752088ccaf5453af060d53",
+      "bytes": 10942,
+      "kind": "file",
+      "lines": 252
+    },
+    {
+      "path": "test/shell_test.sh",
+      "git_blob": "6a877b885c2ace8a2d5b22a1a8475b254e28e7b4",
+      "sha256": "74f2260b57c06df3c5a213c4fe0316e6aa6e9ec0c5f70314b2d88605c4af004a",
+      "bytes": 566,
+      "kind": "file",
+      "lines": 24
+    },
+    {
+      "path": "test/shell_test_mkv.ref",
+      "git_blob": "ccbe49fdffe5a0b998bc601c5ef1af03f8d034cb",
+      "sha256": "246bce7ed2243ad1beca453dca57682fc89cea9c9c2609eb959347f7d4885dd5",
+      "bytes": 10933,
+      "kind": "file",
+      "lines": 252
+    },
+    {
+      "path": "test/sim.lstA",
+      "git_blob": "4da402184a76f6af88298e27ea21ea7f6877c218",
+      "sha256": "8768f0ac964f768ebd6fb33976524423d1004a3d4850048782dee1aa9b76f3f8",
+      "bytes": 323,
+      "kind": "file",
+      "lines": 8
+    },
+    {
+      "path": "test/sim.lstA.sim.phonetic.ref",
+      "git_blob": "d44ef9427d3ecfc30c1f54bb35cd5642e5c3558f",
+      "sha256": "888f45fa874f55daea2cbff718091b5407048737b36733a9f0605849c4b111a4",
+      "bytes": 2173,
+      "kind": "file",
+      "lines": 45
+    },
+    {
+      "path": "test/sim.lstA.sim.ref",
+      "git_blob": "20eb9da8cb0173494e1672d8988d0d095ede0956",
+      "sha256": "accae562445a1514fa024302f2f94e9b6792480496fe35ae9df0b1f0002a817f",
+      "bytes": 2190,
+      "kind": "file",
+      "lines": 45
+    },
+    {
+      "path": "test/sim.lstA.vec.Finish.ref",
+      "git_blob": "bc113e33c28272c15a32acbd01b6f72fca908f0f",
+      "sha256": "fbd17bb678fb9c93650ef26bd390f95c216360821d6edc6f3e3a57bfaf677bb1",
+      "bytes": 812,
+      "kind": "file",
+      "lines": 23
+    },
+    {
+      "path": "test/sim.lstA.vec.phonetic.ref",
+      "git_blob": "267898458c2fbaa2a3d1f2f7257239d9b5205af5",
+      "sha256": "0b1e104e07c5492d09db0e6f35077449821cb186e6813037e507960af39807ac",
+      "bytes": 1628,
+      "kind": "file",
+      "lines": 35
+    },
+    {
+      "path": "test/sim.lstA.vec.ref",
+      "git_blob": "a0bae535971de5ea9aa99f34592300fdf8b63d94",
+      "sha256": "b97d19c37e2f46b548a955f93aa9c12118ea989291bf50fd188e5edd459e8d62",
+      "bytes": 1467,
+      "kind": "file",
+      "lines": 28
+    },
+    {
+      "path": "test/sim.lstB",
+      "git_blob": "c7370f6d9f13fad5125ed8b0a3e7a2326b8f5db5",
+      "sha256": "57b9787e6c0e27aa7632bf2d6fd8223faafc50114fcd203c88236c30c09a5d5f",
+      "bytes": 323,
+      "kind": "file",
+      "lines": 8
+    },
+    {
+      "path": "test/sim.lstB.sim.phonetic.ref",
+      "git_blob": "04df7125a17ba14bf44f8281bee6b999b04f7f8d",
+      "sha256": "cd708d28b587c252257b6937b040b84aba839d6de89e1af1b0337e5c6b04efe4",
+      "bytes": 2245,
+      "kind": "file",
+      "lines": 46
+    },
+    {
+      "path": "test/sim.lstB.sim.ref",
+      "git_blob": "db9ebd898647dd9c229eb9af62ae1443a5571fe2",
+      "sha256": "5893b805e60d18b389edc002ece7b91b0b787b76712e7668a0e6a46605214d25",
+      "bytes": 2190,
+      "kind": "file",
+      "lines": 45
+    },
+    {
+      "path": "test/sim.lstB.vec.Finish.ref",
+      "git_blob": "28298e28554d2e93ae3dadeb31dc98e6fc78c90a",
+      "sha256": "214047bf2ec60e1af21c4b6f3370533576987876ec8e31e392cf97411d2e3712",
+      "bytes": 812,
+      "kind": "file",
+      "lines": 23
+    },
+    {
+      "path": "test/sim.lstB.vec.phonetic.ref",
+      "git_blob": "9d4a51a92c4c36383dca8f08b1dbbf8fb2afd2ac",
+      "sha256": "4f2a3964bee1a02bba2f6bbdbab0b96a0287152e55f3b103ca13ea364d16776d",
+      "bytes": 1607,
+      "kind": "file",
+      "lines": 35
+    },
+    {
+      "path": "test/sim.lstB.vec.ref",
+      "git_blob": "b4db3d9c6d3d136b24701510a32a213b47355fb7",
+      "sha256": "da48a1c443a0aa94b9a991d1facadd75426d1faf6754233697623000b1c000f0",
+      "bytes": 1467,
+      "kind": "file",
+      "lines": 28
+    },
+    {
+      "path": "test/sim.lstS",
+      "git_blob": "d2ffeb584d8093a142eb85f7489feb13fa5cff97",
+      "sha256": "3b1516784dbf851438517e325113f27dc700e02de29beb1d5c94a0e1fe8d4716",
+      "bytes": 323,
+      "kind": "file",
+      "lines": 8
+    },
+    {
+      "path": "test/sim.lstS.sim.phonetic.ref",
+      "git_blob": "e394eb935998b4f9af177d92bbca42b410db2b5e",
+      "sha256": "780fc084303289f039e2a5423ceec4e397b658801a0153514cbaae79640f8dd9",
+      "bytes": 2111,
+      "kind": "file",
+      "lines": 44
+    },
+    {
+      "path": "test/sim.lstS.sim.ref",
+      "git_blob": "f048b1b205fd61db16f6afc77d6fbb9f127f0062",
+      "sha256": "a107940b68279d8439d110e4f6d63b15b96c96257996dacc922cb83e1eaea854",
+      "bytes": 2053,
+      "kind": "file",
+      "lines": 41
+    },
+    {
+      "path": "test/sim.lstS.vec.Finish.ref",
+      "git_blob": "6154b16a5d2c3000860ec1c09e0e8a87718ee271",
+      "sha256": "626684c5d37f3edde352880e3b0fab8d981676ec267efa93dd56ac2b2c65ac6f",
+      "bytes": 812,
+      "kind": "file",
+      "lines": 23
+    },
+    {
+      "path": "test/sim.lstS.vec.phonetic.ref",
+      "git_blob": "f7caa15a1d9a7f74f03cb1662bb075f27329a936",
+      "sha256": "ff5327e32d48a73fcb780c35aed0b9b592bc4ff71138ccf086d18fa6b113c900",
+      "bytes": 1634,
+      "kind": "file",
+      "lines": 35
+    },
+    {
+      "path": "test/sim.lstS.vec.ref",
+      "git_blob": "cf7ddebd51deb78d562d2bdba58928f6c90e6df7",
+      "sha256": "d5809372bc1b1e78f598b7a81c6c4a8982c46577f28931c5eb07bec71a48dae0",
+      "bytes": 1473,
+      "kind": "file",
+      "lines": 28
+    },
+    {
+      "path": "test/sim/(eBook) GNU - Python Standard Library 2001.pdf",
+      "git_blob": "97b5955f788bcee887192305f6980cf01cb99ee7",
+      "sha256": "2634c3097f98e36865f0c572009c4ffd73316bc8b88ccfe8d196af35f46e2394",
+      "bytes": 9,
+      "kind": "file",
+      "lines": 1
+    },
+    {
+      "path": "test/sim/Audio Book - The Grey Coloured Bunnie.mp3",
+      "git_blob": "81bf396956110ad81c14860af1bbcc9dfbe4df20",
+      "sha256": "a63d8014dba891345b30174df2b2a57efbb65b4f9f09b98f245d1b3192277ece",
+      "bytes": 3,
+      "kind": "file",
+      "lines": 1
+    },
+    {
+      "path": "test/sim/ColoredGrayBunny.ogg",
+      "git_blob": "81c545efebe5f57d4cab2ba9ec294c4b0cadf672",
+      "sha256": "a883dafc480d466ee04e0d6da986bd78eb1fdd2178d04693723da3a8f95d42f4",
+      "bytes": 5,
+      "kind": "file",
+      "lines": 1
+    },
+    {
+      "path": "test/sim/GNU - 2001 - Python Standard Library.pdf",
+      "git_blob": "5d308e1d060b0c387d452cf4747f89ecb9935851",
+      "sha256": "11a77c3d96c06974b53d7f40a577e6813739eb5c811b2a86f59038ea90add772",
+      "bytes": 5,
+      "kind": "file",
+      "lines": 1
+    },
+    {
+      "path": "test/sim/GNU - Python Standard Library (2001).rar",
+      "git_blob": "72943a16fb2c8f38f9dde202b7a70ccc19c52f34",
+      "sha256": "17e682f060b5f8e47ea04c5c4855908b0a5ad612022260fe50e11ecb0cc0ab76",
+      "bytes": 4,
+      "kind": "file",
+      "lines": 1
+    },
+    {
+      "path": "test/sim/LayoutTest.java",
+      "git_blob": "97b5955f788bcee887192305f6980cf01cb99ee7",
+      "sha256": "2634c3097f98e36865f0c572009c4ffd73316bc8b88ccfe8d196af35f46e2394",
+      "bytes": 9,
+      "kind": "file",
+      "lines": 1
+    },
+    {
+      "path": "test/sim/PopupTest.java",
+      "git_blob": "e61ef7b965e17c62ca23b6ff5f0aaf09586e10e9",
+      "sha256": "d9cd8155764c3543f10fad8a480d743137466f8d55213c8eaefcd12f06d43a80",
+      "bytes": 3,
+      "kind": "file",
+      "lines": 1
+    },
+    {
+      "path": "test/sim/Python Standard Library.zip",
+      "git_blob": "ee9808dcf8b9fc9326ce4d96ff74e478c3809447",
+      "sha256": "ed02457b5c41d964dbd2f2a609d63fe1bb7528dbe55e1abf5b52c249cd735797",
+      "bytes": 6,
+      "kind": "file",
+      "lines": 1
+    },
+    {
+      "path": "test/test1.Finish.ref",
+      "git_blob": "812bb089335f415529ee040dbeb8f194783535fb",
+      "sha256": "1e3aa73890059de0352683d0d85f83dfcc4954209ddbdfade9fd90711d73f486",
+      "bytes": 28874,
+      "kind": "file",
+      "lines": 537
+    },
+    {
+      "path": "test/test1.lst",
+      "git_blob": "5a473c438c76dc792af36c9c8b397a2123cbca4a",
+      "sha256": "cd2c4c36abb1d6ff67e57fb354710450c642a7f5c748887a6bde4e91c7ab24c0",
+      "bytes": 21465,
+      "kind": "file",
+      "lines": 237
+    },
+    {
+      "path": "test/test1.sim.ref",
+      "git_blob": "3e42750d547335e135f0ea3db1b7bd2dba5b320e",
+      "sha256": "1521fa0ec8156050feb849eca3086a5632f8a5c18edf1c0de5e88c3a8493a62b",
+      "bytes": 70760,
+      "kind": "file",
+      "lines": 1069
+    },
+    {
+      "path": "test/test1.vec.phonetic.ref",
+      "git_blob": "13533db95914d3d889b371e396c855160e10cea2",
+      "sha256": "d7e0b27195f6118f1be17ae513cdb51e1dc01392dbce15586a8464ab231f0b9d",
+      "bytes": 30771,
+      "kind": "file",
+      "lines": 549
+    },
+    {
+      "path": "test/test1.vec.ref",
+      "git_blob": "136cdc0b611eefab91b96ede989ac2c27f482f1b",
+      "sha256": "a0468b9715efdfa74e517cfa9b6d2ca337092300793265280251a3b5ef12248c",
+      "bytes": 32321,
+      "kind": "file",
+      "lines": 537
+    },
+    {
+      "path": "test/test2.Finish.ref",
+      "git_blob": "f16acdbc80e53d67a2ebe1e00373c9804a514164",
+      "sha256": "c909522d249395447697c490d5ce63be1c2cfca19a0aa29db8b41fa0bbb83605",
+      "bytes": 86627,
+      "kind": "file",
+      "lines": 1245
+    },
+    {
+      "path": "test/test2.lst",
+      "git_blob": "8211981fe8a8576cce90fd867aa092cfcbf3bf92",
+      "sha256": "13083eb32884a9b7404335cecf11a4645c6a84de3eeecc0e03d9d9cd85b83ff3",
+      "bytes": 58049,
+      "kind": "file",
+      "lines": 540
+    },
+    {
+      "path": "test/test2.sim.ref",
+      "git_blob": "ba8544522ffd18ad6de02d9ca16469280fcf0537",
+      "sha256": "837432b50d769cccd46723e03d1ceb0611a2d1e8e32900b6f6a313f9771e6756",
+      "bytes": 175196,
+      "kind": "file",
+      "lines": 2430
+    },
+    {
+      "path": "test/test2.vec.phonetic.ref",
+      "git_blob": "b69111260aadc809623a1a63009ed540692b3987",
+      "sha256": "d1d36ff028cc4e9f4d4d8b4c52a8a11a4df6348b2edce13dd4b1238e18be5e91",
+      "bytes": 89274,
+      "kind": "file",
+      "lines": 1247
+    },
+    {
+      "path": "test/test2.vec.ref",
+      "git_blob": "b8a475300cb17656f70685d7ed0f66f5e597bda2",
+      "sha256": "49e5a8a0be48dd004c71662ec0ce1d95f3169f955bbc2adfd71984882ad97895",
+      "bytes": 96658,
+      "kind": "file",
+      "lines": 1245
+    },
+    {
+      "path": "vectorspace.go",
+      "git_blob": "4a552b73bf2b827e9709ffc8a570c4cc39cbc561",
+      "sha256": "299148cc01faa0379cc3ee2805b1676c512ec035d2c09e29446f11116c923578",
+      "bytes": 1208,
+      "kind": "file",
+      "lines": 76
+    }
+  ],
+  "direct_complete_text_reads": [
+    ".gitignore",
+    ".travis.yml",
+    "LICENSE",
+    "Makefile",
+    "README.e.md",
+    "README.md",
+    "bintray-bin.json",
+    "bintray-pkg.json",
+    "cmd_sim.go",
+    "cmd_vec.go",
+    "fcollection.go",
+    "fsimilar_cli.yaml",
+    "fsimilar_cliDef.go",
+    "fsimilar_cliGen.sh",
+    "fsimilar_main.go",
+    "fsimilar_plain.tmpl",
+    "fsimilar_proj.yaml",
+    "fsimilar_std.tmpl",
+    "fsimilar_test.go",
+    "shell_cp.tmpl",
+    "shell_ln.tmpl",
+    "shell_mv.tmpl",
+    "shell_mv.tmpl.real",
+    "shell_rm.tmpl",
+    "template.go",
+    "test/shell_test.sh",
+    "test/sim/(eBook) GNU - Python Standard Library 2001.pdf",
+    "test/sim/Audio Book - The Grey Coloured Bunnie.mp3",
+    "test/sim/ColoredGrayBunny.ogg",
+    "test/sim/GNU - 2001 - Python Standard Library.pdf",
+    "test/sim/GNU - Python Standard Library (2001).rar",
+    "test/sim/LayoutTest.java",
+    "test/sim/PopupTest.java",
+    "test/sim/Python Standard Library.zip",
+    "vectorspace.go"
+  ],
+  "symlink_entries": [
+    {
+      "path": "test/fsimilar_plain.tmpl",
+      "git_blob": "50e2f65b09a1fcc9baa40543ff7ea0b529a54ca6",
+      "sha256": "825f458717a479a931c7c4da9af1ec1c83f65f70d70964d25110f0cf856fd1b1",
+      "bytes": 22,
+      "kind": "symlink",
+      "symlink_target": "../fsimilar_plain.tmpl",
+      "git_payload_sha256": "a62f8799d3a97cbcfa2d3eb54f0ebae292d0b1cd00bb9f24126c45142a5cb3fe"
+    }
+  ],
+  "structured_generated_fixture_review": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/fsimilar-generated-fixture-review-20261013.json",
+  "structured_generated_fixture_review_sha256": "0b3b9d88e8342798632e1cb0da0ee9a11e6f3abcd1bc05d9719a24c417335a3a",
+  "license": "FullMIT read, go-dedup2017; no production copying",
+  "findings": [
+    "Filename-token/optional-size recommendation tool; no content or decoded-image equality verification",
+    "Both sim/vec entrypoints discard processFileInfo scanner/reader errors",
+    "Missing QuerySize stat warns then dereferences nil FileInfo",
+    "Collection LenOf casts toint16 and wraps32768 to-32768",
+    "Vector grouping permits similarity chains with zero-related endpoints",
+    "Size-weighted Similarity can be negative and zero-reference produces nonfinite-to-int conversion without typed error",
+    "Shell templates can emit ln/mv/rm recommendations from name similarity; never copied/executed as identity proof",
+    "Generated shell_cp contains unguarded extension diagnostic words as shell command tokens; syntax-only observation, not executed"
+  ]
+}

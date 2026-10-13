@@ -1,0 +1,43 @@
+{
+  "status": "complete_bounded_frozen_actual_work_index_linux_gate",
+  "tests": 14,
+  "programs": 2,
+  "suite_counts": {
+    "gradient_index": 12,
+    "gradient_index_reflection": 2
+  },
+  "log_binding": "Exact --list/--ignored names from each unchanged ELF matched as multisets against full completed output; summaries checked globally because headings interleave",
+  "ignored_tests": 0,
+  "frozen_files": 3081,
+  "artifacts": [
+    {
+      "suite": "gradient_index",
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-linux-native/target/debug/deps/gradient_index-8eb1395982b65cab",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-gradient-index-actual-work-bounded-linux-qualified-20261011/gradient_index-8eb1395982b65cab.gz",
+      "executable_sha256": "d9f043a50846aaa9764877d2261c0f583eda75ef80c8bef4798f2d811f52fb5d",
+      "archive_sha256": "6008705fb718c0059d92c345c38ffa343e1196a56378ead85bad83d7125c767d",
+      "executable_bytes": 366530320
+    },
+    {
+      "suite": "gradient_index_reflection",
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-linux-native/target/debug/deps/gradient_index_reflection-ed36ea125b024bf8",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-gradient-index-actual-work-bounded-linux-qualified-20261011/gradient_index_reflection-ed36ea125b024bf8.gz",
+      "executable_sha256": "30fd1556b2258de1522b63a903d96fd398b6a4608d5e1b0bfa1c86abe955521e",
+      "archive_sha256": "ad6ae5055a0b180b50641d16cb9814641f8cad791c69bd5e1fbefbdcd0dd2998",
+      "executable_bytes": 350865632
+    }
+  ],
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-index-actual-work-bounded-snapshot-20261011.json": "d15910b1f680752a3dc4e2285c54ea72faf389c0a172f03e373129705e5373a2",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-index-actual-work-bounded-linux-20261011.log": "9f4c8bf9b2476fdc2361231c25bb0623eb24083604dd79f08acd6ba000b322eb",
+    "/Users/themoretheless/.codex/tmp/rrrah-gradient-index-actual-work-bounded-linux-20261011.sh": "b9066e1352788baff0f023f4d98128a64e7303344f69443e9f37913ce65abe35",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-index-actual-work-bounded-linux-platform-test-list-20261011.log": "209524138fc229dd497c682b1af05e9f25f7f5398f6ce997aa07207e72a4119b",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-gradient-index-actual-work-bounded-linux-20261011.py": "b9aae029585867b5ee0d7fc48a7a9608e165a79d71b9c12a45235f7479f65918"
+  },
+  "scope": "Linux aarch64 frozen actual-comparison index API and reflected descriptor tests; artifacts archived before target reuse",
+  "limits": [
+    "Bounded fixtures do not establish broad collection recall or precision",
+    "No Torch, Windows, broad negative/burst or hard total RSS qualification",
+    "Full229 uses an earlier independent frozen source"
+  ]
+}

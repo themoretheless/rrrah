@@ -1,0 +1,86 @@
+{
+  "status": "complete_six_current_directions_pending_audit",
+  "producer_pid": 82397,
+  "plan_sha256": "8dfbb25f0962f6a05dc5937a657bf83c91420a9f720c71d5d04cafed2c723b84",
+  "build_command": [
+    "cargo",
+    "+stable",
+    "build",
+    "--offline",
+    "--bin",
+    "native_bank_current_all_positives",
+    "--jobs",
+    "2",
+    "--target-dir",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-exact-portfolio-20261011"
+  ],
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-current-diagonal-consensus-controls-plan-20261013.json": "8dfbb25f0962f6a05dc5937a657bf83c91420a9f720c71d5d04cafed2c723b84",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/run-dedup-current-diagonal-consensus-controls-20261013.py": "26f1b118215dbc9de45cea664cbec435cbd5562b8718bee4e98ecc22f091fdd3",
+    "/Users/themoretheless/.codex/tmp/rrrah-current-diagonal-consensus-controls-20261013/build.log": "6de88aebfca38e7ae93a60cf9fdb576853db32c8ebb4981901e77253150a14cb",
+    "/Users/themoretheless/.codex/tmp/rrrah-current-diagonal-consensus-controls-20261013/native_bank_current_all_positives": "be6090ed2ecc6dc5d92431d96574cdd66321de1b07ee6a05c65a0dce3cd1c756",
+    "/Users/themoretheless/.codex/tmp/rrrah-current-diagonal-consensus-harness-20261013/Cargo.lock": "40d0319ff61694d6f74b709c8e2df49e5afc536af462b95fb84f38849d050aeb"
+  },
+  "results": [
+    {
+      "index": 0,
+      "label": "table_true",
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-current-diagonal-consensus-controls-20261013/00.json",
+      "sha256": "9fc76123feb22160225f7cc55e5950b44042fd43ddba25b3f2384464ebbe4d0a",
+      "returncode": 0,
+      "support": true,
+      "model_attempted": false
+    },
+    {
+      "index": 1,
+      "label": "table_true",
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-current-diagonal-consensus-controls-20261013/01.json",
+      "sha256": "4734cc67f7e725f523bd129567b0f6ea0f2d3735e462e7a6e2bef1bb87c6a444",
+      "returncode": 0,
+      "support": true,
+      "model_attempted": false
+    },
+    {
+      "index": 2,
+      "label": "table_wrong",
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-current-diagonal-consensus-controls-20261013/02.json",
+      "sha256": "d83811d6a6e9ffd0a3004ed7984d26b93e8ad8f8703d765f71ec9eeaa6095af1",
+      "returncode": 0,
+      "support": null,
+      "model_attempted": true
+    },
+    {
+      "index": 3,
+      "label": "table_wrong",
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-current-diagonal-consensus-controls-20261013/03.json",
+      "sha256": "e47511f61d927b54403c1a6c651b4aee7a89024f24528f4fe813d43b15fa6c61",
+      "returncode": 0,
+      "support": null,
+      "model_attempted": true
+    },
+    {
+      "index": 4,
+      "label": "portrait_wrong",
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-current-diagonal-consensus-controls-20261013/04.json",
+      "sha256": "1ea6181b91fd92b5776e1b037daf074a2d3daf7b06b473e59a984edcfbb3b3cc",
+      "returncode": 0,
+      "support": true,
+      "model_attempted": true
+    },
+    {
+      "index": 5,
+      "label": "portrait_wrong",
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-current-diagonal-consensus-controls-20261013/05.json",
+      "sha256": "bcc5da41a56139604d446573734730072d5f300c5912a9bc1939e969c4480745",
+      "returncode": 0,
+      "support": null,
+      "model_attempted": true
+    }
+  ],
+  "scope": "Same six predeclared diagonal-normalized development directions now using fresh post-worker/fresh-vendor complete-gate source. Original caller Rust source unchanged; only dependency paths move. Stable compiler explicit; existing standalone lock may add new group dependencies. SourceTolerance2*sourceDiagonal/targetDiagonal,640input/CPU2/seed173/native4096/opposite1m/25banks/radii2,6. No atomic consensus API/default change/universal recall/precision/RSS claim; all229positive pair both-direction evidence remains historical. Current snapshot source, not live-root parity assertion.",
+  "compiler": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: aarch64-apple-darwin\nrelease: 1.98.1\nLLVM version: 22.1.8\n",
+  "child_pid": 87856,
+  "build_returncode": 0,
+  "active_index": 5,
+  "source_unchanged": true
+}

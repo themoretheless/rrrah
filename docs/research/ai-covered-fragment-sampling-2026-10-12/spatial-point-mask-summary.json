@@ -1,0 +1,20 @@
+{
+  "implementation": "native spatial commands share one group/mask evaluator for point sampling and pixel integration",
+  "verified": {
+    "quarter_coverage_mask": {
+      "inside_point_alpha": 0.25,
+      "outside_point_alpha": 0,
+      "integrated_pixel_alpha": 0.0625
+    },
+    "geometry_work_refusal": true
+  },
+  "ordinary_passed": 164,
+  "ignored": 12,
+  "limits": [
+    "parent partition must include mask geometry",
+    "mask scene event preparation still required",
+    "production and real AI pixel remain incomplete"
+  ],
+  "log": "docs/research/ai-covered-fragment-sampling-2026-10-12/spatial-point-mask-tests.log",
+  "sha256": "7c42cac6f0bf1c5588894e66466ea7f68f3d7c9839d24c27d44bd501fcf5936e"
+}

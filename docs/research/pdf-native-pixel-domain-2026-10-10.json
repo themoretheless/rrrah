@@ -1,0 +1,190 @@
+{
+  "date": "2026-10-10",
+  "scope": "Test-only native AI fidelity diagnosis; no rendering correction or production qualification claimed",
+  "distribution": [
+    {
+      "fixture": "VectorApple.ai",
+      "page": 0,
+      "pixels_at_or_above_error": {
+        "1": 33072,
+        "2": 32764,
+        "4": 31424,
+        "8": 24003,
+        "16": 13215,
+        "32": 1611,
+        "64": 376,
+        "128": 109
+      }
+    },
+    {
+      "fixture": "one.ai",
+      "page": 0,
+      "pixels_at_or_above_error": {
+        "1": 2494,
+        "2": 2322,
+        "4": 1994,
+        "8": 1558,
+        "16": 908,
+        "32": 220,
+        "64": 0,
+        "128": 0
+      }
+    },
+    {
+      "fixture": "one.ai",
+      "page": 1,
+      "pixels_at_or_above_error": {
+        "1": 0,
+        "2": 0,
+        "4": 0,
+        "8": 0,
+        "16": 0,
+        "32": 0,
+        "64": 0,
+        "128": 0
+      }
+    }
+  ],
+  "counterexample": {
+    "fixture": "VectorApple.ai",
+    "page": 0,
+    "pixel": [
+      141,
+      36
+    ],
+    "native_rgb": [
+      255,
+      255,
+      255
+    ],
+    "poppler_rgb": [
+      156,
+      70,
+      37
+    ],
+    "root_event": 2670,
+    "path_coverage_u8": 96,
+    "soft_mask_value": 1.0,
+    "source_sample_at_pixel_center": null,
+    "within_pixel_domain_probe": {
+      "grid": [
+        16,
+        16
+      ],
+      "samples": 256,
+      "painted_samples": 96,
+      "first_position": [
+        141.03125,
+        36.03125
+      ],
+      "first_original_components": [
+        0.2944777,
+        0.73941565,
+        0.94429773,
+        0.1671868
+      ],
+      "component_count": 4
+    },
+    "finding": "Positive covered area is discarded because the single center lies outside the source domain. Other points in the same pixel return valid original CMYK samples.",
+    "next_requirement": "Integrate source-domain color and shape coverage together for partial pixels; preserve original component interpolation, source ordering, bounded memory/work and cancellation. A first-hit or nearest-point substitution is not sufficient qualification."
+  },
+  "instrumentation": {
+    "env": "RRRAH_TRACE_NATIVE_PIXEL=x,y",
+    "behavior": "Logs positive coverage and center-sample presence. If center is outside, probes a fixed 16x16 grid for diagnosis only; does not alter rendering."
+  },
+  "qualification": {
+    "compositor": {
+      "passed": 126,
+      "failed": 0,
+      "ignored": 10
+    },
+    "real_ai_pages": [
+      {
+        "fixture": "VectorApple.ai",
+        "page": 0,
+        "width": 301,
+        "height": 246,
+        "diagnostic_timeout_seconds": 180,
+        "peak_admitted_bytes": 196387440,
+        "final_admitted_bytes": 0,
+        "status": "native_diagnostic",
+        "native_completed": true,
+        "capture_failed": false,
+        "capture_ms": 7722.2417080000005,
+        "native_replay_ms": 17761.987916,
+        "deadline_expired": false,
+        "events": 2755,
+        "native_paints": 463,
+        "raster_events": 3,
+        "raster_source_models": [
+          "event=3,model=None",
+          "event=1218,model=Some(Cmyk)",
+          "event=2298,model=Some(Cmyk)"
+        ],
+        "native_raster_components": [
+          "event=3,sample_count=Some(29488),refusal=None",
+          "event=1218,sample_count=Some(298224),refusal=None",
+          "event=2298,sample_count=Some(266084),refusal=None"
+        ],
+        "shading_events": 13,
+        "page_model": "Cmyk"
+      },
+      {
+        "fixture": "one.ai",
+        "page": 0,
+        "width": 1366,
+        "height": 768,
+        "diagnostic_timeout_seconds": 180,
+        "peak_admitted_bytes": 168322584,
+        "final_admitted_bytes": 0,
+        "status": "native_diagnostic",
+        "native_completed": true,
+        "capture_failed": false,
+        "capture_ms": 1.401792,
+        "native_replay_ms": 12079.134875,
+        "deadline_expired": false,
+        "events": 8,
+        "native_paints": 2,
+        "raster_events": 0,
+        "raster_source_models": [],
+        "native_raster_components": [],
+        "shading_events": 0,
+        "page_model": "Rgb"
+      },
+      {
+        "fixture": "one.ai",
+        "page": 1,
+        "width": 177,
+        "height": 175,
+        "diagnostic_timeout_seconds": 180,
+        "peak_admitted_bytes": 4957320,
+        "final_admitted_bytes": 0,
+        "status": "native_diagnostic",
+        "native_completed": true,
+        "capture_failed": false,
+        "capture_ms": 0.06475,
+        "native_replay_ms": 493.698625,
+        "deadline_expired": false,
+        "events": 1,
+        "native_paints": 0,
+        "raster_events": 0,
+        "raster_source_models": [],
+        "native_raster_components": [],
+        "shading_events": 0,
+        "page_model": "Rgb"
+      }
+    ],
+    "strict_gate_remains_failed": true
+  },
+  "source_sha256": {
+    "vendor/hayro/src/knockout_interpreter.rs": "e97955ca9ad8348ede54a722865d89f2df6479e18de8fe28c625e935fbdbe634"
+  },
+  "evidence_logs": {
+    "/tmp/rrrah-native-pixel-domain-20261010.log": {
+      "sha256": "45eb189cd8eae6edb15bd5fe16f44ac7dc71408e70cf2926b9eecce3fc8fccd7"
+    },
+    "/tmp/rrrah-native-pixel-domain-141-36-20261010.log": {
+      "sha256": "4126f192b6d12ecfecdd5cdc8fa95ec7a0b4ab740d4bb47cb3e2ecefa146894b"
+    }
+  }
+}

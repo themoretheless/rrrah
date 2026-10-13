@@ -1,0 +1,37 @@
+{
+  "status": "verified_composed_cpu_architecture_noncopy_completed_prefix_only",
+  "completed": 1,
+  "required": 4,
+  "totals": {
+    "copy": {
+      "supported": 0,
+      "inconclusive": 0,
+      "execution_failed": 0
+    },
+    "no_reference_match": {
+      "supported": 0,
+      "inconclusive": 1,
+      "execution_failed": 0
+    }
+  },
+  "rows": [
+    {
+      "query": "R014120",
+      "reference": "R020965",
+      "published_label": "no_reference_match",
+      "annotation": "Different buildings: low unfinished house behind fence versus curved high-rise tower.",
+      "index": 0,
+      "status": "inconclusive",
+      "primary_supported": false,
+      "recovery_attempted": true,
+      "recovery_supported": false
+    }
+  ],
+  "pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-disc21-architecture-controls-prefix-0001-20261012.json": "5fa4aeec690b1d738183d64d01745608cd633dc5995c6e0a1d5eea4159da26a8",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-disc21-architecture-controls-prefix-20261012.py": "362a6d4e877ce1cd13e1334c7d2325fbed6ea5b3e6470740442ed3b997764081",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-disc21-exposure-recovery-api-audit-20261012.json": "4fc4ec37d7c2c56fe436727ada31a1cde590711ddc70d55fa0aba50d202eac8e"
+  },
+  "source_pins_verified": 3298,
+  "scope": "Direct public composed CPU API results, primary25/min10 then recovery9/min20 only on primary miss. Completed prefix only. Manually inspected architecture development labels; no held-out hard-negative precision, localization/full-format/platform/RSS/all500 qualification or default adoption."
+}

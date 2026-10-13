@@ -1,0 +1,40 @@
+{
+  "date": "2026-10-12",
+  "change": "8-bit DPX writes normalized pixel components directly to final RGBA8, removing full-image u16 intermediate and conversion pass; higher precision retains direct RGBA16",
+  "pixel_buffer_bytes_per_pixel": {
+    "previous_8bit_peak": 12,
+    "current_8bit_peak": 4,
+    "source_and_cineon_envelope_excluded": true
+  },
+  "checks": [
+    "one-byte-short final output budget rejects without retained credit",
+    "exact final output budget succeeds with peak equal to output size",
+    "Cineon requires only envelope plus final pixel budget",
+    "all 24 DPX and 12 Cineon independent native sample oracles preserved",
+    "RAM/swap/SDR/RGBA16Float frame preservation"
+  ],
+  "decoder_suite": {
+    "passed": 1024,
+    "failed": 0,
+    "ignored": 72
+  },
+  "metal_collection": {
+    "adapter": "Metal Apple M4 Max",
+    "passed": 1,
+    "failed": 0,
+    "sources": 105,
+    "selections": 134,
+    "storage_cases": 268,
+    "final_root_bytes": 0,
+    "final_queue_bytes": 0
+  },
+  "logs": {
+    "decode-dpx-direct-output-2026-10-12.log": "a5ad8af4934970a6fb70fbbe681a8b59bcac4bcc7a5cb6ac15225e2dd240c745",
+    "metal-dpx-direct-output-2026-10-12.log": "ad12a43d53d866d39a842f68ab7537631b816a19b6223185a1724f1ab4de2ad1"
+  },
+  "limits": [
+    "Measured managed allocation peak on fixture cases, no claimed throughput speedup",
+    "Full source and Cineon envelope memory still separately required",
+    "No universal producer/film-log/physical-HDR qualification"
+  ]
+}

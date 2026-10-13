@@ -1,0 +1,65 @@
+{
+  "status": "passed",
+  "terminal_exit_code": 0,
+  "backend": "Metal",
+  "cycles": 3674,
+  "elapsed_seconds": 3601.158,
+  "swap_reads": 3674,
+  "swap_writes": 8,
+  "final_root_bytes": 0,
+  "final_queue_bytes": 0,
+  "checkpoint_count": 459,
+  "log": "/tmp/rrrah-metal-collection-hour-20261011.log",
+  "log_sha256": "82a090ce2e07e2dd7a3c24178c54412b9849311e077c03fba318f91748ff6c64",
+  "rss_observations": {
+    "scope": "Observed process RSS alongside managed-root checkpoints; snapshots are not leak qualification",
+    "samples": [
+      {
+        "observed_utc": "2026-10-10T20:42:30.510250+00:00",
+        "pid": 37445,
+        "rss_bytes": 723533824,
+        "process_elapsed": "20:21",
+        "cycle_checkpoint": [
+          "1768",
+          "1203.834",
+          "1768",
+          "8"
+        ]
+      },
+      {
+        "observed_utc": "2026-10-10T20:51:11.922994+00:00",
+        "pid": 37445,
+        "rss_bytes": 723533824,
+        "process_elapsed": "29:02",
+        "cycle_checkpoint": [
+          "2048",
+          "1719.516",
+          "2048",
+          "8"
+        ]
+      },
+      {
+        "observed_utc": "2026-10-10T20:57:01.807841+00:00",
+        "pid": 37445,
+        "rss_bytes": 723533824,
+        "process_elapsed": "34:52",
+        "cycle_checkpoint": [
+          "2368",
+          "2069.116",
+          "2368",
+          "8"
+        ]
+      }
+    ]
+  },
+  "scope": "One retained cache and swap worker; eight authored 4000x3000 RGBA32Float images; all float bits and complete Metal SDR frames compared each cycle; TTL, pressure refusal and cancellation exercised.",
+  "limits": [
+    "Local warm filesystem, not a physical slow disk",
+    "Managed reservation pressure, not OS-wide memory exhaustion",
+    "Oracle arrays and driver allocations outside managed budget",
+    "Eight authored images, not a diverse RAW collection or all 100 formats",
+    "SDR offscreen comparison, not physical HDR color qualification",
+    "RSS snapshots are not a formal leak proof",
+    "Running binary preceded subsequent test-helper edits; current source is not a frozen build snapshot"
+  ]
+}

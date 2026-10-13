@@ -1,0 +1,36 @@
+{
+  "status": "complete_bounded_frozen_animation_linux_execution",
+  "producer_pid": 24294,
+  "manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-animation-timeline-linux-locked-snapshot-20261011.json",
+  "manifest_sha256": "5ff3a5407513bd3db8f255608c5e39b7ff952707affe7627843fd1955f119e64",
+  "helper_sha256": "3b38a28643301b73ef8bafd954e4c0731f49510feeac0603e5eb9a74dccbbb27",
+  "results": [
+    {
+      "mode": "animation-unit",
+      "command": [
+        "sh",
+        "/Users/themoretheless/.codex/tmp/rrrah-animation-timeline-linux-locked-20261011.sh",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-linux-native",
+        "/opt/rrrah-dedup-validation/sysroot",
+        "animation-unit",
+        "/Users/themoretheless/.codex/tmp/rrrah-animation-timeline-linux-locked-snapshot-20261011"
+      ],
+      "pid": 24342,
+      "returncode": 0
+    },
+    {
+      "mode": "animation-integration",
+      "command": [
+        "sh",
+        "/Users/themoretheless/.codex/tmp/rrrah-animation-timeline-linux-locked-20261011.sh",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-linux-native",
+        "/opt/rrrah-dedup-validation/sysroot",
+        "animation-integration",
+        "/Users/themoretheless/.codex/tmp/rrrah-animation-timeline-linux-locked-snapshot-20261011"
+      ],
+      "pid": 29193,
+      "returncode": 0
+    }
+  ],
+  "log_sha256": "8b0ee9bc05690db7171cf7d98afe01e4cd6971ed9f6f79c0dac04436ead05474"
+}

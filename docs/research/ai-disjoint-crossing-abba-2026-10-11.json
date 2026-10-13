@@ -1,0 +1,161 @@
+{
+  "order": "ABBA",
+  "runs": [
+    {
+      "kind": "before",
+      "pages": [
+        {
+          "fixture": "VectorApple.ai",
+          "page": 0,
+          "native_replay_ms": 25640.8035,
+          "peak_admitted_bytes": 232664374,
+          "final_admitted_bytes": 0
+        },
+        {
+          "fixture": "one.ai",
+          "page": 0,
+          "native_replay_ms": 12689.306999999999,
+          "peak_admitted_bytes": 169698840,
+          "final_admitted_bytes": 0
+        },
+        {
+          "fixture": "one.ai",
+          "page": 1,
+          "native_replay_ms": 356.43420799999996,
+          "peak_admitted_bytes": 4957320,
+          "final_admitted_bytes": 0
+        }
+      ]
+    },
+    {
+      "kind": "after",
+      "pages": [
+        {
+          "fixture": "VectorApple.ai",
+          "page": 0,
+          "native_replay_ms": 46315.3935,
+          "peak_admitted_bytes": 232664374,
+          "final_admitted_bytes": 0
+        },
+        {
+          "fixture": "one.ai",
+          "page": 0,
+          "native_replay_ms": 13574.513165999999,
+          "peak_admitted_bytes": 169698840,
+          "final_admitted_bytes": 0
+        },
+        {
+          "fixture": "one.ai",
+          "page": 1,
+          "native_replay_ms": 275.352125,
+          "peak_admitted_bytes": 4957320,
+          "final_admitted_bytes": 0
+        }
+      ]
+    },
+    {
+      "kind": "after",
+      "pages": [
+        {
+          "fixture": "VectorApple.ai",
+          "page": 0,
+          "native_replay_ms": 33460.163708,
+          "peak_admitted_bytes": 232664374,
+          "final_admitted_bytes": 0
+        },
+        {
+          "fixture": "one.ai",
+          "page": 0,
+          "native_replay_ms": 12394.424875,
+          "peak_admitted_bytes": 169698840,
+          "final_admitted_bytes": 0
+        },
+        {
+          "fixture": "one.ai",
+          "page": 1,
+          "native_replay_ms": 313.12191700000005,
+          "peak_admitted_bytes": 4957320,
+          "final_admitted_bytes": 0
+        }
+      ]
+    },
+    {
+      "kind": "before",
+      "pages": [
+        {
+          "fixture": "VectorApple.ai",
+          "page": 0,
+          "native_replay_ms": 25563.903292,
+          "peak_admitted_bytes": 232664374,
+          "final_admitted_bytes": 0
+        },
+        {
+          "fixture": "one.ai",
+          "page": 0,
+          "native_replay_ms": 9497.523375,
+          "peak_admitted_bytes": 169698840,
+          "final_admitted_bytes": 0
+        },
+        {
+          "fixture": "one.ai",
+          "page": 1,
+          "native_replay_ms": 218.268042,
+          "peak_admitted_bytes": 4957320,
+          "final_admitted_bytes": 0
+        }
+      ]
+    }
+  ],
+  "binary_sha256": {
+    "before": "5d290438959ac2b38692a732e9ad89734360b033ecb2cb1a370403c627e20306",
+    "after": "0a0f1d3e4eb2c6609497f9ccaf2fb3073f97ee7c7c79107dd0e923eac06f2750"
+  },
+  "all_outputs_byte_exact": true,
+  "limitation": "Two measurements per version on one host; timing evidence only for these test-only AI scenes.",
+  "concurrent_load": "Other dedup and Voxy CPU-heavy jobs ran concurrently; no jobs interrupted.",
+  "decision": "Reverted early-rejection experiment: timing improvement unproven, both VectorApple after-runs slower than both baseline runs. Fine contour accuracy fix remains.",
+  "summary": [
+    {
+      "fixture": "VectorApple.ai",
+      "page": 0,
+      "before_ms": [
+        25640.8035,
+        25563.903292
+      ],
+      "before_median_ms": 25602.353396,
+      "after_ms": [
+        46315.3935,
+        33460.163708
+      ],
+      "after_median_ms": 39887.778604
+    },
+    {
+      "fixture": "one.ai",
+      "page": 0,
+      "before_ms": [
+        12689.306999999999,
+        9497.523375
+      ],
+      "before_median_ms": 11093.415187499999,
+      "after_ms": [
+        13574.513165999999,
+        12394.424875
+      ],
+      "after_median_ms": 12984.4690205
+    },
+    {
+      "fixture": "one.ai",
+      "page": 1,
+      "before_ms": [
+        356.43420799999996,
+        218.268042
+      ],
+      "before_median_ms": 287.35112499999997,
+      "after_ms": [
+        275.352125,
+        313.12191700000005
+      ],
+      "after_median_ms": 294.237021
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "status": "complete_pinned4file_source_review",
+  "repository": "maweidong/ai-smart-photo-dedup",
+  "commit": "76bca9285217633228d0c129b0e3d28abcf8b5cf",
+  "fully_read_files": [
+    ".gitignore",
+    "LICENSE",
+    "dedup.py",
+    "requirements.txt"
+  ],
+  "gitignore_read_basis": "Byte-identical to fully read image-similarity-checker .gitignore",
+  "license": "MIT Copyright2026JackMa",
+  "upstream_tests": 0,
+  "findings": [
+    "No AI embedding model; pHash all-pairs O(n^2), no pixel identity confirmation. Difference-hash method and cv2/numpy imports unused by finder.",
+    "duplicates persists between calls; returned dict shallow-copies mutable lists. No source mutation, request cancellation or admission contracts.",
+    "Report sums pair edges as duplicate images, not unique removable files or physical reclaim.",
+    "Missing root and unreadable/corrupt images have no typed failure in final report; decode errors are printed/dropped.",
+    "Threshold/hash-size not validated; CLI --recursive store_true defaultTrue cannot disable recursion, --dry-run unused, no deletion implemented.",
+    "Requirement ImageHash5.3.0 failed resolution in isolated original dependency attempt; exact upstream runtime is unqualified."
+  ],
+  "adopted": false,
+  "runtime_report": "ai-smart-photo-dedup-runtime-controls-20261012.json",
+  "scope": "Full4file pinned tree read and verified. Eight bounded original-class controls use compatible differing dependencies and identity progress adapter, not full original module/environment qualification."
+}

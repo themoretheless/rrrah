@@ -1,0 +1,47 @@
+
+running 42 tests
+test backbone::tests::build_backbone_rejects_unsupported_resolution ... ok
+test backbone::tests::build_backbone_supports_outdoor_config ... ok
+test backbone::tests::resnet_fpn_8_2_matches_expected_output_shapes ... ok
+test backbone::tests::strip_cancellation_never_returns_partial_convolution ... ok
+test backbone::tests::strip_padding_matches_global_border_reference_with_bounded_copy ... ok
+test backbone::tests::tiled_convolution_matches_full_convolution_at_seams_and_borders ... ok
+test coarse_matching::tests::border_mask_removes_all_matches_on_tiny_grid ... ok
+test coarse_matching::tests::confidence_buffer_reuse_preserves_forward_and_autograd ... ok
+test coarse_matching::tests::dual_softmax_identity_features_match_diagonal ... ok
+test coarse_matching::tests::masks_remove_masked_tokens_from_matches ... ok
+test fine_matching::tests::empty_matches_return_coarse_points ... ok
+test fine_matching::tests::forward_produces_offset_for_peaked_heatmap ... ok
+test fine_matching::tests::forward_uses_batch_scale1_when_present ... ok
+test fine_preprocess::tests::empty_matches_return_empty_windows ... ok
+test fine_preprocess::tests::forward_selects_only_requested_windows_without_concat ... ok
+test fine_preprocess::tests::forward_with_concat_keeps_output_shape ... ok
+test fine_preprocess::tests::stride_matches_kornia_height_axis_behavior ... ok
+test fine_preprocess::tests::unfold_local_windows_matches_expected_patch_layout ... ok
+test linear_attention::tests::full_attention_preserves_shape ... ok
+test linear_attention::tests::linear_attention_preserves_shape ... ok
+test linear_attention::tests::linear_attention_zeroes_masked_queries ... ok
+test loftr::tests::extract_loftr_matches_parses_tuple_outputs ... ok
+test loftr::tests::extract_loftr_matches_rejects_wrong_arity ... ok
+test loftr::tests::normalize_loftr_image_accepts_rgb_chw ... ok
+test loftr::tests::normalize_loftr_image_rejects_invalid_rank ... ok
+test loftr::tests::normalize_loftr_image_scales_byte_range_to_unit_interval ... ok
+test loftr_config::tests::indoor_matches_outdoor_defaults ... ok
+test loftr_config::tests::indoor_new_only_flips_temp_bug_fix ... ok
+test loftr_config::tests::outdoor_config_matches_kornia_defaults ... ok
+test loftr_model::tests::cancellation_at_every_inference_checkpoint_discards_output_and_allows_retry ... ok
+test loftr_model::tests::model_forward_smoke_returns_consistent_output_shapes ... ok
+test loftr_model::tests::model_variable_names_match_kornia_prefixes ... ok
+test loftr_model::tests::regression_no_eager_debug_preserves_outputs_and_public_debug ... ok
+test position_encoding::tests::create_position_encoding_has_expected_shape ... ok
+test position_encoding::tests::forward_expands_internal_encoding_when_input_is_larger ... ok
+test position_encoding::tests::forward_rejects_wrong_channel_count ... ok
+test position_encoding::tests::temp_bug_fix_changes_encoding_values ... ok
+test transformer::tests::coarse_and_fine_transformer_cancellation_between_each_evaluation ... ok
+test transformer::tests::encoder_layer_preserves_shape ... ok
+test transformer::tests::transformer_accepts_masks_and_preserves_feature_shapes ... ok
+test transformer::tests::transformer_preserves_feature_shapes ... ok
+test transformer::tests::transformer_rejects_wrong_feature_dim ... ok
+
+test result: ok. 42 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 13.73s
+

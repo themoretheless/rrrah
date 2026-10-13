@@ -1,0 +1,65 @@
+   Compiling hayro-interpret v0.7.0 (/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret)
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: hidden lifetime parameters in types are deprecated
+   --> vendor/hayro-interpret/src/shading/adaptive.rs:514:34
+    |
+514 |         let mut shared: MeshArray<SharedEdgeSample> = MeshArray::new(admit);
+    |                         ---------^----------------- expected lifetime parameter
+    |
+    = note: requested on the command line with `-W elided-lifetimes-in-paths`
+help: indicate the anonymous lifetime
+    |
+514 |         let mut shared: MeshArray<'_, SharedEdgeSample> = MeshArray::new(admit);
+    |                                   +++
+
+   Compiling hayro v0.7.1 (/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+warning: `hayro-interpret` (lib) generated 1 warning
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+    Finished `test` profile [optimized + debuginfo] target(s) in 1m 25s
+     Running tests/model_input.rs (target/debug/deps/model_input-fc50ee5cd14abacd)
+
+running 4 tests
+test tiny_inputs_are_explicitly_upsampled_and_linear_gray_is_srgb_encoded ... ok
+test invalid_caps_and_unsupported_pixels_refuse_atomically ... ok
+test odd_edges_match_independent_continuous_area_reference_and_credit_tracks_owners ... ok
+test every_one_shot_cancellation_checkpoint_releases_all_output_credit ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/model_input_file.rs (target/debug/deps/model_input_file-53cd47ef050a6e5a)
+
+running 4 tests
+test file_input_retains_only_output_and_rechecks_source_and_generation_after_inference ... ok
+test external_palette_is_rechecked_after_preparation_and_mutation_discards_input ... FAILED
+test invalid_policy_precedes_io_and_mid_preparation_source_changes_are_errors ... ok
+test every_global_checkpoint_and_mid_final_generation_cancellation_discard_payload ... ok
+
+failures:
+
+---- external_palette_is_rechecked_after_preparation_and_mutation_discards_input stdout ----
+
+thread 'external_palette_is_rechecked_after_preparation_and_mutation_discards_input' (79188528) panicked at crates/rrrah-dedup/tests/model_input_file.rs:199:86:
+called `Result::unwrap()` on an `Err` value: Input(UnsupportedPixels)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    external_palette_is_rechecked_after_preparation_and_mutation_discards_input
+
+test result: FAILED. 3 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.31s
+
+error: test failed, to rerun pass `-p rrrah-dedup --test model_input_file`

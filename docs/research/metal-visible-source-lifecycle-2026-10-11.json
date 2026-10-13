@@ -1,0 +1,33 @@
+{
+  "scope": "Native surface re-exposure and transient swap shutdown",
+  "result": "passed bounded lifecycle controls",
+  "changes": [
+    "redraw on unoccluded or focused window",
+    "ForegroundLoader cancels disconnects and joins decode owner",
+    "ImageSwapCache explicit terminal shutdown cancels wakes and joins worker while default Drop stays nonblocking",
+    "loader shutdown joins raster model and RAW swap workers",
+    "ApplicationHandler exiting releases GPU workers/source, loader caches and queued events before macOS terminate bypasses Rust stack teardown"
+  ],
+  "validation": {
+    "app_tests_passed": 208,
+    "app_manual_ignored": 45,
+    "cache_tests_passed": 142,
+    "cache_manual_ignored": 3,
+    "explicit_metal_viewport_passed": 6
+  },
+  "native": [
+    "first background launch screenshots blank while logs report Metal Occluded",
+    "raising exposed window displays HDR bands without keyboard input",
+    "automatic segmented swap adoption logged",
+    "Cmd+Q logs explicit transient shutdown completion",
+    "process exited and fresh test cache has zero files"
+  ],
+  "remaining_files": [],
+  "binary_sha256": "1d5e7d1c8d62ae9f50371b816f7871921ce8ac946b5dace8c958d83eeb26fa74",
+  "limits": [
+    "no physical HDR luminance/color calibration",
+    "no NVIDIA qualification per user priority",
+    "broader format and pressure corpus remain open",
+    "initial full decode and512MiB native payload cap remain"
+  ]
+}

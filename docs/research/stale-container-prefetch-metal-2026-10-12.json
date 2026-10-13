@@ -1,0 +1,37 @@
+{
+  "scope": "Obsolete selected-image generation refusal followed by fresh-generation swap restore and actual Metal readback",
+  "adapter": "Apple M4 Max / Metal",
+  "sources": [
+    "ico-selected-images.ico",
+    "cur-selected-images.cur",
+    "cur-selected-dib.cur",
+    "tiff-distinct-page-profiles.tif"
+  ],
+  "cancelled_indices_per_source": [
+    1,
+    0,
+    2
+  ],
+  "cancel_checks": {
+    "swap_reads": 0,
+    "ram_entries": 0,
+    "shared_credit": 0,
+    "foreground_decode_gate": "held throughout cancellation and retry"
+  },
+  "fresh_retry": "generation1 restores all three indices; exact payload/SDR/HDR;3writes/3reads/errors0/final0",
+  "tests": {
+    "passed": 2,
+    "failed": 0
+  },
+  "driver": "requires stale-generation marker for each fixture; syntax valid; full combined gate not rerun after these test-only additions",
+  "limits": [
+    "Already stale before cache probe, not mid-read cancellation",
+    "Headless helper integration, not live window queue"
+  ],
+  "sha256": {
+    "docs/research/stale-container-prefetch-metal-2026-10-12/tiff.log": "3806ffb439120598e6a59648f6a034a1293dd4beaa1dfd8189d11b1931f9a5a3",
+    "docs/research/stale-container-prefetch-metal-2026-10-12/ico-cur.log": "c7141792b397e73c7b9532714495bf45e802f16214ef110aca22ebe4b1614c4b",
+    "crates/rrrah-app/src/main.rs": "34c48639286072d3765e1e2d470276417e0cd10a9b7f2809df6ef923a170a5aa",
+    "scripts/qualify-viewer-storage-gpu.py": "e5b08db0dd3984ec46a4f95701579a0a79fd851f1a5b16e9129ba8af16007302"
+  }
+}

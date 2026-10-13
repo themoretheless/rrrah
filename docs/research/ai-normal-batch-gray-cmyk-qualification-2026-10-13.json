@@ -1,0 +1,45 @@
+{
+  "retained": "Normal batch equivalence proof extended to original native Gray/CMYK spaces captured from authored PDF images",
+  "proof_cases": 108,
+  "spaces": [
+    "RGB",
+    "Gray",
+    "CMYK"
+  ],
+  "checked": [
+    "pixel components",
+    "pixel alpha",
+    "coverage shape",
+    "coverage alpha",
+    "knockout refusal",
+    "cancellation refusal"
+  ],
+  "tolerance": 1e-12,
+  "route_experiment": {
+    "retained": false,
+    "target": [
+      195,
+      37
+    ],
+    "completed": false,
+    "fragments": 109437,
+    "reason": "Strict adjacent mask-free non-knockout single-opaque-paint group batching did not reduce dispatch or extend target progress; added metadata removed"
+  },
+  "final_suite": {
+    "passed": 205,
+    "ignored": 12,
+    "failed": 0
+  },
+  "remaining": [
+    "Inspect actual route nesting/eligibility",
+    "Effective admitted route integration",
+    "Full-page and independent color qualification"
+  ],
+  "sha256": {
+    "vendor/hayro/src/native_frame.rs": "0bb239246111c365433a358c2df7699d4b6f2c28a021c80a70c66e623c0969b1",
+    "vendor/hayro/src/knockout_interpreter.rs": "f356af6c2e5c51a28733664dd87ecd36d6d0b42f1c20865530623a7b78f49715",
+    "docs/research/ai-normal-batch-gray-cmyk-final-suite-2026-10-13.log": "8a88925bd0b1121b038215b602538265e072e422ae59ff8a271a98d2deddd6e3",
+    "docs/research/ai-normal-batch-route-original-2026-10-13.log": "9d2206a1e48b9a1593b3af38f0097546719bd41694ce00fd3d9a9b4a13c2a048",
+    "docs/research/ai-normal-batch-route-experiment-2026-10-13.rs.txt": "431b32d37fb2922a3bc6f3323a9a27373d3f0840d8513e51df48be0842447d3b"
+  }
+}

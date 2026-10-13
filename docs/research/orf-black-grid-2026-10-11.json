@@ -1,0 +1,18 @@
+{
+  "implementation": "ORF declared BlackLevelRepeatDim 1x1/2x2; row-major sensor coordinate values retained",
+  "passed": 15,
+  "failed": 0,
+  "ignored": 0,
+  "checks": [
+    "2x2 independent distinct offsets10/20/30/40 preserved",
+    "dimension cardinality and unsupported dimensions refused",
+    "black count must match dimensions",
+    "default zero grid when black absent",
+    "all black values below white via metadata validation"
+  ],
+  "log_sha256": "8ee1c858aaf78d1208c0f2965c7e430d99ea074e036cea81d67daf2b6266b1c5",
+  "limits": [
+    "authored metadata regression, no original ORF declaring nonuniform grid available",
+    "GPU phase/color operations qualified separately; not new original-file Metal evidence"
+  ]
+}

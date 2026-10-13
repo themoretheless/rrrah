@@ -37,7 +37,7 @@ enum Event {
         hayro_interpret::ImageData,
         Option<hayro_interpret::LumaData>,
         Affine,
-        Vec<ClipPath>,
+        Vec<SharedClip>,
         Option<u8>, // Stencil paint opacity; mask alpha represents shape.
     ),
     Path(BezPath, Affine, RecordedPaint, Vec<SharedClip>, PathDrawMode),
@@ -60,6 +60,7 @@ struct Recorder {
     raster_spaces: Vec<(usize, Option<hayro_interpret::color::ColorSpace>)>,
     capture_native_rasters: bool,
     capture_native_shadings: bool,
+    integrate_native_mesh_boundaries: bool,
     native_rasters: Vec<(usize, Option<hayro_interpret::NativeRasterComponents>, Option<hayro_interpret::NativeRasterComponentsError>)>,
     mask_results: Vec<ShapeMask>,
     native_mask_transfers: Vec<(usize, Option<hayro_interpret::TransferFunction>, Box<super::native_paint::NativePaint>, bool)>,
@@ -166,7 +167,10 @@ impl Recorder {
         let result = admitted_global_contour(
             path,
             transform,
-            0.0001,
+            // 1e-4 loses enough boundary area to cross RGB8 rounding bins on
+            // source cubic fills. Independent polynomial-area regression
+            // qualifies 1e-5; existing vertex/work/admission caps still apply.
+            0.00001,
             1_000_000,
             &|| cancelled.as_ref().is_some_and(|check| check()),
             &|bytes| {
@@ -358,6 +362,8 @@ impl<'a> Device<'a> for Recorder {
                 native_polygon: self.native_polygon,
                 admitted_strokes: self.admitted_strokes,
                 capture_native_shadings: self.capture_native_shadings,
+                integrate_native_mesh_boundaries: self.integrate_native_mesh_boundaries,
+                capture_native_rasters: self.capture_native_rasters,
                 admission: self.admission.clone(),
                 cancelled: self.cancelled.clone(),
                 ..Recorder::default()
@@ -647,6 +653,15 @@ impl<'a> Device<'a> for Recorder {
                 RecordedPaint::Shading(Box::new(RecordedShading { encoded:Box::new(encoded), native, refusal }))
             }
         };
+        if std::env::var("RRRAH_TRACE_NATIVE_SOURCE_EVENT").ok()
+            .and_then(|value| value.parse::<usize>().ok()) == Some(self.events.len()) {
+            eprintln!("NATIVE_SOURCE_PATH event={} transform={:?} mode={mode:?} elements={:?}",
+                self.events.len(),transform.as_coeffs(),path.elements());
+            for (index,clip) in clips.iter().enumerate() {
+                eprintln!("NATIVE_SOURCE_CLIP event={} index={index} fill={:?} elements={:?}",
+                    self.events.len(),clip.fill,clip.path.elements());
+            }
+        }
         let (path, transform, mode) = if self.global_contour && matches!(mode, PathDrawMode::Fill(_)) {
             let Some(path) = self.prepared_contour(path, transform) else {
                 return;
@@ -736,6 +751,17 @@ impl<'a> Device<'a> for Recorder {
         if !self.event(bytes) {
             return;
         }
+        // Images need the same global, bounded clip preparation as filled paths.
+        // Keep shared contours alive with the recorder's admission guards.
+        let mut recorded_clips=Vec::new();
+        if recorded_clips.try_reserve_exact(self.clips.len()).is_err() {
+            self.failed=true;
+            return;
+        }
+        for index in 0..self.clips.len() {
+            let Some(clip)=self.shared_clip(self.clips[index].clone(),self.global_contour) else {return;};
+            recorded_clips.push(clip);
+        }
         let cancelled = self.cancelled.clone();
         let mut published = false;
         match image {
@@ -756,13 +782,17 @@ impl<'a> Device<'a> for Recorder {
                     if !self.ready() {
                         return;
                     }
-                    if (image.width() as usize).checked_mul(image.height() as usize) != Some(count)
-                        || alpha
-                            .as_ref()
-                            .is_some_and(|a| (a.width as usize).checked_mul(a.height as usize) != Some(count))
-                    {
-                        self.failed = true;
-                        return;
+                    if (image.width() as usize).checked_mul(image.height() as usize) != Some(count) {
+                        self.failed=true;return;
+                    }
+                    if let Some(alpha)=alpha.as_ref() {
+                        let Some(alpha_count)=(alpha.width as usize).checked_mul(alpha.height as usize) else {
+                            self.failed=true;return;
+                        };
+                        if alpha_count==0 || alpha.data.len()!=alpha_count {self.failed=true;return;}
+                        // The initial four bytes per color texel include a same-sized
+                        // alpha plane. Retain additional mask storage explicitly.
+                        if alpha_count>count && !self.capture(Some(alpha_count-count)) {return;}
                     }
                     if !self.capture(Some(size_of::<(usize,Option<hayro_interpret::color::ColorSpace>)>())) { return; }
                     if self.raster_spaces.try_reserve_exact(1).is_err() { self.failed=true; return; }
@@ -773,7 +803,7 @@ impl<'a> Device<'a> for Recorder {
                         self.native_rasters.push((self.events.len(),native,refusal));
                     }
                     self.events
-                        .push(Event::Raster(image, alpha, transform, self.clips.clone(), None));
+                        .push(Event::Raster(image, alpha, transform, recorded_clips, None));
                     published = true;
                 },
                 None,
@@ -812,7 +842,7 @@ impl<'a> Device<'a> for Recorder {
                         image,
                         Some(mask),
                         transform,
-                        self.clips.clone(),
+                        recorded_clips,
                         Some(color[3]),
                     ));
                     published = true;
@@ -1116,10 +1146,18 @@ fn sample_raster(
     if width == 0 || height == 0 || !point.x.is_finite() || !point.y.is_finite() {
         return None;
     }
-    if alpha.is_some_and(|a| a.width != image.width() || a.height != image.height()) {
-        return None;
-    }
-    let at = |x: f64, y: f64| -> [f64; 4] {
+    let alpha_at=|x:f64,y:f64|->Option<f64> {
+        let Some(data)=alpha else {return Some(255.)};
+        let w=data.width as usize;let h=data.height as usize;
+        if w==0 || h==0 || data.data.len()!=w.checked_mul(h)? {return None;}
+        let x=x/width as f64*w as f64;let y=y/height as f64*h as f64;
+        let tap=|x:f64,y:f64|f64::from(data.data[y.clamp(0.,(h-1) as f64) as usize*w+x.clamp(0.,(w-1) as f64) as usize]);
+        if !data.interpolate {return Some(tap(x.floor(),y.floor()));}
+        let x=x-0.5;let y=y-0.5;let tx=x-x.floor();let ty=y-y.floor();
+        Some(tap(x.floor(),y.floor())*(1.-tx)*(1.-ty)+tap(x.floor()+1.,y.floor())*tx*(1.-ty)
+            +tap(x.floor(),y.floor()+1.)*(1.-tx)*ty+tap(x.floor()+1.,y.floor()+1.)*tx*ty)
+    };
+    let at = |x: f64, y: f64, ax:f64, ay:f64| -> Option<[f64; 4]> {
         let x = x.clamp(0.0, (width - 1) as f64) as usize;
         let y = y.clamp(0.0, (height - 1) as f64) as usize;
         let index = y * width + x;
@@ -1131,13 +1169,13 @@ fn sample_raster(
             ],
             hayro_interpret::ImageData::Luma(data) => [data.data[index]; 3],
         };
-        let a = f64::from(alpha.map_or(255, |data| data.data[index]));
-        [
+        let a = alpha_at(ax,ay)?;
+        Some([
             f64::from(rgb[0]) * a / 255.0,
             f64::from(rgb[1]) * a / 255.0,
             f64::from(rgb[2]) * a / 255.0,
             a,
-        ]
+        ])
     };
     let interpolate = match image {
         hayro_interpret::ImageData::Rgb(data) => data.interpolate,
@@ -1148,12 +1186,9 @@ fn sample_raster(
         let y = point.y - 0.5;
         let tx = x - x.floor();
         let ty = y - y.floor();
-        let p = [
-            at(x.floor(), y.floor()),
-            at(x.floor() + 1.0, y.floor()),
-            at(x.floor(), y.floor() + 1.0),
-            at(x.floor() + 1.0, y.floor() + 1.0),
-        ];
+        let tap=|x:f64,y:f64|at(x,y,x.clamp(0.,(width-1) as f64)+0.5,y.clamp(0.,(height-1) as f64)+0.5);
+        let p = [tap(x.floor(),y.floor())?,tap(x.floor()+1.,y.floor())?,
+            tap(x.floor(),y.floor()+1.)?,tap(x.floor()+1.,y.floor()+1.)?];
         std::array::from_fn(|c| {
             p[0][c] * (1.0 - tx) * (1.0 - ty)
                 + p[1][c] * tx * (1.0 - ty)
@@ -1161,7 +1196,7 @@ fn sample_raster(
                 + p[3][c] * tx * ty
         })
     } else {
-        at(point.x.floor(), point.y.floor())
+        at(point.x.floor(), point.y.floor(),point.x,point.y)?
     };
     Some(pixel.map(|c| c.round().clamp(0.0, 255.0) as u8))
 }
@@ -1398,7 +1433,7 @@ fn replay_scene_precise_with_backdrop(
                     transform,
                     clips.iter().map(|clip| {
                         (
-                            &clip.path,
+                            clip.path.as_ref(),
                             match clip.fill {
                                 hayro_interpret::FillRule::NonZero => vello_cpu::peniko::Fill::NonZero,
                                 hayro_interpret::FillRule::EvenOdd => vello_cpu::peniko::Fill::EvenOdd,
@@ -3800,6 +3835,9 @@ fn real_ai_compositor_capture_and_replay_diagnostic() {
     let output =
         std::path::PathBuf::from(std::env::var_os("RRRAH_AI_REPLAY_OUTPUT").expect("fresh output required"));
     std::fs::create_dir(&output).unwrap();
+    let timeout_seconds=std::env::var("RRRAH_AI_REPLAY_TIMEOUT_SECONDS")
+        .map(|value|value.parse::<u64>().expect("integer diagnostic timeout")).unwrap_or(30);
+    assert!((1..=600).contains(&timeout_seconds),"diagnostic timeout must be 1..600 seconds");
     let mut rows = Vec::new();
     for name in ["VectorApple.ai", "one.ai"] {
         let pdf = hayro_interpret::hayro_syntax::Pdf::new(std::fs::read(source.join(name)).unwrap()).unwrap();
@@ -3824,7 +3862,7 @@ fn real_ai_compositor_capture_and_replay_diagnostic() {
                 },
             );
             let start = Instant::now();
-            let cancelled = Arc::new(move || start.elapsed() > Duration::from_secs(30));
+            let cancelled = Arc::new(move || start.elapsed() > Duration::from_secs(timeout_seconds));
             let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
                 let cache = crate::RenderCache::new();
                 let mut context = hayro_interpret::Context::new(
@@ -3840,6 +3878,7 @@ fn real_ai_compositor_capture_and_replay_diagnostic() {
                     mask_probe: true,
                     capture_native_rasters: std::env::var_os("RRRAH_AI_NATIVE_RASTER_CAPTURE").is_some(),
                     capture_native_shadings: std::env::var_os("RRRAH_AI_NATIVE_SHADING_CAPTURE").is_some(),
+                    integrate_native_mesh_boundaries: std::env::var_os("RRRAH_AI_COVERED_MESH_INTEGRATION").is_some(),
                     global_contour: std::env::var_os("RRRAH_AI_GLOBAL_CONTOUR").is_some(),
                     canonical_f32: std::env::var_os("RRRAH_AI_CANONICAL_F32").is_some(),
                     native_polygon: std::env::var_os("RRRAH_AI_NATIVE_POLYGON").is_some(),
@@ -3859,7 +3898,7 @@ fn real_ai_compositor_capture_and_replay_diagnostic() {
                     .count();
                 if std::env::var_os("RRRAH_AI_NATIVE_SOLID_DIAGNOSTIC").is_some() {
                     use hayro_interpret::color::{AlphaColor,Color,BlendingModel};
-                    use super::native_blend::{Model,Pixel};
+                    use super::native_blend::Model;
                     let rgb = Color::from_rgba(AlphaColor::WHITE);
                     let space = match &scene.page_group_space {
                         hayro_interpret::TransparencyGroupColorSpace::Explicit(space) => space,
@@ -3872,25 +3911,30 @@ fn real_ai_compositor_capture_and_replay_diagnostic() {
                         Some(BlendingModel::Cmyk) => Model::Cmyk,
                         _ => return "\"status\":\"native_unsupported_page_space\"".to_owned(),
                     };
-                    let white = if matches!(model,Model::Cmyk) { [0.;4] } else { [1.;4] };
-                    let backdrop = Pixel::from_native(model,&white[..model.channels()],1.).unwrap();
                     let rasters = scene.events.iter().filter(|e| matches!(e,Event::Raster(..))).count();
                     let shadings = scene.events.iter().filter(|e| matches!(e,Event::Path(_,_,RecordedPaint::Shading(_),_,_))).count();
                     let native_raster_components: Vec<_> = scene.native_rasters.iter().map(|(index,data,refusal)| format!("event={index},sample_count={:?},refusal={refusal:?}",data.as_ref().map(|data| data.samples().len()))).collect();
                     let raster_models: Vec<_> = scene.raster_spaces.iter().map(|(index,space)| format!("event={index},model={:?}",space.as_ref().and_then(|space| space.blending_model()))).collect();
                     let paints = scene.events.iter().filter(|e| matches!(e,Event::Path(_,_,RecordedPaint::NativeColor(_),_,_))).count();
                     let replay_start = Instant::now();
-                    let native = replay_native_solid_scene(&scene,width,height,space,backdrop,&*cancelled,&*admission);
+                    let native = replay_native_page_scene(&scene,width,height,space,&*cancelled,&*admission);
                     let completed = native.is_some();
-                    if matches!(model,Model::Rgb) {
-                        if let Some(pixels) = &native {
-                            use std::io::Write;
-                            let mut file = std::fs::File::create(output.join(format!("{name}-page-{index}.native.rgba"))).unwrap();
-                            for pixel in &pixels.pixels {
-                                assert_eq!(pixel.alpha(),1.0);
-                                let c = pixel.native_components().unwrap();
-                                file.write_all(&[(c[0]*255.).round() as u8,(c[1]*255.).round() as u8,(c[2]*255.).round() as u8,255]).unwrap();
+                    if let Some(pixels)=&native {
+                        use std::io::Write;
+                        let mut rgba=std::fs::File::create(output.join(format!("{name}-page-{index}.native.rgba"))).unwrap();
+                        let mut original=std::fs::File::create(output.join(format!("{name}-page-{index}.native.components.f64le"))).unwrap();
+                        for pixel in &pixels.pixels {
+                            assert!(pixel.valid());
+                            let c=pixel.native_components().unwrap();
+                            for component in c[..model.channels()].iter().copied().chain([pixel.alpha()]) {
+                                original.write_all(&component.to_le_bytes()).unwrap();
                             }
+                            let display=if matches!(model,Model::Rgb) {c} else {
+                                let input=c.map(|value|value as f32);
+                                space.device_sample_to_rgb(rgb.color_space(),&input[..model.channels()])
+                                    .expect("explicit native page display conversion").map(f64::from)
+                            };
+                            rgba.write_all(&[(display[0]*255.).round() as u8,(display[1]*255.).round() as u8,(display[2]*255.).round() as u8,(pixel.alpha()*255.).round() as u8]).unwrap();
                         }
                     }
                     drop(native);
@@ -4068,7 +4112,7 @@ fn real_ai_compositor_capture_and_replay_diagnostic() {
                 0,
                 "all capture/replay credits must be released"
             );
-            rows.push(format!("{{\"fixture\":{name:?},\"page\":{index},\"width\":{width},\"height\":{height},\"peak_admitted_bytes\":{},\"final_admitted_bytes\":0,{detail}}}",peak.load(Ordering::Relaxed)));
+            rows.push(format!("{{\"fixture\":{name:?},\"page\":{index},\"width\":{width},\"height\":{height},\"diagnostic_timeout_seconds\":{timeout_seconds},\"peak_admitted_bytes\":{},\"final_admitted_bytes\":0,{detail}}}",peak.load(Ordering::Relaxed)));
         }
     }
     std::fs::write(
@@ -4908,6 +4952,262 @@ fn group_spaces_preserve_page_form_resources_and_unresolved_declarations() {
     }
 }
 
+// PDF 1.7 section 7.3.6: direct page output is isolated. Convert its
+// unassociated group color to the output space before applying media white.
+// Ordinary embedded groups retain their supplied backdrop in the replay below.
+fn replay_native_page_scene(
+    scene: &Recorder, width: u16, height: u16,
+    space: &hayro_interpret::color::ColorSpace,
+    cancelled: &dyn Fn() -> bool,
+    admit: &dyn Fn(usize) -> Option<Box<dyn std::any::Any + Send + Sync>>,
+) -> Option<super::native_frame::Buffer> {
+    use hayro_interpret::color::BlendingModel;
+    use super::native_blend::{Model, Pixel};
+    let model = match space.blending_model()? {
+        BlendingModel::Gray => Model::Gray,
+        BlendingModel::Rgb => Model::Rgb,
+        BlendingModel::Cmyk => Model::Cmyk,
+    };
+    let clear = Pixel::from_native(model, &[0.; 4][..model.channels()], 0.)?;
+    replay_native_solid_scene(scene, width, height, space, clear, cancelled, admit)
+}
+
+#[test]
+fn direct_page_keeps_unpainted_area_transparent_and_paint_unassociated() {
+    use hayro_interpret::color::{AlphaColor, Color};
+    let pdf = authored_pdf_with_font_blend_and_blue_space(false, 0.5, "/form Do",
+        "", "1 0 0 rg 0 0 16 16 re f", "<< >>", None, false, "Normal", None);
+    let scene = record_into(pdf, 32, 16, Affine::IDENTITY,
+        Recorder { global_contour: true, native_polygon: true, ..Recorder::default() });
+    let rgb = Color::from_rgba(AlphaColor::WHITE);
+    let output = replay_native_page_scene(&scene, 32, 16, rgb.color_space(),
+        &|| false, &|_| Some(Box::new(()))).unwrap();
+    let painted = output.pixels[8 * 32 + 8];
+    assert_eq!(painted.alpha(), 0.5);
+    assert_eq!(&painted.native_components().unwrap()[..3], &[1., 0., 0.]);
+    assert_eq!(output.pixels[8 * 32 + 24].alpha(), 0.);
+}
+
+// Mesh boundary fallback: intersect source-ordered triangles with the pixel,
+// paint path and clips. Integrate at convex-fragment centroids. This is exact
+// for affine colors within one triangle; nonlinear functions need subdivision.
+fn sample_covered_shading_pixel(
+    source:&hayro_interpret::encode::NativeShadingSource,
+    path:&BezPath,rule:hayro_interpret::FillRule,clips:&[SharedClip],
+    x:i32,y:i32,cancelled:&dyn Fn()->bool,
+    admit:&dyn Fn(usize)->Option<Box<dyn std::any::Any+Send+Sync>>,
+)->Option<Option<(hayro_interpret::encode::NativeShadingSample,f64)>> {
+    let rect=kurbo::Rect::new(f64::from(x),f64::from(y),f64::from(x)+1.,f64::from(y)+1.);
+    let mut remaining=40_000_000usize;
+    sample_covered_shading_partition(source,path,rule,clips,x,y,rect,0,&mut remaining,cancelled,admit)
+}
+
+fn sample_covered_shading_partition(
+    source:&hayro_interpret::encode::NativeShadingSource,
+    path:&BezPath,rule:hayro_interpret::FillRule,clips:&[SharedClip],
+    x:i32,y:i32,rect:kurbo::Rect,depth:usize,remaining:&mut usize,
+    cancelled:&dyn Fn()->bool,
+    admit:&dyn Fn(usize)->Option<Box<dyn std::any::Any+Send+Sync>>,
+)->Option<Option<(hayro_interpret::encode::NativeShadingSample,f64)>> {
+    // At most 1+4+16 nodes and 16 leaves; one shared polygon allowance.
+    if depth>2 || cancelled() {return None;}
+    let mut dense=false;
+    let result=sample_covered_shading_rect(source,path,rule,clips,x,y,rect,remaining,
+        &mut dense,depth<2,cancelled,admit);
+    if result.is_some() || !dense {return result;}
+    if depth==2 {return None;}
+    // Dense nodes refuse before polygon work and release their admitted scratch.
+    // Child scratch is retained only for the current sequential child.
+    let mut integral=[0.;4];let mut alpha=0.;let mut area=0.;let mut count=None;
+    for dy in 0..2 {for dx in 0..2 {
+        if cancelled() {return None;}
+        let width=rect.width()*0.5;let height=rect.height()*0.5;
+        let tile=kurbo::Rect::new(rect.x0+f64::from(dx)*width,rect.y0+f64::from(dy)*height,
+            rect.x0+f64::from(dx+1)*width,rect.y0+f64::from(dy+1)*height);
+        if let Some((sample,coverage))=sample_covered_shading_partition(source,path,rule,clips,x,y,tile,
+            depth+1,remaining,cancelled,admit)? {
+            if count.is_some_and(|n|n!=sample.count) {return None;}
+            count=Some(sample.count);area+=coverage;
+            let weight=coverage*f64::from(sample.opacity);alpha+=weight;
+            for (sum,value) in integral.iter_mut().zip(sample.components) {*sum+=weight*f64::from(value);}
+        }
+    }}
+    if area==0. {return Some(None);}
+    let components=if alpha==0. {[0.;4]} else {integral.map(|v|(v/alpha) as f32)};
+    Some(Some((hayro_interpret::encode::NativeShadingSample {
+        components,count:count?,opacity:(alpha/area) as f32},area)))
+}
+
+fn sample_covered_shading_rect(
+    source: &hayro_interpret::encode::NativeShadingSource,
+    path: &BezPath, rule: hayro_interpret::FillRule, clips: &[SharedClip],
+    x: i32, y: i32, rect:kurbo::Rect,remaining:&mut usize,dense:&mut bool,may_split:bool,
+    cancelled: &dyn Fn() -> bool,
+    admit: &dyn Fn(usize) -> Option<Box<dyn std::any::Any + Send + Sync>>,
+) -> Option<Option<(hayro_interpret::encode::NativeShadingSample, f64)>> {
+    use hayro_interpret::encode::{NativeShadingSample, NativeShadingTriangle, NativeShadingError};
+    use vello_cpu::peniko::Fill;
+    // VectorApple dense boundary pixel has 327 intersecting triangles.
+    // Keep an admitted bound below the polygon kernel region/edge limits.
+    const MAX_TRIANGLES: usize = 512;
+    if cancelled() || clips.len() >= 64 { return None; }
+    let _credit = admit(MAX_TRIANGLES * (size_of::<NativeShadingTriangle>()
+        + size_of::<BezPath>() + 4 * size_of::<kurbo::PathEl>())
+        + (64 + MAX_TRIANGLES) * size_of::<(&BezPath, Fill)>())?;
+    let mut triangles = Vec::new();
+    triangles.try_reserve_exact(MAX_TRIANGLES).ok()?;
+    let query = source.visit_mesh_triangles(rect, 100_000, cancelled, &mut |triangle| {
+        if triangles.len() == MAX_TRIANGLES { return Err(NativeShadingError::WorkLimit); }
+        triangles.push(triangle); Ok(())
+    });
+    match query {
+        Ok(_) => {},
+        // Analytic domain boundaries retain their separate qualification gap.
+        Err(NativeShadingError::Unsupported) => return Some(None),
+        Err(error) => {
+            *dense=error==NativeShadingError::WorkLimit && triangles.len()==MAX_TRIANGLES;
+            eprintln!("NATIVE_BOUNDARY_QUERY_REFUSAL pixel={x},{y} candidates={} error={error:?}",triangles.len());
+            if error == NativeShadingError::WorkLimit
+                && std::env::var_os("RRRAH_AI_MEASURE_DENSE_PIXEL").is_some() {
+                let mut total = 0usize;
+                let measured = source.visit_mesh_triangles(kurbo::Rect::new(x as f64,y as f64,
+                    x as f64+1.,y as f64+1.),100_000,cancelled,&mut |_| {
+                    total += 1; Ok(())
+                });
+                eprintln!("NATIVE_BOUNDARY_DENSITY pixel={x},{y} total={total} result={measured:?}");
+            }
+            return None;
+        },
+    }
+    if triangles.is_empty() { return Some(None); }
+    if may_split && triangles.len()>256 {
+        *dense=true;return None;
+    }
+    triangles.sort_unstable_by_key(|triangle|triangle.index);
+    let mut paths = Vec::new();
+    paths.try_reserve_exact(triangles.len()).ok()?;
+    for triangle in &triangles {
+        if cancelled() { return None; }
+        let mut elements = Vec::new();
+        elements.try_reserve_exact(4).ok()?;
+        elements.extend([kurbo::PathEl::MoveTo(triangle.points[0]),
+            kurbo::PathEl::LineTo(triangle.points[1]), kurbo::PathEl::LineTo(triangle.points[2]),
+            kurbo::PathEl::ClosePath]);
+        paths.push(BezPath::from_vec(elements));
+    }
+    let fill = |rule| match rule {
+        hayro_interpret::FillRule::NonZero => Fill::NonZero,
+        hayro_interpret::FillRule::EvenOdd => Fill::EvenOdd,
+    };
+    let mut regions = Vec::new();
+    regions.try_reserve_exact(1 + clips.len() + paths.len()).ok()?;
+    regions.push((path, fill(rule)));
+    for clip in clips { regions.push((clip.path.as_ref(), fill(clip.fill))); }
+    let base = regions.len();
+    for path in &paths { regions.push((path, Fill::NonZero)); }
+    let row = super::polygon_coverage::admitted_selected_polygon_domain_budget(&regions, y, rect.y0, rect.y1, remaining, cancelled, admit)
+        .or_else(|| { eprintln!("NATIVE_BOUNDARY_ROW_REFUSAL pixel={x},{y} candidates={}",triangles.len()); None })?;
+    let mut integral = [0.; 4];
+    let mut alpha = 0.;
+    let mut count = None;
+    let mut outside = [false;64];
+    let mut outside_count = 0usize;
+    let mut active = [0u64;MAX_TRIANGLES / 64];
+    let area = row.pixel_incremental_selected_rect_fragments_budget(&regions, x, y, rect, remaining, cancelled, admit,16,
+        &mut |winding,changed| {
+            if changed.is_none() {outside.fill(false);outside_count=0;active.fill(0);}
+            let range=changed.map_or(0..regions.len(),|i|i..i+1);
+            for i in range {
+                if i<base {
+                    let inside=match regions[i].1 {Fill::NonZero=>winding[i]!=0,Fill::EvenOdd=>winding[i]%2!=0};
+                    if outside[i] {outside_count-=1;}
+                    outside[i]=!inside;
+                    if outside[i] {outside_count+=1;}
+                } else {
+                    let rank=i-base;let mask=1u64<<(rank%64);
+                    if winding[i]!=0 {active[rank/64]|=mask;} else {active[rank/64]&=!mask;}
+                }
+            }
+            if outside_count!=0 {return Some(None);}
+            // Candidate order is original source order; highest active rank wins.
+            Some(active.iter().enumerate().rev().find(|(_,bits)|**bits!=0)
+                .map(|(word,bits)|base+word*64+63-bits.leading_zeros() as usize))
+        }, &mut |fragment| {
+            // A scanline crossing can produce a positive algebraic sliver
+            // whose rounded device vertices are collinear. Test represented
+            // geometry exactly, without an area tolerance that loses thin paint.
+            let origin = fragment.vertices[0];
+            let cross = |a: kurbo::Vec2, b: kurbo::Vec2| a.x*b.y-a.y*b.x;
+            let twice_area = cross(fragment.vertices[1]-origin, fragment.vertices[2]-origin)
+                + cross(fragment.vertices[2]-origin, fragment.vertices[3]-origin);
+            if twice_area == 0. { return Some(()); }
+            let owner = triangles.get(fragment.owner.checked_sub(base)?)?.index;
+            let sample = source.sample_mesh_triangle(owner, fragment.centroid, cancelled).map_err(|error| { eprintln!("NATIVE_BOUNDARY_SAMPLE_REFUSAL pixel={x},{y} owner={owner} point={:?} error={error:?}", fragment.centroid); }).ok()?;
+            if sample.count == 0 || sample.count > 4 || count.is_some_and(|n|n != sample.count) { return None; }
+            count = Some(sample.count);
+            let weight = fragment.area * f64::from(sample.opacity);
+            alpha += weight;
+            for (sum,value) in integral.iter_mut().zip(sample.components) { *sum += weight * f64::from(value); }
+            Some(())
+        }).or_else(|| {eprintln!("NATIVE_BOUNDARY_FRAGMENTS_REFUSAL pixel={x},{y} candidates={}",triangles.len());None})?;
+    if !area.is_finite() || !alpha.is_finite() { return None; }
+    if area <= 0. || count.is_none() { return Some(None); }
+    let components = if alpha == 0. { [0.;4] } else { integral.map(|v|(v/alpha) as f32) };
+    if components.iter().any(|v|!v.is_finite()) { return None; }
+    Some(Some((NativeShadingSample {components,count:count?,opacity:(alpha/area) as f32},area)))
+}
+
+#[test]
+fn native_triangle_edge_with_outside_pixel_center_keeps_covered_color() {
+    let records = [[0u8,0,0,64,128,192,0], [0,255,0,64,128,192,0], [0,0,255,64,128,192,0]];
+    let hex = records.iter().flatten().map(|v|format!("{v:02X}")).collect::<String>()+">";
+    let shading = format!("<< /ShadingType 4 /ColorSpace /DeviceCMYK /BitsPerCoordinate 8 /BitsPerComponent 8 /BitsPerFlag 8 /Decode [0 0.375 0 16 0 1 0 1 0 1 0 1] /Filter /ASCIIHexDecode /Length {} >>\nstream\n{hex}\nendstream",hex.len());
+    let pdf = authored_pdf_with_font(true, 1., "/form Do", "", "/S1 sh",
+        "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>", Some(&shading));
+    let scene = record_into(pdf,32,16,Affine::IDENTITY,
+        Recorder {capture_native_shadings:true,integrate_native_mesh_boundaries:true,global_contour:true,native_polygon:true,..Recorder::default()});
+    let space = scene.events.iter().find_map(|event| match event {
+        Event::Path(_,_,RecordedPaint::Shading(paint),_,_) => paint.native.as_ref().map(|s|s.color_space.clone()),
+        _ => None,
+    }).unwrap();
+    let output = replay_native_page_scene(&scene,32,16,&space,&||false,&|_|Some(Box::new(()))).unwrap();
+    let pixel = output.pixels[8*32];
+    assert!(pixel.alpha() > 0. && pixel.alpha() < 1., "edge coverage must survive missing center");
+    let expected = [64.,128.,192.,0.].map(|v| f64::from(v as f32 / 255.));
+    for (a,b) in pixel.native_components().unwrap().into_iter().zip(expected) { assert!((a-b).abs()<1e-12); }
+    assert_eq!(output.pixels[8*32+1].alpha(),0.);
+}
+
+
+#[test]
+fn dense_native_mesh_pixel_subdivides_without_losing_area_or_color() {
+    let mut records=Vec::new();
+    for (low,high) in [(0u8,127u8),(128,255)] {for _ in 0..300 {
+        records.extend([[0u8,0,low,64,128,192,0],[0,255,low,64,128,192,0],[0,0,high,64,128,192,0]]);
+    }}
+    let hex=records.iter().flatten().map(|v|format!("{v:02X}")).collect::<String>()+">";
+    let shading=format!("<< /ShadingType 4 /ColorSpace /DeviceCMYK /BitsPerCoordinate 8 /BitsPerComponent 8 /BitsPerFlag 8 /Decode [0 0.375 0 1 0 1 0 1 0 1 0 1] /Filter /ASCIIHexDecode /Length {} >>\nstream\n{hex}\nendstream",hex.len());
+    let pdf=authored_pdf_with_font(true,1.,"/form Do","","/S1 sh",
+        "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>",Some(&shading));
+    let scene=record_into(pdf,32,16,Affine::IDENTITY,Recorder {
+        capture_native_shadings:true,integrate_native_mesh_boundaries:true,
+        global_contour:true,native_polygon:true,..Recorder::default()});
+    let space=scene.events.iter().find_map(|event|match event {
+        Event::Path(_,_,RecordedPaint::Shading(paint),_,_)=>paint.native.as_ref().map(|s|s.color_space.clone()),_=>None,
+    }).unwrap();
+    let output=replay_native_page_scene(&scene,32,16,&space,&||false,&|_|Some(Box::new(()))).unwrap();
+    let pixel=output.pixels[0];
+    // PDF mesh decoding stores coordinate values as f32 before Point conversion.
+    // Integrate the two decoded triangles analytically, retaining strict tolerance.
+    let expected_area=0.375*0.5*(f64::from(127f32/255.)+1.-f64::from(128f32/255.));
+    assert!((pixel.alpha()-expected_area).abs()<1e-12,
+        "quarter areas add in global units: actual={:?} expected={expected_area:?}",pixel.alpha());
+    for (a,b) in pixel.native_components().unwrap().into_iter().zip([64.,128.,192.,0.]) {
+        assert!((a-f64::from(b as f32/255.)).abs()<1e-12);
+    }
+    assert_eq!(output.pixels[1].alpha(),0.);
+}
+
 // Test-only native solid event replay with alpha/device luminosity masks.
 // Unsupported color boundaries, calibrated luminosity, rasters and shading
 // refuse; their native routing remains required before production.
@@ -4929,6 +5229,11 @@ fn replay_native_solid_scene_depth(
 ) -> Option<super::native_frame::Buffer> {
     use hayro_interpret::TransparencyGroupColorSpace as GroupSpace;
     use super::native_frame::PaintFrame;
+    let trace_pixel=std::env::var("RRRAH_TRACE_NATIVE_PIXEL").ok().and_then(|value| {
+        let (x,y)=value.split_once(',')?;
+        let (x,y)=(x.parse::<usize>().ok()?,y.parse::<usize>().ok()?);
+        (x<usize::from(width) && y<usize::from(height)).then_some(y*usize::from(width)+x)
+    });
     if scene.failed || !scene.native_polygon || cancelled() || depth>=32 { return None; }
     match &scene.page_group_space {
         GroupSpace::Inherited => {},
@@ -5050,12 +5355,18 @@ fn replay_native_solid_scene_depth(
                 stack.last_mut()?.0.apply_group_masked(child,opacity,alpha_is_shape,mask.as_ref().map(|mask| mask.values.as_slice()),mode,cancelled)?;
             }
             Event::Raster(compatibility,_,transform,clips,stencil) => {
+                if std::env::var_os("RRRAH_TRACE_NATIVE_REPLAY_EVENT").is_some() {
+                    eprintln!("NATIVE_RASTER depth={depth} event={event_index} stencil={} capture={:?}",stencil.is_some(),scene.native_rasters.get(raster_cursor).map(|(index,data,reason)|(*index,data.is_some(),reason)));
+                }
                 if stencil.is_some() {return None;}
                 let (index,data,reason)=scene.native_rasters.get(raster_cursor)?;
                 if *index!=event_index || reason.is_some() {return None;}
                 raster_cursor+=1;
                 let data=data.as_ref()?;
                 let (image_width,image_height)=data.dimensions();
+                if std::env::var_os("RRRAH_TRACE_NATIVE_REPLAY_EVENT").is_some() {
+                    eprintln!("NATIVE_RASTER_GEOMETRY depth={depth} event={event_index} native={:?} compatibility={:?} determinant={} model={:?} channels={}",data.dimensions(),(compatibility.width(),compatibility.height()),transform.determinant(),data.color_space().blending_model(),data.color_space().num_components());
+                }
                 if image_width!=compatibility.width() || image_height!=compatibility.height()
                     || !transform.determinant().is_finite() || transform.determinant().abs()<1e-12 {return None;}
                 let inverse=transform.inverse();
@@ -5071,16 +5382,33 @@ fn replay_native_solid_scene_depth(
                 elements.push(kurbo::PathEl::ClosePath);
                 let path=BezPath::from_vec(elements);
                 let fill=|rule|match rule {hayro_interpret::FillRule::NonZero=>vello_cpu::peniko::Fill::NonZero,hayro_interpret::FillRule::EvenOdd=>vello_cpu::peniko::Fill::EvenOdd};
-                let shape=rasterize_global_polygon_shape(&path,vello_cpu::peniko::Fill::NonZero,clips.iter().map(|clip|(&clip.path,fill(clip.fill))),(0,0),width,height,cancelled,admit)?;
+                let Some(shape)=rasterize_global_polygon_shape(&path,vello_cpu::peniko::Fill::NonZero,clips.iter().map(|clip|(clip.path.as_ref(),fill(clip.fill))),(0,0),width,height,cancelled,admit) else {
+                    if std::env::var_os("RRRAH_TRACE_NATIVE_REPLAY_EVENT").is_some() {
+                        let curves=clips.iter().flat_map(|clip|clip.path.elements()).filter(|el|matches!(el,kurbo::PathEl::QuadTo(..)|kurbo::PathEl::CurveTo(..))).count();
+                        eprintln!("NATIVE_RASTER_SHAPE_REFUSAL depth={depth} event={event_index} clips={} clip_curves={curves} cancelled={}",clips.len(),cancelled());
+                    }
+                    return None;
+                };
                 for (index,&coverage) in shape.values.iter().enumerate() {
                     if cancelled() {return None;}
                     if coverage==0 {continue;}
                     let point=inverse*kurbo::Point::new((index%usize::from(width)) as f64+0.5,(index/usize::from(width)) as f64+0.5);
-                    let sample=sample_native_raster(data,point,cancelled)?;
+                    let Some(sample)=sample_native_raster(data,point,cancelled) else {
+                        if std::env::var_os("RRRAH_TRACE_NATIVE_REPLAY_EVENT").is_some() {
+                            eprintln!("NATIVE_RASTER_SAMPLE_REFUSAL depth={depth} event={event_index} point={point:?} cancelled={}",cancelled());
+                        }
+                        return None;
+                    };
                     use hayro_interpret::color::BlendingModel;
                     use super::native_blend::{Model,Pixel};
                     let model=match sample.space.blending_model()? {BlendingModel::Gray=>Model::Gray,BlendingModel::Rgb=>Model::Rgb,BlendingModel::Cmyk=>Model::Cmyk};
                     let pixel=Pixel::from_native(model,&sample.components[..model.channels()],sample.alpha)?;
+                    if trace_pixel==Some(index) {
+                        eprintln!("NATIVE_PIXEL_RASTER depth={depth} event={event_index} point={point:?} dimensions={:?} interpolate={} components={:?} alpha={} coverage={coverage} mask={} alpha_plane={:?}",
+                            data.dimensions(),data.interpolate(),&sample.components[..model.channels()],sample.alpha,
+                            active_mask.as_ref().map_or(1.,|mask|mask.values[index]),
+                            data.alpha().map(|alpha|(alpha.dimensions(),alpha.interpolate())));
+                    }
                     let frame=&mut stack.last_mut()?.0;
                     let prepared=frame.prepare_native_pixel(pixel,sample.space,cancelled)?;
                     frame.apply_prepared_masked(index,&prepared,f64::from(coverage)/255.,ais,active_mask.as_ref().map_or(1.,|mask|mask.values[index]),blend,cancelled)?;
@@ -5100,20 +5428,102 @@ fn replay_native_solid_scene_depth(
                     (clip.path.as_ref(),fill(clip.fill))),(0,0),width,height,cancelled,admit)?;
                 use hayro_interpret::color::BlendingModel;
                 use super::native_blend::{Model,Pixel};
-                let model=match source.color_space.blending_model()? {
-                    BlendingModel::Gray=>Model::Gray,BlendingModel::Rgb=>Model::Rgb,BlendingModel::Cmyk=>Model::Cmyk,
-                };
                 for (index,&coverage) in shape.values.iter().enumerate() {
                     if cancelled() {return None;}
                     if coverage==0 {continue;}
                     let point=kurbo::Point::new((index%width as usize) as f64+0.5,(index/width as usize) as f64+0.5);
-                    let Some(sample)=source.sample(point,cancelled).ok()? else {continue;};
-                    if sample.count!=model.channels() {return None;}
-                    let components=sample.components.map(f64::from);
-                    let pixel=Pixel::from_native(model,&components[..sample.count],f64::from(sample.opacity))?;
+                    let sampled=source.sample(point,cancelled).ok()?;
+                    if trace_pixel==Some(index) {
+                        eprintln!("NATIVE_PIXEL_SHADING depth={depth} event={event_index} coverage={coverage} sample={} mask={}",sampled.is_some(),active_mask.as_ref().map_or(1.,|mask|mask.values[index]));
+                        if sampled.is_none() {
+                            let rect=kurbo::Rect::new(point.x-0.5,point.y-0.5,point.x+0.5,point.y+0.5);
+                            let mut logged=0usize;
+                            let query=source.visit_mesh_triangles(rect,100_000,cancelled,&mut |triangle| {
+                                if logged<4 {eprintln!("NATIVE_PIXEL_TRIANGLE depth={depth} event={event_index} index={} points={:?}",triangle.index,triangle.points);logged+=1;}
+                                Ok(())
+                            });
+                            eprintln!("NATIVE_PIXEL_TRIANGLE_QUERY depth={depth} event={event_index} result={query:?}");
+                            let mut hits=0usize;
+                            let mut first=None;
+                            for y in 0..16 {
+                                for x in 0..16 {
+                                    if cancelled() {return None;}
+                                    let probe=point+kurbo::Vec2::new((f64::from(x)+0.5)/16.-0.5,(f64::from(y)+0.5)/16.-0.5);
+                                    if let Some(value)=source.sample(probe,cancelled).ok()? {
+                                        hits+=1;
+                                        if first.is_none() {first=Some((probe,value.components,value.count));}
+                                    }
+                                }
+                            }
+                            eprintln!("NATIVE_PIXEL_DOMAIN_PROBE depth={depth} event={event_index} samples=256 hits={hits} first={first:?}");
+                        }
+                    }
+                    if trace_pixel==Some(index) {
+                        if let Some(edge) = std::env::var("RRRAH_TRACE_NATIVE_PIXEL_GRID").ok()
+                            .and_then(|value| value.parse::<u32>().ok()).filter(|edge| (1..=64).contains(edge)) {
+                            use kurbo::Shape;
+                            let diagnostic = (|| {
+                                let inside = |path: &BezPath, rule: hayro_interpret::FillRule, point| {
+                                    let winding = path.winding(point);
+                                    match rule {
+                                        hayro_interpret::FillRule::NonZero => winding != 0,
+                                        hayro_interpret::FillRule::EvenOdd => winding % 2 != 0,
+                                    }
+                                };
+                                let mut sums = [0.0f64; 4];
+                                let mut hits = 0u32;
+                                let mut channels = 0;
+                                let mut opacity = [1.0f32, 0.0f32];
+                                for y in 0..edge {
+                                    for x in 0..edge {
+                                        if cancelled() { return None; }
+                                        let probe = point + kurbo::Vec2::new(
+                                            (f64::from(x)+0.5)/f64::from(edge)-0.5,
+                                            (f64::from(y)+0.5)/f64::from(edge)-0.5,
+                                        );
+                                        if !inside(path, *rule, probe) || clips.iter().any(|clip|
+                                            !inside(clip.path.as_ref(), clip.fill, probe)) { continue; }
+                                        let Some(sample) = source.sample(probe, cancelled).ok()? else { continue; };
+                                        if sample.count > 4 || (hits > 0 && channels != sample.count) { return None; }
+                                        channels = sample.count;
+                                        for (sum, component) in sums.iter_mut().zip(&sample.components[..channels]) {
+                                            *sum += f64::from(*component);
+                                        }
+                                        opacity[0] = opacity[0].min(sample.opacity);
+                                        opacity[1] = opacity[1].max(sample.opacity);
+                                        hits += 1;
+                                    }
+                                }
+                                if hits == 0 { return None; }
+                                for sum in &mut sums { *sum /= f64::from(hits); }
+                                Some((hits, channels, sums, opacity))
+                            })();
+                            eprintln!("NATIVE_PIXEL_GRID depth={depth} event={event_index} edge={edge} result={diagnostic:?}");
+                        }
+                    }
+                    let (sample, source_coverage) = match sampled {
+                        Some(sample) => (sample, f64::from(coverage) / 255.),
+                        None if !scene.integrate_native_mesh_boundaries => continue,
+                        None => match sample_covered_shading_pixel(source, path, *rule, clips,
+                            (index % width as usize) as i32, (index / width as usize) as i32,
+                            cancelled, admit)? {
+                            Some(result) => result,
+                            None => continue,
+                        },
+                    };
+                    if trace_pixel==Some(index) {
+                        eprintln!("NATIVE_PIXEL_SHADING_SAMPLE depth={depth} event={event_index} components={:?} opacity={} model={:?}",
+                            &sample.components[..sample.count],sample.opacity,source.color_space.blending_model());
+                    }
+                    let (space,components)=source.color_space.native_sample_coordinates_checked(&sample.components[..sample.count],cancelled)?;
+                    let model=match space.blending_model()? {
+                        BlendingModel::Gray=>Model::Gray,BlendingModel::Rgb=>Model::Rgb,BlendingModel::Cmyk=>Model::Cmyk,
+                    };
+                    let components=components.map(f64::from);
+                    let pixel=Pixel::from_native(model,&components[..model.channels()],f64::from(sample.opacity))?;
                     let frame=&mut stack.last_mut()?.0;
-                    let prepared=frame.prepare_native_pixel(pixel,&source.color_space,cancelled)?;
-                    frame.apply_prepared_masked(index,&prepared,f64::from(coverage)/255.,ais,
+                    let prepared=frame.prepare_native_pixel(pixel,space,cancelled)?;
+                    frame.apply_prepared_masked(index,&prepared,source_coverage,ais,
                         active_mask.as_ref().map_or(1.,|mask|mask.values[index]),blend,cancelled)?;
                 }
             },
@@ -5128,6 +5538,9 @@ fn replay_native_solid_scene_depth(
                 let prepared = stack.last_mut()?.0.prepare_paint(paint,cancelled)?;
                 for (index,&coverage) in shape.values.iter().enumerate() {
                     if cancelled() { return None; }
+                    if trace_pixel==Some(index) && coverage>0 {
+                        eprintln!("NATIVE_PIXEL_SOLID depth={depth} event={event_index} coverage={coverage} mask={}",active_mask.as_ref().map_or(1.,|mask|mask.values[index]));
+                    }
                     stack.last_mut()?.0.apply_prepared_masked(index,&prepared,f64::from(coverage)/255.0,ais,active_mask.as_ref().map_or(1.0,|mask| mask.values[index]),blend,cancelled)?;
                 }
             }
@@ -5176,13 +5589,13 @@ fn native_solid_scene_refusals_and_cancellations_release_all_replay_credit() {
     use std::cell::Cell;
     struct Credit(Arc<AtomicUsize>,usize);
     impl Drop for Credit { fn drop(&mut self) { self.0.fetch_sub(self.1,Ordering::Relaxed); } }
-    for document in [authored_pdf(false,0.5,false),authored_native_alpha_transfer_fixture(),authored_native_gray_child_fixture(),authored_native_gray_child_with_isolation(false),authored_native_soft_image_fixture(false),
+    for document in [authored_native_device_n_shading_fixture(),authored_pdf(false,0.5,false),authored_native_alpha_transfer_fixture(),authored_native_gray_child_fixture(),authored_native_gray_child_with_isolation(false),authored_native_soft_image_fixture(false),
         authored_native_device_luminosity_fixture("/DeviceGray","0.371234"),
         authored_native_device_luminosity_fixture("/DeviceRGB","0.173123 0.319876 0.537654"),
         authored_native_device_luminosity_fixture("/DeviceCMYK","0.173123 0.319876 0.537654 0.071234"),
     ] {
     let scene = record_into(document,2,1,Affine::scale(1.0/16.0),
-        Recorder { capture_native_rasters:true,mask_probe:true,global_contour:true,native_polygon:true,admitted_strokes:true,..Recorder::default() });
+        Recorder { capture_native_shadings:true,capture_native_rasters:true,mask_probe:true,global_contour:true,native_polygon:true,admitted_strokes:true,..Recorder::default() });
     assert!(!scene.failed);
     let rgb = Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
     let clear = Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap();
@@ -5266,6 +5679,67 @@ fn authored_native_alpha_transfer_declaration(transfer: &str) -> Vec<u8> {
 }
 
 #[test]
+fn native_raster_inside_luminosity_mask_preserves_original_samples() {
+    for curved_clip in [false,true] {
+    use hayro_interpret::color::{AlphaColor,Color};
+    use super::native_blend::{Model,Pixel};
+    let bytes="8000>";
+    let image=format!("<< /Type /XObject /Subtype /Image /Width 1 /Height 1 /ColorSpace /DeviceGray /BitsPerComponent 16 /Filter /ASCIIHexDecode /Length {} >>\nstream\n{bytes}\nendstream",bytes.len());
+    // The cubic bounds y=x²/64. At x=20, samples y=2 and y=13
+    // lie strictly on opposite sides, independent of page Y orientation.
+    let content=if curved_clip {"q 0 0 m 10.6666667 0 21.3333333 5.3333333 32 16 c 32 0 l h W n 32 0 0 16 0 0 cm /image Do Q"} else {"q 32 0 0 16 0 0 cm /image Do Q"};
+    let mask=format!("<< /Type /XObject /Subtype /Form /BBox [0 0 32 16] /Group << /S /Transparency /I true /CS /DeviceGray >> /Resources << /XObject << /image 9 0 R >> >> /Length {} >>\nstream\n{content}\nendstream",content.len());
+    let pdf=authored_pdf_with_font_blend(false,1.,"/form Do","1 0 0 rg 0 0 24 16 re f","0 0 1 rg 8 0 24 16 re f",
+        &image,Some(&mask),false,"Normal /SMask << /S /Luminosity /G 10 0 R >>");
+    let scene=record_into(pdf,32,16,Affine::IDENTITY,
+        Recorder {mask_probe:true,global_contour:true,native_polygon:true,capture_native_rasters:true,..Recorder::default()});
+    assert!(!scene.failed);
+    let children=scene.events.iter().filter_map(|event| match event {Event::Mask(Some((child,_,_,_,_)))=>Some(child),_=>None}).collect::<Vec<_>>();
+    assert!(!children.is_empty());
+    for child in children {
+        assert_eq!(child.native_rasters.len(),1);
+        let (_,data,reason)=&child.native_rasters[0];
+        assert_eq!(*reason,None);
+        assert_eq!(data.as_ref().unwrap().samples(),&[32768./65535.]);
+    }
+    let rgb=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
+    let clear=Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap();
+    let output=replay_native_solid_scene(&scene,32,16,rgb.color_space(),clear,&||false,&|_|Some(Box::new(()))).unwrap();
+    for y in [2usize,13] {
+        let routed=replay_spatial_scene_pixel(&scene,rgb.color_space(),clear,20,y as i32,
+            &||false,&|_|Some(Box::new(()))).unwrap();
+        let previous=output.pixels[y*32+20];
+        assert_eq!(routed.alpha(),previous.alpha());
+        for (a,b) in routed.native_components().unwrap().into_iter().zip(previous.native_components().unwrap()) {
+            assert!((a-b).abs()<1e-14,"raster mask y={y} curve={curved_clip}: {a} != {b}");
+        }
+    }
+    let mask=f64::from(32768_f32/65535.);
+    if curved_clip {
+        let mut colors=[2,13].map(|y|output.pixels[y*32+20].native_components().unwrap()[..3].to_vec());
+        colors.sort_by(|a,b|a[2].total_cmp(&b[2]));
+        assert_eq!(colors[0],[1.,0.,0.]);
+        // Integral of x²/64-6 over x=20..21 is 109/192;
+        // the shared shape mask rounds that coverage to 145/255.
+        let mut boundary=[6,9].map(|y|output.pixels[y*32+20].native_components().unwrap()[2]);
+        boundary.sort_by(f64::total_cmp);
+        assert_eq!(boundary[0],0.);
+        assert!((boundary[1]-mask*145./255.).abs()<1e-14,"boundary={boundary:?}");
+        for (actual,expected) in colors[1].iter().zip([1.-mask,0.,mask]) {
+            assert!((*actual-expected).abs()<1e-14,"curved clip actual={actual} expected={expected}");
+        }
+    } else {
+    for pixel in output.pixels[8*32+10..8*32+22].iter() {
+        assert_eq!(pixel.alpha(),1.);
+        for (actual,expected) in pixel.native_components().unwrap()[..3].iter().zip([1.-mask,0.,mask]) {
+            assert!((*actual-expected).abs()<1e-14,"actual={actual} expected={expected}");
+        }
+    }
+}
+}
+}
+
+#[test]
 fn native_alpha_mask_uses_original_transfer_without_lookup_quantization() {
     use hayro_interpret::color::{AlphaColor,Color};
     use super::native_blend::{Model,Pixel};
@@ -5308,6 +5782,12 @@ fn native_device_luminosity_masks_preserve_gray_rgb_cmyk_background_components()
         let output = replay_native_solid_scene(&scene,32,16,rgb.color_space(),clear,&|| false,&|_| Some(Box::new(()))).unwrap();
         for (x,mask) in [(12,expected*0.5),(20,expected)] {
             let pixel = output.pixels[8*32+x];
+            let routed=replay_spatial_scene_pixel(&scene,rgb.color_space(),clear,x as i32,8,
+                &||false,&|_|Some(Box::new(()))).unwrap();
+            assert_eq!(routed.alpha(),pixel.alpha());
+            for (a,b) in routed.native_components().unwrap().into_iter().zip(pixel.native_components().unwrap()) {
+                assert!((a-b).abs()<1e-14,"spatial {model} x{x}: {a} != {b}");
+            }
             assert_eq!(pixel.alpha(),1.0);
             for (actual,expected) in pixel.native_components().unwrap()[..3].iter().zip([1.0-mask,0.,mask]) {
                 assert!((*actual-expected).abs()<1e-14,"{model} x{x} actual{actual} expected{expected}");
@@ -5410,6 +5890,16 @@ fn actual_pdf_isolated_gray_child_routes_native_space_and_preserves_opacity() {
     let rgb = Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
     let clear = Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap();
     let output = replay_native_solid_scene(&scene,32,16,rgb.color_space(),clear,&|| false,&|_| Some(Box::new(()))).unwrap();
+    // The spatial route must preserve the original child space on entry and
+    // convert the completed group exactly once on exit.
+    for x in [16,23,24,28] {
+        let spatial=replay_spatial_scene_pixel(&scene,rgb.color_space(),clear,x,8,
+            &||false,&|_|Some(Box::new(()))).unwrap();
+        let reference=output.pixels[8*32+x as usize];
+        assert_eq!(spatial.alpha(),reference.alpha(),"isolated={isolated}, x={x}");
+        assert_eq!(spatial.native_components(),reference.native_components(),
+            "isolated={isolated}, x={x}");
+    }
     let overlap = output.pixels[8*32+16];
     assert_eq!(overlap.alpha(),1.);
     assert_eq!(&overlap.native_components().unwrap()[..3],&[0.625,0.125,0.125]);
@@ -5583,15 +6073,179 @@ fn native_soft_image_alpha_preserves_16bit_precision_and_refuses_matte() {
     }
 }
 
+#[derive(Clone,Copy)]
 struct NativeRasterSample<'a> {
     space: &'a hayro_interpret::color::ColorSpace,
     components: [f64;4],
     alpha: f64,
 }
 fn sample_native_raster<'a>(image: &'a hayro_interpret::NativeRasterComponents,point: kurbo::Point,cancelled: &dyn Fn()->bool) -> Option<NativeRasterSample<'a>> {
+    sample_native_raster_impl(image,point,cancelled,&mut {usize::MAX},false)
+}
+#[test]
+fn nearest_raster_last_sample_cache_matches_uncached_coordinates_and_refusals() {
+    let content="q 16 0 0 16 0 0 cm BI /W 2 /H 2 /BPC 8 /CS /RGB /F /AHx ID FF000000FF000000FFFFFFFF> EI Q";
+    let mask_bytes="000040008000FFFF>";
+    let mask=format!("<< /Type /XObject /Subtype /Image /Width 2 /Height 2 /ColorSpace /DeviceGray /BitsPerComponent 16 /Filter /ASCIIHexDecode /Length {} >>\nstream\n{mask_bytes}\nendstream",mask_bytes.len());
+    let image_bytes="123456789ABC>";
+    let image=format!("<< /Type /XObject /Subtype /Image /Width 1 /Height 1 /ColorSpace /DeviceRGB /BitsPerComponent 16 /SMask 10 0 R /Filter /ASCIIHexDecode /Length {} >>\nstream\n{image_bytes}\nendstream",image_bytes.len());
+    let unequal_mask=authored_pdf_with_font_blend(false,1.,"/form Do","","q 16 0 0 16 0 0 cm /image Do Q",&image,Some(&mask),false,"Normal");
+    for pdf in [authored_pdf_with_paths(false,1.,"/form Do","",content),authored_native_soft_image_fixture(false),unequal_mask] {
+        let scene=record_into(pdf,32,16,Affine::IDENTITY,Recorder {capture_native_rasters:true,..Recorder::default()});
+        let image=scene.native_rasters[0].1.as_ref().unwrap();
+        let cache=RasterLastSample::new(None);
+        let pixel_cache=RasterLastPixel::new(None);
+        for point in [kurbo::Point::new(0.1,0.1),kurbo::Point::new(0.9,0.9),
+            kurbo::Point::new(1.1,0.1),kurbo::Point::new(1.9,0.9),
+            kurbo::Point::new(0.1,1.1),kurbo::Point::new(1.1,1.1),kurbo::Point::new(-1.,3.)] {
+            let expected=sample_native_raster(image,point,&||false).unwrap();
+            let actual=sample_native_raster_cached(image,point,&cache,&||false,&mut 1000).unwrap();
+            assert_eq!(actual.components,expected.components);assert_eq!(actual.alpha,expected.alpha);
+            assert!(actual.space.shares_blending_coordinates(expected.space));
+            let key=nearest_raster_cell_key(image,point);
+            let fresh=native_raster_pixel_cached(expected,None,&RasterLastPixel::new(None),&||false).unwrap();
+            let cached=native_raster_pixel_cached(actual,key,&pixel_cache,&||false).unwrap();
+            let fingerprint=|pixel:super::native_blend::Pixel|(pixel.alpha(),pixel.native_components().unwrap().to_vec());
+            assert_eq!(fingerprint(cached),fingerprint(fresh));
+            assert_eq!(fingerprint(native_raster_pixel_cached(actual,key,&pixel_cache,&||false).unwrap()),fingerprint(fresh));
+            let saved=pixel_cache.get().map(|(key,pixel)|(key,fingerprint(pixel)));
+            assert!(native_raster_pixel_cached(actual,key,&pixel_cache,&||true).is_none());
+            assert_eq!(pixel_cache.get().map(|(key,pixel)|(key,fingerprint(pixel))),saved);
+            let invalid=NativeRasterSample {alpha:f64::NAN,..actual};
+            assert!(native_raster_pixel_cached(invalid,None,&pixel_cache,&||false).is_none());
+            assert_eq!(pixel_cache.get().map(|(key,pixel)|(key,fingerprint(pixel))),saved);
+
+            let mut budget=1;
+            let repeated=sample_native_raster_cached(image,point,&cache,&||false,&mut budget).unwrap();
+            assert_eq!(budget,0);assert_eq!(repeated.components,expected.components);
+            assert!(sample_native_raster_cached(image,point,&cache,&||false,&mut 0).is_none());
+            assert!(sample_native_raster_cached(image,point,&cache,&||true,&mut 1000).is_none());
+        }
+        assert!(sample_native_raster_cached(image,kurbo::Point::new(f64::NAN,0.),&cache,&||false,&mut 1000).is_none());
+        let mut cells=std::collections::BTreeMap::new();
+        for y in -8..=24 {for x in -8..=24 {
+            let point=kurbo::Point::new(f64::from(x)/8.,f64::from(y)/8.);
+            let key=nearest_raster_cell_key(image,point).unwrap();
+            let sample=sample_native_raster(image,point,&||false).unwrap();
+            let (old_point,old_sample)=cells.entry(key).or_insert((point,sample));
+            assert_eq!(sample.components,old_sample.components);assert_eq!(sample.alpha,old_sample.alpha);
+            for t in [0.125,0.5,0.875] {
+                let mean=kurbo::Point::new(old_point.x*(1.-t)+point.x*t,old_point.y*(1.-t)+point.y*t);
+                assert_eq!(nearest_raster_cell_key(image,mean),Some(key));
+                let middle=sample_native_raster(image,mean,&||false).unwrap();
+                assert_eq!(middle.components,sample.components);assert_eq!(middle.alpha,sample.alpha);
+            }
+        }}
+        // Geometry identities must agree with the independent native sampler,
+        // including reflected/skewed transforms and a different alpha grid.
+        let admit=|_|Some(Box::new(()) as Box<dyn std::any::Any+Send+Sync>);
+        let (w,h)=image.dimensions();
+        for transform in [Affine::IDENTITY,Affine::new([0.7,0.2,-0.15,1.1,4.,2.]),Affine::new([-1.,0.,0.,1.,3.,0.])] {
+            let rect=transform.transform_rect_bbox(kurbo::Rect::new(0.,0.,f64::from(w),f64::from(h)));
+            let (color,mask)=if let Some(alpha)=image.alpha() {
+                let (aw,ah)=alpha.dimensions();let (color,mask)=super::native_spatial::admitted_raster_mask_cells(w,h,aw,ah,transform,rect,10000,&||false,&admit).unwrap();
+                (color,Some(mask))
+            } else {(super::native_spatial::admitted_raster_pixel_cells(w,h,transform,rect,10000,&||false,&admit).unwrap(),None)};
+            let check=|cells:&super::native_spatial::RasterCells,cell_transform:Affine,alpha_field:bool| {
+                assert!(cells.has_texel_grid());assert_eq!(cells.texel_key(0),None);
+                assert_eq!(cells.texel_key(cells.paths.len()),None);assert!(cells.paths.len()>1);
+                for i in 1..cells.paths.len() {
+                    let key=cells.texel_key(i).unwrap();
+                    let x=(key>>32) as f64;let y=(key as u32) as f64;
+                    for offset in [0.125,0.5,0.875] {
+                        let point=cell_transform*kurbo::Point::new(x+offset,y+1.-offset);
+                        assert_ne!(kurbo::Shape::winding(&cells.paths[i],point),0);
+                        let sampled=nearest_raster_cell_key(image,transform.inverse()*point).unwrap();
+                        assert_eq!(sampled[usize::from(alpha_field)],key);
+                    }
+                }
+            };
+            check(&color,transform,false);
+            if let Some(mask)=mask {
+                let (aw,ah)=image.alpha().unwrap().dimensions();
+                check(&mask,transform*Affine::scale_non_uniform(f64::from(w)/f64::from(aw),f64::from(h)/f64::from(ah)),true);
+            }
+        }
+        let nonconstant_grid=image.dimensions()!=(1,1)
+            || image.alpha().is_some_and(|alpha|alpha.dimensions()!=(1,1));
+        if nonconstant_grid {assert!(cells.len()>1);} else {assert_eq!(cells.len(),1);}
+        assert!(nearest_raster_cell_key(image,kurbo::Point::new(f64::NAN,0.)).is_none());
+        assert!(nearest_raster_cell_key(image,kurbo::Point::new(0.,f64::INFINITY)).is_none());
+    }
+}
+
+#[test]
+fn interpolated_raster_bypasses_last_sample_cache() {
+    let content="q 16 0 0 16 0 0 cm BI /W 2 /H 2 /BPC 8 /CS /RGB /I true /F /AHx ID FF000000FF000000FFFFFFFF> EI Q";
+    let scene=record_into(authored_pdf_with_paths(false,1.,"/form Do","",content),32,16,Affine::IDENTITY,Recorder {capture_native_rasters:true,..Recorder::default()});
+    let image=scene.native_rasters[0].1.as_ref().unwrap();assert!(image.interpolate());
+    assert!(nearest_raster_cell_key(image,kurbo::Point::new(0.6,0.7)).is_none());
+    let cache=RasterLastSample::new(None);
+    for point in [kurbo::Point::new(0.6,0.7),kurbo::Point::new(0.9,0.8)] {
+        let expected=sample_native_raster(image,point,&||false).unwrap();
+        let actual=sample_native_raster_cached(image,point,&cache,&||false,&mut 1000).unwrap();
+        assert_eq!(actual.components,expected.components);assert_eq!(actual.alpha,expected.alpha);
+        assert!(cache.borrow().is_none());
+    }
+}
+
+/// Source identity (image, transform, color space and dimensions) belongs to
+/// the enclosing command. These two words identify its nearest color/alpha
+/// cells, including unequal alpha dimensions and exterior clamping.
+fn nearest_raster_cell_key(image:&hayro_interpret::NativeRasterComponents,point:kurbo::Point)->Option<[u64;2]> {
+    if image.interpolate() || image.alpha().is_some_and(|alpha|alpha.interpolate())
+        || !point.x.is_finite() || !point.y.is_finite() {return None;}
+    let (w,h)=image.dimensions();if w==0 || h==0 {return None;}
+    let index=|value:f64,size:u32|value.floor().clamp(0.,f64::from(size-1)) as u32;
+    let pack=|x:u32,y:u32|(u64::from(x)<<32)|u64::from(y);
+    let color=pack(index(point.x,w),index(point.y,h));
+    let alpha=if let Some(alpha)=image.alpha() {
+        let (aw,ah)=alpha.dimensions();if aw==0 || ah==0 {return None;}
+        pack(index(point.x/f64::from(w)*f64::from(aw),aw),
+            index(point.y/f64::from(h)*f64::from(ah),ah))
+    } else {u64::MAX};
+    Some([color,alpha])
+}
+type RasterLastSample<'a>=std::cell::RefCell<Option<([u64;2],NativeRasterSample<'a>)>>;
+// Per-source cache: identical nearest color/alpha cells have identical native
+// coordinates and alpha. Interpolated samples carry no key and always validate.
+type RasterLastPixel=std::cell::Cell<Option<([u64;2],super::native_blend::Pixel)>>;
+fn native_raster_pixel_cached(sample:NativeRasterSample<'_>,key:Option<[u64;2]>,
+    cache:&RasterLastPixel,cancelled:&dyn Fn()->bool)->Option<super::native_blend::Pixel> {
+    use super::native_blend::{Model,Pixel};
+    use hayro_interpret::color::BlendingModel;
+    if cancelled() {return None;}
+    if let (Some(key),Some((old,pixel)))=(key,cache.get()) {if key==old {return Some(pixel);}}
+    let model=match sample.space.blending_model()? {BlendingModel::Gray=>Model::Gray,BlendingModel::Rgb=>Model::Rgb,BlendingModel::Cmyk=>Model::Cmyk};
+    let pixel=Pixel::from_native(model,&sample.components[..model.channels()],sample.alpha)?;
+    if cancelled() {return None;}
+    if let Some(key)=key {cache.set(Some((key,pixel)));}
+    Some(pixel)
+}
+
+fn sample_native_raster_cached<'a>(image:&'a hayro_interpret::NativeRasterComponents,point:kurbo::Point,
+    cache:&RasterLastSample<'a>,cancelled:&dyn Fn()->bool,remaining:&mut usize)->Option<NativeRasterSample<'a>> {
+    if image.interpolate() || image.alpha().is_some_and(|alpha|alpha.interpolate()) {
+        return sample_native_raster_impl(image,point,cancelled,remaining,true);
+    }
+    if cancelled() || !point.x.is_finite() || !point.y.is_finite() {return None;}
+    *remaining=remaining.checked_sub(1)?;
+    let key=nearest_raster_cell_key(image,point)?;
+    if let Some((old,sample))=*cache.borrow() {if old==key {
+        if cancelled() {return None;}return Some(sample);
+    }}
+    let sample=sample_native_raster_impl(image,point,cancelled,remaining,true)?;
+    *cache.borrow_mut()=Some((key,sample));Some(sample)
+}
+fn sample_native_raster_impl<'a>(image:&'a hayro_interpret::NativeRasterComponents,point:kurbo::Point,
+    cancelled:&dyn Fn()->bool,remaining:&mut usize,shared:bool)->Option<NativeRasterSample<'a>> {
+    let work=std::cell::Cell::new(*remaining);
+    let charge=|cost| {let left=work.get().checked_sub(cost)?;work.set(left);Some(())};
+    let result=(|| {
     if cancelled() || !point.x.is_finite() || !point.y.is_finite() { return None; }
     let (width,height)=image.dimensions();
     if width==0 || height==0 { return None; }
+    charge(1)?;
     let channels=usize::from(image.color_space().num_components());
     if image.samples().len()!=usize::try_from(width).ok()?.checked_mul(usize::try_from(height).ok()?)?.checked_mul(channels)? { return None; }
     let alpha_at=|x:f64,y:f64| -> Option<f64> {
@@ -5602,6 +6256,7 @@ fn sample_native_raster<'a>(image: &'a hayro_interpret::NativeRasterComponents,p
         let at=|x:f64,y:f64| -> Option<f64> {
             if cancelled() {return None;}
             let x=x.clamp(0.,f64::from(w-1)) as usize;let y=y.clamp(0.,f64::from(h-1)) as usize;
+            charge(1)?;
             let value=f64::from(alpha.samples()[y*w as usize+x]);
             (value.is_finite() && (0. ..=1.).contains(&value)).then_some(value)
         };
@@ -5613,7 +6268,12 @@ fn sample_native_raster<'a>(image: &'a hayro_interpret::NativeRasterComponents,p
         if cancelled() {return None;}
         let x=x.clamp(0.,f64::from(width-1)) as usize;let y=y.clamp(0.,f64::from(height-1)) as usize;
         let index=(y*width as usize+x)*channels;
-        let (space,components)=image.color_space().native_sample_coordinates(&image.samples()[index..index+channels])?;
+        charge(channels)?;
+        let (space,components)=if shared {
+            let mut left=work.get();
+            let result=image.color_space().native_sample_coordinates_with_budget(&image.samples()[index..index+channels],cancelled,&mut left);
+            work.set(left);result?
+        } else {image.color_space().native_sample_coordinates_checked(&image.samples()[index..index+channels],cancelled)?};
         Some(NativeRasterSample {space,components:components.map(f64::from),alpha:alpha_at(ax,ay)?})
     };
     if !image.interpolate() { return at(point.x.floor(),point.y.floor(),point.x,point.y); }
@@ -5630,6 +6290,78 @@ fn sample_native_raster<'a>(image: &'a hayro_interpret::NativeRasterComponents,p
     if alpha>0. { for value in &mut color { *value/=alpha; } }
     if cancelled() {return None;}
     Some(NativeRasterSample {space:result?,components:color,alpha})
+    })();
+    *remaining=work.get();result
+}
+
+fn authored_native_device_n_shading_fixture()->Vec<u8> {
+    let program="{ exch dup mul exch 0 0 }";
+    let tint=format!("<< /FunctionType 4 /Domain [0 1 0 1] /Range [0 1 0 1 0 1 0 1] /Length {} >>\nstream\n{program}\nendstream",program.len());
+    let shading="<< /ShadingType 2 /ColorSpace [/DeviceN [/Cyan /Magenta] /DeviceCMYK 9 0 R] /Coords [0 0 32 0] /Domain [0 1] /Extend [true true] /Function << /FunctionType 2 /Domain [0 1] /C0 [0 1] /C1 [1 0] /N 1 >> >>";
+    authored_pdf_with_font_blend(false,1.,"/form Do","","/S1 sh",&tint,Some(shading),false,"Normal")
+}
+
+#[test]
+fn native_device_n_axial_preserves_source_and_applies_nonlinear_calculator_tint() {
+    use super::native_blend::{Model,Pixel};
+    let scene=record_into(authored_native_device_n_shading_fixture(),32,16,Affine::IDENTITY,
+        Recorder {capture_native_shadings:true,global_contour:true,native_polygon:true,..Recorder::default()});
+    assert!(!scene.failed);
+    let source=scene.events.iter().find_map(|event|match event {
+        Event::Path(_,_,RecordedPaint::Shading(paint),_,_)=>paint.native.as_ref(),_=>None,
+    }).expect("native DeviceN source captured");
+    let sample=source.sample(kurbo::Point::new(8.,8.),&||false).unwrap().unwrap();
+    assert_eq!(sample.count,2);
+    assert_eq!(sample.components[..2],[0.25,0.75]);
+    let (space,components)=source.color_space.native_sample_coordinates_checked(&sample.components[..2],&||false).unwrap();
+    assert_eq!(components,[0.0625,0.75,0.,0.]);
+    let clear=Pixel::from_native(Model::Cmyk,&[0.;4],0.).unwrap();
+    let output=replay_native_solid_scene(&scene,32,16,space,clear,&||false,&|_|Some(Box::new(()))).unwrap();
+    for y in 0..16 {
+        for x in 0..32 {
+            let t=(x as f32+0.5)/32.;
+            let pixel=output.pixels[y*32+x];
+            assert_eq!(pixel.alpha(),1.);
+            assert_eq!(pixel.native_components().unwrap(),[f64::from(t*t),f64::from(1.-t),0.,0.]);
+        }
+    }
+}
+
+fn authored_native_separation_image_fixture(name:&str,power:u8)->Vec<u8> {
+    let bytes="8000>";
+    let image=format!("<< /Type /XObject /Subtype /Image /Width 1 /Height 1 /ColorSpace [/Separation /{name} /DeviceCMYK << /FunctionType 2 /Domain [0 1] /C0 [0 0 0 0] /C1 [0 0 0 1] /N {power} >>] /BitsPerComponent 16 /Filter /ASCIIHexDecode /Length {} >>\nstream\n{bytes}\nendstream",bytes.len());
+    authored_pdf_with_font_blend(false,1.,"/form Do","","q 16 0 0 16 0 0 cm /image Do Q",&image,None,false,"Normal")
+}
+
+#[test]
+fn native_separation_raster_uses_explicit_float_tint_and_cancels() {
+    use super::native_blend::{Model,Pixel};
+    use std::cell::Cell;
+    for (name,power) in [("Black",1),("Black",2),("None",1)] {
+        let scene=record_into(authored_native_separation_image_fixture(name,power),32,16,Affine::IDENTITY,
+            Recorder {capture_native_rasters:true,global_contour:true,native_polygon:true,..Recorder::default()});
+        assert!(!scene.failed);
+        let data=scene.native_rasters[0].1.as_ref().unwrap();
+        assert_eq!(data.samples(),&[32768./65535.]);
+        let point=kurbo::Point::new(0.5,0.5);
+        if name=="None" {
+            assert!(sample_native_raster(data,point,&||false).is_none());
+            continue;
+        }
+        let polls=Cell::new(0);
+        let sample=sample_native_raster(data,point,&||{polls.set(polls.get()+1);false}).unwrap();
+        let expected=f64::from((32768_f32/65535.).powf(f32::from(power)));
+        assert_eq!(sample.components,[0.,0.,0.,expected]);
+        assert_eq!(sample.alpha,1.);
+        for stop in 1..=polls.get() {
+            let current=Cell::new(0);
+            assert!(sample_native_raster(data,point,&||{current.set(current.get()+1);current.get()==stop}).is_none());
+        }
+        let clear=Pixel::from_native(Model::Cmyk,&[0.;4],0.).unwrap();
+        let output=replay_native_solid_scene(&scene,32,16,sample.space,clear,&||false,&|_|Some(Box::new(()))).unwrap();
+        assert_eq!(output.pixels[8*32+8].native_components().unwrap(),[0.,0.,0.,expected]);
+        assert_eq!(output.pixels[8*32+8].alpha(),1.);
+    }
 }
 
 #[test]
@@ -5644,6 +6376,14 @@ fn native_raster_sampling_expands_palette_before_premultiplied_filtering() {
         assert!(!scene.failed);
         let data=scene.native_rasters[0].1.as_ref().unwrap();
         let middle=sample_native_raster(data,kurbo::Point::new(1.,0.5),&||false).unwrap();
+        let mut work=1000;
+        let budgeted=sample_native_raster_impl(data,kurbo::Point::new(1.,0.5),&||false,&mut work,true).unwrap();
+        assert_eq!(budgeted.components,middle.components);assert_eq!(budgeted.alpha,middle.alpha);
+        let cost=1000-work;assert!(cost>0);let mut shared=2*cost-1;
+        assert!(sample_native_raster_impl(data,kurbo::Point::new(1.,0.5),&||false,&mut shared,true).is_some());
+        assert!(sample_native_raster_impl(data,kurbo::Point::new(1.,0.5),&||false,&mut shared,true).is_none());
+        assert!(sample_native_raster_impl(data,kurbo::Point::new(1.,0.5),&||false,&mut 0,true).is_none());
+
         assert_eq!(middle.alpha,0.5);
         assert_eq!(middle.components[..3],[0.,0.,1.]);
         let clear=sample_native_raster(data,kurbo::Point::new(0.5,0.5),&||false).unwrap();
@@ -5657,6 +6397,15 @@ fn native_raster_sampling_expands_palette_before_premultiplied_filtering() {
             let now=std::cell::Cell::new(0);
             assert!(sample_native_raster(data,kurbo::Point::new(1.,0.5),&|| {now.set(now.get()+1);now.get()==stop}).is_none());
         }
+        let polls=std::cell::Cell::new(0);
+        sample_native_raster_impl(data,kurbo::Point::new(1.,0.5),&||{polls.set(polls.get()+1);false},&mut 1000,true).unwrap();
+        for stop in 1..=polls.get() {
+            let now=std::cell::Cell::new(0);let mut work=1000;
+            assert!(sample_native_raster_impl(data,kurbo::Point::new(1.,0.5),
+                &||{now.set(now.get()+1);now.get()==stop},&mut work,true).is_none());
+            assert!(work<=1000);
+        }
+
     }
 }
 
@@ -5727,4 +6476,1534 @@ fn actual_native_triangle_shading_stream_replay_preserves_original_cmyk() {
         let t=(x as f64+0.5)/32.;
         assert_eq!(pixel.native_components().unwrap(),[t,0.,0.,1.-t],"pixel ({x},{y})");
     }}
+}
+
+#[test]
+fn actual_native_tensor_shading_stream_replay_preserves_original_cmyk() {
+    use super::native_blend::{Model,Pixel};
+    let indices=[[0,1,2,3],[11,12,13,4],[10,15,14,5],[9,8,7,6]];
+    let mut points=[[0u8;2];16];
+    for u in 0..4 {for v in 0..4 {points[indices[u][v]]=[u as u8*85,v as u8*85];}}
+    let mut data=vec![0u8];for point in points {data.extend_from_slice(&point);}
+    for color in [[0,0,0,255],[0,0,0,255],[255,0,0,0],[255,0,0,0]] {data.extend_from_slice(&color);}
+    let hex=data.iter().map(|v|format!("{v:02X}")).collect::<String>()+">";
+    let shading=format!("<< /ShadingType 7 /ColorSpace /DeviceCMYK /BitsPerCoordinate 8 /BitsPerComponent 8 /BitsPerFlag 8 /Decode [0 32 0 16 0 1 0 1 0 1 0 1] /Filter /ASCIIHexDecode /Length {} >>\nstream\n{hex}\nendstream",hex.len());
+    let pdf=authored_pdf_with_font(true,1.0,"/form Do","0 0 0 0 k 0 0 32 16 re f","/S1 sh",
+        "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>",Some(&shading));
+    let scene=record_into(pdf,32,16,Affine::IDENTITY,Recorder {capture_native_shadings:true,global_contour:true,native_polygon:true,..Recorder::default()});
+    assert!(!scene.failed);
+    let space=scene.events.iter().find_map(|event|match event {
+        Event::Path(_,_,RecordedPaint::Shading(paint),_,_)=>paint.native.as_ref().map(|source|source.color_space.clone()),_=>None,
+    }).expect("actual Type7 source captured in original CMYK");
+    let white=Pixel::from_native(Model::Cmyk,&[0.;4],1.).unwrap();
+    let output=replay_native_solid_scene(&scene,32,16,&space,white,&||false,&|_|Some(Box::new(()))).unwrap();
+    for y in 0..16 {for x in 0..32 {
+        let pixel=output.pixels[y*32+x];assert_eq!(pixel.alpha(),1.);
+        let t=(x as f64+0.5)/32.;assert_eq!(pixel.native_components().unwrap(),[t,0.,0.,1.-t],"pixel ({x},{y})");
+    }}
+}
+
+#[test]
+#[ignore = "Diagnostic for correlated edge coverage; scalar replay is known incomplete"]
+fn repeated_and_disjoint_opaque_edges_compare_native_spatial_composition() {
+    use hayro_interpret::color::{AlphaColor,Color};
+    use super::native_blend::{Pixel,Model};
+    let rgb=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
+    let clear=Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap();
+    let same="0 1 0 rg 0 0 0.25 1 re f\n".repeat(17);
+    let disjoint="0 1 0 rg 0 0 0.25 1 re f\n0 0 1 rg 0.25 0 0.25 1 re f\n".to_owned();
+    for (name,content,expected_alpha,expected_components) in [
+        ("same_edge",same,0.25,[0.,1.,0.]),
+        ("disjoint_edges",disjoint,0.5,[0.,0.5,0.5]),
+    ] {
+        let pdf=authored_pdf_with_font(false,1.,&content,"","",
+            "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>",None);
+        if let Some(folder)=std::env::var_os("RRRAH_AI_CORRELATED_EDGE_OUTPUT") {
+            let folder=std::path::PathBuf::from(folder);std::fs::create_dir_all(&folder).unwrap();
+            std::fs::write(folder.join(format!("{name}.pdf")),&pdf).unwrap();
+        }
+        // Exercise the new spatial primitive with original retained PDF paints.
+        let scene=record_into(pdf.clone(),1,1,Affine::IDENTITY,
+            Recorder {global_contour:true,native_polygon:true,..Recorder::default()});
+        let mut regions=Vec::new();let mut indices=Vec::new();let mut sources=Vec::new();
+        for event in &scene.events {
+            if let Event::Path(path,transform,RecordedPaint::NativeColor(paint),clips,PathDrawMode::Fill(rule))=event {
+                assert_eq!(*transform,Affine::IDENTITY);
+                let fill=|rule|match rule {hayro_interpret::FillRule::NonZero=>vello_cpu::peniko::Fill::NonZero,
+                    hayro_interpret::FillRule::EvenOdd=>vello_cpu::peniko::Fill::EvenOdd};
+                let mut required=vec![regions.len()];regions.push((path,fill(*rule)));
+                for clip in clips {required.push(regions.len());regions.push((clip.path.as_ref(),fill(clip.fill)));}
+                indices.push(required);sources.push(paint.pixel_in_space(rgb.color_space(),1.).unwrap());
+            }
+        }
+        assert_eq!(sources.len(),if name=="same_edge" {17} else {2});
+        let paints:Vec<_>=indices.iter().zip(&sources).map(|(regions,&source)|super::native_spatial::SpatialPaint {
+            regions,source,mode:BlendMode::Normal,
+        }).collect();
+        let pixel=super::native_spatial::compose_polygon_pixel(&regions,&paints,clear,0,0,
+            1_000_000,1_000_000,&||false,&|_|Some(Box::new(()))).unwrap();
+        assert!((pixel.alpha()-expected_alpha).abs()<1e-12);
+        for (a,b) in pixel.native_components().unwrap().into_iter().zip(expected_components) {assert!((a-b).abs()<1e-12);}
+        println!("CORRELATED_SPATIAL case={name} alpha={} components={:?}",pixel.alpha(),pixel.native_components().unwrap());
+        for scale in [1u16,16,64] {
+            let scene=record_into(pdf.clone(),scale,scale,Affine::scale(f64::from(scale)),
+                Recorder {global_contour:true,native_polygon:true,..Recorder::default()});
+            assert!(!scene.failed);
+            let output=replay_native_solid_scene(&scene,scale,scale,rgb.color_space(),clear,
+                &||false,&|_|Some(Box::new(()))).unwrap();
+            let mut alpha=0.;let mut integral=[0.;3];
+            for pixel in &output.pixels {
+                let a=pixel.alpha();alpha+=a;
+                let components=pixel.native_components().unwrap();
+                for i in 0..3 {integral[i]+=a*components[i];}
+            }
+            let components=integral.map(|v|v/alpha);
+            alpha/=f64::from(scale)*f64::from(scale);
+            println!("CORRELATED_EDGE case={name} scale={scale} alpha={alpha:?} components={components:?}");
+            if scale==1 {
+                assert!((alpha-expected_alpha).abs()>0.01,
+                    "current scalar replay mismatch must remain explicit until fixed");
+            } else {
+                assert!((alpha-expected_alpha).abs()<1e-12);
+                for (a,b) in components.into_iter().zip(expected_components) {assert!((a-b).abs()<1e-12);}
+            }
+        }
+    }
+}
+
+#[test]
+fn authored_pdf_groups_compose_on_spatial_cells_before_edge_averaging() {
+    use super::native_spatial::{SpatialCommand,SpatialPaint,compose_grouped_polygon_pixel};
+    use super::native_blend::{Pixel,Model};
+    use hayro_interpret::color::{AlphaColor,Color};
+    let rgb=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
+    let clear=Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap();
+    for knockout in [false,true] {
+        let pdf=authored_pdf_with_font(knockout,0.5,"/form Do",
+            "0 1 0 rg 0 0 0.25 1 re f","0 0 1 rg 0 0 0.25 1 re f",
+            "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>",None);
+        let scene=record_into(pdf,1,1,Affine::IDENTITY,
+            Recorder {global_contour:true,native_polygon:true,..Recorder::default()});
+        assert!(!scene.failed);
+        for (_,space) in &scene.group_spaces {
+            if let hayro_interpret::TransparencyGroupColorSpace::Explicit(space)=space {
+                assert!(space.shares_blending_coordinates(rgb.color_space()));
+            }
+        }
+        let fill=|rule|match rule {hayro_interpret::FillRule::NonZero=>vello_cpu::peniko::Fill::NonZero,
+            hayro_interpret::FillRule::EvenOdd=>vello_cpu::peniko::Fill::EvenOdd};
+        let mut regions=Vec::new();let mut requirements=Vec::new();let mut sources=Vec::new();
+        for event in &scene.events {
+            if let Event::Path(path,transform,RecordedPaint::NativeColor(paint),clips,PathDrawMode::Fill(rule))=event {
+                assert_eq!(*transform,Affine::IDENTITY);
+                let mut required=vec![regions.len()];regions.push((path,fill(*rule)));
+                for clip in clips {required.push(regions.len());regions.push((clip.path.as_ref(),fill(clip.fill)));}
+                requirements.push(required);sources.push(paint.pixel_in_space(rgb.color_space(),1.).unwrap());
+            }
+        }
+        let mut commands=Vec::new();let mut cursor=0;let mut mode=BlendMode::Normal;let mut ais=false;
+        for event in &scene.events {
+            match event {
+                Event::Blend(value)=>mode=*value,
+                Event::AlphaSource(value)=>ais=*value,
+                Event::Push(opacity,properties,mode)=>commands.push(SpatialCommand::Begin {
+                    isolated:properties.isolated,knockout:properties.knockout,opacity:f64::from(*opacity),
+                    alpha_is_shape:ais,mode:*mode,
+                }),
+                Event::Pop=>commands.push(SpatialCommand::End),
+                Event::Path(_,_,RecordedPaint::NativeColor(_),_,PathDrawMode::Fill(_))=>{
+                    assert!(!ais);
+                    commands.push(SpatialCommand::Paint(SpatialPaint {regions:&requirements[cursor],source:sources[cursor],mode}));cursor+=1;
+                },
+                Event::Mask(None)=>{},
+                _=>panic!("fixture requires only same-space constant paints and groups"),
+            }
+        }
+        let pixel=compose_grouped_polygon_pixel(&regions,&commands,rgb.color_space(),clear,0,0,
+            1_000_000,1_000_000,&||false,&|_|Some(Box::new(()))).unwrap();
+        let routed=replay_spatial_scene_pixel(&scene,rgb.color_space(),clear,0,0,
+            &||false,&|_|Some(Box::new(()))).unwrap();
+        assert_eq!(routed.alpha(),pixel.alpha());
+        assert_eq!(routed.native_components(),pixel.native_components());
+        let (alpha,components)=if knockout {(0.125,[0.,0.,1.])} else {(0.25,[0.,0.5,0.5])};
+        assert!((pixel.alpha()-alpha).abs()<1e-12);
+        for (a,b) in pixel.native_components().unwrap().into_iter().zip(components) {assert!((a-b).abs()<1e-12);}
+        println!("SPATIAL_PDF_GROUP knockout={knockout} alpha={} components={:?}",pixel.alpha(),pixel.native_components().unwrap());
+    }
+}
+
+#[test]
+fn authored_native_cmyk_mesh_samples_on_spatial_cell_centroids() {
+    use super::native_spatial::{SpatialCommand,compose_grouped_polygon_pixel};
+    use super::native_blend::{Pixel,Model};
+    let records=[[0u8,0,0,0,0,0,0],[0,255,0,255,0,0,0],[0,0,255,0,255,0,0]];
+    let hex=records.iter().flatten().map(|v|format!("{v:02X}")).collect::<String>()+">";
+    let shading=format!("<< /ShadingType 4 /ColorSpace /DeviceCMYK /BitsPerCoordinate 8 /BitsPerComponent 8 /BitsPerFlag 8 /Decode [0 1 0 1 0 1 0 1 0 1 0 1] /Filter /ASCIIHexDecode /Length {} >>\nstream\n{hex}\nendstream",hex.len());
+    let pdf=authored_pdf_with_font(true,1.,"/form Do","","/S1 sh",
+        "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>",Some(&shading));
+    let scene=record_into(pdf,1,1,Affine::IDENTITY,Recorder {
+        capture_native_shadings:true,global_contour:true,native_polygon:true,..Recorder::default()});
+    let source=scene.events.iter().find_map(|event|match event {
+        Event::Path(_,_,RecordedPaint::Shading(paint),_,_)=>paint.native.as_ref(),_=>None,
+    }).unwrap();
+    let mut triangles=Vec::new();
+    source.visit_mesh_triangles(kurbo::Rect::new(0.,0.,1.,1.),1000,&||false,&mut |triangle| {
+        let mut path=BezPath::new();path.move_to(triangle.points[0]);path.line_to(triangle.points[1]);
+        path.line_to(triangle.points[2]);path.close_path();triangles.push(path);Ok(())
+    }).unwrap();assert_eq!(triangles.len(),1);
+    let regions=[(&triangles[0],vello_cpu::peniko::Fill::NonZero)];
+    let sample=|point:kurbo::Point,cancelled:&dyn Fn()->bool| {
+        let sampled=source.sample(point,cancelled).ok()?;
+        match sampled {None=>Some(None),Some(value)=>{
+            if value.count!=4 {return None;}
+            Some(Some(Pixel::from_native(Model::Cmyk,&value.components.map(f64::from),f64::from(value.opacity))?))
+        }}
+    };
+    let commands=[SpatialCommand::SampledPaint {regions:&[0],sample:&sample,sample_cost:128,alpha_is_shape:false,mode:BlendMode::Normal}];
+    let clear=Pixel::from_native(Model::Cmyk,&[0.;4],0.).unwrap();
+    let pixel=compose_grouped_polygon_pixel(&regions,&commands,&source.color_space,clear,0,0,
+        1_000_000,1_000_000,&||false,&|_|Some(Box::new(()))).unwrap();
+    let max_request=std::cell::Cell::new(0usize);
+    let routed=replay_spatial_scene_pixel(&scene,&source.color_space,clear,0,0,&||false,&|bytes| {
+        max_request.set(max_request.get().max(bytes));Some(Box::new(()))
+    }).unwrap();
+    assert!(max_request.get()<64*1024,"sparse mesh must not reserve4095triangle paths: {}",max_request.get());
+    println!("SPATIAL_SPARSE_MESH_MAX_ADMISSION bytes={}",max_request.get());
+    assert_eq!(routed.alpha(),pixel.alpha());assert_eq!(routed.native_components(),pixel.native_components());
+    assert!((pixel.alpha()-0.5).abs()<1e-12);
+    let expected=[f64::from(1f32/3.),f64::from(1f32/3.),0.,0.];
+    for (a,b) in pixel.native_components().unwrap().into_iter().zip(expected) {assert!((a-b).abs()<1e-12);}
+    let gray_pdf=record_into(authored_pdf_with_paths(false,1.,"/form Do","","BI /W 1 /H 1 /BPC 8 /CS /G /F /AHx ID 80> EI"),
+        1,1,Affine::IDENTITY,Recorder {capture_native_rasters:true,..Recorder::default()});
+    let gray=gray_pdf.native_rasters[0].1.as_ref().unwrap().color_space();
+    let gray_pixel=replay_spatial_scene_pixel(&scene,gray,Pixel::from_native(Model::Gray,&[0.],0.).unwrap(),
+        0,0,&||false,&|_|Some(Box::new(()))).unwrap();
+    let expected_gray=source.color_space.device_sample_to_gray_or_cmyk(gray,&[1f32/3.,1f32/3.,0.,0.]).unwrap()[0];
+    assert_eq!(gray_pixel.alpha(),0.5);
+    assert!((gray_pixel.native_components().unwrap()[0]-f64::from(expected_gray)).abs()<1e-12);
+    println!("SPATIAL_NATIVE_MESH alpha={} components={:?}",pixel.alpha(),pixel.native_components().unwrap());
+}
+
+#[test]
+fn authored_pdf_alpha_transfer_mask_applies_once_to_spatial_group() {
+    use super::native_spatial::{SpatialCommand,SpatialPaint,compose_grouped_polygon_pixel};
+    use super::native_blend::{Pixel,Model};
+    use hayro_interpret::color::{AlphaColor,Color};
+    let scene=record_into(authored_native_alpha_transfer_fixture(),32,16,Affine::IDENTITY,
+        Recorder {mask_probe:true,global_contour:true,native_polygon:true,..Recorder::default()});
+    assert!(!scene.failed);
+    let rgb_route=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
+    let routed=replay_spatial_scene_pixel(&scene,rgb_route.color_space(),Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap(),
+        24,0,&||false,&|_|Some(Box::new(()))).unwrap();
+    assert_eq!(routed.alpha(),0.25);
+    let rgb=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
+    let mask_scene=scene.events.iter().find_map(|event|match event {
+        Event::Mask(Some((mask,false,_,_,_)))=>Some(mask.as_ref()),_=>None,
+    }).unwrap();
+    let mask_pixels=replay_native_page_scene(mask_scene,1,1,rgb.color_space(),&||false,&|_|Some(Box::new(()))).unwrap();
+    let mask_alpha=mask_pixels.pixels[0].alpha();assert_eq!(mask_alpha,0.5);
+    let transfer=scene.native_mask_transfers.first().unwrap().1.as_ref().unwrap();
+    let mask=|_:kurbo::Point,cancelled:&dyn Fn()->bool| {
+        transfer.apply_bounded(mask_alpha as f32,cancelled).map(f64::from)
+    };
+    assert_eq!(mask(kurbo::Point::ZERO,&||false),Some(0.25));
+    let clear=Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap();
+    let green=Pixel::from_native(Model::Rgb,&[0.,1.,0.],1.).unwrap();
+    let mut path=BezPath::new();path.move_to((0.,0.));path.line_to((0.25,0.));path.line_to((0.25,1.));path.line_to((0.,1.));path.close_path();
+    let regions=[(&path,vello_cpu::peniko::Fill::NonZero)];
+    let mut commands=vec![SpatialCommand::SetMask {sample:&mask,sample_cost:128},
+        SpatialCommand::Begin {isolated:true,knockout:false,opacity:1.,alpha_is_shape:false,mode:BlendMode::Normal}];
+    for _ in 0..17 {commands.push(SpatialCommand::Paint(SpatialPaint {regions:&[0],source:green,mode:BlendMode::Normal}));}
+    commands.push(SpatialCommand::End);
+    let pixel=compose_grouped_polygon_pixel(&regions,&commands,rgb.color_space(),clear,0,0,
+        1_000_000,1_000_000,&||false,&|_|Some(Box::new(()))).unwrap();
+    assert_eq!(pixel.alpha(),0.0625);assert_eq!(pixel.native_components().unwrap()[..3],[0.,1.,0.]);
+    println!("SPATIAL_NATIVE_MASK source_alpha={mask_alpha} transferred=0.25 output_alpha={}",pixel.alpha());
+}
+
+#[test]
+fn authored_pdf_16bit_raster_integrates_original_texels_spatially() {
+    use super::native_spatial::{admitted_raster_pixel_cells,SpatialCommand,compose_grouped_polygon_pixel};
+    use super::native_blend::{Model,Pixel};
+    let values=[1u16,32768,65534,65535,12345,42];
+    let hex=values.iter().map(|v|format!("{v:04X}")).collect::<String>()+">";
+    let image=format!("<< /Type /XObject /Subtype /Image /Width 2 /Height 1 /ColorSpace /DeviceRGB /BitsPerComponent 16 /Filter /ASCIIHexDecode /Length {} >>\nstream\n{hex}\nendstream",hex.len());
+    let scene=record_into(authored_pdf_with_font(false,1.,"/form Do","","/image Do",&image,None),
+        1,1,Affine::IDENTITY,Recorder {capture_native_rasters:true,global_contour:true,native_polygon:true,..Recorder::default()});
+    assert!(!scene.failed);assert_eq!(scene.native_rasters.len(),1);
+    let (index,data,reason)=&scene.native_rasters[0];assert_eq!(*reason,None);
+    let data=data.as_ref().unwrap();assert_eq!(data.dimensions(),(2,1));assert!(!data.interpolate());
+    let expected:Vec<_>=values.iter().map(|v|f32::from(*v)/65535.).collect();
+    assert_eq!(data.samples(),expected);
+    let Event::Raster(_,_,transform,clips,stencil)=&scene.events[*index] else {panic!("missing raster event")};
+    assert!(stencil.is_none());
+    let cells=admitted_raster_pixel_cells(2,1,*transform,kurbo::Rect::new(0.,0.,1.,1.),10000,
+        &||false,&|_|Some(Box::new(()))).unwrap();
+    let mut regions:Vec<_>=cells.paths.iter().map(|p|(p,vello_cpu::peniko::Fill::NonZero)).collect();
+    let mut required=vec![0];
+    for clip in clips {required.push(regions.len());regions.push((clip.path.as_ref(),match clip.fill {
+        hayro_interpret::FillRule::NonZero=>vello_cpu::peniko::Fill::NonZero,
+        hayro_interpret::FillRule::EvenOdd=>vello_cpu::peniko::Fill::EvenOdd}));}
+    let inverse=transform.inverse();
+    let sample=|point:kurbo::Point,cancelled:&dyn Fn()->bool| {
+        let sampled=sample_native_raster(data,inverse*point,cancelled)?;
+        if !sampled.space.shares_blending_coordinates(data.color_space()) {return None;}
+        Some(Some(Pixel::from_native(Model::Rgb,&sampled.components[..3],sampled.alpha)?))
+    };
+    for repeats in [1,17] {
+        let commands:Vec<_>=(0..repeats).map(|_|SpatialCommand::SampledPaint {
+            regions:&required,sample:&sample,sample_cost:128,alpha_is_shape:false,mode:BlendMode::Normal}).collect();
+        let pixel=compose_grouped_polygon_pixel(&regions,&commands,data.color_space(),
+            Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap(),0,0,1_000_000,1_000_000,
+            &||false,&|_|Some(Box::new(()))).unwrap();
+        assert!((pixel.alpha()-1.).abs()<1e-12);
+        let components=pixel.native_components().unwrap();
+        for channel in 0..3 {let mean=0.5*(f64::from(expected[channel])+f64::from(expected[channel+3]));
+            assert!((components[channel]-mean).abs()<1e-12,"channel={channel}: {} != {mean}",components[channel]);}
+    }
+    let gray_source=record_into(authored_pdf_with_paths(false,1.,"/form Do","","BI /W 1 /H 1 /BPC 8 /CS /G /F /AHx ID 80> EI"),
+        1,1,Affine::IDENTITY,Recorder {capture_native_rasters:true,..Recorder::default()});
+    let gray=gray_source.native_rasters[0].1.as_ref().unwrap().color_space();
+    let gray_scene=record_into(authored_pdf_with_font(false,1.,"/form Do","","/image Do",&image,None),
+        1,1,Affine::IDENTITY,Recorder {capture_native_rasters:true,global_contour:true,native_polygon:true,..Recorder::default()});
+    let gray_pixel=replay_spatial_scene_pixel(&gray_scene,gray,Pixel::from_native(Model::Gray,&[0.],0.).unwrap(),
+        0,0,&||false,&|_|Some(Box::new(()))).unwrap();
+    let expected_gray=(0..2).map(|i|f64::from(0.3*expected[3*i]+0.59*expected[3*i+1]+0.11*expected[3*i+2])).sum::<f64>()*0.5;
+    assert!((gray_pixel.native_components().unwrap()[0]-expected_gray).abs()<1e-12);
+    // Observe every checkpoint and admission in the actual decoded-source path.
+    use std::sync::{Arc,atomic::{AtomicUsize,Ordering}};
+    struct Credit(Arc<AtomicUsize>,usize);
+    impl Drop for Credit {fn drop(&mut self) {self.0.fetch_sub(self.1,Ordering::Relaxed);}}
+    let used=Arc::new(AtomicUsize::new(0));
+    let requests=std::cell::Cell::new(0);let deny=std::cell::Cell::new(usize::MAX);
+    let admit=|bytes| {requests.set(requests.get()+1);if requests.get()==deny.get() {return None;}
+        used.fetch_add(bytes,Ordering::Relaxed);
+        Some(Box::new(Credit(used.clone(),bytes)) as Box<dyn std::any::Any+Send+Sync>)};
+    let run=|cancelled:&dyn Fn()->bool| {
+        let cells=admitted_raster_pixel_cells(2,1,*transform,kurbo::Rect::new(0.,0.,1.,1.),10000,cancelled,&admit)?;
+        let mut regions:Vec<_>=cells.paths.iter().map(|p|(p,vello_cpu::peniko::Fill::NonZero)).collect();
+        let mut required=vec![0];
+        for clip in clips {required.push(regions.len());regions.push((clip.path.as_ref(),match clip.fill {
+            hayro_interpret::FillRule::NonZero=>vello_cpu::peniko::Fill::NonZero,
+            hayro_interpret::FillRule::EvenOdd=>vello_cpu::peniko::Fill::EvenOdd}));}
+        let commands=[SpatialCommand::SampledPaint {regions:&required,sample:&sample,sample_cost:128,alpha_is_shape:false,mode:BlendMode::Normal}];
+        compose_grouped_polygon_pixel(&regions,&commands,data.color_space(),
+            Pixel::from_native(Model::Rgb,&[0.;3],0.)?,0,0,1_000_000,1_000_000,cancelled,&admit)
+    };
+    let polls=std::cell::Cell::new(0);
+    assert!(run(&||{polls.set(polls.get()+1);false}).is_some());
+    assert_eq!(used.load(Ordering::Relaxed),0);let allocations=requests.get();
+    for failure in 1..=allocations {requests.set(0);deny.set(failure);
+        assert!(run(&||false).is_none(),"admission {failure}");assert_eq!(used.load(Ordering::Relaxed),0);}
+    deny.set(usize::MAX);
+    for stop in 1..=polls.get() {let current=std::cell::Cell::new(0);
+        assert!(run(&||{current.set(current.get()+1);current.get()==stop}).is_none(),"checkpoint {stop}");
+        assert_eq!(used.load(Ordering::Relaxed),0);}
+    println!("SPATIAL_PDF_RASTER_FAILURES checkpoints={} admissions={allocations} final_credit=0",polls.get());
+}
+
+#[test]
+fn authored_pdf_distinct_16bit_alpha_grid_composes_before_averaging() {
+    use super::native_spatial::{admitted_raster_mask_cells,SpatialCommand,compose_grouped_polygon_pixel};
+    use super::native_blend::{Model,Pixel};
+    let mask_bytes="0000FFFF8000FFFF>";
+    let mask=format!("<< /Type /XObject /Subtype /Image /Width 4 /Height 1 /ColorSpace /DeviceGray /BitsPerComponent 16 /Filter /ASCIIHexDecode /Length {} >>\nstream\n{mask_bytes}\nendstream",mask_bytes.len());
+    let bytes="0000FFFF000000000000FFFF>";
+    let image=format!("<< /Type /XObject /Subtype /Image /Width 2 /Height 1 /ColorSpace /DeviceRGB /BitsPerComponent 16 /SMask 10 0 R /Filter /ASCIIHexDecode /Length {} >>\nstream\n{bytes}\nendstream",bytes.len());
+    let scene=record_into(authored_pdf_with_font_blend(false,1.,"/form Do","","/image Do",
+        &image,Some(&mask),false,"Normal"),1,1,Affine::IDENTITY,
+        Recorder {capture_native_rasters:true,global_contour:true,native_polygon:true,..Recorder::default()});
+    assert!(!scene.failed);assert_eq!(scene.native_rasters.len(),1);
+    let (index,data,reason)=&scene.native_rasters[0];assert_eq!(*reason,None);
+    let data=data.as_ref().unwrap();let alpha=data.alpha().unwrap();
+    assert_eq!(data.dimensions(),(2,1));assert_eq!(alpha.dimensions(),(4,1));
+    assert!(!data.interpolate() && !alpha.interpolate());
+    let half=f64::from(32768_f32/65535.);
+    assert_eq!(alpha.samples(),&[0.,1.,32768_f32/65535.,1.]);
+    let Event::Raster(_,_,transform,clips,stencil)=&scene.events[*index] else {panic!("missing raster")};
+    assert!(stencil.is_none());
+    let Event::Raster(compatibility,compatibility_alpha,_,_,_)=&scene.events[*index] else {unreachable!()};
+    for (x,expected) in [(0.25,[0,0,0,0]),(0.75,[0,255,0,255]),
+        (1.25,[0,0,128,128]),(1.75,[0,0,255,255])] {
+        assert_eq!(sample_raster(compatibility,compatibility_alpha.as_ref(),kurbo::Point::new(x,0.5)),Some(expected));
+    }
+    let (color,mask)=admitted_raster_mask_cells(2,1,4,1,*transform,kurbo::Rect::new(0.,0.,1.,1.),1000,
+        &||false,&|_|Some(Box::new(()))).unwrap();
+    let mut regions:Vec<_>=color.paths.iter().chain(mask.paths.iter()).map(|p|(p,vello_cpu::peniko::Fill::NonZero)).collect();
+    let mut required=vec![0];
+    for clip in clips {required.push(regions.len());regions.push((clip.path.as_ref(),match clip.fill {
+        hayro_interpret::FillRule::NonZero=>vello_cpu::peniko::Fill::NonZero,
+        hayro_interpret::FillRule::EvenOdd=>vello_cpu::peniko::Fill::EvenOdd}));}
+    let inverse=transform.inverse();
+    let sample=|point:kurbo::Point,cancelled:&dyn Fn()->bool| {
+        let value=sample_native_raster(data,inverse*point,cancelled)?;
+        if !value.space.shares_blending_coordinates(data.color_space()) {return None;}
+        Some(Some(Pixel::from_native(Model::Rgb,&value.components[..3],value.alpha)?))
+    };
+    let routed=replay_spatial_scene_pixel(&scene,data.color_space(),
+        Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap(),0,0,&||false,&|_|Some(Box::new(()))).unwrap();
+    let routed_alpha=0.25*(2.+half);
+    assert!((routed.alpha()-routed_alpha).abs()<1e-12);
+    let routed_c=routed.native_components().unwrap();
+    assert!((routed_c[1]-0.25/routed_alpha).abs()<1e-12);
+    assert!((routed_c[2]-0.25*(1.+half)/routed_alpha).abs()<1e-12);
+    for repeats in [1,17] {
+        let commands:Vec<_>=(0..repeats).map(|_|SpatialCommand::SampledPaint {
+            regions:&required,sample:&sample,sample_cost:128,alpha_is_shape:false,mode:BlendMode::Normal}).collect();
+        let pixel=compose_grouped_polygon_pixel(&regions,&commands,data.color_space(),
+            Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap(),0,0,1_000_000,1_000_000,
+            &||false,&|_|Some(Box::new(()))).unwrap();
+        let blue_partial=1.-(1.-half).powi(repeats);
+        let expected_alpha=0.25*(2.+blue_partial);
+        assert!((pixel.alpha()-expected_alpha).abs()<1e-12);
+        let c=pixel.native_components().unwrap();
+        assert_eq!(c[0],0.);
+        assert!((c[1]-0.25/expected_alpha).abs()<1e-12);
+        assert!((c[2]-0.25*(1.+blue_partial)/expected_alpha).abs()<1e-12);
+        println!("SPATIAL_PDF_ALPHA_GRID repeats={repeats} alpha={} rgb={:?}",pixel.alpha(),&c[..3]);
+    }
+}
+
+/// Allocation-free structural preflight; report the first unsupported event.
+fn spatial_scene_preflight(scene:&Recorder,cancelled:&dyn Fn()->bool)->Result<(),(usize,&'static str)> {
+    if scene.failed {return Err((0,"capture_failed"));}
+    if scene.events.len()>4096 {return Err((0,"event_limit"));}
+    let mut depth=0usize;let mut ais=false;
+    for (index,event) in scene.events.iter().enumerate() {
+        if cancelled() {return Err((index,"cancelled"));}
+        match event {
+            Event::Mask(Some((child,luminosity,_,_,_)))=>{
+                if *luminosity && !scene.native_mask_transfers.iter().any(|(i,_,_,device)|*i==index && *device) {
+                    return Err((index,"calibrated_luminosity_not_qualified"));
+                }
+                if child.events.iter().any(|e|!matches!(e,Event::Path(_,_,RecordedPaint::NativeColor(_),_,PathDrawMode::Fill(_))|
+                    Event::Path(_,_,RecordedPaint::Shading(_),_,PathDrawMode::Fill(_))|Event::Raster(..)|Event::Blend(_)|Event::AlphaSource(_)|Event::Push(..)|Event::Pop|Event::Mask(None))) {
+                    let reason=if child.events.iter().any(|e|matches!(e,Event::Mask(Some(_)))) {"nested_mask_source_not_routed"}
+                        else if child.events.iter().any(|e|matches!(e,Event::Path(_,_,RecordedPaint::Shading(_),_,_))) {"shading_mask_source_not_routed"}
+                        else if child.events.iter().any(|e|matches!(e,Event::Path(_,_,_,_,PathDrawMode::Stroke(_)))) {"stroke_mask_source_not_routed"}
+                        else {"complex_mask_source_not_routed"};
+                    return Err((index,reason));
+                }
+                spatial_scene_preflight(child,cancelled).map_err(|_|(index,"invalid_mask_scene"))?;
+            },
+            Event::AlphaSource(value)=>ais=*value,
+            Event::Push(opacity,_,_)=>{
+                if !opacity.is_finite() || !(0. ..=1.).contains(opacity) {return Err((index,"invalid_group_opacity"));}
+                depth+=1;if depth>32 {return Err((index,"group_depth"));}
+            },
+            Event::Pop=>{depth=depth.checked_sub(1).ok_or((index,"unbalanced_pop"))?;},
+            Event::Path(_,transform,paint,_,mode)=>{
+                if ais {return Err((index,"paint_alpha_is_shape_not_routed"));}
+                if *transform!=Affine::IDENTITY {return Err((index,"non_global_path"));}
+                if !matches!(mode,PathDrawMode::Fill(_)) {return Err((index,"stroke_not_routed"));}
+                match paint {
+                    RecordedPaint::Color(_)=>return Err((index,"compatibility_color")),
+                    RecordedPaint::Shading(paint) if paint.native.is_none()=>return Err((index,"native_shading_unavailable")),
+                    _=>{},
+                }
+            },
+            Event::Raster(_,_,_,_,stencil)=>{
+                if stencil.is_some() {return Err((index,"stencil_not_routed"));}
+                let data=scene.native_rasters.iter().find(|(i,_,_)|*i==index)
+                    .and_then(|(_,data,reason)|if reason.is_none() {data.as_ref()} else {None})
+                    .ok_or((index,"native_raster_unavailable"))?;
+                if data.interpolate() || data.alpha().is_some_and(|a|a.interpolate()) {return Err((index,"raster_interpolation_not_qualified"));}
+            },
+            _=>{},
+        }
+    }
+    if depth!=0 {return Err((scene.events.len(),"unclosed_group"));}
+    Ok(())
+}
+
+/// Route retained constant fills and nearest-neighbor raster events through spatial groups.
+/// Unsupported source/mask/color boundaries refuse the entire pixel.
+fn replay_spatial_scene_pixel(
+    scene:&Recorder,space:&hayro_interpret::color::ColorSpace,backdrop:super::native_blend::Pixel,
+    x:i32,y:i32,cancelled:&dyn Fn()->bool,
+    admit:&dyn Fn(usize)->Option<Box<dyn std::any::Any+Send+Sync>>,
+)->Option<super::native_blend::Pixel> {
+    replay_spatial_scene_impl(scene,space,backdrop,x,y,None,&[],&[],&mut 4_000_000,cancelled,admit)
+}
+struct SpatialRouteTrace {
+    stage:std::cell::Cell<(&'static str,usize)>,
+    completed:std::cell::Cell<bool>,
+    enabled:bool,
+}
+impl Drop for SpatialRouteTrace {
+    fn drop(&mut self) {if self.enabled && !self.completed.get() {
+        let (stage,event)=self.stage.get();eprintln!("SPATIAL_ROUTE_REFUSAL stage={stage} event={event}");
+    }}
+}
+type SpatialRasterCache<'a>=(&'a Recorder,usize,std::sync::Arc<super::native_spatial::RasterCells>,
+    Option<std::sync::Arc<super::native_spatial::RasterCells>>);
+struct SpatialMeshGeometry {
+    paths:Vec<BezPath>,
+    owners:Vec<usize>,
+    _credit:Box<dyn std::any::Any+Send+Sync>,
+}
+type SpatialMeshCache<'a>=(&'a Recorder,usize,std::sync::Arc<SpatialMeshGeometry>);
+// Native layouts already use blending coordinates. Pixel::from_native performs
+// the finite/range validation once; special spaces retain bounded conversion.
+fn spatial_native_sample<'a>(space:&'a hayro_interpret::color::ColorSpace,input:&[f32],opacity:f32,
+    cancelled:&dyn Fn()->bool,remaining:&mut usize,
+)->Option<super::native_spatial::NativeSpatialSample<'a>> {
+    use hayro_interpret::color::BlendingModel;
+    use super::native_blend::{Pixel,Model};
+    if cancelled() || input.is_empty() || input.len()>4 {return None;}
+    let (space,components)=if space.blending_model().is_some() {
+        if input.len()!=usize::from(space.num_components()) {return None;}
+        let mut components=[0.;4];
+        // Widen directly below, without the former validated f32 round trip.
+        for (out,&value) in components.iter_mut().zip(input) {*out=f64::from(value);}
+        (space,components)
+    } else {
+        let (space,components)=space.native_sample_coordinates_with_budget(input,cancelled,remaining)?;
+        (space,components.map(f64::from))
+    };
+    let model=match space.blending_model()? {BlendingModel::Gray=>Model::Gray,BlendingModel::Rgb=>Model::Rgb,BlendingModel::Cmyk=>Model::Cmyk};
+    if usize::from(space.num_components())!=model.channels() {return None;}
+    let pixel=Pixel::from_native(model,&components[..model.channels()],f64::from(opacity))?;
+    if cancelled() {return None;}
+    Some(super::native_spatial::NativeSpatialSample {cell_key:None,pixel,space})
+}
+
+#[test]
+fn spatial_native_sample_matches_bounded_reference_and_rejects_invalid_values() {
+    use hayro_interpret::color::{Color,AlphaColor};
+    use super::native_blend::{Model,Pixel};
+    let color=Color::from_rgba(AlphaColor::WHITE);let space=color.color_space();
+    for opacity in [0.,0.125,1.] {
+        for input in [[0.,0.,0.],[-0.,f32::MIN_POSITIVE,1.],[0.125,0.5,0.875]] {
+            let mut reference_work=100;
+            let (_,coordinates)=space.native_sample_coordinates_with_budget(&input,&||false,&mut reference_work).unwrap();
+            let expected=Pixel::from_native(Model::Rgb,&coordinates[..3].iter().map(|&v|f64::from(v)).collect::<Vec<_>>(),f64::from(opacity)).unwrap();
+            let mut work=0;
+            let actual=spatial_native_sample(space,&input,opacity,&||false,&mut work).unwrap();
+            assert_eq!(actual.pixel.alpha().to_bits(),expected.alpha().to_bits());
+            assert_eq!(actual.pixel.native_components().unwrap().map(f64::to_bits),expected.native_components().unwrap().map(f64::to_bits));
+            assert!(actual.space.shares_blending_coordinates(space));assert_eq!(work,0);
+        }
+    }
+    for input in [&[][..],&[0.,1.][..],&[0.;4][..],&[0.;5][..],&[f32::NAN,0.,0.][..],&[f32::INFINITY,0.,0.][..],&[-0.1,0.,0.][..],&[1.1,0.,0.][..]] {
+        assert!(spatial_native_sample(space,input,1.,&||false,&mut 100).is_none());
+    }
+    for alpha in [f32::NAN,f32::INFINITY,-0.1,1.1] {assert!(spatial_native_sample(space,&[0.;3],alpha,&||false,&mut 100).is_none());}
+    for cancel_at in 1..=2 {
+        let polls=std::cell::Cell::new(0);
+        assert!(spatial_native_sample(space,&[0.;3],1.,&||{polls.set(polls.get()+1);polls.get()==cancel_at},&mut 100).is_none());
+        assert!(spatial_native_sample(space,&[0.;3],1.,&||false,&mut 0).is_some());
+    }
+}
+
+fn replay_spatial_scene_impl(
+    scene:&Recorder,space:&hayro_interpret::color::ColorSpace,backdrop:super::native_blend::Pixel,
+    x:i32,y:i32,point:Option<kurbo::Point>,raster_cache:&[SpatialRasterCache<'_>],mesh_cache:&[SpatialMeshCache<'_>],remaining:&mut usize,cancelled:&dyn Fn()->bool,
+    admit:&dyn Fn(usize)->Option<Box<dyn std::any::Any+Send+Sync>>,
+)->Option<super::native_blend::Pixel> {
+    use super::native_spatial::{SpatialCommand,NativeSpatialSample};
+    let trace=SpatialRouteTrace {stage:std::cell::Cell::new(("preflight",0)),completed:std::cell::Cell::new(false),
+        enabled:std::env::var_os("RRRAH_TRACE_SPATIAL_ROUTE").is_some()};
+    spatial_scene_preflight(scene,cancelled).ok()?;
+    use hayro_interpret::{TransparencyGroupColorSpace as GroupSpace,color::BlendingModel};
+    use super::native_blend::{Pixel,Model};
+    trace.stage.set(("mask_metadata",0));
+    let mask_count=scene.events.iter().filter(|e|matches!(e,Event::Mask(Some(_)))).count();
+    if mask_count>32 {return None;}
+    let _mask_credit=admit(mask_count.checked_mul(256)?)?;
+    let mut masks=Vec::new();masks.try_reserve_exact(mask_count).ok()?;
+    for (index,event) in scene.events.iter().enumerate() {
+        if let Event::Mask(Some((child,luminosity,_,_,_)))=event {
+            trace.stage.set(("mask_space_background",index));
+            let (_,transfer,background,_)=scene.native_mask_transfers.iter().find(|(i,_,_,_)|*i==index)?;
+            let target=match &child.page_group_space {GroupSpace::Explicit(target)=>target,
+                GroupSpace::Inherited=>child.group_spaces.iter().find_map(|(_,g)|match g {GroupSpace::Explicit(t)=>Some(t),_=>None}).unwrap_or(space),
+                _=>return None};
+            let model=match target.blending_model()? {BlendingModel::Gray=>Model::Gray,BlendingModel::Rgb=>Model::Rgb,BlendingModel::Cmyk=>Model::Cmyk};
+            let backdrop=if *luminosity {background.pixel_in_space(target,1.)?}
+                else {Pixel::from_native(model,&[0.;4][..model.channels()],0.)?};
+            masks.push((child.as_ref(),transfer.as_ref(),target,model,*luminosity,backdrop));
+        }
+    }
+    type RasterRoute<'a>=(usize,&'a hayro_interpret::NativeRasterComponents,Affine,
+        std::sync::Arc<super::native_spatial::RasterCells>,Option<std::sync::Arc<super::native_spatial::RasterCells>>);
+    trace.stage.set(("raster_metadata",0));
+    let raster_count=scene.events.iter().filter(|e|matches!(e,Event::Raster(..))).count();
+    if raster_count>128 {return None;}
+    let _raster_credit=admit(raster_count.checked_mul(size_of::<RasterRoute<'_>>()+256)?)?;
+    let mut rasters=Vec::new();rasters.try_reserve_exact(raster_count).ok()?;
+    let rect=kurbo::Rect::new(f64::from(x),f64::from(y),f64::from(x)+1.,f64::from(y)+1.);
+    trace.stage.set(("mask_raster_geometry",0));
+    let mask_raster_count=masks.iter().try_fold(0usize,|sum,(child,_,_,_,_,_)|
+        sum.checked_add(child.events.iter().filter(|e|matches!(e,Event::Raster(..))).count()))?;
+    if mask_raster_count>128 {return None;}
+    let _mask_raster_credit=admit(mask_raster_count.checked_mul(size_of::<SpatialRasterCache<'_>>()+
+        2*(size_of::<super::native_spatial::RasterCells>()+2*size_of::<usize>()))?)?;
+    let mut mask_raster_cells=Vec::new();mask_raster_cells.try_reserve_exact(mask_raster_count).ok()?;
+    for (child,_,_,_,_,_) in &masks {for (index,event) in child.events.iter().enumerate() {
+        if cancelled() {return None;}
+        if let Event::Raster(_,_,transform,_,_)=event {
+            let (_,data,reason)=child.native_rasters.iter().find(|(i,_,_)|*i==index)?;
+            if reason.is_some() {return None;}
+            let data=data.as_ref()?;let (w,h)=data.dimensions();
+            let pair=if let Some(alpha)=data.alpha() {
+                let (mw,mh)=alpha.dimensions();let (color,mask)=super::native_spatial::admitted_raster_mask_cells(
+                    w,h,mw,mh,*transform,rect,100_000,cancelled,admit)?;(color,Some(mask))
+            } else {(super::native_spatial::admitted_raster_pixel_cells(w,h,*transform,rect,100_000,cancelled,admit)?,None)};
+            mask_raster_cells.push((*child,index,std::sync::Arc::new(pair.0),pair.1.map(std::sync::Arc::new)));
+        }
+    }}
+    trace.stage.set(("mask_mesh_geometry",0));
+    let mask_mesh_count=masks.iter().try_fold(0usize,|sum,(child,_,_,_,_,_)|
+        sum.checked_add(child.events.iter().filter(|e|matches!(e,Event::Path(_,_,RecordedPaint::Shading(_),_,_))).count()))?;
+    if mask_mesh_count>32 {return None;}
+    let _mask_mesh_credit=admit(mask_mesh_count.checked_mul(size_of::<SpatialMeshCache<'_>>()+size_of::<SpatialMeshGeometry>()+2*size_of::<usize>())?)?;
+    let mut mask_mesh_paths=Vec::new();mask_mesh_paths.try_reserve_exact(mask_mesh_count).ok()?;
+    for (child,_,_,_,_,_) in &masks {for (event_index,event) in child.events.iter().enumerate() {
+        if let Event::Path(_,_,RecordedPaint::Shading(paint),_,_)=event {
+            trace.stage.set(("mask_mesh_query",0));
+            let source=paint.native.as_ref()?;let mut count=0usize;
+            source.visit_mesh_triangles(rect,100_000,cancelled,&mut |_| {
+                count+=1;if count>4095 {return Err(hayro_interpret::encode::NativeShadingError::WorkLimit);}Ok(())
+            }).ok()?;
+            let credit=admit(count.checked_mul(size_of::<BezPath>()+4*size_of::<kurbo::PathEl>()+size_of::<usize>())?)?;
+            let mut paths=Vec::new();paths.try_reserve_exact(count).ok()?;
+            let mut owners=Vec::new();owners.try_reserve_exact(count).ok()?;
+            source.visit_mesh_triangles(rect,100_000,cancelled,&mut |triangle| {
+                if paths.len()==count {return Err(hayro_interpret::encode::NativeShadingError::WorkLimit);}
+                let mut elements=Vec::new();elements.try_reserve_exact(4).map_err(|_|hayro_interpret::encode::NativeShadingError::Invalid)?;
+                elements.extend([kurbo::PathEl::MoveTo(triangle.points[0]),kurbo::PathEl::LineTo(triangle.points[1]),
+                    kurbo::PathEl::LineTo(triangle.points[2]),kurbo::PathEl::ClosePath]);paths.push(BezPath::from_vec(elements));owners.push(triangle.index);Ok(())
+            }).ok()?;
+            if paths.len()!=count {return None;}
+            mask_mesh_paths.push((*child,event_index,std::sync::Arc::new(SpatialMeshGeometry {paths,owners,_credit:credit})));
+        }
+    }}
+    for (index,event) in scene.events.iter().enumerate() {
+        if cancelled() {return None;}
+        if let Event::Raster(_,_,transform,_,stencil)=event {
+            trace.stage.set(("raster_source_geometry",index));
+            if stencil.is_some() {return None;}
+            let (_,data,reason)=scene.native_rasters.iter().find(|(i,_,_)|*i==index)?;
+            if reason.is_some() {return None;}
+            let data=data.as_ref()?;
+            if data.interpolate() || data.alpha().is_some_and(|a|a.interpolate()) {return None;}
+            let (w,h)=data.dimensions();
+            if let Some((_,_,color,mask))=raster_cache.iter().find(|(owner,event,_,_)|
+                std::ptr::eq(*owner,scene) && *event==index) {
+                rasters.push((index,data,transform.inverse(),color.clone(),mask.clone()));continue;
+            }
+
+            let (color,mask)=if let Some(alpha)=data.alpha() {
+                let (mw,mh)=alpha.dimensions();
+                let (color,mask)=super::native_spatial::admitted_raster_mask_cells(w,h,mw,mh,*transform,rect,
+                    100_000,cancelled,admit)?;(color,Some(mask))
+            } else {(super::native_spatial::admitted_raster_pixel_cells(w,h,*transform,rect,100_000,cancelled,admit)?,None)};
+            rasters.push((index,data,transform.inverse(),std::sync::Arc::new(color),mask.map(std::sync::Arc::new)));
+        }
+    }
+    struct SourceCost {
+        event:usize,enabled:bool,calls:std::cell::Cell<usize>,
+        source:std::cell::Cell<usize>,coordinates:std::cell::Cell<usize>,
+        pixel_hits:std::cell::Cell<usize>,pixel_builds:std::cell::Cell<usize>,
+    }
+    impl Drop for SourceCost {
+        fn drop(&mut self) {if self.enabled && self.calls.get()!=0 {
+            eprintln!("SPATIAL_SOURCE_COST event={} calls={} source={} coordinates={}",
+                self.event,self.calls.get(),self.source.get(),self.coordinates.get());
+            if self.pixel_hits.get()+self.pixel_builds.get()!=0 {
+                eprintln!("SPATIAL_RASTER_PIXEL_CACHE event={} hits={} builds={}",self.event,self.pixel_hits.get(),self.pixel_builds.get());
+            }
+        }}
+    }
+    let mut samples=Vec::new();samples.try_reserve_exact(raster_count).ok()?;
+    for (event,data,inverse,_,_) in &rasters {
+        let cost=SourceCost {event:*event,enabled:trace.enabled,calls:std::cell::Cell::new(0),
+            source:std::cell::Cell::new(0),coordinates:std::cell::Cell::new(0),
+            pixel_hits:std::cell::Cell::new(0),pixel_builds:std::cell::Cell::new(0)};
+        if trace.enabled {eprintln!("SPATIAL_RASTER_SOURCE event={} dimensions={:?} interpolate={} alpha={:?}",event,data.dimensions(),data.interpolate(),data.alpha().map(|a|(a.dimensions(),a.interpolate())));}
+        let cache=RasterLastSample::new(None);
+        let pixel_cache=RasterLastPixel::new(None);
+        samples.push(move |point:kurbo::Point,cancelled:&dyn Fn()->bool,remaining:&mut usize,_owner:Option<usize>| {
+        let before=*remaining;
+        let result=sample_native_raster_cached(data,*inverse*point,&cache,cancelled,remaining);
+        if cost.enabled {cost.calls.set(cost.calls.get()+1);cost.source.set(cost.source.get()+before.saturating_sub(*remaining));}
+        let sample=result?;
+        let cell_key=cache.borrow().as_ref().map(|(key,_)|*key);
+        let pixel_hit=cost.enabled && cell_key.is_some_and(|key|pixel_cache.get().is_some_and(|(old,_)|key==old));
+        let native=native_raster_pixel_cached(sample,cell_key,&pixel_cache,cancelled)?;
+        if cost.enabled {let counter=if pixel_hit {&cost.pixel_hits} else {&cost.pixel_builds};counter.set(counter.get()+1);}
+        Some(Some(NativeSpatialSample {cell_key,pixel:native,space:sample.space}))
+    });
+        if size_of_val(samples.last()?)>256 {return None;}
+    }
+    type MeshRoute<'a>=(usize,&'a hayro_interpret::encode::NativeShadingSource,std::sync::Arc<SpatialMeshGeometry>);
+    trace.stage.set(("mesh_metadata",0));
+    let mesh_count=scene.events.iter().filter(|e|matches!(e,Event::Path(_,_,RecordedPaint::Shading(_),_,_))).count();
+    if mesh_count>32 {return None;}
+    let mesh_bytes=mesh_count.checked_mul(size_of::<MeshRoute<'_>>()+128+
+        size_of::<Box<dyn std::any::Any+Send+Sync>>())?;
+    let _mesh_credit=admit(mesh_bytes)?;
+    // Geometry drops before its admission owners on every return path.
+    let mut meshes=Vec::new();meshes.try_reserve_exact(mesh_count).ok()?;
+    for (index,event) in scene.events.iter().enumerate() {
+        if let Event::Path(_,transform,RecordedPaint::Shading(paint),_,PathDrawMode::Fill(_))=event {
+            trace.stage.set(("mesh_source_geometry",index));
+            if cancelled() || *transform!=Affine::IDENTITY {return None;}
+            let source=paint.native.as_ref()?;
+            if trace.enabled {eprintln!("SPATIAL_MESH_SOURCE event={index} source={:?} destination={:?} axial={}",source.color_space.blending_model(),space.blending_model(),source.axial_boundary_lines().is_some());
+                eprintln!("SPATIAL_AFFINE_MESH_CAPABILITY event={index} native_identity={}",source.mesh_has_affine_native_field(space));}
+            if let Some((_,_,geometry))=mesh_cache.iter().find(|(owner,event,_)|
+                std::ptr::eq(*owner,scene) && *event==index) {
+                meshes.push((index,source,geometry.clone()));continue;
+            }
+            if let Some(lines)=source.axial_boundary_lines() {
+                let cells=super::native_spatial::admitted_line_partition_cells(&lines,rect,1000,cancelled,admit)?;
+                let (paths,credit)=cells.into_parts();meshes.push((index,source,std::sync::Arc::new(SpatialMeshGeometry {paths,owners:Vec::new(),_credit:credit})));continue;
+            }
+            trace.stage.set(("mesh_query",index));
+            let mut candidates=0usize;
+            source.visit_mesh_triangles(rect,100_000,cancelled,&mut |_| {
+                candidates=candidates.checked_add(1).ok_or(hayro_interpret::encode::NativeShadingError::WorkLimit)?;
+                if candidates>4095 {return Err(hayro_interpret::encode::NativeShadingError::WorkLimit);}
+                Ok(())
+            }).map_err(|error| {if trace.enabled {eprintln!("SPATIAL_MESH_QUERY_REFUSAL event={index} error={error:?}");}}).ok()?;
+            let bytes=candidates.checked_mul(size_of::<BezPath>()+4*size_of::<kurbo::PathEl>()+size_of::<usize>())?;
+            let credit=admit(bytes)?;
+            let mut paths=Vec::new();paths.try_reserve_exact(candidates).ok()?;
+            let mut owners=Vec::new();owners.try_reserve_exact(candidates).ok()?;
+            source.visit_mesh_triangles(rect,100_000,cancelled,&mut |triangle| {
+                if paths.len()==candidates {return Err(hayro_interpret::encode::NativeShadingError::WorkLimit);}
+                let mut elements=Vec::new();elements.try_reserve_exact(4).map_err(|_|hayro_interpret::encode::NativeShadingError::Invalid)?;
+                elements.push(kurbo::PathEl::MoveTo(triangle.points[0]));
+                elements.push(kurbo::PathEl::LineTo(triangle.points[1]));
+                elements.push(kurbo::PathEl::LineTo(triangle.points[2]));elements.push(kurbo::PathEl::ClosePath);
+                paths.push(BezPath::from_vec(elements));owners.push(triangle.index);Ok(())
+            }).ok()?;
+            if paths.len()!=candidates {return None;}
+            meshes.push((index,source,std::sync::Arc::new(SpatialMeshGeometry {paths,owners,_credit:credit})));
+        }
+    }
+    #[derive(Default)]
+    struct CombinedSourceSummary {failed:bool,points:usize,max_error:f64,gradient:[f64;2]}
+    let combined_enabled=point.is_none() && std::env::var_os("RRRAH_AI_COMBINED_NATIVE_BOUND").is_some();
+    let combined_source=std::cell::RefCell::new(CombinedSourceSummary::default());
+    let candidate_inputs=std::cell::RefCell::new(None);
+    struct PointEvidenceTracker<'a> {
+        event:usize,entries:std::cell::RefCell<Vec<hayro_interpret::encode::NativeAffinePointEvidence<'a>>>,
+        work:std::cell::Cell<usize>,refused:std::cell::Cell<usize>,unowned:std::cell::Cell<usize>,preparation_work:usize,
+        cancelled:&'a dyn Fn()->bool,summary:Option<&'a std::cell::RefCell<CombinedSourceSummary>>,_credit:Box<dyn std::any::Any+Send+Sync>,
+    }
+    impl<'a> PointEvidenceTracker<'a> {
+        fn prepared(event:usize,source:&'a hayro_interpret::encode::NativeShadingSource,owners:&[usize],domain:kurbo::Rect,
+            space:&hayro_interpret::color::ColorSpace,cancelled:&'a dyn Fn()->bool,
+            summary:Option<&'a std::cell::RefCell<CombinedSourceSummary>>,admit:&dyn Fn(usize)->Option<Box<dyn std::any::Any+Send+Sync>>)->Option<Box<Self>> {
+            if owners.is_empty() || owners.len()>4095 || cancelled() {return None;}
+            let bytes=owners.len().checked_mul(size_of::<hayro_interpret::encode::NativeAffinePointEvidence<'_>>()+size_of::<usize>())?
+                .checked_add(size_of::<Self>())?.checked_add(size_of::<Vec<usize>>())?;
+            let credit=admit(bytes)?;let mut work=4_000_000usize;
+            let mut sorted=Vec::new();sorted.try_reserve_exact(owners.len()).ok()?;
+            if sorted.capacity()>owners.len() {return None;}
+            work=work.checked_sub(owners.len())?;sorted.extend_from_slice(owners);
+            // Bounded insertion sort of small indices; every comparison and
+            // three-word swap is charged before modifying local preparation.
+            for index in 1..sorted.len() {let mut index=index;while index>0 {
+                if cancelled() {return None;}work=work.checked_sub(1)?;
+                if sorted[index-1]<=sorted[index] {break;}
+                work=work.checked_sub(3)?;sorted.swap(index-1,index);index-=1;
+            }}
+            let mut entries=Vec::new();entries.try_reserve_exact(owners.len()).ok()?;
+            if entries.capacity()>owners.len() {return None;}
+            for (index,&owner) in sorted.iter().enumerate() {
+                if index>0 && sorted[index-1]==owner {return None;}
+                entries.push(source.prepare_native_affine_point_evidence(owner,domain,space,cancelled,&mut work).ok()?);
+            }
+            Some(Box::new(Self {event,entries:std::cell::RefCell::new(entries),work:std::cell::Cell::new(16_000_000),refused:std::cell::Cell::new(0),unowned:std::cell::Cell::new(0),preparation_work:4_000_000-work,cancelled,summary,_credit:credit}))
+        }
+        fn observe(&self,owner:Option<usize>,point:kurbo::Point) {
+            let mut work=self.work.get();
+            let result=(|| {
+                if (self.cancelled)() {return None;}
+                let Some(owner)=owner else {work=work.checked_sub(1)?;self.unowned.set(self.unowned.get()+1);return Some(());};
+                let mut entries=self.entries.borrow_mut();let mut lo=0;let mut hi=entries.len();
+                while lo<hi {
+                    if (self.cancelled)() {return None;}work=work.checked_sub(1)?;
+                    let mid=lo+(hi-lo)/2;
+                    match entries[mid].owner_index().cmp(&owner) {
+                        std::cmp::Ordering::Less=>lo=mid+1,std::cmp::Ordering::Greater=>hi=mid,
+                        std::cmp::Ordering::Equal=>{entries[mid].observe(point,self.cancelled,&mut work).ok()?;return Some(());},
+                    }
+                }
+                None
+            })();
+            self.work.set(work);if result.is_none() {self.refused.set(self.refused.get()+1);}
+        }
+    }
+    impl Drop for PointEvidenceTracker<'_> {fn drop(&mut self) {
+        let mut work=self.work.get();let mut points=0usize;let mut observed=0usize;let mut unused=0usize;let mut finish_refused=0usize;
+        let mut max_deficit=0f64;let mut max_error=0f64;
+        for entry in self.entries.get_mut() {
+            if entry.point_count()==0 {unused+=1;continue;}
+            observed+=1;points+=entry.point_count();max_deficit=max_deficit.max(entry.max_projection_deficit_upper());
+            if let Ok(bounds)=entry.component_error_bound(self.cancelled,&mut work) {max_error=max_error.max(bounds.into_iter().fold(0.,f64::max));} else {finish_refused+=1;}
+        }
+        if let Some(summary)=self.summary {
+            let mut summary=summary.borrow_mut();summary.points+=points;summary.max_error=summary.max_error.max(max_error);
+            summary.failed |= self.refused.get()!=0 || finish_refused!=0;
+        }
+        eprintln!("SPATIAL_MESH_POINT_EVIDENCE event={} complete_owned={} points={points} observed_owners={observed} unused_owners={unused} unowned={} refused={} finish_refused={finish_refused} max_deficit={max_deficit:?} max_component_error={max_error:?} preparation_work={} diagnostic_work={}",self.event,self.refused.get()==0 && finish_refused==0,self.unowned.get(),self.refused.get(),self.preparation_work,16_000_000-work);
+    }}
+    struct ProjectionTrace {
+        checks:std::cell::Cell<usize>,projected:std::cell::Cell<usize>,
+        max_deficit:std::cell::Cell<f64>,refused:std::cell::Cell<usize>,work:std::cell::Cell<usize>,
+    }
+    impl Drop for ProjectionTrace {fn drop(&mut self) {
+        eprintln!("SPATIAL_MESH_PROJECTION checks={} projected={} max_deficit={:?} refused={} diagnostic_work={}",self.checks.get(),self.projected.get(),self.max_deficit.get(),self.refused.get(),16_000_000-self.work.get());
+    }}
+    let projection_enabled=std::env::var_os("RRRAH_AI_MESH_PROJECTION").is_some();
+    let _projection_credit=if projection_enabled {Some(admit(size_of::<ProjectionTrace>())?)} else {None};
+    let projection=projection_enabled.then(||ProjectionTrace {checks:std::cell::Cell::new(0),projected:std::cell::Cell::new(0),max_deficit:std::cell::Cell::new(0.),refused:std::cell::Cell::new(0),work:std::cell::Cell::new(16_000_000)});
+    let result = {
+    let mut mesh_samples=Vec::new();mesh_samples.try_reserve_exact(mesh_count).ok()?;
+    let trace_point_sources=point.is_some() && std::env::var_os("RRRAH_AI_TRACE_POINT_SOURCES").is_some();
+    for (event,source,geometry) in &meshes {
+        let component_error=std::env::var_os("RRRAH_AI_MESH_COMPONENT_ERROR").is_some();
+        let gradient_bounds=combined_enabled || std::env::var_os("RRRAH_AI_MESH_GRADIENT_BOUNDS").is_some();
+        if component_error || gradient_bounds || std::env::var_os("RRRAH_AI_MESH_AFFINE_BOUNDS").is_some() {
+            let mut work=4_000_000;let mut accepted=0;let mut refused=0;let mut max_deficit=0f64;
+            let mut max_component_error=0f64;let mut component_refused=0;
+            let mut max_normal_source_error=0f64;let mut normal_refused=0;
+            let mut max_gradient=[0f64;2];let mut gradient_refused=0;
+            for (&owner,path) in geometry.owners.iter().zip(&geometry.paths) {
+                let mut vertices=[kurbo::Point::ZERO;3];let mut count=0;let mut valid=true;
+                for element in path.elements() {match element {
+                    kurbo::PathEl::MoveTo(p)|kurbo::PathEl::LineTo(p)=>{if count==3 {valid=false;break;}vertices[count]=*p;count+=1;},
+                    kurbo::PathEl::ClosePath=>{},_=>{valid=false;break;},
+                }}
+                if !valid || count!=3 {refused+=1;continue;}
+                if cancelled() {return None;}
+                if let Ok(bounds)=source.mesh_triangle_weight_bounds_over_vertices(owner,&vertices,cancelled,&mut work) {
+                    accepted+=1;let deficit=bounds.iter().fold(0f64,|sum,[lo,_]|(sum+(-lo).max(0.)).next_up());max_deficit=max_deficit.max(deficit);
+                } else {refused+=1;}
+                if component_error {
+                    if let Ok(bounds)=source.mesh_native_affine_component_error_bounds(owner,&vertices,space,cancelled,&mut work) {
+                        max_component_error=max_component_error.max(bounds.into_iter().fold(0.,f64::max));
+                        if let Ok((_,opacity))=source.mesh_native_component_bounds(owner,space,cancelled,&mut work) {
+                            if let Some(bound)=super::native_blend::normal_premultiplied_error_bound(backdrop.model(),[0.;4],[0.;4],bounds,f64::from(opacity),1.,&mut work,cancelled) {
+                                max_normal_source_error=max_normal_source_error.max(bound.into_iter().fold(0.,f64::max));
+                            } else {normal_refused+=1;}
+                        } else {normal_refused+=1;}
+                    } else {component_refused+=1;}
+                }
+                if gradient_bounds {
+                    if let Ok(bounds)=source.mesh_native_affine_gradient_bounds(owner,&vertices,space,cancelled,&mut work) {
+                        for derivative in bounds {for axis in 0..2 {max_gradient[axis]=max_gradient[axis].max(derivative[axis]);}}
+                    } else {gradient_refused+=1;}
+                }
+            }
+            eprintln!("SPATIAL_MESH_AFFINE_BOUNDS event={event} accepted={accepted} refused={refused} max_deficit={max_deficit:?} work={}",4_000_000-work);
+            if component_error {eprintln!("SPATIAL_MESH_COMPONENT_ERROR event={event} refused={component_refused} max_error={max_component_error:?}");}
+            if component_error {eprintln!("SPATIAL_MESH_NORMAL_SOURCE_ERROR event={event} refused={normal_refused} max_premultiplied_error={max_normal_source_error:?}");}
+            if combined_enabled {
+                let mut summary=combined_source.borrow_mut();summary.failed |= gradient_refused!=0;
+                for axis in 0..2 {summary.gradient[axis]=summary.gradient[axis].max(max_gradient[axis]);}
+            }
+            if gradient_bounds {eprintln!("SPATIAL_MESH_GRADIENT_BOUNDS event={event} refused={gradient_refused} max_x={:?} max_y={:?}",max_gradient[0],max_gradient[1]);}
+        }
+        if std::env::var_os("RRRAH_AI_MESH_WEIGHT_BOUNDS").is_some() {
+            let mut work=4_000_000;let mut accepted=0;let mut refused=0;let mut inside=0;let mut max_deficit=0f64;
+            for &owner in &geometry.owners {
+                if cancelled() {return None;}
+                if let Ok(bounds)=source.mesh_triangle_weight_bounds(owner,rect,cancelled,&mut work) {
+                    accepted+=1;if bounds.iter().all(|[lo,_]|*lo>=0.) {inside+=1;}
+                    let deficit=bounds.iter().fold(0f64,|sum,[lo,_]|(sum+(-lo).max(0.)).next_up());
+                    max_deficit=max_deficit.max(deficit);
+                } else {refused+=1;}
+            }
+            eprintln!("SPATIAL_MESH_WEIGHT_BOUNDS event={event} accepted={accepted} refused={refused} nonnegative={inside} max_deficit={max_deficit:?} work={}",4_000_000-work);
+        }
+        if std::env::var_os("RRRAH_AI_MESH_COMPONENT_BOUNDS").is_some() {
+            let mut work=4_000_000;let mut accepted=0;let mut refused=0;let mut narrow=0;
+            let mut min_span=f64::INFINITY;let mut max_span=0f64;
+            for &owner in &geometry.owners {
+                if cancelled() {return None;}
+                if let Ok((bounds,_))=source.mesh_native_component_bounds(owner,space,cancelled,&mut work) {
+                    let span=bounds.iter().map(|[lo,hi]|hi-lo).fold(0.,f64::max);
+                    accepted+=1;if span<=1e-6 {narrow+=1;}
+                    min_span=min_span.min(span);max_span=max_span.max(span);
+                } else {refused+=1;}
+            }
+            eprintln!("SPATIAL_MESH_COMPONENT_BOUNDS event={event} accepted={accepted} refused={refused} narrow_1e6={narrow} min_span={min_span:?} max_span={max_span:?} work={}",4_000_000-work);
+        }
+        let cost=SourceCost {event:*event,enabled:trace.enabled,calls:std::cell::Cell::new(0),
+            source:std::cell::Cell::new(0),coordinates:std::cell::Cell::new(0),
+            pixel_hits:std::cell::Cell::new(0),pixel_builds:std::cell::Cell::new(0)};
+        let point_evidence=if combined_enabled || std::env::var_os("RRRAH_AI_MESH_POINT_EVIDENCE").is_some() {
+            let evidence=PointEvidenceTracker::prepared(*event,*source,&geometry.owners,rect.inflate(1e-6,1e-6),space,cancelled,if combined_enabled {Some(&combined_source)} else {None},admit);
+            if combined_enabled && !geometry.owners.is_empty() && evidence.is_none() {combined_source.borrow_mut().failed=true;}
+            eprintln!("SPATIAL_MESH_POINT_EVIDENCE_PREPARE event={event} active={} owners={}",evidence.is_some(),geometry.owners.len());evidence
+        } else {None};
+        let projection=projection.as_ref();
+        mesh_samples.push(move |point:kurbo::Point,cancelled:&dyn Fn()->bool,remaining:&mut usize,owner:Option<usize>| {
+        if let Some(evidence)=&point_evidence {evidence.observe(owner,point);}
+        if let (Some(trace),Some(owner))=(projection,owner) {
+            let mut work=trace.work.get();
+            let deficit=source.mesh_triangle_projection_deficit(owner,point,cancelled,&mut work);
+            trace.work.set(work);trace.checks.set(trace.checks.get()+1);
+            match deficit {
+                Ok(value)=>{if value>0. {trace.projected.set(trace.projected.get()+1);}trace.max_deficit.set(trace.max_deficit.get().max(value));},
+                Err(_)=>trace.refused.set(trace.refused.get()+1),
+            }
+        }
+        let before=*remaining;
+        let result=if let Some(owner)=owner {source.sample_mesh_triangle_with_budget(owner,point,cancelled,remaining).map(Some)}
+            else {source.sample_with_budget(point,cancelled,remaining)};
+        if cost.enabled {cost.calls.set(cost.calls.get()+1);cost.source.set(cost.source.get()+before.saturating_sub(*remaining));}
+        let value=result.ok()?;
+        if trace_point_sources {
+            // Independent bounded diagnostic query; never modifies replay budget.
+            let mut diagnostic_work=100_000;
+            let direct=source.sample_with_budget(point,cancelled,&mut diagnostic_work);
+            let selected=value.as_ref().map(|v|(v.components,v.count,v.opacity));
+            let direct=direct.map(|v|v.map(|v|(v.components,v.count,v.opacity)));
+            eprintln!("REAL_AI_POINT_SOURCE event={event} point={point:?} owner={owner:?} selected={selected:?} direct={direct:?}");
+        }
+        match value {
+            None=>Some(None),Some(value)=>{
+                if value.count==0 || value.count>4 {return None;}
+                let before=*remaining;
+                let native=spatial_native_sample(&source.color_space,&value.components[..value.count],value.opacity,cancelled,remaining);
+                if cost.enabled {cost.coordinates.set(cost.coordinates.get()+before.saturating_sub(*remaining));}
+                Some(Some(native?))
+            }
+        }
+    });if size_of_val(mesh_samples.last()?)>128 {return None;}}
+    let child_raster_cache=&mask_raster_cells;
+    let child_mesh_cache=&mask_mesh_paths;
+    let mut mask_samples=Vec::new();mask_samples.try_reserve_exact(mask_count).ok()?;
+    for (child,transfer,target,model,luminosity,background) in &masks {mask_samples.push(move |p:kurbo::Point,cancelled:&dyn Fn()->bool,remaining:&mut usize| {
+        let pixel=replay_spatial_scene_impl(child,target,*background,x,y,Some(p),child_raster_cache,child_mesh_cache,remaining,cancelled,admit)?;
+        let value=if *luminosity {
+            let c=pixel.native_components()?;
+            let gray=match model {Model::Gray=>c[0],Model::Rgb=>0.30*c[0]+0.59*c[1]+0.11*c[2],
+                Model::Cmyk=>1.-(0.30*c[0]+0.59*c[1]+0.11*c[2]+c[3]).min(1.)};
+            gray*pixel.alpha()
+        } else {pixel.alpha()};
+        let value=if let Some(transfer)=transfer {f64::from(transfer.apply_bounded(value as f32,cancelled)?)} else {value};
+        if cancelled() {None} else {Some(value)}
+    });}
+    trace.stage.set(("region_budget",0));
+    let mut count=0usize;let mut paints=0usize;
+    for event in &scene.events {
+        if cancelled() {return None;}
+        match event {
+            Event::Path(_,transform,RecordedPaint::NativeColor(_),clips,PathDrawMode::Fill(_))=>{
+                if *transform!=Affine::IDENTITY {return None;}
+                count=count.checked_add(1)?.checked_add(clips.len())?;paints+=1;
+            },
+            Event::Raster(_,_,_,clips,_)=>{
+                count=count.checked_add(clips.len())?;paints+=1;
+            },
+            Event::Path(_,_,RecordedPaint::Shading(_),clips,PathDrawMode::Fill(_))=>{
+                count=count.checked_add(1)?.checked_add(clips.len())?;paints+=1;
+            },
+            Event::Blend(_)|Event::AlphaSource(_)|Event::Push(..)|Event::Pop|Event::Mask(_)=>{},
+            _=>return None,
+        }
+    }
+    for (_,_,_,color,mask) in &rasters {
+        count=count.checked_add(color.paths.len())?.checked_add(mask.as_ref().map_or(0,|m|m.paths.len()))?;
+    }
+    for (_,_,geometry) in &meshes {count=count.checked_add(geometry.paths.len())?;}
+    for (child,_,_,_,_,_) in &masks {for event in &child.events {
+        match event {Event::Path(_,_,_,clips,_)=>count=count.checked_add(1)?.checked_add(clips.len())?,
+            Event::Raster(_,_,_,clips,_)=>count=count.checked_add(clips.len())?,_=>{}}
+    }}
+    for (_,_,color,mask) in &mask_raster_cells {
+        count=count.checked_add(color.paths.len())?.checked_add(mask.as_ref().map_or(0,|m|m.paths.len()))?;
+    }
+    for (_,_,geometry) in &mask_mesh_paths {count=count.checked_add(geometry.paths.len())?;}
+    if count>4095 {return None;}
+    trace.stage.set(("group_spaces",0));
+    for (index,group_space) in &scene.group_spaces {
+        if !matches!(scene.events.get(*index),Some(Event::Push(..))) {return None;}
+        if !matches!(group_space,GroupSpace::Explicit(_)|GroupSpace::Inherited) {return None;}
+    }
+    trace.stage.set(("region_storage",0));
+    let bytes=count.checked_mul(size_of::<(&BezPath,vello_cpu::peniko::Fill)>()+size_of::<usize>())?
+        .checked_add(paints.checked_mul(size_of::<Vec<usize>>()+size_of::<super::native_blend::Pixel>())?)?
+        .checked_add(scene.events.len().checked_mul(size_of::<SpatialCommand<'_>>())?)?;
+    let _credit=admit(bytes)?;
+    let mut regions=Vec::new();regions.try_reserve_exact(count).ok()?;
+    let mut requirements=Vec::new();requirements.try_reserve_exact(paints).ok()?;
+    let mut sources=Vec::new();sources.try_reserve_exact(paints).ok()?;
+    let fill=|rule|match rule {hayro_interpret::FillRule::NonZero=>vello_cpu::peniko::Fill::NonZero,
+        hayro_interpret::FillRule::EvenOdd=>vello_cpu::peniko::Fill::EvenOdd};
+    let path_may_touch=|path:&BezPath| {
+        let bounds=path.control_box();
+        !(bounds.x1<rect.x0 || bounds.x0>rect.x1 || bounds.y1<rect.y0 || bounds.y0>rect.y1)
+    };
+    let mut excluded_mesh_regions=0usize;
+    for (index,event) in scene.events.iter().enumerate() {
+        if cancelled() {return None;}
+        trace.stage.set(("source_commands",index));
+        if let Event::Path(path,_,RecordedPaint::NativeColor(paint),clips,PathDrawMode::Fill(rule))=event {
+            if !path_may_touch(path) || !clips.iter().all(|clip|path_may_touch(clip.path.as_ref())) {
+                requirements.push(Vec::new());sources.push(backdrop);continue;
+            }
+            let mut required=Vec::new();required.try_reserve_exact(1+clips.len()).ok()?;
+            required.push(regions.len());regions.push((path,fill(*rule)));
+            for clip in clips {required.push(regions.len());regions.push((clip.path.as_ref(),fill(clip.fill)));}
+            requirements.push(required);sources.push(backdrop);
+        } else if let Event::Path(path,_,RecordedPaint::Shading(_),clips,PathDrawMode::Fill(rule))=event {
+            let (_,_,paths)=meshes.iter().find(|m|m.0==index)?;
+            if !path_may_touch(path) || !clips.iter().all(|clip|path_may_touch(clip.path.as_ref())) {
+                requirements.push(Vec::new());sources.push(backdrop);continue;
+            }
+            let mut required=Vec::new();required.try_reserve_exact(1+clips.len()).ok()?;
+            required.push(regions.len());regions.push((path,fill(*rule)));
+            if path_may_touch(path) && clips.iter().all(|clip|path_may_touch(clip.path.as_ref())) {
+                if paths.owners.len()==paths.paths.len() && !paths.owners.is_empty() {
+                    let n=paths.paths.len();
+                    let _order_credit=admit(n.checked_mul(size_of::<usize>())?)?;
+                    let mut order=Vec::new();order.try_reserve_exact(n).ok()?;
+                    if order.capacity()>n {return None;}
+                    // Bounded local preparation, matching the existing owner-route
+                    // sort allowance; retained paths and source indices stay intact.
+                    let levels=usize::BITS-n.leading_zeros();
+                    if n.checked_mul(levels as usize+1)?>100_000 {return None;}
+                    for i in 0..n {if cancelled() {return None;}order.push(i);}
+                    order.sort_unstable_by_key(|&i|paths.owners[i]);
+                    if cancelled() {return None;}
+                    for i in order {if cancelled() {return None;}regions.push((&paths.paths[i],vello_cpu::peniko::Fill::NonZero));}
+                } else {for path in &paths.paths {regions.push((path,vello_cpu::peniko::Fill::NonZero));}}
+            } else {excluded_mesh_regions+=paths.paths.len();}
+
+            for clip in clips {required.push(regions.len());regions.push((clip.path.as_ref(),fill(clip.fill)));}
+            requirements.push(required);sources.push(backdrop);
+        } else if let Event::Raster(_,_,_,clips,_)=event {
+            let (_,_,_,color,mask)=rasters.iter().find(|r|r.0==index)?;
+            if !path_may_touch(color.paths.first()?) || !clips.iter().all(|clip|path_may_touch(clip.path.as_ref())) {
+                requirements.push(Vec::new());sources.push(backdrop);continue;
+            }
+            let mut required=Vec::new();required.try_reserve_exact(1+clips.len()).ok()?;
+            required.push(regions.len());
+            for path in color.paths.iter().chain(mask.iter().flat_map(|m|m.paths.iter())) {
+                regions.push((path,vello_cpu::peniko::Fill::NonZero));
+            }
+            for clip in clips {required.push(regions.len());regions.push((clip.path.as_ref(),fill(clip.fill)));}
+            requirements.push(required);sources.push(backdrop);
+        }
+    }
+    // Mirror mask capture/reset/restore while conservatively marking groups
+    // containing a paint that can touch this pixel.
+    let mut live_masks=[false;32];let mut active=[None;33];let mut painted=[false;33];
+    let mut depth=0usize;let mut mask_index=0usize;
+    for event in &scene.events {
+        if cancelled() {return None;}
+        match event {
+            Event::Mask(Some(_))=>{active[depth]=Some(mask_index);mask_index+=1;},
+            Event::Mask(None)=>active[depth]=None,
+            Event::Push(..)=>{depth+=1;if depth>=33 {return None;}active[depth]=None;painted[depth]=false;},
+            Event::Pop=>{
+                let child_painted=painted[depth];depth=depth.checked_sub(1)?;
+                if child_painted {painted[depth]=true;if let Some(index)=active[depth] {live_masks[index]=true;}}
+            },
+            Event::Path(path,_,_,clips,_)=>{
+                if path_may_touch(path) && clips.iter().all(|clip|path_may_touch(clip.path.as_ref())) {
+                    painted[depth]=true;if let Some(index)=active[depth] {live_masks[index]=true;}
+                }
+            },
+            Event::Raster(_,_,_,clips,_)=>{
+                if clips.iter().all(|clip|path_may_touch(clip.path.as_ref())) {
+                    painted[depth]=true;if let Some(index)=active[depth] {live_masks[index]=true;}
+                }
+            },_=>{},
+        }
+    }
+    if depth!=0 {return None;}
+    if trace.enabled {eprintln!("SPATIAL_LIVE_MASKS total={} live={}",masks.len(),live_masks.iter().filter(|&&v|v).count());}
+    let mask_is_live=|owner:&Recorder|masks.iter().enumerate().any(|(i,(child,_,_,_,_,_))|
+        live_masks[i] && std::ptr::eq(*child,owner));
+    for (mask_index,(child,_,_,_,_,_)) in masks.iter().enumerate() {if !live_masks[mask_index] {continue;}for event in &child.events {
+        if let Event::Path(path,_,_,clips,PathDrawMode::Fill(rule))=event {
+            regions.push((path,fill(*rule)));for clip in clips {regions.push((clip.path.as_ref(),fill(clip.fill)));}
+        } else if let Event::Raster(_,_,_,clips,_)=event {
+            for clip in clips {regions.push((clip.path.as_ref(),fill(clip.fill)));}
+        }
+    }}
+    for (owner,_,color,mask) in &mask_raster_cells {
+        if !mask_is_live(owner) {continue;}
+        for path in color.paths.iter().chain(mask.iter().flat_map(|m|m.paths.iter())) {regions.push((path,vello_cpu::peniko::Fill::NonZero));}
+    }
+    for (owner,_,geometry) in &mask_mesh_paths {if !mask_is_live(owner) {continue;}for path in &geometry.paths {regions.push((path,vello_cpu::peniko::Fill::NonZero));}}
+    if trace.enabled {eprintln!("SPATIAL_EXCLUDED_MESH_REGIONS count={excluded_mesh_regions}");}
+    let original_regions=regions.len();
+    super::native_spatial::deduplicate_regions(&mut regions,&mut requirements,cancelled,admit)?;
+    if trace.enabled {eprintln!("SPATIAL_REGION_DEDUP original={original_regions} unique={}",regions.len());}
+    let _raster_region_credit=admit(rasters.len().checked_mul(size_of::<super::native_spatial::RasterRegionKeys>())?)?;
+    let mut raster_region_keys=Vec::new();raster_region_keys.try_reserve_exact(rasters.len()).ok()?;
+    if raster_region_keys.capacity()>rasters.len() {return None;}
+    let mut raster_region_work=4_000_000usize;
+    for (event,_,_,color,mask) in &rasters {
+        let keys=super::native_spatial::admitted_raster_region_keys(color,mask.as_deref(),&regions,&mut raster_region_work,cancelled,admit)?;
+        if trace.enabled {let (color,alpha)=keys.counts();eprintln!("SPATIAL_RASTER_REGION_KEYS event={event} color={color} alpha={alpha}");}
+        raster_region_keys.push(keys);
+    }
+    let owner_count=meshes.iter().try_fold(0usize,|n,(_,_,g)|n.checked_add(g.owners.len()))?;
+    let _owner_credit=admit(owner_count.checked_mul(size_of::<(usize,usize)>())?
+        .checked_add(meshes.len().checked_mul(size_of::<Vec<(usize,usize)>>())?)?)?;
+    let mut owner_routes=Vec::new();owner_routes.try_reserve_exact(meshes.len()).ok()?;
+    let mut owner_work=4_000_000usize;
+    for (_,_,geometry) in &meshes {
+        let mut route=Vec::new();route.try_reserve_exact(geometry.owners.len()).ok()?;
+        for (path,&owner) in geometry.paths.iter().zip(&geometry.owners) {
+            let mut region=None;
+            for (index,(candidate,fill)) in regions.iter().enumerate() {
+                if cancelled() {return None;}owner_work=owner_work.checked_sub(1)?;
+                if *fill==vello_cpu::peniko::Fill::NonZero && (std::ptr::eq(*candidate,path)
+                    || candidate.elements()==path.elements()) {region=Some(index);break;}
+            }
+            if let Some(region)=region {route.push((region,owner));}
+        }
+        // Bound sort preparation and preserve highest source-owner precedence.
+        let sort_levels=usize::BITS-route.len().leading_zeros();
+        owner_work=owner_work.checked_sub(route.len().checked_mul(sort_levels as usize+1)?)?;
+        if cancelled() {return None;}
+        route.sort_unstable_by(|a,b|b.1.cmp(&a.1));
+        owner_routes.push(route);
+    }
+    trace.stage.set(("group_commands",0));
+    let mut commands=Vec::new();commands.try_reserve_exact(scene.events.len()).ok()?;
+    // A fill intersection is empty when any required path has a disjoint
+    // conservative control box. Retain boundary contact and all group state.
+    let may_touch=|required:&[usize]| {
+        !required.is_empty() && required.iter().all(|&index| {
+            use kurbo::Shape;
+            let bounds=regions[index].0.control_box();
+            !(bounds.x1<rect.x0 || bounds.x0>rect.x1 || bounds.y1<rect.y0 || bounds.y0>rect.y1)
+        })
+    };
+    let mut mask_cursor=0;let mut mesh_cursor=0;let mut raster_cursor=0;let mut cursor=0;let mut mode=BlendMode::Normal;let mut ais=false;
+    for (event_index,event) in scene.events.iter().enumerate() {
+        if cancelled() {return None;}
+        match event {
+            Event::Blend(value)=>mode=*value,
+            Event::AlphaSource(value)=>ais=*value,
+            Event::Push(opacity,properties,mode)=>{
+                let declared=scene.group_spaces.iter().find(|(i,_)|*i==event_index).map(|(_,g)|g);
+                if let Some(GroupSpace::Explicit(target))=declared.filter(|_|properties.isolated) {
+                    commands.push(SpatialCommand::BeginInSpace {space:target,knockout:properties.knockout,
+                        opacity:f64::from(*opacity),alpha_is_shape:ais,mode:*mode});
+                } else {commands.push(SpatialCommand::Begin {isolated:properties.isolated,knockout:properties.knockout,
+                    opacity:f64::from(*opacity),alpha_is_shape:ais,mode:*mode});}
+            },
+            Event::Pop=>commands.push(SpatialCommand::End),
+            Event::Mask(None)=>commands.push(SpatialCommand::ClearMask),
+            Event::Mask(Some(_))=>{
+                if live_masks[mask_cursor] {
+                    commands.push(SpatialCommand::SetBudgetedMask {sample:&mask_samples[mask_cursor]});
+                } else {
+                    // An unused replacement must still discard the previous mask.
+                    commands.push(SpatialCommand::ClearMask);
+                }
+                mask_cursor+=1;
+            },
+            Event::Raster(..)=>{
+                let (_,_,_,color,mask)=rasters.get(raster_cursor)?;
+                let field=if color.has_texel_grid() && mask.as_ref().is_none_or(|mask|mask.has_texel_grid()) {
+                    super::native_spatial::NativeField::ConstantCells
+                } else {super::native_spatial::NativeField::Unknown};
+                if may_touch(&requirements[cursor]) {commands.push(SpatialCommand::NativeSampledPaint {cells:Some(&raster_region_keys[raster_cursor]),regions:&requirements[cursor],
+                    sample:&samples[raster_cursor],owners:&[],field,alpha_is_shape:ais,mode});}cursor+=1;raster_cursor+=1;
+            },
+            Event::Path(_,_,RecordedPaint::Shading(_),_,_)=>{
+                if ais {return None;}
+                if may_touch(&requirements[cursor]) {commands.push(SpatialCommand::NativeSampledPaint {cells:None,regions:&requirements[cursor],
+                    sample:&mesh_samples[mesh_cursor],owners:&owner_routes[mesh_cursor],
+                    field:if meshes[mesh_cursor].1.mesh_has_affine_native_field(space) {super::native_spatial::NativeField::AffineOwner} else {super::native_spatial::NativeField::Unknown},alpha_is_shape:false,mode});}cursor+=1;mesh_cursor+=1;
+            },
+            Event::Path(_,_,RecordedPaint::NativeColor(paint),_,_)=>{
+                if ais {return None;}
+                if may_touch(&requirements[cursor]) {commands.push(SpatialCommand::RetainedPaint {regions:&requirements[cursor],paint,mode});}cursor+=1;
+            },
+            _=>return None,
+        }
+    }
+    super::native_spatial::prune_empty_groups(&mut commands,cancelled)?;
+    let cleared=super::native_spatial::prune_redundant_mask_clears(&mut commands,remaining,cancelled)?;
+    if trace.enabled {eprintln!("SPATIAL_REDUNDANT_MASK_CLEARS_REMOVED={cleared}");}
+    let flattened=super::native_spatial::flatten_neutral_groups(&mut commands,remaining,cancelled)?;
+    if trace.enabled {eprintln!("SPATIAL_NEUTRAL_GROUP_BOUNDARIES_REMOVED={flattened}");}
+    let uncoalesced=commands.len();
+    super::native_spatial::coalesce_opaque_paints(&mut commands,space,cancelled)?;
+    if trace.enabled {eprintln!("SPATIAL_PAINT_COALESCE before={uncoalesced} after={}",commands.len());}
+    if trace.enabled {
+        // Eligibility observation only. No fragment merging is enabled here:
+        // field keys, clipped moments and rounding bounds remain separate work.
+        let mut depth=0usize;let mut eligible=true;let mut affine_meshes=0usize;let mut constant_rasters=0usize;
+        for command in &commands {
+            if cancelled() {return None;}
+            match command {
+                SpatialCommand::Begin {..}=>depth+=1,
+                SpatialCommand::End=>{if depth==0 {eligible=false;} else {depth-=1;}},
+                SpatialCommand::NativeSampledPaint {sample,alpha_is_shape,mode,..}=> {
+                    let mesh=mesh_samples.iter().position(|candidate| {
+                        let candidate:&super::native_spatial::NativeSpatialSampler<'_>=candidate;
+                        std::ptr::addr_eq(*sample as *const _,candidate as *const _)
+                    });
+                    let raster=samples.iter().position(|candidate| {
+                        let candidate:&super::native_spatial::NativeSpatialSampler<'_>=candidate;
+                        std::ptr::addr_eq(*sample as *const _,candidate as *const _)
+                    });
+                    if let Some(index)=mesh {
+                        let affine=meshes[index].1.mesh_has_affine_native_field(space)
+                            && depth==0 && !*alpha_is_shape && *mode==BlendMode::Normal;
+                        eprintln!("SPATIAL_AFFINE_ROUTE_SOURCE event={} affine_field={} depth={depth} ais={alpha_is_shape} mode={mode:?} accepted={affine}",meshes[index].0,meshes[index].1.mesh_has_affine_native_field(space));
+                        eligible &= affine;affine_meshes+=usize::from(affine);
+                    } else if raster.is_some() {constant_rasters+=1;}
+                    else {eligible=false;}
+                },
+                SpatialCommand::BeginInSpace {..}|SpatialCommand::SetMask {..}|
+                SpatialCommand::SetBudgetedMask {..}|SpatialCommand::SampledPaint {..}=>eligible=false,
+                _=>{},
+            }
+        }
+        eligible &= depth==0 && affine_meshes>0;
+        eprintln!("SPATIAL_AFFINE_ROUTE_CANDIDATE eligible={eligible} affine_meshes={affine_meshes} constant_rasters={constant_rasters}");
+    }
+    trace.stage.set(("spatial_composition",0));
+    let result=super::native_spatial::compose_grouped_polygon_with_candidate_inputs(&regions,&commands,space,backdrop,x,y,point,
+        40_000_000,remaining,cancelled,admit,if combined_enabled {Some(&candidate_inputs)} else {None});
+    result
+    };
+    if combined_enabled {
+        // Release command borrows and finalize each immutable source observation
+        // set before consuming the candidate budget inputs. Pixel values own no refs.
+        let inputs=*candidate_inputs.borrow();let source=combined_source.borrow();
+        let bound=inputs.and_then(|inputs| {
+            let required=inputs.original_variable_points.checked_add(inputs.candidate_variable_points)?;
+            if source.failed || source.points<required {return None;}
+            super::native_moments::opaque_candidate_native_error(&inputs,source.max_error,source.gradient,&mut 10000,cancelled)
+        });
+        eprintln!("SPATIAL_COMBINED_NATIVE_BOUND complete={} max_error={:?} source_complete={} required_points={:?} observed_points={}",bound.is_some(),bound.map(|v|v.into_iter().fold(0.,f64::max)),!source.failed,inputs.map(|i|i.original_variable_points+i.candidate_variable_points),source.points);
+    }
+    if trace.enabled && result.is_none() {
+        eprintln!("SPATIAL_COMPOSITION_REFUSAL remaining_work={} cancelled={}", *remaining, cancelled());
+    }
+    trace.completed.set(result.is_some());result
+}
+
+/// Diagnostic wall-clock deadline with cheap, independently observable polls.
+/// Drop wakes and joins the watchdog, including during a test panic.
+struct AiDiagnosticDeadline {
+    cancelled:std::sync::Arc<std::sync::atomic::AtomicBool>,
+    stopped:std::sync::Arc<std::sync::atomic::AtomicBool>,
+    worker:Option<std::thread::JoinHandle<()>>,
+}
+impl AiDiagnosticDeadline {
+    fn new(duration:std::time::Duration)->Self {
+        use std::sync::{Arc,atomic::{AtomicBool,Ordering}};
+        let cancelled=Arc::new(AtomicBool::new(false));let stopped=Arc::new(AtomicBool::new(false));
+        let signal=cancelled.clone();let stop=stopped.clone();
+        let deadline=std::time::Instant::now()+duration;
+        let worker=std::thread::spawn(move ||loop {
+            if stop.load(Ordering::Acquire) {return;}
+            let Some(remaining)=deadline.checked_duration_since(std::time::Instant::now()) else {
+                signal.store(true,Ordering::Release);return;
+            };
+            std::thread::park_timeout(remaining);
+        });
+        Self {cancelled,stopped,worker:Some(worker)}
+    }
+}
+impl Drop for AiDiagnosticDeadline {
+    fn drop(&mut self) {
+        self.stopped.store(true,std::sync::atomic::Ordering::Release);
+        if let Some(worker)=self.worker.take() {worker.thread().unpark();let _=worker.join();}
+    }
+}
+#[test]
+fn ai_diagnostic_deadline_expires_and_drops_without_waiting_for_timeout() {
+    use std::sync::atomic::Ordering;
+    let mut expired=AiDiagnosticDeadline::new(std::time::Duration::ZERO);
+    expired.worker.take().unwrap().join().unwrap();
+    assert!(expired.cancelled.load(Ordering::Acquire));
+    let pending=AiDiagnosticDeadline::new(std::time::Duration::from_secs(180));
+    assert!(!pending.cancelled.load(Ordering::Acquire));
+    let signal=pending.cancelled.clone();drop(pending);
+    assert!(!signal.load(Ordering::Acquire));
+}
+
+#[test]
+#[ignore = "requires explicit VectorApple corpus; diagnostic completion is reported separately"]
+fn real_ai_spatial_scene_problem_pixel_diagnostic() {
+    use hayro_interpret::TransformExt;
+    use super::native_blend::{Model,Pixel};
+    use std::sync::{Arc,atomic::{AtomicUsize,Ordering}};
+    let path=std::path::PathBuf::from(std::env::var_os("RRRAH_AI_REPLAY_CORPUS").expect("explicit corpus" )).join("VectorApple.ai");
+    let pdf=hayro_interpret::hayro_syntax::Pdf::new(std::fs::read(path).unwrap()).unwrap();
+    let page=&pdf.pages()[0];let (w,h)=page.render_dimensions();
+    let diagnostic_seconds:u64=std::env::var("RRRAH_AI_DIAGNOSTIC_SECONDS").map(|v|v.parse().expect("diagnostic seconds")).unwrap_or(180);
+    assert!((1..=600).contains(&diagnostic_seconds));
+    println!("REAL_AI_DIAGNOSTIC_SECONDS={diagnostic_seconds}");
+    let deadline=AiDiagnosticDeadline::new(std::time::Duration::from_secs(diagnostic_seconds));
+    let signal=deadline.cancelled.clone();
+    let cancelled=Arc::new(move ||signal.load(Ordering::Acquire));
+    struct Credit(Arc<AtomicUsize>,usize);
+    impl Drop for Credit {fn drop(&mut self){self.0.fetch_sub(self.1,Ordering::Relaxed);}}
+    let used=Arc::new(AtomicUsize::new(0));let peak=Arc::new(AtomicUsize::new(0));
+    let counter=used.clone();let high=peak.clone();
+    let admission=std::rc::Rc::new(move |bytes:usize|->Option<Box<dyn std::any::Any+Send+Sync>> {
+        let next=counter.load(Ordering::Relaxed).checked_add(bytes)?;
+        if next>256*1024*1024 {return None;}
+        counter.store(next,Ordering::Relaxed);high.fetch_max(next,Ordering::Relaxed);
+        Some(Box::new(Credit(counter.clone(),bytes)))
+    });
+    let mut scene=record_into(std::fs::read(std::path::PathBuf::from(std::env::var_os("RRRAH_AI_REPLAY_CORPUS").unwrap()).join("VectorApple.ai")).unwrap(),
+        w.ceil() as u16,h.ceil() as u16,page.initial_transform(true).to_kurbo(),
+        Recorder {mask_probe:true,capture_native_rasters:true,capture_native_shadings:true,global_contour:true,
+            native_polygon:true,admitted_strokes:true,admission:Some(admission.clone()),cancelled:Some(cancelled.clone()),..Recorder::default()});
+    let space=scene.events.iter().find_map(|e|match e {
+        Event::Path(_,_,RecordedPaint::Shading(paint),_,_)=>paint.native.as_ref().map(|s|s.color_space.clone()),_=>None,
+    }).expect("captured native shading space");
+    for (index,event) in scene.events.iter().enumerate() {
+        if let Event::Mask(Some((child,luminosity,_,_,_)))=event {
+            let nested=child.events.iter().filter(|e|matches!(e,Event::Mask(Some(_)))).count();
+            let meshes=child.events.iter().filter(|e|matches!(e,Event::Path(_,_,RecordedPaint::Shading(_),_,_))).count();
+            let rasters=child.events.iter().filter(|e|matches!(e,Event::Raster(..))).count();
+            println!("REAL_AI_MASK_SOURCE event={index} luminosity={luminosity} events={} nested={nested} shading={meshes} rasters={rasters}",child.events.len());
+            let source_bounds=child.events.iter().filter_map(|event|match event {
+                Event::Path(path,..)=>Some(path.control_box()),_=>None,
+            }).reduce(|a,b|a.union(b));
+            let next_path=scene.events[index+1..].iter().find_map(|event|match event {
+                Event::Path(path,..)=>Some(path.control_box()),_=>None,
+            });
+            println!("REAL_AI_MASK_BOUNDS event={index} source_paths={source_bounds:?} next_main_path={next_path:?}");
+        }
+    }
+    let preflight=spatial_scene_preflight(&scene,&||cancelled());
+    println!("REAL_AI_SPATIAL_PREFLIGHT={preflight:?}");
+    let requested=std::env::var("RRRAH_AI_SPATIAL_PIXELS").unwrap_or_else(|_|"163,39".into());
+    let coordinates:Vec<(i32,i32)>=requested.split(';').map(|pair| {
+        let (x,y)=pair.split_once(',').expect("pixel coordinate x,y");
+        (x.parse().expect("pixel x"),y.parse().expect("pixel y"))
+    }).collect();
+    assert!(!coordinates.is_empty() && coordinates.len()<=16);
+    let masks=scene.events.iter().filter(|e|matches!(e,Event::Mask(Some(_)))).count();
+    let shading_count=scene.events.iter().filter(|e|matches!(e,Event::Path(_,_,RecordedPaint::Shading(_),_,_))).count();
+    let rgb=hayro_interpret::color::Color::from_rgba(hayro_interpret::color::AlphaColor::new([0.,0.,0.,1.]));
+    let diagnostic_work=std::env::var("RRRAH_AI_DIAGNOSTIC_PIXEL_WORK")
+        .map_or(4_000_000,|value|value.parse::<usize>().expect("diagnostic work integer"));
+    assert!((4_000_000..=16_000_000).contains(&diagnostic_work));
+    println!("REAL_AI_DIAGNOSTIC_WORK_LIMIT={diagnostic_work}");
+    for (x,y) in coordinates {
+        if std::env::var_os("RRRAH_AI_TRACE_CLIP_AREA").is_some() {
+            let fill=|rule|match rule {hayro_interpret::FillRule::NonZero=>vello_cpu::peniko::Fill::NonZero,hayro_interpret::FillRule::EvenOdd=>vello_cpu::peniko::Fill::EvenOdd};
+            for (index,event) in scene.events.iter().enumerate() {
+                if let Event::Path(path,_,RecordedPaint::Shading(paint),clips,PathDrawMode::Fill(rule))=event {
+                    let mut regions=vec![(path,fill(*rule))];
+                    regions.extend(clips.iter().map(|clip|(clip.path.as_ref(),fill(clip.fill))));
+                    let area=super::polygon_coverage::polygon_pixel_area(&regions,x,y,20_000_000,&||cancelled(),admission.as_ref());
+                    println!("REAL_AI_CAPTURED_CLIP_AREA pixel=({x},{y}) event={index} area={area:?}");
+                    if area.is_some_and(|value|value>0.) {
+                        let source=paint.native.as_ref().unwrap();
+                        let result=source.visit_mesh_triangles(kurbo::Rect::new(f64::from(x),f64::from(y),f64::from(x)+1.,f64::from(y)+1.),100_000,&||cancelled(),&mut |triangle| {
+                            println!("REAL_AI_CAPTURED_MESH_TRIANGLE event={index} index={} points={:?}",triangle.index,[triangle.points[0].x,triangle.points[0].y,triangle.points[1].x,triangle.points[1].y,triangle.points[2].x,triangle.points[2].y]);
+                            Ok(())
+                        });
+                        println!("REAL_AI_CAPTURED_MESH_QUERY event={index} result={result:?}");
+                    }
+                }
+            }
+        }
+        let route_admissions=std::cell::Cell::new(0usize);
+        let mut diagnostic_remaining=diagnostic_work;
+        let result=replay_spatial_scene_impl(&scene,&space,Pixel::from_native(Model::Cmyk,&[0.;4],0.).unwrap(),
+            x,y,None,&[],&[],&mut diagnostic_remaining,&||cancelled(),&|bytes|{route_admissions.set(route_admissions.get()+1);admission(bytes)});
+        println!("REAL_AI_DIAGNOSTIC_WORK_USED pixel=({x},{y}) spent={} remaining={diagnostic_remaining}",diagnostic_work-diagnostic_remaining);
+        println!("REAL_AI_SPATIAL_ROUTE_ADMISSIONS pixel=({x},{y}) count={}",route_admissions.get());
+        let white_rgb=result.and_then(|p|super::native_frame::convert_group_pixel(p,&space,rgb.color_space()))
+            .and_then(|p|p.native_components().map(|c|[0,1,2].map(|i|255.*(c[i]*p.alpha()+1.-p.alpha()))));
+        println!("REAL_AI_SPATIAL_PIXEL pixel=({x},{y}) captured={} events={} shading_events={shading_count} mask_events={masks} completed={} alpha={:?} components={:?} white_rgb={white_rgb:?} deadline={} peak_bytes={}",
+            !scene.failed,scene.events.len(),result.is_some(),result.map(|p|p.alpha()),result.and_then(|p|p.native_components()),cancelled(),peak.load(Ordering::Relaxed));
+    }
+    // Optional strict full-page diagnostic. Publish an image only after every
+    // pixel completes; a deadline or refused route cannot produce a passing page.
+    let mut full_page_complete = true;
+    if let Some(path) = std::env::var_os("RRRAH_AI_SPATIAL_PAGE_OUTPUT") {
+        // Explicit diagnostic override only; production replay remains 4M.
+        let page_work:usize=std::env::var("RRRAH_AI_DIAGNOSTIC_PAGE_WORK").map(|v|v.parse().expect("diagnostic page work")).unwrap_or(4_000_000);
+        assert!((4_000_000..=16_000_000).contains(&page_work));
+        println!("REAL_AI_DIAGNOSTIC_PAGE_WORK_LIMIT={page_work}");
+        let mut maximum_work=(0usize,0usize,0usize);
+        let width = w.ceil() as usize;
+        let height = h.ceil() as usize;
+        let bytes = width.checked_mul(height).and_then(|n| n.checked_mul(3)).unwrap();
+        let _output_credit = admission(bytes).expect("full-page output admission");
+        let mut pixels = Vec::new();
+        pixels.try_reserve_exact(bytes).expect("full-page allocation");
+        let mut completed = 0usize;
+        'rows: for y in 0..height {
+            for x in 0..width {
+                let mut remaining=page_work;
+                let native = replay_spatial_scene_impl(&scene, &space,
+                    Pixel::from_native(Model::Cmyk, &[0.;4], 0.).unwrap(),
+                    x as i32, y as i32,None,&[],&[],&mut remaining, &||cancelled(), admission.as_ref());
+                let spent=page_work-remaining;
+                if spent>maximum_work.0 {maximum_work=(spent,x,y);}
+                let converted = native.and_then(|p|
+                    super::native_frame::convert_group_pixel(p, &space, rgb.color_space()))
+                    .and_then(|p|p.native_components().map(|c|
+                        [0,1,2].map(|i|255.*(c[i]*p.alpha()+1.-p.alpha()))));
+                let Some(values) = converted else {
+                    full_page_complete = false;
+                    println!("REAL_AI_SPATIAL_PAGE_REFUSAL pixel=({x},{y}) deadline={}", cancelled());
+                    break 'rows;
+                };
+                assert!(values.iter().all(|v|v.is_finite()));
+                pixels.extend(values.map(|v|v.round().clamp(0.,255.) as u8));
+                completed += 1;
+            }
+            if y % 8 == 0 {
+                println!("REAL_AI_SPATIAL_PAGE_PROGRESS rows={} pixels={completed}", y+1);
+            }
+        }
+        println!("REAL_AI_SPATIAL_PAGE width={width} height={height} completed={completed} total={} deadline={} peak_bytes={}",
+            width*height, cancelled(), peak.load(Ordering::Relaxed));
+        println!("REAL_AI_SPATIAL_PAGE_MAX_WORK spent={} pixel=({},{}) limit={page_work}",maximum_work.0,maximum_work.1,maximum_work.2);
+        if full_page_complete {
+            use std::io::Write;
+            let mut file = std::fs::OpenOptions::new().write(true).create_new(true).open(path).unwrap();
+            write!(file, "P6\n{width} {height}\n255\n").unwrap();
+            file.write_all(&pixels).unwrap();
+        }
+    }
+    // Diagnostic only: compare conversion after area averaging with conversion
+    // of individual fully composited native points. This is not a rendering path.
+    if let Ok(grid)=std::env::var("RRRAH_AI_SPATIAL_POINT_GRID") {
+        let grid:usize=grid.parse().expect("point grid size");
+        assert!((1..=16).contains(&grid));
+        for (x,y) in requested.split(';').map(|pair| {
+            let (x,y)=pair.split_once(',').unwrap();
+            (x.parse::<i32>().unwrap(),y.parse::<i32>().unwrap())
+        }) {
+            let mut sum=[0.;3];let mut alpha_sum=0.;let mut completed=0usize;
+            for row in 0..grid {for col in 0..grid {
+                let point=kurbo::Point::new(f64::from(x)+(col as f64+0.5)/grid as f64,
+                    f64::from(y)+(row as f64+0.5)/grid as f64);
+                let result=replay_spatial_scene_impl(&scene,&space,
+                    Pixel::from_native(Model::Cmyk,&[0.;4],0.).unwrap(),x,y,Some(point),
+                    &[],&[],&mut 4_000_000,&||cancelled(),admission.as_ref());
+                let converted=result.and_then(|p|super::native_frame::convert_group_pixel(p,&space,rgb.color_space()))
+                    .and_then(|p|p.native_components().map(|c|[0,1,2].map(|i|255.*(c[i]*p.alpha()+1.-p.alpha()))));
+                println!("REAL_AI_SPATIAL_POINT pixel=({x},{y}) point={point:?} native={:?} rgb={converted:?}",
+                    result.and_then(|p|p.native_components()));
+                if let Some(values)=converted {for i in 0..3 {sum[i]+=values[i];}alpha_sum+=result.unwrap().alpha();completed+=1;}
+            }}
+            let mean=(completed==grid*grid).then(||sum.map(|v|v/(grid*grid) as f64));
+            println!("REAL_AI_SPATIAL_POINT_GRID pixel=({x},{y}) grid={grid} completed={completed} mean_rgb={mean:?} mean_alpha={:?}", (completed==grid*grid).then(||alpha_sum/(grid*grid) as f64));
+        }
+    }
+    // Releasing the entire captured scene must release retained source ownership.
+    scene.events.clear();drop(scene);
+    assert_eq!(used.load(Ordering::Relaxed),0);
+    println!("REAL_AI_SPATIAL_FINAL_CREDIT=0");
+    assert!(full_page_complete, "full-page spatial diagnostic did not complete");
+}
+
+
+#[test]
+fn spatial_scene_preflight_refuses_mask_before_geometry_admission() {
+    use super::native_blend::{Model,Pixel};
+    use hayro_interpret::color::{AlphaColor,Color};
+    let mut scene=record_into(authored_native_alpha_transfer_fixture(),32,16,Affine::IDENTITY,
+        Recorder {mask_probe:true,global_contour:true,native_polygon:true,..Recorder::default()});
+    assert!(!scene.failed);
+    assert!(spatial_scene_preflight(&scene,&||false).is_ok());
+    for event in &mut scene.events {if let Event::Mask(Some((_,luminosity,_,_,_)))=event {*luminosity=true;}}
+    for (_,_,_,device) in &mut scene.native_mask_transfers {*device=false;}
+    assert_eq!(spatial_scene_preflight(&scene,&||false).unwrap_err().1,"calibrated_luminosity_not_qualified");
+    let rgb=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
+    assert!(replay_spatial_scene_pixel(&scene,rgb.color_space(),Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap(),
+        0,0,&||false,&|_|panic!("unsupported scenes must refuse before scratch admission")).is_none());
+    assert_eq!(spatial_scene_preflight(&scene,&||true).unwrap_err().1,"cancelled");
+}
+
+
+#[test]
+fn authored_pdf_mesh_luminosity_mask_routes_original_gray_before_area_average() {
+    use super::native_blend::{Model,Pixel};
+    use hayro_interpret::color::{AlphaColor,Color};
+    let records=[[0u8,0,0,0],[0,255,0,255],[0,0,255,0]];
+    let hex=records.iter().flatten().map(|v|format!("{v:02X}")).collect::<String>()+">";
+    let shading=format!("<< /ShadingType 4 /ColorSpace /DeviceGray /BitsPerCoordinate 8 /BitsPerComponent 8 /BitsPerFlag 8 /Decode [0 1 0 1 0 1] /Filter /ASCIIHexDecode /Length {} >>\nstream\n{hex}\nendstream",hex.len());
+    let content="/S1 sh";
+    let mask=format!("<< /Type /XObject /Subtype /Form /BBox [0 0 32 16] /Group << /S /Transparency /I true /CS /DeviceGray >> /Resources << /Shading << /S1 9 0 R >> >> /Length {} >>\nstream\n{content}\nendstream",content.len());
+    let scene=record_into(authored_pdf_with_font_blend(false,1.,"/form Do","","0 1 0 rg 0 0 1 1 re f",
+        &shading,Some(&mask),false,"Normal /SMask << /S /Luminosity /G 10 0 R >>"),1,1,Affine::IDENTITY,
+        Recorder {mask_probe:true,capture_native_shadings:true,global_contour:true,native_polygon:true,..Recorder::default()});
+    assert!(!scene.failed);
+    let rgb=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
+    let pixel=replay_spatial_scene_pixel(&scene,rgb.color_space(),Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap(),
+        0,0,&||false,&|_|Some(Box::new(()))).unwrap();
+    assert!((pixel.alpha()-0.5*f64::from(1f32/3.)).abs()<1e-12);
+    assert_eq!(pixel.native_components().unwrap()[..3],[0.,1.,0.]);
+}
+
+
+#[test]
+fn authored_pdf_axial_extent_boundaries_partition_before_color_average() {
+    use super::native_blend::{Model,Pixel};
+    let shading="<< /ShadingType 2 /ColorSpace /DeviceGray /Coords [0.25 0 0.75 0] /Extend [false false] /Function << /FunctionType 2 /Domain [0 1] /C0 [0] /C1 [1] /N 1 >> >>";
+    let scene=record_into(authored_pdf_with_font(false,1.,"/form Do","","/S1 sh",
+        "<< >>",Some(shading)),1,1,Affine::IDENTITY,
+        Recorder {capture_native_shadings:true,global_contour:true,native_polygon:true,..Recorder::default()});
+    assert!(!scene.failed);
+    let source=scene.events.iter().find_map(|e|match e {
+        Event::Path(_,_,RecordedPaint::Shading(p),_,_)=>p.native.as_ref(),_=>None}).unwrap();
+    let pixel=replay_spatial_scene_pixel(&scene,&source.color_space,Pixel::from_native(Model::Gray,&[0.],0.).unwrap(),
+        0,0,&||false,&|_|Some(Box::new(()))).unwrap();
+    assert_eq!(pixel.alpha(),0.5);
+    assert_eq!(pixel.native_components().unwrap()[0],0.5);
+}
+
+#[test]
+fn authored_cmyk_knockout_fade_full_shape_obeys_iso_topmost_element() {
+    use super::native_blend::{Model,Pixel};
+    // ISO 32000-1 11.4.6 and 11.4.8: binary full shape replaces earlier
+    // siblings; constant opacity blends the last source with initial backdrop.
+    // External renderers disagree on this control; use the stated formula.
+    let base=[0.5443226099014282,0.21231108903884888,0.7983059883117676,0.009295190684497356];
+    let last=[0.1889999955892563,0.07000000029802322,0.6019999980926514,0.];
+    let expected=std::array::from_fn::<_,4,_>(|i|base[i]*(1.-0.4375)+last[i]*0.4375);
+    let mut outputs=Vec::new();
+    for pdf in [include_bytes!("testdata/knockout-fade-all.pdf").as_slice(),
+                include_bytes!("testdata/knockout-fade-last.pdf").as_slice()] {
+        let scene=record_into(pdf.to_vec(),8,8,Affine::IDENTITY,
+            Recorder {global_contour:true,native_polygon:true,capture_native_shadings:true,..Recorder::default()});
+        assert!(!scene.failed);
+        let space=scene.events.iter().find_map(|event|match event {
+            Event::Path(_,_,RecordedPaint::NativeColor(paint),_,_)=>Some(&paint.color_space),_=>None,
+        }).unwrap();
+        let pixel=replay_spatial_scene_pixel(&scene,space,Pixel::from_native(Model::Cmyk,&[0.;4],0.).unwrap(),
+            4,4,&||false,&|_|Some(Box::new(()))).unwrap();
+        assert_eq!(pixel.alpha(),1.);
+        let components=pixel.native_components().unwrap();
+        for i in 0..4 {assert!((components[i]-expected[i]).abs()<1e-6,"channel {i}: {} != {}",components[i],expected[i]);}
+        outputs.push(components);
+    }
+    assert_eq!(outputs[0],outputs[1],"full-shape knockout must discard earlier siblings");
+}
+
+#[test]
+fn prepared_normal_batch_preserves_native_gray_and_cmyk_coordinates() {
+    use super::native_blend::Model;
+    for (space,bytes,model) in [("/G","40",Model::Gray),("/CMYK","4080C020",Model::Cmyk)] {
+        let content=format!("q 16 0 0 16 0 0 cm BI /W 1 /H 1 /BPC 8 /CS {space} /F /AHx ID {bytes}> EI Q");
+        let scene=record_into(authored_pdf_with_paths(false,1.,"/form Do","",&content),32,16,Affine::IDENTITY,
+            Recorder {capture_native_rasters:true,..Recorder::default()});
+        let image=scene.native_rasters[0].1.as_ref().unwrap();
+        super::native_frame::assert_normal_batch_equivalence(image.color_space(),model);
+    }
 }

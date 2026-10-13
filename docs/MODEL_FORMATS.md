@@ -8,7 +8,7 @@ Priority: file selection to first presentation, then interaction latency and pea
 
 Binary layout follows the [Library of Congress description](https://www.loc.gov/preservation/digital/formats/fdd/fdd000505.shtml); ASCII grammar follows its [ASCII STL description](https://www.loc.gov/preservation/digital/formats/fdd/fdd000506.shtml). Exact binary length takes priority over a `solid` header prefix. Color extensions are ambiguous and their raw attribute words are preserved, without color interpretation.
 
-A binary load reserves the final facet array once and computes bounds in the parsing pass. ASCII parsing walks borrowed lines and tokens without a token array. Source input is capped by the existing 2 GiB bounded reader; retained facets are capped at 512 MiB. Both paths check cancellation during parsing and reject non-finite geometry. Whole-file input is still retained during parsing; streaming and measured latency/peak memory remain future work.
+A binary load reserves the final facet array once and computes bounds in the parsing pass. ASCII parsing walks borrowed lines and tokens without a token array. Source input is capped by the existing 2 GiB bounded reader; retained facets are capped at 512 MiB. Both paths check cancellation during parsing and reject non-finite geometry. The shared `decode_model`/viewer binary path now streams 1024 facets per 51,200-byte stack block directly into pre-admitted final geometry, checks cancellation at each block and EOF, and refuses source growth or truncation. ASCII and the low-level `decode_stl` API retain bounded whole-file input. Stack scratch is outside managed heap accounting; measured loading speed and OS memory remain separate qualifications.
 
 The STL API remains separate from the sensor/raster `decode_image` API. The application foreground loader, CLI `--inspect`, file drops and mixed-folder navigation now recognize STL (including uppercase extensions). Selected models use `ModelRenderer`, a separate depth-tested GPU pass with a neutral material. Drag rotates, the wheel changes scale and F resets the initial view. The pipeline is created lazily on the first model, so raster opening does not require model shader creation. Model thumbnails and color extensions are pending.
 
@@ -756,3 +756,29 @@ twenty successful reads and zero errors, covering eighty pressure/retry cycles.
 All six application model-swap integration tests pass in
 `/tmp/rrrah-all-model-pressure.log`. This proves the tested codecs preserve
 transient-memory error classification through the real store adapter.
+
+
+### Metal HDR preservation through model swap (2026-10-11)
+
+The actual M4 Max Metal model suite now compares RGBA16Float attachments on
+a 63×65 target at a rotated view before/after disk restore, alongside the
+existing SDR comparison. Six STL/OBJ/OFF/PLY sources retain exact geometry,
+metadata and SDR/HDR frames across twenty pressure/cancellation/retry cycles
+each (120 restores), plus six single-cycle restores. All seven suite tests
+pass; CPU root and queue credit return to zero. The shared half-float readback
+helper also passes the 65-source / 94-selection / 188-case raster collection
+and its verifier. These are neutral-material preservation checks, not new
+material/texture support, broad producer qualification or physical HDR.
+[Evidence](research/metal-model-swap-hdr-expanded-2026-10-11.json).
+
+### Live model HDR surface and resize (2026-10-12)
+
+Extended existing HDR probe with RRRAH_HDR_MODEL_SOURCE: native decode under512MiBmanagedCPUbudget, direct triangle iteration into ModelRenderer, depthresize andviewportupdate onwindowresize, sourcecredit0afterupload. Offlinebuildpassed. Current actualAppleM4Max/Metal RGBA16Float/ExtendedSrgbLinear four sequential fixtures STL/OBJ/PLY/OFF all terminalexit0/no validation errors,3seach,173frames(STL/OBJ/OFF),175frames(PLY);800x400resizeconfirmed andpositiveframesafterresize ineach. This qualifies current livepresentation/resize for these authoredsubsetfixtures; no physicalcolorcalibration/liveinput/broadmaterials orspeedclaim. Evidence: research/metal-live-models-2026-10-12.json and hashedlogs/sources.
+
+### Ordinary viewer live 3D input (2026-10-12)
+
+Current normalviewer offlinebuildpassed. TemporarymacOSbundle wraps samebinary solelyforCUAbinding; concaveOBJ6triangles actuallyvisible. CUAdrag changesorbit, wheel enlargesgeometry, F restoresinitialgeometry; baseline/orbit/zoom/resetPNG retainedandvisuallyinspected. Bundlewindowclosed throughnativeclosebutton; initialunbundledownprocess cleanedSIGTERM separately. This qualifies these ordinarywindowinputactions for authoredOBJ, not allmodels/materials/color/performance orNVIDIA. Evidence: research/metal-live-model-input-2026-10-12/report.json and hashedscreenshots.
+
+### Paired STL CPU load measurements (2026-10-13)
+
+Current whole-file low-level API plus output management versus shared streaming model API, warm filesystem, ABBA order, 20 measured samples per path: 250k facets median 6.235 / 6.138 ms, p95 7.416 / 6.805 ms; 1M facets median 22.326 / 21.565 ms, p95 24.765 / 31.280 ms. No robust speedup established; streaming has a worse tail in the million-facet run. Geometry bits/bounds hashes match on all loads and managed credit returns to zero. The separate streaming admission test proves removal of the whole-file heap buffer. This is not a historical before/after or GPU/display/cold-disk/RSS benchmark. [Evidence](research/stl-load-paired-summary-2026-10-13.json).

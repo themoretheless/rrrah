@@ -1,0 +1,48 @@
+{
+  "status": "complete_frozen_retained_exhaustive_regression_test",
+  "producer_pid": 66891,
+  "command": [
+    "cargo",
+    "test",
+    "--manifest-path",
+    "/Users/themoretheless/.codex/tmp/rrrah-gradient-mutual-regression-snapshot-20261011/Cargo.toml",
+    "--target-dir",
+    "/Users/themoretheless/Documents/Sources/rrrah/target",
+    "-p",
+    "rrrah-dedup",
+    "--locked",
+    "--offline",
+    "--no-default-features",
+    "--features",
+    "decode",
+    "--no-run",
+    "--message-format=json",
+    "--lib"
+  ],
+  "source_manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-mutual-regression-snapshot-20261011.json",
+  "source_manifest_sha256": "3615a94c782c6456bc9a353ef17a19f781620bd8132fe3d8401ac00d8449d70c",
+  "results": [
+    {
+      "suite": "rrrah_dedup",
+      "status": "passed",
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-gradient-mutual-regression-generic-qualified-20261011/rrrah_dedup",
+      "binary_sha256": "415c186673409be91029a2c37501da4dc5e56354afa78fdf95e53cd67ad2791e",
+      "process_pid": 68477,
+      "returncode": 0,
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-gradient-mutual-regression-generic-qualified-20261011/rrrah_dedup.log",
+      "log_sha256": "c03981c94ca41beeff84b08563802f22a5299b97278e99cc8887c8dae5655077",
+      "tests": 1
+    }
+  ],
+  "build_pid": 66909,
+  "build_returncode": 0,
+  "tests": 1,
+  "frozen_files": 3076,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-mutual-regression-snapshot-20261011.json": "3615a94c782c6456bc9a353ef17a19f781620bd8132fe3d8401ac00d8449d70c",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-gradient-mutual-regression-generic-20261011.py": "b65f6d7915bffb2958caa4d552dca86ddd4e156136983d9816693296efbbfb48",
+    "/Users/themoretheless/.codex/tmp/rrrah-gradient-mutual-regression-generic-qualified-20261011/build.jsonl": "1ba38cb1119517e2108908a920063e5caf0ae70cb53507cdf72b96dee6b5b1b7",
+    "/Users/themoretheless/.codex/tmp/rrrah-gradient-mutual-regression-generic-qualified-20261011/build.log": "a8a0b33c4750fa7ce9972e12ab0871be4bfa6d362644a0ad8c1a5e6757d0db27"
+  },
+  "scope": "macOS decode-feature generic providers on frozen dependencies and copied pre-execution programs; no Torch or total RSS qualification"
+}

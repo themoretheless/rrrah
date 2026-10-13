@@ -1,0 +1,29 @@
+{
+  "all_executed_suites_verified": true,
+  "suite_count": 11,
+  "passed": 144,
+  "failed": 0,
+  "ordinary_gpu_ignored": 13,
+  "ordinary_ignored_executed_explicitly": [
+    "full_sensor_linear_exposure_chunked_readback",
+    "full_sensor_managed_exposure_budgets_and_checks_every_pixel",
+    "hdr_exposure_saturates_to_finite_binary16_range",
+    "hdr_opposite_extreme_samples_interpolate_without_nan",
+    "large_cancelled_upload_validation_and_admission_preserve_visible_texture"
+  ],
+  "not_executed_in_this_combined_run": [
+    "full_f828_managed_rgbe_matches_cpu_reference",
+    "fusion_back_full_frame_developed_raw_matches_metal_display_transport",
+    "fusion_front_full_frame_developed_raw_matches_metal_display_transport",
+    "hero9_full_frame_developed_raw_matches_metal_display_transport",
+    "large_hdr_area_lod_preserves_all_output_samples_and_metal_frame",
+    "pinned_native_ai_planes_survive_managed_metal_display",
+    "qualified_sd10_linear_raster_full_frame_display_readback",
+    "raster_single_layer_gpu_timestamp_timing"
+  ],
+  "report": "report.json",
+  "limitations": [
+    "not-executed list describes this combined run only; some tests have separate historical evidence",
+    "no all100format or physical HDR/NVIDIA completion claim"
+  ]
+}

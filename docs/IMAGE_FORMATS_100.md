@@ -4,26 +4,26 @@ The user requested correct operation with 100 image formats. This is an implemen
 
 Completion requires actual library decoding and viewer opening, folder discovery, color management, orientation, precision/alpha preservation, bounded malformed-input handling, and licensed reproducible fixtures with pixel/metadata oracles per row. Animations need disposal, frame timing and loop semantics; layered/page formats need explicit selection/compositing; scientific volumes need explicit slice/window semantics. Camera RAW must decode the sensor, never substitute an embedded preview. Generic TIFF must remain separate from CFA DNG routing.
 
-Current raster API decodes the first image by default. DCX supports explicit page indices, WAD3 selects texture entries, PVR/DDS/KTX1/KTX2 select mips, APNG/GIF/WebP/Aseprite select composited animation frames, and NRRD/MRC/FITS select scalar sections or planes and native DICOM selects scalar frames; other animation/page/layer behavior is pending. It preserves ICC bytes; `prepare_raster_for_display` applies RGB ICC profiles to linear sRGB, and marks unqualified PNG/TIFF/EXR color interpretation unspecified pending complete metadata handling. The common `decode_image` API distinguishes sensor and raster results, inspects TIFF sensor tags including SubIFDs, and never falls back from failed sensor decoding to a preview. CLI `--inspect` supports raster inputs; The window now routes prepared still rasters to a dedicated GPU renderer; mixed-folder navigation and color-managed raster thumbnails are connected. 94 of 100 rows have an implemented subset; 6 remain Pending for normal viewer implementation. None of these rows is fully qualified yet.
+Current raster API decodes the first image by default. ICO/CUR support quality-ranked image selection; TIFF/BigTIFF and DCX support explicit page indices, WAD3 selects texture entries, PVR/DDS/KTX1/KTX2 select mips, APNG/GIF/WebP/Aseprite select composited animation frames, and NRRD/MRC/FITS select scalar sections or planes and native DICOM selects scalar frames; other animation/page/layer behavior is pending. It preserves ICC bytes; `prepare_raster_for_display` applies RGB ICC profiles to linear sRGB, and marks unqualified PNG/TIFF/EXR color interpretation unspecified pending complete metadata handling. The common `decode_image` API distinguishes sensor and raster results, inspects TIFF sensor tags including SubIFDs, and never falls back from failed sensor decoding to a preview. CLI `--inspect` supports raster inputs; The window now routes prepared still rasters to a dedicated GPU renderer; mixed-folder navigation and color-managed raster thumbnails are connected. 94 of 100 rows have an implemented subset; 6 remain Pending for normal viewer implementation. None of these rows is fully qualified yet.
 
 Reference format inventory: https://imagemagick.org/formats/ (used only as a format reference, not as a runtime dependency).
 
 | # | Format | Current implementation | Completion evidence |
 |---|---|---|---|
 | 1 | JPEG | Raster first-image decoder; qualification pending | Pillow CC0 baseline pixel/alpha oracle passes; standalone profiled CMYK JPEG with Adobe APP14 transform 0 preserves channels through ICC, matches the independent 512-pixel oracle exactly and passes float display preparation with released managed ownership; standalone profiled YCCK APP14 transform 2 also matches its independent 512-pixel oracle exactly; both fixtures and 16 asymmetric cases covering all eight EXIF orientations pass RAM leases, pressure-preserving native/prepared swap restoration and actual Metal frames against independent references (maximum one RGB8 level); broader profiles, subsampling and physical viewer qualification remain pending; full variants/color/viewer pending |
-| 2 | PNG | Raster decode, ICC bytes, sRGB/cICP precedence, straight alpha and 16-bit samples | Pillow CC0 baseline pixel/alpha oracle passes; full variants/color/viewer pending |
+| 2 | PNG | Raster decode, ICC bytes, sRGB/cICP precedence, gAMA+cHRM explicit color, preserved wide-gamut/HDR/range signaling, straight alpha and 16-bit samples | Pillow CC0 baseline pixel/alpha oracle passes; linear BT.2020/P3, encoded Display P3 and explicit full-range BT.2020 PQ/HLG decode policies tested on authored 16-bit controls. Narrow-range 8/16-bit BT.709 RGB display is supported with signed excursions and unchanged alpha; narrow PQ/HLG remains unsupported and explicit HDR decode policy refuses it. Full variants/color/viewer pending; see research/png-cicp-expanded-2026-10-13.json |
 | 3 | GIF | Selected composited RGBA8 frames, delay and repeat metadata; decode stops at selection | Twelve independent Pillow presentations for KEEP/BACKGROUND/PREVIOUS; malformed bounds checked; live playback/full variants pending |
 | 4 | WebP | Still decoder plus selected linear-light animation composition, delays/plays, ICC source color | Sixteen libwebp raw-frame/linear presentation contracts, lossy ALPH and lossless; full variants/live playback pending |
 | 5 | AVIF | dav1d/image first image, ICC retained; exact pixel-aligned primary clean-aperture crop before transforms | RGB/alpha libavif oracles; ICC and NCLX sRGB display checked; crop rational/order/refusal tests, 24 crop metadata cases against libavif, and eight libavif-exported top-left crops with seven orientations pass native pixel and RAM/swap/Metal qualification; explicit PQ/HLG BT.2020 viewer policies and neutral/colored SVT 10-bit producer decode/swap/Metal float readback pass; independent 12-bit/alpha HDR producers, fractional crop, sequence and physical HDR output pending |
-| 6 | HEIF / HEIC | libheif HEVC primary image; ICC, NCLX sRGB/linear, straight alpha, item transforms and native precision | Four authored lossless pixel oracles and adjacent 12-bit values; other codecs/HDR/sequence/viewer/full qualification pending |
+| 6 | HEIF / HEIC | libheif HEVC primary image; ICC, NCLX sRGB/linear and explicit BT.2020 PQ/HLG policies, straight alpha, item transforms and native precision | Four authored lossless pixel oracles and adjacent 12-bit values; six gray/color/straight-alpha 12-bit HEVC PQ/HLG controls preserve CICP and all authored codes, independently reproduced by FFmpeg; primary and mixed-color linear conversion matches independent Decimal/chromaticity vectors, reach linear display with explicit policy, and preserve float bits and Metal SDR/HDR frames through pressure/swap; one external Canon DPP 24 MP PQ photograph passes bounded FFmpeg RGB agreement, managed working admission, swap/Metal and native HDR window; direct-camera HDR producers, premultiplied alpha, other codecs, sequences, physical HDR and full qualification pending |
 | 7 | JPEG-XL | jxl-oxide first frame, ICC and native sample precision | libjxl container/codestream alpha oracles; animation/HDR/CMYK/full qualification pending |
-| 8 | TIFF | Raster first-image decoder; qualification pending | Pillow CC0 baseline pixel/alpha oracle passes; full variants/color/viewer pending |
+| 8 | TIFF | Selected top-level TIFF/BigTIFF pages; qualification pending | Pillow CC0 baseline pixel/alpha oracle passes; full variants/color/viewer pending |
 | 9 | BMP | Raster first-image decoder; qualification pending | Pillow CC0 baseline pixel/alpha oracle passes; full variants/color/viewer pending |
-| 10 | ICO | Raster first-image decoder; qualification pending | Pillow CC0 baseline pixel/alpha oracle passes; full variants/color/viewer pending |
-| 11 | CUR | PNG/DIB image through ICO decoder; hotspot bounds checked | Two independent ICO pixel oracles; hotspot preserved through display; full cursor qualification pending |
+| 10 | ICO | Quality-ranked selected PNG/DIB image via ICO decoder; qualification pending | Pillow CC0 baseline pixel/alpha oracle passes; full variants/color/viewer pending |
+| 11 | CUR | Selected PNG/DIB images through ICO decoder; matched hotspot and bounds checked | Two independent ICO pixel oracles; hotspot preserved through display; full cursor qualification pending |
 | 12 | SVG | resvg shapes/text/embedded sRGB PNG, intrinsic viewport, straight RGBA | CairoSVG shapes and embedded-PNG alpha fixtures; other resources/animation/full qualification pending |
 | 13 | EMF | Bounded 88/100/108-byte fixed header with optional UTF16 description rectangle/ellipse and 16/32-bit polygon/polyline/Bezier and continuation subset through SVG; fixed/anisotropic mapping with saved origins/extents, fill modes, MOVETOEX/LINETO current point, saved contexts, stock/custom solid/null RGB brushes/pens and bounded object table with deletion/index reuse | Eight authored opaque fills agree exactly with separate Java2D renderer and pass native/display, RAW-suffix routing, RAM leases, pressure-preserving streamed swap and Metal. Thirty mathematical fixtures pass RAM/swap/Metal; independent EMF-to-SVG/Cairo comparison is 25/30 exact with metric/reflected and continuation mismatches recorded; Bezier cases are collinear; the separate Java2D winding mismatch remains recorded. Independent producers, non-null stroke rasterization, transforms, clipping, fonts/bitmaps, extended headers/color and full qualification pending |
-| 14 | APNG | 8-bit source frames, selected linear-light float32 composition, timing/repeat metadata | Authored linear-light oracles plus FFmpeg structural/compatibility readback; live playback/16-bit/full color and variant qualification pending |
+| 14 | APNG | 1/2/4/8/16-bit source frames, selected linear-light float32 composition, timing/repeat metadata | Authored composition and 16-bit precision oracles; Metal SDR/HDR readback; live playback/full color and variant qualification pending |
 | 15 | MNG | Native MNG-VLC plus admitted LC global palette/transparency and intrapixel subset; opaque 8/16-bit and linear-light alpha composition, explicit selection/ticks | Authored opaque and 28 alpha presentations preserve native/display samples through RAM/swap and actual Metal; embedded PNG samples independently agree with FFmpeg. Independent MNG compositor, wider control/loops/object placement and physical viewer qualification pending |
 | 16 | JNG | Standalone 8-bit JPEG RGB/gray with PNG 1/2/4/8/16-bit or JPEG 8-bit straight alpha, outer color declarations | Eight Pillow JPEG/alpha sample contracts; native adjacent alpha16 preserved; wider JPEG/MNG/live viewer/full qualification pending |
 | 17 | JPEG-2000 | OpenJPEG JP2/J2K, unsigned full-resolution RGB/gray/straight alpha, 8/16-bit, RGB ICC | OpenJPEG/FFmpeg pixel fixtures; palette/subsampling/signed/CMYK/full qualification pending |
@@ -33,10 +33,10 @@ Reference format inventory: https://imagemagick.org/formats/ (used only as a for
 | 21 | TGA | Raster first-image decoder; qualification pending | Pillow CC0 baseline pixel/alpha oracle passes; full variants/color/viewer pending |
 | 22 | PNM | Raster first-image decoder; standard P1–P6 BT.709 preparation | ASCII/binary PBM/PGM/PPM and full-range 8/16-bit color checks pass; 65,536-value nominal reference and independently modeled Netpbm toe difference recorded; Metal frame and payload color-tag roundtrip pass. PAM, nonstandard linear/sRGB variations and broader qualification remain separate. |
 | 23 | PAM | First image; RGB/gray/black-white with straight alpha and native maxval scaling | Five authored tuple/alpha oracles, including adjacent 16-bit values; transfer/page/viewer/full qualification pending |
-| 24 | PFM | Native float RGB/grayscale, bottom-up, both endians; scale retained, output admitted before allocation and wide-row cancellation bounded | Synthetic precision/row/endian/size tests pass; viewer and corpus pending |
+| 24 | PFM | Native float RGB/grayscale, bottom-up, both endians; scale retained, output admitted before allocation and wide-row cancellation bounded | Authored binary32 oracle, explicit linear-sRGB CLI, preload/swap/thumbnail, Metal SDR/HDR and native-window checks pass; broader corpus and alternate dialects pending |
 | 25 | Farbfeld | Native directly decoded RGBA16, output admitted before allocation; explicit assumed-sRGB import, straight alpha | Adjacent 16-bit sample oracle and linear-display alpha checks; native and prepared disk-swap payloads plus actual Metal frames remain exact with pressure/cancel/root-release checks; compressed wrappers, broad corpus and full qualification pending |
-| 26 | OpenEXR | First selected RGB(A) surface; HALF/FLOAT retained as f32 and associated alpha converted to straight | OpenEXR NONE/RLE/ZIP/PIZ pixel oracles; zero-alpha emission, explicit linear Rec.709 declarations supported; other primaries, layers/deep/tiled/viewer/full qualification pending |
-| 27 | Radiance-HDR | RGBE float samples; explicit Rec.709 PRIMARIES prepares linear sRGB, absent/other primaries remain unspecified | Authored old-style and scanline RLE pixel oracles; bounded explicit-primary parser rejects malformed/duplicate declarations, declared RLE HDR preserves all native samples and shares prepared storage with released RAM ownership; actual Metal resident-exposure completed-frame timing passes; arbitrary-primary conversion, exposure calibration, orientation, wider corpus and physical HDR output pending |
+| 26 | OpenEXR | First selected RGB(A) surface; HALF/FLOAT retained as f32 and associated alpha converted to straight | OpenEXR NONE/RLE/ZIP/PIZ pixel oracles; explicit invertible linear chromaticities/white and known Rec.709, BT.2020, P3, ACES AP1/AP0 colorInteropID supported; native wide-gamut preparation and swap pressure/cancellation recovery match analytical SDR/HDR on Metal; zero-alpha emission explicitly refused; other interop IDs, different adopted neutral, layers/deep/tiled/full qualification pending |
+| 27 | Radiance-HDR | RGBE float samples; explicit valid invertible PRIMARIES/white prepares native linear sRGB with Bradford adaptation; absent primaries remain unspecified | Authored old-style and scanline RLE pixel oracles; bounded explicit-primary parser rejects malformed/duplicate declarations, declared Rec.709 RLE HDR preserves all native samples and shares prepared storage; declared BT.2020/D65 native matrix, managed retry and swap-pressure/cancellation recovery preserve analytical SDR/HDR frames on Metal; actual Metal resident-exposure completed-frame timing passes; arbitrary explicit primaries/non-D65 white verified on three authored RGBW sources including AP1/AP0 through managed preparation and swap retry with exact Metal SDR/HDR; exposure calibration, orientation, wider corpus and physical HDR output pending |
 | 28 | PSD | Native saved RGB/gray composition, raw/RLE/ZIP/prediction, 8/16/32-bit; ICC resources | FFmpeg raw/RLE and psd-tools merged-alpha fixtures; layers/color modes/full qualification pending |
 | 29 | PSB | Native saved composition with 64-bit section lengths and 32-bit RLE row lengths | psd-tools raw/RLE pixel oracles; full large-document qualification pending |
 | 30 | XCF | Partial: legacy v0-v3 8-bit normal-layer flatten routes through decode_image/decode_raster; ICC preserved, managed source/canvas/pixels/profile, cancellation, gallery detection and SDR Metal/swap fixture transport verified. Native selected-layer/mask and group metadata APIs remain available. | 12 bounded legacy normal-layer compositions exactly match pinned independent parsing and Pillow alpha composition, including gray, opaque indexed, endpoint masks and one 128/255 opacity case; dimensions/managed release verified. Modern precision, groups/effects/non-normal modes, general fractional masks/opacity, indexed-alpha, v0 indexed interpretation and full color/viewer qualification remain. Untagged inputs require explicit sRGB interpretation. No physical presentation proof; see research/xcf-current-full-flatten-2026-10-06.json and research/xcf-raster-route-metal-2026-10-06.json. |
@@ -48,7 +48,7 @@ Reference format inventory: https://imagemagick.org/formats/ (used only as a for
 | 36 | KTX2 | Native ordinary RGB/RGBA/BGR/BGRA 8-bit, RGB/RGBA16 and float32; plain/DEFLATE, DFD and orientation | Twelve authored pixel fixtures, four precision files and 96 selected-mip native sample oracles; BasisLZ/UASTC/Zstd/compressed textures/array/cube/volume/viewer/full qualification pending |
 | 37 | Basis | ETC1S/UASTC LDR transcoding to managed RGBA8 with selected image/mip, file sRGB flag, CRC and bounded output admission | Eight authored files and 32 selected mips/images (white, 7x5 colored-alpha blocks and two-image red/green mip chains) pass RAM leases, 64 native/prepared pressure-preserving streamed swap roundtrips and actual Metal readback. White reference is exact; colored-alpha channels agree within fixed error 8/255, and swap samples are bit-exact. Four pinned upstream ETC1S/UASTC producer files additionally pass all 13 mip/image selections and 26 native/prepared RAM/swap/Metal preservation roundtrips with SHA256-verified inputs; four newer codecs explicitly refuse. Independent pixel/color oracle, full producer coverage, complex spatial textures/alpha, array/cube/Y-flip, KTX2 Basis and direct compressed GPU upload qualification pending |
 | 38 | PVR | v3 ordinary 8/16/float32 RGB channels, PVRTC1 2/4 bpp, mip selection, orientation metadata | Authored native samples and PowerVR SDK raw-PVRTC oracle; other codecs/legacy/cube/array/packed/viewer pending |
-| 39 | ASTC | Arm reference decoder, all 14 2D footprints; RGBA8 LDR / RGBA32F HDR, validated block classification | 14 reference pixel oracles; compressed and constant HDR precision checked; 3D/color semantics/viewer/full qualification pending |
+| 39 | ASTC | Arm reference decoder, all 14 2D footprints; RGBA8 LDR / RGBA32F HDR, validated block classification | 14 reference pixel oracles; compressed and constant HDR precision checked; explicit linear-sRGB HDR preload/swap and actual Metal SDR/HDR preservation pass; 3D/linear-LDR/producer/full qualification pending |
 | 40 | PKM | Bounded ETC1/ETC2 RGB/RGBA8/RGBA1 color textures via Rust block decoder | Android ETC1 oracle, cropping and baseline ETC2 alpha cases; full ETC2/EAC qualification pending |
 | 41 | DNG | Bounded native mosaic decoder; full qualification pending | 1 pinned current corpus case(s) pass full sensor hash, geometry/CFA, WB/matrix and declared metadata contracts against independent LibRaw references under 256 MiB managed admission; broader variants and physical display remain open. See research/current-managed-raw-corpus-2026-10-06.json. |
 | 42 | CR3 | Bounded native mosaic decoder; full qualification pending | 2 pinned current corpus case(s) pass full sensor hash, geometry/CFA, WB/matrix and declared metadata contracts against independent LibRaw references under 256 MiB managed admission; broader variants and physical display remain open. See research/current-managed-raw-corpus-2026-10-06.json. |
@@ -71,19 +71,19 @@ Reference format inventory: https://imagemagick.org/formats/ (used only as a for
 | 59 | KDC | Native Kodak P880 packed12 subset; other cameras pending | CC0 object 2339: all 8,049,120 sensor values and color metadata match LibRaw; five native WB selections independently checked. Persistent cache/swap exact roundtrip and whole-frame Metal readback verified; eight malformed cases rejected without preview fallback or retained memory. Full photographic color and physical display pending; see `tests/fixtures/kdc-qualification.json`. |
 | 60 | MRW | Native Dynax 7D and DiMAGE A2 packed 12-bit mode 0x59, managed sensor decode and strict camera color/levels | CC0 objects 1826 and 4419: full sensor samples, WB, calibrated matrix, CFA, crop, black/white levels independently qualified; native RAW and mixed-image routing connected. Persistent cache and swap preserve all pixels/metadata; actual Metal readback matches independent samples/color. Other cameras/storage modes, visible window presentation and full photographic color qualification pending; see `tests/fixtures/mrw-qualification.json`. |
 | 61 | MOS | Native Leaf Aptus 22 MM TIFF, single compression-99 lossless JPEG tile; bounded PKTS WB, exact camera profile, full 21,418,752-sample LibRaw equality and managed allocation; other cameras/layouts unqualified | Required RAW corpus, RAM lease/limits, disk/swap pressure retry and full Metal frame equality pass; 6 malformed cases and low-budget refusal release allocations |
-| 62 | MEF | Pending: explicit native Mamiya ZD sensor import API | Known MEF TIFF now classifies directly as sensor, avoiding generic probing of calibration data as TIFF fields; native public decode still refuses the unqualified DNG SubIFD chain. No preview fallback or retained managed credit. See research/mef-public-routing-2026-10-07.json. Public `decode_mef_zd_sensor` returns managed sensor codes only; full sensor comparison remains independent of viewer qualification. Native WB remains unresolved. Public TIFF structure and color support pending; see tests/fixtures/mef-investigation.json |
+| 62 | MEF | Pending: explicit native Mamiya ZD sensor import API | Known MEF TIFF classifies directly as sensor. Public native decode explicitly refuses the unqualified MEF color path through `NativeFormat::UnqualifiedMef`, rather than routing through DNG SubIFDs. No preview fallback or retained managed credit. See research/mef-explicit-color-refusal-2026-10-11.json. Public `decode_mef_zd_sensor` returns managed sensor codes only; full sensor comparison remains independent of viewer qualification. Native WB remains unresolved. Public TIFF structure and color support pending; see tests/fixtures/mef-investigation.json |
 | 63 | ERF | Native Epson R-D1 subset; other profiles pending | CC0 object 2680: all 6,152,960 sensor samples and strict native color metadata qualified against LibRaw; persistent cache/swap exact roundtrip, pressure retry and whole-frame Metal readback verified. Five malformed variants rejected without preview fallback or retained managed memory. Physical display and universal ERF coverage pending; see `tests/fixtures/erf-qualification.json`. |
 | 64 | IIQ | Native Phase One P20+-H format-3 subset; other cameras/storage pending | CC0 object 4366: all 17,065,152 samples after native black, pixel, gain-grid and isolated-column correction match independent LibRaw stages. Native WB/profile/crop, RAM leases, persistent cache, bounded swap pressure retry and whole-frame Metal readback verified. Seven malformed cases rejected with budget zero. Other variants, physical display and full photographic color pending; see `tests/fixtures/iiq-investigation.json`. |
 | 65 | 3FR | Native uncompressed Hasselblad X1D full sensor with file-origin WB/matrix/levels/crop | Object 2058: all 52,852,736 samples match LibRaw. Embedded matrix precision and stored default crop retained; persistent cache, swap pressure retry and consistent 128×96 Metal frames verified. Stored matrix/WB/levels/crop independently match tifffile 2026.9.20. Photographic color accuracy and broader layouts pending. |
 | 66 | FFF | Native CFV-50 predictor-8 sensor, native WB and exact FFF profile | Object 1637: all 51,679,680 samples and color match LibRaw; persistent cache, swap RAM-pressure retry and whole Metal frame verified. Broader camera/codec variants and full qualification pending. |
 | 67 | X3F | Native Sigma SD10/SD14 legacy Huffman/CAMF subset, strict selected WB_DESC, linear RGBA16 and raster viewer routing | Pinned SD10 Auto 2267×1513 and SD14 Sunlight 2639×1757 public output match independent standalone converter channel-for-channel. SD14 explicit Auto is also exact. RAM/swap exact restoration, preload windows, generation cancellation and completed Metal rendering verified. Linear fixture full-frame Metal readback deviation <=1 code value. Other cameras/encodings and full-image qualification of additional WB modes remain pending, as do physical display/HDR; see `research/x3f-sd14-public-sunlight-2026-10-06.json` and `research/x3f-reproducible-full-output-2026-10-06.json` |
 | 68 | RWZ | Pending: Rawzor compressed-file wrapper | Requires native reconstruction of original image payload, then routing to its actual decoder. ExifTool Rawzor.pm documents the 46-byte little-endian header and bzip2 metadata sections; it reconstructs metadata with image-data gaps zero-filled, not original sensor pixels. Header/metadata inspection alone must not count as RWZ image decoding. No qualified pixel codec or reproducible producer fixture yet; see research/rwz-container-boundary-2026-10-08.json. |
-| 69 | BAY | Pending: native explicit-layout sensor unpack for Casio QV-2000UX, QV-3000EX and QV-5700 | Camera-file qualification, CFA/color metadata and viewer routing pending |
-| 70 | CAP | Pending | Pending |
+| 69 | BAY | Pending: native explicit-layout sensor unpack for Casio QV-2000UX, QV-3000EX and QV-5700 | `BaySensorLayout::image_samples_per_row` separates QV-5700’s documented 2576 image samples from full-row unpack storage containing trailer positions. Camera-file qualification, CFA/color metadata and viewer routing pending |
+| 70 | CAP | Pending: legacy Phase One / Capture One sensor format | Current native IIQ path is explicitly P20+ format3 with model-specific calibration; it does not establish CAP compatibility. Fresh raw.pixls.us snapshot contains 2016 rows, 43 Phase One rows and no CAP/CAPTURE download suffix. Original container/sensor/color oracle and native viewer route remain required; see research/cap-source-boundary-2026-10-12.json. |
 | 71 | EIP | Original RAW sensor subset through common viewer route | Bounded classic ZIP, native RAW extraction, shared budget, package-file cache fingerprint and inner decoder recipe. Authored EOS R8 packages pass actual forward/backward app prefetch, one-entry disk cache, RAM TTL/swap and Metal frame preservation against original CR3. Capture One-produced packages and settings/ICC/LCC appearance remain unqualified. See research/eip-common-route-2026-10-07.json, research/eip-app-prefetch-2026-10-07.json and research/eip-ttl-swap-metal-2026-10-07.json. |
 | 72 | DCS | Native Kodak DCS520C lossless-JPEG TIFF subset, strict WB/profile/response curve | CC0 object 2573: original TIFF routes to backend 22 revision 1; all 2,013,760 sensor samples match LibRaw; managed ownership, RAM lease, disk/swap restore and Metal frame readback pass. Exact observed extra JPEG tail accepted only in this camera path; other cameras/tails, physical navigation/color/display and full qualification remain. |
 | 73 | EPS | Native bounded Gray/RGB vector subset through common raster/viewer route; content-based framing and neighbour discovery | Managed source/compiler/VM/path/fill/stroke pipeline; numeric operators, rectangle forms and signed-radius arc/arcn cubic paths with bounded multi-turn sweeps; native clip/eoclip intersections and initclip retain paths and restore with gsave/grestore; numeric rectclip clears the active path with bounded rollback on failure; RAM size/count, visible pin/TTL, swap pressure/cancellation/restore and both neighbour directions tested. Actual Metal offscreen pixels match analytic references after swap restore. Selected arc pixels are qualified with explicit one-sample coverage and zero oracle fill adjustment; the ellipse boundary and default-coverage parity remain open. Strict independent grayscale quantization and diagonal stroke pixel gates remain unresolved; arrays/dictionaries, clippath and array/string rectangle forms, fonts/images, stroke adjustment and full EPS variants remain unsupported. CPU benchmark covers authored 512x512 cases only. See research/eps-updated-app-metal-2026-10-07.json and research/eps-alpha-fast-path-2026-10-07.json. |
-| 74 | AI | Pending: `.ai` gallery candidate; PDF-compatible content uses the PDF renderer, including selected pages. PostScript AI remains unsupported. | Pinned Adobe-produced PDF-compatible AI: RAM/page keys and swap/Metal preservation pass, but current strict Poppler comparison fails on two of three pages (33,167 and 2,522 differing pixels at 72 dpi); one page exact. Rendering fidelity, ordered mesh overlap and PostScript AI remain pending. See research/ai-current-poppler-2026-10-08.json. Test-only native axial/radial source capture now retains admitted original device-color Type2/Type3 functions and replays an exact 512-pixel CMYK axial fixture. Actual VectorApple native replay still refuses tensor-mesh event 9; this is not production AI qualification. See research/pdf-native-shading-source-replay-2026-10-08.json. Test-only native Type4 triangle-stream replay also preserves all 512 independently computed CMYK pixels, source overlap order and admitted fixed component records; tensor support remains pending. See research/pdf-native-triangle-source-replay-2026-10-08.json. Native triangle sampling now uses an admitted source-order BVH; 1024 sparse queries match reverse source geometry exactly (1085 triangles, at most 50 cancellation checkpoints/query). See research/pdf-native-triangle-index-2026-10-08.json. |
+| 74 | AI | Pending: `.ai` gallery candidate; PDF-compatible content uses the PDF renderer, including selected pages. PostScript AI remains unsupported. | Pinned PDF-compatible AI has RAM/page-key and swap/Metal preservation evidence; the 2026-10-08 strict Poppler comparison fails on two of three pages. Production fidelity and PostScript AI remain pending (research/ai-current-poppler-2026-10-08.json). Test-only native axial/radial, Type4 triangle and admitted Type7 tensor sources preserve original device components. The authored 512-pixel Type7 CMYK stream is exact. Dynamic capacity admission captures all five real Tensor sources (298,173 / 180,269 / 180,269 / 24,811 / 62,901 triangles) within 256 MiB without loosening error bounds. Shared curved clips and bounded original Separation/DeviceN tint functions now replay all 2,755 VectorApple events and both one.ai pages, with final admitted bytes zero. All 512 authored nonlinear DeviceN CMYK pixels match the independent float oracle (105 interpreter / 126 compositor tests). Strict native RGB comparison still fails on VectorApple (33,072 pixels) and one.ai page0 (2,494 pixels); page1 is exact. Completion of replay is not fidelity qualification. See research/pdf-native-devicen-calculator-2026-10-10.json and research/ai-native-devicen-poppler-2026-10-10.json. This is not production AI qualification. See research/pdf-adaptive-dynamic-admission-2026-10-10.json. |
 | 75 | STI | Native indexed8/ETRLE, RGB16/24/32 masks and bounded zlib; explicit subimage selection, managed output | Ten authored images and twenty external JA2 images agree with sample references; external parser plus original blitter resolves literal-zero coverage; native/prepared RAM/swap/Metal checks pass. Independent RGB/zlib producers, placement/application semantics, color and full qualification pending |
 | 76 | PDF | Hayro 0.7.1 selected page raster at one pixel per point, bounded geometry/page count, source/pixmap/final-buffer reservations and straight RGBA8 conversion | Two authored opaque 10x10 pages match Poppler and ordinary native routing exactly; managed ownership and insufficient budget/index refusals pass. Both selected opaque pages and a constant half-alpha page pass RAM leases, six native/prepared pressure-preserving streamed swap restores and actual Metal frame readback against mathematical colors. Fixed-profile DeviceCMYK float fills use native hybrid ICC stages: 4721 independent LittleCMS vectors stay within one RGB8 level, an opaque CMYK PDF matches exactly and passes RAM/swap/Metal. Parser/render scratch, interruptible rendering, broader transparency/fonts/color/profiles, independent producer breadth and physical presentation qualification pending |
 | 77 | GPR | Native managed VC-5 sensor decode and normal viewer quality development; full qualification pending | Native managed VC-5: six official HERO5/6/7/9 and Fusion sources, 77,875,968 sensor values exact against complete GoPro SDK. HERO gain maps applied in default quality development; RAM limits, previous/next preload, cancellation, sensor/developed-float swap and Metal tested on HERO9. Native Fusion rectilinear development enabled; synthetic full warp-image comparison against SDK passes; dual-illuminant matrices and 24 color fields for all six cameras independently verified on Metal; full-image color/demosaic quality and broader variants remain unqualified (research/gpr-six-camera-matrices-2026-10-07.json); see research/gpr-full-sdk-sensor-oracle-2026-10-07.json and research/gpr-developed-float-swap-metal-2026-10-07.json |
@@ -113,7 +113,7 @@ Reference format inventory: https://imagemagick.org/formats/ (used only as a for
 
 Next work: qualify the connected common decoder/viewer/gallery against live opening, color and metadata contracts; implement the remaining codecs and per-format fixture gates; add animation, page/layer and scientific slice semantics. Update this matrix from executed evidence rather than compiled feature flags.
 
-PFM contract: Debevec/Netpbm bottom-up raster; finite nonzero scale preserved separately as `DecodedRaster::sample_scale`, without altering samples. The indistinguishable Adobe top-down dialect requires an explicit import option (pending). Primary references: https://pauldebevec.com/Research/HDR/PFM/ and https://netpbm.sourceforge.net/doc/pfm.html .
+PFM contract: Debevec/Netpbm bottom-up raster; finite nonzero scale preserved separately as `DecodedRaster::sample_scale`, without altering samples. The indistinguishable Adobe top-down dialect uses explicit `DecodeRequest::pfm_top_down` / viewer `--pfm-top-down`; bottom-up remains default. Authored RGB/grayscale and both-endian regressions pass, with distinct viewer RAM/swap row-policy keys and exact Metal SDR/HDR restore frames; independent Adobe-exported corpus remains pending. Primary references: https://pauldebevec.com/Research/HDR/PFM/ and https://netpbm.sourceforge.net/doc/pfm.html .
 
 Color preparation: `DecodedRaster::to_linear_srgb` converts declared sRGB or linear sRGB to straight-alpha float RGBA, retaining HDR and advisory sample scale. Unknown primaries/ICC, nonfinite samples, and alpha outside 0..1 are explicit errors. PNG gamma/chromaticities and non-sRGB cICP transforms, TIFF/EXR primaries, grayscale/CMYK ICC and viewer integration remain pending.
 
@@ -787,3 +787,678 @@ integrated qualification runner whenever `--gpr-corpus` is provided.
 Remaining rows pending normal viewer implementation are PTX, MEF, RWZ, BAY,
 CAP and AI. Their explicit limitations in the table still apply. The 94
 implemented subsets are not 94 fully qualified formats.
+
+### Metal cache, compute and HDR evidence (2026-10-11)
+
+The integrated local Metal run completed 114 passing test executions in nine
+suites with no failures. Explicit follow-ups executed all eight hardware/corpus
+tests ignored by the ordinary GPU suite; seven add executions to the integrated
+run, while the large-upload cancellation test was already executed separately.
+The combined evidence is 121 passing executions, including full-sensor compute,
+HERO9/Fusion/SD10 display transport and F828 compute. See
+[the integrated report](research/metal-integrated-cache-prefetch-hdr-2026-10-11.json)
+and [the manual follow-ups](research/metal-current-manual-followups-2026-10-11.json).
+
+Additional checks connect compute output to RAM leases, disk swap and complete
+4000x3000 Metal readback, comparing every retained float component with CPU
+exposure results. Viewer EXR/HDR TTL restoration bypasses a blocked decoder gate;
+actual RAW background-worker reversals preserve both original sensor samples
+and complete 6188x4120 frames. These are bounded fixture checks, with detailed
+scope and admission limits in the
+[compute/cache report](research/metal-large-compute-cache-swap-2026-10-11.json),
+[viewer TTL/prefetch report](research/metal-viewer-ttl-prefetch-2026-10-11.json) and
+[RAW worker report](research/metal-raw-worker-navigation-2026-10-11.json).
+
+A dedicated native Metal window presented 301 RGBA16Float/ExtendedSrgbLinear
+frames over five seconds without validation errors. macOS reported EDR headroom
+rising from 1 to 16 after approximately 2.5 seconds. This establishes surface
+presentation and OS HDR activation; it does not measure panel luminance or
+independent displayed color accuracy. See the
+[live HDR surface report](research/metal-live-hdr-surface-2026-10-11.json) and the
+[12 MP float-attachment/swap report](research/metal-large-float-hdr-2026-10-11.json).
+
+The eight-frame authored 12 MP collection soak passed 3674 restore/render cycles
+over 3601.158 seconds, with exact payload and Metal frame comparisons and zero
+final managed root/queue usage. See the
+[hour-long collection report](research/metal-long-lived-collection-hour-2026-10-11.json). Diverse large RAW collection playback, physical
+slow-disk qualification and complete per-format viewer/color/variant evidence
+remain open. NVIDIA hardware checks are deferred at the user's request. These
+Metal results do not promote any of the 100 format rows to fully qualified.
+
+After the soak ended, two EOS R8 RAW fixtures measured decode-to-completed-frame
+p50 of 139.593/140.895 ms and swap-to-completed-frame p50 of 217.970/171.918 ms
+on Metal. Swap was slower in this run. These are warm-filesystem, offscreen
+1920x1080 measurements, not window presentation latency or a universal RAW
+performance claim. See the
+[post-soak timing report](research/metal-raw-timing-after-hour-2026-10-11.json).
+
+A subsequent decode/swap/swap/decode batch comparison passed all payload and
+managed-budget checks, but observed concurrent compilation, VM and browser load
+caused large timing drift. It does not establish a stable swap speedup or
+regression. See the [ABBA timing report](research/metal-raw-abba-timing-2026-10-11.json).
+
+A separate real-camera collection check passed ten forward/backward rounds over
+nine CR2/CR3/NEF/ARW/ORF/PEF/RW2/RAF files in one retained cache and swap worker.
+All 90 restores preserved sensor samples, metadata and complete 1920x1080 Metal
+frames; visible-pin policy refusal, pressure recovery and final zero managed
+usage were checked. This is a bounded synchronous nine-file test, not hour-long
+large-corpus viewer playback. See the
+[real RAW collection report](research/metal-real-raw-collection-2026-10-11.json).
+
+The same nine-file real RAW collection passed a continuous 3600.270-second run:
+1477 complete forward/backward rounds and 13293 exact sensor/metadata/Metal-frame
+restores, with nine disk writes and zero final managed root/queue usage.
+Pressure refusal, cancellation and visible pin checks run on every restore.
+This closes the one-hour bounded real-RAW cache traversal check; large diverse
+corpora, asynchronous viewer playback and physical slow disks remain open. See
+the [hour-long real RAW report](research/metal-real-raw-collection-hour-2026-10-11.json).
+
+The current ordinary Metal GPU suites and the nine-file RAW collection also
+passed together through the shared qualification runner: 107 passing test
+executions, zero failures, 8 manual tests left ignored in the ordinary GPU
+suite. Those ignored cases are not counted as passing here. See the
+[integrated real-collection report](research/metal-real-collection-integrated-2026-10-11.json).
+
+The actual RAW background worker also passed nine camera fixtures across eight
+extensions with alternating forward/backward plans, a retained one-entry disk
+cache, exact original sensor samples/metadata and full-sensor-sized Metal output.
+Each plan offers one available RAW neighbor; broader multi-neighbor scheduling
+is not established by this test. See the
+[mixed-camera worker report](research/metal-mixed-camera-worker-prefetch-2026-10-11.json).
+
+A further actual-worker test offered three real RAW neighbors at once with
+behind=1/ahead=2 and verified both forward and backward plan order. All six
+restores matched original sensor samples, metadata and 1920x1080 Metal frames;
+the selected input stayed absent and disk count stayed three. This verifies
+multi-neighbor plans processed by one worker, not parallel decode or mid-flight
+reversal. See the
+[multi-neighbor RAW worker report](research/metal-multi-neighbor-raw-worker-2026-10-11.json).
+
+The actual filmstrip renderer also passed an RGBA16Float thumbnail check:
+sRGB byte 128 samples into the independent expected linear-light value with
+exact alpha and released texture/upload credits. This checks one opaque
+thumbnail interior pixel, not the full viewer UI or physical panel. See the
+[HDR filmstrip report](research/metal-hdr-filmstrip-2026-10-11.json).
+
+The main viewer was visually observed on its native Metal HDR surface with two
+RAW files and left/right cache navigation. A separate startup observation showed
+the first RAW frame without input after native surface occlusion cleared;
+initial blank capture was temporary, with first present logged at 4093.577 ms.
+These UI observations do not measure physical HDR color accuracy. See the
+[viewer navigation report](research/metal-main-viewer-hdr-navigation-2026-10-11.json)
+and [startup report](research/metal-main-viewer-hdr-startup-2026-10-11.json).
+
+Metal qualification found a foreground responsiveness issue: the loader read
+`SourceStamp` synchronously before enqueueing every decode request. A native
+viewer sample caught the main thread in `SourceFingerprint::from_path` and
+`File::open` for a Documents input. The same viewer ran with input copies in
+the temporary directory; the cause of the blocked open is unconfirmed. Moving
+this validation off the UI thread must preserve source-change detection and
+pending/active request coalescing. New selections now enqueue without reading
+their source; the decoder worker establishes the active fingerprint. Duplicate
+requests for the same in-flight selection now validate on a bounded background
+worker. Unchanged inputs retain the active generation; changed/unreadable
+inputs schedule one replacement through event-loop polling, including when
+the original decode has already finished. Navigating elsewhere discards the
+old validation result. Deferred thumbnails submit their source checks to
+a single background validator with one active and one queued request. The UI
+polls without waiting and keeps the original two-second retry expiry; replacing
+or dropping a request cancels its result and retains no pixels in the worker.
+Folder-refresh thumbnail cache invalidation now checks a bounded cache snapshot
+on the folder-scan worker. The UI applies only evidence matching the cached
+texture ID, source path and fingerprint, preserving entries replaced while
+the scan was running. A newly selected cover also invalidates the old cover
+even if the old file remains unchanged.
+This version passed 180 ordinary viewer tests with zero failures and 32
+explicit ignored cases, plus a separate actual Metal thumbnail callback test.
+The new regressions check blocked-reader responsiveness/cancellation, delayed
+evidence preserving a replaced texture and a changed first cover. See the
+[background folder validation report](research/metal-background-folder-source-validation-2026-10-11.json).
+These changes remove the identified synchronous fingerprint paths, but do not
+make blocked kernel reads cancellable or qualify physical slow storage.
+Dropped-path metadata inspection now runs on a separate bounded worker with
+one active and one queued path. A newer drop replaces queued work; later
+gallery/folder navigation cancels a pending drop. The UI polls results and
+retains earlier folder-scan context until a drop is accepted or rejected, so
+an invalid drop cannot lose the earlier scan. Symlink, unsupported and special
+file refusals retain their previous inspection policy. Interactive CLI startup
+now admits its initial source on the foreground decoder worker, as described below.
+This version passed 189 ordinary viewer tests with zero failures and 32
+explicit ignored cases. Six new regressions include real metadata/refusal
+cases, blocked-worker/latest-drop behavior, cancellation and actual App state
+transitions preserving prior folder context. A separate actual Metal test
+released the thumbnail upload budget while drop inspection remained blocked;
+this uses a synchronized test reader, not physical slow storage or an OS drag
+gesture. See the [asynchronous drop report](research/metal-async-drop-inspection-2026-10-11.json).
+
+The final asynchronous foreground-duplicate implementation passed 183 ordinary
+viewer tests with zero failures and 32 explicit ignored cases. Regressions
+include a blocked validator, navigation cancelling old evidence, completion
+of the original decode before reload, preserving index/window/development and
+replacing a successful validation completed before a newer file-change
+request. See the [duplicate validation report](research/metal-async-foreground-duplicate-2026-10-11.json).
+The repeated integrated Metal run passed 110 tests with zero failures and
+eight explicit ignored cases; see the
+[integrated report](research/metal-async-fingerprint-integrated-2026-10-11.json).
+The final native binary was also observed displaying its first RAW without
+navigation and both left/right RAW transitions on its actual HDR surface;
+this ordinary navigation observation does not exercise the duplicate-change
+race or qualify physical HDR color. See the
+[final native viewer report](research/metal-main-viewer-async-fingerprint-final-2026-10-11.json).
+
+The deferred-thumbnail change passed all 177 ordinary viewer tests with zero
+failures and 32 explicit ignored cases, followed by a separate passing actual
+Metal callback test. Focused checks cover changed/missing inputs, a blocked
+reader, queue replacement and expiry releasing managed pixels while validation
+is still blocked. These focused tests are included in the ordinary count.
+See the [asynchronous thumbnail validation report](research/metal-async-thumbnail-validation-2026-10-11.json).
+
+The shared qualification runner's `--metal-mixed-raw-workers` option includes
+both real mixed-camera and three-neighbor worker checks, requires a RAW
+manifest with at least five distinct existing files, and rejects passing
+harness output without the expected per-source and completed-plan evidence.
+The integrated run passed 110 tests with zero failures and eight explicit
+ignored tests; both worker suites supplied their required workload evidence.
+See the [integrated report](research/metal-mixed-raw-workers-integrated-2026-10-11.json)
+and [synthetic runner controls](research/metal-mixed-raw-worker-runner-controls-2026-10-11.json).
+The foreground source-validation change separately passed 62 tests with zero
+failures and nine explicit ignored tests; see its
+[regression report](research/metal-foreground-source-validation-2026-10-11.json).
+
+
+Interactive startup admission now checks the required source fingerprint on the
+foreground worker, removing the pre-window `is_file()` call. Cancellation is
+checked before and after admission; obsolete failures are discarded. External
+WAL palette identity and regular-file symlink behavior are preserved. Invalid
+interactive startup paths now open the viewer and show a load failure instead
+of exiting before window creation; headless `--inspect` remains synchronous.
+Five added regressions cover cancellation, blocked admission, non-files,
+palette identity and recovery after a failed startup. The final viewer suite
+passed 194 tests, zero failures, with 32 explicit ignored cases.
+The rebuilt native viewer rejected a real FIFO without hanging and displayed
+a CR3 on Apple M4 Max Metal with an Rgba16Float ExtendedSrgbLinear surface;
+the upload consumer lease returned to zero. Initial occlusion delayed the first
+visible frame. This is neither a physical HDR color/luminance qualification nor
+a physical slow-disk test. See the [startup admission report](research/metal-async-startup-admission-2026-10-11.json).
+
+
+A combined current-source Metal regression after asynchronous startup admission
+completed all 12 requested suites: 119 tests passed, zero failures, eight
+explicit ignored cases. This includes 20 live count/size/TTL policy cycles,
+nine real RAW sources through ten collection rounds (90 restores), actual
+mixed-camera and three-neighbor workers, mixed-gallery reversals, RAW worker
+reversal, 12 MP float HDR swap/readback, 128 viewer HDR TTL restores without
+decoder fallback plus two preloads under a blocked decoder, large upload
+cancellation and compute/cache/swap. All explicitly requested suites recorded
+passing execution on Apple M4 Max Metal. Source files were not edited during
+this run. See the [combined current-source report](research/metal-current-integrated-2026-10-11.json),
+which includes log hashes and source hashes. This run does not replace physical
+HDR/slow-disk/OS-wide pressure qualification, broaden the nine-source RAW
+corpus to all 100 formats, or qualify the eight ignored cases or NVIDIA.
+
+
+A cross-format transport regression now checks 43 fixture sources in both
+native decoded/windowed and display-prepared storage: 86 cases on Apple M4 Max
+Metal. It checks visible-lease pinning, spill after unpinning, cancellation after
+restore admission, refusal under full managed pressure, exact sample bits,
+color/profile, dimensions and image selection, identical 64x64 Metal readback,
+and final zero managed/queued bytes with one successful write/read per case.
+FITS/NRRD/MRC/DICOM use an explicit [-100, 1000] display window; RLA uses
+explicit straight alpha and sRGB. Other untagged inputs explicitly request
+sRGB. This exposed and fixed ignored explicit sRGB assumptions in untagged
+PSD/PSB and JPEG2000 codestreams. Strict unspecified-color refusal remains;
+embedded PSD ICC and JP2 declared color retain precedence. Decoder tests after
+the fixes passed 985 cases (67 ignored); viewer tests passed 194 (32 ignored).
+Use `--metal-raster-collection` with the qualification runner; its evidence
+check rejects missing/duplicate cases and incomplete or nonzero-budget output.
+See the [raster collection report](research/metal-raster-collection-2026-10-11.json).
+The collection proves bounded cache/swap/display transport, not independent
+pixel/color decoding for every format, all variants, physical HDR, physical
+slow-disk/OS-wide pressure, or completion of the 100-row scope.
+
+
+The new raster collection was subsequently executed end to end through the
+qualification runner with `--gpu-backend metal --gpu-only --metal-raster-collection`.
+Both requested suites completed and passed evidence validation: 108 passing test
+executions, zero failures, eight explicitly ignored cases in the ordinary GPU
+suite. The collection itself executed all 43 sources in both storage modes
+(86 cases); the verifier accepted the complete unique-case inventory and zero
+final ownership. Source/log hashes and exact commands are in the
+[runner integration report](research/metal-raster-runner-2026-10-11.json).
+This verifies the repeatable runner integration after the PSD/PSB/J2K fixes;
+it retains all corpus, color-oracle, physical HDR and slow-storage limitations
+of the preceding collection report.
+
+
+The raster collection now additionally compares every binary16 RGBA component
+of a 64x64 linear HDR `Rgba16Float` attachment before/after swap for all 86
+storage cases. A shared-device HDR readback helper releases renderer credit
+after each completed submission. An independent constant-color control checks
+every pixel of a padded 63x65 target: linear [4,-1,0.5,1] at +1 stop must produce
+binary16 [0x4800,0xc000,0x3c00,0x3c00] ([8,-2,1,1]), preserving above-one and
+negative values and excluding row padding. Actual Apple M4 Max Metal execution
+passed all 86 SDR/HDR cases and the independent control. The runner verifier
+now requires matching HDR cases and this control; missing/duplicate HDR cases,
+a missing control or the previous SDR-only log are rejected. See the
+[HDR collection report](research/metal-raster-collection-hdr-2026-10-11.json).
+This extends offscreen transport proof; it does not qualify physical HDR display
+color/luminance, full-resolution targets for all sources or independent decoding
+of all 100 formats.
+
+
+Two explicit empirical Metal HDR range-edge tests also passed. Every pixel of
+a 64x64 attachment saturated [+65504,-65504,0.5,1] at +10 stops to binary16
+[0x7bff,0xfbff,0x6000,0x3c00]. A 63x65 attachment interpolating opaque
+[+f32::MAX,+f32::MAX,0.5,1] and [-f32::MAX,+f32::MAX,0.5,1] produced a zero-red
+center and finite components throughout. These tests intentionally remain
+manual/ignored in ordinary suites: they observe this Metal backend beyond the
+renderer's documented portable binary16 caller range and do not establish a
+cross-backend saturation contract. Production shader code was unchanged.
+See the [Metal range-edge report](research/metal-hdr-range-edges-2026-10-11.json).
+
+
+The raster transport collection has expanded from 43 to 62 sources (124
+native/windowed and display-prepared storage cases). Added sources cover CUR,
+JNG, JPEG-LS, profiled JPEG-XR, Farbfeld, Basis, XBM/XPM, DCX, SGI, SUN,
+ILBM/PBM, PICT, MacPaint, Softimage PIC, Alias PIX, PFM and WAL. All 124 cases
+passed exact sample/color/selection and SDR plus binary16 HDR frame checks
+through RAM/spill/cancellation/managed pressure/swap on required Metal.
+The new original CC0 PFM fixture also matches its authored top-first binary32
+oracle, preserving bottom-first storage, negative/HDR values and adjacent
+float levels under an explicit linear-sRGB assumption. WAL discovers the
+external PCX palette through a temporary canonical textures/pics tree and
+matches the existing Pillow palette oracle. The runner now requires all 124
+unique SDR/HDR cases and rejects the older 43-source evidence as incomplete.
+See the [expanded collection report](research/metal-raster-collection-expanded-2026-10-11.json).
+Counts describe fixture sources, not fully qualified format rows. Remaining
+format variants, independent color/decoder oracles, physical HDR and physical
+slow-storage/OS-wide pressure limitations still apply.
+
+
+Raster collection coverage now includes the first and last advertised image
+selection per source: 62 sources, 77 selected images and 154 native/windowed or
+prepared storage cases, all passing on required Metal. Multi-selection cases
+include GIF, WebP, APNG, Aseprite, DCX, STI, WAD, DDS/KTX/KTX2/PVR mips and
+FITS/NRRD/MRC/DICOM sections/frames. The DDS/KTX/KTX2 fixtures were changed to
+multi-level sources, and both selected mip endpoints match their existing
+native pixel oracles. Swap checks now explicitly retain hotspot, pixel aspect
+and sample scale alongside image selection, color/profile and dimensions.
+Every case still verifies sample bits, SDR and binary16 HDR readback,
+cancellation/managed pressure and zero final ownership. The runner requires
+all 77 unique selections in both storage modes and rejects an all-index-zero
+replacement or the earlier collection log. See the
+[selected-image collection report](research/metal-raster-collection-selection-2026-10-11.json).
+This covers endpoint selections, not all intermediate frames/mips or independent
+color/decoder qualification for all 100 formats; physical HDR and physical
+slow-storage/OS-wide pressure remain separate open requirements.
+
+
+The collection now executes every advertised index in the fixed corpus rather
+than just endpoints: 62 sources, 91 selected images, 182 native/windowed and
+prepared storage cases. All passed on required Metal with the same pixel,
+metadata, SDR/HDR, swap/cancellation/managed-pressure and ownership checks.
+Every selected DDS/KTX/KTX2 mip also matches its existing native pixel oracle.
+For each of the 62 sources, requesting index=image_count failed while retaining
+the original raster and leaving managed used bytes unchanged; this includes
+index=1 for single-image sources. The runner verifier requires a contiguous
+0..image_count index inventory for each source in both storage modes, matching
+HDR proofs and a bounds-refusal record. Missing/duplicate cases, absent bounds,
+an incorrect advertised range, all-index-zero replacements and the previous
+endpoint-only report are rejected. See the
+[all-index collection report](research/metal-raster-collection-all-indices-2026-10-11.json).
+This closes intermediate-selection coverage for these fixtures only. It does
+not close all variants, independent color/decoder qualification for all 100
+formats, physical HDR or physical slow-storage/OS-wide memory pressure.
+
+
+The `raw_view_timing` example now supports `--raster-view --swap-view SOURCE`.
+It seeds a prepared raster outside timing, releases its managed RAM, restores
+it 18 times (three warmups, 15 measured), checks every sample bit and metadata
+outside the timed intervals, reports separate restore/upload/completed-frame
+quantiles, and requires one write, 18 reads, zero errors/queued bytes and final
+CPU/GPU credit zero. Exposure-compute and raster-swap timing remain separate
+modes so restore timings cannot silently include development.
+An ABBA run on an authored 4000x3000 sRGB PNG (2,890,441 compressed bytes,
+192,000,000 prepared bytes) produced decode+prepare+upload+completed-frame p50
+383.840 then 197.374 ms, versus swap totals 333.555 and 325.565 ms. Restore alone
+was 248.998 and 245.464 ms. These results do not establish a general swap speedup;
+they identify prepared-raster restore as a concrete profiling target and show
+substantial warmup/system-load sensitivity in decode. See the
+[raster swap timing report](research/metal-raster-swap-timing-2026-10-11.json).
+This is a warm local-disk offscreen SDR timing, not real display latency, physical
+HDR, slow-disk qualification or a broad format/camera performance claim.
+
+
+A bulk direct-read restore experiment was evaluated and rejected as an unproven
+speed optimization. It bypassed the swap staging buffer for large empty-buffer
+reads and increased raster codec read portions to 256 KiB, keeping the store's
+64 KiB I/O/cancellation bound, hashing and object format unchanged. Experimental
+validation passed 128 cache and 11 swap tests plus all 182 Metal collection
+cases. However, ABBA baseline restore p50 was 240.694/240.125 ms versus
+241.079/236.704 ms for the experiment; whole-path timing also overlapped.
+Both production edits were reverted. A regression for mixed short header,
+bulk read and short tail with exact bytes/hash was retained. See the
+[direct-read experiment report](research/metal-raster-swap-direct-read-experiment-2026-10-11.json).
+These dev-profile measurements do not justify a production speedup claim;
+release-profile timing is required before further performance decisions.
+
+
+Release-profile ABBA on the same authored 12 MP PNG confirmed that prepared
+192 MB swap is slower than decode+prepare for this fixture: whole-path p50
+346.324/326.036 ms versus 210.211/141.966 ms; swap restore alone
+251.874/235.408 ms. All 36 swap restores preserved sample bits and metadata,
+with zero errors, queued bytes and final managed CPU/GPU credits. These are
+completed offscreen SDR Metal frames, not physical display latency or HDR
+color qualification. See the [release timing report](research/metal-raster-swap-release-timing-2026-10-11.json).
+
+The separate release `rrrah-cache` example `raster_restore_profile` uses an
+original finite 4000×3000 RGBA32F payload, 3 warmups and 15 measured restores.
+Total p50 was 218.895 ms, timed stream read/hash 216.144 ms, and non-stream
+remainder 2.628 ms. Separate zero-init and BLAKE3 controls were 1.766 ms and
+189.885 ms. Controls are independent operations, not exact additive stage
+attribution. All 18 restores matched source values and metadata, ending at
+zero managed bytes. This points to integrity hashing as the next profiling
+target without weakening integrity or cancellation. Warm local disk and one
+synthetic payload do not qualify physical slow disks, OS-wide pressure or
+all supported formats. See the [stage profile](research/raster-restore-stage-profile-2026-10-11.json).
+
+
+A follow-up release BLAKE3 control confirms the Apple Silicon build already
+uses NEON. Serial 64 KiB, 1 MiB and whole-input update boundaries showed little
+difference (about 188–192 ms for 192 MB). The optional
+`rrrah-cache/restore-profile-parallel` profiling feature uses dedicated pools:
+2 threads / 4 MiB portions measured p50 102.007 ms; 4 threads / 4 MiB measured
+73.635 ms. All 72 parallel digests matched serial hashing. This is a hash-only
+experiment, not a production swap acceleration: bounded scratch admission,
+cancellation, concurrent restores and whole-path Metal timing still need
+integration and qualification. No production integrity/cancellation path was
+changed. See the [parallel hash controls](research/raster-swap-hash-parallel-controls-2026-10-11.json).
+
+
+Parallel integrity hashing is now integrated for native raster swap restores.
+One lazy process-wide pool (up to four threads) shares one 4 MiB scratch slot;
+scratch is charged to the supplied restore admission root, independent of the
+pixel-only cap. Conservative headroom admission, unavailable slot/pool or
+allocation pressure select serial restore. Custom/expanding payloads and
+mosaic payloads remain serial by default. I/O polls cancellation every 64 KiB;
+a joined hash batch is at most 4 MiB. Thread stacks (up to four × 512 KiB) and
+pool bookkeeping remain outside managed buffer accounting. Payload/digest
+formats and exact-length/hash checks are unchanged.
+
+Actual Metal release ABBA on the authored 12 MP PNG measured restore p50
+168.399/201.928 ms serial versus 124.344/130.905 ms parallel; whole-path p50
+234.881/265.772 ms versus 200.470/209.830 ms. All 72 restores preserved every
+sample bit and metadata, ending with zero managed CPU/GPU and queued credits.
+The final cache/swap gate passed 156 tests (three manual stress tests ignored),
+including exact pixel cap plus large ICC profile, budget replacement, custom
+expanding-codec admission, concurrent-store fallback, cancellation and damaged
+objects. The actual Metal collection again passed 62 sources / 91 selections /
+182 storage cases, exact SDR/HDR frames and all advertised-index bounds.
+This bounded warm-local-disk result does not establish physical display latency,
+physical HDR color, slow-disk or all-format qualification. See the
+[production integration report](research/metal-parallel-raster-swap-2026-10-11.json).
+
+
+The strengthened large-collection Metal qualification passed a 180.259-second
+loop over eight original 4000×3000 linear RGBA32F frames: 359 successful
+accelerated restores, 359 cancellations after scratch admission, 359 full-root
+pressure refusals and 359 preallocation cancellations. Each successful restore
+matched every float-component bit, the full 4000×3000 SDR readback and a 63×65
+binary16 HDR readback against pre-spill GPU references. There were only eight
+initial writes, no redundant writes, errors or dropped spills; managed root,
+queue and RAM membership returned to zero each cycle. Scratch activation was
+observed through charged root use above the exact 192 MB pixel allocation.
+See the [sustained parallel-swap report](research/metal-parallel-raster-swap-sustained-2026-10-11.json).
+This is bounded managed pressure and warm local disk, not physical slow-disk,
+OS-wide memory exhaustion, physical HDR output or 100-format qualification.
+
+A read-only AppKit diagnostic is available as
+`swift scripts/inspect-metal-display.swift`. The local system reports an online
+built-in Liquid Retina XDR display: potential EDR 16× and current EDR 1× at the
+snapshot. Current headroom is dynamic; these metadata do not measure physical
+luminance/color or prove active viewer HDR presentation. See the
+[display inventory](research/metal-display-edr-inventory-2026-10-11.json).
+
+
+Native-window HDR activation was checked on the built-in Liquid Retina XDR
+using an original 1024×512 Radiance control with declared Rec.709 primaries and
+eight linear neutral levels from 0.125 to 16. The actual Metal HDR surface was
+RGBA16Float / ExtendedSrgbLinear: AppKit current EDR changed from 1× to 16×
+while the HDR window was visible, returned to 1× after quitting, and was 1×
+with the same control in the SDR BGRA8UnormSrgb / Auto surface. This establishes
+active OS EDR admission and visible application presentation, not measured
+physical luminance, color accuracy or highlight differentiation above SDR white.
+The control is reproducible with `scripts/make-hdr-display-control.py`.
+
+This native check exposed a view-update bug: exposure keys wrote GPU uniforms
+without requesting a redraw, leaving the old image until an unrelated event.
+The common application view update now requests redraw, also covering zoom,
+pan and reset. CUA verified that minus keys alone reveal all eight control
+levels at −4 stops in both HDR and SDR, and reset immediately restores the
+original appearance. All 194 ordinary viewer tests passed (32 actual-GPU/manual
+tests ignored by that gate); native HDR/SDR checks were performed separately.
+The test viewer was closed and its prior temporary launcher restored. See the
+[native EDR and redraw report](research/metal-native-edr-and-view-redraw-2026-10-11.json).
+
+
+The normal viewer now accepts `--untagged-color linear-srgb` for linear RGB
+whose primaries are unspecified (including PFM), forwarding that explicit
+choice to foreground loads, neighbour preload and thumbnails. Strict remains
+the default, and encoded-sRGB and linear assumptions have separate cache keys.
+The original 2×2 PFM matches its authored binary32 oracle through CLI preload,
+TTL spill and decoder-free swap restore; strict/sRGB requests cannot reuse it.
+Thumbnail last-owner credit release and exact Metal SDR/HDR pre/post-swap frames
+pass. The ordinary viewer gate passed 196 tests (33 manual/GPU cases ignored),
+and the new actual Metal case was run separately. CUA also opened this PFM in
+the normal HDR window (RGBA16Float / ExtendedSrgbLinear, current EDR 16×).
+This closes the bounded viewer-policy gap, not corpus or alternate-PFM-dialect
+qualification. See the [PFM linear CLI report](research/metal-pfm-linear-cli-2026-10-11.json).
+
+
+ASTC HDR now honors explicit `--untagged-color linear-srgb`. The 23×17
+compressed HDR fixture preserves every binary32 sample through preload, TTL
+spill and decoder-free restore; incompatible strict/sRGB cache requests refuse.
+Actual Apple M4 Max Metal SDR and HDR readbacks match exactly before/after swap.
+All 986 ordinary decoder and 197 viewer tests pass; actual Metal was run
+separately. This bounded reference-family check does not qualify all producers,
+linear LDR, 3D slices or physical HDR output. See the
+[ASTC HDR report](research/metal-astc-hdr-linear-policy-2026-10-11.json).
+
+
+KTX2 imports now apply explicit `linear-srgb` only when DFD primaries are
+absent (zero). Declared non-sRGB or unknown nonzero primaries retain their
+strict unsupported-display behavior; native float sample bits remain unchanged.
+Nine KTX2 unit tests and the complete ordinary decoder gate (987 passed,
+67 ignored) pass. Viewer preload, TTL spill and decoder-free restore preserve every float bit;
+actual M4 Max Metal SDR/HDR frames match exactly before/after swap. The full
+viewer gate passes 198 tests (35 ignored); the new Metal case passed separately.
+This is not full producer or physical HDR qualification. See the
+[KTX2 policy report](research/metal-ktx2-linear-policy-2026-10-11.json).
+
+
+DPX explicit `linear-srgb` imports now qualify only undefined colorimetry
+(255), with declared linear transfer (2) and normalized 0–1 reference range.
+User-defined (0) and declared video colorimetry remain strict; non-normalized
+reference quantities are not silently reinterpreted. Three DPX unit tests pass,
+including unchanged native samples across the new policy. Viewer preload/TTL/swap preserves prepared float bits and rejects incompatible
+policy reuse. Actual Apple M4 Max Metal SDR/HDR frames match before/after restore.
+The decoder gate passes 988 tests, viewer gate 199; the new GPU case passes
+separately. This bounded subset is documented in the
+[DPX policy report](research/metal-dpx-linear-policy-2026-10-11.json). Field definitions were
+cross-checked against [OpenImageIO libdpx Characteristic](https://github.com/AcademySoftwareFoundation/OpenImageIO/blob/main/src/dpx.imageio/libdpx/DPXHeader.h).
+
+
+Explicit-layout BAY file import now caps source allocation at the chosen
+camera layout before reading. Oversized files refuse with `InputTooLarge`
+without allocating managed bytes. All four BAY tests pass, retaining full
+8-bit/10-bit storage, padding, cancellation and ownership checks. This closes
+a source-admission gap, not camera/color/normal-viewer qualification. See
+[BAY source-cap evidence](research/bay-source-admission-cap-2026-10-11.json).
+
+
+2026-10-11: The actual Metal raster collection now includes compressed ASTC
+HDR and plain/DEFLATE RGBA32Float KTX2: 65 fixture sources, 94 advertised
+selections and 188 native/prepared storage cases. Full float samples match
+their reference/authored oracles; RAM/swap, pressure refusal, cancellation,
+SDR/HDR readback and final root/queue release pass. The runner verifier accepts
+the expanded log. File counts are not fully qualified format counts, and this
+is not physical HDR measurement.
+[Expanded collection evidence](research/metal-raster-collection-hdr-expanded-2026-10-11.json).
+
+
+2026-10-11: Viewer loader/preload ping-pong qualification now includes PFM
+and compressed ASTC HDR alongside profiled PNG, GIF, EXR and Radiance HDR,
+using the shared explicit linear-sRGB CLI interpretation. All 120 selections
+preserve exact Metal SDR/HDR frames, bounded neighbours and RAM membership,
+visible-owner reuse under managed pressure, stale-generation refusal and final
+root release. The CPU case and actual M4 Max Metal case pass separately;
+199 ordinary viewer tests pass. This synchronous helper test does not qualify
+asynchronous worker timing or physical HDR.
+[Evidence and limits](research/metal-linear-six-format-navigation-2026-10-11.json).
+
+
+2026-10-11: The actual bounded thumbnail worker now has a linear-import
+generation-replacement regression: held ASTC HDR returns no stale thumbnail,
+queued KTX2 is replaced without starting, and only the latest PFM publishes
+the expected pixels. All managed thumbnail memory releases. The real loader
+and queue are exercised with a barrier before decoding; this is not native
+ASTC mid-computation cancellation or foreground event-loop qualification.
+The focused test and 200 ordinary viewer tests pass.
+[Worker evidence](research/linear-thumbnail-worker-reversal-2026-10-11.json).
+
+
+2026-10-11: CUA opened the compressed 23×17 ASTC HDR fixture in the normal
+viewer with explicit linear-sRGB. The native Metal window reported image-ready
+in 6.78 ms, RGBA16Float / ExtendedSrgbLinear and upload pending zero; AppKit
+reported current EDR 16×. Exposure keys reveal colored gradients immediately,
+and reset restores the original appearance. The test app was closed and prior
+temporary launcher restored. This single-source observation is not a benchmark
+or physical luminance/color qualification.
+[Native ASTC evidence](research/metal-native-astc-hdr-window-2026-10-11.json).
+
+
+2026-10-11: Explicit PFM top-down import passes five decoder tests, both
+viewer/cache and actual Metal regressions. The same file has distinct row-order
+RAM/swap entries; decoder-free restore preserves rows and exact SDR/HDR frames.
+Final memory returns to zero after queued spill completion. Full gates: 990
+decoder / 203 viewer tests pass. Adobe-produced interoperability and physical
+HDR remain unqualified.
+[Evidence](research/metal-pfm-top-down-import-2026-10-11.json).
+
+### 2026-10-11: original pending-RAW fixture search
+
+A current 2016-entry raw.pixls.us repository snapshot contains one original MEF and no CAP/PTX/BAY/RWZ download extensions. This is fixture availability in one repository, not proof that samples do not exist elsewhere and not permission to replace them with renamed IIQ/PEF. The six pending rows retain their acceptance requirements: MEF WB/public import, RWZ original-pixel reconstruction, BAY camera metadata/viewer routing, PTX producer fixture, CAP original structure/fixture, and strict AI fidelity. Evidence: `research/pending-raw-original-fixture-availability-2026-10-11.json` records repository snapshot SHA256 and exact matching download URLs.
+
+### Explicit unqualified MEF color route (2026-10-11)
+
+MEF extension now resolves to explicit unqualified-color route instead of generic DNG fallback; recipe/decode return MEF white-balance/color-support diagnostic. Generic TIFF keeps MEF choice, strong supported container magic still wins. Real pinned ZD public refusal has zero managed allocation peak and no preview; full independent native sensor comparisons remain exact. Eleven MEF tests passed with complete source/oracle environment (initial run omitted oracle variable); full decoder regression1005 passed/78 ignored. Evidence: `research/mef-explicit-color-refusal-2026-10-11.json` and hashed logs/source. Color/viewer acceptance remains pending; sensor-only import unchanged.
+
+### PNG physical pixel aspect to Metal and swap (2026-10-11)
+
+Implemented bounded pHYs parsing before IDAT with CRC/length/duplicate/unit validation; positive densities produce pixel width/height=Y/X, zero density keeps unknown aspect. Ordinary PNG and APNG result metadata retain aspect; PNG EXIF axis-swapping rotations invert it. Decoder regression1006 passed/78 ignored including actual encoded sample preservation, ratios0.5/2, zero density, duplicate/CRC and EXIF90 cases. Explicit authored4x4 PNG Metal test:linear preparation, exact64x64 SDR/HDR against aspect0.5 reference, square-pixel control differs and analytic center/side checks, swap preserves aspect/frames, final source/queue zero, one write/read/no errors. Evidence: `research/png-physical-aspect-2026-10-11.json` and hashed logs/source/fixture. Initial GPU test incorrectly supplied encoded samples to prepared-only helper; corrected test preparation, shader unchanged. APNG propagation lacks a dedicated pHYs selected-frame case; physical display/full PNG acceptance remains open. Source: https://www.w3.org/TR/png-3/#11pHYs .
+
+### Selected APNG physical aspect Metal gate (2026-10-11)
+
+Authored two-frame4x4 APNG (opaque white/green SOURCE, pHYs2/1, repeat3) through common selected-frame decode:indices/count and aspect0.5 retained, both full64x64 SDR/HDR frames exactly match independent authored linear reference rasters. Two swap writes and reverse-order reads preserve metadata/frames, source/queue finalzero/errorszero. New --metal-png-physical-aspect driver option requires both PNG/APNG workload markers and actualMetal adapters; fresh gate133 passed/13 ignored across ordinaryGPU plus selectedPNG/APNG suite, every executed row verified. Evidence: `research/png-apng-physical-aspect-current-2026-10-11.json` and linked hashed logs/report/source/fixture. APNG transient canvas/scratch and direct decode_apng ownership are not yet fully request-budgeted; wrapper retained-pixel admission is insufficient proof of full peak bounds. PhysicalHDR/playback/variants remain open.
+
+2026-10-11 selected16-bit APNG: replaced unconditional RGBA8 intermediate with depth-aware RGBA16/RGBA8 conversion and doubled conversion reservation for16-bit. Earlier16-bit sources were explicitly refused (not silently truncated); now the supported selected-frame path retains low bits and alpha. Two1x1 authored sRGB frames with adjacent16-bit RGB/alpha values match independent f64 transfer-function expectations; output lifetime charged16bytes then zero. Initial regression correctly exposed the old8-bit-only guard; removed that guard for16-bit and also installed codec limits at initial metadata decoder construction. Full decoder1005 passed/71 ignored. Actual Metal suite3 passed, including two16-bit frames against independent linear SDR/HDR references and existing PNG/APNG swap cases; integrated report all executed suites verified. Evidence: research/apng-16bit-precision-2026-10-11.json and retained full logs/report/source/fixture hashes. Full16-bit variants, color profiles, playback and shared accounting of private codec scratch remain unqualified.
+
+2026-10-11 packed APNG: removed8/16-only admission guard; PNG codec validates depth/color legality and expands packed samples. Authored1-bit grayscale,2-bit palette+tRNS(0/64/128/255 alpha),4-bit grayscale sources each have two SOURCE frames in reverse pixel order. Six selected frames match independently calculated f64 sRGB/alpha oracles, indices/count and retained64byte managed canvas; final zero credit. Full decoder1006 passed/71 ignored. Actual Metal selected PNG/APNG suite4 passed, including packed six-frame SDR/HDR comparisons before/after six swap writes/reads, errors0/source+queue0. Integrated ordinaryGPU and manual suite both verified. Evidence: research/apng-packed-depths-2026-10-11.json and retained report/log/hash directory. Full packed variants, playback and private codec shared-budget accounting remain unqualified.
+
+2026-10-11 APNG chunk ownership: track default-image IDAT run, current animation data ownership and completion in CRC-validated scan. Refuse IDAT attached to a later animation frame, fdAT attached to default image, empty controlled frames and partial default-frame geometry before pixel admission. Four valid-CRC structural mutations refuse with zero used/peak shared credit. Positive separate static preview plus split consecutive IDAT reproduces all selected last-frame float samples and animation count4. Full decoder1007 passed/71 ignored; current actual Metal PNG/APNG four manual tests passed, SDR/HDR/swap and packed/16-bit precision markers retained. Specification: https://www.w3.org/TR/png-3/#11fcTL . Evidence: research/apng-chunk-ownership-2026-10-11.json and hashed logs/source. Lazy skipped compressed payloads are not fully inflated/validated; playback/all variants remain unqualified.
+
+2026-10-11 application APNG TTL/cache/prefetch: ordinary and explicit actual-Metal tests use production load_cached_raster_mode/preload_raster helpers with16-bit and2-bit palette APNG sources. Each source stores two distinct selected frames under RAM128bytes/count2/TTL1second, keeps fresh entries, spills both after elapsed TTL, then restores1→0 via real prefetch while foreground decoder gate is held (5-second cancellation watchdog). RAM disabled by count0 for restore isolation; disk count2/65536bytes, queue128/count2, restore128. All serialized payloads/index/count and SDR/HDR Metal frames exact;2writes/2reads per source/errors0 and final shared credit0. Updated --metal-viewer-ttl-prefetch gate now requires new APNG suite as well as existing EXR/HDR scenario:131 ordinaryGPU passed/13 ignored plus1 HDR and1 APNG manual tests passed; all rows verified. Evidence: research/apng-viewer-ttl-prefetch-2026-10-11.json and retained report/log/hash directory. This is bounded real-time TTL and selected-frame integration, not animation playback/long collections/physical slow disk qualification.
+
+2026-10-11 large APNG admission: replace arbitrary four-times-output512MiB dimension rejection with actual RGBA32Float output bound; managed canvas/frame/linear/PREVIOUS reservations govern simultaneous working admission. Authored4000x3000 two-frame16-bit APNG now decodes selected1 under512MiB shared limit. Full and128MiB partial pressure cause clean refusal; retry preserves all48million components within1e-7 of independent f64 sRGB oracle and bit-exact original/restored constant field. Managed decode peak480554140bytes; retained192000000; final CPU/queue0. Actual Metal128x96 SDR/HDR exact against1x1 equivalent-aspect constant reference before/after192MB swap; one write/read/errors0. Full decoder1007 passed/71 ignored; new --metal-large-apng integrated gate131 ordinaryGPU+1 manual passed/13 ignored, all rows verified. Evidence: research/large-apng-memory-metal-2026-10-11.json and retained logs/report/source/fixture hashes. Constant authored content is capacity/numeric evidence, not varied-content offset qualification; PNG private scratch excluded from tracked peak; no physical display claim.
+
+2026-10-11 APNG PREVIOUS patch ownership: save only frame rectangle into managed buffer and restore rows in place, retaining original canvas allocation. Cancellation checked per save/restore row. Independent authored4x3 canvas/2x2 offset patch regression admits192+64bytes (full canvas copy would exceed256-byte limit), proves snapshot offsets, restores every original component including surroundings, finalzero. Full decoder1008 passed/71 ignored with existing composition and pressure oracles. New actual-Metal test selected3→1→2 disposal frames against independent5x3 float composition files; full64x64 SDR/HDR exact, finalzero. Updated PNG/APNG integrated gate131 ordinaryGPU plus5 manual passed/13 ignored, all rows verified. Evidence: research/apng-previous-rectangle-2026-10-11.json and retained report/log/hash directory. Memory savings equal patch-vs-canvas difference; runtime speedup not benchmarked. Full playback/variant/codec scratch accounting still unqualified.
+
+2026-10-11 PREVIOUS paired timing and full-frame fast restore: on12MP canvas/64x64 region,9 alternating measured pairs after3 warmups give prior managed full-copy median38.176250ms versus production rectangle helper0.019000ms. Managed peaks384000000 versus192065536bytes; all48million components match authored position-dependent field bit-exact after both paths; final0. This isolates save/overwrite/restore/release, not full decode/viewer speedup; other host work affects timings. Preserve full-canvas PREVIOUS ownership transfer rather than copying back all samples; new3-frame regression full-white→full-green PREVIOUS→partial-blue OVER proves white base restored and untouched pixels intact, final64byte output then0. Full decoder1009 passed/72 ignored (benchmark separately executed). Current Metal gate131 ordinaryGPU+5 PNG/APNG+1 largeAPNG passed/13 ignored, all rows verified. Evidence: research/apng-previous-paired-current-2026-10-11.json and retained paired/raw logs/report/source hash.
+
+2026-10-11 broad post-policy regression: current ordinary rrrah-decode, rrrah-gpu and rrrah app library/binary/integration suites completed70 harnesses,1418 passed,0 failed,226 explicitly ignored; actualMetal required with optionalGPU disabled. App213 passed/59 ignored. Evidence: research/cross-format-cache-metal-2026-10-11.json and full hashed log. This broad regression covers implemented fixture paths; skipped manual/corpus cases remain unverified and it does not prove full100-format, independent color or physical HDR qualification.
+
+2026-10-11 selected TIFF pages: native bounded top-levelIFD walker supports classicTIFF/BigTIFF both byte orders, checks complete tables/next pointers, caps4096 pages/entries, rejects cycles/missing pages and cancellation before codec. Temporarily redirects firstIFD pointer in already admitted mutable source then restores after success/error; original pixel/tag offsets remain absolute, no whole-file copy. Existing codec applies selected orientation/ICC/alpha path. New3 regressions validate authored gray8 pages/orientation, source preservation, malformed chains, magic file route and failed admission. Full decoder1012 passed/72 ignored. Evidence: research/tiff-selected-pages-2026-10-11.json. Newpage-specific compressed16/float, ICC/alpha and viewerRAM/swap/Metal qualification remain open; TIFF row still not fully qualified.
+
+2026-10-12 selected TIFF viewer metadata/cache/Metal: bounded complete top-levelIFD count now attached with selected index to first and later TIFF/BigTIFF pages; source pointer restored after decode before metadata/color conversion. Full DICOM signature retains precedence over arbitrary TIFF-like preamble, caught by existing DICOM oracle regression; failed/passing logs preserved. Decoder1012 passed/72 ignored. ActualMetal four authored classic/BigTIFF LE/BE gray8 files with second-pageorientation6: explicit assumed-sRGB then linear preparation, independently authored pixel references,63x65 SDR/HDR exact, count1/32byteRAM, full-budget liveRAM hit, TTL0 visible protection then spill, reverse1->0->1 restore with selection metadata, writes2/reads3/errors0 each; final CPU/queue0. Evidence: research/tiff-pages-cache-metal-2026-10-12.json. Initial test GPU refusal without color preparation and expired-lease refusal preserved in logs; these are required API semantics, not bypassed. Page-specific ICC/associatedalpha/compressed16/float and full TIFF variants remain unqualified.
+
+2026-10-12 independent compressed TIFF precision: eight existing tifffile/imagecodecs-produced Deflate TIFF uint16/float32 files, both byte orders, original and last-page one-low-bit changed variants; all24 selected pages match authored RGB component bits and opaque alpha exactly, retain3-page metadata and ICC. Native output then ICC preparation,32 reverse2->0->1->2 swap restores,63x65 SDR/HDR transport exact, writes3/reads4/errors0 perfile and finalroot/queue0. Manifest source hashes verified. Explicit --metal-tiff-pages driver requires both tests, four classic/BigTIFF cases and all eight precision cases; actual gate131 ordinaryGPU+2manual passed/13 ignored, all executed suites verified. Evidence: research/tiff-compressed-precision-metal-2026-10-12.json and retained logs/report. Floatproducer0..1 does not qualify above-one HDR; distinct page ICC, associatedalpha and independent color correctness remain open.
+
+2026-10-12 signed HDR TIFF and explicit linear policy: decode previously ignored assume_untagged_linear_srgb on unprofiled floatTIFF, retainingUnspecified and refusing display. Explicit opt-in now declares onlyfloatTIFF linear-sRGB; default unknown color still refuses preparation, integerpolicy unchanged, embeddedICC precedence tested with independent precisionfiles. Two authored DeflateRGBA32 TIFFs LE/BE, threepages each: RGBabove1/negative/signedzero, straight/associatedalpha, orientation6. Allnativebits match authored straight/oriented references; Metal63x65 HDR target containsfiniteabove1andnegativecomponents; SDR/HDR everycomponent equals independent authored raster. Pressure/cancel restores publishnothing then retryexact; reverse2->1->0->2 payloadbits/selection retained, writes3/reads4/errors0, finalCPU/queue0. Actual driver131ordinaryGPU+3manual passed/13ignored allverified; finaldecoder1012passed/72ignored. Evidence: research/tiff-signed-hdr-linear-policy-2026-10-12.json, authoredgenerator/manifest and retained failed/passinglogs. No independent HDRproducer/color, physicalHDR or full TIFFvariant qualification claimed.
+
+2026-10-12 distinct page ICC qualification: authored3-page Deflate RGB8 TIFF contains identical codes with LittleCMS-generated sRGB, explicitly gamma1-edited/independentlyparsed RGB profile, sRGB. Native ICCbytes differ onlywhereexpected, first/thirdprofiles/preparedframes identical, middle differs. Both fallbackflags do notoverrideICC. Independent LittleCMS relative-colorimetric RGB8 oracle agrees after preparedfloat->sRGB encoding within1code; initial idealcurve0.00015 testfailed and preserved, replaced by actual-profile quantizedoracle ratherthan claiming exactICCfloatprecision. Four reverse1->2->0->1 swaprestores retainselection/floatbits and63x65 SDR/HDRexact; writes3/reads4/errors0; finalCPU/queue0. Fixture/oracle/manifest regenerate bitidentically with normalizedICCtimestamp/ID. Updated explicitTIFFgate requires4manualtests; actual131ordinaryGPU+4manualpassed/13ignored allverified. Evidence: research/tiff-distinct-page-icc-2026-10-12.json. Full floatingICCaccuracy, arbitraryprofiles and physicalHDR remain unqualified. Production unchanged from final1012decoderpass revision.
+
+2026-10-12 viewer TIFF selected-page integration: actual production raster loader/cache/preload helpers retain3 page-specific keys for one TIFF with distinctICC.96byte/count3RAM, full-root-pressure RAMhits bypassdecoder,1secondTTL spillsall3 backgrounds; count0RAM then reverse1->2->0 swap preloads bypass heldforegrounddecoder ticket (watchdog). Payload/metadata/128x96MetalSDR/HDR exact, writes3/reads3/errors0, finalroot0. CPU-only marker now reports payloadonly; Metalmarker separately requiresactualadapter andSDR/HDR. All214ordinaryapp passed/60ignored; explicitTIFFgate131ordinaryGPU+4fixturemanual+1viewerhelper passed/13ignored allverified. Evidence: research/tiff-viewer-selected-cache-2026-10-12.json and preserved logs (initial misplacedtest compile failure retained). This is productionhelper integration, not liveUIeventloop/workercollection or largeTIFF qualification.
+
+2026-10-12 rapid page navigation fix: App previously based every bracket-key step on lastdisplayedindex, so whilepage1loaded asecondforward againrequestedpage1 and reversefromvisible0 didnothing. Generation-bound pendingtarget now accumulates0->1->2 and reversesbeforecompletion without changingvisibleindex; currentterminalevent/newfile clearsit, cancellation/obsoletegeneration ignored. Scientificwindow adjustment retainspendingpage. HeadlessactualApp/queue regressions cover0->1->2->1->0, boundary, cancelledtokens, staleRasterReady/Failed, currentfailure reset. All216ordinaryapp passed/60ignored; separatelyactualMetal TIFFviewer cache/TTL/blockdecoder helper passed1 with128x96 SDR/HDRexact/root0. Evidence: research/pending-page-navigation-2026-10-12.json. Livephysicalkeyboard/window interaction remains unverified.
+
+2026-10-12 selected ICO images: native bounded directory selector provides depth/area-ranked imageindices, preservingcodec defaultbest/tiebreak; validates4096-entry cap and payloadbounds, managedshared-budget rank scratch released beforepixels. Redirects selectedrecord/count in existing admitted source and restoresheader afterresult, no fullfilecopy; selectedindex/count retained. Three PillowPNG authored entries prove exactRGBA/alpha/dimensions and rankorder, malformed/memoryrefusal cleanup; existingBMP-backed baseline remainspassing. ActualMetal64byte/count1RAM full-pressurehit, visibleTTL thenreverse2->0->1->2 swap keepsmetadata and63x65 SDR/HDRexact, writes3/reads4/errors0/finalCPUqueue0. Decoder1014passed/72ignored; app216passed/60ignored; combinedICO/TIFFgate131ordinaryGPU+6manual passed/13ignored allverified. Evidence: research/ico-selected-images-2026-10-12.json and source/fixture/log hashes. Multi-DIB/masks, embeddedcolor and multiCUR remain unqualified; ICOrow not fully qualified.
+
+2026-10-12 selected CUR and hotspot tie fix: boundedmanagedICOselector now supportsCUR, validateshotspots and ranksbyarea without treatinghotspotY asbitdepth. Selectedentry pixels/point/imageordinal/count staytogether; header restored afterdecode. Legacycursor normalizer usedlastmaxarea hotspot whileICOcodec couldchoosefirstmaxarea pixels whenlastdirectoryentrywassmaller; tie rule corrected toactualcodecdefault. Authored3PNG-backedentries (twolargesttieddifferentpoints+smalllast) reproduceandprotectthiscase; invalidhotspot refusal/root0/inputunchanged. Decoder1016passed/72ignored, app216passed/60ignored. Actual combinedgate131ordinaryGPU+7manual passed/13ignored allverified: CUR/ICO64byte/count1RAM fullpressurehits, visibleTTL, reverse2->0->1->2 restorekeepspoint/metadata and63x65SDR/HDRexact/finalrootqueue0. Evidence: research/cur-selected-hotspots-2026-10-12.json and hashes/logs. Multi-DIBmaskvariants andliveOS cursorpositioning remainunqualified; CURrow notfullyqualified.
+
+2026-10-12 CUR DIB selected-image qualification: new authored24bitDIB fixture includes padded rows and AND-mask transparency, independently read by Pillow as ICO. Three selected CUR images retain native pixels, matched hotspots, selection metadata through RAM64bytes/count1, full-pressure hits, visibleTTL and reverse swap; exact63x65SDR/HDR on Metal, finalroot/queue0. All3ICO/CUR integration tests passed; driver now requires third DIB workload marker/adapter. Combined actualMetal gate passed. Evidence: research/cur-dib-mask-metal-2026-10-12.json and hashed logs/fixtures. Other DIB bitdepth/mask variants and liveOS cursor placement remain open.
+
+2026-10-12 CUR DIB depth extension: authored1/4/8bit indexed,16bitRGB555 and32bitBGRA three-selected-entry fixtures independently decoded per-entry by Pillow. Exactnativepixels, matching hotspots, partial32bitalpha orANDmask transparency survive64byte/count1RAM/fullpressurehits/visibleTTL/reverse swap and exact63x65MetalSDR/HDR; finalroot/queue0. Combined gate135passed/13ignored, all executed suites verified; driver requires allfive depth markers and adapters. Evidence: research/cur-dib-depths-metal-2026-10-12.json. Uniform-color authored fixtures do not qualify arbitrary palette packing, compression/bitfields, mixed per-pixel masks or liveOS cursor placement.
+
+2026-10-12 mixed CUR DIB coverage: six9x3 authoredfixtures (1/4/8/16/24/32bits) vary pixels across packedbyte/row boundaries with bottom-up rows, mixedANDmask and32bitpartialalpha; per-entryPillow decode independently validates expectedRGBA. Native pixels/hotspot and exactMetalSDR/HDR preserved through full-pressureRAMhit, TTLexpiry andswap; finalroot/queue0. Combinedgate136passed/13ignored, all executed suites verified. Twoinitialtest setupfailures retained: ZEROttl beforehit andfixedexistingTTLdeadlines; corrected sequencing, no productionchange. Evidence: research/cur-dib-patterns-metal-2026-10-12.json. UncompressedBITMAPINFOHEADER only; compression/bitfields/extendedheaders/liveOScursor placement remainopen.
+
+2026-10-12 ICO/CUR viewer selected cache: generalized existingTIFF application qualifier to production load_cached_raster_mode/load_raster_for_display_typed/preload_raster for ICO,PNG-CUR,DIB-CUR three selected entries. Separate keys survive full-rootpressure RAMhits withoutdecode,1sTTL,3swapwrites and reverseprefetch fromswap whileforegroundDecodeGate held; exactserializedpayload/hotspot and128x96MetalSDR/HDR,3reads/errors0/finalCPU0. App217passed/61ignored; combinedgate142passed/13ignored allverified (131GPU+5ICO/CUR+1ICO/CURviewer+4TIFF+1TIFFviewer). Evidence: research/ico-cur-viewer-selected-cache-2026-10-12.json. Headlesshelper evidence does not prove livekeyboard navigation.
+
+2026-10-12 liveCUR keyboard navigation: current normalviewer onAppleM4Max/Metal SDRsurface(Bgra8UnormSrgb), cachecount1/TTL1s, actual bracketkey events producedindices0->1->2->1->0 with matching dimensions/windowtitles; targetedwindow screenshots captured (image2 visuallyinspected green). Viewerclosednormally/exit0. UnprofiledPNG-in-CUR strictmode refused as designed; explicit--untagged-color srgb enabled display. Evidence: research/ico-cur-live-navigation-2026-10-12.json and screenshots/logs. LiveSDR only; no inferredspecificswap-hit orHDRsurface/calibratedcolor claim.
+
+2026-10-12 actual mainviewerHDR: AppleM4Max/Metal surfaceRgba16Float/ExtendedSrgbLinear selected three authoredfloatTIFFpages0->1->2->1->0 using keyboard; explicitlinear-sRGBpolicy/cachecount1/TTL1s. ActualAXwindowsizes640x480then900x650 confirmed; targetedpage3screenshots at bothsizes visuallyinspected correctrotated2x3content. Normalclose/exit0. Evidence: research/metal-live-hdr-viewer-resize-2026-10-12.json and screenshots/logs. This closes selected mainviewerHDR presentation/resize path only, not injectedpressure recovery, physicalHDR calibration or inferredswap-hit.
+
+### PTX primary-source boundary (2026-10-12)
+
+Official Pentax Photo Browser/Laboratory v3.10 manual lists PEF/DNG and no PTX match; K10D recording documentation names PEF/DNG. These bounded sources do not establish a distinct PTX storage contract or prove historical absence. Current PTX-to-PEF routing is compatibility only. Keep row55Pending/countsunchanged; producer-original fixture and storage evidence remain required. Evidence: `research/ptx-primary-source-boundary-2026-10-12.json`.
+
+### JPEG XL retained-output admission (2026-10-12)
+
+JXL now reserves final RGBA capacity before pixel decode/conversion and adopts the reservation into retained pixels. 8/16-bit shortage/exact-budget/shared-owner cases pass alongside precision and ICC/alpha checks. Full decoder regression: 1018 passed, 0 failed, 72 ignored. Codec header/internal scratch is not covered by this retained-output reservation. Report: `research/jxl-output-admission-2026-10-12.json`; catalogue status unchanged.
+
+### 2026-10-12 — JPEG XL codec working admission
+
+Extended the earlier output-only fix: separate working credit now covers a tracker cap of min(65536 + 64 bytes/pixel, MAX_RASTER_BYTES), plus one output-image equivalent for conversion overlap. The cap is enforced through JXL decoder limits and the shared memory budget reserves working credit before pixel decoding. An output-only budget now correctly refuses; enough working/output credit succeeds and retains only output credit after decode. Three focused tests and 1018 ordinary decoder tests passed (72 ignored). Actual Metal collection passed 65 sources, 94 selections, 188 native/prepared storage cases, final root/queue zero. Report: `research/jxl-working-admission-2026-10-12.json`. Header parsing and untracked codec allocations are outside this reservation; it is not a strict RSS guarantee or universal JXL variant qualification. This supersedes the earlier output-only admission boundary.
+
+### 2026-10-12 — grayscale JXL viewer recovery and decode-error cleanup
+
+Expanded Metal collection with alpha-container-1.jxl and precision16.jxl plus independent libjxl native RGBA oracles and exact authored 16-bit samples. The first run failed at display preparation: Gray ICC was categorically rejected. Fixed color preparation to transform replicated grayscale samples through Gray ICC into linear sRGB, with Gray tone-curve normalization, unchanged alpha and refusal of nonreplicated inputs. Mathematical gamma-2 control passes. A truncation regression tests all 249 nonempty prefixes, requires at least one error after working admission and verifies final managed bytes zero after every attempt. Final decoder suite: 1020 passed/0 failed/72 ignored. Actual Metal collection now passes 67 sources, 96 selections, 192 native/prepared cases; final root/queue zero. Failed reproduction and successful logs hashed in `research/jxl-gray-icc-recovery-2026-10-12.json`. Broader gray ICC variants and calibrated physical display qualification remain open.
+
+### 2026-10-12 — grayscale ICC through ordinary PNG/TIFF decode
+
+Added an ordinary file-route regression for PNG La16 and TIFF Gray16 carrying a Gray ICC gamma-2 profile. Native samples 0/32768/32769/65535 remain exact; linear RGB matches the independent mathematical squared-normalized-sample control within 0.0001, adjacent values remain distinct and PNG 16-bit alpha is unchanged. All managed credit is released. Focused test and full decoder suite passed: 1021 passed, 0 failed, 72 ignored. Evidence: `research/gray-icc-png-tiff-2026-10-12.json`. This validates one authored profile curve, not all ICC variants or physical HDR display behavior.
+
+### 2026-10-12 — authored grayscale PNG/TIFF across RAM/swap/Metal
+
+Added deterministic independently byte-authored Gray ICC gamma-2 PNG La16 and TIFF Gray16 fixtures (generator `scripts/generate-gray-icc-fixtures.py`; regeneration hashes match). Metal collection verifies native samples, mathematical gamma-2 linear values, distinct adjacent 16-bit values, alpha, native/prepared RAM/swap and exact SDR/RGBA16Float transport. Actual Apple M4 Max passed 69 sources, 98 selections, 196 storage cases; final root/queue zero. Evidence and source hashes: `research/metal-gray-png-tiff-2026-10-12.json`. This covers one authored profile curve; broader producers/profiles and physical calibrated HDR output remain open.
+
+### 2026-10-12 — independent LittleCMS grayscale color oracle
+
+Built a separate LittleCMS C oracle using the embedded authored Gray gamma-2 ICC profile, relative-colorimetric intent and double-precision linear-sRGB output. Current normal decoder/display dumps for both PNG La16 and TIFF Gray16 agree at all four authored gray values; maximum absolute linear RGB error 1.1920928955078125e-7. Adjacent 32768/32769 outputs remain distinct and PNG alpha remains normalized source coverage. Evidence, oracle source and hashes: `research/gray-icc-lcms-2026-10-12/report.json`. This is independent CPU color evidence for one profile/four values, not all ICC variants or physical HDR calibration.
+
+### 2026-10-12 — complete 16-bit grayscale range vs LittleCMS
+
+Independent CPU oracle comparison now covers all 65536 source codes in a 65536x1 PNG alpha16 row, across every 4096-pixel transform chunk boundary. Authored gamma-2 ICC: maximum linear RGB error 1.7881393432617188e-7; every adjacent red pair strictly increasing. Authored 17-entry sampled Gray curve: maximum error 1.537799835205078e-5 (1.007797 linear 16-bit code units), no decreasing pairs; both native and LittleCMS produce 16383 equal adjacent red pairs. The initial strict-distinctness requirement for sampled curves was invalid and rejected; no native-only precision defect was established. Alpha error <=2.9801867640344426e-8. Evidence, generator and independent C oracle: `research/gray-icc-full-ramp-2026-10-12/report.json`. Two authored curves only; broader ICC variants and physical HDR remain unqualified.
+
+### 2026-10-12 — DPX/Cineon explicit untagged viewer policy
+
+Extending the shared Metal collection with all 24 DPX and 12 Cineon native-oracle fixtures exposed refusal despite explicit untagged sRGB selection. Fixed DPX and the shared Cineon envelope path to accept requested sRGB/linear-sRGB only if both transfer and colorimetry are undefined (255); declared incompatible color and strict default remain refused. Ordinary regression verifies both policies and declaration boundaries. Full decoder suite: 1022 passed, 0 failed, 72 ignored. Actual Metal collection: 105 source files (not formats), 134 selections, 268 native/prepared RAM/swap cases, final root/queue zero; DPX/Cineon native samples match FFmpeg/OpenImageIO references. Evidence includes failed reproduction: `research/dpx-cineon-untagged-metal-2026-10-12.json`. Explicit interpretation is not producer-color or film-log qualification; broader variants and calibrated HDR remain open.
+
+### 2026-10-12 — DPX/Cineon buffer admission before allocation
+
+Fixed DPX output allocation before managed admission: final RGBA credit reserves before pixel storage and is adopted into output; 8-bit conversion also reserves the overlapping u16 working buffer. Exact u8 capacity avoids retaining a wider reused allocation. Cineon now admits its exact envelope header/payload copy in the same root before allocation. New 8/16-bit tests verify one-byte-short refusal releases all credit, exact-budget peak and only retained output credit after decode. Full decoder: 1024 passed, 0 failed, 72 ignored. Actual Metal collection remains green at 105 sources/134 selections/268 cases, final root/queue zero. Report: `research/dpx-cineon-buffer-admission-2026-10-12.json`. Managed admission is not a strict OS RSS guarantee.
+
+### 2026-10-12 — direct 8-bit DPX output
+
+Removed the full-image u16 intermediate and subsequent conversion for 8-bit DPX (also used by Cineon). Pixel components now write directly into admitted final RGBA8; higher precision writes admitted RGBA16. Pixel-buffer peak falls from 12 to 4 bytes/pixel, excluding source and Cineon envelope. Exact-budget regressions prove only final pixel credit is needed; short budgets release cleanly. All 24 DPX/12 Cineon independent sample controls pass. Full decoder 1024 passed/0 failed/72 ignored; actual Metal collection 105 sources/134 selections/268 cases remains exact with final root/queue zero. Evidence: `research/dpx-direct-output-2026-10-12.json`. Throughput was not measured, so no speedup claim.
+
+### 2026-10-12 — measured DPX 8-bit row fast path
+
+Added direct 8-bit nonrotated row handling for gray/RGB/RGBA/ABGR, preserving shared header/output admission and checking cancellation in <=4096-pixel blocks. General orientation/packing path remains. All 1024 decoder tests pass (72 ignored). Added authored 4097x2 RGB8/padded-row fixture and exact native oracle; actual Metal collection passed 106 source files, 135 selections, 270 cases, final root/queue zero. On the same authored 12MP RGB8 source, saved-before/new binaries ran ABBA sequentially, each three warmups plus eleven samples: load p50 before 283.361/305.919ms, after 84.398/82.908ms (~3.52x ratio of mean run medians); CPU-ready p50 before 375.655/383.941ms, after 173.600/164.812ms. Prepared hashes match in all runs; managed peak remains 240000000 bytes. Dev workspace opt-level=1/dependencies=3, warm filesystem/shared host; not a universal/release/GPU speed claim. Evidence and binary/source hashes: `research/dpx-row-fast-path-2026-10-12/report.json`.
+
+### 2026-10-12: full 12MP DPX Metal/swap output
+
+Actual Apple M4 Max Metal passed native and prepared storage for an authored 4000x3000 RGB8 DPX: every native sample matched the authored oracle, and every SDR / RGBA16Float output pixel matched before and after swap. Lease protection, cancellation after restore allocation admission, budget refusal/retry, and final managed root/queue zero passed. Full-output test: 1 passed, 0 failed (13.81 s). Shared collection regression: 106 sources, 135 selections, 270 storage cases; 1 passed, 0 failed (23.17 s). Evidence: `research/metal-dpx-12mp-full-frame-2026-10-12/report.json`. RGB8 content qualifies HDR output transport only; physical HDR calibration, NVIDIA hardware, OS RSS and physical slow-disk pressure remain outside this check. Format qualification counts unchanged.
+
+### 2026-10-12: native BAY image-only row streaming
+
+Added `read_bay_image_sensor_with_budget` and explicit `image_dimensions`: QV5700 produces2576x1924 image-bearing sensor samples without decoding trailer positions or allocating a full-storage intermediate/crop copy; legacy2585-wide full-storage API is preserved. QV2000UX/QV3000EX retain1632x1211/2080x1547. Every new output sample matches pinned authored independent LibRaw test-only dumps; self-contained ordinary tests also verify all authored values. Exact output+one-row budget passes; one-byte-short refusal releasesall; QV5700 peak9,915,680bytes/finalzero. Focused9 passed; full decoder1024 passed/0 failed/73 ignored. Evidence: `research/bay-image-only-stream-2026-10-12.json`. Initial fixture path error corrected and failed log preserved. Original camera interoperability, CFA/WB/color and viewer routing remain Pending; catalogue counts unchanged. Layout source: https://www.inweb.ch/foto/rawformat.html.

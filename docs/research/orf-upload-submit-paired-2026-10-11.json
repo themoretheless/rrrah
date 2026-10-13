@@ -1,0 +1,16 @@
+{
+  "scope": "20 alternating-order measured pairs after4 warmup pairs on original ORF; cached native source, upload through queue-completed1920x1080 frame. Combined versus additional empty submit retaining source CacheLease. Both retain existing production upload guard.",
+  "summary": [
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/1084.orf: 20 measured pairs / 4 warmup pairs; combined total p50/p95 17.080/17.383 ms; split-lease 17.063/17.592 ms; paired delta p50/p95 -0.016/0.835 ms",
+    "managed peak=46999622 limit=536870912",
+    "managed peak=83886080 limit=536870912"
+  ],
+  "log": "docs/research/orf-upload-submit-paired-2026-10-11.log",
+  "log_sha256": "4dabd4b5286b25b361032e99c3be5d61651c5925c4c34b2ed2f41adaa0ceb39b",
+  "source_sha256": {
+    "crates/rrrah-app/examples/raw_view_timing.rs": "a7a48b501768fe6ed92eaa490946b41ec0742ed70bb9d1f1c687d31b74e4b746",
+    "crates/rrrah-gpu/src/lib.rs": "9b77f5c7ad35db5f9397cb9717ace7dab2f727ed118657c58d0557c84820aadf"
+  },
+  "conclusion": "Median additional-submit difference -0.016ms, p95 +0.835ms on this run; no demonstrated median improvement from changing submission ordering. Preserve lifetime mechanism.",
+  "limitations": "Does not disable or directly benchmark production QueuedUploadReservation guard; no native decode, physical presentation, fresh per-pair independent pixel oracle, or broad speedup claim."
+}

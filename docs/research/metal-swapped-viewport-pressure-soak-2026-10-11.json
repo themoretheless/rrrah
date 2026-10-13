@@ -1,0 +1,47 @@
+{
+  "scope": "Swapped viewport repeated pressure and large native source storage",
+  "result": "passed bounded controls",
+  "adapter": "Metal Apple M4 Max",
+  "soak": {
+    "seconds": 60.03,
+    "cycles": 8468,
+    "exact_hdr_detail_frames": 25404,
+    "cpu_pressure_refusals": 8468,
+    "gpu_texture_or_queue_refusals": 25404,
+    "checks": [
+      "CPU restore failure preserves frame and admits retry",
+      "alternating GPU texture/queue pressure retains ready crop without reread",
+      "exact detail and fit references each cycle",
+      "only40960-byte fit preview retained between crops",
+      "final CPU index GPU queue disk credits zero"
+    ]
+  },
+  "large_source": {
+    "dimensions": [
+      6000,
+      6000
+    ],
+    "source_bytes": 576000000,
+    "source_released_before_crop": true,
+    "index_bytes": 281280,
+    "scratch_peak_bytes": 65536,
+    "restored_crop_bytes": 2992,
+    "checks": [
+      "exact float bits signed zero negative and above-one values",
+      "pixel aspect retained",
+      "ordinary whole-payload512MiB cap unchanged",
+      "source streaming size limited by disk quota; restored crop decoder limit retained",
+      "final credits and disk quota zero"
+    ]
+  },
+  "validation": [
+    "full cache suite passed142 ordinary tests;4 manual controls ignored including36MP control separately run",
+    "six explicit Metal viewport regressions passed"
+  ],
+  "limits": [
+    "minute soak uses warm local filesystem and small source; not physical slowdisk or OSwide pressure",
+    "36MP control validates native storage/crop, not new large-source GPU readback",
+    "initial full decode remains required",
+    "physical HDR NVIDIA full100-format acceptance remain open"
+  ]
+}

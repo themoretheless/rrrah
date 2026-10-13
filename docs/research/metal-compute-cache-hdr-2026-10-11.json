@@ -1,0 +1,23 @@
+{
+  "backend": "Metal Apple M4 Max",
+  "passed": 2,
+  "failed": 0,
+  "ignored": 0,
+  "extents": [
+    [
+      164,
+      50
+    ],
+    [
+      4000,
+      3000
+    ]
+  ],
+  "verified": "all computed float bits; exact SDR and finite signed HDR binary16 frames computed/pinned/restored; one swap write/read; final CPU/GPU/queue credits zero",
+  "log": "docs/research/metal-compute-cache-hdr-2026-10-11.log",
+  "sha256": "620d8a874b7844f97a24cd4c96388fc282d477b10677fb8cf111522eac678548",
+  "limitations": [
+    "Authored linear exposure source, not camera appearance oracle.",
+    "Offscreen HDR, not physical display calibration."
+  ]
+}

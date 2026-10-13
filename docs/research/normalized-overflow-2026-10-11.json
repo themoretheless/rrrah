@@ -1,0 +1,17 @@
+{
+  "change": "CPU Bayer normalization refuses non-finite division result before clipping recovery and stage2 corrections",
+  "core_tests": {
+    "passed": 119,
+    "failed": 0,
+    "ignored": 2
+  },
+  "regressions": [
+    "smallest positive f32 white-minus-black causes typed normalized-sample refusal",
+    "finite f32::MAX gains with encoded samples above white cause typed corrected-sample refusal",
+    "both failures release all scratch/output reservations",
+    "valid development immediately reuses same budget and releases output on drop"
+  ],
+  "log_sha256": "0deb10e5865423b935efa3dc31b5b9cb352bd944830a7f2c84e5e3a6dbdba30f",
+  "scope": "Native CPU development/preprocessing; not qualification of extreme-range GPU Bayer shader inputs",
+  "remaining": "Bayer GPU extreme positive-range arithmetic still needs separate admission/readback qualification; physical HDR and NVIDIA remain pending"
+}

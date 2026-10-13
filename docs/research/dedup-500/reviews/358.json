@@ -2,7 +2,7 @@
   "index": 358,
   "repository": "abonander/img_hash",
   "commit": "dbfb37f9251fea8f7efeabbb2267ddb1fcd21ca6",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "Existing prior full/partial source-review artifacts linked after current pin verification; original limits retained. This reconciliation is not a new full-source reading or new runtime execution, except the explicit blockhash-js runtime refresh.",
   "decision": "shortlist",
   "finding": "Rust blockhash/DCT core; actual manifest dual license differs from single GitHub license metadata and requires package check.",
   "available_source_evidence": [
@@ -74,5 +74,16 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "prior_selected_review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "linked_review_artifacts": [
+    {
+      "review_artifact": "img-hash-full-review-20261012.json",
+      "status": "verified_existing_pins_not_new_execution",
+      "pin_errors": [],
+      "original_scope": "Complete13blob pinned tree and all text/license/config/benchmark/algorithm/test source read; unchanged default original unit/binary/doc execution, derived Cargo locks and separately built control executable. No nightly/bench/performance/allformat/platform/resource/precision or full500-source completion."
+    }
+  ],
+  "artifact_pin_reconciliation_audit": "unlinked-reviews-pin-audit-20261013.json",
+  "prior_registry_review": "prior-registry-358-unlinked-reconciliation-20261013.json"
 }

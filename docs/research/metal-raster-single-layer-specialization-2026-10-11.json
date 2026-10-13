@@ -1,0 +1,219 @@
+{
+  "date": "2026-10-11",
+  "adapter": "Apple M4 Max",
+  "backend": "Metal",
+  "workload": "4096x4096 linear RGBA32F to 2048x2048 Rgba16Float; bilinear, straight alpha",
+  "method": "Sequential ABBA; 5 warmups and 30 hardware render-pass timestamp samples per run; separate completed submission before query resolution",
+  "baseline_median_gpu_ms": 0.47668750000000004,
+  "specialized_median_gpu_ms": 0.3559375,
+  "reduction_percent": 25.33106070538875,
+  "runs": [
+    {
+      "median_gpu_ms": 0.4766045,
+      "samples_gpu_ms": [
+        0.476208,
+        0.47625,
+        0.476834,
+        0.47625,
+        0.477375,
+        0.476625,
+        0.476666,
+        0.476458,
+        0.47675,
+        0.475666,
+        0.477583,
+        0.476416,
+        0.476875,
+        0.47675,
+        0.476584,
+        0.476666,
+        0.477542,
+        0.476334,
+        0.47575,
+        0.476667,
+        0.476917,
+        0.476167,
+        0.476542,
+        0.476042,
+        0.476625,
+        0.4765,
+        0.47675,
+        0.476042,
+        0.476791,
+        0.4765
+      ],
+      "source": [
+        4096,
+        4096
+      ],
+      "target": [
+        2048,
+        2048
+      ],
+      "run": "sa1",
+      "variant": "baseline"
+    },
+    {
+      "median_gpu_ms": 0.355563,
+      "samples_gpu_ms": [
+        0.354584,
+        0.355291,
+        0.358042,
+        0.355625,
+        0.355875,
+        0.3555,
+        0.355,
+        0.355084,
+        0.359542,
+        0.355542,
+        0.355959,
+        0.355708,
+        0.355584,
+        0.355291,
+        0.358292,
+        0.354958,
+        0.355834,
+        0.355459,
+        0.355125,
+        0.356458,
+        0.358458,
+        0.354917,
+        0.355333,
+        0.355958,
+        0.355416,
+        0.355625,
+        0.355375,
+        0.355667,
+        0.355125,
+        0.357209
+      ],
+      "source": [
+        4096,
+        4096
+      ],
+      "target": [
+        2048,
+        2048
+      ],
+      "run": "sb1",
+      "variant": "specialized"
+    },
+    {
+      "median_gpu_ms": 0.3563955,
+      "samples_gpu_ms": [
+        0.356167,
+        0.358792,
+        0.356166,
+        0.355917,
+        0.356833,
+        0.356791,
+        0.357709,
+        0.356625,
+        0.356417,
+        0.355708,
+        0.356375,
+        0.357042,
+        0.356584,
+        0.356083,
+        0.355834,
+        0.355916,
+        0.356833,
+        0.356208,
+        0.356041,
+        0.356042,
+        0.356792,
+        0.357291,
+        0.356834,
+        0.356417,
+        0.356416,
+        0.3565,
+        0.355459,
+        0.35575,
+        0.355542,
+        0.355709
+      ],
+      "source": [
+        4096,
+        4096
+      ],
+      "target": [
+        2048,
+        2048
+      ],
+      "run": "sb2",
+      "variant": "specialized"
+    },
+    {
+      "median_gpu_ms": 0.477104,
+      "samples_gpu_ms": [
+        0.476041,
+        0.476,
+        0.476708,
+        0.478542,
+        0.477125,
+        0.476209,
+        0.476542,
+        0.477083,
+        0.4765,
+        0.476041,
+        0.47725,
+        0.477208,
+        0.47625,
+        0.477,
+        0.476208,
+        0.476542,
+        0.477875,
+        0.476584,
+        0.477333,
+        0.476875,
+        0.477334,
+        0.477166,
+        0.476958,
+        0.4775,
+        0.477417,
+        0.478,
+        0.477334,
+        0.47725,
+        0.477333,
+        0.477542
+      ],
+      "source": [
+        4096,
+        4096
+      ],
+      "target": [
+        2048,
+        2048
+      ],
+      "run": "sa2",
+      "variant": "baseline"
+    }
+  ],
+  "validation": {
+    "raster_readback": {
+      "passed": 12,
+      "ignored": 7
+    },
+    "collection": {
+      "passed": 1,
+      "sources": 65,
+      "selections": 94,
+      "storage_cases": 188,
+      "root": 0,
+      "queue": 0
+    },
+    "hdr_raster_swap": {
+      "passed": 14,
+      "ignored": 3
+    }
+  },
+  "limits": [
+    "One workload on one adapter; excludes upload, decode, CPU and pipeline startup cost",
+    "Target and timestamp buffers outside managed input texture budget",
+    "Physical HDR luminance/color, NVIDIA, full 100-format qualification and out-of-core GPU streaming remain open"
+  ],
+  "binaries": {
+    "before-fastpath-valid": "b4789fb9e2e156401453bb7c03c5550c7d4352eb0a36f88f494d914ac15dae6e",
+    "specialized": "12f594d0d6a7e8af9fc94e68ec77c23fdca16d186774cdbacc55c37cb1545fd9"
+  }
+}

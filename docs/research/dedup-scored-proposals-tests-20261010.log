@@ -1,0 +1,20 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: unused variable: `cancel`
+   --> crates/rrrah-dedup/src/local_index.rs:715:5
+    |
+715 |     cancel: impl Fn() -> bool,
+    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_cancel`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-dedup` (lib) generated 1 warning (run `cargo fix --lib -p rrrah-dedup` to apply 1 suggestion)
+    Finished `test` profile [optimized + debuginfo] target(s) in 6.54s
+     Running tests/proposals.rs (target/debug/deps/proposals-5770290f69c71e2c)
+
+running 3 tests
+test malformed_inputs_and_each_work_limit_refuse_without_a_partial_result ... ok
+test heap_selection_matches_stable_reference_with_ties_boundaries_and_both_side_collisions ... ok
+test every_checkpoint_including_heap_and_final_observes_one_shot_cancellation ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

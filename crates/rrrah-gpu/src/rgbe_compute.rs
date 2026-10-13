@@ -126,6 +126,7 @@ impl RgbeCompute {
                 quad[1],
                 quad[2],
                 quad[3],
+                dispatch.output_first_pixel, dispatch.source_first_sample, 0, 0,
             ];
             let uniform = self.device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
                 label: Some("managed RGBE row uniform"),
@@ -138,7 +139,11 @@ impl RgbeCompute {
                 entries: &[
                     wgpu::BindGroupEntry {
                         binding: 0,
-                        resource: source.as_entire_binding(),
+                        resource: wgpu::BindingResource::Buffer(wgpu::BufferBinding {
+                                buffer: &source,
+                                offset: dispatch.source_offset,
+                                size: std::num::NonZeroU64::new(dispatch.source_bytes),
+                            }),
                     },
                     wgpu::BindGroupEntry {
                         binding: 1,

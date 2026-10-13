@@ -1,0 +1,45 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+    Checking rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+error[E0282]: type annotations needed for `Result<(ProjectedModelEvidence, PreparedModelFile, PreparedModelFile, ContentSnapshot), _>`
+   --> crates/rrrah-dedup/src/model_projected_compare.rs:158:9
+    |
+158 |     let result = (|| {
+    |         ^^^^^^
+...
+192 |         Ok((evidence, a, b, model))
+    |         --------------------------- type must be known at this point
+    |
+help: consider giving `result` an explicit type, where the type for type parameter `E` is specified
+    |
+158 |     let result: Result<_, E> = (|| {
+    |               ++++++++++++++
+
+error[E0283]: type annotations needed for `Result<(ProjectedModelEvidence, PreparedModelFile, PreparedModelFile, ContentSnapshot), _>`
+   --> crates/rrrah-dedup/src/model_projected_compare.rs:158:9
+    |
+158 |     let result = (|| {
+    |         ^^^^^^
+...
+197 |     let (evidence, a, b, model) = result?;
+    |                                         - type must be known at this point
+    |
+note: multiple `impl`s satisfying `ProjectedModelError: From<_>` found
+   --> crates/rrrah-dedup/src/model_projected_compare.rs:47:19
+    |
+ 47 |     ModelSource(#[from] SnapshotError),
+    |                   ^^^^
+...
+ 55 |     Geometry(#[from] GeometryError),
+    |                ^^^^
+ 56 |     #[error(transparent)]
+ 57 |     Pixels(#[from] WarpError),
+    |              ^^^^
+    = note: and another `impl` found in the `core` crate: `impl<T> From<T> for T;`
+help: consider giving `result` an explicit type, where the placeholders `_` are specified
+    |
+158 |     let result: Result<_, E> = (|| {
+    |               ++++++++++++++
+
+Some errors have detailed explanations: E0282, E0283.
+For more information about an error, try `rustc --explain E0282`.
+error: could not compile `rrrah-dedup` (lib) due to 2 previous errors

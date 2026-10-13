@@ -1,0 +1,160 @@
+Running cache
+Running cuda-host
+Running viewer
+Running qoi-native
+Running qoi-reference
+Running model-gpu
+Running hdr-ttl-gpu
+Running camera-color-gpu
+Running gpu
+Running gpu-swapped-viewport
+Running gpu-swapped-source-navigation
+
+SWAPPED VIEWPORT
+warning: function `fallible_zeroed_bytes` is never used
+   --> crates/rrrah-cache/src/mosaic_payload_v1.rs:728:4
+    |
+728 | fn fallible_zeroed_bytes(len: usize) -> Result<Box<[u8]>, MosaicPayloadError> {
+    |    ^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-cache` (lib) generated 1 warning
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.28s
+     Running unittests src/main.rs (target/debug/deps/rrrah-0b4921b829754900)
+
+running 7 tests
+test raster_viewport::tests::cancelled_generation_lod_filter_and_upload_preserve_old_frame_and_release_credit ... LOD cancellation: stale generation during filter and after queued write preserve old HDR frame; fresh generation succeeds; LOD/texture/queue=0
+ok
+test raster_viewport::tests::large_swapped_hdr_lod_reaches_exact_metal_frame ... 36MP worker profiling start
+36MP swapped HDR Metal: worker_ms=715.87625 publish_render_readback_ms=7.777333 total_ms=725.893916 managed_peak=427776 index_bytes=281440 source_cpu=0 exact_frame=true
+36MP exact LOD swap cache: hit_worker_ms=0.34870799999999996 hit_peak=327680 source_cpu=0 exact_frame=true objects=2
+ok
+test raster_viewport::tests::panning_reuses_margin_with_replacement_headroom_and_exact_frames ... Metal panning margin: hdr=false shared=false;48 exact frames;2 replacement uploads; final credits=0
+Metal panning margin: hdr=true shared=false;48 exact frames;2 replacement uploads; final credits=0
+Metal panning margin: hdr=false shared=true;48 exact frames;4 replacement uploads; final credits=0
+Metal panning margin: hdr=true shared=true;48 exact frames;4 replacement uploads; final credits=0
+ok
+test raster_viewport::tests::swapped_residency_releases_full_source_and_preserves_detail_and_fit ... corrupt selected swap block refused; previous HDR frame and preview retained; transient memory=0; no retry wake
+swapped viewport soak: seconds=0.007 cycles=1 exact_detail_frames=3 CPU_pressure_refusals=1 GPU_pressure_refusals=3 cpu_peak=2662400 texture_peak=160000 queue_peak=160000
+Metal swapped fit timings ms (worker preparation, publish+GPU render+readback, total): [(0.14024999999999999, 0.5425, 0.682834), (0.12454100000000001, 0.495958, 0.620583), (0.113458, 0.456333, 0.569917), (0.111541, 0.421375, 0.533), (0.107333, 0.445166, 0.5526249999999999), (0.109959, 0.434834, 0.544875), (0.14383300000000002, 0.502709, 0.646625), (0.132209, 0.468625, 0.6009169999999999)]; source512x320 RGBA32F, LOD64x40, framebuffer64x64; warm filesystem; includes readback, excludes display presentation
+swapped fit repeated pressure:8 downgrade/recovery cycles; blocked queue retains frame; blocked CPU schedules nothing; exact original HDR references; no retained full source
+swapped fit recovery:32x20->64x40 from original disk source; exact original fit frame; no redundant job
+swapped fit pressure: original swapped source streamed on worker to32x20; queue failure preserves old frame/ready level; retry exact; full source stays released
+ok
+test raster_viewport::tests::viewer_automatically_opens_hdr_lod_switches_to_source_and_reuses_cached_level ... viewer auto LOD: hdr=false raw=false; fit->source->fit exact; cached40960 bytes reused; source/LOD/texture/queue=0
+viewer auto LOD: hdr=false raw=true; fit->source->fit exact; cached40960 bytes reused; source/LOD/texture/queue=0
+viewer auto LOD: hdr=true raw=false; fit->source->fit exact; cached40960 bytes reused; source/LOD/texture/queue=0
+viewer auto LOD: hdr=true raw=true; fit->source->fit exact; cached40960 bytes reused; source/LOD/texture/queue=0
+ok
+test raster_viewport::tests::viewer_region_fallback_retains_source_reuses_and_retries ... viewer regional fallback: raw=false; source retained without copy; pan/exposure/retry frames exact; root/queue/source=0
+viewer regional fallback: raw=true; source retained without copy; pan/exposure/retry frames exact; root/queue/source=0
+ok
+test raster_viewport::tests::worker_prepared_level_installs_without_filtering_or_scanning_full_source_on_ui ... worker HDR level: real rrrah-hdr-lod thread; prepared publication skips full source scan; exact Metal HDR; source/LOD/texture/queue=0
+ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 248 filtered out; finished in 4.29s
+
+
+SOURCE NAVIGATION
+warning: function `fallible_zeroed_bytes` is never used
+   --> crates/rrrah-cache/src/mosaic_payload_v1.rs:728:4
+    |
+728 | fn fallible_zeroed_bytes(len: usize) -> Result<Box<[u8]>, MosaicPayloadError> {
+    |    ^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-cache` (lib) generated 1 warning
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+warning: methods `submit` and `submit_image` are never used
+    --> crates/rrrah-app/src/main.rs:1377:8
+     |
+1085 | impl ForegroundLoader {
+     | --------------------- methods in this implementation
+...
+1377 |     fn submit(&self, path: PathBuf) -> Result<u64> {
+     |        ^^^^^^
+...
+1380 |     fn submit_image(&self, path: PathBuf, image_index: usize) -> Result<u64> {
+     |        ^^^^^^^^^^^^
+     |
+     = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: associated items `install_with_cancel`, `refresh`, and `refresh_with_cancel` are never used
+   --> crates/rrrah-app/src/raster_viewport.rs:396:19
+    |
+ 26 | impl ResidentSource {
+    | ------------------- associated items in this implementation
+...
+396 |     pub(crate) fn install_with_cancel<F: FnMut() -> bool>(
+    |                   ^^^^^^^^^^^^^^^^^^^
+...
+483 |     pub(crate) fn refresh(
+    |                   ^^^^^^^
+...
+503 |     pub(crate) fn refresh_with_cancel<F: FnMut() -> bool>(
+    |                   ^^^^^^^^^^^^^^^^^^^
+
+warning: `rrrah` (bin "rrrah") generated 2 warnings
+warning: variant `SwapLod` is never constructed
+  --> crates/rrrah-app/tests/../src/raster_lod_worker.rs:11:5
+   |
+ 9 | enum Source {
+   |      ------ variant in this enum
+10 |     Filter(DecodedRaster),
+11 |     SwapLod {
+   |     ^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: field `0` is never read
+  --> crates/rrrah-app/tests/../src/raster_lod_worker.rs:37:13
+   |
+37 |     Swapped(rrrah_cache::SwappedRaster),
+   |     ------- ^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |     |
+   |     field in this variant
+   |
+help: consider changing the field to be of unit type to suppress this warning while preserving the field numbering, or remove the field
+   |
+37 -     Swapped(rrrah_cache::SwappedRaster),
+37 +     Swapped(()),
+   |
+
+warning: method `into_swapped` is never used
+  --> crates/rrrah-app/tests/../src/raster_lod_worker.rs:52:12
+   |
+45 | impl Completed {
+   | -------------- method in this implementation
+...
+52 |     pub fn into_swapped(self) -> Result<rrrah_cache::SwappedRaster, WorkerError> {
+   |            ^^^^^^^^^^^^
+
+warning: methods `with_same_waker` and `submit_swap_lod` are never used
+   --> crates/rrrah-app/tests/../src/raster_lod_worker.rs:90:12
+    |
+ 89 | impl LodWorker {
+    | -------------- methods in this implementation
+ 90 |     pub fn with_same_waker(&self) -> Self {
+    |            ^^^^^^^^^^^^^^^
+...
+125 |     pub fn submit_swap_lod(
+    |            ^^^^^^^^^^^^^^^
+
+warning: `rrrah` (test "swapped_region_metal") generated 4 warnings
+    Finished `test` profile [optimized + debuginfo] target(s) in 2.27s
+     Running tests/swapped_region_metal.rs (target/debug/deps/swapped_region_metal-ada668171286d115)
+
+running 6 tests
+test raster_lod_worker::tests::generation_changed_after_publication_releases_output_before_consumption ... ok
+test raster_lod_worker::tests::navigation_discards_delayed_old_swap_and_presents_only_new_hdr_source ... delayed swap navigation: old file/index released before latest wake; only new HDR source renders; final credits=0
+ok
+test raster_lod_worker::tests::pending_requests_coalesce_without_blocking_and_only_latest_result_owns_output ... ok
+test raster_lod_worker::tests::stale_persisted_source_releases_disk_index_and_input_before_consumption ... ok
+test raster_lod_worker::tests::swapped_regions_coalesce_drop_stale_output_and_retry_memory_pressure ... ok
+test swapped_packed_regions_render_exactly_after_full_source_release ... swapped region adapter: Metal Apple M4 Max
+ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.02s
+

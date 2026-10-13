@@ -250,7 +250,7 @@ fn complete_animation_groups_remove_stale_edges_and_keep_healthy_group() {
     let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/timeline");
     let dir = tempfile::tempdir().unwrap();
     let a = dir.path().join("a.gif");
-    std::fs::copy(root.join("base.gif"), &a).unwrap();
+    std::fs::write(&a, std::fs::read(root.join("base.gif")).unwrap()).unwrap();
     let files = vec![
         (
             1,
@@ -496,7 +496,7 @@ fn indexed_recursive_modes_retain_labelled_groups_with_candidate_only_budget() {
         ("split.apng", "nested/b.apng"),
         ("changed-pixels.apng", "nested/c.apng"),
     ] {
-        std::fs::copy(fixtures.join(source), dir.path().join(destination)).unwrap();
+        std::fs::write(dir.path().join(destination), std::fs::read(fixtures.join(source)).unwrap()).unwrap();
     }
     let policy = PresentationPolicy {
         max_files: 3,
@@ -702,7 +702,7 @@ fn indexed_recursive_source_change_removes_stale_edges_and_retry_restores_them()
         ("split.apng", "b.apng"),
         ("zero-prefix.apng", "c.apng"),
     ] {
-        std::fs::copy(fixtures.join(source), dir.path().join(destination)).unwrap();
+        std::fs::write(dir.path().join(destination), std::fs::read(fixtures.join(source)).unwrap()).unwrap();
     }
     let policy = PresentationPolicy {
         max_files: 3,
@@ -730,7 +730,7 @@ fn indexed_recursive_source_change_removes_stale_edges_and_retry_restores_them()
     };
     let changed_path = dir.path().join("a.gif");
     for automatic in [false, true] {
-        std::fs::copy(fixtures.join("base.gif"), &changed_path).unwrap();
+        std::fs::write(&changed_path, std::fs::read(fixtures.join("base.gif")).unwrap()).unwrap();
         let active = Cell::new(false);
         let changed = Cell::new(false);
         let cancel = || {
@@ -762,7 +762,7 @@ fn indexed_recursive_source_change_removes_stale_edges_and_retry_restores_them()
         assert_eq!(report.source_issues.len(), 1);
         assert_eq!(report.source_issues[0].0, 0);
         assert_eq!(budget.used(), 0);
-        std::fs::copy(fixtures.join("base.gif"), &changed_path).unwrap();
+        std::fs::write(&changed_path, std::fs::read(fixtures.join("base.gif")).unwrap()).unwrap();
         let retry = if automatic {
             scan_indexed_presentation_roots_auto(&roots, &traversal, 100, policy, &budget, || false)
                 .unwrap()
@@ -905,7 +905,7 @@ fn indexed_recursive_memory_refusals_are_attributed_and_retry_recovers_all_edges
         ("split.apng", "b.apng"),
         ("zero-prefix.apng", "c.apng"),
     ] {
-        std::fs::copy(fixtures.join(source), dir.path().join(destination)).unwrap();
+        std::fs::write(dir.path().join(destination), std::fs::read(fixtures.join(source)).unwrap()).unwrap();
     }
     let policy = PresentationPolicy {
         max_files: 3,

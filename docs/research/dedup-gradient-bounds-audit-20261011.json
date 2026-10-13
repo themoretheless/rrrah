@@ -1,0 +1,79 @@
+{
+  "status": "complete_experiment_rejected_production_matcher_restored",
+  "decision": "No adoption: exact API parity but mixed timing evidence, including substantial regression on real crumpled and foreign photo descriptors. No general speedup established. Candidate and baseline retained only under cfg(test).",
+  "snapshot_files": 3056,
+  "frozen_candidate_macos_generic_tests": 114,
+  "real_same_process_alternating_samples": 24,
+  "real_descriptor_configurations": 6,
+  "self_positive_matches": 1142,
+  "real_summary": [
+    {
+      "pair": "0:0",
+      "radius": "None",
+      "median_seconds": {
+        "False": 0.9024096875,
+        "True": 0.837368792
+      },
+      "full_to_bounded_ratio": 1.077672939475872
+    },
+    {
+      "pair": "0:0",
+      "radius": "Some(64.0)",
+      "median_seconds": {
+        "False": 1.221042125,
+        "True": 1.0954361664999999
+      },
+      "full_to_bounded_ratio": 1.1146629647086792
+    },
+    {
+      "pair": "0:1",
+      "radius": "None",
+      "median_seconds": {
+        "False": 0.7729221665,
+        "True": 0.720656125
+      },
+      "full_to_bounded_ratio": 1.0725256328044115
+    },
+    {
+      "pair": "0:1",
+      "radius": "Some(64.0)",
+      "median_seconds": {
+        "False": 1.2192929585,
+        "True": 1.7368895415
+      },
+      "full_to_bounded_ratio": 0.7019979851148179
+    },
+    {
+      "pair": "0:2",
+      "radius": "None",
+      "median_seconds": {
+        "False": 0.5100744165,
+        "True": 0.638662125
+      },
+      "full_to_bounded_ratio": 0.7986608200697669
+    },
+    {
+      "pair": "0:2",
+      "radius": "Some(64.0)",
+      "median_seconds": {
+        "False": 0.863691917,
+        "True": 1.156982979
+      },
+      "full_to_bounded_ratio": 0.7465035637313383
+    }
+  ],
+  "production_matcher_identical_to_prepared_reuse_revision": true,
+  "test_only_relocation_focused_tests": 3,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-bounds-real-20261011.json": "7744e7e2ad4f67f4e6df21120d4f543aaf3a549edddfe6babf41e75df2814cc1",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-bounds-real-snapshot-20261011.json": "7318939a9c4d27ea3a7827a638a9fa76ee3e4319b9ee74e66dfce07030197029",
+    "/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup/src/gradient.rs": "f0e5077b055fda007e515de0f4c4e8ceb740c503c4a9ff51a6ae653492ce8d18",
+    "/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup/src/gradient_matching_tests.rs": "04a490b5919394b8d7d5054e4df1eb20be61a8b4c44eaea121c2566e71b71419",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-bounds-rejected-tests-20261011.log": "7a62ba8882fe832d3c5421dea9bc9e75a0660634377daf25e657dcc3ef2ca319",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-bounds-final-lib-20261011.log": "e9cf89b0e73524f088c8afe09d9b3e4335651ecff77314096ffc15e4ba0d45e1",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-bounds-generic-20261011.log": "e92095905efbc7c62a59507e29db7dad584ffb5643ea4550c3c775f04ae5229c",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-bounds-timing-20261011.log": "d82a02949fe24e231c86a5e9664a59ebe0d1b2bfeb799876fbf3e7a1d855745a",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-gradient-bounds-20261011.py": "c6eef4b33a269a0df2afc6235f45b2d3b4ded2b6733a39bf7004a131560b33ab"
+  },
+  "limits": "Opt-level1 same-process shared-host measurements, three real photos and bounded feature extraction. Not full Native6 collection throughput, current corpus recall, hard RSS, or release-profile performance qualification. Linux candidate gate tracked separately."
+}

@@ -1,0 +1,34 @@
+{
+  "status": "nine_complete_configuration_and_packaging_files_read",
+  "commit": "a74f90d293e05856d19a4c0ac2b29b46ef16cf23",
+  "fully_read_additional_files": {
+    "Cargo.toml": 8,
+    ".gitignore": 7,
+    "snapcraft.yaml": 17,
+    "packaging/Dockerfile": 18,
+    "packaging/build-image.sh": 5,
+    "packaging/cargo-config.toml": 8,
+    "packaging/package-internal.sh": 36,
+    "packaging/package.sh": 14,
+    ".circleci/config.yml": 107
+  },
+  "file_hashes": {
+    "Cargo.toml": "51016506cbccdd350c9f8c258f26df7cf87f26805f15da36bb2f1f63029f1b34",
+    ".gitignore": "2de054badd3a37d1c80e04940059edc1bbc9e0d3d91b51ae9ab890dfc3610c82",
+    "snapcraft.yaml": "98a3c0f6ed13ffd7791afad110c466e117ef9e22f653edd377e63cb7f1328e8e",
+    "packaging/Dockerfile": "f49d3361707f48ad380f96bdb4e902133d5b5ae31d3545181adcbbbda4ecdb67",
+    "packaging/build-image.sh": "197d8bd9f648e735b7f36d21122eaffed84909442bfed3bff90129edbde6d887",
+    "packaging/cargo-config.toml": "12513af442958342ece463fc14631de37c09b10b9a3dea2b08664cd395885101",
+    "packaging/package-internal.sh": "7defcbb88b3f5114122ef59351b3677374e40944824b910e750867ea23468201",
+    "packaging/package.sh": "f3bfef1949a4700314204ece5140466e0de6d333b4c8802d7b66108e08d91d84",
+    ".circleci/config.yml": "448f3453b5a4e9e9732b11cd4b8e040e17a4225858a08a1ca50ca09c47ecc8df"
+  },
+  "observations": [
+    "Workspace release uses panic=abort and LTO; a parser panic is process-fatal in that release configuration. This is source inference, not a release panic execution.",
+    "Pinned CircleCI configuration runs format/build/clippy/tests on a single Rust1.74 Linux image; file presence is not evidence any remote job passed.",
+    "Packaging scripts cross-build four targets and assemble deb/rpm/tgz/zip packages; no platform runtime tests are defined there.",
+    "Packaging builder image/tool installs are unpinned; source does not establish reproducible current packages.",
+    "Snap confines application with home/removable-media plugs; no installation or access behavior tested."
+  ],
+  "scope": "Full text read of nine files only. No scripts executed, no cleanup/package/release/publication action, no CI status/release reproducibility/platform or full42tree/full500 claim."
+}

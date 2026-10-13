@@ -1,0 +1,40 @@
+{
+  "status": "verified_170_original_unit_tests_and_two_docs_macos_arm64",
+  "source_commit": "a74f90d293e05856d19a4c0ac2b29b46ef16cf23",
+  "suites": [
+    {
+      "suite": "lib",
+      "passed": 166,
+      "ignored": [
+        "device::test::test_physical_device_name"
+      ]
+    },
+    {
+      "suite": "main",
+      "passed": 4,
+      "ignored": []
+    }
+  ],
+  "doc_tests_passed": 2,
+  "standalone_original_semaphore_tests_passed": 7,
+  "fully_read_source_files": [
+    "LICENSE",
+    "fclones/Cargo.toml",
+    "fclones/src/hasher.rs",
+    "fclones/src/semaphore.rs",
+    "fclones/src/rlimit.rs",
+    "fclones/src/device.rs"
+  ],
+  "compiler": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: aarch64-apple-darwin\nrelease: 1.98.1\nLLVM version: 22.1.8\n",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/fclones-hasher-source-20261012.json": "54d14fd6f77c95467e02139da2daabbbe9e237abf2d03400abfd39593e32d176",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-full-tests-20261012.log": "4116d3fe60aad445e7fc69c52ddc6ebd177efbe6d15307eec0846219ffb7e849",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-fclones-upstream-20261012.py": "831d5268d8cb0e82734ba8663e3e1982f84baeb86ad5363e293b1550de3065cd",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-full-source-20261012/Cargo.lock": "3f151455d8994d711d7576defe660d9c56e1cbac70b3dfb0781763bfcd2eed96",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-upstream-executables-20261012/lib": "738c143872942a290b4df90b62b23527f12dfe6c5d6822069a4ad394ade7b09e",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-upstream-executables-20261012/main": "53141293a72ec2272f7d5a6617225206ee44288199396b2ada5201a824f0ba97",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-semaphore-tests-20261012": "85a312ffa4344f894e4acfd21453f631ddb3522eee59fcb659eb78c52f321334",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-semaphore-tests-20261012.log": "9f56b819f65ef9a33a644b1f61ba7c0af10c82680152f9ebccfb15161e96956e"
+  },
+  "scope": "Unmodified pinned fclones default-feature whole upstream cargo test, locked dependencies on current macOS ARM64. Linux-only physical-device test ignored. Standalone original semaphore source also ran seven tests. Tree is pinned but full42-file read remains incomplete; no rrrah production adoption, full500, other platforms or total process cap qualification."
+}

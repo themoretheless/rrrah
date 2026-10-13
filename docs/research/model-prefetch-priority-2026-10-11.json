@@ -1,0 +1,19 @@
+{
+  "scope": "Foreground model neighbor queue leases protect nearer cached models against farther eviction; release before new request and idle wait",
+  "report": "docs/research/model-prefetch-priority-2026-10-11/report.json",
+  "app_passed": 211,
+  "app_ignored": 57,
+  "app_log_sha256": "be9066556bd8211de7cc87f64130a6a1a61540762d4e7b49f2f8dd1fe1e98c06",
+  "source_sha256": "2bd564f2ec9dfa6e0b68368c00bfbf4aab19f7ea3549d4d6759a66ea85c222fd",
+  "fixtures": [
+    "triangle.stl",
+    "off-attributes-binary.off",
+    "obj-shared-metadata.obj",
+    "ply-64-le.ply"
+  ],
+  "limitations": [
+    "Helper regression covers four small authored models, not complete real collection scheduling",
+    "Foreground RAW equivalent priority protection still pending audit",
+    "Lease lookup repeats sampled source fingerprint IO"
+  ]
+}

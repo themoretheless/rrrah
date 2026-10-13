@@ -1,0 +1,43 @@
+{
+  "scope": "Scoped verified swap reads for original-source HDR LOD on Metal",
+  "implementation": [
+    "One open file and one managed 64KiB verified block per LOD calculation",
+    "Reuse managed source row across output-row boundaries",
+    "Failed block replacement invalidates cached verification before I/O; partial output is never published by LOD worker"
+  ],
+  "validation": {
+    "cache_unit_passed": 133,
+    "swap_unit_passed": 16,
+    "metal_viewport_passed": 6,
+    "large_source_bytes_released": 576000000,
+    "lod_managed_peak_bytes": 165072,
+    "retained_index_bytes": 281280,
+    "lod_size": [
+      17,
+      11
+    ],
+    "reference": "bit-exact native original-source area filter"
+  },
+  "warm_filesystem_row_benchmark": {
+    "source_bytes": 8388608,
+    "rows": 4096,
+    "row_bytes": 2048,
+    "old_ms": [
+      372.824416,
+      429.639583,
+      448.54275
+    ],
+    "scoped_ms": [
+      9.516833,
+      9.4375,
+      9.471708
+    ],
+    "limits": "Warm filesystem, local synthetic read comparison; not full viewer latency or physical slow-disk qualification"
+  },
+  "remaining": [
+    "Initial full decode remains required",
+    "Physical HDR display calibration and luminance unverified",
+    "NVIDIA/CUDA deferred by user",
+    "Full 100-format acceptance remains open"
+  ]
+}

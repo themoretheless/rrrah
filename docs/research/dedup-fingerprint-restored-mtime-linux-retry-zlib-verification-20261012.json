@@ -1,0 +1,34 @@
+{
+  "status": "verified_15_decode_cache_tests_native_linux_arm64_nonroot",
+  "passed": 15,
+  "ignored": 0,
+  "tests": [
+    "actual_files_ignore_comments_but_not_changed_pixels",
+    "cached_content_does_not_bypass_extension_selected_decoder_errors",
+    "cached_file_fingerprints_reuse_only_current_content_and_recipe",
+    "corrupt_missing_cancelled_and_frame_out_of_range_are_errors",
+    "cache_hits_revalidate_source_and_cancellation_before_returning_evidence",
+    "cached_wal_tracks_external_palette_changes_and_removal",
+    "memory_and_persisted_fingerprint_cache_revalidate_same_size_restored_mtime",
+    "layered_xcf_duplicates_preserve_color_errors_and_managed_ownership",
+    "mutation_during_processing_never_admits_cached_evidence",
+    "pre_icc_fix_persisted_recipe_cannot_reuse_current_fingerprint",
+    "public_selected_decode_rejects_a_source_changed_after_output_admission",
+    "tiff_shaped_raw_never_uses_generic_page_fallback",
+    "icc_conversion_cancellation_releases_partial_output",
+    "cached_page_selection_and_color_assumptions_never_cross_reuse",
+    "multiblock_cache_hit_cancellation_preserves_retry_and_releases_memory"
+  ],
+  "image_id": "sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55",
+  "compiler": "rustc 1.98.0 (88d9e12ae 2026-08-18)\nbinary: rustc\ncommit-hash: 88d9e12ae178fab0fb5cc050a94da85685d449ea\ncommit-date: 2026-08-18\nhost: aarch64-unknown-linux-gnu\nrelease: 1.98.0\nLLVM version: 22.1.8\n",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-fingerprint-restored-mtime-linux-retry-zlib-prepared-20261012.json": "8c56428432b761c0ab4561d541a13ddedda1841f090715127d87077411e5be10",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-fingerprint-restored-mtime-source-20261012.json": "7649bae1b7268e50fb5ad58e16cf034a2d9532a2a2012c51a5e7ebc4dc0e0256",
+    "/Users/themoretheless/.codex/tmp/rrrah-fingerprint-restored-mtime-linux-retry-zlib-tests-20261012.log": "aaf47bd4e42f0126a89b393f16622892c62133c5bdb89dd619279ce76bc62c48",
+    "/Users/themoretheless/.codex/tmp/rrrah-fingerprint-restored-mtime-linux-retry-zlib-executable-20261012": "a1c6f9d132b87c3b817ab53b05bee3500072fc51b2cbac142480896234d5c0d2",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-linux-native/toolchain/bin/rustc": "9d7a5b460112fc7290514b05cc30aea07b0a1430598a26594aa9755ebdba6001",
+    "/Users/themoretheless/.codex/tmp/rrrah-fingerprint-restored-mtime-linux-retry-zlib-20261012.sh": "9254867c094278ee9273989cd4cf3707ca67962490727f44aca8337a88a20e2b",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-fingerprint-restored-mtime-linux-retry-zlib-20261012.py": "f6cc3cce2fcb47dd0739e1f64afcb2f8ccde844b998866f80a6b54d731e15208"
+  },
+  "scope": "Actual nonroot Linux aarch64 ELF executes all15 frozen decode/cache tests including same-size exactrestoredmtime and submillisecond invalidation in memory and saved/reloaded caches. Exact source/compiler/image/log/test list pinned and executable preserved. Uses separate copied sysroot plus pinned actual zlib development package after recorded initial build failure. No fullformats/Windows/RSS/corpus/full500 qualification."
+}

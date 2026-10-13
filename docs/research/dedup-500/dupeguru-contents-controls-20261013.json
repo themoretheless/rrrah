@@ -1,0 +1,49 @@
+{
+  "status": "passed7_selected_contents_scanner_controls",
+  "controls": [
+    {
+      "name": "default_identical_control",
+      "passed": true,
+      "result": "Identical bytes accepted by actual contents scanner."
+    },
+    {
+      "name": "default_full_digest_rejects_sample_collision",
+      "passed": true,
+      "result": "Default bigsize0 full-digest path rejects different5MiB files."
+    },
+    {
+      "name": "configured_samples_accept_distinct_contents",
+      "passed": true,
+      "result": "Configured sample path emits100% and a2file group for distinct full contents; default path rejected."
+    },
+    {
+      "name": "default_scanner_stale_metadata_cache",
+      "passed": true,
+      "result": "Default contents scanner reuses stale cached full digest after same-size restoredmtime edit."
+    },
+    {
+      "name": "default_exists_filter_mitigates_missing_files",
+      "passed": true,
+      "result": "Zero-size accessor fallback matches in engine; default scanner exists check filters both missing files."
+    },
+    {
+      "name": "reference_only_pair_skipped",
+      "passed": true,
+      "result": "Two reference files intentionally skipped."
+    },
+    {
+      "name": "nontransitive_grouping_control",
+      "passed": true,
+      "result": "Supplied nontransitive edge chain does not form triple; grouping-only control."
+    }
+  ],
+  "upstream_tests_executed": 0,
+  "python": "3.9.6 (default, Aug 25 2026, 21:26:21) \n[Clang 21.0.0 (clang-2100.3.34.2)]",
+  "pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-dupeguru-exact-source-20261013/core/fs.py": "16da9febe4fcfebcd3dafeebd409c05349e94f88a6961e81a8499e02b32458ba",
+    "/Users/themoretheless/.codex/tmp/rrrah-dupeguru-scanner-source-20261013/core/engine.py": "4452c45939d48985f171f9627b22172ea6912cac9de628fd031eed90330e4629",
+    "/Users/themoretheless/.codex/tmp/rrrah-dupeguru-scanner-source-20261013/core/scanner.py": "c202f7ec4529b7de6e3baa328005e3a4476487020dbbc967f1d8c098e729f7f4",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/check-dedup-dupeguru-contents-20261013.py": "f452c1338b24208fb8ca6f9f6bd857cac2fa20788b53e309021df29a64daedb1"
+  },
+  "scope": "Unmodified three modules, real files/SQLite/MD5. Progress/translation and listed utility adapters supplied; fuzzy words deliberately disabled. Actual contents Scanner.get_dupe_groups exercised, no UI/deletion or whole368blob source review; no actualxxhash."
+}

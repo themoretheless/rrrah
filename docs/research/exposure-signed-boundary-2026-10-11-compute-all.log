@@ -1,0 +1,14 @@
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.08s
+     Running tests/compute_readback.rs (target/debug/deps/compute_readback-0f0df8525b3523e2)
+
+running 7 tests
+test full_sensor_linear_exposure_chunked_readback ... ignored, allocates about 0.8 GB of GPU buffers; full-resolution local qualification
+test full_sensor_managed_exposure_budgets_and_checks_every_pixel ... ignored, full-resolution managed compute uses about 2 GB of tracked buffers
+test interleaved_exposure_preserves_bits_and_managed_raster_ownership ... ok
+test resident_exposure_preserves_hdr_tail_and_budgeted_gpu_ownership ... ok
+test exposure_signed_f32_boundary_values_remain_exact_and_finite ... ok
+test linear_exposure_compute_preserves_hdr_alpha_and_dispatch_tail ... ok
+test exposure_readback_cancellation_releases_mapping_and_allows_retry ... ok
+
+test result: ok. 5 passed; 0 failed; 2 ignored; 0 measured; 0 filtered out; finished in 0.29s
+

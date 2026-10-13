@@ -1,0 +1,41 @@
+{
+  "status": "point_in_time_selected_root_and_native_source_comparison",
+  "all_selected_match": true,
+  "rows": [
+    {
+      "folder": "crates/rrrah-dedup",
+      "root_files": 616,
+      "snapshot_files": 616,
+      "differences": []
+    },
+    {
+      "folder": "crates/rrrah-core",
+      "root_files": 19,
+      "snapshot_files": 19,
+      "differences": []
+    },
+    {
+      "folder": "crates/rrrah-decode",
+      "root_files": 198,
+      "snapshot_files": 198,
+      "differences": []
+    },
+    {
+      "folder": "crates/rrrah-memory",
+      "root_files": 7,
+      "snapshot_files": 7,
+      "differences": []
+    },
+    {
+      "folder": "vendor",
+      "root_files": 261,
+      "snapshot_files": 261,
+      "differences": []
+    }
+  ],
+  "changes_from_running_full_gate": [
+    "crates/rrrah-dedup/src/model_loftr.rs",
+    "crates/rrrah-dedup/src/search_portfolio.rs"
+  ],
+  "scope": "Four involved crates and vendor only; point-in-time parity, not whole app/workspace. Running full gate predates directional provider helper/native convenience wrapper; latest standalone38 and actual learned control qualify those changes narrowly."
+}

@@ -3,8 +3,8 @@
   "repository": "KevinGliewe/imghash",
   "commit": "920106d6e4cb31bc2d075cd85823457823fc6181",
   "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
-  "decision": "reference",
-  "finding": "Rust image hash CLI with algorithm choices; no detected tests, likely backend wrapper needing qualified oracle.",
+  "decision": "reference-candidate-generator-only",
+  "finding": "All implementation read; original locked build and ten real CLI controls: lowercase algorithm rejected, zero-width empty success, black/white distance0. Candidate generator only; no equality admission, no code adopted.",
   "available_source_evidence": [
     {
       "path": "src/main.rs",
@@ -63,6 +63,14 @@
       "lines": 25,
       "source": false,
       "test": false
+    }
+  ],
+  "incremental_reviews": [
+    {
+      "audit": "docs/research/dedup-500/kevingliewe-imghash-source-review-audit-20261013.json",
+      "controls": "docs/research/dedup-500/kevingliewe-imghash-controls-20261013.json",
+      "whole_implementation_complete": true,
+      "whole_repo_complete": false
     }
   ]
 }

@@ -1,0 +1,189 @@
+{
+  "date": "2026-10-10",
+  "scope": "Dynamic adaptive mesh capacity admission and test-only native PDF compositor; not a Metal GPU benchmark or production AI qualification",
+  "changes": [
+    "Each growing adaptive array admits its full new capacity before releasing old capacity credit",
+    "Consuming scratch iterators retain allocation credit until iterator drop",
+    "Only output capacity credit remains after tessellation",
+    "Balanced median BVH node capacity bound reduces unused reservation",
+    "Native tensor triangle cap raised to 1048576 without loosening error tolerances",
+    "Soft-mask child recorders propagate native raster capture"
+  ],
+  "limits": {
+    "max_triangles": 1048576,
+    "max_depth": 12,
+    "pixel_error": 0.015625,
+    "source_component_error": 0.0009765625,
+    "real_ai_root_budget_bytes": 268435456
+  },
+  "qualification": {
+    "interpreter": {
+      "passed": 103,
+      "failed": 0,
+      "ignored": 0
+    },
+    "compositor": {
+      "passed": 124,
+      "failed": 0,
+      "ignored": 10,
+      "filtered": 1
+    },
+    "admission_control": {
+      "reservations_individually_refused": 136,
+      "cancellation_checkpoints": 358,
+      "retained_output_bytes": 491520,
+      "peak_admitted_bytes": 810176,
+      "final_admitted_bytes": 0,
+      "exact_peak_limit_retry": true,
+      "one_byte_below_peak_refuses": true,
+      "all_original_components_and_positions_match_legacy": true
+    },
+    "raster_mask_regression": {
+      "before_fix": "FAILED: child raster capture count 0 instead of 1",
+      "after_fix": "PASS: original 16-bit Gray samples retained and overlapping RGB result components match float luminosity oracle"
+    }
+  },
+  "real_ai": {
+    "pages": [
+      {
+        "fixture": "VectorApple.ai",
+        "page": 0,
+        "width": 301,
+        "height": 246,
+        "peak_admitted_bytes": 196387440,
+        "final_admitted_bytes": 0,
+        "status": "native_diagnostic",
+        "native_completed": false,
+        "capture_failed": false,
+        "capture_ms": 4435.439791000001,
+        "native_replay_ms": 879.134666,
+        "deadline_expired": false,
+        "events": 2755,
+        "native_paints": 463,
+        "raster_events": 3,
+        "raster_source_models": [
+          "event=3,model=None",
+          "event=1218,model=Some(Cmyk)",
+          "event=2298,model=Some(Cmyk)"
+        ],
+        "native_raster_components": [
+          "event=3,sample_count=Some(29488),refusal=None",
+          "event=1218,sample_count=Some(298224),refusal=None",
+          "event=2298,sample_count=Some(266084),refusal=None"
+        ],
+        "shading_events": 13,
+        "page_model": "Cmyk"
+      },
+      {
+        "fixture": "one.ai",
+        "page": 0,
+        "width": 1366,
+        "height": 768,
+        "peak_admitted_bytes": 168322584,
+        "final_admitted_bytes": 0,
+        "status": "native_diagnostic",
+        "native_completed": true,
+        "capture_failed": false,
+        "capture_ms": 2.539625,
+        "native_replay_ms": 3392.058,
+        "deadline_expired": false,
+        "events": 8,
+        "native_paints": 2,
+        "raster_events": 0,
+        "raster_source_models": [],
+        "native_raster_components": [],
+        "shading_events": 0,
+        "page_model": "Rgb"
+      },
+      {
+        "fixture": "one.ai",
+        "page": 1,
+        "width": 177,
+        "height": 175,
+        "peak_admitted_bytes": 4957320,
+        "final_admitted_bytes": 0,
+        "status": "native_diagnostic",
+        "native_completed": true,
+        "capture_failed": false,
+        "capture_ms": 0.046625,
+        "native_replay_ms": 55.49629100000001,
+        "deadline_expired": false,
+        "events": 1,
+        "native_paints": 0,
+        "raster_events": 0,
+        "raster_source_models": [],
+        "native_raster_components": [],
+        "shading_events": 0,
+        "page_model": "Rgb"
+      }
+    ],
+    "tensor_captures": [
+      {
+        "patches": 1455,
+        "triangles": 298173,
+        "pixel_bound": 0.01562433634695382,
+        "component_bound": 0.0009496351704001427
+      },
+      {
+        "patches": 323,
+        "triangles": 180269,
+        "pixel_bound": 0.015624684263785209,
+        "component_bound": 0.00015306659042835236
+      },
+      {
+        "patches": 323,
+        "triangles": 180269,
+        "pixel_bound": 0.015624684263785209,
+        "component_bound": 0.00015306659042835236
+      },
+      {
+        "patches": 245,
+        "triangles": 24811,
+        "pixel_bound": 0.015624431138975936,
+        "component_bound": 0.0009496351704001427
+      },
+      {
+        "patches": 788,
+        "triangles": 62901,
+        "pixel_bound": 0.015624991177228034,
+        "component_bound": 0.0009496351704001427
+      }
+    ],
+    "native_replay_status": "VectorApple passes former event 9 tensor refusal. Nested raster at depth 1 event 11 is captured with no refusal, original and compatibility dimensions both 395x367, determinant 0.23039999365949. Replay still returns None before any sample-refusal or color-conversion diagnostic; precise shape/replay-stage cause remains unresolved.",
+    "strict_fidelity_qualified": false
+  },
+  "limitations": [
+    "Test-only compositor is not wired into production AI renderer or Metal presentation",
+    "Accounting covers logical array capacities, not allocator bookkeeping, thread stack, source parsing or process RSS",
+    "All five real tensor captures fit memory but this does not prove final AI fidelity",
+    "Nonlinear source functions may amplify component error after interpolation",
+    "Physical HDR and NVIDIA qualification remain separate"
+  ],
+  "evidence_logs": {
+    "interpreter": {
+      "path": "/tmp/rrrah-adaptive-dynamic-interpreter-final-20261010.log",
+      "sha256": "b64f65783c6691d5dfd3f6117f0d3e5a687d1f34acd10b4233f94d5fcba4846d"
+    },
+    "admission": {
+      "path": "/tmp/rrrah-adaptive-dynamic-admission-work-20261010.log",
+      "sha256": "f80c6161bc246b0efb2892f80fa164d31208bad27852e0aff3c0f6baef9fd57c"
+    },
+    "compositor": {
+      "path": "/tmp/rrrah-mask-raster-geometry-20261010.log",
+      "sha256": "6a4aa795399b202da4344f5dda23f95c2f916a88df557b90d6dfdb85a7a37d1d"
+    },
+    "mask_before_fix": {
+      "path": "/tmp/rrrah-mask-raster-before-20261010.log",
+      "sha256": "ae02276d962b0861fd8c11096f2bb77a5c742f0cad5ad5747c1538aad6fa8aba"
+    },
+    "real_ai": {
+      "path": "/tmp/rrrah-mask-raster-geometry-ai-20261010.log",
+      "sha256": "b57718c9fe6aecbeb55845a6ce2ed93eef954aa82f2fae78cfca052f2a0e7833"
+    }
+  },
+  "source_sha256": {
+    "vendor/hayro-interpret/src/shading/adaptive.rs": "7806949f56bf6661c0ccd0c914d836cd6fdf101545c598f3367e8d98ff918da3",
+    "vendor/hayro-interpret/src/encode/native_source.rs": "294d39f15c9f780eba74e81461e66de6faa353e8b88d7d14d7031a76d4fc50cf",
+    "vendor/hayro/src/knockout_interpreter.rs": "7a9ffd9954a246cf1d65f9949177791504cf8d378f166fad3126816608006677"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "status": "complete_original_module6_mocked_dependency_controls",
+  "controls": [
+    {
+      "control": "pHash_placeholder_returns_undefined"
+    },
+    {
+      "control": "PQDHash_placeholder_returns_undefined"
+    },
+    {
+      "control": "blockMeanHash_placeholder_returns_undefined"
+    },
+    {
+      "control": "aHash_returns_neither_hash_nor_promise"
+    },
+    {
+      "control": "undeclared_global_contains_boolean_words",
+      "bitStr": "falsetruefalsetrue"
+    },
+    {
+      "control": "callback_typo_caught_and_only_logged",
+      "error": {
+        "name": "ReferenceError",
+        "message": "bitSt is not defined"
+      }
+    }
+  ],
+  "authored_controls": 6,
+  "upstream_tests": 0,
+  "node_version": "v22.23.3",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/perceptual-hashes-benchmark-full-source-20261012.json": "0124f675db13caaa527cc9047c3e1dacd56ae69abada10c353db6de84e9f7fd0",
+    "/Users/themoretheless/.codex/tmp/rrrah-perceptual-hashes-benchmark-source-20261012/index.js": "fe74e9706a02e64817aac5120cae64319e4fbe37ba4d323cfa4838e9962d0454",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/check-dedup-perceptual-hashes-benchmark-20261012.cjs": "9d2c9656ef4a09618b4135b37575b22e29a27659d76d4cd31c846ff58f507e31",
+    "/opt/homebrew/Cellar/node@22/22.23.3_2/bin/node": "d358db924f68e1f8736e38fc4adbdd9b06c2a4db3e8c683d4719032bd71be8fd"
+  },
+  "scope": "Unchanged pinned JS module, explicit mocked Sharp/mean/iterator adapters. Six observed language/control-flow behaviors; no actual image decode, Sharp API, dependency or benchmark qualification. No adoption."
+}

@@ -1,0 +1,31 @@
+{
+  "adapter": "Metal Apple M4 Max",
+  "scope": "Raster replacement pressure/cancellation/retry: SDR and binary16 HDR targets, small and 4000x3000 float source",
+  "manual_and_small_tests": {
+    "passed": 2,
+    "failed": 0,
+    "ignored": 0
+  },
+  "ordinary_raster_suite": {
+    "passed": 17,
+    "failed": 0,
+    "ignored": 8
+  },
+  "verified": [
+    "Independent texture and upload queue memory admission refusal retains exact previous frame",
+    "Small source cancellation at all six checkpoints; 12MP at six checkpoints spanning validation and admission",
+    "Successful blue replacement is exact; final owned GPU/queue credit zero for both target formats"
+  ],
+  "limitations": [
+    "Offscreen actual Metal readback; no live window or physical HDR display qualification",
+    "Source colors lie within 0..1; signed/above-one HDR content qualification is separate",
+    "Initial new test used SDR-only constructor for HDR and failed assertion; corrected to existing linear HDR constructor, failed log retained",
+    "No production renderer change"
+  ],
+  "sha256": {
+    "crates/rrrah-gpu/tests/common/mod.rs": "c4b7e445d8958f810d0a2f0870b36640bc11a5c8cba8ea791e7423b531c15e5c",
+    "docs/research/metal-raster-hdr-upload-recovery-2026-10-12/raster-suite.log": "6b4a8b59b59c929524bf2e29e20336638454628db34505be4f52de97e8458088",
+    "docs/research/metal-raster-hdr-upload-recovery-2026-10-12/tests.log": "802db22b429bc71bd0556da12f3622e7b0ebaf2d241624f64e637eb7494278ff",
+    "docs/research/metal-raster-hdr-upload-recovery-2026-10-12/initial-constructor-error.log": "d083bbf3169e04881387a99e206580dde7addf33119d3a2499997674542a88a7"
+  }
+}

@@ -16,14 +16,32 @@ pub mod container;
 pub mod crop;
 #[cfg(feature = "decode")]
 pub mod decode;
-pub mod exact;
-pub mod geometry;
-pub mod gradient;
 #[cfg(feature = "decode")]
+mod decode_recipe;
+pub mod exact;
+#[cfg(feature = "decode")]
+pub mod exact_portfolio;
+#[cfg(feature = "decode")]
+pub mod exact_portfolio_collection;
+#[cfg(feature = "decode")]
+pub mod model_banks;
+pub mod geometry;
+pub mod geometry_validation;
+#[cfg(feature = "raster")]
+pub mod bank_partition;
+#[cfg(feature = "raster")]
+pub mod bank_geometry;
+#[cfg(feature = "raster")]
+pub mod joint_witnesses;
+pub mod gradient;
+#[cfg(feature = "raster")]
 pub mod gradient_index;
+#[cfg(feature = "raster")]
+pub mod pair_schedule;
 pub mod gradient_scale;
 pub mod groups;
 pub mod linear;
+pub mod exposure;
 pub mod local;
 #[cfg(feature = "decode")]
 pub mod local_collection;
@@ -42,6 +60,22 @@ mod managed_pair_counts;
 mod managed_targets;
 #[cfg(feature = "decode")]
 mod managed_visual;
+#[cfg(feature = "decode")]
+pub mod model_compare;
+#[cfg(feature = "decode")]
+pub mod model_projected_compare;
+#[cfg(feature = "decode")]
+pub mod model_projected_tiles;
+#[cfg(feature = "raster")]
+pub mod model_input;
+#[cfg(feature = "raster")]
+pub mod model_projection;
+#[cfg(feature = "decode")]
+pub mod model_input_file;
+#[cfg(feature = "loftr")]
+pub mod model_loftr;
+#[cfg(feature = "decode")]
+pub mod model_tiles;
 pub mod ordinal;
 #[cfg(feature = "decode")]
 pub mod pages;
@@ -51,9 +85,20 @@ pub mod piecewise_warp;
 pub mod pixel_index;
 pub mod pixels;
 #[cfg(feature = "decode")]
+pub mod portfolio_collection;
+#[cfg(feature = "decode")]
+pub mod collection;
+#[cfg(feature = "decode")]
+pub mod projected_collection;
+#[cfg(feature = "decode")]
 pub mod presentation_kind;
+pub mod proposals;
 pub mod pyramid;
 pub mod rank_region;
+#[cfg(feature = "raster")]
+pub mod competitive_rank;
+#[cfg(feature = "raster")]
+pub mod mesh_deformation;
 #[cfg(feature = "raster")]
 pub mod raster;
 pub mod region_footprint;
@@ -63,6 +108,14 @@ pub mod region_grid;
 pub mod region_transform;
 #[cfg(feature = "decode")]
 pub mod scan;
+#[cfg(feature = "decode")]
+pub mod search_portfolio;
+#[cfg(feature = "decode")]
+mod guarded_pair;
+#[cfg(feature = "decode")]
+pub mod projected_portfolio;
+#[cfg(feature = "decode")]
+pub mod projected_portfolio_collection;
 pub mod sequence;
 #[cfg(feature = "raster")]
 pub mod triangulation;
@@ -485,3 +538,8 @@ pub mod anchor_rank;
 
 #[cfg(feature = "decode")]
 pub mod anchor_rank_file;
+
+pub mod worker;
+
+#[cfg(feature = "decode")]
+pub mod model_worker;

@@ -1,0 +1,60 @@
+{
+  "scope": "Diagnostic measurement of computed negative barycentric weights before selected-owner projection, separate16Mshared diagnostic allowance per replay",
+  "source_tests": "119passed/1ignored",
+  "compositor_tests": "236passed/12ignored",
+  "rows": [
+    {
+      "checks": 915362,
+      "projected": 59,
+      "max_deficit": 1.3635338747552817e-10,
+      "refused": 0,
+      "diagnostic_work": 915362
+    },
+    {
+      "checks": 326253,
+      "projected": 190,
+      "max_deficit": 1.1501743656211334e-10,
+      "refused": 0,
+      "diagnostic_work": 326253
+    },
+    {
+      "checks": 0,
+      "projected": 0,
+      "max_deficit": 0.0,
+      "refused": 0,
+      "diagnostic_work": 0
+    },
+    {
+      "checks": 107245,
+      "projected": 110,
+      "max_deficit": 1.2825606928979673e-11,
+      "refused": 0,
+      "diagnostic_work": 107245
+    },
+    {
+      "checks": 3912,
+      "projected": 5,
+      "max_deficit": 1.1870504579292174e-12,
+      "refused": 0,
+      "diagnostic_work": 3912
+    }
+  ],
+  "total_checks": 1352772,
+  "total_projected": 364,
+  "max_deficit": 1.3635338747552817e-10,
+  "native_color_source_work_and_existing_comparisons_unchanged": true,
+  "peak_admitted_bytes": [
+    239197736,
+    239197736,
+    239197736,
+    239197736,
+    239197736
+  ],
+  "interpretation": "Small real projection occurs in original selected samples; exact affine identity alone cannot certify their integration",
+  "limitations": [
+    "Empirical max is not a universal bound over every fragment point",
+    "Does not measure nonnegative weight normalization rounding",
+    "No color sampling skipped; ordinary4M/fullpage/color qualification unresolved"
+  ],
+  "next": "Bound projection and coordinate arithmetic over the clipped integration domain, then propagate native component rounding through the route"
+}

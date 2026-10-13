@@ -1,0 +1,16 @@
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+error[E0433]: cannot find type `Arc` in this scope
+   --> crates/rrrah-decode/src/apng.rs:445:13
+    |
+445 |             Arc::new(std::sync::atomic::AtomicU64::new(2)),
+    |             ^^^ use of undeclared type `Arc`
+    |
+help: consider importing one of these structs
+    |
+350 +     use crate::Arc;
+    |
+350 +     use std::sync::Arc;
+    |
+
+For more information about this error, try `rustc --explain E0433`.
+error: could not compile `rrrah-decode` (lib test) due to 1 previous error

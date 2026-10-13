@@ -1,0 +1,25 @@
+{
+  "backend": "Metal",
+  "device": "Apple M4 Max",
+  "result": "2 passed; 0 failed",
+  "exposure_stops": [
+    -10,
+    0,
+    10
+  ],
+  "exact_pixels_per_exposure": 4096,
+  "opposite_extremes_output": [
+    63,
+    65
+  ],
+  "all_half_components_finite": true,
+  "test_seconds": 1.27,
+  "runner_option": "--metal-hdr-range",
+  "evidence_acceptance_refusal_checks": 9,
+  "log": "metal-hdr-range-expanded-2026-10-12.log",
+  "limitations": [
+    "empirical Metal behavior at finite binary16 and f32 extremes; not portable contract for other backends",
+    "constant and symmetric controls only",
+    "physical HDR calibration and NVIDIA unqualified"
+  ]
+}

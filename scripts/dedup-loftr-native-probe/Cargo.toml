@@ -1,0 +1,24 @@
+[package]
+name = "dedup-loftr-native-probe"
+version = "0.0.0"
+edition = "2024"
+publish = false
+
+[workspace]
+
+[dependencies]
+loftr = { path = "../../vendor/loftr" }
+tch = "=0.23.0"
+serde_json = "1"
+rrrah-dedup = { path = "../../crates/rrrah-dedup", default-features = false, features = ["loftr"] }
+rrrah-core = { path = "../../crates/rrrah-core" }
+rrrah-decode = { path = "../../crates/rrrah-decode" }
+
+[patch.crates-io]
+hayro = { path = "../../vendor/hayro" }
+moxcms = { path = "../../vendor/moxcms" }
+hayro-interpret = { path = "../../vendor/hayro-interpret" }
+
+# Keep complete-source guards and generic native search practical in diagnostics.
+[profile.dev]
+opt-level = 3

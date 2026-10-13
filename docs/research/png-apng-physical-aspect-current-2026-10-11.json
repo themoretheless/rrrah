@@ -1,0 +1,13 @@
+{
+  "passed": 133,
+  "ignored": 13,
+  "verified": true,
+  "report": "docs/research/png-apng-physical-aspect-current-2026-10-11/report.json",
+  "APNG_cases": "4x4 opaque white and opaque green SOURCE frames, two selections, pHYs2/1 density gives aspect0.5; reverse swap restores retain frame index/count and exact SDR/HDR pixel arrays against authored linear references.",
+  "sha256": {
+    "crates/rrrah-app/tests/png_physical_aspect.rs": "208d8228518099d130eb4e7a7af340f38b9ffcd2d744430d4bfd60351d9faa31",
+    "tests/fixtures/data/apng-physical-aspect.png": "0577413a7f500be3c8b76d08a7e809caf27f04d2f4b78d6c7b58dac7209cae8b",
+    "scripts/qualify-viewer-storage-gpu.py": "8ab27b0dfceda584706c3ba9dc5fb675bd87ef5bd0b8e823edbd8933ffdf2fdd"
+  },
+  "remaining": "APNG codec canvas and transient allocations are not fully governed by request budget; wrapper admission bounds retained pixels, public decode_apng output ownership requires follow-up. Physical HDR/animation playback/color variants not qualified."
+}

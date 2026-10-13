@@ -1,0 +1,93 @@
+{
+  "status": "complete_bounded_frozen_joint_model_tests",
+  "producer_pid": 38392,
+  "source_manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-model-bank-coverage-negatives-snapshot-20261011.json",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-model-bank-coverage-negatives-snapshot-20261011.json": "0e7352d0bee207c8558ebd7413909094414f5af4703ca5f555eddaf0cf315311",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/qualify-dedup-model-bank-coverage-negatives-20261011.py": "56ac41d2d4b6168af552076da8e735b7d193a705e6047843289d9f4d2821d25b",
+    "/Users/themoretheless/.codex/tmp/rrrah-model-bank-coverage-negatives-qualified-20261011/build.jsonl": "c1e5263971335956e1e72a2a0ab81e6e1d1b6b9c98594bc716834da81ab14f16",
+    "/Users/themoretheless/.codex/tmp/rrrah-model-bank-coverage-negatives-qualified-20261011/build.log": "79041a48786f7f0f20870d56f5209d8058b58faf65a75b9838ef0af59192e03c"
+  },
+  "build_command": [
+    "cargo",
+    "test",
+    "--manifest-path",
+    "/Users/themoretheless/.codex/tmp/rrrah-model-bank-coverage-negatives-snapshot-20261011/Cargo.toml",
+    "-p",
+    "rrrah-dedup",
+    "--no-default-features",
+    "--features",
+    "decode",
+    "--test",
+    "model_compare",
+    "--test",
+    "model_tiles",
+    "--test",
+    "search_portfolio",
+    "--test",
+    "portfolio_collection",
+    "--test",
+    "joint_witnesses",
+    "--locked",
+    "--offline",
+    "--no-run",
+    "--message-format=json",
+    "--config",
+    "profile.dev.package.rrrah-dedup.opt-level=3",
+    "--target-dir",
+    "/Users/themoretheless/.codex/tmp/rrrah-opposite-native-snapshot-20261011/target"
+  ],
+  "results": [
+    {
+      "suite": "model_compare",
+      "tests": 26,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-model-bank-coverage-negatives-qualified-20261011/model_compare",
+      "binary_sha256": "52ed89260e554ab55b1414f0de1ce0ec8aa6720d9d635d4811120c2c5be8c4ae",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-model-bank-coverage-negatives-qualified-20261011/model_compare.log",
+      "log_sha256": "e8e4fcfed0416a97cb8c4a9905283413ae002b8671e82d15ea02bd0442a3cf67"
+    },
+    {
+      "suite": "model_tiles",
+      "tests": 21,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-model-bank-coverage-negatives-qualified-20261011/model_tiles",
+      "binary_sha256": "749073e38d94f1cf5b55cd2086144ad946eaabb476ec5f4dbbe1c282e08bbcdf",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-model-bank-coverage-negatives-qualified-20261011/model_tiles.log",
+      "log_sha256": "0f174c7f8780422ed89eea9579f0372fe66cb9423957507be9c3706d498bdf1e"
+    },
+    {
+      "suite": "search_portfolio",
+      "tests": 22,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-model-bank-coverage-negatives-qualified-20261011/search_portfolio",
+      "binary_sha256": "6ea3cebf750b25035a44773aa5c1607d423474d946f03050117f6184c4b8ecdb",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-model-bank-coverage-negatives-qualified-20261011/search_portfolio.log",
+      "log_sha256": "20b2102a59e69bd0fff9676e7b1064748d14f7de9040c0836c6c2f24d26a82bb"
+    },
+    {
+      "suite": "portfolio_collection",
+      "tests": 23,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-model-bank-coverage-negatives-qualified-20261011/portfolio_collection",
+      "binary_sha256": "adc8c2786aa1445989fc10a2444b647b6304b8f909707048373824c909b7b737",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-model-bank-coverage-negatives-qualified-20261011/portfolio_collection.log",
+      "log_sha256": "1b8fd346d954506af6db0d176c6a690eed209b7c3dea93168c2588c7749fd10c"
+    },
+    {
+      "suite": "joint_witnesses",
+      "tests": 10,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-model-bank-coverage-negatives-qualified-20261011/joint_witnesses",
+      "binary_sha256": "bf76ddfac70039ae45cd66a0b6c9bacac0bac30461783a12f3df77e14dcda2cf",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-model-bank-coverage-negatives-qualified-20261011/joint_witnesses.log",
+      "log_sha256": "1e20f4f8522cc46f5ac7d03752ff683f0241b487a9b8e396bc9807cab1f06a9e"
+    }
+  ],
+  "scope": "Frozen compatible four-crate source and lock, new joint primitive plus legacy/pair/collection tests. Source coherent before/after; root concurrent HDR edits preserved outside this gate. Not full workspace/platform/corpus/RSS qualification.",
+  "build_pid": 38424,
+  "tests": 102,
+  "owned_root_matches": {
+    "crates/rrrah-dedup/src/local_scan.rs": true,
+    "crates/rrrah-dedup/src/geometry.rs": true,
+    "crates/rrrah-dedup/src/anchor_rank_file.rs": true,
+    "crates/rrrah-dedup/src/search_portfolio.rs": true,
+    "crates/rrrah-dedup/src/portfolio_collection.rs": true,
+    "crates/rrrah-dedup/src/model_loftr.rs": false
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "backend": "Metal Apple M4 Max",
+  "passed": 2,
+  "failed": 0,
+  "ignored": 0,
+  "invalid_uploads": 16,
+  "attachments": [
+    "Rgba16Float",
+    "Rgba32Float"
+  ],
+  "cases": "each of four CFA phases with black equal to or greater than white",
+  "checks": [
+    "InvalidLevels error",
+    "previous valid HDR frame remains exact after every refusal",
+    "managed GPU credit unchanged after each refusal",
+    "final renderer drop releases budget"
+  ],
+  "log_sha256": "b8ee1bedc9f58c17c475d862a2e833dbdee28e0adbe4354ed769cc5b321a25bf",
+  "scope": "authored RAW field; GPU upload refusal behavior, not physical calibration"
+}

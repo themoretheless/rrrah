@@ -1,0 +1,28 @@
+{
+  "recovery": "Downloaded pinned official GoPro HERO9 source and regenerated historical production linear fixture with native Rust raw_developed_dump",
+  "source_url": "https://raw.githubusercontent.com/gopro/gpr/446c736a38fb14f51343605c0780d347dc602f89/data/samples/HERO9/GOPR0002.GPR",
+  "source_path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/HERO9.GPR",
+  "source_sha256": "9249208a3482d6d71d39575210fe19ab3dd737e5e446a4d0718d4bd9d3c4358b",
+  "source_bytes": 6763778,
+  "linear_path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/HERO9.rgba32fle",
+  "linear_sha256": "5a13211dbf9c33a67125777d87bc85a950ac054ab051bfcfdf0175ec2475bb58",
+  "linear_matches_historical_pin": true,
+  "linear_bytes": 372031488,
+  "dimensions": [
+    5568,
+    4176
+  ],
+  "native_development_managed_peak": 868711424,
+  "display_validation": {
+    "backend": "Metal Apple M4 Max",
+    "pixels_checked": 23251968,
+    "maximum_rgb8_difference": 1,
+    "result": "passed"
+  },
+  "limits": [
+    "This restores production decode output and display transport evidence; display test is not an independent complete demosaic/color oracle",
+    "Other four pinned fixtures still absent from recovered corpus",
+    "Physical HDR and NVIDIA remain unverified"
+  ],
+  "audit_update": "Portable streaming SHA256 avoids Python-version-specific hashlib.file_digest; --input-root relocates basenames while retaining original checksum requirements; current audit verifiesHERO9 and fails closed for four missing inputs"
+}

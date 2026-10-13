@@ -1,0 +1,20 @@
+{
+  "scope": "Native macOS sampled stack profile of rrrah-hdr-lod while restoring original-source36MP LOD",
+  "worker_samples": 77,
+  "observations": {
+    "read_verify_copy_branch": 50,
+    "blake3_hash_under_read": 37,
+    "file_read_under_read": 11,
+    "copy_under_read": 2,
+    "filter_and_pixel_conversion": 27
+  },
+  "interpretation": "In the captured worker slice, verified block reads account for50/77 samples, with hash37/77. Earlier wall-time labels cannot isolate arithmetic filtering from integrity work. This short sample does not prove whole-pass proportions.",
+  "profiling_limits": [
+    "Initial broad sample captured source/test setup; discarded for worker attribution",
+    "Targeted sample has only77 worker observations",
+    "Profiler perturbs workload: profiled worker2821ms is not a normal latency benchmark",
+    "Different concurrent system load; no comparison against unprofiled times"
+  ],
+  "result": "Exact original-reference Metal HDR frame passes under profiler; full source remains released; final all-resource zero accounting",
+  "next_direction": "Reduce repeated full-source work via bounded reusable exact LODs; preserve block integrity rather than remove verification"
+}

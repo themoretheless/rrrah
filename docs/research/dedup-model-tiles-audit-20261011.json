@@ -1,0 +1,72 @@
+{
+  "status": "complete_bounded_automatic_tiles_qualification",
+  "snapshot_files": 3053,
+  "tests": {
+    "dedup-model-tiles-integration-20261011.log": [
+      56,
+      11,
+      7,
+      10,
+      8
+    ],
+    "dedup-model-tiles-adjacent-tests-20261011.log": [
+      6,
+      5,
+      6
+    ],
+    "dedup-model-tiles-linux-20261011.log": [
+      56,
+      11,
+      6,
+      5,
+      7,
+      10,
+      6,
+      8
+    ]
+  },
+  "macos_generic_tests": 109,
+  "linux_arm64_decode_tests": 109,
+  "native_searches": 3,
+  "native_attempts": 37,
+  "cases": [
+    {
+      "case": "crumpled-automatic",
+      "supported": true,
+      "attempts": 11,
+      "elapsed_seconds": 29.911155542,
+      "process_peak_rss_bytes": 1959526400
+    },
+    {
+      "case": "foreign-automatic",
+      "supported": false,
+      "attempts": 25,
+      "elapsed_seconds": 56.874486167,
+      "process_peak_rss_bytes": 1881669632
+    },
+    {
+      "case": "rephoto-whole",
+      "supported": true,
+      "attempts": 1,
+      "elapsed_seconds": 3.484923291000001,
+      "process_peak_rss_bytes": 1437777920
+    }
+  ],
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-model-tiles-integration-20261011.log": "fd91c1cc244f906b3fdb5c542de52458a7d2d92297deee5d87adc7c6b7843896",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-model-tiles-adjacent-tests-20261011.log": "3ec9d15d080bcb2673093ab4b5dd2be44e7ef0371611fa97c2f853dd1214323a",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-model-tiles-linux-20261011.log": "2e71ff9743dc493180733d17e80b0365d37b024000ef12653b7d131176798895",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-model-tiles-native-20261011.json": "989ff8407d9c87e60fe2b70989142352869fbd9eb00d140b1cfa2a19065a2f34",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-model-tiles-snapshot-20261011.json": "8168b257ea3c9e06c87242417a366be546521a56f7eaaacd8049bddd3580318d",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-model-tiles-native-build-20261011.log": "66974b6633e3b44fe0a5d4f85935d5bd34a9a02ba0d18218e460e5efffcd420b",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-model-tiles-20261011.py": "65c8fac375708858e1e2e40ed8c7b7d8d25fd34bd334a56d64b2a30e2434323f"
+  },
+  "scope": "Production automatic full/quadrant model API, optional pair/collection integration tested with supplied providers. Real CPU native model API recovers crumpled local support without manual ROI, rejects one foreign pair through all25 attempts, preserves whole rephoto proof. No whole-file identity, transitive grouping or broad corpus precision claim.",
+  "remaining": [
+    "Broad original corpus recall and negatives with this revision",
+    "Real tiled portfolio/collection corpus measurement; integration currently tested with supplied providers",
+    "Repeated decode/model load and quadratic collection cost",
+    "Hard total tensor/workspace/RSS admission and kernel preemption",
+    "Alpha/HDR, full100formats, model platforms beyond macOS CPU"
+  ]
+}

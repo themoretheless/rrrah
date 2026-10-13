@@ -1,0 +1,174 @@
+{
+  "status": "incomplete",
+  "objective": "library covers all cases",
+  "scope": "Original exact plus visual library,500-source review, positive/negative quality, formats/platforms, mutation/cancellation/cache, resources and scale; no reduction to implemented subset",
+  "requirements": [
+    {
+      "requirement": "exact_identity",
+      "status": "partial_verified",
+      "evidence": "docs/research/dedup-exact-full-controls-audit-20261013.json",
+      "evidence_sha256": "b225dc14380262264eed36b1abb096b7ee61fff6794d437621d028d55884d79b",
+      "remaining_or_scope": "25targeted tests on prior focused snapshot plus later complete frozen post-cache978pass inventory. New full post-worker snapshot running; broad other-platform/huge-file qualification remains separate."
+    },
+    {
+      "requirement": "pixel_publication",
+      "status": "partial_verified",
+      "evidence": "docs/research/dedup-indexed-publication-audit-20261013.json",
+      "evidence_sha256": "1c433387774356a315422af53a4671bd7f865d9f9cd9ead47b67fead3d26dbda",
+      "remaining_or_scope": "39integration tests plus forced collision on frozen focused source, included in later complete post-cache978pass snapshot. New full post-worker gate running; other-platform/current full format matrix remains separate."
+    },
+    {
+      "requirement": "verified_group_scaling",
+      "status": "partial_verified",
+      "evidence": "docs/research/dedup-verified-group-scaling-audit-20261013.json",
+      "evidence_sha256": "6f6722d6ba849466548969863e022bd8a2050f6e043fcf7711523387417e561a",
+      "remaining_or_scope": "8/32/64/2561MiB files; does not prove million-file scalability or hard memory cap"
+    },
+    {
+      "requirement": "exhaustive_pair_scaling",
+      "status": "open",
+      "evidence": "docs/research/dedup-exact-collection-scaling-audit-20261013.json",
+      "evidence_sha256": "844d44cbc00d67b2b50d274c45b44d327fc3108e22ec4f998014fc3a72fd1d26",
+      "remaining_or_scope": "Quadratic repeated full reads remain; previously rejected cache not readopted"
+    },
+    {
+      "requirement": "worker_control",
+      "status": "partial_verified",
+      "evidence": "docs/research/dedup-model-worker-group-fixed-v2-audit-20261013.json",
+      "evidence_sha256": "e334b227b023c0e1f85869bb6ae4e7693652727f92a3f2bddb4d0f496653e4ce",
+      "remaining_or_scope": "Mac frozen decode library/workers125pass/5ignored; Linux default55pass/2ignored; Windows default cfg compile only. Actual native self160/tol4/176proposals from decode-only group parent matches previous output;1msdeadline is typed refusal, managed0. No hard RSS/disk/scheduling cap, escaped groups, descendant reaping beyond direct child or persistent inference reuse. Full post-worker target inventory running on fresher vendor snapshot.",
+      "previous_evidence": "docs/research/dedup-model-worker-decode-parent-audit-20261013.json",
+      "previous_evidence_sha256": "0571dae364957635717d6c693b391c80fbadf1e20896bec17eb11fab8e44eca2",
+      "previous_focused_evidence": "docs/research/dedup-worker-group-focused-audit-20261013.json"
+    },
+    {
+      "requirement": "negative_quality",
+      "status": "open_confirmed_false_acceptances",
+      "evidence": "docs/research/dedup-latest-native-false-controls-audit-20261013.json",
+      "evidence_sha256": "da2ac6b425a9f10be142e9cc342089cfe24b826cccf4a4b3dbb7dab1d5bec368",
+      "remaining_or_scope": "Portrait and table/fence false acceptances remain open on qualified pre-worker native snapshot. Historical campaign independently audited prefix91: 1false/90inconclusive/0rejected/0executionfailures; full458incomplete. New worker lifecycle evidence does not qualify copying precision; SSCD/competitive/deformation diagnostics provide no universal safe acceptance threshold."
+    },
+    {
+      "requirement": "source_review500",
+      "status": "open",
+      "evidence": "docs/research/dedup-500/registry-coverage-audit-v17-20261013.json",
+      "evidence_sha256": "e95a7462d5134b1873fb6a1ad8fef17024abe9e02c26cb80c734bdd43a6181a5",
+      "remaining_or_scope": "500unique/2938pins/40detailed-reference rows/19full-review declarations. Image-find10entry direct/lock/GIFreview and13CLIcontrols added; not all10manualtext reads nor all188GIFframes visually inspected. All500 full source reviews unproven."
+    },
+    {
+      "requirement": "combined_decode",
+      "status": "partial_verified",
+      "evidence": "docs/research/dedup-vendor-recipe-full-decode-audit-20261013.json",
+      "evidence_sha256": "521508154610fbf7085b1db6bff70f78b00400f98df40db84bfc9cb52d5709f8",
+      "remaining_or_scope": "Complete post-cache pre-worker frozen default+decode inventory978pass/6ignored/153targets. Worker-v2 focused125pass/5ignored/3targets separately verified. Fresh four-crate/current-vendor full post-worker gate running; no passing current all-target gate or allfeature/platform/precision/format proof."
+    },
+    {
+      "requirement": "native458",
+      "status": "verified_fixed_old_snapshot_not_current_parity",
+      "evidence": "docs/research/dedup-current-native-bank-complete-audit-20261013.json",
+      "evidence_sha256": "95d298aa5c74a3c255770781ddd5fbab10677b5582aa531646407d8b756e6533",
+      "remaining_or_scope": "All458 supported directions on frozen2696-file source,229 pairs both directions. Positive-only evidence; does not qualify current APIs, negatives or broad formats/platforms."
+    },
+    {
+      "requirement": "formats_and_platforms",
+      "status": "open",
+      "evidence": "docs/DUPLICATE_LIBRARY_CONTRACT.md",
+      "evidence_sha256": "fa745e74e080e3b51de1fd4eaf78dba310f16c8c55197bd73a3ad49a02b44198",
+      "remaining_or_scope": "Mac decode snapshot tests and one native self; Linux default worker/library execution and Windows default compile only. Latest complete formats/frame/IO/platform matrix and current changing PDFvendor interpretation remain unproven."
+    },
+    {
+      "requirement": "visual_publication",
+      "status": "partial_verified",
+      "evidence": "docs/research/dedup-visual-publication-audit-20261013.json",
+      "evidence_sha256": "58495988ec7e17c78cf9cf229a4843ab73866823f48d4491af8caf110e3d2a35",
+      "remaining_or_scope": "60 tests across8targets on focused snapshot, cold/warm final mutation regression; full latest root/platform matrix missing"
+    },
+    {
+      "requirement": "local_publication",
+      "status": "partial_verified",
+      "evidence": "docs/research/dedup-local-mixed-publication-audit-20261013.json",
+      "evidence_sha256": "314e0c92a339a40bbb8526e67baf2127c57a8bed57c35100145c18d50e97aa4d",
+      "remaining_or_scope": "20tests: direct/directory last callback mutations, mixed early isolation/late refusal/restored retry. Not every specialized wrapper individually injected."
+    }
+  ],
+  "completion_proven": false,
+  "previous_ledger": "docs/research/dedup-goal-coverage-ledger-v17-20261013.json",
+  "hash_scope": "Evidence hashes captured at this audit; mutable producer reports may later change.",
+  "previous_ledger_sha256": "1ebab61ff1a9855a2e1149f201d191cfe90ad8f8037f1856c3539bc52ee3f0fe",
+  "new_additive_geometry_evidence": {
+    "component_partition_audit": "docs/research/dedup-bank-partition-audit-20261013.json",
+    "fixed_split_geometry_audit": "docs/research/dedup-geometry-validation-fit-audit-v2-20261013.json",
+    "bank_geometry_audit": "docs/research/dedup-bank-geometry-v2-audit-20261013.json",
+    "scope": "Focused source snapshots only; no acceptance fix or current full458 preservation."
+  },
+  "current_full_gate": "docs/research/dedup-worker-group-complete-decode-20261013.json",
+  "latest_quality_diagnostics": {
+    "docs/research/dedup-competitive-rank-v2-audit-20261013.json": "ff9318b357a876d7c753b4af0befcffe54546110973879784e68ea58ad96b27b",
+    "docs/research/dedup-competitive-rank-diagnostic-audit-20261013.json": "779cf9254a2d14541ad72f8a0244f937a35805ec914d45a099c7ff3255a3e0cd",
+    "docs/research/dedup-local-deformation-diagnostic-audit-20261013.json": "0332bbfc3fa1fa0e2c09bbb09cbdb109e6d99588e8a850ac4538e33f2f4eff7a",
+    "docs/research/dedup-local-deformation-outer-diagnostic-audit-20261013.json": "660547afb0f5857c50f1f30f3a6d1c6c3be6a8ab0a9c5b1e16c51c9043a1b113",
+    "docs/research/dedup-copydays-nearest-wrong-native-prefix-0007-audit-20261013.json": "dbc8a4030a5bc7f18a5aa11e6149e44cf6f66ed16b1c37ace43f01193dee9d89",
+    "docs/research/dedup-500/registry-coverage-audit-v5-20261013.json": "1d339b9be396f53ffe267d296dd7a8c938aad85464b05ee15e81cd6975ff1b65"
+  },
+  "quality_conclusion": "Current six diagonal-normalized development directions preserve table true in both directions; wrong table neither, wrong portrait forward only. A new historical fixed2 negative false acceptance at index102 also lacks reverse support. No atomic consensus API or general precision/recall qualification; different tolerance policies must not be pooled.",
+  "current_full_gate_excludes_competitive_rank": true,
+  "latest_full_gate": {
+    "status": "verified_current_four_crate_default_decode_978passed6ignored",
+    "audit": "docs/research/dedup-latest-mesh-decode-audit-20261013.json",
+    "audit_sha256": "dcdda4966f46a89f230442bb8c0e10afb9d34fc2292004276de0d8716f7f3221",
+    "root_parity_audit": "docs/research/dedup-latest-mesh-decode-root-parity-20261013.json",
+    "root_parity_audit_sha256": "378deaccc9b1264ae7199f7f02db983cc61fed88f7f51401a7368ad25a44c78a"
+  },
+  "deformation_replay": {
+    "audit": "docs/research/dedup-mesh-deformation-replay-audit-20261013.json",
+    "audit_sha256": "964cf7fc3d43d3993707c3e0288bf3206f0c30e48bffcbc04c54a5e6d80efb8c",
+    "acceptance_fix_proven": false
+  },
+  "latest_source500": {
+    "inventory": "docs/research/dedup-500/registry-coverage-audit-v14-20261013.json",
+    "inventory_sha256": "9c3d22d906f482aaff1a06e255761647c6df956e15b3b5ee5ce4f83d41d605a1",
+    "entries_with_detailed_references": 37,
+    "full_review_declarations": 16,
+    "all500_full_reviews_proven": false
+  },
+  "vendor_recipe_focused_audit": "docs/research/dedup-vendor-recipe-focused-audit-20261013.json",
+  "competitive_grid_diagnostic": "docs/research/dedup-grid-fence-competitive-audit-20261013.json",
+  "aligned_sscd_diagnostic_audit": "docs/research/dedup-aligned-sscd-diagnostic-audit-20261013.json",
+  "latest_hard_negative_prefix_audit": {
+    "path": "docs/research/dedup-copydays-nearest-wrong-native-resume-prefix-0123-audit-20261013.json",
+    "sha256": "0868cc109c791ec3598f4c83b47c9b7dec10849a4a9e4d15a48a7fc9953b272d",
+    "completed": 123,
+    "false_acceptance": 2,
+    "inconclusive": 121
+  },
+  "worker_windows_compile_audit": "docs/research/dedup-worker-group-v2-windows-check-audit-20261013.json",
+  "worker_linux_audit": "docs/research/dedup-worker-group-v2-linux-audit-20261013.json",
+  "worker_native_parent_audit": "docs/research/dedup-model-worker-group-native-parent-audit-20261013.json",
+  "worker_failed_v1_audit": "docs/research/dedup-model-worker-group-fixed-failure-audit-20261013.json",
+  "worker_group_complete_decode_audit": {
+    "path": "docs/research/dedup-worker-group-complete-decode-audit-20261013.json",
+    "sha256": "3f8536f8ab3f8662a408d8e76a1400e1feeb71d2b492beac69d5230f4e495848",
+    "passed": 988,
+    "failed": 0,
+    "ignored": 6,
+    "targets": 154
+  },
+  "current_diagonal_controls_audit": {
+    "path": "docs/research/dedup-current-diagonal-consensus-controls-audit-20261013.json",
+    "sha256": "76fdb820d5ef7a7468e8e70e258a586e68888bc482867caecf2c01a92a489ef5"
+  },
+  "native_foreign_pixel_crosscheck_audit": {
+    "path": "docs/research/dedup-image-find-native-crosscheck-audit-20261013.json",
+    "sha256": "69094a5577c3d34a2b9a742c3933a33d3cfff4fdb201f32fc3bd83494a4a3799"
+  },
+  "native_bank_consensus_api": {
+    "status": "implemented_full_gate_running",
+    "implementation": "docs/research/dedup-native-bank-consensus-implementation-20261013.json",
+    "gate": "docs/research/dedup-consensus-complete-decode-20261013.json"
+  },
+  "second_hard_negative_diagnostic": "docs/research/dedup-second-hard-negative-diagnostic-20261013.json",
+  "native_consensus_adapter": {
+    "report": "docs/research/dedup-native-bank-consensus-native-adapter-20261013.json",
+    "sha256": "d83efff4b78a43a71a7ba791441c96c69c5289c75aaeefb10073a46d4e734748"
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "backend": "Metal",
+  "device": "Apple M4 Max",
+  "result": "2 passed; 0 failed",
+  "lod": {
+    "source": [
+      6000,
+      6000
+    ],
+    "output": [
+      1000,
+      1000
+    ],
+    "source_bytes": 576000000,
+    "managed_output_bytes": 16000000,
+    "cpu_all_pixels_exact": true,
+    "gpu_full_sdr_hdr_matches_constant_reference": true,
+    "downsample_ms": 183.614167,
+    "test_seconds": 1.81,
+    "final_output_credit": 0,
+    "log": "metal-36mp-lod-full-output-2026-10-12.log"
+  },
+  "upload": {
+    "dimensions": [
+      4000,
+      3000
+    ],
+    "formats": [
+      "Rgba8UnormSrgb",
+      "Rgba16Float"
+    ],
+    "checkpoint_count": 2933,
+    "exercised": [
+      1,
+      2,
+      1466,
+      2931,
+      2932,
+      2933
+    ],
+    "previous_frame_exact_on_failure": true,
+    "retry_frame_exact": true,
+    "final_gpu_queue_credit": 0,
+    "runner_evidence_valid": true,
+    "test_seconds": 2.23,
+    "log": "metal-12mp-upload-current-2026-10-12.log"
+  },
+  "limits": [
+    "authored repeated HDR/alpha pattern, not photographic coverage",
+    "local test downsample time is not an isolated performance benchmark",
+    "source CPU allocation is outside managed output budget",
+    "physical HDR calibration and NVIDIA not covered"
+  ]
+}

@@ -1,0 +1,94 @@
+{
+  "status": "verified_original_multiscale_patch_correlation_insufficient_discriminator",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exposure-replay-audit-20261011.json": "a6c5a372281ed0e7a27f1571369cc6d8f0d6e2779c5c8be9cb59049c1778fde2",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exposure-calibration-snapshot-20261011.json": "a3af2c80b79ebd3d26668ae19e9c78926aad85a9c3e5f1dec5b2f659d98e55eb",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exposure-replay-input-20261011.json": "bb6ff4ba02ad8f7e2a40345864783e400ada5cb1e0e7f2099cd922bdbda29cd1",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-structure-replay-output-20261011.json": "117d4a0c7500de8c761cd09a7bfc9d79a45b7022611b4517b16a702f0a277a1e",
+    "/Users/themoretheless/.codex/tmp/rrrah-structure-replay-harness-20261011/src/main.rs": "205e1a9169786ea788ae9a64f45fb764ff7fc62fee56878f23bace4179644f15",
+    "/Users/themoretheless/.codex/tmp/rrrah-structure-replay-harness-20261011/Cargo.toml": "d54fd901bc0ed8b7ded76a45e598bc5ac6f2dd549c941fe9aece6212ba184f72",
+    "/Users/themoretheless/.codex/tmp/rrrah-structure-replay-harness-20261011/Cargo.lock": "845b32a94f3a1a9cde12472810aff6d2f581d9d66bf01367a9d3dc0853aea4f6",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-structure-replay-build-20261011.log": "ec2da1c26c480f9c1f394d1a8a841577938dc9a5f4664a3a6c52752e76403c81",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-structure-replay-runtime-20261011.log": "5ff04e469bc48b90f3d20223a6c8345e05e47d5e3201bee5053f1dc4c360a9ea",
+    "/Users/themoretheless/.codex/tmp/rrrah-structure-replay-qualified-20261011/dedup-structure-replay": "f24812f08a49b797a0a3453682ee7cd40d06807733ab0284d1ab12711cf1b17c",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-structure-replay-20261011.py": "89ae91007ad920392abc42ef9c8c8cb1b8ecc428c0d11d984caecaf16928ad46"
+  },
+  "patches": 141,
+  "sample_pairs": 11421,
+  "summaries": [
+    {
+      "case": "overlap_bank6",
+      "radius": 2.0,
+      "patches": 12,
+      "correlation_median": 0.4018751050885523,
+      "correlation_min": 0.10652493886679427,
+      "correlation_max": 0.9294122107166743
+    },
+    {
+      "case": "overlap_bank6",
+      "radius": 4.0,
+      "patches": 12,
+      "correlation_median": 0.595931139773648,
+      "correlation_min": -0.38666345324703766,
+      "correlation_max": 0.9730271658579152
+    },
+    {
+      "case": "overlap_bank6",
+      "radius": 8.0,
+      "patches": 12,
+      "correlation_median": 0.5866699691110635,
+      "correlation_min": -0.5659353233790395,
+      "correlation_max": 0.8968958260117077
+    },
+    {
+      "case": "overlap_bank7",
+      "radius": 2.0,
+      "patches": 24,
+      "correlation_median": 0.2692488564079414,
+      "correlation_min": -0.38001340045676896,
+      "correlation_max": 0.9358017683191107
+    },
+    {
+      "case": "overlap_bank7",
+      "radius": 4.0,
+      "patches": 24,
+      "correlation_median": 0.44968778995945735,
+      "correlation_min": -0.28468261619488067,
+      "correlation_max": 0.9497263910993555
+    },
+    {
+      "case": "overlap_bank7",
+      "radius": 8.0,
+      "patches": 24,
+      "correlation_median": 0.553181029373449,
+      "correlation_min": -0.06384000153564708,
+      "correlation_max": 0.9505821470730543
+    },
+    {
+      "case": "rejected_bank12",
+      "radius": 2.0,
+      "patches": 11,
+      "correlation_median": 0.42973050252778827,
+      "correlation_min": -0.005397276823068978,
+      "correlation_max": 0.8466592100062259
+    },
+    {
+      "case": "rejected_bank12",
+      "radius": 4.0,
+      "patches": 11,
+      "correlation_median": 0.7707726746215479,
+      "correlation_min": -0.5479926705592791,
+      "correlation_max": 0.9435432833425785
+    },
+    {
+      "case": "rejected_bank12",
+      "radius": 8.0,
+      "patches": 11,
+      "correlation_median": 0.8337143232751929,
+      "correlation_min": -0.06944722704979506,
+      "correlation_max": 0.9657690946494109
+    }
+  ],
+  "adoption": "no_correlation_acceptance_gate",
+  "scope": "Original native-decoded JPEG linear luminance; source-aligned9x9 samples at radii2/4/8 transformed to reference. Python independently recomputes two-pass statistics from published samples; it does not independently decode/recompute native bilinear samples. Samples around existing witnesses are not holdout evidence. No acceptance threshold chosen. Rejected bank12 has higher median correlation than true bank7 at radii4/8, so simple patch correlation does not resolve this false localization. Diagnostic vectors/JSON are outside managed payload accounting. No model rerun, corpus, general precision or performance qualification."
+}

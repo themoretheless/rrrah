@@ -1,0 +1,84 @@
+{
+  "status": "verified_frozen_decode_library_integrated_group_and_macos_empty_exit_gate",
+  "source": "/Users/themoretheless/.codex/tmp/rrrah-model-worker-group-fixed-v2-source-20261013",
+  "source_files": 3788,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-model-worker-group-fixed-v2-20261013.json": "744856a3af7e3b1d39c6d99791cc4e6674969e79d83c47fcf492f441a4049e7d",
+    "/Users/themoretheless/.codex/tmp/rrrah-model-worker-group-fixed-v2-20261013.log": "ef129aea36bb1c9e65717400ad0b1613fa81932eaf16e05a067b9d4715611067",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-model-worker-group-fixed-failure-audit-20261013.json": "381b732818083aa28cf317cd6047ad85a1aab3fe0fd7b4683098a538fdc53c0e",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-model-worker-group-fixed-v2-20261013.py": "4403dfcddfc4c1ded305b4755b57319a3d014cfcf944ff0e25aa8973b7efdd64"
+  },
+  "passed": 125,
+  "failed": 0,
+  "ignored": 5,
+  "executed_targets": 3,
+  "rows": [
+    {
+      "target": "unittests src/lib.rs",
+      "passed": 110,
+      "failed": 0,
+      "ignored": 5,
+      "executable": "/Users/themoretheless/.codex/tmp/rrrah-model-worker-group-fixed-v2-qualified-20261013/rrrah_dedup-76646137647c9ff2",
+      "executable_sha256": "1d68e19820803d6bfec6d5dcd6927032a183e618689a3e49e271bee2520ecac6"
+    },
+    {
+      "target": "tests/worker.rs",
+      "passed": 7,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/Users/themoretheless/.codex/tmp/rrrah-model-worker-group-fixed-v2-qualified-20261013/worker-614813ca420c18cc",
+      "executable_sha256": "542abe24322a583eba3fe732c34982308f0cb36f36365111d414ce58f87b130b"
+    },
+    {
+      "target": "tests/worker_group.rs",
+      "passed": 8,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/Users/themoretheless/.codex/tmp/rrrah-model-worker-group-fixed-v2-qualified-20261013/worker_group-b0a335ec3ebdc559",
+      "executable_sha256": "5d14a33048aca54869daf5d61dcd4d4e705e76b60713e8623da3d2b032335aef"
+    }
+  ],
+  "root_selected_parity": [
+    {
+      "folder": "crates/rrrah-dedup",
+      "current_files": 616,
+      "frozen_files": 616,
+      "match": true,
+      "differences": []
+    },
+    {
+      "folder": "crates/rrrah-core",
+      "current_files": 19,
+      "frozen_files": 19,
+      "match": true,
+      "differences": []
+    },
+    {
+      "folder": "crates/rrrah-decode",
+      "current_files": 198,
+      "frozen_files": 198,
+      "match": true,
+      "differences": []
+    },
+    {
+      "folder": "crates/rrrah-memory",
+      "current_files": 7,
+      "frozen_files": 7,
+      "match": true,
+      "differences": []
+    },
+    {
+      "folder": "vendor",
+      "current_files": 261,
+      "frozen_files": 261,
+      "match": false,
+      "differences": [
+        "vendor/hayro/src/knockout_interpreter.rs",
+        "vendor/hayro/src/native_moments.rs",
+        "vendor/hayro/src/native_spatial.rs"
+      ]
+    }
+  ],
+  "all_selected_root_paths_match": false,
+  "scope": "Frozen default+decode library plus both worker targets on macOSARM64. New actual proposals_from_worker valid-response/background-child regression fails before integration and passes after. V1 two fast-exit failures retained; corrected macOS EPERM path requires exited unreaped leader and complete native inspection showing no live group member. Fast native true/sh status/diagnostics and live-leader/live-descendant quiescence refusal tests pass. Existing protocol/diagnostic-credit tests and grouped cancellation/deadline/normal-failed exits/stdout-stderr flood/callback-panic controls pass. Worker test targets include two fixture helpers. Three targets do not qualify complete integration inventory, all workspace/platform/formats or actual LoFTR runtime/hard RSS/disk/escaped-group containment. Windows default cfg compile check remains separate; Linux runtime unavailable."
+}

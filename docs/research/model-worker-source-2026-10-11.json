@@ -1,0 +1,12 @@
+{
+  "backend": "metal",
+  "passed": 1,
+  "failed": 0,
+  "verified": "managed original model source credit equals capacity; consumer lease blocks zero-cap eviction through completion; dropping lease allows eviction; cancelled final source and worker shutdown release CPU source credit to zero; existing GPU final-zero/race/burst checks pass",
+  "log": "docs/research/model-worker-source-2026-10-11.log",
+  "sha256": "28b8b3d541a2ecc1d972debf37274787743037a0cc1f05d5430846308e1edaa7",
+  "limitations": [
+    "Small STL source; not sustained large-model RAM pressure.",
+    "Driver requires new marker; previous gate report does not prove this added check."
+  ]
+}

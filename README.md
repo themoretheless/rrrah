@@ -586,6 +586,20 @@ advance these callbacks; the viewer tracks successful RAW/raster/strip uploads
 even without a cache lease or redraw. Budget-refusal cleanup checks must await
 GPU completion before assuming all retired texture credit is available.
 
+## Untagged linear raster images
+
+For a PFM or another linear RGB source whose producing pipeline identifies
+linear sRGB, supply the missing primary interpretation explicitly:
+
+```sh
+rrrah --untagged-color linear-srgb image.pfm
+```
+
+The default remains `strict`. This option qualifies linear RGB with unspecified
+primaries; it does not override declared profiles or assign a transfer function
+to arbitrary untagged LDR images. The policy applies to foreground loading,
+neighbour prefetch and thumbnails, and is part of RAM/swap cache identity.
+
 ## RLA interpretation
 
 For RLA files whose producer declares straight alpha and sRGB encoding, use
@@ -613,7 +627,7 @@ choose it from the producing pipeline, since float storage does not identify col
 
 ## PQ HDR interpretation
 
-PQ/BT.2020 AVIF can be viewed with an explicit reference-white luminance:
+PQ/BT.2020 AVIF and HEVC HEIF/HEIC can be viewed with an explicit reference-white luminance:
 
 ```sh
 rrrah --pq-reference-white-nits 100 image.avif
@@ -628,7 +642,7 @@ PQ source conversion, not verified physical HDR monitor output.
 
 ## HLG HDR interpretation
 
-HLG/BT.2020 AVIF uses three explicit settings for a zero-black reference display:
+HLG/BT.2020 AVIF and HEVC HEIF/HEIC use three explicit settings for a zero-black reference display:
 
 ```sh
 rrrah --hlg-reference-white-nits 100 --hlg-peak-nits 1000 --hlg-system-gamma 1.2 image.avif
@@ -641,3 +655,14 @@ parameters reach viewing, neighbour preloading and thumbnails and form separate
 cache identities. PQ settings may also be supplied for folders containing both
 transfer types; each policy applies only to its declared source transfer.
 This controls source interpretation; physical HDR monitor output is not yet qualified.
+
+
+PFM files whose producer stores rows top-to-bottom can be opened explicitly:
+
+```sh
+rrrah --untagged-color linear-srgb --pfm-top-down image.pfm
+```
+
+Bottom-up remains the default. The row-order option follows foreground loads,
+neighbour preload and thumbnails, and separates RAM/swap cache entries. It
+does not infer primaries or alter float sample values or the stored scale.

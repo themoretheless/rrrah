@@ -1,0 +1,35 @@
+{
+  "status": "prepared_fixed_real_publisher_pair_model_inputs_before_execution",
+  "images": [
+    {
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/209101.jpg",
+      "source_sha256": "33c67da2b267731e4fdbdf6857c87d537aa70b46c6f42e2cef6d3a9924a82bd3",
+      "raw": "/Users/themoretheless/.codex/tmp/rrrah-loftr-selected-windows-real-inputs-20261012/0.gray",
+      "raw_sha256": "f8bd715632fa12391964f033bc2e7657d75066121fb2c3b53bb77667505a9603",
+      "dimensions": [
+        640,
+        256
+      ]
+    },
+    {
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/209100.jpg",
+      "source_sha256": "b9cd567982b1e815cc8343132e54406bb3e0923a82a3afb8132a4c08aa84a49f",
+      "raw": "/Users/themoretheless/.codex/tmp/rrrah-loftr-selected-windows-real-inputs-20261012/1.gray",
+      "raw_sha256": "f5946f890b6497808b314ec84f6abeab0b7db9753d6fd5fb66a5fcfedaa46bc7",
+      "dimensions": [
+        640,
+        480
+      ]
+    }
+  ],
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/prepare-dedup-loftr-selected-windows-real-inputs-20261012.py": "f7ba3f45a74c4b5bba1e19170af87fe5d8411ffde5a08f89974bdf3160e8c087",
+    "/Users/themoretheless/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/PIL/__init__.py": "7361b6ad3878589affe5956e4a4da24d71398b0891fd3a8c15e9362217b4ca01",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/209101.jpg": "33c67da2b267731e4fdbdf6857c87d537aa70b46c6f42e2cef6d3a9924a82bd3",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/209100.jpg": "b9cd567982b1e815cc8343132e54406bb3e0923a82a3afb8132a4c08aa84a49f",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-selected-windows-real-inputs-20261012/0.gray": "f8bd715632fa12391964f033bc2e7657d75066121fb2c3b53bb77667505a9603",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-selected-windows-real-inputs-20261012/1.gray": "f5946f890b6497808b314ec84f6abeab0b7db9753d6fd5fb66a5fcfedaa46bc7"
+  },
+  "pillow_version": "12.3.0",
+  "scope": "Two actual Copydays publisher images, standard Pillow L conversion then Lanczos resize with maxside640 and dimensions floored to multiples8. Fixed raw inputs for whole-model numerical parity/RSS only. This is not rrrah original-linear-pixel preprocessing or a duplicate verdict."
+}

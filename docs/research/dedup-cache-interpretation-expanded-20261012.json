@@ -1,0 +1,39 @@
+{
+  "status": "passed",
+  "producer_pid": 58023,
+  "source": "/Users/themoretheless/.codex/tmp/rrrah-cache-interpretation-fix-20261012/source",
+  "source_hashes": {
+    "src/lib.rs": "3a23fe80c08a56ca01ba5e7027ab906d57f30d4099afdd49a5b20aa1674f76da",
+    "src/decode.rs": "0f00177110f8e0c638198801c0762d7609d81d3fd358f6effeca185a15e50850",
+    "src/decode_recipe.rs": "5e350c50fe16652f5d401bf36c531dcc85c665bea9a51a7301943e029d0af7cb",
+    "tests/cache_interpretation.rs": "cff48556034913ebcbf95d9df2601b04de26446b34753c0b2e59f5fb9e9ede96",
+    "tests/scan_retry.rs": "41a5968a32936ad676e88ab532fc84b0e68608303167b4757b19dc62214e3586",
+    "tests/decode.rs": "18bb1d80b57b7f5278f3a5a40b33c12c6ef998df8eb89f1281ab46e3027a007b"
+  },
+  "initial_test_copy": "/Users/themoretheless/.codex/tmp/rrrah-cache-interpretation-fix-20261012/initial-cache-interpretation.rs",
+  "command": [
+    "cargo",
+    "test",
+    "-p",
+    "rrrah-dedup",
+    "--features",
+    "decode",
+    "--locked",
+    "--offline",
+    "--test",
+    "cache_interpretation",
+    "--test",
+    "decode",
+    "--test",
+    "scan_retry",
+    "--jobs",
+    "2",
+    "--target-dir",
+    "/Users/themoretheless/.codex/tmp/rrrah-cache-interpretation-fix-20261012/target"
+  ],
+  "log": "/Users/themoretheless/.codex/tmp/rrrah-cache-interpretation-fix-20261012/final-test.log",
+  "child_pid": 58907,
+  "returncode": 0,
+  "log_sha256": "33f220abbfbf670bab3ecd07ef29bc81019c053704e9eecd76b555d7418fd54c",
+  "inputs_unchanged": true
+}

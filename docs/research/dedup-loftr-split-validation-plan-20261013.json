@@ -1,0 +1,269 @@
+{
+  "status": "fixed_before_build_and_execution",
+  "harness": "/Users/themoretheless/.codex/tmp/rrrah-loftr-split-validation-harness-20261013",
+  "harness_sha256": {
+    "Cargo.toml": "5ca2e23d1ad3079ebc2a0a6c1971c78770a20aa46afdc57329b04f7877de3c82",
+    "src/main.rs": "4fd25f95c95f29e795f8e761726277b62fe43ae5f6ffc570a34ac5a4400a1f18"
+  },
+  "source_audit": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-geometry-validation-fit-audit-20261013.json",
+  "cases": [
+    {
+      "label": "negative",
+      "left": "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/Q41923.jpg",
+      "right": "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/R026396.jpg",
+      "dimensions": [
+        [
+          1024,
+          680
+        ],
+        [
+          944,
+          568
+        ]
+      ],
+      "source_tolerance": 2.0,
+      "weights": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-loftr-split-validation-20261013/negative-plan.json",
+      "plan_sha256": "0910ec165a94fc4ae7514f6f22d8c75a90e39f195606479753a1deda5120af3b"
+    },
+    {
+      "label": "positive-1",
+      "left": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200302.jpg",
+      "right": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200300.jpg",
+      "dimensions": [
+        [
+          800,
+          600
+        ],
+        [
+          2048,
+          1536
+        ]
+      ],
+      "source_tolerance": 0.78125,
+      "weights": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-loftr-split-validation-20261013/positive-1-plan.json",
+      "plan_sha256": "45a5f1535691d448e51eca8dc0dd8ef7aaf41416bfc0ccf13a279d1880c198be"
+    },
+    {
+      "label": "positive-2",
+      "left": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/201303.jpg",
+      "right": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201300.jpg",
+      "dimensions": [
+        [
+          675,
+          543
+        ],
+        [
+          2560,
+          1920
+        ]
+      ],
+      "source_tolerance": 0.5414368903667351,
+      "weights": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-loftr-split-validation-20261013/positive-2-plan.json",
+      "plan_sha256": "6f31f4cfbca7ccbcfdc9ef64b21aabb19970e2a8cba09d2b755754228f6aba63"
+    },
+    {
+      "label": "positive-6",
+      "left": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200301.jpg",
+      "right": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200300.jpg",
+      "dimensions": [
+        [
+          692,
+          349
+        ],
+        [
+          2048,
+          1536
+        ]
+      ],
+      "source_tolerance": 0.605488910954662,
+      "weights": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-loftr-split-validation-20261013/positive-6-plan.json",
+      "plan_sha256": "d81859cdb79faffaa1a58fc00fe42e8cd96d52928c6d0f614c1511e5878aa33d"
+    },
+    {
+      "label": "positive-12",
+      "left": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200300.jpg",
+      "right": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200302.jpg",
+      "dimensions": [
+        [
+          2048,
+          1536
+        ],
+        [
+          800,
+          600
+        ]
+      ],
+      "source_tolerance": 5.12,
+      "weights": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-loftr-split-validation-20261013/positive-12-plan.json",
+      "plan_sha256": "b0e96522da2948845adc9fb471282152642403e9c61d20ebd3e86556dbe24009"
+    },
+    {
+      "label": "positive-34",
+      "left": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/209400.jpg",
+      "right": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/209401.jpg",
+      "dimensions": [
+        [
+          2560,
+          1920
+        ],
+        [
+          1024,
+          701
+        ]
+      ],
+      "source_tolerance": 5.157305482252365,
+      "weights": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-loftr-split-validation-20261013/positive-34-plan.json",
+      "plan_sha256": "1b5a64bc23ca0cb47583efa10383af4aed01e731159de78aa2d78ab487baf6c9"
+    },
+    {
+      "label": "positive-35",
+      "left": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/209401.jpg",
+      "right": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/209400.jpg",
+      "dimensions": [
+        [
+          1024,
+          701
+        ],
+        [
+          2560,
+          1920
+        ]
+      ],
+      "source_tolerance": 0.775598811000249,
+      "weights": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-loftr-split-validation-20261013/positive-35-plan.json",
+      "plan_sha256": "96a2d43408e83e7e2542d85c382d08250f83e0c073c2d127387cd89fc8009357"
+    },
+    {
+      "label": "positive-80",
+      "left": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/211900.jpg",
+      "right": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/211902.jpg",
+      "dimensions": [
+        [
+          2560,
+          1920
+        ],
+        [
+          1845,
+          1431
+        ]
+      ],
+      "source_tolerance": 2.7410097095667587,
+      "weights": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-loftr-split-validation-20261013/positive-80-plan.json",
+      "plan_sha256": "639b812c20847a858490c3cfcd755bc7551dde3c57b1c40d14b113a49e2aafe4"
+    },
+    {
+      "label": "positive-81",
+      "left": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/211902.jpg",
+      "right": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/211900.jpg",
+      "dimensions": [
+        [
+          1845,
+          1431
+        ],
+        [
+          2560,
+          1920
+        ]
+      ],
+      "source_tolerance": 1.459316246140637,
+      "weights": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-loftr-split-validation-20261013/positive-81-plan.json",
+      "plan_sha256": "82e7121e17a283e5e4d5743e7f995074f03ac8dfb7ce43f188423e45cca821bf"
+    },
+    {
+      "label": "positive-105",
+      "left": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/210202.jpg",
+      "right": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/210200.jpg",
+      "dimensions": [
+        [
+          800,
+          600
+        ],
+        [
+          2048,
+          1536
+        ]
+      ],
+      "source_tolerance": 0.78125,
+      "weights": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-loftr-split-validation-20261013/positive-105-plan.json",
+      "plan_sha256": "602e41805b19de73f3e8d36c6fbac5cb5b9504b7560b103dd0409fca89a07666"
+    },
+    {
+      "label": "positive-164",
+      "left": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/212402.jpg",
+      "right": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/212400.jpg",
+      "dimensions": [
+        [
+          1959,
+          1689
+        ],
+        [
+          2560,
+          1920
+        ]
+      ],
+      "source_tolerance": 1.6166132132486113,
+      "weights": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-loftr-split-validation-20261013/positive-164-plan.json",
+      "plan_sha256": "278a3b36591a9b98c688c27e9b1b9f1d6b2e07eb4b501eeb739a9a188e6f11f2"
+    },
+    {
+      "label": "self_control",
+      "left": "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/Q41923.jpg",
+      "right": "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/Q41923.jpg",
+      "dimensions": [
+        [
+          1024,
+          680
+        ],
+        [
+          1024,
+          680
+        ]
+      ],
+      "source_tolerance": 2.0,
+      "weights": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-loftr-split-validation-20261013/self_control-plan.json",
+      "plan_sha256": "eea0fdb31300b1354c48e00f6f15f3d5126fab6cb43a2169ae26cbbc321bc22f"
+    }
+  ],
+  "pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors": "59e55bf0ecd047db9c513672d121a3ea677529ad448bdc3a359e92862c74ddd7",
+    "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/Q41923.jpg": "dc05a19aef23cfd100a371752c9c8ca092c9fdc753616d16fedd6be1ed0dbdcd",
+    "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/R026396.jpg": "45ce2cd2bc8b2654e2e1a8be1fba3d881480c6425c95de8f288b28d560f6d59b",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200302.jpg": "bc4de3728d82839559134cc8155f87bdf7f8aeaca32b66bdea11f5a618420242",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200300.jpg": "0573729209c9ce6c109ea1175079960165b915dd5579121f0e15653d56f755d0",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/201303.jpg": "162003ef18f481a33e8bb6713fe9169bc0af0675b8ce1b3d21508447032a9ae5",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201300.jpg": "f2819f6d37def6b0dcc04c3f1670bb2b46318d2c451ee6ef0ebec59d8ce8c98d",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200301.jpg": "b807d0390bcd90c257cc4dff03d1b9da23aa68c57b2b22151401e67762cec839",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/209400.jpg": "d9caf92ca47a9047154bd987ee240832b1cc2a01b73fd83144043f181c127777",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/209401.jpg": "707f365de5031172ac067f8a156fd0972e5995e59a0d01326d21d4a50ae22704",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/211900.jpg": "81faa5e0860359aa092a5b1e04de4130acd1168182bb5fdf55c7dd73af9fd8fe",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/211902.jpg": "d0ad91669f6f857bcc8d305d1dd57abe0c96eaa447064894da21e5c19c436868",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/210202.jpg": "e37e3bae5aa022e45b8cd1cc95f91ad1d0baa5bf8be23ed3d5df49eafdb2a696",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/210200.jpg": "3feb59f989569051b0665caf0bec8c905bc6b1fd06753eeb85861d91cd0585f0",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/212402.jpg": "16974639514c4be152eec0edf7b1d2942f066a0a17a6a6e8df96c4a61acec727",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/212400.jpg": "b9dd82db088c21b1e34cf1e97fab988e6a5ba7656b6b5e5d9f7eabb73e37ba9b",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libtorch_python.dylib": "cb1d5957b49b8f3c2e4b90de7b99aee835520875bce893b11eb7528a548744fa",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libtorch.dylib": "2178657b7eeffc0c0a989889ac3e2b2e3d216073b35f3a291ee89bd65c0fb406",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libtorch_global_deps.dylib": "6ff1aedff89150170f225ce821dc9355a9d5f9c80a6cc1bb761c8d209638c2c7",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libomp.dylib": "fe0670951c85401421f6cedc91971f28dc870bad4c1f0cfebe2b74dac421e5f0",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libtorch_cpu.dylib": "941f3e16a8e02b23b99bd2c8693caabaf8df859bfaa293f39a5d7dd8a8f5ca6e",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libc10.dylib": "f203c171b7a71c742ef4a84bde3af64465e545a4cc3ebfd7f245dca3ebe4e7cf",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libshm.dylib": "3a6fc248697b8809534e74d9e5fc784b385239d8c7aeef291c3968a73609f7d2"
+  },
+  "split": "even selected-order indices fitting; odd validation; fixed before geometric fit",
+  "sampling_trials": 1000000,
+  "seed": 173,
+  "minimum_fitting_inliers": 4,
+  "scope": "All10 previously model-attempted positives plus known negative and identity. Full-frame provider extraction only, not original complete native/bank recovery pipeline. No threshold tuning or duplicate decision; neural provider sees whole images, so point separation is not statistical/pixel independence."
+}

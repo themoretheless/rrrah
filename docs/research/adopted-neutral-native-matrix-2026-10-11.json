@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-11",
+  "scope": "Native adopted-neutral matrix calculation preserving the original RGB basis; foundation for distinct OpenEXR adoptedNeutral routing",
+  "api": "linear_rgb_to_srgb_with_adopted_neutral_from_xy",
+  "mathematics": "Original declared RGB-to-XYZ basis followed by Bradford(adopted neutral -> D65), then XYZ-to-sRGB. The basis is not renormalized to adoptedNeutral.",
+  "independent_oracles": [
+    "docs/research/adopted-neutral-rec709-oracle-2026-10-11.json",
+    "docs/research/adopted-neutral-ap1-oracle-2026-10-11.json"
+  ],
+  "tests": {
+    "core_passed": 114,
+    "core_ignored": 2,
+    "hdr_metal_regression_passed": 21,
+    "hdr_metal_ignored": 3
+  },
+  "covered": [
+    "All nine matrix coefficients against independent partial-pivot Gaussian inversion oracle.",
+    "Declared neutral RGB from original basis maps to D65 gray.",
+    "Incorrect basis re-normalization produces a distinguishable matrix and is explicitly guarded.",
+    "Nonfinite/nonphysical adopted neutral rejected.",
+    "Existing arbitrary Radiance/EXR and known gamut actual Metal paths retain prior results after common helper refactor."
+  ],
+  "remaining": [
+    "Frame metadata and swap storage of adopted neutral not implemented yet.",
+    "EXR distinct-adoptedNeutral decoder routing remains unqualified; existing refusal policy unchanged.",
+    "No actual distinct-neutral source file is qualified on Metal yet.",
+    "Full goal and physical HDR calibration remain incomplete; NVIDIA deferred."
+  ],
+  "logs": {
+    "core": {
+      "path": "docs/research/adopted-neutral-native-matrix-2026-10-11.core.log",
+      "sha256": "8a174137236f40ca75f6af7471f7d97a9937fc0f3f431c54f7564b6683dc0987"
+    },
+    "metal-regression": {
+      "path": "docs/research/adopted-neutral-native-matrix-2026-10-11.metal-regression.log",
+      "sha256": "1630806eb19d294cb4106a45f2abf4620b178da9a6907063a7d7e74cdb8d2f89"
+    }
+  }
+}

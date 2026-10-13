@@ -1,0 +1,26 @@
+{
+  "status": "verified_live_nonroot_linux_test",
+  "container_id": "53b6f7a82ada07766651f8f48abfdbd3d1a8cc30a6bbac1bd86871ac02151558",
+  "image_id": "sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55",
+  "user": "65534:65534",
+  "sysroot_mount": {
+    "Type": "bind",
+    "Source": "/opt/rrrah-dedup-validation/sysroot-cache-zlib-20261012",
+    "Destination": "/validation/sysroot",
+    "Mode": "ro",
+    "RW": false,
+    "Propagation": "rprivate"
+  },
+  "source_mount": {
+    "Type": "bind",
+    "Source": "/Users/themoretheless/.codex/tmp/rrrah-exact-lossy-path-qualified-20261012",
+    "Destination": "/workspace",
+    "Mode": "ro",
+    "RW": false,
+    "Propagation": "rprivate"
+  },
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exact-lossy-path-source-20261012.json": "97d61de3442d500eda6328af84162a090bb5283b9e8e56d3d0845a2c69901908",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-lossy-path-linux-20261012.sh": "26290c96f10a3b64dfd308796dafa2d5c71eae724289307df6b9931abb4feddb"
+  }
+}

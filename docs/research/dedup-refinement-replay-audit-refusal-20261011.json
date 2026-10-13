@@ -1,0 +1,6 @@
+{
+  "status": "auditor_exact_matrix_decimal_parse_equality_refused",
+  "auditor_sha256": "69fcaf6aeb46130fbdd83344f70418a48c04faa08fef9558c092fd2f46bef4b1",
+  "observed": "Rust serde_json and Python JSON parser differ by1 ULP for three retained coefficient decimals; no runtime/candidate change.",
+  "correction": "Verify coefficients against input within2 ULP and shift equations against actual published zero-trial matrix within2 ULP; retain exact sample baseline parity."
+}

@@ -1,0 +1,40 @@
+{
+  "date": "2026-10-11",
+  "scope": "Interactive startup required source admission on foreground worker",
+  "ordinary_tests": {
+    "passed": 194,
+    "failed": 0,
+    "ignored": 32,
+    "log": "/tmp/rrrah-async-startup-admission-final-20261011.log"
+  },
+  "build": {
+    "success": true,
+    "log": "/tmp/rrrah-async-startup-native-build-20261011.log"
+  },
+  "native": {
+    "adapter": "Apple M4 Max",
+    "backend": "Metal",
+    "surface": "Rgba16Float ExtendedSrgbLinear",
+    "fifo": {
+      "path": "/tmp/rrrah-startup-admission-20261011/fifo.png",
+      "observed_window": "image load failed: cache source is not a regular file",
+      "log": "/tmp/rrrah-main-viewer-startup-fifo-20261011.log"
+    },
+    "raw": {
+      "path": "/tmp/rrrah-viewer-hdr-input/IMG_9043.CR3",
+      "visually_displayed": true,
+      "upload_consumer_pending": 0,
+      "first_present_ms": 3830.728,
+      "log": "/tmp/rrrah-main-viewer-startup-admission-raw-20261011.log"
+    },
+    "both_processes_exited_after_ui_quit": true
+  },
+  "behavior_change": "Invalid interactive startup paths display window load failure rather than pre-window exit. Headless inspect unchanged.",
+  "limitations": [
+    "OS reads cannot be interrupted; cancellation checked before and after",
+    "Physical HDR color and luminance unqualified",
+    "Physical slow disk and OS-wide pressure unqualified",
+    "Native first screenshot occluded; subsequent screenshot showed RAW",
+    "No full 100-format qualification or NVIDIA claim"
+  ]
+}

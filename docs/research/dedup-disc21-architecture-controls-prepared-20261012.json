@@ -1,0 +1,81 @@
+{
+  "status": "prepared_four_visually_inspected_architecture_noncopy_controls",
+  "plan": [
+    {
+      "query": "R014120",
+      "reference": "R020965",
+      "published_label": "no_reference_match",
+      "annotation": "Different buildings: low unfinished house behind fence versus curved high-rise tower."
+    },
+    {
+      "query": "R020965",
+      "reference": "R014120",
+      "published_label": "no_reference_match",
+      "annotation": "Reverse of the same distinct-building comparison."
+    },
+    {
+      "query": "Q00061",
+      "reference": "R014120",
+      "published_label": "no_reference_match",
+      "annotation": "Grayscale street collage contains high-rise tower R020965; wrong reference is low unfinished house R014120."
+    },
+    {
+      "query": "Q00906",
+      "reference": "R020965",
+      "published_label": "no_reference_match",
+      "annotation": "Dark phone screenshot contains unfinished house R014120; wrong reference is high-rise tower R020965."
+    }
+  ],
+  "images": [
+    {
+      "id": "Q00061",
+      "path": "/Users/themoretheless/.codex/tmp/rrrah-disc21-pilot-source-20261011/Q00061.jpg",
+      "sha256": "1f4cadc7e52a1af4374041847c5f69ba289f6853b2bc56d425eeb781999d7be1",
+      "archive": "dev_queries.zip",
+      "member": "images/queries/Q00061.jpg",
+      "zip_crc32": 1162178356,
+      "compressed_size": 167049,
+      "size": 167049
+    },
+    {
+      "id": "Q00906",
+      "path": "/Users/themoretheless/.codex/tmp/rrrah-disc21-cohort-source-20261011/Q00906.jpg",
+      "sha256": "bf05f2eb330a827a1cbc152fab4b09915da427bc53d3a7cf7fbc29dde202459a",
+      "archive": "dev_queries.zip",
+      "member": "images/queries/Q00906.jpg",
+      "zip_crc32": 2520797196,
+      "compressed_size": 42188,
+      "size": 42188
+    },
+    {
+      "id": "R014120",
+      "path": "/Users/themoretheless/.codex/tmp/rrrah-disc21-cohort-source-20261011/R014120.jpg",
+      "sha256": "5e5c15e7da265ad995c24aa172c89b28bd5fd3bb26794fe10d4e0a89a09a30db",
+      "archive": "references_0.zip",
+      "member": "images/references/R014120.jpg",
+      "zip_crc32": 1331505800,
+      "compressed_size": 248460,
+      "size": 248460
+    },
+    {
+      "id": "R020965",
+      "path": "/Users/themoretheless/.codex/tmp/rrrah-disc21-pilot-source-20261011/R020965.jpg",
+      "sha256": "42169e34652db83548484139f9c3ee5dec5ae9cbcad8cf508beada19d0eaa92b",
+      "archive": "references_0.zip",
+      "member": "images/references/R020965.jpg",
+      "zip_crc32": 1258746871,
+      "compressed_size": 202795,
+      "size": 202795
+    }
+  ],
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-disc21-cohort-prepared-20261011.json": "8fb74ed9ad9dff89b1e9ba83f03f2dfbdff388f34e27a62ca93dabf823e4bba1",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/prepare-dedup-disc21-architecture-controls-20261012.py": "02daabeb522f83ef31df77612cb2559baddfe0e8f209ec1c61f9380b2801de95",
+    "/Users/themoretheless/.codex/tmp/rrrah-disc21-pilot-source-20261011/Q00061.jpg": "1f4cadc7e52a1af4374041847c5f69ba289f6853b2bc56d425eeb781999d7be1",
+    "/Users/themoretheless/.codex/tmp/rrrah-disc21-cohort-source-20261011/Q00906.jpg": "bf05f2eb330a827a1cbc152fab4b09915da427bc53d3a7cf7fbc29dde202459a",
+    "/Users/themoretheless/.codex/tmp/rrrah-disc21-cohort-source-20261011/R014120.jpg": "5e5c15e7da265ad995c24aa172c89b28bd5fd3bb26794fe10d4e0a89a09a30db",
+    "/Users/themoretheless/.codex/tmp/rrrah-disc21-pilot-source-20261011/R020965.jpg": "42169e34652db83548484139f9c3ee5dec5ae9cbcad8cf508beada19d0eaa92b"
+  },
+  "selection": "Four fixed development comparisons chosen by visible architectural content before matching outcomes. Original reference contact sheet and full Q00061/Q00906 images inspected. Reference buildings differ in shape, scale, viewpoint and construction state; full source/decode/provenance retained in parent.",
+  "scope": "Manually inspected development noncopy labels, not publisher query-reference negative annotations for reference-reference directions, not independent held-out hard-negative/burst corpus. No image transforms, manual ROIs or threshold changes."
+}

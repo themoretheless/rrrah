@@ -1,0 +1,27 @@
+{
+  "scope": "100000 distinct four-byte rasters; real-file/index churn",
+  "checks": [
+    "100000 exact readbacks and writes",
+    "1000 full-root pressure refusals then successful retry",
+    "objects<=17 bytes<=4096",
+    "physical file audit every1000 keys",
+    "evicted keys absent",
+    "root/queue zero each iteration",
+    "after Drop eventual physical files/bytes/root/queue zero within2sec"
+  ],
+  "observed": [
+    "100k swap asynchronous teardown: 3.340042ms; physical files/bytes and root/queue=0",
+    "100k swap: seconds=15.378412708 writes=100000 reads=100000 pressure_refusals=1000 root_peak=131072 queue_peak=4 final=0"
+  ],
+  "initial_failure": "Immediate post-Drop file-zero assertion raced intentionally asynchronous detached worker teardown; corrected to bounded eventual cleanup check",
+  "limitations": [
+    "Four-byte images isolate key/index retention, not large-image throughput",
+    "Managed pressure, not OS memory pressure",
+    "No synchronous Drop cleanup guarantee"
+  ],
+  "sha256": {
+    "docs/research/100k-swap-teardown-verified-2026-10-13.log": "c8ba2186f9a5531b2017e88b902c91e9dd52fbef148810bebbaa8ac13fbe34c1",
+    "crates/rrrah-cache/tests/sustained_swap.rs": "248fe27c7b73a0ef2aaddd289613e2e662f817dc05e8f5408029a43c3347b881",
+    "crates/rrrah-cache/src/swap.rs": "01f6a4e1dbe28f4509aee38abecd84472ff448180102389d7f6d1a3264431650"
+  }
+}

@@ -1,0 +1,43 @@
+    Blocking waiting for file lock on build directory
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+    Finished `test` profile [optimized + debuginfo] target(s) in 53.84s
+     Running tests/animated.rs (target/debug/deps/animated-2b032b23c07ec228)
+
+running 7 tests
+test changed_gif_timing_prevents_whole_animation_equality ... ok
+test gif_disposal_modes_match_independently_composited_full_canvas_apng ... ok
+test complete_existing_composition_fixtures_decode_and_compare ... ok
+test independent_cross_container_timeline_splits_and_negatives ... ok
+test every_observed_animation_cancellation_checkpoint_releases_and_allows_retry ... ok
+test every_apng_truncation_and_crc_damage_refuses_without_leaking_then_retries ... ok
+test every_gif_and_webp_truncation_refuses_releases_memory_and_recovers ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.47s
+
+     Running tests/sequence.rs (target/debug/deps/sequence-a81d93adfcd22f33)
+
+running 7 tests
+test admission_cancel_at_every_checkpoint_returns_no_partial_sequence_and_retry_succeeds ... ok
+test animation_requires_timing_and_compares_repetitions ... ok
+test equivalent_timelines_ignore_frame_splits_but_keep_time_and_pixels ... ok
+test first_frame_match_does_not_hide_changed_last_frame ... ok
+test rational_extremes_fail_explicitly_without_wrapping ... ok
+test complete_coverage_is_required ... ok
+test timeline_comparison_matches_independent_discrete_presentation_oracle ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+

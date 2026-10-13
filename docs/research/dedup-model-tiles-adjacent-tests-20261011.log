@@ -1,0 +1,51 @@
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+    Finished `test` profile [optimized + debuginfo] target(s) in 10.22s
+     Running tests/model_input.rs (target/debug/deps/model_input-fc50ee5cd14abacd)
+
+running 6 tests
+test tiny_inputs_are_explicitly_upsampled_and_linear_gray_is_srgb_encoded ... ok
+test invalid_caps_and_unsupported_pixels_refuse_atomically ... ok
+test nonzero_odd_crop_matches_independent_continuous_area_and_keeps_full_source_cap ... ok
+test odd_edges_match_independent_continuous_area_reference_and_credit_tracks_owners ... ok
+test crop_bounds_overflow_and_every_cancellation_checkpoint_release_payload ... ok
+test every_one_shot_cancellation_checkpoint_releases_all_output_credit ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/model_input_file.rs (target/debug/deps/model_input_file-53cd47ef050a6e5a)
+
+running 5 tests
+test file_crop_retains_full_source_identity_and_original_dimensions ... ok
+test file_input_retains_only_output_and_rechecks_source_and_generation_after_inference ... ok
+test invalid_policy_precedes_io_and_mid_preparation_source_changes_are_errors ... ok
+test external_palette_is_rechecked_after_preparation_and_mutation_discards_input ... ok
+test every_global_checkpoint_and_mid_final_generation_cancellation_discard_payload ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.19s
+
+     Running tests/proposals.rs (target/debug/deps/proposals-9c412344ef9fd073)
+
+running 6 tests
+test crop_center_offsets_use_full_domains_and_reject_points_outside_the_crop ... ok
+test heap_selection_matches_stable_reference_with_ties_boundaries_and_both_side_collisions ... ok
+test malformed_inputs_and_each_work_limit_refuse_without_a_partial_result ... ok
+test every_checkpoint_including_heap_and_final_observes_one_shot_cancellation ... ok
+test managed_payload_credit_survives_clones_and_all_cancellation_paths_release_it ... ok
+test managed_crop_selection_cancellation_and_last_owner_keep_credit ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

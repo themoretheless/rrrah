@@ -1,0 +1,32 @@
+{
+  "change": "RAW worker tracks protected unique cache keys using HashSet. Repeated resolved key records skip instead of consuming another retained count slot.",
+  "test": "Selected + repeated IMG_9043.CR3 + distinct IMG_9074.CR3; count2, ahead3. Both unique entries stored/restorable; full source dimensions, no prefetch failures, managed memory zero.",
+  "caveat": "Initial fixture used identical-byte copy, correctly sharing content key; those failing logs do not independently reproduce a distinct-neighbor regression. Corrected two-original test passes with fix. Pixel correctness against direct decode is covered separately, not compared in this test.",
+  "logs": {
+    "initial-fixture": {
+      "path": "docs/research/raw-prefetch-distinct-count-2026-10-11-initial-fixture.log",
+      "sha256": "8bd3bf43458cd46be89959f3e887dd110abd4efb70477a7f4bc9f424febddd89",
+      "passed": 0,
+      "ignored": 0
+    },
+    "same-content-after": {
+      "path": "docs/research/raw-prefetch-distinct-count-2026-10-11-same-content-after.log",
+      "sha256": "f7a29ab2e8d7da0de5a64ea673a5d5956cc4a9b353c747d958e03f2573008e53",
+      "passed": 0,
+      "ignored": 0
+    },
+    "distinct-after": {
+      "path": "docs/research/raw-prefetch-distinct-count-2026-10-11-distinct-after.log",
+      "sha256": "10327f5e678c361fe470b2aa5db386657e47315ef30f94dd74a1fbdb60dee5dd",
+      "passed": 1,
+      "ignored": 0
+    },
+    "app-all": {
+      "path": "docs/research/raw-prefetch-distinct-count-2026-10-11-app-all.log",
+      "sha256": "bcc4eb05bf11b863cffe5964164542abd227f45267a7def65e652308b5228522",
+      "passed": 270,
+      "ignored": 125
+    }
+  },
+  "source_sha256": "524d99bec3ba9198033b25888749743335e047bcb468cf874affc4e694dbb97d"
+}

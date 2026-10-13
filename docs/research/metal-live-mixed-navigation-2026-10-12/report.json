@@ -1,0 +1,56 @@
+{
+  "date": "2026-10-12",
+  "mode": "ordinary viewer, RRRAH_HDR_SURFACE=1, untagged linear-srgb",
+  "sequence": [
+    "01.qoi",
+    "02.obj",
+    "03.pfm",
+    "04.off",
+    "03.pfm",
+    "02.obj",
+    "01.qoi"
+  ],
+  "observed": [
+    "QOI 257x3",
+    "OBJ 6 triangles",
+    "PFM 2x2",
+    "OFF 1 triangle",
+    "PFM 2x2 restored",
+    "OBJ 6 triangles restored",
+    "QOI 257x3 restored"
+  ],
+  "screenshots": {
+    "obj-return.png": "287c97ff8b53fdd005cb284b53b16b82489298c0e974d30f27153eb77bd8ecae",
+    "obj.png": "f46fe56974ffb137ad82e80f2a401dd6b5d74652970188a8fb07aab0c33368ec",
+    "off.png": "d73e15f8f15c662b575ca7fdb934800d35d6146237b39123d4c449922a60c5c7",
+    "pfm-return.png": "c1bec2eee2a7beaa5ad8805f775e67731810e6568bdaf79222554a26b9f683c7",
+    "pfm.png": "b3ae83a0727d17de91f16946fed540aaaf1485f4ff87bd25a356713a5d666212",
+    "qoi-return.png": "d794c674d95cc69a86d0b7e0804d7ec9350537931a1b399f9e55176dc3613a53",
+    "qoi.png": "40b5adf76dd1d1804a782dcf48d2462c3f79f6a4db64990b1d488152193f5dfa"
+  },
+  "sources": {
+    "01.qoi": "67003d8ec305a80c75081fd530eb55402f9bb19be5ce4573be16ce92f52e3b80",
+    "02.obj": "25c946020cd51a0ab38f3b5228b595ddcd3a8effff6993f527c23e8a82d107b5",
+    "03.pfm": "55d4ea7e52ac9438426596ca7e107c09c2a6d00df14fbe88769012876aa98e03",
+    "04.off": "1f5dc62486d2dcfbc013ccc5ed98ef9285eb95a9eeff9548e38b82df1b696990"
+  },
+  "limits": [
+    "Four authored fixtures only; no universal format or performance claim",
+    "Screenshot comparison cannot qualify physical HDR color or luminance"
+  ],
+  "closed_via_window_button": true,
+  "viewport_return_comparison": {
+    "qoi": {
+      "identical": true,
+      "difference_bbox": null
+    },
+    "obj": {
+      "identical": true,
+      "difference_bbox": null
+    },
+    "pfm": {
+      "identical": true,
+      "difference_bbox": null
+    }
+  }
+}

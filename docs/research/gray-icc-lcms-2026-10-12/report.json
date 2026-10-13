@@ -1,0 +1,39 @@
+{
+  "oracle": "LittleCMS 2190: 4 gray inputs, relative colorimetric, double linear sRGB output",
+  "comparison": {
+    "png": {
+      "max_abs_linear_rgb_error": 1.1920928955078125e-07,
+      "alpha": [
+        0.0,
+        0.2500038146972656,
+        0.5000076293945312,
+        1.0
+      ],
+      "adjacent_gray_values_distinct": true
+    },
+    "tiff": {
+      "max_abs_linear_rgb_error": 1.1920928955078125e-07,
+      "alpha": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "adjacent_gray_values_distinct": true
+    }
+  },
+  "sha256": {
+    "gray.icc": "ead4c629aaf90e430020520e97f6d2b56abd6a2b6e35b04c62198ee7893b6dae",
+    "png.log": "c454754e65f946922a44d93a06f378a33f7898bd4045876dca2f4131c2599187",
+    "tiff.log": "c454754e65f946922a44d93a06f378a33f7898bd4045876dca2f4131c2599187",
+    "tiff.rgba32f": "841308f21706c60277672f94dcfc99507d6ef281860b67e8933d18f0705f72cf",
+    "oracle.log": "07ecc3442754bae303e3488c0758604bde86ade50b1405dc2429422fd59ec312",
+    "oracle.rgb64f": "162afa89023ffd515bae9aa8f0fab19b6cef763fb64c2db750fa67b0c0f34f6c",
+    "png.rgba32f": "25e0b463e19e85f59c59ed775fc4b20f7b1432d7cc58d3a5524dace0d342fc44",
+    "oracle.c": "2b466a1dcce2bae58ded92db566840fcbe4bc3a17ae241a37ed4f662115434f1"
+  },
+  "limits": [
+    "Four authored gray values and one gamma-2 ICC profile; not all ICC variants",
+    "Independent CPU color conversion; no physical display calibration"
+  ]
+}

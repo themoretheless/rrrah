@@ -1,0 +1,18 @@
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+    Finished `test` profile [optimized + debuginfo] target(s) in 45.81s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_decode-3d841f18ff85d05c)
+
+running 10 tests
+test png_color::tests::cicp_preserves_hdr_unknown_and_narrow_range_declarations ... ok
+test png_color::tests::cicp_overrides_srgb_and_unknown_primaries_do_not_become_srgb ... ok
+test png_color::tests::corrupt_duplicate_and_invalid_color_chunks_are_rejected ... ok
+test raster::output_budget_tests::output_admission_precedes_png_entropy_decode_and_errors_release_reservation ... ok
+test raster::tests::png_magic_wins_over_eps_suffix ... ok
+test raster::tests::png_retains_all_sixteen_bits ... ok
+test raster::tests::declared_png_srgb_and_linear_cicp_reach_linear_pixel_conversion ... ok
+test raster::tests::png_cicp_wide_linear_hdr_and_narrow_range_reach_public_apis ... ok
+test raster_color::tests::gray_icc_png_alpha16_and_tiff16_reach_display_with_native_precision ... ok
+test raster::tests::png_physical_pixel_aspect_reaches_common_raster_without_changing_samples ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 1090 filtered out; finished in 0.00s
+

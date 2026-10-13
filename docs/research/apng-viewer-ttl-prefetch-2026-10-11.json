@@ -1,0 +1,13 @@
+{
+  "scope": "Production raster cache/load/preload helpers: selected16-bit and packed palette APNG frames, nonzero1-second RAM TTL, separate subimage keys, reverse swap preloads while decoder gate held, exact payload/SDR/HDR and final zero shared CPU credit",
+  "report": "docs/research/apng-viewer-ttl-metal-2026-10-11/report.json",
+  "ordinary_log_sha256": "8cbeff64c0f7e394b505ddefda1bc922ce980dd1d19438e2e49da83ad3ba1acc",
+  "sources": {
+    "crates/rrrah-app/src/main.rs": "289957ceb18737182fe4116eea3723cd4a12e06b576cfa63c141b0d9fef90049",
+    "scripts/qualify-viewer-storage-gpu.py": "e9287816a76f5d4f96bb314d25ccbd631276f9ffa526de45459b0c77366f65ec"
+  },
+  "limitations": [
+    "Small authored sources do not prove long collection or physical disk performance",
+    "No automatic animation playback or physical display qualification"
+  ]
+}

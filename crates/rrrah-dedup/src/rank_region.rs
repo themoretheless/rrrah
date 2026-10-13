@@ -22,8 +22,10 @@ pub struct RankRegionEvidence {
 }
 #[derive(Debug, Clone, Copy, PartialEq, Eq, thiserror::Error)]
 pub enum RankRegionError {
-    #[error("invalid rank-region input or unsupported pixels")]
+    #[error("invalid rank-region input")]
     Invalid,
+    #[error("ordinal rank confirmation requires opaque display-range sampled pixels")]
+    UnsupportedPixels,
     #[error("rank-region work budget exceeded")]
     Budget,
     #[error("rank-region comparison cancelled")]
@@ -40,8 +42,11 @@ fn rectangle(r: [u32; 4], image: &LinearRgbaView<'_>) -> bool {
 }
 pub(crate) fn luminance(image: &LinearRgbaView<'_>, x: u32, y: u32) -> Result<f64, RankRegionError> {
     let p = image.rgba(x, y).ok_or(RankRegionError::Invalid)?;
-    if p[3] != 1. || p[..3].iter().any(|v| !v.is_finite() || !(0.0..=1.0).contains(v)) {
+    if p[..3].iter().any(|v| !v.is_finite()) {
         return Err(RankRegionError::Invalid);
+    }
+    if p[3] != 1. || p[..3].iter().any(|v| !(0.0..=1.0).contains(v)) {
+        return Err(RankRegionError::UnsupportedPixels);
     }
     Ok(f64::from(p[0]) * 0.2126 + f64::from(p[1]) * 0.7152 + f64::from(p[2]) * 0.0722)
 }

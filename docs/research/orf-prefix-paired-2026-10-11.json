@@ -1,0 +1,69 @@
+{
+  "scope": "Native ORF entropy decoding only; existing window reader versus fused sign/remainder prefix; alternating order six pairs, one original 4640x3472 sensor. Excludes file IO, metadata, upload and rendering.",
+  "pairs": [
+    {
+      "round": 0,
+      "old_ms": 320.044,
+      "fused_ms": 288.231,
+      "exact_samples": 16110080
+    },
+    {
+      "round": 1,
+      "old_ms": 315.114,
+      "fused_ms": 283.723,
+      "exact_samples": 16110080
+    },
+    {
+      "round": 2,
+      "old_ms": 312.083,
+      "fused_ms": 282.361,
+      "exact_samples": 16110080
+    },
+    {
+      "round": 3,
+      "old_ms": 311.564,
+      "fused_ms": 282.494,
+      "exact_samples": 16110080
+    },
+    {
+      "round": 4,
+      "old_ms": 310.827,
+      "fused_ms": 283.194,
+      "exact_samples": 16110080
+    },
+    {
+      "round": 5,
+      "old_ms": 313.71,
+      "fused_ms": 282.522,
+      "exact_samples": 16110080
+    }
+  ],
+  "median_old_ms": 312.8965,
+  "median_fused_ms": 282.858,
+  "median_reduction_percent": 9.600139343201342,
+  "regression": {
+    "passed": 1004,
+    "failed": 0,
+    "ignored": 78
+  },
+  "logs": {
+    "paired": {
+      "path": "docs/research/orf-prefix-paired-2026-10-11-paired.log",
+      "sha256": "17d1e8c6b3a4c0a73e7747762988888af2af54278c23f081f94f26616a633424"
+    },
+    "regression": {
+      "path": "docs/research/orf-prefix-paired-2026-10-11-regression.log",
+      "sha256": "10f8e9150e27d47bb4d437df4b7debe4848bc8e71aed44b960dfaa1c0d301d01"
+    },
+    "decode-all": {
+      "path": "docs/research/orf-prefix-paired-2026-10-11-decode-all.log",
+      "sha256": "27b50f5b3ef0d62de6e84f8e8f489d0b391eae2261a4b094a900520c1ac962c9"
+    }
+  },
+  "sha256": {
+    "crates/rrrah-decode/src/camtiff/olympus_entropy.rs": "798fa6d136096d83cfd6b129404691aa48e0b9e2515603860ff895278dab5d14",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/1084.orf": "b2221977cbc6eba0d3b363351072092e5647eaa0d02a5d8432b5d985b29f669f",
+    "/tmp/rrrah-orf-prefix-stream-20261011.bin": "fff01728d490e04358cb53a6d50bf7a9e119e7af57db1cfed0841e19c230266b"
+  },
+  "limitation": "Exact old/new sample comparison, not a fresh independent oracle or whole-viewer speedup."
+}

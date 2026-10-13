@@ -1,0 +1,24 @@
+{
+  "backend": "Metal Apple M4 Max",
+  "passed": 1,
+  "failed": 0,
+  "ignored": 0,
+  "restores_and_exact_frames": 495,
+  "duration_seconds": 30,
+  "renderer": "one persistent renderer across full collection traversal",
+  "gpu_peak_bytes": {
+    "resident": 146800640,
+    "upload_scratch": 2097152,
+    "queued_uploads": 73400320
+  },
+  "final_gpu_credit": 0,
+  "checks": [
+    "same sensor data and Metal frames after every restore",
+    "resident credit equals active renderer atlas after readback",
+    "upload scratch and queued credit zero after every frame",
+    "all GPU roots zero after renderer drop",
+    "qualification validator requires actual residency marker; missing marker/nonzero final credit rejected"
+  ],
+  "log_sha256": "803fa3145774c3c3548f7ede4f08a70d9d194012b2d124a751ee10585263aa16",
+  "scope": "30-second regression; ten-minute persistent-renderer soak is separately running; logical GPU payload budgets exclude driver allocations"
+}

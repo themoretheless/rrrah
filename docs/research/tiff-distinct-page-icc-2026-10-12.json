@@ -1,0 +1,37 @@
+{
+  "scope": "Distinct page ICC selection and independently quantized color oracle, not full ICC precision/calibration",
+  "pages": 3,
+  "profiles": [
+    "sRGB transfer",
+    "linear gamma1, same RGB primaries",
+    "sRGB transfer"
+  ],
+  "native_codes_identical": true,
+  "oracle": "Pillow/LittleCMS relative colorimetric RGB8; prepared pixels reencoded to sRGB within1 code",
+  "first_failed_check": "Ideal sRGB curve comparison differed by0.0001506997 for one blue sample; ideal curve does not describe complete ICC transform. Failed log retained; replaced with independent actual-profile color oracle at explicit RGB8 precision.",
+  "storage": "Four reverse restores; exact prepared float bits and63x65 SDR/HDR; selected metadata retained; final managed/queue0",
+  "gate_passed": 135,
+  "gate_ignored": 13,
+  "verified": true,
+  "reproducibility": "TIFF, RGB8 oracle and manifest regenerated bit-identically with normalized profile timestamp/ID",
+  "limitations": [
+    "Quantized RGB8 oracle does not establish full floating-point ICC accuracy",
+    "Only authored transfer-profile variation; broad camera/color/HDR profile corpus pending",
+    "PhysicalHDR/live resize and all100-format scope remain open"
+  ],
+  "sources": {
+    "scripts/generate-tiff-page-profiles.py": "33d0e779e2c4216948713efde0915bd434315c48b3c816dbb38756e4873db58e",
+    "scripts/qualify-viewer-storage-gpu.py": "90cde26d334af6b1c9c2aac230d5490b73fc6ccb041636ca0555e640979332de",
+    "crates/rrrah-app/tests/tiff_pages_metal.rs": "9ef91515c2f9013ea49669087bc5225476434bd454dfa6e90119830a2cc2dd71",
+    "tests/fixtures/data/tiff-distinct-page-profiles.tif": "cb6430c6b6140d93056b0dcf4eec53e04c27a04fa7a0c8e5887590dab019f35d",
+    "tests/fixtures/data/tiff-distinct-page-profiles.rgb8": "8587569143a65ab804de0cf0c69f6be0f86d052668e73203e585a684ebc5b914",
+    "tests/fixtures/data/tiff-distinct-page-profiles.json": "11eb6ec08688d09c3eecb17b6eba9f45d07ae56a30028cc58744c157ac5f29bd"
+  },
+  "logs": {
+    "docs/research/tiff-distinct-page-icc-2026-10-12/rrrah-tiff-page-icc-metal-20261012.log": "5ee425083110666a72f32588e2a28b4aeaf1c0ab001ca062ee8bc539615abcbe",
+    "docs/research/tiff-distinct-page-icc-2026-10-12/report.json": "769641fcc71ab77627de2f09ecc2de7b164de9db9e5cc36d0d1ca2372ffe8e5f",
+    "docs/research/tiff-distinct-page-icc-2026-10-12/rrrah-tiff-page-icc-lcms-metal-20261012.log": "c7161937744dcd46f749e0c99e7349fe0c605a57e00588cac9238271355b8f06",
+    "docs/research/tiff-distinct-page-icc-2026-10-12/gpu-all.log": "7e0152a8184f8fd7023c1e77eaecc3c50d3e536defb9e229cede9d92a25b3e6a",
+    "docs/research/tiff-distinct-page-icc-2026-10-12/gpu-tiff-pages.log": "921b9d9ab941e5e5b0ad473331fb5562c5474db7b44c19e2f60a0e2cc1e80396"
+  }
+}

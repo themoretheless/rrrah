@@ -2,9 +2,9 @@
   "index": 436,
   "repository": "Wassasin/tinyphash",
   "commit": "7c7c503d331cc8fd5507db58e5813398f3939189",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
-  "decision": "shortlist",
-  "finding": "Tiny MIT C DCT/hash conversion with no detected tests; suitable math reference, qualify against independent vectors.",
+  "review_scope": "Complete reading of all8tracked text files at pinned commit, core original-code ASan/UBSan controls and16independent direct-DCT reference vectors. CLI build attempted but refused missing pnglite.h; CLI runtime not qualified.",
+  "decision": "reference_do_not_adopt_broken_core",
+  "finding": "Runtime-confirmed source crop stride error9vs33, median byte-count error0vs32.5, equal comparator returns1 and final hash shift forces lowbit0.16original hashes differ from independent corrected mathematical recipe; easy/unchecked APIs agree and Hamming arithmetic matches scalar oracle. No production adoption.",
   "available_source_evidence": [
     {
       "path": "tinyphash.c",
@@ -38,7 +38,7 @@
     }
   ],
   "license_metadata": "MIT",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "Full MIT LICENSE read; header attribution to rewritten aetilius/pHash retained; no copying or derivative provenance clearance claimed.",
   "tests_detected": 0,
   "upstream_tests_run": false,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
@@ -64,5 +64,15 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_review_complete": true,
+  "whole_repo_complete": true,
+  "fully_read_files": 8,
+  "fully_reviewed_files": 8,
+  "total_files": 8,
+  "complete_source_review": "tinyphash-complete-source-review-20261013.json",
+  "complete_core_runtime_audit": "tinyphash-core-runtime-audit-20261013.json",
+  "prior_registry_review": "tinyphash-prior-registry-436-20261013.json",
+  "upstream_tests": 0,
+  "cli_runtime_qualified": false
 }

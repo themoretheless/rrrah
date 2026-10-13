@@ -1,0 +1,83 @@
+{
+  "status": "fixed_before_build_and_execution",
+  "harness": "/Users/themoretheless/.codex/tmp/rrrah-model-multiscale-rank-diagnostic-20261013",
+  "harness_sha256": {
+    "Cargo.toml": "da54b88dd59c17956e78de65703d0bb756885765078b02eb2b625cc14d3e7690",
+    "src/main.rs": "34e351d852240d56409453a661ea607c7b14ef904d90b3ac7e714da22fccef11"
+  },
+  "cases": [
+    {
+      "label": "positive-1",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-model-positive-pixel-diagnostic-20261013/0001-plan.json",
+      "plan_sha256": "b80beb686572188c1725cc824a4d4f2dcae810e4d50cb59614eccdd8af3f1d69"
+    },
+    {
+      "label": "positive-2",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-model-positive-pixel-diagnostic-20261013/0002-plan.json",
+      "plan_sha256": "7c22edb616c360f1b7675b9d0cd9196c3bac8314e3a2f172d2b36822bc7ca1e9"
+    },
+    {
+      "label": "positive-6",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-model-positive-pixel-diagnostic-20261013/0006-plan.json",
+      "plan_sha256": "113398bd4e9cc80cb5b5c51df0a96bf9880252a69e360b623a97020194b5cb88"
+    },
+    {
+      "label": "positive-12",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-model-positive-pixel-diagnostic-20261013/0012-plan.json",
+      "plan_sha256": "d71898bcfd1b8d51c4b4a25d36921c7f87b761060f038eee234f7855e1d4715a"
+    },
+    {
+      "label": "positive-34",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-model-positive-pixel-diagnostic-20261013/0034-plan.json",
+      "plan_sha256": "7c57c294e6f2cb531244a0db1e0a50a0522c4177859baf5015fa626978e9ed7a"
+    },
+    {
+      "label": "positive-35",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-model-positive-pixel-diagnostic-20261013/0035-plan.json",
+      "plan_sha256": "702f391128ed3100003d3192ce7a5b1391d598ca07742b791acb9a6c4ad77fae"
+    },
+    {
+      "label": "positive-80",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-model-positive-pixel-diagnostic-20261013/0080-plan.json",
+      "plan_sha256": "9c719edb4bf55a6e5417ccbac4c7dedd471afbf2c4e84c925f60f57b24d56425"
+    },
+    {
+      "label": "positive-81",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-model-positive-pixel-diagnostic-20261013/0081-plan.json",
+      "plan_sha256": "bf8934418b7d08027792f692a14be9badef96d288566828d163cce925eff15b6"
+    },
+    {
+      "label": "positive-105",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-model-positive-pixel-diagnostic-20261013/0105-plan.json",
+      "plan_sha256": "21c291f2a859c9c3ab9a2339e371b8c908ea3d04f2ef506e5e7c2dbc76370a49"
+    },
+    {
+      "label": "positive-164",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-model-positive-pixel-diagnostic-20261013/0164-plan.json",
+      "plan_sha256": "7f5b9f098b074176ef0da146f74fa8390aff4e43bc3ee7d93fd60c57b08ec797"
+    },
+    {
+      "label": "negative",
+      "plan": "docs/research/dedup-model-pixel-diagnostic-negative-v2-plan-20261013.json",
+      "plan_sha256": "074f523ab7e00d46c6a51d2d3d3d1cd68768568b7221e57be0a348b3c3ea8498"
+    },
+    {
+      "label": "self_control",
+      "plan": "docs/research/dedup-model-pixel-diagnostic-self_control-v2-plan-20261013.json",
+      "plan_sha256": "7791f5951ea32ddaf368959820ddeb14b5a004a6064dbe12577d41ff4d3a193f"
+    }
+  ],
+  "rank_radius": 8,
+  "minimum_contrast": 0.005,
+  "minimum_pairs": 1,
+  "maximum_sites": 12800000,
+  "maximum_pixel_reads": 64000000,
+  "scope": "Predetermined multiscale measurement on all12 cases, dense saved anchor bounding regions. No threshold tuning, no heldout points, no acceptance decision.",
+  "filters": [
+    0,
+    2,
+    4,
+    8,
+    12
+  ]
+}

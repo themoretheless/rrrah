@@ -2,13 +2,13 @@
   "index": 73,
   "repository": "twpayne/find-duplicates",
   "commit": "ea0d9afe789786172b46815162b3464909bc2d2c",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
-  "decision": "shortlist",
-  "finding": "Go DupFinder offers error handler, buffer, include filter and pluggable hashes; useful API/error isolation reference with tests.",
+  "review_scope": "All10tracked text files reread and matched Git blobs/prior complete source pins. Original11scenarios rerun;2new lifecycle counterexamples reproduced in separate copy. This reconciles a previously unlinked full review, not a newly reviewed repository.",
+  "decision": "reference_require_joined_shutdown_and_byte_confirmation",
+  "finding": "Hash-only grouping lacks byte identity proof; prior forced collision/empty-growth/hardlink controls retained. New original-code controls reproduce success on pre-cancelled empty request and send-on-closed-channel panic after early error with1000missing roots and unbuffered error channel. Source hashing concurrency is not explicitly capped.",
   "license_metadata": "MIT",
-  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "license_scope": "Complete MIT LICENSE read, TomPayne2023; no production copying.",
   "tests_detected": 1,
-  "upstream_tests_run": false,
+  "upstream_tests_run": true,
   "available_source_evidence": [
     {
       "path": "internal/dupfind/dupfinder.go",
@@ -64,5 +64,17 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_review_complete": true,
+  "whole_repo_complete": true,
+  "total_files": 10,
+  "fully_read_files": 10,
+  "fully_reviewed_files": 10,
+  "complete_source_review": "find-duplicates-full-source-20261012.json",
+  "prior_full_runtime_audit": "find-duplicates-full-review-audit-20261012.json",
+  "lifecycle_reconciliation_audit": "find-duplicates-lifecycle-reconciliation-audit-20261013.json",
+  "prior_registry_review": "find-duplicates-prior-registry-073-20261013.json",
+  "upstream_passed_cases": 11,
+  "new_controls_passed": 2,
+  "subprocess_fixture_ignored": 1
 }

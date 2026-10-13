@@ -221,7 +221,7 @@ fn stable_triple() -> (tempfile::TempDir, Vec<(u64, DecodeRequest)>) {
         .map(|(i, name)| {
             let id = u64::try_from(i).unwrap() + 1;
             let path = folder.path().join(format!("{id}.png"));
-            std::fs::copy(root.join(name), &path).unwrap();
+            copy_writable(root.join(name), &path).unwrap();
             (id, DecodeRequest::new(path))
         })
         .collect();
@@ -311,7 +311,7 @@ fn recursive_collection_preserves_aliases_errors_and_request_settings() {
     std::fs::create_dir(&nested).unwrap();
     let fixture =
         std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/information/black.png");
-    std::fs::copy(&fixture, nested.join("a.png")).unwrap();
+    copy_writable(&fixture, nested.join("a.png")).unwrap();
     std::fs::write(folder.path().join("bad.png"), b"invalid image").unwrap();
     #[cfg(unix)]
     std::fs::hard_link(nested.join("a.png"), folder.path().join("alias.png")).unwrap();
@@ -444,8 +444,8 @@ fn recursive_spatial_collection_preserves_requests_and_rejects_substitution() {
     let nested = dir.path().join("nested");
     std::fs::create_dir(&nested).unwrap();
     let source = &files()[0].1.path;
-    std::fs::copy(source, dir.path().join("a.png")).unwrap();
-    std::fs::copy(source, nested.join("b.png")).unwrap();
+    copy_writable(source, dir.path().join("a.png")).unwrap();
+    copy_writable(source, nested.join("b.png")).unwrap();
     std::fs::write(nested.join("bad.png"), b"broken").unwrap();
     let roots = [dir.path().to_path_buf()];
     let traversal = rrrah_dedup::exact::Options::default();
@@ -738,7 +738,7 @@ fn reflected_collection_discards_changed_sources_batch_wide() {
     let root = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/rotation");
     let folder = tempfile::tempdir().unwrap();
     let changed = folder.path().join("base.png");
-    std::fs::copy(root.join("base.png"), &changed).unwrap();
+    copy_writable(root.join("base.png"), &changed).unwrap();
     let requests = [
         (1, DecodeRequest::new(&changed)),
         (2, DecodeRequest::new(root.join("mirrored.png"))),
@@ -781,9 +781,9 @@ fn reflected_recursive_collection_keeps_aliases_paths_and_request_policy() {
     let folder = tempfile::tempdir().unwrap();
     let nested = folder.path().join("nested");
     std::fs::create_dir(&nested).unwrap();
-    std::fs::copy(fixture.join("base.png"), nested.join("base.png")).unwrap();
-    std::fs::copy(fixture.join("mirrored.png"), nested.join("mirror.png")).unwrap();
-    std::fs::copy(fixture.join("unrelated.png"), folder.path().join("other.png")).unwrap();
+    copy_writable(fixture.join("base.png"), nested.join("base.png")).unwrap();
+    copy_writable(fixture.join("mirrored.png"), nested.join("mirror.png")).unwrap();
+    copy_writable(fixture.join("unrelated.png"), folder.path().join("other.png")).unwrap();
     std::fs::write(folder.path().join("bad.png"), b"corrupt image").unwrap();
     #[cfg(unix)]
     {
@@ -1080,4 +1080,151 @@ fn reflected_ranged_modes_validate_before_consuming_sources() {
             assert_eq!(budget.used(), 0);
         }
     }
+}
+
+#[test]
+fn final_callback_mutation_cannot_publish_incident_local_pairs() {
+    use std::{cell::Cell, io::Write};
+    let dir = tempfile::tempdir().unwrap();
+    let original = std::fs::read(files()[0].1.path.clone()).unwrap();
+    let inputs: Vec<_> = (1..=2).map(|id| {
+        let path = dir.path().join(format!("{id}.png"));
+        std::fs::write(&path, &original).unwrap();
+        (id, DecodeRequest::new(path))
+    }).collect();
+    let budget = MemoryBudget::new(64 * 1024 * 1024);
+    let calls = Cell::new(0usize);
+    let healthy = scan_local_collection(inputs.clone(), policy(), &budget, || {
+        calls.set(calls.get() + 1);
+        false
+    }).unwrap();
+    assert_eq!(healthy.local.pairs.len(), 1);
+    let total = calls.get();
+    drop(healthy);
+    assert_eq!(budget.used(), 0);
+    calls.set(0);
+    let changed = Cell::new(false);
+    let result = scan_local_collection(inputs.clone(), policy(), &budget, || {
+        calls.set(calls.get() + 1);
+        if calls.get() == total {
+            std::fs::OpenOptions::new().append(true).open(&inputs[1].1.path).unwrap().write_all(&[0]).unwrap();
+            changed.set(true);
+        }
+        false
+    });
+    assert!(changed.get());
+    match result {
+        Ok(report) => assert!(report.local.pairs.iter().all(|p| p.left != 2 && p.right != 2), "stale local pair after final callback: {report:?}"),
+        Err(rrrah_dedup::scan::ScanError::Source { id: 2, .. }) => {},
+        Err(error) => panic!("unexpected publication error: {error:?}"),
+    }
+    assert_eq!(budget.used(), 0);
+}
+
+#[test]
+fn final_directory_callback_mutation_cannot_publish_incident_local_pairs() {
+    use std::{cell::Cell, io::Write};
+    let dir = tempfile::tempdir().unwrap();
+    let original = std::fs::read(files()[0].1.path.clone()).unwrap();
+    let inputs: Vec<_> = (1..=2).map(|id| {
+        let path = dir.path().join(format!("{id}.png"));
+        std::fs::write(&path, &original).unwrap();
+        (id, DecodeRequest::new(path))
+    }).collect();
+    let budget = MemoryBudget::new(64 * 1024 * 1024);
+    let roots = vec![dir.path().to_path_buf()];
+    let traversal = rrrah_dedup::exact::Options::default();
+    let changed_id = Cell::new(u64::MAX);
+    let run = |cancel: &dyn Fn() -> bool| {
+        rrrah_dedup::local_collection::scan_local_collection_roots(
+            &roots, &traversal, policy(), &budget, cancel,
+        ).map(|report| {
+            changed_id.set(report.files.iter().find(|(_, path)| *path == inputs[1].1.path).unwrap().0);
+            report.indexed
+        })
+    };
+    let calls = Cell::new(0usize);
+    let healthy = run(&|| {
+        calls.set(calls.get() + 1);
+        false
+    }).unwrap();
+    assert_eq!(healthy.local.pairs.len(), 1);
+    let total = calls.get();
+    drop(healthy);
+    assert_eq!(budget.used(), 0);
+    calls.set(0);
+    let changed = Cell::new(false);
+    let result = run(&|| {
+        calls.set(calls.get() + 1);
+        if calls.get() == total {
+            std::fs::OpenOptions::new().append(true).open(&inputs[1].1.path).unwrap().write_all(&[0]).unwrap();
+            changed.set(true);
+        }
+        false
+    });
+    assert!(changed.get());
+    match result {
+        Ok(report) => assert!(report.local.pairs.iter().all(|p| p.left != changed_id.get() && p.right != changed_id.get()), "stale local pair after final callback: {report:?}"),
+        Err(rrrah_dedup::scan::ScanError::Source { id, .. }) if id == changed_id.get() => {},
+        Err(error) => panic!("unexpected publication error: {error:?}"),
+    }
+    assert_eq!(budget.used(), 0);
+}
+
+#[test]
+fn early_bad_source_is_isolated_but_late_healthy_mutation_refuses_publication() {
+    use std::{cell::Cell, io::Write};
+    let dir = tempfile::tempdir().unwrap();
+    let original = std::fs::read(files()[0].1.path.clone()).unwrap();
+    let inputs: Vec<_> = (1..=3).map(|id| {
+        let path = dir.path().join(format!("{id}.png"));
+        std::fs::write(&path, &original).unwrap();
+        (id, DecodeRequest::new(path))
+    }).collect();
+    let budget = MemoryBudget::new(64 * 1024 * 1024);
+    let mut last = 0;
+    for late in [false, true] {
+        for (_, request) in &inputs { std::fs::write(&request.path, &original).unwrap(); }
+        let calls = Cell::new(0usize);
+        let early_changed = Cell::new(false);
+        let late_changed = Cell::new(false);
+        let result = scan_local_collection(inputs.clone(), policy(), &budget, || {
+            calls.set(calls.get() + 1);
+            if budget.used() > 0 && !early_changed.replace(true) {
+                std::fs::OpenOptions::new().append(true).open(&inputs[1].1.path).unwrap().write_all(&[0]).unwrap();
+            }
+            if late && calls.get() == last {
+                std::fs::OpenOptions::new().append(true).open(&inputs[2].1.path).unwrap().write_all(&[0]).unwrap();
+                late_changed.set(true);
+            }
+            false
+        });
+        assert!(early_changed.get());
+        if late {
+            assert!(late_changed.get());
+            assert!(matches!(result, Err(rrrah_dedup::scan::ScanError::Source {
+                id: 3, error: rrrah_dedup::exact::SnapshotError::Changed
+            })), "late healthy source was published: {result:?}");
+        } else {
+            last = calls.get();
+            let report = result.unwrap();
+            assert_eq!(report.local.source_issues.iter().map(|(id, _)| *id).collect::<Vec<_>>(), [2]);
+            assert_eq!(report.local.pairs.iter().map(|p| (p.left, p.right)).collect::<Vec<_>>(), [(1, 3)]);
+        }
+        assert_eq!(budget.used(), 0);
+    }
+    for (_, request) in &inputs { std::fs::write(&request.path, &original).unwrap(); }
+    let retry = scan_local_collection(inputs, policy(), &budget, || false).unwrap();
+    assert_eq!(retry.local.pairs.len(), 3);
+    assert!(retry.local.source_issues.is_empty());
+    drop(retry);
+    assert_eq!(budget.used(), 0);
+}
+
+// Fixture sources may be read-only in an immutable qualification checkout.
+// Copy bytes without inheriting permissions so mutation tests can edit their own files.
+fn copy_writable(source: impl AsRef<std::path::Path>, target: impl AsRef<std::path::Path>) -> std::io::Result<u64> {
+    let bytes = std::fs::read(source)?;
+    std::fs::write(target, &bytes)?;
+    Ok(bytes.len() as u64)
 }

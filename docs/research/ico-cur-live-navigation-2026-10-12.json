@@ -1,0 +1,36 @@
+{
+  "backend": "Metal / Apple M4 Max",
+  "surface": "Bgra8UnormSrgb / SDR",
+  "source": "cur-selected-images.cur",
+  "explicit_policy": "--untagged-color srgb",
+  "ram_cache_count": 1,
+  "ttl_seconds": 1,
+  "observed_key_navigation_indices": [
+    0,
+    1,
+    2,
+    1,
+    0
+  ],
+  "screenshots": [
+    "cur-image-2.png",
+    "cur-image-1.png"
+  ],
+  "inspection": "Screenshot image2 shows green content and correct2of3 title; final window title confirms1of3 after return",
+  "strict_mode": "Unprofiled embedded PNG refused in strict mode, observed AX window error; explicit sRGB passes",
+  "exit_code": 0,
+  "limits": [
+    "No HDR live surface in this run",
+    "No claim of specific swap hit without storage telemetry",
+    "No physical color calibration"
+  ],
+  "sha256": {
+    "docs/research/ico-cur-live-navigation-2026-10-12/explicit-srgb.log": "ee787cfdc00c1274ff1d2061352c81aff465c5c82b245a451073c63d1233ed4b",
+    "docs/research/ico-cur-live-navigation-2026-10-12/cur-image-2.png": "947ffe7aa18214262472fde68938a7b18eccc299af0fb0521cc85d148cbc4013",
+    "docs/research/ico-cur-live-navigation-2026-10-12/strict.log": "bad31f95b94435d7145e313060995df9782ebd4a119accd682fb28e587e3c47d",
+    "docs/research/ico-cur-live-navigation-2026-10-12/cur-image-1.png": "e8b10a7c045901e737b1a066de27f93ce63bffa7447d9faf2c44008e388bb691",
+    "docs/research/ico-cur-live-navigation-2026-10-12/final-window-titles.txt": "54297294de42e1f616d1ebc9ea99456cb3f55e5a5d9e5689ae8954171cec6a71",
+    "crates/rrrah-app/src/main.rs": "12aadff2aaa50e2a87a699fb2f448e2970bf5a58be536674f06c56cbe2f9b410",
+    "tests/fixtures/data/cur-selected-images.cur": "335d23953f576d98e0ae81a79d22eaadfc97047f4a208915973067a040dde11d"
+  }
+}

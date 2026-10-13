@@ -1,0 +1,88 @@
+{
+  "status": "complete_original3_doctest1_controls7",
+  "producer_pid": 66360,
+  "source": "/Users/themoretheless/.codex/tmp/rrrah-fast-dhash-source-20261012",
+  "harness": "/Users/themoretheless/.codex/tmp/rrrah-fast-dhash-controls-20261012",
+  "results": [
+    {
+      "phase": "upstream",
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--jobs",
+        "2",
+        "--target-dir",
+        "/Users/themoretheless/.codex/tmp/rrrah-fast-dhash-target-20261012"
+      ],
+      "cwd": "/Users/themoretheless/.codex/tmp/rrrah-fast-dhash-source-20261012",
+      "returncode": 0,
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-fast-dhash-upstream-20261012.log",
+      "summaries": [
+        [
+          "3",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "1",
+          "0",
+          "0",
+          "0",
+          "0"
+        ]
+      ],
+      "saved_executable": "/Users/themoretheless/.codex/tmp/rrrah-fast-dhash-upstream-executable-20261012"
+    },
+    {
+      "phase": "controls",
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--jobs",
+        "2",
+        "--target-dir",
+        "/Users/themoretheless/.codex/tmp/rrrah-fast-dhash-target-20261012",
+        "--test",
+        "rrrah_controls"
+      ],
+      "cwd": "/Users/themoretheless/.codex/tmp/rrrah-fast-dhash-controls-20261012",
+      "returncode": 0,
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-fast-dhash-controls-20261012.log",
+      "summaries": [
+        [
+          "7",
+          "0",
+          "0",
+          "0",
+          "0"
+        ]
+      ],
+      "saved_executable": "/Users/themoretheless/.codex/tmp/rrrah-fast-dhash-controls-executable-20261012"
+    }
+  ],
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/fast-dhash-full-source-20261012.json": "56550baf8ccde515533b7dbaa062ad63cca081196d991387ffe0c04594901ed9",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/run-dedup-fast-dhash-controls-20261012.py": "bb95b0c43da258edc2a2d5bd061970c278e950f99d4ce444fbbbccd5967b77c2",
+    "/Users/themoretheless/.codex/tmp/rrrah-fast-dhash-controls-20261012/tests/rrrah_controls.rs": "9d8564bd242405aada733f9d1f15c8659b11e2ca3097508928c52c4e12ae5ff6",
+    "/Users/themoretheless/.codex/tmp/rrrah-fast-dhash-source-20261012/.gitignore": "44c92e3a70ad3307b7056871c2bdb096d8bfa9373f5bf06a79bb6324a20ff2fb",
+    "/Users/themoretheless/.codex/tmp/rrrah-fast-dhash-source-20261012/.test/grad.0000.jpg": "7051c7cf1a98d87deaab621f4537bbfce46a93f9773e95f3bff7df7608574e0f",
+    "/Users/themoretheless/.codex/tmp/rrrah-fast-dhash-source-20261012/.test/grad.ffff.jpg": "4a0718725fd2688e332140d71e2710a40572cd0dc229a86296e2590f54f71471",
+    "/Users/themoretheless/.codex/tmp/rrrah-fast-dhash-source-20261012/.test/radial.jpg": "35cb5088980210be99c0bf7efdb612841d251950178ec0b5bcdc4919d0830749",
+    "/Users/themoretheless/.codex/tmp/rrrah-fast-dhash-source-20261012/Cargo.lock": "38e8d889a26ca2368637c5ad4ea61a24c17673f2a4b6c5692d7d55bd0b3fffb8",
+    "/Users/themoretheless/.codex/tmp/rrrah-fast-dhash-source-20261012/Cargo.toml": "b8b83b8dec667e27c60eca478d78e2e271ca91a6f6db02ca997188d3b5662463",
+    "/Users/themoretheless/.codex/tmp/rrrah-fast-dhash-source-20261012/LICENSE": "25857d9bb56041bb099c84add149c567e779f7dd67653e255b7cd5ea905e6275",
+    "/Users/themoretheless/.codex/tmp/rrrah-fast-dhash-source-20261012/README.md": "6e085832c8c29eefbe9de45537af029aa2d4c32ba257061b0a14b802b7532174",
+    "/Users/themoretheless/.codex/tmp/rrrah-fast-dhash-source-20261012/src/lib.rs": "b551102f4cfbe7d217ac0f087baf1ea0d6237c63b85c75db88b450b618b50fb5",
+    "/Users/themoretheless/.codex/tmp/rrrah-fast-dhash-upstream-20261012.log": "333de47e2611dfac6112a552fca4150eea64931235c8f2b80f580d69d5f3e41b",
+    "/Users/themoretheless/.codex/tmp/rrrah-fast-dhash-upstream-executable-20261012": "c7b1438dda68a34db18823d43761afd90c85144dacd1760610af8f329988a342",
+    "/Users/themoretheless/.codex/tmp/rrrah-fast-dhash-controls-20261012.log": "ae3ce3a22d00e1aa1c3f71fcf6e56fcab9cdaf700a718df55a46ded2dd096f1e",
+    "/Users/themoretheless/.codex/tmp/rrrah-fast-dhash-controls-executable-20261012": "f776d8a4cc26f4240013ad118c2dc3aab6c7d142110471db4c783949611d0957"
+  },
+  "scope": "Original pinned Cargo manifest/lock/source and fixtures unchanged. Three embedded units and one doctest attempted first; seven authored public-API controls second. No zero-channel unsafe case executed, benchmark, root adoption or all500 completion.",
+  "active_phase": "controls",
+  "child_pid": 67566
+}

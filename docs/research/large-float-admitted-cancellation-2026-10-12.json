@@ -1,0 +1,24 @@
+{
+  "change": "Replace timer cancellation with observed64MiB pixel admission and>=65536+64 bytes actually read by test I/O adapter; thread-local read count; no production changes",
+  "cycles": 3,
+  "seconds": 87.831,
+  "focused_storage_passed": 1,
+  "ordinary_storage_passed": 4,
+  "ordinary_storage_ignored": 5,
+  "verifier_tests_passed": 7,
+  "verification": "Current actual log accepted; prior timer-based log rejected; duplicate/truncated/short/wrongextent evidence rejected",
+  "final_root_queue_bytes": 0,
+  "limits": [
+    "Focused current tests, not rerun of full combined9-test storage gate",
+    "Artificial local I/O delay, not physical slow disk or OS memory pressure",
+    "Stored float bit transport, not physical HDR color qualification"
+  ],
+  "sha256": {
+    "docs/research/large-float-admitted-cancellation-2026-10-12/rrrah-large-float-verifier-20261012.log": "74c03fc16fde9a2dfeff03db0ec8f472a5a8dfed04e9e982a912b4b7f64faee3",
+    "docs/research/large-float-admitted-cancellation-2026-10-12/rrrah-admitted-cancel-storage-regression-20261012.log": "e70fc23c1c195905207e2c83446f9214b4b9f47494927b4bff858a80ae405c2b",
+    "docs/research/large-float-admitted-cancellation-2026-10-12/rrrah-large-float-admitted-cancel-20261012.log": "58962eba61d4cfff3863d8aea89e6577732e883ae1ff56adae5206408afe9378",
+    "crates/rrrah-cache/tests/sustained_swap.rs": "a696f7fb39a474f248ea4fcdbc4a93f8da9a03a5e8df307382eb763b6eaf47eb",
+    "scripts/qualify-viewer-storage-gpu.py": "ba0aab7d68aeeb9492e3883dc4c737f2b42a3842537afcf29d65f67d400491f3",
+    "scripts/test-large-float-storage-evidence.py": "3f51815363827c2ac5b200e4bd5b17ca1be40c040e7783546bcb8bd82d0c9844"
+  }
+}

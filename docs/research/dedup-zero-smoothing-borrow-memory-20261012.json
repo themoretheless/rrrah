@@ -1,0 +1,52 @@
+{
+  "status": "complete_identical_identity_stage_borrow_memory_control",
+  "rows": [
+    {
+      "mode": "baseline",
+      "command": [
+        "/usr/bin/time",
+        "-l",
+        "/Users/themoretheless/.codex/tmp/rrrah-zero-smoothing-borrow-memory-executable-20261012",
+        "baseline"
+      ],
+      "returncode": 0,
+      "stdout": "{\"digest\":\"207b0b1b18c3ef1a536e3e19a92211663f545d26589ee86957c38387b234b239\",\"retained\":50331648,\"managed_peak\":50331648,\"after_drop\":0}\n",
+      "stderr": "        1.53 real         0.35 user         0.01 sys\n           102400000  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n                6429  page reclaims\n                   0  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                   0  voluntary context switches\n                 363  involuntary context switches\n          4032713481  instructions retired\n           774745956  cycles elapsed\n           101810560  peak memory footprint\n",
+      "result": {
+        "digest": "207b0b1b18c3ef1a536e3e19a92211663f545d26589ee86957c38387b234b239",
+        "retained": 50331648,
+        "managed_peak": 50331648,
+        "after_drop": 0
+      },
+      "rss_bytes": 102400000
+    },
+    {
+      "mode": "borrow",
+      "command": [
+        "/usr/bin/time",
+        "-l",
+        "/Users/themoretheless/.codex/tmp/rrrah-zero-smoothing-borrow-memory-executable-20261012",
+        "borrow"
+      ],
+      "returncode": 0,
+      "stdout": "{\"digest\":\"207b0b1b18c3ef1a536e3e19a92211663f545d26589ee86957c38387b234b239\",\"retained\":0,\"managed_peak\":0,\"after_drop\":0}\n",
+      "stderr": "        0.85 real         0.32 user         0.00 sys\n            52068352  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n                3359  page reclaims\n                   0  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                   0  voluntary context switches\n                 226  involuntary context switches\n          3575822276  instructions retired\n           658694407  cycles elapsed\n            51462504  peak memory footprint\n",
+      "result": {
+        "digest": "207b0b1b18c3ef1a536e3e19a92211663f545d26589ee86957c38387b234b239",
+        "retained": 0,
+        "managed_peak": 0,
+        "after_drop": 0
+      },
+      "rss_bytes": 52068352
+    }
+  ],
+  "rss_difference_bytes": -50331648,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-zero-smoothing-borrow-memory-source-20261012.json": "7bbda8e3f711be84c728e282d3be1301293d468f212303e2523f7c593fafa371",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-zero-smoothing-borrow-source-v2-20261012.json": "9f5cdba175c17be07da8aa0aaa1e789b5faa93a4949e058825cce5da893290f5",
+    "/Users/themoretheless/.codex/tmp/rrrah-zero-smoothing-borrow-memory-executable-20261012": "ac5c15e056f664e5e21667eecf173c9b1b826e196f5d773f2bb06ed757d6a0c3",
+    "/Users/themoretheless/.codex/tmp/rrrah-zero-smoothing-borrow-memory-build-20261012.log": "27f8a0abeb57aa90f1608474250e8a69833e3ce9804ed21e266ab04ff34b5254",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-zero-smoothing-borrow-memory-20261012.py": "189eff2241e5e05c26fcc571d5f72030091142f82f82ab7638568d859db93592"
+  },
+  "scope": "Original ownedzero public smoothing unchanged versus private zero-radius validator and borrowed canonical view. Entire2048x1536opaqueRGB/HDR/negative/subnormal/signedzero output digest identical, baseline50MiBoutputcredit versus0newborrowcredit,release0. Caller-owned input included in process RSS but outsidemanagedbudget. Separatefreshprocess singlecontrol,not completepair/nativegain,hardprocesscap/universaltiming/platform/corpus/500qualification. Root notadopted."
+}

@@ -38,9 +38,7 @@ pub enum CacheError {
 }
 
 fn valid(fp: &Fingerprint) -> bool {
-    fp.mean_linear_rgb.iter().all(|v| v.is_finite())
-        && fp.luminance_stddev.is_finite()
-        && fp.luminance_stddev >= 0.0
+    fp.valid_statistics()
 }
 
 impl FingerprintCache {

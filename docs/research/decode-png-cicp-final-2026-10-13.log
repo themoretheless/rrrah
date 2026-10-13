@@ -1,0 +1,20 @@
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+error[E0382]: borrow of moved value: `bytes`
+   --> crates/rrrah-decode/src/raster.rs:343:8
+    |
+308 |     let bytes = source.as_mut();
+    |         ----- move occurs because `bytes` has type `&mut [u8]`, which does not implement the `Copy` trait
+...
+338 |         decode_raster_bytes_inner(bytes, request)?
+    |                                   ----- value moved here
+...
+343 |     if bytes.starts_with(b"\x89PNG\r\n\x1a\n")
+    |        ^^^^^ value borrowed here after move
+    |
+help: consider creating a fresh reborrow of `bytes` here
+    |
+338 |         decode_raster_bytes_inner(&mut *bytes, request)?
+    |                                   ++++++
+
+For more information about this error, try `rustc --explain E0382`.
+error: could not compile `rrrah-decode` (lib test) due to 1 previous error

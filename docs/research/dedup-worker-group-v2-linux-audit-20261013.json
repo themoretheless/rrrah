@@ -1,0 +1,48 @@
+{
+  "status": "verified_actual_linux_arm64_default_library_and_worker_groups",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-worker-group-v2-linux-20261013.json": "3b647d48d24d6f31ecbeedef8204466bc5474e408fd28337c21a3a00381e47ba",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-worker-group-v2-source-manifest-20261013.json": "9771b007de65e21408070aea4e8c56b24d2efce710013fb7d049c877d6ef0596",
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-v2-linux-20261013/test.log": "69db2f7a189605e7585fa7fac09f5ff114842fc3a4b5212c14d4a18838375cbe",
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-v2-linux-20261013/compiler.txt": "eab8ee6e77a5c1774f73d75eb08f5c51fc56a577f352d22f4d9ae6d7fce56e14",
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-v2-linux-20261013/cargo.txt": "9950bbb2d5c3417b1a068f0e81f6d3cac991a363193bdf2a22d447f5acf8b503",
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-v2-linux-20261013/kernel.txt": "7f67b792ef3690f0ffd11126f892f73bf440fd8aae130c412b436d59ce1bbb0f",
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-v2-linux-20261013/image.json": "8c48c3cc4c89447e3a56960414661102b6280905cb0f11aa7dd70aa8c923649f",
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-v2-linux-20261013/entry.sh": "68c0dbc695713817d0514eb9abf1a1280fbba7a115c80bdcede76e9b5b770211",
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-v2-linux-20261013/container-audit-state.json": "e42935b12f84932705c578b3c040bbdd004a901cdd89daf9a189ac29df6bf26d",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-worker-group-v2-linux-20261013.py": "33ae5586f5c936a21c0847657df1308509734a7ef7470f868a7b750aef4e8fa6"
+  },
+  "source": "/Users/themoretheless/.codex/tmp/rrrah-model-worker-group-fixed-v2-source-20261013",
+  "source_files": 3788,
+  "passed": 55,
+  "failed": 0,
+  "ignored": 2,
+  "executed_targets": 3,
+  "rows": [
+    {
+      "target": "unittests src/lib.rs",
+      "passed": 40,
+      "failed": 0,
+      "ignored": 2,
+      "executable": "/Users/themoretheless/.codex/tmp/rrrah-worker-group-v2-linux-qualified-20261013/rrrah_dedup-d76547b0851713ea",
+      "executable_sha256": "52d351a16ac8f452c3f05f665c8ecc98b494ff2dbf1cbfb4554edb8ca395f18f"
+    },
+    {
+      "target": "tests/worker.rs",
+      "passed": 7,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/Users/themoretheless/.codex/tmp/rrrah-worker-group-v2-linux-qualified-20261013/worker-1f63d8488feb5ff4",
+      "executable_sha256": "7243382cfc9e7fca12fc7b5364698ed29a83d8bb91601ad51299c45b39fbd5a5"
+    },
+    {
+      "target": "tests/worker_group.rs",
+      "passed": 8,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/Users/themoretheless/.codex/tmp/rrrah-worker-group-v2-linux-qualified-20261013/worker_group-8e109d09f1bc00bf",
+      "executable_sha256": "789122c5f338bae98833b99690637dd25dcfc261814dca6228ffb585696c2a2c"
+    }
+  ],
+  "scope": "Actual LinuxARM64 default-feature library/single-worker/group tests under native ARM64 ColimaVM with pinned official Rust1.98.1bookworm image. Source and host registry mounted read-only; container network disabled and Cargo offline/locked. No decode/LoFTR/Linuxformat/fullworkspace/RSS/escaped-group/hard scheduling qualification. Mac quiescence-specific unit/helper excluded by cfg. Existing defaultVM was stopped before this goal started it; no unrelated containers running at launch. Actual container/image/network/read-only mounts and ELF test programs independently verified. Two worker fixture helpers are included in recorded test counts; process-state/heartbeat checks distinguish stopped/zombie descendants from live ones. No claim descendant reaping beyond direct-child wait, hard resource bounds or universal inference precision."
+}

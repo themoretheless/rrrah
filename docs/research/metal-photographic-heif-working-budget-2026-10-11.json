@@ -1,0 +1,100 @@
+{
+  "date": "2026-10-11",
+  "problem": "24 MP 10-bit HEIF was refused because retained-output cap was incorrectly applied to three estimated working-plane equivalents.",
+  "production_fix": "Retained RGBA remains capped at 512 MiB. Before codec execution, managed requests admit retained output plus two estimated native planes, including larger encoded crop dimensions. Output reservation is transferred into the retained pixel owner. Native plugin allocations remain estimated, not exhaustively measured.",
+  "regression": "64x48 fixture encoded as 64x64: output 24576 bytes, working peak 90112 bytes. Exact budget succeeds and retains 24576; one byte less refuses and releases all credit.",
+  "external_source": {
+    "publisher_page": "https://www.rsok.com/~jrm/2026jan07_cardinal/index.html",
+    "download": "https://www.rsok.com/~jrm/2026jan07_cardinal/IMG_5499cpq.HIF",
+    "description": "Photographer-published Canon DPP HDR PQ export, not a straight-out-of-camera HEIF. External copyrighted material retained only under /tmp, not redistributed in repository.",
+    "path": "/tmp/rrrah-canon-dpp-cardinal-IMG_5499cpq.HIF",
+    "bytes": 12736916,
+    "sha256": "a816325fdf92fe04db1da0b29ffbb91e952bf426038108b982e159629fcacc1e",
+    "dimensions": [
+      6000,
+      4000
+    ],
+    "coded_tiles": "2x2, each 3008x2048",
+    "encoding": "YCbCr 4:2:2, 10-bit HEVC; CICP BT.2020/PQ, matrix9, full range",
+    "independent_oracle": "/tmp/rrrah-canon-dpp-cardinal-ffmpeg.rgba16le",
+    "oracle_sha256": "59a2692e3f8b83ede1e141d26fe41cd18a57e93364bbe977766639a7969a0082",
+    "oracle_command": "ffmpeg -hide_banner -loglevel error -threads 2 -i /tmp/rrrah-canon-dpp-cardinal-IMG_5499cpq.HIF -frames:v 1 -pix_fmt rgba64le -f rawvideo -y /tmp/rrrah-canon-dpp-cardinal-ffmpeg.rgba16le"
+  },
+  "independent_comparison": {
+    "rgb_components": 72000000,
+    "max_u16_difference": 71,
+    "mean_u16_difference": 22.478265,
+    "components_above_256": 0,
+    "alpha": "exact opaque",
+    "asserted_max_u16": 128,
+    "asserted_mean_u16": 40,
+    "boundary": "Different u16 expansion/color-conversion rounding; bounded agreement, not byte-identical decoder or photographic color fidelity."
+  },
+  "transport": "All 384000000 native float payload bytes hashed before/after swap using BLAKE3-backed ObjectPayloadHasher; metadata/extent exact, managed pressure refusal and retry, root/queue zero. Full source uploaded to Metal; SDR output 128x96 and HDR output 128x64 exact before/after restore. This is not 6000x4000 GPU readback.",
+  "results": {
+    "heif_focused": {
+      "path": "/tmp/rrrah-heif-camera-admission-decode-final-20261011.log",
+      "sha256": "da8b8b20542752b5c88be00517acd45aa0a25de9c172d8ac175f0b3f983e901b",
+      "passed": 7,
+      "failed": 0,
+      "ignored": 0
+    },
+    "decode_all": {
+      "path": "/tmp/rrrah-heif-camera-decode-all-20261011.log",
+      "sha256": "b2d6ae1a7b669bc568731184e8f93b9711f93907a81c49c622e360efdaeb1c63",
+      "passed": 993,
+      "failed": 0,
+      "ignored": 67
+    },
+    "viewer_all": {
+      "path": "/tmp/rrrah-heif-camera-viewer-all-20261011.log",
+      "sha256": "cd322be157e0249076e20adb83e9ccc5d4fd0f0ffce1238b82f3554154cfb727",
+      "passed": 204,
+      "failed": 0,
+      "ignored": 37
+    },
+    "hdr_all": {
+      "path": "/tmp/rrrah-heif-camera-hdr-all-20261011.log",
+      "sha256": "69fcf6d461f3828dd1520e4b00d8ea825b3b3c631bb4118ac5ae29d6a474e51f",
+      "passed": 14,
+      "failed": 0,
+      "ignored": 3
+    },
+    "photographic_metal": {
+      "path": "/tmp/rrrah-heif-camera-metal-final-20261011.log",
+      "sha256": "c0f354f6cec2106c01453588e55a045417501b016a3fd5be5cdcec93beca5cd8",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    }
+  },
+  "single_run_timings_ms": {
+    "native_decode": 8343.714,
+    "decode_plus_pq": 12404.184,
+    "native_window_ready": 8826.081166
+  },
+  "timing_boundary": "Optimized debug/test build, shared machine load, single observations; not a controlled release benchmark or broad speed qualification. Large HEIF loading still needs optimization.",
+  "native_window": {
+    "adapter": "Metal Apple M4 Max",
+    "surface": "Rgba16Float / ExtendedSrgbLinear",
+    "managed_budget_mib": 1024,
+    "prefetch_behind": 0,
+    "prefetch_ahead": 0,
+    "observed": "CUA screenshot shows full photographic content, exposure change and R reset redraw without another Raster ready event. Cmd-Q and process absence confirmed.",
+    "log": "/tmp/rrrah-canon-hif-native-20261011.log",
+    "log_sha256": "73d8ae7f7ac4ea452f00e3b52fad2aa4257458b8de3b084eb4fbc5e0efc75999",
+    "binary_sha256": "1dc269bfbc4366ea70c027a8e6c77839c282768ff232661ea0766a7c2082340c",
+    "known_cosmetic_gap": "Initial loading window title still says decoding full RAW before raster source classification."
+  },
+  "reproducer": "RRRAH_HEIF_CAMERA_SOURCE=/tmp/rrrah-canon-dpp-cardinal-IMG_5499cpq.HIF RRRAH_HEIF_CAMERA_ORACLE=/tmp/rrrah-canon-dpp-cardinal-ffmpeg.rgba16le RRRAH_GPU_BACKEND=metal RRRAH_GPU_OPTIONAL=0 CARGO_TARGET_DIR=/tmp/rrrah-required-corpus-target cargo test -p rrrah --test hdr_raster_swap photographic_heif_pq_full_resolution_swap_and_metal -- --exact --ignored --nocapture",
+  "limitations": [
+    "One Canon DPP photographic PQ producer; direct camera/Sony HLG/other camera producers remain unqualified.",
+    "Working memory reservation is conservative admission credit, not proof of complete native codec heap accounting.",
+    "Physical HDR brightness/color, actual slow disk and OS-wide memory-pressure qualification remain open.",
+    "Full 100-format scope and NVIDIA (deferred by user) remain incomplete."
+  ],
+  "source_sha256": {
+    "crates/rrrah-decode/src/heif.rs": "fb548c2f0a71e6ae2787e1f66dd132bdd0f6f8ceea5f8541f600fd6349f059ab",
+    "crates/rrrah-app/tests/hdr_raster_swap.rs": "181113b9b59c2967fe61f18b94e3c6eab8b840cb9f4dbc03cfdc744c4dd5f2cb"
+  }
+}

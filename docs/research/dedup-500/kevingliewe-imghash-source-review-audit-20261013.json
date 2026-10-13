@@ -1,0 +1,467 @@
+{
+  "status": "verified_complete_implementation_review_and10_real_cli_controls",
+  "source": "/Users/themoretheless/.codex/tmp/rrrah-kevingliewe-imghash-source-20261013",
+  "repository": "KevinGliewe/imghash",
+  "commit": "920106d6e4cb31bc2d075cd85823457823fc6181",
+  "files": {
+    ".github/workflows/CD.yml": {
+      "git_blob": "20a06280191d0a0e47c46c8f17427b308773f9cc",
+      "sha256": "ea1d10caf96134043d4c46ef5dd811d77505754cbc2faa48452376bb606f4785",
+      "bytes": 1689
+    },
+    ".gitignore": {
+      "git_blob": "c41cc9e35e38efc7d080637859e6c72940b374a2",
+      "sha256": "937456f730114c410243b25f3587e29a6c608b3a79356adafeefb6b960e004b2",
+      "bytes": 7
+    },
+    ".vscode/launch.json": {
+      "git_blob": "b47ed27dc5453b4d614ef576dfbc4b28d87b22fa",
+      "sha256": "e1be92d4d7977eb1b29dc9fb4e8612064bcccd8e3bdbda0a7e11b273496f1ae6",
+      "bytes": 1379
+    },
+    "Cargo.lock": {
+      "git_blob": "b11a53ebb9ba9256ba243ba305309a59e0322df5",
+      "sha256": "4d9604ae16802bff0d2de1ea0a4976680c27f97afed5b5f6539b16d511d97ce1",
+      "bytes": 19916
+    },
+    "Cargo.toml": {
+      "git_blob": "cdfe7b14e8c1de83b0057b24d73bb789a48576d1",
+      "sha256": "70d7bddd9ff8601d5f9c55a250f404ef0beca3c4302528b9829153d95e244d88",
+      "bytes": 287
+    },
+    "build.rs": {
+      "git_blob": "1723685917a02888c13b3a580d74a837c016e5d9",
+      "sha256": "38b0c1a3b00a3966bd1cd27aba4aa3ee56cc212c8676c1e66c4edb3da9832f4a",
+      "bytes": 95
+    },
+    "license.txt": {
+      "git_blob": "3dac0257ff69071b5b6da58dc2823e86bcb20e05",
+      "sha256": "1a45857c7bb55b7948c5cdc13cf04314562db5aa2650348ff63dccc7da95bd69",
+      "bytes": 1055
+    },
+    "readme.md": {
+      "git_blob": "066be37a1a4040d04b47d592d8aa81745cbde988",
+      "sha256": "d09f24085665f149a10ba5e08f54f4591eae6b2d62775592515d13d0dc67b42c",
+      "bytes": 4413
+    },
+    "scripts/update_version.py": {
+      "git_blob": "655a52d4cfbdc043433ade28b5fdbb85d47ced7f",
+      "sha256": "797ca5f44429dd521aaf1e45d6cba2e6b13ded92e71b0a5e4d10aca4eef40b60",
+      "bytes": 594
+    },
+    "src/main.rs": {
+      "git_blob": "428996dbda9a4bd09b48e7c056d6f10917c936bd",
+      "sha256": "faf93d5f3988145fef30faf87e0583de0d71501867288d28844d9a9b70ccfcf7",
+      "bytes": 6477
+    },
+    "testdata/Lenna.png": {
+      "git_blob": "59ef68aabd033341028ccd2b1f6c5871c02b9d7b",
+      "sha256": "7e497501a28bcf9a353ccadf6eb9216bf098ac32888fb542fb9bfe71d486761f",
+      "bytes": 473831
+    },
+    "testdata/Lenna_blocked.png": {
+      "git_blob": "db73f9b6511a9292e9df39872ac07d2b15a15892",
+      "sha256": "97d1618b73f03f9f45e5ae2db783b86d3d005b8add60e5cdd33e27b56993269a",
+      "bytes": 279377
+    },
+    "testdata/Lenna_noisy.png": {
+      "git_blob": "a8d0cafe21fe80abc44edcc7b61f8ce24873745f",
+      "sha256": "05d8d7282aa7193d83ad8c08b9292cbb6014b317d604607500e3bece75615103",
+      "bytes": 647864
+    },
+    "testdata/Peppers.png": {
+      "git_blob": "181777a5d90c25c8b4ad17bc632bbd43d31e79e9",
+      "sha256": "3be59a600d9c80f0c205e296a1f2a4ffeb5ee393165bdc698d8dae0e2d8dff55",
+      "bytes": 33739
+    }
+  },
+  "fully_read_implementation": [
+    "src/main.rs",
+    "build.rs",
+    "scripts/update_version.py"
+  ],
+  "fully_read_other_text": [
+    "Cargo.toml",
+    "readme.md",
+    "license.txt",
+    ".gitignore",
+    ".vscode/launch.json",
+    ".github/workflows/CD.yml"
+  ],
+  "lock_scope": "Complete TOML parsed and original Git blob unchanged after locked build",
+  "lock_packages": [
+    {
+      "name": "adler",
+      "version": "1.0.2"
+    },
+    {
+      "name": "adler32",
+      "version": "1.2.0"
+    },
+    {
+      "name": "ansi_term",
+      "version": "0.11.0"
+    },
+    {
+      "name": "atty",
+      "version": "0.2.14"
+    },
+    {
+      "name": "autocfg",
+      "version": "1.0.1"
+    },
+    {
+      "name": "base64",
+      "version": "0.13.0"
+    },
+    {
+      "name": "bitflags",
+      "version": "1.3.2"
+    },
+    {
+      "name": "built",
+      "version": "0.5.1"
+    },
+    {
+      "name": "bytemuck",
+      "version": "1.7.2"
+    },
+    {
+      "name": "byteorder",
+      "version": "1.4.3"
+    },
+    {
+      "name": "cargo-lock",
+      "version": "7.0.1"
+    },
+    {
+      "name": "cc",
+      "version": "1.0.69"
+    },
+    {
+      "name": "cfg-if",
+      "version": "1.0.0"
+    },
+    {
+      "name": "chrono",
+      "version": "0.4.19"
+    },
+    {
+      "name": "clap",
+      "version": "2.33.3"
+    },
+    {
+      "name": "color_quant",
+      "version": "1.1.0"
+    },
+    {
+      "name": "crc32fast",
+      "version": "1.2.1"
+    },
+    {
+      "name": "crossbeam-channel",
+      "version": "0.5.1"
+    },
+    {
+      "name": "crossbeam-deque",
+      "version": "0.8.1"
+    },
+    {
+      "name": "crossbeam-epoch",
+      "version": "0.9.5"
+    },
+    {
+      "name": "crossbeam-utils",
+      "version": "0.8.5"
+    },
+    {
+      "name": "custom_derive",
+      "version": "0.1.7"
+    },
+    {
+      "name": "deflate",
+      "version": "0.8.6"
+    },
+    {
+      "name": "either",
+      "version": "1.6.1"
+    },
+    {
+      "name": "enum_derive",
+      "version": "0.1.7"
+    },
+    {
+      "name": "form_urlencoded",
+      "version": "1.0.1"
+    },
+    {
+      "name": "gif",
+      "version": "0.11.2"
+    },
+    {
+      "name": "git2",
+      "version": "0.13.21"
+    },
+    {
+      "name": "hermit-abi",
+      "version": "0.1.19"
+    },
+    {
+      "name": "idna",
+      "version": "0.2.3"
+    },
+    {
+      "name": "image",
+      "version": "0.23.14"
+    },
+    {
+      "name": "img_hash",
+      "version": "3.2.0"
+    },
+    {
+      "name": "imghash",
+      "version": "0.0.0"
+    },
+    {
+      "name": "jobserver",
+      "version": "0.1.23"
+    },
+    {
+      "name": "jpeg-decoder",
+      "version": "0.1.22"
+    },
+    {
+      "name": "lazy_static",
+      "version": "1.4.0"
+    },
+    {
+      "name": "libc",
+      "version": "0.2.99"
+    },
+    {
+      "name": "libgit2-sys",
+      "version": "0.12.22+1.1.0"
+    },
+    {
+      "name": "libz-sys",
+      "version": "1.1.3"
+    },
+    {
+      "name": "log",
+      "version": "0.4.14"
+    },
+    {
+      "name": "matches",
+      "version": "0.1.9"
+    },
+    {
+      "name": "memoffset",
+      "version": "0.6.4"
+    },
+    {
+      "name": "miniz_oxide",
+      "version": "0.3.7"
+    },
+    {
+      "name": "miniz_oxide",
+      "version": "0.4.4"
+    },
+    {
+      "name": "num-complex",
+      "version": "0.2.4"
+    },
+    {
+      "name": "num-integer",
+      "version": "0.1.44"
+    },
+    {
+      "name": "num-iter",
+      "version": "0.1.42"
+    },
+    {
+      "name": "num-rational",
+      "version": "0.3.2"
+    },
+    {
+      "name": "num-traits",
+      "version": "0.2.14"
+    },
+    {
+      "name": "num_cpus",
+      "version": "1.13.0"
+    },
+    {
+      "name": "percent-encoding",
+      "version": "2.1.0"
+    },
+    {
+      "name": "pkg-config",
+      "version": "0.3.19"
+    },
+    {
+      "name": "png",
+      "version": "0.16.8"
+    },
+    {
+      "name": "proc-macro2",
+      "version": "1.0.28"
+    },
+    {
+      "name": "quote",
+      "version": "1.0.9"
+    },
+    {
+      "name": "rayon",
+      "version": "1.5.1"
+    },
+    {
+      "name": "rayon-core",
+      "version": "1.9.1"
+    },
+    {
+      "name": "rustdct",
+      "version": "0.4.0"
+    },
+    {
+      "name": "rustfft",
+      "version": "3.0.1"
+    },
+    {
+      "name": "scoped_threadpool",
+      "version": "0.1.9"
+    },
+    {
+      "name": "scopeguard",
+      "version": "1.1.0"
+    },
+    {
+      "name": "semver",
+      "version": "1.0.4"
+    },
+    {
+      "name": "serde",
+      "version": "1.0.127"
+    },
+    {
+      "name": "serde_derive",
+      "version": "1.0.127"
+    },
+    {
+      "name": "strength_reduce",
+      "version": "0.2.3"
+    },
+    {
+      "name": "strsim",
+      "version": "0.8.0"
+    },
+    {
+      "name": "syn",
+      "version": "1.0.74"
+    },
+    {
+      "name": "textwrap",
+      "version": "0.11.0"
+    },
+    {
+      "name": "tiff",
+      "version": "0.6.1"
+    },
+    {
+      "name": "time",
+      "version": "0.1.44"
+    },
+    {
+      "name": "tinyvec",
+      "version": "1.3.1"
+    },
+    {
+      "name": "tinyvec_macros",
+      "version": "0.1.0"
+    },
+    {
+      "name": "toml",
+      "version": "0.5.8"
+    },
+    {
+      "name": "transpose",
+      "version": "0.1.0"
+    },
+    {
+      "name": "transpose",
+      "version": "0.2.1"
+    },
+    {
+      "name": "unicode-bidi",
+      "version": "0.3.6"
+    },
+    {
+      "name": "unicode-normalization",
+      "version": "0.1.19"
+    },
+    {
+      "name": "unicode-width",
+      "version": "0.1.9"
+    },
+    {
+      "name": "unicode-xid",
+      "version": "0.2.2"
+    },
+    {
+      "name": "url",
+      "version": "2.2.2"
+    },
+    {
+      "name": "vcpkg",
+      "version": "0.2.15"
+    },
+    {
+      "name": "vec_map",
+      "version": "0.8.2"
+    },
+    {
+      "name": "wasi",
+      "version": "0.10.0+wasi-snapshot-preview1"
+    },
+    {
+      "name": "weezl",
+      "version": "0.1.5"
+    },
+    {
+      "name": "winapi",
+      "version": "0.3.9"
+    },
+    {
+      "name": "winapi-i686-pc-windows-gnu",
+      "version": "0.4.0"
+    },
+    {
+      "name": "winapi-x86_64-pc-windows-gnu",
+      "version": "0.4.0"
+    }
+  ],
+  "controls": "docs/research/dedup-500/kevingliewe-imghash-controls-20261013.json",
+  "controls_sha256": "13d00d13b2d1f54a40895027be619d5806678f59bb7fe2e7f5d7a786f3bc64b5",
+  "builds": [
+    {
+      "status": "terminal_failure_missing_cached_custom_derive",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-kevingliewe-imghash-build-20261013.log"
+    },
+    {
+      "status": "passed_original_lock",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-kevingliewe-imghash-build-online-20261013.log"
+    }
+  ],
+  "binary_fixture_scope": "Four PNG Git blobs verified, Lenna and Peppers actually decoded; no visual QA or blocked/noisy execution",
+  "whole_implementation_complete": true,
+  "whole_repo_complete": false,
+  "tests_detected": "No Rust test definitions in pinned source; custom CLI controls executed",
+  "findings": [
+    "Lowercase gradient passes clap accepted-value check but enum parse exits4",
+    "Zero width produces empty hash with exit0",
+    "Black and white actual RGB PNGs yield gradient distance0",
+    "Malformed numeric dimensions and missing first/second files return distinct nonzero codes",
+    "Raw hex output omits recipe/algorithm/dimensions provenance; no storage or duplicate admission layer"
+  ],
+  "adopted_code": false,
+  "license": "MIT Kevin Gliewe2021"
+}

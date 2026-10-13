@@ -1,0 +1,50 @@
+--- before/vendor/hayro/src/native_spatial.rs
++++ after/vendor/hayro/src/native_spatial.rs
+@@ -411,6 +411,8 @@
+     // Point mode builds the coverage bits once below. Cell mode charges each
+     // incremental update through the polygon selector's declared work cost.
+     if point_override.is_some() {*remaining=remaining.checked_sub(regions.len())?;}
++    let mut execution_stack:Option<(Vec<Entry>,Credit)>=None;
++    let mut root_frame:Option<Box<PaintFrame>>=None;
+     let mut fused_child:Option<Box<PaintFrame>>=None;
+     let mut last_route:Option<usize>=None;
+     let mut evaluate=|_winding:&[i32],point:kurbo::Point,coverage:&[u64;64],occupied_words:u64| {
+@@ -640,10 +642,22 @@
+                             Some(source)
+                         })
+         };
+-        *remaining=remaining.checked_sub(1)?;
+-        let _credit=admit((maximum+1).checked_mul(size_of::<Entry>())?)?;
+-        let mut stack=Vec::<Entry>::new();stack.try_reserve_exact(maximum+1).ok()?;
+-        stack.push((PaintFrame::admitted(&[backdrop],space,false,false,cancelled,admit)?,None));
++        if execution_stack.is_none() {
++            // Debit the actual stack allocation once, retaining its admission
++            // with empty storage between fragments instead of reallocating.
++            if cancelled() {return None;}*remaining=remaining.checked_sub(1)?;
++            let credit=admit((maximum+1).checked_mul(size_of::<Entry>())?)?;
++            let mut stack=Vec::<Entry>::new();stack.try_reserve_exact(maximum+1).ok()?;
++            if stack.capacity()>maximum+1 || cancelled() {return None;}
++            execution_stack=Some((stack,credit));
++        }
++        let stack=&mut execution_stack.as_mut()?.0;
++        if !stack.is_empty() {return None;}
++        let root=if let Some(mut cached)=root_frame.take() {
++            if cached.reset_single_pixel_root(backdrop,space,cancelled)? {cached}
++            else {drop(cached);PaintFrame::admitted(&[backdrop],space,false,false,cancelled,admit)?}
++        } else {PaintFrame::admitted(&[backdrop],space,false,false,cancelled,admit)?};
++        stack.push((root,None));
+         let mut active_mask=None;
+         let mut position=0usize;let mut pending_run:Option<(usize,State,Credit)>=None;
+         while position<routes[route_index].commands.len() {
+@@ -835,8 +849,9 @@
+             position+=1;
+         }
+         if stack.len()!=1 {return None;}
+-        let buffer=stack.pop()?.0.finish(cancelled)?;
+-        let pixel=buffer.pixels.first().copied()?;
++        let root=stack.pop()?.0;
++        let pixel=root.finished_single_pixel(cancelled)?;
++        root_frame=Some(root);
+         if routes[route_index].constant {routes[route_index].result=Some(pixel);}
+         Some(pixel)
+     };

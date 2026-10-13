@@ -1,0 +1,237 @@
+{
+  "date": "2026-10-13",
+  "scope": "Native selected and hit-tested mesh component interpolation; experimental AI replay validation, not normal-viewer or independent-color qualification",
+  "owner_diagnosis": {
+    "pixel": [
+      145,
+      50
+    ],
+    "owner_entries": 727,
+    "owner_words": 12,
+    "monotonic": true,
+    "note": "Already uses ordered maximum owner lookup; no nonmonotonic search optimization adopted"
+  },
+  "change": "Share component interpolation helper; count4 uses fixed independent f64 lanes with vertex-order accumulation initialized at -0.0 matching Rust Sum. Other counts retain scalar summation. No fused math requested, precision reduction, geometry change, heap allocation or retained metadata.",
+  "validation": {
+    "source_tests_passed": 116,
+    "source_benchmark_ignored": 1,
+    "compositor_tests_passed": 211,
+    "compositor_tests_ignored": 12,
+    "scalar_bit_reference_cases": 3072,
+    "edge_values": [
+      "negative zero",
+      "minimum f32 subnormal",
+      "minimum positive normal",
+      "one"
+    ],
+    "prior_seven_probes_exact": {
+      "(199,25)": true,
+      "(138,39)": true,
+      "(137,37)": true,
+      "(176,46)": true,
+      "(149,56)": true,
+      "(138,36)": true,
+      "(145,50)": true,
+      "(195,37)": true
+    },
+    "target": [
+      145,
+      50
+    ],
+    "target_completed": false,
+    "target_fragments": 233053,
+    "managed_peak_bytes": 239197736,
+    "final_credit_bytes": 0,
+    "work_admission_cache_limits_unchanged": true
+  },
+  "benchmark": {
+    "scope": "Single synthetic CMYK triangle, varying points; complete bounded selected-triangle sample API, not full-page throughput",
+    "blocks": 4,
+    "sequence": "ABBA",
+    "warmup_runs_excluded": 2,
+    "measured_runs": 16,
+    "iterations_per_run": 5000000,
+    "work_per_run": 25000000,
+    "checksums_exact": true,
+    "block_ratios": [
+      1.1693554710941083,
+      1.0654138188215319,
+      0.9926388551434855,
+      1.1255643219973983
+    ],
+    "median_ratio": 1.095489070409465,
+    "median_ms": {
+      "baseline": 147.4667085,
+      "candidate": 132.5201045
+    },
+    "one_block_slightly_slower": true,
+    "report": "ai-mesh-interpolation-batched-abba-2026-10-13.json",
+    "boundary": "Modest kernel-level median gain; no guarantee across input patterns or whole AI viewer",
+    "confirmation": {
+      "report": "ai-mesh-interpolation-confirm-abba-2026-10-13.json",
+      "block_ratios": [
+        1.1098043321655464,
+        1.1231062102371632,
+        1.1193825990990292,
+        1.0754600487129067
+      ],
+      "median_ratio": 1.1145934656322878
+    },
+    "combined": {
+      "blocks": 8,
+      "measured_runs": 32,
+      "excluded_warmups": 4,
+      "samples_per_measured_run": 5000000,
+      "median_block_ratio": 1.1145934656322878,
+      "positive_blocks": 7,
+      "ratio_range": [
+        0.9926388551434855,
+        1.1693554710941083
+      ]
+    }
+  },
+  "probes": {
+    "(145,50)": {
+      "completed": false,
+      "alpha": null,
+      "components": null,
+      "white_rgb": null
+    },
+    "(176,46)": {
+      "completed": true,
+      "alpha": 0.9999999999999861,
+      "components": [
+        0.9095085325667113,
+        0.5334216125488578,
+        0.9403839642789843,
+        0.0015903303523600032
+      ],
+      "white_rgb": [
+        46.68456852436351,
+        109.6108715236207,
+        72.34475120902313
+      ]
+    },
+    "(138,39)": {
+      "completed": true,
+      "alpha": 0.23000043989211091,
+      "components": [
+        0.2760619845691583,
+        0.7164633440344005,
+        0.9244087288389119,
+        0.1528051896347068
+      ],
+      "white_rgb": [
+        234.1938250797703,
+        216.73068273985277,
+        207.15040185202014
+      ]
+    },
+    "(195,37)": {
+      "completed": true,
+      "alpha": 1.0,
+      "components": [
+        0.653609391682176,
+        0.18663448442467723,
+        0.902922408827704,
+        0.03779044552978028
+      ],
+      "white_rgb": [
+        99.64779853820801,
+        156.11963868141174,
+        77.59195804595947
+      ]
+    },
+    "(137,37)": {
+      "completed": true,
+      "alpha": 0.9757737328883405,
+      "components": [
+        0.2167979502787616,
+        0.6457726984690586,
+        0.8255252253197052,
+        0.11741609584381041
+      ],
+      "white_rgb": [
+        181.5827786284322,
+        107.32818614673408,
+        66.42946451349978
+      ]
+    },
+    "(138,36)": {
+      "completed": true,
+      "alpha": 0.9999628213382107,
+      "components": [
+        0.3383463976795398,
+        0.753939134713375,
+        0.7768495160001363,
+        0.19377905992737132
+      ],
+      "white_rgb": [
+        148.31163494679748,
+        78.09125508175765,
+        62.07648508984009
+      ]
+    },
+    "(199,25)": {
+      "completed": true,
+      "alpha": 1.0,
+      "components": [
+        0.7135069188516239,
+        0.17809831327578418,
+        0.9554537787768727,
+        0.0549916907975484
+      ],
+      "white_rgb": [
+        81.60994604229927,
+        151.66586726903915,
+        70.53911849856377
+      ]
+    },
+    "(149,56)": {
+      "completed": true,
+      "alpha": 0.21442580534571978,
+      "components": [
+        0.3285820137140101,
+        0.861481439860559,
+        0.9346276847653974,
+        0.2474774505728342
+      ],
+      "white_rgb": [
+        230.74855138884672,
+        212.56374303909558,
+        208.50489577871136
+      ]
+    }
+  },
+  "sha256": {
+    "vendor/hayro-interpret/src/encode/native_source.rs": "588b6db18e8fc49ceab689e97fdacc402c91c0a183799cc8e68e8730da0bbe55",
+    "vendor/hayro/src/native_spatial.rs": "d946b95c54d4b02d0a67f6b40f18c3b0b51519202b80efbea629f9b763c29b68",
+    "scripts/bench-native-mesh-interpolation.py": "359052a8cf5fbeff6da0a018b7b835ec15ec0bcaef20fdac3bbe97bba8aa8a45",
+    "docs/research/ai-owner-plan-localized-2026-10-13.log": "e01afbe0d7f58d0907accec14a2c17bc7d08fd8ad27263ebeb17f6b7df04bec0",
+    "docs/research/ai-mesh-interpolation-scalar-suite-2026-10-13.log": "60c399b1cf384be56829a4992c273cde0b7531fc9f0f81d31a0728741547df6c",
+    "docs/research/ai-mesh-interpolation-batched-suite-2026-10-13.log": "3dae029524d0ff76fb5fbe81f773bc5cf5a2ee55dd0c7eb4f80a4f788ac36bc7",
+    "docs/research/ai-mesh-interpolation-batched-abba-2026-10-13.json": "9d367f784db42ebb035dfe58a8f11eaa52913ec1b0fe7008946732e9353828ed",
+    "docs/research/ai-mesh-interpolation-compositor-suite-2026-10-13.log": "a7d545f9c86b2a84c0847489a909b542031079c1d031ff69e5f5981799a77835",
+    "docs/research/ai-mesh-interpolation-original-2026-10-13.log": "ec51aa38d2af1c30f08101f96c6c140c7847a83b465e794e258608e17e22977c",
+    "docs/research/ai-mesh-interpolation-change-2026-10-13.patch": "68b6f0208ed7cfa98fbb430a69f6bff6a018992f7e15d40820643c3518549af5",
+    "docs/research/ai-mesh-interpolation-page-2026-10-13.log": "2c72375adc7ca88e94544eda0e41402c737af1ebca0559e7a5ffcd79126815ff",
+    "docs/research/ai-mesh-interpolation-confirm-abba-2026-10-13.json": "6ef6c92b18b540fc0ff9c4f5d7593558f977f1edcce9152ce35773d6fdd8627c"
+  },
+  "page": {
+    "width": 301,
+    "height": 246,
+    "completed": 15195,
+    "total": 74046,
+    "next_refusal": [
+      145,
+      50
+    ],
+    "deadline": false,
+    "peak_bytes": 239197736,
+    "final_credit_bytes": 0,
+    "elapsed_seconds": 45.88,
+    "exit_code": 101,
+    "partial_output_published": false,
+    "boundary": "Same completion prefix; no whole-page speedup established"
+  }
+}

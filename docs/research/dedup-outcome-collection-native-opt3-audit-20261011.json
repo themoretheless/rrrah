@@ -1,0 +1,31 @@
+{
+  "status": "complete_bounded_explicit_unknown_collection_opt3_qualification",
+  "generic_tests": 202,
+  "opt3_tests": 16,
+  "programs": 24,
+  "native_invocations": 3,
+  "frozen_files": 3081,
+  "source_changes": [
+    "crates/rrrah-dedup/src/portfolio_collection.rs",
+    "crates/rrrah-dedup/src/model_loftr.rs",
+    "crates/rrrah-dedup/tests/portfolio_collection.rs",
+    "scripts/dedup-loftr-native-probe/src/bin/tile_outcome_collection_files.rs"
+  ],
+  "current_changed_sources_match": true,
+  "corpus_geometry_reason_matches_previous_error_exactly": true,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-outcome-collection-snapshot-20261011.json": "ec6ae5cc68073bcf661d78f516985d44afd0163eaa8f06cbd9be56cb2d09b368",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-outcome-collection-generic-20261011.json": "45dc94ab706d21d2fecfa1c843c8d9fe40eb642b0bb0a07cfde86942e7b1fc2f",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-outcome-collection-native-opt3-20261011.json": "2e45a40b39b63b3b530a1f733b3d8cf52f33c759b584ef53d89d5efd4bcc3c4a",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-dependency-observation-snapshot-20261011.json": "bb6ca5ac97a5765a361c2c519c01855ec7f83ed3926a0668e3d8b1b01b371c57",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/current-all-query-origins-qualified-20261011/00023.json.gz": "a04ac2834643fd5d1e7493b6b3af588d8a290f3bff411115e7e6afe8b3d4f6e2",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-outcome-collection-opt3-generic-20261011.json": "3c3aa1791a1bbfc926dc2669769dcb6983954b92baed6fee2d5ea79f1719e0d0",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-outcome-collection-native-opt3-build-artifacts-20261011.jsonl": "88fe89f771dc4e5b7e64266153097c186b142b0f6befb8b1bf498d1bc56e6cc8",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-outcome-collection-native-opt3-20261011.py": "91ef3f667c6146abbd65d0d62b870d6d3d6f63c8b29f48f39e51c33457816ea2"
+  },
+  "limits": [
+    "Only the new outcome API retains unknowns; legacy API behavior remains compatible",
+    "One policy-equivalent real corpus unknown plus self-support and missing-weights controls",
+    "Full corpus, Linux current source, indexed scaling, hard Torch RSS and all-format support remain open"
+  ]
+}

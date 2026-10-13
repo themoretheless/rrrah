@@ -1,0 +1,73 @@
+{
+  "scope": "Fresh current diagnostic native spatial replay at VectorApple pixel78,144 and independent Poppler original-source crops",
+  "native": {
+    "alpha": 0.42510841766988045,
+    "white_rgb": [
+      252.69301177698588,
+      239.358423812085,
+      217.02721046203962
+    ],
+    "events": 2755,
+    "peak_admitted_bytes": 202254128,
+    "final_credit": 0,
+    "completed": true
+  },
+  "oracles": [
+    {
+      "scale": 1,
+      "mean_rgb": [
+        255.0,
+        255.0,
+        255.0
+      ],
+      "nonwhite_fraction": 0.0,
+      "artifact": "docs/research/ai-white-probe-oracle-2026-10-13.ppm",
+      "sha256": "3aaa77f17582428b99e7f04836135214e7ae36328fb233b7b284da36da2dafb3"
+    },
+    {
+      "scale": 16,
+      "mean_rgb": [
+        253.109375,
+        240.62109375,
+        219.95703125
+      ],
+      "nonwhite_fraction": 0.3984375,
+      "artifact": "docs/research/ai-white-probe-oracle-16x-2026-10-13.ppm",
+      "sha256": "4b58e079e5ae7e27365c5cb2aee9ac935d94055e33738d8d9a3ba8608181234a"
+    },
+    {
+      "scale": 32,
+      "mean_rgb": [
+        253.0546875,
+        240.1533203125,
+        218.7724609375
+      ],
+      "nonwhite_fraction": 0.412109375,
+      "artifact": "docs/research/ai-white-probe-oracle-32x-2026-10-13.ppm",
+      "sha256": "e01812809086e4f5a153669fb44b074fc67c0633aa4df9b3eb22333c60695c6d"
+    }
+  ],
+  "harness": "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-ai-white-probe-20261013-ub6zt2hk/hayro/Cargo.toml",
+  "source_snapshot_verified_identical": true,
+  "dependency_versions_match_root_lock": true,
+  "findings": [
+    "72dpi white result is not stable across reference resolutions; high-resolution reference shows partial colored source coverage",
+    "Current spatial diagnostic avoids old opaque-root result, but RGB differs from high-resolution averaged reference",
+    "Do not change geometry to force white solely from the72dpi pixel; next classify coverage and color integration separately"
+  ],
+  "limitations": [
+    "Diagnostic only, not production AI viewer implementation or whole-page qualification",
+    "Poppler oracle has previously documented ICC input sanitycheck correction and matched CMYK profile",
+    "First standalone lock selected differing cached dependency versions; final reported replay uses root-lock versions",
+    "No tolerance or acceptance relaxation"
+  ],
+  "sha256": {
+    "docs/research/ai-current-white-probe-root-lock-2026-10-13.log": "d96309e39e25a7c62841ca72e34bae94be91aa8d12fcfbf9dd8e5576281ebd91",
+    "Cargo.lock": "8dcda5a88891672388a8e57fe5a871fec71146a8ef44b2cdd29fbeaa186e2bf3",
+    "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-ai-white-probe-20261013-ub6zt2hk/hayro/Cargo.lock": "9b6e6818743bf832f57e31bd0c07eac02021e88cc5dba0841d8918be05459b5b",
+    "vendor/hayro/src/knockout_interpreter.rs": "d68df928d7948535d8f7c13848937cd80629e76174bdb489d9beeb9c236b1bf9",
+    "vendor/hayro/src/native_spatial.rs": "ccdbd143f758d1cd66d21f37ef272dfcc452a4e88cbd4e8542ebc518a600ee3a",
+    "tests/fixtures/data/metal-recovery/ai-corpus/VectorApple.ai": "c5fc34346629c3379cee6065c45b7de0b620be822604551d1463d8e691b03d06",
+    "vendor/hayro-interpret/assets/CGATS001Compat-v2-micro.icc": "73e1ba37d2bad5bab2a964f40a9eed96209666efc067c3322626214bbef234a0"
+  }
+}

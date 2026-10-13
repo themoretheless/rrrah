@@ -1,0 +1,71 @@
+{
+  "status": "complete_bounded_frozen_joint_model_tests",
+  "producer_pid": 84071,
+  "source_manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-projective-buffer-reuse-snapshot-20261011.json",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-projective-buffer-reuse-snapshot-20261011.json": "81a88b2e8c8c6fa4c69387a16cdde2452bfe4ee109036fe0c0cba69aebec7879",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/qualify-dedup-projective-buffer-reuse-countfix-20261011.py": "5ddc3cd264a2269fa52f7c42d4d06cb45003cedc6f107bd6d403167581769a0d",
+    "/Users/themoretheless/.codex/tmp/rrrah-projective-buffer-reuse-countfix-qualified-20261011/build.jsonl": "e340102368179af11bccd7c18f8338ce5c7bef265c4557fb3ce3e47e9f71360f",
+    "/Users/themoretheless/.codex/tmp/rrrah-projective-buffer-reuse-countfix-qualified-20261011/build.log": "e3b272a0e36c5a502f086f886bbe4790ebf0edebff2e84db64cac6072dccbd8d"
+  },
+  "build_command": [
+    "cargo",
+    "test",
+    "--manifest-path",
+    "/Users/themoretheless/.codex/tmp/rrrah-projective-buffer-reuse-snapshot-20261011/Cargo.toml",
+    "-p",
+    "rrrah-dedup",
+    "--no-default-features",
+    "--test",
+    "geometry",
+    "--test",
+    "projective_domains",
+    "--test",
+    "joint_projective",
+    "--locked",
+    "--offline",
+    "--no-run",
+    "--message-format=json",
+    "--config",
+    "profile.dev.package.rrrah-dedup.opt-level=3",
+    "--target-dir",
+    "/Users/themoretheless/.codex/tmp/rrrah-opposite-native-snapshot-20261011/target"
+  ],
+  "results": [
+    {
+      "suite": "geometry",
+      "tests": 9,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-projective-buffer-reuse-countfix-qualified-20261011/geometry",
+      "binary_sha256": "62e6100908132867d5f5fc12d954703bed9e51d264f2b1567afbe32711db333e",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-projective-buffer-reuse-countfix-qualified-20261011/geometry.log",
+      "log_sha256": "138488b49f98ec2059b65b2a2c4918fa5a0eb4d16093401187f6bc0db0e06513"
+    },
+    {
+      "suite": "projective_domains",
+      "tests": 4,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-projective-buffer-reuse-countfix-qualified-20261011/projective_domains",
+      "binary_sha256": "63917dcc1f1a3e10a79bc289cd45368e7b20d415c97bfbeaa1418e414954c90c",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-projective-buffer-reuse-countfix-qualified-20261011/projective_domains.log",
+      "log_sha256": "829a892444f8251e140ba313b209cabfa302303e63ede88754d25f9346e9a86a"
+    },
+    {
+      "suite": "joint_projective",
+      "tests": 4,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-projective-buffer-reuse-countfix-qualified-20261011/joint_projective",
+      "binary_sha256": "c6655f6fdc10ebd197ae54f55200b9be76a8f84d2217910aa4ba627825591f4f",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-projective-buffer-reuse-countfix-qualified-20261011/joint_projective.log",
+      "log_sha256": "0fca143b7dace548aee9f3a7653d8fcdaa9f346b9afab85e14b9f2df8357d817"
+    }
+  ],
+  "scope": "Frozen compatible four-crate source and lock, new joint primitive plus legacy/pair/collection tests. Source coherent before/after; root concurrent HDR edits preserved outside this gate. Not full workspace/platform/corpus/RSS qualification.",
+  "build_pid": 84084,
+  "tests": 17,
+  "owned_root_matches": {
+    "crates/rrrah-dedup/src/local_scan.rs": true,
+    "crates/rrrah-dedup/src/geometry.rs": true,
+    "crates/rrrah-dedup/src/anchor_rank_file.rs": true,
+    "crates/rrrah-dedup/src/search_portfolio.rs": true,
+    "crates/rrrah-dedup/src/portfolio_collection.rs": true,
+    "crates/rrrah-dedup/src/model_loftr.rs": false
+  }
+}

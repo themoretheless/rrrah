@@ -1,0 +1,105 @@
+--- before/vendor/hayro-interpret/src/encode/native_source.rs
++++ after/vendor/hayro-interpret/src/encode/native_source.rs
+@@ -97,6 +97,23 @@
+     order: Vec<usize>,
+     nodes: Vec<MeshNode>,
+ }
++#[inline]
++fn interpolate_mesh_components(colors:&[[f32;4];3],weights:[f64;3],count:usize)->[f32;4] {
++    if count==4 {
++        // Fixed independent lanes permit vectorization without reassociation,
++        // fused arithmetic, lower precision, or a different work debit.
++        let mut sums=[-0f64;4];
++        for vertex in 0..3 {for channel in 0..4 {
++            sums[channel]+=weights[vertex]*f64::from(colors[vertex][channel]);
++        }}
++        return sums.map(|value|value as f32);
++    }
++    let mut components=[0.;4];
++    for (channel,out) in components.iter_mut().enumerate().take(count) {
++        *out=(0..3).map(|i|weights[i]*f64::from(colors[i][channel])).sum::<f64>() as f32;
++    }
++    components
++}
+ impl NativeTriangle {
+     fn bounds(&self) -> kurbo::Rect {
+         let mut bounds = kurbo::Rect::from_points(self.points[0], self.points[1]);
+@@ -607,12 +624,9 @@
+         let total = weights.iter().sum::<f64>();
+         if !total.is_finite() || total <= 0. { return Err(Invalid); }
+         let weights = weights.map(|w|w / total);
+-        let mut components = [0.;4];
+         let input_count = if self.function.is_some() {1} else {self.count};
+         *remaining=remaining.checked_sub(input_count).ok_or(WorkLimit)?;
+-        for (channel,out) in components.iter_mut().enumerate().take(input_count) {
+-            *out = (0..3).map(|i|weights[i] * f64::from(triangle.colors[i][channel])).sum::<f64>() as f32;
+-        }
++        let mut components=interpolate_mesh_components(&triangle.colors,weights,input_count);
+         if let Some(function) = &self.function {
+             let input = components[0];
+             if (if shared {function.eval_native_with_budget(input,&mut components[..self.count],cancelled,remaining)}
+@@ -689,14 +703,9 @@
+         use NativeShadingError::*;
+         if let Some((index, weights)) = mesh.candidate(point, cancelled,remaining)? {
+             let triangle = &mesh.triangles[index];
+-            let mut components = [0.; 4];
+             let input_count = if self.function.is_some() { 1 } else { self.count };
+             *remaining=remaining.checked_sub(input_count).ok_or(WorkLimit)?;
+-            for channel in 0..input_count {
+-                components[channel] = (0..3)
+-                    .map(|i| weights[i] * f64::from(triangle.colors[i][channel]))
+-                    .sum::<f64>() as f32;
+-            }
++            let mut components=interpolate_mesh_components(&triangle.colors,weights,input_count);
+             if let Some(function) = &self.function {
+                 let input = components[0];
+                 if (if shared {function.eval_native_with_budget(input,&mut components[0..self.count],cancelled,remaining)}
+@@ -967,6 +976,48 @@
+             &||false,&mut |triangle| {indices.push(triangle.index);Ok(())}).unwrap();
+         assert_eq!(count,1);
+         assert_eq!(indices,[1]);
++    }
++
++    #[test]
++    fn batched_cmyk_interpolation_matches_scalar_bits_including_signed_zero() {
++        let mut state=0x59a05cb7u32;
++        for case in 0..1024 {
++            let mut next=|| {state=state.wrapping_mul(1664525).wrapping_add(1013904223);(state>>8) as f32/16777216.};
++            let mut colors=std::array::from_fn(|_|std::array::from_fn(|_|next()));
++            if case==0 {colors=[[-0.;4];3];}
++            if case==1 {colors=[[f32::from_bits(1);4];3];}
++            if case==2 {colors=[[f32::MIN_POSITIVE;4];3];}
++            if case==3 {colors=[[1.;4];3];}
++            let weights=[f64::from(next()),f64::from(next()),f64::from(next())];
++            let total=weights.iter().sum::<f64>();let weights=weights.map(|w|w/total);
++            for count in [1,3,4] {
++                let mut expected=[0f32;4];
++                for channel in 0..count {
++                    expected[channel]=(0..3).map(|v|weights[v]*f64::from(colors[v][channel])).sum::<f64>() as f32;
++                }
++                assert_eq!(interpolate_mesh_components(&colors,weights,count).map(f32::to_bits),expected.map(f32::to_bits));
++            }
++        }
++    }
++
++    #[test]
++    #[ignore = "explicit native mesh interpolation timing"]
++    fn native_selected_mesh_interpolation_benchmark() {
++        let mut p=axial();
++        Arc::make_mut(&mut p.shading).shading_type=Arc::new(ShadingType::TriangleMesh {
++            triangles:vec![native_triangle([[0.125,0.25,0.5,0.75],[0.625,0.75,0.125,0.25],[0.25,0.125,0.75,0.5]],4)],function:None,
++        });
++        let source=NativeShadingSource::capture(&p,&||false,&no_credit).unwrap();
++        let iterations=5_000_000usize;let mut work=usize::MAX;let mut checksum=[0f64;4];
++        let started=std::time::Instant::now();
++        for i in 0..iterations {
++            let point=Point::new((i&1023) as f64/256.,((i>>10)&1023) as f64/256.);
++            let sample=std::hint::black_box(&source).sample_mesh_triangle_with_budget(0,std::hint::black_box(point),&||false,&mut work).unwrap();
++            for (sum,value) in checksum.iter_mut().zip(std::hint::black_box(sample.components)) {*sum+=f64::from(value);}
++        }
++        let elapsed=started.elapsed();
++        assert_eq!(usize::MAX-work,iterations*5);
++        println!("NATIVE_MESH_INTERPOLATION_BENCH iterations={iterations} elapsed_ns={} work={} checksum={checksum:?}",elapsed.as_nanos(),usize::MAX-work);
+     }
+ 
+     #[test]

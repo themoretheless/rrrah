@@ -1,0 +1,49 @@
+{
+  "status": "complete_all_229_repaired_positive_records",
+  "executed_pairs": 229,
+  "counts": {
+    "supported": 229,
+    "miss": 0,
+    "execution_failed": 0
+  },
+  "all_229_supported": true,
+  "stages": {
+    "native": 27,
+    "model_tiles": 202
+  },
+  "originals_scheduled": 157,
+  "targets_scheduled": 229,
+  "pins_verified": 395,
+  "frozen_source_files": 3062,
+  "minimum_supported_anchors": 11,
+  "minimum_supported_informative_pairs": 1108,
+  "minimum_supported_coverage": 0.8579104477611941,
+  "minimum_supported_agreement": 0.9005164034021871,
+  "failures": [],
+  "artifacts": [
+    {
+      "source": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-insufficient-anchor-full229-20261011.json",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/insufficient-anchor-full229-qualified-20261011/dedup-insufficient-anchor-full229-20261011.json",
+      "sha256": "a867f7e31a179f8132b8b05939813c0faf4be4d6f26f567e0d2c832d0fd73ac1"
+    },
+    {
+      "source": "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-insufficient-anchor-full229-20261011.py",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/insufficient-anchor-full229-qualified-20261011/audit-dedup-insufficient-anchor-full229-20261011.py",
+      "sha256": "ca5e9596c024d902b4638d5639c8c0950d0bde06e9a4a9ddd279ad662aa6b63e"
+    },
+    {
+      "source": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-insufficient-anchor-full229-20261011.log",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/insufficient-anchor-full229-qualified-20261011/dedup-insufficient-anchor-full229-20261011.log",
+      "sha256": "c209f88d25f5c34fc368e954519dd620738268e8695932d1ba63eb44bc8e70ca"
+    }
+  ],
+  "source_manifest": "docs/research/dedup-insufficient-anchor-snapshot-20261011.json",
+  "limits": [
+    "Frozen insufficient-anchor snapshot only; later native lifecycle and projected portfolio changes are separate",
+    "Known publisher-origin positives only; no all-query negative precision or one 386-file indexed collection",
+    "Support is regional original-pixel rank evidence, not whole-image/file identity",
+    "Every record is a fresh execution from this run, not a merge of baseline and repaired diagnostics",
+    "Managed payload budget is not total Torch/RSS admission",
+    "Timings are observed shared-host costs, not a comparative performance benchmark"
+  ]
+}

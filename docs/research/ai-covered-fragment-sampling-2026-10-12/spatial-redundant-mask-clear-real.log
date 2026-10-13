@@ -1,0 +1,37 @@
+
+running 1 test
+REAL_AI_MASK_SOURCE event=13 luminosity=true events=21 nested=0 shading=1 rasters=0
+REAL_AI_MASK_SOURCE event=20 luminosity=true events=25 nested=0 shading=0 rasters=1
+REAL_AI_MASK_SOURCE event=1003 luminosity=true events=25 nested=0 shading=0 rasters=1
+REAL_AI_MASK_SOURCE event=1012 luminosity=true events=21 nested=0 shading=1 rasters=0
+REAL_AI_MASK_SOURCE event=1220 luminosity=true events=15 nested=0 shading=0 rasters=1
+REAL_AI_MASK_SOURCE event=2300 luminosity=true events=15 nested=0 shading=0 rasters=1
+REAL_AI_SPATIAL_PREFLIGHT=Ok(())
+SPATIAL_MESH_SOURCE event=9 source=Some(Cmyk) destination=Some(Cmyk) axial=false
+SPATIAL_MESH_SOURCE event=1017 source=None destination=Some(Cmyk) axial=true
+SPATIAL_MESH_SOURCE event=1023 source=Some(Cmyk) destination=Some(Cmyk) axial=true
+SPATIAL_MESH_SOURCE event=1207 source=Some(Cmyk) destination=Some(Cmyk) axial=true
+SPATIAL_MESH_SOURCE event=1230 source=None destination=Some(Cmyk) axial=true
+SPATIAL_MESH_SOURCE event=1236 source=None destination=Some(Cmyk) axial=true
+SPATIAL_MESH_SOURCE event=2097 source=Some(Cmyk) destination=Some(Cmyk) axial=true
+SPATIAL_MESH_SOURCE event=2103 source=Some(Cmyk) destination=Some(Cmyk) axial=true
+SPATIAL_MESH_SOURCE event=2287 source=Some(Cmyk) destination=Some(Cmyk) axial=true
+SPATIAL_MESH_SOURCE event=2664 source=Some(Cmyk) destination=Some(Cmyk) axial=true
+SPATIAL_MESH_SOURCE event=2670 source=Some(Cmyk) destination=Some(Cmyk) axial=false
+SPATIAL_MESH_SOURCE event=2676 source=Some(Cmyk) destination=Some(Cmyk) axial=false
+SPATIAL_MESH_SOURCE event=2742 source=None destination=Some(Cmyk) axial=true
+SPATIAL_LIVE_MASKS total=6 live=0
+SPATIAL_EXCLUDED_MESH_REGIONS count=0
+SPATIAL_REGION_DEDUP original=120 unique=63
+SPATIAL_PAINT_COALESCE before=344 after=344
+SPATIAL_PREPARED_KINDS retained=17 paint=0 native=4 sampled=0 begin=22 end=22 clear_mask=275 set_mask=4
+SPATIAL_ROUTING_REGIONS total=63 used=43
+SPATIAL_DISPATCH_KINDS retained=96554 paint=0 native=51814 sampled=0 begin=203256 end=192324 clear_mask=66420 set_mask=88560
+SPATIAL_WORK_COUNTS fragments=22140 route_hits=21948 route_misses=192 dispatch=698928 groups=192324 native_samples=51814 fixed_samples=0 mask_samples=0 constant_hits=0 group_hits=10932 paint_run_hits=0
+REAL_AI_SPATIAL_ROUTE_ADMISSIONS=880038
+REAL_AI_SPATIAL_PIXEL captured=true events=2755 shading_events=13 mask_events=6 completed=true alpha=Some(0.24414157717689028) components=Some([0.9499999880790699, 0.26999829237874273, 1.0, 0.0]) deadline=false peak_bytes=202254128
+REAL_AI_SPATIAL_FINAL_CREDIT=0
+test knockout_compositor::interpreter_tests::real_ai_spatial_scene_problem_pixel_diagnostic ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 197 filtered out; finished in 36.02s
+

@@ -40,12 +40,19 @@ pub struct Comparison {
     pub distance: u32,
     /// Rotation/reflection variant of the right image (identity = 0).
     pub right_transform: usize,
-    /// Both inputs contain enough luminance variation for global hash evidence.
+    /// Both inputs have finite statistics and enough luminance variation for
+    /// global hash evidence.
     /// This is an information check, not a calibrated duplicate decision.
     pub informative: bool,
 }
 
 impl Fingerprint {
+    pub(crate) fn valid_statistics(&self) -> bool {
+        self.mean_linear_rgb.iter().all(|value| value.is_finite())
+            && self.luminance_stddev.is_finite()
+            && self.luminance_stddev >= 0.0
+    }
+
     /// Compare to the best transform. Always expose low-information inputs.
     /// A caller must qualify thresholds with positive and negative fixtures.
     pub fn compare(&self, other: &Self, allow_transforms: bool) -> Comparison {
@@ -69,7 +76,10 @@ impl Fingerprint {
         Comparison {
             distance: if min_distance == u32::MAX { 0 } else { min_distance },
             right_transform: best_transform,
-            informative: self.luminance_stddev > 0.001 && other.luminance_stddev > 0.001,
+            informative: self.valid_statistics()
+                && other.valid_statistics()
+                && self.luminance_stddev > 0.001
+                && other.luminance_stddev > 0.001,
         }
     }
 }
@@ -151,22 +161,24 @@ impl<'a> Rgba8View<'a> {
         if self.width != other.width || self.height != other.height {
             return Ok(false);
         }
-        if self.bytes == other.bytes {
-            return Ok(true);
-        }
-        for (index, (a, b)) in self
-            .bytes
-            .as_chunks::<4>()
-            .0
-            .iter()
-            .zip(other.bytes.as_chunks::<4>().0.iter())
-            .enumerate()
-        {
-            if index.is_multiple_of(4096) && cancel() {
+        // Keep fast byte comparison bounded so identical buffers still observe
+        // cancellation between blocks and before an equality claim.
+        for (left, right) in self.bytes.chunks(4096 * 4).zip(other.bytes.chunks(4096 * 4)) {
+            if cancel() {
                 return Err(PixelError::Cancelled);
             }
-            if a[3] != b[3] || (a[3] != 0 && a[..3] != b[..3]) {
-                return Ok(false);
+            if left == right {
+                continue;
+            }
+            for (a, b) in left
+                .as_chunks::<4>()
+                .0
+                .iter()
+                .zip(right.as_chunks::<4>().0.iter())
+            {
+                if a[3] != b[3] || (a[3] != 0 && a[..3] != b[..3]) {
+                    return Ok(false);
+                }
             }
         }
         if cancel() {

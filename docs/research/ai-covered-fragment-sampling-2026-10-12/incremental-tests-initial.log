@@ -1,0 +1,204 @@
+   Compiling hayro v0.7.1 (/tmp/rrrah-ai-grid-harness-20261012)
+warning: unnecessary qualification
+  --> src/knockout_interpreter.rs:11:21
+   |
+11 |     NativeColor(Box<super::native_paint::NativePaint>),
+   |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: requested on the command line with `-W unused-qualifications`
+help: remove the unnecessary path segments
+   |
+11 -     NativeColor(Box<super::native_paint::NativePaint>),
+11 +     NativeColor(Box<native_paint::NativePaint>),
+   |
+
+warning: unnecessary qualification
+  --> src/knockout_interpreter.rs:66:87
+   |
+66 |     native_mask_transfers: Vec<(usize, Option<hayro_interpret::TransferFunction>, Box<super::native_paint::NativePaint>, bool)>,
+   |                                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+help: remove the unnecessary path segments
+   |
+66 -     native_mask_transfers: Vec<(usize, Option<hayro_interpret::TransferFunction>, Box<super::native_paint::NativePaint>, bool)>,
+66 +     native_mask_transfers: Vec<(usize, Option<hayro_interpret::TransferFunction>, Box<native_paint::NativePaint>, bool)>,
+   |
+
+warning: unnecessary qualification
+   --> src/knockout_interpreter.rs:446:100
+    |
+446 | ...   if !self.capture(Some(size_of::<(usize, Option<hayro_interpret::TransferFunction>, Box<super::native_paint::NativePaint>, boo...
+    |                                                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+help: remove the unnecessary path segments
+    |
+446 -             if !self.capture(Some(size_of::<(usize, Option<hayro_interpret::TransferFunction>, Box<super::native_paint::NativePaint>, bool)>())) { return; }
+446 +             if !self.capture(Some(size_of::<(usize, Option<hayro_interpret::TransferFunction>, Box<native_paint::NativePaint>, bool)>())) { return; }
+    |
+
+warning: unnecessary qualification
+   --> src/knockout_interpreter.rs:448:41
+    |
+448 |             let Some(native_backdrop) = super::native_paint::NativePaint::capture(&mask.background_color(),&cancel,&admit) else {
+    |                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+help: remove the unnecessary path segments
+    |
+448 -             let Some(native_backdrop) = super::native_paint::NativePaint::capture(&mask.background_color(),&cancel,&admit) else {
+448 +             let Some(native_backdrop) = native_paint::NativePaint::capture(&mask.background_color(),&cancel,&admit) else {
+    |
+
+warning: unnecessary qualification
+   --> src/knockout_interpreter.rs:569:35
+    |
+569 |                 let Some(paint) = super::native_paint::NativePaint::capture(
+    |                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+help: remove the unnecessary path segments
+    |
+569 -                 let Some(paint) = super::native_paint::NativePaint::capture(
+569 +                 let Some(paint) = native_paint::NativePaint::capture(
+    |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:4919:25
+     |
+4919 |             let clear = super::native_blend::Pixel::from_native(super::native_blend::Model::Cmyk, &[0.;4], 0.).unwrap();
+     |                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+4919 -             let clear = super::native_blend::Pixel::from_native(super::native_blend::Model::Cmyk, &[0.;4], 0.).unwrap();
+4919 +             let clear = native_blend::Pixel::from_native(super::native_blend::Model::Cmyk, &[0.;4], 0.).unwrap();
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:4919:65
+     |
+4919 |             let clear = super::native_blend::Pixel::from_native(super::native_blend::Model::Cmyk, &[0.;4], 0.).unwrap();
+     |                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+4919 -             let clear = super::native_blend::Pixel::from_native(super::native_blend::Model::Cmyk, &[0.;4], 0.).unwrap();
+4919 +             let clear = super::native_blend::Pixel::from_native(native_blend::Model::Cmyk, &[0.;4], 0.).unwrap();
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:4920:29
+     |
+4920 |             let mut frame = super::native_frame::PaintFrame::admitted(&[clear], target, false, true,
+     |                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+4920 -             let mut frame = super::native_frame::PaintFrame::admitted(&[clear], target, false, true,
+4920 +             let mut frame = native_frame::PaintFrame::admitted(&[clear], target, false, true,
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:4954:13
+     |
+4954 | ) -> Option<super::native_frame::Buffer> {
+     |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+4954 - ) -> Option<super::native_frame::Buffer> {
+4954 + ) -> Option<native_frame::Buffer> {
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:5048:15
+     |
+5048 |     let row = super::polygon_coverage::admitted_selected_polygon_row(&regions, y, 20_000_000, cancelled, admit)
+     |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+5048 -     let row = super::polygon_coverage::admitted_selected_polygon_row(&regions, y, 20_000_000, cancelled, admit)
+5048 +     let row = polygon_coverage::admitted_selected_polygon_row(&regions, y, 20_000_000, cancelled, admit)
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:5126:59
+     |
+5126 |     space: &hayro_interpret::color::ColorSpace, backdrop: super::native_blend::Pixel,
+     |                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+5126 -     space: &hayro_interpret::color::ColorSpace, backdrop: super::native_blend::Pixel,
+5126 +     space: &hayro_interpret::color::ColorSpace, backdrop: native_blend::Pixel,
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:5129:13
+     |
+5129 | ) -> Option<super::native_frame::Buffer> {
+     |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+5129 - ) -> Option<super::native_frame::Buffer> {
+5129 + ) -> Option<native_frame::Buffer> {
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:5135:59
+     |
+5135 |     space: &hayro_interpret::color::ColorSpace, backdrop: super::native_blend::Pixel,
+     |                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+5135 -     space: &hayro_interpret::color::ColorSpace, backdrop: super::native_blend::Pixel,
+5135 +     space: &hayro_interpret::color::ColorSpace, backdrop: native_blend::Pixel,
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:5139:13
+     |
+5139 | ) -> Option<super::native_frame::Buffer> {
+     |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+5139 - ) -> Option<super::native_frame::Buffer> {
+5139 + ) -> Option<native_frame::Buffer> {
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:5165:62
+     |
+5165 |     let _backdrop_credit = admit(count.checked_mul(size_of::<super::native_blend::Pixel>())?)?;
+     |                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+5165 -     let _backdrop_credit = admit(count.checked_mul(size_of::<super::native_blend::Pixel>())?)?;
+5165 +     let _backdrop_credit = admit(count.checked_mul(size_of::<native_blend::Pixel>())?)?;
+     |
+
+error[E0061]: this method takes 8 arguments but 7 arguments were supplied
+   --> src/polygon_coverage.rs:88:9
+    |
+ 88 |     row.pixel_area_with_work(regions, x, y, &mut work, admit, None, None)
+    |         ^^^^^^^^^^^^^^^^^^^^--------------------------------------------- argument #8 of type `Option<(&mut dyn for<'a> FnMut(&'a [i32], Option<usize>) -> Option<Option<usize>>, usize)>` is missing
+    |
+note: method defined here
+   --> src/polygon_coverage.rs:336:8
+    |
+336 |     fn pixel_area_with_work(
+    |        ^^^^^^^^^^^^^^^^^^^^
+...
+345 |         mut incremental: Option<(&mut dyn FnMut(&[i32],Option<usize>)->Option<Option<usize>>,usize)>,
+    |         --------------------------------------------------------------------------------------------
+help: provide the argument
+    |
+ 88 |     row.pixel_area_with_work(regions, x, y, &mut work, admit, None, None, /* Option<(&mut dyn for<'a> FnMut(&'a [i32], Option<usize>) -> Option<Option<usize>>, usize)> */)
+    |                                                                         ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+For more information about this error, try `rustc --explain E0061`.
+warning: `hayro` (lib test) generated 15 warnings
+error: could not compile `hayro` (lib test) due to 1 previous error; 15 warnings emitted

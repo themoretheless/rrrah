@@ -1,0 +1,94 @@
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+warning: function `fallible_zeroed_bytes` is never used
+   --> crates/rrrah-cache/src/mosaic_payload_v1.rs:728:4
+    |
+728 | fn fallible_zeroed_bytes(len: usize) -> Result<Box<[u8]>, MosaicPayloadError> {
+    |    ^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-cache` (lib) generated 1 warning
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `dev` profile [optimized + debuginfo] target(s) in 6.44s
+     Running `target/debug/examples/raw_view_timing /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/1084.orf`
+adapter: Metal Apple M4 Max
+kind,fixture,iteration,width,height,decode_ms,upload_enqueue_ms,halo_pack_ms,row_pack_ms,enqueue_write_ms,frame_complete_ms,total_ms
+sample,1084.orf,1,4640,3472,356.004,8.731,4.333,0.001,4.272,7.138,371.934
+sample,1084.orf,2,4640,3472,358.741,8.714,4.455,0.001,4.108,7.041,374.563
+sample,1084.orf,3,4640,3472,356.375,8.820,4.613,0.001,4.050,7.138,372.396
+sample,1084.orf,4,4640,3472,356.620,8.842,4.693,0.001,3.992,7.104,372.630
+sample,1084.orf,5,4640,3472,357.183,9.048,4.790,0.001,4.098,6.986,373.287
+sample,1084.orf,6,4640,3472,357.354,8.616,4.515,0.001,3.947,7.264,373.297
+sample,1084.orf,7,4640,3472,357.025,8.610,4.506,0.000,3.944,7.088,372.783
+sample,1084.orf,8,4640,3472,356.887,9.347,4.974,0.001,4.216,7.776,374.076
+sample,1084.orf,9,4640,3472,366.774,9.426,5.029,0.000,4.241,7.471,383.742
+sample,1084.orf,10,4640,3472,359.220,9.478,4.908,0.001,4.408,7.174,375.940
+sample,1084.orf,11,4640,3472,366.981,10.484,5.175,0.001,5.142,8.820,386.357
+sample,1084.orf,12,4640,3472,364.235,13.157,6.150,0.002,6.845,8.385,385.844
+sample,1084.orf,13,4640,3472,417.112,10.021,5.024,0.001,4.834,7.477,434.679
+sample,1084.orf,14,4640,3472,386.142,9.971,4.985,0.001,4.803,7.243,403.431
+sample,1084.orf,15,4640,3472,365.485,9.477,4.927,0.001,4.385,7.376,382.407
+1084.orf: 15 samples / 3 warmups; decode p50/p95 358.741/417.112 ms; upload enqueue 9.347/13.157 ms; frame completion 7.243/8.820 ms; total 374.563/434.679 ms
+resident,1084.orf,3,1920,1080,,,,,,,2.183
+resident,1084.orf,4,1920,1080,,,,,,,1.875
+resident,1084.orf,5,1920,1080,,,,,,,1.947
+resident,1084.orf,6,1920,1080,,,,,,,2.063
+resident,1084.orf,7,1920,1080,,,,,,,2.294
+resident,1084.orf,8,1920,1080,,,,,,,1.950
+resident,1084.orf,9,1920,1080,,,,,,,2.017
+resident,1084.orf,10,1920,1080,,,,,,,1.971
+resident,1084.orf,11,1920,1080,,,,,,,2.039
+resident,1084.orf,12,1920,1080,,,,,,,1.735
+resident,1084.orf,13,1920,1080,,,,,,,1.985
+resident,1084.orf,14,1920,1080,,,,,,,1.780
+resident,1084.orf,15,1920,1080,,,,,,,1.982
+resident,1084.orf,16,1920,1080,,,,,,,1.851
+resident,1084.orf,17,1920,1080,,,,,,,1.946
+resident,1084.orf,18,1920,1080,,,,,,,1.813
+resident,1084.orf,19,1920,1080,,,,,,,1.915
+resident,1084.orf,20,1920,1080,,,,,,,1.948
+resident,1084.orf,21,1920,1080,,,,,,,1.928
+resident,1084.orf,22,1920,1080,,,,,,,1.702
+resident,1084.orf,23,1920,1080,,,,,,,1.806
+resident,1084.orf,24,1920,1080,,,,,,,1.726
+resident,1084.orf,25,1920,1080,,,,,,,1.828
+resident,1084.orf,26,1920,1080,,,,,,,1.677
+resident,1084.orf,27,1920,1080,,,,,,,1.776
+resident,1084.orf,28,1920,1080,,,,,,,2.055
+resident,1084.orf,29,1920,1080,,,,,,,1.936
+resident,1084.orf,30,1920,1080,,,,,,,1.736
+resident,1084.orf,31,1920,1080,,,,,,,1.788
+resident,1084.orf,32,1920,1080,,,,,,,2.105
+resident,1084.orf,33,1920,1080,,,,,,,1.922
+resident,1084.orf,34,1920,1080,,,,,,,1.645
+resident,1084.orf,35,1920,1080,,,,,,,1.840
+resident,1084.orf,36,1920,1080,,,,,,,1.963
+resident,1084.orf,37,1920,1080,,,,,,,1.777
+resident,1084.orf,38,1920,1080,,,,,,,1.556
+resident,1084.orf,39,1920,1080,,,,,,,1.592
+resident,1084.orf,40,1920,1080,,,,,,,1.563
+resident,1084.orf,41,1920,1080,,,,,,,1.611
+resident,1084.orf,42,1920,1080,,,,,,,1.542
+resident,1084.orf,43,1920,1080,,,,,,,1.698
+resident,1084.orf,44,1920,1080,,,,,,,1.732
+resident,1084.orf,45,1920,1080,,,,,,,1.689
+resident,1084.orf,46,1920,1080,,,,,,,2.044
+resident,1084.orf,47,1920,1080,,,,,,,1.784
+resident,1084.orf,48,1920,1080,,,,,,,1.633
+resident,1084.orf,49,1920,1080,,,,,,,1.538
+resident,1084.orf,50,1920,1080,,,,,,,1.457
+resident,1084.orf,51,1920,1080,,,,,,,1.598
+resident,1084.orf,52,1920,1080,,,,,,,1.573
+resident,1084.orf,53,1920,1080,,,,,,,1.589
+resident,1084.orf,54,1920,1080,,,,,,,1.428
+resident,1084.orf,55,1920,1080,,,,,,,1.500
+resident,1084.orf,56,1920,1080,,,,,,,1.619
+resident,1084.orf,57,1920,1080,,,,,,,1.813
+resident,1084.orf,58,1920,1080,,,,,,,1.511
+resident,1084.orf,59,1920,1080,,,,,,,1.549
+resident,1084.orf,60,1920,1080,,,,,,,1.670
+resident,1084.orf,61,1920,1080,,,,,,,1.787
+resident,1084.orf,62,1920,1080,,,,,,,1.645
+1084.orf: resident zoom/pan 60 frames; p50/p95 1.780/2.063 ms
+managed_cpu: used=0 peak=79219782 limit=536870912
+managed_gpu: used=0 peak=83886080 limit=536870912

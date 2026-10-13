@@ -79,3 +79,21 @@ python3 scripts/verify-dedup-source-review.py
 
 The verifier checks counts, unique identities, pinned commits and all archived
 file checksums. It does not certify algorithm correctness or broad coverage.
+
+
+## Follow-up of six ambiguous source records — 2026-10-11
+
+All six records previously marked `needs-deeper-source` now have a separate
+pinned-source follow-up in `deeper-source-20261011/review.json`. Nine additional
+full files are archived and checked against the original tree's Git blob IDs.
+The follow-up distinguishes an actual byte-confirmed exact-file funnel from
+MD5 comparison of JPEG streams after EXIF removal, identifies a concrete
+63-bit image pHash, and records question-ranking/game-item projects and the
+sample-only Android repository as unsuitable algorithm evidence for this scope.
+The original 500 reviews remain historical. This selected-section follow-up
+neither executes upstream tests nor proves full library case coverage.
+
+
+2026-10-11 evidence refresh: `source-coverage-audit-20261011.json` verifies all500 historical individual review records and every referenced archived source/readme/license digest, with zero integrity errors. The historical records contain source material for496 repositories; the four source-absent followups remain separate evidence. This checks material integrity, not complete algorithm or runtime review of all500.
+
+The full pinned `kornelski/dupe-krill` archive now matches all17 original Git blob IDs. All Rust source and tests were read; eight original locked macOS library/file tests pass. Separate public-API controls reproduce stale equality after a cached same-length rewrite and after distinct suffix growth beyond previously captured sizes. Incremental mismatch exit, lazy handles and physical-alias accounting remain useful ideas; unvalidated range-hash caching, digest-only identity, fallible IO inside ordering and destructive default linking are not adopted. No upstream code is copied into production. The exact rrrah regression covers both observed counterexamples and passes all17 macOS exact-file tests. Evidence: `dupe-krill-full-source-20261011.json`, `dupe-krill-full-review-20261011.json`, `../dedup-exact-upstream-adversary-verification-20261011.json`. This does not qualify scanner/linking modes or native Windows/Linux.

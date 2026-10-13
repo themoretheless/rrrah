@@ -1,0 +1,15 @@
+{
+  "status": "verified_three_regressions_fail_on_unmodified_pre_fix_production",
+  "expected_failed_tests": [
+    "duplicate_root_admission_retains_boundary_and_fresh_retry",
+    "excess_root_admission_refuses_before_missing_source_io",
+    "root_admission_cancels_before_io_at_each_preparation_checkpoint"
+  ],
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exact-root-admission-baseline-source-20261012.json": "0e9728cd0901fc282cd882776d9446d5e1d03c6cb498799e01e94fef0a6cdeb9",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-root-admission-baseline-tests-20261012.log": "3dadaa42147ced17914a44c759c66f8b4bc1d37ca691b5a385d5bcaa1794e3dc",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-root-admission-baseline-executable-20261012": "7878473f5320f0e6a67e9e4ff9a010a30770415df7f9ab746226aeff963d3edd",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exact-restored-mtime-source-retry2-20261012.json": "9ab0d320b61d08f30474805e0036aebde2494155d64ff4920846295979709f4e"
+  },
+  "scope": "Pre-fix production unchanged; only3newrootadmissiontests appended. All3 fail on original behavior and pass on adopted54testsource. Expectednegativecontrol,not an unexplained current failure. Confirms rootlimit permits initialsourceIO and completed observations before limit, and later preparation cancellation can already contain IO diagnostics; no directRSS/allocatorcapmeasurement."
+}

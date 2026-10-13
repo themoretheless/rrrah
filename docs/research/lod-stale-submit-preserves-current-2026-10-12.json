@@ -1,0 +1,37 @@
+{
+  "change": "Production LodWorker refuses already-cancelled generation before starting thread and rechecks under queue lock before changing revision/slots",
+  "regression_reproduced_before_fix": true,
+  "regression_assertions": [
+    "Stale first submission returns Interrupted without starting worker or changing revision",
+    "Stale submission preserves completed current8x8 level, revision and1024byte output credit",
+    "Current completed level remains consumable; final credit0"
+  ],
+  "worker_tests": {
+    "passed": 5,
+    "ignored": 1,
+    "failed": 0
+  },
+  "viewer_tests": {
+    "passed": 218,
+    "ignored": 62,
+    "failed": 0
+  },
+  "actual_metal_delayed_navigation": {
+    "passed": 1,
+    "failed": 0,
+    "backend_required": "metal",
+    "gpu_optional": false
+  },
+  "limitations": [
+    "Deterministic queue regression/headless Metal navigation; no live desktop event-loop or physical HDR claim",
+    "Ignored manual tests remain unqualified",
+    "No measured overall viewer speedup"
+  ],
+  "sha256": {
+    "crates/rrrah-app/src/raster_lod_worker.rs": "3893311b0f9c72a00e5003edd0bf5ed581248f9a4c8dad9f8bb4f32b44568470",
+    "docs/research/lod-stale-submit-preserves-current-2026-10-12/metal-navigation.log": "a96a57866155c19036e8544dfbca7f6ae56ab888b7dee36aab0cad3f168440ec",
+    "docs/research/lod-stale-submit-preserves-current-2026-10-12/viewer.log": "5d1990bb69a10b97d3339dce6a349988c432cf5900bd8a0c0bff79cba3cdeecd",
+    "docs/research/lod-stale-submit-preserves-current-2026-10-12/before.log": "6217684983cf4762f79069bad66fdb7919df0dd376e049c90d87e8f6c00638e7",
+    "docs/research/lod-stale-submit-preserves-current-2026-10-12/after.log": "94a86161542b2f2ab4ad2f15c13fbad2c34cdf395cd9b50c8b68d5fb3dd34b4d"
+  }
+}

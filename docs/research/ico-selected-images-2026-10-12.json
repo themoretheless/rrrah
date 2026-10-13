@@ -1,0 +1,52 @@
+{
+  "scope": "Explicit quality-ranked ICO image selection and managed scratch/cache/Metal qualification",
+  "order": "Depth descending, area descending; final-entry maximal tie preserves existing codec best default, otherwise stable directory order",
+  "production": [
+    "Bounded4096 entry directory and payload bounds validation",
+    "Ranking scratch admitted to shared memory budget and released before pixels",
+    "Single selected record/header temporarily patched in admitted source; restored after result",
+    "Image index/count carried through decode and preparation",
+    "DICOM full signature precedence preserved"
+  ],
+  "tests": {
+    "decoder_passed": 1014,
+    "decoder_ignored": 72,
+    "app_passed": 216,
+    "app_ignored": 60,
+    "metal_gate_passed": 137,
+    "metal_gate_ignored": 13
+  },
+  "cases": [
+    "Three authored Pillow PNG entries with distinct dimensions/straight alpha",
+    "Exact native samples and selection metadata",
+    "Malformed directory/offset and memory refusal preserve source/zero credits",
+    "Existing BMP-backed default baseline remains passing",
+    "64byte/count1 RAM with full-budget hits and visibleTTL protection",
+    "Reverse2->0->1->2 swap restore;63x65 SDR/HDR exact; writes3 reads4 errors0; finalroot/queue0"
+  ],
+  "limitations": [
+    "Selected variants are PNG-backed; general multi-DIB/masks and embedded color metadata not fully qualified",
+    "CUR multiple-image selection remains separate",
+    "No physicalHDR or full100-format claim"
+  ],
+  "sources": {
+    "crates/rrrah-decode/src/ico_pages.rs": "a38829cf75c0e9da7ed805c2c1f98b11fecfd0407a5cfa66355003792ada726d",
+    "crates/rrrah-decode/src/raster.rs": "c2ad9f26f6aa18ea4f64394741e9813473ace9b9d0567cb90d5a3ccb1859603b",
+    "crates/rrrah-app/tests/ico_pages_metal.rs": "8891aaa48dd9802e896e28c9bc8f56f2dd2b0751887e9e092a94fc968d3c49a0",
+    "scripts/generate-ico-selected-images.py": "f8d40860ca2b19f04c830da5d5e9ca869e59fb272f1c3e8386ab331e019475d3",
+    "scripts/qualify-viewer-storage-gpu.py": "d7b8e2a6a45df271d8553b305ad03390abe555dc042a4b27f241df5abcaa4f4c",
+    "tests/fixtures/data/ico-selected-images.ico": "a2f6821f7584b9c9125b6b7f4e6cc27c3af56eb37b27b1b71c5bc0437230dfe6",
+    "tests/fixtures/data/ico-selected-images.json": "41456c4ce81e27fcf588e325b374502de65f4a72af2fd028e5c91b0be8b8a71b"
+  },
+  "logs": {
+    "docs/research/ico-selected-images-2026-10-12/rrrah-ico-selection-20261012.log": "24819e04c9a050661adeefbce767db971f9276b5f57dfcbcdf14e5d878ae6473",
+    "docs/research/ico-selected-images-2026-10-12/gpu-tiff-viewer-pages.log": "7684d0e58af91589f621dc3512026b20cedd20cb7a8c7b6083235d7798332790",
+    "docs/research/ico-selected-images-2026-10-12/rrrah-ico-selection-metal-20261012.log": "c51f14e8a31618978d3963e948912528943420bf570f90c4804c003b5cbcf3cd",
+    "docs/research/ico-selected-images-2026-10-12/report.json": "c68022757b93bb5d900105d3df14a98f1ff311c7f98fa8592d5fc172bfcff1ea",
+    "docs/research/ico-selected-images-2026-10-12/gpu-ico-pages.log": "9b77e067a0e69a497dcf9b35fa453f975268b7a0b14f7fba121669406d393782",
+    "docs/research/ico-selected-images-2026-10-12/gpu-all.log": "8fdf3e9d283ee6e233ba2c418b9e8980f972b136f13351cba91c95fb056f8dd9",
+    "docs/research/ico-selected-images-2026-10-12/rrrah-ico-selection-app-all-20261012.log": "9ced4d5280e2e9348c9dd6585652f18240ecee23b192142c5ee1922b6d7f7fd6",
+    "docs/research/ico-selected-images-2026-10-12/gpu-tiff-pages.log": "5cc50df772863994082a73c8901c25d7f6d86e67efd349940166fa40239fff7f",
+    "docs/research/ico-selected-images-2026-10-12/rrrah-ico-selection-final-all-20261012.log": "c57704875609c9c0ba8e4c368b520d1f706a7e9ffdc6149fb6f1185561adcca2"
+  }
+}

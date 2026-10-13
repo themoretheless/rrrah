@@ -1,0 +1,19 @@
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.23s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_decode-3d841f18ff85d05c)
+
+running 12 tests
+test camtiff::orf::tests::recognizes_orf_magics ... ok
+test camtiff::orf::tests::parse_container_rejects_non_orf_bytes ... ok
+test camtiff::orf::tests::rejects_unsupported_bit_depth ... ok
+test camtiff::orf::tests::uncompressed16_decodes_little_endian ... ok
+test camtiff::orf::tests::rejects_missing_cfa_tags ... ok
+test camtiff::orf::tests::rejects_unverifiable_packed_byte_count ... ok
+test camtiff::orf::tests::white_level_defaults_to_full_scale ... ok
+test camtiff::orf::tests::cancellation_is_typed ... ok
+test camtiff::orf::tests::olympus12_unpacking_matches_dcraw_reference ... ok
+test camtiff::orf::tests::rejects_non_bayer_cfa ... ok
+test camtiff::orf::tests::selects_subifd_and_reads_metadata ... ok
+test camtiff::orf::tests::rejects_unsupported_compression ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 1054 filtered out; finished in 0.00s
+

@@ -1,0 +1,20 @@
+{
+  "status": "verified_memory_and_persisted_cache_changed_content_with_restored_mtime",
+  "passed_tests": 1,
+  "time_cases": [
+    "exact restored nanosecondtimestamp",
+    "same millisecond timestamp differing by800ns"
+  ],
+  "cache_modes": [
+    "existing memory cache",
+    "loaded persisted cache"
+  ],
+  "source_files_verified": 3747,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-cache-restored-mtime-control-20261013.json": "5c8228fc97f4c52ed696c52c94a32b0ecd903cafb2413c14a88fe31054bd1e60",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-scan-cancellation-checkpoints-audit-20261013.json": "c0e7a54108c2ce89cf11094d0288cc6289512bc4bd2e802ceeddda3827cd53b2",
+    "/Users/themoretheless/.codex/tmp/rrrah-cache-restored-mtime-control-20261013/test.log": "9c4b7e8e313a1c7af63003783c6d29bfe6d6e868439dd0a04b790c23190df77e",
+    "/Users/themoretheless/.codex/tmp/rrrah-cache-restored-mtime-control-20261013/qualified-test": "e58c18574d8526e06761e1d1b6d82f02a26c8a8a12f87ea5e1137e9599c66e6b"
+  },
+  "scope": "Existing actualBMP regression on frozen post-cancellation source. Same-size changed pixels must miss both stale caches, equal fresh fingerprint, then become valid hits. No fullroot/allformats cache claim."
+}

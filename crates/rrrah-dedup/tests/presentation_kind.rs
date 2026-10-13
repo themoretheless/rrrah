@@ -28,7 +28,7 @@ fn content_detection_ignores_extensions_and_preserves_sensor_routing() {
     ];
     for (name, expected) in cases {
         let path = dir.path().join("renamed.bin");
-        std::fs::copy(root.join(name), &path).unwrap();
+        copy_writable(root.join(name), &path).unwrap();
         let mode = detect_presentation(&DecodeRequest::new(path), limits, 4096, &budget, || false).unwrap();
         let actual = match mode {
             Presentation::Animation(AnimationKind::Gif) => 0,
@@ -57,4 +57,12 @@ fn content_detection_ignores_extensions_and_preserves_sensor_routing() {
         Err(ContainerError::Cancelled)
     ));
     assert_eq!(budget.used(), 0);
+}
+
+// Fixture sources may be read-only in an immutable qualification checkout.
+// Copy bytes without inheriting permissions so mutation tests can edit their own files.
+fn copy_writable(source: impl AsRef<std::path::Path>, target: impl AsRef<std::path::Path>) -> std::io::Result<u64> {
+    let bytes = std::fs::read(source)?;
+    std::fs::write(target, &bytes)?;
+    Ok(bytes.len() as u64)
 }

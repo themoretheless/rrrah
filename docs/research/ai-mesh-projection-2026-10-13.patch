@@ -1,0 +1,85 @@
+--- a/vendor/hayro-interpret/src/encode/native_source.rs
++++ b/vendor/hayro-interpret/src/encode/native_source.rs
+@@ -683,6 +683,28 @@
+         if cancelled() { return Err(Cancelled); }
+         if components[..self.count].iter().any(|v|!v.is_finite() || !(0. ..=1.).contains(v)) { return Err(Invalid); }
+         Ok(NativeShadingSample {components,count:self.count,opacity:self.opacity})
++    }
++
++    /// Sum of negative computed barycentric weights before selected-owner
++    /// projection. Diagnostic only: zero does not certify exact affine arithmetic
++    /// or containment over an integration domain. Performs no color sampling.
++    pub fn mesh_triangle_projection_deficit(&self,index:usize,point:Point,
++        cancelled:&dyn Fn()->bool,remaining:&mut usize)->Result<f64,NativeShadingError> {
++        use NativeShadingError::*;
++        if cancelled() {return Err(Cancelled);}
++        *remaining=remaining.checked_sub(1).ok_or(WorkLimit)?;
++        let triangle=self.mesh.as_ref().ok_or(Unsupported)?.triangles.get(index).ok_or(Invalid)?;
++        let p=self.inverse*point;let [a,b,c]=triangle.points;
++        let cross=|a:kurbo::Vec2,b:kurbo::Vec2|a.x*b.y-a.y*b.x;
++        let denominator=cross(b-a,c-a);
++        if !p.x.is_finite() || !p.y.is_finite() || !denominator.is_finite() || denominator==0. {return Err(Invalid);}
++        let wb=cross(p-a,c-a)/denominator;let wc=cross(b-a,p-a)/denominator;
++        let raw=[1.-wb-wc,wb,wc];
++        if raw.iter().any(|v|!v.is_finite()) {return Err(Invalid);}
++        let deficit=raw.iter().map(|&v|(-v).max(0.)).sum::<f64>();
++        if cancelled() {return Err(Cancelled);}
++        if !deficit.is_finite() {return Err(Invalid);}
++        Ok(deficit)
+     }
+ 
+     /// Visit mesh triangles whose source bounds intersect a device rectangle.
+@@ -1126,6 +1148,16 @@
+         assert_eq!(sample(left),0.);assert_eq!(sample(right),0.5);
+         let average=(f64::from(sample(left))+f64::from(sample(right)))/2.;
+         assert_eq!(average,0.25);assert_eq!(sample(midpoint),0.);
++        let mut diagnostic_work=3;
++        assert_eq!(source.mesh_triangle_projection_deficit(0,left,&||false,&mut diagnostic_work).unwrap(),0.5);
++        assert_eq!(source.mesh_triangle_projection_deficit(0,right,&||false,&mut diagnostic_work).unwrap(),0.);
++        assert_eq!(source.mesh_triangle_projection_deficit(0,midpoint,&||false,&mut diagnostic_work).unwrap(),0.);
++        assert_eq!(diagnostic_work,0);
++        assert!(matches!(source.mesh_triangle_projection_deficit(0,left,&||false,&mut diagnostic_work),Err(NativeShadingError::WorkLimit)));
++        assert!(matches!(source.mesh_triangle_projection_deficit(0,left,&||true,&mut 1),Err(NativeShadingError::Cancelled)));
++        assert!(matches!(source.mesh_triangle_projection_deficit(1,left,&||false,&mut 1),Err(NativeShadingError::Invalid)));
++        assert!(matches!(source.mesh_triangle_projection_deficit(0,Point::new(f64::NAN,0.),&||false,&mut 1),Err(NativeShadingError::Invalid)));
++
+         assert!(source.sample(left,&||false).unwrap().is_none());
+         // The analogous fully contained segment does preserve its affine mean.
+         assert_eq!((sample(Point::new(0.,0.))+sample(right))/2.,sample(Point::new(2.,0.)));
+--- a/vendor/hayro/src/knockout_interpreter.rs
++++ b/vendor/hayro/src/knockout_interpreter.rs
+@@ -7184,6 +7184,16 @@
+             meshes.push((index,source,std::sync::Arc::new(SpatialMeshGeometry {paths,owners,_credit:credit})));
+         }
+     }
++    struct ProjectionTrace {
++        checks:std::cell::Cell<usize>,projected:std::cell::Cell<usize>,
++        max_deficit:std::cell::Cell<f64>,refused:std::cell::Cell<usize>,work:std::cell::Cell<usize>,
++    }
++    impl Drop for ProjectionTrace {fn drop(&mut self) {
++        eprintln!("SPATIAL_MESH_PROJECTION checks={} projected={} max_deficit={:?} refused={} diagnostic_work={}",self.checks.get(),self.projected.get(),self.max_deficit.get(),self.refused.get(),16_000_000-self.work.get());
++    }}
++    let projection_enabled=std::env::var_os("RRRAH_AI_MESH_PROJECTION").is_some();
++    let _projection_credit=if projection_enabled {Some(admit(size_of::<ProjectionTrace>())?)} else {None};
++    let projection=projection_enabled.then(||ProjectionTrace {checks:std::cell::Cell::new(0),projected:std::cell::Cell::new(0),max_deficit:std::cell::Cell::new(0.),refused:std::cell::Cell::new(0),work:std::cell::Cell::new(16_000_000)});
+     let mut mesh_samples=Vec::new();mesh_samples.try_reserve_exact(mesh_count).ok()?;
+     let trace_point_sources=point.is_some() && std::env::var_os("RRRAH_AI_TRACE_POINT_SOURCES").is_some();
+     for (event,source,geometry) in &meshes {
+@@ -7203,7 +7213,17 @@
+         let cost=SourceCost {event:*event,enabled:trace.enabled,calls:std::cell::Cell::new(0),
+             source:std::cell::Cell::new(0),coordinates:std::cell::Cell::new(0),
+             pixel_hits:std::cell::Cell::new(0),pixel_builds:std::cell::Cell::new(0)};
++        let projection=projection.as_ref();
+         mesh_samples.push(move |point:kurbo::Point,cancelled:&dyn Fn()->bool,remaining:&mut usize,owner:Option<usize>| {
++        if let (Some(trace),Some(owner))=(projection,owner) {
++            let mut work=trace.work.get();
++            let deficit=source.mesh_triangle_projection_deficit(owner,point,cancelled,&mut work);
++            trace.work.set(work);trace.checks.set(trace.checks.get()+1);
++            match deficit {
++                Ok(value)=>{if value>0. {trace.projected.set(trace.projected.get()+1);}trace.max_deficit.set(trace.max_deficit.get().max(value));},
++                Err(_)=>trace.refused.set(trace.refused.get()+1),
++            }
++        }
+         let before=*remaining;
+         let result=if let Some(owner)=owner {source.sample_mesh_triangle_with_budget(owner,point,cancelled,remaining).map(Some)}
+             else {source.sample_with_budget(point,cancelled,remaining)};

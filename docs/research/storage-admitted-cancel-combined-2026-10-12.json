@@ -1,0 +1,46 @@
+{
+  "scope": "Combined actual Metal GPU regression and sustained real-file delayed swap with allocation/progress-based large HDR cancellation",
+  "totals": {
+    "passed": 140,
+    "ignored": 13,
+    "failed": 0
+  },
+  "all_executed_suites_verified": true,
+  "storage_seconds": 273.72,
+  "100k": {
+    "writes": 100000,
+    "reads": 100000,
+    "pressure_refusals": 1000,
+    "seconds": 105.436547417,
+    "root_peak_bytes": 131072,
+    "queue_peak_bytes": 4,
+    "final_credit": 0
+  },
+  "large_float": {
+    "extent": [
+      2048,
+      2048
+    ],
+    "bytes": 67108864,
+    "cycles": 3,
+    "seconds": 117.519,
+    "cancellation": "after64MiB managed allocation and >=64KiB real payload read progress each cycle",
+    "restored_bits": "all exact including negative zero and signed HDR extremes",
+    "disk_count_limit": 2,
+    "final_credit": 0
+  },
+  "other_storage": "Separate byte, count, combined bounds; idle TTL physical file deletion; writer burst; cancellation and stale lock-waiter contention all passed",
+  "limits": [
+    "Artificial I/O delay on local disk, not physical slow drive",
+    "Managed pressure, not OS-wide pressure or process RSS accounting",
+    "No physical HDR or NVIDIA qualification",
+    "No new live viewer/100format qualification"
+  ],
+  "sha256": {
+    "docs/research/storage-admitted-cancel-combined-2026-10-12/storage-soak.log": "dff4ba2bfca1be656a3625d6ce092f7e1f3c890c80e1422af510381ee40f2ff9",
+    "docs/research/storage-admitted-cancel-combined-2026-10-12/report.json": "1f1ad0fadb86a3e06626805049182882bb9641f492f2d48295a971c62c1d4408",
+    "docs/research/storage-admitted-cancel-combined-2026-10-12/gpu-all.log": "b6d3a21d18405c0b6a95b73480250b65ea032351653c06a8fc4037ab57da581b",
+    "scripts/qualify-viewer-storage-gpu.py": "e5b08db0dd3984ec46a4f95701579a0a79fd851f1a5b16e9129ba8af16007302",
+    "crates/rrrah-cache/tests/sustained_swap.rs": "a696f7fb39a474f248ea4fcdbc4a93f8da9a03a5e8df307382eb763b6eaf47eb"
+  }
+}

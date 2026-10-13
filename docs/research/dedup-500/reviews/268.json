@@ -2,7 +2,7 @@
   "index": 268,
   "repository": "kornelski/dupe-krill",
   "commit": "0e813b83c08543d4052523e05ca170bb1d155e91",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "Existing prior full/partial source-review artifacts linked after current pin verification; original limits retained. This reconciliation is not a new full-source reading or new runtime execution, except the explicit blockhash-js runtime refresh.",
   "decision": "shortlist",
   "finding": "Rust BLAKE3 hasher and inode-aware scanner with scan tests; strong exact-stage reference to benchmark.",
   "available_source_evidence": [
@@ -74,5 +74,16 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "prior_selected_review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "linked_review_artifacts": [
+    {
+      "review_artifact": "dupe-krill-full-review-20261011.json",
+      "status": "verified_existing_pins_not_new_execution",
+      "pin_errors": [],
+      "original_scope": "Deepens historical shortlist record268. Whole Rust implementation and tests read, complete archive blob verification, eight original macOS tests plus two reproduced mutation counterexamples and rrrah17-test regression qualification. Not all500 full-source/runtime qualification, native Windows/Linux or linking safety qualification."
+    }
+  ],
+  "artifact_pin_reconciliation_audit": "unlinked-reviews-pin-audit-20261013.json",
+  "prior_registry_review": "prior-registry-268-unlinked-reconciliation-20261013.json"
 }

@@ -1,0 +1,94 @@
+   Compiling rrrah-gpu v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-gpu)
+warning: function `fallible_zeroed_bytes` is never used
+   --> crates/rrrah-cache/src/mosaic_payload_v1.rs:728:4
+    |
+728 | fn fallible_zeroed_bytes(len: usize) -> Result<Box<[u8]>, MosaicPayloadError> {
+    |    ^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-cache` (lib) generated 1 warning
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `dev` profile [optimized + debuginfo] target(s) in 5.97s
+     Running `target/debug/examples/raw_view_timing /Users/themoretheless/Documents/Sources/rrrah/tests/IMG_9043.CR3`
+adapter: Metal Apple M4 Max
+kind,fixture,iteration,width,height,decode_ms,upload_enqueue_ms,halo_pack_ms,row_pack_ms,enqueue_write_ms,frame_complete_ms,total_ms
+sample,IMG_9043.CR3,1,6188,4120,73.168,23.646,11.647,0.002,11.811,8.280,105.170
+sample,IMG_9043.CR3,2,6188,4120,70.036,22.955,10.846,0.002,11.964,7.598,100.650
+sample,IMG_9043.CR3,3,6188,4120,76.008,24.322,11.640,0.001,12.517,10.300,110.700
+sample,IMG_9043.CR3,4,6188,4120,81.010,27.528,12.780,0.002,14.499,15.910,124.558
+sample,IMG_9043.CR3,5,6188,4120,97.719,29.928,13.047,0.003,16.662,8.702,136.433
+sample,IMG_9043.CR3,6,6188,4120,83.060,24.997,11.797,0.002,13.005,7.763,115.899
+sample,IMG_9043.CR3,7,6188,4120,83.085,27.111,12.690,0.002,14.116,10.586,120.972
+sample,IMG_9043.CR3,8,6188,4120,81.315,27.907,12.290,0.002,15.363,16.964,126.323
+sample,IMG_9043.CR3,9,6188,4120,90.188,27.265,12.493,0.002,14.504,9.308,126.863
+sample,IMG_9043.CR3,10,6188,4120,96.232,30.667,13.592,0.003,16.839,10.683,137.679
+sample,IMG_9043.CR3,11,6188,4120,112.936,33.606,13.496,0.003,19.916,8.899,155.527
+sample,IMG_9043.CR3,12,6188,4120,106.140,30.303,13.149,0.003,16.888,7.155,143.680
+sample,IMG_9043.CR3,13,6188,4120,84.145,28.865,13.276,0.002,15.401,14.697,127.789
+sample,IMG_9043.CR3,14,6188,4120,86.465,29.252,13.421,0.004,15.569,8.990,124.855
+sample,IMG_9043.CR3,15,6188,4120,95.340,28.881,13.117,0.002,15.541,7.709,132.025
+IMG_9043.CR3: 15 samples / 3 warmups; decode p50/p95 84.145/112.936 ms; upload enqueue 27.907/33.606 ms; frame completion 8.990/16.964 ms; total 126.323/155.527 ms
+resident,IMG_9043.CR3,3,1920,1080,,,,,,,1.779
+resident,IMG_9043.CR3,4,1920,1080,,,,,,,1.705
+resident,IMG_9043.CR3,5,1920,1080,,,,,,,1.993
+resident,IMG_9043.CR3,6,1920,1080,,,,,,,1.728
+resident,IMG_9043.CR3,7,1920,1080,,,,,,,1.710
+resident,IMG_9043.CR3,8,1920,1080,,,,,,,1.599
+resident,IMG_9043.CR3,9,1920,1080,,,,,,,2.158
+resident,IMG_9043.CR3,10,1920,1080,,,,,,,2.677
+resident,IMG_9043.CR3,11,1920,1080,,,,,,,1.682
+resident,IMG_9043.CR3,12,1920,1080,,,,,,,1.665
+resident,IMG_9043.CR3,13,1920,1080,,,,,,,1.738
+resident,IMG_9043.CR3,14,1920,1080,,,,,,,1.606
+resident,IMG_9043.CR3,15,1920,1080,,,,,,,1.645
+resident,IMG_9043.CR3,16,1920,1080,,,,,,,1.642
+resident,IMG_9043.CR3,17,1920,1080,,,,,,,1.548
+resident,IMG_9043.CR3,18,1920,1080,,,,,,,2.503
+resident,IMG_9043.CR3,19,1920,1080,,,,,,,3.048
+resident,IMG_9043.CR3,20,1920,1080,,,,,,,1.647
+resident,IMG_9043.CR3,21,1920,1080,,,,,,,1.737
+resident,IMG_9043.CR3,22,1920,1080,,,,,,,3.157
+resident,IMG_9043.CR3,23,1920,1080,,,,,,,1.702
+resident,IMG_9043.CR3,24,1920,1080,,,,,,,1.728
+resident,IMG_9043.CR3,25,1920,1080,,,,,,,1.725
+resident,IMG_9043.CR3,26,1920,1080,,,,,,,2.387
+resident,IMG_9043.CR3,27,1920,1080,,,,,,,2.614
+resident,IMG_9043.CR3,28,1920,1080,,,,,,,1.721
+resident,IMG_9043.CR3,29,1920,1080,,,,,,,1.823
+resident,IMG_9043.CR3,30,1920,1080,,,,,,,1.711
+resident,IMG_9043.CR3,31,1920,1080,,,,,,,1.832
+resident,IMG_9043.CR3,32,1920,1080,,,,,,,2.217
+resident,IMG_9043.CR3,33,1920,1080,,,,,,,2.134
+resident,IMG_9043.CR3,34,1920,1080,,,,,,,2.403
+resident,IMG_9043.CR3,35,1920,1080,,,,,,,2.754
+resident,IMG_9043.CR3,36,1920,1080,,,,,,,1.842
+resident,IMG_9043.CR3,37,1920,1080,,,,,,,2.144
+resident,IMG_9043.CR3,38,1920,1080,,,,,,,2.476
+resident,IMG_9043.CR3,39,1920,1080,,,,,,,7.455
+resident,IMG_9043.CR3,40,1920,1080,,,,,,,1.876
+resident,IMG_9043.CR3,41,1920,1080,,,,,,,1.791
+resident,IMG_9043.CR3,42,1920,1080,,,,,,,5.047
+resident,IMG_9043.CR3,43,1920,1080,,,,,,,2.053
+resident,IMG_9043.CR3,44,1920,1080,,,,,,,1.675
+resident,IMG_9043.CR3,45,1920,1080,,,,,,,1.775
+resident,IMG_9043.CR3,46,1920,1080,,,,,,,1.488
+resident,IMG_9043.CR3,47,1920,1080,,,,,,,1.910
+resident,IMG_9043.CR3,48,1920,1080,,,,,,,1.863
+resident,IMG_9043.CR3,49,1920,1080,,,,,,,2.307
+resident,IMG_9043.CR3,50,1920,1080,,,,,,,3.551
+resident,IMG_9043.CR3,51,1920,1080,,,,,,,1.656
+resident,IMG_9043.CR3,52,1920,1080,,,,,,,1.793
+resident,IMG_9043.CR3,53,1920,1080,,,,,,,1.650
+resident,IMG_9043.CR3,54,1920,1080,,,,,,,1.483
+resident,IMG_9043.CR3,55,1920,1080,,,,,,,1.608
+resident,IMG_9043.CR3,56,1920,1080,,,,,,,1.762
+resident,IMG_9043.CR3,57,1920,1080,,,,,,,1.669
+resident,IMG_9043.CR3,58,1920,1080,,,,,,,3.041
+resident,IMG_9043.CR3,59,1920,1080,,,,,,,2.167
+resident,IMG_9043.CR3,60,1920,1080,,,,,,,1.740
+resident,IMG_9043.CR3,61,1920,1080,,,,,,,1.767
+resident,IMG_9043.CR3,62,1920,1080,,,,,,,3.074
+IMG_9043.CR3: resident zoom/pan 60 frames; p50/p95 1.779/3.157 ms
+managed_cpu: used=0 peak=124360466 limit=536870912
+managed_gpu: used=0 peak=146800640 limit=536870912

@@ -1,0 +1,40 @@
+{
+  "backend": "Metal Apple M4 Max",
+  "hdr_tests": {
+    "passed": 22,
+    "failed": 0,
+    "ignored": 3
+  },
+  "arbitrary_exr": {
+    "accepted": 17,
+    "refused": 11,
+    "unknown": 6,
+    "pinned_files": 51
+  },
+  "wide_exr": {
+    "qualified": 10,
+    "refused": 4,
+    "unknown": 2,
+    "pinned_files": 22
+  },
+  "checks": [
+    "independent analytical color oracle",
+    "native source sample bits",
+    "adopted neutral metadata retained",
+    "exact SDR and HDR frames before and after V4 swap",
+    "memory pressure refusal, cancellation and retry",
+    "tracked root credit zero",
+    "deterministic fixture generation and SHA256 pins"
+  ],
+  "log": "exr-adopted-neutral-metal-2026-10-11.log",
+  "log_sha256": "b84453130e0b1b8162c7f83a38a8e7ab4638cb8e95dbadc6b90b7ca7d5cb50d3",
+  "limits": [
+    "authored metadata variants of independently encoded EXR samples",
+    "broader producers, layers, deep and tiled EXR remain unqualified",
+    "physical HDR calibration remains open",
+    "NVIDIA hardware deferred by user"
+  ],
+  "decoder_log": "exr-adopted-neutral-decode-2026-10-11.log",
+  "decoder_log_sha256": "d44e27dfc10dcf275b6abcea575b8fcc72dcedb8aa8bf0abdabdbfc3a4a2d510",
+  "decoder_focused_run": "exit 0; see preserved log for test and filtered counts"
+}

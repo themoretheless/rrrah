@@ -1,0 +1,63 @@
+{
+  "status": "complete_bounded_opposite_native_controls",
+  "producer_pid": 96390,
+  "source_manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-opposite-native-capacity-snapshot-20261011.json",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-opposite-native-capacity-snapshot-20261011.json": "ba658d4ea6e584e9597fe4882bc4404225624970d0c0ca14f60786220f9dc173",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-loftr-publisher-positives-ordering-prefix-0130-audit-20261011.json": "44a473b3cb8d0b26cc6ee6530b9189b47a05830dd21227a2284627c86da765e2",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-publisher-positives-qualified-20261011/audits/ordering-prefix-0130.json": "26bc447a8cfff1926c21f8fc62106f0628a34b9a98fb0f4d5b42d1accb702cd7",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-loftr-native-20261010-runtime-pins.json": "8daa92d3ed2c84278338c53eedffed1fcdc272bf8ee7a419397cd7f098a6783a",
+    "/Users/themoretheless/.codex/tmp/rrrah-opposite-native-first-rejection-qualified-20261011/opposite_native_files": "d3350a33870cf9e7ea34d10edaff96ac110cb4d23f098bfebe229469df81a951",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-opposite-native-first-rejection-20261011.py": "07fb2676e01223a9f4f3f45fac352569aa198790dc6a1566594e308d89846b54",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libtorch_python.dylib": "cb1d5957b49b8f3c2e4b90de7b99aee835520875bce893b11eb7528a548744fa",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libtorch.dylib": "2178657b7eeffc0c0a989889ac3e2b2e3d216073b35f3a291ee89bd65c0fb406",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libtorch_global_deps.dylib": "6ff1aedff89150170f225ce821dc9355a9d5f9c80a6cc1bb761c8d209638c2c7",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libomp.dylib": "fe0670951c85401421f6cedc91971f28dc870bad4c1f0cfebe2b74dac421e5f0",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libtorch_cpu.dylib": "941f3e16a8e02b23b99bd2c8693caabaf8df859bfaa293f39a5d7dd8a8f5ca6e",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libc10.dylib": "f203c171b7a71c742ef4a84bde3af64465e545a4cc3ebfd7f245dca3ebe4e7cf",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libshm.dylib": "3a6fc248697b8809534e74d9e5fc784b385239d8c7aeef291c3968a73609f7d2",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/203502.jpg": "bf1d351e0a8259716fe65e0eb3c37a55e25bfa3d1d06042c8a50f8935b31dd1c",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/203500.jpg": "e22cba724438643ac01eb2516eab2ab466d51544218f9096c2a99fbbf07c4aac",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-opposite-native-20261011.json": "5c467eb2d161e84ab8513f802bcd09cb79b9e2b4df382fa7e2cafe1d24180ff0"
+  },
+  "plan": [
+    {
+      "original_id": 35,
+      "query_id": 209,
+      "group_id": 203500,
+      "original": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/203500.jpg",
+      "query": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/203502.jpg",
+      "direction": "reverse",
+      "left": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/203502.jpg",
+      "right": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/203500.jpg",
+      "source_tolerance": 0.5536776036072714,
+      "gradient_minimum_distance": 0.19068231807512986,
+      "radius_0_1_proposed": false
+    }
+  ],
+  "results": [
+    {
+      "index": 0,
+      "status": "inconclusive",
+      "command": [
+        "/usr/bin/time",
+        "-l",
+        "/usr/bin/env",
+        "DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+        "/Users/themoretheless/.codex/tmp/rrrah-opposite-native-first-rejection-qualified-20261011/opposite_native_files",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/203502.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/203500.jpg",
+        "0.5536776036072714"
+      ],
+      "pid": 96393,
+      "returncode": 1,
+      "elapsed_seconds": 123.172637208,
+      "stdout": "",
+      "stderr": "Error: Rank(InsufficientGeometry)\n      123.16 real       116.22 user         0.68 sys\n          1342062592  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n              226119  page reclaims\n                   7  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                  14  voluntary context switches\n               22298  involuntary context switches\n       1514833331815  instructions retired\n        294738109448  cycles elapsed\n          1306445432  peak memory footprint\n",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-opposite-native-first-rejection-qualified-20261011/0.log",
+      "log_sha256": "3f8dcd816b2c6d8338cd3aaec104dcdca5232c9c94f3d20795bffd4905533691"
+    }
+  ],
+  "required": 1,
+  "scope": "Explicit new six-opposite-recipe API on the first frozen-baseline rejected publisher positive203500/203502 reverse. Unchanged caller-direction thresholds, no synthetic points or opposite inlier relabelling. Not automatic portfolio/collection integration or full-corpus qualification."
+}

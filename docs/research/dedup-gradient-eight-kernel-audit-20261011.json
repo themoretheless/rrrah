@@ -1,0 +1,65 @@
+{
+  "status": "complete_microkernel_eight_lane_candidate_rejected_for_current_opt1",
+  "decision": "Keep production four-lane implementation. Eight-lane opt1 is slower on the largest synthetic bank. Opt3 improvements do not justify a default-profile regression or establish real-matcher behavior.",
+  "summary": [
+    {
+      "opt_level": 1,
+      "left": 64,
+      "right": 65,
+      "four_seconds": 0.000228542,
+      "eight_seconds": 0.00022875,
+      "four_over_eight": 0.9990907103825137
+    },
+    {
+      "opt_level": 1,
+      "left": 257,
+      "right": 259,
+      "four_seconds": 0.0036521875,
+      "eight_seconds": 0.0037180205,
+      "four_over_eight": 0.9822935349603371
+    },
+    {
+      "opt_level": 1,
+      "left": 1024,
+      "right": 1025,
+      "four_seconds": 0.1009381875,
+      "eight_seconds": 0.123952125,
+      "four_over_eight": 0.8143320455377429
+    },
+    {
+      "opt_level": 3,
+      "left": 64,
+      "right": 65,
+      "four_seconds": 0.000227479,
+      "eight_seconds": 0.0002175205,
+      "four_over_eight": 1.0457818918216903
+    },
+    {
+      "opt_level": 3,
+      "left": 257,
+      "right": 259,
+      "four_seconds": 0.004518167,
+      "eight_seconds": 0.003509333,
+      "four_over_eight": 1.2874717218343201
+    },
+    {
+      "opt_level": 3,
+      "left": 1024,
+      "right": 1025,
+      "four_seconds": 0.09908935399999999,
+      "eight_seconds": 0.0867076875,
+      "four_over_eight": 1.1427977940248952
+    }
+  ],
+  "timed_samples": 48,
+  "bitwise_distance_assertions_per_optimization_level": 24327,
+  "metadata_erratum": "The harness prints a fixed parity,17527 marker; its number is not a counted test result. The actual enumerated bitwise distance assertions are 24327 per compiled binary. This marker is ignored by result parsing.",
+  "pins": {
+    "docs/research/dedup-gradient-eight-kernel-20261011.json": "c3f30b2189fed464b7c3873fd617aa2fb4913d46ca7e7f59f625db257eacb6f0",
+    "/Users/themoretheless/.codex/tmp/rrrah-gradient-eight-kernel-20261011/build-opt1.log": "92f1c4dcf3f16acc8604eae3db7fbe77004a4176d18b8bb76e65135bab5fb2d8",
+    "/Users/themoretheless/.codex/tmp/rrrah-gradient-eight-kernel-20261011/run-opt1.log": "2fcbecafe57f041c3d3768381a95d9100aaa47223dce183b377ce1baa5cee38b",
+    "/Users/themoretheless/.codex/tmp/rrrah-gradient-eight-kernel-20261011/build-opt3.log": "92f1c4dcf3f16acc8604eae3db7fbe77004a4176d18b8bb76e65135bab5fb2d8",
+    "/Users/themoretheless/.codex/tmp/rrrah-gradient-eight-kernel-20261011/run-opt3.log": "32e958022565c184b783d9e408dff24891bebc015f80a162fbfe8fe495f588e9"
+  },
+  "limits": "Synthetic isolated distance kernel only, no production change, no real-image matcher, cancellation, file proof or whole-library speedup qualification."
+}

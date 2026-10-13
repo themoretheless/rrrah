@@ -1,0 +1,55 @@
+{
+  "status": "verified_cli_logger_source_followup_static_only",
+  "repository": "kmulvey/imagedup",
+  "commit": "385bd25bc2a4536f6a7374783a61b0305237e066",
+  "source": "/Users/themoretheless/.codex/tmp/rrrah-kmulvey-imagedup-selected-20261013",
+  "fully_read_this_followup": [
+    "cmd/nsquared/main.go",
+    "cmd/uniqdirs/main.go",
+    "cmd/verify/main.go",
+    "pkg/imagedup/logger/logger.go",
+    "pkg/imagedup/logger/logger_test.go",
+    "go.mod"
+  ],
+  "all_go_implementation_files_fully_read": true,
+  "go_files_read_across_reviews": 15,
+  "whole_implementation_complete": true,
+  "whole_repository_complete": false,
+  "runtime_executed": false,
+  "source_sha256": {
+    "LICENSE": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+    "README.md": "3c0b31082685f4de6fe0f9b3af0e3a177a3266abfa93069ab534738126c0d8e4",
+    "cmd/nsquared/main.go": "554837f10b47a1208824f701b41d9febf50538f5d3bd195225c11a8c0290eb76",
+    "cmd/uniqdirs/main.go": "fdf08b3b6fc2556bbb655dcef7f8d87401aaeab8972fd82fb5b748b589099f0c",
+    "cmd/verify/main.go": "0a94bfef7ccf4cfade7a6bccf18885394ebcbab8fe0217dc778e75fb3f07057c",
+    "go.mod": "cb1c28f2a6013a62eae2af1894b6331bc49a363130068d294100ec25db67e838",
+    "go.sum": "9ac6256645efc17a59a930c33016145ff05173aa2f021e044aa93030c385ae67",
+    "internal/app/imagedup/files.go": "f9ae8cae8920b3604cd68905be760d85b723f2483cd2f1a41ef55cb3619a39ce",
+    "internal/app/imagedup/files_test.go": "864687fd1c3c9dadc65af6cc12f45908aaeb9f9ab8059fc99c5fba3a06252e30",
+    "internal/app/imagedup/hash/cache.go": "f343a0f49fe5cb78aff9977ab39e0fffdc6439c3f2488acb73bff4028c8a5e90",
+    "internal/app/imagedup/hash/cache_test.go": "9274b945814bbb5f8b403f7341b31b49a962bf8b660f4086396260e6024ed020",
+    "internal/app/imagedup/hash/differ.go": "e527be6aa3fe9e77c0395078452e6321c69df2812ac61a5a6a803785e59cca31",
+    "internal/app/imagedup/hash/differ_test.go": "676f182dba33836f7a7d2d5fed54b1c70e7468716b237aa7576072312764d9ae",
+    "internal/app/imagedup/imagedup.go": "c2683e4204724589c55dcbdc20b00f47aa83e0e42ed66fc0f3f456746508a053",
+    "internal/app/imagedup/imagedup_test.go": "11e9ff11fcc4f3dee8a9067ce90b3b48f83ad18dfe503168efc17e1e042a8bd4",
+    "internal/app/imagedup/stats.go": "240817c577a4047f0e2171fc520cc3c2076d2dfc3211a33904c8ba67947b77ec",
+    "pkg/imagedup/logger/logger.go": "8a63ce85004aea66d4428e947b82da5ebeb7741a0234f1b3df28c7f00e981568",
+    "pkg/imagedup/logger/logger_test.go": "5c105e55973d23252d3e2a75facabfc1c052289878d840256aace12d81f234e4",
+    "pkg/imagedup/types/pair.go": "65903b386dff20e523d6dd979018c746fde575caa9a517a0ca2432661c2977b3"
+  },
+  "findings": [
+    "Warm persisted cache restores Config{}; DiffResult areas zero; logger ties choose One as Small. Verify always-delete can retain lower-resolution image depending on pair order. Static path analysis only; no deletion executed.",
+    "verify checks existence then removes by path without binding content/identity to search observation; file replacement between search and action is not guarded. Static only.",
+    "uniqdirs dedupDir signal branch returns false before cancel, Shutdown and logger.Close, leaving cleanup incomplete. Static only.",
+    "collectResults outer signal select wraps an inner blocking result/error select; signal is not an alternative in inner select. Static only.",
+    "Directory cache/log filenames use filepath.Base(dir), allowing distinct same-basename directories to reuse output/cache paths. Static only.",
+    "Delete logger removes existing output then writes incomplete JSON array until Close; no atomic temporary publication/checksum. Static only.",
+    "README describes roaring bitmap pair dedup but implementation uses map[string]struct{}; documentation mismatch."
+  ],
+  "remaining": [
+    "Non-Go config/workflows and binary fixtures not fully reviewed",
+    "go.sum dependency inventory only",
+    "No Go/runtime tests or CLI execution; Go1.26 toolchain absent"
+  ],
+  "adoption": "No upstream code adopted; retained as cache/identity/cancellation and publication contract counterexamples."
+}

@@ -1,0 +1,15 @@
+{
+  "status": "source_level_mismatch_identified_not_runtime_fix",
+  "source_pins": {
+    "crates/rrrah-dedup/src/geometry.rs": "8f0ec8dbaf5760a48857b17e16ca32d6ecb1556bc89a37d5bdfb2b026c79ecc4",
+    "crates/rrrah-dedup/src/local_rank.rs": "31be57cbd71f721beb613a43d1441336ae9bcf4702af1b46e441aa10042ac08f"
+  },
+  "observations": [
+    "verify_projective_sampled_selected ranks candidate transforms by target-only inlier count and squared target error before one-direction refinement.",
+    "LocalRank witness admission requires both target and inverse-source residual tolerances simultaneously.",
+    "Recorded strict reverse tolerance can reject most target-only fit inliers; earlier 211900 diagnosis measured this explicitly.",
+    "Opposite-native recovery repairs one measured case, while the additional 204100 reverse remains insufficient. That result alone does not establish the cause in 204100."
+  ],
+  "next_evidence": "Trace actual 204100/207700 candidate points and count joint-admissible witnesses for sampled/refined transforms before changing the fitter. A joint-scoring candidate must keep both caller thresholds, domain guards, bounded trials/point work, cancellation and original-pixel confirmation.",
+  "scope": "Source inspection and bounded existing case evidence, not universal directionality diagnosis or qualified new geometry implementation."
+}

@@ -1,0 +1,69 @@
+{
+  "change": "Skip slope division for vertically disjoint edge pairs, retaining work accounting and cancellation",
+  "pages": [
+    {
+      "fixture": "VectorApple.ai",
+      "page": 0,
+      "native_replay_ms": 23368.99725,
+      "peak_admitted_bytes": 232664374,
+      "final_admitted_bytes": 0,
+      "prior_replay_ms": 30300.535167
+    },
+    {
+      "fixture": "one.ai",
+      "page": 0,
+      "native_replay_ms": 9978.717542,
+      "peak_admitted_bytes": 169698840,
+      "final_admitted_bytes": 0,
+      "prior_replay_ms": 29553.76225
+    },
+    {
+      "fixture": "one.ai",
+      "page": 1,
+      "native_replay_ms": 217.272834,
+      "peak_admitted_bytes": 4957320,
+      "final_admitted_bytes": 0,
+      "prior_replay_ms": 1029.0447920000001
+    }
+  ],
+  "outputs": [
+    {
+      "file": "VectorApple.ai-page-0.native.components.f64le",
+      "sha256": "62926b25aa0701ea931fe20aa31a99a6ddab452b9d87851bd1f30f3ec23c8c67",
+      "byte_exact": true
+    },
+    {
+      "file": "VectorApple.ai-page-0.native.rgba",
+      "sha256": "ecbb6bcbf532cb70c0e35be8c9d655c3cb38ddd8cfd85288e6e3c4c544020efc",
+      "byte_exact": true
+    },
+    {
+      "file": "one.ai-page-0.native.components.f64le",
+      "sha256": "890cec0274060767c59cb00826d6d181cce662028840e659be6cba6ea08d849a",
+      "byte_exact": true
+    },
+    {
+      "file": "one.ai-page-0.native.rgba",
+      "sha256": "4d4dc1019b440c5389a7ed8731db277513f63d501006a3d97fc6a861e78e76c8",
+      "byte_exact": true
+    },
+    {
+      "file": "one.ai-page-1.native.components.f64le",
+      "sha256": "b3ba384a292a73ea286ec3ca3a2c98fe65580dd385458cf1f025891dc405b595",
+      "byte_exact": true
+    },
+    {
+      "file": "one.ai-page-1.native.rgba",
+      "sha256": "89db416a84fdc983853717f5fd73690c020e6feced867d1a3d4e02873f9d7e36",
+      "byte_exact": true
+    }
+  ],
+  "regressions": {
+    "passed": 135,
+    "ignored": 10
+  },
+  "limitations": [
+    "Test-only native AI kernel; production AI qualification remains open.",
+    "Single-run timing comparison does not establish a stable performance improvement."
+  ]
+}

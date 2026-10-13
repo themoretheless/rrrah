@@ -1,0 +1,22 @@
+{
+  "backend": "metal",
+  "optional": false,
+  "passed": 8,
+  "failed": 0,
+  "ignored": 0,
+  "output": [
+    63,
+    65
+  ],
+  "formats": [
+    "Rgba8UnormSrgb",
+    "Rgba16Float"
+  ],
+  "verified": "each format: five cancelled replacements and GPU-budget refusal preserve every previous frame sample and resident credit; successful retry changes frame; final credit zero",
+  "log": "docs/research/model-cancel-frame-2026-10-11.log",
+  "sha256": "ff1df90c6e1845ef63d507fcd9dc2faaefd47897523297db0b76667219c4b8ee",
+  "limitations": [
+    "Authored single-triangle replacement; not large-model latency or OS/physical GPU memory exhaustion.",
+    "Offscreen HDR, not physical HDR display calibration."
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "status": "complete_bounded_native_projected_baseline_with_known_hdr_copy_miss",
+  "report": "docs/research/dedup-projected-loftr-native-20261011.json",
+  "report_sha256": "d064a1f2eea9a37299af554b38ae1c853712ad0965b04582bd015d13a7153ece",
+  "projected_byte_equalities": {
+    "hdr_copy": true,
+    "hdr_collision": true,
+    "alpha_copy": true,
+    "alpha_collision": true
+  },
+  "executed": 5,
+  "expected_outcomes_matched": 4,
+  "known_miss": "hdr_copy",
+  "finding": "Subpixel noisy self-fit produces interpolation error at sharp HDR highlight edge, although both original files are byte-identical. This is a measured false negative under the diagnostic policy; not complete qualification.",
+  "selected_next_action": "Independently pixel-verify identity when equal projected inputs and identity-inlier support nominate it; preserve fitted fallback and bound cumulative original-grid work.",
+  "runtime_pin_count": 7,
+  "bootstrap_correction": "Initial bootstrap expected eight dylibs; actual pinned runtime contains seven. That assertion failed before any preparation/inference; terminal log preserved separately.",
+  "bootstrap_log": "docs/research/dedup-projected-loftr-bootstrap-before-20261011.log"
+}

@@ -1,0 +1,371 @@
+{
+  "status": "complete_five_pair_automatic_search_cpu_qualification",
+  "scope": "Automatic native/LoFTR search: real rephoto in model-first order, rotation controls in native-first order.\n\nFive narrow CPU comparisons, not full corpus/collection/format/platform qualification.\nNative-first recovery of the original large rephoto is not claimed by these controls.\n",
+  "pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/loftr-search-portfolio-full-qualified-20261010": "1ecdd7fa6abb1df96b1055c2e4606ef5ac3f0107f2b59bb7c53e17ee1a67a34b",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-search-portfolio-full-snapshot-20261010.json": "3fc31ab6d61694e86dd7756a6743f2fb884f505a56211ef265479e0718b276a4",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors": "59e55bf0ecd047db9c513672d121a3ea677529ad448bdc3a359e92862c74ddd7",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/209400.jpg": "d9caf92ca47a9047154bd987ee240832b1cc2a01b73fd83144043f181c127777",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/209401.jpg": "707f365de5031172ac067f8a156fd0972e5995e59a0d01326d21d4a50ae22704",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-search-portfolio-full-20261010.py": "e9d6edb280cefcfa4dcf0d4bc4332c2095f85bfcbb56774f2e3f46e078533a7f",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-search-portfolio-full-native-build-20261010.log": "4df2cc1ba71ce121b34c8aff3fd2bbb0f9cce8d6229f550d0f988d915e1034da",
+    "/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup/tests/fixtures/rotation/base.png": "9166225bcbd8c74aca7d1ce153b8e5bfbdbe39bd4c29a795cf25133d1e54a525",
+    "/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup/tests/fixtures/rotation/mirrored.png": "3172cdf545c6d4db87424f8e145e88700912ed14f801223d2f9d6296ee2e550f",
+    "/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup/tests/fixtures/rotation/unrelated.png": "4711b6c997d7dbf9b106188c9524da7b638efa2e17b9d724a76169db526be5d0"
+  },
+  "results": [
+    {
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/209400.jpg",
+      "target": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/209401.jpg",
+      "max_side": 320,
+      "order": "model-first",
+      "returncode": 0,
+      "stdout": "{\"attempted_stages\":1,\"first_miss\":\"None\",\"geometry_inliers\":63,\"hypotheses\":20000,\"managed_peak\":98458336,\"managed_used\":0,\"model_digest\":[251,248,128,60,113,119,49,0,204,125,138,137,62,0,255,47,68,141,150,91,38,37,242,55,0,75,47,168,45,71,4,147],\"order\":\"model-first\",\"pixels\":{\"anchors\":[63,63],\"directions\":[{\"agreeing_pairs\":9333,\"informative_pairs\":9711,\"sites\":1575,\"valid_sites\":1575},{\"agreeing_pairs\":9307,\"informative_pairs\":9954,\"sites\":1575,\"valid_sites\":1575}],\"supported\":true},\"raw_proposals\":263,\"scope\":\"Unified library lifecycle; provider inference tensors/geometry scratch outside payload account. Cooperative stage/strip cancellation; no individual-kernel preemption guarantee.\",\"selected_points\":263,\"status\":\"ok\",\"supported\":true,\"terminal\":\"model\",\"transform\":[[0.4830213659987915,0.18215926079932507,-177.73436068500683],[0.008655429121046814,1.0992505474770438,-373.3308946236274],[0.00002588061605746039,0.0002707885090920206,0.7759807433269611]]}\n",
+      "stderr": "        4.40 real         2.09 user         0.20 sys\n           540229632  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n               33686  page reclaims\n                   9  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                  24  voluntary context switches\n               12230  involuntary context switches\n         17061393574  instructions retired\n          4733028502  cycles elapsed\n           489243704  peak memory footprint\n",
+      "expected_supported": true,
+      "expected_terminal": "model",
+      "evidence": {
+        "attempted_stages": 1,
+        "first_miss": "None",
+        "geometry_inliers": 63,
+        "hypotheses": 20000,
+        "managed_peak": 98458336,
+        "managed_used": 0,
+        "model_digest": [
+          251,
+          248,
+          128,
+          60,
+          113,
+          119,
+          49,
+          0,
+          204,
+          125,
+          138,
+          137,
+          62,
+          0,
+          255,
+          47,
+          68,
+          141,
+          150,
+          91,
+          38,
+          37,
+          242,
+          55,
+          0,
+          75,
+          47,
+          168,
+          45,
+          71,
+          4,
+          147
+        ],
+        "order": "model-first",
+        "pixels": {
+          "anchors": [
+            63,
+            63
+          ],
+          "directions": [
+            {
+              "agreeing_pairs": 9333,
+              "informative_pairs": 9711,
+              "sites": 1575,
+              "valid_sites": 1575
+            },
+            {
+              "agreeing_pairs": 9307,
+              "informative_pairs": 9954,
+              "sites": 1575,
+              "valid_sites": 1575
+            }
+          ],
+          "supported": true
+        },
+        "raw_proposals": 263,
+        "scope": "Unified library lifecycle; provider inference tensors/geometry scratch outside payload account. Cooperative stage/strip cancellation; no individual-kernel preemption guarantee.",
+        "selected_points": 263,
+        "status": "ok",
+        "supported": true,
+        "terminal": "model",
+        "transform": [
+          [
+            0.4830213659987915,
+            0.18215926079932507,
+            -177.73436068500683
+          ],
+          [
+            0.008655429121046814,
+            1.0992505474770438,
+            -373.3308946236274
+          ],
+          [
+            2.588061605746039e-05,
+            0.0002707885090920206,
+            0.7759807433269611
+          ]
+        ]
+      },
+      "process_peak_rss_bytes": 540229632,
+      "exact_standalone_model_evidence_parity": true
+    },
+    {
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/209400.jpg",
+      "target": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/209401.jpg",
+      "max_side": 640,
+      "order": "model-first",
+      "returncode": 0,
+      "stdout": "{\"attempted_stages\":1,\"first_miss\":\"None\",\"geometry_inliers\":515,\"hypotheses\":20000,\"managed_peak\":98917280,\"managed_used\":0,\"model_digest\":[251,248,128,60,113,119,49,0,204,125,138,137,62,0,255,47,68,141,150,91,38,37,242,55,0,75,47,168,45,71,4,147],\"order\":\"model-first\",\"pixels\":{\"anchors\":[515,515],\"directions\":[{\"agreeing_pairs\":81112,\"informative_pairs\":81658,\"sites\":12875,\"valid_sites\":12875},{\"agreeing_pairs\":80935,\"informative_pairs\":82092,\"sites\":12875,\"valid_sites\":12875}],\"supported\":true},\"raw_proposals\":925,\"scope\":\"Unified library lifecycle; provider inference tensors/geometry scratch outside payload account. Cooperative stage/strip cancellation; no individual-kernel preemption guarantee.\",\"selected_points\":925,\"status\":\"ok\",\"supported\":true,\"terminal\":\"model\",\"transform\":[[0.4814253173718157,0.17752744178962881,-174.44113452849444],[0.008675948497697334,1.0889456178509886,-366.44166112820153],[0.000027197080334437145,0.00026711169860048237,0.7729291205601484]]}\n",
+      "stderr": "       12.88 real         5.27 user         0.46 sys\n          1435107328  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n               88306  page reclaims\n                   9  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                  30  voluntary context switches\n               27548  involuntary context switches\n         35321802702  instructions retired\n         11959085665  cycles elapsed\n          1384613640  peak memory footprint\n",
+      "expected_supported": true,
+      "expected_terminal": "model",
+      "evidence": {
+        "attempted_stages": 1,
+        "first_miss": "None",
+        "geometry_inliers": 515,
+        "hypotheses": 20000,
+        "managed_peak": 98917280,
+        "managed_used": 0,
+        "model_digest": [
+          251,
+          248,
+          128,
+          60,
+          113,
+          119,
+          49,
+          0,
+          204,
+          125,
+          138,
+          137,
+          62,
+          0,
+          255,
+          47,
+          68,
+          141,
+          150,
+          91,
+          38,
+          37,
+          242,
+          55,
+          0,
+          75,
+          47,
+          168,
+          45,
+          71,
+          4,
+          147
+        ],
+        "order": "model-first",
+        "pixels": {
+          "anchors": [
+            515,
+            515
+          ],
+          "directions": [
+            {
+              "agreeing_pairs": 81112,
+              "informative_pairs": 81658,
+              "sites": 12875,
+              "valid_sites": 12875
+            },
+            {
+              "agreeing_pairs": 80935,
+              "informative_pairs": 82092,
+              "sites": 12875,
+              "valid_sites": 12875
+            }
+          ],
+          "supported": true
+        },
+        "raw_proposals": 925,
+        "scope": "Unified library lifecycle; provider inference tensors/geometry scratch outside payload account. Cooperative stage/strip cancellation; no individual-kernel preemption guarantee.",
+        "selected_points": 925,
+        "status": "ok",
+        "supported": true,
+        "terminal": "model",
+        "transform": [
+          [
+            0.4814253173718157,
+            0.17752744178962881,
+            -174.44113452849444
+          ],
+          [
+            0.008675948497697334,
+            1.0889456178509886,
+            -366.44166112820153
+          ],
+          [
+            2.7197080334437145e-05,
+            0.00026711169860048237,
+            0.7729291205601484
+          ]
+        ]
+      },
+      "process_peak_rss_bytes": 1435107328,
+      "exact_standalone_model_evidence_parity": true
+    },
+    {
+      "source": "/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup/tests/fixtures/rotation/base.png",
+      "target": "/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup/tests/fixtures/rotation/base.png",
+      "max_side": 320,
+      "order": "native-first",
+      "returncode": 0,
+      "stdout": "{\"anchors\":[415,415],\"attempted_stages\":1,\"candidate_points\":1283,\"first_miss\":\"None\",\"managed_peak\":186572824,\"managed_used\":0,\"native_recipes\":1,\"reflected_source\":false,\"status\":\"ok\",\"supported\":true,\"terminal\":\"native\",\"transform\":[[1.0,0.0,0.0],[0.0,1.0,0.0],[0.0,0.0,1.0]]}\n",
+      "stderr": "        5.28 real         2.08 user         0.09 sys\n           114540544  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n                7706  page reclaims\n                   9  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                  24  voluntary context switches\n                7339  involuntary context switches\n         16847146545  instructions retired\n          4601019642  cycles elapsed\n            69173920  peak memory footprint\n",
+      "expected_supported": true,
+      "expected_terminal": "native",
+      "evidence": {
+        "anchors": [
+          415,
+          415
+        ],
+        "attempted_stages": 1,
+        "candidate_points": 1283,
+        "first_miss": "None",
+        "managed_peak": 186572824,
+        "managed_used": 0,
+        "native_recipes": 1,
+        "reflected_source": false,
+        "status": "ok",
+        "supported": true,
+        "terminal": "native",
+        "transform": [
+          [
+            1.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            1.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      "process_peak_rss_bytes": 114540544
+    },
+    {
+      "source": "/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup/tests/fixtures/rotation/base.png",
+      "target": "/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup/tests/fixtures/rotation/mirrored.png",
+      "max_side": 320,
+      "order": "native-first",
+      "returncode": 0,
+      "stdout": "{\"anchors\":[403,407],\"attempted_stages\":1,\"candidate_points\":1191,\"first_miss\":\"None\",\"managed_peak\":186572600,\"managed_used\":0,\"native_recipes\":4,\"reflected_source\":true,\"status\":\"ok\",\"supported\":true,\"terminal\":\"native\",\"transform\":[[-1.0023948688825892,0.007672177631127551,158.2660455884964],[-0.00016923783440001298,1.0051866411036205,-0.5153194623744781],[-5.074281253084987e-6,0.00005116160648913775,0.9948155015566601]]}\n",
+      "stderr": "       10.06 real         5.87 user         0.16 sys\n           115572736  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n                7769  page reclaims\n                   9  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                  24  voluntary context switches\n               16040  involuntary context switches\n         46237435767  instructions retired\n         12339739031  cycles elapsed\n            70189704  peak memory footprint\n",
+      "expected_supported": true,
+      "expected_terminal": "native",
+      "evidence": {
+        "anchors": [
+          403,
+          407
+        ],
+        "attempted_stages": 1,
+        "candidate_points": 1191,
+        "first_miss": "None",
+        "managed_peak": 186572600,
+        "managed_used": 0,
+        "native_recipes": 4,
+        "reflected_source": true,
+        "status": "ok",
+        "supported": true,
+        "terminal": "native",
+        "transform": [
+          [
+            -1.0023948688825892,
+            0.007672177631127551,
+            158.2660455884964
+          ],
+          [
+            -0.00016923783440001298,
+            1.0051866411036205,
+            -0.5153194623744781
+          ],
+          [
+            -5.074281253084987e-06,
+            5.116160648913775e-05,
+            0.9948155015566601
+          ]
+        ]
+      },
+      "process_peak_rss_bytes": 115572736
+    },
+    {
+      "source": "/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup/tests/fixtures/rotation/base.png",
+      "target": "/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup/tests/fixtures/rotation/unrelated.png",
+      "max_side": 320,
+      "order": "native-first",
+      "returncode": 0,
+      "stdout": "{\"attempted_stages\":2,\"first_miss\":\"Some(Native { recipes: 6, candidates: 0 })\",\"geometry_inliers\":0,\"hypotheses\":20000,\"managed_peak\":186572824,\"managed_used\":0,\"model_digest\":[251,248,128,60,113,119,49,0,204,125,138,137,62,0,255,47,68,141,150,91,38,37,242,55,0,75,47,168,45,71,4,147],\"order\":\"native-first\",\"pixels\":null,\"raw_proposals\":42,\"scope\":\"Unified library lifecycle; provider inference tensors/geometry scratch outside payload account. Cooperative stage/strip cancellation; no individual-kernel preemption guarantee.\",\"selected_points\":42,\"status\":\"ok\",\"supported\":false,\"terminal\":\"model\",\"transform\":null}\n",
+      "stderr": "       31.62 real         8.73 user         0.48 sys\n           457310208  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n               28623  page reclaims\n                  10  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                  33  voluntary context switches\n               47036  involuntary context switches\n         66959063295  instructions retired\n         19402682882  cycles elapsed\n           406553632  peak memory footprint\n",
+      "expected_supported": false,
+      "expected_terminal": "model",
+      "evidence": {
+        "attempted_stages": 2,
+        "first_miss": "Some(Native { recipes: 6, candidates: 0 })",
+        "geometry_inliers": 0,
+        "hypotheses": 20000,
+        "managed_peak": 186572824,
+        "managed_used": 0,
+        "model_digest": [
+          251,
+          248,
+          128,
+          60,
+          113,
+          119,
+          49,
+          0,
+          204,
+          125,
+          138,
+          137,
+          62,
+          0,
+          255,
+          47,
+          68,
+          141,
+          150,
+          91,
+          38,
+          37,
+          242,
+          55,
+          0,
+          75,
+          47,
+          168,
+          45,
+          71,
+          4,
+          147
+        ],
+        "order": "native-first",
+        "pixels": null,
+        "raw_proposals": 42,
+        "scope": "Unified library lifecycle; provider inference tensors/geometry scratch outside payload account. Cooperative stage/strip cancellation; no individual-kernel preemption guarantee.",
+        "selected_points": 42,
+        "status": "ok",
+        "supported": false,
+        "terminal": "model",
+        "transform": null
+      },
+      "process_peak_rss_bytes": 457310208
+    }
+  ]
+}

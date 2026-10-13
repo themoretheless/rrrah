@@ -2,9 +2,9 @@
   "index": 485,
   "repository": "vjymisal0/photo-hash",
   "commit": "2e1559e0a522f2cd17af8d51e92c10dfca91e6c1",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
-  "decision": "reference",
-  "finding": "JS image difference-hash API and tests; useful independent bit-order/backend oracle.",
+  "review_scope": "All17tracked files: all implementation/tests/docs/config read, lock fully parsed and Git blobs verified.10original tests+9authored actualSharp controls; original channel-stride hypothesis falsified.",
+  "decision": "reference_do_not_adopt_unqualified_verdict",
+  "finding": "Transparent/opaque visible-different PNG collision; malformed hex silently identical; empty similarityNaN; odd-grid padded-bit denominator. Opaque alpha stride bug disproved on actualSharp0.35.4. No adoption.",
   "available_source_evidence": [
     {
       "path": "src/dhash.js",
@@ -60,8 +60,8 @@
   "license_metadata": "MIT",
   "license_scope": "screening metadata; nested licenses require checking before copying",
   "tests_detected": 2,
-  "upstream_tests_run": false,
-  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "upstream_tests_run": true,
+  "tests_inventory_scope": "All10node:test declarations in two complete upstream test files executed on actual original lockedSharp0.35.4; staticTypeScript declarations not compiled.",
   "tree_truncated": false,
   "available_readme_license_evidence": [
     {
@@ -84,5 +84,14 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "full_repository_review_complete": true,
+  "whole_repo_complete": true,
+  "whole_implementation_complete": true,
+  "fully_read_files": 17,
+  "complete_source_review": "photo-hash-full-source-review-20261013.json",
+  "complete_runtime_audit": "photo-hash-complete-runtime-audit-v2-20261013.json",
+  "original_tests_passed": 10,
+  "runtime_controls_passed": 9
 }

@@ -1,0 +1,14 @@
+{
+  "status": "inspected_tuple_pair_keys_and_existing_whitespace_identity_controls",
+  "source_sha256": {
+    "crates/rrrah-dedup/src/local_index.rs": "81e04bbdd06ec25e27fd42608344266298769ffa994bf9422dd2fe5774bfbdc3",
+    "crates/rrrah-dedup/src/managed_pair_counts.rs": "06f937219bb3421347eb51dbffdb0add475612ad655c82faaf859d0573085a62",
+    "crates/rrrah-dedup/tests/exact_files.rs": "0b29e51d48da608cddb2a499fa30c770e9e8827e91531c3c3c1dc9b461a125df"
+  },
+  "findings": [
+    "Legacy file-pair counts use HashMap<(u64,u64),usize>.",
+    "ManagedPairCounts stores and compares left/right u64 fields independently after hashing tuple.",
+    "Existing exact_files whitespace test authors8 distinct content families across16files with leading/trailing spaces, tabs, newline and carriage-return names; checks exact group partitions for two root orders and ordinary/verified scan."
+  ],
+  "runtime_scope": "No new runtime execution in this pair-key audit; existing exact-control qualification is separate. No assertion about every repository API."
+}

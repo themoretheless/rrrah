@@ -1,0 +1,35 @@
+{
+  "backend": "metal",
+  "passed": 1,
+  "failed": 0,
+  "triangles": 1000000,
+  "output": [
+    1920,
+    1080
+  ],
+  "swap_writes": 1,
+  "successful_reads": 2,
+  "pressure_refusals": 2,
+  "admitted_cancellations": 2,
+  "verified": "entire serialized model geometry/metadata exact after both restores; CPU pressure/cancellation preserves retry; full SDR and finite HDR frames exact; final CPU/queue/GPU roots zero",
+  "timings": [
+    [
+      "SDR",
+      "141.211",
+      "26.918"
+    ],
+    [
+      "HDR",
+      "126.646",
+      "76.627"
+    ]
+  ],
+  "log": "docs/research/million-grid-swap-2026-10-11.log",
+  "sha256": "812cc5220659f97b6fc58dfb81e754a84911e02e9b14cb428c37078fccb0e880",
+  "limitations": [
+    "Authored coplanar grid, not independent real-scene appearance.",
+    "Managed memory pressure and local temp disk, not OS memory pressure or slow physical disk.",
+    "Test payload/frame oracles and GPU targets/readbacks are outside managed source/geometry budgets.",
+    "Older integrated reports lack added swap/failure markers."
+  ]
+}

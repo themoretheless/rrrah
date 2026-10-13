@@ -1,0 +1,29 @@
+{
+  "backend": "Metal Apple M4 Max",
+  "passed": 1,
+  "failed": 0,
+  "ignored": 0,
+  "seconds": 31.782,
+  "rounds": 15,
+  "restores_and_exact_SDR_HDR_frames": 135,
+  "HDR_pressure_refusals": 134,
+  "HDR_partial_upload_cancellations": 134,
+  "source_count": 9,
+  "checks": [
+    "typed Memory refusal keeps previous scene-linear binary16 HDR frame exact",
+    "check64 forced 512-tile cancellation keeps previous binary16 HDR frame exact",
+    "shared atlas reservations retained across refusal",
+    "cancelled temporary atlas/queue credit released on GPU completion",
+    "retry HDR frame bit-exact",
+    "SDR failure checks remain active alongside HDR",
+    "all GPU/storage roots zero on final drop",
+    "driver requires exact HDR failure counts and preservation/release evidence"
+  ],
+  "log_sha256": "fbcddd656f13983a5428ba3bc453dcaaf1d868b27f3a92162abaace9724f2261",
+  "limits": [
+    "Logical budget pressure, not physical VRAM exhaustion",
+    "Current fixed tiling loop proves cancellation crosses tile-write iterations; no hardware tracing",
+    "Offscreen float transport, not physical display calibration or independent appearance qualification",
+    "Warm local I/O; thirty-second failure regression"
+  ]
+}

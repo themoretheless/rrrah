@@ -1,0 +1,29 @@
+{
+  "status": "selected_three_complete_modules_reviewed_with8_fs_controls",
+  "index": 1,
+  "repository": "arsenetar/dupeguru",
+  "commit": "db097a030150b3d4ea9f492b85e7e4e4bcb3f789",
+  "reviewed_modules": [
+    "core/fs.py",
+    "core/se/fs.py",
+    "core/se/scanner.py"
+  ],
+  "whole_repository_complete": false,
+  "repository_blob_count": 368,
+  "upstream_tests_executed": 0,
+  "findings": [
+    "StandardEdition modules mainly provide display info and declare Filename/Contents/Folders modes; actual scanner algorithm not included in this review.",
+    "FilesDB key is path,size,mtime_ns; same-size changed content with restoredmtime reused stale full digest in actual filesystem control.",
+    "Updating one digest column advances metadata for entire row while keeping alternate digest columns; old partial digest reused after actual content+mtime change.",
+    "ignore_mtime explicitly allows stale same-size entries.",
+    "Hasher selection defaults xxh128 if present elseMD5; cache schema has no backend namespace. Injected SHA256 control demonstrates namespace omission, actualxxhash not executed.",
+    "Three sampled chunks do not include every byte; two5MiB files differing at first byte had equal sampled digest and distinct full MD5. Candidate filter only.",
+    "Missing file File.digest accessor catches error and returns emptybytes; no scanner false-match or deletion outcome inferred."
+  ],
+  "license_observation": "Selected file headers stateGPLv3. No upstream code adopted.",
+  "runtime_scope": "Whole selected core/fs.py unchanged, actual filesystem/SQLite/hashlib. No scanner/app/deletion execution or whole dupeGuru source review; no original xxhash backend qualification.",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/dupeguru-exact-selected-source-20261013.json": "348291c1b795c40b6a29f82bd65eedc6de36e5cfad6164447c9b113e9eb09e82",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/dupeguru-fs-controls-20261013.json": "9bc0e93582d993738ef54948524abfa07a27d6bbaeec50962f98782a5a947e0b"
+  }
+}

@@ -1,0 +1,101 @@
+{
+  "status": "verified_bounded_opposite_proposal_inversion_support",
+  "results": [
+    {
+      "phase": "forward",
+      "correspondences": 113,
+      "forward_residual_inliers": 53,
+      "joint_residual_admissible_before_anchor_selection": 53,
+      "anchor_result": {
+        "anchors": [
+          50,
+          47
+        ],
+        "directions": [
+          {
+            "agreeing_pairs": 8365,
+            "informative_pairs": 8505,
+            "sites": 1250,
+            "valid_sites": 1250
+          },
+          {
+            "agreeing_pairs": 6987,
+            "informative_pairs": 7217,
+            "sites": 1175,
+            "valid_sites": 1130
+          }
+        ],
+        "supported": true
+      }
+    },
+    {
+      "phase": "0",
+      "correspondences": 113,
+      "forward_residual_inliers": 70,
+      "joint_residual_admissible_before_anchor_selection": 5,
+      "anchor_result": {
+        "error": "Rank(InsufficientGeometry)"
+      }
+    },
+    {
+      "phase": "1",
+      "correspondences": 70,
+      "forward_residual_inliers": 41,
+      "joint_residual_admissible_before_anchor_selection": 4,
+      "anchor_result": {
+        "error": "Rank(InsufficientGeometry)"
+      }
+    },
+    {
+      "phase": "2",
+      "correspondences": 72,
+      "forward_residual_inliers": 39,
+      "joint_residual_admissible_before_anchor_selection": 7,
+      "anchor_result": {
+        "error": "Rank(InsufficientGeometry)"
+      }
+    },
+    {
+      "phase": "3",
+      "correspondences": 36,
+      "forward_residual_inliers": 0,
+      "joint_residual_admissible_before_anchor_selection": null,
+      "anchor_result": null
+    },
+    {
+      "phase": "4",
+      "correspondences": 17,
+      "forward_residual_inliers": 0,
+      "joint_residual_admissible_before_anchor_selection": null,
+      "anchor_result": null
+    },
+    {
+      "phase": "5",
+      "correspondences": 16,
+      "forward_residual_inliers": 0,
+      "joint_residual_admissible_before_anchor_selection": null,
+      "anchor_result": null
+    }
+  ],
+  "actual_forward_correspondences": 113,
+  "actual_shared_swapped_correspondences": 96,
+  "inverse_forward_geometry_joint_admissible": 11,
+  "recorded_reverse_policy_anchors": [
+    11,
+    11
+  ],
+  "role_swapped_policy_anchors": [
+    47,
+    50
+  ],
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-native-direction-trace-211900-20261011.json": "76e9a6078dc15fb8982f2ae91adab06eb962442c899aa3a6c663bd7a0fd62aea",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-native-direction-trace-snapshot-20261011.json": "0e05b091233c8dd040d47a0050ce09560755c9e1888fadb2efa8764a365ecbdb",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-directional-211900-211901-fixture-20261011.json": "139fc26a9bd241e3f0a4e6cf191b74162c974311b6d18f3ce502403ab20fb65c",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-native-direction-tolerance-20261011.json": "312f819ad92d900c2d9b8c97d96bb03140b14cff9c2bc678892b9af642e018d7",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-native-direction-tolerance-harness-20261011.json": "daa95ee8cf1b378d94c9827b2364b1da6612462088e3887540440261797489a1",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-native-direction-trace-20261011.py": "3da2960f36562edb2ccd4a628af31ff1667180c7e3a1ce6bca5f2be42153563e"
+  },
+  "conclusion": "Recorded reverse thresholds can confirm this pair using actual opposite-direction proposals and inverse geometry. Three reverse fitted geometries have only5/4/7 jointly admissible points despite70/41/39 target-only inliers; other three have no geometry. Opposite point sets overlap96/113. Automatic bounded opposite-proposal fallback is not yet integrated.",
+  "scope": "One publisher pair, native source unchanged, seven recipe traces and one tolerance-role control. Not full corpus/negative precision/hard RSS/platform or automatic search fix. Role-swapped policy control is not a replacement for the stricter original replay policy."
+}

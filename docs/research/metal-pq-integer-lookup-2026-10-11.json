@@ -1,0 +1,231 @@
+{
+  "date": "2026-10-11",
+  "change": "Exact optional PQ integer lookup; 512 KiB u16 / 2 KiB u8 managed scratch, scalar fallback when scratch cannot be admitted/allocated; no HLG or arbitrary float lookup.",
+  "measurement": {
+    "command": "cargo run --release -p rrrah-decode --example heif_hdr_timing -- /tmp/rrrah-canon-dpp-cardinal-IMG_5499cpq.HIF 5 compare",
+    "method": "One warmup pair excluded. Five measured pairs with alternating scalar/table order, shared native source per pair; conversion children share root. Exact output-only conversion budget forces scalar; output+512KiB allows table. Hashing and dropping outside timed conversion.",
+    "scope": "Final run after this task compilation ended; ordinary HDR tests overlapped initial warmup. Shared interactive host, five pairs on one photographic file. Not cold filesystem, native app ready-time, physical display or GPU throughput qualification.",
+    "scalar_pq_median_ms": 4131.706708000001,
+    "table_pq_median_ms": 422.67808299999996,
+    "median_ratio": 9.775067301041018,
+    "records": [
+      {
+        "conversion_peak": 384524288,
+        "dimensions": [
+          6000,
+          4000
+        ],
+        "float_blake3": "fabe8ed8f0bb1a861ec7afb1404fee8f1e86a0f222dcb5cc18dfaa1514dcb16a",
+        "iteration": 1,
+        "mode": "table",
+        "native_ms": 2577.389917,
+        "peak": 588736916,
+        "pq_ms": 537.875459,
+        "root": 0
+      },
+      {
+        "conversion_peak": 384000000,
+        "dimensions": [
+          6000,
+          4000
+        ],
+        "float_blake3": "fabe8ed8f0bb1a861ec7afb1404fee8f1e86a0f222dcb5cc18dfaa1514dcb16a",
+        "iteration": 1,
+        "mode": "scalar",
+        "native_ms": 2577.389917,
+        "peak": 588736916,
+        "pq_ms": 3729.878584,
+        "root": 0
+      },
+      {
+        "conversion_peak": 384000000,
+        "dimensions": [
+          6000,
+          4000
+        ],
+        "float_blake3": "fabe8ed8f0bb1a861ec7afb1404fee8f1e86a0f222dcb5cc18dfaa1514dcb16a",
+        "iteration": 2,
+        "mode": "scalar",
+        "native_ms": 2322.693333,
+        "peak": 588736916,
+        "pq_ms": 4330.954667,
+        "root": 0
+      },
+      {
+        "conversion_peak": 384524288,
+        "dimensions": [
+          6000,
+          4000
+        ],
+        "float_blake3": "fabe8ed8f0bb1a861ec7afb1404fee8f1e86a0f222dcb5cc18dfaa1514dcb16a",
+        "iteration": 2,
+        "mode": "table",
+        "native_ms": 2322.693333,
+        "peak": 588736916,
+        "pq_ms": 437.720417,
+        "root": 0
+      },
+      {
+        "conversion_peak": 384524288,
+        "dimensions": [
+          6000,
+          4000
+        ],
+        "float_blake3": "fabe8ed8f0bb1a861ec7afb1404fee8f1e86a0f222dcb5cc18dfaa1514dcb16a",
+        "iteration": 3,
+        "mode": "table",
+        "native_ms": 2593.935708,
+        "peak": 588736916,
+        "pq_ms": 422.67808299999996,
+        "root": 0
+      },
+      {
+        "conversion_peak": 384000000,
+        "dimensions": [
+          6000,
+          4000
+        ],
+        "float_blake3": "fabe8ed8f0bb1a861ec7afb1404fee8f1e86a0f222dcb5cc18dfaa1514dcb16a",
+        "iteration": 3,
+        "mode": "scalar",
+        "native_ms": 2593.935708,
+        "peak": 588736916,
+        "pq_ms": 4307.810208,
+        "root": 0
+      },
+      {
+        "conversion_peak": 384000000,
+        "dimensions": [
+          6000,
+          4000
+        ],
+        "float_blake3": "fabe8ed8f0bb1a861ec7afb1404fee8f1e86a0f222dcb5cc18dfaa1514dcb16a",
+        "iteration": 4,
+        "mode": "scalar",
+        "native_ms": 2900.0200830000003,
+        "peak": 588736916,
+        "pq_ms": 4087.146958,
+        "root": 0
+      },
+      {
+        "conversion_peak": 384524288,
+        "dimensions": [
+          6000,
+          4000
+        ],
+        "float_blake3": "fabe8ed8f0bb1a861ec7afb1404fee8f1e86a0f222dcb5cc18dfaa1514dcb16a",
+        "iteration": 4,
+        "mode": "table",
+        "native_ms": 2900.0200830000003,
+        "peak": 588736916,
+        "pq_ms": 396.23875,
+        "root": 0
+      },
+      {
+        "conversion_peak": 384524288,
+        "dimensions": [
+          6000,
+          4000
+        ],
+        "float_blake3": "fabe8ed8f0bb1a861ec7afb1404fee8f1e86a0f222dcb5cc18dfaa1514dcb16a",
+        "iteration": 5,
+        "mode": "table",
+        "native_ms": 2328.1255,
+        "peak": 588736916,
+        "pq_ms": 352.80699999999996,
+        "root": 0
+      },
+      {
+        "conversion_peak": 384000000,
+        "dimensions": [
+          6000,
+          4000
+        ],
+        "float_blake3": "fabe8ed8f0bb1a861ec7afb1404fee8f1e86a0f222dcb5cc18dfaa1514dcb16a",
+        "iteration": 5,
+        "mode": "scalar",
+        "native_ms": 2328.1255,
+        "peak": 588736916,
+        "pq_ms": 4131.706708000001,
+        "root": 0
+      }
+    ],
+    "native_decode_median_ms": 2577.389917,
+    "earlier_under_compilation": {
+      "scalar_median_ms": 5384.881334,
+      "table_median_ms": 504.978833,
+      "reason_for_final_run": "Concurrent compilation made timings variable; final run repeats after own compilation finished."
+    }
+  },
+  "limits": [
+    "Physical HDR display color/nits unqualified.",
+    "NVIDIA deferred by user.",
+    "Full 100-format acceptance still incomplete."
+  ],
+  "artifacts": {
+    "source": {
+      "path": "/tmp/rrrah-canon-dpp-cardinal-IMG_5499cpq.HIF",
+      "sha256": "a816325fdf92fe04db1da0b29ffbb91e952bf426038108b982e159629fcacc1e"
+    },
+    "oracle": {
+      "path": "/tmp/rrrah-canon-dpp-cardinal-ffmpeg.rgba16le",
+      "sha256": "59a2692e3f8b83ede1e141d26fe41cd18a57e93364bbe977766639a7969a0082"
+    },
+    "binary": {
+      "path": "target/release/examples/heif_hdr_timing",
+      "sha256": "6290b9ff89efccad72146611dfd09b603e8937a38548874ae8ae6b274f80770d"
+    },
+    "core_log": {
+      "path": "/tmp/rrrah-pq-core-current.log",
+      "sha256": "cd34fba2333ba2b97bee78a46efefd3a9eb088a9805982e24d3e310bf1d11a34"
+    },
+    "core_source": {
+      "path": "crates/rrrah-core/src/raster.rs",
+      "sha256": "7fcd85c3a190d3c1379fa382489eabadc1c6749e4d53e6656c6f9d2b659b24af"
+    },
+    "benchmark_source": {
+      "path": "crates/rrrah-decode/examples/heif_hdr_timing.rs",
+      "sha256": "f3142864567dffdffea7b5591565ee9426bcd0b9a6802f9ef4fe9b2057da0caf"
+    },
+    "final_measurements": {
+      "path": "/tmp/rrrah-pq-compare-final.jsonl",
+      "sha256": "61c066dfb467bbd1a50b8a264fce9f2fe0ead074ee16335795c9bb0f1dd5def6"
+    }
+  },
+  "source_provenance": {
+    "page": "https://www.rsok.com/~jrm/2026jan07_cardinal/index.html",
+    "download": "https://www.rsok.com/~jrm/2026jan07_cardinal/IMG_5499cpq.HIF",
+    "description": "Canon DPP HDR PQ export, external copyrighted source under /tmp only; not straight-out-of-camera qualification."
+  },
+  "gates": {
+    "core": {
+      "passed": 105,
+      "failed": 0,
+      "ignored": 2,
+      "log": "/tmp/rrrah-pq-core-current.log",
+      "sha256": "cd34fba2333ba2b97bee78a46efefd3a9eb088a9805982e24d3e310bf1d11a34"
+    },
+    "decode": {
+      "passed": 993,
+      "failed": 0,
+      "ignored": 67,
+      "log": "/tmp/rrrah-pq-decode-current.log",
+      "sha256": "3df6d4b001cb2ca28f30686b64bb4bea5127d17bd32888b131e06470b9303f29"
+    },
+    "photographic_metal": {
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "log": "/tmp/rrrah-pq-metal-current.log",
+      "sha256": "e54c1a3acf1e620e6bba9eecbbcd79f2eecbe94c14ac026f59afd09c8bdf5fa8"
+    },
+    "ordinary_hdr": {
+      "passed": 14,
+      "failed": 0,
+      "ignored": 3,
+      "log": "/tmp/rrrah-pq-hdr-current.log",
+      "sha256": "ff4dc4e3ea57af00f363434af4bdc70ea9c61833796cdf62cf234302a4482c9e"
+    }
+  },
+  "gpu_scope": "Actual Apple M4 Max Metal; full 6000x4000 source upload and all 384000000 float bytes checked across RAM/disk swap. SDR128x96 and HDR128x64 output exact across restore; pressure rejection/retry; root/queue zero. Not full-resolution GPU readback or physical HDR measurement."
+}

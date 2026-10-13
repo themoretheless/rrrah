@@ -1,0 +1,33 @@
+{
+  "date": "2026-10-11",
+  "change": "Native stack-only linear RGB xy/white -> linear sRGB/D65 matrix construction, with Bradford adaptation. Existing BT2020/P3 linear display preparation now uses the shared constructor.",
+  "api": "rrrah_core::linear_rgb_to_srgb_from_xy",
+  "tests": {
+    "core_passed": 112,
+    "core_ignored": 2,
+    "hdr_metal_passed": 17,
+    "hdr_metal_ignored": 3
+  },
+  "covered": [
+    "BT2020/P3 D65 reference first-column values and neutral mapping",
+    "ACES AP1/AP0 D60 and XYZ-axis primary neutral mapping",
+    "Nonfinite, collapsed and invalid white bases refused",
+    "Existing Radiance and EXR known-wide-color swap/cancel/pressure/SDR/HDR regressions on actual Metal"
+  ],
+  "remaining": [
+    "Per-frame arbitrary chromaticity metadata and swap serialization are not implemented yet.",
+    "Decoders still qualify only explicitly recognized color spaces; generic source metadata is not yet routed.",
+    "Full independent non-D65 matrix oracle and actual arbitrary-primary Metal frames remain to qualify.",
+    "Physical HDR calibration and NVIDIA hardware remain unqualified."
+  ],
+  "logs": {
+    "core": {
+      "path": "docs/research/linear-primary-matrix-2026-10-11.core.log",
+      "sha256": "a125ba6858d105e4ebe2c1b1df41de1a60b44da24f591be657a57b7fc6d59c8a"
+    },
+    "metal": {
+      "path": "docs/research/linear-primary-matrix-2026-10-11.metal.log",
+      "sha256": "8f0500e4271848a4d1aa6c360ab52239daccb4c6cbecc49074c822895aa6cdbe"
+    }
+  }
+}

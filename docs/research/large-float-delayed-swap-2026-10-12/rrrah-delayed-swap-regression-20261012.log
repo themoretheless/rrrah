@@ -1,0 +1,25 @@
+warning: function `fallible_zeroed_bytes` is never used
+   --> crates/rrrah-cache/src/mosaic_payload_v1.rs:728:4
+    |
+728 | fn fallible_zeroed_bytes(len: usize) -> Result<Box<[u8]>, MosaicPayloadError> {
+    |    ^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-cache` (lib) generated 1 warning
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.63s
+     Running tests/sustained_swap.rs (target/debug/deps/sustained_swap-16217ab17c614679)
+
+running 9 tests
+test hundred_thousand_distinct_rasters_keep_swap_index_and_memory_bounded ... ignored, manual 100000 distinct-key real-file churn; small payloads isolate index retention
+test sustained_byte_cap_evicts_without_count_or_ttl_pressure ... ignored, manual sustained independent byte-cap qualification
+test sustained_count_cap_evicts_without_byte_or_ttl_pressure ... ignored, manual sustained independent count-cap qualification
+test sustained_float_hdr_delayed_swap_pressure_cancel_and_retry ... ignored, manual large float HDR delayed disk pressure/cancel qualification
+test sustained_large_keyspace_delayed_swap_pressure_and_retry ... ignored, manual sustained delayed-I/O pressure qualification; default 60 seconds
+test stale_slow_restore_and_cancelled_lock_waiter_release_credit_for_latest_key ... ok
+test cancelled_delayed_restore_releases_partial_pixels_and_keeps_retryable_entry ... ok
+test idle_ttl_removes_delayed_large_blobs_and_physical_files ... ok
+test burst_overload_of_delayed_writer_is_bounded_and_rejected_keys_retry ... ok
+
+test result: ok. 4 passed; 0 failed; 5 ignored; 0 measured; 0 filtered out; finished in 12.38s
+

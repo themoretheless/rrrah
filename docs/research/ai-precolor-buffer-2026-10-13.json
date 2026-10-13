@@ -1,0 +1,38 @@
+{
+  "scope": "Reuse pre-color field key scratch buffer; initialize16words once, reset3 active metadata words per prediction; publish only on complete success",
+  "tests": {
+    "passed": 236,
+    "failed": 0,
+    "ignored": 12
+  },
+  "before_observer_work": [
+    131145281,
+    46752234
+  ],
+  "after_observer_work": [
+    116355569,
+    41483818
+  ],
+  "reduction_percent": [
+    11.277349735519648,
+    11.268800545445593
+  ],
+  "native_five_pixels_and_centroid_comparisons_exactly_unchanged": true,
+  "precolor_checks": 1540674,
+  "mismatches": 0,
+  "regressions": [
+    "Stale inactive tail ignored and preserved",
+    "Reused key exact active-prefix parity and16work saving",
+    "Partial exhausted-work refusal followed by successful retry restores correct identity",
+    "Immediate cancellation leaves scratch unchanged"
+  ],
+  "limitations": [
+    "Diagnostic operation-count reduction only; no throughput benchmark",
+    "All original color sampling retained",
+    "Ordinary4M fullpage integration and independent color qualification remain open"
+  ],
+  "logs": [
+    "ai-precolor-buffer-suite-2026-10-13.log",
+    "ai-precolor-buffer-original-2026-10-13.log"
+  ]
+}

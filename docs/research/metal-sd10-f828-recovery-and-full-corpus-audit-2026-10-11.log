@@ -1,0 +1,75 @@
+
+SOURCE /tmp/rrrah-f828-recovered-oracle.log
+
+
+SOURCE /tmp/rrrah-sd10-recovered-converter.log
+
+
+SOURCE /tmp/rrrah-metal-recovered-f828-compute.log
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.10s
+     Running tests/rgbe_compute_readback.rs (target/debug/deps/rgbe_compute_readback-5d310ff784bafb7a)
+
+running 1 test
+full RGBE adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+full RGBE: 33,062,400 channel values equal; CPU/GPU final usage zero
+test full_f828_managed_rgbe_matches_cpu_reference ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 3 filtered out; finished in 3.15s
+
+
+
+SOURCE /tmp/rrrah-metal-recovered-sd10-display.log
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.10s
+     Running tests/raster_readback.rs (target/debug/deps/raster_readback-96fa399a25885f6d)
+
+running 1 test
+X3F 2267x1513 raster adapter: Metal Apple M4 Max
+X3F 2267x1513 full-frame GPU sRGB max deviation=1; CPU leases released
+test qualified_sd10_linear_raster_full_frame_display_readback ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 23 filtered out; finished in 1.75s
+
+
+
+SOURCE /tmp/rrrah-metal-required-inputs-all-recovered-audit.log
+{
+  "manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/metal-current-manual-followups-2026-10-11.json",
+  "verified": true,
+  "inputs": [
+    {
+      "name": "Fusion-back.rgba32fle",
+      "path": "tests/fixtures/data/metal-recovery/Fusion-back.rgba32fle",
+      "expected_sha256": "00d54286d47dab1e1a0e2d761e8f407e2dcdcdb0823e7ab91fd50f71e2a84df3",
+      "actual_sha256": "00d54286d47dab1e1a0e2d761e8f407e2dcdcdb0823e7ab91fd50f71e2a84df3",
+      "status": "verified"
+    },
+    {
+      "name": "Fusion-front.rgba32fle",
+      "path": "tests/fixtures/data/metal-recovery/Fusion-front.rgba32fle",
+      "expected_sha256": "37871b3f2f5f9de0933a8e3b05edf4e00a1ca9503fd3fe581a94ee5a51f20fa5",
+      "actual_sha256": "37871b3f2f5f9de0933a8e3b05edf4e00a1ca9503fd3fe581a94ee5a51f20fa5",
+      "status": "verified"
+    },
+    {
+      "name": "HERO9.rgba32fle",
+      "path": "tests/fixtures/data/metal-recovery/HERO9.rgba32fle",
+      "expected_sha256": "5a13211dbf9c33a67125777d87bc85a950ac054ab051bfcfdf0175ec2475bb58",
+      "actual_sha256": "5a13211dbf9c33a67125777d87bc85a950ac054ab051bfcfdf0175ec2475bb58",
+      "status": "verified"
+    },
+    {
+      "name": "linear-srgb.ppm",
+      "path": "tests/fixtures/data/metal-recovery/linear-srgb.ppm",
+      "expected_sha256": "00f64dc46ad86366f7da089c9ba37d4aec3462dd49595c2d2049ba0e0d0b68ff",
+      "actual_sha256": "00f64dc46ad86366f7da089c9ba37d4aec3462dd49595c2d2049ba0e0d0b68ff",
+      "status": "verified"
+    },
+    {
+      "name": "F828-sensor-oracle",
+      "path": "tests/fixtures/data/metal-recovery/rrrah-srf-refresh-20261008.u16le",
+      "expected_sha256": "b3fc3d395950407a35d33392a97181fa51aac1afb0aa6b96d94a7eba00e95d42",
+      "actual_sha256": "b3fc3d395950407a35d33392a97181fa51aac1afb0aa6b96d94a7eba00e95d42",
+      "status": "verified"
+    }
+  ]
+}

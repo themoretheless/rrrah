@@ -1,0 +1,20 @@
+{
+  "backend": "Metal",
+  "passed": 126,
+  "failed": 0,
+  "ignored": 13,
+  "log_sha256": "1c270c3ffe407c611206454e0f9ff0fdbd807e0750b03a24c8381c55295e040d",
+  "sources": {
+    "crates/rrrah-gpu/src/lib.rs": "c87708ca15b3f38397558b23fe4e8eed0e2c7db66357a0bfef888f2f8100eb3a",
+    "crates/rrrah-gpu/shaders/raw_view.wgsl": "1ddc40ac3e76107f13b7d3c680cc220726545f638bbc691f8c41a394a2a57068",
+    "crates/rrrah-gpu/tests/raw_linear_readback.rs": "1bed92d592872b9118933f2366165eb343fdd13d71cdb9768e1c9e472804e1c0"
+  },
+  "contract": [
+    "Admission bounds unnormalized filter accumulation and absolute matrix row sums with +10-stop exposure, gamut and quadratic ACES headroom.",
+    "Finite float16 scene output saturates to signed +/-65504; float32 retains representable larger results."
+  ],
+  "limits": [
+    "Conservative admission may refuse extreme finite profiles; not an exhaustive formal proof of every shader path or arbitrary nonfinite view parameters.",
+    "Physical HDR and independent camera appearance remain unverified."
+  ]
+}

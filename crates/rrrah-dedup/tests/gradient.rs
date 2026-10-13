@@ -105,7 +105,7 @@ fn independently_rotated_texture_and_alpha_refusal() {
     let alpha = LinearRgbaView::new(48, 48, &a, 2304, || false).unwrap();
     assert!(matches!(
         describe_gradient(&alpha, [24., 24.], 1., 0., 256, || false),
-        Err(LocalError::Invalid)
+        Err(LocalError::UnsupportedPixels)
     ));
 }
 

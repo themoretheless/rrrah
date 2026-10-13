@@ -1,0 +1,91 @@
+{
+  "scope": "Numerical native-component error bound for all actually observed selected-owner fragment/centroid samples; explicit diagnostic only",
+  "source_tests": "125passed/1ignored",
+  "compositor_tests": "249passed/12ignored",
+  "rows": [
+    {
+      "event": 2670,
+      "complete_owned": true,
+      "points": 915362,
+      "observed_owners": 581,
+      "unused_owners": 101,
+      "unowned": 6,
+      "refused": 0,
+      "finish_refused": 0,
+      "projection_deficit_upper": 1.3635338747552832e-10,
+      "component_error_upper": 1.1933653437754575e-07,
+      "preparation_work": 571351,
+      "diagnostic_work": 9741210
+    },
+    {
+      "event": 2670,
+      "complete_owned": true,
+      "points": 326253,
+      "observed_owners": 684,
+      "unused_owners": 43,
+      "unowned": 1240,
+      "refused": 0,
+      "finish_refused": 0,
+      "projection_deficit_upper": 1.1501743656211345e-10,
+      "component_error_upper": 1.1922071915215496e-07,
+      "preparation_work": 523815,
+      "diagnostic_work": 3492297
+    },
+    {
+      "event": 2670,
+      "complete_owned": true,
+      "points": 107245,
+      "observed_owners": 250,
+      "unused_owners": 155,
+      "unowned": 1,
+      "refused": 0,
+      "finish_refused": 0,
+      "projection_deficit_upper": 1.2825606928979686e-11,
+      "component_error_upper": 1.192165209309733e-07,
+      "preparation_work": 177581,
+      "diagnostic_work": 1066035
+    },
+    {
+      "event": 2670,
+      "complete_owned": true,
+      "points": 3912,
+      "observed_owners": 64,
+      "unused_owners": 0,
+      "unowned": 100,
+      "refused": 0,
+      "finish_refused": 0,
+      "projection_deficit_upper": 1.1870504579292186e-12,
+      "component_error_upper": 1.1921014940798933e-07,
+      "preparation_work": 10612,
+      "diagnostic_work": 30561
+    }
+  ],
+  "total_selected_points": 1352772,
+  "unowned_original_fallback_samples": 1347,
+  "max_component_error": 1.1933653437754575e-07,
+  "all_baseline_controls_and_peak_exact": true,
+  "peak_admitted_bytes": 239197736,
+  "final_retained_credit": 0,
+  "ownership": "Borrowed immutable source and original owner index, per-point finite closed-rectangle check, outward projection deficit evidence",
+  "regressions": [
+    "289interior/exterior sample comparisons without source-hull assumptions",
+    "Refused observations preserve prior evidence",
+    "All insufficient preparation/observation/finalization budgets and all cancellation checkpoints",
+    "Empty evidence, reversed/nonfinite domain and invalid owner refuse"
+  ],
+  "recovery": "Source-linked offline manifests under ignored target directory; root lock versions preserved and generation idempotent",
+  "harness_helper": "scripts/prepare-ai-native-harness.py",
+  "limitations": [
+    "No color computation skipped or ordinary4M/fullpage qualification",
+    "Only successfully observed owned points certified; unowned samples use original fallback",
+    "Does not prove true PDF clipping/ownership or independent color/display accuracy",
+    "Combined route/moment/replacement error and fast-path budget remain open"
+  ],
+  "derivation": "ai-point-evidence-derivation-2026-10-13.md",
+  "source_sha256": {
+    "vendor/hayro-interpret/src/encode/native_source.rs": "859185ae6a6304f8f75da0501eff75a96b8abb48dcf1818aa3ed5826dc8ac85c",
+    "vendor/hayro-interpret/src/encode.rs": "98baef59e57eb380a5385366182ad5a03862c5b36016df42ec9914a14f7d41fd",
+    "vendor/hayro/src/knockout_interpreter.rs": "708152a59de1fa0dbcc9931b3724b03bb9e76ea05f69ecb8d6a4f8dbfa8bf8fa",
+    "scripts/prepare-ai-native-harness.py": "240c61aa29a76c55e7a88d6f463023da471b271591a56f971e6e43c7a26ee1d8"
+  }
+}

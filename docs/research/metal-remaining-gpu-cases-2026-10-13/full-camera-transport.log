@@ -1,0 +1,42 @@
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.14s
+     Running tests/raster_readback.rs (target/debug/deps/raster_readback-96fa399a25885f6d)
+
+running 8 tests
+test fusion_back_full_frame_developed_raw_matches_metal_display_transport ... Fusion-back full-frame display adapter: Metal Apple M4 Max
+Fusion-back pixels checked: 9312000; maximum RGB8 difference: 1
+ok
+test fusion_front_full_frame_developed_raw_matches_metal_display_transport ... Fusion-front full-frame display adapter: Metal Apple M4 Max
+Fusion-front pixels checked: 9312000; maximum RGB8 difference: 1
+ok
+test hdr_exposure_saturates_to_finite_binary16_range ... HDR finite-range adapter: Metal Apple M4 Max
+HDR finite-range: exposure=-10; all4096 pixels exact; finite signed binary16
+HDR finite-range: exposure=0; all4096 pixels exact; finite signed binary16
+HDR finite-range: exposure=10; all4096 pixels exact; finite signed binary16
+ok
+test hdr_opposite_extreme_samples_interpolate_without_nan ... HDR opposite-extreme adapter: Metal Apple M4 Max
+HDR opposite-extreme: 63x65; symmetric center exact; all components finite
+ok
+test hero9_full_frame_developed_raw_matches_metal_display_transport ... HERO9 full-frame display adapter: Metal Apple M4 Max
+HERO9 pixels checked: 23251968; maximum RGB8 difference: 1
+ok
+test large_cancelled_upload_validation_and_admission_preserve_visible_texture ... large upload cancellation adapter: Metal Apple M4 Max
+raster upload pressure: texture-and-queue-refused; previous-frame-exact; temporary-credit-zero
+raster upload cancellation: total_checkpoints=2933; exercised=[1, 2, 1466, 2931, 2932, 2933]; upload_budget=192000000
+raster replacement values: format=Rgba8UnormSrgb; initial_center=[255, 0, 0, 255]; retry_center=[0, 0, 255, 255]
+raster replacement recovery: format=Rgba8UnormSrgb; pressure/cancellation previous frame exact; retry blue exact; final GPU/queue credit=0
+raster upload pressure: texture-and-queue-refused; previous-frame-exact; temporary-credit-zero
+raster upload cancellation: total_checkpoints=2933; exercised=[1, 2, 1466, 2931, 2932, 2933]; upload_budget=192000000
+raster replacement values: format=Rgba16Float; initial_center=[17408, 47104, 0, 15360]; retry_center=[46080, 0, 17408, 15360]
+raster replacement recovery: format=Rgba16Float; pressure/cancellation previous frame exact; retry blue exact; final GPU/queue credit=0
+ok
+test large_hdr_area_lod_preserves_all_output_samples_and_metal_frame ... 36 MP HDR LOD adapter: Metal Apple M4 Max
+36 MP HDR area LOD full output: 64x64; every SDR/HDR component matches independent constant reference
+36 MP HDR area LOD full output: 1000x1000; every SDR/HDR component matches independent constant reference
+36 MP HDR area LOD: source=576000000; output=16000000; all1000000 pixels exact; SDR/HDR Metal exact; elapsed=149.302917ms; output root=0
+ok
+test qualified_sd10_linear_raster_full_frame_display_readback ... X3F 2267x1513 raster adapter: Metal Apple M4 Max
+X3F 2267x1513 full-frame GPU sRGB max deviation=1; CPU leases released
+ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 17 filtered out; finished in 4.88s
+

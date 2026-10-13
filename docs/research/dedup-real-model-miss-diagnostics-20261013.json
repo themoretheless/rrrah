@@ -1,0 +1,81 @@
+{
+  "status": "complete_pending_audit",
+  "producer_pid": 70821,
+  "source": "/Users/themoretheless/.codex/tmp/rrrah-model-miss-diagnostics-20261012/source",
+  "harness": "/Users/themoretheless/.codex/tmp/rrrah-real-model-miss-diagnostics-20261013/harness",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-model-miss-diagnostics-audit-20261012.json": "cfcd78fece4ce7e773a5addda7e93c0ac3de1f16ae7e87c4764f2e0586c4e958",
+    "/Users/themoretheless/.codex/tmp/rrrah-real-model-miss-diagnostics-20261013/harness/Cargo.toml": "740c31dd9b549e37b4c6884c53ee63073660812bbc59b778584c037b58dc030c",
+    "/Users/themoretheless/.codex/tmp/rrrah-real-model-miss-diagnostics-20261013/harness/Cargo.lock": "cc5b54756fe7ede0b3d9b671f3b3b57ee56054f5197ccfbd58d4ebdb6964baca",
+    "/Users/themoretheless/.codex/tmp/rrrah-real-model-miss-diagnostics-20261013/harness/src/native_policy.rs": "16ddc4d9e77bbadad4312d0a491cc3e1c759fc47b03550f7c6266688ce364a17",
+    "/Users/themoretheless/.codex/tmp/rrrah-real-model-miss-diagnostics-20261013/harness/src/bin/native_bank_miss_diagnostics_20261013.rs": "b9b2649227dff78392197c9f30b8c86e7bfa3ee76003b0c9b6a2514ec2224741",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/run-dedup-real-model-miss-diagnostics-20261013.py": "10ffccffa1a879a2200b383b634a270fc19879db88c4f68f79a97f196a1d04ab",
+    "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/Q36603.jpg": "97972e3a40fa061fef6ab6a894d0d67e13d9ce083307f4dd8d027af9a8d2d38d",
+    "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/R043984.jpg": "4c0172d98f699ce49fe67e5001a8505f408e020b14988fa54f9703c2dcd0a867",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors": "59e55bf0ecd047db9c513672d121a3ea677529ad448bdc3a359e92862c74ddd7",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-current-heldout-negatives-20261012/00.json": "99c4c73a657f9e9c28814148d7ee9cdc4f6c5cb241741011e48959846e727b37",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/212600.jpg": "1f0be0e87dc2e9d925b8745f448727f215e0f96c9f8ee637635cc7a630aca890",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/212602.jpg": "b2ce5645f901ea1fe1fa4686fbf6802405965d6ea58939dc12631cd43d90676e",
+    "/Users/themoretheless/.codex/tmp/rrrah-current-native-bank-all-positives-qualified-20261012/0007.json": "686cece311ecd12a223ff50ac7791006a5f52a27f1c4bd26378d5735b9e13434",
+    "/Users/themoretheless/.codex/tmp/rrrah-real-model-miss-diagnostics-20261013/build.log": "a67d5948898eaeb88bd750f1151595304f32859fb77fbc0b6b7954d7762df6a0",
+    "/Users/themoretheless/.codex/tmp/rrrah-real-model-miss-diagnostics-20261013/native_bank_miss_diagnostics_20261013": "983d0f08ac22b62cac5d4afe1baf799fca110697f4d2682add57ce98794f40d4"
+  },
+  "plan": [
+    {
+      "kind": "fixed_negative_index0",
+      "left": "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/Q36603.jpg",
+      "right": "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/R043984.jpg",
+      "weights": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+      "tolerance": 2.0,
+      "baseline": "/Users/themoretheless/.codex/tmp/rrrah-dedup-current-heldout-negatives-20261012/00.json"
+    },
+    {
+      "kind": "publisher_positive_baseline_index0",
+      "left": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/212600.jpg",
+      "right": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/212602.jpg",
+      "weights": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+      "tolerance": 4.0,
+      "baseline": "/Users/themoretheless/.codex/tmp/rrrah-current-native-bank-all-positives-qualified-20261012/0007.json"
+    }
+  ],
+  "results": [
+    {
+      "kind": "fixed_negative_index0",
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-real-model-miss-diagnostics-20261013/fixed_negative_index0.json",
+      "sha256": "2df37b201bba224c5e740ec8129d98ccadbc40be481ee2a171e416755fb3881a"
+    },
+    {
+      "kind": "publisher_positive_baseline_index0",
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-real-model-miss-diagnostics-20261013/publisher_positive_baseline_index0.json",
+      "sha256": "d764b8aee36b8dc9ff67a43454578161b241209a6f45c9b066b6b02b4dff694c"
+    }
+  ],
+  "scope": "Two fixed real CPU LoFTR controls with original640/max1m/radii2and6 policy. New compact diagnostics only; no heldout precision/general RSS bound/full458 qualification.",
+  "build_command": [
+    "cargo",
+    "build",
+    "--locked",
+    "--offline",
+    "--bin",
+    "native_bank_miss_diagnostics_20261013",
+    "--target-dir",
+    "/Users/themoretheless/.codex/tmp/rrrah-cache-interpretation-fix-20261012/target"
+  ],
+  "child_pid": 73101,
+  "build_returncode": 0,
+  "binary": "/Users/themoretheless/.codex/tmp/rrrah-real-model-miss-diagnostics-20261013/native_bank_miss_diagnostics_20261013",
+  "active_kind": "publisher_positive_baseline_index0",
+  "command": [
+    "/usr/bin/time",
+    "-l",
+    "/usr/bin/env",
+    "DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+    "/Users/themoretheless/.codex/tmp/rrrah-real-model-miss-diagnostics-20261013/native_bank_miss_diagnostics_20261013",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/212600.jpg",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/212602.jpg",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+    "640",
+    "4.0",
+    "1000000"
+  ]
+}

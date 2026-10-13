@@ -1,0 +1,44 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+    Finished `test` profile [optimized + debuginfo] target(s) in 6.63s
+     Running tests/model_input_file.rs (target/debug/deps/model_input_file-68e5053628aee8cd)
+
+running 3 tests
+test final_source_verification_callback_cannot_hide_source_or_dependency_mutation ... FAILED
+test final_preparation_callback_cannot_publish_mutated_source_or_dependency ... FAILED
+test every_global_checkpoint_and_mid_final_generation_cancellation_discard_payload ... ok
+
+failures:
+
+---- final_source_verification_callback_cannot_hide_source_or_dependency_mutation stdout ----
+
+thread 'final_source_verification_callback_cannot_hide_source_or_dependency_mutation' (89217472) panicked at crates/rrrah-dedup/tests/model_input_file.rs:539:9:
+dependency=false: stale verification Ok(())
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- final_preparation_callback_cannot_publish_mutated_source_or_dependency stdout ----
+
+thread 'final_preparation_callback_cannot_publish_mutated_source_or_dependency' (89217471) panicked at crates/rrrah-dedup/tests/model_input_file.rs:504:13:
+dependency=false, variant=0: stale preparation Ok(PreparedModelFile { input: GrayModelInput { dimensions: [16, 16], original: [16, 16], pixels: SharedBuffer(MutableBuffer { values: [199, 197, 194, 191, 188, 185, 183, 180, 177, 174, 172, 169, 166, 163, 161, 158, 186, 192, 181, 187, 175, 181, 169, 176, 164, 170, 158, 165, 153, 159, 147, 153, 173, 170, 185, 182, 162, 159, 174, 171, 151, 148, 163, 160, 139, 137, 152, 149, 159, 166, 172, 178, 148, 155, 161, 167, 137, 143, 150, 156, 126, 132, 139, 145, 146, 143, 141, 138, 171, 168, 165, 163, 124, 121, 118, 116, 149, 146, 143, 140, 133, 139, 127, 134, 158, 164, 152, 158, 111, 117, 105, 111, 135, 142, 130, 136, 120, 117, 132, 129, 144, 142, 157, 154, 97, 95, 110, 107, 122, 119, 135, 132, 106, 113, 119, 125, 131, 137, 143, 150, 84, 90, 97, 103, 109, 115, 121, 127, 93, 90, 87, 85, 82, 79, 76, 74, 143, 140, 137, 134, 131, 129, 126, 123, 80, 86, 74, 80, 69, 75, 63, 69, 129, 135, 124, 130, 118, 124, 113, 119, 66, 64, 79, 76, 55, 53, 68, 65, 116, 113, 128, 126, 105, 102, 117, 115, 53, 59, 66, 72, 42, 48, 54, 61, 103, 109, 115, 121, 92, 98, 104, 110, 40, 37, 34, 32, 65, 62, 59, 56, 89, 87, 84, 81, 114, 111, 109, 106, 27, 33, 21, 27, 51, 58, 46, 52, 76, 82, 71, 77, 101, 107, 95, 102, 13, 11, 26, 23, 38, 35, 50, 48, 63, 60, 75, 72, 88, 85, 100, 97, 0, 6, 12, 19, 25, 31, 37, 43, 50, 56, 62, 68, 74, 81, 87, 93], reservation: Reservation { parent: None, budget: MemoryBudget(BudgetState { parent: None, limit: 8388608, used: 256, peak: 5120 }), bytes: 256 } }) }, original: [16, 16], rectangle: [0, 0, 16, 16], source: DecodeSourceSnapshot { source: ContentSnapshot { entry: Entry { path: "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/.tmpRuseIy/source.bmp", canonical: "/private/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/.tmpRuseIy/source.bmp", stamp: Stamp { identity: Unix(16777229, 179984745), bytes: 822, modified: Some(SystemTime { tv_sec: 1791681541, tv_nsec: 29201502 }), changed: (1791681541, 29201502) }, aliases: {} }, digest: [128, 170, 7, 28, 247, 255, 243, 0, 153, 179, 68, 46, 102, 191, 185, 125, 33, 83, 130, 77, 143, 25, 2, 73, 50, 5, 10, 108, 146, 159, 245, 109] }, dependencies: [] }, cancellation: None, projection: OpaqueSdr })
+
+
+failures:
+    final_preparation_callback_cannot_publish_mutated_source_or_dependency
+    final_source_verification_callback_cannot_hide_source_or_dependency_mutation
+
+test result: FAILED. 1 passed; 2 failed; 0 ignored; 0 measured; 7 filtered out; finished in 0.31s
+
+error: test failed, to rerun pass `-p rrrah-dedup --test model_input_file`

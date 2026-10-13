@@ -1,0 +1,56 @@
+{
+  "scope": "experimental AI compositor; full viewer and independent color qualification incomplete",
+  "new_mechanism": "reuse grouped hit permutation with identical membership validation, bounded adjacent repair and exact legacy fallback for ties/disorder",
+  "suite": {
+    "passed": 215,
+    "ignored": 12,
+    "failed": 0,
+    "reference_sort_comparisons": 1024
+  },
+  "cut_statistics": {
+    "147,59": {
+      "emitted": 5628,
+      "unique": 3298
+    },
+    "145,50": {
+      "emitted": 4018,
+      "unique": 1312
+    }
+  },
+  "pixel_147_59": {
+    "completed": true,
+    "polygon_budget": 40000000,
+    "diagnostic_command_budget": 16000000,
+    "command_spent": 14107965,
+    "command_remaining": 1892035,
+    "fragments": 924358,
+    "result_line": "REAL_AI_SPATIAL_PIXEL pixel=(147,59) captured=true events=2755 shading_events=13 mask_events=6 completed=true alpha=Some(0.6737398252860465) components=Some([0.1874715304800365, 0.6583002923535491, 0.7777743789530881, 0.1361266559336537]) white_rgb=Some([205.4139990826125, 151.15068671224302, 127.7102347702531]) deadline=false peak_bytes=239197736",
+    "production_command_budget": 4000000,
+    "production_completed": false
+  },
+  "four_prior_controls_exact": true,
+  "extra_admitted_scratch_bytes_per_edge": 24,
+  "peak_bytes": 239197736,
+  "final_credit": 0,
+  "strict_page": {
+    "limit": 4000000,
+    "completed": 15195,
+    "total": 74046,
+    "next": [
+      145,
+      50
+    ],
+    "deadline": false,
+    "exit": 101,
+    "partial_image": false
+  },
+  "speed_claim": null,
+  "source_sha256": "7519940c7527719cc790aabf586d541edf662cd40f6af45969efa135b05bfca1",
+  "logs": {
+    "ai-cut-count-original-2026-10-13.log": "6ccd387a2ccf94acfb882ea975c15aa7997c5e860e7c3ef9fab075b827e68acc",
+    "ai-grouped-order-suite-2026-10-13.log": "08c5acb633d33ca4d0e66aa2c1cc86d782b29227bb4638ee6ec3aa5340a649c5",
+    "ai-grouped-order-reference-suite-2026-10-13.log": "606613a3319890f84fbbb87ff23efe721d840c969344ee59f081d9b59e61ad04",
+    "ai-grouped-order-original-2026-10-13.log": "b8bd9bdddcf9540b41604abd10a1c827bca3038077ab4b493ecbcb104025146b",
+    "ai-grouped-order-page-2026-10-13.log": "63fc4e8cdcb99dbe01a790f398e5d42b147e97fae1055e5fe0298326b61aaa61"
+  }
+}

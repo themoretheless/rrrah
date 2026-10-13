@@ -1,0 +1,120 @@
+{
+  "status": "verified_real_cargo_vendor_semantic_change_invalidates_only_fixed_recipe",
+  "rows": [
+    {
+      "build_script": "original",
+      "outputs": [
+        {
+          "vendor_value": 1,
+          "recipe": "2d400b88a6b38d8f1aad66e53e516b62fb23f262facad907d6580a0a6de0e80e",
+          "log": "/Users/themoretheless/.codex/tmp/rrrah-vendor-recipe-cargo-controls-20261013/original-1.log",
+          "log_sha256": "dbfad861aec77204f8b614eacd676a07b40abbaade3d07360e80870074829c5a",
+          "cargo_lock_sha256": "69989f6dd0ac38903e524b93698ad17a1e5f63eb48e3ac3f2343e1ff8caa915e",
+          "command": [
+            "cargo",
+            "run",
+            "--offline",
+            "--manifest-path",
+            "/Users/themoretheless/.codex/tmp/rrrah-vendor-recipe-cargo-controls-20261013/original/crates/rrrah-dedup/Cargo.toml",
+            "--target-dir",
+            "/Users/themoretheless/.codex/tmp/rrrah-vendor-recipe-cargo-controls-20261013/original-target",
+            "--quiet"
+          ]
+        },
+        {
+          "vendor_value": 2,
+          "recipe": "2d400b88a6b38d8f1aad66e53e516b62fb23f262facad907d6580a0a6de0e80e",
+          "log": "/Users/themoretheless/.codex/tmp/rrrah-vendor-recipe-cargo-controls-20261013/original-2.log",
+          "log_sha256": "6a5713b5a2bf1e5d8c127a22c94aad05551e4d2729f50a2170c0069ef6fa786d",
+          "cargo_lock_sha256": "69989f6dd0ac38903e524b93698ad17a1e5f63eb48e3ac3f2343e1ff8caa915e",
+          "command": [
+            "cargo",
+            "run",
+            "--offline",
+            "--manifest-path",
+            "/Users/themoretheless/.codex/tmp/rrrah-vendor-recipe-cargo-controls-20261013/original/crates/rrrah-dedup/Cargo.toml",
+            "--target-dir",
+            "/Users/themoretheless/.codex/tmp/rrrah-vendor-recipe-cargo-controls-20261013/original-target",
+            "--quiet"
+          ]
+        }
+      ],
+      "recipe_changes_with_vendor": false
+    },
+    {
+      "build_script": "fixed",
+      "outputs": [
+        {
+          "vendor_value": 1,
+          "recipe": "948061fccfd2dd08d8e426c1eeac7ce0d8ff85bf4bdd36b7c44ece03b8c59a19",
+          "log": "/Users/themoretheless/.codex/tmp/rrrah-vendor-recipe-cargo-controls-20261013/fixed-1.log",
+          "log_sha256": "a064f5e583aa7eedcc4e7455fc16ee23d8904d73fcf3c6cbdec77552ee3b9911",
+          "cargo_lock_sha256": "69989f6dd0ac38903e524b93698ad17a1e5f63eb48e3ac3f2343e1ff8caa915e",
+          "command": [
+            "cargo",
+            "run",
+            "--offline",
+            "--manifest-path",
+            "/Users/themoretheless/.codex/tmp/rrrah-vendor-recipe-cargo-controls-20261013/fixed/crates/rrrah-dedup/Cargo.toml",
+            "--target-dir",
+            "/Users/themoretheless/.codex/tmp/rrrah-vendor-recipe-cargo-controls-20261013/fixed-target",
+            "--quiet"
+          ]
+        },
+        {
+          "vendor_value": 2,
+          "recipe": "70e191fa2c6afb3495955d95e726b82c803e19be4559ccb94f531aa7cbcad4cd",
+          "log": "/Users/themoretheless/.codex/tmp/rrrah-vendor-recipe-cargo-controls-20261013/fixed-2.log",
+          "log_sha256": "01cebb7d49c90ada535da9dfee2c31cab80de5478bd46ca295351d5de91e6ab0",
+          "cargo_lock_sha256": "69989f6dd0ac38903e524b93698ad17a1e5f63eb48e3ac3f2343e1ff8caa915e",
+          "command": [
+            "cargo",
+            "run",
+            "--offline",
+            "--manifest-path",
+            "/Users/themoretheless/.codex/tmp/rrrah-vendor-recipe-cargo-controls-20261013/fixed/crates/rrrah-dedup/Cargo.toml",
+            "--target-dir",
+            "/Users/themoretheless/.codex/tmp/rrrah-vendor-recipe-cargo-controls-20261013/fixed-target",
+            "--quiet"
+          ]
+        }
+      ],
+      "recipe_changes_with_vendor": true
+    }
+  ],
+  "pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-mesh-deformation-source-20261013/crates/rrrah-dedup/build.rs": "ea12b6297f3282d6c98b5ed186708ccc5d7ac441f1f370e700f088e334d22b48",
+    "/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup/build.rs": "aa3bfa28f6700985cab38806c7516fd85d98b90f37b270f38d4ea175b27859e0",
+    "/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup/build_context.rs": "8c5ab4c2ee9532bcb60a979f390d6e0fab7af17e84f0018fcf2e8084abf5f711",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/check-dedup-vendor-build-recipe-20261013.py": "da4d729f4354af374f01ac3ff5da519e58446f39c5e81729c45db667810eadb8",
+    "/Users/themoretheless/.codex/tmp/rrrah-vendor-recipe-cargo-controls-20261013/original/Cargo.toml": "800c279a8010c2d97cea6f782c62e03bdefbb78335d1fd595077f035859467b8",
+    "/Users/themoretheless/.codex/tmp/rrrah-vendor-recipe-cargo-controls-20261013/original/Cargo.lock": "69989f6dd0ac38903e524b93698ad17a1e5f63eb48e3ac3f2343e1ff8caa915e",
+    "/Users/themoretheless/.codex/tmp/rrrah-vendor-recipe-cargo-controls-20261013/original/crates/rrrah-core/Cargo.toml": "b34a4cda1b5915ad04da7e21acc1185b63ae465025cdd10bb4797cb846433cb3",
+    "/Users/themoretheless/.codex/tmp/rrrah-vendor-recipe-cargo-controls-20261013/original/crates/rrrah-core/lib.rs": "7590d7b892bc7e6cc18176f32f47756f8bbd77cecb8fb99c2d5934d3c7e7a221",
+    "/Users/themoretheless/.codex/tmp/rrrah-vendor-recipe-cargo-controls-20261013/original/crates/rrrah-decode/Cargo.toml": "b34a4cda1b5915ad04da7e21acc1185b63ae465025cdd10bb4797cb846433cb3",
+    "/Users/themoretheless/.codex/tmp/rrrah-vendor-recipe-cargo-controls-20261013/original/crates/rrrah-decode/lib.rs": "7590d7b892bc7e6cc18176f32f47756f8bbd77cecb8fb99c2d5934d3c7e7a221",
+    "/Users/themoretheless/.codex/tmp/rrrah-vendor-recipe-cargo-controls-20261013/original/crates/rrrah-dedup/Cargo.toml": "971f1a63257381306f7d77fcd67552c5b161c9e2831efb2567c9d6d1aa9f829a",
+    "/Users/themoretheless/.codex/tmp/rrrah-vendor-recipe-cargo-controls-20261013/original/crates/rrrah-dedup/build.rs": "ea12b6297f3282d6c98b5ed186708ccc5d7ac441f1f370e700f088e334d22b48",
+    "/Users/themoretheless/.codex/tmp/rrrah-vendor-recipe-cargo-controls-20261013/original/crates/rrrah-dedup/build_context.rs": "8c5ab4c2ee9532bcb60a979f390d6e0fab7af17e84f0018fcf2e8084abf5f711",
+    "/Users/themoretheless/.codex/tmp/rrrah-vendor-recipe-cargo-controls-20261013/original/crates/rrrah-dedup/src/main.rs": "a7553bc5f8bc2df553d42d36c314e9cfc3cbe3f7d77c117a3e1f67972b7de1e5",
+    "/Users/themoretheless/.codex/tmp/rrrah-vendor-recipe-cargo-controls-20261013/original/crates/rrrah-memory/Cargo.toml": "b34a4cda1b5915ad04da7e21acc1185b63ae465025cdd10bb4797cb846433cb3",
+    "/Users/themoretheless/.codex/tmp/rrrah-vendor-recipe-cargo-controls-20261013/original/crates/rrrah-memory/lib.rs": "7590d7b892bc7e6cc18176f32f47756f8bbd77cecb8fb99c2d5934d3c7e7a221",
+    "/Users/themoretheless/.codex/tmp/rrrah-vendor-recipe-cargo-controls-20261013/original/vendor/pixel/Cargo.toml": "b8b135e14a89bdbb6ecb672a035460bea327db9b078fd80a985cff6757186990",
+    "/Users/themoretheless/.codex/tmp/rrrah-vendor-recipe-cargo-controls-20261013/original/vendor/pixel/src/lib.rs": "2dd19f47c3cc5b678a9dc4463f011cc30b8ce37ccf0631a3093d0e02b37aa6db",
+    "/Users/themoretheless/.codex/tmp/rrrah-vendor-recipe-cargo-controls-20261013/fixed/Cargo.toml": "800c279a8010c2d97cea6f782c62e03bdefbb78335d1fd595077f035859467b8",
+    "/Users/themoretheless/.codex/tmp/rrrah-vendor-recipe-cargo-controls-20261013/fixed/Cargo.lock": "69989f6dd0ac38903e524b93698ad17a1e5f63eb48e3ac3f2343e1ff8caa915e",
+    "/Users/themoretheless/.codex/tmp/rrrah-vendor-recipe-cargo-controls-20261013/fixed/crates/rrrah-core/Cargo.toml": "b34a4cda1b5915ad04da7e21acc1185b63ae465025cdd10bb4797cb846433cb3",
+    "/Users/themoretheless/.codex/tmp/rrrah-vendor-recipe-cargo-controls-20261013/fixed/crates/rrrah-core/lib.rs": "7590d7b892bc7e6cc18176f32f47756f8bbd77cecb8fb99c2d5934d3c7e7a221",
+    "/Users/themoretheless/.codex/tmp/rrrah-vendor-recipe-cargo-controls-20261013/fixed/crates/rrrah-decode/Cargo.toml": "b34a4cda1b5915ad04da7e21acc1185b63ae465025cdd10bb4797cb846433cb3",
+    "/Users/themoretheless/.codex/tmp/rrrah-vendor-recipe-cargo-controls-20261013/fixed/crates/rrrah-decode/lib.rs": "7590d7b892bc7e6cc18176f32f47756f8bbd77cecb8fb99c2d5934d3c7e7a221",
+    "/Users/themoretheless/.codex/tmp/rrrah-vendor-recipe-cargo-controls-20261013/fixed/crates/rrrah-dedup/Cargo.toml": "971f1a63257381306f7d77fcd67552c5b161c9e2831efb2567c9d6d1aa9f829a",
+    "/Users/themoretheless/.codex/tmp/rrrah-vendor-recipe-cargo-controls-20261013/fixed/crates/rrrah-dedup/build.rs": "aa3bfa28f6700985cab38806c7516fd85d98b90f37b270f38d4ea175b27859e0",
+    "/Users/themoretheless/.codex/tmp/rrrah-vendor-recipe-cargo-controls-20261013/fixed/crates/rrrah-dedup/build_context.rs": "8c5ab4c2ee9532bcb60a979f390d6e0fab7af17e84f0018fcf2e8084abf5f711",
+    "/Users/themoretheless/.codex/tmp/rrrah-vendor-recipe-cargo-controls-20261013/fixed/crates/rrrah-dedup/src/main.rs": "a7553bc5f8bc2df553d42d36c314e9cfc3cbe3f7d77c117a3e1f67972b7de1e5",
+    "/Users/themoretheless/.codex/tmp/rrrah-vendor-recipe-cargo-controls-20261013/fixed/crates/rrrah-memory/Cargo.toml": "b34a4cda1b5915ad04da7e21acc1185b63ae465025cdd10bb4797cb846433cb3",
+    "/Users/themoretheless/.codex/tmp/rrrah-vendor-recipe-cargo-controls-20261013/fixed/crates/rrrah-memory/lib.rs": "7590d7b892bc7e6cc18176f32f47756f8bbd77cecb8fb99c2d5934d3c7e7a221",
+    "/Users/themoretheless/.codex/tmp/rrrah-vendor-recipe-cargo-controls-20261013/fixed/vendor/pixel/Cargo.toml": "b8b135e14a89bdbb6ecb672a035460bea327db9b078fd80a985cff6757186990",
+    "/Users/themoretheless/.codex/tmp/rrrah-vendor-recipe-cargo-controls-20261013/fixed/vendor/pixel/src/lib.rs": "2dd19f47c3cc5b678a9dc4463f011cc30b8ce37ccf0631a3093d0e02b37aa6db"
+  },
+  "scope": "Actual original/fixed build.rs compiled as Cargo build scripts in two isolated synthetic complete-workspace fixtures. Same Cargo.lock, four crate source trees and compiler context within each experiment; only a path dependency implementation changes its returned value1to2. Original recipe stays equal despite changed executed dependency behavior; fixed recipe changes. This is a real Cargo/compiler regression, not an actual PDF raster/cache-file reproduction. No root vendor files changed; no general build-system/source-tamper guarantee."
+}

@@ -1,0 +1,59 @@
+{
+  "change": "PNG gAMA+cHRM explicit color: linear gamma uses native chromaticities; nonlinear gamma creates internal ICC matrix/parametric profile. Higher-priority cICP/iCCP/sRGB retained. Validate CRC, size, duplicates, zero gamma, invalid/singular chromaticities; exponent outside ICC range refuses.",
+  "correction": "ICC display destination now uses exact standard D65 xy (0.3127,0.3290), matching native/renderer transforms, instead of CMS predefined 6504K approximation.",
+  "sources": [
+    "https://www.w3.org/TR/png-3/#11gAMA",
+    "https://www.w3.org/TR/png-3/#11cHRM"
+  ],
+  "verification": {
+    "decode_passed": 1029,
+    "decode_ignored": 73,
+    "app_passed": 221,
+    "app_ignored": 62,
+    "ramp_cases": 5,
+    "codes_per_ramp": 65536,
+    "ramp_absolute_max_errors": [
+      3.226916383880507e-05,
+      3.2272191086701874e-05,
+      9.504131393001103e-08,
+      2.1668577274258638e-05,
+      2.539959808989245e-05
+    ],
+    "oracle": "f64 power decoding, fixed P3 column and independent Gaussian RGB/XYZ/Bradford custom D50 column; authored integer samples and alpha exact before color conversion",
+    "controls": [
+      "gamma50000 BT709 gray",
+      "gamma45455 BT709 gray",
+      "gamma100000 P3 red",
+      "gamma50000 P3 red",
+      "gamma50000 arbitrary primaries/D50 red"
+    ],
+    "memory": "Post-allocation display cancellation/retry and final managed0 per ramp",
+    "metal_sources": 114,
+    "metal_selections": 143,
+    "metal_storage_cases": 286,
+    "evidence_verifier_tests": 9,
+    "generator_byte_identical": true
+  },
+  "limitations": [
+    "Nonlinear legacy metadata uses ICC signed16.16 coefficients; measured conversion is not mathematically bit-exact to f64 color oracle",
+    "RGB gAMA without cHRM or cHRM without gAMA remains unqualified",
+    "gAMA values1/2/3 with cHRM exceed internal ICC exponent representation and refuse",
+    "Authored ramps/fixtures, not full original-producer/PNG-variant qualification",
+    "No physical HDR calibration or NVIDIA result"
+  ],
+  "sha256": {
+    "docs/research/png-gamma-chroma-verified-decode-2026-10-13.log": "4ba7e44c10b15aeb5c2b095fa2883409e58c0028998fe785761da613c3697ffd",
+    "docs/research/png-gamma-chroma-verified-app-2026-10-13.log": "57277834790ea677f872cc795b283c0012e2e90048580627af6d03760e77f7ef",
+    "docs/research/png-gamma-chroma-verified-metal-2026-10-13.log": "c83fc72110b8d2f896bb5304ad924b7b62221603d28644b08066a94ec716c261",
+    "tests/fixtures/raster/gamma-chrm-709.png": "d1f765c5f9dccc60bcab50730a90e6eacdda444eb3414fd55f298b30d0844442",
+    "tests/fixtures/raster/gamma-chrm-p3.png": "aa0492d6038f19c979f8eb6e639915a16fa74b3bec073ada5e7db7d44fd80c26",
+    "crates/rrrah-decode/src/png_color.rs": "a59f8b595cfb874f705a1d6dec31084238dab831517be6a11ed4424c00ec94aa",
+    "crates/rrrah-decode/src/raster.rs": "37411e9e5d05c0c13899e24265356c19f9ae05ca55ae8039540b76c81a82c4eb",
+    "crates/rrrah-decode/src/raster_color.rs": "afacc67c77717bc14e32e224a8035b4dd08395986c8be0a4fa473d49a558b03e",
+    "crates/rrrah-app/tests/raster_collection_metal.rs": "2eb927185cab6153d2e8abfd584131590dac5f972622ae5068472bfa42139152",
+    "scripts/generate-png-cicp-fixtures.py": "df1e0e653c2190d850ece58f32895686ebf94c1bb4e4a21735044d226a00bae1",
+    "scripts/probe-linear-color-oracle.py": "8465b6d11c5d916306b4b67426a3ba7cfcc750e974bf99bd4c1f6e121b3c651d",
+    "scripts/qualify-viewer-storage-gpu.py": "112891e7ec22c94c498aa25309dc3c2e063400279df6660b62aeb9f2d9a2d747",
+    "scripts/test-viewer-storage-gpu-evidence.py": "6805325cc6b3c16a5498eb288f2a821c1e4a492c2a7211cae039378060326e24"
+  }
+}

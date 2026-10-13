@@ -1,0 +1,22 @@
+{
+  "change": "explicit Panasonic RGB linearity limits must fit sensor bit depth",
+  "refusal_regression": "4096 rejected in12-bit source",
+  "results": [
+    "test result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 1053 filtered out; finished in 0.00s"
+  ],
+  "original_GH2": {
+    "samples": 16526720,
+    "native_bits_unchanged": true,
+    "independent_sensor_oracle": "nine-raw-independent-sensors-2026-10-11.json",
+    "white": [
+      3967,
+      3967,
+      3967
+    ],
+    "sensor_sha256": "90ac674eded1ec883e3351b4524a44bd26fe9c797b92ef773c6466c598d6610f"
+  },
+  "log_sha256": "2b1551f2514bce3aeca3555cb2e28a12f4c2e23013f1814b21c8d2b53aa9f420",
+  "limits": [
+    "metadata validity, not physical saturation calibration"
+  ]
+}

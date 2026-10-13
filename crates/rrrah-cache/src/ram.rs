@@ -496,6 +496,38 @@ mod tests {
         assert!(!cache.insert(key(4), mosaic(2)));
     }
     #[test]
+    fn nonzero_ttl_retains_live_raw_leases_until_last_release_then_spills() {
+        let (_parent, mut cache) = swap_cache(64, 2);
+        let root = rrrah_memory::MemoryBudget::new(4);
+        let ttl = std::time::Duration::from_secs(1);
+        assert!(cache.set_limits_and_spill(crate::CacheLimits {
+            max_bytes: 4, max_entries: Some(1), ttl: Some(ttl),
+        }));
+        assert!(cache.insert(key(1), mosaic(2).try_manage_pixels(&root).unwrap()));
+        let lease = cache.get_lease(&key(1)).unwrap();
+        let second = lease.clone();
+        std::thread::sleep(ttl + std::time::Duration::from_millis(20));
+        assert!(cache.get_resident(&key(1)).is_none());
+        assert_eq!(&lease.pixels[..], &[42, 42]);
+        assert_eq!(cache.resident_weight(), 4);
+        assert_eq!(cache.spill_expired(), 0);
+        assert_eq!(root.used(), 4);
+        drop(lease);
+        assert_eq!(cache.spill_expired(), 0);
+        assert_eq!(&second.pixels[..], &[42, 42]);
+        drop(second);
+        assert_eq!(cache.spill_expired(), 1);
+        cache.swap().unwrap().wait_idle().unwrap();
+        assert_eq!(root.used(), 0);
+        assert_eq!(cache.resident_weight(), 0);
+        assert_eq!(cache.swap().unwrap().stats().writes, 1);
+        let restored = cache.swap().unwrap().get(&key(1), || false).unwrap();
+        assert_eq!(restored.pixels, mosaic(2).pixels);
+        assert_eq!(restored.metadata, mosaic(2).metadata);
+        drop(restored);
+        assert_eq!(cache.swap().unwrap().stats().errors, 0);
+    }
+    #[test]
     fn expired_raw_is_offered_to_swap_before_new_admission() {
         let (_parent, mut cache) = swap_cache(64, 2);
         let limits = crate::CacheLimits {

@@ -1,0 +1,36 @@
+{
+  "scope": "Authored BAY sensor packing and streaming admission verified independently, not original-camera/color support",
+  "manifest": "tests/fixtures/bay-authored-oracles.json",
+  "oracle": "LibRaw 0.22.2-Release test-only scripts/raw-fixture-oracle.cpp",
+  "samples_exact_total": 10167652,
+  "models": [
+    "QV-2000UX",
+    "QV-3000EX",
+    "QV-5700"
+  ],
+  "runs": [
+    {
+      "suite": "bay",
+      "passed": 7,
+      "ignored": 0,
+      "log": "docs/research/bay-independent-authored-sensor-oracles-2026-10-11-bay.log",
+      "sha256": "16a4f68d70a97582e899173f491c714ca145d41ced43e919a8e8c70fb3710221"
+    },
+    {
+      "suite": "decoder",
+      "passed": 996,
+      "ignored": 68,
+      "log": "docs/research/bay-independent-authored-sensor-oracles-2026-10-11-decoder.log",
+      "sha256": "29075b4b926a787f82890772856869ded522e419119b75c56024beae5b95ebc0"
+    }
+  ],
+  "credits_final": 0,
+  "source_and_oracle_sha256_pinned": true,
+  "source_generator": "8-bit sample=(x+17*y)%256; 10-bit sample=(x+17*y)%1024 serialized MSB-first with 3232-byte rows, six final padding bits set",
+  "limitations": [
+    "No original BAY file found in current public RAW snapshot or targeted search; not proof none exists elsewhere",
+    "No native CFA/WB/color/public-viewer qualification",
+    "LibRaw reference infers camera from authored size; this does not prove real camera-file identification"
+  ],
+  "primary_layout_reference": "https://www.inweb.ch/foto/rawformat.html"
+}

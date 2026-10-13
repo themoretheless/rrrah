@@ -1,0 +1,19 @@
+{
+  "scope": "Native raster region restoration from segmented swap; Metal viewer integration pending",
+  "validation": "cargo test -p rrrah-cache -p rrrah-swap",
+  "result": "passed",
+  "controls": [
+    "full managed source released before float region restore",
+    "exact HDR sample bits including signed zero and NaN payload storage",
+    "CICP ICC sample scale pixel aspect image selection and translated hotspot",
+    "u8 and u16 independent coordinate samples",
+    "memory pressure refusal and retry; cancellation; bounds; final credit and disk quota zero"
+  ],
+  "limits": [
+    "requires initial complete decoded raster",
+    "existing 512 MiB native pixel payload cap",
+    "transient packed region plus decoded region and profile buffers",
+    "viewer retains full source until integration",
+    "no new Metal or physical HDR qualification in this step"
+  ]
+}

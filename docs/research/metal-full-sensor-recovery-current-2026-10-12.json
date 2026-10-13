@@ -1,0 +1,34 @@
+{
+  "backend": "Metal",
+  "device": "Apple M4 Max",
+  "dimensions": [
+    6188,
+    4120
+  ],
+  "pixels": 25494560,
+  "dispatch_windows": 7,
+  "result": "1 passed; 0 failed",
+  "test_seconds": 2.53,
+  "checks": [
+    "CPU budget pressure refusal rolls back temporary allocations",
+    "GPU budget pressure refusal rolls back CPU admission",
+    "cancellation after CPU/GPU admission preserves source and releases temporary credits",
+    "interleaved and managed retries compare every component against independent index formula",
+    "nonperiodic green and independent alpha distinguish dispatch offsets",
+    "shared result owners retain CPU credits until final drop",
+    "final CPU/GPU credits zero"
+  ],
+  "gpu_peak_bytes": 1223738992,
+  "cpu_peak_bytes": 815825920,
+  "local_end_to_end_ms": {
+    "interleaved": 333.675,
+    "managed": 290.667
+  },
+  "log": "metal-full-sensor-recovery-current-2026-10-12.log",
+  "limitations": [
+    "authored linear sensor-size field, not camera demosaic/color qualification",
+    "local timing includes validation, allocation, transfer and readback; not shader-only benchmark",
+    "managed budgets do not measure OS RSS",
+    "NVIDIA deferred"
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "index": 268,
+  "repository": "kornelski/dupe-krill",
+  "commit": "0e813b83c08543d4052523e05ca170bb1d155e91",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "shortlist",
+  "finding": "Rust BLAKE3 hasher and inode-aware scanner with scan tests; strong exact-stage reference to benchmark.",
+  "available_source_evidence": [
+    {
+      "path": "src/hasher.rs",
+      "local": "02-hasher.rs",
+      "url": "https://github.com/kornelski/dupe-krill/blob/0e813b83c08543d4052523e05ca170bb1d155e91/src/hasher.rs",
+      "sha256": "8c44cf8d6481382df0625615905c55d466839682d1758f41ea5e24bda01f06f7",
+      "truncated": false,
+      "lines": 172,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/scanner.rs",
+      "local": "03-scanner.rs",
+      "url": "https://github.com/kornelski/dupe-krill/blob/0e813b83c08543d4052523e05ca170bb1d155e91/src/scanner.rs",
+      "sha256": "3e6d74dd7bbfa6a5d60bb828c5c7ce2e940203490a57c6fbf4990446d71f3e8a",
+      "truncated": false,
+      "lines": 506,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/bin.rs",
+      "local": "04-bin.rs",
+      "url": "https://github.com/kornelski/dupe-krill/blob/0e813b83c08543d4052523e05ca170bb1d155e91/src/bin.rs",
+      "sha256": "3b2548dc7b3c9b9c9f82558f372d6763b33b1c417ce7651abcb98d4aa5ba21ed",
+      "truncated": false,
+      "lines": 114,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/scantest.rs",
+      "local": "05-scantest.rs",
+      "url": "https://github.com/kornelski/dupe-krill/blob/0e813b83c08543d4052523e05ca170bb1d155e91/tests/scantest.rs",
+      "sha256": "0d2723bd51f4d9e39ed5a5a7454386c5fdf75b21119d42be1688655772e9420b",
+      "truncated": false,
+      "lines": 56,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 2,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/kornelski/dupe-krill/blob/0e813b83c08543d4052523e05ca170bb1d155e91/README.md",
+      "sha256": "2829638b357d652f056ce8cf9967b5380a140c07e8ce412ce2958e033b65d813",
+      "truncated": false,
+      "lines": 108,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/kornelski/dupe-krill/blob/0e813b83c08543d4052523e05ca170bb1d155e91/LICENSE",
+      "sha256": "af8a1cdcbe552c0378784bdb3e2d427bdfd6fca5d3af58df875c5cafa7c5a58b",
+      "truncated": false,
+      "lines": 7,
+      "source": false,
+      "test": false
+    }
+  ]
+}

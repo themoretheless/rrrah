@@ -1,0 +1,87 @@
+{
+  "scope": "Selected flat green pixel at VectorApple page0 (216,25); no claim about every strict mismatch",
+  "trace": [
+    "NATIVE_PIXEL_SHADING depth=0 event=1023 coverage=255 sample=true mask=1",
+    "NATIVE_PIXEL_SHADING_SAMPLE depth=0 event=1023 components=[0.8794023, 0.23389284, 0.99231184, 0.08509913] opacity=1 model=Some(Cmyk)"
+  ],
+  "source_pixel": {
+    "coverage": 255,
+    "mask": 1,
+    "opacity": 1,
+    "event": 1023,
+    "cmyk": [
+      0.8794023,
+      0.23389284,
+      0.99231184,
+      0.08509913
+    ],
+    "native_rgb8": [
+      0,
+      135,
+      68
+    ],
+    "poppler_rgb8": [
+      38,
+      135,
+      62
+    ]
+  },
+  "isolated_constant_device_cmyk": {
+    "cmyk": [
+      0.8794023,
+      0.23389284,
+      0.99231184,
+      0.08509913
+    ],
+    "poppler_colors": [
+      [
+        38,
+        135,
+        62
+      ]
+    ],
+    "original_poppler_pixel": [
+      38,
+      135,
+      62
+    ],
+    "original_native_pixel": [
+      0,
+      135,
+      68
+    ]
+  },
+  "conclusion": "Same CMYK values in isolated constant-fill PDF reproduce original Poppler RGB exactly. Selected mismatch is consistent with display color-conversion policy rather than geometric coverage or gradient interpolation. Do not alter source colors or relax acceptance.",
+  "renderer_change": "Trace-only source components/model/opacity logging; six outputs byte-identical",
+  "regressions": {
+    "passed": 135,
+    "ignored": 10
+  },
+  "outputs": [
+    {
+      "name": "VectorApple.ai-page-0.native.components.f64le",
+      "sha256": "62926b25aa0701ea931fe20aa31a99a6ddab452b9d87851bd1f30f3ec23c8c67"
+    },
+    {
+      "name": "VectorApple.ai-page-0.native.rgba",
+      "sha256": "ecbb6bcbf532cb70c0e35be8c9d655c3cb38ddd8cfd85288e6e3c4c544020efc"
+    },
+    {
+      "name": "one.ai-page-1.native.components.f64le",
+      "sha256": "b3ba384a292a73ea286ec3ca3a2c98fe65580dd385458cf1f025891dc405b595"
+    },
+    {
+      "name": "one.ai-page-0.native.rgba",
+      "sha256": "4d4dc1019b440c5389a7ed8731db277513f63d501006a3d97fc6a861e78e76c8"
+    },
+    {
+      "name": "one.ai-page-1.native.rgba",
+      "sha256": "89db416a84fdc983853717f5fd73690c020e6feced867d1a3d4e02873f9d7e36"
+    },
+    {
+      "name": "one.ai-page-0.native.components.f64le",
+      "sha256": "890cec0274060767c59cb00826d6d181cce662028840e659be6cba6ea08d849a"
+    }
+  ],
+  "next": "Compare current native DeviceCMYK CGATS/hybrid conversion against explicit destination/profile policy before choosing any renderer change."
+}

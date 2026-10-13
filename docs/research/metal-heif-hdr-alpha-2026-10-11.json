@@ -1,0 +1,75 @@
+{
+  "date": "2026-10-11",
+  "scope": "Synthetic 12-bit straight-alpha PQ/HLG HEVC source, native color/alpha preservation, actual Metal linear composition and swap, thumbnail and native window. Full objective remains incomplete.",
+  "fixtures_sha256": [
+    {
+      "tests/fixtures/raster/heif-pq12-color-alpha.heic": "716a46c4b0e2c9032d87c4344854d1841989232f7001c7a672ba5ae29a2b84a6",
+      "tests/fixtures/raster/heif-pq12-color-alpha.heic.alpha12le": "a67161d325a37d07d3ff0eabbf551aa6c38e79f3fa76f4af9b47c2ef615397bc",
+      "tests/fixtures/raster/heif-pq12-color-alpha.heic.rgba16le": "39a9532200bc2e48ee63658f6bd400faa8a055886ec502a514a96916d08cb2f5"
+    },
+    {
+      "tests/fixtures/raster/heif-hlg12-color-alpha.heic": "f1c93343026ec67e90e3f8bd79a4253132311de898dbd7b3aec406a28bbe1071",
+      "tests/fixtures/raster/heif-hlg12-color-alpha.heic.alpha12le": "a67161d325a37d07d3ff0eabbf551aa6c38e79f3fa76f4af9b47c2ef615397bc",
+      "tests/fixtures/raster/heif-hlg12-color-alpha.heic.rgba16le": "39a9532200bc2e48ee63658f6bd400faa8a055886ec502a514a96916d08cb2f5"
+    }
+  ],
+  "producer": "libheif 1.23.6/x265 lossless RGBA16 PNG -> 12-bit HEVC; authored CC0",
+  "independent_decoder": "FFmpeg native HEVC decoder; stream 0 is primary RGB, stream 1 is auxiliary alpha",
+  "independent_alpha": "All 6144 auxiliary 12-bit alpha codes match input 0,1024,2048,4095. Primary RGBA16 output has opaque alpha because FFmpeg does not composite HEIF auxiliary alpha; it is not falsely used as an RGBA oracle.",
+  "native_checks": "Every normalized native RGB/alpha sample, retained straight RGB even under alpha zero, unchanged alpha after explicit PQ/HLG conversion; primary RGB math remains compared against independent Decimal/chromaticity references.",
+  "metal_checks": "Six-source pressure/swap transport exact in native float bits and SDR/HDR frames. For each alpha file, 16 interior RGB/alpha controls are compared against linear foreground*alpha*2 + background*(1-alpha), within binary16 precision. All sampled control components finite; display alpha=1 throughout the frame.",
+  "thumbnail_checks": "CLI/preload RAM cache hit and thumbnail route for both HDR alpha sources; all transparent top-quarter thumbnail pixels equal background RGBA8 36,36,36,255; managed credit zero after owners dropped.",
+  "results": {
+    "decode_focused": {
+      "path": "/tmp/rrrah-heif-hdr-alpha-decode-20261011.log",
+      "sha256": "4354fae6742a7db0d54568a1512b9dff582603131b097f4734ff0d70142fb336",
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0
+    },
+    "decode_all": {
+      "path": "/tmp/rrrah-heif-hdr-alpha-decode-all-20261011.log",
+      "sha256": "f092247ea1ead5a20c132643f416375176b506e586420a78d870a685fc7c12c3",
+      "passed": 992,
+      "failed": 0,
+      "ignored": 67
+    },
+    "viewer_all": {
+      "path": "/tmp/rrrah-heif-hdr-alpha-viewer-all-20261011.log",
+      "sha256": "739d3cb5bc288a453cdceaf44221d83c7ca89ab1d27bb34e95702c0a15c3d6a0",
+      "passed": 204,
+      "failed": 0,
+      "ignored": 37
+    },
+    "metal": {
+      "path": "/tmp/rrrah-heif-hdr-alpha-metal-20261011.log",
+      "sha256": "c4789c97a18c2588d7f4db216b4e5a6defb2b8ee3d637bf7bc439d1d097853f7",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    }
+  },
+  "native_window": {
+    "bundle": "/tmp/RrrahHeifHdrAlphaQualification.app",
+    "source": "/tmp/rrrah-heif-hdr-alpha-native-input-20261011/control.heic",
+    "ready_ms": 4.34,
+    "adapter": "Metal Apple M4 Max",
+    "surface": "Rgba16Float / ExtendedSrgbLinear",
+    "observation": "CUA screenshots show transparent top quarter and colored alpha steps after 32 minus keys; R reset redraws immediately. Test app quit with Cmd-Q; process absence verified.",
+    "log": "/tmp/rrrah-heif-hdr-alpha-native-20261011.log",
+    "log_sha256": "8cd08bcf68f8d2c0c7df029ce56913387a088f02d86728509dfb2ebe3798c529",
+    "binary_sha256": "4fe55ef9118ad6a300f6e6b9c0ddb9b8962a61900f9235e37a87ee80f17aba21"
+  },
+  "limitations": [
+    "Single tiny warm source ready time is not a performance benchmark.",
+    "Native screenshot and offscreen readback do not measure physical HDR nits/color.",
+    "Independent camera/proprietary HEIC producers, premultiplied alpha, sequences and other codecs remain open.",
+    "All 100 formats and real slow-disk/OS-wide pressure scope remain incomplete. NVIDIA deferred."
+  ],
+  "source_sha256": {
+    "scripts/generate-heif-hdr-fixtures.py": "02017b924c3c1320d3051878f86efa91b05ec43b7ca2bba56b453e7417817a51",
+    "crates/rrrah-decode/src/heif.rs": "7445b60621099a3e4e6065eac365945c4f10b7422120d47e2acfa07798c184a3",
+    "crates/rrrah-app/src/linear_pfm_viewer_tests.rs": "8bbc93a77f41cb45acb7a3f47331dd75d87eb2beb25fada209f4da9fe5bdbe75",
+    "crates/rrrah-app/tests/hdr_raster_swap.rs": "2aafa791a24b8fb16dfe4186046ff7600133cbe6363599e41968e93b4f44a752"
+  }
+}

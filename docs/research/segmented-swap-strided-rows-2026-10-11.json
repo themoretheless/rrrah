@@ -1,0 +1,29 @@
+{
+  "date": "2026-10-11",
+  "component": "rrrah-swap",
+  "change": "SwapRows and restore_rows pack non-overlapping source rows with one open file and one verified-block cache; restore_range delegates to this path",
+  "checks": {
+    "swap_units_passed": 15,
+    "integration_tests_passed": 6,
+    "doctests_passed": 2,
+    "strided_layouts_exact": 192,
+    "oracle": "independent source slice concatenation",
+    "cases": [
+      "unaligned starts",
+      "adjacent rows",
+      "row gaps",
+      "block boundaries",
+      "empty rows",
+      "corrupted skipped block",
+      "overflow/out-of-bounds/overlap rejection",
+      "existing memory/cancellation/ownership/integrity controls"
+    ],
+    "final_output_scratch_index_disk_credits": 0
+  },
+  "limits": [
+    "Byte rows only; image metadata/decode and viewer/GPU connection remain open",
+    "No physical disk throughput benchmark",
+    "No new Metal qualification in this run",
+    "Physical HDR, NVIDIA and full100-format acceptance remain open"
+  ]
+}

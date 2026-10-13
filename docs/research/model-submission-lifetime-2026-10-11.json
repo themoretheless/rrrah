@@ -1,0 +1,12 @@
+{
+  "backend": "metal",
+  "passed": 9,
+  "failed": 0,
+  "verified": "encode old model; prepare and install replacement; old geometry/depth reservation retained by resource lease after renderer drop; submit old commands, retain lease through completion; no validation error, final budget zero",
+  "log": "docs/research/model-submission-lifetime-2026-10-11.log",
+  "sha256": "d0f09af9b8f708761721875bf8c6d099707f4797717c7df845c309b451ffb985",
+  "limitations": [
+    "Authored small geometry; resource lifetime regression, not performance benchmark.",
+    "No physical HDR display claim."
+  ]
+}

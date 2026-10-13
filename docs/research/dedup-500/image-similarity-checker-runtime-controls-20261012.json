@@ -1,0 +1,80 @@
+{
+  "status": "complete_original_source7_controls",
+  "upstream_source_modified": false,
+  "upstream_tests": 0,
+  "authored_controls": 7,
+  "controls": [
+    {
+      "control": "alpha_difference_erased",
+      "ssim": 1.0,
+      "phash_distance": 0
+    },
+    {
+      "control": "different_rgb_same_decoded_gray",
+      "ssim": 1.0
+    },
+    {
+      "control": "identical_flat_image_has_zero_orb_matches",
+      "orb_matches": 0
+    },
+    {
+      "control": "missing_input_is_attribute_error",
+      "exception": "AttributeError",
+      "message": "'NoneType' object has no attribute 'shape'"
+    },
+    {
+      "control": "tiny_identical_input_is_ssim_error",
+      "exception": "ValueError",
+      "message": "win_size exceeds image extent. Either ensure that your images are at least 7x7; or pass win_size explicitly in the function call, with an odd value less than or equal to the smaller side of your images. If your images are multichannel (with color channels), set channel_axis to the axis number corresponding to the channels."
+    },
+    {
+      "control": "distinct_original_dimensions_erased",
+      "left_dimensions": [
+        64,
+        16
+      ],
+      "right_dimensions": [
+        16,
+        64
+      ],
+      "ssim": 1.0
+    },
+    {
+      "control": "documented_cli_flags_ignored",
+      "command": [
+        "/Users/themoretheless/.codex/tmp/rrrah-image-similarity-checker-runtime-20261012/bin/python",
+        "/Users/themoretheless/.codex/tmp/rrrah-image-similarity-checker-source-20261012/image-similarity.py",
+        "--img1",
+        "absent-left.jpg",
+        "--img2",
+        "absent-right.jpg"
+      ],
+      "returncode": 0,
+      "stdout": "Comparing 'before.jpg' and 'after.jpg':\n\n1\ufe0f Perceptual Hash (pHash) difference: 0\n   - Lower values mean images are more similar.\n\n2\ufe0f Structural Similarity Index (SSIM): 1.0000\n   - Value ranges from 0 to 1. Closer to 1 means more similar.\n\n3\ufe0f ORB Feature Matches: 0\n   - Higher number of matches indicates higher similarity.\n",
+      "stderr": ""
+    }
+  ],
+  "packages": {
+    "Pillow": "11.3.0",
+    "ImageHash": "4.3.2",
+    "opencv-python-headless": "4.12.0.88",
+    "numpy": "2.2.6",
+    "scikit-image": "0.25.2",
+    "scipy": "1.18.1"
+  },
+  "interpreter": "/Users/themoretheless/.codex/tmp/rrrah-image-similarity-checker-runtime-20261012/bin/python",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/image-similarity-checker-full-source-20261012.json": "a41d053f8a8b5db3e342b6ebb74921ed42b33e57e1334067b6db51b1ba3b8d3b",
+    "/Users/themoretheless/.codex/tmp/rrrah-image-similarity-checker-source-20261012/image-similarity.py": "c3c1823fd5960703f6dcc540f997fa0d95cacf90ba05f47677528ebb9254bf11",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/check-dedup-image-similarity-checker-controls-20261012.py": "57665237c0b18d7efdfb9ddbfc813d6638c64b3aa9ead98a3b1cdb761e9fb745",
+    "/Users/themoretheless/.codex/tmp/rrrah-image-similarity-checker-controls-20261012/before.jpg": "f6af400df0cbdf3acde7137acb2fa2a4fb19af910b66bc24b44817c7be5c0d18",
+    "/Users/themoretheless/.codex/tmp/rrrah-image-similarity-checker-controls-20261012/tiny.png": "0286ec8637976a396f7064338d48a76189b11efdd84484ac83f194afd84d339c",
+    "/Users/themoretheless/.codex/tmp/rrrah-image-similarity-checker-controls-20261012/tall.png": "9135ac600b0340a71981c9fbc73834f26bfc4d35983c1f053286e5d3992cd431",
+    "/Users/themoretheless/.codex/tmp/rrrah-image-similarity-checker-controls-20261012/wide.png": "9fd4a2fd80dddb76d7410396dfeb0283f4f8b4eea3b9b0c6400d28a4a33fac74",
+    "/Users/themoretheless/.codex/tmp/rrrah-image-similarity-checker-controls-20261012/after.jpg": "f6af400df0cbdf3acde7137acb2fa2a4fb19af910b66bc24b44817c7be5c0d18",
+    "/Users/themoretheless/.codex/tmp/rrrah-image-similarity-checker-controls-20261012/green.png": "874832f3134dadbf694f1beb0c15133a57860322dea6a0a086f48725b40d1883",
+    "/Users/themoretheless/.codex/tmp/rrrah-image-similarity-checker-controls-20261012/opaque.png": "a206d2c1a7cca3d2603cb431b3626e5c2842cfda3a1f5f03cfd4790d1c1177bb",
+    "/Users/themoretheless/.codex/tmp/rrrah-image-similarity-checker-controls-20261012/transparent.png": "7631a7e0f8fa9a0e18a26194ab868c69e4c72099f4525d8f05f41319e71f5b27"
+  },
+  "scope": "Observed seven bounded scorer/CLI behaviors in original pinned source. Does not estimate general precision or assert these scores are upstream duplicate decisions; source has no duplicate classifier. No code adopted."
+}

@@ -149,7 +149,7 @@ fn scan_impl(
         budget,
         cancelled,
     )?;
-    let invalid = verify_sources(snapshots, &mut source_issues, cancelled)?;
+    let invalid = verify_sources(&snapshots, &mut source_issues, cancelled)?;
     pixels
         .equal
         .retain(|(a, b)| !invalid.contains(a) && !invalid.contains(b));
@@ -173,6 +173,28 @@ fn scan_impl(
     if cancelled() {
         return Err(ScanError::Cancelled);
     }
+    // Validate surviving observations after all caller checkpoints. Otherwise
+    // publication can expose stale digests, analysed ids and confirmed pairs.
+    let owners = || {
+        requests.values().any(|request| {
+            request
+                .cancellation
+                .as_ref()
+                .is_some_and(rrrah_decode::GenerationToken::is_cancelled)
+        })
+    };
+    for (id, source) in &snapshots {
+        if invalid.contains(id) {
+            continue;
+        }
+        source.verify(&owners).map_err(|error| match error {
+            SnapshotError::Cancelled => ScanError::Cancelled,
+            error => ScanError::Source { id: *id, error },
+        })?;
+    }
+    if owners() {
+        return Err(ScanError::Cancelled);
+    }
     Ok(IndexedPixelReport {
         analysed,
         pixels,
@@ -183,7 +205,7 @@ fn scan_impl(
     })
 }
 fn verify_sources(
-    snapshots: Vec<(u64, ContentSnapshot)>,
+    snapshots: &[(u64, ContentSnapshot)],
     source_issues: &mut Vec<(u64, SnapshotError)>,
     cancelled: impl Fn() -> bool,
 ) -> Result<HashSet<u64>, ScanError> {
@@ -195,9 +217,9 @@ fn verify_sources(
         }
         if let Err(error) = result {
             invalid.try_reserve(1).map_err(|_| ScanError::Budget)?;
-            invalid.insert(id);
+            invalid.insert(*id);
             source_issues.try_reserve(1).map_err(|_| ScanError::Budget)?;
-            source_issues.push((id, error));
+            source_issues.push((*id, error));
         }
     }
     Ok(invalid)
@@ -343,10 +365,9 @@ pub fn scan_indexed_pixel_roots_with_requests(
         }
         requests.push((*id, request));
     }
+    // The inner operation owns final cancellation and source validation.
+    // A caller checkpoint here would reopen its publication window.
     let indexed = scan_indexed_pixels(requests, policy, budget, &cancel)?;
-    if cancel() {
-        return Err(ScanError::Cancelled);
-    }
     Ok(DirectoryIndexedPixelReport {
         files,
         aliases: discovery.aliases,

@@ -1,0 +1,20 @@
+{
+  "tests_passed": 11,
+  "tests_failed": 0,
+  "backend_required": "Metal",
+  "optional_gpu": false,
+  "scope": [
+    "SDR/HDR exact frame retained after replacement cancellation and memory refusal",
+    "Resize refusal preserves old frame and same-size reuse under full budget; release permits exact retry",
+    "Renderer device ownership and resource lifetime checks"
+  ],
+  "limitations": [
+    "Offscreen renderer tests do not prove production window event-loop recovery"
+  ],
+  "sha256": {
+    "docs/research/metal-model-recovery-current-2026-10-12/model-readback.log": "2a1aa4e280fdd75296d532b739c1c14c004c716d90b9fb4e5578a4b1a5977fd1",
+    "crates/rrrah-gpu/tests/model_readback.rs": "7940ee14381f4763c5e2fff45f860216c7fb3e249bfa4dc88ada5c0c2019913e",
+    "crates/rrrah-gpu/src/model.rs": "ab64f4eb171d5742c197ba2275bca2757bc999a942d35bdcc5f1b2d321d650dc",
+    "crates/rrrah-app/src/main.rs": "558398d785c6c948e032f8ab7f2307fa71d54325cf5db07aa9faa623d06c45f1"
+  }
+}

@@ -134,6 +134,7 @@ fn compare_region(
         || policy.radius == 0
         || !policy.minimum_contrast.is_finite()
         || policy.minimum_contrast <= 0.
+        || policy.minimum_contrast > 1.
         || policy.minimum_pairs == 0
     {
         return Err(RankRegionError::Invalid);

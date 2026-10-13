@@ -1,0 +1,55 @@
+{
+  "status": "passed8_real_pillow_controls",
+  "controls": [
+    {
+      "name": "flat_black_white_collision",
+      "passed": true,
+      "result": "Black and white have equal hash and zero image distance; no equality verdict."
+    },
+    {
+      "name": "independent_first_bit_vector",
+      "passed": true,
+      "result": "First descending comparison occupies low bit of each row byte."
+    },
+    {
+      "name": "all_bits_and_image_hash_distance_agree",
+      "passed": true,
+      "result": 56
+    },
+    {
+      "name": "different_alpha_same_hash",
+      "passed": true,
+      "result": "Actual Pillow conversion drops alpha; hashes collide."
+    },
+    {
+      "name": "flat_dimension_collision",
+      "passed": true,
+      "result": "Different flat dimensions/values collide."
+    },
+    {
+      "name": "unbounded_hash_string_width",
+      "passed": true,
+      "result": "Hash-string API accepts values wider than64bits."
+    },
+    {
+      "name": "negative_hash_string_accepted",
+      "passed": true,
+      "result": "Negative hash strings accepted without domain validation."
+    },
+    {
+      "name": "malformed_hex_explicit_value_error",
+      "passed": true,
+      "result": "ValueError"
+    }
+  ],
+  "python": "3.12.14 (main, Aug 25 2026, 13:50:33) [Clang 22.1.3 ]",
+  "executable": "/Users/themoretheless/.codex/tmp/rrrah-image-similarity-checker-runtime-20261012/bin/python",
+  "pillow": "11.3.0",
+  "upstream_tests_executed": 0,
+  "pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-rayraegah-dhash-source-20261013/dhash.py": "34f3ba5d574185e5f5da8a7e2618674f28ba2435297faca9458eb018958e142e",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/check-dedup-rayraegah-dhash-20261013.py": "d49a61e9beaa2727a208549d9685874fad8aa236138eb070ef1a56958a019932",
+    "/Users/themoretheless/.codex/tmp/rrrah-image-similarity-checker-runtime-20261012/lib/python3.12/site-packages/PIL/__init__.py": "43828e12947b4bf5ec8f7d1fbceb2f47de311295f8294b15794c1a54fd5f53cd"
+  },
+  "scope": "Whole pinned original module, actual Pillow11.3.0, eight synthetic controls. No upstream dependency pins or tests exist. No general similarity threshold/precision or code adoption."
+}

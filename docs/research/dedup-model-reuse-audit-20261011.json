@@ -1,0 +1,40 @@
+{
+  "status": "complete_bounded_operation_scoped_reuse_qualification",
+  "snapshot_files": 3054,
+  "macos_loftr_unit_tests": 60,
+  "native_parity_attempts": 37,
+  "native_lifecycle_controls": 2,
+  "alternating_counter_free_timing_controls": 4,
+  "timing_median_seconds": {
+    "fresh": 235.42426039550006,
+    "reuse": 217.75945812550003
+  },
+  "cpu_time_median_seconds": {
+    "fresh": 111.7,
+    "reuse": 109.75
+  },
+  "observed_fresh_to_reuse_ratio": 1.0811207119179154,
+  "timing_scope": "One fixed foreign pair, two runs per mode, reversed order on a shared host. No controlled general latency or collection throughput claim. Diagnostic callback-counting parity runs are excluded from timing comparison.",
+  "maximum_timing_process_rss_bytes": 1919483904,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-model-reuse-fixed-snapshot-20261011.json": "9e8659a229b5101d44173415b9d4538ae57ef856dd9bde280b444e7fca6faeb1",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-model-reuse-native-20261011.json": "f0ea466673df717fd92dc1cce9c1763afaa75bd3523958e9562f9ccf1d9634f3",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-model-reuse-timing-20261011.json": "ec65ab35dcf0578fe556537241f7835bd131b366948ecdd2718a84f05f778a43",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-model-reuse-loftr-unit-tests-20261011.log": "1f3634431b1f7edf7ee837e95f56a8ea25ec1e779d29e4bd0475ef80cf786269",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-model-reuse-loftr-unit-build-20261011.log": "4c8f89418c5cafc0094f493e2ffb196b2dbc9d230e64cd980dc8f9454aa4a39e",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-model-reuse-fixed-native-build-20261011.log": "5d3fb51181c8f271b24b06b6699ee08ec094479dc0f9a232e4ec72587688c55d",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-model-reuse-timing-build-20261011.log": "308634bff7d5635bc6c911a1a017d75697ebeb1ec5d15bee039a0484e5cf0f9e",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-model-reuse-20261011.py": "1e80af84b091771b2b7e62596208f17f0e4b5618090e6a2b9582336c4dbdf9fb",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/model-reuse-loftr-unit-qualified-20261011": "238df43287e906de46b1d25a7ee31de815177ed128ea4c50210ffb5af7d57c04"
+  },
+  "scope": "Private lazy model slot scoped to one public tiles/portfolio/collection call. Each call starts empty, fixed weights guarded by existing per-attempt and final snapshots; no global cache. Real direct tiles retain every prior attempt proof. Portfolio/collection cached-provider runtime still needs real qualification. No hard tensor/workspace/RSS admission or all-case completion.",
+  "remaining": [
+    "Retained positional-table bounds under changing extreme aspect ratios need qualification; current640 controls fit default256-square coarse table",
+    "Real reused-model tiled portfolio/collection measurement",
+    "Repeated decoding/preparation and complete current corpus recall/negatives",
+    "Indexed scaling rather than quadratic pair enumeration",
+    "Total tensor/workspace/RSS admission and kernel preemption",
+    "Alpha/HDR, full100format and cross-platform model qualification"
+  ],
+  "initial_failed_build": "docs/research/dedup-model-reuse-native-build-20261011.log; syntax-only insertion error, preserved superseded snapshot; fixed source qualified separately"
+}

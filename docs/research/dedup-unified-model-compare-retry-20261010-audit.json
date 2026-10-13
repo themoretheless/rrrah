@@ -1,0 +1,71 @@
+{
+  "status": "verified_two_native_positives_four_foreign_rejections_and_rss_gap",
+  "report": "docs/research/dedup-unified-model-compare-retry-20261010.json",
+  "report_sha256": "43e358c98d6fde5671587d5c8aad4868af983d28e0da0c6bf66fd53283df1d9f",
+  "pins_verified": 10,
+  "source_files_verified": 2998,
+  "results": [
+    {
+      "source": "209400.jpg",
+      "max_side": 320,
+      "supported": true,
+      "raw_proposals": 263,
+      "anchors": [
+        63,
+        63
+      ],
+      "managed_peak": 98458336,
+      "process_peak_rss_bytes": 756678656
+    },
+    {
+      "source": "209400.jpg",
+      "max_side": 640,
+      "supported": true,
+      "raw_proposals": 925,
+      "anchors": [
+        515,
+        515
+      ],
+      "managed_peak": 98917280,
+      "process_peak_rss_bytes": 2478145536
+    },
+    {
+      "source": "201400.jpg",
+      "max_side": 320,
+      "supported": false,
+      "raw_proposals": 48,
+      "anchors": [],
+      "managed_peak": 98304000,
+      "process_peak_rss_bytes": 750403584
+    },
+    {
+      "source": "201400.jpg",
+      "max_side": 640,
+      "supported": false,
+      "raw_proposals": 111,
+      "anchors": [],
+      "managed_peak": 98304000,
+      "process_peak_rss_bytes": 2471739392
+    },
+    {
+      "source": "209000.jpg",
+      "max_side": 320,
+      "supported": false,
+      "raw_proposals": 48,
+      "anchors": [],
+      "managed_peak": 98304000,
+      "process_peak_rss_bytes": 752746496
+    },
+    {
+      "source": "209000.jpg",
+      "max_side": 640,
+      "supported": false,
+      "raw_proposals": 64,
+      "anchors": [],
+      "managed_peak": 98304000,
+      "process_peak_rss_bytes": 2460172288
+    }
+  ],
+  "maximum_process_peak_rss_bytes": 2478145536,
+  "scope": "Single native library call spans file preparation, real LoFTR provider, geometry and original pixels with unchanged thresholds. Provenance/native pixel predicates and observed macOS process RSS, not independent inference/pixel oracle or broad precision/recall. Managed payload peak is not total inference memory; RSS exceeds 512 MiB and no blocking-forward cancellation bound is qualified."
+}

@@ -3,8 +3,8 @@
   "repository": "alikoker/dct-perceptual-hash-csharp",
   "commit": "af087039af40eca918edf7c5e032490aef687d2d",
   "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
-  "decision": "shortlist",
-  "finding": "C# DCT64 with SIMD coefficient evaluation and test program; useful independent arithmetic oracle, preprocessing still needs review.",
+  "decision": "arithmetic-reference-unqualified",
+  "finding": "All implementation/tests reviewed and15 Git blobs verified. net48/GDI+ runtime not available here. Static calibration permits division by zero and original/resized domain mismatch by compatibility design; no golden arithmetic oracle or precision corpus. No code adopted.",
   "available_source_evidence": [
     {
       "path": "src/DctPerceptualHash/PerceptualHash.cs",
@@ -63,6 +63,14 @@
       "lines": 202,
       "source": false,
       "test": false
+    }
+  ],
+  "incremental_reviews": [
+    {
+      "audit": "docs/research/dedup-500/csharp-dct-source-review-audit-20261013.json",
+      "whole_implementation_complete": true,
+      "whole_repo_complete": false,
+      "runtime_behavior_executed": false
     }
   ]
 }

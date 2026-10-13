@@ -1,0 +1,83 @@
+warning: function `fallible_zeroed_bytes` is never used
+   --> crates/rrrah-cache/src/mosaic_payload_v1.rs:728:4
+    |
+728 | fn fallible_zeroed_bytes(len: usize) -> Result<Box<[u8]>, MosaicPayloadError> {
+    |    ^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+warning: `rrrah-cache` (lib) generated 1 warning
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+warning: methods `submit` and `submit_image` are never used
+    --> crates/rrrah-app/src/main.rs:1379:8
+     |
+1087 | impl ForegroundLoader {
+     | --------------------- methods in this implementation
+...
+1379 |     fn submit(&self, path: PathBuf) -> Result<u64> {
+     |        ^^^^^^
+...
+1382 |     fn submit_image(&self, path: PathBuf, image_index: usize) -> Result<u64> {
+     |        ^^^^^^^^^^^^
+     |
+     = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: associated items `install_with_cancel`, `refresh`, and `refresh_with_cancel` are never used
+   --> crates/rrrah-app/src/raster_viewport.rs:396:19
+    |
+ 26 | impl ResidentSource {
+    | ------------------- associated items in this implementation
+...
+396 |     pub(crate) fn install_with_cancel<F: FnMut() -> bool>(
+    |                   ^^^^^^^^^^^^^^^^^^^
+...
+483 |     pub(crate) fn refresh(
+    |                   ^^^^^^^
+...
+503 |     pub(crate) fn refresh_with_cancel<F: FnMut() -> bool>(
+    |                   ^^^^^^^^^^^^^^^^^^^
+
+warning: `rrrah` (bin "rrrah") generated 2 warnings
+    Finished `test` profile [optimized + debuginfo] target(s) in 33.21s
+     Running tests/png_physical_aspect.rs (target/debug/deps/png_physical_aspect-f1fca5da1a1554eb)
+
+running 5 tests
+test apng_sixteen_bit_precision_matches_authored_linear_metal_reference ... ok
+test png_physical_aspect_survives_swap_and_matches_metal_geometry ... ok
+test apng_selected_frames_preserve_physical_aspect_through_swap_and_metal ... ok
+test apng_previous_rectangle_matches_independent_composition_frames_on_metal ... ok
+test apng_packed_samples_and_palette_alpha_survive_metal_and_swap ... ok
+
+successes:
+
+---- apng_sixteen_bit_precision_matches_authored_linear_metal_reference stdout ----
+APNG precision adapter: Metal Apple M4 Max
+APNG 16-bit precision: two selected frames; authored linear SDR/HDR reference exact; final=0
+
+---- png_physical_aspect_survives_swap_and_matches_metal_geometry stdout ----
+PNG aspect adapter: Metal Apple M4 Max
+PNG physical aspect: width/height=0.5; decoded and swapped SDR/HDR frames exact; final=0
+
+---- apng_selected_frames_preserve_physical_aspect_through_swap_and_metal stdout ----
+APNG aspect adapter: Metal Apple M4 Max
+APNG physical aspect: two selected frames; reverse swap restore; SDR/HDR exact; final=0
+
+---- apng_previous_rectangle_matches_independent_composition_frames_on_metal stdout ----
+APNG previous adapter: Metal Apple M4 Max
+APNG previous rectangle: three selected disposal frames; independent SDR/HDR oracle exact; final=0
+
+---- apng_packed_samples_and_palette_alpha_survive_metal_and_swap stdout ----
+APNG packed adapter: Metal Apple M4 Max
+APNG packed precision: six selected frames; grayscale/palette alpha; SDR/HDR and swap exact; final=0
+
+
+successes:
+    apng_packed_samples_and_palette_alpha_survive_metal_and_swap
+    apng_previous_rectangle_matches_independent_composition_frames_on_metal
+    apng_selected_frames_preserve_physical_aspect_through_swap_and_metal
+    apng_sixteen_bit_precision_matches_authored_linear_metal_reference
+    png_physical_aspect_survives_swap_and_matches_metal_geometry
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.73s
+

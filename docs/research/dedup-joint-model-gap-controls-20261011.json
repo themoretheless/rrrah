@@ -1,0 +1,95 @@
+{
+  "status": "complete_bounded_joint_model_gap_controls",
+  "producer_pid": 69554,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-joint-model-tiles-native-fixed-audit-20261011.json": "2c307fd4d1412edd6836f257638f9464cb5311736f6dee6b2a2ae6169998310b",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-model-tiles-native-fixed-qualified-20261011/joint_model_tiles_files": "73113e0aa7382f499b3ad4cd0b368cebdd334fe1e1279a2440755abaeac9ff46",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-model-gap-controls-qualified-20261011/joint_model_tiles_files": "73113e0aa7382f499b3ad4cd0b368cebdd334fe1e1279a2440755abaeac9ff46",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-publisher-positives-qualified-20261011/audits/ordering-prefix-0200.json": "a9d39b6918bb4496daa0381e9d4851545002a07d2dd4f8a98a0c444e82cc49d9",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors": "59e55bf0ecd047db9c513672d121a3ea677529ad448bdc3a359e92862c74ddd7",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-joint-model-gap-controls-20261011.py": "f4275afb3bd5fc90168c15b3a013af531995c7c7e28344404d559c30a5414ef7",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/203502.jpg": "bf1d351e0a8259716fe65e0eb3c37a55e25bfa3d1d06042c8a50f8935b31dd1c",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/203500.jpg": "e22cba724438643ac01eb2516eab2ab466d51544218f9096c2a99fbbf07c4aac",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200302.jpg": "bc4de3728d82839559134cc8155f87bdf7f8aeaca32b66bdea11f5a618420242",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200300.jpg": "0573729209c9ce6c109ea1175079960165b915dd5579121f0e15653d56f755d0"
+  },
+  "plan": [
+    {
+      "original_id": 35,
+      "query_id": 209,
+      "group_id": 203500,
+      "original": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/203500.jpg",
+      "query": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/203502.jpg",
+      "direction": "reverse",
+      "left": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/203502.jpg",
+      "right": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/203500.jpg",
+      "source_tolerance": 0.5536776036072714,
+      "gradient_minimum_distance": 0.19068231807512986,
+      "radius_0_1_proposed": false
+    },
+    {
+      "original_id": 3,
+      "query_id": 162,
+      "group_id": 200300,
+      "original": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200300.jpg",
+      "query": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200302.jpg",
+      "direction": "reverse",
+      "left": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200302.jpg",
+      "right": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200300.jpg",
+      "source_tolerance": 0.78125,
+      "gradient_minimum_distance": 0.3079304424492396,
+      "radius_0_1_proposed": false
+    }
+  ],
+  "results": [
+    {
+      "group_id": 203500,
+      "status": "inconclusive",
+      "command": [
+        "/usr/bin/time",
+        "-l",
+        "/usr/bin/env",
+        "DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+        "/Users/themoretheless/.codex/tmp/rrrah-joint-model-gap-controls-qualified-20261011/joint_model_tiles_files",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/203502.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/203500.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+        "640",
+        "0.5536776036072714"
+      ],
+      "pid": 69558,
+      "returncode": 0,
+      "stdout": "{\"attempts\":25,\"geometry_inliers\":0,\"managed_peak\":130031208,\"managed_used\":0,\"original_dimensions\":[[800,600],[3008,2000]],\"pixels\":\"None\",\"raw_proposals\":27,\"scope\":\"Real CPU proposals, explicit1m joint hypotheses and filter12; same strict residual/pixel thresholds. Whole-image diagnostic, not automatic scale/tile/collection or full corpus qualification.\",\"selected_points\":27,\"supported\":false,\"transform\":null}\n",
+      "stderr": "       69.73 real        78.34 user         1.77 sys\n          1366425600  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n              154199  page reclaims\n                  10  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                 543  voluntary context switches\n              111496  involuntary context switches\n        642797643300  instructions retired\n        186046934276  cycles elapsed\n          1326630544  peak memory footprint\n",
+      "elapsed_seconds": 69.742207875,
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-joint-model-gap-controls-qualified-20261011/203500.log",
+      "log_sha256": "3206436f9ad4b8e1f68387af0a831ac936b406ec9146709b240fb2be16798bb7",
+      "attempts": 25
+    },
+    {
+      "group_id": 200300,
+      "status": "supported",
+      "command": [
+        "/usr/bin/time",
+        "-l",
+        "/usr/bin/env",
+        "DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+        "/Users/themoretheless/.codex/tmp/rrrah-joint-model-gap-controls-qualified-20261011/joint_model_tiles_files",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200302.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200300.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+        "640",
+        "0.78125"
+      ],
+      "pid": 70492,
+      "returncode": 0,
+      "stdout": "{\"attempts\":13,\"geometry_inliers\":12,\"managed_peak\":72683464,\"managed_used\":0,\"original_dimensions\":[[800,600],[2048,1536]],\"pixels\":\"Some(AnchorRankEvidence { forward_anchors: 12, reverse_anchors: 12, forward: RankRegionEvidence { sites: 300, valid_sites: 300, informative_pairs: 1503, agreeing_pairs: 1441, pixel_reads: 121500 }, reverse: RankRegionEvidence { sites: 300, valid_sites: 300, informative_pairs: 1833, agreeing_pairs: 1775, pixel_reads: 121500 }, supported: true })\",\"raw_proposals\":47,\"scope\":\"Real CPU proposals, explicit1m joint hypotheses and filter12; same strict residual/pixel thresholds. Whole-image diagnostic, not automatic scale/tile/collection or full corpus qualification.\",\"selected_points\":47,\"supported\":true,\"transform\":[[1.717521442052154,-0.5806807984379434,493.2663511609886],[0.0662260894457567,1.8862368193007288,149.8055342549036],[-0.0002619660083535962,-0.000481954918694156,1.2212502058120005]]}\n",
+      "stderr": "       26.84 real        39.19 user         0.94 sys\n          1947336704  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n              131261  page reclaims\n                   9  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                 649  voluntary context switches\n               54037  involuntary context switches\n        362003470233  instructions retired\n        106748812843  cycles elapsed\n          1907820656  peak memory footprint\n",
+      "elapsed_seconds": 26.845184250000003,
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-joint-model-gap-controls-qualified-20261011/200300.log",
+      "log_sha256": "c1ce4777685f0056009657b9ca2319eb3512a2f3ad1cc47acb87c94f82653edc",
+      "attempts": 13
+    }
+  ],
+  "scope": "Two unresolved publisher-positive directions through actual CPU joint25-window search,1m hypotheses/window and fixed filter12, original residual/pixel floors unchanged. Missing support is inconclusive, not semantic rejection. No full portfolio/precision/corpus/default claim."
+}

@@ -1,0 +1,412 @@
+{
+  "status": "complete_isolated_microkernel_experiment_not_adopted",
+  "scope": "Copied actual four-distance helper versus explicit eight-accumulator candidate. No production changes, no matcher/cancellation/geometry/runtime qualification. Seeded normalized synthetic banks only.",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup/src/gradient.rs": "814cc1117c9e89e6b5eb8dc00ee881ee8fb1298bde35a3b8443d7ffa08e63e78",
+    "/Users/themoretheless/.codex/tmp/rrrah-gradient-eight-kernel-20261011/kernel.rs": "64ac67dd57190a40faa43871e5447c0b5ac598624d6b916fd4fbe5d7fe241c9c",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-gradient-eight-kernel-20261011.py": "c6a715102df6f6f7a5ae222de3f093634ded098d7231a511d939749a8e518bca",
+    "/Users/themoretheless/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc": "766eda9d8f53afd6fc7f27b3cd2e444dd22afacb5afa710a5625fc8e45b8c941"
+  },
+  "runs": [
+    {
+      "opt_level": 1,
+      "samples": [
+        {
+          "left": 64,
+          "right": 65,
+          "trial": 0,
+          "eight": false,
+          "seconds": 0.000228542,
+          "checksum_bits": "40a02559f054386c"
+        },
+        {
+          "left": 64,
+          "right": 65,
+          "trial": 1,
+          "eight": true,
+          "seconds": 0.00022875,
+          "checksum_bits": "40a02559f054386c"
+        },
+        {
+          "left": 64,
+          "right": 65,
+          "trial": 2,
+          "eight": true,
+          "seconds": 0.000228833,
+          "checksum_bits": "40a02559f054386c"
+        },
+        {
+          "left": 64,
+          "right": 65,
+          "trial": 3,
+          "eight": false,
+          "seconds": 0.000228625,
+          "checksum_bits": "40a02559f054386c"
+        },
+        {
+          "left": 64,
+          "right": 65,
+          "trial": 4,
+          "eight": false,
+          "seconds": 0.000228542,
+          "checksum_bits": "40a02559f054386c"
+        },
+        {
+          "left": 64,
+          "right": 65,
+          "trial": 5,
+          "eight": true,
+          "seconds": 0.00022875,
+          "checksum_bits": "40a02559f054386c"
+        },
+        {
+          "left": 64,
+          "right": 65,
+          "trial": 6,
+          "eight": true,
+          "seconds": 0.00022875,
+          "checksum_bits": "40a02559f054386c"
+        },
+        {
+          "left": 64,
+          "right": 65,
+          "trial": 7,
+          "eight": false,
+          "seconds": 0.000228542,
+          "checksum_bits": "40a02559f054386c"
+        },
+        {
+          "left": 257,
+          "right": 259,
+          "trial": 0,
+          "eight": false,
+          "seconds": 0.00365025,
+          "checksum_bits": "40e051e2c47155b3"
+        },
+        {
+          "left": 257,
+          "right": 259,
+          "trial": 1,
+          "eight": true,
+          "seconds": 0.003718625,
+          "checksum_bits": "40e051e2c47155b3"
+        },
+        {
+          "left": 257,
+          "right": 259,
+          "trial": 2,
+          "eight": true,
+          "seconds": 0.003713458,
+          "checksum_bits": "40e051e2c47155b3"
+        },
+        {
+          "left": 257,
+          "right": 259,
+          "trial": 3,
+          "eight": false,
+          "seconds": 0.003654125,
+          "checksum_bits": "40e051e2c47155b3"
+        },
+        {
+          "left": 257,
+          "right": 259,
+          "trial": 4,
+          "eight": false,
+          "seconds": 0.003655583,
+          "checksum_bits": "40e051e2c47155b3"
+        },
+        {
+          "left": 257,
+          "right": 259,
+          "trial": 5,
+          "eight": true,
+          "seconds": 0.003719167,
+          "checksum_bits": "40e051e2c47155b3"
+        },
+        {
+          "left": 257,
+          "right": 259,
+          "trial": 6,
+          "eight": true,
+          "seconds": 0.003717416,
+          "checksum_bits": "40e051e2c47155b3"
+        },
+        {
+          "left": 257,
+          "right": 259,
+          "trial": 7,
+          "eight": false,
+          "seconds": 0.003642917,
+          "checksum_bits": "40e051e2c47155b3"
+        },
+        {
+          "left": 1024,
+          "right": 1025,
+          "trial": 0,
+          "eight": false,
+          "seconds": 0.13371175,
+          "checksum_bits": "4120116f28b61bf6"
+        },
+        {
+          "left": 1024,
+          "right": 1025,
+          "trial": 1,
+          "eight": true,
+          "seconds": 0.161587292,
+          "checksum_bits": "4120116f28b61bf6"
+        },
+        {
+          "left": 1024,
+          "right": 1025,
+          "trial": 2,
+          "eight": true,
+          "seconds": 0.108873583,
+          "checksum_bits": "4120116f28b61bf6"
+        },
+        {
+          "left": 1024,
+          "right": 1025,
+          "trial": 3,
+          "eight": false,
+          "seconds": 0.091278625,
+          "checksum_bits": "4120116f28b61bf6"
+        },
+        {
+          "left": 1024,
+          "right": 1025,
+          "trial": 4,
+          "eight": false,
+          "seconds": 0.11059775,
+          "checksum_bits": "4120116f28b61bf6"
+        },
+        {
+          "left": 1024,
+          "right": 1025,
+          "trial": 5,
+          "eight": true,
+          "seconds": 0.139030667,
+          "checksum_bits": "4120116f28b61bf6"
+        },
+        {
+          "left": 1024,
+          "right": 1025,
+          "trial": 6,
+          "eight": true,
+          "seconds": 0.105340292,
+          "checksum_bits": "4120116f28b61bf6"
+        },
+        {
+          "left": 1024,
+          "right": 1025,
+          "trial": 7,
+          "eight": false,
+          "seconds": 0.077770292,
+          "checksum_bits": "4120116f28b61bf6"
+        }
+      ],
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-gradient-eight-kernel-20261011/kernel-opt1",
+      "binary_sha256": "3100f6f2e83d2c2ee12c4852894d7148591186c1a0eaf899ae71ce3457857e4e",
+      "exact_distance_and_checksum_assertions_passed": true
+    },
+    {
+      "opt_level": 3,
+      "samples": [
+        {
+          "left": 64,
+          "right": 65,
+          "trial": 0,
+          "eight": false,
+          "seconds": 0.000221042,
+          "checksum_bits": "40a02559f054386c"
+        },
+        {
+          "left": 64,
+          "right": 65,
+          "trial": 1,
+          "eight": true,
+          "seconds": 0.000224417,
+          "checksum_bits": "40a02559f054386c"
+        },
+        {
+          "left": 64,
+          "right": 65,
+          "trial": 2,
+          "eight": true,
+          "seconds": 0.00021175,
+          "checksum_bits": "40a02559f054386c"
+        },
+        {
+          "left": 64,
+          "right": 65,
+          "trial": 3,
+          "eight": false,
+          "seconds": 0.00025325,
+          "checksum_bits": "40a02559f054386c"
+        },
+        {
+          "left": 64,
+          "right": 65,
+          "trial": 4,
+          "eight": false,
+          "seconds": 0.000217666,
+          "checksum_bits": "40a02559f054386c"
+        },
+        {
+          "left": 64,
+          "right": 65,
+          "trial": 5,
+          "eight": true,
+          "seconds": 0.000219958,
+          "checksum_bits": "40a02559f054386c"
+        },
+        {
+          "left": 64,
+          "right": 65,
+          "trial": 6,
+          "eight": true,
+          "seconds": 0.000215083,
+          "checksum_bits": "40a02559f054386c"
+        },
+        {
+          "left": 64,
+          "right": 65,
+          "trial": 7,
+          "eight": false,
+          "seconds": 0.000233916,
+          "checksum_bits": "40a02559f054386c"
+        },
+        {
+          "left": 257,
+          "right": 259,
+          "trial": 0,
+          "eight": false,
+          "seconds": 0.004215084,
+          "checksum_bits": "40e051e2c47155b3"
+        },
+        {
+          "left": 257,
+          "right": 259,
+          "trial": 1,
+          "eight": true,
+          "seconds": 0.004253125,
+          "checksum_bits": "40e051e2c47155b3"
+        },
+        {
+          "left": 257,
+          "right": 259,
+          "trial": 2,
+          "eight": true,
+          "seconds": 0.003283375,
+          "checksum_bits": "40e051e2c47155b3"
+        },
+        {
+          "left": 257,
+          "right": 259,
+          "trial": 3,
+          "eight": false,
+          "seconds": 0.00420075,
+          "checksum_bits": "40e051e2c47155b3"
+        },
+        {
+          "left": 257,
+          "right": 259,
+          "trial": 4,
+          "eight": false,
+          "seconds": 0.00482125,
+          "checksum_bits": "40e051e2c47155b3"
+        },
+        {
+          "left": 257,
+          "right": 259,
+          "trial": 5,
+          "eight": true,
+          "seconds": 0.003735291,
+          "checksum_bits": "40e051e2c47155b3"
+        },
+        {
+          "left": 257,
+          "right": 259,
+          "trial": 6,
+          "eight": true,
+          "seconds": 0.003265667,
+          "checksum_bits": "40e051e2c47155b3"
+        },
+        {
+          "left": 257,
+          "right": 259,
+          "trial": 7,
+          "eight": false,
+          "seconds": 0.012086709,
+          "checksum_bits": "40e051e2c47155b3"
+        },
+        {
+          "left": 1024,
+          "right": 1025,
+          "trial": 0,
+          "eight": false,
+          "seconds": 0.071546708,
+          "checksum_bits": "4120116f28b61bf6"
+        },
+        {
+          "left": 1024,
+          "right": 1025,
+          "trial": 1,
+          "eight": true,
+          "seconds": 0.06202575,
+          "checksum_bits": "4120116f28b61bf6"
+        },
+        {
+          "left": 1024,
+          "right": 1025,
+          "trial": 2,
+          "eight": true,
+          "seconds": 0.05347425,
+          "checksum_bits": "4120116f28b61bf6"
+        },
+        {
+          "left": 1024,
+          "right": 1025,
+          "trial": 3,
+          "eight": false,
+          "seconds": 0.062428,
+          "checksum_bits": "4120116f28b61bf6"
+        },
+        {
+          "left": 1024,
+          "right": 1025,
+          "trial": 4,
+          "eight": false,
+          "seconds": 0.201052292,
+          "checksum_bits": "4120116f28b61bf6"
+        },
+        {
+          "left": 1024,
+          "right": 1025,
+          "trial": 5,
+          "eight": true,
+          "seconds": 0.111389625,
+          "checksum_bits": "4120116f28b61bf6"
+        },
+        {
+          "left": 1024,
+          "right": 1025,
+          "trial": 6,
+          "eight": true,
+          "seconds": 0.17240125,
+          "checksum_bits": "4120116f28b61bf6"
+        },
+        {
+          "left": 1024,
+          "right": 1025,
+          "trial": 7,
+          "eight": false,
+          "seconds": 0.126632,
+          "checksum_bits": "4120116f28b61bf6"
+        }
+      ],
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-gradient-eight-kernel-20261011/kernel-opt3",
+      "binary_sha256": "f737fb32d1b7491a7f725f214f3e6de9e5f3263424cbfeb3a8ea242d8b2f7966",
+      "exact_distance_and_checksum_assertions_passed": true
+    }
+  ]
+}

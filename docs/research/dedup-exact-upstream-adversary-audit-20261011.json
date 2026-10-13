@@ -1,0 +1,36 @@
+{
+  "status": "failed",
+  "producer_pid": 28881,
+  "source_manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exact-upstream-adversary-snapshot-20261011.json",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exact-upstream-adversary-snapshot-20261011.json": "78f0c3cfc9c002d53a654d8653c7ed64bb1c2c5f33ac423fdced533a11288620",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/qualify-dedup-exact-upstream-adversary-20261011.py": "f9f1d914a950ed501515718783bbe3e012489a1fad5227ae510715d578d1547d",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-upstream-adversary-qualified-20261011/build.jsonl": "79d14b09116c517caf7e5721c6fd2077c162bef66454cf953d627b555758d5b0",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-upstream-adversary-qualified-20261011/build.log": "afc39e80b188a78b74b8d82cb5c455af968ea9e60ac265a6f51b5f81dcf2a501"
+  },
+  "build_command": [
+    "cargo",
+    "test",
+    "--manifest-path",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-upstream-adversary-snapshot-20261011/Cargo.toml",
+    "-p",
+    "rrrah-dedup",
+    "--no-default-features",
+    "--features",
+    "decode",
+    "--test",
+    "exact_files",
+    "--locked",
+    "--offline",
+    "--no-run",
+    "--message-format=json",
+    "--config",
+    "profile.dev.package.rrrah-dedup.opt-level=3",
+    "--target-dir",
+    "/Users/themoretheless/.codex/tmp/rrrah-opposite-native-snapshot-20261011/target"
+  ],
+  "results": [],
+  "scope": "Frozen compatible core and lock;18 exact-file tests including both independent upstream stale-equality counterexamples. Source unchanged from verified148 core; not full workspace/platform/filesystem/RSS qualification.",
+  "build_pid": 28883,
+  "error": "/Users/themoretheless/.codex/tmp/rrrah-exact-upstream-adversary-qualified-20261011/exact_files.log"
+}

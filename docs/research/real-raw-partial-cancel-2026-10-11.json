@@ -1,0 +1,34 @@
+{
+  "backend": "Metal Apple M4 Max",
+  "passed": 1,
+  "failed": 0,
+  "ignored": 0,
+  "seconds": 30.482,
+  "restores_and_exact_new_frames": 306,
+  "partial_gpu_cancellations": 305,
+  "gpu_pressure_refusals": 305,
+  "source_count": 9,
+  "cancel_configuration": {
+    "tile_size": 512,
+    "tile_halo": 2,
+    "cooperative_check": 64
+  },
+  "checks": [
+    "cancel after crossing completed tile-write iterations, during later packing",
+    "previous frame exact after cancellation",
+    "renderer resident bytes remain previous atlas",
+    "cancelled atlas and queued resources release on GPU completion",
+    "packing credit zero on cancellation",
+    "normal retry exact for all restored originals",
+    "final GPU/storage roots zero",
+    "driver requires cancellation count=restores-1 and preservation/release/retry markers"
+  ],
+  "log_sha256": "4d732ce3427e149d821d5a4b5b1d1e9f6cf293efe57abf7be0dd7c51d7743092",
+  "limits": [
+    "Cooperative upload cancellation; already submitted GPU work completes normally",
+    "Tile-write progress is inferred from current fixed tiling and checked loop structure, not GPU hardware tracing",
+    "Logical payload budgets exclude driver/pipeline overhead",
+    "30-second failure regression, not a new ten-minute cancellation soak",
+    "Warm local offscreen SDR rendering; physical HDR/NVIDIA remain pending"
+  ]
+}

@@ -1,0 +1,107 @@
+{
+  "status": "rejected_exploratory_contrast_recovery_spatial_mismatch",
+  "pins": {
+    "docs/research/dedup-disc21-dark-contrast-grid-20261011.json": "c7b7fae08f348ac677c544fc8594e99a569c534c5b1cdc812e95669c91fc15b0",
+    "docs/research/dedup-disc21-dark-contrast-grid-audit-20261011.json": "8723c40412b1859e0f409ee02e7d228117e9d3455526d73fd9e3e83eb312270a",
+    "/Users/themoretheless/.codex/tmp/rrrah-disc21-cohort-source-20261011/Q00906.jpg": "bf05f2eb330a827a1cbc152fab4b09915da427bc53d3a7cf7fbc29dde202459a",
+    "/Users/themoretheless/.codex/tmp/rrrah-disc21-cohort-source-20261011/R014120.jpg": "5e5c15e7da265ad995c24aa172c89b28bd5fd3bb26794fe10d4e0a89a09a30db"
+  },
+  "hypothesis_bank": 12,
+  "source_witness_bounds": [
+    [
+      400.0,
+      488.0
+    ],
+    [
+      456.0,
+      488.0
+    ]
+  ],
+  "target_witness_bounds": [
+    [
+      711.2703552246094,
+      806.9325866699219
+    ],
+    [
+      257.18722858834775,
+      290.83033752441406
+    ]
+  ],
+  "visually_inspected_building_tile_bbox_xyxy": [
+    199,
+    694,
+    373,
+    867
+  ],
+  "witnesses_in_building_tile": 0,
+  "witnesses": [
+    [
+      456.0,
+      464.0,
+      774.6502380371094,
+      266.2496636573305
+    ],
+    [
+      448.0,
+      464.0,
+      767.9677886962891,
+      266.5208285717254
+    ],
+    [
+      480.0,
+      464.0,
+      799.802978515625,
+      267.4753648473861
+    ],
+    [
+      464.0,
+      464.0,
+      781.8649597167969,
+      266.081851066427
+    ],
+    [
+      472.0,
+      456.0,
+      791.4557800292969,
+      258.586093496769
+    ],
+    [
+      464.0,
+      456.0,
+      782.0445556640625,
+      258.62463086716673
+    ],
+    [
+      440.0,
+      464.0,
+      759.6318817138672,
+      265.8813765505527
+    ],
+    [
+      488.0,
+      464.0,
+      806.9325866699219,
+      267.77879073772027
+    ],
+    [
+      448.0,
+      456.0,
+      767.0217742919922,
+      258.51979811648107
+    ],
+    [
+      400.0,
+      488.0,
+      711.2703552246094,
+      290.83033752441406
+    ],
+    [
+      440.0,
+      456.0,
+      758.9136657714844,
+      257.18722858834775
+    ]
+  ],
+  "annotation_scope": "Manual approximate tile bounds from original image inspection, not official localization annotations and not an automatic admission rule. All bank12 witnesses are far outside the visible building-copy tile.",
+  "conclusion": "Lower contrast yields high ordinal agreement on an unrelated tile against window edges. This is false localized evidence even though the image pair has an annotated copy elsewhere. Reject adoption of the low-contrast setting; image-level positive label alone cannot validate localization. Original policy refuses this candidate."
+}

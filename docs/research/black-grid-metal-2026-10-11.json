@@ -1,0 +1,23 @@
+{
+  "change": "GPU black-level quad rejects grids that cannot be represented exactly; no top-left approximation",
+  "core_tests": {
+    "passed": 115,
+    "failed": 0,
+    "ignored": 2
+  },
+  "metal_raw_linear_tests": {
+    "passed": 2,
+    "failed": 0,
+    "ignored": 0
+  },
+  "regressions": [
+    "exact 2x4 periodic grid",
+    "uniform 3x3 grid",
+    "odd-width wrap refusal",
+    "odd-height wrap refusal",
+    "nonperiodic larger grid refusal",
+    "multi-component refusal"
+  ],
+  "log_sha256": "cde501ce5003690ab3ea8f53c032d9be00718d717f695d51ffbcd9a0c026f38f",
+  "remaining": "Arbitrary repeat-grid GPU correction is not implemented; synthetic regression does not qualify camera appearance."
+}

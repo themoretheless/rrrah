@@ -1,0 +1,27 @@
+{
+  "status": "verified_six_original_scan_helper_controls",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/fclones-hasher-source-20261012.json": "54d14fd6f77c95467e02139da2daabbbe9e237abf2d03400abfd39593e32d176",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/fclones-scan-controls-20261012.rs": "be45f64268eca175898d97dc052c40504a21603e5c1319f27228ebb85c97cb06",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/fclones-controls-LICENSE-20261012": "fa876876689ee8c7ad01e3d332f53502bece80de772d4239dced8f3398014000",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-scan-controls-20261012": "f36ca6fb13dbc68657ad93176f0cbbfc6fde9da7f634e8584a8c8de58bfa9716",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-scan-controls-20261012.log": "9c9613c52f000a5ce034836d98712c3064d3c8bf4efb76977542dad7004254b9",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-fclones-scan-controls-20261012.py": "f90e238bb054cad479122849e26969d23e30086d092cf05156bc52f17d8bdfcc"
+  },
+  "tests": [
+    "controls::early_eof_reports_short_success",
+    "controls::exact_requested_prefix",
+    "controls::interrupted_read_is_propagated",
+    "controls::short_reads_accumulate",
+    "controls::thread_buffer_retains_largest_request",
+    "controls::zero_buffer_returns_no_data"
+  ],
+  "findings": [
+    "Requested prefix and short reads are handled by the original helper.",
+    "Early EOF returns short successful length; caller must validate promised length.",
+    "A zero buffer length on an empty thread-local buffer returns zero bytes despite nonempty input.",
+    "Interrupted errors propagate without retry.",
+    "Largest per-thread buffer remains retained after smaller requests."
+  ],
+  "scope": "Original scan and TLS block executed verbatim with primitive FileLen adapter; default FileHasher buffer is nonzero 65536. Zero-buffer control is helper contract boundary, not normal CLI failure. Early EOF is documented at-most stream behavior; no whole scanner mutation race or bad duplicate group claim. This is targeted hasher review, not full42-file source review, whole upstream suite or process memory qualification. No production adoption."
+}

@@ -1,0 +1,35 @@
+{
+  "scope": "Fresh current-code live Metal HDR surface presentation and OS-reported EDR activation/release on connected built-in display; not measured luminance/calibration",
+  "gpu": "Apple M4 Max",
+  "display_type": "spdisplays_built-in-liquid-retina-xdr",
+  "display_online": "spdisplays_yes",
+  "surface_format": "Rgba16Float",
+  "surface_color_space": "ExtendedSrgbLinear",
+  "presented_frames": 178,
+  "elapsed_seconds": 3.003,
+  "validation_errors": 0,
+  "reported_before_configure_headroom": 1,
+  "reported_after_present_headroom_samples": [
+    1.0689863,
+    2.2914047,
+    4.5827775,
+    9.165492,
+    16.0,
+    16.0
+  ],
+  "reported_after_owned_window_exit": {
+    "name": "Built-in Retina Display",
+    "edr_current_max": 1,
+    "edr_potential_max": 16,
+    "scope": "read-only NSScreen after probe exit; not measured nits"
+  },
+  "source_sha256": "1570bdeb1262862af03e27f23537300d9c1f50aeb06ca5985e04b5f1af9aa200",
+  "binary_sha256": "2d31db9803840c4d7d1ec32c4cf3a2499333e1603f310714b6874ee0f65d0f0d",
+  "log_sha256": "4ace6b124654f525f760020ee397ca25c80d68ef533061f1bea856f722275da7",
+  "query_note": "Swift helper compilation was deliberately stopped after equivalent read-only JXA/AppKit query succeeded. No display setting changed.",
+  "limitations": [
+    "No nits, chromaticity, calibration or gamut measurement",
+    "Advertised PQ/HLG surface pairs not exercised by this linear surface probe",
+    "No universal support claim for every HDR image format/profile or other displays"
+  ]
+}

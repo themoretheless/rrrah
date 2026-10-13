@@ -1,0 +1,17 @@
+{
+  "scope": "12MP selected16-bit APNG capacity, full/partial shared pressure refusal and retry,48million component f64 tolerance plus original/restored bit equality, SDR/HDR Metal oracle and192MB swap",
+  "peak_managed_decode_bytes": 480554140,
+  "retained_bytes": 192000000,
+  "report": "docs/research/large-apng-metal-2026-10-11/report.json",
+  "hashes": {
+    "crates/rrrah-decode/src/apng.rs": "93b19ea716d22eb3710893a4509988cc96806a66263919d0dcf1ab2491a523a3",
+    "crates/rrrah-app/tests/large_apng_memory.rs": "425c3cb38a93ed974eb60f3768664fac17de33e4ae17d34da657a5d87a37bafe",
+    "scripts/qualify-viewer-storage-gpu.py": "309a7a2b913391f40be92ca87bf21bad231064537c5365b4a36b5021deca916d",
+    "tests/fixtures/data/apng-12mp-16bit.png": "f10aed2b392a2a6a97881ab0899f73ba580d694e749c65a9c21447c222c65ae9"
+  },
+  "limitations": [
+    "Authored spatially constant fields do not qualify arbitrary image offsets or photographic content",
+    "Private PNG scratch not included in shared-budget peak",
+    "Offscreen Metal is not physical presentation"
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "status": "complete_bounded_cpu_loftr_hdr_alpha_identity_qualification",
+  "native_controls": 5,
+  "all_expected_outcomes_match": true,
+  "macos_generic_regression_tests": 8,
+  "report": "docs/research/dedup-projected-loftr-identity-native-20261011.json",
+  "report_sha256": "c62391a32feea4bf171cc43ab78ddb644fd7b4a292a344f93628b2c280ba99c3",
+  "baseline_audit": "docs/research/dedup-projected-loftr-baseline-audit-20261011.json",
+  "baseline_known_copy_miss_recovered": true,
+  "acceptance_thresholds_unchanged": true,
+  "proposal_counts_unchanged": true,
+  "copy_original_pixel_errors": [
+    0,
+    0
+  ],
+  "collision_projected_byte_equalities": {
+    "hdr_copy": true,
+    "hdr_collision": true,
+    "alpha_copy": true,
+    "alpha_collision": true
+  },
+  "cumulative_pixel_work": [
+    153600,
+    307200,
+    153600,
+    307200,
+    0
+  ],
+  "snapshot_files": 3062,
+  "regression_log_sha256": "ec3a94da3dccd0133565152f377d07f0973169b547524002c4c287e1af4028f3",
+  "scope": "Frozen CPU native inference, two textured synthetic positive controls, two identical-projection original-pixel negatives and one unrelated control. Does not qualify arbitrary HDR/alpha data, automatic projected search, total Torch RSS, or other-platform Torch runtime. Linux generic gate remains separate."
+}

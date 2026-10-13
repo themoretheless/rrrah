@@ -208,8 +208,8 @@ fn filtered_file_evidence_is_discarded_on_late_cancellation_generation_or_mutati
     let source = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/rotation/base.png");
     let left = dir.path().join("left.png");
     let right = dir.path().join("right.png");
-    std::fs::copy(&source, &left).unwrap();
-    std::fs::copy(source, &right).unwrap();
+    copy_writable(&source, &left).unwrap();
+    copy_writable(source, &right).unwrap();
     let mut a = DecodeRequest::new(&left);
     let b = DecodeRequest::new(right);
     let generation = Arc::new(AtomicU64::new(7));
@@ -818,7 +818,7 @@ fn recursive_reflected_brightness_keeps_fitted_mode_paths_and_frame_settings() {
     for id in [830, 898] {
         for variant in ["base", "mirror-brightness"] {
             let name = format!("{id}-{variant}.png");
-            std::fs::copy(root.join(&name), nested.join(name)).unwrap();
+            copy_writable(root.join(&name), nested.join(name)).unwrap();
         }
     }
     let p = LocalCollectionPolicy {
@@ -915,7 +915,7 @@ fn recursive_spatial_reflected_brightness_shares_pair_and_frame_policy() {
     for id in [830, 898] {
         for variant in ["base", "mirror-brightness"] {
             let name = format!("{id}-{variant}.png");
-            std::fs::copy(root.join(&name), nested.join(name)).unwrap();
+            copy_writable(root.join(&name), nested.join(name)).unwrap();
         }
     }
     let p = LocalCollectionPolicy {
@@ -1218,8 +1218,8 @@ fn reflected_filtered_file_guards_discard_late_results() {
     let source = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/rotation/base.png");
     let left = dir.path().join("left.png");
     let right = dir.path().join("right.png");
-    std::fs::copy(&source, &left).unwrap();
-    std::fs::copy(source.with_file_name("mirrored.png"), &right).unwrap();
+    copy_writable(&source, &left).unwrap();
+    copy_writable(source.with_file_name("mirrored.png"), &right).unwrap();
     let mut a = DecodeRequest::new(&left);
     let b = DecodeRequest::new(right);
     let generation = Arc::new(AtomicU64::new(7));
@@ -1399,7 +1399,7 @@ fn recursive_filtered_fixture() -> (tempfile::TempDir, Vec<PathBuf>) {
         "1084-base.png",
         "1084-mirror-jpeg.png",
     ] {
-        std::fs::copy(source.join(name), nested.join(name)).unwrap();
+        copy_writable(source.join(name), nested.join(name)).unwrap();
     }
     std::fs::write(folder.path().join("bad.png"), b"corrupt image").unwrap();
     #[cfg(unix)]
@@ -2076,7 +2076,7 @@ fn recursive_ranged_reflections_preserve_oracle_aliases_errors_and_modes() {
     let photos = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/photos");
     for scene in [830, 1084] {
         std::fs::remove_file(roots[1].join(format!("{scene}-mirror-jpeg.png"))).unwrap();
-        std::fs::copy(
+        copy_writable(
             photos.join(format!("{scene}-mirror-brightness.png")),
             roots[1].join(format!("{scene}-mirror-brightness.png")),
         )
@@ -2435,4 +2435,12 @@ fn recursive_ranged_reflection_keeps_frame_selection_and_factory_guards() {
         ));
         assert_eq!(budget.used(), 0);
     }
+}
+
+// Fixture sources may be read-only in an immutable qualification checkout.
+// Copy bytes without inheriting permissions so mutation tests can edit their own files.
+fn copy_writable(source: impl AsRef<std::path::Path>, target: impl AsRef<std::path::Path>) -> std::io::Result<u64> {
+    let bytes = std::fs::read(source)?;
+    std::fs::write(target, &bytes)?;
+    Ok(bytes.len() as u64)
 }

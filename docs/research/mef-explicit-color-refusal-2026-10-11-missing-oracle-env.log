@@ -1,0 +1,30 @@
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+    Finished `test` profile [optimized + debuginfo] target(s) in 31.63s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_decode-3d841f18ff85d05c)
+
+running 11 tests
+test camtiff::mef_sensor::tests::sensor_strip_cannot_alias_out_of_line_metadata ... ok
+test camtiff::mef_sensor::tests::file_import_rejects_selection_and_stale_generation_before_reading ... ok
+test native_router::tests::mef_refuses_unimplemented_color_without_dng_or_memory_admission ... ok
+test camtiff::mef_sensor::tests::packed_boundaries_admission_cancel_and_ownership ... ok
+test image_router::tests::unsupported_mef_tiff_remains_sensor_without_preview_or_full_read ... ok
+
+thread 'camtiff::mef_sensor::tests::real_zd_full_sensor_matches_oracle' (13878721) panicked at crates/rrrah-decode/src/camtiff/mef_sensor.rs:548:73:
+called `Result::unwrap()` on an `Err` value: NotPresent
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+MEF public route refusal: native MEF decoder failed: camera white balance and color profile are not implemented for viewing; explicit sensor import is available
+test image_router::tests::unqualified_mef_refuses_public_view_without_preview_fallback_or_leak ... ok
+test camtiff::mef_sensor::tests::real_zd_full_sensor_matches_oracle ... FAILED
+test camtiff::mef_sensor::tests::real_zd_sensor_admission_cancellation_and_last_owner ... ok
+test camtiff::mef_sensor::tests::real_zd_file_import_shares_source_and_output_budget ... ok
+test camtiff::mef_sensor::tests::second_pass_rejects_changed_truncated_or_cancelled_sensor_without_credit_leak ... ok
+test camtiff::mef_sensor::tests::real_zd_all_sensor_values_match_pinned_independent_oracle ... ok
+
+failures:
+
+failures:
+    camtiff::mef_sensor::tests::real_zd_full_sensor_matches_oracle
+
+test result: FAILED. 10 passed; 1 failed; 0 ignored; 0 measured; 1062 filtered out; finished in 0.34s
+
+error: test failed, to rerun pass `-p rrrah-decode --lib`

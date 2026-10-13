@@ -1,0 +1,23 @@
+{
+  "runs": [
+    {
+      "test": "metal-navigation",
+      "log": "docs/research/metal-navigation-and-thumbnail-decoder-credit-2026-10-11-metal-navigation.log",
+      "sha256": "2d5f5c8ee07250a38d90da50f96c275d159ba0fb8abfe7842740e65ad93db781"
+    },
+    {
+      "test": "decoder-owner",
+      "log": "docs/research/metal-navigation-and-thumbnail-decoder-credit-2026-10-11-decoder-owner.log",
+      "sha256": "378be1e6512f3b5f1f566ca1ea5549f5e87688efe1f4a92d01da1ec21bfcb249"
+    }
+  ],
+  "metal": "Apple M4 Max; 120 mixed-format ping-pong transitions; six formats; exact SDR/HDR readback; stale work refused; managed root zero",
+  "shutdown": "Paused thumbnail loader retains 64-byte managed decoder-owner credit; destruction waits; credit zero before destructor returns",
+  "scope": "Separate navigation transport and thumbnail owner lifecycle checks, not one end-to-end native UI session",
+  "remaining": [
+    "physical HDR display",
+    "physical slow disk and OS-wide pressure",
+    "NVIDIA deferred by user",
+    "full 100-format acceptance"
+  ]
+}

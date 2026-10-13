@@ -1,0 +1,76 @@
+{
+  "date": "2026-10-11",
+  "scope": "12 MP GPU upload cancellation at validation and admission boundaries with old Metal frame retention and successful replacement recovery",
+  "adapter": "Metal Apple M4 Max",
+  "dimensions": [
+    4000,
+    3000
+  ],
+  "format": "RGBA32Float LinearSrgb",
+  "source_bytes": 192000000,
+  "gpu_limit_bytes": 192000016,
+  "upload_queue_limit_bytes": 192000000,
+  "large_checkpoint_count": 2933,
+  "exercised_large_checkpoints": [
+    1,
+    2,
+    1466,
+    2931,
+    2932,
+    2933
+  ],
+  "small_checkpoints": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "checks": [
+    "Canceled upload returns Cancelled at every exercised checkpoint",
+    "Every canceled upload retains full old visible frame and its 16-byte reservation",
+    "Temporary replacement and upload queue credit return to baseline after cancellation",
+    "Successful upload after cancellations renders expected blue center and changes frame",
+    "Old GPU image reservation releases after successful replacement",
+    "GPU and upload queue budgets return to zero after renderer drop"
+  ],
+  "logs": [
+    {
+      "path": "/tmp/rrrah-metal-large-upload-cancel-20261011.log",
+      "sha256": "cac95e71648cf2b085694788b5cb677b10d1636c247fba842969141acaf8fdde",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "path": "/tmp/rrrah-metal-raster-upload-regression-20261011.log",
+      "sha256": "d95f092291a2904cd10a4ff6bd18953d3c60120ee4f2a51448ae51a6957e687a",
+      "passed": 10,
+      "failed": 0,
+      "ignored": 5
+    }
+  ],
+  "source_sha256": {
+    "crates/rrrah-gpu/tests/common/mod.rs": "8ad145ef417ee1b6cc145958bee3e17b67329ab04d86b2a8269c303661e49223",
+    "crates/rrrah-gpu/tests/raster_readback.rs": "33b5a375e3a6392775fb2513a67f785313ae60628a5e5d87c140abeaf5da1dc9",
+    "scripts/qualify-viewer-storage-gpu.py": "5c48f1be889da4116c08eb4849a4302b4fdec7f1737fb2f5de0658f22c4160d1"
+  },
+  "reproduce": {
+    "environment": {
+      "RRRAH_GPU_OPTIONAL": "0",
+      "RRRAH_GPU_BACKEND": "metal"
+    },
+    "command": "cargo test --locked --offline --target-dir /tmp/rrrah-required-corpus-target -p rrrah-gpu --test raster_readback cancelled_upload_validation_and_admission_preserve_visible_texture -- --include-ignored --nocapture --test-threads=1",
+    "integrated_runner_flag": "--metal-large-upload-cancel"
+  },
+  "limitations": [
+    "Six selected checkpoints out of 2933 are exercised for the large source; every checkpoint only for the small source",
+    "Driver allocation/write calls are not interruptible after final pre-driver cancellation check",
+    "Old/new frame readback is 128x96, not full-size raster",
+    "Constant authored replacement does not qualify diverse decoding or all formats",
+    "Source CPU vectors are independent test allocations outside GPU/queue budgets",
+    "SDR offscreen test does not qualify physical HDR display",
+    "Ignored full-camera corpus/manual tests are unverified by ordinary regression"
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "status": "passed",
+  "producer_pid": 54344,
+  "source": "/Users/themoretheless/.codex/tmp/rrrah-cache-interpretation-fix-20261012/source",
+  "target": "/Users/themoretheless/.codex/tmp/rrrah-cache-interpretation-fix-20261012/target",
+  "changed_inputs": {
+    "src/lib.rs": "3a23fe80c08a56ca01ba5e7027ab906d57f30d4099afdd49a5b20aa1674f76da",
+    "src/decode.rs": "0f00177110f8e0c638198801c0762d7609d81d3fd358f6effeca185a15e50850",
+    "src/decode_recipe.rs": "5e350c50fe16652f5d401bf36c531dcc85c665bea9a51a7301943e029d0af7cb",
+    "tests/cache_interpretation.rs": "eb94ed4bbdc04b17a030bcd2d1a4109cb5318d1c5470020ef0adb16b16d8fbde",
+    "tests/scan_retry.rs": "41a5968a32936ad676e88ab532fc84b0e68608303167b4757b19dc62214e3586"
+  },
+  "command": [
+    "cargo",
+    "test",
+    "-p",
+    "rrrah-dedup",
+    "--features",
+    "decode",
+    "--locked",
+    "--offline",
+    "--test",
+    "cache_interpretation",
+    "--test",
+    "scan_retry",
+    "--jobs",
+    "2",
+    "--target-dir",
+    "/Users/themoretheless/.codex/tmp/rrrah-cache-interpretation-fix-20261012/target"
+  ],
+  "log": "/Users/themoretheless/.codex/tmp/rrrah-cache-interpretation-fix-20261012/test.log",
+  "child_pid": 55073,
+  "returncode": 0,
+  "log_sha256": "4644a10249edc4c23df426d64df796e75414c9d36872750dc85267b39c6df429",
+  "inputs_unchanged": true
+}

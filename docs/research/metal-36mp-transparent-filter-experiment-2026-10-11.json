@@ -1,0 +1,28 @@
+{
+  "experiment": "Skip arithmetic for alpha==0 after finite/alpha validation in streamed source LOD",
+  "source": "6000x6000 variable RGBA32F, 25 percent fully transparent, 128x128 output, exact Metal HDR readback",
+  "worker_ms": {
+    "baseline": [
+      762.698792,
+      671.428375,
+      684.0760409999999
+    ],
+    "candidate": [
+      1206.417084,
+      1177.817875,
+      736.335875
+    ],
+    "restored": [
+      611.4260830000001
+    ]
+  },
+  "median_ms": {
+    "baseline": 684.0760409999999,
+    "candidate": 1177.817875,
+    "restored": 611.4260830000001
+  },
+  "decision": "Rejected and reverted: no speedup demonstrated; restored path passes exact-frame test at 611.43ms",
+  "interpretation": "Different concurrent load and small sample counts prevent precise causal performance attribution; do not claim a general speed regression or improvement",
+  "next_step": "Profile original-source filtering before changing hot-loop arithmetic",
+  "validation": "All candidate/restored Metal frames exact; candidate cache units133 passed; restored managed peak427776 index281280 full source zero final resources zero"
+}

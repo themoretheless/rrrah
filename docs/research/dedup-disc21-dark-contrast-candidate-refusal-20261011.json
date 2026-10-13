@@ -1,0 +1,52 @@
+{
+  "status": "verified_automatic_reproduction_rejected_spatial_support",
+  "pins": {
+    "docs/research/dedup-disc21-dark-contrast-candidate-20261011.json": "fc24e3e4e9b17b0f023d57da9afb6312c409446eab6462c10f93161f7818ef93",
+    "docs/research/dedup-disc21-dark-contrast-grid-20261011.json": "c7b7fae08f348ac677c544fc8594e99a569c534c5b1cdc812e95669c91fc15b0",
+    "docs/research/dedup-disc21-dark-contrast-spatial-refusal-20261011.json": "3f5981e346e2a1def01a3f41939fc8c1c4ed957dae04b6b75f4a4d3cb46019e3"
+  },
+  "evidence": {
+    "attempts": 25,
+    "geometry_inliers": 11,
+    "hypothesis_bank": 12,
+    "managed_peak": 25638304,
+    "managed_used": 0,
+    "original_dimensions": [
+      [
+        576,
+        1024
+      ],
+      [
+        1024,
+        760
+      ]
+    ],
+    "pixel_attempts": 5,
+    "pixel_rank_radius": 8,
+    "pixel_window_radius": 2,
+    "pixels": "Some(AnchorRankEvidence { forward_anchors: 11, reverse_anchors: 11, forward: RankRegionEvidence { sites: 275, valid_sites: 275, informative_pairs: 1452, agreeing_pairs: 1362, pixel_reads: 111375 }, reverse: RankRegionEvidence { sites: 275, valid_sites: 275, informative_pairs: 1509, agreeing_pairs: 1413, pixel_reads: 111375 }, supported: true })",
+    "raw_proposals": 1065,
+    "scope": "Actual CPU25-bank extraction, automatic hypothesis and original pixels; explicit1m/filter12, not full corpus/precision/RSS qualification.",
+    "selected_points": 1065,
+    "supported": true,
+    "transform": [
+      [
+        1.4800555156260997,
+        -1.0162989533516078,
+        579.3614011149398
+      ],
+      [
+        0.19189142558698924,
+        0.7459859392683901,
+        -164.62219888504416
+      ],
+      [
+        0.0005711918552549537,
+        -0.0011999797224377315,
+        1.3067237506332934
+      ]
+    ]
+  },
+  "adoption": "rejected",
+  "scope": "Automatic full search reproduces the same bank12 transform that ordinal pixels accept at lowered contrast. Its witnesses are outside actual copy tile. This is not recovery qualification despite an image-level positive label; production threshold remains unchanged."
+}

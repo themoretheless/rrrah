@@ -1,0 +1,32 @@
+{
+  "status": "verified_52_default_tests_native_linux_arm64_nonroot",
+  "passed": 52,
+  "ignored": 2,
+  "suites": [
+    {
+      "suite": "lib",
+      "passed": 32,
+      "ignored": [
+        "gradient::batch_tests::alternating_matcher_timing",
+        "gradient::matching_tests::alternating_matcher_timing"
+      ]
+    },
+    {
+      "suite": "exact_files",
+      "passed": 20,
+      "ignored": []
+    }
+  ],
+  "image_id": "sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55",
+  "compiler": "rustc 1.98.0 (88d9e12ae 2026-08-18)\nbinary: rustc\ncommit-hash: 88d9e12ae178fab0fb5cc050a94da85685d449ea\ncommit-date: 2026-08-18\nhost: aarch64-unknown-linux-gnu\nrelease: 1.98.0\nLLVM version: 22.1.8\n",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exact-restored-mtime-linux-prepared-20261012.json": "62515655bdecea8ce6bbc116da7eba753f7a822cf956db506b7ff9991af035ea",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exact-restored-mtime-source-retry2-20261012.json": "9ab0d320b61d08f30474805e0036aebde2494155d64ff4920846295979709f4e",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-restored-mtime-linux-tests-20261012.log": "4df590f15d5971b655006763f634a201dfaceafd7089e02f4abd4175108da60d",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-exact-restored-mtime-linux-20261012.py": "fc1556ef2794968fbae005255f8837f9c14fb1b2d4e1ad35415349250a5beea9",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-linux-native/toolchain/bin/rustc": "9d7a5b460112fc7290514b05cc30aea07b0a1430598a26594aa9755ebdba6001",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-restored-mtime-linux-executables-20261012/lib": "890f3fa65c8f5b98128a6015aef9a5fab1955f3a95c389470ee40ed78b1a576d",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-restored-mtime-linux-executables-20261012/exact_files": "7130dbf0a33b3822a1a5e64a07f53fcb464571700e3f7f19bfd3344d7bcb4ddd"
+  },
+  "scope": "Original restored-mtime snapshot source before any later root-admission candidate. Linux ARM64 nonroot52default-feature unit/exactfile controls including both restoredmtime regressions, source/image/toolchain/testnames/ELFbinaries pinned. No decoder/allfeature/Windows/processcap/fullcorpus/500 qualification."
+}

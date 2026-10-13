@@ -1,0 +1,14 @@
+{
+  "backend": "metal",
+  "passed": 8,
+  "failed": 0,
+  "ignored": 0,
+  "verified": "2049-triangle GPU preparation in std::thread; pending/stale result preserves SDR/HDR previous pixels; drop releases temporary credit; accepted result installs and changes frame; nine cancellation checkpoints remain passing",
+  "log": "docs/research/model-prepared-2026-10-11.log",
+  "sha256": "56dd8c0bc261eeb7e2f7d0218c0e31da7cc9b8b83abcef10c53681201bbbf884",
+  "test_source_sha256": "55c5e43913651659f71eeff47be53145ad3cbc76ba8a18781b7ac2f6450b96dc",
+  "limitations": [
+    "Viewer event-loop worker integration remains pending.",
+    "Caller must prepare and install on same device with intended shared budget."
+  ]
+}

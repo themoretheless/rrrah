@@ -1,0 +1,31 @@
+{
+  "status": "complete_adopted_cpu_backbone_memory_reduction",
+  "previous_goal_turn_classification": "progress",
+  "previous_progress": "Backbone stage RSS evidence selected convolution workspace as the next target.",
+  "production_adoption": "scripts/dedup-loftr-native-probe uses vendor/loftr; generic library remains provider-agnostic.",
+  "module_tests": 37,
+  "module_test_platform": "macOS ARM64 / libtorch 2.10 CPU",
+  "real_comparisons": 6,
+  "exact_complete_native_evidence_parity": true,
+  "rss_reduction_range": [
+    0.2526632600034644,
+    0.32814999933886047
+  ],
+  "baseline_max_rss_bytes": 2478145536,
+  "patched_max_rss_bytes": 1671462912,
+  "current_provider_check": "passed --locked --offline",
+  "current_dedup_runtime_matches_measured_snapshot": true,
+  "limits": [
+    "Real six-case runs use pinned previous decoder dependencies; current provider compilation checked separately.",
+    "No hard total RSS/tensor-memory admission; peak remains above 512 MiB managed budget.",
+    "Cancellation inside forward, broad corpus quality, other platforms/devices and automatic six-phase adoption remain open.",
+    "No controlled wall-latency benchmark."
+  ],
+  "pins": {
+    "docs/research/dedup-loftr-tiled-convolution-measurement-20261010.json": "9aff2abdb186d66748acf121fac3088980dd95eba8258cc9c35fb3d22f011a67",
+    "docs/research/dedup-loftr-tiled-convolution-adoption-20261010.json": "369631ea65f823634590ae81b59cbd888e98e343830787b58aa09295e3497d42",
+    "docs/research/dedup-loftr-tiled-convolution-adoption-check-20261010.log": "95091410d418ea0bdb406ef3fa04c56bcd1ae99bf688aaa6fdbfb3fac4b8eeb2",
+    "docs/research/dedup-loftr-tiled-convolution-tests-20261010.log": "32c571548a449e77fd30a330570a6d19133d35e57670e6a8e1fca55610219c33",
+    "docs/research/dedup-loftr-tiled-convolution-adoption-tests-20261010.log": "2ec054d514213c8b33d64f8949a29e075a9cfc22933123f4a53f67178a1ffbd1"
+  }
+}

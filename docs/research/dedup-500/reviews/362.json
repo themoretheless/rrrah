@@ -2,7 +2,7 @@
   "index": 362,
   "repository": "commonsmachinery/blockhash-js",
   "commit": "2084417e40005e37f4ad957dbd2bca08ddc222bc",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "Existing prior full/partial source-review artifacts linked after current pin verification; original limits retained. This reconciliation is not a new full-source reading or new runtime execution, except the explicit blockhash-js runtime refresh.",
   "decision": "shortlist",
   "finding": "MIT JS blockhash core and Hamming tests; independently compare alpha/non-divisible-block behavior.",
   "available_source_evidence": [
@@ -64,5 +64,30 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "prior_selected_review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "linked_review_artifacts": [
+    {
+      "review_artifact": "blockhash-js-full-review-20261012.json",
+      "status": "historical_artifact_has_current_pin_errors",
+      "pin_errors": [
+        {
+          "path": "/Users/themoretheless/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node",
+          "kind": "changed_pin",
+          "expected": "40eb03e1524abd09d90727d0abea6f5008a49c410a7715e71dbda7537df42ab9",
+          "actual": "743cbaf12bd9323937b85f6297d8182b086526510c9f9c5875fa74d2aad9072d"
+        }
+      ],
+      "original_scope": "Deepens registry362: complete pinned text source/config/test/readme/license and reference-vector review, all blobs verified,34unchanged original tests on macOSNode plus edge controls. Not browser/backend/platform/resource/precision or all500 completion."
+    },
+    {
+      "review_artifact": "blockhash-js-runtime-refresh-audit-20261013.json",
+      "status": "verified_34_original_tests_current_explicit_node_with_old_source_and_dependencies",
+      "pin_errors": [],
+      "original_scope": "Same unchanged63source entries and original34fixture comparisons with unchanged pinned test-dependency tree. New explicitNode26supersedes old mutable runtime pin for this execution only. Existing browserify-shim installation failure and browser/lint/platform/resource/precision limits remain. Prior full-source reading is linked, not counted as a new repository read; no production adoption. Two earlier incorrect Mocha-entrypoint launches failed before tests and are preserved separately."
+    }
+  ],
+  "artifact_pin_reconciliation_audit": "unlinked-reviews-pin-audit-20261013.json",
+  "prior_registry_review": "prior-registry-362-unlinked-reconciliation-20261013.json",
+  "runtime_refresh_audit": "blockhash-js-runtime-refresh-audit-20261013.json"
 }

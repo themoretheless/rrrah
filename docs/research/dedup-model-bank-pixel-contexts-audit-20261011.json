@@ -1,0 +1,133 @@
+{
+  "status": "complete_bounded_frozen_joint_model_tests",
+  "producer_pid": 26056,
+  "source_manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-model-bank-pixel-contexts-snapshot-20261011.json",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-model-bank-pixel-contexts-snapshot-20261011.json": "aec03c2d25f7c5fceaed568fe413017e3d4ecfd5e2ff3c075ad5abf4cffa8f0f",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/qualify-dedup-model-bank-pixel-contexts-20261011.py": "cfdffdf6b9107d8277a1b38c9d5a853aec7b26fe9f9087deb329db475095cbcc",
+    "/Users/themoretheless/.codex/tmp/rrrah-model-bank-pixel-contexts-qualified-20261011/build.jsonl": "988fd6520b4496ab061328ae83df22bffec02b5f4a7b3b127bb114916c4aeb49",
+    "/Users/themoretheless/.codex/tmp/rrrah-model-bank-pixel-contexts-qualified-20261011/build.log": "cf1a7d0d2276d42f1830ce5b6ad2c5ce6e50333ddfb1330b353ca79bfac35dcf"
+  },
+  "build_command": [
+    "cargo",
+    "test",
+    "--manifest-path",
+    "/Users/themoretheless/.codex/tmp/rrrah-model-bank-pixel-contexts-snapshot-20261011/Cargo.toml",
+    "-p",
+    "rrrah-dedup",
+    "--no-default-features",
+    "--features",
+    "decode",
+    "--test",
+    "model_compare",
+    "--test",
+    "model_tiles",
+    "--test",
+    "search_portfolio",
+    "--test",
+    "portfolio_collection",
+    "--test",
+    "joint_witnesses",
+    "--test",
+    "geometry",
+    "--test",
+    "projective_domains",
+    "--test",
+    "joint_projective",
+    "--test",
+    "projective_pruning",
+    "--locked",
+    "--offline",
+    "--no-run",
+    "--message-format=json",
+    "--config",
+    "profile.dev.package.rrrah-dedup.opt-level=3",
+    "--target-dir",
+    "/Users/themoretheless/.codex/tmp/rrrah-opposite-native-snapshot-20261011/target"
+  ],
+  "results": [
+    {
+      "suite": "model_compare",
+      "tests": 28,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-model-bank-pixel-contexts-qualified-20261011/model_compare",
+      "binary_sha256": "8df739a8468d4aa61fdf7fe3ff3de5e8780bc5afccdbf99569ed6275ff8bd85c",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-model-bank-pixel-contexts-qualified-20261011/model_compare.log",
+      "log_sha256": "94c3e9bdf393719c0ce10295e9808df1533b8f70ae927dd71c12d429ffa666b1"
+    },
+    {
+      "suite": "model_tiles",
+      "tests": 21,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-model-bank-pixel-contexts-qualified-20261011/model_tiles",
+      "binary_sha256": "77ebd0e97476cbe0d78bb7b04b6433711b56a9bcfc307a93a2f8528a23c81268",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-model-bank-pixel-contexts-qualified-20261011/model_tiles.log",
+      "log_sha256": "80e50c37a88f6f69314771413800c7579b8a783c602296b4f28fbc49c3ced067"
+    },
+    {
+      "suite": "search_portfolio",
+      "tests": 35,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-model-bank-pixel-contexts-qualified-20261011/search_portfolio",
+      "binary_sha256": "050997bee209a2676a8db07de0401b6b76baa99ef29378d62b2e4369e759c172",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-model-bank-pixel-contexts-qualified-20261011/search_portfolio.log",
+      "log_sha256": "1234e6e2b4c348129866df0185f2362914b1a03437abccca322e142b863586c9"
+    },
+    {
+      "suite": "portfolio_collection",
+      "tests": 36,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-model-bank-pixel-contexts-qualified-20261011/portfolio_collection",
+      "binary_sha256": "371af0b167efcc9d71d0001b856be1f30a3b3de8666af3f1c4aeda4c2b2a7ec4",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-model-bank-pixel-contexts-qualified-20261011/portfolio_collection.log",
+      "log_sha256": "55c27551ec174dbed73b6d89747d9cd571974f6d395f0bb56eca4d5751f1cfb8"
+    },
+    {
+      "suite": "joint_witnesses",
+      "tests": 10,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-model-bank-pixel-contexts-qualified-20261011/joint_witnesses",
+      "binary_sha256": "89cb7a341dbb4ded8bd64fafb77a5f96be82953a73e359c941200ed846e42cc5",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-model-bank-pixel-contexts-qualified-20261011/joint_witnesses.log",
+      "log_sha256": "b33ae6f88b60071d22bcdaaef0d9182f6f096402979524793d95d1d9a62df855"
+    },
+    {
+      "suite": "geometry",
+      "tests": 9,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-model-bank-pixel-contexts-qualified-20261011/geometry",
+      "binary_sha256": "0ca9ec40b80e3a41391db54d0c6b7e0cc53bd45622cbe31ac9054a0984aee34d",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-model-bank-pixel-contexts-qualified-20261011/geometry.log",
+      "log_sha256": "138488b49f98ec2059b65b2a2c4918fa5a0eb4d16093401187f6bc0db0e06513"
+    },
+    {
+      "suite": "projective_domains",
+      "tests": 4,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-model-bank-pixel-contexts-qualified-20261011/projective_domains",
+      "binary_sha256": "c3a2729b96bda2dd2df9dd9606038a82fe99cd92a08579c96985061b0475f351",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-model-bank-pixel-contexts-qualified-20261011/projective_domains.log",
+      "log_sha256": "9a86eb5e07ba7d9bf84545366e912db2ad5164c65efc2904a5e8351ac03a2b57"
+    },
+    {
+      "suite": "joint_projective",
+      "tests": 4,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-model-bank-pixel-contexts-qualified-20261011/joint_projective",
+      "binary_sha256": "5dc62033783af75f78e29be784c45cb2211e4572679f71ebf1e243de33806290",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-model-bank-pixel-contexts-qualified-20261011/joint_projective.log",
+      "log_sha256": "693a44dddd04a65bbe8c2b3ad48547dd0c456a765efe489ab6537d121c4e8fc8"
+    },
+    {
+      "suite": "projective_pruning",
+      "tests": 3,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-model-bank-pixel-contexts-qualified-20261011/projective_pruning",
+      "binary_sha256": "e802cd289462cfe5f1e6c1d11a3951e4b01dea38e1d5bf12659b00cc3792dfa6",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-model-bank-pixel-contexts-qualified-20261011/projective_pruning.log",
+      "log_sha256": "8ca82e39baa87883471c1a4985c3d7835e679d18b1a3b473798f9c96e441a92e"
+    }
+  ],
+  "scope": "Frozen compatible four-crate source and lock, new joint primitive plus legacy/pair/collection tests. Source coherent before/after; root concurrent HDR edits preserved outside this gate. Not full workspace/platform/corpus/RSS qualification.",
+  "build_pid": 26084,
+  "tests": 150,
+  "owned_root_matches": {
+    "crates/rrrah-dedup/src/local_scan.rs": true,
+    "crates/rrrah-dedup/src/geometry.rs": true,
+    "crates/rrrah-dedup/src/anchor_rank_file.rs": true,
+    "crates/rrrah-dedup/src/search_portfolio.rs": true,
+    "crates/rrrah-dedup/src/portfolio_collection.rs": true,
+    "crates/rrrah-dedup/src/model_loftr.rs": false
+  }
+}

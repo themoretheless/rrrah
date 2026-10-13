@@ -1,0 +1,197 @@
+{
+  "backend": "Metal Apple M4 Max",
+  "output": "1920x1080 offscreen sRGB",
+  "measured_per_file": 15,
+  "warmups_per_file": 3,
+  "cases": [
+    {
+      "file": "1294.cr2",
+      "decode_ms": [
+        519.795,
+        556.867
+      ],
+      "upload_ms": [
+        14.456,
+        23.523
+      ],
+      "completion_ms": [
+        9.466,
+        15.205
+      ],
+      "total_ms": [
+        545.282,
+        588.103
+      ]
+    },
+    {
+      "file": "898.nef",
+      "decode_ms": [
+        522.595,
+        919.935
+      ],
+      "upload_ms": [
+        13.643,
+        25.754
+      ],
+      "completion_ms": [
+        9.044,
+        41.794
+      ],
+      "total_ms": [
+        546.965,
+        957.75
+      ]
+    },
+    {
+      "file": "2414.arw",
+      "decode_ms": [
+        147.321,
+        288.466
+      ],
+      "upload_ms": [
+        31.206,
+        40.569
+      ],
+      "completion_ms": [
+        9.655,
+        26.559
+      ],
+      "total_ms": [
+        180.012,
+        328.789
+      ]
+    },
+    {
+      "file": "1084.orf",
+      "decode_ms": [
+        559.374,
+        920.121
+      ],
+      "upload_ms": [
+        12.331,
+        24.083
+      ],
+      "completion_ms": [
+        7.979,
+        9.439
+      ],
+      "total_ms": [
+        581.074,
+        953.667
+      ]
+    },
+    {
+      "file": "831.pef",
+      "decode_ms": [
+        452.657,
+        1332.476
+      ],
+      "upload_ms": [
+        8.798,
+        34.818
+      ],
+      "completion_ms": [
+        8.87,
+        17.544
+      ],
+      "total_ms": [
+        470.882,
+        1363.183
+      ]
+    },
+    {
+      "file": "5025.rw2",
+      "decode_ms": [
+        60.706,
+        62.205
+      ],
+      "upload_ms": [
+        10.328,
+        11.523
+      ],
+      "completion_ms": [
+        7.722,
+        9.715
+      ],
+      "total_ms": [
+        78.569,
+        82.204
+      ]
+    },
+    {
+      "file": "2883.raf",
+      "decode_ms": [
+        32.052,
+        33.304
+      ],
+      "upload_ms": [
+        12.334,
+        14.212
+      ],
+      "completion_ms": [
+        8.447,
+        10.009
+      ],
+      "total_ms": [
+        51.976,
+        55.525
+      ]
+    },
+    {
+      "file": "IMG_9043.CR3",
+      "decode_ms": [
+        51.753,
+        53.024
+      ],
+      "upload_ms": [
+        18.193,
+        20.465
+      ],
+      "completion_ms": [
+        11.095,
+        13.719
+      ],
+      "total_ms": [
+        81.352,
+        85.148
+      ]
+    },
+    {
+      "file": "IMG_9074.CR3",
+      "decode_ms": [
+        52.513,
+        55.386
+      ],
+      "upload_ms": [
+        18.333,
+        20.485
+      ],
+      "completion_ms": [
+        10.697,
+        12.739
+      ],
+      "total_ms": [
+        80.848,
+        84.913
+      ]
+    }
+  ],
+  "input_hashes": {
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/1294.cr2": "8f28465cee09844ffad95dbd3ec91923717a329c5ec4f3f405f5b4fce83aaea3",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/898.nef": "f90deb2819863f5a6ca9913c255fdd83a94963f4284eb88df9d389da7a6c7665",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/2414.arw": "250784580ea527442c09004417bb0eead484f2bf3ee8f9121a776ac65bb50d0f",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/1084.orf": "b2221977cbc6eba0d3b363351072092e5647eaa0d02a5d8432b5d985b29f669f",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/831.pef": "51a3f22d702353b246684dca79f83c79cfdbdf9892702ae5ac55dd469e239bb6",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/5025.rw2": "87516d28f8594dcfd20b0577883ad0d35662efc503674b1e3688aa894d32a2c0",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/2883.raf": "58ad687b23138c3c49ebeb6c1f80daf13185349be364b947e2bf27e39a462d2f",
+    "/Users/themoretheless/Documents/Sources/rrrah/tests/IMG_9043.CR3": "d06cbb10e84882cf130430bdc88ed2652c2622b96dea8d6a854c09e3bee37e59",
+    "/Users/themoretheless/Documents/Sources/rrrah/tests/IMG_9074.CR3": "9c0d47cc2dd550eb6dc26c4ba2b2874b67f5c89e79dff5c472abf0ac6b2f6178"
+  },
+  "log_sha256": "736b46ac5097c3307565da0a3f109c6cfff00eb1fd473f534ef281cd9925f5d3",
+  "managed_final_zero": true,
+  "limits": [
+    "Sequential warm-file benchmark; host load and file differences prevent universal format ranking.",
+    "Not live window/physical HDR or independent camera appearance.",
+    "Separate invocations vary materially; do not compare as paired optimization measurements."
+  ]
+}

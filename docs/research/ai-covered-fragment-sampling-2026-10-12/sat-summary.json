@@ -1,0 +1,46 @@
+{
+  "implementation": "Device-space triangle/rectangle separating-axis rejection before callback; fixed scratch; touching boundaries retained; no epsilon",
+  "tests": {
+    "interpreter_passed": 110,
+    "renderer_passed": 138,
+    "renderer_ignored": 10
+  },
+  "replay": [
+    {
+      "fixture": "VectorApple.ai",
+      "page": 0,
+      "native_completed": false,
+      "capture_failed": false,
+      "deadline_expired": false,
+      "final_admitted_bytes": 0,
+      "native_replay_ms": 46392.894042
+    },
+    {
+      "fixture": "one.ai",
+      "page": 0,
+      "native_completed": true,
+      "capture_failed": false,
+      "deadline_expired": false,
+      "final_admitted_bytes": 0,
+      "native_replay_ms": 17078.423333
+    },
+    {
+      "fixture": "one.ai",
+      "page": 1,
+      "native_completed": true,
+      "capture_failed": false,
+      "deadline_expired": false,
+      "final_admitted_bytes": 0,
+      "native_replay_ms": 437.34499999999997
+    }
+  ],
+  "remaining": "VectorApple pixel138,34 still reaches256 candidate cap; feature remains opt-in; no full AI qualification",
+  "numerical_limit": "f64 arithmetic; not certified exact predicates",
+  "hashes": {
+    "vendor/hayro-interpret/src/encode/native_source.rs": "e50a780d7061ab31abf7f22966cc8f651eb4dd1ca65e466b28b02dcb296534f5",
+    "docs/research/ai-covered-fragment-sampling-2026-10-12/interpreter-sat.log": "07c471ea463305323a4ea2272f2abc81f8a64e043e1b9b76e29faa7081a47f8a",
+    "docs/research/ai-covered-fragment-sampling-2026-10-12/hayro-sat.log": "73fb2a6e8ceb8be2938aba88f184b55d178ea8ca4a0013ef3f708ff217075876",
+    "docs/research/ai-covered-fragment-sampling-2026-10-12/sat-replay.log": "67b83d6e1b991c7ceb2ca3f46782b0f0fc08901bdd60cf09e79b1cf25eac2cc9",
+    "docs/research/ai-covered-fragment-sampling-2026-10-12/sat-report.json": "29c943c5403e2ce0de3a5fa623479a55c0ead5697875f0282392a2701a323f59"
+  }
+}

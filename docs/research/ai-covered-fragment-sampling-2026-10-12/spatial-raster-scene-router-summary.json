@@ -1,0 +1,26 @@
+{
+  "implementation": "automatic retained scene routing now supports constant fills and nearest-neighbor native rasters",
+  "verified": [
+    "actual16bit PDF2x1image/4x1mask routed through scene groups to analytic alpha and original RGB",
+    "normal/knockout constant PDF controls retained"
+  ],
+  "bounds": {
+    "raster_events": 128,
+    "regions": 4095,
+    "scene_events": 4096,
+    "geometry_work_per_raster": 100000,
+    "polygon_work": 40000000,
+    "command_work": 4000000
+  },
+  "storage": "pre-admitted route metadata, bounded fallible scratch allocations, original source storage retained",
+  "ordinary_passed": 162,
+  "ignored": 11,
+  "limits": [
+    "test-only",
+    "same verified blending coordinates",
+    "interpolation/stencils/shading/mask events/crossspace remain unsupported",
+    "full production AI not qualified"
+  ],
+  "log": "docs/research/ai-covered-fragment-sampling-2026-10-12/spatial-raster-scene-router-final-tests.log",
+  "sha256": "f7549e8d66ce8f196c3c26f6b4f5d3c04e9ff644c85de559bd58fe230ee7cfc4"
+}

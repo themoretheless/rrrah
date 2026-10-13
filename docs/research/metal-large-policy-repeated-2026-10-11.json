@@ -1,0 +1,72 @@
+{
+  "date": "2026-10-11",
+  "scope": "Repeated large authored raster cache policy and disk swap checks on actual Metal; bounded cycles, not long-duration collection qualification",
+  "adapter": "Metal Apple M4 Max",
+  "large_cycles": 30,
+  "large_cycle_elapsed_seconds": 32.857,
+  "harness_seconds": 38.73,
+  "source_dimensions": [
+    4000,
+    3000
+  ],
+  "source_format": "RGBA32Float LinearSrgb",
+  "payload_bytes": 192000000,
+  "managed_root_limit_bytes": 768000000,
+  "small_policy_cycles": 100,
+  "checks": [
+    "Cycle-dependent spatial pixel values",
+    "Every original and replacement float component compared bit-for-bit after disk restore, including signed zero, negative values and HDR values",
+    "Full 4000x3000 offscreen Metal RGBA8 readback compared before and after swap",
+    "Live size/count/TTL tightening with active display lease",
+    "Visible frame protection and background restore isolation",
+    "Full managed root pressure refuses restore without swap errors, then restore recovers",
+    "Canceled background restore leaves managed root accounting unchanged",
+    "Final managed root bytes zero after every large cycle"
+  ],
+  "logs": [
+    {
+      "path": "/tmp/rrrah-metal-large-sustained-20261011.log",
+      "sha256": "bc4ec3a7653dafc090ab50c4df27c352dca86adcf4a66a97841f126b55903efa",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "path": "/tmp/rrrah-metal-policy-pressure-100-20261011.log",
+      "sha256": "f5427a2853d99ef5d4d6f63182b2eb0a75976f02bf6ca4218046f5adce8e492e",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "path": "/tmp/rrrah-metal-ttl-regression-20261011.log",
+      "sha256": "6e1c8669f5733c504fa055df9a3968b245b5b7405f7166591ed6df9c2719529f",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 4
+    }
+  ],
+  "source_sha256": {
+    "crates/rrrah-app/tests/ttl_swap_metal.rs": "8c0eac53684e15e22fdf462d0240f6510eb4191d6a1a647f2f56b8330ac8f302",
+    "scripts/qualify-viewer-storage-gpu.py": "91ac530c8f909c04796cbce736fc351bc34c2f42953746dcb77b25322b118294"
+  },
+  "reproduce": {
+    "environment": {
+      "RRRAH_GPU_OPTIONAL": "0",
+      "RRRAH_GPU_BACKEND": "metal",
+      "RRRAH_METAL_LARGE_POLICY_CYCLES": "30"
+    },
+    "command": "cargo test --locked --offline --target-dir /tmp/rrrah-required-corpus-target -p rrrah --test ttl_swap_metal sustained_large_hdr_live_policy_preserves_every_component_and_metal_pixel -- --exact --ignored --nocapture",
+    "integrated_runner_flag": "--metal-large-policy-cycles 30"
+  },
+  "limitations": [
+    "32.857 seconds of cycle work is not hours of sustained operation",
+    "Each cycle creates a fresh cache and swap directory; long-lived collection cache remains unqualified by this test",
+    "Authored raster data does not qualify diverse image decoding or all 100 formats",
+    "Local filesystem is not a physical slow disk",
+    "Managed root does not account for independent test oracle arrays, process RSS or all driver allocations",
+    "HDR source floats and SDR offscreen output do not qualify physical HDR display",
+    "NVIDIA deferred by user",
+    "Ignored corpus test is not counted as passing"
+  ]
+}

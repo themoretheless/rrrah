@@ -1,0 +1,44 @@
+warning: function `fallible_zeroed_bytes` is never used
+   --> crates/rrrah-cache/src/mosaic_payload_v1.rs:728:4
+    |
+728 | fn fallible_zeroed_bytes(len: usize) -> Result<Box<[u8]>, MosaicPayloadError> {
+    |    ^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-cache` (lib) generated 1 warning
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.23s
+     Running unittests src/main.rs (target/debug/deps/rrrah-0b4921b829754900)
+
+running 7 tests
+test raster_viewport::tests::cancelled_generation_lod_filter_and_upload_preserve_old_frame_and_release_credit ... LOD cancellation: stale generation during filter and after queued write preserve old HDR frame; fresh generation succeeds; LOD/texture/queue=0
+ok
+test raster_viewport::tests::large_swapped_hdr_lod_reaches_exact_metal_frame ... 36MP worker profiling start
+36MP swapped HDR Metal: worker_ms=699.021542 publish_render_readback_ms=6.583917 total_ms=707.195333 managed_peak=427776 index_bytes=281440 source_cpu=0 exact_frame=true
+36MP exact LOD swap cache: hit_worker_ms=10.019290999999999 hit_peak=327680 source_cpu=0 exact_frame=true objects=2
+ok
+test raster_viewport::tests::panning_reuses_margin_with_replacement_headroom_and_exact_frames ... Metal panning margin: hdr=false shared=false;48 exact frames;2 replacement uploads; final credits=0
+Metal panning margin: hdr=true shared=false;48 exact frames;2 replacement uploads; final credits=0
+Metal panning margin: hdr=false shared=true;48 exact frames;4 replacement uploads; final credits=0
+Metal panning margin: hdr=true shared=true;48 exact frames;4 replacement uploads; final credits=0
+ok
+test raster_viewport::tests::swapped_residency_releases_full_source_and_preserves_detail_and_fit ... corrupt selected swap block refused; previous HDR frame and preview retained; transient memory=0; no retry wake
+swapped viewport soak: seconds=0.010 cycles=1 exact_detail_frames=3 CPU_pressure_refusals=1 GPU_pressure_refusals=3 cpu_peak=2662400 texture_peak=160000 queue_peak=160000
+Metal swapped fit timings ms (worker preparation, publish+GPU render+readback, total): [(0.106708, 0.5926669999999999, 0.699416), (1.187292, 1.01125, 2.1988749999999997), (0.281958, 0.839916, 1.121958), (0.095292, 0.410709, 0.5061249999999999), (0.503416, 0.981291, 1.4848750000000002), (0.091166, 0.9275410000000001, 1.018875), (0.174042, 0.832833, 1.006959), (0.5915, 0.846541, 1.4381249999999999)]; source512x320 RGBA32F, LOD64x40, framebuffer64x64; warm filesystem; includes readback, excludes display presentation
+swapped fit repeated pressure:8 downgrade/recovery cycles; blocked queue retains frame; blocked CPU schedules nothing; exact original HDR references; no retained full source
+swapped fit recovery:32x20->64x40 from original disk source; exact original fit frame; no redundant job
+swapped fit pressure: original swapped source streamed on worker to32x20; queue failure preserves old frame/ready level; retry exact; full source stays released
+ok
+test raster_viewport::tests::viewer_automatically_opens_hdr_lod_switches_to_source_and_reuses_cached_level ... viewer auto LOD: hdr=false raw=false; fit->source->fit exact; cached40960 bytes reused; source/LOD/texture/queue=0
+viewer auto LOD: hdr=false raw=true; fit->source->fit exact; cached40960 bytes reused; source/LOD/texture/queue=0
+viewer auto LOD: hdr=true raw=false; fit->source->fit exact; cached40960 bytes reused; source/LOD/texture/queue=0
+viewer auto LOD: hdr=true raw=true; fit->source->fit exact; cached40960 bytes reused; source/LOD/texture/queue=0
+ok
+test raster_viewport::tests::viewer_region_fallback_retains_source_reuses_and_retries ... viewer regional fallback: raw=false; source retained without copy; pan/exposure/retry frames exact; root/queue/source=0
+viewer regional fallback: raw=true; source retained without copy; pan/exposure/retry frames exact; root/queue/source=0
+ok
+test raster_viewport::tests::worker_prepared_level_installs_without_filtering_or_scanning_full_source_on_ui ... worker HDR level: real rrrah-hdr-lod thread; prepared publication skips full source scan; exact Metal HDR; source/LOD/texture/queue=0
+ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 255 filtered out; finished in 2.45s
+

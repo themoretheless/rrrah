@@ -1,0 +1,40 @@
+{
+  "status": "verified_42_joint_model_and_legacy_tests",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-joint-model-snapshot-20261011.json": "da813a37ba2ca427ca976b245571d0fa72bedaaad48e17e77b0031ad00e5b8d3",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-joint-model-audit-20261011.json": "2399da7e6c1f18e342d984b2468515f542488c55bf2f140895bf330f64cf2e6c",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-model-qualified-20261011/model_compare": "d3856e2c8b7a01d348dd7dea8d25d4bf6ef5102995c7ab9434f7e3d80c39edec",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-model-qualified-20261011/model_compare.log": "5d784ab612c697c9db695e25867a815434f5b267309bbe1c65fab027d2110552",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-joint-model-legacy-audit-20261011.json": "3a41280dab94a32681ceaa275fa6bbd98e7762e4610c42effead85f319b623ce",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-model-legacy-qualified-20261011/model_tiles": "b5b745230c517c7076d8977f6dc6498ffe3b48a44edb260782c05f349cc3de70",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-model-legacy-qualified-20261011/model_tiles.log": "6f117a57ab000ebd3f998ad4f2b0bca59d9f3d0279500411b6c07d212520a604",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-model-legacy-qualified-20261011/model_projected_compare": "a2120023d2e989ca15e427d4fe75817bce5e76249cdb3b7bb6716c2a5fc2d1f6",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-model-legacy-qualified-20261011/model_projected_compare.log": "d0ad876029296dce38c11d5d1d72238d955537911e7acd584faf86b0fcb763a2",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-model-legacy-qualified-20261011/model_projected_tiles": "0f85e23948d376b647ff67cbd1920190ea0c3039ba009adc174cccbf14643b93",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-model-legacy-qualified-20261011/model_projected_tiles.log": "dcb3916d5b20cb4b37b4de38df4bc6f3fb16a7ed730625754ef896c094ebb1ab"
+  },
+  "tests": 42,
+  "results": [
+    {
+      "suite": "model_compare",
+      "tests": 13
+    },
+    {
+      "suite": "model_tiles",
+      "tests": 13
+    },
+    {
+      "suite": "model_projected_compare",
+      "tests": 8
+    },
+    {
+      "suite": "model_projected_tiles",
+      "tests": 8
+    }
+  ],
+  "owned_source": {
+    "crates/rrrah-dedup/src/model_compare.rs": "1ed78fd8952269af6a3f34f7df619bcca88a9250b2deb3820d9955a9dead0d8c",
+    "crates/rrrah-dedup/tests/model_compare.rs": "36594fcd21c99cdc103772721d1b5d5798b994ad6363250cdf0e62c7ea039cbc"
+  },
+  "scope": "Explicit joint whole/region model-provider APIs, pre-I/O worst-case projection budget, shared original-pixel/source/cancellation lifecycle. New whole-image budget/cancel/retry/support tests and legacy compare/tile/projected suites. Joint crop-specific tests, actual CPU integration, scales, full search, annotated precision and current HDR workspace gate remain open."
+}

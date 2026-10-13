@@ -1,0 +1,71 @@
+{
+  "date": "2026-10-11",
+  "scope": "ASTC HDR explicit linear-sRGB interpretation through viewer preload, TTL spill and Metal SDR/HDR restore",
+  "change": "ASTC applies DecodeRequest.qualify_linear_color; strict default and LDR interpretation retained",
+  "fixture": {
+    "path": "tests/fixtures/raster/hdr-compressed.astc",
+    "dimensions": [
+      23,
+      17
+    ],
+    "oracle": "tests/fixtures/raster/hdr-compressed.astc.rgba32f",
+    "provenance": "Authored CC0 texture encoded and decoded with standalone Arm astcenc 4.6.1; float oracle extracted from EXR. Reference family comparison, not independent mathematical decoder."
+  },
+  "checks": {
+    "decoder_tests": 5,
+    "viewer_CPU_tests": 3,
+    "actual_Metal_tests": 1,
+    "adapter": "Metal Apple M4 Max",
+    "all_source_float_bits_exact": true,
+    "SDR_before_after_swap_exact": true,
+    "HDR_before_after_swap_binary16_exact": true,
+    "output_dimensions": [
+      63,
+      65
+    ],
+    "exposure_stops": 1,
+    "incompatible_strict_and_srgb_cache_requests_refused": true,
+    "restore_without_decoder": true,
+    "final_managed_bytes": 0,
+    "decode_gate": {
+      "passed": 986,
+      "failed": 0,
+      "ignored": 67
+    },
+    "app_gate": {
+      "passed": 197,
+      "failed": 0,
+      "ignored": 34
+    }
+  },
+  "logs": [
+    {
+      "path": "/tmp/rrrah-astc-linear-color-tests-20261011.log",
+      "sha256": "e7745240abc37b41edcd3ffbbee5e467ccc275c8b5bcceba3b2898931b8943b1"
+    },
+    {
+      "path": "/tmp/rrrah-astc-linear-viewer-tests-20261011.log",
+      "sha256": "9ded39c83e68df769b8cc21f6772bffea202a67e56ce8b0b3ff17afbe09568ee"
+    },
+    {
+      "path": "/tmp/rrrah-astc-linear-cli-metal-20261011.log",
+      "sha256": "7e280614985f71adb4d60ffc5f3b367a746c4908fcaf023289ee75df194d493c"
+    },
+    {
+      "path": "/tmp/rrrah-astc-linear-decode-all-20261011.log",
+      "sha256": "1dcc05d108e57605f3d03797141a6d37e2e01889c68483ea5a8b8314297b9bf7"
+    },
+    {
+      "path": "/tmp/rrrah-astc-linear-app-all-20261011.log",
+      "sha256": "64c8c708bbdb80149045aa3e2b35cf3753840f22a157076e4dc6f82f1c5aa050"
+    }
+  ],
+  "limitations": [
+    "One authored compressed HDR fixture; not broad producer qualification",
+    "Offscreen Metal readback does not establish physical HDR luminance or color accuracy",
+    "Raw ASTC primaries must be explicitly identified by caller",
+    "Linear LDR/non-color semantics and 3D slices remain pending",
+    "Small fixture uses serial swap; parallel large-raster path has separate evidence",
+    "NVIDIA deferred"
+  ]
+}

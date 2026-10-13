@@ -1,0 +1,329 @@
+{
+  "status": "passed",
+  "backend": "Metal Apple M4 Max",
+  "order": [
+    "decode",
+    "swap",
+    "swap",
+    "decode"
+  ],
+  "runs": [
+    {
+      "index": 0,
+      "mode": "decode",
+      "command": [
+        "/tmp/rrrah-required-corpus-target/debug/examples/raw_view_timing",
+        "tests/IMG_9043.CR3",
+        "tests/IMG_9074.CR3"
+      ],
+      "exit_code": 0,
+      "statistics": {
+        "IMG_9043.CR3": {
+          "decode_ms": {
+            "p50": 396.548,
+            "p95": 646.076
+          },
+          "upload_enqueue_ms": {
+            "p50": 27.786,
+            "p95": 95.102
+          },
+          "halo_pack_ms": {
+            "p50": 12.407,
+            "p95": 14.768
+          },
+          "row_pack_ms": {
+            "p50": 0.002,
+            "p95": 0.003
+          },
+          "enqueue_write_ms": {
+            "p50": 15.16,
+            "p95": 81.574
+          },
+          "frame_complete_ms": {
+            "p50": 13.744,
+            "p95": 16.794
+          },
+          "total_ms": {
+            "p50": 438.39,
+            "p95": 690.952
+          }
+        },
+        "IMG_9074.CR3": {
+          "decode_ms": {
+            "p50": 199.139,
+            "p95": 361.906
+          },
+          "upload_enqueue_ms": {
+            "p50": 29.035,
+            "p95": 60.63
+          },
+          "halo_pack_ms": {
+            "p50": 12.824,
+            "p95": 43.654
+          },
+          "row_pack_ms": {
+            "p50": 0.002,
+            "p95": 0.003
+          },
+          "enqueue_write_ms": {
+            "p50": 15.946,
+            "p95": 26.732
+          },
+          "frame_complete_ms": {
+            "p50": 13.995,
+            "p95": 73.493
+          },
+          "total_ms": {
+            "p50": 252.117,
+            "p95": 402.537
+          }
+        }
+      },
+      "log": "adapter: Metal Apple M4 Max\nIMG_9043.CR3: 15 samples / 3 warmups; decode p50/p95 396.548/646.076 ms; upload enqueue 27.786/95.102 ms; frame completion 13.744/16.794 ms; total 438.390/690.952 ms\nIMG_9043.CR3: resident zoom/pan 60 frames; p50/p95 3.038/15.948 ms\nIMG_9074.CR3: 15 samples / 3 warmups; decode p50/p95 199.139/361.906 ms; upload enqueue 29.035/60.630 ms; frame completion 13.995/73.493 ms; total 252.117/402.537 ms\nIMG_9074.CR3: resident zoom/pan 60 frames; p50/p95 2.870/11.493 ms\nmanaged_cpu: used=0 peak=124360466 limit=536870912\nmanaged_gpu: used=0 peak=146800640 limit=536870912\n",
+      "csv_sha256": "075bd353a83219619c68c8d31a4fd22a675d154a3fc4feb2305cdaa62937777b",
+      "log_sha256": "6dec3382a1ded698f31bd2f2a504335750637d0621a95feca4726a08a01a2cb5"
+    },
+    {
+      "index": 1,
+      "mode": "swap",
+      "command": [
+        "/tmp/rrrah-required-corpus-target/debug/examples/raw_view_timing",
+        "--swap-view",
+        "tests/IMG_9043.CR3",
+        "tests/IMG_9074.CR3"
+      ],
+      "exit_code": 0,
+      "statistics": {
+        "IMG_9043.CR3": {
+          "swap_restore_ms": {
+            "p50": 365.112,
+            "p95": 774.942
+          },
+          "upload_enqueue_ms": {
+            "p50": 95.947,
+            "p95": 409.599
+          },
+          "halo_pack_ms": {
+            "p50": 15.92,
+            "p95": 333.643
+          },
+          "row_pack_ms": {
+            "p50": 0.003,
+            "p95": 0.004
+          },
+          "enqueue_write_ms": {
+            "p50": 28.311,
+            "p95": 246.712
+          },
+          "frame_complete_ms": {
+            "p50": 14.384,
+            "p95": 229.335
+          },
+          "total_ms": {
+            "p50": 564.169,
+            "p95": 905.686
+          }
+        },
+        "IMG_9074.CR3": {
+          "swap_restore_ms": {
+            "p50": 389.377,
+            "p95": 796.478
+          },
+          "upload_enqueue_ms": {
+            "p50": 172.613,
+            "p95": 472.507
+          },
+          "halo_pack_ms": {
+            "p50": 17.731,
+            "p95": 199.363
+          },
+          "row_pack_ms": {
+            "p50": 0.003,
+            "p95": 0.005
+          },
+          "enqueue_write_ms": {
+            "p50": 28.165,
+            "p95": 346.222
+          },
+          "frame_complete_ms": {
+            "p50": 17.108,
+            "p95": 201.042
+          },
+          "total_ms": {
+            "p50": 570.861,
+            "p95": 1049.008
+          }
+        }
+      },
+      "log": "adapter: Metal Apple M4 Max\nIMG_9043.CR3: 15 samples / 3 warmups; swap_restore p50/p95 365.112/774.942 ms; upload enqueue 95.947/409.599 ms; frame completion 14.384/229.335 ms; total 564.169/905.686 ms\nIMG_9043.CR3: resident zoom/pan 60 frames; p50/p95 3.064/45.473 ms\nIMG_9074.CR3: 15 samples / 3 warmups; swap_restore p50/p95 389.377/796.478 ms; upload enqueue 172.613/472.507 ms; frame completion 17.108/201.042 ms; total 570.861/1049.008 ms\nIMG_9074.CR3: resident zoom/pan 60 frames; p50/p95 5.786/18.413 ms\nmanaged_cpu: used=0 peak=104075392 limit=536870912\nmanaged_gpu: used=0 peak=146800640 limit=536870912\n",
+      "csv_sha256": "4aff5342e173be04171a29635b7c4c61ae4cad4e9af591026a11290215e3e070",
+      "log_sha256": "dcc6345cf9b9aed67c1c45a4ad4ac9a41208ed69519d91c1fcad934b21bd9eb7"
+    },
+    {
+      "index": 2,
+      "mode": "swap",
+      "command": [
+        "/tmp/rrrah-required-corpus-target/debug/examples/raw_view_timing",
+        "--swap-view",
+        "tests/IMG_9043.CR3",
+        "tests/IMG_9074.CR3"
+      ],
+      "exit_code": 0,
+      "statistics": {
+        "IMG_9043.CR3": {
+          "swap_restore_ms": {
+            "p50": 414.856,
+            "p95": 612.644
+          },
+          "upload_enqueue_ms": {
+            "p50": 141.341,
+            "p95": 357.246
+          },
+          "halo_pack_ms": {
+            "p50": 50.801,
+            "p95": 269.738
+          },
+          "row_pack_ms": {
+            "p50": 0.003,
+            "p95": 0.003
+          },
+          "enqueue_write_ms": {
+            "p50": 49.178,
+            "p95": 306.192
+          },
+          "frame_complete_ms": {
+            "p50": 13.847,
+            "p95": 42.359
+          },
+          "total_ms": {
+            "p50": 619.173,
+            "p95": 870.819
+          }
+        },
+        "IMG_9074.CR3": {
+          "swap_restore_ms": {
+            "p50": 377.258,
+            "p95": 798.446
+          },
+          "upload_enqueue_ms": {
+            "p50": 150.599,
+            "p95": 326.565
+          },
+          "halo_pack_ms": {
+            "p50": 26.184,
+            "p95": 167.16
+          },
+          "row_pack_ms": {
+            "p50": 0.003,
+            "p95": 0.004
+          },
+          "enqueue_write_ms": {
+            "p50": 69.207,
+            "p95": 205.044
+          },
+          "frame_complete_ms": {
+            "p50": 13.972,
+            "p95": 78.703
+          },
+          "total_ms": {
+            "p50": 561.238,
+            "p95": 1193.339
+          }
+        }
+      },
+      "log": "adapter: Metal Apple M4 Max\nIMG_9043.CR3: 15 samples / 3 warmups; swap_restore p50/p95 414.856/612.644 ms; upload enqueue 141.341/357.246 ms; frame completion 13.847/42.359 ms; total 619.173/870.819 ms\nIMG_9043.CR3: resident zoom/pan 60 frames; p50/p95 2.703/23.022 ms\nIMG_9074.CR3: 15 samples / 3 warmups; swap_restore p50/p95 377.258/798.446 ms; upload enqueue 150.599/326.565 ms; frame completion 13.972/78.703 ms; total 561.238/1193.339 ms\nIMG_9074.CR3: resident zoom/pan 60 frames; p50/p95 4.636/19.347 ms\nmanaged_cpu: used=0 peak=104075392 limit=536870912\nmanaged_gpu: used=0 peak=146800640 limit=536870912\n",
+      "csv_sha256": "5a91699e71f8fccab6e543b23e6aab99be4a331a66757d462d773d74f079cde5",
+      "log_sha256": "deb3948be9295646df2920e96098f5def14845ea9dc3348b4b30e0f64c149ba1"
+    },
+    {
+      "index": 3,
+      "mode": "decode",
+      "command": [
+        "/tmp/rrrah-required-corpus-target/debug/examples/raw_view_timing",
+        "tests/IMG_9043.CR3",
+        "tests/IMG_9074.CR3"
+      ],
+      "exit_code": 0,
+      "statistics": {
+        "IMG_9043.CR3": {
+          "decode_ms": {
+            "p50": 423.903,
+            "p95": 736.266
+          },
+          "upload_enqueue_ms": {
+            "p50": 31.358,
+            "p95": 93.345
+          },
+          "halo_pack_ms": {
+            "p50": 12.823,
+            "p95": 20.313
+          },
+          "row_pack_ms": {
+            "p50": 0.002,
+            "p95": 0.004
+          },
+          "enqueue_write_ms": {
+            "p50": 17.686,
+            "p95": 79.254
+          },
+          "frame_complete_ms": {
+            "p50": 13.784,
+            "p95": 28.863
+          },
+          "total_ms": {
+            "p50": 487.565,
+            "p95": 792.672
+          }
+        },
+        "IMG_9074.CR3": {
+          "decode_ms": {
+            "p50": 421.984,
+            "p95": 563.159
+          },
+          "upload_enqueue_ms": {
+            "p50": 28.421,
+            "p95": 59.678
+          },
+          "halo_pack_ms": {
+            "p50": 12.836,
+            "p95": 39.098
+          },
+          "row_pack_ms": {
+            "p50": 0.002,
+            "p95": 0.02
+          },
+          "enqueue_write_ms": {
+            "p50": 16.12,
+            "p95": 44.17
+          },
+          "frame_complete_ms": {
+            "p50": 14.052,
+            "p95": 37.841
+          },
+          "total_ms": {
+            "p50": 491.229,
+            "p95": 607.874
+          }
+        }
+      },
+      "log": "adapter: Metal Apple M4 Max\nIMG_9043.CR3: 15 samples / 3 warmups; decode p50/p95 423.903/736.266 ms; upload enqueue 31.358/93.345 ms; frame completion 13.784/28.863 ms; total 487.565/792.672 ms\nIMG_9043.CR3: resident zoom/pan 60 frames; p50/p95 2.847/33.086 ms\nIMG_9074.CR3: 15 samples / 3 warmups; decode p50/p95 421.984/563.159 ms; upload enqueue 28.421/59.678 ms; frame completion 14.052/37.841 ms; total 491.229/607.874 ms\nIMG_9074.CR3: resident zoom/pan 60 frames; p50/p95 5.659/10.161 ms\nmanaged_cpu: used=0 peak=124360466 limit=536870912\nmanaged_gpu: used=0 peak=146800640 limit=536870912\n",
+      "csv_sha256": "5f8f8b75a75945d5c5205bb81637d15c72a1aeebd59503e9b88e2fd82af774ba",
+      "log_sha256": "3d1da4c086322a8ac75e5626fd3b7dc479c1fe162c6fc28e9dd47706eb27073e"
+    }
+  ],
+  "binary_sha256": "aa22bf8c7bc593d0eb107eeb026aba227c1334e56f4a397d6933068ec53c762d",
+  "fixture_sha256": {
+    "tests/IMG_9043.CR3": "d06cbb10e84882cf130430bdc88ed2652c2622b96dea8d6a854c09e3bee37e59",
+    "tests/IMG_9074.CR3": "9c0d47cc2dd550eb6dc26c4ba2b2874b67f5c89e79dff5c472abf0ac6b2f6178"
+  },
+  "scope": "ABBA process batches, each fixture 3 warmups and 15 complete load/upload/offscreen frame samples. Payload equality checked outside timed intervals.",
+  "limits": [
+    "Batch alternation, not sample-by-sample pairing",
+    "Warm filesystem, uncontrolled external workloads",
+    "Offscreen GPU completion, not window presentation",
+    "Two fixtures, no universal RAW performance claim",
+    "No production optimization or before/after speedup claim"
+  ],
+  "concurrent_load_snapshot": "  PID  %CPU COMM\n97594 171.9 /Users/themoretheless/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc\n95421  97.4 /Users/themoretheless/Library/Caches/ms-playwright/chromium_headless_shell-1234/chrome-headless-shell-mac-arm64/chrome-headless-shell\n86607  79.9 /Users/themoretheless/.codex/worktrees/fillet-end-transitions/open-scad-viewer/crates/target/debug/build/brep-core/4214d529fd646c3b/out/brep_core-4214d529fd646c3b\n  501  73.7 /usr/libexec/syspolicyd\n29937  64.7 /System/Library/Frameworks/Virtualization.framework/Versions/A/XPCServices/com.apple.Virtualization.VirtualMachine.xpc/Contents/MacOS/com.apple.Virtualization.VirtualMachine\n68113  47.7 /Applications/ChatGPT.app/Contents/Frameworks/Codex Framework.framework/Versions/155.0.8059.27/Helpers/Codex (Renderer).app/Contents/MacOS/Codex (Renderer)\n  517  40.4 /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/Metadata.framework/Versions/A/Support/mds_stores\n  409  29.0 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer\n98401  28.5 /Library/Developer/CommandLineTools/usr/bin/git\n82715  25.7 /Users/themoretheless/.codex/tmp/osv-full-sweep-native-target-20261011/debug/build/brep-core/a336ce6e0b0d2895/out/brep_core-a336ce6e0b0d2895\n67559  25.3 /Users/themoretheless/Library/Caches/ms-playwright/chromium_headless_shell-1234/chrome-headless-shell-mac-arm64/chrome-headless-shell\n",
+  "conclusion": "Large between-batch drift under observed concurrent compilation/VM/browser load prevents a stable decode-versus-swap performance conclusion. All four batches passed payload and final managed-budget checks."
+}

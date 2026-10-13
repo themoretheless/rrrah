@@ -1,0 +1,45 @@
+--- a/vendor/hayro-interpret/src/encode/native_source.rs
++++ b/vendor/hayro-interpret/src/encode/native_source.rs
+@@ -62,6 +62,9 @@
+     _credit: Box<dyn std::any::Any + Send + Sync>,
+ }
+ struct NativeTriangle {
++    // Exact cross(b-a,c-a), retained without reciprocal/reassociation.
++    // Included in existing size_of::<NativeTriangle>() admission.
++    denominator:f64,
+     points: [Point; 3],
+     colors: [[f32; 4]; 3],
+ }
+@@ -123,7 +126,7 @@
+     fn weights(&self, point: Point) -> Result<Option<[f64; 3]>, NativeShadingError> {
+         let [a, b, c] = self.points;
+         let cross = |x: kurbo::Vec2, y: kurbo::Vec2| x.x * y.y - x.y * y.x;
+-        let denominator = cross(b - a, c - a);
++        let denominator = self.denominator;
+         if !denominator.is_finite() {
+             return Err(NativeShadingError::Invalid);
+         }
+@@ -516,10 +519,10 @@
+             for (dst, vertex) in colors.iter_mut().zip(vertices) {
+                 dst[0..input_count].copy_from_slice(&vertex.colors);
+             }
+-            mesh.push(NativeTriangle {
+-                points: vertices.map(|v| v.point),
+-                colors,
+-            });
++            let points=vertices.map(|v| v.point);
++            let b=points[1]-points[0];let c=points[2]-points[0];
++            let denominator=b.x*c.y-b.y*c.x;
++            mesh.push(NativeTriangle {denominator,points,colors});
+         }
+         let mut order = Vec::new();
+         order.try_reserve_exact(triangles.len()).map_err(|_| Admission)?;
+@@ -629,7 +632,7 @@
+         let p = self.inverse * point;
+         let [a,b,c] = triangle.points;
+         let cross = |a: kurbo::Vec2,b: kurbo::Vec2| a.x*b.y-a.y*b.x;
+-        let denominator = cross(b-a,c-a);
++        let denominator = triangle.denominator;
+         if !p.x.is_finite() || !p.y.is_finite() || !denominator.is_finite() || denominator == 0. { return Err(Invalid); }
+         let wb = cross(p-a,c-a) / denominator;
+         let wc = cross(b-a,p-a) / denominator;

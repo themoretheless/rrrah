@@ -1,0 +1,106 @@
+{
+  "scope": "authored uniform DeviceCMYK PDF control with actual 15 retained child colors/opacities, native-profile Poppler reference; mismatch isolated but reference not presumed specification proof",
+  "controls": [
+    {
+      "name": "ko-all",
+      "center_rgb": [
+        185,
+        203,
+        122
+      ],
+      "pdf_sha256": "a1b8cd53d0fca29358778057a30a386195138375e36838c38b83b63acfe10f9b",
+      "ppm_sha256": "e482b3ed8a54e514a5448773d0b6f2be881d59237af0705dcd2bab016cf610aa"
+    },
+    {
+      "name": "ko-last",
+      "center_rgb": [
+        165,
+        184,
+        109
+      ],
+      "pdf_sha256": "72de5f3528c7141fa2c69e5ac1744b3e75935c587c3b005b1d0ada49203bda7e",
+      "ppm_sha256": "f5eecb83d33a1b00bc79cb7748c18987a127fb4c47167847e5f2c916c396f9ed"
+    },
+    {
+      "name": "nonko-all",
+      "center_rgb": [
+        204,
+        210,
+        122
+      ],
+      "pdf_sha256": "42d38760a1d145c3347bdc37de1212c3bf80303b318840f299fe9cea228c150c",
+      "ppm_sha256": "adc9392e29c2b1e4c0f44a2f52f1d21cb211f012bf18383ed002b862fb3ecc51"
+    }
+  ],
+  "native_center_rgb": [
+    164.829683303833,
+    183.55790555477142,
+    110.18804535269737
+  ],
+  "finding": "Corrected qualification: renderer discrepancy is established, native formula error is not. ISO full-shape topmost rule agrees with native control. PDFium and Quartz ignore knockout in this particular all-versus-nonko control; do not treat either as conformance oracle.",
+  "pdfium": {
+    "ko-all": [
+      204,
+      210,
+      122
+    ],
+    "ko-last": [
+      165,
+      185,
+      109
+    ],
+    "nonko-all": [
+      204,
+      210,
+      122
+    ]
+  },
+  "quartz_srgb": {
+    "ko-all": [
+      202,
+      210,
+      122,
+      255
+    ],
+    "ko-last": [
+      159,
+      180,
+      107,
+      255
+    ],
+    "nonko-all": [
+      202,
+      210,
+      122,
+      255
+    ]
+  },
+  "standard": {
+    "url": "https://opensource.adobe.com/dc-acrobat-sdk-docs/pdfstandards/PDF32000_2008.pdf",
+    "sha256": "9de0ca9e8570d6209e8bd48a355be8eb6ec376acfc3fc3ae97cd8730351417ff",
+    "sections": [
+      "11.4.6",
+      "11.4.8"
+    ],
+    "pages_physical": [
+      346,
+      347,
+      349,
+      350
+    ],
+    "interpretation": "For full binary shape, topmost element knocks out earlier siblings; nonisolated subgroup initial backdrop is outer initial backdrop. Constant opacity remains distinct from shape.",
+    "expected_final_cmyk": [
+      0.388868966139853,
+      0.15004998771473765,
+      0.7124221175909042,
+      0.005228544760029763
+    ]
+  },
+  "native_conformance_test": {
+    "passed": 192,
+    "ignored": 12,
+    "control_test": "authored_cmyk_knockout_fade_full_shape_obeys_iso_topmost_element",
+    "log_sha256": "c74753c376cd18dd7788fbc16c7f4e4d7afb6f051cc68681f2501b76076796e4",
+    "all_siblings_equal_last_only": true
+  }
+}

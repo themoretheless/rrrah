@@ -1,0 +1,60 @@
+{
+  "implementation": "Test-only native_spatial::compose_polygon_pixel partitions unit pixel by all path/clip regions; ordered constant paints composite per cell; average native premultiplied components after composition; no supersampling/display conversion",
+  "bounds": {
+    "region_cap": 4095,
+    "paint_cap": 4096,
+    "required_regions_per_paint_cap": 4096,
+    "polygon_budget": "caller explicit; preparation and integration share allowance",
+    "paint_budget": "caller explicit; perpaint required-region scan charged",
+    "storage": "all region references/unit polygon and kernel scratch pre-admitted"
+  },
+  "supported": "Constant paints already in one shared blending coordinate space; intersections of perpaint regions/clips; Normal/Multiply/Screen/HardLight via existing native algebra",
+  "not_integrated": "Full PDF group, mask, raster, shading replay and production viewer; no full AI qualification",
+  "tests": {
+    "ordinary_passed": 146,
+    "ignored": 11,
+    "explicit_pdf_control_passed": 1,
+    "checks": [
+      "opaque repeated quarterpixel",
+      "translucent repeated quarterpixel",
+      "disjoint colors and exact union area",
+      "ordered overlapping colors",
+      "nativeCMYK with clip",
+      "every observed cancellation checkpoint",
+      "each admission refusal",
+      "polygon and paint work refusal",
+      "final managed credit0"
+    ]
+  },
+  "pdf_control_results": [
+    {
+      "case": "same_edge",
+      "alpha": 0.25,
+      "native_components": [
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "case": "disjoint_edges",
+      "alpha": 0.5,
+      "native_components": [
+        0.0,
+        0.5,
+        0.5,
+        0.0
+      ]
+    }
+  ],
+  "independent_oracle": "Same authored PDFs and16x/64x Poppler white-composite means from correlated-edge-control/independent-oracle-report.json",
+  "qualification": "Foundation fixes controlcases without increased resolution; allgoal requirements still incomplete",
+  "hashes": {
+    "vendor/hayro/src/native_spatial.rs": "ad20e380fedde15ef634435e1117c7ebe0266a4ad7df49b3cdd448b41ca9bb36",
+    "vendor/hayro/src/knockout_compositor.rs": "c10e6129158bbf55400b357a32043eca65fa180ad668562baaf036415d34a3b0",
+    "vendor/hayro/src/knockout_interpreter.rs": "83db92ecd551f570d3452be68665121a65a5bc9a0355f84dc33aaecf0757e199",
+    "docs/research/ai-covered-fragment-sampling-2026-10-12/spatial-primitive-final-tests.log": "27b479c430162f365f08247ae83049feaaecefc7fef69966c49f181fad2a7b09",
+    "docs/research/ai-covered-fragment-sampling-2026-10-12/spatial-pdf-controls.log": "69af864e77c4ddb2214a61872e98ab10419b8edf0f5bea2180a8d52eeb9f900f"
+  }
+}

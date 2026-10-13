@@ -133,11 +133,26 @@ pub enum CalibrationError {
 /// Explicit source calibration. Levels are sensor-phase ordered; WB and matrix
 /// planes are R/G/B/E ordered. Only scalar or exact 2x2 level grids are accepted.
 #[derive(Debug, Clone)]
+enum BlackLevels {
+    Quad([f32; 4]),
+    Repeat(std::sync::Arc<crate::LevelGrid>),
+}
+impl BlackLevels {
+    fn at(&self, x: u32, y: u32) -> Option<f32> {
+        match self {
+            Self::Quad(values) => Some(values[((y % 2) * 2 + x % 2) as usize]),
+            Self::Repeat(grid) => grid.at(y, x, 0),
+        }
+    }
+}
+
+#[derive(Debug, Clone)]
 pub struct Calibration {
     dimensions: [u32; 2],
     quad: [u32; 4],
     camera_to_rgb: [[f64; 4]; 3],
-    black: [f32; 4],
+    black: BlackLevels,
+    _black_credit: Option<std::sync::Arc<crate::Reservation>>,
     white: [f32; 4],
     gains: [f32; 4],
 }
@@ -153,26 +168,26 @@ impl Calibration {
             .ok_or(CalibrationError::Invalid("missing CFA"))?
             .rgbe_quad()?;
         let grid = &metadata.black_level;
-        let black = if grid.width == 1 && grid.height == 1 && grid.components == 1 {
-            [grid.values[0]; 4]
-        } else if grid.width == 2 && grid.height == 2 && grid.components == 1 {
-            grid.values[..].try_into().unwrap()
-        } else {
-            return Err(CalibrationError::Invalid("unsupported black-level layout"));
-        };
+        if grid.components != 1 {
+            return Err(CalibrationError::Invalid("black-level grid must have one component"));
+        }
         let white = match metadata.white_level.0.as_slice() {
             [one] => [*one; 4],
             values if values.len() == 4 => values.try_into().unwrap(),
             _ => return Err(CalibrationError::Invalid("unsupported white-level layout")),
         };
-        for phase in 0..4 {
-            let range = white[phase] - black[phase];
-            let largest =
-                (65535. - black[phase]).max(0.) / range * metadata.white_balance[quad[phase] as usize];
-            if !range.is_finite() || range <= 0. || !largest.is_finite() {
-                return Err(CalibrationError::Invalid(
-                    "level/gain range is not finite and positive",
-                ));
+        // Check the joint grid/CFA period, including parity changes across odd
+        // repeat boundaries. Every possible per-site division must be valid.
+        for y in 0..u32::from(grid.height) * 2 {
+            for x in 0..u32::from(grid.width) * 2 {
+                let phase = ((y % 2) * 2 + x % 2) as usize;
+                let black = grid.at(y, x, 0).unwrap();
+                let range = white[phase] - black;
+                let largest = (65535. - black).max(0.) / range
+                    * metadata.white_balance[quad[phase] as usize];
+                if !range.is_finite() || range <= 0. || !largest.is_finite() {
+                    return Err(CalibrationError::Invalid("level/gain range is not finite and positive"));
+                }
             }
         }
         let camera_to_rgb =
@@ -181,9 +196,13 @@ impl Calibration {
             dimensions: [metadata.width, metadata.height],
             quad,
             camera_to_rgb,
-            black,
+            black: match grid.bayer_quad() {
+                Ok(quad) => BlackLevels::Quad(quad),
+                Err(_) => BlackLevels::Repeat(std::sync::Arc::new(grid.clone())),
+            },
             white,
             gains: metadata.white_balance,
+            _black_credit: None,
         })
     }
     pub fn dimensions(&self) -> [u32; 2] {
@@ -227,8 +246,9 @@ impl Calibration {
             return None;
         }
         let phase = ((y % 2) * 2 + x % 2) as usize;
+        let black = self.black.at(x, y)?;
         Some(
-            (f32::from(value) - self.black[phase]).max(0.) / (self.white[phase] - self.black[phase])
+            (f32::from(value) - black).max(0.) / (self.white[phase] - black)
                 * self.gains[self.quad[phase] as usize],
         )
     }
@@ -240,7 +260,13 @@ impl Calibration {
         if cancelled() {
             return Err(CalibrationError::Cancelled);
         }
-        let calibration = Self::new(&mosaic.metadata)?;
+        let grid = &mosaic.metadata.black_level;
+        grid.validate()?;
+        let black_credit = if grid.bayer_quad().is_err() {
+            Some(std::sync::Arc::new(budget.try_reserve(grid.values.len() as u64 * 4)?))
+        } else { None };
+        let mut calibration = Self::new(&mosaic.metadata)?;
+        calibration._black_credit = black_credit;
         let expected = (calibration.dimensions[0] as usize)
             .checked_mul(calibration.dimensions[1] as usize)
             .ok_or(crate::FrameError::DimensionOverflow)?;
@@ -405,6 +431,66 @@ mod calibration_tests {
         assert!(mosaic.thumbnail_rgba8_with_cancel(2, &|| true).is_empty());
     }
     #[test]
+    fn odd_black_grid_preserves_all_four_gains_and_repeat_boundaries() {
+        let mut m = metadata();
+        m.width = 12;
+        m.height = 12;
+        m.white_level.0 = vec![1000.; 4];
+        m.black_level = LevelGrid {
+            width: 3, height: 5, components: 1,
+            values: (0..15).map(|i| (i * 20) as f32).collect(),
+        };
+        let calibration = Calibration::new(&m).unwrap();
+        for y in 0..12 {
+            for x in 0..12 {
+                let black = (((y % 5) * 3 + x % 3) * 20) as u16;
+                let phase = ((y % 2) * 2 + x % 2) as usize;
+                let gain = [5., 2., 4., 3.][phase];
+                assert_eq!(calibration.normalize_site(x, y, (1000 + black) / 2), Some(0.5 * gain));
+            }
+        }
+        m.black_level.values[14] = 1000.;
+        assert!(Calibration::new(&m).is_err());
+    }
+
+    #[test]
+    fn managed_repeat_grid_credit_survives_clones_and_rolls_back_failures() {
+        let mut m = metadata();
+        m.width = 12;
+        m.height = 12;
+        m.white_level.0 = vec![1000.; 4];
+        m.black_level = LevelGrid {
+            width: 3, height: 5, components: 1,
+            values: (0..15).map(|i| (i * 20) as f32).collect(),
+        };
+        let mosaic = DecodedMosaic::new(m, std::sync::Arc::new(vec![500; 144])).unwrap();
+        // 60 bytes for the repeat grid and 576 for normalized samples.
+        let insufficient = MemoryBudget::new(635);
+        assert!(Calibration::normalize_managed(&mosaic, &insufficient, &|| false).is_err());
+        assert_eq!(insufficient.used(), 0);
+        let budget = MemoryBudget::new(636);
+        let (calibration, normalized) = Calibration::normalize_managed(&mosaic, &budget, &|| false).unwrap();
+        assert_eq!(budget.used(), 636);
+        let copy = calibration.clone();
+        assert_eq!(budget.used(), 636);
+        drop(calibration);
+        drop(normalized);
+        assert_eq!(budget.used(), 60);
+        assert_eq!(copy.normalize_site(3, 5, 500), Some(1.5));
+        drop(copy);
+        assert_eq!(budget.used(), 0);
+        let calls = std::cell::Cell::new(0);
+        let cancelled = || {
+            let count = calls.get();
+            calls.set(count + 1);
+            count >= 2
+        };
+        assert!(matches!(Calibration::normalize_managed(&mosaic, &budget, &cancelled),
+            Err(CalibrationError::Cancelled)));
+        assert_eq!(budget.used(), 0);
+    }
+
+    #[test]
     fn malformed_calibration_is_rejected() {
         let mut m = metadata();
         m.white_level.0[0] = 10.;
@@ -416,7 +502,7 @@ mod calibration_tests {
         m.xyz_to_camera = [[0.; 3]; 4];
         assert!(Calibration::new(&m).is_err());
         let mut m = metadata();
-        m.black_level.width = 4;
+        m.black_level.components = 2;
         m.black_level.height = 1;
         assert!(Calibration::new(&m).is_err());
     }

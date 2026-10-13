@@ -1,0 +1,26 @@
+{
+  "status": "adopted_masked_value_ownership_fix",
+  "changed_files": [
+    "vendor/loftr/src/linear_attention.rs",
+    "vendor/loftr/src/linear_attention/tests.rs"
+  ],
+  "before_hashes": {
+    "vendor/loftr/src/linear_attention.rs": "7a62894c332e8c67571d38e6c04af2130311c9f11a215e216b5550b2edfd30e9",
+    "vendor/loftr/src/linear_attention/tests.rs": "6bffbda30990a6876956b336812c92bf24220b3c914961887d321e97546ee4be"
+  },
+  "after_hashes": {
+    "vendor/loftr/src/linear_attention.rs": "905288a0f333d277be238463499783855f9bf9a5cd63ad6608146929b5016a33",
+    "vendor/loftr/src/linear_attention/tests.rs": "ac060dac3e28d773c878aa0ca377ffa69bbf23c2e4110d59c75844cf797c658d"
+  },
+  "passed": 51,
+  "ignored": 0,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-loftr-masked-values-verification-20261012.json": "38ee4f1e20789df08d38a15d2698956b65963b5d09665ccfb4445479fcf53d6a",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-loftr-masked-values-source-20261012.json": "feca8cf19e30c5205ec87ae2e8717b892323bb71e8623bb04a50f771dbbc9424",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-loftr-selected-windows-current-baseline-20261012.json": "75b6c2b3d370304a38c5225111e2bfee1f21cc098740a02d1dba1d7f862d30ce",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/adopt-dedup-loftr-masked-values-20261012.py": "f25e6ae2ce3debd4ca0ee1d5d1cc73e87c15b07b3fa05c7905b26eb7f6f3b059",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-masked-values-adoption-before-20261012/vendor/loftr/src/linear_attention.rs": "7a62894c332e8c67571d38e6c04af2130311c9f11a215e216b5550b2edfd30e9",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-masked-values-adoption-before-20261012/vendor/loftr/src/linear_attention/tests.rs": "6bffbda30990a6876956b336812c92bf24220b3c914961887d321e97546ee4be"
+  },
+  "scope": "Only masked LinearAttention value result becomes owned; borrowed inputs and aliases remain unchanged and leaf gradients work. Three pre-fix failures, full51nativebackendunitpasses, exact source reconstruction and preserved pre-adoption files. Existing unmasked arithmetic and all other dedup/LoFTR source unchanged. No commit/push, other platforms/fullformats/full500/corpus or total memory cap qualification."
+}

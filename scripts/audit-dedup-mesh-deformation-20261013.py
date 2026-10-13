@@ -1,0 +1,12 @@
+#!/usr/bin/env python3
+import json,re,hashlib,subprocess
+from pathlib import Path
+R=Path(__file__).resolve().parents[1];D=R/'docs/research';T=Path('/Users/themoretheless/.codex/tmp');sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest();P=D/'dedup-mesh-deformation-20261013.json';data=json.loads(P.read_text());assert data['status']=='passed_pending_audit' and data['returncode']==0 and data['source_unchanged'];S=Path(data['source']);assert all(sha(S/p)==h for p,h in data['source_sha256'].items());L=Path(data['log']);assert sha(L)==data['log_sha256']
+dest=T/'rrrah-mesh-deformation-qualified-20261013';assert not dest.exists();dest.mkdir();rows=[]
+for block in re.split(r'(?=     Running )',L.read_text()):
+ run=re.search(r'Running (unittests src/lib\.rs|tests/(\w+)\.rs) \(([^)]+)\)',block)
+ if not run:continue
+ _,name,binary=run.groups();name=name or 'raster_library';m=re.search(r'test result: ok\. (\d+) passed; (\d+) failed; (\d+) ignored;',block);assert m and m[2]=='0';out=dest/name;subprocess.run(['cp','-cp',binary,str(out)],check=True);assert sha(out)==sha(binary);rows.append(dict(target=name,passed=int(m[1]),ignored=int(m[3]),executable=str(out),executable_sha256=sha(out)))
+assert len(rows)==4 and {r['target'] for r in rows}==set(data['targets'])|{'raster_library'}
+result=dict(status='verified_mesh_vertex_residual_deformation_bounds',source=str(S),source_files=len(data['source_sha256']),source_sha256=data['source_sha256'],producer_report_sha256=sha(P),log_sha256=sha(L),targets=rows,passed=sum(r['passed'] for r in rows),ignored=sum(r['ignored'] for r in rows),scope=data['scope'],controls=['Analytic translation has displacement but zero residual slope','Analytic shear has exact independently calculated edge slope and fails tighter bound','Exact perspective baseline has negligible residual and asymmetric image axes normalize independently','Complete work prepaid, malformed numeric policy refuses','Every one-shot cancellation checkpoint discards evidence with identical retry','Existing mesh topology, memory/cancellation and competitive pixel regression targets'])
+out=D/'dedup-mesh-deformation-audit-20261013.json';assert not out.exists();out.write_text(json.dumps(result,indent=2)+'\n');print(result['status'],result['passed'],result['ignored'])

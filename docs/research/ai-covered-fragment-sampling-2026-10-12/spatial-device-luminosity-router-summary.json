@@ -1,0 +1,27 @@
+{
+  "change": "native spatial constant-source DeviceGray/RGB/CMYK luminosity masks including original native backdrop and transfer",
+  "verified": "three authored PDF device spaces, two positions each, match prior original-component controls within1e-14",
+  "ordinary_passed": 164,
+  "ignored": 12,
+  "real_artwork": {
+    "first_unsupported_event": 13,
+    "reason": "complex_mask_source_not_routed",
+    "route_admissions": 0,
+    "pixel_completed": false,
+    "final_managed_bytes": 0
+  },
+  "limitations": [
+    "device luminosity approximation; calibrated PCS unqualified",
+    "complex mask sources and production AI remain incomplete"
+  ],
+  "logs": [
+    {
+      "path": "docs/research/ai-covered-fragment-sampling-2026-10-12/spatial-device-luminosity-router-final-tests.log",
+      "sha256": "1821ef4def00474af136821a70c020750cdcaabdc43b2d82a79c59e5551b97c8"
+    },
+    {
+      "path": "docs/research/ai-covered-fragment-sampling-2026-10-12/real-spatial-device-luminosity-tests.log",
+      "sha256": "5b03ca9fd7bd4b3b5c73eac68c36a6738a711cb519b38ce9bdfdf57cef789438"
+    }
+  ]
+}

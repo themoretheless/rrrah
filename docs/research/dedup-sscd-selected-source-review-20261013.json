@@ -1,0 +1,70 @@
+{
+  "status": "selected9_complete_source_modules_plus_readme_license_evaluation_reviewed",
+  "repository": "https://github.com/facebookresearch/sscd-copy-detection",
+  "commit": "95902662f2217a5f4aa45f2a3fc70a01dfd3b66a",
+  "source": "/Users/themoretheless/.codex/tmp/rrrah-sscd-source-20261013",
+  "fully_read_files": {
+    "sscd/models/model.py": {
+      "sha256": "3ccf7883fde3565fc45bd37e7e3fa9e59f947bf2a7fd1122b38d579134c0c76b",
+      "lines": 78
+    },
+    "sscd/models/gem_pooling.py": {
+      "sha256": "43f395e3e3f26d1eb3e1b0b3ee552d0bfa78f5ec8b19460111ff9185b5762923",
+      "lines": 32
+    },
+    "sscd/datasets/copydays.py": {
+      "sha256": "670f68bcd59f74127a9064166cf0f76550abf08f62ad39d01d83d87a4d649bdd",
+      "lines": 261
+    },
+    "sscd/datasets/disc.py": {
+      "sha256": "fc2886570d5a1fd928b0607394a1bdd6c1955d9cb5c46782bfd28304d257a370",
+      "lines": 129
+    },
+    "sscd/datasets/image_folder.py": {
+      "sha256": "d27a505d7474ba064e41a79ce447d5880b8ea6629b20f1e034c311347a312fd2",
+      "lines": 42
+    },
+    "sscd/lib/inference.py": {
+      "sha256": "ed638183738045f022ea3f4e772015143861811247db1bedf2725ef365b06648",
+      "lines": 156
+    },
+    "sscd/lib/util.py": {
+      "sha256": "21d507b9b377e2d1dc9fad51ce04ba065056ca58dcd138501974129b7e41a720",
+      "lines": 21
+    },
+    "sscd/copydays_eval.py": {
+      "sha256": "a6ab52d921e765967107eb3287c598e186b6e0f96902c84a24af0a26faefb755",
+      "lines": 160
+    },
+    "sscd/transforms/transforms.py": {
+      "sha256": "43dc4f287586ce733d0e7dc2936fe1bd67cbcd81e3bc7014fb725d9061924cde",
+      "lines": 183
+    },
+    "README.md": {
+      "sha256": "e446463ab4cbb5a5866cebc1f1d9d943374262c4473bcff75378c3c67706f6cc",
+      "lines": 246
+    },
+    "LICENSE": {
+      "sha256": "da6d3703ed11cbe42bd212c725957c98da23cbff1998c05fa4b3d976d1a58e93",
+      "lines": 21
+    },
+    "docs/Evaluation.md": {
+      "sha256": "c7eb0bda19c5eb09e479d04ff0a6b68e0e56dca4f2fc9d1fcaf3eb0f6d668f9e",
+      "lines": 111
+    }
+  },
+  "whole_repo_complete": false,
+  "repository_files": 41,
+  "scope": "Nine complete relevant source modules and three complete supporting text files read, not all41files or full training source. Supplemental outside original500registry. Official TorchScript execution separately audited; Python source runtime training/evaluation dependencies not executed wholesale.",
+  "findings": [
+    "ResNet backbone, GeM clamped pooling, linear head and L2 normalization produce copy descriptors; only TorchScript artifact executed in oracle",
+    "Published RGB loader uses storedpixel orientation; no EXIF transpose, source mutation guard or original-interpretation recipe in these paths",
+    "ImageFolder filename inventory is lru-cached by path; file IDs are list positions, not content/interpretation identity",
+    "Copydays strong matches only same first-four-digit filename prefix; full157original list can supply every wrong-origin retrieval negative",
+    "Author evaluation uses288short-edge with aspect preservation and centering/whitening/10k distractors; square320raw-dot oracle is a different declared diagnostic",
+    "Published0.75example is not a universal threshold for physical print/scan/deformation or this corpus",
+    "Repository MIT license read; README supplies pretrained weights for reproduction, no separate model-license file in tree; no code or weights integrated into production"
+  ],
+  "runtime_audit": "docs/research/dedup-sscd-oracle-v2-audit-20261013.json",
+  "decision": "use_as_diagnostic_and_candidate_ranking_reference_not_duplicate_verdict"
+}

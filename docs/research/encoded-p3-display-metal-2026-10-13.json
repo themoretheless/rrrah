@@ -1,0 +1,38 @@
+{
+  "change": "Full-range CICP(12,13,0,1) Display P3 to linear sRGB: signed sRGB inverse transfer then D65 primary matrix; preserve alpha and out-of-sRGB components. Shared raster API serves PNG and other CICP sources.",
+  "reference": "https://www.w3.org/TR/css-color-4/#predefined-display-p3",
+  "checks": {
+    "oracle": "Independent fixed P3-to-sRGB matrix plus f64 inverse transfer; error <2e-6 on RGB primaries, mixed colors, white and signed float excursions",
+    "storage_paths": [
+      "RGBA8",
+      "RGBA16 with 65536 pixels to exercise previous LUT threshold",
+      "RGBA32Float including negative and >1 encoded components"
+    ],
+    "memory": "Exact output budget, cancellation after admission, retry and final zero",
+    "core_passed": 121,
+    "core_ignored": 2,
+    "decode_passed": 1027,
+    "decode_ignored": 73,
+    "metal_sources": 112,
+    "metal_selections": 141,
+    "metal_storage_cases": 282,
+    "evidence_verifier_tests": 8
+  },
+  "limitations": [
+    "Authored fixture and same-renderer frame transport, not independent original-producer qualification",
+    "No physical HDR calibration or NVIDIA result",
+    "No loading-speed improvement claim"
+  ],
+  "sha256": {
+    "docs/research/encoded-p3-core-final-2026-10-13.log": "15fac9c1de7ee8392e6e249ff7eabbf173f1bd3cf5d2147fd9be39067f7bf934",
+    "docs/research/encoded-p3-decode-final-2026-10-13.log": "bd25dcc624c9f539b2d8b658bd21b4f171a3a324046c8d32096327edb7bbb00f",
+    "docs/research/encoded-p3-metal-2026-10-13.log": "6f021962508bcd8b2d11586c060ecf8d095bbf4aa790149256eaec9fe5197359",
+    "crates/rrrah-core/src/raster.rs": "861a4e64178fcd597feac23c374fe779611be2b6e042924567adb54ad06976e5",
+    "crates/rrrah-decode/src/raster.rs": "c9b27dca14a644ac886de6347ff491793dd297227fb6dafab59830bf70b3588e",
+    "crates/rrrah-app/tests/raster_collection_metal.rs": "05359011f98ed8b4f58de035c8485d6f791d77def4a972c4cdeffd487a84eeb3",
+    "scripts/generate-png-cicp-fixtures.py": "7c89b3144a0c327f2819bb41728adf5f560961fb1c28b1c953cb97eb241bd5b3",
+    "scripts/qualify-viewer-storage-gpu.py": "27cf3b354f42453ce3d513d77c94a6529efed225710e631a3a5d1d7d11ea2d2e",
+    "scripts/test-viewer-storage-gpu-evidence.py": "db7e22a6daade6038bd09ff2e0e49f8cb897e1c9758cb232a884806cdcdccf4f",
+    "tests/fixtures/raster/cicp-encoded-p3.png": "ddf2c061218cacbb35b540a6abe700f758765334f02bedb9479fa59027888b8b"
+  }
+}

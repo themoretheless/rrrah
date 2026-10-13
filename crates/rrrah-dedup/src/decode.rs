@@ -11,7 +11,7 @@ use rrrah_decode::{DecodeRequest, DecodedImage, RasterDecodeError};
 #[derive(Debug)]
 pub(crate) struct DecodeSourceSnapshot {
     source: crate::exact::ContentSnapshot,
-    dependencies: Vec<crate::exact::ContentSnapshot>,
+    dependencies: DecodeDependenciesSnapshot,
 }
 impl DecodeSourceSnapshot {
     pub(crate) fn read(
@@ -20,10 +20,51 @@ impl DecodeSourceSnapshot {
         cancel: impl Fn() -> bool,
     ) -> Result<Self, crate::exact::SnapshotError> {
         let source = crate::exact::ContentSnapshot::read(path, max_bytes, &cancel)?;
+        let dependencies = DecodeDependenciesSnapshot::read(&source, path, max_bytes, &cancel)?;
+        Ok(Self { source, dependencies })
+    }
+    pub(crate) fn verify(&self, cancel: impl Fn() -> bool) -> Result<(), crate::exact::SnapshotError> {
+        self.source.verify(&cancel)?;
+        self.dependencies.verify(cancel)
+    }
+}
+
+/// External resources observed through an already guarded original file. This
+/// keeps exact-first collections from hashing the same source twice per guard.
+#[derive(Debug)]
+pub(crate) struct DecodeDependenciesSnapshot {
+    files: Vec<crate::exact::ContentSnapshot>,
+}
+impl DecodeDependenciesSnapshot {
+    pub(crate) fn read(
+        source: &crate::exact::ContentSnapshot,
+        path: &std::path::Path,
+        max_bytes: u64,
+        cancel: impl Fn() -> bool,
+    ) -> Result<Self, crate::exact::SnapshotError> {
         let length =
             usize::try_from(source.byte_count().min(64)).map_err(|_| crate::exact::SnapshotError::Policy)?;
         let header = source.read_prefix(length, &cancel)?;
-        let paths = rrrah_decode::raster_external_dependencies(&DecodeRequest::new(path), &header);
+        Self::read_header(path, max_bytes, &header, cancel)
+    }
+    pub(crate) fn read_verified(
+        source: &crate::exact::ContentSnapshot,
+        path: &std::path::Path,
+        max_bytes: u64,
+        cancel: impl Fn() -> bool,
+    ) -> Result<Self, crate::exact::SnapshotError> {
+        let length =
+            usize::try_from(source.byte_count().min(64)).map_err(|_| crate::exact::SnapshotError::Policy)?;
+        let header = source.read_verified_prefix(length, &cancel)?;
+        Self::read_header(path, max_bytes, &header, cancel)
+    }
+    fn read_header(
+        path: &std::path::Path,
+        max_bytes: u64,
+        header: &[u8],
+        cancel: impl Fn() -> bool,
+    ) -> Result<Self, crate::exact::SnapshotError> {
+        let paths = rrrah_decode::raster_external_dependencies(&DecodeRequest::new(path), header);
         let mut dependencies = Vec::new();
         dependencies
             .try_reserve_exact(paths.len())
@@ -31,11 +72,10 @@ impl DecodeSourceSnapshot {
         for path in paths {
             dependencies.push(crate::exact::ContentSnapshot::read(&path, max_bytes, &cancel)?);
         }
-        Ok(Self { source, dependencies })
+        Ok(Self { files: dependencies })
     }
     pub(crate) fn verify(&self, cancel: impl Fn() -> bool) -> Result<(), crate::exact::SnapshotError> {
-        self.source.verify(&cancel)?;
-        for dependency in &self.dependencies {
+        for dependency in &self.files {
             dependency.verify(&cancel)?;
         }
         Ok(())
@@ -230,6 +270,17 @@ pub fn fingerprint_file(
     cache: &mut crate::cache::FingerprintCache,
     cancel: impl Fn() -> bool,
 ) -> Result<CachedFingerprint, CachedError> {
+    fingerprint_file_observed(request, policy, budget, cache, cancel).map(|(result, _)| result)
+}
+
+/// Retain the observation used by fingerprint/cache admission for batch publication.
+pub(crate) fn fingerprint_file_observed(
+    request: &DecodeRequest,
+    policy: FingerprintPolicy,
+    budget: &MemoryBudget,
+    cache: &mut crate::cache::FingerprintCache,
+    cancel: impl Fn() -> bool,
+) -> Result<(CachedFingerprint, DecodeSourceSnapshot), CachedError> {
     let cancelled = || {
         cancel()
             || request
@@ -241,7 +292,7 @@ pub fn fingerprint_file(
     let header_length =
         usize::try_from(source.byte_count().min(64)).map_err(|_| crate::cache::CacheError::Invalid)?;
     let header = source.read_prefix(header_length, cancelled)?;
-    let dependencies = &source.dependencies;
+    let dependencies = &source.dependencies.files;
     let native_identity = if header.get(4..8) == Some(b"ftyp") {
         Some(rrrah_decode::hevc_decoder_resource_identity().map_err(FileError::from)?)
     } else {
@@ -260,7 +311,7 @@ pub fn fingerprint_file(
         Ok(())
     };
     let mut recipe = blake3::Hasher::new();
-    recipe.update(b"rrrah-file-linear-fingerprint-v5");
+    recipe.update(b"rrrah-file-linear-fingerprint-v6");
     recipe.update(env!("RRRAH_BUILT_RECIPE_ID").as_bytes());
     recipe.update(&policy.recipe);
     recipe.update(b"external-file-dependencies-v1");
@@ -292,8 +343,7 @@ pub fn fingerprint_file(
         recipe.update(b"svg-font-resources-v1");
         recipe.update(&fonts);
     }
-    recipe.update(&[u8::from(request.assume_untagged_srgb)]);
-    recipe.update(&[u8::from(request.assume_untagged_linear_srgb)]);
+    crate::decode_recipe::update_interpretation(&mut recipe, request)?;
     recipe.update(&policy.max_pixels.to_le_bytes());
     recipe.update(&policy.max_file_bytes.to_le_bytes());
     recipe.update(
@@ -309,20 +359,26 @@ pub fn fingerprint_file(
     if let Some(fingerprint) = cache.get(&key) {
         source.verify(cancelled)?;
         verify_native()?;
-        return Ok(CachedFingerprint {
-            fingerprint: fingerprint.clone(),
-            cache_hit: true,
-        });
+        return Ok((
+            CachedFingerprint {
+                fingerprint: fingerprint.clone(),
+                cache_hit: true,
+            },
+            source,
+        ));
     }
     let raster = decode_snapshot_frame(request, &source, policy, budget, cancelled)?;
     let fingerprint = raster.view(cancelled)?.fingerprint(cancelled)?;
     source.verify(cancelled)?;
     verify_native()?;
     cache.insert(key, fingerprint.clone(), policy.max_cache_entries)?;
-    Ok(CachedFingerprint {
-        fingerprint,
-        cache_hit: false,
-    })
+    Ok((
+        CachedFingerprint {
+            fingerprint,
+            cache_hit: false,
+        },
+        source,
+    ))
 }
 
 /// Decode a selected frame using already validated content and explicit limits.

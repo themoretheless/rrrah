@@ -1,0 +1,26 @@
+{
+  "change": "Independent canonical cubic boundary refinement at pixel_error/16; no extra interior leaves",
+  "original_probes": [
+    "REAL_AI_SPATIAL_PIXEL pixel=(149,56) captured=true events=2755 shading_events=13 mask_events=6 completed=true alpha=Some(0.2144258053457193) components=Some([0.3285820138639881, 0.8614814401610394, 0.9346276845122133, 0.2474774506403712]) white_rgb=Some([230.74855138884672, 212.56374303909564, 208.50489577871147]) deadline=false peak_bytes=239197736",
+    "REAL_AI_SPATIAL_PIXEL pixel=(78,144) captured=true events=2755 shading_events=13 mask_events=6 completed=true alpha=Some(0.42510841766988045) components=Some([0.0165102079245959, 0.13781330307176187, 0.38555059730256924, 0.0]) white_rgb=Some([252.69301177698588, 239.358423812085, 217.02721046203962]) deadline=false peak_bytes=239197736",
+    "REAL_AI_SPATIAL_PIXEL pixel=(141,36) captured=true events=2755 shading_events=13 mask_events=6 completed=true alpha=Some(0.3747232553518382) components=Some([0.344368246775941, 0.8084049571646199, 0.9383511012689423, 0.21172374171317165]) white_rgb=Some([213.82299535800462, 184.95232247091752, 174.95464105896951]) deadline=false peak_bytes=239197736"
+  ],
+  "analytical_area_regression": true,
+  "admission_and_cancellation_regressions": true,
+  "adaptive_suite_passed": 115,
+  "compositor_suite_passed": 192,
+  "compositor_ignored": 12,
+  "limitations": [
+    "Native experimental AI capture improved; normal viewer AI still pending",
+    "Three pixels do not establish full-page fidelity",
+    "239197736 managed bytes exclude OS/allocator bookkeeping"
+  ],
+  "sha256": {
+    "vendor/hayro-interpret/src/shading/adaptive.rs": "f628ae36e2045ca12a38619f650ed6f6d483a00b211e128811a84f429b3a748c",
+    "vendor/hayro-interpret/src/encode/native_source.rs": "d74c34d8847c3cbba814da08e3b7d84881d1c83d8a841f9eb7da6447e140b25c",
+    "vendor/hayro/src/knockout_interpreter.rs": "71f54c1e647f1685dd859efffae4f77b37a0c2f79e469675a6f1dcb91255631a",
+    "docs/research/ai-edge-adaptive-full-tests-2026-10-13.log": "02b4c588c89a87b51f7d2ed928922e239a239e156c53ed648eb3a701aedcc49d",
+    "docs/research/ai-edge-current-compositor-suite-2026-10-13.log": "a08da43669105c8c1e2827c6471285bad21aeb3583f44be1ffe1fdf7df5ed532",
+    "docs/research/ai-edge-current-original-probes-2026-10-13.log": "c8847f3009941340facb7ede0de5558865e26af5ecd2ba73d10fca7976309d03"
+  }
+}

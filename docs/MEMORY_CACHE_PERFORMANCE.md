@@ -518,3 +518,16 @@ These are warm single-source timings, not cold-storage, sustained navigation,
 physical scanout, HDR display or CUDA/NVIDIA evidence. RAM lease acquisition is
 not a completed-frame latency. GPU limits cover tracked atlas ownership, not
 driver allocations.
+
+2026-10-11 fitting cache policy updates: WeightedLru::set_limits returns without cloning/sorting candidate keys when current byte/count membership already fits, after pin feasibility validation. Existing deadlines and recency remain unchanged; no expiration semantics changed. New100000-entry regression verifies zero key clones, existing no-TTL memberships remain live afterTTL0 policy change, and touched-key LRU ordering survives. Memory/cache suites192 passed/5 manual ignored; actualMetal eight12MP collection10s/full4000x3000 SDR-HDR verified by strict evidence helper. Evidence: research/cache-fitting-limit-update-2026-10-11.json and hashes/logs. Removes unnecessary planning allocation/work; no measured whole-viewer speedup claimed.
+
+## Current segmented row APIs, paired warm benchmark (2026-10-13)
+
+`swap-row-abba-2026-10-13.json` compares current per-range and scoped-reader
+APIs over8MiB/4096rows:7ABBA blocks,2warmup,10measured samples each. Median
+204.705ms versus4.697ms (43.58x); nearest-rankp95 with10samples is the maximum,
+222.679/5.410ms. All28results match every byte outside timing; managed output/
+scratch and final index/store return to zero. Source/comparison Vec allocations
+are outside accounting. This measures warm local-file reading, including API
+allocation/copy/verification overhead, not historical before/after or viewer
+presentation speed. Scoped reading is already used by streamed region/LOD paths.

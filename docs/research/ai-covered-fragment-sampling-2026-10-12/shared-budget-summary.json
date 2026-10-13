@@ -1,0 +1,56 @@
+{
+  "change": "One40M remaining allowance for row preparation and fragment integration across sequential quarters; actual used work charged on success and refusal; work exhaustion sets remainder0",
+  "tests": {
+    "passed": 143,
+    "ignored": 10,
+    "regression": "Shared preparation/two-rectangle exact-budget success; one unit short refuses and remains0; cancellation preserves unspent allowance"
+  },
+  "real_replay": [
+    {
+      "fixture": "VectorApple.ai",
+      "page": 0,
+      "native_completed": false,
+      "capture_failed": false,
+      "deadline_expired": false,
+      "final_admitted_bytes": 0,
+      "native_replay_ms": 59415.646250000005
+    },
+    {
+      "fixture": "one.ai",
+      "page": 0,
+      "native_completed": true,
+      "capture_failed": false,
+      "deadline_expired": false,
+      "final_admitted_bytes": 0,
+      "native_replay_ms": 36803.288292
+    },
+    {
+      "fixture": "one.ai",
+      "page": 1,
+      "native_completed": true,
+      "capture_failed": false,
+      "deadline_expired": false,
+      "final_admitted_bytes": 0,
+      "native_replay_ms": 691.4015
+    }
+  ],
+  "progress": "Passes previous147,61 and dense147,63-65",
+  "remaining_refusal": {
+    "pixel": [
+      147,
+      66
+    ],
+    "candidates": 423,
+    "work_left": 3,
+    "requested": 16,
+    "aggregate_polygon_work_limit": 40000000
+  },
+  "qualification": "Incomplete opt-in AI; fixed-memory/cancellation bounds retained; no physicalHDR or full-format completion",
+  "hashes": {
+    "shared-budget-tests.log": "f188e70f0cb15f5b80b5b4d421d79ef6796694754e240cf84e6ec72149e06bcc",
+    "shared-budget-replay.log": "ecc2935b00ad500801d63f9edd70f85e8884a7dd255085207f5a6128d3680403",
+    "shared-budget-report.json": "9a00afa8e2f3ca2ce6cfd98c53363848f791c395a3aa1d8fae2031c9666f6824",
+    "polygon_coverage.rs": "97c3824e06d7783adcba7371712bb5ac9a4db1c67ce9e97c56ea379f3799d016",
+    "knockout_interpreter.rs": "9970d88117ab3b20e0ee6da27cdb53afa3139740e965594ff317b40ba4beb34e"
+  }
+}

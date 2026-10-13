@@ -1,0 +1,510 @@
+{
+  "scope": "Ordinary decoder/app/GPU suites after fitting-policy update; manual external-corpus cases skipped",
+  "command": "RRRAH_GPU_BACKEND=metal RRRAH_GPU_OPTIONAL=0 cargo test -p rrrah-decode -p rrrah-gpu -p rrrah --bin rrrah --lib --tests --locked --offline --target-dir target",
+  "exit_code": 0,
+  "suites": [
+    {
+      "target": "unittests src/main.rs (target/debug/deps/rrrah-c2665e453e9ea3f2)",
+      "result": "ok",
+      "passed": 213,
+      "failed": 0,
+      "ignored": 59
+    },
+    {
+      "target": "tests/ai_swap_metal.rs (target/debug/deps/ai_swap_metal-3b3796fd34b04d76)",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "target": "tests/basis_readback.rs (target/debug/deps/basis_readback-0154d9fd78e5946e)",
+      "result": "ok",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "target": "tests/compute_cache_swap.rs (target/debug/deps/compute_cache_swap-1edf326245cd0842)",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 2
+    },
+    {
+      "target": "tests/crw_swap_metal.rs (target/debug/deps/crw_swap_metal-2861065b143daf02)",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "target": "tests/disk_cache_cli.rs (target/debug/deps/disk_cache_cli-c257d350aba13b07)",
+      "result": "ok",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/eip_sensor_readback.rs (target/debug/deps/eip_sensor_readback-528c7a1fd2ee3deb)",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 2
+    },
+    {
+      "target": "tests/emf_readback.rs (target/debug/deps/emf_readback-e84cebaa4fae31a6)",
+      "result": "ok",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/eps_lifecycle.rs (target/debug/deps/eps_lifecycle-216bf5032500c1ce)",
+      "result": "ok",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 6
+    },
+    {
+      "target": "tests/epson_erf_readback.rs (target/debug/deps/epson_erf_readback-d5e865439a2de544)",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 2
+    },
+    {
+      "target": "tests/gpr_readback.rs (target/debug/deps/gpr_readback-bdde9c03fa890c4f)",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 4
+    },
+    {
+      "target": "tests/hasselblad_3fr_readback.rs (target/debug/deps/hasselblad_3fr_readback-5ce1d4b3f85ed34d)",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "target": "tests/hasselblad_3fr_rejection.rs (target/debug/deps/hasselblad_3fr_rejection-7b24bfc5f1cea9ae)",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "target": "tests/hasselblad_fff_readback.rs (target/debug/deps/hasselblad_fff_readback-6787540085159ab9)",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "target": "tests/hasselblad_fff_rejection.rs (target/debug/deps/hasselblad_fff_rejection-7bb7b7c1b468dbef)",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "target": "tests/hdr_raster_swap.rs (target/debug/deps/hdr_raster_swap-2109aee0af5d978f)",
+      "result": "ok",
+      "passed": 22,
+      "failed": 0,
+      "ignored": 3
+    },
+    {
+      "target": "tests/kodak_dcr_readback.rs (target/debug/deps/kodak_dcr_readback-4103b912d399c25a)",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "target": "tests/kodak_dcr_rejection.rs (target/debug/deps/kodak_dcr_rejection-fc43b997d261ff44)",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "target": "tests/kodak_dcs_readback.rs (target/debug/deps/kodak_dcs_readback-b63c000ee6f19ec6)",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "target": "tests/kodak_kdc_readback.rs (target/debug/deps/kodak_kdc_readback-e11eee8092e550bf)",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 2
+    },
+    {
+      "target": "tests/large_apng_memory.rs (target/debug/deps/large_apng_memory-30c1d7f79974031b)",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "target": "tests/leaf_mos_readback.rs (target/debug/deps/leaf_mos_readback-2af07bd3bae83898)",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "target": "tests/leaf_mos_rejection.rs (target/debug/deps/leaf_mos_rejection-e1621e4720c7cace)",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "target": "tests/mef_sensor_compute.rs (target/debug/deps/mef_sensor_compute-7ad7ae05c78d2908)",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "target": "tests/minolta_mrw_readback.rs (target/debug/deps/minolta_mrw_readback-01f77de5a530b3c8)",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 4
+    },
+    {
+      "target": "tests/mng_readback.rs (target/debug/deps/mng_readback-3a704edcbd34c67a)",
+      "result": "ok",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/model_readback.rs (target/debug/deps/model_readback-f1b20ddfb6103e82)",
+      "result": "ok",
+      "passed": 6,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "target": "tests/nrw_readback.rs (target/debug/deps/nrw_readback-776358a82ee9262e)",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "target": "tests/panasonic_raw_readback.rs (target/debug/deps/panasonic_raw_readback-d8b273f86cf6141c)",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 3
+    },
+    {
+      "target": "tests/pdf_readback.rs (target/debug/deps/pdf_readback-58ec61b65e611ed2)",
+      "result": "ok",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 4
+    },
+    {
+      "target": "tests/phaseone_iiq_readback.rs (target/debug/deps/phaseone_iiq_readback-b052b762baddb3e8)",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "target": "tests/phaseone_iiq_rejection.rs (target/debug/deps/phaseone_iiq_rejection-7b1bdc43ad1b109e)",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "target": "tests/png_physical_aspect.rs (target/debug/deps/png_physical_aspect-d0c6e8217dc3bd7c)",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 5
+    },
+    {
+      "target": "tests/pnm_cache_swap.rs (target/debug/deps/pnm_cache_swap-942625390fc09584)",
+      "result": "ok",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "target": "tests/ptx_alias.rs (target/debug/deps/ptx_alias-064b121953de9e28)",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "target": "tests/raster_collection_metal.rs (target/debug/deps/raster_collection_metal-afb1763937f50821)",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "target": "tests/raw_collection_metal.rs (target/debug/deps/raw_collection_metal-1973424e23861efe)",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "target": "tests/raw_quality.rs (target/debug/deps/raw_quality-2ef96ea8e35241a7)",
+      "result": "ok",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/rla_cache_swap.rs (target/debug/deps/rla_cache_swap-58e80b204a675c4b)",
+      "result": "ok",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/rpf_readback.rs (target/debug/deps/rpf_readback-845deb1998d893c1)",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 2
+    },
+    {
+      "target": "tests/rwl_readback.rs (target/debug/deps/rwl_readback-963bab7fc7d6e66c)",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "target": "tests/samsung_srw_readback.rs (target/debug/deps/samsung_srw_readback-81fc1baecee8a19d)",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 2
+    },
+    {
+      "target": "tests/sony_sr2_readback.rs (target/debug/deps/sony_sr2_readback-738628b856dbb142)",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "target": "tests/sony_srf_readback.rs (target/debug/deps/sony_srf_readback-4d297dd8378202ea)",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "target": "tests/sony_srf_rejection.rs (target/debug/deps/sony_srf_rejection-e90c43c2b28b067d)",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "target": "tests/sti_readback.rs (target/debug/deps/sti_readback-72d679e10f8a72ba)",
+      "result": "ok",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "target": "tests/stl_swap.rs (target/debug/deps/stl_swap-540d6fd823284078)",
+      "result": "ok",
+      "passed": 7,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/swapped_region_metal.rs (target/debug/deps/swapped_region_metal-fb1fd23f46580167)",
+      "result": "ok",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "target": "tests/ttl_swap_metal.rs (target/debug/deps/ttl_swap_metal-97d420dcba39040f)",
+      "result": "ok",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 5
+    },
+    {
+      "target": "tests/wmf_readback.rs (target/debug/deps/wmf_readback-45cbbf7a1c306baa)",
+      "result": "ok",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "target": "unittests src/lib.rs (target/debug/deps/rrrah_decode-cebcbcde5a00dd19)",
+      "result": "ok",
+      "passed": 1009,
+      "failed": 0,
+      "ignored": 72
+    },
+    {
+      "target": "tests/bay_sensor_oracle.rs (target/debug/deps/bay_sensor_oracle-fa4a041ce2fc4957)",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "target": "tests/gpr_color_oracle.rs (target/debug/deps/gpr_color_oracle-7623910b09534e28)",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "target": "tests/gpr_highlight_support.rs (target/debug/deps/gpr_highlight_support-46ebeb1c8b81608c)",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "target": "tests/pdf_knockout.rs (target/debug/deps/pdf_knockout-0d8a754c768afe00)",
+      "result": "ok",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 4
+    },
+    {
+      "target": "tests/qoi_reference_corpus.rs (target/debug/deps/qoi_reference_corpus-e874ace4925ce121)",
+      "result": "ok",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "unittests src/lib.rs (target/debug/deps/rrrah_gpu-5784c571f7987e90)",
+      "result": "ok",
+      "passed": 54,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/ai_native_transport.rs (target/debug/deps/ai_native_transport-e938b4857db940dc)",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "target": "tests/camera_color_readback.rs (target/debug/deps/camera_color_readback-9a4a2b096a2fb68b)",
+      "result": "ok",
+      "passed": 12,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/compute_readback.rs (target/debug/deps/compute_readback-6f6846bc5760f8c6)",
+      "result": "ok",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 2
+    },
+    {
+      "target": "tests/filmstrip_readback.rs (target/debug/deps/filmstrip_readback-8e62b917a9bce034)",
+      "result": "ok",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/model_readback.rs (target/debug/deps/model_readback-ed448b4c58e772ac)",
+      "result": "ok",
+      "passed": 11,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/raster_readback.rs (target/debug/deps/raster_readback-5f89d7a1ce3e8667)",
+      "result": "ok",
+      "passed": 17,
+      "failed": 0,
+      "ignored": 8
+    },
+    {
+      "target": "tests/raster_timing.rs (target/debug/deps/raster_timing-359060f0a1499402)",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "target": "tests/raw_linear_readback.rs (target/debug/deps/raw_linear_readback-d8c54a775737d74f)",
+      "result": "ok",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/raw_orientation_readback.rs (target/debug/deps/raw_orientation_readback-902d0a934d8db229)",
+      "result": "ok",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/readback.rs (target/debug/deps/readback-72611cd1635fb9e9)",
+      "result": "ok",
+      "passed": 11,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/resource_lease.rs (target/debug/deps/resource_lease-2c03c9299a4d0dd8)",
+      "result": "ok",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "tests/rgbe_compute_readback.rs (target/debug/deps/rgbe_compute_readback-98acb9759149443c)",
+      "result": "ok",
+      "passed": 6,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "target": "tests/rgbe_view_readback.rs (target/debug/deps/rgbe_view_readback-48e9c577729c0ec6)",
+      "result": "ok",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    }
+  ],
+  "passed": 1418,
+  "ignored": 226,
+  "failed": 0,
+  "log_sha256": "63bbac818e6f666f565f267b079f7742fb2ee1a69114874754b73484f02e1e50",
+  "post_run_sources": {
+    "crates/rrrah-memory/src/policy.rs": "c791b438a702636e3a8aefea910f578405efbf85ef8b5a3eea43b67484b10c65",
+    "crates/rrrah-app/src/main.rs": "9a2044850216e85fcad1fff063e1de987b82cac26a933b7af5f679f092290a06"
+  },
+  "limitations": [
+    "Ignored tests are unverified",
+    "Does not qualify all100 formats or independent color fidelity",
+    "NVIDIA deferred; physical HDR/live window and slow-disk/OS pressure not covered"
+  ]
+}

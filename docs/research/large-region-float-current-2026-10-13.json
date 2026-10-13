@@ -1,0 +1,58 @@
+{
+  "large_region": {
+    "source_size": [
+      6000,
+      6000
+    ],
+    "source_pixel_bytes": 576000000,
+    "source_pattern": "x-dependent positive HDR red; y-dependent negative green; coordinate parity signed-zero or 0.25 blue; opaque alpha",
+    "crop": [
+      5983,
+      5989,
+      17,
+      11
+    ],
+    "crop_pixel_bytes": 2992,
+    "scratch_peak": 65536,
+    "index_bytes": 281280,
+    "lod_managed_peak": 165072,
+    "checks": [
+      "source managed allocation released before restoring",
+      "every cropped sample exact at requested source coordinate",
+      "17x11 LOD equals direct-source downsample",
+      "pixel aspect preserved"
+    ]
+  },
+  "delayed_float": {
+    "cycles": 3,
+    "seconds": 93.805,
+    "buffer_bytes": 67108864,
+    "size": [
+      2048,
+      2048
+    ],
+    "io_delay_ms_per_call": 2,
+    "max_io_chunk": 65536,
+    "checks": [
+      "every float bit exact including negative zero and signed HDR",
+      "full root pressure refuses restore",
+      "cancel after admitted 64MiB allocation and 64KiB read progress",
+      "same-key retry succeeds",
+      "disk count2 and byte limits hold",
+      "final root and queue zero"
+    ]
+  },
+  "limitations": [
+    "Injected delay on local disk, not physical slow drive",
+    "Managed pressure, not OS-level pressure",
+    "LOD reference uses same downsample implementation",
+    "Three large-buffer cycles do not prove hours-long reliability",
+    "Concurrent region test compilation means no isolated timing benchmark claim"
+  ],
+  "sha256": {
+    "docs/research/float-hdr-delayed-current-2026-10-13.log": "21f495dfce45a299f4a2969a762d488a256c9d66b09a6bb00616cacfb88ff7e0",
+    "docs/research/large-region-coordinate-current-2026-10-13.log": "b2661a0c22c8115b622a52cf71102f4370a2d23878095f4ecb79570fe3563a65",
+    "crates/rrrah-cache/tests/sustained_swap.rs": "197ab3b22b188b8fabf1d0d886240c257475ae8a103241f242b13466ec56314a",
+    "crates/rrrah-cache/src/raster_regions.rs": "edf446b9f02e403444638e33c65a7ff834a116a5cfbf514935d2ba9aa40636e1"
+  }
+}

@@ -1,7 +1,7 @@
 //! Encoding shading patterns for easy sampling.
 
 mod native_source;
-pub use native_source::{NativeShadingError, NativeShadingSample, NativeShadingSource};
+pub use native_source::{NativeAffinePointEvidence, NativeShadingError, NativeShadingSample, NativeShadingSource, NativeShadingTriangle};
 
 use crate::color::{AlphaColor, ColorComponents, ColorSpace};
 use crate::interpret::state::ActiveTransferFunction;

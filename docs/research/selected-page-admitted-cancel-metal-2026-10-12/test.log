@@ -1,0 +1,20 @@
+warning: function `fallible_zeroed_bytes` is never used
+   --> crates/rrrah-cache/src/mosaic_payload_v1.rs:728:4
+    |
+728 | fn fallible_zeroed_bytes(len: usize) -> Result<Box<[u8]>, MosaicPayloadError> {
+    |    ^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-cache` (lib) generated 1 warning
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 1m 23s
+     Running unittests src/main.rs (target/debug/deps/rrrah-0b4921b829754900)
+
+running 1 test
+Selected-page admitted cancellation adapter: Metal Apple M4 Max
+Selected-page admitted cancellation: bytes=67108864; obsolete page1 unpublished; RAM=0; page2 retry payload/SDR/HDR exact; blocked decoder bypassed; final=0
+test raster_swap_viewer_tests::selected_page_prefetch_cancel_after_restore_admission_metal ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 278 filtered out; finished in 3.44s
+

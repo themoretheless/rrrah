@@ -565,9 +565,10 @@ fn verify_projective_selected(
             }
         }
     }
-    refine_projective_evidence(points, policy, tolerance2, best, hypotheses, &cancel, &eligible)
+    refine_projective_evidence(points, policy, tolerance2, best, hypotheses, &cancel, &eligible, ProjectiveScoring::Target)
 }
 
+#[allow(clippy::too_many_arguments)]
 fn refine_projective_evidence(
     points: &[Correspondence],
     policy: GeometryPolicy,
@@ -576,6 +577,7 @@ fn refine_projective_evidence(
     hypotheses: u64,
     cancel: &impl Fn() -> bool,
     eligible: &impl Fn(ProjectiveTransform) -> bool,
+    scoring: ProjectiveScoring,
 ) -> Result<Option<ProjectiveEvidence>, GeometryError> {
     if cancel() {
         return Err(GeometryError::Cancelled);
@@ -588,15 +590,12 @@ fn refine_projective_evidence(
                     .try_reserve_exact(points.len())
                     .map_err(|_| GeometryError::Budget)?;
                 let mut squared_error = 0.0;
+                let inverse = scoring.inverse(transform);
                 for (index, point) in points.iter().enumerate() {
                     if cancel() {
                         return Err(GeometryError::Cancelled);
                     }
-                    let Some(p) = transform.apply(point.source) else {
-                        continue;
-                    };
-                    let residual = (p[0] - point.target[0]).powi(2) + (p[1] - point.target[1]).powi(2);
-                    if residual.is_finite() && residual <= tolerance2 {
+                    if let Some(residual) = scoring.residual(transform, inverse, *point, tolerance2) {
                         inliers.push(index);
                         squared_error += residual;
                     }
@@ -940,7 +939,7 @@ pub fn verify_projective_sampled(
     sampling: ProjectiveSamplingPolicy,
     cancel: impl Fn() -> bool,
 ) -> Result<Option<ProjectiveEvidence>, GeometryError> {
-    verify_projective_sampled_selected(points, policy, sampling, cancel, |_| true)
+    verify_projective_sampled_selected(points, policy, sampling, cancel, |_| true, ProjectiveScoring::Target)
 }
 
 /// Sample only models valid on both whole-image rectangles, including refinement.
@@ -962,7 +961,7 @@ pub fn verify_projective_sampled_for_domains(
     }
     verify_projective_sampled_selected(points, policy, sampling, cancel, |transform| {
         projective_domain_eligible(transform, source, target)
-    })
+    }, ProjectiveScoring::Target)
 }
 
 pub(crate) fn projective_domain_eligible(
@@ -994,6 +993,7 @@ fn verify_projective_sampled_selected(
     sampling: ProjectiveSamplingPolicy,
     cancel: impl Fn() -> bool,
     eligible: impl Fn(ProjectiveTransform) -> bool,
+    scoring: ProjectiveScoring,
 ) -> Result<Option<ProjectiveEvidence>, GeometryError> {
     let tolerance2 = validate(points, policy, &cancel)?;
     if policy.min_inliers < 4 || sampling.trials == 0 || sampling.seed == 0 {
@@ -1007,6 +1007,7 @@ fn verify_projective_sampled_selected(
     }
     let mut state = sampling.seed;
     let mut best: Option<ProjectiveEvidence> = None;
+    let mut inliers = Vec::new();
     for trial in 0..sampling.trials {
         if cancel() {
             return Err(GeometryError::Cancelled);
@@ -1035,24 +1036,42 @@ fn verify_projective_sampled_selected(
         if !eligible(transform) {
             continue;
         }
-        let mut inliers = Vec::new();
+        inliers.clear();
         inliers
             .try_reserve_exact(points.len())
             .map_err(|_| GeometryError::Budget)?;
         let mut squared_error = 0.0;
+        let inverse = scoring.inverse(transform);
+        // Joint residuals lie in [0, 2], so their sum cannot overflow for a
+        // realizable slice. Target-only sums can overflow and keep the full
+        // scan/error behavior. Count then nonnegative error gives an exact
+        // lower bound: a dominated hypothesis cannot replace the first winner.
+        let incumbent = if matches!(scoring, ProjectiveScoring::Joint { .. }) {
+            best.as_ref().map(|old| (old.inliers.len(), old.squared_error))
+        } else {
+            None
+        };
+        let mut dominated = false;
         for (index, point) in points.iter().enumerate() {
             if cancel() {
                 return Err(GeometryError::Cancelled);
             }
-            let Some(predicted) = transform.apply(point.source) else {
+            // Preserve every point cancellation checkpoint even after pruning.
+            if dominated {
                 continue;
-            };
-            let residual =
-                (predicted[0] - point.target[0]).powi(2) + (predicted[1] - point.target[1]).powi(2);
-            if residual.is_finite() && residual <= tolerance2 {
+            }
+            if let Some(residual) = scoring.residual(transform, inverse, *point, tolerance2) {
                 inliers.push(index);
                 squared_error += residual;
             }
+            if let Some((count, error)) = incumbent {
+                let possible = inliers.len() + (points.len() - index - 1);
+                dominated = possible < count || (possible == count && squared_error >= error);
+            }
+        }
+        if dominated {
+            debug_assert!(squared_error.is_finite());
+            continue;
         }
         if !squared_error.is_finite() {
             return Err(GeometryError::Invalid);
@@ -1064,12 +1083,15 @@ fn verify_projective_sampled_selected(
             inliers.len() > old.inliers.len()
                 || (inliers.len() == old.inliers.len() && squared_error < old.squared_error)
         }) {
-            best = Some(ProjectiveEvidence {
+            let previous = best.replace(ProjectiveEvidence {
                 transform,
-                inliers,
+                inliers: std::mem::take(&mut inliers),
                 squared_error,
                 hypotheses: trial + 1,
             });
+            if let Some(old) = previous {
+                inliers = old.inliers;
+            }
         }
     }
     refine_projective_evidence(
@@ -1080,5 +1102,128 @@ fn verify_projective_sampled_selected(
         sampling.trials,
         &cancel,
         &eligible,
+        scoring,
     )
+}
+
+
+#[derive(Clone, Copy)]
+enum ProjectiveScoring {
+    Target,
+    Joint { source_tolerance2: f64 },
+}
+impl ProjectiveScoring {
+    fn inverse(self, h: ProjectiveTransform) -> Option<ProjectiveTransform> {
+        match self {
+            Self::Target => None,
+            Self::Joint { .. } => h.inverse().ok(),
+        }
+    }
+    fn residual(
+        self,
+        h: ProjectiveTransform,
+        inverse: Option<ProjectiveTransform>,
+        point: Correspondence,
+        target_tolerance2: f64,
+    ) -> Option<f64> {
+        let p = h.apply(point.source)?;
+        let forward = (p[0] - point.target[0]).powi(2) + (p[1] - point.target[1]).powi(2);
+        if !forward.is_finite() || forward > target_tolerance2 {
+            return None;
+        }
+        match self {
+            Self::Target => Some(forward),
+            Self::Joint { source_tolerance2 } => {
+                let p = inverse?.apply(point.target)?;
+                let reverse = (p[0] - point.source[0]).powi(2) + (p[1] - point.source[1]).powi(2);
+                (reverse.is_finite() && reverse <= source_tolerance2)
+                    .then_some(forward / target_tolerance2 + reverse / source_tolerance2)
+            }
+        }
+    }
+}
+
+/// Sampled projective geometry requiring both endpoint residual thresholds.
+#[derive(Debug, Clone, Copy)]
+pub struct JointProjectivePolicy {
+    pub target: GeometryPolicy,
+    pub source_tolerance: f64,
+    /// Prepaid point projections for both directions of every trial and one
+    /// refinement: `2 * target.max_points * (sampling.trials + 1)`.
+    /// Domain-corner checks are bounded separately by the trial count.
+    pub maximum_projection_checks: u64,
+}
+#[derive(Debug, Clone)]
+pub struct JointProjectiveEvidence {
+    pub transform: ProjectiveTransform,
+    pub inliers: Vec<usize>,
+    /// Sum of forward/target_tolerance² and inverse/source_tolerance² residuals.
+    pub normalized_squared_error: f64,
+    pub hypotheses: u64,
+}
+
+/// Rank and refine by jointly admitted correspondences, then normalized
+/// bidirectional error. Both full-image domains must remain horizon-free.
+/// This is geometry evidence; original-pixel support is still required.
+/// Point/inlier scratch uses fallible allocation bounded by `target.max_points`,
+/// outside a managed payload budget, as in the other geometry APIs.
+/// # Errors
+/// Invalid dimensions/points/policy, cumulative projection work overflow or
+/// refusal, allocation failure and cancellation. No partial evidence is returned.
+#[allow(clippy::too_many_arguments)]
+pub fn verify_projective_sampled_joint_for_domains(
+    points: &[Correspondence],
+    policy: JointProjectivePolicy,
+    sampling: ProjectiveSamplingPolicy,
+    source: (u32, u32),
+    target: (u32, u32),
+    cancel: impl Fn() -> bool,
+) -> Result<Option<JointProjectiveEvidence>, GeometryError> {
+    if cancel() {
+        return Err(GeometryError::Cancelled);
+    }
+    let source_tolerance2 = policy.source_tolerance * policy.source_tolerance;
+    let target_tolerance2 = policy.target.tolerance * policy.target.tolerance;
+    if !policy.source_tolerance.is_finite()
+        || policy.source_tolerance <= 0.
+        || !source_tolerance2.is_finite()
+        || source_tolerance2 <= 0.
+        || !target_tolerance2.is_finite()
+        || target_tolerance2 <= 0.
+        || source.0 == 0
+        || source.1 == 0
+        || target.0 == 0
+        || target.1 == 0
+    {
+        return Err(GeometryError::Invalid);
+    }
+    let required = u64::try_from(policy.target.max_points)
+        .ok()
+        .and_then(|n| n.checked_mul(2))
+        .and_then(|n| {
+            sampling
+                .trials
+                .checked_add(1)
+                .and_then(|trials| n.checked_mul(trials))
+        })
+        .ok_or(GeometryError::Budget)?;
+    if required > policy.maximum_projection_checks {
+        return Err(GeometryError::Budget);
+    }
+    verify_projective_sampled_selected(
+        points,
+        policy.target,
+        sampling,
+        cancel,
+        |h| projective_domain_eligible(h, source, target),
+        ProjectiveScoring::Joint { source_tolerance2 },
+    )
+    .map(|e| {
+        e.map(|e| JointProjectiveEvidence {
+            transform: e.transform,
+            inliers: e.inliers,
+            normalized_squared_error: e.squared_error,
+            hypotheses: e.hypotheses,
+        })
+    })
 }

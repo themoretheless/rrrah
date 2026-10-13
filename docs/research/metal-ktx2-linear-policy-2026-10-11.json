@@ -1,0 +1,53 @@
+{
+  "date": "2026-10-11",
+  "scope": "KTX2 missing DFD primaries explicit linear-sRGB viewer policy",
+  "fixture": "Authored precision-32-0.ktx2 with only DFD primaries byte changed to zero; 2x1 RGBA32Float",
+  "decoder_boundary": "Explicit assumption applies only to DFD primaries zero; values 1,2,9,255 tested with strict and explicit policy; declared unsupported primaries remain refused for display",
+  "checks": {
+    "native_float_bits_exact": true,
+    "preload_TTL_spill_decoder_free_restore": true,
+    "incompatible_cache_policies_refused": true,
+    "managed_bytes_final": 0,
+    "Metal_adapter": "Metal Apple M4 Max",
+    "SDR_and_HDR_before_after_swap_exact": true,
+    "output_dimensions": [
+      63,
+      65
+    ],
+    "exposure_stops": 1,
+    "KTX2_unit_tests_passed": 9,
+    "decode_gate_passed": 987,
+    "decode_gate_ignored": 67,
+    "app_gate_passed": 198,
+    "app_gate_ignored": 35,
+    "actual_Metal_new_case_passed": 1
+  },
+  "logs": [
+    {
+      "path": "/tmp/rrrah-ktx2-linear-policy-tests-20261011.log",
+      "sha256": "396465d41d227de0ce572beb09bc749317bae3b61b78c29e4c72bfcb7d3cff33"
+    },
+    {
+      "path": "/tmp/rrrah-ktx2-linear-all-tests-20261011.log",
+      "sha256": "526eaca55d3e5857daedaafa67032508fc454320cacd032425c672e0b1e5f25b"
+    },
+    {
+      "path": "/tmp/rrrah-ktx2-linear-viewer-tests-20261011.log",
+      "sha256": "1fede07be1af8f3b62d44fe310a83f8d4a3d8c48caa0686881bdbea3736e12db"
+    },
+    {
+      "path": "/tmp/rrrah-ktx2-linear-cli-metal-20261011.log",
+      "sha256": "6247eab59a556293a23c01dea206c77ac468e1579ff0505fefa168dda60e6bf6"
+    },
+    {
+      "path": "/tmp/rrrah-ktx2-linear-app-all-20261011.log",
+      "sha256": "6fa6a677b79a813139866d76405adf2038699c0a69ebae6878bdbc49867a1003"
+    }
+  ],
+  "limitations": [
+    "Authored subset, not independent producer corpus",
+    "Offscreen readback, not physical HDR luminance/color qualification",
+    "Known unsupported primaries are preserved as unsupported; no new color conversion",
+    "NVIDIA deferred"
+  ]
+}

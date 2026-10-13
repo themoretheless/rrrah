@@ -1,0 +1,68 @@
+{
+  "scope": "Experimental native AI selector-driven raster identity observer; production source sampling unchanged",
+  "tests": {
+    "passed": 233,
+    "failed": 0,
+    "ignored": 12
+  },
+  "implementation": [
+    "Admitted compressed region-to-source links and per-command64bit active color/alpha sets",
+    "Selector toggles update only linked source states; constant-work query refuses missing or ambiguous cells",
+    "Centroid representative coverage rebuilds tracker before query",
+    "Work/cancellation debit complete bounded update/rebuild before state mutation; geometry and ordinary4Mcolor budgets unchanged",
+    "Unsupported >64cells/grid or >16384links falls back to existing scan, no silent truncation"
+  ],
+  "regressions": [
+    "4096deterministic updates including shared multi-source/multi-channel regions and region70 match independent full binding scan",
+    "Update/rebuild cancellation or exhausted work preserves existing state",
+    "All preparation cancellation polls and denied admission release retained and scratch credit",
+    "Bitmap ceiling and link ceiling refuse before storage admission; finalcredit0"
+  ],
+  "original_pixels_exactly_equal": [
+    "147,59",
+    "145,50",
+    "199,25",
+    "138,39",
+    "149,56"
+  ],
+  "geometry_comparison_checks": 3125548,
+  "mismatches": 0,
+  "moment_counts_and_centroid_deltas_unchanged": true,
+  "peak_admitted_bytes": 239197736,
+  "pixels": [
+    {
+      "xy": [
+        147,
+        59
+      ],
+      "scan_work": 92527880,
+      "transition_work": 66719457,
+      "work_reduction_percent": 27.89259086018182
+    },
+    {
+      "xy": [
+        145,
+        50
+      ],
+      "scan_work": 35007609,
+      "transition_work": 23841608,
+      "work_reduction_percent": 31.89592582572549
+    }
+  ],
+  "timing": {
+    "report": "ai-raster-transitions-paired-2026-10-13.json",
+    "sequence": "ABBAABBA",
+    "A_median_seconds": 3.3771434579999995,
+    "B_median_seconds": 2.6658089374999996,
+    "limitation": "Runs2.57to4.73sec, broad variation; no stable throughput gain claimed"
+  },
+  "limitations": [
+    "Explicit diagnostic only, source colors still sampled per fragment",
+    "Remaining observer work66.7M/23.8M exceeds working budgets",
+    "Mesh-owner transition state, formal rounding/color/fullpage/viewer qualification remain open"
+  ],
+  "logs": [
+    "ai-raster-transitions-final-suite-2026-10-13.log",
+    "ai-raster-transitions-original-2026-10-13.log"
+  ]
+}

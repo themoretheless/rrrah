@@ -1,0 +1,47 @@
+{
+  "scope": "Native experimental AI nearest raster field identity; no production fragment coalescing",
+  "change": "Two packed u64 words identify color and independent alpha texel; image/transform/space/dimensions remain enclosing source identity. Existing nearest last-sample cache now uses the same identity helper.",
+  "tests": {
+    "passed": 223,
+    "failed": 0,
+    "ignored": 12
+  },
+  "fixtures": [
+    "RGB2x2",
+    "authored native soft image",
+    "RGB1x1 with alpha2x2"
+  ],
+  "constant_cell_check": {
+    "points_per_fixture": 1089,
+    "grid": "[-1,3] step1/8 in both coordinates",
+    "convex_combinations_per_point": [
+      0.125,
+      0.5,
+      0.875
+    ],
+    "comparison": "Same-key endpoints and interpolated points have identical uncached native color and alpha; centroid remains same cell"
+  },
+  "refusal": "NaN/infinity/interpolated image key refused; cached budget0 and cancellation remain refused",
+  "cache_identity_bytes": {
+    "old": 32,
+    "new": 16
+  },
+  "original_pixels_exactly_equal": [
+    "147,59",
+    "145,50",
+    "199,25",
+    "138,39",
+    "149,56"
+  ],
+  "peak_admitted_bytes": 239197736,
+  "limitations": [
+    "Authored grid is regression evidence, not universal floating-point proof",
+    "Raster identity must include enclosing command; alpha absent sentinel is not a global source key",
+    "Owner/route generation, integration rounding bounds and working4M page still unresolved",
+    "No throughput claim or production color sampling skipped"
+  ],
+  "logs": [
+    "ai-raster-cell-identity-final-suite-2026-10-13.log",
+    "ai-raster-cell-identity-original-2026-10-13.log"
+  ]
+}

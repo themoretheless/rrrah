@@ -1,0 +1,40 @@
+{
+  "status": "failed",
+  "producer_pid": 73334,
+  "source_manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-joint-model-portfolio-snapshot-20261011.json",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-joint-model-portfolio-snapshot-20261011.json": "b1166c8695a617e4b9c4281d52e7711dafbb9a1782242ef74c70bf9a24f2ce4e",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/qualify-dedup-joint-model-portfolio-20261011.py": "3f54e03274953b38f51cad739102b7d888bcd82abbcfeb252ace3894e57aef85",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-model-portfolio-qualified-20261011/build.jsonl": "45f97a8b2f8a2db40f89298457eb678ff11d61b81e36e7950868db8db1b279e6",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-model-portfolio-qualified-20261011/build.log": "c5658b8906929795aec140ab58ea098372081ea4c45709afd6546a3ce1a9a994"
+  },
+  "build_command": [
+    "cargo",
+    "test",
+    "--manifest-path",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-model-portfolio-snapshot-20261011/Cargo.toml",
+    "-p",
+    "rrrah-dedup",
+    "--no-default-features",
+    "--features",
+    "decode",
+    "--test",
+    "model_compare",
+    "--test",
+    "model_tiles",
+    "--test",
+    "search_portfolio",
+    "--locked",
+    "--offline",
+    "--no-run",
+    "--message-format=json",
+    "--config",
+    "profile.dev.package.rrrah-dedup.opt-level=3",
+    "--target-dir",
+    "/Users/themoretheless/.codex/tmp/rrrah-opposite-native-snapshot-20261011/target"
+  ],
+  "results": [],
+  "scope": "Frozen compatible four-crate source and lock, new joint primitive plus legacy/pair/collection tests. Source coherent before/after; root concurrent HDR edits preserved outside this gate. Not full workspace/platform/corpus/RSS qualification.",
+  "build_pid": 73359,
+  "error": "warning: unused workspace dependency `memmap2`\n  --> Cargo.toml:34:1\n   |\n34 | memmap2 = \"0.9\"\n   | ^^^^^^^\n   |\n   = note: `cargo::unused_workspace_dependencies` is set to `warn` by default\nhelp: consider removing the workspace dependency `memmap2`\nwarning: unused field `repository` in `workspace.package`\n  --> Cargo.toml:23:1\n   |\n23 | repository = \"https://github.com/example/rrrah\"\n   | ^^^^^^^^^^\n   |\n   = note: `cargo::unused_workspace_package_fields` is set to `warn` by default\nhelp: consider removing the field `workspace.package.repository`\nwarning: workspace (manifest) generated 2 warnings\n   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/.codex/tmp/rrrah-joint-model-portfolio-snapshot-20261011/crates/rrrah-dedup)\nerror: could not compile `rrrah-dedup` (test \"search_portfolio\") due to 2 previous errors\nwarning: build failed, waiting for other jobs to finish...\n"
+}

@@ -1,0 +1,40 @@
+{
+  "scope": "Experimental native AI source-field metadata and observer guard",
+  "changes": [
+    "Native sampled result transports optional nearest color/alpha cell key from existing cache without recomputing inverse coordinates",
+    "Field identity requires actual sample plus raster cells or selected affine owner; missing/unknown evidence refuses qualification",
+    "Per-replay monotonic checked route generation persists across route eviction; never use mutable vector index as identity"
+  ],
+  "tests": {
+    "passed": 225,
+    "failed": 0,
+    "ignored": 12
+  },
+  "regressions": [
+    "Missing sample/cell/owner refuses; alpha-cell changes and selected-owner changes remain distinct",
+    "1024 generated IDs through64entry simulated evictions; u64MAX exhaustion never wraps",
+    "Existing actual route-cache repeated-eviction rendering regression retained"
+  ],
+  "budget": "One explicit color-work unit debited per new route generation; tight lazy-mask regression adjusted39to40 accordingly, still detects duplicate or replaced mask sampling",
+  "original_pixels_exactly_equal": [
+    "147,59",
+    "145,50",
+    "199,25",
+    "138,39",
+    "149,56"
+  ],
+  "moment_observer_work": [
+    44317504,
+    15626072
+  ],
+  "peak_admitted_bytes": 239197736,
+  "limitations": [
+    "Metadata and conservative observer guard; no compact moment key integration yet",
+    "Route generation is unique within one replay, not global identity",
+    "No sampling skipped, throughput/full-page/working4M/color/viewer qualification remains open"
+  ],
+  "logs": [
+    "ai-source-field-identity-qualified-suite-2026-10-13.log",
+    "ai-source-field-identity-original-2026-10-13.log"
+  ]
+}

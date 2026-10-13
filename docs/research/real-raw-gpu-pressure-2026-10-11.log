@@ -1,0 +1,121 @@
+warning: function `fallible_zeroed_bytes` is never used
+   --> crates/rrrah-cache/src/mosaic_payload_v1.rs:728:4
+    |
+728 | fn fallible_zeroed_bytes(len: usize) -> Result<Box<[u8]>, MosaicPayloadError> {
+    |    ^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-cache` (lib) generated 1 warning
+warning: methods `submit` and `submit_image` are never used
+    --> crates/rrrah-app/src/main.rs:1377:8
+     |
+1085 | impl ForegroundLoader {
+     | --------------------- methods in this implementation
+...
+1377 |     fn submit(&self, path: PathBuf) -> Result<u64> {
+     |        ^^^^^^
+...
+1380 |     fn submit_image(&self, path: PathBuf, image_index: usize) -> Result<u64> {
+     |        ^^^^^^^^^^^^
+     |
+     = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: associated items `install_with_cancel`, `refresh`, and `refresh_with_cancel` are never used
+   --> crates/rrrah-app/src/raster_viewport.rs:396:19
+    |
+ 26 | impl ResidentSource {
+    | ------------------- associated items in this implementation
+...
+396 |     pub(crate) fn install_with_cancel<F: FnMut() -> bool>(
+    |                   ^^^^^^^^^^^^^^^^^^^
+...
+483 |     pub(crate) fn refresh(
+    |                   ^^^^^^^
+...
+503 |     pub(crate) fn refresh_with_cancel<F: FnMut() -> bool>(
+    |                   ^^^^^^^^^^^^^^^^^^^
+
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+warning: `rrrah` (bin "rrrah") generated 2 warnings
+    Finished `test` profile [optimized + debuginfo] target(s) in 3.27s
+     Running tests/raw_collection_metal.rs (target/debug/deps/raw_collection_metal-5d07d17c3f2a5a20)
+
+running 1 test
+RAW collection adapter: Metal Apple M4 Max
+RAW initial latency: source=/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/1294.cr2; native_decode_ms=1103.620; gpu_upload_render_readback_ms=50.957; output=1920x1080
+seed /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/1294.cr2: 6288x4056; 25504128 samples
+RAW initial latency: source=/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/898.nef; native_decode_ms=795.288; gpu_upload_render_readback_ms=24.983; output=1920x1080
+seed /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/898.nef: 6032x4032; 24321024 samples
+RAW initial latency: source=/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/2414.arw; native_decode_ms=92.608; gpu_upload_render_readback_ms=25.101; output=1920x1080
+seed /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/2414.arw: 6048x4024; 24337152 samples
+RAW initial latency: source=/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/1084.orf; native_decode_ms=563.977; gpu_upload_render_readback_ms=19.253; output=1920x1080
+seed /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/1084.orf: 4640x3472; 16110080 samples
+RAW initial latency: source=/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/831.pef; native_decode_ms=397.437; gpu_upload_render_readback_ms=17.649; output=1920x1080
+seed /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/831.pef: 4352x2868; 12481536 samples
+RAW initial latency: source=/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/5025.rw2; native_decode_ms=84.816; gpu_upload_render_readback_ms=19.946; output=1920x1080
+seed /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/5025.rw2: 4760x3472; 16526720 samples
+RAW initial latency: source=/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/2883.raf; native_decode_ms=47.211; gpu_upload_render_readback_ms=24.283; output=1920x1080
+seed /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/2883.raf: 5120x3288; 16834560 samples
+RAW initial latency: source=/Users/themoretheless/Documents/Sources/rrrah/tests/IMG_9043.CR3; native_decode_ms=66.617; gpu_upload_render_readback_ms=32.544; output=1920x1080
+seed /Users/themoretheless/Documents/Sources/rrrah/tests/IMG_9043.CR3: 6188x4120; 25494560 samples
+RAW initial latency: source=/Users/themoretheless/Documents/Sources/rrrah/tests/IMG_9074.CR3; native_decode_ms=66.643; gpu_upload_render_readback_ms=31.722; output=1920x1080
+seed /Users/themoretheless/Documents/Sources/rrrah/tests/IMG_9074.CR3: 6188x4120; 25494560 samples
+RAW collection rounds=1; elapsed=0.598s; reads=9; root=0; queue=0
+RAW collection rounds=2; elapsed=1.198s; reads=18; root=0; queue=0
+RAW collection rounds=3; elapsed=1.795s; reads=27; root=0; queue=0
+RAW collection rounds=4; elapsed=2.365s; reads=36; root=0; queue=0
+RAW collection rounds=5; elapsed=2.936s; reads=45; root=0; queue=0
+RAW collection rounds=6; elapsed=3.536s; reads=54; root=0; queue=0
+RAW collection rounds=7; elapsed=4.133s; reads=63; root=0; queue=0
+RAW collection rounds=8; elapsed=4.732s; reads=72; root=0; queue=0
+RAW collection rounds=9; elapsed=5.284s; reads=81; root=0; queue=0
+RAW collection rounds=10; elapsed=5.866s; reads=90; root=0; queue=0
+RAW collection rounds=11; elapsed=6.438s; reads=99; root=0; queue=0
+RAW collection rounds=12; elapsed=7.015s; reads=108; root=0; queue=0
+RAW collection rounds=13; elapsed=7.603s; reads=117; root=0; queue=0
+RAW collection rounds=14; elapsed=8.179s; reads=126; root=0; queue=0
+RAW collection rounds=15; elapsed=8.745s; reads=135; root=0; queue=0
+RAW collection rounds=16; elapsed=9.303s; reads=144; root=0; queue=0
+RAW collection rounds=17; elapsed=9.903s; reads=153; root=0; queue=0
+RAW collection rounds=18; elapsed=10.505s; reads=162; root=0; queue=0
+RAW collection rounds=19; elapsed=11.082s; reads=171; root=0; queue=0
+RAW collection rounds=20; elapsed=11.645s; reads=180; root=0; queue=0
+RAW collection rounds=21; elapsed=12.204s; reads=189; root=0; queue=0
+RAW collection rounds=22; elapsed=12.803s; reads=198; root=0; queue=0
+RAW collection rounds=23; elapsed=13.398s; reads=207; root=0; queue=0
+RAW collection rounds=24; elapsed=13.937s; reads=216; root=0; queue=0
+RAW collection rounds=25; elapsed=14.499s; reads=225; root=0; queue=0
+RAW collection rounds=26; elapsed=15.062s; reads=234; root=0; queue=0
+RAW collection rounds=27; elapsed=15.619s; reads=243; root=0; queue=0
+RAW collection rounds=28; elapsed=16.200s; reads=252; root=0; queue=0
+RAW collection rounds=29; elapsed=16.781s; reads=261; root=0; queue=0
+RAW collection rounds=30; elapsed=17.341s; reads=270; root=0; queue=0
+RAW collection rounds=31; elapsed=17.904s; reads=279; root=0; queue=0
+RAW collection rounds=32; elapsed=18.506s; reads=288; root=0; queue=0
+RAW collection rounds=33; elapsed=19.242s; reads=297; root=0; queue=0
+RAW collection rounds=34; elapsed=19.839s; reads=306; root=0; queue=0
+RAW collection rounds=35; elapsed=20.521s; reads=315; root=0; queue=0
+RAW collection rounds=36; elapsed=21.194s; reads=324; root=0; queue=0
+RAW collection rounds=37; elapsed=21.919s; reads=333; root=0; queue=0
+RAW collection rounds=38; elapsed=22.517s; reads=342; root=0; queue=0
+RAW collection rounds=39; elapsed=23.113s; reads=351; root=0; queue=0
+RAW collection rounds=40; elapsed=23.727s; reads=360; root=0; queue=0
+RAW collection rounds=41; elapsed=24.310s; reads=369; root=0; queue=0
+RAW collection rounds=42; elapsed=24.871s; reads=378; root=0; queue=0
+RAW collection rounds=43; elapsed=25.502s; reads=387; root=0; queue=0
+RAW collection rounds=44; elapsed=26.111s; reads=396; root=0; queue=0
+RAW collection rounds=45; elapsed=26.855s; reads=405; root=0; queue=0
+RAW collection rounds=46; elapsed=28.128s; reads=414; root=0; queue=0
+RAW collection rounds=47; elapsed=28.990s; reads=423; root=0; queue=0
+RAW collection rounds=48; elapsed=29.624s; reads=432; root=0; queue=0
+RAW collection rounds=49; elapsed=30.188s; reads=441; root=0; queue=0
+RAW collection complete: rounds=49; elapsed=30.188s; reads=441; writes=9; root=0; queue=0
+RAW collection latency: stage=restore; samples=441; total=441; window=last4096; p50_ms=41.289; p95_ms=51.735; max_ms=200.779
+RAW collection latency: stage=gpu_upload_render_readback; samples=441; total=441; window=last4096; p50_ms=21.789; p95_ms=30.609; max_ms=135.095
+RAW GPU pressure complete: refusals=440; previous-frame-exact; reservation-unchanged; retry-exact
+RAW persistent GPU complete: resident_peak=536870912; upload_peak=2097152; queue_peak=73400320; resident=0; upload=0; queue=0
+test real_raw_collection_eviction_and_swap_preserve_metal_frames ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 34.20s
+

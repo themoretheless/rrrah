@@ -1,0 +1,58 @@
+{
+  "status": "complete_all_229_baseline_records_with_one_execution_failure",
+  "executed_pairs": 229,
+  "counts": {
+    "supported": 228,
+    "miss": 0,
+    "execution_failed": 1
+  },
+  "all_229_supported": false,
+  "stages": {
+    "model_tiles": 202,
+    "native": 26
+  },
+  "originals_scheduled": 157,
+  "targets_scheduled": 229,
+  "pins_verified": 395,
+  "frozen_source_files": 3057,
+  "minimum_supported_anchors": 11,
+  "minimum_supported_informative_pairs": 1108,
+  "minimum_supported_coverage": 0.8579104477611941,
+  "minimum_supported_agreement": 0.9005164034021871,
+  "failures": [
+    {
+      "query": "211201.jpg",
+      "original": "211200.jpg",
+      "returncode": 1,
+      "stderr": "Error: Pair { left: 0, right: 1, error: ModelTiles(Comparison(Pixels(Rank(InsufficientGeometry)))) }\n       83.05 real        92.30 user         4.17 sys\n          1512439808  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n              220059  page reclaims\n                   9  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                   5  voluntary context switches\n              344402  involuntary context switches\n        525546193540  instructions retired\n        191066222797  cycles elapsed\n          1472317216  peak memory footprint\n"
+    }
+  ],
+  "artifacts": [
+    {
+      "source": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-batch-full229-20261011.json",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/gradient-batch-full229-qualified-20261011/dedup-gradient-batch-full229-20261011.json",
+      "sha256": "1ac2c2df0adfd73c7f290f29ae715928198ec991f7d8f99ace4bb6be8e53bb00"
+    },
+    {
+      "source": "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-gradient-batch-full229-20261011.py",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/gradient-batch-full229-qualified-20261011/audit-dedup-gradient-batch-full229-20261011.py",
+      "sha256": "66bcea4465061a9ec834c51c04c580218800cde7c5d6fc484ccfe07536278f53"
+    },
+    {
+      "source": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-batch-full229-20261011.log",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/gradient-batch-full229-qualified-20261011/dedup-gradient-batch-full229-20261011.log",
+      "sha256": "9656c847a833d669912df57458c0a0c49f7ca2c7c4da9c26da8ec5c52b63fdb6"
+    }
+  ],
+  "source_manifest": "docs/research/dedup-gradient-batch-production-snapshot-20261011.json",
+  "known_failure_capture": "docs/research/dedup-full229-211201-failure-20261011.json",
+  "native_first_alternative_audit": "docs/research/dedup-full229-211201-native-first-audit-20261011.json",
+  "limits": [
+    "Frozen earlier library only; later recovery code unqualified by this run",
+    "Known publisher-origin positives only; no all-query negative precision or one 386-file indexed collection",
+    "Support is regional original-pixel rank evidence, not whole-image/file identity",
+    "One execution failure remains in baseline; NativeFirst diagnostic is separate evidence",
+    "Managed payload budget is not total Torch/RSS admission",
+    "Timings are observed shared-host costs, not a comparative performance benchmark; case 204101 was sampled for three seconds"
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "status": "failed_projected_portfolio_generic_gate",
+  "producer_pid": 76356,
+  "command": [
+    "cargo",
+    "test",
+    "--manifest-path",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-portfolio-snapshot-20261011/Cargo.toml",
+    "--target-dir",
+    "/Users/themoretheless/Documents/Sources/rrrah/target",
+    "-p",
+    "rrrah-dedup",
+    "--locked",
+    "--offline",
+    "--no-default-features",
+    "--features",
+    "decode",
+    "--no-run",
+    "--message-format=json",
+    "--test",
+    "projected_portfolio",
+    "--test",
+    "exact_files"
+  ],
+  "source_manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exact-portfolio-snapshot-20261011.json",
+  "source_manifest_sha256": "fd3556fc0a619c7586b8f98d5bee36d6cf8f4b494850e4bc01b92a6f047f8ac1",
+  "results": [
+    {
+      "suite": "projected_portfolio",
+      "status": "running",
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-exact-portfolio-generic-qualified-20261011/projected_portfolio",
+      "binary_sha256": "b2b4ffcd4df0bf8ed20f67100b95088419646f0e29a3c00c004a797952a94352",
+      "process_pid": 82800,
+      "returncode": 101,
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-exact-portfolio-generic-qualified-20261011/projected_portfolio.log",
+      "log_sha256": "b0d55c14d231beaeddd6b57f00ad97955b1391e9308d56cb3a7be45d8eca028b"
+    }
+  ],
+  "build_pid": 76361,
+  "build_returncode": 0,
+  "error": "('projected_portfolio', \"\\nrunning 17 tests\\ntest aggregate_and_constituent_work_refuse_before_io_and_cancel_wins ... ok\\ntest exact_first_accepts_undecodable_copies_without_weights_or_provider ... ok\\ntest exact_first_mismatch_runs_visual_and_keeps_projection_collision_inconclusive ... FAILED\\ntest exact_first_sticky_global_and_both_owners_cancel_every_exact_checkpoint ... ok\\ntest native_alpha_refusal_recovers_with_projected_original_support_in_both_orders ... ok\\ntest provider_and_source_weight_failures_after_native_inconclusive_remain_terminal ... ok\\ntest collection_unknown_does_not_swallow_late_source_or_provider_failure ... ok\\ntest exact_first_last_callback_revalidates_sources_and_visual_weights ... ok\\ntest global_and_both_owner_generations_cancel_first_middle_and_last_checkpoints ... ok\\ntest alpha_collision_exhausts_projected_and_preserves_typed_native_inconclusive ... ok\\ntest hdr_regions_recover_after_whole_miss_and_exhaust_before_native_negative ... ok\\ntest collection_retains_supported_and_explicit_unknown_pairs_in_both_orders ... ok\\ntest collection_work_admission_precedes_iterator_and_unknown_reports_keep_final_source_guards ... ok\\ntest final_callback_source_and_weight_mutations_precede_support_and_inconclusive ... ok\\ntest external_palette_change_discards_projected_portfolio_collection_in_both_orders ... ok\\ntest native_early_support_avoids_inference_and_projected_exhaustion_can_recover_natively ... ok\\ntest native_anchor_inconclusive_recovers_or_stays_inconclusive_after_projected_exhaustion ... ok\\n\\nfailures:\\n\\n---- exact_first_mismatch_runs_visual_and_keeps_projection_collision_inconclusive stdout ----\\n\\nthread 'exact_first_mismatch_runs_visual_and_keeps_projection_collision_inconclusive' (1721097) panicked at crates/rrrah-dedup/tests/projected_portfolio.rs:1090:13:\\nassertion `left == right` failed\\n  left: 8200\\n right: 0\\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\\n\\n\\nfailures:\\n    exact_first_mismatch_runs_visual_and_keeps_projection_collision_inconclusive\\n\\ntest result: FAILED. 16 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 39.23s\\n\\n\", '')"
+}

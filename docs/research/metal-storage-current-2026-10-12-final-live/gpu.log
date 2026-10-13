@@ -1,0 +1,300 @@
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.26s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_gpu-3fc6e742f2070fc2)
+
+running 54 tests
+test filmstrip::tests::max_scroll_is_zero_when_everything_fits ... ok
+test filmstrip::tests::strip_band_hit_region ... ok
+test filmstrip::tests::scroll_to_reveal_moves_only_when_needed ... ok
+test rgbe_plan::tests::invalid_geometry_planes_and_device_admission_fail_before_allocating_pixels ... ok
+test raster::tile_admission_tests::metadata_region_rejects_invalid_geometry_without_source_allocation ... ok
+test rgbe_plan::tests::source_larger_than_binding_is_windowed_with_interpolation_halo ... ok
+test raster::tile_admission_tests::rejects_unrepresentable_extents_layers_and_padded_over_budget ... ok
+test rgbe_plan::tests::full_srf_plan_and_small_limit_segments_cover_without_overlap ... ok
+test tests::card_layout_is_safe_for_empty_and_tiny_viewports ... ok
+test filmstrip::tests::hit_testing_finds_tiles_and_rejects_gaps_and_padding ... ok
+test tests::card_layout_scales_for_a_retina_surface ... ok
+test raster::tile_admission_tests::visible_region_normalizes_view_and_skips_wholly_offscreen_images ... ok
+test backend::vendor_tests::hardware_vendor_filter_rejects_other_ids_and_incompatible_surfaces ... ok
+test backend::tests::explicit_backend_masks_and_unavailable_requests_never_fallback ... ok
+test tests::card_description_wraps_and_clips_by_line_count ... ok
+test tests::compact_card_metrics_keep_dense_descriptions_readable ... ok
+test tests::default_tiling_avoids_the_4096_frame_regression ... ok
+test tests::default_tiling_errors_when_layer_limit_cannot_be_met ... ok
+test tests::default_tiling_keeps_aligned_tiles_when_one_layer_is_not_smaller ... ok
+test tests::default_tiling_rejects_tiny_adapters ... ok
+test tests::default_tiling_shrinks_for_small_adapters ... ok
+test tests::default_tiling_uses_c2_optimum_with_aligned_extent ... ok
+test tests::default_tiling_uses_one_frame_tile_when_layer_growth_would_waste_atlas_space ... ok
+test tests::default_tiling_uses_one_small_frame_tile_when_atlas_is_materially_smaller ... ok
+test tests::dense_card_grid_scales_for_a_retina_surface ... ok
+test tests::direct_white_balance_preserves_backend_neutral_contract ... ok
+test tests::display_keeps_decoder_white_balance_gains_bit_exact ... ok
+test tests::edge_tiles_clamp_without_out_of_bounds_reads ... ok
+test tests::eleven_cards_use_three_columns_for_the_total_block ... ok
+test tests::five_column_dashboard_scales_exactly_for_a_retina_surface ... ok
+test tests::five_column_metrics_preserve_timing_title_and_description_capacity ... ok
+test tests::forty_one_cards_keep_algorithm_descriptions_readable ... ok
+test tests::four_cards_fill_the_nominal_telemetry_dashboard ... ok
+test tests::hud_space_is_blank_instead_of_unknown_glyph ... ok
+test tests::malformed_dimensions_do_not_panic_helper_paths ... ok
+test tests::odd_dense_card_count_keeps_row_major_order ... ok
+test tests::ten_cards_fill_a_two_column_five_row_grid ... ok
+test tests::thirty_eight_cards_fill_a_five_column_eight_row_dashboard ... ok
+test tests::tile_halo_matches_full_frame_at_internal_boundary ... ok
+test tests::tiling_override_below_minimum_is_rejected ... ok
+test tests::tiling_override_exceeding_texture_limit_is_rejected ... ok
+test tests::tiling_override_is_applied_verbatim ... ok
+test tests::tiling_override_respects_array_layer_limit ... ok
+test tests::twenty_eight_cards_fill_a_five_column_six_row_dashboard ... ok
+test tests::twenty_four_cards_fill_a_four_column_six_row_dashboard ... ok
+test tests::uniform_layout_remains_wgsl_compatible ... ok
+test tests::upload_rows_are_padded_to_webgpu_alignment ... ok
+test tests::halo_packing_cancels_inside_large_tiles_and_preserves_scalar_samples ... ok
+test tests::padded_upload_rows_cancel_and_preserve_bytes ... ok
+test tests::hud_shader_parses_and_validates_with_naga ... ok
+test model::tests::model_shader_validates ... ok
+test tests::viewport_shader_parses_and_validates_with_naga ... ok
+test tests::rowwise_tile_halo_matches_scalar_oracle_across_randomized_geometry ... ok
+RGBE geometry sweep: attempted=16384; admitted=7557; every lattice read/output row in bounds
+test rgbe_plan::tests::aligned_windows_contain_every_lattice_read_for_varied_odd_extents ... ok
+
+test result: ok. 54 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+
+     Running tests/compute_readback.rs (target/debug/deps/compute_readback-0f0df8525b3523e2)
+
+running 7 tests
+test full_sensor_linear_exposure_chunked_readback ... ignored, allocates about 0.8 GB of GPU buffers; full-resolution local qualification
+test full_sensor_managed_exposure_budgets_and_checks_every_pixel ... ignored, full-resolution managed compute uses about 2 GB of tracked buffers
+compute adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+cancelled readback adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+interleaved compute adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+exposure boundary adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+resident exposure adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+test interleaved_exposure_preserves_bits_and_managed_raster_ownership ... ok
+test linear_exposure_compute_preserves_hdr_alpha_and_dispatch_tail ... ok
+test exposure_signed_f32_boundary_values_remain_exact_and_finite ... ok
+test resident_exposure_preserves_hdr_tail_and_budgeted_gpu_ownership ... ok
+compute cancellation: six admitted checkpoints in both layouts; every retry exact; CPU/GPU final=0
+test exposure_readback_cancellation_releases_mapping_and_allows_retry ... ok
+
+test result: ok. 5 passed; 0 failed; 2 ignored; 0 measured; 0 filtered out; finished in 4.92s
+
+     Running tests/model_readback.rs (target/debug/deps/model_readback-cb73a0cd6a7f5d18)
+
+running 11 tests
+model budget adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+model adapter: Metal Apple M4 Max
+test model_budget_admits_vertices_and_depth_transactionally ... ok
+test cancelled_model_upload_preserves_resident_geometry_and_credit ... ok
+test raster_and_model_resources_share_parent_admission ... ok
+prepared model lifetime: old encoded geometry/depth credit retained across replacement/drop; submission completed; final zero
+test prepared_model_replacement_keeps_submitted_resource_credit_until_completion ... ok
+test model_linear_hdr_target_matches_analytic_material_and_releases_budget ... ok
+test depth_resolves_overlapping_facets_independent_of_submission_order ... ok
+test model_depth_stays_on_renderer_device_with_foreign_resize_argument ... ok
+test model_has_coverage_orbits_and_fits_extreme_coordinates ... ok
+test refused_depth_resize_preserves_sdr_hdr_frame_and_retries ... ok
+test float64_translation_and_scale_preserve_small_geometry ... ok
+model replacement failures: SDR/HDR; nine cancellations and memory refusal retain exact frame; retry changes frame; final credit zero
+test cancelled_model_replacement_keeps_sdr_and_hdr_pixels_exact ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 5.28s
+
+     Running tests/raster_readback.rs (target/debug/deps/raster_readback-96fa399a25885f6d)
+
+running 25 tests
+test fusion_back_full_frame_developed_raw_matches_metal_display_transport ... ignored, requires corrected production Fusion linear dumps; display transport qualification
+test fusion_front_full_frame_developed_raw_matches_metal_display_transport ... ignored, requires corrected production Fusion linear dumps; display transport qualification
+test hdr_exposure_saturates_to_finite_binary16_range ... ignored, Metal-specific empirical range edge; outside portable binary16 caller contract
+test hdr_opposite_extreme_samples_interpolate_without_nan ... ignored, Metal-specific empirical range edge; outside portable binary16 caller contract
+test hero9_full_frame_developed_raw_matches_metal_display_transport ... ignored, requires production HERO9 scene-linear dump; transport qualification, not demosaic/color oracle
+test large_cancelled_upload_validation_and_admission_preserve_visible_texture ... ignored, manual 12 MP Metal upload cancellation qualification
+test large_hdr_area_lod_preserves_all_output_samples_and_metal_frame ... ignored, manual 36 MP HDR area LOD and actual Metal qualification
+test qualified_sd10_linear_raster_full_frame_display_readback ... ignored, requires qualified X3F linear sRGB PPM and a physical GPU
+raster queue adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+texture budget adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+HDR raster adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+upload cancellation adapter: Metal Apple M4 Max
+raster readback adapter: Metal Apple M4 Max
+resident raster adapter: Metal Apple M4 Max
+aspect transition adapter: Metal Apple M4 Max
+tiled raster adapter: Metal Apple M4 Max; negotiated extent64
+test raster_queue_admission_accounts_alignment_and_completion_ownership ... ok
+test transparent_rgb_is_removed_before_bilinear_interpolation ... ok
+test texture_budget_preserves_loaded_image_on_refusal_and_releases_owners ... ok
+test linear_hdr_attachment_preserves_bright_negative_and_exposed_channels ... ok
+test uploaded_rows_and_rgb_channels_keep_their_positions ... ok
+raster upload pressure: texture-and-queue-refused; previous-frame-exact; temporary-credit-zero
+raster upload cancellation: total_checkpoints=6; exercised=[1, 2, 3, 4, 5, 6]; upload_budget=179200
+test linear_gray_and_straight_alpha_composite_match_display_reference ... ok
+test pixel_aspect_rejection_is_atomic_and_next_upload_resets_geometry ... ok
+raster replacement values: format=Rgba8UnormSrgb; initial_center=[255, 0, 0, 255]; retry_center=[0, 0, 255, 255]
+raster replacement recovery: format=Rgba8UnormSrgb; pressure/cancellation previous frame exact; retry blue exact; final GPU/queue credit=0
+managed area HDR LOD: signed/bright/transparent-RGB oracle SDR/HDR exact; output root=0
+raster upload pressure: texture-and-queue-refused; previous-frame-exact; temporary-credit-zero
+raster upload cancellation: total_checkpoints=6; exercised=[1, 2, 3, 4, 5, 6]; upload_budget=179200
+test area_filtered_hdr_lod_matches_independent_alpha_reference_on_metal ... ok
+raster replacement values: format=Rgba16Float; initial_center=[15360, 0, 0, 15360]; retry_center=[0, 0, 15360, 15360]
+raster replacement recovery: format=Rgba16Float; pressure/cancellation previous frame exact; retry blue exact; final GPU/queue credit=0
+test cancelled_upload_validation_and_admission_preserve_visible_texture ... ok
+resident tiles: 130x5; SDR/HDR exact; padded_bytes=10560; compute/queue/texture root=0
+test developed_raw_exposure_precedes_tone_and_monotone_curve ... ok
+test nonfinite_raster_controls_produce_exact_finite_sdr_hdr_frames ... ok
+resident tiles: 5x130; SDR/HDR exact; padded_bytes=10560; compute/queue/texture root=0
+resident tiles: 128x130; SDR/HDR exact; padded_bytes=270336; compute/queue/texture root=0
+resident tiles: 130x130; SDR/HDR exact; padded_bytes=278784; compute/queue/texture root=0
+test tiled_raster_seams_padding_and_partial_cancel_preserve_sdr_hdr ... ok
+test gpu_resident_compute_rows_match_cpu_exposure_reference ... ok
+resident tiles: 20000x64; SDR/HDR exact; padded_bytes=20481024; compute/queue/texture root=0
+test resident_compute_tiles_match_cpu_sdr_hdr_across_aligned_and_packed_rows ... ok
+6000x6000 source=576000000 bytes > eager limit; resident 128x128=262144 bytes; full HDR viewport exact; root/queue=0
+test small_resident_region_renders_source_above_eager_atlas_limit ... ok
+resident source region=[35, 40, 130, 70]; bytes=145600; full geometry SDR/HDR exact; root/queue=0
+resident source region=[35, 40, 130, 70]; bytes=147840; full geometry SDR/HDR exact; root/queue=0
+resident source region=[0, 0, 70, 70]; bytes=78400; full geometry SDR/HDR exact; root/queue=0
+resident source region=[130, 90, 70, 70]; bytes=78400; full geometry SDR/HDR exact; root/queue=0
+test resident_source_regions_preserve_full_geometry_hdr_and_transactional_admission ... ok
+visible-region planner: 60 exact full SDR/HDR view frames; uploads=46; offscreen_skips=14; aspects=0.5/1/2; root/queue=0
+test planned_visible_regions_match_whole_image_during_pan_zoom_and_pixel_aspect ... ok
+
+test result: ok. 17 passed; 0 failed; 8 ignored; 0 measured; 0 filtered out; finished in 8.17s
+
+     Running tests/raw_linear_readback.rs (target/debug/deps/raw_linear_readback-9fd8b6185e48ed18)
+
+running 5 tests
+test binary16_reference_covers_signed_hdr_and_subnormals ... ok
+RAW linear adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+RAW RGBE repeat grid: Rgba16Float; 3x5; four planes and independent signed HDR matrix preserved
+RAW above file white: Rgba16Float; encoded=3989; black=15; white=3967; exposure=1; all channels retain HDR headroom
+RAW invalid levels: Rgba16Float; phases=4; equal/inverted refused; previous HDR frame exact; credit unchanged
+RAW invalid pixel count: Rgba16Float; empty/truncated/extra refused; prior frame and credit exact
+RAW fractional levels: Rgba16Float; black=.75 white=1.25 sample=1 exposure=1; RGB=1
+RAW extreme correction: Rgba16Float; subnormal zero field exact; normalization/gain overflow refused; prior frame and credit exact; valid retry
+RAW repeat grid: Rgba16Float; 3x5 odd boundaries; independent neutral exact; extra credit=60; invalid last cell preserves frame; fast path releases grid
+test nonfinite_raw_view_components_keep_previous_finite_frame ... ok
+RAW RGBE repeat grid: Rgba32Float; 3x5; four planes and independent signed HDR matrix preserved
+RAW above file white: Rgba32Float; encoded=3989; black=15; white=3967; exposure=1; all channels retain HDR headroom
+RAW invalid levels: Rgba32Float; phases=4; equal/inverted refused; previous HDR frame exact; credit unchanged
+RAW invalid pixel count: Rgba32Float; empty/truncated/extra refused; prior frame and credit exact
+test signed_rgbe_hdr_saturation_preserves_float32_and_both_half_limits ... ok
+test finite_large_bayer_values_refuse_unsafe_filter_range_before_replacement ... ok
+RAW fractional levels: Rgba32Float; black=.75 white=1.25 sample=1 exposure=1; RGB=1
+RAW extreme correction: Rgba32Float; subnormal zero field exact; normalization/gain overflow refused; prior frame and credit exact; valid retry
+RAW repeat grid: Rgba32Float; 3x5 odd boundaries; independent neutral exact; extra credit=60; invalid last cell preserves frame; fast path releases grid
+test raw_linear_float_target_preserves_hdr_and_negative_rgbe_color ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 7.28s
+
+     Running tests/readback.rs (target/debug/deps/readback-381870146e3bac04)
+
+running 11 tests
+RAW budget adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+readback: adapter Metal Apple M4 Max
+test raw_atlas_budget_accounts_halos_and_preserves_image_on_refusal ... ok
+out-of-gamut pure red: linear [1.2777706384658813, -0.1450584977865219, -0.020508810877799988] -> readback [223, 0, 72, 255] vs reference [223, 0, 72]
+test exposure_shift_raises_midtones_without_replot ... ok
+test readback_is_bit_identical_across_rerenders ... ok
+test black_and_white_endpoints_match_aces_contract ... ok
+out-of-gamut pure green: linear [-0.2950807213783264, 0.8427019119262695, -0.2481752634048462] -> readback [0, 222, 48, 255] vs reference [0, 222, 48]
+test uniform_gray_renders_neutral_and_spatially_uniform ... ok
+out-of-gamut pure blue: linear [0.02482142113149166, -0.411801278591156, 1.2324081659317017] -> readback [35, 0, 237, 255] vs reference [35, 0, 237]
+test out_of_gamut_camera_colors_desaturate_matching_cpu_reference ... ok
+test decoder_white_balance_scale_is_preserved_through_real_camera_profile ... ok
+test known_gray_points_match_cpu_reference_curve ... ok
+test tone_curve_is_monotonic_across_input_levels ... ok
+test cancelled_raw_tile_upload_preserves_previous_frame_and_budget ... ok
+
+hue preservation (CIELAB h°, input -> output, Δh):
+  red      x0.18    40.00 ->   39.09  Δh  0.91°  rgb [141, 0, 0, 255]
+  red      x0.50    40.00 ->   40.00  Δh  0.00°  rgb [206, 0, 0, 255]
+  red      x1.00    40.00 ->   40.00  Δh  0.00°  rgb [232, 0, 0, 255]
+  red      x2.00    40.00 ->   40.00  Δh  0.00°  rgb [245, 0, 0, 255]
+  red      x4.00    40.00 ->   40.00  Δh  0.00°  rgb [252, 0, 0, 255]
+  yellow   x0.18   102.85 ->  102.85  Δh  0.00°  rgb [141, 141, 0, 255]
+  yellow   x0.50   102.85 ->  102.85  Δh  0.00°  rgb [206, 206, 0, 255]
+  yellow   x1.00   102.85 ->  102.85  Δh  0.00°  rgb [232, 232, 0, 255]
+  yellow   x2.00   102.85 ->  102.85  Δh  0.00°  rgb [245, 245, 0, 255]
+  yellow   x4.00   102.85 ->  102.85  Δh  0.00°  rgb [252, 252, 0, 255]
+  green    x0.18   136.02 ->  136.02  Δh  0.00°  rgb [0, 141, 0, 255]
+  green    x0.50   136.02 ->  136.02  Δh  0.00°  rgb [0, 206, 0, 255]
+  green    x1.00   136.02 ->  136.02  Δh  0.00°  rgb [0, 232, 0, 255]
+  green    x2.00   136.02 ->  136.02  Δh  0.00°  rgb [0, 245, 0, 255]
+  green    x4.00   136.02 ->  136.02  Δh  0.00°  rgb [0, 252, 0, 255]
+  cyan     x0.18   196.38 ->  196.38  Δh  0.00°  rgb [0, 141, 141, 255]
+  cyan     x0.50   196.38 ->  196.38  Δh  0.00°  rgb [0, 206, 206, 255]
+  cyan     x1.00   196.38 ->  196.38  Δh  0.00°  rgb [0, 232, 232, 255]
+  cyan     x2.00   196.38 ->  196.38  Δh  0.00°  rgb [0, 245, 245, 255]
+  cyan     x4.00   196.38 ->  196.38  Δh  0.00°  rgb [0, 252, 252, 255]
+  blue     x0.18   306.28 ->  306.28  Δh  0.00°  rgb [0, 0, 141, 255]
+  blue     x0.50   306.28 ->  306.28  Δh  0.00°  rgb [0, 0, 206, 255]
+  blue     x1.00   306.28 ->  306.28  Δh  0.00°  rgb [0, 0, 232, 255]
+  blue     x2.00   306.28 ->  306.28  Δh  0.00°  rgb [0, 0, 245, 255]
+  blue     x4.00   306.28 ->  306.28  Δh  0.00°  rgb [0, 0, 252, 255]
+  magenta  x0.18   328.23 ->  328.23  Δh  0.00°  rgb [141, 0, 141, 255]
+  magenta  x0.50   328.23 ->  328.23  Δh  0.00°  rgb [206, 0, 206, 255]
+  magenta  x1.00   328.23 ->  328.23  Δh  0.00°  rgb [232, 0, 232, 255]
+  magenta  x2.00   328.23 ->  328.23  Δh  0.00°  rgb [245, 0, 245, 255]
+  magenta  x4.00   328.23 ->  328.23  Δh  0.00°  rgb [252, 0, 252, 255]
+  orange   x0.18    81.59 ->   81.52  Δh  0.07°  rgb [141, 102, 0, 255]
+  orange   x0.50    81.59 ->   81.68  Δh  0.09°  rgb [206, 151, 0, 255]
+  orange   x1.00    81.59 ->   81.47  Δh  0.12°  rgb [232, 170, 0, 255]
+  orange   x2.00    81.59 ->   81.58  Δh  0.01°  rgb [245, 180, 0, 255]
+  orange   x4.00    81.59 ->   81.49  Δh  0.10°  rgb [252, 185, 0, 255]
+  lime     x0.18   118.39 ->  118.43  Δh  0.04°  rgb [102, 141, 0, 255]
+  lime     x0.50   118.39 ->  118.34  Δh  0.05°  rgb [151, 206, 0, 255]
+  lime     x1.00   118.39 ->  118.45  Δh  0.06°  rgb [170, 232, 0, 255]
+  lime     x2.00   118.39 ->  118.39  Δh  0.01°  rgb [180, 245, 0, 255]
+  lime     x4.00   118.39 ->  118.44  Δh  0.05°  rgb [185, 252, 0, 255]
+  azure    x0.18   250.28 ->  250.43  Δh  0.16°  rgb [0, 102, 141, 255]
+  azure    x0.50   250.28 ->  250.09  Δh  0.19°  rgb [0, 151, 206, 255]
+  azure    x1.00   250.28 ->  250.53  Δh  0.25°  rgb [0, 170, 232, 255]
+  azure    x2.00   250.28 ->  250.30  Δh  0.02°  rgb [0, 180, 245, 255]
+  azure    x4.00   250.28 ->  250.49  Δh  0.22°  rgb [0, 185, 252, 255]
+  rose     x0.18   342.73 ->  342.78  Δh  0.05°  rgb [141, 0, 102, 255]
+  rose     x0.50   342.73 ->  342.66  Δh  0.07°  rgb [206, 0, 151, 255]
+  rose     x1.00   342.73 ->  342.82  Δh  0.09°  rgb [232, 0, 170, 255]
+  rose     x2.00   342.73 ->  342.74  Δh  0.01°  rgb [245, 0, 180, 255]
+  rose     x4.00   342.73 ->  342.80  Δh  0.08°  rgb [252, 0, 185, 255]
+  spring   x0.18   164.33 ->  164.27  Δh  0.07°  rgb [0, 141, 102, 255]
+  spring   x0.50   164.33 ->  164.41  Δh  0.08°  rgb [0, 206, 151, 255]
+  spring   x1.00   164.33 ->  164.23  Δh  0.11°  rgb [0, 232, 170, 255]
+  spring   x2.00   164.33 ->  164.33  Δh  0.01°  rgb [0, 245, 180, 255]
+  spring   x4.00   164.33 ->  164.24  Δh  0.09°  rgb [0, 252, 185, 255]
+  violet   x0.18   318.33 ->  318.31  Δh  0.03°  rgb [102, 0, 141, 255]
+  violet   x0.50   318.33 ->  318.36  Δh  0.03°  rgb [151, 0, 206, 255]
+  violet   x1.00   318.33 ->  318.29  Δh  0.04°  rgb [170, 0, 232, 255]
+  violet   x2.00   318.33 ->  318.33  Δh  0.00°  rgb [180, 0, 245, 255]
+  violet   x4.00   318.33 ->  318.30  Δh  0.04°  rgb [185, 0, 252, 255]
+worst hue shift: 0.913° (red x0.18000000715255737)
+test saturated_colors_preserve_hue_through_tone_map ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 5.79s
+
+     Running tests/rgbe_compute_readback.rs (target/debug/deps/rgbe_compute_readback-5d310ff784bafb7a)
+
+running 7 tests
+test full_f828_managed_rgbe_matches_cpu_reference ... ignored, requires independent DSC-F828 full-sensor dump; authored four-channel normalization, not as-shot color qualification
+RGBE grid compute adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+RGBE compute adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+test cancelled_large_rgbe_validation_does_not_admit_output_resources ... ok
+test signed_f32_extremes_interpolate_finitely_against_f64_reference ... ok
+RGBE odd grid compute: 3x5 grid; 17x13 sensor; four independent planes exact; split dispatch and odd edges; CPU/GPU credit zero
+test managed_rgbe_admission_completion_and_output_owner ... ok
+RGBE odd grid compute: 3x5 grid; 17x33 sensor; four independent planes exact; split dispatch and odd edges; CPU/GPU credit zero
+test odd_black_repeat_grid_normalization_to_managed_metal_compute ... ok
+test four_plane_compute_matches_cpu_lattices_edges_hdr_and_tail ... ok
+RGBE segmented cancellation: checkpoints=18; every retry exact; CPU/GPU final zero
+test segmented_input_cancellation_at_every_checkpoint_releases_and_retries ... ok
+
+test result: ok. 6 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 4.63s
+
+     Running tests/rgbe_view_readback.rs (target/debug/deps/rgbe_view_readback-e71f7d8542d54b99)
+
+running 2 tests
+RGBE view adapter: Metal Apple M4 Max
+RGBE tiling adapter: Metal Apple M4 Max
+test four_plane_color_edges_and_downscale_match_cpu ... ok
+test odd_crop_orientations_and_tile_seams_preserve_rgbe_frame ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 5.65s
+

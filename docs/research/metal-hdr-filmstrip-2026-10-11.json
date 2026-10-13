@@ -1,0 +1,16 @@
+{
+  "status": "passed",
+  "terminal_exit_code": 0,
+  "backend": "Metal Apple M4 Max",
+  "passed": 3,
+  "new_check": "hdr_filmstrip_thumbnail_is_linear_and_releases_resources",
+  "scope": "Actual FilmstripRenderer targets RGBA16Float. Opaque sRGB byte 128 is sampled into linear light and read as binary16; RGB within 0.0005 of independent IEC sRGB transfer formula, alpha exactly 1. Texture and upload credits zero after removal/drop; validation scope empty.",
+  "limits": [
+    "One opaque gray thumbnail interior pixel",
+    "No full viewer UI or physical HDR panel color measurement",
+    "HUD colors, blending with nonopaque thumbnails and all layout pixels not qualified by this check"
+  ],
+  "log_sha256": "c9217fdd7d492f88672d2247cfa992c21371afa005c74fa74073c111af9f6450",
+  "source_sha256": "61ccb7463b0615715f418adb3c6d3edc75ae5d226ed5662455379ad0cedeff97",
+  "log": "   Compiling rrrah-gpu v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-gpu)\n    Finished `test` profile [optimized + debuginfo] target(s) in 6.67s\n     Running tests/filmstrip_readback.rs (/tmp/rrrah-required-corpus-target/debug/deps/filmstrip_readback-846abeeec2a0d920)\n\nrunning 3 tests\nHDR filmstrip adapter: AdapterInfo { name: \"Apple M4 Max\", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: \"\", driver: \"\", driver_info: \"\", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }\nthumbnail residency adapter: AdapterInfo { name: \"Apple M4 Max\", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: \"\", driver: \"\", driver_info: \"\", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }\nfilmstrip queue adapter: AdapterInfo { name: \"Apple M4 Max\", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: \"\", driver: \"\", driver_info: \"\", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }\ntest thumbnail_queue_refusal_validation_slot_reuse_and_completion ... ok\ntest thumbnail_texture_credit_competes_with_raster_and_releases_on_slot_removal ... ok\ntest hdr_filmstrip_thumbnail_is_linear_and_releases_resources ... ok\n\ntest result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 5.57s\n\n"
+}

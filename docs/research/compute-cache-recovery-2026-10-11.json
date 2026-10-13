@@ -1,0 +1,30 @@
+{
+  "scope": "Metal compute to RAM lease to swap and exact SDR/HDR recovery at164x50 and4000x3000",
+  "checks": [
+    "full CPU budget refusal",
+    "cancellation observes nonzero admitted restore reservation",
+    "credits zero after cancellation",
+    "entry retry succeeds with all component bits and SDR/HDR frames exact",
+    "one write/read zero errors final credits zero"
+  ],
+  "passed": 2,
+  "failed": 0,
+  "ignored": 0,
+  "validator_negative_cases": 4,
+  "logs": {
+    "initial-assertion": {
+      "path": "docs/research/compute-cache-recovery-2026-10-11-initial-assertion.log",
+      "sha256": "46e14fdb4d57bbdf2777fe459560034cb1016caa3dcbbcc0573228f2881564e7"
+    },
+    "passed": {
+      "path": "docs/research/compute-cache-recovery-2026-10-11-passed.log",
+      "sha256": "d6a18760fec998a77d67600089b94ed5d36e439c9827a3f5f3891a7cd303a523"
+    }
+  },
+  "source_sha256": {
+    "crates/rrrah-app/tests/compute_cache_swap.rs": "a2a212a1f5177827d6bfbb5b821c4a5f43c738b6cf8ccac48475fd7728095fc9",
+    "scripts/qualify-viewer-storage-gpu.py": "ba6a1d68ad8ce9a70a784654bbb14d5ff263d861a498df179f6f6b457f598df6"
+  },
+  "initial_test_correction": "Cancellation API returns Ok(None); initial assertion incorrectly expected Err. Corrected without production changes.",
+  "limitations": "Authored signed HDR data, local disk and offscreen Metal, not physical HDR or OS pressure."
+}

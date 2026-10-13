@@ -1,0 +1,50 @@
+{
+  "dimensions": [
+    4000,
+    3000
+  ],
+  "format": "RGBA16 / full-range encoded Display P3",
+  "statistics": {
+    "scalar": {
+      "samples": 20,
+      "median_ms": 306.764521,
+      "p95_ms": 329.90166700000003,
+      "max_ms": 361.0925
+    },
+    "table": {
+      "samples": 20,
+      "median_ms": 64.70127049999999,
+      "p95_ms": 75.39233300000001,
+      "max_ms": 75.71300000000001
+    }
+  },
+  "median_ratio_scalar_over_table": 4.7412441615037535,
+  "order": "12 ABBA blocks; first2 warmup discarded;20 samples each path",
+  "scope": "Current scalar versus optional LUT P3 RGB16 CPU conversion; ABBA; source/hash/drop outside timer; no file IO or GPU",
+  "output_blake3": "7eab818d7064d9f53c0291e75b062ebee518f56c4e3a05d75209d234a187c603",
+  "memory": {
+    "output_bytes": 192000000,
+    "optional_table_bytes": 262144,
+    "final_managed_bytes": 0,
+    "source_outside_managed_budget": true
+  },
+  "verification": [
+    "121 core passed,2 ignored",
+    "All65536 integer code values per channel agree with fixed independent color reference within2e-6; scalar/table/fallback float bits equal",
+    "Admitted table cancellation releases credit; same-root retry succeeds; one-byte-short scratch budget selects scalar without failing conversion",
+    "Actual Metal collection112files/141selections/282native-prepared cases exact, root/queue0; evidence verifier8tests pass"
+  ],
+  "limitations": [
+    "Current API path comparison selected by scratch budget, not historical before-after build",
+    "Dev optimized+debug build, warm CPU; no file decode/GPU/display latency or RSS claim",
+    "No new format, producer or physical HDR/NVIDIA qualification"
+  ],
+  "sha256": {
+    "docs/research/p3-table-paired-2026-10-13.json": "37b2ab686990676377d0225fb7180cb57c67647053ce11847bafa8591302e07a",
+    "docs/research/p3-table-core-memory-final-2026-10-13.log": "af0f5ae6346a22ae36eeacbb0cc93ec3143a1068bb1c61aea506e560cd4eb480",
+    "docs/research/p3-table-metal-2026-10-13.log": "14ef6d71d17e3703a69f4e56c8a1bc3f2b739c21c38ccef50fb291bd2afc1c39",
+    "crates/rrrah-core/src/raster.rs": "d5d06ba782ab9383533c8f2b1ab4232dc3a248c5b70b22fe119b6f27c0d69e1a",
+    "crates/rrrah-decode/examples/p3_convert_bench.rs": "554d384e5731a6533d5e342e54543b3cf7e1b3438a8bdea0567a821bea5af0ec",
+    "target/debug/examples/p3_convert_bench": "60dcfd40cd39a163043d9d726de6ab2cad2591d4d6c264b168aa3637476cca3c"
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "status": "passed",
+  "change": "Deferred-thumbnail source validation runs on one background worker; UI polls without opening the file. One active and one queued check, replacement fails closed, dropped handles cancel publication, original retry expiry remains, validation jobs retain no pixel buffers.",
+  "suites": [
+    {
+      "suite": "ordinary-viewer",
+      "passed": 177,
+      "failed": 0,
+      "ignored": 32,
+      "log": "/tmp/rrrah-viewer-async-thumbnail-regression-20261011.log",
+      "log_sha256": "cd8451d95ea8398f6ef28b57fa5995cf79c16c665bff98f76af6ec36a8934b5b"
+    },
+    {
+      "suite": "source-validation",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0,
+      "log": "/tmp/rrrah-source-validation-worker-final-20261011.log",
+      "log_sha256": "699c6897ec859a6797b9d1e371fca9eb081ff250c6bbef84119b7da6cf404ed6"
+    },
+    {
+      "suite": "thumbnail-retry",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 1,
+      "log": "/tmp/rrrah-thumbnail-async-validation-20261011.log",
+      "log_sha256": "c57d1933a70bd93da9835ef3dbbb2945b42eb164069aff5ca462fd602a03e6a8"
+    },
+    {
+      "suite": "actual-metal-callback",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "log": "/tmp/rrrah-thumbnail-async-metal-callback-20261011.log",
+      "log_sha256": "26f80a5660e0b5dca3f21012049bc681a5ff7d6aa877e7ceff8fa01f5dac8041"
+    }
+  ],
+  "counts_note": "Focused source/retry tests are included in the ordinary viewer count, not additional unique tests. Actual Metal callback was explicitly run after its ordinary ignored result.",
+  "binary": "/tmp/rrrah-required-corpus-target/debug/deps/rrrah-14b2e2b2b9670d3d",
+  "binary_sha256": "57cc2cd9a10b759b708365be249b5aa3bc33326835e628ca3d19c00953ca3f83",
+  "source_sha256": {
+    "crates/rrrah-app/src/main.rs": "cc19048d57bd7a1c59cf98061c876d7d569f4d5efaa5deddda572179c4828c55",
+    "crates/rrrah-app/src/source_validation.rs": "9ab27350326f054c4ba09fc0136824b5efdcbab35bd8715f4e62afcfc7a1e387"
+  },
+  "limitations": [
+    "Blocked source read is controlled by test channels; no physical slow disk qualification.",
+    "GPU callback test checks resource release, not physical HDR color.",
+    "No post-change native-window observation.",
+    "Same-selection foreground duplicate validation and folder-refresh thumbnail cache invalidation still fingerprint on the submitting/UI thread."
+  ]
+}

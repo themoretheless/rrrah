@@ -1,0 +1,176 @@
+{
+  "source_url": "https://raw.pixls.us/getfile.php/562/nice/Mamiya%20-%20ZD.MEF",
+  "source_path": "tests/fixtures/data/metal-recovery/Mamiya-ZD.MEF",
+  "source_sha256": "bcd63507c3c4cc3ea1bad2945e3f88cb4677a1a3c762e1acc38df4445714eb7c",
+  "oracle_path": "tests/fixtures/data/metal-recovery/Mamiya-ZD-oracle.u16le",
+  "oracle_sha256": "3daa5dcb996733310dc06971f75066c74ded92d2f645cc25fc61878dd574eb1b",
+  "oracle_metadata": {
+    "libraw_version": "0.22.2-Release",
+    "processing_stage": "unpack",
+    "make": "Mamiya",
+    "model": "ZD",
+    "width": 4016,
+    "height": 5344,
+    "orientation_flip": 6,
+    "crop": [
+      0,
+      0,
+      4016,
+      5344
+    ],
+    "wb": [
+      0,
+      1,
+      0,
+      0
+    ],
+    "black": 0,
+    "cblack": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "white": 4095,
+    "cfa": [
+      "R",
+      "G",
+      "G",
+      "B"
+    ],
+    "cfa_indices": [
+      0,
+      1,
+      3,
+      2
+    ],
+    "xyz_to_camera": [
+      [
+        0.7645000219,
+        0.2578999996,
+        -0.1362999976
+      ],
+      [
+        -0.868900001,
+        1.671700001,
+        0.2014999986
+      ],
+      [
+        -0.3711999953,
+        0.5940999985,
+        0.5960999727
+      ],
+      [
+        0,
+        0,
+        0
+      ]
+    ],
+    "camera_to_rgb": [
+      [
+        2.287914276,
+        -1.533669114,
+        0.2457549125
+      ],
+      [
+        -0.01535167731,
+        1.333883166,
+        -0.3185315132
+      ],
+      [
+        0.07452435046,
+        -0.9362688661,
+        1.861744523
+      ]
+    ],
+    "camera_to_rgb4": [
+      [
+        2.287914276,
+        -1.533669114,
+        0.2457549125,
+        0
+      ],
+      [
+        -0.01535167731,
+        1.333883166,
+        -0.3185315132,
+        0
+      ],
+      [
+        0.07452435046,
+        -0.9362688661,
+        1.861744523,
+        0
+      ]
+    ],
+    "file_color_matrices": [
+      {
+        "parsedfields": 0,
+        "illuminant": 65535,
+        "xyz_to_camera": [
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "parsedfields": 0,
+        "illuminant": 65535,
+        "xyz_to_camera": [
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ]
+        ]
+      }
+    ]
+  },
+  "tests": {
+    "passed": 9,
+    "failed": 0,
+    "ignored": 0
+  },
+  "log_sha256": "d93b039e9087902c88782871dd75d839ac79be313a175c641a9c1dc80d45157b",
+  "production_decoder": "native Rust; LibRaw used only to regenerate independent test oracle",
+  "limitations": [
+    "WB remains unavailable; sensor qualification does not establish camera color or viewer support",
+    "Initial broad run failed one test because oracle environment was missing; after generating and supplying oracle all nine passed",
+    "ExifTool unavailable on current host; no fresh MakerNote/WB extraction claimed"
+  ],
+  "bay_layout_primary_reference": "https://www.inweb.ch/foto/rawformat.html"
+}

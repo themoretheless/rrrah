@@ -1,0 +1,32 @@
+{
+  "retained_change": "Optional trace additionally reports no-owner sampling work; no sampling or production budget behavior changed",
+  "pixel": [
+    138,
+    36
+  ],
+  "baseline": {
+    "owner_work": 1441000,
+    "sample_and_coordinates_work": 1709074,
+    "no_owner_sample_work": 1202014,
+    "fragments": 84760
+  },
+  "rejected_experiment": {
+    "name": "Certified outside-mesh background shortcut",
+    "fragments": 85082,
+    "completed": false,
+    "prior_five_probes_unchanged": true,
+    "reason": "Only 0.38 percent more fragments; most no-owner work remains; shortcut API and caller edits removed"
+  },
+  "final_suite": {
+    "passed": 200,
+    "ignored": 12,
+    "failed": 0
+  },
+  "next_action": "Measure cost by native source event to identify axial/function versus mesh lookup cost",
+  "sha256": {
+    "vendor/hayro/src/native_spatial.rs": "16ea0ccc3ff62dd2e6fd5e4427034ee90b382fbd97aa5e59489c01b8fe61d9c7",
+    "docs/research/ai-no-owner-cost-original-2026-10-13.log": "8d690c864ba44d54088b2c2d25cdd1ead5b908d09a3243368fa52cda0b2de5c2",
+    "docs/research/ai-proven-outside-original-2026-10-13.log": "cda4f40abe2bbd62df99870b9126f9ad835ead063c723dac8fd443c3edc0425c",
+    "docs/research/ai-no-owner-final-suite-2026-10-13.log": "1e1e50e1e2c912b073e6231ed8d8e6da16bfdb5a380018ebd140a1a522dac84a"
+  }
+}

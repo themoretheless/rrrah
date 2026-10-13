@@ -1,0 +1,28 @@
+{
+  "status": "failed_unified_native_model_comparison_diagnostic",
+  "pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/unified-model-compare-qualified-20261010": "2a97c1c93d243d03cb42114b86cf373847961ebefed495a2195a55084f6e1ea2",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-model-compare-snapshot-20261010.json": "ce2332977600a79172c064e9cbc5e9da0459178fc6d2f14340b97b869f395640",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors": "59e55bf0ecd047db9c513672d121a3ea677529ad448bdc3a359e92862c74ddd7",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/209401.jpg": "707f365de5031172ac067f8a156fd0972e5995e59a0d01326d21d4a50ae22704",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/209400.jpg": "d9caf92ca47a9047154bd987ee240832b1cc2a01b73fd83144043f181c127777",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201400.jpg": "0568e043468d6a40e8839e603d0e8da72220e33e77632a64220dd8ffd5234a0d",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/209000.jpg": "486eaeb0a1342cba05b032406c1e04011a1b0a97d74e8e7f95558e7ee0b3e09a",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-unified-model-compare-20261010.py": "885c1046970829181e162756a7dce106c1746274844f156769dc65212ef676bf",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-loftr-native-20261010-runtime-pins.json": "8daa92d3ed2c84278338c53eedffed1fcdc272bf8ee7a419397cd7f098a6783a",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-model-compare-native-build-20261010.log": "38a6e12e9be0855c1a2b421cb75f20a7298ce09216e8823f1f91f8a248a4d26a"
+  },
+  "results": [
+    {
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/209400.jpg",
+      "max_side": 320,
+      "expected_positive": true,
+      "returncode": -6,
+      "stdout": "",
+      "stderr": "dyld[77152]: Library not loaded: @rpath/libtorch_cpu.dylib\n  Referenced from: <9349B852-5EEC-36C6-B7D2-AEE7125E86B2> /Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/unified-model-compare-qualified-20261010\n  Reason: no LC_RPATH's found\ntime: command terminated abnormally\n        1.67 real         0.00 user         0.00 sys\n              770048  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n                 173  page reclaims\n                   0  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                  12  voluntary context switches\n                  32  involuntary context switches\n            10214077  instructions retired\n             7050259  cycles elapsed\n              295032  peak memory footprint\n",
+      "elapsed_seconds": 1.686824375006836
+    }
+  ],
+  "scope": "Real LoFTR through unified native library comparison: 2 positive/4 foreign variants.\n\nAll outcomes retained. Does not qualify total inference tensor/RSS admission,\ninterrupting blocking forward, broad precision/recall or collection integration.\n",
+  "error": ""
+}

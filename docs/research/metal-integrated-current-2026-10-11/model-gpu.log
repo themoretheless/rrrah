@@ -1,0 +1,54 @@
+warning: function `fallible_zeroed_bytes` is never used
+   --> crates/rrrah-cache/src/mosaic_payload_v1.rs:728:4
+    |
+728 | fn fallible_zeroed_bytes(len: usize) -> Result<Box<[u8]>, MosaicPayloadError> {
+    |    ^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-cache` (lib) generated 1 warning
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+warning: methods `submit` and `submit_image` are never used
+    --> crates/rrrah-app/src/main.rs:1379:8
+     |
+1087 | impl ForegroundLoader {
+     | --------------------- methods in this implementation
+...
+1379 |     fn submit(&self, path: PathBuf) -> Result<u64> {
+     |        ^^^^^^
+...
+1382 |     fn submit_image(&self, path: PathBuf, image_index: usize) -> Result<u64> {
+     |        ^^^^^^^^^^^^
+     |
+     = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: associated items `install_with_cancel`, `refresh`, and `refresh_with_cancel` are never used
+   --> crates/rrrah-app/src/raster_viewport.rs:396:19
+    |
+ 26 | impl ResidentSource {
+    | ------------------- associated items in this implementation
+...
+396 |     pub(crate) fn install_with_cancel<F: FnMut() -> bool>(
+    |                   ^^^^^^^^^^^^^^^^^^^
+...
+483 |     pub(crate) fn refresh(
+    |                   ^^^^^^^
+...
+503 |     pub(crate) fn refresh_with_cancel<F: FnMut() -> bool>(
+    |                   ^^^^^^^^^^^^^^^^^^^
+
+warning: `rrrah` (bin "rrrah") generated 2 warnings
+    Finished `test` profile [optimized + debuginfo] target(s) in 1.36s
+     Running tests/model_readback.rs (target/debug/deps/model_readback-e15397fa4b601d6a)
+
+running 7 tests
+test repeated_model_swap_pressure_and_cancellation_preserve_metal_frames ... ignored, manual repeated model swap pressure and Metal frame qualification
+test model_swap::tests::malformed_all_model_codecs_refuse_geometry_without_large_reservations ... ok
+test decoded_obj_notch_survives_common_model_and_gpu_upload ... ok
+test off_binary_attributes_float64_and_concave_surface_reach_gpu ... ok
+test managed_model_decoding_preserves_gpu_pixels_and_releases_cpu_credit ... ok
+test native_float64_ply_reaches_gpu_before_precision_reduction ... ok
+test real_model_swap_preserves_gpu_pixels_and_releases_restored_geometry ... ok
+
+test result: ok. 6 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.29s
+

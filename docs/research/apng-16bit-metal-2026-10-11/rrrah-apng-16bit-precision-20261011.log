@@ -1,0 +1,25 @@
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+    Finished `test` profile [optimized + debuginfo] target(s) in 2m 36s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_decode-3d841f18ff85d05c)
+
+running 4 tests
+test apng::tests::truncation_crc_trailing_and_cancellation_are_explicit ... ok
+test apng::tests::sixteen_bit_selected_frames_keep_low_bits_and_alpha ... FAILED
+test apng::tests::canvas_credit_follows_last_output_reference_and_refusal_releases_scratch ... ok
+test apng::tests::linear_light_composition_timing_and_loop_oracles ... ok
+
+failures:
+
+---- apng::tests::sixteen_bit_selected_frames_keep_low_bits_and_alpha stdout ----
+
+thread 'apng::tests::sixteen_bit_selected_frames_keep_low_bits_and_alpha' (16345721) panicked at crates/rrrah-decode/src/apng.rs:366:49:
+called `Result::unwrap()` on an `Err` value: InvalidApng("only 8-bit animation samples are qualified")
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    apng::tests::sixteen_bit_selected_frames_keep_low_bits_and_alpha
+
+test result: FAILED. 3 passed; 1 failed; 0 ignored; 0 measured; 1072 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p rrrah-decode --lib`

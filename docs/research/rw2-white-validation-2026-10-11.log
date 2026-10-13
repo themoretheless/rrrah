@@ -1,0 +1,24 @@
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+    Finished `test` profile [optimized + debuginfo] target(s) in 41.45s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_decode-3d841f18ff85d05c)
+
+running 16 tests
+test camtiff::rw2::tests::rejects_non_rw2_signature ... ok
+test camtiff::rw2::tests::selects_the_directory_with_sensor_tags ... ok
+test camtiff::rw2::tests::decodes_panasonic_packed_constant_rows ... ok
+test camtiff::rw2::tests::decodes_unpacked_16_bit_strips ... ok
+test camtiff::rw2::tests::decodes_panasonic_packed_delta_paths ... ok
+test camtiff::rw2::tests::rejects_unsupported_compression ... ok
+test camtiff::rw2::tests::rejects_unsupported_uncompressed_bit_depth ... ok
+test camtiff::rw2::tests::rejects_multi_strip_lossless_jpeg ... ok
+test camtiff::rw2::tests::parse_container_recognizes_iiu_signature ... ok
+test camtiff::rw2::tests::honours_cancellation ... ok
+test camtiff::rw2::tests::rejects_missing_cfa ... ok
+test camtiff::rw2::tests::legacy_panasonic_left_aligned_samples_and_black_level ... ok
+test camtiff::rw2::tests::decodes_lossless_jpeg_strip ... ok
+test camtiff::rw2::tests::legacy_fz8_packed_pairs_are_bounded_and_cancellable ... ok
+test camtiff::rw2::tests::reads_panasonic_metadata_tags ... ok
+test camtiff::rw2::tests::keeps_rgb_linearity_limits_and_rejects_partial_or_invalid_limits ... ok
+
+test result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 1053 filtered out; finished in 0.00s
+

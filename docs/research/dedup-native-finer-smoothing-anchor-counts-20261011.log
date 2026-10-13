@@ -1,0 +1,27 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+    Finished `test` profile [optimized + debuginfo] target(s) in 14.43s
+     Running tests/native_anchor_recovery.rs (target/debug/deps/native_anchor_recovery-7a77685a28cae590)
+
+running 1 test
+base.png radii=[2, 0] candidates=647 anchors=Some(AnchorRankEvidence { forward_anchors: 348, reverse_anchors: 344, forward: RankRegionEvidence { sites: 8700, valid_sites: 7803, informative_pairs: 45384, agreeing_pairs: 45384, pixel_reads: 2356580 }, reverse: RankRegionEvidence { sites: 8600, valid_sites: 7879, informative_pairs: 45721, agreeing_pairs: 45721, pixel_reads: 2329200 }, supported: true })
+base.png radii=[0, 2] candidates=648 anchors=Some(AnchorRankEvidence { forward_anchors: 345, reverse_anchors: 348, forward: RankRegionEvidence { sites: 8625, valid_sites: 7850, informative_pairs: 45580, agreeing_pairs: 45580, pixel_reads: 2336045 }, reverse: RankRegionEvidence { sites: 8700, valid_sites: 7818, informative_pairs: 45459, agreeing_pairs: 45459, pixel_reads: 2356580 }, supported: true })
+base.png radii=[1, 0] candidates=647 anchors=Some(AnchorRankEvidence { forward_anchors: 348, reverse_anchors: 354, forward: RankRegionEvidence { sites: 8700, valid_sites: 7945, informative_pairs: 45831, agreeing_pairs: 45831, pixel_reads: 2356580 }, reverse: RankRegionEvidence { sites: 8850, valid_sites: 7998, informative_pairs: 46206, agreeing_pairs: 46206, pixel_reads: 2397640 }, supported: true })
+base.png radii=[0, 0] candidates=650 anchors=Some(AnchorRankEvidence { forward_anchors: 349, reverse_anchors: 349, forward: RankRegionEvidence { sites: 8725, valid_sites: 7943, informative_pairs: 46232, agreeing_pairs: 46232, pixel_reads: 2363425 }, reverse: RankRegionEvidence { sites: 8725, valid_sites: 7943, informative_pairs: 46232, agreeing_pairs: 46232, pixel_reads: 2363425 }, supported: true })
+test measure_finer_asymmetric_native_recipe_anchor_counts ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 4.27s
+

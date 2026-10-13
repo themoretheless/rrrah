@@ -1,0 +1,53 @@
+{
+  "repository": "abonander/img_hash",
+  "registry_index": 358,
+  "commit": "dbfb37f9251fea8f7efeabbb2267ddb1fcd21ca6",
+  "status": "full_pinned_source_review_default_units_docs_and_native_counterexamples",
+  "git_blobs": 13,
+  "text_files_read": 13,
+  "license": "MIT OR Apache-2.0, complete dual licenses and manifest read",
+  "source_manifest": "img-hash-full-source-20261012.json",
+  "unit_tests_passed": 3,
+  "vacuous_unit_tests": [
+    "dct::test_transpose"
+  ],
+  "doc_tests_passed": 3,
+  "doc_compile_only": 1,
+  "controls": {
+    "unequal_length_distance": 0,
+    "fractional_hash": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "transparent_mean_distance": 32,
+    "transparent_block_distance": 0,
+    "black_white_mean_distance": 0
+  },
+  "findings": [
+    "Blockhash fractional path uses x+1.%block_width/y+1.%block_height;9x9single-pixel control yields[1,0,0,0,0,0,0,0]instead of exact area-overlap[3,3,0,0,0,0,0,0].",
+    "Variable-length ImageHash distance zips common prefix;[0]versus[0,255]returns0. Docs mark different hash-size comparisons meaningless; require explicit schema/length validation rather than equality inference.",
+    "Mean/grayscale ignores hidden alpha: two fully transparent buffers differ32bits. Blockhash explicitly maps fully transparent pixels towhite and returns0for this control; partial alpha stillneedsqualification.",
+    "Opaque black/white Mean hashes collide, confirming need for full pixel/byte evidence.",
+    "Unchecked width*height and rounding/preprocessing allocation, pixel subtraction in u8 and old/nightly/benchmark paths require separate admission/qualification; not copied."
+  ],
+  "adoption": "No upstream source copied. Treat algorithm features as requirements; keep fixed-bit schema, checked sizes/resources, canonical alpha, full confirmation and owner/source/weight guards.",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/img-hash-full-source-20261012.json": "5d4f70e963d9fee80487165947ab2295a6f14745e5b7852a12f419483848f917",
+    "/Users/themoretheless/.codex/tmp/rrrah-img-hash-upstream-all-tests-20261012.log": "6e6a120a03c7d5e9ae58bb88f6723eba2e134e437fc0c813124612ccd8bce00f",
+    "/Users/themoretheless/.codex/tmp/rrrah-img-hash-controls-run-20261012.log": "2a7e3d5b3e769a40757d07b02004d73e109411d25bcd899059ca99ae357c25e6",
+    "/Users/themoretheless/.codex/tmp/rrrah-img-hash-controls-executable-20261012": "3c30c1a8492125974b782ba2f628bead80d1755c17eb9ba2b6c87abb4e5df816",
+    "/Users/themoretheless/.codex/tmp/rrrah-img-hash-original-units-executable-20261012": "ad69805280a1f08f4a0c55ff3112a3766de1d51acf6fe39216399e097264c710",
+    "/Users/themoretheless/.codex/tmp/rrrah-img-hash-full-source-20261012/Cargo.lock": "d44a9920ce0ff2fe6afd5813a05bff542d8683a69ee7b90f9b07534e64b9e93d",
+    "/Users/themoretheless/.codex/tmp/rrrah-img-hash-controls-harness-20261012/Cargo.lock": "b81f2b228c8e2a2d1d1eabb9bf95d6c0960e4fecd14cb0d09d8f02d880101d4c",
+    "/Users/themoretheless/.codex/tmp/rrrah-img-hash-controls-harness-20261012/Cargo.toml": "de675f4e1f5b4ace4b0a17b46f25163811524c9336c09c9df6c3c27175f6e292",
+    "/Users/themoretheless/.codex/tmp/rrrah-img-hash-controls-harness-20261012/src/main.rs": "c59e3584923d1d606f5336bdd1f1a3c7a8c04baf9fc7ecd69d986d4eba2e8839",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/img-hash-controls-20261012.rs": "c59e3584923d1d606f5336bdd1f1a3c7a8c04baf9fc7ecd69d986d4eba2e8839"
+  },
+  "scope": "Complete13blob pinned tree and all text/license/config/benchmark/algorithm/test source read; unchanged default original unit/binary/doc execution, derived Cargo locks and separately built control executable. No nightly/bench/performance/allformat/platform/resource/precision or full500-source completion."
+}

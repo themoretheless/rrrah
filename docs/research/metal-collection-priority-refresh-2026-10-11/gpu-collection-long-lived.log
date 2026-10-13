@@ -1,0 +1,65 @@
+warning: function `fallible_zeroed_bytes` is never used
+   --> crates/rrrah-cache/src/mosaic_payload_v1.rs:728:4
+    |
+728 | fn fallible_zeroed_bytes(len: usize) -> Result<Box<[u8]>, MosaicPayloadError> {
+    |    ^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-cache` (lib) generated 1 warning
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+warning: methods `submit` and `submit_image` are never used
+    --> crates/rrrah-app/src/main.rs:1389:8
+     |
+1087 | impl ForegroundLoader {
+     | --------------------- methods in this implementation
+...
+1389 |     fn submit(&self, path: PathBuf) -> Result<u64> {
+     |        ^^^^^^
+...
+1392 |     fn submit_image(&self, path: PathBuf, image_index: usize) -> Result<u64> {
+     |        ^^^^^^^^^^^^
+     |
+     = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: associated items `install_with_cancel`, `refresh`, and `refresh_with_cancel` are never used
+   --> crates/rrrah-app/src/raster_viewport.rs:396:19
+    |
+ 26 | impl ResidentSource {
+    | ------------------- associated items in this implementation
+...
+396 |     pub(crate) fn install_with_cancel<F: FnMut() -> bool>(
+    |                   ^^^^^^^^^^^^^^^^^^^
+...
+483 |     pub(crate) fn refresh(
+    |                   ^^^^^^^
+...
+503 |     pub(crate) fn refresh_with_cancel<F: FnMut() -> bool>(
+    |                   ^^^^^^^^^^^^^^^^^^^
+
+warning: `rrrah` (bin "rrrah") generated 2 warnings
+    Finished `test` profile [optimized + debuginfo] target(s) in 28.05s
+     Running tests/ttl_swap_metal.rs (target/debug/deps/ttl_swap_metal-585a6570bc9d74a6)
+
+running 1 test
+long-lived collection adapter: Metal Apple M4 Max; duration=120s; frames=8; payload=192000000; hdr_output=[63, 65]
+long-lived collection cycles=8; elapsed=8.553s; root=0; queue=0; reads=8; writes=8
+long-lived collection cycles=16; elapsed=15.440s; root=0; queue=0; reads=16; writes=8
+long-lived collection cycles=24; elapsed=19.459s; root=0; queue=0; reads=24; writes=8
+long-lived collection cycles=32; elapsed=22.384s; root=0; queue=0; reads=32; writes=8
+long-lived collection cycles=40; elapsed=28.339s; root=0; queue=0; reads=40; writes=8
+long-lived collection cycles=48; elapsed=40.596s; root=0; queue=0; reads=48; writes=8
+test long_lived_large_collection_cache_preserves_swap_and_metal_frames has been running for over 60 seconds
+long-lived collection cycles=56; elapsed=56.654s; root=0; queue=0; reads=56; writes=8
+long-lived collection cycles=64; elapsed=68.871s; root=0; queue=0; reads=64; writes=8
+long-lived collection cycles=72; elapsed=81.572s; root=0; queue=0; reads=72; writes=8
+long-lived collection cycles=80; elapsed=91.733s; root=0; queue=0; reads=80; writes=8
+long-lived collection cycles=88; elapsed=96.488s; root=0; queue=0; reads=88; writes=8
+long-lived collection cycles=96; elapsed=101.922s; root=0; queue=0; reads=96; writes=8
+long-lived collection cycles=104; elapsed=111.686s; root=0; queue=0; reads=104; writes=8
+long-lived collection complete: cycles=110; elapsed=120.230s; reads=110; writes=8; root=0; queue=0
+parallel collection: accelerated=110; mid_batch_cancelled=110; exact_sdr_full_frames=110; exact_hdr_half_frames=110; hdr_output=[63, 65]; root=0; queue=0
+test long_lived_large_collection_cache_preserves_swap_and_metal_frames ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 6 filtered out; finished in 127.68s
+

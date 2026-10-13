@@ -1,3 +1,6 @@
+override SINGLE_LAYER: bool = false;
+override RESIDENT_REGION: bool = false;
+
 struct Parameters {
     viewport: vec2<f32>,
     image_size: vec2<f32>,
@@ -8,8 +11,9 @@ struct Parameters {
     background: vec4<f32>,
     raw_development: vec4<u32>,
     curve: array<vec4<f32>, 256>,
+    resident_rect: vec4<u32>,
 };
-@group(0) @binding(0) var image: texture_2d<f32>;
+@group(0) @binding(0) var image: texture_2d_array<f32>;
 @group(0) @binding(1) var<uniform> p: Parameters;
 
 @vertex
@@ -20,7 +24,20 @@ fn vs_main(@builtin(vertex_index) index: u32) -> @builtin(position) vec4<f32> {
 
 fn premultiplied_at(coordinate: vec2<i32>) -> vec4<f32> {
     let upper = vec2<i32>(p.image_size) - vec2<i32>(1);
-    let color = textureLoad(image, clamp(coordinate, vec2<i32>(0), upper), 0);
+    var global = clamp(coordinate, vec2<i32>(0), upper);
+    if RESIDENT_REGION { global -= vec2<i32>(p.resident_rect.xy); }
+    // Most images occupy one layer: bypass integer division/remainder there.
+    if SINGLE_LAYER {
+        let color = textureLoad(image, global, 0, 0);
+        return vec4<f32>(color.rgb * color.a, color.a);
+    }
+    let tile_size = vec2<i32>(textureDimensions(image, 0));
+    let tile = global / tile_size;
+    var resident_width = i32(p.image_size.x);
+    if RESIDENT_REGION { resident_width = i32(p.resident_rect.z); }
+    let columns = (resident_width + tile_size.x - 1) / tile_size.x;
+    let layer = tile.y * columns + tile.x;
+    let color = textureLoad(image, global % tile_size, layer, 0);
     return vec4<f32>(color.rgb * color.a, color.a);
 }
 
@@ -95,6 +112,14 @@ fn fs_main(@builtin(position) position: vec4<f32>) -> @location(0) vec4<f32> {
     let centered = location - vec2<f32>(0.5);
     let base = vec2<i32>(floor(centered));
     let weight = fract(centered);
+    if RESIDENT_REGION {
+        let upper = vec2<i32>(p.image_size) - vec2<i32>(1);
+        let first = clamp(base, vec2<i32>(0), upper);
+        let last = clamp(base + vec2<i32>(1), vec2<i32>(0), upper);
+        let origin = vec2<i32>(p.resident_rect.xy);
+        let end = origin + vec2<i32>(p.resident_rect.zw);
+        if any(first < origin) || any(last >= end) { return p.background; }
+    }
     // Premultiply before interpolation, so invisible RGB cannot make fringes.
     let top = mix(premultiplied_at(base), premultiplied_at(base+vec2<i32>(1,0)), weight.x);
     let bottom = mix(premultiplied_at(base+vec2<i32>(0,1)), premultiplied_at(base+vec2<i32>(1,1)), weight.x);

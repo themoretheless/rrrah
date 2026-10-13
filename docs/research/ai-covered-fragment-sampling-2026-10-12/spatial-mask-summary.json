@@ -1,0 +1,36 @@
+{
+  "implementation": "Spatial SetMask/ClearMask commands; source sampled percell with explicit precharged work and post-call cancellation; parent mask captured for one group exit, child reset, parent restored; constant and sampled paints use native apply_prepared_masked",
+  "scope": "Per-cell mask supplied by alpha or separately verified luminosity sampler; native PDF alpha source and original transfer control connected; full mask scene routing/luminosity transforms not qualified",
+  "tests": {
+    "ordinary_passed": 157,
+    "ignored": 11,
+    "native_pdf_control_passed": 1,
+    "retained_manual_edge_control_passed": 1,
+    "coverage": [
+      "parent mask applies once to17opaque group paints",
+      "child mask clear does not remove captured parent mask",
+      "parent restored for following paint",
+      "affine triangular mask analytic integral",
+      "each observed cancellation/admission failure",
+      "invalid NaN/Inf/outofrange masks",
+      "source refusal",
+      "work refusal before source invocation",
+      "postmask cancellation",
+      "final managedcredit0"
+    ]
+  },
+  "native_pdf_control": {
+    "source_alpha": 0.5,
+    "original_transfer_output": 0.25,
+    "quarterpixel_group_alpha": 0.0625
+  },
+  "bounds": "Existing32groupdepth/4096commands/4095regions; mask samplecost1..1M; explicit polygon/command budgets; no new image buffer",
+  "remaining": "Raster texel boundaries/sampling, full interpreter event routing, nonlinear integration, cross-space groups, full VectorApple/production qualification and broader100format/GPU/HDR/NVIDIA objective incomplete",
+  "hashes": {
+    "vendor/hayro/src/native_spatial.rs": "2ea83fd18a139b7d092109d8b1f211338f6a0a3a3409f0764df3129cd3bd6d01",
+    "vendor/hayro/src/knockout_interpreter.rs": "ecd6ac8199a88af0dae03a2b3c12fb7ce2bc49a98f0918ade801a9cb8fac65bb",
+    "docs/research/ai-covered-fragment-sampling-2026-10-12/spatial-mask-final-tests.log": "bb0ba75bd63f4092175d5ec52f47d4ef802d51bfa820d29d5dce94dee7b487aa",
+    "docs/research/ai-covered-fragment-sampling-2026-10-12/spatial-mask-native-pdf.log": "5308d19a5f7288c891b47e470f34b6d86640ae8481ca26c24cef767e503e0beb",
+    "docs/research/ai-covered-fragment-sampling-2026-10-12/spatial-mask-retained-edges.log": "4e08ecfda21b184355488afc270034a692220e39fefe56d9e5fcb3baf33d4255"
+  }
+}

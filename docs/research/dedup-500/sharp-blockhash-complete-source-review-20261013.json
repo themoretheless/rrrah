@@ -1,0 +1,40 @@
+{
+  "index": 483,
+  "repository": "cryptoquick/sharp-blockhash",
+  "commit": "3d0bfee9d116bf3a682ba97561dc6acfa06172f7",
+  "status": "complete_pinned_source_review_with_mocked_wrapper_controls",
+  "reviewed_text_files": [
+    ".gitignore",
+    "LICENSE",
+    "README.md",
+    "index.js",
+    "package.json",
+    "test/index.js"
+  ],
+  "fixture_inventory": {
+    "files": 17,
+    "role": "Downloaded, Git-blob verified; no pixel or perceptual quality evaluation."
+  },
+  "findings": [
+    "No-input constructor skips Sharp initialization, leaving options undefined.",
+    "Callback-only overload erases callback by assigning options=undefined first.",
+    "File-input callback path does not invoke callback.",
+    "Stream input with callback plus returned promise schedules two getHash calls.",
+    "Constructor blockhash options are reset to defaults.",
+    "Raw pipeline bytes are paired with metadataAsync dimensions; mock demonstrates unchanged wiring, not real Sharp resize semantics.",
+    "Upstream tests cover original/copy, solid, compressed and control; most attacked fixtures are not referenced in assertions.",
+    "No lockfile; old dependency ranges. MIT2016andyhu notice; no upstream code adopted."
+  ],
+  "controls": 6,
+  "real_sharp_executed": false,
+  "upstream_tests_executed": 0,
+  "harness_repair": "Initial assertion used host TypeError against VM TypeError and failed on realm prototype mismatch. Preserved first harness; corrected matcher inspects name/message. No upstream change.",
+  "decision": "reject-wrapper-lifecycle-adoption",
+  "remaining": "Real Sharp0.16.2/backend/environment, actual fixtures and perceptual quality not executed.",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/sharp-blockhash-commit-20261013.json": "e67139ed9397d53fd03ffeb7e00f921bd8d5d446db70257c3821b7735fa886bb",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/sharp-blockhash-full-source-20261013.json": "82adba76f797d6057e20cadb367fc8d886aab8a955cd0b6315b122955b7590f6",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/sharp-blockhash-controls-20261013.json": "175bf7a90c0fdfbccb40914551af72a8f1645eee501006a28a66299a8fa38de8",
+    "/Users/themoretheless/.codex/tmp/rrrah-sharp-blockhash-source-20261013-first-controls.cjs": "ef23df5e45969f3dfebcca948d57af25b264efe9f5ec540edc028c352c552af5"
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "scope": "Whole library regression after BAY row-image boundary API; core buffers/decode/cache/memory/swap",
+  "command": "cargo test --locked --offline --target-dir target -p rrrah-core -p rrrah-decode -p rrrah-cache -p rrrah-memory -p rrrah-swap --lib",
+  "exit_code": 0,
+  "suites": [
+    {
+      "package": "rrrah-cache",
+      "passed": 139,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "package": "rrrah-core",
+      "passed": 119,
+      "failed": 0,
+      "ignored": 2
+    },
+    {
+      "package": "rrrah-decode",
+      "passed": 1017,
+      "failed": 0,
+      "ignored": 72
+    },
+    {
+      "package": "rrrah-memory",
+      "passed": 40,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "package": "rrrah-swap",
+      "passed": 16,
+      "failed": 0,
+      "ignored": 1
+    }
+  ],
+  "totals": {
+    "passed": 1331,
+    "failed": 0,
+    "ignored": 76
+  },
+  "catalogue": {
+    "rows": 100,
+    "pending": [
+      "PTX",
+      "MEF",
+      "RWZ",
+      "BAY",
+      "CAP",
+      "AI"
+    ],
+    "qualification": "Implemented subsets do not establish complete variants/color/viewer qualification"
+  },
+  "documentation_correction": "MEF row now matches explicit UnqualifiedMef public refusal rather than historical DNG SubIFD refusal",
+  "limits": [
+    "Library unit suites only; ignored tests unverified",
+    "No integration/hardware/original-camera completion inferred",
+    "NVIDIA later per user; physical HDR and OS pressure remain open"
+  ],
+  "sha256": {
+    "docs/research/native-library-regression-2026-10-12/libraries.log": "1d98ff9583e677d4501efb39f6662345425da607fce40130956c741792fe10aa",
+    "crates/rrrah-decode/src/bay.rs": "0988f79edaf08f874e1eea4cabe2c853d217a6179723c3db38c3ccbcebcf10ce",
+    "crates/rrrah-decode/src/native_router.rs": "410b88aa4b99d2db8a9163e58ccd7cf186fae77ffeb6c7eb92225533c3e1f9df",
+    "docs/IMAGE_FORMATS_100.md": "302ec18938a2e99ad7a5aef792e759e75322ab37e55991c4ce2ff3992e1f2424"
+  }
+}

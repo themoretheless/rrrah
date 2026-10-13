@@ -1,0 +1,45 @@
+{
+  "scope": "Isolated shared cubic edge refinement, original AI pixel149,56; interior leaves unchanged",
+  "baseline_alpha": 0.21184744274305764,
+  "independent_original_area": 0.21446153215456878,
+  "runs": [
+    {
+      "boundary_tolerance": 0.000244140625,
+      "log": "docs/research/ai-edge-refinement-experiment-2026-10-13.log",
+      "sha256": "089d179604492d9ae6dd0d769e9e96865fc1ae48c98c3eff3a658c2a4a0ca79b",
+      "completed": false,
+      "refusals": [
+        "Admission"
+      ]
+    },
+    {
+      "boundary_tolerance": 0.00390625,
+      "log": "docs/research/ai-edge-refinement-quarter-2026-10-13.log",
+      "sha256": "3d6869931595f5b2d9834d0633b6418b7fc7c677e668d3d234176fb068d1d8fc",
+      "completed": true,
+      "alpha": 0.2139417204790806,
+      "absolute_area_error": 0.0005198116754881743,
+      "error_reduction": 5.028916307153272,
+      "peak_managed_bytes": 216466640,
+      "final_credit_zero": true
+    },
+    {
+      "boundary_tolerance": 0.0009765625,
+      "log": "docs/research/ai-edge-refinement-sixteenth-2026-10-13.log",
+      "sha256": "a4a250ede5763f8c05b596e587af61829af2be4c3df55af4985b783416c08f9b",
+      "completed": true,
+      "alpha": 0.2144258053457193,
+      "absolute_area_error": 3.5726808849473324e-05,
+      "error_reduction": 73.1688470281521,
+      "peak_managed_bytes": 239197736,
+      "final_credit_zero": true
+    }
+  ],
+  "suite": "192 passed; 0 failed; 12 ignored",
+  "limitations": [
+    "Experimental source snapshot only; production unchanged",
+    "One pixel is not full-page fidelity",
+    "Managed capacity is not OS RSS",
+    "Further admission/cancellation/edge-welding regressions required before adoption"
+  ]
+}

@@ -1,0 +1,72 @@
+/Users/themoretheless/.codex/tmp/rrrah-dedup-learned-matching-oracle/lib/python3.12/site-packages/torch/jit/_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+1 baseline [0, 0, 2048, 1536] [0, 0, 800, 600] False 26 3
+2 foreign [0, 0, 2048, 1536] [0, 0, 2560, 1920] False 17 4
+/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-loftr-both-tiles-20261010.py:60: RuntimeWarning: divide by zero encountered in matmul
+  v = np.column_stack((values, np.ones(len(values)))) @ m.T
+/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-loftr-both-tiles-20261010.py:60: RuntimeWarning: overflow encountered in matmul
+  v = np.column_stack((values, np.ones(len(values)))) @ m.T
+/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-loftr-both-tiles-20261010.py:60: RuntimeWarning: invalid value encountered in matmul
+  v = np.column_stack((values, np.ones(len(values)))) @ m.T
+3 rephoto-control [0, 0, 2560, 1920] [0, 0, 1024, 701] False 925 526
+4 baseline [0, 0, 2048, 1536] [0, 0, 800, 600] True 73 7
+5 foreign [0, 0, 2048, 1536] [0, 0, 2560, 1920] True 64 2
+6 rephoto-control [0, 0, 2560, 1920] [0, 0, 1024, 701] True 879 462
+7 both-tiles [0, 0, 1024, 768] [0, 0, 800, 600] False 22 5
+8 both-tiles [0, 0, 1024, 768] [0, 0, 800, 600] True 56 4
+9 both-tiles [0, 0, 1024, 768] [0, 0, 400, 300] False 30 6
+10 both-tiles [0, 0, 1024, 768] [0, 0, 400, 300] True 56 6
+11 both-tiles [0, 0, 1024, 768] [400, 0, 400, 300] False 17 5
+12 both-tiles [0, 0, 1024, 768] [400, 0, 400, 300] True 48 4
+13 both-tiles [0, 0, 1024, 768] [0, 300, 400, 300] False 19 6
+14 both-tiles [0, 0, 1024, 768] [0, 300, 400, 300] True 37 5
+15 both-tiles [0, 0, 1024, 768] [400, 300, 400, 300] False 21 4
+16 both-tiles [0, 0, 1024, 768] [400, 300, 400, 300] True 43 4
+17 both-tiles [1024, 0, 1024, 768] [0, 0, 800, 600] False 44 11
+18 both-tiles [1024, 0, 1024, 768] [0, 0, 800, 600] True 75 2
+19 both-tiles [1024, 0, 1024, 768] [0, 0, 400, 300] False 37 4
+20 both-tiles [1024, 0, 1024, 768] [0, 0, 400, 300] True 77 7
+21 both-tiles [1024, 0, 1024, 768] [400, 0, 400, 300] False 43 17
+22 both-tiles [1024, 0, 1024, 768] [400, 0, 400, 300] True 69 7
+23 both-tiles [1024, 0, 1024, 768] [0, 300, 400, 300] False 17 4
+24 both-tiles [1024, 0, 1024, 768] [0, 300, 400, 300] True 55 0
+25 both-tiles [1024, 0, 1024, 768] [400, 300, 400, 300] False 21 5
+26 both-tiles [1024, 0, 1024, 768] [400, 300, 400, 300] True 56 4
+27 both-tiles [0, 768, 1024, 768] [0, 0, 800, 600] False 20 5
+28 both-tiles [0, 768, 1024, 768] [0, 0, 800, 600] True 87 4
+29 both-tiles [0, 768, 1024, 768] [0, 0, 400, 300] False 24 1
+30 both-tiles [0, 768, 1024, 768] [0, 0, 400, 300] True 97 7
+31 both-tiles [0, 768, 1024, 768] [400, 0, 400, 300] False 19 3
+32 both-tiles [0, 768, 1024, 768] [400, 0, 400, 300] True 65 3
+33 both-tiles [0, 768, 1024, 768] [0, 300, 400, 300] False 13 5
+34 both-tiles [0, 768, 1024, 768] [0, 300, 400, 300] True 87 6
+35 both-tiles [0, 768, 1024, 768] [400, 300, 400, 300] False 15 4
+36 both-tiles [0, 768, 1024, 768] [400, 300, 400, 300] True 84 1
+37 both-tiles [1024, 768, 1024, 768] [0, 0, 800, 600] False 16 5
+38 both-tiles [1024, 768, 1024, 768] [0, 0, 800, 600] True 86 6
+39 both-tiles [1024, 768, 1024, 768] [0, 0, 400, 300] False 20 4
+40 both-tiles [1024, 768, 1024, 768] [0, 0, 400, 300] True 87 4
+41 both-tiles [1024, 768, 1024, 768] [400, 0, 400, 300] False 27 5
+42 both-tiles [1024, 768, 1024, 768] [400, 0, 400, 300] True 84 4
+43 both-tiles [1024, 768, 1024, 768] [0, 300, 400, 300] False 33 6
+44 both-tiles [1024, 768, 1024, 768] [0, 300, 400, 300] True 73 7
+45 both-tiles [1024, 768, 1024, 768] [400, 300, 400, 300] False 17 4
+46 both-tiles [1024, 768, 1024, 768] [400, 300, 400, 300] True 70 1
+      174.19 real       111.68 user         6.52 sys
+          4701356032  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              829844  page reclaims
+                5048  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                2504  voluntary context switches
+              738189  involuntary context switches
+        734036849252  instructions retired
+        268337071466  cycles elapsed
+          4573843800  peak memory footprint

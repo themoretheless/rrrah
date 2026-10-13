@@ -1,0 +1,43 @@
+{
+  "status": "running",
+  "producer_pid": 28239,
+  "plan_sha256": "9b4c7fcd03744f98e1b2961ac483391211fa50c9860d0413bb063e679ab0129b",
+  "required_images": 414,
+  "completed_images": 5,
+  "embeddings": [
+    {
+      "path": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200000.jpg",
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-sscd-oracle-qualified-20261013/0000.json",
+      "sha256": "25cee7dd356f8b4add0925fee0b5d8dcb50d880aeb26bacfaac990a2809c839f"
+    },
+    {
+      "path": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200100.jpg",
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-sscd-oracle-qualified-20261013/0001.json",
+      "sha256": "1ecaa2c0f2c0bd5df50b5e0278f10da407ec0cff392021e680fa31c5b196fbbd"
+    },
+    {
+      "path": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200200.jpg",
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-sscd-oracle-qualified-20261013/0002.json",
+      "sha256": "8ac0d4b3d0aa5fdaf48a539639adea1b2ce3520281cd14aab16b8c6ea30be1f5"
+    },
+    {
+      "path": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200300.jpg",
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-sscd-oracle-qualified-20261013/0003.json",
+      "sha256": "74ff3b588f448869a5874ea8a63a611e7549b06df97f223a32a24c16e42b7394"
+    },
+    {
+      "path": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200400.jpg",
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-sscd-oracle-qualified-20261013/0004.json",
+      "sha256": "bebdf44a0e98c62dc374851054f019462951151000ffa193f644aff10057f608"
+    }
+  ],
+  "scope": "Official SSCD DISC mixup TorchScript oracle;229unique publisher positives in both458directions,8category-negative directions and16nearhash negatives,2identity controls. Embeddings alone do not prove copying.0.75 is a publisher example threshold, not calibration on this corpus.157-original retrieval lacks10k distractors/whitening and is not reproduction of paper metrics. Potential pretrained-data overlap with DISC negatives unverified. Python/Pillow research oracle only; no native production integration, acceptance change, hard RSS cap or all500 source review.",
+  "runtime": {
+    "python": "3.12.14 (main, Aug 25 2026, 13:50:33) [Clang 22.1.3 ]",
+    "torch": "2.10.0",
+    "numpy": "2.2.6",
+    "pillow": "11.3.0",
+    "device": "cpu",
+    "threads": 2
+  }
+}

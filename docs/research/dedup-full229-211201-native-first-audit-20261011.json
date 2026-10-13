@@ -1,0 +1,29 @@
+{
+  "status": "complete_bounded_native_first_recovery_diagnostic",
+  "report": "docs/research/dedup-full229-211201-native-first-20261011.json",
+  "report_sha256": "a6af660980dccac3b002c48ec87a718c554c96dcc3f9ef63a1c1e90f51bdaf22",
+  "baseline_failure": "docs/research/dedup-full229-211201-failure-20261011.json",
+  "native_recipes": 1,
+  "candidate_points": 378,
+  "original_pixel_anchors": [
+    36,
+    36
+  ],
+  "original_pixel_directions": [
+    {
+      "agreeing_pairs": 6886,
+      "informative_pairs": 6957,
+      "sites": 900,
+      "valid_sites": 900
+    },
+    {
+      "agreeing_pairs": 6891,
+      "informative_pairs": 6971,
+      "sites": 900,
+      "valid_sites": 900
+    }
+  ],
+  "managed_used": 0,
+  "scope": "Same archived frozen executable, weights, input pair and policy; only search order changed. This diagnoses an available alternative, not a repaired ModelFirst pipeline or a clean full229 baseline.",
+  "required_fix": "Preserve per-candidate insufficient-anchor geometry as inconclusive while trying remaining candidates/stages. Preserve final inconclusive if all alternatives fail; source/provider/resource/cancel errors remain terminal."
+}

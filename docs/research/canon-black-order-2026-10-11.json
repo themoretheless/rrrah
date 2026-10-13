@@ -1,0 +1,19 @@
+{
+  "source": "1294.cr2",
+  "stored_black_order": "R G1 G2 B",
+  "raw_coordinate_cfa": "R G1 / G2 B",
+  "native_black_grid": [
+    512,
+    512,
+    511,
+    511
+  ],
+  "mapping": "direct RGGB words to raw 2x2 grid valid for this original",
+  "independent_parser_evidence": "LibRaw Canon parser reads sequential words into ChannelBlackLevel[RGGB_2_RGBG(c)]",
+  "references": [
+    "https://raw.githubusercontent.com/LibRaw/LibRaw/master/src/metadata/canon.cpp",
+    "https://exiftool.org/TagNames/Canon.html"
+  ],
+  "source_code_sha256": "0aa9a520d5f3a91f3609dce0b39f8a8cc65a85874db1734ab8bbadd45a6cb3c5",
+  "remaining": "stored black versus post-unpack calibrated black policy; other CFA phases/cameras not qualified"
+}

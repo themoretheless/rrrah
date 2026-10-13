@@ -1,0 +1,21 @@
+#!/usr/bin/env python3
+"""Preserve Skiff exact-file module review and actual isolated module tests."""
+import hashlib,json,re,shutil,subprocess,tarfile
+from pathlib import Path
+R=Path(__file__).resolve().parents[1];D=R/'docs/research/dedup-500';T=Path('/Users/themoretheless/.codex/tmp');S=T/'rrrah-skiff-source-20261012';H=T/'rrrah-skiff-controls-20261012'
+def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
+a=S.with_suffix('.tar.gz');inventory={}
+with tarfile.open(a) as archive:
+ for m in archive.getmembers():
+  if m.isfile():
+   n='/'.join(Path(m.name).parts[1:]);data=archive.extractfile(m).read();assert data==(S/n).read_bytes();inventory[n]={'sha256':sha(S/n),'bytes':len(data)}
+assert len(inventory)==129
+baseline=T/'rrrah-skiff-upstream-tests-20261012.log';first=T/'rrrah-skiff-controls-20261012.log';final=T/'rrrah-skiff-controls-v2-20261012.log'
+assert 'test result: ok. 9 passed; 0 failed; 0 ignored' in baseline.read_text();assert 'test result: ok. 4 passed; 0 failed; 0 ignored' in final.read_text()
+assert 'Illegal byte sequence' in first.read_text() and '4 passed; 1 failed' in first.read_text()
+exe=Path(re.search(r'Running unittests .*\(([^)]+)\)',final.read_text())[1]);saved=T/'rrrah-skiff-controls-executable-20261012';assert not saved.exists();shutil.copy2(exe,saved)
+files=[a,baseline,first,final,saved,H/'Cargo.toml',H/'Cargo.lock',H/'src/lib.rs',H/'src/controls.rs',H/'src/controls-first-fixture-attempt.rs',Path(__file__)]
+read=['LICENSE','src-tauri/Cargo.toml','src-tauri/src/models/files.rs','src-tauri/src/services/files.rs'];files += [S/n for n in read]
+p=D/'skiff-exact-module-source-runtime-review-20261012.json';assert not p.exists()
+p.write_text(json.dumps(dict(status='complete_exact_file_module_review_not_full_repository',repository='DrizzleTime/Skiff',commit='c1c686bb5b91d94d705c639ba2e21ca520207533',archive_url='https://codeload.github.com/DrizzleTime/Skiff/tar.gz/c1c686bb5b91d94d705c639ba2e21ca520207533',archive_inventory=inventory,full_files_read=read,license='MIT Copyright2026 shiyu',compiler=subprocess.check_output(['rustc','-vV'],text=True),original_module_tests_passed=9,authored_controls_passed=4,controls=['Overlapping configured roots repeat the same path into a duplicate group with false reclaimable14bytes.','Hardlink aliases reported as independent reclaimable10bytes.','Nonexistent configured root returns successful empty scan.','Positive: identical files across three different suffixes correctly grouped.'],excluded_control='Original invalid-UTF8 name fixture failed during filesystem creation with illegal byte sequence, before the scan. Preserved first attempt and log; no runtime finding or passing coverage claimed.',source_findings=['All equal-size files fully hashed using DefaultHasher; candidates finally partitioned with bytewise comparison. Hash is not used alone as identity.','Root list deduplicates exact canonical paths but not ancestor/descendant coverage; collection lacks file identity/path deduplication.','Directory, entry, metadata, hash and compare errors are silently dropped or converted to non-match.','No hardlink inode identity in FileItem or reclaimable calculation.','Path display string is lossy for non-UTF8 names; static concern only on this physical filesystem.','No cancellation or resource admission in recursive scan/hash/comparison.'],adopted_code=False,existing_root_regressions=['nested_overlapping_roots_match_the_full_authored_partition','missing_input_and_overlap_do_not_lose_valid_results','physical_hardlinks_are_aliases_while_copied_bytes_are_separate_files','lossy_equal_non_utf8_names_preserve_distinct_copy_partitions'],pins={str(p):sha(p) for p in files},scope='Exact file module and model plus license/manifest read fully. All129 archive files inventoried and verified, not fully reviewed. Nine unchanged upstream module tests and four controls run in minimal serde/trash/tempfile harness on macOS ARM64; not original whole Tauri app dependency lock, full app tests/platforms, full129tree or all500. No deletion API invoked, no upstream code adopted.'),indent=2)+'\n')
+print('Verified Skiff module:9 original tests,4 controls,129-file archive; full repository incomplete')

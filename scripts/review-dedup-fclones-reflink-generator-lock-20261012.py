@@ -1,0 +1,23 @@
+#!/usr/bin/env python3
+import hashlib,json,re,shutil,subprocess,tomllib
+from pathlib import Path
+R=Path(__file__).resolve().parents[1];D=R/'docs/research/dedup-500';T=Path('/Users/themoretheless/.codex/tmp');S=T/'rrrah-fclones-full-source-20261012'
+def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
+def main():
+ manifest=D/'fclones-hasher-source-20261012.json';m=json.loads(manifest.read_text());assert all(sha(S/p)==h for p,h in m['file_hashes'].items())
+ log=T/'rrrah-fclones-reflink-tests-20261012.log';text=log.read_text();assert '2 passed; 0 failed; 0 ignored' in text and 'skipping' not in text.lower()
+ build=T/'rrrah-fclones-generator-build-20261012.log';assert 'Finished' in build.read_text();exe=T/'rrrah-fclones-generator-executable-20261012';assert not exe.exists();shutil.copy2(T/'rrrah-fclones-target-20261012/debug/gen-test-files',exe)
+ root=T/'rrrah-fclones-generator-fixtures-20261012';assert not root.exists();root.mkdir();bad=root/'bad';good=root/'good';bad.mkdir();good.mkdir();runs=[]
+ for maximum,dest in [(1,bad),(2,good)]:
+  cmd=[str(exe),'--count','1','--max-group-size',str(maximum),str(dest)];result=subprocess.run(cmd,capture_output=True,text=True);out=root/f'max-{maximum}.log';out.write_text(result.stdout+result.stderr);runs.append({'command':cmd,'returncode':result.returncode,'log':str(out),'log_sha256':sha(out)})
+ assert runs[0]['returncode']!=0 and 'panicked' in Path(runs[0]['log']).read_text() and list(bad.iterdir())==[]
+ assert runs[1]['returncode']==0;files=list(good.iterdir());assert len(files)==1 and files[0].name=='file_0_0.txt' and files[0].stat().st_size==65538
+ lock=tomllib.loads((S/'Cargo.lock').read_text());packages=lock['package'];assert lock['version']==3 and len(packages)==199;assert len({(p['name'],p['version']) for p in packages})==199
+ edges=0
+ for package in packages:
+  if package.get('source'):assert package['source']=='registry+https://github.com/rust-lang/crates.io-index' and re.fullmatch('[a-f0-9]{64}',package['checksum'])
+  for dep in package.get('dependencies',[]):
+   parts=dep.split();targets=[p for p in packages if p['name']==parts[0] and (len(parts)<2 or p['version']==parts[1])];assert len(targets)==1,dep;edges+=1
+ pins={str(p):sha(p) for p in [Path(__file__),manifest,log,build,exe,*[Path(x['log']) for x in runs],*files,S/'fclones/src/reflink.rs',S/'gen-test-files/Cargo.toml',S/'gen-test-files/src/main.rs',S/'Cargo.lock']}
+ out=D/'fclones-reflink-generator-lock-review-20261012.json';assert not out.exists();out.write_text(json.dumps({'status':'complete_reflink_generator_source_and_structured_full_lock_review','commit':m['commit'],'fully_read_additional_files':{'fclones/src/reflink.rs':545,'gen-test-files/Cargo.toml':len((S/'gen-test-files/Cargo.toml').read_text().splitlines()),'gen-test-files/src/main.rs':31},'machine_inspected_files':{'Cargo.lock':{'lines':1791,'package_entries':199,'resolved_dependency_edges':edges,'registry_packages':sum(bool(p.get('source')) for p in packages),'method':'Full TOML parse; every package/edge inspected, exact inventory printed; every registry checksum syntax validated. Not third-party dependency source audit.'}},'original_reflink_tests_passed':2,'tests':re.findall(r'^test (\S+) \.\.\. ok$',text,re.M),'generator_runs':runs,'lock_inventory':[{'name':p['name'],'version':p['version'],'source':p.get('source','workspace'),'dependencies':p.get('dependencies',[])} for p in packages],'pins':pins,'observations':['macOS generic reflink path passed two original content/existence tests without support-guard skip notice. Linux ioctl branch, ACL/xattr/owner restoration failures and concurrent mutation not qualified.','safe_reflink commits content replacement before xattr/metadata restoration. Later restoration failure is not covered by the safe_remove rollback; source observation only.','Generator max_group_size1 panics before creating files; max_group_size2 creates exactly one65538byte file. Random generator has no fixed seed and samples exclusive upper group-size bound.','Workspace lock has199packages,197 registry entries and2workspace entries. Complete graph resolved; downloaded crate sources/security/reproducible current releases not audited.'],'scope':'Three full source/config files, complete structured lock inventory,2 original temporary-fixture reflink tests and2 original generator CLI runs in fresh owned directories. No user data modified, no adoption, Linux/Windows physical reflink/total memory/metadata preservation or full500 completion claim.'},indent=2)+'\n');print('Reviewed reflink/generator and all199lock entries;2 reflink tests, generator panic/healthy controls')
+if __name__=='__main__':main()

@@ -1,0 +1,469 @@
+{
+  "status": "complete13actual_cli_controls_pending_audit",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/image-find-build-20261013.json": "f96023d0a8ff3c7265993ac1eb80c66544661e2b6f7aeb920c7baa274e773339",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/run-dedup-image-find-cli-controls-20261013.py": "0be5a825014e6ad3b251a5dab6814c2628aacd86d10403c643d13669dcddc74a",
+    "/Users/themoretheless/.codex/tmp/rrrah-image-find-qualified-20261013": "feb360a14e4c437ca3cfe70b8c5c150458cf3e308eb97b2dbb1723e5ba957b8c"
+  },
+  "executable": "/Users/themoretheless/.codex/tmp/rrrah-image-find-qualified-20261013",
+  "fixtures": {
+    "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/00/wanted/black.png": "4a0945534329d26ce523a2f096e203aae59a9fffaec71895599fa3ef42d23f22",
+    "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/00/search/white.png": "7fc942ab8fe553485f48d80840515992ec07b4a4fdf9c37b8b7aae4162034861",
+    "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/01/search/query.png": "4a0945534329d26ce523a2f096e203aae59a9fffaec71895599fa3ef42d23f22",
+    "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/02/wanted/reference.png": "4a0945534329d26ce523a2f096e203aae59a9fffaec71895599fa3ef42d23f22",
+    "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/02/search/query.PnG": "4a0945534329d26ce523a2f096e203aae59a9fffaec71895599fa3ef42d23f22",
+    "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/03/wanted/bad.png": "5464533c9647b67eb320c40ccc5959537c09102ae75388f6a7675b433e745c9d",
+    "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/03/search/query.png": "4a0945534329d26ce523a2f096e203aae59a9fffaec71895599fa3ef42d23f22",
+    "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/04/wanted/reference.png": "4a0945534329d26ce523a2f096e203aae59a9fffaec71895599fa3ef42d23f22",
+    "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/04/search/bad.png": "5464533c9647b67eb320c40ccc5959537c09102ae75388f6a7675b433e745c9d",
+    "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/04/search/query.png": "4a0945534329d26ce523a2f096e203aae59a9fffaec71895599fa3ef42d23f22",
+    "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/05/wanted/reference.png": "4a0945534329d26ce523a2f096e203aae59a9fffaec71895599fa3ef42d23f22",
+    "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/05/search/a,b.png": "4a0945534329d26ce523a2f096e203aae59a9fffaec71895599fa3ef42d23f22",
+    "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/06/wanted/reference.png": "4a0945534329d26ce523a2f096e203aae59a9fffaec71895599fa3ef42d23f22",
+    "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/06/search/query.png": "4a0945534329d26ce523a2f096e203aae59a9fffaec71895599fa3ef42d23f22",
+    "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/07/wanted/reference.png": "4a0945534329d26ce523a2f096e203aae59a9fffaec71895599fa3ef42d23f22",
+    "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/07/search/query.png": "4a0945534329d26ce523a2f096e203aae59a9fffaec71895599fa3ef42d23f22",
+    "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/08/wanted/reference.png": "4a0945534329d26ce523a2f096e203aae59a9fffaec71895599fa3ef42d23f22",
+    "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/08/search/query.png": "4a0945534329d26ce523a2f096e203aae59a9fffaec71895599fa3ef42d23f22",
+    "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/09/wanted/reference.png": "4a0945534329d26ce523a2f096e203aae59a9fffaec71895599fa3ef42d23f22",
+    "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/09/search/query.png": "4a0945534329d26ce523a2f096e203aae59a9fffaec71895599fa3ef42d23f22",
+    "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/10/wanted/reference.png": "4a0945534329d26ce523a2f096e203aae59a9fffaec71895599fa3ef42d23f22",
+    "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/10/search/query.jpg": "4a0945534329d26ce523a2f096e203aae59a9fffaec71895599fa3ef42d23f22",
+    "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/11/wanted/reference.png": "4a0945534329d26ce523a2f096e203aae59a9fffaec71895599fa3ef42d23f22",
+    "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/11/search/nested/query.png": "4a0945534329d26ce523a2f096e203aae59a9fffaec71895599fa3ef42d23f22",
+    "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/12/wanted/transparent.png": "f7384f4a77fcb038a8e41d555cb28cdb5170d0427a11932d3e8c5c7e66df71f3",
+    "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/12/search/transparent_other_rgb.png": "ca206a49ecfe84ad809d4770610035d174002ec5fc076fd91767b1fbe591801d"
+  },
+  "rows": [
+    {
+      "label": "uniform_black_white_collision",
+      "command": [
+        "/Users/themoretheless/.codex/tmp/rrrah-image-find-qualified-20261013",
+        "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/00/wanted",
+        "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/00/search",
+        "100"
+      ],
+      "cwd": "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/00/work",
+      "environment": {
+        "RAYON_NUM_THREADS": "2"
+      },
+      "returncode": 0,
+      "stdout": "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/00/stdout",
+      "stdout_sha256": "a5cbb15742bc34ef368eb1e6df19602da885fbdab7e991d8ce3d58408e8c4f75",
+      "stderr": "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/00/stderr",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "csv": "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/00/found.csv",
+      "csv_sha256": "9812d295bb561a09fd9710739ce7c7c89cf830cd1a62cfed70bc27b06a709e7b",
+      "parsed_csv_rows": [
+        [
+          "id",
+          "file",
+          "path",
+          "similarity"
+        ],
+        [
+          "white",
+          "white.png",
+          "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/00/search/white.png",
+          "1.0000"
+        ]
+      ],
+      "expected_match_rows": 1
+    },
+    {
+      "label": "empty_references_threshold0",
+      "command": [
+        "/Users/themoretheless/.codex/tmp/rrrah-image-find-qualified-20261013",
+        "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/01/wanted",
+        "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/01/search",
+        "0"
+      ],
+      "cwd": "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/01/work",
+      "environment": {
+        "RAYON_NUM_THREADS": "2"
+      },
+      "returncode": 0,
+      "stdout": "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/01/stdout",
+      "stdout_sha256": "d2a69db282df5b62611ff9ce5bd80ba3c22af3861034fdbca9be3d437fa4f14d",
+      "stderr": "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/01/stderr",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "csv": "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/01/found.csv",
+      "csv_sha256": "52f48815e6e3e0c59fec442b23b83e5599f6908ab236affcf302db9ad67a1884",
+      "parsed_csv_rows": [
+        [
+          "id",
+          "file",
+          "path",
+          "similarity"
+        ],
+        [
+          "query",
+          "query.png",
+          "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/01/search/query.png",
+          "0.0000"
+        ]
+      ],
+      "expected_match_rows": 1
+    },
+    {
+      "label": "mixed_case_extension_skipped",
+      "command": [
+        "/Users/themoretheless/.codex/tmp/rrrah-image-find-qualified-20261013",
+        "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/02/wanted",
+        "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/02/search",
+        "100"
+      ],
+      "cwd": "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/02/work",
+      "environment": {
+        "RAYON_NUM_THREADS": "2"
+      },
+      "returncode": 0,
+      "stdout": "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/02/stdout",
+      "stdout_sha256": "d344ad4ba58f2fd758ca09e3a0b63da66ccd8157f6a54f30ec1a94ad0cda3c2f",
+      "stderr": "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/02/stderr",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "csv": "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/02/found.csv",
+      "csv_sha256": "3c06575146ba3a4d39da13a9fe1229ccf4248b5845d0ec3679cff0684df6d102",
+      "parsed_csv_rows": [
+        [
+          "id",
+          "file",
+          "path",
+          "similarity"
+        ]
+      ],
+      "expected_match_rows": 0
+    },
+    {
+      "label": "corrupt_wanted_succeeds",
+      "command": [
+        "/Users/themoretheless/.codex/tmp/rrrah-image-find-qualified-20261013",
+        "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/03/wanted",
+        "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/03/search",
+        "90"
+      ],
+      "cwd": "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/03/work",
+      "environment": {
+        "RAYON_NUM_THREADS": "2"
+      },
+      "returncode": 0,
+      "stdout": "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/03/stdout",
+      "stdout_sha256": "b9c3cbfb9be76fc4d987e27792bdfb0292728b4702b25eb1d1076f9ae0acbe41",
+      "stderr": "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/03/stderr",
+      "stderr_sha256": "68b995fb771bb40a17bf73ff6a42f0e4a9a34cb2b5e34a31ad33be5b7b1aa43c",
+      "csv": "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/03/found.csv",
+      "csv_sha256": "3c06575146ba3a4d39da13a9fe1229ccf4248b5845d0ec3679cff0684df6d102",
+      "parsed_csv_rows": [
+        [
+          "id",
+          "file",
+          "path",
+          "similarity"
+        ]
+      ],
+      "expected_match_rows": 0
+    },
+    {
+      "label": "corrupt_search_succeeds_with_valid_match",
+      "command": [
+        "/Users/themoretheless/.codex/tmp/rrrah-image-find-qualified-20261013",
+        "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/04/wanted",
+        "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/04/search",
+        "100"
+      ],
+      "cwd": "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/04/work",
+      "environment": {
+        "RAYON_NUM_THREADS": "2"
+      },
+      "returncode": 0,
+      "stdout": "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/04/stdout",
+      "stdout_sha256": "5745e220b730b5c12cced9d4fde8c29e94a0fa7af3a0e2f407b77cd8dac49249",
+      "stderr": "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/04/stderr",
+      "stderr_sha256": "4bec1c03cf2dc11c4559c2518d4e3cdf6dc82f4878883dfc51240b439ba0c555",
+      "csv": "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/04/found.csv",
+      "csv_sha256": "01448f406590d4379e6f5ff6e6c1b45504fcbb48fd1a9abe847e59ad6de8e1b9",
+      "parsed_csv_rows": [
+        [
+          "id",
+          "file",
+          "path",
+          "similarity"
+        ],
+        [
+          "query",
+          "query.png",
+          "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/04/search/query.png",
+          "1.0000"
+        ]
+      ],
+      "expected_match_rows": 1
+    },
+    {
+      "label": "unescaped_comma_csv",
+      "command": [
+        "/Users/themoretheless/.codex/tmp/rrrah-image-find-qualified-20261013",
+        "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/05/wanted",
+        "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/05/search",
+        "100"
+      ],
+      "cwd": "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/05/work",
+      "environment": {
+        "RAYON_NUM_THREADS": "2"
+      },
+      "returncode": 0,
+      "stdout": "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/05/stdout",
+      "stdout_sha256": "8b36209aadf58034160f99dcf596dffaf0f34d9ea7abb05631e36bd3ded45291",
+      "stderr": "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/05/stderr",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "csv": "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/05/found.csv",
+      "csv_sha256": "9a9cac757dbdeaf69cbc40d85c3984c8b25d836b075ec2d1e9a931b8825190e9",
+      "parsed_csv_rows": [
+        [
+          "id",
+          "file",
+          "path",
+          "similarity"
+        ],
+        [
+          "a",
+          "b",
+          "a",
+          "b.png",
+          "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/05/search/a",
+          "b.png",
+          "1.0000"
+        ]
+      ],
+      "expected_match_rows": 1
+    },
+    {
+      "label": "parent_csv_overwritten",
+      "command": [
+        "/Users/themoretheless/.codex/tmp/rrrah-image-find-qualified-20261013",
+        "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/06/wanted",
+        "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/06/search",
+        "100"
+      ],
+      "cwd": "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/06/work",
+      "environment": {
+        "RAYON_NUM_THREADS": "2"
+      },
+      "returncode": 0,
+      "stdout": "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/06/stdout",
+      "stdout_sha256": "dd3d8cd8415cd0d0854a9fdc2f632438bf91a387cde9a2c9c1508609145d29d3",
+      "stderr": "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/06/stderr",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "csv": "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/06/found.csv",
+      "csv_sha256": "b2d722a1ed94a93ba98c14adaf4bdb57711918c33e7539e3188d4b6a1ca001b0",
+      "parsed_csv_rows": [
+        [
+          "id",
+          "file",
+          "path",
+          "similarity"
+        ],
+        [
+          "query",
+          "query.png",
+          "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/06/search/query.png",
+          "1.0000"
+        ]
+      ],
+      "expected_match_rows": 1
+    },
+    {
+      "label": "copy_error_still_success",
+      "command": [
+        "/Users/themoretheless/.codex/tmp/rrrah-image-find-qualified-20261013",
+        "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/07/wanted",
+        "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/07/search",
+        "100",
+        "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/07/dest"
+      ],
+      "cwd": "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/07/work",
+      "environment": {
+        "RAYON_NUM_THREADS": "2"
+      },
+      "returncode": 0,
+      "stdout": "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/07/stdout",
+      "stdout_sha256": "5df0428d88f55898571652c44c25065975148dd98287a2f425721ae1333a22ad",
+      "stderr": "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/07/stderr",
+      "stderr_sha256": "2c3b5ab1b1f40e55fec56d9c255d57d188c1515b0cb2edf637e3cc96967cd213",
+      "csv": "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/07/found.csv",
+      "csv_sha256": "f4aeddf8286fcacb359ffcaefbc671c935c84ec35926db421433e7f7a5c8ec59",
+      "parsed_csv_rows": [
+        [
+          "id",
+          "file",
+          "path",
+          "similarity"
+        ],
+        [
+          "query",
+          "query.png",
+          "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/07/search/query.png",
+          "1.0000"
+        ]
+      ],
+      "expected_match_rows": 1
+    },
+    {
+      "label": "out_of_range_threshold150",
+      "command": [
+        "/Users/themoretheless/.codex/tmp/rrrah-image-find-qualified-20261013",
+        "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/08/wanted",
+        "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/08/search",
+        "150"
+      ],
+      "cwd": "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/08/work",
+      "environment": {
+        "RAYON_NUM_THREADS": "2"
+      },
+      "returncode": 0,
+      "stdout": "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/08/stdout",
+      "stdout_sha256": "71b3a5fe783afaeeb16ca2661464f8a78d75536b4b0f3d2691d4575568593f2d",
+      "stderr": "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/08/stderr",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "csv": "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/08/found.csv",
+      "csv_sha256": "3c06575146ba3a4d39da13a9fe1229ccf4248b5845d0ec3679cff0684df6d102",
+      "parsed_csv_rows": [
+        [
+          "id",
+          "file",
+          "path",
+          "similarity"
+        ]
+      ],
+      "expected_match_rows": 0
+    },
+    {
+      "label": "invalid_threshold_defaults90",
+      "command": [
+        "/Users/themoretheless/.codex/tmp/rrrah-image-find-qualified-20261013",
+        "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/09/wanted",
+        "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/09/search",
+        "invalid"
+      ],
+      "cwd": "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/09/work",
+      "environment": {
+        "RAYON_NUM_THREADS": "2"
+      },
+      "returncode": 0,
+      "stdout": "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/09/stdout",
+      "stdout_sha256": "6c4781cf148becd379c453eed16e0ce6dee1918d05c486d29e08838661f8e4ba",
+      "stderr": "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/09/stderr",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "csv": "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/09/found.csv",
+      "csv_sha256": "c34e84fc5288bf2c1cb60e85628bbb053cd5aecc25eb1fac000fd73c89ed8e87",
+      "parsed_csv_rows": [
+        [
+          "id",
+          "file",
+          "path",
+          "similarity"
+        ],
+        [
+          "query",
+          "query.png",
+          "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/09/search/query.png",
+          "1.0000"
+        ]
+      ],
+      "expected_match_rows": 1
+    },
+    {
+      "label": "png_content_in_jpg_extension",
+      "command": [
+        "/Users/themoretheless/.codex/tmp/rrrah-image-find-qualified-20261013",
+        "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/10/wanted",
+        "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/10/search",
+        "100"
+      ],
+      "cwd": "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/10/work",
+      "environment": {
+        "RAYON_NUM_THREADS": "2"
+      },
+      "returncode": 0,
+      "stdout": "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/10/stdout",
+      "stdout_sha256": "557ba9afaf4f4841d97d28d6b85fcf3a3cfd34cafd3be30030fabb4cd592458f",
+      "stderr": "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/10/stderr",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "csv": "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/10/found.csv",
+      "csv_sha256": "0a05f33e94b1cef4c73b68c8a9f7993be7828025ff122645ced3243ad9a5f3a1",
+      "parsed_csv_rows": [
+        [
+          "id",
+          "file",
+          "path",
+          "similarity"
+        ],
+        [
+          "query",
+          "query.jpg",
+          "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/10/search/query.jpg",
+          "1.0000"
+        ]
+      ],
+      "expected_match_rows": 1
+    },
+    {
+      "label": "flat_scan_ignores_nested_file",
+      "command": [
+        "/Users/themoretheless/.codex/tmp/rrrah-image-find-qualified-20261013",
+        "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/11/wanted",
+        "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/11/search",
+        "100"
+      ],
+      "cwd": "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/11/work",
+      "environment": {
+        "RAYON_NUM_THREADS": "2"
+      },
+      "returncode": 0,
+      "stdout": "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/11/stdout",
+      "stdout_sha256": "d110d0d52641ca684b98e35b9b00eb23d90d2c1681350025214448d5d8e1df5e",
+      "stderr": "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/11/stderr",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "csv": "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/11/found.csv",
+      "csv_sha256": "3c06575146ba3a4d39da13a9fe1229ccf4248b5845d0ec3679cff0684df6d102",
+      "parsed_csv_rows": [
+        [
+          "id",
+          "file",
+          "path",
+          "similarity"
+        ]
+      ],
+      "expected_match_rows": 0
+    },
+    {
+      "label": "transparent_hidden_rgb_changes_hash",
+      "command": [
+        "/Users/themoretheless/.codex/tmp/rrrah-image-find-qualified-20261013",
+        "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/12/wanted",
+        "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/12/search",
+        "100"
+      ],
+      "cwd": "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/12/work",
+      "environment": {
+        "RAYON_NUM_THREADS": "2"
+      },
+      "returncode": 0,
+      "stdout": "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/12/stdout",
+      "stdout_sha256": "aef49ace589a7cb7ac48b5c84f0ee83f19c5307755f6b5bbac482a48a72535f4",
+      "stderr": "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/12/stderr",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "csv": "/Users/themoretheless/.codex/tmp/rrrah-image-find-controls-20261013/cases/12/found.csv",
+      "csv_sha256": "3c06575146ba3a4d39da13a9fe1229ccf4248b5845d0ec3679cff0684df6d102",
+      "parsed_csv_rows": [
+        [
+          "id",
+          "file",
+          "path",
+          "similarity"
+        ]
+      ],
+      "expected_match_rows": 0
+    }
+  ],
+  "scope": "Original locked CLI binary, isolated per-case current directories and outputs; no production source changes. Thirteen authored CLI observations/counterexamples, not upstream tests or generic copy precision. Original CSV writes to parent directory, so all controls execute below dedicated case directories. Source/library format/platform/scale/lifecycle/resource gaps remain separate."
+}

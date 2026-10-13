@@ -1,0 +1,32 @@
+{
+  "status": "passed",
+  "change": "Drag/drop metadata classification runs on one background worker with one queued request. Later drops supersede queued work; later gallery/folder/image navigation cancels pending inspection. Folder results remain queued while inspection is pending, so rejecting an invalid drop preserves previous folder context. File/folder intake and symlink/unsupported/special-file refusal policies are preserved.",
+  "ordinary_viewer": {
+    "passed": 189,
+    "failed": 0,
+    "ignored": 32,
+    "log": "/tmp/rrrah-async-drop-current-all-20261011.log",
+    "log_sha256": "65e006d09e4fdd7e97f179c613fcdd082d881aabc3eda26ad739b2cb57e8f3d5"
+  },
+  "metal_callback_with_blocked_inspection": {
+    "passed": 1,
+    "failed": 0,
+    "ignored": 0,
+    "log": "/tmp/rrrah-async-drop-metal-callback-20261011.log",
+    "log_sha256": "23e58932040b732aeec1094f4082d5e96da79c9fcae1ff54e7dcbed5ac19cb0e",
+    "scope": "Actual Metal required; upload budget reaches zero while controlled drop-metadata worker is still blocked."
+  },
+  "source_sha256": {
+    "crates/rrrah-app/src/main.rs": "71ba7cc18a6a28f89c87f9ec8f95f9e9196a7a6d9ba23623b4f4d6fd40e1a20b",
+    "crates/rrrah-app/src/drop_inspection.rs": "acf57758f2c8a3f0caef7ccf8c5a9775546c220198e634f2d4306da2ae269064",
+    "crates/rrrah-app/src/gallery.rs": "db68ac608660abefe24ea1d00346400f0b688c69dbb9628b0c45831f861dfc13"
+  },
+  "limitations": [
+    "Blocked metadata uses synchronized test channels, not physical slow storage.",
+    "A blocked OS metadata call can still delay this worker and its one queued request; UI submission/polling does not wait for it.",
+    "No native OS drag gesture or post-change viewer-window observation.",
+    "Intake tests classify PNG/OBJ file paths; they do not qualify their decoding or all 100 formats.",
+    "CLI initial-path regular-file validation remains synchronous before the UI loop.",
+    "This does not qualify physical HDR color or NVIDIA hardware."
+  ]
+}

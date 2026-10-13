@@ -1,0 +1,16 @@
+{
+  "status": "startup_frame_verified_without_navigation",
+  "backend": "Metal Apple M4 Max",
+  "surface": "Rgba16Float ExtendedSrgbLinear",
+  "first_present_ms": 4093.577,
+  "observation": "Initial screenshot blank while native surface was occluded. Without keyboard, pointer or resize actions, subsequent screenshot showed IMG_9043 RAW and filmstrip. Log confirms generation 0 first frame presented after occlusion.",
+  "scope": "Same primary viewer binary in temporary bundle; real RAW copied to /tmp; initial cache load and natural native surface visibility recovery.",
+  "limits": [
+    "One startup repetition, not statistical startup latency qualification",
+    "UI captures and OS visibility scheduling affect delay",
+    "No panel luminance/color calibration",
+    "Log marks submission/present call, not independently timed physical scanout"
+  ],
+  "log": "[2026-10-10T22:53:07Z DEBUG rrrah] foreground generation=0 RAW policy=cache-first\n[2026-10-10T22:53:07Z INFO  rrrah] GPU adapter: backend=Metal name=Apple M4 Max vendor=0x0000 device=0x0000\n[2026-10-10T22:53:07Z INFO  rrrah] Viewer surface: hdr=true format=Rgba16Float color_space=ExtendedSrgbLinear\n[2026-10-10T22:53:07Z DEBUG rrrah] viewer surface acquisition deferred: occluded\n[2026-10-10T22:53:07Z DEBUG rrrah] RAW Ready generation=0 GPU available=true\n[2026-10-10T22:53:07Z DEBUG rrrah] viewer surface acquisition deferred: occluded\n[2026-10-10T22:53:07Z DEBUG rrrah] GPU upload consumer lease released; pending=0\n[2026-10-10T22:53:07Z DEBUG rrrah] viewer surface acquisition deferred: occluded\n[2026-10-10T22:53:07Z DEBUG rrrah] viewer surface acquisition deferred: occluded\n[2026-10-10T22:53:07Z DEBUG rrrah] viewer surface acquisition deferred: occluded\n[2026-10-10T22:53:07Z DEBUG rrrah] viewer surface acquisition deferred: occluded\n[2026-10-10T22:53:07Z DEBUG rrrah] viewer surface acquisition deferred: occluded\n[2026-10-10T22:53:07Z DEBUG rrrah] viewer surface acquisition deferred: occluded\n[2026-10-10T22:53:07Z DEBUG rrrah] viewer surface acquisition deferred: occluded\n[2026-10-10T22:53:07Z DEBUG rrrah] viewer surface acquisition deferred: occluded\n[2026-10-10T22:53:07Z DEBUG rrrah] viewer surface acquisition deferred: occluded\n[2026-10-10T22:53:07Z DEBUG rrrah] viewer surface acquisition deferred: occluded\n[2026-10-10T22:53:07Z DEBUG rrrah] viewer surface acquisition deferred: occluded\n[2026-10-10T22:53:08Z DEBUG rrrah] viewer surface acquisition deferred: occluded\n[2026-10-10T22:53:08Z DEBUG rrrah] viewer surface acquisition deferred: occluded\n[2026-10-10T22:53:08Z DEBUG rrrah] viewer surface acquisition deferred: occluded\n[2026-10-10T22:53:08Z DEBUG rrrah] viewer surface acquisition deferred: occluded\n[2026-10-10T22:53:08Z DEBUG rrrah] viewer surface acquisition deferred: occluded\n[2026-10-10T22:53:11Z DEBUG rrrah] first window frame presented generation=0 total_ms=4093.577\n",
+  "log_sha256": "4613a64629c6f1a669b0561608b5c64d69a2f449799eb2f18665a0baf82e5352"
+}

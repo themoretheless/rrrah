@@ -1,0 +1,36 @@
+{
+  "status": "passed_pending_audit",
+  "source": "/Users/themoretheless/.codex/tmp/rrrah-scan-group-publication-20261013/source",
+  "command": [
+    "cargo",
+    "test",
+    "-p",
+    "rrrah-dedup",
+    "--features",
+    "decode",
+    "--offline",
+    "--locked",
+    "--test",
+    "scan",
+    "--test",
+    "scan_retry",
+    "--test",
+    "scan_cancellation_checkpoints",
+    "--test",
+    "scan_group_publication",
+    "--jobs",
+    "2",
+    "--target-dir",
+    "/Users/themoretheless/.codex/tmp/rrrah-cache-interpretation-fix-20261012/target"
+  ],
+  "pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-scan-group-publication-20261013/baseline.log": "5a8f884172d41b0fefdc964e38de1b90ebea738192a4d650e33c7f7752707e2d",
+    "/Users/themoretheless/.codex/tmp/rrrah-scan-group-publication-20261013/source.baseline.rs": "7b956b162aba8a9cc9b72fc35bde6325b54dc73b4fced7fcad0f7e0fb68d6f3c",
+    "/Users/themoretheless/.codex/tmp/rrrah-scan-group-publication-20261013/test.baseline.rs": "ab70e4db8a51b8cb153b87754ec182fc52ee1d2a6f85fa85711ba5b406578ebe",
+    "/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup/src/scan.rs": "7345d3a0fe6f9985766bd2a1f6fddde81e5916bfffe1836f88496c0b5b76dae2",
+    "/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup/tests/scan_group_publication.rs": "e0255c07cf10e4484c2062c6e213d602c2fc02738a11ee74f6cbde019deeecc6",
+    "/Users/themoretheless/.codex/tmp/rrrah-scan-group-publication-20261013/fixed.log": "af6144d056226dc87d7d4c334ac488c6a381560f730a12701016dee626cbb778"
+  },
+  "child_pid": 40136,
+  "returncode": 0
+}

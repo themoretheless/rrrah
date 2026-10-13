@@ -1,0 +1,81 @@
+{
+  "date": "2026-10-11",
+  "backend": "Metal",
+  "report": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/million-grid-swap-gate-20261011/report.json",
+  "report_sha256": "7796b96206ac19e62a4f1569de612aefb051f92d0d5e1d7c38cd4e632297eb5d",
+  "suites": [
+    {
+      "suite": "gpu-all",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-gpu",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/Users/themoretheless/Documents/Sources/rrrah/target",
+        "--",
+        "--nocapture"
+      ],
+      "exit_code": 0,
+      "passed": 123,
+      "failed": 0,
+      "ignored": 13,
+      "ignored_tests": [
+        "test pinned_native_ai_planes_survive_managed_metal_display ... ignored, requires pinned RRRAH_AI_METAL_ROOT replay/source corpus and actual Metal",
+        "test full_sensor_linear_exposure_chunked_readback ... ignored, allocates about 0.8 GB of GPU buffers; full-resolution local qualification",
+        "test full_sensor_managed_exposure_budgets_and_checks_every_pixel ... ignored, full-resolution managed compute uses about 2 GB of tracked buffers",
+        "test fusion_back_full_frame_developed_raw_matches_metal_display_transport ... ignored, requires corrected production Fusion linear dumps; display transport qualification",
+        "test fusion_front_full_frame_developed_raw_matches_metal_display_transport ... ignored, requires corrected production Fusion linear dumps; display transport qualification",
+        "test hdr_exposure_saturates_to_finite_binary16_range ... ignored, Metal-specific empirical range edge; outside portable binary16 caller contract",
+        "test hdr_opposite_extreme_samples_interpolate_without_nan ... ignored, Metal-specific empirical range edge; outside portable binary16 caller contract",
+        "test hero9_full_frame_developed_raw_matches_metal_display_transport ... ignored, requires production HERO9 scene-linear dump; transport qualification, not demosaic/color oracle",
+        "test large_cancelled_upload_validation_and_admission_preserve_visible_texture ... ignored, manual 12 MP Metal upload cancellation qualification",
+        "test large_hdr_area_lod_preserves_all_output_samples_and_metal_frame ... ignored, manual 36 MP HDR area LOD and actual Metal qualification",
+        "test qualified_sd10_linear_raster_full_frame_display_readback ... ignored, requires qualified X3F linear sRGB PPM and a physical GPU",
+        "test raster_single_layer_gpu_timestamp_timing ... ignored, manual actual-GPU timestamp comparison; 4096-square input / 2048-square HDR target",
+        "test full_f828_managed_rgbe_matches_cpu_reference ... ignored, requires independent DSC-F828 full-sensor dump; authored four-channel normalization, not as-shot color qualification"
+      ],
+      "log": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/million-grid-swap-gate-20261011/gpu-all.log",
+      "log_sha256": "4d52060b8d860116b34362e04e377cccc63ee155186acaac646451b12756422f",
+      "verified_execution": true
+    },
+    {
+      "suite": "gpu-model-upload-worker",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah",
+        "--bin",
+        "rrrah",
+        "model_upload_worker::",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/Users/themoretheless/Documents/Sources/rrrah/target",
+        "--",
+        "--ignored",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0,
+      "ignored_tests": [],
+      "log": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/million-grid-swap-gate-20261011/gpu-model-upload-worker.log",
+      "log_sha256": "c7802f8168bd3b29d3e27941a25baff89184c561fa4f54df399e7719618ba6d1",
+      "verified_execution": true,
+      "workload_evidence_valid": true
+    }
+  ],
+  "limits": [
+    "Passing host CUDA tests does not qualify NVIDIA hardware.",
+    "Metal readback does not qualify physical HDR display.",
+    "Ignored tests are unverified, not passing.",
+    "These regression suites do not prove all 100 formats or sustained slow-disk workloads.",
+    "Authored coplanar million-triangle grid; local disk and managed memory pressure, not physical slow disk or OS memory pressure."
+  ]
+}

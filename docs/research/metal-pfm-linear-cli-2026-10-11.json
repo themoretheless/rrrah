@@ -1,0 +1,108 @@
+{
+  "date": "2026-10-11",
+  "scope": "Explicit linear-sRGB CLI policy closes PFM normal-viewer routing gap; authored subset qualification",
+  "change": "--untagged-color linear-srgb sets only assume_untagged_linear_srgb, preserves strict default and existing source declarations; foreground, preload and thumbnail requests share policy",
+  "fixture": {
+    "source": "tests/fixtures/raster/transport-linear.pfm",
+    "source_sha256": "55d4ea7e52ac9438426596ca7e107c09c2a6d00df14fbe88769012876aa98e03",
+    "oracle": "tests/fixtures/raster/transport-linear.pfm.rgba32f",
+    "oracle_sha256": "ba22f50fbcdf9dcdbfcac6088fc322a81e7f2e2eedfb6400785f85a8189c4198",
+    "metadata": {
+      "license": "CC0-1.0",
+      "producer": "authored Python struct little-endian binary32",
+      "width": 2,
+      "height": 2,
+      "storage_rows": "bottom first",
+      "assumption": "explicit linear sRGB",
+      "oracle": "transport-linear.pfm.rgba32f",
+      "values_top_first": [
+        [
+          [
+            1.0,
+            0.0,
+            0.5
+          ],
+          [
+            0.25,
+            0.5000000596046448,
+            1.5
+          ]
+        ],
+        [
+          [
+            2.0,
+            -1.0,
+            0.25
+          ],
+          [
+            0.5,
+            0.125,
+            0.75
+          ]
+        ]
+      ]
+    }
+  },
+  "CPU_regressions": [
+    "CLI option parsing and inspect conflict",
+    "Preload matches every authored binary32 RGBA bit, including negative, >1 and adjacent float samples",
+    "Expired RAM membership spills once and restores without decoder fallback",
+    "Strict and encoded-sRGB requests cannot reuse the linear RAM/swap entry",
+    "Thumbnail uses selected interpretation; last owner releases all managed bytes"
+  ],
+  "Metal": {
+    "adapter": "Metal Apple M4 Max",
+    "before_after_swap_SDR_exact": true,
+    "before_after_swap_HDR_binary16_exact": true,
+    "output_dimensions": [
+      63,
+      65
+    ],
+    "exposure_stops": 1,
+    "log": "/tmp/rrrah-linear-pfm-cli-metal-20261011.log",
+    "log_sha256": "18d7ea5ad71099ba3524faa6f7725eadb3182aed1c5b606fa1f88104349e76e5"
+  },
+  "native_window": {
+    "control_path": "/tmp/rrrah-native-pfm-20261011/control.pfm",
+    "dimensions": [
+      2,
+      2
+    ],
+    "CUA_ready_title": "Rrrah \u2014 image 2x2 ready in 3.11ms",
+    "CUA_visual_observation": "Authored four-pixel float PFM visibly rendered as enlarged smooth color quadrants",
+    "surface": "Rgba16Float / ExtendedSrgbLinear",
+    "EDR": {
+      "displays": [
+        {
+          "currentEDR": 16,
+          "name": "Built-in Retina Display",
+          "potentialEDR": 16,
+          "referenceEDR": 0
+        }
+      ],
+      "observedAt": "2026-10-11T01:17:41Z",
+      "schemaVersion": 1
+    },
+    "upload_pending": 0,
+    "log": "/tmp/rrrah-native-pfm-20261011/viewer.log",
+    "log_sha256": "7e7608d6898a4595bbd4eb1676997879b0643384083729c7278ddfa4d67772cd",
+    "test_app_closed": true,
+    "prior_temporary_launcher_restored": true
+  },
+  "ordinary_viewer_tests": {
+    "passed": 196,
+    "failed": 0,
+    "ignored": 33,
+    "new_ignored_Metal_test_run_separately": true,
+    "log": "/tmp/rrrah-linear-pfm-viewer-all-20261011.log",
+    "log_sha256": "2f9dd4a738cb3421209306ac229b9b4e9714d5865c63184da33bf46dec6537c2"
+  },
+  "limitations": [
+    "One authored 2x2 bottom-up little-endian PFM; not independent camera/producer corpus coverage",
+    "Other PFM dialects, including explicit Adobe top-down import, remain pending",
+    "The caller must identify linear sRGB; no automatic primaries inference or broad reinterpretation of untagged LDR",
+    "EDR metadata and CUA screenshot do not establish physical luminance or color accuracy",
+    "Tiny fixture uses serial swap; large-raster parallel path has separate sustained qualification",
+    "NVIDIA deferred"
+  ]
+}

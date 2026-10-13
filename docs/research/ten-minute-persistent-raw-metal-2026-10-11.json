@@ -1,0 +1,100 @@
+{
+  "passed": 1,
+  "failed": 0,
+  "ignored": 0,
+  "adapter": "RAW collection adapter: Metal Apple M4 Max",
+  "rounds": 926,
+  "seconds": 600.006,
+  "exact_restores_and_frames": 8334,
+  "initial_swap_writes": 9,
+  "renderer": "single persistent RAW renderer",
+  "gpu_peak_bytes": {
+    "resident": 146800640,
+    "upload_scratch": 2097152,
+    "queued_uploads": 73400320
+  },
+  "final_gpu_and_storage_credits": 0,
+  "latency": {
+    "restore": {
+      "samples": 4096,
+      "total": 8334,
+      "p50_ms": 41.83,
+      "p95_ms": 68.318,
+      "max_ms": 290.941,
+      "window": "last4096"
+    },
+    "gpu_upload_render_readback": {
+      "samples": 4096,
+      "total": 8334,
+      "p50_ms": 22.928,
+      "p95_ms": 41.585,
+      "max_ms": 153.542,
+      "window": "last4096"
+    }
+  },
+  "input_pins_reverified_after_run": [
+    {
+      "path": "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/1294.cr2",
+      "bytes": 36489482,
+      "sha256": "8f28465cee09844ffad95dbd3ec91923717a329c5ec4f3f405f5b4fce83aaea3"
+    },
+    {
+      "path": "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/898.nef",
+      "bytes": 26336302,
+      "sha256": "f90deb2819863f5a6ca9913c255fdd83a94963f4284eb88df9d389da7a6c7665"
+    },
+    {
+      "path": "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/2414.arw",
+      "bytes": 25639680,
+      "sha256": "250784580ea527442c09004417bb0eead484f2bf3ee8f9121a776ac65bb50d0f"
+    },
+    {
+      "path": "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/1084.orf",
+      "bytes": 14779462,
+      "sha256": "b2221977cbc6eba0d3b363351072092e5647eaa0d02a5d8432b5d985b29f669f"
+    },
+    {
+      "path": "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/831.pef",
+      "bytes": 14201244,
+      "sha256": "51a3f22d702353b246684dca79f83c79cfdbdf9892702ae5ac55dd469e239bb6"
+    },
+    {
+      "path": "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/5025.rw2",
+      "bytes": 19520000,
+      "sha256": "87516d28f8594dcfd20b0577883ad0d35662efc503674b1e3688aa894d32a2c0"
+    },
+    {
+      "path": "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/2883.raf",
+      "bytes": 26158592,
+      "sha256": "58ad687b23138c3c49ebeb6c1f80daf13185349be364b947e2bf27e39a462d2f"
+    },
+    {
+      "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/IMG_9043.CR3",
+      "bytes": 22382226,
+      "sha256": "d06cbb10e84882cf130430bdc88ed2652c2622b96dea8d6a854c09e3bee37e59"
+    },
+    {
+      "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/IMG_9074.CR3",
+      "bytes": 21368466,
+      "sha256": "9c0d47cc2dd550eb6dc26c4ba2b2874b67f5c89e79dff5c472abf0ac6b2f6178"
+    }
+  ],
+  "log_sha256": "368892878d2c3aace686b4adcc4acf42997fcad16f68651fcdef659ac7093b14",
+  "driver_workload_evidence_valid": true,
+  "checks": [
+    "nine original RAW files",
+    "full sensor pixels and metadata exact after restore",
+    "1920x1080 frame exact after every replacement",
+    "pressure refusal, cancellation, retry, visible pin and spill every cycle",
+    "active GPU reservation equals renderer resident bytes after readback",
+    "temporary upload and queue credits zero each frame",
+    "all resident/upload/queue reservations zero after renderer drop"
+  ],
+  "limits": [
+    "Warm local file I/O, not physical slow disk or OS-wide pressure",
+    "Offscreen SDR readback, not physical HDR calibration",
+    "Initial native frames are restore references, not independent photographic appearance oracles",
+    "Logical GPU budgets exclude driver/pipeline allocations",
+    "NVIDIA deferred as requested"
+  ]
+}

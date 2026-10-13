@@ -1,0 +1,73 @@
+{
+  "status": "complete_bounded_frozen_scheduled_loftr_native_audit",
+  "source_manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-scheduled-loftr-snapshot-20261011.json",
+  "frozen_files": 3089,
+  "controls": 3,
+  "successful_controls": 2,
+  "successful_pair_records": 4,
+  "expected_missing_weight_failures": 1,
+  "optimized_emitted_runtime_packages": 225,
+  "generic_tests": 55,
+  "results": [
+    {
+      "case": "proposed_other_self_fallback",
+      "pairs": 3,
+      "managed_peak": 188738632,
+      "observed_maximum_resident_bytes": 417988608,
+      "self_model_anchors": [
+        144,
+        144
+      ],
+      "decisions": [
+        {
+          "left": 0,
+          "right": 1,
+          "supported": true,
+          "terminal": "model_tiles"
+        },
+        {
+          "left": 0,
+          "right": 2,
+          "supported": false,
+          "terminal": "native"
+        },
+        {
+          "left": 1,
+          "right": 2,
+          "supported": false,
+          "terminal": "native"
+        }
+      ]
+    },
+    {
+      "case": "no_hints_self",
+      "pairs": 1,
+      "managed_peak": 2442504,
+      "observed_maximum_resident_bytes": 407191552,
+      "self_model_anchors": [
+        144,
+        144
+      ],
+      "decisions": [
+        {
+          "left": 0,
+          "right": 1,
+          "supported": true,
+          "terminal": "model_tiles"
+        }
+      ]
+    }
+  ],
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-scheduled-loftr-native-runtime-20261011.json": "3d06f61dcbf76c7faab07b80cbe4e635cc83bc773c71ad5cec0d64f1afce87b5",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-scheduled-loftr-snapshot-20261011.json": "16ac09aeff00955b7329c41573fea6dfeb73f953da1bbc20aa76a6c9ebc231e3",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-scheduled-loftr-20261011.py": "630ac2ad50b0848884c56d9d99657ed9857f405641851f4d1549fab62eb928a8",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-scheduled-portfolio-audit-20261011.json": "2a611ba70192564e5a8270dab94f9bb789377156e2b0f8774aff194e42e91126"
+  },
+  "limits": [
+    "Only two distinct normalized 320-side images, model max-side160 and diagnostic untagged-linear assumption",
+    "Different-origin decisions are observed outputs, not semantic-negative calibration",
+    "No full corpus/original-resolution accuracy, hard RSS, kernel-interruption or cross-platform qualification",
+    "Initial producer stopped before runtime because it incorrectly included host BLAKE3 opt-level0; corrected producer validates emitted normal-runtime dependencies separately"
+  ]
+}

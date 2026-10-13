@@ -1,0 +1,65 @@
+{
+  "repository": "benhoyt/dhash",
+  "commit": "b2271b8c3b7d30fc9abdbcaf5988338a7b6bc76e",
+  "status": "complete_pinned_text_source_review_with_bounded_pillow_runtime_controls",
+  "files": 9,
+  "all_git_blobs_verified": true,
+  "text_files_read": [
+    ".github/workflows/ci.yml",
+    ".gitignore",
+    "LICENSE.txt",
+    "MANIFEST.in",
+    "README.rst",
+    "dhash.py",
+    "setup.py",
+    "test.py"
+  ],
+  "license": "MIT license text read; no production code copied",
+  "upstream_runtime": "One original Pillow unittest selected by AST import adapter and24 original doctest examples passed. Original full suite failed to import Wand; no mocked backend and no full-suite claim. Python3.12/Pillow12.3 macOS only.",
+  "findings": [
+    {
+      "source": "dhash.py:37-45",
+      "finding": "RGBA/LA fill removes invisible RGB before grayscale, but P-mode PNG alpha-table metadata is not handled by that branch. Fully invisible palette samples yield hashes separated by64bits in the reproduced control."
+    },
+    {
+      "source": "dhash.py:101-127",
+      "finding": "Strict row/column intensity increases produce128candidate bits; uniform opaque white and black share zero hash. No original pixel equality or texture information gate."
+    },
+    {
+      "source": "dhash.py:150-193",
+      "finding": "General size parameter lacks positive/whole-byte serialization policy: helper output and Python arbitrary-size integer semantics need explicit validation before API reuse."
+    },
+    {
+      "source": "dhash.py:73-98; README.rst",
+      "finding": "Pillow/Wand grayscale and resize differ; backend and recipe must be stable cache identity. No HDR/ICC/orientation/cancellation/resource source-guard guarantee is established."
+    }
+  ],
+  "adoptable": [
+    "Independent row/column bit-order oracle on precomputed grayscale matrices",
+    "Explicit alpha compositing policy and backend identity as requirements"
+  ],
+  "not_adopted": [
+    "Hash equality as duplicate identity",
+    "Unqualified P-mode transparency conversion",
+    "Unbounded image conversion without cancellation/source validation"
+  ],
+  "rrrah_regression_state": "Focused frozen-snapshot pixels/linear run started; result not yet qualified here. Existing fixtures cover invisible RGB, signed zero and uniform collisions.",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/dhash-full-source-20261012.json": "38c9687feabdcb5e222105dab10efb734db24b46503d01fc1139dff8e500fc1e",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/dhash-upstream-controls-20261012.json": "289151c2cce8acf501d0df592aa5596f5d3bd955c1adf8908d58fd2c4510892b",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/benhoyt--dhash/tree.json": "2e806b49874b2ccbb6d7bc3514067ae2b16305a14101059f8a9bc6ad2a13b84f",
+    "/Users/themoretheless/.codex/tmp/rrrah-dhash-b2271b8c-20261012.tar.gz": "20f9f748341494d151871d8a2161f48d438b86a864f085f389af741a6a681209",
+    "/Users/themoretheless/.codex/tmp/rrrah-dhash-upstream-tests-20261012.log": "a828163938241cfcb992fa63655c244046be3fe6fa604ce6dd0cbd31b7fa80c0",
+    "/Users/themoretheless/.codex/tmp/rrrah-dhash-selected-controls-20261012.log": "b7a9cb2d25b381abb845331cc90e533aa27c09b189edd5c6b2b76495d6d34355",
+    "/Users/themoretheless/.codex/tmp/rrrah-dhash-full-source-20261012/.github/workflows/ci.yml": "e643f98391665a626234c3acd6503a7090df08e4c9c88c0e4815fe7ca8302612",
+    "/Users/themoretheless/.codex/tmp/rrrah-dhash-full-source-20261012/.gitignore": "8596403a2585e21f1d094c420487048c5c82230f543c3337b885c765c7d93f82",
+    "/Users/themoretheless/.codex/tmp/rrrah-dhash-full-source-20261012/LICENSE.txt": "4b2a7d69f599aacab3aeea2497bdb6f6e5deb7c5ebdd124767502e4c5151c50c",
+    "/Users/themoretheless/.codex/tmp/rrrah-dhash-full-source-20261012/MANIFEST.in": "95b0c08b143140525f885e3969ea3650ea7581e4e54e3cc56ea9380373508797",
+    "/Users/themoretheless/.codex/tmp/rrrah-dhash-full-source-20261012/README.rst": "220dabe94d075fd72138f84f61410f96ca124b0f9adaa3f316a4817fa27763f0",
+    "/Users/themoretheless/.codex/tmp/rrrah-dhash-full-source-20261012/dhash-test.jpg": "86d9044cde6035a916592be13384af54231a06025f64adc5907dfdb29c402435",
+    "/Users/themoretheless/.codex/tmp/rrrah-dhash-full-source-20261012/dhash.py": "b09aa8f978e42b6997cd91c6c7680f950efbaa5a60288ce2bbf8782ec5471b39",
+    "/Users/themoretheless/.codex/tmp/rrrah-dhash-full-source-20261012/setup.py": "90ec777e522e25685c00e086aeee8db129e95767bfdef1f43a22144be81a1b81",
+    "/Users/themoretheless/.codex/tmp/rrrah-dhash-full-source-20261012/test.py": "8d791afa55686c13716657c199d968c73253cea7224dd559f075154dfeb670c1"
+  },
+  "scope": "Deepens record022 beyond selected excerpts. Full pinned Python implementation, tests, manifest/config/readme/license text read; all9 repository blobs verified. Bounded upstream runtime, not full backend/platform suite or all500 completion."
+}

@@ -1,0 +1,60 @@
+{
+  "manual_tests_passed": 3,
+  "backend": "Metal Apple M4 Max explicitly selected",
+  "hardware_render_timing": {
+    "median_gpu_ms": 0.355333,
+    "samples_gpu_ms": [
+      0.355167,
+      0.355,
+      0.355333,
+      0.354625,
+      0.356083,
+      0.355458,
+      0.355125,
+      0.355041,
+      0.355208,
+      0.354875,
+      0.355667,
+      0.355833,
+      0.355625,
+      0.355375,
+      0.355,
+      0.355458,
+      0.3555,
+      0.355333,
+      0.355333,
+      0.355375,
+      0.355833,
+      0.354958,
+      0.355209,
+      0.355333,
+      0.355208,
+      0.355333,
+      0.355667,
+      0.355417,
+      0.355334,
+      0.354958
+    ],
+    "source": [
+      4096,
+      4096
+    ],
+    "target": [
+      2048,
+      2048
+    ]
+  },
+  "timing_scope": "Hardware render-pass timestamps only; source already uploaded; excludes decode/upload/readback/UI and physical display",
+  "hdr_extremes": [
+    "Binary16 maximum finite signed values with exposure+10 saturate to finite range and preserve expected other channels",
+    "Opposite f32 extreme source samples interpolate at center to expected finite binary16 output; target contains no NaN/Inf"
+  ],
+  "portability_limit": "These HDR extreme tests are empirical Metal-specific results outside the portable binary16 caller contract; passing does not extend cross-backend guarantees",
+  "remaining_manual_gpu_cases": [
+    "HERO9 full production linear display transport",
+    "Fusion front/back full production linear display transport",
+    "qualified SD10 full linear display readback",
+    "DSC-F828 full-sensor RGBE oracle compute"
+  ],
+  "full_goal": "open; physical HDR, NVIDIA, slow disks, full100 formats remain unqualified"
+}

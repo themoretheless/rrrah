@@ -1,0 +1,40 @@
+   Compiling rrrah-core v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-core)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+error[E0308]: mismatched types
+  --> crates/rrrah-decode/src/png_color.rs:30:30
+   |
+30 |         red: Chromaticity {x:xy[0], y:xy[1]},
+   |                              ^^^^^ expected `f32`, found `f64`
+
+error[E0308]: mismatched types
+  --> crates/rrrah-decode/src/png_color.rs:30:39
+   |
+30 |         red: Chromaticity {x:xy[0], y:xy[1]},
+   |                                       ^^^^^ expected `f32`, found `f64`
+
+error[E0308]: mismatched types
+  --> crates/rrrah-decode/src/png_color.rs:31:32
+   |
+31 |         green: Chromaticity {x:xy[2], y:xy[3]},
+   |                                ^^^^^ expected `f32`, found `f64`
+
+error[E0308]: mismatched types
+  --> crates/rrrah-decode/src/png_color.rs:31:41
+   |
+31 |         green: Chromaticity {x:xy[2], y:xy[3]},
+   |                                         ^^^^^ expected `f32`, found `f64`
+
+error[E0308]: mismatched types
+  --> crates/rrrah-decode/src/png_color.rs:32:31
+   |
+32 |         blue: Chromaticity {x:xy[4], y:xy[5]},
+   |                               ^^^^^ expected `f32`, found `f64`
+
+error[E0308]: mismatched types
+  --> crates/rrrah-decode/src/png_color.rs:32:40
+   |
+32 |         blue: Chromaticity {x:xy[4], y:xy[5]},
+   |                                        ^^^^^ expected `f32`, found `f64`
+
+For more information about this error, try `rustc --explain E0308`.
+error: could not compile `rrrah-decode` (lib test) due to 6 previous errors

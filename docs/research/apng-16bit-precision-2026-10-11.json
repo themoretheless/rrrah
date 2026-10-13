@@ -1,0 +1,20 @@
+{
+  "scope": "Native selected 16-bit APNG samples, source alpha and SDR/HDR Metal readback against independently calculated linear reference",
+  "logs": [
+    {
+      "path": "docs/research/apng-16bit-metal-2026-10-11/rrrah-apng-16bit-precision-20261011.log",
+      "sha256": "0a686282fd59ed8abb5f26b1fccd826953907797fb269816f2c4ea29f2baed4a"
+    },
+    {
+      "path": "docs/research/apng-16bit-metal-2026-10-11/rrrah-apng-16bit-full-20261011.log",
+      "sha256": "0e541a9e4f326e32e2931ce22aabaec1d25f3c1e239f5b81fe36ec9bbe9f09da"
+    }
+  ],
+  "report": "docs/research/apng-16bit-metal-2026-10-11/report.json",
+  "source_sha256": "f348fab30c309937681278446c17d46f426014407dc0b8fd5e6612af8970dc81",
+  "fixture_sha256": "d744a6194981d1c01ab64aac72a56251756f04d723972fb6d0021a5517d4f175",
+  "limitations": [
+    "Not full 16-bit variant/color/playback qualification",
+    "Codec private scratch not charged to shared memory budget"
+  ]
+}

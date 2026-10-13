@@ -1,0 +1,107 @@
+warning: function `fallible_zeroed_bytes` is never used
+   --> crates/rrrah-cache/src/mosaic_payload_v1.rs:728:4
+    |
+728 | fn fallible_zeroed_bytes(len: usize) -> Result<Box<[u8]>, MosaicPayloadError> {
+    |    ^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-cache` (lib) generated 1 warning
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 11.38s
+     Running unittests src/main.rs (target/debug/deps/rrrah-0b4921b829754900)
+
+running 1 test
+delayed swap navigation: old file/index released before latest wake; only new HDR source renders; final credits=0
+test raster_lod_worker::tests::navigation_discards_delayed_old_swap_and_presents_only_new_hdr_source ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 253 filtered out; finished in 1.64s
+
+
+warning: function `fallible_zeroed_bytes` is never used
+   --> crates/rrrah-cache/src/mosaic_payload_v1.rs:728:4
+    |
+728 | fn fallible_zeroed_bytes(len: usize) -> Result<Box<[u8]>, MosaicPayloadError> {
+    |    ^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-cache` (lib) generated 1 warning
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+warning: field `0` is never read
+  --> crates/rrrah-app/tests/../src/raster_lod_worker.rs:33:13
+   |
+33 |     Swapped(rrrah_cache::SwappedRaster),
+   |     ------- ^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |     |
+   |     field in this variant
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+help: consider changing the field to be of unit type to suppress this warning while preserving the field numbering, or remove the field
+   |
+33 -     Swapped(rrrah_cache::SwappedRaster),
+33 +     Swapped(()),
+   |
+
+warning: method `into_swapped` is never used
+  --> crates/rrrah-app/tests/../src/raster_lod_worker.rs:48:12
+   |
+41 | impl Completed {
+   | -------------- method in this implementation
+...
+48 |     pub fn into_swapped(self) -> Result<rrrah_cache::SwappedRaster, WorkerError> {
+   |            ^^^^^^^^^^^^
+
+warning: method `with_same_waker` is never used
+  --> crates/rrrah-app/tests/../src/raster_lod_worker.rs:86:12
+   |
+85 | impl LodWorker {
+   | -------------- method in this implementation
+86 |     pub fn with_same_waker(&self) -> Self {
+   |            ^^^^^^^^^^^^^^^
+
+warning: methods `submit` and `submit_image` are never used
+    --> crates/rrrah-app/src/main.rs:1377:8
+     |
+1085 | impl ForegroundLoader {
+     | --------------------- methods in this implementation
+...
+1377 |     fn submit(&self, path: PathBuf) -> Result<u64> {
+     |        ^^^^^^
+...
+1380 |     fn submit_image(&self, path: PathBuf, image_index: usize) -> Result<u64> {
+     |        ^^^^^^^^^^^^
+     |
+     = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: associated items `install_with_cancel`, `refresh`, and `refresh_with_cancel` are never used
+   --> crates/rrrah-app/src/raster_viewport.rs:331:19
+    |
+ 20 | impl ResidentSource {
+    | ------------------- associated items in this implementation
+...
+331 |     pub(crate) fn install_with_cancel<F: FnMut() -> bool>(
+    |                   ^^^^^^^^^^^^^^^^^^^
+...
+418 |     pub(crate) fn refresh(
+    |                   ^^^^^^^
+...
+438 |     pub(crate) fn refresh_with_cancel<F: FnMut() -> bool>(
+    |                   ^^^^^^^^^^^^^^^^^^^
+
+warning: `rrrah` (test "swapped_region_metal") generated 3 warnings
+warning: `rrrah` (bin "rrrah") generated 2 warnings
+    Finished `test` profile [optimized + debuginfo] target(s) in 12.55s
+     Running tests/swapped_region_metal.rs (target/debug/deps/swapped_region_metal-ada668171286d115)
+
+running 6 tests
+test raster_lod_worker::tests::navigation_discards_delayed_old_swap_and_presents_only_new_hdr_source ... ignored, actual Metal navigation while old swapped region worker is delayed
+test raster_lod_worker::tests::generation_changed_after_publication_releases_output_before_consumption ... ok
+test raster_lod_worker::tests::pending_requests_coalesce_without_blocking_and_only_latest_result_owns_output ... ok
+test raster_lod_worker::tests::stale_persisted_source_releases_disk_index_and_input_before_consumption ... ok
+test raster_lod_worker::tests::swapped_regions_coalesce_drop_stale_output_and_retry_memory_pressure ... ok
+swapped region adapter: Metal Apple M4 Max
+test swapped_packed_regions_render_exactly_after_full_source_release ... ok
+
+test result: ok. 5 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 1.59s
+

@@ -1,0 +1,64 @@
+{
+  "index": 486,
+  "repository": "9elt/fast-dhash",
+  "commit": "b3ee22f1094837f4fc0fd3b2e3b1574e886fe77d",
+  "review_scope": "All270-line implementation/tests plus manifest/README/license/gitignore read.9 Git blobs verified;3 upstream JPEG golden tests and1doc example pass unchanged locked dependency source, external8controls use separately pinned dependency lock. No whole repository read/performance/general precision/platform or all500 completion.",
+  "decision": "do_not_adopt_unchecked_implementation",
+  "finding": "Actual small-image/remainder information loss and nontransitive approximate equality; static zero-channel unchecked-access unsoundness.12 runtime checks passed as characterization, not evidence defects absent.",
+  "available_source_evidence": [
+    {
+      "path": "src/lib.rs",
+      "local": "02-lib.rs",
+      "url": "https://github.com/9elt/fast-dhash/blob/b3ee22f1094837f4fc0fd3b2e3b1574e886fe77d/src/lib.rs",
+      "sha256": "b551102f4cfbe7d217ac0f087baf1ea0d6237c63b85c75db88b450b618b50fb5",
+      "truncated": false,
+      "lines": 270,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 3,
+  "upstream_tests_run": true,
+  "tests_inventory_scope": "Full270-line library source contains3embedded original tests plus1doc example; runtime pending.",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/9elt/fast-dhash/blob/b3ee22f1094837f4fc0fd3b2e3b1574e886fe77d/README.md",
+      "sha256": "6e085832c8c29eefbe9de45537af029aa2d4c32ba257061b0a14b802b7532174",
+      "truncated": false,
+      "lines": 29,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/9elt/fast-dhash/blob/b3ee22f1094837f4fc0fd3b2e3b1574e886fe77d/LICENSE",
+      "sha256": "25857d9bb56041bb099c84add149c567e779f7dd67653e255b7cd5ea905e6275",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ],
+  "full_repository_review_complete": true,
+  "total_files": 9,
+  "fully_read_files": 5,
+  "fully_reviewed_files": 9,
+  "complete_source_review": "fast-dhash-complete-source-review-20261012.json",
+  "complete_runtime_audit": "fast-dhash-complete-runtime-audit-20261012.json",
+  "original_unit_tests_passed": 3,
+  "original_doctests_passed": 1,
+  "authored_controls_passed": 7,
+  "whole_implementation_read": true,
+  "whole_repo_complete": false,
+  "incremental_reviews": [
+    {
+      "audit": "docs/research/dedup-500/fast-dhash-selected-source-audit-20261013.json"
+    }
+  ]
+}

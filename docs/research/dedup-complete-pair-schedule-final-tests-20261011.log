@@ -1,0 +1,68 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/pair_schedule.rs:82:1
+   |
+82 | / pub struct CompletePairIter<'a,F> {
+83 | |     schedule: &'a CompletePairSchedule,
+84 | |     cancel: F,
+85 | |     hint: usize,
+...  |
+88 | |     done: bool,
+89 | | }
+   | |_^
+
+warning: `rrrah-dedup` (lib) generated 2 warnings
+error[E0597]: `seen` does not live long enough
+  --> crates/rrrah-dedup/tests/pair_schedule.rs:54:45
+   |
+54 |         let seen=Cell::new(0);let cancel=||{seen.set(seen.get()+1);seen.get()==stop};
+   |             ----                         -- ^^^^ borrowed value does not live long enough
+   |             |                            |
+   |             |                            value captured here
+   |             binding `seen` declared here
+55 |         assert!(matches!(build(&cancel as &dyn Fn()->bool),Err(LocalError::Cancelled)));assert_eq!(budget.used(),0);
+56 |     }
+   |     - `seen` dropped here while still borrowed
+57 |     let schedule=build(&(||false) as &dyn Fn()->bool).unwrap();let baseline=budget.used();let calls=Cell::new(0);
+   |                  ----- borrow later used here
+
+error[E0597]: `stop` does not live long enough
+  --> crates/rrrah-dedup/tests/pair_schedule.rs:54:80
+   |
+53 |     for stop in 1..=calls.get() {
+   |         ---- binding `stop` declared here
+54 |         let seen=Cell::new(0);let cancel=||{seen.set(seen.get()+1);seen.get()==stop};
+   |                                          -- value captured here                ^^^^ borrowed value does not live long enough
+55 |         assert!(matches!(build(&cancel as &dyn Fn()->bool),Err(LocalError::Cancelled)));assert_eq!(budget.used(),0);
+56 |     }
+   |     - `stop` dropped here while still borrowed
+57 |     let schedule=build(&(||false) as &dyn Fn()->bool).unwrap();let baseline=budget.used();let calls=Cell::new(0);
+   |                  ----- borrow later used here
+
+error[E0597]: `cancel` does not live long enough
+  --> crates/rrrah-dedup/tests/pair_schedule.rs:55:32
+   |
+54 |         let seen=Cell::new(0);let cancel=||{seen.set(seen.get()+1);seen.get()==stop};
+   |                                   ------ binding `cancel` declared here
+55 |         assert!(matches!(build(&cancel as &dyn Fn()->bool),Err(LocalError::Cancelled)));assert_eq!(budget.used(),0);
+   |                                ^^^^^^^ borrowed value does not live long enough
+56 |     }
+   |     - `cancel` dropped here while still borrowed
+57 |     let schedule=build(&(||false) as &dyn Fn()->bool).unwrap();let baseline=budget.used();let calls=Cell::new(0);
+   |                  ----- borrow later used here
+
+For more information about this error, try `rustc --explain E0597`.
+error: could not compile `rrrah-dedup` (test "pair_schedule") due to 3 previous errors

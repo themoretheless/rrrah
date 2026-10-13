@@ -1,0 +1,53 @@
+{
+  "adapter": "Metal Apple M4 Max",
+  "date": "2026-10-12",
+  "change": "live policy helper now compares exact RGBA16Float readback as well as SDR and source f32 bits",
+  "runs": [
+    {
+      "cycles": 200,
+      "source": [
+        2,
+        1
+      ],
+      "output": [
+        96,
+        64
+      ],
+      "passed": 1,
+      "failed": 0,
+      "seconds": 7.19
+    },
+    {
+      "cycles": 1,
+      "source": [
+        4000,
+        3000
+      ],
+      "output": [
+        4000,
+        3000
+      ],
+      "passed": 1,
+      "failed": 0,
+      "seconds": 3.8
+    }
+  ],
+  "checks": [
+    "live TTL=0/count=1/byte-cap tightening refuses while lease pinned",
+    "visible lease survives policy tightening with exact SDR/HDR output",
+    "spill and restore preserve every f32 bit including negative and signed-zero values",
+    "full managed pressure and cancelled restore rejected",
+    "background restore cannot replace visible frame",
+    "replacement spills and restores with exact SDR/HDR output",
+    "managed CPU and completed HDR renderer budgets released"
+  ],
+  "logs": {
+    "metal-live-policy-half-2026-10-12.log": "d84a197a5b447689f33be5e542ac572a2a19132678c499460a53020dac1c0a0d",
+    "metal-large-policy-half-2026-10-12.log": "205c44d846d9f7892ad72a49d389acf17baabd878204df160a25b2b0901558de"
+  },
+  "limits": [
+    "Authored linear HDR payloads; not all formats",
+    "Metal readback is not physical HDR display calibration",
+    "Managed pressure is not OS RSS or physical slow disk"
+  ]
+}

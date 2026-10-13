@@ -1,0 +1,44 @@
+{
+  "status": "complete_pinned4file_review_with8_serial_adapter_controls",
+  "repository": "mk-fg/image-deduplication-tool",
+  "commit": "b78cef579284f33b59959800b7037277c27648f1",
+  "fully_read_files": [
+    ".gitignore",
+    "COPYING",
+    "README.md",
+    "image_matcher.py"
+  ],
+  "license": "WTFPLv2 Copyright2012MikeKazantsev",
+  "upstream_tests": 0,
+  "authored_controls": 8,
+  "adopted": false,
+  "findings": [
+    {
+      "kind": "runtime_adapter",
+      "detail": "Path-only cache reuses stale hashes after byte mutation and caches None failures after repair."
+    },
+    {
+      "kind": "runtime_adapter",
+      "detail": "Direct-file input is ignored despite CLI docs; missing root returns empty successful update and removes old cache entries."
+    },
+    {
+      "kind": "runtime_adapter",
+      "detail": "--top-n1 breaks only inner distance tier, producing3pairs across3tiers."
+    },
+    {
+      "kind": "runtime_adapter",
+      "detail": "Overlapping roots hash a path once; deleted paths evicted; zero hashes skipped."
+    },
+    {
+      "kind": "static",
+      "detail": "Async fork has no elapsed deadline/RSS limit; select has no timeout. Exceptional cleanup sends SIGTERM to pending children without waitpid or closing pending read descriptors. Normal completed children are waited; do not claim all paths leak."
+    },
+    {
+      "kind": "static",
+      "detail": "No source/dependency generations, model/library recipe cache identity, exact pixel confirmation or atomic cache replacement. Optional feh supports shell/delete actions; not executed."
+    }
+  ],
+  "extraction": "Unchanged3FunctionDef bodies; Python3 imap/xrange/viewitems/viewvalues adapters, mocked hash provider, serial mode. No native hashing/fork/viewer execution.",
+  "scope": "Bounded path-cache, enumeration and CLI behavior with original function bodies and adapters. No exact Python2/libpHash environment, image-hash precision, asynchronous child lifecycle or feh/delete qualification. No adoption.",
+  "control_harness_initial_failure": "First helper attempt used int.bit_count unavailable in Python3.9; replaced only hash adapter with bin(xor).count(1), retained initial task directory and executed new v2 directory. Not an upstream failure."
+}

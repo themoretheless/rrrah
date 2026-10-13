@@ -1,0 +1,12 @@
+{
+  "backend": "metal",
+  "passed": 1,
+  "failed": 0,
+  "verified": "first active request held by test-only bounded rendezvous; 1000 new submissions leave exactly one latest pending and no completed result or GPU reservation; released obsolete request is discarded and latest request succeeds; source lease/completed races/final CPU-GPU release checks pass",
+  "log": "docs/research/model-worker-bounded-2026-10-11.log",
+  "sha256": "36022deb6b6b549571cf4c8e2568d8b644084f7a9b38b1d6bd3c9dfb945a228e",
+  "limitations": [
+    "Deterministic worker-state qualification, not live-window frame timing.",
+    "Previous driver reports lack the newly required bounded-queue marker."
+  ]
+}

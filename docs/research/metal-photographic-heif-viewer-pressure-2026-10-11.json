@@ -1,0 +1,25 @@
+{
+  "date": "2026-10-11",
+  "scenario": "Normal viewer preload/cache route, external Canon DPP 6000x4000 PQ HEIF; actual Apple M4 Max Metal.",
+  "managed_cpu_root_bytes": 1073741824,
+  "retained_frame_bytes": 384000000,
+  "assertions": [
+    "Initial prepared LinearSrgb RGBA32Float occupies exactly 384000000 managed bytes.",
+    "Reserve all remaining managed root credit. A normal preload of the cached source succeeds and shares the same PixelBuffer allocation.",
+    "Metal SDR128x64 and HDR128x64 frames are exact on the pressure cache hit.",
+    "A distinct source path is refused at source-headroom admission and does not evict the ready original cache entry.",
+    "After releasing pressure, preloading the second source succeeds and Metal SDR/HDR frames match.",
+    "Drop all returned frames and cache: root used is zero."
+  ],
+  "command": "RRRAH_HEIF_CAMERA_SOURCE=/tmp/rrrah-canon-dpp-cardinal-IMG_5499cpq.HIF RRRAH_GPU_OPTIONAL=0 cargo test -p rrrah --bin rrrah photographic_heif_preload_cache_hit_under_full_pressure_and_metal -- --ignored --nocapture",
+  "gate": "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 241 filtered out; finished in 7.26s",
+  "limitations": [
+    "Managed CPU-budget pressure, not whole-system OS pressure.",
+    "Single external Canon DPP export; not all camera HEIF producers.",
+    "Rendered attachments checked at 128x64, full source uploaded; not full-resolution GPU readback.",
+    "Physical HDR display color/luminance unqualified; NVIDIA deferred."
+  ],
+  "source_sha256": "a816325fdf92fe04db1da0b29ffbb91e952bf426038108b982e159629fcacc1e",
+  "test_source_sha256": "39271b91d3e606a2017ec22dabd8ee159abbb7d30258917c07e7010653d9bfce",
+  "log_sha256": "339a9dc20d3357add43140444f1d3bac99a8ede97d78a305aca55335dd1a3afa"
+}

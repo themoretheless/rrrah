@@ -1,0 +1,183 @@
+{
+  "date": "2026-10-11",
+  "scope": "Source-order polygon fragments and allocation-free mesh rectangle query; prerequisites for native PDF covered-area integration, not a completed rendering fix",
+  "implementation": {
+    "pixel_selected_fragments": "Select a visible source region from signed winding counts; disjoint strips retain owner IDs, area and centroids. Invalid/outside owners and selector refusal abort.",
+    "clip_and_source_order": "Caller applies clip fill rules then chooses latest original source index, independently of BVH traversal order.",
+    "selected_region_limit": 4096,
+    "row_active_edge_limit": 4096,
+    "ordinary_intersection_region_limit_unchanged": 64,
+    "scratch": "Existing admitted cuts/hits/winding arrays; no retained fragment or owner array",
+    "mesh_rectangle_query": "Fixed 32-slot stack; conservative source-space bounds query; returned vertices transformed once by retained original forward affine; stable original indices preserved",
+    "mesh_query_failure": "Explicit WorkLimit, cancellation, invalid rectangle and callback refusals; discard prior callback accumulation on error"
+  },
+  "qualification": {
+    "interpreter": {
+      "passed": 106,
+      "failed": 0,
+      "ignored": 0
+    },
+    "compositor": {
+      "passed": 133,
+      "failed": 0,
+      "ignored": 10,
+      "filtered": 1
+    },
+    "spatial_query": {
+      "source_triangles": 1085,
+      "independent_brute_force_rectangle_comparisons": 1024,
+      "work_limit_per_sparse_query": 128,
+      "affine_geometry_matches_direct_original_transform": true,
+      "cancellation_checkpoints": 4,
+      "callback_error_propagated": true,
+      "zero_work_refused": true,
+      "invalid_and_disjoint_rectangles_checked": true
+    },
+    "selected_fragment_tests": {
+      "focused_passed": 4,
+      "full_and_partial_overlap_two_orders": true,
+      "cyan_magenta_component_integrals_and_total_area_exact": true,
+      "evenodd_hole_clipped_before_union": true,
+      "real_candidate_count_fixture_regions": 74,
+      "last_owner": 73,
+      "full_overlap_union_area_exact": 1.0,
+      "4097_regions_refused_before_any_admission": true,
+      "scratch_reservations_individually_refused": 1,
+      "cancellation_checkpoints": 19,
+      "callback_selector_invalid_owner_and_work_refusals_checked": true,
+      "final_admitted_bytes_after_row_drop": 0
+    }
+  },
+  "real_ai_pixel": {
+    "fixture": "VectorApple.ai",
+    "page": 0,
+    "pixel": [
+      141,
+      36
+    ],
+    "event": 2670,
+    "mesh_rectangle_candidates": 73,
+    "original_center_sample_missing": true,
+    "within_pixel_valid_samples": 96,
+    "within_pixel_probe_samples": 256,
+    "path_coverage_u8": 96,
+    "native_diagnostic_pages": [
+      {
+        "fixture": "VectorApple.ai",
+        "page": 0,
+        "width": 301,
+        "height": 246,
+        "diagnostic_timeout_seconds": 180,
+        "peak_admitted_bytes": 196387488,
+        "final_admitted_bytes": 0,
+        "status": "native_diagnostic",
+        "native_completed": true,
+        "capture_failed": false,
+        "capture_ms": 2578.3015,
+        "native_replay_ms": 8860.529874999998,
+        "deadline_expired": false,
+        "events": 2755,
+        "native_paints": 463,
+        "raster_events": 3,
+        "raster_source_models": [
+          "event=3,model=None",
+          "event=1218,model=Some(Cmyk)",
+          "event=2298,model=Some(Cmyk)"
+        ],
+        "native_raster_components": [
+          "event=3,sample_count=Some(29488),refusal=None",
+          "event=1218,sample_count=Some(298224),refusal=None",
+          "event=2298,sample_count=Some(266084),refusal=None"
+        ],
+        "shading_events": 13,
+        "page_model": "Cmyk"
+      },
+      {
+        "fixture": "one.ai",
+        "page": 0,
+        "width": 1366,
+        "height": 768,
+        "diagnostic_timeout_seconds": 180,
+        "peak_admitted_bytes": 168322584,
+        "final_admitted_bytes": 0,
+        "status": "native_diagnostic",
+        "native_completed": true,
+        "capture_failed": false,
+        "capture_ms": 1.4231669999999998,
+        "native_replay_ms": 9774.281625,
+        "deadline_expired": false,
+        "events": 8,
+        "native_paints": 2,
+        "raster_events": 0,
+        "raster_source_models": [],
+        "native_raster_components": [],
+        "shading_events": 0,
+        "page_model": "Rgb"
+      },
+      {
+        "fixture": "one.ai",
+        "page": 1,
+        "width": 177,
+        "height": 175,
+        "diagnostic_timeout_seconds": 180,
+        "peak_admitted_bytes": 4957320,
+        "final_admitted_bytes": 0,
+        "status": "native_diagnostic",
+        "native_completed": true,
+        "capture_failed": false,
+        "capture_ms": 0.039042,
+        "native_replay_ms": 259.056,
+        "deadline_expired": false,
+        "events": 1,
+        "native_paints": 0,
+        "raster_events": 0,
+        "raster_source_models": [],
+        "native_raster_components": [],
+        "shading_events": 0,
+        "page_model": "Rgb"
+      }
+    ],
+    "all_three_rgb_plane_hashes_unchanged_from_strict_report": true
+  },
+  "strict_report": "ai-native-devicen-poppler-2026-10-10.json",
+  "remaining": [
+    "Collect candidate mesh regions under admission and compose them with the path/clip regions in native replay",
+    "Integrate original component fields over selected fragments, respecting functions, color conversion, masks and blend modes",
+    "Repeat strict real AI fidelity and performance qualification after the rendering path changes",
+    "Production viewer, physical HDR, deferred NVIDIA and the complete 100-format goal remain open"
+  ],
+  "limits": [
+    "Rectangle candidates are conservative under affine transforms; actual triangle clipping remains required",
+    "Selected predicate and callback work must be bounded by the caller in addition to kernel edge/crossing work",
+    "No centroid substitution for arbitrary nonlinear functions is qualified",
+    "This turn deliberately does not claim the white-pixel defect fixed"
+  ],
+  "source_sha256": {
+    "vendor/hayro/src/polygon_coverage.rs": "c1b7c2519ca1c2222224b104bee5fe5a4d8122b3c314b5a75fc5547d94f6cfa4",
+    "vendor/hayro-interpret/src/encode/native_source.rs": "5133ef8d7ddf55b987264bfe104327d9ba10b577e2c2ab5eee3498a374fd97a8",
+    "vendor/hayro-interpret/src/encode.rs": "aad82992659261ff410bf5eef9e804db674f4586cd0d1cb070cc79bd14ecdb43",
+    "vendor/hayro/src/knockout_interpreter.rs": "63feeda13aceb039bcfde3e120ece14f833d182884013d2437f28e5739df8eb9"
+  },
+  "evidence_logs": {
+    "/tmp/rrrah-selected-source-regions-final-20261010.log": {
+      "sha256": "8a08d5f71284a7bbba4d646263a70230e6a6dd7711078dab45cf54fdeb6de421"
+    },
+    "/tmp/rrrah-mesh-rectangle-query-20261010.log": {
+      "sha256": "efa36f17990494aae6303855bd562c49a39392e33fbdb9fcf33ba220d61e0426"
+    },
+    "/tmp/rrrah-selected-source-budget-20261011.log": {
+      "sha256": "416a7c87136bddeb39d043c149bdcaf0ceba6c3a01e2b5eb24710719ec0acbc8"
+    },
+    "/tmp/rrrah-mesh-query-budget-20261011.log": {
+      "sha256": "3afd89cd8b21c53bdcfa458960c11c16a74c7db16f49146df3195041c026e08b"
+    },
+    "/tmp/rrrah-mesh-pixel-candidates-20261010.log": {
+      "sha256": "61709d62c80f321cc95b3e1541db730e74fde1e024fd05249d7ac6fec47657d3"
+    }
+  },
+  "reproduce": [
+    "python3 scripts/test-pdf-mesh-bounds.py --filter :: --target-dir /tmp/rrrah-required-corpus-target",
+    "python3 scripts/test-pdf-mesh-bounds.py --renderer --filter knockout_compositor --target-dir /tmp/rrrah-required-corpus-target",
+    "Native AI diagnostic with RRRAH_TRACE_NATIVE_PIXEL=141,36 and the environment in pdf-native-raster-clips-separation-2026-10-10.json"
+  ]
+}

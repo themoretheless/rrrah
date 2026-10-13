@@ -1,0 +1,61 @@
+{
+  "runs": [
+    {
+      "raw_report": "stl-load-paired-current-2026-10-13.json",
+      "facets": 250000,
+      "source_bytes": 12500084,
+      "geometry_blake3": "e9be83e32a710c0185a449fe06606c34aeed96a2cd36cbd018dd13a12d4c2fbf",
+      "statistics": {
+        "whole_file": {
+          "samples": 20,
+          "median_ms": 6.2351455,
+          "p95_ms": 7.415875,
+          "max_ms": 7.540125
+        },
+        "streaming": {
+          "samples": 20,
+          "median_ms": 6.1380835000000005,
+          "p95_ms": 6.804916,
+          "max_ms": 8.579917
+        }
+      }
+    },
+    {
+      "raw_report": "stl-load-paired-1m-current-2026-10-13.json",
+      "facets": 1000000,
+      "source_bytes": 50000084,
+      "geometry_blake3": "bff734b15fa9b7d14ca4ec8a200240f799b3b02e5fe95b71f6e59a3628de9778",
+      "statistics": {
+        "whole_file": {
+          "samples": 20,
+          "median_ms": 22.326229499999997,
+          "p95_ms": 24.76475,
+          "max_ms": 25.209458
+        },
+        "streaming": {
+          "samples": 20,
+          "median_ms": 21.564521,
+          "p95_ms": 31.280416,
+          "max_ms": 31.852166
+        }
+      }
+    }
+  ],
+  "order": "12 ABBA blocks, first 2 discarded; 20 samples per API per fixture",
+  "scope": "Warm CPU loading: current low-level whole-file API plus output management versus shared streaming model API. Geometry hash checked on all 48 loads per source; managed credit returns to zero after every drop.",
+  "conclusion": "No robust acceleration established: streaming median slightly lower but million-facet p95 worse. Streaming removes whole-source heap allocation, verified separately.",
+  "limitations": [
+    "Not a historical before-after benchmark",
+    "No cold disk, GPU or presentation latency",
+    "No process RSS measurement in this benchmark"
+  ],
+  "sha256": {
+    "docs/research/stl-load-paired-current-2026-10-13.json": "e2be632eb70b5332a0c750ca62bfd73a6a93a8c9dc64ac882a4678191ec995fe",
+    "/tmp/rrrah-stl-stream-bench-20261013/grid.stl": "3e90c23e18f0db3281d9c72408b316afd10c90541e39b652d9c9b91784fe4ae5",
+    "docs/research/stl-load-paired-1m-current-2026-10-13.json": "b1a905e08340625348697aa9d09e34d12a874bcaa76a3ff7e04edf82a5e6f924",
+    "/tmp/rrrah-stl-stream-bench-1m-20261013/grid.stl": "30726e34123265486f6a18cae4a23aa1d27d0c505e8091d8619dd33beb402f98",
+    "crates/rrrah-decode/examples/stl_load_bench.rs": "50649ff85cbb28e0c1d0082a7035ebf1120831a667edbeb477763a48f7f5a53a",
+    "target/debug/examples/stl_load_bench": "a27e08d5203fbec793e9d655ec150c0930d581c897be50cf97725eebc237fd95",
+    "crates/rrrah-decode/src/stl.rs": "0ad1d24ba36de951e60d310c317347d09672f069db3c1eb563e47953a51c416f"
+  }
+}

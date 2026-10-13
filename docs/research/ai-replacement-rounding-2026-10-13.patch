@@ -1,0 +1,147 @@
+--- a/vendor/hayro/src/native_moments.rs
++++ b/vendor/hayro/src/native_moments.rs
+@@ -27,8 +27,16 @@
+ impl<const C:usize> IntegralEnvelope<C> {
+     pub(super) fn new()->Self {Self {alpha:[0.;2],components:[[0.;2];C],max_component_abs:[0.;C]}}
+     pub(super) fn added(self,area:f64,alpha:f64,components:[f64;C],work:&mut usize,cancelled:&dyn Fn()->bool)->Option<Self> {
++        self.added_impl(area,alpha,components,1.,work,cancelled)
++    }
++    /// Moment aggregate area may exceed1by the already admitted rounding
++    /// tolerance. Original individual-fragment validation remains strict.
++    pub(super) fn added_aggregate(self,area:f64,alpha:f64,components:[f64;C],work:&mut usize,cancelled:&dyn Fn()->bool)->Option<Self> {
++        self.added_impl(area,alpha,components,1.+1e-12,work,cancelled)
++    }
++    fn added_impl(self,area:f64,alpha:f64,components:[f64;C],max_area:f64,work:&mut usize,cancelled:&dyn Fn()->bool)->Option<Self> {
+         debit(work,5+C.checked_mul(4)?,cancelled)?;
+-        if !(1..=4).contains(&C) || !area.is_finite() || area<=0. || area>1. || !alpha.is_finite() || alpha<0. || alpha>1.+1e-12
++        if !(1..=4).contains(&C) || !area.is_finite() || area<=0. || area>max_area || !alpha.is_finite() || alpha<0. || alpha>1.+1e-12
+             || components.iter().any(|v|!v.is_finite()) {return None;}
+         let product=area*alpha;
+         let weight=[product.next_down().max(0.),product.next_up()];
+@@ -40,6 +48,21 @@
+             let value=[a.min(b).next_down(),a.max(b).next_up()];
+             out.components[channel]=sum(self.components[channel],value);
+             out.max_component_abs[channel]=self.max_component_abs[channel].max(components[channel].abs());
++        }
++        if out.alpha.iter().chain(out.components.iter().flatten()).any(|v|!v.is_finite()) || cancelled() {return None;}
++        Some(out)
++    }
++    /// Merge two independently enclosed sample streams. Their maximum native
++    /// values remain a bound for the combined nonnegative-alpha weighted mean.
++    pub(super) fn merged(self,other:Self,work:&mut usize,cancelled:&dyn Fn()->bool)->Option<Self> {
++        debit(work,1+C.checked_mul(4)?,cancelled)?;
++        if !(1..=4).contains(&C) {return None;}
++        let sum=|a:[f64;2],b:[f64;2]|[(a[0]+b[0]).next_down(),(a[1]+b[1]).next_up()];
++        let mut out=self;out.alpha=sum(self.alpha,other.alpha);out.alpha[0]=out.alpha[0].max(0.);
++        for channel in 0..C {
++            if cancelled() {return None;}
++            out.components[channel]=sum(self.components[channel],other.components[channel]);
++            out.max_component_abs[channel]=self.max_component_abs[channel].max(other.max_component_abs[channel]);
+         }
+         if out.alpha.iter().chain(out.components.iter().flatten()).any(|v|!v.is_finite()) || cancelled() {return None;}
+         Some(out)
+@@ -592,3 +615,28 @@
+         assert!((a/alpha-b/other_alpha).abs()<=error[0]);
+     }}
+ }
++
++#[test]
++fn merged_integral_envelopes_cover_two_sample_streams_and_all_refusal_checkpoints() {
++    let left=IntegralEnvelope::<1>::new().added(0.5,0.5,[0.125],&mut 100,&||false).unwrap();
++    let right=IntegralEnvelope::<1>::new().added(0.5,0.5,[0.875],&mut 100,&||false).unwrap();
++    let mut work=100;let merged=left.merged(right,&mut work,&||false).unwrap();
++    let bounds=merged.finish(0.5,[0.25],&mut 100,&||false).unwrap();
++    assert!(bounds.alpha[0]<=0.5 && bounds.alpha[1]>=0.5);
++    assert!(bounds.components[0][0]<=0.25 && bounds.components[0][1]>=0.25);
++    assert_eq!(bounds.max_component_abs,[0.875]);
++    for budget in 0..100-work {assert!(left.merged(right,&mut {budget},&||false).is_none());}
++    let polls=std::cell::Cell::new(0);left.merged(right,&mut 100,&||{polls.set(polls.get()+1);false}).unwrap();
++    for stop in 1..=polls.get() {let count=std::cell::Cell::new(0);assert!(left.merged(right,&mut 100,&||{count.set(count.get()+1);count.get()>=stop}).is_none());}
++    assert_eq!(left.alpha,right.alpha);
++}
++
++#[test]
++fn aggregate_integral_area_allows_moment_rounding_without_weakening_fragment_validation() {
++    let envelope=IntegralEnvelope::<1>::new();let area=1.+f64::EPSILON;
++    assert!(envelope.added(area,0.5,[0.5],&mut 100,&||false).is_none());
++    let aggregate=envelope.added_aggregate(area,0.5,[0.5],&mut 100,&||false).unwrap();
++    let bounds=aggregate.finish(area*0.5,[area*0.25],&mut 100,&||false).unwrap();
++    assert!(bounds.alpha[0]<=area*0.5 && bounds.alpha[1]>=area*0.5);
++    assert!(envelope.added_aggregate(1.+2e-12,0.5,[0.5],&mut 100,&||false).is_none());
++}
+--- a/vendor/hayro/src/native_spatial.rs
++++ b/vendor/hayro/src/native_spatial.rs
+@@ -90,9 +90,13 @@
+         else {super::native_moments::MomentTable::<64,5,64>::admitted_prefix(8192,origin,key_words,admit)}
+     } else {None};
+     let mut moment_complete=moments.is_some();let mut moment_work=256_000_000usize;
+-    let integral_rounding=std::env::var_os("RRRAH_AI_INTEGRAL_ROUNDING_BOUNDS").is_some();
++    let replacement_rounding=observe_moments && std::env::var_os("RRRAH_AI_REPLACEMENT_ROUNDING_BOUNDS").is_some();
++    let integral_rounding=replacement_rounding || std::env::var_os("RRRAH_AI_INTEGRAL_ROUNDING_BOUNDS").is_some();
+     let _integral_credit=if integral_rounding {admit(size_of::<super::native_moments::IntegralEnvelope<4>>())} else {None};
+     let mut integral_envelope=if _integral_credit.is_some() {Some(super::native_moments::IntegralEnvelope::<4>::new())} else {None};
++    let _replacement_credit=if replacement_rounding {admit(2*size_of::<super::native_moments::IntegralEnvelope<4>>())} else {None};
++    let mut fallback_envelope=if _replacement_credit.is_some() {Some(super::native_moments::IntegralEnvelope::<4>::new())} else {None};
++    let mut original_integral_bounds=None;
+     // Credit precedes the vector so storage is dropped before credit release.
+     let _token_credit=if fingerprint_moments {Some(admit(regions.len().checked_mul(size_of::<u64>())?)?)} else {None};
+     let mut hash_tokens=Vec::new();
+@@ -157,6 +161,7 @@
+         })?;
+         if pixel.model()!=backdrop.model() || !pixel.valid() {return None;}
+         if observe_moments && !affine?.get() {
++            if let Some(envelope)=fallback_envelope {fallback_envelope=envelope.added(fragment.area,pixel.alpha(),pixel.native_components()?,&mut moment_work,cancelled);}
+             fallback_fragments+=1;fallback_alpha+=fragment.area*pixel.alpha();
+             for (sum,value) in fallback_integral.iter_mut().zip(pixel.native_components()?) {*sum+=fragment.area*pixel.alpha()*value;}
+         }
+@@ -197,6 +202,7 @@
+     }
+     if integral_rounding {
+         if let Some(bounds)=integral_envelope.and_then(|envelope|envelope.finish(alpha,integral,&mut moment_work,cancelled)) {
++            original_integral_bounds=Some(bounds);
+             let lower=alpha.min(bounds.alpha[0]).next_down();
+             let quotient=super::native_moments::native_quotient_error_bound(bounds.component_error,bounds.alpha_error,lower,bounds.max_component_abs,&mut moment_work,cancelled);
+             eprintln!("SPATIAL_INTEGRAL_ROUNDING complete=true alpha_error={:?} max_integral_error={:?} quotient_available={} max_quotient_error={:?} diagnostic_work={}",bounds.alpha_error,bounds.component_error.into_iter().fold(0.,f64::max),quotient.is_some(),quotient.map(|v|v.into_iter().fold(0.,f64::max)),256_000_000-moment_work);
+@@ -230,6 +236,7 @@
+         eprintln!("SPATIAL_FRAGMENT_MOMENTS complete={moment_complete} fragments={moment_fragments} buckets={buckets} area={area:?} fallback_fragments={fallback_fragments} diagnostic_work={}",256_000_000-moment_work);
+         if moment_complete {
+             let mut grouped_alpha=0.;let mut grouped_integral=[0.;4];let mut compared=0usize;
++            let mut replacement_envelope=if _replacement_credit.is_some() {Some(super::native_moments::IntegralEnvelope::<4>::new())} else {None};
+             let mut bucket_errors=0usize;let mut identity_fallbacks=0usize;let mut generation_only=0usize;
+             for (_identity,weight,centroid,reference,key,identity_words) in moments.as_ref()?.iter_with_witness() {
+                 if cancelled() {break;}
+@@ -255,6 +262,9 @@
+                     let actual=source_key?.key.borrow();let actual=actual.as_ref()?;
+                     if actual.len!=identity_words || actual.words[..actual.len]!=_identity[..identity_words] {
+                         identity_fallbacks+=1;
++                        // Original per-bucket reference uses compensated sums;
++                        // its interval is not yet retained. Never invent a bound.
++                        if replacement_rounding {replacement_envelope=None;}
+                         if actual.words[1..actual.len]==_identity[1..identity_words] {generation_only+=1;}
+                         if identity_fallbacks<=16 {
+                             eprintln!("SPATIAL_FIELD_CENTROID_IDENTITY_FALLBACK expected={:?} actual={:?} centroid={centroid:?}", &_identity[..identity_words],&actual.words[..actual.len]);
+@@ -273,9 +283,24 @@
+                     bucket_errors+=1;
+                     eprintln!("SPATIAL_MOMENT_BUCKET_ERROR area={weight:?} centroid={centroid:?} alpha_sample={:?} alpha_reference={:?} alpha_integral_delta={bucket_alpha_delta:?} color_integral_delta={bucket_color_delta:?} key={:?}",pixel.alpha(),reference[0]/weight,&key[..(regions.len()+63)/64]);
+                 }
++                if let Some(envelope)=replacement_envelope {replacement_envelope=envelope.added_aggregate(weight,pixel.alpha(),values,&mut moment_work,cancelled);}
+                 grouped_alpha+=weight*pixel.alpha();
+                 for (sum,value) in grouped_integral.iter_mut().zip(values) {*sum+=weight*pixel.alpha()*value;}
+                 compared+=1;
++            }
++            if replacement_rounding {
++                let candidate_alpha=grouped_alpha+fallback_alpha;
++                let candidate_integral=std::array::from_fn(|i|grouped_integral[i]+fallback_integral[i]);
++                let candidate=if compared==buckets {
++                    replacement_envelope.zip(fallback_envelope).and_then(|(a,b)|a.merged(b,&mut moment_work,cancelled))
++                        .and_then(|envelope|envelope.finish(candidate_alpha,candidate_integral,&mut moment_work,cancelled))
++                } else {None};
++                if let (Some(bounds),Some(original))=(candidate,original_integral_bounds) {
++                    let first=super::native_moments::native_quotient_error_bound(original.component_error,original.alpha_error,alpha.min(original.alpha[0]).next_down(),original.max_component_abs,&mut moment_work,cancelled);
++                    let second=super::native_moments::native_quotient_error_bound(bounds.component_error,bounds.alpha_error,candidate_alpha.min(bounds.alpha[0]).next_down(),bounds.max_component_abs,&mut moment_work,cancelled);
++                    let native=first.zip(second).map(|(a,b)|a.into_iter().zip(b).map(|(a,b)|(a+b).next_up()).fold(0.,f64::max));
++                    eprintln!("SPATIAL_REPLACEMENT_ROUNDING complete=true candidate_alpha_error={:?} max_candidate_integral_error={:?} quotient_available={} native_arithmetic_term={native:?}",bounds.alpha_error,bounds.component_error.into_iter().fold(0.,f64::max),native.is_some());
++                } else {eprintln!("SPATIAL_REPLACEMENT_ROUNDING complete=false identity_fallbacks={identity_fallbacks} compared={compared} buckets={buckets}");}
+             }
+             let delta=grouped_integral.iter().zip(fallback_integral).zip(integral).map(|((a,b),c)|(a+b-c).abs()).fold(0.,f64::max);
+             if field_moments {eprintln!("SPATIAL_FIELD_CENTROID_GUARD accepted={} fallback_buckets={identity_fallbacks} generation_only={generation_only}",compared-identity_fallbacks);}

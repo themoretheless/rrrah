@@ -1,0 +1,200 @@
+{
+  "date": "2026-10-10",
+  "scope": "Test-only native PDF raster replay: admitted shared curved clips and explicit Separation alternate tints; not production AI or Metal qualification",
+  "changes": [
+    "Raster events retain shared globally prepared clips, using the existing admitted/cancellable contour preparation and exact-geometry cache",
+    "Original Separation samples resolve through explicit bounded alternate-space functions before premultiplied sample interpolation; no RGB8 reconstruction",
+    "Native sample resolution supports cooperative cancellation, at most 16 color-space levels and 4096 shared function steps",
+    "None colorant, unsupported alternate spaces and unsupported tint functions refuse explicitly",
+    "Ignored AI diagnostic timeout is configurable from 1 to 600 seconds, default 30; report records the configured budget"
+  ],
+  "qualification": {
+    "compositor": {
+      "passed": 125,
+      "failed": 0,
+      "ignored": 10,
+      "filtered": 1
+    },
+    "curved_raster_regression": {
+      "before_fix": "FAILED: native replay returned None on cubic clip",
+      "after_fix": "PASS: 16-bit Gray source retained; exact RGB components on either side; independent boundary area 109/192 gives rounded coverage 145/255"
+    },
+    "separation_regression": {
+      "linear_black_tint": true,
+      "nonlinear_squared_tint": true,
+      "all_observed_sample_cancellation_checkpoints": true,
+      "none_colorant_refused": true,
+      "original_16bit_samples_retained": true,
+      "native_cmyk_replay_exact": true
+    },
+    "interpreter": {
+      "passed": 103,
+      "failed": 0,
+      "ignored": 0,
+      "filtered": 0
+    }
+  },
+  "real_ai": {
+    "pages": [
+      {
+        "fixture": "VectorApple.ai",
+        "page": 0,
+        "width": 301,
+        "height": 246,
+        "diagnostic_timeout_seconds": 180,
+        "peak_admitted_bytes": 196387440,
+        "final_admitted_bytes": 0,
+        "status": "native_diagnostic",
+        "native_completed": false,
+        "capture_failed": false,
+        "capture_ms": 21307.233875,
+        "native_replay_ms": 41148.808541,
+        "deadline_expired": false,
+        "events": 2755,
+        "native_paints": 463,
+        "raster_events": 3,
+        "raster_source_models": [
+          "event=3,model=None",
+          "event=1218,model=Some(Cmyk)",
+          "event=2298,model=Some(Cmyk)"
+        ],
+        "native_raster_components": [
+          "event=3,sample_count=Some(29488),refusal=None",
+          "event=1218,sample_count=Some(298224),refusal=None",
+          "event=2298,sample_count=Some(266084),refusal=None"
+        ],
+        "shading_events": 13,
+        "page_model": "Cmyk"
+      },
+      {
+        "fixture": "one.ai",
+        "page": 0,
+        "width": 1366,
+        "height": 768,
+        "diagnostic_timeout_seconds": 180,
+        "peak_admitted_bytes": 168322584,
+        "final_admitted_bytes": 0,
+        "status": "native_diagnostic",
+        "native_completed": true,
+        "capture_failed": false,
+        "capture_ms": 21.425458000000003,
+        "native_replay_ms": 12118.268709,
+        "deadline_expired": false,
+        "events": 8,
+        "native_paints": 2,
+        "raster_events": 0,
+        "raster_source_models": [],
+        "native_raster_components": [],
+        "shading_events": 0,
+        "page_model": "Rgb"
+      },
+      {
+        "fixture": "one.ai",
+        "page": 1,
+        "width": 177,
+        "height": 175,
+        "diagnostic_timeout_seconds": 180,
+        "peak_admitted_bytes": 4957320,
+        "final_admitted_bytes": 0,
+        "status": "native_diagnostic",
+        "native_completed": true,
+        "capture_failed": false,
+        "capture_ms": 0.067209,
+        "native_replay_ms": 575.32,
+        "deadline_expired": false,
+        "events": 1,
+        "native_paints": 0,
+        "raster_events": 0,
+        "raster_source_models": [],
+        "native_raster_components": [],
+        "shading_events": 0,
+        "page_model": "Rgb"
+      }
+    ],
+    "before_clip_fix": "depth 1 raster event 11: three clips with 123 curve elements refused by polygon stage",
+    "before_tint_fix": "same raster passed clip stage, original Separation/Black/DeviceCMYK Type2 tint then refused native sampling",
+    "after_fixes": "VectorApple passes nested raster event 11 and reaches root shading event 1017; captured=false, refusal=Unsupported. No deadline expiry; all final admitted bytes zero.",
+    "source_raster_object": 489,
+    "source_color_space_object": 488,
+    "source_color_space_declaration": "Separation Black DeviceCMYK, FunctionType2, C0=[0,0,0,0], C1=[0,0,0,1], N=1",
+    "source_raster_decode": [
+      1,
+      0
+    ],
+    "strict_fidelity_qualified": false
+  },
+  "timing_limits": [
+    "The default 30-second run cancelled VectorApple under concurrent machine load, after 28.652 seconds of capture; final reserve zero",
+    "The 180-second forensic run is a functionality diagnostic, not a latency qualification or speed benchmark",
+    "Image interpolation is implementation-dependent in Adobe PDF Reference 1.6, pages316-317; native alternate-component premultiplied bilinear policy still needs broader oracle coverage"
+  ],
+  "limitations": [
+    "Production AI strict Poppler fidelity remains pending; PostScript AI unsupported",
+    "Native compositor remains test-only and is not connected to Metal presentation",
+    "DeviceN, Lab, None paint semantics and broader tint functions remain unsupported in this native image resolver",
+    "Original parsed color/function metadata and allocator bookkeeping are outside the logical array-capacity budget"
+  ],
+  "sources": [
+    {
+      "title": "Adobe PDF Reference 1.6",
+      "url": "https://opensource.adobe.com/dc-acrobat-sdk-docs/pdfstandards/pdfreference1.6.pdf",
+      "local_sha256": "8ade80bb8bcc4f5aece6bb4c55ef76e583d21d564102d58a4021432949c95847",
+      "use": "Separation alternate tint semantics and implementation-dependent image interpolation"
+    }
+  ],
+  "evidence_logs": {
+    "/tmp/rrrah-curved-raster-before-20261010.log": {
+      "sha256": "3dc3d958b8ef5be07dcdbb386e9d342ce4d3f46fef03a3d884ac977c580c8d19"
+    },
+    "/tmp/rrrah-curved-raster-after-20261010.log": {
+      "sha256": "afa6b34ae432a18af9d596b0511f9ae66aa4262965ff34cd4a2af1647c36fbf5"
+    },
+    "/tmp/rrrah-raster-clip-before-20261010.log": {
+      "sha256": "e137f9263cc074b0d50cbe4773cdf6c87ce68a7fc74484e067cf4ee5583c8c45"
+    },
+    "/tmp/rrrah-separation-raster-final-20261010.log": {
+      "sha256": "0f5f017cc5a6f64b27804b7a4aeb0cc03c0f33f946dc5d0ed3364d4ea062233b"
+    },
+    "/tmp/rrrah-separation-raster-ai-20261010.log": {
+      "sha256": "340dfa65357281a43e8d05da0385173e7b86964c628952c789ab73fc72bce6d6"
+    },
+    "/tmp/rrrah-separation-raster-extended-ai-20261010.log": {
+      "sha256": "4ce397d8e8f9ebd138f1deb72dd86509b9a3646f1a01a204c6f918b87f1db709"
+    },
+    "/tmp/rrrah-separation-interpreter-20261010.log": {
+      "sha256": "5640b97d6034badff940f664f5f83097de8eb2df3794ebfe4aad4f4af84e497e"
+    }
+  },
+  "source_sha256": {
+    "vendor/hayro/src/knockout_interpreter.rs": "9397ab1e8a7eb9fb9535c9f55ba9d30a8813aba6f81529251bdb2c480765ab12",
+    "vendor/hayro-interpret/src/color.rs": "b50374998088f0b8862a99a26a64e2b7af4b5c3eaac848fb790925ab3da57f6e"
+  },
+  "fixtures": {
+    "VectorApple.ai": {
+      "sha256": "c5fc34346629c3379cee6065c45b7de0b620be822604551d1463d8e691b03d06"
+    },
+    "one.ai": {
+      "sha256": "97786949c268233a446e1738fb9c2f941e4d109811bd2f972948cdb7a45d64b4"
+    }
+  },
+  "reproduce": {
+    "compositor": "python3 scripts/test-pdf-mesh-bounds.py --renderer --filter knockout_compositor --target-dir /tmp/rrrah-required-corpus-target",
+    "interpreter": "python3 scripts/test-pdf-mesh-bounds.py --filter :: --target-dir /tmp/rrrah-required-corpus-target",
+    "real_ai_command": "python3 scripts/test-pdf-mesh-bounds.py --renderer --filter real_ai_compositor_capture_and_replay_diagnostic --include-ignored --target-dir /tmp/rrrah-required-corpus-target",
+    "real_ai_env": {
+      "RRRAH_AI_REPLAY_CORPUS": "directory containing pinned VectorApple.ai and one.ai",
+      "RRRAH_AI_REPLAY_OUTPUT": "new output directory that does not already exist",
+      "RRRAH_AI_REPLAY_TIMEOUT_SECONDS": "180",
+      "RRRAH_AI_GLOBAL_CONTOUR": "1",
+      "RRRAH_AI_CANONICAL_F32": "1",
+      "RRRAH_AI_NATIVE_POLYGON": "1",
+      "RRRAH_AI_ADMITTED_STROKES": "1",
+      "RRRAH_AI_NATIVE_SOLID_DIAGNOSTIC": "1",
+      "RRRAH_AI_NATIVE_RASTER_CAPTURE": "1",
+      "RRRAH_AI_NATIVE_SHADING_CAPTURE": "1",
+      "RRRAH_TRACE_NATIVE_REPLAY_EVENT": "1",
+      "RRRAH_TRACE_NATIVE_COLOR_REFUSAL": "1",
+      "RRRAH_TRACE_NATIVE_AREA_REFUSAL": "1"
+    }
+  }
+}

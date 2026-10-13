@@ -1,0 +1,28 @@
+{
+  "backend": "Metal Apple M4 Max",
+  "dimensions": [
+    3360,
+    2460
+  ],
+  "values_checked_per_case": 33062400,
+  "cases": [
+    {
+      "binding_limit": 134217728,
+      "dispatches": 1
+    },
+    {
+      "binding_limit": 1048576,
+      "dispatches": 130
+    }
+  ],
+  "passed": 1,
+  "failed": 0,
+  "cpu_gpu_final_zero": true,
+  "tolerance": 1e-05,
+  "log": "docs/research/full-f828-input-windows-2026-10-11.log",
+  "sha256": "7de8307aa721629e24a08013e5352db307a21c19a95734d18d29a2f72a6a1e60",
+  "limitations": [
+    "Independent original sensor with authored gains and normalization, not as-shot WB/color.",
+    "Buffers remain fully allocated; this qualifies binding segmentation, not streaming."
+  ]
+}

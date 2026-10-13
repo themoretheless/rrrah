@@ -1,0 +1,32 @@
+{
+  "status": "verified_55_default_tests_with_bounded_root_admission_native_linux_arm64_nonroot",
+  "passed": 55,
+  "ignored": 2,
+  "suites": [
+    {
+      "suite": "lib",
+      "passed": 32,
+      "ignored": [
+        "gradient::batch_tests::alternating_matcher_timing",
+        "gradient::matching_tests::alternating_matcher_timing"
+      ]
+    },
+    {
+      "suite": "exact_files",
+      "passed": 23,
+      "ignored": []
+    }
+  ],
+  "image_id": "sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55",
+  "compiler": "rustc 1.98.0 (88d9e12ae 2026-08-18)\nbinary: rustc\ncommit-hash: 88d9e12ae178fab0fb5cc050a94da85685d449ea\ncommit-date: 2026-08-18\nhost: aarch64-unknown-linux-gnu\nrelease: 1.98.0\nLLVM version: 22.1.8\n",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exact-root-admission-linux-prepared-20261012.json": "4b676570ac0ec46bca5d363c26e0ae310f6514282d5d2b13abd56d1608916049",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exact-root-admission-source-retry2-20261012.json": "cbad385750fe3d63894e1abcfd7d9a6e8641d5a6c9eb9aaf31fecc718b02e599",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-root-admission-linux-tests-20261012.log": "5d421a6df22f6272db29afffcf609b6d44bdbbcb52625324aeeda6f7c9bfbf81",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-exact-root-admission-linux-20261012.py": "8a9f798684e04b06026bba93d5b1f55da727c343a32d6e6dfa1d3db15f573833",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-linux-native/toolchain/bin/rustc": "9d7a5b460112fc7290514b05cc30aea07b0a1430598a26594aa9755ebdba6001",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-root-admission-linux-executables-20261012/lib": "50138e8a3cd9a0d5f6b49b61cfcba61ee0c20f00c774c8d7628d7c3cb3265378",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-root-admission-linux-executables-20261012/exact_files": "8df69b624a2ab253b0d3f7be03c7bb7f76b92027cc2a28e1f75ecb8b37b575a7"
+  },
+  "scope": "Current adopted bounded-root-admission source. Linux ARM64 nonroot55default-feature unit/exactfile controls including3rootadmission and2restoredmtime regressions, source/image/toolchain/testnames/ELFbinaries pinned. No decoder/allfeature/Windows/totalprocesscap/fullcorpus/500 qualification."
+}

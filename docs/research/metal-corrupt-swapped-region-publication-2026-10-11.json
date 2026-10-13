@@ -1,0 +1,21 @@
+{
+  "scope": "Selected swapped pixel block corruption through actual viewer worker and Metal frame preservation",
+  "result": "passed",
+  "adapter": "Metal Apple M4 Max",
+  "controls": [
+    "full source already released and fit preview installed",
+    "flip byte in selected pixel block beyond metadata block",
+    "worker returns digest mismatch; no native crop published",
+    "viewer retains exact previous HDR frame and only40960-byte fit preview memory",
+    "pending and ready slots empty; no automatic retry wake",
+    "restore original byte; later worker reads and all three detail references plus fit succeed",
+    "paused rapid pans still publish only latest crop",
+    "all final CPU index texture queue and disk credits zero"
+  ],
+  "validation": "explicit actual Metal swapped viewport control passed",
+  "limits": [
+    "deliberate local file corruption and repair, not physical failing-disk qualification",
+    "no native corrupt-file UI navigation qualification",
+    "physical HDR OSwide pressure NVIDIA full100-format acceptance remain open"
+  ]
+}

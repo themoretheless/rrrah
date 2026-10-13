@@ -1,0 +1,27 @@
+{
+  "scope": "Shared CPU admission for swapped viewport crop overscan and rapid pan scheduling",
+  "result": "passed",
+  "adapter": "Metal Apple M4 Max",
+  "changes": [
+    "SwappedRaster advisory accounts retained prefix packed pixels scratch and parsed native crop/profile in distinct phases",
+    "shared ancestors counted jointly through can_reserve_with; query reserves no memory and changes no peaks",
+    "ordinary per-crop decode cap retained",
+    "viewer omits pan overscan when shared CPU budget cannot restore candidate but exact visible crop fits"
+  ],
+  "controls": [
+    "independent output parse boundary2111 refuses2112 admits",
+    "shared parent read phase66623 refuses66624 admits and restores",
+    "Metal95000-byte remaining CPU budget chooses exact visible region and restores it",
+    "paused first worker request while three pan views supersede; only newest HDR reference published",
+    "final CPU index texture queue and disk credits zero"
+  ],
+  "validation": {
+    "cache_region_controls_passed": 3,
+    "large_manual_region_control_ignored": 1,
+    "explicit_metal_viewport_controls_passed": 6
+  },
+  "limits": [
+    "advisory planning remains subject to actual atomic admission under concurrent ownership changes",
+    "no physical slowdisk OSwide pressure HDR calibration NVIDIA or full100-format completion claim"
+  ]
+}

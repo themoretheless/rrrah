@@ -1,0 +1,90 @@
+{
+  "status": "failed",
+  "producer_pid": 54981,
+  "source_manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-joint-projective-qualified-snapshot-20261011.json",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-joint-projective-qualified-snapshot-20261011.json": "04360eec77a26979aa7eb3137741ef6d3a7ac7c7adf3caea8b730b29fa2f7f0c",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/qualify-dedup-joint-projective-frozen-20261011.py": "09c0f7312ee3e91c69215b3ccf0243180cf3b5bf08bc585e2352ea9258ae30fd",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-projective-frozen-qualified-20261011/build.jsonl": "d3324fd7a9fbe82b233319a67d28c0325bc40ea5e1204ce48d95617f1a3ed36d",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-projective-frozen-qualified-20261011/build.log": "beb7b6ecf2216bbe0cb4dde06ed134703fd7dd5bf0ba6f5df38b9b995f438715"
+  },
+  "build_command": [
+    "cargo",
+    "test",
+    "--manifest-path",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-projective-qualified-snapshot-20261011/Cargo.toml",
+    "-p",
+    "rrrah-dedup",
+    "--features",
+    "decode",
+    "--test",
+    "projective_geometry",
+    "--test",
+    "projective_domains",
+    "--test",
+    "projective_exhaustive_domains",
+    "--test",
+    "joint_projective",
+    "--test",
+    "anchor_reflection_fallback",
+    "--test",
+    "opposite_native",
+    "--test",
+    "search_portfolio",
+    "--test",
+    "portfolio_collection",
+    "--locked",
+    "--offline",
+    "--no-run",
+    "--message-format=json",
+    "--config",
+    "profile.dev.package.rrrah-dedup.opt-level=3",
+    "--target-dir",
+    "/Users/themoretheless/.codex/tmp/rrrah-opposite-native-snapshot-20261011/target"
+  ],
+  "results": [
+    {
+      "suite": "projective_geometry",
+      "tests": 14,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-joint-projective-frozen-qualified-20261011/projective_geometry",
+      "binary_sha256": "0f19933dccde87814855d20f1adfdd9dba0ca4cc0e8e0ea8ad0108cb0cfd8fa5",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-joint-projective-frozen-qualified-20261011/projective_geometry.log",
+      "log_sha256": "012cb049094d8d40d3ebfc2538302725a70170a29c8a6b995b0c673014258517"
+    },
+    {
+      "suite": "projective_domains",
+      "tests": 4,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-joint-projective-frozen-qualified-20261011/projective_domains",
+      "binary_sha256": "3fdb840854b039be0b71e9f0d71f9377dd9894ace49fbd4f181d9cbabb2e7d5f",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-joint-projective-frozen-qualified-20261011/projective_domains.log",
+      "log_sha256": "9a86eb5e07ba7d9bf84545366e912db2ad5164c65efc2904a5e8351ac03a2b57"
+    },
+    {
+      "suite": "projective_exhaustive_domains",
+      "tests": 3,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-joint-projective-frozen-qualified-20261011/projective_exhaustive_domains",
+      "binary_sha256": "ea1162048bb1e1729d49e93e7a57e7fcbfb904d13317409d822122baf8e55030",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-joint-projective-frozen-qualified-20261011/projective_exhaustive_domains.log",
+      "log_sha256": "b18e1f8cea135dd6f3a3ee83c8fc964fcf18ce385e89dd3a8e5530808b8b20a6"
+    },
+    {
+      "suite": "joint_projective",
+      "tests": 3,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-joint-projective-frozen-qualified-20261011/joint_projective",
+      "binary_sha256": "aa0f8e9b0e516137ddc81077692a4cb5bf0c14be94b953d7a02fe0e9ad7ba9f8",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-joint-projective-frozen-qualified-20261011/joint_projective.log",
+      "log_sha256": "ea2b9a58a2329218923ff25092cd3af602aa64eb0cacec8d720cb7b522783b67"
+    },
+    {
+      "suite": "anchor_reflection_fallback",
+      "tests": 12,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-joint-projective-frozen-qualified-20261011/anchor_reflection_fallback",
+      "binary_sha256": "f767e74d9d5272eda1c11087da0aeec8ae308bef48496970c484d8fd7733d03f",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-joint-projective-frozen-qualified-20261011/anchor_reflection_fallback.log",
+      "log_sha256": "ad3ea9ca6e6204c9bfff590da254b16fed2da06a24362e9849351352ded73e6f"
+    }
+  ],
+  "scope": "Frozen compatible four-crate source and lock, new joint primitive plus legacy/pair/collection tests. Source coherent before/after; root concurrent HDR edits preserved outside this gate. Not full workspace/platform/corpus/RSS qualification.",
+  "build_pid": 54989,
+  "error": "/Users/themoretheless/.codex/tmp/rrrah-joint-projective-frozen-qualified-20261011/opposite_native.log"
+}

@@ -1,0 +1,89 @@
+{
+  "repository": "bunchesofdonald/photohash",
+  "commit": "2a43d23a879f1484cd59775f940853eb38168b17",
+  "python": "3.12.14 (main, Aug 25 2026, 13:50:33) [Clang 22.1.3 ]",
+  "pillow": "12.3.0",
+  "original_suite": {
+    "tests": 5,
+    "failures": 0,
+    "errors": 3,
+    "skipped": 0,
+    "log": "test_average_hash (photohash.tests.test_photohash.PhotoHashTestCase.test_average_hash)\naverage_hash should output the expected hash for each test image ... ERROR\ntest_distance (photohash.tests.test_photohash.PhotoHashTestCase.test_distance)\ndistance should know the distance between the average_hash of two test images ... ERROR\ntest_hash_distance (photohash.tests.test_photohash.PhotoHashTestCase.test_hash_distance)\nhash_distance should know the hamming distance between two strings ... ok\ntest_is_look_alike (photohash.tests.test_photohash.PhotoHashTestCase.test_is_look_alike)\nis_look_alike should know if two images look similar ... ERROR\ntesthash_distance_same_length_required (photohash.tests.test_photohash.PhotoHashTestCase.testhash_distance_same_length_required)\nhash_distance should throw a ValueError if the two strings are not the same length ... ok\n\n======================================================================\nERROR: test_average_hash (photohash.tests.test_photohash.PhotoHashTestCase.test_average_hash)\naverage_hash should output the expected hash for each test image\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/Users/themoretheless/.codex/tmp/rrrah-photohash-full-source-20261012/photohash/tests/test_photohash.py\", line 36, in test_average_hash\n    self.assertEqual(photo['average_hash'], average_hash(photo['path']))\n                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/themoretheless/.codex/tmp/rrrah-photohash-full-source-20261012/photohash/photohash.py\", line 26, in average_hash\n    image = Image.open(f).resize((hash_size, hash_size), Image.ANTIALIAS).convert('L')\n                                                         ^^^^^^^^^^^^^^^\nAttributeError: module 'PIL.Image' has no attribute 'ANTIALIAS'\n\n======================================================================\nERROR: test_distance (photohash.tests.test_photohash.PhotoHashTestCase.test_distance)\ndistance should know the distance between the average_hash of two test images\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/Users/themoretheless/.codex/tmp/rrrah-photohash-full-source-20261012/photohash/tests/test_photohash.py\", line 59, in test_distance\n    distance(self.photos[i]['path'], self.photos[j]['path'])\n  File \"/Users/themoretheless/.codex/tmp/rrrah-photohash-full-source-20261012/photohash/photohash.py\", line 39, in distance\n    image_hash = average_hash(image_path)\n                 ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/themoretheless/.codex/tmp/rrrah-photohash-full-source-20261012/photohash/photohash.py\", line 26, in average_hash\n    image = Image.open(f).resize((hash_size, hash_size), Image.ANTIALIAS).convert('L')\n                                                         ^^^^^^^^^^^^^^^\nAttributeError: module 'PIL.Image' has no attribute 'ANTIALIAS'\n\n======================================================================\nERROR: test_is_look_alike (photohash.tests.test_photohash.PhotoHashTestCase.test_is_look_alike)\nis_look_alike should know if two images look similar\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/Users/themoretheless/.codex/tmp/rrrah-photohash-full-source-20261012/photohash/tests/test_photohash.py\", line 66, in test_is_look_alike\n    self.assertTrue(is_look_alike(self.photos[2]['path'], self.photos[2]['path']))\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/themoretheless/.codex/tmp/rrrah-photohash-full-source-20261012/photohash/photohash.py\", line 46, in is_look_alike\n    image_hash = average_hash(image_path)\n                 ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/themoretheless/.codex/tmp/rrrah-photohash-full-source-20261012/photohash/photohash.py\", line 26, in average_hash\n    image = Image.open(f).resize((hash_size, hash_size), Image.ANTIALIAS).convert('L')\n                                                         ^^^^^^^^^^^^^^^\nAttributeError: module 'PIL.Image' has no attribute 'ANTIALIAS'\n\n----------------------------------------------------------------------\nRan 5 tests in 0.054s\n\nFAILED (errors=3)\n"
+  },
+  "compatibility": "Pillow Image.ANTIALIAS alias only; algorithm and original tests unchanged",
+  "compatible_suite": {
+    "tests": 5,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "log": "test_average_hash (photohash.tests.test_photohash.PhotoHashTestCase.test_average_hash)\naverage_hash should output the expected hash for each test image ... ok\ntest_distance (photohash.tests.test_photohash.PhotoHashTestCase.test_distance)\ndistance should know the distance between the average_hash of two test images ... ok\ntest_hash_distance (photohash.tests.test_photohash.PhotoHashTestCase.test_hash_distance)\nhash_distance should know the hamming distance between two strings ... ok\ntest_is_look_alike (photohash.tests.test_photohash.PhotoHashTestCase.test_is_look_alike)\nis_look_alike should know if two images look similar ... ok\ntesthash_distance_same_length_required (photohash.tests.test_photohash.PhotoHashTestCase.testhash_distance_same_length_required)\nhash_distance should throw a ValueError if the two strings are not the same length ... ok\n\n----------------------------------------------------------------------\nRan 5 tests in 0.102s\n\nOK\n"
+  },
+  "decoded_original_fixtures": [
+    {
+      "path": "/Users/themoretheless/.codex/tmp/rrrah-photohash-full-source-20261012/photohash/tests/assets/minneapolis.jpg",
+      "mode": "RGB",
+      "size": [
+        500,
+        373
+      ],
+      "sha256": "1d08ef1e076f38f207aa1e6982f29ec84d34e0f0292e6adad5b20abf4043b782",
+      "hash": "ffffffffc7000000"
+    },
+    {
+      "path": "/Users/themoretheless/.codex/tmp/rrrah-photohash-full-source-20261012/photohash/tests/assets/snow.jpg",
+      "mode": "RGB",
+      "size": [
+        500,
+        375
+      ],
+      "sha256": "ccedb17f68dd61c95be231e18c8b51e02c8155ada3e3c856b3724d7b16c42086",
+      "hash": "67047df9fcf0408f"
+    },
+    {
+      "path": "/Users/themoretheless/.codex/tmp/rrrah-photohash-full-source-20261012/photohash/tests/assets/santa_monica.jpg",
+      "mode": "RGB",
+      "size": [
+        500,
+        373
+      ],
+      "sha256": "fe907d1d8a2477c61c1c41e84f5f5480819ff3882a11ddd2eba303af2dea0477",
+      "hash": "01ffffff1f3f0008"
+    },
+    {
+      "path": "/Users/themoretheless/.codex/tmp/rrrah-photohash-full-source-20261012/photohash/tests/assets/santa_monica_small.jpg",
+      "mode": "RGB",
+      "size": [
+        200,
+        149
+      ],
+      "sha256": "6935379f9f2a32adc459fcf61bc10c6f59b5f4573171314e0d56f1f4bf7976eb",
+      "hash": "01ffffff1f3f0008"
+    }
+  ],
+  "controls": {
+    "hex_0_f_reported_distance": 1,
+    "hex_0_f_bit_distance": 4,
+    "six_hex_character_mismatches_are_similar": true,
+    "six_hex_character_mismatches_bit_distance": 24,
+    "hashes": {
+      "black": "0000000000000000",
+      "white": "0000000000000000",
+      "invisible_black": "0000000000000000",
+      "invisible_gradient": "00000000ffffffff"
+    },
+    "opaque_black_white_similar": true,
+    "fully_invisible_pair_distance": 8
+  },
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/photohash-full-source-20261012.json": "1fd9bbcdf0c7dde2147e3836723b4f92709542b59b9c93d6511bb2dd83603ef2",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/probe-dedup-photohash-upstream-20261012.py": "dda6edb50df2e789128274d2d85faef532e69c78051be6233877dfdb2c73e20a",
+    "/Users/themoretheless/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/PIL/Image.py": "04af3f2db7ffdd61e829fa7aa8f5481d394a0a4129a8fd8aa5b13908928fcd6d"
+  },
+  "scope": "Original source/tests unchanged; missing legacy Pillow constant adapted only in second run. Development hash/alpha counterexamples, no backend/platform/resource/precision qualification or production copying.",
+  "fixture_pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-photohash-controls-20261012/invisible_gradient.png": "f217fcdbe9afad2933abdd779b9666e725814fc5fce4e98766223aa9a6fd6cc8",
+    "/Users/themoretheless/.codex/tmp/rrrah-photohash-controls-20261012/black.png": "4a0945534329d26ce523a2f096e203aae59a9fffaec71895599fa3ef42d23f22",
+    "/Users/themoretheless/.codex/tmp/rrrah-photohash-controls-20261012/invisible_black.png": "e0f89dc98bc3cd5e36fe43afbf3d9ce142f69be881931e0a9733700e0df30628",
+    "/Users/themoretheless/.codex/tmp/rrrah-photohash-controls-20261012/white.png": "47c0b232b83e0aaf92d46f39b9066c67528fc4c31fc88bc50d7d8e2291137145"
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "status": "complete_bounded_frozen_joint_model_tests",
+  "producer_pid": 58717,
+  "source_manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-joint-model-snapshot-20261011.json",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-joint-model-snapshot-20261011.json": "da813a37ba2ca427ca976b245571d0fa72bedaaad48e17e77b0031ad00e5b8d3",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/qualify-dedup-joint-model-20261011.py": "43df4c6bddf0a3d7071aff4ba0ffffb7b7f75799016e04dc1642f05b0e804f79",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-model-qualified-20261011/build.jsonl": "9c63640a73c3fbad9c0376eeceabe2b4345d34db235fa2e37e438817c45fe588",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-model-qualified-20261011/build.log": "3626064a881709c8f4ab1c2469380decef8493dde8b144b17a64d8f3d716f96e"
+  },
+  "build_command": [
+    "cargo",
+    "test",
+    "--manifest-path",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-model-snapshot-20261011/Cargo.toml",
+    "-p",
+    "rrrah-dedup",
+    "--no-default-features",
+    "--features",
+    "decode",
+    "--test",
+    "model_compare",
+    "--locked",
+    "--offline",
+    "--no-run",
+    "--message-format=json",
+    "--config",
+    "profile.dev.package.rrrah-dedup.opt-level=3",
+    "--target-dir",
+    "/Users/themoretheless/.codex/tmp/rrrah-opposite-native-snapshot-20261011/target"
+  ],
+  "results": [
+    {
+      "suite": "model_compare",
+      "tests": 13,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-joint-model-qualified-20261011/model_compare",
+      "binary_sha256": "d3856e2c8b7a01d348dd7dea8d25d4bf6ef5102995c7ab9434f7e3d80c39edec",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-joint-model-qualified-20261011/model_compare.log",
+      "log_sha256": "5d784ab612c697c9db695e25867a815434f5b267309bbe1c65fab027d2110552"
+    }
+  ],
+  "scope": "Frozen compatible four-crate source and lock, new joint primitive plus legacy/pair/collection tests. Source coherent before/after; root concurrent HDR edits preserved outside this gate. Not full workspace/platform/corpus/RSS qualification.",
+  "build_pid": 58769,
+  "tests": 13,
+  "owned_root_matches": {
+    "crates/rrrah-dedup/src/local_scan.rs": true,
+    "crates/rrrah-dedup/src/geometry.rs": true,
+    "crates/rrrah-dedup/src/anchor_rank_file.rs": true,
+    "crates/rrrah-dedup/src/search_portfolio.rs": true,
+    "crates/rrrah-dedup/src/portfolio_collection.rs": true,
+    "crates/rrrah-dedup/src/model_loftr.rs": false
+  }
+}

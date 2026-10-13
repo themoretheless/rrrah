@@ -1,0 +1,37 @@
+{
+  "status": "verified_four_unrelated_native_file_model_controls",
+  "report": "docs/research/dedup-native-file-model-input-controls-20261010.json",
+  "report_sha256": "026e942988dc2211d67b2679295359170a765cda76cf16b6f6b61db5fb753e1e",
+  "pins_verified": 30,
+  "results": [
+    {
+      "source": "201400.jpg",
+      "side": 320,
+      "raw_matches": 48,
+      "status": "no_geometry",
+      "supported": false
+    },
+    {
+      "source": "201400.jpg",
+      "side": 640,
+      "raw_matches": 111,
+      "status": "no_geometry",
+      "supported": false
+    },
+    {
+      "source": "209000.jpg",
+      "side": 320,
+      "raw_matches": 48,
+      "status": "no_geometry",
+      "supported": false
+    },
+    {
+      "source": "209000.jpg",
+      "side": 640,
+      "raw_matches": 64,
+      "status": "no_geometry",
+      "supported": false
+    }
+  ],
+  "scope": "Two distinct originals, each at fixed 320/640 sizes against mosaic 209401; proposals generated natively on each unrelated pair, not reused positive proposals. All outcomes retained. Provenance, terminal native status and credit predicates; no independent inference/negative geometry oracle or corpus-wide precision."
+}

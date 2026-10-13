@@ -3,8 +3,8 @@
   "repository": "studioph/mediahash",
   "commit": "e14ff15a2b918a957c80082f586c14df501e8bcd",
   "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
-  "decision": "reference",
-  "finding": "Decoded image byte MD5 plus perceptual MediaFingerprint interface; compare decoded equality separately from file digest.",
+  "decision": "reject-current-implementation",
+  "finding": "Image name shadowing breaks all three image operations; fresh video self-comparison fails on2D cosine; short video checksum raises StopIteration; component chaining exceeds endpoint threshold. Nine real dependency controls; no code adopted.",
   "available_source_evidence": [
     {
       "path": "src/mediahash/__init__.py",
@@ -83,6 +83,15 @@
       "lines": 674,
       "source": false,
       "test": false
+    }
+  ],
+  "incremental_reviews": [
+    {
+      "audit": "docs/research/dedup-500/mediahash-source-review-audit-20261013.json",
+      "controls": "docs/research/dedup-500/mediahash-controls-20261013.json",
+      "scope": "All five implementation modules and both test files fully read; all16 git blobs verified; nine real dependency controls; not upstream pytest or full lock reproduction",
+      "whole_implementation_complete": true,
+      "whole_repo_complete": false
     }
   ]
 }

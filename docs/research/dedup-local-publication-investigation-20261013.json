@@ -1,0 +1,22 @@
+{
+  "status": "verified_18_local_collection_tests",
+  "source": "/Users/themoretheless/.codex/tmp/rrrah-local-publication-20261013",
+  "test": "local_collection::final_callback_mutation_cannot_publish_incident_local_pairs",
+  "test_sha256": "f1bc15ddaf67292452646bad4c8a3c5150295d8c4c8a570a6d441046b0823ee0",
+  "log": "/Users/themoretheless/.codex/tmp/rrrah-local-publication-baseline-20261013.log",
+  "session": 69994,
+  "hypothesis": "Final caller callback after verify_sources may mutate source without subsequent verification. Not yet reproduced.",
+  "production_changed": true,
+  "baseline_returncode": 101,
+  "baseline_log_sha256": "0ef8ea5a27a6e3d8efbbc7b3ff6aa117c165bccbba38c9cb78c83c500c367878",
+  "fixed_log": "/Users/themoretheless/.codex/tmp/rrrah-local-publication-fixed-v3-20261013.log",
+  "fixed_session": 16971,
+  "production_source_sha256": "b11a7eec65dbb3a43da829655f259c59a728c8540085477f820c174fd4acf0c8",
+  "limitations": [
+    "Fix not yet execution-qualified.",
+    "Directory wrapper still has a caller callback after inner publication; separate regression/fix remains.",
+    "First fix command referenced nonexistent reflected_collection target and did not run tests; second compile found undefined generations in reflected path, corrected before third run."
+  ],
+  "passed": 18,
+  "audit": "docs/research/dedup-local-publication-audit-20261013.json"
+}

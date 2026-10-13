@@ -1,0 +1,17 @@
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> /Users/themoretheless/.codex/tmp/rrrah-dedup-model-compare-snapshot-20261010/crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+   Compiling loftr v0.1.1 (/Users/themoretheless/.codex/tmp/rrrah-loftr-tiled-convolution-20261010/loftr)
+warning: `rrrah-dedup` (lib) generated 1 warning
+   Compiling dedup-loftr-native-probe v0.0.0 (/Users/themoretheless/.codex/tmp/rrrah-loftr-tiled-convolution-20261010/probe)
+    Finished `release` profile [optimized] target(s) in 20.57s

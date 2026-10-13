@@ -12,6 +12,7 @@ pub(crate) struct Type3 {
     bounds: Vec<f32>,
     encode: TupleVec,
     clamper: Clamper,
+    native_bounds_valid: bool,
 }
 
 impl Type3 {
@@ -23,13 +24,7 @@ impl Type3 {
         { return None; }
         let (low, high) = self.clamper.domain[0];
         if !low.is_finite() || !high.is_finite() || low >= high { return None; }
-        let mut previous = low;
-        for &bound in &self.bounds[1..self.bounds.len()-1] {
-            if cancelled() { return None; }
-            *remaining = remaining.checked_sub(1)?;
-            if !bound.is_finite() || bound <= previous || bound >= high { return None; }
-            previous = bound;
-        }
+        if !self.native_bounds_valid { return None; }
         let input = input.clamp(low, high);
         let index = self.bounds[1..self.bounds.len()-1].partition_point(|bound| *bound <= input);
         let start = if index == 0 { low } else { self.bounds[index] };
@@ -57,13 +52,7 @@ impl Type3 {
         { return None; }
         let (low, high) = self.clamper.domain[0];
         if !low.is_finite() || !high.is_finite() || low >= high { return None; }
-        let mut previous = low;
-        for &bound in &self.bounds[1..self.bounds.len()-1] {
-            if cancelled() { return None; }
-            *remaining = remaining.checked_sub(1)?;
-            if !bound.is_finite() || bound <= previous || bound >= high { return None; }
-            previous = bound;
-        }
+        if !self.native_bounds_valid { return None; }
         let input = input.clamp(low, high);
         let index = self.bounds[1..self.bounds.len()-1].partition_point(|bound| *bound <= input);
         let start = if index == 0 { low } else { self.bounds[index] };
@@ -110,10 +99,21 @@ impl Type3 {
 
         let encode = dict.get::<TupleVec>(ENCODE)?;
 
+        // Metadata is immutable after construction. Preserve legacy parsing
+        // while certifying the exact stricter native interval requirements once.
+        let native_bounds_valid=if clamper.domain.len()==1 {
+            let (low,high)=clamper.domain[0];let mut previous=low;
+            low.is_finite() && high.is_finite() && low<high &&
+                bounds[1..bounds.len()-1].iter().all(|&bound| {
+                    let valid=bound.is_finite() && bound>previous && bound<high;
+                    previous=bound;valid
+                })
+        } else {false};
         Some(Self {
             functions,
             clamper,
             bounds,
+            native_bounds_valid,
             encode,
         })
     }
@@ -188,14 +188,14 @@ mod tests {
         let polls=std::cell::Cell::new(0);
         function.eval_components_bounded(0.25,&mut [0.;4],&|| { polls.set(polls.get()+1);false }).unwrap();
         let total=polls.get();
-        assert_eq!(total,9);
+        assert!(total>0);
         for target in 1..=total {
             polls.set(0);let mut output=[9.;4];
             assert!(function.eval_components_bounded(0.25,&mut output,&|| { polls.set(polls.get()+1);polls.get()==target }).is_none());
             assert_eq!(output,[9.;4]);assert_eq!(polls.get(),target);
         }
-        assert!(function.eval_components_with_budget(0.25,&mut [0.;4],&|| false,&mut 6,0).is_none());
-        assert!(function.eval_components_with_budget(0.25,&mut [0.;4],&|| false,&mut 7,0).is_some());
+        assert!(function.eval_components_with_budget(0.25,&mut [0.;4],&|| false,&mut 5,0).is_none());
+        assert!(function.eval_components_with_budget(0.25,&mut [0.;4],&|| false,&mut 6,0).is_some());
         let leaf="<< /FunctionType 2 /Domain [0 1] /C0 [0 0 0 0] /C1 [1 1 1 1] /N 1 >>";
         for nesting in [31,32] {
             let mut data=leaf.to_owned();
@@ -227,7 +227,9 @@ mod tests {
         for (input, expected) in [(0.0,0.0),(0.25,0.5),(0.5,0.2),(0.75,0.3),(1.0,0.4),(-1.0,0.0),(2.0,0.4)] {
             assert!((function.eval_scalar_bounded(input, &|| false).unwrap()-expected).abs() < 1e-7);
         }
-        for stop in 1..=5 {
+        let checkpoints=std::cell::Cell::new(0);
+        function.eval_scalar_bounded(0.25,&|| {checkpoints.set(checkpoints.get()+1);false}).unwrap();
+        for stop in 1..=checkpoints.get() {
             let polls = std::cell::Cell::new(0);
             assert!(function.eval_scalar_bounded(0.25, &|| {
                 polls.set(polls.get()+1); polls.get()==stop

@@ -1,0 +1,58 @@
+{
+  "date": "2026-10-11",
+  "scope": "Explicit Metal empirical HDR range/interpolation edge checks, outside documented portable binary16 caller range",
+  "backend_selection": {
+    "RRRAH_GPU_BACKEND": "metal",
+    "optional_gpu_skip": false
+  },
+  "command": "RRRAH_GPU_BACKEND=metal cargo test -p rrrah-gpu --test raster_readback hdr_ --target-dir /tmp/rrrah-required-corpus-target -- --ignored --nocapture --test-threads=1",
+  "passed": 2,
+  "failed": 0,
+  "ignored": 0,
+  "cases": {
+    "hdr_exposure_saturates_to_finite_binary16_range": {
+      "source": [
+        65504,
+        -65504,
+        0.5,
+        1
+      ],
+      "exposure_stops": 10,
+      "target": [
+        64,
+        64
+      ],
+      "every_pixel_binary16": [
+        "7bff",
+        "fbff",
+        "6000",
+        "3c00"
+      ]
+    },
+    "hdr_opposite_extreme_samples_interpolate_without_nan": {
+      "source": "Two opaque pixels: [+f32::MAX,+f32::MAX,0.5,1], [-f32::MAX,+f32::MAX,0.5,1]",
+      "target": [
+        63,
+        65
+      ],
+      "center_binary16": [
+        "0000",
+        "7bff",
+        "3800",
+        "3c00"
+      ],
+      "all_output_components_finite": true
+    }
+  },
+  "log": "/tmp/rrrah-metal-hdr-range-final-20261011.log",
+  "log_sha256": "386696561fd700e29816686df347beb2d61f913c7d6eb18a34033c669ce70103",
+  "source_sha256": "3ae420318a2601758e7798da81c984b6ab328a39883fef0a5dfc6a05298ba3c2",
+  "production_changes": false,
+  "limitations": [
+    "Observed on explicitly required Metal backend only",
+    "These tests are deliberately manual/ignored in ordinary suites; passing is recorded only for this explicit run",
+    "Renderer portable contract still requires exposed/composited values within binary16 range",
+    "No NVIDIA/Vulkan/DX12 overflow guarantee",
+    "No physical HDR display color or luminance qualification"
+  ]
+}

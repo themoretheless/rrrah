@@ -1,0 +1,30 @@
+{
+  "scope": "Viewer residency supports adopted swapped source and background detail refresh",
+  "adapter": "Metal Apple M4 Max",
+  "result": "passed",
+  "validation": {
+    "ordinary_app_passed": 207,
+    "manual_app_ignored": 45,
+    "explicit_metal_viewport_passed": 6
+  },
+  "changes": [
+    "ResidentSource can replace full source ownership with verified swap handle after identity geometry and preview checks",
+    "retains fit preview and metadata; plans region from metadata",
+    "GpuState update_view routes swapped state to coalescing region worker",
+    "ready crop retained across GPU admission failure; stale or unneeded crop discarded",
+    "successful detail publication preserves global source geometry; fit reuses preview"
+  ],
+  "controls": [
+    "stale identity adoption rejected",
+    "2621440-byte full source released; only40960-byte preview remains between crops",
+    "three panned HDR reference frames exact through viewer refresh worker path",
+    "GPU pressure retains ready crop and previous frame; retry succeeds without reread",
+    "fit preview exact and all managed/index/disk credits zero",
+    "existing panning shared budget LOD RAW cancellation worker regressions pass"
+  ],
+  "remaining": [
+    "ordinary file loading does not yet schedule initial segmented swap write/adoption automatically",
+    "no native window gesture qualification of new branch yet",
+    "physical HDR NVIDIA full100-format acceptance"
+  ]
+}

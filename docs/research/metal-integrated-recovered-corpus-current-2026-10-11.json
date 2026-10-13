@@ -1,0 +1,887 @@
+{
+  "gpu_backend": "metal",
+  "gpu_optional": false,
+  "storage_soak_seconds_per_mode": 0,
+  "gpu_policy_cycles": 8,
+  "large_hdr_policy_cycles": 0,
+  "metal_collection_seconds": 0,
+  "metal_raw_collection_seconds": 0,
+  "metal_raw_collection_manifest": null,
+  "metal_prefetch_navigation": true,
+  "metal_raw_worker_navigation": false,
+  "metal_large_float_hdr": false,
+  "metal_viewer_ttl_prefetch": true,
+  "metal_large_upload_cancel": false,
+  "metal_compute_cache": true,
+  "metal_model_swap_cycles": 8,
+  "large_hdr_policy": true,
+  "full_sensor_compute": true,
+  "suites": [
+    {
+      "suite": "cache",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-cache",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/Users/themoretheless/Documents/Sources/rrrah/target"
+      ],
+      "exit_code": 0,
+      "passed": 146,
+      "failed": 0,
+      "ignored": 4,
+      "ignored_tests": [
+        "test raster_regions::tests::large_source_above_full_restore_cap_streams_and_restores_small_native_crop ... ignored, manual 36MP float source above full-payload512MiB cap",
+        "test hundred_thousand_distinct_rasters_keep_swap_index_and_memory_bounded ... ignored, manual 100000 distinct-key real-file churn; small payloads isolate index retention",
+        "test sustained_byte_cap_evicts_without_count_or_ttl_pressure ... ignored, manual sustained independent byte-cap qualification",
+        "test sustained_large_keyspace_delayed_swap_pressure_and_retry ... ignored, manual sustained delayed-I/O pressure qualification; default 60 seconds"
+      ],
+      "log": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/integrated-current-20261011/cache.log",
+      "log_sha256": "b4db8ac18fd187e6d191b15d7d735ae98f58b2802e5cd2aa8807c5d72d9b0eae",
+      "verified_execution": true
+    },
+    {
+      "suite": "cuda-host",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-cuda",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/Users/themoretheless/Documents/Sources/rrrah/target"
+      ],
+      "exit_code": 0,
+      "passed": 5,
+      "failed": 0,
+      "ignored": 1,
+      "ignored_tests": [
+        "test tests::nvidia_full_output_boundaries_hdr_alpha_and_managed_limits ... ignored, requires CUDA-capable NVIDIA driver on 64-bit Linux/Windows; never a CPU fallback"
+      ],
+      "log": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/integrated-current-20261011/cuda-host.log",
+      "log_sha256": "67355471240615100830ab6f485653e12ef03cae3f2ca065b5fc4d8798597252",
+      "verified_execution": true
+    },
+    {
+      "suite": "viewer",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah",
+        "--bin",
+        "rrrah",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/Users/themoretheless/Documents/Sources/rrrah/target"
+      ],
+      "exit_code": 0,
+      "passed": 208,
+      "failed": 0,
+      "ignored": 47,
+      "ignored_tests": [
+        "test foreground_loader_tests::hundred_thousand_valid_sources_navigate_with_bounded_prefetch_and_pressure ... ignored, manual 100000 valid file paths with mixed-format cache navigation",
+        "test foreground_loader_tests::metal_upload_retains_raw_lease_until_submission_completion ... ignored, requires Metal device and RRRAH_SONY_SR2_CORPUS pinned source",
+        "test foreground_loader_tests::mixed_gallery_reversals_preserve_metal_frames_and_prefetch_pressure ... ignored, requires actual GPU for mixed-format prefetch navigation readback",
+        "test foreground_loader_tests::queued_navigation_cancels_x3f_preload_and_decodes_latest_raster ... ignored, requires external SD10 source",
+        "test foreground_loader_tests::raw_thumbnail_source_and_preview_share_managed_root ... ignored, requires external Sony DSC-F828 SRF fixture",
+        "test foreground_loader_tests::real_ai_pages_use_shared_ram_hits_and_independent_prefetch_keys ... ignored, requires pinned AI source corpus; set RRRAH_AI_CORPUS",
+        "test foreground_loader_tests::real_x3f_generation_cancellation_after_sensor_allocation_recovers ... ignored, requires external SD10 source",
+        "test foreground_loader_tests::real_x3f_neighbour_windows_preserve_visible_and_reuse_preload ... ignored, requires external SD10 source",
+        "test foreground_loader_tests::source_kind_pressure_preserves_visible_then_releases_unpinned_raw ... ignored, requires local EOS R8 tests/IMG_9043.CR3 fixture",
+        "test fusion_warp_tests::fusion_warp_triggers_quality_and_changes_corrected_channels ... ignored, requires pinned official Fusion GPR",
+        "test gallery::tests::eip_prefetch_restores_exact_sensor_and_fingerprints_complete_package ... ignored, requires authored EIP pair and local EOS R8 CR3",
+        "test gallery::tests::folder_scan_retains_all_hundred_thousand_supported_files ... ignored, manual 100000 actual directory entries; enumeration without image decode",
+        "test gallery::tests::mixed_camera_worker_prefetch_preserves_full_metal_frames ... ignored, requires real RAW manifest and actual Metal",
+        "test gallery::tests::multi_neighbor_raw_worker_preserves_metal_frames ... ignored, requires real RAW manifest and actual Metal",
+        "test gallery::tests::navigation_reversal_cancels_blocked_forward_and_warms_backward_raw ... ignored, manual real EOS R8 navigation reversal qualification",
+        "test gallery::tests::navigation_reversal_worker_preserves_full_raw_metal_frames ... ignored, requires real EOS R8 sources and actual Metal for worker navigation qualification",
+        "test gallery::tests::raster_selection_warms_real_crw_neighbour ... ignored, requires pinned EOS 10D via RRRAH_CRW_SOURCE",
+        "test gallery::tests::raster_selection_warms_real_raw_neighbour_without_nonraw_failures ... ignored, requires local EOS R8 tests/IMG_9043.CR3 fixture",
+        "test gallery::tests::raw_prefetch_byte_limit_preserves_present_priority_neighbour ... ignored, requires local EOS R8 tests/IMG_9043.CR3 fixture",
+        "test gallery::tests::raw_prefetch_count_limit_counts_retained_neighbours_after_missing_file ... ignored, requires external Sony DSC-F828 SRF fixture",
+        "test gallery::tests::raw_prefetch_count_limit_preserves_highest_priority_neighbour ... ignored, requires local EOS R8 tests/IMG_9043.CR3 fixture",
+        "test gallery::tests::raw_prefetch_respects_shared_budget_and_recovers_after_release ... ignored, requires local EOS R8 tests/IMG_9043.CR3 fixture",
+        "test gpr_development_tests::gpr_opcodes_trigger_default_quality_development ... ignored, requires pinned HERO9 GPR",
+        "test gpr_development_tests::navigation_cancels_gpr_quality_development_after_float_admission ... ignored, requires pinned HERO9 GPR",
+        "test gpr_preload_tests::gpr_neighbour_windows_preserve_visible_and_bound_count_and_bytes ... ignored, requires pinned HERO9 GPR",
+        "test gpr_preload_tests::gpr_preload_hits_ram_and_disk_and_cancels_stale_generation ... ignored, requires pinned HERO9 GPR",
+        "test linear_pfm_viewer_tests::linear_cli_astc_hdr_preload_swap_preserves_metal_sdr_and_hdr ... ignored, requires actual Metal device",
+        "test linear_pfm_viewer_tests::linear_cli_dpx_preload_swap_preserves_metal_sdr_and_hdr ... ignored, requires actual Metal device",
+        "test linear_pfm_viewer_tests::linear_cli_ktx2_hdr_preload_swap_preserves_metal_sdr_and_hdr ... ignored, requires actual Metal device",
+        "test linear_pfm_viewer_tests::linear_cli_pfm_preload_swap_preserves_metal_sdr_and_hdr ... ignored, requires actual Metal device",
+        "test linear_pfm_viewer_tests::pfm_top_down_cli_swap_preserves_metal_sdr_hdr_rows ... ignored, requires actual Metal device",
+        "test linear_pfm_viewer_tests::photographic_heif_preload_cache_hit_under_full_pressure_and_metal ... ignored, requires external 24 MP Canon DPP PQ HEIF and actual Metal",
+        "test linear_pfm_viewer_tests::viewer_uses_supported_metal_texture_extent_above_default ... ignored, requires Metal adapter supporting textures wider than portable default",
+        "test raster_lod_worker::tests::navigation_discards_delayed_old_swap_and_presents_only_new_hdr_source ... ignored, actual Metal navigation while old swapped region worker is delayed",
+        "test raster_swap_viewer_tests::real_x3f_display_ram_hit_and_swap_restore_exact ... ignored, requires external SD10 source",
+        "test raster_swap_viewer_tests::repeated_hdr_ttl_viewer_prefetch_restore_preserves_metal_frames ... ignored, requires actual Metal for viewer TTL swap and prefetch readback",
+        "test raster_viewport::tests::cancelled_generation_lod_filter_and_upload_preserve_old_frame_and_release_credit ... ignored, actual Metal stale-generation LOD filtering and queued upload cancellation",
+        "test raster_viewport::tests::large_swapped_hdr_lod_reaches_exact_metal_frame ... ignored, actual Metal 36MP original-swap HDR LOD latency and bounded workspace",
+        "test raster_viewport::tests::panning_reuses_margin_with_replacement_headroom_and_exact_frames ... ignored, actual Metal panning overscan residency and exact SDR/HDR frames",
+        "test raster_viewport::tests::swapped_residency_releases_full_source_and_preserves_detail_and_fit ... ignored, actual Metal swapped source residency, worker panning and fit preview",
+        "test raster_viewport::tests::viewer_automatically_opens_hdr_lod_switches_to_source_and_reuses_cached_level ... ignored, actual Metal automatic fit HDR LOD and source-region switching",
+        "test raster_viewport::tests::viewer_region_fallback_retains_source_reuses_and_retries ... ignored, actual Metal viewer region fallback and managed source lifetime",
+        "test raster_viewport::tests::worker_prepared_level_installs_without_filtering_or_scanning_full_source_on_ui ... ignored, actual Metal worker-prepared managed HDR level publication",
+        "test raw_load_policy::tests::real_3fr_decode_admission_refusal_recovers_disk_and_swap ... ignored, requires pinned Hasselblad X1D 3FR source",
+        "test raw_ram_preload_tests::idle_timer_spills_real_raw_and_restores_sensor_values ... ignored, requires local EOS R8 tests/IMG_9043.CR3 fixture",
+        "test raw_ram_preload_tests::native_raw_preload_hits_ram_and_disk_without_transferring_visible_pin ... ignored, requires local EOS R8 tests/IMG_9043.CR3 fixture",
+        "test thumbnail_retry_tests::thumbnail_budget_callbacks_progress_without_surface_redraw ... ignored, requires actual Metal device"
+      ],
+      "log": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/integrated-current-20261011/viewer.log",
+      "log_sha256": "dd1a7d1c5e510c7801ffec53734da9590ecdf29a0d53d880843b68b472f76a23",
+      "verified_execution": true
+    },
+    {
+      "suite": "qoi-native",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-decode",
+        "--lib",
+        "qoi_bounds::tests",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/Users/themoretheless/Documents/Sources/rrrah/target"
+      ],
+      "exit_code": 0,
+      "passed": 4,
+      "failed": 0,
+      "ignored": 1,
+      "ignored_tests": [
+        "test qoi_bounds::tests::large_qoi_framing_cost ... ignored, 12 MP QOI timing control; run locally with --ignored --nocapture"
+      ],
+      "log": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/integrated-current-20261011/qoi-native.log",
+      "log_sha256": "aa62997043372204ab9687237005907d69eb62215870f1713009cc622fb22cc4",
+      "verified_execution": true
+    },
+    {
+      "suite": "qoi-reference",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-decode",
+        "--test",
+        "qoi_reference_corpus",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/Users/themoretheless/Documents/Sources/rrrah/target"
+      ],
+      "exit_code": 0,
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "ignored_tests": [],
+      "log": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/integrated-current-20261011/qoi-reference.log",
+      "log_sha256": "699be4b5f54e578f5105bf85f1c096a537b37e0d8c8900c88ad3a8746c8467b2",
+      "verified_execution": true
+    },
+    {
+      "suite": "model-gpu",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah",
+        "--test",
+        "model_readback",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/Users/themoretheless/Documents/Sources/rrrah/target"
+      ],
+      "exit_code": 0,
+      "passed": 6,
+      "failed": 0,
+      "ignored": 1,
+      "ignored_tests": [
+        "test repeated_model_swap_pressure_and_cancellation_preserve_metal_frames ... ignored, manual repeated model swap pressure and Metal frame qualification"
+      ],
+      "log": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/integrated-current-20261011/model-gpu.log",
+      "log_sha256": "470c91e5c583a0f7dccd61a35c27c02b6ac7ebe5fc1277c264b473ac0930de20",
+      "verified_execution": true
+    },
+    {
+      "suite": "hdr-ttl-gpu",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah",
+        "--test",
+        "hdr_raster_swap",
+        "--test",
+        "ttl_swap_metal",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/Users/themoretheless/Documents/Sources/rrrah/target"
+      ],
+      "exit_code": 0,
+      "passed": 16,
+      "failed": 0,
+      "ignored": 8,
+      "ignored_tests": [
+        "test large_float_hdr_swap_preserves_full_metal_attachment ... ignored, manual 12 MP float HDR attachment and disk swap qualification",
+        "test photographic_heif_pq_full_resolution_swap_and_metal ... ignored, requires external Canon DPP 6000x4000 HDR PQ HIF and FFmpeg RGBA16 oracle",
+        "test pict_external_directbits_oracle_swap_pressure_and_metal ... ignored, requires actual GPU and external PICT/TwelveMonkeys corpus",
+        "test expired_eip_lease_and_swap_restore_match_original_cr3_metal_frame ... ignored, requires authored EIP and actual Metal GPU",
+        "test large_hdr_live_policy_preserves_every_component_and_metal_pixel ... ignored, manual 12 MP Metal and disk-swap qualification",
+        "test live_count_size_and_ttl_changes_preserve_hdr_frames_through_swap ... ignored, manual hardware qualification",
+        "test long_lived_large_collection_cache_preserves_swap_and_metal_frames ... ignored, manual long-lived 12 MP collection cache and Metal qualification",
+        "test sustained_large_hdr_live_policy_preserves_every_component_and_metal_pixel ... ignored, manual sustained 12 MP Metal and disk-swap qualification"
+      ],
+      "log": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/integrated-current-20261011/hdr-ttl-gpu.log",
+      "log_sha256": "b8ed4af06b0e0b6386fb5b4515770362a15d6b57c4f0fbe24c8c5ebd31203f23",
+      "verified_execution": true
+    },
+    {
+      "suite": "camera-color-gpu",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-gpu",
+        "--test",
+        "camera_color_readback",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/Users/themoretheless/Documents/Sources/rrrah/target",
+        "--",
+        "--nocapture"
+      ],
+      "exit_code": 0,
+      "passed": 12,
+      "failed": 0,
+      "ignored": 0,
+      "ignored_tests": [],
+      "log": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/integrated-current-20261011/camera-color-gpu.log",
+      "log_sha256": "64ecef83d1b94fad610c2e6059e97f1990ecfbd2cc5af4d4a0ec40377e648da1",
+      "verified_execution": true
+    },
+    {
+      "suite": "gpu",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-gpu",
+        "--lib",
+        "--test",
+        "compute_readback",
+        "--test",
+        "readback",
+        "--test",
+        "raster_readback",
+        "--test",
+        "model_readback",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/Users/themoretheless/Documents/Sources/rrrah/target"
+      ],
+      "exit_code": 0,
+      "passed": 89,
+      "failed": 0,
+      "ignored": 10,
+      "ignored_tests": [
+        "test full_sensor_linear_exposure_chunked_readback ... ignored, allocates about 0.8 GB of GPU buffers; full-resolution local qualification",
+        "test full_sensor_managed_exposure_budgets_and_checks_every_pixel ... ignored, full-resolution managed compute uses about 2 GB of tracked buffers",
+        "test fusion_back_full_frame_developed_raw_matches_metal_display_transport ... ignored, requires corrected production Fusion linear dumps; display transport qualification",
+        "test fusion_front_full_frame_developed_raw_matches_metal_display_transport ... ignored, requires corrected production Fusion linear dumps; display transport qualification",
+        "test hdr_exposure_saturates_to_finite_binary16_range ... ignored, Metal-specific empirical range edge; outside portable binary16 caller contract",
+        "test hdr_opposite_extreme_samples_interpolate_without_nan ... ignored, Metal-specific empirical range edge; outside portable binary16 caller contract",
+        "test hero9_full_frame_developed_raw_matches_metal_display_transport ... ignored, requires production HERO9 scene-linear dump; transport qualification, not demosaic/color oracle",
+        "test large_cancelled_upload_validation_and_admission_preserve_visible_texture ... ignored, manual 12 MP Metal upload cancellation qualification",
+        "test large_hdr_area_lod_preserves_all_output_samples_and_metal_frame ... ignored, manual 36 MP HDR area LOD and actual Metal qualification",
+        "test qualified_sd10_linear_raster_full_frame_display_readback ... ignored, requires qualified X3F linear sRGB PPM and a physical GPU"
+      ],
+      "log": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/integrated-current-20261011/gpu.log",
+      "log_sha256": "bd419249e2831d10bb3ddbeb51f3cb55eee0b0c2d38388adbb4046a4056348e9",
+      "verified_execution": true
+    },
+    {
+      "suite": "full-camera-transport",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-gpu",
+        "--test",
+        "raster_readback",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/Users/themoretheless/Documents/Sources/rrrah/target",
+        "--",
+        "--ignored",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "passed": 8,
+      "failed": 0,
+      "ignored": 0,
+      "ignored_tests": [],
+      "log": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/integrated-current-20261011/full-camera-transport.log",
+      "log_sha256": "0d008d242059d4ab0a7ce883ebf0116a63be1842c898caf0e8c334527f96131b",
+      "verified_execution": true
+    },
+    {
+      "suite": "full-f828-compute",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-gpu",
+        "--test",
+        "rgbe_compute_readback",
+        "full_f828_managed_rgbe_matches_cpu_reference",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/Users/themoretheless/Documents/Sources/rrrah/target",
+        "--",
+        "--ignored",
+        "--nocapture"
+      ],
+      "exit_code": 0,
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "ignored_tests": [],
+      "log": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/integrated-current-20261011/full-f828-compute.log",
+      "log_sha256": "48557e66f09919a58cfc738c023a7baee992b03ea9c692e51e3777a3e7f8cd08",
+      "verified_execution": true
+    },
+    {
+      "suite": "gpu-policy-cycles",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah",
+        "--test",
+        "ttl_swap_metal",
+        "live_count_size_and_ttl_changes_preserve_hdr_frames_through_swap",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/Users/themoretheless/Documents/Sources/rrrah/target",
+        "--",
+        "--exact",
+        "--include-ignored",
+        "--nocapture"
+      ],
+      "exit_code": 0,
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "ignored_tests": [],
+      "log": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/integrated-current-20261011/gpu-policy-cycles.log",
+      "log_sha256": "7a1351e1333d9e3bcddeb56945d9f98febe50cd1dee2ba91974d13d4f7cc8d58",
+      "verified_execution": true
+    },
+    {
+      "suite": "gpu-policy-large-hdr",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah",
+        "--test",
+        "ttl_swap_metal",
+        "large_hdr_live_policy_preserves_every_component_and_metal_pixel",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/Users/themoretheless/Documents/Sources/rrrah/target",
+        "--",
+        "--exact",
+        "--include-ignored",
+        "--nocapture"
+      ],
+      "exit_code": 0,
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "ignored_tests": [],
+      "log": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/integrated-current-20261011/gpu-policy-large-hdr.log",
+      "log_sha256": "4163e20da9205d8a23dfa4cd896904cde3d4a7c8b2e0250708498d0243281c04",
+      "verified_execution": true
+    },
+    {
+      "suite": "gpu-raster-collection",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah",
+        "--test",
+        "raster_collection_metal",
+        "raster_collection_native_and_prepared_swap_preserve_metal_frames",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/Users/themoretheless/Documents/Sources/rrrah/target",
+        "--",
+        "--exact",
+        "--ignored",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "ignored_tests": [],
+      "log": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/integrated-current-20261011/gpu-raster-collection.log",
+      "log_sha256": "dd36a3c7a2a7c9cbe1d7fb8670f438974e90a842b3b7ec71b41fdfed2da715ab",
+      "verified_execution": true,
+      "workload_evidence_valid": true
+    },
+    {
+      "suite": "gpu-prefetch-navigation",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah",
+        "--bin",
+        "rrrah",
+        "mixed_gallery_reversals_preserve_metal_frames_and_prefetch_pressure",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/Users/themoretheless/Documents/Sources/rrrah/target",
+        "--",
+        "--ignored",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "ignored_tests": [],
+      "log": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/integrated-current-20261011/gpu-prefetch-navigation.log",
+      "log_sha256": "9bd3cee41846106626d4e090a24ac0151e54aae0d8d631687b390d5369cd292f",
+      "verified_execution": true
+    },
+    {
+      "suite": "gpu-linear-import-linear_cli_pfm_preload_swap_preserves_metal_sdr_and_hdr",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah",
+        "--bin",
+        "rrrah",
+        "linear_pfm_viewer_tests::linear_cli_pfm_preload_swap_preserves_metal_sdr_and_hdr",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/Users/themoretheless/Documents/Sources/rrrah/target",
+        "--",
+        "--exact",
+        "--ignored",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "ignored_tests": [],
+      "log": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/integrated-current-20261011/gpu-linear-import-linear_cli_pfm_preload_swap_preserves_metal_sdr_and_hdr.log",
+      "log_sha256": "2f66daa46a12827ff978d3de4a25302925be2183f86cdf232f041406db38c22d",
+      "verified_execution": true,
+      "workload_evidence_valid": true
+    },
+    {
+      "suite": "gpu-linear-import-linear_cli_astc_hdr_preload_swap_preserves_metal_sdr_and_hdr",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah",
+        "--bin",
+        "rrrah",
+        "linear_pfm_viewer_tests::linear_cli_astc_hdr_preload_swap_preserves_metal_sdr_and_hdr",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/Users/themoretheless/Documents/Sources/rrrah/target",
+        "--",
+        "--exact",
+        "--ignored",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "ignored_tests": [],
+      "log": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/integrated-current-20261011/gpu-linear-import-linear_cli_astc_hdr_preload_swap_preserves_metal_sdr_and_hdr.log",
+      "log_sha256": "026f7bf8ad043aa00a93ea0901a5467efd95082c1c7063e1c55c88d60ebc7919",
+      "verified_execution": true,
+      "workload_evidence_valid": true
+    },
+    {
+      "suite": "gpu-linear-import-linear_cli_ktx2_hdr_preload_swap_preserves_metal_sdr_and_hdr",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah",
+        "--bin",
+        "rrrah",
+        "linear_pfm_viewer_tests::linear_cli_ktx2_hdr_preload_swap_preserves_metal_sdr_and_hdr",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/Users/themoretheless/Documents/Sources/rrrah/target",
+        "--",
+        "--exact",
+        "--ignored",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "ignored_tests": [],
+      "log": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/integrated-current-20261011/gpu-linear-import-linear_cli_ktx2_hdr_preload_swap_preserves_metal_sdr_and_hdr.log",
+      "log_sha256": "ce37c51687b34d3870aa6784c575b27813e4303665f947ebd0cb16232c8f86f4",
+      "verified_execution": true,
+      "workload_evidence_valid": true
+    },
+    {
+      "suite": "gpu-linear-import-linear_cli_dpx_preload_swap_preserves_metal_sdr_and_hdr",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah",
+        "--bin",
+        "rrrah",
+        "linear_pfm_viewer_tests::linear_cli_dpx_preload_swap_preserves_metal_sdr_and_hdr",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/Users/themoretheless/Documents/Sources/rrrah/target",
+        "--",
+        "--exact",
+        "--ignored",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "ignored_tests": [],
+      "log": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/integrated-current-20261011/gpu-linear-import-linear_cli_dpx_preload_swap_preserves_metal_sdr_and_hdr.log",
+      "log_sha256": "b94c29c6efd3421b06eeb533accf10c8c49a6e09ecb1e9479dbfa83615485d6d",
+      "verified_execution": true,
+      "workload_evidence_valid": true
+    },
+    {
+      "suite": "gpu-linear-import-pfm_top_down_cli_swap_preserves_metal_sdr_hdr_rows",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah",
+        "--bin",
+        "rrrah",
+        "linear_pfm_viewer_tests::pfm_top_down_cli_swap_preserves_metal_sdr_hdr_rows",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/Users/themoretheless/Documents/Sources/rrrah/target",
+        "--",
+        "--exact",
+        "--ignored",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "ignored_tests": [],
+      "log": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/integrated-current-20261011/gpu-linear-import-pfm_top_down_cli_swap_preserves_metal_sdr_hdr_rows.log",
+      "log_sha256": "e91690cf007dc08b0a07bf9a93eb5feff508d2bb1e9b29d84e8f413a5f82986e",
+      "verified_execution": true,
+      "workload_evidence_valid": true
+    },
+    {
+      "suite": "gpu-viewer-ttl-prefetch",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah",
+        "--bin",
+        "rrrah",
+        "repeated_hdr_ttl_viewer_prefetch_restore_preserves_metal_frames",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/Users/themoretheless/Documents/Sources/rrrah/target",
+        "--",
+        "--ignored",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "ignored_tests": [],
+      "log": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/integrated-current-20261011/gpu-viewer-ttl-prefetch.log",
+      "log_sha256": "bb7b21a11d1b069cb932b5af685baba11356a3076ec8bfdec9e46c64e0a851e3",
+      "verified_execution": true
+    },
+    {
+      "suite": "gpu-compute-cache",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah",
+        "--test",
+        "compute_cache_swap",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/Users/themoretheless/Documents/Sources/rrrah/target",
+        "--",
+        "--ignored",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "ignored_tests": [],
+      "log": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/integrated-current-20261011/gpu-compute-cache.log",
+      "log_sha256": "c73a28aad27ca3b79b4bcb68f0f957f7a0a3317935c94ac58c341d348098f243",
+      "verified_execution": true
+    },
+    {
+      "suite": "gpu-model-swap-cycles",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah",
+        "--test",
+        "model_readback",
+        "repeated_model_swap_pressure_and_cancellation_preserve_metal_frames",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/Users/themoretheless/Documents/Sources/rrrah/target",
+        "--",
+        "--exact",
+        "--ignored",
+        "--nocapture"
+      ],
+      "exit_code": 0,
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "ignored_tests": [],
+      "log": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/integrated-current-20261011/gpu-model-swap-cycles.log",
+      "log_sha256": "e6b3b2c27ff871d92a76318a9c22d9691e8b53b0eec33ef7c5843df78c3a0dbf",
+      "verified_execution": true
+    },
+    {
+      "suite": "full-sensor-compute",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-gpu",
+        "--test",
+        "compute_readback",
+        "full_sensor",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/Users/themoretheless/Documents/Sources/rrrah/target",
+        "--",
+        "--include-ignored",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "ignored_tests": [],
+      "log": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/integrated-current-20261011/full-sensor-compute.log",
+      "log_sha256": "be216db8f0947493257cd8017f9d1466d51287acda2fafeca46f51f0ac7d574c",
+      "verified_execution": true
+    }
+  ],
+  "complete_suite_execution": true,
+  "limitations": [
+    "Passing host CUDA tests does not qualify NVIDIA hardware.",
+    "Metal readback does not qualify physical HDR display.",
+    "Ignored tests are unverified, not passing.",
+    "These regression suites do not prove all 100 formats or sustained slow-disk workloads.",
+    "Raster collection checks 65 fixture sources in native/prepared storage, not independent decoder or color correctness, all format variants or physical HDR.",
+    "Large HDR policy checks one authored 12 MP payload cycle and offscreen SDR output, not physical HDR or a collection soak.",
+    "Full-sensor compute checks exposure/readback of authored float pixels; it does not qualify every RAW demosaic pipeline.",
+    "Current app ordinary suite skips explicit swapped-source residency tests; their separate seven-test/60-second Metal evidence remains separate.",
+    "Raster collection coverage is65 sources/94 selections, not full100-format acceptance.",
+    "Recovered camera transport is not independent complete demosaic/color qualification."
+  ],
+  "metal_raster_collection": true,
+  "metal_linear_import": true,
+  "external_viewer_inputs": {
+    "Fusion-back.rgba32fle": {
+      "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/Fusion-back.rgba32fle",
+      "sha256": "00d54286d47dab1e1a0e2d761e8f407e2dcdcdb0823e7ab91fd50f71e2a84df3"
+    },
+    "Fusion-front.rgba32fle": {
+      "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/Fusion-front.rgba32fle",
+      "sha256": "37871b3f2f5f9de0933a8e3b05edf4e00a1ca9503fd3fe581a94ee5a51f20fa5"
+    },
+    "HERO9.rgba32fle": {
+      "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/HERO9.rgba32fle",
+      "sha256": "5a13211dbf9c33a67125777d87bc85a950ac054ab051bfcfdf0175ec2475bb58"
+    },
+    "linear-srgb.ppm": {
+      "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/linear-srgb.ppm",
+      "sha256": "00f64dc46ad86366f7da089c9ba37d4aec3462dd49595c2d2049ba0e0d0b68ff"
+    },
+    "F828-sensor-oracle": {
+      "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/rrrah-srf-refresh-20261008.u16le",
+      "sha256": "b3fc3d395950407a35d33392a97181fa51aac1afb0aa6b96d94a7eba00e95d42"
+    }
+  },
+  "metal_mixed_raw_workers": false,
+  "all_executed_suites_verified": true,
+  "current_summary": {
+    "executed_suites": 24,
+    "passing_test_executions": 512,
+    "failed_test_executions": 0,
+    "ignored_test_executions_in_individual_invocations": 72,
+    "interpretation": "Counts are test executions, not unique tests. Some ordinary ignored cases are explicitly executed by later manual suites; ignored entries are never counted as passed."
+  },
+  "evidence_logs": [
+    {
+      "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/integrated-current-20261011/cache.log",
+      "sha256": "b4db8ac18fd187e6d191b15d7d735ae98f58b2802e5cd2aa8807c5d72d9b0eae"
+    },
+    {
+      "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/integrated-current-20261011/camera-color-gpu.log",
+      "sha256": "64ecef83d1b94fad610c2e6059e97f1990ecfbd2cc5af4d4a0ec40377e648da1"
+    },
+    {
+      "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/integrated-current-20261011/cuda-host.log",
+      "sha256": "67355471240615100830ab6f485653e12ef03cae3f2ca065b5fc4d8798597252"
+    },
+    {
+      "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/integrated-current-20261011/full-camera-transport.log",
+      "sha256": "0d008d242059d4ab0a7ce883ebf0116a63be1842c898caf0e8c334527f96131b"
+    },
+    {
+      "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/integrated-current-20261011/full-f828-compute.log",
+      "sha256": "48557e66f09919a58cfc738c023a7baee992b03ea9c692e51e3777a3e7f8cd08"
+    },
+    {
+      "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/integrated-current-20261011/full-sensor-compute.log",
+      "sha256": "be216db8f0947493257cd8017f9d1466d51287acda2fafeca46f51f0ac7d574c"
+    },
+    {
+      "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/integrated-current-20261011/gpu-compute-cache.log",
+      "sha256": "c73a28aad27ca3b79b4bcb68f0f957f7a0a3317935c94ac58c341d348098f243"
+    },
+    {
+      "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/integrated-current-20261011/gpu-linear-import-linear_cli_astc_hdr_preload_swap_preserves_metal_sdr_and_hdr.log",
+      "sha256": "026f7bf8ad043aa00a93ea0901a5467efd95082c1c7063e1c55c88d60ebc7919"
+    },
+    {
+      "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/integrated-current-20261011/gpu-linear-import-linear_cli_dpx_preload_swap_preserves_metal_sdr_and_hdr.log",
+      "sha256": "b94c29c6efd3421b06eeb533accf10c8c49a6e09ecb1e9479dbfa83615485d6d"
+    },
+    {
+      "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/integrated-current-20261011/gpu-linear-import-linear_cli_ktx2_hdr_preload_swap_preserves_metal_sdr_and_hdr.log",
+      "sha256": "ce37c51687b34d3870aa6784c575b27813e4303665f947ebd0cb16232c8f86f4"
+    },
+    {
+      "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/integrated-current-20261011/gpu-linear-import-linear_cli_pfm_preload_swap_preserves_metal_sdr_and_hdr.log",
+      "sha256": "2f66daa46a12827ff978d3de4a25302925be2183f86cdf232f041406db38c22d"
+    },
+    {
+      "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/integrated-current-20261011/gpu-linear-import-pfm_top_down_cli_swap_preserves_metal_sdr_hdr_rows.log",
+      "sha256": "e91690cf007dc08b0a07bf9a93eb5feff508d2bb1e9b29d84e8f413a5f82986e"
+    },
+    {
+      "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/integrated-current-20261011/gpu-model-swap-cycles.log",
+      "sha256": "e6b3b2c27ff871d92a76318a9c22d9691e8b53b0eec33ef7c5843df78c3a0dbf"
+    },
+    {
+      "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/integrated-current-20261011/gpu-policy-cycles.log",
+      "sha256": "7a1351e1333d9e3bcddeb56945d9f98febe50cd1dee2ba91974d13d4f7cc8d58"
+    },
+    {
+      "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/integrated-current-20261011/gpu-policy-large-hdr.log",
+      "sha256": "4163e20da9205d8a23dfa4cd896904cde3d4a7c8b2e0250708498d0243281c04"
+    },
+    {
+      "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/integrated-current-20261011/gpu-prefetch-navigation.log",
+      "sha256": "9bd3cee41846106626d4e090a24ac0151e54aae0d8d631687b390d5369cd292f"
+    },
+    {
+      "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/integrated-current-20261011/gpu-raster-collection.log",
+      "sha256": "dd36a3c7a2a7c9cbe1d7fb8670f438974e90a842b3b7ec71b41fdfed2da715ab"
+    },
+    {
+      "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/integrated-current-20261011/gpu-viewer-ttl-prefetch.log",
+      "sha256": "bb7b21a11d1b069cb932b5af685baba11356a3076ec8bfdec9e46c64e0a851e3"
+    },
+    {
+      "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/integrated-current-20261011/gpu.log",
+      "sha256": "bd419249e2831d10bb3ddbeb51f3cb55eee0b0c2d38388adbb4046a4056348e9"
+    },
+    {
+      "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/integrated-current-20261011/hdr-ttl-gpu.log",
+      "sha256": "b8ed4af06b0e0b6386fb5b4515770362a15d6b57c4f0fbe24c8c5ebd31203f23"
+    },
+    {
+      "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/integrated-current-20261011/model-gpu.log",
+      "sha256": "470c91e5c583a0f7dccd61a35c27c02b6ac7ebe5fc1277c264b473ac0930de20"
+    },
+    {
+      "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/integrated-current-20261011/qoi-native.log",
+      "sha256": "aa62997043372204ab9687237005907d69eb62215870f1713009cc622fb22cc4"
+    },
+    {
+      "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/integrated-current-20261011/qoi-reference.log",
+      "sha256": "699be4b5f54e578f5105bf85f1c096a537b37e0d8c8900c88ad3a8746c8467b2"
+    },
+    {
+      "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/integrated-current-20261011/viewer.log",
+      "sha256": "dd1a7d1c5e510c7801ffec53734da9590ecdf29a0d53d880843b68b472f76a23"
+    }
+  ]
+}

@@ -1,0 +1,728 @@
+{
+  "source_sha256": "88344458798562089f167540141169058f9b77444e55945e7f07b461112efe89",
+  "cases": [
+    {
+      "name": "arbitrary-custom-chroma.exr",
+      "outcome": "accepted",
+      "xy": [
+        0.6399999856948853,
+        0.33000001311302185,
+        0.30000001192092896,
+        0.6000000238418579,
+        0.15000000596046448,
+        0.05999999865889549,
+        0.34567001461982727,
+        0.35850000381469727
+      ],
+      "adopted_neutral": null,
+      "matrix": [
+        [
+          1.1046169018666319,
+          -0.09199253468379257,
+          -0.012624367182838547
+        ],
+        [
+          0.005247380098803578,
+          0.9994631439593175,
+          -0.004710524058120294
+        ],
+        [
+          0.009582612024546015,
+          0.028762168833887464,
+          0.961655219141566
+        ]
+      ],
+      "double_cone_delta": 4.6667603115224665e-09,
+      "oracle": "arbitrary-custom-chroma.linear-srgb.f32"
+    },
+    {
+      "name": "arbitrary-custom-neutral-match.exr",
+      "outcome": "accepted",
+      "xy": [
+        0.6399999856948853,
+        0.33000001311302185,
+        0.30000001192092896,
+        0.6000000238418579,
+        0.15000000596046448,
+        0.05999999865889549,
+        0.34567001461982727,
+        0.35850000381469727
+      ],
+      "adopted_neutral": [
+        0.34567001461982727,
+        0.35850000381469727
+      ],
+      "matrix": [
+        [
+          1.1046169018666319,
+          -0.09199253468379257,
+          -0.012624367182838547
+        ],
+        [
+          0.005247380098803578,
+          0.9994631439593175,
+          -0.004710524058120294
+        ],
+        [
+          0.009582612024546015,
+          0.028762168833887464,
+          0.961655219141566
+        ]
+      ],
+      "double_cone_delta": 4.6667603115224665e-09,
+      "oracle": "arbitrary-custom-neutral-match.linear-srgb.f32"
+    },
+    {
+      "name": "arbitrary-custom-neutral-other.exr",
+      "outcome": "accepted",
+      "xy": [
+        0.6399999856948853,
+        0.33000001311302185,
+        0.30000001192092896,
+        0.6000000238418579,
+        0.15000000596046448,
+        0.05999999865889549,
+        0.34567001461982727,
+        0.35850000381469727
+      ],
+      "adopted_neutral": [
+        0.33329999446868896,
+        0.33329999446868896
+      ],
+      "matrix": [
+        [
+          1.098601647515839,
+          -0.12076405098240986,
+          -0.006365052482049438
+        ],
+        [
+          0.0071646040760336895,
+          1.0219870753439142,
+          -0.0004888792385971501
+        ],
+        [
+          0.0033431329341853076,
+          0.006293920673967307,
+          0.7866013567717512
+        ]
+      ],
+      "double_cone_delta": 2.342420701850756e-09,
+      "oracle": "arbitrary-custom-neutral-other.linear-srgb.f32"
+    },
+    {
+      "name": "arbitrary-custom-unknown-id.exr",
+      "outcome": "unknown"
+    },
+    {
+      "name": "arbitrary-custom-unknown-id-neutral.exr",
+      "outcome": "unknown"
+    },
+    {
+      "name": "arbitrary-custom-invalid-neutral.exr",
+      "outcome": "refused"
+    },
+    {
+      "name": "arbitrary-custom-id-conflict.exr",
+      "outcome": "refused"
+    },
+    {
+      "name": "arbitrary-custom-singular.exr",
+      "outcome": "refused"
+    },
+    {
+      "name": "arbitrary-custom-aces.exr",
+      "outcome": "refused"
+    },
+    {
+      "name": "arbitrary-ap1-chroma.exr",
+      "outcome": "accepted",
+      "xy": [
+        0.7129999995231628,
+        0.2930000126361847,
+        0.16500000655651093,
+        0.8299999833106995,
+        0.12800000607967377,
+        0.04399999976158142,
+        0.3216800093650818,
+        0.3376699984073639
+      ],
+      "adopted_neutral": null,
+      "matrix": [
+        [
+          1.7050509806800305,
+          -0.6217921384931142,
+          -0.08325884218691715
+        ],
+        [
+          -0.1302563968664705,
+          1.1408047245351622,
+          -0.010548327668691175
+        ],
+        [
+          -0.024003372047437233,
+          -0.12896896408195954,
+          1.1529723361293969
+        ]
+      ],
+      "double_cone_delta": 1.7871981117245639e-09,
+      "oracle": "arbitrary-ap1-chroma.linear-srgb.f32"
+    },
+    {
+      "name": "arbitrary-ap1-neutral-match.exr",
+      "outcome": "accepted",
+      "xy": [
+        0.7129999995231628,
+        0.2930000126361847,
+        0.16500000655651093,
+        0.8299999833106995,
+        0.12800000607967377,
+        0.04399999976158142,
+        0.3216800093650818,
+        0.3376699984073639
+      ],
+      "adopted_neutral": [
+        0.3216800093650818,
+        0.3376699984073639
+      ],
+      "matrix": [
+        [
+          1.7050509806800305,
+          -0.6217921384931142,
+          -0.08325884218691715
+        ],
+        [
+          -0.1302563968664705,
+          1.1408047245351622,
+          -0.010548327668691175
+        ],
+        [
+          -0.024003372047437233,
+          -0.12896896408195954,
+          1.1529723361293969
+        ]
+      ],
+      "double_cone_delta": 1.7871981117245639e-09,
+      "oracle": "arbitrary-ap1-neutral-match.linear-srgb.f32"
+    },
+    {
+      "name": "arbitrary-ap1-neutral-other.exr",
+      "outcome": "accepted",
+      "xy": [
+        0.7129999995231628,
+        0.2930000126361847,
+        0.16500000655651093,
+        0.8299999833106995,
+        0.12800000607967377,
+        0.04399999976158142,
+        0.3216800093650818,
+        0.3376699984073639
+      ],
+      "adopted_neutral": [
+        0.33329999446868896,
+        0.33329999446868896
+      ],
+      "matrix": [
+        [
+          1.6336108563386458,
+          -0.7035676462884632,
+          -0.08314783371282847
+        ],
+        [
+          -0.1272999898472799,
+          1.1850815391259308,
+          -0.010300841952117758
+        ],
+        [
+          -0.022699675077456065,
+          -0.13142444639548045,
+          1.160922491918086
+        ]
+      ],
+      "double_cone_delta": 3.5723977109825e-09,
+      "oracle": "arbitrary-ap1-neutral-other.linear-srgb.f32"
+    },
+    {
+      "name": "arbitrary-ap1-unknown-id.exr",
+      "outcome": "unknown"
+    },
+    {
+      "name": "arbitrary-ap1-unknown-id-neutral.exr",
+      "outcome": "unknown"
+    },
+    {
+      "name": "arbitrary-ap1-invalid-neutral.exr",
+      "outcome": "refused"
+    },
+    {
+      "name": "arbitrary-ap1-id-conflict.exr",
+      "outcome": "refused"
+    },
+    {
+      "name": "arbitrary-ap1-singular.exr",
+      "outcome": "refused"
+    },
+    {
+      "name": "arbitrary-ap1-aces.exr",
+      "outcome": "refused"
+    },
+    {
+      "name": "arbitrary-ap1-id.exr",
+      "outcome": "accepted",
+      "xy": [
+        0.713,
+        0.293,
+        0.165,
+        0.83,
+        0.128,
+        0.044,
+        0.32168,
+        0.33767
+      ],
+      "adopted_neutral": null,
+      "matrix": [
+        [
+          1.70505099135163,
+          -0.6217921211378502,
+          -0.0832588702137812
+        ],
+        [
+          -0.13025641692178222,
+          1.1408047364777687,
+          -0.010548319555985487
+        ],
+        [
+          -0.024003356828091044,
+          -0.12896897582466524,
+          1.1529723326527561
+        ]
+      ],
+      "double_cone_delta": 1.7871974455907491e-09,
+      "oracle": "arbitrary-ap1-id.linear-srgb.f32"
+    },
+    {
+      "name": "arbitrary-ap1-both.exr",
+      "outcome": "accepted",
+      "xy": [
+        0.713,
+        0.293,
+        0.165,
+        0.83,
+        0.128,
+        0.044,
+        0.32168,
+        0.33767
+      ],
+      "adopted_neutral": null,
+      "matrix": [
+        [
+          1.70505099135163,
+          -0.6217921211378502,
+          -0.0832588702137812
+        ],
+        [
+          -0.13025641692178222,
+          1.1408047364777687,
+          -0.010548319555985487
+        ],
+        [
+          -0.024003356828091044,
+          -0.12896897582466524,
+          1.1529723326527561
+        ]
+      ],
+      "double_cone_delta": 1.7871974455907491e-09,
+      "oracle": "arbitrary-ap1-both.linear-srgb.f32"
+    },
+    {
+      "name": "arbitrary-ap1-id-neutral.exr",
+      "outcome": "accepted",
+      "xy": [
+        0.713,
+        0.293,
+        0.165,
+        0.83,
+        0.128,
+        0.044,
+        0.32168,
+        0.33767
+      ],
+      "adopted_neutral": [
+        0.33329999446868896,
+        0.33329999446868896
+      ],
+      "matrix": [
+        [
+          1.6336108164533305,
+          -0.703567688687274,
+          -0.08314786160926063
+        ],
+        [
+          -0.12730000848151052,
+          1.1850815824117311,
+          -0.010300833794275752
+        ],
+        [
+          -0.022699658761561887,
+          -0.13142446041971867,
+          1.1609225085873065
+        ]
+      ],
+      "double_cone_delta": 3.5723977109825e-09,
+      "oracle": "arbitrary-ap1-id-neutral.linear-srgb.f32"
+    },
+    {
+      "name": "arbitrary-ap0-chroma.exr",
+      "outcome": "accepted",
+      "xy": [
+        0.7347000241279602,
+        0.2653000056743622,
+        0.0,
+        1.0,
+        9.999999747378752e-05,
+        -0.07699999958276749,
+        0.3216800093650818,
+        0.3376699984073639
+      ],
+      "adopted_neutral": null,
+      "matrix": [
+        [
+          2.521686220952428,
+          -1.1341310331837762,
+          -0.38755518776865155
+        ],
+        [
+          -0.2764799305453062,
+          1.3727191094833693,
+          -0.09623917893806272
+        ],
+        [
+          -0.015378107098909136,
+          -0.15297533703534283,
+          1.1683534441342518
+        ]
+      ],
+      "double_cone_delta": 2.111818553363065e-09,
+      "oracle": "arbitrary-ap0-chroma.linear-srgb.f32"
+    },
+    {
+      "name": "arbitrary-ap0-neutral-match.exr",
+      "outcome": "accepted",
+      "xy": [
+        0.7347000241279602,
+        0.2653000056743622,
+        0.0,
+        1.0,
+        9.999999747378752e-05,
+        -0.07699999958276749,
+        0.3216800093650818,
+        0.3376699984073639
+      ],
+      "adopted_neutral": [
+        0.3216800093650818,
+        0.3376699984073639
+      ],
+      "matrix": [
+        [
+          2.521686220952428,
+          -1.1341310331837762,
+          -0.38755518776865155
+        ],
+        [
+          -0.2764799305453062,
+          1.3727191094833693,
+          -0.09623917893806272
+        ],
+        [
+          -0.015378107098909136,
+          -0.15297533703534283,
+          1.1683534441342518
+        ]
+      ],
+      "double_cone_delta": 2.111818553363065e-09,
+      "oracle": "arbitrary-ap0-neutral-match.linear-srgb.f32"
+    },
+    {
+      "name": "arbitrary-ap0-neutral-other.exr",
+      "outcome": "accepted",
+      "xy": [
+        0.7347000241279602,
+        0.2653000056743622,
+        0.0,
+        1.0,
+        9.999999747378752e-05,
+        -0.07699999958276749,
+        0.3216800093650818,
+        0.3376699984073639
+      ],
+      "adopted_neutral": [
+        0.33329999446868896,
+        0.33329999446868896
+      ],
+      "matrix": [
+        [
+          2.424256364870761,
+          -1.2134221293044196,
+          -0.3639388592289866
+        ],
+        [
+          -0.27557638599860507,
+          1.4240981003903734,
+          -0.10104100706523549
+        ],
+        [
+          -0.013231778997291633,
+          -0.1562198457097814,
+          1.1762499951522223
+        ]
+      ],
+      "double_cone_delta": 5.286796778136704e-09,
+      "oracle": "arbitrary-ap0-neutral-other.linear-srgb.f32"
+    },
+    {
+      "name": "arbitrary-ap0-unknown-id.exr",
+      "outcome": "unknown"
+    },
+    {
+      "name": "arbitrary-ap0-unknown-id-neutral.exr",
+      "outcome": "unknown"
+    },
+    {
+      "name": "arbitrary-ap0-invalid-neutral.exr",
+      "outcome": "refused"
+    },
+    {
+      "name": "arbitrary-ap0-id-conflict.exr",
+      "outcome": "refused"
+    },
+    {
+      "name": "arbitrary-ap0-singular.exr",
+      "outcome": "refused"
+    },
+    {
+      "name": "arbitrary-ap0-aces.exr",
+      "outcome": "accepted",
+      "xy": [
+        0.7347000241279602,
+        0.2653000056743622,
+        0.0,
+        1.0,
+        9.999999747378752e-05,
+        -0.07699999958276749,
+        0.3216800093650818,
+        0.3376699984073639
+      ],
+      "adopted_neutral": null,
+      "matrix": [
+        [
+          2.521686220952428,
+          -1.1341310331837762,
+          -0.38755518776865155
+        ],
+        [
+          -0.2764799305453062,
+          1.3727191094833693,
+          -0.09623917893806272
+        ],
+        [
+          -0.015378107098909136,
+          -0.15297533703534283,
+          1.1683534441342518
+        ]
+      ],
+      "double_cone_delta": 2.111818553363065e-09,
+      "oracle": "arbitrary-ap0-aces.linear-srgb.f32"
+    },
+    {
+      "name": "arbitrary-ap0-id.exr",
+      "outcome": "accepted",
+      "xy": [
+        0.7347,
+        0.2653,
+        0,
+        1,
+        0.0001,
+        -0.077,
+        0.32168,
+        0.33767
+      ],
+      "adopted_neutral": null,
+      "matrix": [
+        [
+          2.5216861848994645,
+          -1.1341309885071191,
+          -0.3875551963923462
+        ],
+        [
+          -0.2764799133770317,
+          1.3727190874179385,
+          -0.0962391740409056
+        ],
+        [
+          -0.015378065020303339,
+          -0.1529753355778847,
+          1.1683534005981877
+        ]
+      ],
+      "double_cone_delta": 2.1118174986511917e-09,
+      "oracle": "arbitrary-ap0-id.linear-srgb.f32"
+    },
+    {
+      "name": "arbitrary-ap0-both.exr",
+      "outcome": "accepted",
+      "xy": [
+        0.7347,
+        0.2653,
+        0,
+        1,
+        0.0001,
+        -0.077,
+        0.32168,
+        0.33767
+      ],
+      "adopted_neutral": null,
+      "matrix": [
+        [
+          2.5216861848994645,
+          -1.1341309885071191,
+          -0.3875551963923462
+        ],
+        [
+          -0.2764799133770317,
+          1.3727190874179385,
+          -0.0962391740409056
+        ],
+        [
+          -0.015378065020303339,
+          -0.1529753355778847,
+          1.1683534005981877
+        ]
+      ],
+      "double_cone_delta": 2.1118174986511917e-09,
+      "oracle": "arbitrary-ap0-both.linear-srgb.f32"
+    },
+    {
+      "name": "arbitrary-ap0-id-neutral.exr",
+      "outcome": "accepted",
+      "xy": [
+        0.7347,
+        0.2653,
+        0,
+        1,
+        0.0001,
+        -0.077,
+        0.32168,
+        0.33767
+      ],
+      "adopted_neutral": [
+        0.33329999446868896,
+        0.33329999446868896
+      ],
+      "matrix": [
+        [
+          2.424256257731291,
+          -1.2134221403099148,
+          -0.36393885126458003
+        ],
+        [
+          -0.2755763674342281,
+          1.4240981133066575,
+          -0.10104100573648436
+        ],
+        [
+          -0.013231734935810563,
+          -0.15621984712666404,
+          1.1762499714685004
+        ]
+      ],
+      "double_cone_delta": 5.286796334047494e-09,
+      "oracle": "arbitrary-ap0-id-neutral.linear-srgb.f32"
+    },
+    {
+      "name": "arbitrary-ap0-aces-id.exr",
+      "outcome": "accepted",
+      "xy": [
+        0.7347,
+        0.2653,
+        0,
+        1,
+        0.0001,
+        -0.077,
+        0.32168,
+        0.33767
+      ],
+      "adopted_neutral": null,
+      "matrix": [
+        [
+          2.5216861848994645,
+          -1.1341309885071191,
+          -0.3875551963923462
+        ],
+        [
+          -0.2764799133770317,
+          1.3727190874179385,
+          -0.0962391740409056
+        ],
+        [
+          -0.015378065020303339,
+          -0.1529753355778847,
+          1.1683534005981877
+        ]
+      ],
+      "double_cone_delta": 2.1118174986511917e-09,
+      "oracle": "arbitrary-ap0-aces-id.linear-srgb.f32"
+    }
+  ],
+  "files": {
+    "arbitrary-custom-chroma.exr": "7e05033233cf157562d2c473f4f39c9d87fcd36d4d60e4b7c94491b05b6bff0b",
+    "arbitrary-custom-chroma.linear-srgb.f32": "fea55b08b7c52b3303cf6e5e13c727351c2bb4972a57a7493ba7370d31f7ee71",
+    "arbitrary-custom-neutral-match.exr": "8b79efe44ee1376a6a4859d114cd64644720189491db4ef32c64ab1a5b947a18",
+    "arbitrary-custom-neutral-match.linear-srgb.f32": "fea55b08b7c52b3303cf6e5e13c727351c2bb4972a57a7493ba7370d31f7ee71",
+    "arbitrary-custom-neutral-other.exr": "4460b8330a1e9009d473ed1a516f8aec246019492f1998fdbb5737827b7ffccf",
+    "arbitrary-custom-neutral-other.linear-srgb.f32": "44cef720dab4dc40b88cb74ca9dfb016fd29c88ab0acfb41d36b7dc0d3a1c4a3",
+    "arbitrary-custom-unknown-id.exr": "c08cc5c2c5970aad9797414104b75554e9c922dd24b8c43b476cc1f72ace3a9d",
+    "arbitrary-custom-unknown-id-neutral.exr": "f8dd3bfaea7f1e4b5b572c2afb2874858101efd50b5a49caf8ec69266e1b328e",
+    "arbitrary-custom-invalid-neutral.exr": "7c9b3eeb2a5ce9ab8a128ed3e588423f32d7779070051bc7b880be30063b619d",
+    "arbitrary-custom-id-conflict.exr": "964256ce2fd5c4520e33bec7764c58e3d2185b6298fd86d9f630e3f166fb653a",
+    "arbitrary-custom-singular.exr": "4b9bc764e4f537223d44f2cf3dd897f3bed06682b3794d85855f1050a446a8b4",
+    "arbitrary-custom-aces.exr": "515fc3f252c9b42afb0a2cf6db66b7df591c804b7fa54de06f0793afa14e1263",
+    "arbitrary-ap1-chroma.exr": "e9ddbca296d26cf96b7ce1074a101ba95dd69ae51e05c54e276924efd81f8d72",
+    "arbitrary-ap1-chroma.linear-srgb.f32": "6e6c5adc1c2d9aea053697717d95ba0a9fe81f3debb027b200b4024a6858442d",
+    "arbitrary-ap1-neutral-match.exr": "a0f78876520198f6e1be384fab78c39914c657bb06d8facc4547c8b63a89fb0e",
+    "arbitrary-ap1-neutral-match.linear-srgb.f32": "6e6c5adc1c2d9aea053697717d95ba0a9fe81f3debb027b200b4024a6858442d",
+    "arbitrary-ap1-neutral-other.exr": "3520cf6a246b23caa6fc91dc5ad054f60144a00c8ddb6715fc4d5d371a4f0ae3",
+    "arbitrary-ap1-neutral-other.linear-srgb.f32": "3980399f3adb63b39eb736371673f4e3e67d1dde2eef65474e2d54cb95e62569",
+    "arbitrary-ap1-unknown-id.exr": "2fa06e97f0244c16aef49ac09c4849be620fa041bb8b476000366e8af19161da",
+    "arbitrary-ap1-unknown-id-neutral.exr": "42638659ac4f5d5273bffb0bc8dfc4707ddbdb0d8384af352da83413dcd3e78e",
+    "arbitrary-ap1-invalid-neutral.exr": "b124d944af789b234b5414aec6ce5cdc17c936cdba765d09880799083bfcfeca",
+    "arbitrary-ap1-id-conflict.exr": "dcd37fbd187e35db96a9398acfb7ac44cbeb0b0dbad0f61344da327df7dd049a",
+    "arbitrary-ap1-singular.exr": "4b9bc764e4f537223d44f2cf3dd897f3bed06682b3794d85855f1050a446a8b4",
+    "arbitrary-ap1-aces.exr": "2d0c9f68643972d7e1e4d336366615d51ac9c5b25b2051f2e77ab2e4d026ef86",
+    "arbitrary-ap1-id.exr": "45831412926d391ebd42d5d95733f11f21d622d659d39e3c4a749dbe66f56e07",
+    "arbitrary-ap1-id.linear-srgb.f32": "5b36cd9fedc7de8ee2461bbd62653a16f50e34fec5e7f13b64f83c8ed97bcc70",
+    "arbitrary-ap1-both.exr": "15b07ca7abbd5049c4ab82198201529fa3aca98a4662d1bed1c2343852bd9928",
+    "arbitrary-ap1-both.linear-srgb.f32": "5b36cd9fedc7de8ee2461bbd62653a16f50e34fec5e7f13b64f83c8ed97bcc70",
+    "arbitrary-ap1-id-neutral.exr": "d412ad37992a255b281ded5d226554516804ff3e1d2a376eea9c20464a0c1f74",
+    "arbitrary-ap1-id-neutral.linear-srgb.f32": "6506f4e1d2b80bbc908ef44d17188f3ea346bf528ce02c03d92b33d3541f28fd",
+    "arbitrary-ap0-chroma.exr": "4c069fccc71d7e302b1d6ecb42f1b53e8dd33a75eaa4f1feb72e1f8830732027",
+    "arbitrary-ap0-chroma.linear-srgb.f32": "13ab00897c879485087048a77f1c2a069fd6c5f2e2fc4eb60e29dcde33a9286c",
+    "arbitrary-ap0-neutral-match.exr": "f2755fdedf9671bdc1aba4156eda90987495b700b8127b3309b790c3f36068bc",
+    "arbitrary-ap0-neutral-match.linear-srgb.f32": "13ab00897c879485087048a77f1c2a069fd6c5f2e2fc4eb60e29dcde33a9286c",
+    "arbitrary-ap0-neutral-other.exr": "8326410742002421288981b7030fd083ff78ef5708523c499621b4145f5578cc",
+    "arbitrary-ap0-neutral-other.linear-srgb.f32": "ff561bc42d8049a82fa670a3338196dedd6b94e7b085cf0c98c976c510d197b3",
+    "arbitrary-ap0-unknown-id.exr": "0cd1352ab1ac43da020bb8da02a1ee71ac4197af88e8e4e5b2600dcd9901b17c",
+    "arbitrary-ap0-unknown-id-neutral.exr": "909853ac49e9ab49893f6ee80fa265570bfb993b978e35347acd30ca93673251",
+    "arbitrary-ap0-invalid-neutral.exr": "86a86ed2ccd8677fcb3a3447d3cb979e91dd4c6280a6bd81bb8af939e4975ae5",
+    "arbitrary-ap0-id-conflict.exr": "621c906c440f32cfc20b958ac2209193a80ccddd23d0d23ea05969d4e2a38981",
+    "arbitrary-ap0-singular.exr": "4b9bc764e4f537223d44f2cf3dd897f3bed06682b3794d85855f1050a446a8b4",
+    "arbitrary-ap0-aces.exr": "13c2b7cef17b42260db0e64c07fe94b3481ea20b915d9b949f9c04886a0ba2d5",
+    "arbitrary-ap0-aces.linear-srgb.f32": "13ab00897c879485087048a77f1c2a069fd6c5f2e2fc4eb60e29dcde33a9286c",
+    "arbitrary-ap0-id.exr": "41f791803311e6ced7949050fe5b9b923ed7c58cecc98c43c2a6af545f6e2f27",
+    "arbitrary-ap0-id.linear-srgb.f32": "53fb17484571cd6202aff84a373c5db5bd4c127baa9a36b2cac5f72469a9b595",
+    "arbitrary-ap0-both.exr": "c94e5d7b83219bc930cd87a24053f1929513cdbe6ce73ae6e1e0cdf31a7f0724",
+    "arbitrary-ap0-both.linear-srgb.f32": "53fb17484571cd6202aff84a373c5db5bd4c127baa9a36b2cac5f72469a9b595",
+    "arbitrary-ap0-id-neutral.exr": "2ef07375a3a3ded98aeaaca4b6323831b4b321b60fe3081548139836d20f6b92",
+    "arbitrary-ap0-id-neutral.linear-srgb.f32": "984301136bb9a928a1c3b090e342ff09649f6c2e5e9d9a4fa62eadbc000140c3",
+    "arbitrary-ap0-aces-id.exr": "b1bf2f10eb09728c2232b625cb02972e8602cb3c19eac7a8c42cf54611d5d3f1",
+    "arbitrary-ap0-aces-id.linear-srgb.f32": "53fb17484571cd6202aff84a373c5db5bd4c127baa9a36b2cac5f72469a9b595"
+  }
+}

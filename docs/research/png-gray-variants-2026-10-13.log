@@ -1,0 +1,21 @@
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+    Finished `test` profile [optimized + debuginfo] target(s) in 39.36s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_decode-3d841f18ff85d05c)
+
+running 1 test
+gray gAMA=50000 sixteen=true alpha=true maximum_error=0.00000008583963417851947
+gray gAMA=50000 sixteen=true alpha=false maximum_error=0.00000008583963417851947
+gray gAMA=50000 sixteen=false alpha=true maximum_error=0.00000004927500629747783
+gray gAMA=50000 sixteen=false alpha=false maximum_error=0.00000004927500629747783
+gray gAMA=45455 sixteen=true alpha=true maximum_error=0.0000006677955935452395
+gray gAMA=45455 sixteen=true alpha=false maximum_error=0.0000006677955935452395
+gray gAMA=45455 sixteen=false alpha=true maximum_error=0.000000595998071895032
+gray gAMA=45455 sixteen=false alpha=false maximum_error=0.000000595998071895032
+gray gAMA=100000 sixteen=true alpha=true maximum_error=0.000000029801867640344426
+gray gAMA=100000 sixteen=true alpha=false maximum_error=0.000000029801867640344426
+gray gAMA=100000 sixteen=false alpha=true maximum_error=0.000000029685450542160652
+gray gAMA=100000 sixteen=false alpha=false maximum_error=0.000000029685450542160652
+test raster::tests::png_gray_gamma_only_preserves_full_u16_ramp_and_alpha ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 1103 filtered out; finished in 0.03s
+

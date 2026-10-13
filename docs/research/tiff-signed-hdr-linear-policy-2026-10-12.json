@@ -1,0 +1,42 @@
+{
+  "scope": "Explicit unprofiled float TIFF linear-sRGB interpretation and signed HDR/alpha selected-page transport on actual Metal",
+  "production_fix": "Honor assume_untagged_linear_srgb only for unprofiled float TIFF; integer sample policy and embedded ICC precedence preserved",
+  "authored_files": 2,
+  "pages_per_file": 3,
+  "coverage": [
+    "Deflate both byte orders",
+    "Above-one, negative and signed-zero native components bit-exact",
+    "Straight and associated alpha decoded to exact straight components",
+    "Selected orientation6 and index/count retained",
+    "HDR target contains finite above-one and negative components",
+    "Pressure refusal and precancel return no frame, retry succeeds",
+    "Reverse swap preserves bits and SDR/HDR63x65 output; final CPU/queuezero",
+    "Independent ICC TIFF sources retain ICC despite explicit linear request"
+  ],
+  "decoder_passed": 1012,
+  "decoder_ignored": 72,
+  "metal_gate_passed": 134,
+  "metal_gate_ignored": 13,
+  "limitations": [
+    "HDR sources are authored numerical fixtures, not independent producer/calibrated color",
+    "Physical HDR/live resize, distinct page ICC and full format support remain open"
+  ],
+  "sources": {
+    "crates/rrrah-decode/src/raster.rs": "b3d0bc3779e34de23e57b01b8161f7eb5a499be41402840dfc755e107ed6f51d",
+    "crates/rrrah-decode/src/lib.rs": "2c1822246ef671e510d0f9e8f45401a6a9ba5d679d2826375ab03a9fe210b9c7",
+    "crates/rrrah-app/tests/tiff_pages_metal.rs": "fd8f072e95455aada5f5edc6feb30c660f575105aded82c6e8470a44db6dcb2a",
+    "scripts/generate-tiff-hdr-pages.py": "3212f9518eff08f4d883555ea60d7d4855e988a09043a081257ac587ed7752bf",
+    "scripts/qualify-viewer-storage-gpu.py": "7ca6c134524eb64a4dffd4a3616ca2f33f201de7edf00bbce6b9f696fc0d7515",
+    "tests/fixtures/data/tiff-pages-hdr-manifest.json": "aa2d3053629d012ee97b617c23981cf92e448a4468d46e93aae7a92036e6ff69"
+  },
+  "logs": {
+    "docs/research/tiff-signed-hdr-linear-policy-2026-10-12/rrrah-tiff-signed-hdr-all-fixed-20261012.log": "6d0d207e6b420fd119a2a9b51ca100eecc9ce6817e853de349ca4bd977f930c9",
+    "docs/research/tiff-signed-hdr-linear-policy-2026-10-12/report.json": "2133d24fc12c8464174bd905d3b8f5c0eb468aead05cdb125fc53d168c2e4e36",
+    "docs/research/tiff-signed-hdr-linear-policy-2026-10-12/rrrah-tiff-signed-hdr-prepared-metal-20261012.log": "17e7aa8fd8a045dd3200f3665c52845f893766f828eaddde35dfdd82b8dd365e",
+    "docs/research/tiff-signed-hdr-linear-policy-2026-10-12/rrrah-tiff-float-linear-final-decoder-20261012.log": "c678b6cf45eb7d3dea7972c82a6dff274816b74a14c003f970105db658d56ba1",
+    "docs/research/tiff-signed-hdr-linear-policy-2026-10-12/rrrah-tiff-signed-hdr-metal-20261012.log": "2cedf5ade0ac964473fcd4df0034b437c1e5a185ea9401f7976eb56ff6e6e26b",
+    "docs/research/tiff-signed-hdr-linear-policy-2026-10-12/gpu-all.log": "d2f02817072dd367e5e2aea22cdc4cc03fabf57b880fa8b8884da94fdeeeafb5",
+    "docs/research/tiff-signed-hdr-linear-policy-2026-10-12/gpu-tiff-pages.log": "f86a32aa23e2a8b4ca2ef681996bde042ccdcaaf24590833c6c6c558ce0befb5",
+    "docs/research/tiff-signed-hdr-linear-policy-2026-10-12/rrrah-tiff-signed-hdr-policy-fixed-20261012.log": "8d90e0424bdcda7789e7b8298119b2c421babb6ac633708618b771fe6015a2a3"
+  }
+}

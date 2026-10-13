@@ -1,0 +1,11 @@
+{
+  "change": "CPU Bayer development refuses non-finite or non-positive white-minus-black ranges before division, consistent with Metal viewport",
+  "core_tests": {
+    "passed": 118,
+    "failed": 0,
+    "ignored": 2
+  },
+  "regression": "finite black=-f32::MAX and white=f32::MAX overflow their difference; typed refusal releases all scratch/output credit",
+  "log_sha256": "5f738cbb5c231b6d3ef9528e10e23916ca72362f8319fcb0e3042459a7bb5c24",
+  "scope": "Authored metadata validation and managed rollback; not physical camera calibration"
+}

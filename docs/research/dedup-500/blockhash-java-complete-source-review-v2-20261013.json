@@ -1,0 +1,75 @@
+{
+  "repository": "matteodg/blockhash-java",
+  "commit": "ef7b1526ebf12dfe9b6a8c52450805cae61c2eed",
+  "whole_repo_complete": true,
+  "complete_text_files_read": [
+    ".gitignore",
+    "LICENSE",
+    "README.md",
+    "pom.xml",
+    "src/main/java/blockhashjava/BlockHash.java",
+    "src/test/java/blockhashjava/BlockHashTest.java"
+  ],
+  "runtime_executed": false,
+  "upstream_tests_run": false,
+  "upstream_test_methods": 5,
+  "license": "MIT, Copyright 2019 Matteo Di Giovinazzo; complete LICENSE read; no code copied",
+  "findings": [
+    {
+      "kind": "unimplemented_public_hashes",
+      "location": "BlockHash.java:148,237",
+      "detail": "blockhash and bitsToHexhash throw UnsupportedOperationException. Default CLI calls blockhash; quick path eventually calls unimplemented bitsToHexhash. No successful public hash path established."
+    },
+    {
+      "kind": "block_accumulation",
+      "location": "BlockHash.java:132-134",
+      "detail": "Even-path inner loops assign value = totalValue..., leaving only final pixel in each block before thresholding; not a sum."
+    },
+    {
+      "kind": "inconsistent_threshold",
+      "location": "BlockHash.java:214",
+      "detail": "Threshold halfBlockValue scales by full pixelsPerBlock despite overwritten single-pixel block value."
+    },
+    {
+      "kind": "partial_alpha",
+      "location": "BlockHash.java:184-187",
+      "detail": "Alpha zero treated as white; every nonzero alpha ignores opacity. Signed getAlpha affects numeric interpretation but zero check still works."
+    },
+    {
+      "kind": "truncated_edges",
+      "location": "BlockHash.java:119-120",
+      "detail": "Integer division excludes right/bottom remainders in quick path. Dimensions smaller than bits produce zero block widths/heights; no admission guard."
+    },
+    {
+      "kind": "median_precision_and_admission",
+      "location": "BlockHash.java:170-175",
+      "detail": "Even median uses float and ties-to-even integer rounding. Empty input indexes negative position; no admission guard."
+    },
+    {
+      "kind": "channel_labels",
+      "location": "BlockHash.java:197-206",
+      "detail": "getRed/getBlue names reverse BufferedImage ARGB red/blue positions; sum RGB unaffected, individual public getters misleading."
+    },
+    {
+      "kind": "unfinished_cli",
+      "location": "BlockHash.java:89-110",
+      "detail": "Resize/interpolation/debug behavior unfinished; parsed flag values consume following arguments. ImageIO.read null is not checked."
+    },
+    {
+      "kind": "test_scope",
+      "location": "BlockHashTest.java",
+      "detail": "Five JUnit methods exercise median odd/even and RGB/RGBA totals only. Neither hashing public path nor CLI is exercised."
+    }
+  ],
+  "dependencies": {
+    "java_source_target": "1.8",
+    "junit": "4.12",
+    "hamcrest-core": "1.3",
+    "guava": "23.0",
+    "scope": "POM direct declarations read; no resolved transitive dependency or runtime qualification"
+  },
+  "decision": "Do not adopt or use as functioning alternative hash oracle; useful negative reference for unfinished APIs and insufficient tests",
+  "runtime_limit": "System java_home reports no Java runtime; Homebrew/JDK temporary inventories inspected and no reusable JDK found. Runtime remains unqualified, no passing-test claim.",
+  "supersedes": "blockhash-java-complete-source-review-20261013.json",
+  "revision_scope": "Correct exact source line references after numbered full-source inspection; findings and execution scope unchanged."
+}

@@ -1,0 +1,70 @@
+{
+  "status": "complete_test_only_four_lane_prototype_qualification",
+  "real_controls": 6,
+  "alternating_samples": 24,
+  "focused_tests_per_feature_configuration": 3,
+  "summary": [
+    {
+      "pair": "0:0",
+      "radius": "None",
+      "median_seconds": {
+        "False": 0.36505200000000004,
+        "True": 0.15917966700000002
+      },
+      "full_to_batched_ratio": 2.2933331051634878
+    },
+    {
+      "pair": "0:0",
+      "radius": "Some(64.0)",
+      "median_seconds": {
+        "False": 0.7140535,
+        "True": 0.391669479
+      },
+      "full_to_batched_ratio": 1.8231022284991474
+    },
+    {
+      "pair": "0:1",
+      "radius": "None",
+      "median_seconds": {
+        "False": 0.7721473130000001,
+        "True": 0.2506408125
+      },
+      "full_to_batched_ratio": 3.0806926665225367
+    },
+    {
+      "pair": "0:1",
+      "radius": "Some(64.0)",
+      "median_seconds": {
+        "False": 1.3299436875000001,
+        "True": 0.5874054790000001
+      },
+      "full_to_batched_ratio": 2.2640981997037177
+    },
+    {
+      "pair": "0:2",
+      "radius": "None",
+      "median_seconds": {
+        "False": 0.535861729,
+        "True": 0.33108047900000004
+      },
+      "full_to_batched_ratio": 1.6185240839886543
+    },
+    {
+      "pair": "0:2",
+      "radius": "Some(64.0)",
+      "median_seconds": {
+        "False": 1.141092833,
+        "True": 0.6670024164999999
+      },
+      "full_to_batched_ratio": 1.7107776595289146
+    }
+  ],
+  "pins": {
+    "docs/research/dedup-gradient-batch-real-20261011.json": "b9f2a7ad9289964d1139bf824dd4de91eea9f27a171ed625ab2d73678f294414",
+    "docs/research/dedup-gradient-batch-snapshot-20261011.json": "e92b4d66f6cedc34a3324fee08cef6dc1c6c0955f963bdf7f8d86ee8e46e4e12",
+    "docs/research/dedup-gradient-batch-final-tests-20261011.log": "16e717d9fa227a2feabcec0e73c31b18c694aba0b1ff99581decc023efbef771",
+    "docs/research/dedup-gradient-batch-decode-tests-20261011.log": "6046111f2b3d6b6367f2ab4f31428fc15be64a81db04505caecd8206d2fbf071",
+    "docs/research/dedup-gradient-batch-synthetic-20261011.log": "4cf8056c0664cbe2bb6d54066249d11d11d83f7997843023c25dd3469dca5467"
+  },
+  "scope": "Exact bitwise ordered distances and scalar correspondence/cancellation parity; prototype repeats last descriptor in inactive tail lanes and is not production-ready. Shared-host opt-level1 matcher observations, not whole-library or collection speedup. Production transfer must use scalar tails and be qualified separately."
+}

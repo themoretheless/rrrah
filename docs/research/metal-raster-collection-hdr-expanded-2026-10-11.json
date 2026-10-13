@@ -1,0 +1,33 @@
+{
+  "date": "2026-10-11",
+  "scope": "Expanded native/prepared raster collection actual Metal cache/swap preservation",
+  "adapter": "Metal Apple M4 Max",
+  "sources": 65,
+  "selections": 94,
+  "storage_cases": 188,
+  "new_sources": [
+    "raster/hdr-compressed.astc",
+    "raster/precision-32-0.ktx2",
+    "raster/precision-32-3.ktx2"
+  ],
+  "checks": [
+    "All advertised indices and out-of-range refusal",
+    "Every native ASTC HDR float bit against Arm reference oracle",
+    "Plain/DEFLATE KTX2 authored HDR float samples exact",
+    "Native/prepared storage roundtrips preserve pixels, metadata and SDR/HDR GPU frames",
+    "Pressure refusal, cancellation and recovery",
+    "Final managed root and upload queue zero",
+    "Independent constant HDR binary16 output oracle on odd 63x65 target"
+  ],
+  "verifier": "scripts/qualify-viewer-storage-gpu.py:raster_collection_evidence accepted current log",
+  "log": "/tmp/rrrah-metal-raster-hdr-expanded-20261011.log",
+  "log_sha256": "cbcaf6cb7b5fdffe3675e8393188250fe93fbfeeb1cd8be05072b937f41cec77",
+  "limitations": [
+    "65 fixture files are not 65 fully qualified formats",
+    "Reference-family ASTC oracle is not an independent decoder implementation",
+    "Tiny source fixtures do not qualify sustained large-image workloads; those have separate evidence",
+    "No physical HDR luminance/color measurement",
+    "MEF WB and other pending normal-viewer formats remain open",
+    "NVIDIA deferred"
+  ]
+}

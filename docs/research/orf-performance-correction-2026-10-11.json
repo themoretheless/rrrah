@@ -1,0 +1,61 @@
+{
+  "production": "original checked bit reader restored",
+  "candidate": "test-only byte-window implementation",
+  "prior_2_8x_decode_speedup_claim": "withdrawn: non-interleaved before/after showed unrelated CR2 decode also improving",
+  "paired_checked_reader_rounds": [
+    {
+      "round": 0,
+      "reference_ms": 21.552,
+      "window_ms": 21.914,
+      "checksum": 1206070988
+    },
+    {
+      "round": 1,
+      "reference_ms": 22.426,
+      "window_ms": 21.286,
+      "checksum": 1206070988
+    },
+    {
+      "round": 2,
+      "reference_ms": 23.458,
+      "window_ms": 20.492,
+      "checksum": 1206070988
+    },
+    {
+      "round": 3,
+      "reference_ms": 21.638,
+      "window_ms": 20.048,
+      "checksum": 1206070988
+    },
+    {
+      "round": 4,
+      "reference_ms": 21.952,
+      "window_ms": 19.491,
+      "checksum": 1206070988
+    },
+    {
+      "round": 5,
+      "reference_ms": 22.108,
+      "window_ms": 19.061,
+      "checksum": 1206070988
+    }
+  ],
+  "median_reference_ms": 22.03,
+  "median_candidate_ms": 20.27,
+  "verification": "4 entropy tests including paired microbenchmark passed; restored production nine-source actual Metal test passed with 90 restores",
+  "logs": {
+    "paired": {
+      "path": "docs/research/orf-performance-correction-paired-2026-10-11.log",
+      "sha256": "0e3c08e5be7a118dc2aa672b3938493dd412e36a887da4c599ff49ce2c8fec12"
+    },
+    "production-metal": {
+      "path": "docs/research/orf-performance-correction-production-metal-2026-10-11.log",
+      "sha256": "f08dd5dd79685b6ffd4fd0d6268d39c61da2dec3ae6a59e7be65ba7156458c10"
+    }
+  },
+  "limits": [
+    "mixed-width synthetic bit stream; not complete original ORF decode",
+    "earlier unchecked-reference microbenchmark superseded by checked original reader comparison",
+    "no interleaved complete decoder A/B evidence; candidate not admitted to production"
+  ]
+}

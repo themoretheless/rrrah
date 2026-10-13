@@ -1,0 +1,23 @@
+{
+  "backend": "Metal",
+  "sources": {
+    "crates/rrrah-app/src/main.rs": "05762f0cb1a5ce75531bcab366e340a2402697cf2a58971e1d2a4b6c4e2a431e",
+    "crates/rrrah-gpu/tests/model_readback.rs": "865814641eebef409a0d7968e9f6596efa7a0bbb5325b65e4b8ca0fdd795d529"
+  },
+  "logs": {
+    "model": {
+      "passed": 10,
+      "path": "model-resize-model-2026-10-11.log",
+      "sha256": "2c618ca00b4bbf01525b311e06e6bb149f85e1daf88fc163e1118cd100fc3b7e"
+    },
+    "app": {
+      "passed": 208,
+      "path": "model-resize-app-2026-10-11.log",
+      "sha256": "36c5a1e08a99c14b4fbd6bc2fe5ca78f489b333e39c2f34ff5682275e647383e"
+    }
+  },
+  "limits": [
+    "GPU readback proves retained depth/frame and retry. Surface/window presentation after a refused resize still requires live desktop qualification.",
+    "Memory pressure is explicit managed budget pressure, not OS/driver exhaustion."
+  ]
+}

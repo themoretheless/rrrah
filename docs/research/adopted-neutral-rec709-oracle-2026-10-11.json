@@ -1,0 +1,53 @@
+{
+  "xy": [
+    0.64,
+    0.33,
+    0.3,
+    0.6,
+    0.15,
+    0.06,
+    0.3127,
+    0.329
+  ],
+  "adopted_neutral": [
+    0.3333,
+    0.3333
+  ],
+  "matrix_double_Bradford": [
+    [
+      0.9340649442474859,
+      -0.12377150318004143,
+      -0.008817571309440664
+    ],
+    [
+      0.0060915400664476324,
+      1.0474378770438715,
+      -0.0006772371235931746
+    ],
+    [
+      0.002842437377282552,
+      0.006450719012017658,
+      1.0896827944534835
+    ]
+  ],
+  "matrix_f32_Bradford_cones": [
+    [
+      0.9340649422558872,
+      -0.12377150261792225,
+      -0.008817569255978652
+    ],
+    [
+      0.006091541552094074,
+      1.0474378754627227,
+      -0.0006772374432571365
+    ],
+    [
+      0.002842437298447322,
+      0.0064507192574145555,
+      1.0896827943019614
+    ]
+  ],
+  "max_matrix_precision_delta": 2.0534620115419955e-09,
+  "method": "Independent partial-pivot Gaussian inversion; no production code/matrices imported. f32 cone variant supplies strict portable pixel reference; double-cone variant bounds precision loss.",
+  "rgba32": "tests/fixtures/raster/adopted-neutral-rec709.linear-srgb.f32"
+}

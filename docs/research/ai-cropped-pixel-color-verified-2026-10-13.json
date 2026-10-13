@@ -1,0 +1,108 @@
+{
+  "scope": "Original-resource crop diagnostic at199,25; original AI unchanged",
+  "cropbox": [
+    199,
+    219.5,
+    200,
+    220.5
+  ],
+  "runs": [
+    {
+      "scale": 64,
+      "valid": true,
+      "returncode": 0,
+      "stderr": "",
+      "mean_rgb": [
+        88.9931640625,
+        162.2861328125,
+        63.91748046875
+      ],
+      "command": [
+        "/tmp/rrrah-poppler-profile-oracle-20261012/build/utils/pdftoppm",
+        "-r",
+        "4608",
+        "-f",
+        "1",
+        "-l",
+        "1",
+        "-singlefile",
+        "-cropbox",
+        "-defaultcmykprofile",
+        "/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/assets/CGATS001Compat-v2-micro.icc",
+        "/Users/themoretheless/Documents/Sources/rrrah/docs/research/ai-pixel-199-25-crop-oracle-2026-10-13.pdf",
+        "/Users/themoretheless/Documents/Sources/rrrah/docs/research/ai-cropped-pixel-oracle-64x-2026-10-13"
+      ],
+      "sha256": "8df42f87f505ae4d4cd5ccb27687d4b62e4b1638cb44c983179c5cd972a42d5e"
+    },
+    {
+      "scale": 128,
+      "valid": true,
+      "returncode": 0,
+      "stderr": "",
+      "mean_rgb": [
+        90.7802734375,
+        163.28289794921875,
+        63.7958984375
+      ],
+      "command": [
+        "/tmp/rrrah-poppler-profile-oracle-20261012/build/utils/pdftoppm",
+        "-r",
+        "9216",
+        "-f",
+        "1",
+        "-l",
+        "1",
+        "-singlefile",
+        "-cropbox",
+        "-defaultcmykprofile",
+        "/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/assets/CGATS001Compat-v2-micro.icc",
+        "/Users/themoretheless/Documents/Sources/rrrah/docs/research/ai-pixel-199-25-crop-oracle-2026-10-13.pdf",
+        "/Users/themoretheless/Documents/Sources/rrrah/docs/research/ai-cropped-pixel-oracle-128x-2026-10-13"
+      ],
+      "sha256": "607b7c72e6ba1e26b85a22f7c22c8cfde10c7c6ac3f033c4c42559fdd0cbddee"
+    },
+    {
+      "scale": 256,
+      "valid": false,
+      "returncode": 0,
+      "stderr": "Bogus memory allocation size\nBogus memory allocation size\n",
+      "mean_rgb": null,
+      "command": [
+        "/tmp/rrrah-poppler-profile-oracle-20261012/build/utils/pdftoppm",
+        "-r",
+        "18432",
+        "-f",
+        "1",
+        "-l",
+        "1",
+        "-singlefile",
+        "-cropbox",
+        "-defaultcmykprofile",
+        "/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/assets/CGATS001Compat-v2-micro.icc",
+        "/Users/themoretheless/Documents/Sources/rrrah/docs/research/ai-pixel-199-25-crop-oracle-2026-10-13.pdf",
+        "/Users/themoretheless/Documents/Sources/rrrah/docs/research/ai-cropped-pixel-oracle-256x-2026-10-13"
+      ],
+      "sha256": "7b51a6fbb10ddd74d21c9fd874792d51205d38a7e4785b0ff136f37f09da948b"
+    }
+  ],
+  "native_rgb": [
+    81.60994604229927,
+    151.66586726903915,
+    70.53911849856377
+  ],
+  "last_valid_max_rgb8_difference": 11.617030680179596,
+  "last_valid_scale_delta": 1.787109375,
+  "converged": false,
+  "limitations": [
+    "Derived crop PDF; no full-page acceptance",
+    "Valid scales still require convergence",
+    "Native diagnostic values pinned to incremental-routing-original log"
+  ],
+  "sha256": {
+    "tests/fixtures/data/metal-recovery/ai-corpus/VectorApple.ai": "c5fc34346629c3379cee6065c45b7de0b620be822604551d1463d8e691b03d06",
+    "vendor/hayro-interpret/assets/CGATS001Compat-v2-micro.icc": "73e1ba37d2bad5bab2a964f40a9eed96209666efc067c3322626214bbef234a0",
+    "/tmp/rrrah-poppler-profile-oracle-20261012/build/utils/pdftoppm": "cb31608dfdd31a73166b1ff84313ba61b27cb1c6e5d4357debd8a0e37980c19f",
+    "docs/research/ai-incremental-routing-original-2026-10-13.log": "9e603305b9ede68c7fa9cf11b8d0971386b7dab15fd724769192a6bf83ee4aca",
+    "scripts/diagnose-ai-cropped-pixel-color.py": "04d0a9db2566c961635f36a52238befb3a74e499eefb9a7c3398a2835edf08e2"
+  }
+}

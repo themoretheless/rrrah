@@ -1,0 +1,64 @@
+{
+  "scope": "Experimental native AI source-field moment observer; production sampling unchanged",
+  "decision": "Adopt exact variable-width keys and active-prefix buffer reuse; reject previous-entry shortcut",
+  "changes": [
+    "Each entry retains exact identity length; hash and equality examine every active word. Fixed-width API still refuses wrong widths, variable API refuses empty and oversized keys",
+    "Field buffer reset writes only generation/length, stale tail excluded from hashing/copy/comparison; newly stored keys have zero tail",
+    "Centroid identity guard compares exact stored length and every active word; route-generation fallback retained"
+  ],
+  "tests": {
+    "passed": 229,
+    "failed": 0,
+    "ignored": 12
+  },
+  "regressions": [
+    "Forced same-hash keys[7],[7,0],[7,0,0] remain distinct by length",
+    "Malformed/overlong/fixed-width mismatch and exhausted work preserve entries and original witness",
+    "Reset after four sources to one source matches fresh active prefix while stale tail is demonstrably different"
+  ],
+  "pixels": [
+    {
+      "xy": [
+        147,
+        59
+      ],
+      "before": 82478711,
+      "adopted": 59250992,
+      "rejected_last_lookup": 65656612,
+      "adopted_reduction_percent": 28.162078090672395,
+      "last_lookup_regression_percent": 10.810991991492735
+    },
+    {
+      "xy": [
+        145,
+        50
+      ],
+      "before": 29553328,
+      "adopted": 21177975,
+      "rejected_last_lookup": 24432792,
+      "adopted_reduction_percent": 28.339796452027333,
+      "last_lookup_regression_percent": 15.368877336005916
+    }
+  ],
+  "original_pixels_exactly_equal": [
+    "147,59",
+    "145,50",
+    "199,25",
+    "138,39",
+    "149,56"
+  ],
+  "centroid_results_unchanged": true,
+  "admitted_table_bytes": 9633792,
+  "peak_admitted_bytes": 239197736,
+  "limitations": [
+    "Still59.3M/21.2M observer work, above working budgets",
+    "No measured throughput gain or skipped source samples",
+    "Formal rounding/color/fullpage/viewer qualification remains open"
+  ],
+  "next": "Derive source-field identity from geometry transitions instead of rebuilding after every full color evaluation",
+  "logs": [
+    "ai-variable-field-key-final-suite-2026-10-13.log",
+    "ai-variable-field-key-original-2026-10-13.log",
+    "ai-variable-last-field-key-original-2026-10-13.log"
+  ]
+}

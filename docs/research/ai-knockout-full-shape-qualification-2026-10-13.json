@@ -1,0 +1,110 @@
+{
+  "change": "In knockout parent, independent opaque Normal child with AIS=false replaces earlier sibling objects at full shape even when group alpha is reduced",
+  "guard": "Global soft-mask exclusion preserved; AIS=true/non-knockout parent requires previous rules; reduced-alpha overwrite does not mark parent as opaque independent",
+  "newly_completed_pixel": [
+    195,
+    37
+  ],
+  "probes": {
+    "195,37": {
+      "alpha": 1.0,
+      "components": [
+        0.653609391682176,
+        0.18663448442467723,
+        0.902922408827704,
+        0.03779044552978028
+      ],
+      "rgb": [
+        99.64779853820801,
+        156.11963868141174,
+        77.59195804595947
+      ]
+    },
+    "137,37": {
+      "alpha": 0.9757737328883405,
+      "components": [
+        0.2167979502787616,
+        0.6457726984690586,
+        0.8255252253197052,
+        0.11741609584381041
+      ],
+      "rgb": [
+        181.5827786284322,
+        107.32818614673408,
+        66.42946451349978
+      ]
+    },
+    "138,36": {
+      "alpha": 0.9999628213382107,
+      "components": [
+        0.3383463976795398,
+        0.753939134713375,
+        0.7768495160001363,
+        0.19377905992737132
+      ],
+      "rgb": [
+        148.31163494679748,
+        78.09125508175765,
+        62.07648508984009
+      ]
+    },
+    "199,25": {
+      "alpha": 1.0,
+      "components": [
+        0.7135069188516239,
+        0.17809831327578418,
+        0.9554537787768727,
+        0.0549916907975484
+      ],
+      "rgb": [
+        81.60994604229927,
+        151.66586726903915,
+        70.53911849856377
+      ]
+    },
+    "149,56": {
+      "alpha": 0.21442580534571978,
+      "components": [
+        0.3285820137140101,
+        0.861481439860559,
+        0.9346276847653974,
+        0.2474774505728342
+      ],
+      "rgb": [
+        230.74855138884672,
+        212.56374303909558,
+        208.50489577871136
+      ]
+    }
+  },
+  "prior_rgb_max_difference": 0.0,
+  "prior_component_max_difference": 0.0,
+  "suite": {
+    "passed": 206,
+    "ignored": 12,
+    "failed": 0
+  },
+  "managed_peak_bytes": 239197736,
+  "final_credit": 0,
+  "limitations": [
+    "Normal-viewer AI integration and independent color fidelity incomplete"
+  ],
+  "sha256": {
+    "vendor/hayro/src/native_spatial.rs": "e2e82e20dabbc41321c8aac9b81e2ab75a987a74cb311725da72bec40de978b3",
+    "docs/research/ai-route-structure-original-2026-10-13.log": "d4cefbbf4fc12612cab68f8c0c6a3a142e90bb36527784fb4701810c70482d8b",
+    "docs/research/ai-knockout-full-shape-original-2026-10-13.log": "4ad07fbddd68bf7a8000028dc339ec7d6475aa4c1c144f0056c9020056b65bc1",
+    "docs/research/ai-knockout-full-shape-final-suite-2026-10-13.log": "c22b62f712bfec0ce1a4bdedd80fbe1c59d6f2e4761f84d84a8d85f85d0bda7d",
+    "docs/research/ai-knockout-full-shape-page-2026-10-13.log": "dabb3b9dfebe6afe6aa7c422aaa2836d9e845b4cfb9c36bfd231e7d37edc7843"
+  },
+  "full_page": {
+    "completed": 11877,
+    "total": 74046,
+    "next_refusal": [
+      138,
+      39
+    ],
+    "deadline": false,
+    "seconds": 61.71,
+    "partial_image_published": false
+  }
+}

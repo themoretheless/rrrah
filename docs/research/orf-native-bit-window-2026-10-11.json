@@ -1,0 +1,55 @@
+{
+  "change": "native Olympus entropy reader extracts up to three covering bytes instead of iterating per bit",
+  "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/1084.orf",
+  "source_sha256": "b2221977cbc6eba0d3b363351072092e5647eaa0d02a5d8432b5d985b29f669f",
+  "baseline_decode_ms": 1839.866,
+  "after_decode_ms": [
+    659.654,
+    630.439
+  ],
+  "tests": {
+    "entropy": 3,
+    "orf": 12,
+    "nine_source_metal_runs": 2,
+    "restores_per_run": 90
+  },
+  "logs": {
+    "orf-bit-window-tests": {
+      "path": "docs/research/orf-bit-window-tests-2026-10-11.log",
+      "sha256": "78c8eedd20c50f9875578c68956879a33a5b9f606f9a5d8fe0bc27d680c2838f",
+      "results": [
+        "test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 1063 filtered out; finished in 0.00s"
+      ]
+    },
+    "orf-full-tests": {
+      "path": "docs/research/orf-full-tests-2026-10-11.log",
+      "sha256": "08be8e2cb99855a9949db4db77bb9f14bfce426a14828ba05911ee44cbe3a7a6",
+      "results": [
+        "test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 1054 filtered out; finished in 0.00s"
+      ]
+    },
+    "orf-bit-window-metal": {
+      "path": "docs/research/orf-bit-window-metal-2026-10-11.log",
+      "sha256": "4a369b8bd51387b7fb25a665792cec1603a1d307cdceab24ccf5991e87811ce3",
+      "results": [
+        "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 9.12s"
+      ]
+    },
+    "orf-bit-window-metal-repeat": {
+      "path": "docs/research/orf-bit-window-metal-repeat-2026-10-11.log",
+      "sha256": "1271ba8d90cc3d4d76df88e69d12cd9a55dc690e3d4660066ceaa638072f1fa4",
+      "results": [
+        "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 8.84s"
+      ]
+    }
+  },
+  "limitations": [
+    "prior baseline single run; no interleaved A/B benchmark",
+    "single ORF original; not format-wide speed guarantee",
+    "full CPU decode still required; this is not a GPU entropy decoder",
+    "physical HDR and full 100-format qualification remain open"
+  ],
+  "superseded_by": "orf-performance-correction-2026-10-11.json",
+  "production_status": "candidate removed from production; retained test-only",
+  "speedup_claim": "withdrawn; non-controlled before/after"
+}

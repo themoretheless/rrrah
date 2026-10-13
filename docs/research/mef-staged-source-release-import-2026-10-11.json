@@ -1,0 +1,41 @@
+{
+  "change": "MEF file sensor import separates full-source TIFF validation from output allocation; retains same open file; BLAKE3 sensor digest checked after row reread",
+  "source_sha256": "bcd63507c3c4cc3ea1bad2945e3f88cb4677a1a3c762e1acc38df4445714eb7c",
+  "memory": {
+    "previous_peak_bytes": 79498316,
+    "current_exact_peak_bytes": 42929032,
+    "output_bytes": 42923008,
+    "row_bytes": 6024,
+    "full_source_validation_bytes": 36575308
+  },
+  "verified": [
+    "full independent pinned sensor hash",
+    "all native vs independent oracle sensor codes",
+    "relocated sensor strip remains supported with peak max(source, output+row)",
+    "one-byte-short budget refusal and last-owner release",
+    "metadata overlap and public color refusal preserved"
+  ],
+  "runs": [
+    {
+      "suite": "real-mef",
+      "passed": 9,
+      "ignored": 0,
+      "log": "docs/research/mef-staged-source-release-import-2026-10-11-real-mef.log",
+      "sha256": "cf97b918c5fcc482a8484c9ff9fc74eaa8aebb3801b3501f3c47e5daa022eaf3"
+    },
+    {
+      "suite": "decoder",
+      "passed": 995,
+      "ignored": 67,
+      "log": "docs/research/mef-staged-source-release-import-2026-10-11-decoder.log",
+      "sha256": "a41b21b035ac7f9e566118c6ed0055e296b0d350036fede2d185d53be94395a8"
+    }
+  ],
+  "limitations": [
+    "Two-pass I/O and integrity hashing trade time for peak memory; no latency speedup claimed",
+    "Full input still temporarily allocated for TIFF validation; bounded seekable metadata remains future work",
+    "Concurrent source mutation digest mismatch branch still needs deterministic fault injection",
+    "MEF WB/color/viewer support remains pending"
+  ],
+  "development_note": "Initial failures were stale peak-memory expectations in relocated-source regression; corrected to staged max(source,output+row) and pre-admission refusal"
+}

@@ -17,6 +17,14 @@ use crate::gallery::SourceStamp;
 /// Maximum number of uploaded thumbnail textures kept resident.
 pub const THUMB_CACHE_CAPACITY: usize = 128;
 
+#[derive(Debug, Clone)]
+pub struct CachedThumbSource {
+    pub folder: PathBuf,
+    pub source: PathBuf,
+    pub stamp: SourceStamp,
+    pub id: FilmstripTileId,
+}
+
 /// Count-bounded LRU over uploaded strip textures. Eviction returns the GPU
 /// handle so the caller can free the texture; the cache itself stays
 /// GPU-agnostic for testability.
@@ -38,21 +46,35 @@ impl ThumbCache {
         }
     }
 
-    /// Revalidate on folder refresh, outside the drawing path.
-    pub fn invalidate_changed_sources(&mut self) -> Vec<FilmstripTileId> {
-        let stale: Vec<_> = self
-            .sources
-            .iter()
-            .filter(|(_, (p, s))| SourceStamp::read(p) != *s)
-            .map(|(f, _)| f.clone())
-            .collect();
+    /// A count-bounded inventory; cloning this never accesses the filesystem.
+    pub fn source_snapshot(&self) -> Vec<CachedThumbSource> {
+        self.sources.iter().filter_map(|(folder, (source, stamp))| {
+            let (id, _) = self.entries.get(folder)?;
+            Some(CachedThumbSource { folder: folder.clone(), source: source.clone(),
+                stamp: stamp.clone(), id: *id })
+        }).collect()
+    }
+
+    /// Apply worker evidence only to the entry it actually checked. A newly
+    /// decoded/replaced texture must survive an older scan's stale result.
+    pub fn invalidate_sources(&mut self, stale: Vec<CachedThumbSource>) -> Vec<FilmstripTileId> {
         stale
             .into_iter()
-            .filter_map(|f| {
-                self.sources.remove(&f);
-                self.entries.remove(&f).map(|(id, _)| id)
+            .filter_map(|snapshot| {
+                let matches = self.entries.get(&snapshot.folder).is_some_and(|(id, _)| *id == snapshot.id)
+                    && self.sources.get(&snapshot.folder).is_some_and(|(path, stamp)|
+                        *path == snapshot.source && *stamp == snapshot.stamp);
+                if !matches { return None; }
+                self.sources.remove(&snapshot.folder);
+                self.entries.remove(&snapshot.folder).map(|(id, _)| id)
             })
             .collect()
+    }
+    #[cfg(test)]
+    fn invalidate_changed_sources(&mut self) -> Vec<FilmstripTileId> {
+        let stale = self.source_snapshot().into_iter()
+            .filter(|snapshot| SourceStamp::read(&snapshot.source) != snapshot.stamp).collect();
+        self.invalidate_sources(stale)
     }
     #[cfg(test)]
     pub fn insert_source(
@@ -200,6 +222,27 @@ mod tests {
 
     fn id(value: usize) -> FilmstripTileId {
         FilmstripTileId::from_raw_for_test(value)
+    }
+
+    #[test]
+    fn delayed_source_evidence_cannot_evict_a_replaced_texture() {
+        let dir = tempfile::tempdir().unwrap();
+        let folder = dir.path().to_path_buf();
+        let source = folder.join("cover.png");
+        std::fs::write(&source, b"first source").unwrap();
+        let mut cache = ThumbCache::new(1);
+        cache.insert_source(folder.clone(), source.clone(), id(1));
+        let old_handle = cache.source_snapshot();
+        cache.insert_source(folder.clone(), source.clone(), id(2));
+        assert!(cache.invalidate_sources(old_handle).is_empty());
+        let old_stamp = cache.source_snapshot();
+        std::fs::write(&source, b"replaced source").unwrap();
+        cache.insert_source(folder.clone(), source.clone(), id(2));
+        assert!(cache.invalidate_sources(old_stamp).is_empty());
+        assert!(cache.contains(&folder));
+        assert_eq!(cache.invalidate_sources(cache.source_snapshot()), vec![id(2)]);
+        assert_eq!(cache.len(), 0);
+        assert!(cache.source_snapshot().is_empty());
     }
 
     #[test]

@@ -2,9 +2,9 @@
   "index": 100,
   "repository": "mk-fg/image-deduplication-tool",
   "commit": "b78cef579284f33b59959800b7037277c27648f1",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
-  "decision": "wrapper",
-  "finding": "ctypes pHash library wrapper; wrapper WTFPL does not establish libpHash license or image decode behavior.",
+  "review_scope": "complete pinned4file review with8serial Python3/hash-adapter controls; Python2/libpHash/async/feh unqualified",
+  "decision": "reference",
+  "finding": "Full4file review: stale path cache/failed-hash no retry, direct-file input ignored, top-n exceeds limit.8serial adapted controls. Async deadline/RSS absent and exceptional cleanup unreaped per static source. No adoption.",
   "license_metadata": "WTFPL",
   "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
   "tests_detected": 0,
@@ -44,5 +44,11 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "fully_read_files": 4,
+  "reviewed_files": 4,
+  "complete_source_review": "image-deduplication-tool-complete-source-review-20261012.json",
+  "complete_runtime_audit": "image-deduplication-tool-complete-runtime-audit-20261012.json",
+  "runtime_controls_passed": 8
 }

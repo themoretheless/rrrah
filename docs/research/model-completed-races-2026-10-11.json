@@ -1,0 +1,11 @@
+{
+  "backend": "metal",
+  "passed": 1,
+  "failed": 0,
+  "verified": "deterministically wait for completed slot with installed+prepared GPU credit=72; generation change rejects result and releases to36; explicit cancellation likewise releases completed result to36; worker/renderer drop final0; 1000 replacement burst still passes",
+  "log": "docs/research/model-completed-races-2026-10-11.log",
+  "sha256": "61897be6ddbfe8e14b73ec6319eae35343ca4b5568b454f6be8370397b36d23d",
+  "limitations": [
+    "Worker/application-state regression without live window; physical interactive responsiveness pending."
+  ]
+}

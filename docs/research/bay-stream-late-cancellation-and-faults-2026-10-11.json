@@ -1,0 +1,36 @@
+{
+  "fix": "BAY streamed reader checks cancellation after final EOF read before publishing sensor",
+  "regression_cases": {
+    "cancel_after_reads": [
+      1,
+      605,
+      1211,
+      1212
+    ],
+    "truncated_after_admission": true,
+    "extra_byte_after_admission": true,
+    "partial_sensor_never_returned": true,
+    "managed_peak": "full output plus one row",
+    "final_credits": 0
+  },
+  "runs": [
+    {
+      "suite": "focused",
+      "passed": 6,
+      "ignored": 0,
+      "log": "docs/research/bay-stream-late-cancellation-and-faults-2026-10-11-focused.log",
+      "sha256": "8a15f4110baa84d3693ef94e3470980feeaf4e8a3865a3f8e34f58eefb2577a2"
+    },
+    {
+      "suite": "decoder",
+      "passed": 995,
+      "ignored": 67,
+      "log": "docs/research/bay-stream-late-cancellation-and-faults-2026-10-11-decoder.log",
+      "sha256": "f9e802085ef1498d256943c4df1358a22508ca8dbde37cf6a837e9fb9c1e624d"
+    }
+  ],
+  "limitations": [
+    "Injected reader faults validate deterministic stream behavior, not OS-wide pressure or a physical slow disk",
+    "BAY native sensor unpack is not qualified original-camera color viewing"
+  ]
+}

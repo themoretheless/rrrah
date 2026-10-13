@@ -1,0 +1,1748 @@
+{
+  "status": "complete_reflink_generator_source_and_structured_full_lock_review",
+  "commit": "a74f90d293e05856d19a4c0ac2b29b46ef16cf23",
+  "fully_read_additional_files": {
+    "fclones/src/reflink.rs": 545,
+    "gen-test-files/Cargo.toml": 10,
+    "gen-test-files/src/main.rs": 31
+  },
+  "machine_inspected_files": {
+    "Cargo.lock": {
+      "lines": 1791,
+      "package_entries": 199,
+      "resolved_dependency_edges": 362,
+      "registry_packages": 197,
+      "method": "Full TOML parse; every package/edge inspected, exact inventory printed; every registry checksum syntax validated. Not third-party dependency source audit."
+    }
+  },
+  "original_reflink_tests_passed": 2,
+  "tests": [
+    "reflink::test::test_reflink_command_fills_file_with_content_anyos",
+    "reflink::test::test_reflink_command_works_with_files_too_large_anyos"
+  ],
+  "generator_runs": [
+    {
+      "command": [
+        "/Users/themoretheless/.codex/tmp/rrrah-fclones-generator-executable-20261012",
+        "--count",
+        "1",
+        "--max-group-size",
+        "1",
+        "/Users/themoretheless/.codex/tmp/rrrah-fclones-generator-fixtures-20261012/bad"
+      ],
+      "returncode": 101,
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-fclones-generator-fixtures-20261012/max-1.log",
+      "log_sha256": "08ce32c67d963d1d58daafd4716d2ca263625fabe6e1c27cf5336cdc7414b750"
+    },
+    {
+      "command": [
+        "/Users/themoretheless/.codex/tmp/rrrah-fclones-generator-executable-20261012",
+        "--count",
+        "1",
+        "--max-group-size",
+        "2",
+        "/Users/themoretheless/.codex/tmp/rrrah-fclones-generator-fixtures-20261012/good"
+      ],
+      "returncode": 0,
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-fclones-generator-fixtures-20261012/max-2.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "lock_inventory": [
+    {
+      "name": "aho-corasick",
+      "version": "1.1.2",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "memchr"
+      ]
+    },
+    {
+      "name": "android-tzdata",
+      "version": "0.1.1",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "android_system_properties",
+      "version": "0.1.5",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "libc"
+      ]
+    },
+    {
+      "name": "ansi-escapes",
+      "version": "0.1.1",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "anstream",
+      "version": "0.6.18",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "anstyle",
+        "anstyle-parse",
+        "anstyle-query",
+        "anstyle-wincon",
+        "colorchoice",
+        "is_terminal_polyfill",
+        "utf8parse"
+      ]
+    },
+    {
+      "name": "anstyle",
+      "version": "1.0.10",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "anstyle-parse",
+      "version": "0.2.2",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "utf8parse"
+      ]
+    },
+    {
+      "name": "anstyle-query",
+      "version": "1.0.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "windows-sys 0.48.0"
+      ]
+    },
+    {
+      "name": "anstyle-wincon",
+      "version": "3.0.6",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "anstyle",
+        "windows-sys 0.59.0"
+      ]
+    },
+    {
+      "name": "arrayref",
+      "version": "0.3.7",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "arrayvec",
+      "version": "0.7.4",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "assert_matches",
+      "version": "1.5.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "atty",
+      "version": "0.2.14",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "hermit-abi 0.1.19",
+        "libc",
+        "winapi"
+      ]
+    },
+    {
+      "name": "autocfg",
+      "version": "1.1.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "bincode",
+      "version": "1.3.3",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "serde"
+      ]
+    },
+    {
+      "name": "bitflags",
+      "version": "1.3.2",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "bitflags",
+      "version": "2.4.1",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "blake3",
+      "version": "1.5.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "arrayref",
+        "arrayvec",
+        "cc",
+        "cfg-if",
+        "constant_time_eq"
+      ]
+    },
+    {
+      "name": "block-buffer",
+      "version": "0.10.4",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "generic-array"
+      ]
+    },
+    {
+      "name": "bstr",
+      "version": "1.7.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "memchr",
+        "serde"
+      ]
+    },
+    {
+      "name": "bumpalo",
+      "version": "3.14.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "byte-unit",
+      "version": "4.0.19",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "serde",
+        "utf8-width"
+      ]
+    },
+    {
+      "name": "byteorder",
+      "version": "1.5.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "bytesize",
+      "version": "1.3.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "cc",
+      "version": "1.0.83",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "libc"
+      ]
+    },
+    {
+      "name": "cfg-if",
+      "version": "1.0.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "chrono",
+      "version": "0.4.31",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "android-tzdata",
+        "iana-time-zone",
+        "num-traits",
+        "serde",
+        "windows-targets 0.48.5"
+      ]
+    },
+    {
+      "name": "clap",
+      "version": "4.5.31",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "clap_builder",
+        "clap_derive"
+      ]
+    },
+    {
+      "name": "clap_builder",
+      "version": "4.5.31",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "anstream",
+        "anstyle",
+        "clap_lex",
+        "strsim",
+        "terminal_size"
+      ]
+    },
+    {
+      "name": "clap_complete",
+      "version": "4.4.10",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "clap"
+      ]
+    },
+    {
+      "name": "clap_derive",
+      "version": "4.5.28",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "heck",
+        "proc-macro2",
+        "quote",
+        "syn"
+      ]
+    },
+    {
+      "name": "clap_lex",
+      "version": "0.7.4",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "colorchoice",
+      "version": "1.0.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "console",
+      "version": "0.15.7",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "encode_unicode",
+        "lazy_static",
+        "libc",
+        "unicode-width",
+        "windows-sys 0.45.0"
+      ]
+    },
+    {
+      "name": "constant_time_eq",
+      "version": "0.3.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "core-foundation-sys",
+      "version": "0.8.4",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "cpufeatures",
+      "version": "0.2.9",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "libc"
+      ]
+    },
+    {
+      "name": "crc32fast",
+      "version": "1.3.2",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "cfg-if"
+      ]
+    },
+    {
+      "name": "crossbeam-channel",
+      "version": "0.5.8",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "cfg-if",
+        "crossbeam-utils"
+      ]
+    },
+    {
+      "name": "crossbeam-deque",
+      "version": "0.8.3",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "cfg-if",
+        "crossbeam-epoch",
+        "crossbeam-utils"
+      ]
+    },
+    {
+      "name": "crossbeam-epoch",
+      "version": "0.9.15",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "autocfg",
+        "cfg-if",
+        "crossbeam-utils",
+        "memoffset",
+        "scopeguard"
+      ]
+    },
+    {
+      "name": "crossbeam-utils",
+      "version": "0.8.16",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "cfg-if"
+      ]
+    },
+    {
+      "name": "crypto-common",
+      "version": "0.1.6",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "generic-array",
+        "typenum"
+      ]
+    },
+    {
+      "name": "csv",
+      "version": "1.3.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "csv-core",
+        "itoa",
+        "ryu",
+        "serde"
+      ]
+    },
+    {
+      "name": "csv-core",
+      "version": "0.1.11",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "memchr"
+      ]
+    },
+    {
+      "name": "dashmap",
+      "version": "5.5.3",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "cfg-if",
+        "hashbrown 0.14.2",
+        "lock_api",
+        "once_cell",
+        "parking_lot_core 0.9.9"
+      ]
+    },
+    {
+      "name": "digest",
+      "version": "0.10.7",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "block-buffer",
+        "crypto-common"
+      ]
+    },
+    {
+      "name": "dirs",
+      "version": "5.0.1",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "dirs-sys"
+      ]
+    },
+    {
+      "name": "dirs-sys",
+      "version": "0.4.1",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "libc",
+        "option-ext",
+        "redox_users",
+        "windows-sys 0.48.0"
+      ]
+    },
+    {
+      "name": "dtparse",
+      "version": "2.0.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "chrono",
+        "lazy_static",
+        "num-traits",
+        "rust_decimal"
+      ]
+    },
+    {
+      "name": "dunce",
+      "version": "1.0.4",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "either",
+      "version": "1.9.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "encode_unicode",
+      "version": "0.3.6",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "equivalent",
+      "version": "1.0.1",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "errno",
+      "version": "0.3.5",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "libc",
+        "windows-sys 0.48.0"
+      ]
+    },
+    {
+      "name": "fallible-iterator",
+      "version": "0.3.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "fastrand",
+      "version": "2.0.1",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "fclones",
+      "version": "0.35.0",
+      "source": "workspace",
+      "dependencies": [
+        "assert_matches",
+        "bincode",
+        "blake3",
+        "byte-unit",
+        "byteorder",
+        "bytesize",
+        "chrono",
+        "clap",
+        "clap_complete",
+        "console",
+        "crossbeam-channel",
+        "crossbeam-utils",
+        "csv",
+        "dashmap",
+        "dirs",
+        "dtparse",
+        "dunce",
+        "fallible-iterator",
+        "fiemap",
+        "file-owner",
+        "filetime",
+        "hex",
+        "ignore",
+        "indexmap 2.0.2",
+        "itertools",
+        "lazy-init",
+        "lazy_static",
+        "libc",
+        "maplit",
+        "metrohash",
+        "nix",
+        "nom",
+        "nom-regex",
+        "num_cpus",
+        "priority-queue",
+        "rand",
+        "rayon",
+        "reflink",
+        "regex",
+        "serde",
+        "serde_json",
+        "serde_test",
+        "sha2",
+        "sha3",
+        "sled",
+        "smallvec",
+        "status-line",
+        "stfu8",
+        "sysinfo",
+        "tempfile",
+        "thread_local",
+        "typed-sled",
+        "uuid",
+        "winapi",
+        "winapi-util",
+        "xattr",
+        "xxhash-rust"
+      ]
+    },
+    {
+      "name": "fiemap",
+      "version": "0.1.1",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "bitflags 1.3.2"
+      ]
+    },
+    {
+      "name": "file-owner",
+      "version": "0.1.2",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "nix"
+      ]
+    },
+    {
+      "name": "filetime",
+      "version": "0.2.22",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "cfg-if",
+        "libc",
+        "redox_syscall 0.3.5",
+        "windows-sys 0.48.0"
+      ]
+    },
+    {
+      "name": "fnv",
+      "version": "1.0.7",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "fs2",
+      "version": "0.4.3",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "libc",
+        "winapi"
+      ]
+    },
+    {
+      "name": "fxhash",
+      "version": "0.2.1",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "byteorder"
+      ]
+    },
+    {
+      "name": "gen-test-files",
+      "version": "0.1.0",
+      "source": "workspace",
+      "dependencies": [
+        "clap",
+        "rand"
+      ]
+    },
+    {
+      "name": "generic-array",
+      "version": "0.14.7",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "typenum",
+        "version_check"
+      ]
+    },
+    {
+      "name": "getrandom",
+      "version": "0.2.10",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "cfg-if",
+        "libc",
+        "wasi"
+      ]
+    },
+    {
+      "name": "globset",
+      "version": "0.4.13",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "aho-corasick",
+        "bstr",
+        "fnv",
+        "log",
+        "regex"
+      ]
+    },
+    {
+      "name": "hashbrown",
+      "version": "0.12.3",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "hashbrown",
+      "version": "0.14.2",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "heck",
+      "version": "0.5.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "hermit-abi",
+      "version": "0.1.19",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "libc"
+      ]
+    },
+    {
+      "name": "hermit-abi",
+      "version": "0.3.3",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "hex",
+      "version": "0.4.3",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "iana-time-zone",
+      "version": "0.1.58",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "android_system_properties",
+        "core-foundation-sys",
+        "iana-time-zone-haiku",
+        "js-sys",
+        "wasm-bindgen",
+        "windows-core"
+      ]
+    },
+    {
+      "name": "iana-time-zone-haiku",
+      "version": "0.1.2",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "cc"
+      ]
+    },
+    {
+      "name": "ignore",
+      "version": "0.4.20",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "globset",
+        "lazy_static",
+        "log",
+        "memchr",
+        "regex",
+        "same-file",
+        "thread_local",
+        "walkdir",
+        "winapi-util"
+      ]
+    },
+    {
+      "name": "indexmap",
+      "version": "1.9.3",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "autocfg",
+        "hashbrown 0.12.3"
+      ]
+    },
+    {
+      "name": "indexmap",
+      "version": "2.0.2",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "equivalent",
+        "hashbrown 0.14.2"
+      ]
+    },
+    {
+      "name": "instant",
+      "version": "0.1.12",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "cfg-if"
+      ]
+    },
+    {
+      "name": "is_terminal_polyfill",
+      "version": "1.70.1",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "itertools",
+      "version": "0.11.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "either"
+      ]
+    },
+    {
+      "name": "itoa",
+      "version": "1.0.9",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "js-sys",
+      "version": "0.3.64",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "wasm-bindgen"
+      ]
+    },
+    {
+      "name": "keccak",
+      "version": "0.1.4",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "cpufeatures"
+      ]
+    },
+    {
+      "name": "lazy-init",
+      "version": "0.5.1",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "lazy_static",
+      "version": "1.4.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "libc",
+      "version": "0.2.155",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "linux-raw-sys",
+      "version": "0.4.10",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "lock_api",
+      "version": "0.4.11",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "autocfg",
+        "scopeguard"
+      ]
+    },
+    {
+      "name": "log",
+      "version": "0.4.20",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "maplit",
+      "version": "1.0.2",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "memchr",
+      "version": "2.6.4",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "memoffset",
+      "version": "0.9.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "autocfg"
+      ]
+    },
+    {
+      "name": "metrohash",
+      "version": "1.0.6",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "minimal-lexical",
+      "version": "0.2.1",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "nix",
+      "version": "0.27.1",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "bitflags 2.4.1",
+        "cfg-if",
+        "libc"
+      ]
+    },
+    {
+      "name": "nom",
+      "version": "7.1.3",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "memchr",
+        "minimal-lexical"
+      ]
+    },
+    {
+      "name": "nom-regex",
+      "version": "0.2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "nom",
+        "regex"
+      ]
+    },
+    {
+      "name": "ntapi",
+      "version": "0.4.1",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "winapi"
+      ]
+    },
+    {
+      "name": "num-traits",
+      "version": "0.2.17",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "autocfg"
+      ]
+    },
+    {
+      "name": "num_cpus",
+      "version": "1.16.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "hermit-abi 0.3.3",
+        "libc"
+      ]
+    },
+    {
+      "name": "once_cell",
+      "version": "1.18.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "option-ext",
+      "version": "0.2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "parking_lot",
+      "version": "0.11.2",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "instant",
+        "lock_api",
+        "parking_lot_core 0.8.6"
+      ]
+    },
+    {
+      "name": "parking_lot_core",
+      "version": "0.8.6",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "cfg-if",
+        "instant",
+        "libc",
+        "redox_syscall 0.2.16",
+        "smallvec",
+        "winapi"
+      ]
+    },
+    {
+      "name": "parking_lot_core",
+      "version": "0.9.9",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "cfg-if",
+        "libc",
+        "redox_syscall 0.4.1",
+        "smallvec",
+        "windows-targets 0.48.5"
+      ]
+    },
+    {
+      "name": "pin-project",
+      "version": "1.1.3",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "pin-project-internal"
+      ]
+    },
+    {
+      "name": "pin-project-internal",
+      "version": "1.1.3",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "proc-macro2",
+        "quote",
+        "syn"
+      ]
+    },
+    {
+      "name": "ppv-lite86",
+      "version": "0.2.17",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "priority-queue",
+      "version": "1.3.2",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "autocfg",
+        "indexmap 1.9.3"
+      ]
+    },
+    {
+      "name": "proc-macro2",
+      "version": "1.0.69",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "unicode-ident"
+      ]
+    },
+    {
+      "name": "quote",
+      "version": "1.0.33",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "proc-macro2"
+      ]
+    },
+    {
+      "name": "rand",
+      "version": "0.8.5",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "libc",
+        "rand_chacha",
+        "rand_core"
+      ]
+    },
+    {
+      "name": "rand_chacha",
+      "version": "0.3.1",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "ppv-lite86",
+        "rand_core"
+      ]
+    },
+    {
+      "name": "rand_core",
+      "version": "0.6.4",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "getrandom"
+      ]
+    },
+    {
+      "name": "rayon",
+      "version": "1.8.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "either",
+        "rayon-core"
+      ]
+    },
+    {
+      "name": "rayon-core",
+      "version": "1.12.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "crossbeam-deque",
+        "crossbeam-utils"
+      ]
+    },
+    {
+      "name": "redox_syscall",
+      "version": "0.2.16",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "bitflags 1.3.2"
+      ]
+    },
+    {
+      "name": "redox_syscall",
+      "version": "0.3.5",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "bitflags 1.3.2"
+      ]
+    },
+    {
+      "name": "redox_syscall",
+      "version": "0.4.1",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "bitflags 1.3.2"
+      ]
+    },
+    {
+      "name": "redox_users",
+      "version": "0.4.3",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "getrandom",
+        "redox_syscall 0.2.16",
+        "thiserror"
+      ]
+    },
+    {
+      "name": "reflink",
+      "version": "0.1.3",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "libc",
+        "winapi"
+      ]
+    },
+    {
+      "name": "regex",
+      "version": "1.10.2",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "aho-corasick",
+        "memchr",
+        "regex-automata",
+        "regex-syntax"
+      ]
+    },
+    {
+      "name": "regex-automata",
+      "version": "0.4.3",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "aho-corasick",
+        "memchr",
+        "regex-syntax"
+      ]
+    },
+    {
+      "name": "regex-syntax",
+      "version": "0.8.2",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "rust_decimal",
+      "version": "1.32.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "arrayvec",
+        "num-traits"
+      ]
+    },
+    {
+      "name": "rustix",
+      "version": "0.38.20",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "bitflags 2.4.1",
+        "errno",
+        "libc",
+        "linux-raw-sys",
+        "windows-sys 0.48.0"
+      ]
+    },
+    {
+      "name": "ryu",
+      "version": "1.0.15",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "same-file",
+      "version": "1.0.6",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "winapi-util"
+      ]
+    },
+    {
+      "name": "scopeguard",
+      "version": "1.2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "serde",
+      "version": "1.0.189",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "serde_derive"
+      ]
+    },
+    {
+      "name": "serde_derive",
+      "version": "1.0.189",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "proc-macro2",
+        "quote",
+        "syn"
+      ]
+    },
+    {
+      "name": "serde_json",
+      "version": "1.0.107",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "itoa",
+        "ryu",
+        "serde"
+      ]
+    },
+    {
+      "name": "serde_test",
+      "version": "1.0.176",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "serde"
+      ]
+    },
+    {
+      "name": "sha2",
+      "version": "0.10.8",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "cfg-if",
+        "cpufeatures",
+        "digest"
+      ]
+    },
+    {
+      "name": "sha3",
+      "version": "0.10.8",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "digest",
+        "keccak"
+      ]
+    },
+    {
+      "name": "sled",
+      "version": "0.34.7",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "crc32fast",
+        "crossbeam-epoch",
+        "crossbeam-utils",
+        "fs2",
+        "fxhash",
+        "libc",
+        "log",
+        "parking_lot"
+      ]
+    },
+    {
+      "name": "smallvec",
+      "version": "1.11.1",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "status-line",
+      "version": "0.2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "ansi-escapes",
+        "atty"
+      ]
+    },
+    {
+      "name": "stfu8",
+      "version": "0.2.6",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "lazy_static",
+        "regex"
+      ]
+    },
+    {
+      "name": "strsim",
+      "version": "0.11.1",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "syn",
+      "version": "2.0.38",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "proc-macro2",
+        "quote",
+        "unicode-ident"
+      ]
+    },
+    {
+      "name": "sysinfo",
+      "version": "0.29.10",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "cfg-if",
+        "core-foundation-sys",
+        "libc",
+        "ntapi",
+        "once_cell",
+        "rayon",
+        "winapi"
+      ]
+    },
+    {
+      "name": "tempfile",
+      "version": "3.8.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "cfg-if",
+        "fastrand",
+        "redox_syscall 0.3.5",
+        "rustix",
+        "windows-sys 0.48.0"
+      ]
+    },
+    {
+      "name": "terminal_size",
+      "version": "0.4.1",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "rustix",
+        "windows-sys 0.59.0"
+      ]
+    },
+    {
+      "name": "thiserror",
+      "version": "1.0.50",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "thiserror-impl"
+      ]
+    },
+    {
+      "name": "thiserror-impl",
+      "version": "1.0.50",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "proc-macro2",
+        "quote",
+        "syn"
+      ]
+    },
+    {
+      "name": "thread_local",
+      "version": "1.1.7",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "cfg-if",
+        "once_cell"
+      ]
+    },
+    {
+      "name": "typed-sled",
+      "version": "0.2.3",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "bincode",
+        "pin-project",
+        "serde",
+        "sled",
+        "thiserror"
+      ]
+    },
+    {
+      "name": "typenum",
+      "version": "1.17.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "unicode-ident",
+      "version": "1.0.12",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "unicode-width",
+      "version": "0.1.11",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "utf8-width",
+      "version": "0.1.6",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "utf8parse",
+      "version": "0.2.1",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "uuid",
+      "version": "1.5.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "getrandom"
+      ]
+    },
+    {
+      "name": "version_check",
+      "version": "0.9.4",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "walkdir",
+      "version": "2.4.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "same-file",
+        "winapi-util"
+      ]
+    },
+    {
+      "name": "wasi",
+      "version": "0.11.0+wasi-snapshot-preview1",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "wasm-bindgen",
+      "version": "0.2.87",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "cfg-if",
+        "wasm-bindgen-macro"
+      ]
+    },
+    {
+      "name": "wasm-bindgen-backend",
+      "version": "0.2.87",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "bumpalo",
+        "log",
+        "once_cell",
+        "proc-macro2",
+        "quote",
+        "syn",
+        "wasm-bindgen-shared"
+      ]
+    },
+    {
+      "name": "wasm-bindgen-macro",
+      "version": "0.2.87",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "quote",
+        "wasm-bindgen-macro-support"
+      ]
+    },
+    {
+      "name": "wasm-bindgen-macro-support",
+      "version": "0.2.87",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "proc-macro2",
+        "quote",
+        "syn",
+        "wasm-bindgen-backend",
+        "wasm-bindgen-shared"
+      ]
+    },
+    {
+      "name": "wasm-bindgen-shared",
+      "version": "0.2.87",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "winapi",
+      "version": "0.3.9",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "winapi-i686-pc-windows-gnu",
+        "winapi-x86_64-pc-windows-gnu"
+      ]
+    },
+    {
+      "name": "winapi-i686-pc-windows-gnu",
+      "version": "0.4.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "winapi-util",
+      "version": "0.1.6",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "winapi"
+      ]
+    },
+    {
+      "name": "winapi-x86_64-pc-windows-gnu",
+      "version": "0.4.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "windows-core",
+      "version": "0.51.1",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "windows-targets 0.48.5"
+      ]
+    },
+    {
+      "name": "windows-sys",
+      "version": "0.45.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "windows-targets 0.42.2"
+      ]
+    },
+    {
+      "name": "windows-sys",
+      "version": "0.48.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "windows-targets 0.48.5"
+      ]
+    },
+    {
+      "name": "windows-sys",
+      "version": "0.59.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "windows-targets 0.52.6"
+      ]
+    },
+    {
+      "name": "windows-targets",
+      "version": "0.42.2",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "windows_aarch64_gnullvm 0.42.2",
+        "windows_aarch64_msvc 0.42.2",
+        "windows_i686_gnu 0.42.2",
+        "windows_i686_msvc 0.42.2",
+        "windows_x86_64_gnu 0.42.2",
+        "windows_x86_64_gnullvm 0.42.2",
+        "windows_x86_64_msvc 0.42.2"
+      ]
+    },
+    {
+      "name": "windows-targets",
+      "version": "0.48.5",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "windows_aarch64_gnullvm 0.48.5",
+        "windows_aarch64_msvc 0.48.5",
+        "windows_i686_gnu 0.48.5",
+        "windows_i686_msvc 0.48.5",
+        "windows_x86_64_gnu 0.48.5",
+        "windows_x86_64_gnullvm 0.48.5",
+        "windows_x86_64_msvc 0.48.5"
+      ]
+    },
+    {
+      "name": "windows-targets",
+      "version": "0.52.6",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "windows_aarch64_gnullvm 0.52.6",
+        "windows_aarch64_msvc 0.52.6",
+        "windows_i686_gnu 0.52.6",
+        "windows_i686_gnullvm",
+        "windows_i686_msvc 0.52.6",
+        "windows_x86_64_gnu 0.52.6",
+        "windows_x86_64_gnullvm 0.52.6",
+        "windows_x86_64_msvc 0.52.6"
+      ]
+    },
+    {
+      "name": "windows_aarch64_gnullvm",
+      "version": "0.42.2",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "windows_aarch64_gnullvm",
+      "version": "0.48.5",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "windows_aarch64_gnullvm",
+      "version": "0.52.6",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "windows_aarch64_msvc",
+      "version": "0.42.2",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "windows_aarch64_msvc",
+      "version": "0.48.5",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "windows_aarch64_msvc",
+      "version": "0.52.6",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "windows_i686_gnu",
+      "version": "0.42.2",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "windows_i686_gnu",
+      "version": "0.48.5",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "windows_i686_gnu",
+      "version": "0.52.6",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "windows_i686_gnullvm",
+      "version": "0.52.6",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "windows_i686_msvc",
+      "version": "0.42.2",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "windows_i686_msvc",
+      "version": "0.48.5",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "windows_i686_msvc",
+      "version": "0.52.6",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "windows_x86_64_gnu",
+      "version": "0.42.2",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "windows_x86_64_gnu",
+      "version": "0.48.5",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "windows_x86_64_gnu",
+      "version": "0.52.6",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "windows_x86_64_gnullvm",
+      "version": "0.42.2",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "windows_x86_64_gnullvm",
+      "version": "0.48.5",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "windows_x86_64_gnullvm",
+      "version": "0.52.6",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "windows_x86_64_msvc",
+      "version": "0.42.2",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "windows_x86_64_msvc",
+      "version": "0.48.5",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "windows_x86_64_msvc",
+      "version": "0.52.6",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    },
+    {
+      "name": "xattr",
+      "version": "1.0.1",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": [
+        "libc"
+      ]
+    },
+    {
+      "name": "xxhash-rust",
+      "version": "0.8.7",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "dependencies": []
+    }
+  ],
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/review-dedup-fclones-reflink-generator-lock-20261012.py": "4eebeded0434339412ee71ab9ba28c51576d9c736de85a89a54c06aa94b377f0",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/fclones-hasher-source-20261012.json": "54d14fd6f77c95467e02139da2daabbbe9e237abf2d03400abfd39593e32d176",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-reflink-tests-20261012.log": "b105e36c8f193f281d9e5421a3b04b0cd30e3b0cffa837ebab71c15b768d6d13",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-generator-build-20261012.log": "ce8d3f8d93e0e6f78bfb34a8fd979e7d453d39b8d423928fc26f75272620ca5e",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-generator-executable-20261012": "d71fe3e5188d04ac6d4e3518530edcd442541f8f99f0a7fa2699f3491c059922",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-generator-fixtures-20261012/max-1.log": "08ce32c67d963d1d58daafd4716d2ca263625fabe6e1c27cf5336cdc7414b750",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-generator-fixtures-20261012/max-2.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-generator-fixtures-20261012/good/file_0_0.txt": "6b0a0c57084529e04b12f54dfabc2a87521d5418b712b071db161479fa7da83a",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-full-source-20261012/fclones/src/reflink.rs": "6cf7be0225a57c49bc049a5ae20d6f792d7e17755c680b6de850bff9b40cbe0b",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-full-source-20261012/gen-test-files/Cargo.toml": "2295d1cfa2ba55a254d9dc038b33b7b60dc0c6749bc700da56067a2296d1dfbc",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-full-source-20261012/gen-test-files/src/main.rs": "cf4a6f6b9ebb653cced0ec236bad4a057944568f4087c506b9a7127500444b72",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-full-source-20261012/Cargo.lock": "3f151455d8994d711d7576defe660d9c56e1cbac70b3dfb0781763bfcd2eed96"
+  },
+  "observations": [
+    "macOS generic reflink path passed two original content/existence tests without support-guard skip notice. Linux ioctl branch, ACL/xattr/owner restoration failures and concurrent mutation not qualified.",
+    "safe_reflink commits content replacement before xattr/metadata restoration. Later restoration failure is not covered by the safe_remove rollback; source observation only.",
+    "Generator max_group_size1 panics before creating files; max_group_size2 creates exactly one65538byte file. Random generator has no fixed seed and samples exclusive upper group-size bound.",
+    "Workspace lock has199packages,197 registry entries and2workspace entries. Complete graph resolved; downloaded crate sources/security/reproducible current releases not audited."
+  ],
+  "scope": "Three full source/config files, complete structured lock inventory,2 original temporary-fixture reflink tests and2 original generator CLI runs in fresh owned directories. No user data modified, no adoption, Linux/Windows physical reflink/total memory/metadata preservation or full500 completion claim."
+}

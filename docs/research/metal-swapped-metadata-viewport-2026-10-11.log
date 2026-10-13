@@ -1,0 +1,112 @@
+   Compiling rrrah-gpu v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-gpu)
+   Compiling rrrah-cache v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-cache)
+warning: function `fallible_zeroed_bytes` is never used
+   --> crates/rrrah-cache/src/mosaic_payload_v1.rs:728:4
+    |
+728 | fn fallible_zeroed_bytes(len: usize) -> Result<Box<[u8]>, MosaicPayloadError> {
+    |    ^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-cache` (lib) generated 1 warning
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+warning: methods `submit` and `submit_image` are never used
+    --> crates/rrrah-app/src/main.rs:1367:8
+     |
+1079 | impl ForegroundLoader {
+     | --------------------- methods in this implementation
+...
+1367 |     fn submit(&self, path: PathBuf) -> Result<u64> {
+     |        ^^^^^^
+...
+1370 |     fn submit_image(&self, path: PathBuf, image_index: usize) -> Result<u64> {
+     |        ^^^^^^^^^^^^
+     |
+     = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: associated items `install_with_cancel`, `refresh`, and `refresh_with_cancel` are never used
+   --> crates/rrrah-app/src/raster_viewport.rs:169:19
+    |
+ 15 | impl ResidentSource {
+    | ------------------- associated items in this implementation
+...
+169 |     pub(crate) fn install_with_cancel<F: FnMut() -> bool>(
+    |                   ^^^^^^^^^^^^^^^^^^^
+...
+251 |     pub(crate) fn refresh(
+    |                   ^^^^^^^
+...
+271 |     pub(crate) fn refresh_with_cancel<F: FnMut() -> bool>(
+    |                   ^^^^^^^^^^^^^^^^^^^
+
+warning: `rrrah` (bin "rrrah") generated 2 warnings
+    Finished `test` profile [optimized + debuginfo] target(s) in 6.51s
+     Running tests/swapped_region_metal.rs (target/debug/deps/swapped_region_metal-4488f604aa30c590)
+
+running 1 test
+swapped region adapter: Metal Apple M4 Max
+test swapped_packed_regions_render_exactly_after_full_source_release ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.05s
+
+
+   Compiling rrrah-gpu v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-gpu)
+    Finished `test` profile [optimized + debuginfo] target(s) in 2.35s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_gpu-3fc6e742f2070fc2)
+
+running 52 tests
+test filmstrip::tests::max_scroll_is_zero_when_everything_fits ... ok
+test filmstrip::tests::hit_testing_finds_tiles_and_rejects_gaps_and_padding ... ok
+test backend::vendor_tests::hardware_vendor_filter_rejects_other_ids_and_incompatible_surfaces ... ok
+test filmstrip::tests::strip_band_hit_region ... ok
+test backend::tests::explicit_backend_masks_and_unavailable_requests_never_fallback ... ok
+test raster::tile_admission_tests::visible_region_normalizes_view_and_skips_wholly_offscreen_images ... ok
+test rgbe_plan::tests::full_srf_plan_and_small_limit_segments_cover_without_overlap ... ok
+test filmstrip::tests::scroll_to_reveal_moves_only_when_needed ... ok
+test raster::tile_admission_tests::rejects_unrepresentable_extents_layers_and_padded_over_budget ... ok
+test raster::tile_admission_tests::metadata_region_rejects_invalid_geometry_without_source_allocation ... ok
+test rgbe_plan::tests::invalid_geometry_planes_and_device_admission_fail_before_allocating_pixels ... ok
+test tests::card_layout_is_safe_for_empty_and_tiny_viewports ... ok
+test tests::compact_card_metrics_keep_dense_descriptions_readable ... ok
+test tests::card_layout_scales_for_a_retina_surface ... ok
+test tests::default_tiling_avoids_the_4096_frame_regression ... ok
+test tests::card_description_wraps_and_clips_by_line_count ... ok
+test tests::default_tiling_errors_when_layer_limit_cannot_be_met ... ok
+test tests::default_tiling_keeps_aligned_tiles_when_one_layer_is_not_smaller ... ok
+test tests::default_tiling_rejects_tiny_adapters ... ok
+test tests::default_tiling_shrinks_for_small_adapters ... ok
+test tests::default_tiling_uses_c2_optimum_with_aligned_extent ... ok
+test tests::default_tiling_uses_one_frame_tile_when_layer_growth_would_waste_atlas_space ... ok
+test tests::default_tiling_uses_one_small_frame_tile_when_atlas_is_materially_smaller ... ok
+test tests::dense_card_grid_scales_for_a_retina_surface ... ok
+test tests::direct_white_balance_preserves_backend_neutral_contract ... ok
+test tests::display_keeps_decoder_white_balance_gains_bit_exact ... ok
+test tests::edge_tiles_clamp_without_out_of_bounds_reads ... ok
+test tests::eleven_cards_use_three_columns_for_the_total_block ... ok
+test tests::five_column_dashboard_scales_exactly_for_a_retina_surface ... ok
+test tests::five_column_metrics_preserve_timing_title_and_description_capacity ... ok
+test tests::forty_one_cards_keep_algorithm_descriptions_readable ... ok
+test tests::four_cards_fill_the_nominal_telemetry_dashboard ... ok
+test tests::hud_space_is_blank_instead_of_unknown_glyph ... ok
+test tests::malformed_dimensions_do_not_panic_helper_paths ... ok
+test tests::odd_dense_card_count_keeps_row_major_order ... ok
+test tests::ten_cards_fill_a_two_column_five_row_grid ... ok
+test tests::thirty_eight_cards_fill_a_five_column_eight_row_dashboard ... ok
+test tests::tile_halo_matches_full_frame_at_internal_boundary ... ok
+test tests::tiling_override_below_minimum_is_rejected ... ok
+test tests::tiling_override_exceeding_texture_limit_is_rejected ... ok
+test tests::tiling_override_is_applied_verbatim ... ok
+test tests::tiling_override_respects_array_layer_limit ... ok
+test tests::twenty_eight_cards_fill_a_five_column_six_row_dashboard ... ok
+test tests::twenty_four_cards_fill_a_four_column_six_row_dashboard ... ok
+test tests::uniform_layout_remains_wgsl_compatible ... ok
+test tests::upload_rows_are_padded_to_webgpu_alignment ... ok
+test tests::hud_shader_parses_and_validates_with_naga ... ok
+test model::tests::model_shader_validates ... ok
+test tests::padded_upload_rows_cancel_and_preserve_bytes ... ok
+test tests::halo_packing_cancels_inside_large_tiles_and_preserves_scalar_samples ... ok
+test tests::viewport_shader_parses_and_validates_with_naga ... ok
+test tests::rowwise_tile_halo_matches_scalar_oracle_across_randomized_geometry ... ok
+
+test result: ok. 52 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+

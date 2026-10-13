@@ -1,0 +1,24 @@
+{
+  "date": "2026-10-11",
+  "backend": "Metal",
+  "hardware": "Apple M4 Max",
+  "change": "Background viewport HDR LOD preparation with event-loop wake and transactional upload",
+  "checks": {
+    "app_units_passed": 206,
+    "app_units_ignored": 43,
+    "explicit_metal_controls_passed": 4,
+    "worker_controls_passed": 2,
+    "replacement_hdr_frame": "exact against reference",
+    "old_frame_during_preparation": "unchanged",
+    "output_budget_boundary_bytes": 40960,
+    "output_budget_available_before_publication": 0,
+    "final_managed_credits": 0
+  },
+  "limits": [
+    "Native window gesture scheduling not exercised in this run; production helper exercised on real Metal",
+    "GPU validation and transfers remain on UI thread",
+    "Full CPU source retained; no out-of-core decode",
+    "Physical HDR display accuracy and NVIDIA remain unqualified",
+    "Full 100-format acceptance remains open"
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "scope": "Actual production prefetch helper: generation change after observed 64MiB restore admission; new selected-page swap/Metal retry",
+  "adapter": "Metal Apple M4 Max",
+  "passed": 1,
+  "failed": 0,
+  "seconds": 3.44,
+  "authored_payload_dimensions": [
+    2048,
+    2048
+  ],
+  "bytes_per_payload": 67108864,
+  "selection_count": 3,
+  "obsolete_index": 1,
+  "new_index": 2,
+  "verified": [
+    "Cancellation triggered only after managed allocation >=67108864 observed",
+    "Obsolete restore returns error; no frame, lease or RAM entry; root credit zero",
+    "Foreground decoder gate remains held while current generation restores page2 from swap",
+    "All restored float samples exact; full128x96 SDR/HDR planes match authored same-aspect uniform reference",
+    "Two swap writes, one successful read, zero errors; cancelled restore not counted as successful read",
+    "Final shared memory credit zero"
+  ],
+  "limitations": [
+    "Authored transport payloads under a real source fingerprint; source file is not decoded in this test",
+    "Allocation phase observed; no minimum physical read progress asserted",
+    "One navigation reversal, headless production-helper scope; no live event-loop or physical HDR qualification"
+  ],
+  "sha256": {
+    "crates/rrrah-app/src/main.rs": "1b9c2607978b9352c17dbb8ad173cb5b1d57828a5800e90dcb87c13aedad939d",
+    "tests/fixtures/data/ico-selected-images.ico": "a2f6821f7584b9c9125b6b7f4e6cc27c3af56eb37b27b1b71c5bc0437230dfe6",
+    "docs/research/selected-page-admitted-cancel-metal-2026-10-12/test.log": "ada1954f30f39bfb10111531c003f2e0328ad9ce02adfb5f0c911254962291f2",
+    "docs/research/selected-page-admitted-cancel-metal-2026-10-12/initial-compile.log": "e4e856965fe4634c34cbd3ae9fa6162e6159de3a7383b4c1874eaf84ccea99d9",
+    "docs/research/selected-page-admitted-cancel-metal-2026-10-12/first-pass.log": "e8efa0f8410bac0095e6f5e5c03fad4aa1a732aa7f0ec7db4f66aa2908092623"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "status": "both_candidates_rejected_original_production_restored",
+  "first_candidate_report": "docs/research/dedup-gradient-mutual-real-repeated-20261011.json",
+  "hoisted_candidate_report": "docs/research/dedup-gradient-mutual-hoisted-real-repeated-20261011.json",
+  "reason": "Repeated self distinct controls regress: baseline/candidate ratios 0.891 and 0.922. Foreign-pair improvements do not establish a general improvement.",
+  "restored_source": "crates/rrrah-dedup/src/gradient.rs",
+  "restored_sha256": "700347c5d4439d572f3d004e61ccfb350733aeff9f2946171c1f9cd461c8be1a",
+  "qualified_baseline_manifest": "docs/research/dedup-projected-portfolio-dependency-snapshot-20261011.json",
+  "remaining_src_delta": [
+    "crates/rrrah-dedup/src/gradient_matching_tests.rs"
+  ],
+  "scope": "Only new exhaustive regression test retained; runtime production implementation restored byte-for-byte. Frozen experimental sources and measurements preserved."
+}

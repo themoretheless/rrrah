@@ -1,6 +1,6 @@
 //! Debevec/Netpbm bottom-up PFM. Scale describes sample units and is
 //! preserved as metadata. The indistinguishable Adobe top-down dialect
-//! requires an explicit future import option, rather than a heuristic flip.
+//! uses the explicit pfm_top_down import option, rather than a heuristic flip.
 
 use crate::{
     DecodeRequest,
@@ -67,7 +67,9 @@ pub(crate) fn decode(mut bytes: &[u8], request: &DecodeRequest) -> Result<Decode
         .try_reserve_exact(pixel_count * 4)
         .map_err(|_| RasterDecodeError::OutputTooLarge)?;
     let row_bytes = width as usize * channels * 4;
-    for row in bytes.chunks_exact(row_bytes).rev() {
+    for y in 0..height as usize {
+        let source_y = if request.pfm_top_down { y } else { height as usize - 1 - y };
+        let row = &bytes[source_y * row_bytes..(source_y + 1) * row_bytes];
         request.check_cancelled()?;
         for (index, pixel) in row.chunks_exact(channels * 4).enumerate() {
             if index.is_multiple_of(4096) {
@@ -102,6 +104,31 @@ pub(crate) fn decode(mut bytes: &[u8], request: &DecodeRequest) -> Result<Decode
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn explicit_top_down_keeps_row_order_for_both_endians_and_channel_counts() {
+        for little in [false, true] {
+            for channels in [1, 3] {
+                let mut bytes = format!("{}\n1 2\n{}2.5\n", if channels == 1 { "Pf" } else { "PF" }, if little { "-" } else { "" }).into_bytes();
+                let values = [0.25_f32, -0.0, 4.0, 2.0, -1.0, 8.0];
+                for v in values.iter().take(channels * 2) {
+                    bytes.extend(if little { v.to_le_bytes() } else { v.to_be_bytes() });
+                }
+                let mut request = DecodeRequest::new("rows.pfm");
+                request.pfm_top_down = true;
+                let frame = decode(&bytes, &request).unwrap();
+                let RasterPixels::Rgba32Float(p) = frame.pixels() else { panic!() };
+                for row in 0..2 {
+                    for channel in 0..3 {
+                        let source = row * channels + if channels == 1 { 0 } else { channel };
+                        assert_eq!(p[row * 4 + channel].to_bits(), values[source].to_bits());
+                    }
+                    assert_eq!(p[row * 4 + 3], 1.0);
+                }
+                assert_eq!(frame.sample_scale(), 2.5);
+            }
+        }
+    }
+
     #[test]
     fn output_is_admitted_before_allocation_and_released_with_last_owner() {
         let mut bytes = b"PF\n1 1\n-1\n".to_vec();

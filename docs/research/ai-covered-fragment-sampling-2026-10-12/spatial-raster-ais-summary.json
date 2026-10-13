@@ -1,0 +1,27 @@
+{
+  "implementation": "sampled native paint carries alpha_is_shape to native frame; raster scene state now routes AIS",
+  "verified": "half-alpha blue over opaquegreen inside isolated knockout group: AISfalse alpha0.5/blue, AIStrue alpha1/green0.5blue0.5",
+  "ordinary_passed": 166,
+  "ignored": 12,
+  "real_artwork": {
+    "structural_preflight": "passed",
+    "route_admissions": 10,
+    "spatial_pixel_completed": false,
+    "deadline_expired": false,
+    "final_managed_bytes": 0
+  },
+  "limits": [
+    "real pixel refuses after preflight during preparation; exact next refusal needs tracing",
+    "full production AI unqualified"
+  ],
+  "logs": [
+    {
+      "path": "docs/research/ai-covered-fragment-sampling-2026-10-12/spatial-raster-ais-tests.log",
+      "sha256": "51a8323a2d70f22df71482a5c1d16bd6a1fb8114752fb20a8e110f21ae118a88"
+    },
+    {
+      "path": "docs/research/ai-covered-fragment-sampling-2026-10-12/real-spatial-raster-ais-tests.log",
+      "sha256": "e6c3f042e14c22459b0152574890fcb5a71de8359a001bc7451abbef2d6cf3b1"
+    }
+  ]
+}

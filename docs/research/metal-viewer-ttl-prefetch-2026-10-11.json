@@ -1,0 +1,62 @@
+{
+  "date": "2026-10-11",
+  "scope": "Production viewer TTL/swap load helper and actual preload helper with blocked decoder gate, plus Metal frame preservation",
+  "adapter": "Metal Apple M4 Max",
+  "root_limit_bytes": 65536,
+  "ram_limit_bytes": 4096,
+  "ram_count_limit": 1,
+  "ram_ttl_seconds": 0,
+  "ordinary_restores": 128,
+  "preload_restores": 2,
+  "total_swap_reads": 130,
+  "final_root_bytes": 0,
+  "checks": [
+    "Two original EXR/HDR fixtures contain values greater than one",
+    "Full serialized raster payload unchanged through 64 TTL restores per fixture",
+    "Decoder fallback closure panics if any ordinary swap restore tries decoding",
+    "Actual preload_raster succeeds from disk swap while foreground ticket blocks decode gate",
+    "Five-second watchdog cancels a mistaken decode attempt instead of hanging test",
+    "All initial, speculative and ordinary restored 128x96 Metal frames identical",
+    "RAM membership <=1, resident bytes <=4096, root zero after spill and after final drop"
+  ],
+  "fixtures_sha256": {
+    "float-none-rec709-declared.exr": "237d1030caf9022f441458e8a90b718df4fe07f24e473b0bcf827d1b0ac9628e",
+    "rle-hdr-rec709-declared.hdr": "7054e40d167f8f6b66768df908b25997e6f3e02c60e1c2efe1e72d2a7ddaed96"
+  },
+  "source_sha256": {
+    "crates/rrrah-app/src/main.rs": "d8ce09089ba0fe9c250925bd2f65a9c3276c5dc0685f982351220fce8d7fbc7f",
+    "scripts/qualify-viewer-storage-gpu.py": "87deccb99ab5a54db69cdd41d2991230f01278d82ce62e3ff7adf42d02c93bad"
+  },
+  "logs": [
+    {
+      "path": "/tmp/rrrah-metal-viewer-ttl-prefetch-20261011.log",
+      "sha256": "68b22974d00f7c776c000968270ffd8125717cfc9ee138da811ee04a860c311a",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "path": "/tmp/rrrah-metal-viewer-swap-regression-20261011.log",
+      "sha256": "c98ecbce7a542e6a45f5e6e8182c6e87e807cbfd9d2af5518bc38e4e914eb5c2",
+      "passed": 6,
+      "failed": 0,
+      "ignored": 2
+    }
+  ],
+  "reproduce": {
+    "environment": {
+      "RRRAH_GPU_OPTIONAL": "0",
+      "RRRAH_GPU_BACKEND": "metal"
+    },
+    "command": "cargo test --locked --offline --target-dir /tmp/rrrah-required-corpus-target -p rrrah --bin rrrah repeated_hdr_ttl -- --include-ignored --nocapture --test-threads=1",
+    "integrated_runner_flag": "--metal-viewer-ttl-prefetch"
+  },
+  "limitations": [
+    "Two small fixtures and 130 reads do not prove large-collection or hours-long viewer performance",
+    "Preload helper is called synchronously; separate RAW worker test exercises actual background thread",
+    "TTL zero exercises expiry semantics rather than timed waits",
+    "SDR offscreen output is frame preservation evidence, not physical HDR display qualification",
+    "No window presentation latency or independent full color accuracy measured",
+    "Ordinary regression ignores external corpus and manual hardware tests; targeted new GPU test executed separately"
+  ]
+}

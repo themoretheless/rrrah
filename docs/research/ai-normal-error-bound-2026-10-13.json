@@ -1,0 +1,47 @@
+{
+  "scope": "One fixed-alpha native Normal paint step; source contribution with zero preceding/backdrop error in actual AI diagnostics",
+  "tests": "238passed/12ignored",
+  "perturbed_pixel_pairs": 4608,
+  "active_component_comparisons": 12288,
+  "actual_source_contribution_rows": [
+    {
+      "event": 2670,
+      "refused": 0,
+      "source_normal_premultiplied_error": 1.2083350793624602e-07
+    },
+    {
+      "event": 2670,
+      "refused": 0,
+      "source_normal_premultiplied_error": 1.1930531600268512e-07
+    },
+    {
+      "event": 2670,
+      "refused": 0,
+      "source_normal_premultiplied_error": 1.1943915478493817e-07
+    },
+    {
+      "event": 2670,
+      "refused": 0,
+      "source_normal_premultiplied_error": 1.1921404297718379e-07
+    }
+  ],
+  "controls_exact": true,
+  "requirements": [
+    "Same fixed alpha and shape",
+    "Checked native0..1 source values",
+    "Matching native coordinates",
+    "Previous/backdrop error measured in additive premultiplied storage"
+  ],
+  "refusal": [
+    "Invalid or inactive channel bounds",
+    "Nonfinite or invalid alpha/shape",
+    "Positive alpha below1e-12",
+    "Work exhaustion or cancellation"
+  ],
+  "limitations": [
+    "Not group/route or final rendered pixel certificate",
+    "Clipped fragment/centroid domain membership and moment error unresolved",
+    "No actual color samples skipped and no working4Mfullpage qualification claimed"
+  ],
+  "derivation": "ai-normal-error-bound-derivation-2026-10-13.md"
+}

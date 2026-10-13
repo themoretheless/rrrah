@@ -1,0 +1,37 @@
+{
+  "date": "2026-10-11",
+  "gap_closed": "Independent mixed-color HEIF PQ/HLG linear conversion; previous test compared only three pure-primary bands.",
+  "oracle": "60-digit Decimal transfer functions; exact Fraction chromaticity-derived matrix; generator imports no production implementation. Added authored 12-bit mixed vector expanded to u16 using integer full-range mapping.",
+  "new_vector_u16": [
+    32776,
+    49163,
+    16388
+  ],
+  "coverage": "All pixels of all four color bands in PQ/HLG color and straight-alpha HEIF controls compare linear RGB against independent oracle at relative tolerance 2e-6, absolute floor 2e-6. Alpha separately checks native normalized preservation. Core totals 450 PQ / 270 HLG vectors at several display policies.",
+  "metal": "Six gray/color/straight-alpha PQ/HLG HEIF sources on actual Apple M4 Max Metal; complete float payload and rendered SDR/HDR frames exact across RAM/disk pressure swap and restore; alpha interior composition controls.",
+  "limits": [
+    "Authored synthetic HEVC controls, not broad camera producer qualification.",
+    "Physical HDR display luminance/color remains unqualified.",
+    "NVIDIA deferred."
+  ],
+  "gates": {
+    "core": {
+      "summary": "test result: ok. 105 passed; 0 failed; 2 ignored; 0 measured; 0 filtered out; finished in 0.03s",
+      "sha256": "85b6c3e382dab906e05c7bec6a8fa93135fc20a76915d82400bd3f3181e87b5b"
+    },
+    "heif_independent": {
+      "summary": "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 1059 filtered out; finished in 0.01s",
+      "sha256": "6ab79f78003b4385eed644bdce1abeebd18694a1c90b7da7532a673c026a53cf"
+    },
+    "six_sources_metal": {
+      "summary": "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 16 filtered out; finished in 1.69s",
+      "sha256": "c45f126053202e6fa7aad6169e83a03defea1ba69059702153e453ce43e7f109"
+    }
+  },
+  "files": {
+    "scripts/generate-pq-color-oracle.py": "16b1dd4a3ead22d46b1ba2ac94fea0031f2cdb2ed164cd198a52851957b4ffc0",
+    "tests/fixtures/raster/pq-color-decimal-oracle.tsv": "4899ea3f115d4bd93b1797d7b394b51d90aef5ddbf6679f4231c3923dfd7fe8b",
+    "tests/fixtures/raster/hlg-color-decimal-oracle.tsv": "7db88c6cb7c68ad55e2f85e173b021fcad620892c9c22458fa79110b0e51e75e",
+    "crates/rrrah-decode/src/heif.rs": "31e3cd9338ff85c7982b0fc40fcefe82f198140af590db2dd07c3adb72dc99e4"
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "backend": "Metal Apple M4 Max",
+  "passed": 1,
+  "failed": 0,
+  "ignored": 0,
+  "seconds": 31.325,
+  "restores": 216,
+  "sdr_frames_exact": 216,
+  "hdr_binary16_frames_exact": 216,
+  "hdr_target": "Rgba16Float SceneLinear 1920x1080",
+  "source_hdr_measurements": [
+    {
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/1294.cr2",
+      "above_one_channels": 168236,
+      "negative_channels": 1509
+    },
+    {
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/898.nef",
+      "above_one_channels": 4341,
+      "negative_channels": 1
+    },
+    {
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/2414.arw",
+      "above_one_channels": 10598,
+      "negative_channels": 83
+    },
+    {
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/1084.orf",
+      "above_one_channels": 1690,
+      "negative_channels": 2400
+    },
+    {
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/831.pef",
+      "above_one_channels": 0,
+      "negative_channels": 312
+    },
+    {
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/5025.rw2",
+      "above_one_channels": 52,
+      "negative_channels": 19932
+    },
+    {
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/2883.raf",
+      "above_one_channels": 0,
+      "negative_channels": 94
+    },
+    {
+      "source": "/Users/themoretheless/Documents/Sources/rrrah/tests/IMG_9043.CR3",
+      "above_one_channels": 7,
+      "negative_channels": 2
+    },
+    {
+      "source": "/Users/themoretheless/Documents/Sources/rrrah/tests/IMG_9074.CR3",
+      "above_one_channels": 0,
+      "negative_channels": 0
+    }
+  ],
+  "renderers": "persistent SDR and HDR renderers share managed atlas/upload/queue roots",
+  "checks": [
+    "full native sensor and metadata exact after restore",
+    "all reference HDR outputs finite",
+    "signed and above-one HDR samples retained bit-exact after swap",
+    "shared GPU credit equals sum of both active atlases",
+    "temporary credit zero every completed readback",
+    "all GPU/storage credits zero after dropping both renderers",
+    "215 SDR pressure refusals and partial cancellations preserve old SDR frame",
+    "driver requires one HDR source marker per original and HDR frame count=restores"
+  ],
+  "gpu_timing_scope": "combined SDR and HDR upload/render/readback, not comparable to previous SDR-only stage",
+  "log_sha256": "46cb19e1e9c0a7544ae094a453a63e0e0146216a8421a74f635553584e23c6f3",
+  "limits": [
+    "Offscreen binary16 transport, not physical display calibration",
+    "Reference is same native renderer before swap, not independent photographic appearance",
+    "HDR replacement failure preservation not separately read back here; failure checks target SDR renderer",
+    "Warm local I/O and logical budget pressure",
+    "Screen unlock still required for live HDR; NVIDIA deferred"
+  ]
+}

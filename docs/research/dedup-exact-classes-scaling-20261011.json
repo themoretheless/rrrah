@@ -1,0 +1,95 @@
+{
+  "status": "complete_frozen_all_copy_exact_classes_scaling",
+  "producer_pid": 13499,
+  "source_manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exact-classes-snapshot-20261011.json",
+  "source_manifest_sha256": "81a28bc74d1eb21de359272c3acbc6532d57e956279cc2451c4b6c57ad5fdf9c",
+  "build_command": [
+    "cargo",
+    "test",
+    "--manifest-path",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-classes-snapshot-20261011/Cargo.toml",
+    "--target-dir",
+    "/Users/themoretheless/Documents/Sources/rrrah/target",
+    "-p",
+    "rrrah-dedup",
+    "--locked",
+    "--offline",
+    "--features",
+    "decode",
+    "--test",
+    "projected_portfolio",
+    "--no-run",
+    "--message-format=json"
+  ],
+  "build_pid": 13533,
+  "build_returncode": 0,
+  "command": [
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-classes-scaling-qualified-20261011/projected_portfolio",
+    "exact_collection_scaling_latency_probe",
+    "--exact",
+    "--ignored",
+    "--nocapture"
+  ],
+  "binary": "/Users/themoretheless/.codex/tmp/rrrah-exact-classes-scaling-qualified-20261011/projected_portfolio",
+  "binary_sha256": "3ea72a04ad0dfc0948cecb1675db99568116a122332cc12397fac808ffef5d72",
+  "process_pid": 14573,
+  "returncode": 0,
+  "controls": 3,
+  "samples": 9,
+  "rows": [
+    {
+      "files": 8,
+      "families": 1,
+      "pairs": 28,
+      "exact_pairs": 28,
+      "file_bytes": 1048576,
+      "analytical_source_bytes": 165675008,
+      "elapsed_ns": [
+        171077542,
+        147935333,
+        132255084
+      ],
+      "managed_peak": 13056,
+      "median_seconds": 0.147935333
+    },
+    {
+      "files": 32,
+      "families": 1,
+      "pairs": 496,
+      "exact_pairs": 496,
+      "file_bytes": 1048576,
+      "analytical_source_bytes": 2279604224,
+      "elapsed_ns": [
+        2025105083,
+        2267769167,
+        2316874167
+      ],
+      "managed_peak": 175104,
+      "median_seconds": 2.267769167
+    },
+    {
+      "files": 64,
+      "families": 1,
+      "pairs": 2016,
+      "exact_pairs": 2016,
+      "file_bytes": 1048576,
+      "analytical_source_bytes": 8856272896,
+      "elapsed_ns": [
+        11037705084,
+        11942591000,
+        14752616417
+      ],
+      "managed_peak": 677888,
+      "median_seconds": 11.942591
+    }
+  ],
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exact-classes-snapshot-20261011.json": "81a28bc74d1eb21de359272c3acbc6532d57e956279cc2451c4b6c57ad5fdf9c",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-exact-classes-scaling-20261011.py": "1a1bae892beac9c8c0b94246ee754672a2061f71ffc277a0949201236d5ac2f0",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-classes-scaling-qualified-20261011/build.jsonl": "f974b349129d40b43e4e784f53613a8371471f1e84cd40d64d2380d0bbc9c00d",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-classes-scaling-qualified-20261011/build.log": "5ae0697b67f77253ee92ab4382d62278b92af1626ab5ec2f17590baaff50a148",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-classes-scaling-qualified-20261011/scaling.log": "8da5a464635e1fb144d636e092a43809df31ca51c4fe95cb38a1d53cb5bb552c",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-classes-scaling-qualified-20261011/projected_portfolio": "3ea72a04ad0dfc0948cecb1675db99568116a122332cc12397fac808ffef5d72"
+  },
+  "scope": "macOS all-copy exhaustive pair reports on frozen production; latency measured, source payload bytes analytically derived; no device-I/O/RSS, mixed visual collection or universal performance claim"
+}

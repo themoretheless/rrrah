@@ -1,0 +1,62 @@
+
+SOURCE /tmp/rrrah-metal-recovery-hero9-development.log
+    Blocking waiting for file lock on build directory
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+    Finished `dev` profile [optimized + debuginfo] target(s) in 35.06s
+     Running `target/debug/examples/raw_developed_dump tests/fixtures/data/metal-recovery/HERO9.GPR tests/fixtures/data/metal-recovery/HERO9.rgba32fle`
+camera=GoPro HERO9 Black white_balance=[2.1562505, 1.0, 1.7695326, 1.0] xyz_to_camera=[[1.0443232, -0.43043888, -0.084942974], [-0.24070327, 1.0862143, 0.14262491], [0.0032425344, 0.117696844, 0.41469717], [0.0, 0.0, 0.0]]
+highlight_recovery=true
+dimensions=5568x4176 color=LinearSrgb peak=868711424
+
+
+SOURCE /tmp/rrrah-metal-recovered-hero9-display.log
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.20s
+     Running tests/raster_readback.rs (target/debug/deps/raster_readback-96fa399a25885f6d)
+
+running 1 test
+HERO9 full-frame display adapter: Metal Apple M4 Max
+HERO9 pixels checked: 23251968; maximum RGB8 difference: 1
+test hero9_full_frame_developed_raw_matches_metal_display_transport ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 23 filtered out; finished in 4.04s
+
+
+
+SOURCE /tmp/rrrah-metal-required-inputs-recovered-hero9-audit.log
+{
+  "manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/metal-current-manual-followups-2026-10-11.json",
+  "verified": false,
+  "inputs": [
+    {
+      "name": "Fusion-back.rgba32fle",
+      "path": "tests/fixtures/data/metal-recovery/Fusion-back.rgba32fle",
+      "expected_sha256": "00d54286d47dab1e1a0e2d761e8f407e2dcdcdb0823e7ab91fd50f71e2a84df3",
+      "status": "missing"
+    },
+    {
+      "name": "Fusion-front.rgba32fle",
+      "path": "tests/fixtures/data/metal-recovery/Fusion-front.rgba32fle",
+      "expected_sha256": "37871b3f2f5f9de0933a8e3b05edf4e00a1ca9503fd3fe581a94ee5a51f20fa5",
+      "status": "missing"
+    },
+    {
+      "name": "HERO9.rgba32fle",
+      "path": "tests/fixtures/data/metal-recovery/HERO9.rgba32fle",
+      "expected_sha256": "5a13211dbf9c33a67125777d87bc85a950ac054ab051bfcfdf0175ec2475bb58",
+      "actual_sha256": "5a13211dbf9c33a67125777d87bc85a950ac054ab051bfcfdf0175ec2475bb58",
+      "status": "verified"
+    },
+    {
+      "name": "linear-srgb.ppm",
+      "path": "tests/fixtures/data/metal-recovery/linear-srgb.ppm",
+      "expected_sha256": "00f64dc46ad86366f7da089c9ba37d4aec3462dd49595c2d2049ba0e0d0b68ff",
+      "status": "missing"
+    },
+    {
+      "name": "F828-sensor-oracle",
+      "path": "tests/fixtures/data/metal-recovery/rrrah-srf-refresh-20261008.u16le",
+      "expected_sha256": "b3fc3d395950407a35d33392a97181fa51aac1afb0aa6b96d94a7eba00e95d42",
+      "status": "missing"
+    }
+  ]
+}

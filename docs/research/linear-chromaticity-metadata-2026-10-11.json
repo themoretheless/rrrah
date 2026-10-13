@@ -1,0 +1,44 @@
+{
+  "date": "2026-10-11",
+  "scope": "Validated inline arbitrary linear RGB chromaticity metadata and versioned raster swap transport; native matrix preparation and actual Metal",
+  "api": "RasterColorSpace::LinearRgb(RgbChromaticities)",
+  "representation": "Validated fixed 64-byte little-endian f64 coordinates, exact Eq/Hash; no separate metadata heap allocation",
+  "swap": "RRRAST3/color8 with 64-byte coordinate block; prior V1/V2 readers retained; old version/color combinations refused; metadata read directly into stack storage",
+  "tests": {
+    "core_passed": 112,
+    "core_ignored": 2,
+    "cache_all_passed": 147,
+    "cache_all_ignored": 5,
+    "hdr_metal_passed": 18,
+    "hdr_metal_ignored": 3
+  },
+  "evidence": [
+    "Exact sample/color/aspect restoration with output budget equal to pixel bytes; no metadata scratch reservation required.",
+    "Malformed version, length, NaN, collapsed basis and incompatible tag refused with zero leaked credit.",
+    "Full source release then region restoration keeps exact coordinate bytes, aspect, selection, scale, hotspot and float sample bits.",
+    "Explicit xy P3 frame preserves analytical samples and exact Metal SDR/HDR frames through preparation and swap pressure/cancel/retry; root zero."
+  ],
+  "remaining": [
+    "Arbitrary source chromaticities are not yet routed by file decoders; this qualifies the frame/serialization/native-render path.",
+    "Non-D65 full independent color/frame oracle remains to qualify.",
+    "Full 100-format qualification and physical HDR calibration remain open; NVIDIA deferred."
+  ],
+  "logs": {
+    "check": {
+      "path": "docs/research/linear-chromaticity-metadata-2026-10-11.check.log",
+      "sha256": "a848bcb65a1ea68482c7521145f37316f20fdc2f4839ea115862946022b9dbfe"
+    },
+    "core-cache": {
+      "path": "docs/research/linear-chromaticity-metadata-2026-10-11.core-cache.log",
+      "sha256": "24ebc5056e6a4f8f75cd290ebe97b45cd61bd8f032c00bf4762c93b33dd86528"
+    },
+    "cache-all": {
+      "path": "docs/research/linear-chromaticity-metadata-2026-10-11.cache-all.log",
+      "sha256": "3d74ec9150cbb05b19cfc9b1c0587794e6bbb2b727abd5f2dbbd6a74039df637"
+    },
+    "metal": {
+      "path": "docs/research/linear-chromaticity-metadata-2026-10-11.metal.log",
+      "sha256": "634f356cf8ebc8c15041da68885106fb3f2979eb0cee079057a90f565b5a3b55"
+    }
+  }
+}

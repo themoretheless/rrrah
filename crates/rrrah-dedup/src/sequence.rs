@@ -150,6 +150,34 @@ impl<'a> Sequence<'a> {
         })
     }
 
+    // Caller has fallibly allocated and admitted the frame-view table. Consume
+    // it directly so animation comparison needs no second ordinal/copy table.
+    #[cfg(feature = "decode")]
+    pub(crate) fn from_prepared_frames(
+        playback: Playback,
+        frames: Vec<Frame<'a>>,
+        cancel: impl Fn() -> bool,
+    ) -> Result<Self, SequenceError> {
+        if cancel() {
+            return Err(PixelError::Cancelled.into());
+        }
+        if frames.is_empty() {
+            return Err(SequenceError::Coverage);
+        }
+        for frame in &frames {
+            if cancel() {
+                return Err(PixelError::Cancelled.into());
+            }
+            if matches!(playback, Playback::Pages) != frame.duration.is_none() {
+                return Err(SequenceError::Timing);
+            }
+        }
+        if cancel() {
+            return Err(PixelError::Cancelled.into());
+        }
+        Ok(Self { frames, playback })
+    }
+
     /// Compare all ordered frames, normalized rational durations and repetition.
     /// Frame segmentation is retained; equivalent timelines with different frame
     /// segmentation are not established by this exact sequence comparison.

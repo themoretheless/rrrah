@@ -1,0 +1,32 @@
+{
+  "scope": "Actual Metal full-resolution SDR/HDR restore equality, not independent render fidelity or physical HDR",
+  "adapter": "Apple M4 Max / Metal",
+  "frames": 8,
+  "pixels_per_frame": 12000000,
+  "payload_bytes_per_frame": 192000000,
+  "cycles": 150,
+  "elapsed_seconds": 120.803,
+  "sdr_output": [
+    4000,
+    3000
+  ],
+  "hdr_output": [
+    4000,
+    3000
+  ],
+  "mid_batch_cancellations": 150,
+  "swap_writes": 8,
+  "final_managed_and_queue_bytes": 0,
+  "driver_verified": true,
+  "timing_limitation": "Concurrent qualification ran during part of soak; elapsed duration is not a throughput benchmark",
+  "files": {
+    "docs/research/metal-full-hdr-collection-2026-10-11/report.json": "4046c15c9050aaba12cf44f08b4d264325098b5227a40e0d6241e7c30765b7a6",
+    "docs/research/metal-full-hdr-collection-2026-10-11/gpu-all.log": "be892bc80d7cdf06e8f02a7b5f2aecf3a7aa076034809782840b81e9d9e12543",
+    "docs/research/metal-full-hdr-collection-2026-10-11/gpu-collection-long-lived.log": "964590f02a40fa8d3ecbfd60549112f773c23aa0c4b0690e3f64219b95559f3e",
+    "docs/research/metal-full-hdr-collection-2026-10-11/sustained.log": "5a0ceaf58be820b0b9e45f8998e69d758a50f72947dfe039c12351d8cc9b151e"
+  },
+  "sources": {
+    "scripts/qualify-viewer-storage-gpu.py": "cf86f6f0eee39c6d70bb51fc0e70d40623c9ebe368004464742c7cf77b8d35cc",
+    "crates/rrrah-app/tests/ttl_swap_metal.rs": "54c7cd8891007460fba865a299c9eb429c006c9794e5b060c89ff78f033a59b3"
+  }
+}

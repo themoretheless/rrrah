@@ -1,0 +1,45 @@
+{
+  "scope": "Rounding error of compensated moment output relative to exact sum of reported f64 fragment area/centroid inputs; not true clipped polygon geometry",
+  "tests": "245passed/12ignored",
+  "original_ai_rows": [
+    {
+      "certified": 1659,
+      "unavailable": 0,
+      "area_error_upper": 7.334410856429942e-15,
+      "centroid_error_upper": 2.415845301584341e-12
+    },
+    {
+      "certified": 2192,
+      "unavailable": 0,
+      "area_error_upper": 7.625844400394046e-15,
+      "centroid_error_upper": 2.771116669464391e-13
+    }
+  ],
+  "total_certified": 3851,
+  "controls_exact": true,
+  "side_admitted_bytes_per_table": 393216,
+  "extra_work_per_accumulation": 14,
+  "export_work_per_bucket": 32,
+  "observer_work": [
+    129349585,
+    46146480
+  ],
+  "design": [
+    "Opt-in separately admitted side vector; ordinary table entries unchanged",
+    "Outward local-origin subtraction/product/sum intervals",
+    "Positive interval area division plus origin addition encloses exact weighted centroid",
+    "Distance from actual compensated outputs gives area/coordinate error bounds",
+    "Geometry and ordinary moments commit together only after work and cancellation checks"
+  ],
+  "regressions": [
+    "4096fragments enclose known exact moments and match ordinary outputs",
+    "Every short budget and every cancellation checkpoint preserves update state",
+    "First insertion failures preserve slots/entries/side state and allow retry",
+    "Denied side admission and drop release all credit"
+  ],
+  "limitations": [
+    "Reported input geometry may already contain clipping error",
+    "No source-hull membership proof or full route/moment/display error propagation yet",
+    "Extra observer work, no samples skipped or ordinary4M fullpage qualification claimed"
+  ]
+}

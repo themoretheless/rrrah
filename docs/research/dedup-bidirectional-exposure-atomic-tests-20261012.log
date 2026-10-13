@@ -1,0 +1,74 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/.codex/tmp/rrrah-bidirectional-exposure-atomic-qualified-20261012/crates/rrrah-dedup)
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+warning: calls to `std::mem::drop` with a value that implements `Copy` does nothing
+   --> crates/rrrah-dedup/tests/model_compare.rs:144:5
+    |
+144 | /      drop(
+145 | |/         compare_model_files_with(
+146 | ||             &r[0],
+147 | ||             &r[1],
+148 | ||             &w,
+...   ||
+157 | ||         .unwrap(),
+    | ||_________________- argument has type `ModelComparisonEvidence`
+158 | |      );
+    | |______^
+    |
+    = note: `#[warn(dropping_copy_types)]` on by default
+help: use `let _ = ...` to ignore the expression or result
+    |
+144 ~     let _ = compare_model_files_with(
+145 |             &r[0],
+...
+155 |         )
+156 ~         .unwrap();
+    |
+
+warning: calls to `std::mem::drop` with a value that implements `Copy` does nothing
+   --> crates/rrrah-dedup/tests/model_compare.rs:816:5
+    |
+816 | /      drop(
+817 | |/         compare_model_joint_files_with(
+818 | ||             &r[0],
+819 | ||             &r[1],
+820 | ||             &w,
+...   ||
+829 | ||         .unwrap(),
+    | ||_________________- argument has type `ModelComparisonEvidence`
+830 | |      );
+    | |______^
+    |
+help: use `let _ = ...` to ignore the expression or result
+    |
+816 ~     let _ = compare_model_joint_files_with(
+817 |             &r[0],
+...
+827 |         )
+828 ~         .unwrap();
+    |
+
+warning: `rrrah-dedup` (test "model_compare") generated 2 warnings
+    Finished `test` profile [optimized + debuginfo] target(s) in 1m 37s
+     Running tests/model_compare.rs (/Users/themoretheless/.codex/tmp/rrrah-opposite-native-snapshot-20261011/target/debug/deps/model_compare-1cb2979d293ca215)
+
+running 4 tests
+test bidirectional_exposure_collection_prepays_reverse_before_input ... ok
+test bidirectional_exposure_collection_reverse_final_mutation_and_cancel_discard_batch ... ok
+test bidirectional_exposure_collection_preserves_direction_and_skips_supported_suffix ... ok
+test bidirectional_exposure_final_reverse_invalidates_previously_supported_pairs ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 43 filtered out; finished in 5.71s
+

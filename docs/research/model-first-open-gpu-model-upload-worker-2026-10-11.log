@@ -1,0 +1,40 @@
+warning: function `fallible_zeroed_bytes` is never used
+   --> crates/rrrah-cache/src/mosaic_payload_v1.rs:728:4
+    |
+728 | fn fallible_zeroed_bytes(len: usize) -> Result<Box<[u8]>, MosaicPayloadError> {
+    |    ^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-cache` (lib) generated 1 warning
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 21.35s
+     Running unittests src/main.rs (target/debug/deps/rrrah-0b4921b829754900)
+
+running 4 tests
+test model_upload_worker::full_grid_tests::million_triangle_grid_worker_full_hd_sdr_hdr ... million grid full HD: SDR; every pixel exact; prepare_ms=147.552; render_readback_ms=35.882
+million grid full HD: HDR; every pixel exact; prepare_ms=133.959; render_readback_ms=42.550
+million grid restore failures: pressure=2; admitted-cancel=2; retry exact; temporary CPU zero
+million grid swap complete: writes=1; reads=2; payload exact; final CPU/queue/GPU zero
+million grid complete: triangles=1000000; 1920x1080 SDR/HDR exact; CPU/GPU credit zero
+ok
+test model_upload_worker::large_tests::million_triangle_worker_keeps_submission_light_and_releases_memory ... million triangle render: output=16x16; every SDR pixel exact; render_readback_ms=17.547; geometry=36000000; depth=1024
+million triangle worker: decode_ms=38.742; submit_ms=0.034; ready_ms=135.846; gpu_bytes=36000000; source CPU and GPU final zero
+ok
+test model_upload_worker::swap_tests::native_models_swap_through_worker_preserve_sdr_hdr ... model swap worker: triangle.stl; SDR/HDR exact; source CPU/GPU credit zero
+model swap worker: obj-shared-metadata.obj; SDR/HDR exact; source CPU/GPU credit zero
+model swap worker: off-concave-u.off; SDR/HDR exact; source CPU/GPU credit zero
+model swap worker: ply-32-ascii.ply; SDR/HDR exact; source CPU/GPU credit zero
+model swap worker: ply-offset64-be.ply; SDR/HDR exact; source CPU/GPU credit zero
+model swap worker: ply-u64-le.ply; SDR/HDR exact; source CPU/GPU credit zero
+model swap worker pressure: refusals=12; source CPU released; swap retry exact
+ok
+test model_upload_worker::tests::latest_model_upload_wins_and_cancel_releases_worker_credit ... model first open: worker-built SDR/HDR pipelines; owner-bound install; final CPU/GPU zero
+model upload bounded queue: first active job blocked; 1000 replacements; one latest pending; obsolete active discarded
+model upload source ownership: managed-source exact; lease prevents eviction; cancellation/shutdown releases source CPU credit
+model upload completed races: generation-change and explicit-cancel release queued GPU credit
+model upload worker: 1000 replacements; latest only; generation cancellation; final credit zero
+ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 258 filtered out; finished in 2.31s
+

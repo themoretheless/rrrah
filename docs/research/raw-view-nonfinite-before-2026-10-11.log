@@ -1,0 +1,24 @@
+   Compiling rrrah-gpu v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-gpu)
+    Finished `test` profile [optimized + debuginfo] target(s) in 1.78s
+     Running tests/raw_linear_readback.rs (target/debug/deps/raw_linear_readback-9fd8b6185e48ed18)
+
+running 1 test
+test nonfinite_raw_view_components_keep_previous_finite_frame ... FAILED
+
+failures:
+
+---- nonfinite_raw_view_components_keep_previous_finite_frame stdout ----
+
+thread 'nonfinite_raw_view_components_keep_previous_finite_frame' (13320045) panicked at crates/rrrah-gpu/tests/raw_linear_readback.rs:414:13:
+assertion `left == right` failed
+  left: [-65504.0, -65504.0, -65504.0, 1.0]
+ right: [1.0, 1.0, 1.0, 1.0]
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    nonfinite_raw_view_components_keep_previous_finite_frame
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.36s
+
+error: test failed, to rerun pass `-p rrrah-gpu --test raw_linear_readback`

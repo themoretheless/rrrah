@@ -1,0 +1,51 @@
+{
+  "date": "2026-10-11",
+  "adapter": "Apple M4 Max",
+  "backend": "Metal",
+  "implementation": {
+    "module": "crates/rrrah-app/src/raster_viewport.rs",
+    "initial_load": "Normal full upload first; texture-limit or memory failure falls back to admitted visible source rectangle when it is smaller than full image",
+    "ownership": "Retain managed source clone only for regional fallback; shared original pixel buffer, no full CPU copy",
+    "interaction": "GpuState update_view plans current footprint, reuses containing region, skips offscreen source, otherwise replaces admitted region",
+    "raw": "Retained MonotoneCurve reapplied after regional upload; view exposure updated normally",
+    "errors": "Failure preserves previous source/texture/region; user-visible status on unavailable region and clear on recovery",
+    "release": "Regional CPU source released on successful new whole-image load or switch to native RAW/model"
+  },
+  "validation": {
+    "app_units_passed": 204,
+    "app_units_ignored": 40,
+    "actual_metal_viewer_helper_tests_passed": 1,
+    "modes": [
+      "linear HDR",
+      "RAW-developed HDR with identity monotone curve"
+    ],
+    "source_extent": [
+      512,
+      320
+    ],
+    "source_rgba32f_bytes": 2621440,
+    "managed_texture_budget": 160000,
+    "managed_upload_queue_budget": 160000,
+    "checks": [
+      "Whole texture cannot fit and initial regional fallback succeeds at zoom16",
+      "Managed source survives original owner drop without copy and releases on regional state drop",
+      "Initial/exposure-only view reuses residency without upload",
+      "Fractional pan uploads new region with full HDR frame exact against whole-image production renderer",
+      "Memory pressure refuses replacement, retains region, then retry succeeds",
+      "Offscreen view skips upload",
+      "Fit-to-window requiring whole source honestly refuses insufficient GPU budget",
+      "Final source/texture/queue accounting zero"
+    ]
+  },
+  "limitations": [
+    "Actual Metal tests call production helper and production renderer; native window interaction was not exercised in this milestone",
+    "New image normally opens at fit; if full visible footprint exceeds budget initial load still rejects until a bounded HDR LOD is implemented",
+    "CPU full source is retained during regional mode; no region decoder or out-of-core CPU source",
+    "Region uploads currently synchronous in view handling; background scheduling, overscan prefetch and multiregion LRU are still open",
+    "Physical HDR, NVIDIA and full 100-format qualification remain open"
+  ],
+  "sha256": {
+    "crates/rrrah-app/src/raster_viewport.rs": "7ec9fc713f27d76c277013ab950976570e5575abd8b99228837c33608780b087",
+    "crates/rrrah-app/src/main.rs": "a5e618b5a1a0a89226616b02f88253e6e0674f7765d42eef0dd27d303fed6a18"
+  }
+}

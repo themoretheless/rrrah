@@ -2,9 +2,9 @@
   "index": 382,
   "repository": "burntcarrot/hashsearch",
   "commit": "3713e5824f2cf31d3ea412f4696dfc17591d73b3",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
-  "decision": "reference",
-  "finding": "Go average-hash image search and resize helper tests; global-hash collisions require verification.",
+  "review_scope": "All29tracked entries reviewed:25complete plain text reads,structuredgo.sumchecksum inventory,3independentvisual PNGviews. Original unchanged fullsuite initial7leafcases pass; TestDistances repeated64times yields58passes/6failures.7external counterexamples run in separate copy and saved binaries.",
+  "decision": "reference_do_not_adopt_unqualified_hash_persistence_or_upload",
+  "finding": "Confirmed bitpacking drops64thpixel and forcesbit0zero; publicmean overflows on257x257white;20PNGdecode errors retain20file descriptors without GC; corruptBuntDBrecord silently truncates list; same-name79byte upload leaves114byteoldfile. Originaldistance test depends on map iteration order.64independent gray-grid vectors/100scalar Hamming comparisons characterize actualrecipe.",
   "available_source_evidence": [
     {
       "path": "pkg/hash/avg.go",
@@ -48,9 +48,9 @@
     }
   ],
   "license_metadata": "MIT",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "Full MIT LICENSE read, AadhavVignesh2022; no implementation or fixture copying into production.",
   "tests_detected": 2,
-  "upstream_tests_run": false,
+  "upstream_tests_run": true,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
   "tree_truncated": false,
   "available_readme_license_evidence": [
@@ -74,5 +74,20 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_review_complete": true,
+  "whole_repo_complete": true,
+  "total_files": 29,
+  "fully_read_files": 25,
+  "structured_checksum_files_reviewed": 1,
+  "binary_images_reviewed": 3,
+  "fully_reviewed_files": 29,
+  "complete_source_review": "hashsearch-complete-source-review-20261013.json",
+  "complete_runtime_audit": "hashsearch-complete-runtime-audit-20261013.json",
+  "prior_registry_review": "hashsearch-prior-registry-382-20261013.json",
+  "upstream_initial_leaf_cases_passed": 7,
+  "upstream_top_level_test_functions": 5,
+  "upstream_order_repetitions": 64,
+  "upstream_order_failures": 6,
+  "authored_controls_passed": 7
 }

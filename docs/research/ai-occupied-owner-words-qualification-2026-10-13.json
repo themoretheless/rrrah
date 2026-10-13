@@ -1,0 +1,36 @@
+{
+  "change": "Incremental occupied-coverage-word mask intersects per-source owner-word mask before owner lookup",
+  "bounds": "Existing 64-word coverage; owner positions metadata included in sizeof-based admission; polygon update charge4 to6",
+  "target": [
+    137,
+    37
+  ],
+  "completed": false,
+  "before": {
+    "fragments": 91936,
+    "owner_work": 2301932
+  },
+  "after": {
+    "fragments": 137183,
+    "owner_work": 1465014
+  },
+  "owner_work_per_fragment_reduction": 0.5734847214970897,
+  "prior_four_probes_identical": true,
+  "suite": {
+    "passed": 203,
+    "ignored": 12,
+    "failed": 0
+  },
+  "regression": "Independent winding/source-priority check now includes word63 region4094 entering and leaving coverage; point and cell modes supported",
+  "final_credit": 0,
+  "peak_bytes": 239197736,
+  "limitations": [
+    "Paint budget still exhausted at137,37",
+    "No claim of complete-page or normal-viewer AI qualification"
+  ],
+  "sha256": {
+    "vendor/hayro/src/native_spatial.rs": "25f645d49834df29f92b9ac37b868d44650a45eba85a9fc0ea177ac7e2a2b78e",
+    "docs/research/ai-occupied-owner-words-original-2026-10-13.log": "2a6bf42c52ea809287198fb251c3bd6cbe5ec02a5f0b30e6f5006f9215451596",
+    "docs/research/ai-occupied-owner-words-verified-suite-2026-10-13.log": "aea0cec515c507f130f51a9096034be3774d11329450546d93a40db3d21b602c"
+  }
+}

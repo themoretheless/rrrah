@@ -1,0 +1,47 @@
+{
+  "status": "verified_targeted_walk_and_lock_review_not_complete_tree",
+  "commit": "a74f90d293e05856d19a4c0ac2b29b46ef16cf23",
+  "fully_read_additional_files": {
+    "fclones/src/walk.rs": 675,
+    "fclones/src/lock.rs": 90
+  },
+  "upstream_walk_tests_passed": 10,
+  "filtered_not_passed": 157,
+  "tests": [
+    "walk::test::descend_into_nested_dirs",
+    "walk::test::follow_abs_dir_sym_links",
+    "walk::test::follow_rel_dir_sym_links",
+    "walk::test::follow_rel_file_sym_links",
+    "walk::test::list_files",
+    "walk::test::report_rel_file_sym_links",
+    "walk::test::respect_fdignore",
+    "walk::test::respect_gitignore",
+    "walk::test::skip_hidden",
+    "walk::test::sym_link_cycles"
+  ],
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/fclones-hasher-source-20261012.json": "54d14fd6f77c95467e02139da2daabbbe9e237abf2d03400abfd39593e32d176",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/fclones-upstream-verification-20261012.json": "9cf8b64c4e8cc34e2100ecef5b8e20a1cc9b2c5e75c6a0891dda2952766e3dac",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-upstream-executables-20261012/lib": "738c143872942a290b4df90b62b23527f12dfe6c5d6822069a4ad394ade7b09e",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-walk-tests-20261012.log": "bc75b62364249b58010603fec92dd0a4c1ec098d0bce2881fb3811ddedfbff89",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-fclones-walk-20261012.py": "cb1f3cc055a9708b77e5f099ba33f095197dde7177ced67fd4be94a2b8546dee"
+  },
+  "findings": [
+    {
+      "kind": "source_observation",
+      "location": "fclones/src/walk.rs:420",
+      "detail": "sorted_entries collects the entire directory before sorting and queues a Rayon task per entry. No per-directory managed byte/entry admission in this function; this is not a measured process-memory bound."
+    },
+    {
+      "kind": "source_observation",
+      "location": "fclones/src/walk.rs:420",
+      "detail": "ReadDir and DirEntry conversion errors are discarded by filter_map in sorted_entries. Top-level stat/read_dir errors separately reach optional logger."
+    },
+    {
+      "kind": "source_observation",
+      "location": "fclones/src/lock.rs:35",
+      "detail": "Unix F_SETLK is advisory; it is not evidence that unrelated writers cannot modify a scanned file. Windows branch was read but not executed."
+    }
+  ],
+  "scope": "Original preserved upstream binary executes10 existing walk cases including directory cycles, symlink targets, reporting links, hidden paths and ignore files. No new upstream regression, concurrent writer control, memory measurement, Windows execution or full42file/full500 review. No code adopted."
+}

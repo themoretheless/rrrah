@@ -1,0 +1,1457 @@
+{
+  "status": "complete_reuse_parity_and_two_lifecycle_controls",
+  "scope": "Qualify operation-scoped LoFTR reuse against every prior automatic attempt, plus late cancellation and weight mutation.",
+  "pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/loftr-model-reuse-qualified-20261011": "a842f5689810185a18f9a74a7d668dec1ee58acb65581167ad6d4a4957ee72c9",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors": "59e55bf0ecd047db9c513672d121a3ea677529ad448bdc3a359e92862c74ddd7",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-model-reuse-fixed-snapshot-20261011.json": "9e8659a229b5101d44173415b9d4538ae57ef856dd9bde280b444e7fca6faeb1",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-loftr-native-20261010-runtime-pins.json": "8daa92d3ed2c84278338c53eedffed1fcdc272bf8ee7a419397cd7f098a6783a",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-model-reuse-20261011.py": "00ebd2c270a9d87dd938ca2e865545a72aa87dcb4952a37e688a926f98f27d4b",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200300.jpg": "0573729209c9ce6c109ea1175079960165b915dd5579121f0e15653d56f755d0",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200302.jpg": "bc4de3728d82839559134cc8155f87bdf7f8aeaca32b66bdea11f5a618420242",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201400.jpg": "0568e043468d6a40e8839e603d0e8da72220e33e77632a64220dd8ffd5234a0d",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/209400.jpg": "d9caf92ca47a9047154bd987ee240832b1cc2a01b73fd83144043f181c127777",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/209401.jpg": "707f365de5031172ac067f8a156fd0972e5995e59a0d01326d21d4a50ae22704",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-model-reuse-fixed-native-build-20261011.log": "5d3fb51181c8f271b24b06b6699ee08ec094479dc0f9a232e4ec72587688c55d",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-loftr-regions-frozen-20261010.json": "5174678247e0e805c24539cf387357709ee6ea0613aa89711d1bdee2c64306e2",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-model-tiles-native-20261011.json": "989ff8407d9c87e60fe2b70989142352869fbd9eb00d140b1cfa2a19065a2f34"
+  },
+  "producer_pid": 49384,
+  "results": [
+    {
+      "case": "crumpled-automatic",
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200300.jpg",
+      "target": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200302.jpg",
+      "status": "complete",
+      "process_pid": 49461,
+      "returncode": 0,
+      "stdout": "{\"attempts\":[{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[0,0,2048,1536],\"original_dimensions\":[[2048,1536],[800,600]],\"pixels\":null,\"raw_proposals\":29,\"right_rectangle\":[0,0,800,600],\"selected_points\":29,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[0,0,2048,1536],\"original_dimensions\":[[2048,1536],[800,600]],\"pixels\":null,\"raw_proposals\":20,\"right_rectangle\":[0,0,400,300],\"selected_points\":20,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[0,0,2048,1536],\"original_dimensions\":[[2048,1536],[800,600]],\"pixels\":null,\"raw_proposals\":25,\"right_rectangle\":[400,0,400,300],\"selected_points\":25,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[0,0,2048,1536],\"original_dimensions\":[[2048,1536],[800,600]],\"pixels\":null,\"raw_proposals\":23,\"right_rectangle\":[0,300,400,300],\"selected_points\":23,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[0,0,2048,1536],\"original_dimensions\":[[2048,1536],[800,600]],\"pixels\":null,\"raw_proposals\":25,\"right_rectangle\":[400,300,400,300],\"selected_points\":25,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[0,0,1024,768],\"original_dimensions\":[[2048,1536],[800,600]],\"pixels\":null,\"raw_proposals\":25,\"right_rectangle\":[0,0,800,600],\"selected_points\":25,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[0,0,1024,768],\"original_dimensions\":[[2048,1536],[800,600]],\"pixels\":null,\"raw_proposals\":34,\"right_rectangle\":[0,0,400,300],\"selected_points\":34,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[0,0,1024,768],\"original_dimensions\":[[2048,1536],[800,600]],\"pixels\":null,\"raw_proposals\":19,\"right_rectangle\":[400,0,400,300],\"selected_points\":19,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[0,0,1024,768],\"original_dimensions\":[[2048,1536],[800,600]],\"pixels\":null,\"raw_proposals\":13,\"right_rectangle\":[0,300,400,300],\"selected_points\":13,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[0,0,1024,768],\"original_dimensions\":[[2048,1536],[800,600]],\"pixels\":null,\"raw_proposals\":19,\"right_rectangle\":[400,300,400,300],\"selected_points\":19,\"supported\":false,\"transform\":null},{\"geometry_inliers\":12,\"hypotheses\":20000,\"left_rectangle\":[1024,0,1024,768],\"original_dimensions\":[[2048,1536],[800,600]],\"pixels\":{\"anchors\":[12,12],\"directions\":[{\"agreeing_pairs\":1711,\"informative_pairs\":1769,\"sites\":300,\"valid_sites\":300},{\"agreeing_pairs\":1204,\"informative_pairs\":1227,\"sites\":300,\"valid_sites\":300}],\"supported\":true},\"raw_proposals\":48,\"right_rectangle\":[0,0,800,600],\"selected_points\":48,\"supported\":true,\"transform\":[[0.496943166826844,-0.12605797090653223,-45.293113197897014],[-0.04735197047914483,0.39899462626438736,35.05713849542144],[0.000013101062846330418,-0.0002793927156596186,1.1472680171299687]]}],\"callback_calls\":48678766,\"managed_peak\":63537896,\"managed_used\":0,\"model_digest\":[251,248,128,60,113,119,49,0,204,125,138,137,62,0,255,47,68,141,150,91,38,37,242,55,0,75,47,168,45,71,4,147],\"scope\":\"Automatic fixed full/quadrant search; original-file pixel confirmation. Tensor/workspace allocations outside managed budget.\",\"status\":\"ok\",\"supported\":true}\n",
+      "stderr": "       73.49 real        34.50 user         2.82 sys\n          1927151616  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n              131844  page reclaims\n                  16  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                 328  voluntary context switches\n              297436  involuntary context switches\n        204856137595  instructions retired\n         78307670098  cycles elapsed\n          1887701104  peak memory footprint\n",
+      "elapsed_seconds": 73.512035709,
+      "evidence": {
+        "attempts": [
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              0,
+              0,
+              2048,
+              1536
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                800,
+                600
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 29,
+            "right_rectangle": [
+              0,
+              0,
+              800,
+              600
+            ],
+            "selected_points": 29,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              0,
+              0,
+              2048,
+              1536
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                800,
+                600
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 20,
+            "right_rectangle": [
+              0,
+              0,
+              400,
+              300
+            ],
+            "selected_points": 20,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              0,
+              0,
+              2048,
+              1536
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                800,
+                600
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 25,
+            "right_rectangle": [
+              400,
+              0,
+              400,
+              300
+            ],
+            "selected_points": 25,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              0,
+              0,
+              2048,
+              1536
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                800,
+                600
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 23,
+            "right_rectangle": [
+              0,
+              300,
+              400,
+              300
+            ],
+            "selected_points": 23,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              0,
+              0,
+              2048,
+              1536
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                800,
+                600
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 25,
+            "right_rectangle": [
+              400,
+              300,
+              400,
+              300
+            ],
+            "selected_points": 25,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              0,
+              0,
+              1024,
+              768
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                800,
+                600
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 25,
+            "right_rectangle": [
+              0,
+              0,
+              800,
+              600
+            ],
+            "selected_points": 25,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              0,
+              0,
+              1024,
+              768
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                800,
+                600
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 34,
+            "right_rectangle": [
+              0,
+              0,
+              400,
+              300
+            ],
+            "selected_points": 34,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              0,
+              0,
+              1024,
+              768
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                800,
+                600
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 19,
+            "right_rectangle": [
+              400,
+              0,
+              400,
+              300
+            ],
+            "selected_points": 19,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              0,
+              0,
+              1024,
+              768
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                800,
+                600
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 13,
+            "right_rectangle": [
+              0,
+              300,
+              400,
+              300
+            ],
+            "selected_points": 13,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              0,
+              0,
+              1024,
+              768
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                800,
+                600
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 19,
+            "right_rectangle": [
+              400,
+              300,
+              400,
+              300
+            ],
+            "selected_points": 19,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 12,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              1024,
+              0,
+              1024,
+              768
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                800,
+                600
+              ]
+            ],
+            "pixels": {
+              "anchors": [
+                12,
+                12
+              ],
+              "directions": [
+                {
+                  "agreeing_pairs": 1711,
+                  "informative_pairs": 1769,
+                  "sites": 300,
+                  "valid_sites": 300
+                },
+                {
+                  "agreeing_pairs": 1204,
+                  "informative_pairs": 1227,
+                  "sites": 300,
+                  "valid_sites": 300
+                }
+              ],
+              "supported": true
+            },
+            "raw_proposals": 48,
+            "right_rectangle": [
+              0,
+              0,
+              800,
+              600
+            ],
+            "selected_points": 48,
+            "supported": true,
+            "transform": [
+              [
+                0.496943166826844,
+                -0.12605797090653223,
+                -45.293113197897014
+              ],
+              [
+                -0.04735197047914483,
+                0.39899462626438736,
+                35.05713849542144
+              ],
+              [
+                1.3101062846330418e-05,
+                -0.0002793927156596186,
+                1.1472680171299687
+              ]
+            ]
+          }
+        ],
+        "callback_calls": 48678766,
+        "managed_peak": 63537896,
+        "managed_used": 0,
+        "model_digest": [
+          251,
+          248,
+          128,
+          60,
+          113,
+          119,
+          49,
+          0,
+          204,
+          125,
+          138,
+          137,
+          62,
+          0,
+          255,
+          47,
+          68,
+          141,
+          150,
+          91,
+          38,
+          37,
+          242,
+          55,
+          0,
+          75,
+          47,
+          168,
+          45,
+          71,
+          4,
+          147
+        ],
+        "scope": "Automatic fixed full/quadrant search; original-file pixel confirmation. Tensor/workspace allocations outside managed budget.",
+        "status": "ok",
+        "supported": true
+      },
+      "process_peak_rss_bytes": 1927151616,
+      "exact_prior_terminal_proof_parity": true,
+      "exact_all_attempts_parity": true,
+      "prior_elapsed_seconds": 29.911155542
+    },
+    {
+      "case": "foreign-automatic",
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200300.jpg",
+      "target": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201400.jpg",
+      "status": "complete",
+      "process_pid": 50374,
+      "returncode": 0,
+      "stdout": "{\"attempts\":[{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[0,0,2048,1536],\"original_dimensions\":[[2048,1536],[2560,1920]],\"pixels\":null,\"raw_proposals\":20,\"right_rectangle\":[0,0,2560,1920],\"selected_points\":20,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[0,0,2048,1536],\"original_dimensions\":[[2048,1536],[2560,1920]],\"pixels\":null,\"raw_proposals\":16,\"right_rectangle\":[0,0,1280,960],\"selected_points\":16,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[0,0,2048,1536],\"original_dimensions\":[[2048,1536],[2560,1920]],\"pixels\":null,\"raw_proposals\":15,\"right_rectangle\":[1280,0,1280,960],\"selected_points\":15,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[0,0,2048,1536],\"original_dimensions\":[[2048,1536],[2560,1920]],\"pixels\":null,\"raw_proposals\":27,\"right_rectangle\":[0,960,1280,960],\"selected_points\":27,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[0,0,2048,1536],\"original_dimensions\":[[2048,1536],[2560,1920]],\"pixels\":null,\"raw_proposals\":23,\"right_rectangle\":[1280,960,1280,960],\"selected_points\":23,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[0,0,1024,768],\"original_dimensions\":[[2048,1536],[2560,1920]],\"pixels\":null,\"raw_proposals\":35,\"right_rectangle\":[0,0,2560,1920],\"selected_points\":35,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[0,0,1024,768],\"original_dimensions\":[[2048,1536],[2560,1920]],\"pixels\":null,\"raw_proposals\":10,\"right_rectangle\":[0,0,1280,960],\"selected_points\":10,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[0,0,1024,768],\"original_dimensions\":[[2048,1536],[2560,1920]],\"pixels\":null,\"raw_proposals\":28,\"right_rectangle\":[1280,0,1280,960],\"selected_points\":28,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[0,0,1024,768],\"original_dimensions\":[[2048,1536],[2560,1920]],\"pixels\":null,\"raw_proposals\":19,\"right_rectangle\":[0,960,1280,960],\"selected_points\":19,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[0,0,1024,768],\"original_dimensions\":[[2048,1536],[2560,1920]],\"pixels\":null,\"raw_proposals\":20,\"right_rectangle\":[1280,960,1280,960],\"selected_points\":20,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[1024,0,1024,768],\"original_dimensions\":[[2048,1536],[2560,1920]],\"pixels\":null,\"raw_proposals\":31,\"right_rectangle\":[0,0,2560,1920],\"selected_points\":31,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[1024,0,1024,768],\"original_dimensions\":[[2048,1536],[2560,1920]],\"pixels\":null,\"raw_proposals\":15,\"right_rectangle\":[0,0,1280,960],\"selected_points\":15,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[1024,0,1024,768],\"original_dimensions\":[[2048,1536],[2560,1920]],\"pixels\":null,\"raw_proposals\":33,\"right_rectangle\":[1280,0,1280,960],\"selected_points\":33,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[1024,0,1024,768],\"original_dimensions\":[[2048,1536],[2560,1920]],\"pixels\":null,\"raw_proposals\":23,\"right_rectangle\":[0,960,1280,960],\"selected_points\":23,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[1024,0,1024,768],\"original_dimensions\":[[2048,1536],[2560,1920]],\"pixels\":null,\"raw_proposals\":25,\"right_rectangle\":[1280,960,1280,960],\"selected_points\":25,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[0,768,1024,768],\"original_dimensions\":[[2048,1536],[2560,1920]],\"pixels\":null,\"raw_proposals\":14,\"right_rectangle\":[0,0,2560,1920],\"selected_points\":14,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[0,768,1024,768],\"original_dimensions\":[[2048,1536],[2560,1920]],\"pixels\":null,\"raw_proposals\":11,\"right_rectangle\":[0,0,1280,960],\"selected_points\":11,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[0,768,1024,768],\"original_dimensions\":[[2048,1536],[2560,1920]],\"pixels\":null,\"raw_proposals\":15,\"right_rectangle\":[1280,0,1280,960],\"selected_points\":15,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[0,768,1024,768],\"original_dimensions\":[[2048,1536],[2560,1920]],\"pixels\":null,\"raw_proposals\":20,\"right_rectangle\":[0,960,1280,960],\"selected_points\":20,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[0,768,1024,768],\"original_dimensions\":[[2048,1536],[2560,1920]],\"pixels\":null,\"raw_proposals\":22,\"right_rectangle\":[1280,960,1280,960],\"selected_points\":22,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[1024,768,1024,768],\"original_dimensions\":[[2048,1536],[2560,1920]],\"pixels\":null,\"raw_proposals\":10,\"right_rectangle\":[0,0,2560,1920],\"selected_points\":10,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":0,\"left_rectangle\":[1024,768,1024,768],\"original_dimensions\":[[2048,1536],[2560,1920]],\"pixels\":null,\"raw_proposals\":3,\"right_rectangle\":[0,0,1280,960],\"selected_points\":3,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[1024,768,1024,768],\"original_dimensions\":[[2048,1536],[2560,1920]],\"pixels\":null,\"raw_proposals\":5,\"right_rectangle\":[1280,0,1280,960],\"selected_points\":5,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[1024,768,1024,768],\"original_dimensions\":[[2048,1536],[2560,1920]],\"pixels\":null,\"raw_proposals\":9,\"right_rectangle\":[0,960,1280,960],\"selected_points\":9,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[1024,768,1024,768],\"original_dimensions\":[[2048,1536],[2560,1920]],\"pixels\":null,\"raw_proposals\":18,\"right_rectangle\":[1280,960,1280,960],\"selected_points\":18,\"supported\":false,\"transform\":null}],\"callback_calls\":130080416,\"managed_peak\":98618600,\"managed_used\":0,\"model_digest\":[251,248,128,60,113,119,49,0,204,125,138,137,62,0,255,47,68,141,150,91,38,37,242,55,0,75,47,168,45,71,4,147],\"scope\":\"Automatic fixed full/quadrant search; original-file pixel confirmation. Tensor/workspace allocations outside managed budget.\",\"status\":\"ok\",\"supported\":false}\n",
+      "stderr": "      234.47 real       103.30 user         7.43 sys\n          1863925760  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n              131036  page reclaims\n                  18  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                  47  voluntary context switches\n             1007083  involuntary context switches\n        601429756697  instructions retired\n        222043877566  cycles elapsed\n          1824376872  peak memory footprint\n",
+      "elapsed_seconds": 234.48535233399997,
+      "evidence": {
+        "attempts": [
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              0,
+              0,
+              2048,
+              1536
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                2560,
+                1920
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 20,
+            "right_rectangle": [
+              0,
+              0,
+              2560,
+              1920
+            ],
+            "selected_points": 20,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              0,
+              0,
+              2048,
+              1536
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                2560,
+                1920
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 16,
+            "right_rectangle": [
+              0,
+              0,
+              1280,
+              960
+            ],
+            "selected_points": 16,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              0,
+              0,
+              2048,
+              1536
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                2560,
+                1920
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 15,
+            "right_rectangle": [
+              1280,
+              0,
+              1280,
+              960
+            ],
+            "selected_points": 15,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              0,
+              0,
+              2048,
+              1536
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                2560,
+                1920
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 27,
+            "right_rectangle": [
+              0,
+              960,
+              1280,
+              960
+            ],
+            "selected_points": 27,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              0,
+              0,
+              2048,
+              1536
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                2560,
+                1920
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 23,
+            "right_rectangle": [
+              1280,
+              960,
+              1280,
+              960
+            ],
+            "selected_points": 23,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              0,
+              0,
+              1024,
+              768
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                2560,
+                1920
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 35,
+            "right_rectangle": [
+              0,
+              0,
+              2560,
+              1920
+            ],
+            "selected_points": 35,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              0,
+              0,
+              1024,
+              768
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                2560,
+                1920
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 10,
+            "right_rectangle": [
+              0,
+              0,
+              1280,
+              960
+            ],
+            "selected_points": 10,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              0,
+              0,
+              1024,
+              768
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                2560,
+                1920
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 28,
+            "right_rectangle": [
+              1280,
+              0,
+              1280,
+              960
+            ],
+            "selected_points": 28,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              0,
+              0,
+              1024,
+              768
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                2560,
+                1920
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 19,
+            "right_rectangle": [
+              0,
+              960,
+              1280,
+              960
+            ],
+            "selected_points": 19,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              0,
+              0,
+              1024,
+              768
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                2560,
+                1920
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 20,
+            "right_rectangle": [
+              1280,
+              960,
+              1280,
+              960
+            ],
+            "selected_points": 20,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              1024,
+              0,
+              1024,
+              768
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                2560,
+                1920
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 31,
+            "right_rectangle": [
+              0,
+              0,
+              2560,
+              1920
+            ],
+            "selected_points": 31,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              1024,
+              0,
+              1024,
+              768
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                2560,
+                1920
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 15,
+            "right_rectangle": [
+              0,
+              0,
+              1280,
+              960
+            ],
+            "selected_points": 15,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              1024,
+              0,
+              1024,
+              768
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                2560,
+                1920
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 33,
+            "right_rectangle": [
+              1280,
+              0,
+              1280,
+              960
+            ],
+            "selected_points": 33,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              1024,
+              0,
+              1024,
+              768
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                2560,
+                1920
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 23,
+            "right_rectangle": [
+              0,
+              960,
+              1280,
+              960
+            ],
+            "selected_points": 23,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              1024,
+              0,
+              1024,
+              768
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                2560,
+                1920
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 25,
+            "right_rectangle": [
+              1280,
+              960,
+              1280,
+              960
+            ],
+            "selected_points": 25,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              0,
+              768,
+              1024,
+              768
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                2560,
+                1920
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 14,
+            "right_rectangle": [
+              0,
+              0,
+              2560,
+              1920
+            ],
+            "selected_points": 14,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              0,
+              768,
+              1024,
+              768
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                2560,
+                1920
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 11,
+            "right_rectangle": [
+              0,
+              0,
+              1280,
+              960
+            ],
+            "selected_points": 11,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              0,
+              768,
+              1024,
+              768
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                2560,
+                1920
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 15,
+            "right_rectangle": [
+              1280,
+              0,
+              1280,
+              960
+            ],
+            "selected_points": 15,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              0,
+              768,
+              1024,
+              768
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                2560,
+                1920
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 20,
+            "right_rectangle": [
+              0,
+              960,
+              1280,
+              960
+            ],
+            "selected_points": 20,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              0,
+              768,
+              1024,
+              768
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                2560,
+                1920
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 22,
+            "right_rectangle": [
+              1280,
+              960,
+              1280,
+              960
+            ],
+            "selected_points": 22,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              1024,
+              768,
+              1024,
+              768
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                2560,
+                1920
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 10,
+            "right_rectangle": [
+              0,
+              0,
+              2560,
+              1920
+            ],
+            "selected_points": 10,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 0,
+            "left_rectangle": [
+              1024,
+              768,
+              1024,
+              768
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                2560,
+                1920
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 3,
+            "right_rectangle": [
+              0,
+              0,
+              1280,
+              960
+            ],
+            "selected_points": 3,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              1024,
+              768,
+              1024,
+              768
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                2560,
+                1920
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 5,
+            "right_rectangle": [
+              1280,
+              0,
+              1280,
+              960
+            ],
+            "selected_points": 5,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              1024,
+              768,
+              1024,
+              768
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                2560,
+                1920
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 9,
+            "right_rectangle": [
+              0,
+              960,
+              1280,
+              960
+            ],
+            "selected_points": 9,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              1024,
+              768,
+              1024,
+              768
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                2560,
+                1920
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 18,
+            "right_rectangle": [
+              1280,
+              960,
+              1280,
+              960
+            ],
+            "selected_points": 18,
+            "supported": false,
+            "transform": null
+          }
+        ],
+        "callback_calls": 130080416,
+        "managed_peak": 98618600,
+        "managed_used": 0,
+        "model_digest": [
+          251,
+          248,
+          128,
+          60,
+          113,
+          119,
+          49,
+          0,
+          204,
+          125,
+          138,
+          137,
+          62,
+          0,
+          255,
+          47,
+          68,
+          141,
+          150,
+          91,
+          38,
+          37,
+          242,
+          55,
+          0,
+          75,
+          47,
+          168,
+          45,
+          71,
+          4,
+          147
+        ],
+        "scope": "Automatic fixed full/quadrant search; original-file pixel confirmation. Tensor/workspace allocations outside managed budget.",
+        "status": "ok",
+        "supported": false
+      },
+      "process_peak_rss_bytes": 1863925760,
+      "exact_all_attempts_parity": true,
+      "prior_elapsed_seconds": 56.874486167
+    },
+    {
+      "case": "rephoto-whole",
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/209400.jpg",
+      "target": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/209401.jpg",
+      "status": "complete",
+      "process_pid": 53155,
+      "returncode": 0,
+      "stdout": "{\"attempts\":[{\"geometry_inliers\":515,\"hypotheses\":20000,\"left_rectangle\":[0,0,2560,1920],\"original_dimensions\":[[2560,1920],[1024,701]],\"pixels\":{\"anchors\":[515,515],\"directions\":[{\"agreeing_pairs\":81112,\"informative_pairs\":81658,\"sites\":12875,\"valid_sites\":12875},{\"agreeing_pairs\":80935,\"informative_pairs\":82092,\"sites\":12875,\"valid_sites\":12875}],\"supported\":true},\"raw_proposals\":925,\"right_rectangle\":[0,0,1024,701],\"selected_points\":925,\"supported\":true,\"transform\":[[0.4814253173718157,0.17752744178962881,-174.44113452849444],[0.008675948497697334,1.0889456178509886,-366.44166112820153],[0.000027197080334437145,0.00026711169860048237,0.7729291205601484]]}],\"callback_calls\":26329251,\"managed_peak\":98924680,\"managed_used\":0,\"model_digest\":[251,248,128,60,113,119,49,0,204,125,138,137,62,0,255,47,68,141,150,91,38,37,242,55,0,75,47,168,45,71,4,147],\"scope\":\"Automatic fixed full/quadrant search; original-file pixel confirmation. Tensor/workspace allocations outside managed budget.\",\"status\":\"ok\",\"supported\":true}\n",
+      "stderr": "       32.14 real         5.35 user         0.46 sys\n          1424113664  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n               88290  page reclaims\n                  19  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                 658  voluntary context switches\n               34595  involuntary context switches\n         35533685885  instructions retired\n         12170197931  cycles elapsed\n          1384335040  peak memory footprint\n",
+      "elapsed_seconds": 32.15440233300001,
+      "evidence": {
+        "attempts": [
+          {
+            "geometry_inliers": 515,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              0,
+              0,
+              2560,
+              1920
+            ],
+            "original_dimensions": [
+              [
+                2560,
+                1920
+              ],
+              [
+                1024,
+                701
+              ]
+            ],
+            "pixels": {
+              "anchors": [
+                515,
+                515
+              ],
+              "directions": [
+                {
+                  "agreeing_pairs": 81112,
+                  "informative_pairs": 81658,
+                  "sites": 12875,
+                  "valid_sites": 12875
+                },
+                {
+                  "agreeing_pairs": 80935,
+                  "informative_pairs": 82092,
+                  "sites": 12875,
+                  "valid_sites": 12875
+                }
+              ],
+              "supported": true
+            },
+            "raw_proposals": 925,
+            "right_rectangle": [
+              0,
+              0,
+              1024,
+              701
+            ],
+            "selected_points": 925,
+            "supported": true,
+            "transform": [
+              [
+                0.4814253173718157,
+                0.17752744178962881,
+                -174.44113452849444
+              ],
+              [
+                0.008675948497697334,
+                1.0889456178509886,
+                -366.44166112820153
+              ],
+              [
+                2.7197080334437145e-05,
+                0.00026711169860048237,
+                0.7729291205601484
+              ]
+            ]
+          }
+        ],
+        "callback_calls": 26329251,
+        "managed_peak": 98924680,
+        "managed_used": 0,
+        "model_digest": [
+          251,
+          248,
+          128,
+          60,
+          113,
+          119,
+          49,
+          0,
+          204,
+          125,
+          138,
+          137,
+          62,
+          0,
+          255,
+          47,
+          68,
+          141,
+          150,
+          91,
+          38,
+          37,
+          242,
+          55,
+          0,
+          75,
+          47,
+          168,
+          45,
+          71,
+          4,
+          147
+        ],
+        "scope": "Automatic fixed full/quadrant search; original-file pixel confirmation. Tensor/workspace allocations outside managed budget.",
+        "status": "ok",
+        "supported": true
+      },
+      "process_peak_rss_bytes": 1424113664,
+      "exact_prior_terminal_proof_parity": true,
+      "exact_all_attempts_parity": true,
+      "prior_elapsed_seconds": 3.484923291000001
+    }
+  ],
+  "controls": [
+    {
+      "action": "cancel",
+      "checkpoint": 24339383,
+      "weights": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+      "before_sha256": "59e55bf0ecd047db9c513672d121a3ea677529ad448bdc3a359e92862c74ddd7",
+      "status": "complete",
+      "process_pid": 53520,
+      "returncode": 0,
+      "stdout": "{\"callback_calls\":24339383,\"error\":\"Cancelled\",\"managed_used\":0,\"status\":\"refused\"}\n",
+      "stderr": "       32.78 real        12.89 user         1.04 sys\n          1925005312  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n              137753  page reclaims\n                   9  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                  44  voluntary context switches\n               92329  involuntary context switches\n         79505124494  instructions retired\n         29086335946  cycles elapsed\n          1885554800  peak memory footprint\n",
+      "elapsed_seconds": 32.79195333299998,
+      "after_sha256": "59e55bf0ecd047db9c513672d121a3ea677529ad448bdc3a359e92862c74ddd7",
+      "evidence": {
+        "callback_calls": 24339383,
+        "error": "Cancelled",
+        "managed_used": 0,
+        "status": "refused"
+      }
+    },
+    {
+      "action": "mutate",
+      "checkpoint": 24339383,
+      "weights": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/loftr-model-reuse-20261011.guard.safetensors",
+      "before_sha256": "59e55bf0ecd047db9c513672d121a3ea677529ad448bdc3a359e92862c74ddd7",
+      "status": "complete",
+      "process_pid": 53996,
+      "returncode": 0,
+      "stdout": "{\"callback_calls\":24425664,\"error\":\"Comparison(ModelSource(Changed))\",\"managed_used\":0,\"status\":\"refused\"}\n",
+      "stderr": "       26.97 real        12.52 user         1.05 sys\n          1944682496  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n              119466  page reclaims\n                   9  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                  17  voluntary context switches\n               99525  involuntary context switches\n         79572396285  instructions retired\n         27533305846  cycles elapsed\n          1894877320  peak memory footprint\n",
+      "elapsed_seconds": 26.989020332999985,
+      "after_sha256": "d51ea5b73dbc59a8e92cb9eb35b7945575446789d78c44d059f7877fc0638508",
+      "evidence": {
+        "callback_calls": 24425664,
+        "error": "Comparison(ModelSource(Changed))",
+        "managed_used": 0,
+        "status": "refused"
+      }
+    }
+  ]
+}

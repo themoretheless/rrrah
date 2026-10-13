@@ -1,0 +1,293 @@
+{
+  "status": "complete_six_real_descriptor_controls_with_exact_parity",
+  "pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/gradient-batch-real-qualified-20261011": "d43e518458b74b7a23d1592f210c5e569e7f6369bfbcd33f328e2adf4dd04d19",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-batch-snapshot-20261011.json": "e92b4d66f6cedc34a3324fee08cef6dc1c6c0955f963bdf7f8d86ee8e46e4e12",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-batch-real-build-20261011.log": "26893897033d093556d37ccb1656adee5872a102c49e509fc2d4729e08ffdc72",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-gradient-batch-real-20261011.py": "e9652be78a77c2bd98778c8d000c06f9e9ccf3744d82693c9c5f2b99fe06d436",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200300.jpg": "0573729209c9ce6c109ea1175079960165b915dd5579121f0e15653d56f755d0",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200302.jpg": "bc4de3728d82839559134cc8155f87bdf7f8aeaca32b66bdea11f5a618420242",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201400.jpg": "0568e043468d6a40e8839e603d0e8da72220e33e77632a64220dd8ffd5234a0d"
+  },
+  "producer_pid": 40333,
+  "scope": "Frozen alternating whole-matcher timing/parity on real decoded photo descriptors.",
+  "returncode": 0,
+  "elapsed_seconds": 24.844724917,
+  "stdout": "\nrunning 1 test\ntest gradient::batch_tests::real_photo_matcher_timing ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 65 filtered out; finished in 22.07s\n\n",
+  "stderr": "real_matcher pair=0:0 features=1142:1142 radius=None batched=false matches=1142 seconds=0.305768042\nreal_matcher pair=0:0 features=1142:1142 radius=None batched=true matches=1142 seconds=0.147277542\nreal_matcher pair=0:0 features=1142:1142 radius=None batched=true matches=1142 seconds=0.171081792\nreal_matcher pair=0:0 features=1142:1142 radius=None batched=false matches=1142 seconds=0.424335958\nreal_matcher pair=0:0 features=1142:1142 radius=Some(64.0) batched=false matches=1142 seconds=0.704955375\nreal_matcher pair=0:0 features=1142:1142 radius=Some(64.0) batched=true matches=1142 seconds=0.386954333\nreal_matcher pair=0:0 features=1142:1142 radius=Some(64.0) batched=true matches=1142 seconds=0.396384625\nreal_matcher pair=0:0 features=1142:1142 radius=Some(64.0) batched=false matches=1142 seconds=0.723151625\nreal_matcher pair=0:1 features=1142:1421 radius=None batched=false matches=9 seconds=0.510542709\nreal_matcher pair=0:1 features=1142:1421 radius=None batched=true matches=9 seconds=0.236183375\nreal_matcher pair=0:1 features=1142:1421 radius=None batched=true matches=9 seconds=0.265098250\nreal_matcher pair=0:1 features=1142:1421 radius=None batched=false matches=9 seconds=1.033751917\nreal_matcher pair=0:1 features=1142:1421 radius=Some(64.0) batched=false matches=10 seconds=1.481406084\nreal_matcher pair=0:1 features=1142:1421 radius=Some(64.0) batched=true matches=10 seconds=0.601816250\nreal_matcher pair=0:1 features=1142:1421 radius=Some(64.0) batched=true matches=10 seconds=0.572994708\nreal_matcher pair=0:1 features=1142:1421 radius=Some(64.0) batched=false matches=10 seconds=1.178481291\nreal_matcher pair=0:2 features=1142:1476 radius=None batched=false matches=5 seconds=0.727149167\nreal_matcher pair=0:2 features=1142:1476 radius=None batched=true matches=5 seconds=0.373772875\nreal_matcher pair=0:2 features=1142:1476 radius=None batched=true matches=5 seconds=0.288388083\nreal_matcher pair=0:2 features=1142:1476 radius=None batched=false matches=5 seconds=0.344574291\nreal_matcher pair=0:2 features=1142:1476 radius=Some(64.0) batched=false matches=5 seconds=1.266342000\nreal_matcher pair=0:2 features=1142:1476 radius=Some(64.0) batched=true matches=5 seconds=0.782622250\nreal_matcher pair=0:2 features=1142:1476 radius=Some(64.0) batched=true matches=5 seconds=0.551382583\nreal_matcher pair=0:2 features=1142:1476 radius=Some(64.0) batched=false matches=5 seconds=1.015843666\n",
+  "samples": [
+    {
+      "pair": "0:0",
+      "left_features": 1142,
+      "right_features": 1142,
+      "radius": "None",
+      "batched": false,
+      "matches": 1142,
+      "seconds": 0.305768042
+    },
+    {
+      "pair": "0:0",
+      "left_features": 1142,
+      "right_features": 1142,
+      "radius": "None",
+      "batched": true,
+      "matches": 1142,
+      "seconds": 0.147277542
+    },
+    {
+      "pair": "0:0",
+      "left_features": 1142,
+      "right_features": 1142,
+      "radius": "None",
+      "batched": true,
+      "matches": 1142,
+      "seconds": 0.171081792
+    },
+    {
+      "pair": "0:0",
+      "left_features": 1142,
+      "right_features": 1142,
+      "radius": "None",
+      "batched": false,
+      "matches": 1142,
+      "seconds": 0.424335958
+    },
+    {
+      "pair": "0:0",
+      "left_features": 1142,
+      "right_features": 1142,
+      "radius": "Some(64.0)",
+      "batched": false,
+      "matches": 1142,
+      "seconds": 0.704955375
+    },
+    {
+      "pair": "0:0",
+      "left_features": 1142,
+      "right_features": 1142,
+      "radius": "Some(64.0)",
+      "batched": true,
+      "matches": 1142,
+      "seconds": 0.386954333
+    },
+    {
+      "pair": "0:0",
+      "left_features": 1142,
+      "right_features": 1142,
+      "radius": "Some(64.0)",
+      "batched": true,
+      "matches": 1142,
+      "seconds": 0.396384625
+    },
+    {
+      "pair": "0:0",
+      "left_features": 1142,
+      "right_features": 1142,
+      "radius": "Some(64.0)",
+      "batched": false,
+      "matches": 1142,
+      "seconds": 0.723151625
+    },
+    {
+      "pair": "0:1",
+      "left_features": 1142,
+      "right_features": 1421,
+      "radius": "None",
+      "batched": false,
+      "matches": 9,
+      "seconds": 0.510542709
+    },
+    {
+      "pair": "0:1",
+      "left_features": 1142,
+      "right_features": 1421,
+      "radius": "None",
+      "batched": true,
+      "matches": 9,
+      "seconds": 0.236183375
+    },
+    {
+      "pair": "0:1",
+      "left_features": 1142,
+      "right_features": 1421,
+      "radius": "None",
+      "batched": true,
+      "matches": 9,
+      "seconds": 0.26509825
+    },
+    {
+      "pair": "0:1",
+      "left_features": 1142,
+      "right_features": 1421,
+      "radius": "None",
+      "batched": false,
+      "matches": 9,
+      "seconds": 1.033751917
+    },
+    {
+      "pair": "0:1",
+      "left_features": 1142,
+      "right_features": 1421,
+      "radius": "Some(64.0)",
+      "batched": false,
+      "matches": 10,
+      "seconds": 1.481406084
+    },
+    {
+      "pair": "0:1",
+      "left_features": 1142,
+      "right_features": 1421,
+      "radius": "Some(64.0)",
+      "batched": true,
+      "matches": 10,
+      "seconds": 0.60181625
+    },
+    {
+      "pair": "0:1",
+      "left_features": 1142,
+      "right_features": 1421,
+      "radius": "Some(64.0)",
+      "batched": true,
+      "matches": 10,
+      "seconds": 0.572994708
+    },
+    {
+      "pair": "0:1",
+      "left_features": 1142,
+      "right_features": 1421,
+      "radius": "Some(64.0)",
+      "batched": false,
+      "matches": 10,
+      "seconds": 1.178481291
+    },
+    {
+      "pair": "0:2",
+      "left_features": 1142,
+      "right_features": 1476,
+      "radius": "None",
+      "batched": false,
+      "matches": 5,
+      "seconds": 0.727149167
+    },
+    {
+      "pair": "0:2",
+      "left_features": 1142,
+      "right_features": 1476,
+      "radius": "None",
+      "batched": true,
+      "matches": 5,
+      "seconds": 0.373772875
+    },
+    {
+      "pair": "0:2",
+      "left_features": 1142,
+      "right_features": 1476,
+      "radius": "None",
+      "batched": true,
+      "matches": 5,
+      "seconds": 0.288388083
+    },
+    {
+      "pair": "0:2",
+      "left_features": 1142,
+      "right_features": 1476,
+      "radius": "None",
+      "batched": false,
+      "matches": 5,
+      "seconds": 0.344574291
+    },
+    {
+      "pair": "0:2",
+      "left_features": 1142,
+      "right_features": 1476,
+      "radius": "Some(64.0)",
+      "batched": false,
+      "matches": 5,
+      "seconds": 1.266342
+    },
+    {
+      "pair": "0:2",
+      "left_features": 1142,
+      "right_features": 1476,
+      "radius": "Some(64.0)",
+      "batched": true,
+      "matches": 5,
+      "seconds": 0.78262225
+    },
+    {
+      "pair": "0:2",
+      "left_features": 1142,
+      "right_features": 1476,
+      "radius": "Some(64.0)",
+      "batched": true,
+      "matches": 5,
+      "seconds": 0.551382583
+    },
+    {
+      "pair": "0:2",
+      "left_features": 1142,
+      "right_features": 1476,
+      "radius": "Some(64.0)",
+      "batched": false,
+      "matches": 5,
+      "seconds": 1.015843666
+    }
+  ],
+  "summary": [
+    {
+      "pair": "0:0",
+      "radius": "None",
+      "median_seconds": {
+        "False": 0.36505200000000004,
+        "True": 0.15917966700000002
+      },
+      "full_to_batched_ratio": 2.2933331051634878
+    },
+    {
+      "pair": "0:0",
+      "radius": "Some(64.0)",
+      "median_seconds": {
+        "False": 0.7140535,
+        "True": 0.391669479
+      },
+      "full_to_batched_ratio": 1.8231022284991474
+    },
+    {
+      "pair": "0:1",
+      "radius": "None",
+      "median_seconds": {
+        "False": 0.7721473130000001,
+        "True": 0.2506408125
+      },
+      "full_to_batched_ratio": 3.0806926665225367
+    },
+    {
+      "pair": "0:1",
+      "radius": "Some(64.0)",
+      "median_seconds": {
+        "False": 1.3299436875000001,
+        "True": 0.5874054790000001
+      },
+      "full_to_batched_ratio": 2.2640981997037177
+    },
+    {
+      "pair": "0:2",
+      "radius": "None",
+      "median_seconds": {
+        "False": 0.535861729,
+        "True": 0.33108047900000004
+      },
+      "full_to_batched_ratio": 1.6185240839886543
+    },
+    {
+      "pair": "0:2",
+      "radius": "Some(64.0)",
+      "median_seconds": {
+        "False": 1.141092833,
+        "True": 0.6670024164999999
+      },
+      "full_to_batched_ratio": 1.7107776595289146
+    }
+  ],
+  "limits": "Same-process alternating complete matcher, real features from three photos, self-positive plus crumpled and foreign pairs. Current test profile opt-level1 and shared-host load. No whole-library or Native6 collection speedup claim."
+}

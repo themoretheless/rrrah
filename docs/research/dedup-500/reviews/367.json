@@ -2,9 +2,9 @@
   "index": 367,
   "repository": "btd/sharp-phash",
   "commit": "afcf8fe8085a03f81e72f486fbf8755fece9662c",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
-  "decision": "reference",
-  "finding": "Sharp pHash Node wrapper/distance and tests; decoder/resize dependencies need fixture normalization.",
+  "review_scope": "All25trackedfiles reviewed:13text including complete lock JSON and12binary image fixtures visually inspected and Git-blob verified. Original lockedSharp0.32.6/libvips8.14.5 runs8upstream comparisons and9authored tests with independent direct-DCT/native-decode controls.",
+  "decision": "candidate_hash_reference_with_input_and_alpha_contract_required",
+  "finding": "Original8comparisons pass, includingEXIF8.3actual decoded images match independent direct cosine DCT and100distance vectors match scalar counts. Distance silently asymmetric on unequal lengths and accepts nonbinary/empty hashes. Transparent hiddenRGB and opaque image hashes collide; original upstream catches failures and exits0. No production copying or exact identity claim.",
   "available_source_evidence": [
     {
       "path": "distance.d.ts",
@@ -58,9 +58,9 @@
     }
   ],
   "license_metadata": "MIT",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "Full MIT LICENSE read, DenisBardadym2016; no production copying. Image fixtures inspected/tested but not copied into production.",
   "tests_detected": 1,
-  "upstream_tests_run": false,
+  "upstream_tests_run": true,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
   "tree_truncated": false,
   "available_readme_license_evidence": [
@@ -84,5 +84,17 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_review_complete": true,
+  "whole_repo_complete": true,
+  "total_files": 25,
+  "fully_read_files": 13,
+  "fully_reviewed_files": 25,
+  "binary_fixture_files": 12,
+  "complete_source_review": "sharp-phash-complete-source-review-20261013.json",
+  "complete_runtime_audit": "sharp-phash-complete-runtime-audit-20261013.json",
+  "prior_registry_review": "sharp-phash-prior-registry-367-20261013.json",
+  "upstream_passed_comparisons": 8,
+  "authored_test_functions_passed": 9,
+  "standalone_typescript_typecheck": false
 }

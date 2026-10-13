@@ -1,0 +1,59 @@
+{
+  "status": "complete_guarded_native_learned_pair_search_qualification",
+  "apis": [
+    "search_portfolio::search_portfolio_files_with",
+    "model_loftr::search_loftr_portfolio_files"
+  ],
+  "mac_tests": 15,
+  "linux_aarch64_tests": 15,
+  "new_portfolio_tests": 5,
+  "real_cpu_comparisons": 5,
+  "rephoto_model_first_complete_model_evidence_parity": true,
+  "source_file_count": 3046,
+  "sources_unchanged": true,
+  "peak_process_rss_bytes": 1435107328,
+  "superseded_qualified_source_preserved": {
+    "crates/rrrah-dedup/src/lib.rs": "/Users/themoretheless/.codex/tmp/rrrah-loftr-library-f32-before-portfolio-20261010/crates/rrrah-dedup/src/lib.rs",
+    "crates/rrrah-dedup/src/model_compare.rs": "/Users/themoretheless/.codex/tmp/rrrah-loftr-library-f32-before-portfolio-20261010/crates/rrrah-dedup/src/model_compare.rs",
+    "crates/rrrah-dedup/src/model_loftr.rs": "/Users/themoretheless/.codex/tmp/rrrah-loftr-library-f32-before-portfolio-20261010/crates/rrrah-dedup/src/model_loftr.rs"
+  },
+  "initial_linux_snapshot_failure": {
+    "report": "dedup-search-portfolio-linux-tests-20261010.log",
+    "reason": "Incomplete packaging omitted current decoder dependency modules. Full snapshot adds all current dependency files and is independently compiled/tested on Linux.",
+    "added_paths": [
+      "crates/rrrah-decode/src/qoi_bounds.rs",
+      "crates/rrrah-decode/tests/qoi_reference_corpus.rs",
+      "vendor/hayro-interpret/src/encode/native_source.rs",
+      "vendor/hayro-interpret/src/native_image_samples.rs"
+    ]
+  },
+  "pins": {
+    "docs/research/dedup-search-portfolio-full-snapshot-20261010.json": "3fc31ab6d61694e86dd7756a6743f2fb884f505a56211ef265479e0718b276a4",
+    "docs/research/dedup-search-portfolio-full-measurement-20261010.json": "0d57e4b1fc22658f3896ece8425c6a2fb7d75adcb60b23c28ff98a9eedb02fd7",
+    "docs/research/dedup-search-portfolio-final-tests-20261010.log": "17ce9611ca2a0f5ccfa15129df664350204a9d8aa72c89f9d951376411ba5147",
+    "docs/research/dedup-search-portfolio-full-linux-tests-20261010.log": "5b88d087747ddea7161fe0d73ee9d822520a536cb0d0dec546eb438b9e1ed394",
+    "docs/research/dedup-loftr-native-20261010-runtime-pins.json": "8daa92d3ed2c84278338c53eedffed1fcdc272bf8ee7a419397cd7f098a6783a",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-search-portfolio-20261010.py": "1288404d17f64b5e1e304d8b077bff02a4f58c898102d53a1267855b39b2d5b0",
+    "docs/research/dedup-search-portfolio-full-native-build-20261010.log": "4df2cc1ba71ce121b34c8aff3fd2bbb0f9cce8d6229f550d0f988d915e1034da",
+    "docs/research/dedup-search-portfolio-linux-tests-20261010.log": "395090d679f86e1e19845ea0fd3f98ee8040d84cb0943adac657be9a56159caa",
+    "/Users/themoretheless/.codex/tmp/rrrah-search-portfolio-linux-20261010.sh": "0a596e16c7dbc53fd63c4dc99c5def45377b8986293036615ad047950bb4966e",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/loftr-search-portfolio-full-qualified-20261010": "1ecdd7fa6abb1df96b1055c2e4606ef5ac3f0107f2b59bb7c53e17ee1a67a34b",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/search-portfolio-tests-qualified-20261010": "88f1ed70d6f95f2b021ebe187b5b7ccdac2d3353847a8542ef372e2e10a84dc4",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/search-portfolio-model-tests-qualified-20261010": "b479bec3eedd26a6bae29072283aafb700ad400cb9d56bc380a2b0f0bb532554",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/search-portfolio-native-tests-qualified-20261010": "a6bf16d919f418b0b3f1baefef0649ef8e83716e91729421ae9b08ac524c8d63",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/search-portfolio-linux-anchor_reflection_fallback-qualified-20261010": "e24660d9d1a54d76a190f85b67be538910a1afd31a9b6f48ce8b9075b958315d",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/search-portfolio-linux-model_compare-qualified-20261010": "f4198ad1be2aba4685e4711a77e365b543dceddd057c7698fc32f1636eab0325",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/search-portfolio-linux-search_portfolio-qualified-20261010": "4e08e826a11f74d40f748b13b2e83ba8d1ba434e70806bea7455c845776bd65c",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-library-f32-before-portfolio-20261010/crates/rrrah-dedup/src/lib.rs": "128e1d2f879f6412ce9e1049fd0b067ef4c8ee68dbffe3714266b43d6316cbec",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-library-f32-before-portfolio-20261010/crates/rrrah-dedup/src/model_compare.rs": "021a71edb6de49d75cc1bba33b29ee3d2ae5ab0e511d07c60353c74dad1045df",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-library-f32-before-portfolio-20261010/crates/rrrah-dedup/src/model_loftr.rs": "65c4282df5c5f6b7229b30b1735b3b03cef8ab74d11ec4dcbd4259f0b542fb73"
+  },
+  "scope": "Pair API integration. Five macOS CPU weight-backed controls: two large rephoto model-first sizes, ordinary/mirror native early support, foreign native miss then model miss. Five generic portfolio tests plus seven model lifecycle and three native portfolio tests per platform. Linux tests use decode only, not libtorch. Root tests use root lock; native weight-backed diagnostic uses standalone probe lock and optimized dev profile. No controlled latency, full collection/corpus/format coverage or hard total RSS claim.",
+  "remaining": [
+    "Automatic collection-wide native/learned search and complete real-collection qualification",
+    "Hard inference tensor/workspace/RSS admission; kernel preemption/latency",
+    "Crumpled-photo case 200302",
+    "Alpha/HDR learned input, broad format/corpus/platform qualification; Windows and Linux LoFTR runtime unqualified",
+    "Native-first recovery/performance for the original large rephoto not established by these pair controls"
+  ]
+}

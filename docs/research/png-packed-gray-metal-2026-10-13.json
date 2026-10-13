@@ -1,0 +1,39 @@
+{
+  "adapter": "Metal Apple M4 Max",
+  "packed_png_depths": [
+    1,
+    2,
+    4
+  ],
+  "transfer_gamma": 2,
+  "transparency": "tRNS original gray code1",
+  "checks": [
+    "exact decoded expanded u8 levels/alpha",
+    "independent f64 power reference before transport",
+    "native/prepared RAM, pressure, admitted cancellation/retry, swap metadata",
+    "full SDR/HDR restored frame equality",
+    "source index bounds and final root/queue zero",
+    "deterministic generator regeneration byte-identical"
+  ],
+  "collection": {
+    "sources": 118,
+    "selections": 147,
+    "storage_cases": 294,
+    "strict_verified": true
+  },
+  "verifier_tests_passed": 11,
+  "limitations": [
+    "Authored noninterlaced fixtures; not original producer interoperability",
+    "Frame transport not physical HDR/color calibration"
+  ],
+  "sha256": {
+    "tests/fixtures/raster/gamma-gray-packed-1.png": "2aea26d10ccbc396c24a98628de0019332490f3fb4d5e35756308799d94cc446",
+    "tests/fixtures/raster/gamma-gray-packed-2.png": "e585bf00480c0f2b919a7340b81adebcaf4100c04c08d1871cb28513e25fef2a",
+    "tests/fixtures/raster/gamma-gray-packed-4.png": "6284d392ff22760e9789db7ec1f66620c4393c6aa03727a0c0751f6477305c32",
+    "docs/research/png-packed-gray-metal-2026-10-13.log": "ef36281e09a299652485ee77b11fc32c4e8820ac00b45088e02b2d6f4b98e1f1",
+    "scripts/generate-png-cicp-fixtures.py": "ee03da555f03ad225021de6edf2fa332c416d5a83f663f64e50f232dc434b121",
+    "scripts/qualify-viewer-storage-gpu.py": "78c92f5c9b7057912cde162d93c8ca8c5fcef260de45d00331ac8eafa86fb7e9",
+    "scripts/test-viewer-storage-gpu-evidence.py": "a829d96d1337b3907be946f9ee9acc0a9a6db510af66bd4d2fe78fc0def13161",
+    "crates/rrrah-app/tests/raster_collection_metal.rs": "b38fb79146bacf38312e2f1744fcafcedfd38e5a34b4349ca9efcf701aa62fad"
+  }
+}

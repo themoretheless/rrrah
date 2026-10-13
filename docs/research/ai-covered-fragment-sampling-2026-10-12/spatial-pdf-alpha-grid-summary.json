@@ -1,0 +1,18 @@
+{
+  "source": "actual PDF RGB16 image2x1 with Gray16 SMask4x1",
+  "fix": "diagnostic capture permits validated distinct alpha dimensions and admits additional retained mask bytes",
+  "verified": [
+    "native mask resolution and16bit samples retained",
+    "both grids plus actual clips partition device pixel",
+    "single and17repeats match analytic premultiplied sourcecolor/alpha within1e-12"
+  ],
+  "ordinary_passed": 162,
+  "ignored": 11,
+  "limits": [
+    "nearest-neighbor diagnostic control",
+    "compatibility sampler still refuses different alpha resolution",
+    "full production AI routing remains incomplete"
+  ],
+  "log": "docs/research/ai-covered-fragment-sampling-2026-10-12/spatial-pdf-alpha-grid-full-tests.log",
+  "sha256": "1ce0e0474482841c41cc9796af872bb0ec74577a0d65eb71adbfd8dd683c9b84"
+}

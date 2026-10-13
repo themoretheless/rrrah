@@ -396,6 +396,25 @@ impl ColorSpace {
     pub fn native_device_retained_capacity(&self) -> Option<usize> {
         self.is_device().then_some(size_of::<ColorSpaceType>() + 2*size_of::<usize>())
     }
+    /// Conservative retained capacity for device colors and explicit
+    /// Separation/DeviceN alternate transforms. Profiles and calibrated spaces
+    /// are refused; source metadata parsing is outside this capture allowance.
+    pub fn native_sample_retained_capacity(&self,cancelled:&dyn Fn()->bool)->Option<usize> {
+        self.native_color_capacity(cancelled,&mut 4096,0)
+    }
+    fn native_color_capacity(&self,cancelled:&dyn Fn()->bool,remaining:&mut usize,depth:usize)->Option<usize> {
+        if cancelled() || depth>=16 {return None;}
+        *remaining=remaining.checked_sub(1)?;
+        let own=size_of::<ColorSpaceType>().checked_add(2*size_of::<usize>())?;
+        let (space,function)=match self.0.as_ref() {
+            ColorSpaceType::DeviceGray|ColorSpaceType::DeviceRgb|ColorSpaceType::DeviceCmyk=>return Some(own),
+            ColorSpaceType::Separation(s) if !s.is_none_separation=>(&s.alternate_space,&s.tint_transform),
+            ColorSpaceType::DeviceN(s) if !s.is_none && (1..=4).contains(&s.num_components)=>(&s.alternate_space,&s.tint_transform),
+            _=>return None,
+        };
+        own.checked_add(space.native_color_capacity(cancelled,remaining,depth+1)?)?
+            .checked_add(function.native_retained_with_budget(cancelled,remaining,depth+1)?)
+    }
     pub(crate) fn is_device(&self) -> bool {
         matches!(self.0.as_ref(), ColorSpaceType::DeviceGray | ColorSpaceType::DeviceRgb | ColorSpaceType::DeviceCmyk)
     }
@@ -444,19 +463,60 @@ impl ColorSpace {
     }
 
     /// Resolve one original sample into blending coordinates without RGB8.
-    /// Indexed palettes are expanded before interpolation. Unsupported base
-    /// spaces (e.g. Lab or spot coordinates) require a separate native transform.
+    /// Indexed palettes and bounded Separation alternate tint transforms are
+    /// resolved before interpolation. DeviceN uses its explicit alternate; `/None` and Lab are refused.
     pub fn native_sample_coordinates(&self, input: &[f32]) -> Option<(&Self,[f32;4])> {
-        if input.iter().any(|value| !value.is_finite()) { return None; }
-        let (space,values)=if let ColorSpaceType::Indexed(indexed)=self.0.as_ref() {
-            if input.len()!=1 { return None; }
-            let index=(input[0].clamp(0.,f32::from(indexed.hival))+0.5) as usize;
-            (indexed.base.as_ref(),indexed.values.get(index)?.as_slice())
-        } else { (self,input) };
-        space.blending_model()?;
-        let count=usize::from(space.num_components());
-        if count>4 || values.len()!=count || values.iter().any(|value| !value.is_finite() || !(0. ..=1.).contains(value)) { return None; }
-        let mut out=[0.;4];out[..count].copy_from_slice(values);Some((space,out))
+        self.native_sample_coordinates_checked(input,&|| false)
+    }
+
+    /// Resolve original samples with cooperative cancellation, at most 16 color
+    /// space levels and 4096 shared function steps, without heap scratch.
+    /// Separation uses its explicit alternate color space; `/None` is refused
+    /// because a transparent no-paint sample is not an alternate color value.
+    pub fn native_sample_coordinates_checked(&self, input: &[f32], cancelled: &dyn Fn()->bool) -> Option<(&Self,[f32;4])> {
+        self.native_sample_with_budget(input,cancelled,&mut 4096,0)
+    }
+
+    /// Resolve original components using the caller's shared color/function work.
+    pub fn native_sample_coordinates_with_budget(&self,input:&[f32],cancelled:&dyn Fn()->bool,remaining:&mut usize)->Option<(&Self,[f32;4])> {
+        self.native_sample_with_budget(input,cancelled,remaining,0)
+    }
+
+    fn native_sample_with_budget(&self,input:&[f32],cancelled:&dyn Fn()->bool,remaining:&mut usize,depth:usize)->Option<(&Self,[f32;4])> {
+        if cancelled() || depth>=16 || input.iter().any(|value| !value.is_finite()) {return None;}
+        *remaining=remaining.checked_sub(1)?;
+        match self.0.as_ref() {
+            ColorSpaceType::Indexed(indexed)=> {
+                if input.len()!=1 {return None;}
+                let index=(input[0].clamp(0.,f32::from(indexed.hival))+0.5) as usize;
+                indexed.base.native_sample_with_budget(indexed.values.get(index)?.as_slice(),cancelled,remaining,depth+1)
+            }
+            ColorSpaceType::Separation(separation)=> {
+                if separation.is_none_separation || input.len()!=1 || !(0. ..=1.).contains(&input[0]) {return None;}
+                let count=usize::from(separation.alternate_space.num_components());
+                if count==0 || count>4 {return None;}
+                let mut values=[0.;4];
+                separation.tint_transform.eval_components_with_budget(input[0],&mut values[..count],cancelled,remaining,depth+1)?;
+                separation.alternate_space.native_sample_with_budget(&values[..count],cancelled,remaining,depth+1)
+            }
+            ColorSpaceType::DeviceN(device)=> {
+                if device.is_none || input.len()!=usize::from(device.num_components) || input.len()>4
+                    || input.iter().any(|value| !(0. ..=1.).contains(value)) {return None;}
+                let count=usize::from(device.alternate_space.num_components());
+                if count==0 || count>4 {return None;}
+                let mut values=[0.;4];
+                device.tint_transform.eval_vector_with_budget(input,&mut values[..count],cancelled,remaining,depth+1)?;
+                device.alternate_space.native_sample_with_budget(&values[..count],cancelled,remaining,depth+1)
+            }
+            _=> {
+                self.blending_model()?;
+                let count=usize::from(self.num_components());
+                if count==0 || count>4 || input.len()!=count || input.iter().any(|value| !(0. ..=1.).contains(value)) {return None;}
+                let mut out=[0.;4];out[..count].copy_from_slice(input);
+                if cancelled() {return None;}
+                Some((self,out))
+            }
+        }
     }
 
     /// Return `true` if the current color space is an indexed color space.
@@ -1560,6 +1620,19 @@ mod blending_coordinate_tests {
         assert!(gray.device_sample_to_rgb(&cmyk, &[0.5]).is_none());
         assert!(rgb.device_sample_to_rgb(&rgb, &[f32::NAN, 0.0, 0.0]).is_none());
         assert!(rgb.device_sample_to_rgb(&rgb, &[1.1, 0.0, 0.0]).is_none());
+    }
+    #[test]
+    fn vectorapple_green_sample_matches_independent_profile_oracle() {
+        // Original shading event 1023 at pixel (216,25). Independent LittleCMS
+        // float transform with the pinned CGATS profile yields
+        // [-0.0583028533, 0.5280224085, 0.2648545802] before display clipping.
+        // Bare-device Poppler uses a different policy; do not change geometry
+        // or source CMYK to force agreement with its [38,135,62] result.
+        let input = [0.8794023, 0.23389284, 0.99231184, 0.08509913];
+        let converted = ColorSpace::device_cmyk()
+            .device_sample_to_rgb(&ColorSpace::device_rgb(), &input).unwrap();
+        let actual = converted[..3].iter().copied().map(f32_to_u8).collect::<Vec<_>>();
+        assert_eq!(actual, [0, 135, 68]);
     }
     #[test]
     fn explicit_icc_blending_transform_preserves_float_samples() {

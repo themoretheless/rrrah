@@ -1,0 +1,209 @@
+{
+  "status": "passed",
+  "terminal_exit_codes": {
+    "decode": 0,
+    "swap": 0
+  },
+  "plan": {
+    "status": "ready_not_executed",
+    "wait_for_hour_exec_session": 38713,
+    "hour_log": "/tmp/rrrah-metal-collection-hour-20261011.log",
+    "binary": "/tmp/rrrah-required-corpus-target/debug/examples/raw_view_timing",
+    "binary_sha256": "aa22bf8c7bc593d0eb107eeb026aba227c1334e56f4a397d6933068ec53c762d",
+    "source_sha256": "6ab59a3eabf82316192f4477ea237158f80e80b839e5ea363dd235480f822b51",
+    "fixtures": {
+      "tests/IMG_9043.CR3": "d06cbb10e84882cf130430bdc88ed2652c2622b96dea8d6a854c09e3bee37e59",
+      "tests/IMG_9074.CR3": "9c0d47cc2dd550eb6dc26c4ba2b2874b67f5c89e79dff5c472abf0ac6b2f6178"
+    },
+    "environment": {
+      "RRRAH_GPU_BACKEND": "metal",
+      "RRRAH_VIEW_CPU_MB": "512",
+      "RRRAH_VIEW_GPU_MB": "512"
+    },
+    "commands": {
+      "decode": [
+        "/tmp/rrrah-required-corpus-target/debug/examples/raw_view_timing",
+        "tests/IMG_9043.CR3",
+        "tests/IMG_9074.CR3"
+      ],
+      "swap": [
+        "/tmp/rrrah-required-corpus-target/debug/examples/raw_view_timing",
+        "--swap-view",
+        "tests/IMG_9043.CR3",
+        "tests/IMG_9074.CR3"
+      ]
+    },
+    "output_prefix": "/tmp/rrrah-metal-raw-timing-after-hour-20261011",
+    "conditions": [
+      "Only start after hour session has terminal success and log confirms >=3600 seconds with passing harness result",
+      "Warm filesystem, not cold disk",
+      "Offscreen completed GPU frame, not window presentation",
+      "Other machine workloads are not controlled; avoid claiming isolated machine measurements"
+    ]
+  },
+  "measurements": {
+    "decode": {
+      "fixtures": {
+        "IMG_9043.CR3": {
+          "decode_ms": {
+            "p50": 100.283,
+            "p95": 111.934
+          },
+          "upload_enqueue_ms": {
+            "p50": 24.635,
+            "p95": 38.559
+          },
+          "halo_pack_ms": {
+            "p50": 11.557,
+            "p95": 12.98
+          },
+          "row_pack_ms": {
+            "p50": 0.002,
+            "p95": 0.003
+          },
+          "enqueue_write_ms": {
+            "p50": 12.55,
+            "p95": 25.944
+          },
+          "frame_complete_ms": {
+            "p50": 13.925,
+            "p95": 16.935
+          },
+          "total_ms": {
+            "p50": 139.593,
+            "p95": 154.437
+          },
+          "resident_zoom_pan_ms": {
+            "frames": 60,
+            "p50": 2.785,
+            "p95": 6.296
+          }
+        },
+        "IMG_9074.CR3": {
+          "decode_ms": {
+            "p50": 100.916,
+            "p95": 109.612
+          },
+          "upload_enqueue_ms": {
+            "p50": 24.33,
+            "p95": 39.315
+          },
+          "halo_pack_ms": {
+            "p50": 11.111,
+            "p95": 18.309
+          },
+          "row_pack_ms": {
+            "p50": 0.002,
+            "p95": 0.004
+          },
+          "enqueue_write_ms": {
+            "p50": 12.278,
+            "p95": 26.434
+          },
+          "frame_complete_ms": {
+            "p50": 13.171,
+            "p95": 22.959
+          },
+          "total_ms": {
+            "p50": 140.895,
+            "p95": 155.832
+          },
+          "resident_zoom_pan_ms": {
+            "frames": 60,
+            "p50": 2.109,
+            "p95": 4.199
+          }
+        }
+      },
+      "log_text": "adapter: Metal Apple M4 Max\nIMG_9043.CR3: 15 samples / 3 warmups; decode p50/p95 100.283/111.934 ms; upload enqueue 24.635/38.559 ms; frame completion 13.925/16.935 ms; total 139.593/154.437 ms\nIMG_9043.CR3: resident zoom/pan 60 frames; p50/p95 2.785/6.296 ms\nIMG_9074.CR3: 15 samples / 3 warmups; decode p50/p95 100.916/109.612 ms; upload enqueue 24.330/39.315 ms; frame completion 13.171/22.959 ms; total 140.895/155.832 ms\nIMG_9074.CR3: resident zoom/pan 60 frames; p50/p95 2.109/4.199 ms\nmanaged_cpu: used=0 peak=124360466 limit=536870912\nmanaged_gpu: used=0 peak=146800640 limit=536870912\n",
+      "csv_sha256": "2568308fa65c2411611ae745341376575eb131c2d1573b21660eac99e661345f",
+      "log_sha256": "ee87d5db7d48cc4c6a434c6eff0a9d2372affb300a00d963d71fff4f8697390e"
+    },
+    "swap": {
+      "fixtures": {
+        "IMG_9043.CR3": {
+          "swap_restore_ms": {
+            "p50": 144.611,
+            "p95": 255.401
+          },
+          "upload_enqueue_ms": {
+            "p50": 57.579,
+            "p95": 91.071
+          },
+          "halo_pack_ms": {
+            "p50": 13.225,
+            "p95": 52.675
+          },
+          "row_pack_ms": {
+            "p50": 0.002,
+            "p95": 0.003
+          },
+          "enqueue_write_ms": {
+            "p50": 19.628,
+            "p95": 75.747
+          },
+          "frame_complete_ms": {
+            "p50": 14.081,
+            "p95": 38.166
+          },
+          "total_ms": {
+            "p50": 217.97,
+            "p95": 334.845
+          },
+          "resident_zoom_pan_ms": {
+            "frames": 60,
+            "p50": 5.778,
+            "p95": 8.591
+          }
+        },
+        "IMG_9074.CR3": {
+          "swap_restore_ms": {
+            "p50": 111.537,
+            "p95": 160.844
+          },
+          "upload_enqueue_ms": {
+            "p50": 41.719,
+            "p95": 66.726
+          },
+          "halo_pack_ms": {
+            "p50": 16.137,
+            "p95": 47.559
+          },
+          "row_pack_ms": {
+            "p50": 0.002,
+            "p95": 0.003
+          },
+          "enqueue_write_ms": {
+            "p50": 14.304,
+            "p95": 47.634
+          },
+          "frame_complete_ms": {
+            "p50": 14.74,
+            "p95": 36.137
+          },
+          "total_ms": {
+            "p50": 171.918,
+            "p95": 235.111
+          },
+          "resident_zoom_pan_ms": {
+            "frames": 60,
+            "p50": 2.646,
+            "p95": 18.274
+          }
+        }
+      },
+      "log_text": "adapter: Metal Apple M4 Max\nIMG_9043.CR3: 15 samples / 3 warmups; swap_restore p50/p95 144.611/255.401 ms; upload enqueue 57.579/91.071 ms; frame completion 14.081/38.166 ms; total 217.970/334.845 ms\nIMG_9043.CR3: resident zoom/pan 60 frames; p50/p95 5.778/8.591 ms\nIMG_9074.CR3: 15 samples / 3 warmups; swap_restore p50/p95 111.537/160.844 ms; upload enqueue 41.719/66.726 ms; frame completion 14.740/36.137 ms; total 171.918/235.111 ms\nIMG_9074.CR3: resident zoom/pan 60 frames; p50/p95 2.646/18.274 ms\nmanaged_cpu: used=0 peak=104075392 limit=536870912\nmanaged_gpu: used=0 peak=146800640 limit=536870912\n",
+      "csv_sha256": "d56c3c6c3a88fbfd7f7c5d532a6e1e405755f2f972cd87d4af4a032dd5686895",
+      "log_sha256": "f3f09ab48643e2b273c1e95ac57b348fb072c34e8eb755f728f7cc40349a3baa"
+    }
+  },
+  "conditions": [
+    "Only start after hour session has terminal success and log confirms >=3600 seconds with passing harness result",
+    "Warm filesystem, not cold disk",
+    "Offscreen completed GPU frame, not window presentation",
+    "Other machine workloads are not controlled; avoid claiming isolated machine measurements",
+    "Optimized development binary; two EOS R8 fixtures only",
+    "No controlled before/after performance comparison",
+    "Swap was slower than decoding in this run; no speedup claimed"
+  ]
+}

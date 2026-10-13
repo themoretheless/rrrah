@@ -1,0 +1,79 @@
+{
+  "date": "2026-10-11",
+  "scope": "ABBA evaluation of bulk direct-read swap restoration experiment on authored 192 MB prepared raster",
+  "decision": "Rejected as unproven speed optimization; both production changes reverted, mixed small/bulk regression retained",
+  "experiment": [
+    "ReadStream bypasses staging buffer when empty and caller output at least 64 KiB; each file read remains capped at 64 KiB with BLAKE3 and cancellation checks",
+    "Raster payload sample read chunks increased from 16 KiB to 256 KiB"
+  ],
+  "runs": [
+    {
+      "tag": "A1",
+      "implementation": "baseline",
+      "restore_p50_ms": 240.694,
+      "restore_p95_ms": 258.193,
+      "total_p50_ms": 315.382,
+      "total_p95_ms": 336.452,
+      "n": 15,
+      "log": "/tmp/rrrah-raster-swap-timing-20261011/direct-A1.log",
+      "log_sha256": "f9465ecaa5f5d5043f1d75cdd9238abbba0a8631192632de494c783b21a38905"
+    },
+    {
+      "tag": "B1",
+      "implementation": "experimental",
+      "restore_p50_ms": 241.079,
+      "restore_p95_ms": 247.516,
+      "total_p50_ms": 318.924,
+      "total_p95_ms": 326.086,
+      "n": 15,
+      "log": "/tmp/rrrah-raster-swap-timing-20261011/direct-B1.log",
+      "log_sha256": "0d38379b78fc3ecc6949d12bd317ea02443717a8810b675b429b74501b272ad4"
+    },
+    {
+      "tag": "B2",
+      "implementation": "experimental",
+      "restore_p50_ms": 236.704,
+      "restore_p95_ms": 248.471,
+      "total_p50_ms": 312.468,
+      "total_p95_ms": 324.721,
+      "n": 15,
+      "log": "/tmp/rrrah-raster-swap-timing-20261011/direct-B2.log",
+      "log_sha256": "9074d226328ab72db26284e98f0af868687225960849cdaa5e011f1228f20d26"
+    },
+    {
+      "tag": "A2",
+      "implementation": "baseline",
+      "restore_p50_ms": 240.125,
+      "restore_p95_ms": 254.993,
+      "total_p50_ms": 313.137,
+      "total_p95_ms": 343.642,
+      "n": 15,
+      "log": "/tmp/rrrah-raster-swap-timing-20261011/direct-A2.log",
+      "log_sha256": "ac87d5363fc1e67bc8929411d35c035af9996d141fb072ff09490f1f5f646a16"
+    }
+  ],
+  "experimental_validation": {
+    "cache_tests_passed": 128,
+    "swap_tests_passed": 11,
+    "metal_collection_sources": 62,
+    "metal_selected_images": 91,
+    "metal_storage_cases": 182,
+    "failed": 0,
+    "unit_log": "/tmp/rrrah-direct-swap-tests-final-20261011.log",
+    "gpu_log": "/tmp/rrrah-direct-swap-metal-collection-20261011.log"
+  },
+  "binary_sha256": {
+    "raw-view-before": "7d30096359e5af8a0e933cbfab48d908a712d3949b83e0e66748eb4999a091f2",
+    "raw-view-after": "9da77537d369213956a6137b3985093d38c8f92cdd4d34f823fe8dcf5146b6a5"
+  },
+  "finding": "Baseline restore p50 240.694 and 240.125 ms; experimental 241.079 and 236.704 ms. No consistent useful reduction established; whole-path total p50 also overlaps.",
+  "retained_regression": "mixed_small_and_bulk_restore_keeps_prefix_tail_and_hash_exact",
+  "limitations": [
+    "Dev workspace opt-level=1, external dependencies opt-level=3; not a release performance qualification",
+    "One authored low-entropy source; warm local disk",
+    "15 measured iterations/run plus three warmups; per-run quantiles only",
+    "Reference vectors and identity scans outside timing/managed budget still affect memory/cache traffic",
+    "No claim of universal gain or absence of regressions on every backend/storage device",
+    "Physical HDR, physical slow disk, OS-wide pressure and NVIDIA remain unqualified"
+  ]
+}

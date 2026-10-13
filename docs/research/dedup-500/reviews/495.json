@@ -2,9 +2,9 @@
   "index": 495,
   "repository": "maweidong/ai-smart-photo-dedup",
   "commit": "76bca9285217633228d0c129b0e3d28abcf8b5cf",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
-  "decision": "wrapper",
-  "finding": "Python cleaner calls ImageHash pHash; no independent algorithm or calibrated corpus.",
+  "review_scope": "complete pinned4file source review;8original-class controls with differing compatible dependencies; original requirements install failed",
+  "decision": "reference",
+  "finding": "Full4file review: repeated scans retain stale/duplicate edges and alias returned lists; pair-count overstates unique duplicates, black/white pHash false positive.8class controls with differing dependencies; original ImageHash5.3.0 install failed. No adoption.",
   "available_source_evidence": [
     {
       "path": "dedup.py",
@@ -34,5 +34,12 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "fully_read_files": 4,
+  "reviewed_files": 4,
+  "complete_source_review": "ai-smart-photo-dedup-complete-source-review-20261012.json",
+  "complete_runtime_audit": "ai-smart-photo-dedup-complete-runtime-audit-20261012.json",
+  "runtime_controls_passed": 8,
+  "exact_upstream_environment_qualified": false
 }

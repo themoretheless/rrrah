@@ -1,0 +1,15 @@
+{
+  "application_passed": 208,
+  "ignored": 54,
+  "log_sha256": "2d0ff3fd770c500af62e4996564615ecae86f902ef7620b0e1e0b294c110c55f",
+  "main_sha256": "7a724ea41c5afc9e9b106e5b40bfa46967a85f7906f400f05d9885daa0e68893",
+  "changes": [
+    "Zero-size resize clears deferred model resize.",
+    "View parameters follow accepted GPU viewport after resize refusal.",
+    "Successful deferred resize updates view before redraw."
+  ],
+  "limits": [
+    "Live window minimization, resize refusal and retry remain unverified on locked desktop.",
+    "Earlier GPU readback confirms resource/frame transaction; it did not exercise these application view parameters."
+  ]
+}

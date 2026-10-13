@@ -1,0 +1,41 @@
+{
+  "scope": "Experimental native AI geometry accounting; no production coalescing",
+  "tests": {
+    "passed": 222,
+    "ignored": 12,
+    "failed": 0
+  },
+  "geometry_limit": 40000000,
+  "pixels": [
+    {
+      "xy": [
+        147,
+        59
+      ],
+      "spent": 32230736,
+      "remaining": 7769264,
+      "moment_observer_work": 47480544
+    },
+    {
+      "xy": [
+        145,
+        50
+      ],
+      "spent": 18830136,
+      "remaining": 21169864,
+      "moment_observer_work": 16744430
+    }
+  ],
+  "baseline_observer_geometry_and_native_output_identical": true,
+  "peak_admitted_bytes": 239197736,
+  "limitations": [
+    "Diagnostic 16M color allowance; normal 4M page remains incomplete",
+    "Moment observer independent budget; work cannot be silently moved to geometry",
+    "No throughput or full color qualification claim"
+  ],
+  "logs": [
+    "ai-shared-polygon-budget-regression-suite-2026-10-13.log",
+    "ai-shared-polygon-work-baseline-2026-10-13.log",
+    "ai-shared-polygon-work-original-2026-10-13.log"
+  ]
+}

@@ -1,0 +1,84 @@
+{
+  "scope": "Original-source matched-profile Poppler supersampling at199,25 versus completed native spatial diagnostic",
+  "native_rgb": [
+    81.60994604229927,
+    151.66586726903915,
+    70.53911849856377
+  ],
+  "reference": [
+    {
+      "scale": 64,
+      "mean_rgb": [
+        88.9931640625,
+        162.2861328125,
+        63.91748046875
+      ],
+      "command": [
+        "/tmp/rrrah-poppler-profile-oracle-20261012/build/utils/pdftoppm",
+        "-r",
+        "4608",
+        "-f",
+        "1",
+        "-l",
+        "1",
+        "-singlefile",
+        "-x",
+        "12736",
+        "-y",
+        "1600",
+        "-W",
+        "64",
+        "-H",
+        "64",
+        "-defaultcmykprofile",
+        "vendor/hayro-interpret/assets/CGATS001Compat-v2-micro.icc",
+        "tests/fixtures/data/metal-recovery/ai-corpus/VectorApple.ai",
+        "docs/research/ai-first-refusal-oracle-64x-2026-10-13"
+      ],
+      "sha256": "8df42f87f505ae4d4cd5ccb27687d4b62e4b1638cb44c983179c5cd972a42d5e",
+      "stderr": "",
+      "valid": true
+    },
+    {
+      "scale": 256,
+      "mean_rgb": [
+        91.79716491699219,
+        163.85043334960938,
+        63.69868469238281
+      ],
+      "command": [
+        "/tmp/rrrah-poppler-profile-oracle-20261012/build/utils/pdftoppm",
+        "-r",
+        "18432",
+        "-f",
+        "1",
+        "-l",
+        "1",
+        "-singlefile",
+        "-x",
+        "50944",
+        "-y",
+        "6400",
+        "-W",
+        "256",
+        "-H",
+        "256",
+        "-defaultcmykprofile",
+        "vendor/hayro-interpret/assets/CGATS001Compat-v2-micro.icc",
+        "tests/fixtures/data/metal-recovery/ai-corpus/VectorApple.ai",
+        "docs/research/ai-first-refusal-oracle-256x-2026-10-13"
+      ],
+      "sha256": "7b51a6fbb10ddd74d21c9fd874792d51205d38a7e4785b0ff136f37f09da948b",
+      "stderr": "Bogus memory allocation size\nBogus memory allocation size\n",
+      "valid": false
+    }
+  ],
+  "max_rgb8_difference_at_256x": null,
+  "limitations": [
+    "One pixel; not full-page acceptance",
+    "Current centroid color integration remains an approximation",
+    "Oracle and original profile provenance documented in prior convergence report"
+  ],
+  "invalidated_reason": "256x Poppler returned Bogus memory allocation size twice; exit zero did not establish a valid image",
+  "superseded_by": "ai-cropped-pixel-color-verified-2026-10-13.json"
+}

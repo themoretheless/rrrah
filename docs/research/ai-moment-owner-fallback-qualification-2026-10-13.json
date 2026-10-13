@@ -1,0 +1,55 @@
+{
+  "scope": "explicit diagnostic centroid composition comparison; original fragment result still returned",
+  "suite": {
+    "passed": 220,
+    "ignored": 12,
+    "failed": 0
+  },
+  "initial_unguarded_145_50": {
+    "alpha_delta": 8.590064844471446e-05,
+    "premultiplied_native_delta": 7.21451914682536e-05,
+    "rejected": true
+  },
+  "cause": "missing mesh owner describes nonconvex exterior; averaged point may enter mesh and invent source alpha",
+  "guard": "every active AffineOwner source requires selected triangle; missing owners keep original per-fragment composition",
+  "payload": "optional0..5 admitted compensated reference integrals; invalid/reference/work refusal transactional",
+  "diagnostic_admitted_table_bytes": 5373952,
+  "comparison": {
+    "147,59": {
+      "centroid_samples": 4582,
+      "alpha_delta": 1.362243651215067e-13,
+      "premultiplied_native_delta": 3.169718931772536e-10
+    },
+    "145,50": {
+      "centroid_samples": 2627,
+      "alpha_delta": 2.468025783741723e-13,
+      "premultiplied_native_delta": 4.4681514044242476e-10
+    }
+  },
+  "fallback_fragments": {
+    "147,59": 6,
+    "145,50": 1240
+  },
+  "original_pixels_exact": true,
+  "peak_bytes": 239197736,
+  "final_credit": 0,
+  "production_coalescing_enabled": false,
+  "formal_error_bound_complete": false,
+  "speed_claim": null,
+  "remaining": [
+    "compact incremental field-key lookup",
+    "formal ownership/raster-cell and rounding bound",
+    "guarded production integration and strict4Mpage",
+    "independentcolor/normalviewerqualification"
+  ],
+  "sources": {
+    "vendor/hayro/src/native_moments.rs": "ef20ffcd69f805d7a66b8e09f52bd8c0eaa77f718becee26cda8a1271b92b42c",
+    "vendor/hayro/src/native_spatial.rs": "4e01b1d606dd1bf920d36e4a86b80e5a1f2dbe2e5b62abc39232f77644360991"
+  },
+  "logs": {
+    "ai-moment-composition-comparison-original-2026-10-13.log": "5da916118f4295da6c37383a2cad08f0cfb966a0e03439f9afb5011fe1978901",
+    "ai-moment-reference-buckets-original-2026-10-13.log": "51a9ed1df1306feaf52abeb050ce83cf89e7fb4e6b0cfa2ac938141b623847e2",
+    "ai-moment-owner-fallback-original-2026-10-13.log": "9657393812c51e2341986f30ed110bf65df8f3ce218502584eaeb4d2a3f29b1f",
+    "ai-moment-nonconvex-owner-suite-2026-10-13.log": "4685d58b0162d4e069119c755342bb1cb7dbf3bf4f0f2b6db2045056581be012"
+  }
+}

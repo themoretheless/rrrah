@@ -1,0 +1,58 @@
+   Compiling rrrah-cache v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-cache)
+warning: function `fallible_zeroed_bytes` is never used
+   --> crates/rrrah-cache/src/mosaic_payload_v1.rs:728:4
+    |
+728 | fn fallible_zeroed_bytes(len: usize) -> Result<Box<[u8]>, MosaicPayloadError> {
+    |    ^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-cache` (lib) generated 1 warning
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `dev` profile [optimized + debuginfo] target(s) in 2.44s
+     Running `target/debug/examples/raw_view_timing --compare-upload-submit /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/1084.orf`
+adapter: Metal Apple M4 Max
+fixture,pair,mode,upload_ms,submit_ms,frame_ms,total_ms
+1084.orf,1,combined,9.530333,0.000250,7.457500,17.038459
+1084.orf,1,split-lease,10.008583,0.008500,7.313208,17.401208
+1084.orf,2,split-lease,9.597042,0.006000,7.222042,16.876375
+1084.orf,2,combined,9.703292,0.000125,7.272125,17.025292
+1084.orf,3,combined,9.762042,0.000291,7.187917,16.997042
+1084.orf,3,split-lease,9.714375,0.005209,7.184084,16.950125
+1084.orf,4,split-lease,9.964500,0.005625,7.239500,17.257375
+1084.orf,4,combined,9.940292,0.000209,7.215291,17.209917
+1084.orf,5,combined,8.712875,0.000167,7.440292,16.218542
+1084.orf,5,split-lease,8.287625,0.038041,7.406250,15.826584
+1084.orf,6,split-lease,10.460292,0.007959,7.400166,17.932959
+1084.orf,6,combined,9.405542,0.000167,7.185084,16.654667
+1084.orf,7,combined,9.652000,0.000459,7.385500,17.106708
+1084.orf,7,split-lease,9.745875,0.006750,7.249042,17.055083
+1084.orf,8,split-lease,9.708166,0.005584,7.297666,17.063125
+1084.orf,8,combined,9.630583,0.000042,7.397542,17.079541
+1084.orf,9,combined,9.671291,0.000208,7.413292,17.135708
+1084.orf,9,split-lease,9.769084,0.005875,7.389000,17.210250
+1084.orf,10,split-lease,9.694042,0.005875,7.200208,16.946625
+1084.orf,10,combined,9.744791,0.000250,7.309334,17.113083
+1084.orf,11,combined,9.678000,0.000291,7.340625,17.072458
+1084.orf,11,split-lease,9.635083,0.005667,7.429667,17.118541
+1084.orf,12,split-lease,9.280250,0.006042,7.356458,16.709125
+1084.orf,12,combined,9.984958,0.000333,7.838833,17.882792
+1084.orf,13,combined,9.058708,0.000250,7.310417,16.437583
+1084.orf,13,split-lease,9.857042,0.008084,7.335708,17.273041
+1084.orf,14,split-lease,9.856917,0.011084,7.329084,17.296166
+1084.orf,14,combined,9.695125,0.000375,7.362833,17.119958
+1084.orf,15,combined,9.690125,0.000250,7.373416,17.117917
+1084.orf,15,split-lease,9.742333,0.005625,7.225917,17.023875
+1084.orf,16,split-lease,9.620458,0.005583,7.382250,17.055000
+1084.orf,16,combined,9.992334,0.000209,7.341791,17.383333
+1084.orf,17,combined,9.774583,0.000292,7.345625,17.190959
+1084.orf,17,split-lease,9.612000,0.007375,7.527417,17.217875
+1084.orf,18,split-lease,9.996792,0.007917,7.510917,17.592417
+1084.orf,18,combined,9.935166,0.000250,7.320208,17.312167
+1084.orf,19,combined,9.587875,0.000125,7.438625,17.078500
+1084.orf,19,split-lease,9.590750,0.006292,7.330834,16.979875
+1084.orf,20,split-lease,9.786708,0.005375,7.342416,17.182542
+1084.orf,20,combined,9.650584,0.000291,7.338958,17.041208
+/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/1084.orf: 20 measured pairs / 4 warmup pairs; combined total p50/p95 17.080/17.383 ms; split-lease 17.063/17.592 ms; paired delta p50/p95 -0.016/0.835 ms
+managed peak=46999622 limit=536870912
+managed peak=83886080 limit=536870912

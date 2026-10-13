@@ -1,0 +1,187 @@
+{
+  "date": "2026-10-10",
+  "scope": "Admitted adaptive tensor source capture in the test-only native PDF compositor",
+  "changes": [
+    "Conservative scratch reservation based on actual patch count, triangle cap, maximum depth and portable structure sizes",
+    "Explicit fallible array growth accounts for concurrent old/new scratch storage",
+    "Canonical cubic keys stored once; shared parameter samples carry compact edge IDs",
+    "Output triangle capacity reserved once before construction",
+    "Immutable returned mesh retains output credit; scratch credit released before return",
+    "Native device-color TensorProductPatchMesh capture transforms geometry once and retains original component triangles in admitted BVH"
+  ],
+  "limits": {
+    "pixel_error": 0.015625,
+    "source_component_error": 0.0009765625,
+    "max_depth": 12,
+    "max_triangles": 131072,
+    "real_ai_root_budget_bytes": 268435456
+  },
+  "qualification": {
+    "interpreter": {
+      "passed": 103,
+      "failed": 0,
+      "ignored": 0
+    },
+    "compositor": {
+      "passed": 123,
+      "failed": 0,
+      "ignored": 10
+    },
+    "authored_type7_pdf_stream": {
+      "compared_pixels": 512,
+      "comparison": "Every CMYK component exactly matches independently calculated gradient"
+    },
+    "admission_control": {
+      "triangle_cap": 4096,
+      "patches": 2,
+      "max_depth": 8,
+      "scratch_bytes": 4126016,
+      "output_bytes": 983112,
+      "peak_admitted_bytes": 5109128,
+      "final_admitted_bytes": 0,
+      "cancellation_checkpoints": 361
+    }
+  },
+  "real_ai": {
+    "pages": [
+      {
+        "fixture": "VectorApple.ai",
+        "page": 0,
+        "width": 301,
+        "height": 246,
+        "peak_admitted_bytes": 204958740,
+        "final_admitted_bytes": 0,
+        "status": "native_diagnostic",
+        "native_completed": false,
+        "capture_failed": false,
+        "capture_ms": 2201.935709,
+        "native_replay_ms": 42.675625000000004,
+        "deadline_expired": false,
+        "events": 2755,
+        "native_paints": 463,
+        "raster_events": 3,
+        "raster_source_models": [
+          "event=3,model=None",
+          "event=1218,model=Some(Cmyk)",
+          "event=2298,model=Some(Cmyk)"
+        ],
+        "native_raster_components": [
+          "event=3,sample_count=Some(29488),refusal=None",
+          "event=1218,sample_count=Some(298224),refusal=None",
+          "event=2298,sample_count=Some(266084),refusal=None"
+        ],
+        "shading_events": 13,
+        "page_model": "Cmyk"
+      },
+      {
+        "fixture": "one.ai",
+        "page": 0,
+        "width": 1366,
+        "height": 768,
+        "peak_admitted_bytes": 168322584,
+        "final_admitted_bytes": 0,
+        "status": "native_diagnostic",
+        "native_completed": true,
+        "capture_failed": false,
+        "capture_ms": 2.5568750000000002,
+        "native_replay_ms": 3597.768042,
+        "deadline_expired": false,
+        "events": 8,
+        "native_paints": 2,
+        "raster_events": 0,
+        "raster_source_models": [],
+        "native_raster_components": [],
+        "shading_events": 0,
+        "page_model": "Rgb"
+      },
+      {
+        "fixture": "one.ai",
+        "page": 1,
+        "width": 177,
+        "height": 175,
+        "peak_admitted_bytes": 4957320,
+        "final_admitted_bytes": 0,
+        "status": "native_diagnostic",
+        "native_completed": true,
+        "capture_failed": false,
+        "capture_ms": 0.052542,
+        "native_replay_ms": 76.608625,
+        "deadline_expired": false,
+        "events": 1,
+        "native_paints": 0,
+        "raster_events": 0,
+        "raster_source_models": [],
+        "native_raster_components": [],
+        "shading_events": 0,
+        "page_model": "Rgb"
+      }
+    ],
+    "successful_tensor_source_captures": [
+      {
+        "patches": 245,
+        "triangles": 24811,
+        "max_pixel_bound": 0.015624431138975936,
+        "max_source_component_bound": 0.0009496351704001427
+      },
+      {
+        "patches": 788,
+        "triangles": 62901,
+        "max_pixel_bound": 0.015624991177228034,
+        "max_source_component_bound": 0.0009496351704001427
+      }
+    ],
+    "refused_tensor_sources": [
+      {
+        "patches": 1455,
+        "error": "TriangleLimit"
+      },
+      {
+        "patches": 323,
+        "error": "TriangleLimit"
+      },
+      {
+        "patches": 323,
+        "error": "TriangleLimit"
+      }
+    ],
+    "first_native_replay_refusal_event": 9,
+    "source_hashes": {
+      "VectorApple.ai": "c5fc34346629c3379cee6065c45b7de0b620be822604551d1463d8e691b03d06",
+      "one.ai": "97786949c268233a446e1738fb9c2f941e4d109811bd2f972948cdb7a45d64b4"
+    }
+  },
+  "source_hashes": {
+    "vendor/hayro-interpret/src/shading/adaptive.rs": "e5cded39fb65841f945ba18115e18d162f75d7cf906b0754d556523475708340",
+    "vendor/hayro-interpret/src/shading.rs": "d4e397c1e8e1abc890b33f5283f2cdb1ac7dcff9c6af4f5f36b9fc997bf9bcc3",
+    "vendor/hayro-interpret/src/encode/native_source.rs": "9b35d896964788a55725d8966b5817da2d16b3056bdbbe0745d691d8ad4a6c2b",
+    "vendor/hayro/src/knockout_interpreter.rs": "8e3d686ca2c4a824b41afe5924a06949812540258339a91dee4498aada61721a"
+  },
+  "logs": [
+    {
+      "path": "/tmp/rrrah-native-tensor-compact-interpreter-20261010.log",
+      "sha256": "2af1aa80d9ae64ca5a3134684a2f72468fa0feaa7599a4df928089d92ec34089"
+    },
+    {
+      "path": "/tmp/rrrah-native-tensor-compact-renderer-20261010.log",
+      "sha256": "97c15ec75d07bf1e0c48b77a922dc408e776f8f96f3fb45c00bba58e93f43e33"
+    },
+    {
+      "path": "/tmp/rrrah-adaptive-admission-work-20261010.log",
+      "sha256": "4a0d10d7f3345bdc94126293e01391c0d3fe195802fd7edf7a97fbfce08fcd28"
+    },
+    {
+      "path": "/tmp/rrrah-real-ai-native-tensor-compact-20261010.log",
+      "sha256": "fd8e82eb33bc269445781d6d1a93d61785432725463618fad567c534aaa2e59d"
+    }
+  ],
+  "limitations": [
+    "Two real tensor sources successfully capture/tessellate; VectorApple native page replay still stops at the first larger tensor source",
+    "No full real-AI fidelity qualification or fresh strict Poppler match",
+    "Nonlinear function/color transform error is not bounded by the source-component tolerance",
+    "Coons source capture, profiles and spot-color sources remain unsupported in the native bridge",
+    "Parsed original source data, thread stack and allocator bookkeeping precede or lie outside these logical capacity reservations",
+    "Sort cancellation is checked before and after sorting",
+    "This compositor is test-only and is not the production AI renderer or Metal integration",
+    "Ignored tests are not counted as passes"
+  ]
+}

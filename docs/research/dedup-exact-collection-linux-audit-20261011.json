@@ -1,0 +1,313 @@
+{
+  "status": "complete_bounded_frozen_exact_first_collection_linux_gate",
+  "tests": 280,
+  "programs": 32,
+  "suite_counts": {
+    "lib": 76,
+    "anchor_candidate_search": 1,
+    "anchor_fallback_collection_lifecycle": 1,
+    "anchor_fallback_search": 1,
+    "anchor_geometry_rank_fallback": 1,
+    "anchor_geometry_search": 1,
+    "anchor_rank_file": 3,
+    "anchor_reflected_geometry": 1,
+    "anchor_reflection_collection_lifecycle": 1,
+    "anchor_reflection_fallback": 12,
+    "exact_files": 17,
+    "gradient": 9,
+    "gradient_candidate_smoothing": 3,
+    "gradient_interpolated": 4,
+    "local_index": 7,
+    "local_rank": 5,
+    "local_rank_cached": 3,
+    "mesh_rank": 2,
+    "model_compare": 11,
+    "model_input": 9,
+    "model_input_file": 10,
+    "model_projected_compare": 8,
+    "model_projected_tiles": 8,
+    "model_tiles": 13,
+    "native_anchor_recovery": 2,
+    "native_pixel_domain": 3,
+    "portfolio_collection": 10,
+    "projected_collection": 8,
+    "projected_portfolio": 24,
+    "proposals": 6,
+    "rank_region": 7,
+    "search_portfolio": 13
+  },
+  "log_binding": "Exact --list/--ignored names from each unchanged ELF matched as multisets against full completed output; summaries checked globally because headings interleave",
+  "ignored_tests": 4,
+  "frozen_files": 3080,
+  "artifacts": [
+    {
+      "suite": "lib",
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-linux-native/target/debug/deps/rrrah_dedup-6cc5209a2deed122",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-exact-collection-linux-qualified-20261011/rrrah_dedup-6cc5209a2deed122.gz",
+      "executable_sha256": "2c8c296b852c322ce02569f77b301104ae51dfde04d00bdb10bdc18c4289a130",
+      "archive_sha256": "751dc90084cea7a028a5f4c74be99264db1d6ca8f4016951915059242b5921ca",
+      "executable_bytes": 614305448
+    },
+    {
+      "suite": "anchor_candidate_search",
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-linux-native/target/debug/deps/anchor_candidate_search-61815f385e7a83b0",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-exact-collection-linux-qualified-20261011/anchor_candidate_search-61815f385e7a83b0.gz",
+      "executable_sha256": "08550532e40327b877049f49ee81bb4e5304488fa4f4da100d938d610fa1122f",
+      "archive_sha256": "24d55a451234fc349955baa2d2dfd266e33b0dd35d5438c284c746ec8955ed73",
+      "executable_bytes": 406585520
+    },
+    {
+      "suite": "anchor_fallback_collection_lifecycle",
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-linux-native/target/debug/deps/anchor_fallback_collection_lifecycle-78f17f98b6a05ac7",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-exact-collection-linux-qualified-20261011/anchor_fallback_collection_lifecycle-78f17f98b6a05ac7.gz",
+      "executable_sha256": "d5462415b114659602b74a956b22ca5b9d22767bc4f6350dce142016db5ebd85",
+      "archive_sha256": "6f91addb010ddce3e523e10b3a656fee270f1b7a61cf94ede0509f0f44d8b279",
+      "executable_bytes": 389585040
+    },
+    {
+      "suite": "anchor_fallback_search",
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-linux-native/target/debug/deps/anchor_fallback_search-28b3793074e0ed99",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-exact-collection-linux-qualified-20261011/anchor_fallback_search-28b3793074e0ed99.gz",
+      "executable_sha256": "a65ab643143140ea734a6f39fec61ae8e4ee9cd6680ce2156a04435940ae0937",
+      "archive_sha256": "f858a40f69407e327fd39f5ea43b195632d1fab040b45e2bd55048aea26192ea",
+      "executable_bytes": 384771800
+    },
+    {
+      "suite": "anchor_geometry_rank_fallback",
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-linux-native/target/debug/deps/anchor_geometry_rank_fallback-ed2ed9a1809bc484",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-exact-collection-linux-qualified-20261011/anchor_geometry_rank_fallback-ed2ed9a1809bc484.gz",
+      "executable_sha256": "7317ff71904e1657650d854f1cc2faa183aca14432cba6fdb32da120b17f04b9",
+      "archive_sha256": "034be76feb477591879ea3e87d8a8b0e2e220c135cc364353f2e6123ef5f4255",
+      "executable_bytes": 413086216
+    },
+    {
+      "suite": "anchor_geometry_search",
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-linux-native/target/debug/deps/anchor_geometry_search-b21b2cccf3a5f314",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-exact-collection-linux-qualified-20261011/anchor_geometry_search-b21b2cccf3a5f314.gz",
+      "executable_sha256": "92ef6ba9acc6755f71c9718971d4938b53d14c61cf7268a8f9956d441801182f",
+      "archive_sha256": "d98b72be3a1c9ebc0e1589f91ff929d8431301558173c5a25d17d9d8eeaafa3b",
+      "executable_bytes": 412964304
+    },
+    {
+      "suite": "anchor_rank_file",
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-linux-native/target/debug/deps/anchor_rank_file-7be74c90e64c79e4",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-exact-collection-linux-qualified-20261011/anchor_rank_file-7be74c90e64c79e4.gz",
+      "executable_sha256": "4c5a7a71d16c5cce32f97ddf5f4c70c0eadfbc904cdbe165dcf895d519b9a263",
+      "archive_sha256": "f59933fa00ed905a5e4eb6025cc1fe676ec8f3f5e58ef3f836de40aa6858d2c2",
+      "executable_bytes": 383827272
+    },
+    {
+      "suite": "anchor_reflected_geometry",
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-linux-native/target/debug/deps/anchor_reflected_geometry-e9bfe11bb9b6524a",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-exact-collection-linux-qualified-20261011/anchor_reflected_geometry-e9bfe11bb9b6524a.gz",
+      "executable_sha256": "1540f5d0c278e6f7c66257104041b3cbd959a4537a69db838e038b04f3d50ba3",
+      "archive_sha256": "c498d89e711915e7ffe6d2166f162ae5b36b65fb06719ff89533979d43051e4a",
+      "executable_bytes": 410335240
+    },
+    {
+      "suite": "anchor_reflection_collection_lifecycle",
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-linux-native/target/debug/deps/anchor_reflection_collection_lifecycle-329a92fe688744c3",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-exact-collection-linux-qualified-20261011/anchor_reflection_collection_lifecycle-329a92fe688744c3.gz",
+      "executable_sha256": "0bf3c3bd7b30f87f3f9ca66a582bce01ce2691f4e8d0ff6e609bca23af572e61",
+      "archive_sha256": "f1a210c3dc80e9fe875d80e91ce2422e84731a514c106bf0d50993c4025fe997",
+      "executable_bytes": 381258816
+    },
+    {
+      "suite": "anchor_reflection_fallback",
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-linux-native/target/debug/deps/anchor_reflection_fallback-1c38cc6f3bc02ee8",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-exact-collection-linux-qualified-20261011/anchor_reflection_fallback-1c38cc6f3bc02ee8.gz",
+      "executable_sha256": "e9abb6960d6a81de87cc05846aa60000060ef277f0c263d8542fd02ce73cb78c",
+      "archive_sha256": "e01bc837d2c4d4edbb47e9d75a615122048f8b676d462e0592ec73fcd0ba2b95",
+      "executable_bytes": 447427032
+    },
+    {
+      "suite": "exact_files",
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-linux-native/target/debug/deps/exact_files-0120d22305a44e35",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-exact-collection-linux-qualified-20261011/exact_files-0120d22305a44e35.gz",
+      "executable_sha256": "9b547344b8f06c3e00da34de9bbe5afe9b94bab628de78b2bc75604c9b0f87fe",
+      "archive_sha256": "f7dcdd6289632a142f1fe12ad52f0718e72c9b3b4657c902be0eb3b32f149269",
+      "executable_bytes": 370182552
+    },
+    {
+      "suite": "gradient",
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-linux-native/target/debug/deps/gradient-4dffdaf03fc9f995",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-exact-collection-linux-qualified-20261011/gradient-4dffdaf03fc9f995.gz",
+      "executable_sha256": "d5985adac8a897b584ce8cc36f249983ba5a026dcec82c001be5fe1ab89dbeea",
+      "archive_sha256": "277a792e7c06d58cea852658b630378bd813c9d1e6f997eba3c096ed94e1737a",
+      "executable_bytes": 357836536
+    },
+    {
+      "suite": "gradient_candidate_smoothing",
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-linux-native/target/debug/deps/gradient_candidate_smoothing-f44c8edc3b593025",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-exact-collection-linux-qualified-20261011/gradient_candidate_smoothing-f44c8edc3b593025.gz",
+      "executable_sha256": "59fe3c04e7cbacd2e6697d6bba3216173aa381455ef2b4c8b0a5e4ca80ca18f6",
+      "archive_sha256": "37d5fca3ca34d8b878aab186308a0cc9260c0653e7b144d0ea3ad7ce0d78615c",
+      "executable_bytes": 348384824
+    },
+    {
+      "suite": "gradient_interpolated",
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-linux-native/target/debug/deps/gradient_interpolated-a0cd223fe759359d",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-exact-collection-linux-qualified-20261011/gradient_interpolated-a0cd223fe759359d.gz",
+      "executable_sha256": "58eb5b8e0225ed553ffd6cc82f2e9c4fa46515e593be6006372f3ff299b9d9d3",
+      "archive_sha256": "266cc1b099135d5e96394e0ebad4b07c2e2b2b8299d4f8603454ab9012400b44",
+      "executable_bytes": 352125392
+    },
+    {
+      "suite": "local_index",
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-linux-native/target/debug/deps/local_index-3c3071456241205e",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-exact-collection-linux-qualified-20261011/local_index-3c3071456241205e.gz",
+      "executable_sha256": "dd9e0c4fb008dc4b6037716e72cc9da087b8d263bf41c0bd0571899a2dc7d765",
+      "archive_sha256": "fafa972b3de72527a8d3ad8810a8146f388e5b277c8ed4f618bb90702a1004c2",
+      "executable_bytes": 383828032
+    },
+    {
+      "suite": "local_rank",
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-linux-native/target/debug/deps/local_rank-2a9ba839c688349e",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-exact-collection-linux-qualified-20261011/local_rank-2a9ba839c688349e.gz",
+      "executable_sha256": "2ed96b704e81e41a5b7af34f5cbee83d608044b7e2448f5f5430743e1ae75d50",
+      "archive_sha256": "5db5c57d81fe2fcea95a512a1dfcc0d5e5f8c4774fb56f8bc82b4ab7362618e8",
+      "executable_bytes": 348722240
+    },
+    {
+      "suite": "local_rank_cached",
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-linux-native/target/debug/deps/local_rank_cached-929a34d4691a7ee7",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-exact-collection-linux-qualified-20261011/local_rank_cached-929a34d4691a7ee7.gz",
+      "executable_sha256": "eaf9e4411052589d8cf19823e3acf577ab5110f6cfb1b517148b18fc7ecbe01d",
+      "archive_sha256": "79481b7bbb0074f3c378f8f5ac81c66d3c379daac412c0cbbedb83bb3b84b325",
+      "executable_bytes": 348692184
+    },
+    {
+      "suite": "mesh_rank",
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-linux-native/target/debug/deps/mesh_rank-8b0d1cf9731f8fc6",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-exact-collection-linux-qualified-20261011/mesh_rank-8b0d1cf9731f8fc6.gz",
+      "executable_sha256": "b775590e46b64cecc7ffc1a00875a1d6b91ed3295b5b2f8c7ac8aa80504f85f7",
+      "archive_sha256": "59b3f4d34769f0829c8f0c5db022edc023b3fcfdb5f5d3d3f5a8a362ecffe147",
+      "executable_bytes": 348109248
+    },
+    {
+      "suite": "model_compare",
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-linux-native/target/debug/deps/model_compare-b444b41bfeb51367",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-exact-collection-linux-qualified-20261011/model_compare-b444b41bfeb51367.gz",
+      "executable_sha256": "d47e9fc73c01534c0b0e74fc2bddb9e75590c8f16b720537d11155ce6bacaa7d",
+      "archive_sha256": "16042f87888d72e44cdc0cbd7b76a99c89823855c18f7c12d56af1962328101a",
+      "executable_bytes": 375046408
+    },
+    {
+      "suite": "model_input",
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-linux-native/target/debug/deps/model_input-6a94aca0b2a8a1fc",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-exact-collection-linux-qualified-20261011/model_input-6a94aca0b2a8a1fc.gz",
+      "executable_sha256": "0f23811485633d2504cad86cf553751a8a685d1cdc422dd89bedaa2dadfee6f2",
+      "archive_sha256": "c58140f5e8964ebb0148d8350b86e35befac25c0b439f2e9959f9ef4689b90fd",
+      "executable_bytes": 348171240
+    },
+    {
+      "suite": "model_input_file",
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-linux-native/target/debug/deps/model_input_file-1313ac1676992548",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-exact-collection-linux-qualified-20261011/model_input_file-1313ac1676992548.gz",
+      "executable_sha256": "7b08626503a0befb2631215fa4588fb616cfa8fc892659d6c8b5db0d527bda42",
+      "archive_sha256": "136a05880ceac6fd9019aa94351e80cebcf7cd2207575692545dd0bc8dcdafd4",
+      "executable_bytes": 375236368
+    },
+    {
+      "suite": "model_projected_compare",
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-linux-native/target/debug/deps/model_projected_compare-1d55e805fab719a6",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-exact-collection-linux-qualified-20261011/model_projected_compare-1d55e805fab719a6.gz",
+      "executable_sha256": "b2abc473f6b4294648490ff4abaa89394a57d17df261e12da9de5030c6999ba0",
+      "archive_sha256": "83d5007bc666bcb2402da9d23dad2633856be2f90827abc74504cfd3ab8e563b",
+      "executable_bytes": 376069424
+    },
+    {
+      "suite": "model_projected_tiles",
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-linux-native/target/debug/deps/model_projected_tiles-d8da008ad29981b3",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-exact-collection-linux-qualified-20261011/model_projected_tiles-d8da008ad29981b3.gz",
+      "executable_sha256": "fe2a5d0ef94be6e11e1a898e290eb5af53adf41ed550f95a721e90ac6f3a8665",
+      "archive_sha256": "97c32f7f619cdb1a817806502016e44547d31d6ad3679ee79db76b5413d30186",
+      "executable_bytes": 376944184
+    },
+    {
+      "suite": "model_tiles",
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-linux-native/target/debug/deps/model_tiles-d766e7f40874d709",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-exact-collection-linux-qualified-20261011/model_tiles-d766e7f40874d709.gz",
+      "executable_sha256": "a0e809cfe22384b4e378a58d9163252cf3a3a6007e68439e8cc9a7cb377c15e9",
+      "archive_sha256": "8126a4273cd45b88f2fad43d139a866b19b8af98834fb92e02e9c9ac5d9eaf4c",
+      "executable_bytes": 375302448
+    },
+    {
+      "suite": "native_anchor_recovery",
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-linux-native/target/debug/deps/native_anchor_recovery-9f8b9dfa4a6c3f14",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-exact-collection-linux-qualified-20261011/native_anchor_recovery-9f8b9dfa4a6c3f14.gz",
+      "executable_sha256": "fad34e7d65238b4dfd105af663a872e77d0e74ad3c0781898d5568d01cd68ab4",
+      "archive_sha256": "586ca88bf80285a9ef6d400588f3c68d75d16f0ffe00686bc338228a4a4436cc",
+      "executable_bytes": 393405728
+    },
+    {
+      "suite": "native_pixel_domain",
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-linux-native/target/debug/deps/native_pixel_domain-378d41d3882f1542",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-exact-collection-linux-qualified-20261011/native_pixel_domain-378d41d3882f1542.gz",
+      "executable_sha256": "1ca688f774001b24de9f02445db1dc4fba80646fc820ca2d2a46254f9faed29e",
+      "archive_sha256": "b34d80a299cd136901980abad609bd367e542f53755ed0b5b98ffa7d3c317465",
+      "executable_bytes": 348197256
+    },
+    {
+      "suite": "portfolio_collection",
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-linux-native/target/debug/deps/portfolio_collection-ac4004e5b88ef545",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-exact-collection-linux-qualified-20261011/portfolio_collection-ac4004e5b88ef545.gz",
+      "executable_sha256": "e47dcc940c93f5c6730c86fa4fa5a3d8c650f863f544d24acbec9d5414329c6c",
+      "archive_sha256": "cb0b1c90b8296bbdb2f850d55fc64f04182b91a3499fd04c19f07e361c1c6de9",
+      "executable_bytes": 379112904
+    },
+    {
+      "suite": "projected_collection",
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-linux-native/target/debug/deps/projected_collection-c4ae73b87effdd33",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-exact-collection-linux-qualified-20261011/projected_collection-c4ae73b87effdd33.gz",
+      "executable_sha256": "e3da7b9ec3433c4e1585b050d88addf21cca2ae8e3d4d84d60705f7a3c55cb28",
+      "archive_sha256": "6ce473cf0b7fb684a8b834daf4aa24e8b0c44dd22961dd178001c0eeb0b5f41f",
+      "executable_bytes": 379081168
+    },
+    {
+      "suite": "projected_portfolio",
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-linux-native/target/debug/deps/projected_portfolio-16cd45814cc977f7",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-exact-collection-linux-qualified-20261011/projected_portfolio-16cd45814cc977f7.gz",
+      "executable_sha256": "1df4da20b26b3ce094849bd04998a05d7e3707bcd1f32119aac695b1cedc200a",
+      "archive_sha256": "aaa38afccd4e4a088ef6f229a28d504b93cb968b1cdc52a423c5cc730b4d44e0",
+      "executable_bytes": 385553096
+    },
+    {
+      "suite": "proposals",
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-linux-native/target/debug/deps/proposals-48061571b2a7881e",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-exact-collection-linux-qualified-20261011/proposals-48061571b2a7881e.gz",
+      "executable_sha256": "ad22f4e4b1122ba4108cba916ede576f52ca4b1d23a1c2517057874738e8e442",
+      "archive_sha256": "cbfa7fd58cc547c6b50bba5c9286ace67950755cbe24cc16088aca8bf05312ac",
+      "executable_bytes": 348745048
+    },
+    {
+      "suite": "rank_region",
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-linux-native/target/debug/deps/rank_region-77aefa38b2299b62",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-exact-collection-linux-qualified-20261011/rank_region-77aefa38b2299b62.gz",
+      "executable_sha256": "b264b3c421becd0347f99c754f4f7dfb63810f5eaefe47bae96fd2cf5e730f68",
+      "archive_sha256": "8394e7fbba4a87ffb64bf7fe91338caa4197f945bad3c7a3f1dc5384a2ed70ca",
+      "executable_bytes": 348677008
+    },
+    {
+      "suite": "search_portfolio",
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-linux-native/target/debug/deps/search_portfolio-a0fcc8e0f3c615a8",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-exact-collection-linux-qualified-20261011/search_portfolio-a0fcc8e0f3c615a8.gz",
+      "executable_sha256": "5a94e7117a4fe324dcff3f5fb285398a617f4f6bd43a96dafc64ded2cb0e26a3",
+      "archive_sha256": "921bafb28796e61761f3ec85b012a8f012e11a5aba30a29c64ac4462cd6b3cc3",
+      "executable_bytes": 379046968
+    }
+  ],
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exact-collection-loftr-fixed-snapshot-20261011.json": "11e991fdb094a85dc7b749cd39d7f9839f5cce61c23753d069bac9d642656422",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exact-collection-linux-20261011.log": "d836c877ae0a85e0987e08b9145522da487b3adada70218ac6bac43928d43076",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-collection-linux-20261011.sh": "bdd5d3ff69dad267f2ea9fd96761eb7d39d12223dab4bbba68f155af4c877778",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exact-collection-linux-platform-test-list-20261011.log": "d3dc6f86b7571deb31a66b3b445bbe4fba06ddd47d62327c8fe2232397776335",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-exact-collection-linux-platform-20261011.py": "bc49ef42dcc03dd8b4fe874868d6fc37afad286c53eedae289c88a4a1836ae19"
+  },
+  "scope": "Linux aarch64 frozen exact-first collection, decode-feature generic/native-anchor tests; artifacts archived before target reuse",
+  "limits": [
+    "Bounded fixtures do not establish broad collection recall or precision",
+    "No Torch, Windows, broad negative/burst or hard total RSS qualification",
+    "Full229 uses an earlier independent frozen source"
+  ]
+}

@@ -34,6 +34,8 @@ pub struct LocalPolicy {
 pub enum LocalError {
     #[error("invalid feature policy or coordinates")]
     Invalid,
+    #[error("native gradient candidates require opaque sampled pixels")]
+    UnsupportedPixels,
     #[error("local feature extraction/matching exceeds supplied budget")]
     Budget,
     #[error("local feature extraction/matching cancelled")]

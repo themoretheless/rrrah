@@ -1,0 +1,178 @@
+     Locking 79 packages to latest compatible versions
+      Adding vello_cpu v0.0.8 (available: v0.1.0)
+   Compiling moxcms v0.8.1 (/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-mesh-bounds-test-wz_b8zoo/moxcms)
+   Compiling image v0.25.10
+   Compiling hayro-interpret v0.7.0 (/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-mesh-bounds-test-wz_b8zoo/hayro-interpret)
+   Compiling hayro v0.7.1 (/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-mesh-bounds-test-wz_b8zoo/hayro)
+warning: unnecessary qualification
+  --> src/knockout_interpreter.rs:11:21
+   |
+11 |     NativeColor(Box<super::native_paint::NativePaint>),
+   |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: requested on the command line with `-W unused-qualifications`
+help: remove the unnecessary path segments
+   |
+11 -     NativeColor(Box<super::native_paint::NativePaint>),
+11 +     NativeColor(Box<native_paint::NativePaint>),
+   |
+
+warning: unnecessary qualification
+  --> src/knockout_interpreter.rs:65:87
+   |
+65 |     native_mask_transfers: Vec<(usize, Option<hayro_interpret::TransferFunction>, Box<super::native_paint::NativePaint>, bool)>,
+   |                                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+help: remove the unnecessary path segments
+   |
+65 -     native_mask_transfers: Vec<(usize, Option<hayro_interpret::TransferFunction>, Box<super::native_paint::NativePaint>, bool)>,
+65 +     native_mask_transfers: Vec<(usize, Option<hayro_interpret::TransferFunction>, Box<native_paint::NativePaint>, bool)>,
+   |
+
+warning: unnecessary qualification
+   --> src/knockout_interpreter.rs:444:100
+    |
+444 | ...   if !self.capture(Some(size_of::<(usize, Option<hayro_interpret::TransferFunction>, Box<super::native_paint::NativePaint>, boo...
+    |                                                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+help: remove the unnecessary path segments
+    |
+444 -             if !self.capture(Some(size_of::<(usize, Option<hayro_interpret::TransferFunction>, Box<super::native_paint::NativePaint>, bool)>())) { return; }
+444 +             if !self.capture(Some(size_of::<(usize, Option<hayro_interpret::TransferFunction>, Box<native_paint::NativePaint>, bool)>())) { return; }
+    |
+
+warning: unnecessary qualification
+   --> src/knockout_interpreter.rs:446:41
+    |
+446 |             let Some(native_backdrop) = super::native_paint::NativePaint::capture(&mask.background_color(),&cancel,&admit) else {
+    |                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+help: remove the unnecessary path segments
+    |
+446 -             let Some(native_backdrop) = super::native_paint::NativePaint::capture(&mask.background_color(),&cancel,&admit) else {
+446 +             let Some(native_backdrop) = native_paint::NativePaint::capture(&mask.background_color(),&cancel,&admit) else {
+    |
+
+warning: unnecessary qualification
+   --> src/knockout_interpreter.rs:567:35
+    |
+567 |                 let Some(paint) = super::native_paint::NativePaint::capture(
+    |                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+help: remove the unnecessary path segments
+    |
+567 -                 let Some(paint) = super::native_paint::NativePaint::capture(
+567 +                 let Some(paint) = native_paint::NativePaint::capture(
+    |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:4909:25
+     |
+4909 |             let clear = super::native_blend::Pixel::from_native(super::native_blend::Model::Cmyk, &[0.;4], 0.).unwrap();
+     |                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+4909 -             let clear = super::native_blend::Pixel::from_native(super::native_blend::Model::Cmyk, &[0.;4], 0.).unwrap();
+4909 +             let clear = native_blend::Pixel::from_native(super::native_blend::Model::Cmyk, &[0.;4], 0.).unwrap();
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:4909:65
+     |
+4909 |             let clear = super::native_blend::Pixel::from_native(super::native_blend::Model::Cmyk, &[0.;4], 0.).unwrap();
+     |                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+4909 -             let clear = super::native_blend::Pixel::from_native(super::native_blend::Model::Cmyk, &[0.;4], 0.).unwrap();
+4909 +             let clear = super::native_blend::Pixel::from_native(native_blend::Model::Cmyk, &[0.;4], 0.).unwrap();
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:4910:29
+     |
+4910 |             let mut frame = super::native_frame::PaintFrame::admitted(&[clear], target, false, true,
+     |                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+4910 -             let mut frame = super::native_frame::PaintFrame::admitted(&[clear], target, false, true,
+4910 +             let mut frame = native_frame::PaintFrame::admitted(&[clear], target, false, true,
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:4941:59
+     |
+4941 |     space: &hayro_interpret::color::ColorSpace, backdrop: super::native_blend::Pixel,
+     |                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+4941 -     space: &hayro_interpret::color::ColorSpace, backdrop: super::native_blend::Pixel,
+4941 +     space: &hayro_interpret::color::ColorSpace, backdrop: native_blend::Pixel,
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:4944:13
+     |
+4944 | ) -> Option<super::native_frame::Buffer> {
+     |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+4944 - ) -> Option<super::native_frame::Buffer> {
+4944 + ) -> Option<native_frame::Buffer> {
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:4950:59
+     |
+4950 |     space: &hayro_interpret::color::ColorSpace, backdrop: super::native_blend::Pixel,
+     |                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+4950 -     space: &hayro_interpret::color::ColorSpace, backdrop: super::native_blend::Pixel,
+4950 +     space: &hayro_interpret::color::ColorSpace, backdrop: native_blend::Pixel,
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:4954:13
+     |
+4954 | ) -> Option<super::native_frame::Buffer> {
+     |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+4954 - ) -> Option<super::native_frame::Buffer> {
+4954 + ) -> Option<native_frame::Buffer> {
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:4980:62
+     |
+4980 |     let _backdrop_credit = admit(count.checked_mul(size_of::<super::native_blend::Pixel>())?)?;
+     |                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+4980 -     let _backdrop_credit = admit(count.checked_mul(size_of::<super::native_blend::Pixel>())?)?;
+4980 +     let _backdrop_credit = admit(count.checked_mul(size_of::<native_blend::Pixel>())?)?;
+     |
+
+warning: `hayro` (lib test) generated 13 warnings (run `cargo fix --lib -p hayro --tests` to apply 13 suggestions)
+    Finished `test` profile [optimized + debuginfo] target(s) in 23.77s
+     Running unittests src/lib.rs (target/debug/deps/hayro-31cada64c17eb186)
+
+running 1 test
+NATIVE_PIXEL_SOLID depth=1 event=4 coverage=255 mask=1
+NATIVE_PIXEL_RASTER depth=1 event=11 point=(63.103233895304584, 185.00365840591775) dimensions=(395, 367) interpolate=false components=[0.0, 0.0, 0.0, 0.929411768913269] alpha=1 coverage=255 mask=1 alpha_plane=None
+NATIVE_PIXEL_RASTER depth=1 event=11 point=(63.103233895304584, 185.00365840591775) dimensions=(395, 367) interpolate=false components=[0.0, 0.0, 0.0, 0.929411768913269] alpha=1 coverage=255 mask=1 alpha_plane=None
+NATIVE_PIXEL_SOLID depth=1 event=4 coverage=255 mask=1
+NATIVE_PIXEL_SHADING depth=0 event=2676 coverage=108 sample=true mask=1
+NATIVE_PIXEL_SHADING_SAMPLE depth=0 event=2676 components=[0.016602673, 0.13868213, 0.3871869, 0.0] opacity=1 model=Some(Cmyk)
+test knockout_compositor::interpreter_tests::real_ai_compositor_capture_and_replay_diagnostic ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 145 filtered out; finished in 48.50s
+

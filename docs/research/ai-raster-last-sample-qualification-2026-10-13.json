@@ -1,0 +1,134 @@
+{
+  "change": "One-entry native nearest-neighbor raster sample cache keyed by both color and alpha texel coordinates; interpolated color or alpha bypasses caching",
+  "admission": "Raster sampler allowance increased 128 to 256 bytes per source; closure size checked against allowance",
+  "newly_completed_pixel": [
+    138,
+    36
+  ],
+  "probes": {
+    "138,36": {
+      "alpha": 0.9999628213382105,
+      "components": [
+        0.3383463976795398,
+        0.7539391347133751,
+        0.7768495160001366,
+        0.19377905992737143
+      ],
+      "rgb": [
+        148.31163494679754,
+        78.09125508175771,
+        62.07648508984015
+      ]
+    },
+    "139,34": {
+      "alpha": 0.6233016604890418,
+      "components": [
+        0.3118590338082927,
+        0.745081655744093,
+        0.909939827850562,
+        0.17415316897038857
+      ],
+      "rgb": [
+        193.0837047146896,
+        146.98914614366063,
+        125.78349043423542
+      ]
+    },
+    "138,34": {
+      "alpha": 0.4473354104716791,
+      "components": [
+        0.2323576653621876,
+        0.664123608278963,
+        0.8537717680043353,
+        0.1279215125441031
+      ],
+      "rgb": [
+        219.4483649179116,
+        185.49523329477617,
+        166.50881305396837
+      ]
+    },
+    "105,33": {
+      "alpha": 0.9999999999999988,
+      "components": [
+        0.9351232815663919,
+        0.2596741408031866,
+        0.8425726707372792,
+        0.1337093472489289
+      ],
+      "rgb": [
+        3.114175584073564e-13,
+        124.74997356534018,
+        82.04518228769322
+      ]
+    },
+    "199,25": {
+      "alpha": 1.0,
+      "components": [
+        0.7135069188516239,
+        0.17809831327578418,
+        0.9554537787768727,
+        0.0549916907975484
+      ],
+      "rgb": [
+        81.60994604229927,
+        151.66586726903915,
+        70.53911849856377
+      ]
+    },
+    "149,56": {
+      "alpha": 0.2144258053457203,
+      "components": [
+        0.3285820137140102,
+        0.8614814398605593,
+        0.9346276847653973,
+        0.24747745057283443
+      ],
+      "rgb": [
+        230.74855138884664,
+        212.56374303909544,
+        208.50489577871127
+      ]
+    }
+  },
+  "prior_max_difference": 0.0,
+  "paint_work_limit": 4000000,
+  "final_credit": 0,
+  "peak_bytes": 239197736,
+  "suite": {
+    "passed": 202,
+    "ignored": 12,
+    "failed": 0
+  },
+  "tests": [
+    "Changing 2x2 color texels and repeated hits",
+    "16-bit soft alpha",
+    "Unequal color and alpha dimensions",
+    "Negative and clamped coordinates",
+    "Cache-hit work exhaustion and cancellation",
+    "Nonfinite coordinates",
+    "Interpolated source bypass"
+  ],
+  "limitations": [
+    "Experimental native AI diagnostic path; normal-viewer integration and independent color fidelity remain incomplete"
+  ],
+  "sha256": {
+    "vendor/hayro/src/knockout_interpreter.rs": "aedd5fcb9b1d800617adc59bd4d996c05058febee15296fe32cc892bd0a348bc",
+    "vendor/hayro/src/native_spatial.rs": "16ea0ccc3ff62dd2e6fd5e4427034ee90b382fbd97aa5e59489c01b8fe61d9c7",
+    "docs/research/ai-raster-last-sample-original-2026-10-13.log": "772d9338ac73c3dadb99d6d0c5d49ea2816faf1c0a8f47c0365b0733e6b8196b",
+    "docs/research/ai-all-source-event-cost-original-2026-10-13.log": "f7afbb2f8f8b14b3054db8ddde7da4c8a1f3498cc3c533a34b9b801ab948c426",
+    "docs/research/ai-raster-last-sample-final-suite-2026-10-13.log": "86f28dc2b9bc4e5afffdb89ae0d9ea4e15843d8803b174f786f0707a8d95fe72",
+    "docs/research/ai-raster-last-sample-page-2026-10-13.log": "d0a2f55ae9166da792e5751340eb2a186f474737430065a38ef3097f415cd795"
+  },
+  "full_page": {
+    "completed": 11274,
+    "total": 74046,
+    "next_refusal": [
+      137,
+      37
+    ],
+    "deadline": false,
+    "seconds": 63.94,
+    "partial_image_published": false
+  }
+}

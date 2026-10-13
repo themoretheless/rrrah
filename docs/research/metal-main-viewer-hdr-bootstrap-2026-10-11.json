@@ -1,0 +1,22 @@
+{
+  "status": "bootstrap_verified_ui_unverified",
+  "command": [
+    "/tmp/rrrah-required-corpus-target/debug/rrrah",
+    "tests/IMG_9043.CR3"
+  ],
+  "environment": {
+    "RRRAH_GPU_BACKEND": "metal",
+    "RRRAH_HDR_SURFACE": "1",
+    "RUST_LOG": "info"
+  },
+  "binary_sha256": "05e86862baa05f3d76eb75b8fbd33939d0c4b76b22e731aab72c0ecd488d5fd3",
+  "log_sha256": "40a8e84352cf015e2fe2e1875254369df95b1cab75466d0d6863414a24c0ee22",
+  "log": "[2026-10-10T22:49:34Z INFO  rrrah] GPU adapter: backend=Metal name=Apple M4 Max vendor=0x0000 device=0x0000\n[2026-10-10T22:49:34Z INFO  rrrah] Viewer surface: hdr=true format=Rgba16Float color_space=ExtendedSrgbLinear\n",
+  "scope": "Main viewer selects actual Metal adapter and configures HDR RGBA16Float ExtendedSrgbLinear surface. Process observed live then deliberately terminated.",
+  "limits": [
+    "No decoded frame completion or visible RAW image confirmed",
+    "UI automation did not resolve unbundled CLI viewer as application",
+    "No clean natural process exit; test process terminated by SIGTERM",
+    "No full UI/HDR color qualification claimed"
+  ]
+}

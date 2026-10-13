@@ -1,0 +1,28 @@
+{
+  "change": "RAW upload checks decoded sensor length against width*height before calibration/texture allocation",
+  "backend": "Metal Apple M4 Max",
+  "tests": {
+    "passed": 2,
+    "failed": 0,
+    "ignored": 0
+  },
+  "targets": [
+    "Rgba16Float",
+    "Rgba32Float"
+  ],
+  "pixel_count_refusals": 6,
+  "cases": [
+    "0 samples",
+    "255 samples for 16x16",
+    "257 samples for 16x16"
+  ],
+  "checks": [
+    "typed Frame InvalidPixelCount preserves expected and actual lengths",
+    "previous HDR frame exact after every refusal",
+    "resident budget unchanged after every refusal",
+    "extreme-metadata source scan cancelled at first row checkpoint before allocation",
+    "previous zero frame and credit exact after scan cancellation"
+  ],
+  "log_sha256": "488c09b11b33497abf0de0a88d8a3e470356db4ad881c53ff987d58d96089a4e",
+  "scope": "Authored API malformed-buffer and cancellation boundary regression; no universal format/HDR appearance or physical GPU-memory claim"
+}

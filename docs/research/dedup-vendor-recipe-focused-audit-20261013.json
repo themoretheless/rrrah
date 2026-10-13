@@ -1,0 +1,49 @@
+{
+  "status": "verified_frozen_vendor_recipe_focused_cache_and_library_gate",
+  "producer_sha256": "b80d3cb173cf27e0d69310dd171d0f6f7675541d5495e971b3111ffd656128b1",
+  "verifier_sha256": "e85e7baf1c2b017ea60730863aa142b33b7b9b4603e9d057241973dd8345f846",
+  "source_files": 3787,
+  "source": "/Users/themoretheless/.codex/tmp/rrrah-vendor-recipe-source-20261013",
+  "log_sha256": "3227492f668b6dac4fb4d038e4fb1e5f58157ddeccdb6181876bfa83c3115662",
+  "metadata_targets": 4,
+  "executed_targets": 4,
+  "passed": 113,
+  "failed": 0,
+  "ignored": 5,
+  "zero_test_targets": 0,
+  "rows": [
+    {
+      "target": "unittests src/lib.rs",
+      "passed": 108,
+      "failed": 0,
+      "ignored": 5,
+      "executable": "/Users/themoretheless/.codex/tmp/rrrah-vendor-recipe-focused-qualified-20261013/rrrah_dedup-f6ec6102079208bb",
+      "executable_sha256": "1d1228c8c4a3a0b7b4ab77641c7eeed6bf71bf2ec02973359ec4f74d5a3f7164"
+    },
+    {
+      "target": "tests/build_context.rs",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/Users/themoretheless/.codex/tmp/rrrah-vendor-recipe-focused-qualified-20261013/build_context-6c23fae5a6bd9385",
+      "executable_sha256": "db1a6b7bc433aac10dd15082b02f543c4f6764df2869911a6bd358efd8a511f7"
+    },
+    {
+      "target": "tests/cache_interpretation.rs",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/Users/themoretheless/.codex/tmp/rrrah-vendor-recipe-focused-qualified-20261013/cache_interpretation-2b043d684b0d3ee2",
+      "executable_sha256": "3f85267138dc323cf1917f94aaae3cd133109c9402b81d10267ce10ba0a77b7b"
+    },
+    {
+      "target": "tests/cache_rla_interpretation.rs",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/Users/themoretheless/.codex/tmp/rrrah-vendor-recipe-focused-qualified-20261013/cache_rla_interpretation-72d239ba02a60b62",
+      "executable_sha256": "4e332655540191b551fb8cf814ba78f3adfe1133e62b9f9ba9c85e205d8e3c9c"
+    }
+  ],
+  "scope": "Focused library/cache interpretation/build-context targets for frozen source with current vendor tree and vendor-recipe fix on macOS ARM64. Full default+decode gate predates this build-script edit; no new full-gate claim. Zero-test/ignored targets do not establish feature/runtime coverage; not all formats, platforms, scale or precision."
+}

@@ -1,0 +1,124 @@
+{
+  "order": [
+    "before",
+    "after",
+    "after",
+    "before"
+  ],
+  "runs": [
+    {
+      "path": "/tmp/rrrah-dpx-12mp-current-20261012.dpx",
+      "index": 0,
+      "iterations": 11,
+      "load_p50_ms": 283.36083299999996,
+      "load_p95_ms": 352.15529200000003,
+      "prepare_p50_ms": 83.112083,
+      "prepare_p95_ms": 111.377584,
+      "cpu_ready_p50_ms": 375.654833,
+      "cpu_ready_p95_ms": 451.325292,
+      "display_blake3": "cb0ca43e87a4066ca8311e6d44e18d2a20a42a44cbab7f1b9f1f662c83c1ffd8",
+      "cache": "warm filesystem; process warm; no decoded image cache",
+      "version": "before"
+    },
+    {
+      "path": "/tmp/rrrah-dpx-12mp-current-20261012.dpx",
+      "index": 0,
+      "iterations": 11,
+      "load_p50_ms": 84.398166,
+      "load_p95_ms": 125.70899999999999,
+      "prepare_p50_ms": 78.602375,
+      "prepare_p95_ms": 98.769583,
+      "cpu_ready_p50_ms": 173.60008299999998,
+      "cpu_ready_p95_ms": 205.683458,
+      "display_blake3": "cb0ca43e87a4066ca8311e6d44e18d2a20a42a44cbab7f1b9f1f662c83c1ffd8",
+      "cache": "warm filesystem; process warm; no decoded image cache",
+      "version": "after"
+    },
+    {
+      "path": "/tmp/rrrah-dpx-12mp-current-20261012.dpx",
+      "index": 0,
+      "iterations": 11,
+      "load_p50_ms": 82.908208,
+      "load_p95_ms": 93.186416,
+      "prepare_p50_ms": 81.94858400000001,
+      "prepare_p95_ms": 96.904959,
+      "cpu_ready_p50_ms": 164.812084,
+      "cpu_ready_p95_ms": 188.181334,
+      "display_blake3": "cb0ca43e87a4066ca8311e6d44e18d2a20a42a44cbab7f1b9f1f662c83c1ffd8",
+      "cache": "warm filesystem; process warm; no decoded image cache",
+      "version": "after"
+    },
+    {
+      "path": "/tmp/rrrah-dpx-12mp-current-20261012.dpx",
+      "index": 0,
+      "iterations": 11,
+      "load_p50_ms": 305.918625,
+      "load_p95_ms": 328.384167,
+      "prepare_p50_ms": 86.751667,
+      "prepare_p95_ms": 92.86850000000001,
+      "cpu_ready_p50_ms": 383.94070899999997,
+      "cpu_ready_p95_ms": 420.745334,
+      "display_blake3": "cb0ca43e87a4066ca8311e6d44e18d2a20a42a44cbab7f1b9f1f662c83c1ffd8",
+      "cache": "warm filesystem; process warm; no decoded image cache",
+      "version": "before"
+    }
+  ],
+  "binary_sha256": {
+    "before": "9152d00705f2c0abd1ed873a4199b72c148411a5ead9cd1456e0072921d742d8",
+    "after": "b3e2f8ab5e9ce68c0541931abee6894d8b98d885c39ee4d75681303875299e1e"
+  },
+  "source_sha256": "2c8a8165d53dc08afcad0c9f5945a1014d7f03ca399e590340d1318586b25fc9",
+  "scope": "dev opt-level=1 workspace/3 dependencies; 3 warmups then 11 iterations per run; warm filesystem, CPU decode/preparation, shared host",
+  "summary": {
+    "before_load_p50_ms": [
+      283.36083299999996,
+      305.918625
+    ],
+    "after_load_p50_ms": [
+      84.398166,
+      82.908208
+    ],
+    "ratio_mean_of_run_medians": 3.522157846777553,
+    "stable_display_hash": true,
+    "managed_peak_bytes_per_run": [
+      240000000,
+      240000000,
+      240000000,
+      240000000
+    ],
+    "decoder_suite": {
+      "passed": 1024,
+      "failed": 0,
+      "ignored": 72
+    },
+    "metal_collection": {
+      "source_files": 106,
+      "selections": 135,
+      "storage_cases": 270,
+      "passed": 1,
+      "failed": 0,
+      "final_root_bytes": 0,
+      "final_queue_bytes": 0
+    }
+  },
+  "limits": [
+    "Single authored 12MP DPX, nonrotated RGB8 only in timing",
+    "Gray/RGBA/ABGR and other variants correctness tested but no throughput claim",
+    "Warm shared host, dev optimized build; no isolated release or physical display benchmark"
+  ],
+  "sha256": {
+    "2-after.json": "90bf52ba50825febdc2ba60d6d934ae3d90b60fae69ae07635422e759f6f07cc",
+    "paired.json": "8f5a201024654db8c9c642f5b9865db60c3491d7d7b5271805ef8ff134529495",
+    "generate.py": "0510d5f3f423333a36857ec3a0c189f753745a01a75fe19d475250b6d6a5fbe5",
+    "2-after-memory.log": "766af8ba350169b7e5c6e6d3003dd4096ab0aa34257818f2e4f2372b3bdb3a60",
+    "0-before.json": "36446f55a50c81706a3d8f189158b4e084c757daf085113b70ab09f889d4ec4b",
+    "1-after-memory.log": "766af8ba350169b7e5c6e6d3003dd4096ab0aa34257818f2e4f2372b3bdb3a60",
+    "3-before-memory.log": "766af8ba350169b7e5c6e6d3003dd4096ab0aa34257818f2e4f2372b3bdb3a60",
+    "0-before-memory.log": "766af8ba350169b7e5c6e6d3003dd4096ab0aa34257818f2e4f2372b3bdb3a60",
+    "metal.log": "3595835c3ec6f2c91e78474102722811bb026cb3cc0025032ea93494738a62e2",
+    "compare.py": "31e97cba9bd1abc48ebbdf89bc799fbc35ad89305879c75027a3466cceced20d",
+    "3-before.json": "92c8dc8c01001feb2ab1598ebb889dc2b5c56009eb42164d8a1a773b8fe3677e",
+    "1-after.json": "7c15b7ff0555345491043513adec5442f3a5d19daf44eb9e3131754b2a44b085",
+    "build.log": "2e8495b93b4545b0eb288dde3207cd2780983981e0b183fa39d4398e18baf44c"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "change": "Per-plan path dedup before content fingerprint IO; separate paths still resolve content keys and protected-key dedup. Both sets lifetime bounded by current command.",
+  "real_test": "Four planned neighbors: original IMG_9043, repeated same path, copied identical content, distinct IMG_9074. Count2. Two unique stored entries, four completed attempts, no failures. Both restored full sensor arrays and metadata exactly match direct native decode; final managed memory zero.",
+  "logs": {
+    "real-cr3": {
+      "path": "docs/research/raw-prefetch-path-content-dedup-2026-10-11-real-cr3.log",
+      "sha256": "10fbc8f832e258e186c107463a5eb85fb41af352689f2212ad6445cae366536a",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    "gallery": {
+      "path": "docs/research/raw-prefetch-path-content-dedup-2026-10-11-gallery.log",
+      "sha256": "7c865587392ca7557372afe26e76ca4c23ca7775b959b9ca51d7fa62f793a7ba",
+      "passed": 38,
+      "failed": 0,
+      "ignored": 14
+    }
+  },
+  "source_sha256": "7e094f37cd48b31b8765faefb6a52eca7476948eafb9c11672eeb2be2b793aa1",
+  "limitations": "Local files/native worker. No measured speedup or independent camera color oracle, no live GPU responsiveness claim."
+}

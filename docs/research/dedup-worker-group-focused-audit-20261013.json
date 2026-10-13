@@ -1,0 +1,41 @@
+{
+  "status": "verified_frozen_default_library_and_worker_group_gate",
+  "source": "/Users/themoretheless/.codex/tmp/rrrah-worker-group-source-20261013",
+  "source_files": 3788,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-worker-group-focused-20261013.json": "a932877837e0fbf3994e7598ed4ab024456bc064599200f4af089d93d56c5bd0",
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-focused-20261013.log": "31c272b6e1a6b906376ce78f3319719387a780908523bdd2c144e4c80ec241d9",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-worker-group-focused-20261013.py": "185fd4eab56de8c407ca2c0dd440c6c484193367f38cf723c59dd26b21840aee"
+  },
+  "passed": 54,
+  "failed": 0,
+  "ignored": 2,
+  "executed_targets": 3,
+  "rows": [
+    {
+      "target": "unittests src/lib.rs",
+      "passed": 40,
+      "failed": 0,
+      "ignored": 2,
+      "executable": "/Users/themoretheless/.codex/tmp/rrrah-worker-group-focused-qualified-20261013/rrrah_dedup-6ba9f6fe5bf3dfa8",
+      "executable_sha256": "81bf02ad6c31088af3617142186c366fa55cce4e45e4f174f02a412dcdfcc4dc"
+    },
+    {
+      "target": "tests/worker.rs",
+      "passed": 7,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/Users/themoretheless/.codex/tmp/rrrah-worker-group-focused-qualified-20261013/worker-11f9c08a25c71609",
+      "executable_sha256": "e76f0a558f79abd0b37a885a4ca474c6a0705bf1a59f2c7481d7db45f0188b78"
+    },
+    {
+      "target": "tests/worker_group.rs",
+      "passed": 7,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/Users/themoretheless/.codex/tmp/rrrah-worker-group-focused-qualified-20261013/worker_group-98f26fe3ecd27638",
+      "executable_sha256": "0b0dcd5eb13db23dd6c55f3bacaba9e844a69e74788397180a5213cec7169ffc"
+    }
+  ],
+  "scope": "Frozen default-feature library plus single-process/group tests on macOSARM64. Each worker target includes one fixture helper that returns without child mode;14worker-target test records are12behavioral tests plus2helpers. Group cases inspect actual descendant process state (absent or zombie awaiting OS reaping) and stopped heartbeat after cancel/deadline/normal-failed leader exits/stdout-stderr excess/callback panic; retry and pre-spawn refusals included. No independently reimplemented kernel semantics, Linux/Windows runtime, escaped-group containment, hard RSS/disk/scheduling cap, decode/LoFTR/full-workspace qualification."
+}

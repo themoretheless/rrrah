@@ -1,0 +1,124 @@
+{
+  "source_triangle_refusal": {
+    "index": 50569,
+    "pixel": [
+      129,
+      227
+    ],
+    "denominator": 0.0,
+    "repeated_vertices": true
+  },
+  "fix": "Exclude exactly zero-area source triangles before affine transform; preserve nonzero thin triangles",
+  "tests": {
+    "interpreter": 109,
+    "hayro": 138,
+    "hayro_ignored": 10
+  },
+  "experimental_replay": [
+    {
+      "fixture": "VectorApple.ai",
+      "page": 0,
+      "width": 301,
+      "height": 246,
+      "diagnostic_timeout_seconds": 180,
+      "peak_admitted_bytes": 232664374,
+      "final_admitted_bytes": 0,
+      "status": "native_diagnostic",
+      "native_completed": false,
+      "capture_failed": false,
+      "capture_ms": 10818.864916999999,
+      "native_replay_ms": 56441.663041,
+      "deadline_expired": false,
+      "events": 2755,
+      "native_paints": 463,
+      "raster_events": 3,
+      "raster_source_models": [
+        "event=3,model=None",
+        "event=1218,model=Some(Cmyk)",
+        "event=2298,model=Some(Cmyk)"
+      ],
+      "native_raster_components": [
+        "event=3,sample_count=Some(29488),refusal=None",
+        "event=1218,sample_count=Some(298224),refusal=None",
+        "event=2298,sample_count=Some(266084),refusal=None"
+      ],
+      "shading_events": 13,
+      "page_model": "Cmyk"
+    },
+    {
+      "fixture": "one.ai",
+      "page": 0,
+      "width": 1366,
+      "height": 768,
+      "diagnostic_timeout_seconds": 180,
+      "peak_admitted_bytes": 169698840,
+      "final_admitted_bytes": 0,
+      "status": "native_diagnostic",
+      "native_completed": true,
+      "capture_failed": false,
+      "capture_ms": 17.994083,
+      "native_replay_ms": 19977.390499999998,
+      "deadline_expired": false,
+      "events": 8,
+      "native_paints": 2,
+      "raster_events": 0,
+      "raster_source_models": [],
+      "native_raster_components": [],
+      "shading_events": 0,
+      "page_model": "Rgb"
+    },
+    {
+      "fixture": "one.ai",
+      "page": 1,
+      "width": 177,
+      "height": 175,
+      "diagnostic_timeout_seconds": 180,
+      "peak_admitted_bytes": 4957320,
+      "final_admitted_bytes": 0,
+      "status": "native_diagnostic",
+      "native_completed": true,
+      "capture_failed": false,
+      "capture_ms": 0.062542,
+      "native_replay_ms": 714.109792,
+      "deadline_expired": false,
+      "events": 1,
+      "native_paints": 0,
+      "raster_events": 0,
+      "raster_source_models": [],
+      "native_raster_components": [],
+      "shading_events": 0,
+      "page_model": "Rgb"
+    }
+  ],
+  "remaining_refusal": {
+    "pixel": [
+      138,
+      34
+    ],
+    "candidate_limit": 256,
+    "error": "WorkLimit"
+  },
+  "default_boundary_integration": false,
+  "qualification": "Partial; VectorApple remains incomplete; no goal completion claim",
+  "logs": {
+    "convex-replay.log": "2c88cc215d1aebe0bf8b50149c97c06547ebb53f2173ea845e9c36300f0e8bac",
+    "triangle-field-test.log": "838491f43889126afa25598c092161f58f63c63eb4cb8edcd47084a7a563e126",
+    "refusal-phase.log": "54ccc692149069684b2770e8f895a9fc8794d0687e98450d2009fbf0af6468c4",
+    "first-replay-refusal.log": "8e20de2fc05c22cd7c0115847e13c3564799ecde9f27dcb997fe3e9c38fd222b",
+    "hayro-final.log": "10f4dc3bddef0999f1fd0c17813ee3099c4f0c7da9398929d01feb1f7d60b30a",
+    "degenerate-fixed-replay.log": "001da158580a5ccfe009c34254d8b43b92e2d8d9edc0a9dcf52087ead2128000",
+    "refusal-trace.log": "830c009434e74031eb8d54ba2197216eeb95ae6e1e0576c1a0ee8a94965edf5c",
+    "interpreter-full.log": "b3b5dedd26303653036e97a835d52bfc907cc55b388d3a8d265c069e7cda99f5",
+    "interpreter-degenerate-fixed.log": "4360d6ebe984b4cf00c8a90af58d4f13a99792c98542ce36579a392d3e888f85",
+    "paint-path-only-refusal.log": "f2608df9080a5672fb1cb6a2063c0c8885ab71f453122b9679bacfe874808542",
+    "precise-error.log": "284f147bc93390e0a690c844ef93141c3fd61d1fcea1fe4d0809d6cf1a48aee3",
+    "initial-compile.log": "b9830d20d29777ff5beab5d9ba6318ef5a4500dcf2d1e058156c7a8b8f024e61",
+    "precise-denominator-fresh.log": "5526fc4026322c25800c10adda38eab8bed4867348beafd73fd9c8983fe0ec59",
+    "replay.log": "e1a4d853c5893b610708da1a2e94de2dcaf9b1f9c0c3e662ee4cef2784c0f582",
+    "before.log": "b04108ed1cee29da83dc05e494aec24e7ffe877423df85e319bcd927265077c4",
+    "triangle-field-tests.log": "b6399067532d8b55e5e53d1f3821328aa9b24047eafb90c7f6c555908d2d2231",
+    "precise-denominator.log": "902706ea59e999705ba098b36b4eb83699c255fb041d63d9e72392b44eb2b80b",
+    "rounded-vertex-refusal.log": "fa6a3481755f3b632c63c05dc9ef230b5fefbc35e257c1c4d98c017d94878053",
+    "after.log": "d7c27d50ae43d94549b270e8143b2cb62ddf79d461193b25600c388966ddca25"
+  }
+}

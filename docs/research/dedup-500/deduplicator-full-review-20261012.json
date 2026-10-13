@@ -1,0 +1,40 @@
+{
+  "status": "complete_pinned_20file_review_with_original_tests_and_two_counterexamples",
+  "repository": "sreedevk/deduplicator",
+  "registry_index": 23,
+  "commit": "245e910c39747ff4fcbf332c14666d9f4c778ae1",
+  "fully_read_files": 20,
+  "original_upstream_first_run": {
+    "passed": 6,
+    "failed": 3,
+    "ignored": 0
+  },
+  "original_upstream_physical_tmp_run": {
+    "passed": 9,
+    "failed": 0,
+    "ignored": 0
+  },
+  "counterexample_tests_passed": 2,
+  "five_full_hash_seeds": [
+    0,
+    1,
+    -1,
+    300,
+    9223372036854775807
+  ],
+  "compiler": "rustc 1.101.0-nightly (32dba69d6 2026-10-09)\nbinary: rustc\ncommit-hash: 32dba69d69c5b10ea89a4042de8d0619f7756203\ncommit-date: 2026-10-09\nhost: aarch64-apple-darwin\nrelease: 1.101.0-nightly\nLLVM version: 23.1.3\n",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/deduplicator-full-source-v2-20261012.json": "d2089f7551cbc471e623d85d67e6e2e0ca0dd73aa66a3f22504a4d6b99a3bb92",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/sreedevk--deduplicator/tree.json": "3c04819e2628cc259513c66d0a8010208a105053993987e5722ed00a29daa6ef",
+    "/Users/themoretheless/.codex/tmp/rrrah-deduplicator-upstream-tests-20261012.log": "0be2433c3b4636093b048b0b40d0d1a330d3e1b4594ef6c2dcedd81ab517dee2",
+    "/Users/themoretheless/.codex/tmp/rrrah-deduplicator-upstream-physical-tmp-tests-20261012.log": "bc29506281042c21f567893d6854bb65acec7623eeec8bfdc43788b045eb2f1a",
+    "/Users/themoretheless/.codex/tmp/rrrah-deduplicator-upstream-test-executable-20261012": "3d29d9a3983341df08aaa2aa8b859f448ae9e6518e617f15ddeeaf3429fc79f2",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/deduplicator-block-order-source-20261012.json": "1274bc6a46ad38f8d7bb0e3828523eefdc55257d4e0e4869df883b213211120a",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/deduplicator-block-order-controls-20261012.rs": "ad46848cc445f3e94f420ed94b8f3d1f8958d9668618c70566374c56c67392df",
+    "/Users/themoretheless/.codex/tmp/rrrah-deduplicator-block-order-tests-20261012.log": "6f7247c0ef594f8239daae6f33f2538b1559798b1efb8400d4a2b4561d796e81",
+    "/Users/themoretheless/.codex/tmp/rrrah-deduplicator-block-order-executable-20261012": "744c9ee25e863d382117903f37b6079d6b0ae7849b5df9cbac9398a8be27c286",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-deduplicator-full-20261012.py": "ff9fbdeb4bc7f979348b8336e775653243f70359d0b2e109f54ac6fead1d6f54"
+  },
+  "decision": "reference_only_no_code_adoption",
+  "scope": "All20tracked text files read, including8Rustmodules,MITlicense,lockfile,CI andbenchmark scripts. Scripts/deletion mode not executed. Original9tests first6pass/3scannerfail; same executable9pass with physical TMPDIR, consistent with scanner canonicalizing paths while fixtures compare raw temp paths; not universal platform proof. Two appended private controls execute unchanged FileInfo and sequential sizewise/hashwise Processor functions: deterministic chunk permutation has equal full hashes for5seeds and strict grouping includes3files despiteonly2byteidentical. This is original hashing/grouping API evidence, not concurrent Server/CLI/deletion/Windows/RSS qualification. Sourceobservation: map-basedhash has no final byte confirmation/sourcegeneration guard. Source manifest v2 corrects initial scope count21 to actual20. Full500review not complete."
+}

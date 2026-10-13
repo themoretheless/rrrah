@@ -1,0 +1,19 @@
+   Compiling rrrah-gpu v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-gpu)
+    Finished `test` profile [optimized + debuginfo] target(s) in 1.20s
+     Running tests/rgbe_compute_readback.rs (target/debug/deps/rgbe_compute_readback-5d310ff784bafb7a)
+
+running 6 tests
+test full_f828_managed_rgbe_matches_cpu_reference ... ignored, requires independent DSC-F828 full-sensor dump; authored four-channel normalization, not as-shot color qualification
+RGBE grid compute adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+RGBE compute adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+test cancelled_large_rgbe_validation_does_not_admit_output_resources ... ok
+RGBE odd grid compute: 3x5 grid; 17x13 sensor; four independent planes exact; split dispatch and odd edges; CPU/GPU credit zero
+test managed_rgbe_admission_completion_and_output_owner ... ok
+RGBE odd grid compute: 3x5 grid; 17x33 sensor; four independent planes exact; split dispatch and odd edges; CPU/GPU credit zero
+test odd_black_repeat_grid_normalization_to_managed_metal_compute ... ok
+test four_plane_compute_matches_cpu_lattices_edges_hdr_and_tail ... ok
+RGBE segmented cancellation: checkpoints=18; every retry exact; CPU/GPU final zero
+test segmented_input_cancellation_at_every_checkpoint_releases_and_retries ... ok
+
+test result: ok. 5 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.23s
+

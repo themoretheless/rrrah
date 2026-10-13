@@ -1,0 +1,32 @@
+{
+  "status": "verified_four_local_crate_parity",
+  "rows": [
+    {
+      "crate": "crates/rrrah-dedup",
+      "files": 615,
+      "matches": true,
+      "different_paths": []
+    },
+    {
+      "crate": "crates/rrrah-core",
+      "files": 19,
+      "matches": true,
+      "different_paths": []
+    },
+    {
+      "crate": "crates/rrrah-decode",
+      "files": 198,
+      "matches": true,
+      "different_paths": []
+    },
+    {
+      "crate": "crates/rrrah-memory",
+      "files": 7,
+      "matches": true,
+      "different_paths": []
+    }
+  ],
+  "gate_audit": "docs/research/dedup-latest-mesh-decode-audit-20261013.json",
+  "gate_audit_sha256": "dcdda4966f46a89f230442bb8c0e10afb9d34fc2292004276de0d8716f7f3221",
+  "scope": "Current filesystem content compared with complete qualified frozen source manifest for four involved crates. Rest of workspace, tools, other platforms, precision and full500review not qualified."
+}

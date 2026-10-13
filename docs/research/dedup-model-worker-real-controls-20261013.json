@@ -1,0 +1,71 @@
+{
+  "status": "complete_pending_audit",
+  "producer_pid": 95810,
+  "harness": "/Users/themoretheless/.codex/tmp/rrrah-model-worker-real-controls-20261013/harness",
+  "source": "/Users/themoretheless/.codex/tmp/rrrah-model-worker-20261013/source",
+  "plan": [
+    {
+      "kind": "fixed_negative_index0",
+      "left": "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/Q36603.jpg",
+      "right": "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/R043984.jpg",
+      "weights": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+      "tolerance": 2.0,
+      "baseline": "/Users/themoretheless/.codex/tmp/rrrah-dedup-current-heldout-negatives-20261012/00.json"
+    },
+    {
+      "kind": "publisher_positive_baseline_index0",
+      "left": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/212600.jpg",
+      "right": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/212602.jpg",
+      "weights": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+      "tolerance": 4.0,
+      "baseline": "/Users/themoretheless/.codex/tmp/rrrah-current-native-bank-all-positives-qualified-20261012/0007.json"
+    }
+  ],
+  "results": [
+    {
+      "kind": "fixed_negative_index0",
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-model-worker-real-controls-20261013/fixed_negative_index0.json",
+      "sha256": "763ecfa41f2cb4f5323ec4d4a8ba56d6dc099ee037977dcc58bcd02379cce73d"
+    },
+    {
+      "kind": "publisher_positive_baseline_index0",
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-model-worker-real-controls-20261013/publisher_positive_baseline_index0.json",
+      "sha256": "1cab6a12d528819f536788bc1fed689affa4fddb9ea1f5745b8e3e3a6f9e3990"
+    }
+  ],
+  "pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-model-worker-real-controls-20261013/harness/Cargo.toml": "08740e55c14962f5c1fbc3987df41acd9b4acd28f749e2143e5ad153f80590e6",
+    "/Users/themoretheless/.codex/tmp/rrrah-model-worker-real-controls-20261013/harness/Cargo.lock": "c73946b4bf507a396cf5b19e939d0e7793e09b540a369d3264612f42f25bb93c",
+    "/Users/themoretheless/.codex/tmp/rrrah-model-worker-real-controls-20261013/harness/src/main.rs": "16b40cbbd24f2a796a0e7c354876eb3234b6e061c70476dcb4b60cfad66f2c1d",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/run-dedup-model-worker-real-controls-20261013.py": "4129b72c633192c76c3f3dc4739428872f2e02ad53fcaed4dbe22568f0a74616",
+    "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/Q36603.jpg": "97972e3a40fa061fef6ab6a894d0d67e13d9ce083307f4dd8d027af9a8d2d38d",
+    "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/R043984.jpg": "4c0172d98f699ce49fe67e5001a8505f408e020b14988fa54f9703c2dcd0a867",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors": "59e55bf0ecd047db9c513672d121a3ea677529ad448bdc3a359e92862c74ddd7",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/212600.jpg": "1f0be0e87dc2e9d925b8745f448727f215e0f96c9f8ee637635cc7a630aca890",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/212602.jpg": "b2ce5645f901ea1fe1fa4686fbf6802405965d6ea58939dc12631cd43d90676e",
+    "/Users/themoretheless/.codex/tmp/rrrah-model-worker-20261013/rrrah-loftr-worker": "e2a141a0d5eb1c56a0021e0dcb14f445a8080827f2459b285ecb7a4d527722ba",
+    "/Users/themoretheless/.codex/tmp/rrrah-model-worker-real-controls-20261013/build.log": "0417d747337f3e9b9b524792623a3f29e35d5bcde860862f899202859ec32637",
+    "/Users/themoretheless/.codex/tmp/rrrah-model-worker-real-controls-20261013/probe": "75916520dd89fd3142556b4d92bfe1b2190e6f6a21370a571a7fe7b8e0f6332b"
+  },
+  "scope": "Two fixed real input pairs; raw native proposal bit parity and complete guarded comparison evidence parity for one full-image inference each. One child per provider invocation. Not25bank performance, full458, OS RSS or persistent reuse qualification.",
+  "build_command": [
+    "cargo",
+    "build",
+    "--offline",
+    "--target-dir",
+    "/Users/themoretheless/.codex/tmp/rrrah-cache-interpretation-fix-20261012/target"
+  ],
+  "child_pid": 99008,
+  "build_returncode": 0,
+  "active_kind": "publisher_positive_baseline_index0",
+  "command": [
+    "/Users/themoretheless/.codex/tmp/rrrah-model-worker-real-controls-20261013/probe",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/212600.jpg",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/212602.jpg",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+    "640",
+    "4.0",
+    "/Users/themoretheless/.codex/tmp/rrrah-model-worker-20261013/rrrah-loftr-worker",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib"
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "date": "2026-10-11",
+  "scope": "One long-lived cache and swap directory, eight authored 12 MP RGBA32Float images, actual Metal full-frame readback",
+  "adapter": "Metal Apple M4 Max",
+  "dimensions": [
+    4000,
+    3000
+  ],
+  "frames": 8,
+  "payload_bytes": 192000000,
+  "managed_root_limit_bytes": 576000000,
+  "queue_limit_bytes": 192000000,
+  "ram_count_limit": 1,
+  "ram_size_limit_bytes": 192000000,
+  "cycles": 328,
+  "elapsed_seconds": 60.058,
+  "disk_reads": 328,
+  "disk_writes": 8,
+  "final_root_bytes": 0,
+  "final_queue_bytes": 0,
+  "errors": 0,
+  "dropped": 0,
+  "checks": [
+    "All 48 million original component bits per restored image, including signed zero and negative/HDR values",
+    "Every full Metal 4000x3000 frame equals its independent retained initial GPU frame",
+    "One cache/directory retained across all restores",
+    "Full-root pressure refusal followed by successful restore",
+    "Cancellation before restore leaves root unchanged",
+    "TTL zero applies to newly replaced membership; visible frame retained until unpinned",
+    "One RAM entry and 192 MB resident cap",
+    "Existing disk entries reused without redundant writes",
+    "Root, queue and resident bytes zero after each cycle"
+  ],
+  "log": {
+    "path": "/tmp/rrrah-metal-collection-20261011.log",
+    "sha256": "78febb1a44270c952ecf02883018da36c7b81320e68f9c42f060a1c8abd36ffa"
+  },
+  "source_sha256": {
+    "crates/rrrah-app/tests/ttl_swap_metal.rs": "07df31d4b8397a006a3c5633973a61d40e51b0aedfd8c9a5e1fdf4b6186cb40b",
+    "scripts/qualify-viewer-storage-gpu.py": "4a7bd5f24ec18e183121a55de52cb2157f7439bf323a498d0f2e88c8dc8e9948"
+  },
+  "reproduce": {
+    "environment": {
+      "RRRAH_GPU_OPTIONAL": "0",
+      "RRRAH_GPU_BACKEND": "metal",
+      "RRRAH_METAL_COLLECTION_SECONDS": "60"
+    },
+    "command": "cargo test --locked --offline --target-dir /tmp/rrrah-required-corpus-target -p rrrah --test ttl_swap_metal long_lived_large_collection_cache_preserves_swap_and_metal_frames -- --exact --ignored --nocapture",
+    "integrated_runner_flag": "--metal-collection-seconds 60"
+  },
+  "limitations": [
+    "60 seconds does not prove hours or days of stability",
+    "Eight authored float images do not qualify diverse decoding or all 100 formats",
+    "No actual viewer prefetch scheduler exercised by this cache test",
+    "Local disk and warm filesystem caches do not qualify a physical slow disk",
+    "Initial Metal frame comparison proves preservation, not independent color accuracy",
+    "Independent frame oracles and driver allocations are outside managed cache accounting",
+    "SDR offscreen readback does not qualify physical HDR display",
+    "NVIDIA remains deferred by user"
+  ]
+}

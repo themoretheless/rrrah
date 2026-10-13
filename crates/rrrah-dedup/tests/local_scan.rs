@@ -145,7 +145,7 @@ fn stable_triple() -> (tempfile::TempDir, Vec<(u64, DecodeRequest)>) {
         .enumerate()
         .map(|(index, (name, source))| {
             let path = folder.path().join(name);
-            std::fs::copy(root().join(source), &path).unwrap();
+            copy_writable(root().join(source), &path).unwrap();
             (u64::try_from(index).unwrap() + 1, DecodeRequest::new(path))
         })
         .collect();
@@ -235,9 +235,9 @@ fn recursive_local_search_preserves_paths_aliases_and_decode_errors() {
     let nested = folder.path().join("nested");
     std::fs::create_dir(&nested).unwrap();
     let base = folder.path().join("base.png");
-    std::fs::copy(root().join("rotation/base.png"), &base).unwrap();
-    std::fs::copy(root().join("local-files/crop.png"), nested.join("crop.png")).unwrap();
-    std::fs::copy(
+    copy_writable(root().join("rotation/base.png"), &base).unwrap();
+    copy_writable(root().join("local-files/crop.png"), nested.join("crop.png")).unwrap();
+    copy_writable(
         root().join("rotation/scale-216-angle-17.png"),
         nested.join("scaled.png"),
     )
@@ -312,8 +312,8 @@ fn fitted_batch_and_roots_preserve_signal_selection_and_corrupt_file_diagnostics
     let base_path = folder.path().join("base.png");
     let dark_path = nested.join("dark.png");
     let broken = nested.join("broken.png");
-    std::fs::copy(root().join("photos/830-base.png"), &base_path).unwrap();
-    std::fs::copy(root().join("photos/830-brightness.png"), &dark_path).unwrap();
+    copy_writable(root().join("photos/830-base.png"), &base_path).unwrap();
+    copy_writable(root().join("photos/830-brightness.png"), &dark_path).unwrap();
     std::fs::write(&broken, b"corrupt").unwrap();
     let budget = MemoryBudget::new(64 * 1024 * 1024);
     for fit in [
@@ -538,8 +538,8 @@ fn spatial_file_policy_preserves_pixel_proof_errors_and_source_guards() {
     let dir = tempfile::tempdir().unwrap();
     let a = dir.path().join("a.png");
     let b = dir.path().join("b.png");
-    std::fs::copy(root().join("rotation/base.png"), &a).unwrap();
-    std::fs::copy(&a, &b).unwrap();
+    copy_writable(root().join("rotation/base.png"), &a).unwrap();
+    copy_writable(&a, &b).unwrap();
     let left = DecodeRequest::new(&a);
     let right = DecodeRequest::new(&b);
     let grid = SpatialFeaturePolicy {
@@ -607,4 +607,12 @@ fn spatial_file_policy_preserves_pixel_proof_errors_and_source_guards() {
         "wrong mutation evidence: {result:?}"
     );
     assert_eq!(budget.used(), 0);
+}
+
+// Fixture sources may be read-only in an immutable qualification checkout.
+// Copy bytes without inheriting permissions so mutation tests can edit their own files.
+fn copy_writable(source: impl AsRef<std::path::Path>, target: impl AsRef<std::path::Path>) -> std::io::Result<u64> {
+    let bytes = std::fs::read(source)?;
+    std::fs::write(target, &bytes)?;
+    Ok(bytes.len() as u64)
 }

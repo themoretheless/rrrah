@@ -1,0 +1,31 @@
+{
+  "adapter": "Metal Apple M4 Max",
+  "cases": 15,
+  "pixel_aspects": [
+    0.5,
+    1,
+    2
+  ],
+  "views": [
+    "center",
+    "four source corners"
+  ],
+  "checks": [
+    "requested corner region touches asserted original image edges",
+    "coordinate-varying float source released before restore",
+    "full 64x64 SDR and binary16 HDR frames identical after packed-region restore",
+    "GPU pressure and cancelled replacement preserve existing frame",
+    "CPU/GPU/index/swap owners zero after teardown"
+  ],
+  "limitations": [
+    "Same-renderer transport comparison, not independent color oracle",
+    "200x160 authored source, not large-texture capacity qualification"
+  ],
+  "initial_failed_run": "Wrong test pan calculation omitted 32-pixel viewer fit margins; fixed before verified run",
+  "sha256": {
+    "docs/research/metal-region-corners-verified-2026-10-13.log": "63fe53772fb6b93809b98027d67e180f4970dc4f2ed27a434fa57f882a04f6e7",
+    "crates/rrrah-app/tests/swapped_region_metal.rs": "d7c4ddc75c9d9bceb905c2f2fc86532eb81cbd839a89e83ab8b4cb183853ba49",
+    "crates/rrrah-cache/src/raster_regions.rs": "edf446b9f02e403444638e33c65a7ff834a116a5cfbf514935d2ba9aa40636e1",
+    "crates/rrrah-gpu/src/raster.rs": "2f98d3dad5d7bf2b4479382228883f1cdaaf2403cda147de8a410970f422f794"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "report": "docs/research/metal-storage-current-2026-10-12-final-live/report.json",
+  "report_sha256": "e0e4034930e28e2f92d5ebf135bb76cef3d1055570b52b3338f5fd2413aff089",
+  "suites": 25,
+  "passed": 580,
+  "failed": 0,
+  "ignored": 90,
+  "all_executed_suites_verified": true,
+  "complete_suite_execution": true,
+  "backend": "Metal",
+  "storage_soak_seconds_per_small_mode": 10,
+  "large_float_cycles": 3,
+  "large_float_seconds": 101.166,
+  "hundred_thousand_keyspace_seconds": 92.328953292,
+  "limitations": [
+    "Explicit ignored tests remain unexecuted",
+    "CUDA host tests are not NVIDIA hardware validation",
+    "Artificial delayed local I/O and managed pressure are not physical slow-drive or OS-wide pressure/RSS qualification",
+    "Full 100-format color and viewer qualification remains incomplete",
+    "Live HDR presentation is separate evidence; no calibrated luminance measurement"
+  ]
+}

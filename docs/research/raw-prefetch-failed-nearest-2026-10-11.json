@@ -1,0 +1,22 @@
+{
+  "scope": "Real native EOS R8 CR3 worker with corrupted nearest neighbor, count1, ahead/behind2, both navigation directions.",
+  "checks": [
+    "one failed attempt plus one stored valid neighbor per direction",
+    "one disk entry",
+    "full original sensor and metadata exact on restore",
+    "managed budget zero"
+  ],
+  "initial_test_issue": "Waited for one completed attempt instead of both; corrected test synchronization. No production scheduler change needed.",
+  "logs": {
+    "initial": {
+      "path": "docs/research/raw-prefetch-failed-nearest-2026-10-11-initial.log",
+      "sha256": "7fce4a3bf8ac0116f8e8ac902b4d069e2052cf62b478f81bd974e63e270161fb"
+    },
+    "corrected": {
+      "path": "docs/research/raw-prefetch-failed-nearest-2026-10-11-corrected.log",
+      "sha256": "73122007f461af292407f3f5d15c02174b8541be49138fc01715dad00cd112d5"
+    }
+  },
+  "source_sha256": "ddce604759a62f9e24121434b3d5120d805499ea8d8949cb8ef3b378b980d046",
+  "limitations": "Native worker/local disk, no GPU presentation or new camera appearance oracle."
+}

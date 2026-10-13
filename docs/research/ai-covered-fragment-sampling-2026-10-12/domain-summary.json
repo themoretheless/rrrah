@@ -1,0 +1,55 @@
+{
+  "change": "Prepare only actual subrectangle vertical domain; preserve original edge endpoints; store domain in PolygonRow and refuse integration outside it",
+  "tests": {
+    "passed": 144,
+    "ignored": 10,
+    "regression": "300 contours in other vertical domain excluded; full-row and narrow-row area/centroid/owner identical; lower preparation work; out-of-domain use refused"
+  },
+  "real_replay": [
+    {
+      "fixture": "VectorApple.ai",
+      "page": 0,
+      "native_completed": false,
+      "capture_failed": false,
+      "deadline_expired": false,
+      "final_admitted_bytes": 0,
+      "native_replay_ms": 78698.789584
+    },
+    {
+      "fixture": "one.ai",
+      "page": 0,
+      "native_completed": true,
+      "capture_failed": false,
+      "deadline_expired": false,
+      "final_admitted_bytes": 0,
+      "native_replay_ms": 24655.802416
+    },
+    {
+      "fixture": "one.ai",
+      "page": 1,
+      "native_completed": true,
+      "capture_failed": false,
+      "deadline_expired": false,
+      "final_admitted_bytes": 0,
+      "native_replay_ms": 622.7179590000001
+    }
+  ],
+  "remaining_refusal": {
+    "pixel": [
+      147,
+      66
+    ],
+    "candidates": 423,
+    "work_left": 8,
+    "requested": 16,
+    "shared_polygon_allowance": 40000000
+  },
+  "qualification": "Incomplete opt-in AI; domain preparation reduces irrelevant work but does not resolve dense interior arrangement",
+  "hashes": {
+    "domain-tests.log": "c6c28e67923762d2d5f9a0936a0dca0f63329efccd3f24adde722ffcef8052c9",
+    "domain-replay.log": "5e0c606b88bc288e480a05dba8543ecf057ecb36a7e05cfecef90771871e543a",
+    "domain-report.json": "8523d27d4666b10a6eba3b38e6974a35c09d5b12ec89640fcac99043d11fc717",
+    "polygon_coverage.rs": "8d6f10ec3ca7958cd3da9af731c51d4619c8703c91d71d8672fbfa9cf9f64a9e",
+    "knockout_interpreter.rs": "df72e83cb553300f7688985a71c0a50d121ec00a0bef6334442b607e23de9e2b"
+  }
+}

@@ -1,0 +1,26 @@
+#!/usr/bin/env python3
+import json,hashlib,subprocess,os,time,re
+from pathlib import Path
+R=Path(__file__).resolve().parents[1];T=Path('/Users/themoretheless/.codex/tmp');D=R/'docs/research';sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest();H=T/'rrrah-latest-native-false-controls-harness-20261013';runtime=T/'rrrah-loftr-native-runtime-20261010';qualified=D/'dedup-latest-mesh-decode-20261013.json';q=json.loads(qualified.read_text());assert q['status']=='passed_pending_audit';S=Path(q['source']);assert all(sha(S/k)==v for k,v in q['source_sha256'].items());positive=T/'rrrah-current-native-bank-all-positives-qualified-20261012/0000.json';negative=T/'rrrah-copydays-nearest-wrong-native-20261013/0052.json';portrait=D/'dedup-model-pixel-diagnostic-negative-v2-plan-20261013.json';pc=json.loads(positive.read_text());nc=json.loads(negative.read_text());pp=json.loads(portrait.read_text());weights=pc['command'][-4];assert weights==nc['command'][-4];cases=[dict(label='known_table_copy',left=pc['command'][-6],right=pc['command'][-5],source_tolerance='0.5'),dict(label='table_vs_fence_false',left=nc['command'][-6],right=nc['command'][-5],source_tolerance='2.0'),dict(label='portrait_false',left=pp['left'],right=pp['right'],source_tolerance='2.0')];pins={str(v):sha(v) for v in [positive,negative,portrait,qualified,Path(weights),Path(__file__)]}
+for p in H.rglob('*'):
+ if p.is_file() and 'target'not in p.relative_to(H).parts and '.git'not in p.relative_to(H).parts:pins[str(p)]=sha(p)
+for case in cases:
+ for key in ['left','right']:pins[case[key]]=sha(case[key])
+rt=D/'dedup-loftr-native-20261010-runtime-pins.json';pins[str(rt)]=sha(rt)
+for path,h in json.loads(rt.read_text())['pins'].items():
+ if path.endswith('.dylib'):assert sha(path)==h;pins[path]=h
+F=T/'rrrah-latest-native-false-controls-qualified-20261013';P=D/'dedup-latest-native-false-controls-20261013.json';pre=D/'dedup-latest-native-false-controls-plan-20261013.json';assert not P.exists() and not pre.exists() and not F.exists();F.mkdir();scope='Current qualified3783file snapshot, original native/opposite/25bank caller unchanged except dependency source paths. ActualCPU LoFTR. Three predeclared historical control directions replay original respective tolerances0.5/2/2,640input,1mopposite,seed173. Distinct caller tolerances, no unified-policy/458recall/heldoutprecision/allplatform claim; provider tensor/RSS not hard capped.';pre.write_text(json.dumps(dict(cases=cases,pins=pins,source=str(S),source_sha256=q['source_sha256'],scope=scope),indent=2)+'\n');pins[str(pre)]=sha(pre);d=dict(status='building',producer_pid=os.getpid(),pins=pins,cases=cases,results=[],source=str(S),scope=scope)
+def save():
+ p=P.with_suffix('.tmp');p.write_text(json.dumps(d,indent=2)+'\n');p.replace(P)
+cmd=['cargo','build','--locked','--offline','--bin','native_bank_current_all_positives','--message-format=json','--jobs','2','--target-dir',str(T/'rrrah-dedup-exact-portfolio-20261011')];d['build_command']=cmd;save();env=dict(os.environ,LIBTORCH_USE_PYTORCH='1');env['PATH']=str(runtime/'bin')+':'+env['PATH'];log=F/'build.jsonl';err=F/'build.stderr'
+with log.open('x')as o,err.open('x')as e:
+ child=subprocess.Popen(cmd,cwd=H,env=env,stdout=o,stderr=e);d['child_pid']=child.pid;save();code=child.wait()
+d['build_returncode']=code;d['build_log_sha256']=sha(log);d['build_stderr_sha256']=sha(err)
+if code!=0:d['status']='terminal_build_failure';save();raise SystemExit(code)
+items=[json.loads(x)for x in log.read_text().splitlines() if x.startswith('{')];binaries=[x['executable']for x in items if x.get('reason')=='compiler-artifact' and x.get('executable') and x.get('target',{}).get('name')=='native_bank_current_all_positives'];assert binaries;exe=F/'native_bank_current_all_positives';subprocess.run(['cp','-cp',binaries[-1],str(exe)],check=True);pins[str(exe)]=sha(exe);d['executable']=str(exe);d['status']='running';save()
+for i,case in enumerate(cases):
+ assert all(sha(path)==h for path,h in pins.items()) and all(sha(S/k)==h for k,h in q['source_sha256'].items());cmd=['/usr/bin/time','-l','/usr/bin/env','DYLD_LIBRARY_PATH='+str(runtime/'lib/python3.12/site-packages/torch/lib'),str(exe),case['left'],case['right'],weights,'640',case['source_tolerance'],'1000000'];start=time.monotonic();child=subprocess.Popen(cmd,cwd='/tmp',stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True);d['child_pid']=child.pid;d['active_index']=i;save();stdout,stderr=child.communicate();out=F/('%02d.json'%i);value=dict(label=case['label'],command=cmd,returncode=child.returncode,stdout=stdout,stderr=stderr,elapsed_seconds=time.monotonic()-start)
+ if child.returncode==0:
+  v=json.loads(stdout);assert v['files']==[2,9] and v['managed_used']==0 and len(v['pairs'])==1;value['support']=v['pairs'][0]['support'];value['rss_bytes']=int(re.search(r'(\d+)\s+maximum resident set size',stderr)[1])
+ out.write_text(json.dumps(value,indent=2)+'\n');d['results'].append(dict(label=case['label'],result=str(out),result_sha256=sha(out),returncode=child.returncode,support=value.get('support')));save()
+assert all(sha(path)==h for path,h in pins.items()) and all(sha(S/k)==h for k,h in q['source_sha256'].items());d['status']='complete_three_controls_pending_audit';save();print(d['status'])

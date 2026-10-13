@@ -1,0 +1,50 @@
+{
+  "date": "2026-10-11",
+  "adapter": "Apple M4 Max",
+  "backend": "Metal",
+  "implementation": [
+    "ResidentSource install_with_cancel propagates callback through full upload, regional upload, LOD size selection, managed CPU area filter and final LOD upload",
+    "Initial RasterReady processing binds callback to actual ForegroundLoader GenerationToken",
+    "Superseded result does not overwrite current request status or schedule neighbour work after upload returns",
+    "refresh_with_cancel supports cancellation during region/LOD replacement; existing interactive refresh wrapper currently supplies false until asynchronous scheduler is connected",
+    "RasterError Cancelled during LOD preparation maps to RasterUploadError Cancelled and is terminal, never treated as a cache miss/admission retry"
+  ],
+  "validation": {
+    "app_units_passed": 204,
+    "app_units_ignored": 42,
+    "explicit_metal_viewer_tests_passed": 3,
+    "new_cancellation_test": {
+      "source_extent": [
+        512,
+        320
+      ],
+      "texture_and_queue_budget_each": 160000,
+      "lod_output_budget": 100000,
+      "checks": [
+        "Actual atomic GenerationToken7->8 changes after six admitted-output filter checkpoints",
+        "Cancellation releases partial CPU LOD and preserves all old HDR frame components",
+        "Cancellation after three admitted upload checkpoints includes queued LOD texture write; completion releases texture/queue credit",
+        "Fresh generation8 retries successfully",
+        "During refresh with20000 bytes GPU headroom, cancellation of smaller replacement preserves source region, cached old LOD and exact old HDR frame",
+        "Subsequent refresh succeeds after pressure release",
+        "Final managed LOD/texture/queue credit zero"
+      ]
+    },
+    "retained_regressions": [
+      "Whole-source refusal and regional fallback",
+      "SDR/HDR and ordinary/RAW curves during fit/source/fit",
+      "Cached LOD reuse and smaller preview under pressure",
+      "Managed source and externally held preview ownership"
+    ]
+  },
+  "limits": [
+    "CPU filtering and GPU upload initiation still run synchronously in viewer; cancellation plumbing is not background execution or responsiveness proof",
+    "UI view refresh has cancellation-aware API but no asynchronous viewport generation scheduler yet",
+    "Native window cancellation was not exercised; explicit production-helper tests ran actual Metal",
+    "Physical HDR, NVIDIA, slow physical disks, out-of-core source handling and full100-format acceptance remain open"
+  ],
+  "sha256": {
+    "crates/rrrah-app/src/main.rs": "f7390fefa925b6785188c6498de8532e6b42ebb7bf93916a99fb3ce0d8669928",
+    "crates/rrrah-app/src/raster_viewport.rs": "f457b06e09b5fbbeb6509e6d0e43e671b9378534418ff0c2508e20b81b432cf9"
+  }
+}

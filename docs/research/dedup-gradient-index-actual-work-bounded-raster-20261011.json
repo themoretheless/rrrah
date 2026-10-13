@@ -1,0 +1,43 @@
+{
+  "status": "failed_projected_portfolio_generic_gate",
+  "producer_pid": 97812,
+  "command": [
+    "cargo",
+    "test",
+    "--manifest-path",
+    "/Users/themoretheless/.codex/tmp/rrrah-gradient-index-actual-work-bounded-snapshot-20261011/Cargo.toml",
+    "--target-dir",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-exact-portfolio-20261011",
+    "-p",
+    "rrrah-dedup",
+    "--locked",
+    "--offline",
+    "--no-default-features",
+    "--features",
+    "raster",
+    "--no-run",
+    "--message-format=json",
+    "--lib",
+    "--test",
+    "gradient_index",
+    "--test",
+    "gradient_index_reflection"
+  ],
+  "source_manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-index-actual-work-bounded-snapshot-20261011.json",
+  "source_manifest_sha256": "d15910b1f680752a3dc4e2285c54ea72faf389c0a172f03e373129705e5373a2",
+  "results": [
+    {
+      "suite": "rrrah_dedup",
+      "status": "running",
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-gradient-index-actual-work-bounded-raster-qualified-20261011/rrrah_dedup",
+      "binary_sha256": "311c1985f24174e75d1266640c93ba298e4ee0222f8ad44351d5f94c042431fc",
+      "process_pid": 98200,
+      "returncode": 0,
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-gradient-index-actual-work-bounded-raster-qualified-20261011/rrrah_dedup.log",
+      "log_sha256": "6f66efd3d3f911fea9382409776fd7f8cee58f76d57fad48dc652fb71bc7f44a"
+    }
+  ],
+  "build_pid": 97814,
+  "build_returncode": 0,
+  "error": "('rrrah_dedup', ['9'])"
+}

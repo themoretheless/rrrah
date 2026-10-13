@@ -1,0 +1,43 @@
+{
+  "status": "adopted_bounded_explicit_opposite_native_api",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-opposite-native-capacity-snapshot-20261011.json": "ba658d4ea6e584e9597fe4882bc4404225624970d0c0ca14f60786220f9dc173",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-opposite-native-20261011.json": "5c467eb2d161e84ab8513f802bcd09cb79b9e2b4df382fa7e2cafe1d24180ff0",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-native-direction-trace-211900-20261011.json": "76e9a6078dc15fb8982f2ae91adab06eb962442c899aa3a6c663bd7a0fd62aea",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-opposite-native-capacity-tests-20261011.log": "e80b1dba9cb27eb2c1c4d5f1cafea62e98420b1c4fc1dc9f995b6bc2615a8684",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-opposite-native-capacity-test-build-20261011.jsonl": "a0b4bb723362424000f3dd6a5268fc57ab18784ed22ce68814a61afe631b5278",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/adopt-dedup-opposite-native-20261011.py": "306e31170b81a8f5b92d7eb2d739293aedf6d6b5248986c110233a25036710f0",
+    "/Users/themoretheless/.codex/tmp/rrrah-opposite-native-capacity-tests-qualified-20261011/opposite_native": "e1dfc46b2486ef4a66969da4a33685c46c7aa43b3c3d106d35d769b1d52a23db"
+  },
+  "before": {
+    "crates/rrrah-dedup/src/anchor_rank_file.rs": "a00d5afc620fe7c086a6d4684df729f17a9043b181eb7476bbe26e2e21adc129",
+    "crates/rrrah-dedup/Cargo.toml": "096c9da23501bd6da315104276163511d8ab259e189d35ab11aa5b2b9130550b"
+  },
+  "adopted": {
+    "crates/rrrah-dedup/src/anchor_rank_file.rs": "c527fb64ddf974bbd40e10c5cfa23acd76f5031f8fa0ff7ed624cba53914aa22",
+    "crates/rrrah-dedup/Cargo.toml": "0d3f828c017a53cb94f01c279258f650ff70529201afab167002bbff15bc55e7",
+    "crates/rrrah-dedup/tests/opposite_native.rs": "ec833de837344d6ac32ab2955078a2636d424583982ca01eb8ecc2abe2bd471e",
+    "scripts/dedup-loftr-native-probe/src/bin/opposite_native_files.rs": "da31e7844eedc70021c508ca73067baf46d9be2a7a7329b472901a7ed1eab96d"
+  },
+  "tests": 16,
+  "new_tests": 4,
+  "native_controls": [
+    {
+      "group_id": 211900,
+      "status": "supported"
+    },
+    {
+      "group_id": 200300,
+      "status": "not_supported"
+    },
+    {
+      "group_id": 201300,
+      "status": "inconclusive"
+    }
+  ],
+  "known_reverse_fixture_anchors": [
+    11,
+    11
+  ],
+  "scope": "Isolated frozen source and compatible baseline lock. Actual root Cargo.lock differs and two independent RAW decoder source changes are preserved; current-workspace gate separate. Explicit additional six recipes, not automatic portfolio/collection integration. Unsupported stage observations do not replace original unknowns or establish negative precision. No hard RSS/platform/full corpus/goal completion claim."
+}

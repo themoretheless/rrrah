@@ -1,0 +1,18 @@
+{
+  "command": "cargo test -p rrrah-decode --locked --offline --target-dir target",
+  "passed": 1004,
+  "failed": 0,
+  "ignored": 77,
+  "result_groups": 7,
+  "log_sha256": "484c1162def8c376521b9ab48c2793571f41846ccd1f12e108f0c9f24dca358f",
+  "sources": {
+    "crates/rrrah-decode/src/lib.rs": "d840084226170b8a38ce3f710e719c0010e90f417f5bd4018197e497910d879a",
+    "crates/rrrah-core/src/develop/mod.rs": "e6bc89a1dad61eb1f77daea56926cdcf86a9c2a164312df7c1aef3ae1b9454e7",
+    "docs/IMAGE_FORMATS_100.md": "5940fb3781c9e349ec4bafaee6a44e33017fb45e97b9fb9bb60a30aa9b00dca2"
+  },
+  "limits": [
+    "Current regression coverage, not full qualification of every format/variant or original camera appearance.",
+    "Ignored manual/corpus tests were not executed by this command.",
+    "Format ledger retains 94 implemented subsets, 6 pending viewer rows, and zero fully qualified rows."
+  ]
+}

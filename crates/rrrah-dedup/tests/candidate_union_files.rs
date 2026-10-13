@@ -800,3 +800,61 @@ fn fallback_collection_cancellation_source_change_and_restored_retry() {
     drop(r);
     assert_eq!(budget.used(), 0);
 }
+
+#[test]
+fn zero_radius_collection_matches_fresh_pair_evidence_both_orders() {
+    use rrrah_dedup::local_collection::scan_projective_local_collection_candidate_union_regions_managed as scan;
+    let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/rotation");
+    let files = [
+        (1, rrrah_decode::DecodeRequest::new(root.join("base.png"))),
+        (
+            2,
+            rrrah_decode::DecodeRequest::new(root.join("scale-117-angle-0.png")),
+        ),
+        (3, rrrah_decode::DecodeRequest::new(root.join("unrelated.png"))),
+    ];
+    let mut p = collection_config();
+    p.search.smoothing_radius = 0;
+    for reverse in [false, true] {
+        let input: Vec<_> = if reverse {
+            files.iter().rev().cloned().collect()
+        } else {
+            files.to_vec()
+        };
+        let budget = rrrah_core::MemoryBudget::new(64 * 1024 * 1024);
+        let report = scan(input, p, &factors(), &budget, || false).unwrap();
+        assert_eq!(report.analysed, [1, 2, 3]);
+        assert!(
+            report.file_issues.is_empty()
+                && report.local.issues.is_empty()
+                && report.local.source_issues.is_empty()
+        );
+        for i in 0..3 {
+            for j in i + 1..3 {
+                let fresh =
+                    compare(&files[i].1, &files[j].1, p.search, &factors(), &budget, || false).unwrap();
+                let supported = fresh
+                    .regions
+                    .as_ref()
+                    .is_some_and(|r| r.region_support_count() > 0);
+                assert_eq!(supported, (i, j) == (0, 1));
+                let found = report
+                    .local
+                    .pairs
+                    .iter()
+                    .find(|pair| (pair.left, pair.right) == (files[i].0, files[j].0));
+                if supported {
+                    assert!(found.is_some());
+                }
+                if let Some(pair) = found {
+                    assert_eq!(format!("{:?}", pair.evidence), format!("{fresh:?}"));
+                }
+                drop(fresh);
+            }
+        }
+        drop(report);
+        assert_eq!(budget.used(), 0);
+        assert!(scan(files.clone(), p, &factors(), &budget, || true).is_err());
+        assert_eq!(budget.used(), 0);
+    }
+}

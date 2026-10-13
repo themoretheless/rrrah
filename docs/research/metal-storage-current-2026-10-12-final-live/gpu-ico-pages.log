@@ -1,0 +1,95 @@
+warning: function `fallible_zeroed_bytes` is never used
+   --> crates/rrrah-cache/src/mosaic_payload_v1.rs:728:4
+    |
+728 | fn fallible_zeroed_bytes(len: usize) -> Result<Box<[u8]>, MosaicPayloadError> {
+    |    ^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-cache` (lib) generated 1 warning
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+warning: methods `submit` and `submit_image` are never used
+    --> crates/rrrah-app/src/main.rs:1433:8
+     |
+1087 | impl ForegroundLoader {
+     | --------------------- methods in this implementation
+...
+1433 |     fn submit(&self, path: PathBuf) -> Result<u64> {
+     |        ^^^^^^
+...
+1436 |     fn submit_image(&self, path: PathBuf, image_index: usize) -> Result<u64> {
+     |        ^^^^^^^^^^^^
+     |
+     = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: associated items `install_with_cancel`, `refresh`, and `refresh_with_cancel` are never used
+   --> crates/rrrah-app/src/raster_viewport.rs:396:19
+    |
+ 26 | impl ResidentSource {
+    | ------------------- associated items in this implementation
+...
+396 |     pub(crate) fn install_with_cancel<F: FnMut() -> bool>(
+    |                   ^^^^^^^^^^^^^^^^^^^
+...
+483 |     pub(crate) fn refresh(
+    |                   ^^^^^^^
+...
+503 |     pub(crate) fn refresh_with_cancel<F: FnMut() -> bool>(
+    |                   ^^^^^^^^^^^^^^^^^^^
+
+warning: `rrrah` (bin "rrrah") generated 2 warnings
+    Finished `test` profile [optimized + debuginfo] target(s) in 6.61s
+     Running tests/ico_pages_metal.rs (target/debug/deps/ico_pages_metal-26b0611293066b5b)
+
+running 5 tests
+test selected_cursor_images_keep_matching_hotspots_and_metal_frames ... ok
+test selected_ico_images_keep_quality_order_alpha_and_metal_frames ... ok
+test selected_dib_cursor_images_keep_masks_hotspots_and_metal_frames ... ok
+test patterned_cursor_dib_pixels_survive_swap_and_metal ... ok
+test selected_indexed_and_bgra_cursor_images_keep_masks_and_metal_frames ... ok
+
+successes:
+
+---- selected_cursor_images_keep_matching_hotspots_and_metal_frames stdout ----
+CUR pages adapter: Metal Apple M4 Max
+CUR pages: quality order3; matching hotspots; exact RGBA alpha; count1/64byte RAM; full-pressure hit; visible TTL; reverse swap; SDR/HDR exact; final=0
+
+---- selected_ico_images_keep_quality_order_alpha_and_metal_frames stdout ----
+ICO pages adapter: Metal Apple M4 Max
+ICO pages: quality order3; exact RGBA alpha; count1/64byte RAM; full-pressure hit; visible TTL; reverse swap; SDR/HDR exact; final=0
+
+---- selected_dib_cursor_images_keep_masks_hotspots_and_metal_frames stdout ----
+CUR DIB pages adapter: Metal Apple M4 Max
+CUR DIB pages: padded24bit AND masks; matching hotspots; RAM TTL reverse swap; SDR/HDR exact; final=0
+
+---- patterned_cursor_dib_pixels_survive_swap_and_metal stdout ----
+CUR patterned adapter: Metal Apple M4 Max
+CUR patterned depth1: 9x3 packed rows/mixed mask/alpha; native oracle and SDR/HDR swap exact; final=0
+CUR patterned depth4: 9x3 packed rows/mixed mask/alpha; native oracle and SDR/HDR swap exact; final=0
+CUR patterned depth8: 9x3 packed rows/mixed mask/alpha; native oracle and SDR/HDR swap exact; final=0
+CUR patterned depth16: 9x3 packed rows/mixed mask/alpha; native oracle and SDR/HDR swap exact; final=0
+CUR patterned depth24: 9x3 packed rows/mixed mask/alpha; native oracle and SDR/HDR swap exact; final=0
+CUR patterned depth32: 9x3 packed rows/mixed mask/alpha; native oracle and SDR/HDR swap exact; final=0
+
+---- selected_indexed_and_bgra_cursor_images_keep_masks_and_metal_frames stdout ----
+CUR DIB depths pages adapter: Metal Apple M4 Max
+CUR DIB depth1: palette/alpha/mask; matching hotspots; RAM TTL reverse swap; SDR/HDR exact; final=0
+CUR DIB depths pages adapter: Metal Apple M4 Max
+CUR DIB depth4: palette/alpha/mask; matching hotspots; RAM TTL reverse swap; SDR/HDR exact; final=0
+CUR DIB depths pages adapter: Metal Apple M4 Max
+CUR DIB depth8: palette/alpha/mask; matching hotspots; RAM TTL reverse swap; SDR/HDR exact; final=0
+CUR DIB depths pages adapter: Metal Apple M4 Max
+CUR DIB depth16: palette/alpha/mask; matching hotspots; RAM TTL reverse swap; SDR/HDR exact; final=0
+CUR DIB depths pages adapter: Metal Apple M4 Max
+CUR DIB depth32: palette/alpha/mask; matching hotspots; RAM TTL reverse swap; SDR/HDR exact; final=0
+
+
+successes:
+    patterned_cursor_dib_pixels_survive_swap_and_metal
+    selected_cursor_images_keep_matching_hotspots_and_metal_frames
+    selected_dib_cursor_images_keep_masks_hotspots_and_metal_frames
+    selected_ico_images_keep_quality_order_alpha_and_metal_frames
+    selected_indexed_and_bgra_cursor_images_keep_masks_and_metal_frames
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.15s
+

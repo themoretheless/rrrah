@@ -1,0 +1,18 @@
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+    Finished `test` profile [optimized + debuginfo] target(s) in 51.14s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_decode-3d841f18ff85d05c)
+
+running 9 tests
+test camtiff::mef_sensor::tests::file_import_rejects_selection_and_stale_generation_before_reading ... ok
+test camtiff::mef_sensor::tests::packed_boundaries_admission_cancel_and_ownership ... ok
+test camtiff::mef_sensor::tests::real_zd_all_sensor_values_match_pinned_independent_oracle ... ok
+test camtiff::mef_sensor::tests::real_zd_file_import_shares_source_and_output_budget ... ok
+test camtiff::mef_sensor::tests::real_zd_full_sensor_matches_oracle ... ok
+test camtiff::mef_sensor::tests::real_zd_sensor_admission_cancellation_and_last_owner ... ok
+test camtiff::mef_sensor::tests::sensor_strip_cannot_alias_out_of_line_metadata ... ok
+test image_router::tests::unqualified_mef_refuses_public_view_without_preview_fallback_or_leak ... MEF public route refusal: native DNG decoder failed: DNG SubIFD at 116920 has unsupported next-IFD chain to 29704
+ok
+test image_router::tests::unsupported_mef_tiff_remains_sensor_without_preview_or_full_read ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 1053 filtered out; finished in 1.17s
+

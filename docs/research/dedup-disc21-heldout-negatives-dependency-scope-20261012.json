@@ -1,0 +1,16 @@
+{
+  "status": "clarified_current_dedup_but_older_compatible_loftr_dependency",
+  "deltas": [
+    {
+      "path": "vendor/loftr/src/coarse_matching/tests.rs",
+      "frozen_sha256": "818515d108e62a65e4c0896b8bbe855c96806eae9821f34d13d266c4500e263a",
+      "root_sha256": "b79e23be71ecd8e3c375c9dd312e137408d72329b30966d17ee55a2e42d2bee9"
+    },
+    {
+      "path": "vendor/loftr/src/coarse_matching.rs",
+      "frozen_sha256": "99d6a33aa5838d122eedd5ef26971fe0d66ebb5ec3b11cf2e7eb8e61295a3a80",
+      "root_sha256": "ef9363e326ba0de200c420ad7ea63701cce4ce29f796bb458f66ae6886994c4d"
+    }
+  ],
+  "scope": "All dedup production matches root at probe build. Two LoFTR coarse-matching source/test files differ from already-adopted root cooperative blocked matcher. Live16pair binary is preserved, not restarted. Its precision/RSS/time observations apply to this frozen dependency composition, not full current-root native stack. New selected-window baseline freezes and verifies current dedup and LoFTR production together."
+}

@@ -1,0 +1,31 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: unused variable: `cancel`
+   --> crates/rrrah-dedup/src/local_index.rs:715:5
+    |
+715 |     cancel: impl Fn() -> bool,
+    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_cancel`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-dedup` (lib) generated 1 warning (run `cargo fix --lib -p rrrah-dedup` to apply 1 suggestion)
+    Finished `test` profile [optimized + debuginfo] target(s) in 6.91s
+     Running tests/model_input.rs (target/debug/deps/model_input-f693974042cdf7a2)
+
+running 4 tests
+test invalid_caps_and_unsupported_pixels_refuse_atomically ... ok
+test odd_edges_match_independent_continuous_area_reference_and_credit_tracks_owners ... ok
+test tiny_inputs_are_explicitly_upsampled_and_linear_gray_is_srgb_encoded ... ok
+test every_one_shot_cancellation_checkpoint_releases_all_output_credit ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/proposals.rs (target/debug/deps/proposals-d233b8027f108e4b)
+
+running 4 tests
+test malformed_inputs_and_each_work_limit_refuse_without_a_partial_result ... ok
+test heap_selection_matches_stable_reference_with_ties_boundaries_and_both_side_collisions ... ok
+test every_checkpoint_including_heap_and_final_observes_one_shot_cancellation ... ok
+test managed_payload_credit_survives_clones_and_all_cancellation_paths_release_it ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

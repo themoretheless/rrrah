@@ -1,0 +1,33 @@
+{
+  "scope": "Production viewer raster loader/cache/preload helpers with actual selected TIFF pages; not live UI event loop",
+  "ordinary_app_passed": 214,
+  "ordinary_app_ignored": 60,
+  "metal_gate_passed": 136,
+  "metal_gate_ignored": 13,
+  "cases": [
+    "Three selected page keys for same path and distinct ICC profiles",
+    "96byte/count3 RAM limits; full-root-pressure RAM hits bypass decoder",
+    "Nonzero1second TTL expires all3 background memberships and persists",
+    "Count0 RAM admission during swap-only preloads",
+    "Foreground decoder ticket remains held; watchdog prevents deadlock",
+    "Reverse1->2->0 restores payload/metadata/128x96 Metal SDR/HDR exactly",
+    "Writes3 reads3 errors0; final managedcredit0"
+  ],
+  "limitations": [
+    "Helper integration rather than live UI navigation/worker schedule",
+    "Small authored pages; large/independent TIFF source collection not qualified"
+  ],
+  "sources": {
+    "crates/rrrah-app/src/main.rs": "3b8680060fcbf1f6a8c3de15ffb13dec5b076fd02e5eed0128c2750553d587be",
+    "scripts/qualify-viewer-storage-gpu.py": "4cf9dc5add0cdd14b8347cc7e6755884cf5af9d1db2cb950f6e056aa579b4e9e"
+  },
+  "logs": {
+    "docs/research/tiff-viewer-selected-cache-2026-10-12/gpu-tiff-viewer-pages.log": "54b5275e768b84c795710909043b6211641fd5e4651fb42187b51f238229a37b",
+    "docs/research/tiff-viewer-selected-cache-2026-10-12/rrrah-tiff-viewer-loader-module-fixed-20261012.log": "1f1cf9de97e7f0d7cedc1de5884b02df9732429c4b12dd401b699325d8524759",
+    "docs/research/tiff-viewer-selected-cache-2026-10-12/report.json": "7fbcf2c10914c2de7c6929dd0bfa371af70742c86405bf1f4e04a50f614e7ef7",
+    "docs/research/tiff-viewer-selected-cache-2026-10-12/rrrah-tiff-viewer-loader-20261012.log": "f4c5d270b39ec8017c62dce545715c5cf806d6f770d1a1f7d8ed9c8fc7b9a0a3",
+    "docs/research/tiff-viewer-selected-cache-2026-10-12/gpu-all.log": "9cfc86aebd6f35632445e27ebd8113b3818a95e27470f2ad2ff72873aa0c4341",
+    "docs/research/tiff-viewer-selected-cache-2026-10-12/gpu-tiff-pages.log": "abd86696d161aa452edad57f8098fe5a6ec2c37311e6a6bea2c4fd595b126fbf",
+    "docs/research/tiff-viewer-selected-cache-2026-10-12/rrrah-tiff-viewer-app-final-20261012.log": "0d6ddeee04ea21d3b99869f4c34893fb3c4b0cb2b019b66c4b89de031ce6f9f3"
+  }
+}

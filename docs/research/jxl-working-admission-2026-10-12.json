@@ -1,0 +1,37 @@
+{
+  "date": "2026-10-12",
+  "change": "JPEG XL separately reserves codec working credit and conversion overlap; applies the matching cap to the codec allocation tracker",
+  "codec_tracker_cap": "min(65536 + width*height*64, MAX_RASTER_BYTES)",
+  "working_credit": "codec tracker cap + output RGBA bytes",
+  "output_credit": "retained independently until last pixel owner drops",
+  "focused": {
+    "passed": 3,
+    "failed": 0
+  },
+  "decoder_suite": {
+    "passed": 1018,
+    "failed": 0,
+    "ignored": 72
+  },
+  "metal_collection": {
+    "adapter": "Metal Apple M4 Max",
+    "passed": 1,
+    "failed": 0,
+    "sources": 65,
+    "selections": 94,
+    "storage_cases": 188,
+    "final_root_bytes": 0,
+    "final_queue_bytes": 0
+  },
+  "logs": {
+    "jxl-working-admission-2026-10-12.log": "46fdd9652881796b85d490594e8e5db851ac3f76ff66fe732eb7b889aa183329",
+    "decode-jxl-working-regression-2026-10-12.log": "b4049e08acc784675c3f478d818ff337e2ac9eabb892803ea58168d3bd871555",
+    "metal-jxl-working-collection-2026-10-12.log": "123da87b6dcde33c5661840abbdefe9821aba4d0f70b3eb82a924cf24b99ab65"
+  },
+  "limits": [
+    "Header parsing precedes working admission",
+    "Only tracker-managed codec allocations are capped; not a strict OS RSS bound",
+    "Working cap is an explicit bounded decoding policy, not proof every JPEG XL variant fits",
+    "Collection frame references are same-renderer transport checks, not independent decoder/color qualification"
+  ]
+}

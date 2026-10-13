@@ -1,0 +1,43 @@
+{
+  "scope": "Experimental native AI raster geometry-to-source identity groundwork",
+  "change": [
+    "Nearest RasterCells retain compact query-grid bounds; path indices map to packed native color or alpha texel coordinates in constant work without inverse sampling",
+    "Footprint/out-of-range/arbitrary line partitions have no texel identity",
+    "ConstantCells capability now requires nearest-grid metadata for both color and optional alpha geometry"
+  ],
+  "tests": {
+    "passed": 230,
+    "failed": 0,
+    "ignored": 12
+  },
+  "regressions": [
+    "Partial8x6query2.2,1.2to4.8,3.8 verifies9row-major texel identities and bounds refusal",
+    "Three authored native raster fixtures, identity/skew/reflection transforms; every emitted cell checked at three interior source positions against actual nearest native sampler key and polygon winding",
+    "Independent differently sized alpha grid follows its own scaled transform",
+    "Existing work/cancel/admission refusal and storage release tests retained"
+  ],
+  "grid_metadata_admission_bytes": 24,
+  "original_pixels_exactly_equal": [
+    "147,59",
+    "145,50",
+    "199,25",
+    "138,39",
+    "149,56"
+  ],
+  "source_field_observer_work_unchanged": [
+    59250992,
+    21177975
+  ],
+  "centroid_guard_counts_unchanged": true,
+  "peak_admitted_bytes": 239197736,
+  "limitations": [
+    "Metadata path mapping only; selector-driven field-key tracking not wired yet",
+    "Interior authored regression is not a universal floating-point boundary proof",
+    "No sampling skipped, throughput/working4M/fullpage/color/viewer qualification remains open"
+  ],
+  "next": "Attach texel identities to deduplicated region indices and update source keys from selector transitions",
+  "logs": [
+    "ai-raster-geometry-identity-final-suite-2026-10-13.log",
+    "ai-raster-geometry-identity-original-2026-10-13.log"
+  ]
+}

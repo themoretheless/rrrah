@@ -1,0 +1,35 @@
+RRRAH_LIST /validation/target/debug/deps/rrrah_dedup-6cc5209a2deed122
+animated::frame_slot_tests::decoded_animation_retains_actual_frame_table_credit: test
+animated::frame_slot_tests::frame_table_is_fallible_admitted_and_retained: test
+animated::timeline_key_tests::rational_sum_overflow_is_inconclusive_despite_direct_timeline_equality: test
+animated::timeline_key_tests::zero_duration_timelines_ignore_pixels_but_retain_repetition: test
+animated::timeline_scratch_tests::every_timeline_scratch_cancel_checkpoint_releases_both_tables: test
+animated::timeline_scratch_tests::timeline_scratch_refuses_early_and_late_releases_and_retries: test
+
+6 tests, 0 benchmarks
+RRRAH_IGNORED /validation/target/debug/deps/rrrah_dedup-6cc5209a2deed122
+0 tests, 0 benchmarks
+RRRAH_LIST /validation/target/debug/deps/animated-9ecc3b9ba3a46e62
+changed_gif_timing_prevents_whole_animation_equality: test
+complete_existing_composition_fixtures_decode_and_compare: test
+every_apng_truncation_and_crc_damage_refuses_without_leaking_then_retries: test
+every_gif_and_webp_truncation_refuses_releases_memory_and_recovers: test
+every_observed_animation_cancellation_checkpoint_releases_and_allows_retry: test
+gif_disposal_modes_match_independently_composited_full_canvas_apng: test
+independent_cross_container_timeline_splits_and_negatives: test
+
+7 tests, 0 benchmarks
+RRRAH_IGNORED /validation/target/debug/deps/animated-9ecc3b9ba3a46e62
+0 tests, 0 benchmarks
+RRRAH_LIST /validation/target/debug/deps/sequence-76d2b92e60973d37
+admission_cancel_at_every_checkpoint_returns_no_partial_sequence_and_retry_succeeds: test
+animation_requires_timing_and_compares_repetitions: test
+complete_coverage_is_required: test
+equivalent_timelines_ignore_frame_splits_but_keep_time_and_pixels: test
+first_frame_match_does_not_hide_changed_last_frame: test
+rational_extremes_fail_explicitly_without_wrapping: test
+timeline_comparison_matches_independent_discrete_presentation_oracle: test
+
+7 tests, 0 benchmarks
+RRRAH_IGNORED /validation/target/debug/deps/sequence-76d2b92e60973d37
+0 tests, 0 benchmarks

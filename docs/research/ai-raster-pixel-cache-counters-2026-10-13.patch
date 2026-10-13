@@ -1,0 +1,46 @@
+--- a/vendor/hayro/src/knockout_interpreter.rs
++++ b/vendor/hayro/src/knockout_interpreter.rs
+@@ -7105,17 +7105,22 @@
+     struct SourceCost {
+         event:usize,enabled:bool,calls:std::cell::Cell<usize>,
+         source:std::cell::Cell<usize>,coordinates:std::cell::Cell<usize>,
++        pixel_hits:std::cell::Cell<usize>,pixel_builds:std::cell::Cell<usize>,
+     }
+     impl Drop for SourceCost {
+         fn drop(&mut self) {if self.enabled && self.calls.get()!=0 {
+             eprintln!("SPATIAL_SOURCE_COST event={} calls={} source={} coordinates={}",
+                 self.event,self.calls.get(),self.source.get(),self.coordinates.get());
++            if self.pixel_hits.get()+self.pixel_builds.get()!=0 {
++                eprintln!("SPATIAL_RASTER_PIXEL_CACHE event={} hits={} builds={}",self.event,self.pixel_hits.get(),self.pixel_builds.get());
++            }
+         }}
+     }
+     let mut samples=Vec::new();samples.try_reserve_exact(raster_count).ok()?;
+     for (event,data,inverse,_,_) in &rasters {
+         let cost=SourceCost {event:*event,enabled:trace.enabled,calls:std::cell::Cell::new(0),
+-            source:std::cell::Cell::new(0),coordinates:std::cell::Cell::new(0)};
++            source:std::cell::Cell::new(0),coordinates:std::cell::Cell::new(0),
++            pixel_hits:std::cell::Cell::new(0),pixel_builds:std::cell::Cell::new(0)};
+         if trace.enabled {eprintln!("SPATIAL_RASTER_SOURCE event={} dimensions={:?} interpolate={} alpha={:?}",event,data.dimensions(),data.interpolate(),data.alpha().map(|a|(a.dimensions(),a.interpolate())));}
+         let cache=RasterLastSample::new(None);
+         let pixel_cache=RasterLastPixel::new(None);
+@@ -7125,7 +7130,9 @@
+         if cost.enabled {cost.calls.set(cost.calls.get()+1);cost.source.set(cost.source.get()+before.saturating_sub(*remaining));}
+         let sample=result?;
+         let cell_key=cache.borrow().as_ref().map(|(key,_)|*key);
++        let pixel_hit=cost.enabled && cell_key.is_some_and(|key|pixel_cache.get().is_some_and(|(old,_)|key==old));
+         let native=native_raster_pixel_cached(sample,cell_key,&pixel_cache,cancelled)?;
++        if cost.enabled {let counter=if pixel_hit {&cost.pixel_hits} else {&cost.pixel_builds};counter.set(counter.get()+1);}
+         Some(Some(NativeSpatialSample {cell_key,pixel:native,space:sample.space}))
+     });
+         if size_of_val(samples.last()?)>256 {return None;}
+@@ -7181,7 +7188,8 @@
+     let trace_point_sources=point.is_some() && std::env::var_os("RRRAH_AI_TRACE_POINT_SOURCES").is_some();
+     for (event,source,_) in &meshes {
+         let cost=SourceCost {event:*event,enabled:trace.enabled,calls:std::cell::Cell::new(0),
+-            source:std::cell::Cell::new(0),coordinates:std::cell::Cell::new(0)};
++            source:std::cell::Cell::new(0),coordinates:std::cell::Cell::new(0),
++            pixel_hits:std::cell::Cell::new(0),pixel_builds:std::cell::Cell::new(0)};
+         mesh_samples.push(move |point:kurbo::Point,cancelled:&dyn Fn()->bool,remaining:&mut usize,owner:Option<usize>| {
+         let before=*remaining;
+         let result=if let Some(owner)=owner {source.sample_mesh_triangle_with_budget(owner,point,cancelled,remaining).map(Some)}

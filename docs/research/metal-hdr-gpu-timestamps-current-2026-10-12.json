@@ -1,0 +1,61 @@
+{
+  "median_gpu_ms": 0.108271,
+  "p95_gpu_ms": 0.554042,
+  "max_gpu_ms": 0.651125,
+  "warmups": 5,
+  "samples_gpu_ms": [
+    0.106625,
+    0.5265,
+    0.108209,
+    0.10725,
+    0.086166,
+    0.0935,
+    0.101958,
+    0.088292,
+    0.1235,
+    0.093208,
+    0.095084,
+    0.147208,
+    0.109416,
+    0.193167,
+    0.476583,
+    0.097458,
+    0.554042,
+    0.102875,
+    0.113334,
+    0.1055,
+    0.651125,
+    0.108333,
+    0.100417,
+    0.099167,
+    0.109875,
+    0.116125,
+    0.112,
+    0.101833,
+    0.244583,
+    0.110875
+  ],
+  "source": [
+    4096,
+    4096
+  ],
+  "target": [
+    2048,
+    2048
+  ],
+  "target_format": "Rgba16Float",
+  "backend": "Metal",
+  "device": "Apple M4 Max",
+  "result": "1 passed; 0 failed",
+  "percentile_method": "nearest rank p95 of 30 measured samples; median averages central two",
+  "log": "metal-hdr-gpu-timestamps-current-2026-10-12.log",
+  "source_sha256": "a6e85fd8d6e52b886f998ba5c90c069360b96fe8f1d8732592e316cda8b716f8",
+  "limits": [
+    "GPU render-pass timestamps only; excludes decode, upload, CPU submission, readback and presentation",
+    "single authored constant float texture with alpha; not representative of all content or formats",
+    "sequential per-frame completion and separate timestamp resolve; not saturated pipeline throughput",
+    "shared host and GPU clocks affect measurements; no paired optimization comparison",
+    "physical HDR color/luminance and NVIDIA unqualified"
+  ],
+  "final_managed_gpu_credit": 0
+}

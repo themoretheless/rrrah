@@ -1,0 +1,42 @@
+{
+  "scope": "ignored diagnostic only; default and normal replay4M unchanged",
+  "suite": {
+    "passed": 212,
+    "ignored": 12
+  },
+  "page": {
+    "diagnostic_command_budget": 8000000,
+    "deadline_seconds": 600,
+    "completed_pixels": 17906,
+    "total_pixels": 74046,
+    "refusal": [
+      147,
+      59
+    ],
+    "deadline": false,
+    "exit": 101,
+    "elapsed_seconds": 103.47,
+    "partial_image": false
+  },
+  "isolated_pixel": {
+    "command_budget": 16000000,
+    "spent": 10825219,
+    "remaining": 5174781,
+    "completed": false,
+    "fragments_before_refusal": 708497,
+    "regions": 710,
+    "polygon_budget": 40000000,
+    "polygon_remaining": 4332,
+    "next_polygon_charge": 8736,
+    "deadline": false,
+    "final_credit": 0
+  },
+  "peak_bytes": 239197736,
+  "next_action": "optimize polygon subdivision; color work alone cannot clear geometry refusal",
+  "logs": {
+    "ai-page-complexity-suite-2026-10-13.log": "1be82a20aaeb58544c82f776400475f00596887588306057419d6630ec4d2c5a",
+    "ai-page-complexity-8m-2026-10-13.log": "4cc827874e1fc89f7b1a2f9d0c83438104ff5a4dbd44e1e275703e61328b2834",
+    "ai-pixel-147-59-complexity-2026-10-13.log": "367d1a53b508ae601a2f30ed7d809fa16617157f00419bc042989171eed850dd",
+    "ai-pixel-147-59-area-refusal-2026-10-13.log": "52754e61852ac6be431957e0790b2e9314e7b066016d4f47a3d9f43d7fabed13"
+  }
+}

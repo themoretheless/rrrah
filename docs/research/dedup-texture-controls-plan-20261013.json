@@ -1,0 +1,56 @@
+{
+  "status": "fixed_before_execution",
+  "seed": [
+    173,
+    991
+  ],
+  "inputs": {
+    "/Users/themoretheless/.codex/tmp/rrrah-texture-controls-20261013/inverse.pfm": "b1006ff5ce6c4b41bb484b13b68edb9ea6f1bcb7eef95ce486461d7d8303fe93",
+    "/Users/themoretheless/.codex/tmp/rrrah-texture-controls-20261013/affine.pfm": "b0a0b7fc9c54e2936ddbbca7cfe4c52560ce48326604cafdc6efe7395883ca32",
+    "/Users/themoretheless/.codex/tmp/rrrah-texture-controls-20261013/unrelated.pfm": "86990417344590379489dc72a3d300da63ac06ed188effbafe511194ab19c636",
+    "/Users/themoretheless/.codex/tmp/rrrah-texture-controls-20261013/plane_b.pfm": "fb7edfdb172bf82e2627c5b3334aa3ff0fd050d345a1a798e29b51ab28ebe22b",
+    "/Users/themoretheless/.codex/tmp/rrrah-texture-controls-20261013/plane_a.pfm": "8f28d9d956fa198c14babf58e6766ab4d6c57f01777283962ea9382fe03b5f49",
+    "/Users/themoretheless/.codex/tmp/rrrah-texture-controls-20261013/flat_b.pfm": "21a9deb118f5e4d01fffd427e7976600b08e59a0048313e218a3aa4ca4e346dc",
+    "/Users/themoretheless/.codex/tmp/rrrah-texture-controls-20261013/flat_a.pfm": "896648439c053e81462b63588dfd3efd7a9a016b1c9aa7bfbea8267672e30b14",
+    "/Users/themoretheless/.codex/tmp/rrrah-texture-controls-20261013/texture.pfm": "f7a669138e5b36236fb93b3e2706b0a5a4de3d6f30987eb742a2e7503a94ac7e"
+  },
+  "cases": [
+    {
+      "label": "identity",
+      "expect": "positive",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-texture-controls-20261013/identity-plan.json",
+      "plan_sha256": "74b80eb70fe11132c6b05d0ee26fe6e9f39f0dce8132f2618bc526a442163061"
+    },
+    {
+      "label": "affine",
+      "expect": "positive",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-texture-controls-20261013/affine-plan.json",
+      "plan_sha256": "ccc91c369c9bf73e5b47c57b5434e9831d0cfa40db77333ceb0b25b04fb2ce9d"
+    },
+    {
+      "label": "inversion",
+      "expect": "negative",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-texture-controls-20261013/inversion-plan.json",
+      "plan_sha256": "3086a1fce07171a4fb6c61ff29c2cdd2911ff3ff54d111adcf28aee545865e93"
+    },
+    {
+      "label": "independent",
+      "expect": "uncorrelated",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-texture-controls-20261013/independent-plan.json",
+      "plan_sha256": "226a6dceeb2f16bcfe7a5f44ac1a4d72f675e3da02e0d69d6dd55f65a197c440"
+    },
+    {
+      "label": "flat",
+      "expect": "flat",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-texture-controls-20261013/flat-plan.json",
+      "plan_sha256": "b2dd29ed204a321af0d18055fd62bc098b1868f6c00444e8dfcd106c606d9361"
+    },
+    {
+      "label": "planes",
+      "expect": "flat",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-texture-controls-20261013/planes-plan.json",
+      "plan_sha256": "d7d074db21e8ad4b9e2ef96c93ea25d385ca7cf3c2836e9cd5a422fe3e1d2985"
+    }
+  ],
+  "scope": "Deterministic authored linear-f32 PFM controls for diagnostic math, fixed bounds: identity/affine correlation>0.999, inversion<-0.999, unrelated absolute mean<0.3, flat/planar uninformative. Not natural-image precision."
+}

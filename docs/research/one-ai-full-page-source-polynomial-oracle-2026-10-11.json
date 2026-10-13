@@ -1,0 +1,308 @@
+{
+  "scope": "Independent numerical full-page cubic coverage, not Poppler qualification",
+  "source_sha256": "97786949c268233a446e1738fb9c2f941e4d109811bd2f972948cdb7a45d64b4",
+  "dimensions": [
+    1366,
+    768
+  ],
+  "root_bisection_iterations": [
+    32,
+    52
+  ],
+  "rgb8_convergence_differing_pixels": 0,
+  "native_differing_pixels": 17,
+  "native_max_channel_error": 1,
+  "oracle_rgb_sha256": "38d412ae322b74bc56dcfccee5ec41730ece92bd4365fc7c8f14a03dd7d89104",
+  "native_rgb_sha256": "c129881ea8c272950dbc52a0653e37c63b2507ae1cf0079e728bb9d5dbcc90a5",
+  "method": "Source cubic controls; split at pixel-boundary roots, integrate polynomial x(t)*dy/dt analytically, white background black fill",
+  "limitations": [
+    "Convergence is numerical, not a certified interval bound",
+    "Pinned one.ai page zero with two filled curves only",
+    "Strict Poppler comparison remains separate and unchanged"
+  ],
+  "differences": [
+    {
+      "pixel": [
+        266,
+        210
+      ],
+      "native": [
+        116,
+        116,
+        116
+      ],
+      "oracle": [
+        115,
+        115,
+        115
+      ]
+    },
+    {
+      "pixel": [
+        381,
+        210
+      ],
+      "native": [
+        116,
+        116,
+        116
+      ],
+      "oracle": [
+        115,
+        115,
+        115
+      ]
+    },
+    {
+      "pixel": [
+        983,
+        249
+      ],
+      "native": [
+        49,
+        49,
+        49
+      ],
+      "oracle": [
+        48,
+        48,
+        48
+      ]
+    },
+    {
+      "pixel": [
+        975,
+        264
+      ],
+      "native": [
+        90,
+        90,
+        90
+      ],
+      "oracle": [
+        89,
+        89,
+        89
+      ]
+    },
+    {
+      "pixel": [
+        1158,
+        264
+      ],
+      "native": [
+        90,
+        90,
+        90
+      ],
+      "oracle": [
+        89,
+        89,
+        89
+      ]
+    },
+    {
+      "pixel": [
+        217,
+        277
+      ],
+      "native": [
+        173,
+        173,
+        173
+      ],
+      "oracle": [
+        172,
+        172,
+        172
+      ]
+    },
+    {
+      "pixel": [
+        430,
+        277
+      ],
+      "native": [
+        173,
+        173,
+        173
+      ],
+      "oracle": [
+        172,
+        172,
+        172
+      ]
+    },
+    {
+      "pixel": [
+        194,
+        391
+      ],
+      "native": [
+        14,
+        14,
+        14
+      ],
+      "oracle": [
+        13,
+        13,
+        13
+      ]
+    },
+    {
+      "pixel": [
+        194,
+        403
+      ],
+      "native": [
+        14,
+        14,
+        14
+      ],
+      "oracle": [
+        13,
+        13,
+        13
+      ]
+    },
+    {
+      "pixel": [
+        217,
+        517
+      ],
+      "native": [
+        173,
+        173,
+        173
+      ],
+      "oracle": [
+        172,
+        172,
+        172
+      ]
+    },
+    {
+      "pixel": [
+        430,
+        517
+      ],
+      "native": [
+        173,
+        173,
+        173
+      ],
+      "oracle": [
+        172,
+        172,
+        172
+      ]
+    },
+    {
+      "pixel": [
+        975,
+        530
+      ],
+      "native": [
+        90,
+        90,
+        90
+      ],
+      "oracle": [
+        89,
+        89,
+        89
+      ]
+    },
+    {
+      "pixel": [
+        1158,
+        530
+      ],
+      "native": [
+        90,
+        90,
+        90
+      ],
+      "oracle": [
+        89,
+        89,
+        89
+      ]
+    },
+    {
+      "pixel": [
+        983,
+        545
+      ],
+      "native": [
+        49,
+        49,
+        49
+      ],
+      "oracle": [
+        48,
+        48,
+        48
+      ]
+    },
+    {
+      "pixel": [
+        1150,
+        545
+      ],
+      "native": [
+        49,
+        49,
+        49
+      ],
+      "oracle": [
+        48,
+        48,
+        48
+      ]
+    },
+    {
+      "pixel": [
+        266,
+        584
+      ],
+      "native": [
+        116,
+        116,
+        116
+      ],
+      "oracle": [
+        115,
+        115,
+        115
+      ]
+    },
+    {
+      "pixel": [
+        381,
+        584
+      ],
+      "native": [
+        116,
+        116,
+        116
+      ],
+      "oracle": [
+        115,
+        115,
+        115
+      ]
+    }
+  ],
+  "script_sha256": "283f97c8cba97ccc5d05abadc42f44f72b533d65fb269cbb1230f955bbdd8e80",
+  "qualification_exit_code": 1,
+  "comparison_preserves_strict_equality": true,
+  "earlier_simpson_experiment": {
+    "subdivisions": [
+      64,
+      256
+    ],
+    "convergence_differing_pixels": 8,
+    "replaced_by": "piecewise polynomial antiderivative"
+  }
+}

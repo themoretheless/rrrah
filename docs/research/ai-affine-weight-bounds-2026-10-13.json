@@ -1,0 +1,49 @@
+{
+  "scope": "Computed raw barycentric weight enclosure over convex hull of supplied finite vertices; linear coefficient intervals plus separate rounded-evaluation error",
+  "source_tests": "121passed/1ignored",
+  "compositor_tests": "236passed/12ignored",
+  "regressions": [
+    "10404sample points under both enclosure schemes including decimal/negative orientation/near degeneracy and skew/reflection",
+    "Skinny diagonal triangle hull weights stay within-0.001..1.001, rectangle interval width exceeds1e9",
+    "Every insufficient work budget and every cancellation checkpoint refuses",
+    "Empty or65vertex domain refuses"
+  ],
+  "real_source_triangle_rows": [
+    {
+      "event": 2670,
+      "accepted": 682,
+      "refused": 0,
+      "deficit_upper": 1.6313587680076135e-07,
+      "work": 81840
+    },
+    {
+      "event": 2670,
+      "accepted": 727,
+      "refused": 0,
+      "deficit_upper": 1.3073203359136246e-08,
+      "work": 87240
+    },
+    {
+      "event": 2670,
+      "accepted": 405,
+      "refused": 0,
+      "deficit_upper": 4.6556034858633415e-08,
+      "work": 48600
+    },
+    {
+      "event": 2670,
+      "accepted": 64,
+      "refused": 0,
+      "deficit_upper": 1.148250591692932e-09,
+      "work": 7680
+    }
+  ],
+  "native_pixels_and_prior_comparisons_exact": true,
+  "storage": "No persistent per-triangle metadata; stack-only certificate construction, explicit bounded diagnostic preparation",
+  "limitations": [
+    "Source triangle hull enclosure does not prove rounded clipped fragments/centroids remain inside hull",
+    "Does not yet propagate projection/normalization/component/group/moment error to final pixel",
+    "No native samples skipped; ordinary4Mfullpage and independent color/viewer qualification open"
+  ],
+  "next": "Propagate hull raw-weight bound into source color and route integration error, and bound clipping/centroid domain error"
+}

@@ -1,0 +1,37 @@
+{
+  "date": "2026-10-11",
+  "backend": "Metal",
+  "hardware": "Apple M4 Max",
+  "binary_sha256": "5ebd28841cf94835b685ff4b1104472fa4821d5cb90229fd966b452b7b588040",
+  "source": {
+    "kind": "authored HDR PFM RGB bands",
+    "width": 1000,
+    "height": 1000,
+    "prepared_bytes": 16000000
+  },
+  "raster_gpu_budget_bytes": 1048576,
+  "surface": "Rgba16Float ExtendedSrgbLinear",
+  "native_actions": [
+    "initial fit worker level250x250",
+    "scroll up10: original region16x14",
+    "scroll down1: original region70x54",
+    "F: background worker replacement125x125",
+    "scroll up10 and drag400: source regionx492 to489",
+    "F: reuse cached preview",
+    "quit; process absent"
+  ],
+  "checks": {
+    "decode_ready_events": 1,
+    "background_viewport_request_id": 1,
+    "app_units_passed": 206,
+    "explicit_metal_tests_passed": 4,
+    "worker_tests_passed": 2
+  },
+  "fix": "Drain worker output only when a completed slot exists; cancel only when pending request exists",
+  "open_findings": [
+    "Residual idle presentation activity observed around7.5 percent CPU; sample mainly waits in CAMetalLayer nextDrawable. Cause not yet isolated.",
+    "Physical HDR accuracy remains unqualified",
+    "NVIDIA postponed by user",
+    "Out-of-core decoding and full100 formats remain open"
+  ]
+}

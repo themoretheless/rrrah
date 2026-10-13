@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-12",
+  "test": "dpx_cineon_prefetch_keeps_srgb_and_linear_cache_entries_distinct",
+  "sources": [
+    "dpx-16-be-50-p0.dpx",
+    "cineon-16-be-3-p3.cin"
+  ],
+  "checks": [
+    "CLI sRGB/linear-sRGB settings passed through real preload",
+    "two distinct prepared cache entries and float buffers",
+    "sRGB-prepared color differs from linear with unchanged alpha",
+    "strict preload cannot reuse assumed-color entries",
+    "both policy variants hit same managed buffers under full root pressure without decode",
+    "final managed root zero"
+  ],
+  "suite": {
+    "passed": 220,
+    "failed": 0,
+    "ignored": 62
+  },
+  "initial_test_correction": "Removed unjustified absolute color-difference >0.01 requirement: source DPX has only dark native RGB values; now checks actual policy separation and expected ordering",
+  "sha256": {
+    "viewer-dpx-cineon-policy-prefetch-2026-10-12.log": "96d75bebcca061f4fcf6c641a4f73b3e76e2e30d082bd130595c851ca39fe9e4",
+    "viewer-dpx-cineon-policy-prefetch-final-2026-10-12.log": "bcb8488d5e0c5f2af9fc1ae3c300a0cd2632f973adb5b173d052603e9eb4659c"
+  },
+  "limits": [
+    "Two 16-bit authored source variants",
+    "No new independent color or physical display qualification"
+  ]
+}

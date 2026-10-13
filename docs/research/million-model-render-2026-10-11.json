@@ -1,0 +1,22 @@
+{
+  "backend": "metal",
+  "passed": 1,
+  "failed": 0,
+  "triangles": 1000000,
+  "output": [
+    16,
+    16
+  ],
+  "render_readback_ms": 21.16,
+  "every_sdr_pixel_exact": true,
+  "geometry_bytes": 36000000,
+  "depth_bytes": 1024,
+  "final_cpu_gpu_zero": true,
+  "log": "docs/research/million-model-render-2026-10-11.log",
+  "sha256": "ed5e4877161384d0568d2975aa7fc4d2522484a308408c326a0e1243012ef062",
+  "limitations": [
+    "Authored repeated coplanar triangle; small 16x16 target.",
+    "Does not qualify complex scene performance at full viewer resolution or million-triangle HDR.",
+    "Single-run host timing includes target/readback setup."
+  ]
+}

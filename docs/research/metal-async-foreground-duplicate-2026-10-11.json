@@ -1,0 +1,20 @@
+{
+  "status": "passed",
+  "change": "Active foreground duplicates validate their source on a bounded background worker. Each incoming duplicate replaces pending validation evidence; unchanged source keeps its generation, changed/unreadable source enqueues one replacement during UI polling. Navigation cancels old validation; completion of the original decode does not lose a required reload. Reload preserves image index, scalar window and development recipe and re-enters foreground prefetch priority.",
+  "passed": 183,
+  "failed": 0,
+  "ignored": 32,
+  "log": "/tmp/rrrah-async-foreground-duplicate-final-20261011.log",
+  "log_sha256": "531dc62eae9cbca95aa3d2efbcb05e7ec463250abe41a43677abe06eb85e8d01",
+  "source_sha256": {
+    "crates/rrrah-app/src/main.rs": "3405a3508bbfe65110ad38639c8445f9ee0017427195e743302e12106a300a70",
+    "crates/rrrah-app/src/source_validation.rs": "3bda01da36c2364e6031db1b99ec78fa05fbf779001ee91b6773fab5587fa3bd"
+  },
+  "limitations": [
+    "Blocked reader is controlled with synchronized channels, not a physical slow disk.",
+    "The source identity retains the existing sampled fingerprint semantics.",
+    "An OS read can still block its worker; checks retain no mosaic or thumbnail pixels.",
+    "Native ordinary-navigation observations do not exercise source modification during an active duplicate request.",
+    "Dropped-path metadata inspection still performs UI-thread filesystem access."
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "status": "complete_eight_tracked_text_files_read",
+  "repository": "Wassasin/tinyphash",
+  "commit": "7c7c503d331cc8fd5507db58e5813398f3939189",
+  "source": "/Users/themoretheless/.codex/tmp/rrrah-tinyphash-source-20261013",
+  "files": [
+    {
+      "path": ".clang-format",
+      "mode": "100644",
+      "git_blob": "468ceea01f1a013ceb7c14a6344a8e1dd00d483a",
+      "sha256": "b4dc898fb88008a7add5fe976d0b964d5acb1e4267c7dcd228066d72a5122312",
+      "bytes": 18,
+      "lines": 1
+    },
+    {
+      "path": ".gitignore",
+      "mode": "100644",
+      "git_blob": "86571d72b72570dcc7eaecdb23e3d90ed50fea10",
+      "sha256": "baed3774fd5d0e704bc08a481637f96c82443644b1b02a8cd3f55c967d644c7c",
+      "bytes": 47,
+      "lines": 5
+    },
+    {
+      "path": "LICENSE",
+      "mode": "100644",
+      "git_blob": "d217d6d4e1d6a80b62cb2df3fdfd0e577b5e5399",
+      "sha256": "fee9ca628ec46b9a0a1ebc229604d276d849c3b1bfabed0d6b412201052f49cf",
+      "bytes": 1055,
+      "lines": 7
+    },
+    {
+      "path": "README.md",
+      "mode": "100644",
+      "git_blob": "9634aae226bd49d50b654f8eaaffc565fd92de0d",
+      "sha256": "3f1679d500f4353bcd8db26a8fc6c11286bdf9acb0a884f172b0fe9140564391",
+      "bytes": 2014,
+      "lines": 59
+    },
+    {
+      "path": "cli.c",
+      "mode": "100644",
+      "git_blob": "2cb175dbbd1ffc51d12e91978505949c81a06b4e",
+      "sha256": "b18eb05e76abfde917b4728f2fe5b74a57fcef3417c52a24b4382a8c6a91285c",
+      "bytes": 1034,
+      "lines": 43
+    },
+    {
+      "path": "png.h",
+      "mode": "100644",
+      "git_blob": "fe380a3c8f17c4ce4575a3eab4e56015d66e3b8c",
+      "sha256": "849b2f11a32ddf5d23151622ad87bc0b5a7781886bb992d8d1c0ddffc8c1d9b1",
+      "bytes": 2085,
+      "lines": 87
+    },
+    {
+      "path": "tinyphash.c",
+      "mode": "100644",
+      "git_blob": "6b985eb5c31035df04d80f5440763453fe816525",
+      "sha256": "9fca6257eca19830d7fb1365e56df45cd2a1d80aeb57b661ce53f47e5133b8f9",
+      "bytes": 7139,
+      "lines": 252
+    },
+    {
+      "path": "tinyphash.h",
+      "mode": "100644",
+      "git_blob": "fef609bd54bb1cc1e5355b6ec0e09e017fd0867a",
+      "sha256": "6ddee8929e364480133015ceeca44bb05cf9011f1bef979af8abc86cc87e406c",
+      "bytes": 1943,
+      "lines": 57
+    }
+  ],
+  "implementation_files": [
+    "tinyphash.c",
+    "tinyphash.h",
+    "cli.c",
+    "png.h"
+  ],
+  "upstream_tests": 0,
+  "license": "Full MIT LICENSE read, Wouter Geraedts2020; header says rewritten from aetilius/pHash, no production copying or derivative-provenance clearance claim",
+  "findings": [
+    "Crop indexes source rows by destination dimension8 instead of source dimension32",
+    "Median memcpy copies size bytes instead of size*sizeof(float);64increasing floats produce0instead of32.5",
+    "Comparator returns1for equal values rather than0",
+    "Hash packing shifts after final bit, dropping earliest bit and forcing low bit0",
+    "Core requires38x38single-channel bytes; dimension checks are assertions, no length or allocation/cancellation/work admission",
+    "CLI checks color/dimensions/bpp; libpnglite unavailable in this environment; numeric zero comparison hash is treated as parse failure and trailing parse characters are not checked",
+    "README reusable-matrix example tests undeclared dct_matrix_transposed instead of declared pointer; inspected but not compiled"
+  ]
+}

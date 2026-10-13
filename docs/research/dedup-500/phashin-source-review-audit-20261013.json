@@ -1,0 +1,96 @@
+{
+  "status": "verified_complete_implementation_review_and_registry_correction",
+  "repository": "aaronshaf/phashin",
+  "commit": "c1cb04727239439e09c151cbea40dbf050f348c9",
+  "source": "/Users/themoretheless/.codex/tmp/rrrah-phashin-source-20261013",
+  "files": {
+    ".dockerignore": {
+      "git_blob": "93f13619916123cf5434dab2ffcc8263c7420af1",
+      "sha256": "7c12a77f46e042412273b579d497f70d7ba24c3892a295b393a06c84fc4921c3",
+      "bytes": 27
+    },
+    ".gitignore": {
+      "git_blob": "0d764f74bc5483cd9a7a33bb7531b7bdee20e300",
+      "sha256": "399863e61e1aa01e58b742fc37af14bfb4c94c849ee004cee6c6c4210d061fbb",
+      "bytes": 113
+    },
+    "Dockerfile": {
+      "git_blob": "eaf55ec668c43f3f157d575a7fec9f9fc4111470",
+      "sha256": "dbb1176bce0ccb3a8dd52b47add274fd7c9871611477d797a322ea5ef67eeedc",
+      "bytes": 497
+    },
+    "LICENSE": {
+      "git_blob": "b29c2683c321d84a7004d9785abb14104f8bda8d",
+      "sha256": "04f9d31058eb0af55ef94fac56cdab0190ed9cd7390db5d9551a9667343bc4a4",
+      "bytes": 1074
+    },
+    "README.md": {
+      "git_blob": "78f4b84a0b9ce080d9363150922b6545a761fb9b",
+      "sha256": "02027351e312a59d38a9bde5f4be61fffe2ade8aa3ab16b18e26b4d963eebe5d",
+      "bytes": 143
+    },
+    "docker-compose.yml": {
+      "git_blob": "93f9d2cea38ca4413caaa7374cd58e60eb931f34",
+      "sha256": "0bc252a4113797d36ba2e127e03b3b5aaf08e24a32e6073bd1db13c816429fd8",
+      "bytes": 378
+    },
+    "index.js": {
+      "git_blob": "04c07daced17d6cb83a2fd130a4dcc9470cbaccd",
+      "sha256": "3293b438a22bffbd90da51fb2fb63ca74d1f84c51f0af7443b0f270bf9d1cd14",
+      "bytes": 2509
+    },
+    "package.json": {
+      "git_blob": "b39696345c678aeeeabbbed3054f8a36c97bc379",
+      "sha256": "77f8edf33efd4da627fb11cda7c692ab9b10bb46d24a5eab2f004db74886bae8",
+      "bytes": 338
+    },
+    "test.js": {
+      "git_blob": "ccf936a9e75288d21b1baccad73dc955c0ac4f3f",
+      "sha256": "679845e50ac72cf592b8b577e081d95763b9e9585a4af61d6baf68944ea382e0",
+      "bytes": 180
+    },
+    "yarn.lock": {
+      "git_blob": "75adfa68e42f15abc76e82c5fef5fec8478e9106",
+      "sha256": "0f2706e8daedd49164a843a4e2d78d610459e76baef8a09c120ef6d9484d44cf",
+      "bytes": 42237
+    }
+  },
+  "fully_read_implementation": [
+    "index.js",
+    "test.js"
+  ],
+  "fully_read_configuration": [
+    "Dockerfile",
+    "docker-compose.yml",
+    "package.json",
+    ".gitignore",
+    ".dockerignore",
+    "README.md",
+    "LICENSE"
+  ],
+  "lock_scope": "Whole file acquired and Git-blob verified; inventory and phash entry inspected, not manual dependency source audit",
+  "syntax_checks": {
+    "runtime": "Node22.23.3",
+    "commands": [
+      "node --check index.js",
+      "node --check test.js"
+    ],
+    "returncodes": [
+      0,
+      0
+    ]
+  },
+  "runtime_behavior_executed": false,
+  "whole_implementation_complete": true,
+  "whole_repo_complete": false,
+  "findings": [
+    "Main service only captures screenshots; pHash import commented and no duplicate comparison",
+    "test.js has no assertion, fixture absent and package has no test script",
+    "phash appears in yarn.lock but not package.json; Docker uses npm install without copying lock",
+    "Screenshot save promise not returned; browser.end only in timer branches, catch(next) has no explicit teardown: static lifecycle concerns, not executed failures",
+    "Fixed screenshot delete timer not tied to response completion: static race concern, not runtime proof"
+  ],
+  "decision": "exclude_from_duplicate_algorithm_shortlist_capture_reference_only",
+  "adopted_code": false,
+  "license": "MIT Aaron Shafovaloff2017"
+}

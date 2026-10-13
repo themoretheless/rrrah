@@ -1,0 +1,43 @@
+{
+  "status": "complete_bounded_collection_qualification_on_frozen_revision",
+  "scope": "Complete bounded all-pairs native/learned collection search; not full corpus or hard RSS qualification.",
+  "source_snapshot": "docs/research/dedup-portfolio-collection-sticky-snapshot-20261010.json",
+  "source_files": 3049,
+  "mac_collection_tests": 8,
+  "mac_final_generation_unit_tests": 1,
+  "linux_unit_tests": 54,
+  "linux_collection_tests": 8,
+  "linux_features": [
+    "decode"
+  ],
+  "linux_libtorch_runtime_qualified": false,
+  "measurement": "docs/research/dedup-portfolio-collection-sticky-measurement-20261010.json",
+  "frozen_build": "docs/research/dedup-portfolio-collection-sticky-frozen-build-20261010.log",
+  "live_checkout_drift": [
+    "vendor/hayro/src/knockout_interpreter.rs"
+  ],
+  "drift_handling": "Rebuilt from immutable snapshot; preserve independent live checkout changes.",
+  "remaining": [
+    "O(n squared) comparison cost; original three-file control takes about seventeen minutes on the shared host",
+    "Hard tensor/workspace/RSS admission; measured peak about 2.32 GiB",
+    "Crumpled rephoto 200302 automatic native inference not yet qualified; external tiled proposals now have pixel support",
+    "Broad formats/corpus/platform qualification"
+  ],
+  "real_collections": 2,
+  "real_pairs": 6,
+  "source_revision_scope": "Only the frozen sticky collection revision; subsequent explicit-region API changes are separate and not covered.",
+  "original_resolution_positive_exact_parity": true,
+  "maximum_process_peak_rss_bytes": 2486665216,
+  "original_resolution_elapsed_seconds": 1009.128231959,
+  "pins": {
+    "docs/research/dedup-portfolio-collection-sticky-snapshot-20261010.json": "69dc847b950f03b2d6b1850233c02fa457ff783b4953bb2210cf6d6b97ad5128",
+    "docs/research/dedup-portfolio-collection-sticky-native-build-20261010.log": "406481f16ddf3629b9bf987c7e735e19393450466e28a67bdbed2640aad171c4",
+    "docs/research/dedup-portfolio-collection-sticky-frozen-build-20261010.log": "41b441e3353b68ddbcbb55805044d3ccc6be90dc0f6aa455238023db38b84ffe",
+    "docs/research/dedup-portfolio-collection-sticky-measurement-20261010.json": "016190c2f0f9274bc35e22b6306b1311da7e78dde2197951a3f6e32d3638b061",
+    "docs/research/dedup-portfolio-collection-sticky-frozen-measurement-20261010.log": "4f1ddef96b33277970f9f74ca9d16f3a6c575d8841db2e24c6ff66ce82f772a9",
+    "docs/research/dedup-portfolio-collection-sticky-linux-tests-20261010.log": "8f74c15058142886a10b42ce09d6ef16a7cb2d9d83ffacff6c64fdf0f8fc9d00",
+    "docs/research/dedup-portfolio-collection-sticky-integration-tests-20261010.log": "1c90b5679cbfd048718f7f14c21c665abc33fe7d5e1210fa1c7dde3d65197341",
+    "docs/research/dedup-portfolio-collection-sticky-tests-20261010.log": "1a6a4ab530d1bada557afab2492ccf1e3b9da5b626e7c3c1b03c73b33322bfdc",
+    "docs/research/dedup-portfolio-collection-superseded-20261010.json": "fccbfc06cb54bd2f2d551892459d8ca75fbbc4a183dffe1131e99a038fe0c999"
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-11",
+  "scope": "Actual native ASTC HDR viewer window with explicit linear-sRGB CLI",
+  "source": "tests/fixtures/raster/hdr-compressed.astc",
+  "source_sha256": "a04a2d3c99176bf710e98d071e9c0d28cad7f5f2b02b09bdf00b2cbeca63f792",
+  "adapter": "Metal Apple M4 Max",
+  "surface": "Rgba16Float / ExtendedSrgbLinear",
+  "window_title": "Rrrah \u2014 image 23x17 ready in 6.78ms",
+  "timing_boundary": "Single tiny warm source, app-reported image-ready latency; not process startup, benchmark or physical presentation timing",
+  "CUA_observations": [
+    "Native window ready 23x17",
+    "Default HDR image clips to white in SDR screenshot representation",
+    "Sixteen minus key presses immediately expose colored spatial gradients",
+    "R resets immediately to original white screenshot appearance",
+    "Test app quit using super+q"
+  ],
+  "display": {
+    "displays": [
+      {
+        "currentEDR": 16,
+        "name": "Built-in Retina Display",
+        "potentialEDR": 16,
+        "referenceEDR": 0
+      }
+    ],
+    "observedAt": "2026-10-11T01:50:56Z",
+    "schemaVersion": 1
+  },
+  "upload_pending": 0,
+  "log": "/tmp/rrrah-native-astc-20261011/viewer.log",
+  "log_sha256": "6546e566e125a6fa84697980724604aecff8eb83e1b3bbfcc37684c4bb2b1252",
+  "prior_temporary_launcher_restored": true,
+  "limitations": [
+    "One authored ASTC HDR fixture",
+    "SDR screenshots and EDR metadata do not measure physical HDR luminance or color",
+    "No universal speed or producer qualification",
+    "NVIDIA deferred"
+  ]
+}

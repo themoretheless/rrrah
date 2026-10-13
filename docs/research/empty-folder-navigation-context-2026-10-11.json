@@ -1,0 +1,28 @@
+{
+  "date": "2026-10-11",
+  "scope": "Completed empty folder scan replaces stale navigation context",
+  "bug": "App::drain_folder_scan previously replaced gallery only for nonempty results, leaving old file paths and selection available after an empty result",
+  "fix": "Always replace gallery and recompute gallery_index after accepted scan generation; pending-drop and stale-generation guards retained",
+  "regression": "Real FolderScanner result consumed through App::drain_folder_scan for open_first=false and true; old gallery emptied, index cleared, old index cannot enqueue load; existing displayed source path retained",
+  "tests": {
+    "focused_passed": 1,
+    "app_gate_passed": 201,
+    "failed": 0,
+    "ignored": 36
+  },
+  "logs": [
+    {
+      "path": "/tmp/rrrah-empty-folder-navigation-20261011.log",
+      "sha256": "8cce0b09e22cf27a44fcd2af3f5727db27160f84567cde0b7d4cefb0add44bd1"
+    },
+    {
+      "path": "/tmp/rrrah-empty-folder-app-all-20261011.log",
+      "sha256": "46ee1e02d013214a775644d1b3e20dcbf0a376a0fb664296d626be65235a83b2"
+    }
+  ],
+  "limits": [
+    "Unit integration with actual folder scanner, not native-window navigation test",
+    "Sibling-folder filmstrip enumeration is intentional current design and unchanged",
+    "Does not complete remaining image format/HDR qualification"
+  ]
+}

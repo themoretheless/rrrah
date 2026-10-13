@@ -1,0 +1,37 @@
+{
+  "change": [
+    "metadata u16 upper bound certifies finite normalization/gain correction on ordinary uploads",
+    "only potentially unsafe metadata triggers an actual source sample scan, with row cancellation checks",
+    "actual non-finite correction or nonzero division by subnormal range refused before resource replacement",
+    "zero numerator returns zero before shader division; valid all-zero extreme-range source accepted"
+  ],
+  "focused_tests": {
+    "passed": 14,
+    "failed": 0,
+    "ignored": 0
+  },
+  "full_gpu_tests": {
+    "passed": 117,
+    "failed": 0,
+    "ignored": 13
+  },
+  "backend": "Metal Apple M4 Max",
+  "targets": [
+    "Rgba16Float",
+    "Rgba32Float"
+  ],
+  "checks": [
+    "all-zero smallest-positive-white field displays exact black",
+    "nonzero normalization overflow refused",
+    "finite maximum gain multiplication overflow refused",
+    "previous frame and resident credit unchanged after each refusal",
+    "valid retry exact"
+  ],
+  "log_sha256": "2450fd839d853996dcf0fef3fb13152bdbe44b480f6b6fd51f782e953a4f1a73",
+  "full_gpu_log_sha256": "6ccce5d0c4ad43c8e9748a1d0092d39db4892bd357fbbe96239e3d9fadb63f1b",
+  "limits": [
+    "This bounds normalization and white-balance correction; later interpolation/matrix/exposure and half-float output overflow are not fully qualified by these tests",
+    "Normal uploads avoid extra sensor scans by a metadata bound; no throughput speedup claimed",
+    "Physical HDR calibration and NVIDIA remain pending"
+  ]
+}

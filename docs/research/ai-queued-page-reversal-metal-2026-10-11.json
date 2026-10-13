@@ -1,0 +1,33 @@
+{
+  "scope": "Pinned AI originals, production ForegroundLoader submit queue/coalescing and preload/cache routines with test-owned background thread, actual Metal",
+  "sequence": [
+    "active VectorApple preload held behind decode gate",
+    "submit one.ai page1",
+    "submit one.ai page0",
+    "submit one.ai page1"
+  ],
+  "verified": [
+    "Old generation cancelled and stale preload returns failure without cached output",
+    "Pending channel contains only latest one.ai page1 request",
+    "Latest page1 decodes after old worker joins and gate releases",
+    "Neighbour page0 retained under distinct key; cache count2",
+    "Latest visible page1 RAM hit shares allocation under full managed root pressure",
+    "128x96 SDR and HDR Metal frames exact before/after hit",
+    "Managed root final zero"
+  ],
+  "root_limit_bytes": 67108864,
+  "adapter": "Metal Apple M4 Max",
+  "production_change": false,
+  "tests": {
+    "passed": 1,
+    "failed": 0,
+    "ignored": 0
+  },
+  "log_sha256": "75303eefe3bc65b649d3e2c8c61ef3c175ee0b765c4f0f609f11429926d39821",
+  "limitations": [
+    "Test owns worker thread rather than creating native window/event-loop worker",
+    "Stale preload is blocked/cancelled before decode; this does not prove cancellation halfway through AI rendering",
+    "Original AI appearance still independently unqualified",
+    "Headless HDR is not physical display qualification"
+  ]
+}

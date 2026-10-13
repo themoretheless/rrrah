@@ -1,0 +1,26 @@
+{
+  "implementation": "ModelReady queues bounded GPU preparation; accepted completion installs only after current generation/id check; stale source lease/result dropped; worker wakes event loop; no triangle traversal in accepted UI upload branch",
+  "app_model_tests_passed": 22,
+  "explicit_metal_worker_passed": 1,
+  "evidence": [
+    {
+      "suite": "check",
+      "log": "docs/research/model-worker-integrated-check-2026-10-11.log",
+      "sha256": "098d18a6ab7d89ae5405e42a399355e0916e966b164e7ae582f61c230b8bf295"
+    },
+    {
+      "suite": "app-tests",
+      "log": "docs/research/model-worker-integrated-app-tests-2026-10-11.log",
+      "sha256": "edc9582db0555ce580c13e55e4cd88b6b73bff465a30eafb5baf8f7c57297701"
+    },
+    {
+      "suite": "metal-worker",
+      "log": "docs/research/model-worker-integrated-metal-worker-2026-10-11.log",
+      "sha256": "10f284a002bce2b1e6c9ba827bee340afaefbc40b84020110fe2c2f8687868aa"
+    }
+  ],
+  "limitations": [
+    "Locked screen prevents interactive navigation/frame-time qualification.",
+    "Render pipeline creation and depth resize still occur on UI thread."
+  ]
+}

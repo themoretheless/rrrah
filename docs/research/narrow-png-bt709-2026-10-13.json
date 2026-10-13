@@ -1,0 +1,45 @@
+{
+  "change": "Narrow-range integer BT709 RGB to linear sRGB with signed inverse transfer and unchanged full-range alpha. Metadata and original PNG integer codes remain unchanged.",
+  "reference": "https://www.w3.org/TR/png-3/#11cICP",
+  "code_ranges": {
+    "8bit": [
+      16,
+      235
+    ],
+    "16bit": [
+      4096,
+      60160
+    ]
+  },
+  "verification": {
+    "all_8bit_codes": 256,
+    "all_16bit_codes": 65536,
+    "reference": "Independent signed double-precision inverse BT709 formula, absolute error < 1e-6 at every code",
+    "memory": "Exact output admission; one-byte-short refusal; post-allocation cancellation and same-root retry; final0",
+    "core_passed": 120,
+    "core_ignored": 2,
+    "decode_passed": 1027,
+    "decode_ignored": 73,
+    "metal": "111 files / 140 selections / 280 storage cases, all full SDR/HDR frames exact; added narrow PNG source native/prepared/pressure/cancel/retry/swap metadata exact, root/queue0",
+    "evidence_verifier_tests_passed": 8
+  },
+  "limitations": [
+    "Narrow float sources have no integer source-depth contract and remain unsupported",
+    "Narrow-range PQ/HLG remains unsupported",
+    "Authored controls; no new original-producer or physical HDR calibration",
+    "Fixture count is not format count; NVIDIA deferred"
+  ],
+  "sha256": {
+    "docs/research/narrow-bt709-core-2026-10-13.log": "fde291fbba370486fa21724272912a0b90596dca8eed33af410abe995b5655f8",
+    "docs/research/narrow-png-core-2026-10-13.log": "4e80dc2443f8434a97a003de2b8fd3d9c5a8f7a0ddb2169bd2ff8ad2ed0881b7",
+    "docs/research/narrow-png-decode-final-2026-10-13.log": "1e442dd4616869cc56d0d8034cf00463531f11b5747dbb247db70a83b13f1c55",
+    "docs/research/narrow-png-metal-2026-10-13.log": "bcfb72ee622530c6bc4f865f1f2e4fcbd0fb30f55eec080b94dd8242a5d5d198",
+    "crates/rrrah-core/src/raster.rs": "8c1830d9959d0cbe675b7fa88c2512ebc20529cd35376ad66fb02679fd616642",
+    "crates/rrrah-decode/src/raster.rs": "50a0963bceef7e2252775a55a02e3bf8d0bd9e11a3e264f65d939ec779798ba8",
+    "crates/rrrah-app/tests/raster_collection_metal.rs": "6986e2dad43fc6ef04f06c8245f357a38873f3b19ce286f599b0124ab305b880",
+    "scripts/generate-png-cicp-fixtures.py": "bb7dea36f52568eaaa69cd5c3f87e9b7aba81026a829512140e71c049fed4008",
+    "scripts/qualify-viewer-storage-gpu.py": "4b2ae561d8a000ebe723556bcdb90184b5779940a0f9d6ec5b50a0dabb675be3",
+    "scripts/test-viewer-storage-gpu-evidence.py": "20a57d4fe0d6034dd35f10b41ee5ef2cf44407ec55f77afa8ce090ba6b2eddfb",
+    "tests/fixtures/raster/cicp-narrow-709.png": "c28bbbc366f11641476fae939b0495fe41f04fc5ede669510d978f24586b223e"
+  }
+}

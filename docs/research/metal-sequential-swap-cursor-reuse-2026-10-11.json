@@ -1,0 +1,22 @@
+{
+  "change": "Reuse known file position for adjacent verified swap blocks; seek only for nonadjacent or unknown cursor",
+  "safety": "Invalidate known cursor before read; successful complete read updates it, partial errors force explicit seek on retry",
+  "validation": [
+    "Full cache/swap suites pass",
+    "New real-file truncation/repair retry regression passes",
+    "36MP worker produces exact original-reference Metal HDR frame with full source released and final resources zero"
+  ],
+  "timing": {
+    "worker_ms": 719.705708,
+    "publish_render_readback_ms": 6.257833,
+    "total_ms": 727.907916,
+    "managed_peak": 427776.0,
+    "index_bytes": 281280.0,
+    "source_cpu": 0.0
+  },
+  "performance_conclusion": "No latency improvement demonstrated: current single worker sample 719.71ms versus prior 608.93ms, under different concurrent load. Reduction of redundant seeks is structural, not a measured end-to-end speedup.",
+  "remaining": [
+    "CPU source filtering remains dominant",
+    "Physical HDR and NVIDIA unverified"
+  ]
+}

@@ -1,0 +1,173 @@
+--- a/vendor/hayro-interpret/src/encode/native_source.rs
++++ b/vendor/hayro-interpret/src/encode/native_source.rs
+@@ -114,6 +114,30 @@
+     }
+     components
+ }
++// Outward intervals enclose the rounded result of each ordinary f64
++// operation. Refuse infinities rather than publishing an unbounded certificate.
++#[derive(Clone,Copy)]
++struct MeshWeightInterval {lo:f64,hi:f64}
++impl MeshWeightInterval {
++    fn new(lo:f64,hi:f64)->Option<Self> {(lo.is_finite() && hi.is_finite() && lo<=hi).then_some(Self {lo,hi})}
++    fn exact(v:f64)->Option<Self> {Self::new(v,v)}
++    fn op(self,other:Self,kind:u8,work:&mut usize,cancelled:&dyn Fn()->bool)->Option<Self> {
++        if cancelled() {return None;}*work=work.checked_sub(1)?;
++        let (lo,hi)=match kind {
++            0=>(self.lo+other.lo,self.hi+other.hi),
++            1=>(self.lo-other.hi,self.hi-other.lo),
++            _=>{
++                if kind==3 && other.lo<=0. && other.hi>=0. {return None;}
++                let values=if kind==2 {[self.lo*other.lo,self.lo*other.hi,self.hi*other.lo,self.hi*other.hi]}
++                    else {[self.lo/other.lo,self.lo/other.hi,self.hi/other.lo,self.hi/other.hi]};
++                if values.iter().any(|v|!v.is_finite()) {return None;}
++                (values.iter().copied().fold(f64::INFINITY,f64::min),values.iter().copied().fold(f64::NEG_INFINITY,f64::max))
++            }
++        };
++        Self::new(lo.next_down(),hi.next_up())
++    }
++}
++
+ impl NativeTriangle {
+     fn bounds(&self) -> kurbo::Rect {
+         let mut bounds = kurbo::Rect::from_points(self.points[0], self.points[1]);
+@@ -683,6 +707,40 @@
+         if cancelled() { return Err(Cancelled); }
+         if components[..self.count].iter().any(|v|!v.is_finite() || !(0. ..=1.).contains(v)) { return Err(Invalid); }
+         Ok(NativeShadingSample {components,count:self.count,opacity:self.opacity})
++    }
++
++    /// Outward intervals for all three computed, unprojected barycentric weights
++    /// over a device rectangle. Includes inverse-transform and weight-operation
++    /// rounding. This is a domain diagnostic, not an affine integration proof.
++    /// Degeneracy, overflow, work exhaustion and cancellation refuse safely.
++    pub fn mesh_triangle_weight_bounds(&self,index:usize,rect:kurbo::Rect,
++        cancelled:&dyn Fn()->bool,remaining:&mut usize)->Result<[[f64;2];3],NativeShadingError> {
++        use NativeShadingError::*;
++        if cancelled() {return Err(Cancelled);}
++        *remaining=remaining.checked_sub(1).ok_or(WorkLimit)?;
++        let triangle=self.mesh.as_ref().ok_or(Unsupported)?.triangles.get(index).ok_or(Invalid)?;
++        let result=(|| {
++            let x=MeshWeightInterval::new(rect.x0,rect.x1)?;let y=MeshWeightInterval::new(rect.y0,rect.y1)?;
++            let exact=MeshWeightInterval::exact;
++            let mut op=|a:MeshWeightInterval,b:MeshWeightInterval,k|a.op(b,k,remaining,cancelled);
++            let [xx,yx,xy,yy,tx,ty]=self.inverse.as_coeffs();
++            let px0=op(exact(xx)?,x,2)?;let px1=op(exact(xy)?,y,2)?;
++            let px=op(px0,px1,0)?;let px=op(px,exact(tx)?,0)?;
++            let py0=op(exact(yx)?,x,2)?;let py1=op(exact(yy)?,y,2)?;
++            let py=op(py0,py1,0)?;let py=op(py,exact(ty)?,0)?;
++            let [a,b,c]=triangle.points;let b=b-a;let c=c-a;
++            let denominator=b.x*c.y-b.y*c.x;
++            if !denominator.is_finite() || denominator==0. {return None;}
++            let dx=op(px,exact(a.x)?,1)?;let dy=op(py,exact(a.y)?,1)?;
++            let u=op(dx,exact(c.y)?,2)?;let v=op(dy,exact(c.x)?,2)?;
++            let wb=op(u,v,1)?;let wb=op(wb,exact(denominator)?,3)?;
++            let u=op(exact(b.x)?,dy,2)?;let v=op(exact(b.y)?,dx,2)?;
++            let wc=op(u,v,1)?;let wc=op(wc,exact(denominator)?,3)?;
++            let wa=op(exact(1.)?,wb,1)?;let wa=op(wa,wc,1)?;
++            Some([wa,wb,wc].map(|v|[v.lo,v.hi]))
++        })();
++        if cancelled() {return Err(Cancelled);}
++        result.ok_or(if *remaining==0 {WorkLimit} else {Invalid})
+     }
+ 
+     /// Sum of negative computed barycentric weights before selected-owner
+@@ -1130,6 +1188,46 @@
+         let mut source=source;
+         source.mesh.as_mut().unwrap().triangles[0].colors[0][0]=f32::NAN;
+         assert!(matches!(source.mesh_native_component_bounds(0,&source.color_space,&||false,&mut 13),Err(NativeShadingError::Invalid)));
++    }
++
++    #[test]
++    fn mesh_weight_intervals_enclose_all_rectangle_samples_and_bound_projection() {
++        let mut pattern=axial();
++        Arc::make_mut(&mut pattern.shading).shading_type=Arc::new(ShadingType::TriangleMesh {triangles:vec![native_triangle([[0.;4],[1.;4],[0.;4]],4)],function:None});
++        let mut source=NativeShadingSource::capture(&pattern,&||false,&no_credit).unwrap();
++        for points in [
++            [Point::ZERO,Point::new(8.,0.),Point::new(0.,8.)],
++            [Point::new(0.1,-0.3),Point::new(3.7,0.2),Point::new(-0.8,2.9)],
++            [Point::new(0.1,-0.3),Point::new(-0.8,2.9),Point::new(3.7,0.2)],
++            [Point::ZERO,Point::new(1.,1.),Point::new(2.,2.000000000001)],
++        ] {
++        source.mesh.as_mut().unwrap().triangles[0].points=points;
++        for inverse in [kurbo::Affine::IDENTITY,kurbo::Affine::new([1.25,-0.5,0.75,2.,-3.,4.]),kurbo::Affine::new([-1.,0.,0.,1.,8.,0.])] {
++            source.inverse=inverse;
++            for rect in [kurbo::Rect::new(-4.,-2.,8.,8.),kurbo::Rect::new(1.,1.,2.,2.),kurbo::Rect::new(0.,0.,0.,0.)] {
++                let mut work=1000;
++                let bounds=source.mesh_triangle_weight_bounds(0,rect,&||false,&mut work).unwrap();
++                let used=1000-work;assert!(used>1);
++                for y in 0..=16 {for x in 0..=16 {
++                    let point=Point::new(rect.x0+rect.width()*f64::from(x)/16.,rect.y0+rect.height()*f64::from(y)/16.);
++                    let p=source.inverse*point;let [a,b,c]=points;let b=b-a;let c=c-a;
++                    let cross=|a:kurbo::Vec2,b:kurbo::Vec2|a.x*b.y-a.y*b.x;
++                    let denominator=cross(b,c);let wb=cross(p-a,c)/denominator;let wc=cross(b,p-a)/denominator;
++                    let raw=[1.-wb-wc,wb,wc];
++                    for (value,[lo,hi]) in raw.into_iter().zip(bounds) {assert!(lo<=value && value<=hi,"{value:?} outside {lo:?}..{hi:?}");}
++                    let deficit=source.mesh_triangle_projection_deficit(0,point,&||false,&mut 1).unwrap();
++                    let upper=bounds.iter().fold(0f64,|sum,[lo,_]|(sum+(-lo).max(0.)).next_up());
++                    assert!(deficit<=upper);
++                }}
++                for budget in 0..used {assert!(source.mesh_triangle_weight_bounds(0,rect,&||false,&mut {budget}).is_err());}
++            }
++        }
++        }
++        assert!(matches!(source.mesh_triangle_weight_bounds(0,kurbo::Rect::ZERO,&||true,&mut 1000),Err(NativeShadingError::Cancelled)));
++        assert!(source.mesh_triangle_weight_bounds(0,kurbo::Rect::new(2.,0.,1.,1.),&||false,&mut 1000).is_err());
++        assert!(source.mesh_triangle_weight_bounds(0,kurbo::Rect::new(f64::MAX,0.,f64::MAX,1.),&||false,&mut 1000).is_err());
++        source.mesh.as_mut().unwrap().triangles[0].points=[Point::ZERO;3];
++        assert!(source.mesh_triangle_weight_bounds(0,kurbo::Rect::ZERO,&||false,&mut 1000).is_err());
+     }
+ 
+     #[test]
+--- a/vendor/hayro/src/knockout_interpreter.rs
++++ b/vendor/hayro/src/knockout_interpreter.rs
+@@ -7184,9 +7184,31 @@
+             meshes.push((index,source,std::sync::Arc::new(SpatialMeshGeometry {paths,owners,_credit:credit})));
+         }
+     }
++    struct ProjectionTrace {
++        checks:std::cell::Cell<usize>,projected:std::cell::Cell<usize>,
++        max_deficit:std::cell::Cell<f64>,refused:std::cell::Cell<usize>,work:std::cell::Cell<usize>,
++    }
++    impl Drop for ProjectionTrace {fn drop(&mut self) {
++        eprintln!("SPATIAL_MESH_PROJECTION checks={} projected={} max_deficit={:?} refused={} diagnostic_work={}",self.checks.get(),self.projected.get(),self.max_deficit.get(),self.refused.get(),16_000_000-self.work.get());
++    }}
++    let projection_enabled=std::env::var_os("RRRAH_AI_MESH_PROJECTION").is_some();
++    let _projection_credit=if projection_enabled {Some(admit(size_of::<ProjectionTrace>())?)} else {None};
++    let projection=projection_enabled.then(||ProjectionTrace {checks:std::cell::Cell::new(0),projected:std::cell::Cell::new(0),max_deficit:std::cell::Cell::new(0.),refused:std::cell::Cell::new(0),work:std::cell::Cell::new(16_000_000)});
+     let mut mesh_samples=Vec::new();mesh_samples.try_reserve_exact(mesh_count).ok()?;
+     let trace_point_sources=point.is_some() && std::env::var_os("RRRAH_AI_TRACE_POINT_SOURCES").is_some();
+     for (event,source,geometry) in &meshes {
++        if std::env::var_os("RRRAH_AI_MESH_WEIGHT_BOUNDS").is_some() {
++            let mut work=4_000_000;let mut accepted=0;let mut refused=0;let mut inside=0;let mut max_deficit=0f64;
++            for &owner in &geometry.owners {
++                if cancelled() {return None;}
++                if let Ok(bounds)=source.mesh_triangle_weight_bounds(owner,rect,cancelled,&mut work) {
++                    accepted+=1;if bounds.iter().all(|[lo,_]|*lo>=0.) {inside+=1;}
++                    let deficit=bounds.iter().fold(0f64,|sum,[lo,_]|(sum+(-lo).max(0.)).next_up());
++                    max_deficit=max_deficit.max(deficit);
++                } else {refused+=1;}
++            }
++            eprintln!("SPATIAL_MESH_WEIGHT_BOUNDS event={event} accepted={accepted} refused={refused} nonnegative={inside} max_deficit={max_deficit:?} work={}",4_000_000-work);
++        }
+         if std::env::var_os("RRRAH_AI_MESH_COMPONENT_BOUNDS").is_some() {
+             let mut work=4_000_000;let mut accepted=0;let mut refused=0;let mut narrow=0;
+             let mut min_span=f64::INFINITY;let mut max_span=0f64;
+@@ -7203,7 +7225,17 @@
+         let cost=SourceCost {event:*event,enabled:trace.enabled,calls:std::cell::Cell::new(0),
+             source:std::cell::Cell::new(0),coordinates:std::cell::Cell::new(0),
+             pixel_hits:std::cell::Cell::new(0),pixel_builds:std::cell::Cell::new(0)};
++        let projection=projection.as_ref();
+         mesh_samples.push(move |point:kurbo::Point,cancelled:&dyn Fn()->bool,remaining:&mut usize,owner:Option<usize>| {
++        if let (Some(trace),Some(owner))=(projection,owner) {
++            let mut work=trace.work.get();
++            let deficit=source.mesh_triangle_projection_deficit(owner,point,cancelled,&mut work);
++            trace.work.set(work);trace.checks.set(trace.checks.get()+1);
++            match deficit {
++                Ok(value)=>{if value>0. {trace.projected.set(trace.projected.get()+1);}trace.max_deficit.set(trace.max_deficit.get().max(value));},
++                Err(_)=>trace.refused.set(trace.refused.get()+1),
++            }
++        }
+         let before=*remaining;
+         let result=if let Some(owner)=owner {source.sample_mesh_triangle_with_budget(owner,point,cancelled,remaining).map(Some)}
+             else {source.sample_with_budget(point,cancelled,remaining)};

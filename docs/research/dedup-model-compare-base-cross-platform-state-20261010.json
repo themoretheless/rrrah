@@ -1,0 +1,29 @@
+{
+  "status": "verified_sixteen_base_tests_native_macos_and_aarch64_linux",
+  "tests_per_platform": 16,
+  "test_names": [
+    "both_generations_and_ignored_provider_cancellation_are_sticky",
+    "either_source_or_model_mutation_during_provider_refuses_and_restored_retry_recovers",
+    "every_checkpoint_including_heap_and_final_observes_one_shot_cancellation",
+    "every_global_checkpoint_and_mid_final_generation_cancellation_discard_payload",
+    "every_one_shot_cancellation_checkpoint_releases_all_output_credit",
+    "external_palette_is_rechecked_after_preparation_and_mutation_discards_input",
+    "file_input_retains_only_output_and_rechecks_source_and_generation_after_inference",
+    "heap_selection_matches_stable_reference_with_ties_boundaries_and_both_side_collisions",
+    "invalid_caps_and_unsupported_pixels_refuse_atomically",
+    "invalid_policy_precedes_io_and_mid_preparation_source_changes_are_errors",
+    "malformed_inputs_and_each_work_limit_refuse_without_a_partial_result",
+    "managed_payload_credit_survives_clones_and_all_cancellation_paths_release_it",
+    "odd_edges_match_independent_continuous_area_reference_and_credit_tracks_owners",
+    "policy_preflight_and_proposal_count_refuse_without_partial_evidence",
+    "supplied_provider_supports_original_pixels_empty_is_explicit_and_errors_do_not_become_misses",
+    "tiny_inputs_are_explicitly_upsampled_and_linear_gray_is_srgb_encoded"
+  ],
+  "pins": {
+    "docs/research/dedup-model-compare-snapshot-20261010.json": "ce2332977600a79172c064e9cbc5e9da0459178fc6d2f14340b97b869f395640",
+    "docs/research/dedup-model-compare-combined-tests-20261010.log": "c0c7bb42361774444eec075ec7bb3b8b577411d98a070f809a59ec41ecc7bbe7",
+    "docs/research/dedup-model-compare-linux-20261010.log": "3310ac53ad95f0049fb442bc4c43f26041dcd828a1ccb644037b70ff98fb8b4d"
+  },
+  "snapshot_files_verified": 2998,
+  "scope": "Base unified lifecycle plus file/scalar input and proposal tests. Frozen native provider/library sources before two supplemental late tests. Root macOS current dependencies, Linux older pinned dependencies. Real native model and supplemental late gate pending."
+}

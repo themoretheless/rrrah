@@ -1,0 +1,72 @@
+{
+  "status": "passed",
+  "terminal_exit_code": 0,
+  "adapter": "Metal Apple M4 Max",
+  "fixtures": [
+    {
+      "path": "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/1294.cr2",
+      "width": 6288,
+      "height": 4056,
+      "sha256": "8f28465cee09844ffad95dbd3ec91923717a329c5ec4f3f405f5b4fce83aaea3"
+    },
+    {
+      "path": "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/898.nef",
+      "width": 6032,
+      "height": 4032,
+      "sha256": "f90deb2819863f5a6ca9913c255fdd83a94963f4284eb88df9d389da7a6c7665"
+    },
+    {
+      "path": "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/2414.arw",
+      "width": 6048,
+      "height": 4024,
+      "sha256": "250784580ea527442c09004417bb0eead484f2bf3ee8f9121a776ac65bb50d0f"
+    },
+    {
+      "path": "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/1084.orf",
+      "width": 4640,
+      "height": 3472,
+      "sha256": "b2221977cbc6eba0d3b363351072092e5647eaa0d02a5d8432b5d985b29f669f"
+    },
+    {
+      "path": "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/831.pef",
+      "width": 4352,
+      "height": 2868,
+      "sha256": "51a3f22d702353b246684dca79f83c79cfdbdf9892702ae5ac55dd469e239bb6"
+    },
+    {
+      "path": "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/5025.rw2",
+      "width": 4760,
+      "height": 3472,
+      "sha256": "87516d28f8594dcfd20b0577883ad0d35662efc503674b1e3688aa894d32a2c0"
+    },
+    {
+      "path": "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/2883.raf",
+      "width": 5120,
+      "height": 3288,
+      "sha256": "58ad687b23138c3c49ebeb6c1f80daf13185349be364b947e2bf27e39a462d2f"
+    },
+    {
+      "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/IMG_9043.CR3",
+      "width": 6188,
+      "height": 4120,
+      "sha256": "d06cbb10e84882cf130430bdc88ed2652c2622b96dea8d6a854c09e3bee37e59"
+    },
+    {
+      "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/IMG_9074.CR3",
+      "width": 6188,
+      "height": 4120,
+      "sha256": "9c0d47cc2dd550eb6dc26c4ba2b2874b67f5c89e79dff5c472abf0ac6b2f6178"
+    }
+  ],
+  "log_sha256": "4c83beacfdf9f00fb9f34de0cbccd66fc527198582e13cdd4febb65ac7a3bd85",
+  "source_sha256_after_execution": "53f38469324ebfcbefe70f04a8a73b114b9464fd7da7aa7bdb6ce3b09f9755c2",
+  "scope": "One actual RawPrefetcher and persistent disk cache retained across nine cameras; forward/backward plans alternate; every original sensor sample and metadata compared to independent synchronous native decode; full-sensor-sized Metal output compared exactly. Disk count stays one and previous camera evicted; managed input and reference budgets final zero.",
+  "limits": [
+    "Nine fixtures only",
+    "Each submitted plan has one available RAW neighbor, so does not qualify simultaneous multi-neighbor scheduling",
+    "Generation cancellation separately qualified by existing EOS R8 reversal test",
+    "Offscreen SDR readback, not physical HDR color accuracy",
+    "Reference decode uses same native implementation; comparison proves worker/cache equivalence, not independent decoder/color correctness"
+  ],
+  "log": "warning: function `fallible_zeroed_bytes` is never used\n   --> crates/rrrah-cache/src/mosaic_payload_v1.rs:728:4\n    |\n728 | fn fallible_zeroed_bytes(len: usize) -> Result<Box<[u8]>, MosaicPayloadError> {\n    |    ^^^^^^^^^^^^^^^^^^^^^\n    |\n    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default\n\nwarning: `rrrah-cache` (lib) generated 1 warning\n   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)\n    Finished `test` profile [optimized + debuginfo] target(s) in 2m 02s\n     Running unittests src/main.rs (/tmp/rrrah-required-corpus-target/debug/deps/rrrah-14b2e2b2b9670d3d)\n\nrunning 1 test\ntest gallery::tests::mixed_camera_worker_prefetch_preserves_full_metal_frames ... mixed RAW worker adapter: Metal Apple M4 Max\nmixed RAW worker: /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/1294.cr2 full=6288x4056; original samples and frame exact; disk-count=1; root=0\nmixed RAW worker: /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/898.nef full=6032x4032; original samples and frame exact; disk-count=1; root=0\nmixed RAW worker: /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/2414.arw full=6048x4024; original samples and frame exact; disk-count=1; root=0\nmixed RAW worker: /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/1084.orf full=4640x3472; original samples and frame exact; disk-count=1; root=0\nmixed RAW worker: /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/831.pef full=4352x2868; original samples and frame exact; disk-count=1; root=0\nmixed RAW worker: /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/5025.rw2 full=4760x3472; original samples and frame exact; disk-count=1; root=0\nmixed RAW worker: /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/2883.raf full=5120x3288; original samples and frame exact; disk-count=1; root=0\nmixed RAW worker: /Users/themoretheless/Documents/Sources/rrrah/tests/IMG_9043.CR3 full=6188x4120; original samples and frame exact; disk-count=1; root=0\nmixed RAW worker: /Users/themoretheless/Documents/Sources/rrrah/tests/IMG_9074.CR3 full=6188x4120; original samples and frame exact; disk-count=1; root=0\nok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 204 filtered out; finished in 46.17s\n\n"
+}

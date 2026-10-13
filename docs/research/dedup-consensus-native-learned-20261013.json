@@ -1,0 +1,45 @@
+{
+  "status": "complete_corrected_learned_control_pending_audit",
+  "producer_pid": 16109,
+  "plan_sha256": "490a3e40b9be0adffcdb3bdcf0b04cf3e6203659580b9a95cf97bd660a20bd15",
+  "command": [
+    "cargo",
+    "+stable",
+    "build",
+    "--offline",
+    "--locked",
+    "--bin",
+    "native_bank_current_all_positives",
+    "--jobs",
+    "2",
+    "--target-dir",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-exact-portfolio-20261011"
+  ],
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-consensus-native-learned-plan-20261013.json": "490a3e40b9be0adffcdb3bdcf0b04cf3e6203659580b9a95cf97bd660a20bd15",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/run-dedup-consensus-native-learned-20261013.py": "5430b175f55bb35554594cf5b82033fc5218d1802a10d7e60638314a5af59d01",
+    "/Users/themoretheless/.codex/tmp/rrrah-consensus-native-learned-20261013/build.log": "7abb1880c1f1129150195085c79f9678454a6731edd21d3047f0897e724805bb",
+    "/Users/themoretheless/.codex/tmp/rrrah-consensus-native-learned-20261013/probe": "97e7dfaa8e9d2ea29d683614fcebb1c5d07337a4d501db0215d5678bd415481a",
+    "/Users/themoretheless/.codex/tmp/rrrah-consensus-native-learned-harness-20261013/Cargo.lock": "40d0319ff61694d6f74b709c8e2df49e5afc536af462b95fb84f38849d050aeb"
+  },
+  "results": [
+    {
+      "index": 0,
+      "label": "self_learned_forced_native_miss",
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-consensus-native-learned-20261013/00.json",
+      "sha256": "615ba981845c1b7b041bb7d1657542eddb664859965e7e701af3cf0b257f578a",
+      "returncode": 0,
+      "support": true,
+      "forward_support": true,
+      "reverse_support": true,
+      "forward_model_attempted": true,
+      "reverse_model_attempted": true
+    }
+  ],
+  "scope": "Corrected explicit learned-path control: all native corner recipes disabled by threshold1e9 in both direct and opposite directions, actual traces must show model attempted both ways. Self pair160input,sourceTolerance4/4,CPU2,seed173once per atomic operation. Not normalized natural-image precision/recall.",
+  "compiler": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: aarch64-apple-darwin\nrelease: 1.98.1\nLLVM version: 22.1.8\n",
+  "child_pid": 16223,
+  "build_returncode": 0,
+  "active_index": 0,
+  "source_unchanged": true
+}

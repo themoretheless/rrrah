@@ -1,0 +1,30 @@
+{
+  "status": "verified_15_current_decode_cache_tests_with_restored_mtime_regression",
+  "passed": 15,
+  "ignored": 0,
+  "tests": [
+    "actual_files_ignore_comments_but_not_changed_pixels",
+    "cache_hits_revalidate_source_and_cancellation_before_returning_evidence",
+    "cached_content_does_not_bypass_extension_selected_decoder_errors",
+    "cached_file_fingerprints_reuse_only_current_content_and_recipe",
+    "cached_page_selection_and_color_assumptions_never_cross_reuse",
+    "cached_wal_tracks_external_palette_changes_and_removal",
+    "corrupt_missing_cancelled_and_frame_out_of_range_are_errors",
+    "icc_conversion_cancellation_releases_partial_output",
+    "layered_xcf_duplicates_preserve_color_errors_and_managed_ownership",
+    "memory_and_persisted_fingerprint_cache_revalidate_same_size_restored_mtime",
+    "multiblock_cache_hit_cancellation_preserves_retry_and_releases_memory",
+    "mutation_during_processing_never_admits_cached_evidence",
+    "pre_icc_fix_persisted_recipe_cannot_reuse_current_fingerprint",
+    "public_selected_decode_rejects_a_source_changed_after_output_admission",
+    "tiff_shaped_raw_never_uses_generic_page_fallback"
+  ],
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-fingerprint-restored-mtime-source-20261012.json": "7649bae1b7268e50fb5ad58e16cf034a2d9532a2a2012c51a5e7ebc4dc0e0256",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exact-root-admission-consumers-source-20261012.json": "a8583775ffa2614f06e783106673f419f42f65512fe9ab142b9db2988edf650e",
+    "/Users/themoretheless/.codex/tmp/rrrah-fingerprint-restored-mtime-tests-20261012.log": "53ca8325c686a4cf21f1d4c87c8c15d8c3129f6c461d2cdb1921983196df335f",
+    "/Users/themoretheless/.codex/tmp/rrrah-fingerprint-restored-mtime-executable-20261012": "1aa90d1dae48e6028eae8ed848e538a19c62db622df21b0f41f0d74fbd4d80f6",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-fingerprint-restored-mtime-20261012.py": "4a8ca5634108c6b2801942dc3589dfc26c5f414b5d27de21766ae96ce9606901"
+  },
+  "scope": "Current production unchanged, one added regression across two same-size bitmap edits with exactrestoredmtime and distinctsubmillisecondmtime. Warm memory and saved/reloaded cache both miss after edit and equal fresh fingerprint; new healthy repeat hits and managed usage returns0. All14existingdecode tests also pass. macOS ARM64 on compatible frozen dependencies, not Windows/currentLinux/allformats/wholeprocesscap/500qualification."
+}

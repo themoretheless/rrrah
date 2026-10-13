@@ -1,0 +1,32 @@
+{
+  "status": "checked_pending_audit",
+  "producer_pid": 58861,
+  "source": "/Users/themoretheless/.codex/tmp/rrrah-worker-group-source-20261013",
+  "source_manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-worker-group-focused-20261013.json",
+  "source_manifest_sha256": "a932877837e0fbf3994e7598ed4ab024456bc064599200f4af089d93d56c5bd0",
+  "command": [
+    "cargo",
+    "check",
+    "-p",
+    "rrrah-dedup",
+    "--lib",
+    "--test",
+    "worker",
+    "--test",
+    "worker_group",
+    "--target",
+    "x86_64-pc-windows-gnu",
+    "--offline",
+    "--locked",
+    "--jobs",
+    "2",
+    "--target-dir",
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013"
+  ],
+  "log": "/Users/themoretheless/.codex/tmp/rrrah-worker-group-windows-check-20261013.log",
+  "scope": "Cross-check default-feature library/single-worker/group-target cfg for Windows GNU. Process-group API/tests are excluded; this is compile checking only, no Windows execution, linking, decode or LoFTR qualification.",
+  "child_pid": 58876,
+  "returncode": 0,
+  "log_sha256": "e5c5830187c8b860be0d715a9265a35bbadff804a9a2247244e3929056e3e2f1",
+  "source_unchanged": true
+}

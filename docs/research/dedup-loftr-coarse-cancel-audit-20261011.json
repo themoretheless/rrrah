@@ -1,0 +1,27 @@
+{
+  "status": "verified_bounded_memory_comparison",
+  "report": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-loftr-coarse-cancel-20261011.json",
+  "report_sha256": "a6d966dd2f440d1e1fa0777e4bbf7c2f8dca1dcd4b60d0e9fd1a3b27e7131e5e",
+  "source_files": 3089,
+  "changes": [
+    "vendor/loftr/src/coarse_matching.rs",
+    "vendor/loftr/src/loftr_model.rs"
+  ],
+  "comparisons": [
+    {
+      "direction": "forward",
+      "baseline_rss_bytes": 1554022400,
+      "candidate_rss_bytes": 1555611648,
+      "rss_reduction_fraction": -0.0010226673695308275,
+      "evidence_equal": true
+    },
+    {
+      "direction": "reverse",
+      "baseline_rss_bytes": 1511538688,
+      "candidate_rss_bytes": 1510506496,
+      "rss_reduction_fraction": 0.0006828750121942173,
+      "evidence_equal": true
+    }
+  ],
+  "limits": "One real positive pair, two directions, single fresh process per variant/direction; not hard RSS cap, full corpus or statistical timing qualification."
+}

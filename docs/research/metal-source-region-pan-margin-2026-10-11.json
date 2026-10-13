@@ -1,0 +1,32 @@
+{
+  "date": "2026-10-11",
+  "backend": "Metal",
+  "hardware": "Apple M4 Max",
+  "change": "Budget-aware source-region panning margin, bounded to min(32,visible_min_dimension/4) pixels",
+  "admission": "Two copies of padded texture and aligned upload layout must fit independently; advisory, atomic upload remains authoritative",
+  "fallback": "If expanded upload refuses memory/extent, retry exact visible region; cancellation remains terminal",
+  "checks": {
+    "app_units_passed": 206,
+    "app_units_ignored": 44,
+    "gpu_units_passed": 51,
+    "explicit_metal_tests_passed": 5,
+    "pan_source_dimensions": [
+      512,
+      320
+    ],
+    "texture_and_queue_budget_each_bytes": 1048576,
+    "sdr_frames_exact": 48,
+    "hdr_frames_exact": 48,
+    "replacement_uploads_per_mode": 2,
+    "final_texture_and_queue_credits": 0,
+    "prior_controls": "Regional pressure/retry, automatic HDR/source/cache switching, stale filter/upload cancellation, worker publication all pass"
+  },
+  "limits": [
+    "No wall-clock pan performance benchmark claimed",
+    "New margin native-window path not exercised in this run; real Metal production helper exercised",
+    "Headroom is advisory under concurrent/shared-ancestor reservations",
+    "CPU full source remains retained",
+    "Physical HDR and NVIDIA unqualified",
+    "Full100-format qualification remains open"
+  ]
+}

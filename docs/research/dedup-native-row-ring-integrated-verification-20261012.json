@@ -1,0 +1,163 @@
+{
+  "status": "verified_complete_native_row_ring_integration_gate",
+  "passed": 316,
+  "ignored": 5,
+  "suites": [
+    {
+      "suite": "lib",
+      "passed": 86,
+      "ignored": [
+        "gradient::batch_tests::alternating_matcher_timing",
+        "gradient::batch_tests::real_photo_matcher_timing",
+        "gradient::matching_tests::alternating_matcher_timing",
+        "gradient::matching_tests::real_photo_matcher_timing",
+        "gradient_index::row_major_tests::row_major_index_build_latency_probe"
+      ],
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-native-row-ring-integrated-executables-20261012/lib",
+      "sha256": "db6b8cdf68108de3baea634e516a718bd4a3576ff1dc5931605c376dc9569cb3"
+    },
+    {
+      "suite": "anchor_fallback_collection_lifecycle",
+      "passed": 1,
+      "ignored": [],
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-native-row-ring-integrated-executables-20261012/anchor_fallback_collection_lifecycle",
+      "sha256": "84e9a429a3e134d763c4bf046a49b341f0df51fd57c6860fa5faa4b175d7f4df"
+    },
+    {
+      "suite": "anchor_reflection_collection_lifecycle",
+      "passed": 1,
+      "ignored": [],
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-native-row-ring-integrated-executables-20261012/anchor_reflection_collection_lifecycle",
+      "sha256": "7367326b06fd4b172bfe687ba6597bb09dbf95ebc033562c1b84fec940a40f55"
+    },
+    {
+      "suite": "anchor_reflection_fallback",
+      "passed": 12,
+      "ignored": [],
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-native-row-ring-integrated-executables-20261012/anchor_reflection_fallback",
+      "sha256": "86d5c8c983a05a8e43e6002bb57c4d699ff02b36b8b648e59298513e9927940b"
+    },
+    {
+      "suite": "candidate_union_files",
+      "passed": 9,
+      "ignored": [],
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-native-row-ring-integrated-executables-20261012/candidate_union_files",
+      "sha256": "8fe0338c904a067f2089cc4d26864dace7642ef2a05a6ecadc02881d57ac6ec1"
+    },
+    {
+      "suite": "correspondence_union",
+      "passed": 2,
+      "ignored": [],
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-native-row-ring-integrated-executables-20261012/correspondence_union",
+      "sha256": "2ca16c941b2000ea29c25cdfa020d7a75ff2da28e52e2df4147c47bfff624fb3"
+    },
+    {
+      "suite": "gradient",
+      "passed": 9,
+      "ignored": [],
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-native-row-ring-integrated-executables-20261012/gradient",
+      "sha256": "f77eafaeb7205b9846b067ff686e22f4e68876622ec94b990450a662c6a2cb5f"
+    },
+    {
+      "suite": "gradient_candidate_smoothing",
+      "passed": 6,
+      "ignored": [],
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-native-row-ring-integrated-executables-20261012/gradient_candidate_smoothing",
+      "sha256": "04f17b26196cb9718fd1b39eadf4a73aee248f4ac412a018927c47e735f0b1c2"
+    },
+    {
+      "suite": "gradient_scale",
+      "passed": 6,
+      "ignored": [],
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-native-row-ring-integrated-executables-20261012/gradient_scale",
+      "sha256": "ce09743d17f3c0668f753132e327226120eac5287dc0fd458682ab2e2787d35e"
+    },
+    {
+      "suite": "gradient_scale_files",
+      "passed": 19,
+      "ignored": [],
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-native-row-ring-integrated-executables-20261012/gradient_scale_files",
+      "sha256": "05936cde339160752f220890072a92a2c9e89cd2d5f20e2d01d1b2c82763173c"
+    },
+    {
+      "suite": "joint_projective",
+      "passed": 4,
+      "ignored": [],
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-native-row-ring-integrated-executables-20261012/joint_projective",
+      "sha256": "06197d4a9b789beb16ea22ff64c477d63bb9cdaee5fa2727d8aeb26211b85887"
+    },
+    {
+      "suite": "model_compare",
+      "passed": 47,
+      "ignored": [],
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-native-row-ring-integrated-executables-20261012/model_compare",
+      "sha256": "bfefccd15106038330c80a41d24f83f7de280a0ed9524736904849c329380566"
+    },
+    {
+      "suite": "model_tiles",
+      "passed": 21,
+      "ignored": [],
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-native-row-ring-integrated-executables-20261012/model_tiles",
+      "sha256": "fd3fa61567d62c688c4e79e68dd1f149b96d3a946d8dc341e17a8efd81c0c751"
+    },
+    {
+      "suite": "native_anchor_recovery",
+      "passed": 2,
+      "ignored": [],
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-native-row-ring-integrated-executables-20261012/native_anchor_recovery",
+      "sha256": "6a56de99206f85c9b1a95e826af1747081dda486c9e1972d547c0a3094d731a5"
+    },
+    {
+      "suite": "pixel_search",
+      "passed": 16,
+      "ignored": [],
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-native-row-ring-integrated-executables-20261012/pixel_search",
+      "sha256": "21a0e05cf0106f0acb249fc5c56815e21d483692c42a76664febb0cd94a2ee31"
+    },
+    {
+      "suite": "portfolio_collection",
+      "passed": 36,
+      "ignored": [],
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-native-row-ring-integrated-executables-20261012/portfolio_collection",
+      "sha256": "8dbc41fee5d45e9fa377d2710126b03c225df8ea7dc64e8fedd0484bcd099945"
+    },
+    {
+      "suite": "projective_domains",
+      "passed": 4,
+      "ignored": [],
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-native-row-ring-integrated-executables-20261012/projective_domains",
+      "sha256": "bcefd2ab25a2e666d655b09f0bd429c5a1244f0ad46a61b07b5b9b8b614569f0"
+    },
+    {
+      "suite": "search_portfolio",
+      "passed": 35,
+      "ignored": [],
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-native-row-ring-integrated-executables-20261012/search_portfolio",
+      "sha256": "b2fc91940d2357b29b7de8800d6bfc2283c30a9db73d4dfb3fb6a0f332314336"
+    }
+  ],
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-native-row-ring-snapshot-20261012.json": "e913283c6e2504ed4c121b97d4209c628282fd293aa5b9d1220247cf9245962d",
+    "/Users/themoretheless/.codex/tmp/rrrah-native-row-ring-integrated-tests-20261012.log": "de57554be0011affad32a8bf751371d1d8633ae803cba0196a78cf19b618581a",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-native-row-ring-integrated-20261012.py": "35ba182f040a0f11d5be38c5ab312ee1f4a3c62b835e2a8a6b8dd1048cb2d68f",
+    "/Users/themoretheless/.codex/tmp/rrrah-native-row-ring-integrated-executables-20261012/lib": "db6b8cdf68108de3baea634e516a718bd4a3576ff1dc5931605c376dc9569cb3",
+    "/Users/themoretheless/.codex/tmp/rrrah-native-row-ring-integrated-executables-20261012/anchor_fallback_collection_lifecycle": "84e9a429a3e134d763c4bf046a49b341f0df51fd57c6860fa5faa4b175d7f4df",
+    "/Users/themoretheless/.codex/tmp/rrrah-native-row-ring-integrated-executables-20261012/anchor_reflection_collection_lifecycle": "7367326b06fd4b172bfe687ba6597bb09dbf95ebc033562c1b84fec940a40f55",
+    "/Users/themoretheless/.codex/tmp/rrrah-native-row-ring-integrated-executables-20261012/anchor_reflection_fallback": "86d5c8c983a05a8e43e6002bb57c4d699ff02b36b8b648e59298513e9927940b",
+    "/Users/themoretheless/.codex/tmp/rrrah-native-row-ring-integrated-executables-20261012/candidate_union_files": "8fe0338c904a067f2089cc4d26864dace7642ef2a05a6ecadc02881d57ac6ec1",
+    "/Users/themoretheless/.codex/tmp/rrrah-native-row-ring-integrated-executables-20261012/correspondence_union": "2ca16c941b2000ea29c25cdfa020d7a75ff2da28e52e2df4147c47bfff624fb3",
+    "/Users/themoretheless/.codex/tmp/rrrah-native-row-ring-integrated-executables-20261012/gradient": "f77eafaeb7205b9846b067ff686e22f4e68876622ec94b990450a662c6a2cb5f",
+    "/Users/themoretheless/.codex/tmp/rrrah-native-row-ring-integrated-executables-20261012/gradient_candidate_smoothing": "04f17b26196cb9718fd1b39eadf4a73aee248f4ac412a018927c47e735f0b1c2",
+    "/Users/themoretheless/.codex/tmp/rrrah-native-row-ring-integrated-executables-20261012/gradient_scale": "ce09743d17f3c0668f753132e327226120eac5287dc0fd458682ab2e2787d35e",
+    "/Users/themoretheless/.codex/tmp/rrrah-native-row-ring-integrated-executables-20261012/gradient_scale_files": "05936cde339160752f220890072a92a2c9e89cd2d5f20e2d01d1b2c82763173c",
+    "/Users/themoretheless/.codex/tmp/rrrah-native-row-ring-integrated-executables-20261012/joint_projective": "06197d4a9b789beb16ea22ff64c477d63bb9cdaee5fa2727d8aeb26211b85887",
+    "/Users/themoretheless/.codex/tmp/rrrah-native-row-ring-integrated-executables-20261012/model_compare": "bfefccd15106038330c80a41d24f83f7de280a0ed9524736904849c329380566",
+    "/Users/themoretheless/.codex/tmp/rrrah-native-row-ring-integrated-executables-20261012/model_tiles": "fd3fa61567d62c688c4e79e68dd1f149b96d3a946d8dc341e17a8efd81c0c751",
+    "/Users/themoretheless/.codex/tmp/rrrah-native-row-ring-integrated-executables-20261012/native_anchor_recovery": "6a56de99206f85c9b1a95e826af1747081dda486c9e1972d547c0a3094d731a5",
+    "/Users/themoretheless/.codex/tmp/rrrah-native-row-ring-integrated-executables-20261012/pixel_search": "21a0e05cf0106f0acb249fc5c56815e21d483692c42a76664febb0cd94a2ee31",
+    "/Users/themoretheless/.codex/tmp/rrrah-native-row-ring-integrated-executables-20261012/portfolio_collection": "8dbc41fee5d45e9fa377d2710126b03c225df8ea7dc64e8fedd0484bcd099945",
+    "/Users/themoretheless/.codex/tmp/rrrah-native-row-ring-integrated-executables-20261012/projective_domains": "bcefd2ab25a2e666d655b09f0bd429c5a1244f0ad46a61b07b5b9b8b614569f0",
+    "/Users/themoretheless/.codex/tmp/rrrah-native-row-ring-integrated-executables-20261012/search_portfolio": "b2fc91940d2357b29b7de8800d6bfc2283c30a9db73d4dfb3fb6a0f332314336"
+  },
+  "scope": "Current-identical dedup production source and selected17 integration suites plus all decode-feature units on compatible frozen dependencies. Covers native smoothing/scales/union/anchor fallback and reflected collection source/owner/caller cancellation/mutation/retry plus portfolio/model-bank/collection/geometry/pixel gates. Five ignored pre-existing controls are listed per suite; no all-feature/dirty workspace/Windows/full corpus/heldout precision/process cap/full500 completion claim."
+}

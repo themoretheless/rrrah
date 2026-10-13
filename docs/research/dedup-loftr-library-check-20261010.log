@@ -1,0 +1,135 @@
+     Locking 39 packages to latest Rust 1.89 compatible versions
+      Adding aes v0.8.4
+      Adding base64ct v1.8.3
+      Adding block-buffer v0.10.4
+      Adding bzip2 v0.4.4
+      Adding bzip2-sys v0.1.13+1.0.8
+      Adding cipher v0.4.4
+      Adding constant_time_eq v0.1.5
+      Adding cpufeatures v0.2.17
+      Adding crypto-common v0.1.7
+      Adding deranged v0.5.8
+      Adding digest v0.10.7
+      Adding generic-array v0.14.7 (available: v0.14.9)
+      Adding hmac v0.12.1
+      Adding inout v0.1.4
+      Adding loftr v0.1.1 (/Users/themoretheless/Documents/Sources/rrrah/vendor/loftr)
+      Adding matrixmultiply v0.3.11
+      Adding ndarray v0.16.1
+      Adding num-conv v0.2.2
+      Adding password-hash v0.4.2
+      Adding pbkdf2 v0.11.0
+      Adding powerfmt v0.2.1
+      Adding ppv-lite86 v0.2.21
+      Adding rand v0.8.8
+      Adding rand_chacha v0.3.1
+      Adding rand_core v0.6.4
+      Adding rawpointer v0.2.1
+      Adding safetensors v0.3.3
+      Adding sha1 v0.10.7
+      Adding sha2 v0.10.9
+      Adding subtle v2.6.1
+      Adding tch v0.23.0
+      Adding time v0.3.55
+      Adding time-core v0.1.9
+      Adding torch-sys v0.23.0
+      Adding typenum v1.20.1
+      Adding zip v0.6.6
+      Adding zstd v0.11.2+zstd.1.5.2
+      Adding zstd-safe v5.0.2+zstd.1.5.2
+      Adding zstd-sys v2.1.1+zstd.1.5.7
+   Compiling generic-array v0.14.7
+   Compiling typenum v1.20.1
+   Compiling zstd-safe v5.0.2+zstd.1.5.2
+   Compiling subtle v2.6.1
+   Compiling cpufeatures v0.2.17
+   Compiling zstd-sys v2.1.1+zstd.1.5.7
+   Compiling bzip2-sys v0.1.13+1.0.8
+   Compiling rand_core v0.6.4
+   Compiling simd-adler32 v0.3.10
+   Compiling base64ct v1.8.3
+   Compiling adler2 v2.0.1
+    Checking getrandom v0.2.17
+   Compiling crc32fast v1.5.2
+   Compiling time-core v0.1.9
+   Compiling deranged v0.5.8
+   Compiling powerfmt v0.2.1
+   Compiling num-conv v0.2.2
+   Compiling byteorder v1.5.0
+   Compiling miniz_oxide v0.9.1
+   Compiling password-hash v0.4.2
+   Compiling constant_time_eq v0.1.5
+   Compiling anyhow v1.0.104
+   Compiling matrixmultiply v0.3.11
+    Checking ppv-lite86 v0.2.21
+    Checking rawpointer v0.2.1
+   Compiling time v0.3.55
+   Compiling flate2 v1.1.10
+   Compiling bzip2 v0.4.4
+    Checking crypto-common v0.1.7
+    Checking block-buffer v0.10.4
+    Checking inout v0.1.4
+    Checking rand_chacha v0.3.1
+   Compiling tch v0.23.0
+    Checking hayro-interpret v0.7.0 (/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret)
+    Checking safetensors v0.3.3
+    Checking digest v0.10.7
+    Checking cipher v0.4.4
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+    Checking ndarray v0.16.1
+    Checking rand v0.8.8
+    Checking sha2 v0.10.9
+    Checking hmac v0.12.1
+   Compiling aes v0.8.4
+   Compiling sha1 v0.10.7
+    Checking pbkdf2 v0.11.0
+    Checking hayro v0.7.1 (/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro)
+    Checking rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+   Compiling zstd v0.11.2+zstd.1.5.2
+    Checking zip v0.6.6
+   Compiling torch-sys v0.23.0
+    Checking loftr v0.1.1 (/Users/themoretheless/Documents/Sources/rrrah/vendor/loftr)
+warning: method `forward_t` is never used
+   --> vendor/loftr/src/backbone.rs:274:12
+    |
+221 | impl ResNetFpn8_2 {
+    | ----------------- method in this implementation
+...
+274 |     pub fn forward_t(&self, x: &Tensor, train: bool) -> Result<(Tensor, Tensor), LoftrError> {
+    |            ^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `forward_t` is never used
+   --> vendor/loftr/src/backbone.rs:329:12
+    |
+328 | impl Backbone {
+    | ------------- method in this implementation
+329 |     pub fn forward_t(&self, x: &Tensor, train: bool) -> Result<(Tensor, Tensor), LoftrError> {
+    |            ^^^^^^^^^
+
+warning: method `forward` is never used
+   --> vendor/loftr/src/transformer.rs:166:12
+    |
+147 | impl LocalFeatureTransformer {
+    | ---------------------------- method in this implementation
+...
+166 |     pub fn forward(
+    |            ^^^^^^^
+
+warning: `loftr` (lib) generated 3 warnings
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+    Finished `dev` profile [optimized + debuginfo] target(s) in 1m 27s

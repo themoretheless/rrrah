@@ -2,7 +2,7 @@
   "index": 360,
   "repository": "bunchesofdonald/photohash",
   "commit": "2a43d23a879f1484cd59775f940853eb38168b17",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "Existing prior full/partial source-review artifacts linked after current pin verification; original limits retained. This reconciliation is not a new full-source reading or new runtime execution, except the explicit blockhash-js runtime refresh.",
   "decision": "reference",
   "finding": "Small Python Hamming perceptual module with tests; no multi-format/RAW qualification established.",
   "available_source_evidence": [
@@ -74,5 +74,16 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "prior_selected_review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "linked_review_artifacts": [
+    {
+      "review_artifact": "photohash-full-review-20261012.json",
+      "status": "verified_existing_pins_not_new_execution",
+      "pin_errors": [],
+      "original_scope": "Complete18blob tree review,14text files read and4original JPEGs decoded; bounded original tests with explicit compatibility adapter. Not Python2/oldPillow/allplatform/format/precision/resource or full500-source completion."
+    }
+  ],
+  "artifact_pin_reconciliation_audit": "unlinked-reviews-pin-audit-20261013.json",
+  "prior_registry_review": "prior-registry-360-unlinked-reconciliation-20261013.json"
 }

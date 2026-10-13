@@ -1,0 +1,8 @@
+#!/usr/bin/env python3
+import hashlib,json
+from pathlib import Path
+R=Path(__file__).resolve().parents[1];D=R/'docs/research/dedup-500';P=D/'blockhash-java-full-source-20261013.json';d=json.loads(P.read_text());S=Path(d['source']);sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest();tree=json.loads((D/'evidence/matteodg--blockhash-java/tree.json').read_text());expected={e['path']:e for e in tree['tree'] if e['type']=='blob'};assert not tree['truncated'];assert len(expected)==len(d['files'])==6;assert {str(p.relative_to(S)) for p in S.rglob('*') if p.is_file()}==set(expected)
+for row in d['files']:
+ b=(S/row['path']).read_bytes();assert hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()==expected[row['path']]['sha']==row['git_blob'];assert sha(S/row['path'])==row['sha256'];b.decode('utf-8')
+V=D/'blockhash-java-complete-source-review-20261013.json';v=json.loads(V.read_text());assert set(v['complete_text_files_read'])==set(expected);assert v['runtime_executed'] is False
+out=D/'blockhash-java-complete-source-audit-20261013.json';assert not out.exists();out.write_text(json.dumps(dict(status='verified_complete6file_static_review_no_java_runtime',repository=d['repository'],commit=d['commit'],pins={str(p):sha(p) for p in [P,V,Path(__file__),D/'evidence/matteodg--blockhash-java/tree.json',*[S/k for k in sorted(expected)]]},scope='Complete six tracked UTF-8 files read; source/tree hashes independently checked. Findings are static source facts, not executed counterexamples or upstream test results. Java runtime unavailable. No source adoption.'),indent=2)+'\n');print(out)

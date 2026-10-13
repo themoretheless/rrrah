@@ -1,0 +1,127 @@
+{
+  "pixel": [
+    163,
+    39
+  ],
+  "shading_event": 1023,
+  "shading_path_coverage": 62,
+  "center_sample_present": true,
+  "solid_events": [
+    {
+      "event": 1034,
+      "coverage": 62
+    },
+    {
+      "event": 1044,
+      "coverage": 62
+    },
+    {
+      "event": 1054,
+      "coverage": 62
+    },
+    {
+      "event": 1064,
+      "coverage": 62
+    },
+    {
+      "event": 1074,
+      "coverage": 62
+    },
+    {
+      "event": 1084,
+      "coverage": 62
+    },
+    {
+      "event": 1094,
+      "coverage": 62
+    },
+    {
+      "event": 1104,
+      "coverage": 62
+    },
+    {
+      "event": 1114,
+      "coverage": 62
+    },
+    {
+      "event": 1124,
+      "coverage": 62
+    },
+    {
+      "event": 1134,
+      "coverage": 62
+    },
+    {
+      "event": 1144,
+      "coverage": 62
+    },
+    {
+      "event": 1154,
+      "coverage": 62
+    },
+    {
+      "event": 1164,
+      "coverage": 62
+    },
+    {
+      "event": 1174,
+      "coverage": 62
+    },
+    {
+      "event": 1184,
+      "coverage": 62
+    },
+    {
+      "event": 1194,
+      "coverage": 62
+    }
+  ],
+  "native_rgba": [
+    0,
+    141,
+    75,
+    218
+  ],
+  "white_composite_if_alpha_is_single_coverage62": [
+    193,
+    227,
+    211
+  ],
+  "oracle64_mean_rgb": [
+    192.3203125,
+    226.0712890625,
+    210.249755859375
+  ],
+  "hypothesis": "Premature scalar averaging loses correlation between repeated paints of same partial edge; per-paint AA coverage accumulates alpha incorrectly. Need authored repeated opaque contour test to isolate from groups, blend mode and source opacity.",
+  "secondary_hypothesis": "Center-inside mesh pixel currently uses paint-path coverage instead of intersected mesh area; unexecuted reproducer saved separately, not counted as a passing test",
+  "pages": [
+    {
+      "fixture": "VectorApple.ai",
+      "page": 0,
+      "native_completed": true,
+      "capture_failed": false,
+      "deadline_expired": false,
+      "final_admitted_bytes": 0
+    },
+    {
+      "fixture": "one.ai",
+      "page": 0,
+      "native_completed": true,
+      "capture_failed": false,
+      "deadline_expired": false,
+      "final_admitted_bytes": 0
+    },
+    {
+      "fixture": "one.ai",
+      "page": 1,
+      "native_completed": true,
+      "capture_failed": false,
+      "deadline_expired": false,
+      "final_admitted_bytes": 0
+    }
+  ],
+  "hashes": {
+    "docs/research/ai-covered-fragment-sampling-2026-10-12/green-edge-trace.log": "cde1cdb7fc36f0b832df21fcd94ac89ba12548c06a51c7fdea220c1d09bdeaa7",
+    "docs/research/ai-covered-fragment-sampling-2026-10-12/green-edge-trace-report.json": "61f44724604b0603fa877aa611e45bd8720f3c87e17e335ba979943533a838aa"
+  }
+}

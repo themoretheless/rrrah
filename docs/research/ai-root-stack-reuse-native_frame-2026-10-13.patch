@@ -1,0 +1,69 @@
+--- before/vendor/hayro/src/native_frame.rs
++++ after/vendor/hayro/src/native_frame.rs
+@@ -272,6 +272,27 @@
+             if !a.same_storage(b) {return Some(false);}
+         }
+         Some(true)
++    }
++    /// Reset an admitted single-pixel root to a fresh non-isolated frame.
++    pub(super) fn reset_single_pixel_root(
++        &mut self,backdrop:Pixel,space:&hayro_interpret::color::ColorSpace,cancelled:&dyn Fn()->bool,
++    )->Option<bool> {
++        if self.frame.failed || cancelled() || !backdrop.valid() {return None;}
++        if !self.space.shares_blending_coordinates(space) || self.frame.initial.pixels.len()!=1 ||
++            self.frame.current.pixels.len()!=1 || self.frame.coverage.values.len()!=1 {return Some(false);}
++        if self.frame.initial.pixels[0].model()!=backdrop.model() {return Some(false);}
++        if cancelled() {return None;}
++        self.frame.initial.pixels[0]=backdrop;self.frame.current.pixels[0]=backdrop;
++        self.frame.coverage.values[0]=PreciseCoverage::default();
++        self.frame.knockout=false;self.frame.space_key=1;
++        Some(true)
++    }
++    /// Validate exactly as finish, retaining owned storage for the next root.
++    pub(super) fn finished_single_pixel(&self,cancelled:&dyn Fn()->bool)->Option<Pixel> {
++        if self.frame.failed || cancelled() || self.frame.current.pixels.len()!=1 {return None;}
++        let pixel=self.frame.current.pixels[0];
++        if cancelled() || !pixel.valid() {return None;}
++        Some(pixel)
+     }
+     /// Reset admitted one-pixel storage to the exact state of a fresh child.
+     /// A different color space or buffer shape requires a newly admitted frame.
+@@ -960,3 +981,38 @@
+     let color=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
+     assert_normal_batch_equivalence(color.color_space(),super::native_blend::Model::Rgb);
+ }
++
++#[test]
++fn reused_root_restores_fresh_frame_state_and_rejects_failed_or_multi_pixel_frames() {
++    use super::native_blend::Model;
++    use hayro_interpret::color::{AlphaColor,Color};
++    let rgb=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
++    let admit=|_:usize|Some(Box::new(()) as Credit);
++    for prior_knockout in [false,true] {for old_alpha in [0.,0.4,1.] {for new_alpha in [0.,0.6,1.] {
++        let old=Pixel::from_native(Model::Rgb,&[0.2,0.3,0.4],old_alpha).unwrap();
++        let backdrop=Pixel::from_native(Model::Rgb,&[0.7,0.1,0.9],new_alpha).unwrap();
++        let source=Pixel::from_native(Model::Rgb,&[0.3,0.8,0.2],0.7).unwrap();
++        let mut reused=PaintFrame::admitted(&[old],rgb.color_space(),false,prior_knockout,&||false,&admit).unwrap();
++        let prepared=reused.prepare_native_pixel(source,rgb.color_space(),&||false).unwrap();
++        reused.apply_prepared_masked(0,&prepared,0.3,false,0.4,BlendMode::HardLight,&||false).unwrap();
++        let before=reused.single_pixel_state(&||false).unwrap();
++        assert!(reused.reset_single_pixel_root(backdrop,rgb.color_space(),&||true).is_none());
++        assert!(before.same(&reused.single_pixel_state(&||false).unwrap()));
++        assert_eq!(reused.reset_single_pixel_root(backdrop,rgb.color_space(),&||false),Some(true));
++        let mut fresh=PaintFrame::admitted(&[backdrop],rgb.color_space(),false,false,&||false,&admit).unwrap();
++        assert!(reused.single_pixel_state(&||false).unwrap().same(&fresh.single_pixel_state(&||false).unwrap()));
++        for frame in [&mut reused,&mut fresh] {
++            let prepared=frame.prepare_native_pixel(source,rgb.color_space(),&||false).unwrap();
++            frame.apply_prepared_masked(0,&prepared,0.4,true,0.6,BlendMode::Screen,&||false).unwrap();
++        }
++        assert!(reused.finished_single_pixel(&||false).unwrap().same_storage(fresh.finish(&||false).unwrap().pixels[0]));
++    }}}
++    let clear=Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap();
++    let mut multi=PaintFrame::admitted(&[clear,clear],rgb.color_space(),false,false,&||false,&admit).unwrap();
++    assert_eq!(multi.reset_single_pixel_root(clear,rgb.color_space(),&||false),Some(false));
++    assert!(multi.finished_single_pixel(&||false).is_none());
++    let mut failed=PaintFrame::admitted(&[clear],rgb.color_space(),false,false,&||false,&admit).unwrap();
++    assert!(failed.prepare_native_pixel(clear,rgb.color_space(),&||true).is_none());
++    assert!(failed.reset_single_pixel_root(clear,rgb.color_space(),&||false).is_none());
++    assert!(failed.finished_single_pixel(&||false).is_none());
++}

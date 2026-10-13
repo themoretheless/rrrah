@@ -1,0 +1,203 @@
+{
+  "date": "2026-10-13",
+  "scope": "Experimental native AI spatial replay; normal viewer and independent color qualification remain incomplete",
+  "change": "Add charged 64-bit avalanche to coverage-key hash before power-of-two route table lookup; preserve full key collision equality",
+  "limits_unchanged": {
+    "routes": 64,
+    "index_slots": 128,
+    "pixel_work": 4000000,
+    "managed_admission_bytes": 268435456
+  },
+  "validation": {
+    "suite_passed": 208,
+    "suite_failed": 0,
+    "suite_ignored": 12,
+    "eviction_regression_routes": 96,
+    "lazy_mask_test_budget": {
+      "previous": 36,
+      "current": 39,
+      "reason": "Exactly three new work units charged for hash finalization; replaced mask remains unsampled and used mask called once per point"
+    },
+    "prior_six_probes_exact": {
+      "(149,56)": true,
+      "(199,25)": true,
+      "(137,37)": true,
+      "(195,37)": true,
+      "(138,36)": true,
+      "(138,39)": true
+    },
+    "final_credit_bytes": 0
+  },
+  "localized": {
+    "pixel": [
+      176,
+      46
+    ],
+    "before": {
+      "completed": false,
+      "fragments": 111206,
+      "lookup_work": 840216,
+      "route_preparation_work": 156314
+    },
+    "after": {
+      "completed": true,
+      "fragments": 113816,
+      "lookup_work": 417109,
+      "route_preparation_work": 104686
+    },
+    "deadline": false,
+    "peak_bytes": 239197736,
+    "final_credit_bytes": 0
+  },
+  "probes": {
+    "(176,46)": {
+      "completed": true,
+      "alpha": 0.9999999999999861,
+      "components": [
+        0.9095085325667113,
+        0.5334216125488578,
+        0.9403839642789843,
+        0.0015903303523600032
+      ],
+      "white_rgb": [
+        46.68456852436351,
+        109.6108715236207,
+        72.34475120902313
+      ]
+    },
+    "(138,39)": {
+      "completed": true,
+      "alpha": 0.23000043989211091,
+      "components": [
+        0.2760619845691583,
+        0.7164633440344005,
+        0.9244087288389119,
+        0.1528051896347068
+      ],
+      "white_rgb": [
+        234.1938250797703,
+        216.73068273985277,
+        207.15040185202014
+      ]
+    },
+    "(195,37)": {
+      "completed": true,
+      "alpha": 1.0,
+      "components": [
+        0.653609391682176,
+        0.18663448442467723,
+        0.902922408827704,
+        0.03779044552978028
+      ],
+      "white_rgb": [
+        99.64779853820801,
+        156.11963868141174,
+        77.59195804595947
+      ]
+    },
+    "(137,37)": {
+      "completed": true,
+      "alpha": 0.9757737328883405,
+      "components": [
+        0.2167979502787616,
+        0.6457726984690586,
+        0.8255252253197052,
+        0.11741609584381041
+      ],
+      "white_rgb": [
+        181.5827786284322,
+        107.32818614673408,
+        66.42946451349978
+      ]
+    },
+    "(138,36)": {
+      "completed": true,
+      "alpha": 0.9999628213382107,
+      "components": [
+        0.3383463976795398,
+        0.753939134713375,
+        0.7768495160001363,
+        0.19377905992737132
+      ],
+      "white_rgb": [
+        148.31163494679748,
+        78.09125508175765,
+        62.07648508984009
+      ]
+    },
+    "(199,25)": {
+      "completed": true,
+      "alpha": 1.0,
+      "components": [
+        0.7135069188516239,
+        0.17809831327578418,
+        0.9554537787768727,
+        0.0549916907975484
+      ],
+      "white_rgb": [
+        81.60994604229927,
+        151.66586726903915,
+        70.53911849856377
+      ]
+    },
+    "(149,56)": {
+      "completed": true,
+      "alpha": 0.21442580534571978,
+      "components": [
+        0.3285820137140101,
+        0.861481439860559,
+        0.9346276847653974,
+        0.2474774505728342
+      ],
+      "white_rgb": [
+        230.74855138884672,
+        212.56374303909558,
+        208.50489577871136
+      ]
+    }
+  },
+  "performance_boundary": "Budget and lookup reductions measured; no paired wall-clock throughput claim",
+  "sha256": {
+    "vendor/hayro/src/native_spatial.rs": "8f696bc8a7b87b45859195794f09e85e20051245cdc1f97a7aa77a4facba4733",
+    "docs/research/ai-route-hash-final-suite-2026-10-13.log": "21ab38f2440edb02c93dfb05622a0a9eebd36fe170d676f8b377ff390357b0cf",
+    "docs/research/ai-route-hash-original-2026-10-13.log": "b4ec52ac6347f14a7e95d1c9feb0a69d728922669bd6289ada0303befbf8a07a",
+    "docs/research/ai-route-hash-localized-2026-10-13.log": "f9f3013f87b42d2833e20dc24784d92c24d87352d04ccf15c6d12e4b8a5439ec",
+    "docs/research/ai-tenth-refusal-localized-2026-10-13.log": "6ca5040726943473f69b3fcaf77e4b618cd494344c72dcf2ae25a5b696dadff0",
+    "docs/research/ai-route-hash-page-2026-10-13.log": "26b6e58eae7588b18c5ba199400d73e34b20ca93b0336aca5f9c0ad56fe45b8a",
+    "docs/research/ai-eleventh-refusal-localized-2026-10-13.log": "5dcf9022c07ee67d498801ad5d8c38f95e4d2b42e4585126e28c15f8dfd02bcd"
+  },
+  "page": {
+    "width": 301,
+    "height": 246,
+    "completed": 15195,
+    "previous_completed": 14022,
+    "total": 74046,
+    "next_refusal": [
+      145,
+      50
+    ],
+    "deadline": false,
+    "elapsed_seconds": 97.34,
+    "peak_bytes": 239197736,
+    "final_credit_bytes": 0,
+    "exit_code": 101,
+    "partial_output_published": false,
+    "note": "Strict full-page test fails on first refusal; source differed from final suite only by test expectation correction"
+  },
+  "next_refusal_diagnosis": {
+    "pixel": [
+      145,
+      50
+    ],
+    "regions": 760,
+    "fragments": 219616,
+    "route_misses": 2,
+    "native_source_work": 2630503,
+    "owner_lookup_work": 638095,
+    "sample_and_coordinate_work": 1992408,
+    "source_event": 2670,
+    "deadline": false,
+    "final_credit_bytes": 0,
+    "next_action": "Inspect mesh triangle sample cost and owner lookup; route cache has only two misses"
+  }
+}

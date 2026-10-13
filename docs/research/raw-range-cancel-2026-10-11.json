@@ -1,0 +1,26 @@
+{
+  "backend": "Metal",
+  "raw_linear_tests_passed": 5,
+  "failed": 0,
+  "ignored": 0,
+  "cancel_checkpoints": [
+    2,
+    9,
+    17
+  ],
+  "targets": [
+    "RGBA32Float",
+    "RGBA16Float"
+  ],
+  "verified": [
+    "Cancellation during exceptional sample scanning retains prior center frame and resident budget.",
+    "Unsafe finite color correction refusal retains budget.",
+    "All-zero actual samples with gain1e16 admitted despite unsafe metadata upper bound.",
+    "Valid retry exact; renderer drop releases all managed GPU credit."
+  ],
+  "log_sha256": "9c3940931feaff6534b6518e7a95b8e803b6c8df82a2ff9acb47c0683ad0f21c",
+  "test_sha256": "1ac9fc2285a9627efac7709bdcf152558e67908454922c258839a55312f6d00f",
+  "limits": [
+    "16x16 authored Bayer source, center readback, managed memory budget; not OS pressure or independent camera appearance."
+  ]
+}

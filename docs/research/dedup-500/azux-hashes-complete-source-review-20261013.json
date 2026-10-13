@@ -1,0 +1,80 @@
+{
+  "repository": "AzuxDario/Perceptual-image-hashes",
+  "commit": "ec33225edc08e2158f0f2198da5d4a5f8a02e465",
+  "whole_repo_complete": true,
+  "complete_text_files_read": [
+    ".gitattributes",
+    ".gitignore",
+    "LICENSE",
+    "README.md",
+    "Source/Hash/Implementation/AverageHash.cpp",
+    "Source/Hash/Implementation/AverageHash.h",
+    "Source/Hash/Implementation/DifferenceHash.cpp",
+    "Source/Hash/Implementation/DifferenceHash.h",
+    "Source/Hash/Implementation/PerceptualHash.cpp",
+    "Source/Hash/Implementation/PerceptualHash.h",
+    "Source/Hash/Interface/IHash.h",
+    "Source/Image/Image.cpp",
+    "Source/Image/Image.h"
+  ],
+  "license": "Complete root MIT read, Copyright2020AzuxDario; no source adopted.",
+  "original_upstream_tests": 0,
+  "original_build_system": "No tracked build system or test driver. Four original translation units compiled directly in external driver.",
+  "findings": [
+    {
+      "kind": "mean_formula",
+      "location": "Source/Hash/Implementation/AverageHash.cpp:20-22",
+      "scope": "Executed",
+      "detail": "sum/size*size differs from sum/(size*size). Uniform128 outputs64ones versus correct strict mean tie64zeros;97/100seeded64pixel grids differ from independent sum/64 oracle."
+    },
+    {
+      "kind": "no_input_admission",
+      "scope": "Executed",
+      "detail": "Average accepts empty and one-byte inputs with variable-length output; Difference short one-byte vector causes ASan heap-buffer-overflow."
+    },
+    {
+      "kind": "difference_recipe",
+      "scope": "Executed observation, not standalone memory bug for64pixels",
+      "detail": "Fixed8x8 rows compare last column to first column circularly. External independent circular oracle matches64bits. This differs from usual9x8 adjacent difference recipe."
+    },
+    {
+      "kind": "coordinate_inverse",
+      "location": "Source/Image/Image.cpp:11",
+      "scope": "Executed",
+      "detail": "Inverse returns size%pos,size/pos;pos5,size8gives3,1instead5,0. pos0causes UBSan division by zero."
+    },
+    {
+      "kind": "resize_nan",
+      "location": "Source/Hash/Implementation/PerceptualHash.cpp:33-49",
+      "scope": "Executed sanitizer refusal",
+      "detail": "oldX/oldY unsigned truncate to integer, floor and ceil coincide; divisions produce NaN converted to unsigned char. Original public pHash on64zero pixels triggers UBSan float-cast-overflow before later errors."
+    },
+    {
+      "kind": "unresized_vector",
+      "location": "Source/Hash/Implementation/PerceptualHash.cpp:24-25,51",
+      "scope": "Static only, later than observed sanitizer failure",
+      "detail": "reserve increases capacity but leaves vector size0; at(index)=... would throw. Not separately executed after repairing earlier UB; no algorithm patch."
+    },
+    {
+      "kind": "top_coefficient_stride",
+      "location": "Source/Hash/Implementation/PerceptualHash.cpp:107-116",
+      "scope": "Executed via access-only header macro",
+      "detail": "Extract8x8 indexes32x32coefficient array with stride8;56/64values differ from independent stride32 expectation under original loop ordering."
+    },
+    {
+      "kind": "incomplete_dct",
+      "location": "Source/Hash/Implementation/PerceptualHash.cpp:62-83,103",
+      "scope": "Static only, not reached through failing public pHash",
+      "detail": "Horizontal rows copied rather than transformed; toTransform accumulates columns without clearing while DCTLine reads first32values; floating DCT values converted to unsigned bytes."
+    },
+    {
+      "kind": "interface_lifetime",
+      "location": "Source/Hash/Interface/IHash.h",
+      "scope": "Static only",
+      "detail": "Polymorphic interface lacks virtual destructor; no delete-through-base experiment."
+    }
+  ],
+  "runtime_controls": "azux-hashes-runtime-controls-20261013.json",
+  "limits": "Six distinct safe checks under normal and ASan/UBSan builds; three failing sanitizer subprocess counterexamples, all original implementation translation units byte-identical. Private access macro is explicitly limited to header declarations for stride probe. No native image decoder integration, correct DCT end-to-end oracle, similarity precision, all-platform/performance or upstream test claim.",
+  "decision": "Reject as a correct independent perceptual-hash oracle; keep explicit mathematical and memory-admission counterexamples. No code adoption."
+}

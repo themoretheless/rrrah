@@ -1,0 +1,29 @@
+{
+  "date": "2026-10-12",
+  "change": "JPEG XL output RGBA budget reservation precedes DynamicImage pixel decoding, and reservation is adopted by retained pixels",
+  "focused": {
+    "passed": 3,
+    "failed": 0,
+    "ignored": 0
+  },
+  "decoder_suite": {
+    "passed": 1018,
+    "failed": 0,
+    "ignored": 72
+  },
+  "checks": [
+    "8-bit alpha and 16-bit fixtures",
+    "one-byte-short output budget rejects with peak managed bytes zero",
+    "exact output budget accepts",
+    "cloned frame keeps reservation until final owner drops",
+    "existing adjacent 16-bit precision and ICC/alpha tests pass"
+  ],
+  "logs": {
+    "jxl-output-admission-2026-10-12.log": "6cdb5305ed0570a61ad7da46ec9497ca0ec28d0e8f36eae683db57b5da8037cf",
+    "decode-jxl-admission-regression-2026-10-12.log": "21cc99f8215aa0b0301acfcdd62ebb2fdb67136d1d094d86c84886571eec3e34"
+  },
+  "limits": [
+    "Codec header and internal scratch allocations are outside this output reservation",
+    "No new animation, HDR or full JPEG XL qualification claim"
+  ]
+}

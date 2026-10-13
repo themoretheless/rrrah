@@ -1,0 +1,66 @@
+{
+  "status": "verified_original_core_defects_and_bounded_sanitized_controls_cli_unavailable",
+  "repository": "Wassasin/tinyphash",
+  "commit": "7c7c503d331cc8fd5507db58e5813398f3939189",
+  "source_review": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/tinyphash-complete-source-review-20261013.json",
+  "source_review_sha256": "3d67da73b73fac0d2bd7f4f67e8f8bb370ba25c18e579ebae79b5887395080c1",
+  "pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-tinyphash-source-20261013/.clang-format": "b4dc898fb88008a7add5fe976d0b964d5acb1e4267c7dcd228066d72a5122312",
+    "/Users/themoretheless/.codex/tmp/rrrah-tinyphash-source-20261013/.gitignore": "baed3774fd5d0e704bc08a481637f96c82443644b1b02a8cd3f55c967d644c7c",
+    "/Users/themoretheless/.codex/tmp/rrrah-tinyphash-source-20261013/LICENSE": "fee9ca628ec46b9a0a1ebc229604d276d849c3b1bfabed0d6b412201052f49cf",
+    "/Users/themoretheless/.codex/tmp/rrrah-tinyphash-source-20261013/README.md": "3f1679d500f4353bcd8db26a8fc6c11286bdf9acb0a884f172b0fe9140564391",
+    "/Users/themoretheless/.codex/tmp/rrrah-tinyphash-source-20261013/cli.c": "b18eb05e76abfde917b4728f2fe5b74a57fcef3417c52a24b4382a8c6a91285c",
+    "/Users/themoretheless/.codex/tmp/rrrah-tinyphash-source-20261013/png.h": "849b2f11a32ddf5d23151622ad87bc0b5a7781886bb992d8d1c0ddffc8c1d9b1",
+    "/Users/themoretheless/.codex/tmp/rrrah-tinyphash-source-20261013/tinyphash.c": "9fca6257eca19830d7fb1365e56df45cd2a1d80aeb57b661ce53f47e5133b8f9",
+    "/Users/themoretheless/.codex/tmp/rrrah-tinyphash-source-20261013/tinyphash.h": "6ddee8929e364480133015ceeca44bb05cf9011f1bef979af8abc86cc87e406c",
+    "/Users/themoretheless/.codex/tmp/rrrah-tinyphash-controls-20261013/controls.c": "522e924a1bdd5d908896eac4c848f51a63ba03f5f1d0e4a0e72fa386588872b3",
+    "/Users/themoretheless/.codex/tmp/rrrah-tinyphash-controls-20261013/controls-sanitized": "ecfd38fc39b6a69e670c71c34e7ad0d8ba9de995b72495c0167d2ca4a518e7a9",
+    "/Users/themoretheless/.codex/tmp/rrrah-tinyphash-controls-20261013/results.json": "0775ac092855e6cea4ec75cbc42a1d1bc6ac4cab37a666be00ead4bfe8aa423b",
+    "/Users/themoretheless/.codex/tmp/rrrah-tinyphash-controls-20261013/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/Users/themoretheless/.codex/tmp/rrrah-tinyphash-controls-20261013/cli-build.json": "378f685a2283630c527742eba86039959a918718cb1873fbeed841afa3fc6cb5",
+    "/Users/themoretheless/.codex/tmp/rrrah-tinyphash-controls-20261013/cli-build.log": "711462996462351f9a0e20518a41ae4019a7a79f83334ecec7273bd0ff40a6db",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-tinyphash-20261013.py": "e2e9886ee6ff292fc2b08afecb51689093da8c7f56dccb25a6cb7b3bdfe4e63e",
+    "/Library/Developer/CommandLineTools/usr/bin/clang": "1590ac950a3d627817d09ade5cb60b2115f17a72182a3141e010b4bcc482a0c9"
+  },
+  "repeat_result": "/Users/themoretheless/.codex/tmp/rrrah-tinyphash-controls-20261013/audit-repeat.json",
+  "repeat_result_sha256": "0775ac092855e6cea4ec75cbc42a1d1bc6ac4cab37a666be00ead4bfe8aa423b",
+  "repeat_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "compiler": "/Library/Developer/CommandLineTools/usr/bin/clang",
+  "compiler_version": "Apple clang version 21.0.0 (clang-2100.3.34.2)\nTarget: arm64-apple-darwin25.6.0\nThread model: posix\nInstalledDir: /Library/Developer/CommandLineTools/usr/bin\n",
+  "compile_command": [
+    "/usr/bin/clang",
+    "-O1",
+    "-g",
+    "-fsanitize=address,undefined",
+    "-fno-omit-frame-pointer",
+    "/Users/themoretheless/.codex/tmp/rrrah-tinyphash-controls-20261013/controls.c",
+    "-o",
+    "/Users/themoretheless/.codex/tmp/rrrah-tinyphash-controls-20261013/controls-sanitized",
+    "-lm"
+  ],
+  "controls": [
+    "actual static crop helper9 vs independent expected33",
+    "actual static median0 vs independent expected32.5",
+    "equal-value comparator returns1",
+    "16fixed seeded original easy/unchecked API hashes match each other, differ from direct double cosine/median/packing reference;12references have odd low bit while all originals are even",
+    "Hamming integer and fraction outputs match independent scalar popcount on all16pairs"
+  ],
+  "sanitizer_result": "ASan/UBSan execution exit0 with empty diagnostics; logic defects intentionally asserted as observed, not repaired",
+  "cli_build": {
+    "command": [
+      "/usr/bin/clang",
+      "/Users/themoretheless/.codex/tmp/rrrah-tinyphash-source-20261013/cli.c",
+      "/Users/themoretheless/.codex/tmp/rrrah-tinyphash-source-20261013/tinyphash.c",
+      "-O2",
+      "-g",
+      "-o",
+      "/Users/themoretheless/.codex/tmp/rrrah-tinyphash-controls-20261013/upstream-cli",
+      "-lpnglite",
+      "-lz",
+      "-lm"
+    ],
+    "returncode": 1
+  },
+  "upstream_tests": 0,
+  "scope": "All8sourcefiles completely read and Git-blob verified; unchanged original code included in authored C translation unit to exercise static helpers. No adapters or upstream fixes.16synthetic38x38grayscale inputs; no CLI/image decoder/platform/general precision qualification, no production copying. System SDK/runtime libraries not exhaustively pinned."
+}

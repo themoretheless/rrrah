@@ -1,0 +1,34 @@
+{
+  "status": "verified_eighteen_unique_tests_native_macos_and_aarch64_linux",
+  "tests_per_platform": 18,
+  "test_names": [
+    "both_generations_and_ignored_provider_cancellation_are_sticky",
+    "either_source_or_model_mutation_during_provider_refuses_and_restored_retry_recovers",
+    "every_checkpoint_including_heap_and_final_observes_one_shot_cancellation",
+    "every_global_checkpoint_and_mid_final_generation_cancellation_discard_payload",
+    "every_one_shot_cancellation_checkpoint_releases_all_output_credit",
+    "external_palette_is_rechecked_after_preparation_and_mutation_discards_input",
+    "file_input_retains_only_output_and_rechecks_source_and_generation_after_inference",
+    "global_and_both_request_tokens_cancel_mid_and_final_publication",
+    "heap_selection_matches_stable_reference_with_ties_boundaries_and_both_side_collisions",
+    "invalid_caps_and_unsupported_pixels_refuse_atomically",
+    "invalid_policy_precedes_io_and_mid_preparation_source_changes_are_errors",
+    "malformed_inputs_and_each_work_limit_refuse_without_a_partial_result",
+    "managed_payload_credit_survives_clones_and_all_cancellation_paths_release_it",
+    "model_mutation_during_fresh_pixel_confirmation_discards_supported_evidence",
+    "odd_edges_match_independent_continuous_area_reference_and_credit_tracks_owners",
+    "policy_preflight_and_proposal_count_refuse_without_partial_evidence",
+    "supplied_provider_supports_original_pixels_empty_is_explicit_and_errors_do_not_become_misses",
+    "tiny_inputs_are_explicitly_upsampled_and_linear_gray_is_srgb_encoded"
+  ],
+  "pins": {
+    "docs/research/dedup-model-compare-snapshot-20261010.json": "ce2332977600a79172c064e9cbc5e9da0459178fc6d2f14340b97b869f395640",
+    "docs/research/dedup-model-compare-late-snapshot-20261010.json": "691974f3eab345e66d89e59e85ac870c77aaa1332b56d2fa801e6c8de26f80b7",
+    "docs/research/dedup-model-compare-base-cross-platform-state-20261010.json": "03e249bc6c8ebeacc4c80e2d9337b4987623ec29c9951c75306dd00060cd2be8",
+    "docs/research/dedup-model-compare-late-tests-20261010.log": "87d3bcf41cab235090eccd52a69d093da99cc025b1e7dfbdf99663dd3d78e8ba",
+    "docs/research/dedup-model-compare-late-linux-20261010.log": "65bee684a46bd29fb6c1d5aa2d05242c2c31705c2c2d9a9714855d2cde1b63ea"
+  },
+  "library_runtime_sources_identical_between_gates": true,
+  "supplemental_tests": 2,
+  "scope": "16 base plus 6 supplemental executions with 4 repeated tests: 18 unique tests/platform. Late model mutation while fresh pixels decode, global/both-token midpoint/final cancellation, provider errors/source mutation/output cap and prior input lifecycle gates. Root Mac current deps; Linux older pinned deps. Real LoFTR native runtime is Mac-only and inference allocations/cancellation remain unqualified."
+}

@@ -1,0 +1,137 @@
+   Compiling hayro-interpret v0.7.0 (/tmp/rrrah-adaptive-edge-tests-20261013)
+    Finished `test` profile [optimized + debuginfo] target(s) in 4.55s
+     Running unittests src/lib.rs (target/ai-adaptive-edges-20261013/debug/deps/hayro_interpret-d399f4c587eae283)
+
+running 115 tests
+test color::blending_coordinate_tests::calibrated_float_policy_retains_fractions_and_refuses_invalid_parameters ... ok
+test color::blending_coordinate_tests::device_gray_cmyk_boundaries_follow_independent_references ... ok
+test encode::native_source::tests::retained_source_admission_and_cancellation_release_all_credit ... ok
+test encode::native_source::tests::axial_boundary_lines_preserve_parameter_under_shear_and_reflection ... ok
+test encode::native_source::tests::radial_concentric_translated_and_linear_cone_keep_original_gray ... ok
+test encode::native_source::tests::native_source_samples_share_actual_work_and_preserve_legacy_values ... ok
+test encode::native_source::tests::native_mesh_rectangle_query_affine_work_callback_and_every_cancel ... ok
+test encode::native_source::tests::rectangle_query_excludes_zero_area_but_keeps_thin_source_triangles ... ok
+test color::blending_coordinate_tests::explicit_bg_ucr_cmyk_conversion_is_bounded_and_cancellable ... ok
+test encode::native_source::tests::original_cmyk_axial_transform_and_extension_have_exact_samples ... ok
+test encode::native_source::tests::original_triangle_mesh_transform_overlap_and_function_preserve_cmyk ... ok
+test encode::native_source::tests::selected_triangle_field_preserves_affine_components_and_constant_edge_values ... ok
+test encode::native_source::tests::native_tensor_capture_preserves_transformed_cmyk_and_releases_intermediate_credit ... ok
+test encode::ordered_grid::tests::admission_refusal_and_cancellation_produce_no_partial_result ... ok
+test encode::ordered_grid::tests::cancellation_after_storage_admission_releases_every_credit ... ok
+test encode::native_source::tests::triangle_rectangle_query_rejects_bbox_false_positives_and_keeps_edges ... ok
+test encode::native_source::tests::triangle_capture_refuses_before_allocation_and_releases_cancelled_credit ... ok
+test encode::ordered_grid::tests::folded_patch_keeps_the_larger_v_branch ... ok
+test encode::ordered_grid::tests::partial_overlap_preserves_visible_portion_of_earlier_patch ... ok
+test encode::ordered_grid::tests::later_geometry_replaces_overlap_without_averaging_hidden_color ... ok
+test color::blending_coordinate_tests::device_calibration_and_shared_profile_coordinates_are_distinct ... ok
+test color::blending_coordinate_tests::explicit_icc_blending_transform_preserves_float_samples ... ok
+test color::blending_coordinate_tests::device_rgb_policy_avoids_display_quantization ... ok
+test color::native_color_access_tests::preserves_native_components_and_opacity_across_display_conversion ... ok
+test function::type0::scalar_tests::sampled_scalar_linear_references_cover_all_bit_depths ... ok
+test encode::sample_bounds_tests::patch_stream_cancellation_is_explicit_and_stops_generation ... ok
+test color::blending_coordinate_tests::vectorapple_green_sample_matches_independent_profile_oracle ... ok
+test encode::sample_bounds_tests::table_growth_and_multicomponent_spills_release_credit ... ok
+test function::type0::scalar_tests::sampled_scalar_refuses_cancellation_missing_samples_and_work_exhaustion ... ok
+test function::type2::tests::bounded_scalar_validates_domains_ranges_and_nonfinite_arithmetic ... ok
+test function::type2::tests::clamp_domain ... ok
+test function::type2::tests::clamp_range ... ok
+test function::type2::tests::native_component_failure_and_every_cancellation_boundary_preserve_output ... ok
+test function::type2::tests::native_rgb_cmyk_exponential_components_have_analytical_references ... ok
+test function::type2::tests::simple ... ok
+test function::type2::tests::with_exponent ... ok
+test function::type3::tests::bounded_scalar_rejects_deep_nesting_and_invalid_bounds ... ok
+test function::type3::tests::bounded_scalar_uses_exact_endpoints_and_right_interval_at_boundary ... FAILED
+test function::type3::tests::native_cmyk_stitch_has_exact_endpoints_and_right_interval_reference ... ok
+test encode::sample_bounds_tests::fractional_texture_bounds_preserve_every_consumed_sample ... ok
+test function::type3::tests::native_stitch_cancellation_and_shared_work_depth_bounds_preserve_output ... ok
+test function::type3::tests::native_stitch_refuses_malformed_ranges_bounds_and_widths_without_publication ... ok
+test function::type3::tests::simple ... ok
+test function::type4::tests::bounded_calculator_scalar_has_numeric_and_conditional_references ... ok
+test function::type4::tests::bounded_calculator_scalar_refuses_overflow_invalid_arithmetic_work_and_cancel ... ok
+test function::type4::tests::bounded_calculator_vector_refusal_and_cancel_preserve_output ... ok
+test function::type4::tests::bounded_calculator_vector_matches_real_cyan_magenta_alternate ... ok
+test function::type4::tests::domain ... ok
+test function::type4::tests::lex_1 ... ok
+test function::type4::tests::lex_3 ... ok
+test encode::sample_bounds_tests::mesh_sampling_cancels_at_every_checkpoint_without_partial_result ... ok
+test function::type4::tests::op_abs ... ok
+test function::type4::tests::op_and ... ok
+test function::type4::tests::op_atan ... ok
+test function::type4::tests::op_bitshift ... ok
+test function::type4::tests::op_ceiling ... ok
+test function::type4::tests::op_copy ... ok
+test function::type4::tests::op_cos ... ok
+test function::type4::tests::op_cvi ... ok
+test function::type4::tests::op_cvr ... ok
+test function::type4::tests::op_div ... ok
+test function::type4::tests::op_dup ... ok
+test function::type4::tests::op_eq ... ok
+test function::type4::tests::op_exch ... ok
+test function::type4::tests::op_exp ... ok
+test function::type4::tests::op_false ... ok
+test function::type4::tests::op_floor ... ok
+test function::type4::tests::op_ge ... ok
+test function::type4::tests::op_gt ... ok
+test function::type4::tests::op_idiv ... ok
+test function::type4::tests::op_if ... ok
+test function::type4::tests::op_ifelse ... ok
+test function::type4::tests::op_index ... ok
+test function::type4::tests::op_le ... ok
+test function::type4::tests::op_ln ... ok
+test function::type4::tests::op_log ... ok
+test function::type4::tests::op_lt ... ok
+test function::type4::tests::op_mod ... ok
+test function::type4::tests::op_mul ... ok
+test function::type4::tests::op_ne ... ok
+test function::type4::tests::op_neg ... ok
+test function::type4::tests::op_not ... ok
+test function::type4::tests::op_or ... ok
+test function::type4::tests::op_pop ... ok
+test function::type4::tests::op_roll ... ok
+test function::type4::tests::op_round ... ok
+test function::type4::tests::op_sqrt ... ok
+test function::type4::tests::op_sub ... ok
+test function::type4::tests::op_sin ... ok
+test function::type4::tests::op_truncate ... ok
+test function::type4::tests::op_xor ... ok
+test native_image_samples::tests::native_component_samples_precision_padding_and_decode_ranges ... ok
+test native_image_samples::tests::native_component_samples_refusals_and_every_cancellation_release_credit ... ok
+test shading::adaptive::qualification_tests::fixed_planning_stack_reaches_maximum_depth_without_capacity_failure ... ok
+test shading::adaptive::qualification_tests::curved_boundary_area_matches_analytic_cubic_integral ... ok
+test shading::adaptive::qualification_tests::mesh_cancellation_and_triangle_limit_preserve_existing_output_and_ranges ... ok
+test shading::external_budget_tests::native_shading_samples_share_function_work_and_never_publish_partial_output ... ok
+test shading::adaptive::qualification_tests::reversed_identical_edges_weld_but_near_distinct_edges_do_not ... ok
+test x_object::image_color_cancellation_tests::matte_conversion_checks_every_block_and_preserves_values ... ok
+test shading::adaptive::qualification_tests::refined_curved_shared_edge_is_bit_exact_when_reversed ... ok
+test x_object::image_color_cancellation_tests::one_shot_cancel_stays_latched_across_optional_mask_fallback ... ok
+test shading::adaptive::qualification_tests::bilinear_source_component_is_within_bound_at_independent_dense_samples ... ok
+test x_object::image_color_cancellation_tests::transfer_table_is_exact_and_evaluates_each_present_value_once ... ok
+test x_object::odd_16bit_component_payload_refuses_without_panic ... ok
+test x_object::image_color_cancellation_tests::block_conversion_preserves_pixels_and_refuses_partial_output ... ok
+test shading::adaptive::qualification_tests::unequal_patch_subdivision_welds_shared_boundary_and_preserves_source_color ... ok
+test x_object::transparency_group_properties_tests::preserves_independent_isolation_and_knockout_flags ... ok
+test x_object::image_color_cancellation_tests::nonlinear_pdf_transfer_table_matches_direct_function_for_every_byte ... ok
+test x_object::image_color_cancellation_tests::u8_block_conversion_is_exact_and_cancellation_returns_no_partial_buffer ... ok
+test x_object::image_color_cancellation_tests::mask_bytes_preserve_values_and_cancel_at_every_checkpoint ... ok
+test shading::adaptive::qualification_tests::admitted_mesh_cancels_every_checkpoint_without_retaining_capacity ... ok
+test shading::adaptive::qualification_tests::admitted_mesh_refusal_retry_capacity_and_original_components_match_legacy ... ok
+test encode::ordered_grid::tests::spatial_credit_is_bounded_independently_of_overlap_count_and_released ... ok
+test encode::native_source::tests::native_mesh_index_matches_source_order_with_bounded_sparse_query_work ... ok
+test encode::sample_bounds_tests::patch_internal_cancellation_rolls_back_every_checkpoint ... ok
+
+failures:
+
+---- function::type3::tests::bounded_scalar_uses_exact_endpoints_and_right_interval_at_boundary stdout ----
+
+thread 'function::type3::tests::bounded_scalar_uses_exact_endpoints_and_right_interval_at_boundary' (82875794) panicked at src/function/type3.rs:232:13:
+assertion failed: function.eval_scalar_bounded(0.25,
+        &|| { polls.set(polls.get() + 1); polls.get() == stop }).is_none()
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    function::type3::tests::bounded_scalar_uses_exact_endpoints_and_right_interval_at_boundary
+
+test result: FAILED. 114 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+
+error: test failed, to rerun pass `--lib`

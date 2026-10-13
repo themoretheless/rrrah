@@ -1,0 +1,113 @@
+--- a/vendor/hayro/src/native_spatial.rs
++++ b/vendor/hayro/src/native_spatial.rs
+@@ -278,11 +278,44 @@
+     }
+ }
+ 
+-struct GeometryKeyTrace {enabled:bool,checks:std::cell::Cell<usize>,misses:std::cell::Cell<usize>,owner_enabled:bool,owner_checks:std::cell::Cell<usize>,owner_misses:std::cell::Cell<usize>}
++/// Predict source identity without invoking any color sampler. Blending-route
++/// qualification is conservative; absent or ambiguous geometry refuses.
++fn geometry_route_field_key(commands:&[SpatialCommand<'_>],route:&[usize],generation:u64,
++    coverage:&[u64;64],rasters:Option<&RasterTransitions<'_>>,owners:Option<&OwnerTransitions>,
++    work:&mut usize,cancelled:&dyn Fn()->bool)->Option<FieldKey> {
++    if cancelled() {return None;}*work=work.checked_sub(route.len())?;
++    if !affine_native_route(commands,route) {return None;}
++    *work=work.checked_sub(19)?;let mut key=FieldKey::route(generation);
++    for &index in route {
++        if cancelled() {return None;}*work=work.checked_sub(1)?;
++        if let SpatialCommand::NativeSampledPaint {field,..}=commands.get(index)? {
++            let identity=match field {
++                NativeField::Unknown=>return None,
++                NativeField::ConstantCells=>SourceFieldIdentity::RasterCells(rasters?.key(index,work,cancelled)?),
++                NativeField::AffineOwner=>SourceFieldIdentity::AffineOwner(owners?.owner(index,coverage,work,cancelled)??),
++            };
++            *work=work.checked_sub(4)?;key.append(index,identity)?;
++        }
++    }
++    Some(key)
++}
++
++struct GeometryKeyTrace {enabled:bool,checks:std::cell::Cell<usize>,misses:std::cell::Cell<usize>,owner_enabled:bool,owner_checks:std::cell::Cell<usize>,owner_misses:std::cell::Cell<usize>,precolor_enabled:bool,precolor_ready:std::cell::Cell<usize>,precolor_unavailable:std::cell::Cell<usize>,precolor_checks:std::cell::Cell<usize>,precolor_misses:std::cell::Cell<usize>}
+ impl Drop for GeometryKeyTrace {
+     fn drop(&mut self) {
+         if self.enabled {eprintln!("SPATIAL_GEOMETRY_FIELD_KEYS checks={} mismatches={}",self.checks.get(),self.misses.get());}
+         if self.owner_enabled {eprintln!("SPATIAL_GEOMETRY_OWNER_KEYS checks={} mismatches={}",self.owner_checks.get(),self.owner_misses.get());}
++        if self.precolor_enabled {eprintln!("SPATIAL_PRECOLOR_FIELD_KEYS ready={} unavailable={} checks={} mismatches={}",self.precolor_ready.get(),self.precolor_unavailable.get(),self.precolor_checks.get(),self.precolor_misses.get());}
++    }
++}
++impl GeometryKeyTrace {
++    fn verify_precolor(&self,expected:Option<&FieldKey>,actual:&FieldObservation)->bool {
++        let Some(expected)=expected else {return true;};
++        actual.work.set(actual.work.get().saturating_add(expected.len+1));
++        self.precolor_checks.set(self.precolor_checks.get()+1);
++        let observed=actual.key.borrow();
++        let matches=observed.as_ref().is_some_and(|observed|observed.len==expected.len && observed.words[..observed.len]==expected.words[..expected.len]);
++        if !matches {self.precolor_misses.set(self.precolor_misses.get()+1);}matches
+     }
+ }
+ struct FieldObservation {key:std::cell::RefCell<Option<FieldKey>>,work:std::cell::Cell<usize>}
+@@ -719,7 +752,8 @@
+     let owner_keys=geometry_field_keys && point_override.is_none() && std::env::var_os("RRRAH_AI_OWNER_TRANSITIONS").is_some();
+     let owner_transitions=if owner_keys {OwnerTransitions::admitted(commands,regions.len(),&mut 4_000_000,cancelled,admit).map(std::cell::RefCell::new)} else {None};
+     if owner_keys {eprintln!("SPATIAL_OWNER_TRANSITIONS active={}",owner_transitions.is_some());}
+-    let geometry_trace=GeometryKeyTrace {enabled:geometry_field_keys,checks:std::cell::Cell::new(0),misses:std::cell::Cell::new(0),owner_enabled:owner_keys,owner_checks:std::cell::Cell::new(0),owner_misses:std::cell::Cell::new(0)};
++    let precolor_enabled=collect_fields && std::env::var_os("RRRAH_AI_PRECOLOR_KEYS").is_some();
++    let geometry_trace=GeometryKeyTrace {enabled:geometry_field_keys,checks:std::cell::Cell::new(0),misses:std::cell::Cell::new(0),owner_enabled:owner_keys,owner_checks:std::cell::Cell::new(0),owner_misses:std::cell::Cell::new(0),precolor_enabled,precolor_ready:std::cell::Cell::new(0),precolor_unavailable:std::cell::Cell::new(0),precolor_checks:std::cell::Cell::new(0),precolor_misses:std::cell::Cell::new(0)};
+     let mut evaluate=|_winding:&[i32],point:kurbo::Point,coverage:&[u64;64],occupied_words:u64| {
+         work_trace.hit(0);
+         let local=work_trace.measure(0,remaining,|remaining| {
+@@ -889,8 +923,20 @@
+         last_route=Some(route_index);
+         if observe_moments {route_is_affine.set(affine_native_route(commands,&routes[route_index].commands));}
+         if collect_fields {source_field_key.reset(routes[route_index].generation);}
++        let precolor_key=if precolor_enabled && route_is_affine.get() {
++            let mut budget=4_000_000;
++            let rasters=transitions.as_ref().map(std::cell::RefCell::borrow);
++            let owners=owner_transitions.as_ref().map(std::cell::RefCell::borrow);
++            let key=geometry_route_field_key(commands,&routes[route_index].commands,routes[route_index].generation,coverage,
++                rasters.as_deref(),owners.as_deref(),&mut budget,cancelled);
++            source_field_key.work.set(source_field_key.work.get().saturating_add(4_000_000-budget));
++            if key.is_some() {geometry_trace.precolor_ready.set(geometry_trace.precolor_ready.get()+1);}
++            else {geometry_trace.precolor_unavailable.set(geometry_trace.precolor_unavailable.get()+1);}
++            key
++        } else {None};
+         if let Some(pixel)=routes[route_index].result {
+             if cancelled() {return None;}*remaining=remaining.checked_sub(1)?;
++            if !geometry_trace.verify_precolor(precolor_key.as_ref(),&source_field_key) {route_is_affine.set(false);}
+             work_trace.hit(8);return Some(pixel);
+         }
+         mask_cache.fill(None);
+@@ -1197,6 +1243,7 @@
+         let root=stack.pop()?.0;
+         let pixel=root.finished_single_pixel(cancelled)?;
+         root_frame=Some(root);
++        if !geometry_trace.verify_precolor(precolor_key.as_ref(),&source_field_key) {route_is_affine.set(false);}
+         if routes[route_index].constant {routes[route_index].result=Some(pixel);}
+         Some(pixel)
+     };
+@@ -3029,3 +3076,25 @@
+     assert_eq!(used.load(Ordering::Relaxed),before);
+     drop(bad);drop(regions);drop(a);drop(b);assert_eq!(used.load(Ordering::Relaxed),0);
+ }
++
++#[test]
++fn geometry_route_keys_need_no_color_sampling_and_refuse_missing_fields() {
++    use hayro_interpret::BlendMode;
++    let cells=RasterRegionKeys {color:vec![(0,10)],alpha:vec![(1,11)],alpha_present:true,_credit:Box::new(())};
++    let sample:&NativeSpatialSampler<'_>=&|_,_,_,_|panic!("precolor identity must not invoke a sampler");
++    let commands=[SpatialCommand::NativeSampledPaint {cells:Some(&cells),field:NativeField::ConstantCells,regions:&[0],sample,owners:&[],alpha_is_shape:false,mode:BlendMode::Normal},
++        SpatialCommand::NativeSampledPaint {cells:None,field:NativeField::AffineOwner,regions:&[2],sample,owners:&[(2,7)],alpha_is_shape:false,mode:BlendMode::Normal}];
++    let admit=|_|Some(Box::new(()) as Box<dyn std::any::Any+Send+Sync>);
++    let mut work=100000;let mut rasters=RasterTransitions::admitted(&commands,3,&mut work,&||false,&admit).unwrap();
++    let mut owners=OwnerTransitions::admitted(&commands,3,&mut work,&||false,&admit).unwrap();
++    let mut coverage=[0u64;64];coverage[0]=7;
++    rasters.rebuild(&coverage,&mut work,&||false).unwrap();owners.rebuild(&coverage,&mut work,&||false).unwrap();
++    let key=geometry_route_field_key(&commands,&[0,1],42,&coverage,Some(&rasters),Some(&owners),&mut work,&||false).unwrap();
++    assert_eq!(key.len,8);assert_eq!(&key.words[..key.len],&[42,8,0,10,11,1,7,u64::MAX]);
++    assert!(geometry_route_field_key(&commands,&[0,1],42,&coverage,None,Some(&owners),&mut work,&||false).is_none());
++    assert!(geometry_route_field_key(&commands,&[0,1],42,&coverage,Some(&rasters),None,&mut work,&||false).is_none());
++    assert!(geometry_route_field_key(&commands,&[0,1],42,&coverage,Some(&rasters),Some(&owners),&mut 0,&||false).is_none());
++    assert!(geometry_route_field_key(&commands,&[0,1],42,&coverage,Some(&rasters),Some(&owners),&mut work,&||true).is_none());
++    coverage[0]=3;owners.rebuild(&coverage,&mut work,&||false).unwrap();
++    assert!(geometry_route_field_key(&commands,&[0,1],42,&coverage,Some(&rasters),Some(&owners),&mut work,&||false).is_none());
++}

@@ -1,0 +1,134 @@
+{
+  "status": "fixed_before_build_and_execution",
+  "harness": "/Users/themoretheless/.codex/tmp/rrrah-loftr-bank-partition-harness-20261013",
+  "harness_sha256": {
+    "Cargo.toml": "0e09285f1935e29c9937b371dedce6685761a44315187bc70616d541bf6991b1",
+    "src/main.rs": "1cd9f07c7da1deca887c900ebd2399f03f849c903e556a745a827340b2b721dd"
+  },
+  "source_audit": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-bank-partition-audit-20261013.json",
+  "cases": [
+    {
+      "label": "negative",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-loftr-bank-partition-20261013/negative-plan.json",
+      "plan_sha256": "6d0bbca63d7b7736bdc4007a800c197cf0f2ce84a49540b67f7d4fadfd87abb4",
+      "left": "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/Q41923.jpg",
+      "right": "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/R026396.jpg",
+      "weights": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors"
+    },
+    {
+      "label": "positive-1",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-loftr-bank-partition-20261013/positive-1-plan.json",
+      "plan_sha256": "0c5670a198f939a1387828d9a6567f5d480efe4576941d2467123bc6540862a4",
+      "left": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200302.jpg",
+      "right": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200300.jpg",
+      "weights": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors"
+    },
+    {
+      "label": "positive-2",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-loftr-bank-partition-20261013/positive-2-plan.json",
+      "plan_sha256": "6fa7c01d614908d93c4d25ea6ed503eba30dc4861da63b9ebdbb5be1511b2096",
+      "left": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/201303.jpg",
+      "right": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201300.jpg",
+      "weights": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors"
+    },
+    {
+      "label": "positive-6",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-loftr-bank-partition-20261013/positive-6-plan.json",
+      "plan_sha256": "b08ddfeaebe140d969265fc2277d484d9bdc00774d6baa64938efa2ede99a2bc",
+      "left": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200301.jpg",
+      "right": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200300.jpg",
+      "weights": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors"
+    },
+    {
+      "label": "positive-12",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-loftr-bank-partition-20261013/positive-12-plan.json",
+      "plan_sha256": "747f86b636701bdbc458cb10f3aa4801c5fc0c66fe26cdd037e5368f91d2e90a",
+      "left": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200300.jpg",
+      "right": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200302.jpg",
+      "weights": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors"
+    },
+    {
+      "label": "positive-34",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-loftr-bank-partition-20261013/positive-34-plan.json",
+      "plan_sha256": "c2d6168edb4cf67e4b03c4977923cdc1a7939198575990888b89d19c1533be72",
+      "left": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/209400.jpg",
+      "right": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/209401.jpg",
+      "weights": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors"
+    },
+    {
+      "label": "positive-35",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-loftr-bank-partition-20261013/positive-35-plan.json",
+      "plan_sha256": "ac2e27edf0eaeeb4900bac3eacefaf86423e048092ea364ade81b4a13bbb8501",
+      "left": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/209401.jpg",
+      "right": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/209400.jpg",
+      "weights": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors"
+    },
+    {
+      "label": "positive-80",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-loftr-bank-partition-20261013/positive-80-plan.json",
+      "plan_sha256": "c9f86fae2f77309c5421d5667d36d6b1160f31810b6db2cfd914fbbce9bc6002",
+      "left": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/211900.jpg",
+      "right": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/211902.jpg",
+      "weights": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors"
+    },
+    {
+      "label": "positive-81",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-loftr-bank-partition-20261013/positive-81-plan.json",
+      "plan_sha256": "cec7b0f96024da79d3d79b75cf90fddada07a4e0d0834f3dcf94c1c3d6dcf906",
+      "left": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/211902.jpg",
+      "right": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/211900.jpg",
+      "weights": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors"
+    },
+    {
+      "label": "positive-105",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-loftr-bank-partition-20261013/positive-105-plan.json",
+      "plan_sha256": "71cf15c1fd63fb92d1cb160e29a3f6b9ac76bedf5b59d84278d81d256653963b",
+      "left": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/210202.jpg",
+      "right": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/210200.jpg",
+      "weights": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors"
+    },
+    {
+      "label": "positive-164",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-loftr-bank-partition-20261013/positive-164-plan.json",
+      "plan_sha256": "03a85784bb68c10cd901f8e56c640135a0aec0c980c537dbd24e6e9919712a65",
+      "left": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/212402.jpg",
+      "right": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/212400.jpg",
+      "weights": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors"
+    },
+    {
+      "label": "self_control",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-loftr-bank-partition-20261013/self_control-plan.json",
+      "plan_sha256": "b182b5e62ed8db91ea22a0cc50043a889217fe577ffc280e9788c736353d3d3e",
+      "left": "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/Q41923.jpg",
+      "right": "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/Q41923.jpg",
+      "weights": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors"
+    }
+  ],
+  "pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors": "59e55bf0ecd047db9c513672d121a3ea677529ad448bdc3a359e92862c74ddd7",
+    "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/Q41923.jpg": "dc05a19aef23cfd100a371752c9c8ca092c9fdc753616d16fedd6be1ed0dbdcd",
+    "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/R026396.jpg": "45ce2cd2bc8b2654e2e1a8be1fba3d881480c6425c95de8f288b28d560f6d59b",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200302.jpg": "bc4de3728d82839559134cc8155f87bdf7f8aeaca32b66bdea11f5a618420242",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200300.jpg": "0573729209c9ce6c109ea1175079960165b915dd5579121f0e15653d56f755d0",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/201303.jpg": "162003ef18f481a33e8bb6713fe9169bc0af0675b8ce1b3d21508447032a9ae5",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201300.jpg": "f2819f6d37def6b0dcc04c3f1670bb2b46318d2c451ee6ef0ebec59d8ce8c98d",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200301.jpg": "b807d0390bcd90c257cc4dff03d1b9da23aa68c57b2b22151401e67762cec839",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/209400.jpg": "d9caf92ca47a9047154bd987ee240832b1cc2a01b73fd83144043f181c127777",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/209401.jpg": "707f365de5031172ac067f8a156fd0972e5995e59a0d01326d21d4a50ae22704",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/211900.jpg": "81faa5e0860359aa092a5b1e04de4130acd1168182bb5fdf55c7dd73af9fd8fe",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/211902.jpg": "d0ad91669f6f857bcc8d305d1dd57abe0c96eaa447064894da21e5c19c436868",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/210202.jpg": "e37e3bae5aa022e45b8cd1cc95f91ad1d0baa5bf8be23ed3d5df49eafdb2a696",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/210200.jpg": "3feb59f989569051b0665caf0bec8c905bc6b1fd06753eeb85861d91cd0585f0",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/212402.jpg": "16974639514c4be152eec0edf7b1d2942f066a0a17a6a6e8df96c4a61acec727",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/212400.jpg": "b9dd82db088c21b1e34cf1e97fab988e6a5ba7656b6b5e5d9f7eabb73e37ba9b",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libtorch_python.dylib": "cb1d5957b49b8f3c2e4b90de7b99aee835520875bce893b11eb7528a548744fa",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libtorch.dylib": "2178657b7eeffc0c0a989889ac3e2b2e3d216073b35f3a291ee89bd65c0fb406",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libtorch_global_deps.dylib": "6ff1aedff89150170f225ce821dc9355a9d5f9c80a6cc1bb761c8d209638c2c7",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libomp.dylib": "fe0670951c85401421f6cedc91971f28dc870bad4c1f0cfebe2b74dac421e5f0",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libtorch_cpu.dylib": "941f3e16a8e02b23b99bd2c8693caabaf8df859bfaa293f39a5d7dd8a8f5ca6e",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libc10.dylib": "f203c171b7a71c742ef4a84bde3af64465e545a4cc3ebfd7f245dca3ebe4e7cf",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libshm.dylib": "3a6fc248697b8809534e74d9e5fc784b385239d8c7aeef291c3968a73609f7d2"
+  },
+  "minimum_endpoint_separation": 2.0,
+  "scope": "All12 fixed image pairs, actual original25 whole/quadrant Cartesian bank extraction under outer guards, all coordinate alternatives/provenance retained, no fitting or acceptance decision. Old transform witness/component counts only; no threshold tuning, statistical/pixel independence, all458 preservation or full pipeline parity claim."
+}

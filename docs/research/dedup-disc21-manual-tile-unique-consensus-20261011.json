@@ -1,0 +1,120 @@
+{
+  "status": "complete_manual_oracle_feasibility_diagnostic",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-joint-consensus-200301-20261011.json": "5968921ed23f1817fbadccb3092f51a249427a52ede7abe09c522f5a5371194f",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-consensus-200301-qualified-20261011/joint_consensus_diagnostic": "35f5820c2d49e55e0f6d0643524e7262c4d78da358dead38b21ddcfe0fa78b89",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/probe-dedup-disc21-manual-tile-unique-consensus-20261011.py": "2ea5c10f8de565a3afe31843d37eba6db7d3e4cf5c5f03903191fbe4ee12c179",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-disc21-dark-proposal-locations-20261011.json": "5c085f20f05c04a3f7a413295e0d53ba553afb33b02d853c50be9bdb1482eb09",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-disc21-dark-proposal-locations-audit-20261011.json": "fe555e323d7d10707aaf08cba9ab697b0686d52686b397d2d29add8991703ae9",
+    "/Users/themoretheless/.codex/tmp/rrrah-disc21-manual-tile-unique-consensus-20261011/raw.json": "fedda549ea3fdff891b98dca5e77637911a464044ee780b16c174a14f222a20a",
+    "/Users/themoretheless/.codex/tmp/rrrah-disc21-manual-tile-unique-consensus-20261011/raw.log": "028249190d45263c955a647409d8701f973445dafb1ea45f374799b2e1549fe4",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-disc21-dark-normalized-proposals-20261011.json": "510785fc33c35d262cd4868b755606ec803d3abbda792b22887de003e150f902",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-disc21-dark-normalized-proposals-audit-20261011.json": "075dfe11b2ef36fc1ed6f278a54b6738771242557efb11ddc20285d8555d7b2e",
+    "/Users/themoretheless/.codex/tmp/rrrah-disc21-manual-tile-unique-consensus-20261011/normalized.json": "70edcb1afeadf305273ac8d40f37e0cc3f0e5646465a08f05792c14667566670",
+    "/Users/themoretheless/.codex/tmp/rrrah-disc21-manual-tile-unique-consensus-20261011/normalized.log": "87eef1c3ad0ec49cb989cd5456b6cc8d737d08f34914fd8f4a4de45ffbca2716"
+  },
+  "results": [
+    {
+      "kind": "raw",
+      "before_exact_alias_elision": 158,
+      "command": [
+        "/Users/themoretheless/.codex/tmp/rrrah-joint-consensus-200301-qualified-20261011/joint_consensus_diagnostic",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-manual-tile-unique-consensus-20261011/raw.json",
+        "1000000",
+        "173"
+      ],
+      "elapsed_seconds": 2.3110160410000002,
+      "evidence": {
+        "best": {
+          "joint_inliers": [
+            41,
+            43,
+            46,
+            52,
+            54,
+            59,
+            62,
+            63
+          ],
+          "normalized_bidirectional_error": 0.5423598616023065,
+          "transform": [
+            [
+              4.144157086040025,
+              -0.37904744792907585,
+              -372.93036609468015
+            ],
+            [
+              -0.5502869740496384,
+              3.6515018556656056,
+              -2301.682944927411
+            ],
+            [
+              -0.000881866486176987,
+              -0.0010634340592657,
+              2.0852720220588825
+            ]
+          ]
+        },
+        "diagnostic_min_inliers": 4,
+        "maximum_projection_checks": 280000280,
+        "points": 140,
+        "scope": "Diagnostic consensus at minimum4 only. No pixel support or production acceptance; original residual tolerances retained.",
+        "seed": 173,
+        "source_tolerance": 2.0,
+        "target_tolerance": 2.0,
+        "trials": 1000000
+      }
+    },
+    {
+      "kind": "normalized",
+      "before_exact_alias_elision": 175,
+      "command": [
+        "/Users/themoretheless/.codex/tmp/rrrah-joint-consensus-200301-qualified-20261011/joint_consensus_diagnostic",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-manual-tile-unique-consensus-20261011/normalized.json",
+        "1000000",
+        "173"
+      ],
+      "elapsed_seconds": 2.611419290999999,
+      "evidence": {
+        "best": {
+          "joint_inliers": [
+            0,
+            1,
+            6,
+            8,
+            64,
+            75,
+            76
+          ],
+          "normalized_bidirectional_error": 1.0673009394766308,
+          "transform": [
+            [
+              3.2983117361253766,
+              0.058858150669517904,
+              -291.8644891085977
+            ],
+            [
+              1.8407903599047903,
+              1.303672667906732,
+              -1069.2856762794368
+            ],
+            [
+              0.002516391860495489,
+              7.563650851059578e-05,
+              0.14677406506875124
+            ]
+          ]
+        },
+        "diagnostic_min_inliers": 4,
+        "maximum_projection_checks": 298000298,
+        "points": 149,
+        "scope": "Diagnostic consensus at minimum4 only. No pixel support or production acceptance; original residual tolerances retained.",
+        "seed": 173,
+        "source_tolerance": 2.0,
+        "target_tolerance": 2.0,
+        "trials": 1000000
+      }
+    }
+  ],
+  "scope": "Manual tile oracle feasibility only. Existing pinned generic geometry diagnostic,1m trials/seed173/tolerances2,minimum4; no pixel confirmation or automatic retrieval qualification. Exact endpoint aliases removed in caller order before fitting; this order can discard other possible matches and is not an unbiased estimator."
+}

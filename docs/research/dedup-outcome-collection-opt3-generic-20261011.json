@@ -1,0 +1,63 @@
+{
+  "status": "complete_bounded_frozen_outcome_collection_opt3_generic_execution",
+  "producer_pid": 46654,
+  "command": [
+    "cargo",
+    "test",
+    "--manifest-path",
+    "/Users/themoretheless/.codex/tmp/rrrah-outcome-collection-snapshot-20261011/Cargo.toml",
+    "--target-dir",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-exact-portfolio-20261011",
+    "--config",
+    "profile.dev.package.rrrah-dedup.opt-level=3",
+    "-p",
+    "rrrah-dedup",
+    "--locked",
+    "--offline",
+    "--no-default-features",
+    "--features",
+    "decode",
+    "--no-run",
+    "--message-format=json",
+    "--lib",
+    "--test",
+    "portfolio_collection"
+  ],
+  "source_manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-outcome-collection-snapshot-20261011.json",
+  "source_manifest_sha256": "ec6ae5cc68073bcf661d78f516985d44afd0163eaa8f06cbd9be56cb2d09b368",
+  "results": [
+    {
+      "suite": "rrrah_dedup",
+      "status": "passed",
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-outcome-collection-opt3-generic-qualified-20261011/rrrah_dedup",
+      "binary_sha256": "f9d05b7f7d7a54c7f5021e14ffb193a8c9fc0880f75f5e7c9e683b231812a6ec",
+      "process_pid": 50692,
+      "returncode": 0,
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-outcome-collection-opt3-generic-qualified-20261011/rrrah_dedup.log",
+      "log_sha256": "4f8279965420523c38adab21e524a7630de0bd54fefaca6716dcee8c38e87be6",
+      "tests": 4
+    },
+    {
+      "suite": "portfolio_collection",
+      "status": "passed",
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-outcome-collection-opt3-generic-qualified-20261011/portfolio_collection",
+      "binary_sha256": "3a68a455ab35bbb5cf20d71225722ee30d9476ab276a9bea5edca15fe502fec5",
+      "process_pid": 50718,
+      "returncode": 0,
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-outcome-collection-opt3-generic-qualified-20261011/portfolio_collection.log",
+      "log_sha256": "db4829ac7e8a114583b73dabd19e25fdd45070ee9a151872da878b335a2fe353",
+      "tests": 12
+    }
+  ],
+  "build_pid": 46656,
+  "build_returncode": 0,
+  "tests": 16,
+  "frozen_files": 3081,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-outcome-collection-snapshot-20261011.json": "ec6ae5cc68073bcf661d78f516985d44afd0163eaa8f06cbd9be56cb2d09b368",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-outcome-collection-opt3-generic-20261011.py": "413200b96581a6e2185ce35d7a011a6b46ed27dfd70e4a9c725999ea550f610e",
+    "/Users/themoretheless/.codex/tmp/rrrah-outcome-collection-opt3-generic-qualified-20261011/build.jsonl": "48931fd2924ce6f6d371e755b35379fe7a61b8a45c9dd0dfcb2d631218a29c61",
+    "/Users/themoretheless/.codex/tmp/rrrah-outcome-collection-opt3-generic-qualified-20261011/build.log": "6deb23453e66a2da728db214a02d6ba8f13dbd225e8ad4c4d13d9d4d57c3c6cf"
+  },
+  "scope": "macOS decode-feature generic providers on frozen dependencies and copied pre-execution programs; no Torch or total RSS qualification"
+}

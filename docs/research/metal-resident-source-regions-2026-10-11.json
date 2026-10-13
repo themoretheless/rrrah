@@ -1,0 +1,135 @@
+{
+  "date": "2026-10-11",
+  "backend": "Metal",
+  "adapter": "Apple M4 Max",
+  "implementation": {
+    "api": "RasterRenderer::upload_region_with_cancel",
+    "coordinates": "[source_x, source_y, width, height], full-image geometry and source pixel aspect retained",
+    "storage": "Balanced Rgba32Float texture-array region; reads packed original CPU row strides directly, no intermediate CPU region buffer",
+    "shader": "Static RESIDENT_REGION variant; original SINGLE_LAYER fast path retained; region pipelines compiled lazily after admission",
+    "sampling": "Premultiplied bilinear interpolation; caller supplies one-pixel halo, unavailable footprint returns ordinary shader background",
+    "transaction": "Invalid rectangle, memory refusal and cancellation preserve previous image; partial queued transfers retain resource/queue credit through completion"
+  },
+  "validation": {
+    "gpu_units": 50,
+    "metal_raster": {
+      "passed": 14,
+      "ignored": 7
+    },
+    "hdr_swap": {
+      "passed": 14,
+      "ignored": 3
+    },
+    "collection": {
+      "sources": 65,
+      "selections": 94,
+      "storage_cases": 188,
+      "root": 0,
+      "queue": 0
+    },
+    "regions": [
+      [
+        35,
+        40,
+        130,
+        70
+      ],
+      [
+        0,
+        0,
+        70,
+        70
+      ],
+      [
+        130,
+        90,
+        70,
+        70
+      ]
+    ],
+    "negotiated_test_extent": 64,
+    "checks": [
+      "Single-layer and tiled regions match full-image SDR/HDR frames bit for bit",
+      "Top-left, bottom-right and padded region tiles retain full source placement",
+      "Invalid/overflow/empty region rejected without replacing old image",
+      "Memory pressure refusal, queued cancellation, retry and ordinary upload origin reset",
+      "Nonresident sampling shows ordinary shader background without edge smearing",
+      "Managed texture/queue budgets return to zero"
+    ]
+  },
+  "above_eager_limit": {
+    "source_extent": [
+      6000,
+      6000
+    ],
+    "source_float_bytes": 576000000,
+    "region_extent": [
+      128,
+      128
+    ],
+    "region_texture_bytes": 262144,
+    "full_upload": "TextureLimit",
+    "region_upload": "success; full 64x64 HDR viewport exact vs independent constant-raster render"
+  },
+  "ordinary_path_gpu_timestamp_smoke": {
+    "median_gpu_ms": 0.35525,
+    "samples_gpu_ms": [
+      0.355125,
+      0.354875,
+      0.35525,
+      0.35525,
+      0.356208,
+      0.355083,
+      0.355125,
+      0.3555,
+      0.355,
+      0.354917,
+      0.3565,
+      0.355166,
+      0.355625,
+      0.355542,
+      0.35475,
+      0.354958,
+      0.355667,
+      0.355542,
+      0.355667,
+      0.355292,
+      0.355542,
+      0.355042,
+      0.355208,
+      0.35525,
+      0.355417,
+      0.355084,
+      0.355083,
+      0.35525,
+      0.355917,
+      0.355625
+    ],
+    "source": [
+      4096,
+      4096
+    ],
+    "target": [
+      2048,
+      2048
+    ]
+  },
+  "limits": [
+    "Region transfer primitive is not wired into automatic viewer viewport selection, panning cache or prefetch yet",
+    "Full CPU source remains resident; no region decoder or out-of-core CPU source",
+    "Region replacement requires temporary credit for old and new textures to preserve old frame on failure",
+    "Region GPU residency retains 512MiB/layer limits; no multilevel LOD or mip fallback for fit-to-window above-limit sources",
+    "Shader compilation/startup overhead of first region request not benchmarked",
+    "One ordinary-path timestamp smoke is not a broad performance benchmark",
+    "Physical HDR accuracy, NVIDIA and full 100-format qualification remain incomplete"
+  ],
+  "diagnostics": [
+    "Background oracle initially used an empty render-pass clear; Metal sRGB clear yields code36 while shader background yields37. Corrected oracle compares ordinary shader background; no shader precision rule weakened.",
+    "An exploratory include-ignored HDR run passed15 cases but failed two external-source tests because their environment paths were not supplied. Final configured HDR gate passed14 with3 intentionally ignored."
+  ],
+  "sha256": {
+    "crates/rrrah-gpu/src/raster.rs": "58e97008640705438bd5aa75c061b15de26bf3767defc33618975dac70b75f0f",
+    "crates/rrrah-gpu/shaders/raster_view.wgsl": "b8370189ec0d24fc665b786de18856ff095ad54c5ea48a75c9a05929e912742c",
+    "crates/rrrah-gpu/tests/raster_readback.rs": "98135d6a7ff9eb948c81c18781f7e14cdb86564823f35b294b63c9041c283b31"
+  }
+}

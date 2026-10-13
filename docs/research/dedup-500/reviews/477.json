@@ -2,9 +2,9 @@
   "index": 477,
   "repository": "cbulock/ahash",
   "commit": "b92ced669d73a628e5f3d62672eec0a0e4f30433",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
-  "decision": "reference",
-  "finding": "Small PHP average-hash constructor; no detected tests, global low-information collisions unqualified.",
+  "review_scope": "complete pinned4file source review; all text fully read and Git blobs verified; PHP/GD not executed",
+  "decision": "reject-uninitialized-image-dispatch",
+  "finding": "Full4file review: undefined image metadata prevents initialized decoder dispatch; no runtime or adoption.",
   "available_source_evidence": [
     {
       "path": "lib/Cbulock/Ahash/Ahash.php",
@@ -44,5 +44,7 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "complete_source_review": "docs/research/dedup-500/ahash-complete-source-review-20261013.json",
+  "complete_source_audit": "docs/research/dedup-500/ahash-complete-source-audit-20261013.json"
 }

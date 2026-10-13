@@ -1,0 +1,38 @@
+{
+  "scope": "Shared neighbour planner exercised through actual selected-container loader/swap and Metal SDR/HDR readback",
+  "adapter": "Metal Apple M4 Max",
+  "sources": [
+    "ico-selected-images.ico",
+    "cur-selected-images.cur",
+    "cur-selected-dib.cur",
+    "tiff-distinct-page-profiles.tif"
+  ],
+  "planned_order": [
+    1,
+    0,
+    2
+  ],
+  "plan": "backward from2 ahead2 behind0 ->1,0; forward from1 ahead1 behind0 ->2",
+  "checks": [
+    "Independent selected keys",
+    "RAM hits under full shared pressure",
+    "Nonzero TTL expiry",
+    "Three swap restores while foreground decode gate held",
+    "Exact serialized payload and SDR/HDR readback",
+    "Three writes, three reads, zero swap errors, final shared credit zero"
+  ],
+  "result": {
+    "manual_tests_passed": 2,
+    "failed": 0
+  },
+  "limits": [
+    "Headless production helper integration, not live automatic window worker telemetry",
+    "Physical HDR calibration and broad format qualification remain open"
+  ],
+  "sha256": {
+    "docs/research/planned-container-prefetch-metal-2026-10-12/ico-cur.log": "597c3d473b429277893948fb9b27735cd26d116f66d1ebc6394b282ce2042367",
+    "docs/research/planned-container-prefetch-metal-2026-10-12/tiff.log": "35ef8a543dc93f86b934f949317e97225bb854db2dc1d1583c0d1e250e403a69",
+    "crates/rrrah-app/src/main.rs": "82908968245c4b4c23f4374488bc26a0305d649e9b0a02c85b2be3b43c317734",
+    "crates/rrrah-app/src/gallery.rs": "6be3b13b5b4943f03a90e1733637fa3e7b8839a6ddc726689dce2c050ced4dc0"
+  }
+}

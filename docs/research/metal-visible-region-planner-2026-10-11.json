@@ -1,0 +1,62 @@
+{
+  "date": "2026-10-11",
+  "adapter": "Apple M4 Max",
+  "backend": "Metal",
+  "api": "RasterRenderer::visible_source_region",
+  "behavior": [
+    "Returns bounded source rectangle with bilinear halo or None for fully offscreen image",
+    "Same shared finite viewport/pan/zoom normalization as update_view",
+    "Uses shader f32 fit/scale rounding before f64 inversion",
+    "32-pixel fit margin and source pixel aspect included",
+    "Coordinate-rounding halo scales with source dimension",
+    "No allocation, device access or transfer during planning; admission remains upload_region_with_cancel responsibility"
+  ],
+  "validation": {
+    "gpu_units": 51,
+    "metal_raster_passed": 15,
+    "metal_raster_ignored": 7,
+    "matrix_frames": 60,
+    "region_uploads": 46,
+    "offscreen_skips": 14,
+    "pixel_aspects": [
+      0.5,
+      1,
+      2
+    ],
+    "zoom_range": [
+      0.02,
+      128
+    ],
+    "source_extent": [
+      512,
+      320
+    ],
+    "output_extent": [
+      64,
+      64
+    ],
+    "negotiated_region_device_extent": 64,
+    "checks": [
+      "Every full SDR/HDR viewport equals full-image renderer during pan, zoom, clipped source edges and return to fit",
+      "Nonconstant signed/bright/fractional-alpha source; exposure1.25 stops",
+      "Source rows, bilinear halo and cropped texture-array layers exercised",
+      "Exact admitted region footprint and zero upload queue after completion",
+      "Managed root and queue zero after renderer drop",
+      "NaN/Infinity normalization and far-offscreen plans tested without GPU"
+    ]
+  },
+  "limits": [
+    "Planner and region uploader are library APIs; normal viewer has not yet been wired to retain source, plan/schedule/reuse regions during interaction",
+    "Fit-to-window of source above eager budget still needs LOD or streaming tiles covering the full footprint",
+    "Automatic region prefetch and residency eviction remain to implement",
+    "Physical HDR, NVIDIA and full 100-format qualification remain open"
+  ],
+  "diagnostics": [
+    "Initial matrix counter assumed12 offscreen views; actual14 were correct because one fractional-pan case is offscreen for aspect0.5. All60 pixel comparisons passed before correcting expected counter.",
+    "Final gate waited on a live concurrent dedup build lock, then completed without restarting that build."
+  ],
+  "sha256": {
+    "crates/rrrah-gpu/src/raster.rs": "ab1e4f1806109f81f50e386d48a272645bcd6f3c99bab7cae0a62fc5ba9f77d4",
+    "crates/rrrah-gpu/tests/raster_readback.rs": "39887d643182d6804332f8f05fd9482bd00a9e4f656aa88037d4809ade485860"
+  }
+}

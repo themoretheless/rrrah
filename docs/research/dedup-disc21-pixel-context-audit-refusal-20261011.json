@@ -1,0 +1,7 @@
+{
+  "status": "initial_audit_comparison_refused",
+  "reason": "Generic150 source snapshot omits the already separately-qualified native-first CPU wrappers. Initial comparison incorrectly assumed only the new context wrapper differed from generic model_loftr.",
+  "correction": "Require all other generic source files unchanged, and compare model_loftr after removing only the new context wrapper against pinned native-bank-collection-native CPU snapshot, which contains the existing wrappers.",
+  "runtime_rerun": false,
+  "controls_initial_attempt": "Not started because prerequisite independent audit did not exist. No controls directory or report created."
+}

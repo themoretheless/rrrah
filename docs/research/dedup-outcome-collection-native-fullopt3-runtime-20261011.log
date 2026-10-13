@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-outcome-collection-native-fullopt3-runtime-20261011.py", line 69, in <module>
+    if __name__=='__main__':main()
+  File "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-outcome-collection-native-fullopt3-runtime-20261011.py", line 39, in main
+    pins.update({p:h for p,h in json.loads(runtime.read_text())['pins'].items() if torch in p})
+AttributeError: 'set' object has no attribute 'read_text'

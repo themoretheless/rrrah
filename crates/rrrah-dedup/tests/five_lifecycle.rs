@@ -60,8 +60,8 @@ fn five_search_source_replacement_discards_prior_positives() {
     let dir = tempfile::tempdir().unwrap();
     let a_path = dir.path().join("a.png");
     let b_path = dir.path().join("b.png");
-    std::fs::copy(source.join("2414-base.png"), &a_path).unwrap();
-    std::fs::copy(&a_path, &b_path).unwrap();
+    std::fs::write(&a_path, std::fs::read(source.join("2414-base.png")).unwrap()).unwrap();
+    std::fs::write(&b_path, std::fs::read(&a_path).unwrap()).unwrap();
     let a = DecodeRequest::new(&a_path);
     let b = DecodeRequest::new(&b_path);
     let mut local = policy();
@@ -229,7 +229,7 @@ fn five_search_source_replacement_discards_prior_positives() {
         "{result:?}"
     );
     assert_eq!(budget.used(), 0);
-    std::fs::copy(&a_path, &b_path).unwrap();
+    std::fs::write(&b_path, std::fs::read(&a_path).unwrap()).unwrap();
     let retry =
         compare_local_files_projective_complementary_gradient_portfolio(&a, &b, five, &budget, || false)
             .unwrap();

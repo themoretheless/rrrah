@@ -580,6 +580,9 @@ where
     if minimum_shared_features == 0 {
         return Err(LocalError::Invalid);
     }
+    if cancel() {
+        return Err(LocalError::Cancelled);
+    }
     let mut documents = Vec::new();
     let mut seen = HashSet::new();
     let mut count = 0usize;
@@ -601,6 +604,9 @@ where
         seen.try_reserve(1).map_err(|_| LocalError::Budget)?;
         seen.insert(id);
         documents.push((id, features));
+    }
+    if cancel() {
+        return Err(LocalError::Cancelled);
     }
     documents.sort_unstable_by_key(|(id, _)| *id);
     drop(seen);
@@ -657,9 +663,13 @@ where
                 }
             }
             match &mut targets {
-                FileTargets::Legacy(set) => {
-                    count_targets(std::mem::take(set), left, &mut counts, budgets.max_pair_counts)?
-                }
+                FileTargets::Legacy(set) => count_targets(
+                    std::mem::take(set),
+                    left,
+                    &mut counts,
+                    budgets.max_pair_counts,
+                    &cancel,
+                )?,
                 #[cfg(feature = "decode")]
                 FileTargets::Managed(storage) => count_ordered_targets(
                     storage.ordered().iter().copied(),
@@ -685,6 +695,9 @@ where
         return Err(LocalError::Cancelled);
     }
     pairs.sort_unstable();
+    if cancel() {
+        return Err(LocalError::Cancelled);
+    }
     Ok(DescriptorFilePairs {
         pairs,
         indexed_features: count,
@@ -698,14 +711,26 @@ fn count_targets(
     left: u64,
     counts: &mut FilePairCounts,
     max_pair_counts: usize,
+    cancel: impl Fn() -> bool,
 ) -> Result<(), LocalError> {
+    if cancel() {
+        return Err(LocalError::Cancelled);
+    }
     let mut ordered_targets = Vec::new();
     ordered_targets
         .try_reserve_exact(targets.len())
         .map_err(|_| LocalError::Budget)?;
-    ordered_targets.extend(targets);
+    for target in targets {
+        if cancel() {
+            return Err(LocalError::Cancelled);
+        }
+        ordered_targets.push(target);
+    }
+    if cancel() {
+        return Err(LocalError::Cancelled);
+    }
     ordered_targets.sort_unstable();
-    count_ordered_targets(ordered_targets, left, counts, max_pair_counts, || false)
+    count_ordered_targets(ordered_targets, left, counts, max_pair_counts, cancel)
 }
 fn count_ordered_targets(
     targets: impl IntoIterator<Item = u64>,
@@ -715,6 +740,9 @@ fn count_ordered_targets(
     cancel: impl Fn() -> bool,
 ) -> Result<(), LocalError> {
     for right in targets {
+        if cancel() {
+            return Err(LocalError::Cancelled);
+        }
         match counts {
             #[cfg(feature = "decode")]
             FilePairCounts::Managed(storage) => {
@@ -843,5 +871,90 @@ mod managed_owner_slots_tests {
             Err(LocalError::Invalid)
         ));
         assert_eq!(duplicate.peak(), 0);
+    }
+}
+
+#[cfg(test)]
+mod owner_count_cancellation_tests {
+    use super::*;
+    use std::cell::Cell;
+
+    #[test]
+    fn legacy_owner_count_stops_when_iterator_requests_cancellation() {
+        let cancelled = Cell::new(false);
+        let visited = Cell::new(0);
+        let targets = (1..100).inspect(|right| {
+            visited.set(visited.get() + 1);
+            if *right == 3 {
+                cancelled.set(true);
+            }
+        });
+        let mut counts = FilePairCounts::Legacy(HashMap::new());
+        assert!(matches!(
+            count_ordered_targets(targets, 0, &mut counts, 100, || cancelled.get()),
+            Err(LocalError::Cancelled)
+        ));
+        assert_eq!(visited.get(), 3);
+        match counts {
+            FilePairCounts::Legacy(counts) => {
+                assert_eq!(counts.len(), 2);
+                assert_eq!(counts.get(&(0, 1)), Some(&1));
+                assert_eq!(counts.get(&(0, 2)), Some(&1));
+            }
+            #[cfg(feature = "decode")]
+            _ => unreachable!(),
+        }
+    }
+
+    #[test]
+    fn descriptor_pair_entry_cancellation_does_not_consume_input() {
+        let limits = FileFeatureBudgets {
+            max_files: 3,
+            max_features: 6,
+            max_hits: 36,
+            max_pair_counts: 3,
+            max_pairs: 3,
+        };
+        let touched = Cell::new(false);
+        let files = std::iter::from_fn(|| {
+            touched.set(true);
+            None::<(u64, Vec<Feature>)>
+        });
+        assert!(matches!(
+            descriptor_file_pairs(files, 0, 1, limits, || true),
+            Err(LocalError::Cancelled)
+        ));
+        assert!(
+            !touched.get(),
+            "pre-cancelled operation consumed the input iterator"
+        );
+        #[cfg(feature = "decode")]
+        {
+            let files = std::iter::from_fn(|| {
+                touched.set(true);
+                None::<(u64, Vec<Feature>)>
+            });
+            let budget = rrrah_core::MemoryBudget::new(1024);
+            assert!(matches!(
+                descriptor_file_pairs_shared_managed(files, 0, 1, limits, &budget, || true),
+                Err(LocalError::Cancelled)
+            ));
+            assert!(!touched.get());
+            assert_eq!(budget.peak(), 0);
+        }
+    }
+
+    #[test]
+    fn legacy_owner_materialization_honors_cancellation() {
+        let mut counts = FilePairCounts::Legacy(HashMap::new());
+        assert!(matches!(
+            count_targets([1, 2, 3].into_iter().collect(), 0, &mut counts, 3, || true),
+            Err(LocalError::Cancelled)
+        ));
+        match counts {
+            FilePairCounts::Legacy(counts) => assert!(counts.is_empty()),
+            #[cfg(feature = "decode")]
+            _ => unreachable!(),
+        }
     }
 }

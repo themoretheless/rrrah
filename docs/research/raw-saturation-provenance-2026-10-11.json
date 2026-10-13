@@ -1,0 +1,96 @@
+{
+  "sources": [
+    {
+      "source": "1084.orf",
+      "native_white": [
+        4095.0
+      ],
+      "active_area_parity_statistics": [
+        {
+          "count": 3981312,
+          "min": 2,
+          "max": 3794,
+          "above_native_white": 0
+        },
+        {
+          "count": 3981312,
+          "min": 9,
+          "max": 3795,
+          "above_native_white": 0
+        },
+        {
+          "count": 3981312,
+          "min": 9,
+          "max": 3795,
+          "above_native_white": 0
+        },
+        {
+          "count": 3981312,
+          "min": 1,
+          "max": 3796,
+          "above_native_white": 0
+        }
+      ]
+    },
+    {
+      "source": "5025.rw2",
+      "native_white": [
+        3967.0,
+        3967.0,
+        3967.0
+      ],
+      "active_area_parity_statistics": [
+        {
+          "count": 3981312,
+          "min": 0,
+          "max": 3988,
+          "above_native_white": 14
+        },
+        {
+          "count": 3981312,
+          "min": 0,
+          "max": 3989,
+          "above_native_white": 60
+        },
+        {
+          "count": 3981312,
+          "min": 0,
+          "max": 3989,
+          "above_native_white": 53
+        },
+        {
+          "count": 3981312,
+          "min": 0,
+          "max": 3987,
+          "above_native_white": 8
+        }
+      ]
+    }
+  ],
+  "calibration_conflicts": {
+    "E-M5": {
+      "native_full_scale": 4095,
+      "libraw_model": 4065,
+      "rawspeed_model": 4095,
+      "rawspeed_black": 255
+    },
+    "DMC-GH2": {
+      "native_file_rgb_limits": 3967,
+      "libraw_model": 3989,
+      "rawspeed_model": 3800
+    }
+  },
+  "references": [
+    "https://raw.githubusercontent.com/LibRaw/LibRaw/master/src/tables/colordata.cpp",
+    "https://raw.githubusercontent.com/darktable-org/rawspeed/develop/data/cameras.xml"
+  ],
+  "reference_sha256": {
+    "libraw": "8ccba3f142c377bc45db9f560e1e5d5b241db912c57aaf33f146269a45a91503",
+    "rawspeed": "d67d32beb3acf073a4ecc521daae29545f90bf79270749e9041031dedb89d166"
+  },
+  "decision": "retain explicit file limits and existing defaults; do not replace with conflicting third-party model constants; physical saturation remains unqualified",
+  "limits": [
+    "scene sample extrema do not measure physical sensor saturation",
+    "requires controlled flat-field exposure or independent manufacturer calibration"
+  ]
+}

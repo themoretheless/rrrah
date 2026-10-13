@@ -1,0 +1,14 @@
+{
+  "status": "design_only_not_implemented",
+  "observation": "Production distinct-location gradient matching computes the same full pair distances in two passes. A live native sample still reaches distances_four.",
+  "candidate": "Optional managed f64 pair-distance matrix for the distinct-location pass. Cache only admitted matrices up to a bounded scratch cap, initially 32 MiB; allocation/count/size refusal falls back to the existing complete four-lane matcher.",
+  "invariants": [
+    "Preserve bitwise f64 distances, logical pair and tie order, all admitted full 2*n*m pair work, per-logical-pair cancellation checkpoints and all spatial distinctness checks.",
+    "No matrix for non-distinct single-pass matching. No omitted candidates or lower feature caps when memory is insufficient.",
+    "Fill every actual pair exactly once during the first pass, reuse identical stored values in the second, release all matrix credit before returning or original file confirmation.",
+    "Expose actual optional-cache residency in managed peak; do not hide bytes or claim whole-process RSS.",
+    "Check cached and fallback paths against the retained scalar oracle, every ordinal cancellation, duplicate/spatial chains and one-short mandatory budgets.",
+    "Run real-descriptor alternating A/B and actual mirror/rephoto/three-pair proof parity before any production adoption. No whole-library speed claim from kernel timing."
+  ],
+  "scope": "This is the next exact-memory tradeoff candidate after eight accumulators regressed opt1. It does not solve indexed collection scaling or tensor workspace admission."
+}

@@ -1,0 +1,14 @@
+{
+  "backend": "metal",
+  "passed": 8,
+  "failed": 0,
+  "check": "rrrah passed",
+  "verified": "budgeted renderer rejects unbudgeted and unrelated-budget prepared geometry with BudgetMismatch; rejected buffers release credit and previous SDR/HDR frame stays exact; intended shared-budget preparation/installation succeeds",
+  "test_source_sha256": "37b213475c876f05b4f9f19956a7360d6ee3020c4b66b43c08d3a114fe75f10c",
+  "log": "docs/research/model-prepared-budget-2026-10-11.log",
+  "sha256": "797f26dcc33dc179919ec9d9fa628828f230298001e0a93cc682925457e923d9",
+  "limitations": [
+    "Caller still must use same GPU device.",
+    "Viewer worker integration remains pending."
+  ]
+}

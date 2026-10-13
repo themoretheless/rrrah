@@ -1,0 +1,21 @@
+{
+  "backend": "Metal",
+  "raw_linear_tests_passed": 5,
+  "failed": 0,
+  "ignored": 0,
+  "zooms": [
+    2,
+    0.3,
+    0.125
+  ],
+  "assertions": [
+    "Float32 RGB finite; includes both above65504 and below-65504.",
+    "Float16 saturated endpoints exactly match signed limits; other components agree within binary16 tolerance."
+  ],
+  "log_sha256": "c618dde2462e25ff2a6f4742400525ae96233f6ccc0938a9c7ce10cae7542c88",
+  "test_source_sha256": "1a10ea6311f7554c68bad9cee4fddcb04b331e453b1f5d31fd0020fb85e794d5",
+  "limits": [
+    "Authored RGBE source, center pixel at three zoom levels; not full-frame appearance or physical HDR.",
+    "Float32 renderer is conversion reference; saturation endpoints independently fixed by binary16 range."
+  ]
+}

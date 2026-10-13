@@ -1,0 +1,23 @@
+{
+  "status": "pinned_native_runtime_and_cached_weight_origin",
+  "torch_version": "2.10.0",
+  "loftr_version": "0.1.1",
+  "tch_version": "0.23.0",
+  "upstream_inspected_commit": "eef23f1ab0429c544f37ab45066245310eae8171",
+  "pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr_outdoor.ckpt": "21f5bec5968178e8bc8b7633441836fe5de4f47d861dd2cd7dc38e271b0479ec",
+    "docs/research/dedup-loftr-native-build-20261010.log": "e857bb920d2a18f3c2cfacf0a3778f50c885619140b975b9ec0ea419e7a78d5a",
+    "docs/research/dedup-loftr-native-runtime-20261010.log": "b41092f487bc256ad037dde510c989defebd0dc25bca66a7ee69df7ce8e0c1b4",
+    "docs/research/dedup-loftr-native-20261010.log": "b7e2c861926dbf839cfefb6821f8cd2e6bec2929e97e343c27e8eb656670c149",
+    "docs/research/dedup-209401-loftr-native-anchors.json": "37d9fd04618e94d6b3d3445a4fea243b3cffa6dd8e7f21291e62e612f177afac",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libtorch_python.dylib": "cb1d5957b49b8f3c2e4b90de7b99aee835520875bce893b11eb7528a548744fa",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libtorch.dylib": "2178657b7eeffc0c0a989889ac3e2b2e3d216073b35f3a291ee89bd65c0fb406",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libtorch_global_deps.dylib": "6ff1aedff89150170f225ce821dc9355a9d5f9c80a6cc1bb761c8d209638c2c7",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libomp.dylib": "fe0670951c85401421f6cedc91971f28dc870bad4c1f0cfebe2b74dac421e5f0",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libtorch_cpu.dylib": "941f3e16a8e02b23b99bd2c8693caabaf8df859bfaa293f39a5d7dd8a8f5ca6e",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libc10.dylib": "f203c171b7a71c742ef4a84bde3af64465e545a4cc3ebfd7f245dca3ebe4e7cf",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libshm.dylib": "3a6fc248697b8809534e74d9e5fc784b385239d8c7aeef291c3968a73609f7d2"
+  },
+  "weight_conversion": "torch.load(cpu, weights_only=True)[state_dict], remove matcher. prefix, contiguous tensors, safetensors save_file; no new model download",
+  "scope": "Runtime/build/checkpoint provenance supplement to four-variant diagnostic; not a sandbox or library memory guarantee."
+}

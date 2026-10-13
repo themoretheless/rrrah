@@ -1,0 +1,177 @@
+--- a/vendor/hayro-interpret/src/encode/native_source.rs
++++ b/vendor/hayro-interpret/src/encode/native_source.rs
+@@ -138,6 +138,52 @@
+     }
+ }
+ 
++// The coefficients enclose the exact linear expression; error bounds the
++// difference introduced by evaluating that expression in the sampler's order.
++#[derive(Clone,Copy)]
++struct AffineMeshWeight {coeff:[MeshWeightInterval;3],range:MeshWeightInterval,error:f64}
++impl AffineMeshWeight {
++    fn input(axis:usize,range:MeshWeightInterval)->Self {
++        let mut coeff=[MeshWeightInterval {lo:0.,hi:0.};3];coeff[axis]=MeshWeightInterval {lo:1.,hi:1.};
++        Self {coeff,range,error:0.}
++    }
++    fn constant(value:f64)->Option<Self> {
++        let mut coeff=[MeshWeightInterval::exact(0.)?;3];coeff[2]=MeshWeightInterval::exact(value)?;
++        Some(Self {coeff,range:MeshWeightInterval::exact(value)?,error:0.})
++    }
++    fn op(self,other:Self,kind:u8,work:&mut usize,cancelled:&dyn Fn()->bool)->Option<Self> {
++        // Multiplication/division here only permit an exact scalar RHS.
++        if kind>=2 && (other.error!=0. || other.range.lo!=other.range.hi
++            || other.coeff[0].lo!=0. || other.coeff[0].hi!=0.
++            || other.coeff[1].lo!=0. || other.coeff[1].hi!=0.) {return None;}
++        let range=self.range.op(other.range,kind,work,cancelled)?;
++        let mut coeff=self.coeff;
++        for (i,value) in coeff.iter_mut().enumerate() {
++            *value=self.coeff[i].op(if kind<2 {other.coeff[i]} else {other.range},kind,work,cancelled)?;
++        }
++        let magnitude=range.lo.abs().max(range.hi.abs());
++        let rounding=(magnitude.next_up()-magnitude).next_up();
++        let propagated=match kind {
++            0|1=>(self.error+other.error).next_up(),
++            2=>(self.error*other.range.lo.abs()).next_up(),
++            _=>(self.error/other.range.lo.abs()).next_up(),
++        };
++        let error=(propagated+rounding).next_up();
++        error.is_finite().then_some(Self {coeff,range,error})
++    }
++    fn over_vertices(self,vertices:&[Point],work:&mut usize,cancelled:&dyn Fn()->bool)->Option<[f64;2]> {
++        let mut lo=f64::INFINITY;let mut hi=f64::NEG_INFINITY;
++        for point in vertices {
++            let x=self.coeff[0].op(MeshWeightInterval::exact(point.x)?,2,work,cancelled)?;
++            let y=self.coeff[1].op(MeshWeightInterval::exact(point.y)?,2,work,cancelled)?;
++            let v=x.op(y,0,work,cancelled)?.op(self.coeff[2],0,work,cancelled)?;
++            lo=lo.min(v.lo);hi=hi.max(v.hi);
++        }
++        let lo=(lo-self.error).next_down();let hi=(hi+self.error).next_up();
++        MeshWeightInterval::new(lo,hi).map(|v|[v.lo,v.hi])
++    }
++}
++
+ impl NativeTriangle {
+     fn bounds(&self) -> kurbo::Rect {
+         let mut bounds = kurbo::Rect::from_points(self.points[0], self.points[1]);
+@@ -738,6 +784,48 @@
+             let wc=op(u,v,1)?;let wc=op(wc,exact(denominator)?,3)?;
+             let wa=op(exact(1.)?,wb,1)?;let wa=op(wa,wc,1)?;
+             Some([wa,wb,wc].map(|v|[v.lo,v.hi]))
++        })();
++        if cancelled() {return Err(Cancelled);}
++        result.ok_or(if *remaining==0 {WorkLimit} else {Invalid})
++    }
++
++    /// Bounds computed raw weights over the convex hull of 1..=64 finite
++    /// device vertices, preserving linear coordinate correlation. A separate
++    /// rounding envelope covers evaluation over the hull's bounding rectangle.
++    /// This does not certify that caller fragment centroids lie in that hull.
++    pub fn mesh_triangle_weight_bounds_over_vertices(&self,index:usize,vertices:&[Point],
++        cancelled:&dyn Fn()->bool,remaining:&mut usize)->Result<[[f64;2];3],NativeShadingError> {
++        use NativeShadingError::*;
++        if cancelled() {return Err(Cancelled);}
++        *remaining=remaining.checked_sub(1).ok_or(WorkLimit)?;
++        if vertices.is_empty() || vertices.len()>64 {return Err(Invalid);}
++        let triangle=self.mesh.as_ref().ok_or(Unsupported)?.triangles.get(index).ok_or(Invalid)?;
++        let result=(|| {
++            let mut bbox=[f64::INFINITY,f64::NEG_INFINITY,f64::INFINITY,f64::NEG_INFINITY];
++            for p in vertices {
++                if cancelled() {return None;}*remaining=remaining.checked_sub(1)?;
++                if !p.x.is_finite() || !p.y.is_finite() {return None;}
++                bbox[0]=bbox[0].min(p.x);bbox[1]=bbox[1].max(p.x);bbox[2]=bbox[2].min(p.y);bbox[3]=bbox[3].max(p.y);
++            }
++            let x=AffineMeshWeight::input(0,MeshWeightInterval::new(bbox[0],bbox[1])?);
++            let y=AffineMeshWeight::input(1,MeshWeightInterval::new(bbox[2],bbox[3])?);
++            let constant=AffineMeshWeight::constant;
++            let mut op=|a:AffineMeshWeight,b:AffineMeshWeight,k|a.op(b,k,remaining,cancelled);
++            let [xx,yx,xy,yy,tx,ty]=self.inverse.as_coeffs();
++            let px0=op(x,constant(xx)?,2)?;let px1=op(y,constant(xy)?,2)?;
++            let px=op(px0,px1,0)?;let px=op(px,constant(tx)?,0)?;
++            let py0=op(x,constant(yx)?,2)?;let py1=op(y,constant(yy)?,2)?;
++            let py=op(py0,py1,0)?;let py=op(py,constant(ty)?,0)?;
++            let [a,b,c]=triangle.points;let b=b-a;let c=c-a;
++            let denominator=b.x*c.y-b.y*c.x;
++            if !denominator.is_finite() || denominator==0. {return None;}
++            let dx=op(px,constant(a.x)?,1)?;let dy=op(py,constant(a.y)?,1)?;
++            let u=op(dx,constant(c.y)?,2)?;let v=op(dy,constant(c.x)?,2)?;
++            let wb=op(u,v,1)?;let wb=op(wb,constant(denominator)?,3)?;
++            let u=op(dy,constant(b.x)?,2)?;let v=op(dx,constant(b.y)?,2)?;
++            let wc=op(u,v,1)?;let wc=op(wc,constant(denominator)?,3)?;
++            let wa=op(constant(1.)?,wb,1)?;let wa=op(wa,wc,1)?;
++            Some([wa.over_vertices(vertices,remaining,cancelled)?,wb.over_vertices(vertices,remaining,cancelled)?,wc.over_vertices(vertices,remaining,cancelled)?])
+         })();
+         if cancelled() {return Err(Cancelled);}
+         result.ok_or(if *remaining==0 {WorkLimit} else {Invalid})
+@@ -1208,6 +1296,8 @@
+                 let mut work=1000;
+                 let bounds=source.mesh_triangle_weight_bounds(0,rect,&||false,&mut work).unwrap();
+                 let used=1000-work;assert!(used>1);
++                let vertices=[Point::new(rect.x0,rect.y0),Point::new(rect.x1,rect.y0),Point::new(rect.x1,rect.y1),Point::new(rect.x0,rect.y1)];
++                let affine_bounds=source.mesh_triangle_weight_bounds_over_vertices(0,&vertices,&||false,&mut 1000).unwrap();
+                 for y in 0..=16 {for x in 0..=16 {
+                     let point=Point::new(rect.x0+rect.width()*f64::from(x)/16.,rect.y0+rect.height()*f64::from(y)/16.);
+                     let p=source.inverse*point;let [a,b,c]=points;let b=b-a;let c=c-a;
+@@ -1215,6 +1305,7 @@
+                     let denominator=cross(b,c);let wb=cross(p-a,c)/denominator;let wc=cross(b,p-a)/denominator;
+                     let raw=[1.-wb-wc,wb,wc];
+                     for (value,[lo,hi]) in raw.into_iter().zip(bounds) {assert!(lo<=value && value<=hi,"{value:?} outside {lo:?}..{hi:?}");}
++                    for (value,[lo,hi]) in raw.into_iter().zip(affine_bounds) {assert!(lo<=value && value<=hi,"affine: {value:?} outside {lo:?}..{hi:?}");}
+                     let deficit=source.mesh_triangle_projection_deficit(0,point,&||false,&mut 1).unwrap();
+                     let upper=bounds.iter().fold(0f64,|sum,[lo,_]|(sum+(-lo).max(0.)).next_up());
+                     assert!(deficit<=upper);
+@@ -1228,6 +1319,30 @@
+         assert!(source.mesh_triangle_weight_bounds(0,kurbo::Rect::new(f64::MAX,0.,f64::MAX,1.),&||false,&mut 1000).is_err());
+         source.mesh.as_mut().unwrap().triangles[0].points=[Point::ZERO;3];
+         assert!(source.mesh_triangle_weight_bounds(0,kurbo::Rect::ZERO,&||false,&mut 1000).is_err());
++    }
++
++    #[test]
++    fn affine_weight_domain_keeps_skinny_triangle_correlation_and_refuses_all_short_budgets() {
++        let mut pattern=axial();
++        Arc::make_mut(&mut pattern.shading).shading_type=Arc::new(ShadingType::TriangleMesh {triangles:vec![native_triangle([[0.;4],[1.;4],[0.;4]],4)],function:None});
++        let mut source=NativeShadingSource::capture(&pattern,&||false,&no_credit).unwrap();source.inverse=kurbo::Affine::IDENTITY;
++        let points=[Point::ZERO,Point::new(1.,1.),Point::new(2.,2.000000001)];
++        source.mesh.as_mut().unwrap().triangles[0].points=points;
++        let mut work=1000;
++        let bounds=source.mesh_triangle_weight_bounds_over_vertices(0,&points,&||false,&mut work).unwrap();
++        let used=1000-work;
++        for [lo,hi] in bounds {assert!(lo>=-0.001 && hi<=1.001,"{lo}..{hi}");}
++        let rect=source.mesh_triangle_weight_bounds(0,kurbo::Rect::new(0.,0.,2.,2.000000001),&||false,&mut 1000).unwrap();
++        assert!(rect.iter().any(|[lo,hi]|hi-lo>1e9));
++        for budget in 0..used {assert!(source.mesh_triangle_weight_bounds_over_vertices(0,&points,&||false,&mut {budget}).is_err());}
++        assert!(source.mesh_triangle_weight_bounds_over_vertices(0,&[],&||false,&mut 1000).is_err());
++        assert!(source.mesh_triangle_weight_bounds_over_vertices(0,&[Point::ZERO;65],&||false,&mut 1000).is_err());
++        let polls=std::cell::Cell::new(0);
++        source.mesh_triangle_weight_bounds_over_vertices(0,&points,&||{polls.set(polls.get()+1);false},&mut 1000).unwrap();
++        for stop in 1..=polls.get() {
++            let count=std::cell::Cell::new(0);
++            assert!(source.mesh_triangle_weight_bounds_over_vertices(0,&points,&||{count.set(count.get()+1);count.get()>=stop},&mut 1000).is_err());
++        }
+     }
+ 
+     #[test]
+--- a/vendor/hayro/src/knockout_interpreter.rs
++++ b/vendor/hayro/src/knockout_interpreter.rs
+@@ -7197,6 +7197,22 @@
+     let mut mesh_samples=Vec::new();mesh_samples.try_reserve_exact(mesh_count).ok()?;
+     let trace_point_sources=point.is_some() && std::env::var_os("RRRAH_AI_TRACE_POINT_SOURCES").is_some();
+     for (event,source,geometry) in &meshes {
++        if std::env::var_os("RRRAH_AI_MESH_AFFINE_BOUNDS").is_some() {
++            let mut work=4_000_000;let mut accepted=0;let mut refused=0;let mut max_deficit=0f64;
++            for (&owner,path) in geometry.owners.iter().zip(&geometry.paths) {
++                let mut vertices=[kurbo::Point::ZERO;3];let mut count=0;let mut valid=true;
++                for element in path.elements() {match element {
++                    kurbo::PathEl::MoveTo(p)|kurbo::PathEl::LineTo(p)=>{if count==3 {valid=false;break;}vertices[count]=*p;count+=1;},
++                    kurbo::PathEl::ClosePath=>{},_=>{valid=false;break;},
++                }}
++                if !valid || count!=3 {refused+=1;continue;}
++                if cancelled() {return None;}
++                if let Ok(bounds)=source.mesh_triangle_weight_bounds_over_vertices(owner,&vertices,cancelled,&mut work) {
++                    accepted+=1;let deficit=bounds.iter().fold(0f64,|sum,[lo,_]|(sum+(-lo).max(0.)).next_up());max_deficit=max_deficit.max(deficit);
++                } else {refused+=1;}
++            }
++            eprintln!("SPATIAL_MESH_AFFINE_BOUNDS event={event} accepted={accepted} refused={refused} max_deficit={max_deficit:?} work={}",4_000_000-work);
++        }
+         if std::env::var_os("RRRAH_AI_MESH_WEIGHT_BOUNDS").is_some() {
+             let mut work=4_000_000;let mut accepted=0;let mut refused=0;let mut inside=0;let mut max_deficit=0f64;
+             for &owner in &geometry.owners {

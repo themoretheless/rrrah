@@ -1,0 +1,36 @@
+{
+  "requirement": "Nonzero TTL must retain fresh swap and asynchronously release expired physical file/quota without lookup.",
+  "ttl_seconds": 2,
+  "timeout_seconds": 6,
+  "checks": [
+    "fresh explicit prune removes zero entries",
+    "fresh physical object and nonzero bytes retained",
+    "background expiration without get/barrier/prune",
+    "physical bytes/objects and index zero",
+    "source budget zero and no swap errors"
+  ],
+  "results": {
+    "focused": {
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    "all": {
+      "passed": 149,
+      "failed": 0,
+      "ignored": 5
+    }
+  },
+  "logs": {
+    "focused": {
+      "path": "docs/research/nonzero-swap-ttl-2026-10-11-focused.log",
+      "sha256": "db2d90813887346b58b17ceaa4e556f236a45d675126ee29594c262c0033a5e3"
+    },
+    "all": {
+      "path": "docs/research/nonzero-swap-ttl-2026-10-11-all.log",
+      "sha256": "f0dc7c7f2cd7acf486e82221365a5e81dcc95fe74f88c0349fdf54d60f0eafea"
+    }
+  },
+  "source_sha256": "01f6a4e1dbe28f4509aee38abecd84472ff448180102389d7f6d1a3264431650",
+  "limitations": "Small authored raster, real local filesystem, not full RAW viewer or slow physical disk."
+}

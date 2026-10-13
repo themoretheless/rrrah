@@ -1,0 +1,146 @@
+{
+  "status": "complete_pending_independent_audit",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/azux-hashes-full-source-20261013.json": "7719cdf591087874db2d840a80245243101a31bd2c4bcbc6c110fee30d2aaa71",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/run-dedup-azux-hashes-controls-20261013.py": "bd9e7d2fbdfdd2f6eefad1f08f97a17f22042bfc066861c479a1a8198bbeea38",
+    "/Users/themoretheless/.codex/tmp/rrrah-azux-hashes-controls-20261013/controls.cpp": "519c3f3cd7cd9efa3cd8523d3e547913b3ab59d63c2105f7056eac68c7b34ef0",
+    "/Users/themoretheless/.codex/tmp/rrrah-azux-hashes-source-20261013/.gitattributes": "1a1dbe176bc233b499d35a57db7513f2941c99ab9759f177830c9149be99005b",
+    "/Users/themoretheless/.codex/tmp/rrrah-azux-hashes-source-20261013/.gitignore": "cb3b27b3201c8cb0ff02acc65ab4f6aa362e91da32779d290ee11b2c3c40c2d0",
+    "/Users/themoretheless/.codex/tmp/rrrah-azux-hashes-source-20261013/LICENSE": "33aeff2c6508e4addbf9fec8b3ebfc5f2a5c8cfa9a59bc646c9065f165af1627",
+    "/Users/themoretheless/.codex/tmp/rrrah-azux-hashes-source-20261013/README.md": "f535ffe7acd1c16aa8e589ba51af9d7993362b29b4408ed3a2d7046f6e7ac679",
+    "/Users/themoretheless/.codex/tmp/rrrah-azux-hashes-source-20261013/Source/Hash/Implementation/AverageHash.cpp": "52a4e56aa80c3610a896ed62daa16e6dfe9fd547da22e666c615bd914e7ea440",
+    "/Users/themoretheless/.codex/tmp/rrrah-azux-hashes-source-20261013/Source/Hash/Implementation/AverageHash.h": "2747377596df79b27c2cd5fea92257a72936c5725288b3264d83885732a209ba",
+    "/Users/themoretheless/.codex/tmp/rrrah-azux-hashes-source-20261013/Source/Hash/Implementation/DifferenceHash.cpp": "df4286d16b8725b4f6e6b131a8ca1599eb3fc854a4b6454e83ff703be1ef2378",
+    "/Users/themoretheless/.codex/tmp/rrrah-azux-hashes-source-20261013/Source/Hash/Implementation/DifferenceHash.h": "b264bcef2834ad093aad9474fa8969de172f762b97d80e508ca8c3894d115532",
+    "/Users/themoretheless/.codex/tmp/rrrah-azux-hashes-source-20261013/Source/Hash/Implementation/PerceptualHash.cpp": "88f0bb41eb9d40a389295445847b11b75031946dd75d65a07c7352d2b15e3fdb",
+    "/Users/themoretheless/.codex/tmp/rrrah-azux-hashes-source-20261013/Source/Hash/Implementation/PerceptualHash.h": "fd24bbd499ff9b3d987503491e0e96ba3adc95df4381a4566b1263372fea517e",
+    "/Users/themoretheless/.codex/tmp/rrrah-azux-hashes-source-20261013/Source/Hash/Interface/IHash.h": "6f2b180b9cbc607924dcd5260a39ca65a7ebb6683a65a54931bf7385db6ef136",
+    "/Users/themoretheless/.codex/tmp/rrrah-azux-hashes-source-20261013/Source/Image/Image.cpp": "a2ffda4484cbd0b29d6b59f42e8eb1c66c75456bf9fcf25c4b59da9d893dbb77",
+    "/Users/themoretheless/.codex/tmp/rrrah-azux-hashes-source-20261013/Source/Image/Image.h": "4553ac86ab8fc9d9c3ee7e02ff56616adfe29e4c8d7bd98758ab99fe1dd8a804"
+  },
+  "compiler": "Apple clang version 21.0.0 (clang-2100.3.34.2)\nTarget: arm64-apple-darwin25.6.0\nThread model: posix\nInstalledDir: /Library/Developer/CommandLineTools/usr/bin\n",
+  "sanitizer_environment": {
+    "ASAN_OPTIONS": "detect_leaks=0:halt_on_error=1",
+    "UBSAN_OPTIONS": "halt_on_error=1:print_stacktrace=0"
+  },
+  "rows": [
+    {
+      "kind": "build",
+      "label": "normal",
+      "command": [
+        "clang++",
+        "-std=c++17",
+        "-O1",
+        "-g",
+        "-I",
+        "/Users/themoretheless/.codex/tmp/rrrah-azux-hashes-source-20261013",
+        "/Users/themoretheless/.codex/tmp/rrrah-azux-hashes-controls-20261013/controls.cpp",
+        "/Users/themoretheless/.codex/tmp/rrrah-azux-hashes-source-20261013/Source/Hash/Implementation/AverageHash.cpp",
+        "/Users/themoretheless/.codex/tmp/rrrah-azux-hashes-source-20261013/Source/Hash/Implementation/DifferenceHash.cpp",
+        "/Users/themoretheless/.codex/tmp/rrrah-azux-hashes-source-20261013/Source/Hash/Implementation/PerceptualHash.cpp",
+        "/Users/themoretheless/.codex/tmp/rrrah-azux-hashes-source-20261013/Source/Image/Image.cpp",
+        "-o",
+        "/Users/themoretheless/.codex/tmp/rrrah-azux-hashes-controls-20261013/normal"
+      ],
+      "returncode": 0,
+      "executable": "/Users/themoretheless/.codex/tmp/rrrah-azux-hashes-controls-20261013/normal",
+      "executable_sha256": "6bac6cd7d597d024321c3cd53f1b41220c27fb98e8122e99bde4c86d9fa11c72"
+    },
+    {
+      "kind": "build",
+      "label": "sanitized",
+      "command": [
+        "clang++",
+        "-std=c++17",
+        "-O1",
+        "-g",
+        "-I",
+        "/Users/themoretheless/.codex/tmp/rrrah-azux-hashes-source-20261013",
+        "/Users/themoretheless/.codex/tmp/rrrah-azux-hashes-controls-20261013/controls.cpp",
+        "/Users/themoretheless/.codex/tmp/rrrah-azux-hashes-source-20261013/Source/Hash/Implementation/AverageHash.cpp",
+        "/Users/themoretheless/.codex/tmp/rrrah-azux-hashes-source-20261013/Source/Hash/Implementation/DifferenceHash.cpp",
+        "/Users/themoretheless/.codex/tmp/rrrah-azux-hashes-source-20261013/Source/Hash/Implementation/PerceptualHash.cpp",
+        "/Users/themoretheless/.codex/tmp/rrrah-azux-hashes-source-20261013/Source/Image/Image.cpp",
+        "-fsanitize=address,undefined,float-cast-overflow",
+        "-fno-sanitize-recover=all",
+        "-fno-omit-frame-pointer",
+        "-o",
+        "/Users/themoretheless/.codex/tmp/rrrah-azux-hashes-controls-20261013/sanitized"
+      ],
+      "returncode": 0,
+      "executable": "/Users/themoretheless/.codex/tmp/rrrah-azux-hashes-controls-20261013/sanitized",
+      "executable_sha256": "ccc69827913667e5b569fd88154c0bd259385d8acd4ac62bcadf6358110ef0a3"
+    },
+    {
+      "kind": "run",
+      "label": "normal",
+      "mode": "safe",
+      "command": [
+        "/Users/themoretheless/.codex/tmp/rrrah-azux-hashes-controls-20261013/normal",
+        "safe"
+      ],
+      "returncode": 0,
+      "stdout": "/Users/themoretheless/.codex/tmp/rrrah-azux-hashes-controls-20261013/normal-safe.stdout",
+      "stdout_sha256": "4734f57b67c27dd8ca33b799b06e467e8642ce3550d62e056303b16b34cd469c",
+      "stderr": "/Users/themoretheless/.codex/tmp/rrrah-azux-hashes-controls-20261013/normal-safe.stderr",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "kind": "run",
+      "label": "sanitized",
+      "mode": "safe",
+      "command": [
+        "/Users/themoretheless/.codex/tmp/rrrah-azux-hashes-controls-20261013/sanitized",
+        "safe"
+      ],
+      "returncode": 0,
+      "stdout": "/Users/themoretheless/.codex/tmp/rrrah-azux-hashes-controls-20261013/sanitized-safe.stdout",
+      "stdout_sha256": "4734f57b67c27dd8ca33b799b06e467e8642ce3550d62e056303b16b34cd469c",
+      "stderr": "/Users/themoretheless/.codex/tmp/rrrah-azux-hashes-controls-20261013/sanitized-safe.stderr",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "kind": "run",
+      "label": "sanitized",
+      "mode": "phash",
+      "command": [
+        "/Users/themoretheless/.codex/tmp/rrrah-azux-hashes-controls-20261013/sanitized",
+        "phash"
+      ],
+      "returncode": -6,
+      "stdout": "/Users/themoretheless/.codex/tmp/rrrah-azux-hashes-controls-20261013/sanitized-phash.stdout",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "/Users/themoretheless/.codex/tmp/rrrah-azux-hashes-controls-20261013/sanitized-phash.stderr",
+      "stderr_sha256": "bcd509c1022480d8bc6d7728d892c629c0c10039b1d42ae4d9576b7dfe5c2d90"
+    },
+    {
+      "kind": "run",
+      "label": "sanitized",
+      "mode": "position_zero",
+      "command": [
+        "/Users/themoretheless/.codex/tmp/rrrah-azux-hashes-controls-20261013/sanitized",
+        "position_zero"
+      ],
+      "returncode": -6,
+      "stdout": "/Users/themoretheless/.codex/tmp/rrrah-azux-hashes-controls-20261013/sanitized-position_zero.stdout",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "/Users/themoretheless/.codex/tmp/rrrah-azux-hashes-controls-20261013/sanitized-position_zero.stderr",
+      "stderr_sha256": "26b25b0ba0abfb468714ce39de5e8689411064d4a2b716ade7b7224e2c18f826"
+    },
+    {
+      "kind": "run",
+      "label": "sanitized",
+      "mode": "difference_short",
+      "command": [
+        "/Users/themoretheless/.codex/tmp/rrrah-azux-hashes-controls-20261013/sanitized",
+        "difference_short"
+      ],
+      "returncode": -6,
+      "stdout": "/Users/themoretheless/.codex/tmp/rrrah-azux-hashes-controls-20261013/sanitized-difference_short.stdout",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "/Users/themoretheless/.codex/tmp/rrrah-azux-hashes-controls-20261013/sanitized-difference_short.stderr",
+      "stderr_sha256": "55154557107bd8cae428992302befa9ae39baeda3d7126ea38395b0ffde7c7af"
+    }
+  ],
+  "scope": "Unmodified original four implementation translation units, external driver exposes private methods by header-only access macro for one stride control. Six safe checks run normally and with ASan/UBSan. Three failing sanitizer subprocess counterexamples bounded20seconds. Not upstream tests, original build-system support, image decoding, performance, portability or copy precision. No production code adoption."
+}

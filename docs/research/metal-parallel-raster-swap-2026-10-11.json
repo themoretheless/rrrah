@@ -1,0 +1,218 @@
+{
+  "date": "2026-10-11",
+  "adapter": "Metal Apple M4 Max",
+  "fixture": {
+    "path": "/tmp/rrrah-raster-swap-timing-20261011/authored-12mp-srgb.png",
+    "sha256": "3a194d3cc6495dfca4b86e6b794383d5659f4140200da68f3f185eac5b960793",
+    "width": 4000,
+    "height": 3000,
+    "png_bytes": 2890441,
+    "prepared_bytes": 192000000,
+    "producer": "CC0 authored standard-library PNG encoder, RGBA8 (x%256,y%256,(x+y)%256,255), filter zero, zlib level3, explicit sRGB chunk"
+  },
+  "cpu_budget_bytes": 536870912,
+  "gpu_budget_bytes": 536870912,
+  "observed_peaks_bytes": {
+    "managed_cpu": 240000000,
+    "renderer_gpu": 384000000
+  },
+  "scope": "Production prepared-raster swap parallel integrity hashing; final Metal release ABBA",
+  "run_order": "serial / parallel / parallel / serial",
+  "warmup_per_run": 3,
+  "measured_per_run": 15,
+  "profile": "release; codegen-units=1; lto=thin",
+  "runs": [
+    {
+      "mode": "serial",
+      "log": "/tmp/rrrah-raster-swap-timing-20261011/parallel-ABBA-serial-1.log",
+      "log_sha256": "af08a1484a40df8b38641acf79eec46bd2bbe73b2836f01c997bcb05abcd0281",
+      "total": {
+        "p50_ms": 234.881,
+        "p95_ms": 304.798,
+        "n": 15
+      },
+      "stages": {
+        "swap-restore": {
+          "p50_ms": 168.399,
+          "p95_ms": 230.261,
+          "n": 15
+        },
+        "prepare": {
+          "p50_ms": 0.0,
+          "p95_ms": 0.0,
+          "n": 15
+        },
+        "exposure+transfer-submit": {
+          "p50_ms": 41.447,
+          "p95_ms": 54.09,
+          "n": 15
+        },
+        "completed-frame": {
+          "p50_ms": 16.172,
+          "p95_ms": 22.989,
+          "n": 15
+        }
+      }
+    },
+    {
+      "mode": "parallel",
+      "log": "/tmp/rrrah-raster-swap-timing-20261011/parallel-ABBA-parallel-1.log",
+      "log_sha256": "471dbd23019e0186ff8c41989804f9d5bc732151d77b35f689f4efda9df9df7e",
+      "total": {
+        "p50_ms": 200.47,
+        "p95_ms": 277.08,
+        "n": 15
+      },
+      "stages": {
+        "swap-restore": {
+          "p50_ms": 124.344,
+          "p95_ms": 205.8,
+          "n": 15
+        },
+        "prepare": {
+          "p50_ms": 0.0,
+          "p95_ms": 0.0,
+          "n": 15
+        },
+        "exposure+transfer-submit": {
+          "p50_ms": 52.614,
+          "p95_ms": 58.756,
+          "n": 15
+        },
+        "completed-frame": {
+          "p50_ms": 17.344,
+          "p95_ms": 21.923,
+          "n": 15
+        }
+      }
+    },
+    {
+      "mode": "parallel",
+      "log": "/tmp/rrrah-raster-swap-timing-20261011/parallel-ABBA-parallel-2.log",
+      "log_sha256": "a45abd7391f0eaf94e7a8b01dc1ab2c3b4bdf61bf1fe6dd9a9232546fb43baa9",
+      "total": {
+        "p50_ms": 209.83,
+        "p95_ms": 297.699,
+        "n": 15
+      },
+      "stages": {
+        "swap-restore": {
+          "p50_ms": 130.905,
+          "p95_ms": 219.537,
+          "n": 15
+        },
+        "prepare": {
+          "p50_ms": 0.0,
+          "p95_ms": 0.0,
+          "n": 15
+        },
+        "exposure+transfer-submit": {
+          "p50_ms": 54.229,
+          "p95_ms": 67.083,
+          "n": 15
+        },
+        "completed-frame": {
+          "p50_ms": 18.736,
+          "p95_ms": 25.103,
+          "n": 15
+        }
+      }
+    },
+    {
+      "mode": "serial",
+      "log": "/tmp/rrrah-raster-swap-timing-20261011/parallel-ABBA-serial-2.log",
+      "log_sha256": "4b242ad8f22423a5842f901f9e67f76cfb29411dc4730c29e67e5c021e739615",
+      "total": {
+        "p50_ms": 265.772,
+        "p95_ms": 337.72,
+        "n": 15
+      },
+      "stages": {
+        "swap-restore": {
+          "p50_ms": 201.928,
+          "p95_ms": 244.575,
+          "n": 15
+        },
+        "prepare": {
+          "p50_ms": 0.0,
+          "p95_ms": 0.0,
+          "n": 15
+        },
+        "exposure+transfer-submit": {
+          "p50_ms": 44.889,
+          "p95_ms": 75.263,
+          "n": 15
+        },
+        "completed-frame": {
+          "p50_ms": 15.957,
+          "p95_ms": 33.38,
+          "n": 15
+        }
+      }
+    }
+  ],
+  "binaries": {
+    "serial": {
+      "path": "/tmp/rrrah-raster-swap-timing-20261011/raw-view-release-serial",
+      "sha256": "a60229660cda78e6cbb6c67552c61cc514c819d5e66a674f77893399046a48c7"
+    },
+    "parallel": {
+      "path": "/tmp/rrrah-required-corpus-target/release/examples/raw_view_timing",
+      "sha256": "743da971c504198c7591d1c92aabde945ff1cae86936bb01d2da04195b087ba1"
+    }
+  },
+  "design": [
+    "Default-on for native raster SwapPayload; custom/expanding payloads and Mosaic remain serial",
+    "One process-wide lazy dedicated pool of at most four threads and one scratch slot",
+    "Scratch at most 4 MiB charged to original supplied restore budget; pixel-only cap remains independent",
+    "Conservative admission leaves unread wire size available; no extra scratch if budget/pool/slot unavailable",
+    "Physical I/O capped at 64 KiB with cancellation polls; hashing at most 4 MiB per joined batch",
+    "No change to payload or BLAKE3 digest format; successful restore requires exact length and digest",
+    "Thread stacks at most 4 x 512 KiB and bookkeeping outside managed buffer budget"
+  ],
+  "verification": {
+    "restores_exact": 72,
+    "writes_per_run": 1,
+    "errors": 0,
+    "final_queue_bytes": 0,
+    "final_CPU_GPU_credits": 0
+  },
+  "tests": {
+    "log": "/tmp/rrrah-parallel-swap-final-all-tests-20261011.log",
+    "sha256": "60a6b517a199e8e5ddf5387b7d24e69da06ae31f935e479f950575c711624545",
+    "passed": 156,
+    "failed": 0,
+    "ignored": 3,
+    "coverage": [
+      "Existing cache/swap unit and integration regressions",
+      "Mixed reads/tail, memory-pressure serial fallback",
+      "Latched batch cancellation, scratch release, handle retry",
+      "Two concurrent stores share single slot without waiting",
+      "Corrupt, partial, trailing and truncated objects rejected",
+      "Large ICC profile, exact pixel cap, budget replacement",
+      "Custom expanding codec remains serial and keeps pixel admission priority"
+    ]
+  },
+  "metal_collection": {
+    "log": "/tmp/rrrah-parallel-swap-metal-collection-20261011.log",
+    "sha256": "f2d3f5f6025ca426fe4eb8e041cc2a2dde7d5ec8061479e89ac3d2d4e70f1aa9",
+    "sources": 62,
+    "selections": 91,
+    "storage_cases": 182,
+    "all_SDR_and_HDR_frames_exact": true,
+    "all_bounds_checked": true,
+    "root": 0,
+    "queue": 0,
+    "verifier_accepted": true
+  },
+  "finding": "Both parallel runs have lower restore and whole-path p50 than both serial runs; retain production raster integration. No universal format, disk or system-load speedup claim.",
+  "limitations": [
+    "One authored 12 MP low-entropy PNG for timing; warm local disk/OS cache",
+    "15 measured samples per run; nearest-rank p95 is maximum; quantiles are per-run and not additive",
+    "GPU completion of 1920x1080 offscreen SDR frame, not physical display latency or HDR color/nits",
+    "Collection regression includes small fixtures that can stay serial; large-payload admission is separately asserted by budget regression and full-frame benchmark",
+    "Unmanaged source/reference vectors and offscreen targets outside reported managed budgets",
+    "No physical slow-disk, OS-wide memory pressure or broad 100-format completion proof",
+    "NVIDIA explicitly deferred"
+  ]
+}

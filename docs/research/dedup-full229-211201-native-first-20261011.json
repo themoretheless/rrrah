@@ -1,0 +1,108 @@
+{
+  "status": "complete_bounded_native_first_alternative_execution",
+  "scope": "Alternative-order diagnostic for one frozen full229 failure, not a baseline rerun.",
+  "producer_pid": 60273,
+  "pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/tile_collection_files-gradient-batch-production-qualified-20261011": "f1418a192aa956cb2c7110e5952f664c3403d03fec4e298946237674437820b8",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors": "59e55bf0ecd047db9c513672d121a3ea677529ad448bdc3a359e92862c74ddd7",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/211200.jpg": "5de805d5d84796b5030a0e9af110e4bbeffc4e96c41ae0a9937638e84ffdd1a1",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/211201.jpg": "97f7a149f6f9ec28ce3f50a387c4bd5c4635c7d24cb5e2072fac3b82ad8eeee9",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-full229-211201-native-first-20261011.py": "171c931e195187d1fa959ac07bec4ac6c17ee5a85430f73b5881c5a034ac200f",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-full229-211201-failure-20261011.json": "3467114889a0530e0bd4052336a9fffe4721dd9dba839ad4a4c203ee92dbc82a",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-batch-production-snapshot-20261011.json": "10b51fad371c678b2877f93920b6f6f3ab6a25a378860e35943464eed9634eca",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-loftr-native-20261010-runtime-pins.json": "8daa92d3ed2c84278338c53eedffed1fcdc272bf8ee7a419397cd7f098a6783a",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libtorch_python.dylib": "cb1d5957b49b8f3c2e4b90de7b99aee835520875bce893b11eb7528a548744fa",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libtorch.dylib": "2178657b7eeffc0c0a989889ac3e2b2e3d216073b35f3a291ee89bd65c0fb406",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libtorch_global_deps.dylib": "6ff1aedff89150170f225ce821dc9355a9d5f9c80a6cc1bb761c8d209638c2c7",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libomp.dylib": "fe0670951c85401421f6cedc91971f28dc870bad4c1f0cfebe2b74dac421e5f0",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libtorch_cpu.dylib": "941f3e16a8e02b23b99bd2c8693caabaf8df859bfaa293f39a5d7dd8a8f5ca6e",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libc10.dylib": "f203c171b7a71c742ef4a84bde3af64465e545a4cc3ebfd7f245dca3ebe4e7cf",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libshm.dylib": "3a6fc248697b8809534e74d9e5fc784b385239d8c7aeef291c3968a73609f7d2"
+  },
+  "command": [
+    "/usr/bin/time",
+    "-l",
+    "/usr/bin/env",
+    "DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/tile_collection_files-gradient-batch-production-qualified-20261011",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+    "640",
+    "2.380403906588785",
+    "native-first",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/211200.jpg",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/211201.jpg"
+  ],
+  "process_pid": 60298,
+  "returncode": 0,
+  "stdout": "{\"files\":[0,1],\"managed_peak\":364261392,\"managed_retained_before_drop\":19040,\"managed_used\":0,\"pairs\":[{\"attempted_stages\":1,\"evidence\":{\"candidate_points\":378,\"native_recipes\":1,\"pixels\":{\"anchors\":[36,36],\"directions\":[{\"agreeing_pairs\":6886,\"informative_pairs\":6957,\"sites\":900,\"valid_sites\":900},{\"agreeing_pairs\":6891,\"informative_pairs\":6971,\"sites\":900,\"valid_sites\":900}],\"supported\":true},\"reflected_source\":false,\"supported\":true,\"terminal\":\"native\",\"transform\":[[-0.9935281499321507,0.14607425197087556,2205.5747118510308],[0.13671181160341883,0.9954606335258429,-327.3042941840514],[-2.746118969184055e-6,3.936390015859045e-6,0.9991954060927574]]},\"first_miss\":null,\"left\":0,\"right\":1}],\"scope\":\"Complete bounded pair enumeration, no retrieval pruning or transitive grouping. Metadata slot capacities and managed inputs/evidence are admitted; provider tensors/workspaces remain outside total RSS admission. Final caller cancellation checkpoint is followed by read-only source revalidation with generation checks.\",\"source_paths\":[\"/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/211200.jpg\",\"/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/211201.jpg\"],\"status\":\"ok\"}\n",
+  "stderr": "       89.43 real        66.52 user         1.12 sys\n           767852544  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n               57641  page reclaims\n                  15  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                   8  voluntary context switches\n              108796  involuntary context switches\n        567963632035  instructions retired\n        130387271794  cycles elapsed\n           733840584  peak memory footprint\n",
+  "elapsed_seconds": 89.441670625,
+  "evidence": {
+    "files": [
+      0,
+      1
+    ],
+    "managed_peak": 364261392,
+    "managed_retained_before_drop": 19040,
+    "managed_used": 0,
+    "pairs": [
+      {
+        "attempted_stages": 1,
+        "evidence": {
+          "candidate_points": 378,
+          "native_recipes": 1,
+          "pixels": {
+            "anchors": [
+              36,
+              36
+            ],
+            "directions": [
+              {
+                "agreeing_pairs": 6886,
+                "informative_pairs": 6957,
+                "sites": 900,
+                "valid_sites": 900
+              },
+              {
+                "agreeing_pairs": 6891,
+                "informative_pairs": 6971,
+                "sites": 900,
+                "valid_sites": 900
+              }
+            ],
+            "supported": true
+          },
+          "reflected_source": false,
+          "supported": true,
+          "terminal": "native",
+          "transform": [
+            [
+              -0.9935281499321507,
+              0.14607425197087556,
+              2205.5747118510308
+            ],
+            [
+              0.13671181160341883,
+              0.9954606335258429,
+              -327.3042941840514
+            ],
+            [
+              -2.746118969184055e-06,
+              3.936390015859045e-06,
+              0.9991954060927574
+            ]
+          ]
+        },
+        "first_miss": null,
+        "left": 0,
+        "right": 1
+      }
+    ],
+    "scope": "Complete bounded pair enumeration, no retrieval pruning or transitive grouping. Metadata slot capacities and managed inputs/evidence are admitted; provider tensors/workspaces remain outside total RSS admission. Final caller cancellation checkpoint is followed by read-only source revalidation with generation checks.",
+    "source_paths": [
+      "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/211200.jpg",
+      "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/211201.jpg"
+    ],
+    "status": "ok"
+  }
+}

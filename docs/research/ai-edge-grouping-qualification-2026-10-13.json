@@ -1,0 +1,69 @@
+{
+  "scope": "test-only native AI compositor; not viewer qualification",
+  "changes": [
+    "canonical lower-Y edge interpolation anchor; oriented winding retained",
+    "identical endpoint-bit geometry shares slab hit, all region winding updates retained",
+    "distinct-geometry sampled-X ties fallback to original full hit list/sort",
+    "exact duplicate intersection removal; allocation credit retained"
+  ],
+  "suite": {
+    "passed": 214,
+    "ignored": 12,
+    "failed": 0
+  },
+  "target": [
+    147,
+    59
+  ],
+  "polygon_work_limit": 40000000,
+  "diagnostic_command_work_limit": 16000000,
+  "baseline_fragments_before_refusal": 708497,
+  "grouped_fragments": 915899,
+  "grouped_dedup_fragments": 922996,
+  "fragment_progress_gain_percent": 30.27521640882036,
+  "target_completed": false,
+  "control_deltas": {
+    "(145,50)": {
+      "max_native_delta": 4.440892098500626e-16,
+      "max_rgb_delta": 1.1368683772161603e-13
+    },
+    "(199,25)": {
+      "max_native_delta": 0.0,
+      "max_rgb_delta": 0.0
+    },
+    "(138,39)": {
+      "max_native_delta": 1.1102230246251565e-16,
+      "max_rgb_delta": 0.0
+    },
+    "(149,56)": {
+      "max_native_delta": 2.220446049250313e-16,
+      "max_rgb_delta": 0.0
+    }
+  },
+  "strict_page": {
+    "per_pixel_work": 4000000,
+    "completed": 15195,
+    "total": 74046,
+    "refusal": [
+      145,
+      50
+    ],
+    "exit": 101,
+    "deadline": false,
+    "elapsed_seconds": 43.54,
+    "partial_image": false
+  },
+  "peak_bytes": 239197736,
+  "final_credit": 0,
+  "speed_claim": null,
+  "independent_color_qualification": false,
+  "source_sha256": "ed77db37254d3ad28916bec745153b1dda6503cc371d0770d73611134632e34d",
+  "logs": {
+    "ai-directed-duplicates-original-2026-10-13.log": "50e661cfbccec4a9d6887b66b42280c7b7abce3fcbd8d80fe6cac384cd788f1c",
+    "ai-canonical-edge-anchor-original-2026-10-13.log": "6107dba7739462574d93840ca3a41d5340a9edea4005961739da952ba467b4ae",
+    "ai-edge-grouping-original-2026-10-13.log": "00638ffbd95cfc6d347ee38f291fbf464328e79fcbf1bc61726d955dbf689c1b",
+    "ai-edge-grouping-dedup-original-2026-10-13.log": "86fa69a31033e83f928bfc66727c44cd590691bf6bd782f38006a017c1f17db9",
+    "ai-edge-grouping-dedup-suite-2026-10-13.log": "9647cfee57326ff343b8b3eaa2c30d0ee5ffa2fadcba2542a316205d1e45b1be",
+    "ai-edge-grouping-page-2026-10-13.log": "4774dd2b397cb6a849f74517b99341a4cfb327bb96cda27a68ed3eb974b446d9"
+  }
+}

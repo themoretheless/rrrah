@@ -1,0 +1,1018 @@
+{
+  "status": "complete_verified_anchor_window_trace",
+  "producer_pid": 46840,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-model-points-trace-harvest-20261011.json": "5742b2304d64d7947c64f6b402135b77ba2daeaa1670b36e5160ecd2dacd80fd",
+    "/Users/themoretheless/.codex/tmp/rrrah-model-points-trace-qualified-20261011/201300.log": "e6f49fa44900a7b93e62ecd8d100b12c4e4c6d23f50e6644751da3cd3de009fb",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-joint-geometry-sampling-audit-20261011.json": "3f6f9c34c73eaccd33cbc250b3cbcba90ff480acd12159874b875ef4ea6663ff",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-geometry-sampling-patched-qualified-20261011/sampling_trace": "53544f1466d4da3858ebfb7a61a5a3081eb5533a3281d83ee4dc7266a30fd69a",
+    "/Users/themoretheless/.codex/tmp/rrrah-model-joint-refit-qualified-20261011/sampling_trace": "53544f1466d4da3858ebfb7a61a5a3081eb5533a3281d83ee4dc7266a30fd69a",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-model-joint-refit-20261011.py": "a49124a9dd26b1f778427123be1c2457bc68b0da50b237ecc95e0a9397c67446",
+    "/Users/themoretheless/.codex/tmp/rrrah-model-joint-refit-qualified-20261011/201300-0.json": "b53bd4b93bf664e6821e5d29325991fa75b14b7c5688b3a8dcc002a8e335f126",
+    "/Users/themoretheless/.codex/tmp/rrrah-model-joint-refit-qualified-20261011/201300-11.json": "89e0482b73fa9fd5465cb1c619bf894d08720146c604feff282f6fe84625f003",
+    "/Users/themoretheless/.codex/tmp/rrrah-model-joint-refit-qualified-20261011/201300-16.json": "084e7ea448eef309aa2797b76773d1732d73bb8184fc4dc04106ef97d24d92c3",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/201303.jpg": "162003ef18f481a33e8bb6713fe9169bc0af0675b8ce1b3d21508447032a9ae5",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201300.jpg": "f2819f6d37def6b0dcc04c3f1670bb2b46318d2c451ee6ef0ebec59d8ce8c98d",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-anchor-window-trace-snapshot-20261011.json": "2688bbe98f16ddb3e8c8ea0558ff2b70cef60bffd4a29dc0766edf1c8c8d1725",
+    "/Users/themoretheless/.codex/tmp/dedup-anchor-window-trace-build-20261011.jsonl": "1635c5dbb7c87781358e4ddd9c977f85338f7a0e4321a25366c1337211e187ee",
+    "/Users/themoretheless/.codex/tmp/dedup-anchor-window-trace-build-20261011.log": "5b5645e6b0ffa8704f7a1c8df423cfb1298a708bae7b56c9bc4be27495b3eeb3",
+    "/Users/themoretheless/.codex/tmp/rrrah-anchor-window-trace-qualified-20261011/sampling_trace": "9094f7112c20175da618a4754d7638d185bc52e88c3a529f1e3b17de3f26cd19",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-model-joint-refit-20261011.json": "5d66e056bbe4b30dd9a5781a891c6375ed8f7d7a339f430fd8a9f72ab82d51c1",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-anchor-window-trace-20261011.py": "50430aaa6b741a4dd83e8452aa7c29e0270669d1a1c3352769275f6e61c68d16"
+  },
+  "results": [
+    {
+      "trials": 20000,
+      "status": "verified_exact_aggregate_parity",
+      "pid": 46853,
+      "returncode": 0,
+      "elapsed_seconds": 0.818590625,
+      "stdout": "{\"alias_pairs\":[],\"anchor_result\":{\"anchors\":[10,10],\"directions\":[{\"agreeing_pairs\":1146,\"informative_pairs\":1275,\"sites\":250,\"valid_sites\":250},{\"agreeing_pairs\":1141,\"informative_pairs\":1288,\"sites\":250,\"valid_sites\":250}],\"supported\":false},\"best\":{\"joint_inliers\":[4,19,24,27,30,51,59,103,120,122],\"normalized_bidirectional_error\":0.47275816553029393,\"transform\":[[0.9891844147767545,-0.06337133933583397,504.98679263751944],[-0.00816677691054881,0.9524775161279982,167.58743512612102],[-0.000018034521267932953,-0.00009811299847308883,1.0358954655064476]]},\"decimal_bit_differences\":18,\"managed_peak\":104168400,\"managed_used\":0,\"maximum_projection_checks\":6920346,\"points\":173,\"scope\":\"Public joint sampled geometry API on exact-bit captured real points, including guarded refinement and preflight projection work. Independent original-pixel confirmation. JSON/point/geometry scratch outside managed payload admission; not automatic search integration, total RSS or full corpus qualification.\",\"seed\":173,\"source_tolerance\":0.5414368903667351,\"target_tolerance\":2.0,\"trials\":20000}\n",
+      "stderr": "RRRAH_ANCHOR_WINDOW\t(675, 543)\t(2560, 1920)\t[640, 669, 5, 5]\tRankRegionEvidence { sites: 25, valid_sites: 25, informative_pairs: 127, agreeing_pairs: 127, pixel_reads: 6845 }\nRRRAH_ANCHOR_WINDOW\t(675, 543)\t(2560, 1920)\t[640, 538, 5, 5]\tRankRegionEvidence { sites: 25, valid_sites: 25, informative_pairs: 93, agreeing_pairs: 85, pixel_reads: 6845 }\nRRRAH_ANCHOR_WINDOW\t(675, 543)\t(2560, 1920)\t[605, 642, 5, 5]\tRankRegionEvidence { sites: 25, valid_sites: 25, informative_pairs: 162, agreeing_pairs: 81, pixel_reads: 6845 }\nRRRAH_ANCHOR_WINDOW\t(675, 543)\t(2560, 1920)\t[512, 607, 5, 5]\tRankRegionEvidence { sites: 25, valid_sites: 25, informative_pairs: 181, agreeing_pairs: 154, pixel_reads: 6845 }\nRRRAH_ANCHOR_WINDOW\t(675, 543)\t(2560, 1920)\t[1020, 419, 5, 5]\tRankRegionEvidence { sites: 25, valid_sites: 25, informative_pairs: 187, agreeing_pairs: 187, pixel_reads: 6845 }\nRRRAH_ANCHOR_WINDOW\t(675, 543)\t(2560, 1920)\t[798, 320, 5, 5]\tRankRegionEvidence { sites: 25, valid_sites: 25, informative_pairs: 171, agreeing_pairs: 171, pixel_reads: 6845 }\nRRRAH_ANCHOR_WINDOW\t(675, 543)\t(2560, 1920)\t[640, 513, 5, 5]\tRankRegionEvidence { sites: 25, valid_sites: 25, informative_pairs: 162, agreeing_pairs: 162, pixel_reads: 6845 }\nRRRAH_ANCHOR_WINDOW\t(675, 543)\t(2560, 1920)\t[764, 254, 5, 5]\tRankRegionEvidence { sites: 25, valid_sites: 25, informative_pairs: 169, agreeing_pairs: 156, pixel_reads: 6845 }\nRRRAH_ANCHOR_WINDOW\t(675, 543)\t(2560, 1920)\t[606, 386, 5, 5]\tRankRegionEvidence { sites: 25, valid_sites: 25, informative_pairs: 23, agreeing_pairs: 23, pixel_reads: 6845 }\nRRRAH_ANCHOR_WINDOW\t(675, 543)\t(2560, 1920)\t[833, 386, 5, 5]\tRankRegionEvidence { sites: 25, valid_sites: 25, informative_pairs: 0, agreeing_pairs: 0, pixel_reads: 6845 }\nRRRAH_ANCHOR_WINDOW\t(2560, 1920)\t(675, 543)\t[158, 515, 5, 5]\tRankRegionEvidence { sites: 25, valid_sites: 25, informative_pairs: 131, agreeing_pairs: 131, pixel_reads: 6845 }\nRRRAH_ANCHOR_WINDOW\t(2560, 1920)\t(675, 543)\t[158, 388, 5, 5]\tRankRegionEvidence { sites: 25, valid_sites: 25, informative_pairs: 97, agreeing_pairs: 88, pixel_reads: 6845 }\nRRRAH_ANCHOR_WINDOW\t(2560, 1920)\t(675, 543)\t[124, 490, 5, 5]\tRankRegionEvidence { sites: 25, valid_sites: 25, informative_pairs: 168, agreeing_pairs: 71, pixel_reads: 6845 }\nRRRAH_ANCHOR_WINDOW\t(2560, 1920)\t(675, 543)\t[31, 456, 5, 5]\tRankRegionEvidence { sites: 25, valid_sites: 25, informative_pairs: 179, agreeing_pairs: 154, pixel_reads: 6845 }\nRRRAH_ANCHOR_WINDOW\t(2560, 1920)\t(675, 543)\t[538, 269, 5, 5]\tRankRegionEvidence { sites: 25, valid_sites: 25, informative_pairs: 190, agreeing_pairs: 190, pixel_reads: 6845 }\nRRRAH_ANCHOR_WINDOW\t(2560, 1920)\t(675, 543)\t[318, 167, 5, 5]\tRankRegionEvidence { sites: 25, valid_sites: 25, informative_pairs: 165, agreeing_pairs: 165, pixel_reads: 6845 }\nRRRAH_ANCHOR_WINDOW\t(2560, 1920)\t(675, 543)\t[158, 362, 5, 5]\tRankRegionEvidence { sites: 25, valid_sites: 25, informative_pairs: 170, agreeing_pairs: 170, pixel_reads: 6845 }\nRRRAH_ANCHOR_WINDOW\t(2560, 1920)\t(675, 543)\t[284, 99, 5, 5]\tRankRegionEvidence { sites: 25, valid_sites: 25, informative_pairs: 164, agreeing_pairs: 148, pixel_reads: 6845 }\nRRRAH_ANCHOR_WINDOW\t(2560, 1920)\t(675, 543)\t[124, 235, 5, 5]\tRankRegionEvidence { sites: 25, valid_sites: 25, informative_pairs: 24, agreeing_pairs: 24, pixel_reads: 6845 }\nRRRAH_ANCHOR_WINDOW\t(2560, 1920)\t(675, 543)\t[352, 235, 5, 5]\tRankRegionEvidence { sites: 25, valid_sites: 25, informative_pairs: 0, agreeing_pairs: 0, pixel_reads: 6845 }\n",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-anchor-window-trace-qualified-20261011/20000.log",
+      "log_sha256": "4601b7f455246bd2fc2ff32522544866f368bc7f2327e6ae18147fd2ac6303ca",
+      "windows": [
+        {
+          "source_dimensions": [
+            675,
+            543
+          ],
+          "target_dimensions": [
+            2560,
+            1920
+          ],
+          "rectangle": [
+            640,
+            669,
+            5,
+            5
+          ],
+          "counts": {
+            "sites": 25,
+            "valid_sites": 25,
+            "informative_pairs": 127,
+            "agreeing_pairs": 127,
+            "pixel_reads": 6845
+          }
+        },
+        {
+          "source_dimensions": [
+            675,
+            543
+          ],
+          "target_dimensions": [
+            2560,
+            1920
+          ],
+          "rectangle": [
+            640,
+            538,
+            5,
+            5
+          ],
+          "counts": {
+            "sites": 25,
+            "valid_sites": 25,
+            "informative_pairs": 93,
+            "agreeing_pairs": 85,
+            "pixel_reads": 6845
+          }
+        },
+        {
+          "source_dimensions": [
+            675,
+            543
+          ],
+          "target_dimensions": [
+            2560,
+            1920
+          ],
+          "rectangle": [
+            605,
+            642,
+            5,
+            5
+          ],
+          "counts": {
+            "sites": 25,
+            "valid_sites": 25,
+            "informative_pairs": 162,
+            "agreeing_pairs": 81,
+            "pixel_reads": 6845
+          }
+        },
+        {
+          "source_dimensions": [
+            675,
+            543
+          ],
+          "target_dimensions": [
+            2560,
+            1920
+          ],
+          "rectangle": [
+            512,
+            607,
+            5,
+            5
+          ],
+          "counts": {
+            "sites": 25,
+            "valid_sites": 25,
+            "informative_pairs": 181,
+            "agreeing_pairs": 154,
+            "pixel_reads": 6845
+          }
+        },
+        {
+          "source_dimensions": [
+            675,
+            543
+          ],
+          "target_dimensions": [
+            2560,
+            1920
+          ],
+          "rectangle": [
+            1020,
+            419,
+            5,
+            5
+          ],
+          "counts": {
+            "sites": 25,
+            "valid_sites": 25,
+            "informative_pairs": 187,
+            "agreeing_pairs": 187,
+            "pixel_reads": 6845
+          }
+        },
+        {
+          "source_dimensions": [
+            675,
+            543
+          ],
+          "target_dimensions": [
+            2560,
+            1920
+          ],
+          "rectangle": [
+            798,
+            320,
+            5,
+            5
+          ],
+          "counts": {
+            "sites": 25,
+            "valid_sites": 25,
+            "informative_pairs": 171,
+            "agreeing_pairs": 171,
+            "pixel_reads": 6845
+          }
+        },
+        {
+          "source_dimensions": [
+            675,
+            543
+          ],
+          "target_dimensions": [
+            2560,
+            1920
+          ],
+          "rectangle": [
+            640,
+            513,
+            5,
+            5
+          ],
+          "counts": {
+            "sites": 25,
+            "valid_sites": 25,
+            "informative_pairs": 162,
+            "agreeing_pairs": 162,
+            "pixel_reads": 6845
+          }
+        },
+        {
+          "source_dimensions": [
+            675,
+            543
+          ],
+          "target_dimensions": [
+            2560,
+            1920
+          ],
+          "rectangle": [
+            764,
+            254,
+            5,
+            5
+          ],
+          "counts": {
+            "sites": 25,
+            "valid_sites": 25,
+            "informative_pairs": 169,
+            "agreeing_pairs": 156,
+            "pixel_reads": 6845
+          }
+        },
+        {
+          "source_dimensions": [
+            675,
+            543
+          ],
+          "target_dimensions": [
+            2560,
+            1920
+          ],
+          "rectangle": [
+            606,
+            386,
+            5,
+            5
+          ],
+          "counts": {
+            "sites": 25,
+            "valid_sites": 25,
+            "informative_pairs": 23,
+            "agreeing_pairs": 23,
+            "pixel_reads": 6845
+          }
+        },
+        {
+          "source_dimensions": [
+            675,
+            543
+          ],
+          "target_dimensions": [
+            2560,
+            1920
+          ],
+          "rectangle": [
+            833,
+            386,
+            5,
+            5
+          ],
+          "counts": {
+            "sites": 25,
+            "valid_sites": 25,
+            "informative_pairs": 0,
+            "agreeing_pairs": 0,
+            "pixel_reads": 6845
+          }
+        },
+        {
+          "source_dimensions": [
+            2560,
+            1920
+          ],
+          "target_dimensions": [
+            675,
+            543
+          ],
+          "rectangle": [
+            158,
+            515,
+            5,
+            5
+          ],
+          "counts": {
+            "sites": 25,
+            "valid_sites": 25,
+            "informative_pairs": 131,
+            "agreeing_pairs": 131,
+            "pixel_reads": 6845
+          }
+        },
+        {
+          "source_dimensions": [
+            2560,
+            1920
+          ],
+          "target_dimensions": [
+            675,
+            543
+          ],
+          "rectangle": [
+            158,
+            388,
+            5,
+            5
+          ],
+          "counts": {
+            "sites": 25,
+            "valid_sites": 25,
+            "informative_pairs": 97,
+            "agreeing_pairs": 88,
+            "pixel_reads": 6845
+          }
+        },
+        {
+          "source_dimensions": [
+            2560,
+            1920
+          ],
+          "target_dimensions": [
+            675,
+            543
+          ],
+          "rectangle": [
+            124,
+            490,
+            5,
+            5
+          ],
+          "counts": {
+            "sites": 25,
+            "valid_sites": 25,
+            "informative_pairs": 168,
+            "agreeing_pairs": 71,
+            "pixel_reads": 6845
+          }
+        },
+        {
+          "source_dimensions": [
+            2560,
+            1920
+          ],
+          "target_dimensions": [
+            675,
+            543
+          ],
+          "rectangle": [
+            31,
+            456,
+            5,
+            5
+          ],
+          "counts": {
+            "sites": 25,
+            "valid_sites": 25,
+            "informative_pairs": 179,
+            "agreeing_pairs": 154,
+            "pixel_reads": 6845
+          }
+        },
+        {
+          "source_dimensions": [
+            2560,
+            1920
+          ],
+          "target_dimensions": [
+            675,
+            543
+          ],
+          "rectangle": [
+            538,
+            269,
+            5,
+            5
+          ],
+          "counts": {
+            "sites": 25,
+            "valid_sites": 25,
+            "informative_pairs": 190,
+            "agreeing_pairs": 190,
+            "pixel_reads": 6845
+          }
+        },
+        {
+          "source_dimensions": [
+            2560,
+            1920
+          ],
+          "target_dimensions": [
+            675,
+            543
+          ],
+          "rectangle": [
+            318,
+            167,
+            5,
+            5
+          ],
+          "counts": {
+            "sites": 25,
+            "valid_sites": 25,
+            "informative_pairs": 165,
+            "agreeing_pairs": 165,
+            "pixel_reads": 6845
+          }
+        },
+        {
+          "source_dimensions": [
+            2560,
+            1920
+          ],
+          "target_dimensions": [
+            675,
+            543
+          ],
+          "rectangle": [
+            158,
+            362,
+            5,
+            5
+          ],
+          "counts": {
+            "sites": 25,
+            "valid_sites": 25,
+            "informative_pairs": 170,
+            "agreeing_pairs": 170,
+            "pixel_reads": 6845
+          }
+        },
+        {
+          "source_dimensions": [
+            2560,
+            1920
+          ],
+          "target_dimensions": [
+            675,
+            543
+          ],
+          "rectangle": [
+            284,
+            99,
+            5,
+            5
+          ],
+          "counts": {
+            "sites": 25,
+            "valid_sites": 25,
+            "informative_pairs": 164,
+            "agreeing_pairs": 148,
+            "pixel_reads": 6845
+          }
+        },
+        {
+          "source_dimensions": [
+            2560,
+            1920
+          ],
+          "target_dimensions": [
+            675,
+            543
+          ],
+          "rectangle": [
+            124,
+            235,
+            5,
+            5
+          ],
+          "counts": {
+            "sites": 25,
+            "valid_sites": 25,
+            "informative_pairs": 24,
+            "agreeing_pairs": 24,
+            "pixel_reads": 6845
+          }
+        },
+        {
+          "source_dimensions": [
+            2560,
+            1920
+          ],
+          "target_dimensions": [
+            675,
+            543
+          ],
+          "rectangle": [
+            352,
+            235,
+            5,
+            5
+          ],
+          "counts": {
+            "sites": 25,
+            "valid_sites": 25,
+            "informative_pairs": 0,
+            "agreeing_pairs": 0,
+            "pixel_reads": 6845
+          }
+        }
+      ]
+    },
+    {
+      "trials": 1000000,
+      "status": "verified_exact_aggregate_parity",
+      "pid": 46874,
+      "returncode": 0,
+      "elapsed_seconds": 1.390281084,
+      "stdout": "{\"alias_pairs\":[],\"anchor_result\":{\"anchors\":[11,11],\"directions\":[{\"agreeing_pairs\":1146,\"informative_pairs\":1276,\"sites\":275,\"valid_sites\":275},{\"agreeing_pairs\":1139,\"informative_pairs\":1287,\"sites\":275,\"valid_sites\":275}],\"supported\":false},\"best\":{\"joint_inliers\":[4,19,24,27,30,51,59,103,105,120,122],\"normalized_bidirectional_error\":1.3801783260623264,\"transform\":[[0.9893488610633348,-0.06458413144881481,505.18271712949047],[-0.008255715237170955,0.9512831228016387,167.7828048232427],[-0.000017640605204939312,-0.00009997499525884028,1.0361358130980567]]},\"decimal_bit_differences\":18,\"managed_peak\":104168400,\"managed_used\":0,\"maximum_projection_checks\":346000346,\"points\":173,\"scope\":\"Public joint sampled geometry API on exact-bit captured real points, including guarded refinement and preflight projection work. Independent original-pixel confirmation. JSON/point/geometry scratch outside managed payload admission; not automatic search integration, total RSS or full corpus qualification.\",\"seed\":173,\"source_tolerance\":0.5414368903667351,\"target_tolerance\":2.0,\"trials\":1000000}\n",
+      "stderr": "RRRAH_ANCHOR_WINDOW\t(675, 543)\t(2560, 1920)\t[640, 669, 5, 5]\tRankRegionEvidence { sites: 25, valid_sites: 25, informative_pairs: 127, agreeing_pairs: 127, pixel_reads: 6845 }\nRRRAH_ANCHOR_WINDOW\t(675, 543)\t(2560, 1920)\t[640, 538, 5, 5]\tRankRegionEvidence { sites: 25, valid_sites: 25, informative_pairs: 94, agreeing_pairs: 85, pixel_reads: 6845 }\nRRRAH_ANCHOR_WINDOW\t(675, 543)\t(2560, 1920)\t[605, 642, 5, 5]\tRankRegionEvidence { sites: 25, valid_sites: 25, informative_pairs: 162, agreeing_pairs: 81, pixel_reads: 6845 }\nRRRAH_ANCHOR_WINDOW\t(675, 543)\t(2560, 1920)\t[512, 607, 5, 5]\tRankRegionEvidence { sites: 25, valid_sites: 25, informative_pairs: 181, agreeing_pairs: 154, pixel_reads: 6845 }\nRRRAH_ANCHOR_WINDOW\t(675, 543)\t(2560, 1920)\t[1020, 419, 5, 5]\tRankRegionEvidence { sites: 25, valid_sites: 25, informative_pairs: 187, agreeing_pairs: 187, pixel_reads: 6845 }\nRRRAH_ANCHOR_WINDOW\t(675, 543)\t(2560, 1920)\t[798, 320, 5, 5]\tRankRegionEvidence { sites: 25, valid_sites: 25, informative_pairs: 171, agreeing_pairs: 171, pixel_reads: 6845 }\nRRRAH_ANCHOR_WINDOW\t(675, 543)\t(2560, 1920)\t[640, 513, 5, 5]\tRankRegionEvidence { sites: 25, valid_sites: 25, informative_pairs: 162, agreeing_pairs: 162, pixel_reads: 6845 }\nRRRAH_ANCHOR_WINDOW\t(675, 543)\t(2560, 1920)\t[764, 254, 5, 5]\tRankRegionEvidence { sites: 25, valid_sites: 25, informative_pairs: 169, agreeing_pairs: 156, pixel_reads: 6845 }\nRRRAH_ANCHOR_WINDOW\t(675, 543)\t(2560, 1920)\t[834, 419, 5, 5]\tRankRegionEvidence { sites: 25, valid_sites: 25, informative_pairs: 0, agreeing_pairs: 0, pixel_reads: 6845 }\nRRRAH_ANCHOR_WINDOW\t(675, 543)\t(2560, 1920)\t[606, 386, 5, 5]\tRankRegionEvidence { sites: 25, valid_sites: 25, informative_pairs: 23, agreeing_pairs: 23, pixel_reads: 6845 }\nRRRAH_ANCHOR_WINDOW\t(675, 543)\t(2560, 1920)\t[833, 386, 5, 5]\tRankRegionEvidence { sites: 25, valid_sites: 25, informative_pairs: 0, agreeing_pairs: 0, pixel_reads: 6845 }\nRRRAH_ANCHOR_WINDOW\t(2560, 1920)\t(675, 543)\t[158, 515, 5, 5]\tRankRegionEvidence { sites: 25, valid_sites: 25, informative_pairs: 131, agreeing_pairs: 131, pixel_reads: 6845 }\nRRRAH_ANCHOR_WINDOW\t(2560, 1920)\t(675, 543)\t[158, 388, 5, 5]\tRankRegionEvidence { sites: 25, valid_sites: 25, informative_pairs: 97, agreeing_pairs: 87, pixel_reads: 6845 }\nRRRAH_ANCHOR_WINDOW\t(2560, 1920)\t(675, 543)\t[124, 490, 5, 5]\tRankRegionEvidence { sites: 25, valid_sites: 25, informative_pairs: 168, agreeing_pairs: 71, pixel_reads: 6845 }\nRRRAH_ANCHOR_WINDOW\t(2560, 1920)\t(675, 543)\t[31, 456, 5, 5]\tRankRegionEvidence { sites: 25, valid_sites: 25, informative_pairs: 179, agreeing_pairs: 154, pixel_reads: 6845 }\nRRRAH_ANCHOR_WINDOW\t(2560, 1920)\t(675, 543)\t[538, 269, 5, 5]\tRankRegionEvidence { sites: 25, valid_sites: 25, informative_pairs: 190, agreeing_pairs: 190, pixel_reads: 6845 }\nRRRAH_ANCHOR_WINDOW\t(2560, 1920)\t(675, 543)\t[318, 167, 5, 5]\tRankRegionEvidence { sites: 25, valid_sites: 25, informative_pairs: 164, agreeing_pairs: 164, pixel_reads: 6845 }\nRRRAH_ANCHOR_WINDOW\t(2560, 1920)\t(675, 543)\t[158, 362, 5, 5]\tRankRegionEvidence { sites: 25, valid_sites: 25, informative_pairs: 170, agreeing_pairs: 170, pixel_reads: 6845 }\nRRRAH_ANCHOR_WINDOW\t(2560, 1920)\t(675, 543)\t[284, 99, 5, 5]\tRankRegionEvidence { sites: 25, valid_sites: 25, informative_pairs: 164, agreeing_pairs: 148, pixel_reads: 6845 }\nRRRAH_ANCHOR_WINDOW\t(2560, 1920)\t(675, 543)\t[352, 269, 5, 5]\tRankRegionEvidence { sites: 25, valid_sites: 25, informative_pairs: 0, agreeing_pairs: 0, pixel_reads: 6845 }\nRRRAH_ANCHOR_WINDOW\t(2560, 1920)\t(675, 543)\t[124, 235, 5, 5]\tRankRegionEvidence { sites: 25, valid_sites: 25, informative_pairs: 24, agreeing_pairs: 24, pixel_reads: 6845 }\nRRRAH_ANCHOR_WINDOW\t(2560, 1920)\t(675, 543)\t[352, 235, 5, 5]\tRankRegionEvidence { sites: 25, valid_sites: 25, informative_pairs: 0, agreeing_pairs: 0, pixel_reads: 6845 }\n",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-anchor-window-trace-qualified-20261011/1000000.log",
+      "log_sha256": "050f77d4fc5b42f55da8b766a9711caa01fcac19650c8c1acd6cf8a3016e4626",
+      "windows": [
+        {
+          "source_dimensions": [
+            675,
+            543
+          ],
+          "target_dimensions": [
+            2560,
+            1920
+          ],
+          "rectangle": [
+            640,
+            669,
+            5,
+            5
+          ],
+          "counts": {
+            "sites": 25,
+            "valid_sites": 25,
+            "informative_pairs": 127,
+            "agreeing_pairs": 127,
+            "pixel_reads": 6845
+          }
+        },
+        {
+          "source_dimensions": [
+            675,
+            543
+          ],
+          "target_dimensions": [
+            2560,
+            1920
+          ],
+          "rectangle": [
+            640,
+            538,
+            5,
+            5
+          ],
+          "counts": {
+            "sites": 25,
+            "valid_sites": 25,
+            "informative_pairs": 94,
+            "agreeing_pairs": 85,
+            "pixel_reads": 6845
+          }
+        },
+        {
+          "source_dimensions": [
+            675,
+            543
+          ],
+          "target_dimensions": [
+            2560,
+            1920
+          ],
+          "rectangle": [
+            605,
+            642,
+            5,
+            5
+          ],
+          "counts": {
+            "sites": 25,
+            "valid_sites": 25,
+            "informative_pairs": 162,
+            "agreeing_pairs": 81,
+            "pixel_reads": 6845
+          }
+        },
+        {
+          "source_dimensions": [
+            675,
+            543
+          ],
+          "target_dimensions": [
+            2560,
+            1920
+          ],
+          "rectangle": [
+            512,
+            607,
+            5,
+            5
+          ],
+          "counts": {
+            "sites": 25,
+            "valid_sites": 25,
+            "informative_pairs": 181,
+            "agreeing_pairs": 154,
+            "pixel_reads": 6845
+          }
+        },
+        {
+          "source_dimensions": [
+            675,
+            543
+          ],
+          "target_dimensions": [
+            2560,
+            1920
+          ],
+          "rectangle": [
+            1020,
+            419,
+            5,
+            5
+          ],
+          "counts": {
+            "sites": 25,
+            "valid_sites": 25,
+            "informative_pairs": 187,
+            "agreeing_pairs": 187,
+            "pixel_reads": 6845
+          }
+        },
+        {
+          "source_dimensions": [
+            675,
+            543
+          ],
+          "target_dimensions": [
+            2560,
+            1920
+          ],
+          "rectangle": [
+            798,
+            320,
+            5,
+            5
+          ],
+          "counts": {
+            "sites": 25,
+            "valid_sites": 25,
+            "informative_pairs": 171,
+            "agreeing_pairs": 171,
+            "pixel_reads": 6845
+          }
+        },
+        {
+          "source_dimensions": [
+            675,
+            543
+          ],
+          "target_dimensions": [
+            2560,
+            1920
+          ],
+          "rectangle": [
+            640,
+            513,
+            5,
+            5
+          ],
+          "counts": {
+            "sites": 25,
+            "valid_sites": 25,
+            "informative_pairs": 162,
+            "agreeing_pairs": 162,
+            "pixel_reads": 6845
+          }
+        },
+        {
+          "source_dimensions": [
+            675,
+            543
+          ],
+          "target_dimensions": [
+            2560,
+            1920
+          ],
+          "rectangle": [
+            764,
+            254,
+            5,
+            5
+          ],
+          "counts": {
+            "sites": 25,
+            "valid_sites": 25,
+            "informative_pairs": 169,
+            "agreeing_pairs": 156,
+            "pixel_reads": 6845
+          }
+        },
+        {
+          "source_dimensions": [
+            675,
+            543
+          ],
+          "target_dimensions": [
+            2560,
+            1920
+          ],
+          "rectangle": [
+            834,
+            419,
+            5,
+            5
+          ],
+          "counts": {
+            "sites": 25,
+            "valid_sites": 25,
+            "informative_pairs": 0,
+            "agreeing_pairs": 0,
+            "pixel_reads": 6845
+          }
+        },
+        {
+          "source_dimensions": [
+            675,
+            543
+          ],
+          "target_dimensions": [
+            2560,
+            1920
+          ],
+          "rectangle": [
+            606,
+            386,
+            5,
+            5
+          ],
+          "counts": {
+            "sites": 25,
+            "valid_sites": 25,
+            "informative_pairs": 23,
+            "agreeing_pairs": 23,
+            "pixel_reads": 6845
+          }
+        },
+        {
+          "source_dimensions": [
+            675,
+            543
+          ],
+          "target_dimensions": [
+            2560,
+            1920
+          ],
+          "rectangle": [
+            833,
+            386,
+            5,
+            5
+          ],
+          "counts": {
+            "sites": 25,
+            "valid_sites": 25,
+            "informative_pairs": 0,
+            "agreeing_pairs": 0,
+            "pixel_reads": 6845
+          }
+        },
+        {
+          "source_dimensions": [
+            2560,
+            1920
+          ],
+          "target_dimensions": [
+            675,
+            543
+          ],
+          "rectangle": [
+            158,
+            515,
+            5,
+            5
+          ],
+          "counts": {
+            "sites": 25,
+            "valid_sites": 25,
+            "informative_pairs": 131,
+            "agreeing_pairs": 131,
+            "pixel_reads": 6845
+          }
+        },
+        {
+          "source_dimensions": [
+            2560,
+            1920
+          ],
+          "target_dimensions": [
+            675,
+            543
+          ],
+          "rectangle": [
+            158,
+            388,
+            5,
+            5
+          ],
+          "counts": {
+            "sites": 25,
+            "valid_sites": 25,
+            "informative_pairs": 97,
+            "agreeing_pairs": 87,
+            "pixel_reads": 6845
+          }
+        },
+        {
+          "source_dimensions": [
+            2560,
+            1920
+          ],
+          "target_dimensions": [
+            675,
+            543
+          ],
+          "rectangle": [
+            124,
+            490,
+            5,
+            5
+          ],
+          "counts": {
+            "sites": 25,
+            "valid_sites": 25,
+            "informative_pairs": 168,
+            "agreeing_pairs": 71,
+            "pixel_reads": 6845
+          }
+        },
+        {
+          "source_dimensions": [
+            2560,
+            1920
+          ],
+          "target_dimensions": [
+            675,
+            543
+          ],
+          "rectangle": [
+            31,
+            456,
+            5,
+            5
+          ],
+          "counts": {
+            "sites": 25,
+            "valid_sites": 25,
+            "informative_pairs": 179,
+            "agreeing_pairs": 154,
+            "pixel_reads": 6845
+          }
+        },
+        {
+          "source_dimensions": [
+            2560,
+            1920
+          ],
+          "target_dimensions": [
+            675,
+            543
+          ],
+          "rectangle": [
+            538,
+            269,
+            5,
+            5
+          ],
+          "counts": {
+            "sites": 25,
+            "valid_sites": 25,
+            "informative_pairs": 190,
+            "agreeing_pairs": 190,
+            "pixel_reads": 6845
+          }
+        },
+        {
+          "source_dimensions": [
+            2560,
+            1920
+          ],
+          "target_dimensions": [
+            675,
+            543
+          ],
+          "rectangle": [
+            318,
+            167,
+            5,
+            5
+          ],
+          "counts": {
+            "sites": 25,
+            "valid_sites": 25,
+            "informative_pairs": 164,
+            "agreeing_pairs": 164,
+            "pixel_reads": 6845
+          }
+        },
+        {
+          "source_dimensions": [
+            2560,
+            1920
+          ],
+          "target_dimensions": [
+            675,
+            543
+          ],
+          "rectangle": [
+            158,
+            362,
+            5,
+            5
+          ],
+          "counts": {
+            "sites": 25,
+            "valid_sites": 25,
+            "informative_pairs": 170,
+            "agreeing_pairs": 170,
+            "pixel_reads": 6845
+          }
+        },
+        {
+          "source_dimensions": [
+            2560,
+            1920
+          ],
+          "target_dimensions": [
+            675,
+            543
+          ],
+          "rectangle": [
+            284,
+            99,
+            5,
+            5
+          ],
+          "counts": {
+            "sites": 25,
+            "valid_sites": 25,
+            "informative_pairs": 164,
+            "agreeing_pairs": 148,
+            "pixel_reads": 6845
+          }
+        },
+        {
+          "source_dimensions": [
+            2560,
+            1920
+          ],
+          "target_dimensions": [
+            675,
+            543
+          ],
+          "rectangle": [
+            352,
+            269,
+            5,
+            5
+          ],
+          "counts": {
+            "sites": 25,
+            "valid_sites": 25,
+            "informative_pairs": 0,
+            "agreeing_pairs": 0,
+            "pixel_reads": 6845
+          }
+        },
+        {
+          "source_dimensions": [
+            2560,
+            1920
+          ],
+          "target_dimensions": [
+            675,
+            543
+          ],
+          "rectangle": [
+            124,
+            235,
+            5,
+            5
+          ],
+          "counts": {
+            "sites": 25,
+            "valid_sites": 25,
+            "informative_pairs": 24,
+            "agreeing_pairs": 24,
+            "pixel_reads": 6845
+          }
+        },
+        {
+          "source_dimensions": [
+            2560,
+            1920
+          ],
+          "target_dimensions": [
+            675,
+            543
+          ],
+          "rectangle": [
+            352,
+            235,
+            5,
+            5
+          ],
+          "counts": {
+            "sites": 25,
+            "valid_sites": 25,
+            "informative_pairs": 0,
+            "agreeing_pairs": 0,
+            "pixel_reads": 6845
+          }
+        }
+      ]
+    }
+  ],
+  "scope": "Frozen diagnostic counts per unchanged geometrically selected anchor window. Exact aggregate output parity with previous201300 refit required. No per-window filtering, threshold relaxation, production change, or proof of unique mismatch cause."
+}

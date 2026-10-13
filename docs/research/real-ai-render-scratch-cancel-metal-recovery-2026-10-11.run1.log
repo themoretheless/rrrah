@@ -1,0 +1,20 @@
+warning: function `fallible_zeroed_bytes` is never used
+   --> crates/rrrah-cache/src/mosaic_payload_v1.rs:728:4
+    |
+728 | fn fallible_zeroed_bytes(len: usize) -> Result<Box<[u8]>, MosaicPayloadError> {
+    |    ^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-cache` (lib) generated 1 warning
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 18.81s
+     Running unittests src/main.rs (target/debug/deps/rrrah-0b4921b829754900)
+
+running 1 test
+AI render cancellation adapter: Metal Apple M4 Max
+AI render cancellation: live_credit=3029994; setup_credit=2718090; typed_cancelled; retry_samples_Metal_SDR_HDR_exact; root=0; reference_root=0; appearance_unqualified
+test foreground_loader_tests::real_ai_cancel_after_render_scratch_admission_recovers_metal ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 257 filtered out; finished in 4.41s
+

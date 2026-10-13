@@ -1,0 +1,1407 @@
+{
+  "status": "complete_three_automatic_searches",
+  "scope": "Three real CPU LoFTR automatic full/quadrant searches, unchanged original-pixel thresholds.",
+  "pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/loftr-model-tiles-qualified-20261011": "5378900098344b478ec7123f70f0b4f562dc0b679df77d92bb5a0fd261c054a8",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors": "59e55bf0ecd047db9c513672d121a3ea677529ad448bdc3a359e92862c74ddd7",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-model-tiles-snapshot-20261011.json": "8168b257ea3c9e06c87242417a366be546521a56f7eaaacd8049bddd3580318d",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-loftr-native-20261010-runtime-pins.json": "8daa92d3ed2c84278338c53eedffed1fcdc272bf8ee7a419397cd7f098a6783a",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-model-tiles-20261011.py": "22b537f4088e7a631d153e51eff50b08c50c47a11432d7c608f16fc035a01a57",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200300.jpg": "0573729209c9ce6c109ea1175079960165b915dd5579121f0e15653d56f755d0",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200302.jpg": "bc4de3728d82839559134cc8155f87bdf7f8aeaca32b66bdea11f5a618420242",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201400.jpg": "0568e043468d6a40e8839e603d0e8da72220e33e77632a64220dd8ffd5234a0d",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/209400.jpg": "d9caf92ca47a9047154bd987ee240832b1cc2a01b73fd83144043f181c127777",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/209401.jpg": "707f365de5031172ac067f8a156fd0972e5995e59a0d01326d21d4a50ae22704",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-model-tiles-native-build-20261011.log": "66974b6633e3b44fe0a5d4f85935d5bd34a9a02ba0d18218e460e5efffcd420b",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-loftr-regions-frozen-20261010.json": "5174678247e0e805c24539cf387357709ee6ea0613aa89711d1bdee2c64306e2"
+  },
+  "producer_pid": 33177,
+  "results": [
+    {
+      "case": "crumpled-automatic",
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200300.jpg",
+      "target": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200302.jpg",
+      "status": "complete",
+      "process_pid": 33190,
+      "returncode": 0,
+      "stdout": "{\"attempts\":[{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[0,0,2048,1536],\"original_dimensions\":[[2048,1536],[800,600]],\"pixels\":null,\"raw_proposals\":29,\"right_rectangle\":[0,0,800,600],\"selected_points\":29,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[0,0,2048,1536],\"original_dimensions\":[[2048,1536],[800,600]],\"pixels\":null,\"raw_proposals\":20,\"right_rectangle\":[0,0,400,300],\"selected_points\":20,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[0,0,2048,1536],\"original_dimensions\":[[2048,1536],[800,600]],\"pixels\":null,\"raw_proposals\":25,\"right_rectangle\":[400,0,400,300],\"selected_points\":25,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[0,0,2048,1536],\"original_dimensions\":[[2048,1536],[800,600]],\"pixels\":null,\"raw_proposals\":23,\"right_rectangle\":[0,300,400,300],\"selected_points\":23,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[0,0,2048,1536],\"original_dimensions\":[[2048,1536],[800,600]],\"pixels\":null,\"raw_proposals\":25,\"right_rectangle\":[400,300,400,300],\"selected_points\":25,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[0,0,1024,768],\"original_dimensions\":[[2048,1536],[800,600]],\"pixels\":null,\"raw_proposals\":25,\"right_rectangle\":[0,0,800,600],\"selected_points\":25,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[0,0,1024,768],\"original_dimensions\":[[2048,1536],[800,600]],\"pixels\":null,\"raw_proposals\":34,\"right_rectangle\":[0,0,400,300],\"selected_points\":34,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[0,0,1024,768],\"original_dimensions\":[[2048,1536],[800,600]],\"pixels\":null,\"raw_proposals\":19,\"right_rectangle\":[400,0,400,300],\"selected_points\":19,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[0,0,1024,768],\"original_dimensions\":[[2048,1536],[800,600]],\"pixels\":null,\"raw_proposals\":13,\"right_rectangle\":[0,300,400,300],\"selected_points\":13,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[0,0,1024,768],\"original_dimensions\":[[2048,1536],[800,600]],\"pixels\":null,\"raw_proposals\":19,\"right_rectangle\":[400,300,400,300],\"selected_points\":19,\"supported\":false,\"transform\":null},{\"geometry_inliers\":12,\"hypotheses\":20000,\"left_rectangle\":[1024,0,1024,768],\"original_dimensions\":[[2048,1536],[800,600]],\"pixels\":{\"anchors\":[12,12],\"directions\":[{\"agreeing_pairs\":1711,\"informative_pairs\":1769,\"sites\":300,\"valid_sites\":300},{\"agreeing_pairs\":1204,\"informative_pairs\":1227,\"sites\":300,\"valid_sites\":300}],\"supported\":true},\"raw_proposals\":48,\"right_rectangle\":[0,0,800,600],\"selected_points\":48,\"supported\":true,\"transform\":[[0.496943166826844,-0.12605797090653223,-45.293113197897014],[-0.04735197047914483,0.39899462626438736,35.05713849542144],[0.000013101062846330418,-0.0002793927156596186,1.1472680171299687]]}],\"managed_peak\":63537896,\"managed_used\":0,\"model_digest\":[251,248,128,60,113,119,49,0,204,125,138,137,62,0,255,47,68,141,150,91,38,37,242,55,0,75,47,168,45,71,4,147],\"scope\":\"Automatic fixed full/quadrant search; original-file pixel confirmation. Tensor/workspace allocations outside managed budget.\",\"status\":\"ok\",\"supported\":true}\n",
+      "stderr": "       29.90 real        23.70 user         1.22 sys\n          1959526400  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n              120996  page reclaims\n                   9  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                 667  voluntary context switches\n               88821  involuntary context switches\n        211172617855  instructions retired\n         65767650418  cycles elapsed\n          1909622896  peak memory footprint\n",
+      "elapsed_seconds": 29.911155542,
+      "evidence": {
+        "attempts": [
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              0,
+              0,
+              2048,
+              1536
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                800,
+                600
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 29,
+            "right_rectangle": [
+              0,
+              0,
+              800,
+              600
+            ],
+            "selected_points": 29,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              0,
+              0,
+              2048,
+              1536
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                800,
+                600
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 20,
+            "right_rectangle": [
+              0,
+              0,
+              400,
+              300
+            ],
+            "selected_points": 20,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              0,
+              0,
+              2048,
+              1536
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                800,
+                600
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 25,
+            "right_rectangle": [
+              400,
+              0,
+              400,
+              300
+            ],
+            "selected_points": 25,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              0,
+              0,
+              2048,
+              1536
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                800,
+                600
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 23,
+            "right_rectangle": [
+              0,
+              300,
+              400,
+              300
+            ],
+            "selected_points": 23,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              0,
+              0,
+              2048,
+              1536
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                800,
+                600
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 25,
+            "right_rectangle": [
+              400,
+              300,
+              400,
+              300
+            ],
+            "selected_points": 25,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              0,
+              0,
+              1024,
+              768
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                800,
+                600
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 25,
+            "right_rectangle": [
+              0,
+              0,
+              800,
+              600
+            ],
+            "selected_points": 25,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              0,
+              0,
+              1024,
+              768
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                800,
+                600
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 34,
+            "right_rectangle": [
+              0,
+              0,
+              400,
+              300
+            ],
+            "selected_points": 34,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              0,
+              0,
+              1024,
+              768
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                800,
+                600
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 19,
+            "right_rectangle": [
+              400,
+              0,
+              400,
+              300
+            ],
+            "selected_points": 19,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              0,
+              0,
+              1024,
+              768
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                800,
+                600
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 13,
+            "right_rectangle": [
+              0,
+              300,
+              400,
+              300
+            ],
+            "selected_points": 13,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              0,
+              0,
+              1024,
+              768
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                800,
+                600
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 19,
+            "right_rectangle": [
+              400,
+              300,
+              400,
+              300
+            ],
+            "selected_points": 19,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 12,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              1024,
+              0,
+              1024,
+              768
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                800,
+                600
+              ]
+            ],
+            "pixels": {
+              "anchors": [
+                12,
+                12
+              ],
+              "directions": [
+                {
+                  "agreeing_pairs": 1711,
+                  "informative_pairs": 1769,
+                  "sites": 300,
+                  "valid_sites": 300
+                },
+                {
+                  "agreeing_pairs": 1204,
+                  "informative_pairs": 1227,
+                  "sites": 300,
+                  "valid_sites": 300
+                }
+              ],
+              "supported": true
+            },
+            "raw_proposals": 48,
+            "right_rectangle": [
+              0,
+              0,
+              800,
+              600
+            ],
+            "selected_points": 48,
+            "supported": true,
+            "transform": [
+              [
+                0.496943166826844,
+                -0.12605797090653223,
+                -45.293113197897014
+              ],
+              [
+                -0.04735197047914483,
+                0.39899462626438736,
+                35.05713849542144
+              ],
+              [
+                1.3101062846330418e-05,
+                -0.0002793927156596186,
+                1.1472680171299687
+              ]
+            ]
+          }
+        ],
+        "managed_peak": 63537896,
+        "managed_used": 0,
+        "model_digest": [
+          251,
+          248,
+          128,
+          60,
+          113,
+          119,
+          49,
+          0,
+          204,
+          125,
+          138,
+          137,
+          62,
+          0,
+          255,
+          47,
+          68,
+          141,
+          150,
+          91,
+          38,
+          37,
+          242,
+          55,
+          0,
+          75,
+          47,
+          168,
+          45,
+          71,
+          4,
+          147
+        ],
+        "scope": "Automatic fixed full/quadrant search; original-file pixel confirmation. Tensor/workspace allocations outside managed budget.",
+        "status": "ok",
+        "supported": true
+      },
+      "process_peak_rss_bytes": 1959526400,
+      "exact_prior_terminal_proof_parity": true
+    },
+    {
+      "case": "foreign-automatic",
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200300.jpg",
+      "target": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201400.jpg",
+      "status": "complete",
+      "process_pid": 33822,
+      "returncode": 0,
+      "stdout": "{\"attempts\":[{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[0,0,2048,1536],\"original_dimensions\":[[2048,1536],[2560,1920]],\"pixels\":null,\"raw_proposals\":20,\"right_rectangle\":[0,0,2560,1920],\"selected_points\":20,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[0,0,2048,1536],\"original_dimensions\":[[2048,1536],[2560,1920]],\"pixels\":null,\"raw_proposals\":16,\"right_rectangle\":[0,0,1280,960],\"selected_points\":16,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[0,0,2048,1536],\"original_dimensions\":[[2048,1536],[2560,1920]],\"pixels\":null,\"raw_proposals\":15,\"right_rectangle\":[1280,0,1280,960],\"selected_points\":15,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[0,0,2048,1536],\"original_dimensions\":[[2048,1536],[2560,1920]],\"pixels\":null,\"raw_proposals\":27,\"right_rectangle\":[0,960,1280,960],\"selected_points\":27,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[0,0,2048,1536],\"original_dimensions\":[[2048,1536],[2560,1920]],\"pixels\":null,\"raw_proposals\":23,\"right_rectangle\":[1280,960,1280,960],\"selected_points\":23,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[0,0,1024,768],\"original_dimensions\":[[2048,1536],[2560,1920]],\"pixels\":null,\"raw_proposals\":35,\"right_rectangle\":[0,0,2560,1920],\"selected_points\":35,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[0,0,1024,768],\"original_dimensions\":[[2048,1536],[2560,1920]],\"pixels\":null,\"raw_proposals\":10,\"right_rectangle\":[0,0,1280,960],\"selected_points\":10,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[0,0,1024,768],\"original_dimensions\":[[2048,1536],[2560,1920]],\"pixels\":null,\"raw_proposals\":28,\"right_rectangle\":[1280,0,1280,960],\"selected_points\":28,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[0,0,1024,768],\"original_dimensions\":[[2048,1536],[2560,1920]],\"pixels\":null,\"raw_proposals\":19,\"right_rectangle\":[0,960,1280,960],\"selected_points\":19,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[0,0,1024,768],\"original_dimensions\":[[2048,1536],[2560,1920]],\"pixels\":null,\"raw_proposals\":20,\"right_rectangle\":[1280,960,1280,960],\"selected_points\":20,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[1024,0,1024,768],\"original_dimensions\":[[2048,1536],[2560,1920]],\"pixels\":null,\"raw_proposals\":31,\"right_rectangle\":[0,0,2560,1920],\"selected_points\":31,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[1024,0,1024,768],\"original_dimensions\":[[2048,1536],[2560,1920]],\"pixels\":null,\"raw_proposals\":15,\"right_rectangle\":[0,0,1280,960],\"selected_points\":15,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[1024,0,1024,768],\"original_dimensions\":[[2048,1536],[2560,1920]],\"pixels\":null,\"raw_proposals\":33,\"right_rectangle\":[1280,0,1280,960],\"selected_points\":33,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[1024,0,1024,768],\"original_dimensions\":[[2048,1536],[2560,1920]],\"pixels\":null,\"raw_proposals\":23,\"right_rectangle\":[0,960,1280,960],\"selected_points\":23,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[1024,0,1024,768],\"original_dimensions\":[[2048,1536],[2560,1920]],\"pixels\":null,\"raw_proposals\":25,\"right_rectangle\":[1280,960,1280,960],\"selected_points\":25,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[0,768,1024,768],\"original_dimensions\":[[2048,1536],[2560,1920]],\"pixels\":null,\"raw_proposals\":14,\"right_rectangle\":[0,0,2560,1920],\"selected_points\":14,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[0,768,1024,768],\"original_dimensions\":[[2048,1536],[2560,1920]],\"pixels\":null,\"raw_proposals\":11,\"right_rectangle\":[0,0,1280,960],\"selected_points\":11,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[0,768,1024,768],\"original_dimensions\":[[2048,1536],[2560,1920]],\"pixels\":null,\"raw_proposals\":15,\"right_rectangle\":[1280,0,1280,960],\"selected_points\":15,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[0,768,1024,768],\"original_dimensions\":[[2048,1536],[2560,1920]],\"pixels\":null,\"raw_proposals\":20,\"right_rectangle\":[0,960,1280,960],\"selected_points\":20,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[0,768,1024,768],\"original_dimensions\":[[2048,1536],[2560,1920]],\"pixels\":null,\"raw_proposals\":22,\"right_rectangle\":[1280,960,1280,960],\"selected_points\":22,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[1024,768,1024,768],\"original_dimensions\":[[2048,1536],[2560,1920]],\"pixels\":null,\"raw_proposals\":10,\"right_rectangle\":[0,0,2560,1920],\"selected_points\":10,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":0,\"left_rectangle\":[1024,768,1024,768],\"original_dimensions\":[[2048,1536],[2560,1920]],\"pixels\":null,\"raw_proposals\":3,\"right_rectangle\":[0,0,1280,960],\"selected_points\":3,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[1024,768,1024,768],\"original_dimensions\":[[2048,1536],[2560,1920]],\"pixels\":null,\"raw_proposals\":5,\"right_rectangle\":[1280,0,1280,960],\"selected_points\":5,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[1024,768,1024,768],\"original_dimensions\":[[2048,1536],[2560,1920]],\"pixels\":null,\"raw_proposals\":9,\"right_rectangle\":[0,960,1280,960],\"selected_points\":9,\"supported\":false,\"transform\":null},{\"geometry_inliers\":0,\"hypotheses\":20000,\"left_rectangle\":[1024,768,1024,768],\"original_dimensions\":[[2048,1536],[2560,1920]],\"pixels\":null,\"raw_proposals\":18,\"right_rectangle\":[1280,960,1280,960],\"selected_points\":18,\"supported\":false,\"transform\":null}],\"managed_peak\":98618600,\"managed_used\":0,\"model_digest\":[251,248,128,60,113,119,49,0,204,125,138,137,62,0,255,47,68,141,150,91,38,37,242,55,0,75,47,168,45,71,4,147],\"scope\":\"Automatic fixed full/quadrant search; original-file pixel confirmation. Tensor/workspace allocations outside managed budget.\",\"status\":\"ok\",\"supported\":false}\n",
+      "stderr": "       56.87 real        84.35 user         3.29 sys\n          1881669632  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n              162817  page reclaims\n                  10  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                  38  voluntary context switches\n              330572  involuntary context switches\n        615319284078  instructions retired\n        214495772358  cycles elapsed\n          1842169920  peak memory footprint\n",
+      "elapsed_seconds": 56.874486167,
+      "evidence": {
+        "attempts": [
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              0,
+              0,
+              2048,
+              1536
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                2560,
+                1920
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 20,
+            "right_rectangle": [
+              0,
+              0,
+              2560,
+              1920
+            ],
+            "selected_points": 20,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              0,
+              0,
+              2048,
+              1536
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                2560,
+                1920
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 16,
+            "right_rectangle": [
+              0,
+              0,
+              1280,
+              960
+            ],
+            "selected_points": 16,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              0,
+              0,
+              2048,
+              1536
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                2560,
+                1920
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 15,
+            "right_rectangle": [
+              1280,
+              0,
+              1280,
+              960
+            ],
+            "selected_points": 15,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              0,
+              0,
+              2048,
+              1536
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                2560,
+                1920
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 27,
+            "right_rectangle": [
+              0,
+              960,
+              1280,
+              960
+            ],
+            "selected_points": 27,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              0,
+              0,
+              2048,
+              1536
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                2560,
+                1920
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 23,
+            "right_rectangle": [
+              1280,
+              960,
+              1280,
+              960
+            ],
+            "selected_points": 23,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              0,
+              0,
+              1024,
+              768
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                2560,
+                1920
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 35,
+            "right_rectangle": [
+              0,
+              0,
+              2560,
+              1920
+            ],
+            "selected_points": 35,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              0,
+              0,
+              1024,
+              768
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                2560,
+                1920
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 10,
+            "right_rectangle": [
+              0,
+              0,
+              1280,
+              960
+            ],
+            "selected_points": 10,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              0,
+              0,
+              1024,
+              768
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                2560,
+                1920
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 28,
+            "right_rectangle": [
+              1280,
+              0,
+              1280,
+              960
+            ],
+            "selected_points": 28,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              0,
+              0,
+              1024,
+              768
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                2560,
+                1920
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 19,
+            "right_rectangle": [
+              0,
+              960,
+              1280,
+              960
+            ],
+            "selected_points": 19,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              0,
+              0,
+              1024,
+              768
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                2560,
+                1920
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 20,
+            "right_rectangle": [
+              1280,
+              960,
+              1280,
+              960
+            ],
+            "selected_points": 20,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              1024,
+              0,
+              1024,
+              768
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                2560,
+                1920
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 31,
+            "right_rectangle": [
+              0,
+              0,
+              2560,
+              1920
+            ],
+            "selected_points": 31,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              1024,
+              0,
+              1024,
+              768
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                2560,
+                1920
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 15,
+            "right_rectangle": [
+              0,
+              0,
+              1280,
+              960
+            ],
+            "selected_points": 15,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              1024,
+              0,
+              1024,
+              768
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                2560,
+                1920
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 33,
+            "right_rectangle": [
+              1280,
+              0,
+              1280,
+              960
+            ],
+            "selected_points": 33,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              1024,
+              0,
+              1024,
+              768
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                2560,
+                1920
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 23,
+            "right_rectangle": [
+              0,
+              960,
+              1280,
+              960
+            ],
+            "selected_points": 23,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              1024,
+              0,
+              1024,
+              768
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                2560,
+                1920
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 25,
+            "right_rectangle": [
+              1280,
+              960,
+              1280,
+              960
+            ],
+            "selected_points": 25,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              0,
+              768,
+              1024,
+              768
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                2560,
+                1920
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 14,
+            "right_rectangle": [
+              0,
+              0,
+              2560,
+              1920
+            ],
+            "selected_points": 14,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              0,
+              768,
+              1024,
+              768
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                2560,
+                1920
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 11,
+            "right_rectangle": [
+              0,
+              0,
+              1280,
+              960
+            ],
+            "selected_points": 11,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              0,
+              768,
+              1024,
+              768
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                2560,
+                1920
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 15,
+            "right_rectangle": [
+              1280,
+              0,
+              1280,
+              960
+            ],
+            "selected_points": 15,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              0,
+              768,
+              1024,
+              768
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                2560,
+                1920
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 20,
+            "right_rectangle": [
+              0,
+              960,
+              1280,
+              960
+            ],
+            "selected_points": 20,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              0,
+              768,
+              1024,
+              768
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                2560,
+                1920
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 22,
+            "right_rectangle": [
+              1280,
+              960,
+              1280,
+              960
+            ],
+            "selected_points": 22,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              1024,
+              768,
+              1024,
+              768
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                2560,
+                1920
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 10,
+            "right_rectangle": [
+              0,
+              0,
+              2560,
+              1920
+            ],
+            "selected_points": 10,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 0,
+            "left_rectangle": [
+              1024,
+              768,
+              1024,
+              768
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                2560,
+                1920
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 3,
+            "right_rectangle": [
+              0,
+              0,
+              1280,
+              960
+            ],
+            "selected_points": 3,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              1024,
+              768,
+              1024,
+              768
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                2560,
+                1920
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 5,
+            "right_rectangle": [
+              1280,
+              0,
+              1280,
+              960
+            ],
+            "selected_points": 5,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              1024,
+              768,
+              1024,
+              768
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                2560,
+                1920
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 9,
+            "right_rectangle": [
+              0,
+              960,
+              1280,
+              960
+            ],
+            "selected_points": 9,
+            "supported": false,
+            "transform": null
+          },
+          {
+            "geometry_inliers": 0,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              1024,
+              768,
+              1024,
+              768
+            ],
+            "original_dimensions": [
+              [
+                2048,
+                1536
+              ],
+              [
+                2560,
+                1920
+              ]
+            ],
+            "pixels": null,
+            "raw_proposals": 18,
+            "right_rectangle": [
+              1280,
+              960,
+              1280,
+              960
+            ],
+            "selected_points": 18,
+            "supported": false,
+            "transform": null
+          }
+        ],
+        "managed_peak": 98618600,
+        "managed_used": 0,
+        "model_digest": [
+          251,
+          248,
+          128,
+          60,
+          113,
+          119,
+          49,
+          0,
+          204,
+          125,
+          138,
+          137,
+          62,
+          0,
+          255,
+          47,
+          68,
+          141,
+          150,
+          91,
+          38,
+          37,
+          242,
+          55,
+          0,
+          75,
+          47,
+          168,
+          45,
+          71,
+          4,
+          147
+        ],
+        "scope": "Automatic fixed full/quadrant search; original-file pixel confirmation. Tensor/workspace allocations outside managed budget.",
+        "status": "ok",
+        "supported": false
+      },
+      "process_peak_rss_bytes": 1881669632
+    },
+    {
+      "case": "rephoto-whole",
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/209400.jpg",
+      "target": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/209401.jpg",
+      "status": "complete",
+      "process_pid": 34865,
+      "returncode": 0,
+      "stdout": "{\"attempts\":[{\"geometry_inliers\":515,\"hypotheses\":20000,\"left_rectangle\":[0,0,2560,1920],\"original_dimensions\":[[2560,1920],[1024,701]],\"pixels\":{\"anchors\":[515,515],\"directions\":[{\"agreeing_pairs\":81112,\"informative_pairs\":81658,\"sites\":12875,\"valid_sites\":12875},{\"agreeing_pairs\":80935,\"informative_pairs\":82092,\"sites\":12875,\"valid_sites\":12875}],\"supported\":true},\"raw_proposals\":925,\"right_rectangle\":[0,0,1024,701],\"selected_points\":925,\"supported\":true,\"transform\":[[0.4814253173718157,0.17752744178962881,-174.44113452849444],[0.008675948497697334,1.0889456178509886,-366.44166112820153],[0.000027197080334437145,0.00026711169860048237,0.7729291205601484]]}],\"managed_peak\":98924680,\"managed_used\":0,\"model_digest\":[251,248,128,60,113,119,49,0,204,125,138,137,62,0,255,47,68,141,150,91,38,37,242,55,0,75,47,168,45,71,4,147],\"scope\":\"Automatic fixed full/quadrant search; original-file pixel confirmation. Tensor/workspace allocations outside managed budget.\",\"status\":\"ok\",\"supported\":true}\n",
+      "stderr": "        3.47 real         4.10 user         0.36 sys\n          1437777920  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n               88641  page reclaims\n                  16  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                 665  voluntary context switches\n               16282  involuntary context switches\n         35022188773  instructions retired\n         10273311988  cycles elapsed\n          1387677424  peak memory footprint\n",
+      "elapsed_seconds": 3.484923291000001,
+      "evidence": {
+        "attempts": [
+          {
+            "geometry_inliers": 515,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              0,
+              0,
+              2560,
+              1920
+            ],
+            "original_dimensions": [
+              [
+                2560,
+                1920
+              ],
+              [
+                1024,
+                701
+              ]
+            ],
+            "pixels": {
+              "anchors": [
+                515,
+                515
+              ],
+              "directions": [
+                {
+                  "agreeing_pairs": 81112,
+                  "informative_pairs": 81658,
+                  "sites": 12875,
+                  "valid_sites": 12875
+                },
+                {
+                  "agreeing_pairs": 80935,
+                  "informative_pairs": 82092,
+                  "sites": 12875,
+                  "valid_sites": 12875
+                }
+              ],
+              "supported": true
+            },
+            "raw_proposals": 925,
+            "right_rectangle": [
+              0,
+              0,
+              1024,
+              701
+            ],
+            "selected_points": 925,
+            "supported": true,
+            "transform": [
+              [
+                0.4814253173718157,
+                0.17752744178962881,
+                -174.44113452849444
+              ],
+              [
+                0.008675948497697334,
+                1.0889456178509886,
+                -366.44166112820153
+              ],
+              [
+                2.7197080334437145e-05,
+                0.00026711169860048237,
+                0.7729291205601484
+              ]
+            ]
+          }
+        ],
+        "managed_peak": 98924680,
+        "managed_used": 0,
+        "model_digest": [
+          251,
+          248,
+          128,
+          60,
+          113,
+          119,
+          49,
+          0,
+          204,
+          125,
+          138,
+          137,
+          62,
+          0,
+          255,
+          47,
+          68,
+          141,
+          150,
+          91,
+          38,
+          37,
+          242,
+          55,
+          0,
+          75,
+          47,
+          168,
+          45,
+          71,
+          4,
+          147
+        ],
+        "scope": "Automatic fixed full/quadrant search; original-file pixel confirmation. Tensor/workspace allocations outside managed budget.",
+        "status": "ok",
+        "supported": true
+      },
+      "process_peak_rss_bytes": 1437777920,
+      "exact_prior_terminal_proof_parity": true
+    }
+  ]
+}

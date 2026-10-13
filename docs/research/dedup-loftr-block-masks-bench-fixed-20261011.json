@@ -1,0 +1,14 @@
+{
+  "status": "failed_diagnostic_flatten_noncontiguous_indices",
+  "producer_pid": 11588,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-loftr-block-masks-bench-harness-20261011.json": "c1e7720b38674607c6d4022ad77db8f2fe914bedc6f04993852013ddb6952416",
+    "/Users/themoretheless/.codex/tmp/dedup-loftr-block-masks-bench-build-20261011.jsonl": "b9ae93252174f237b0c068a494b2f275bdd0b54dca6d606dc92a2de67161146b",
+    "/Users/themoretheless/.codex/tmp/dedup-loftr-block-masks-bench-build-20261011.log": "605c72de9d6fd8357f9801d6372720f49e670e9727cd3bca7bd8226af3a76bbb",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-block-masks-bench-fixed-qualified-20261011/mask_probe": "c65a59a020235a6a0121f480398bf6cd9b4a5ede20b3ed4d1b6755ffc92d4e21",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-loftr-block-masks-fixed-20261011.py": "1eefd7d22046dbf5955b2e449914d63e6fa221bb5dcfbda58ee1ff9ead860cc9"
+  },
+  "results": [],
+  "scope": "Fresh CPU processes, deterministic 6400x6400 float confidence,2threads. Exact match-index parity and measured selector RSS/time; not full provider speed/RSS cap.",
+  "reason": "Benchmark serializer used view on non-contiguous nonzero indices; candidate selector tests unaffected."
+}

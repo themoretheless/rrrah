@@ -1,0 +1,52 @@
+{
+  "change": "Explicit-layout BAY file reader streams each row into one managed scratch buffer, directly filling managed u16 sensor output",
+  "memory": [
+    {
+      "layout": "QV-2000UX",
+      "old_source_plus_output_bytes": 5929056,
+      "new_row_plus_output_bytes": 3954336,
+      "scratch_bytes": 1632
+    },
+    {
+      "layout": "QV-3000EX",
+      "old_source_plus_output_bytes": 9653280,
+      "new_row_plus_output_bytes": 6437600,
+      "scratch_bytes": 2080
+    },
+    {
+      "layout": "QV-5700",
+      "old_source_plus_output_bytes": 16165448,
+      "new_row_plus_output_bytes": 9950312,
+      "scratch_bytes": 3232
+    }
+  ],
+  "tests": [
+    {
+      "suite": "focused",
+      "passed": 5,
+      "ignored": 0,
+      "sha256": "b7796d1e3677dd2ba25ceff6d806b4892c675e01506f372861e6423e2baeca10",
+      "log": "docs/research/bay-row-streamed-managed-import-2026-10-11-focused.log"
+    },
+    {
+      "suite": "decoder-unit",
+      "passed": 994,
+      "ignored": 67,
+      "sha256": "f2e9f2e61cdb1587da97c0c997ffc3822b97fd71d0770046a3e75a135965ebcd",
+      "log": "docs/research/bay-row-streamed-managed-import-2026-10-11-decoder-unit.log"
+    }
+  ],
+  "checks": [
+    "every authored sample for all three layouts",
+    "ten-bit QV5700 last sample and six padding bits",
+    "exact combined admission and one-byte-short refusal",
+    "oversized input before admission",
+    "selection and stale generation before file read",
+    "last-owner credits return to zero"
+  ],
+  "limitations": [
+    "Authored fixtures qualify packing and ownership, not producer-camera interoperability",
+    "BAY CFA/WB/color and public viewer routing remain pending",
+    "Streaming still requires full sensor output allocation"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "status": "verified_expected_baseline_failure",
+  "build_returncode": 0,
+  "test_returncode": 101,
+  "assertion": "storage order is part of pixel interpretation",
+  "evidence": "/Users/themoretheless/.codex/tmp/rrrah-dedup-cache-interpretation-baseline-20261012/test.log",
+  "evidence_sha256": "9804a326613bbc3422895b4d8a3198021b9ddb01af77a92ecf1ead3fe3a255b3",
+  "all_immutable_pins_match": true,
+  "mutable_root_inputs_changed_by_formatting": [
+    "/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup/tests/cache_interpretation.rs"
+  ],
+  "scope": "Reproduces stale cache hit for changed PFM row interpretation; expected failure before production fix."
+}

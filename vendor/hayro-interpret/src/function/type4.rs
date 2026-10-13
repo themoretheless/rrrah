@@ -35,6 +35,50 @@ impl Type4 {
         }
         Some(output)
     }
+    pub(crate) fn eval_components(&self,input:&[f32],output:&mut[f32],cancelled:&dyn Fn()->bool,remaining:&mut usize,depth:usize)->Option<()> {
+        if cancelled() || input.is_empty() || input.len()>4 || output.is_empty() || output.len()>4
+            || self.clamper.domain.len()!=input.len() {return None;}
+        let range=self.clamper.range.as_ref()?;
+        if range.len()!=output.len() {return None;}
+        let mut stack=InterpreterStack::new();
+        for (&value,&(low,high)) in input.iter().zip(&self.clamper.domain) {
+            if cancelled() || !value.is_finite() || !low.is_finite() || !high.is_finite() || low>high {return None;}
+            stack.push(Argument::Float(value.clamp(low,high)))?;
+        }
+        eval_inner(&self.program,&mut stack,remaining,depth,cancelled)?;
+        if stack.len()!=output.len() {return None;}
+        let mut scratch=[0.;4];
+        for ((value,arg),&(low,high)) in scratch.iter_mut().zip(stack.items()).zip(range) {
+            if cancelled() || !low.is_finite() || !high.is_finite() || low>high {return None;}
+            let Argument::Float(number)=arg else {return None;};
+            if !number.is_finite() {return None;}
+            *value=number.clamp(low,high);
+        }
+        if cancelled() {return None;}
+        output.copy_from_slice(&scratch[..output.len()]);Some(())
+    }
+
+    pub(crate) fn native_retained_capacity(&self,cancelled:&dyn Fn()->bool,remaining:&mut usize,depth:usize)->Option<usize> {
+        fn program_bytes(program:&Vec<PostScriptOp>,cancelled:&dyn Fn()->bool,remaining:&mut usize,depth:usize)->Option<usize> {
+            if cancelled() || depth>=32 {return None;}
+            *remaining=remaining.checked_sub(program.len())?;
+            let mut bytes=program.capacity().checked_mul(size_of::<PostScriptOp>())?;
+            for op in program {
+                if cancelled() {return None;}
+                match op {
+                    PostScriptOp::If(child)=>bytes=bytes.checked_add(program_bytes(child,cancelled,remaining,depth+1)?)?,
+                    PostScriptOp::IfElse(a,b)=> {
+                        bytes=bytes.checked_add(program_bytes(a,cancelled,remaining,depth+1)?)?;
+                        bytes=bytes.checked_add(program_bytes(b,cancelled,remaining,depth+1)?)?;
+                    },
+                    _=>{},
+                }
+            }
+            Some(bytes)
+        }
+        self.clamper.native_vector_retained_capacity()?.checked_add(program_bytes(&self.program,cancelled,remaining,depth)?)
+    }
+
     /// Create a new type 4 function.
     pub(crate) fn new(stream: &Stream<'_>) -> Option<Self> {
         let dict = stream.dict().clone();
@@ -592,6 +636,54 @@ mod tests {
             program: parse_procedure(program).unwrap(),
             clamper: Clamper { domain: smallvec::smallvec![(0.0,1.0)], range: Some(smallvec::smallvec![(0.0,1.0)]) },
         })))
+    }
+
+    fn vector(program:&[u8],inputs:usize,outputs:usize)->Function {
+        Function(Arc::new(FunctionType::Type4(Type4 {
+            program:parse_procedure(program).unwrap(),
+            clamper:Clamper {domain:smallvec::SmallVec::from_slice(&[(0.,1.);4][..inputs]),range:Some(smallvec::SmallVec::from_slice(&[(0.,1.);4][..outputs]))},
+        })))
+    }
+
+    #[test]
+    fn bounded_calculator_vector_matches_real_cyan_magenta_alternate() {
+        let program=b"{1 index 1.000000 cvr exch sub 3 1 roll 0 index 1.000000 cvr exch sub 3 1 roll 1.000000 3 1 roll 1.000000 3 1 roll 6 -1 roll 1.000000 cvr exch sub 6 1 roll 5 -1 roll 1.000000 cvr exch sub 5 1 roll 4 -1 roll 1.000000 cvr exch sub 4 1 roll 3 -1 roll 1.000000 cvr exch sub 3 1 roll pop pop }";
+        let function=vector(program,2,4);
+        assert!(function.native_retained_capacity(&||false).unwrap()>program.len());
+        for c in 0..=10 {
+            for m in 0..=10 {
+                let input=[c as f32/10.,m as f32/10.];let mut output=[-1.;4];
+                function.eval_vector_bounded(&input,&mut output,&||false).unwrap();
+                for (actual,expected) in output.into_iter().zip([input[0],input[1],0.,0.]) {
+                    assert!((actual-expected).abs()<1e-7,"{input:?}: {actual} != {expected}");
+                }
+            }
+        }
+        let nonlinear=vector(b"{ exch dup mul exch 0 0 }",2,4);
+        let mut output=[-1.;4];
+        nonlinear.eval_vector_bounded(&[0.5,0.75],&mut output,&||false).unwrap();
+        assert_eq!(output,[0.25,0.75,0.,0.]);
+    }
+
+    #[test]
+    fn bounded_calculator_vector_refusal_and_cancel_preserve_output() {
+        let function=vector(b"{ exch dup mul exch 0 0 }",2,4);
+        let polls=std::cell::Cell::new(0);let mut output=[-1.;4];
+        function.eval_vector_bounded(&[0.5,0.75],&mut output,&||{polls.set(polls.get()+1);false}).unwrap();
+        for stop in 1..=polls.get() {
+            output=[-1.;4];let current=std::cell::Cell::new(0);
+            assert!(function.eval_vector_bounded(&[0.5,0.75],&mut output,&||{current.set(current.get()+1);current.get()==stop}).is_none());
+            assert_eq!(output,[-1.;4]);
+        }
+        for program in [b"{ pop 0 div 0 0 0 }".as_slice(),b"{ pop pop true 0 0 0 }",b"{ pop pop }",b"{ 0 0 0 }"] {
+            output=[-1.;4];
+            assert!(vector(program,2,4).eval_vector_bounded(&[0.5,0.75],&mut output,&||false).is_none());
+            assert_eq!(output,[-1.;4]);
+        }
+        output=[-1.;4];
+        assert!(function.eval_vector_with_budget(&[0.5,0.75],&mut output,&||false,&mut 2,0).is_none());
+        assert_eq!(output,[-1.;4]);
+        assert!(function.native_retained_with_budget(&||false,&mut 2,0).is_none());
     }
 
     #[test]

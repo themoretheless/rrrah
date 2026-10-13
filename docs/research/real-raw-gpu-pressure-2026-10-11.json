@@ -1,0 +1,31 @@
+{
+  "adapter": "RAW collection adapter: Metal Apple M4 Max",
+  "passed": 1,
+  "failed": 0,
+  "ignored": 0,
+  "duration_seconds": 30.188,
+  "restores_and_replacement_frames": 441,
+  "gpu_pressure_refusals": 440,
+  "source_count": 9,
+  "checks": [
+    "typed GPU Memory error on full logical resident-budget pressure",
+    "old resident reservation unchanged after failed replacement",
+    "previous 1920x1080 Metal frame exact after each refusal",
+    "retry of new RAW exact after pressure released",
+    "temporary upload and queue credit zero",
+    "all GPU/storage credits zero on final drop",
+    "driver requires exact refusal count=restores-1 and preservation/retry marker"
+  ],
+  "peak_budget_bytes": {
+    "resident_including_artificial_pressure": 536870912,
+    "upload_scratch": 2097152,
+    "queued_payload": 73400320
+  },
+  "log_sha256": "a7bb48076ed806c11101b9ac2d75586a64497d9f9a0ec5487164016b081baf3c",
+  "limits": [
+    "Injected logical GPU budget pressure, not measured physical VRAM exhaustion",
+    "Resident peak includes artificial pressure reservation and is not the texture footprint",
+    "30-second failure regression; preceding ten-minute reuse soak did not inject GPU pressure every frame",
+    "Warm local SDR offscreen rendering; no physical HDR/NVIDIA claim"
+  ]
+}

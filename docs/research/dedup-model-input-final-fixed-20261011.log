@@ -1,0 +1,142 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+warning: calls to `std::mem::drop` with a value that implements `Copy` does nothing
+   --> crates/rrrah-dedup/tests/model_compare.rs:144:5
+    |
+144 | /      drop(
+145 | |/         compare_model_files_with(
+146 | ||             &r[0],
+147 | ||             &r[1],
+148 | ||             &w,
+...   ||
+157 | ||         .unwrap(),
+    | ||_________________- argument has type `ModelComparisonEvidence`
+158 | |      );
+    | |______^
+    |
+    = note: `#[warn(dropping_copy_types)]` on by default
+help: use `let _ = ...` to ignore the expression or result
+    |
+144 ~     let _ = compare_model_files_with(
+145 |             &r[0],
+...
+155 |         )
+156 ~         .unwrap();
+    |
+
+warning: `rrrah-dedup` (test "model_compare") generated 1 warning
+    Finished `test` profile [optimized + debuginfo] target(s) in 1m 00s
+     Running tests/model_compare.rs (target/debug/deps/model_compare-1cb2979d293ca215)
+
+running 11 tests
+test malformed_regions_refuse_before_weight_io_or_provider_and_global_cancel_wins ... ok
+test shifted_crop_domains_confirm_the_same_original_pixels_without_a_translation_error ... ok
+test policy_preflight_and_proposal_count_refuse_without_partial_evidence ... ok
+test model_mutation_during_fresh_pixel_confirmation_discards_supported_evidence ... ok
+test both_generations_and_ignored_provider_cancellation_are_sticky ... ok
+test provider_cancellation_error_is_typed_cancelled_for_global_and_both_owners ... ok
+test supplied_provider_supports_original_pixels_empty_is_explicit_and_errors_do_not_become_misses ... ok
+test region_lifecycle_refuses_whole_source_mutation_and_both_request_cancellations ... ok
+test final_caller_checkpoint_cannot_publish_a_model_result_after_source_or_weight_mutation ... ok
+test global_and_both_request_tokens_cancel_mid_and_final_publication ... ok
+test either_source_or_model_mutation_during_provider_refuses_and_restored_retry_recovers ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+
+     Running tests/model_input_file.rs (target/debug/deps/model_input_file-68e5053628aee8cd)
+
+running 10 tests
+test projected_file_invalid_configuration_is_refused_before_source_io ... ok
+test file_input_retains_only_output_and_rechecks_source_and_generation_after_inference ... ok
+test projected_hdr_file_retains_recipe_and_rejects_equal_length_mutation ... ok
+test file_crop_retains_full_source_identity_and_original_dimensions ... ok
+test projected_crop_reads_original_rectangle_and_guards_mutation_outside_it ... ok
+test invalid_policy_precedes_io_and_mid_preparation_source_changes_are_errors ... ok
+test external_palette_is_rechecked_after_preparation_and_mutation_discards_input ... ok
+test final_source_verification_callback_cannot_hide_source_or_dependency_mutation ... ok
+test final_preparation_callback_cannot_publish_mutated_source_or_dependency ... ok
+test every_global_checkpoint_and_mid_final_generation_cancellation_discard_payload ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.34s
+
+     Running tests/model_projected_compare.rs (target/debug/deps/model_projected_compare-4e390d9d2ef936a0)
+
+running 8 tests
+test work_and_invalid_thresholds_refuse_before_provider ... ok
+test transparent_black_collision_is_rejected_by_original_alpha ... ok
+test identity_candidate_recovers_noisy_self_geometry_without_loosening_pixel_policy ... ok
+test source_and_weights_mutation_in_provider_never_publish_evidence ... ok
+test hdr_original_proof_accepts_copy_and_rejects_equal_projection_collision ... ok
+test each_request_generation_and_tiny_memory_refusal_release_all_owners ... ok
+test rejected_identity_continues_fitted_proof_and_charges_both_grids_for_each_mapping ... ok
+test cancellation_and_final_checkpoint_mutations_discard_result ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/model_tiles.rs (target/debug/deps/model_tiles-fea33a6d23e202b9)
+
+running 13 tests
+test all_eight_work_caps_overflow_invalid_policy_and_storage_refuse_before_io ... ok
+test insufficient_geometry_does_not_swallow_a_later_proposal_work_refusal ... ok
+test insufficient_anchor_geometry_keeps_the_attempt_and_recovers_on_a_later_rectangle ... ok
+test late_preparation_memory_refusal_discards_cached_inputs_and_all_attempts ... ok
+test tiny_decoded_domains_omit_empty_quadrants_and_duplicate_full_regions ... ok
+test whole_support_stops_at_one_and_late_crop_support_stops_only_after_original_pixels ... ok
+test complete_fixed_order_visits_all_twenty_five_regions_and_shared_credit_follows_last_owner ... ok
+test exhausted_insufficient_geometry_is_typed_and_retains_the_complete_managed_roster ... ok
+test geometry_without_original_pixel_support_does_not_stop_the_tile_sequence ... ok
+test repeated_regions_reuse_identical_managed_inputs_and_retained_owners_keep_credit ... ok
+test late_provider_failures_source_mutations_and_both_generations_discard_all_attempts ... ok
+test final_source_mutation_takes_precedence_over_exhausted_insufficient_geometry ... ok
+test final_caller_checkpoint_mutation_cancellation_and_request_change_never_publish ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.71s
+
+     Running tests/portfolio_collection.rs (target/debug/deps/portfolio_collection-74316a1a0fe22014)
+
+running 10 tests
+test cumulative_overflow_policy_and_memory_preflight_precede_iterator_and_io ... ok
+test duplicate_file_and_complete_pair_limits_refuse_before_file_io ... ok
+test empty_and_single_file_batches_are_complete_without_invented_pairs ... ok
+test idle_owner_cancellation_and_late_provider_failure_discard_earlier_decisions ... ok
+test every_pair_is_deterministic_matches_direct_evidence_and_credit_follows_report_owners ... ok
+test a_native_empty_proposal_bank_does_not_hide_model_only_collection_support ... ok
+test late_tiled_pair_failure_or_idle_owner_cancellation_discards_earlier_collection_results ... ok
+test collection_checks_every_pair_with_automatic_tiles_and_retained_attempt_credit ... ok
+test final_cancellation_or_final_callback_source_mutation_never_publishes_a_stale_batch ... ok
+test native_evidence_and_report_slots_have_independent_last_owner_credit ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.05s
+
+     Running tests/search_portfolio.rs (target/debug/deps/search_portfolio-35b12520fe4864fe)
+
+running 13 tests
+test cumulative_and_both_policy_preflight_precede_io_cancel_wins ... ok
+test tiled_and_aggregate_work_refuse_before_io_even_in_native_first_order ... ok
+test provider_failure_after_an_inconclusive_tile_remains_terminal ... ok
+test cross_stage_source_or_weight_changes_and_provider_errors_never_become_misses ... ok
+test portfolio_final_user_checkpoint_cannot_publish_mutated_sources_or_weights ... ok
+test both_orders_stop_at_support_and_misses_advance_without_leaked_payload ... ok
+test automatic_tiles_recover_after_full_misses_in_both_orders_and_exhaust_before_native_fallback ... ok
+test global_and_both_generations_cancel_entry_and_terminal_publication ... ok
+test final_source_mutation_and_cancellation_precede_portfolio_inconclusive_publication ... ok
+test complete_native_miss_cannot_turn_model_insufficiency_into_an_ordinary_negative_in_either_order ... ok
+test insufficient_model_anchor_geometry_advances_to_independently_verified_native_support ... ok
+test native_early_support_never_calls_model_and_model_miss_falls_through ... ok
+test exhausted_native_anchor_geometry_advances_to_independently_verified_model_support ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 10.75s
+

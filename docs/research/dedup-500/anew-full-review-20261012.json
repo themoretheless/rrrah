@@ -1,0 +1,103 @@
+{
+  "status": "complete_full_source_review_six_original_cli_controls",
+  "repository": "tomnomnom/anew",
+  "registry_index": 7,
+  "upstream_go_test": "success_no_test_files_not_unit_passes",
+  "go_version": "go version go1.27.2 darwin/arm64",
+  "controls": [
+    {
+      "control": "ordinary_line_membership_appends_once",
+      "args": [],
+      "returncode": 0,
+      "stdin_length": 16,
+      "stdin_sha256": "e09b36549c5a36d0ddd209cfb3aaf0202124544f748432e5f56b77feafeede83",
+      "stdout": "Three\n",
+      "stderr": "",
+      "before_length": 8,
+      "before_sha256": "2fcfb7830c3bb1c40b0a64f0549acc4c661f7f9f8c39d3b8ecaaf51313670f68",
+      "after_length": 14,
+      "after_sha256": "840995a3c79fdf88f5c58ddbe6fb31db36fb94ecb91cd0b079f3c8d74b033122"
+    },
+    {
+      "control": "explicit_trim_changes_line_semantics",
+      "args": [
+        "-t"
+      ],
+      "returncode": 0,
+      "stdin_length": 10,
+      "stdin_sha256": "455f48a691e4c45fab307a98f1ffbec0d86f3e088189729fc7f57ca8d86f8be2",
+      "stdout": "x\n",
+      "stderr": "",
+      "before_length": null,
+      "before_sha256": null,
+      "after_length": null,
+      "after_sha256": null
+    },
+    {
+      "control": "dry_run_preserves_target",
+      "args": [
+        "-d"
+      ],
+      "returncode": 0,
+      "stdin_length": 8,
+      "stdin_sha256": "3463de811d7d2ece7174fd343a8302ac634d80aca8b123adcaad87ab5e981b04",
+      "stdout": "new\n",
+      "stderr": "",
+      "before_length": 4,
+      "before_sha256": "01d09d19c2139a46aebfb577780d123d7396e97201bc7ead210a2ebff8239dee",
+      "after_length": 4,
+      "after_sha256": "01d09d19c2139a46aebfb577780d123d7396e97201bc7ead210a2ebff8239dee"
+    },
+    {
+      "control": "quiet_mode_appends_without_stdout",
+      "args": [
+        "-q"
+      ],
+      "returncode": 0,
+      "stdin_length": 8,
+      "stdin_sha256": "3463de811d7d2ece7174fd343a8302ac634d80aca8b123adcaad87ab5e981b04",
+      "stdout": "",
+      "stderr": "",
+      "before_length": 4,
+      "before_sha256": "01d09d19c2139a46aebfb577780d123d7396e97201bc7ead210a2ebff8239dee",
+      "after_length": 8,
+      "after_sha256": "92ac9321e2f7d396720e17184d34da66fdd4f45f51e8949a0a3db33db379c81a"
+    },
+    {
+      "control": "long_stdin_token_silently_discards_remaining_input",
+      "args": [],
+      "returncode": 0,
+      "stdin_length": 70012,
+      "stdin_sha256": "8db3994e7f2d0da9a22a01e0cf300bdb0e544f98966b59f9a2f3d7f172762117",
+      "stdout": "first\n",
+      "stderr": "",
+      "before_length": null,
+      "before_sha256": null,
+      "after_length": null,
+      "after_sha256": null
+    },
+    {
+      "control": "long_existing_token_misses_later_membership_and_appends_duplicate",
+      "args": [],
+      "returncode": 0,
+      "stdin_length": 6,
+      "stdin_sha256": "0bd7226ea868984d97d517ccc35c0bc9a04d93e81c5a25b6c8eaded088626944",
+      "stdout": "later\n",
+      "stderr": "",
+      "before_length": 70013,
+      "before_sha256": "942181bccb779e21d243836fc722f14f7d8bd5fcaa0f54f9d179884f8e69ab05",
+      "after_length": 70019,
+      "after_sha256": "30c3190adeff30fdf472648ca8ce36745d019f87da19e743be8f6292ed7bd6af"
+    }
+  ],
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/anew-full-source-20261012.json": "7f3357e676a1d42ebb0c7055d2d16e3ed300f61565610ad8ea8723af47fb0ffb",
+    "/Users/themoretheless/.codex/tmp/rrrah-anew-upstream-executable-20261012": "50743a67d07c226ed52f0b56ed8576468f6f0e7abced244806c2b88108f2c49f",
+    "/Users/themoretheless/.codex/tmp/rrrah-go-1.27.2-20261012/go/bin/go": "516c1fbb53b5f8f4852f0c3c379d45bcff53a1032e5cd1a9ca1738f03ba07cb1",
+    "/Users/themoretheless/.codex/tmp/rrrah-anew-upstream-tests-20261012.jsonl": "75c81ea980f30f1ff0fee2c56c6bac6ff4ba0b34e60d4850d705b53c0c33e950",
+    "/Users/themoretheless/.codex/tmp/rrrah-anew-upstream-tests-20261012.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/review-dedup-anew-full-20261012.py": "7c7d3992e2fe050bff021476b35600a8f4d9d62e5ace11b556d5d389fb9346e5"
+  },
+  "decision": "reject-domain_no_production_adoption",
+  "scope": "Original unchanged CLI executed in six temporary-file/stdin controls. This is line-set membership, not byte-confirmed duplicate files or image matching. Scanner token limits/errors unchecked cause silent truncation and missed membership after long existing line; complete CLI counterexamples, no concurrent mutation/race/wholeRSS/platform assertion. Source map grows with unique lines; no resource bound reproduced. All6files read for this one registry row, not full500completion."
+}

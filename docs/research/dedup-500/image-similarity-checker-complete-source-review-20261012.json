@@ -1,0 +1,39 @@
+{
+  "status": "complete_pinned4_file_source_review_runtime_pending",
+  "repository": "Imranch4/image-similarity-checker",
+  "commit": "189504a23d911bee1e375837ebea73c6375db0b0",
+  "fully_read_files": [
+    ".gitignore",
+    "LICENSE",
+    "README.md",
+    "image-similarity.py"
+  ],
+  "license": "MIT Copyright2025Imranch4",
+  "upstream_tests_detected": 0,
+  "upstream_tests_run": false,
+  "findings": [
+    {
+      "kind": "static",
+      "detail": "README references absent requirements.txt and --img1/--img2 flags. Main has no argument parser and always reads before.jpg/after.jpg."
+    },
+    {
+      "kind": "static",
+      "detail": "pHash uses Pillow default imagehash transform; no alpha/ICC/orientation, full animation/page or exact byte/pixel identity confirmation."
+    },
+    {
+      "kind": "static",
+      "detail": "SSIM reads grayscale then stretches both images to the minimum width/height independently. RGB/alpha differences, original dimensions and aspect ratio are not retained. Failed imread is dereferenced via .shape; tiny images are not preflighted."
+    },
+    {
+      "kind": "static",
+      "detail": "ORB reports raw count of cross-checked matches, no distance admission, geometric model or original pixel confirmation. No descriptors returns numeric0, including textureless identical images."
+    },
+    {
+      "kind": "static",
+      "detail": "No source mutation/generation cancellation, budget, cache identity, grouping, file-management operations or resource isolation."
+    }
+  ],
+  "adopted_code": false,
+  "decision": "reference_only_existing_rrrah_contracts_are_stronger",
+  "scope": "Every file in complete pinned tree fully read and Gitblob verified. Runtime counterexamples pending; no third-party dependency source audit or general matcher precision proof."
+}

@@ -1,0 +1,50 @@
+    Blocking waiting for file lock on build directory
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+    Finished `test` profile [optimized + debuginfo] target(s) in 1m 18s
+     Running tests/pair_schedule.rs (target/debug/deps/pair_schedule-d7ec7f6057b04b6e)
+
+running 5 tests
+test constructor_and_enumeration_cancel_at_every_checkpoint_then_retry ... ok
+test full_pair_count_and_input_limits_preflight_before_allocation ... ok
+test late_memory_refusal_releases_ids_and_owned_inputs_cannot_change_schedule ... ok
+test invalid_ids_and_hints_refuse_without_retaining_memory ... ok
+test every_proposal_subset_keeps_all_pairs_including_descriptorless_files ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/portfolio_collection.rs (target/debug/deps/portfolio_collection-201681014c69d06e)
+
+running 16 tests
+test cumulative_overflow_policy_and_memory_preflight_precede_iterator_and_io ... ok
+test duplicate_file_and_complete_pair_limits_refuse_before_file_io ... ok
+test scheduled_mismatch_refuses_before_missing_source_or_model_io ... ok
+test empty_and_single_file_batches_are_complete_without_invented_pairs ... ok
+test scheduled_late_provider_failure_discards_prior_confirmed_pairs ... ok
+test idle_owner_cancellation_and_late_provider_failure_discard_earlier_decisions ... ok
+test a_native_empty_proposal_bank_does_not_hide_model_only_collection_support ... ok
+test scheduled_outcome_collection_keeps_all_pairs_and_canonical_report ... ok
+test every_pair_is_deterministic_matches_direct_evidence_and_credit_follows_report_owners ... ok
+test late_tiled_pair_failure_or_idle_owner_cancellation_discards_earlier_collection_results ... ok
+test fatal_failure_after_unknown_still_discards_entire_outcome_collection ... ok
+test collection_checks_every_pair_with_automatic_tiles_and_retained_attempt_credit ... ok
+test scheduled_fallback_retains_inconclusive_geometry_as_unknown ... ok
+test final_cancellation_or_final_callback_source_mutation_never_publishes_a_stale_batch ... ok
+test insufficient_geometry_is_retained_for_every_pair_in_both_search_orders ... ok
+test native_evidence_and_report_slots_have_independent_last_owner_credit ... ok
+
+test result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.82s
+

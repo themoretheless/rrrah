@@ -1,0 +1,103 @@
+{
+  "status": "complete_bounded_macos_projected_model_original_rgba_gate",
+  "tests": 146,
+  "suite_counts": [
+    72,
+    7,
+    11,
+    9,
+    8,
+    6,
+    9,
+    10,
+    6,
+    8
+  ],
+  "source_file_count": 552,
+  "source_manifest": "docs/research/dedup-projected-compare-source-hashes-20261011.json",
+  "source_archive": "/Users/themoretheless/.codex/tmp/rrrah-projected-compare-qualified-20261011/sources",
+  "artifacts": [
+    {
+      "source": "target/debug/deps/rrrah_dedup-2403464ceafac33e",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-projected-compare-qualified-20261011/executables/rrrah_dedup-2403464ceafac33e",
+      "sha256": "7c4784a1d00bcdb43ec357e11a4137c31c65d67922ea60d1ae26cee249943779"
+    },
+    {
+      "source": "target/debug/deps/local_index-d0efdaf8b88d94fe",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-projected-compare-qualified-20261011/executables/local_index-d0efdaf8b88d94fe",
+      "sha256": "a627dc7c3a8882d88f92ea5fdc25e16aeab8b3e889798b359b2bc28ef6996f1b"
+    },
+    {
+      "source": "target/debug/deps/model_compare-1cb2979d293ca215",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-projected-compare-qualified-20261011/executables/model_compare-1cb2979d293ca215",
+      "sha256": "50fa5b27a75c1966768ec3ee1abb198dee9a89176f04fcbe7409d80c2c3a291b"
+    },
+    {
+      "source": "target/debug/deps/model_input-3d9ede0feecec86c",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-projected-compare-qualified-20261011/executables/model_input-3d9ede0feecec86c",
+      "sha256": "fb7d2b44609eace2f4b18cdd9a59409c3de6c4097b2ac44c0311c905288642f2"
+    },
+    {
+      "source": "target/debug/deps/model_input_file-68e5053628aee8cd",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-projected-compare-qualified-20261011/executables/model_input_file-68e5053628aee8cd",
+      "sha256": "43b0eef9ce8b659638e6360148b6a148b406fc6f9abec811f2d246236f43f22f"
+    },
+    {
+      "source": "target/debug/deps/model_projected_compare-4e390d9d2ef936a0",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-projected-compare-qualified-20261011/executables/model_projected_compare-4e390d9d2ef936a0",
+      "sha256": "8c936db3b5ddd61e472e311aa67635e7ad4ff5b1c4f9ad12af9e7074fb23b894"
+    },
+    {
+      "source": "target/debug/deps/model_tiles-fea33a6d23e202b9",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-projected-compare-qualified-20261011/executables/model_tiles-fea33a6d23e202b9",
+      "sha256": "04e0897e819c61411a7dee91ff09655ab547dbb5f0edb6aa612d41db97a5e2d1"
+    },
+    {
+      "source": "target/debug/deps/portfolio_collection-74316a1a0fe22014",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-projected-compare-qualified-20261011/executables/portfolio_collection-74316a1a0fe22014",
+      "sha256": "b79e49edf3613e83e3d2908067042512dd213ce4afd652a065907cff44db2734"
+    },
+    {
+      "source": "target/debug/deps/proposals-43845c6bf2e6f4d3",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-projected-compare-qualified-20261011/executables/proposals-43845c6bf2e6f4d3",
+      "sha256": "05cba12ce7d755ffeafe24e77f1ceade7868e5bb79453ec00a01eae3cf758e40"
+    },
+    {
+      "source": "target/debug/deps/search_portfolio-35b12520fe4864fe",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-projected-compare-qualified-20261011/executables/search_portfolio-35b12520fe4864fe",
+      "sha256": "a93b93cd0a3eb106cce9da19c7d482e711fd82c1989428713cc23897d389cfcf"
+    },
+    {
+      "source": "docs/research/dedup-projected-compare-gate-20261011.log",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-projected-compare-qualified-20261011/dedup-projected-compare-gate-20261011.log",
+      "sha256": "68ec44d7a7e0b917d6f68ebf327467221a997bd30f30e578e99cd3a01dbd24fb"
+    },
+    {
+      "source": "docs/research/dedup-projected-compare-source-hashes-20261011.json",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-projected-compare-qualified-20261011/dedup-projected-compare-source-hashes-20261011.json",
+      "sha256": "75fa22797b55b7b7885693456d50cd460c8b2190d1aa807baf20b320ab9edcf7"
+    }
+  ],
+  "execution_scope": "Root run, not frozen execution; current dedup sources rechecked against hashes recorded during gate.",
+  "implemented": [
+    "Explicit provider-to-geometry-to-original-RGBA full-file API",
+    "Each source decoded once and original owners retained through confirmation",
+    "Both-direction coverage and agreement required; projected bytes are candidate-only",
+    "Source/dependency/weights observations and both generations remain live",
+    "Pixel work preflight before provider; managed original/input/proposal ownership"
+  ],
+  "controls": [
+    "HDR copy accepts; HDR collision with identical projected bytes rejects",
+    "Transparent black collision rejects through original alpha",
+    "Source/weights mutation in provider and final caller checkpoint rejects",
+    "First/middle/final caller cancellation and both request generations discard owners",
+    "One-short pixel work, invalid thresholds and tiny memory refuse"
+  ],
+  "remaining": [
+    "Native LoFTR projected wrapper and real HDR/alpha corpus",
+    "Automatic search portfolio integration",
+    "Total inference tensor/workspace RSS admission",
+    "Linux/Windows execution of this new API",
+    "Full negative-corpus precision and full 229 run"
+  ]
+}

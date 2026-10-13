@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-outcome-collection-native-fullopt3-20261011.py", line 58, in <module>
+    if __name__=='__main__':main()
+  File "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-outcome-collection-native-fullopt3-20261011.py", line 26, in main
+    assert all(row['profile']['opt_level']=='3' for row in rows if row.get('reason')=='compiler-artifact' and not set(row['target']['kind']) & {'custom-build','proc-macro'})
+AssertionError

@@ -1,0 +1,50 @@
+     Locking 83 packages to highest Rust 1.101.0-nightly compatible versions
+      Adding generic-array v0.14.7 (available: v0.14.9)
+      Adding thiserror v1.0.69 (available: v2.0.21)
+   Compiling libc v0.2.190
+   Compiling syn v2.0.119
+   Compiling syn v3.0.7
+   Compiling simd-adler32 v0.3.10
+   Compiling memchr v2.8.3
+   Compiling num-integer v0.1.47
+   Compiling num-complex v0.4.6
+   Compiling miniz_oxide v0.9.1
+   Compiling ndarray v0.16.1
+   Compiling serde_json v1.0.152
+   Compiling flate2 v1.1.10
+   Compiling jobserver v0.1.35
+   Compiling cpufeatures v0.2.17
+   Compiling sha2 v0.10.9
+   Compiling aes v0.8.4
+   Compiling sha1 v0.10.7
+   Compiling cc v1.7.0
+   Compiling pbkdf2 v0.11.0
+   Compiling serde_derive v1.0.229
+   Compiling zstd-sys v2.1.1+zstd.1.5.7
+   Compiling bzip2-sys v0.1.13+1.0.8
+   Compiling zerocopy-derive v0.8.62
+   Compiling thiserror-impl v1.0.69
+   Compiling bzip2 v0.4.4
+   Compiling thiserror v1.0.69
+   Compiling zerocopy v0.8.62
+   Compiling serde v1.0.229
+   Compiling safetensors v0.3.3
+   Compiling zstd-safe v5.0.2+zstd.1.5.2
+   Compiling zstd v0.11.2+zstd.1.5.2
+   Compiling zip v0.6.6
+   Compiling torch-sys v0.23.0
+   Compiling ppv-lite86 v0.2.21
+   Compiling rand_chacha v0.3.1
+   Compiling rand v0.8.8
+   Compiling half v2.7.1
+   Compiling tch v0.23.0
+   Compiling loftr-memory-controls v0.0.0 (/Users/themoretheless/.codex/tmp/rrrah-loftr-sequential-windows-test-harness-20261011)
+    Finished `test` profile [optimized + debuginfo] target(s) in 37.80s
+     Running unittests src/lib.rs (/Users/themoretheless/.codex/tmp/rrrah-dedup-exact-portfolio-20261011/debug/build/loftr-memory-controls/b6a7572e5e0830fe/out/loftr_memory_controls-b6a7572e5e0830fe)
+dyld[54895]: Library not loaded: @rpath/libtorch_cpu.dylib
+  Referenced from: <AB338B9E-87A8-37AB-8460-F8C85E5211B6> /Users/themoretheless/.codex/tmp/rrrah-dedup-exact-portfolio-20261011/debug/build/loftr-memory-controls/b6a7572e5e0830fe/out/loftr_memory_controls-b6a7572e5e0830fe
+  Reason: tried: '/Users/themoretheless/.codex/tmp/rrrah-dedup-exact-portfolio-20261011/debug/build/torch-sys/cfa02c46afb6cbc7/out/libtorch_cpu.dylib' (no such file), '/Users/themoretheless/.codex/tmp/rrrah-dedup-exact-portfolio-20261011/debug/build/zstd-sys/5432764577e13c17/out/libtorch_cpu.dylib' (no such file), '/Users/themoretheless/.codex/tmp/rrrah-dedup-exact-portfolio-20261011/debug/build/zstd-sys/badd13fc62a71593/out/libtorch_cpu.dylib' (no such file), '/Users/themoretheless/.codex/tmp/rrrah-dedup-exact-portfolio-20261011/debug/libtorch_cpu.dylib' (no such file), '/Users/themoretheless/.rustup/toolchains/nightly-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/lib/libtorch_cpu.dylib' (no such file), '/Users/themoretheless/.rustup/toolchains/nightly-aarch64-apple-darwin/lib/libtorch_cpu.dylib' (no such file), '/Users/themoretheless/lib/libtorch_cpu.dylib' (no such file), '/usr/local/lib/libtorch_cpu.dylib' (no such file), '/usr/lib/libtorch_cpu.dylib' (no such file, not in dyld cache)
+error: test failed, to rerun pass `--lib`
+
+Caused by:
+  process didn't exit successfully: `/Users/themoretheless/.codex/tmp/rrrah-dedup-exact-portfolio-20261011/debug/build/loftr-memory-controls/b6a7572e5e0830fe/out/loftr_memory_controls-b6a7572e5e0830fe 'fine_preprocess::'` (signal: 6, SIGABRT: process abort signal)

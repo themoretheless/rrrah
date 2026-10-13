@@ -1,0 +1,606 @@
+   Compiling rrrah-dedup v0.1.0 (/workspace/crates/rrrah-dedup)
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+warning: linker stderr: /validation/sysroot/usr/bin/ld: /validation/target/debug/deps/libjpegxr-8d01a0594e000fc4.rlib(2e643c6506a180d9-strenc.o): in function `StrIOEncInit':
+         /validation/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/jpegxr-0.3.1/jxrlib/image/encode/strenc.c:485:(.text.StrIOEncInit+0xf0): the use of `tmpnam' is dangerous, better use `mkstemp'
+  |
+  = note: `#[warn(linker_messages)]` on by default
+
+warning: linker stdout: /validation/sysroot/usr/bin/ld: /validation/target/debug/deps/libjpegxr-8d01a0594e000fc4.rlib(2e643c6506a180d9-strenc.o): note: the message above does not take linker garbage collection into account
+
+warning: `rrrah-dedup` (test "local_rank_cached") generated 2 warnings
+warning: `rrrah-dedup` (test "proposals") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "portfolio_collection") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "anchor_reflection_fallback") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "model_input_file") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "gradient_interpolated") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "local_rank") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "gradient_candidate_smoothing") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "native_anchor_recovery") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "anchor_candidate_search") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "anchor_fallback_collection_lifecycle") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "search_portfolio") generated 2 warnings (2 duplicates)
+warning: calls to `std::mem::drop` with a value that implements `Copy` does nothing
+   --> crates/rrrah-dedup/tests/model_compare.rs:144:5
+    |
+144 | /      drop(
+145 | |/         compare_model_files_with(
+146 | ||             &r[0],
+147 | ||             &r[1],
+148 | ||             &w,
+...   ||
+157 | ||         .unwrap(),
+    | ||_________________- argument has type `ModelComparisonEvidence`
+158 | |      );
+    | |______^
+    |
+    = note: `#[warn(dropping_copy_types)]` on by default
+help: use `let _ = ...` to ignore the expression or result
+    |
+144 ~     let _ = compare_model_files_with(
+145 |             &r[0],
+...
+155 |         )
+156 ~         .unwrap();
+    |
+
+warning: `rrrah-dedup` (test "model_compare") generated 3 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "rank_region") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "anchor_geometry_search") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "anchor_geometry_rank_fallback") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "anchor_fallback_search") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "mesh_rank") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "model_projected_tiles") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "gradient") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "anchor_reflected_geometry") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "anchor_reflection_collection_lifecycle") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "native_pixel_domain") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "projected_collection") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "exact_files") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "local_index") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "model_input") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "projected_portfolio") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "model_tiles") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "model_projected_compare") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "anchor_rank_file") generated 2 warnings (2 duplicates)
+warning: taking a mutable reference to a `const` item
+   --> crates/rrrah-dedup/src/managed_metric.rs:218:59
+    |
+218 |                     .search(query, radius, entries.len(), &mut usize::MAX, &budget, || false)
+    |                                                           ^^^^^^^^^^^^^^^
+    |
+    = note: each usage of a `const` item creates a new temporary
+    = note: the mutable reference will refer to this temporary, not the original `const` item
+note: `const` item defined here
+   --> /rustc/88d9e12ae178fab0fb5cc050a94da85685d449ea/library/core/src/num/uint_macros.rs:51:8
+   --> /rustc/88d9e12ae178fab0fb5cc050a94da85685d449ea/library/core/src/num/mod.rs:1449:4
+   ::: /rustc/88d9e12ae178fab0fb5cc050a94da85685d449ea/library/core/src/num/mod.rs:1473:5
+    |
+    = note: in this macro invocation
+    = note: `#[warn(const_item_mutation)]` on by default
+    = note: this warning originates in the macro `uint_impl` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+warning: taking a mutable reference to a `const` item
+   --> crates/rrrah-dedup/src/managed_metric.rs:237:36
+    |
+237 |             index.search(0, 64, 0, &mut usize::MAX, &budget, || false),
+    |                                    ^^^^^^^^^^^^^^^
+    |
+    = note: each usage of a `const` item creates a new temporary
+    = note: the mutable reference will refer to this temporary, not the original `const` item
+note: `const` item defined here
+   --> /rustc/88d9e12ae178fab0fb5cc050a94da85685d449ea/library/core/src/num/uint_macros.rs:51:8
+   --> /rustc/88d9e12ae178fab0fb5cc050a94da85685d449ea/library/core/src/num/mod.rs:1449:4
+   ::: /rustc/88d9e12ae178fab0fb5cc050a94da85685d449ea/library/core/src/num/mod.rs:1473:5
+    |
+    = note: in this macro invocation
+    = note: this warning originates in the macro `uint_impl` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+warning: taking a mutable reference to a `const` item
+   --> crates/rrrah-dedup/src/managed_metric.rs:242:37
+    |
+242 |             index.search(0, 64, 96, &mut usize::MAX, &budget, || true),
+    |                                     ^^^^^^^^^^^^^^^
+    |
+    = note: each usage of a `const` item creates a new temporary
+    = note: the mutable reference will refer to this temporary, not the original `const` item
+note: `const` item defined here
+   --> /rustc/88d9e12ae178fab0fb5cc050a94da85685d449ea/library/core/src/num/uint_macros.rs:51:8
+   --> /rustc/88d9e12ae178fab0fb5cc050a94da85685d449ea/library/core/src/num/mod.rs:1449:4
+   ::: /rustc/88d9e12ae178fab0fb5cc050a94da85685d449ea/library/core/src/num/mod.rs:1473:5
+    |
+    = note: in this macro invocation
+    = note: this warning originates in the macro `uint_impl` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+warning: `rrrah-dedup` (lib test) generated 6 warnings (3 duplicates)
+    Finished `test` profile [optimized + debuginfo] target(s) in 21m 50s
+     Running unittests src/lib.rs (/validation/target/debug/deps/rrrah_dedup-6cc5209a2deed122)
+
+running 80 tests
+test collection::tests::final_generation_observation_stays_cancelled_if_owner_resets_counter ... ok
+test cache::publication_tests::directory_sync_failure_reports_already_published_complete_cache ... ok
+test animated::timeline_key_tests::rational_sum_overflow_is_inconclusive_despite_direct_timeline_equality ... ok
+test animated::timeline_key_tests::zero_duration_timelines_ignore_pixels_but_retain_repetition ... ok
+test container::reuse_tests::candidate_collisions_and_signature_failures_cannot_replace_direct_evidence ... ok
+test container::reuse_tests::indexed_groups_remove_changed_sources_without_losing_healthy_edges ... ok
+test container::reuse_tests::retained_left_reuses_pixels_and_rejects_changed_source_and_cancellation ... ok
+test container::reuse_tests::retained_left_survives_memory_refusal_and_releases_before_row_change ... ok
+test container::reuse_tests::indexed_groups_keep_selected_pages_and_animation_scopes_separate ... ok
+test container::reuse_tests::signature_preparation_errors_remain_pair_issues_without_unique_classification ... ok
+test container::reuse_tests::stale_different_signatures_are_errors_and_equal_signatures_require_confirmation ... ok
+test container::reuse_tests::indexed_groups_keep_labels_under_collisions_failure_and_candidate_caps ... ok
+test exact::collision_tests::colliding_samples_and_full_hashes_still_partition_by_bytes ... ok
+test exact::collision_tests::final_content_validation_rejects_change_even_when_metadata_matches ... ok
+test exact::collision_tests::pair_comparison_checks_policy_and_cancellation_at_every_checkpoint ... ok
+test exact::collision_tests::pair_comparison_confirms_bytes_and_refuses_digest_collision ... ok
+test exact::collision_tests::pair_comparison_rejects_last_checkpoint_mutations_on_both_outcomes ... ok
+test exact::collision_tests::read_buffer_capacity_failure_is_explicit_and_retry_succeeds ... ok
+test exact::collision_tests::verified_observations_detect_metadata_invisible_pruned_mutations ... ok
+test exact::observed_snapshot_policy_tests::replacement_after_initial_metadata_cannot_bypass_observed_size_limit ... ok
+test gradient::batch_tests::alternating_matcher_timing ... ignored, manual alternating exact matcher timing control
+test gradient::batch_tests::every_cancellation_checkpoint_and_work_refusal_matches_scalar ... ok
+test gradient::batch_tests::exact_matching_agrees_with_exhaustive_positive_negative_ties_and_spatial_chains ... ok
+test gradient::batch_tests::four_lane_distances_are_bitwise_scalar_for_every_tail_length ... ok
+test gradient::batch_tests::real_photo_matcher_timing ... ignored, manual real-photo exact matcher timing and parity
+test gradient::matching_tests::alternating_matcher_timing ... ignored, manual alternating exact matcher timing control
+test gradient::matching_tests::bounded_distance_preserves_order_and_strict_ties ... ok
+test gradient::matching_tests::every_cancellation_checkpoint_and_work_refusal_matches_exhaustive ... ok
+test container::reuse_tests::reused_pair_latches_every_cancellation_checkpoint_and_generation_token ... ok
+test gradient::matching_tests::exact_matching_agrees_with_exhaustive_positive_negative_ties_and_spatial_chains ... ok
+test gradient::matching_tests::real_photo_matcher_timing ... ignored, manual real-photo exact matcher timing and parity
+test gradient_scale::area_tests::footprint_average_removes_stripe_alias_and_matches_fractional_oracle ... ok
+test local_collection::compact_portfolio_tests::compaction_admits_overlap_preserves_order_and_rolls_back ... ok
+test local_collection::compact_portfolio_tests::incremental_batches_admit_overlap_and_preserve_previous_batch_on_failure ... ok
+test local_collection::feature_release_tests::fresh_confirmation_reuses_feature_credit_and_prechecks_keep_their_banks ... ok
+test local_collection::gradient_metadata_tests::gradient_id_scratch_exact_limit_cancellation_and_ownership ... ok
+test local_index::managed_owner_slots_tests::binary_owner_table_parity_credit_lifetime_and_refusals ... ok
+test local_index::owner_count_cancellation_tests::descriptor_pair_entry_cancellation_does_not_consume_input ... ok
+test local_index::owner_count_cancellation_tests::legacy_owner_count_stops_when_iterator_requests_cancellation ... ok
+test local_index::owner_count_cancellation_tests::legacy_owner_materialization_honors_cancellation ... ok
+test local_scan::feature_memory_tests::grayscale_admission_accounts_for_other_owners_and_releases_on_cancel ... ok
+test local_scan::feature_memory_tests::retained_feature_storage_keeps_credit_until_last_owner ... ok
+test local_scan::reflected_model_confirmation_tests::a_rejected_second_model_does_not_convert_first_fit_failure_to_a_negative ... ok
+test local_scan::reflected_model_confirmation_tests::alternative_confirmation_cancel_and_work_limits_remain_terminal ... ok
+test local_scan::reflected_model_confirmation_tests::coefficient_bounds_and_low_variance_failures_are_also_model_specific ... ok
+test local_scan::reflected_model_confirmation_tests::exhausted_model_fits_preserve_first_inconclusive_reason ... ok
+test local_scan::reflected_model_confirmation_tests::insufficient_fit_support_in_first_model_does_not_hide_second_verified_model ... ok
+test local_scan::reflected_model_confirmation_tests::ordinary_alternative_models_recover_photometric_range_and_display_fits ... ok
+test local_scan::reflected_model_confirmation_tests::reflected_ranged_models_recover_fit_and_preserve_selected_domain ... ok
+test local_scan::reflected_model_confirmation_tests::selected_encoded_filter_retains_auxiliary_linear_failure ... ok
+test managed_descriptor_union::tests::sparse_union_equals_independent_minimum_distance_and_releases ... ok
+test managed_metric::tests::managed_tree_equals_exhaustive_and_retains_results_credit ... ok
+test managed_pair_counts::tests::collision_chain_cancellation_preserves_counts_at_every_checkpoint ... ok
+test managed_pair_counts::tests::pair_table_matches_independent_counts_and_admits_before_allocating ... ok
+test managed_pair_counts::tests::sparse_growth_admission_and_every_transfer_cancellation_are_atomic ... ok
+test managed_targets::tests::targets_reuse_credit_and_preserve_unique_sorted_opaque_ids ... ok
+test managed_visual::tests::managed_complete_recipe_matches_independent_comparison_and_cancellation ... ok
+test model_projection::tests::extreme_finite_parameters_remain_bounded ... ok
+test model_projection::tests::invalid_configuration_is_refused ... ok
+test model_projection::tests::invisible_rgb_is_ignored_and_background_is_explicit ... ok
+test model_projection::tests::neutral_reinhard_and_linear_alpha_compositing ... ok
+test model_projection::tests::opaque_sdr_preserves_values_and_refuses_alpha_hdr ... ok
+test model_projection::tests::projected_equality_can_hide_alpha_and_hdr_differences ... ok
+test model_projection::tests::visible_nonfinite_channels_and_invalid_alpha_are_refused ... ok
+test model_tiles::tests::observed_final_request_cancellation_is_sticky_after_counter_reset ... ok
+test model_tiles::tests::odd_tiny_and_maximum_domains_partition_without_empty_or_duplicate_rectangles ... ok
+test pages::page_key_tests::key_retains_page_order_and_count_independently_of_first_page ... ok
+test pixel_index::tests::injected_constant_keys_still_require_direct_pixel_confirmation ... ok
+test tests::collision_membership_keeps_arbitrary_order_and_pair_identity ... ok
+test tests::empty_and_duplicate_fingerprints ... ok
+test tests::indexed_search_matches_independent_exhaustive_scan ... ok
+test tests::traversal_work_exhaustion_is_distinct_from_failure ... ok
+test visual::distinct_variant_tests::repeated_complete_variants_preserve_all_ids_and_exact_metric ... ok
+test warp::bounded_fit_tests::boundary_fit_matches_exhaustive_rectangle_and_beats_independent_clipping ... ok
+test warp::encoded_signal_tests::extended_srgb_landmarks_match_independent_decimal_oracle_without_clipping ... ok
+test warp::encoded_signal_tests::transfer_precedes_premultiplication_and_bilinear_sampling ... ok
+test warp::regional_reuse_tests::reused_whole_evidence_preserves_regions_and_reduces_observed_work ... ok
+test gradient::matching_tests::production_mutual_competitors_match_exhaustive_at_every_checkpoint ... ok
+test container::reuse_tests::indexed_groups_cancel_without_partial_output_at_every_normal_checkpoint ... ok
+test container::reuse_tests::whole_signature_pipeline_cancels_at_every_checkpoint_without_report_or_leaks ... ok
+
+test result: ok. 76 passed; 0 failed; 4 ignored; 0 measured; 0 filtered out; finished in 16.58s
+
+     Running tests/anchor_candidate_search.rs (/validation/target/debug/deps/anchor_candidate_search-61815f385e7a83b0)
+
+running 1 test
+test automatic_candidates_drive_guarded_anchor_pixels_with_complete_points ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 8.48s
+
+     Running tests/anchor_fallback_collection_lifecycle.rs (/validation/target/debug/deps/anchor_fallback_collection_lifecycle-78f17f98b6a05ac7)
+
+running 1 test
+test fallback_anchor_collection_mutation_cancel_and_restored_retry has been running for over 60 seconds
+test fallback_anchor_collection_mutation_cancel_and_restored_retry ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 175.27s
+
+     Running tests/anchor_fallback_search.rs (/validation/target/debug/deps/anchor_fallback_search-28b3793074e0ed99)
+
+running 1 test
+test fallback_metadata_and_complete_points_drive_guarded_anchor_files ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.67s
+
+     Running tests/anchor_geometry_rank_fallback.rs (/validation/target/debug/deps/anchor_geometry_rank_fallback-ed2ed9a1809bc484)
+
+running 1 test
+test rank_driven_fallback_admission_selection_cancel_and_release ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.54s
+
+     Running tests/anchor_geometry_search.rs (/validation/target/debug/deps/anchor_geometry_search-b21b2cccf3a5f314)
+
+running 1 test
+test geometry_only_anchor_pipeline_equals_legacy_anchor_confirmation ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 10.92s
+
+     Running tests/anchor_rank_file.rs (/validation/target/debug/deps/anchor_rank_file-7be74c90e64c79e4)
+
+running 3 tests
+test aggregate_work_refuses_before_missing_source_io ... ok
+test invalid_anchor_policy_refuses_before_missing_source_io ... ok
+test files_match_views_and_cancel_or_mutation_discard_evidence ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/anchor_reflected_geometry.rs (/validation/target/debug/deps/anchor_reflected_geometry-e9bfe11bb9b6524a)
+
+running 1 test
+test reflected_file_search_common_lifecycle_and_original_pixel_parity ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 9.42s
+
+     Running tests/anchor_reflection_collection_lifecycle.rs (/validation/target/debug/deps/anchor_reflection_collection_lifecycle-329a92fe688744c3)
+
+running 1 test
+test reflected_collection_mid_late_cancel_mutation_and_restored_reverse_edges has been running for over 60 seconds
+test reflected_collection_mid_late_cancel_mutation_and_restored_reverse_edges ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 253.11s
+
+     Running tests/anchor_reflection_fallback.rs (/validation/target/debug/deps/anchor_reflection_fallback-1c38cc6f3bc02ee8)
+
+running 12 tests
+test all_eight_cumulative_caps_refuse_before_missing_io_and_cancel_wins ... ok
+test ordinary_mirror_and_foreign_select_correct_six_phase_recipes ... ok
+test six_recipe_final_callback_cannot_publish_mutated_source ... ok
+test standalone_color_candidate_final_callback_guards_source ... ok
+test standalone_color_fallback_final_callback_guards_source ... ok
+test insufficient_anchor_geometry_continues_remaining_native_recipes ... ok
+test standalone_rank_final_callback_guards_source ... ok
+test standalone_geometry_final_callback_guards_source ... ok
+test standalone_reflected_geometry_final_callback_guards_source ... ok
+test three_recipe_final_callback_cannot_publish_mutated_source ... ok
+test six_phase_cancellation_and_both_source_mutations_release_memory ... ok
+test final_callback_source_mutation_precedes_native_inconclusive_error ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 21.07s
+
+     Running tests/exact_files.rs (/validation/target/debug/deps/exact_files-0120d22305a44e35)
+
+running 17 tests
+test copies_empty_files_and_equal_size_negatives ... ok
+test hardlink_aliases_and_followed_symlink_cycles ... ok
+test missing_input_and_overlap_do_not_lose_valid_results ... ok
+test cancellation_during_full_hash_is_bounded ... ok
+test non_utf8_paths_preserve_exact_identity_and_duplicates ... ok
+test physical_hardlinks_are_aliases_while_copied_bytes_are_separate_files ... ok
+test same_bytes_and_modified_time_do_not_hide_physical_file_replacement ... ok
+test same_length_mutation_during_sample_is_detected ... ok
+test same_samples_different_middle_are_not_duplicates ... ok
+test size_depth_and_entry_limits_are_visible ... ok
+test unavailable_non_utf8_path_preserves_diagnostic_bytes ... ok
+test unreadable_file_is_explicit_and_does_not_hide_healthy_copies ... ok
+test fifo_replacement_does_not_block_or_hide_healthy_copies ... ok
+test verified_scan_preserves_groups_and_observes_every_admitted_file ... ok
+test verified_scan_discards_groups_for_one_shot_cancel_at_every_checkpoint ... ok
+test nested_overlapping_roots_match_the_full_authored_partition ... ok
+test changing_any_member_does_not_hide_healthy_duplicates ... ok
+
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.16s
+
+     Running tests/gradient.rs (/validation/target/debug/deps/gradient-4dffdaf03fc9f995)
+
+running 9 tests
+test dominant_gradient_orientation_analytic_angles_flat_and_limits ... ok
+test gradient_matching_mutual_ties_admission_and_cancel ... ok
+test gradient_affine_light_flat_refusals_and_cancel ... ok
+test independently_rotated_texture_and_alpha_refusal ... ok
+test rotated_uniform_patches_never_create_descriptors ... ok
+test managed_spatial_pyramid_matches_unmanaged_and_releases_last_owner ... ok
+test spatial_gradient_selection_preserves_recipe_and_cell_limits ... ok
+test extracted_gradients_identity_unrelated_work_and_cancel ... ok
+test gradient_pyramid_independent_double_size_coordinates_and_work ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.16s
+
+     Running tests/gradient_candidate_smoothing.rs (/validation/target/debug/deps/gradient_candidate_smoothing-f44c8edc3b593025)
+
+running 3 tests
+test smoothing_matches_independent_footprints_and_exact_last_owner_credit ... ok
+test work_memory_opacity_and_every_cancellation_refuse_without_retained_output ... ok
+test zero_radius_exact_bits_half_memory_and_all_cancellation_points ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/gradient_interpolated.rs (/validation/target/debug/deps/gradient_interpolated-a0cd223fe759359d)
+
+running 4 tests
+test interpolated_cells_reduce_one_pixel_edge_localization_error ... ok
+test interpolated_recipe_flat_alpha_work_and_cancellation_refusals ... ok
+test interpolated_recipe_preserves_independent_quarter_turn_and_affine_light ... ok
+test explicit_recipe_pyramid_preserves_positions_limits_cancel_and_managed_ownership ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
+
+     Running tests/local_index.rs (/validation/target/debug/deps/local_index-3c3071456241205e)
+
+running 7 tests
+test collision_buckets_recipes_and_limits_never_return_partial_results ... ok
+test file_pair_storage_limits_preserve_sorted_complete_results ... ok
+test descriptor_index_equals_independent_exhaustive_variant_search ... ok
+test reverse_matching_preserves_asymmetric_variant_metric_and_hit_limits ... ok
+test file_pair_retrieval_equals_exhaustive_distinct_query_feature_counts ... ok
+test indexed_mutual_matching_equals_exhaustive_ratios_for_every_recipe ... ok
+test extracted_rotation_and_scale_features_keep_exhaustive_correspondences ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.26s
+
+     Running tests/local_rank.rs (/validation/target/debug/deps/local_rank-2a9ba839c688349e)
+
+running 5 tests
+test inverse_residual_is_required_even_when_forward_error_is_small ... ok
+test bidirectional_support_requires_geometry_and_pixel_order ... ok
+test unsupported_pixels_uninformative_regions_and_overflow_refuse_explicitly ... ok
+test points_outside_selected_regions_do_not_count_and_aliases_are_not_hidden ... ok
+test aggregate_work_and_each_cancellation_refuse ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.96s
+
+     Running tests/local_rank_cached.rs (/validation/target/debug/deps/local_rank_cached-929a34d4691a7ee7)
+
+running 3 tests
+test all_1016_original_points_require_prepaid_checks_without_truncation ... ok
+test cached_bidirectional_local_support_matches_direct_for_identity_and_perspective ... ok
+test cached_aggregate_context_limits_and_every_cancel_release_all_credits ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.42s
+
+     Running tests/mesh_rank.rs (/validation/target/debug/deps/mesh_rank-8b0d1cf9731f8fc6)
+
+running 2 tests
+test summed_mesh_windows_match_direct_projective_windows_and_reject_inversion ... ok
+test cancellation_memory_reads_and_overflow_refuse_without_retaining_scratch ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/model_compare.rs (/validation/target/debug/deps/model_compare-b444b41bfeb51367)
+
+running 11 tests
+test both_generations_and_ignored_provider_cancellation_are_sticky ... ok
+test malformed_regions_refuse_before_weight_io_or_provider_and_global_cancel_wins ... ok
+test model_mutation_during_fresh_pixel_confirmation_discards_supported_evidence ... ok
+test policy_preflight_and_proposal_count_refuse_without_partial_evidence ... ok
+test either_source_or_model_mutation_during_provider_refuses_and_restored_retry_recovers ... ok
+test final_caller_checkpoint_cannot_publish_a_model_result_after_source_or_weight_mutation ... ok
+test provider_cancellation_error_is_typed_cancelled_for_global_and_both_owners ... ok
+test global_and_both_request_tokens_cancel_mid_and_final_publication ... ok
+test shifted_crop_domains_confirm_the_same_original_pixels_without_a_translation_error ... ok
+test region_lifecycle_refuses_whole_source_mutation_and_both_request_cancellations ... ok
+test supplied_provider_supports_original_pixels_empty_is_explicit_and_errors_do_not_become_misses ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/model_input.rs (/validation/target/debug/deps/model_input-6a94aca0b2a8a1fc)
+
+running 9 tests
+test invalid_caps_and_unsupported_pixels_refuse_atomically ... ok
+test nonzero_odd_crop_matches_independent_continuous_area_and_keeps_full_source_cap ... ok
+test odd_edges_match_independent_continuous_area_reference_and_credit_tracks_owners ... ok
+test projected_hdr_alpha_odd_area_matches_independent_reference_and_credit ... ok
+test projected_collisions_are_rejected_by_original_rgba_warp ... ok
+test projected_preflight_every_cancellation_and_memory_refusal_release_payload ... ok
+test tiny_inputs_are_explicitly_upsampled_and_linear_gray_is_srgb_encoded ... ok
+test crop_bounds_overflow_and_every_cancellation_checkpoint_release_payload ... ok
+test every_one_shot_cancellation_checkpoint_releases_all_output_credit ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/model_input_file.rs (/validation/target/debug/deps/model_input_file-1313ac1676992548)
+
+running 10 tests
+test file_crop_retains_full_source_identity_and_original_dimensions ... ok
+test file_input_retains_only_output_and_rechecks_source_and_generation_after_inference ... ok
+test external_palette_is_rechecked_after_preparation_and_mutation_discards_input ... ok
+test invalid_policy_precedes_io_and_mid_preparation_source_changes_are_errors ... ok
+test projected_crop_reads_original_rectangle_and_guards_mutation_outside_it ... ok
+test final_source_verification_callback_cannot_hide_source_or_dependency_mutation ... ok
+test projected_file_invalid_configuration_is_refused_before_source_io ... ok
+test projected_hdr_file_retains_recipe_and_rejects_equal_length_mutation ... ok
+test final_preparation_callback_cannot_publish_mutated_source_or_dependency ... ok
+test every_global_checkpoint_and_mid_final_generation_cancellation_discard_payload ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+
+     Running tests/model_projected_compare.rs (/validation/target/debug/deps/model_projected_compare-1d55e805fab719a6)
+
+running 8 tests
+test each_request_generation_and_tiny_memory_refusal_release_all_owners ... ok
+test identity_candidate_recovers_noisy_self_geometry_without_loosening_pixel_policy ... ok
+test hdr_original_proof_accepts_copy_and_rejects_equal_projection_collision ... ok
+test rejected_identity_continues_fitted_proof_and_charges_both_grids_for_each_mapping ... ok
+test work_and_invalid_thresholds_refuse_before_provider ... ok
+test source_and_weights_mutation_in_provider_never_publish_evidence ... ok
+test cancellation_and_final_checkpoint_mutations_discard_result ... ok
+test transparent_black_collision_is_rejected_by_original_alpha ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/model_projected_tiles.rs (/validation/target/debug/deps/model_projected_tiles-d8da008ad29981b3)
+
+running 8 tests
+test all_seven_work_caps_and_ledger_refuse_before_missing_io_and_cancel_wins ... ok
+test different_nonzero_crop_origins_map_proposals_to_full_original_coordinates ... ok
+test alpha_copies_support_and_equal_black_projections_with_different_alpha_exhaust ... ok
+test all_25_equal_hdr_projections_are_rejected_by_originals ... ok
+test hdr_regions_recover_after_whole_miss_with_original_domain_mapping_and_shared_ledger ... ok
+test source_weights_and_provider_failures_after_a_miss_remain_terminal_and_release ... ok
+test global_and_both_owner_generations_cancel_first_middle_and_final_checkpoints ... ok
+test last_caller_source_and_weight_mutations_cannot_publish_a_negative_ledger ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+
+     Running tests/model_tiles.rs (/validation/target/debug/deps/model_tiles-d766e7f40874d709)
+
+running 13 tests
+test all_eight_work_caps_overflow_invalid_policy_and_storage_refuse_before_io ... ok
+test complete_fixed_order_visits_all_twenty_five_regions_and_shared_credit_follows_last_owner ... ok
+test exhausted_insufficient_geometry_is_typed_and_retains_the_complete_managed_roster ... ok
+test insufficient_anchor_geometry_keeps_the_attempt_and_recovers_on_a_later_rectangle ... ok
+test insufficient_geometry_does_not_swallow_a_later_proposal_work_refusal ... ok
+test late_preparation_memory_refusal_discards_cached_inputs_and_all_attempts ... ok
+test geometry_without_original_pixel_support_does_not_stop_the_tile_sequence ... ok
+test repeated_regions_reuse_identical_managed_inputs_and_retained_owners_keep_credit ... ok
+test tiny_decoded_domains_omit_empty_quadrants_and_duplicate_full_regions ... ok
+test late_provider_failures_source_mutations_and_both_generations_discard_all_attempts ... ok
+test final_source_mutation_takes_precedence_over_exhausted_insufficient_geometry ... ok
+test whole_support_stops_at_one_and_late_crop_support_stops_only_after_original_pixels ... ok
+test final_caller_checkpoint_mutation_cancellation_and_request_change_never_publish ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.21s
+
+     Running tests/native_anchor_recovery.rs (/validation/target/debug/deps/native_anchor_recovery-9f8b9dfa4a6c3f14)
+
+running 2 tests
+test six_recipe_search_recovers_after_real_insufficient_geometry ... ok
+test three_recipe_search_recovers_after_real_insufficient_geometry ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 13.27s
+
+     Running tests/native_pixel_domain.rs (/validation/target/debug/deps/native_pixel_domain-378d41d3882f1542)
+
+running 3 tests
+test rank_alpha_negative_and_hdr_refusals_preserve_invalid_and_cancelled_errors ... ok
+test gradient_opacity_is_distinct_from_coordinates_work_and_cancellation ... ok
+test only_explicit_pixel_domain_errors_can_admit_an_alternate_verifier ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/portfolio_collection.rs (/validation/target/debug/deps/portfolio_collection-ac4004e5b88ef545)
+
+running 10 tests
+test duplicate_file_and_complete_pair_limits_refuse_before_file_io ... ok
+test cumulative_overflow_policy_and_memory_preflight_precede_iterator_and_io ... ok
+test empty_and_single_file_batches_are_complete_without_invented_pairs ... ok
+test every_pair_is_deterministic_matches_direct_evidence_and_credit_follows_report_owners ... ok
+test idle_owner_cancellation_and_late_provider_failure_discard_earlier_decisions ... ok
+test collection_checks_every_pair_with_automatic_tiles_and_retained_attempt_credit ... ok
+test late_tiled_pair_failure_or_idle_owner_cancellation_discards_earlier_collection_results ... ok
+test final_cancellation_or_final_callback_source_mutation_never_publishes_a_stale_batch ... ok
+test a_native_empty_proposal_bank_does_not_hide_model_only_collection_support ... ok
+test native_evidence_and_report_slots_have_independent_last_owner_credit ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.41s
+
+     Running tests/projected_collection.rs (/validation/target/debug/deps/projected_collection-c4ae73b87effdd33)
+
+running 8 tests
+test cumulative_work_and_cancellation_refuse_before_iterator_consumption ... ok
+test collection_admission_never_truncates_and_empty_batch_still_guards_weights ... ok
+test all_pairs_recover_regions_in_id_order_and_keep_managed_ledgers ... ok
+test global_and_every_selected_owner_cancel_at_first_middle_and_final_checkpoint ... ok
+test last_collection_checkpoint_cannot_publish_mutated_inputs_or_weights ... ok
+test source_weights_and_provider_failures_discard_prior_supported_pairs ... ok
+test different_hdr_originals_remain_negative_in_complete_collection ... ok
+test external_palette_mutation_or_removal_discards_prior_support_and_final_collection ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.19s
+
+     Running tests/projected_portfolio.rs (/validation/target/debug/deps/projected_portfolio-16cd45814cc977f7)
+
+running 24 tests
+test aggregate_and_constituent_work_refuse_before_io_and_cancel_wins ... ok
+test collection_unknown_does_not_swallow_late_source_or_provider_failure ... ok
+test exact_collection_admission_refuses_before_iterator_or_model_io ... ok
+test alpha_collision_exhausts_projected_and_preserves_typed_native_inconclusive ... ok
+test collection_work_admission_precedes_iterator_and_unknown_reports_keep_final_source_guards ... ok
+test exact_collection_global_and_every_owner_cancel_without_partial_report ... ok
+test collection_retains_supported_and_explicit_unknown_pairs_in_both_orders ... ok
+test exact_collection_late_provider_failure_discards_prior_exact_and_unknown_pairs ... ok
+test exact_collections_empty_singleton_and_copies_need_no_decoder_weights_or_provider ... ok
+test exact_first_accepts_undecodable_copies_without_weights_or_provider ... ok
+test exact_first_last_callback_revalidates_sources_and_visual_weights ... ok
+test exact_first_mismatch_runs_visual_and_keeps_projection_collision_inconclusive ... ok
+test exact_first_sticky_global_and_both_owners_cancel_every_exact_checkpoint ... ok
+test exact_collection_preserves_exact_visual_and_unknown_evidence_in_both_orders ... ok
+test exact_collection_final_callback_revalidates_every_file_and_started_weights ... ok
+test final_callback_source_and_weight_mutations_precede_support_and_inconclusive ... ok
+test global_and_both_owner_generations_cancel_first_middle_and_last_checkpoints ... ok
+test native_alpha_refusal_recovers_with_projected_original_support_in_both_orders ... ok
+test hdr_regions_recover_after_whole_miss_and_exhaust_before_native_negative ... ok
+test exact_collection_external_palette_change_discards_report_in_both_orders ... ok
+test provider_and_source_weight_failures_after_native_inconclusive_remain_terminal ... ok
+test external_palette_change_discards_projected_portfolio_collection_in_both_orders ... ok
+test native_early_support_avoids_inference_and_projected_exhaustion_can_recover_natively ... ok
+test native_anchor_inconclusive_recovers_or_stays_inconclusive_after_projected_exhaustion ... ok
+
+test result: ok. 24 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 25.03s
+
+     Running tests/proposals.rs (/validation/target/debug/deps/proposals-48061571b2a7881e)
+
+running 6 tests
+test crop_center_offsets_use_full_domains_and_reject_points_outside_the_crop ... ok
+test heap_selection_matches_stable_reference_with_ties_boundaries_and_both_side_collisions ... ok
+test malformed_inputs_and_each_work_limit_refuse_without_a_partial_result ... ok
+test managed_payload_credit_survives_clones_and_all_cancellation_paths_release_it ... ok
+test managed_crop_selection_cancellation_and_last_owner_keep_credit ... ok
+test every_checkpoint_including_heap_and_final_observes_one_shot_cancellation ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/rank_region.rs (/validation/target/debug/deps/rank_region-77aefa38b2299b62)
+
+running 7 tests
+test flat_pixels_budget_and_cancellation_do_not_produce_evidence ... ok
+test filtered_overflow_and_mid_window_cancel_return_no_partial_evidence ... ok
+test filter_zero_preserves_evidence_and_callback_work ... ok
+test invalid_domains_policy_alpha_and_scene_range_are_explicit ... ok
+test independent_textures_are_not_high_agreement_evidence ... ok
+test nonlinear_monotone_transfer_preserves_local_order_but_inversion_does_not ... ok
+test filtered_identity_matches_independent_box_counts_and_read_budget ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/search_portfolio.rs (/validation/target/debug/deps/search_portfolio-a0fcc8e0f3c615a8)
+
+running 13 tests
+test cross_stage_source_or_weight_changes_and_provider_errors_never_become_misses ... ok
+test cumulative_and_both_policy_preflight_precede_io_cancel_wins ... ok
+test both_orders_stop_at_support_and_misses_advance_without_leaked_payload ... ok
+test automatic_tiles_recover_after_full_misses_in_both_orders_and_exhaust_before_native_fallback ... ok
+test complete_native_miss_cannot_turn_model_insufficiency_into_an_ordinary_negative_in_either_order ... ok
+test final_source_mutation_and_cancellation_precede_portfolio_inconclusive_publication ... ok
+test global_and_both_generations_cancel_entry_and_terminal_publication ... ok
+test portfolio_final_user_checkpoint_cannot_publish_mutated_sources_or_weights ... ok
+test provider_failure_after_an_inconclusive_tile_remains_terminal ... ok
+test tiled_and_aggregate_work_refuse_before_io_even_in_native_first_order ... ok
+test native_early_support_never_calls_model_and_model_miss_falls_through ... ok
+test insufficient_model_anchor_geometry_advances_to_independently_verified_native_support ... ok
+test exhausted_native_anchor_geometry_advances_to_independently_verified_model_support ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 20.39s
+

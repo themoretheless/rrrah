@@ -1,0 +1,1356 @@
+{
+  "status": "complete_bounded_frozen_row_major_index_controls",
+  "source_manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-index-row-major-snapshot-20261011.json",
+  "results": [
+    {
+      "suite": "gradient_index_reflection",
+      "tests": 2,
+      "ignored": 0,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-gradient-index-row-major-qualified-20261011/gradient_index_reflection",
+      "binary_sha256": "b4e9e03c1361a5550c41fd2cd7dac1fb7cbf7a1b70b35db8de5a042bb557707f",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-gradient-index-row-major-qualified-20261011/gradient_index_reflection.log",
+      "log_sha256": "8f8a52940176b1ac00c68dfcb2ae983bfaed19c8fb2927648718a75107d20237"
+    },
+    {
+      "suite": "rrrah_dedup",
+      "tests": 39,
+      "ignored": 3,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-gradient-index-row-major-qualified-20261011/rrrah_dedup",
+      "binary_sha256": "e1175a2ebacb77dbadd7027824361632718db2b483a2f10554bb6da85160bc97",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-gradient-index-row-major-qualified-20261011/rrrah_dedup.log",
+      "log_sha256": "eed29306e1f534a9682f5fe79c12551b8daabca3ad12c2f0a35037d660b014e8"
+    },
+    {
+      "suite": "gradient_index",
+      "tests": 7,
+      "ignored": 0,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-gradient-index-row-major-qualified-20261011/gradient_index",
+      "binary_sha256": "9e5ebbb18e65869d46682884d9510b0f4cc017b7433b43c0f4b4626f21fa0388",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-gradient-index-row-major-qualified-20261011/gradient_index.log",
+      "log_sha256": "c697b03325be81cf57a5de2be749c121650a7bf940edf94a4374364bdd6582a8"
+    }
+  ],
+  "measurements": [
+    {
+      "control": "dense512",
+      "baseline": true,
+      "round": 0,
+      "elapsed_ns": 160375,
+      "peak": 4096,
+      "axis": 101
+    },
+    {
+      "control": "dense512",
+      "baseline": false,
+      "round": 0,
+      "elapsed_ns": 127875,
+      "peak": 4096,
+      "axis": 101
+    },
+    {
+      "control": "dense512",
+      "baseline": false,
+      "round": 0,
+      "elapsed_ns": 122334,
+      "peak": 4096,
+      "axis": 101
+    },
+    {
+      "control": "dense512",
+      "baseline": true,
+      "round": 0,
+      "elapsed_ns": 149208,
+      "peak": 4096,
+      "axis": 101
+    },
+    {
+      "control": "dense512",
+      "baseline": false,
+      "round": 1,
+      "elapsed_ns": 121959,
+      "peak": 4096,
+      "axis": 101
+    },
+    {
+      "control": "dense512",
+      "baseline": true,
+      "round": 1,
+      "elapsed_ns": 149084,
+      "peak": 4096,
+      "axis": 101
+    },
+    {
+      "control": "dense512",
+      "baseline": true,
+      "round": 1,
+      "elapsed_ns": 149083,
+      "peak": 4096,
+      "axis": 101
+    },
+    {
+      "control": "dense512",
+      "baseline": false,
+      "round": 1,
+      "elapsed_ns": 121584,
+      "peak": 4096,
+      "axis": 101
+    },
+    {
+      "control": "dense512",
+      "baseline": true,
+      "round": 2,
+      "elapsed_ns": 148625,
+      "peak": 4096,
+      "axis": 101
+    },
+    {
+      "control": "dense512",
+      "baseline": false,
+      "round": 2,
+      "elapsed_ns": 120375,
+      "peak": 4096,
+      "axis": 101
+    },
+    {
+      "control": "dense512",
+      "baseline": false,
+      "round": 2,
+      "elapsed_ns": 119458,
+      "peak": 4096,
+      "axis": 101
+    },
+    {
+      "control": "dense512",
+      "baseline": true,
+      "round": 2,
+      "elapsed_ns": 148167,
+      "peak": 4096,
+      "axis": 101
+    },
+    {
+      "control": "dense512",
+      "baseline": false,
+      "round": 3,
+      "elapsed_ns": 121250,
+      "peak": 4096,
+      "axis": 101
+    },
+    {
+      "control": "dense512",
+      "baseline": true,
+      "round": 3,
+      "elapsed_ns": 148917,
+      "peak": 4096,
+      "axis": 101
+    },
+    {
+      "control": "dense512",
+      "baseline": true,
+      "round": 3,
+      "elapsed_ns": 148208,
+      "peak": 4096,
+      "axis": 101
+    },
+    {
+      "control": "dense512",
+      "baseline": false,
+      "round": 3,
+      "elapsed_ns": 121500,
+      "peak": 4096,
+      "axis": 101
+    },
+    {
+      "control": "dense512",
+      "baseline": true,
+      "round": 4,
+      "elapsed_ns": 148500,
+      "peak": 4096,
+      "axis": 101
+    },
+    {
+      "control": "dense512",
+      "baseline": false,
+      "round": 4,
+      "elapsed_ns": 120875,
+      "peak": 4096,
+      "axis": 101
+    },
+    {
+      "control": "dense512",
+      "baseline": false,
+      "round": 4,
+      "elapsed_ns": 121208,
+      "peak": 4096,
+      "axis": 101
+    },
+    {
+      "control": "dense512",
+      "baseline": true,
+      "round": 4,
+      "elapsed_ns": 148750,
+      "peak": 4096,
+      "axis": 101
+    },
+    {
+      "control": "dense512",
+      "baseline": false,
+      "round": 5,
+      "elapsed_ns": 121583,
+      "peak": 4096,
+      "axis": 101
+    },
+    {
+      "control": "dense512",
+      "baseline": true,
+      "round": 5,
+      "elapsed_ns": 148917,
+      "peak": 4096,
+      "axis": 101
+    },
+    {
+      "control": "dense512",
+      "baseline": true,
+      "round": 5,
+      "elapsed_ns": 148666,
+      "peak": 4096,
+      "axis": 101
+    },
+    {
+      "control": "dense512",
+      "baseline": false,
+      "round": 5,
+      "elapsed_ns": 120125,
+      "peak": 4096,
+      "axis": 101
+    },
+    {
+      "control": "dense512",
+      "baseline": true,
+      "round": 6,
+      "elapsed_ns": 148375,
+      "peak": 4096,
+      "axis": 101
+    },
+    {
+      "control": "dense512",
+      "baseline": false,
+      "round": 6,
+      "elapsed_ns": 124125,
+      "peak": 4096,
+      "axis": 101
+    },
+    {
+      "control": "dense512",
+      "baseline": false,
+      "round": 6,
+      "elapsed_ns": 119792,
+      "peak": 4096,
+      "axis": 101
+    },
+    {
+      "control": "dense512",
+      "baseline": true,
+      "round": 6,
+      "elapsed_ns": 148875,
+      "peak": 4096,
+      "axis": 101
+    },
+    {
+      "control": "dense512",
+      "baseline": false,
+      "round": 7,
+      "elapsed_ns": 120333,
+      "peak": 4096,
+      "axis": 101
+    },
+    {
+      "control": "dense512",
+      "baseline": true,
+      "round": 7,
+      "elapsed_ns": 148667,
+      "peak": 4096,
+      "axis": 101
+    },
+    {
+      "control": "dense512",
+      "baseline": true,
+      "round": 7,
+      "elapsed_ns": 148333,
+      "peak": 4096,
+      "axis": 101
+    },
+    {
+      "control": "dense512",
+      "baseline": false,
+      "round": 7,
+      "elapsed_ns": 121417,
+      "peak": 4096,
+      "axis": 101
+    },
+    {
+      "control": "dense8192",
+      "baseline": true,
+      "round": 0,
+      "elapsed_ns": 2685833,
+      "peak": 65536,
+      "axis": 81
+    },
+    {
+      "control": "dense8192",
+      "baseline": false,
+      "round": 0,
+      "elapsed_ns": 2108083,
+      "peak": 65536,
+      "axis": 81
+    },
+    {
+      "control": "dense8192",
+      "baseline": false,
+      "round": 0,
+      "elapsed_ns": 2074541,
+      "peak": 65536,
+      "axis": 81
+    },
+    {
+      "control": "dense8192",
+      "baseline": true,
+      "round": 0,
+      "elapsed_ns": 2652958,
+      "peak": 65536,
+      "axis": 81
+    },
+    {
+      "control": "dense8192",
+      "baseline": false,
+      "round": 1,
+      "elapsed_ns": 2068292,
+      "peak": 65536,
+      "axis": 81
+    },
+    {
+      "control": "dense8192",
+      "baseline": true,
+      "round": 1,
+      "elapsed_ns": 2654375,
+      "peak": 65536,
+      "axis": 81
+    },
+    {
+      "control": "dense8192",
+      "baseline": true,
+      "round": 1,
+      "elapsed_ns": 2623625,
+      "peak": 65536,
+      "axis": 81
+    },
+    {
+      "control": "dense8192",
+      "baseline": false,
+      "round": 1,
+      "elapsed_ns": 2064542,
+      "peak": 65536,
+      "axis": 81
+    },
+    {
+      "control": "dense8192",
+      "baseline": true,
+      "round": 2,
+      "elapsed_ns": 2623666,
+      "peak": 65536,
+      "axis": 81
+    },
+    {
+      "control": "dense8192",
+      "baseline": false,
+      "round": 2,
+      "elapsed_ns": 2056042,
+      "peak": 65536,
+      "axis": 81
+    },
+    {
+      "control": "dense8192",
+      "baseline": false,
+      "round": 2,
+      "elapsed_ns": 2057375,
+      "peak": 65536,
+      "axis": 81
+    },
+    {
+      "control": "dense8192",
+      "baseline": true,
+      "round": 2,
+      "elapsed_ns": 2610875,
+      "peak": 65536,
+      "axis": 81
+    },
+    {
+      "control": "dense8192",
+      "baseline": false,
+      "round": 3,
+      "elapsed_ns": 2060208,
+      "peak": 65536,
+      "axis": 81
+    },
+    {
+      "control": "dense8192",
+      "baseline": true,
+      "round": 3,
+      "elapsed_ns": 2607750,
+      "peak": 65536,
+      "axis": 81
+    },
+    {
+      "control": "dense8192",
+      "baseline": true,
+      "round": 3,
+      "elapsed_ns": 2611083,
+      "peak": 65536,
+      "axis": 81
+    },
+    {
+      "control": "dense8192",
+      "baseline": false,
+      "round": 3,
+      "elapsed_ns": 2059875,
+      "peak": 65536,
+      "axis": 81
+    },
+    {
+      "control": "dense8192",
+      "baseline": true,
+      "round": 4,
+      "elapsed_ns": 2617250,
+      "peak": 65536,
+      "axis": 81
+    },
+    {
+      "control": "dense8192",
+      "baseline": false,
+      "round": 4,
+      "elapsed_ns": 2056542,
+      "peak": 65536,
+      "axis": 81
+    },
+    {
+      "control": "dense8192",
+      "baseline": false,
+      "round": 4,
+      "elapsed_ns": 2060708,
+      "peak": 65536,
+      "axis": 81
+    },
+    {
+      "control": "dense8192",
+      "baseline": true,
+      "round": 4,
+      "elapsed_ns": 2639417,
+      "peak": 65536,
+      "axis": 81
+    },
+    {
+      "control": "dense8192",
+      "baseline": false,
+      "round": 5,
+      "elapsed_ns": 2069791,
+      "peak": 65536,
+      "axis": 81
+    },
+    {
+      "control": "dense8192",
+      "baseline": true,
+      "round": 5,
+      "elapsed_ns": 2630417,
+      "peak": 65536,
+      "axis": 81
+    },
+    {
+      "control": "dense8192",
+      "baseline": true,
+      "round": 5,
+      "elapsed_ns": 2641375,
+      "peak": 65536,
+      "axis": 81
+    },
+    {
+      "control": "dense8192",
+      "baseline": false,
+      "round": 5,
+      "elapsed_ns": 2060375,
+      "peak": 65536,
+      "axis": 81
+    },
+    {
+      "control": "dense8192",
+      "baseline": true,
+      "round": 6,
+      "elapsed_ns": 2634000,
+      "peak": 65536,
+      "axis": 81
+    },
+    {
+      "control": "dense8192",
+      "baseline": false,
+      "round": 6,
+      "elapsed_ns": 2065458,
+      "peak": 65536,
+      "axis": 81
+    },
+    {
+      "control": "dense8192",
+      "baseline": false,
+      "round": 6,
+      "elapsed_ns": 2059583,
+      "peak": 65536,
+      "axis": 81
+    },
+    {
+      "control": "dense8192",
+      "baseline": true,
+      "round": 6,
+      "elapsed_ns": 2627792,
+      "peak": 65536,
+      "axis": 81
+    },
+    {
+      "control": "dense8192",
+      "baseline": false,
+      "round": 7,
+      "elapsed_ns": 2057292,
+      "peak": 65536,
+      "axis": 81
+    },
+    {
+      "control": "dense8192",
+      "baseline": true,
+      "round": 7,
+      "elapsed_ns": 2671792,
+      "peak": 65536,
+      "axis": 81
+    },
+    {
+      "control": "dense8192",
+      "baseline": true,
+      "round": 7,
+      "elapsed_ns": 2630375,
+      "peak": 65536,
+      "axis": 81
+    },
+    {
+      "control": "dense8192",
+      "baseline": false,
+      "round": 7,
+      "elapsed_ns": 2088709,
+      "peak": 65536,
+      "axis": 81
+    },
+    {
+      "control": "dense32768",
+      "baseline": true,
+      "round": 0,
+      "elapsed_ns": 12779333,
+      "peak": 262144,
+      "axis": 97
+    },
+    {
+      "control": "dense32768",
+      "baseline": false,
+      "round": 0,
+      "elapsed_ns": 9121542,
+      "peak": 262144,
+      "axis": 97
+    },
+    {
+      "control": "dense32768",
+      "baseline": false,
+      "round": 0,
+      "elapsed_ns": 8823875,
+      "peak": 262144,
+      "axis": 97
+    },
+    {
+      "control": "dense32768",
+      "baseline": true,
+      "round": 0,
+      "elapsed_ns": 12204458,
+      "peak": 262144,
+      "axis": 97
+    },
+    {
+      "control": "dense32768",
+      "baseline": false,
+      "round": 1,
+      "elapsed_ns": 8775000,
+      "peak": 262144,
+      "axis": 97
+    },
+    {
+      "control": "dense32768",
+      "baseline": true,
+      "round": 1,
+      "elapsed_ns": 12283542,
+      "peak": 262144,
+      "axis": 97
+    },
+    {
+      "control": "dense32768",
+      "baseline": true,
+      "round": 1,
+      "elapsed_ns": 12540375,
+      "peak": 262144,
+      "axis": 97
+    },
+    {
+      "control": "dense32768",
+      "baseline": false,
+      "round": 1,
+      "elapsed_ns": 8796125,
+      "peak": 262144,
+      "axis": 97
+    },
+    {
+      "control": "dense32768",
+      "baseline": true,
+      "round": 2,
+      "elapsed_ns": 12640250,
+      "peak": 262144,
+      "axis": 97
+    },
+    {
+      "control": "dense32768",
+      "baseline": false,
+      "round": 2,
+      "elapsed_ns": 8815750,
+      "peak": 262144,
+      "axis": 97
+    },
+    {
+      "control": "dense32768",
+      "baseline": false,
+      "round": 2,
+      "elapsed_ns": 8751542,
+      "peak": 262144,
+      "axis": 97
+    },
+    {
+      "control": "dense32768",
+      "baseline": true,
+      "round": 2,
+      "elapsed_ns": 12225875,
+      "peak": 262144,
+      "axis": 97
+    },
+    {
+      "control": "dense32768",
+      "baseline": false,
+      "round": 3,
+      "elapsed_ns": 8615584,
+      "peak": 262144,
+      "axis": 97
+    },
+    {
+      "control": "dense32768",
+      "baseline": true,
+      "round": 3,
+      "elapsed_ns": 11956583,
+      "peak": 262144,
+      "axis": 97
+    },
+    {
+      "control": "dense32768",
+      "baseline": true,
+      "round": 3,
+      "elapsed_ns": 11978333,
+      "peak": 262144,
+      "axis": 97
+    },
+    {
+      "control": "dense32768",
+      "baseline": false,
+      "round": 3,
+      "elapsed_ns": 8612333,
+      "peak": 262144,
+      "axis": 97
+    },
+    {
+      "control": "dense32768",
+      "baseline": true,
+      "round": 4,
+      "elapsed_ns": 12845750,
+      "peak": 262144,
+      "axis": 97
+    },
+    {
+      "control": "dense32768",
+      "baseline": false,
+      "round": 4,
+      "elapsed_ns": 8616291,
+      "peak": 262144,
+      "axis": 97
+    },
+    {
+      "control": "dense32768",
+      "baseline": false,
+      "round": 4,
+      "elapsed_ns": 8959500,
+      "peak": 262144,
+      "axis": 97
+    },
+    {
+      "control": "dense32768",
+      "baseline": true,
+      "round": 4,
+      "elapsed_ns": 11964959,
+      "peak": 262144,
+      "axis": 97
+    },
+    {
+      "control": "dense32768",
+      "baseline": false,
+      "round": 5,
+      "elapsed_ns": 8582500,
+      "peak": 262144,
+      "axis": 97
+    },
+    {
+      "control": "dense32768",
+      "baseline": true,
+      "round": 5,
+      "elapsed_ns": 11685250,
+      "peak": 262144,
+      "axis": 97
+    },
+    {
+      "control": "dense32768",
+      "baseline": true,
+      "round": 5,
+      "elapsed_ns": 11600291,
+      "peak": 262144,
+      "axis": 97
+    },
+    {
+      "control": "dense32768",
+      "baseline": false,
+      "round": 5,
+      "elapsed_ns": 8574416,
+      "peak": 262144,
+      "axis": 97
+    },
+    {
+      "control": "dense32768",
+      "baseline": true,
+      "round": 6,
+      "elapsed_ns": 12415459,
+      "peak": 262144,
+      "axis": 97
+    },
+    {
+      "control": "dense32768",
+      "baseline": false,
+      "round": 6,
+      "elapsed_ns": 8631834,
+      "peak": 262144,
+      "axis": 97
+    },
+    {
+      "control": "dense32768",
+      "baseline": false,
+      "round": 6,
+      "elapsed_ns": 8609000,
+      "peak": 262144,
+      "axis": 97
+    },
+    {
+      "control": "dense32768",
+      "baseline": true,
+      "round": 6,
+      "elapsed_ns": 12706542,
+      "peak": 262144,
+      "axis": 97
+    },
+    {
+      "control": "dense32768",
+      "baseline": false,
+      "round": 7,
+      "elapsed_ns": 8582459,
+      "peak": 262144,
+      "axis": 97
+    },
+    {
+      "control": "dense32768",
+      "baseline": true,
+      "round": 7,
+      "elapsed_ns": 11875375,
+      "peak": 262144,
+      "axis": 97
+    },
+    {
+      "control": "dense32768",
+      "baseline": true,
+      "round": 7,
+      "elapsed_ns": 11754625,
+      "peak": 262144,
+      "axis": 97
+    },
+    {
+      "control": "dense32768",
+      "baseline": false,
+      "round": 7,
+      "elapsed_ns": 8572375,
+      "peak": 262144,
+      "axis": 97
+    },
+    {
+      "control": "flat8192",
+      "baseline": true,
+      "round": 0,
+      "elapsed_ns": 2284708,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "flat8192",
+      "baseline": false,
+      "round": 0,
+      "elapsed_ns": 1721667,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "flat8192",
+      "baseline": false,
+      "round": 0,
+      "elapsed_ns": 1712875,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "flat8192",
+      "baseline": true,
+      "round": 0,
+      "elapsed_ns": 2280667,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "flat8192",
+      "baseline": false,
+      "round": 1,
+      "elapsed_ns": 1729667,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "flat8192",
+      "baseline": true,
+      "round": 1,
+      "elapsed_ns": 2275041,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "flat8192",
+      "baseline": true,
+      "round": 1,
+      "elapsed_ns": 2265500,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "flat8192",
+      "baseline": false,
+      "round": 1,
+      "elapsed_ns": 1720291,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "flat8192",
+      "baseline": true,
+      "round": 2,
+      "elapsed_ns": 2279583,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "flat8192",
+      "baseline": false,
+      "round": 2,
+      "elapsed_ns": 1728416,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "flat8192",
+      "baseline": false,
+      "round": 2,
+      "elapsed_ns": 1719125,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "flat8192",
+      "baseline": true,
+      "round": 2,
+      "elapsed_ns": 2316583,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "flat8192",
+      "baseline": false,
+      "round": 3,
+      "elapsed_ns": 1745500,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "flat8192",
+      "baseline": true,
+      "round": 3,
+      "elapsed_ns": 2346709,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "flat8192",
+      "baseline": true,
+      "round": 3,
+      "elapsed_ns": 2281000,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "flat8192",
+      "baseline": false,
+      "round": 3,
+      "elapsed_ns": 1725042,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "flat8192",
+      "baseline": true,
+      "round": 4,
+      "elapsed_ns": 2296000,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "flat8192",
+      "baseline": false,
+      "round": 4,
+      "elapsed_ns": 1705875,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "flat8192",
+      "baseline": false,
+      "round": 4,
+      "elapsed_ns": 1717875,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "flat8192",
+      "baseline": true,
+      "round": 4,
+      "elapsed_ns": 2272708,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "flat8192",
+      "baseline": false,
+      "round": 5,
+      "elapsed_ns": 1714000,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "flat8192",
+      "baseline": true,
+      "round": 5,
+      "elapsed_ns": 2266541,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "flat8192",
+      "baseline": true,
+      "round": 5,
+      "elapsed_ns": 2300875,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "flat8192",
+      "baseline": false,
+      "round": 5,
+      "elapsed_ns": 1722583,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "flat8192",
+      "baseline": true,
+      "round": 6,
+      "elapsed_ns": 2292292,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "flat8192",
+      "baseline": false,
+      "round": 6,
+      "elapsed_ns": 1710084,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "flat8192",
+      "baseline": false,
+      "round": 6,
+      "elapsed_ns": 1710958,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "flat8192",
+      "baseline": true,
+      "round": 6,
+      "elapsed_ns": 2276917,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "flat8192",
+      "baseline": false,
+      "round": 7,
+      "elapsed_ns": 1723917,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "flat8192",
+      "baseline": true,
+      "round": 7,
+      "elapsed_ns": 2282917,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "flat8192",
+      "baseline": true,
+      "round": 7,
+      "elapsed_ns": 2307500,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "flat8192",
+      "baseline": false,
+      "round": 7,
+      "elapsed_ns": 1709959,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "sparse8192",
+      "baseline": true,
+      "round": 0,
+      "elapsed_ns": 2618375,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "sparse8192",
+      "baseline": false,
+      "round": 0,
+      "elapsed_ns": 2022166,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "sparse8192",
+      "baseline": false,
+      "round": 0,
+      "elapsed_ns": 1990833,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "sparse8192",
+      "baseline": true,
+      "round": 0,
+      "elapsed_ns": 2540500,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "sparse8192",
+      "baseline": false,
+      "round": 1,
+      "elapsed_ns": 1989042,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "sparse8192",
+      "baseline": true,
+      "round": 1,
+      "elapsed_ns": 2536917,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "sparse8192",
+      "baseline": true,
+      "round": 1,
+      "elapsed_ns": 2548375,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "sparse8192",
+      "baseline": false,
+      "round": 1,
+      "elapsed_ns": 1981125,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "sparse8192",
+      "baseline": true,
+      "round": 2,
+      "elapsed_ns": 2530083,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "sparse8192",
+      "baseline": false,
+      "round": 2,
+      "elapsed_ns": 1979584,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "sparse8192",
+      "baseline": false,
+      "round": 2,
+      "elapsed_ns": 1989917,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "sparse8192",
+      "baseline": true,
+      "round": 2,
+      "elapsed_ns": 2552750,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "sparse8192",
+      "baseline": false,
+      "round": 3,
+      "elapsed_ns": 1981250,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "sparse8192",
+      "baseline": true,
+      "round": 3,
+      "elapsed_ns": 2584375,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "sparse8192",
+      "baseline": true,
+      "round": 3,
+      "elapsed_ns": 2567916,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "sparse8192",
+      "baseline": false,
+      "round": 3,
+      "elapsed_ns": 1984417,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "sparse8192",
+      "baseline": true,
+      "round": 4,
+      "elapsed_ns": 2534166,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "sparse8192",
+      "baseline": false,
+      "round": 4,
+      "elapsed_ns": 1983458,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "sparse8192",
+      "baseline": false,
+      "round": 4,
+      "elapsed_ns": 2005750,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "sparse8192",
+      "baseline": true,
+      "round": 4,
+      "elapsed_ns": 2554625,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "sparse8192",
+      "baseline": false,
+      "round": 5,
+      "elapsed_ns": 1974875,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "sparse8192",
+      "baseline": true,
+      "round": 5,
+      "elapsed_ns": 2549709,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "sparse8192",
+      "baseline": true,
+      "round": 5,
+      "elapsed_ns": 2544459,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "sparse8192",
+      "baseline": false,
+      "round": 5,
+      "elapsed_ns": 1977542,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "sparse8192",
+      "baseline": true,
+      "round": 6,
+      "elapsed_ns": 2543917,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "sparse8192",
+      "baseline": false,
+      "round": 6,
+      "elapsed_ns": 1974417,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "sparse8192",
+      "baseline": false,
+      "round": 6,
+      "elapsed_ns": 1968208,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "sparse8192",
+      "baseline": true,
+      "round": 6,
+      "elapsed_ns": 2573875,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "sparse8192",
+      "baseline": false,
+      "round": 7,
+      "elapsed_ns": 1979000,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "sparse8192",
+      "baseline": true,
+      "round": 7,
+      "elapsed_ns": 2549333,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "sparse8192",
+      "baseline": true,
+      "round": 7,
+      "elapsed_ns": 2562583,
+      "peak": 65536,
+      "axis": 0
+    },
+    {
+      "control": "sparse8192",
+      "baseline": false,
+      "round": 7,
+      "elapsed_ns": 1980458,
+      "peak": 65536,
+      "axis": 0
+    }
+  ],
+  "tests": 48,
+  "benchmark_invocations": 1,
+  "benchmark_builds": 160,
+  "summary": {
+    "dense512": {
+      "baseline_median_ns": 148708.5,
+      "candidate_median_ns": 121333.5,
+      "baseline_over_candidate": 1.2256178219535412
+    },
+    "dense8192": {
+      "baseline_median_ns": 2630396.0,
+      "candidate_median_ns": 2060541.5,
+      "baseline_over_candidate": 1.2765557014988536
+    },
+    "dense32768": {
+      "baseline_median_ns": 12215166.5,
+      "candidate_median_ns": 8624062.5,
+      "baseline_over_candidate": 1.4164051454868283
+    },
+    "flat8192": {
+      "baseline_median_ns": 2281958.5,
+      "candidate_median_ns": 1719708.0,
+      "baseline_over_candidate": 1.3269453302537408
+    },
+    "sparse8192": {
+      "baseline_median_ns": 2549521.0,
+      "candidate_median_ns": 1981187.5,
+      "baseline_over_candidate": 1.286865074608032
+    }
+  },
+  "benchmark_log": "/Users/themoretheless/.codex/tmp/rrrah-gradient-index-row-major-qualified-20261011/benchmark.log",
+  "benchmark_log_sha256": "5cd0515fd78b811f02c86ce08e222f72d6dd901769baa7c8332bd05ca030dc48",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-index-row-major-snapshot-20261011.json": "e19f976e9dcf9b4b1d7d0c886ff0ebb511b5160b95b9d416743f9dd4aaf75839",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-index-row-major-build-artifacts-20261011.jsonl": "355d269b81dcf39658b5fa1f77777f62c3c90e09a55bd12e8432cd77510499de",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-gradient-index-row-major-20261011.py": "2b6b2544bb340a7859cd8e7c9f9ef6babf8f715ccb1379a048ab8957e15ef9a2",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-index-row-major-build-20261011.log": "c11091d3249db855de89242c43205ec108bbd6510c640aa6f57453eec926c110",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/freeze-dedup-gradient-index-row-major-20261011.py": "a92d5ca21ef9b483002c7eee0f9158d09388cffd1a07b650619e23f77edad0fa",
+    "/Users/themoretheless/.codex/tmp/rrrah-gradient-index-row-major-tests-20261011.rs": "a4fa9a2e9d1300bd4ee6aeaa47c602816d59f00a2b407a64c870d718ed360038"
+  },
+  "scope": "Synthetic exact descriptor index construction, same-process alternating old reference/new implementation, opt-level3 with atomic caller checkpoints. Not whole-file or collection throughput. Production root remains unmodified."
+}

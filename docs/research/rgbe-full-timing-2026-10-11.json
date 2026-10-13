@@ -1,0 +1,32 @@
+{
+  "backend": "Metal Apple M4 Max",
+  "dimensions": [
+    3360,
+    2460
+  ],
+  "cases": [
+    {
+      "binding_bytes": 134217728,
+      "runs": 3,
+      "min_ms": 45.331,
+      "p50_ms": 48.645,
+      "max_ms": 60.622
+    },
+    {
+      "binding_bytes": 1048576,
+      "runs": 3,
+      "min_ms": 56.609,
+      "p50_ms": 57.127,
+      "max_ms": 75.236
+    }
+  ],
+  "included": "Input validation, managed admission, input transfer, shader execution, GPU wait/readback and output ownership.",
+  "excluded": "Pipeline construction, source normalization/preparation, independent CPU oracle comparison, display rendering.",
+  "log_sha256": "942ff4c842be5438b4bcdfd1bbdce1fb3a193aa1c32e7d179c2e44316822a6d0",
+  "test_sha256": "40b584bdd2f4328a364e2b4670061d899d1cb695e96c66dec9a7038127cdc088",
+  "limits": [
+    "Three runs per configuration; descriptive stage timings, not statistical performance qualification.",
+    "No paired old-shader measurement, no claim of speedup from numerical fix.",
+    "Last result per configuration has full33062400-value oracle verification; managed GPU credit checked every run."
+  ]
+}

@@ -1,0 +1,108 @@
+{
+  "gpu_backend": "metal",
+  "gpu_optional": false,
+  "storage_soak_seconds_per_mode": 0,
+  "gpu_policy_cycles": 0,
+  "large_hdr_policy_cycles": 0,
+  "metal_collection_seconds": 0,
+  "metal_raw_collection_seconds": 0,
+  "metal_raw_collection_manifest": null,
+  "metal_prefetch_navigation": false,
+  "metal_raw_worker_navigation": false,
+  "metal_large_float_hdr": false,
+  "metal_viewer_ttl_prefetch": false,
+  "metal_large_upload_cancel": false,
+  "metal_compute_cache": false,
+  "metal_model_swap_cycles": 0,
+  "large_hdr_policy": false,
+  "full_sensor_compute": false,
+  "suites": [
+    {
+      "suite": "gpu-all",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-gpu",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target",
+        "--",
+        "--nocapture"
+      ],
+      "exit_code": 0,
+      "passed": 107,
+      "failed": 0,
+      "ignored": 8,
+      "ignored_tests": [
+        "test full_sensor_linear_exposure_chunked_readback ... ignored, allocates about 0.8 GB of GPU buffers; full-resolution local qualification",
+        "test full_sensor_managed_exposure_budgets_and_checks_every_pixel ... ignored, full-resolution managed compute uses about 2 GB of tracked buffers",
+        "test fusion_back_full_frame_developed_raw_matches_metal_display_transport ... ignored, requires corrected production Fusion linear dumps; display transport qualification",
+        "test fusion_front_full_frame_developed_raw_matches_metal_display_transport ... ignored, requires corrected production Fusion linear dumps; display transport qualification",
+        "test hero9_full_frame_developed_raw_matches_metal_display_transport ... ignored, requires production HERO9 scene-linear dump; transport qualification, not demosaic/color oracle",
+        "test large_cancelled_upload_validation_and_admission_preserve_visible_texture ... ignored, manual 12 MP Metal upload cancellation qualification",
+        "test qualified_sd10_linear_raster_full_frame_display_readback ... ignored, requires qualified X3F linear sRGB PPM and a physical GPU",
+        "test full_f828_managed_rgbe_matches_cpu_reference ... ignored, requires independent DSC-F828 full-sensor dump; authored four-channel normalization, not as-shot color qualification"
+      ],
+      "log": "/private/tmp/rrrah-metal-raster-runner-20261011/gpu-all.log",
+      "log_sha256": "44ae896c3c414f128664858f8375e744694a0bf381d17f6986839956bfc604f1",
+      "verified_execution": true
+    },
+    {
+      "suite": "gpu-raster-collection",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah",
+        "--test",
+        "raster_collection_metal",
+        "raster_collection_native_and_prepared_swap_preserve_metal_frames",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target",
+        "--",
+        "--exact",
+        "--ignored",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "ignored_tests": [],
+      "log": "/private/tmp/rrrah-metal-raster-runner-20261011/gpu-raster-collection.log",
+      "log_sha256": "85ee72d7cf71362eb7ab32d1276ac14c9abdf1c1ced83135c636a6c8387df32b",
+      "verified_execution": true,
+      "workload_evidence_valid": true
+    }
+  ],
+  "complete_suite_execution": true,
+  "limitations": [
+    "Passing host CUDA tests does not qualify NVIDIA hardware.",
+    "Metal readback does not qualify physical HDR display.",
+    "Ignored tests are unverified, not passing.",
+    "These regression suites do not prove all 100 formats or sustained slow-disk workloads.",
+    "Raster collection checks 43 fixture sources in native/prepared storage, not independent decoder or color correctness, all format variants or physical HDR."
+  ],
+  "metal_raster_collection": true,
+  "external_viewer_inputs": {},
+  "metal_mixed_raw_workers": false,
+  "all_executed_suites_verified": true,
+  "date": "2026-10-11",
+  "scope": "End-to-end qualification runner execution of ordinary GPU suites and 43-source native/prepared raster collection on Metal after PSD/PSB/J2K explicit color fixes",
+  "totals": {
+    "passed": 108,
+    "failed": 0,
+    "ignored": 8
+  },
+  "source_sha256": {
+    "scripts/qualify-viewer-storage-gpu.py": "1d37970d183fde3c3323156d86493f72e28aa417b7d592cdcd711de01339aa2f",
+    "crates/rrrah-app/tests/raster_collection_metal.rs": "e7159251cfff09e1cbbc12555af4f2c17a68359d4d7c2a034a1619538d234914",
+    "crates/rrrah-decode/src/psd.rs": "1507e66c2a98f01d989b488e9b4c44402a42eb1cc41de5122adc8334617ab8bc",
+    "crates/rrrah-decode/src/jp2.rs": "9f9764b4e432cee4f5dd644645f643f45449fa891ce67b8b406f058e8ddce8fa"
+  }
+}

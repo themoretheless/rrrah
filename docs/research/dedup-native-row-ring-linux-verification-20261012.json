@@ -1,0 +1,25 @@
+{
+  "status": "verified_six_row_ring_tests_native_linux_arm64_nonroot",
+  "passed": 6,
+  "ignored": 0,
+  "tests": [
+    "smoothing_matches_independent_footprints_and_exact_last_owner_credit",
+    "row_ring_admits_only_window_scratch_and_refuses_one_byte_short",
+    "row_ring_is_bitwise_full_two_pass_for_wraps_borders_and_hdr",
+    "work_memory_opacity_and_every_cancellation_refuse_without_retained_output",
+    "zero_radius_exact_bits_half_memory_and_all_cancellation_points",
+    "row_ring_wrap_cancellation_and_late_alpha_never_retain_partial_output"
+  ],
+  "image_id": "sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55",
+  "compiler": "rustc 1.98.0 (88d9e12ae 2026-08-18)\nbinary: rustc\ncommit-hash: 88d9e12ae178fab0fb5cc050a94da85685d449ea\ncommit-date: 2026-08-18\nhost: aarch64-unknown-linux-gnu\nrelease: 1.98.0\nLLVM version: 22.1.8\n",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-native-row-ring-linux-prepared-20261012.json": "dc2e567706c8e0e5200ce92b128307b41edb3256580c26471b5f2f6a63dc7d59",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-native-row-ring-snapshot-20261012.json": "e913283c6e2504ed4c121b97d4209c628282fd293aa5b9d1220247cf9245962d",
+    "/Users/themoretheless/.codex/tmp/rrrah-native-row-ring-linux-tests-20261012.log": "5f671ed7cc82be02b5367d8c33d8c537f43fccf1f7206422ea530a33bff62c83",
+    "/Users/themoretheless/.codex/tmp/rrrah-native-row-ring-linux-executable-20261012": "23853e84f2fac6864ef760b8d3897d209c18df37bee4eb5641fb817c0e0dc38b",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-linux-native/toolchain/bin/rustc": "9d7a5b460112fc7290514b05cc30aea07b0a1430598a26594aa9755ebdba6001",
+    "/Users/themoretheless/.codex/tmp/rrrah-native-row-ring-linux-20261012.sh": "17472b62af1aa6d76c4fee6b83de44056cc9f573fbd8fdc4b8b8d931200feb54",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-native-row-ring-linux-20261012.py": "8f34cefe3cc429324190167d57eaf5cc09c41c4b1b6cf20f9fb865bf5c487dac"
+  },
+  "scope": "Actual nonroot Linux aarch64 ELF executes all6 same-source smoothing tests, including35 bitwise cases and272 cancellation checkpoints. Exact test list/source/compiler/image pinned and executable preserved. No Linux decoder/full portfolio/Windows/RSS/corpus/full500 qualification."
+}

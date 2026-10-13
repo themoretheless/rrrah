@@ -1,0 +1,41 @@
+
+SOURCE /tmp/rrrah-metal-full-sensor-managed-current.log
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.10s
+     Running tests/compute_readback.rs (target/debug/deps/compute_readback-0f0df8525b3523e2)
+
+running 1 test
+managed full-resolution compute adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+interleaved full-resolution exposure: pixels=25494560, end_to_end_ms=326.546, all pixels exact
+managed full-resolution exposure: pixels=25494560, end_to_end_ms=241.162, gpu_peak=1223738992, cpu_peak=815825920, all pixels exact, final used=0
+test full_sensor_managed_exposure_budgets_and_checks_every_pixel ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 5 filtered out; finished in 2.63s
+
+
+
+SOURCE /tmp/rrrah-metal-full-sensor-chunked-current.log
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.15s
+     Running tests/compute_readback.rs (target/debug/deps/compute_readback-0f0df8525b3523e2)
+
+running 1 test
+full-resolution compute adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+full-resolution compute: 25494560 pixels, 407912960 bytes per buffer, samples_ms=[2.963708, 2.9892920000000003, 3.005792, 3.09775, 3.131166], p50_ms=3.006, max_ms=3.131
+test full_sensor_linear_exposure_chunked_readback ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 5 filtered out; finished in 3.85s
+
+
+
+SOURCE /tmp/rrrah-metal-large-raster-current.log
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.16s
+     Running tests/raster_readback.rs (target/debug/deps/raster_readback-96fa399a25885f6d)
+
+running 2 tests
+test large_cancelled_upload_validation_and_admission_preserve_visible_texture ... large upload cancellation adapter: Metal Apple M4 Max
+raster upload cancellation: total_checkpoints=2933; exercised=[1, 2, 1466, 2931, 2932, 2933]; upload_budget=192000000
+ok
+test large_hdr_area_lod_preserves_all_output_samples_and_metal_frame ... 36 MP HDR area LOD: source=576000000; output=16000000; all1000000 pixels exact; SDR/HDR Metal exact; elapsed=161.60025ms; output root=0
+ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 22 filtered out; finished in 2.78s
+

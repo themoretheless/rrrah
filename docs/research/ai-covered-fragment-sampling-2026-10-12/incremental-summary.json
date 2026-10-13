@@ -1,0 +1,59 @@
+{
+  "change": "Incremental winding selector: rebuild once per slab, then update one region after every crossed edge; fixed512bit active set and64clip flags; highest source rank wins",
+  "work_accounting": {
+    "initialization": "region_count+16",
+    "per_crossed_edge": 16,
+    "pixel_limit": 20000000
+  },
+  "tests": {
+    "passed": 141,
+    "ignored": 10,
+    "regression": "Incremental and full-scan fragment area/centroid/owner exact match; every winding state synchronized; cancellation, admission and selector refusal checked"
+  },
+  "real_replay": [
+    {
+      "fixture": "VectorApple.ai",
+      "page": 0,
+      "native_completed": false,
+      "capture_failed": false,
+      "deadline_expired": false,
+      "final_admitted_bytes": 0,
+      "native_replay_ms": 56390.285749999995
+    },
+    {
+      "fixture": "one.ai",
+      "page": 0,
+      "native_completed": true,
+      "capture_failed": false,
+      "deadline_expired": false,
+      "final_admitted_bytes": 0,
+      "native_replay_ms": 27889.744625
+    },
+    {
+      "fixture": "one.ai",
+      "page": 1,
+      "native_completed": true,
+      "capture_failed": false,
+      "deadline_expired": false,
+      "final_admitted_bytes": 0,
+      "native_replay_ms": 474.951
+    }
+  ],
+  "progress": "Passes previous work-exhaustion pixel138,39",
+  "remaining_refusal": {
+    "pixel": [
+      147,
+      61
+    ],
+    "candidate_cap": 512,
+    "error": "WorkLimit"
+  },
+  "qualification": "Incomplete; boundary integration stays opt-in; no timing benchmark or goal completion claim",
+  "hashes": {
+    "incremental-tests.log": "700efde193483f1a801d8b753f1d042a6c4448b0c6db499399b8f5ed559ebb05",
+    "incremental-replay.log": "faf33cca4ae1adf4e170c43d7d5e150cae436d9e86ad7c5d61272d27b73ff3b9",
+    "incremental-report.json": "30fcefd7f230a507fe4ef57f12c5e096cf35eea7672afdb3c8c8e23a2abf1bba",
+    "polygon_coverage.rs": "620bb6b80dc19e04d3e5c57d8cbae24e095ea5beeeeba8e68c08fe0b74972ce3",
+    "knockout_interpreter.rs": "07aecdb86116161fa0331bc83d3734e6ae9614c6405145bd3c3830636f7b3304"
+  }
+}

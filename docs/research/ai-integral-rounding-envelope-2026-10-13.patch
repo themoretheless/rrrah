@@ -1,0 +1,161 @@
+--- a/vendor/hayro/src/native_moments.rs
++++ b/vendor/hayro/src/native_moments.rs
+@@ -12,6 +12,70 @@
+         (total.is_finite() && error.is_finite()).then_some(Self {value:total,error})
+     }
+ }
++/// Outward sum enclosure for exact products of reported sample values.
++/// This excludes errors in clipping, source sampling and component conversion.
++#[derive(Clone,Copy,Debug,PartialEq)]
++pub(super) struct IntegralEnvelope<const C:usize> {
++    alpha:[f64;2],components:[[f64;2];C],max_component_abs:[f64;C],
++}
++#[derive(Clone,Copy,Debug,PartialEq)]
++pub(super) struct IntegralRoundingBounds<const C:usize> {
++    pub(super) alpha:[f64;2],pub(super) components:[[f64;2];C],
++    pub(super) alpha_error:f64,pub(super) component_error:[f64;C],
++    pub(super) max_component_abs:[f64;C],
++}
++impl<const C:usize> IntegralEnvelope<C> {
++    pub(super) fn new()->Self {Self {alpha:[0.;2],components:[[0.;2];C],max_component_abs:[0.;C]}}
++    pub(super) fn added(self,area:f64,alpha:f64,components:[f64;C],work:&mut usize,cancelled:&dyn Fn()->bool)->Option<Self> {
++        debit(work,5+C.checked_mul(4)?,cancelled)?;
++        if !(1..=4).contains(&C) || !area.is_finite() || area<=0. || area>1. || !alpha.is_finite() || alpha<0. || alpha>1.+1e-12
++            || components.iter().any(|v|!v.is_finite()) {return None;}
++        let product=area*alpha;
++        let weight=[product.next_down().max(0.),product.next_up()];
++        let sum=|a:[f64;2],b:[f64;2]|[(a[0]+b[0]).next_down(),(a[1]+b[1]).next_up()];
++        let mut out=self;out.alpha=sum(self.alpha,weight);out.alpha[0]=out.alpha[0].max(0.);
++        for channel in 0..C {
++            if cancelled() {return None;}
++            let a=weight[0]*components[channel];let b=weight[1]*components[channel];
++            let value=[a.min(b).next_down(),a.max(b).next_up()];
++            out.components[channel]=sum(self.components[channel],value);
++            out.max_component_abs[channel]=self.max_component_abs[channel].max(components[channel].abs());
++        }
++        if out.alpha.iter().chain(out.components.iter().flatten()).any(|v|!v.is_finite()) || cancelled() {return None;}
++        Some(out)
++    }
++    pub(super) fn finish(self,alpha:f64,components:[f64;C],work:&mut usize,cancelled:&dyn Fn()->bool)->Option<IntegralRoundingBounds<C>> {
++        debit(work,1+C.checked_mul(3)?,cancelled)?;
++        if !alpha.is_finite() || components.iter().any(|v|!v.is_finite()) {return None;}
++        let error=|v:f64,b:[f64;2]|(v-b[0]).abs().max((v-b[1]).abs()).next_up();
++        let component_error=std::array::from_fn(|i|error(components[i],self.components[i]));
++        let alpha_error=error(alpha,self.alpha);
++        if !alpha_error.is_finite() || component_error.iter().any(|v|!v.is_finite()) || cancelled() {return None;}
++        Some(IntegralRoundingBounds {alpha:self.alpha,components:self.components,alpha_error,component_error,max_component_abs:self.max_component_abs})
++    }
++}
++/// Quotient discrepancy with differing alpha: (integral_error+B*alpha_error)
++/// divided by a positive lower bound for both alphas. B bounds the exact
++/// reference quotient. Covers division rounding on both compared quotients;
++/// excludes later Pixel storage, profile conversion and display quantization.
++pub(super) fn native_quotient_error_bound<const C:usize>(integral_error:[f64;C],alpha_error:f64,
++    alpha_lower:f64,value_bounds:[f64;C],work:&mut usize,cancelled:&dyn Fn()->bool)->Option<[f64;C]> {
++    debit(work,1+C.checked_mul(8)?,cancelled)?;
++    if !(1..=4).contains(&C) || !alpha_error.is_finite() || alpha_error<0. || !alpha_lower.is_finite() || alpha_lower<=0.
++        || integral_error.iter().chain(value_bounds.iter()).any(|v|!v.is_finite() || *v<0.) {return None;}
++    let add=|a:f64,b:f64|(a+b).next_up();let mul=|a:f64,b:f64|(a*b).next_up();
++    let mut result=[0.;C];
++    for channel in 0..C {
++        if cancelled() {return None;}
++        let base=(add(integral_error[channel],mul(value_bounds[channel],alpha_error))/alpha_lower).next_up();
++        let magnitude=add(mul(2.,value_bounds[channel]),base);
++        let rounding=add(mul(2.*f64::EPSILON,magnitude),2.*f64::from_bits(1));
++        result[channel]=add(base,rounding);
++        if !result[channel].is_finite() {return None;}
++    }
++    if cancelled() {return None;}Some(result)
++}
++
+ #[derive(Clone,Copy,Default)]
+ struct GeometryBounds {area:[f64;2],x:[f64;2],y:[f64;2]}
+ /// Exact reported-fragment area/centroid sum enclosure, not polygon clipping error.
+@@ -483,3 +547,48 @@
+     for stop in 1..=polls.get() {let count=std::cell::Cell::new(0);assert!(affine_moment_geometry_error_bound(&geometry,gradients,values,&mut 100,&||{count.set(count.get()+1);count.get()>=stop}).is_none());}
+     assert!(affine_moment_geometry_error_bound(&geometry,[[f64::NAN,0.];2],values,&mut 100,&||false).is_none());
+ }
++
++#[test]
++fn integral_envelope_encloses_exact_dyadic_products_without_changing_naive_outputs() {
++    let mut envelope=IntegralEnvelope::<2>::new();let mut alpha=0.;let mut integral=[0.;2];
++    for i in 0..4096 {
++        let components=[(i as f64+0.5)/4096.,0.25];let area=1./4096.;let opacity=0.5;
++        let weight=area*opacity;alpha+=weight;for channel in 0..2 {integral[channel]+=weight*components[channel];}
++        envelope=envelope.added(area,opacity,components,&mut 100,&||false).unwrap();
++    }
++    let bounds=envelope.finish(alpha,integral,&mut 100,&||false).unwrap();
++    assert!(bounds.alpha[0]<=0.5 && bounds.alpha[1]>=0.5);
++    for (exact,[lo,hi]) in [0.25,0.125].into_iter().zip(bounds.components) {assert!(lo<=exact && exact<=hi);}
++    let native=native_quotient_error_bound(bounds.component_error,bounds.alpha_error,bounds.alpha[0].min(alpha).next_down(),bounds.max_component_abs,&mut 100,&||false).unwrap();
++    for (i,exact) in [0.5,0.25].into_iter().enumerate() {assert!((integral[i]/alpha-exact).abs()<=native[i]);assert!(native[i]<1e-10);}
++}
++#[test]
++fn integral_envelope_and_quotient_refuse_exhaustion_cancel_invalid_values() {
++    let envelope=IntegralEnvelope::<2>::new();let values=[0.2,-0.1];
++    let mut work=100;envelope.added(0.5,0.5,values,&mut work,&||false).unwrap();
++    for budget in 0..100-work {assert!(envelope.added(0.5,0.5,values,&mut {budget},&||false).is_none());}
++    let polls=std::cell::Cell::new(0);envelope.added(0.5,0.5,values,&mut 100,&||{polls.set(polls.get()+1);false}).unwrap();
++    for stop in 1..=polls.get() {let count=std::cell::Cell::new(0);assert!(envelope.added(0.5,0.5,values,&mut 100,&||{count.set(count.get()+1);count.get()>=stop}).is_none());}
++    let mut finish_work=100;envelope.finish(0.,[0.;2],&mut finish_work,&||false).unwrap();
++    for budget in 0..100-finish_work {assert!(envelope.finish(0.,[0.;2],&mut {budget},&||false).is_none());}
++    let finish_polls=std::cell::Cell::new(0);envelope.finish(0.,[0.;2],&mut 100,&||{finish_polls.set(finish_polls.get()+1);false}).unwrap();
++    for stop in 1..=finish_polls.get() {let count=std::cell::Cell::new(0);assert!(envelope.finish(0.,[0.;2],&mut 100,&||{count.set(count.get()+1);count.get()>=stop}).is_none());}
++    assert!(envelope.added(0.5,-0.5,values,&mut 100,&||false).is_none());
++    assert!(envelope.added(0.5,0.5,[f64::NAN,0.],&mut 100,&||false).is_none());
++    assert!(native_quotient_error_bound([1e-9;2],1e-10,0.,[1.;2],&mut 100,&||false).is_none());
++    assert!(native_quotient_error_bound([-1.;2],0.,0.5,[1.;2],&mut 100,&||false).is_none());
++    assert!(native_quotient_error_bound([1.;2],0.,f64::from_bits(1),[1.;2],&mut 100,&||false).is_none());
++    let mut work=100;native_quotient_error_bound([1e-9;2],1e-10,0.5,[1.;2],&mut work,&||false).unwrap();
++    for budget in 0..100-work {assert!(native_quotient_error_bound([1e-9;2],1e-10,0.5,[1.;2],&mut {budget},&||false).is_none());}
++    let polls=std::cell::Cell::new(0);native_quotient_error_bound([1e-9;2],1e-10,0.5,[1.;2],&mut 100,&||{polls.set(polls.get()+1);false}).unwrap();
++    for stop in 1..=polls.get() {let count=std::cell::Cell::new(0);assert!(native_quotient_error_bound([1e-9;2],1e-10,0.5,[1.;2],&mut 100,&||{count.set(count.get()+1);count.get()>=stop}).is_none());}
++}
++#[test]
++fn quotient_bound_contains_differing_alpha_comparisons_including_tiny_positive_alpha() {
++    for alpha in [1e-300f64,1e-12,0.01,0.5] {for value in [0.,0.125,0.333333333333,0.9] {
++        let other_alpha=alpha*1.1;let other_value=value+0.0001;
++        let a=alpha*value;let b=other_alpha*other_value;
++        let error=native_quotient_error_bound([(a-b).abs().next_up()],(alpha-other_alpha).abs().next_up(),alpha.min(other_alpha).next_down(),[2.],&mut 100,&||false).unwrap();
++        assert!((a/alpha-b/other_alpha).abs()<=error[0]);
++    }}
++}
+--- a/vendor/hayro/src/native_spatial.rs
++++ b/vendor/hayro/src/native_spatial.rs
+@@ -90,6 +90,9 @@
+         else {super::native_moments::MomentTable::<64,5,64>::admitted_prefix(8192,origin,key_words,admit)}
+     } else {None};
+     let mut moment_complete=moments.is_some();let mut moment_work=256_000_000usize;
++    let integral_rounding=std::env::var_os("RRRAH_AI_INTEGRAL_ROUNDING_BOUNDS").is_some();
++    let _integral_credit=if integral_rounding {admit(size_of::<super::native_moments::IntegralEnvelope<4>>())} else {None};
++    let mut integral_envelope=if _integral_credit.is_some() {Some(super::native_moments::IntegralEnvelope::<4>::new())} else {None};
+     // Credit precedes the vector so storage is dropped before credit release.
+     let _token_credit=if fingerprint_moments {Some(admit(regions.len().checked_mul(size_of::<u64>())?)?)} else {None};
+     let mut hash_tokens=Vec::new();
+@@ -179,14 +182,25 @@
+             };
+             if result.is_none() {moment_complete=false;}
+         }
++        let components=pixel.native_components()?;
++        if let Some(envelope)=integral_envelope {
++            integral_envelope=envelope.added(fragment.area,pixel.alpha(),components,&mut moment_work,cancelled);
++        }
+         let weight=fragment.area*pixel.alpha();alpha+=weight;
+-        for (sum,value) in integral.iter_mut().zip(pixel.native_components()?) {*sum+=weight*value;}
++        for (sum,value) in integral.iter_mut().zip(components) {*sum+=weight*value;}
+         Some(())
+     }).or_else(|| {
+         if std::env::var_os("RRRAH_TRACE_SPATIAL_ROUTE").is_some() {eprintln!("SPATIAL_POLYGON_FRAGMENTS_REFUSAL regions={}",all.len());}None
+     })?;
+     if std::env::var_os("RRRAH_TRACE_SPATIAL_ROUTE").is_some() {
+         eprintln!("SPATIAL_POLYGON_WORK spent={} remaining={remaining} limit={polygon_work}",polygon_work-remaining);
++    }
++    if integral_rounding {
++        if let Some(bounds)=integral_envelope.and_then(|envelope|envelope.finish(alpha,integral,&mut moment_work,cancelled)) {
++            let lower=alpha.min(bounds.alpha[0]).next_down();
++            let quotient=super::native_moments::native_quotient_error_bound(bounds.component_error,bounds.alpha_error,lower,bounds.max_component_abs,&mut moment_work,cancelled);
++            eprintln!("SPATIAL_INTEGRAL_ROUNDING complete=true alpha_error={:?} max_integral_error={:?} quotient_available={} max_quotient_error={:?} diagnostic_work={}",bounds.alpha_error,bounds.component_error.into_iter().fold(0.,f64::max),quotient.is_some(),quotient.map(|v|v.into_iter().fold(0.,f64::max)),256_000_000-moment_work);
++        } else {eprintln!("SPATIAL_INTEGRAL_ROUNDING complete=false diagnostic_work={}",256_000_000-moment_work);}
+     }
+     if field_moments {
+         if let Some(left)=moment_work.checked_sub(source_key?.work.replace(0)) {moment_work=left;}

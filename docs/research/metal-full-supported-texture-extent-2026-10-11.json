@@ -1,0 +1,42 @@
+{
+  "scope": "Actual Metal logical raster width above portable 8192 and at supported 16384; authored constant red linear pixels",
+  "portable_texture_extent": 8192,
+  "actual_metal_supported_extent": 16384,
+  "cases": [
+    {
+      "width": 8193,
+      "height": 128,
+      "pixels": 1048704,
+      "managed_source_bytes": 16779264,
+      "native_texture_credit_bytes": 16779264
+    },
+    {
+      "width": 16384,
+      "height": 128,
+      "pixels": 2097152,
+      "managed_source_bytes": 33554432,
+      "native_texture_credit_bytes": 33554432
+    }
+  ],
+  "verified": [
+    "Managed source allocation within exact byte limit",
+    "Default-limit device accepts source via tiled upload and releases credit",
+    "Viewer-requested supported-limit device retains exact unpadded source-sized texture",
+    "Every SDR pixel is visible red with opaque alpha",
+    "Every binary16 HDR attachment pixel is exactly [0x3c00,0,0,0x3c00]",
+    "CPU source/native texture/portable tiled texture budgets released"
+  ],
+  "production_change": false,
+  "previous_test_limitation": "Only width8193 and one central SDR/HDR pixel; now both widths and full attachments",
+  "limitations": [
+    "Constant color does not establish orientation or every interpolation case",
+    "Offscreen HDR buffer does not qualify physical HDR display",
+    "Readback harness, driver and OS memory outside tracked budgets"
+  ],
+  "tests": {
+    "passed": 1,
+    "failed": 0,
+    "ignored": 0
+  },
+  "log_sha256": "f09363b1db25e32d8bc3ebda797a3310647c6d3764dbd9dbb18de5491fe7e554"
+}

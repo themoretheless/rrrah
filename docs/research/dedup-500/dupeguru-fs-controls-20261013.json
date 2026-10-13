@@ -1,0 +1,58 @@
+{
+  "status": "passed8_selected_fs_controls",
+  "controls": [
+    {
+      "name": "full_digest_fallback_control",
+      "passed": true,
+      "result": "Actual full file MD5 equals independent hashlib."
+    },
+    {
+      "name": "ordinary_mtime_change_recomputes",
+      "passed": true,
+      "result": "Newmtime without prior alternate columns recomputes full digest."
+    },
+    {
+      "name": "restored_metadata_stale_digest",
+      "passed": true,
+      "result": "Actual changed bytes with restored size/mtime reuse olddigest."
+    },
+    {
+      "name": "cross_field_upsert_retains_stale_partial",
+      "passed": true,
+      "result": "Updating full digest advances shared row metadata but retains old partial digest."
+    },
+    {
+      "name": "explicit_ignore_mtime_staleness",
+      "passed": true,
+      "result": "Explicit ignoremtime permits stale digest at same size."
+    },
+    {
+      "name": "sample_filter_is_not_full_equality",
+      "passed": true,
+      "result": "Three sample hashes collide for difference at first byte; full hashes differ."
+    },
+    {
+      "name": "missing_file_accessor_default",
+      "passed": true,
+      "result": "File accessor catches absent-file exception and returns empty digest default; scanner not exercised."
+    },
+    {
+      "name": "hash_backend_not_in_cache_namespace",
+      "passed": true,
+      "result": "Injected actual SHA256 backend reuses old MD5 cache; actual xxhash not tested."
+    }
+  ],
+  "python": "3.9.6 (default, Aug 25 2026, 21:26:21) \n[Clang 21.0.0 (clang-2100.3.34.2)]",
+  "sqlite": "3.51.0",
+  "upstream_tests_executed": 0,
+  "adapters": [
+    "hscommon.util.nonone/get_file_ext only",
+    "xxhash import disabled to select original MD5 fallback",
+    "one explicit injected SHA256 namespace control"
+  ],
+  "pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-dupeguru-exact-source-20261013/core/fs.py": "16da9febe4fcfebcd3dafeebd409c05349e94f88a6961e81a8499e02b32458ba",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/check-dedup-dupeguru-fs-20261013.py": "bfcee4d375e97c8513b21f5ed4aa1a9c4a40e0ebf865d49169f1f33499fc3ba4"
+  },
+  "scope": "Whole selected core/fs.py unchanged, actual filesystem/SQLite/hashlib. No scanner/app/deletion execution or whole dupeGuru source review; no original xxhash backend qualification."
+}

@@ -1,0 +1,32 @@
+{
+  "adapter": "Apple M4 Max / Metal",
+  "surface": "RGBA16Float / ExtendedSrgbLinear",
+  "runs": [
+    {
+      "kind": "raster",
+      "frames": 176,
+      "seconds": 3.004,
+      "frames_after_resize": 146,
+      "log": "metal-live-ready-retry-2026-10-13.log",
+      "sha256": "0d338a0277bf90a1f7f50eecfdd4937adae689d0e224b64deb2ce5564b5626a5"
+    },
+    {
+      "kind": "raw",
+      "frames": 146,
+      "seconds": 3.007,
+      "frames_after_resize": 116,
+      "log": "metal-live-ready-raw-2026-10-13.log",
+      "sha256": "a5f788650bbf375d34f722b95ef7246688a5a2f0af1e67b76059d2e00f5cafdb"
+    }
+  ],
+  "reported_headroom": 16.0,
+  "limitations": [
+    "Live probe presentation and resize only; no physical luminance or color calibration",
+    "NVIDIA deferred by user"
+  ],
+  "sha256": {
+    "crates/rrrah-app/examples/hdr_surface_probe.rs": "4330ce952671a17a6e941a4aad35afa189931c78bcdf0a220613a10f0477848e",
+    "target/debug/examples/hdr_surface_probe": "37e3803e3a0bec7d858ee5e09a5dc040ea176bf405bcc78c468c94254c19d161",
+    "tests/IMG_9043.CR3": "d06cbb10e84882cf130430bdc88ed2652c2622b96dea8d6a854c09e3bee37e59"
+  }
+}

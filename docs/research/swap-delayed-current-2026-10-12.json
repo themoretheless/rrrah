@@ -1,0 +1,63 @@
+{
+  "result": "4 passed; 0 failed",
+  "large_float": {
+    "dimensions": [
+      2048,
+      2048
+    ],
+    "pixel_bytes": 67108864,
+    "requested_seconds": 60,
+    "actual_seconds": 114.883,
+    "cycles": 3,
+    "checks": [
+      "all float bits exact including signed zero and HDR extrema",
+      "full managed-pressure refusal",
+      "cancel after admitted allocation and real 64KiB payload read",
+      "successful retry",
+      "disk max2 entries and byte bound",
+      "final root/queue zero"
+    ],
+    "runner_evidence_valid": true,
+    "log": "swap-float-delayed-60s-current-2026-10-12.log"
+  },
+  "independent_limits": [
+    {
+      "test": "sustained_byte_cap_evicts_without_count_or_ttl_pressure",
+      "seconds": "10.109996",
+      "cycles": "58",
+      "pressure_refusals": "58",
+      "root_peak": "2097152",
+      "queue_peak": "262144",
+      "disk_peak_bytes": "786624",
+      "disk_peak_objects": "3"
+    },
+    {
+      "test": "sustained_count_cap_evicts_without_byte_or_ttl_pressure",
+      "seconds": "10.143308291",
+      "cycles": "59",
+      "pressure_refusals": "59",
+      "root_peak": "2097152",
+      "queue_peak": "262144",
+      "disk_peak_bytes": "786624",
+      "disk_peak_objects": "3"
+    },
+    {
+      "test": "sustained_large_keyspace_delayed_swap_pressure_and_retry",
+      "seconds": "10.004831667",
+      "cycles": "60",
+      "pressure_refusals": "60",
+      "root_peak": "2097152",
+      "queue_peak": "262144",
+      "disk_peak_bytes": "3670912",
+      "disk_peak_objects": "14"
+    }
+  ],
+  "independent_log": "swap-independent-limits-current-2026-10-12.log",
+  "io_model": "2ms requested sleep per read/write call; actual scheduling may delay more; up to64KiB per call, codec chunks16KiB",
+  "limits": [
+    "injected local I/O delays, not physical slow-drive qualification",
+    "managed credits do not measure OS RSS",
+    "large test minimum3 complete cycles causes elapsed time to exceed requested duration",
+    "storage-only tests; combined Metal transport separately recorded"
+  ]
+}

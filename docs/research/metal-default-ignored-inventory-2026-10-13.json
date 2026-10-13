@@ -1,0 +1,50 @@
+{
+  "scope": "Current rrrah-gpu default-ignored test inventory, not overall100format or physical-device acceptance",
+  "ordinary_ignored_count": 13,
+  "explicitly_executed_all": [
+    "full_f828_managed_rgbe_matches_cpu_reference",
+    "full_sensor_linear_exposure_chunked_readback",
+    "full_sensor_managed_exposure_budgets_and_checks_every_pixel",
+    "fusion_back_full_frame_developed_raw_matches_metal_display_transport",
+    "fusion_front_full_frame_developed_raw_matches_metal_display_transport",
+    "hdr_exposure_saturates_to_finite_binary16_range",
+    "hdr_opposite_extreme_samples_interpolate_without_nan",
+    "hero9_full_frame_developed_raw_matches_metal_display_transport",
+    "large_cancelled_upload_validation_and_admission_preserve_visible_texture",
+    "large_hdr_area_lod_preserves_all_output_samples_and_metal_frame",
+    "pinned_native_ai_planes_survive_managed_metal_display",
+    "qualified_sd10_linear_raster_full_frame_display_readback",
+    "raster_single_layer_gpu_timestamp_timing"
+  ],
+  "remaining_unexecuted_default_ignored": [],
+  "reports": [
+    {
+      "path": "docs/research/metal-current-combined-2026-10-13/report.json",
+      "sha256": "dc298d3572da73c1583136bb06d47f80796317eb126e1595da7841cbf77ab67f",
+      "passed": 144,
+      "failed": 0
+    },
+    {
+      "path": "docs/research/metal-remaining-gpu-cases-2026-10-13/report.json",
+      "sha256": "844efe94e2253e88bfe0b2b3d17144818e7d7239505102b4e2e632c6493007f6",
+      "passed": 143,
+      "failed": 0
+    }
+  ],
+  "runner_new_options": [
+    "--metal-large-lod",
+    "--metal-raster-timing"
+  ],
+  "permanent_evidence_tests": {
+    "passed": 7,
+    "failed": 0,
+    "file": "scripts/test-viewer-storage-gpu-evidence.py"
+  },
+  "limitations": [
+    "GoPro and X3F fixtures qualify full-frame transport, not all native camera variants",
+    "AI replay planes are test-only; production appearance remains unqualified",
+    "F828 authored four-channel normalization does not establish WB/color",
+    "timestamps measure GPU pass, not whole viewer latency",
+    "catalogue94subsets/6Pending; physical HDR calibration and NVIDIA remain incomplete"
+  ]
+}

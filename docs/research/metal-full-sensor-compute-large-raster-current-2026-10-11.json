@@ -1,0 +1,60 @@
+{
+  "backend": "Metal Apple M4 Max, explicitly selected",
+  "manual_tests_passed": 4,
+  "managed_full_sensor": {
+    "dimensions": [
+      6188,
+      4120
+    ],
+    "pixels": 25494560,
+    "all_pixels_exact": true,
+    "interleaved_end_to_end_ms": 326.546,
+    "managed_end_to_end_ms": 241.162,
+    "gpu_peak_bytes": 1223738992,
+    "cpu_peak_bytes": 815825920,
+    "final_used": 0
+  },
+  "resident_buffer_compute": {
+    "pixels": 25494560,
+    "bytes_per_buffer": 407912960,
+    "submission_and_wait_samples_ms": [
+      2.963708,
+      2.989292,
+      3.005792,
+      3.09775,
+      3.131166
+    ],
+    "median_ms": 3.006,
+    "verification": "three readback positions only; all-pixel qualification supplied separately by managed test",
+    "excludes": "initial upload, allocation and full readback"
+  },
+  "large_upload_cancellation": {
+    "source": "12MP",
+    "checkpoints": [
+      1,
+      2,
+      1466,
+      2931,
+      2932,
+      2933
+    ],
+    "budget_bytes": 192000000,
+    "validation": "cancelled validation/admission preserves prior visible texture"
+  },
+  "large_native_hdr_lod": {
+    "source_pixels": 36000000,
+    "source_bytes": 576000000,
+    "output_pixels": 1000000,
+    "output_bytes": 16000000,
+    "all_output_pixels_exact": true,
+    "sdr_hdr_metal_frames_exact": true,
+    "cpu_lod_elapsed_ms": 161.60025,
+    "final_output_credit": 0
+  },
+  "limits": [
+    "Exposure compute on synthetic linear input is not full RAW decode/demosaic/color qualification",
+    "Resident submission timing is not end-to-end viewer latency",
+    "Remaining manual corpus/HDR-edge tests not run here",
+    "Physical HDR and NVIDIA remain unverified; full goal open"
+  ]
+}

@@ -1,0 +1,19 @@
+   Compiling rrrah-gpu v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-gpu)
+    Finished `test` profile [optimized + debuginfo] target(s) in 1.56s
+     Running tests/model_readback.rs (target/debug/deps/model_readback-cb73a0cd6a7f5d18)
+
+running 8 tests
+model budget adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+model adapter: Metal Apple M4 Max
+test cancelled_model_upload_preserves_resident_geometry_and_credit ... ok
+test model_budget_admits_vertices_and_depth_transactionally ... ok
+test raster_and_model_resources_share_parent_admission ... ok
+test model_linear_hdr_target_matches_analytic_material_and_releases_budget ... ok
+test depth_resolves_overlapping_facets_independent_of_submission_order ... ok
+test model_has_coverage_orbits_and_fits_extreme_coordinates ... ok
+test float64_translation_and_scale_preserve_small_geometry ... ok
+model replacement failures: SDR/HDR; nine cancellations and memory refusal retain exact frame; retry changes frame; final credit zero
+test cancelled_model_replacement_keeps_sdr_and_hdr_pixels_exact ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.45s
+

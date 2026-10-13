@@ -1,0 +1,33 @@
+{
+  "status": "verified_isolated_zero_borrow_v4_raster_gate",
+  "passed": 48,
+  "ignored": 3,
+  "suites": [
+    {
+      "suite": "lib",
+      "passed": 42,
+      "ignored": [
+        "gradient::batch_tests::alternating_matcher_timing",
+        "gradient::matching_tests::alternating_matcher_timing",
+        "gradient_index::row_major_tests::row_major_index_build_latency_probe"
+      ],
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-zero-smoothing-borrow-v4-raster-executables-20261012/lib",
+      "sha256": "1f251941d36ca08613dbec724bdbe89d9d80bced74950bd57e6f21b5d94749a6"
+    },
+    {
+      "suite": "gradient_candidate_smoothing",
+      "passed": 6,
+      "ignored": [],
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-zero-smoothing-borrow-v4-raster-executables-20261012/gradient_candidate_smoothing",
+      "sha256": "1efb48f508bee5bf84d2f27a91325c521506c3ca9159c75bc775dbe523d95dd9"
+    }
+  ],
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-zero-smoothing-borrow-source-v4-20261012.json": "149176a65ecd0f55c793cbf713a98b98e147e2809eb3026158b67f103e18b49c",
+    "/Users/themoretheless/.codex/tmp/rrrah-zero-smoothing-borrow-v4-raster-tests-20261012.log": "1098fef52bcee73beec5edc9a9c01368e1b5326b484b0c67eb48b15afbc6fd7f",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-zero-smoothing-borrow-v4-raster-20261012.py": "4950fbf069e3bcd6683cab27b1fd4b1d94938fd80c2d2222e66965eb29bfd3a3",
+    "/Users/themoretheless/.codex/tmp/rrrah-zero-smoothing-borrow-v4-raster-executables-20261012/lib": "1f251941d36ca08613dbec724bdbe89d9d80bced74950bd57e6f21b5d94749a6",
+    "/Users/themoretheless/.codex/tmp/rrrah-zero-smoothing-borrow-v4-raster-executables-20261012/gradient_candidate_smoothing": "1efb48f508bee5bf84d2f27a91325c521506c3ca9159c75bc775dbe523d95dd9"
+  },
+  "scope": "Isolated v4 candidate, not adopted. All raster-feature units and smoothing integration suite; exact test names, frozen source and preserved binaries verified. Five ignored manual controls are not passes. Includes identity-validator HDR/shape/cancellation/work tests and existing smoothing suite; decode-only collection tests are outside this gate. No wholepairRSS/Linuxcandidate/fullcorpus/full500qualification."
+}

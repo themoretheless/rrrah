@@ -1,0 +1,47 @@
+{
+  "scope": "Pointwise native source component discrepancy from corresponding exact affine field over supplied vertex hull; conditional on hull membership",
+  "tests": {
+    "source": 122,
+    "source_ignored": 1,
+    "compositor": 236,
+    "compositor_ignored": 12
+  },
+  "includes": [
+    "Raw weight evaluation error",
+    "Negative weight clipping",
+    "Positive-sum rounding and normalized division",
+    "Native interpolation arithmetic",
+    "Source f32 rounding"
+  ],
+  "actual_source_rows": [
+    {
+      "event": 2670,
+      "refused": 0,
+      "component_error_upper": 1.2083345109282708e-07
+    },
+    {
+      "event": 2670,
+      "refused": 0,
+      "component_error_upper": 1.1930525915926618e-07
+    },
+    {
+      "event": 2670,
+      "refused": 0,
+      "component_error_upper": 1.1943909794151923e-07
+    },
+    {
+      "event": 2670,
+      "refused": 0,
+      "component_error_upper": 1.1921398613376485e-07
+    }
+  ],
+  "native_five_pixels_and_existing_comparisons_exact": true,
+  "regression": "Inside/exterior domain component comparisons including constant channel; every insufficient work budget and every cancellation checkpoint refuses",
+  "fixed_during_refactor": "Cancellation regression caught eager error construction ignoring a late poll; lazy error construction plus final cancellation check restores strict refusal",
+  "proof_note": "ai-affine-component-error-derivation-2026-10-13.md",
+  "limitations": [
+    "Not final pixel or display color error bound",
+    "Rounded clipping and centroid hull membership not yet certified",
+    "No samples skipped or normal4Mfullpage/viewer qualification claimed"
+  ]
+}

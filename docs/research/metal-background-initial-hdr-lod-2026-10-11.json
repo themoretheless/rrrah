@@ -1,0 +1,73 @@
+{
+  "date": "2026-10-11",
+  "backend": "Metal",
+  "adapter": "Apple M4 Max",
+  "implementation": [
+    "Lazy dedicated rrrah-hdr-lod thread performs initial-fit HDR area filtering",
+    "One active calculation, one replaceable pending source request and one completed output slot; submit clears obsolete completed output",
+    "Own job revision and ForegroundLoader GenerationToken cancel superseded/running calculations; cancelled outputs are not published",
+    "Source input ownership is dropped before output wake-up",
+    "Main thread retains original RasterReady event and cache consumer lease, plans size from current headroom, consumes only matching job/generation result",
+    "Completion wakes winit event loop through existing EventLoopProxy",
+    "Prepared-level installation skips full original-source pixel scan when full upload cannot be admitted; GPU validation/upload still runs for the bounded prepared level",
+    "New-source GPU region path and whole-image path retain normal behavior; prepared level retained for subsequent fit/source switching"
+  ],
+  "validation": {
+    "app_units_passed": 205,
+    "app_units_ignored": 43,
+    "actual_metal_viewer_tests_passed": 4,
+    "worker_queue_test": [
+      "Pause first worker request with deterministic channel gate",
+      "Submitting second/third requests returns while worker remains paused",
+      "Only third pending request is retained and published",
+      "Output budget reflects only latest result and releases after consume/cancel/drop"
+    ],
+    "metal_prepared_path_test": [
+      "Real background callback thread name rrrah-hdr-lod",
+      "512x320 original managed source,64x40 prepared HDR level",
+      "UI installation callback count below100 rather than original320-row scan",
+      "Exact HDR frame against prepared-level reference",
+      "Final managed source/LOD/texture/queue zero"
+    ],
+    "retained_controls": [
+      "Cancellation during filter/queued GPU write/replacement",
+      "SDR/HDR and RAW curves during fit/source/fit",
+      "Cached preview reuse and smaller preview under pressure"
+    ],
+    "native_window": {
+      "bundle": "/tmp/RrrahAsyncLodMetalQualification.app",
+      "source_extent": [
+        1000,
+        1000
+      ],
+      "source_float_bytes": 16000000,
+      "preview_extent": [
+        250,
+        250
+      ],
+      "raster_texture_limit": 1048576,
+      "managed_cpu_limit": 134217728,
+      "observations": [
+        "Window title reaches ready via worker completion",
+        "Four HDR RGB/gray bands visibly rendered in fit",
+        "Log records background thread, then fallback and one raster-ready event",
+        "Qualification app quit and own process absent"
+      ],
+      "timing": "Window title elapsed reflects existing decoder timing only, not end-to-end latency or responsiveness benchmark"
+    }
+  },
+  "limits": [
+    "This milestone offloads initial-fit filtering; interactive refresh that constructs a new pressure/replacement LOD still filters synchronously",
+    "GPU upload/validation initiation and ordinary full-image upload remain on main thread",
+    "Headroom planning is advisory and can become stale; final admission may refuse safely, automatic rescheduling under changing budgets still open",
+    "Full CPU source remains resident and preview/replacement require transient budget headroom",
+    "Native screenshots were observed via computer-use tool, not exported as local files",
+    "No physical HDR luminance/color accuracy, NVIDIA, slow physical disks, out-of-core decoding or full100-format acceptance claim"
+  ],
+  "sha256": {
+    "crates/rrrah-app/src/raster_lod_worker.rs": "7ba8cd27d654154d7415fee3ab6d536d137f974986f769913efa8f7abae080c9",
+    "crates/rrrah-app/src/raster_viewport.rs": "c78e66636d236d2015a5355e02a2353f4aed66c4af56ee2295907eb95ec91e4e",
+    "crates/rrrah-app/src/main.rs": "ce5435e1f786c15def3496e14fa340d0d7e2147c66d4607f8576b5c8c0cf7e7e",
+    "/tmp/RrrahAsyncLodMetalQualification.app/Contents/MacOS/rrrah": "a3d8a9808c4438ac5959509748f47a855f6f7c252546c361071ed2b34951f1e0"
+  }
+}

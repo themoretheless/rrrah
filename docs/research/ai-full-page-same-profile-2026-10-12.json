@@ -1,0 +1,104 @@
+{
+  "scope": "Full VectorApple page comparison holding pinned saved native output fixed while freshly rendering reference with native fixed CMYK ICC",
+  "dimensions": [
+    301,
+    246
+  ],
+  "native_rerun": false,
+  "native_saved_artifact_hash_verified": true,
+  "reference": "Separate Poppler26.10.0 build with input-profile sanitycheck corrected; original unchangedCGATS ICC; implicit default sRGB destination",
+  "comparisons": [
+    {
+      "reference": "default",
+      "different_pixels": 33072,
+      "max_channel_error": 218,
+      "mean_absolute_channel_error": 3.9056082255174713,
+      "bounds": [
+        55,
+        13,
+        274,
+        240
+      ],
+      "probe_210_21": {
+        "native": [
+          0,
+          135,
+          68
+        ],
+        "oracle": [
+          38,
+          135,
+          62
+        ]
+      },
+      "probe_78_144": {
+        "native": [
+          253,
+          237,
+          213
+        ],
+        "oracle": [
+          255,
+          255,
+          255
+        ]
+      }
+    },
+    {
+      "reference": "same_cmyk_profile",
+      "different_pixels": 28120,
+      "max_channel_error": 216,
+      "mean_absolute_channel_error": 1.9498059764650804,
+      "bounds": [
+        55,
+        13,
+        274,
+        240
+      ],
+      "probe_210_21": {
+        "native": [
+          0,
+          135,
+          68
+        ],
+        "oracle": [
+          0,
+          135,
+          68
+        ]
+      },
+      "probe_78_144": {
+        "native": [
+          253,
+          237,
+          213
+        ],
+        "oracle": [
+          255,
+          255,
+          255
+        ]
+      }
+    }
+  ],
+  "findings": [
+    "Green probe210,21 exact after matchingprofile",
+    "Mean absolute channel error reduced3.905608->1.949806",
+    "28120pixels still differ; maxerror216; strictqualificationfails",
+    "White probe78,144 unchangedmismatch native[253,237,213],reference[255,255,255]"
+  ],
+  "next_action": "Adjudicate sourcepath/clip/mesh-domain coverage at whiteprobe78,144; do not treat profile matching as geometry fix",
+  "limits": [
+    "Pinned saved native replay, not newproductionAIrun",
+    "Fullpage error includes sourcequantization/coverage differences; not allmismatches causallyclassified",
+    "No acceptance/tolerance changes; AI stillpending"
+  ],
+  "sha256": {
+    "docs/research/ai-full-page-same-profile-2026-10-12/poppler.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/research/ai-full-page-same-profile-2026-10-12/comparison.json": "7b47a5e733a01709bd85857515407911c0f4bd83fb2747aaf6147aa9d4b640ee",
+    "docs/research/ai-full-page-same-profile-2026-10-12/poppler-same-profile.ppm": "8e524275d04386895c04522d926535647f504e06f1b7aafd9718809dfef796f8",
+    "tests/fixtures/data/metal-recovery/ai-corpus/VectorApple.ai": "c5fc34346629c3379cee6065c45b7de0b620be822604551d1463d8e691b03d06",
+    "tests/fixtures/data/metal-recovery/ai-native-finer-current-20261011/VectorApple.ai-page-0.native.rgba": "ecbb6bcbf532cb70c0e35be8c9d655c3cb38ddd8cfd85288e6e3c4c544020efc",
+    "vendor/hayro-interpret/assets/CGATS001Compat-v2-micro.icc": "73e1ba37d2bad5bab2a964f40a9eed96209666efc067c3322626214bbef234a0"
+  }
+}

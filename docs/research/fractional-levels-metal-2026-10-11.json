@@ -1,0 +1,40 @@
+{
+  "backend": "Metal Apple M4 Max",
+  "change": "Bayer normalization preserves positive fractional white-black ranges; upload refuses non-finite subtraction before replacing resources",
+  "tests": [
+    {
+      "passed": 12,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    }
+  ],
+  "attachments": [
+    "Rgba16Float",
+    "Rgba32Float"
+  ],
+  "independent_case": {
+    "encoded": 1,
+    "black": 0.75,
+    "white": 1.25,
+    "exposure_stops": 1,
+    "expected_rgb": [
+      1,
+      1,
+      1
+    ]
+  },
+  "checks": [
+    "fractional normalization",
+    "overflowing subtraction refusal",
+    "previous frame preserved on refusal",
+    "managed credit unchanged on refusal",
+    "camera profiles regression"
+  ],
+  "log_sha256": "ef015c9454144318b8232be402d2765a484e937f33b14c7269564dda86967a7f",
+  "scope": "Authored arithmetic fixture plus camera-profile GPU regressions; not photographic appearance or physical HDR calibration"
+}

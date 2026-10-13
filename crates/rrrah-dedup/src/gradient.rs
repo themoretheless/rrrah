@@ -38,7 +38,7 @@ pub fn gradient_orientation(
             .ok_or(LocalError::Invalid)?
             .map(|v| f64::from(f32::from_bits(v)));
         if p[3] != 1. {
-            return Err(LocalError::Invalid);
+            return Err(LocalError::UnsupportedPixels);
         }
         Ok(p[0] * 0.2126 + p[1] * 0.7152 + p[2] * 0.0722)
     };
@@ -160,25 +160,36 @@ pub fn reflect_gradient_features_managed(
     budget: &rrrah_core::MemoryBudget,
     cancel: impl Fn() -> bool,
 ) -> Result<rrrah_core::SharedBuffer<GradientFeature>, LocalError> {
-    if cancel() { return Err(LocalError::Cancelled); }
+    if cancel() {
+        return Err(LocalError::Cancelled);
+    }
     let n = u64::try_from(features.len()).map_err(|_| LocalError::Budget)?;
     if n.checked_mul(128).ok_or(LocalError::Budget)? > maximum_bins {
         return Err(LocalError::Budget);
     }
-    let bytes = n.checked_mul(std::mem::size_of::<GradientFeature>() as u64)
+    let bytes = n
+        .checked_mul(std::mem::size_of::<GradientFeature>() as u64)
         .ok_or(LocalError::Budget)?;
     let credit = budget.try_reserve(bytes).map_err(|_| LocalError::Budget)?;
     let mut output = Vec::new();
-    output.try_reserve_exact(features.len()).map_err(|_| LocalError::Budget)?;
+    output
+        .try_reserve_exact(features.len())
+        .map_err(|_| LocalError::Budget)?;
     for feature in features {
-        if cancel() { return Err(LocalError::Cancelled); }
-        if feature.position.iter().any(|v| !v.is_finite()) { return Err(LocalError::Invalid); }
+        if cancel() {
+            return Err(LocalError::Cancelled);
+        }
+        if feature.position.iter().any(|v| !v.is_finite()) {
+            return Err(LocalError::Invalid);
+        }
         output.push(GradientFeature {
             position: feature.position,
             descriptor: reflect_gradient_descriptor(&feature.descriptor, &cancel)?,
         });
     }
-    if cancel() { return Err(LocalError::Cancelled); }
+    if cancel() {
+        return Err(LocalError::Cancelled);
+    }
     credit.try_adopt(output).map_err(|_| LocalError::Budget)
 }
 
@@ -565,7 +576,9 @@ fn extract_gradient_pyramid_selected_managed(
 }
 
 /// Mutual unique nearest descriptors with explicit squared-distance evidence.
-/// Equal-distance ties reject. Returned positions need independent geometry and
+/// Equal-distance ties reject. Distances use independent ordered accumulators
+/// in blocks of at most four; every pair retains its cancellation checkpoint
+/// before the block arithmetic. Returned positions need independent geometry and
 /// pixel confirmation. All allocations are fallible; no managed reservation.
 ///
 /// # Errors
@@ -600,10 +613,28 @@ pub fn match_gradients_distinct_locations(
     match_gradients_selected(left, right, policy, Some(competitor_radius.powi(2)), cancel)
 }
 
+/// The caller holds normal matcher/output credit. This helper adds only optional
+/// cache storage, charged to the same budget and dropped before returning points.
+#[cfg(feature = "raster")]
+pub(crate) fn match_gradients_distinct_locations_prepaid(
+    left: &[GradientFeature], right: &[GradientFeature], policy: GradientMatchPolicy,
+    competitor_radius: f64, budget: &rrrah_core::MemoryBudget, cancel: impl Fn() -> bool,
+) -> Result<Vec<crate::geometry::Correspondence>, LocalError> {
+    if !competitor_radius.is_finite() || competitor_radius < 0. || !competitor_radius.powi(2).is_finite() {
+        return Err(LocalError::Invalid);
+    }
+    match_gradients_selected_with_cache(left, right, policy, Some(competitor_radius.powi(2)),
+        |pairs| budget.try_buffer(pairs, 0.).ok()
+            .filter(|buffer| buffer.capacity_bytes() <= MAX_DISTANCE_CACHE_BYTES), cancel)
+}
+
 /// Managed variant of distinct-location matching. Input features are caller-owned.
 /// Scratch tables and worst-case retained correspondences are admitted before
 /// allocation; retained credit follows the result's last shared owner. This is
-/// managed allocation admission, not a process RSS bound.
+/// managed allocation admission, not a process RSS bound. An optional exact
+/// distance cache uses up to16MiB additional admitted scratch for the second
+/// pass. Refused cache admission falls back to recomputation; full work limits
+/// and all cancellation checkpoints remain enforced.
 /// # Errors
 /// Same validation/work/cancellation errors plus memory-budget refusal.
 #[cfg(feature = "raster")]
@@ -652,11 +683,56 @@ pub fn match_gradients_distinct_locations_managed(
         .ok_or(LocalError::Budget)?;
     let _scratch = budget.try_reserve(scratch).map_err(|_| LocalError::Budget)?;
     let retained = budget.try_reserve(retained).map_err(|_| LocalError::Budget)?;
-    let output = match_gradients_distinct_locations(left, right, policy, competitor_radius, &cancel)?;
+    let output = match_gradients_distinct_locations_prepaid(left, right, policy, competitor_radius, budget, &cancel)?;
     if cancel() {
         return Err(LocalError::Cancelled);
     }
     retained.try_adopt(output).map_err(|_| LocalError::Budget)
+}
+
+#[cfg(all(test, feature = "raster"))]
+#[path = "gradient_cache_tests.rs"]
+mod cache_tests;
+#[cfg(test)]
+#[path = "gradient_batch_tests.rs"]
+mod batch_tests;
+#[cfg(test)]
+#[path = "gradient_matching_tests.rs"]
+mod matching_tests;
+
+// Four independent accumulators preserve each scalar summation order.
+// Incomplete blocks evaluate only actual pairs. No heap scratch or unsafe SIMD.
+fn distances_four(a: &GradientDescriptor, b: &[GradientFeature]) -> [f64; 4] {
+    // No repeated/phantom comparisons in partial blocks.
+    if b.len() < 4 {
+        let mut output = [0.; 4];
+        for (lane, b) in b.iter().enumerate() {
+            output[lane] =
+                a.0.iter()
+                    .zip(&b.descriptor.0)
+                    .map(|(x, y)| (x - y) * (x - y))
+                    .sum();
+        }
+        return output;
+    }
+    let last = 3;
+    let b0 = &b[0].descriptor.0;
+    let b1 = &b[1.min(last)].descriptor.0;
+    let b2 = &b[2.min(last)].descriptor.0;
+    let b3 = &b[3.min(last)].descriptor.0;
+    let (mut s0, mut s1, mut s2, mut s3) = (0., 0., 0., 0.);
+    for k in 0..128 {
+        let x = a.0[k];
+        let d0 = x - b0[k];
+        s0 += d0 * d0;
+        let d1 = x - b1[k];
+        s1 += d1 * d1;
+        let d2 = x - b2[k];
+        s2 += d2 * d2;
+        let d3 = x - b3[k];
+        s3 += d3 * d3;
+    }
+    [s0, s1, s2, s3]
 }
 
 fn match_gradients_selected(
@@ -664,6 +740,26 @@ fn match_gradients_selected(
     right: &[GradientFeature],
     policy: GradientMatchPolicy,
     distinct_radius_squared: Option<f64>,
+    cancel: impl Fn() -> bool,
+) -> Result<Vec<crate::geometry::Correspondence>, LocalError> {
+    match_gradients_selected_with_cache(left, right, policy, distinct_radius_squared,
+        |_| None::<Vec<f64>>, cancel)
+}
+
+// Cache only immutable pair distances within one matcher call. Refused optional
+// scratch never changes admission of the original exhaustive recipe.
+const MAX_DISTANCE_CACHE_BYTES: u64 = 16 * 1024 * 1024;
+fn distance_cache_pairs(left: usize, right: usize, distinct: bool) -> Option<usize> {
+    if !distinct { return None; }
+    left.checked_mul(right).filter(|&n| n >= 4096 && n <= MAX_DISTANCE_CACHE_BYTES as usize / std::mem::size_of::<f64>())
+}
+
+fn match_gradients_selected_with_cache<C: std::ops::DerefMut<Target = [f64]>>(
+    left: &[GradientFeature],
+    right: &[GradientFeature],
+    policy: GradientMatchPolicy,
+    distinct_radius_squared: Option<f64>,
+    make_cache: impl FnOnce(usize) -> Option<C>,
     cancel: impl Fn() -> bool,
 ) -> Result<Vec<crate::geometry::Correspondence>, LocalError> {
     if !policy.max_squared_distance.is_finite()
@@ -713,6 +809,8 @@ fn match_gradients_selected(
     };
     let mut forward = allocate(left.len())?;
     let mut reverse = allocate(right.len())?;
+    let mut distance_cache = distance_cache_pairs(left.len(), right.len(), distinct_radius_squared.is_some())
+        .and_then(|pairs| make_cache(pairs).filter(|values| values.len() == pairs));
     let update = |best: &mut (f64, f64, usize), distance, index| {
         if distance < best.0 {
             *best = (distance, best.0, index);
@@ -721,19 +819,24 @@ fn match_gradients_selected(
         }
     };
     for (i, a) in left.iter().enumerate() {
-        for (j, b) in right.iter().enumerate() {
-            if cancel() {
-                return Err(LocalError::Cancelled);
+        for (block, chunk) in right.chunks(4).enumerate() {
+            for _ in chunk {
+                if cancel() {
+                    return Err(LocalError::Cancelled);
+                }
             }
-            let distance = a
-                .descriptor
-                .0
-                .iter()
-                .zip(b.descriptor.0.iter())
-                .map(|(a, b)| (a - b) * (a - b))
-                .sum();
-            update(&mut forward[i], distance, j);
-            update(&mut reverse[j], distance, i);
+            let distances = distances_four(&a.descriptor, chunk);
+            if let Some(cache) = distance_cache.as_mut() {
+                let start = i * right.len() + block * 4;
+                cache[start..start + chunk.len()].copy_from_slice(&distances[..chunk.len()]);
+            }
+            for (lane, _b) in chunk.iter().enumerate() {
+                let j = block * 4 + lane;
+
+                let distance = distances[lane];
+                update(&mut forward[i], distance, j);
+                update(&mut reverse[j], distance, i);
+            }
         }
     }
     if let Some(radius) = distinct_radius_squared {
@@ -741,24 +844,32 @@ fn match_gradients_selected(
             best.1 = f64::INFINITY;
         }
         for (i, a) in left.iter().enumerate() {
-            for (j, b) in right.iter().enumerate() {
-                if cancel() {
-                    return Err(LocalError::Cancelled);
+            for (block, chunk) in right.chunks(4).enumerate() {
+                for _ in chunk {
+                    if cancel() {
+                        return Err(LocalError::Cancelled);
+                    }
                 }
-                let distance: f64 = a
-                    .descriptor
-                    .0
-                    .iter()
-                    .zip(b.descriptor.0.iter())
-                    .map(|(x, y)| (x - y) * (x - y))
-                    .sum();
-                let nearest = right[forward[i].2].position;
-                if (b.position[0] - nearest[0]).powi(2) + (b.position[1] - nearest[1]).powi(2) > radius {
-                    forward[i].1 = forward[i].1.min(distance);
-                }
-                let nearest = left[reverse[j].2].position;
-                if (a.position[0] - nearest[0]).powi(2) + (a.position[1] - nearest[1]).powi(2) > radius {
-                    reverse[j].1 = reverse[j].1.min(distance);
+                let distances = if let Some(cache) = distance_cache.as_ref() {
+                    let start = i * right.len() + block * 4;
+                    let mut values = [0.; 4];
+                    values[..chunk.len()].copy_from_slice(&cache[start..start + chunk.len()]);
+                    values
+                } else {
+                    distances_four(&a.descriptor, chunk)
+                };
+                for (lane, b) in chunk.iter().enumerate() {
+                    let j = block * 4 + lane;
+
+                    let distance = distances[lane];
+                    let nearest = right[forward[i].2].position;
+                    if (b.position[0] - nearest[0]).powi(2) + (b.position[1] - nearest[1]).powi(2) > radius {
+                        forward[i].1 = forward[i].1.min(distance);
+                    }
+                    let nearest = left[reverse[j].2].position;
+                    if (a.position[0] - nearest[0]).powi(2) + (a.position[1] - nearest[1]).powi(2) > radius {
+                        reverse[j].1 = reverse[j].1.min(distance);
+                    }
                 }
             }
         }
@@ -877,7 +988,7 @@ fn describe_gradient_cells(
                     .ok_or(LocalError::Invalid)?
                     .map(|v| f64::from(f32::from_bits(v)));
                 if p[3] != 1. {
-                    return Err(LocalError::Invalid);
+                    return Err(LocalError::UnsupportedPixels);
                 }
                 values[(dy * 2 + dx) as usize] = p[0] * 0.2126 + p[1] * 0.7152 + p[2] * 0.0722;
             }

@@ -1,0 +1,28 @@
+{
+  "date": "2026-10-12",
+  "backend": "Metal",
+  "device": "Apple M4 Max",
+  "test": "large_float_hdr_swap_preserves_full_metal_attachment",
+  "result": "1 passed; 0 failed",
+  "seconds": 2.83,
+  "dimensions": [
+    4000,
+    3000
+  ],
+  "source_bytes": 192000000,
+  "checks": [
+    "independent binary16 constant-region oracle including bright and negative values with exposure",
+    "all float source bits exact after swap",
+    "all 48000000 binary16 output components exact before/after swap including boundaries",
+    "full root budget refuses restore",
+    "cancel after restore allocation admission releases all credits",
+    "successful retry; one read and write; zero swap errors",
+    "final managed root and queue zero"
+  ],
+  "limits": [
+    "independent constant-region oracle excludes one-pixel quadrant boundaries; exact transport comparison includes every pixel",
+    "managed pressure does not prove OS RSS or physical slow-disk behavior",
+    "physical HDR calibration and NVIDIA not covered"
+  ],
+  "log": "metal-12mp-hdr-pressure-cancel-2026-10-12.log"
+}

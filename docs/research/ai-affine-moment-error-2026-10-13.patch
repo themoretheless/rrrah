@@ -1,0 +1,171 @@
+--- a/vendor/hayro-interpret/src/encode/native_source.rs
++++ b/vendor/hayro-interpret/src/encode/native_source.rs
+@@ -839,6 +839,35 @@
+         })();
+         if cancelled() {return Err(Cancelled);}
+         result.ok_or(if *remaining==0 {WorkLimit} else {Invalid})
++    }
++
++    /// Absolute device-x/device-y derivative bounds of the corresponding exact
++    /// native affine component field. They do not include sampler projection or
++    /// rounding, which require the separate pointwise component error envelope.
++    pub fn mesh_native_affine_gradient_bounds(&self,index:usize,vertices:&[Point],
++        destination:&ColorSpace,cancelled:&dyn Fn()->bool,remaining:&mut usize,
++    )->Result<[[f64;2];4],NativeShadingError> {
++        use NativeShadingError::*;
++        if cancelled() {return Err(Cancelled);}
++        if !self.mesh_has_affine_native_field(destination) {return Err(Unsupported);}
++        let fields=self.mesh_triangle_affine_weight_fields(index,vertices,cancelled,remaining)?;
++        let triangle=&self.mesh.as_ref().ok_or(Unsupported)?.triangles[index];
++        let mut bounds=[[0.;2];4];
++        for (channel,out) in bounds.iter_mut().enumerate().take(self.count) {
++            let values=triangle.colors.map(|color|color[channel]);
++            if values.iter().any(|v|!v.is_finite() || !(0. ..=1.).contains(v)) {return Err(Invalid);}
++            for (axis,bound) in out.iter_mut().enumerate() {
++                let mut derivative=MeshWeightInterval::exact(0.).ok_or(Invalid)?;
++                for (field,value) in fields.iter().zip(values) {
++                    let value=MeshWeightInterval::exact(f64::from(value)).ok_or(Invalid)?;
++                    let term=field.coeff[axis].op(value,2,remaining,cancelled).ok_or_else(||if cancelled() {Cancelled} else if *remaining==0 {WorkLimit} else {Invalid})?;
++                    derivative=derivative.op(term,0,remaining,cancelled).ok_or_else(||if cancelled() {Cancelled} else if *remaining==0 {WorkLimit} else {Invalid})?;
++                }
++                *bound=derivative.lo.abs().max(derivative.hi.abs()).next_up();
++                if !bound.is_finite() {return Err(Invalid);}
++            }
++        }
++        if cancelled() {return Err(Cancelled);}Ok(bounds)
+     }
+ 
+     /// Pointwise absolute component error versus the corresponding exact affine
+@@ -1406,6 +1435,27 @@
+         for stop in 1..=polls.get() {
+             let count=std::cell::Cell::new(0);
+             assert!(source.mesh_triangle_weight_bounds_over_vertices(0,&points,&||{count.set(count.get()+1);count.get()>=stop},&mut 1000).is_err());
++        }
++    }
++
++    #[test]
++    fn affine_gradient_bounds_enclose_known_device_derivatives_and_refuse_short_work() {
++        let mut pattern=axial();
++        Arc::make_mut(&mut pattern.shading).shading_type=Arc::new(ShadingType::TriangleMesh {triangles:vec![native_triangle([[0.,0.5,0.125,1.],[1.,0.5,0.875,0.],[0.,0.5,0.125,1.]],4)],function:None});
++        let mut source=NativeShadingSource::capture(&pattern,&||false,&no_credit).unwrap();
++        let vertices=[Point::ZERO,Point::new(8.,0.),Point::new(0.,8.)];
++        for inverse in [kurbo::Affine::IDENTITY,kurbo::Affine::new([1.25,-0.5,0.75,2.,-3.,4.]),kurbo::Affine::new([-1.,0.,0.,1.,8.,0.])] {
++            source.inverse=inverse;let mut work=1000;
++            let bounds=source.mesh_native_affine_gradient_bounds(0,&vertices,&source.color_space,&||false,&mut work).unwrap();
++            let coefficients=inverse.as_coeffs();
++            for (channel,gain) in [1f64,0.,0.75,-1.].into_iter().enumerate() {
++                for (axis,coefficient) in [coefficients[0],coefficients[2]].into_iter().enumerate() {
++                    let exact=(gain*coefficient/8.).abs();assert!(bounds[channel][axis]>=exact);assert!(bounds[channel][axis]-exact<1e-10);
++                }
++            }
++            for budget in 0..1000-work {assert!(source.mesh_native_affine_gradient_bounds(0,&vertices,&source.color_space,&||false,&mut {budget}).is_err());}
++            let polls=std::cell::Cell::new(0);source.mesh_native_affine_gradient_bounds(0,&vertices,&source.color_space,&||{polls.set(polls.get()+1);false},&mut 1000).unwrap();
++            for stop in 1..=polls.get() {let count=std::cell::Cell::new(0);assert!(source.mesh_native_affine_gradient_bounds(0,&vertices,&source.color_space,&||{count.set(count.get()+1);count.get()>=stop},&mut 1000).is_err());}
+         }
+     }
+ 
+--- a/vendor/hayro/src/native_moments.rs
++++ b/vendor/hayro/src/native_moments.rs
+@@ -22,6 +22,28 @@
+     pub(super) area_error:f64,
+     pub(super) centroid_error:[f64;2],
+ }
++/// Geometric replacement error for an exact affine field, comparing exact
++/// reported-input moments with the table's evaluated area/centroid. This excludes
++/// pointwise sampler error, geometry clipping error and integral summation error.
++pub(super) fn affine_moment_geometry_error_bound<const C:usize>(geometry:&GeometryRoundingBounds,
++    gradients:[[f64;2];C],value_bounds:[f64;C],remaining:&mut usize,cancelled:&dyn Fn()->bool,
++)->Option<[f64;C]> {
++    if cancelled() {return None;}*remaining=remaining.checked_sub(1+C.checked_mul(8)?)?;
++    if !(1..=4).contains(&C) || geometry.area.iter().any(|v|!v.is_finite()) || geometry.area[0]<=0. || geometry.area[1]<geometry.area[0]
++        || !geometry.area_error.is_finite() || geometry.area_error<0. || geometry.centroid_error.iter().any(|v|!v.is_finite() || *v<0.)
++        || geometry.centroid.iter().any(|[lo,hi]|!lo.is_finite() || !hi.is_finite() || lo>hi)
++        || gradients.iter().flatten().any(|v|!v.is_finite() || *v<0.) || value_bounds.iter().any(|v|!v.is_finite() || *v<0.) {return None;}
++    let add=|a:f64,b:f64|(a+b).next_up();let mul=|a:f64,b:f64|(a*b).next_up();
++    let mut out=[0.;C];
++    for channel in 0..C {
++        if cancelled() {return None;}
++        let shift=add(mul(gradients[channel][0],geometry.centroid_error[0]),mul(gradients[channel][1],geometry.centroid_error[1]));
++        out[channel]=add(mul(geometry.area[1],shift),mul(geometry.area_error,value_bounds[channel]));
++        if !out[channel].is_finite() {return None;}
++    }
++    if cancelled() {return None;}Some(out)
++}
++
+ impl GeometryBounds {
+     fn added(self,area:f64,centroid:Point,origin:Point,work:&mut usize,cancelled:&dyn Fn()->bool)->Option<Self> {
+         debit(work,14,cancelled)?;
+@@ -445,3 +467,19 @@
+         assert!(table.slots.iter().all(|i|*i==usize::MAX));
+     }
+ }
++
++#[test]
++fn affine_moment_geometry_error_bounds_enclose_area_and_centroid_corner_perturbations() {
++    let geometry=GeometryRoundingBounds {area:[0.99,1.01],centroid:[[0.48,0.52],[0.47,0.53]],area_error:0.011,centroid_error:[0.021,0.031]};
++    let gradients=[[2.,3.],[0.5,1.]];let values=[3.,1.];let mut work=100;
++    let bounds=affine_moment_geometry_error_bound(&geometry,gradients,values,&mut work,&||false).unwrap();
++    for area in geometry.area {for x in geometry.centroid[0] {for y in geometry.centroid[1] {
++        let exact=[area*(0.1+2.*x+3.*y),area*(0.25-0.5*x+y)];
++        let evaluated=[0.1+2.*0.5+3.*0.5,0.25-0.5*0.5+0.5];
++        for i in 0..2 {assert!((exact[i]-evaluated[i]).abs()<=bounds[i]);}
++    }}}
++    for budget in 0..100-work {assert!(affine_moment_geometry_error_bound(&geometry,gradients,values,&mut {budget},&||false).is_none());}
++    let polls=std::cell::Cell::new(0);affine_moment_geometry_error_bound(&geometry,gradients,values,&mut 100,&||{polls.set(polls.get()+1);false}).unwrap();
++    for stop in 1..=polls.get() {let count=std::cell::Cell::new(0);assert!(affine_moment_geometry_error_bound(&geometry,gradients,values,&mut 100,&||{count.set(count.get()+1);count.get()>=stop}).is_none());}
++    assert!(affine_moment_geometry_error_bound(&geometry,[[f64::NAN,0.];2],values,&mut 100,&||false).is_none());
++}
+--- a/vendor/hayro/src/knockout_interpreter.rs
++++ b/vendor/hayro/src/knockout_interpreter.rs
+@@ -7198,10 +7198,12 @@
+     let trace_point_sources=point.is_some() && std::env::var_os("RRRAH_AI_TRACE_POINT_SOURCES").is_some();
+     for (event,source,geometry) in &meshes {
+         let component_error=std::env::var_os("RRRAH_AI_MESH_COMPONENT_ERROR").is_some();
+-        if component_error || std::env::var_os("RRRAH_AI_MESH_AFFINE_BOUNDS").is_some() {
++        let gradient_bounds=std::env::var_os("RRRAH_AI_MESH_GRADIENT_BOUNDS").is_some();
++        if component_error || gradient_bounds || std::env::var_os("RRRAH_AI_MESH_AFFINE_BOUNDS").is_some() {
+             let mut work=4_000_000;let mut accepted=0;let mut refused=0;let mut max_deficit=0f64;
+             let mut max_component_error=0f64;let mut component_refused=0;
+             let mut max_normal_source_error=0f64;let mut normal_refused=0;
++            let mut max_gradient=[0f64;2];let mut gradient_refused=0;
+             for (&owner,path) in geometry.owners.iter().zip(&geometry.paths) {
+                 let mut vertices=[kurbo::Point::ZERO;3];let mut count=0;let mut valid=true;
+                 for element in path.elements() {match element {
+@@ -7223,10 +7225,16 @@
+                         } else {normal_refused+=1;}
+                     } else {component_refused+=1;}
+                 }
++                if gradient_bounds {
++                    if let Ok(bounds)=source.mesh_native_affine_gradient_bounds(owner,&vertices,space,cancelled,&mut work) {
++                        for derivative in bounds {for axis in 0..2 {max_gradient[axis]=max_gradient[axis].max(derivative[axis]);}}
++                    } else {gradient_refused+=1;}
++                }
+             }
+             eprintln!("SPATIAL_MESH_AFFINE_BOUNDS event={event} accepted={accepted} refused={refused} max_deficit={max_deficit:?} work={}",4_000_000-work);
+             if component_error {eprintln!("SPATIAL_MESH_COMPONENT_ERROR event={event} refused={component_refused} max_error={max_component_error:?}");}
+             if component_error {eprintln!("SPATIAL_MESH_NORMAL_SOURCE_ERROR event={event} refused={normal_refused} max_premultiplied_error={max_normal_source_error:?}");}
++            if gradient_bounds {eprintln!("SPATIAL_MESH_GRADIENT_BOUNDS event={event} refused={gradient_refused} max_x={:?} max_y={:?}",max_gradient[0],max_gradient[1]);}
+         }
+         if std::env::var_os("RRRAH_AI_MESH_WEIGHT_BOUNDS").is_some() {
+             let mut work=4_000_000;let mut accepted=0;let mut refused=0;let mut inside=0;let mut max_deficit=0f64;
+--- a/vendor/hayro/src/native_spatial.rs
++++ b/vendor/hayro/src/native_spatial.rs
+@@ -200,13 +200,18 @@
+         let area=moments.as_ref().map_or(0.,|m|m.iter().map(|(_,a,_)|a).sum::<f64>());
+         if geometry_moment_bounds {
+             let mut certified=0;let mut unavailable=0;let mut max_area_error=0f64;let mut max_centroid_error=0f64;
++            let mut unit_integral_error=0f64;let mut term_refused=0;
+             if let Some(table)=&moments {for index in 0..buckets {
+                 if let Some(bounds)=table.geometry_rounding_bounds(index,&mut moment_work,cancelled) {
+                     certified+=1;max_area_error=max_area_error.max(bounds.area_error);
+                     max_centroid_error=max_centroid_error.max(bounds.centroid_error.into_iter().fold(0.,f64::max));
++                    if let Some(term)=super::native_moments::affine_moment_geometry_error_bound(&bounds,[[1.,1.]],[2.],&mut moment_work,cancelled) {
++                        unit_integral_error=(unit_integral_error+term[0]).next_up();
++                    } else {term_refused+=1;}
+                 } else {unavailable+=1;}
+             }}
+             eprintln!("SPATIAL_MOMENT_ROUNDING certified={certified} unavailable={unavailable} max_area_error={max_area_error:?} max_centroid_error={max_centroid_error:?}");
++            eprintln!("SPATIAL_MOMENT_GEOMETRY_TERM unit_gradient_value2_error={unit_integral_error:?} refused={term_refused}");
+         }
+         eprintln!("SPATIAL_FRAGMENT_MOMENTS complete={moment_complete} fragments={moment_fragments} buckets={buckets} area={area:?} fallback_fragments={fallback_fragments} diagnostic_work={}",256_000_000-moment_work);
+         if moment_complete {

@@ -1,0 +1,19 @@
+{
+  "status": "terminal_failure_needs_harness_repair",
+  "producer_status": "terminal_failure",
+  "returncode": 101,
+  "completed_target_summaries": 43,
+  "passed": 219,
+  "failed": 2,
+  "ignored": 5,
+  "failures": [
+    "container::complete_animation_groups_remove_stale_edges_and_keep_healthy_group",
+    "container::indexed_recursive_source_change_removes_stale_edges_and_retry_restores_them"
+  ],
+  "observed_error": "PermissionDenied modifying copied fixture files from read-only source snapshot",
+  "repair": "Create mutable temporary files by writing fixture bytes; preserve read-only original snapshot. Focused container rerun pending.",
+  "repair_source": "/Users/themoretheless/.codex/tmp/rrrah-container-writable-tests-20261013",
+  "repair_log": "/Users/themoretheless/.codex/tmp/rrrah-container-writable-tests-20261013.log",
+  "repair_session": 51816,
+  "scope": "Combined gate stopped at container; later targets unexecuted. Does not qualify current root or later publication fixes."
+}

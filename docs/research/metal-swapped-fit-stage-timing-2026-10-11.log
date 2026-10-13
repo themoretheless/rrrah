@@ -1,0 +1,24 @@
+warning: function `fallible_zeroed_bytes` is never used
+   --> crates/rrrah-cache/src/mosaic_payload_v1.rs:728:4
+    |
+728 | fn fallible_zeroed_bytes(len: usize) -> Result<Box<[u8]>, MosaicPayloadError> {
+    |    ^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-cache` (lib) generated 1 warning
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 13.80s
+     Running unittests src/main.rs (target/debug/deps/rrrah-0b4921b829754900)
+
+running 1 test
+corrupt selected swap block refused; previous HDR frame and preview retained; transient memory=0; no retry wake
+swapped viewport soak: seconds=0.010 cycles=1 exact_detail_frames=3 CPU_pressure_refusals=1 GPU_pressure_refusals=3 cpu_peak=2662400 texture_peak=160000 queue_peak=160000
+Metal swapped fit timings ms (worker preparation, publish+GPU render+readback, total): [(3.1017089999999996, 0.707208, 3.809042), (3.211709, 0.799709, 4.011500000000001), (3.032833, 0.7032079999999999, 3.736125), (3.0282500000000003, 0.7502500000000001, 3.778583), (3.044459, 0.791834, 3.836375), (3.093292, 0.496667, 3.590083), (3.004542, 0.7142090000000001, 3.718833), (3.066792, 0.507875, 3.57475)]; source512x320 RGBA32F, LOD64x40, framebuffer64x64; warm filesystem; includes readback, excludes display presentation
+swapped fit repeated pressure:8 downgrade/recovery cycles; blocked queue retains frame; blocked CPU schedules nothing; exact original HDR references; no retained full source
+swapped fit recovery:32x20->64x40 from original disk source; exact original fit frame; no redundant job
+swapped fit pressure: original swapped source streamed on worker to32x20; queue failure preserves old frame/ready level; retry exact; full source stays released
+test raster_viewport::tests::swapped_residency_releases_full_source_and_preserves_detail_and_fit ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 253 filtered out; finished in 1.58s
+

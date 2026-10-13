@@ -1,0 +1,66 @@
+{
+  "scope": "admitted area/first-moment primitive and explicit diagnostic observer; no sampling skipped",
+  "suite": {
+    "passed": 218,
+    "ignored": 12,
+    "failed": 0
+  },
+  "proof_tests": [
+    "independent affine field integral over4096strips at translated origin",
+    "triangle first moments",
+    "independent keys",
+    "capacity refusal preserves state",
+    "low-work refusal preserves state",
+    "cancellation preserves state and retry",
+    "invalid samples refuse",
+    "admission refusal and finalzero"
+  ],
+  "diagnostic_capacity": 8192,
+  "admitted_observer_bytes": 4718592,
+  "diagnostic_work_limit": 256000000,
+  "pixel_work_limit": 16000000,
+  "statistics": {
+    "147,59": {
+      "fragments": 924358,
+      "buckets": 4587,
+      "area": 1.000000000000002,
+      "diagnostic_work": 143399984
+    },
+    "145,50": {
+      "fragments": 329277,
+      "buckets": 2641,
+      "area": 1.0000000000000016,
+      "diagnostic_work": 49111036
+    }
+  },
+  "initial_capacity_4096": {
+    "147,59": {
+      "complete": false,
+      "recorded_fragments": 860700,
+      "buckets": 4096,
+      "area": 0.9024551824447591
+    },
+    "normal_result_unchanged": true
+  },
+  "native_pixels_exact": true,
+  "peak_bytes": 239197736,
+  "final_credit": 0,
+  "acceleration_enabled": false,
+  "remaining": [
+    "compact incremental source-field keys; diagnostic full-key work is too expensive for4M",
+    "compare centroid-composited integrals under explicit rounding bounds",
+    "integrate guarded coalescing with ordinary fallback",
+    "complete strict4Mpage and independentcolor/viewerqualification"
+  ],
+  "sources": {
+    "vendor/hayro/src/native_moments.rs": "5e6deb2efca106f45b381c15111d48a59f1a34fd10d16c34f1121762cef623ca",
+    "vendor/hayro/src/native_spatial.rs": "d2fbba8e0166ecb2dd9e74f97380f34121169a98a62cd577e29356f1d2436b1b",
+    "vendor/hayro/src/knockout_compositor.rs": "cfaf200179d868237b3c9869268ba9e4d618f11ac188638c62bc4ee8dffc51fc"
+  },
+  "logs": {
+    "ai-fragment-moments-suite-2026-10-13.log": "ec451cf4929247c80908f488db58c52a88192569b3bfde1315bd671f7a42a2d8",
+    "ai-fragment-moments-original-2026-10-13.log": "b93c1c9629206059ae2f4f099cac145f6797896b222db56b2c937a95a1ba3af6",
+    "ai-fragment-moments-8192-suite-2026-10-13.log": "d07e05d93b96797eaf09f01a8afc00a86c7be94ad7ce159fd419672088162c07",
+    "ai-fragment-moments-8192-original-2026-10-13.log": "b75a183608a690da477d24721e51fdcdf83a9b22c2f623016424b00c76581a97"
+  }
+}

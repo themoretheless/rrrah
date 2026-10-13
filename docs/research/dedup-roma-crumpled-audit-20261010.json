@@ -1,0 +1,34 @@
+{
+  "status": "verified_three_pair_diagnostic_no_crumpled_recovery",
+  "scope": "Independently check recorded RoMa fields, center mapping and residuals.\n\nNo inference rerun or pixel-admission claim. This verifies the fixed diagnostic,\nincluding the failed crumpled recovery, rather than selecting only its control.\n",
+  "counts": [
+    {
+      "case": "crumpled",
+      "distinct_points": 143,
+      "global_inliers": 6,
+      "maximum_regional_inliers": 7
+    },
+    {
+      "case": "foreign",
+      "distinct_points": 3,
+      "global_inliers": 0,
+      "maximum_regional_inliers": 0
+    },
+    {
+      "case": "rephoto-control",
+      "distinct_points": 1684,
+      "global_inliers": 1684,
+      "maximum_regional_inliers": 438
+    }
+  ],
+  "process_peak_rss_bytes": 16479027200,
+  "model_adopted": false,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-roma-crumpled-20261010.json": "42484a2ce904a3bd28261a0cd80d181189265a0101366d47efa378fb8e4f0e82",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-roma-crumpled-20261010.log": "98c52e5ffea423cf9c2401f7cb36c89f7f70a1029103b617d7d5ce8ce6eb8549",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/verify-dedup-roma-crumpled-20261010.py": "646360da924e293e0a805bcd233228e430fd9cea11191734e67a373a11904cc7",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-roma-oracle-source-20261010.json": "b54347a54a28249c99bb01e9d8a372f077dd36291b13fe48ac6ba57071270e12",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-roma-oracle-dependency-pins-20261010.json": "2239ac559a9f4015f253977a4c5b2488607e16400f47e6025cbfddfab2caa4ba",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-roma-oracle-weights-20261010.json": "414a76a6f86e2891157c1e899fde82efffbba1b02d9250db7f316e75dcaac913"
+  }
+}

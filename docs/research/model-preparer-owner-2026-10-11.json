@@ -1,0 +1,15 @@
+{
+  "backend": "metal",
+  "passed": 8,
+  "failed": 0,
+  "check": "rrrah passed",
+  "verified": "cloneable preparer owns device/budget and renderer identity; foreign independent-instance device result is refused with RendererMismatch, credit released, SDR/HDR prior frame exact; worker prepared matching result installs",
+  "test_source_sha256": "b42f6f2e28a61aab766efb29b8210a8f0171e9a7547881e2be70d135f8ab4c34",
+  "log": "docs/research/model-preparer-owner-2026-10-11.log",
+  "sha256": "176eff52a19de238ce07a77d75c1b06bd7c8d213696e4e98b773d9d705230535",
+  "finding": "wgpu Device equality can collide across independent Instances; acceptance uses Arc owner identity instead.",
+  "limitations": [
+    "Viewer worker integration remains pending.",
+    "Low-level unbound preparation cannot be installed; use renderer upload_preparer for worker results."
+  ]
+}

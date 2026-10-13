@@ -1070,7 +1070,7 @@ fn indexed_projective_collection_mutation_cancel_and_limits() {
     let mut files: Vec<_> = (1..=3)
         .map(|id| {
             let path = dir.path().join(format!("{id}.png"));
-            std::fs::copy(&source, &path).unwrap();
+            copy_writable(&source, &path).unwrap();
             (id, DecodeRequest::new(path))
         })
         .collect();
@@ -1189,7 +1189,7 @@ fn indexed_projective_collection_mutation_cancel_and_limits() {
     );
     assert!(late_report.local.pairs[0].evidence.candidate);
     assert_eq!(budget.used(), 0);
-    std::fs::copy(&source, &late_path).unwrap();
+    copy_writable(&source, &late_path).unwrap();
     assert!(matches!(
         scan_projective_local_collection(
             files.clone(),
@@ -1380,8 +1380,8 @@ fn recursive_projective_collection_preserves_aliases_errors_and_requests() {
     std::fs::create_dir(&nested).unwrap();
     let source =
         std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/photos-heldout/2414-base.png");
-    std::fs::copy(&source, dir.path().join("a.png")).unwrap();
-    std::fs::copy(&source, nested.join("b.png")).unwrap();
+    copy_writable(&source, dir.path().join("a.png")).unwrap();
+    copy_writable(&source, nested.join("b.png")).unwrap();
     std::fs::write(dir.path().join("bad.png"), b"invalid image").unwrap();
     #[cfg(unix)]
     std::fs::hard_link(dir.path().join("a.png"), nested.join("alias.png")).unwrap();
@@ -2116,7 +2116,7 @@ fn sampled_projective_collection_mutation_cancel_and_limits() {
     let mut files: Vec<_> = (1..=3)
         .map(|id| {
             let path = dir.path().join(format!("{id}.png"));
-            std::fs::copy(&source, &path).unwrap();
+            copy_writable(&source, &path).unwrap();
             (id, DecodeRequest::new(path))
         })
         .collect();
@@ -2235,7 +2235,7 @@ fn sampled_projective_collection_mutation_cancel_and_limits() {
     );
     assert!(late_report.local.pairs[0].evidence.candidate);
     assert_eq!(budget.used(), 0);
-    std::fs::copy(&source, &late_path).unwrap();
+    copy_writable(&source, &late_path).unwrap();
     assert!(matches!(
         scan_projective_local_collection(
             files.clone(),
@@ -2476,8 +2476,8 @@ fn anchored_projective_file_objective_never_bypasses_pixel_acceptance() {
     );
     assert_eq!(budget.used(), 0);
     let dir = tempfile::tempdir().unwrap();
-    std::fs::copy(&a.path, dir.path().join("a.png")).unwrap();
-    std::fs::copy(&a.path, dir.path().join("b.png")).unwrap();
+    copy_writable(&a.path, dir.path().join("a.png")).unwrap();
+    copy_writable(&a.path, dir.path().join("b.png")).unwrap();
     std::fs::write(dir.path().join("bad.png"), b"corrupt").unwrap();
     #[cfg(unix)]
     std::fs::hard_link(dir.path().join("a.png"), dir.path().join("alias.png")).unwrap();
@@ -2728,7 +2728,7 @@ fn anchored_projective_collection_mutation_cancel_and_limits() {
     let mut files: Vec<_> = (1..=3)
         .map(|id| {
             let path = dir.path().join(format!("{id}.png"));
-            std::fs::copy(&source, &path).unwrap();
+            copy_writable(&source, &path).unwrap();
             (id, DecodeRequest::new(path))
         })
         .collect();
@@ -2847,7 +2847,7 @@ fn anchored_projective_collection_mutation_cancel_and_limits() {
     );
     assert!(late_report.local.pairs[0].evidence.candidate);
     assert_eq!(budget.used(), 0);
-    std::fs::copy(&source, &late_path).unwrap();
+    copy_writable(&source, &late_path).unwrap();
     assert!(matches!(
         scan_projective_local_collection(
             files.clone(),
@@ -3066,8 +3066,8 @@ fn projective_photometric_file_fit_keeps_strict_errors_and_refusals() {
         scan_projective_local_collection_roots_photometric_with_requests,
     };
     let dir = tempfile::tempdir().unwrap();
-    std::fs::copy(&a.path, dir.path().join("a.png")).unwrap();
-    std::fs::copy(&light.path, dir.path().join("light.png")).unwrap();
+    copy_writable(&a.path, dir.path().join("a.png")).unwrap();
+    copy_writable(&light.path, dir.path().join("light.png")).unwrap();
     std::fs::write(dir.path().join("bad.png"), b"corrupt").unwrap();
     #[cfg(unix)]
     std::fs::hard_link(dir.path().join("a.png"), dir.path().join("alias.png")).unwrap();
@@ -3248,7 +3248,7 @@ fn projective_photometric_collection_mutation_cancel_and_limits() {
     let mut files: Vec<_> = (1..=3)
         .map(|id| {
             let path = dir.path().join(format!("{id}.png"));
-            std::fs::copy(&source, &path).unwrap();
+            copy_writable(&source, &path).unwrap();
             (id, DecodeRequest::new(path))
         })
         .collect();
@@ -3367,7 +3367,7 @@ fn projective_photometric_collection_mutation_cancel_and_limits() {
     );
     assert!(late_report.local.pairs[0].evidence.candidate);
     assert_eq!(budget.used(), 0);
-    std::fs::copy(&source, &late_path).unwrap();
+    copy_writable(&source, &late_path).unwrap();
     assert!(matches!(
         scan_projective_local_collection(
             files.clone(),
@@ -3717,8 +3717,8 @@ fn registration_portfolio_files_preserve_both_residuals_and_atomic_refusals() {
         scan_projective_local_collection_roots_portfolio_with_requests,
     };
     let dir = tempfile::tempdir().unwrap();
-    std::fs::copy(&a.path, dir.path().join("a.png")).unwrap();
-    std::fs::copy(&a.path, dir.path().join("b.png")).unwrap();
+    copy_writable(&a.path, dir.path().join("a.png")).unwrap();
+    copy_writable(&a.path, dir.path().join("b.png")).unwrap();
     std::fs::write(dir.path().join("bad.png"), b"corrupt").unwrap();
     #[cfg(unix)]
     std::fs::hard_link(dir.path().join("a.png"), dir.path().join("alias.png")).unwrap();
@@ -3891,7 +3891,7 @@ fn registration_portfolio_collection_mutation_cancel_and_limits() {
     let mut files: Vec<_> = (1..=3)
         .map(|id| {
             let path = dir.path().join(format!("{id}.png"));
-            std::fs::copy(&source, &path).unwrap();
+            copy_writable(&source, &path).unwrap();
             (id, DecodeRequest::new(path))
         })
         .collect();
@@ -4010,7 +4010,7 @@ fn registration_portfolio_collection_mutation_cancel_and_limits() {
     );
     assert!(late_report.local.pairs[0].evidence.candidate);
     assert_eq!(budget.used(), 0);
-    std::fs::copy(&source, &late_path).unwrap();
+    copy_writable(&source, &late_path).unwrap();
     assert!(matches!(
         scan_projective_local_collection(
             files.clone(),
@@ -4248,7 +4248,7 @@ fn pyramid_collection_and_nested_roots_match_direct_pairs_and_refusals() {
     ] {
         let path = tree.path().join(relative);
         std::fs::create_dir_all(path.parent().unwrap()).unwrap();
-        std::fs::copy(source.join(name), &path).unwrap();
+        copy_writable(source.join(name), &path).unwrap();
         files.push((id, DecodeRequest::new(path)));
     }
     let mut local = policy();
@@ -4429,8 +4429,8 @@ fn complementary_files_preserve_both_searches_and_atomic_refusals() {
     let dir = tempfile::tempdir().unwrap();
     let a_path = dir.path().join("a.png");
     let b_path = dir.path().join("b.png");
-    std::fs::copy(source.join("2414-base.png"), &a_path).unwrap();
-    std::fs::copy(&a_path, &b_path).unwrap();
+    copy_writable(source.join("2414-base.png"), &a_path).unwrap();
+    copy_writable(&a_path, &b_path).unwrap();
     let a = DecodeRequest::new(&a_path);
     let b = DecodeRequest::new(&b_path);
     let unrelated = DecodeRequest::new(source.join("5495-base.png"));
@@ -4834,7 +4834,7 @@ fn complementary_files_preserve_both_searches_and_atomic_refusals() {
     });
     assert!(changed.get() && result.is_err(), "{result:?}");
     assert_eq!(budget.used(), 0);
-    std::fs::copy(&a_path, &b_path).unwrap();
+    copy_writable(&a_path, &b_path).unwrap();
     assert!(
         compare_local_files_projective_complementary(&a, &b, policy, &budget, || false)
             .unwrap()
@@ -4875,7 +4875,7 @@ fn complementary_collection_keeps_separate_matching_and_nested_source_lifecycle(
     ] {
         let path = dir.path().join(relative);
         std::fs::create_dir_all(path.parent().unwrap()).unwrap();
-        std::fs::copy(source.join(name), &path).unwrap();
+        copy_writable(source.join(name), &path).unwrap();
         files.push((id, DecodeRequest::new(path)));
     }
     let mut local = policy();
@@ -5222,7 +5222,7 @@ fn complementary_collection_keeps_separate_matching_and_nested_source_lifecycle(
     assert!(changed_report.local.source_issues.iter().any(|(id, _)| *id == 3));
     assert_eq!(accepted(&changed_report), direct);
     assert_eq!(budget.used(), 0);
-    std::fs::copy(source.join("5495-base.png"), &changed_path).unwrap();
+    copy_writable(source.join("5495-base.png"), &changed_path).unwrap();
     files.reverse();
     assert_eq!(
         accepted(&scan_projective_local_collection_complementary(files, config, &budget, || false).unwrap()),
@@ -5274,4 +5274,12 @@ fn complementary_collection_keeps_separate_matching_and_nested_source_lifecycle(
         Err(ScanError::InvalidPolicy)
     ));
     assert_eq!(budget.used(), 0);
+}
+
+// Fixture sources may be read-only in an immutable qualification checkout.
+// Copy bytes without inheriting permissions so mutation tests can edit their own files.
+fn copy_writable(source: impl AsRef<std::path::Path>, target: impl AsRef<std::path::Path>) -> std::io::Result<u64> {
+    let bytes = std::fs::read(source)?;
+    std::fs::write(target, &bytes)?;
+    Ok(bytes.len() as u64)
 }

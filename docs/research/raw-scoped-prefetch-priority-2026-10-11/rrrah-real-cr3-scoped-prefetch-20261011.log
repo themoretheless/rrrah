@@ -1,0 +1,26 @@
+warning: function `fallible_zeroed_bytes` is never used
+   --> crates/rrrah-cache/src/mosaic_payload_v1.rs:728:4
+    |
+728 | fn fallible_zeroed_bytes(len: usize) -> Result<Box<[u8]>, MosaicPayloadError> {
+    |    ^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-cache` (lib) generated 1 warning
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.39s
+     Running unittests src/main.rs (target/debug/deps/rrrah-0b4921b829754900)
+
+running 1 test
+test gpr_preload_tests::real_cr3_prefetch_leases_keep_nearest_in_both_directions ... ok
+
+successes:
+
+---- gpr_preload_tests::real_cr3_prefetch_leases_keep_nearest_in_both_directions stdout ----
+RAW scoped prefetch: original CR3; both directions; count/bytes; failed neighbor; nearest retained; release admits farther; final=0
+
+
+successes:
+    gpr_preload_tests::real_cr3_prefetch_leases_keep_nearest_in_both_directions
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 268 filtered out; finished in 2.32s
+

@@ -1,0 +1,52 @@
+{
+  "backend": "Metal Apple M4 Max",
+  "collection": {
+    "source_count": 8,
+    "frame_extent": [
+      4000,
+      3000
+    ],
+    "source_bytes_each": 192000000,
+    "duration_seconds": 60,
+    "exact_sdr_frames": 83,
+    "exact_hdr_half_frames": 83,
+    "mid_batch_cancellations": 83,
+    "tracked_root_final": 0,
+    "tracked_queue_final": 0
+  },
+  "storage": {
+    "passed": 8,
+    "failed": 0,
+    "ignored": 0,
+    "soak_seconds_per_mode": 30,
+    "includes": [
+      "100000 distinct raster keys",
+      "independent byte/count limits",
+      "TTL physical file removal",
+      "delayed I/O",
+      "queue overload",
+      "restore cancellation and retry"
+    ]
+  },
+  "logs": {
+    "metal-full-hdr-collection": {
+      "path": "docs/research/metal-full-hdr-collection-2026-10-11.log",
+      "sha256": "8168757ed4a639e8965a59b6ef7e104a8cbfedfa9342609dce8243fdd12f6695",
+      "test_results": [
+        "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 6 filtered out; finished in 70.80s"
+      ]
+    },
+    "storage-sustained-current": {
+      "path": "docs/research/storage-sustained-current-2026-10-11.log",
+      "sha256": "9a92c040141cc64ae971487d89c70c2786015a60c0f33262466a1f26b4e2ea66",
+      "test_results": [
+        "test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 168.44s"
+      ]
+    }
+  },
+  "limitations": [
+    "managed admission pressure is not OS-wide memory pressure",
+    "delayed local I/O is not physical slow-disk qualification",
+    "physical HDR calibration and NVIDIA hardware remain unqualified"
+  ]
+}

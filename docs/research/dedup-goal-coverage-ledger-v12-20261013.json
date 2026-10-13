@@ -1,0 +1,143 @@
+{
+  "status": "incomplete",
+  "objective": "library covers all cases",
+  "scope": "Original exact plus visual library,500-source review, positive/negative quality, formats/platforms, mutation/cancellation/cache, resources and scale; no reduction to implemented subset",
+  "requirements": [
+    {
+      "requirement": "exact_identity",
+      "status": "partial_verified",
+      "evidence": "docs/research/dedup-exact-full-controls-audit-20261013.json",
+      "evidence_sha256": "b225dc14380262264eed36b1abb096b7ee61fff6794d437621d028d55884d79b",
+      "remaining_or_scope": "25 tests on prior focused snapshot; current combined gate running, not green; other-platform execution remains separate; later frozen978-pass gate verified, post-vendor-recipe full gate pending."
+    },
+    {
+      "requirement": "pixel_publication",
+      "status": "partial_verified",
+      "evidence": "docs/research/dedup-indexed-publication-audit-20261013.json",
+      "evidence_sha256": "1c433387774356a315422af53a4671bd7f865d9f9cd9ead47b67fead3d26dbda",
+      "remaining_or_scope": "39 integration tests plus forced collision on frozen focused source; current full combined gate running, not green; later frozen978-pass gate verified, post-vendor-recipe full gate pending."
+    },
+    {
+      "requirement": "verified_group_scaling",
+      "status": "partial_verified",
+      "evidence": "docs/research/dedup-verified-group-scaling-audit-20261013.json",
+      "evidence_sha256": "6f6722d6ba849466548969863e022bd8a2050f6e043fcf7711523387417e561a",
+      "remaining_or_scope": "8/32/64/2561MiB files; does not prove million-file scalability or hard memory cap"
+    },
+    {
+      "requirement": "exhaustive_pair_scaling",
+      "status": "open",
+      "evidence": "docs/research/dedup-exact-collection-scaling-audit-20261013.json",
+      "evidence_sha256": "844d44cbc00d67b2b50d274c45b44d327fc3108e22ec4f998014fc3a72fd1d26",
+      "remaining_or_scope": "Quadratic repeated full reads remain; previously rejected cache not readopted"
+    },
+    {
+      "requirement": "worker_control",
+      "status": "partial_verified",
+      "evidence": "docs/research/dedup-model-worker-decode-parent-audit-20261013.json",
+      "evidence_sha256": "0571dae364957635717d6c693b391c80fbadf1e20896bec17eb11fab8e44eca2",
+      "remaining_or_scope": "Actual child model identity/deadline controls; no hard RSS/descendants bound or persistent reuse"
+    },
+    {
+      "requirement": "negative_quality",
+      "status": "open_confirmed_false_acceptances",
+      "evidence": "docs/research/dedup-latest-native-false-controls-audit-20261013.json",
+      "evidence_sha256": "da2ac6b425a9f10be142e9cc342089cfe24b826cccf4a4b3dbb7dab1d5bec368",
+      "remaining_or_scope": "Both known false families reproduce on qualified four-crate pre-cache-fix snapshot; current PDF vendor differs. Historical campaign prefix77:1false/76inconclusive; full458 incomplete. Aligned SSCD28direction diagnostic overlaps false and true scores and does not justify a universal threshold. No acceptance fix."
+    },
+    {
+      "requirement": "source_review500",
+      "status": "open",
+      "evidence": "docs/research/dedup-500/registry-coverage-audit-v15-20261013.json",
+      "evidence_sha256": "ebc935d5811975a5e0efbc5a26c77c0f18b06e464b6adf8cca56dce01517f358",
+      "remaining_or_scope": "500unique/2938pins/38detailed-reference rows/17full-review declarations. Complete six-file Java BlockHash static review added; Java runtime unqualified. All500 full source reviews unproven."
+    },
+    {
+      "requirement": "combined_decode",
+      "status": "partial_verified",
+      "evidence": "docs/research/dedup-latest-mesh-decode-audit-20261013.json",
+      "evidence_sha256": "dcdda4966f46a89f230442bb8c0e10afb9d34fc2292004276de0d8716f7f3221",
+      "remaining_or_scope": "978pass/6ignored/153targets on pre-cache-fix frozen snapshot. Post-fix focused113pass/5ignored/four targets; new full gate running. No full current platform/feature/format/precision claim."
+    },
+    {
+      "requirement": "native458",
+      "status": "verified_fixed_old_snapshot_not_current_parity",
+      "evidence": "docs/research/dedup-current-native-bank-complete-audit-20261013.json",
+      "evidence_sha256": "95d298aa5c74a3c255770781ddd5fbab10677b5582aa531646407d8b756e6533",
+      "remaining_or_scope": "All458 supported directions on frozen2696-file source,229 pairs both directions. Positive-only evidence; does not qualify current APIs, negatives or broad formats/platforms."
+    },
+    {
+      "requirement": "formats_and_platforms",
+      "status": "open",
+      "evidence": "docs/DUPLICATE_LIBRARY_CONTRACT.md",
+      "evidence_sha256": "164765136cda8cc508b53f69b2a588ded31b4971b9738f2e92f0401b236b7b40",
+      "remaining_or_scope": "Existing many fixtures and historical platform checks do not prove latest complete matrix; format interpretation, frame selection and platform-specific IO require explicit qualification"
+    },
+    {
+      "requirement": "visual_publication",
+      "status": "partial_verified",
+      "evidence": "docs/research/dedup-visual-publication-audit-20261013.json",
+      "evidence_sha256": "58495988ec7e17c78cf9cf229a4843ab73866823f48d4491af8caf110e3d2a35",
+      "remaining_or_scope": "60 tests across8targets on focused snapshot, cold/warm final mutation regression; full latest root/platform matrix missing"
+    },
+    {
+      "requirement": "local_publication",
+      "status": "partial_verified",
+      "evidence": "docs/research/dedup-local-mixed-publication-audit-20261013.json",
+      "evidence_sha256": "314e0c92a339a40bbb8526e67baf2127c57a8bed57c35100145c18d50e97aa4d",
+      "remaining_or_scope": "20tests: direct/directory last callback mutations, mixed early isolation/late refusal/restored retry. Not every specialized wrapper individually injected."
+    }
+  ],
+  "completion_proven": false,
+  "previous_ledger": "docs/research/dedup-goal-coverage-ledger-v11-20261013.json",
+  "hash_scope": "Evidence hashes captured at this audit; mutable producer reports may later change.",
+  "previous_ledger_sha256": "5ac2359afc09e798f6677aea7c277f5d635ec879fcabc45a5bb81936ff8eb170",
+  "new_additive_geometry_evidence": {
+    "component_partition_audit": "docs/research/dedup-bank-partition-audit-20261013.json",
+    "fixed_split_geometry_audit": "docs/research/dedup-geometry-validation-fit-audit-v2-20261013.json",
+    "bank_geometry_audit": "docs/research/dedup-bank-geometry-v2-audit-20261013.json",
+    "scope": "Focused source snapshots only; no acceptance fix or current full458 preservation."
+  },
+  "current_full_gate": {
+    "status": "verified_frozen_gate_969_passed_6_ignored",
+    "audit": "docs/research/dedup-current-bank-geometry-decode-audit-20261013.json",
+    "audit_sha256": "46edac008695f77c49e4bfbe67b50c5dedf84b9056e46923eef7d09d9ac3ecd1",
+    "excludes": [
+      "competitive_rank",
+      "mesh_deformation"
+    ]
+  },
+  "latest_quality_diagnostics": {
+    "docs/research/dedup-competitive-rank-v2-audit-20261013.json": "ff9318b357a876d7c753b4af0befcffe54546110973879784e68ea58ad96b27b",
+    "docs/research/dedup-competitive-rank-diagnostic-audit-20261013.json": "779cf9254a2d14541ad72f8a0244f937a35805ec914d45a099c7ff3255a3e0cd",
+    "docs/research/dedup-local-deformation-diagnostic-audit-20261013.json": "0332bbfc3fa1fa0e2c09bbb09cbdb109e6d99588e8a850ac4538e33f2f4eff7a",
+    "docs/research/dedup-local-deformation-outer-diagnostic-audit-20261013.json": "660547afb0f5857c50f1f30f3a6d1c6c3be6a8ab0a9c5b1e16c51c9043a1b113",
+    "docs/research/dedup-copydays-nearest-wrong-native-prefix-0007-audit-20261013.json": "dbc8a4030a5bc7f18a5aa11e6149e44cf6f66ed16b1c37ace43f01193dee9d89",
+    "docs/research/dedup-500/registry-coverage-audit-v5-20261013.json": "1d339b9be396f53ffe267d296dd7a8c938aad85464b05ee15e81cd6975ff1b65"
+  },
+  "quality_conclusion": "Known semantic false acceptance remains open. Local translation improvement also fits unrelated portraits; fixed outer checks lose true copies as well. No acceptance changes.",
+  "current_full_gate_excludes_competitive_rank": true,
+  "latest_full_gate": {
+    "status": "verified_current_four_crate_default_decode_978passed6ignored",
+    "audit": "docs/research/dedup-latest-mesh-decode-audit-20261013.json",
+    "audit_sha256": "dcdda4966f46a89f230442bb8c0e10afb9d34fc2292004276de0d8716f7f3221",
+    "root_parity_audit": "docs/research/dedup-latest-mesh-decode-root-parity-20261013.json",
+    "root_parity_audit_sha256": "378deaccc9b1264ae7199f7f02db983cc61fed88f7f51401a7368ad25a44c78a"
+  },
+  "deformation_replay": {
+    "audit": "docs/research/dedup-mesh-deformation-replay-audit-20261013.json",
+    "audit_sha256": "964cf7fc3d43d3993707c3e0288bf3206f0c30e48bffcbc04c54a5e6d80efb8c",
+    "acceptance_fix_proven": false
+  },
+  "latest_source500": {
+    "inventory": "docs/research/dedup-500/registry-coverage-audit-v14-20261013.json",
+    "inventory_sha256": "9c3d22d906f482aaff1a06e255761647c6df956e15b3b5ee5ce4f83d41d605a1",
+    "entries_with_detailed_references": 37,
+    "full_review_declarations": 16,
+    "all500_full_reviews_proven": false
+  },
+  "vendor_recipe_focused_audit": "docs/research/dedup-vendor-recipe-focused-audit-20261013.json",
+  "competitive_grid_diagnostic": "docs/research/dedup-grid-fence-competitive-audit-20261013.json",
+  "aligned_sscd_diagnostic_audit": "docs/research/dedup-aligned-sscd-diagnostic-audit-20261013.json",
+  "latest_hard_negative_prefix_audit": "docs/research/dedup-copydays-nearest-wrong-native-resume-prefix-0077-audit-20261013.json"
+}

@@ -1,0 +1,30 @@
+{
+  "status": "complete_pinned_source_review_real_pillow_controls",
+  "index": 375,
+  "repository": "Rayraegah/dhash",
+  "commit": "930957107023a91fcefe01016ee371eeb9e8f5b1",
+  "reviewed_text_files": [
+    ".editorconfig",
+    ".gitignore",
+    "LICENSE",
+    "README.md",
+    "dhash.py"
+  ],
+  "license": "MIT2018Rayraegah",
+  "upstream_tests": 0,
+  "authored_controls": 8,
+  "pillow": "11.3.0",
+  "findings": [
+    "Fixed9x8 resize thenL conversion; resampling not specified and no dependency/version manifest.",
+    "Strict descending comparison, first column is low bit in each byte; independent0101 andffff vectors verified.",
+    "Actual black/white and flat dimension collisions; alpha erased by actualPillowL conversion.",
+    "README distance<5 equality wording is not justified by collision controls.",
+    "Hash-string distance accepts negative and arbitrarilywide integers; no64bit shape validation.",
+    "Whole original module imported unchanged; no mocks, no upstreamcodeadoption."
+  ],
+  "decision": "candidate-hash-only-no-equality-oracle",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/rayraegah-dhash-full-source-20261013.json": "e15022649670e3ad7cf7851b81cc661e696540cf96311e88f7c8a3f350d62cec",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/rayraegah-dhash-controls-20261013.json": "342ce4095e291c6bc9b50c9e5ff1d42a7d020a103142b4399396647d94319add"
+  }
+}

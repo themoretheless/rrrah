@@ -1,0 +1,88 @@
+--- a/vendor/hayro/src/native_spatial.rs
++++ b/vendor/hayro/src/native_spatial.rs
+@@ -280,11 +280,21 @@
+ 
+ /// Predict source identity without invoking any color sampler. Blending-route
+ /// qualification is conservative; absent or ambiguous geometry refuses.
++#[cfg(test)]
+ fn geometry_route_field_key(commands:&[SpatialCommand<'_>],route:&[usize],generation:u64,
+     coverage:&[u64;64],rasters:Option<&RasterTransitions<'_>>,owners:Option<&OwnerTransitions>,
+     work:&mut usize,cancelled:&dyn Fn()->bool)->Option<FieldKey> {
+     if cancelled() {return None;}*work=work.checked_sub(route.len())?;
+     if !affine_native_route(commands,route) {return None;}
++    geometry_qualified_route_field_key(commands,route,generation,coverage,rasters,owners,work,cancelled)
++}
++
++/// Caller retains an immutable route already accepted by affine_native_route.
++/// Source fields still require exact current geometry evidence on every call.
++fn geometry_qualified_route_field_key(commands:&[SpatialCommand<'_>],route:&[usize],generation:u64,
++    coverage:&[u64;64],rasters:Option<&RasterTransitions<'_>>,owners:Option<&OwnerTransitions>,
++    work:&mut usize,cancelled:&dyn Fn()->bool)->Option<FieldKey> {
++    if cancelled() {return None;}
+     *work=work.checked_sub(19)?;let mut key=FieldKey::route(generation);
+     for &index in route {
+         if cancelled() {return None;}*work=work.checked_sub(1)?;
+@@ -700,7 +710,7 @@
+     struct Transition {input:State,output:State,_credit:Credit}
+     struct GroupSlot {end:Option<usize>,frame:Option<Box<PaintFrame>>,
+         run_end:Option<usize>,transition:Option<Box<Transition>>}
+-    struct Route {generation:u64,key:[u64;64],commands:Vec<usize>,groups:Vec<GroupSlot>,constant:bool,result:Option<Pixel>,hash:u64,reuse_bits:Vec<u64>,reuse_word_mask:u64}
++    struct Route {affine:bool,generation:u64,key:[u64;64],commands:Vec<usize>,groups:Vec<GroupSlot>,constant:bool,result:Option<Pixel>,hash:u64,reuse_bits:Vec<u64>,reuse_word_mask:u64}
+     const ROUTE_INDEX_SIZE:usize=128;
+     type Index=[Option<(u64,usize)>;ROUTE_INDEX_SIZE];
+     fn insert_index(table:&mut Index,hash:u64,index:usize,remaining:&mut usize,cancelled:&dyn Fn()->bool)->Option<()> {
+@@ -909,25 +919,30 @@
+                     }
+                 }
+             }
++            // Commands and their native-field capabilities are immutable for the
++            // lifetime of this route. Cache qualification with the exact route;
++            // cache eviction creates and qualifies a fresh route generation.
++            let affine=(observe_moments || work_trace.enabled) && affine_native_route(commands,&route);
++            if observe_moments {source_field_key.work.set(source_field_key.work.get().saturating_add(route.len()));}
+             if work_trace.enabled {
+-                eprintln!("SPATIAL_ACTIVE_AFFINE_ROUTE eligible={} commands={}",affine_native_route(commands,&route),route.len());
++                eprintln!("SPATIAL_ACTIVE_AFFINE_ROUTE eligible={} commands={}",affine,route.len());
+             }
+             *remaining=remaining.checked_sub(1)?;
+             let generation=generations.next()?;
+-            let index=routes.len();routes.push(Route {generation,key,commands:route,groups:slots,constant,result:None,hash,reuse_bits,reuse_word_mask});
++            let index=routes.len();routes.push(Route {affine,generation,key,commands:route,groups:slots,constant,result:None,hash,reuse_bits,reuse_word_mask});
+             insert_index(&mut route_lookup,hash,index,remaining,cancelled)?;Some(index)
+             })?
+         };
+             route_index
+         };
+         last_route=Some(route_index);
+-        if observe_moments {route_is_affine.set(affine_native_route(commands,&routes[route_index].commands));}
++        if observe_moments {route_is_affine.set(routes[route_index].affine);}
+         if collect_fields {source_field_key.reset(routes[route_index].generation);}
+         let precolor_key=if precolor_enabled && route_is_affine.get() {
+             let mut budget=4_000_000;
+             let rasters=transitions.as_ref().map(std::cell::RefCell::borrow);
+             let owners=owner_transitions.as_ref().map(std::cell::RefCell::borrow);
+-            let key=geometry_route_field_key(commands,&routes[route_index].commands,routes[route_index].generation,coverage,
++            let key=geometry_qualified_route_field_key(commands,&routes[route_index].commands,routes[route_index].generation,coverage,
+                 rasters.as_deref(),owners.as_deref(),&mut budget,cancelled);
+             source_field_key.work.set(source_field_key.work.get().saturating_add(4_000_000-budget));
+             if key.is_some() {geometry_trace.precolor_ready.set(geometry_trace.precolor_ready.get()+1);}
+@@ -3091,10 +3106,19 @@
+     rasters.rebuild(&coverage,&mut work,&||false).unwrap();owners.rebuild(&coverage,&mut work,&||false).unwrap();
+     let key=geometry_route_field_key(&commands,&[0,1],42,&coverage,Some(&rasters),Some(&owners),&mut work,&||false).unwrap();
+     assert_eq!(key.len,8);assert_eq!(&key.words[..key.len],&[42,8,0,10,11,1,7,u64::MAX]);
++    let mut full_work=1000;let mut cached_work=1000;
++    let full=geometry_route_field_key(&commands,&[0,1],42,&coverage,Some(&rasters),Some(&owners),&mut full_work,&||false).unwrap();
++    assert!(affine_native_route(&commands,&[0,1]));
++    let cached=geometry_qualified_route_field_key(&commands,&[0,1],42,&coverage,Some(&rasters),Some(&owners),&mut cached_work,&||false).unwrap();
++    assert_eq!(&full.words[..full.len],&cached.words[..cached.len]);
++    assert_eq!(cached_work-full_work,2); // Qualification is debited once per immutable route.
++
+     assert!(geometry_route_field_key(&commands,&[0,1],42,&coverage,None,Some(&owners),&mut work,&||false).is_none());
+     assert!(geometry_route_field_key(&commands,&[0,1],42,&coverage,Some(&rasters),None,&mut work,&||false).is_none());
+     assert!(geometry_route_field_key(&commands,&[0,1],42,&coverage,Some(&rasters),Some(&owners),&mut 0,&||false).is_none());
+     assert!(geometry_route_field_key(&commands,&[0,1],42,&coverage,Some(&rasters),Some(&owners),&mut work,&||true).is_none());
+     coverage[0]=3;owners.rebuild(&coverage,&mut work,&||false).unwrap();
++    // Cached route capability never caches geometry ownership.
++    assert!(geometry_qualified_route_field_key(&commands,&[0,1],42,&coverage,Some(&rasters),Some(&owners),&mut work,&||false).is_none());
+     assert!(geometry_route_field_key(&commands,&[0,1],42,&coverage,Some(&rasters),Some(&owners),&mut work,&||false).is_none());
+ }

@@ -1,0 +1,49 @@
+{
+  "date": "2026-10-11",
+  "backend": "Metal",
+  "adapter": "Apple M4 Max",
+  "test": "long_lived_large_collection_cache_preserves_swap_and_metal_frames",
+  "environment": {
+    "RRRAH_GPU_BACKEND": "metal",
+    "RRRAH_GPU_OPTIONAL": "0",
+    "RRRAH_METAL_COLLECTION_SECONDS": "60",
+    "RRRAH_METAL_COLLECTION_FULL_HDR": "1"
+  },
+  "frames": 8,
+  "source_extent": [
+    4000,
+    3000
+  ],
+  "sdr_readback_extent": [
+    4000,
+    3000
+  ],
+  "hdr_readback_extent": [
+    4000,
+    3000
+  ],
+  "source_bytes_each": 192000000,
+  "cache_managed_budget": 576000000,
+  "cycles": 108,
+  "elapsed_cycle_seconds": 60.05,
+  "reads": 108,
+  "writes": 8,
+  "parallel_restore_and_mid_batch_cancel_cycles": 108,
+  "checks": [
+    "Every restored RGBA32F component bit equals authored reference",
+    "Every full SDR RGBA8 and HDR RGBA16Float readback equals pre-spill frame",
+    "Complete managed pressure refuses background restore then retry succeeds",
+    "Parallel mid-batch cancellation does not publish pixels and releases credits",
+    "Visible expired lease survives; released expired membership spills",
+    "Tracked root and queue return to zero each cycle and after drop",
+    "Unchanged persisted data produces only eight initial writes"
+  ],
+  "limits": [
+    "Authored float collection, not photographic corpus",
+    "Local disk, not a physically slow disk",
+    "Cache root excludes reference frames, readback buffers and other test allocations",
+    "GPU HDR readback does not establish physical display luminance or color accuracy",
+    "60 second cycle run does not replace long-duration qualification"
+  ],
+  "test_source_sha256": "54c7cd8891007460fba865a299c9eb429c006c9794e5b060c89ff78f033a59b3"
+}

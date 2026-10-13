@@ -1,0 +1,26 @@
+{
+  "status": "verified_bounded_memory_comparison",
+  "report": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-loftr-sequential-windows-20261011.json",
+  "report_sha256": "2aafd7144efd4809ddf2c91327aba6b1c62676c8857209ae2826029230060b22",
+  "source_files": 3089,
+  "changes": [
+    "vendor/loftr/src/fine_preprocess.rs"
+  ],
+  "comparisons": [
+    {
+      "direction": "forward",
+      "baseline_rss_bytes": 1695547392,
+      "candidate_rss_bytes": 1696301056,
+      "rss_reduction_fraction": -0.00044449598021034653,
+      "evidence_equal": true
+    },
+    {
+      "direction": "reverse",
+      "baseline_rss_bytes": 1602764800,
+      "candidate_rss_bytes": 1603207168,
+      "rss_reduction_fraction": -0.0002760030667008362,
+      "evidence_equal": true
+    }
+  ],
+  "limits": "One real positive pair, two directions, single fresh process per variant/direction; not hard RSS cap, full corpus or statistical timing qualification."
+}

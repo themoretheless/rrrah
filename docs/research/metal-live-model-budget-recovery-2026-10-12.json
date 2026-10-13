@@ -1,0 +1,51 @@
+{
+  "scope": "Actual HDR main viewer model resize admission refusal, retained presentation and subsequent successful same-size request",
+  "adapter": "Apple M4 Max / Metal",
+  "surface": "Rgba16Float / ExtendedSrgbLinear",
+  "model_budget": 16777216,
+  "resident_at_refusal": 7680036,
+  "replacement_refused": 13516800,
+  "deferred_retry_refusals": 39,
+  "logical_window_sequence": [
+    [
+      800,
+      632
+    ],
+    [
+      1100,
+      800
+    ],
+    [
+      600,
+      432
+    ],
+    [
+      400,
+      332
+    ],
+    [
+      1100,
+      800
+    ]
+  ],
+  "recovery": "Shrink releases depth allocation; same1100x800 request then renders with no further refusals; screenshot visually inspected",
+  "exit_code": 0,
+  "limits": [
+    "Not OS-wide memory pressure",
+    "Requested large size was reissued after smaller resize, not autonomous recovery of unchanged request after external allocation release",
+    "Physical HDR luminance/color remains uncalibrated"
+  ],
+  "sha256": {
+    "docs/research/metal-live-model-budget-recovery-2026-10-12/recovered-small.png": "15d07961949ed3fc3ef0cd967dbe89c41584c3c152de39a3b9b2edfad5541d78",
+    "docs/research/metal-live-model-budget-recovery-2026-10-12/before.png": "c857f9ccfe9285ef7ca2442cc5da11372ec428d1579ee421d901532d679c7447",
+    "docs/research/metal-live-model-budget-recovery-2026-10-12/viewer.log": "7900a03a012363080b4c75a1e33aec14b60b3d78bace666664c66a2a38c8d6fd",
+    "docs/research/metal-live-model-budget-recovery-2026-10-12/retry-large.png": "b80b716ef55f3aecf8ba03cee34609d785958ada3658850feaf54fed0b47ba38",
+    "docs/research/metal-live-model-budget-recovery-2026-10-12/released-smaller.png": "10c3c4675a4f63e9eae681c3d6d3f27248381e692564e6bbdcdecea4972070b7",
+    "docs/research/metal-live-model-budget-recovery-2026-10-12/refused-large.png": "a70a08708cb18aa547f61899fd7758611aa9d302a3460c77ec0687d9debae07b",
+    "docs/research/metal-live-model-budget-recovery-2026-10-12/retry-large-window-state.txt": "58fa2f1c417289db993ab0e53ea4e3dce89935ebce18f0c31c14013893fe9cfe",
+    "docs/research/metal-live-model-budget-recovery-2026-10-12/recovered-window-state.txt": "31e72561ab54302dd1b76eb9c6ef0f9e654872d027790d3b77915e10852544b8",
+    "crates/rrrah-app/src/main.rs": "12aadff2aaa50e2a87a699fb2f448e2970bf5a58be536674f06c56cbe2f9b410",
+    "crates/rrrah-gpu/src/model.rs": "ab64f4eb171d5742c197ba2275bca2757bc999a942d35bdcc5f1b2d321d650dc",
+    "tests/fixtures/models/triangle.stl": "cb38a51d5a813e11f96377a701c46be622d35a0cffc438d2ae570a04ecf73fc7"
+  }
+}

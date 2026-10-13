@@ -1,0 +1,35 @@
+{
+  "date": "2026-10-12",
+  "changes": [
+    "DPX output reserved before pixel allocation and adopted into retained buffers",
+    "8-bit DPX reserves separate u16 intermediate and final u8 buffers; final u8 exact capacity avoids wider intermediate allocation retention",
+    "Cineon envelope reserves exact header plus payload capacity in same root before copying"
+  ],
+  "tests": [
+    "8/16-bit DPX one-byte-short refuses with root zero; exact peak then retained output only",
+    "8/16-bit Cineon envelope plus decoder budget one-byte-short refuses with root zero; exact peak then output only"
+  ],
+  "decoder_suite": {
+    "passed": 1024,
+    "failed": 0,
+    "ignored": 72
+  },
+  "metal_collection": {
+    "adapter": "Metal Apple M4 Max",
+    "passed": 1,
+    "failed": 0,
+    "sources": 105,
+    "selections": 134,
+    "storage_cases": 268,
+    "final_root_bytes": 0,
+    "final_queue_bytes": 0
+  },
+  "sha256": {
+    "decode-dpx-cineon-admission-final-2026-10-12.log": "cbd2d9acce8dd97aabf1d3a41e4ad069e04b3aa06375cf9b8810e742c8d0a2f2",
+    "metal-dpx-cineon-admission-2026-10-12.log": "72215eb05d1ff53fe23dbcd3ba2b04ae264f966b85a9255b5b91803ef61ef35e"
+  },
+  "limits": [
+    "Managed buffer admission, not OS RSS guarantee",
+    "Only supported DPX/Cineon native layouts; no universal producer or film-log qualification"
+  ]
+}

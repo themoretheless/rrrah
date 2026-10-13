@@ -1,0 +1,14 @@
+#!/usr/bin/env python3
+import hashlib,json,re,shutil,subprocess
+from pathlib import Path
+R=Path(__file__).resolve().parents[1];D=R/'docs/research';T=Path('/Users/themoretheless/.codex/tmp');BASE=T/'rrrah-dedup-linux-native'
+def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
+def main():
+ prep=D/'dedup-native-row-ring-linux-prepared-20261012.json';p=json.loads(prep.read_text());assert p['image_os']=='linux'and p['image_arch']=='arm64'and p['user']=='65534:65534';assert all(sha(k)==v for k,v in p['pins'].items())
+ mp=D/'dedup-native-row-ring-snapshot-20261012.json';m=json.loads(mp.read_text());s=Path(m['snapshot']);assert all(sha(s/k)==v for k,v in m['file_hashes'].items());assert sha(R/'crates/rrrah-dedup/src/gradient_scale.rs')==m['file_hashes']['crates/rrrah-dedup/src/gradient_scale.rs']
+ log=T/'rrrah-native-row-ring-linux-tests-20261012.log';text=log.read_text();assert '6 passed; 0 failed; 0 ignored'in text;names=re.findall(r'^test (\S+) \.\.\. ok$',text,re.M);assert len(names)==len(set(names))==6
+ matches=re.findall(r'Running tests/gradient_candidate_smoothing.rs \(([^)]+)\)',text);assert len(matches)==1;relative=Path(matches[0]).relative_to('/validation');original=BASE/relative;binary=T/'rrrah-native-row-ring-linux-executable-20261012';assert not binary.exists();shutil.copy2(original,binary);raw=binary.read_bytes();assert raw[:4]==b'\x7fELF'and raw[4]==2 and int.from_bytes(raw[18:20],'little')==183
+ cmd=['docker','run','--rm','--user','65534:65534','-v',str(BASE)+':/validation:ro','-v','/opt/rrrah-dedup-validation/sysroot:/validation/sysroot:ro','-e','LD_LIBRARY_PATH=/validation/sysroot/usr/lib/aarch64-linux-gnu:/validation/sysroot/usr/lib/llvm-18/lib',p['image_id']]
+ listed=subprocess.check_output(cmd+[matches[0],'--list'],text=True);assert set(re.findall(r'^(.*): test$',listed,re.M))==set(names);version=subprocess.check_output(cmd+['/validation/toolchain/bin/rustc','-vV'],text=True);assert 'host: aarch64-unknown-linux-gnu'in version;assert sha(original)==sha(binary)
+ pins={str(x):sha(x)for x in [prep,mp,log,binary,BASE/'toolchain/bin/rustc',T/'rrrah-native-row-ring-linux-20261012.sh',Path(__file__)]};out=D/'dedup-native-row-ring-linux-verification-20261012.json';assert not out.exists();out.write_text(json.dumps({'status':'verified_six_row_ring_tests_native_linux_arm64_nonroot','passed':6,'ignored':0,'tests':names,'image_id':p['image_id'],'compiler':version,'pins':pins,'scope':'Actual nonroot Linux aarch64 ELF executes all6 same-source smoothing tests, including35 bitwise cases and272 cancellation checkpoints. Exact test list/source/compiler/image pinned and executable preserved. No Linux decoder/full portfolio/Windows/RSS/corpus/full500 qualification.'},indent=2)+'\n');print('Verified six native Linux aarch64 nonroot smoothing tests')
+if __name__=='__main__':main()

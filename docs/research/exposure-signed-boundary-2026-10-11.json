@@ -1,0 +1,58 @@
+{
+  "device": "Apple M4 Max Metal",
+  "cases": [
+    {
+      "stops": 0,
+      "magnitude": "f32MAX"
+    },
+    {
+      "stops": 1,
+      "magnitude": "f32MAX/2"
+    },
+    {
+      "stops": 32,
+      "magnitude": "f32MAX/2^32"
+    },
+    {
+      "stops": -32,
+      "magnitude": "f32MAX"
+    }
+  ],
+  "checks": [
+    "positive and negative RGB bit-exact to CPU multiply",
+    "signed negative zero preserved",
+    "alpha negative f32MAX unchanged",
+    "all outputs finite",
+    "CPU/GPU budget zero after every case"
+  ],
+  "logs": {
+    "boundary": {
+      "path": "docs/research/exposure-signed-boundary-2026-10-11-boundary.log",
+      "sha256": "ccad79a8f6b2e508f4c0eae3a922116142795fd588f8b0db347a1f31fc5a404b",
+      "results": [
+        [
+          "1",
+          "0",
+          "0"
+        ]
+      ]
+    },
+    "compute-all": {
+      "path": "docs/research/exposure-signed-boundary-2026-10-11-compute-all.log",
+      "sha256": "794b694c87897c5809fbd5b55e7dbf5973987252915cf4e65b1a780827d9780b",
+      "results": [
+        [
+          "5",
+          "0",
+          "2"
+        ]
+      ]
+    }
+  },
+  "source_sha256": {
+    "crates/rrrah-gpu/tests/compute_readback.rs": "fcd495ec9347450a8345698eb03a8f83e16a02bac131be63344172da6466cd8f",
+    "crates/rrrah-gpu/src/compute.rs": "c7a7ccddd563cb337b6c2556dbb753285516fbd777d086513fff64723bc1b16d",
+    "crates/rrrah-gpu/shaders/linear_exposure.wgsl": "2f0346f2e9e6ccafcd99b90354f93e7bf24f673b554052dd4b1f364e323ea665"
+  },
+  "limitation": "One-pixel buffer compute boundary coverage, not image filtering or physical display."
+}

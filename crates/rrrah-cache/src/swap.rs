@@ -48,6 +48,9 @@ impl std::error::Error for SwapPayloadError {}
 /// Streaming codec for an immutable reproducible object. The store supplies
 /// integrity and cancellation; implementations must budget restored allocations.
 pub trait SwapPayload: Send + 'static + Sized {
+    /// Opt in only when allocations made after stream reads begin are bounded
+    /// by unread wire bytes. Compressed/custom payloads remain serial by default.
+    fn permits_hash_scratch() -> bool { false }
     fn capacity_bytes(&self) -> u64;
     fn payload_len(&self) -> std::io::Result<u64>;
     fn write_payload(&self, writer: &mut impl Write) -> std::io::Result<()>;
@@ -84,6 +87,7 @@ impl SwapPayload for DecodedMosaic {
     }
 }
 impl SwapPayload for DecodedRaster {
+    fn permits_hash_scratch() -> bool { true }
     fn capacity_bytes(&self) -> u64 {
         self.capacity_bytes()
     }
@@ -161,10 +165,13 @@ impl<K: Eq + Hash> Drop for PendingSpill<K> {
 #[derive(Debug)]
 pub struct ImageSwapCache<K, V> {
     tx: SyncSender<Command<K, V>>,
+    worker: Mutex<Option<std::thread::JoinHandle<()>>>,
     index: Arc<Mutex<WeightedLru<K, SwapHandle>>>,
     store: SwapStore,
     queue_budget: MemoryBudget,
     restore_budget: MemoryBudget,
+    // Original caller admission root; scratch must not consume pixel-only caps.
+    scratch_budget: MemoryBudget,
     restore_limit: u64,
     retired_restore_budgets: Vec<MemoryBudget>,
     restore_admission: Mutex<()>,
@@ -200,6 +207,7 @@ impl<K: Clone + Eq + Hash + Send + 'static, V: SwapPayload> ImageSwapCache<K, V>
             ));
         }
         let queue_budget = queue_budget.child(config.queue_bytes);
+        let scratch_budget = restore_budget.clone();
         let restore_budget = restore_budget.child(config.restore_bytes);
         let store = SwapStore::new(
             parent,
@@ -221,12 +229,13 @@ impl<K: Clone + Eq + Hash + Send + 'static, V: SwapPayload> ImageSwapCache<K, V>
         let worker_cancel = cancelled.clone();
         let worker_generation = write_generation.clone();
         let worker_counters = counters.clone();
-        std::thread::Builder::new()
+        let worker = std::thread::Builder::new()
             .name("rrrah-swap-write".into())
             .spawn(move || {
                 let maintenance_period = std::time::Duration::from_secs(1);
                 let mut next_maintenance = std::time::Instant::now() + maintenance_period;
                 loop {
+                    if worker_cancel.load(Ordering::Acquire) { break; }
                     let command = if config.limits.ttl.is_some() {
                         // A busy command stream must not keep resetting TTL
                         // maintenance. In particular, barriers do not touch LRU.
@@ -326,10 +335,12 @@ impl<K: Clone + Eq + Hash + Send + 'static, V: SwapPayload> ImageSwapCache<K, V>
             })?;
         Ok(Self {
             tx,
+            worker: Mutex::new(Some(worker)),
             index,
             store,
             queue_budget,
             restore_budget,
+            scratch_budget,
             restore_limit: config.restore_bytes,
             retired_restore_budgets: Vec::new(),
             restore_admission: Mutex::new(()),
@@ -403,6 +414,10 @@ impl<K: Clone + Eq + Hash + Send + 'static, V: SwapPayload> ImageSwapCache<K, V>
     pub fn discard_pending_writes(&self) {
         self.write_generation.fetch_add(1, Ordering::AcqRel);
     }
+    /// Share the same disk quota for a visible image's segmented region backing.
+    /// The returned handle remains charged until its last owner drops.
+    pub fn region_store(&self) -> SwapStore { self.store.clone() }
+
     pub fn restore_budget(&self) -> &MemoryBudget {
         &self.restore_budget
     }
@@ -412,6 +427,7 @@ impl<K: Clone + Eq + Hash + Send + 'static, V: SwapPayload> ImageSwapCache<K, V>
         if self.restore_budget.used() != 0 {
             self.retired_restore_budgets.push(self.restore_budget.clone());
         }
+        self.scratch_budget = budget.clone();
         self.restore_budget = budget.child(self.restore_limit);
     }
     pub fn get(&self, key: &K, cancelled: impl FnMut() -> bool) -> Option<V> {
@@ -463,7 +479,7 @@ impl<K: Clone + Eq + Hash + Send + 'static, V: SwapPayload> ImageSwapCache<K, V>
             .fold(0u64, |total, (_, budget)| total.saturating_add(budget.used()));
         let allowance = self.restore_limit.saturating_sub(live);
         let restore = self.restore_budget.child(allowance);
-        let result = self.store.read_stream(&handle, &mut cancelled, |mut reader| {
+        let decode = |mut reader: &mut dyn Read| {
             let decoded = V::read_payload(&mut reader, handle.byte_len(), &restore);
             match decoded {
                 Err(SwapPayloadError::Memory(error)) => {
@@ -487,7 +503,12 @@ impl<K: Clone + Eq + Hash + Send + 'static, V: SwapPayload> ImageSwapCache<K, V>
                 }
                 result => result.map_err(std::io::Error::other),
             }
-        });
+        };
+        let result = if V::permits_hash_scratch() {
+            self.store.read_stream_with_scratch(&handle, &mut cancelled, decode, &self.scratch_budget)
+        } else {
+            self.store.read_stream(&handle, &mut cancelled, decode)
+        };
         match result {
             Ok(mosaic) => {
                 self.counters.reads.fetch_add(1, Ordering::Relaxed);
@@ -533,6 +554,17 @@ impl<K: Clone + Eq + Hash + Send + 'static, V: SwapPayload> ImageSwapCache<K, V>
     }
 
     /// Synchronization hook for tests/benchmarks; never call this from the render thread.
+    /// Terminal owner shutdown. Cancels queued writes and joins the worker so
+    /// temporary storage owners are released before process exit. Never use on UI.
+    pub fn shutdown(&self) {
+        self.cancelled.store(true, Ordering::Release);
+        let (wake, _) = mpsc::channel();
+        let _ = self.tx.try_send(Command::Barrier(wake));
+        if let Some(worker) = self.worker.lock().unwrap_or_else(std::sync::PoisonError::into_inner).take() {
+            let _ = worker.join();
+        }
+    }
+
     pub fn wait_idle(&self) -> std::io::Result<()> {
         let (tx, rx) = mpsc::channel();
         self.tx
@@ -589,6 +621,27 @@ mod write_cancellation_tests {
             })
         }
     }
+    #[test]
+    fn terminal_shutdown_joins_idle_worker_and_releases_temporary_directory() {
+        for ttl in [None, Some(std::time::Duration::from_secs(3600))] {
+            let directory = tempfile::tempdir().unwrap();
+            let root = MemoryBudget::new(3);
+            let swap = ImageSwapCache::<u8, Payload>::new(directory.path(), ImageSwapConfig {
+                limits: CacheLimits { max_bytes:3, max_entries:Some(1), ttl },
+                queue_bytes:3, queue_count:1, restore_bytes:3,
+            }).unwrap();
+            swap.enqueue(1,Payload { buffer:root.try_buffer(3,7).unwrap().freeze(),pause:None });
+            swap.wait_idle().unwrap();
+            assert_eq!(swap.disk_usage().unwrap().objects,1);
+            swap.shutdown();
+            swap.shutdown();
+            assert!(swap.worker.lock().unwrap().is_none());
+            drop(swap);
+            assert_eq!(root.used(),0);
+            assert_eq!(std::fs::read_dir(directory.path()).unwrap().count(),0);
+        }
+    }
+
     #[test]
     fn cancelling_active_and_queued_spills_releases_owners_and_allows_new_writes() {
         let directory = tempfile::tempdir().unwrap();
@@ -1602,6 +1655,39 @@ mod raster_tests {
                 std::time::Instant::now() < deadline,
                 "idle TTL worker did not reclaim swap"
             );
+            std::thread::sleep(Duration::from_millis(10));
+        }
+        assert_eq!(swap.store.usage().unwrap().bytes, 0);
+        assert!(swap.index.lock().unwrap().is_empty());
+        assert_eq!(swap.stats().errors, 0);
+    }
+    #[test]
+    fn nonzero_ttl_keeps_fresh_swap_then_reclaims_without_lookup() {
+        let source = MemoryBudget::new(19);
+        let ttl = Duration::from_secs(2);
+        let swap = RasterSwapCache::new(
+            &std::env::temp_dir(),
+            config(CacheLimits {
+                max_bytes: 1024,
+                max_entries: Some(1),
+                ttl: Some(ttl),
+            }),
+        ).unwrap();
+        swap.enqueue(1u32, frame(&source));
+        swap.wait_idle().unwrap();
+        assert_eq!(swap.stats().writes, 1);
+        assert_eq!(source.used(), 0);
+        // Explicit maintenance must retain a newly committed, nonzero-TTL entry.
+        assert_eq!(swap.prune_expired().unwrap(), 0);
+        let initial = swap.store.usage().unwrap();
+        assert_eq!(initial.objects, 1);
+        assert!(initial.bytes > 0);
+        let deadline = std::time::Instant::now() + Duration::from_secs(6);
+        // Only observe physical accounting: no get, barrier, or prune can cause
+        // expiration here. The background worker must release the stored file.
+        while swap.store.usage().unwrap().objects != 0 {
+            assert!(std::time::Instant::now() < deadline,
+                "nonzero TTL worker did not reclaim idle swap");
             std::thread::sleep(Duration::from_millis(10));
         }
         assert_eq!(swap.store.usage().unwrap().bytes, 0);

@@ -1,0 +1,40 @@
+{
+  "status": "complete_bounded_macos_owner_count_cancellation_qualification",
+  "source_manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-owner-count-cancellation-source-20261011.json",
+  "raster_tests": 30,
+  "decode_tests": 71,
+  "raster_suite_counts": [
+    24,
+    6
+  ],
+  "decode_suite_counts": [
+    64,
+    7
+  ],
+  "archived_test_binaries": [
+    {
+      "path": "/Users/themoretheless/.codex/tmp/rrrah-owner-count-cancellation-qualified-20261011/rrrah_dedup-61d85b6132806172",
+      "sha256": "d8b7f8a7bd4a1b35d53904ccb7eb60b4d286931f7e50ff4e75961d17c4d40247"
+    },
+    {
+      "path": "/Users/themoretheless/.codex/tmp/rrrah-owner-count-cancellation-qualified-20261011/local_index-e2438f2e937a4336",
+      "sha256": "9650f8717381192d4b4187faa2154c6a86a37bee294eaafb1dcf57c22c9d86a4"
+    },
+    {
+      "path": "/Users/themoretheless/.codex/tmp/rrrah-owner-count-cancellation-qualified-20261011/rrrah_dedup-2403464ceafac33e",
+      "sha256": "a78aef26e5d4405e38fcaeb12a94e055b40f5a1778c8d1f51af8eac071c51be5"
+    },
+    {
+      "path": "/Users/themoretheless/.codex/tmp/rrrah-owner-count-cancellation-qualified-20261011/local_index-d0efdaf8b88d94fe",
+      "sha256": "fead9696bea751b8c9b984f66fb4740f8ace8135c26090b343db649c8c4b37e9"
+    }
+  ],
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-owner-count-cancellation-source-20261011.json": "66f2865f8f9f2dba8cdf1bdd4007ae6326efcfe6c975a8b72d526686634271e0",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-owner-count-cancellation-raster-current-20261011.log": "2dbea64d52cd6aac23ee350d22d89142fb2165da3a53329f16bb495c3800406b",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-owner-count-cancellation-decode-20261011.log": "a1f3eeb77a201addfb7a794160ba3f186f20ff06f7c0b1e98f2dd13fe1d7c612",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-owner-count-cancellation-20261011.py": "6b87c022113303dcdbaa75a905f98ab1637230a91d3430de29f8e6ad44442987"
+  },
+  "scope": "Legacy owner materialization and both ordered count variants observe the supplied cancellation callback. Mid-iteration regression stops before the third update. Existing exhaustive-retrieval and capacity suites pass. The only library delta from the parent feature-gate snapshot is local_index.rs.",
+  "limits": "Current macOS runtime qualification only; earlier Linux and Windows gates predate this delta. Sort/allocator calls are indivisible. Full 229-pair native corpus uses its own earlier frozen binary and does not qualify this later cancellation change."
+}

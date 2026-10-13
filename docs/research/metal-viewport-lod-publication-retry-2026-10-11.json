@@ -1,0 +1,24 @@
+{
+  "date": "2026-10-11",
+  "backend": "Metal",
+  "hardware": "Apple M4 Max",
+  "change": "Retain one ready viewport LOD across failed upload; avoid immediate refilter/wake loops",
+  "checks": {
+    "app_units_passed": 206,
+    "app_units_ignored": 43,
+    "explicit_metal_tests_passed": 4,
+    "worker_tests_passed": 2,
+    "texture_pressure_failure": "old HDR frame and regional state preserved",
+    "upload_queue_pressure_failure": "old HDR frame preserved; attempted texture credit released",
+    "retry_after_pressure": "same prepared pixels, exact HDR reference",
+    "prepared_cpu_bytes": 40960,
+    "final_managed_credits": 0
+  },
+  "limits": [
+    "Native gesture scheduling not exercised",
+    "No physical HDR display accuracy qualification",
+    "No NVIDIA qualification",
+    "Full CPU source remains retained",
+    "Full 100-format qualification remains open"
+  ]
+}

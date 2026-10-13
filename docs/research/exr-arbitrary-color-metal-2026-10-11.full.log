@@ -1,0 +1,192 @@
+warning: function `fallible_zeroed_bytes` is never used
+   --> crates/rrrah-cache/src/mosaic_payload_v1.rs:728:4
+    |
+728 | fn fallible_zeroed_bytes(len: usize) -> Result<Box<[u8]>, MosaicPayloadError> {
+    |    ^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+warning: `rrrah-cache` (lib) generated 1 warning
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+warning: methods `submit` and `submit_image` are never used
+    --> crates/rrrah-app/src/main.rs:1377:8
+     |
+1085 | impl ForegroundLoader {
+     | --------------------- methods in this implementation
+...
+1377 |     fn submit(&self, path: PathBuf) -> Result<u64> {
+     |        ^^^^^^
+...
+1380 |     fn submit_image(&self, path: PathBuf, image_index: usize) -> Result<u64> {
+     |        ^^^^^^^^^^^^
+     |
+     = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: associated items `install_with_cancel`, `refresh`, and `refresh_with_cancel` are never used
+   --> crates/rrrah-app/src/raster_viewport.rs:396:19
+    |
+ 26 | impl ResidentSource {
+    | ------------------- associated items in this implementation
+...
+396 |     pub(crate) fn install_with_cancel<F: FnMut() -> bool>(
+    |                   ^^^^^^^^^^^^^^^^^^^
+...
+483 |     pub(crate) fn refresh(
+    |                   ^^^^^^^
+...
+503 |     pub(crate) fn refresh_with_cancel<F: FnMut() -> bool>(
+    |                   ^^^^^^^^^^^^^^^^^^^
+
+warning: `rrrah` (bin "rrrah") generated 2 warnings
+    Finished `test` profile [optimized + debuginfo] target(s) in 23.97s
+     Running tests/hdr_raster_swap.rs (target/debug/deps/hdr_raster_swap-6e84ed1ddcd47ad6)
+
+running 24 tests
+test large_float_hdr_swap_preserves_full_metal_attachment ... ignored, manual 12 MP float HDR attachment and disk swap qualification
+test photographic_heif_pq_full_resolution_swap_and_metal ... ignored, requires external Canon DPP 6000x4000 HDR PQ HIF and FFmpeg RGBA16 oracle
+test pict_external_directbits_oracle_swap_pressure_and_metal ... ignored, requires actual GPU and external PICT/TwelveMonkeys corpus
+test malformed_radiance_primaries_release_decode_admission ... ok
+test corrupt_raster_swap_entries_release_memory_and_allow_replacement ... ok
+HDR float adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+HDR raster adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+HDR raster adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+Raster transport adapter: Metal Apple M4 Max
+HDR still adapter: Metal Apple M4 Max
+HDR still adapter: Metal Apple M4 Max
+Raster transport adapter: Metal Apple M4 Max
+Declared linear gamut adapter: Metal Apple M4 Max
+Declared linear gamut adapter: Metal Apple M4 Max
+Declared linear gamut adapter: Metal Apple M4 Max
+native Farbfeld adapter: Metal Apple M4 Max
+HDR still adapter: Metal Apple M4 Max
+Masked XCF adapter: Metal Apple M4 Max
+Declared linear gamut adapter: Metal Apple M4 Max
+Declared linear gamut adapter: Metal Apple M4 Max
+Raster transport adapter: Metal Apple M4 Max
+HDR float adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+HDR float adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+HDR float adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+HDR float adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+HDR float adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+HDR float adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+HDR float adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+test hdr_raster_swap_preserves_samples_and_linear_metal_output ... ok
+test float_rla_swap_preserves_hdr_samples_and_linear_metal_output ... ok
+ICC raster swap adapter: Metal Apple M4 Max
+QOI transport adapter: Metal Apple M4 Max
+Raster transport adapter: Metal Apple M4 Max
+HDR float adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+test pict_public_route_lease_swap_pressure_and_metal_preserve_rgba ... ok
+Declared linear gamut adapter: Metal Apple M4 Max
+test pict_unpacked_xrgb_macos_pixels_survive_swap_pressure_and_metal ... ok
+test native_farbfeld_preserves_u16_and_display_through_budgeted_swap ... ok
+Raster transport adapter: Metal Apple M4 Max
+Declared linear gamut 0: arbitrary-custom-chroma.exr; declared source preserved; pressure/cancel/swap retry; SDR/HDR analytical frame exact; root=0
+HDR still adapter: Metal Apple M4 Max
+HDR float adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+HDR still adapter: Metal Apple M4 Max
+HDR still adapter: Metal Apple M4 Max
+HDR float adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+HDR float adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+HDR float adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+Declared linear gamut 9: rec2020-linear-red.hdr; declared source preserved; pressure/cancel/swap retry; SDR/HDR analytical frame exact; root=0
+Declared linear gamut 12: p3-linear-rgbw.hdr; declared source preserved; pressure/cancel/swap retry; SDR/HDR analytical frame exact; root=0
+Declared linear gamut 9: wide-9-chroma.exr; declared source preserved; pressure/cancel/swap retry; SDR/HDR analytical frame exact; root=0
+test declared_radiance_p3_keeps_rgbw_hdr_through_swap_and_gpu ... ok
+test declared_radiance_bt2020_keeps_extended_gamut_through_gpu ... ok
+Declared linear gamut adapter: Metal Apple M4 Max
+test icc_images_prepare_and_restore_exactly_for_linear_hdr_metal ... ok
+Declared linear gamut adapter: Metal Apple M4 Max
+Declared linear gamut 0: explicit xy metadata; declared source preserved; pressure/cancel/swap retry; SDR/HDR analytical frame exact; root=0
+test explicit_chromaticity_metadata_survives_swap_and_metal ... Raster transport adapter: Metal Apple M4 Max
+ok
+HDR float adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+HDR float adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+HDR float adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+Raster transport adapter: Metal Apple M4 Max
+Declared linear gamut 0: custom-white.hdr; declared source preserved; pressure/cancel/swap retry; SDR/HDR analytical frame exact; root=0
+test qoi_transfer_flags_and_alpha_survive_native_prepared_swap_and_metal ... ok
+Declared linear gamut adapter: Metal Apple M4 Max
+test pq_avif_linear_pixels_survive_pressure_swap_and_metal ... ok
+test hlg_avif_linear_pixels_survive_pressure_swap_and_metal ... ok
+HDR still adapter: Metal Apple M4 Max
+HDR float adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+Raster transport adapter: Metal Apple M4 Max
+Declared linear gamut 9: wide-9-id.exr; declared source preserved; pressure/cancel/swap retry; SDR/HDR analytical frame exact; root=0
+Declared linear gamut 0: arbitrary-custom-neutral-match.exr; declared source preserved; pressure/cancel/swap retry; SDR/HDR analytical frame exact; root=0
+Declared linear gamut adapter: Metal Apple M4 Max
+HDR float adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+Declared linear gamut adapter: Metal Apple M4 Max
+Declared linear gamut 0: ap1-white.hdr; declared source preserved; pressure/cancel/swap retry; SDR/HDR analytical frame exact; root=0
+Raster transport adapter: Metal Apple M4 Max
+Declared linear gamut adapter: Metal Apple M4 Max
+HDR still adapter: Metal Apple M4 Max
+HDR float adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backendtest profiled_png_and_archives_keep_color_through_swap_and_metal ... ok
+: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+Raster transport adapter: Metal Apple M4 Max
+HDR float adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+Declared linear gamut 9: wide-9-both.exr; declared source preserved; pressure/cancel/swap retry; SDR/HDR analytical frame exact; root=0
+Raster transport adapter: Metal Apple M4 Max
+Declared linear gamut adapter: Metal Apple M4 Max
+Declared linear gamut 0: arbitrary-ap1-chroma.exr; declared source preserved; pressure/cancel/swap retry; SDR/HDR analytical frame exact; root=0
+Declared linear gamut adapter: Metal Apple M4 Max
+HDR still adapter: Metal Apple M4 Max
+Declared linear gamut 0: ap0-white.hdr; declared source preserved; pressure/cancel/swap retry; SDR/HDR analytical frame exact; root=0
+HDR float adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+Radiance arbitrary color: 3 non-D65 RGBW sources; independent full matrix oracle; native samples unchanged; Metal SDR/HDR and swap retry exact
+test radiance_arbitrary_primaries_and_non_d65_white_survive_swap_and_metal ... ok
+Raster transport adapter: Metal Apple M4 Max
+HEVC HDR alpha: heif-pq12-color-alpha.heic; 16 interior controls match linear premultiplied composition
+HDR float adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+Raster transport adapter: Metal Apple M4 Max
+Declared linear gamut 12: wide-12-chroma.exr; declared source preserved; pressure/cancel/swap retry; SDR/HDR analytical frame exact; root=0
+Declared linear gamut adapter: Metal Apple M4 Max
+Declared linear gamut 0: arbitrary-ap1-neutral-match.exr; declared source preserved; pressure/cancel/swap retry; SDR/HDR analytical frame exact; root=0
+test masked_legacy_xcf_preserves_explicit_color_assumption_through_swap_and_metal ... ok
+Declared linear gamut adapter: Metal Apple M4 Max
+HDR still adapter: Metal Apple M4 Max
+HDR float adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+Raster transport adapter: Metal Apple M4 Max
+HEVC HDR alpha: heif-hlg12-color-alpha.heic; 16 interior controls match linear premultiplied composition
+HDR float adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+Raster transport adapter: Metal Apple M4 Max
+Declared linear gamut 12: wide-12-id.exr; declared source preserved; pressure/cancel/swap retry; SDR/HDR analytical frame exact; root=0
+Declared linear gamut adapter: Metal Apple M4 Max
+test hdr_hevc_linear_pixels_survive_pressure_swap_and_metal ... ok
+Raster transport adapter: Metal Apple M4 Max
+Declared linear gamut 0: arbitrary-ap1-id.exr; declared source preserved; pressure/cancel/swap retry; SDR/HDR analytical frame exact; root=0
+Declared linear gamut adapter: Metal Apple M4 Max
+Raster transport adapter: Metal Apple M4 Max
+Raster transport adapter: Metal Apple M4 Max
+Declared linear gamut 12: wide-12-both.exr; declared source preserved; pressure/cancel/swap retry; SDR/HDR analytical frame exact; root=0
+EXR wide color: 6 qualified metadata cases; 4 conflicting cases refused; 4 unknown/neutral cases remain unqualified; root=0
+test declared_exr_wide_gamuts_preserve_native_color_and_metal_swap ... ok
+Declared linear gamut 0: arbitrary-ap1-both.exr; declared source preserved; pressure/cancel/swap retry; SDR/HDR analytical frame exact; root=0
+Declared linear gamut adapter: Metal Apple M4 Max
+Raster transport adapter: Metal Apple M4 Max
+Raster transport adapter: Metal Apple M4 Max
+Raster transport adapter: Metal Apple M4 Max
+Declared linear gamut 0: arbitrary-ap0-chroma.exr; declared source preserved; pressure/cancel/swap retry; SDR/HDR analytical frame exact; root=0
+Raster transport adapter: Metal Apple M4 Max
+Declared linear gamut adapter: Metal Apple M4 Max
+Raster transport adapter: Metal Apple M4 Max
+Raster transport adapter: Metal Apple M4 Max
+Raster transport adapter: Metal Apple M4 Max
+Declared linear gamut 0: arbitrary-ap0-neutral-match.exr; declared source preserved; pressure/cancel/swap retry; SDR/HDR analytical frame exact; root=0
+Declared linear gamut adapter: Metal Apple M4 Max
+Raster transport adapter: Metal Apple M4 Max
+Raster transport adapter: Metal Apple M4 Max
+Declared linear gamut 0: arbitrary-ap0-aces.exr; declared source preserved; pressure/cancel/swap retry; SDR/HDR analytical frame exact; root=0
+Declared linear gamut adapter: Metal Apple M4 Max
+test avif_clean_aperture_ram_swap_and_metal_preserve_pixels ... ok
+Declared linear gamut 0: arbitrary-ap0-id.exr; declared source preserved; pressure/cancel/swap retry; SDR/HDR analytical frame exact; root=0
+Declared linear gamut adapter: Metal Apple M4 Max
+Declared linear gamut 0: arbitrary-ap0-both.exr; declared source preserved; pressure/cancel/swap retry; SDR/HDR analytical frame exact; root=0
+Declared linear gamut adapter: Metal Apple M4 Max
+Declared linear gamut 0: arbitrary-ap0-aces-id.exr; declared source preserved; pressure/cancel/swap retry; SDR/HDR analytical frame exact; root=0
+EXR arbitrary color: accepted=12; refused=8; unknown=6; independent full matrix; native/swap/Metal SDR/HDR exact; root=0
+test exr_arbitrary_primaries_and_aces_ids_preserve_color_through_metal_swap ... ok
+
+test result: ok. 21 passed; 0 failed; 3 ignored; 0 measured; 0 filtered out; finished in 0.48s
+

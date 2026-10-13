@@ -1,0 +1,38 @@
+{
+  "status": "verified_same_immediate_cancel_outcome_lower_initial_root_rss",
+  "rows": [
+    {
+      "mode": "baseline",
+      "command": [
+        "/usr/bin/time",
+        "-l",
+        "/Users/themoretheless/.codex/tmp/rrrah-exact-root-memory-executable-20261012",
+        "baseline"
+      ],
+      "returncode": 0,
+      "stdout": "cancelled=true issues=0 groups=0 files=0 bytes=0 roots=100000\n",
+      "stderr": "        0.88 real         0.17 user         0.02 sys\n           144621568  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n                9015  page reclaims\n                   0  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                   0  voluntary context switches\n                  53  involuntary context switches\n          1869492306  instructions retired\n           388031289  cycles elapsed\n           143933896  peak memory footprint\n",
+      "rss_bytes": 144621568
+    },
+    {
+      "mode": "bounded",
+      "command": [
+        "/usr/bin/time",
+        "-l",
+        "/Users/themoretheless/.codex/tmp/rrrah-exact-root-memory-executable-20261012",
+        "bounded"
+      ],
+      "returncode": 0,
+      "stdout": "cancelled=true issues=0 groups=0 files=0 bytes=0 roots=100000\n",
+      "stderr": "        0.04 real         0.02 user         0.01 sys\n            70139904  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n                4462  page reclaims\n                   0  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                   0  voluntary context switches\n                   7  involuntary context switches\n           315801050  instructions retired\n            74860310  cycles elapsed\n            69386624  peak memory footprint\n",
+      "rss_bytes": 70139904
+    }
+  ],
+  "rss_reduction_bytes": 74481664,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exact-root-memory-source-20261012.json": "d0a535a1326ede4aa421eb23b9a7432156b495efb34117bd537c8a690f3ccb97",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-root-memory-executable-20261012": "627971a0979122ad648c1c1e6b65fd85d05f6e35fbf7e28fcaa3cbedee0fdd41",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-root-memory-build-20261012.log": "20743a2571b8b873fab0ffd6f1e430e88ace624010bd14c1e7484ff7b729164a"
+  },
+  "scope": "Same binary, original whole collect function copied verbatim and renamed versus adopted collect,100000caller-owned roots512byte suffix, forced immediatecancel. Only rootpreparation memory, no hashing or totalprocesscap. Separate fresh macOS ARM64 processes, identical outcomes. Original wholecollect retained verbatim, renamed in isolated harness; no production benchmark code adopted. One memory control, not complete-operation cap or universal timing."
+}

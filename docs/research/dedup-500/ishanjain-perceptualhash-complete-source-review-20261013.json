@@ -1,0 +1,64 @@
+{
+  "status": "complete_pinned_static_source_review",
+  "index": 449,
+  "repository": "ishanjain28/perceptualhash",
+  "commit": "4277af205ad929fd23f753dffe8f42bf2c01034f",
+  "reviewed_files": [
+    ".gitignore",
+    "LICENSE",
+    "README.md",
+    "example/example.go",
+    "perceptual-hash.go"
+  ],
+  "license": "MIT2017IshanJain",
+  "upstream_tests": 0,
+  "runtime_executed": false,
+  "runtime_observation": "go not found on current PATH; no Go or resize backend run claimed.",
+  "algebraic_derivation_not_runtime": [
+    {
+      "requested": 1,
+      "side": 2,
+      "actual_bits": 2,
+      "identical_hash_percentage_formula": 200.0
+    },
+    {
+      "requested": 2,
+      "side": 2,
+      "actual_bits": 2,
+      "identical_hash_percentage_formula": 100.0
+    },
+    {
+      "requested": 64,
+      "side": 7,
+      "actual_bits": 72,
+      "identical_hash_percentage_formula": 112.5
+    },
+    {
+      "requested": 128,
+      "side": 9,
+      "actual_bits": 128,
+      "identical_hash_percentage_formula": 100.0
+    },
+    {
+      "requested": 512,
+      "side": 17,
+      "actual_bits": 512,
+      "identical_hash_percentage_formula": 100.0
+    }
+  ],
+  "findings": [
+    "Arbitrary requested bit length rounds up square side; hash count2*(side-1)^2 divided by requested length can exceed100%.64->72bits->112.5% for identical hash.",
+    "Unsupported extension falls through decodeImage returning nil,nil; subsequent Bounds call on nil has no typed refusal.",
+    "If second file open fails, first opened file is not closed on error path.",
+    "diffHashes indexes second string using first length without shape validation.",
+    "Image loops use Bounds.Max and zero origin, not Bounds.Min/Dx/Dy.",
+    "Direct CalculateHash uses red RGBA component; grayscale/downsize only performed by CalculateSimilarity.",
+    "Example imports github.com/ishanjain28/phash; reviewed repository is perceptualhash. No go.mod, dependency lock, CI or tests in full tree.",
+    "No positive hash-length validation or explicit pixel/resource admission."
+  ],
+  "decision": "reject-unvalidated-percentage-and-input-lifecycle",
+  "adopted_code": false,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/ishanjain-perceptualhash-full-source-20261013.json": "d12952d17f92bc78e57e2c848f41f9d6a75a0d3bf610368e64f9c0ac09f39e34"
+  }
+}

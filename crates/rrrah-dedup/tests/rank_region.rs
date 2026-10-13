@@ -157,7 +157,7 @@ fn invalid_domains_policy_alpha_and_scene_range_are_explicit() {
                 policy(),
                 || false
             ),
-            Err(RankRegionError::Invalid)
+            Err(RankRegionError::UnsupportedPixels)
         );
     }
 }

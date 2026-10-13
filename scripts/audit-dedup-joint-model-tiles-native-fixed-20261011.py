@@ -1,0 +1,16 @@
+#!/usr/bin/env python3
+import hashlib,json,re
+from pathlib import Path
+R=Path(__file__).resolve().parents[1];D=R/'docs/research';T=Path('/Users/themoretheless/.codex/tmp')
+def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
+def main():
+ out=D/'dedup-joint-model-tiles-native-fixed-audit-20261011.json';assert not out.exists();rp=D/'dedup-joint-model-tiles-native-fixed-20261011.json';r=json.loads(rp.read_text());assert r['status']=='complete_bounded_native_joint_model' and r['returncode']==0;assert all(sha(p)==h for p,h in r['pins'].items());assert sha(r['log'])==r['log_sha256'];assert Path(r['log']).read_text()==r['stdout']+r['stderr'];mp=D/'dedup-joint-model-tiles-native-fixed-snapshot-20261011.json';m=json.loads(mp.read_text());S=Path(m['snapshot']);assert all(sha(S/f)==h for f,h in m['file_hashes'].items());v=json.loads(r['stdout']);assert v['attempts']==1;assert v['supported'] and v['managed_used']==0 and v['selected_points']==v['raw_proposals']==173 and v['geometry_inliers']==11
+ ref=D/'dedup-anchor-scale-trace-20261011.json';q=json.loads(ref.read_text());assert all(sha(p)==h for p,h in q['pins'].items());expected=json.loads(next(x['stdout'] for x in q['results'] if x['filter_radius']==12));assert v['transform']==expected['best']['transform'];counts=[]
+ for kind in ['forward','reverse']:
+  match=re.search(kind+r': RankRegionEvidence \{ ([^}]+) \}',v['pixels']);assert match;counts.append({k:int(n) for k,n in re.findall(r'(sites|valid_sites|informative_pairs|agreeing_pairs): (\d+)',match[1])})
+ assert counts==expected['anchor_result']['directions'];assert v['original_dimensions']==[[675,543],[2560,1920]];pins=dict(r['pins']);pins.update({str(p):sha(p) for p in [rp,ref,Path(__file__),Path(r['log'])]});generic=D/'dedup-joint-model-tiles-audit-20261011.json';g=json.loads(generic.read_text());assert g['tests']==33 and g['status']=='complete_bounded_frozen_joint_model_tests';assert all(sha(p)==h for p,h in g['pins'].items());gm=json.loads(Path(g['source_manifest']).read_text());assert m['file_hashes']['crates/rrrah-dedup/src/model_compare.rs']==gm['file_hashes']['crates/rrrah-dedup/src/model_compare.rs'];pins[str(generic)]=sha(generic)
+ artifacts=[json.loads(x) for x in (T/'dedup-joint-model-tiles-native-fixed-build-20261011.jsonl').read_text().splitlines()];compiled=[e for e in artifacts if e.get('reason')=='compiler-artifact']
+ for target in ['rrrah_dedup','rrrah_decode','loftr','tch','joint_model_tiles_files']:
+  entries=[e for e in compiled if e['target']['name']==target];assert entries and all(e['profile']['opt_level']=='3' for e in entries)
+ rss=re.search(r'(\d+)\s+maximum resident set size',r['stderr']);out.write_text(json.dumps({'status':'verified_real_cpu_joint_model_tiles_201300_support','pins':pins,'selected_points':173,'geometry_inliers':11,'directions':counts,'elapsed_seconds':r['elapsed_seconds'],'max_rss_bytes':int(rss[1]),'scope':'Actual CPU provider through explicit joint whole-image API; identical H and original-pixel counts to independently checked exact-bit refit/filter12.16 generic comparison tests share fitting source. Explicit1m hypotheses and filter12, no default change or automatic tile/scale/collection/full corpus/precision/RSS-cap claim.'},indent=2)+'\n');print('Verified real CPU201300 support')
+if __name__=='__main__':main()

@@ -1,0 +1,67 @@
+{
+  "measured_density": {
+    "pixel": [
+      138,
+      34
+    ],
+    "intersecting_triangles": 327,
+    "query_work_limit": 100000,
+    "query_result": "Ok(327)",
+    "allocates_triangle_storage": false
+  },
+  "change": {
+    "candidate_cap_before": 256,
+    "candidate_cap_after": 512,
+    "pre_admitted_storage": true,
+    "still_opt_in": true
+  },
+  "tests": {
+    "renderer_passed": 138,
+    "renderer_ignored": 10
+  },
+  "current_refusal": {
+    "pixel": [
+      138,
+      39
+    ],
+    "candidates": 263,
+    "phase": "pixel_selected_fragments"
+  },
+  "pages": [
+    {
+      "fixture": "VectorApple.ai",
+      "page": 0,
+      "native_completed": false,
+      "capture_failed": false,
+      "deadline_expired": false,
+      "final_admitted_bytes": 0,
+      "native_replay_ms": 72942.25733400001
+    },
+    {
+      "fixture": "one.ai",
+      "page": 0,
+      "native_completed": true,
+      "capture_failed": false,
+      "deadline_expired": false,
+      "final_admitted_bytes": 0,
+      "native_replay_ms": 26443.2225
+    },
+    {
+      "fixture": "one.ai",
+      "page": 1,
+      "native_completed": true,
+      "capture_failed": false,
+      "deadline_expired": false,
+      "final_admitted_bytes": 0,
+      "native_replay_ms": 635.6195
+    }
+  ],
+  "hashes": {
+    "density-replay.log": "d35479520fa713a23414fc09d63a25920292dcff33eccec0d11fc59f9cb51aab",
+    "density-report.json": "f70f9c56b0bc27070dfef86f044b83bd511df991520192c5cc23ce5e14a32a8a",
+    "hayro-density-bound.log": "6a9bd15598d92cc5c8af57c75ec14a3c46b0facf2e4b709908d647f708082190",
+    "512-replay.log": "0bf3dcd1378ca80284c54e82bfda2089e49590b19b44427933b097bbd3d0ff95",
+    "512-report.json": "a65a1635cada3d77f9a3ef6c6d44065ab2b390648654b52e330d13a2faa62dd4"
+  },
+  "qualification": "Incomplete native AI; no completed goal claim"
+}

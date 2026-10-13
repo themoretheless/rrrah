@@ -1,0 +1,21 @@
+{
+  "device": "Apple M4 Max Metal",
+  "change": "Extended existing model float64 normalization regression to full64x64 binary16 HDR frame equality as well as SDR.",
+  "cases": [
+    "translation+1e12/-1e12/+1e12",
+    "scale1e300",
+    "smallest positive f64 subnormal",
+    "scale f64MAX with opposite-sign coordinates"
+  ],
+  "checks": [
+    "reference HDR every channel finite",
+    "full SDR and HDR frames equal baseline for each transformation"
+  ],
+  "passed": 11,
+  "failed": 0,
+  "ignored": 0,
+  "log": "docs/research/model-hdr-extreme-scale-2026-10-11.log",
+  "log_sha256": "9290294f99b130393a333c0b4f146b1a7552e8aa1e45e1b7745841b1c02fafc9",
+  "source_sha256": "7940ee14381f4763c5e2fff45f860216c7fb3e249bfa4dc88ada5c0c2019913e",
+  "limitations": "Authored single triangle, offscreen attachments, not full 3D format material/texture support or physical HDR."
+}

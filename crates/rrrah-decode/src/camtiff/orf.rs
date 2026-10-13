@@ -172,6 +172,9 @@ impl CameraQuirks for OrfQuirks {
         };
         let black_level = read_black_level(raw)?;
         let white_level = read_white_level(raw, bits_per_sample)?;
+        if black_level.values.iter().any(|black| *black >= white_level.0[0]) {
+            return Err(orf_error("BlackLevel must be below WhiteLevel"));
+        }
         let white_balance = read_white_balance(raw)?;
         let xyz_to_camera = read_xyz_to_camera(raw)?;
         let active_area = read_active_area(raw, width, height)?;
@@ -362,41 +365,52 @@ fn read_cfa(raw: &CameraDirectory<'_>) -> Result<CfaPattern, DecodeError> {
 // domain metadata; conversions are checked for finiteness at each site.
 #[allow(clippy::cast_possible_truncation)]
 fn read_black_level(raw: &CameraDirectory<'_>) -> Result<LevelGrid, DecodeError> {
-    let value = match raw.entry(FORMAT, BLACK_LEVEL)? {
-        Some(entry) => entry
-            .numeric_values()
-            .map_err(|error| orf_error(format!("BlackLevel: {error}")))?
-            .first()
-            .copied()
-            .map(|value| value as f32)
-            .filter(|value| value.is_finite())
-            .ok_or_else(|| orf_error("BlackLevel is empty or non-finite"))?,
-        // Documented default: Olympus black level is 0 for the supported
-        // 12-bit packed and 16-bit uncompressed storage.
-        None => 0.0,
+    let dimensions = raw.entry(FORMAT, 50713)?
+        .map(|entry| entry.unsigned_values().map_err(|error| orf_error(format!("BlackLevelRepeatDim: {error}"))))
+        .transpose()?;
+    let (width, height) = match dimensions.as_deref() {
+        None | Some([1, 1]) => (1_u8, 1_u8),
+        Some([2, 2]) => (2, 2),
+        _ => return Err(orf_error("BlackLevelRepeatDim must declare a 1x1 or 2x2 grid")),
     };
-    Ok(LevelGrid {
-        width: 1,
-        height: 1,
-        components: 1,
-        values: vec![value],
-    })
+    let count = usize::from(width) * usize::from(height);
+    let values = match raw.entry(FORMAT, BLACK_LEVEL)? {
+        Some(entry) => {
+            let values = entry.numeric_values()
+                .map_err(|error| orf_error(format!("BlackLevel: {error}")))?;
+            if values.len() != count {
+                return Err(orf_error("BlackLevel count differs from its declared repeat grid"));
+            }
+            values.into_iter().map(|value| {
+                let value = value as f32;
+                if !value.is_finite() || value < 0.0 {
+                    return Err(orf_error("BlackLevel must be finite and nonnegative"));
+                }
+                Ok(value)
+            }).collect::<Result<Vec<_>, DecodeError>>()?
+        }
+        None => vec![0.; count],
+    };
+    Ok(LevelGrid { width, height, components: 1, values })
 }
 
 #[allow(clippy::cast_possible_truncation)]
 fn read_white_level(raw: &CameraDirectory<'_>, bits_per_sample: u8) -> Result<WhiteLevel, DecodeError> {
+    let maximum = f64::from((1_u32 << bits_per_sample) - 1);
     let value = match raw.entry(FORMAT, WHITE_LEVEL)? {
-        Some(entry) => entry
-            .numeric_values()
-            .map_err(|error| orf_error(format!("WhiteLevel: {error}")))?
-            .first()
-            .copied()
-            .map(|value| value as f32)
-            .filter(|value| value.is_finite())
-            .ok_or_else(|| orf_error("WhiteLevel is empty or non-finite"))?,
-        // Documented default: full-scale for the bit depth. Olympus' exact
-        // per-model saturation point is makernote-only and not parsed.
-        None => ((1_u32 << bits_per_sample) - 1) as f32,
+        Some(entry) => {
+            let values = entry.numeric_values()
+                .map_err(|error| orf_error(format!("WhiteLevel: {error}")))?;
+            let [value] = values.as_slice() else {
+                return Err(orf_error("WhiteLevel must contain exactly one sensor limit"));
+            };
+            if !value.is_finite() || *value <= 0.0 || *value > maximum || value.fract() != 0.0 {
+                return Err(orf_error("WhiteLevel must be an integer within the sensor bit depth"));
+            }
+            *value as f32
+        }
+        // Full scale is the fallback only when no explicit limit is declared.
+        None => maximum as f32,
     };
     Ok(WhiteLevel(vec![value]))
 }
@@ -1039,6 +1053,53 @@ mod tests {
         let raw = OrfQuirks.select_raw_ifd(&file).unwrap();
         let metadata = OrfQuirks.read_metadata(&file, raw).unwrap();
         assert_eq!(metadata.white_level.0, [4_095.0]);
+    }
+
+    #[test]
+    fn invalid_explicit_white_levels_are_rejected() {
+        for limits in [vec![], vec![0], vec![4096], vec![4095, 4095]] {
+            let bytes = build_fixture(8, 2, 12, 1, &[0; 24], 24,
+                Some([0, 1, 1, 2]), vec![short(WHITE_LEVEL, &limits)]);
+            let file = parse_fixture(&bytes);
+            let raw = OrfQuirks.select_raw_ifd(&file).unwrap();
+            assert!(matches!(OrfQuirks.read_metadata(&file, raw),
+                Err(DecodeError::NativeCamera { format: FORMAT, .. })), "limits={limits:?}");
+        }
+    }
+
+    #[test]
+    fn invalid_black_levels_and_collapsed_sensor_range_are_rejected() {
+        for levels in [vec![], vec![1, 2], vec![4095], vec![4096]] {
+            let bytes = build_fixture(8, 2, 12, 1, &[0; 24], 24,
+                Some([0, 1, 1, 2]), vec![short(BLACK_LEVEL, &levels)]);
+            let file = parse_fixture(&bytes);
+            let raw = OrfQuirks.select_raw_ifd(&file).unwrap();
+            assert!(matches!(OrfQuirks.read_metadata(&file, raw),
+                Err(DecodeError::NativeCamera { format: FORMAT, .. })), "levels={levels:?}");
+        }
+        let bytes = build_fixture(8, 2, 12, 1, &[0; 24], 24,
+            Some([0, 1, 1, 2]), vec![short(BLACK_LEVEL, &[64]), short(WHITE_LEVEL, &[3995])]);
+        let file = parse_fixture(&bytes);
+        let raw = OrfQuirks.select_raw_ifd(&file).unwrap();
+        assert_eq!(OrfQuirks.read_metadata(&file, raw).unwrap().black_level.values, [64.]);
+    }
+
+    #[test]
+    fn declared_black_grid_preserves_sensor_coordinates_and_checks_shape() {
+        let bytes = build_fixture(8, 2, 12, 1, &[0; 24], 24,
+            Some([0, 1, 1, 2]), vec![short(50713, &[2, 2]), short(BLACK_LEVEL, &[10, 20, 30, 40])]);
+        let file = parse_fixture(&bytes);
+        let raw = OrfQuirks.select_raw_ifd(&file).unwrap();
+        let black = OrfQuirks.read_metadata(&file, raw).unwrap().black_level;
+        assert_eq!((black.width, black.height, black.components), (2, 2, 1));
+        assert_eq!(black.values, [10., 20., 30., 40.]);
+        for dims in [vec![], vec![2], vec![0, 2], vec![3, 3], vec![1, 1]] {
+            let bytes = build_fixture(8, 2, 12, 1, &[0; 24], 24,
+                Some([0, 1, 1, 2]), vec![short(50713, &dims), short(BLACK_LEVEL, &[10, 20, 30, 40])]);
+            let file = parse_fixture(&bytes);
+            let raw = OrfQuirks.select_raw_ifd(&file).unwrap();
+            assert!(OrfQuirks.read_metadata(&file, raw).is_err(), "dims={dims:?}");
+        }
     }
 
     #[test]

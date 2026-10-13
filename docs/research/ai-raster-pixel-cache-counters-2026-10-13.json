@@ -1,0 +1,69 @@
+{
+  "scope": "Actual final raster Pixel reuse counts on five original AI diagnostic pixels",
+  "rows": [
+    {
+      "event": 1218,
+      "hits": 915974,
+      "builds": 10043
+    },
+    {
+      "event": 2298,
+      "hits": 915953,
+      "builds": 10064
+    },
+    {
+      "event": 1218,
+      "hits": 327260,
+      "builds": 4209
+    },
+    {
+      "event": 2298,
+      "hits": 327243,
+      "builds": 4226
+    },
+    {
+      "event": 1218,
+      "hits": 37537,
+      "builds": 3969
+    },
+    {
+      "event": 1218,
+      "hits": 269895,
+      "builds": 9567
+    },
+    {
+      "event": 2298,
+      "hits": 269895,
+      "builds": 9567
+    },
+    {
+      "event": 1218,
+      "hits": 4584,
+      "builds": 489
+    },
+    {
+      "event": 2298,
+      "hits": 4584,
+      "builds": 489
+    }
+  ],
+  "total_hits": 3072925,
+  "total_builds": 52623,
+  "hit_percent": 98.3163592432431,
+  "native_pixels_source_work_and_centroid_results_unchanged": true,
+  "tests": "236passed/12ignored",
+  "peak_admitted_bytes": 239197736,
+  "bottleneck_evidence": {
+    "pixel": "147,59",
+    "mesh_event": 2670,
+    "calls": 915368,
+    "source_work": 4578032,
+    "ordinary_total_color_budget": 4000000
+  },
+  "next_action": "Reduce mesh source evaluation count using exact field identities plus a conservative integration error certificate; raster cache alone cannot bring this pixel under4M",
+  "limitations": [
+    "Counts include centroid diagnostic replays",
+    "No normal-viewer throughput or fullpage correctness claim",
+    "Counters enabled only with existing spatial tracing"
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "status": "verified_bounded_sampling_recovers_207700",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-joint-geometry-sampling-patched-20261011.json": "e43420ae503b0642385fe41d94a2c70127e16d2970c8888f256edb35c6d85cfe",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-joint-geometry-sampling-patched-harness-20261011.json": "ead82e770e9d5e05af89d70bd760d29fbb0cd17ac958c08a509b0ed171493773",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-joint-projective-native-20261011.json": "f28e8129739cd5e5bacbe4320ab6049ff5d8b7d482456868216a66a0c137051b",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-joint-geometry-sampling-20261011.py": "a7461f1ef5bf768d395395049bb5c11563f2cc241a8b431b8a57571734f0b066",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-geometry-sampling-patched-qualified-20261011/204100_calibration.log": "18ffccf16149d607fbafaa3b50d3923157d88180886efad79aa464886bbc550c",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-geometry-sampling-patched-qualified-20261011/207700_opposite_100k.log": "6d2628580a0feba788007a0a327a2db5c0abeaf9b9341c667b0f1587ff34d2f2",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-geometry-sampling-patched-qualified-20261011/207700_direct_100k.log": "c3c01efb22acde00354f5798012f0b5d992e2588291c9ad1c071b32c4cf65a9d",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-geometry-sampling-patched-qualified-20261011/207700_opposite_1m.log": "bae220751d579cea2ab0a5f54674c8da320344c38d6bd04815e0e596ee5912b6",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-geometry-sampling-patched-qualified-20261011/207700_direct_1m.log": "565cd2fd88ddd840978b3668f734b8a1eaf2bdcea8f58b8cfe910ef36d6a6281"
+  },
+  "results": [
+    {
+      "case": "204100_calibration",
+      "trials": 4096,
+      "joint_inliers": 13,
+      "anchors": [
+        12,
+        12
+      ],
+      "status": "supported",
+      "elapsed_seconds": 1.056548041
+    },
+    {
+      "case": "207700_opposite_100k",
+      "trials": 100000,
+      "joint_inliers": 0,
+      "anchors": null,
+      "status": "inconclusive",
+      "elapsed_seconds": 0.24170712500000002
+    },
+    {
+      "case": "207700_direct_100k",
+      "trials": 100000,
+      "joint_inliers": 0,
+      "anchors": null,
+      "status": "inconclusive",
+      "elapsed_seconds": 0.27747199999999994
+    },
+    {
+      "case": "207700_opposite_1m",
+      "trials": 1000000,
+      "joint_inliers": 11,
+      "anchors": [
+        10,
+        11
+      ],
+      "status": "supported",
+      "elapsed_seconds": 2.1775961660000003
+    },
+    {
+      "case": "207700_direct_1m",
+      "trials": 1000000,
+      "joint_inliers": 10,
+      "anchors": null,
+      "status": "inconclusive",
+      "elapsed_seconds": 2.253703584
+    }
+  ],
+  "scope": "Exact-bit native point sets, production joint fitter, strict source.5/target2 and original pixels independently checked. Calibration exactly matches old transform/error/pixels with parent registry dependency versions. Larger trial budget recovers opposite207700; direct geometry alone still insufficient. Not file extraction/pipeline high-trial integration, all-seed coverage, full corpus or RSS cap."
+}

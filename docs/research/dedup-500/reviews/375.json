@@ -2,9 +2,9 @@
   "index": 375,
   "repository": "Rayraegah/dhash",
   "commit": "930957107023a91fcefe01016ee371eeb9e8f5b1",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
-  "decision": "reference",
-  "finding": "Small Python dHash class; no detected tests, independent transform/alpha qualification required.",
+  "review_scope": "All5 pinned text files read and Git-blob verified; whole original module executed with actualPillow11.3.0 in8 synthetic controls; no upstreamtests exist.",
+  "decision": "candidate-hash-only-no-equality-oracle",
+  "finding": "Verified flat/alpha collisions, low-bit row order, unbounded and negative hash strings. Candidate-only; no duplicate classification or code adoption.",
   "available_source_evidence": [
     {
       "path": "dhash.py",
@@ -44,5 +44,6 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "complete_source_review": "rayraegah-dhash-complete-source-review-20261013.json"
 }

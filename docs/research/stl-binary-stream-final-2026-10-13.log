@@ -1,0 +1,15 @@
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.34s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_decode-3d841f18ff85d05c)
+
+running 7 tests
+test stl::tests::binary_and_ascii_preserve_geometry ... ok
+test stl::tests::preserves_attributes_empty_mesh_and_cancellation ... ok
+test stl::tests::rejects_truncation_nonfinite_and_trailing_data ... ok
+test stl::tests::public_file_api_and_cancellation_before_io ... ok
+test stl::tests::ascii_model_reserves_exact_facets_before_coordinate_decode ... ok
+test stl::tests::binary_model_admits_before_facets_and_retains_reservation ... ok
+STL stream: 2050 facets/all fields exact; three blocks; four admitted cancellations and same-root retries; truncation/growth refused; geometry-only peak=106656; final=0
+test stl::tests::streamed_binary_blocks_preserve_facets_cancel_and_recover ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 1091 filtered out; finished in 0.00s
+

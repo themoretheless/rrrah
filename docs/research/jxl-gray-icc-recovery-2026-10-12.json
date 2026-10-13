@@ -1,0 +1,42 @@
+{
+  "date": "2026-10-12",
+  "bug": "16-bit grayscale JXL decoded exact native samples but display preparation rejected Gray ICC as UnsupportedProfileSpace",
+  "fix": "Relative-colorimetric Gray ICC to linear sRGB via moxcms Gray layout; require replicated R/G/B source samples; preserve alpha; normalize gray single-gamma curve like RGB curves",
+  "regressions": {
+    "truncated_jxl_prefixes": 249,
+    "must_observe_error_after_working_admission": true,
+    "managed_bytes_after_each_prefix": 0,
+    "gray_gamma_control": "0.5 with gamma 2 gives 0.25 RGB within 0.0001; alpha 0.25 unchanged",
+    "nonreplicated_gray_profile_input": "rejected without retained allocations",
+    "decoder_suite": {
+      "passed": 1020,
+      "failed": 0,
+      "ignored": 72
+    },
+    "metal_collection": {
+      "adapter": "Metal Apple M4 Max",
+      "passed": 1,
+      "failed": 0,
+      "sources": 67,
+      "selections": 96,
+      "storage_cases": 192,
+      "final_root_bytes": 0,
+      "final_queue_bytes": 0
+    }
+  },
+  "jxl_oracles": [
+    "alpha-container-0/1 native RGBA vs independent libjxl oracle files",
+    "precision16 exact authored 32768/32769 samples"
+  ],
+  "logs": {
+    "jxl-truncated-admission-2026-10-12.log": "c9b699be00db6ce4c65b1f26d982ee6f55915c037f3fed67b19082421036f942",
+    "metal-jxl-precision-collection-2026-10-12.log": "3e28f631935d6c2e967a2a8dab058be6e91d1fc5e167264807d1300a6aa9b601",
+    "decode-gray-icc-final-2026-10-12.log": "ac5d79dd046194f3834deea6298b21b3debfa791e7f4188f4272802421ffb484",
+    "metal-jxl-gray-fixed-2026-10-12.log": "7907b31d4934b0a5bd6194bccfc5fbce8a13a79e63869eeb7c5ba4b866f90b1e"
+  },
+  "limits": [
+    "Authored grayscale ICC control and one JXL gray producer; not all gray ICC LUT profiles",
+    "Metal frames compare transport consistency; no calibrated display claim",
+    "JXL header/untracked codec allocations remain outside working credit"
+  ]
+}

@@ -1,0 +1,116 @@
+{
+  "scope": "Independent source-cubic coverage diagnosis at four selected pixels, not full-page qualification",
+  "source": "one.ai pinned 97786949c268233a446e1738fb9c2f941e4d109811bd2f972948cdb7a45d64b4",
+  "geometry": "Second filled curve; page transform y=768-y; source control points copied from decoded content stream",
+  "method": "Monotonic cubic y inversion by 60 bisections, Simpson area integral at 256/1024/4096 subdivisions, explicit white-background black fill and nearest RGB8 conversion",
+  "rows": [
+    {
+      "pixel": [
+        1185,
+        384
+      ],
+      "integrated_coverage_by_subdivisions": {
+        "256": 0.7723405316782633,
+        "1024": 0.772340531678242,
+        "4096": 0.772340531678226
+      },
+      "independent_source_curve_gray": 58,
+      "native_rgb": [
+        58,
+        58,
+        58
+      ],
+      "poppler_rgb": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "pixel": [
+        1185,
+        410
+      ],
+      "integrated_coverage_by_subdivisions": {
+        "256": 0.7723405316782422,
+        "1024": 0.7723405316782218,
+        "4096": 0.7723405316782305
+      },
+      "independent_source_curve_gray": 58,
+      "native_rgb": [
+        58,
+        58,
+        58
+      ],
+      "poppler_rgb": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "pixel": [
+        1185,
+        385
+      ],
+      "integrated_coverage_by_subdivisions": {
+        "256": 0.806089008856231,
+        "1024": 0.8060890088562512,
+        "4096": 0.8060890088562399
+      },
+      "independent_source_curve_gray": 49,
+      "native_rgb": [
+        49,
+        49,
+        49
+      ],
+      "poppler_rgb": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "pixel": [
+        1185,
+        409
+      ],
+      "integrated_coverage_by_subdivisions": {
+        "256": 0.8060890088562456,
+        "1024": 0.8060890088562463,
+        "4096": 0.8060890088562443
+      },
+      "independent_source_curve_gray": 49,
+      "native_rgb": [
+        49,
+        49,
+        49
+      ],
+      "poppler_rgb": [
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "limitations": [
+    "Numerical convergence is not a formal interval certificate",
+    "Selected four pixels only; strict full-page Poppler comparison remains failing",
+    "Different rasterization semantics are a hypothesis requiring further renderer investigation"
+  ],
+  "regression": {
+    "test": "one_ai_source_cubic_boundary_matches_independent_area_oracle",
+    "passed": true,
+    "coverage_checks": "four source-cubic pixels, both f64 contour and canonical f32 contour",
+    "area_error_limit": 0.0002,
+    "rgb8_expected_exact": [
+      58,
+      58,
+      49,
+      49
+    ],
+    "log_sha256": "3d98a14a03a9d623a8ea7932db0ed41c6127faee3e420dd89abdc6f2e2a9ac3e"
+  },
+  "content_stream_sha256": "09e9c46c0a876d3784b09c55f16729f6c859eb6b6a27e64682cbc03832f9f3fe",
+  "source_content_finding": "Two black cubic-filled shapes using f, not stroked paths. ExtGState contains SA true; no causal attribution made."
+}

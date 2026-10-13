@@ -5578,3 +5578,4318 @@ with original-coordinate separation>2. Input and script pins pass
 confirmation or causal explanation is established. The live current native
 six-phase run remains pending. Coarser candidate scales are a next diagnostic
 for the repeating-texture hypothesis; acceptance is unchanged.
+
+### 2026-10-10 bounded exact-pixel equality cancellation
+
+The intervening pixels.rs identical-byte shortcut skipped all post-entry
+cancellation checks and returned Ok(true). A native regression reproduces
+this (exit101, expected Cancelled). same_pixels now compares borrowed
+4096-pixel byte blocks, checks cancellation for each block and before an
+equality claim, and normalizes differing invisible RGB only within a block.
+The existing fingerprint/popcount and digest optimizations are preserved.
+Six native macOS pixel tests pass, including identical/transparent equality
+across one pixel, exact/partial blocks, and every successful cancellation
+checkpoint. Archived pre-fix source/test and before/after logs are pinned in
+`research/dedup-pixel-equality-cancellation-state.json`. Linux is running in
+session60789 on `research/dedup-pixel-equality-snapshot-20261010.json`.
+No whole-library/decoder/collection qualification is inferred.
+
+Sixteen area-scale SIFT diagnostics for mosaic209401 complete with at most
+seven reported bidirectional inliers. All outcomes and pinned source/input
+provenance are preserved in `research/dedup-209401-coarse-sift-audit.json`.
+No native pixel support, independent residual-count recomputation or recovery
+is claimed. The frozen native six-phase retry remains live separately.
+
+Native Linux exact-pixel cancellation is terminal exit0 with all six tests
+passed and frozen hashes/declared names verified:
+`research/dedup-pixel-equality-linux-20261010-state.json`.
+
+### Mosaic209401 native support with external learned proposals
+
+Four cached pinned outdoor LoFTR proposal variants yield 61,54,526,462
+bidirectional original-coordinate inliers. Bounds, original point separation
+and residual counts are independently recomputed in
+`research/dedup-209401-loftr-diagnostic-audit.json`. All four complete model/
+point bundles pass the existing guarded Rust compare_anchor_rank_files on
+fresh original JPEGs: unchanged rank8/filter8/.005/1000/.3/.9/min10,
+target2/source-scaled geometry, 512 MiB, and final zero retained memory.
+The terminal report/source/binary/input/count audit is
+`research/dedup-209401-loftr-native-anchors-audit.json`.
+
+This proves native original-pixel support with external proposals, not
+native learned extraction, automatic collection recovery, independent
+pixel recomputation or unrelated precision. The native automatic six-phase
+retry remains a separate live measurement; automatic proposal integration
+and the crumpled200302 miss remain open.
+
+### 2026-10-10: native learned-proposal feasibility on mosaic 209401
+
+The preserved frozen six-phase retry terminated successfully after 421.216 s,
+but returned `no_geometry` after all six recipes. Its seven pins and 2982 frozen
+source files were verified in
+`research/dedup-209401-six-phase-retry-20261010-audit.json`. This qualifies that
+frozen miss, before subsequent local.rs/pixels.rs edits, not current recall.
+
+An isolated Rust/tch inference probe now runs published `loftr=0.1.1` with
+`tch=0.23.0` and a separate compatible PyTorch 2.10 runtime. The older Python
+oracle environment (PyTorch 2.14) was preserved. Cached pinned outdoor weights
+were converted locally to safetensors; no new pretrained model was downloaded.
+See `scripts/dedup-loftr-native-probe/` and
+`scripts/measure-dedup-loftr-native-20261010.py`.
+
+All four 320/640 grayscale/CLAHE variants confirmed the original mosaic pixels
+at unchanged acceptance thresholds, with 61, 54, 526 and 462 anchors in each
+direction. Every original-pixel evidence record exactly equals the prior
+Python LoFTR experiment. Report, audit and runtime/checkpoint/build pins:
+`research/dedup-loftr-native-20261010{,-audit,-runtime-pins}.json`.
+
+This removes a native inference feasibility uncertainty. Fixture preparation,
+point selection and homography fitting still use diagnostic Python/OpenCV;
+there is no integrated automatic library recovery yet. Model allocation limits,
+cancellation, model lifecycle, unrelated-image precision, Windows and the
+crumpled 200302 case remain unqualified. No full-library parity is inferred.
+
+### 2026-10-10: Rust proposal selection and projective geometry
+
+`geometry` in the isolated native LoFTR probe now consumes archived native
+correspondences directly: confidence ordering, original-coordinate mapping,
+full-domain bounds, two-pixel separation and geometry all run in Rust. It uses
+existing `verify_projective_sampled_for_domains` with 20,000 hypotheses, seed
+173, tolerance 2 and minimum 10 inliers. No OpenCV fit is used in this diagnostic.
+All four variants pass unchanged native original-pixel confirmation, with
+60, 57, 521 and 477 anchors in each direction. Independent NumPy recomputation
+checks selection (absolute coordinate tolerance 2e-12 pixels for floating-point
+operation ordering), all forward residual indices and bidirectional counts.
+See `research/dedup-loftr-rust-geometry-20261010{,-audit}.json` and its source
+snapshot manifest; previous native-inference manifest/lock/main sources are
+preserved byte-identically in `dedup-loftr-native-before-geometry-preserved-20261010.json`.
+
+Eight wrong-source controls (201400 and 209000 against mosaic 209401, retaining
+all four mosaic proposal/model sets) are rejected by native original-pixel
+confirmation with zero retained credit. These specifically test pixel rejection
+of wrong-source evidence, not learned proposals on unrelated pairs or corpus
+precision. See `research/dedup-loftr-rust-geometry-controls-20261010{,-audit}.json`.
+
+Remaining integration requirements include native fixture decoding/preprocessing,
+model memory and cancellation enforcement, source/model lifecycle, collection
+retrieval and unrelated learned-pair controls. This does not qualify complete
+automatic recovery, the crumpled case, Windows or full-corpus coverage.
+
+### 2026-10-10: bounded scored-proposal admission is a library API
+
+`proposals::{select_scored_proposals, select_scored_proposals_managed}` now lives
+in rrrah-dedup, without a learned-runtime dependency. It validates all proposals,
+maps resized pixel centers to original coordinates, uses confidence-ordered heap
+selection with input-order ties, rejects mapped points outside both original
+rasters and enforces separation on both sides. Ranking and separation have
+separate explicit work caps and cancellation checkpoints. Refusals publish no
+partial result. The raster-feature managed entrypoint admits index scratch and
+correspondence payload credit before selection; returned credit follows the last
+shared owner. Caller inputs, allocator/control-block overhead and inference
+allocations are outside this specific payload account.
+
+Four new tests cover stable-reference ordering/bounds/both-side collisions,
+every one-shot cancellation checkpoint including heap/final stages, malformed
+inputs/count/work refusals, and exact credit retention/release across clones and
+all cancellation paths. These and thirty existing geometry/domain tests pass
+on native macOS and aarch64 Linux (34 per platform), with exact test-name sets
+and 2985 frozen source files verified:
+`research/dedup-scored-proposals-cross-platform-state-20261010.json`.
+
+The native fixture probe now calls the managed library API with a 256 KiB
+selection payload ceiling. All four archived Rust LoFTR variants retain exactly
+the preceding native geometry and original-pixel evidence (60/57/521/477 anchors).
+Selection payload peaks are 10520/10240/37000/35160 bytes; retained credit is zero
+after result release. Independent selection/residual verification and native
+pixel predicates are recorded in
+`research/dedup-loftr-scored-proposals-managed-20261010{,-audit}.json`.
+This does not bound total probe RSS, geometry scratch or model tensors, and
+still does not qualify an integrated native file/collection learned fallback.
+
+### 2026-10-10: native file-to-model input preparation
+
+`model_input::prepare_gray_model_input` now area-averages explicitly opaque SDR
+linear-sRGB pixels into grayscale8 network rasters with sides divisible by eight.
+The recipe encodes sRGB, uses BT.601 luminance, preserves all odd source edges
+with integer overlap weights, and rounds once at output. Tiny inputs explicitly
+upsample to at least 8x8. Source/output/read caps, every-read cancellation and
+shared output payload ownership are enforced. No full-resolution gray scratch
+is allocated. Alpha and HDR return `UnsupportedPixels`; no silent compositing
+or tone map is implied. This is proposal input, never replacement pixel proof.
+
+Four model-input tests and four proposal-selection tests pass on native macOS
+and aarch64 Linux. Independent continuous-area reference, odd edges, tiny-input
+sRGB conversion, every one-shot cancellation checkpoint, clone ownership,
+count/work/memory refusal and unsupported last-pixel alpha/HDR are covered.
+`research/dedup-model-input-cross-platform-state-20261010.json` verifies the
+identical eight-test sets and all 2988 frozen files. Frozen dependencies remain
+older qualified sources; no current root decoder-wide qualification is claimed.
+
+The file diagnostic now executes native JPEG decoding and input preparation,
+Rust/tch LoFTR, managed library proposal selection, native projective fitting
+and original-pixel confirmation. Python only orchestrates processes and writes
+native model/point output. Both fixed grayscale sizes recover mosaic 209401:
+63 anchors at 320 and 515 at 640, with unchanged pixel thresholds. Independent
+selection/residual/domain checks and native credit/pixel predicates are in
+`research/dedup-native-file-model-input-20261010{,-audit}.json`.
+
+Four unrelated-pair variants generate new native proposals on 201400/209000
+versus 209401 at both sizes (48/111/48/64 raw proposals). All terminate with
+`no_geometry`; no variant is selected away. See
+`research/dedup-native-file-model-input-controls-20261010{,-audit}.json`.
+These two unrelated sources do not establish corpus precision.
+
+Remaining gaps include a unified learned-file/collection library API, model
+allocation/cancellation/lifecycle controls, CLAHE, alpha/HDR proposal recipes,
+crumpled 200302 recovery, full-corpus and platform coverage. Native per-stage
+payload budgets do not qualify total inference RSS or the full objective.
+
+### 2026-10-10: source-owned model-file preparation API
+
+`model_input_file::prepare_gray_model_file` now combines policy preflight, source
+and decoder-dependency snapshots, bounded decoding, managed input preparation
+and final source verification. `PreparedModelFile` exposes an immutable input
+borrow and retains source/dependency observations plus the original generation
+token for `verify_source` after inference. Global/request cancellation is sticky
+within each operation; source changes remain explicit errors, not non-matches.
+Only grayscale payload credit survives preparation; decoded storage is released.
+This is file-input lifecycle integration, not an integrated inference/verdict API.
+
+The new BMP/WAL lifecycle tests cover all global preparation checkpoints,
+entry/mid/final request-generation cancellation, source mutation during preparation,
+post-preparation source/token checks, external-palette mutation during/after
+preparation and restored-source retry. The WAL dependency fixture replaces only
+transparent index 255 with opaque index 254 so it tests the explicit SDR recipe;
+the unchanged transparent input remains outside that recipe. Root macOS tests
+exercise current root dependencies; frozen Linux/native probes use separately
+pinned older dependencies, as stated in their manifests. Full decoder parity,
+model lifecycle/resources, collection integration and the broader matrix remain open.
+
+The model-file lifecycle gate is terminal: twelve named tests pass on each
+platform; all 2990 frozen files and current dedup API/test hashes were verified
+in `research/dedup-model-file-cross-platform-state-20261010.json`. The updated
+native JPEG probe calls this library API and preserves all four grayscale byte
+buffers, native LoFTR proposals, geometry and original-pixel evidence exactly
+(63/515 anchors). See
+`research/dedup-native-model-file-api-20261010{,-audit}.json` and
+`research/dedup-model-file-native-parity-20261010.json`. The subprocess diagnostic
+drops the prepared object before separate inference; retained post-inference
+verification is exercised by lifecycle tests. It is not yet a unified learned
+comparison API spanning source/model lifetimes and resource cancellation.
+
+### 2026-10-10: unified model comparison and measured inference memory gap
+
+`model_compare::compare_model_files_with` now spans both file preparations,
+a caller model provider, managed proposal selection, full-domain projective
+geometry and fresh original-pixel confirmation. Source/dependency observations,
+weights content/identity and both request generations are verified through the
+last phase. Errors remain typed; provider failures and changing weights/sources
+never become misses. Providers must cooperate with cancellation and use the
+supplied model/budget. The API cannot enforce arbitrary provider inference
+allocation or interrupt a blocking forward; geometry scratch is not fully
+accounted in the managed payload budget either.
+
+Eighteen unique tests pass on macOS and native aarch64 Linux (16 base plus 6
+supplemental executions with 4 repeated tests). They include mutation of weights
+while fresh pixel decoding is active, midpoint/final global/both-owner generation
+cancellation, provider failure and output count refusal. All runtime sources are
+identical between the two frozen gates; only the supplemental test file changes.
+See `research/dedup-model-compare-cross-platform-state-20261010.json`.
+
+The real Rust/tch LoFTR adapter in the isolated `compare_files` binary now calls
+this unified library entrypoint. All fixed runs are retained: mosaic 209401
+passes at 320/640 with 63/515 original-pixel anchors, while 201400 and 209000 at
+both sizes return no geometry. No Python pixel/proposal processing is involved.
+The first RSS launcher failed before inference because libtorch could not load;
+its report is preserved. The explicit child environment retry completed six runs:
+`research/dedup-unified-model-compare-retry-20261010{,-audit}.json`.
+
+Actual macOS process peak RSS exposes an important resource gap: up to
+2,478,145,536 bytes (2.308 GiB) at 640, versus at most 98,917,280 bytes of managed
+payload credit. Even the observed 320 runs use roughly 0.70 GiB process RSS.
+Thus the 512 MiB payload budget is explicitly NOT a total inference memory bound.
+The next resource milestone must address native model allocation/working storage
+and blocking-forward cancellation; no cause is assigned from RSS alone. Two
+positive sizes/four foreign cases do not establish broad recall or precision,
+and the crumpled, alpha/HDR, collection and Windows requirements remain open.
+
+
+### 2026-10-10: LoFTR memory investigation, negative optimization results
+
+Two isolated source variants were measured on the same six original-resolution
+file comparisons and unchanged model, input sizes and decision thresholds:
+(1) defer tensor diagnostic statistics until `forward_debug`, and (2) additionally
+release four consumed backbone tensors explicitly. Both retained all six complete
+native evidence records exactly. Neither demonstrated a consistent RSS reduction;
+these patches are not adopted into the repository's native provider dependency.
+The targeted plain/debug regression also passed. The first test launch failed to
+load libtorch; the explicit-library-path retry passed. The lazy-debug producer's
+final audit failed on Python `zip(strict=True)` compatibility after all six native
+runs completed; the failed report is preserved and a separate audit verifies them.
+
+Stage-boundary profiling of the 640-side positive pair retained the baseline native
+evidence and measured 2,480,078,848 bytes peak process RSS. First-image backbone
+current RSS (KiB): stem 439840, layer1 939824, layer2 1219728, layer3 1248912,
+FPN2 1479776, FPN1 2185456. These locate growth around the backbone, especially
+layer1 and final FPN; they do not establish an individual operation's peak or
+whether live tensors, convolution workspace or allocator retention dominate it.
+Next work is bounded convolution workspace investigation, not reducing input size
+or relaxing acceptance thresholds. Hard inference memory admission and cancellation
+inside forward remain open. Evidence: `docs/research/dedup-loftr-memory-investigation-20261010.json`.
+
+
+### 2026-10-10: adopt strip-based native LoFTR backbone convolution
+
+The native provider now depends on `vendor/loftr`, a pinned Apache-2.0
+loftr 0.1.1 source copy with original attribution and local modification notices.
+Its backbone 3x3 convolutions compute at most 32 output rows per call. Each strip
+reads the required overlapping input halo from the globally padded feature map;
+strip boundaries introduce no extra padding. Kernel names/weights, stride, full
+image sizes and decision thresholds remain unchanged. Normal forward additionally
+skips diagnostic tensor summaries; forward_debug retains them.
+
+All 37 LoFTR module tests pass in both the isolated experiment and adopted vendor
+copy on macOS ARM64 with libtorch 2.10 CPU. The new full-convolution comparison
+covers stride 1/2, odd/even sizes, multiple batches/channels, strip seams, global
+borders and tiny inputs (floating comparison tolerance 1e-5). Six real native file
+comparisons retain every native evidence field exactly, including proposals,
+geometry, original-pixel support and managed credit release. Source 209400 supports
+at 320/640; the four 201400/209000 variants remain no_geometry.
+
+Measured process RSS (baseline -> strips):
+- 209400/320: 756678656 -> 565493760 bytes;
+- 209400/640: 2478145536 -> 1664942080 bytes;
+- 201400/320: 750403584 -> 558776320 bytes;
+- 201400/640: 2471739392 -> 1671462912 bytes;
+- 209000/320: 752746496 -> 554123264 bytes;
+- 209000/640: 2460172288 -> 1668907008 bytes.
+
+This is a measured 25-33 percent reduction for these cases, not a hard memory
+bound. RSS still exceeds the 512 MiB managed-payload budget; tensor admission and
+cancellation inside inference remain open. The six-case executable retains the
+previous frozen decoder dependencies; all current rrrah-dedup runtime source files
+match that snapshot. Other devices/platforms and broad corpus quality remain
+unqualified. Wall times were affected by concurrent host work and are not a
+controlled latency benchmark. Evidence and source pins are in
+`docs/research/dedup-loftr-tiled-convolution-{measurement,adoption}-20261010.json`.
+
+The adopted current native provider also passes `cargo check --locked --offline --manifest-path scripts/dedup-loftr-native-probe/Cargo.toml --bin compare_files` with libtorch 2.10 configured. The existing GradientIndexBank missing-Debug warning remains. Final verification: `docs/research/dedup-loftr-tiled-convolution-audit-20261010.json`.
+
+
+### 2026-10-10: cooperative native LoFTR inference cancellation
+
+`vendor/loftr` now exposes `LoftrModel::forward_cancellable` and typed
+`LoftrError::Cancelled`. The native provider forwards the unified library's
+sticky global/request-generation callback to inference. Cancellation is checked
+before normalization, between model stages, between left/right encoder-layer
+evaluations and before/after each backbone 3x3 convolution strip. An observed
+cancellation returns an error, drops unpublished partial tensors and publishes
+no matches. The existing normal forward/debug APIs remain available. This does
+not interrupt a running libtorch kernel, bound cancellation latency or admit
+all inference tensor memory. Weight loading is still checked before/after.
+
+All 40 LoFTR module tests pass on macOS ARM64/libtorch 2.10 CPU, including
+cancellation at every reachable checkpoint of a small unequal-shape inference,
+every checkpoint of multi-strip convolution, both coarse/fine transformers, and
+exact retry. The generic comparison callback regression confirms existing sticky
+cancellation normalization for global and either request generation even when
+the provider itself returns an interruption error; no generic runtime patch was
+needed. Its seven-test suite passes on the current macOS checkout.
+
+Real-weight native inference on native-prepared JPEG grayscale inputs at 320/640
+visits 317/465 checkpoints. Nine selected one-shot cancellation positions per
+size (18 total) return typed cancellation, stop checking immediately and retain
+exact keypoint/confidence/batch tensors on successful retry. The 263/925 proposal
+counts match the prior positive pair. Six full real comparisons also retain all
+previous native decision evidence exactly; only the diagnostic `scope` metadata
+changes to describe cooperative cancellation. Positive/foreign classifications,
+geometry, fresh original-pixel evidence and managed-credit release are unchanged.
+The native real-case executable retains the previous pinned decoder dependencies;
+current rrrah-dedup runtime and adopted LoFTR/provider source identity are checked
+separately, and the current native provider passes locked offline compilation.
+
+Reports: `dedup-loftr-cancellation-measurement-20261010.json`,
+`dedup-loftr-cancel-forward-20261010.json`, source/adoption manifests and
+`dedup-loftr-cancellation-frozen-tests-20261010.log` under `docs/research`.
+Total tensor/RSS admission, kernel-level preemption, broader corpus precision/
+recall, other model platforms/devices and automatic six-phase integration remain
+open. The existing missing-Debug warning and three newly unused internal
+noncancellable compatibility wrappers are recorded compilation warnings.
+
+The same seven generic comparison tests also pass on native aarch64 Linux using the pinned previous decoder snapshot (only the new test file differs). This does not qualify Linux LoFTR inference. Final audit: `docs/research/dedup-loftr-cancellation-audit-20261010.json`.
+
+
+### 2026-10-10: strip-local convolution padding
+
+The native LoFTR backbone now copies and pads only the input rows needed by the
+current 32-output-row strip and its halo. Interior strips read actual neighboring
+rows; zero top/bottom padding appears only at global image boundaries. This
+removes the previous full-feature-map padded copy without changing full input
+size, kernel weights, stride, acceptance thresholds or cancellation checkpoints.
+
+All 41 module tests pass on macOS ARM64/libtorch 2.10 CPU. The added reference
+compares each returned padded strip exactly with a slice of the fully padded map,
+including multiple batches/channels, stride 1/2, odd/even shapes and tiny inputs;
+it also checks strip-sized returned dimensions. This is not a measurement of all
+libtorch internal scratch allocations. Six real native comparisons retain every
+previous evidence field exactly (including scope metadata), and all 18 real-weight
+cancellation checks and exact retries still pass at the same 317/465 checkpoints.
+
+For 640-side inputs, measured process RSS falls by 6.7-8.0 percent relative to the
+previous cancellable variant; the six-case maximum falls from 1642774528 to
+1525055488 bytes (about 1.53 to 1.42 GiB). There is no consistent meaningful win at
+320: one foreign pair increases by 0.71 percent. Hard total RSS/tensor admission
+remains open. The adopted current native provider passes locked offline checking;
+real-case measurements retain previous pinned decoder dependencies. Other model
+platforms/devices, broad precision/recall, cancellation latency and automatic
+six-phase integration remain unqualified. No controlled latency claim is made.
+
+Evidence: `docs/research/dedup-loftr-strip-padding-audit-20261010.json`.
+The prior root vendor source pins are preserved through the earlier frozen source
+snapshot and `dedup-loftr-cancellation-before-strip-padding-preserved-20261010.json`.
+
+
+### 2026-10-10: inference confidence-buffer reuse and tensor lifetime controls
+
+The adopted LoFTR backbone releases five consumed intermediate tensor handles
+explicitly. Coarse matching releases similarity scratch after confidence creation.
+These lifetime changes alone produced only a small observed RSS difference; a
+second control showed no consistent incremental win from releasing similarity
+after the original full confidence expression. Both controls are retained with
+41 module tests, six native decision-parity cases and 18 real cancellation checks.
+
+The selected implementation additionally reuses the column-softmax result for
+its product with row-softmax when similarity does not require gradients. This
+avoids a separate full confidence-product output buffer. Gradient-enabled inputs
+keep the original out-of-place expression so autograd retains unmodified softmax
+values. A new regression checks exact forward values, unchanged input logits and
+exact backward gradients against the original expression. All 42 module tests pass
+in the frozen experiment and adopted current vendor copy on macOS ARM64/libtorch
+2.10 CPU. Production source is byte-identical; the adopted test assertion differs
+only in independently checked rustfmt layout.
+
+Six real native comparisons retain all previous evidence fields exactly, and all
+18 real-weight cancellation checks and exact retries pass at unchanged 317/465
+checkpoints. Measured six-case maximum RSS falls from 1525055488 to 1432469504
+bytes (about 1.42 to 1.33 GiB). Each 640-side case decreases by 6.1-6.6 percent.
+These are observed cases, not a hard memory bound or statistical performance
+estimate. The real cases keep previous pinned decoder dependencies; current
+provider compilation passes locked offline checking. Other model platforms/
+devices and broad corpus precision/recall remain unqualified. Total inference
+admission, kernel preemption, crumpled case 200302 and automatic library-level
+learned fallback remain open. No acceptance threshold or input size was reduced.
+
+Evidence: `docs/research/dedup-loftr-confidence-reuse-audit-20261010.json`;
+standalone controls: `dedup-loftr-early-release-audit-20261010.json` and
+`dedup-loftr-early-release-coarse-audit-20261010.json`. Historical root vendor
+source is archived under `dedup-loftr-before-confidence-reuse-20261010.json` and
+`dedup-loftr-strip-padding-before-confidence-reuse-preserved-20261010.json`.
+
+### Optional library LoFTR provider (2026-10-10)
+
+`rrrah_dedup::model_loftr::compare_loftr_files` is available with Cargo feature
+`loftr` (which enables `decode`). It loads local outdoor weights for each call
+and uses the existing guarded model comparison lifecycle: policy preflight,
+source/model snapshots, sticky cancellation for both requests and the caller,
+native geometry and fresh original-pixel confirmation. Model scores alone do
+not establish support. No weights are downloaded; global libtorch thread/seed
+settings belong to the caller. Enabling this feature, including via
+`--all-features`, requires libtorch 2.10 for tch 0.23. Default and `decode` builds
+remain independent of libtorch.
+
+Proposal adoption validates count, aligned tensor shapes and single-pair batch
+indexes. It admits the managed proposal buffer before reading scalar results,
+without intermediate unmanaged coordinate/score vectors. Refusals are errors,
+not misses. Cancellation is checked before adoption, before each row and before
+publication; buffer credit follows the last shared owner.
+
+This API does not yet add an automatic learned fallback to the native search
+portfolio. Model tensors, workspaces and geometry scratch remain outside the
+managed payload budget; total RSS admission and individual-kernel preemption
+are unresolved. The crumpled-photo case and broad corpus/platform qualification
+remain open. Qualification evidence is recorded separately in
+`docs/research/dedup-loftr-library-*.json` and corresponding logs.
+
+Qualified on macOS ARM64 CPU with libtorch 2.10.0: 57 module tests (four
+provider-specific), plus six real comparisons at 320/640 input sides, with
+exact complete decision/pixel/geometry/payload evidence parity against the
+previous diagnostic. The initial direct-double adoption changed two fitted
+matrices despite identical decisions; a same-build legacy control localized
+this to the prior float32 conversion. Scalar float32 conversion restores exact
+parity without scratch vectors. The failed initial report, control, original
+source and binaries are retained; see `dedup-loftr-library-audit-20261010.json`.
+This is narrow backend qualification, not completion of all-format, corpus,
+automatic search or total-memory guarantees.
+
+### Automatic native/learned pair search (2026-10-10)
+
+`search_portfolio::search_portfolio_files_with` (`decode`) combines the existing
+six native recipes and one supplied model-provider comparison. With feature
+`loftr`, `model_loftr::search_loftr_portfolio_files` supplies the local-weight CPU
+LoFTR implementation. `SearchOrder` explicitly chooses native-first or
+model-first; original-pixel support stops the sequence, and an ordinary
+unsupported result advances to the other stage. Typed errors stop the sequence
+and never masquerade as a miss. Both constituent policies and six cumulative
+work limits are checked before I/O, including checked overflow. Per-stage
+limits still bound other work; this does not admit total libtorch/RSS usage.
+
+Outer guards cover both original files, external decode dependencies and the
+weights across both stages. The weights are required even when native-first
+support avoids inference. Caller cancellation and both request generation
+changes are sticky through final publication. Unsupported first-stage managed
+buffers are released before fallback, while a small `SearchStageMiss` records
+the attempted method; the terminal stage retains its original evidence.
+Neither local support nor exhausting this finite portfolio establishes
+whole-image identity or universal non-duplication.
+
+Qualification is recorded in `dedup-search-portfolio-audit-20261010.json`.
+The large real rephoto is exercised in model-first order; testing native-first
+fallback on bounded controls does not prove recovery/performance for every
+large image. Collection-wide use, the crumpled-photo case 200302, alpha/HDR
+model input, total tensor/RSS admission and broad corpus/platform qualification
+remain open. Prior standalone-provider evidence is preserved; its three
+superseded source files are archived byte-identically under
+`rrrah-loftr-library-f32-before-portfolio-20261010` outside the checkout.
+
+The native miss summary's candidate count is from its terminal recipe, not a
+sum of all six attempts. The five weight-backed controls preserve exact model
+evidence on the large rephoto at 320/640, select native recipe 1 for an ordinary
+pair and recipe 4 for its mirror, and traverse six native misses then one model
+miss for the unrelated control. Their full source snapshot contains 3046 files;
+an earlier incomplete packaging attempt and its Linux compile failure remain
+in the research reports rather than being overwritten.
+
+
+### Complete bounded collection search (2026-10-10)
+
+`portfolio_collection::scan_portfolio_collection_with` (`decode`) and
+`model_loftr::scan_loftr_portfolio_collection` (`loftr`) enumerate every
+unordered pair in sorted application-ID order. Native descriptor retrieval
+cannot suppress a model-only crop match. Results retain pair evidence,
+including unsupported pairs; local visual support is nontransitive and does
+not establish whole-file duplicate groups.
+
+Declared file/pair storage and six cumulative work limits are admitted before
+consuming the caller iterator. Duplicate IDs, overflow and insufficient pair
+capacity refuse the batch before file I/O. The implementation is O(n squared)
+pair enumeration, not a scalable index. A late error discards earlier results.
+Source files, external decode dependencies, local weights and every accepted
+request generation are guarded across the entire batch. Observed cancellation
+is sticky, including the final read-only verification pass. The final user
+callback precedes that pass; no further user callback may mutate sources before
+publication. This boundary does not provide filesystem locking.
+
+Managed credit follows report storage and shared native evidence independently.
+Request paths, snapshot metadata, geometry scratch and model tensors/workspaces
+remain outside that budget. Total RSS admission and kernel preemption remain
+open. Current generic qualification passes eight collection integration tests
+on macOS and 54 unit plus eight collection tests on Linux ARM64. Linux testing
+uses `decode`, without libtorch. Real local-weight collection qualification is
+recorded separately; a running measurement is not a completed qualification.
+
+
+### Explicit original-region model input and comparison (2026-10-10)
+
+`prepare_gray_model_region_input` and `prepare_gray_model_region_file` area-average
+an original-pixel rectangle directly into managed grayscale input. They do not
+create crop files or a full-resolution grayscale scratch raster. Source-pixel
+and decode caps still apply to the full original; pixel-read caps apply to
+preparation. Prepared file inputs expose both their crop rectangle and complete
+oriented source dimensions, retaining whole-file/dependency/request guards.
+
+`RegionProposalDomain` maps crop-local model centers to complete original-image
+coordinates before distinctness and geometry. Invalid/overflowing rectangles
+refuse; mapped points outside the crop are discarded even if inside the full
+image. Existing full-image entrypoints delegate to the zero-origin full domain.
+
+`compare_model_regions_files_with` and optional
+`model_loftr::compare_loftr_regions_files` fit full-domain projective geometry
+and confirm fresh original pixels. This is an explicit local visual-support API;
+it neither infers whole-image equality nor automatically selects search crops.
+The initial native CPU diagnostic recovers the previously missed crumpled print
+200302 with 12 and 19 bidirectional original-pixel witnesses in two fixed crop
+configurations. Corresponding foreign controls reject, and full rephoto evidence
+retains exact parity. These are local controls, not broad precision proof.
+Frozen-source qualification, twenty foreign crop controls and Linux generic
+checks are recorded in the model-region research artifacts; running gates must
+not be counted as complete. Tensor/RSS admission and automatic tiled portfolio
+and collection integration remain open.
+
+
+Completed explicit-region qualification is recorded in
+`docs/research/dedup-model-region-audit-20261010.json`: macOS 58 LoFTR/library
+unit tests, 40 decode integration tests and four no-default-feature proposal
+checks; Linux ARM64 54 decode unit and 40 integration tests without libtorch.
+The immutable 3050-file source snapshot produces 24 CPU native comparisons:
+two crumpled crop positives with exact repeated 12/19 witness evidence, twenty
+foreign crop negatives, one full-crumpled miss and exact previous full-rephoto
+proof parity. Peak measured RSS is 1,873,412,096 bytes (about 1.74 GiB), outside
+the managed 512 MiB payload guarantee. These explicit crop checks do not enable
+or qualify automatic tiled portfolio/collection search or broad corpus recall.
+The RoMa alternative is not adopted: it fails the crumpled diagnostic and its
+measured process RSS is 16,479,027,200 bytes; its successful rephoto and foreign
+controls and complete failed-recovery evidence are preserved separately.
+
+The earlier bounded collection revision is independently qualified in
+`dedup-portfolio-collection-audit-20261010.json`: two three-file collections,
+six complete pairs, and exact positive parity on the original-resolution trio.
+The large trio takes approximately 1009 seconds on the shared host and peaks at
+2,486,665,216 RSS bytes. This is evidence of the remaining quadratic cost and
+unmanaged runtime memory, not a controlled latency benchmark or scale claim.
+
+### Automatic model-region search — 2026-10-11
+
+`model_tiles::search_model_tiles_files_with` tries full images, then all
+remaining pairs of full image and nonempty 2x2 quadrants in fixed order (at most
+25 attempts). Only fresh original-pixel confirmation ends the sequence early.
+All eight cumulative model work limits and managed attempt storage are admitted
+before source I/O. Sources, external decode dependencies, weights and request
+generations remain guarded across attempts and final publication. Typed errors
+abort the result; retained attempt accounting follows shared ownership.
+
+`SearchPortfolioPolicy.model_tiles = Some(ModelTileWorkLimits::for_model(model)?)`
+enables this recipe in the model stage, including complete collection scans.
+The caller explicitly admits aggregate work using `required_work()` and the
+collection pair maxima. `None` preserves a single whole-image model attempt.
+Both constituent policies remain validated even when the first stage succeeds.
+A final caller checkpoint now precedes read-only source/weight verification in
+the direct model and pair portfolio APIs, preventing callback mutation from
+publishing stale evidence; this is not a file-locking guarantee.
+
+The 3053-file frozen-source native diagnostic
+`docs/research/dedup-model-tiles-native-20261011.json` completes three searches
+and 37 model attempts. It automatically recovers crumpled 200302 on attempt 11
+with exactly the earlier 12/12 original-pixel anchors, rejects the foreign pair
+through all 25 attempts, and preserves the full rephoto proof on attempt one.
+Measured times on this shared host are about 29.91, 56.87 and 3.48 seconds;
+maximum process RSS is 1,959,526,400 bytes, outside managed payload admission.
+These controls qualify bounded local support, not whole-file identity or broad
+corpus precision. Real tiled portfolio/collection corpus measurement, repeated
+model loading/decoding costs, quadratic pair enumeration, total tensor/workspace
+admission, alpha/HDR and broad format/platform qualification remain open.
+
+Completed audit: `docs/research/dedup-model-tiles-audit-20261011.json`.
+macOS generic decode and Linux ARM64 frozen-source decode gates each pass
+109 tests. Linux qualification does not include libtorch. Pair/collection
+integration uses supplied-provider regression tests; only the direct automatic
+model API has the three new real native photograph controls.
+
+### Operation-scoped LoFTR reuse — 2026-10-11
+
+The optional LoFTR provider now creates its model lazily once per public tiled,
+pair-portfolio or collection operation, and reuses it only inside that operation.
+A new public call starts empty; single-comparison entrypoints continue to load
+fresh models. Native early support and preflight refusal avoid model creation.
+The weights path is fixed by each wrapper and existing complete-file snapshots
+remain checked around every attempt and final publication. There is no global
+cache or changed score/geometry/pixel threshold. Cancellation or changed weights
+still discards the entire result.
+
+The fixed 3054-file snapshot and real diagnostic are recorded in
+`docs/research/dedup-model-reuse-fixed-snapshot-20261011.json` and
+`docs/research/dedup-model-reuse-native-20261011.json`. Every one of the preceding
+37 full/quadrant attempt proofs remains exactly equal. A late cancellation and
+mutation of an isolated weights copy return typed cancellation/changed-source
+errors with zero retained managed credit. All 60 macOS libtorch/library unit
+tests pass. This qualifies direct native tile behavior; real reused-model
+portfolio/collection behavior still needs measurement. The diagnostic uses an
+observable cancellation counter for lifecycle injection, so its elapsed times
+must not be used as a counter-free speed comparison.
+
+The model remains resident through original-pixel confirmation and any native
+fallback in that public operation. Tensor/workspace/RSS admission is still open;
+reusing weights does not remove repeated original-file decoding/preparation or
+quadratic collection enumeration. Sequential counter-free alternating timing
+controls are tracked separately in the model-reuse timing report.
+
+The completed reuse audit is
+`docs/research/dedup-model-reuse-audit-20261011.json`. Four counter-free timing
+controls preserve all 25 attempt proofs in each run. Fresh-model observations
+are 289.64/181.21 seconds and scoped-reuse observations 240.33/195.19 seconds;
+the small shared-host sample has wide overlapping variation and does not
+establish a reliable general speedup. Concurrent builds, including the new
+positional-cache test build during later samples, limit timing interpretation.
+All original 37 proof comparisons, both late lifecycle refusals and 60 macOS
+libtorch/library unit checks pass at that immutable revision.
+
+### Current-input positional-cache extent — 2026-10-11
+
+The vendored LoFTR position encoder now retains the configured constructor floor
+plus the current input extent, instead of independent historical maxima of
+height and width. A wide image followed by a tall one no longer grows a cached
+rectangle combining both historical axes. Returning to a small input shrinks
+the table to its initial floor. Coordinate values do not depend on allocation
+extent; retained output tensors keep their own values after table replacement.
+
+Five focused position-encoding tests pass, including alternating wide/tall/small
+inputs, exact fresh-instance parity for both encoding variants, retained output
+stability and unchanged state after invalid channels. Source is frozen in
+`docs/research/dedup-position-extent-snapshot-20261011.json` (3055 files).
+The broader vendor unit gate and real native collection qualification are tracked
+separately; these focused checks do not establish total tensor/workspace/RSS
+admission, extreme-image support or full corpus coverage.
+
+The complete standalone vendor gate now passes 43 tests, including those five
+position checks, inference cancellation/retry and numerical regressions.
+`docs/research/dedup-position-extent-unit-audit-20261011.json` pins the source,
+standalone lockfile, libtorch runtime, executable and logs. The newly built
+frozen native whole-rephoto control retains exact previous proof parity.
+The three-unique-photo collection measurement completed all three unordered
+pairs with support [true, false, false]. All 11 crumpled-image model attempts
+preserve exact prior proof parity; each negative exhausts 25 model attempts and
+all six native recipes. The frozen collection audit is
+`docs/research/dedup-position-extent-collection-audit-20261011.json`.
+This bounded three-file run took 2520.11 seconds with maximum observed RSS
+1,930,969,088 bytes; it does not establish full corpus recall or indexed scaling. A separate three-second live stack sample records
+provider inference/backbone activity; it does not establish whole-pipeline
+cost attribution or justify a general speedup claim.
+
+### Guarded prepared model input reuse — 2026-10-11
+
+The tiled model operation now lazily retains each of its five possible inputs
+per side under the existing managed memory budget. A full negative search still
+performs all 25 Cartesian model comparisons, while preparing at most ten distinct
+gray inputs instead of preparing both inputs afresh for every comparison.
+Borrowed inputs retain their original source/dependency observations; weights use
+the operation's original snapshot. Reuse preserves the existing source, weight,
+cancellation and final original-pixel confirmation checks.
+
+The macOS generic gate passes 111 tests, including pointer-identity reuse against
+fresh input bytes, retained-owner credit lifetime, and a late preparation budget
+refusal that discards all attempts and cached owners. Retaining inputs can raise
+resident managed payload compared with immediate disposal; it does not establish
+hard process RSS admission or universal success at smaller caller budgets.
+The 3055-file frozen snapshot is
+`docs/research/dedup-prepared-reuse-snapshot-20261011.json`. Linux also passes all 111 generic decode tests. Native qualification retains exact
+prior proof parity for all 37 attempts (11 crumpled, 25 foreign, one rephoto);
+late cancellation and weight mutation both refuse with managed credit released.
+The immutable audit is `docs/research/dedup-prepared-reuse-audit-20261011.json`.
+Maximum observed process RSS across the three direct native controls is
+1,915,682,816 bytes; the 512 MiB managed budget does not cap libtorch or process
+RSS. Model inference count and evidence thresholds are unchanged. The separate
+three-photo collection gate completed at the earlier position-extent revision;
+it does not qualify collection execution with this later prepared-input cache.
+
+
+### Descriptor-distance bounds rejected after real measurements — 2026-10-11
+
+A test-only candidate accumulates squared descriptor differences in the original
+order and stops only after strictly exceeding both relevant live table bounds.
+It preserves ties, distinct-location competitors, full pair work admission and
+every cancellation checkpoint. The frozen candidate passes 114 generic macOS
+tests and exact parity in 24 alternating complete-matcher measurements across
+six real-descriptor configurations, including 1142 self-positive matches.
+
+Timing is mixed: the real crumpled distinct-location control has an observed
+full-to-candidate median ratio of 0.702 and the foreign distinct-location control
+0.747, while self-positive controls improve modestly. The opt-level1 shared-host
+sample establishes no general speedup. The bounded-distance candidate was rejected; at that revision production
+`match_gradients_selected` was restored byte-for-byte to the prior prepared-reuse
+revision. The later four-lane replacement is qualified separately below. The candidate, exhaustive baseline and manual benchmarks remain only
+under `cfg(test)`. Three focused tests pass after that relocation.
+`docs/research/dedup-gradient-bounds-audit-20261011.json` records the decision and
+pins both the rejected experiment and restored production implementation.
+The frozen candidate Linux gate is tracked separately; this experiment does not
+qualify full corpus recall, Native6 collection throughput or hard RSS admission.
+
+
+### Ordered four-lane descriptor matching — 2026-10-11
+
+Production matching now computes up to four independent descriptor distances
+per block, retaining each distance's original left-to-right f64 addition order.
+Partial blocks use the scalar path for actual pairs only. Logical pair order,
+full pair work admission, best/runner-up updates, distinct-location rules and
+strict tie thresholds remain unchanged. Each pair retains its checkpoint before
+the at-most-four-pair arithmetic block; this is cooperative cancellation, not
+preemption inside floating-point instructions. There is no new heap scratch.
+
+The actual production implementation is compared with a retained scalar oracle.
+Tests cover bitwise distances for tails1..4 and tiny terms, positive/foreign
+features, ties, spatial chains, every cancellation checkpoint and work refusal.
+The final source passes 117 macOS generic tests plus three optimized-level3
+numeric checks. In 24 alternating real-descriptor runs across six configurations,
+all correspondences agree exactly; observed full-to-batched median ratios range
+from 1.544 to 2.548. This opt-level1 shared-host sample is a local matcher result,
+not a general whole-library or collection speedup.
+
+Source is frozen in
+`docs/research/dedup-gradient-batch-production-snapshot-20261011.json` (3057 files).
+The frozen native whole-rephoto proof agrees exactly with the previous report.
+A NativeFirst mirror pair preserves the previous Native4 proof, including all
+403/407 pixel-confirmed anchors and the full transform. The completed prefix
+audit is `docs/research/dedup-gradient-batch-production-prefix-audit-20261011.json`.
+Its two completed native rows are copied independently of the mutable collection
+report. The Linux final-source gate passes the same 117 tests. The complete three-photo
+tiled/native collection preserves all three previous pair reports exactly, with
+support [true,false,false], including both negatives after 25 model attempts and
+six native recipes. The final bounded audit is
+`docs/research/dedup-gradient-batch-production-audit-20261011.json`.
+The separate full 229-positive-pair qualification remains in progress. Full current corpus
+recall, indexed collection scaling and total tensor/workspace/RSS admission remain
+open. The earlier bounded-distance candidate stays rejected under cfg(test).
+
+
+### Pure gradient index feature exposure — 2026-10-11
+
+The Windows raster-only build exposed a feature mismatch: the reflection suite
+required the pure gradient index, but that module was gated behind `decode`.
+The module and its ordinary integration suite now use `raster`; their code has
+no decoder dependency. Since `decode` includes `raster`, decoder-enabled numeric
+bodies remain unchanged relative to the frozen four-lane qualification.
+
+The existing raster suites pass 31 tests on macOS. The fixed frozen source
+compiles 125 test programs for x86_64 Windows GNU, and the parent default-core
+build compiles one additional program. All 126 PE executables are archived and
+hashed. These are compile-only Windows checks: no Windows tests were executed.
+The original failing build is preserved. Evidence and the explicit two-file
+source delta are in `research/dedup-gradient-index-raster-audit-20261011.json`.
+
+
+### Descriptor owner-count cancellation — 2026-10-11
+
+The legacy descriptor owner-count path previously replaced the operation's
+cancellation callback with an always-false closure. It now checks cancellation
+while materializing owners and before each ordered count update. Both storage
+variants observe the ordered-loop checkpoint. A regression iterator requests
+cancellation at its third owner; counting stops with only the first two owners
+processed. A second regression covers cancellation before materialization.
+This does not make sorting or allocator calls preemptible.
+
+The raster gate passes 24 library tests and six independent descriptor-index
+integration tests (two manual benchmarks ignored). The decode gate passes 64 library tests and seven index integration tests.
+A repeat raster gate after source formatting also passes all 30 tests.
+Both gates and four archived test binaries are pinned in
+`research/dedup-owner-count-cancellation-audit-20261011.json`. The one-file source delta is frozen in
+`research/dedup-owner-count-cancellation-source-20261011.json`; the older
+four-lane and Windows audits do not certify this later source change.
+
+The full current positive-corpus producer continues independently. Its first
+57 completed records are copied and hash-verified in
+`research/dedup-gradient-batch-full229-prefix57-audit-20261011.json`, including
+original-pixel support and zero retained managed memory. This prefix is not
+completion of all 229 pairs or all-query negative qualification.
+
+
+A three-second live stack sample of the full-corpus case `204101.jpg` remains
+inside native distinct-location gradient matching, including the four-distance
+helper. Evidence: `research/dedup-full229-204101-profile-audit-20261011.json`.
+This is a finite hotspot observation, not pipeline-wide CPU attribution. The
+sample may perturb this case's recorded elapsed time; it does not change inputs,
+the frozen executable, or correctness evidence.
+
+
+The isolated eight-accumulator successor was tested without changing production.
+All per-distance comparisons remain bitwise equal and timed bank checksums agree.
+Across 48 alternating synthetic-kernel samples at opt-level1/3, the largest
+opt-level1 bank has a four/eight median ratio of about 0.814: eight lanes regress
+that current native diagnostic profile. Optimized-level3 gains do not qualify
+real matcher behavior or justify that regression. The candidate is rejected;
+production keeps four lanes. Evidence:
+`research/dedup-gradient-eight-kernel-audit-20261011.json`. The audit explicitly
+corrects the harness's fixed numeric parity marker; correctness rests on the
+executed assertions and exit status, not that marker.
+
+
+### Descriptor-pair entry and terminal cancellation — 2026-10-11
+
+A new side-effecting empty iterator independently reproduces a missing entry
+checkpoint: an already-cancelled call previously consumed the iterator before
+returning cancellation. The original failing source/log are retained in
+`research/dedup-owner-entry-before-20261011.json`. The shared legacy/managed core
+now checks cancellation before iterator conversion/consumption, after document
+materialization, before target sorting and after the final pair sort. Zero
+shared-feature validation keeps its existing precedence. Sorting and allocator
+calls remain indivisible.
+
+The corrected raster gate passes 25 library and six index integration tests.
+The regression's decode-enabled branch also checks no managed allocation before
+pre-cancelled input consumption. The frozen macOS decode gate passes 65 library and seven index integration
+tests. The native aarch64 Linux gate passes 127 tests across the library and eight
+selected integration suites. The closed frozen-source audit is
+`research/dedup-owner-entry-cancellation-audit-20261011.json`; subsequent HDR
+projection source changes require their own qualification. The 3057-file source snapshot is
+`research/dedup-owner-entry-snapshot-20261011.json`. Prior owner-count audits
+remain historical and do not certify this later delta.
+
+
+### HDR/alpha model-input projection draft — 2026-10-11
+
+A standalone CompositeReinhardV1 draft passes seven pure-std checks, including
+known neutral values, straight-alpha composition, invisible nonfinite RGB,
+invalid configuration, extreme exposure/background values and proposal
+collisions hiding different original alpha/HDR values. Evidence:
+`research/dedup-model-projection-draft-audit-20261011.json`.
+This is not integrated library support: the harness uses an error-enum stub.
+Managed area preparation, file/dependency lifecycle and original-linear-RGBA
+projective confirmation still need integration and independent qualification.
+The current model/rank path remains explicitly opaque SDR; its policy is not
+weakened by treating projected equality as original-pixel evidence.
+
+
+### Managed projected model preparation — 2026-10-11
+
+The explicit projection now integrates with full-image and original-crop model
+preparation in memory and files. Existing entry points retain OpaqueSdr. New
+`*_with_projection` APIs apply CompositeReinhardV1 per source tap before encoded
+luminance area averaging. No full-resolution projection scratch is allocated.
+Projection configuration is validated before allocation and file I/O. Prepared
+files retain the exact parameters, original dimensions/rectangle and the existing
+source/dependency/generation observations; projection parameters belong in cache
+keys. Untagged linear files still require an explicit decoder interpretation.
+
+The raster gate passes 32 library and nine model-input tests. Independent odd
+area/alpha/HDR references, every cancellation checkpoint and one-short payload
+budgets pass. Three pairs with identical projected bytes but different original
+alpha, HDR values or negative values are all rejected by the existing original
+linear-RGBA bidirectional warp verifier at zero tolerance. Original pixels remain
+unchanged. The decode gate passes 108 tests; the separate file-crop follow-up
+passes eight tests, including same-length mutation outside the selected crop.
+Closed preparation and crop audits retain source and executable hashes.
+This is candidate-preparation integration, not automatic HDR model search:
+the existing rank-based model comparison remains opaque SDR. The guarded
+provider-to-original-RGBA entry point is qualified separately below; native LoFTR
+and automatic projected search still require integration and corpus qualification.
+
+### Projected model candidates confirmed against original RGBA — 2026-10-11
+
+`model_projected_compare::compare_projected_model_files_with` now connects the
+explicit projection and supplied model provider to managed proposal selection,
+native projective geometry and bidirectional original linear premultiplied-RGBA
+verification. Each selected frame is decoded once; original owners remain live
+through confirmation. The previous opaque-SDR preparation and comparison retain
+their owner-release timing and behavior.
+
+The caller supplies positive coverage and agreement thresholds for both
+directions. Equal projected bytes never suffice. Pixel work admits the sum of
+both original grids before calling the provider. Source/dependency observations,
+weights and both request generations span the operation. The final caller
+checkpoint is followed by read-only verification without further caller code.
+No geometry is an explicit candidate miss; source/provider/resource errors never
+become ordinary misses. Regional support does not establish whole-file identity.
+
+The macOS root gate passes 146 tests in ten suites, with four manual benchmarks
+ignored. Six new integration tests cover an accepted HDR copy, rejected HDR and
+alpha collisions with identical model inputs, provider/final-checkpoint source
+and weight mutations, first/middle/final global cancellation, both request
+generations, invalid thresholds, one-short pixel work and tiny memory refusal.
+The closed audit is `research/dedup-projected-compare-audit-20261011.json`; it
+archives all ten executables and the dedup source hashes. This was a root run,
+not a frozen-source execution.
+
+These tests use supplied fixture correspondences. Real native LoFTR inference,
+automatic projected tile/portfolio search, Linux/Windows execution and HDR/alpha
+corpus precision remain unqualified for this entry point. Managed originals,
+inputs and proposals share the operation budget; arbitrary provider tensors,
+workspace, geometry allocator overhead and total RSS remain outside that bound.
+
+### Native projected LoFTR and exact identity candidate — 2026-10-11
+
+`model_loftr::compare_loftr_projected_files` now uses the guarded original-RGBA
+entry point with real local CPU LoFTR weights. A frozen five-control baseline
+found a concrete false negative: a byte-identical textured HDR copy fitted a
+slightly displaced projective mapping. Interpolation across its 100-linear-RGB
+highlight edge produced errors above three despite identical original files.
+The baseline remains recorded with one known copy miss; it was not retconned as
+a successful qualification.
+
+Equal complete projected inputs and sufficient original-coordinate identity
+inliers can now nominate an exact identity mapping before the noisy fitted
+mapping. Every mapping still requires original bidirectional RGBA confirmation.
+A rejected identity continues to the fitted mapping; at most two mappings are
+verified. `pixels.max_source_pixels` admits cumulative full-grid work, and
+`pixel_attempts`/`pixel_work` report consumed proof work. A second one-short work
+cap refuses as inconclusive. Acceptance tolerances and coverage/agreement
+thresholds were not loosened. Model/provider failure still precedes nomination.
+
+All five frozen real CPU LoFTR controls now have the expected outcomes: HDR and
+alpha copies accept with exact identity and zero original-pixel error; the HDR
+100-versus-110 and alpha 64/255-versus-one edits reject despite byte-identical
+projected inputs; an unrelated image has no verified geometry. Both copies use
+153600 original-grid work, both collision negatives 307200, and the unrelated
+control zero. Proposal counts match the baseline. Each operation releases its
+managed payload to zero. The fixture transformation, source/weights/runtime
+pins, gray-byte artifacts, frozen source tree and archived executables are
+retained by `research/dedup-projected-loftr-identity-audit-20261011.json`.
+
+Eight macOS generic regression tests pass, including noisy self-geometry recovery
+and a deliberately rejected identity followed by a successful fitted mapping.
+The latter verifies cumulative two-grid work and refusal at 255 versus 256. The
+frozen Linux decode-feature gate passes 148 tests in ten suites. Its audit
+archives all ten ELF executables and qualifies the frozen identity snapshot,
+not later insufficient-anchor recovery edits.
+These are bounded synthetic textured controls, not arbitrary HDR/alpha corpus
+qualification. Automatic projected tile/portfolio search, other-platform Torch
+execution and total tensor/workspace RSS admission remain open.
+
+The separate full229 frozen baseline continues. Its first terminal execution
+failure, 211200 -> 211201, is captured in
+`research/dedup-full229-211201-failure-20261011.json`: anchor-rank confirmation
+returns `InsufficientGeometry`. It is not an ordinary negative. An isolated
+NativeFirst alternative-order diagnostic independently confirms this pair in
+one native recipe with 36 original-pixel anchors in each direction. It changes
+only order, not tolerances. The unchanged ModelFirst baseline still fails;
+continuation past typed per-candidate insufficient-anchor geometry requires a
+separate repair that preserves final inconclusive results and terminal failures.
+
+### Full229 baseline and per-candidate insufficient-anchor recovery — 2026-10-11
+
+The frozen four-lane production baseline has now executed all 229 known-positive
+Copydays pairs: 228 supported, zero ordinary misses and one execution failure.
+Among the supported pairs, 202 terminate in model tiles and 26 in native search.
+All 157 originals and 229 targets are scheduled as fresh two-file ModelFirst
+collections; this is not one indexed 386-file collection or an all-query negative
+precision measurement. The closed full audit verifies all 395 pins, frozen
+sources, pair order, labels, original-pixel arithmetic and managed release.
+It is `research/dedup-gradient-batch-full229-audit-20261011.json`. The 211201
+execution failure remains in that baseline denominator.
+
+The new `ModelTileOutcome` distinguishes a completed `Comparison` from
+`InsufficientAnchorGeometry`. The tile ledger keeps every attempted rectangle.
+Only the exact anchor-rank `LocalRankError::InsufficientGeometry` is recoverable
+inside this loop; original inputs/dependencies and weights are revalidated before
+advancing. A later original-pixel-supported candidate may succeed. If the fixed
+search exhausts with any insufficient attempt and no support, it returns
+`ModelTileError::InsufficientAnchorGeometry` owning its complete managed ledger.
+That error retains ledger credit until its last owner drops. Callers that read
+`ModelTileAttempt.evidence` now inspect the typed outcome or `comparison()` rather
+than assuming every attempt has completed comparison evidence.
+
+The portfolio may advance from typed insufficient-anchor geometry to the other
+method. It records `SearchStageMiss::InsufficientAnchorGeometry` with a compact
+`InsufficientAnchorStage` reason and drops model-stage managed buffers before
+fallback. If neither method supports and any was inconclusive, the portfolio
+returns a typed inconclusive error after final post-caller read-only validation.
+Source/dependency/weights mutation, provider failure, other geometry/pixel errors,
+allocation/work refusal and cancellation stay terminal. This does not yet
+qualify continuation inside the native six-recipe loop itself.
+
+The macOS root compatibility/regression run passes 35 tests: 13 model-tile,
+12 portfolio and ten collection tests. Eight new tests cover later-rectangle and
+native-stage recovery, complete 25-attempt inconclusive exhaustion, both search
+orders, owned ledger lifetime, late proposal work/provider failures, and final
+source mutation/cancellation precedence. This run precedes an equivalent
+optional-reason match cleanup. The final frozen snapshot passes 156 Linux tests in ten suites. The real
+211200 -> 211201 ModelFirst reproduction now completes all 25 model attempts,
+retains one insufficient-anchor outcome and confirms via the first native
+recipe. Its complete native geometry and original-pixel evidence exactly match
+the separate successful NativeFirst run, including 36 anchors in each direction.
+Managed peak also matches that run, with final managed use zero. Acceptance
+thresholds and default search order remain unchanged. This qualifies the
+frozen repair and one real pair; a repaired full229 run is still required.
+
+The frozen recovery qualification is closed at
+`research/dedup-insufficient-anchor-recovery-audit-20261011.json`: 156 Linux
+generic tests, real ModelFirst recovery, exact prior native proof, unchanged
+acceptance parameters and managed release. All ten Linux test programs are
+archived as gzip files; each archive was fully decompressed and checked against
+the SHA-256 of the executed ELF, with executable mode retained in metadata.
+The fresh repaired full229 producer has started from the frozen repair, testing
+211201 first and retaining every one of the 229 cases. Its report is
+`research/dedup-insufficient-anchor-full229-20261011.json`. The old 228 successes
+and isolated repaired case are not combined into a claimed full current-source
+corpus pass.
+
+### Native fallback lifecycle correction (2026-10-11)
+
+The three-recipe and six-recipe native file APIs now retain source/dependency
+snapshots through the last caller cancellation checkpoint, then verify them
+without invoking caller code again. Both new mutation regressions failed before
+this change with stale `Ok(())`; both pass afterward. All five existing/new
+reflection fallback tests passed in
+`research/dedup-native-fallback-final-fixed-20261011.log`.
+
+Only `Rank(InsufficientGeometry)` permits another native recipe. If no later
+recipe proves original-pixel support, an inconclusive attempt remains a typed
+error even when other recipes produce ordinary negative evidence. Budget,
+decode, source and cancellation errors remain terminal. A broader lifecycle and
+portfolio regression run is recorded separately in
+`research/dedup-native-fallback-regression-20261011.log`.
+The running repaired 229-pair evaluation uses its prior frozen snapshot and
+therefore cannot qualify this newer native fallback correction.
+
+The real native fixture regression
+`insufficient_anchor_geometry_continues_remaining_native_recipes` also passes:
+its first standalone recipe refuses insufficient anchor geometry, the three
+recipe search executes more than twice its callback work, and the six recipe
+search executes additional reflected work. Both exhausted searches retain the
+typed error and release all managed credit. This verifies continuation and
+exhaustion on a real decoded fixture, not later successful recovery after an
+insufficient native recipe. The latter remains unqualified by this fixture.
+
+### Shared terminal source guards (2026-10-11)
+
+Five further entry paths reproduced the same late-callback stale publication:
+explicit anchor comparison, legacy color-confirmed candidate search, legacy
+color fallback, native geometry search, and reflected geometry search. All five
+returned stale `Ok(())` before correction, captured in
+`research/dedup-native-standalone-final-before-20261011.log`.
+`anchor_rank_file::finish_source_guard` now serves these paths and both native
+fallbacks. It verifies retained original/dependency snapshots after the final
+caller checkpoint, calls no user code afterward, and gives sticky request-owner
+cancellation priority over cancellation encountered inside snapshot verification.
+
+The additional native-to-model recovery regression passes for both single and
+25-region model policies: exhausted native anchor geometry remains an explicit
+first-stage inconclusive reason, one independently confirmed model attempt
+supports the result, and all managed credit releases. Final source mutation also
+beats exhausted native geometry in both three/six recipe policies. Logs:
+`research/dedup-native-to-model-recovery-20261011.log` and
+`research/dedup-native-inconclusive-final-source-20261011.log`.
+
+The exact three-file delta is frozen over the previous dependency snapshot in
+`research/dedup-native-terminal-source-snapshot-20261011.json` (3,062 files).
+A 32-test macOS root compatibility gate and a separate 58-test frozen Linux gate
+are running; their terminal logs and archived executables must be independently
+audited before claiming completion. The earlier broader root command started
+before this standalone correction and may later execute replaced test paths;
+it is not frozen-source qualification of this delta. Root decoder/application
+changes are preserved; Linux uses the frozen dependency tree. The active 229-pair
+run also uses its separate previous frozen source and cannot qualify this change.
+
+The macOS gate has now completed successfully: **32 tests** across seven suites,
+including all twelve native fallback/source-guard tests and all thirteen
+portfolio tests. The independent audit is
+`research/dedup-native-terminal-macos-audit-20261011.json`;
+it verifies the frozen 3,062-file manifest, current three-file delta, all five
+captured stale publications, seven completed suites and seven executable
+archives. Every gzip archive roundtrips to the source executable SHA-256; source,
+logs and auditor are pinned. This is root macOS compatibility with concurrent
+root dependency changes, not a claim that the root dependency tree equals the
+frozen Linux tree. The separate 58-test Linux gate remains running.
+
+### Prepared-model final caller source validation (2026-10-11)
+
+Two further concrete stale-success paths were reproduced in public model input
+preparation and `PreparedModelFile::verify_source`: each invoked caller
+cancellation after its last file observation and could return `Ok` after that
+callback changed the source. The baseline log is
+`research/dedup-model-input-final-before-20261011.log` (two new regressions fail;
+one existing final-generation cancellation regression passes).
+
+Both paths now retain their observations through the last caller checkpoint and
+verify original content/identity and external decoder dependencies without
+further caller callbacks. Owner generations remain sticky and take priority over
+cancellation inside snapshot verification. Failed preparation drops its managed
+input and optional original owner; a failed borrowed `verify_source` preserves
+credit in the caller's still-owned prepared input until that owner drops. Default
+preparation still releases its normalized original before source verification.
+
+The corrected regressions exercise all four whole/region and default/projected
+preparation variants against both original-file and external WAL-palette
+mutation. Six macOS suites pass **65 tests**: model comparison 11, model input
+file 10, original-RGBA projected comparison 8, model tiles 13, portfolio collection
+10 and search portfolio 13. The closed audit is
+`research/dedup-model-input-final-macos-audit-20261011.json`: six executable gzip
+archives roundtrip to their exact binary hashes, source/log/auditor pins verify,
+and the two-file delta is frozen over the native terminal source snapshot in
+`research/dedup-model-input-final-snapshot-20261011.json` (3,062 files).
+
+This qualifies root macOS generic-provider compatibility, not new Torch runtime,
+Windows, all-query negative precision, automatic projected model-region search,
+all formats or total inference RSS. A fresh Linux qualification of this newer
+model-input delta is still pending; the active native-terminal Linux gate uses
+its earlier frozen tree. Finish and archive that gate before rebuilding its
+shared test paths. The separate repaired full229 run likewise cannot qualify
+this newer source revision. The older mixed-executable root gate completed with
+28 passing tests, but remains excluded from frozen-source qualification.
+
+### Real native later-recipe recovery controls (2026-10-11)
+
+Native continuation is now qualified beyond exhaustion/callback counters. Two
+real decoded fixtures (`angle-17.png`, `angle-63.png`) use explicitly configured
+symmetric radius 0, asymmetric radius 1 and fixed minimum witness counts 240 and
+220 respectively. The first `[0,0]` recipe genuinely refuses insufficient anchor
+geometry. The independently run `[1,0]` recipe supports the same original files:
+254/250 and 226/237 forward/reverse anchors. Both three-recipe and six-recipe APIs
+recover at recipe 2 with exactly the same transform, complete correspondence
+buffer and bidirectional rank evidence as the standalone successful recipe.
+All managed credit releases before the next operation and after result drop.
+Acceptance thresholds remain unchanged across attempts. These configured
+controls do not qualify default-policy or broad-corpus recall.
+
+`research/dedup-native-later-recovery-controlled-audit-20261011.json` closes a
+frozen before/after comparison: both 3,063-file trees have identical inputs,
+tests and dependencies; only `anchor_rank_file.rs` differs. Both wrapper tests
+fail on the captured pre-fix implementation at the first fixture, with
+`Rank(InsufficientGeometry)`, after their standalone second-recipe control passes.
+Both corrected tests complete both fixtures. The auditor executes separately
+copied before/after programs, hashes them before and after execution, checks
+embedded compile-time fixture roots, verifies both full frozen manifests, and
+roundtrips gzip archives to the executed binary hashes.
+
+An initial root executable archive was mistakenly associated with the earlier
+successful root run because Cargo reused the same test-output filename for the
+subsequent before build. That association is explicitly invalidated in
+`research/dedup-native-later-recovery-macos-audit-20261011.json`, retained for
+traceability, and excluded from qualification. The controlled audit above is
+the authoritative replacement; it reruns the isolated actual programs and pins
+their distinct sources and outcomes.
+
+A combined 183-test/20-program Linux follow-up is prepared for the new 3,063-file
+snapshot, including the model-input final-source correction and these controls.
+It is not launched until the earlier frozen native-terminal Linux gate completes
+and its binaries are archived, to avoid overwriting those evidence paths.
+Full repaired229, negative/burst precision, automatic projected region/portfolio
+search, broad formats/platforms and total model RSS remain separate open work.
+
+### 2026-10-11: automatic projected HDR/alpha regions
+
+`model_projected_tiles::search_projected_model_tiles_files_with` and the native
+`model_loftr::search_loftr_projected_tiles_files` now search the whole image plus
+four quadrants on each side, in a fixed source-major sequence of at most 25
+pairs. Each file is decoded once; whole-image and quadrant model inputs are
+cached lazily, at most five per source. The native wrapper reuses one local
+LoFTR model within the operation. Projected gray inputs nominate geometry;
+retained original linear RGBA samples determine support, including alpha and
+HDR differences hidden by projection. Region coordinates are mapped back to
+full original coordinates before geometry and bidirectional pixel checks.
+
+`ProjectedTileWorkLimits` admits named cumulative input, proposal, geometry,
+identity and pixel work before IO. These limits do not establish a hard total
+Torch tensor, workspace or RSS bound. The result owns its managed attempt
+ledger; the last clone releases its budget. Cancellation, source/dependency
+changes, model changes and provider failures remain typed terminal outcomes.
+
+The frozen 3066-file snapshot and 75 passing generic tests are recorded in
+`research/dedup-projected-tiles-snapshot-20261011.json` and
+`research/dedup-projected-tiles-generic-20261011.json`. The eight new region
+controls cover recovery after a whole-image miss, different crop origins,
+projection collisions, exhausted search, prepaid limits, cancellation, source
+mutation and ledger ownership. All five native CPU LoFTR controls completed with their expected outcomes
+(`research/dedup-projected-tiles-native-20261011.json`): HDR and alpha copies
+accepted; HDR and alpha projection collisions and unrelated HDR exhausted
+25 attempts without support. All first whole-image attempts exactly matched
+the previous native evidence. The latest 191-test Linux gate is still running
+and is not yet a qualification result. Broad negative/burst precision, projected portfolio and
+collection integration, and other-platform Torch execution remain open.
+
+### 2026-10-11: shared exhaustive collection lifecycle and projected adapter
+
+The new `projected_collection::scan_projected_model_collection_with` applies
+original-RGBA-confirmed projected region search to every unordered collection
+pair. `model_loftr::scan_loftr_projected_collection` reuses one operation-local
+CPU LoFTR model across all regions and pairs. Neither operation infers transitive
+identity, prunes pairs by descriptors, or publishes a partial collection.
+
+Both the existing native/model portfolio collection and this projected adapter
+use `collection::scan_guarded_collection`, an internal shared lifecycle with
+public generic managed report/pair/error types. Legacy portfolio policy, entry
+point and concrete error variants remain available; its report and pair names
+alias the common owned types. The adapter explicitly maps common structural
+errors to the original public error enum. Request ordering, pair enumeration,
+prepaid capacities, source/dependency/weight guards, cancellation and the final
+read-only publication checks have one implementation.
+
+`ProjectedCollectionPolicy` separately declares per-pair work and cumulative
+work for `max_pairs`. `ProjectedTileWorkLimits::for_pairs` performs checked
+multiplication of all seven named work maxima. Invalid constituent policies,
+one-unit-short total work, overflow and managed slot refusal are rejected
+before consuming the iterator. Actual file/pair excess refuses without
+truncation. Local weights remain required for an empty collection.
+
+The implementation is frozen separately in
+`research/dedup-projected-collection-snapshot-20261011.json`. Its nine-program,
+82-test generic gate completed successfully using executables copied before
+execution (`research/dedup-projected-collection-generic-20261011.json`); the
+final source and evidence pins were verified. The native probe build
+completed successfully. Seven new generic controls exercise region
+recovery across all three pairs, HDR collision rejection, complete deterministic
+ordering, managed ledger ownership, source/weight/provider failures after an
+earlier positive, final-callback mutations, cancellation and pre-IO admission.
+Both native three-file controls completed successfully: all six HDR/alpha
+collection pairs had the expected outcomes, with exact independent per-attempt
+evidence parity and zero retained managed credit after dropping each report
+(`research/dedup-projected-collection-native-20261011.json`). The previous
+frozen Linux191 gate remains separate; the latest Linux198 gate has not yet
+started. No projected/native
+cross-stage portfolio integration, cross-pair decode reuse, broad negative or
+burst precision, indexed scalability, other-platform Torch or hard total RSS
+qualification is implied.
+
+### 2026-10-11: projected collection external-palette guards
+
+The separately frozen eight-test collection program passed all four added
+external-dependency controls: a third file's WAL palette is mutated or removed
+after an earlier HDR pair supports, and at the collection's last caller
+checkpoint. Each case returns a source error attributed to ID9, discards every
+earlier pair decision, and releases all managed evidence. The late checkpoint
+adds no subsequent caller invocation. A stable baseline first confirms all
+three pair records, including the earlier positive and both exhausted negatives.
+
+Evidence: `research/dedup-projected-collection-dependency-fixed-generic-20261011.json`
+and `research/dedup-projected-collection-dependency-fixed-snapshot-20261011.json`.
+Only the test program differs from the 3070-file native-six-pair-qualified
+parent; production source is unchanged. The initial dependency fixture gate
+correctly refused its underdeclared original-grid work cap (256 versus 320
+pixels for an 8x8/16x16 pair). That failed report is retained separately; the
+corrected fixture explicitly admits 1024 grid pixels without changing match
+thresholds. These controls do not qualify arbitrary external dependencies,
+all formats, or broad negative-corpus precision.
+
+### 2026-10-11: explicit native pixel-domain refusals
+
+`LocalError::UnsupportedPixels` now distinguishes nonopaque native gradient
+samples and smoothing inputs from invalid policies or coordinates.
+`RankRegionError::UnsupportedPixels` distinguishes nonopaque or out-of-display-
+range finite rank samples from invalid input. `ScanError::UnsupportedPixels`
+preserves this distinction when a native candidate error crosses a collection
+adapter. Successful gradient, smoothing and rank arithmetic is unchanged.
+These public enum additions require callers with exhaustive matches to add the
+new variants; alpha/HDR assertions previously expecting `Invalid` must migrate.
+
+`AnchorRankFileError::pixel_refusal()` identifies only the exact typed native
+candidate-opacity and rank-pixel-range errors, including the file-search rank
+wrapper. It returns `None` for malformed policy/coordinates, work exhaustion,
+cancellation, source/decode errors and insufficient geometric witnesses.
+The method does not itself advance a search or classify an unsupported source
+as a negative. Native+projected portfolio dispatch remains open.
+
+Three early runtime controls passed on a copied program with a pinned frozen
+source root in the executable (`research/dedup-native-pixel-domain-feedback-20261011.json`).
+They distinguish gradient opacity from coordinate/work/cancel failures, rank
+alpha/negative/HDR samples from invalid/cancelled input, and narrow refusal
+classification from other errors. The definitive 17-program/119-test corrected
+frozen gate is pending (`research/dedup-native-pixel-domain-fixed-generic-20261011.json`).
+An earlier zero-radius smoothing assertion still expected the old `Invalid`
+variant; its failed root run and initial frozen gate remain separate evidence.
+The latest Linux235 gate is prepared, requiring the old Linux191 archive before
+target reuse. No newer Torch or Linux qualification of this source delta is
+implied by earlier independent snapshots.
+
+
+### Native/projected portfolio, 2026-10-11
+
+`search_projected_portfolio_files_with` and `scan_projected_portfolio_collection_with` combine the native six-recipe search with the projected full-image/quadrant model search in either order. Exact native pixel-domain refusals and insufficient anchor geometry advance to the alternate stage. An independent model proof can recover them; an exhausted model search preserves a typed inconclusive outcome. Collection records expose `Some(true)`, `Some(false)` or `None` rather than treating inconclusive as a negative. Other failures discard the operation.
+
+The common guarded pair lifecycle checks sources, decoder dependencies, model weights and sticky cancellation, including a readonly verification after the final caller callback. Twelve aggregate work counters are checked before I/O. The LoFTR adapters reuse one local model per operation and do not change process-wide settings.
+
+The frozen 3,076-file snapshot passed 131 tests across 18 programs (`docs/research/dedup-projected-portfolio-generic-20261011.json`). Real LoFTR controls and a 247-test Linux gate are running separately; those results are not yet qualified. Earlier Linux projected-tile coverage completed 191 tests with four ignored tests and archived executable hashes (`docs/research/dedup-projected-tiles-linux-audit-20261011.json`). The earlier typed pixel-domain snapshot separately passed 119 generic tests.
+
+Cross-pair decode reuse, indexed collection scaling, broad negative precision and hard Torch workspace/RSS admission remain open. These bounded tests do not establish universal duplicate detection, and visual support does not authorize deletion or transitive identity.
+
+The subsequent WAL dependency regression passed all eight mutation/removal and stage-order variants through the new portfolio collection API, including mutation at the final caller callback. The new 3,076-file snapshot changes only `tests/projected_portfolio.rs`; every production source hash is unchanged. Its complete 13-test frozen suite is running separately (`research/dedup-projected-portfolio-dependency-generic-20261011.json`).
+
+The portfolio qualification subsequently completed: all eight real CPU LoFTR invocations (ten comparison records) matched the expected outcomes and the independently measured projected-stage evidence. The frozen dependency suite passed all 13 tests. Together with the unchanged parent suites this covers 132 distinct generic tests. The closed audit rechecked all report pins, copied test executable and log hashes, both complete 3,076-file snapshots, and current production source hashes (`research/dedup-projected-portfolio-native-audit-20261011.json`). Linux qualification remains separate and running.
+
+The next origin-retrieval producer schedules the full Cartesian 229-query by 157-original comparison (35,953 comparisons: 229 known origin copies and 35,724 different-origin comparisons), without retrieval pruning. It preserves raw outputs and failed executions, and does not interpret differing publisher origins as independently annotated semantic or local-mask negatives. Its executable build completed, but execution requires the independent repaired229 audit to close first. This evaluates the current legacy rank-confirmed ModelFirst portfolio; the projected RGBA portfolio has separate bounded controls.
+
+The independent repaired229 run closed successfully: 229 supports, zero misses, zero execution failures, comprising 202 model-tile and 27 native terminal proofs. The audit verified 395 pins and all 3,062 frozen source files, with at least 11 anchors and 1,108 informative rank pairs in supported evidence (`research/dedup-insufficient-anchor-full229-audit-20261011.json`). It remains evidence for that earlier snapshot, not the later projected RGBA implementation.
+
+The current-source full 35,953-comparison origin-retrieval run has started. Each completed record is fsynced to a journal, with compressed raw stdout/stderr and hashes; failures remain failures, and different-origin supports require review. The verifier checks the Cartesian order, origin labels, source hashes, pair identities, managed release and support evidence. Four adversarial tests reject schedule/label corruption, failures relabeled as negatives and fabricated or underqualified support. A partial prefix explicitly cannot establish completion. The first current positive proof exactly matched its independently executed earlier229 proof.
+
+### Exact mutual-competitor optimization candidate, 2026-10-11
+
+A one-second sample of the first current different-origin comparison located 266 main-thread sampled stacks in `gradient::distances_four`, inside native distinct-location matching. This is a hotspot observation on a shared host, not a runtime distribution or throughput benchmark.
+
+A new candidate leaves the complete nearest-neighbor first pass unchanged. The distinct-competitor second pass omits distance blocks only when neither their row nor any column can publish a mutual nearest match within the existing absolute distance threshold. Every potentially published pair still evaluates all opposing descriptors for its distinct competitors. Scalar summation order, tie rules, conservative two-pass work admission and all cancellation checkpoints are preserved. No additional scratch cache is introduced.
+
+The frozen 3,077-file candidate adds an exhaustive callback-by-callback oracle and a test-only copy of the former four-lane matcher for alternating real-photo comparisons. Its 205-test generic gate is running; real-photo measurements have not started. Retention as a speed improvement remains unproven. The long origin-retrieval and Linux gates retain their earlier frozen executable/source and cannot qualify this candidate.
+
+Isolated mathematical feedback subsequently passed: the extracted frozen production distance/matching functions passed the new exhaustive production oracle with every cancellation checkpoint, plus three existing mathematical tests. All input, generated-unit, binary and log hashes were rechecked (`research/dedup-gradient-mutual-math-20261011.json`). This feedback uses simple type shells and does not qualify crate integration, source guards, managed credit or speed; the complete frozen gate is still running.
+
+The 500-repository source triage now has a complete-byte supplement for all eight formerly truncated files, totaling 7,567,187 bytes. Every complete file was checked against its pinned Git tree blob ID, with relevant source/asset provenance followups recorded. One historical selection (`PierreCrette/VideoDedup:CompareV2`) was an ELF executable rather than source; the pinned 44,735-byte `CompareV2.lpr` was additionally acquired and reviewed. It compares four hash-key words with PopCnt/XOR and a threshold, which does not certify complete video equality. Original manifests/reviews remain historical, with the correction explicit in `research/dedup-500/full-truncated-source-20261011/review.json`. This closes the eight archived-file truncations, not full upstream runtime or algorithm qualification.
+
+The four source-absent triage records were revisited against complete, untruncated pinned trees and their READMEs. They contain hardware board files, external tool links, a README-only perceptual-hash stub, or EO/XMIR documentation/build configuration. The followup records absence at those historical commits, not at later upstream revisions (`research/dedup-500/source-absent-followup-20261011.json`). The duplicate root feedback compiler was intentionally stopped after isolated mathematical parity passed; the complete frozen205 gate remains running and authoritative for crate integration.
+
+After an execution interruption, all recorded candidate-build and all-query producer/child PIDs were confirmed absent; their stale `running` reports were not treated as terminal success. The full query comparison resumed from its independently revalidated one-record journal, retaining the interrupted checkpoint and original pinned executable. Only its unproven in-flight pair is repeated. The frozen205 gate uses a new report/archive, and the Linux247 gate was relaunched with a separate log after Docker was restored and no surviving validation container was found. Prior partial reports and logs remain intact (`research/dedup-interrupted-processes-20261011.json`).
+
+The first mutual-competitor candidate passed its complete frozen205 gate (19 copied programs), six initial real-photo controls, and ten repeated controls (200 alternating samples across five rounds). Every timed invocation matched reference coordinates exactly. The repeated foreign distinct controls had baseline/candidate median ratios 1.225 and 1.250, but the self distinct control regressed to 0.891. It is therefore not accepted as a general performance improvement. A new frozen child changes only `gradient.rs`, hoisting the invariant forward mutual predicate out of the inner competitor-block loop. Its own mathematical and frozen205 qualification is running; its repeated real-photo comparison is prepared separately. Prior measurements cannot qualify this new source.
+
+The hoisted child passed the isolated four-test mathematical feedback, including exhaustive production/cancellation parity. The resumed Linux247 build then failed at link time with undefined internal LLVM/anonymous symbols; no tests from that failed build are counted. Cargo package cleanup refused a missing cache tag, so no tag override was used. Only inactive rrrah-dedup incremental directories and the exact failed library-test object/fingerprint family were moved to a recorded quarantine. A new Linux247 log runs with incremental compilation disabled; dependencies, source and earlier qualified executable archives remain intact.
+
+The hoisted candidate also passed all205 generic tests and all ten repeated real-photo controls with exact coordinate parity (200 timings). Its self distinct ratio remained 0.922, despite foreign distinct ratios 1.166 and 1.296. Both runtime candidates are rejected as general improvements. `gradient.rs` is restored byte-for-byte to the qualified projected-portfolio dependency baseline. The only retained source delta is the exhaustive regression test in `gradient_matching_tests.rs`; its separate frozen test-only gate is running. All experimental snapshots and measurements remain preserved in their original artifacts. No speedup is claimed (`research/dedup-gradient-mutual-rejection-20261011.json`).
+
+
+### Exact file pair comparison (2026-10-11)
+
+`exact::compare_files(left, right, max_file_bytes, cancel)` compares regular files without requiring the raster/decode/LoFTR features. Matching full digests are confirmed by streaming byte comparison. Each file has an explicit size limit; both observations are rehashed and identity-checked after the final caller callback, including negative results. Cancellation is sticky. Final read-only validation does not call caller code. This is an observed file-byte result, not decoded-pixel identity or an atomic filesystem snapshot. It does not yet automatically dispatch the visual portfolio on a negative result.
+
+Regression controls include empty/self/multiblock copies, final-byte differences, forced digest collision, size/policy/I/O refusal, one-shot cancellation at every callback and final-callback mutation of either file for both outcomes. Current macOS minimal-feature test evidence is recorded separately in `research/dedup-exact-pair-20261011.json`; it does not extend Linux/decode/model qualification.
+
+
+### Exact-first projected portfolio (2026-10-11, supersedes standalone dispatch gap above)
+
+`exact_portfolio::search_exact_projected_portfolio_files_with` now performs byte confirmation before the complete native/projected visual portfolio. Its enum distinguishes `ExactBytes` from `Visual(ProjectedPortfolioEvidence)`. All visual work policies are admitted before I/O. Exact copies bypass decoding, local weights and the proposal provider. A mismatch retains full visual search and typed inconclusive/error outcomes, without pruning recipes or admitting projection collisions as identity. Original file observations span both stages; visual dependencies and weights are observed from visual entry onward. No caller callback follows the visual stage's final source/dependency/weight validation. Both request generations and global cancellation are sticky.
+
+The supplied MemoryBudget governs the existing visual stages. Exact reads use the existing fixed 64 KiB streaming blocks (byte confirmation holds two), separately from visual managed credit; total process/RSS admission remains open. Identical source bytes alone do not imply identical rendering under different request settings or external resources. No collection wrapper or LoFTR convenience adapter for exact-first dispatch is claimed here. Frozen generic controls are recorded in `research/dedup-exact-portfolio-generic-20261011.json` when terminal; a running build is not qualification.
+
+Exact-first frozen generic gate completed: 33 tests (17 portfolio, 16 exact-file), plus 17 root compatibility tests, with zero failures. Audit `research/dedup-exact-portfolio-audit-20261011.json` verifies all 3077 snapshot files, current four changed source files, copied programs, logs and producer pins. The initial 16-pass/one-failure gate remains archived: its failed assertion checked released memory before dropping returned evidence; the corrected snapshot changes only that test, preserving production bytes. This qualifies generic providers on macOS only.
+
+
+### Local LoFTR exact-first pair adapter (2026-10-11)
+
+`model_loftr::search_loftr_exact_projected_portfolio_files` exposes the exact-first generic pair orchestration using one lazily loaded local CPU model. Exact byte copies return a distinct enum variant without requiring model weights or a supported decoder. Visual misses preserve native/projected unknown semantics. The library does not download weights or set global threads/seeds. The probe sets two CPU threads and seed 173 explicitly for controls. Frozen source manifest `research/dedup-exact-loftr-snapshot-20261011.json` adds only this adapter and its probe over the qualified exact-first generic snapshot. Native controls in `research/dedup-exact-loftr-native-20261011.json` remain unqualified until terminal success and audit.
+
+Local CPU LoFTR exact-first controls are now closed: 11/11 invocations pass, including five exact-copy controls with absent weights and zero managed peak (QOI, HDR and undecodable bytes), three byte-different/pixel-equal recoding controls, two full 25-region projection-collision unknowns, and one missing-weight visual refusal. All five visual/unknown records equal independently qualified earlier portfolio evidence exactly. Audit `research/dedup-exact-loftr-native-audit-20261011.json` verifies all 3078 frozen files, only the two declared source/probe deltas from the qualified generic parent, current changed sources, copied executable/log/runtime/input/weight pins, and inherited 33 generic tests. Qualification remains bounded to macOS CPU local Torch; collection dispatch, provider RSS, broad precision and all-format coverage remain open.
+
+
+### Exact-first complete collection dispatch (2026-10-11)
+
+`exact_portfolio_collection::scan_exact_projected_portfolio_collection_with` enumerates every unordered pair with explicit ExactBytes, Complete visual evidence or typed Inconclusive outcomes. ExactBytes alone proves file-byte equality; support() remains a convenience and does not merge the evidence classes. No transitive groups or automatic deletion are inferred. Empty, singleton and all-exact collections require no model weights or decode dependency reads. All files have full content baselines before pair processing, and matching digests are byte-confirmed.
+
+The shared collection engine retains the original visual observation type and upfront weight semantics for existing APIs. Its new exact mode observes only file bytes initially. Before the first byte-different pair invokes visual/provider code, all selected sources acquire decode dependency observations and local weights acquire a content observation. Those observations span all remaining pairs and final publication, protecting idle files and prior exact evidence. The final caller checkpoint precedes read-only revalidation of every observed file, activated dependency and weight; every request generation remains live and sticky. Errors discard the whole report.
+
+All constituent and aggregate visual work, file/pair capacities and managed slots are admitted before input consumption. The exact mode reserves its larger observation slots explicitly; fixed streaming blocks, dependency-owned data and provider RSS remain outside the existing managed credit contract. This remains exhaustive pair enumeration, not indexed scaling or a cross-pair decode cache. Frozen generic qualification: `research/dedup-exact-collection-generic-20261011.json` (pending until terminal success). No native LoFTR collection convenience adapter or expanded platform qualification is claimed yet.
+
+Exact-first collection generic gate is closed: 159 tests across 19 copied test programs pass on the frozen 3079-file snapshot, including 24 portfolio tests (seven new collection regressions), legacy visual collections/pairs, model input/proposal paths, gradients and exact-file scans. Seven current-root minimal-feature exact/collision tests also pass. Audit `research/dedup-exact-collection-audit-20261011.json` verifies source/parent delta hashes, current five changed files, copied executables/logs and producer pins. New controls cover no-model empty/single/all-copy collections, exact/visual/unknown pairs in both orders, pre-iterator resource/work/file/pair/ID refusal, final mutation of every file and started weights, all request owners/global cancellation, late provider failure after prior exact/unknown pairs and eight external-WAL-palette mutation/removal variants. Native collection LoFTR, indexed scaling/cache and provider RSS remain unqualified.
+
+Linux aarch64 projected-portfolio baseline gate has completed: 247 tests across 31 programs, four intentionally ignored, over the original frozen 3076-file projected-portfolio snapshot. Cargo interleaved later stderr suite headings with preceding stdout summaries, so the original adjacency parser refused qualification. The replacement audit lists names and ignored tests from each unchanged ELF, compares exact name multisets against the complete successful execution log, checks all 31 summaries globally, verifies the full source snapshot and gzip-archives every ELF with decompressed hash roundtrip before target reuse. Evidence: `research/dedup-projected-portfolio-linux-noincremental-audit-20261011.json`; failed parser log is retained. This closes the earlier Linux baseline only; exact-first changes, later regressions and native Torch remain outside that Linux qualification.
+
+
+### Local LoFTR exact-first complete collections (2026-10-11)
+
+`model_loftr::scan_loftr_exact_projected_portfolio_collection` wraps the exact-first collection engine with one operation-local lazily loaded CPU model. Model weights are unnecessary for empty, singleton and all-exact collections; visual pairs retain full native/projected search and independent typed unknowns. No library global thread/seed changes or downloads are introduced. The native probe is limited to three files by explicit policy and sets its own CPU threads/seed.
+
+Frozen final source: `research/dedup-exact-collection-loftr-fixed-snapshot-20261011.json`, 3080 files. The adapter/probe parent adds only two files over the qualified generic collection snapshot. The final child changes only the probe to release its returned report before asserting freed managed credit; production source remains identical. Native collection controls in `research/dedup-exact-collection-loftr-native-20261011.json` are pending until terminal success and closed audit. Current Linux gate `research/dedup-exact-collection-linux-20261011.log` uses this source with decode features, excluding Torch; previous 247-test Linux artifacts were archived before target reuse.
+
+Local CPU LoFTR exact-first collection controls have completed: nine invocations pass, including seven complete collections (15 pair records: nine ExactBytes, four supported visual, two typed unknown) and two explicit error controls (missing weights after a prior exact pair, file-limit refusal before weight I/O). Both mixed-positive orders and both full 25-region unknown pair records equal independently qualified pair evidence exactly. Every completed report returns managed credit to zero after drop. Audit `research/dedup-exact-collection-loftr-native-audit-20261011.json` verifies both 3080-file source levels, declared adapter/probe-only and ownership-test-only deltas, current changed sources, runtime/input/weight/executable/log pins, and the inherited 159 generic tests. Current exact-first Linux gate remains pending; no indexed scaling, cross-pair decode-cache, total Torch RSS or broad precision/all-format claim is made.
+
+
+### Exact collection scaling baseline (2026-10-11)
+
+Frozen production all-copy controls (one MiB/file, three samples/control) return every exact pair without weights/inference: 8 files/28 pairs median 0.183 s; 32/496 median 2.348 s; 64/2016 median 8.897 s. The existing exact branch reads source payload `(4*n + 6*pairs)*file_bytes`: initial/final observations and both per-pair guards plus byte confirmation. This yields 200 MiB, 3104 MiB and 12352 MiB respectively. These volumes are analytically derived from inspected code, not measured device I/O; timings come from a shared host and do not establish general throughput. Evidence: `research/dedup-exact-collection-scaling-baseline-audit-20261011.json`, verified 3080-file snapshot and copied binary/log pins. Only an ignored explicitly invoked benchmark test was added; production is unchanged. Next candidate is operation-local exact equivalence certificates to remove repeated byte confirmation while retaining all per-pair/final source guards, collision partitioning and complete reports. No optimization is adopted yet.
+
+
+### Rejected exact equality-certificate optimization (2026-10-11)
+
+A managed operation-local exact equality cache passed 162 frozen generic tests, including collision partitioning and no certificates from failed comparisons, while retaining every existing source guard. Its all-copy source-read formula would reduce 64-file payload reads from 12352 MiB to 8446 MiB. Initial candidate timing was worse; an alternating baseline/candidate/candidate/baseline control (36 samples across 8/32/64 files) produced baseline/candidate median ratios 0.769, 0.826 and 0.913. The candidate is rejected. `collection.rs` and the ignored scaling test are restored byte-for-byte to the already qualified baseline snapshot; no equality cache remains in production. Candidate snapshots, executable/log pins and both initial/repeated measurements remain archived. Evidence: `research/dedup-exact-classes-rejection-20261011.json`. The alternating run is bounded shared-host evidence, not proof of universal regression. Next investigation is duplicated original-file observation verification in the exact collection visual branch; no replacement is implemented or qualified yet.
+
+
+### Dependency-only observations for exact collections (2026-10-11)
+
+ExactObservation now retains one original ContentSnapshot and, after visual activation, a DecodeDependenciesSnapshot containing only external resources. All original-file per-pair/final rehashes and external-resource checks remain; the same original file is no longer rehashed a second time through visual.source. Existing full visual DecodeSourceSnapshot still owns its original file and dependencies and preserves its original verification order and fingerprint recipe data. No exact equality cache from the rejected experiment is retained.
+
+Activation reads at most 64 prefix bytes using `ContentSnapshot::read_verified_prefix`, hashing the complete source in that same streaming observation and requiring the original digest before exposing the header. This prevents dependency discovery from accepting a header or body rewrite merely because metadata cannot reveal it. Initial/final observation semantics remain non-atomic, and intermediate restored concurrent rewrites are outside the existing contract. External dependencies retain independent full observations.
+
+Frozen macOS generic gate passes 200 tests across 24 copied programs, including nine exact/prefix unit regressions, all 24 portfolio tests, 14 decode/cache controls, four WAL dependency controls, seven scans and seven raster-equality controls, plus the previous shared model/collection/gradient suites. Audit `research/dedup-dependency-observation-audit-20261011.json` verifies the full 3080-file snapshot, three declared source deltas, current changed sources and executable/log/producer hashes. Header controls cover metadata-invisible header and body mutations, empty/short/multiblock files, policy refusal, every cancellation checkpoint and last-checkpoint mutation. This closes generic correctness only; latency, native Torch, current Linux, indexing, provider RSS and broad precision/all-format coverage remain open.
+
+
+The earlier exact-first collection Linux aarch64 gate is now closed: 280 passing tests across 32 archived ELF programs, four ignored tests. Its original 279-test expectation omitted the Linux-only non-UTF8 path regression; the corrected auditor binds exact test names and executable hashes to the completed log. Evidence: `research/dedup-exact-collection-linux-audit-20261011.json`. This qualifies the earlier frozen exact-first collection source, before the dependency-only observation refactor. Current refactor native LoFTR controls are running separately; no current Linux qualification is inferred.
+
+
+Current dependency-only observations also pass the frozen macOS CPU LoFTR controls: nine invocations, 15 returned pair records (nine exact, four supported visual, two explicitly inconclusive), plus the two expected whole-operation error controls. Both visual orders and inconclusive pair records match the independent prior pair evidence exactly; every completed report releases managed credit after drop. Audit `research/dedup-dependency-observation-native-audit-20261011.json` binds all 3080 frozen source files, the three production deltas, current changed sources, 200 generic tests, copied executable, inputs, weights, runtime and logs. This establishes bounded native correctness, not latency improvement or total Torch RSS admission.
+
+The independently verified all-query journal prefix now includes a real execution failure on the earlier snapshot: query `200001.jpg` against original `202300.jpg` returns `InsufficientAnchorGeometry` after 25 model attempts with one insufficient attempt. Raw output is retained and hashed in the state record. It is an execution failure, not evidence of a rejected visual match; replay on the current typed-inconclusive portfolio remains required. The 26-record prefix does not complete the required 35953 comparisons.
+
+
+### Explicit insufficient-geometry collection outcomes (2026-10-11)
+
+`scan_portfolio_outcome_collection_with` and its CPU LoFTR adapter `scan_loftr_portfolio_outcome_collection` retain exhausted insufficient geometry as `PortfolioPairOutcome::Inconclusive`, with `support() == None`. Complete outcomes preserve supported true/false visual evidence. All unordered pairs remain present on successful publication. The legacy API keeps its existing error-on-inconclusive contract. Both use one shared generic collection implementation; only the typed final insufficient-geometry error is converted after the guarded pair returns. Source/dependency/weight/provider/policy failures and sticky cancellation still discard the whole report. Neither local visual outcome certifies exact file identity.
+
+Frozen generic qualification passes 202 tests across 24 copied programs (`research/dedup-outcome-collection-generic-audit-20261011.json`, 3081 pinned source files). New controls cover all three pairs and both search orders with single and 25-region model recipes, retained insufficient-attempt counts, and fatal provider/owner cancellation after a prior unknown. The real corpus replay with the original 640-side/12.8M-pixel policy is still running; current Linux qualification is also pending. An initial replay through the smaller exact-projected diagnostic correctly refused its 1M-pixel decode limit before geometry and cannot establish a result for that photograph.
+
+A one-second live sample of the policy-equivalent replay found the native fallback in gradient `match_gradients_selected` / `distances_four`, after model attempts. This identifies a concrete performance investigation point; it does not establish universal stage costs or a speedup. The sample path/hash is retained in the state record. Full corpus precision, indexed scaling, hard Torch RSS, broad format/platform support and complete upstream algorithm qualification remain open.
+
+
+The policy-equivalent `202300.jpg` / `200001.jpg` native replay now succeeds through the explicit-outcome collection API, retaining unknown support and the exact prior ModelTiles reason/digest (25 attempts, one insufficient attempt). A same-file supported visual control and missing-weights fatal control also pass. Audit `research/dedup-outcome-collection-native-opt3-audit-20261011.json` verifies the frozen 3081-file source, 202 generic tests, 16 copied opt-level3 controls, three real CPU LoFTR invocations, source/current deltas and executable/input/weight/runtime/log pins. The legacy API retains its error behavior; this does not reclassify the running historical all-query producer or complete its corpus.
+
+Cargo metadata proves this replay optimized rrrah-dedup only; BLAKE3 and the probe binary remained at level0. A live sample found full file revalidation in BLAKE3 during model tiles; another earlier sample found native gradient matching. These bounded samples and a shared-host 895-second replay do not establish universal stage costs or a performance improvement. The redundant all-debug replay was intentionally terminated after the equivalent opt3 control was audited; its raw error report and explicit termination decision are preserved separately, and it is not counted as a completed or algorithm-failing control.
+
+A full opt-level3 build encountered a path-specific CMake wait inside `open` while configuring CharLS under Documents. Its own waiting CMake process was terminated and the failed build log retained. CMake version/configuration succeeds from `/tmp` with an isolated output directory outside Documents. The same frozen build is now relocated to the existing isolated validation target under `.codex/tmp`, with new metadata/log files. The cause of the path-specific wait is not established. Full-profile native controls and current Linux archival remain pending.
+
+
+The fully optimized native collection replay also passes all three controls: the same corpus pair returns the exact independently qualified unknown reason/digest, same-file visual support is positive, and missing weights remain fatal. Audit `research/dedup-outcome-collection-native-optimized-audit-20261011.json` verifies source/input/runtime/executable/log pins and the Cargo dependency graph: all 225 emitted normal-runtime packages have opt-level3 artifacts. Host-only build tooling and unbuilt optional normal dependencies are explicitly separated. The earlier overbroad pre-execution profile assertion and a temporary harness variable-shadowing error prevented execution; their logs/copies are retained and do not count as library failures. The successful replay took 220 seconds on the shared host; this single comparison across different profiles/load is not a universal throughput or speedup claim.
+
+Current library-source Linux aarch64 qualification is closed: 284 passing tests across 32 archived ELF programs, five ignored tests, full 3081-file frozen source verification and exact executable test-name/log binding (`research/dedup-outcome-collection-linux-audit-20261011.json`). This includes the dependency-only source observations and new explicit-unknown collection API. Linux Torch, Windows runtime, broad corpus precision, indexing and hard provider RSS remain open.
+
+The standalone native diagnostic now defaults to `[profile.dev] opt-level = 3`, avoiding accidental all-debug source guards and generic search. This is a profile-only child; algorithms, input/model policies and dependency lock are unchanged. Audit `research/dedup-outcome-native-profile-audit-20261011.json` verifies all source hashes and the sole manifest delta, then compares all 379 compiler-artifact profile/feature records with the successfully runtime-qualified explicit opt-level3 build. The default-profile child binary is copied and build-verified; it has not been separately runtime-executed. Parent native controls are configuration/source equivalence evidence, not additional child invocations.
+
+
+### Sequential exact gradient-index construction (2026-10-11)
+
+`GradientDescriptorIndex::new` now accumulates all 128 coordinate minima/maxima during sequential descriptor validation, replacing 128 strided scans of the borrowed bank. Axis selection still uses the first widest coordinate with the same subtraction and strict comparison. Descriptor validation, duplicate-ID checks, sorted order, exact radius search and every caller checkpoint remain unchanged. The two 128-element f64 arrays are bounded stack metadata; no descriptor bank copy or new heap buffer is introduced. Managed index credit/peak and release remain unchanged.
+
+The exact original constructor is retained privately under cfg(test) as the independent reference. Final frozen-source qualification passes 48 raster tests and 202 decode-feature tests across 24 copied decode programs. New controls verify axis/order/search equality over empty, dense, identical and one-hot banks, both recipes, inclusive radii, managed credit and every construction cancellation checkpoint. The final formatted file was adopted only after source/parent/hash checks, full test gates and isolated alternating measurements passed; the root file matched its baseline before replacement. Evidence: `research/dedup-gradient-index-row-major-adoption-20261011.json`.
+
+An isolated opt-level3 benchmark runs 160 old/new constructions in alternating ABBA/BAAB order across five synthetic 512/8192/32768-entry controls. Final baseline/candidate median ratios are 1.235, 1.253, 1.409, 1.319 and 1.274; time reductions are approximately 19-29%. Every control retains the same axis and managed peak. These are synthetic index-construction measurements on a shared host, not full-image or collection throughput, universal retrieval quality, or a resolution of exhaustive quadratic pair enumeration. Current Linux qualification for the changed constructor is running separately (expected 294 tests/34 programs); the earlier closed 284-test Linux report belongs to the prior source.
+
+
+### Actual descriptor-comparison admission (2026-10-11)
+
+`gradient_file_pair_report_with_actual_work` adds opt-in cumulative admission for descriptor-distance attempts. A sparse coordinate index can complete below the legacy `n*n` prepayment; the original APIs retain their worst-case preflight. The report exposes `descriptor_comparisons`, including coordinate candidates rejected by distance and self/same-file hits. This is a candidate-proposal API: geometry/pixel confirmation remains necessary.
+
+At least `n` comparisons and `n` hits are required before allocating the index, because ordinary queries include their own descriptor. Reflection has an independent prepaid transform-bin limit. Index construction, sorting, coordinate lookup, and reflection are not descriptor-distance attempts; the counter is not a total CPU-time limit. Memory, hit, and pair caps remain independent. A later exhausted budget or cancellation discards the entire report and releases managed reservations.
+
+Frozen bounded source passed 53 raster tests (39 library, 12 index, 2 reflection) and 202 decode tests across 24 copied programs. Tests cover sparse admission, rejected coordinate candidates, reflection, all cancellation checkpoints, early zero-allocation refusal, and late refusal after a prior pair. Adoption verifies the source ancestry, report/binary/log hashes, and unchanged parent dedup files. See `research/dedup-gradient-index-actual-work-bounded-adoption-20261011.json`.
+
+The first broad raster harness accidentally filtered the library to 9 collision tests while expecting 39; it was retained as a failed harness invocation. The corrected `raster-full` producer executed all 53 tests. Temporary candidate files use default rustfmt settings; adoption checks those settings explicitly, without claiming repository-format equivalence. No complete-corpus speedup, Linux/Windows qualification of this new API, or whole-process RSS bound follows from these checks.
+
+
+The follow-up `actual_work_pair_union_matches_independent_exhaustive_oracle` independently permutes reflected bins and enumerates all query/target distances. It compares exact pairs and hit counts for 176 configurations (0/1/2/7/32 descriptors, both recipes, ordinary/reflected queries, multiple radii including adjacent representable boundary values). Repeated descriptors and repeated owners preserve ambiguous hits while deduplicating file pairs. Every configuration is re-run at exact measured comparison/hit/pair limits, for 352 API invocations. The 13 index and 2 reflection tests pass in copied macOS programs; source and executable/log hashes are recorded in `research/dedup-gradient-index-actual-work-exhaustive-audit-20261011.json`. This adds test evidence without changing the qualified production implementation.
+
+
+### Real normalized-corpus index limitation (2026-10-11)
+
+`gradient_corpus_index_probe` extracted 11,750 interpolated gradients from all 386 pinned normalized Copydays images, with at most 32 features per image and one pyramid level. At squared radius 0.1 the index exactly matched an independent scalar full-distance oracle: 992 unique file proposals and 25,154 descriptor hits. It attempted 137,308,822 of 138,062,500 possible comparisons; elapsed search 11.844 s versus oracle 10.217 s on this shared-host run. This is evidence against claiming a useful corpus speedup from the one-coordinate window.
+
+Only 75/229 known original-query publisher-copy pairs were proposed at radius 0.1. Independent scalar minima for every one of the 74,305 file pairs show that radius 0.5650830955549176 retains all 229 known pairs on this same input, but proposes 73,434 file pairs. This is in-sample calibration, not a general recall guarantee or a recommended threshold. Missing descriptor proposals must not be interpreted as image nonduplicates: complete coverage requires another search path or explicit unknown outcomes. The exhaustive portfolio remains the fallback; no production filter or default threshold changed.
+
+Inputs here are prepared images with maximum side 320, not original-resolution confirmation. Different publisher origins are not semantic negative annotations. Records and descriptor/minimum-distance artifacts are pinned in `research/dedup-gradient-corpus-index-20261011.json` and `research/dedup-gradient-corpus-radius-audit-20261011.json`; `scripts/verify-dedup-gradient-corpus-radius-20261011.py` checks pins, all file-pair minima and sweep counts. Managed peak was 21,762,048 bytes and ended at zero; this excludes whole-process RSS and the diagnostic oracle's ordinary containers.
+
+
+### Four-level corpus extraction comparison (2026-10-11)
+
+A separate `gradient_corpus_pyramid_index_probe` retains the same level-zero features and appends three dyadic pyramid levels, with up to 32 features per level and 128 per file. On the same 386 pinned normalized images it extracted 32,018 descriptors. At radius 0.1 the index and independent exhaustive oracle agree on 2,895 file proposals and 109,206 descriptor hits. Known original-query publisher pairs improved from 75/229 to 133/229, gaining 58 without dropping any prior proposal. The audit verifies every file's original descriptor bytes as an unchanged prefix and every pair's minimum distance as nonincreasing.
+
+Full known-pair in-sample retention still needs radius 0.4026769180682869 and 73,227/74,305 file proposals. This experiment therefore improves feature coverage but remains unsuitable as the sole complete-image filter. On this shared-host run index search took 69.264 s and exhaustive distance search 66.060 s; a concurrent scalar-minimum diagnostic also ran, so these values do not establish a controlled speed comparison with the earlier run. Managed peak 60,499,968 bytes, ending at zero, excludes process RSS and the diagnostic oracle's ordinary containers. Production policies and thresholds remain unchanged.
+
+Reports: `research/dedup-gradient-corpus-pyramid-index-20261011.json` and `research/dedup-gradient-corpus-pyramid-radius-audit-20261011.json`. The producer archives source copies before execution. The earlier one-level run's source bytes are preserved in `research/dedup-gradient-corpus-index-source-archive-20261011.json`, including the parent manifest reconstructed by removing exactly the newly appended diagnostic stanza and checking its original SHA256. No original report was rewritten.
+
+
+Linux aarch64 follow-up: the frozen row-major source passed 294 tests in 34 programs (6 ignored), and the later frozen actual-comparison source passed 12 index plus 2 reflection tests. Exact executable test-name lists, complete logs, source manifests and gzip-archived ELF hashes are bound in `research/dedup-gradient-index-row-major-linux-audit-20261011.json` and `research/dedup-gradient-index-actual-work-bounded-linux-audit-20261011.json`. These validate the named frozen code and fixture scopes; they do not establish Torch behavior, Windows behavior, corpus accuracy, or a full regression of every subsequent working-tree change.
+
+
+### Retained animation frame-table admission (2026-10-11)
+
+`decode_animation` now admits the retained `Vec<(NormalizedRaster, Duration)>` table using the first decoder-reported frame count, with checked byte arithmetic and `try_reserve_exact`. Zero frame count refuses as incomplete coverage. The reservation is extended to actual vector capacity and stays owned by `Animation` until it drops. Each subsequent frame still checks the stable count/repetition and uses the existing pixel/source guards. This closes the prior uncredited infallible `Vec::push` growth; it does not reserve the caller's potentially huge `max_frames` limit.
+
+Four module tests and seven existing real GIF/APNG/WebP integration tests pass, including timeline segmentation, exact rational timing, disposal composition, corruption/truncation, every observed cancellation checkpoint and managed-memory release. New controls cover metadata budget refusal before allocation, checked size overflow, retained metadata credit and actual-count admission with a one-million-frame policy cap. Copied test programs and source archives are recorded in `research/dedup-animation-frame-slots-audit-20261011.json`. The initial combined feedback command filtered the animation integration suite to zero; only the later unfiltered seven-test run is qualification evidence. This is macOS bounded validation; timeline-comparison scratch containers, complete format coverage and whole-process RSS remain separate gaps.
+
+
+### Timeline comparison scratch admission (2026-10-11)
+
+`Animation::same_timeline` now retains the decoding budget handle and admits one fallibly allocated frame-view table per input to that input's budget. Self-comparison charges both tables to the same budget. Each reservation is checked against the actual vector capacity and remains live through comparison. A private `Sequence::from_prepared_frames` consumes the already ordered view table directly, validates timing and cancellation, and removes the former intermediate ordinal table and vector of two sequences.
+
+Budget refusal is now an explicit `AnimationError::Memory` outcome from timeline comparison. Unit controls exhaust the budget before the first table and one byte before both tables can fit, verify release after second-table refusal, recover after freeing the held budget, test independent input budgets, and cancel at every observed checkpoint while checking both tables release. Six animation module tests plus seven animation integration tests and seven sequence tests pass in copied programs: 20 tests total, including an independent discrete-presentation oracle. Sources, parent files, binary hashes and logs are archived in `research/dedup-animation-timeline-scratch-audit-20261011.json`.
+
+These checks qualify macOS fixtures and the named allocations. They do not claim whole-process RSS, decoder/Torch workspace bounds, all-container support or Linux qualification of this new animation change. The original retained-frame-table qualification remains separately archived.
+
+
+The animation Linux follow-up is running from `research/dedup-animation-timeline-linux-locked-snapshot-20261011.json`. The initial snapshot copied a newer root Cargo.lock into an earlier frozen workspace baseline; `--locked` refused before compilation. That failed invocation remains in `research/dedup-animation-timeline-linux-execution-20261011.json`. A child snapshot changes only Cargo.lock back to the verified dependency-baseline lock; the current root lock and concurrent core/decode/memory changes are untouched. This tests captured four-crate source bytes with the earlier dependency resolution, not equivalence to the newer root lock. Before/after file hashing does not establish an atomic filesystem snapshot; the first capture manifest's word “atomically” is too strong. Frozen file bytes and their hashes are authoritative.
+
+
+### Complete proposal-first scheduling primitive (2026-10-11)
+
+`pair_schedule::CompletePairSchedule` accepts the complete file-ID set separately from descriptor proposals, including files with no descriptors. It owns managed ID and proposal buffers, validates IDs/canonical pairs, deduplicates repeated hints, and prepays the full unordered file-pair count. Its allocation-free iterator yields all unique proposals first and every remaining pair in canonical ID order. It stores no n² pair table. The `proposed` flag is only a search hint; false is not negative image evidence. Successful complete enumeration requires draining the iterator; cancellation yields an error once and then fuses. Callers must discard incomplete aggregates. Enumeration does not roll back external callback effects.
+
+Five tests cover all 64 proposal subsets for four files, extreme IDs, descriptorless files, empty/singleton cases, duplicate/unknown/noncanonical IDs, budget limits before allocation and after retained IDs, immutable owned input copies, every constructor/enumeration cancellation checkpoint, release and retry. The copied corpus probe enumerated all 74,305 unordered pairs for the 386-file corpus exactly once: 2,895 proposals and 71,410 fallback pairs. All 229 known publisher original-query pairs remain scheduled, including 96 outside the gradient proposals. This proves enumeration coverage, not successful visual recognition of those 96 pairs. The primitive is not yet integrated into the existing portfolio collection scanner.
+
+Copied test/probe programs, final source files, proposal inputs and independent complete-set verification are recorded in `research/dedup-complete-pair-schedule-audit-20261011.json`. Early test harness attempts failed to compile because of a callback trait-object lifetime in the helper; the final five-test source and run are the qualification evidence.
+
+The animation Linux follow-up completed 20 tests in three programs on the frozen dependency-baseline snapshot. Test names and logs are bound to archived ELF binaries in `research/dedup-animation-timeline-linux-locked-audit-20261011.json`; the earlier lock mismatch remains a separately recorded pre-compilation failure. This does not qualify the newer proposal scheduler or every current-root dependency change on Linux.
+
+
+### Guarded proposal-first portfolio integration (2026-10-11)
+
+`scan_portfolio_scheduled_outcome_collection_with` now connects `CompletePairSchedule` to the shared guarded collection engine. The schedule must contain exactly the admitted file IDs and complete pair count; mismatch returns `PortfolioCollectionError::Pairs` before engine source/model I/O. Policy and complete-work admission remain in force. Proposals execute first, every other pair still executes, and the final report is sorted in canonical ID order. This is an optional new API; previous entry points retain their original order.
+
+All pair and global source/model guards stay on the same shared path. The new tests verify actual provider-call order in the engine, final canonical records, an idle previously processed file mutated during the final pair, every cancellation checkpoint, retry, a late provider failure after prior confirmations, and unknown outcomes on fallback pairs. This closes the earlier standalone-only limitation. It does not classify the 96 descriptor-missed corpus pairs as confirmed copies: those still need real provider/geometry/pixel execution.
+
+The copied-program qualification passed 55 tests: 2 scheduled-engine guard tests, 16 portfolio collection tests, 5 schedule tests, 24 legacy projected-portfolio/exact-first tests and 8 projected-collection tests. Current Rust/TOML sources, compiler artifact metadata, copied binaries and logs are preserved in `research/dedup-scheduled-portfolio-audit-20261011.json`. This is bounded macOS generic-provider validation, not a complete frozen-workspace build, native Torch execution, full corpus confirmation, or Linux qualification of the integration.
+
+
+### Scheduled CPU LoFTR integration (2026-10-11)
+
+`scan_loftr_portfolio_scheduled_outcome_collection` now exposes the guarded proposal-first exhaustive API through the native CPU provider, reusing one lazy operation-local model. It preserves explicit unknown outcomes, complete-work admission and all shared source/final guards. The provider still does not alter global Torch thread/seed settings; the diagnostic alone uses two threads and seed 173.
+
+The frozen 3,089-file snapshot passed three real controls: a three-file/two-image batch with only unrelated pair (1,2) proposed retained and confirmed self-pair (0,1) through fallback; an empty-proposal self batch succeeded; missing weights refused without publishing an image decision. Four successful pair records were emitted in canonical order. Both self decisions used LoFTR ModelTiles evidence with 144 anchors per direction and direct pixel-rank agreement. The two other-origin pairs returned unsupported, which is an observed result, not semantic-negative calibration. Inputs were normalized maximum-side320 images, model maximum-side160, with a diagnostic untagged-linear assumption.
+
+Runtime metadata verifies opt-level3 artifacts for 225 emitted normal-dependency packages; host/build duplicates are excluded. The initial producer failed before any native invocation because it mistakenly required host BLAKE3 to be opt-level3 as well; its log and copied binary remain separate. The corrected native report and independent audit are `research/dedup-scheduled-loftr-native-runtime-20261011.json` and `research/dedup-scheduled-loftr-native-audit-20261011.json`. Managed peaks were 188,738,632 bytes for the three-file batch and 2,442,504 for the self batch, ending at zero. Observed resident peaks were 417,988,608 and 407,191,552 bytes; these are observations, not hard limits.
+
+A separate original-resolution publisher-positive 200000/200001 check is running in both directions with model side640 and empty proposals. Its source tolerances follow the existing corpus formula. Its result must not be inferred from the normalized self controls. Full-corpus accuracy, hard RSS, interruption inside Torch kernels and other platforms remain open.
+
+
+The original-resolution 200000/200001 follow-up subsequently completed both directions with empty proposals. ModelTiles confirmed local visual support in 14.154 s forward and 11.302 s reverse, with managed peaks 109,096,136 and 126,172,912 bytes, returning to zero. Independent audit checks source/runtime/input pins, full pair coverage, geometry inlier counts, reciprocal anchor counts and direct pixel-rank coverage/agreement in `research/dedup-scheduled-loftr-original-positive-audit-20261011.json`. These controls establish the new fallback path on one real transformed publisher pair; they do not establish whole-file identity, complete original-resolution corpus recall/precision or hard memory limits.
+
+
+The original-resolution controls also exposed a concrete remaining memory gap: observed resident peaks were 1,691,844,608 bytes forward and 1,605,074,944 reverse, despite managed peaks of about 109/126 MB. Provider tensors/workspace and allocator state remain outside the managed cap. These measurements do not prove a hard process limit or identify the allocation owner; they justify profiling the native model before claiming complete resource coverage.
+
+
+### 2026-10-11: bounded CPU LoFTR memory reduction
+
+Inference dual-softmax now computes its dimension-2 normalization in blocks of
+128 dimension-1 rows, multiplying into the existing column-normalized output.
+Each row still normalizes over its complete original domain. The autograd path
+retains the dense reference computation and unchanged backward buffers.
+
+The isolated sequential fine-window lifetime candidate was rejected: original
+publisher-positive RSS did not improve. The adopted row-softmax candidate was
+built from a frozen 3,089-file parent with one production-source delta. A copied
+source harness passed all 44 LoFTR library tests, including exact dense equality
+at row counts 0, 1, 127, 128, 129, 257 and existing autograd equality. Test harness
+Cargo execution initially failed to locate Torch dylibs; the copied executable
+was subsequently run directly with the pinned runtime and passed. Failed logs
+remain preserved.
+
+Original-resolution Copydays original200000 / strong200001, both directions,
+model side640, empty proposal hints, unchanged weights and parameters: all
+geometry and pixel evidence equals the baseline exactly. The first four fresh
+process controls and repeated ABBA/BAAB eight controls agree on reduced RSS.
+Repeated medians: forward 1,696,088,064 -> 1,603,035,136 bytes; reverse
+1,608,761,344 -> 1,511,702,528 bytes. This saves approximately 93-97 MB (5-6%).
+Managed allocations remain unchanged and return to zero.
+
+Tradeoff: repeated median wall time was 4.372 -> 4.870 seconds forward and
+4.834 -> 4.914 seconds reverse on a shared host. This is not a speed improvement
+or statistical throughput qualification. It is not a hard total RSS cap, full
+corpus validation, Linux/Windows Torch qualification, or complete format support.
+
+Evidence: `research/dedup-loftr-row-softmax-adoption-20261011.json`,
+`research/dedup-loftr-row-softmax-audit-20261011.json`,
+`research/dedup-loftr-row-softmax-repeat-20261011.json`, and preserved candidate
+source manifests, copied executables, test and raw runtime logs.
+
+
+### 2026-10-11: release coarse evidence tensors before fine matching
+
+The native model now computes requested debug scalar statistics immediately
+following coarse matching, releases the dense coarse confidence tensor before
+fine preprocessing, and releases backbone/coarse feature maps after selected
+fine windows are prepared. Normal inference does not compute debug statistics.
+Reference-counted autograd graph ownership remains intact where gradients are
+requested; this change releases Rust handles to no-longer-needed tensors.
+
+The child frozen source contains the production model delta plus the already
+adopted coarse block-boundary test. Final adoption adjusts only leading
+indentation of the debug expression: every line was compared with the native
+candidate. The exact formatted library source was separately compiled, copied
+and tested: all 44 tests pass, including no-eager-debug/output equivalence and
+cancellation coverage. Source, artifact, binary, log and runtime pins are retained
+in `research/dedup-loftr-early-release-adoption-20261011.json`.
+
+Four first fresh-process controls plus eight ABBA/BAAB repeat controls use the
+same original-resolution publisher positive, both directions, model side640,
+empty hints, unchanged thresholds/weights/runtime. Geometry and pixel evidence
+is identical to the prior qualified result. Relative to the adopted row-softmax
+baseline, repeated forward RSS median is 1,605,910,528 -> 1,554,718,720 bytes
+(51,191,808 bytes, 3.2% saved). Reverse is essentially unchanged:
+1,511,841,792 -> 1,510,522,880 bytes. Managed used memory returns to zero.
+
+Shared-host times are inconsistent: repeated forward medians 4.790 -> 4.573 s,
+reverse 5.117 -> 6.591 s; one candidate reverse run took 7.989 s and the other
+5.193 s. No speed improvement, non-regression or stable overhead is claimed.
+No hard total RSS bound, full corpus, format or cross-platform coverage follows
+from this one-pair qualification. The all-query/origin legacy job remains
+separate and was verified live at 70/35,953 pairs during this milestone.
+
+
+### 2026-10-11: full published-positive replay started, missing proposals first
+
+`measure-dedup-loftr-publisher-positives-20261011.py` starts a separate pinned
+replay of all 229 published Copydays original/strong pairs in both directions:
+458 planned fresh-process two-file scheduled outcome collections. The 96 pairs
+outside the normalized four-level gradient index radius0.1 (192 directions)
+run first, descending minimum descriptor distance. All original source bytes
+are verified against prepared publisher metadata. Model side640, source
+coordinate tolerance formula, weights, CPU runtime, and diagnostic untagged
+linear-sRGB assumption remain unchanged. Every schedule has empty hints, so
+these controls exercise complete fallback. This is not a 386-file collection
+cache/scaling benchmark or a semantic-negative precision test.
+
+The native binary is copied from the qualified early-release candidate and
+pinned with its complete frozen source manifest. Root native model adoption
+hash and coarse implementation/test hashes are checked at launch. This does
+not assert equality of the entire independently dirty workspace. Each case
+retains commands, raw output/log SHA256, timing, managed admission and observed
+RSS, and distinguishes positive support, positive rejection, inconclusive
+outcome, and execution failure. A rejected publisher positive remains a recall
+gap; an inconclusive outcome remains unknown.
+
+Independent prefix auditing validates all 458 plan entries, source/publisher
+mapping, original dimensions and tolerance, index output file order against
+normalized paths, frozen source/runtime/input hashes, exact commands/logs,
+zero released managed memory, and actual positive geometry/pixel-rank evidence.
+Immutable captured prefixes are retained separately from the live report.
+The strengthened verifier initially expected an incorrect historical report
+status label; that verifier check was corrected before the first ordering-aware
+prefix audit. This was not a native library failure.
+
+Verified checkpoint: 3/458 directions, all from pairs missing index proposals,
+all supported. Hardest-distance original212600/strong212602: forward/reverse
+ModelTiles, 22/21 geometry inliers, direct-pixel anchors 22/22 and 15/15.
+Original211900/strong211901 forward: native terminal after model attempts;
+its direct pixel proof is independently checked. Reverse is still running at
+this checkpoint. No full recall, full goal completion or hard RSS claim follows.
+Producer PID62651 and its current /usr/bin/time child PID63655 were confirmed
+live. The older 35,953-pair different-origin/positive job remains separate.
+
+Live report: `research/dedup-loftr-publisher-positives-20261011.json`.
+Captured proof: `research/dedup-loftr-publisher-positives-ordering-prefix-0003-audit-20261011.json`.
+Use `scripts/verify-dedup-loftr-publisher-positives-ordering-20261011.py --partial`
+for a new immutable completed-prefix audit; do not restart a live producer or
+rewrite the fixed plan/results with a different native source.
+
+
+### 2026-10-11: cooperative coarse matching cancellation, directional gaps retained
+
+`CoarseMatching::forward_cancellable` adds cancellation checkpoints around dense
+coarse similarity/confidence/mask/selection stages and every128-row inference
+softmax block. The autograd branch checks between its dense softmax operations.
+The legacy `forward` delegates with a false cancellation callback; LoFTR model
+forward passes its existing operation callback into coarse matching. Individual
+running libtorch kernels remain noninterruptible: this is cooperative behavior,
+not a hard latency or process-memory bound.
+
+An isolated child snapshot and copied library test harness qualify the adopted
+three root files. All46 library tests pass, including every observed coarse
+checkpoint with/without masks, inference/autograd softmax checkpoints, no later
+callback after a transient true cancellation, unchanged inputs, dense-reference
+outputs/gradients, full-model cancellation and retry. Four fresh native controls
+on original200000/strong200001 both directions preserve exact geometry and pixel
+evidence, with managed used0. RSS is essentially unchanged; no performance
+improvement is claimed. The frozen production snapshot has two source deltas;
+the harness/adoption additionally retains two cancellation regression tests.
+Evidence: `research/dedup-loftr-coarse-cancel-adoption-20261011.json` and
+`research/dedup-loftr-coarse-cancel-audit-20261011.json`.
+
+The separate458-direction publisher replay deliberately continues with its
+older pinned binary. Ordering-aware immutable prefix0014 independently verifies
+12 supported and2 inconclusive directions, all from pairs absent radius0.1
+proposals. Original211900/strong211901 forward native proof has113 candidate
+correspondences and50/47 direct-pixel anchors, while reverse returns
+Inconclusive(Native). Original200300/strong200302 also supports forward, while
+reverse returns Inconclusive(ModelTiles),25 attempts with1 insufficient-geometry
+attempt. Neither unknown is relabelled false or dismissed as an execution crash.
+Input dimensions are2560x1920/640x480 and2048x1536/800x600 respectively; directional
+policy tolerances differ by the established scale formula, so an implementation
+cause has not been proved. Future diagnosis must separate proposal/fitting from
+anchor admission without relaxing the recorded replay thresholds.
+
+Reproduction artifacts:
+`research/dedup-directional-211900-211901-fixture-20261011.json` and
+`research/dedup-directional-publisher-gaps-prefix0014-20261011.json` retain
+original input digests, actual commands, geometry/pixel forward evidence,
+reverse unknown reasons and raw output log references. Whole-corpus quality,
+remaining directions, source-normalized fitting, hard RSS, formats, platforms
+and complete500-upstream qualification remain open. Replay producerPID62651
+was confirmed live at the14-direction checkpoint; no restart or binary mixing.
+
+
+### 2026-10-11: reverse native gap isolated with unchanged pixel thresholds
+
+Seven original-resolution native-only traces for211900/211901 separately run
+forward recipe0 and all6 reverse recipes on pinned frozen source. The forward
+recipe reproduces the original113 actual descriptor-qualified correspondences,
+transform,50/47-anchor pixel proof exactly. Its inverse transform and swapped
+actual correspondences independently confirm the reverse direction under the
+original recorded policy(source tolerance0.5,target2):11/11 anchors,1903/2018
+informative pixel pairs, agreement1873/1903 and2010/2018, valid coverage265/275
+and275/275. No synthetic proposal points or relaxed original threshold are used.
+
+Independent audit recomputes geometric residual eligibility from emitted actual
+points. Forward geometry has53 target-residual inliers and53 jointly admissible
+points(source8,target2). Reverse recipes0/1/2 fit70/41/39 target-residual inliers,
+but only5/4/7 points satisfy both original reverse thresholds: below required10,
+matching Rank(InsufficientGeometry). Reverse reflected recipes3/4/5 have36/17/16
+correspondences and no admitted geometry. Opposite-direction point sets share
+96 of113 exact swapped pairs; the remaining17 also differ, so this is not
+proved to be only a model-fitting issue or only descriptor selection.
+
+An additional separately labelled role-control swaps the original forward
+policy roles(source2,target8) and obtains exactly the reversed47/50 anchor proof
+and pixel counters. That control does not replace the stricter recorded reverse
+policy or any corpus result. The independent inverse audit initially assumed
+unit matrix product; it was corrected to identity up to nonzero projective scale,
+as required by the existing adjugate inverse API, before qualification.
+
+Evidence: `research/dedup-native-direction-trace-audit-20261011.json`, full7-case
+trace report, source manifest, copied binaries/logs, and separate tolerance
+harness/control report. Diagnostic JSON containers are outside managed admission;
+managed native evidence returns to0. Production search behavior is unchanged.
+
+Required next recovery path (not implemented): explicit bounded opposite-direction
+native proposals, invert nonsingular geometry, swap real correspondences, and
+reconfirm original pixels with the caller-direction original thresholds. Admit
+all possible extra recipes/reflection bins and managed swapped-point storage
+before file IO. Keep one outer original-source guard and sticky cancellation
+through both directions. Do not relabel opposite-direction inlier indices/counts
+as caller-direction fit evidence; recompute them or expose proposal provenance
+separately. Preserve old six-recipe APIs/work limits; do not silently double work
+for existing callers. Never reuse an opposite-direction supported boolean as
+caller-direction support. Qualification must include the real reverse fixture,
+source mutations/cancellation/budget refusal, and broader positive/negative checks.
+
+Publisher replay checkpoint0057:54 supported,3 inconclusive of458 directions,
+all57 from missing-radius0.1 proposal pairs. The third unknown is reverse
+201300/201303, ModelTiles25 attempts with3 insufficient attempts. Original replay
+remains pinned, live producerPID62651 confirmed, and the three unknowns remain
+unchanged. Full coverage, automatic recovery, precision, formats, total RSS,
+platforms and complete500-upstream qualification remain open.
+
+
+### 2026-10-11: explicit guarded opposite-native proposal recovery API
+
+`anchor_rank_file::search_anchor_rank_opposite_files` is now an additive public
+six-recipe native recovery API. It extracts descriptor-qualified correspondences
+from right->left, inverts a nonsingular proposal transform, swaps actual point
+coordinates, and independently calls original-pixel anchor verification in the
+caller's left->right direction with unchanged caller thresholds. The result is
+`OppositeAnchorSearchEvidence`: caller-direction points/transform, optional pixel
+proof, attempt count and reflection provenance. Opposite-fit inliers/errors are
+not exposed as caller-direction geometry evidence. No synthetic points or
+opposite supported boolean are used.
+
+`OppositeAnchorSearchPolicy` retains explicit six-recipe work/reflection limits
+and adds a checked maximum swapped-point payload. Full limits, overflow and
+maximum swap credit are checked before source IO; actual Vec capacity above the
+cap refuses. Conservative maximum credit follows the retained managed point
+buffer until drop. Both original source snapshots span all attempts and pixel
+checks; sticky caller/owner cancellation and final callback-free source checks
+also precede an inconclusive publication. An unresolved insufficient-anchor
+recipe remains a typed error unless a later recipe supports. Existing six-recipe
+APIs do not invoke this stage or silently double their work.
+
+The frozen compatible-lock candidate passed16 tests (12 existing+4 new) and three
+original-resolution controls with unchanged thresholds:211900/211901 reverse
+supports on the first opposite recipe with113 actual swapped points and exactly
+the independently verified inverse transform and11/11-anchor pixel counters;
+200300/200302 reverse has no support from this stage;201300/201303 reverse remains
+inconclusive. These latter observations do not replace their original overall
+unknowns and do not establish negative precision. The initial candidate and its
+actual-capacity guard child retain separate immutable manifests/build logs.
+
+The API was adopted into root. Current-source/current-Cargo.lock compilation and
+all16 tests then passed. A follow-up removes duplicated copies of the12 legacy
+tests from our new test file: existing `anchor_reflection_fallback` runs12 and
+new `opposite_native` runs4. The same16 named tests pass again in copied programs
+against the current lock, four-crate Rust/TOML source captures and rotation
+fixtures, with before/after hashes. Independent RAW decoder edits in bay.rs and
+camtiff/mef_sensor.rs were preserved and compiled; no RAW behavior qualification
+is claimed. The final split-suite current-source report supersedes only the
+historical test-file fingerprint in the original adoption report; production
+API code and original legacy test suite are unchanged by that cleanup.
+
+Evidence: `research/dedup-opposite-native-adoption-20261011.json`,
+`research/dedup-opposite-native-20261011.json`,
+`research/dedup-opposite-native-test-layout-20261011.json`, and final
+`research/dedup-opposite-native-split-current-audit-20261011.json`.
+Automatic portfolio/collection routing, combined12-native-recipe preflight and
+broader precision/corpus/platform/format/RSS qualification remain required work.
+
+The old458-direction replay remains separate on its pinned binary. Checkpoint
+0130 independently verifies125 supported,4 inconclusive and1 rejected publisher
+positive. The first rejection is203500/203502 reverse: forward ModelTiles support,
+reverse native terminal unsupported with44 proposals and no geometry. This recall
+miss is retained in `research/dedup-publisher-first-rejection-203500-203502-20261011.json`.
+A separate copied-new-API replay of that pair is running, producerPID96390 was
+confirmed live; its result is not substituted into the old journal. No complete
+coverage or full goal completion is claimed.
+
+
+The203500/203502 reverse explicit opposite-native follow-up has now terminated:
+123.17 seconds, typed Rank(InsufficientGeometry), no partial stdout. Its original
+replay rejection remains unchanged; no successful recovery is claimed. See
+`research/dedup-opposite-native-first-rejection-audit-20261011.json`. Automatic
+routing must preserve such recovery unknowns rather than treating them as a new
+negative, and learned opposite-direction proposal recovery remains open work.
+
+### 2026-10-11: guarded pair recovery integration
+
+`search_portfolio::search_recovery_files_with` adds opt-in opposite-native recovery
+through `SearchRecoveryPolicy`, preserving the existing portfolio API. Six extra
+native recipes have checked aggregate point/selection/rank/pixel/hypothesis work
+admission. Maximum swapped-point storage is reserved before source or weights
+I/O, retained through primary search, and transferred into recovery without a
+second reservation for the first recovery attempt. Primary support avoids recovery
+and inference when native-first succeeds. Unsupported primary buffers are dropped
+before recovery. Original caller-direction anchor and pixel thresholds apply.
+
+An unsupported recovery cannot erase primary insufficient geometry; the new
+outcome exposes `supported() -> Option<bool>`. Sources, decode dependencies,
+weights and owner cancellation remain guarded across the complete sequence,
+including callback-free final revalidation. Other typed failures stop execution.
+Managed metadata/work admission is not a Torch tensor/workspace or total RSS cap.
+
+The current-source initial gate passed 33 tests: 12 legacy reflection, 4 opposite
+native, and 17 portfolio (including 4 new recovery tests). Tests cover aggregate
+and metadata preflight before missing-file I/O, lazy primary support, recovery
+support after forced primary miss, unresolved primary uncertainty, final weights
+mutation, cancellation at entry/middle/final and successful retry with released
+managed memory. Archived binary/source gate:
+`docs/research/dedup-search-recovery-current-audit-20261011.json`.
+Automatic collection routing, the native LoFTR convenience adapter, and real
+publisher-corpus qualification of this combined entry point remain outstanding.
+
+### 2026-10-11: exhaustive recovery collection and CPU adapters
+
+`portfolio_collection::scan_recovery_collection_with` applies the guarded pair
+recovery API to every unordered pair, under checked collection cumulative maxima
+and the shared all-or-nothing source/dependency/weights/generation lifecycle.
+Optional `CompletePairSchedule` changes attempt order without pruning missing
+pairs; results remain canonical by application ID. Recovery metadata capacity is
+probed before iterator consumption and charged again per execution alongside
+retained report evidence. A later managed-memory refusal discards the whole batch.
+Insufficient geometry remains explicit unknown, and a later provider failure or
+final weights mutation discards earlier results.
+
+The CPU adapters `model_loftr::search_loftr_recovery_files` and
+`model_loftr::scan_loftr_recovery_collection` reuse one lazily loaded local-weight
+model per operation. They retain the provider tensor/workspace/total RSS limitation.
+Current root source and compatible current lock passed 52 tests in four copied
+programs (12 reflection, 4 opposite native, 17 pair portfolio, 19 collection).
+Three new collection tests cover work/metadata preflight before iterator or I/O,
+canonical complete scheduled recovery, preserved unknowns, late provider failure,
+final weights mutation and retained/released managed credit. The initial failed
+collection-test compile lacked a `Path` import; it remains recorded separately.
+Final generic qualification is
+`docs/research/dedup-recovery-collection-fixed-current-audit-20261011.json`.
+
+Frozen native production-source child and live real-provider controls are recorded
+in `dedup-recovery-collection-snapshot-20261011.json` and
+`dedup-recovery-collection-native-20261011.json`. Native snapshots retain the
+parent-compatible lock and unrelated decoder source; generic current-root tests
+qualify the current decoder source separately. Native snapshot test text predates
+an import-only test fix; native build does not claim that frozen test text passed.
+Runtime completion must be established by the native report and its independent
+auditor, not inferred from the generic tests or successful native compilation.
+
+The independently verified baseline prefix200 has 194 supported, 5 inconclusive,
+and 1 rejected publisher-positive directions. All first192 directions without
+radius0.1 proposal hints are complete (186 supported, 5 unknown, 1 rejected).
+`dedup-publisher-unresolved-prefix0200-20261011.json` records the six reverse gaps
+and independently supported forward outcomes. The old baseline is not overwritten
+by recovery experiments. Remaining458-direction replay, additional reverse
+proposal/geometry recovery, provider RSS bounds, collection caching/scaling,
+platform/format and full500-upstream qualification remain open.
+
+The native recovery collection controls are now complete and independently
+verified by `dedup-recovery-collection-native-audit-20261011.json`: 225 emitted
+normal runtime packages were optimized at level3; production recovery source
+matches the current-root copied-program52-test gate. Original reverse211900
+recovers113 actual correspondences and11/11 anchors, with exactly the previously
+qualified explicit-stage transform and pixel counters. Original reverse200300
+remains unknown despite an ordinary opposite-stage miss. The normalized three-file
+hint/fallback collection publishes all three canonical pairs (self support and two
+recorded unsupported other-origin comparisons, not precision qualification).
+Missing local weights fail before a report. Successful controls release all managed
+payload. Diagnostic duration is298.36s/354.91s for the two original pairs, and129.04s
+for the normalized three-file batch on the shared host; no speedup claim is made.
+
+Process peak RSS on those original controls is1,853,489,152 and1,962,803,200 bytes,
+respectively, outside managed admission. Earlier1.5GB figures used other inputs
+and do not bound these full tile/recovery runs. Hard provider/RSS admission and
+collection performance remain unresolved.
+
+Two further baseline reverse gaps,204100 and207700, also remain insufficient
+through all six previously qualified explicit opposite-native recipes:
+`dedup-opposite-native-prefix0200-audit-20261011.json`. This is not combined-runtime
+qualification of those pairs. `dedup-joint-geometry-investigation-20261011.json`
+records a source-level mismatch between target-only projective candidate ranking
+and bidirectional anchor witness thresholds; it is a next investigation, not a
+proven new fitter or an attribution of every unresolved case.
+
+
+### Joint projective candidate scoring (2026-10-11)
+
+`geometry::verify_projective_sampled_joint_for_domains` now selects and refines
+candidates using both forward and inverse residuals. It validates both image
+domains, retains spread/horizon checks, supports cancellation and prepays a
+checked `2 * max_points * (trials + 1)` point-projection ceiling. Geometry scratch
+remains outside managed payload admission. This primitive produces geometry,
+not a visual identity verdict, and is not yet routed into automatic pair or
+collection search. Existing target-only APIs retain their behavior; real
+204100/211900 fixtures compare transforms, inlier lists and errors bit for bit.
+
+The coherent frozen-source gate passed76 tests across eight geometry, native,
+pair and collection suites: `dedup-joint-projective-split-audit-20261011.json`.
+It uses compatible frozen decoder dependencies and current owned geometry.
+Concurrent root HDR edits are preserved and are outside this qualification.
+The earlier current-root broad gate ran its tests successfully but failed source
+coherence; the first frozen gate encountered an expected-count mismatch from
+a duplicated legacy test layout. Both failed records remain preserved.
+
+`dedup-joint-projective-native-audit-20261011.json` independently verifies the
+new production primitive on exact-bit captured real points and original pixels:
+204100 opposite/direct gives12/12 and13/13 anchors;211900 gives12/12 and11/11.
+The decimal-coordinate diagnostic initially perturbed low coordinate bits;
+exact IEEE-754 input removes that replay artifact without changing thresholds.
+207700 remains inconclusive on both captured point sets, independently recorded
+in `dedup-joint-projective-207700-native-audit-20261011.json`. These bounded
+controls neither update the old corpus baseline nor establish full search
+recovery, negative precision, performance or process memory bounds.
+
+
+### Joint opposite file search (2026-10-11)
+
+`search_anchor_rank_joint_opposite_files` adds a guarded six-recipe file path
+under `JointOppositeAnchorSearchPolicy`. It extracts actual reversed native
+points without running the old target-only fit, swaps points into caller
+coordinates and fits with the caller's source and target anchor tolerances.
+Original pixels independently confirm support. Cumulative projection work for
+all six fits is admitted before file IO; swapped managed point storage, source
+and dependency snapshots, cancellation and final callback guards remain active.
+A missing joint model remains insufficient evidence rather than a negative.
+Geometry scratch is still outside managed payload admission.
+
+The frozen compatible-source gate passed78 tests, including self/mirror support,
+pre-IO projection refusal, cancellation, insufficient geometry and payload
+release: `dedup-joint-opposite-files-audit-20261011.json`. Root anchor source
+subsequently only lost one blank EOF line; normalized bytes were checked.
+The original-resolution three-pair replay is tracked separately in
+`dedup-joint-opposite-native-20261011.json`; running controls are not completed
+qualification. Automatic primary portfolio and collection routing remain open.
+
+
+The immutable two-control prefix is independently verified in
+`dedup-joint-opposite-native-prefix-0002-audit-20261011.json`: reverse204100
+and211900 each support12/12 original-pixel anchors in the first recipe,
+at43.77s and38.26s on this shared host. The audit binds actual source files,
+runtime dylibs, copied binary/build logs and the same production source as
+the78-test gate. The207700 six-recipe control remains running; this prefix
+is not the completed three-control report or a broad speedup claim.
+
+
+The full three-control joint opposite-file replay is now independently verified
+in `dedup-joint-opposite-native-audit-20261011.json`. Reverse207700 remains
+inconclusive after all six recipes (298.59s on the shared host). This confirms
+no additional recovery on that input; it does not establish a negative verdict.
+
+### Joint recovery pair and collection integration (2026-10-11)
+
+`search_joint_recovery_files_with` runs primary native/model search followed by
+joint opposite recovery under the existing outer source/weights guard. Its
+projection ceiling is checked before IO, alongside native/model work and swapped
+managed storage. `scan_joint_recovery_collection_with` checks both a per-pair
+ceiling and checked `per_pair * max_pairs` cumulative projection ceiling before
+consuming the iterator. All unordered pairs and optional complete scheduling
+remain covered; fatal errors discard the batch and insufficient evidence stays
+unknown. Legacy entry points keep target-only recovery behavior.
+
+CPU wrappers `search_loftr_joint_recovery_files` and
+`scan_loftr_joint_recovery_collection` retain one lazily loaded model per
+operation. Generic frozen qualification is tracked in
+`dedup-joint-recovery-audit-20261011.json`; CPU compilation uses
+`dedup-joint-recovery-loftr-snapshot-20261011.json`. Running gates and CPU
+compilation do not establish real-provider combined-runtime qualification.
+
+
+`dedup-joint-recovery-combined-audit-20261011.json` independently verifies
+80 tests across eight suites and CPU wrapper compilation. The first frozen gate
+passed seven suites (60 tests), then the new collection test refused its invalid
+1000-witness/16-point fixture policy. Its corrected policy and input-size limits
+passed all20 collection tests in a child snapshot; this is the sole source delta
+between the two generic snapshots. Production source remained identical.
+The failed first gate is preserved, rather than relabelled as successful.
+
+Real combined CPU-provider replay is running in
+`dedup-joint-recovery-native-20261011.json`: original reverse204100,211900,200300;
+normalized hinted/fallback collection; missing weights. Its older reused scope
+text says two original inputs, but the authoritative five-entry plan includes
+three. No terminal or speed/RSS claim is made until the report closes and is
+independently audited.
+
+Separately, older-source publisher baseline prefix447 is independently audited:
+440 supported,6 unknown,1 rejected. Its additional unknown at index255 is another
+reverse200300 input; current joint recovery does not overwrite that baseline.
+The458-direction completion and broader recall/precision remain open.
+
+
+### Completed old-source publisher baseline (2026-10-11)
+
+The458-direction baseline is complete and independently verified in
+`dedup-loftr-publisher-positives-ordering-prefix-0458-audit-20261011.json`:
+451 supported,6 inconclusive,1 rejected publisher-positive direction. All192
+directions without radius0.1 hints were executed (186 supported,5 unknown,
+1 rejected). This is the older frozen early-release version, not current joint
+recovery or the later blocked-mask implementation. The remaining unresolved
+positive directions, negative precision, full collection scaling and500-upstream
+qualification are not complete.
+
+### Blocked coarse LoFTR match selection (2026-10-11)
+
+Coarse threshold/border/mutual masks now process one batch and128 source rows
+at a time. Row/column maxima still span the complete confidence matrix; the
+algorithm retains all ties and batch/source/target index order. It introduces
+cooperative checkpoints between blocks. Confidence storage, actual output index
+storage and other model allocations remain outside a hard process memory cap.
+
+`dedup-loftr-block-masks-tests-audit-20261011.json` verifies48 tests on current
+LoFTR source, including dense parity, ties, borders, strict thresholds, block
+boundaries, cancellation/retry, existing autograd and model controls.
+`dedup-loftr-block-masks-audit-20261011.json` verifies three fresh CPU processes
+per mode on deterministic6400x6400 float confidence,2threads: ordered indices
+match exactly, median peak RSS falls from432,570,368 to287,899,648 bytes, saving
+144,670,720 bytes (about33%). These are selector-only measurements; they neither
+bound full LoFTR RSS nor establish whole-pipeline performance. Initial runtime
+loader and diagnostic non-contiguous flatten failures remain preserved.
+
+The new combined joint recovery chain has one independently verified closed
+original-resolution control so far:
+`dedup-joint-recovery-native-prefix-0001-audit-20261011.json`. Reverse204100
+supports with exactly the separately qualified joint explicit-stage transform
+and pixels, at364.19s including primary model/tile search on this host. Remaining
+controls are running. This pinned chain excludes the newer blocked-mask source.
+
+
+### Closed combined joint controls and full-chain mask parity (2026-10-11)
+
+`dedup-joint-recovery-native-audit-20261011.json` closes all five controls and
+verifies225 optimized emitted normal-runtime packages: reverse204100 and211900
+support12/12 anchors with exactly the explicit-stage transforms/pixels;
+reverse200300 stays unknown. The normalized hinted collection enumerates all
+three canonical pairs with decisions `[true, null, null]`; these unknowns are
+not negative precision evidence. Missing weights fail before publication.
+Managed payload releases on successful controls. Original-control peak RSS is
+1,954,349,056 /1,918,812,160 /1,955,512,320 bytes, outside managed admission.
+
+`dedup-loftr-block-masks-native-audit-20261011.json` compares the complete
+reverse204100 chain before/after the blocked-mask source delta. The entire
+result JSON, including evidence and managed counters, is identical. Peak RSS
+is1,954,349,056 before and1,852,440,576 after in this one comparison. New run
+took502.66s versus364.19s under different shared-host load; no speedup, universal
+memory reduction, hard RSS bound or whole-corpus equivalence is claimed.
+
+### Sampling coverage recovers reverse207700 (2026-10-11)
+
+The independently audited experiment
+`dedup-joint-geometry-sampling-audit-20261011.json` retains actual exact-bit
+correspondences and strict source0.5/target2 residual thresholds. Neither4096
+nor100,000 trials confirms the opposite107-point set;1,000,000 trials finds
+11 jointly consistent points and10/11 original-pixel anchors. The direct104-point
+set finds10 geometric inliers at1m but still refuses pixel support. Geometry
+alone remains insufficient. Calibration exactly matches the old204100 transform,
+error and pixels with parent registry dependency versions and decoder patches.
+The initial standalone build without required local patches failed and remains
+preserved, with no runtime claim.
+
+`dedup-joint-opposite-sampling-audit-20261011.json` then confirms real file
+extraction: the first recipe produces exactly the same107 points, transform and
+10/11 pixel anchors in35.06s. This uses existing public joint file APIs with
+explicit larger hypothesis/projection work admission, not relaxed thresholds
+or changed defaults. A diagnostic JSON field spelling was corrected in root
+after the frozen run; the auditor records and validates the original key/value.
+Four generic geometry regression tests pass in
+`dedup-joint-sampling-regression-audit-20261011.json`, including the new real
+fixture and refusal when the larger trial count lacks projection admission.
+The high-trial combined primary/collection control is now independently verified below.
+
+
+### Combined high-trial reverse207700 control (2026-10-11)
+
+`dedup-joint-recovery-sampling-native-prefix-0001-audit-20261011.json` now
+verifies reverse207700 through the complete CPU primary/model-tile/native/joint
+recovery chain. Explicit1m-trial opposite recovery produces exactly the
+separately verified file-stage transform and10/11 original-pixel anchors.
+Runtime is204.23s and peak RSS1,955,790,848 bytes on this host. This chain
+includes blocked coarse masks; one earlier full-pipeline memory reduction does
+not bound its RSS. The larger hypothesis/projection budget is explicit and
+defaults remain unchanged. The companion reverse200300 control completed in408.84s with peak RSS1,961,295,872 bytes and remains inconclusive despite1m trials. Both controls are verified in `dedup-joint-recovery-sampling-native-audit-20261011.json`.
+
+`dedup-model-points-trace-snapshot-20261011.json` prepares a diagnostic-only
+model-comparison source child for reverse201300. It logs selected coordinate
+bits after mapping each model window into full original domains, then runs the
+unchanged target-only fitter and original pixel verifier. Trace Vec/log storage
+is unmanaged and is not production instrumentation. Runtime progress is recorded
+in `dedup-model-points-trace-20261011.json`; pending traces prove neither a
+model-geometry fix nor new case coverage.
+
+
+### Actual model points: reverse201300 remains inconclusive (2026-10-11)
+
+`dedup-model-points-trace-harvest-20261011.json` verifies25 complete Cartesian
+model windows and1665 selected points in full original coordinate domains.
+The diagnostic wrapper incorrectly propagated the expected typed
+`InsufficientAnchorGeometry` result as process exit1. This is not a model crash;
+`dedup-model-points-trace-terminal-20261011.json` records terminal state while
+the historical running checkpoint remains immutable for its pinned harvest.
+The root diagnostic wrapper now handles that typed outcome; the frozen run
+was neither rewritten nor repeated. Diagnostic point/log scratch is unmanaged.
+
+`dedup-model-joint-refit-audit-20261011.json` independently verifies exact-bit
+input identity, forward/inverse residuals, projection work admission and logs
+for the three insufficient windows at20k and1m trials, seed173. Whole-window
+geometry improves from10 to11 joint inliers, but original-pixel agreement is
+1146/1276 and1139/1287 (both below90 percent) at1m. The other two windows
+produce no admitted joint geometry at either count. All six runs release their
+managed payload; none supports the match. This result does not justify lowering
+the pixel threshold or adopting joint model fitting as a recovered-case fix.
+Production model fitting and default sampling remain unchanged. Further work
+must examine proposal accuracy and the original-pixel mismatch; these six runs
+do not establish a unique cause or full-corpus precision.
+
+
+### Per-anchor localization of reverse201300 mismatch (2026-10-11)
+
+`dedup-anchor-window-trace-20261011.json` captures20/22 per-window pixel
+counts for the20k/1m whole-window joint fits. The frozen diagnostic changes
+only stderr logging after each unchanged pixel evaluation; complete aggregate
+JSON, transforms, selection counts and managed peaks match the earlier refits
+exactly. All window count sums equal both reported directions. No window is
+removed or selected by its score. The weakest target rectangle starts at
+[605,642], with81/162 agreeing comparisons; its source-side counterpart starts
+at[124,490], with71/168. Most other informative windows agree at90–100 percent;
+a second weaker window agrees at about85–86 percent. Zero-information windows
+are retained. Visual inspection shows a heavily blurred crop of the rock in
+the original scene, but does not prove blur is the sole cause. Scale-aware
+confirmation/alignment remains an investigation, with unchanged90 percent
+threshold and negative calibration still required before any recovery claim.
+Diagnostic logging/scratch is not production instrumentation or a total-RSS bound.
+
+
+### Fixed-scale confirmation experiment (2026-10-11)
+
+`dedup-anchor-scale-trace-audit-20261011.json` verifies16 controls: eight
+fixed filter radii0,2,4,8,12,16,24,32 on the same201300 positive points and
+geometry, plus the same eight with an unrelated207700 original target.
+Geometry,11 anchors per direction,90 percent agreement, contrast and1000-pair
+minimum remain unchanged. Radius8 exactly reproduces the prior positive output.
+Radius12 confirms the positive with1129/1227 and1108/1202 agreements; radius16
+with1038/1082 and1024/1060. Radius24/32 refuse despite near100 percent agreement
+because fewer than1000 informative pairs survive. This demonstrates why agreement
+alone cannot admit a match. All windows contribute, managed payload is released,
+and the unrelated target refuses at every radius. This bounded diagnostic
+supports investigating blur-aware confirmation; it does not qualify automatic
+scale selection, model integration, full precision or corpus recovery. Production
+policies remain unchanged. Broader negatives and positive controls are required.
+
+
+### Expanded scale controls in progress (2026-10-11)
+
+`dedup-anchor-scale-corpus-controls-20261011.json` inventories all157 original
+JPEGs and schedules144 fixed-radius8/12/16 controls for48 compatible2560x1920
+domains. The other109 dimensions are explicitly excluded from this diagnostic;
+this is not complete corpus qualification. Each control retains201300 points,
+1m-trial seed173 geometry, all11 anchor windows in both directions and unchanged
+pixel floors. Different publisher origin IDs are candidate controls rather than
+independently annotated negatives. The closed14-row immutable prefix in
+`dedup-anchor-scale-corpus-controls-prefix-0014-audit-20261011.json` verifies
+logs and all window count sums: only the known positive supports, at12/16.
+The producer remains active; later rows must be audited before any completion
+claim. No production policy or API changed.
+
+
+### Other-domain scale stress controls in progress (2026-10-11)
+
+The same-domain producer is live and its closed81/144 prefix is audited in
+`dedup-anchor-scale-corpus-controls-prefix-0081-audit-20261011.json`.
+`dedup-anchor-scale-remapped-controls-20261011.json` separately schedules327
+controls over the other109 original domains. Target point coordinates scale
+by actual width/2560 and height/1920; source exact bits and original image
+pixels remain unchanged. The public joint fitter re-runs on those actual full
+domains with unchanged residual limits,1m trials and seed173. This artificial
+normalized geometry stresses pixel confirmation; it is not model extraction.
+`dedup-anchor-scale-remapped-controls-prefix-0022-audit-20261011.json` verifies
+mapping, bidirectional residuals and complete window sums for22 closed rows.
+Some smaller domains cause typed `Rank(Invalid)` (for example, normalized point
+separation can violate alias eligibility). Such outcomes are inconclusive,
+never evidence that the images differ. The raw producer's `not_supported`
+label denotes lack of support only; later audits explicitly distinguish typed
+errors/missing geometry from completed pixel evidence. Neither run proves
+semantic negative annotations, automatic fallback safety or complete coverage.
+
+
+### EXIF control-domain correction and closed144 controls (2026-10-11)
+
+The same-domain144 controls are complete and independently audited in
+`dedup-anchor-scale-corpus-controls-prefix-0144-audit-20261011.json`:
+only201300 supports at12/16. This is still fixed-geometry stress evidence,
+not annotated full-search precision.
+
+`dedup-anchor-invalid-trace-20261011.json` identifies the earlier201100
+`Rank(Invalid)` cause using real bounded decodes: EXIF Orientation6 changes
+2048x1536 raw JPEG dimensions to1536x2048, leaving two diagnostic target
+points outside the decoded image. Alias counts were zero; alias eligibility
+was not the demonstrated cause. The library correctly rejected invalid inputs.
+`dedup-control-oriented-domains-audit-20261011.json` inventories primary EXIF
+orientation for all157 originals and finds ten changed domains. Their30 raw
+coordinate controls must be superseded, not counted as valid completed evidence.
+Historical pinned reports and running producer remain preserved.
+
+`dedup-anchor-scale-oriented-controls-20261011.json` schedules30 corrected
+runs with normalized target coordinates in the oriented domains and an additional
+bounded decode to verify both actual dimensions on every run. The first four
+closed rows are checked by
+`dedup-anchor-scale-oriented-controls-prefix-0004-audit-20261011.json`.
+Corrected201100 completes all three radii without `Invalid` and refuses pixel
+support. This fixes diagnostic domain preparation, not production behavior.
+Full other-domain controls, semantic labels and model integration remain open.
+
+
+### Corrected effective scale-control ledger (2026-10-11)
+
+`dedup-anchor-scale-oriented-controls-prefix-0030-audit-20261011.json`
+verifies all30 corrected controls, including actual decoded domains, normalized
+point mapping, bidirectional residuals and aggregate/window parity. No corrected
+control supports; all yield completed pixel evidence without typed errors.
+`dedup-anchor-scale-effective-prefix-0346-audit-20261011.json` merges only
+immutable audited rows from the complete144 same-domain checks,181 closed raw
+other-domain checks and30 corrected checks. It replaces every EXIF-affected raw
+row exclusively with its corrected row, avoiding both double counting and invalid
+negative evidence. There are346 unique effective target/radius checks out of471
+planned across157 originals;125 remain pending in the live other-domain producer.
+Only201300 at12/16 supports in this prefix; zero effective rows are inconclusive.
+These remain fixed/synthetic geometry stress controls without independent
+semantic negative annotations or learned search, not complete precision or
+production fallback qualification.
+
+
+### Explicit joint model-provider geometry APIs (2026-10-11)
+
+`model_compare` now exposes `JointModelComparisonPolicy`,
+`compare_model_joint_files_with` and `compare_model_joint_regions_files_with`.
+Before any file/model read or provider call, checked worst-case projection work
+2*geometry.max_points*(sampling.trials+1) must fit the explicit ceiling.
+Joint fitting uses the original anchor source tolerance and configured target
+geometry tolerance. The common lifecycle still maps crops into complete oriented
+domains, checks original pixels, guards sources/weights and prioritizes sticky
+cancellation. Legacy entrypoints retain target-only fitting; defaults unchanged.
+`dedup-joint-model-combined-audit-20261011.json` verifies42 tests on frozen
+compatible source:13 comparison tests including new budget/cancellation priority,
+overflow and cancelled retry/payload release checks, plus29 legacy tile/projected
+checks. CPU forwarding, joint crop-specific lifecycle qualification, model-tile
+integration, scale fallback and actual201300 recovery remain open. Geometry and
+provider scratch remain outside managed payload/RSS admission. This is not a
+complete current HDR workspace or full-corpus gate.
+
+
+### Actual CPU joint model201300 confirmation (2026-10-11)
+
+All471 effective fixed/synthetic scale controls over157 originals are now closed
+in `dedup-anchor-scale-effective-prefix-0471-audit-20261011.json`, with corrected
+EXIF rows replacing raw-domain rows. Only the known201300 positive supports at
+12/16. This remains stress evidence without independent semantic negatives.
+
+`dedup-joint-model-crop-audit-20261011.json` verifies16 comparison tests,
+including joint shifted-crop original-coordinate parity, source/weight mutation,
+both sticky request cancellations and source mutation at the last caller
+checkpoint. `compare_loftr_joint_files` and `compare_loftr_joint_regions_files`
+now forward explicit policy through the same guarded local CPU provider.
+`dedup-joint-model-native-audit-20261011.json` verifies actual CPU whole-image
+201300 support:173 proposals/selected points,11 joint inliers and original-pixel
+counts1129/1227 and1108/1202. The transform and counts exactly match the audited
+captured-point refit at filter12. Native core/model/probe artifacts use opt-level3;
+the comparison fitting source matches the16 generic tests. Managed payload is
+released. Explicit1m trials and filter12 are caller settings, not changed defaults.
+Automatic tile/scale/collection integration, annotated precision, full-corpus and
+platform/RSS-cap qualification remain open.
+
+
+### Explicit joint model tile integration (2026-10-11)
+
+`search_joint_model_tiles_files_with` forwards joint fitting through retained
+prepared crop inputs. Its per-window ceiling must cover checked worst-case
+2*geometry.max_points*(sampling.trials+1); the cumulative ceiling must admit
+25 times the per-window ceiling before any source/model I/O, even if the first
+window might support. `search_loftr_joint_model_tiles_files` reuses one lazy
+CPU model inside the operation. Legacy target-only APIs and defaults remain.
+`dedup-joint-model-tiles-audit-20261011.json` verifies33 tests:16 comparison and
+17 tile tests, including full25-window traversal/retained credit, whole/late
+crop support, final source/owner/cancellation checkpoint guards, and per-window,
+aggregate and multiplication-overflow refusals before I/O. Native runtime,
+automatic scale selection and pair/collection integration remain pending.
+
+
+`dedup-joint-model-tiles-generic-verification-20261011.json` independently
+checks the33-test logs and current owned fitting/tile source coherence.
+`dedup-joint-model-tiles-native-fixed-audit-20261011.json` verifies real CPU
+201300 through the joint tile entrypoint: its first whole-image window supports
+with exactly the prior173 proposals,11 inliers, transform and original-pixel
+counts. Managed roster/payload release is verified. This does not exercise all25
+windows on real CPU input; generic tests cover full traversal and late support.
+The initial diagnostic probe build failed because comparison() already returns
+Copy evidence and was unnecessarily dereferenced. The failure source/logs remain
+pinned in `dedup-joint-model-tiles-native-build-failure-20261011.json`; only the
+probe changed in the successful child snapshot. Production library compiled in
+both attempts. Actual late-window CPU qualification, automatic scales and
+pair/collection forwarding remain open.
+
+
+### Late real CPU window recovers200300; strict unknown retained (2026-10-11)
+
+`dedup-joint-model-gap-controls-prefix-0002-audit-20261011.json` verifies two
+actual CPU gap controls on frozen joint tile source shared with36 generic tests.
+Reverse200300 (strong200302, baseline index7) supports at the13th window in
+26.85s:47 selected points,12 joint inliers,12/12 original anchors and agreement
+1441/1503 forward,1775/1833 reverse. This qualifies actual late-window CPU
+support, not just first-window support or a replay of captured points.
+Reverse203500 exhausts25 windows in69.74s without support and remains
+inconclusive; no semantic rejection is inferred. The second200300 baseline
+variant at index255 remains separately unqualified. Explicit filter12/1m trials
+and unchanged original residual/pixel thresholds are required; no defaults change.
+
+`dedup-joint-model-tiles-admission-verification-20261011.json` verifies37 tests
+and a subsequent validation-only source delta: joint source-tolerance squares
+must be finite and positive before any source read/provider invocation, including
+square overflow/underflow. Legacy fitting is unchanged. Actual CPU gap runs use
+the prior immutable source with ordinary finite squared tolerances; they were
+not repeated after this preflight-only change. Automatic scale selection,
+portfolio/collection forwarding and independent semantic precision remain open.
+
+
+### Joint model geometry in native/model portfolio (2026-10-11)
+
+`search_joint_model_portfolio_files_with` now selects joint whole-image or tile
+model geometry inside the common native/model lifecycle. Both per-window and
+cumulative projection ceilings, including source-tolerance-square eligibility,
+are checked before either stage reads sources, even in native-first order.
+Native recipes, original pixels, stage ordering and fatal/cancellation/source
+semantics remain unchanged. Legacy public and recovery entrypoints explicitly
+retain target-only model geometry. `search_loftr_joint_model_portfolio_files`
+adds operation-scoped local CPU model reuse; its build/runtime gate is separate.
+`dedup-joint-model-portfolio-verification-20261011.json` verifies59 tests:
+16 comparison,21 tile and22 portfolio tests, including both orders, late crop
+support, cross-stage/final source-weight mutation and pre-I/O projection refusal.
+The first new test gate failed only due a duplicated test helper and omitted new
+budget arguments; its failed source/report remain preserved. CPU runtime,
+automatic scales and collection/recovery joint-model forwarding remain open.
+
+
+### Actual joint portfolio CPU and exhaustive collection API (2026-10-11)
+
+`dedup-joint-model-portfolio-runtime-audit-20261011.json` verifies200300 through
+`search_loftr_joint_model_portfolio_files`: the entire output, including H,
+original-pixel counts,13 attempts and managed peak/release, matches the earlier
+joint tile run exactly. This qualifies model-first CPU portfolio execution;
+actual native-first CPU behavior is not inferred from it.
+
+`scan_joint_model_portfolio_outcome_collection_with` now forwards joint whole/
+tile model fitting for every unordered pair through the common guarded collection
+engine. Per-window, per-pair and complete maximum-pair projection work is admitted
+before iterator consumption. Typed insufficient geometry remains unknown; fatal
+errors discard all prior records. Legacy entrypoints retain their model fitter.
+`scan_loftr_joint_model_portfolio_outcome_collection` adds one lazy CPU model
+across pairs; its native build/runtime gate is separate.
+`dedup-joint-model-collection-verification-20261011.json` verifies82 tests:
+16 comparison,21 tile,22 portfolio,23 collection. New checks exercise complete
+canonical pair support/Arc ownership, both stage orders with unknowns, fatal
+failure after unknown and projection admission before iterator/I/O. The first
+new fixture wrongly cloned CollectionReport directly; its preserved failed gate
+was followed by a test-only Arc correction. CPU collection runtime, scheduled
+joint collection, recovery-model forwarding, automatic scales and independent
+semantic precision remain open.
+
+
+### Actual three-file CPU collection control running (2026-10-11)
+
+The frozen `dedup-joint-model-collection-native-snapshot-20261011.json` CPU
+wrapper/probe build completed. The standalone
+`dedup-joint-model-collection-runtime-harness-20261011.json` retains the exact
+frozen production/registry source and invokes the exhaustive CPU collection API.
+`dedup-joint-model-collection-runtime-20261011.json` records the live operation:
+IDs2/6 are byte-identical200302 query images at distinct paths; ID9 is original
+200300. All3 canonical pairs are expected to support, including two copies of
+the recovered200300 direction. The producer/child were confirmed live; no
+completion or pixel/managed-release claim is made while running. This positive
+ownership/control fixture is not diverse-corpus or negative precision evidence.
+
+
+### Real collection completion and sampled-fit buffer reuse (2026-10-11)
+
+`dedup-joint-model-collection-runtime-audit-20261011.json` verifies all3 real
+CPU collection pairs in canonical order(2,6),(2,9),(6,9), with positive support
+and1/13/13 model windows respectively. Both late200300 pairs reproduce the prior
+transform and original-pixel counts exactly. Retained report payload23,280 bytes
+is released after drop. Runtime237.40s, observed RSS2,375,876,608 bytes; this
+positive control uses two distinct images plus a query copy, not diverse corpus
+or semantic negative/scaling qualification. It ran on immutable pre-reuse geometry.
+
+The shared sampled target/joint fitter now retains scratch/previous-best inlier
+vectors across eligible hypotheses instead of repeatedly allocating them.
+Trial sequence, strict residuals, tie comparisons, refinement and cancellation
+checkpoints are unchanged. `dedup-projective-buffer-reuse-verification-20261011.json`
+verifies17 geometry/domain/joint tests and complete JSON equality on four real
+point controls against the old allocating fitter:204100 calibration,207700
+opposite/direct1m and201300 whole1m. H, inlier indices/error, original pixels
+and managed fields match. The first gate expected14 geometry tests although the
+suite has9; all9 passed, and the corrected17-total gate ran all three suites.
+That expectation-only failed report remains preserved. No measured speed or RSS
+improvement, whole CPU collection rerun or full workspace qualification is claimed.
+
+
+### Remaining variant and direction controls (2026-10-11)
+
+`dedup-joint-model-variant-controls-prefix-0002-audit-20261011.json`
+closes two actual CPU controls with fixed filter12 and1m hypotheses/window.
+Reverse200301→200300 (baseline255) remains inconclusive after25 windows
+(51.62s, observed RSS1,069,531,136 bytes). Forward203500→203502
+(baseline66) supports after4 windows (9.20s, RSS1,514,995,712 bytes).
+Neither the recovered200302 variant nor this forward203500 control qualifies
+the remaining reverse directions. The probe formerly serialized only the
+terminal comparison; its zero inliers cannot describe preceding windows.
+A separate window-roster diagnostic now preserves every attempted rectangle
+and comparison, using frozen production and the same strict thresholds.
+
+`dedup-joint-window-roster-audit-20261011.json` verifies all25 attempts
+for each remaining reverse control, with source/binary/log pins and managed
+release.200301→200300 has no accepted geometry in any window.203502→203500
+has geometry only at zero-based window15:144 selected points,18 joint inliers,
+18/18 anchors. Forward167/167 and reverse391/391 informative pixel pairs agree,
+but each is below minimum1000; support correctly remains false/unknown.
+The two failures require different remedies: proposal/geometry recovery versus
+more informative verification coverage. No threshold reduction or semantic
+negative claim is made. These controls use frozen pre-buffer-reuse production.
+The diagnostic producer inherits a stale scope sentence naming forward66; its
+actual pinned plan is reverse255/67, checked by the independent audit.
+
+
+### Expanded pixel coverage recovers reverse203500 (2026-10-11)
+
+`dedup-joint-expanded-window-audit-20261011.json` closes actual CPU controls
+with center-window radii6/12 instead of2. Radius6 supports reverse203502→203500
+after16 attempts. Every attempted rectangle and geometry prefix matches the
+radius2 control exactly, including18 joint inliers at window15. Forward
+1199/1199 informative pairs over3042/3042 valid sites and reverse1495/1495
+over1551/2028 valid sites pass the unchanged1000-pair,90%-agreement and30%-coverage
+floors. Managed usage returns to zero. This is an explicit caller policy control,
+not automatic coverage selection or independent negative precision qualification.
+
+Radius12 exhausts25 attempts with typed InsufficientAnchorGeometry; larger
+windows can reduce disjoint anchor count, so success is not monotonic in radius.
+The producer did not handle that expected typed outcome and exited after writing
+its terminal result; the independent audit verifies it rather than pretending
+the running checkpoint completed normally. A separate earlier launch failure
+replaced the source argument instead of executable; preserved failure/child
+reports distinguish this from model or library failure. Production was frozen
+pre-buffer-reuse and no workspace-wide qualification is claimed.
+
+
+### Remaining200301 model input resolution control (2026-10-11)
+
+`dedup-joint-model-resolution704-audit-20261011.json` verifies the actual CPU
+reverse200301→200300 control with max_side704 instead of640. All25 attempts
+still have no accepted geometry (73.81s); original source tolerance, target
+tolerance,1m trials, filter12 and strict original-pixel floors are retained.
+Managed usage returns to zero. This rules out this specific resolution change
+as a recovery, not all resolutions or correspondence methods.
+
+`dedup-model-points-200301-trace-audit-20261011.json` verifies669 exact-bit
+selected correspondences across all25 windows at640 using separately frozen
+diagnostic instrumentation before the target-only fitter. Counts range8–65;
+each point is finite and inside the actual original dimensions. This trace
+is an input to independent geometry diagnosis, not recovered support or a
+claim that its older target-only pipeline equals the later joint pipeline.
+
+
+### Cross-window witness diagnosis recovers200301 pixel control (2026-10-11)
+
+`dedup-joint-consensus-200301-audit-20261011.json` verifies25 exact-point
+controls at1m/seed173 with diagnostic min_inliers4 only, retaining the original
+2px target/source-scaled residuals. Highest sampled within-window consensus9
+occurs at window6. This is not an exhaustive maximum or lowered production
+acceptance. Independent residual checks cover every reported inlier.
+
+`dedup-cross-window-consensus-200301-20261011.json` rescores those candidate
+models against all669 captured points, then rejects endpoint aliases within2px
+before pixels. Window6 H admits10 nonaliased points:9 from window6 and one from
+window1. `dedup-cross-window-pixels-200301-audit-20261011.json` independently
+checks their exact provenance/bits, H, bidirectional residuals, aliases and
+original pixel floors. The public file comparator with filter12/window_radius2
+supports:10/10 anchors, forward1221/1233 and reverse1581/1651 agreeing/informative
+pairs,250/250 valid sites in both directions. Radius6 instead returns typed
+insufficient anchor geometry. Contrast.005, minimum1000 pairs, agreement.9,
+coverage.3 and10 witnesses are unchanged. Managed usage returns to zero.
+
+This proves a bounded original-pixel positive using correspondence aggregation
+across windows, not an integrated automatic tile-union search. Model generation
+was separately frozen/instrumented; pixel comparison uses the buffer-reuse frozen
+production. A reusable bounded aggregation/candidate API, ownership/admission,
+source/cancellation guards, independent negative precision and full new-source
+corpus rerun remain required before calling the library case recovered.
+
+
+### Managed joint witness aggregation primitive (2026-10-11)
+
+New public raster API `joint_witnesses::collect_joint_projective_witnesses`
+filters full-coordinate caller point banks by strict forward/inverse residuals
+then greedily excludes aliases at either endpoint, preserving caller order.
+Malformed points invalidate the entire batch; duplicates across windows are
+expected and skipped. Whole-image projective eligibility, finite positive
+nonoverflowing tolerances, count/projection/separation ceilings and managed
+retained capacity are admitted before scanning. Cancellation is observed while
+scanning/separating and before/after adoption; last-clone drop releases credit.
+Caller banks and supplied H remain external; no pixels or identity verdict occur.
+
+`dedup-joint-witnesses-verification-20261011.json` verifies22 frozen tests
+(17 existing geometry/domain/joint,5 new aggregation tests), including669 real
+points selecting the exact10 witnesses, malformed suffix, budget admission,
+empty/zero domains, every cancellation checkpoint and Arc ownership. The first
+gate exposed zero dimensions reaching an internal unchecked corner subtraction;
+the public entry now rejects them before calling domain eligibility. Preserved
+failed and corrected child snapshots distinguish this fix from a skipped gate.
+
+`dedup-cross-window-aggregate-runtime-20261011.json` verifies actual public
+aggregation over all669 captured points followed by the original-file pixel
+comparator. All prior pixel evidence matches exactly (radius2 positive, radius6
+typed insufficiency). Managed aggregation peak21,408 bytes returns to zero;
+pixel/decode managed peak66,778,688 bytes also returns to zero. These are payload
+credits, not total RSS. H is still supplied from the diagnostic candidate;
+automatic generation/retention of cross-window candidates, source guards across
+inference, model tile/portfolio/collection integration and precision/full-corpus
+qualification remain open.
+
+
+### Automatic cross-bank geometric candidate generation (2026-10-11)
+
+`joint_witnesses::search_joint_bank_candidate` now samples a domain-eligible
+joint model per caller-owned point bank, rescores each on the full managed
+flattened pool, and returns the largest nonaliased strict witness set (first
+on ties). Local hypothesis minimum and final witness minimum are distinct;
+the real case uses4 for generating a hypothesis and10 for final witnesses.
+Source/target residual tolerances are required to agree between both stages.
+Bank/count/per-fit/total projection and separation work are admitted with
+checked arithmetic before fitting, and malformed full-coordinate suffixes
+refuse atomically. Flattened pool and retained witnesses are managed; existing
+fitter scratch is bounded/fallible but outside payload accounting. The result
+is a geometric candidate, never image identity or a semantic negative.
+
+`dedup-joint-bank-candidate-verification-20261011.json` verifies25 frozen
+tests:17 existing geometry/domain/joint plus8 aggregation/candidate tests.
+On all25 captured banks/669 real points,1m/seed173, the public API generates
+window6 H bitwise equal to the independently original-pixel-confirmed matrix
+and returns10 strict witnesses without any supplied H. Tests also check
+conservative total admission, malformed suffix, every cooperative cancellation
+checkpoint and last-clone release. This is captured-point qualification;
+model inference retention, guarded tile/portfolio/collection integration and
+new complete CPU/corpus/precision qualification remain open. Only the largest
+geometry candidate is retained; this API does not promise to find every
+smaller candidate that might pass pixels if the largest fails.
+
+
+### Guarded managed model point-bank extraction (2026-10-11)
+
+`model_compare::extract_model_region_points_files_with` returns a public
+`ModelPointBank` with full original dimensions, model digest, raw proposal
+count and managed selected original-coordinate points. Shared comparison
+lifecycle now has an internal capture-only mode: it skips geometry/pixel
+scoring, retains selected capacity, and publishes only after the existing
+whole-source/weights observations, sticky caller cancellation and both request
+generations pass their final checks. Existing comparison/prepared/joint paths
+explicitly select legacy behavior and discard the unused capture value.
+
+`dedup-model-point-bank-verification-20261011.json` verifies93 frozen tests:
+19 comparison,21 tiles,22 portfolio,23 collection,8 joint-witness/bank. New
+tests verify unequal crop origins mapped into original coordinates without
+requiring geometry, output last-clone credit, changed left/right/weights during
+provider inference, explicit empty bank and every caller cancellation checkpoint.
+Retained bank carries no geometry/identity/pixel verdict. Source observations
+are operation-local; a later cross-window operation must keep/revalidate its
+own original observations rather than treating detached points as fresh files.
+Actual CPU LoFTR extraction, inference point-bank retention across25 windows
+and end-to-end guarded file recovery remain unqualified.
+
+
+### Guarded file-level model bank search (2026-10-11)
+
+New decode API `model_banks::search_model_banks_files_with` joins whole/quadrant
+point extraction, automatic cross-bank candidate generation and original-file
+pixel confirmation under one retained source/dependency/weights observation.
+It exhausts every nonempty Cartesian bank (up to25), validates each bank digest
+and full dimensions, then tests the largest geometric candidate. All aggregate
+projection/separation ceilings and52 worst-case model-input read units (25 pairs
+plus two full preparations) are admitted before I/O. Source guards are rechecked
+between extractions and after fresh original pixels; the final caller checkpoint
+is followed by read-only owner/source verification. Missing geometry or typed
+insufficient pixel anchor geometry remains inconclusive, never a semantic
+negative. Incremental bank memory admission may fail late and discards everything.
+
+The25 owner slots use an explicitly reserved capacity and fallible vector;
+point-bank payloads, full prepared inputs, flattening and witnesses use the same
+managed budget. Existing model tensors/fitter scratch and the25-entry borrowed
+reference vector remain outside payload accounting. Each rectangle is currently
+prepared independently; caching and real CPU performance remain unqualified.
+
+`dedup-model-bank-files-verification-20261011.json` verifies96 frozen tests:
+22 comparison/file-bank,21 tiles,22 portfolio,23 collection,8 joint-bank. New
+checks confirm all25 provider calls followed by original-pixel support, work
+refusal before missing-file I/O, weights mutation on call25, explicit empty
+unknown and cancellation after retaining a prefix; all managed credit releases.
+The first compile rejected a non-Copy owner type in `try_buffer`; a preserved
+failed snapshot and corrected explicitly reserved owner storage distinguish the
+fix from skipped qualification. Test aggregate anchor ceilings also account
+for the expanded witness set rather than the per-window proposal count.
+Actual CPU LoFTR wrapper/runtime, portfolio/collection routing, independent
+negative precision, all458 new-source controls and full500-repository scope
+remain open.
+
+
+### Actual CPU file-bank recovery of reverse200301 (2026-10-11)
+
+`model_loftr::search_loftr_model_banks_files` routes the guarded25-window file
+operation through one lazily cached CPU LoFTR model. Provider tensors/workspaces
+remain outside managed credit. The immutable native source/harness and locked
+offline build preserve compatible decoder/runtime dependencies; no captured
+points or H are injected into the executable.
+
+`dedup-model-bank-native-audit-20261011.json` verifies actual reverse200301→200300
+(baseline255) from original files and local weights through all25 extractions,
+automatic hypothesis generation, cross-bank selection and original pixels.
+669 selected points produce window6 H with10 witnesses. H matches the independent
+exact-bit diagnostic, and pixel counts match exactly:forward1221/1233 and
+reverse1581/1651 agreeing/informative,250/250 valid sites both directions.
+The strict10-witness,1000-pair,.9-agreement,.3-coverage and original residual
+floors are retained with explicit1m trials/filter12. Managed used returns0,
+peak67,335,104 bytes; observed RSS1,077,231,616 bytes and elapsed79.674s.
+Managed payload peak is not a total RSS cap.
+
+The audit verifies executable/build/source/input/weights/log/runtime-library
+pins and identical executed core source to the96-test generic qualification.
+This closes this bounded real file/API case, not automatic portfolio/collection
+routing, broad candidate/pixel policy calibration, all458 new-source controls,
+allformats/platforms or the complete500-repository review/adoption scope.
+Other controls must be rerun on this candidate-ranking path before broad parity
+is claimed; it currently tests only the largest geometric candidate.
+
+
+### Broader CPU controls and pixel-qualified candidate ranking (2026-10-11)
+
+`dedup-model-bank-broader-controls-audit-20261011.json` closes two actual CPU
+controls using the earlier immutable single-largest-candidate binary at
+filter12/window2/1m. Reverse200302→200300(baseline7) retains support from569
+selected points,17 joint witnesses,bank12; original pixels2226/2294 forward
+and2466/2524 reverse pass strict floors (84.71s). Reverse203502→203500
+(baseline67) remains inconclusive:989 selected points,18 witnesses,bank15,
+167/167 and391/391 informative/agreement counts below1000 (62.42s). The
+known independent radius6 positive is not silently attributed to this radius2
+control. Absence of support is not semantic rejection.
+
+The root API now adds `search_joint_bank_candidate_with`: callbacks qualify
+every strict candidate before ranking. Rejected larger candidates cannot
+prune smaller accepted candidates. Callback errors are fatal; cancellation
+after callback wins over its error. Geometry-only entry behavior is retained
+through an always-accept callback. File-bank search now applies original-file
+pixels through this hook and ranks only confirmed candidates. Existing prepaid
+25-window pixel limits cover at most25 callbacks. Source/cancellation guards
+still span the whole operation. No accepted candidate returns unknown without
+an identity verdict; unconfirmed geometry is not published as confirmed output.
+
+`dedup-model-bank-qualified-candidates-verification-20261011.json` verifies98
+tests, including a larger5-point rejected model followed by a smaller4-point
+accepted model, qualifier error/atomic credit release and callback cancellation
+precedence, plus the existing96 tests. Those4-point settings are synthetic
+generic geometry tests, not lowered10-witness production pixel acceptance.
+This source is newer than the two CPU controls: a real CPU rerun of the
+pixel-qualified path, bounded window coverage fallback, collection/portfolio
+routing and independent full precision/corpus/500-repository scope remain open.
+
+
+### Three real CPU pixel-qualified positives and synthetic pixel refusals (2026-10-11)
+
+`dedup-model-bank-qualified-native-audit-20261011.json` verifies all3 actual
+CPU controls on the pixel-qualified-candidate source sharing98 generic tests.
+Reverse200301→200300(baseline255,window2) returns669 selected points,10 witnesses,
+bank6; reverse200302→200300(baseline7,window2) returns569/17,bank12; reverse
+203502→203500(baseline67,window6) returns989/18,bank15. Every case runs all25
+original-file/model extractions and automatically generates its H; no point/H
+injection. Original pixel counts match the independently verified controls
+exactly:1221/1233 and1581/1651;2226/2294 and2466/2524;1199/1199 and1495/1495.
+Original strict residuals,10 witnesses,1000 pairs,.9 agreement,.3 coverage and
+filter12/1m remain unchanged. Managed credit returns0 in every operation.
+
+Observed elapsed51.57/75.53/75.91s and RSS1,087,340,544/1,971,126,272/
+1,438,351,360 bytes are bounded controls, not controlled speed comparisons or
+hard RSS caps. Window radii2/2/6 are explicit per-control caller settings; this
+does not qualify automatic coverage selection or source-agnostic precision.
+The harness uses a unique executable name/immutable copy so earlier pinned
+native artifacts are preserved.
+
+`dedup-model-bank-pixel-negatives-verification-20261011.json` verifies99
+tests in a test-only child of the same production source. New file-bank tests
+supply consistent proposal geometry across all25 windows while original pixels
+are either flat or inverted. Both refuse support and release all managed credit.
+This is synthetic evidence that geometry alone cannot publish a positive;
+independent semantic negative calibration, bounded automatic window fallback,
+portfolio/collection routing and all458/new-source/full500 scope remain open.
+
+
+### Bounded automatic pixel coverage with shared inference/geometry (2026-10-11)
+
+`model_banks::search_model_banks_coverage_files_with` tries1–8 caller-ordered
+window radii per strict geometric candidate, stopping at its first original
+pixel support. Typed insufficient anchor geometry tries the next radius; all
+other errors remain fatal. Inference and geometry are shared, thresholds and
+original observations unchanged. Complete point/selection/rank/read ceilings
+are prepaid for25 times the radius count before I/O; empty/oversized lists,
+context arithmetic overflow and unpaid work refuse. The original single-radius
+API delegates to this path without changing its evidence. Evidence now exposes
+chosen pixel_window_radius and total pixel_attempts, including failed radii.
+
+`dedup-model-bank-coverage-verification-20261011.json` verifies101 tests,
+including exact singleton parity and insufficient-anchor radius12 followed by
+radius1 positive with exactly25 provider calls. The test-only child
+`dedup-model-bank-coverage-negatives-verification-20261011.json` verifies102
+tests, adding flat/inverted original pixels under actual2/6 fallback; neither
+publishes support/radius and all managed credit releases. These synthetic
+controls do not establish independent semantic negative precision.
+
+`model_loftr::search_loftr_model_banks_coverage_files` uses one cached CPU model.
+`dedup-model-bank-coverage-native-audit-20261011.json` verifies real reverse
+203502→203500 from files/weights, all25 extractions,989 selected points and18
+witnesses. The prepaid list[2,6] automatically selects6 after2 pixel attempts.
+H and original pixel counts exactly equal prior fixed6 control:forward1199/1199
+and reverse1495/1495 informative/agreeing,3042/3042 and1551/2028 valid/sites.
+Strict1000-pair/.9/.3 floors,filter12 and1m trials remain unchanged. Managed
+used returns0,peak128,675,104 bytes; observed RSS1,449,082,880 bytes,117.866s
+under concurrent generic qualification are not speed or hard RSS claims.
+
+An initial native build was launched from root and selected stable1.98.1 instead
+of the established /tmp nightly1.101 context. Only that owned cargo process was
+stopped(exit143), partial logs retained; the qualified executable comes from
+the corrected /tmp offline build. Native executed core hashes match101 tests;
+102-test child changes only tests. Automatic selection is bounded to the caller
+list, not general filter/scale calibration. Other CPU/corpus/collection/portfolio
+routing, allformats/platforms and full500-repository completion remain open.
+
+
+### Portfolio routing for learned bank coverage (2026-10-11)
+
+New opt-in `search_portfolio::search_model_bank_portfolio_files_with` routes
+managed25-bank aggregation/bounded pixel coverage through the existing native
+six-recipe/model stage order and original `guarded_pair` observation. The supplied
+bank work/radii replace the legacy model_tiles recipe only for this entrypoint;
+legacy, joint-model and recovery callers explicitly retain their prior mode.
+`required_model_bank_portfolio_work` adds native6-recipe maxima to the supplied
+bank work with checked arithmetic. Both stages, geometric work and every pixel
+radius are validated before I/O even if native-first support avoids inference.
+
+Supported learned bank evidence uses the existing Model stage with aggregate
+proposal/selected counts and confirmed original pixels, avoiding a parallel
+stage-evidence hierarchy. No learned support becomes typed Model inconclusive
+while an independent native stage is still tried; complete native miss cannot
+convert it to ordinary negative, and native support can resolve that unknown.
+Whole source/dependency/weights observations and cancellation remain guarded
+across both stages. Private bank preflight is shared with direct file search.
+
+`dedup-model-bank-portfolio-verification-20261011.json` verifies107 frozen
+tests:26 model comparison/coverage,21 tiles,27 portfolio,23 collection,10 bank.
+New tests cover both orders after native miss (25 model calls and support),
+empty learned/native misses as typed unknown, native early support with zero
+model calls, learned unknown followed by independent native support, pre-I/O
+aggregate admission/cancellation precedence and weights mutation on call25.
+All managed credits release. These are generic-provider portfolio checks;
+real CPU ModelFirst coverage is qualified separately below. Opt-in bank collection
+routing remains open, alongside broader precision/corpus/all500 acceptance.
+
+
+### Real CPU ModelFirst bank portfolio (2026-10-11)
+
+`model_loftr::search_loftr_model_bank_portfolio_files` uses one lazy cached CPU
+model and routes through the guarded bank portfolio API. The immutable docfix
+source snapshot corrects probe inner-doc placement before compilation; the first
+unbuilt snapshot is preserved. The standalone harness was built from `/tmp` with
+the pinned offline native dependencies.
+
+`dedup-model-bank-portfolio-native-audit-20261011.json` independently verifies
+real CPU reverse203502→203500, ModelFirst terminal Model support in one stage,
+989 selected points and18 witnesses. Transform bits and both original-pixel
+counts equal the prior direct fixed6 control: forward3042 sites/3042 valid and
+1199 informative/1199 agreeing; reverse2028 sites/1551 valid and1495/1495.
+The caller admits radii[2,6]; chosen radius is not exposed by the existing Model
+stage evidence, so the audit records6 only as inferred from exact fixed6 parity.
+Core source hashes match the107-test generic portfolio snapshot.
+
+Measured72.528s, process peak RSS1,453,801,472 bytes, managed peak128,675,104,
+managed used0 after return. This is one CPU ModelFirst positive control; there
+is no speedup, total RSS cap, NativeFirst CPU, full458/negative precision,
+collection bank routing or all500 qualification claim.
+
+
+### Managed bank coverage in exhaustive collections (2026-10-11)
+
+`portfolio_collection::scan_model_bank_portfolio_outcome_collection_with` routes
+every unordered pair through the shared bank portfolio operation. An optional
+complete pair schedule only prioritizes evaluation; output records stay in
+canonical ID order. There is no retrieval pruning or transitive duplicate claim.
+
+Pair/radius admission is shared with the direct API via
+`validate_model_bank_portfolio_policy`. Before consuming the file iterator,
+collection admission checks the complete pair work and checked products for
+`ModelBankCollectionWorkLimits` projection/separation totals. Source, dependency,
+weights and generation observations remain owned by the existing collection
+engine. Final insufficient learned geometry is retained as an explicit unknown;
+provider/source/weights/cancellation failures discard the report. Legacy callers
+retain their original mode.
+
+`dedup-model-bank-collection-verification-20261011.json` verifies110 frozen
+tests:26 model comparison,21 tiles,27 pair portfolio,26 collection,10 joint bank.
+The collection suite includes three new
+regressions:3 canonical pairs with75 provider calls in both stage orders and with
+complete scheduling; pair/radius/aggregate projection/separation admission before
+iterator consumption and cancellation precedence; all unknown outcomes plus fatal
+provider, weights mutation and sticky generation cancellation on call26 after
+the first completed unknown pair. Retained report credit releases on last owner.
+Real CPU bank collection runtime, full corpus/negative precision/scalability,
+process RSS bounds and full500 repository acceptance remain open.
+
+
+### CPU bank collection wrapper and complete recall run started (2026-10-11)
+
+`model_loftr::scan_loftr_model_bank_portfolio_outcome_collection` shares one lazy
+CPU model across every collection pair and preserves the generic route's unknown
+outcomes and atomic guards. The new frozen native snapshot inherits the110-test
+collection core; its offline standalone native build completed successfully.
+The3-ID probe compares203502, its separate byte-identical copy and203500. Its
+runtime is still pending; no3-pair support or final process RSS claim is made.
+
+A separate two-file outcome probe on the same frozen native core drives
+`dedup-model-bank-all-positives-20261011.json`: all458 published positive
+directions remain in the plan, with prior unresolved indices3,7,27,57,67,153,255
+first. Each comparison uses all25 banks and bounded radii[2,6],filter12/1m.
+Completed, unknown, rejected and execution failure remain distinct. The run has
+started, not completed; historical451/6/1 counts are not rewritten.
+
+`dedup-model-bank-collection-native-profile-20261011.json` pins a one-second
+stack sample from the live3-ID probe. The sampled hot path is joint sampled
+geometry/residual scoring and nested per-point collection cancellation. This
+locates work for later profiling; it is not a measured whole-run fraction or
+speedup. Process RSS, negative precision, diverse collection scaling, full
+formats/platforms and full500 algorithm/runtime qualification remain open.
+
+
+### First current bank recall evidence (2026-10-11)
+
+`dedup-model-bank-all-positives-prefix-0003-audit-20261011.json` independently
+freezes and verifies the first3 completed directions of the live458 run:
+baseline3 reverse211901→211900 inconclusive; baseline7 reverse200302→200300
+supported; baseline27 reverse201303→201300 supported. There are0 execution
+failures and0 rejected positives in this prefix. The full plan is unchanged.
+The211900 miss demonstrates that standalone bank coverage has not yet unified
+previously qualified opposite-native recovery; the old451/6/1 aggregate remains
+historical evidence, not a current-source result.
+
+
+### Exact joint hypothesis dominance pruning (2026-10-11)
+
+The sampled projective fitter now skips further residual scoring of a joint
+hypothesis once its maximum possible support is below the incumbent, or its
+maximum support ties while accumulated nonnegative normalized error is already
+no better. Joint residuals are bounded[0,2], so ignoring a dominated suffix
+cannot hide an overflowing sum. Target-only scoring retains the complete
+previous scan/error behavior. Every trial is still drawn/fitted and every point
+still calls cancellation; nonwinning spread checks are avoided. Refinement,
+first-winner ties, policy ceilings and malformed-input validation are unchanged.
+
+`dedup-projective-joint-pruning-verification-20261011.json` verifies130 tests:
+110 bank/pair/collection regressions,17 geometry/domain/joint tests and3 new
+reference tests. The reference fixture bytes equal the complete pre-change
+geometry source in the native collection parent snapshot. Seeded identity,
+noise and outlier sets plus two real reverse correspondence sets compare
+transform bits, inlier order, residual bits and hypothesis counts in both
+scoring modes. Cancel/malformed refusals remain covered; the synthetic cases
+actually exercise dominance. No native speedup is measured yet. Both live
+CPU jobs retain their earlier immutable unpruned binaries.
+
+
+### Real CPU bank collection completed (2026-10-11)
+
+`dedup-model-bank-collection-native-audit-20261011.json` independently verifies
+all3 canonical pairs[2,6],[2,9],[6,9] supported on the frozen110-test native
+collection core. IDs2/6 contain the same203502 bytes; ID9 is203500. Both cross
+pairs match the prior singleton portfolio's transform bits and original-pixel
+evidence exactly (989 points,18 witnesses each). Managed report credit1080
+bytes remains until report drop, then managed used0.
+
+Measured905.184s and peak process RSS2,491,039,744 bytes, managed peak128,677,192.
+This exposes substantial runtime/RSS cost on a tiny collection; it does not
+qualify scalability, diverse images, negatives or a hard RSS bound. The binary
+uses the pre-pruning core. The current joint-pruning change has generic parity
+evidence but no actual CPU collection speed comparison yet.
+
+
+### Bank primary followed by joint opposite recovery (2026-10-11)
+
+`search_portfolio::search_model_bank_joint_recovery_files_with` adds bank
+coverage to the existing guarded recovery engine.
+`required_model_bank_recovery_work` checks the full bank primary plus six
+opposite-native maxima; shared primary admission validates every bank/radius.
+Opposite projection limits and swapped-point reservation remain admitted before
+source/weights IO even if primary support makes recovery lazy. Legacy recovery
+and collection callers explicitly retain their original primary mode.
+
+The bank primary, native fallback and opposite-native stage share one original
+source/dependency/weights observation. Primary bank support stops immediately;
+primary unknown followed by unsupported opposite evidence remains inconclusive;
+fatal provider/source/cancellation errors cannot become recovery misses.
+`model_loftr::search_loftr_model_bank_joint_recovery_files` adds one cached CPU
+model per operation; its frozen native build completed. Actual211901→211900
+bank-then-opposite runtime is started but not yet verified. Model bank filter12
+and native opposite filter8 remain explicit distinct caller policies.
+
+`dedup-model-bank-joint-recovery-verification-20261011.json` verifies134 tests,
+including31 pair portfolio tests. Four new tests exercise complete combined
+admission/cancellation, bank primary support and unresolved unknown, both stage
+orders from learned unknown to independently supported native opposite fixture,
+final weights mutation refusal and fatal provider failure on the25th bank.
+The retained130-test geometry/pruning/collection gates also pass. Opt-in bank
+recovery collection routing, full current combined458 recall, negative precision,
+allformats/platforms/full500 and process RSS bounds remain open.
+
+
+### Real CPU bank then opposite211900 recovered (2026-10-11)
+
+`dedup-model-bank-joint-recovery-native-audit-20261011.json` independently
+verifies actual CPU reverse211901→211900: the25-bank primary remains unknown,
+then joint opposite-native recovery supports under the same guarded operation.
+The134-test core is source-coherent. The4096-trial opposite result matches the
+previous independently qualified native control's transform bits, recipe/reflection
+fields and original-pixel evidence exactly:113 candidate points,12 anchors in
+each direction; forward300 sites/295 valid/2019 informative/1960 agreeing,
+reverse300/300/2207/2199. No supplied H or captured point injection is used.
+
+Measured360.403s, peak RSS1,956,904,960 bytes, managed peak329,062,128 and used0
+after evidence drop. Shared host and different primary path preclude a speedup
+claim. This closes the integrated211900 pair control only; current combined
+204100/207700 CPU, bank recovery collection CPU, full combined458 and broad
+negative/scaling/format/platform/full500 qualification remain open.
+
+The independent bank-only prefix0007 audit now verifies all seven historical
+problem directions:4 supported(indices7,27,67,255),3 inconclusive(3,57,153),
+0 rejected,0 execution failures. The full unpruned bank-only458 process continues
+on its original snapshot; it is not rewritten as the newly combined source.
+
+
+### Bank plus joint recovery collection routing (2026-10-11)
+
+`portfolio_collection::scan_model_bank_joint_recovery_collection_with` composes
+the bank primary and joint opposite-native recovery inside the existing guarded
+collection engine. Before iterator consumption it validates complete bank/radius
+work, checked bank projection/separation products, pair/total opposite projection
+ceilings, aggregate collection work and recovery storage. Optional complete
+scheduling preserves exhaustive enumeration and canonical output IDs. Existing
+collection wrappers explicitly retain their prior primary mode.
+
+`dedup-model-bank-recovery-collection-verification-20261011.json` verifies138
+tests (30 collection,31 pair portfolio,26 model comparison,21 tiles,10 joint bank,
+17 geometry/domain/joint and3 pruning-reference). Four new collection regressions
+cover all cumulative preflight before iterator, scheduled3-pair75-call support
+in both orders, learned unknown→actual opposite-native fixture with last-owner
+release, and provider/weights/sticky-generation failure after first unknown.
+This is generic-provider integrated collection evidence. Cached CPU collection
+wrapper/runtime and full combined corpus/negative precision/format/platform/
+full500/RSS-cap qualification remain open.
+
+
+### Cached CPU combined collection build and runtime controls started (2026-10-11)
+
+`model_loftr::scan_loftr_model_bank_joint_recovery_collection` now shares one
+lazily loaded CPU model across the combined collection operation.
+`dedup-model-bank-recovery-collection-native-compile-audit-20261011.json`
+independently verifies the offline native build, probe/harness hashes and exact
+138-test generic core coherence. The complete scheduled3-file probe prioritizes
+[2,9] without pruning the remaining pairs; records remain canonical[2,6,9].
+
+`dedup-model-bank-recovery-collection-native-20261011.json` is running on
+IDs2=211901,9=211900,6=204101. All3 have distinct bytes. Prepared publisher
+metadata puts2/9 in group211900 and6 in group204100. The known positive must
+match the singleton211900 control. Cross-group outcomes are recorded rather
+than treated as semantic-negative ground truth. No runtime pass is claimed yet.
+
+`dedup-model-bank-recovery-remaining-native-20261011.json` separately starts
+sequential integrated pair controls204101→204100 (4096 opposite trials) and
+207701→207700 (1m opposite trials) on the qualified134-test pair binary.
+These are explicit previously bank-only unknown cases; actual integrated
+results are pending. The full458 bank-only baseline remains on its original
+immutable source. No combined full-corpus/precision/scaling/formats/platforms/
+full500/RSS-cap completion follows from these starts or the compile gate.
+
+
+`dedup-model-bank-all-positives-prefix-0011-audit-20261011.json` independently
+freezes11 completed directions of the original bank-only458 run:8 supported,
+3 inconclusive (the same historical3/57/153 gaps),0 rejected and0 execution
+failures. The full plan and source remain unchanged; this is a prefix result,
+not combined-route recall or full458 completion.
+
+
+### Integrated remaining opposite controls qualified (2026-10-11)
+
+`dedup-model-bank-recovery-remaining-native-audit-20261011.json` independently
+verifies both actual CPU integrated pair controls: reverse204101→204100 at4096
+opposite trials and207701→207700 at1m. Each bank primary remains unknown,
+then joint opposite support matches the previous qualified control's transform
+bits, original pixels, candidate count, recipe count and reflection fields.
+Managed credit returns0. These close the integrated pair controls on the134-test
+source; they are not a current all-seven/full458 or collection recall result.
+
+### Fixed native/opposite/bank cascade (2026-10-11)
+
+`search_native_bank_recovery_files_with` admits the same complete bank and
+opposite work, but executes direct native, joint opposite, then model bank.
+The fixed order supersedes `primary.order` and legacy model_tiles only for this
+new entrypoint. Independent original-pixel confirmation remains mandatory for
+every positive. `NativeBankRecoveryEvidence` explicitly retains the native miss,
+whether opposite geometry was insufficient, terminal stage and model-attempted
+state. Miss buffers are dropped before advancing; errors remain fatal and final
+source/dependency/weights/generation guards remain shared. Existing APIs retain
+their prior order. The CPU wrapper lazily creates its cached model only if both
+native stages miss.
+
+`dedup-native-bank-cascade-verification-20261011.json` verifies142 tests,
+including35 pair portfolio tests. Four new regressions cover direct/opposite
+native support with a provider that panics if called, both native misses followed
+by25 model calls with positive or unknown outcome, all-stage admission before
+missing-file IO/cancel precedence, and final weights mutation after early
+opposite support. Legacy pair/collection/geometry/pruning tests remain green.
+
+`dedup-native-bank-cascade-native-audit-20261011.json` verifies actual CPU
+211901→211900 with no learned model invocation and exact prior transform/pixel/
+candidate/recipe/reflection parity. Observed269.871s and peak RSS728,285,184
+bytes, managed used0; previous model-first same-pair observation360.403s and
+1,956,904,960 bytes. These shared-host observations are not a controlled/general
+speedup or hard RSS cap. The one-second pinned profile identifies opposite
+proposal matching, specifically gradient::distances_four, as the sampled hot
+path; it does not quantify whole-run fractions.
+
+Native-first collection routing, exact descriptor-distance acceleration, broad
+precision and full current combined458/format/platform/full500 qualification
+remain open. The separate138-test3-distinct-file CPU collection run is still
+pending on its original model-first source.
+
+`dedup-model-bank-all-positives-prefix-0019-audit-20261011.json` independently
+verifies19 completed directions of the original unpruned bank-only458 run:
+16 supported,3 inconclusive,0 rejected,0 execution failures. The full plan
+continues unchanged; this is not current combined-route full recall.
+
+
+### Actual CPU scheduled collection: three distinct files (2026-10-11)
+
+`dedup-model-bank-recovery-collection-native-audit-20261011.json` verifies the complete three-pair schedule for three distinct input hashes. The known 211901/211900 duplicate retains the singleton transform and pixel evidence exactly; both cross-origin pairs remain typed inconclusive, not negative ground truth. Runtime was 1507.447 seconds and peak RSS 1,947,516,928 bytes on the shared host. Managed retained credit is released to zero. This is bounded collection integration evidence, not full corpus, semantic precision, throughput or an RSS cap.
+
+
+### Descriptor cutoff experiment rejected (2026-10-11)
+
+The frozen `dedup-gradient-bounded-snapshot-20261011.json` experiment adds nonnegative partial-distance pruning to four-lane matching while preserving full validation, arithmetic order of relevant distances, work admission and every pair cancellation checkpoint. Seven scalar/exhaustive gradient tests pass. Alternating source-extracted original versus experimental matcher measurements (`dedup-gradient-bounded-ab-audit-20261011.json`) show dense-descriptor regression despite sparse-descriptor improvements. The production gradient file is restored byte-for-byte to the prior native-bank-cascade snapshot. The experimental snapshot and logs remain evidence only; this optimization is not adopted and its integration qualification does not describe a production change.
+
+
+### Native-first complete collection (2026-10-11)
+
+`portfolio_collection::scan_native_bank_recovery_collection_with` applies direct native, joint opposite native, then model-bank coverage to every admitted unordered pair, with optional complete schedule hints and canonical publication. The shared recovery collection engine admits bank, opposite, pair and cumulative work and storage before iterator consumption. Per-pair stage traces remain explicit; unresolved evidence stays inconclusive and fatal errors discard the batch. Existing recovery APIs preserve their former order. The CPU wrapper `scan_loftr_native_bank_recovery_collection` reuses one lazily loaded model across pairs.
+
+`dedup-native-bank-collection-verification-20261011.json` verifies 146 generic tests, including complete scheduled learned fallback after both native misses, opposite support without a provider call, cumulative admission before iteration, managed evidence release and late provider/weight/sticky-generation failures. `dedup-native-bank-collection-native-compile-audit-20261011.json` verifies coherent CPU compilation. The real three-distinct-file collection run is tracked separately in `dedup-native-bank-collection-native-20261011.json`; compilation alone is not runtime qualification. The full corpus, semantic negative precision, formats, platforms, all500 repository qualification and RSS/scaling scope remain open.
+
+
+### Native-first collection publication adversaries (2026-10-11)
+
+The test-only child `dedup-native-bank-collection-guards-snapshot-20261011.json` preserves the production source of the 146-test collection core. `native_bank_collection_all_unknown_pairs_preserve_stage_trace` verifies all three canonical pairs reach all25 model calls after both native misses, remain explicitly inconclusive, retain model/native/opposite trace and release managed evidence. `native_bank_collection_final_publication_rechecks_every_file_after_last_callback` first measures the final callback on an unchanged complete run, then independently changes each of the three files at that exact callback. Each variant must refuse the entire report with attribution to the changed file and return managed usage to zero. This is publication-boundary source integrity evidence; it does not establish general semantic precision or eliminate filesystem races after observation.
+
+
+### Full native-first corpus qualification started (2026-10-11)
+
+The probe-only child `dedup-native-bank-outcome-native-snapshot-20261011.json` preserves all production modules of the verified146-test native-first collection core. `dedup-native-bank-outcome-native-compile-audit-20261011.json` verifies the two-file CPU probe compilation and source coherence. `dedup-native-bank-all-positives-20261011.json` retains all458 original baseline directions (229 publisher copies in both directions), fixed4096 direct-native trials, fixed1,000,000 joint-opposite trials for every pair, and all25 model banks with radii2/6. No per-case sampling policy is selected. Each complete two-file collection retains stage traces and typed unknowns, records original-file/model/runtime/source/binary hashes, and verifies final managed credit zero. The run is deliberately separate from the historical110-test bank-only full run and three-file runtime controls; results are not mixed into a synthetic full recall number.
+
+The native-first full run was started and its actual binary process confirmed live. No result or full-corpus completion is established by launch. `verify-dedup-native-bank-all-positives-prefix-20261011.py` can capture and verify completed prefixes, checking the complete baseline plan, fixed sampling argument, actual compilation pins, input hashes, pair IDs, explicit unknown/model trace, logs, RSS and managed release. Semantic negative precision, all formats, native platforms, all500 repository qualification and general RSS/scaling remain separate open requirements.
+
+
+### Actual CPU native-first collection and first full-corpus prefix (2026-10-11)
+
+`dedup-native-bank-collection-native-audit-20261011.json` verifies all three scheduled pairs across three distinct files. Known positive211901/211900 skips the model and exactly preserves prior transform/pixel evidence; cross-origin2/6 and6/9 remain inconclusive after model execution. Managed payload releases to zero; measured shared-host elapsed647.798s and RSS1,964,015,616bytes are bounded observations, not throughput or RSS limits. `dedup-native-bank-all-positives-prefix-0003-audit-20261011.json` independently verifies the first3 of458 current native-first directions:3 supported,0 inconclusive,0 rejected,0 execution failures. Full run remains live. The separate historical bank-only full run has an independently verified34-prefix:31 supported,3 inconclusive,0 execution failures; the versions/results are not combined.
+
+`dedup-exact-upstream-adversary-verification-20261011.json` verifies17 macOS exact-file tests including repeated-scan same-length rewrite and distinct-growth controls inspired by reproduced upstream stale-equality counterexamples. The original producer's refusal is preserved: it expected18 tests by source-attribute count, but one fixture is Linux-only; the actual macOS executable passed17 with0 failures. Full pinned-source/upstream evidence is in `dedup-500/dupe-krill-full-review-20261011.json`; no upstream production code is copied.
+
+
+### Actual CPU generated negative controls (2026-10-11)
+
+`dedup-native-bank-generated-negatives-audit-20261011.json` verifies the current native/opposite/model-bank collection path on two independently generated128x128 grayscale BMP pairs: constant64 versus192, and xorshift noise seeds173 versus991. All stages are configured as in the full native-first run (4096 direct-native,1m joint opposite,25 model banks,radii2/6); both execute the real learned provider and terminate inconclusive, without supported visual evidence. Managed usage returns to zero. The independent noise inputs differ at99.6337890625% of pixels with raw-gray correlation−0.00038737581809063866; the auditor separately checks complete BMP structure and pixel distributions. Shared-host observations are5.752s/RSS468,484,096bytes for flat and16.278s/RSS473,317,376bytes for noise. These two controls qualify information/random texture handling only. They do not establish semantic/burst/look-alike precision, a precision rate, total RSS limits or full-format coverage.
+
+The full current native-first run additionally has verified prefix5/458, all5 supported (`dedup-native-bank-all-positives-prefix-0005-audit-20261011.json`). No full aggregate recall is claimed.
+
+
+### Published-label DISC21 pilot prepared; current corpus prefix12 (2026-10-11)
+
+The official DISC21 dataset page (`https://sites.google.com/view/isc2021/dataset`) publishes development query/reference archives and `dev_ground_truth.csv`. The dataset paper (`https://arxiv.org/html/2106.09672v2`, section4.3) defines development distractor queries as having no reference match; its annotation-error caveat remains applicable. The deterministic pilot takes the first published positive whose reference is in shard0 (`Q00061/R020965`) and the first query absent from the10000-row positive mapping (`Q00000/R020965`). Image inspection shows a small building copy overlaid on a street photograph for the positive, and a decorated-card distractor against the building reference for the negative. This is an easy unrelated negative, not a hard semantic or burst control.
+
+`dedup-disc21-pilot-prepared-audit-20261011.json` verifies the original three JPEGs by offline replay of20 retained HTTP ranges and ZIP CRCs from two official archives, with version/ETag checks during download. Only11,078,776 archive bytes were downloaded rather than whole multi-GB archives. Original labels, range bytes, JPEG hashes and source scripts remain pinned. Images stay in local research storage, outside product assets. The real CPU execution is tracked in `dedup-disc21-pilot-native-20261011.json` with identical preselected policies for both cases (source tolerance2.0,native4096,opposite1m,25banks,radii2/6). Its actual first-case binary was confirmed live; no runtime result is claimed from preparation or launch.
+
+Separately, `dedup-native-bank-all-positives-prefix-0012-audit-20261011.json` verifies12/458 native-first directions:12 supported,0 inconclusive,0 execution errors. Baseline indices3,57,153 (the three historical bank-only unknown directions) are now all supported within this same frozen full-run policy, without mixing isolated controls. Full458 and all-case completion remain unproved.
+
+### DISC21 collage acceptance gap (2026-10-11)
+
+The pinned two-case pilot completed: published copy Q00061/R020965 is inconclusive, and unrelated Q00000/R020965 is also inconclusive. Execution and provenance are independently verified in `research/dedup-disc21-pilot-native-audit-20261011.json`; this is an observed positive miss, not a coverage pass. The unchanged model-bank diagnostic extracted 786 points across all25 banks and attempted four original-pixel comparisons. Its final zero inliers/absent transform discard failed candidates and do not establish absence of geometric hypotheses. Diagnostic evidence is verified in `research/dedup-disc21-bank-diagnostic-native-audit-20261011.json`. Candidate-level tracing is isolated from production thresholds and source.
+
+A deterministic next cohort contains8 published positives,16 distractor comparisons and32 original JPEGs. Selection, exact ZIP extraction and CRC/hash replay are verified in `research/dedup-disc21-cohort-prepared-audit-20261011.json`; runtime qualification is pending. These distractors do not constitute a hard semantic/burst corpus.
+
+The current native-first full458 run has a verified34-case prefix,34 supported and0 inconclusive/execution failures. The separate model-only run has a verified54-case prefix,51 supported and3 inconclusive. These prefixes and the DISC21 miss remain separate observations; neither run is complete.
+
+The isolated candidate trace is now independently verified in `research/dedup-disc21-candidate-trace-audit-20261011.json`, with terminal JSON identical to the unchanged diagnostic. Bank0 has12 witnesses: radius2 agrees on1977/2122 forward rank pairs (93.1668%) and1860/2079 reverse pairs (89.4661%), so the bidirectional90% rule correctly refuses support. Bank5 has14 witnesses and88.5123%/89.7370% agreement. Radius6 yields insufficient anchor geometry for both. These are measured refusal causes, not proof that either geometric error or scale-dependent filtering alone caused the miss. Production thresholds remain unchanged; investigate geometry refinement and scale treatment against the fixed positive/negative cohort before adopting a recovery.
+
+The fixed exploratory56-call pixel grid on the same positive is verified in `research/dedup-disc21-pixel-grid-audit-20261011.json`. Holding filter12, geometric candidates and90%/1000-pair rules fixed, rank-neighbor distance2 supports both candidates: bank0 has1245/1290 forward and1182/1240 reverse agreeing pairs; bank5 has1296/1360 and1768/1866. This candidate setting was selected after seeing the positive and remains unqualified for negative precision. Production code and original-policy terminal output are unchanged. The full24-pair baseline cohort is now running, reusing identical pilot observations only after binary/input/argument/hash checks.
+
+The rank2/filter12 caller-policy candidate now passes a fresh automatic25-bank CPU search (not only replayed hypotheses), independently verified in `research/dedup-disc21-rank2-candidate-audit-20261011.json`. It selects bank5 with14 witnesses,1296/1360 forward and1768/1866 reverse agreements; all production source hashes are unchanged. A separate fixed24-pair model-bank candidate run is live in `research/dedup-disc21-rank2-cohort-20261011.json`. The first positive is explicitly a development case used for policy selection; the other23 pairs were not used for that selection. Candidate and native-first baseline results must not be combined into a single recall aggregate.
+
+### Explicit model-bank pixel contexts (2026-10-11)
+
+`search_model_banks_pixel_coverage_files_with` accepts up to8 explicit `(window_radius, rank_radius)` recipes, sharing model extraction and geometric candidates. Before file/model I/O it admits conservative maximum rank padding and cumulative work for every recipe. Pixel thresholds are unchanged, context misses remain inconclusive, and late source/cancellation guards remain shared. Evidence records both selected radii. The original radius-only API delegates with its original rank radius and order. A frozen150-test generic gate is running in `research/dedup-model-bank-pixel-contexts-audit-20261011.json`; actual CPU qualification of the new API remains pending.
+
+Independent fixed-cohort prefixes now verify4/4 positive supports for the rank2 candidate, and6 supported/2 inconclusive positives plus1 inconclusive distractor for the baseline cascade. Q00906/R014120 is the second baseline positive gap. Cohort execution remains live; no negative precision qualification is available for the rank2 candidate yet. Auditor correction provenance is retained in `research/dedup-disc21-cohort-auditor-correction-20261011.json`; the initial rank2 prefix2 audit is superseded because its mutable auditor self-pin changed while fixing nested reused-binary pin validation. Use the verified prefix4 audit instead.
+
+The frozen pixel-context gate completed all150 tests with zero failures; source, executable and log hashes are independently verified in `research/dedup-model-bank-pixel-contexts-verification-20261011.json`. This validates the new generic-provider API and retained legacy/collection behavior. It does not validate a new actual-CPU wrapper or complete either DISC21 cohort; the ongoing rank2 cohort still uses the old API with its caller-selected parameter.
+
+The new cached CPU entry point `search_loftr_model_banks_pixel_coverage_files` compiled and recovered Q00061/R020965 with the four fixed contexts `(window2,rank8),(window6,rank8),(window2,rank2),(window6,rank2)`. It performs25 extractions and6 pixel attempts, then reports14 witnesses with the same transform and original-pixel evidence as the separately verified rank2 candidate. Independent verification: `research/dedup-disc21-pixel-context-native-audit-20261011.json`. The initial auditor comparison refusal is retained in `research/dedup-disc21-pixel-context-audit-refusal-20261011.json`: generic150 source omits previously separately-qualified CPU native-first wrappers, so corrected verification compares the CPU wrapper file against its pinned actual-CPU parent and all other files against generic150. No rerun or historical source rewrite occurred.
+
+The rank2 cohort now has a verified7-positive prefix:6 supported, Q00906/R014120 inconclusive with1065 points and4 pixel attempts. This screenshot is strongly darkened and contains a small photo tile with text. A fixed diagnostic contrast grid is running without changing original terminal decisions; contrast versus geometry remains unresolved. The new four-context CPU wrapper is separately running an unrelated distractor first and then this second positive gap. Cohort and general negative precision remain incomplete.
+
+### Reject dark contrast recovery with incorrect localization (2026-10-11)
+
+The fixed20-call dark contrast grid is verified in `research/dedup-disc21-dark-contrast-grid-audit-20261011.json`. At contrast0.005 both eligible candidates have zero informative pairs. Lower contrast yields high ordinal agreement for bank12 (e.g.1362/1452 and1413/1509 at0.0005/rank8). This is **not an accepted recovery**: all11 witnesses lie at source x400..488,y456..488, in an unrelated upper-right screenshot tile, outside the visible building-copy tile (manual approximate bbox x199..373,y694..867). Spatial refusal and image/hash/point evidence are retained in `research/dedup-disc21-dark-contrast-spatial-refusal-20261011.json`. Image-level positive labels alone cannot validate localized evidence; this setting is rejected for adoption. Production contrast thresholds are unchanged. A separate automatic candidate reproduction may complete, but image-level support there must not erase this spatial refusal.
+
+The original Q00061 collage control was separately rechecked: all14 automatically accepted bank5 witnesses lie inside the actual inserted building tile (manual approximate bbox x175..299,y91..286), and its transform matches the actual new-API CPU result. Evidence: `research/dedup-disc21-collage-spatial-control-20261011.json`. These manual rectangles are development observations, not official DISC21 localization annotations or automatic admission rules.
+
+The new four-context API's unrelated Q00000/R020965 control completed inconclusive with no observed false support, independently verified in `research/dedup-disc21-pixel-context-controls-prefix-0001-audit-20261011.json`. Its dark-positive control remains live. Two added generic regression tests cover flat/inverted pixels under all four contexts and last-provider weight mutation/cancellation with released managed credit; the frozen152-test gate is running.
+
+The152-test guard gate completed with zero failures and was independently verified in `research/dedup-model-bank-pixel-context-guards-verification-20261011.json`. This is a test-only child of the150-test context implementation; actual CPU source remains unchanged. The new flat/inverted and last-provider mutation/cancellation controls pass. It does not resolve the dark screenshot miss or qualify low-contrast adoption.
+
+The four-context actual CPU controls completed: unrelated Q00000/R020965 and positive Q00906/R014120 both remain inconclusive, independently verified in `research/dedup-disc21-pixel-context-controls-prefix-0002-audit-20261011.json`. The rank2 cohort has a verified10-pair prefix: all8 published positives processed (7 supported,1 inconclusive) and2 distractors inconclusive with zero observed false support. Remaining14 distractors are pending; supported image-level pairs do not by themselves prove correct localized witnesses.
+
+### Publish selected-window localization (2026-10-11)
+
+`AnchorRankEvidence` now exposes `source_window_bounds` and `target_window_bounds` as original-coordinate `[x,y,width,height]` rectangles enclosing actually selected center windows. They are accumulated during existing selection, without a second point scan, new allocation or additional pixel reads. Invalid-residual points do not contribute. Context padding and holes between windows are not compared evidence. The shifted-image fixture independently checks different source/target bounds and exclusion of a rejected correspondence; all157 generic tests pass and are independently verified in `research/dedup-anchor-window-bounds-verification-20261011.json`. Actual CPU output with the added fields is not yet qualified.
+
+The rejected low-contrast setting also reproduces bank12 support in the automatic CPU path, with the same misplaced transform; `research/dedup-disc21-dark-contrast-candidate-refusal-20261011.json` records rejection, not recovery.
+
+The original dark-image extraction has1065 selected points,158 inside the manually inspected actual-copy tile. Model-input min/max stretch (original pixels unchanged) has1368 points,175 inside. These counts include cross-bank duplicates and do not prove correspondence correctness; extraction-only runs use1 geometry trial and their terminal classifications are not qualification evidence. Independent records: `research/dedup-disc21-dark-proposal-locations-audit-20261011.json` and `research/dedup-disc21-dark-normalized-proposals-audit-20261011.json`. A manual-tile feasibility diagnostic using a historical pinned geometry helper, fixed1m trials/seed173/tolerances2 and exact endpoint alias removal finds8 and7 joint inliers, respectively, below10. This is not proof that no valid transform exists and is not automatic recall evidence (`research/dedup-disc21-manual-tile-unique-consensus-audit-20261011.json`). The initial concatenated-point diagnostic correctly refused duplicate endpoints; its failed execution and stale running report are explicitly closed in `research/dedup-disc21-manual-tile-consensus-refusal-20261011.json`. Next investigate automatic overlapping regions: the actual building tile crosses the vertical boundary of the fixed quadrant roster.
+
+### CPU extraction for caller-defined overlap searches (2026-10-11)
+
+`model_loftr::extract_loftr_region_points_files` now exposes the guarded generic extraction primitive through the native CPU provider. It returns managed original-coordinate proposals and model/dimension observations, without a copy verdict. Caller-defined multi-call aggregation must retain outer source/weights guards and separately qualify geometry and original pixels. The new wrapper and9-region diagnostic compile against the unchanged157-test generic core; source delta and build/binary pins are independently verified in `research/dedup-disc21-overlap-regions-native-v2-compile-audit-20261011.json`. An initial provider-closure lifetime inference build failure is preserved in `research/dedup-disc21-overlap-regions-build-refusal-20261011.json`; no CPU run occurred for that failed build.
+
+The actual CPU experiment is live in `research/dedup-disc21-overlap-regions-native-v2-20261011.json`:9 deterministic overlapping half-image source windows (3x3 offsets0,quarter,half) versus the whole reference, with outer original-file/weights guards. It preserves tolerances2,contrast0.005,agreement0.9 and minimum1000 informative pairs. No manual tile rectangle enters extraction or geometry. Runtime recovery and precision are pending. The extraction wrapper does not change the default fixed-quadrant search roster or any acceptance threshold.
+
+
+### Overlap geometry improved; dark-positive confirmation still refused (2026-10-11)
+
+The nine-region CPU experiment completed and is independently verified in `research/dedup-disc21-overlap-regions-native-v2-audit-20261011.json`. Bank7 has24 geometric witnesses,23 inside the manually inspected actual-copy tile; this rectangle was not used by extraction or geometry. At the unchanged0.005 contrast floor all attempted pixel comparisons have zero informative pairs, so the published copy remains inconclusive. The new original-coordinate selected-window bounds are independently replayed for all three completed pixel calls in `research/dedup-disc21-anchor-window-bounds-native-audit-20261011.json`; actual CPU bounds qualification is now complete for these calls.
+
+A separate development experiment lowers contrast to0.0005 while requiring20 geometric/anchor witnesses. All nine proposal banks are bit-identical to the preceding overlap run. Rank8/window2 yields1020/1020 forward agreeing pairs and853/970 reverse: reverse fails both the1000-pair minimum and90% agreement. Rank2 has too few informative pairs; radius6 has insufficient reverse anchors. The result remains inconclusive (`research/dedup-disc21-overlap-low-contrast-strong-audit-20261011.json`). Neither this candidate nor the earlier misplaced bank12 support is adopted. Next investigate explicit exposure-aware original-pixel verification and comparable physical scales for forward/reverse contexts, with independent negative/localization controls; these are directions, not implemented capabilities.
+
+The separate rank2 fixed cohort now has an independently verified21/24 prefix:7 supported/1 inconclusive positives and13 inconclusive distractors, with zero observed distractor supports (`research/dedup-disc21-rank2-cohort-prefix-0021-audit-20261011.json`). Three distractors remain outside this verified prefix; no full-cohort, hard-negative precision, all-format or all500-repository completion is claimed.
+
+The rank2 cohort subsequently completed all24 cases. Independent final-prefix verification (`research/dedup-disc21-rank2-cohort-prefix-0024-audit-20261011.json`) confirms7/8 positive supports, one positive miss (Q00906/R014120),16/16 distractors inconclusive and zero execution failures. This closes only the fixed cohort; it does not qualify hard-negative precision or the remaining broad coverage contract.
+
+### Explicit exposure measurement primitive (2026-10-11)
+
+`exposure::measure_rank_exposure` scans original linear RGB with constant storage, admitting the entire pixel-read count before reads and checking cancellation at each pixel and before publication. It reports maximum RGB and its positive reciprocal, preserving original samples. Opaque nonnegative positive HDR is admitted; zero, alpha and negative samples refuse calibration. This is neither texture information nor copy evidence and is not wired into existing rank acceptance. Three focused tests on a frozen157-core child pass (`research/dedup-exposure-verification-20261011.json`); the dark DISC21 miss and calibrated rank integration remain open.
+
+`exposure::calibrate_rank_exposure_into` now applies the measured uniform positive RGB gain into exact-size caller scratch. Three original-image passes are prepaid, including output validation; cancellation returns no calibrated view and scratch must be discarded on error. Float rounding is explicit; there is no clipping or per-channel adjustment. Seventeen exposure/rank/anchor tests pass on a pinned compatible snapshot (`research/dedup-exposure-calibration-verification-20261011.json`), including synthetic darkening recovery and inversion refusal. This does not yet establish recovery or precision on original DISC21 geometry; correct overlap and rejected bank12 replays remain the next required controls. Defaults and file-level search acceptance remain unchanged.
+
+
+### Original-frame exposure replay: positive support and false localization (2026-10-11)
+
+`research/dedup-exposure-replay-audit-20261011.json` verifies native decoding/calibration and12 original-pixel calls on three previously saved candidates, without rerunning model extraction. The dark query peak is0.021219009533524513 (uniform gain47.12755316972132), reference peak1. Uncalibrated rank8 observations exactly replay both overlap candidates; all uncalibrated calls have zero informative pairs. Calibrated overlap bank7 at rank2 supports with1226/1244 forward and1494/1545 reverse agreements at unchanged contrast0.005, minimum1000 pairs and90% agreement. However, misplaced bank12 also supports with1375/1375 and1424/1426 agreements. General adoption is therefore rejected. At rank8 both bank7 and bank12 fail reverse agreement. This experiment establishes that exposure alone does not resolve localized false support; stronger independent spatial/texture and cross-scale evidence remains required. It is not an automatic search recovery or precision qualification. Both calibration buffers retain managed credit until destruction; source JPEG byte guards span all calls. No external profile-sidecar case is qualified. The initial private-type compile failure is preserved separately in `research/dedup-exposure-replay-build-refusal-20261011.json`, with no runtime from that build.
+
+The separate native-first458 run now has independently verified prefix80:80 supported,0 inconclusive/rejected/execution failures (`research/dedup-native-bank-all-positives-prefix-0080-audit-20261011.json`). Its producer was confirmed live; the remaining378 directions and broad coverage contract remain open.
+
+
+### Original multiscale structure replay (2026-10-11)
+
+`research/dedup-structure-replay-audit-20261011.json` verifies141 patches/11421 sample pairs from the same three saved candidates on native-decoded original JPEGs. Each patch uses9x9 source-aligned positions at source radii2/4/8, with bilinear luminance in both images and the retained projective mapping. An independent Python two-pass calculation checks native online means, energies, covariance and correlation from published sample pairs; it does not independently decode the JPEGs or replay native bilinear reads. Samples surround existing witnesses and are not statistical holdout evidence. No contrast floor or copy threshold is introduced.
+
+Simple patch correlation fails to discriminate this case: misplaced bank12 median correlation is0.7707726746215482/0.8337143232751926 at radii4/8, versus0.4496877899594571/0.5531810293734489 for correct overlap bank7. No correlation gate is adopted. Next test comparable physical sampling apertures and geometric residuals: mapped point samples currently compare a downsampled screenshot with raw reference detail. The effect of that mismatch is a hypothesis, not an established cause or qualified recovery. Existing default acceptance remains unchanged.
+
+
+### Reference sampling aperture changes structure evidence (2026-10-11)
+
+`research/dedup-aperture-replay-audit-20261011.json` verifies564 original-frame patches/45516 valid pairs for the same three saved candidates, source patch radii2/4/8 and reference-only aperture radii0/0.5/1/2 in source coordinates. Each nonzero aperture averages25 fully valid bilinear taps mapped through the retained geometry. The zero-aperture samples and statistics exactly equal the preceding structure replay. Whole sample pairs with an invalid edge tap are skipped, without partial-window renormalization or padding:20 patches retain72..78 of81 attempted samples. The auditor independently checks statistics from published averaged pairs, not individual native decoder/tap values. An initial auditor assumption of81 valid pairs everywhere is explicitly corrected in `research/dedup-aperture-replay-audit-refusal-20261011.json`; runtime data was not changed.
+
+At source patch radius2/aperture1, correct bank7 median correlation increases from0.2692488564079413 to approximately0.67217, while misplaced bank12 decreases from0.429730502527788 to approximately0.29802. At patch radius8 bank12 remains more correlated than bank7. Thus sampling aperture measurably affects this case, but no simple correlation gate or production recovery policy is adopted. Next measure geometric residuals and investigate fixed global refinement with separate fit/check pixels. No model extraction rerun, automatic search/negative precision, full-format or full-corpus qualification is established here.
+
+
+### Spatially separated translation fit/check (2026-10-11)
+
+`research/dedup-refinement-replay-audit-20261011.json` verifies a fixed25-offset global translation experiment (source-coordinate dx/dy in−1,−0.5,0,0.5,1), using radius2 patches/reference aperture1. Witness median-x splits fit centers<=median−8 and check centers>=median+8. Only fit scores select the offset; check pixels are read afterward. Independent projected bilinear index footprints show zero shared original source/reference pixels between all fit trials and both check evaluations for these three cases. This is procedural/spatial separation, not statistical independence or held-out policy qualification: images and recipe were used during development. Zero-trial patch samples exactly equal the aperture replay. Matrix decimal parsing differs by1 ULP in three coefficients across Rust/Python; input provenance and shift equations are verified within2 ULP, with the initial exact-equality auditor refusal preserved separately.
+
+Correct bank7 has12fit/12check patches: selected source shift[0.5,0] improves fit mean correlation0.61537→0.72129, but check only0.55124→0.56206. Misplaced bank12 has5fit/5check: shift[−0.5,−0.5] improves fit0.30383→0.31561 while check declines0.31259→0.30001. Bank6 has only2check patches, below the declared3minimum, and its observed check score worsens; no refinement qualification is claimed for it. No production adoption, copy threshold or automatic recovery is established. Global translation alone provides little transfer to the correct spatial check; inspect local geometry/scale/blur evidence before selecting a refinement model or acceptance rule.
+
+
+### Existing full-witness geometry refit does not resolve the dark case (2026-10-11)
+
+The bank search fits/refines a hypothesis within its bank, then collects joint witnesses from all banks; it does not refit that collected set. A research replay invokes the existing public joint projective verifier on each full saved witness set (4096 trials,seed173,all witnesses required,source/target tolerance2,whole-image domain checks). Independent verification: `research/dedup-joint-refit-replay-audit-20261011.json`. The original12 pixel observations replay exactly, and12 refined observations use the same original/calibrated rank8/2 policies. No production code or default acceptance changes.
+
+For correct bank7, source residual median/max are0.23515/0.43618 pixels; target median/max1.04098/1.96083. Full-set refit moves projected witnesses by at most1.28e−13 target pixels and retains identical pixel evidence. Misplaced bank12 also retains identical evidence, including calibrated rank2 false support. Smaller bank6 improves normalized geometric error2.16227→1.64509 but still fails pixel support. Thus adding aggregate refit would not resolve this measured gap. Explicit calibrated verification must be qualified with stronger geometry/independent spatial evidence and automatic negative controls before adoption.
+
+The separate native-first DISC21 baseline has verified prefix17/24:6 supported/2 inconclusive positives and9 inconclusive distractors, with0 execution failures (`research/dedup-disc21-cohort-native-prefix-0017-audit-20261011.json`). The producer was still live; this is not final cohort completion and remains separate from the completed rank2 cohort.
+
+
+### Explicit guarded calibrated-file verifier and automatic development recovery (2026-10-11)
+
+`anchor_rank_file::compare_exposure_anchor_rank_files` adds explicit exposure metadata around local anchor evidence. It shares the original sticky cancellation and source/dependency publication guards. Before I/O it admits calibration work covering6×decode pixel cap; both fallibly allocated scratch buffers retain managed credit until destruction, initialization is cancellable, and original/calibrated views remain distinct. Existing file API delegates through the same implementation without calibration or changed thresholds/callback order. All172 exposure/file/rank/geometry/model/portfolio/collection tests pass on a pinned compatible child (`research/dedup-exposure-anchor-files-verification-20261011.json`), including new dark-positive/inversion, work overflow/pre-I/O cancellation and late source-mutation controls. No default search path selects this verifier.
+
+The actual CPU nine-overlapping-region development recipe now requires20 geometric/anchor witnesses, retaining contrast0.005,minimum1000 informative pairs and90% bidirectional agreement, trying rank8/2 and windows2/6. `research/dedup-disc21-overlap-calibrated-strong-audit-20261011.json` verifies automatic Q00906/R014120 recovery with bank7/24 witnesses after3 pixel attempts;23 witnesses fall inside the offline manual actual-copy annotation. All nine proposal banks exactly equal the earlier overlap baseline. The unrelated Q00000/R020965 control remains inconclusive with0 pixel attempts. Managed payload peaks are44,445,456/16,320,640bytes; tensor/model RSS and diagnostic metadata are outside admission, and shared-host timing is not a performance qualification.
+
+`research/dedup-calibrated-file-replay-audit-20261011.json` separately verifies the new file API on saved original candidates: correct24-witness bank7 has1226/1244 and1494/1545 agreeing pairs; known misplaced11-witness bank12 and smaller12-witness bank6 explicitly refuse insufficient geometry under min20. This minimum was selected using the development positive/false-localization observations, so neither this rejection nor one easy negative establishes general precision. The earlier min10 calibrated false support is retained; exposure alone remains insufficient.
+
+A separate fixed24-pair candidate cohort is launched in `research/dedup-disc21-calibrated-strong-cohort-20261011.json`, reusing the two identical controls only after pinned binary/input/argument checks. It remains separate from the completed rank2 and ongoing native-first baselines. No combined8/8 recall, default recovery-pipeline adoption, hard-negative precision, all-format/platform/RSS/all500 completion is claimed.
+
+
+### Calibration resource and request-owner controls (2026-10-12)
+
+`research/dedup-exposure-file-guards-verification-20261012.json` verifies six file tests in a test-only harness against unchanged172-gate production source. Three prior tests repeat; three new controls establish: a managed cap sufficient for legacy decoding/comparison explicitly refuses additional calibrated scratch as a rank budget error with released credit; a black file returns typed uninformative exposure with released scratch; either request-owner generation change cancels mid-operation and at final publication even when the caller callback itself returns false. This is not a fresh full175-test run or total-process RSS qualification. The immutable original172-test gate remains separate.
+
+`research/dedup-disc21-calibrated-strong-cohort-prefix-0002-audit-20261012.json` independently verifies the first two candidate-cohort outcomes: Q00061/R020965 and Q00324/R044970 are inconclusive, with0 execution failures. No negatives are included in this prefix. Thus the stronger calibrated-overlap recipe cannot replace the prior rank2/native searches; its separately verified Q00906 recovery only motivates an additional guarded recovery path. No combined recall or integrated fallback lifecycle is established. The fixed24-pair candidate producer and its current child were confirmed live; unfinished suffix remains unqualified.
+
+
+### Guarded overlap/exposure search becomes an explicit library operation (2026-10-12)
+
+`model_banks::search_model_banks_overlap_exposure_files_with` now owns nine deterministic source-half regions at0/quarter/half offsets versus the whole reference, shared point-bank geometry, all caller-ordered pixel contexts, original-file/dependency and weight observations, sticky cancellation and final publication guards. `ExposureModelBankSearchEvidence` retains selected exposure metadata beside the existing search trace; misses retain neither a candidate transform nor exposure metadata. Existing whole/quadrant APIs delegate through the shared implementation with unchanged roster/order/pixel semantics. Conservative25-bank work admission remains: cumulative calibration25×recipe_count×6×decode.max_pixels is checked before I/O in addition to original extraction/geometry/rank caps. Region-pair stack metadata and bounded reference vectors are outside managed payload accounting. The path is explicit; no default or portfolio/collection fallback automatically selects it.
+
+`model_loftr::search_loftr_model_banks_overlap_exposure_files` reuses one `Option<LoftrModel>` provider cache across the complete library operation. Source inspection establishes weight loading only for the empty cache; no instrumented load count or timing A/B is claimed. All179 generic/file/rank/geometry/model/portfolio/collection tests pass (`research/dedup-overlap-exposure-search-verification-20261012.json`). Four new generic controls check9 provider calls with expected crop/full dimensions, selected exposure metadata, cumulative pre-I/O calibration refusal, last-provider weight mutation and both request owners, and flat/inverted pixel refusal. Prior file-resource tests and legacy25-bank behavior remain included.
+
+Actual CPU public-API controls are verified in `research/dedup-disc21-overlap-cached-exposure-audit-20261012.json`: Q00906/R014120 selects bank7/24 witnesses after3pixel attempts, and Q00000/R020965 remains inconclusive after9banks/0pixel attempts. Positive selected matrix and pixel evidence exactly equal the previous research run; proposal totals are531positive/278negative. Managed payload peaks44,447,056/16,322,240bytes exclude model/tensor RSS and diagnostic metadata. This qualifies the new explicit API on these controls, not general precision, performance, full formats/platforms/all500 or integrated fallback lifecycle.
+
+The separate strict-recipe cohort now has a verified9-case prefix (`research/dedup-disc21-calibrated-strong-cohort-prefix-0009-audit-20261012.json`):6/8positives supported, Q00061 and Q00324 inconclusive,1distractor inconclusive. Remaining15distractors are pending. This variant cannot replace earlier rank2/native methods; composition must preserve prior supports and guard sources across both stages before any combined-recall claim.
+
+
+### Guarded primary search followed by calibrated recovery (2026-10-12)
+
+`model_banks::search_model_banks_exposure_recovery_files_with` composes ordinary bank search with the explicit nine-region calibrated search. A supported primary result skips recovery; an inconclusive primary result advances; errors refuse the whole operation. `ModelBankExposureRecoveryPolicy::for_stages` checked-adds all eight work caps. Both stage recipes, calibration admission and cumulative limits are validated before I/O, including a suffix skipped after primary success. Outer original-file/dependency and weight observations span both stages, with sticky caller cancellation and both request-owner generations checked before publication. The evidence retains the primary trace and an optional recovery trace without publishing partial results on failure.
+
+`model_loftr::search_loftr_model_banks_exposure_recovery_files` shares one model cache across both stages and requires equal proposal caps to preserve each stage's extraction semantics. All184 tests pass on a pinned compatible snapshot (`research/dedup-exposure-recovery-search-verification-20261012.json`), including five new composition controls: primary short-circuit, secondary execution after a miss, full pre-I/O suffix/cumulative/overflow refusal, final-secondary source mutation and either owner, and final outer weight/owner checks even after primary success. An initial auditor output-directory collision refused before copying; its separate refusal artifact is retained and prior179 executables were preserved.
+
+Actual original-JPEG CPU controls are independently verified in `research/dedup-disc21-exposure-recovery-api-audit-20261012.json`: Q00061 retains primary bank5/14-witness support and skips recovery; Q00906 advances after a primary miss to bank7/24-witness calibrated support; unrelated Q00000 remains inconclusive through both stages. Selected positive geometry/pixel evidence matches the separately verified earlier operations. All three return managed usage to zero; observed managed peaks are21,109,568/44,447,056/16,339,232bytes, excluding model/tensor RSS and diagnostic metadata. This explicit operation is not adopted by default portfolio/collection paths; the fixed24-pair composed cohort, held-out hard negatives, total RSS, broad formats/platforms and full500 source reviews remain open.
+
+
+### Complete strict cohort and direct composed-cohort qualification (2026-10-12)
+
+`research/dedup-disc21-calibrated-strong-cohort-prefix-0024-audit-20261012.json` closes the separate strict calibrated-overlap development cohort:6/8 positives supported, Q00061 and Q00324 inconclusive,16/16 distractors inconclusive,0 execution failures. Every result/log/input/policy provenance and accepted pixel count was checked. This is complete evaluation of that fixed recipe on this24-pair development plan, not hard-negative precision or broad acceptance.
+
+`research/dedup-disc21-exposure-recovery-cohort-20261012.json` now executes that same fixed24-pair plan through the public composed CPU API itself. Three exact previously audited controls may be reused only with identical commands and immutable binary/source/input pins. The completed prefix auditor validates primary25-bank/min10 evidence, secondary9-bank/min20 evidence only after primary miss, bidirectional1000-pair/90% support, per-pair logs, released managed usage and published labels. Its verified2-case prefix preserves Q00061 and Q00324 through primary support, with recovery skipped (`research/dedup-disc21-exposure-recovery-cohort-prefix-0002-audit-20261012.json`). Remaining22 cases are pending; this does not establish combined8/8 recall or independent precision. Producer and current child were confirmed live after launch.
+
+Separate baselines remain distinct: native-first DISC21 has verified23/24 (6positive supports,2unknown positives,15unknown negatives), while native-first Copydays has verified105/458 positive directions, all105 supported,0 execution failures (`research/dedup-disc21-cohort-native-prefix-0023-audit-20261011.json`, `research/dedup-native-bank-all-positives-prefix-0105-audit-20261011.json`). Their unfinished suffixes, format/platform/RSS and full500-repository source reviews remain open.
+
+
+### Architectural noncopy controls prepared before matching (2026-10-12)
+
+Four manually inspected architectural comparisons are precommitted in `research/dedup-disc21-architecture-controls-prepared-20261012.json`: unfinished low house R014120 versus curved high-rise R020965 in both directions; grayscale street collage Q00061 versus the wrong house; dark phone screenshot Q00906 versus the wrong tower. Full query images and original reference contact sheet were viewed before runtime selection. Hashes, parent image records and ZIP CRCs for all4 original JPEGs and the exact plan are verified in `research/dedup-disc21-architecture-controls-prepared-audit-20261012.json`. The reference-reference negative labels are manual observations, not publisher ground truth; these development cases are not an independent hard-negative/burst corpus.
+
+`research/dedup-disc21-architecture-controls-20261012.json` runs unchanged public composed CPU recovery and thresholds on those4 comparisons. No manual ROI or image transformation enters matching. The initial new producer retained another cohort's scratch path and refused before report creation, directory modification or runtime; `research/dedup-disc21-architecture-controls-launch-refusal-20261012.json` preserves that refusal. A distinct scratch path is now used and producer/child confirmed live. No runtime result is qualified yet. Separate completed-prefix auditing checks original commands/logs/pins, primary/secondary trace, bidirectional pixel thresholds and released managed usage.
+
+The main composed24-pair cohort now has independently verified3/24 completed positives, all supported (`research/dedup-disc21-exposure-recovery-cohort-prefix-0003-audit-20261012.json`); remaining21 comparisons and full acceptance remain pending.
+
+The native-first DISC21 baseline has now completed all24 and is independently verified in `research/dedup-disc21-cohort-native-prefix-0024-audit-20261011.json`:6/8 positives supported, Q00061/Q00906 inconclusive,16/16 negatives inconclusive,0 execution failures. This closes that fixed baseline, preserving both measured gaps; it does not close the composed cohort or broad acceptance.
+
+The first architectural comparison is now independently verified in `research/dedup-disc21-architecture-controls-prefix-0001-audit-20261012.json`: R014120 versus R020965 remains inconclusive through primary and calibrated recovery, with managed credit returned to zero. The other3 comparisons remain pending; one development negative does not establish general architectural precision.
+
+The direct composed-cohort verified prefix advances to4/24, all4 positive comparisons supported with0 execution failures (`research/dedup-disc21-exposure-recovery-cohort-prefix-0004-audit-20261012.json`). No negative cohort result or full8-positive completion is inferred from this prefix.
+
+
+### Full pinned dhash review and transparent-palette counterexample (2026-10-12)
+
+`research/dedup-500/dhash-full-review-audit-20261012.json` verifies all9 repository blobs of benhoyt/dhash at b2271b8c3b7d30fc9abdbcaf5988338a7b6bc76e. The full Python implementation/test/packaging/config/license/readme text was read. One original Pillow unittest and24 original doctest examples pass on Python3.12/Pillow12.3. The unchanged complete test suite failed import because Wand is unavailable; the bounded runner removes only that import using an AST adapter and selects the original Pillow test, without mocking Wand or editing upstream source. This is not full backend/platform runtime qualification.
+
+A reproduced in-memory palette-alpha case gives two fully invisible images hashes separated by64bits: the upstream grayscale path composites RGBA/LA but ignores P-mode alpha-table metadata before grayscale conversion. Opaque white and black both hash tozero. Thus this implementation supplies an independent row/column bit-order oracle, but neither original-pixel identity nor qualified transparency/crop/color/source/resource semantics. No production code is copied. Existing rrrah canonical invisible-RGB/signed-zero and uniform-collision fixtures are being run on the pinned184-gate source snapshot; completion is pending, so upstream counterexamples are not treated as current rrrah proof.
+
+Current independent completed-prefix audits advance composed DISC21 to5/24 (all5 positives supported) and architectural noncopies to2/4 (both distinct-building directions inconclusive), with0 execution failures. The remaining suffixes and full500 source/runtime requirement stay open.
+
+`research/dedup-dhash-rrrah-pixel-guards-verification-20261012.json` now verifies10 existing linear/pixel tests on unchanged184-gate source: canonical invisible RGB/signed zero, exact visible-pixel inequality and uniform hash collision information gates pass. This is a separate focused10-test run, not a new full194-test gate or a P-mode decoder-specific qualification. The original pinned upstream review and its incomplete Wand runtime remain unchanged.
+
+Latest direct composed-cohort prefix is7/24, all7 positives supported; architectural noncopy prefix is3/4, all3 inconclusive,0 execution failures (`research/dedup-disc21-exposure-recovery-cohort-prefix-0007-audit-20261012.json`, `research/dedup-disc21-architecture-controls-prefix-0003-audit-20261012.json`). Unfinished suffixes remain unqualified.
+
+
+### Real PNG palette-alpha regression closes the decoded-view gap (2026-10-12)
+
+`tests/palette_transparency.rs` adds two native selected-frame decode/equality controls using six independent Pillow-encoded9x9 original PNG fixtures. Two P-mode images have different hidden RGB/index values and a full256-entry transparent alpha table; both equal a fully transparent RGBA encoding. Changing one center pixel to visible gray180 explicitly makes equality false. Opaque black and white PNGs also remain different. All decoded owners are dropped before checking managed usage returns tozero. Independent fixture replay reproduces the exact bytes and the auditor checks PNG modes/alpha table lengths and decoded fixture semantics.
+
+`research/dedup-palette-transparency-verification-20261012.json` verifies both tests against unchanged pinned184-gate production source, in a separate test-only harness with its own lock/source/fixture pins. This is actual PNG decoder coverage beyond the prior already-decoded linear-view fixtures; it is not a fresh186-test full gate, broad PNG/platform/RSS qualification or new production fix. The upstream dhash P-mode counterexample is therefore covered by these specific rrrah file controls without adopting upstream conversion behavior.
+
+The direct composed DISC21 prefix is now9/24: all8positive pairs supported, the first distractor inconclusive,0 execution failures (`research/dedup-disc21-exposure-recovery-cohort-prefix-0009-audit-20261012.json`). The remaining15 negatives are pending. All4 manually inspected architectural noncopy comparisons completed and remain inconclusive through both stages (`research/dedup-disc21-architecture-controls-prefix-0004-audit-20261012.json`). These results qualify these development controls, not independent hard-negative precision, default integration, full formats/platforms/RSS/all500 acceptance.
+
+
+### Palette-alpha discovery in complete collections (2026-10-12)
+
+The palette file regression now also passes through both `scan_equal_pixels` and `scan_indexed_pixels`. On the six original PNGs, exhaustive search returns exactly3 equal pairs among the three fully transparent encodings and12different pairs; indexed discovery produces exactly the same3equal pairs,6indexed decodes and3candidate pairs. Both input orders pass, with no source/decode diagnostics and released managed credit. This establishes actual collection discovery for these uniform/transparent cases without disabling perceptual information gates or providing candidate pairs manually.
+
+`research/dedup-palette-collection-verification-20261012.json` pins a separate3-test harness, lock, fixtures, log and executable against unchanged184-gate production source. Adding the third root test intentionally changed the mutable root-test pin in the prior2-test manifest; the auditor verifies its original bytes in the previous immutable harness, preserving historical manifests/logs rather than overwriting them. The new frozen3-test run qualifies the current root tests; no fresh187-test full gate or broader PNG/platform/RSS/full500 claim is made.
+
+The direct composed DISC21 prefix advances to12/24:8positive supports and4inconclusive distractors,0 execution failures (`research/dedup-disc21-exposure-recovery-cohort-prefix-0012-audit-20261012.json`). Remaining12 distractors and broad acceptance remain open.
+
+
+### Same-length PNG alpha-table change invalidates repeated-scan evidence (2026-10-12)
+
+`tests/palette_mutation.rs` exercises original encoded PNG content through `fingerprint_file` and `scan_indexed_pixels`. Three initially transparent palette PNGs produce3equal pairs. Rewriting only palette alpha entry80 and its tRNS CRC preserves encoded length but makes9pixels visible in one source. Its prior cache entry is missed, the new fingerprint differs, and a second call hits only the new entry. Indexed rescan in reversed input order retains just the unchanged pair(1,3), with1candidate pair and no decode/source diagnostics; managed usage returns tozero.
+
+`research/dedup-palette-mutation-verification-20261012.json` verifies the new single test, immutable harness/lock/log/executable and unchanged184-gate production source. Independent Python zlib checks original PNG chunk CRCs and constructs an equal-length rewrite; Pillow verifies0→9visible pixels. This is sequential rescan qualification, not a concurrent or restored-metadata race guarantee, broad PNG/platform/RSS proof, fresh188-test full gate or new production fix.
+
+The composed DISC21 completed prefix is14/24:8positive supports,6inconclusive distractors,0 execution failures (`research/dedup-disc21-exposure-recovery-cohort-prefix-0014-audit-20261012.json`). The separate native-first458 run has verified122supported directions,0inconclusive/rejected/execution failures (`research/dedup-native-bank-all-positives-prefix-0122-audit-20261011.json`). Their unfinished suffixes and all-format/platform/full500 acceptance remain open.
+
+
+### Selected-frame collection lifecycle and information gate revalidated (2026-10-12)
+
+`research/dedup-pixel-search-information-verification-20261012.json` verifies21 existing tests on unchanged184-gate production source with test sources identical to the current root:16pixel_search and5information. The gate covers final caller/request-owner cancellation without partial reports, changed-source edge invalidation, source change before decode, corrupt/missing/permission diagnostics, indexed zero-pair unique collections, explicit HDR color authority, uniform/invisible-color discovery and informative fingerprint collisions requiring full-resolution confirmation. Logs and preserved executables are pinned independently. These are existing fixtures, not a new palette-specific cancellation sweep, fresh205-test full suite, or full platform/RSS qualification.
+
+The direct composed DISC21 verified prefix is16/24:8positive supports,8inconclusive distractors and0execution failures (`research/dedup-disc21-exposure-recovery-cohort-prefix-0016-audit-20261012.json`). The final8 negatives remain pending; this fixed development cohort and separate architectural controls do not qualify held-out semantic/burst precision or all-format/platform/full500 acceptance.
+
+
+### Complete blockhash-js source and original-test review (2026-10-12)
+
+`research/dedup-500/blockhash-js-full-review-20261012.json` deepens registry362 at commit2084417e40005e37f4ad957dbd2bca08ddc222bc. All63 repository blobs match the pinned Git tree; the complete algorithm/test/config/license/readme/reference-vector text was read. All34 unchanged original method/image tests pass with the original JPEG/PNG decoder versions and wildcard test dependencies resolved in a separately pinned dependency prefix. The full development install failed on browserify-shim registry404; browser bundling/lint remain unqualified. No installation lifecycle scripts, source edits or production/image-fixture copying were used.
+
+Original-code controls show method1 on5x5/bits4 omits a changed fifth row, whereas method2 changes0000→000f and agrees with an independent exact-Fraction pixel/block overlap oracle. The README restricts method1 to divisible sizes; rrrah should retain explicit fast-path admission rather than silent edge loss. Invalid hex zz versus00 returns distance0 through JavaScript NaN/bitwise coercion. Fully transparent hidden RGB is ignored via white fill, but partial alpha1 and opaque255 produce identical hashes for the same RGB. These are candidate-fingerprint semantics, not pixel identity; unchecked parsing/alpha-insensitive acceptance and unbounded decoder/resource behavior are not adopted.
+
+The direct composed DISC21 completed prefix is19/24:8positive supports,11inconclusive distractors,0execution failures (`research/dedup-disc21-exposure-recovery-cohort-prefix-0019-audit-20261012.json`). Final5 distractors, held-out semantic/burst precision, formats/platforms/RSS and full500-source/runtime acceptance remain open.
+
+
+### Fresh integrated219-test snapshot (2026-10-12)
+
+`research/dedup-integrated-palette-recovery-verification-20261012.json` verifies a fresh19-suite219-test run. This is an actual coherent execution, not arithmetic aggregation of older gates: prior184 guarded bank/exposure/portfolio/geometry tests plus linear4,pixels6,information5,pixel_search16,palette_transparency3 andpalette_mutation1 all pass. Every rrrah-dedup production source matches the current root exactly, including the public exposure export location; new tests/fixtures are frozen together. Whole-source hashes, parent manifest, log, suite counts and preserved executables are checked. The compatible4-crate dependency snapshot intentionally excludes unrelated mutable core/decode HDR work, so this does not qualify the entire dirty workspace, every feature/native platform, total RSS or full500 acceptance.
+
+Direct composed DISC21 is verified through23/24:8positive supports,15inconclusive distractors,0execution failures (`research/dedup-disc21-exposure-recovery-cohort-prefix-0023-audit-20261012.json`). The last negative remains pending. Native-first Copydays is independently verified through137/458, all137supported (`research/dedup-native-bank-all-positives-prefix-0137-audit-20261011.json`); its unfinished suffix remains open.
+
+
+### Complete composed24-pair CPU development cohort (2026-10-12)
+
+`research/dedup-disc21-exposure-recovery-cohort-final-audit-20261012.json` closes the precommitted24-pair evaluation through the public composed CPU API:8/8positive image-level supports,16/16distractors inconclusive,0execution failures and released managed credit for every pair. Primary ordinary25-bank/rank2/min10 search supports7positives and skips recovery; all17primary misses enter nine-region calibrated/min20 recovery, which supports Q00906 and leaves16negatives inconclusive. Three exact previously audited controls (Q00061,Q00906,Q00000) were reused only after matching immutable source/binary/input/argument checks; the other21pairs execute in the cohort. The terminal producer exited normally, the final completed-prefix audit verifies all24 rows/logs/pins, and the final auditor checks stage traces and reuse identities.
+
+This is direct composition evidence, not a union of separate policy reports. It establishes recovery of this previously measured dark-positive gap while retaining the primary supports on this fixed development plan. It does not establish held-out semantic/burst precision, correct localization for every supported image, byte/pixel identity, default portfolio/collection adoption, full458 corpus/formats/native-platform/RSS or full500 source/runtime completion. Those original acceptance requirements remain open.
+
+
+### Guarded exposure-recovery collection (2026-10-12)
+
+`research/dedup-exposure-recovery-collection-verification-20261012.json` verifies a fresh 223-test, 19-suite run against frozen current-identical dedup production source and compatible dependencies. Four new collection controls cover complete scheduling, retained inconclusive pairs, cumulative work/calibration admission before input consumption, report-owned memory credit, and atomic failure when the final pair mutates an earlier source or cancels its owner.
+
+The explicit collection API shares a provider across all pairs and both stages; its native CPU wrapper retains one model cache. Ordinary evidence skips calibrated recovery. IDs currently determine source/target direction: source-region recovery is asymmetric, and an opposite-direction attempt is still required for order-independent discovery. No transitive groups or default portfolio adoption are implied. The three-source actual CPU control is running in `research/dedup-disc21-exposure-recovery-collection-20261012.json`; its result is not yet qualified. Full corpus, held-out hard negatives, total RSS, platform/format coverage and complete review of all 500 repositories remain open.
+
+
+### Bidirectional exposure-recovery collection (2026-10-12)
+
+`scan_model_banks_bidirectional_exposure_recovery_collection_with` adds the missing reverse attempt after an inconclusive forward composed search. `ModelBankExposureCollectionPolicy::for_bidirectional_pairs` prepays both full directions, including both calibrated suffixes, with checked multiplication. All eight work fields and calibration reads are validated before consuming the input iterator. Forward support skips the reverse attempt; otherwise reverse evidence is retained even when inconclusive. Transforms stay explicitly associated with forward (lower-ID source) or reverse (higher-ID source), rather than being silently inverted or combined into transitive groups.
+
+The CPU wrapper shares one lazy model cache across both directions and all collection pairs. The immutable snapshot and full 46-test model comparison execution are recorded by `research/dedup-bidirectional-exposure-collection-snapshot-20261012.json` and its test log; execution is not qualified until the verification artifact exists. New tests cover forward support, reverse primary support, reverse calibrated support, double misses, each reverse work cap, overflow and final reverse mutation/owner cancellation. The separate actual CPU control assigns the reference lower ID than the dark query and is recorded in `research/dedup-disc21-bidirectional-exposure-collection-20261012.json`. Native runtime recall, default portfolio integration, hard-negative precision and original full acceptance remain pending until directly verified.
+
+`research/dedup-bidirectional-exposure-collection-verification-20261012.json` now verifies all46 tests passing (0failed/ignored), snapshot hashes, current dedup source identity, log and preserved executable. The native CPU probe and new wrapper also compile successfully with the pinned offline runtime. The actual reversed-ID run remains in progress; compilation and synthetic/provider tests do not establish real directional recall.
+
+
+### Final reverse attempt invalidates earlier supported pairs (2026-10-12)
+
+`research/dedup-bidirectional-exposure-atomic-verification-20261012.json` verifies four focused bidirectional tests on production unchanged from the46-test gate. A new three-source control supports the first two unordered pairs, exhausts the final pair forward, and triggers an event on its final reverse provider call: replacing the earlier source, cancelling its owner, caller cancellation or provider failure. Every case discards the entire collection and returns the expected source/cancellation/pair error, with managed credit released. No partial supported prefix is returned. This is a test-only extension with immutable snapshot/log/executable evidence; actual CPU recall, precision and full acceptance remain pending.
+
+
+### Full positive corpus progress:152/458 (2026-10-12)
+
+`research/dedup-native-bank-all-positives-prefix-0152-audit-20261011.json` freezes and verifies152 completed directions in the precommitted458-case native-first run:152supported,0inconclusive,0rejected and0execution failures. The auditor checks original plan order, source/weight/runtime pins, exact command inputs, every completed log, report evidence and managed-credit release. The producer is still live; the unfinished306 cases remain required. This policy and frozen source are distinct from the newer exposure-recovery collection; results are not merged into a broader recall claim.
+
+
+### Bidirectional architecture noncopy controls started (2026-10-12)
+
+`research/dedup-disc21-bidirectional-noncopy-prepared-20261012.json` fixes three unordered comparisons before execution: R014120/R020965, Q00061/R014120 and Q00906/R020965. The same pinned CPU binary and ordinary25/calibrated9 policy as the reversed-ID positive control evaluate each direction, without threshold changes or manual ROI. The first report is live in `research/dedup-disc21-bidirectional-noncopy-20261012.json`; no outcome is yet qualified. These existing visually inspected development controls do not replace an independent held-out semantic/burst negative corpus. The completed-prefix auditor checks exact command inputs, immutable source/runtime/image pins, logs, both25+9 traces, absent transforms and released managed report credit.
+
+
+### Actual CPU three-source collection verified (2026-10-12)
+
+`research/dedup-disc21-exposure-recovery-collection-audit-20261012.json` verifies the completed public CPU collection over Q00906, R014120 and Q00000. The canonical pairs are (1,2)supported, (1,3)inconclusive and (2,3)inconclusive. Both primary and recovery evidence for the positive match the previously verified Q00906 pair operation exactly: primary miss, calibrated overlap bank7support. Every miss executes25ordinary plus9recovery banks. The audit checks all source/runtime/model/input pins, native build log, complete223-test gate, final traces and report ownership:2304managed bytes remain owned by the returned report, then0after drop (managed peak44,450,368). This is managed payload accounting, not total process RSS.
+
+This closes the explicit one-direction collection CPU control on its frozen source. The newer bidirectional positive and three noncopy pairs remain separate running controls; no outcomes from them or full-format/platform/held-out/full500 qualification are implied.
+
+
+### Measured native CPU total-memory gap (2026-10-12)
+
+`research/dedup-cpu-resource-gap-20261012.json` independently verifies `/usr/bin/time -l` resource data from the completed three-source CPU control: peak process RSS1,389,445,120bytes, managed payload peak44,450,368bytes, configured managed cap536,870,912bytes, managed usage0after report drop. The512MiB payload budget therefore does not constitute a total process memory cap. This is one real macOS ARM measurement, not a tensor-only peak or evidence of a leak. Model/tensor/provider/snapshot allocations remain outside payload admission; real total-resource admission and scale qualification remain a main acceptance gap. Raising a payload credit or reporting only the44MiB managed peak would not close it.
+
+
+### Actual CPU reverse recovery verified (2026-10-12)
+
+`research/dedup-disc21-bidirectional-exposure-collection-audit-20261012.json` verifies the completed reversed-ID CPU control: R014120 is ID1 and Q00906 is ID2. Forward ordinary25-bank plus calibrated9-region search is inconclusive; reverse search supports the dark embedded copy. Both reverse primary and recovery traces exactly match the independently qualified Q00906 pair evidence. The report retains explicit transform direction and managed credit until drop, then usage returns to0. Immutable source/runtime/model/image pins, build log and46-test gate are checked. This directly exercises the previously missing source/target direction instead of assuming either directed search is symmetric. It closes this development case; the negative controls, integrated227gate, broader recall/precision/platform/total-RSS and full500 acceptance remain separate requirements.
+
+
+### Integrated227-test gate verified (2026-10-12)
+
+`research/dedup-bidirectional-exposure-integrated-verification-20261012.json` verifies one fresh19-suite227-test execution on the atomic bidirectional snapshot, with all current rrrah-dedup production source hashes matching. The full47-test model comparison suite passes alongside the previous collection/portfolio, geometry/rank, exposure, selected-pixel, information, linear and real palette mutation/transparency suites. The auditor verifies all frozen source/parent hashes, exact per-suite counts, completed log and separately preserved executables. No ignored or failed tests are counted as passes. Compatible frozen core/decode dependencies exclude unrelated dirty HDR work; this is not a whole dirty-workspace/all-feature/platform/RSS/full500 completion claim.
+
+
+### First bidirectional noncopy pair verified (2026-10-12)
+
+`research/dedup-disc21-bidirectional-noncopy-prefix-0001-audit-20261012.json` verifies the first fixed pair, R014120/R020965, through both directions. Both ordinary25-bank and calibrated9-region traces remain inconclusive with no transform or exposure support; managed report credit is released after drop. Exact original inputs, fixed640/2.0arguments, runtime/source pins and completed stdout/stderr are checked and frozen. Two remaining unordered noncopy pairs are still running. This establishes two development negative directions, not held-out architectural precision.
+
+
+### Column-softmax memory candidate rejected (2026-10-12)
+
+`research/dedup-loftr-column-softmax-memory-audit-20261012.json` verifies an isolated experiment; production LoFTR is unchanged. Chunking every independent column block failed exact equality on shape1x257x129 (maximum difference3.308722450212111e-24). A guarded variant retains original whole softmax for non128-divisible widths and passes10coarse unit tests, including exact edge/batch parity, autograd and cancellation. Separate processes then run the original column-full/row128 normalization and aligned candidate on the same6400x6400 Float CPU matrix. Sample/sum agree, but RSS is435,699,712 versus438,845,440bytes; this control demonstrates no memory benefit. It is a single synthetic stage measurement, not statistically conclusive performance regression or whole-model memory proof. The candidate is not adopted. Removing dense similarity/confidence storage and real provider/total-memory admission remain open work.
+
+
+### Full positive corpus progress:163/458 (2026-10-12)
+
+`research/dedup-native-bank-all-positives-prefix-0163-audit-20261011.json` verifies163 completed directions from the fixed458-case native-first plan:163supported,0inconclusive,0rejected,0execution failures. Source/runtime/model/input pins, exact original plan indices, completed logs/evidence and released managed credit are checked. The285 unfinished directions remain required. This frozen native/opposite/model-bank run is independent of newer exposure-recovery/bidirectional controls and is not combined with them to claim broader recall.
+
+`research/dedup-disc21-bidirectional-noncopy-prefix-0002-audit-20261012.json` additionally verifies Q00061/R014120: the street collage with a tower does not support the unrelated unfinished-house reference in either direction. Both fixed25+9stage traces remain inconclusive, without transforms/exposure support; managed credit is released. Total verified development noncopy coverage is2/3unordered pairs and4/6directed attempts. The final dark-screenshot/wrong-tower pair remains running.
+
+
+### Strip-output ownership candidate:stage memory gain (2026-10-12)
+
+`research/dedup-loftr-strip-output-candidate-20261012.json` freezes an isolated LoFTR change: inference writes each32-row convolution strip into one destination rather than holding every strip and then concatenating a second full output. A differentiable first strip retains the original concatenation path. All7backbone unit tests pass, including exact original-strip values, exact input/weight gradients, seams/borders and cancellation without partial output. Production remains unchanged.
+
+`research/dedup-loftr-strip-output-memory-audit-20261012.json` verifies a separate-process synthetic3x640x640input/128output-channel convolution comparison: originalRSS532,463,616bytes versus candidate333,086,720bytes, a199,376,896-byte observed reduction; output sample/sum agree. This is one stage measurement, not a full-model RSS bound. The full original-weight reversed-ID dark-positive collection is building/running in `research/dedup-disc21-strip-output-collection-20261012.json` using a unique binary and frozen source. Full-model traces and totalRSS must be compared before adoption; the existing native binary/source qualifications are preserved.
+
+`research/dedup-loftr-strip-output-all-units-verification-20261012.json` now verifies all49native LoFTR unit tests on that same frozen candidate and preserved executable, with0failed/ignored/filtered. Beyond the7backbone controls, this covers whole-model shape/debug behavior, every inference cancellation checkpoint with retry, coarse/fine selection and transformers. The actual original-weight full CPU/RSS comparison remains separate and in progress; production adoption is still pending.
+
+
+### Complete bidirectional architecture noncopy controls (2026-10-12)
+
+`research/dedup-disc21-bidirectional-noncopy-prefix-0003-audit-20261012.json` closes all3precommitted unordered pairs /6directions with0false supports and0execution failures. The final dark Q00906 screenshot does not support the wrong R020965 tower in either direction. Each directed primary25-bank and calibrated9-region search remains inconclusive with absent transforms/exposure support, and managed report credit returns to0after drop. Original JPEGs, fixed policy/runtime/model/source pins, exact commands and completed stdout/stderr are frozen and checked. These are visually inspected development controls, not an independent held-out semantic/burst precision corpus.
+
+### Complete photohash source and bounded original-test review (2026-10-12)
+
+`research/dedup-500/photohash-full-review-audit-20261012.json` deepens registry360 at commit2a43d23a879f1484cd59775f940853eb38168b17: all18Git blobs verified, all14text files read (including complete MIT license/config/setup/algorithm/tests), all4original JPEG fixtures decoded. The unchanged5-test suite has3errors on modern Pillow because Image.ANTIALIAS was removed. A runtime alias only to Resampling.LANCZOS gives5/5passes; no original file was edited and no old-backend/Python2matrix is claimed.
+
+Original-code controls expose character rather than bit distance for hexadecimal hashes (0/f returns1instead of4; default6character tolerance can accept24bit differences), opaque black/white average-hash collision and hidden-RGB dependence for two completely transparent images (distance8). Independent bit counts and alpha0checks confirm the counterexamples. No upstream production code or fixtures are copied. Existing rrrah bit-level/pixel-confirmation/canonical-alpha contracts remain authoritative; a full review of this small tree is not full500completion.
+
+
+### Strip-output full-model candidate not adopted (2026-10-12)
+
+`research/dedup-disc21-strip-output-collection-audit-20261012.json` verifies exact original-weight full bidirectional CPU outcome parity: every primary/recovery, geometry, transform, pixel and exposure field matches the qualified baseline; report credit is released. However whole-control RSS is1,251,196,928bytes baseline versus1,313,112,064bytes candidate. The isolated stage reduction therefore does not establish overall memory improvement. All49unit tests and the stage gain remain valid evidence, but the candidate is not adopted and production is unchanged. This single process comparison does not establish universal regression, identify allocator causality or close total-memory admission.
+
+### Complete img_hash source and native-counterexample review (2026-10-12)
+
+`research/dedup-500/img-hash-full-review-audit-20261012.json` deepens registry358 at commitdbfb37f9251fea8f7efeabbb2267ddb1fcd21ca6: all13Git blobs/full text files read and verified, including both MIT/Apache2licenses, complete algorithms/config/benchmark and commented obsolete tests. Unchanged default execution passes3unit tests (oneemptytranspose placeholder) plus3docs (onecompile-only), with dependency locks and executables pinned. Nightly/bench/platform/resource scope remains unqualified.
+
+An independent exact-Fraction overlap oracle disproves the upstream fractional Blockhash control:9x9image with a white pixel at(1,1),8x8hash, yields upstream[1,0,0,0,0,0,0,0]instead of[3,3,0,0,0,0,0,0]. The source uses x+1.%block_width and correspondingyexpression. Native controls also show unequal-length[0]/[0,255]distance0through prefixzip (different-size comparisons are documented as meaningless), hidden-alpha Mean distance32despite both buffers fully invisible, transparent Blockhash distance0, and opaque black/white Mean collision. No upstream code/fixtures are copied. Explicit schema/size/resource checks and canonical-alpha/full-confirmation contracts remain necessary; this does not close full500review.
+
+
+### Native total-resource gap and164/458corpus prefix (2026-10-12)
+
+`research/dedup-native-bank-all-positives-prefix-0164-audit-20261011.json` verifies164completed fixed-policy directions, all164supported with0inconclusive/rejected/execution failures;294remain. The latest completed run(index163, baseline162) supports through joint_opposite_native with model_attemptedfalse.
+
+`research/dedup-native-resource-gap-20261012.json` freezes its actual process RSS1,004,994,560bytes versus managed peak377,266,064bytes and payload cap536,870,912bytes; managed credit returns to0after report drop. This demonstrates that the total-resource gap also occurs on a supported native-stage path, not solely when LoFTR matching executes. The process still loads the native runtime, and allocator/workspace contributions are not isolated; this is no leak or cause diagnosis. Observed wall time1290.93seconds occurred with concurrent host work and is not an exclusive benchmark. Native and model-path allocation profiles plus real total-resource admission remain required.
+
+### Exact empty-file growth regression and full find-duplicates source review (2026-10-12)
+
+`research/dedup-500/find-duplicates-full-review-audit-20261012.json` qualifies registry73 (`twpayne/find-duplicates`, commit ea0d9afe789786172b46815162b3464909bc2d2c): all10 tracked text blobs and complete MIT license read, unchanged upstream11 cases pass on isolated official Go1.27.2 macOS ARM runtime. Three independent controls in a separate copy reproduce hash-only collision grouping, original `hashPath` stale-zero-size shortcut after growth, and hardlink paths classified as one hash group. Hash grouping is documented upstream behavior and does not establish byte identity; the stale-size control invokes the original helper directly, not a full scheduled filesystem race. Source also has unbounded per-path hash goroutines and a documented channel lifecycle FIXME; no panic or RSS bound reproduction is claimed. No upstream production code is adopted; full500 review remains incomplete.
+
+`research/dedup-exact-empty-growth-verification-20261012.json` pins current rrrah default-feature source and49 passing tests (32units and17exact-file integration;2 pre-existing manual timing controls ignored). A new private unit regression verifies that formerly empty files grown to distinct bytes are rejected by sampled/full hashing and by either side of byte equality. Healthy empty files still hash/compare correctly, and a fresh public verified scan reports only the healthy empty pair. Source comparison proves the added unit test is the only difference from the previous qualified exact.rs; production behavior is unchanged. This does not qualify decode/LoFTR/all-platform/full workspace behavior.
+
+A separate same-policy positive163 control without the optional LoFTR feature has built and is executing in `research/dedup-native-no-torch-20261012.json`. `otool -L` contains no Torch dependency and any provider call is fatal. Exact native evidence and process RSS comparison remain pending until the producer terminates and the independent auditor passes. No native allocator cause or memory improvement is inferred from a live process.
+
+### Native matching profile and isolated eight-lane experiment (2026-10-12)
+
+`research/dedup-native-no-torch-stack-observation-20261012.json` pins a two-second live macOS sample of the same-policy no-Torch control. Its sampled main-thread stacks are inside candidate-union gradient matching and `distances_four`, motivating a descriptor-matcher experiment rather than assuming sampled geometry is the only cost. This is a stage-local sample, not whole-operation percentage attribution.
+
+`research/dedup-gradient-eight-candidate-verification-20261012.json` records an isolated single-thread candidate processing eight descriptors per pass with independent ordered accumulators. All32 default correctness units pass, including bitwise scalar parity through full/partial eight-lane blocks and exhaustive matcher/tie/cancellation controls. Three manual timing controls are ignored by default; a separate alternating synthetic current-four/candidate-eight control passes exact correspondence checks but yields mixed timing under host load. Production remains four-lane. The real-JPEG descriptor A/B producer is building in `research/dedup-gradient-eight-real-20261012.json`; actual source0-versus-each-bank comparisons and both ratio modes are measured, not the entire native portfolio or exact positive163 stage. No speedup or adoption is qualified yet.
+
+### Completed no-Torch native control and smoothing row ring (2026-10-12)
+
+`research/dedup-native-no-torch-audit-20261012.json` verifies the completed original-policy positive163 control with decode feature only: every native pair/file/trial/evidence field and managed retained/peak/release value equals the frozen original run, the provider is never called, and dynamic dependencies contain no Torch. Peak process RSS is835,584,000bytes instead of the previous Torch-linked1,004,994,560bytes. This remains above the536,870,912byte payload admission cap. Observed wall1133.37seconds versus1290.93seconds is a single concurrent-host comparison, not a qualified speedup or allocator-cause proof.
+
+`research/dedup-gradient-eight-real-audit-20261012.json` closes the eight-lane experiment: actual current-four/candidate-eight whole descriptor matcher outputs match on ten original-JPEG controls, but7/10 candidate medians are slower. The exact retained four-lane baseline is source-bound; no consistent real timing gain is established and the candidate is not adopted.
+
+Production `gradient_scale::smooth_gradient_candidates_managed` now retains the horizontal intermediate in at most min(height,2radius+1)rows. Each horizontal row is produced once, and vertical reads preserve clamping, ordered f64 division/addition and f32 intermediate rounding. Input and full output layouts, zero-radius behavior, work limits and final original-pixel confirmation are unchanged. Scratch/output are admitted before allocation; scratch credit is released on all exits and retained output credit follows its last owner.
+
+`research/dedup-native-row-ring-verification-20261012.json` verifies6 focused raster tests,35 bitwise full-two-pass oracle cases across wraps/borders/HDR/negative/subnormal samples, exact window/output credits and one-byte/work-short refusal, all272 one-shot cancellation checkpoints, late-alpha refusal and healthy last-owner release. Separate original-function/candidate processes on2048x1536/radius4 have identical complete output digest: managed peak100,663,296→50,626,560bytes and RSS152,764,416→102,727,680bytes. This is a measured smoothing-stage improvement, not a whole-library cap. The broader native/portfolio/collection gate is running; a same-policy no-Torch positive163 control pins the exact old source with only gradient_scale.rs changed and is building/running in `research/dedup-native-row-ring-control-20261012.json`. Whole-operation RSS, broad formats/platforms/precision, unfinished corpus and full500 review remain open.
+
+Row-ring Linux qualification (2026-10-12): all six focused smoothing controls passed on native Linux ARM64 as a nonroot user with pinned image, source and executable (`research/dedup-native-row-ring-linux-verification-20261012.json`). This does not qualify the full Linux portfolio or Windows. The frozen native-first positive corpus independently reached 165/458 verified directions, all supported (`research/dedup-native-bank-all-positives-prefix-0165-audit-20261011.json`); 293 remain.
+
+### Completed whole native row-ring control (2026-10-12)
+
+`research/dedup-native-row-ring-control-audit-20261012.json` verifies the completed same-policy positive163 no-Torch control with only `gradient_scale.rs` changed. Complete native evidence, support, directions, coordinates, trials, retained credits and post-drop zero usage match the baseline. Peak process RSS decreased835,584,000→713,621,504 bytes (121,962,496 fewer); managed peak remains377,266,064 bytes. This is one concurrent-host observation, not a hard total-process cap or universal speedup. The broader integration gate is still running.
+
+`research/dedup-500/fclones-scan-controls-audit-20261012.json` verifies six independent controls executing the verbatim pinned fclones scan/TLS helper. Its largest thread buffer remains retained across smaller requests; short EOF succeeds with the returned actual length, Interrupted propagates, and zero buffer returns zero bytes (normal FileHasher uses65536, so this is a helper boundary, not an ordinary CLI failure). Prefix limits and short-read accumulation pass. The full42-file tree is pinned but only the hasher/license/package manifest have been fully read; original hasher tests are building. No production copying or full-repository completion claim. Our exact scanner already retries Interrupted and revalidates source identity/length around reads.
+
+Frozen native-first corpus update:177/458 completed directions independently verified, all177supported,0inconclusive/rejected/execution failures;281remain (`research/dedup-native-bank-all-positives-prefix-0177-audit-20261011.json`). This frozen old-policy run does not qualify the new row-ring source or held-out precision.
+
+Fclones upstream execution completed:170original unit tests and2docs passed on macOS ARM64 with unchanged pinned source and locked dependencies; the Linux-only physical-device test is ignored. Seven original semaphore tests also passed standalone. `research/dedup-500/fclones-upstream-verification-20261012.json` pins source/log/compiler/preserved executables and exact test names. Six source files are now fully read (license,package manifest,hasher,semaphore,rlimit,device), not the entire42-file repository. Device worker pools bound scheduling independently by device/access type; TLS hash buffers and stacks remain per worker. No hard process-memory bound or direct code adoption is established.
+
+### Current row-ring integration gate and restored-mtime refusal (2026-10-12)
+
+`research/dedup-native-row-ring-integrated-verification-20261012.json` verifies316passes in18suites (all decode-feature units plus17selected integration suites),5pre-existing controls ignored. Current production source and every selected test file match the pinned snapshot. Exact runtime test names/counts, logs and preserved binaries were independently checked. This qualifies the row-ring change through smoothing/scales/candidate union/native anchors/reflection/collection cancellation,source mutation,retry,portfolio,model-bank and projective/pixel controls represented by these tests; it does not qualify the full dirty workspace, all formats/platforms/458positives/heldoutprecision/process cap or full500review.
+
+`research/dedup-exact-restored-mtime-verification-20261012.json` verifies51default-feature passes (32units+19exact integration) and2pre-existing manual controls ignored. New regressions reject a same-length snapshot rewrite with exact mtime restored, and a Unix same-inode/length/mtime rewrite during scan with a verified different ctime tick; fresh retries succeed. The first isolated preparation omitted build_context.rs and failed before any tests; its frozen source/log are retained separately from the successful corrected snapshot. No Windows execution claim.
+
+`research/dedup-500/fclones-cache-controls-audit-20261012.json` verifies two separate controls executing the original FileHasher+HashCache in an otherwise unchanged pinned copied tree: samefile/size/exactrestoredmtime or distinct verified submillisecondmtime within the same cached millisecond returns the old BLAKE3, while fresh uncached hashing changes. This is an actual cache/hasher counterexample, not a full CLI bad-group or concurrent filesystem race reproduction. Cache/file source was fully read in addition to the earlier6files. The first invocation selected the wrong workspace and failed package selection; an explicit-manifest retry passed. No production copying; full42file/500review remains open.
+
+`research/dedup-decode-pages-current-verification-20261012.json` verifies72passes/0ignored across11current-identical decode/pages/animation/ICC/linear/pixels/information/palette/orientation/container suites. Selected-file and all dedup production hashes, exact runtime test names, logs and preserved binaries are checked on the compatible frozen dependencies. This qualifies the represented actual fixtures, not every format/page/layer/ICC/platform case or unrelated dirty workspace.
+
+`research/dedup-exact-restored-mtime-linux-verification-20261012.json` verifies52native Linux ARM64 nonroot default/exact-file passes,2manualcontrolsignored. Compared to macOS51passes, Linux additionally executes the nonUTF8path control. Both new restoredmtime regressions pass; source/image/compiler and ELF executables are pinned. Windows remains unqualified.
+
+Native-first frozen corpus:184/458directions verified, all184supported and0inconclusive/rejected/executionfailed;274remain (`research/dedup-native-bank-all-positives-prefix-0184-audit-20261011.json`). This remains the original frozen policy/source and does not aggregate later controls.
+
+### Bounded initial roots for exact and recursive discovery (2026-10-12)
+
+`exact::collect` now indexes borrowed unique initial roots while checking cancellation per input path and admitting at most `Options::max_entries` unique roots. It clones paths only after root admission succeeds. An excess initial unique-root list is refused as a whole with a `Limit` diagnostic before filesystem access; duplicate initial paths do not consume additional entries. Existing directory/depth/file-byte policy remains separate. This bounds initial root bookkeeping by admitted entries, not total path bytes or process RSS.
+
+`research/dedup-exact-root-admission-verification-20261012.json` verifies the adopted current source with54default-feature passes (32units+22exactintegration) and2manualcontrolsignored. Three new controls cover no-IO excess-root refusal including limit0/reversedinputs,all64one-shot cancellation checkpoints during preparation,and1000duplicate roots fitting limit1 plus boundary/freshretry. `research/dedup-exact-root-admission-baseline-verification-20261012.json` proves all3regressions fail on unchanged pre-fix production; these expected-negative results are retained. The first candidate retained existing numeric FIFO injection timing and mutated before observation; the corrected3mutationfixtures add the new root-admission callback count to retain their original sample/pre-hash phase, with all assertions preserved.
+
+The earlier316row-ring and72decode/pages gates precede this additional `exact::collect` production change and are historical coherent snapshot results. Since recursive visual/pixel/container/local consumers share discovery, a fresh decode-feature gate runs all units plus exact_files,scan,container,local_scan,local_collection,pixel_search against `research/dedup-exact-root-admission-consumers-source-20261012.json`; completion is pending. Current Linux default/exact source execution finished and independent auditing is pending.
+
+Current root-admission Linux audit completed:55native ARM64 nonroot default/exact tests pass,2manualcontrolsignored (`research/dedup-exact-root-admission-linux-verification-20261012.json`). All3rootadmission regressions and both restoredmtime controls execute on current adopted source. Exact test names,source,image,compiler and preservedELF binaries were checked; recursive decode consumers remain running separately.
+
+### Measured initial-root cancellation memory (2026-10-12)
+
+`research/dedup-exact-root-memory-audit-20261012.json` independently verifies a same-binary original/current collect control in separate fresh macOS ARM64 processes with100000caller-owned initial paths,each having512byte suffix. The complete original collect function is preserved verbatim except its name in an isolated harness; current production exact.rs is its unchanged source prefix. Both immediately cancelled runs return identical cancelled=true/issues0/groups0/files0/bytes0 results, without source IO. Peak process RSS144,621,568→70,139,904bytes (74,481,664fewer), including caller-owned inputs. This measures initial-root preparation only, not a successful full scan, total-path-byte admission/hardprocesscap or universal timing. Benchmark helpers are isolated and not adopted into production. The current recursive-consumer gate remains compiling in its confirmed live Cargo process.
+
+Native-first corpus verified prefix:189/458directions,all189supported,0inconclusive/rejected/executionfailed,269remain (`research/dedup-native-bank-all-positives-prefix-0189-audit-20261011.json`). Frozen oldpolicy/source evidence remains separate from currentchanges.
+
+### Complete anew source and original CLI controls (2026-10-12)
+
+`research/dedup-500/anew-full-review-audit-20261012.json` qualifies registry7,tomnomnom/anew at d67d68db0d56469fdea7505c5a9209c0a465effa: all6trackedtextfiles fully read,including fullMITlicense and release script (inspected only). Every file matches its pinnedGitblob. Original `go test -json ./...` succeeds with no testfiles; no unitpass count is claimed. Six unchanged originalCLI controls run under pinned Go1.27.2 macOS ARM64: ordinarymembership/appendonce,explicittrim,dryrunpreservation,quietappend pass; longstdin70kB token silently discards laterinput with returncode0/stderr empty; longexistingtoken causes missed latermembership and actual duplicateappend of a line already present beyond that token. These are complete CLI counterexamples,not concurrency/race/memorybound claims. This is textline deduplication,not duplicatefile/visual evidence; rejectdomain/no productionadoption retained. Full500 source/runtime review remains incomplete.
+
+Frozen native-first corpus:190/458completed directions independently verified,all190supported,0inconclusive/rejected/executionfailed,268remain (`research/dedup-native-bank-all-positives-prefix-0190-audit-20261011.json`). Recursive currentrootadmissionconsumer gate remains compiling in a confirmed live rustc child; no completed result is claimed.
+
+### Completed current recursive-consumer gate and fclones grouping cache controls (2026-10-12)
+
+`research/dedup-exact-root-admission-consumers-verification-20261012.json` verifies173passes across7suites,5pre-existing manualcontrols ignored:86decodefeatureunits,14container,22exactfiles,17localcollection,11localscan,16pixelsearch,7scan. Current production source and every selected test file match the frozen snapshot. Complete exact runtime test names,logs and preserved binaries are audited. This closes the recursive-consumer gate for current root-admission source,not allfeatures/dirtyworkspace/formats/platforms/fullcorpus/heldoutprecision/processcap/500review.
+
+`research/dedup-500/fclones-group-cache-audit-20261012.json` verifies two complete ordinary grouping-pipeline counterexamples: warmed equal-byte files,then sameinode/length rewrite with exactrestoredmtime or distinctverifiedsubmillisecondmtime,produce a stale two-file group despite unequal bytes; original uncached public group_files returns none. Original production is unchanged. The appended adapter copies the complete original group_files body and changes only its name/cachepathargument plus temporarycache supply after ordinary context creation; it never accesses the defaultusercache. This is whole ordinary pipeline evidence through that isolatedcacheadapter,not defaultcacheCLI/race/otherplatform/RSS claims. All2101lines of group.rs were read; ninefiles total read sofar,not full42file/500completion. No code adopted. First preparation used incorrect cwd and failed before source creation; preserved errorlog and successful explicit-manifestretry distinguish it.
+
+Frozen native-first corpus:195/458directions independently verified,all195supported,0inconclusive/rejected/executionfailed,263remain (`research/dedup-native-bank-all-positives-prefix-0195-audit-20261011.json`). New memory/persisted fingerprint restoredmtime regression is added separately; its current15decode-test gate is running.
+
+`research/dedup-fingerprint-restored-mtime-verification-20261012.json` verifies15current decode/cache tests with no ignores,including the new memory+persistedcache regression. Same-size BMP edits with exactrestoredmtime and distinctsubmillisecondmtime both produce cachemisses in warmed memory and saved/reloaded cache; both fingerprints equal a fresh uncached oracle and differ from the old color samples. Healthynewrepeats hit correctly,and managedusage returns0. Production source is unchanged; only this integrationtest was added. Source/testnames/log/executable are pinned. This is macOSARM64 evidence,not a Windows/Linux/allformat/processcap/500claim.
+
+
+### 2026-10-12: isolated zero-radius borrowing candidate
+
+The v2 candidate removes an owned pixel copy only in the candidate-union pair
+comparison when one side has smoothing radius zero. It validates the full
+original view, prepaid work, opacity and cancellation before borrowing; the
+public owned-output smoothing API remains unchanged. Nonzero sides release
+original rasters before descriptor scratch as before. No candidate changes
+have been adopted into the production source tree.
+
+Independent audit `docs/research/dedup-zero-smoothing-borrow-verification-20261012.json`
+pins the frozen source, preserved executables and logs: two private helper
+checks, nine existing candidate-union file/collection lifecycle tests and six
+existing smoothing tests pass (17 total, zero ignored). The 43 filtered unit
+tests are not passes. Existing asymmetric tests exercise both [4,0] and [0,4]
+with original-pixel confirmation, cancellation, source replacement and retry.
+
+One separate-process 2048x1536 identity-stage control produces the same complete
+canonical pixel digest with baseline RSS 102400000 bytes and borrowed RSS
+52068352 bytes. Managed output credit changes from 50331648 to zero; both modes
+release all credit. This is stage evidence, not whole-pair memory qualification
+or a hard process cap. The existing native-163 control specifies nonzero
+smoothing and asymmetric radii, so it cannot establish this branch's benefit.
+Collection proposal extractors still use the existing owned smoothing path.
+
+The fixed original corpus run has independently verified 201 of 458 positive
+directions, all supported, with 257 remaining. Its frozen source/policy does
+not include newer production changes or this candidate. The current 15-test
+cache/decode Linux ARM64 nonroot run is still compiling dependencies; no Linux
+cache result is claimed yet. Full source review of all 500 repositories,
+held-out precision, all formats, Windows and total-process limits remain open.
+
+
+### 2026-10-12: zero-radius collection follow-up and walk review
+
+Isolated zero-borrow v3 extends validation/borrowing to both candidate-union
+collection extractors. The production source tree remains unchanged. Two
+private controls pass: the complete nonempty feature arrays equal the copied
+original functions across 18 configurations (three shapes, base radius 0/2,
+portfolios empty/[0]/[4,0]); insufficient work and cancellation release all
+credit, and a healthy retry succeeds. These are numeric feature comparisons,
+not a claimed full-corpus or bitwise process-output qualification. 93 filtered
+unit tests were not counted as passes. Frozen source, original function
+identity and preserved executable are independently checked by
+`dedup-zero-smoothing-borrow-v3-collection-verification-20261012.json`.
+The full module/file/collection gate is running separately.
+
+For pinned fclones a74f90d, walk.rs (675 lines) and lock.rs (90 lines) were
+fully read. The original preserved executable passes its ten existing walk
+cases, including symlink cycles and ignore rules. Source inspection shows
+whole-directory collection before sorting, per-entry Rayon scheduling without
+managed byte admission in that function, discarded per-entry read/conversion
+errors, and advisory Unix file locking. These observations are not runtime
+memory or concurrent-writer proofs; no code was adopted. The corrected source
+locations are in `dedup-500/fclones-walk-review-v2-20261012.json`; the initial
+review is retained as historical evidence. The full 42-file tree and all 500
+repositories are not claimed reviewed.
+
+The independently frozen corpus prefix is now 206/458 supported directions,
+with 252 remaining (`dedup-native-bank-all-positives-prefix-0206-audit-20261011.json`).
+
+
+### 2026-10-12: block-order counterexample and exact regression
+
+Registry row23 sreedevk/deduplicator at245e910c39747ff4fcbf332c14666d9f4c778ae1
+now has all20tracked text files fully read, including8Rust modules,1288line
+Cargo.lock,fullMITlicense,CI andbenchmark scripts. Scripts and deletion mode
+were inspected, not executed. Source manifest v2 corrects an initial prose
+count21 to actual20. Original unchanged upstream tests initially had6passes
+and3scanner failures on macOS; the preserved same executable passes all9when
+TMPDIR is a physical canonical path. Scanner canonicalization versus raw
+fixture paths is consistent with this difference, not a universal platform
+qualification.
+
+Two appended private controls execute original unchanged FileInfo and
+sequential Processor sizewise/hashwise APIs. XOR of4096byte chunk hashes is
+order-invariant: reordered middle blocks produce equal full hashes for five
+seeds. With three authored files, only two byte-identical, strict grouping
+still returns one three-file group. This is a deterministic hashing/grouping
+counterexample, not an executed concurrent Server or CLI/deletion experiment.
+Audit/source/executable evidence:
+`docs/research/dedup-500/deduplicator-full-review-20261012.json`.
+No third-party code was adopted.
+
+The root library now includes
+`reordered_middle_blocks_with_identical_sampled_edges_are_not_copies`:
+same-sized files share sampled prefix/suffix but permute two4096byte middle
+blocks. Both root orders retain exactly the two actual copies and exclude the
+permuted file. All32defaultunit+23exactintegration tests pass; two manual tests
+remain ignored. Production code is unchanged. Current-identical source,
+precise test lists and preserved binaries are checked by
+`docs/research/dedup-exact-block-order-verification-20261012.json`.
+
+### 2026-10-12: zero-borrow integrated gate and Linux environment failure
+
+Isolated v3 passed122tests across four suites with5manual tests ignored:
+90decode-feature units,9candidate-union files,6smoothing and17local-collection.
+`dedup-zero-smoothing-borrow-v3-integrated-verification-20261012.json` pins
+source and preserved executables. It does not include the new v4 bothzero
+public pair/collection regression; v4 is formatted with repository settings,
+removes unused test-reference imports and remains under test. No zero-borrow
+production adoption yet.
+
+The current15-test cache/decode Linux run terminated before executing tests:
+libheif-sys pkg-config resolution cannot find zlib development metadata in the
+isolated sysroot. libheif.pc itself exists and requires zlib; the base contains
+libz.so.1.3 but no zlib.h or zlib.pc. No Linux cache pass is claimed.
+`dedup-fingerprint-restored-mtime-linux-build-failure-20261012.json` preserves
+the terminal evidence. A separate copied sysroot is being prepared with the
+actual zlib development package; the original sysroot and failed logs remain
+intact. These checks do not close full500source review,full458positives,
+held-out negatives,allformats,Windows or totalprocess-memory scope.
+
+
+### 2026-10-12: qualified zero-radius borrowing adopted
+
+The v4 zero-radius candidate is now production code in gradient_scale.rs,
+local_scan.rs and local_collection.rs. Both pair smoothing and the two
+collection extractors validate the complete unsmoothed source and borrow it
+when radius is zero. Nonzero smoothing retains the row-ring implementation;
+original normalized frames for nonzero sides still drop before descriptor
+scratch. Final confirmation uses original source pixels and source guards.
+The public owned-output smoothing function is unchanged after repository
+formatting. No third-party implementation was copied.
+
+The independently audited v4 decode gate passed123tests with5manual controls
+ignored:90units,10candidate-union file/collection tests,6smoothing tests and
+17local-collection tests. This includes the newly authored bothzero fresh
+positive/unrelated pair versus collection evidence comparison in both input
+orders, cancellation and terminal credit release. Separate raster-mode gate
+passed48tests with3manual controls ignored; these overlap and are not summed.
+The raster report v2 corrects copied prose about fiveignored to actualthree;
+the original numeric counts were already48/3 and no result/source was changed.
+
+`dedup-zero-smoothing-borrow-adoption-20261012.json` records exact root hashes,
+frozen qualified source, preserved originals and gate pins. Adoption checked
+all preexisting dedup production source against its baseline before replacing
+only three production files and one integration test file; the independently
+added exact block-order regression remains in place. No commits or pushes
+were made. `git diff --check` passes for the adopted files.
+
+The private identity validator is identical to the previously measured v2
+function after the same formatter. Earlier102400000->52068352byte RSS evidence
+therefore remains an identity-stage result; it is not a measured complete
+pair/collection RSS reduction or hard total-process cap. Compatible frozen
+dependencies were tested, not the entire dirty workspace, LoFTR feature,
+Windows, current Linux candidate or all formats.
+
+Linux cache/decode retry is running after the first terminal missing-zlib-dev
+build failure. A separate copy of the original sysroot now contains the actual
+Ubuntu arm64 zlib1g-dev1:1.3.dfsg-3.1ubuntu2.2 package, SHA256
+de750f2515144715015e792c391bfa2ab4a926db6c370ba519af576bb3f131b5.
+Its pkg-config resolves zlib1.3 and libheif1.17.6. The observed live nonroot
+container uses the same pinned image/source and mounts that separate sysroot
+read-only; no cache test pass is claimed before terminal results.
+`dedup-fingerprint-restored-mtime-linux-retry-zlib-prepared-20261012.json`
+pins the setup and preserved failure log.
+
+The frozen original corpus now has an independently audited221/458supported
+prefix, with237remaining. New production changes are not merged into that
+frozen run. Full458,current-source recall,held-out negatives,all500fullsource
+reviews,allformats/platforms and total-process resources remain open.
+
+2026-10-12: Linux cache follow-up now independently verifies 15/15 native
+AArch64 decode/cache cases under nonroot execution with a read-only copied
+sysroot; the initial missing zlib development dependency failure remains archived.
+Evidence: `research/dedup-fingerprint-restored-mtime-linux-retry-zlib-verification-20261012.json`.
+This does not establish Windows or all-format coverage.
+
+The fixed historical positive corpus has an immutable audited prefix of 239/458,
+all 239 supported, zero execution errors, 219 outstanding. Evidence:
+`research/dedup-native-bank-all-positives-prefix-0239-audit-20261011.json`.
+New current-source production changes are not included in that historical binary.
+A separate current-source bidirectional CPU evaluation of 16 unused local DISC21
+hash-near publisher distractor pairs is running with the archived caller policy;
+input selection and build/policy audits are preserved independently. This is not
+a semantic hard-negative or general precision qualification.
+
+Additional full-file fclones review covered path.rs, selector.rs and transform.rs.
+17 original path/selector tests pass, while a separate public-API control proves
+three longer-base strip_prefix counterexamples. Only strip_root and tests call
+this helper in the pinned source, so CLI grouping consequences are not inferred.
+Arc prefix sharing is useful, but the lossy path filtering and unbounded external
+transform lifecycle are not adopted. rrrah already uses standard library paths.
+Evidence: `research/dedup-500/fclones-path-selector-transform-review-20261012.json`.
+This extends the source review; it does not complete the 42-file tree or 500 repos.
+
+The first independently audited held-out negative pair has zero false acceptance
+and zero retained managed credit; it remains an inconclusive non-acceptance.
+Actual two-direction execution took 356.18 seconds and reached 1,174,339,584 bytes
+RSS while managed peak was 16,208,016 bytes. This exposes continuing model/process
+resource and latency work; concurrent workload means this is not an isolated
+performance benchmark. Evidence:
+`research/dedup-disc21-heldout-negatives-prefix-01-audit-20261012.json`.
+Three further complete fclones files (phase/progress/util) and eight existing
+tests were reviewed in `research/dedup-500/fclones-progress-utils-review-20261012.json`;
+this still does not establish a complete upstream tree review.
+
+Current-production Linux exact/default gate now passes 57 tests, with two manual
+controls ignored. The new regression preserves two copy partitions where two
+byte-distinct invalid-UTF8 filenames have identical lossy display strings, in
+both overlapping-root orders. Existing block-order, mutation, root admission and
+non-UTF8 path checks remain in the same executed gate. Original logs, native
+AArch64 executables, complete names, compiler and image are independently pinned:
+`research/dedup-exact-lossy-path-linux-verification-20261012.json`.
+No production algorithm change was needed for this case. macOS cannot execute
+this Linux-filesystem fixture and Windows remains unqualified.
+
+2026-10-12 selected-window inference experiment (isolated, not adopted):
+`research/dedup-loftr-selected-windows-stage-audit-20261012.json` verifies 50 native
+unit passes and one ignored manual control. The complete old fine-preprocessing
+forward remains byte-identical as a test-only oracle. New controls compare full
+outputs across six configurations (borders, repeated indices, rectangular and
+noncontiguous inputs, concatenated coarse context and multibatch fallback), and
+preserve the original gradient path. The CPU single-batch float inference
+candidate gathers requested windows instead of materializing every fine window.
+Four fresh-process sparse-stage controls produced identical noncryptographic
+output fingerprints: dense RSS 442,007,552 / 442,433,536 bytes versus selected
+230,621,184 / 230,719,488 bytes. This is a stage measurement on 256/6400 selected
+windows, not a whole-model/collection gain or memory cap. Dense/high-repetition
+selection still needs separate resource qualification before any adoption.
+
+Two unchanged public bidirectional caller builds are independently pinned in
+`research/dedup-loftr-selected-windows-collection-build-audit-20261012.json`;
+whole-collection A/B execution is running in
+`research/dedup-loftr-selected-windows-collection-20261012.json` on one fixed
+publisher distractor pair. Both baseline dedup and LoFTR production equal current
+root; the candidate only changes fine-window extraction and test controls.
+Positive recall, broader negatives and platforms remain open.
+
+Dependency-scope correction for the earlier 16-pair distractor run:
+`research/dedup-disc21-heldout-negatives-dependency-scope-20261012.json` records
+that its dedup source is current, but two LoFTR coarse-matcher source/test files
+come from an older compatible snapshot. Its frozen binary is preserved and the
+run continues. Its RSS/timing results must not be presented as a full-current-root
+native-stack benchmark. The new A/B baseline includes the already-adopted current
+coarse cancellation implementation. The first two independently audited earlier
+negative pairs have zero false acceptances and remain inconclusive non-acceptances.
+
+2026-10-12 selected-window experiment terminal result: the complete public
+bidirectional distractor collection produced identical evidence and managed
+accounting, but peak RSS increased from 1,205,764,096 to 1,250,934,784 bytes.
+`research/dedup-loftr-selected-windows-collection-audit-20261012.json` therefore
+records no production adoption. Stage-only savings did not qualify this as a
+process-memory improvement; concurrent workload prevents a qualified speed claim.
+Additional stage controls at 6400 and 12800 repeated selections preserve output
+fingerprints and reduce stage RSS, but do not override the whole-collection result
+(`research/dedup-loftr-selected-windows-density-audit-20261012.json`). Actual
+pretrained whole-model controls on a real Copydays pair preserve complete
+Float/Double outputs, order and batch indices in both directions, with1601/1636
+matches, but show no meaningful whole-model RSS reduction
+(`research/dedup-loftr-selected-windows-real-model-v2-audit-20261012.json`).
+The earlier f32-only raw diagnostic is superseded by this full-precision control.
+
+A separate correctness fix is adopted in the actual backend:
+`research/dedup-loftr-masked-values-adoption-20261012.json`. LinearAttention's
+shallow value clone used in-place masking and thus modified the borrowed tensor
+and live aliases. Three original-source regressions reproduced value mutation,
+changed subsequent unmasked results and leaf-gradient failure. Masked values now
+use an owned multiplication result; unmasked arithmetic is unchanged. The full
+native backend gate passes51tests/0ignored, with exact source reconstruction,
+original failing executable and pre-adoption files preserved. No other dedup or
+LoFTR source changed, and selected-window inference remains an isolated candidate.
+This is macOS ARM64 backend qualification, not all-platform/full500 completion.
+
+The immutable positive-corpus prefix now verifies264/458, all264supported,
+zero execution errors,194remaining; the six completed publisher distractor pairs
+have zero false acceptances and remain inconclusive non-acceptances. Both broader
+runs continue on their recorded frozen source compositions. New dependency-scope
+notes after the ownership fix are in
+`research/dedup-disc21-heldout-negatives-dependency-scope-v2-20261012.json`.
+
+
+### 2026-10-12: independent FullAttention masks and empty support
+
+Four pre-fix controls reproduced ignored single masks, non-finite empty support, and omitted validation for lone malformed masks. FullAttention now validates each optional mask before score allocation, excludes unavailable keys, and returns zero attention for unsupported rows without an all-negative-infinity softmax. Previously adopted borrowed-value ownership fix remains intact; unmasked arithmetic is unchanged.
+
+The isolated full native macOS ARM64 backend suite passed **55 tests, zero failed, zero ignored**, including finite gradients and input alias preservation. Independent audit reconstructed both changed source files, checked all frozen source hashes and executable test inventory, and adoption preserved previous root files. Evidence: `research/dedup-loftr-full-masks-verification-20261012.json` and `research/dedup-loftr-full-masks-adoption-20261012.json`. Existing long-running corpus executables retain their frozen historical dependency versions. This does not complete the 500 source reviews, all 458 positive pairs, negative precision, all formats/platforms, or total process memory qualification.
+
+
+### 2026-10-12: corpus checkpoints and fclones path filters
+
+Independently captured frozen positive-run prefix **277/458**, all277 supported, zero inconclusive/rejected/execution errors;181 remain. Unused local DISC21 hash-near negative prefix **8/16**, zero false acceptances and zero execution errors, eight inconclusive non-acceptances. Both producers were verified live; these counts qualify the archived executable compositions, not the current entire native stack or general precision. See `research/dedup-native-bank-all-positives-prefix-0277-audit-20261011.json`, `research/dedup-disc21-heldout-negatives-prefix-08-audit-20261012.json` and dependency-scope-v3 correction.
+
+Completed reading pinned fclones regex.rs, pattern.rs and lib.rs. An isolated byte-identical source harness passed30 original tests and four runtime counterexamples: raw alternatives are not fully anchored, Unicode optional-prefix truncation and escaped-repeat prefix extraction reject valid ancestors, and advertised negative extglob returns unsupported-lookaround error. Initial optional-letter control did not reproduce and is preserved separately; corrected repeated-punctuation control reproduced. No fclones code adopted; whole CLI traversal consequences and the remaining42-file tree/full500 review are unqualified. See `research/dedup-500/fclones-pattern-regex-review-v2-20261012.json` and verification-v2.
+
+
+### 2026-10-12: cancellation between interrupted and short file reads
+
+The exact scanner full-hash read loop and six exact-length read sites now check cooperative cancellation before each read attempt, including retries after `Interrupted` and short reads. This covers sampled hashes, byte equality, verified/ordinary prefixes and source-range reads. EOF remains an explicit `UnexpectedEof` error. No digest/equality/admission semantics changed.
+
+Three injected-reader regressions cover repeated interruption cancellation, cancellation before the first attempt, and short reads mixed with interruptions plus EOF. The original helper body, adapted only from File to generic Read for deterministic injection, made four attempts despite three interruptions; no callback checkpoint existed inside it. The current-root macOS ARM64 default library and exact-file integration suites passed **58 tests; two manual scale tests remain ignored**. Saved executables, source snapshot and before-file are hash-pinned in `research/dedup-exact-interrupted-verification-20261012.json`. Only exact.rs differs from the preceding qualified production snapshot.
+
+Cancellation remains cooperative: an active kernel call and an arbitrary output writer are not preempted. Other platforms, fullformats/full500/full458 and total process memory remain unqualified. Long-running corpus executables are unchanged; heldout-negative dependency-scope-v4 records the additional older exact.rs dependency.
+
+
+### 2026-10-12: cancellation between interrupted and partial output writes
+
+Two failing public `ContentSnapshot::copy_range` controls proved that the former `Write::write_all` continued writing after the caller requested cancellation: one after repeated Interrupted responses, one after two partial writes. Output now uses a cancellation-aware loop with checkpoints before each write attempt. Healthy short/interrupted output preserves the exact requested source range; WriteZero and BrokenPipe remain typed I/O errors. Cancellation/failure may leave an already-written prefix, and a single blocking writer call cannot be preempted; this is documented on the public method.
+
+The full current-root macOS ARM64 default-library and exact-file integration suites passed **62 tests; two manual scale tests remain ignored**. Red source/executable/log, green executables and source snapshot are preserved and hash-pinned in `research/dedup-exact-output-red-20261012.json` and `research/dedup-exact-output-verification-20261012.json`. Only exact.rs changed relative to the preceding read-cancellation source snapshot. No other-platform, fullformat/full500/full458 or total-memory qualification.
+
+Latest independently audited frozen corpus prefixes: **284/458 positives supported**, zero rejected/inconclusive/errors;174 remain. **9/16 unused local DISC21 hash-near negatives**, zero false acceptances and zero execution errors; nine inconclusive non-acceptances. Full runs remain incomplete and source-pinned; dependency-scope-v5 records the older exact implementation in the negative executable.
+
+
+### 2026-10-12: fclones argument handling and Linux retry-cancellation qualification
+
+Completed reading fclones arg.rs (474 lines), error.rs (45), log.rs (180), and main.rs (350) at pinned commit a74f90d293e05856d19a4c0ac2b29b46ef16cf23. Byte-identical isolated arg module passed11 original tests and3 additional controls: Unicode dollar-quoted text panics on a non-character byte boundary (caught deliberately), empty argument quote/split loses the argument, and invalid Unix UTF8 plus whitespace/apostrophe roundtrip retains exact bytes. Compatible offline dependencies were used; this is not whole CLI qualification. Saved original upstream main executable passed4 tests.
+
+Source-only observations: group output is opened with File::create before grouping; stdin paths bypass early existence checking; lazy dedupe processing may precede a later report-read error. No removal/link/move/reflink action or destructive counterexample was executed. Full dedupe/report/config source and the full42-file tree/500-repository review remain incomplete. Evidence: `research/dedup-500/fclones-arguments-review-20261012.json` and `research/dedup-500/fclones-error-log-main-review-20261012.json`.
+
+Current read/write cancellation source snapshot is executing default-library and exact-file tests on Linux ARM64 as UID/GID65534, with the source and sysroot mounted read-only. Preparation evidence: `research/dedup-exact-output-linux-prepared-20261012.json`. Passing status must be established by final executable/log audit; a live build is not qualification.
+
+
+Further pinned fclones source review completed config.rs (824 lines; six original tests passed) and nine workspace/CI/packaging configuration files. CLI cache is opt-in, minimum size defaults to1 byte, and skip-content-hash deliberately weakens exact evidence. Unix stdin paths use UTF8 lines with unwrap; source observation only. Packaging defines cross-builds, not cross-platform runtime qualification. Release panic=abort means the caught parser panic is potentially process-fatal in that release configuration; no release/packaging/CI execution claimed. Evidence: `research/dedup-500/fclones-config-review-20261012.json` and `research/dedup-500/fclones-packaging-ci-review-20261012.json`.
+
+
+Linux retry-cancellation run completed and was independently audited: **64 tests passed, zero failed, two manual scale tests ignored** (39 library plus25 exact integration). Actual Linux ARM64 execution under UID/GID65534, read-only source/sysroot mounts, ELF AArch64 executable inventory and all production source hashes verified. Saved executables and logs: `research/dedup-exact-output-linux-verification-20261012.json`. This supersedes the live-build-only status above for this exact/default test scope. No Windows/kernel preemption/fullformats/full500/full458/total process memory claim.
+
+Both pinned fclones README files were completely read and verified byte-identical. Documentation explicitly omits byte confirmation and describes metadata-dependent optional caching; its historical benchmark tables are not new measurements. Evidence: `research/dedup-500/fclones-readme-review-20261012.json`. Remaining dedupe/report/reflink/generator/dependency-lock source review prevents a full42-tree completion claim.
+
+
+### 2026-10-12: full fclones report/dedupe review and whitespace filename regression
+
+Completely read pinned fclones report.rs (939 lines) and dedupe.rs (1633). Eleven original report tests and20 original dedupe tests passed; dedupe test operations were confined to a new isolated fixture working directory. Four public report controls reproduced numeric overflow panic, blank-line early termination, leading/trailing path-space loss, and preserved typed ordinary malformed-header error. A separate public dedupe+log_script control generated a removal plan for unequal same-size files under a synthetic equal report hash and default API config; both files remained unchanged, and no generated command was executed. CLI normally adds report timestamp, so this is scoped to the API default trust boundary.
+
+Source observations requiring separate physical-concurrency qualification: execute discards the lock guard before the following operation; Move also discards acquisition errors. Move target checks precede overwriting rename/copy; source content is not rehashed/byte-confirmed before planning; run_script continues after individual errors. These implementations were not adopted. Evidence: `research/dedup-500/fclones-report-review-20261012.json` and `research/dedup-500/fclones-dedupe-review-20261012.json`. Remaining source/dependency review prevents full42tree/full500 completion.
+
+Our exact integration suite now includes eight same-size distinct copy families with leading/trailing spaces, tabs, newlines and CR in real Unix filenames. Both ordinary and verified scanners preserve all eight two-file groups under both root orders and repeated root input. Actual macOS ARM64: **24 exact-file integration tests passed, zero ignored**. Production source is unchanged from the preceding64-pass Linux/62-pass macOS qualification; this newly added regression itself has not yet executed on Linux or Windows. Evidence: `research/dedup-exact-whitespace-path-verification-20261012.json`.
+
+Independently audited corpus prefixes advanced to **291/458 positives**, all supported, zero inconclusive/rejected/errors;167 remain. **11/16 unused local DISC21 hash-near negatives** completed with zero false acceptances/errors and11 inconclusive non-acceptances. Frozen historical executables remain live and unchanged; these are not full current-stack recall/precision/full500/format/platform/resource qualifications.
+
+
+### 2026-10-12: complete pinned fclones tree source review
+
+Completed review of all42tracked fclones files at a74f90d293e05856d19a4c0ac2b29b46ef16cf23:41complete source/documentation/config text reads, plus a structured complete Cargo.lock review of199packages/197registry entries and every resolved dependency edge. Canonical independent audit `research/dedup-500/fclones-complete-source-review-20261012.json` maps every tracked file to pinned review evidence and verifies all source/report hashes. This supersedes earlier tree-incomplete statements for this pinned source review only. It does not audit source of197third-party dependencies or complete all500repositories.
+
+Final source modules: reflink.rs545lines and generator source31lines plus manifest. Two original macOS reflink fixture tests passed without support-guard skip notice; they check content/existence, not metadata failure restoration, Linux ioctl behavior or concurrency. Original generator max-group-size1 panics before writing files; max2/count1 creates one65538byte file in a new owned fixture directory. See `research/dedup-500/fclones-reflink-generator-lock-review-20261012.json`.
+
+No fclones implementation adopted. Size/prefix/suffix staging, device-aware scheduling and path-prefix sharing remain design references; metadata-only cache trust, hash-only final proof, path/report parsing and cleanup transaction/lock behavior do not meet rrrah exact admission requirements. Whole-library formats/platforms, full458positives, broad negatives and hard total process resources remain open.
+
+
+### 2026-10-12: primary exact-content regression
+
+Added an authored 14-file fixture covering three four-copy families (empty,512 bytes,128 KiB), each spread across jpg/PNG/bin/empty suffixes, plus two same-size negatives changed in the middle. Ordinary and verified scans must return the exact three partitions under both input orders; extensions must not hide copies, and sampled-edge equality must not admit different contents. Production code is unchanged. Current macOS ARM64 default-library and exact integration execution passed64 tests (39+25), zero failed; two manual timing tests remain ignored. This does not qualify Windows, visual precision/recall, total process memory, all458 pairs or all500 repository reviews.
+
+
+### 2026-10-12: go-find-duplicates complete tree and current corpus checkpoints
+
+Completed all25files of m-manu/go-find-duplicates at cd928ba207ba7b78d939597eb48590b1e78b52c6, including Apache2 license, complete source/tests and manifests. Independent audit compared the entire archive tree and six initial source pins; copied harness preserves every original file. Five original Go tests passed on macOS ARM64. Four added public API controls reproduce cross-extension misses even with thorough SHA256, a fast-mode false group for a65536-byte pair differing at unsampled offset12000, nil error for a missing root, and physical hardlinks counted as reclaimable copies. Same-extension positive succeeds and thorough hashing separates the unequal pair. These passing counterexample tests document defects. No upstream implementation adopted. Report: `research/dedup-500/go-find-duplicates-complete-source-review-20261012.json`. Third-party dependency source, other platforms, physical mutation races and total RSS are not qualified.
+
+Both original corpus producers were confirmed live, without restart. Independently audited immutable prefixes now contain304/458 positive pairs, all304supported,154remaining, and13/16 unused local DISC21 hash-near negative pairs, zero false acceptances/errors and13inconclusive non-acceptances. Frozen historical executable compositions are unchanged. This is not a general precision/current-stack/fullformats/full500 completion claim. Reports: `research/dedup-native-bank-all-positives-prefix-0304-audit-20261011.json` and `research/dedup-disc21-heldout-negatives-prefix-13-audit-20261012.json`.
+
+
+### 2026-10-12: request generation cancellation at visual batch publication
+
+A corrected public scan_visual control first obtained a healthy analysed-file baseline, then changed its request generation at the final caller checkpoint. The original implementation returned Ok with that analysed file despite cancellation. Saved red-v3 source/test/executable/log evidence proves this specific defect. Earlier v1/v2 setup attempts used zero cache capacity and failed with Cache(Budget); they are preserved and excluded from defect evidence.
+
+scan_visual now retains admitted request generation tokens and includes them in the batch cancellation predicate, covering indexing and final publication after decoding. No matching or fingerprint arithmetic changed. Actual macOS ARM64 decode-feature tests passed130 (97 library,25 exact files,8 visual scan), zero failed; five manual timing tests ignored. Canonical audit reconstructs the production change, verifies source/test pins and saves all three executable inventories: `research/dedup-visual-generation-verification-20261012.json`. A concurrent unrelated hayro source change exists between red/green snapshots and further hayro drift is recorded; this run is not a pure whole-dependency comparison or complete current-workspace qualification. Other platforms, physical concurrency, complete formats/458positive pairs/500repositories and total resources remain open. Existing corpus executables were not restarted; negative frozen-source scope is corrected in dependency-scope-v6.
+
+
+### 2026-10-12: generation cancellation in direct pixel confirmation
+
+Two public confirm_pixels controls reproduced successful output despite generation cancellation: a stale admitted request with an empty candidate list returned an empty success, and cancellation at the final callback returned an equal pair. Both pre-fix failures and healthy equal baseline are preserved in `research/dedup-pixel-generation-red-20261012.json`. confirm_pixels now retains admitted request tokens in the batch cancellation predicate, covering empty candidates and final publication. Matching and direct pixel equality are unchanged.
+
+Actual macOS ARM64 full visual/pixel scan integration suite passed10 tests, zero failed/ignored. Independent audit reconstructs the production delta, verifies unchanged red/green test bytes and saved executable inventory, and freezes source/test/fixture: `research/dedup-pixel-generation-verification-20261012.json`. This10-test run is separate from earlier130-test historical qualification; counts must not be added. No whole-dependency snapshot, physical concurrency, other-platform, fullformat/full500/full458 or total resource claim. Frozen negative executable source scope is corrected in dependency-scope-v7 without restart.
+
+Both corpus producers were confirmed live. Latest independently audited immutable prefixes contain311/458 positive pairs, all311supported and147remaining, and15/16 unused local DISC21 hash-near negative pairs, zero false acceptances/errors and15inconclusive non-acceptances. Reports: `research/dedup-native-bank-all-positives-prefix-0311-audit-20261011.json` and `research/dedup-disc21-heldout-negatives-prefix-15-audit-20261012.json`. These qualify frozen historical compositions, not full current stack or general visual precision.
+
+
+### 2026-10-12: complete16-pair frozen negative execution and LSH counterexamples
+
+The originally running16-pair unused local DISC21 hash-near negative producer terminated normally; final report status complete, all16rows complete, zero execution errors and zero false acceptances. Independent audit validates every frozen source/report/executable/log pin and fixed plan/policy. All16 non-acceptances remain inconclusive, not proof of non-copy or representative precision. Whole-process RSS minimum773292032, median1214038016 and maximum2025193472 bytes; maximum managed peak21829200 bytes. This confirms substantial Torch/model/runtime memory outside managed accounting, not a hard total-memory guarantee. Final evidence: `research/dedup-disc21-heldout-negatives-complete-audit-20261012.json`; frozen dependency scope remainsv7. No restart occurred. Semantic/burst hard negatives and broad precision remain open.
+
+Reviewed11 complete ordinary text files of mattilyra/LSH at a57069bfb70f4b620d47931f81966b5a73c1b480, all35 notebook cell sources/text outputs and both generated MinHash algorithm bodies. Remaining21808-line generated Cython runtime is not comprehensively reviewed, so full13-file tree completion is not claimed. Root MIT and embedded MurmurHash public-domain notices read. Original Cython0.24.1 C++ build fails on Python3.12 missing longintrepr.h; preserved. Separate modern Cython regeneration from unchanged pyx/MurmurHash/Python sources passes108 upstream tests. Six authored controls nevertheless reproduce NumPy fingerprint Jaccard1 for disjoint arrays, low-overlap candidates surviving threshold0.9, clear retaining old fingerprints, replacement retaining stale buckets, caller-array mutation breaking removal and shared mutable cached return values. No implementation adopted. Evidence: `research/dedup-500/lsh-partial-source-runtime-review-20261012.json`. First wrongly located regeneration attempt is preserved separately and excluded from successful-build evidence. No full500/source dependency/platform/resource accuracy qualification.
+
+Latest audited immutable positive prefix:319/458, all319supported, zero inconclusive/rejected/errors,139remaining. Existing producer remains live. Evidence: `research/dedup-native-bank-all-positives-prefix-0319-audit-20261011.json`. Frozen historical composition only.
+
+
+### 2026-10-12: phase RSS diagnostic localizes the first large increase
+
+Launched an instrumentation-only copy of the unchanged frozen negative composition on the original maximum-RSS pair Q00992/R043984. Same weights, seed, input dimensions, fixed bidirectional primary/recovery policy; only vendor/loftr/src/loftr_model.rs adds phase-boundary ps samples and shapes. Independent audit reconstructs the instrumented file from the exact original plus replacement list/helper and verifies every other source hash unchanged. Producer62722 and child63615 confirmed live; existing full-positive producer is unaffected.
+
+Immutable prefix covers28 complete inference traces with nine ordered phases each: `research/dedup-loftr-negative-rss-prefix-028-audit-20261012.json`. First inference current RSS rises from354779136 bytes at normalized input to1775583232 at backbone output, a boundary increase1420804096; coarse-feature boundary1825849344, coarse-match boundary1827078144, fine-match boundary1844281344. These are phase-boundary current-resident observations, not allocator ownership attribution or internal kernel peaks. Main first large increase therefore occurs by backbone completion in this run, before coarse/fine matching. Source currently stacks equal-size images for backbone; sequential inference is a candidate requiring exact outcome and whole-operation memory validation, not yet implemented/adopted. Earlier strip-output and selected-window candidates remain rejected on their recorded whole-operation controls.
+
+Separate safetensors audit verifies211tensor entries,46272776payload bytes (46272640F32 and136I64), all shape/type byte sizes and contiguous full data offsets: `research/dedup-loftr-weight-payload-audit-20261012.json`. This is weight-file payload only, not total resident model or inference accounting. Full stage diagnostic and final evidence parity against the original negative execution remain pending; `research/dedup-loftr-negative-rss-profile-20261012.json` is the live report. Hard total-resource admission/fullcurrent-stack/formats/platforms/full458/full500 remain unqualified.
+
+
+### 2026-10-12: complete RSS diagnostic and isolated sequential backbone candidate
+
+The original instrumentation-only diagnostic completed normally. Independent final audit reconstructs its sole instrumented production file, verifies all other frozen source hashes, all68 complete ordered inference traces and exact entire caller JSON parity against the original worst pair. Peak whole-process RSS1952972800 bytes. Evidence: `research/dedup-loftr-negative-rss-complete-audit-20261012.json`. Phase samples still do not attribute allocator ownership or internal kernel peaks.
+
+An isolated sequential backbone candidate removes equal-size image stacking while preserving the existing separate inference path. Four small shape/batch random-weight controls produce exact equal coarse/fine tensors. All45 native tests of the candidate historical snapshot pass, including an independent original stacked feature oracle. These are not the current55-test native stack. The unchanged complete worst-pair caller probe is being built/executed; evidence/RSS are pending in `research/dedup-loftr-sequential-backbone-runtime-20261012.json`. No root optimization adopted. Full current-stack, corpus, platform and hard total-memory qualification remain open.
+
+
+### 2026-10-12: adopt sequential backbone after complete caller RSS comparison
+
+The isolated sequential backbone completed unchanged full bidirectional Q00992/R043984 search with exact entire caller JSON parity. Whole-process peak RSS1409335296 versus original2025193472 bytes, a615858176-byte (30.4percent) reduction; versus instrumentation-only original1952972800 the reduction543637504 bytes. Independent audit reconstructs the sole changed production method/call, validates saved source/log/executable hashes,45 historical native units and complete caller command/evidence/RSS: `research/dedup-loftr-sequential-backbone-complete-audit-20261012.json`. These are one-shot comparisons, not repeatability or timing benchmarks.
+
+A fresh copy of all current native source, including later attention fixes, then passed56 tests, zero failed/ignored, including the independent original stacked backbone oracle. Root now adopts precisely those tested source bytes: remove equal-size stacking, use separate left/right backbone inference, simplify private arguments and retain the exact-feature regression. No other root production file changed in this adoption. Evidence: `research/dedup-loftr-sequential-current-units-20261012.json` and `research/dedup-loftr-sequential-backbone-adoption-20261012.json`. Root native hash equality and scoped diff whitespace check pass. Full current caller/decoder composition, gradients, other devices/platforms, full458 positives/full500 repository reviews and hard total-memory limits remain unqualified.
+
+The latest independently audited frozen positive prefix is331/458, all331supported,127remaining: `research/dedup-native-bank-all-positives-prefix-0331-audit-20261011.json`. Its historical executable was never restarted or relabeled as the new source.
+
+
+### 2026-10-12: Skiff exact module counterexamples and current-source full caller probe
+
+Pinned DrizzleTime/Skiff c1c686bb5b91d94d705c639ba2e21ca520207533 archive contains129files, all archive/extracted hashes verified. Exact file module, model, Cargo manifest and MIT license read fully; remaining repository not fully reviewed. Unchanged original module passes9tests in an isolated serde/trash/tempfile harness, not the entire Tauri app/dependency lock. Four authored controls pass: three reproduce overlapping-root groups containing the same path twice, hardlink aliases counted as reclaimable independent storage and missing configured root returning successful empty results; one confirms cross-extension byte copies. InvalidUTF8 filename creation failed with illegal byte sequence before scanning; preserve/exclude that attempt. No deletion function called and no upstream code adopted. Root exact tests already contain explicit overlapping-root, hardlink, missing-input and nonUTF8 regressions. Evidence: `research/dedup-500/skiff-exact-module-source-runtime-review-20261012.json`. Full129tree/all500 remain incomplete.
+
+Started an unchanged full fixed worst-negative caller probe against a snapshot of1218current local crates/vendor/config source files, including sequential backbone and current decoder/native fixes. Prior probe manifest/lock/runtime/features/config retained. Compilation and full execution outcomes are pending: `research/dedup-loftr-current-stack-runtime-20261012.json`. Historical corpus executable remains distinct and running. Latest independently audited historical positive prefix340/458, all340supported and118remaining: `research/dedup-native-bank-all-positives-prefix-0340-audit-20261011.json`. No fullcurrent-stack/corpus/platform/resource completion claim.
+
+
+### 2026-10-12: Skiff selection guard counterexample and22-file source prefix
+
+Fully read the duplicate React page, complete CLI, complete Tauri command/router files, settings service, all model modules and selected README/package/Tauri configuration. Total22of129files now fully read;107remain not fully reviewed. The unmodified original toggleFile body, with only its TypeScript parameter annotation erased, passes a healthy two-distinct-path Node control but allows selecting the sole unique path when two duplicate records have that same path. This record shape was already reproduced by the unchanged public scanner with overlapping roots. Zero unique paths remain unselected. No mounted React/Tauri test or deletion operation occurred. Evidence: `research/dedup-500/skiff-selection-and-source-prefix-review-20261012.json`.
+
+Static call-path findings: app duplicate scan defaults to10MiB minimum/40groups and falls back to default settings on settings-read failure; backend file deletion does not require duplicate evidence; README home-only boundary differs from accepted configured outside-home roots. These findings do not authorize or trigger deletion in rrrah-dedup, which remains a reporting library. No implementation adopted; full129tree/all500 still incomplete. Current-source complete worst-pair caller build remains separately tracked without restart.
+
+
+### 2026-10-12: Skiff cumulative64-file complete-text review prefix
+
+Read42additional complete files: all cleanup/UI components, all lib helpers, complete TS response types, titlebar, both entry points and complete App orchestration. Cumulative64of129archive files fully read;65remaining paths explicitly listed. Immutable source hashes and previous module/selection audits verified: `research/dedup-500/skiff-full-file-prefix-064-review-20261012.json`. This batch adds no executed tests or adopted code.
+
+The reviewed component tree only displays/forwards identities; generic checkbox cannot repair duplicate path records. Outer App records results/routes to history without revalidating keeper/content; toolbar cancellation is confirmation-state reset rather than duplicate-scan cancellation. No additional matcher in these reviewed files. Remaining backend/AI/pages/config/assets/locks still require appropriate review; full129/all500 completion remains unproven. Current-source full caller probe remains live as separately recorded.
+
+
+### 2026-10-12: Skiff76-file backend source prefix and measured overlap defect
+
+Fully read all cleanup target definitions/providers/spec/engine/router plus system helpers, disk reader and service router. Cumulative76of129archive files fully read;53remaining paths listed. Isolated unchanged engine passes4original tests; one authored read-only fixture confirms a7byte file measures as14bytes when parent and child paths are both supplied. Original cleanup unit deletes only its own generated temporary fixture; no real user/cache/package cleanup executed. Evidence: `research/dedup-500/skiff-full-file-prefix-076-backend-review-20261012.json`.
+
+Static provider dedupe only handles equal lossy path strings, not ancestor unions/inodes. macOS predefined cache targets include parent and nested browser cache directories, so summing targets can overlap; real caches were not measured. Cleanup measurement propagates errors unlike the duplicate scanner, but the target view records zero size on error. These are separate cleanup-domain findings, no additional duplicate matcher or implementation adoption. Full129tree/all500/physical-platform and rrrah full-resource claims remain incomplete. Current-source fixed worst-pair caller continues independently without restart.
+
+
+### 2026-10-12: Skiff90-file config/space review and actual traversal control
+
+Read complete release/issue YAML, TypeScript/Vite/component configuration, platform window override, ignore/build/env files and complete space service. Cumulative90of129files fully read;39remaining paths listed. Unchanged original space module passes5tests in isolated serde/rayon/trash/tempfile macOS harness. One authored public request control confirms display depth1 still visits12nested dirs/13entries and counts the17byte deep file while retained child subtree is empty. max_depth/max_children constrain retained display, not traversal work/resource admission. This is aggregation/display semantics, not a false claim that depth aggregation itself is defective. No cancellation/total work/memory admission in this module. Evidence: `research/dedup-500/skiff-full-file-prefix-090-space-config-review-20261012.json`. Original delete tests remove only their own generated temporary fixtures; no real user data or release/CI commands executed. YAML declared cross-platform gates are not executed CI evidence. No code adopted/full129/all500 completion.
+
+Latest independently audited historical positive prefix344/458, all344supported and114remaining: `research/dedup-native-bank-all-positives-prefix-0344-audit-20261011.json`. This executable remains the frozen earlier composition. Separate current-source full worst-pair caller remains live, without restart or outcome claim.
+
+
+### 2026-10-12: Skiff97-file source prefix and agent substring control
+
+Read complete agent router/shared/Claude/Codex modules, tray, About and Junk pages; cumulative97of129files fully read,32remaining listed. All four agent source module bytes copied unchanged into isolated serde/serde_json/rusqlite0.40.1 bundled/tempfile harness. Two original tests pass. One authored public cleanup control, entirely within generated temporary fake history/home, confirms selecting thread-a removes telemetry/events.thread-ab.json while thread-ab.jsonl remains. The related-file name.contains(id) predicate crosses session identities. No real user session/database cleanup or upstream code adoption occurred. Evidence: `research/dedup-500/skiff-full-file-prefix-097-agent-review-20261012.json`.
+
+Two setup failures are preserved/excluded: initial offline hashlink cache miss, then incorrect isolated module placement. Third run preserves original module tree and passes actual tests. Static source review additionally notes cross-file database/JSONL operations lack a shared transaction and version-specific database schemas are not generic file identity. No full Tauri/platform/physical-race/full129/all500 qualification. Independent current-source full worst-pair probe continues without restart; a final verifier is prepared but not executed before completion.
+
+
+### 2026-10-12: current-stack whole caller completed; position-floor candidate
+
+The frozen1218-file current-stack worst-negative caller completed normally. Independent complete auditor verifies source/config/executable/log pins and RSS1317060608 bytes. Full JSON differs from the older baseline only in managed_peak16666544→16666672; all remaining fields compare equal. This is independently recorded in research/dedup-loftr-current-stack-evidence-delta-20261012.json. Two unrelated hayro files drifted after freezing; execution remains attributed to its frozen snapshot, not latest whole worktree.
+
+An isolated one-production-file candidate changes initial positional encoding floor256×256→1×1. All57 native unit tests pass, including authored exact comparison with original floor for both encoding modes, alternating aspect ratios, dimensions beyond256 and reuse. Root production source remains unchanged. The complete fixed caller RSS candidate probe is building/running under scripts/measure-dedup-loftr-position-floor-20261012.py; outcome pending in research/dedup-loftr-position-floor-runtime-20261012.json. No adoption without whole result equality and measured whole RSS benefit. Candidate source/executable/build/test logs are pinned in research/dedup-loftr-position-floor-candidate-20261012.json.
+
+Historical positive prefix348/458 independently verified, all348 supported, zero inconclusive/rejected/execution failures;110remaining at that captured prefix. Existing historical producer continues without restart. Scope remains full458/full500/formats/platforms/mutation/resources/scale; none declared complete. Main problem priorities recorded in docs/DUPLICATE_LIBRARY_PRIORITIES.md.
+
+
+### 2026-10-12: Skiff101-file text prefix; position-floor full execution
+
+Completed reading README.zh-CN.md, index.html, src/assets/skiff-logo.svg and src/App.css without truncated outputs. Cumulative101/129files,28remaining listed in research/dedup-500/skiff-full-file-prefix-101-doc-style-review-20261012.json. Chinese README repeats HOME-only configured-path boundary contradicted by earlier complete settings source review. HTML/CSS/SVG contain startup/theme/layout/markdown/drawing behavior, no extra duplicate identity or resource/cancellation admission. No new runtime or rendered UI claim, no adoption/full129/all500 completion.
+
+Position-floor candidate compiled successfully and complete fixed caller execution started. Process10662 confirmed live, child of time10661/producer7848. Independent final verifier scripts/audit-dedup-loftr-position-floor-20261012.py now checks all source pins, exact one-file reconstructed delta, unchanged caller/lock/config,57-unit qualification, whole JSON and parsed RSS. Verifier is prepared, not executed before terminal evidence. Root production unchanged; result/RSS benefit still pending.
+
+
+### 2026-10-12: Skiff109-file prefix and UTF8 chunk control
+
+Fully read LargeFilesPage, HistoryPage, complete six-file AI backend tree. Cumulative109/129files,20remaining. Exact original client UTF8 append block in standalone std Rust control accepts valid whole SSE bytes and rejects the identical valid bytes split within a Chinese codepoint. This is a block-level control, not full asynchronous HTTP/Tauri integration. No network or user-file operation executed. Evidence: research/dedup-500/skiff-full-file-prefix-105-client-review-20261012.json and skiff-full-file-prefix-109-ai-review-20261012.json. Original six-module/model tree copied unchanged to minimal serde/reqwest/futures harness; original parsing/payload test build pending. Per-request75second timeout and limited message/item counts do not provide aggregate response-byte/work/cancellation limits. Backend delete tool only proposes confirmation records; unread SpaceAnalysisPage prevents an end-to-end confirmation claim. No code adopted/full129/all500 completion.
+
+Historical positive prefix351/458 independently audited, all351supported, zero inconclusive/rejected/execution errors,107remaining in captured prefix: research/dedup-native-bank-all-positives-prefix-0351-audit-20261011.json. Existing producer unchanged. Position-floor candidate full caller process10662 remains live; no outcome or RSS benefit claim yet.
+
+
+### 2026-10-12: positive parity plan and Skiff110-file prefix
+
+Before position-floor full worst-pair outcome, precommitted two positive controls: first two supported/model-attempted rows of independently audited351-prefix fixed order, baseline indices7and27. Files and historical report pinned in research/dedup-loftr-position-positive-plan-20261012.json. Serial baseline/candidate unchanged full caller runner prepared in scripts/measure-dedup-loftr-position-positive-20261012.py, not yet executed. Historical model support does not prove current direct caller support; both require measurement. No candidate adoption from negative-only evidence.
+
+Skiff complete six-module original AI source passes12original local parser/payload tests in minimal pinned harness. Separate copy preserves all original production source and appends one cfg(test) parser failure control: response.failed after partial output is ignored and accumulator publishes partial text. All13tests pass; no actual server/EOF public HTTP integration or deletion performed. AgentCleanupPage fully read, cumulative110/129files,19remaining. UI confirms selected session IDs but does not revalidate related-file session boundaries; cancel dismisses confirmation rather than running backend. Evidence research/dedup-500/skiff-ai-original-units-20261012.json and skiff-full-file-prefix-110-ai-failure-review-20261012.json. No adoption/full129/all500/platform/resource completion.
+
+
+### 2026-10-12: Skiff111-file prefix and stale config save controls
+
+Complete1367-line environment module read. Byte-identical env/system/model harness passes3original string tests and2authored public save controls: explicit ShellConfig path outside supplied fake home is modified; stale original_key/value does not prevent unrelated current line being overwritten by line number. All writes/backups confined to generated temporary fake home and sibling fixture; no real HOME shell/config, environment inventory, registry or shell execution. Outside-fake-home behavior does not itself establish a UI exploit or a documented env-editor HOME boundary. Static non-atomic multi-file writes/second-resolution basename backup collision and dollar-expansion observations are not physical race/crash/shell execution evidence. Cumulative111/129files,18remaining explicitly listed: research/dedup-500/skiff-full-file-prefix-111-env-review-20261012.json. No code adopted/full repository/all500/platform/resources completion.
+
+
+### 2026-10-12: Skiff112-file prefix, package resource scope and355 positives
+
+Complete1476-line package service read. Byte-identical package/system/model minimal harness passes11original non-uninstall parser/filter/string/icon-format units. Initial offline build lacked pinned plist1.9.0 archive, excluded; locked online fetch retry passes, preserved both logs. Original tiny icon test runs with TMPDIR redirected to new owned scratch and removes its fixture. No package manager, uninstall/trash/application scan command executed. Static resource observations: icon512KiB refusal occurs after full read; subprocess output captured without timeout/cancel; released_size is scanned nominal size rather than observed physical free space. These are not an exhaustion or actual platform/uninstall test. Cumulative112/129files,17remaining: research/dedup-500/skiff-full-file-prefix-112-package-review-20261012.json. No adoption/full500 completion.
+
+Historical positive prefix355/458 independently audited, all355supported, zero inconclusive/rejected/errors,103remaining: research/dedup-native-bank-all-positives-prefix-0355-audit-20261011.json. Existing historical producer unchanged. Independent two-positive full caller verifier prepared in scripts/audit-dedup-loftr-position-positive-20261012.py; executions await completion/audit of current position-floor worst-pair probe. Neither prepared verifier nor historical positive support establishes current candidate qualification.
+
+
+### 2026-10-12: Skiff114-file prefix, confirmation and partial context cap
+
+Fully read506-line SettingsPage and2253-line SpaceAnalysisPage. AI delete proposals become pending cards only after matching retained scan node; explicit confirmation handlers invoke deletion, permanent mode additionally checks DELETE path phrase. Source-level UI confirmation is now reviewed, not mounted/physical identity proof. Requests still carry path/mode/phrase rather than source identity/digest; preserveAi rescans retain older pending item. No actual config, credentials, HTTP or deletion accessed/executed.
+
+Exact original five-helper source block plus MAX_AI_CONTEXT_ITEMS constant, stripped only of TypeScript syntax by Node22 builtin, returns1200items without references and1257unique items with one referenced last directory on3193-node authored tree,56children per directory/depth2. This matches UI scanner child/depth limits and demonstrates initial-selection-only cap rather than total1200 cap. Entire retained tree is flattened before selection; no exhaustion or mounted UI claim. Cumulative114/129files,15remaining: research/dedup-500/skiff-full-file-prefix-114-space-page-review-20261012.json. No code adopted/full129/all500 completion. Full LoFTR position-floor process10662 remains live; outcome pending.
+
+
+### 2026-10-12: position floor whole-case result and positive gates
+
+The complete isolated position-floor caller finished normally and its independent audit passed: 57 native units, every result JSON field identical to the frozen current baseline, RSS 1,252,065,280 versus 1,317,060,608 bytes (64,995,328 bytes lower). Evidence: `research/dedup-loftr-position-floor-complete-audit-20261012.json`. Production has not adopted the candidate. The two precommitted positive controls now run serially on both frozen executables; explicit support and complete evidence parity are adoption gates. `scripts/adopt-dedup-loftr-position-floor-20261012.py` refuses adoption without both audited positive controls, the worst-case audit, all pinned artifacts, and unchanged root native sources.
+
+The historical positive corpus now has an independently captured 358/458 prefix, all 358 supported, zero inconclusive/rejected/execution failures: `research/dedup-native-bank-all-positives-prefix-0358-audit-20261011.json`. This remains the older frozen executable, not qualification of the current native candidate.
+
+
+### 2026-10-12: Skiff117-file prefix, complete page source
+
+Finished EnvironmentPage1098lines, ApplicationCleanupPage841lines and OverviewPage431lines; all three are now fully read. Evidence: `research/dedup-500/skiff-full-file-prefix-117-final-pages-review-20261012.json`. 117/129 archive files reviewed; two locks, four locale JSON files and six binary icons remain. Application uninstall uses explicit confirmation controls and selected IDs; cancel dismisses confirmation rather than aborting active backend work. Environment submits original key/value but earlier backend stale-line control remains applicable; frontend forwarding does not add identity validation. Overview only aggregates supplied target/run metrics, without physical overlap correction or another duplicate matcher. No new runtime tests, mounted React/Tauri, package operation, real environment/config/registry access or code adoption.
+
+
+### 2026-10-12: complete Skiff repository file review
+
+All129 pinned archive files are reviewed:117 source/config/doc text files fully read; two generated locks parsed record-by-record, four locale JSON files structurally compared across every key/value/placeholder, six binary icons structurally inspected and displayed (ICNS/ICO through task-owned sips previews). Artifact: `research/dedup-500/skiff-complete-source-review-20261012.json`. Cargo556packages and all dependency edges resolve, registry checksum shapes valid; bun350package records have valid SHA512 integrity shapes and direct dependency ranges match package.json. Locale468primary/70target strings per language have equal keys/placeholders; critical duplicate/delete/cancel/error/confirmation text inspected in both languages. This does not claim downloaded dependency content verification, dependency source audit, semantic review of every translated phrase or full upstream app build/platform testing. Prior exact/cleanup/stream/context/env/package original-unit and fixture evidence is retained through immutable prefix pins. No upstream implementation adopted; full500 repository scope remains open.
+
+
+### 2026-10-12: current base unit gate
+
+The current root no-default-features rrrah-dedup library unit command completed with exit0:39passed,0failed,2ignored manual alternating matcher timing controls. The independent verifier checks every source-before/source-after hash, named test outcome, summary, saved executable and log: `research/dedup-base-current-source-gate-20261012.json`. This command excludes decode/Torch and integration targets. Separate current macOS exact_files/cache/groups integration execution is now running, recorded in `research/dedup-exact-cache-groups-current-gate-20261012.json`; outcomes pending. No production change or broad full-case completion claim follows from these gates.
+
+
+### 2026-10-12: current exact/cache/group integration gate
+
+Current root exact_files25,cache7,groups5 tests all pass on macOS, exit0,0failed/ignored/filtered. Independent auditor checks unchanged current source/test hashes, every named result per target, complete summary, logs and executables: `research/dedup-exact-cache-groups-current-gate-20261012.json`. Cache count includes the subprocess helper invocation, not7independent persistence scenarios. Two physical non-UTF8 path tests compile only on non-macOS Unix and are not qualified here. Positive cases include overlapping roots, hardlink identity, stale source/mtime restoration, FIFO replacement, cancellation, crash/concurrent cache publication and nontransitive grouping. This is not decode/Torch/image-corpus/other-platform/full500 qualification.
+
+The initial registry row022 was stale: existing dhash complete8text-file review and1originalPillow/24doctest evidence are now independently reverified, all9source blobs match and its30x20JPEG was viewed. `research/dedup-500/dhash-current-review-reconciliation-20261012.json` records precise bounded runtime and absent full Wand suite. Registry updated without rerunning or inflating upstream tests. No code adopted.
+
+
+### 2026-10-12: current pixel/linear gates and first positive baseline
+
+Current root pure pixels6 and linear4 integration tests pass, no failures/ignored/filtered. Source-before/source-after, saved executable, runner and complete log hashes independently verified: `research/dedup-current-pixel-gate-complete-audit-20261012.json`. Cases include independent gradient bits, uninformative uniform collision, invisible RGB/signedzero canonicalization, HDR/sub-byte/highlight preservation, invalid layout/budget and every late pixel cancellation checkpoint. This verifies pure prepared-pixel APIs, not decoding/file formats/ICC/orientation/animation/Torch/platform/fullcorpus/all500 behavior.
+
+The first precommitted complete positive baseline execution finished normally with explicit support, baseline_index7,RSS1322483712. Immutable prefix audit: `research/dedup-loftr-position-positive-prefix-0001-audit-20261012.json`. Candidate samepair execution remains live. One baseline completion does not establish A/B parity or permit position-floor adoption; four terminal executions and the prepared complete audit remain required.
+
+
+### 2026-10-12: adopt qualified minimal position floor
+
+All four precommitted positive executions finished normally. Both baseline and candidate explicitly support each pair; complete JSON evidence is identical per pair. Independent final audit: `research/dedup-loftr-position-positive-complete-audit-20261012.json`. RSS deltas: baseline_index7 1,322,483,712→1,321,385,984 (−1,097,728bytes); baseline_index27 1,533,526,016→1,431,879,680 (−101,646,336bytes). No timing claim: machine contention differed.
+
+Adopted exactly the57-unit qualified native constructor and regression test, changing initial position floor256×256→1×1. Every root native file matches the qualified source; preflight verified all native files unchanged since baseline and precisely two source/test deltas. Scoped whitespace check passes. `research/dedup-loftr-position-floor-adoption-20261012.json` pins before/after native hashes, complete worstcase and positive audits and adoption script. Worstnegative complete JSON remains identical with RSS reduction64,995,328bytes. This does not add a hard RSS cap, kernel preemption, fullcurrent458/corpus/platform/all500 coverage. Two later unrelated hayro changes remain outside the frozen complete caller qualification.
+
+
+### 2026-10-12: frozen current decode/container gate and377 positives
+
+Prepared and launched decode-feature rrrah-dedup library units plus raster_equality/animated/pages/container integration targets from a fresh2696-file current snapshot, including local crates/vendor/config and required raster fixtures. The snapshot includes adopted minimal position floor and later hayro edits; this is separate from prior frozen caller sources. Evidence: `research/dedup-current-decode-gate-20261012.json`. Compilation is live; outcomes pending. No root source/config mutation. Command does not enable Torch or qualify allformats/currentfullcorpus/platform/all500.
+
+Historical positive execution independently captured at377/458, all377supported and0inconclusive/rejected/executionfailed,81remaining: `research/dedup-native-bank-all-positives-prefix-0377-audit-20261011.json`. Original producer remains live and is not restarted/relabelled as the new current stack.
+
+
+### 2026-10-12: preserve completed base gate executables
+
+Verified completed base/exact/cache/groups/pixels/linear report pins again and copied all six exact test executables from shared Cargo target to immutable task-owned storage. `research/dedup-current-base-qualified-executables-20261012.json` records original paths, saved paths, equal hashes and historical reports. This prevents future target reuse from losing the executed binaries; no tests rerun or coverage broadened. Current decode/container compilation remains live. Its independent complete verifier is prepared as `scripts/audit-dedup-current-decode-gate-20261012.py`, and must execute only after all five target results are terminal.
+
+
+### 2026-10-12: complete fast-dhash source review, runtime in progress
+
+Reviewed all9pinned files of9elt/fast-dhash b3ee22f1094837f4fc0fd3b2e3b1574e886fe77d:5fulltext including270-line implementation/embedded3units andMIT, structured114-package/197-edge Cargo.lock,3JPEGs displayed. Archive matches every cached Git blob. `research/dedup-500/fast-dhash-complete-source-review-20261012.json`. Source integer-divided9x8cells omit smallinputs and right/bottom remainders; alpha ignored; PartialEq applies nontransitive Hamming<11. Static zero-channel unsafe-access path identified but explicitly not executed. No source copied into product and no speed claim. Original pinned manifest/lock3units+1doctest and7authored public API controls now run sequentially in owned scratch: `research/dedup-500/fast-dhash-runtime-controls-20261012.json`, outcomes pending. Original detection count0 was path-name screening and is corrected to3embedded tests. Current decode/container build remains live without restart.
+
+
+### 2026-10-12: fast-dhash original tests and counterexamples complete
+
+Original pinned3embedded units and1doctest pass, then7authored publicAPI controls pass on a separate byte-identical source/manifest/lock copy. Independent audit verifies original/harness9file equality, all phase logs/summaries, saved binaries and source pins: `research/dedup-500/fast-dhash-complete-runtime-audit-20261012.json`. Valid8x8/9x7different grayscale images hashzero; lastcolumn10x8/lastrow9x9edits are omitted; fullytransparent opposite RGB gradients differ64hashbits; public approximate PartialEq is nontransitive at10/10/20bits; opaqueblack/white hashzero; invalidlength panics beforeloops. Zerochannel unsafe path remains static and unexecuted. These are candidatehash limitations and API/sampling findings, not evidence that rrrah's guarded pixel/complete-link flow inherits them. No code or performance claim adopted; source review486complete with bounded runtime, all500 remains open. Current decode/container compilation still live.
+
+
+### 2026-10-12: current decode gate verified; current458 producer launched
+
+Independent complete audit passed:97decode-feature library units,7animation,14container,11pages,7raster-equality tests;136passed,5manual timing/index measurements ignored. All2696frozen files and complete logs/named outcomes verified, five executed binaries preserved. Root drift at audit0. `research/dedup-current-decode-gate-complete-audit-20261012.json`. This does not establish allformats/Torch/fullcorpus/platform coverage.
+
+Launched a new full458publisher-direction execution using this frozen current composition, including native memory fixes and current decoder changes. Exact historical native_bank_outcome caller/policy bytes, manifest path substitutions only, original ordering and fixed thresholds. Distinct binary name preserves the still-live historical producer's original shared-target executable pin. Complete evidence is stored once per immutable caseJSON; small progress report avoids repeated full-evidence rewrites. Current build succeeded, runtime is pending: `research/dedup-current-native-bank-all-positives-20261012.json`. Independent prefix auditor prepared as `scripts/audit-dedup-current-native-bank-prefix-20261012.py`. Neither historical nor current full458run is yet declared complete.
+
+
+### 2026-10-12: current model error contract gate and historical prefix421
+
+The independent historical prefix audit verified421/458 fixed-policy positive directions:421supported,0inconclusive,0rejected,0execution_failed (`research/dedup-native-bank-all-positives-prefix-0421-audit-20261011.json`). The historical frozen executable is distinct from the current optimized source and is not evidence of current458completion.
+
+The current frozen2696file decode snapshot now has a running `model_compare` + `opposite_native` integration gate (`research/dedup-current-model-contract-gate-20261012.json`). This checks generic provider/search contracts, including insufficient geometry, source/weight mutation, request-owner cancellation, work admission, and atomic collection publication. It does not execute native Torch inference. Results remain pending until the producer terminates and the full log/source evidence is audited. Current native positive prefix1 is separately audited (`research/dedup-current-native-bank-prefix-0001-audit-20261012.json`); the remaining457directions are not claimed passed.
+
+
+### 2026-10-12: current generic model contract gate complete
+
+The current frozen source passed47 `model_compare` tests and6 `opposite_native` tests,53total with0failed/ignored. Independent audit verified all2696source hashes, the complete test-name lists against both executed binaries, and log checksum. Two working-tree files differ from the executed snapshot: `crates/rrrah-app/examples/hdr_surface_probe.rs` and `crates/rrrah-cache/tests/sustained_swap.rs`. These outside-dedup changes are preserved and are not covered by this execution; no dedup/native source drift was found. Both executables are preserved separately from the reusable build target. Evidence: `research/dedup-current-model-contract-gate-complete-audit-20261012.json`. This proves the executed generic provider/opposite search contracts; actual Torch inference, full458recall, harder negative precision, all formats/platforms, all500source reviews, and hard RSS/time limits remain separate unfinished requirements.
+
+
+### 2026-10-12: full decode suite fixture failure preserved and corrected
+
+The first complete140-target decode test build terminated with exit101 before executing tests: its earlier selective-gate snapshot omitted root XCF fixtures required by `tests/decode.rs`. This is a test-snapshot preparation failure, not a passed gate or demonstrated production decoder failure. Evidence is preserved in `research/dedup-current-all-integration-missing-fixtures-audit-20261012.json`.
+
+A distinct frozen snapshot retains every original2696source hash unchanged and adds the complete2517-file root fixture tree, resulting in3738unique files. Root fixture bytes and path set were verified against the copy before launch. New producer `research/dedup-current-full-fixtures-integration-gate-20261012.json` runs the complete decode test command with the full fixture snapshot; final audit remains pending. The previous terminal attempt and running native458source are not overwritten or restarted.
+
+
+### 2026-10-12: current native positive prefix3 and fixed16 negative replay
+
+Independent current-prefix audit confirms3/458positive directions supported with0inconclusive/rejected/execution failures (`research/dedup-current-native-bank-prefix-0003-audit-20261012.json`). A new distinct runtime replays the original16published hash-near DISC21 distractors through the same preserved current native/opposite/bank caller, at fixed640input,2.0tolerance and1mopposite trials. Source, executable, weights, dylibs, original selection and input bytes are pinned; completed records are immutable and false acceptance/rejection/inconclusive/execution failure are distinct. Evidence: `research/dedup-current-heldout-negatives-20261012.json`; prefix auditor prepared, no completed negative result claimed yet. The prior negative caller differed, so no complete JSON parity or new semantic-heldout precision claim is made.
+
+Scale investigation retains the prior exact-equality-cache rejection (`research/dedup-exact-classes-rejection-20261011.json`):36alternating samples showed slower bounded all-copy latency despite fewer analytical bytes. Current exact observation already separates original-source guards from external dependencies; no rejected cache or duplicated-source factorization is reintroduced.
+
+
+### 2026-10-12: source review460 complete with original runtime controls
+
+Imranch4/image-similarity-checker commit189504a23d911bee1e375837ebea73c6375db0b0: every4file in the complete pinned tree fully read and Gitblob verified. Seven authored controls execute unchanged original functions/CLI: alpha/RGB/original dimensions erased by scorer normalization, identical flat image ORB0, missing image AttributeError, tiny identical image SSIMValueError, documented CLI flags ignored. Isolated package versions and fixture/source/control hashes recorded; independent audit `research/dedup-500/image-similarity-checker-complete-runtime-audit-20261012.json`. No upstream tests exist, no duplicate classifier/general precision proof, no dependency source audit, no code adoption. All500complete review remains pending.
+
+
+### 2026-10-12: historical full458 execution independently complete
+
+The original frozen positive producer terminated successfully. Final independent audit verifies458/458supported,229distinct unordered publisher positive pairs with both directions,0inconclusive/rejected/execution_failed. All complete logs, immutable terminal capture, source/build/runtime/executable/input pins, original order and exact per-case commands/tolerances are verified.10directions attempted the model stage; maximum measured process RSS across historical cases2,104,950,784bytes. Evidence: `research/dedup-native-bank-all-positives-complete-audit-20261012.json`. This is completion of the historical fixed-corpus execution only. Current optimized458qualification, general precision, allformats/platforms/full500 and hard resource bounds remain incomplete.
+
+Full source review495 (maweidong/ai-smart-photo-dedup) covers all4files.8compatible-dependency original-class controls confirm stale/duplicate edges across repeated scans, shallow report aliasing, removed-file retention, pair-count overcount, missing-root/decode-error empty outcomes, black/white false acceptance and unvalidated threshold. Exact upstream requirements install failed for ImageHash5.3.0; ImageHash4.3.2/Pillow11.3.0 controls exclude module imports/main and substitute only identity progress UI. No full original dependency/runtime claim or adoption. Independent audit: `research/dedup-500/ai-smart-photo-dedup-complete-runtime-audit-20261012.json`.
+
+
+### 2026-10-12: current prefixes6positive/3negative; source review471 complete
+
+Independent immutable current audits confirm6/458positive directions supported and3/16negative cases inconclusive,0false acceptances/explicit rejections/execution failures. Evidence: `research/dedup-current-native-bank-prefix-0006-audit-20261012.json`, `research/dedup-current-heldout-negatives-prefix-03-audit-20261012.json`. These prefixes do not establish full current recall or general precision.
+
+Mikerah/perceptual-hashes-benchmark: all4files fully read/Gitblob verified.3exported functions are placeholders; aHash returns neither result nor promise, creates a global boolean-word string and swallows bitSt ReferenceError.6original-module JS controls use explicit mocked Sharp/mean/iterator adapters. No actual Sharp/image/benchmark qualification, tests/manifest absent, no adoption. Source/runtime hashes and node executable pinned: `research/dedup-500/perceptual-hashes-benchmark-complete-runtime-audit-20261012.json`.
+
+
+### 2026-10-12: current prefix11/4 and full source review100
+
+Immutable current audits verify11/458positive directions supported,4/16negative cases inconclusive and0false acceptances/errors. Full scopes remain incomplete.
+
+mk-fg/image-deduplication-tool: all4files fully read and Gitblob verified.8original-function controls use explicit Python3 compatibility and hash adapters in serial mode: cached source mutation and repaired hash failure remain stale; direct-file/missing-root input mishandled; top-n1prints3distance tiers; overlapping roots/deletion/zero-hash behavior checked. Normal async completion waits children, but exceptional pending-child cleanup only SIGTERMs without waitpid/closing pending pipes; this is static analysis, not an executed native worker test. No elapsed/RSS cap. Native Python2/libpHash/fork/feh/delete paths unqualified and not adopted. Evidence: `research/dedup-500/image-deduplication-tool-complete-runtime-audit-20261012.json`.
+
+
+### 2026-10-12: new current same-cache lifecycle regression passed
+
+Added `crates/rrrah-dedup/tests/scan_retry.rs`: one integrated scenario runs the same cache through decode failure, repaired identical file, changed source bytes, fresh-cache comparison and original-pixel rejection, removed source, old-report independence, recreated source and empty request set.1test passed,0failed/ignored; managed credit released. Independent audit verifies unchanged compiler semantics against exact argv captured from a live full-gate Rustc child, all pinned libraries/source/executable/logs and3738frozen source hashes. Output is task-owned and no shared Cargo artifact is mutated. Evidence: `research/dedup-current-scan-retry-gate-complete-audit-20261012.json`.
+
+The first isolated compilation failed because textual ps arguments lost compiler cfg quoting; it is preserved as `research/dedup-current-scan-retry-gate-20261012.json`. The v2 execution used byte-exact macOS argv, stopping before environment data, and passed. This was harness preparation, not a production failure. The new root test is outside the original frozen140target full-suite inventory and supplements that pending gate; no full-suite/current458/precision/resource/all500 completion claim.
+
+
+### 2026-10-12: full source review123 and original key controls
+
+alexander-marquardt/deduplicate-elasticsearch: all3files read and Gitblob verified.8controls execute unchanged original key assignments/function with real hashlib, excluding client construction/main/network calls. Distinct field boundaries and types collapse to the same string before MD5; repeated IDs retained. Selected fields intentionally exclude other data. Equality confirmation/DELETE remain comments/TODO; no actual delete or Elasticsearch validation claimed. Evidence: `research/dedup-500/deduplicate-elasticsearch-complete-runtime-audit-20261012.json`. No adoption/general library identity or full500 completion claim.
+
+
+### 2026-10-12: caller interpretation cache identity
+
+A real PFM regression reproduced a stale cache hit when `pfm_top_down` changed on the same file and cache. The original compiled library built successfully; the test failed at the intended cache-hit assertion. Evidence: `research/dedup-cache-interpretation-baseline-audit-20261012.json`. The immutable baseline test/log/binary remain preserved; the root test was subsequently formatted.
+
+The candidate fingerprint recipe v6 canonically hashes all caller pixel interpretation settings: RPF channel/matte/alpha/color declarations, RLA alpha/byte-order/color declarations, PQ reference white, HLG display tuple, both untagged color assumptions and PFM row order. Exhaustive DecodeRequest destructuring forces future fields to receive an explicit cache-identity decision. Variable-size metadata is length-prefixed; float values use their binary representation. Selected frame and source/dispatch identities retain their existing handling; admission and cancellation remain live guards.
+
+Qualification is tracked separately in `research/dedup-cache-interpretation-fix-20261012.json`; a running or preparing report is not passing evidence. The older full-fixture integration and native portfolio jobs use their original frozen snapshots and do not qualify this new production change.
+
+Qualification update: the expanded Cargo gate completed with 18 passed, zero failed and zero ignored (cache interpretation 2, decode 15, scan retry 1). The cache separation test uses 21 distinct request configurations; it does not establish RPF/RLA/HDR decoding semantics on BMP. The actual PFM test verifies changed decoded fingerprint and correct repeat/restore hits. The initial test copy was preserved before expanding the snapshot test. See `research/dedup-cache-interpretation-expanded-20261012.json` and independent `research/dedup-cache-interpretation-fix-audit-20261012.json`.
+
+RLA semantic follow-up: the old compiled library demonstrably returned cached success after omitting required alpha interpretation, while an empty cache rejected the same request. With the rebuilt v6 recipe, one real RLA regression passes both independent alpha/color omissions, checks the same typed-error debug value as empty-cache execution, restores the original successful entry, and releases managed credit. Baseline failure and fixed Cargo execution are independently pinned in `research/dedup-cache-rla-interpretation-audit-20261012.json`. This adds one passed integration test to the earlier18. SVG font identity was also inspected: its database is an immutable OnceLock snapshot with retained Binary font sources, so lack of a second filesystem font scan is not by itself a cache invalidation defect.
+
+
+### 2026-10-12: retain bounded model miss diagnostics
+
+Inspection of the fixed native/opposite/model-bank cascade found that an unsuccessful model bank search discarded its complete compact search evidence and retained only the model digest. The candidate adds `ModelBankDiagnostics` counts for geometrically admitted candidates, insufficient pixel-window geometry and checked pixel rejections. `NativeBankRecoveryEvidence::model_search` retains the copyable bank-search evidence on both model support and unknown, while native/opposite early support leaves it None. These fields retain no input/candidate bank allocations; collection report admission uses the evidence type size. A pixel rejection is rejection of an examined candidate, not proof that the file pair has no visual relationship. Support/unknown semantics are unchanged.
+
+Qualification is tracked in `research/dedup-model-miss-diagnostics-20261012.json`. Existing 47 model contract tests passed with strengthened assertions for empty proposals and flat/inverted real BMP pixels, including counter accounting. Additional cascade/collection tests are pending. The originally selected `native_bank` Cargo filter does not match the search_portfolio tests' `native_family_first` names; zero selected tests cannot qualify that stage. `research/dedup-native-family-diagnostics-supplement-20261012.json` executes the three correctly named cases from the newly compiled test binary. Full corpus jobs continue to refer to their earlier immutable source snapshots.
+
+Review473 anton-matosov/PerceHash: all three complete text files at commit121760f836c6670626785d7b4e57672e5cb448b3 were read and checked against the complete untruncated Git tree. Only .gitignore, Apache2.0 license text and a54byteREADME exist; no implementation/build/fixtures/tests exist in that commit. No runtime execution or code adoption is claimed. Full-source review/audit: `research/dedup-500/percehash-complete-source-review-20261012.json` and `research/dedup-500/percehash-complete-source-audit-20261012.json`.
+
+Final model miss diagnostic qualification:57passed/0failed/0ignored (47model_compare,4native_family_first,6native_bank_collection). The first supplement asserted3listed tests but the binary listed4; this was a harness inventory error before execution and is preserved as terminal_harness_assertion_failure. The v2supplement executed all4 correctly named tests. Independent final audit checks exact executed logs, source/root equality, the original frozen manifest apart from declared edits, and preserved all three compiled binaries: `research/dedup-model-miss-diagnostics-audit-20261012.json`. The0selected Cargo filter contributes zero coverage.
+
+Review477 cbulock/ahash at b92ced669d73a628e5f3d62672eec0a0e4f30433: all4complete files read and Git blobs verified. The PHP method switches on undefined $image[type] after destructuring only dimensions, leaving $img uninitialized for imagecopyresampled. This is static source evidence; no PHP/GD executable is available on PATH and no runtime warning/error or translated mock qualification is claimed. No tests/fixtures/lockfile; GPL manifest/notice identifiers differ. No code adopted. Evidence: `research/dedup-500/ahash-complete-source-review-20261013.json` and matching complete-source-audit.
+
+
+### 2026-10-13: actual LoFTR diagnostic controls
+
+The qualified diagnostic source was rebuilt with the actual CPU LoFTR provider under the original optimized harness policy. The only caller change adds JSON for model_search. Two preselected controls executed with original640input,1mopposite,25banks/radii2and6, weights, seed and thread count: fixed DISC21 negative index0(Q36603/R043984), and publisher positive baseline index0. Full3742source files and7Torch dylibs were pinned before execution and verified afterward.
+
+The negative yielded384raw/selected proposals across25attempts,0joint geometry candidates and0pixel attempts. Its unknown status is evidence of insufficient geometry, not a justified negative classification. The positive retained direct-native support and skipped inference. All prior decision, geometry, correspondence and pixel evidence matched the fixed baseline. Managed report credit/peak increased by exactly368bytes in both controls; the same exact delta appeared in every nested BudgetState embedded in Debug output. The first audit failed because it compared those embedded dynamic ledgers literally; v2 explicitly checks and normalizes only the measured368byte ledger delta, then requires complete remaining JSON/string equality. This is an audit correction, not a changed search output.
+
+Independent audit: `research/dedup-real-model-miss-diagnostics-audit-v2-20261013.json`; producer: `research/dedup-real-model-miss-diagnostics-20261013.json`; full preparation pins: `research/dedup-real-model-miss-preparation-20261013.json`. RSS and duration are retained as observations under concurrent jobs, with no performance improvement, universal resource bound or heldout precision claim. The full native458 and fixed16 regressions remain on their earlier frozen source.
+
+
+### 2026-10-13: single-process worker supervision foundation
+
+`rrrah_dedup::worker::run_worker` supervises a caller-selected trusted executable with private temporary-file stdin/stdout/stderr, avoiding blocking pipe delivery/read deadlocks. Policy/input refusal occurs before spawn. Cancellation, an observed elapsed deadline and observed capture excess terminate and wait for the owned child; a drop guard also owns cleanup on error/unwind. Nonzero exit preserves bounded binary stderr and never publishes stdout evidence. Successful captures use limit-checked fallible Vec reservations; they are not MemoryBudget-owned. Deadline includes input staging and output capture. Limits bound returned capture payload; child output can grow between polls. This is not an RSS cap, hard real-time/disk cap or descendant containment. Trusted workers must not spawn descendants. Existing model_loftr APIs still run in process; provider protocol/integration and OS-specific memory enforcement remain unfinished.
+
+The no-feature Cargo gate passed7test functions:6behavioral tests and1subprocess fixture helper. Real child processes cover binary IO, no-spawn refusal, timeout, cancellation/retry, both output floods and nonzero binary diagnostics. A separate actual native comparison executable was stopped/reaped at an observed200ms deadline. No claim is made that a Torch kernel had started. The first integration harness failed without explicitly preserving the Torch dynamic-library path through Cargo; its executable/log and a successful direct-invocation diagnostic are preserved. The v2harness explicitly passes the child runtime path and passes. Independent audit: `research/dedup-worker-supervisor-audit-20261013.json`.
+
+### 2026-10-13: earlier optimized fixed16 negative execution complete
+
+All16fixed published-label hash-near distractors completed on the original frozen optimized snapshot, before later cache/miss-diagnostic/worker edits. Independent prefix16 plus terminal capture audit verified all commands, input/source/runtime/executable pins and records. Counts:0false_acceptance,16inconclusive,0rejected,0execution_failed. This bounded regression does not establish semantic-heldout precision or negative recall. Final audit: `research/dedup-current-heldout-negatives-complete-audit-20261013.json`.
+
+
+## Fixed-model validation geometry
+
+`geometry_validation::validate_projective_points` accepts a fixed projective model, a declared complete fitting pool, and a separate validation set. It checks endpoint separation within/across both sets in each image and reports bidirectional residual evidence only on validation points, without fitting/refinement or a copy verdict. All point-pair and projection work is prepaid; it allocates no buffers and never publishes partial results after cancellation or invalid input.
+
+Supply the complete point pool used for model selection/refinement, not just final inliers. Establish and retain the split before inspecting validation results. The function cannot verify caller provenance. Coordinate-disjoint sets do not imply disjoint descriptor/pixel contexts, statistical independence, or independence from whole-image neural inference. Geometry alone does not establish copying, and missing support does not establish unrelated images.
+
+
+`geometry_validation::fit_and_validate_projective_points` couples the declared split to fitting: only the fitting slice enters hypothesis sampling/ranking/refinement. Validation is checked for malformed/aliased coordinates before fitting and is then scored once under the unchanged chosen model. Even zero validation support returns the training candidate and validation errors; validation never causes another model to be chosen. None means no qualifying training hypothesis. Fitting scratch/work use the underlying joint-fitter policy; validation separation/projections use their own policy. Callers must fix the split before inspecting results and must not tune repeated calls against validation. This algorithmic separation of points is not independence of provider image context or proof of copying.
+
+### Bank provenance and alias components (2026-10-13)
+
+`bank_partition::partition_point_banks` retains all supplied correspondence alternatives and returns original bank/point indices. Source OR target proximity forms transitive components; each entire component belongs to fitting or validation. A single component yields no independent validation partition. Work and managed payload admission precede allocation; cancellation returns no partial output. Coordinates do not establish descriptor, pixel or statistical independence. This additive API does not change duplicate acceptance.
+
+### Component-vote bank geometry (2026-10-13)
+
+`bank_geometry::fit_and_validate_point_banks` partitions all supplied alternatives, samples four different fitting components and one member from each, then scores every fitting alternative. Each component has one vote using its best jointly admitted residual. It retains the first count/error winner, performs no refinement, and scores that unchanged model once on validation members. Forward and reverse evidence from different members cannot create a joint vote. No model or no validation support does not establish non-copying; geometry still requires content confirmation.
+
+The component graph uses all input coordinates before search: altering validation coordinates can change the split itself. Training-only separation applies after this deterministic partition, and does not certify statistical or pixel/descriptor-context independence. Managed grouping scratch is released atomically; only returned partition credit remains until its last clone drops. Projection work, four-point solves and domain checks have explicit limits; allocator metadata and total RSS remain outside managed payload admission.
+
+
+### Competitive ordinal evidence (2026-10-13)
+
+`competitive_rank::compare_competitive_rank_region` compares a supplied mapping against caller-predeclared target translations, retaining a fixed warped source template. Source contrast alone defines the common informative-pair denominator; low target contrast counts as disagreement. Every candidate shares the same valid sites. All pixel reads are admitted before sampling, storage is fixed, and cancellation publishes no partial evidence. Edge contexts can remove support; insufficient support is inconclusive. Agreement and a positive margin do not establish copying or statistical independence. No acceptance pipeline or decision threshold changes.
+
+Frozen raster qualification: `research/dedup-competitive-rank-v2-audit-20261013.json`, 71 passed and 3 manual tests ignored across five targets. Controls cover smooth planes, independent integer-grid ordinal counts on texture, flat targets, boundaries, work limits, unsupported pixels and every cancellation checkpoint. The concurrent full decode gate uses an earlier snapshot and excludes this API.
+
+
+### Mesh residual deformation bounds (2026-10-13)
+
+`mesh_deformation::validate_mesh_deformation` checks every vertex occurrence and edge of an existing topology-qualified `PiecewiseWarp` relative to a fixed source-to-target projective baseline. It measures inverse-baseline source residuals in source-axis normalized units, and their differences divided by target-axis normalized edge lengths. Caller-fixed maximum displacement and edge slope bounds yield complete geometry evidence and `conforms`; crossing a bound does not terminate early or prove non-copying. All six checks per face are prepaid, there is no allocation, and cancellation discards partial evidence.
+
+This is a vertex/edge residual constraint, not an interior approximation-error bound against a nonlinear inverse projective map, global smoothness certificate, independent content confirmation or copy verdict. Existing piecewise topology checks remain mandatory. No acceptance pipeline changes. Frozen raster qualification: `research/dedup-mesh-deformation-audit-20261013.json`, 63 passed, 3 manual ignored across four targets, including analytic translation/shear, exact perspective, asymmetric axis normalization, invalid/budget refusal and every cancellation checkpoint. Current full decode gate excludes this API and the competitive ordinal API.
+
+
+### 2026-10-13: local dependency source changes invalidate fingerprint interpretation
+
+The built-source recipe v2 includes the recursive local `vendor` tree as well as the four involved crates, Cargo manifests/lock and compiler/build context. Cargo watches the vendor directory even when absent, so later creation triggers reevaluation. A vendor implementation change can alter decoded pixels without changing Cargo.lock; the cache recipe must change with it. The actual-Cargo regression in `research/dedup-vendor-build-recipe-regression-20261013.json` executes a local dependency returning 1 then 2: the old recipe remains unchanged, while the fixed recipe changes with an unchanged lock. This proves the build identity mechanism, not a reproduced stale PDF cache or completeness for arbitrary external runtime dependencies. Focused library/cache/build-context verification passes 113 tests, 5 ignored, 0 failed across four targets; the full post-fix default+decode gate remains pending.
+
+
+### 2026-10-13: explicit process-group supervision
+
+`worker::run_worker_process_group` is available on Linux/macOS and launches a trusted executable into a new process group. Cancellation, deadline, capture excess, unwinding and normal/failed leader exit signal the owned group before waiting on the direct child. Normal-exit observation uses non-reaping waitid, retaining the leader PID until group signalling, to avoid signalling a group whose leader PID has already been released/reused. The caller must not separately reap the owned child, including from SIGCHLD handlers, or override grouping through pre-exec hooks. The original single-process entry point keeps its existing scope.
+
+This terminates descendants that remain in the group; it is not a sandbox or a hard RSS/disk/scheduling cap. Descendants that create another process group/session are outside this mechanism. Only the direct child is reaped by this owner; stopped descendants may briefly remain zombies awaiting their parent/OS reaper. Tests accept absent/zombie process state and separately verify stopped heartbeat writes.
+
+`research/dedup-worker-group-focused-audit-20261013.json` verifies54passed/0failed/2ignored across default library and two worker targets on a frozen macOSARM64 snapshot. Worker targets include two fixture-helper records; twelve behavioral tests cover cancellation/retry, deadline, normal/failed leader exit, both output floods, callback panic, pre-spawn refusal and existing binary/error handling. `research/dedup-worker-group-windows-check-audit-20261013.json` verifies WindowsGNU compile checking only; group API/tests excluded and no Windows runtime proof. Linux runtime remains unavailable while Docker daemon is stopped. The ongoing full post-cache default+decode gate predates these worker changes; separate model-provider integration qualification is required.
+
+
+### 2026-10-13: integrated worker group and macOS empty-group correction verified
+
+The first model-provider integration failed two existing fast-exit tests, despite passing the descendant regression: Darwin killpg returns EPERM when the unreaped leader is already a zombie and no eligible live members remain. The failed121pass/2fail/5ignored gate and20actual true/sh PermissionDenied probes are preserved in `research/dedup-model-worker-group-fixed-failure-audit-20261013.json`. EPERM is not suppressed unconditionally. The corrected macOS path first observes the owned leader exited with non-reaping waitid, then uses pinned libproc0.14.11 native group enumeration/BSD state inspection. A live member, failed lookup or possibly truncated enumeration refuses completion; errno is reset before libproc's zero-result success/error distinction. Other group-signal errors retain their meaning. No project unsafe code is added. RootMIT license for libproc read; registry dependency remains separately licensed.
+
+`research/dedup-model-worker-group-fixed-v2-audit-20261013.json` verifies125passed/0failed/5ignored across frozen decode-feature library and both worker targets on macOSARM64. Includes new actual model-protocol background-child regression,20fast true/sh calls preserving exit/diagnostics, and native quiescence refusal with a live leader or live descendant after leader exit. Four involved crates match root at this audit; three PDFvendor files differ, so no whole-current-workspace claim. `research/dedup-worker-group-v2-linux-audit-20261013.json` verifies55passed/0failed/2ignored on actual LinuxARM64 under pinned official Rust1.98.1bookworm/Colima. Source/registry mounts are read-only, Cargo offline/locked, container network disabled; all three ELF test executables saved. Linux excludes the macOS-specific helper/unit. WindowsGNU default cfg compilation separately succeeds; no Windows execution or group API claim. Worker counts include two fixture helpers.
+
+`research/dedup-model-worker-group-native-parent-audit-20261013.json` verifies actual pinned LoFTR child inference from a decode-only parent without Torch dependencies/links. One self pair at input max-side160/source-tolerance4.0returns176proposals and supported evidence identical to the previous decode-parent output;1msdeadline remains a typed provider error and managed credit returns to0. Caller code unchanged; dependency paths/name adjusted, stable compiler explicit, standalone lock replaces rustix1.1.5with1.1.4andadds libproc. This does not qualify640input/25banks/all458pairs, arbitrary precision, Torch kernel entry before the tiny deadline or hard RSS.
+
+The prior complete post-vendor-recipe default+decode gate independently verifies978passed/0failed/6ignored/153targets (`research/dedup-vendor-recipe-full-decode-audit-20261013.json`), before worker-group changes. A fresh complete post-group source with current vendor copied under before/after/hash agreement is running separately in `research/dedup-worker-group-complete-decode-20261013.json`. Hard RSS/disk/scheduling, escaped-group containment and descendant reaping beyond the direct child remain outside these guarantees.
+
+
+### 2026-10-13: current quality controls and completed worker gate
+
+The complete frozen default+decode gate after process-group integration passed 988 tests, with 6 ignored and 154 executed targets; all executables are retained. Four involved crates and vendor matched the live root at the recorded checkpoint. See `research/dedup-worker-group-complete-decode-audit-20261013.json` and its root-parity report. This does not qualify all workspace features or the native natural-image corpus.
+
+Six current native development directions using the original positive campaign's diagonal-normalized source tolerance were independently audited: true table `[true,true]`, wrong table `[unknown,unknown]`, wrong portrait `[true,unknown]`. Both-direction support is a candidate acceptance requirement, not an implemented atomic consensus API or a general quality guarantee. Existing OR/fallback APIs keep their documented semantics. See `research/dedup-current-diagonal-consensus-controls-audit-20261013.json`.
+
+The historical fixed-tolerance hard-negative campaign now has an audited prefix of 123/458 directions: 2 false acceptances, 121 inconclusive, no explicit rejections or execution errors. The new false acceptance is query 209202 against wrong origin 212800 (index102), with reverse index103 inconclusive. Historical negatives use fixed source tolerance2; positives use 2*sourceDiagonal/targetDiagonal. Do not pool these as one precision/recall experiment. Full campaign, current-source recall, atomic two-direction publication, scale/resource limits and all500 full-source review remain open.
+
+The exact native pixel pipeline also passed the independent crosscheck on the four original image-find PNG controls: opaque black/white differ; fully transparent images with different hidden RGB normalize equally. Indexed candidates are directly confirmed; omitted pairs are not reported as proven different. See `research/dedup-image-find-native-crosscheck-audit-20261013.json`.
+
+
+### 2026-10-13: opt-in atomic two-direction confirmation implemented
+
+`search_portfolio::search_native_bank_consensus_files_with` now runs both complete native/opposite/model-bank cascades under an outer original-file/dependency/weight/generation guard. It accepts separate directional policies, checks six summed work fields and the summed opposite-stage projection caps, validates both suffixes before IO, and checks each sequential scratch reservation. Compact summaries release managed correspondence banks before reverse execution. Provider errors remain terminal. Only two positive directional results produce `Some(true)`; any missing support remains `None`, never a uniqueness or rejection claim. Existing OR/fallback APIs retain their semantics.
+
+Three regression tests cover reverse-policy/global-work refusal before IO, both-native support without inference, final mutation/cancellation, forward-positive/reverse-unknown, reverse provider failure, reverse weight mutation and cancellation, and zero retained managed credit. The initial version passed all38 portfolio tests. Strengthened testing exposed a test assertion expecting outer `Source` where the correct terminal error is `ModelTiles(Comparison(ModelSource(Changed)))`; the assertion is corrected. Complete frozen default+decode validation for the final source is running, not yet qualified. See `research/dedup-native-bank-consensus-implementation-20261013.json` and `research/dedup-consensus-complete-decode-20261013.json`.
+
+This API has not yet been qualified with actual learned inference on the complete natural-image corpus, integrated into collection/publication/default routes, or proved to identify whole-image copies. The new index102 false acceptance was inspected visually: a mountain-town/street composite versus another public square. Its10 matching geometric witnesses and small enclosing windows are local evidence, not whole-image coverage. The historical fixed2 diagnostic remains separate from normalized/current API quality evaluation.
+
+
+### 2026-10-13: native consensus model adapter and actual learned-path check
+
+`model_loftr::search_loftr_native_bank_consensus_files` now shares one operation-local lazy CPU model across both directions. An internal directional provider selects each direction's own proposal cap; the existing generic callback API remains intact. The outer guarded consensus lifecycle still surrounds both complete cascades.
+
+All38 latest portfolio tests passed from a retained standalone native-feature test executable, including asymmetric support, reverse provider failure, changed weights and cancellation. A separate160-input self comparison with all native corner recipes explicitly disabled actually reached the learned bank route in both directions and returned two supports with zero retained managed bytes. This qualifies that execution path on one self pair, not natural-image recall/precision or a measured model-load count. See `research/dedup-consensus-native-focused-audit-20261013.json` and `research/dedup-consensus-native-learned-audit-20261013.json`.
+
+The initial intended forced-learned self control only raised the native witness minimum to1000 while the policy permits28000; it still supported natively. That route gap and two Torch loader startup failures are retained in `research/dedup-consensus-native-control-repairs-20261013.json`. The corrected learned control disables native corner extraction with threshold1e9 and verifies both model-attempt traces. Startup failures are not image decisions.
+
+The natural table pair also supported both directions in the real atomic API. Portrait and newly discovered composite/square negatives remain running. The full default+decode gate runs the earlier consensus snapshot; latest native source differs in two files for the directional provider helper and convenience wrapper. Latest standalone38 and actual learned self checks cover those changes narrowly. Do not label the earlier full gate as latest-source qualification. Full500 source review, complete natural quality campaigns, collection/publication routing, scale and resource/format/platform coverage remain open.
+
+
+### 2026-10-13: actual atomic natural portrait control and native profile
+
+The real atomic native/LoFTR consensus kept the true table pair `[true,true]` and returned unknown for the wrong portrait pair `[true,unknown]`; the earlier one-direction false acceptance is not published as a positive by this opt-in API. This is one measured natural wrong pair, not a general precision guarantee or explicit rejection. The composite/square wrong pair remains running. Execution prefix4 and its explicit initial forced-route gap are independently checked in `research/dedup-consensus-native-v2-execution-prefix-0004-audit-20261013.json`; the separate corrected learned self control remains the evidence for actual learned execution.
+
+A one-second live sample of the composite/square control located the direct-native candidate-union distinct-location gradient matcher. `distances_four` accounted for414of589 main-thread top-of-stack samples in that window. See `research/dedup-consensus-native-gradient-profile-20261013.json`. This is a local hotspot observation, not whole-operation timing or an achieved speedup; no performance source change has been made. Profile the exact ordered descriptor kernel and compare paired complete-result timings before adopting an optimization.
+
+
+### 2026-10-13: complete initial-consensus gate and full common-policy campaigns
+
+The complete frozen initial-consensus default+decode gate is independently verified:991passed,0failed,6ignored,154executed targets,0empty targets. Every executable is retained. See `research/dedup-consensus-complete-decode-audit-20261013.json`. This snapshot includes the initial atomic consensus core and all38portfolio regressions. Two later source files add the directional provider helper and native convenience adapter; those retain separate latest standalone38 and actual learned/natural control evidence. Do not call the earlier full gate complete qualification of the later whole source.
+
+All five planned atomic native controls completed. True table remains `[true,true]`; wrong portrait `[true,unknown]` and composite/square `[unknown,unknown]` are not positive. The original intended forced-learned self control still has its explicit native-only route gap; the corrected separate self control actually exercised both learned paths. See `research/dedup-consensus-native-v2-execution-prefix-0005-audit-20261013.json` and `research/dedup-consensus-native-learned-audit-20261013.json`. Composite/square uses independently normalized tolerances that differ from the historical fixed2 recipe, so its result is not evidence that conjunction alone removed the old acceptance.
+
+Six descriptor experiments were retained without modifying production gradient code. Early-distance bounds preserve tested exact nearest tables but regress some distributions; row gating improves synthetic near-copy data without consistent natural benefit. Array accumulators provide essentially no synthetic improvement. Transposed scratch is about1.32times baseline synthetic time and would need additional memory admission. The natural microbench used8direction runs comprising7unique ordered image pairs, including repeated self direction,2matching modes and9alternating timing pairs; it is not complete native-search timing or acceptance-policy parity. Exact nearest-table bits, correspondence/error results and cancellation checkpoints were compared. See `research/dedup-gradient-performance-experiments-audit-20261013.json` and `research/dedup-gradient-natural-bound-benchmark-audit-20261013.json`. No claimed production speedup. A bounded exact-f64 distance cache remains an experiment candidate; memory/work admission and whole-operation measurements would be required before adoption.
+
+Current atomic pair-quality campaigns now run on one retained native executable and one common recipe:229publisher-positive pairs and233wrong pairs (229nearest-wrong-origin plus4semantic pairs). Each operation uses640model input,CPU2,seed173once,1mopposite trials,25banks,radii2/6,explicit linear-sRGB interpretation,512MiBmanaged budget, and both independently calculated source tolerances `2*sourceDiagonal/targetDiagonal`. No pruning/packed-layout experiment is included. Inputs, weights, runtime libraries, source, command arguments and case order are fixed before launch. Only exact prior atomic command-argument and binary-hash matches are reused:1positive and1negative. The positive audited prefix1 is the reused table control, not newly measured full-corpus recall. See `research/dedup-consensus-current-positive-plan-20261013.json`, its negative counterpart, live producers and prefix auditor.
+
+The historical fixed2 negative campaign separately reached audited prefix140/458:2false acceptances,138unknown,0explicit rejections or execution failures. It is not pooled with current normalized campaigns as one accuracy measurement. Inconclusive negatives are never counted as proven true negatives. Collection/default routing, all500complete-source reviews, broad format/platform/resource/scaling qualification and complete current corpus outcomes remain open. All12original ledger requirements remain intact in `research/dedup-goal-coverage-ledger-v20-20261013.json`; completion remains false.

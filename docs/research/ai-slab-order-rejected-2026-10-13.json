@@ -1,0 +1,33 @@
+{
+  "status": "both experiments rejected; polygon runtime restored",
+  "pixel": [
+    147,
+    59
+  ],
+  "limits": {
+    "polygon_work": 40000000,
+    "diagnostic_command_work": 16000000
+  },
+  "baseline_fragments_before_geometry_refusal": 708497,
+  "candidate_fragments_before_geometry_refusal": {
+    "strict_order_reuse": 577277,
+    "bounded_adjacent_repair": 577277
+  },
+  "fragment_change_percent": -18.52089705390425,
+  "four_original_controls_exact": true,
+  "final_credit": 0,
+  "restored_suite": {
+    "passed": 212,
+    "ignored": 12,
+    "failed": 0
+  },
+  "source_sha256": "f8332ee43be9e93b72fa99ddd6e87e839925dab683f115af73aeab3ac8c05644",
+  "interpretation": "validation/fallback overhead outweighs reuse on this original; no speed or completion improvement",
+  "logs_and_archives": {
+    "ai-slab-strict-order-rejected-2026-10-13.rs.txt": "374aba21307e04454bfe00fef5b02c223bf81af9275fbe31c0b06d4d20b2e4d1",
+    "ai-slab-order-repair-rejected-2026-10-13.rs.txt": "eedfd4676d404ee0c52a1866bd21fa6fd2630203b6ceddf5de8bbd5b285dc727",
+    "ai-slab-order-reuse-original-2026-10-13.log": "4537d6a3674feb550741369c9a82023fb0a9365ce46ac191f2aa6e80e3f1e224",
+    "ai-slab-order-repair-original-2026-10-13.log": "58271deebf55ba3f4d52e4df5eb82f97f579dffd3dfdd5460adc0a7fe15603fa",
+    "ai-slab-order-reverted-suite-2026-10-13.log": "8a50facdc79dd364ff9f635912c4533542bdee1b643400abcd57030a74579da0"
+  }
+}

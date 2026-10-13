@@ -233,7 +233,7 @@ fn supplied_model_regions_require_pixels_and_cancel_atomically() {
     use rrrah_dedup::local_scan::compare_local_files_projective_region_grid_transform;
     let temp = tempfile::tempdir().unwrap();
     let path = temp.path().join("copy.png");
-    std::fs::copy(root.join("2414-base.png"), &path).unwrap();
+    copy_writable(root.join("2414-base.png"), &path).unwrap();
     let request = DecodeRequest::new(&path);
     calls.set(0);
     let file =
@@ -289,7 +289,7 @@ fn supplied_model_regions_require_pixels_and_cancel_atomically() {
         Err(LocalFileError::Source(rrrah_dedup::exact::SnapshotError::Changed))
     ));
     assert_eq!(budget.used(), 0);
-    std::fs::copy(root.join("2414-base.png"), &path).unwrap();
+    copy_writable(root.join("2414-base.png"), &path).unwrap();
     let retry =
         compare_local_files_projective_region_grid_transform(&a, &request, model, q, (2, 2), &budget, || {
             false
@@ -398,7 +398,7 @@ fn supplied_model_regions_require_pixels_and_cancel_atomically() {
         Err(LocalFileError::Source(rrrah_dedup::exact::SnapshotError::Changed))
     ));
     assert_eq!(budget.used(), 0);
-    std::fs::copy(root.join("2414-base.png"), &path).unwrap();
+    copy_writable(root.join("2414-base.png"), &path).unwrap();
     let retry = compare_local_files_projective_bidirectional_region_grid_transform(
         &a,
         &request,
@@ -412,4 +412,12 @@ fn supplied_model_regions_require_pixels_and_cancel_atomically() {
     assert_eq!(retry.region_support_count(), 8);
     drop(retry);
     assert_eq!(budget.used(), 0);
+}
+
+// Fixture sources may be read-only in an immutable qualification checkout.
+// Copy bytes without inheriting permissions so mutation tests can edit their own files.
+fn copy_writable(source: impl AsRef<std::path::Path>, target: impl AsRef<std::path::Path>) -> std::io::Result<u64> {
+    let bytes = std::fs::read(source)?;
+    std::fs::write(target, &bytes)?;
+    Ok(bytes.len() as u64)
 }

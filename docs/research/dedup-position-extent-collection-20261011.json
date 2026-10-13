@@ -1,0 +1,1084 @@
+{
+  "status": "complete_whole_rephoto_and_three_unique_photo_collection",
+  "scope": "Frozen CPU qualification: whole rephoto parity and full three-unique-photo tiled/native collection.",
+  "pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/tile_model_files-position-extent-qualified-20261011": "269a0328973733ef594bdc6af145b3e38302026e424b36ef751417d203d6c4b3",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/tile_collection_files-position-extent-qualified-20261011": "bb74da981addf056a87df53411e822b7d434cf4a16deb7bc075830d93ffe2cb3",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors": "59e55bf0ecd047db9c513672d121a3ea677529ad448bdc3a359e92862c74ddd7",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200300.jpg": "0573729209c9ce6c109ea1175079960165b915dd5579121f0e15653d56f755d0",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200302.jpg": "bc4de3728d82839559134cc8155f87bdf7f8aeaca32b66bdea11f5a618420242",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201400.jpg": "0568e043468d6a40e8839e603d0e8da72220e33e77632a64220dd8ffd5234a0d",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/209400.jpg": "d9caf92ca47a9047154bd987ee240832b1cc2a01b73fd83144043f181c127777",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/209401.jpg": "707f365de5031172ac067f8a156fd0972e5995e59a0d01326d21d4a50ae22704",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-position-extent-snapshot-20261011.json": "e90fe2a44437cbc5f5caacf8bad21174b51c681a2387998c3568b7f0726177f5",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-loftr-native-20261010-runtime-pins.json": "8daa92d3ed2c84278338c53eedffed1fcdc272bf8ee7a419397cd7f098a6783a",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-position-extent-collection-20261011.py": "36332acef0ae2eabbc13e581041b4e36a40173e51dcf4cfa6f629521e867a267",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-position-extent-native-build-20261011.log": "ef649ee1f97f728c5d31658409fe0c5b0ea00592cf3a74f543e12eb69bfce853",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-model-tiles-native-20261011.json": "989ff8407d9c87e60fe2b70989142352869fbd9eb00d140b1cfa2a19065a2f34"
+  },
+  "producer_pid": 73878,
+  "results": [
+    {
+      "case": "whole-rephoto",
+      "status": "complete",
+      "args": [
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/tile_model_files-position-extent-qualified-20261011",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/209400.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/209401.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+        "640",
+        "5.157305482252365"
+      ],
+      "process_pid": 73901,
+      "returncode": 0,
+      "stdout": "{\"attempts\":[{\"geometry_inliers\":515,\"hypotheses\":20000,\"left_rectangle\":[0,0,2560,1920],\"original_dimensions\":[[2560,1920],[1024,701]],\"pixels\":{\"anchors\":[515,515],\"directions\":[{\"agreeing_pairs\":81112,\"informative_pairs\":81658,\"sites\":12875,\"valid_sites\":12875},{\"agreeing_pairs\":80935,\"informative_pairs\":82092,\"sites\":12875,\"valid_sites\":12875}],\"supported\":true},\"raw_proposals\":925,\"right_rectangle\":[0,0,1024,701],\"selected_points\":925,\"supported\":true,\"transform\":[[0.4814253173718157,0.17752744178962881,-174.44113452849444],[0.008675948497697334,1.0889456178509886,-366.44166112820153],[0.000027197080334437145,0.00026711169860048237,0.7729291205601484]]}],\"managed_peak\":98924680,\"managed_used\":0,\"model_digest\":[251,248,128,60,113,119,49,0,204,125,138,137,62,0,255,47,68,141,150,91,38,37,242,55,0,75,47,168,45,71,4,147],\"scope\":\"Automatic fixed full/quadrant search; original-file pixel confirmation. Tensor/workspace allocations outside managed budget.\",\"status\":\"ok\",\"supported\":true}\n",
+      "stderr": "       12.43 real         5.24 user         0.52 sys\n          1434419200  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n               88302  page reclaims\n                  14  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                 274  voluntary context switches\n               33754  involuntary context switches\n         35161289974  instructions retired\n         11706190306  cycles elapsed\n          1384285912  peak memory footprint\n",
+      "elapsed_seconds": 12.450249625,
+      "evidence": {
+        "attempts": [
+          {
+            "geometry_inliers": 515,
+            "hypotheses": 20000,
+            "left_rectangle": [
+              0,
+              0,
+              2560,
+              1920
+            ],
+            "original_dimensions": [
+              [
+                2560,
+                1920
+              ],
+              [
+                1024,
+                701
+              ]
+            ],
+            "pixels": {
+              "anchors": [
+                515,
+                515
+              ],
+              "directions": [
+                {
+                  "agreeing_pairs": 81112,
+                  "informative_pairs": 81658,
+                  "sites": 12875,
+                  "valid_sites": 12875
+                },
+                {
+                  "agreeing_pairs": 80935,
+                  "informative_pairs": 82092,
+                  "sites": 12875,
+                  "valid_sites": 12875
+                }
+              ],
+              "supported": true
+            },
+            "raw_proposals": 925,
+            "right_rectangle": [
+              0,
+              0,
+              1024,
+              701
+            ],
+            "selected_points": 925,
+            "supported": true,
+            "transform": [
+              [
+                0.4814253173718157,
+                0.17752744178962881,
+                -174.44113452849444
+              ],
+              [
+                0.008675948497697334,
+                1.0889456178509886,
+                -366.44166112820153
+              ],
+              [
+                2.7197080334437145e-05,
+                0.00026711169860048237,
+                0.7729291205601484
+              ]
+            ]
+          }
+        ],
+        "managed_peak": 98924680,
+        "managed_used": 0,
+        "model_digest": [
+          251,
+          248,
+          128,
+          60,
+          113,
+          119,
+          49,
+          0,
+          204,
+          125,
+          138,
+          137,
+          62,
+          0,
+          255,
+          47,
+          68,
+          141,
+          150,
+          91,
+          38,
+          37,
+          242,
+          55,
+          0,
+          75,
+          47,
+          168,
+          45,
+          71,
+          4,
+          147
+        ],
+        "scope": "Automatic fixed full/quadrant search; original-file pixel confirmation. Tensor/workspace allocations outside managed budget.",
+        "status": "ok",
+        "supported": true
+      },
+      "process_peak_rss_bytes": 1434419200,
+      "exact_whole_proof_parity": true
+    },
+    {
+      "case": "three-unique-photo-collection",
+      "status": "complete",
+      "args": [
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/tile_collection_files-position-extent-qualified-20261011",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+        "640",
+        "5.12",
+        "model-first",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200300.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200302.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201400.jpg"
+      ],
+      "process_pid": 74076,
+      "returncode": 0,
+      "stdout": "{\"files\":[0,1,2],\"managed_peak\":373765152,\"managed_retained_before_drop\":9504,\"managed_used\":0,\"pairs\":[{\"attempted_stages\":1,\"evidence\":{\"attempts\":[{\"evidence\":{\"geometry_inliers\":0,\"hypotheses\":20000,\"model_digest\":[251,248,128,60,113,119,49,0,204,125,138,137,62,0,255,47,68,141,150,91,38,37,242,55,0,75,47,168,45,71,4,147],\"original_dimensions\":[[2048,1536],[800,600]],\"pixels\":null,\"raw_proposals\":29,\"selected_points\":29,\"supported\":false,\"transform\":null},\"left_rectangle\":[0,0,2048,1536],\"right_rectangle\":[0,0,800,600]},{\"evidence\":{\"geometry_inliers\":0,\"hypotheses\":20000,\"model_digest\":[251,248,128,60,113,119,49,0,204,125,138,137,62,0,255,47,68,141,150,91,38,37,242,55,0,75,47,168,45,71,4,147],\"original_dimensions\":[[2048,1536],[800,600]],\"pixels\":null,\"raw_proposals\":20,\"selected_points\":20,\"supported\":false,\"transform\":null},\"left_rectangle\":[0,0,2048,1536],\"right_rectangle\":[0,0,400,300]},{\"evidence\":{\"geometry_inliers\":0,\"hypotheses\":20000,\"model_digest\":[251,248,128,60,113,119,49,0,204,125,138,137,62,0,255,47,68,141,150,91,38,37,242,55,0,75,47,168,45,71,4,147],\"original_dimensions\":[[2048,1536],[800,600]],\"pixels\":null,\"raw_proposals\":25,\"selected_points\":25,\"supported\":false,\"transform\":null},\"left_rectangle\":[0,0,2048,1536],\"right_rectangle\":[400,0,400,300]},{\"evidence\":{\"geometry_inliers\":0,\"hypotheses\":20000,\"model_digest\":[251,248,128,60,113,119,49,0,204,125,138,137,62,0,255,47,68,141,150,91,38,37,242,55,0,75,47,168,45,71,4,147],\"original_dimensions\":[[2048,1536],[800,600]],\"pixels\":null,\"raw_proposals\":23,\"selected_points\":23,\"supported\":false,\"transform\":null},\"left_rectangle\":[0,0,2048,1536],\"right_rectangle\":[0,300,400,300]},{\"evidence\":{\"geometry_inliers\":0,\"hypotheses\":20000,\"model_digest\":[251,248,128,60,113,119,49,0,204,125,138,137,62,0,255,47,68,141,150,91,38,37,242,55,0,75,47,168,45,71,4,147],\"original_dimensions\":[[2048,1536],[800,600]],\"pixels\":null,\"raw_proposals\":25,\"selected_points\":25,\"supported\":false,\"transform\":null},\"left_rectangle\":[0,0,2048,1536],\"right_rectangle\":[400,300,400,300]},{\"evidence\":{\"geometry_inliers\":0,\"hypotheses\":20000,\"model_digest\":[251,248,128,60,113,119,49,0,204,125,138,137,62,0,255,47,68,141,150,91,38,37,242,55,0,75,47,168,45,71,4,147],\"original_dimensions\":[[2048,1536],[800,600]],\"pixels\":null,\"raw_proposals\":25,\"selected_points\":25,\"supported\":false,\"transform\":null},\"left_rectangle\":[0,0,1024,768],\"right_rectangle\":[0,0,800,600]},{\"evidence\":{\"geometry_inliers\":0,\"hypotheses\":20000,\"model_digest\":[251,248,128,60,113,119,49,0,204,125,138,137,62,0,255,47,68,141,150,91,38,37,242,55,0,75,47,168,45,71,4,147],\"original_dimensions\":[[2048,1536],[800,600]],\"pixels\":null,\"raw_proposals\":34,\"selected_points\":34,\"supported\":false,\"transform\":null},\"left_rectangle\":[0,0,1024,768],\"right_rectangle\":[0,0,400,300]},{\"evidence\":{\"geometry_inliers\":0,\"hypotheses\":20000,\"model_digest\":[251,248,128,60,113,119,49,0,204,125,138,137,62,0,255,47,68,141,150,91,38,37,242,55,0,75,47,168,45,71,4,147],\"original_dimensions\":[[2048,1536],[800,600]],\"pixels\":null,\"raw_proposals\":19,\"selected_points\":19,\"supported\":false,\"transform\":null},\"left_rectangle\":[0,0,1024,768],\"right_rectangle\":[400,0,400,300]},{\"evidence\":{\"geometry_inliers\":0,\"hypotheses\":20000,\"model_digest\":[251,248,128,60,113,119,49,0,204,125,138,137,62,0,255,47,68,141,150,91,38,37,242,55,0,75,47,168,45,71,4,147],\"original_dimensions\":[[2048,1536],[800,600]],\"pixels\":null,\"raw_proposals\":13,\"selected_points\":13,\"supported\":false,\"transform\":null},\"left_rectangle\":[0,0,1024,768],\"right_rectangle\":[0,300,400,300]},{\"evidence\":{\"geometry_inliers\":0,\"hypotheses\":20000,\"model_digest\":[251,248,128,60,113,119,49,0,204,125,138,137,62,0,255,47,68,141,150,91,38,37,242,55,0,75,47,168,45,71,4,147],\"original_dimensions\":[[2048,1536],[800,600]],\"pixels\":null,\"raw_proposals\":19,\"selected_points\":19,\"supported\":false,\"transform\":null},\"left_rectangle\":[0,0,1024,768],\"right_rectangle\":[400,300,400,300]},{\"evidence\":{\"geometry_inliers\":12,\"hypotheses\":20000,\"model_digest\":[251,248,128,60,113,119,49,0,204,125,138,137,62,0,255,47,68,141,150,91,38,37,242,55,0,75,47,168,45,71,4,147],\"original_dimensions\":[[2048,1536],[800,600]],\"pixels\":{\"anchors\":[12,12],\"directions\":[{\"agreeing_pairs\":1711,\"informative_pairs\":1769,\"sites\":300,\"valid_sites\":300},{\"agreeing_pairs\":1204,\"informative_pairs\":1227,\"sites\":300,\"valid_sites\":300}],\"supported\":true},\"raw_proposals\":48,\"selected_points\":48,\"supported\":true,\"transform\":[[0.496943166826844,-0.12605797090653223,-45.293113197897014],[-0.04735197047914483,0.39899462626438736,35.05713849542144],[0.000013101062846330418,-0.0002793927156596186,1.1472680171299687]]},\"left_rectangle\":[1024,0,1024,768],\"right_rectangle\":[0,0,800,600]}],\"supported\":true,\"terminal\":\"model_tiles\"},\"first_miss\":null,\"left\":0,\"right\":1},{\"attempted_stages\":2,\"evidence\":{\"candidate_points\":18,\"native_recipes\":6,\"pixels\":null,\"reflected_source\":true,\"supported\":false,\"terminal\":\"native\",\"transform\":null},\"first_miss\":{\"attempts\":25,\"model_digest\":[251,248,128,60,113,119,49,0,204,125,138,137,62,0,255,47,68,141,150,91,38,37,242,55,0,75,47,168,45,71,4,147],\"raw_proposals\":18,\"selected_points\":18,\"stage\":\"model_tiles\"},\"left\":0,\"right\":2},{\"attempted_stages\":2,\"evidence\":{\"candidate_points\":11,\"native_recipes\":6,\"pixels\":null,\"reflected_source\":true,\"supported\":false,\"terminal\":\"native\",\"transform\":null},\"first_miss\":{\"attempts\":25,\"model_digest\":[251,248,128,60,113,119,49,0,204,125,138,137,62,0,255,47,68,141,150,91,38,37,242,55,0,75,47,168,45,71,4,147],\"raw_proposals\":54,\"selected_points\":54,\"stage\":\"model_tiles\"},\"left\":1,\"right\":2}],\"scope\":\"Complete bounded pair enumeration, no retrieval pruning or transitive grouping. Metadata slot capacities and managed inputs/evidence are admitted; provider tensors/workspaces remain outside total RSS admission. Final caller cancellation checkpoint is followed by read-only source revalidation with generation checks.\",\"source_paths\":[\"/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200300.jpg\",\"/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200302.jpg\",\"/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201400.jpg\"],\"status\":\"ok\"}\n",
+      "stderr": "     2520.15 real       859.20 user        29.97 sys\n          1930969088  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n             1315717  page reclaims\n                  10  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                 187  voluntary context switches\n             3891581  involuntary context switches\n       5825380604851  instructions retired\n       1820652708436  cycles elapsed\n          1891125312  peak memory footprint\n",
+      "elapsed_seconds": 2520.110533208,
+      "evidence": {
+        "files": [
+          0,
+          1,
+          2
+        ],
+        "managed_peak": 373765152,
+        "managed_retained_before_drop": 9504,
+        "managed_used": 0,
+        "pairs": [
+          {
+            "attempted_stages": 1,
+            "evidence": {
+              "attempts": [
+                {
+                  "evidence": {
+                    "geometry_inliers": 0,
+                    "hypotheses": 20000,
+                    "model_digest": [
+                      251,
+                      248,
+                      128,
+                      60,
+                      113,
+                      119,
+                      49,
+                      0,
+                      204,
+                      125,
+                      138,
+                      137,
+                      62,
+                      0,
+                      255,
+                      47,
+                      68,
+                      141,
+                      150,
+                      91,
+                      38,
+                      37,
+                      242,
+                      55,
+                      0,
+                      75,
+                      47,
+                      168,
+                      45,
+                      71,
+                      4,
+                      147
+                    ],
+                    "original_dimensions": [
+                      [
+                        2048,
+                        1536
+                      ],
+                      [
+                        800,
+                        600
+                      ]
+                    ],
+                    "pixels": null,
+                    "raw_proposals": 29,
+                    "selected_points": 29,
+                    "supported": false,
+                    "transform": null
+                  },
+                  "left_rectangle": [
+                    0,
+                    0,
+                    2048,
+                    1536
+                  ],
+                  "right_rectangle": [
+                    0,
+                    0,
+                    800,
+                    600
+                  ]
+                },
+                {
+                  "evidence": {
+                    "geometry_inliers": 0,
+                    "hypotheses": 20000,
+                    "model_digest": [
+                      251,
+                      248,
+                      128,
+                      60,
+                      113,
+                      119,
+                      49,
+                      0,
+                      204,
+                      125,
+                      138,
+                      137,
+                      62,
+                      0,
+                      255,
+                      47,
+                      68,
+                      141,
+                      150,
+                      91,
+                      38,
+                      37,
+                      242,
+                      55,
+                      0,
+                      75,
+                      47,
+                      168,
+                      45,
+                      71,
+                      4,
+                      147
+                    ],
+                    "original_dimensions": [
+                      [
+                        2048,
+                        1536
+                      ],
+                      [
+                        800,
+                        600
+                      ]
+                    ],
+                    "pixels": null,
+                    "raw_proposals": 20,
+                    "selected_points": 20,
+                    "supported": false,
+                    "transform": null
+                  },
+                  "left_rectangle": [
+                    0,
+                    0,
+                    2048,
+                    1536
+                  ],
+                  "right_rectangle": [
+                    0,
+                    0,
+                    400,
+                    300
+                  ]
+                },
+                {
+                  "evidence": {
+                    "geometry_inliers": 0,
+                    "hypotheses": 20000,
+                    "model_digest": [
+                      251,
+                      248,
+                      128,
+                      60,
+                      113,
+                      119,
+                      49,
+                      0,
+                      204,
+                      125,
+                      138,
+                      137,
+                      62,
+                      0,
+                      255,
+                      47,
+                      68,
+                      141,
+                      150,
+                      91,
+                      38,
+                      37,
+                      242,
+                      55,
+                      0,
+                      75,
+                      47,
+                      168,
+                      45,
+                      71,
+                      4,
+                      147
+                    ],
+                    "original_dimensions": [
+                      [
+                        2048,
+                        1536
+                      ],
+                      [
+                        800,
+                        600
+                      ]
+                    ],
+                    "pixels": null,
+                    "raw_proposals": 25,
+                    "selected_points": 25,
+                    "supported": false,
+                    "transform": null
+                  },
+                  "left_rectangle": [
+                    0,
+                    0,
+                    2048,
+                    1536
+                  ],
+                  "right_rectangle": [
+                    400,
+                    0,
+                    400,
+                    300
+                  ]
+                },
+                {
+                  "evidence": {
+                    "geometry_inliers": 0,
+                    "hypotheses": 20000,
+                    "model_digest": [
+                      251,
+                      248,
+                      128,
+                      60,
+                      113,
+                      119,
+                      49,
+                      0,
+                      204,
+                      125,
+                      138,
+                      137,
+                      62,
+                      0,
+                      255,
+                      47,
+                      68,
+                      141,
+                      150,
+                      91,
+                      38,
+                      37,
+                      242,
+                      55,
+                      0,
+                      75,
+                      47,
+                      168,
+                      45,
+                      71,
+                      4,
+                      147
+                    ],
+                    "original_dimensions": [
+                      [
+                        2048,
+                        1536
+                      ],
+                      [
+                        800,
+                        600
+                      ]
+                    ],
+                    "pixels": null,
+                    "raw_proposals": 23,
+                    "selected_points": 23,
+                    "supported": false,
+                    "transform": null
+                  },
+                  "left_rectangle": [
+                    0,
+                    0,
+                    2048,
+                    1536
+                  ],
+                  "right_rectangle": [
+                    0,
+                    300,
+                    400,
+                    300
+                  ]
+                },
+                {
+                  "evidence": {
+                    "geometry_inliers": 0,
+                    "hypotheses": 20000,
+                    "model_digest": [
+                      251,
+                      248,
+                      128,
+                      60,
+                      113,
+                      119,
+                      49,
+                      0,
+                      204,
+                      125,
+                      138,
+                      137,
+                      62,
+                      0,
+                      255,
+                      47,
+                      68,
+                      141,
+                      150,
+                      91,
+                      38,
+                      37,
+                      242,
+                      55,
+                      0,
+                      75,
+                      47,
+                      168,
+                      45,
+                      71,
+                      4,
+                      147
+                    ],
+                    "original_dimensions": [
+                      [
+                        2048,
+                        1536
+                      ],
+                      [
+                        800,
+                        600
+                      ]
+                    ],
+                    "pixels": null,
+                    "raw_proposals": 25,
+                    "selected_points": 25,
+                    "supported": false,
+                    "transform": null
+                  },
+                  "left_rectangle": [
+                    0,
+                    0,
+                    2048,
+                    1536
+                  ],
+                  "right_rectangle": [
+                    400,
+                    300,
+                    400,
+                    300
+                  ]
+                },
+                {
+                  "evidence": {
+                    "geometry_inliers": 0,
+                    "hypotheses": 20000,
+                    "model_digest": [
+                      251,
+                      248,
+                      128,
+                      60,
+                      113,
+                      119,
+                      49,
+                      0,
+                      204,
+                      125,
+                      138,
+                      137,
+                      62,
+                      0,
+                      255,
+                      47,
+                      68,
+                      141,
+                      150,
+                      91,
+                      38,
+                      37,
+                      242,
+                      55,
+                      0,
+                      75,
+                      47,
+                      168,
+                      45,
+                      71,
+                      4,
+                      147
+                    ],
+                    "original_dimensions": [
+                      [
+                        2048,
+                        1536
+                      ],
+                      [
+                        800,
+                        600
+                      ]
+                    ],
+                    "pixels": null,
+                    "raw_proposals": 25,
+                    "selected_points": 25,
+                    "supported": false,
+                    "transform": null
+                  },
+                  "left_rectangle": [
+                    0,
+                    0,
+                    1024,
+                    768
+                  ],
+                  "right_rectangle": [
+                    0,
+                    0,
+                    800,
+                    600
+                  ]
+                },
+                {
+                  "evidence": {
+                    "geometry_inliers": 0,
+                    "hypotheses": 20000,
+                    "model_digest": [
+                      251,
+                      248,
+                      128,
+                      60,
+                      113,
+                      119,
+                      49,
+                      0,
+                      204,
+                      125,
+                      138,
+                      137,
+                      62,
+                      0,
+                      255,
+                      47,
+                      68,
+                      141,
+                      150,
+                      91,
+                      38,
+                      37,
+                      242,
+                      55,
+                      0,
+                      75,
+                      47,
+                      168,
+                      45,
+                      71,
+                      4,
+                      147
+                    ],
+                    "original_dimensions": [
+                      [
+                        2048,
+                        1536
+                      ],
+                      [
+                        800,
+                        600
+                      ]
+                    ],
+                    "pixels": null,
+                    "raw_proposals": 34,
+                    "selected_points": 34,
+                    "supported": false,
+                    "transform": null
+                  },
+                  "left_rectangle": [
+                    0,
+                    0,
+                    1024,
+                    768
+                  ],
+                  "right_rectangle": [
+                    0,
+                    0,
+                    400,
+                    300
+                  ]
+                },
+                {
+                  "evidence": {
+                    "geometry_inliers": 0,
+                    "hypotheses": 20000,
+                    "model_digest": [
+                      251,
+                      248,
+                      128,
+                      60,
+                      113,
+                      119,
+                      49,
+                      0,
+                      204,
+                      125,
+                      138,
+                      137,
+                      62,
+                      0,
+                      255,
+                      47,
+                      68,
+                      141,
+                      150,
+                      91,
+                      38,
+                      37,
+                      242,
+                      55,
+                      0,
+                      75,
+                      47,
+                      168,
+                      45,
+                      71,
+                      4,
+                      147
+                    ],
+                    "original_dimensions": [
+                      [
+                        2048,
+                        1536
+                      ],
+                      [
+                        800,
+                        600
+                      ]
+                    ],
+                    "pixels": null,
+                    "raw_proposals": 19,
+                    "selected_points": 19,
+                    "supported": false,
+                    "transform": null
+                  },
+                  "left_rectangle": [
+                    0,
+                    0,
+                    1024,
+                    768
+                  ],
+                  "right_rectangle": [
+                    400,
+                    0,
+                    400,
+                    300
+                  ]
+                },
+                {
+                  "evidence": {
+                    "geometry_inliers": 0,
+                    "hypotheses": 20000,
+                    "model_digest": [
+                      251,
+                      248,
+                      128,
+                      60,
+                      113,
+                      119,
+                      49,
+                      0,
+                      204,
+                      125,
+                      138,
+                      137,
+                      62,
+                      0,
+                      255,
+                      47,
+                      68,
+                      141,
+                      150,
+                      91,
+                      38,
+                      37,
+                      242,
+                      55,
+                      0,
+                      75,
+                      47,
+                      168,
+                      45,
+                      71,
+                      4,
+                      147
+                    ],
+                    "original_dimensions": [
+                      [
+                        2048,
+                        1536
+                      ],
+                      [
+                        800,
+                        600
+                      ]
+                    ],
+                    "pixels": null,
+                    "raw_proposals": 13,
+                    "selected_points": 13,
+                    "supported": false,
+                    "transform": null
+                  },
+                  "left_rectangle": [
+                    0,
+                    0,
+                    1024,
+                    768
+                  ],
+                  "right_rectangle": [
+                    0,
+                    300,
+                    400,
+                    300
+                  ]
+                },
+                {
+                  "evidence": {
+                    "geometry_inliers": 0,
+                    "hypotheses": 20000,
+                    "model_digest": [
+                      251,
+                      248,
+                      128,
+                      60,
+                      113,
+                      119,
+                      49,
+                      0,
+                      204,
+                      125,
+                      138,
+                      137,
+                      62,
+                      0,
+                      255,
+                      47,
+                      68,
+                      141,
+                      150,
+                      91,
+                      38,
+                      37,
+                      242,
+                      55,
+                      0,
+                      75,
+                      47,
+                      168,
+                      45,
+                      71,
+                      4,
+                      147
+                    ],
+                    "original_dimensions": [
+                      [
+                        2048,
+                        1536
+                      ],
+                      [
+                        800,
+                        600
+                      ]
+                    ],
+                    "pixels": null,
+                    "raw_proposals": 19,
+                    "selected_points": 19,
+                    "supported": false,
+                    "transform": null
+                  },
+                  "left_rectangle": [
+                    0,
+                    0,
+                    1024,
+                    768
+                  ],
+                  "right_rectangle": [
+                    400,
+                    300,
+                    400,
+                    300
+                  ]
+                },
+                {
+                  "evidence": {
+                    "geometry_inliers": 12,
+                    "hypotheses": 20000,
+                    "model_digest": [
+                      251,
+                      248,
+                      128,
+                      60,
+                      113,
+                      119,
+                      49,
+                      0,
+                      204,
+                      125,
+                      138,
+                      137,
+                      62,
+                      0,
+                      255,
+                      47,
+                      68,
+                      141,
+                      150,
+                      91,
+                      38,
+                      37,
+                      242,
+                      55,
+                      0,
+                      75,
+                      47,
+                      168,
+                      45,
+                      71,
+                      4,
+                      147
+                    ],
+                    "original_dimensions": [
+                      [
+                        2048,
+                        1536
+                      ],
+                      [
+                        800,
+                        600
+                      ]
+                    ],
+                    "pixels": {
+                      "anchors": [
+                        12,
+                        12
+                      ],
+                      "directions": [
+                        {
+                          "agreeing_pairs": 1711,
+                          "informative_pairs": 1769,
+                          "sites": 300,
+                          "valid_sites": 300
+                        },
+                        {
+                          "agreeing_pairs": 1204,
+                          "informative_pairs": 1227,
+                          "sites": 300,
+                          "valid_sites": 300
+                        }
+                      ],
+                      "supported": true
+                    },
+                    "raw_proposals": 48,
+                    "selected_points": 48,
+                    "supported": true,
+                    "transform": [
+                      [
+                        0.496943166826844,
+                        -0.12605797090653223,
+                        -45.293113197897014
+                      ],
+                      [
+                        -0.04735197047914483,
+                        0.39899462626438736,
+                        35.05713849542144
+                      ],
+                      [
+                        1.3101062846330418e-05,
+                        -0.0002793927156596186,
+                        1.1472680171299687
+                      ]
+                    ]
+                  },
+                  "left_rectangle": [
+                    1024,
+                    0,
+                    1024,
+                    768
+                  ],
+                  "right_rectangle": [
+                    0,
+                    0,
+                    800,
+                    600
+                  ]
+                }
+              ],
+              "supported": true,
+              "terminal": "model_tiles"
+            },
+            "first_miss": null,
+            "left": 0,
+            "right": 1
+          },
+          {
+            "attempted_stages": 2,
+            "evidence": {
+              "candidate_points": 18,
+              "native_recipes": 6,
+              "pixels": null,
+              "reflected_source": true,
+              "supported": false,
+              "terminal": "native",
+              "transform": null
+            },
+            "first_miss": {
+              "attempts": 25,
+              "model_digest": [
+                251,
+                248,
+                128,
+                60,
+                113,
+                119,
+                49,
+                0,
+                204,
+                125,
+                138,
+                137,
+                62,
+                0,
+                255,
+                47,
+                68,
+                141,
+                150,
+                91,
+                38,
+                37,
+                242,
+                55,
+                0,
+                75,
+                47,
+                168,
+                45,
+                71,
+                4,
+                147
+              ],
+              "raw_proposals": 18,
+              "selected_points": 18,
+              "stage": "model_tiles"
+            },
+            "left": 0,
+            "right": 2
+          },
+          {
+            "attempted_stages": 2,
+            "evidence": {
+              "candidate_points": 11,
+              "native_recipes": 6,
+              "pixels": null,
+              "reflected_source": true,
+              "supported": false,
+              "terminal": "native",
+              "transform": null
+            },
+            "first_miss": {
+              "attempts": 25,
+              "model_digest": [
+                251,
+                248,
+                128,
+                60,
+                113,
+                119,
+                49,
+                0,
+                204,
+                125,
+                138,
+                137,
+                62,
+                0,
+                255,
+                47,
+                68,
+                141,
+                150,
+                91,
+                38,
+                37,
+                242,
+                55,
+                0,
+                75,
+                47,
+                168,
+                45,
+                71,
+                4,
+                147
+              ],
+              "raw_proposals": 54,
+              "selected_points": 54,
+              "stage": "model_tiles"
+            },
+            "left": 1,
+            "right": 2
+          }
+        ],
+        "scope": "Complete bounded pair enumeration, no retrieval pruning or transitive grouping. Metadata slot capacities and managed inputs/evidence are admitted; provider tensors/workspaces remain outside total RSS admission. Final caller cancellation checkpoint is followed by read-only source revalidation with generation checks.",
+        "source_paths": [
+          "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200300.jpg",
+          "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200302.jpg",
+          "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201400.jpg"
+        ],
+        "status": "ok"
+      },
+      "process_peak_rss_bytes": 1930969088,
+      "exact_crumpled_all_attempt_proof_parity": true
+    }
+  ]
+}

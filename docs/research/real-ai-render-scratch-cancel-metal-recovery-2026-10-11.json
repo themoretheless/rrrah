@@ -1,0 +1,42 @@
+{
+  "scope": "Production original VectorApple rendering interrupted after live renderer scratch admission; actual Metal retry frame comparison",
+  "source_sha256": "c5fc34346629c3379cee6065c45b7de0b620be822604551d1463d8e691b03d06",
+  "runs": [
+    {
+      "observed_live_bytes": 3029994,
+      "source_and_frame_setup_bytes": 2718090,
+      "log_sha256": "bc10957c0dba0e394d43c3e3bd3cc647f8da4256b66320c2fe8f9df132dcfdb3"
+    },
+    {
+      "observed_live_bytes": 3029994,
+      "source_and_frame_setup_bytes": 2718090,
+      "log_sha256": "3286388d50cfd303e9ba4f212b20888625599689777d58be457cd8eda3f88d87"
+    },
+    {
+      "observed_live_bytes": 3030450,
+      "source_and_frame_setup_bytes": 2718090,
+      "log_sha256": "427c8548c2328a6d0b9c0b1a7cffc943807064e68b1c8dd7e8a0ac3a87f1edc2"
+    }
+  ],
+  "root_limit_bytes": 67108864,
+  "verified": [
+    "Observer sees live credit beyond two source copies plus final RGBA8/pixmap reservations",
+    "Generation invalidated after observation; decoder returns typed DecodeError::Cancelled",
+    "Cancelled decode releases all root credit",
+    "New-generation cache load restores full RGBA32F sample plane exactly against uncancelled reference",
+    "128x96 SDR/HDR Metal frames exact against reference",
+    "Retry and reference roots both released"
+  ],
+  "production_change": false,
+  "tests": {
+    "passing_executions": 3,
+    "failed": 0,
+    "ignored": 0
+  },
+  "limitations": [
+    "Observed allocation is a render-stage boundary, not an arbitrary specified percentage of page completion",
+    "Observer depends on scheduling; three successful separate runs recorded, no universal timing guarantee",
+    "Production AI appearance not independently qualified",
+    "No physical HDR claim"
+  ]
+}

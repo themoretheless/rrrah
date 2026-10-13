@@ -7,6 +7,197 @@ use rrrah_dedup::{
     scan::{ScanError, VisualPolicy, scan_visual},
 };
 
+fn pixel_generation_policy() -> VisualPolicy {
+    VisualPolicy {
+        fingerprint: FingerprintPolicy {
+            recipe: [0; 32],
+            max_frames: 10,
+            max_pixels: 100,
+            max_file_bytes: 100_000,
+            max_cache_entries: 1,
+        },
+        max_files: 2,
+        max_pairs: 1,
+        radius: 0,
+        allow_transforms: false,
+        require_information: false,
+    }
+}
+
+fn check_one_shot_cancel_during_managed_decode(kind: u8) {
+    use std::cell::Cell;
+    let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/timeline/base.png");
+    let files = [(1, DecodeRequest::new(&path)), (2, DecodeRequest::new(&path))];
+    let budget = MemoryBudget::new(4 * 1024 * 1024);
+    let fired = Cell::new(false);
+    let cancel = || budget.used() > 0 && !fired.replace(true);
+    let result = match kind {
+        0 => scan_visual(
+            files,
+            pixel_generation_policy(),
+            &budget,
+            &mut FingerprintCache::default(),
+            cancel,
+        )
+        .map(|_| ()),
+        1 => rrrah_dedup::scan::confirm_pixels(files, [(1, 2)], pixel_generation_policy(), &budget, cancel)
+            .map(|_| ()),
+        _ => rrrah_dedup::scan::confirm_pixel_groups(
+            files,
+            [(1, 2)],
+            pixel_generation_policy(),
+            rrrah_dedup::groups::GroupBudget {
+                max_entries: 2,
+                max_pairs: 1,
+                max_pair_checks: 10,
+            },
+            &budget,
+            cancel,
+        )
+        .map(|_| ()),
+    };
+    assert!(fired.get(), "control never reached managed decoding");
+    assert!(
+        matches!(result, Err(ScanError::Cancelled)),
+        "kind {kind}: {result:?}"
+    );
+    assert_eq!(budget.used(), 0);
+}
+
+#[test]
+fn visual_one_shot_cancel_during_decode_discards_batch() {
+    check_one_shot_cancel_during_managed_decode(0);
+}
+#[test]
+fn pixels_one_shot_cancel_during_decode_discards_batch() {
+    check_one_shot_cancel_during_managed_decode(1);
+}
+#[test]
+fn groups_one_shot_cancel_during_decode_discards_batch() {
+    check_one_shot_cancel_during_managed_decode(2);
+}
+
+#[test]
+fn pixel_generation_cancelled_empty_pair_batch_is_not_successful() {
+    use std::sync::{Arc, atomic::AtomicU64};
+    let dir = tempfile::tempdir().unwrap();
+    let mut request = DecodeRequest::new(dir.path().join("missing.png"));
+    request.cancellation = Some(rrrah_decode::GenerationToken::new(Arc::new(AtomicU64::new(8)), 7));
+    let budget = MemoryBudget::new(4 * 1024 * 1024);
+    let result =
+        rrrah_dedup::scan::confirm_pixels([(1, request)], [], pixel_generation_policy(), &budget, || false);
+    assert!(matches!(result, Err(ScanError::Cancelled)), "{result:?}");
+    assert_eq!(budget.used(), 0);
+}
+
+#[test]
+fn pixel_generation_final_publication_discards_equal_pair() {
+    use std::{
+        cell::Cell,
+        sync::{
+            Arc,
+            atomic::{AtomicU64, Ordering},
+        },
+    };
+    let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/timeline/base.png");
+    let generation = Arc::new(AtomicU64::new(7));
+    let mut request = DecodeRequest::new(&path);
+    request.cancellation = Some(rrrah_decode::GenerationToken::new(generation.clone(), 7));
+    let files = [(1, request), (2, DecodeRequest::new(path))];
+    let budget = MemoryBudget::new(4 * 1024 * 1024);
+    let calls = Cell::new(0_usize);
+    let baseline = rrrah_dedup::scan::confirm_pixels(
+        files.clone(),
+        [(1, 2)],
+        pixel_generation_policy(),
+        &budget,
+        || {
+            calls.set(calls.get() + 1);
+            false
+        },
+    )
+    .unwrap();
+    assert_eq!(baseline.equal, [(1, 2)]);
+    assert!(baseline.issues.is_empty(), "{baseline:?}");
+    let last = calls.get();
+    assert!(last > 0);
+    calls.set(0);
+    let result =
+        rrrah_dedup::scan::confirm_pixels(files, [(1, 2)], pixel_generation_policy(), &budget, || {
+            calls.set(calls.get() + 1);
+            if calls.get() == last {
+                generation.store(8, Ordering::Release);
+            }
+            false
+        });
+    assert_eq!(generation.load(Ordering::Acquire), 8);
+    assert!(matches!(result, Err(ScanError::Cancelled)), "{result:?}");
+    assert_eq!(budget.used(), 0);
+}
+
+#[test]
+fn visual_batch_final_publication_observes_request_generation_cancellation() {
+    use std::{
+        cell::Cell,
+        sync::{
+            Arc,
+            atomic::{AtomicU64, Ordering},
+        },
+    };
+    let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/timeline/base.png");
+    let generation = Arc::new(AtomicU64::new(7));
+    let mut request = DecodeRequest::new(path);
+    request.cancellation = Some(rrrah_decode::GenerationToken::new(generation.clone(), 7));
+    let policy = VisualPolicy {
+        fingerprint: FingerprintPolicy {
+            recipe: [0; 32],
+            max_frames: 10,
+            max_pixels: 100,
+            max_file_bytes: 100_000,
+            max_cache_entries: 1,
+        },
+        max_files: 1,
+        max_pairs: 0,
+        radius: 0,
+        allow_transforms: false,
+        require_information: false,
+    };
+    let budget = MemoryBudget::new(4 * 1024 * 1024);
+    let calls = Cell::new(0_usize);
+    let baseline = scan_visual(
+        [(1, request.clone())],
+        policy,
+        &budget,
+        &mut FingerprintCache::default(),
+        || {
+            calls.set(calls.get() + 1);
+            false
+        },
+    )
+    .unwrap();
+    assert!(baseline.issues.is_empty(), "{baseline:?}");
+    assert_eq!(baseline.analysed, [1]);
+    let final_checkpoint = calls.get();
+    assert!(final_checkpoint > 0);
+    calls.set(0);
+    let result = scan_visual(
+        [(1, request)],
+        policy,
+        &budget,
+        &mut FingerprintCache::default(),
+        || {
+            calls.set(calls.get() + 1);
+            if calls.get() == final_checkpoint {
+                generation.store(8, Ordering::Release);
+            }
+            false
+        },
+    );
+    assert_eq!(generation.load(Ordering::Acquire), 8);
+    assert!(matches!(result, Err(ScanError::Cancelled)), "{result:?}");
+    assert_eq!(budget.used(), 0);
+}
+
 #[test]
 fn nested_visual_roots_preserve_all_copy_edges_and_corrupt_file_attribution() {
     use rrrah_dedup::{exact::Options, scan::scan_visual_roots};
@@ -21,7 +212,7 @@ fn nested_visual_roots_preserve_all_copy_edges_and_corrupt_file_attribution() {
             let folder = dir.path().join(format!("branch-{copy}/nested"));
             std::fs::create_dir_all(&folder).unwrap();
             let path = folder.join(format!("{family}.png"));
-            std::fs::copy(fixtures.join(format!("{family}-perspective.png")), &path).unwrap();
+            copy_writable(fixtures.join(format!("{family}-perspective.png")), &path).unwrap();
             paths.push(path);
             roots.push(folder);
         }
@@ -189,8 +380,8 @@ fn confirmation_mutation_generation_and_memory_are_inconclusive() {
     let dir = tempfile::tempdir().unwrap();
     let a = dir.path().join("a.png");
     let b = dir.path().join("b.png");
-    std::fs::copy(root, &a).unwrap();
-    std::fs::copy(&a, &b).unwrap();
+    copy_writable(root, &a).unwrap();
+    copy_writable(&a, &b).unwrap();
     let files = vec![(1, DecodeRequest::new(&a)), (2, DecodeRequest::new(&b))];
     let policy = VisualPolicy {
         fingerprint: FingerprintPolicy {
@@ -228,7 +419,7 @@ fn confirmation_mutation_generation_and_memory_are_inconclusive() {
         ))
     ));
     assert_eq!(budget.used(), 0);
-    std::fs::copy(&b, &a).unwrap();
+    copy_writable(&b, &a).unwrap();
     let denied = MemoryBudget::new(0);
     let report = confirm_pixels(files.clone(), [(1, 2)], policy, &denied, || false).unwrap();
     assert!(report.equal.is_empty());
@@ -357,8 +548,8 @@ fn recursive_visual_discovery_keeps_aliases_and_errors_visible() {
     let source = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/timeline/base.png");
     let a = dir.path().join("a.png");
     let b = dir.path().join("nested/b.png");
-    std::fs::copy(source, &a).unwrap();
-    std::fs::copy(&a, &b).unwrap();
+    copy_writable(source, &a).unwrap();
+    copy_writable(&a, &b).unwrap();
     std::fs::write(dir.path().join("broken.bin"), b"not an image").unwrap();
     #[cfg(unix)]
     std::fs::hard_link(&a, dir.path().join("alias.png")).unwrap();
@@ -433,9 +624,9 @@ fn group_admission_invalidates_edges_from_changed_source() {
     let a = dir.path().join("a.png");
     let b = dir.path().join("b.png");
     let c = dir.path().join("c.png");
-    std::fs::copy(fixture, &a).unwrap();
-    std::fs::copy(&a, &b).unwrap();
-    std::fs::copy(&a, &c).unwrap();
+    copy_writable(fixture, &a).unwrap();
+    copy_writable(&a, &b).unwrap();
+    copy_writable(&a, &c).unwrap();
     let policy = VisualPolicy {
         fingerprint: FingerprintPolicy {
             recipe: [0; 32],
@@ -545,4 +736,12 @@ fn pixel_group_final_checks_observe_generation_cancellation() {
         "{result:?}"
     );
     assert_eq!(budget.used(), 0);
+}
+
+// Fixture sources may be read-only in an immutable qualification checkout.
+// Copy bytes without inheriting permissions so mutation tests can edit their own files.
+fn copy_writable(source: impl AsRef<std::path::Path>, target: impl AsRef<std::path::Path>) -> std::io::Result<u64> {
+    let bytes = std::fs::read(source)?;
+    std::fs::write(target, &bytes)?;
+    Ok(bytes.len() as u64)
 }

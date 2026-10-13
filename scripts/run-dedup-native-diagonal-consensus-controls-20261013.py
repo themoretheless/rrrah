@@ -1,0 +1,12 @@
+#!/usr/bin/env python3
+import json,hashlib,subprocess,os,re
+from pathlib import Path
+R=Path(__file__).resolve().parents[1];D=R/'docs/research';T=Path('/Users/themoretheless/.codex/tmp');Q=D/'dedup-native-diagonal-consensus-controls-plan-20261013.json';q=json.loads(Q.read_text());sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest();assert all(sha(k)==h for k,h in q['pins'].items());manifest=json.loads(Path(q['source_manifest']).read_text());S=Path(q['source']);assert all(sha(S/k)==h for k,h in manifest['source_hashes'].items());rt=json.loads((D/'dedup-loftr-native-20261010-runtime-pins.json').read_text());libs={k:h for k,h in rt['pins'].items() if k.endswith('.dylib')};assert libs and all(sha(k)==h for k,h in libs.items());P=D/'dedup-native-diagonal-consensus-controls-20261013.json';F=T/'rrrah-native-diagonal-consensus-controls-20261013';assert not P.exists() and not F.exists();F.mkdir();d=dict(status='running',producer_pid=os.getpid(),plan_sha256=sha(Q),pins={str(Q):sha(Q),str(Path(__file__)):sha(__file__),**libs},source=str(S),results=[],scope=q['scope'])
+def save():
+ p=P.with_suffix('.tmp');p.write_text(json.dumps(d,indent=2)+'\n');p.replace(P)
+save()
+for i,case in enumerate(q['cases']):
+ child=subprocess.Popen(case['command'],stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True,cwd=R);d.update(active_index=i,child_pid=child.pid);save();out,err=child.communicate();report=F/('%02d.json'%i);rss=re.search(r'(\d+)\s+maximum resident set size',err);report.write_text(json.dumps(dict(index=i,label=case['label'],command=case['command'],returncode=child.returncode,stdout=out,stderr=err,rss_bytes=int(rss[1]) if rss else None),indent=2)+'\n');row=dict(index=i,label=case['label'],report=str(report),sha256=sha(report),returncode=child.returncode)
+ if child.returncode!=0:d['results'].append(row);d['status']='terminal_execution_failure';save();raise SystemExit(child.returncode)
+ value=json.loads(out);assert value['managed_used']==0 and value['opposite_trials']==1000000;row.update(support=value['pairs'][0]['support'],model_attempted=value['pairs'][0]['model_attempted']);d['results'].append(row);save()
+assert all(sha(k)==h for k,h in q['pins'].items()) and all(sha(k)==h for k,h in d['pins'].items()) and all(sha(S/k)==h for k,h in manifest['source_hashes'].items());d.update(status='complete_six_directions_pending_audit',source_unchanged=True);save();print(d['status'])

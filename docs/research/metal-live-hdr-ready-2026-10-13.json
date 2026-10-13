@@ -1,0 +1,28 @@
+{
+  "scope": "Live Metal HDR presentation after user unlock, including window resize",
+  "surface": "RGBA16Float / ExtendedSrgbLinear",
+  "runs": [
+    {
+      "kind": "raster",
+      "frames": 175,
+      "seconds": 3.007,
+      "frames_after_resize": 145,
+      "log": "docs/research/metal-live-hdr-ready-2026-10-13.log",
+      "sha256": "2a62af0d50461e54c276fb5ac5c45e52f5d4d7604bc0235274d72f956e63b601"
+    },
+    {
+      "kind": "native_raw",
+      "frames": 130,
+      "seconds": 3.015,
+      "frames_after_resize": 100,
+      "log": "docs/research/metal-live-raw-hdr-ready-2026-10-13.log",
+      "sha256": "85f8f7c4388b3bc34b3abbf23f8674465531047543e83eefcc29ef369bdc900f"
+    }
+  ],
+  "reported_active_headroom": 2.6666667,
+  "limitations": [
+    "No photometric calibration",
+    "Existing compiled probe; no fresh rebuild",
+    "Does not qualify every format or NVIDIA"
+  ]
+}

@@ -1,0 +1,323 @@
+//! Admitted, bounded fragment moments. A matching key does not itself prove
+//! affine color or convex ownership; those remain the caller's obligations.
+use kurbo::Point;
+
+#[derive(Clone,Copy,Default)]
+struct Sum {value:f64,error:f64}
+impl Sum {
+    fn added(self,value:f64)->Option<Self> {
+        let adjusted=value-self.error;
+        let total=self.value+adjusted;
+        let error=(total-self.value)-adjusted;
+        (total.is_finite() && error.is_finite()).then_some(Self {value:total,error})
+    }
+}
+struct Entry<const N:usize,const K:usize,const W:usize> {key:[u64;N],words:usize,witness:[u64;W],area:Sum,x:Sum,y:Sum,reference:[Sum;K]}
+pub(super) struct MomentTable<const N:usize,const K:usize=0,const W:usize=0> {
+    entries:Vec<Entry<N,K,W>>,
+    slots:Vec<usize>,
+    capacity:usize,
+    words:usize,
+    last:Option<usize>,
+    origin:Point,
+    total:Sum,
+    _credit:Box<dyn std::any::Any+Send+Sync>,
+}
+fn debit(remaining:&mut usize,count:usize,cancelled:&dyn Fn()->bool)->Option<()> {
+    if cancelled() {return None;}
+    *remaining=remaining.checked_sub(count)?;Some(())
+}
+impl<const N:usize,const K:usize,const W:usize> MomentTable<N,K,W> {
+    pub(super) fn admitted(capacity:usize,origin:Point,
+        admit:&dyn Fn(usize)->Option<Box<dyn std::any::Any+Send+Sync>>,
+    )->Option<Self> {
+        Self::admitted_prefix(capacity,origin,N,admit)
+    }
+    pub(super) fn admitted_prefix(capacity:usize,origin:Point,words:usize,
+        admit:&dyn Fn(usize)->Option<Box<dyn std::any::Any+Send+Sync>>,
+    )->Option<Self> {
+        if words==0 || words>N {return None;}
+        if !(1..=64).contains(&N) || K>5 || W>64 || !(1..=16384).contains(&capacity)
+            || !origin.x.is_finite() || !origin.y.is_finite()
+            || origin.x.abs()>1_048_576. || origin.y.abs()>1_048_576. {return None;}
+        let slots=capacity.checked_mul(2)?.checked_next_power_of_two()?;
+        let bytes=capacity.checked_mul(size_of::<Entry<N,K,W>>())?
+            .checked_add(slots.checked_mul(size_of::<usize>())?)?;
+        let credit=admit(bytes)?;
+        let mut entries=Vec::new();entries.try_reserve_exact(capacity).ok()?;
+        let mut index=Vec::new();index.try_reserve_exact(slots).ok()?;index.resize(slots,usize::MAX);
+        if entries.capacity()>capacity || index.capacity()>slots {return None;}
+        Some(Self {entries,slots:index,capacity,words,last:None,origin,total:Sum::default(),_credit:credit})
+    }
+    pub(super) fn add(&mut self,key:[u64;N],area:f64,centroid:Point,
+        remaining:&mut usize,cancelled:&dyn Fn()->bool,
+    )->Option<()> {
+        self.add_sample(key,area,centroid,[0.;K],remaining,cancelled)
+    }
+    pub(super) fn add_sample(&mut self,key:[u64;N],area:f64,centroid:Point,reference:[f64;K],
+        remaining:&mut usize,cancelled:&dyn Fn()->bool,
+    )->Option<()> {
+        self.add_prefix_sample(&key,area,centroid,reference,remaining,cancelled)
+    }
+    /// Prefix width is fixed at admission. Omitted words are stored as zero;
+    /// wrong-width keys refuse rather than silently truncating identity.
+    pub(super) fn add_prefix_sample(&mut self,key:&[u64],area:f64,centroid:Point,reference:[f64;K],
+        remaining:&mut usize,cancelled:&dyn Fn()->bool,
+    )->Option<()> {
+        self.add_impl(key,false,None,&[0;W],area,centroid,reference,remaining,cancelled)
+    }
+    /// Caller supplies a stable hash of the complete key and accounts for its
+    /// computation. Collisions always require exact key equality. Never mix
+    /// hash schemes for one table: equal keys must receive equal hashes.
+    pub(super) fn add_prehashed_sample(&mut self,key:&[u64],hash:u64,area:f64,centroid:Point,reference:[f64;K],
+        remaining:&mut usize,cancelled:&dyn Fn()->bool)->Option<()> {
+        self.add_impl(key,false,Some(hash),&[0;W],area,centroid,reference,remaining,cancelled)
+    }
+    /// Retain the first representative only. Caller must prove that its
+    /// interpretation remains valid for every fragment with this identity.
+    pub(super) fn add_witness_sample(&mut self,key:&[u64],prehash:Option<u64>,witness:&[u64;W],area:f64,
+        centroid:Point,reference:[f64;K],remaining:&mut usize,cancelled:&dyn Fn()->bool)->Option<()> {
+        self.add_impl(key,false,prehash,witness,area,centroid,reference,remaining,cancelled)
+    }
+    /// Variable identity uses every supplied word and its exact length. The
+    /// admission width is a maximum, not permission to truncate a longer key.
+    pub(super) fn add_variable_witness_sample(&mut self,key:&[u64],prehash:Option<u64>,witness:&[u64;W],area:f64,
+        centroid:Point,reference:[f64;K],remaining:&mut usize,cancelled:&dyn Fn()->bool)->Option<()> {
+        self.add_impl(key,true,prehash,witness,area,centroid,reference,remaining,cancelled)
+    }
+    fn add_impl(&mut self,key:&[u64],variable:bool,prehash:Option<u64>,witness:&[u64;W],area:f64,centroid:Point,reference:[f64;K],
+        remaining:&mut usize,cancelled:&dyn Fn()->bool)->Option<()> {
+        if key.is_empty() || key.len()>self.words || (!variable && key.len()!=self.words) {return None;}
+        debit(remaining,8+K,cancelled)?;
+        if reference.iter().any(|v|!v.is_finite()) {return None;}
+        let x=centroid.x-self.origin.x;let y=centroid.y-self.origin.y;
+        if !area.is_finite() || area<=0. || area>1. || !x.is_finite() || !y.is_finite()
+            || !(0. ..=1.).contains(&x) || !(0. ..=1.).contains(&y) {return None;}
+        let total=self.total.added(area)?;
+        if total.value>1.+1e-12 {return None;}
+        if variable {
+            if let Some(index)=self.last {
+                debit(remaining,1,cancelled)?;
+                if self.entries[index].words==key.len() {
+                    debit(remaining,key.len(),cancelled)?;
+                    if self.entries[index].key[..key.len()]==*key {
+                        return self.accumulate(index,area,x,y,reference,total,remaining,cancelled);
+                    }
+                }
+            }
+        }
+        let mut hash=if let Some(hash)=prehash {hash} else {
+            debit(remaining,key.len(),cancelled)?;
+            let mut hash=0xcbf29ce484222325u64;
+            for &word in key {hash=(hash^word).wrapping_mul(0x100000001b3);}
+            hash
+        };
+        debit(remaining,3,cancelled)?;
+        hash=(hash^(hash>>30)).wrapping_mul(0xbf58476d1ce4e5b9);
+        hash=(hash^(hash>>27)).wrapping_mul(0x94d049bb133111eb);hash^=hash>>31;
+        let mut slot=hash as usize&(self.slots.len()-1);
+        for _ in 0..self.slots.len() {
+            debit(remaining,1,cancelled)?;
+            let index=self.slots[slot];
+            if index==usize::MAX {
+                if self.entries.len()==self.capacity {return None;}
+                debit(remaining,N.checked_add(key.len())?.checked_add(W)?.checked_add(4+K)?,cancelled)?;
+                let mut values=[Sum::default();K];
+                for (sum,value) in values.iter_mut().zip(reference) {*sum=sum.added(area*value)?;}
+                let mut stored=[0u64;N];stored[..key.len()].copy_from_slice(key);
+                let entry=Entry {key:stored,words:key.len(),witness:*witness,area:Sum::default().added(area)?,
+                    x:Sum::default().added(area*x)?,y:Sum::default().added(area*y)?,reference:values};
+                if cancelled() {return None;}
+                self.slots[slot]=self.entries.len();self.entries.push(entry);self.total=total;self.last=Some(self.entries.len()-1);
+                return Some(());
+            }
+            debit(remaining,1,cancelled)?;
+            if self.entries[index].words!=key.len() {slot=(slot+1)&(self.slots.len()-1);continue;}
+            debit(remaining,key.len(),cancelled)?;
+            if self.entries[index].key[..key.len()]==*key {
+                return self.accumulate(index,area,x,y,reference,total,remaining,cancelled);
+            }
+            slot=(slot+1)&(self.slots.len()-1);
+        }
+        None
+    }
+    fn accumulate(&mut self,index:usize,area:f64,x:f64,y:f64,reference:[f64;K],total:Sum,
+        remaining:&mut usize,cancelled:&dyn Fn()->bool)->Option<()> {
+        debit(remaining,3+K,cancelled)?;
+        let entry=&self.entries[index];
+        let a=entry.area.added(area)?;let sx=entry.x.added(area*x)?;let sy=entry.y.added(area*y)?;
+        let mut values=entry.reference;
+        for (sum,value) in values.iter_mut().zip(reference) {*sum=sum.added(area*value)?;}
+        if cancelled() {return None;}
+        let entry=&mut self.entries[index];entry.area=a;entry.x=sx;entry.y=sy;entry.reference=values;
+        self.total=total;self.last=Some(index);Some(())
+    }
+    pub(super) fn iter_with_witness(&self)->impl Iterator<Item=([u64;N],f64,Point,[f64;K],[u64;W],usize)>+'_ {
+        self.entries.iter().map(|e|(e.key,e.area.value,
+            Point::new(self.origin.x+e.x.value/e.area.value,self.origin.y+e.y.value/e.area.value),e.reference.map(|v|v.value),e.witness,e.words))
+    }
+    pub(super) fn iter_with_reference(&self)->impl Iterator<Item=([u64;N],f64,Point,[f64;K])>+'_ {
+        self.entries.iter().map(|e|(e.key,e.area.value,
+            Point::new(self.origin.x+e.x.value/e.area.value,self.origin.y+e.y.value/e.area.value),e.reference.map(|v|v.value)))
+    }
+    pub(super) fn iter(&self)->impl Iterator<Item=([u64;N],f64,Point)>+'_ {
+        self.entries.iter().map(|e|(e.key,e.area.value,
+            Point::new(self.origin.x+e.x.value/e.area.value,self.origin.y+e.y.value/e.area.value)))
+    }
+}
+
+#[test]
+fn moments_integrate_affine_fields_and_keep_keys_independent() {
+    let mut table=MomentTable::<2>::admitted(8,Point::new(1000.,-2000.),&|_|Some(Box::new(()))).unwrap();
+    let mut work=1_000_000;
+    for i in 0..4096 {
+        let x=(i as f64+0.5)/4096.;let area=1./4096.;
+        table.add([i%2,17],area,Point::new(1000.+x,-1999.5),&mut work,&||false).unwrap();
+    }
+    let mut integral=0.;let mut area=0.;
+    for (_,a,p) in table.iter() {area+=a;integral+=a*(0.1+0.4*(p.x-1000.)+0.2*(p.y+2000.));}
+    assert_eq!(area,1.);assert!((integral-0.4).abs()<1e-14);
+    assert_eq!(table.iter().count(),2);
+    let mut triangle=MomentTable::<1>::admitted(1,Point::ZERO,&|_|Some(Box::new(()))).unwrap();
+    for (x,y) in [(4./9.,1./9.),(4./9.,4./9.),(1./9.,4./9.)] {
+        triangle.add([0],1./6.,Point::new(x,y),&mut work,&||false).unwrap();
+    }
+    let (_,a,p)=triangle.iter().next().unwrap();
+    assert_eq!(a,0.5);assert!((p.x-1./3.).abs()<1e-15 && (p.y-1./3.).abs()<1e-15);
+    assert!((a*(0.1+0.4*p.x+0.2*p.y)-0.15).abs()<1e-15);
+}
+
+#[test]
+fn moment_refusal_and_cancellation_preserve_entries_and_release_admission() {
+    use std::sync::{Arc,atomic::{AtomicUsize,Ordering}};
+    struct Credit(Arc<AtomicUsize>,usize);
+    impl Drop for Credit {fn drop(&mut self){self.0.fetch_sub(self.1,Ordering::Relaxed);}}
+    let used=Arc::new(AtomicUsize::new(0));
+    let admit=|bytes|{used.fetch_add(bytes,Ordering::Relaxed);
+        Some(Box::new(Credit(used.clone(),bytes)) as Box<dyn std::any::Any+Send+Sync>)};
+    assert!(MomentTable::<1>::admitted(1,Point::ZERO,&|_|None).is_none());
+    {
+        let mut table=MomentTable::<1>::admitted(1,Point::ZERO,&admit).unwrap();
+        let mut work=10000;table.add([1],0.25,Point::new(0.25,0.5),&mut work,&||false).unwrap();
+        let expected=table.iter().collect::<Vec<_>>();
+        assert!(table.add([2],0.25,Point::new(0.75,0.5),&mut work,&||false).is_none());
+        assert_eq!(table.iter().collect::<Vec<_>>(),expected);
+        for budget in 0..16 {
+            assert!(table.add([1],0.25,Point::new(0.75,0.5),&mut {budget},&||false).is_none());
+            assert_eq!(table.iter().collect::<Vec<_>>(),expected);
+        }
+        let polls=std::cell::Cell::new(0);
+        assert!(table.add([1],0.25,Point::new(0.75,0.5),&mut work,
+            &||{polls.set(polls.get()+1);polls.get()==3}).is_none());
+        assert_eq!(table.iter().collect::<Vec<_>>(),expected);
+        for (area,p) in [(f64::NAN,Point::ZERO),(0.,Point::ZERO),(1.1,Point::ZERO),
+            (0.1,Point::new(-0.1,0.5)),(0.1,Point::new(f64::INFINITY,0.))] {
+            assert!(table.add([1],area,p,&mut work,&||false).is_none());
+            assert_eq!(table.iter().collect::<Vec<_>>(),expected);
+        }
+        table.add([1],0.25,Point::new(0.75,0.5),&mut work,&||false).unwrap();
+        assert_eq!(table.iter().next().unwrap(),([1],0.5,Point::new(0.5,0.5)));
+    }
+    assert_eq!(used.load(Ordering::Relaxed),0);
+}
+
+#[test]
+fn optional_reference_integrals_preserve_transactional_updates() {
+    let mut table=MomentTable::<1,5>::admitted(2,Point::ZERO,&|_|Some(Box::new(()))).unwrap();
+    let mut work=10000;
+    table.add_sample([1],0.25,Point::new(0.25,0.5),[1.,0.25,0.5,0.75,1.],&mut work,&||false).unwrap();
+    let expected=table.iter_with_reference().collect::<Vec<_>>();
+    assert!(table.add_sample([1],0.25,Point::new(0.75,0.5),[1.,f64::NAN,0.,0.,0.],&mut work,&||false).is_none());
+    assert_eq!(table.iter_with_reference().collect::<Vec<_>>(),expected);
+    assert!(table.add_sample([1],0.25,Point::new(0.75,0.5),[1.;5],&mut 1,&||false).is_none());
+    assert_eq!(table.iter_with_reference().collect::<Vec<_>>(),expected);
+    table.add_sample([1],0.25,Point::new(0.75,0.5),[1.,0.75,0.5,0.25,0.],&mut work,&||false).unwrap();
+    assert_eq!(table.iter_with_reference().next().unwrap(),([1],0.5,Point::new(0.5,0.5),[0.5,0.25,0.25,0.25,0.25]));
+}
+
+#[test]
+fn prefix_identity_rejects_truncation_and_preserves_each_active_word() {
+    let mut table=MomentTable::<64,1>::admitted_prefix(4,Point::ZERO,2,&|_|Some(Box::new(()))).unwrap();
+    let mut work=10000;
+    table.add_prefix_sample(&[1,2],0.25,Point::new(0.25,0.5),[0.5],&mut work,&||false).unwrap();
+    table.add_prefix_sample(&[1,3],0.25,Point::new(0.75,0.5),[1.],&mut work,&||false).unwrap();
+    let before=table.iter_with_reference().collect::<Vec<_>>();
+    assert_eq!(before.len(),2);
+    for (key,_,_,_) in &before {assert!(key[2..].iter().all(|&v|v==0));}
+    for key in [&[1][..],&[1,2,99][..],&[0;64][..]] {
+        assert!(table.add_prefix_sample(key,0.1,Point::new(0.5,0.5),[1.],&mut work,&||false).is_none());
+        assert_eq!(table.iter_with_reference().collect::<Vec<_>>(),before);
+    }
+    assert!(table.add_sample([0;64],0.1,Point::new(0.5,0.5),[1.],&mut work,&||false).is_none());
+    table.add_prefix_sample(&[1,2],0.25,Point::new(0.75,0.5),[0.5],&mut work,&||false).unwrap();
+    let entries=table.iter_with_reference().collect::<Vec<_>>();
+    assert_eq!(entries.len(),2);assert_eq!(entries[0].1,0.5);assert_eq!(entries[0].3,[0.25]);
+    assert_eq!(entries[0].2,Point::new(0.5,0.5));
+    assert!(MomentTable::<64>::admitted_prefix(1,Point::ZERO,65,&|_|Some(Box::new(()))).is_none());
+}
+
+/// XOR of deterministic per-bit tokens: toggling one coverage bit updates a
+/// complete-key fingerprint. It is only an index, never an equality proof.
+pub(super) fn coverage_bit_token(index:usize)->u64 {
+    let mut hash=(index as u64).wrapping_add(0x9e3779b97f4a7c15);
+    hash=(hash^(hash>>30)).wrapping_mul(0xbf58476d1ce4e5b9);
+    hash=(hash^(hash>>27)).wrapping_mul(0x94d049bb133111eb);
+    hash^(hash>>31)
+}
+
+#[test]
+fn prehashed_collisions_keep_full_identity_and_incremental_toggle_parity() {
+    let mut table=MomentTable::<2>::admitted(4,Point::ZERO,&|_|Some(Box::new(()))).unwrap();
+    let mut work=10000;
+    for key in [[1,0],[0,1],[1,0],[0,1]] {
+        table.add_prehashed_sample(&key,17,0.25,Point::new(0.5,0.5),[],&mut work,&||false).unwrap();
+    }
+    let entries=table.iter().collect::<Vec<_>>();
+    assert_eq!(entries.len(),2);assert_eq!(entries[0].1,0.5);assert_eq!(entries[1].1,0.5);
+    let before=entries;
+    assert!(table.add_prehashed_sample(&[1,0],17,0.1,Point::new(0.5,0.5),[],&mut 0,&||false).is_none());
+    assert_eq!(table.iter().collect::<Vec<_>>(),before);
+    let mut bits=[0u64;64];let mut hash=0u64;
+    for i in 0..8192 {
+        let index=(i*1543+11)%4096;
+        bits[index/64]^=1u64<<(index%64);hash^=coverage_bit_token(index);
+        let expected=bits.iter().enumerate().fold(0u64,|mut hash,(word,&bits)| {
+            for bit in 0..64 {if bits&(1u64<<bit)!=0 {hash^=coverage_bit_token(word*64+bit);}}hash
+        });
+        assert_eq!(hash,expected);
+    }
+    assert_eq!(hash,0);assert_eq!(bits,[0;64]);
+}
+
+#[test]
+fn moment_witness_retains_first_representative_transactionally() {
+    let mut table=MomentTable::<1,1,2>::admitted(2,Point::ZERO,&|_|Some(Box::new(()))).unwrap();
+    let mut work=1000;
+    table.add_witness_sample(&[1],Some(9),&[11,12],0.25,Point::new(0.25,0.5),[0.5],&mut work,&||false).unwrap();
+    let before=table.iter_with_witness().collect::<Vec<_>>();
+    assert!(table.add_witness_sample(&[1],Some(9),&[99,98],0.25,Point::new(0.75,0.5),[0.5],&mut 0,&||false).is_none());
+    assert_eq!(table.iter_with_witness().collect::<Vec<_>>(),before);
+    table.add_witness_sample(&[1],Some(9),&[99,98],0.25,Point::new(0.75,0.5),[0.5],&mut work,&||false).unwrap();
+    let entry=table.iter_with_witness().next().unwrap();assert_eq!(entry.4,[11,12]);assert_eq!(entry.1,0.5);
+    assert!(MomentTable::<1,0,65>::admitted(1,Point::ZERO,&|_|Some(Box::new(()))).is_none());
+}
+
+#[test]
+fn variable_keys_preserve_length_under_collision_and_fixed_width_refusal() {
+    let mut table=MomentTable::<4,0,1>::admitted(4,Point::ZERO,&|_|Some(Box::new(()))).unwrap();
+    let mut work=10000;
+    for key in [&[7][..],&[7,0][..],&[7,0,0][..]] {
+        table.add_variable_witness_sample(key,Some(9),&[key.len() as u64],0.125,Point::new(0.5,0.5),[],&mut work,&||false).unwrap();
+    }
+    let before=table.iter_with_witness().collect::<Vec<_>>();assert_eq!(before.len(),3);
+    assert_eq!(before.iter().map(|e|e.5).collect::<Vec<_>>(),[1,2,3]);
+    for key in [&[][..],&[7,0,0,0,0][..]] {
+        assert!(table.add_variable_witness_sample(key,Some(9),&[99],0.1,Point::new(0.5,0.5),[],&mut work,&||false).is_none());
+    }
+    assert!(table.add_witness_sample(&[7],Some(9),&[99],0.1,Point::new(0.5,0.5),[],&mut work,&||false).is_none());
+    assert!(table.add_variable_witness_sample(&[7],Some(9),&[99],0.1,Point::new(0.5,0.5),[],&mut 0,&||false).is_none());
+    assert_eq!(table.iter_with_witness().collect::<Vec<_>>(),before);
+    table.add_variable_witness_sample(&[7],Some(9),&[99],0.125,Point::new(0.5,0.5),[],&mut work,&||false).unwrap();
+    let after=table.iter_with_witness().collect::<Vec<_>>();assert_eq!(after[0].1,0.25);assert_eq!(after[0].4,[1]);
+    for e in after {assert!(e.0[e.5..].iter().all(|&v|v==0));}
+}

@@ -1,0 +1,205 @@
+{
+  "scope": "Current per-range vs scoped segmented swap APIs; warm local filesystem;8MiB4096rows;ABBA7blocks first2warmup",
+  "results": {
+    "per_range": {
+      "n": 10,
+      "p50_ms": 204.7047495,
+      "p95_nearest_rank_ms": 222.679083,
+      "max_ms": 222.679083
+    },
+    "scoped": {
+      "n": 10,
+      "p50_ms": 4.696771,
+      "p95_nearest_rank_ms": 5.410375,
+      "max_ms": 5.410375
+    },
+    "p50_ratio": 43.584145256389974
+  },
+  "samples": [
+    {
+      "block": 0,
+      "measured": false,
+      "scoped": false,
+      "ms": 223.709875
+    },
+    {
+      "block": 0,
+      "measured": false,
+      "scoped": true,
+      "ms": 4.779166
+    },
+    {
+      "block": 0,
+      "measured": false,
+      "scoped": true,
+      "ms": 4.864292
+    },
+    {
+      "block": 0,
+      "measured": false,
+      "scoped": false,
+      "ms": 203.004833
+    },
+    {
+      "block": 1,
+      "measured": false,
+      "scoped": false,
+      "ms": 196.11375
+    },
+    {
+      "block": 1,
+      "measured": false,
+      "scoped": true,
+      "ms": 4.955
+    },
+    {
+      "block": 1,
+      "measured": false,
+      "scoped": true,
+      "ms": 4.839666
+    },
+    {
+      "block": 1,
+      "measured": false,
+      "scoped": false,
+      "ms": 201.778416
+    },
+    {
+      "block": 2,
+      "measured": true,
+      "scoped": false,
+      "ms": 203.946333
+    },
+    {
+      "block": 2,
+      "measured": true,
+      "scoped": true,
+      "ms": 4.6285
+    },
+    {
+      "block": 2,
+      "measured": true,
+      "scoped": true,
+      "ms": 4.526375
+    },
+    {
+      "block": 2,
+      "measured": true,
+      "scoped": false,
+      "ms": 197.556875
+    },
+    {
+      "block": 3,
+      "measured": true,
+      "scoped": false,
+      "ms": 204.663833
+    },
+    {
+      "block": 3,
+      "measured": true,
+      "scoped": true,
+      "ms": 5.123542
+    },
+    {
+      "block": 3,
+      "measured": true,
+      "scoped": true,
+      "ms": 4.8305
+    },
+    {
+      "block": 3,
+      "measured": true,
+      "scoped": false,
+      "ms": 204.745666
+    },
+    {
+      "block": 4,
+      "measured": true,
+      "scoped": false,
+      "ms": 206.189
+    },
+    {
+      "block": 4,
+      "measured": true,
+      "scoped": true,
+      "ms": 4.589708
+    },
+    {
+      "block": 4,
+      "measured": true,
+      "scoped": true,
+      "ms": 4.584583
+    },
+    {
+      "block": 4,
+      "measured": true,
+      "scoped": false,
+      "ms": 197.294542
+    },
+    {
+      "block": 5,
+      "measured": true,
+      "scoped": false,
+      "ms": 206.3945
+    },
+    {
+      "block": 5,
+      "measured": true,
+      "scoped": true,
+      "ms": 4.727708
+    },
+    {
+      "block": 5,
+      "measured": true,
+      "scoped": true,
+      "ms": 4.665834
+    },
+    {
+      "block": 5,
+      "measured": true,
+      "scoped": false,
+      "ms": 222.679083
+    },
+    {
+      "block": 6,
+      "measured": true,
+      "scoped": false,
+      "ms": 208.89275
+    },
+    {
+      "block": 6,
+      "measured": true,
+      "scoped": true,
+      "ms": 5.410375
+    },
+    {
+      "block": 6,
+      "measured": true,
+      "scoped": true,
+      "ms": 4.989667
+    },
+    {
+      "block": 6,
+      "measured": true,
+      "scoped": false,
+      "ms": 204.350375
+    }
+  ],
+  "correctness": "All28 loads every byte exact outside timing; per-run output/scratch zero; final index/store zero",
+  "limitations": [
+    "Both are current APIs, not historical before/after change",
+    "Source and comparison Vec outside managed accounting",
+    "No actual GPU/file decode/presentation or cold-disk speed claim",
+    "Small sample size; p95 is maximum with10 samples"
+  ],
+  "sha256": {
+    "docs/research/swap-row-abba-2026-10-13.log": "90a4d01ddb2dc316d6ffd708ccdabfc4f376d0d6a2ae5a9b4c7c5575478d0e4d",
+    "crates/rrrah-swap/src/segmented.rs": "30b45e50fe2087a641dc27952fbeb1f43972655968663ec4616f9e09c4a3aa5f",
+    "docs/research/swap-row-suite-2026-10-13.log": "16a512fd42ba1de600936a6a925010933c811253b7028e69cbb45c93e7b7ef54"
+  },
+  "swap_suite": {
+    "passed": 24,
+    "failed": 0,
+    "ignored": 1
+  }
+}

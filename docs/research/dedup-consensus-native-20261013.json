@@ -1,0 +1,39 @@
+{
+  "status": "terminal_runtime_failure",
+  "producer_pid": 12202,
+  "plan_sha256": "674ee06240ac7fbdc8785e0bbdc63c5625ff08c93ebb9ea34a1aa0e8dd3dfa27",
+  "command": [
+    "cargo",
+    "+stable",
+    "build",
+    "--offline",
+    "--locked",
+    "--bin",
+    "native_bank_current_all_positives",
+    "--jobs",
+    "2",
+    "--target-dir",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-exact-portfolio-20261011"
+  ],
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-consensus-native-plan-20261013.json": "674ee06240ac7fbdc8785e0bbdc63c5625ff08c93ebb9ea34a1aa0e8dd3dfa27",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/run-dedup-consensus-native-20261013.py": "02f01e7817514635b52fb6d53b71551994eec9d76e5bb05114f40ef120132cc8",
+    "/Users/themoretheless/.codex/tmp/rrrah-consensus-native-20261013/build.log": "5cb40a7a8ae5fc0e826fc607237a544fde6c681664de66a414ca9fbf9c89ef29",
+    "/Users/themoretheless/.codex/tmp/rrrah-consensus-native-20261013/probe": "9493c0d7ae15376d0ce1c8b0236716aa271fae7075ce56b8c6f8bc08232539be",
+    "/Users/themoretheless/.codex/tmp/rrrah-consensus-native-harness-20261013/Cargo.lock": "40d0319ff61694d6f74b709c8e2df49e5afc536af462b95fb84f38849d050aeb"
+  },
+  "results": [
+    {
+      "index": 0,
+      "label": "self_native",
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-consensus-native-20261013/00.json",
+      "sha256": "69daa187305948498ae25cce21b7d220a3e7933c6b2f326e129bf757396c8e82",
+      "returncode": -6
+    }
+  ],
+  "scope": "Real CPU LoFTR opt-in atomic consensus, exact root-derived native source snapshot; standalone optimized development harness. Runtime/inputs/cases fixed by producer before execution; not full corpus or all features.",
+  "compiler": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: aarch64-apple-darwin\nrelease: 1.98.1\nLLVM version: 22.1.8\n",
+  "child_pid": 13348,
+  "build_returncode": 0,
+  "active_index": 0
+}

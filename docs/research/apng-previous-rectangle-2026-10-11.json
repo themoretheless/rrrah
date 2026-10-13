@@ -1,0 +1,16 @@
+{
+  "scope": "APNG PREVIOUS saves/restores changed rectangle while retaining original managed canvas; row cancellation checks; exact surroundings and patch-only memory admission; independent composition Metal SDR/HDR",
+  "report": "docs/research/apng-previous-rectangle-metal-2026-10-11/report.json",
+  "decoder_passed": 1008,
+  "decoder_ignored": 71,
+  "decoder_log_sha256": "647272a637846a27afbffd1ba75853530ded07e8a53c8ce87391b16509ec7c18",
+  "hashes": {
+    "crates/rrrah-decode/src/apng.rs": "8220055f08272a1a9179aeced7c34d940abcf2a331e06e91d8b8b5e4b200976c",
+    "crates/rrrah-app/tests/png_physical_aspect.rs": "86e41e522b35ed6e1f21b466233d2b4e30627084fb0645126782de17855530f2",
+    "scripts/qualify-viewer-storage-gpu.py": "93083d5374955215b59e86672f6731f392153af6c1f16da424d772a63a98292a"
+  },
+  "limitations": [
+    "No performance benchmark or complete variant/playback qualification",
+    "Private codec scratch remains outside shared memory accounting"
+  ]
+}

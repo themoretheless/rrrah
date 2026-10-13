@@ -1,0 +1,377 @@
+warning: function `fallible_zeroed_bytes` is never used
+   --> crates/rrrah-cache/src/mosaic_payload_v1.rs:728:4
+    |
+728 | fn fallible_zeroed_bytes(len: usize) -> Result<Box<[u8]>, MosaicPayloadError> {
+    |    ^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-cache` (lib) generated 1 warning
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+warning: variant `SwapLod` is never constructed
+  --> crates/rrrah-app/tests/../src/raster_lod_worker.rs:11:5
+   |
+ 9 | enum Source {
+   |      ------ variant in this enum
+10 |     Filter(DecodedRaster),
+11 |     SwapLod {
+   |     ^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: field `0` is never read
+  --> crates/rrrah-app/tests/../src/raster_lod_worker.rs:37:13
+   |
+37 |     Swapped(rrrah_cache::SwappedRaster),
+   |     ------- ^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |     |
+   |     field in this variant
+   |
+help: consider changing the field to be of unit type to suppress this warning while preserving the field numbering, or remove the field
+   |
+37 -     Swapped(rrrah_cache::SwappedRaster),
+37 +     Swapped(()),
+   |
+
+warning: method `into_swapped` is never used
+  --> crates/rrrah-app/tests/../src/raster_lod_worker.rs:52:12
+   |
+45 | impl Completed {
+   | -------------- method in this implementation
+...
+52 |     pub fn into_swapped(self) -> Result<rrrah_cache::SwappedRaster, WorkerError> {
+   |            ^^^^^^^^^^^^
+
+warning: methods `with_same_waker` and `submit_swap_lod` are never used
+   --> crates/rrrah-app/tests/../src/raster_lod_worker.rs:90:12
+    |
+ 89 | impl LodWorker {
+    | -------------- methods in this implementation
+ 90 |     pub fn with_same_waker(&self) -> Self {
+    |            ^^^^^^^^^^^^^^^
+...
+125 |     pub fn submit_swap_lod(
+    |            ^^^^^^^^^^^^^^^
+
+warning: `rrrah` (test "swapped_region_metal") generated 4 warnings
+warning: methods `submit` and `submit_image` are never used
+    --> crates/rrrah-app/src/main.rs:1379:8
+     |
+1087 | impl ForegroundLoader {
+     | --------------------- methods in this implementation
+...
+1379 |     fn submit(&self, path: PathBuf) -> Result<u64> {
+     |        ^^^^^^
+...
+1382 |     fn submit_image(&self, path: PathBuf, image_index: usize) -> Result<u64> {
+     |        ^^^^^^^^^^^^
+     |
+     = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: associated items `install_with_cancel`, `refresh`, and `refresh_with_cancel` are never used
+   --> crates/rrrah-app/src/raster_viewport.rs:396:19
+    |
+ 26 | impl ResidentSource {
+    | ------------------- associated items in this implementation
+...
+396 |     pub(crate) fn install_with_cancel<F: FnMut() -> bool>(
+    |                   ^^^^^^^^^^^^^^^^^^^
+...
+483 |     pub(crate) fn refresh(
+    |                   ^^^^^^^
+...
+503 |     pub(crate) fn refresh_with_cancel<F: FnMut() -> bool>(
+    |                   ^^^^^^^^^^^^^^^^^^^
+
+warning: `rrrah` (bin "rrrah") generated 2 warnings
+    Finished `test` profile [optimized + debuginfo] target(s) in 5.28s
+     Running unittests src/main.rs (target/debug/deps/rrrah-0b4921b829754900)
+
+running 1 test
+RAW failed-nearest fallback: forward/backward; count=1; full original sensor and metadata exact; final=0
+test gallery::tests::raw_prefetch_failed_nearest_does_not_consume_count_slot_in_either_direction ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 262 filtered out; finished in 0.97s
+
+     Running tests/ai_swap_metal.rs (target/debug/deps/ai_swap_metal-d2f0d4287791f621)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+     Running tests/basis_readback.rs (target/debug/deps/basis_readback-e30a19a1af60f495)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+     Running tests/compute_cache_swap.rs (target/debug/deps/compute_cache_swap-1a68747ff02152f2)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+     Running tests/crw_swap_metal.rs (target/debug/deps/crw_swap_metal-bee823b18d7e1adc)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+     Running tests/disk_cache_cli.rs (target/debug/deps/disk_cache_cli-97e0b42d4db58f11)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+     Running tests/eip_sensor_readback.rs (target/debug/deps/eip_sensor_readback-765db84926673f21)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+     Running tests/emf_readback.rs (target/debug/deps/emf_readback-1c69548a1f587a29)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+     Running tests/eps_lifecycle.rs (target/debug/deps/eps_lifecycle-cc650ab1fdea197e)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 9 filtered out; finished in 0.00s
+
+     Running tests/epson_erf_readback.rs (target/debug/deps/epson_erf_readback-de3a8ce26a06359b)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+     Running tests/gpr_readback.rs (target/debug/deps/gpr_readback-9e43aae3fb9807c5)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.00s
+
+     Running tests/hasselblad_3fr_readback.rs (target/debug/deps/hasselblad_3fr_readback-64e9d0791866f2ea)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+     Running tests/hasselblad_3fr_rejection.rs (target/debug/deps/hasselblad_3fr_rejection-19073721d447df6e)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+     Running tests/hasselblad_fff_readback.rs (target/debug/deps/hasselblad_fff_readback-3b5d59dc6cdeb1c4)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+     Running tests/hasselblad_fff_rejection.rs (target/debug/deps/hasselblad_fff_rejection-d5f93ad435ecb604)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+     Running tests/hdr_raster_swap.rs (target/debug/deps/hdr_raster_swap-6e84ed1ddcd47ad6)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 25 filtered out; finished in 0.00s
+
+     Running tests/kodak_dcr_readback.rs (target/debug/deps/kodak_dcr_readback-8d4f47408cb643c3)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+     Running tests/kodak_dcr_rejection.rs (target/debug/deps/kodak_dcr_rejection-07d339674d0ee583)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+     Running tests/kodak_dcs_readback.rs (target/debug/deps/kodak_dcs_readback-7be1e1d7aaff9158)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+     Running tests/kodak_kdc_readback.rs (target/debug/deps/kodak_kdc_readback-3eb8e8655c3c0e83)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+     Running tests/leaf_mos_readback.rs (target/debug/deps/leaf_mos_readback-bcd2e379cccc4c40)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+     Running tests/leaf_mos_rejection.rs (target/debug/deps/leaf_mos_rejection-0b777c47107b7e8d)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+     Running tests/mef_sensor_compute.rs (target/debug/deps/mef_sensor_compute-d33f601f5054f67c)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+     Running tests/minolta_mrw_readback.rs (target/debug/deps/minolta_mrw_readback-c9a65b7159ec66f9)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.00s
+
+     Running tests/mng_readback.rs (target/debug/deps/mng_readback-182244c8334e6452)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+     Running tests/model_readback.rs (target/debug/deps/model_readback-e15397fa4b601d6a)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 7 filtered out; finished in 0.00s
+
+     Running tests/nrw_readback.rs (target/debug/deps/nrw_readback-03240aa937632137)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+     Running tests/panasonic_raw_readback.rs (target/debug/deps/panasonic_raw_readback-2c3eed2d361b8976)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.00s
+
+     Running tests/pdf_readback.rs (target/debug/deps/pdf_readback-7bb25e083d081f6d)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 6 filtered out; finished in 0.00s
+
+     Running tests/phaseone_iiq_readback.rs (target/debug/deps/phaseone_iiq_readback-4ecc9bb4aecc9e3f)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+     Running tests/phaseone_iiq_rejection.rs (target/debug/deps/phaseone_iiq_rejection-24ae2f1014bb23b8)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+     Running tests/pnm_cache_swap.rs (target/debug/deps/pnm_cache_swap-c48dfb6f65fef3bf)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+     Running tests/ptx_alias.rs (target/debug/deps/ptx_alias-b41445c576631466)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+     Running tests/raster_collection_metal.rs (target/debug/deps/raster_collection_metal-b7cd301b09fb108e)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+     Running tests/raw_collection_metal.rs (target/debug/deps/raw_collection_metal-5d07d17c3f2a5a20)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+     Running tests/raw_quality.rs (target/debug/deps/raw_quality-ceb34f2ee6feed0f)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+     Running tests/rla_cache_swap.rs (target/debug/deps/rla_cache_swap-a5645674ca33276a)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+     Running tests/rpf_readback.rs (target/debug/deps/rpf_readback-d341dee13b117a09)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+     Running tests/rwl_readback.rs (target/debug/deps/rwl_readback-83c637c8a2e6a759)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+     Running tests/samsung_srw_readback.rs (target/debug/deps/samsung_srw_readback-921bf52f677c3ec9)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+     Running tests/sony_sr2_readback.rs (target/debug/deps/sony_sr2_readback-ccefd81338bbe8c6)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+     Running tests/sony_srf_readback.rs (target/debug/deps/sony_srf_readback-6cb028804436056a)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+     Running tests/sony_srf_rejection.rs (target/debug/deps/sony_srf_rejection-903be69f3ca284d9)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+     Running tests/sti_readback.rs (target/debug/deps/sti_readback-1410b3d42e7303cb)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.00s
+
+     Running tests/stl_swap.rs (target/debug/deps/stl_swap-881354f1561be4b7)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 7 filtered out; finished in 0.00s
+
+     Running tests/swapped_region_metal.rs (target/debug/deps/swapped_region_metal-ada668171286d115)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 6 filtered out; finished in 0.00s
+
+     Running tests/ttl_swap_metal.rs (target/debug/deps/ttl_swap_metal-585a6570bc9d74a6)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 7 filtered out; finished in 0.00s
+
+     Running tests/wmf_readback.rs (target/debug/deps/wmf_readback-751bc84584d81492)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.00s
+

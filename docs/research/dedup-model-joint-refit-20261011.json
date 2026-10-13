@@ -1,0 +1,166 @@
+{
+  "status": "complete_bounded_model_joint_refit",
+  "producer_pid": 41814,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-model-points-trace-harvest-20261011.json": "5742b2304d64d7947c64f6b402135b77ba2daeaa1670b36e5160ecd2dacd80fd",
+    "/Users/themoretheless/.codex/tmp/rrrah-model-points-trace-qualified-20261011/201300.log": "e6f49fa44900a7b93e62ecd8d100b12c4e4c6d23f50e6644751da3cd3de009fb",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-joint-geometry-sampling-audit-20261011.json": "3f6f9c34c73eaccd33cbc250b3cbcba90ff480acd12159874b875ef4ea6663ff",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-geometry-sampling-patched-qualified-20261011/sampling_trace": "53544f1466d4da3858ebfb7a61a5a3081eb5533a3281d83ee4dc7266a30fd69a",
+    "/Users/themoretheless/.codex/tmp/rrrah-model-joint-refit-qualified-20261011/sampling_trace": "53544f1466d4da3858ebfb7a61a5a3081eb5533a3281d83ee4dc7266a30fd69a",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-model-joint-refit-20261011.py": "a49124a9dd26b1f778427123be1c2457bc68b0da50b237ecc95e0a9397c67446",
+    "/Users/themoretheless/.codex/tmp/rrrah-model-joint-refit-qualified-20261011/201300-0.json": "b53bd4b93bf664e6821e5d29325991fa75b14b7c5688b3a8dcc002a8e335f126",
+    "/Users/themoretheless/.codex/tmp/rrrah-model-joint-refit-qualified-20261011/201300-11.json": "89e0482b73fa9fd5465cb1c619bf894d08720146c604feff282f6fe84625f003",
+    "/Users/themoretheless/.codex/tmp/rrrah-model-joint-refit-qualified-20261011/201300-16.json": "084e7ea448eef309aa2797b76773d1732d73bb8184fc4dc04106ef97d24d92c3",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/201303.jpg": "162003ef18f481a33e8bb6713fe9169bc0af0675b8ce1b3d21508447032a9ae5",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201300.jpg": "f2819f6d37def6b0dcc04c3f1670bb2b46318d2c451ee6ef0ebec59d8ce8c98d"
+  },
+  "plan": [
+    {
+      "trace_index": 0,
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-model-joint-refit-qualified-20261011/201300-0.json",
+      "trials": 20000,
+      "seed": 173
+    },
+    {
+      "trace_index": 0,
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-model-joint-refit-qualified-20261011/201300-0.json",
+      "trials": 1000000,
+      "seed": 173
+    },
+    {
+      "trace_index": 11,
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-model-joint-refit-qualified-20261011/201300-11.json",
+      "trials": 20000,
+      "seed": 173
+    },
+    {
+      "trace_index": 11,
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-model-joint-refit-qualified-20261011/201300-11.json",
+      "trials": 1000000,
+      "seed": 173
+    },
+    {
+      "trace_index": 16,
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-model-joint-refit-qualified-20261011/201300-16.json",
+      "trials": 20000,
+      "seed": 173
+    },
+    {
+      "trace_index": 16,
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-model-joint-refit-qualified-20261011/201300-16.json",
+      "trials": 1000000,
+      "seed": 173
+    }
+  ],
+  "results": [
+    {
+      "trace_index": 0,
+      "trials": 20000,
+      "status": "inconclusive",
+      "command": [
+        "/Users/themoretheless/.codex/tmp/rrrah-model-joint-refit-qualified-20261011/sampling_trace",
+        "/Users/themoretheless/.codex/tmp/rrrah-model-joint-refit-qualified-20261011/201300-0.json",
+        "20000",
+        "173"
+      ],
+      "pid": 41816,
+      "returncode": 0,
+      "stdout": "{\"alias_pairs\":[],\"anchor_result\":{\"anchors\":[10,10],\"directions\":[{\"agreeing_pairs\":1146,\"informative_pairs\":1275,\"sites\":250,\"valid_sites\":250},{\"agreeing_pairs\":1141,\"informative_pairs\":1288,\"sites\":250,\"valid_sites\":250}],\"supported\":false},\"best\":{\"joint_inliers\":[4,19,24,27,30,51,59,103,120,122],\"normalized_bidirectional_error\":0.47275816553029393,\"transform\":[[0.9891844147767545,-0.06337133933583397,504.98679263751944],[-0.00816677691054881,0.9524775161279982,167.58743512612102],[-0.000018034521267932953,-0.00009811299847308883,1.0358954655064476]]},\"decimal_bit_differences\":18,\"managed_peak\":104168400,\"managed_used\":0,\"maximum_projection_checks\":6920346,\"points\":173,\"scope\":\"Public joint sampled geometry API on exact-bit captured real points, including guarded refinement and preflight projection work. Independent original-pixel confirmation. JSON/point/geometry scratch outside managed payload admission; not automatic search integration, total RSS or full corpus qualification.\",\"seed\":173,\"source_tolerance\":0.5414368903667351,\"target_tolerance\":2.0,\"trials\":20000}\n",
+      "stderr": "",
+      "elapsed_seconds": 0.912592583,
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-model-joint-refit-qualified-20261011/0-20000.log",
+      "log_sha256": "6993d91c2a735e9abc1365fc4e311a06e49503bd0676362a09fb4ec7d5221f48"
+    },
+    {
+      "trace_index": 0,
+      "trials": 1000000,
+      "status": "inconclusive",
+      "command": [
+        "/Users/themoretheless/.codex/tmp/rrrah-model-joint-refit-qualified-20261011/sampling_trace",
+        "/Users/themoretheless/.codex/tmp/rrrah-model-joint-refit-qualified-20261011/201300-0.json",
+        "1000000",
+        "173"
+      ],
+      "pid": 41820,
+      "returncode": 0,
+      "stdout": "{\"alias_pairs\":[],\"anchor_result\":{\"anchors\":[11,11],\"directions\":[{\"agreeing_pairs\":1146,\"informative_pairs\":1276,\"sites\":275,\"valid_sites\":275},{\"agreeing_pairs\":1139,\"informative_pairs\":1287,\"sites\":275,\"valid_sites\":275}],\"supported\":false},\"best\":{\"joint_inliers\":[4,19,24,27,30,51,59,103,105,120,122],\"normalized_bidirectional_error\":1.3801783260623264,\"transform\":[[0.9893488610633348,-0.06458413144881481,505.18271712949047],[-0.008255715237170955,0.9512831228016387,167.7828048232427],[-0.000017640605204939312,-0.00009997499525884028,1.0361358130980567]]},\"decimal_bit_differences\":18,\"managed_peak\":104168400,\"managed_used\":0,\"maximum_projection_checks\":346000346,\"points\":173,\"scope\":\"Public joint sampled geometry API on exact-bit captured real points, including guarded refinement and preflight projection work. Independent original-pixel confirmation. JSON/point/geometry scratch outside managed payload admission; not automatic search integration, total RSS or full corpus qualification.\",\"seed\":173,\"source_tolerance\":0.5414368903667351,\"target_tolerance\":2.0,\"trials\":1000000}\n",
+      "stderr": "",
+      "elapsed_seconds": 3.719262875,
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-model-joint-refit-qualified-20261011/0-1000000.log",
+      "log_sha256": "6779da3b57990fec6790860fc7c510e49c903e1cb83ae2134ed6f8569299264e"
+    },
+    {
+      "trace_index": 11,
+      "trials": 20000,
+      "status": "inconclusive",
+      "command": [
+        "/Users/themoretheless/.codex/tmp/rrrah-model-joint-refit-qualified-20261011/sampling_trace",
+        "/Users/themoretheless/.codex/tmp/rrrah-model-joint-refit-qualified-20261011/201300-11.json",
+        "20000",
+        "173"
+      ],
+      "pid": 41852,
+      "returncode": 0,
+      "stdout": "{\"alias_pairs\":[],\"anchor_result\":null,\"best\":null,\"decimal_bit_differences\":12,\"managed_peak\":0,\"managed_used\":0,\"maximum_projection_checks\":1400070,\"points\":35,\"scope\":\"Public joint sampled geometry API on exact-bit captured real points, including guarded refinement and preflight projection work. Independent original-pixel confirmation. JSON/point/geometry scratch outside managed payload admission; not automatic search integration, total RSS or full corpus qualification.\",\"seed\":173,\"source_tolerance\":0.5414368903667351,\"target_tolerance\":2.0,\"trials\":20000}\n",
+      "stderr": "",
+      "elapsed_seconds": 0.06344091700000032,
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-model-joint-refit-qualified-20261011/11-20000.log",
+      "log_sha256": "7bdc3cbc6d364e981bd18f421833a0af9264e12c945ba64f5ad34fbc66ba0d82"
+    },
+    {
+      "trace_index": 11,
+      "trials": 1000000,
+      "status": "inconclusive",
+      "command": [
+        "/Users/themoretheless/.codex/tmp/rrrah-model-joint-refit-qualified-20261011/sampling_trace",
+        "/Users/themoretheless/.codex/tmp/rrrah-model-joint-refit-qualified-20261011/201300-11.json",
+        "1000000",
+        "173"
+      ],
+      "pid": 41853,
+      "returncode": 0,
+      "stdout": "{\"alias_pairs\":[],\"anchor_result\":null,\"best\":null,\"decimal_bit_differences\":12,\"managed_peak\":0,\"managed_used\":0,\"maximum_projection_checks\":70000070,\"points\":35,\"scope\":\"Public joint sampled geometry API on exact-bit captured real points, including guarded refinement and preflight projection work. Independent original-pixel confirmation. JSON/point/geometry scratch outside managed payload admission; not automatic search integration, total RSS or full corpus qualification.\",\"seed\":173,\"source_tolerance\":0.5414368903667351,\"target_tolerance\":2.0,\"trials\":1000000}\n",
+      "stderr": "",
+      "elapsed_seconds": 2.1618843329999997,
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-model-joint-refit-qualified-20261011/11-1000000.log",
+      "log_sha256": "207ac073c300f1f7c5e76d6899982092c4e6fbbda6f85808114187441c217eff"
+    },
+    {
+      "trace_index": 16,
+      "trials": 20000,
+      "status": "inconclusive",
+      "command": [
+        "/Users/themoretheless/.codex/tmp/rrrah-model-joint-refit-qualified-20261011/sampling_trace",
+        "/Users/themoretheless/.codex/tmp/rrrah-model-joint-refit-qualified-20261011/201300-16.json",
+        "20000",
+        "173"
+      ],
+      "pid": 41868,
+      "returncode": 0,
+      "stdout": "{\"alias_pairs\":[],\"anchor_result\":null,\"best\":null,\"decimal_bit_differences\":12,\"managed_peak\":0,\"managed_used\":0,\"maximum_projection_checks\":2480124,\"points\":62,\"scope\":\"Public joint sampled geometry API on exact-bit captured real points, including guarded refinement and preflight projection work. Independent original-pixel confirmation. JSON/point/geometry scratch outside managed payload admission; not automatic search integration, total RSS or full corpus qualification.\",\"seed\":173,\"source_tolerance\":0.5414368903667351,\"target_tolerance\":2.0,\"trials\":20000}\n",
+      "stderr": "",
+      "elapsed_seconds": 0.04777091699999936,
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-model-joint-refit-qualified-20261011/16-20000.log",
+      "log_sha256": "16a266787503a2e7af9ed4b851d0b30ee1d15ca0eaff5b0e2096cccc253b5075"
+    },
+    {
+      "trace_index": 16,
+      "trials": 1000000,
+      "status": "inconclusive",
+      "command": [
+        "/Users/themoretheless/.codex/tmp/rrrah-model-joint-refit-qualified-20261011/sampling_trace",
+        "/Users/themoretheless/.codex/tmp/rrrah-model-joint-refit-qualified-20261011/201300-16.json",
+        "1000000",
+        "173"
+      ],
+      "pid": 41869,
+      "returncode": 0,
+      "stdout": "{\"alias_pairs\":[],\"anchor_result\":null,\"best\":null,\"decimal_bit_differences\":12,\"managed_peak\":0,\"managed_used\":0,\"maximum_projection_checks\":124000124,\"points\":62,\"scope\":\"Public joint sampled geometry API on exact-bit captured real points, including guarded refinement and preflight projection work. Independent original-pixel confirmation. JSON/point/geometry scratch outside managed payload admission; not automatic search integration, total RSS or full corpus qualification.\",\"seed\":173,\"source_tolerance\":0.5414368903667351,\"target_tolerance\":2.0,\"trials\":1000000}\n",
+      "stderr": "",
+      "elapsed_seconds": 1.0623352920000002,
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-model-joint-refit-qualified-20261011/16-1000000.log",
+      "log_sha256": "ea17a0a97719e9ef338a7c99e3c43753af51328979efcbe821d34a71953be48e"
+    }
+  ],
+  "scope": "Joint refit of three actual mapped/selected model point banks that previously yielded insufficient anchor geometry. Same calibrated public fitter/decoder and original source/pixel thresholds;20k and1m explicitly admitted trials. No new inference or model API adoption."
+}

@@ -70,6 +70,14 @@ pub fn decode_mef_zd_sensor(
     budget: &MemoryBudget,
     cancelled: &dyn Fn() -> bool,
 ) -> Result<PixelBuffer<u16>, DecodeError> {
+    let range = validated_sensor_range(bytes, cancelled)?;
+    packed_12(&bytes[range], 4016, 5344, budget, cancelled)
+}
+
+fn validated_sensor_range(
+    bytes: &[u8],
+    cancelled: &dyn Fn() -> bool,
+) -> Result<std::ops::Range<usize>, DecodeError> {
     if cancelled() {
         return Err(DecodeError::Cancelled);
     }
@@ -143,12 +151,12 @@ pub fn decode_mef_zd_sensor(
             metadata_disjoint(bytes, entry.raw_bytes(), offset, end)?;
         }
     }
-    let sensor = bytes
-        .get(offset..end)
-        .ok_or_else(|| error("truncated packed sensor"))?;
-    packed_12(sensor, 4016, 5344, budget, cancelled)
+    bytes.get(offset..end).ok_or_else(|| error("truncated packed sensor"))?;
+    Ok(offset..end)
 }
-/// Read a qualified ZD sensor file with source and output under one root budget.
+/// Read a qualified ZD sensor file in two stages under one root budget.
+/// Full-source validation is released before output admission; reread sensor
+/// bytes must match the validated BLAKE3 digest. This trades I/O for peak memory.
 /// Only image zero is supported. Returns raw codes, not developed camera color.
 pub fn decode_mef_zd_sensor_file(
     request: &crate::DecodeRequest,
@@ -160,20 +168,122 @@ pub fn decode_mef_zd_sensor_file(
             index: request.image_index,
         });
     }
-    let mut bounded = request.clone();
-    bounded.memory_budget = Some(budget.clone());
-    let source = crate::bounded_io::read_bounded(&bounded)?;
-    decode_mef_zd_sensor(&source, budget, &|| {
-        bounded
-            .cancellation
-            .as_ref()
-            .is_some_and(crate::GenerationToken::is_cancelled)
-    })
+    use std::io::{Read, Seek, SeekFrom};
+    let io_error = |source| DecodeError::Io { path: request.path.clone(), source };
+    let mut file = std::fs::File::open(&request.path).map_err(io_error)?;
+    let length = file.metadata().map_err(io_error)?.len();
+    if length > crate::bounded_io::MAX_INPUT_BYTES {
+        return Err(DecodeError::InputTooLarge { path: request.path.clone(), actual: length,
+            limit: crate::bounded_io::MAX_INPUT_BYTES });
+    }
+    let mut source = budget.try_buffer(usize::try_from(length)
+        .map_err(|_| DecodeError::DimensionOverflow)?, 0u8)?;
+    for chunk in source.chunks_mut(64 * 1024) {
+        request.check_cancelled()?;
+        file.read_exact(chunk).map_err(io_error)?;
+    }
+    let range = validated_sensor_range(&source, &|| request.check_cancelled().is_err())?;
+    let mut expected = blake3::Hasher::new();
+    for chunk in source[range.clone()].chunks(64 * 1024) {
+        request.check_cancelled()?;
+        expected.update(chunk);
+    }
+    let expected = expected.finalize();
+    drop(source);
+    request.check_cancelled()?;
+    file.seek(SeekFrom::Start(range.start as u64)).map_err(io_error)?;
+    let output = read_verified_sensor(&mut file, request, budget, expected)?;
+    if file.metadata().map_err(io_error)?.len() != length {
+        return Err(error("source changed during staged sensor import"));
+    }
+    request.check_cancelled()?;
+    Ok(output)
+}
+
+fn read_verified_sensor(
+    reader: &mut impl std::io::Read,
+    request: &crate::DecodeRequest,
+    budget: &MemoryBudget,
+    expected: blake3::Hash,
+) -> Result<PixelBuffer<u16>, DecodeError> {
+    request.check_cancelled()?;
+    let io_error = |source| DecodeError::Io { path: request.path.clone(), source };
+    let mut row = budget.try_buffer(4016 / 2 * 3, 0u8)?;
+    let mut output = budget.try_buffer(4016 * 5344, 0u16)?;
+    let mut actual = blake3::Hasher::new();
+    for pixels in output.chunks_exact_mut(4016) {
+        request.check_cancelled()?;
+        reader.read_exact(&mut row).map_err(io_error)?;
+        actual.update(&row);
+        for (encoded, decoded) in row.chunks_exact(3).zip(pixels.chunks_exact_mut(2)) {
+            decoded[0] = (u16::from(encoded[0]) << 4) | (u16::from(encoded[1]) >> 4);
+            decoded[1] = ((u16::from(encoded[1]) & 15) << 8) | u16::from(encoded[2]);
+        }
+    }
+    request.check_cancelled()?;
+    if actual.finalize() != expected {
+        return Err(error("source changed during staged sensor import"));
+    }
+    request.check_cancelled()?;
+    Ok(output.freeze().into())
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn second_pass_rejects_changed_truncated_or_cancelled_sensor_without_credit_leak() {
+        use std::sync::{Arc, atomic::{AtomicU64, Ordering}};
+        let source = vec![0x35; 32192256];
+        let expected = blake3::hash(&source);
+        let request = crate::DecodeRequest::new("authored-second-pass.mef");
+        let peak = 42_923_008 + 6024;
+        for position in [0, 16096128, source.len() - 1] {
+            let mut changed = source.clone();
+            changed[position] ^= 1;
+            let budget = MemoryBudget::new(peak);
+            let result = read_verified_sensor(&mut std::io::Cursor::new(changed), &request, &budget, expected);
+            assert!(matches!(result, Err(DecodeError::NativeCamera { message, .. })
+                if message == "source changed during staged sensor import"));
+            assert_eq!(budget.peak(), peak);
+            assert_eq!(budget.used(), 0);
+        }
+        let budget = MemoryBudget::new(peak);
+        assert!(matches!(read_verified_sensor(&mut &source[..source.len()-1], &request, &budget, expected),
+            Err(DecodeError::Io { .. })));
+        assert_eq!(budget.used(), 0);
+        struct CancellingReader<'a> {
+            bytes: &'a [u8],
+            calls: usize,
+            cancel_at: usize,
+            generation: Arc<AtomicU64>,
+        }
+        impl std::io::Read for CancellingReader<'_> {
+            fn read(&mut self, bytes: &mut [u8]) -> std::io::Result<usize> {
+                let n = std::io::Read::read(&mut self.bytes, bytes)?;
+                self.calls += 1;
+                if self.calls == self.cancel_at { self.generation.store(2, Ordering::Release); }
+                Ok(n)
+            }
+        }
+        for cancel_at in [1, 2672, 5344] {
+            let generation = Arc::new(AtomicU64::new(1));
+            let mut request = request.clone();
+            request.cancellation = Some(crate::GenerationToken::new(generation.clone(), 1));
+            let budget = MemoryBudget::new(peak);
+            let mut reader = CancellingReader { bytes: &source, calls: 0, cancel_at, generation };
+            assert!(matches!(read_verified_sensor(&mut reader, &request, &budget, expected),
+                Err(DecodeError::Cancelled)));
+            assert_eq!(budget.peak(), peak);
+            assert_eq!(budget.used(), 0);
+        }
+        let budget = MemoryBudget::new(peak);
+        let output = read_verified_sensor(&mut &source[..], &request, &budget, expected).unwrap();
+        for pair in output.chunks_exact(2) { assert_eq!(pair, &[0x353, 0x535]); }
+        assert_eq!(budget.used(), 42_923_008);
+        drop(output);
+        assert_eq!(budget.used(), 0);
+    }
     #[test]
     #[ignore = "requires pinned RRRAH_MEF_SOURCE and shasum; full independent sensor hash, not color qualification"]
     fn real_zd_all_sensor_values_match_pinned_independent_oracle() {
@@ -236,10 +346,10 @@ mod tests {
         let path = std::env::temp_dir().join(format!("rrrah-mef-relocated-{}.mef", std::process::id()));
         std::fs::write(&path, &relocated).unwrap();
         let request = crate::DecodeRequest::new(&path);
-        let exact = MemoryBudget::new(relocated.len() as u64 + 42_923_008);
+        let exact = MemoryBudget::new((relocated.len() as u64).max(42_923_008 + 6024));
         let moved = decode_mef_zd_sensor_file(&request, &exact).unwrap();
         assert_eq!(&moved[..], &output[..]);
-        assert_eq!(exact.peak(), relocated.len() as u64 + 42_923_008);
+        assert_eq!(exact.peak(), exact.limit());
         assert_eq!(exact.used(), 42_923_008);
         drop(moved);
         assert_eq!(exact.used(), 0);
@@ -247,7 +357,7 @@ mod tests {
         let refused = decode_mef_zd_sensor_file(&request, &short);
         std::fs::remove_file(&path).unwrap();
         assert!(matches!(refused, Err(DecodeError::Memory(_))));
-        assert_eq!(short.peak(), relocated.len() as u64);
+        assert_eq!(short.peak(), 0);
         assert_eq!(short.used(), 0);
         for invalid in [0u32, 7, 8, 116919, 116920, 117140, 117164, 117372] {
             relocated[entry + 8..entry + 12].copy_from_slice(&invalid.to_be_bytes());
@@ -309,18 +419,19 @@ mod tests {
         let weight = 4016 * 5344 * 2_u64;
         let oracle_budget = MemoryBudget::new(weight);
         let expected = decode_mef_zd_sensor(&source, &oracle_budget, &|| false).unwrap();
-        let budget = MemoryBudget::new(source.len() as u64 + weight);
+        let peak = weight + 6024;
+        let budget = MemoryBudget::new(peak);
         let request = crate::DecodeRequest::new(&path);
         let output = decode_mef_zd_sensor_file(&request, &budget).unwrap();
         assert_eq!(&output[..], &expected[..]);
         assert_eq!(budget.used(), weight);
-        assert_eq!(budget.peak(), source.len() as u64 + weight);
+        assert_eq!(budget.peak(), peak);
         let held = output.clone();
         drop(output);
         assert_eq!(budget.used(), weight);
         drop(held);
         assert_eq!(budget.used(), 0);
-        let short = MemoryBudget::new(source.len() as u64 + weight - 1);
+        let short = MemoryBudget::new(peak - 1);
         assert!(matches!(
             decode_mef_zd_sensor_file(&request, &short),
             Err(DecodeError::Memory(_))

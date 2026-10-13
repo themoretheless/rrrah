@@ -1,0 +1,310 @@
+{
+  "status": "verified_original_pixel_calibration_replay_rejected_for_general_adoption",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exposure-calibration-snapshot-20261011.json": "a3af2c80b79ebd3d26668ae19e9c78926aad85a9c3e5f1dec5b2f659d98e55eb",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exposure-replay-input-20261011.json": "bb6ff4ba02ad8f7e2a40345864783e400ada5cb1e0e7f2099cd922bdbda29cd1",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exposure-replay-output-20261011.json": "5e2d6a76ec930146fd36f0d19da780cb91099cc076eec3f3e92004bb77e89932",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-disc21-overlap-regions-native-v2-20261011.json": "3b04062ed6352e8365e01f743f12e23276793ddb1b91df01d79ddbaee86b63ae",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-disc21-dark-contrast-grid-20261011.json": "c7b7fae08f348ac677c544fc8594e99a569c534c5b1cdc812e95669c91fc15b0",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-disc21-dark-contrast-spatial-refusal-20261011.json": "3f5981e346e2a1def01a3f41939fc8c1c4ed957dae04b6b75f4a4d3cb46019e3",
+    "/Users/themoretheless/.codex/tmp/rrrah-exposure-replay-harness-20261011/src/main.rs": "971f5f43730dea2972603d5e82d2719b5e1417a91b75e71fd62131d4abab4c40",
+    "/Users/themoretheless/.codex/tmp/rrrah-exposure-replay-harness-20261011/Cargo.toml": "0b832272e590e07737585656d582ef95c7f39ba6b4b37a36ecab399f9c6984db",
+    "/Users/themoretheless/.codex/tmp/rrrah-exposure-replay-harness-20261011/Cargo.lock": "2159143d1cb262dc0d60a46140ca5510a93c1cecf046df4f6c057c99ba84ea47",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exposure-replay-build-v2-20261011.log": "c620f09c60831542e60e1004d04e9a22880fd60295cfaa169c7d4f113d08b12c",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exposure-replay-runtime-20261011.log": "bcbca9011fc31f38dcec50752bcb3268240a73c1a4f923b54aadae5a6c9a1f44",
+    "/Users/themoretheless/.codex/tmp/rrrah-exposure-replay-qualified-20261011/dedup-exposure-replay": "524f7eeb6e4f5e44d33b8eea97e8e9451bd8a2a0f96081e788375193f8a65297",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-exposure-replay-20261011.py": "aa1bbfa0c7c77b90b23da7929423c830267470861f02e0aaa45c256f0ace139c",
+    "/Users/themoretheless/.codex/tmp/rrrah-disc21-cohort-source-20261011/Q00906.jpg": "bf05f2eb330a827a1cbc152fab4b09915da427bc53d3a7cf7fbc29dde202459a",
+    "/Users/themoretheless/.codex/tmp/rrrah-disc21-cohort-source-20261011/R014120.jpg": "5e5c15e7da265ad995c24aa172c89b28bd5fd3bb26794fe10d4e0a89a09a30db"
+  },
+  "evidence": {
+    "evidence": {
+      "left_exposure": "RankExposure { peak_rgb: 0.021219009533524513, gain: 47.12755316972132, pixel_reads: 1769472 }",
+      "right_exposure": "RankExposure { peak_rgb: 1.0, gain: 1.0, pixel_reads: 2334720 }",
+      "rows": [
+        {
+          "calibrated": false,
+          "case": "overlap_bank6",
+          "rank": 8,
+          "result": "Ok(AnchorRankEvidence { forward_anchors: 12, reverse_anchors: 12, source_window_bounds: [206, 766, 53, 93], target_window_bounds: [166, 346, 220, 376], forward: RankRegionEvidence { sites: 300, valid_sites: 300, informative_pairs: 0, agreeing_pairs: 0, pixel_reads: 121500 }, reverse: RankRegionEvidence { sites: 300, valid_sites: 125, informative_pairs: 0, agreeing_pairs: 0, pixel_reads: 121500 }, supported: false })",
+          "supported": false
+        },
+        {
+          "calibrated": true,
+          "case": "overlap_bank6",
+          "rank": 8,
+          "result": "Ok(AnchorRankEvidence { forward_anchors: 12, reverse_anchors: 12, source_window_bounds: [206, 766, 53, 93], target_window_bounds: [166, 346, 220, 376], forward: RankRegionEvidence { sites: 300, valid_sites: 300, informative_pairs: 1518, agreeing_pairs: 1458, pixel_reads: 121500 }, reverse: RankRegionEvidence { sites: 300, valid_sites: 125, informative_pairs: 827, agreeing_pairs: 711, pixel_reads: 121500 }, supported: false })",
+          "supported": false
+        },
+        {
+          "calibrated": false,
+          "case": "overlap_bank6",
+          "rank": 2,
+          "result": "Ok(AnchorRankEvidence { forward_anchors: 12, reverse_anchors: 12, source_window_bounds: [206, 766, 53, 93], target_window_bounds: [166, 346, 220, 376], forward: RankRegionEvidence { sites: 300, valid_sites: 300, informative_pairs: 0, agreeing_pairs: 0, pixel_reads: 65340 }, reverse: RankRegionEvidence { sites: 300, valid_sites: 247, informative_pairs: 0, agreeing_pairs: 0, pixel_reads: 65340 }, supported: false })",
+          "supported": false
+        },
+        {
+          "calibrated": true,
+          "case": "overlap_bank6",
+          "rank": 2,
+          "result": "Ok(AnchorRankEvidence { forward_anchors: 12, reverse_anchors: 12, source_window_bounds: [206, 766, 53, 93], target_window_bounds: [166, 346, 220, 376], forward: RankRegionEvidence { sites: 300, valid_sites: 300, informative_pairs: 878, agreeing_pairs: 861, pixel_reads: 65340 }, reverse: RankRegionEvidence { sites: 300, valid_sites: 247, informative_pairs: 831, agreeing_pairs: 769, pixel_reads: 65340 }, supported: false })",
+          "supported": false
+        },
+        {
+          "calibrated": false,
+          "case": "overlap_bank7",
+          "rank": 8,
+          "result": "Ok(AnchorRankEvidence { forward_anchors: 24, reverse_anchors: 24, source_window_bounds: [206, 758, 181, 101], target_window_bounds: [166, 309, 731, 413], forward: RankRegionEvidence { sites: 600, valid_sites: 600, informative_pairs: 0, agreeing_pairs: 0, pixel_reads: 243000 }, reverse: RankRegionEvidence { sites: 600, valid_sites: 325, informative_pairs: 0, agreeing_pairs: 0, pixel_reads: 243000 }, supported: false })",
+          "supported": false
+        },
+        {
+          "calibrated": true,
+          "case": "overlap_bank7",
+          "rank": 8,
+          "result": "Ok(AnchorRankEvidence { forward_anchors: 24, reverse_anchors: 24, source_window_bounds: [206, 758, 181, 101], target_window_bounds: [166, 309, 731, 413], forward: RankRegionEvidence { sites: 600, valid_sites: 600, informative_pairs: 3159, agreeing_pairs: 2945, pixel_reads: 243000 }, reverse: RankRegionEvidence { sites: 600, valid_sites: 325, informative_pairs: 2011, agreeing_pairs: 1789, pixel_reads: 243000 }, supported: false })",
+          "supported": false
+        },
+        {
+          "calibrated": false,
+          "case": "overlap_bank7",
+          "rank": 2,
+          "result": "Ok(AnchorRankEvidence { forward_anchors: 24, reverse_anchors: 24, source_window_bounds: [206, 758, 181, 101], target_window_bounds: [166, 309, 731, 413], forward: RankRegionEvidence { sites: 600, valid_sites: 600, informative_pairs: 0, agreeing_pairs: 0, pixel_reads: 130680 }, reverse: RankRegionEvidence { sites: 600, valid_sites: 475, informative_pairs: 0, agreeing_pairs: 0, pixel_reads: 130680 }, supported: false })",
+          "supported": false
+        },
+        {
+          "calibrated": true,
+          "case": "overlap_bank7",
+          "rank": 2,
+          "result": "Ok(AnchorRankEvidence { forward_anchors: 24, reverse_anchors: 24, source_window_bounds: [206, 758, 181, 101], target_window_bounds: [166, 309, 731, 413], forward: RankRegionEvidence { sites: 600, valid_sites: 600, informative_pairs: 1244, agreeing_pairs: 1226, pixel_reads: 130680 }, reverse: RankRegionEvidence { sites: 600, valid_sites: 475, informative_pairs: 1545, agreeing_pairs: 1494, pixel_reads: 130680 }, supported: true })",
+          "supported": true
+        },
+        {
+          "calibrated": false,
+          "case": "rejected_bank12",
+          "rank": 8,
+          "result": "Ok(AnchorRankEvidence { forward_anchors: 11, reverse_anchors: 11, source_window_bounds: [398, 454, 93, 37], target_window_bounds: [709, 255, 100, 38], forward: RankRegionEvidence { sites: 275, valid_sites: 275, informative_pairs: 0, agreeing_pairs: 0, pixel_reads: 111375 }, reverse: RankRegionEvidence { sites: 275, valid_sites: 275, informative_pairs: 0, agreeing_pairs: 0, pixel_reads: 111375 }, supported: false })",
+          "supported": false
+        },
+        {
+          "calibrated": true,
+          "case": "rejected_bank12",
+          "rank": 8,
+          "result": "Ok(AnchorRankEvidence { forward_anchors: 11, reverse_anchors: 11, source_window_bounds: [398, 454, 93, 37], target_window_bounds: [709, 255, 100, 38], forward: RankRegionEvidence { sites: 275, valid_sites: 275, informative_pairs: 1602, agreeing_pairs: 1437, pixel_reads: 111375 }, reverse: RankRegionEvidence { sites: 275, valid_sites: 275, informative_pairs: 1637, agreeing_pairs: 1454, pixel_reads: 111375 }, supported: false })",
+          "supported": false
+        },
+        {
+          "calibrated": false,
+          "case": "rejected_bank12",
+          "rank": 2,
+          "result": "Ok(AnchorRankEvidence { forward_anchors: 11, reverse_anchors: 11, source_window_bounds: [398, 454, 93, 37], target_window_bounds: [709, 255, 100, 38], forward: RankRegionEvidence { sites: 275, valid_sites: 275, informative_pairs: 0, agreeing_pairs: 0, pixel_reads: 59895 }, reverse: RankRegionEvidence { sites: 275, valid_sites: 275, informative_pairs: 0, agreeing_pairs: 0, pixel_reads: 59895 }, supported: false })",
+          "supported": false
+        },
+        {
+          "calibrated": true,
+          "case": "rejected_bank12",
+          "rank": 2,
+          "result": "Ok(AnchorRankEvidence { forward_anchors: 11, reverse_anchors: 11, source_window_bounds: [398, 454, 93, 37], target_window_bounds: [709, 255, 100, 38], forward: RankRegionEvidence { sites: 275, valid_sites: 275, informative_pairs: 1375, agreeing_pairs: 1375, pixel_reads: 59895 }, reverse: RankRegionEvidence { sites: 275, valid_sites: 275, informative_pairs: 1426, agreeing_pairs: 1424, pixel_reads: 59895 }, supported: true })",
+          "supported": true
+        }
+      ]
+    },
+    "managed_peak": 43862000,
+    "managed_used": 0
+  },
+  "rows": [
+    {
+      "case": "overlap_bank6",
+      "rank": 8,
+      "calibrated": false,
+      "supported": false,
+      "counts_informative_agreeing": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "case": "overlap_bank6",
+      "rank": 8,
+      "calibrated": true,
+      "supported": false,
+      "counts_informative_agreeing": [
+        [
+          1518,
+          1458
+        ],
+        [
+          827,
+          711
+        ]
+      ]
+    },
+    {
+      "case": "overlap_bank6",
+      "rank": 2,
+      "calibrated": false,
+      "supported": false,
+      "counts_informative_agreeing": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "case": "overlap_bank6",
+      "rank": 2,
+      "calibrated": true,
+      "supported": false,
+      "counts_informative_agreeing": [
+        [
+          878,
+          861
+        ],
+        [
+          831,
+          769
+        ]
+      ]
+    },
+    {
+      "case": "overlap_bank7",
+      "rank": 8,
+      "calibrated": false,
+      "supported": false,
+      "counts_informative_agreeing": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "case": "overlap_bank7",
+      "rank": 8,
+      "calibrated": true,
+      "supported": false,
+      "counts_informative_agreeing": [
+        [
+          3159,
+          2945
+        ],
+        [
+          2011,
+          1789
+        ]
+      ]
+    },
+    {
+      "case": "overlap_bank7",
+      "rank": 2,
+      "calibrated": false,
+      "supported": false,
+      "counts_informative_agreeing": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "case": "overlap_bank7",
+      "rank": 2,
+      "calibrated": true,
+      "supported": true,
+      "counts_informative_agreeing": [
+        [
+          1244,
+          1226
+        ],
+        [
+          1545,
+          1494
+        ]
+      ]
+    },
+    {
+      "case": "rejected_bank12",
+      "rank": 8,
+      "calibrated": false,
+      "supported": false,
+      "counts_informative_agreeing": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "case": "rejected_bank12",
+      "rank": 8,
+      "calibrated": true,
+      "supported": false,
+      "counts_informative_agreeing": [
+        [
+          1602,
+          1437
+        ],
+        [
+          1637,
+          1454
+        ]
+      ]
+    },
+    {
+      "case": "rejected_bank12",
+      "rank": 2,
+      "calibrated": false,
+      "supported": false,
+      "counts_informative_agreeing": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "case": "rejected_bank12",
+      "rank": 2,
+      "calibrated": true,
+      "supported": true,
+      "counts_informative_agreeing": [
+        [
+          1375,
+          1375
+        ],
+        [
+          1426,
+          1424
+        ]
+      ]
+    }
+  ],
+  "adoption": "rejected_for_general_search",
+  "scope": "Original JPEGs and saved candidates only; no model extraction rerun. Real overlap bank7 recovered at rank2, but misplaced bank12 also supported at rank2. Exposure alone does not qualify copy localization or general precision. Per-call rank work admitted, both calibrated buffers use managed credits for full lifetime; diagnostic JSON/Vec metadata external. Public byte snapshots guard original JPEGs; no external ICC/profile-sidecar case tested. Shared-host timing is not a performance qualification."
+}

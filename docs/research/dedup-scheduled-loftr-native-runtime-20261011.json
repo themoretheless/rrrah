@@ -1,0 +1,135 @@
+{
+  "status": "complete_bounded_scheduled_loftr_native_controls",
+  "producer_pid": 44658,
+  "source_manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-scheduled-loftr-snapshot-20261011.json",
+  "optimized_emitted_runtime_packages": 225,
+  "profile_scope": "Normal dependency graph emitted packages have opt-level3 artifacts; host/build duplicates excluded, including host BLAKE3 opt-level0.",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-scheduled-loftr-snapshot-20261011.json": "16ac09aeff00955b7329c41573fea6dfeb73f953da1bbc20aa76a6c9ebc231e3",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-scheduled-loftr-runtime-20261011.py": "38da4cf11f7e1107541ba7c71933671bf36fa8fdc21f41a04ee070f2631f86f5",
+    "/Users/themoretheless/.codex/tmp/rrrah-scheduled-loftr-runtime-qualified-20261011/scheduled_outcome_collection_files": "927d6e47cec1f48c3cf5da2f35990eae0b5193799169d3c1c9ed657cb6c65aab",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-scheduled-loftr-build-artifacts-20261011.jsonl": "a826325392fefbfdd7adac0c74f074d2a92d22a1a8a8e45e6c9932292bd142a4",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-scheduled-loftr-build-20261011.log": "39678ea130f4c3bd822059c20acb5a3852ebe1ad183dcfd340ca40956469d67e",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/prepared.json": "6ba843f8f09419efb8ccec9b5d84cc8f086d1dc74ec222f5aa2acae29f9fff01",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/normalized/original/200000.png": "04b702e544dbcf4f34b5258d546ad24ef872fbb70ff648106a1dfc366862d0dd",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/normalized/original/200100.png": "cfd567607e6f92131b201f45ee2fc3386dc0a7cd56afa581aef40e3d254b4462",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors": "59e55bf0ecd047db9c513672d121a3ea677529ad448bdc3a359e92862c74ddd7",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-loftr-native-20261010-runtime-pins.json": "8daa92d3ed2c84278338c53eedffed1fcdc272bf8ee7a419397cd7f098a6783a",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-scheduled-portfolio-audit-20261011.json": "2a611ba70192564e5a8270dab94f9bb789377156e2b0f8774aff194e42e91126",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-scheduled-loftr-runtime-metadata-20261011.json": "307ffa7e6d40b8ab63b487c62cac3f6011b4f8b4395b14474712401c19e4700b",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libtorch_python.dylib": "cb1d5957b49b8f3c2e4b90de7b99aee835520875bce893b11eb7528a548744fa",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libtorch.dylib": "2178657b7eeffc0c0a989889ac3e2b2e3d216073b35f3a291ee89bd65c0fb406",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libtorch_global_deps.dylib": "6ff1aedff89150170f225ce821dc9355a9d5f9c80a6cc1bb761c8d209638c2c7",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libomp.dylib": "fe0670951c85401421f6cedc91971f28dc870bad4c1f0cfebe2b74dac421e5f0",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libtorch_cpu.dylib": "941f3e16a8e02b23b99bd2c8693caabaf8df859bfaa293f39a5d7dd8a8f5ca6e",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libc10.dylib": "f203c171b7a71c742ef4a84bde3af64465e545a4cc3ebfd7f245dca3ebe4e7cf",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libshm.dylib": "3a6fc248697b8809534e74d9e5fc784b385239d8c7aeef291c3968a73609f7d2"
+  },
+  "results": [
+    {
+      "case": "proposed_other_self_fallback",
+      "status": "passed_bounded_control",
+      "command": [
+        "/usr/bin/time",
+        "-l",
+        "/usr/bin/env",
+        "DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+        "/Users/themoretheless/.codex/tmp/rrrah-scheduled-loftr-runtime-qualified-20261011/scheduled_outcome_collection_files",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+        "160",
+        "2",
+        "model-first",
+        "1:2",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/normalized/original/200000.png",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/normalized/original/200000.png",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/normalized/original/200100.png"
+      ],
+      "pid": 44780,
+      "returncode": 0,
+      "elapsed_seconds": 52.030788583,
+      "stdout": "{\"files\":[0,1,2],\"managed_peak\":188738632,\"managed_retained_before_drop\":8648,\"managed_used\":0,\"pairs\":[{\"attempted_stages\":1,\"evidence\":{\"attempts\":[{\"evidence\":{\"geometry_inliers\":144,\"hypotheses\":20000,\"model_digest\":[251,248,128,60,113,119,49,0,204,125,138,137,62,0,255,47,68,141,150,91,38,37,242,55,0,75,47,168,45,71,4,147],\"original_dimensions\":[[208,320],[208,320]],\"pixels\":{\"anchors\":[144,144],\"directions\":[{\"agreeing_pairs\":18602,\"informative_pairs\":18602,\"sites\":3600,\"valid_sites\":3600},{\"agreeing_pairs\":18607,\"informative_pairs\":18607,\"sites\":3600,\"valid_sites\":3600}],\"supported\":true},\"raw_proposals\":144,\"selected_points\":144,\"supported\":true,\"transform\":[[1.000732609829296,0.000902966345898618,-0.16128098000557145],[0.001284243421610822,1.0017434438319788,-0.2801595717542966],[4.571410445828187e-6,7.719808630930274e-6,0.9983815880757607]]},\"left_rectangle\":[0,0,208,320],\"right_rectangle\":[0,0,208,320]}],\"supported\":true,\"terminal\":\"model_tiles\"},\"first_miss\":null,\"left\":0,\"right\":1},{\"attempted_stages\":2,\"evidence\":{\"candidate_points\":2,\"native_recipes\":6,\"pixels\":null,\"reflected_source\":true,\"supported\":false,\"terminal\":\"native\",\"transform\":null},\"first_miss\":{\"attempts\":25,\"model_digest\":[251,248,128,60,113,119,49,0,204,125,138,137,62,0,255,47,68,141,150,91,38,37,242,55,0,75,47,168,45,71,4,147],\"raw_proposals\":10,\"selected_points\":10,\"stage\":\"model_tiles\"},\"left\":0,\"right\":2},{\"attempted_stages\":2,\"evidence\":{\"candidate_points\":2,\"native_recipes\":6,\"pixels\":null,\"reflected_source\":true,\"supported\":false,\"terminal\":\"native\",\"transform\":null},\"first_miss\":{\"attempts\":25,\"model_digest\":[251,248,128,60,113,119,49,0,204,125,138,137,62,0,255,47,68,141,150,91,38,37,242,55,0,75,47,168,45,71,4,147],\"raw_proposals\":10,\"selected_points\":10,\"stage\":\"model_tiles\"},\"left\":1,\"right\":2}],\"proposal_pairs\":[[1,2]],\"scope\":\"Proposal-first exhaustive fallback, no retrieval pruning or transitive grouping; diagnostic assumes untagged input linear sRGB. Metadata slot capacities and managed inputs/evidence are admitted; provider tensors/workspaces remain outside total RSS admission. Final caller cancellation checkpoint is followed by read-only source revalidation with generation checks.\",\"source_paths\":[\"/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/normalized/original/200000.png\",\"/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/normalized/original/200000.png\",\"/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/normalized/original/200100.png\"],\"status\":\"ok\"}\n",
+      "stderr": "       52.02 real        51.15 user         1.70 sys\n           417988608  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n               31515  page reclaims\n                   9  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                  70  voluntary context switches\n               93471  involuntary context switches\n        498072641387  instructions retired\n        125177111447  cycles elapsed\n           366347200  peak memory footprint\n",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-scheduled-loftr-runtime-qualified-20261011/proposed_other_self_fallback.log",
+      "log_sha256": "71865f6ed5e53787c80fdaad73f2abfe3d2d97295644baf6b86d4160c63e74ae",
+      "decisions": [
+        {
+          "left": 0,
+          "right": 1,
+          "supported": true,
+          "terminal": "model_tiles"
+        },
+        {
+          "left": 0,
+          "right": 2,
+          "supported": false,
+          "terminal": "native"
+        },
+        {
+          "left": 1,
+          "right": 2,
+          "supported": false,
+          "terminal": "native"
+        }
+      ]
+    },
+    {
+      "case": "no_hints_self",
+      "status": "passed_bounded_control",
+      "command": [
+        "/usr/bin/time",
+        "-l",
+        "/usr/bin/env",
+        "DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+        "/Users/themoretheless/.codex/tmp/rrrah-scheduled-loftr-runtime-qualified-20261011/scheduled_outcome_collection_files",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+        "160",
+        "2",
+        "model-first",
+        "-",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/normalized/original/200000.png",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/normalized/original/200000.png"
+      ],
+      "pid": 45464,
+      "returncode": 0,
+      "elapsed_seconds": 1.1961552920000003,
+      "stdout": "{\"files\":[0,1],\"managed_peak\":2442504,\"managed_retained_before_drop\":7784,\"managed_used\":0,\"pairs\":[{\"attempted_stages\":1,\"evidence\":{\"attempts\":[{\"evidence\":{\"geometry_inliers\":144,\"hypotheses\":20000,\"model_digest\":[251,248,128,60,113,119,49,0,204,125,138,137,62,0,255,47,68,141,150,91,38,37,242,55,0,75,47,168,45,71,4,147],\"original_dimensions\":[[208,320],[208,320]],\"pixels\":{\"anchors\":[144,144],\"directions\":[{\"agreeing_pairs\":18602,\"informative_pairs\":18602,\"sites\":3600,\"valid_sites\":3600},{\"agreeing_pairs\":18607,\"informative_pairs\":18607,\"sites\":3600,\"valid_sites\":3600}],\"supported\":true},\"raw_proposals\":144,\"selected_points\":144,\"supported\":true,\"transform\":[[1.000732609829296,0.000902966345898618,-0.16128098000557145],[0.001284243421610822,1.0017434438319788,-0.2801595717542966],[4.571410445828187e-6,7.719808630930274e-6,0.9983815880757607]]},\"left_rectangle\":[0,0,208,320],\"right_rectangle\":[0,0,208,320]}],\"supported\":true,\"terminal\":\"model_tiles\"},\"first_miss\":null,\"left\":0,\"right\":1}],\"proposal_pairs\":[],\"scope\":\"Proposal-first exhaustive fallback, no retrieval pruning or transitive grouping; diagnostic assumes untagged input linear sRGB. Metadata slot capacities and managed inputs/evidence are admitted; provider tensors/workspaces remain outside total RSS admission. Final caller cancellation checkpoint is followed by read-only source revalidation with generation checks.\",\"source_paths\":[\"/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/normalized/original/200000.png\",\"/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/normalized/original/200000.png\"],\"status\":\"ok\"}\n",
+      "stderr": "        1.19 real         1.18 user         0.12 sys\n           407191552  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n               25576  page reclaims\n                   9  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                   7  voluntary context switches\n                1978  involuntary context switches\n         10188181191  instructions retired\n          2991883306  cycles elapsed\n           356139968  peak memory footprint\n",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-scheduled-loftr-runtime-qualified-20261011/no_hints_self.log",
+      "log_sha256": "06e0ed792c26874e560c0a4d3c615683cbf4b38b3f9be6305cf281bf911f091b",
+      "decisions": [
+        {
+          "left": 0,
+          "right": 1,
+          "supported": true,
+          "terminal": "model_tiles"
+        }
+      ]
+    },
+    {
+      "case": "missing_weights",
+      "status": "passed_bounded_control",
+      "command": [
+        "/usr/bin/time",
+        "-l",
+        "/usr/bin/env",
+        "DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+        "/Users/themoretheless/.codex/tmp/rrrah-scheduled-loftr-runtime-qualified-20261011/scheduled_outcome_collection_files",
+        "/Users/themoretheless/.codex/tmp/rrrah-scheduled-loftr-runtime-qualified-20261011/missing-weights",
+        "160",
+        "2",
+        "model-first",
+        "-",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/normalized/original/200000.png",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/normalized/original/200000.png"
+      ],
+      "pid": 45477,
+      "returncode": 1,
+      "elapsed_seconds": 0.17811020800000676,
+      "stdout": "",
+      "stderr": "Error: ModelSource(Io(Os { code: 2, kind: NotFound, message: \"No such file or directory\" }))\n        0.17 real         0.15 user         0.01 sys\n           104497152  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n                7079  page reclaims\n                   9  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                   1  voluntary context switches\n                   9  involuntary context switches\n          1605086693  instructions retired\n           397694924  cycles elapsed\n            60654144  peak memory footprint\n",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-scheduled-loftr-runtime-qualified-20261011/missing_weights.log",
+      "log_sha256": "a2873697f65e709866be79fd030b46535ba22138b4d1d0d62bf46f28127451f6"
+    }
+  ],
+  "scope": "CPU LoFTR with normalized max-side320 inputs, model max-side160 and untagged-linear assumption; proposal-first exhaustive fallback controls. Self-support required, other-origin outputs recorded without semantic-negative claims. No full corpus or hard RSS qualification."
+}

@@ -1,0 +1,22 @@
+--- before/vendor/hayro-interpret/src/encode/native_source.rs
++++ after/vendor/hayro-interpret/src/encode/native_source.rs
+@@ -158,7 +158,10 @@
+         });
+         if order.len() > LEAF_TRIANGLES {
+             let x_axis = bounds.width() >= bounds.height();
+-            order.sort_unstable_by(|&a, &b| {
++            // Only the two median partitions are needed; fully sorting each
++            // subtree repeats unnecessary O(n log n) work at every level.
++            let middle = order.len() / 2;
++            order.select_nth_unstable_by(middle,|&a, &b| {
+                 let center = |index: usize| {
+                     let r = triangles[index].bounds();
+                     if x_axis {
+@@ -172,7 +175,6 @@
+             if cancelled() {
+                 return Err(Cancelled);
+             }
+-            let middle = order.len() / 2;
+             let (left, right) = order.split_at_mut(middle);
+             let a = Self::build_nodes(triangles, left, offset, nodes, cancelled)?;
+             let b = Self::build_nodes(triangles, right, offset + middle, nodes, cancelled)?;

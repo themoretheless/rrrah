@@ -1,0 +1,21 @@
+{
+  "status": "focused_regression_passed",
+  "change": "New foreground selections enqueue without reading SourceStamp; decoder worker establishes active identity. Known identity survives recipe/index changes for the same path. Superseded requests are skipped before fingerprinting.",
+  "command": "cargo test -p rrrah --bin rrrah --target-dir /tmp/rrrah-required-corpus-target foreground_loader_tests:: -- --test-threads=1",
+  "passed": 62,
+  "failed": 0,
+  "ignored": 9,
+  "log": "/tmp/rrrah-foreground-source-validation-20261011.log",
+  "log_sha256": "20a207555a9428024757840540c192f43011ec3e9a79ca858e55a9b7fffefa09",
+  "source_sha256": {
+    "crates/rrrah-app/src/main.rs": "067d08a274bb6790f18c3aece9226d220e79806b80b5de2afce05caf33e815d1",
+    "scripts/qualify-viewer-storage-gpu.py": "a36959a4533cc3b2b5b8de8c8c3b75a5e10853e3afc021ccbdd02283ebb31687"
+  },
+  "limitations": [
+    "Repeated requests for the same active selection still fingerprint synchronously on the submitting thread.",
+    "Deferred thumbnail validation still reads the source on the UI thread.",
+    "No post-change native-window slow-open runtime qualification.",
+    "Initial short-name exact filter selected zero tests; excluded from pass evidence.",
+    "First implementation failed the source replacement regression after recipe changes; corrected before the recorded passing run."
+  ]
+}

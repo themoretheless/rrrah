@@ -1,0 +1,79 @@
+warning: function `fallible_zeroed_bytes` is never used
+   --> crates/rrrah-cache/src/mosaic_payload_v1.rs:728:4
+    |
+728 | fn fallible_zeroed_bytes(len: usize) -> Result<Box<[u8]>, MosaicPayloadError> {
+    |    ^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-cache` (lib) generated 1 warning
+warning: methods `submit` and `submit_image` are never used
+    --> crates/rrrah-app/src/main.rs:1379:8
+     |
+1087 | impl ForegroundLoader {
+     | --------------------- methods in this implementation
+...
+1379 |     fn submit(&self, path: PathBuf) -> Result<u64> {
+     |        ^^^^^^
+...
+1382 |     fn submit_image(&self, path: PathBuf, image_index: usize) -> Result<u64> {
+     |        ^^^^^^^^^^^^
+     |
+     = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: associated items `install_with_cancel`, `refresh`, and `refresh_with_cancel` are never used
+   --> crates/rrrah-app/src/raster_viewport.rs:396:19
+    |
+ 26 | impl ResidentSource {
+    | ------------------- associated items in this implementation
+...
+396 |     pub(crate) fn install_with_cancel<F: FnMut() -> bool>(
+    |                   ^^^^^^^^^^^^^^^^^^^
+...
+483 |     pub(crate) fn refresh(
+    |                   ^^^^^^^
+...
+503 |     pub(crate) fn refresh_with_cancel<F: FnMut() -> bool>(
+    |                   ^^^^^^^^^^^^^^^^^^^
+
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+warning: `rrrah` (bin "rrrah") generated 2 warnings
+    Finished `test` profile [optimized + debuginfo] target(s) in 3.46s
+     Running tests/compute_cache_swap.rs (target/debug/deps/compute_cache_swap-1a68747ff02152f2)
+
+running 2 tests
+compute cache adapter: Metal Apple M4 Max
+compute cache adapter: Metal Apple M4 Max
+
+thread 'compute_hdr_result_preserves_float_bits_ram_swap_and_rendering' (13736930) panicked at crates/rrrah-app/tests/compute_cache_swap.rs:109:5:
+assertion failed: swap.try_get(&1,
+        ||
+            {
+                if root.used() != 0 {
+                    cancelled_after_admission = true;
+                    true
+                } else { false }
+            }).is_err()
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test compute_hdr_result_preserves_float_bits_ram_swap_and_rendering ... FAILED
+
+thread 'large_compute_hdr_result_preserves_float_bits_ram_swap_and_rendering' (13736931) panicked at crates/rrrah-app/tests/compute_cache_swap.rs:109:5:
+assertion failed: swap.try_get(&1,
+        ||
+            {
+                if root.used() != 0 {
+                    cancelled_after_admission = true;
+                    true
+                } else { false }
+            }).is_err()
+test large_compute_hdr_result_preserves_float_bits_ram_swap_and_rendering ... FAILED
+
+failures:
+
+failures:
+    compute_hdr_result_preserves_float_bits_ram_swap_and_rendering
+    large_compute_hdr_result_preserves_float_bits_ram_swap_and_rendering
+
+test result: FAILED. 0 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.63s
+
+error: test failed, to rerun pass `-p rrrah --test compute_cache_swap`

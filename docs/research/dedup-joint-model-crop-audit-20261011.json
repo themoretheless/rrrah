@@ -1,0 +1,53 @@
+{
+  "status": "complete_bounded_frozen_joint_model_tests",
+  "producer_pid": 61220,
+  "source_manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-joint-model-crop-snapshot-20261011.json",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-joint-model-crop-snapshot-20261011.json": "f73938658076826d5d86f12ed38b4735f631d5b096ad9ede9e26f74fd2b755a3",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/qualify-dedup-joint-model-crop-20261011.py": "94c4a8e074228350ab28241bbd2eeae7a2ef14050adffb32a9a0e04132cb1ca8",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-model-crop-qualified-20261011/build.jsonl": "4533f1eee8f29b36e9add6e98cf8bfbf34af613ae943a6b7b196a4181c49ce91",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-model-crop-qualified-20261011/build.log": "d8a4c0df845d6be13f9f51835a398a0672773f97f1b2e3d05b181b274358e5e5"
+  },
+  "build_command": [
+    "cargo",
+    "test",
+    "--manifest-path",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-model-crop-snapshot-20261011/Cargo.toml",
+    "-p",
+    "rrrah-dedup",
+    "--no-default-features",
+    "--features",
+    "decode",
+    "--test",
+    "model_compare",
+    "--locked",
+    "--offline",
+    "--no-run",
+    "--message-format=json",
+    "--config",
+    "profile.dev.package.rrrah-dedup.opt-level=3",
+    "--target-dir",
+    "/Users/themoretheless/.codex/tmp/rrrah-opposite-native-snapshot-20261011/target"
+  ],
+  "results": [
+    {
+      "suite": "model_compare",
+      "tests": 16,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-joint-model-crop-qualified-20261011/model_compare",
+      "binary_sha256": "a8a58395194bce1a3d8239189e54295dc4b8b0fe137e5c771894543975df7c4e",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-joint-model-crop-qualified-20261011/model_compare.log",
+      "log_sha256": "eadc4c935021fa0fe7c9fe73d227b4c07cc105e6f4effb22bf0cebe48aa84aae"
+    }
+  ],
+  "scope": "Frozen compatible four-crate source and lock, new joint primitive plus legacy/pair/collection tests. Source coherent before/after; root concurrent HDR edits preserved outside this gate. Not full workspace/platform/corpus/RSS qualification.",
+  "build_pid": 61237,
+  "tests": 16,
+  "owned_root_matches": {
+    "crates/rrrah-dedup/src/local_scan.rs": true,
+    "crates/rrrah-dedup/src/geometry.rs": true,
+    "crates/rrrah-dedup/src/anchor_rank_file.rs": true,
+    "crates/rrrah-dedup/src/search_portfolio.rs": true,
+    "crates/rrrah-dedup/src/portfolio_collection.rs": true,
+    "crates/rrrah-dedup/src/model_loftr.rs": false
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "status": "three_complete_source_files_four_original_main_tests",
+  "fully_read_additional_files": {
+    "fclones/src/error.rs": 45,
+    "fclones/src/log.rs": 180,
+    "fclones/src/main.rs": 350
+  },
+  "original_main_tests_passed": 4,
+  "tests": [
+    "test::test_extract_error_cause_joins_lines",
+    "test::test_extract_error_cause_strips_error_prefix",
+    "test::test_extract_error_cause_strips_usage",
+    "test::test_no_panic_in_completion_script_generation"
+  ],
+  "pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-main-tests-20261012.log": "3159caeef4882fbb1d1acb9c491631151520b3e85c90a0c4d63b95530a0a718d",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-upstream-executables-20261012/main": "53141293a72ec2272f7d5a6617225206ee44288199396b2ada5201a824f0ba97",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/fclones-arguments-review-20261012.json": "070eb21e2cc78976283321426f9f208cffd3f2ebfb1c9b8f1e809d81a6361bf3",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-full-source-20261012/fclones/src/error.rs": "13e4f7327476b6c496ee7a24a65debd56f2fd14991c66d753384ae17c159a13b",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-full-source-20261012/fclones/src/log.rs": "28deb4d3aa33ed6e568a74813a6d623217596ad4843ccfc48a2901cff6b2e92a",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-full-source-20261012/fclones/src/main.rs": "b8388dcf9d50bc676b6528e076b5b535a9f5783142eda335d6cf743546354dc8"
+  },
+  "observations": [
+    "Top-level Error stores a message String; Unix unsupported errno is normalized by error_kind.",
+    "Logger uses Arc/Weak progress tracking and Mutex unwrap; poisoned locks and executable-path initialization errors can panic. Source observation only.",
+    "run_group calls File::create(output) before grouping and report production; source shows pre-scan truncation of an existing output path. No destructive execution performed.",
+    "stdin grouping paths skip early existence check; lower-level warnings handle access failures.",
+    "run_dedupe builds and runs a lazy script while reading report groups, then returns a report-read error if encountered. Source suggests already-executed effects may precede malformed later input; dedupe/report whole-source review remains incomplete and no action execution was performed."
+  ],
+  "scope": "Complete error/log/main source read; original saved upstream main test executable passed4 tests. No CLI removal/link/move/reflink operations, no new production adoption, Windows qualification or full42tree/full500 claim."
+}

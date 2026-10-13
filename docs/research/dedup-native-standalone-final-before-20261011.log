@@ -1,0 +1,64 @@
+    Blocking waiting for file lock on build directory
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+    Finished `test` profile [optimized + debuginfo] target(s) in 1m 38s
+     Running tests/anchor_reflection_fallback.rs (target/debug/deps/anchor_reflection_fallback-488b94f2fb0b2151)
+
+running 5 tests
+test standalone_rank_final_callback_guards_source ... FAILED
+test standalone_geometry_final_callback_guards_source ... FAILED
+test standalone_reflected_geometry_final_callback_guards_source ... FAILED
+test standalone_color_candidate_final_callback_guards_source ... FAILED
+test standalone_color_fallback_final_callback_guards_source ... FAILED
+
+failures:
+
+---- standalone_rank_final_callback_guards_source stdout ----
+
+thread 'standalone_rank_final_callback_guards_source' (89062828) panicked at crates/rrrah-dedup/tests/anchor_reflection_fallback.rs:650:9:
+case=0: stale publication Ok(())
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- standalone_geometry_final_callback_guards_source stdout ----
+
+thread 'standalone_geometry_final_callback_guards_source' (89062827) panicked at crates/rrrah-dedup/tests/anchor_reflection_fallback.rs:650:9:
+case=3: stale publication Ok(())
+
+---- standalone_reflected_geometry_final_callback_guards_source stdout ----
+
+thread 'standalone_reflected_geometry_final_callback_guards_source' (89062829) panicked at crates/rrrah-dedup/tests/anchor_reflection_fallback.rs:650:9:
+case=4: stale publication Ok(())
+
+---- standalone_color_candidate_final_callback_guards_source stdout ----
+
+thread 'standalone_color_candidate_final_callback_guards_source' (89062825) panicked at crates/rrrah-dedup/tests/anchor_reflection_fallback.rs:650:9:
+case=1: stale publication Ok(())
+
+---- standalone_color_fallback_final_callback_guards_source stdout ----
+
+thread 'standalone_color_fallback_final_callback_guards_source' (89062826) panicked at crates/rrrah-dedup/tests/anchor_reflection_fallback.rs:650:9:
+case=2: stale publication Ok(())
+
+
+failures:
+    standalone_color_candidate_final_callback_guards_source
+    standalone_color_fallback_final_callback_guards_source
+    standalone_geometry_final_callback_guards_source
+    standalone_rank_final_callback_guards_source
+    standalone_reflected_geometry_final_callback_guards_source
+
+test result: FAILED. 0 passed; 5 failed; 0 ignored; 0 measured; 7 filtered out; finished in 0.44s
+
+error: test failed, to rerun pass `-p rrrah-dedup --test anchor_reflection_fallback`

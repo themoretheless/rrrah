@@ -1,0 +1,17 @@
+#!/usr/bin/env python3
+import hashlib,json,re,shutil,subprocess
+from collections import Counter
+from pathlib import Path
+R=Path(__file__).resolve().parents[1];D=R/'docs/research';T=Path('/Users/themoretheless/.codex/tmp');BASE=T/'rrrah-dedup-linux-native'
+def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
+def main():
+ prep=D/'dedup-exact-root-admission-linux-prepared-20261012.json';p=json.loads(prep.read_text());assert p['image_os']=='linux'and p['image_arch']=='arm64'and p['user']=='65534:65534';assert all(sha(k)==v for k,v in p['pins'].items());mp=D/'dedup-exact-root-admission-source-retry2-20261012.json';m=json.loads(mp.read_text());s=Path(m['snapshot']);assert all(sha(s/k)==v for k,v in m['file_hashes'].items());log=T/'rrrah-exact-root-admission-linux-tests-20261012.log';text=log.read_text();assert re.findall(r'test result: ok\. (\d+) passed; 0 failed; (\d+) ignored;',text)==[('32','2'),('23','0')]
+ matches=re.findall(r'Running (?:unittests src/(lib)\.rs|tests/(exact_files)\.rs) \(([^)]+)\)',text);assert len(matches)==2;out=D/'dedup-exact-root-admission-linux-verification-20261012.json';saved=T/'rrrah-exact-root-admission-linux-executables-20261012';assert not out.exists()and not saved.exists();saved.mkdir();pins={str(x):sha(x)for x in [prep,mp,log,Path(__file__),BASE/'toolchain/bin/rustc']};passed=Counter();ignored=Counter();suites=[]
+ cmd=['docker','run','--rm','--user','65534:65534','-v',str(BASE)+':/validation:ro','-v','/opt/rrrah-dedup-validation/sysroot:/validation/sysroot:ro','-e','LD_LIBRARY_PATH=/validation/sysroot/usr/lib/aarch64-linux-gnu:/validation/sysroot/usr/lib/llvm-18/lib',p['image_id']]
+ for k,v in m['file_hashes'].items():
+  if k.startswith(('src/','tests/')):assert sha(R/'crates/rrrah-dedup'/k)==v,k
+ for lib,test,path in matches:
+  n=lib or test;original=BASE/Path(path).relative_to('/validation');binary=saved/n;shutil.copy2(original,binary);raw=binary.read_bytes();assert raw[:4]==b'\x7fELF'and raw[4]==2 and int.from_bytes(raw[18:20],'little')==183;ls=subprocess.check_output(cmd+[path,'--list'],text=True);ig=subprocess.check_output(cmd+[path,'--list','--ignored'],text=True);all_names=re.findall(r'^(.*): test$',ls,re.M);ignore=re.findall(r'^(.*): test$',ig,re.M);assert len(all_names)==len(set(all_names));good=[x for x in all_names if x not in ignore];passed.update(good);ignored.update(ignore);assert sha(original)==sha(binary);pins[str(binary)]=sha(binary);suites.append({'suite':n,'passed':len(good),'ignored':ignore})
+ assert Counter(re.findall(r'^test (\S+) \.\.\. ok$',text,re.M))==passed;assert Counter(re.findall(r'^test (\S+) \.\.\. ignored(?:,.*)?$',text,re.M))==ignored;assert sum(passed.values())==55 and sum(ignored.values())==2
+ version=subprocess.check_output(cmd+['/validation/toolchain/bin/rustc','-vV'],text=True);assert 'host: aarch64-unknown-linux-gnu'in version;out.write_text(json.dumps({'status':'verified_55_default_tests_with_bounded_root_admission_native_linux_arm64_nonroot','passed':55,'ignored':2,'suites':suites,'image_id':p['image_id'],'compiler':version,'pins':pins,'scope':'Current adopted bounded-root-admission source. Linux ARM64 nonroot55default-feature unit/exactfile controls including3rootadmission and2restoredmtime regressions, source/image/toolchain/testnames/ELFbinaries pinned. No decoder/allfeature/Windows/totalprocesscap/fullcorpus/500 qualification.'},indent=2)+'\n');print('Verified55nativeLinuxARM64default/exact tests;2manualcontrolsignored')
+if __name__=='__main__':main()

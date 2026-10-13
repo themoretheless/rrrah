@@ -1,0 +1,34 @@
+{
+  "source_audit": {
+    "repository": "https://raw.pixls.us/json/getrepository.php?set=all",
+    "rows": 2016,
+    "phase_one_rows": 43,
+    "download_urls_ending_cap_or_capture": 0,
+    "snapshot_sha256": "8dc5f5c74e20cc3a38f4548d53bba4bb516835e2a859e80bf86e7ac6283b3aa3"
+  },
+  "primary_reference": {
+    "url": "https://www.loc.gov/preservation/digital/formats/fdd/fdd000241.shtml",
+    "fact": "CAP and CAPTURE listed as Phase One/Capture One RAW; separate fmt/1060 reference from IIQ"
+  },
+  "implementation_boundary": [
+    "Current native Phase One pipeline requires little-endian TIFF header and private IIIICwaR at offset8",
+    "Geometry4134x4128,format3,P20+-H firmware profile and explicit calibration tags are checked",
+    "Native router selects Iiq only for iiq extension; no independently qualified CAP payload or calibration path",
+    "No CAP alias or pixel compatibility inferred from IIQ"
+  ],
+  "next_acceptance": [
+    "Obtain provenance-pinned CAP/CAPTURE original",
+    "Identify container, sensor payload storage, CFA, WB, camera matrix, black/white and calibration operations",
+    "Implement native bounded decode and compare full sensor against test-only independent oracle",
+    "Connect native viewer/cache/swap/Metal with no preview fallback"
+  ],
+  "status": "Pending; catalogue counts unchanged94/6",
+  "limits": [
+    "Single public repository snapshot plus local source inspection; no claim that CAP samples do not exist elsewhere"
+  ],
+  "sha256": {
+    "crates/rrrah-decode/src/camtiff/phaseone.rs": "2b53e74327f1a08cd0b773dc87d2678fc72edb74c534e4c6671e5255c4339f3b",
+    "crates/rrrah-decode/src/camtiff/phaseone_container.rs": "99b55f71c7f7c382e6f743392dcdde4e4f9918c391f5af163c1cac6c02b5650d",
+    "crates/rrrah-decode/src/native_router.rs": "410b88aa4b99d2db8a9163e58ccd7cf186fae77ffeb6c7eb92225533c3e1f9df"
+  }
+}

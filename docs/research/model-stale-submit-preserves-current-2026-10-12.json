@@ -1,0 +1,37 @@
+{
+  "change": "Production model upload worker rejects cancelled-token callers before thread creation and queue mutation; rechecks under lock",
+  "before_regression_failed": true,
+  "after_model_worker_passed": 4,
+  "viewer_tests": {
+    "passed": 218,
+    "failed": 0,
+    "ignored": 62
+  },
+  "combined_metal_tests": {
+    "passed": 135,
+    "failed": 0,
+    "ignored": 13,
+    "all_executed_suites_verified": true
+  },
+  "verified": [
+    "Obsolete initial request leaves thread absent and revision zero",
+    "Stale submission preserves current prepared GPU geometry and72byte tracked allocation/revision",
+    "Thousand-request coalescing, original source lease/CPU ownership and completed-generation cancellation still pass",
+    "Million-triangle worker1920x1080 SDR/HDR, native model swap and pressure/retry paths pass"
+  ],
+  "limitations": [
+    "Headless actual Metal, no live window or physical HDR calibration",
+    "Manual skips remain explicit; full100-format/NVIDIA goal still incomplete"
+  ],
+  "sha256": {
+    "crates/rrrah-app/src/model_upload_worker.rs": "6a85b5b7bce30f12a32dd5b742b5b491a85b11d8a3cb6963333c7112b508883f",
+    "scripts/qualify-viewer-storage-gpu.py": "ce3bd58668da9087efd5b611ff469d1f9393bd81feb542ebc870985ec740ab0c",
+    "docs/research/model-stale-submit-preserves-current-2026-10-12/viewer.log": "edaddff6e27bd3a43c21b62ebe32ce10bddeeb8a2b3f527a7e5d8c9f3f7f2563",
+    "docs/research/model-stale-submit-preserves-current-2026-10-12/before.log": "d9dcc2f4f9bd946b253a674d7b8b260eb65f5f6b36ea8b7694eb6ca0a9d05a94",
+    "docs/research/model-stale-submit-preserves-current-2026-10-12/after.log": "f16ce346829ac64724589a0d222079da1c7a118ef449ad81bdfbfe3073a69ccc",
+    "docs/research/model-stale-submit-metal-gate-2026-10-12/report.json": "3b5532f60eda1ddbc25c4015a33dc0df88e5c7db9295d3a79a8c1f7b26b552df",
+    "docs/research/model-stale-submit-metal-gate-2026-10-12/gpu-model-upload-worker.log": "b21f417f25385b616a5d7fb6447d3cf407cfc05bf3e17845e682d5d707151c88",
+    "docs/research/model-stale-submit-metal-gate-2026-10-12/gpu-all.log": "131a61df61e10cdb84755afd1bf3b0badbbeca4d5b8561e0b5e1adaebf8b077d",
+    "docs/research/model-stale-submit-metal-gate-2026-10-12/driver.log": "1a1ed28404234b265b63ab9ce0fea62ec4731cb5521adfb34f12948ea3e8fd66"
+  }
+}

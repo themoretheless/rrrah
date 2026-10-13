@@ -1,0 +1,15 @@
+   Compiling rrrah-gpu v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-gpu)
+    Finished `test` profile [optimized + debuginfo] target(s) in 1.55s
+     Running tests/raw_linear_readback.rs (target/debug/deps/raw_linear_readback-9fd8b6185e48ed18)
+
+running 2 tests
+test binary16_reference_covers_signed_hdr_and_subnormals ... ok
+RAW linear adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+RAW above file white: Rgba16Float; encoded=3989; black=15; white=3967; exposure=1; all channels retain HDR headroom
+RAW invalid levels: Rgba16Float; phases=4; equal/inverted refused; previous HDR frame exact; credit unchanged
+RAW above file white: Rgba32Float; encoded=3989; black=15; white=3967; exposure=1; all channels retain HDR headroom
+RAW invalid levels: Rgba32Float; phases=4; equal/inverted refused; previous HDR frame exact; credit unchanged
+test raw_linear_float_target_preserves_hdr_and_negative_rgbe_color ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.17s
+

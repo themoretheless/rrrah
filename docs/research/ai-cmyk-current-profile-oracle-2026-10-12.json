@@ -1,0 +1,95 @@
+{
+  "scope": "Current native constant DeviceCMYK import independently compared to LittleCMS float transform under pinned native ICC policy",
+  "source_cmyk": [
+    0.8794023,
+    0.23389284,
+    0.99231184,
+    0.08509913
+  ],
+  "fixture": "Authored16x16constantDeviceCMYKPDF from earlier traced VectorApple pixel components",
+  "native_command": "cargo run --locked --offline --target-dir target -p rrrah-decode --example raster_fixture_dump -- constant.pdf 0 native.rgba",
+  "native_exit_code": 0,
+  "all256nativepixels_rgba": [
+    0,
+    135,
+    68,
+    255
+  ],
+  "independent_lcms": "TYPE_CMYK_FLT(percent) -> built-in sRGB TYPE_RGB_FLT, all four rendering intents; all round/clamp to[0,135,68]",
+  "poppler_default_rgb": [
+    38,
+    135,
+    62
+  ],
+  "float_oracle": [
+    {
+      "intent": 0,
+      "rgb_float": [
+        -0.058302853256464005,
+        0.5280224084854126,
+        0.2648545801639557
+      ],
+      "rgb8": [
+        0,
+        135,
+        68
+      ]
+    },
+    {
+      "intent": 1,
+      "rgb_float": [
+        -0.058302853256464005,
+        0.5280224084854126,
+        0.2648545801639557
+      ],
+      "rgb8": [
+        0,
+        135,
+        68
+      ]
+    },
+    {
+      "intent": 2,
+      "rgb_float": [
+        -0.058302853256464005,
+        0.5280224084854126,
+        0.2648545801639557
+      ],
+      "rgb8": [
+        0,
+        135,
+        68
+      ]
+    },
+    {
+      "intent": 3,
+      "rgb_float": [
+        -0.058302853256464005,
+        0.5280224084854126,
+        0.2648545801639557
+      ],
+      "rgb8": [
+        0,
+        135,
+        68
+      ]
+    }
+  ],
+  "profile_experiment": "Poppler -defaultcmykprofile refused originalICC as not an input profile. Header is already scnr; attempted header-class copy was byte-identical and provides no evidence. Initial output-class assumption corrected. Cause of Poppler rejection unresolved.",
+  "conclusion": "For this selected sample, current native display conversion agrees with independent ICC computation. Default Poppler RGB difference cannot be treated as proof native ICC transform is wrong. No tolerance/acceptance policy changed.",
+  "limits": [
+    "Single original sample isolated into authoredPDF; not all colors/pages",
+    "AI root replay/group fidelity and partial-shading geometric differences remain unresolved",
+    "No production renderer change or complete AI qualification"
+  ],
+  "sha256": {
+    "docs/research/ai-cmyk-current-profile-oracle-2026-10-12/lcms-float.json": "c9b126dcc1677aca85a65707495f90762021df18eff49546feae8ac71bf68989",
+    "docs/research/ai-cmyk-current-profile-oracle-2026-10-12/constant.pdf": "1e19ed4733998eaf9c8f92b3e973e0115384d2c870f3857d63fc03cc652166ba",
+    "docs/research/ai-cmyk-current-profile-oracle-2026-10-12/poppler-profile-refusal.log": "3ad084cba660e00f1688e732be40cbdf41885c8508b6def235e8b9bb09562ad8",
+    "docs/research/ai-cmyk-current-profile-oracle-2026-10-12/native.log": "50bfff2814e8147b95179199f3c08bc14b35007051bee3c70b1e4c1ac1215479",
+    "docs/research/ai-cmyk-current-profile-oracle-2026-10-12/native.rgba": "aa514bdbbb142640f3ac990df792e5ab037e641fec158a6822a205da9cba54fd",
+    "docs/research/ai-cmyk-current-profile-oracle-2026-10-12/default.ppm": "b614034bec529edefb039a5344f7bf45bff988ec54b0d892360b0f5cf655a1c0",
+    "vendor/hayro-interpret/assets/CGATS001Compat-v2-micro.icc": "73e1ba37d2bad5bab2a964f40a9eed96209666efc067c3322626214bbef234a0",
+    "/System/Library/ColorSync/Profiles/sRGB Profile.icc": "2b3aa1645779a9e634744faf9b01e9102b0c9b88fd6deced7934df86b949af7e"
+  }
+}

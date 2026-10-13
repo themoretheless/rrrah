@@ -1,0 +1,60 @@
+{
+  "implementation": "compose_grouped_polygon_pixel evaluates admitted native PaintFrame group lifecycle inside each disjoint spatial cell before averaging; common verified blending space supplied by caller",
+  "supported": "Constant native paints, perpaint path/clip intersection, group opacity, isolated/nonisolated and knockout groups, nesting, supported native blend modes",
+  "bounds": {
+    "maximum_group_depth": 32,
+    "commands": 4096,
+    "regions": 4095,
+    "required_regions_per_paint": 4096,
+    "polygon_and_command_work": "separate caller allowances shared across spatial cells",
+    "allocation": "stack metadata and each native frame pre-admitted; released on every tested refusal"
+  },
+  "tests": {
+    "ordinary_passed": 150,
+    "ignored": 11,
+    "pdf_group_control_passed": 1,
+    "retained_edge_manual_control_passed": 1,
+    "coverage": [
+      "group opacity and partial area",
+      "isolated/nonisolated with Multiply on opaque backdrop",
+      "knockout repeated translucent paint",
+      "nested group exits",
+      "actual captured PDF forms and paints",
+      "every observed cancellation checkpoint",
+      "each observed admission failure",
+      "command work exhaustion",
+      "malformed group exit"
+    ]
+  },
+  "pdf_control_results": [
+    {
+      "knockout": false,
+      "alpha": 0.25,
+      "native_components": [
+        0.0,
+        0.5,
+        0.5,
+        0.0
+      ]
+    },
+    {
+      "knockout": true,
+      "alpha": 0.125,
+      "native_components": [
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ]
+    }
+  ],
+  "not_integrated": "Full original VectorApple scene, masks, shading/raster percell samplers, cross-space group conversion and production viewer",
+  "qualification": "Group foundation and authored PDF controls validated; original realAI green-edge fix not yet claimed",
+  "hashes": {
+    "vendor/hayro/src/native_spatial.rs": "39fbd8b8c6d9079c652987b143abddc69f1ce76c2a63cb84187ea64c6d1b63c3",
+    "vendor/hayro/src/knockout_interpreter.rs": "1134b93cd932a19c70daa6357f54664c4716f5ff605c12142756f3784b06c19f",
+    "docs/research/ai-covered-fragment-sampling-2026-10-12/spatial-groups-final-tests.log": "26f054c0c234ea84263882e2b9bcf2863c566ad51f94bef22b6f49f8c275bab8",
+    "docs/research/ai-covered-fragment-sampling-2026-10-12/spatial-groups-pdf-control.log": "0e59f0451258b865296156bf0704999df94ac7963f81c64c6b3a2c3ee336d06e",
+    "docs/research/ai-covered-fragment-sampling-2026-10-12/spatial-groups-retained-controls.log": "e77219b81ddfc8b70cbaa28f4a8ad9bf3b0435047f178b2b2f7e541a9c9668e9"
+  }
+}

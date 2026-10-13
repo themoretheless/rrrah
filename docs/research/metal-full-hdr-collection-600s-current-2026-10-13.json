@@ -1,0 +1,43 @@
+{
+  "backend": "Metal",
+  "device": "Apple M4 Max",
+  "exit_code": 0,
+  "seconds": 600.006,
+  "cycles": 1335,
+  "reads": 1335,
+  "writes": 8,
+  "mid_batch_cancelled": 1335,
+  "full_sdr_comparisons": 1335,
+  "full_hdr_comparisons": 1335,
+  "dimensions": [
+    4000,
+    3000
+  ],
+  "frames": 8,
+  "payload_bytes_per_frame": 192000000,
+  "managed_final_bytes": 0,
+  "queue_final_bytes": 0,
+  "rss_observations": {
+    "samples": 112,
+    "interval_seconds": 5,
+    "min_bytes": 1636401152,
+    "max_bytes": 7153483776,
+    "first_bytes": 5901582336,
+    "last_bytes": 1909702656,
+    "first_quarter_median_bytes": 5020999680.0,
+    "last_quarter_median_bytes": 1841152000.0
+  },
+  "limitations": [
+    "Local disk; no injected IO delay in Metal test",
+    "RSS samples exclude first ~40 seconds; not a peak guarantee or leak proof",
+    "Retained GPU comparison arrays outside managed cache budget",
+    "Same-renderer exact transport, not physical HDR calibration",
+    "Ten minutes does not establish hours-long reliability or all-format/NVIDIA qualification"
+  ],
+  "sha256": {
+    "docs/research/metal-full-hdr-collection-600s-current-2026-10-13.log": "5492d28530aa2b4b0ca601ef6041da70eb5cd608b0ce88f3836a185e57d079dc",
+    "docs/research/metal-full-hdr-collection-600s-memory-2026-10-13.json": "cb85a1df4e1b43e00a12105335f8cb53ac0e434471e35baacefb617799087899",
+    "crates/rrrah-app/tests/ttl_swap_metal.rs": "93192a848552b335f6d90373dffe5e9ffe71dec138cbdcf0d265c0ed6f545415",
+    "target/debug/deps/ttl_swap_metal-585a6570bc9d74a6": "1001f411efd2066ec7ab79e7f3d61082c56ba9fcdd9a55889e30f763395e5187"
+  }
+}

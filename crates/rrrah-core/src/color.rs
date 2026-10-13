@@ -1,3 +1,5 @@
+mod linear_primaries;
+pub use linear_primaries::{RgbChromaticities, linear_rgb_to_srgb_from_xy, linear_rgb_to_srgb_with_adopted_neutral_from_xy};
 mod dng_neutral;
 pub use dng_neutral::resolve_dng_neutral_matrix;
 

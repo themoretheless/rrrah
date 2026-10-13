@@ -1,0 +1,58 @@
+{
+  "platform": "macOS Apple M4 Max",
+  "measurement": "/usr/bin/time -l, fresh process per run,3 warmups +11 measured iterations",
+  "runs": [
+    {
+      "benchmark": {
+        "path": "/tmp/rrrah-dpx-12mp-current-20261012.dpx",
+        "index": 0,
+        "iterations": 11,
+        "load_p50_ms": 148.18479200000002,
+        "load_p95_ms": 367.532458,
+        "prepare_p50_ms": 81.256083,
+        "prepare_p95_ms": 215.063041,
+        "cpu_ready_p50_ms": 307.293833,
+        "cpu_ready_p95_ms": 488.944292,
+        "display_blake3": "cb0ca43e87a4066ca8311e6d44e18d2a20a42a44cbab7f1b9f1f662c83c1ffd8",
+        "cache": "warm filesystem; process warm; no decoded image cache"
+      },
+      "max_rss_bytes": 281460736,
+      "peak_footprint_bytes": 278872640,
+      "managed_peak_bytes": 240000000,
+      "managed_final_bytes": 0,
+      "raw_log": "dpx-12mp-process-memory-current-2026-10-12.log"
+    },
+    {
+      "benchmark": {
+        "path": "/tmp/rrrah-dpx-12mp-current-20261012.dpx",
+        "index": 0,
+        "iterations": 11,
+        "load_p50_ms": 90.997333,
+        "load_p95_ms": 119.56991599999999,
+        "prepare_p50_ms": 95.679292,
+        "prepare_p95_ms": 138.703833,
+        "cpu_ready_p50_ms": 189.995417,
+        "cpu_ready_p95_ms": 249.469833,
+        "display_blake3": "cb0ca43e87a4066ca8311e6d44e18d2a20a42a44cbab7f1b9f1f662c83c1ffd8",
+        "cache": "warm filesystem; process warm; no decoded image cache"
+      },
+      "max_rss_bytes": 281493504,
+      "peak_footprint_bytes": 278921816,
+      "managed_peak_bytes": 240000000,
+      "managed_final_bytes": 0,
+      "raw_log": "dpx-12mp-process-memory-repeat-2026-10-12.log"
+    }
+  ],
+  "sha256": {
+    "target/debug/examples/raster_load_bench": "9d520d433dab44de540b3aee155dfd862ad5a81a48d1c83e30dd3330d304b8f5",
+    "crates/rrrah-decode/examples/raster_load_bench.rs": "7d131e0f48f5970969d8f7197553bf98c7029c1795f2d3af88ec84662014c292",
+    "/tmp/rrrah-dpx-12mp-current-20261012.dpx": "2c8a8165d53dc08afcad0c9f5945a1014d7f03ca399e590340d1318586b25fc9"
+  },
+  "limits": [
+    "max RSS is observed peak for this source and process, not a guaranteed cap",
+    "managed final zero does not imply resident allocator pages are returned to OS",
+    "CPU decode and preparation only; GPU and display excluded",
+    "warm filesystem, shared host; timing not isolated and no speedup claim",
+    "does not establish behavior under system-wide memory pressure"
+  ]
+}

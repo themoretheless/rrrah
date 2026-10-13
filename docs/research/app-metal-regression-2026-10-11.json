@@ -1,0 +1,20 @@
+{
+  "backend_requested": "metal",
+  "gpu_optional": false,
+  "command": "RRRAH_GPU_BACKEND=metal RRRAH_GPU_OPTIONAL=0 cargo test -p rrrah --bin rrrah --locked --offline --target-dir target",
+  "passed": 208,
+  "failed": 0,
+  "ignored": 54,
+  "log": "app-metal-regression-2026-10-11.log",
+  "log_sha256": "fc7850c46bce2090e19cd01acf883b4d3c6f14d72e3674e3bf939acdc318c71c",
+  "sources": {
+    "crates/rrrah-app/src/main.rs": "5d9e3472639fd730f5fec6e36cda3902ae38a042fe9c7772906943d6ffbca7a2",
+    "crates/rrrah-app/src/model_upload_worker.rs": "4e3948edfcc47149f893ef358aa883bbcfc21054a54a7c3de01583530ffbfae5",
+    "crates/rrrah-gpu/src/model.rs": "f878347d4b3176ccd04e5398e9357ffb9dee4c1e021abf26241c48a3aceeabc0"
+  },
+  "limits": [
+    "Ordinary application unit/regression tests; does not demonstrate live window rendering or physical HDR.",
+    "Screen lock independently confirmed; no live probe launched.",
+    "Initial model shader/pipeline creation and depth resize still occur on the UI thread; responsiveness needs live measurement."
+  ]
+}

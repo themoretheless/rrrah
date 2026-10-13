@@ -1,0 +1,18 @@
+{
+  "scope": "Recover swapped HDR fit quality when GPU headroom returns",
+  "change": "Choose from original source dimensions rather than repeatedly halving the retained preview; include output, f64 accumulator row, source row and shared verification scratch in advisory CPU admission",
+  "validation": {
+    "metal_viewport_tests": 6,
+    "cache_unit_tests": 133,
+    "app_unit_tests": 208,
+    "recovery": "32x20 -> 64x40, bit-exact original fit HDR frame, source CPU buffer stays released, no redundant next job",
+    "shared_cpu_boundary_bytes": 71136,
+    "one_byte_below": "refused without allocations"
+  },
+  "limits": [
+    "Admission is advisory under concurrent changes; actual reservations remain authoritative",
+    "Physical HDR-display color/luminance remains unverified",
+    "NVIDIA deferred",
+    "Full 100-format goal remains open"
+  ]
+}

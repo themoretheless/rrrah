@@ -1,12 +1,12 @@
 //! CUR directory validation before adapting pixel entries to ICO.
 use crate::raster::RasterDecodeError;
-fn valid_directory(bytes: &[u8]) -> bool {
+pub(crate) fn valid_directory(bytes: &[u8]) -> bool {
     if !bytes.starts_with(&[0, 0, 2, 0]) || bytes.len() < 6 {
         return false;
     }
     let count = usize::from(u16::from_le_bytes([bytes[4], bytes[5]]));
     let end = 6 + count * 16;
-    if count == 0 || bytes.len() < end {
+    if count == 0 || count > 4096 || bytes.len() < end {
         return false;
     }
     bytes[6..end].chunks_exact(16).all(|entry| {
@@ -31,7 +31,7 @@ pub(crate) fn normalize(
     let count = usize::from(u16::from_le_bytes([bytes[4], bytes[5]]));
     let mut selected = None;
     let mut best_area = 0u32;
-    for entry in bytes[6..6 + count * 16].chunks_exact_mut(16) {
+    for (index, entry) in bytes[6..6 + count * 16].chunks_exact_mut(16).enumerate() {
         let width = if entry[0] == 0 { 256 } else { u16::from(entry[0]) };
         let height = if entry[1] == 0 { 256 } else { u16::from(entry[1]) };
         if u16::from_le_bytes([entry[4], entry[5]]) >= width
@@ -40,7 +40,7 @@ pub(crate) fn normalize(
             return Err(RasterDecodeError::InvalidCursor("hotspot outside image"));
         }
         let area = u32::from(width) * u32::from(height);
-        if area >= best_area {
+        if area > best_area || (area == best_area && index == count - 1) {
             best_area = area;
             selected = Some((
                 u32::from(u16::from_le_bytes([entry[4], entry[5]])),

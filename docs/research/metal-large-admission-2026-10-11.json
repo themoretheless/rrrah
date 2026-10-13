@@ -1,0 +1,27 @@
+{
+  "backend": "metal",
+  "optional": false,
+  "suites": [
+    {
+      "suite": "large-cancel",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "log": "docs/research/metal-large-cancel-admission-2026-10-11.log",
+      "sha256": "19d791a099e82c4086e747853499d4e986c0e4a41b58357ebdc570b48761d275"
+    },
+    {
+      "suite": "raster",
+      "passed": 16,
+      "failed": 0,
+      "ignored": 8,
+      "log": "docs/research/metal-raster-admission-2026-10-11.log",
+      "sha256": "0ee2b57c156e6aa10e116467a0aa6cccb79783f1b9383831c044ef4bfe53b31e"
+    }
+  ],
+  "scope": "12 MP raster validation/admission cancellation; independent texture/queue pressure preserves visible frame and reservations; successful retry and final release",
+  "limitations": [
+    "Not partial GPU-write cancellation in this helper.",
+    "Not physical HDR display or OS memory pressure."
+  ]
+}

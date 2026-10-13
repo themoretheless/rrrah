@@ -1,0 +1,27 @@
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+    Finished `test` profile [optimized + debuginfo] target(s) in 1m 10s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_decode-3d841f18ff85d05c)
+
+running 9 tests
+test bay::tests::authored_full_sensors_match_independent_libraw_oracles ... ignored, requires pinned authored BAY and independent LibRaw dumps at RRRAH_BAY_AUTHORED_CORPUS; not camera/color qualification
+
+thread 'bay::tests::image_rows_match_independent_oracles_without_trailer_or_full_copy' (70892803) panicked at crates/rrrah-decode/src/bay.rs:284:87:
+called `Result::unwrap()` on an `Err` value: Source(Io { path: "/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode/../../tests/fixtures/QV-2000UX-authored.BAY", source: Os { code: 2, kind: NotFound, message: "No such file or directory" } })
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test bay::tests::oversized_file_is_refused_before_source_admission_for_every_layout ... ok
+test bay::tests::image_rows_match_independent_oracles_without_trailer_or_full_copy ... FAILED
+test bay::tests::file_source_and_sensor_share_budget_and_release_after_refusal ... ok
+test bay::tests::streamed_truncation_growth_and_cancellation_release_partial_sensor ... ok
+test bay::tests::qv5700_trailer_changes_do_not_change_image_samples ... ok
+test bay::tests::eight_bit_layouts_preserve_all_values_and_exact_storage_dimensions ... ok
+test bay::tests::all_ten_bit_values_storage_columns_padding_and_managed_ownership ... ok
+test bay::tests::streamed_files_match_every_authored_sample_with_one_row_scratch ... ok
+
+failures:
+
+failures:
+    bay::tests::image_rows_match_independent_oracles_without_trailer_or_full_copy
+
+test result: FAILED. 7 passed; 1 failed; 1 ignored; 0 measured; 1088 filtered out; finished in 0.12s
+
+error: test failed, to rerun pass `-p rrrah-decode --lib`

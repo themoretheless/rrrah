@@ -1,0 +1,329 @@
+--- before/native_moments.rs
++++ after/native_moments.rs
+@@ -12,9 +12,9 @@
+         (total.is_finite() && error.is_finite()).then_some(Self {value:total,error})
+     }
+ }
+-struct Entry<const N:usize,const K:usize> {key:[u64;N],area:Sum,x:Sum,y:Sum,reference:[Sum;K]}
+-pub(super) struct MomentTable<const N:usize,const K:usize=0> {
+-    entries:Vec<Entry<N,K>>,
++struct Entry<const N:usize,const K:usize,const W:usize> {key:[u64;N],witness:[u64;W],area:Sum,x:Sum,y:Sum,reference:[Sum;K]}
++pub(super) struct MomentTable<const N:usize,const K:usize=0,const W:usize=0> {
++    entries:Vec<Entry<N,K,W>>,
+     slots:Vec<usize>,
+     capacity:usize,
+     words:usize,
+@@ -26,7 +26,7 @@
+     if cancelled() {return None;}
+     *remaining=remaining.checked_sub(count)?;Some(())
+ }
+-impl<const N:usize,const K:usize> MomentTable<N,K> {
++impl<const N:usize,const K:usize,const W:usize> MomentTable<N,K,W> {
+     pub(super) fn admitted(capacity:usize,origin:Point,
+         admit:&dyn Fn(usize)->Option<Box<dyn std::any::Any+Send+Sync>>,
+     )->Option<Self> {
+@@ -36,11 +36,11 @@
+         admit:&dyn Fn(usize)->Option<Box<dyn std::any::Any+Send+Sync>>,
+     )->Option<Self> {
+         if words==0 || words>N {return None;}
+-        if !(1..=64).contains(&N) || K>5 || !(1..=16384).contains(&capacity)
++        if !(1..=64).contains(&N) || K>5 || W>64 || !(1..=16384).contains(&capacity)
+             || !origin.x.is_finite() || !origin.y.is_finite()
+             || origin.x.abs()>1_048_576. || origin.y.abs()>1_048_576. {return None;}
+         let slots=capacity.checked_mul(2)?.checked_next_power_of_two()?;
+-        let bytes=capacity.checked_mul(size_of::<Entry<N,K>>())?
++        let bytes=capacity.checked_mul(size_of::<Entry<N,K,W>>())?
+             .checked_add(slots.checked_mul(size_of::<usize>())?)?;
+         let credit=admit(bytes)?;
+         let mut entries=Vec::new();entries.try_reserve_exact(capacity).ok()?;
+@@ -63,16 +63,22 @@
+     pub(super) fn add_prefix_sample(&mut self,key:&[u64],area:f64,centroid:Point,reference:[f64;K],
+         remaining:&mut usize,cancelled:&dyn Fn()->bool,
+     )->Option<()> {
+-        self.add_impl(key,None,area,centroid,reference,remaining,cancelled)
++        self.add_impl(key,None,&[0;W],area,centroid,reference,remaining,cancelled)
+     }
+     /// Caller supplies a stable hash of the complete key and accounts for its
+     /// computation. Collisions always require exact key equality. Never mix
+     /// hash schemes for one table: equal keys must receive equal hashes.
+     pub(super) fn add_prehashed_sample(&mut self,key:&[u64],hash:u64,area:f64,centroid:Point,reference:[f64;K],
+         remaining:&mut usize,cancelled:&dyn Fn()->bool)->Option<()> {
+-        self.add_impl(key,Some(hash),area,centroid,reference,remaining,cancelled)
+-    }
+-    fn add_impl(&mut self,key:&[u64],prehash:Option<u64>,area:f64,centroid:Point,reference:[f64;K],
++        self.add_impl(key,Some(hash),&[0;W],area,centroid,reference,remaining,cancelled)
++    }
++    /// Retain the first representative only. Caller must prove that its
++    /// interpretation remains valid for every fragment with this identity.
++    pub(super) fn add_witness_sample(&mut self,key:&[u64],prehash:Option<u64>,witness:&[u64;W],area:f64,
++        centroid:Point,reference:[f64;K],remaining:&mut usize,cancelled:&dyn Fn()->bool)->Option<()> {
++        self.add_impl(key,prehash,witness,area,centroid,reference,remaining,cancelled)
++    }
++    fn add_impl(&mut self,key:&[u64],prehash:Option<u64>,witness:&[u64;W],area:f64,centroid:Point,reference:[f64;K],
+         remaining:&mut usize,cancelled:&dyn Fn()->bool)->Option<()> {
+         if key.len()!=self.words {return None;}
+         debit(remaining,8+K,cancelled)?;
+@@ -97,11 +103,11 @@
+             let index=self.slots[slot];
+             if index==usize::MAX {
+                 if self.entries.len()==self.capacity {return None;}
+-                debit(remaining,N.checked_add(self.words)?.checked_add(3+K)?,cancelled)?;
++                debit(remaining,N.checked_add(self.words)?.checked_add(W)?.checked_add(3+K)?,cancelled)?;
+                 let mut values=[Sum::default();K];
+                 for (sum,value) in values.iter_mut().zip(reference) {*sum=sum.added(area*value)?;}
+                 let mut stored=[0u64;N];stored[..self.words].copy_from_slice(key);
+-                let entry=Entry {key:stored,area:Sum::default().added(area)?,
++                let entry=Entry {key:stored,witness:*witness,area:Sum::default().added(area)?,
+                     x:Sum::default().added(area*x)?,y:Sum::default().added(area*y)?,reference:values};
+                 if cancelled() {return None;}
+                 self.slots[slot]=self.entries.len();self.entries.push(entry);self.total=total;
+@@ -121,6 +127,10 @@
+             slot=(slot+1)&(self.slots.len()-1);
+         }
+         None
++    }
++    pub(super) fn iter_with_witness(&self)->impl Iterator<Item=([u64;N],f64,Point,[f64;K],[u64;W])>+'_ {
++        self.entries.iter().map(|e|(e.key,e.area.value,
++            Point::new(self.origin.x+e.x.value/e.area.value,self.origin.y+e.y.value/e.area.value),e.reference.map(|v|v.value),e.witness))
+     }
+     pub(super) fn iter_with_reference(&self)->impl Iterator<Item=([u64;N],f64,Point,[f64;K])>+'_ {
+         self.entries.iter().map(|e|(e.key,e.area.value,
+@@ -254,3 +264,16 @@
+     }
+     assert_eq!(hash,0);assert_eq!(bits,[0;64]);
+ }
++
++#[test]
++fn moment_witness_retains_first_representative_transactionally() {
++    let mut table=MomentTable::<1,1,2>::admitted(2,Point::ZERO,&|_|Some(Box::new(()))).unwrap();
++    let mut work=1000;
++    table.add_witness_sample(&[1],Some(9),&[11,12],0.25,Point::new(0.25,0.5),[0.5],&mut work,&||false).unwrap();
++    let before=table.iter_with_witness().collect::<Vec<_>>();
++    assert!(table.add_witness_sample(&[1],Some(9),&[99,98],0.25,Point::new(0.75,0.5),[0.5],&mut 0,&||false).is_none());
++    assert_eq!(table.iter_with_witness().collect::<Vec<_>>(),before);
++    table.add_witness_sample(&[1],Some(9),&[99,98],0.25,Point::new(0.75,0.5),[0.5],&mut work,&||false).unwrap();
++    let entry=table.iter_with_witness().next().unwrap();assert_eq!(entry.4,[11,12]);assert_eq!(entry.1,0.5);
++    assert!(MomentTable::<1,0,65>::admitted(1,Point::ZERO,&|_|Some(Box::new(()))).is_none());
++}
+--- before/native_spatial.rs
++++ after/native_spatial.rs
+@@ -33,7 +33,7 @@
+             || paint.regions.iter().any(|&i|i>=regions.len()) {return None;}
+     }
+     let mut paint_remaining=paint_work;
+-    compose_cells(regions,backdrop,x,y,polygon_work,cancelled,admit,None,&mut |winding,_point,_coverage,_occupied_words| {
++    compose_cells(regions,backdrop,x,y,polygon_work,cancelled,admit,None,None,&mut |winding,_point,_coverage,_occupied_words| {
+         let mut pixel=backdrop;
+         for paint in paints {
+             paint_remaining=paint_remaining.checked_sub(paint.regions.len().checked_add(1)?)?;
+@@ -51,6 +51,7 @@
+     regions:&[(&BezPath,Fill)],backdrop:Pixel,x:i32,y:i32,polygon_work:usize,
+     cancelled:&dyn Fn()->bool,admit:&dyn Fn(usize)->Option<Box<dyn std::any::Any+Send+Sync>>,
+     affine:Option<&std::cell::Cell<bool>>,
++    source_key:Option<&FieldObservation>,
+     evaluate:&mut dyn FnMut(&[i32],kurbo::Point,&[u64;64],u64)->Option<Pixel>,
+ )->Option<Pixel> {
+     let bytes=(regions.len()+1).checked_mul(size_of::<(&BezPath,Fill)>())?
+@@ -71,12 +72,15 @@
+     let occupied_words=std::cell::Cell::new(0u64);
+     // Explicit observation only: no source sampling or integration is skipped.
+     let observe_moments=affine.is_some() && regions.len()>500 && std::env::var_os("RRRAH_AI_FRAGMENT_MOMENTS").is_some();
+-    let mut moments=if observe_moments {super::native_moments::MomentTable::<64,5>::admitted_prefix(8192,kurbo::Point::new(f64::from(x),f64::from(y)),(regions.len()+63)/64,admit)} else {None};
++    let field_moments=observe_moments && source_key.is_some() && std::env::var_os("RRRAH_AI_SOURCE_FIELD_MOMENTS").is_some();
++    let fingerprint_moments=observe_moments && !field_moments;
++    let key_words=if field_moments {16} else {(regions.len()+63)/64};
++    let mut moments=if observe_moments {super::native_moments::MomentTable::<64,5,64>::admitted_prefix(8192,kurbo::Point::new(f64::from(x),f64::from(y)),key_words,admit)} else {None};
+     let mut moment_complete=moments.is_some();let mut moment_work=256_000_000usize;
+     // Credit precedes the vector so storage is dropped before credit release.
+-    let _token_credit=if observe_moments {Some(admit(regions.len().checked_mul(size_of::<u64>())?)?)} else {None};
++    let _token_credit=if fingerprint_moments {Some(admit(regions.len().checked_mul(size_of::<u64>())?)?)} else {None};
+     let mut hash_tokens=Vec::new();
+-    if observe_moments {
++    if fingerprint_moments {
+         hash_tokens.try_reserve_exact(regions.len()).ok()?;
+         if hash_tokens.capacity()>regions.len() {return None;}
+         for i in 0..regions.len() {
+@@ -85,7 +89,7 @@
+         }
+     }
+     let coverage_hash=std::cell::Cell::new(0u64);
+-    let hash_work=std::cell::Cell::new(if observe_moments {regions.len().checked_mul(3)?} else {0});
++    let hash_work=std::cell::Cell::new(if fingerprint_moments {regions.len().checked_mul(3)?} else {0});
+     let mut moment_fragments=0usize;let mut fallback_fragments=0usize;
+     let mut fallback_alpha=0.;let mut fallback_integral=[0.;4];
+     let mut alpha=0.;let mut integral=[0.;4];
+@@ -97,7 +101,7 @@
+             values[i]=winding[i+1];
+             let inside=match regions[i].1 {Fill::NonZero=>values[i]!=0,Fill::EvenOdd=>values[i]%2!=0};
+             let mask=1u64<<(i%64);
+-            if observe_moments {
++            if fingerprint_moments {
+                 hash_work.set(hash_work.get().saturating_add(1));
+                 if (bits[i/64]&mask!=0)!=inside {
+                     coverage_hash.set(coverage_hash.get()^hash_tokens[i]);
+@@ -124,6 +128,10 @@
+             fallback_fragments+=1;fallback_alpha+=fragment.area*pixel.alpha();
+             for (sum,value) in fallback_integral.iter_mut().zip(pixel.native_components()?) {*sum+=fragment.area*pixel.alpha()*value;}
+         }
++        if field_moments {
++            if let Some(left)=moment_work.checked_sub(source_key?.work.replace(0)) {moment_work=left;}
++            else {moment_work=0;moment_complete=false;}
++        }
+         if observe_moments {
+             if let Some(left)=moment_work.checked_sub(hash_work.replace(0)) {moment_work=left;}
+             else {moment_work=0;moment_complete=false;}
+@@ -131,7 +139,10 @@
+         if moment_complete && affine?.get() {
+             moment_fragments+=1;
+             let a=pixel.alpha();let c=pixel.native_components()?;
+-            if moments.as_mut()?.add_prehashed_sample(&coverage.borrow()[..(regions.len()+63)/64],coverage_hash.get(),fragment.area,fragment.centroid,[a,a*c[0],a*c[1],a*c[2],a*c[3]],&mut moment_work,cancelled).is_none() {moment_complete=false;}
++            let bits=coverage.borrow();
++            let stored_key=if field_moments {Some(source_key?.key.borrow())} else {None};
++            let key=if field_moments {&stored_key.as_ref()?.as_ref()?.words[..]} else {&bits[..key_words]};
++            if moments.as_mut()?.add_witness_sample(key,if field_moments {None} else {Some(coverage_hash.get())},&bits,fragment.area,fragment.centroid,[a,a*c[0],a*c[1],a*c[2],a*c[3]],&mut moment_work,cancelled).is_none() {moment_complete=false;}
+         }
+         let weight=fragment.area*pixel.alpha();alpha+=weight;
+         for (sum,value) in integral.iter_mut().zip(pixel.native_components()?) {*sum+=weight*value;}
+@@ -145,13 +156,14 @@
+     if observe_moments {
+         if let Some(left)=moment_work.checked_sub(hash_work.replace(0)) {moment_work=left;}
+         else {moment_work=0;moment_complete=false;}
++        eprintln!("SPATIAL_MOMENT_IDENTITY source_fields={field_moments} key_words={key_words}");
+         let buckets=moments.as_ref().map_or(0,|m|m.iter().count());
+         let area=moments.as_ref().map_or(0.,|m|m.iter().map(|(_,a,_)|a).sum::<f64>());
+         eprintln!("SPATIAL_FRAGMENT_MOMENTS complete={moment_complete} fragments={moment_fragments} buckets={buckets} area={area:?} fallback_fragments={fallback_fragments} diagnostic_work={}",256_000_000-moment_work);
+         if moment_complete {
+             let mut grouped_alpha=0.;let mut grouped_integral=[0.;4];let mut compared=0usize;
+-            let mut bucket_errors=0usize;
+-            for (key,weight,centroid,reference) in moments.as_ref()?.iter_with_reference() {
++            let mut bucket_errors=0usize;let mut identity_fallbacks=0usize;let mut generation_only=0usize;
++            for (_identity,weight,centroid,reference,key) in moments.as_ref()?.iter_with_witness() {
+                 if cancelled() {break;}
+                 let Some(left)=moment_work.checked_sub(regions.len()) else {break;};moment_work=left;
+                 let mut winding=saved.borrow_mut();
+@@ -159,6 +171,23 @@
+                 let occupied=key.iter().enumerate().fold(0u64,|bits,(i,&word)|bits|if word!=0 {1u64<<i} else {0});
+                 let Some(pixel)=evaluate(&winding,centroid,&key,occupied) else {break;};
+                 if !affine?.get() || pixel.model()!=backdrop.model() || !pixel.valid() {break;}
++                if field_moments {
++                    let cost=source_key?.work.replace(0).checked_add(21)?;
++                    let Some(left)=moment_work.checked_sub(cost) else {break;};moment_work=left;
++                    let actual=source_key?.key.borrow();let actual=&actual.as_ref()?.words;
++                    if actual[..]!=_identity[..16] {
++                        identity_fallbacks+=1;
++                        if actual[1..]==_identity[1..16] {generation_only+=1;}
++                        if identity_fallbacks<=16 {
++                            eprintln!("SPATIAL_FIELD_CENTROID_IDENTITY_FALLBACK expected={:?} actual={actual:?} centroid={centroid:?}", &_identity[..16]);
++                        }
++                        // A changed generation or field never authorizes centroid
++                        // replacement. Retain the original per-fragment integral.
++                        grouped_alpha+=reference[0];
++                        for (sum,value) in grouped_integral.iter_mut().zip(&reference[1..]) {*sum+=value;}
++                        compared+=1;continue;
++                    }
++                }
+                 let Some(values)=pixel.native_components() else {break;};
+                 let bucket_alpha_delta=(weight*pixel.alpha()-reference[0]).abs();
+                 let bucket_color_delta=values.iter().enumerate().map(|(i,&v)|(weight*pixel.alpha()*v-reference[i+1]).abs()).fold(0.,f64::max);
+@@ -171,6 +200,7 @@
+                 compared+=1;
+             }
+             let delta=grouped_integral.iter().zip(fallback_integral).zip(integral).map(|((a,b),c)|(a+b-c).abs()).fold(0.,f64::max);
++            if field_moments {eprintln!("SPATIAL_FIELD_CENTROID_GUARD accepted={} fallback_buckets={identity_fallbacks} generation_only={generation_only}",compared-identity_fallbacks);}
+             eprintln!("SPATIAL_FRAGMENT_MOMENT_COMPARISON complete={} samples={compared} alpha_delta={:?} premultiplied_component_delta={delta:?}",compared==buckets,(grouped_alpha+fallback_alpha-alpha).abs());
+         }
+     }
+@@ -190,6 +220,34 @@
+     pub(super) cell_key:Option<[u64;2]>,
+ }
+ pub(super) type NativeSpatialSampler<'a>=dyn Fn(kurbo::Point,&dyn Fn()->bool,&mut usize,Option<usize>)->Option<Option<NativeSpatialSample<'a>>>+'a;
++
++#[derive(Clone,Copy)]
++struct FieldKey {words:[u64;16],len:usize}
++impl FieldKey {
++    fn route(generation:u64)->Self {let mut words=[0;16];words[0]=generation;words[1]=2;Self {words,len:2}}
++    fn append(&mut self,command:usize,identity:SourceFieldIdentity)->Option<()> {
++        let end=self.len.checked_add(3)?;if end>self.words.len() {return None;}
++        self.words[self.len]=u64::try_from(command).ok()?;
++        let payload=match identity {SourceFieldIdentity::RasterCells(key)=>key,
++            SourceFieldIdentity::AffineOwner(owner)=>[u64::try_from(owner).ok()?,u64::MAX]};
++        self.words[self.len+1..end].copy_from_slice(&payload);self.len=end;self.words[1]=end as u64;Some(())
++    }
++}
++
++struct FieldObservation {key:std::cell::RefCell<Option<FieldKey>>,work:std::cell::Cell<usize>}
++impl FieldObservation {
++    fn new()->Self {Self {key:std::cell::RefCell::new(None),work:std::cell::Cell::new(0)}}
++    fn reset(&self,generation:u64) {
++        self.work.set(self.work.get().saturating_add(19));
++        *self.key.borrow_mut()=Some(FieldKey::route(generation));
++    }
++    fn append(&self,command:usize,identity:Option<SourceFieldIdentity>)->bool {
++        self.work.set(self.work.get().saturating_add(4));
++        let mut key=self.key.borrow_mut();
++        let valid=match (key.as_mut(),identity) { (Some(key),Some(identity))=>key.append(command,identity).is_some(),_=>false};
++        if !valid {*key=None;}valid
++    }
++}
+ 
+ #[derive(Clone,Copy,Debug,PartialEq,Eq)]
+ enum SourceFieldIdentity {RasterCells([u64;2]),AffineOwner(usize)}
+@@ -591,6 +649,8 @@
+     let mut last_route:Option<usize>=None;
+     let observe_moments=std::env::var_os("RRRAH_AI_FRAGMENT_MOMENTS").is_some();
+     let route_is_affine=std::cell::Cell::new(false);
++    let source_field_key=FieldObservation::new();
++    let collect_fields=observe_moments && std::env::var_os("RRRAH_AI_SOURCE_FIELD_MOMENTS").is_some();
+     let mut evaluate=|_winding:&[i32],point:kurbo::Point,coverage:&[u64;64],occupied_words:u64| {
+         work_trace.hit(0);
+         let local=work_trace.measure(0,remaining,|remaining| {
+@@ -759,6 +819,7 @@
+         };
+         last_route=Some(route_index);
+         if observe_moments {route_is_affine.set(affine_native_route(commands,&routes[route_index].commands));}
++        if collect_fields {source_field_key.reset(routes[route_index].generation);}
+         if let Some(pixel)=routes[route_index].result {
+             if cancelled() {return None;}*remaining=remaining.checked_sub(1)?;
+             work_trace.hit(8);return Some(pixel);
+@@ -825,6 +886,9 @@
+                         if observe_moments {
+                             let identity=field.identity(owner,source.as_ref());
+                             if identity.is_none() {route_is_affine.set(false);}
++                            if collect_fields {
++                                if !source_field_key.append(command_index,identity) {route_is_affine.set(false);}
++                            }
+                             if work_trace.enabled && identity_traces<8 {
+                                 eprintln!("SPATIAL_SOURCE_FIELD_IDENTITY generation={} command={command_index} identity={identity:?}",route_generation);
+                                 identity_traces+=1;
+@@ -1066,7 +1130,7 @@
+             }
+         }
+         evaluate(&winding,point,&coverage,occupied_words)
+-    } else {compose_cells(regions,backdrop,x,y,polygon_work,cancelled,admit,Some(&route_is_affine),&mut evaluate)}
++    } else {compose_cells(regions,backdrop,x,y,polygon_work,cancelled,admit,Some(&route_is_affine),Some(&source_field_key),&mut evaluate)}
+ }
+ 
+ #[test]
+@@ -2722,3 +2786,22 @@
+     assert_eq!(generations.next(),None);assert_eq!(generations.0,u64::MAX);
+     assert_eq!(generations.next(),None);
+ }
++
++#[test]
++fn source_field_key_preserves_generation_order_alpha_and_bounded_arity() {
++    let raster=SourceFieldIdentity::RasterCells([0,0]);
++    let mut key=FieldKey::route(7);let empty=key.words;
++    key.append(0,raster).unwrap();assert_ne!(key.words,empty);
++    let first=key.words;
++    let mut other=FieldKey::route(8);other.append(0,raster).unwrap();assert_ne!(key.words,other.words);
++    other=FieldKey::route(7);other.append(0,SourceFieldIdentity::RasterCells([0,1])).unwrap();assert_ne!(first,other.words);
++    key.append(1,SourceFieldIdentity::AffineOwner(3)).unwrap();
++    other=FieldKey::route(7);other.append(1,SourceFieldIdentity::AffineOwner(3)).unwrap();other.append(0,raster).unwrap();
++    assert_ne!(key.words,other.words);
++    key.append(2,raster).unwrap();key.append(3,raster).unwrap();let full=key.words;
++    assert!(key.append(4,raster).is_none());assert_eq!(key.words,full);
++    let observation=FieldObservation::new();observation.reset(1);
++    assert!(!observation.append(0,None));assert!(observation.key.borrow().is_none());
++    assert!(!observation.append(0,Some(raster)));
++    observation.reset(2);assert!(observation.append(0,Some(raster)));
++}

@@ -21,6 +21,12 @@ mod native_paint;
 #[path = "native_frame.rs"]
 mod native_frame;
 
+#[path = "native_moments.rs"]
+mod native_moments;
+
+#[path = "native_spatial.rs"]
+mod native_spatial;
+
 struct CompositeBuffer {
     pixels: Vec<[u8; 4]>,
     // Buffer storage drops before its memory admission credit.
@@ -2153,6 +2159,45 @@ fn admitted_global_contour_preserves_cubic_area_and_refuses_vertex_exhaustion() 
 }
 
 #[test]
+fn one_ai_source_cubic_boundary_matches_independent_area_oracle() {
+    // Original one.ai second black filled curve, after y=768-y page transform.
+    // Oracle: monotonic cubic-y inversion and independently converged Simpson
+    // integration over each unit pixel. This does not assert Poppler equality.
+    let mut source = kurbo::BezPath::new();
+    source.move_to((1186., 397.5));
+    source.curve_to((1186., 512.651), (1132.722, 606.), (1067., 606.));
+    source.curve_to((1001.278, 606.), (948., 512.651), (948., 397.5));
+    source.curve_to((948., 282.349), (1001.278, 189.), (1067., 189.));
+    source.curve_to((1132.722, 189.), (1186., 282.349), (1186., 397.5));
+    source.close_path();
+    let mut contour = admitted_global_contour(&source, kurbo::Affine::IDENTITY,
+        0.0001, 1_000_000, &|| false, &|_| Some(Box::new(()))).unwrap();
+    for canonical_f32 in [false, true] {
+        if canonical_f32 {
+            for element in contour.path.elements_mut() {
+                match element {
+                    kurbo::PathEl::MoveTo(point) | kurbo::PathEl::LineTo(point) => {
+                        point.x = f64::from(point.x as f32);
+                        point.y = f64::from(point.y as f32);
+                    }
+                    kurbo::PathEl::ClosePath => {},
+                    _ => panic!("prepared contour must be linear"),
+                }
+            }
+        }
+        for (y, expected, gray) in [(384, 0.772340531678226, 58u8),
+            (410, 0.7723405316782305, 58), (385, 0.8060890088562399, 49),
+            (409, 0.8060890088562443, 49)] {
+            let area = polygon_coverage::polygon_pixel_area(
+                &[(&contour.path, vello_cpu::peniko::Fill::NonZero)],
+                1185, y, 20_000_000, &|| false, &|_| Some(Box::new(()))).unwrap();
+            assert!((area - expected).abs() < 0.0002, "y={y} area={area} expected={expected}");
+            assert_eq!(((1. - area) * 255.).round() as u8, gray);
+        }
+    }
+}
+
+#[test]
 fn admitted_global_contour_releases_storage_at_every_cancel_checkpoint() {
     use std::cell::Cell;
     use std::sync::{
@@ -2456,4 +2501,64 @@ fn native_global_polygon_mask_retains_output_credit_and_releases_every_refusal()
         );
         assert_eq!(used.load(Ordering::Relaxed), 0);
     }
+}
+
+#[test]
+fn one_ai_curve_tolerance_against_source_area_oracle() {
+    // Full-page independent polynomial-area oracle identified these residuals.
+    // This tests the geometric approximation, not Poppler rasterization.
+    let expected = [
+        (266, 210, 115u8),
+        (381, 210, 115u8),
+        (983, 249, 48u8),
+        (1150, 249, 48u8),
+        (975, 264, 89u8),
+        (1158, 264, 89u8),
+        (217, 277, 172u8),
+        (430, 277, 172u8),
+        (194, 391, 13u8),
+        (453, 391, 13u8),
+        (194, 403, 13u8),
+        (453, 403, 13u8),
+        (217, 517, 172u8),
+        (430, 517, 172u8),
+        (975, 530, 89u8),
+        (1158, 530, 89u8),
+        (983, 545, 48u8),
+        (1150, 545, 48u8),
+        (266, 584, 115u8),
+        (381, 584, 115u8)
+    ];
+    let mut paths = Vec::new();
+    for (right, radius, control) in [(454., 130., 58.203), (1186., 119., 53.278)] {
+        let center = right - radius;
+        let left = center - radius;
+        let mut path = kurbo::BezPath::new();
+        path.move_to((right, 397.5));
+        path.curve_to((right, 512.651), (right-control, 606.), (center, 606.));
+        path.curve_to((left+control, 606.), (left, 512.651), (left, 397.5));
+        path.curve_to((left, 282.349), (left+control, 189.), (center, 189.));
+        path.curve_to((right-control, 189.), (right, 282.349), (right, 397.5));
+        path.close_path();
+        paths.push(path);
+    }
+    let mut counts = Vec::new();
+    for tolerance in [0.0001, 0.00001, 0.000001, 0.0000001] {
+        let contours: Vec<_> = paths.iter().map(|path| admitted_global_contour(path,
+            kurbo::Affine::IDENTITY, tolerance, 1_000_000, &|| false,
+            &|_| Some(Box::new(()))).unwrap()).collect();
+        let mut differing = 0;
+        for &(x,y,gray) in &expected {
+            let contour = &contours[usize::from(x > 700)];
+            let area = polygon_coverage::polygon_pixel_area(
+                &[(&contour.path, vello_cpu::peniko::Fill::NonZero)],
+                x,y,20_000_000,&|| false,&|_| Some(Box::new(()))).unwrap();
+            differing += usize::from(((1.-area)*255.).round() as u8 != gray);
+        }
+        eprintln!("source-cubic accuracy: tolerance={tolerance}; differing={differing}/{}; contour_vertices={}",
+            expected.len(), contours.iter().map(|c|c.path.elements().len()).sum::<usize>());
+        counts.push(differing);
+    }
+    assert!(counts[0] > 0, "control must reproduce geometric approximation residuals");
+    assert_eq!(*counts.last().unwrap(),0,"finest contour must preserve oracle RGB8 at every residual");
 }

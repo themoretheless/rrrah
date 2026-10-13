@@ -1,0 +1,49 @@
+{
+  "status": "complete_bounded_frozen_projected_collection_dependency_fixed_generic_execution",
+  "producer_pid": 84971,
+  "command": [
+    "cargo",
+    "test",
+    "--manifest-path",
+    "/Users/themoretheless/.codex/tmp/rrrah-projected-collection-dependency-fixed-snapshot-20261011/Cargo.toml",
+    "--target-dir",
+    "/Users/themoretheless/Documents/Sources/rrrah/target",
+    "-p",
+    "rrrah-dedup",
+    "--locked",
+    "--offline",
+    "--no-default-features",
+    "--features",
+    "decode",
+    "--no-run",
+    "--message-format=json",
+    "--test",
+    "projected_collection"
+  ],
+  "source_manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-projected-collection-dependency-fixed-snapshot-20261011.json",
+  "source_manifest_sha256": "57a7aa9e4119df9bf16809e1007d751e69ce717bd4cef40eb52d874f8bf43b98",
+  "results": [
+    {
+      "suite": "projected_collection",
+      "status": "passed",
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-projected-collection-dependency-fixed-generic-qualified-20261011/projected_collection",
+      "binary_sha256": "ffa03c3eca8459bb7f01b5790b22d0fee652a5f2076adb6adf33ace998a336e3",
+      "process_pid": 85360,
+      "returncode": 0,
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-projected-collection-dependency-fixed-generic-qualified-20261011/projected_collection.log",
+      "log_sha256": "c4fdc12ea25b2b0fadab961280f5723afcd70612bc410883b98b70fb9783a04b",
+      "tests": 8
+    }
+  ],
+  "build_pid": 85022,
+  "build_returncode": 0,
+  "tests": 8,
+  "frozen_files": 3070,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-projected-collection-dependency-fixed-snapshot-20261011.json": "57a7aa9e4119df9bf16809e1007d751e69ce717bd4cef40eb52d874f8bf43b98",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-projected-collection-dependency-fixed-20261011.py": "fbd4ff135051947b9b47e2f1ec344630ec4644ca8de3840a36bb85c052038ae5",
+    "/Users/themoretheless/.codex/tmp/rrrah-projected-collection-dependency-fixed-generic-qualified-20261011/build.jsonl": "619008ed848b0ab900aa2cb5d47c77d8a1fcc8f385513594728a09a62e7ee1b3",
+    "/Users/themoretheless/.codex/tmp/rrrah-projected-collection-dependency-fixed-generic-qualified-20261011/build.log": "75a46e7c8b51457f747ab428d17214ca8eca1a05e939cc59398fd58d5121cb8c"
+  },
+  "scope": "macOS decode-feature generic providers on frozen dependencies and copied pre-execution programs; no Torch or total RSS qualification"
+}

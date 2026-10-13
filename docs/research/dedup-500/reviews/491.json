@@ -3,7 +3,7 @@
   "repository": "kmulvey/imagedup",
   "commit": "385bd25bc2a4536f6a7374783a61b0305237e066",
   "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
-  "decision": "reference",
+  "decision": "reference-cache-and-cancellation-limitations",
   "finding": "Go image finder extension regex and tests; narrow candidate extensions and matching semantics need review.",
   "available_source_evidence": [
     {
@@ -73,6 +73,14 @@
       "lines": 674,
       "source": false,
       "test": false
+    }
+  ],
+  "incremental_reviews": [
+    {
+      "audit": "docs/research/dedup-500/kmulvey-imagedup-selected-source-audit-20261013.json"
+    },
+    {
+      "audit": "docs/research/dedup-500/kmulvey-imagedup-cli-source-audit-20261013.json"
     }
   ]
 }

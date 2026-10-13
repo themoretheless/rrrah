@@ -1,0 +1,13 @@
+{
+  "change": "diagnostic compatibility raster sampler maps alpha coordinates to independent dimensions and honors alpha interpolation flag",
+  "verified": "actual PDF2x1color/4x1mask checks four source positions including transparent,opaque and half-alpha texels",
+  "ordinary_passed": 162,
+  "ignored": 11,
+  "limitations": [
+    "diagnostic compatibility path only",
+    "bilinear distinct-grid mathematical integration not qualified",
+    "full AI production integration pending"
+  ],
+  "log": "docs/research/ai-covered-fragment-sampling-2026-10-12/compatibility-alpha-grid-tests.log",
+  "sha256": "3ba371c66e7c22d0bddeb10330c5f8739d60e4802461384595e2c681650ab3d5"
+}

@@ -1,0 +1,32 @@
+{
+  "status": "verified_55_current_default_tests_with_block_order_regression",
+  "passed": 55,
+  "ignored": 2,
+  "suites": [
+    {
+      "suite": "lib",
+      "passed": 32,
+      "ignored": [
+        "gradient::batch_tests::alternating_matcher_timing",
+        "gradient::matching_tests::alternating_matcher_timing"
+      ],
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-exact-block-order-executables-20261012/lib",
+      "sha256": "7b57defcef554476c7990757e6ebc78065957443f8b2e7b4bdff6f11e0d7fafd"
+    },
+    {
+      "suite": "exact_files",
+      "passed": 23,
+      "ignored": [],
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-exact-block-order-executables-20261012/exact_files",
+      "sha256": "e407410043f9b2563e26b4637b791a6f289a677b91ca834604e81595fee5ea84"
+    }
+  ],
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exact-block-order-source-20261012.json": "dd932f1503d1dfa7631471d307cbb50923a61d015f57a49e62480c40bee00dbd",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-block-order-tests-20261012.log": "1e5a4d40c0ba3d18313123d20cbd58df6600be6179a393e609a906aa8b8bf9da",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-exact-block-order-20261012.py": "e37b7f5f4228030ce36a1f874d60c3886babab5d27d75bb05da3694bf857b8c4",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-block-order-executables-20261012/lib": "7b57defcef554476c7990757e6ebc78065957443f8b2e7b4bdff6f11e0d7fafd",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-block-order-executables-20261012/exact_files": "e407410043f9b2563e26b4637b791a6f289a677b91ca834604e81595fee5ea84"
+  },
+  "scope": "Current-identical dedup production and exact integration tests,32defaultunits+23exactpasses,2manualignored. New same-size middle4096byte block permutation shares sampled edges and preserves two true copies while rejecting reordered bytes in both root orders. Source/executables/testnames pinned. No Linux/Windows/fullformat/corpus/full500qualification."
+}

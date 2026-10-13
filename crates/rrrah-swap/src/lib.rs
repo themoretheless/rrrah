@@ -6,6 +6,31 @@
 //! keeps its disk quota until its last clone drops. Failed memory admission
 //! does not consume or invalidate the handle, so restore can be retried.
 //!
+//! `write_segmented` stores independently verified64KiB blocks with a managed
+//! digest index. `restore_range` reads only intersecting blocks and bounds
+//! managed buffers to the result plus one block and retained index credit.
+//! A segmented handle consumes one disk object; unread blocks are not reverified.
+//! This byte-range primitive does not itself decode image tiles or wire them
+//! into the viewer, and is not a crash-durable persistent format.
+//! `restore_rows` packs non-overlapping source rows in one read operation,
+//! reusing the last verified block and skipping blocks between requested rows.
+//!
+//! ```
+//! use rrrah_memory::MemoryBudget;
+//! use rrrah_swap::{SwapStore, SwapLimits, SwapRows};
+//! let directory = tempfile::tempdir()?;
+//! let store = SwapStore::new(directory.path(), SwapLimits {max_bytes:8,max_objects:Some(1)})?;
+//! let index = MemoryBudget::new(32);
+//! let scratch = MemoryBudget::new(8);
+//! let source = [1u8,2,3,4,5,6,7,8];
+//! let handle = store.write_segmented(&mut std::io::Cursor::new(source),8,&index,&scratch,||false)?;
+//! let output = MemoryBudget::new(4);
+//! let selected = store.restore_rows(&handle,SwapRows {offset:1,row_bytes:2,stride:4,rows:2},
+//!     &output,&scratch,||false)?;
+//! assert_eq!(&*selected,&[2,3,6,7]);
+//! # Ok::<(), Box<dyn std::error::Error>>(())
+//! ```
+//!
 //! # Composition contract
 //! Disk quotas include writes in progress and objects retained by any handle.
 //! RAM used by source buffers, restored buffers, and a composing write queue
@@ -47,15 +72,63 @@
 //! assert_eq!(ram.used(), 0);
 //! # Ok::<(), Box<dyn std::error::Error>>(())
 //! ```
-use rrrah_memory::{MemoryBudget, SharedBuffer};
+use rrrah_memory::{MemoryBudget, MutableBuffer, SharedBuffer};
+mod segmented;
+pub use segmented::{SegmentedSwapHandle, SegmentedSwapReader, SwapRows};
 use std::{
     io::{Read, Write},
     path::Path,
-    sync::{Arc, Mutex},
+    sync::{
+        Arc, Mutex, OnceLock,
+        atomic::{AtomicBool, Ordering},
+    },
 };
 use tempfile::{NamedTempFile, TempDir};
 use thiserror::Error;
 const BLOCK: usize = 64 * 1024;
+/// Maximum extra managed pixel-stream scratch across accelerated restores.
+pub const PARALLEL_HASH_SCRATCH_BYTES: usize = 4 * 1024 * 1024;
+static HASH_SLOT: AtomicBool = AtomicBool::new(false);
+static HASH_POOL: OnceLock<Option<rayon::ThreadPool>> = OnceLock::new();
+struct HashPermit;
+impl Drop for HashPermit {
+    fn drop(&mut self) {
+        HASH_SLOT.store(false, Ordering::Release);
+    }
+}
+struct HashScratch {
+    bytes: MutableBuffer<u8>,
+    pool: &'static rayon::ThreadPool,
+    _permit: HashPermit,
+}
+impl HashScratch {
+    fn try_new(budget: &MemoryBudget) -> Option<Self> {
+        HASH_SLOT
+            .compare_exchange(false, true, Ordering::AcqRel, Ordering::Acquire)
+            .ok()?;
+        let permit = HashPermit;
+        let pool = HASH_POOL
+            .get_or_init(|| {
+                let threads = std::thread::available_parallelism().ok()?.get().min(4);
+                if threads < 2 {
+                    return None;
+                }
+                rayon::ThreadPoolBuilder::new()
+                    .num_threads(threads)
+                    .stack_size(512 * 1024)
+                    .thread_name(|i| format!("rrrah-swap-hash-{i}"))
+                    .build()
+                    .ok()
+            })
+            .as_ref()?;
+        let bytes = budget.try_buffer(PARALLEL_HASH_SCRATCH_BYTES, 0u8).ok()?;
+        Some(Self {
+            bytes,
+            pool,
+            _permit: permit,
+        })
+    }
+}
 #[derive(Debug, Clone, Copy)]
 pub struct SwapLimits {
     pub max_bytes: u64,
@@ -155,7 +228,11 @@ impl SwapStore {
     fn reserve(&self, bytes: u64) -> Result<Reservation> {
         let mut usage = self.0.usage.lock().map_err(|_| SwapError::Poisoned)?;
         if bytes > self.0.limits.max_bytes - usage.bytes
-            || self.0.limits.max_objects.is_some_and(|max| usage.objects >= max)
+            || self
+                .0
+                .limits
+                .max_objects
+                .is_some_and(|max| usage.objects >= max)
         {
             return Err(SwapError::Quota);
         }
@@ -274,8 +351,38 @@ impl SwapStore {
     pub fn read_stream<T>(
         &self,
         handle: &SwapHandle,
+        cancelled: impl FnMut() -> bool,
+        decode: impl FnOnce(&mut dyn Read) -> std::io::Result<T>,
+    ) -> Result<T> {
+        self.read_stream_impl(handle, cancelled, decode, None)
+    }
+    /// Like `read_stream`, with opportunistic bounded parallel integrity hashing.
+    /// A single process-wide four-thread pool and scratch slot are shared across
+    /// stores. At most 4 MiB of extra scratch is charged to `scratch_budget`.
+    /// Allocation/slot/pool failure falls back to the serial path without waiting
+    /// for another restore. Scratch admission is deferred until the codec has
+    /// consumed its first block, so pixel admission retains priority.
+    /// Callers opting in must ensure future codec allocations are bounded by
+    /// unread wire bytes; compressed/expanding codecs should use `read_stream`.
+    /// Physical reads still poll cancellation every 64 KiB. A running hash batch
+    /// is bounded to 4 MiB and joined before cancellation is checked again.
+    /// Thread stacks (at most 4 × 512 KiB) and pool bookkeeping are outside the
+    /// managed buffer budget. Both methods preserve identical object digests.
+    pub fn read_stream_with_scratch<T>(
+        &self,
+        handle: &SwapHandle,
+        cancelled: impl FnMut() -> bool,
+        decode: impl FnOnce(&mut dyn Read) -> std::io::Result<T>,
+        scratch_budget: &MemoryBudget,
+    ) -> Result<T> {
+        self.read_stream_impl(handle, cancelled, decode, Some(scratch_budget))
+    }
+    fn read_stream_impl<T>(
+        &self,
+        handle: &SwapHandle,
         mut cancelled: impl FnMut() -> bool,
         decode: impl FnOnce(&mut dyn Read) -> std::io::Result<T>,
+        scratch_budget: Option<&MemoryBudget>,
     ) -> Result<T> {
         // Once observed, cancellation belongs to this whole operation even
         // when the caller's callback reports a transient signal.
@@ -302,6 +409,10 @@ impl SwapStore {
                 hasher: &mut hasher,
                 remaining: &mut remaining,
                 cancelled: &mut check_cancelled,
+                scratch_budget,
+                scratch: None,
+                attempted_scratch: false,
+                delivered_block: false,
             };
             decode(&mut stream)
         };
@@ -433,6 +544,10 @@ struct ReadStream<'a> {
     hasher: &'a mut blake3::Hasher,
     remaining: &'a mut u64,
     cancelled: &'a mut dyn FnMut() -> bool,
+    scratch_budget: Option<&'a MemoryBudget>,
+    scratch: Option<HashScratch>,
+    attempted_scratch: bool,
+    delivered_block: bool,
 }
 impl Read for ReadStream<'_> {
     fn read(&mut self, output: &mut [u8]) -> std::io::Result<usize> {
@@ -446,16 +561,62 @@ impl Read for ReadStream<'_> {
             return Ok(0);
         }
         if self.start == self.end {
-            let capacity = usize::try_from((*self.remaining).min(BLOCK as u64)).unwrap();
-            self.end = self.file.read(&mut self.buffer[..capacity])?;
-            self.start = 0;
-            if self.end == 0 {
-                return Ok(0);
+            if self.delivered_block
+                && !self.attempted_scratch
+                && *self.remaining >= PARALLEL_HASH_SCRATCH_BYTES as u64
+            {
+                self.attempted_scratch = true;
+                // Leave at least the unread wire size for codecs that allocate
+                // pixels after reading a large profile/header. Supported cache
+                // payloads need no more than that for their remaining buffers.
+                self.scratch = self
+                    .scratch_budget
+                    .filter(|budget| {
+                        budget.available_bytes()
+                            >= self
+                                .remaining
+                                .saturating_add(PARALLEL_HASH_SCRATCH_BYTES as u64)
+                    })
+                    .and_then(HashScratch::try_new);
             }
-            self.hasher.update(&self.buffer[..self.end]);
+            if let Some(scratch) = self.scratch.as_mut() {
+                let capacity =
+                    usize::try_from((*self.remaining).min(scratch.bytes.len() as u64)).unwrap();
+                self.start = 0;
+                self.end = 0;
+                for block in scratch.bytes[..capacity].chunks_mut(BLOCK) {
+                    if (self.cancelled)() {
+                        return Err(std::io::Error::other(SwapError::Cancelled));
+                    }
+                    self.file.read_exact(block)?;
+                    self.end += block.len();
+                }
+                if (self.cancelled)() {
+                    return Err(std::io::Error::other(SwapError::Cancelled));
+                }
+                scratch.pool.install(|| {
+                    self.hasher.update_rayon(&scratch.bytes[..self.end]);
+                });
+                if (self.cancelled)() {
+                    return Err(std::io::Error::other(SwapError::Cancelled));
+                }
+            } else {
+                let capacity = usize::try_from((*self.remaining).min(BLOCK as u64)).unwrap();
+                self.end = self.file.read(&mut self.buffer[..capacity])?;
+                self.start = 0;
+                if self.end == 0 {
+                    return Ok(0);
+                }
+                self.hasher.update(&self.buffer[..self.end]);
+            }
+            self.delivered_block = true;
         }
         let count = output.len().min(self.end - self.start);
-        output[..count].copy_from_slice(&self.buffer[self.start..self.start + count]);
+        let source: &[u8] = self
+            .scratch
+            .as_ref()
+            .map_or(&self.buffer[..], |scratch| &scratch.bytes);
+        output[..count].copy_from_slice(&source[self.start..self.start + count]);
         self.start += count;
         // Hash each fetched block once, but count only delivered bytes as
         // consumed. Exact-length validation still rejects a partial decoder.
@@ -467,6 +628,27 @@ impl Read for ReadStream<'_> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn mixed_small_and_bulk_restore_keeps_prefix_tail_and_hash_exact() {
+        let source: Vec<u8> = (0..BLOCK * 4 + 97).map(|i| (i % 251) as u8).collect();
+        let store = make_store(source.len() as u64, Some(1));
+        let handle = store.write_stream(source.len() as u64, || false,
+            |writer| writer.write_all(&source)).unwrap();
+        let restored = store.read_stream(&handle, || false, |reader| {
+            let mut prefix = [0u8; 17];
+            reader.read_exact(&mut prefix)?;
+            let mut bulk = vec![0u8; BLOCK * 3];
+            reader.read_exact(&mut bulk)?;
+            let mut tail = Vec::new();
+            reader.read_to_end(&mut tail)?;
+            let mut result = prefix.to_vec();
+            result.extend(bulk);
+            result.extend(tail);
+            Ok(result)
+        }).unwrap();
+        assert_eq!(restored, source);
+    }
+
     fn make_store(bytes: u64, objects: Option<usize>) -> SwapStore {
         SwapStore::new(
             std::env::temp_dir().as_path(),

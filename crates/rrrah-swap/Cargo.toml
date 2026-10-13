@@ -6,7 +6,8 @@ rust-version.workspace = true
 license.workspace = true
 
 [dependencies]
-blake3.workspace = true
+blake3 = { workspace = true, features = ["rayon"] }
+rayon = "1.11"
 tempfile.workspace = true
 thiserror.workspace = true
 rrrah-memory = { path = "../rrrah-memory", version = "0.1.0" }

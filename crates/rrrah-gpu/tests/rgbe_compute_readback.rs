@@ -23,7 +23,7 @@ fn four_plane_compute_matches_cpu_lattices_edges_hdr_and_tail() {
         compilation_options: Default::default(),
         cache: None,
     });
-    for dimensions in [[2u32, 2], [3, 5], [17, 13], [16, 13]] {
+    for dimensions in [[2u32, 2], [3, 5], [17, 13], [17, 33], [16, 13]] {
         for quad in [[3u32, 0, 2, 1], [0, 3, 1, 2], [1, 2, 0, 3]] {
             let count = (dimensions[0] * dimensions[1]) as usize;
             let values: Vec<f32> = (0..count)
@@ -53,13 +53,12 @@ fn four_plane_compute_matches_cpu_lattices_edges_hdr_and_tail() {
             });
             let mut encoder = device.create_command_encoder(&Default::default());
             let mut limits = device.limits();
-            if dimensions[0] == 16 {
+            if dimensions[0] == 16 || dimensions[0] == 17 {
                 limits.max_storage_buffer_binding_size = 1024;
             }
             let plan = rrrah_gpu::RgbePlan::new(dimensions, quad, &limits).unwrap();
-            if dimensions[0] == 16 {
-                assert_eq!(plan.dispatches.len(), 4);
-            }
+            if dimensions[0] == 16 { assert_eq!(plan.dispatches.len(), 4); }
+            if dimensions == [17, 13] { assert_eq!(plan.dispatches.len(), 5); }
             for dispatch in plan.dispatches {
                 let params = [
                     dimensions[0],
@@ -70,6 +69,7 @@ fn four_plane_compute_matches_cpu_lattices_edges_hdr_and_tail() {
                     quad[1],
                     quad[2],
                     quad[3],
+                    dispatch.output_first_pixel, dispatch.source_first_sample, 0, 0,
                 ];
                 let uniform = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
                     label: None,
@@ -82,7 +82,11 @@ fn four_plane_compute_matches_cpu_lattices_edges_hdr_and_tail() {
                     entries: &[
                         wgpu::BindGroupEntry {
                             binding: 0,
-                            resource: source.as_entire_binding(),
+                            resource: wgpu::BindingResource::Buffer(wgpu::BufferBinding {
+                                buffer: &source,
+                                offset: dispatch.source_offset,
+                                size: std::num::NonZeroU64::new(dispatch.source_bytes),
+                            }),
                         },
                         wgpu::BindGroupEntry {
                             binding: 1,
@@ -136,6 +140,56 @@ fn four_plane_compute_matches_cpu_lattices_edges_hdr_and_tail() {
             assert!(actual[..count].iter().flatten().any(|v| *v > 1.));
         }
     }
+}
+
+#[test]
+fn segmented_input_cancellation_at_every_checkpoint_releases_and_retries() {
+    let instance = common::headless_instance();
+    let adapter = pollster::block_on(common::request_adapter(&instance, &Default::default())).unwrap();
+    let (device, queue) = pollster::block_on(adapter.request_device(&wgpu::DeviceDescriptor {
+        required_limits: wgpu::Limits { max_storage_buffer_binding_size: 1024, ..Default::default() },
+        ..Default::default()
+    })).unwrap();
+    let dimensions = [17, 33];
+    let quad = [3, 0, 2, 1];
+    let source: Vec<f32> = (0..561).map(|i| (i % 29) as f32 * 0.125 - 1.).collect();
+    let plan = rrrah_gpu::RgbePlan::new(dimensions, quad, &device.limits()).unwrap();
+    assert!(plan.source_bytes > 1024);
+    assert!(plan.dispatches.iter().any(|d| d.source_offset > 0));
+    let cpu = rrrah_core::MemoryBudget::new(plan.output_bytes);
+    let gpu = rrrah_core::MemoryBudget::new(plan.gpu_buffer_bytes);
+    let compute = rrrah_gpu::RgbeCompute::new(&device);
+    let mut total_checks = 0;
+    let baseline = compute.execute_managed_with_cancel(
+        &queue, &source, dimensions, quad, &gpu, &cpu,
+        || { total_checks += 1; false },
+    ).unwrap();
+    for (i, pixel) in baseline.iter().enumerate() {
+        let expected = rrrah_core::rgbe::interpolate_planes(
+            quad, [(i % 17) as u32, (i / 17) as u32], dimensions,
+            |x, y| source[(y * 17 + x) as usize] as f64,
+        ).unwrap();
+        for (actual, expected) in pixel.iter().zip(expected) {
+            assert!((*actual as f64 - expected).abs() < 1e-5);
+        }
+    }
+    let expected = baseline.to_vec();
+    drop(baseline);
+    assert_eq!(total_checks, plan.dispatches.len() + 6);
+    for checkpoint in 1..=total_checks {
+        let mut checks = 0;
+        assert!(matches!(compute.execute_managed_with_cancel(
+            &queue, &source, dimensions, quad, &gpu, &cpu,
+            || { checks += 1; checks == checkpoint },
+        ), Err(rrrah_gpu::RgbeComputeError::Cancelled)));
+        assert_eq!(checks, checkpoint);
+        assert_eq!((cpu.used(), gpu.used()), (0, 0));
+        let retry = compute.execute_managed(&queue, &source, dimensions, quad, &gpu, &cpu).unwrap();
+        assert_eq!(&*retry, expected.as_slice());
+        drop(retry);
+        assert_eq!((cpu.used(), gpu.used()), (0, 0));
+    }
+    eprintln!("RGBE segmented cancellation: checkpoints={total_checks}; every retry exact; CPU/GPU final zero");
 }
 
 #[test]
@@ -221,7 +275,7 @@ fn managed_rgbe_admission_completion_and_output_owner() {
     assert!(result.iter().all(|p| *p == [2.5; 4]));
     assert_eq!(cpu.used(), 3328);
     assert_eq!(gpu.used(), 0);
-    assert_eq!(gpu.peak(), 7616);
+    assert_eq!(gpu.peak(), 7680);
     let owner = result.clone();
     drop(result);
     assert_eq!(cpu.used(), 3328);
@@ -236,7 +290,6 @@ fn full_f828_managed_rgbe_matches_cpu_reference() {
     assert_eq!(bytes.len(), 3360 * 2460 * 2);
     let quad = [3u32, 0, 2, 1];
     let cpu = rrrah_core::MemoryBudget::new(256 * 1024 * 1024);
-    let gpu = rrrah_core::MemoryBudget::new(512 * 1024 * 1024);
     let mut source = cpu.try_buffer(3360 * 2460, 0f32).unwrap();
     // Deliberately authored gains exercise all planes. They do not infer E WB.
     let gains = [1.2f32, 0.8, 1.4, 0.9];
@@ -253,28 +306,50 @@ fn full_f828_managed_rgbe_matches_cpu_reference() {
     ))
     .unwrap();
     eprintln!("full RGBE adapter: {:?}", adapter.get_info());
-    let (device, queue) =
-        pollster::block_on(adapter.request_device(&wgpu::DeviceDescriptor::default())).unwrap();
-    let compute = rrrah_gpu::RgbeCompute::new(&device);
-    let actual = compute
-        .execute_managed(&queue, &source, [3360, 2460], quad, &gpu, &cpu)
-        .unwrap();
-    for (i, pixel) in actual.iter().enumerate() {
-        let expected = rrrah_core::rgbe::interpolate_planes(
-            quad,
-            [(i % 3360) as u32, (i / 3360) as u32],
-            [3360, 2460],
-            |x, y| source[(y * 3360 + x) as usize] as f64,
-        )
-        .unwrap();
-        for (a, b) in pixel.iter().zip(expected) {
-            assert!((*a as f64 - b).abs() < 1e-5, "pixel {i}");
+    for binding_limit in [wgpu::Limits::default().max_storage_buffer_binding_size, 1024 * 1024] {
+        let limits = wgpu::Limits { max_storage_buffer_binding_size: binding_limit, ..Default::default() };
+        let (device, queue) = pollster::block_on(adapter.request_device(&wgpu::DeviceDescriptor {
+            required_limits: limits,
+            ..Default::default()
+        })).unwrap();
+        let plan = rrrah_gpu::RgbePlan::new([3360, 2460], quad, &device.limits()).unwrap();
+        if binding_limit == 1024 * 1024 {
+            assert!(plan.source_bytes > u64::from(binding_limit));
+            assert!(plan.dispatches.iter().any(|d| d.source_offset > 0));
         }
+        let gpu = rrrah_core::MemoryBudget::new(512 * 1024 * 1024);
+        let compute = rrrah_gpu::RgbeCompute::new(&device);
+        let mut elapsed_ms = Vec::new();
+        let mut last = None;
+        for run in 0..3 {
+            let started = std::time::Instant::now();
+            let output = compute.execute_managed(&queue, &source, [3360, 2460], quad, &gpu, &cpu).unwrap();
+            elapsed_ms.push(started.elapsed().as_secs_f64()*1000.);
+            assert_eq!(gpu.used(), 0);
+            if run == 2 { last = Some(output); } else { drop(output); }
+        }
+        let actual = last.unwrap();
+        elapsed_ms.sort_by(f64::total_cmp);
+        eprintln!("full RGBE managed timing: binding={binding_limit}; runs=3; min_ms={:.3}; p50_ms={:.3}; max_ms={:.3}; includes validation/upload/execute/readback; excludes pipeline/source preparation", elapsed_ms[0], elapsed_ms[1], elapsed_ms[2]);
+        for (i, pixel) in actual.iter().enumerate() {
+            let expected = rrrah_core::rgbe::interpolate_planes(
+                quad,
+                [(i % 3360) as u32, (i / 3360) as u32],
+                [3360, 2460],
+                |x, y| source[(y * 3360 + x) as usize] as f64,
+            )
+            .unwrap();
+            for (a, b) in pixel.iter().zip(expected) {
+                assert!((*a as f64 - b).abs() < 1e-5, "pixel {i}");
+            }
+        }
+        assert_eq!(gpu.used(), 0);
+        assert_eq!(gpu.peak(), plan.gpu_buffer_bytes);
+        assert_eq!(cpu.used(), 165312000);
+        drop(actual);
+        assert_eq!(cpu.used(), 33062400);
+        eprintln!("full RGBE binding window: limit={binding_limit}; dispatches={}; all channel values equal; GPU credit zero", plan.dispatches.len());
     }
-    assert_eq!(gpu.used(), 0);
-    assert_eq!(gpu.peak(), 297561632);
-    assert_eq!(cpu.used(), 165312000);
-    drop(actual);
     drop(source);
     assert_eq!(cpu.used(), 0);
     eprintln!("full RGBE: 33,062,400 channel values equal; CPU/GPU final usage zero");
@@ -304,4 +379,101 @@ fn cancelled_large_rgbe_validation_does_not_admit_output_resources() {
     assert_eq!(checkpoints, 3);
     assert_eq!(cpu.peak(), 0);
     assert_eq!(gpu.peak(), 0);
+}
+
+#[test]
+fn odd_black_repeat_grid_normalization_to_managed_metal_compute() {
+    let instance = common::headless_instance();
+    let adapter = pollster::block_on(common::request_adapter(
+        &instance, &wgpu::RequestAdapterOptions::default(),
+    )).unwrap();
+    eprintln!("RGBE grid compute adapter: {:?}", adapter.get_info());
+    for (height, binding_limit, site_count) in [(13, 1024, 221_u64), (33, 1024, 561_u64)] {
+    let (device, queue) = pollster::block_on(adapter.request_device(&wgpu::DeviceDescriptor {
+        required_limits: wgpu::Limits { max_storage_buffer_binding_size: binding_limit, ..Default::default() },
+        ..Default::default()
+    })).unwrap();
+    let mut mosaic = common::profiled_pattern_mosaic(
+        17, height, 1000., [2., 3., 4., 5.],
+        [[1., 0., 0.], [0., 1., 0.], [0., 0., 1.], [0., 1., 0.]],
+        |x, y| {
+            let black = ((y % 5) * 3 + x % 3) * 20;
+            ((1000 + black) / 2) as u16
+        },
+    );
+    use rrrah_core::CfaColor::{Emerald, Red, Blue, Green};
+    mosaic.metadata.cfa = Some(rrrah_core::CfaPattern {
+        width: 2, height: 2, cells: vec![Emerald, Red, Blue, Green],
+    });
+    mosaic.metadata.black_level = rrrah_core::LevelGrid {
+        width: 3, height: 5, components: 1,
+        values: (0..15).map(|i| (i * 20) as f32).collect(),
+    };
+    let cpu = rrrah_core::MemoryBudget::new(65536);
+    let gpu = rrrah_core::MemoryBudget::new(65536);
+    let (calibration, normalized) = rrrah_core::rgbe::Calibration::normalize_managed(
+        &mosaic, &cpu, &|| false,
+    ).unwrap();
+    assert_eq!(cpu.used(), site_count * 4 + 60);
+    for (i, sample) in normalized.iter().enumerate() {
+        let phase = ((i / 17 % 2) * 2 + i % 17 % 2) as usize;
+        assert_eq!(*sample, [2.5, 1., 2., 1.5][phase]);
+    }
+    let plan = rrrah_gpu::RgbePlan::new(calibration.dimensions(), calibration.quad(), &device.limits()).unwrap();
+    assert!(plan.dispatches.len() > 1);
+    let compute = rrrah_gpu::RgbeCompute::new(&device);
+    let result = compute.execute_managed(
+        &queue, &normalized, calibration.dimensions(), calibration.quad(), &gpu, &cpu,
+    ).unwrap();
+    // Constant independent calibrated R/G/B/E values, including odd edges and
+    // dispatch boundaries; no interpolation implementation used as the oracle.
+    for pixel in result.iter() { assert_eq!(*pixel, [1., 1.5, 2., 2.5]); }
+    assert_eq!(gpu.used(), 0);
+    assert_eq!(cpu.used(), site_count * 20 + 60);
+    drop(normalized);
+    assert_eq!(cpu.used(), site_count * 16 + 60);
+    let retained = result.clone();
+    drop(result);
+    assert_eq!(cpu.used(), site_count * 16 + 60);
+    drop(retained);
+    assert_eq!(cpu.used(), 60);
+    drop(calibration);
+    assert_eq!(cpu.used(), 0);
+    eprintln!("RGBE odd grid compute: 3x5 grid; 17x{height} sensor; four independent planes exact; split dispatch and odd edges; CPU/GPU credit zero");
+    }
+}
+
+#[test]
+fn signed_f32_extremes_interpolate_finitely_against_f64_reference() {
+    let Some(gpu_device) = common::qualification_gpu() else { return; };
+    let dimensions = [5u32, 5];
+    let quad = [3usize, 0, 2, 1];
+    let source: Vec<f32> = (0..25).map(|i| {
+        if ((i % 5) / 2 + (i / 5) / 2) % 2 == 0 { f32::MAX } else { -f32::MAX }
+    }).collect();
+    let compute = rrrah_gpu::RgbeCompute::new(&gpu_device.device);
+    let gpu = rrrah_core::MemoryBudget::new(8192);
+    let cpu = rrrah_core::MemoryBudget::new(25 * 16);
+    let output = compute.execute_managed(&gpu_device.queue, &source, dimensions,
+        quad.map(|v| v as u32), &gpu, &cpu).unwrap();
+    let axis = |coordinate: usize, phase: usize| {
+        let last = phase + ((4-phase)/2)*2;
+        let lo = (phase + coordinate.saturating_sub(phase)/2*2).min(last);
+        let hi = (lo+2).min(last);
+        let weight = if hi == lo || coordinate < lo { 0. } else { (coordinate-lo) as f64/(hi-lo) as f64 };
+        (lo, hi, weight)
+    };
+    for y in 0..5 { for x in 0..5 { for phase in 0..4 {
+        let (lx, hx, wx) = axis(x, phase%2);
+        let (ly, hy, wy) = axis(y, phase/2);
+        let a = f64::from(source[ly*5+lx])*(1.-wx)+f64::from(source[ly*5+hx])*wx;
+        let b = f64::from(source[hy*5+lx])*(1.-wx)+f64::from(source[hy*5+hx])*wx;
+        let expected = (a*(1.-wy)+b*wy) as f32;
+        let actual = output[y*5+x][quad[phase]];
+        assert!(actual.is_finite(), "({x},{y}) channel={phase}: {actual}");
+        assert_eq!(actual, expected, "({x},{y}) channel={phase}");
+    }}}
+    drop(output);
+    assert_eq!(cpu.used(), 0);
+    assert_eq!(gpu.used(), 0);
 }

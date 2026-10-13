@@ -1,0 +1,38 @@
+{
+  "scope": "diagnostic moment lookup; production coalescing disabled",
+  "mechanism": "fixed prefix width at admission; slice length required; omitted storage words zero-initialized; exact equality over all admitted identity words",
+  "suite": {
+    "passed": 221,
+    "ignored": 12,
+    "failed": 0
+  },
+  "key_words_before": 64,
+  "key_words_after": 12,
+  "lookup_work": {
+    "147,59": {
+      "before": 152582586,
+      "after": 47480544,
+      "reduction_fraction": 0.6888206888825439
+    },
+    "145,50": {
+      "before": 52203946,
+      "after": 16744430,
+      "reduction_fraction": 0.6792497256816563
+    }
+  },
+  "native_pixels_exact": true,
+  "centroid_comparison_exact": true,
+  "peak_bytes": 239197736,
+  "final_credit": 0,
+  "admitted_observer_bytes": 5373952,
+  "speed_claim": null,
+  "remaining": "lookup remains much larger than4M; need incremental/compact stable field identity and production error bounds before activation",
+  "sources": {
+    "vendor/hayro/src/native_moments.rs": "ffddaaeed17c24c4f692c973bfe1e10d14e5d7909870a199720bc3de3d0e0a99",
+    "vendor/hayro/src/native_spatial.rs": "2b16aec93a4bcb9ab0ccb903ca16da84c7ed2b2983d989dcfa5018658f5d9604"
+  },
+  "logs": {
+    "ai-moment-prefix-keys-suite-2026-10-13.log": "bf120142e738971b89277664e651fd257a617ec86df2536bc7a80cbddbc2b052",
+    "ai-moment-prefix-keys-original-2026-10-13.log": "fe5c03a48ed6f11e6ea8bd1ee85b8b06c394cd2197942f5cd797b8fb1d1e6dc1"
+  }
+}

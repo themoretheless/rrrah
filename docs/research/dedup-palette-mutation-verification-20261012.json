@@ -1,0 +1,45 @@
+{
+  "status": "verified_same_length_palette_alpha_mutation_cache_and_indexed_rescan",
+  "tests": 1,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exposure-recovery-search-snapshot-20261012.json": "65b8886065e84c5fff55fe5b703e9d2067224d15da88feee1bd667051e005e20",
+    "/Users/themoretheless/.codex/tmp/rrrah-palette-mutation-harness-20261012/Cargo.toml": "d59e3bff419f639b2d0906faba4c465bed45ba7271c00d8651ce0f6da313bac6",
+    "/Users/themoretheless/.codex/tmp/rrrah-palette-mutation-harness-20261012/Cargo.lock": "cf8aa05c0061b1afd96eff664e939bd235bfb6d7d8d1614720889ff70d440ae6",
+    "/Users/themoretheless/.codex/tmp/rrrah-palette-mutation-harness-20261012/tests/palette_mutation.rs": "b83717a334f2424f54763b71cb61ce7c5e94299070f37bc3280d3b355ea9c9fe",
+    "/Users/themoretheless/.codex/tmp/rrrah-palette-mutation-harness-20261012/tests/fixtures/palette-transparency/hidden-gradient.png": "7222b84f1ca088567cbccdbc29482741d87d7dae2e819f58564fe127bcd77ab3",
+    "/Users/themoretheless/.codex/tmp/rrrah-palette-same-length-alpha-rewrite-20261012.png": "7c08dee1ac7fb6f6592f59366086bada5fc12f2826cebcc8f530a5f5ad6a293f",
+    "/Users/themoretheless/.codex/tmp/rrrah-palette-mutation-tests-20261012.log": "41d8ac227422ff81ae954c56fe02b243028599bdd8b9d53295c6376e74cdfdc2",
+    "/Users/themoretheless/.codex/tmp/rrrah-palette-mutation-qualified-20261012": "0602758ca2218c8f4f13d1a9311089e76e1964bc3a6237236722b72da255ceca",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-palette-mutation-20261012.py": "72631f202a4aa395372970f6b2253cbda3baf9e29f9cf9d8ca8ff5f5fa0e6999"
+  },
+  "original_and_changed_bytes": 1126,
+  "expected_before_equal": [
+    [
+      1,
+      2
+    ],
+    [
+      1,
+      3
+    ],
+    [
+      2,
+      3
+    ]
+  ],
+  "expected_after_equal": [
+    [
+      1,
+      3
+    ]
+  ],
+  "cache_sequence": [
+    "miss",
+    "hit",
+    "same_length_alpha_rewrite",
+    "miss",
+    "hit"
+  ],
+  "independent_fixture_check": "Python zlib verifies every original chunk CRC, patches only tRNS entry80 and CRC without length change; Pillow confirms0\u21929 visible pixels. Native test independently constructs the rewrite, verifies cache miss/new fingerprint and indexed rescan removes changed-source edges.",
+  "scope": "Sequential repeated scans on unchanged184 production source, not during-scan mutation/metadata-indistinguishable race or allPNG/platform/RSS/full500 qualification. No fresh188 full gate or production fix claimed."
+}

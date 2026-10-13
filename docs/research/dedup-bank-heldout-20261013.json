@@ -1,0 +1,98 @@
+{
+  "status": "complete_fixed12_bank_heldout",
+  "producer_pid": 16475,
+  "plan_sha256": "d6121a9642d778189bf2bc48d2d30ec3416a922e67a8c6fd69b03b74c68e1c72",
+  "source_audit_sha256": "bd5fbd061f795f5f7206618d9b8c991c453992e60aa0521f9117ae133d6b0c58",
+  "required": 12,
+  "completed": 12,
+  "results": [
+    {
+      "label": "negative",
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-bank-heldout-qualified-20261013/negative.json",
+      "report_sha256": "c339b7545d9a961b4546d7ff0f60b7ac1ece4dff6c7defaa26e5dcca6c53bee2",
+      "terminal": "execution_failed"
+    },
+    {
+      "label": "positive-1",
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-bank-heldout-qualified-20261013/positive-1.json",
+      "report_sha256": "df138e7072273332dffb3c7702da26c8c6ea48e8fb1d52b24ce5de3d664089c7",
+      "terminal": "execution_failed"
+    },
+    {
+      "label": "positive-2",
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-bank-heldout-qualified-20261013/positive-2.json",
+      "report_sha256": "43cb6d9fe8fb72f4e371dbdf7d5fa46d43d75afd9c868a130d5eb41c1121985c",
+      "terminal": "execution_failed"
+    },
+    {
+      "label": "positive-6",
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-bank-heldout-qualified-20261013/positive-6.json",
+      "report_sha256": "cc16dacb481ec6236492f1a3799bcd4ac7851c6d0a2b3aaa34fd52596ebb1703",
+      "terminal": "execution_failed"
+    },
+    {
+      "label": "positive-12",
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-bank-heldout-qualified-20261013/positive-12.json",
+      "report_sha256": "d0da820b879962faddffdcf6af835cede2119964fc8a6a1937879da4c2ff88c7",
+      "terminal": "execution_failed"
+    },
+    {
+      "label": "positive-34",
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-bank-heldout-qualified-20261013/positive-34.json",
+      "report_sha256": "c7daf55bbc1ae56f17bd4bb116423fb38be9a212722805f0aa6368bd3e7617ce",
+      "terminal": "execution_failed"
+    },
+    {
+      "label": "positive-35",
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-bank-heldout-qualified-20261013/positive-35.json",
+      "report_sha256": "e47a58479524b798638323a788f6cd2c667cce7ace6a0f753a9bc5185fadc8a9",
+      "terminal": "execution_failed"
+    },
+    {
+      "label": "positive-80",
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-bank-heldout-qualified-20261013/positive-80.json",
+      "report_sha256": "93ac03529bf9511238c14f5b051db47a7275f2d45fa65114a44a5d7080ce7c0a",
+      "terminal": "execution_failed"
+    },
+    {
+      "label": "positive-81",
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-bank-heldout-qualified-20261013/positive-81.json",
+      "report_sha256": "6e7834d304d8d0a1a54696562ebb045b512f005417b2667dd8ee86ac5043acb8",
+      "terminal": "execution_failed"
+    },
+    {
+      "label": "positive-105",
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-bank-heldout-qualified-20261013/positive-105.json",
+      "report_sha256": "7ca086a07cf1f2f2b6b6583ac00572665157a0923389917bc8ed286d49c0ed14",
+      "terminal": "execution_failed"
+    },
+    {
+      "label": "positive-164",
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-bank-heldout-qualified-20261013/positive-164.json",
+      "report_sha256": "36777893071c194244068796f4b8a4180cd81e9976ee44c5d6a6758a5549e4fe",
+      "terminal": "execution_failed"
+    },
+    {
+      "label": "self_control",
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-bank-heldout-qualified-20261013/self_control.json",
+      "report_sha256": "85d3243f7d540e5ebaec0d308cf5120b1deca8efb92274bbcc863ab8330ada2a",
+      "terminal": "execution_failed"
+    }
+  ],
+  "build_log": "/Users/themoretheless/.codex/tmp/rrrah-bank-heldout-build-20261013.log",
+  "scope": "All12 pinned actual-bank replay cases; component split fixed before training, retain alternatives, score single training-only model on heldout points/components. No fitting against validation, threshold selection or acceptance change.",
+  "active_command": [
+    "/usr/bin/time",
+    "-l",
+    "/Users/themoretheless/.codex/tmp/rrrah-bank-heldout-qualified-20261013/bank_heldout_diagnostic",
+    "/Users/themoretheless/.codex/tmp/rrrah-bank-heldout-plans-20261013/self_control.json"
+  ],
+  "child_pid": 16684,
+  "build_log_sha256": "bc410eb9c8e7e77457030c60820d17a42c74cf38846053199667ab3bf29795ac",
+  "lock_sha256": "b4327275e797e9eea6dfb08828211c3b13b79c7ee92690d7f90a54ed32f23952",
+  "executable": "/Users/themoretheless/.codex/tmp/rrrah-bank-heldout-qualified-20261013/bank_heldout_diagnostic",
+  "executable_sha256": "5cf43753bf54ce9fde81a9edb47a0841647672f830bd7ba838d8e3083df806be",
+  "active_label": "self_control",
+  "source_unchanged": true,
+  "harness_unchanged": true
+}

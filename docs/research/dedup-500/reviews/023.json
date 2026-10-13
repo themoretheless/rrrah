@@ -2,7 +2,7 @@
   "index": 23,
   "repository": "sreedevk/deduplicator",
   "commit": "245e910c39747ff4fcbf332c14666d9f4c778ae1",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "Existing prior full/partial source-review artifacts linked after current pin verification; original limits retained. This reconciliation is not a new full-source reading or new runtime execution, except the explicit blockhash-js runtime refresh.",
   "decision": "reference",
   "finding": "Rust recursive scanner and full/initial-page u128 hashing; preserve sampled hash only as a filter.",
   "license_metadata": "MIT",
@@ -74,5 +74,16 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "prior_selected_review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "linked_review_artifacts": [
+    {
+      "review_artifact": "deduplicator-full-review-20261012.json",
+      "status": "verified_existing_pins_not_new_execution",
+      "pin_errors": [],
+      "original_scope": "All20tracked text files read, including8Rustmodules,MITlicense,lockfile,CI andbenchmark scripts. Scripts/deletion mode not executed. Original9tests first6pass/3scannerfail; same executable9pass with physical TMPDIR, consistent with scanner canonicalizing paths while fixtures compare raw temp paths; not universal platform proof. Two appended private controls execute unchanged FileInfo and sequential sizewise/hashwise Processor functions: deterministic chunk permutation has equal full hashes for5seeds and strict grouping includes3files despiteonly2byteidentical. This is original hashing/grouping API evidence, not concurrent Server/CLI/deletion/Windows/RSS qualification. Sourceobservation: map-basedhash has no final byte confirmation/sourcegeneration guard. Source manifest v2 corrects initial scope count21 to actual20. Full500review not complete."
+    }
+  ],
+  "artifact_pin_reconciliation_audit": "unlinked-reviews-pin-audit-20261013.json",
+  "prior_registry_review": "prior-registry-023-unlinked-reconciliation-20261013.json"
 }

@@ -269,7 +269,11 @@ mod tests {
             result.is_err(),
             "unqualified camera must not become a preview or guessed-color image"
         );
-        eprintln!("MEF public route refusal: {}", result.unwrap_err());
+        let error = result.unwrap_err();
+        assert!(error.to_string().contains("native MEF decoder failed"));
+        assert!(error.to_string().contains("white balance"));
+        eprintln!("MEF public route refusal: {error}");
+        assert_eq!(budget.peak(), 0);
         assert_eq!(budget.used(), 0);
     }
     use super::*;

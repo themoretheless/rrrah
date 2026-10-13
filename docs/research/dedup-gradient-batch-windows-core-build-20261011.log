@@ -1,0 +1,33 @@
+   Compiling shlex v2.0.1
+   Compiling find-msvc-tools v0.1.9
+   Compiling proc-macro2 v1.0.107
+   Compiling quote v1.0.47
+   Compiling cfg-if v1.0.4
+   Compiling windows-link v0.2.1
+   Compiling getrandom v0.4.3
+   Compiling thiserror v2.0.19
+   Compiling arrayvec v0.7.8
+   Compiling constant_time_eq v0.4.2
+   Compiling once_cell v1.21.4
+   Compiling cpufeatures v0.3.0
+   Compiling arrayref v0.3.9
+   Compiling fastrand v2.5.0
+   Compiling windows-sys v0.61.2
+   Compiling cc v1.3.0
+   Compiling tempfile v3.27.0
+   Compiling winapi-util v0.1.11
+   Compiling syn v3.0.2
+   Compiling blake3 v1.8.5
+   Compiling thiserror-impl v2.0.19
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/.codex/tmp/rrrah-gradient-batch-production-snapshot-20261011/crates/rrrah-dedup)
+warning: unused variable: `cancel`
+   --> crates/rrrah-dedup/src/local_index.rs:715:5
+    |
+715 |     cancel: impl Fn() -> bool,
+    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_cancel`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-dedup` (lib test) generated 1 warning (run `cargo fix --lib -p rrrah-dedup --tests` to apply 1 suggestion)
+    Finished `test` profile [optimized + debuginfo] target(s) in 57.27s
+  Executable unittests src/lib.rs (target/x86_64-pc-windows-gnu/debug/deps/rrrah_dedup-73510a0cec273f4f.exe)

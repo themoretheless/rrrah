@@ -1,0 +1,16 @@
+{
+  "scope": "Exact nearest raster final native Pixel cache per immutable source",
+  "tests": "236passed/12ignored",
+  "checks": "Five original pixels and1540674precolor checks exact; centroid comparisons unchanged",
+  "semantics": "Cache key includes color and independently scaled alpha cells. Interpolation bypasses cache. Cancellation checked before hit and before publication. Missing key always validates fresh. Failed validation preserves prior cache.",
+  "memory": "Captured sampler remains within existing admitted256byte/source bound; observed peak239197736unchanged",
+  "timing": {
+    "A": 2.788602646,
+    "B": 2.7761443750000008
+  },
+  "limitations": [
+    "Narrow diagnostic timing only; overlapping variation",
+    "Native component lookup still executes",
+    "Working4M full page, integration bounds, independent AI color and viewer qualification remain open"
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "status": "complete_optional_library_provider_cpu_qualification",
+  "api": "rrrah_dedup::model_loftr::compare_loftr_files",
+  "cargo_feature": "loftr",
+  "platform": "macOS aarch64 CPU, libtorch 2.10.0 / tch 0.23.0, rustc 1.98.1",
+  "unit_tests": 57,
+  "new_provider_tests": 4,
+  "real_comparisons": 6,
+  "exact_historical_evidence_parity": true,
+  "peak_process_rss_bytes": 1432305664,
+  "source_pins_unchanged": true,
+  "pins": {
+    "docs/research/dedup-loftr-library-f32-measurement-20261010.json": "04e1a6e6b1662d599e0fbd5c61e72ac8d62addbdceb7f63cd9914e525b7e0b05",
+    "docs/research/dedup-loftr-library-f32-source-pins-20261010.json": "029489e799ab10fa4f3dc962c80ee6c4f386d6617ccb399f9cc0511acd0fd6e9",
+    "docs/research/dedup-loftr-library-f32-all-unit-tests-20261010.log": "401f4c23ee2d3e9f25bf9d6517fa0013cde7671aa812cce31e8455c3976d86c5",
+    "docs/research/dedup-loftr-library-f32-tests-build-20261010.log": "5227cd6875fafdae24ceca71bf8c77ee3e77c51f7da1955c9df97bc5139051ec",
+    "docs/research/dedup-loftr-library-f32-probe-build-20261010.log": "02a4075eba646495ef0a69c438a9f71a150239b53102590985066b482c0c493d",
+    "docs/research/dedup-loftr-library-measurement-20261010.json": "6ab8e8c2c4b00edb5c3eb84de96568e5206e884e844c864677cc1732101a9b96",
+    "docs/research/dedup-loftr-library-control-20261010.json": "9ccc450c5b9ecfdae977f97a2f0c9d3ff4cdbe4788e9a0de30f2b0a87c09d346",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/loftr-library-f32-qualified-20261010": "4a51e0db08e00104967b94d83950d002712b9badd32caf89fb5a60dad974099b",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/loftr-library-f32-unit-qualified-20261010": "fe2ccc33127bccc8db67b25da3411bdef054f7962d84fd042b170ab2b58d908b",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-library-before-f32-adoption-20261010.rs": "5007705369ae01e658466e9e4f459684ec8ec5982684e51a8a86e517ae8630c6",
+    "scripts/dedup-loftr-native-probe/src/bin/library_control.rs": "b935206823bb1692bd4bcaea17c85e34b5a73efc2dfeb09c970414d30f6c91b5"
+  },
+  "regression": {
+    "initial_report": "dedup-loftr-library-measurement-20261010.json",
+    "initial_status": "failed_strict_transform_parity",
+    "same_build_legacy_control": "dedup-loftr-library-control-20261010.json",
+    "cause": "Direct double scalar extraction changed the former Vec<f32> coordinate conversion. Preserve float32 conversion per scalar without scratch vectors. Final six-case evidence equals historical baseline exactly.",
+    "initial_source_preserved": "/Users/themoretheless/.codex/tmp/rrrah-loftr-library-before-f32-adoption-20261010.rs"
+  },
+  "scope": "Optional reusable library provider, not automatic search/collection fallback. Root unit tests use root lock; real diagnostic uses current root library/decoder/vendor sources with standalone probe lock and optimized dev profile. No controlled latency claim.",
+  "remaining": [
+    "Automatic native/learned portfolio with explicit order, cumulative preflight and shared source guards",
+    "Hard total inference tensor/workspace/RSS admission; kernel preemption/latency",
+    "Crumpled-photo case 200302",
+    "Broad corpus, formats and platform qualification; no Windows/Linux LoFTR runtime qualification"
+  ]
+}

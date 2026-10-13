@@ -1,0 +1,50 @@
+{
+  "status": "complete_original_functions8_python3_hash_adapter_controls",
+  "authored_controls": 8,
+  "upstream_tests": 0,
+  "controls": [
+    {
+      "control": "changed_bytes_reuse_old_path_hash",
+      "hash_calls": 1
+    },
+    {
+      "control": "failed_hash_is_not_retried_after_repair"
+    },
+    {
+      "control": "documented_direct_file_input_is_ignored_and_evicted"
+    },
+    {
+      "control": "missing_root_succeeds_and_clears_cache"
+    },
+    {
+      "control": "overlapping_roots_hash_each_path_once"
+    },
+    {
+      "control": "deleted_paths_are_evicted"
+    },
+    {
+      "control": "zero_hash_pairs_are_skipped"
+    },
+    {
+      "control": "top_n1_prints_three_distance_tiers",
+      "lines": [
+        "/Users/themoretheless/.codex/tmp/rrrah-image-deduplication-tool-controls-v2-20261012/images/b.bin /Users/themoretheless/.codex/tmp/rrrah-image-deduplication-tool-controls-v2-20261012/images/a.bin 1",
+        "/Users/themoretheless/.codex/tmp/rrrah-image-deduplication-tool-controls-v2-20261012/images/c.bin /Users/themoretheless/.codex/tmp/rrrah-image-deduplication-tool-controls-v2-20261012/images/b.bin 2",
+        "/Users/themoretheless/.codex/tmp/rrrah-image-deduplication-tool-controls-v2-20261012/images/c.bin /Users/themoretheless/.codex/tmp/rrrah-image-deduplication-tool-controls-v2-20261012/images/a.bin 3"
+      ]
+    }
+  ],
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/image-deduplication-tool-full-source-20261012.json": "e7e725522d615b9001e25fc556ca75f24028a2a8585a4ca4149831b7033ce3c0",
+    "/Users/themoretheless/.codex/tmp/rrrah-image-deduplication-tool-source-20261012/image_matcher.py": "cd71ed9961b5295a0f388dca0534c67d28feda7c5b2eb7595def8c652168c611",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/check-dedup-image-deduplication-tool-20261012.py": "05e8300ffd02751e947bb137d0b6e1388fb935b148e4e496df92eadd2edcaa28",
+    "/Users/themoretheless/.codex/tmp/rrrah-image-deduplication-tool-controls-v2-20261012/hashes.db": "18df46a2dccc4209a08be9e933dcb7000789fbbf20616560edd141a13e7721fe",
+    "/Users/themoretheless/.codex/tmp/rrrah-image-deduplication-tool-controls-v2-20261012/controls.stdout": "1fba24977bb13ceca4f92876e90ce15544cbe8b68a18f4acafb4f9b6e802e3b8",
+    "/Users/themoretheless/.codex/tmp/rrrah-image-deduplication-tool-controls-v2-20261012/images/c.bin": "e629fa6598d732768f7c726b4b621285f9c3b85303900aa912017db7617d8bdb",
+    "/Users/themoretheless/.codex/tmp/rrrah-image-deduplication-tool-controls-v2-20261012/images/b.bin": "4e07408562bedb8b60ce05c1decfe3ad16b72230967de01f640b7e4729b49fce",
+    "/Users/themoretheless/.codex/tmp/rrrah-image-deduplication-tool-controls-v2-20261012/images/a.bin": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b"
+  },
+  "python2_on_path": null,
+  "extraction": "Unchanged3FunctionDef bodies; Python3 imap/xrange/viewitems/viewvalues adapters, mocked hash provider, serial mode. No native hashing/fork/viewer execution.",
+  "scope": "Bounded path-cache, enumeration and CLI behavior with original function bodies and adapters. No exact Python2/libpHash environment, image-hash precision, asynchronous child lifecycle or feh/delete qualification. No adoption."
+}

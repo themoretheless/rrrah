@@ -1,0 +1,34 @@
+{
+  "change": "RGBE row dispatch binds aligned output windows with a prefix and explicit global first-output-pixel offset; shader writes only actual rows",
+  "previous_gap_closed": "17x13 sensor with 1024-byte storage binding limit now runs in five dispatches",
+  "uniform_bytes_per_dispatch": 48,
+  "library_tests": {
+    "passed": 52,
+    "failed": 0,
+    "ignored": 0
+  },
+  "metal_compute_tests": {
+    "passed": 4,
+    "failed": 0,
+    "ignored": 1
+  },
+  "checks": [
+    "17x13 managed compute on 1024-byte device binding limit",
+    "17x33 managed compute on 8192-byte limit",
+    "3x5 black grid and four independent calibrated planes exact across both shapes",
+    "direct nonconstant lattice reference at 17x13 five-way split",
+    "tail sentinel unchanged",
+    "aligned binding offsets and <=limit byte ranges checked",
+    "all intended rows contiguous and covered once",
+    "queue/CPU/GPU admission/cancellation/last-owner release tests pass",
+    "48-byte per-dispatch uniforms included in GPU budget",
+    "genuinely too-small single-row binding still refused"
+  ],
+  "log_sha256": "a2d86ec1a40bf91bebf28965d745ffdddedaeaa7b3e73bd925439b644cc9bd51",
+  "limits": [
+    "Source sensor still binds as one input buffer and must fit its device binding limit",
+    "Output row must fit the available aligned window; no column segmentation implemented",
+    "One full original F828 oracle test remains ignored in this focused run",
+    "Physical HDR and NVIDIA remain pending"
+  ]
+}

@@ -1,0 +1,14 @@
+
+running 1 test
+CORRELATED_SPATIAL case=same_edge alpha=0.25 components=[0.0, 1.0, 0.0, 0.0]
+CORRELATED_EDGE case=same_edge scale=1 alpha=0.9926483609520756 components=[0.0, 1.0, 0.0]
+CORRELATED_EDGE case=same_edge scale=16 alpha=0.25 components=[0.0, 1.0, 0.0]
+CORRELATED_EDGE case=same_edge scale=64 alpha=0.25 components=[0.0, 1.0, 0.0]
+CORRELATED_SPATIAL case=disjoint_edges alpha=0.5 components=[0.0, 0.5, 0.5, 0.0]
+CORRELATED_EDGE case=disjoint_edges scale=1 alpha=0.4389696270665129 components=[0.0, 0.4282511210762332, 0.5717488789237668]
+CORRELATED_EDGE case=disjoint_edges scale=16 alpha=0.5 components=[0.0, 0.5, 0.5]
+CORRELATED_EDGE case=disjoint_edges scale=64 alpha=0.5 components=[0.0, 0.5, 0.5]
+test knockout_compositor::interpreter_tests::repeated_and_disjoint_opaque_edges_compare_native_spatial_composition ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 163 filtered out; finished in 0.03s
+

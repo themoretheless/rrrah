@@ -1,0 +1,73 @@
+{
+  "date": "2026-10-11",
+  "scope": "Actual Metal compute output to RAM lease, disk swap and full-size rendering, compared with CPU float exposure oracle",
+  "adapter": "Metal Apple M4 Max",
+  "passed": 2,
+  "failed": 0,
+  "cases": [
+    {
+      "source": [
+        164,
+        50
+      ],
+      "pixels": 8200,
+      "output": [
+        128,
+        96
+      ]
+    },
+    {
+      "source": [
+        4000,
+        3000
+      ],
+      "pixels": 12000000,
+      "output": [
+        4000,
+        3000
+      ]
+    }
+  ],
+  "large_limits": {
+    "managed_cpu_root_bytes": 384000000,
+    "managed_compute_gpu_root_bytes": 576000064,
+    "swap_queue_bytes": 192000000,
+    "ram_resident_bytes": 192000000
+  },
+  "checks": [
+    "All CPU-computed exposure component bits match GPU compute readback",
+    "Compute GPU credit released after readback",
+    "Original source releases its CPU credit before cached frame ownership",
+    "RAM consumer lease prevents shrinking below retained frame",
+    "Every full-size Metal output pixel equals independently CPU-exposed raster before RAM insertion, through lease and after disk restore",
+    "Every float bit unchanged after disk restore",
+    "Exactly one disk write/read per case, zero swap errors",
+    "Managed CPU, compute GPU and swap queue budgets return to zero"
+  ],
+  "multi_dispatch_budget_note": "12 MP initially refused the old single-uniform test allowance: requested 576000048 vs limit 576000016. Updated test allowance includes up to four 16-byte dispatch uniforms; no production change or fallback.",
+  "log": {
+    "path": "/tmp/rrrah-metal-compute-cache-large-20261011.log",
+    "sha256": "7379939f470704d4103138cb37e9341efcfa7bb81a6170d32d502c7c3beab1b3"
+  },
+  "source_sha256": {
+    "crates/rrrah-app/tests/compute_cache_swap.rs": "e8cec83ef847ef064ac0f6855eab453c0767c87665dbf2c06a46fa0ddc9c4ba7",
+    "scripts/qualify-viewer-storage-gpu.py": "9f17e6c5266693c5d1d50011213df8d27ee80f48ff1683baa77ba38b23ea8d32",
+    "crates/rrrah-gpu/tests/common/mod.rs": "8ad145ef417ee1b6cc145958bee3e17b67329ab04d86b2a8269c303661e49223"
+  },
+  "reproduce": {
+    "environment": {
+      "RRRAH_GPU_OPTIONAL": "0",
+      "RRRAH_GPU_BACKEND": "metal"
+    },
+    "command": "cargo test --locked --offline --target-dir /tmp/rrrah-required-corpus-target -p rrrah --test compute_cache_swap -- --ignored --nocapture --test-threads=1",
+    "integrated_runner_flag": "--metal-compute-cache"
+  },
+  "limitations": [
+    "Authored float exposure inputs do not qualify all RAW decoding or all 100 formats",
+    "Full output readback is RGBA8 SDR, not physical HDR; separate float-attachment tests cover retained HDR values",
+    "Oracle vectors and display readback/driver allocations are outside named compute/CPU/queue budgets",
+    "Finite pipeline checks are not a long-running compute collection soak",
+    "Hour-long collection test remains in progress and is not counted as completed",
+    "Timings include concurrent GPU workload and are not isolated speed benchmarks"
+  ]
+}

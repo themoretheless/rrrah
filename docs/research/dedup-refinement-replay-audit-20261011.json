@@ -1,0 +1,66 @@
+{
+  "status": "verified_spatial_fit_check_translation_experiment_no_adoption",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-aperture-replay-audit-20261011.json": "54dd5a53ea1edcee9cb5c8f9dee23d0c74bdb027a33c2e70841546ae1a417479",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exposure-replay-input-20261011.json": "bb6ff4ba02ad8f7e2a40345864783e400ada5cb1e0e7f2099cd922bdbda29cd1",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-refinement-replay-output-20261011.json": "7e0f4461d3a5e7bd56be079fe38daa2f62d73fd7d2fafaaf2d74ed743569acc8",
+    "/Users/themoretheless/.codex/tmp/rrrah-refinement-replay-harness-20261011/src/main.rs": "e90f6afe05cc384e78ce9222f5e004dc781cefe5a8bfaece59b886d8a05691dc",
+    "/Users/themoretheless/.codex/tmp/rrrah-refinement-replay-harness-20261011/Cargo.toml": "8cf1e75ef0ce760e3329eef4313480b2248a06fdfb311997774cee4615c0c20c",
+    "/Users/themoretheless/.codex/tmp/rrrah-refinement-replay-harness-20261011/Cargo.lock": "68b3f4191f146abc5c3451d3c1fedf500460340a7c66ec53c51f35e65879898c",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-refinement-replay-build-20261011.log": "faabf2a419a1eb19cd59f42151c58f338eea5ef6218a701cc69815c9a168328a",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-refinement-replay-runtime-20261011.log": "b9174a689b7274aab009eae4048adbbb7fa6363b22ca7496eb792d7693ffa748",
+    "/Users/themoretheless/.codex/tmp/rrrah-refinement-replay-qualified-20261011/dedup-refinement-replay": "ec5b2fa18db95e69ed94509f6e924f1ece2ca375128a40b0cb134c3fc4ed90a2",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-refinement-replay-20261011.py": "a2101992407a3e1471bced2ec8dfca344b5ee7e5e076cfa92a078b10dae70382"
+  },
+  "summaries": [
+    {
+      "case": "overlap_bank6",
+      "fit_patches": 5,
+      "check_patches": 2,
+      "enough_groups": false,
+      "offset": [
+        -0.5,
+        -0.5
+      ],
+      "fit_before": 0.48284454006707844,
+      "fit_after": 0.49689025163514977,
+      "check_before": 0.9204835873293006,
+      "check_after": 0.7875237389767644,
+      "shared_source_pixels": 0,
+      "shared_reference_pixels_all_fit_trials_vs_checks": 0
+    },
+    {
+      "case": "overlap_bank7",
+      "fit_patches": 12,
+      "check_patches": 12,
+      "enough_groups": true,
+      "offset": [
+        0.5,
+        0.0
+      ],
+      "fit_before": 0.6153687494588145,
+      "fit_after": 0.7212870593242272,
+      "check_before": 0.5512412749804165,
+      "check_after": 0.5620626319227173,
+      "shared_source_pixels": 0,
+      "shared_reference_pixels_all_fit_trials_vs_checks": 0
+    },
+    {
+      "case": "rejected_bank12",
+      "fit_patches": 5,
+      "check_patches": 5,
+      "enough_groups": true,
+      "offset": [
+        -0.5,
+        -0.5
+      ],
+      "fit_before": 0.3038300210633903,
+      "fit_after": 0.31560928828692875,
+      "check_before": 0.3125889840407458,
+      "check_after": 0.3000090137012657,
+      "shared_source_pixels": 0,
+      "shared_reference_pixels_all_fit_trials_vs_checks": 0
+    }
+  ],
+  "scope": "Fixed25 global source-coordinate translations, original geometry retained within2 ULP across JSON parsers; all shift equations independently checked within2 ULP. Only left group selects translation, right group evaluated afterward. Independent arithmetic replay and zero-trial exact baseline parity; projected bilinear pixel-index footprints confirm no source/reference pixel reuse between all fit trials and both check evaluations for these cases. This does not establish statistical independence or held-out policy qualification: image/candidates/recipe were used during development. Bank6 has only2 check patches, below declared3. Native samples are not independently decoded/recomputed by auditor. No automatic recovery, new acceptance gate or general precision/performance claim; diagnostic scratch external."
+}

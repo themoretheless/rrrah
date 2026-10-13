@@ -1,0 +1,54 @@
+{
+  "scope": "Outward f64 interval evaluation of actual computed unprojected barycentric weights over device rectangle",
+  "tests": {
+    "source_passed": 120,
+    "source_ignored": 1,
+    "compositor_passed": 236,
+    "compositor_ignored": 12,
+    "sampled_points": 10404
+  },
+  "rounding": "Every inverse-transform multiply/add, point subtraction, cross product and division enclosed with outward next_down/next_up; denominator is exact singleton of unchanged actual floating constant computation",
+  "refusal": "Nonfinite intervals/results, zero denominator, reversed rectangle, exhausted shared work, cancellation",
+  "actual_query_rectangle_rows": [
+    {
+      "event": 2670,
+      "accepted": 682,
+      "refused": 0,
+      "nonnegative": 0,
+      "deficit_upper": 197629.42964053547,
+      "work": 14322
+    },
+    {
+      "event": 2670,
+      "accepted": 727,
+      "refused": 0,
+      "nonnegative": 0,
+      "deficit_upper": 20802.018037295526,
+      "work": 15267
+    },
+    {
+      "event": 2670,
+      "accepted": 405,
+      "refused": 0,
+      "nonnegative": 0,
+      "deficit_upper": 108669.0681668348,
+      "work": 8505
+    },
+    {
+      "event": 2670,
+      "accepted": 64,
+      "refused": 0,
+      "nonnegative": 0,
+      "deficit_upper": 1649.9011465627834,
+      "work": 1344
+    }
+  ],
+  "native_pixels_and_existing_comparisons_exact": true,
+  "conclusion": "Whole-pixel rectangle bounds are valid but much too wide for skinny retained source triangles; no domain nonnegativity certificate obtained",
+  "next": "Retain clipped-domain correlation using triangle or polygon vertices and quantified arithmetic error, rather than enclosing each source triangle in the entire pixel rectangle",
+  "limitations": [
+    "Not affine integration or color-error certificate",
+    "No samples skipped",
+    "The mathematical and independent color qualification of full viewer remains incomplete"
+  ]
+}

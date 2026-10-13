@@ -1,0 +1,98 @@
+{
+  "adapter": "RAW collection adapter: Metal Apple M4 Max",
+  "passed": 1,
+  "failed": 0,
+  "ignored": 0,
+  "rounds": 957,
+  "seconds": 600.074,
+  "restores_and_exact_metal_frames": 8613,
+  "initial_swap_writes": 9,
+  "viewport": [
+    1920,
+    1080
+  ],
+  "input_pins_reverified_after_run": [
+    {
+      "path": "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/1294.cr2",
+      "bytes": 36489482,
+      "sha256": "8f28465cee09844ffad95dbd3ec91923717a329c5ec4f3f405f5b4fce83aaea3"
+    },
+    {
+      "path": "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/898.nef",
+      "bytes": 26336302,
+      "sha256": "f90deb2819863f5a6ca9913c255fdd83a94963f4284eb88df9d389da7a6c7665"
+    },
+    {
+      "path": "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/2414.arw",
+      "bytes": 25639680,
+      "sha256": "250784580ea527442c09004417bb0eead484f2bf3ee8f9121a776ac65bb50d0f"
+    },
+    {
+      "path": "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/1084.orf",
+      "bytes": 14779462,
+      "sha256": "b2221977cbc6eba0d3b363351072092e5647eaa0d02a5d8432b5d985b29f669f"
+    },
+    {
+      "path": "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/831.pef",
+      "bytes": 14201244,
+      "sha256": "51a3f22d702353b246684dca79f83c79cfdbdf9892702ae5ac55dd469e239bb6"
+    },
+    {
+      "path": "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/5025.rw2",
+      "bytes": 19520000,
+      "sha256": "87516d28f8594dcfd20b0577883ad0d35662efc503674b1e3688aa894d32a2c0"
+    },
+    {
+      "path": "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/2883.raf",
+      "bytes": 26158592,
+      "sha256": "58ad687b23138c3c49ebeb6c1f80daf13185349be364b947e2bf27e39a462d2f"
+    },
+    {
+      "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/IMG_9043.CR3",
+      "bytes": 22382226,
+      "sha256": "d06cbb10e84882cf130430bdc88ed2652c2622b96dea8d6a854c09e3bee37e59"
+    },
+    {
+      "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/IMG_9074.CR3",
+      "bytes": 21368466,
+      "sha256": "9c0d47cc2dd550eb6dc26c4ba2b2874b67f5c89e79dff5c472abf0ac6b2f6178"
+    }
+  ],
+  "latency": {
+    "restore": {
+      "samples": 4096,
+      "total": 8613,
+      "window": "last4096",
+      "p50_ms": 41.462,
+      "p95_ms": 71.05,
+      "max_ms": 161.74
+    },
+    "gpu_upload_render_readback": {
+      "samples": 4096,
+      "total": 8613,
+      "window": "last4096",
+      "p50_ms": 25.043,
+      "p95_ms": 50.197,
+      "max_ms": 198.624
+    }
+  },
+  "checks": [
+    "full decoded sensor sample vector and metadata exact on every restore",
+    "forward/backward traversal through nine originals",
+    "managed full-root pressure refusal then retry",
+    "cancelled restore leaves root zero",
+    "entire 1920x1080 Metal frame exact against initial native frame",
+    "visible frame remains pinned during limit reduction",
+    "RAM empty after every spill",
+    "root/queue zero and swap errors zero every cycle and final drop"
+  ],
+  "log_sha256": "c6ef791bc9dad078ec7f0f9b8963a0b77d5ed8d78ff9380b5524d5324f529631",
+  "limits": [
+    "Warm local filesystem; not physical slow-disk throughput or OS-wide pressure",
+    "Expected frames come from the same native renderer, so this proves restore fidelity, not independent photographic appearance",
+    "Offscreen SDR viewport; not a ten-minute physical HDR presentation test",
+    "Renderer recreated per frame; persistent renderer replacement residency is qualified by separate tests",
+    "Storage root/queue assertions do not represent a process-wide/GPU memory cap",
+    "Physical HDR calibration and NVIDIA remain pending"
+  ]
+}

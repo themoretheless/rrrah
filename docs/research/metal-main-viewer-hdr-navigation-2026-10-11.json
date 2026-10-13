@@ -1,0 +1,28 @@
+{
+  "status": "visible_raw_navigation_verified_initial_frame_unresolved",
+  "backend": "Metal Apple M4 Max",
+  "surface": "Rgba16Float ExtendedSrgbLinear",
+  "binary_sha256": "05e86862baa05f3d76eb75b8fbd33939d0c4b76b22e731aab72c0ecd488d5fd3",
+  "fixtures": {
+    "/tmp/rrrah-viewer-hdr-input/IMG_9043.CR3": "d06cbb10e84882cf130430bdc88ed2652c2622b96dea8d6a854c09e3bee37e59",
+    "/tmp/rrrah-viewer-hdr-input/IMG_9074.CR3": "9c0d47cc2dd550eb6dc26c4ba2b2874b67f5c89e79dff5c472abf0ac6b2f6178"
+  },
+  "observed_ui": [
+    "Initial title full RAW ready from mosaic cache in 109.38ms; initial captured content blank",
+    "Right navigation: RAW 2/2; full RAW ready; native RAW decode 281.41ms, total 288.45ms; screenshot visibly shows second photograph and filmstrip",
+    "Left navigation: RAW 1/2; full RAW ready from mosaic cache in 538.62us; screenshot visibly shows first photograph and filmstrip"
+  ],
+  "limits": [
+    "UI title times are diagnostic load times, not controlled presentation benchmarks",
+    "Initial blank observation remains unresolved; startup display not qualified",
+    "Screenshots do not measure HDR panel luminance or color accuracy",
+    "Only two RAW fixtures and left/right navigation exercised",
+    "Temporary app with same viewer binary; input copies in /tmp avoid Documents open blocking",
+    "After closing, UI observation appears to have relaunched app; own remaining viewer processes explicitly terminated"
+  ],
+  "log": "[2026-10-10T22:52:28Z INFO  rrrah] GPU adapter: backend=Metal name=Apple M4 Max vendor=0x0000 device=0x0000\n[2026-10-10T22:52:28Z INFO  rrrah] Viewer surface: hdr=true format=Rgba16Float color_space=ExtendedSrgbLinear\n",
+  "stopped_test_pids": [
+    79018
+  ],
+  "followup": "Initial blank resolved in independent startup observation without navigation; see metal-main-viewer-hdr-startup-2026-10-11.json. Prior observations retained."
+}

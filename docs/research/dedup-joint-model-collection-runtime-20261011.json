@@ -1,0 +1,37 @@
+{
+  "status": "complete_bounded_native_joint_model",
+  "producer_pid": 81251,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-joint-model-collection-runtime-harness-20261011.json": "7a9aaab04658b5db6a0418ef8493be0c7bf54b4f6b7865b0d5ad760233778c92",
+    "/Users/themoretheless/.codex/tmp/dedup-joint-model-collection-runtime-build-20261011.jsonl": "93544959005e3ec2c89a1c1b72a199ed2d37c0d16e653adf81ce34a5ff0f9c5b",
+    "/Users/themoretheless/.codex/tmp/dedup-joint-model-collection-runtime-build-20261011.log": "b2454c236b6b5ff98e46548084d0af94e46f69fe43c4e11104d5387c02fd11af",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-model-collection-runtime-qualified-20261011/joint_model_collection_files": "bb7a516152224ec90fd85c9d4b078931b71ed34be927d4cafbd15cab57f657f5",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-publisher-positives-qualified-20261011/audits/ordering-prefix-0200.json": "a9d39b6918bb4496daa0381e9d4851545002a07d2dd4f8a98a0c444e82cc49d9",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200302.jpg": "bc4de3728d82839559134cc8155f87bdf7f8aeaca32b66bdea11f5a618420242",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200300.jpg": "0573729209c9ce6c109ea1175079960165b915dd5579121f0e15653d56f755d0",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors": "59e55bf0ecd047db9c513672d121a3ea677529ad448bdc3a359e92862c74ddd7",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-model-collection-runtime-qualified-20261011/third_source.jpg": "bc4de3728d82839559134cc8155f87bdf7f8aeaca32b66bdea11f5a618420242",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-joint-model-collection-runtime-20261011.py": "d4519bc4f99d5045fc772a11c8569bd1ac9bb3a40de5477e1e761cb2f033f437"
+  },
+  "command": [
+    "/usr/bin/time",
+    "-l",
+    "/usr/bin/env",
+    "DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-model-collection-runtime-qualified-20261011/joint_model_collection_files",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200302.jpg",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200300.jpg",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+    "640",
+    "0.78125",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-model-collection-runtime-qualified-20261011/third_source.jpg"
+  ],
+  "scope": "Real3-file CPU joint model collection on200300 baseline7 plus byte-identical strong-query copy at a distinct path;1m admitted hypotheses/filter12 fixed explicitly. Not full search, automatic scale choice, annotated precision or full corpus.",
+  "child_pid": 81263,
+  "returncode": 0,
+  "stdout": "{\"files\":[2,6,9],\"managed_peak\":72700352,\"managed_retained_before_drop\":23280,\"managed_used\":0,\"pairs\":[{\"detail\":{\"attempts\":1,\"pixels\":\"Some(AnchorRankEvidence { forward_anchors: 4256, reverse_anchors: 4256, forward: RankRegionEvidence { sites: 106400, valid_sites: 105039, informative_pairs: 672105, agreeing_pairs: 672105, pixel_reads: 43030595 }, reverse: RankRegionEvidence { sites: 106400, valid_sites: 104429, informative_pairs: 667933, agreeing_pairs: 667933, pixel_reads: 43032620 }, supported: true })\",\"transform\":[[1.0000475547997563,-0.000016103818067890615,-0.00971759823028151],[0.00001208803018418035,1.0000934755412128,-0.02878447955589536],[8.527464015917371e-8,3.196106226093536e-8,0.9999568733493074]]},\"left\":2,\"right\":6,\"support\":true},{\"detail\":{\"attempts\":13,\"pixels\":\"Some(AnchorRankEvidence { forward_anchors: 12, reverse_anchors: 12, forward: RankRegionEvidence { sites: 300, valid_sites: 300, informative_pairs: 1503, agreeing_pairs: 1441, pixel_reads: 121500 }, reverse: RankRegionEvidence { sites: 300, valid_sites: 300, informative_pairs: 1833, agreeing_pairs: 1775, pixel_reads: 121500 }, supported: true })\",\"transform\":[[1.717521442052154,-0.5806807984379434,493.2663511609886],[0.0662260894457567,1.8862368193007288,149.8055342549036],[-0.0002619660083535962,-0.000481954918694156,1.2212502058120005]]},\"left\":2,\"right\":9,\"support\":true},{\"detail\":{\"attempts\":13,\"pixels\":\"Some(AnchorRankEvidence { forward_anchors: 12, reverse_anchors: 12, forward: RankRegionEvidence { sites: 300, valid_sites: 300, informative_pairs: 1503, agreeing_pairs: 1441, pixel_reads: 121500 }, reverse: RankRegionEvidence { sites: 300, valid_sites: 300, informative_pairs: 1833, agreeing_pairs: 1775, pixel_reads: 121500 }, supported: true })\",\"transform\":[[1.717521442052154,-0.5806807984379434,493.2663511609886],[0.0662260894457567,1.8862368193007288,149.8055342549036],[-0.0002619660083535962,-0.000481954918694156,1.2212502058120005]]},\"left\":6,\"right\":9,\"support\":true}],\"scope\":\"Actual CPU exhaustive joint model collection on3 file IDs, fixed filter12/1m. No grouping or precision/full corpus/RSS claim.\"}\n",
+  "stderr": "      237.39 real       250.36 user         2.59 sys\n          2375876608  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n              346678  page reclaims\n                  10  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                 408  voluntary context switches\n              126248  involuntary context switches\n       2923527400435  instructions retired\n        672993307095  cycles elapsed\n          2336295264  peak memory footprint\n",
+  "elapsed_seconds": 237.400023584,
+  "log": "/Users/themoretheless/.codex/tmp/rrrah-joint-model-collection-runtime-qualified-20261011/200300.log",
+  "log_sha256": "8aeb3b5cb990f2c1e4b39ef6ec83c129913f3f5d8c85609c88cbb7f980c7f35c"
+}

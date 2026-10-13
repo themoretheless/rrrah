@@ -1,0 +1,38 @@
+{
+  "status": "failed",
+  "producer_pid": 83774,
+  "source_manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-projective-buffer-reuse-snapshot-20261011.json",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-projective-buffer-reuse-snapshot-20261011.json": "81a88b2e8c8c6fa4c69387a16cdde2452bfe4ee109036fe0c0cba69aebec7879",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/qualify-dedup-projective-buffer-reuse-20261011.py": "fdebdb0079f813fba5a8b51bcfa5e55a524aa46db8b55b5126b9bd3204b22400",
+    "/Users/themoretheless/.codex/tmp/rrrah-projective-buffer-reuse-qualified-20261011/build.jsonl": "1f8ba6d90ba5474fba9586a24e902d4cb422ade77c9f76ab368ea1595d6aa509",
+    "/Users/themoretheless/.codex/tmp/rrrah-projective-buffer-reuse-qualified-20261011/build.log": "19e16a389762f078bfdb4f687cafb3b6aa580d0b918d8fcaa5daf5f0d46874e1"
+  },
+  "build_command": [
+    "cargo",
+    "test",
+    "--manifest-path",
+    "/Users/themoretheless/.codex/tmp/rrrah-projective-buffer-reuse-snapshot-20261011/Cargo.toml",
+    "-p",
+    "rrrah-dedup",
+    "--no-default-features",
+    "--test",
+    "geometry",
+    "--test",
+    "projective_domains",
+    "--test",
+    "joint_projective",
+    "--locked",
+    "--offline",
+    "--no-run",
+    "--message-format=json",
+    "--config",
+    "profile.dev.package.rrrah-dedup.opt-level=3",
+    "--target-dir",
+    "/Users/themoretheless/.codex/tmp/rrrah-opposite-native-snapshot-20261011/target"
+  ],
+  "results": [],
+  "scope": "Frozen compatible four-crate source and lock, new joint primitive plus legacy/pair/collection tests. Source coherent before/after; root concurrent HDR edits preserved outside this gate. Not full workspace/platform/corpus/RSS qualification.",
+  "build_pid": 83828,
+  "error": "/Users/themoretheless/.codex/tmp/rrrah-projective-buffer-reuse-qualified-20261011/geometry.log"
+}

@@ -1,0 +1,33 @@
+{
+  "status": "passed",
+  "change": "Folder scan receives a count-bounded thumbnail cache snapshot and validates sources on its existing worker. UI invalidation compares texture ID, path and original fingerprint before removing entries. Changed first cover invalidates the previous cover even if old source still exists.",
+  "suites": [
+    {
+      "suite": "ordinary-viewer",
+      "passed": 180,
+      "failed": 0,
+      "ignored": 32,
+      "log": "/tmp/rrrah-folder-source-validation-20261011.log",
+      "log_sha256": "50263f4a030a6f28948baddd04a6056e78d769573523e009fa89cd3a24239a42"
+    },
+    {
+      "suite": "actual-metal-thumbnail-callback",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "log": "/tmp/rrrah-folder-source-metal-callback-20261011.log",
+      "log_sha256": "d5cd87fff138c4d7f4227df7df33b66057cf49627d631c2aef823ac5b08dd842"
+    }
+  ],
+  "source_sha256": {
+    "crates/rrrah-app/src/main.rs": "1b41fb591f9f0abf3054ec3700507aa9a533a2f2cfad8b17cd97ab8d3307dd8b",
+    "crates/rrrah-app/src/gallery.rs": "2db700bbc57943b3caa8ea93c2bf5e2ef25ac46d7ad8efb821367e48e6c9cbbb",
+    "crates/rrrah-app/src/filmstrip_ui.rs": "b5b37142a61cfd73227ea2d8842f6ee589141477a04c04f14b0f58de72e74cbe"
+  },
+  "limitations": [
+    "Blocked reader uses synchronized test channels, not physical slow storage.",
+    "A blocked OS read can still delay the scanning worker; this change removes UI file reads, not kernel I/O blocking.",
+    "No post-change native-window observation or physical HDR verification.",
+    "Same-selection foreground duplicate requests still synchronously fingerprint their source."
+  ]
+}

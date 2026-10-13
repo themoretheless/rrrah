@@ -1,0 +1,17 @@
+{
+  "backend": "Metal",
+  "passed": 126,
+  "failed": 0,
+  "ignored": 13,
+  "before": "Admitted finite corrected values 1e38 produced [inf, inf, NaN, 1] in RGBA32Float.",
+  "fix": "Reject corrected samples above f32MAX/max(16,width*height*4) before replacing resources; scan actual samples only when worst-case range requires it.",
+  "sources": {
+    "crates/rrrah-gpu/src/lib.rs": "83c6de2a8a9d391c78815fc62c1fd1e2facb41c92ab5659cf45bd83d8d0fbe5a",
+    "crates/rrrah-gpu/tests/raw_linear_readback.rs": "130049de5193e5e66246656be3912012b2366a9ebc9cccbf44332f234e3fb929"
+  },
+  "limits": [
+    "Conservative filter admission, not complete color matrix/exposure/binary16 range contract.",
+    "Arithmetic rewrite did not fix the reproduction on Metal and was withdrawn; original shader hash verified.",
+    "Current regression checks prior center pixel and valid retry in both float targets; not full extreme-frame appearance."
+  ]
+}

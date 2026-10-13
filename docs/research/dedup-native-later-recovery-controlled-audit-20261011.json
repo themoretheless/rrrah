@@ -1,0 +1,76 @@
+{
+  "status": "complete_bounded_frozen_native_later_recipe_recovery",
+  "frozen_files_each": 3063,
+  "changed_source_files": [
+    "crates/rrrah-dedup/src/anchor_rank_file.rs"
+  ],
+  "executions": [
+    {
+      "variant": "before",
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-native-later-recovery-controlled-qualified-20261011/before-test",
+      "binary_sha256": "5499707cacd91c3814c8b4d5d94414a3c43036deb4455e866e4edfa402fa8b52",
+      "returncode": 101,
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-native-later-recovery-controlled-qualified-20261011/before-execution.log",
+      "log_sha256": "b5adecfdf190b0921e31d09366c449cec96f46a5403603195b86aa483ea7185f",
+      "gzip": "/Users/themoretheless/.codex/tmp/rrrah-native-later-recovery-controlled-qualified-20261011/before-test.gz",
+      "gzip_sha256": "d97c9c68ab772b92597aba2dc0cf1516ef83fa85005d200feccf7bc3cab41a8f"
+    },
+    {
+      "variant": "after",
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-native-later-recovery-controlled-qualified-20261011/after-test",
+      "binary_sha256": "d925562d2b54a0a31731d244ce1649faa63a24108d001a7909de6a79a2e3cf17",
+      "returncode": 0,
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-native-later-recovery-controlled-qualified-20261011/after-execution.log",
+      "log_sha256": "910d12cbc515c15630697592e4bd07bb2f719b50e2136fd42b658415d64f0efd",
+      "gzip": "/Users/themoretheless/.codex/tmp/rrrah-native-later-recovery-controlled-qualified-20261011/after-test.gz",
+      "gzip_sha256": "b5e1857777dc613b9e5103ad473e9499381b8b3fc2e47e0816898e5bd849e0fc"
+    }
+  ],
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-native-later-recovery-before-snapshot-20261011.json": "b988935f9e799b2ab3ba48b95e3736397c022f5f2de50f67f1e2d3cb71dfb504",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-native-later-recovery-snapshot-20261011.json": "3e69f6eedb0b5ce79f9c3e81191b41901fd362cf82cbd0c82c983c06ee78bb7b",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-native-later-recipe-before-20261011.log": "4fad3d010e3d670abe690ea27b196b58b7ffdf735b20c3a8d06d69d6441cb953",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-native-later-recipe-frozen-after-20261011.log": "42565a632d7f0ecbe344879869647e61f65b2647a9ec511d1eaf8307b65a73f2",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-native-later-recovery-macos-audit-20261011.json": "31dd5c2bafb9cc12f7d16f1f2764a21b5df220eb11ce90f9566e8a29970ae032",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-native-later-recovery-controlled-20261011.py": "54cfc8abc4364347d4c7d410c36b429a2ed77135f607803afa6730b8e09dd6fc"
+  },
+  "fixtures": [
+    "angle-17.png",
+    "angle-63.png"
+  ],
+  "recipe_sizes": [
+    3,
+    6
+  ],
+  "first_recipe": [
+    0,
+    0
+  ],
+  "supported_recipe": [
+    1,
+    0
+  ],
+  "attempted_recipes": 2,
+  "minimum_witnesses": [
+    240,
+    220
+  ],
+  "verified_anchor_counts": [
+    [
+      254,
+      250
+    ],
+    [
+      226,
+      237
+    ]
+  ],
+  "exact_direct_second_recipe_geometry_points_and_pixel_evidence": true,
+  "managed_credit_released_before_recovery_and_after_result_drop": true,
+  "baseline_scope": "Both wrapper tests fail at angle-17 before reaching angle-63. Corrected tests each complete both fixtures.",
+  "limits": [
+    "Configured smoothing/strict anchor-count controls, not default-policy or broad-corpus recall",
+    "No Linux/Torch/Windows qualification of these new controls",
+    "Full repaired229, negative precision, automatic projected search and total model RSS remain separate requirements"
+  ]
+}

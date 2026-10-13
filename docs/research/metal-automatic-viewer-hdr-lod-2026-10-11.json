@@ -1,0 +1,95 @@
+{
+  "date": "2026-10-11",
+  "adapter": "Apple M4 Max",
+  "backend": "Metal",
+  "implementation": [
+    "Viewer opens a smaller scene-linear HDR level when full texture/current visible region cannot fit",
+    "Level dimensions are repeatedly halved until managed CPU output and current GPU texture/queue headroom admit a candidate",
+    "App LOD cache budget16MiB is a child of configured managed CPU root; independently managed when no root is configured",
+    "Managed source and one filtered level are retained without copying original pixels",
+    "View refresh reuses preview/exposure state, promotes to exact source region when admitted, and returns to cached preview on zoom-out",
+    "When cached preview exceeds replacement headroom, create/admit a smaller level before replacing old cache/frame",
+    "Original and preview both preserve pixel aspect, alpha-aware HDR and RAW monotone curve",
+    "Texture/queue planning query is advisory; actual upload reservations still enforce admission"
+  ],
+  "validation": {
+    "app_units_passed": 204,
+    "app_units_ignored": 41,
+    "explicit_actual_metal_tests_passed": 2,
+    "modes": [
+      "SDR",
+      "linear HDR",
+      "RAW-developed SDR",
+      "RAW-developed HDR"
+    ],
+    "automatic_test": {
+      "source_extent": [
+        512,
+        320
+      ],
+      "original_float_bytes": 2621440,
+      "texture_and_queue_budget_each": 160000,
+      "cpu_lod_child_budget": 100000,
+      "initial_preview": [
+        64,
+        40
+      ],
+      "initial_preview_bytes": 40960,
+      "pressure_preview": [
+        32,
+        20
+      ],
+      "pressure_preview_bytes": 10240,
+      "checks": [
+        "Automatic initial fit fallback succeeds",
+        "Exposure-only and unchanged fit do not upload",
+        "Zoom/pan source regions match whole-source reference frames",
+        "Return to fit matches cached LOD reference, no re-filter",
+        "Under20000 bytes GPU headroom cached40960-byte LOD is replaced by10240-byte level",
+        "External old preview owner remains charged during replacement",
+        "Managed source/LOD/texture/queue release tozero"
+      ]
+    },
+    "native_window": {
+      "bundle": "/tmp/RrrahLodMetalQualification.app",
+      "source": "/tmp/rrrah-lod-native-fixture/hdr-bands.pfm",
+      "source_extent": [
+        1000,
+        1000
+      ],
+      "source_float_bytes": 16000000,
+      "raster_gpu_cap": 1048576,
+      "managed_cpu_cap": 134217728,
+      "initial_preview_extent": [
+        250,
+        250
+      ],
+      "initial_preview_float_bytes": 1000000,
+      "ui_actions": [
+        "Raise actual window and inspect four HDR RGB/gray bands in fit",
+        "Scroll up to zoom; log confirms original16x14 source-region residency",
+        "Drag400 window pixels; log confirms region origin change492->489",
+        "PressF; inspect four bands again, log confirms preview mode",
+        "Quit own qualification bundle; its process absent afterward"
+      ],
+      "decoded_events": 1,
+      "surface_scope": "Native window, actual Metal adapter, requested HDR surface; no physical luminance/color measurement"
+    }
+  },
+  "limits": [
+    "Filtering/uploads are synchronous on current viewer thread; background cancellation/scheduling still open",
+    "Full CPU source remains retained; no out-of-core region decoder",
+    "One retained preview plus one current texture region; no multiregion LRU or overscan prefetch",
+    "Halving sizes is conservative, and preview quality can stay reduced until source-region replacement has headroom",
+    "Shared-ancestor/concurrent headroom can invalidate planning query; final atomic admission may refuse safely",
+    "Authored/native controls do not establish full100-format acceptance",
+    "Physical HDR accuracy, NVIDIA and physically slow-disk qualification remain open"
+  ],
+  "sha256": {
+    "crates/rrrah-app/src/main.rs": "0b80815fc9187fbd96ace1d8b9ff0a034117e51faada95f204e0f0cc8fee2197",
+    "crates/rrrah-app/src/raster_viewport.rs": "cfb52eba465ecc97f938cd19858a4a1ff53b7931347bbb7cae98bf37d686cc3b",
+    "crates/rrrah-gpu/src/raster.rs": "3d47a06351b910187d50f8e948dd428818d4e53b44b65c6246950f74a8ed3ea5",
+    "/tmp/RrrahLodMetalQualification.app/Contents/MacOS/rrrah": "698afc2bb384ee934822e8f3620987c34231223c19fc1f0e7c85be1257d88d3e",
+    "/tmp/rrrah-lod-native-fixture/hdr-bands.pfm": "19397c577682ccb1ab02e80bb17a2812742be2f0076a8e1736272f5cf0509575"
+  }
+}

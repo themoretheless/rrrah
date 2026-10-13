@@ -1,0 +1,76 @@
+   Compiling rrrah-core v0.1.0 (/workspace/crates/rrrah-core)
+   Compiling rrrah-dedup v0.1.0 (/workspace/crates/rrrah-dedup)
+warning: unused variable: `cancel`
+   --> crates/rrrah-dedup/src/local_index.rs:715:5
+    |
+715 |     cancel: impl Fn() -> bool,
+    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_cancel`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-dedup` (lib) generated 1 warning (run `cargo fix --lib -p rrrah-dedup` to apply 1 suggestion)
+    Finished `test` profile [optimized + debuginfo] target(s) in 32.20s
+     Running tests/geometry.rs (/validation/target/debug/deps/geometry-133484a354d5214d)
+
+running 9 tests
+test degenerate_least_squares_refinement_preserves_prior_hypothesis ... ok
+test alternative_geometry_keeps_degeneracy_guards_and_deduplicates_identical_models ... ok
+test duplicate_and_collinear_support_cannot_inflate_evidence ... ok
+test capped_residual_candidate_preserves_exact_majority_beside_count_winner ... ok
+test noisy_corners_refine_to_independently_known_least_squares_solution ... ok
+test one_shot_cancel_never_publishes_partial_geometry_and_retry_recovers_support ... ok
+test scaled_rotated_crop_translation_rejects_watermark_outliers ... ok
+test reflected_geometry_keeps_support_original_coordinates_and_cancel_atomicity ... ok
+test alternative_geometry_budget_and_cancellation_never_publish_partial_models ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/projective_domains.rs (/validation/target/debug/deps/projective_domains-7631f72202117c09)
+
+running 4 tests
+test supported_horizon_model_is_excluded_from_whole_domains ... ok
+test admissible_model_matches_original_and_cancellation_is_atomic ... ok
+test inverse_horizon_is_rejected_even_when_forward_domain_is_valid ... ok
+test valid_alternative_survives_a_stronger_horizon_consensus ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/projective_exhaustive_domains.rs (/validation/target/debug/deps/projective_exhaustive_domains-c691af4d219af2c1)
+
+running 3 tests
+test horizon_only_points_and_zero_domains_are_explicit ... ok
+test every_cancel_and_one_short_work_limit_refuse_partial_results ... ok
+test weaker_eligible_model_is_not_hidden_by_stronger_horizon_model ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/projective_geometry.rs (/validation/target/debug/deps/projective_geometry-c618cb70e5ca3954)
+
+running 14 tests
+test perspective_mapping_and_permutations ... ok
+test invalid_horizon_and_cancel_checkpoints ... ok
+test perspective_pixels_hdr_edits_horizon_and_cancel ... ok
+test full_support_refinement_beats_minimal_hypotheses_on_noisy_points ... ok
+test perspective_inverse_grid_catches_unsampled_edit ... ok
+test projective_filter_preserves_strict_edits_and_terminal_cancellation ... ok
+test registration_candidates_keep_independent_full_grid_evidence_and_shared_limits ... ok
+test perspective_photometric_fit_preserves_unfitted_errors_and_limits ... ok
+test robust_perspective_outliers_budget_and_cancellation ... ok
+test sampled_projective_cancellation_discards_models_and_retry_is_deterministic ... ok
+test sampled_projective_recovers_large_outlier_set_with_fixed_work ... ok
+test registration_portfolio_admits_shared_work_and_discards_partial_models_on_cancel ... ok
+test photometric_registration_keeps_geometry_under_affine_encoded_light_change ... ok
+test pixel_registration_reduces_known_offset_and_obeys_terminal_limits ... ok
+
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.19s
+
+     Running tests/proposals.rs (/validation/target/debug/deps/proposals-0d0c6be6e9ba36e7)
+
+running 4 tests
+test heap_selection_matches_stable_reference_with_ties_boundaries_and_both_side_collisions ... ok
+test malformed_inputs_and_each_work_limit_refuse_without_a_partial_result ... ok
+test every_checkpoint_including_heap_and_final_observes_one_shot_cancellation ... ok
+test managed_payload_credit_survives_clones_and_all_cancellation_paths_release_it ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

@@ -1,0 +1,6 @@
+{
+  "status": "auditor_expected_full81_sample_patches_but_aperture_edge_taps_refused",
+  "auditor_sha256": "f0c3dffb662ffbf0b21b9f67fbda26d44576c3e659d159de0d6caa529a894176",
+  "observed": "564 patches,45516 valid sample pairs;20 patches lose7-9 samples at reference edges. No runtime failure or padded/clipped aperture substitution.",
+  "correction": "Allow explicit72..81 valid sample counts and retain all81 attempted site read upper bounds. Disclose incomplete edge patches."
+}

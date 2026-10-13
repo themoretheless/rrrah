@@ -1,0 +1,52 @@
+{
+  "status": "complete_bounded_real_cpu_native_bank_cascade",
+  "producer_pid": 98063,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-native-bank-cascade-native-snapshot-20261011.json": "7d96e2d51ed4fdff826de9eda680f754a471142501a82fbf6a96213c3545c649",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-native-bank-cascade-native-harness-20261011.json": "0326632b2592c5b160f572b29a050abf9af97c9778087d52dba97b8fcec67855",
+    "/Users/themoretheless/.codex/tmp/dedup-native-bank-cascade-native-build-20261011.jsonl": "8b8b1a80d6dc18e3d7434dee0468246a5de1b250eb0a0439034f7fcc873361d8",
+    "/Users/themoretheless/.codex/tmp/dedup-native-bank-cascade-native-build-20261011.log": "bd0965b7b3cea581bc633fc179edce46252afc9017bebb7353858cfac5aabbbc",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-exact-portfolio-20261011/debug/native_bank_cascade_files": "c48360bb39a76af441475aa16bd9c03335b3da38bcf453c61377860795aebe78",
+    "/Users/themoretheless/.codex/tmp/rrrah-native-bank-cascade-native-qualified-20261011/native_bank_cascade_files": "c48360bb39a76af441475aa16bd9c03335b3da38bcf453c61377860795aebe78",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-publisher-positives-qualified-20261011/audits/ordering-prefix-0458.json": "a790769341341700f9abba71a364a888851021be78ee0417badbdc0a89387707",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors": "59e55bf0ecd047db9c513672d121a3ea677529ad448bdc3a359e92862c74ddd7",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/211901.jpg": "6c076f5642a9de92efb53cfe0734d7140a499fd44d08d2b1d93199c2bfc9bcd9",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/211900.jpg": "81faa5e0860359aa092a5b1e04de4130acd1168182bb5fdf55c7dd73af9fd8fe",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-native-bank-cascade-native-20261011.py": "a31ba79c2182a2d401069f40a55ede1a015563bac48f961d66ac8ff61d7bbb04"
+  },
+  "plan": {
+    "original_id": 119,
+    "query_id": 329,
+    "group_id": 211900,
+    "original": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/211900.jpg",
+    "query": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/211901.jpg",
+    "direction": "reverse",
+    "left": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/211901.jpg",
+    "right": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/211900.jpg",
+    "source_tolerance": 0.5,
+    "gradient_minimum_distance": 0.3314793740243949,
+    "radius_0_1_proposed": false,
+    "baseline_index": 3
+  },
+  "command": [
+    "/usr/bin/time",
+    "-l",
+    "/usr/bin/env",
+    "DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+    "/Users/themoretheless/.codex/tmp/rrrah-native-bank-cascade-native-qualified-20261011/native_bank_cascade_files",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/211901.jpg",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/211900.jpg",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+    "640",
+    "0.5",
+    "4096"
+  ],
+  "scope": "Actual CPU reverse211901→211900 fixed direct-native/joint-opposite/bank order with complete bank25/radii2/6/filter12/1m admission and opposite4096/filter8. Expected native support skips learned inference, original pixel gates unchanged; no general speedup/full corpus/precision/RSS cap qualification.",
+  "child_pid": 98146,
+  "returncode": 0,
+  "stdout": "{\"detail\":{\"candidate_points\":113,\"native_miss\":\"Some(InsufficientAnchorGeometry(Native))\",\"native_recipes\":1,\"pixels\":{\"anchors\":[12,12],\"directions\":[{\"agreeing_pairs\":1960,\"informative_pairs\":2019,\"sites\":300,\"valid_sites\":295},{\"agreeing_pairs\":2199,\"informative_pairs\":2207,\"sites\":300,\"valid_sites\":300}],\"supported\":true},\"reflected_proposal_source\":false,\"terminal\":\"joint_opposite_native\",\"transform\":[[0.07530297274093972,0.6890112936542554,1198.491120396432],[-0.603301768676062,0.04677807525667126,1241.021342435097],[0.00005000535441275515,0.00003692815773147605,0.9722710229903718]]},\"managed_peak\":329062128,\"managed_retained_before_drop\":896000,\"managed_used\":0,\"model_attempted\":false,\"opposite_insufficient\":false,\"opposite_trials\":4096,\"scope\":\"Actual CPU fixed direct-native/opposite/bank cascade; admitted model remains lazy when native supports, explicit2/6/model filter12/opposite filter8. No general speedup/full corpus/precision/RSS qualification.\",\"supported\":true}\n",
+  "stderr": "      269.84 real       215.96 user         1.84 sys\n           728285184  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n              315854  page reclaims\n                  10  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                  10  voluntary context switches\n              136437  involuntary context switches\n       1904949238627  instructions retired\n        422200945230  cycles elapsed\n           682853528  peak memory footprint\n",
+  "elapsed_seconds": 269.870924292,
+  "log": "/Users/themoretheless/.codex/tmp/rrrah-native-bank-cascade-native-qualified-20261011/211900.log",
+  "log_sha256": "43042f58e2400a4a70e6052d5f9d01ba489f58777d9aa123079ca543ac665dd9"
+}

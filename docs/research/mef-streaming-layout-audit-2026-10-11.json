@@ -1,0 +1,270 @@
+{
+  "source_sha256": "bcd63507c3c4cc3ea1bad2945e3f88cb4677a1a3c762e1acc38df4445714eb7c",
+  "source_bytes": 36575308,
+  "direct_tiff_layout": [
+    {
+      "offset": 8,
+      "entries": 24,
+      "fields": [
+        {
+          "tag": 256,
+          "type": 3,
+          "count": 1,
+          "values": [
+            144
+          ],
+          "data_offset": null
+        },
+        {
+          "tag": 257,
+          "type": 3,
+          "count": 1,
+          "values": [
+            192
+          ],
+          "data_offset": null
+        },
+        {
+          "tag": 258,
+          "type": 3,
+          "count": 3,
+          "values": [
+            8,
+            8,
+            8
+          ],
+          "data_offset": 302
+        },
+        {
+          "tag": 273,
+          "type": 4,
+          "count": 1,
+          "values": [
+            117580
+          ],
+          "data_offset": null
+        },
+        {
+          "tag": 279,
+          "type": 4,
+          "count": 1,
+          "values": [
+            82944
+          ],
+          "data_offset": null
+        },
+        {
+          "tag": 330,
+          "type": 4,
+          "count": 3,
+          "values": [
+            116920,
+            117164,
+            117372
+          ],
+          "data_offset": 430
+        },
+        {
+          "tag": 34665,
+          "type": 4,
+          "count": 1,
+          "values": [
+            490
+          ],
+          "data_offset": null
+        }
+      ]
+    },
+    {
+      "offset": 116920,
+      "entries": 18,
+      "fields": [
+        {
+          "tag": 256,
+          "type": 3,
+          "count": 1,
+          "values": [
+            4016
+          ],
+          "data_offset": null
+        },
+        {
+          "tag": 257,
+          "type": 3,
+          "count": 1,
+          "values": [
+            5344
+          ],
+          "data_offset": null
+        },
+        {
+          "tag": 258,
+          "type": 3,
+          "count": 3,
+          "values": [
+            12,
+            12,
+            12
+          ],
+          "data_offset": 117158
+        },
+        {
+          "tag": 273,
+          "type": 4,
+          "count": 1,
+          "values": [
+            4383052
+          ],
+          "data_offset": null
+        },
+        {
+          "tag": 279,
+          "type": 4,
+          "count": 1,
+          "values": [
+            32192256
+          ],
+          "data_offset": null
+        }
+      ]
+    },
+    {
+      "offset": 117164,
+      "entries": 15,
+      "fields": [
+        {
+          "tag": 256,
+          "type": 3,
+          "count": 1,
+          "values": [
+            992
+          ],
+          "data_offset": null
+        },
+        {
+          "tag": 257,
+          "type": 3,
+          "count": 1,
+          "values": [
+            1328
+          ],
+          "data_offset": null
+        },
+        {
+          "tag": 258,
+          "type": 3,
+          "count": 3,
+          "values": [
+            8,
+            8,
+            8
+          ],
+          "data_offset": 117350
+        },
+        {
+          "tag": 273,
+          "type": 4,
+          "count": 1,
+          "values": [
+            430924
+          ],
+          "data_offset": null
+        },
+        {
+          "tag": 279,
+          "type": 4,
+          "count": 1,
+          "values": [
+            3952128
+          ],
+          "data_offset": null
+        }
+      ]
+    },
+    {
+      "offset": 117372,
+      "entries": 15,
+      "fields": [
+        {
+          "tag": 256,
+          "type": 3,
+          "count": 1,
+          "values": [
+            240
+          ],
+          "data_offset": null
+        },
+        {
+          "tag": 257,
+          "type": 3,
+          "count": 1,
+          "values": [
+            320
+          ],
+          "data_offset": null
+        },
+        {
+          "tag": 258,
+          "type": 3,
+          "count": 3,
+          "values": [
+            8,
+            8,
+            8
+          ],
+          "data_offset": 117558
+        },
+        {
+          "tag": 273,
+          "type": 4,
+          "count": 1,
+          "values": [
+            200524
+          ],
+          "data_offset": null
+        },
+        {
+          "tag": 279,
+          "type": 4,
+          "count": 1,
+          "values": [
+            230400
+          ],
+          "data_offset": null
+        }
+      ]
+    },
+    {
+      "offset": 29704,
+      "invalid_entry_count": 4084
+    },
+    {
+      "offset": 29912,
+      "invalid_entry_count": 4088
+    }
+  ],
+  "qualified_sensor": {
+    "width": 4016,
+    "height": 5344,
+    "strip_offset": 4383052,
+    "strip_bytes": 32192256,
+    "end": 36575308,
+    "output_u16_bytes": 42923008,
+    "packed_row_bytes": 6024
+  },
+  "current_file_import_peak_bytes": 79498316,
+  "finding": "All four valid root/SubIFD tables end before packed sensor; source prefix also contains previews. A seekable metadata parser can avoid retaining image payloads. No streaming production MEF change made.",
+  "requirements_for_safe_streaming": [
+    "Validate all referenced TIFF metadata ranges and nonoverlap using real file length",
+    "Preserve exact camera and geometry checks, duplicate sensor rejection and typed source errors",
+    "Bound metadata allocation separately from sensor output and one packed row",
+    "Do not treat opaque non-TIFF next pointers as valid tables or weaken generic TIFF validation",
+    "Retain cancellation, final length checks and full independent sensor oracle equality"
+  ],
+  "limitations": [
+    "One pinned Mamiya ZD file only",
+    "Direct TIFF audit is not full MakerNote/WB parsing",
+    "Original code still allocates full source",
+    "WB and public color viewer remain unqualified"
+  ]
+}

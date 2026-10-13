@@ -1,0 +1,98 @@
+   Compiling moxcms v0.8.1 (/Users/themoretheless/.codex/tmp/rrrah-model-reuse-snapshot-20261011/vendor/moxcms)
+   Compiling rrrah-memory v0.1.0 (/Users/themoretheless/.codex/tmp/rrrah-model-reuse-snapshot-20261011/crates/rrrah-memory)
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/.codex/tmp/rrrah-model-reuse-snapshot-20261011/crates/rrrah-dedup)
+   Compiling loftr v0.1.1 (/Users/themoretheless/.codex/tmp/rrrah-model-reuse-snapshot-20261011/vendor/loftr)
+   Compiling rrrah-core v0.1.0 (/Users/themoretheless/.codex/tmp/rrrah-model-reuse-snapshot-20261011/crates/rrrah-core)
+warning: method `forward_t` is never used
+   --> /Users/themoretheless/.codex/tmp/rrrah-model-reuse-snapshot-20261011/vendor/loftr/src/backbone.rs:274:12
+    |
+221 | impl ResNetFpn8_2 {
+    | ----------------- method in this implementation
+...
+274 |     pub fn forward_t(&self, x: &Tensor, train: bool) -> Result<(Tensor, Tensor), LoftrError> {
+    |            ^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `forward_t` is never used
+   --> /Users/themoretheless/.codex/tmp/rrrah-model-reuse-snapshot-20261011/vendor/loftr/src/backbone.rs:329:12
+    |
+328 | impl Backbone {
+    | ------------- method in this implementation
+329 |     pub fn forward_t(&self, x: &Tensor, train: bool) -> Result<(Tensor, Tensor), LoftrError> {
+    |            ^^^^^^^^^
+
+warning: method `forward` is never used
+   --> /Users/themoretheless/.codex/tmp/rrrah-model-reuse-snapshot-20261011/vendor/loftr/src/transformer.rs:166:12
+    |
+147 | impl LocalFeatureTransformer {
+    | ---------------------------- method in this implementation
+...
+166 |     pub fn forward(
+    |            ^^^^^^^
+
+warning: `loftr` (lib) generated 3 warnings
+   Compiling image v0.25.10
+   Compiling hayro-interpret v0.7.0 (/Users/themoretheless/.codex/tmp/rrrah-model-reuse-snapshot-20261011/vendor/hayro-interpret)
+   Compiling hayro v0.7.1 (/Users/themoretheless/.codex/tmp/rrrah-model-reuse-snapshot-20261011/vendor/hayro)
+   Compiling jxl-oxide v0.12.6
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/.codex/tmp/rrrah-model-reuse-snapshot-20261011/crates/rrrah-decode)
+error: expected expression, found `let` statement
+   --> /Users/themoretheless/.codex/tmp/rrrah-model-reuse-snapshot-20261011/crates/rrrah-dedup/src/model_loftr.rs:406:5
+    |
+406 |     let mut model = None;
+    |     ^^^
+    |
+    = note: only supported directly in conditions of `if` and `while` expressions
+
+error: invalid const generic expression
+   --> /Users/themoretheless/.codex/tmp/rrrah-model-reuse-snapshot-20261011/crates/rrrah-dedup/src/model_loftr.rs:406:5
+    |
+406 |     let mut model = None;
+    |     ^^^^^^^^^^^^^^^^^^^^
+    |
+help: expressions must be enclosed in braces to be used as const generic arguments
+    |
+406 |     { let mut model = None };
+    |     +                      +
+
+error: expected one of `!`, `,`, `.`, `::`, `:`, `=`, `>`, `?`, `{`, or an operator, found `;`
+   --> /Users/themoretheless/.codex/tmp/rrrah-model-reuse-snapshot-20261011/crates/rrrah-dedup/src/model_loftr.rs:406:25
+    |
+406 |     let mut model = None;
+    |                         ^ expected one of 10 possible tokens
+    |
+help: use a comma to separate type parameters
+    |
+406 -     let mut model = None;
+407 -     crate::portfolio_collection::PortfolioCollectionReport,
+406 +     let mut model = None, crate::portfolio_collection::PortfolioCollectionReport,
+    |
+
+error[E0425]: cannot find value `model` in this scope
+   --> /Users/themoretheless/.codex/tmp/rrrah-model-reuse-snapshot-20261011/crates/rrrah-dedup/src/model_loftr.rs:418:39
+    |
+418 |             proposals_with_model(&mut model, weights, left, right, cap, budget, cancel)
+    |                                       ^^^^^ not found in this scope
+
+error[E0107]: enum takes 2 generic arguments but 3 generic arguments were supplied
+   --> /Users/themoretheless/.codex/tmp/rrrah-model-reuse-snapshot-20261011/crates/rrrah-dedup/src/model_loftr.rs:405:6
+    |
+405 |   ) -> Result<
+    |        ^^^^^^ expected 2 generic arguments
+406 |       let mut model = None;
+407 |       crate::portfolio_collection::PortfolioCollectionReport,
+    |  ___________________________________________________________-
+408 | |     crate::portfolio_collection::PortfolioCollectionError,
+    | |_________________________________________________________- help: remove the unnecessary generic argument
+    |
+note: enum defined here, with 2 generic parameters: `T`, `E`
+   --> /Users/themoretheless/.rustup/toolchains/stable-aarch64-apple-darwin/lib/rustlib/src/rust/library/core/src/result.rs:557:10
+    |
+557 | pub enum Result<T, E> {
+    |          ^^^^^^ -  -
+
+Some errors have detailed explanations: E0107, E0425.
+For more information about an error, try `rustc --explain E0107`.
+error: could not compile `rrrah-dedup` (lib) due to 5 previous errors
+warning: build failed, waiting for other jobs to finish...

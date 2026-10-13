@@ -1,0 +1,97 @@
+{
+  "status": "complete_bounded_joint_model_gap_controls",
+  "producer_pid": 21755,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-model-bank-native-audit-20261011.json": "cdafb043a7c5ebc02cb0a92fadf52060d87b4acc3a923466813256634483f45d",
+    "/Users/themoretheless/.codex/tmp/rrrah-model-bank-native-qualified-20261011/model_banks_files": "658699bb454acdccbe9bbb929f6922b51c70712d9837529956401e8b89a5370e",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-model-bank-broader-controls-qualified-20261011/joint_model_tiles_files": "658699bb454acdccbe9bbb929f6922b51c70712d9837529956401e8b89a5370e",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-publisher-positives-qualified-20261011/audits/ordering-prefix-0458.json": "a790769341341700f9abba71a364a888851021be78ee0417badbdc0a89387707",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors": "59e55bf0ecd047db9c513672d121a3ea677529ad448bdc3a359e92862c74ddd7",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-model-bank-broader-controls-20261011.py": "eda90190502cb9b55994495e62a4db57ce0dd3a78bb28c46a53dbfb282328b83",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200302.jpg": "bc4de3728d82839559134cc8155f87bdf7f8aeaca32b66bdea11f5a618420242",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200300.jpg": "0573729209c9ce6c109ea1175079960165b915dd5579121f0e15653d56f755d0",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/203502.jpg": "bf1d351e0a8259716fe65e0eb3c37a55e25bfa3d1d06042c8a50f8935b31dd1c",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/203500.jpg": "e22cba724438643ac01eb2516eab2ab466d51544218f9096c2a99fbbf07c4aac"
+  },
+  "plan": [
+    {
+      "original_id": 3,
+      "query_id": 162,
+      "group_id": 200300,
+      "original": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200300.jpg",
+      "query": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200302.jpg",
+      "direction": "reverse",
+      "left": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200302.jpg",
+      "right": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200300.jpg",
+      "source_tolerance": 0.78125,
+      "gradient_minimum_distance": 0.3079304424492396,
+      "radius_0_1_proposed": false,
+      "baseline_index": 7
+    },
+    {
+      "original_id": 35,
+      "query_id": 209,
+      "group_id": 203500,
+      "original": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/203500.jpg",
+      "query": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/203502.jpg",
+      "direction": "reverse",
+      "left": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/203502.jpg",
+      "right": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/203500.jpg",
+      "source_tolerance": 0.5536776036072714,
+      "gradient_minimum_distance": 0.19068231807512986,
+      "radius_0_1_proposed": false,
+      "baseline_index": 67
+    }
+  ],
+  "results": [
+    {
+      "group_id": 200300,
+      "status": "supported",
+      "command": [
+        "/usr/bin/time",
+        "-l",
+        "/usr/bin/env",
+        "DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+        "/Users/themoretheless/.codex/tmp/rrrah-joint-model-bank-broader-controls-qualified-20261011/joint_model_tiles_files",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200302.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200300.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+        "640",
+        "0.78125"
+      ],
+      "pid": 21879,
+      "returncode": 0,
+      "stdout": "{\"attempts\":25,\"geometry_inliers\":17,\"hypothesis_bank\":12,\"managed_peak\":71246976,\"managed_used\":0,\"original_dimensions\":[[800,600],[2048,1536]],\"pixels\":\"Some(AnchorRankEvidence { forward_anchors: 17, reverse_anchors: 16, forward: RankRegionEvidence { sites: 425, valid_sites: 425, informative_pairs: 2294, agreeing_pairs: 2226, pixel_reads: 172125 }, reverse: RankRegionEvidence { sites: 400, valid_sites: 400, informative_pairs: 2524, agreeing_pairs: 2466, pixel_reads: 162000 }, supported: true })\",\"raw_proposals\":569,\"scope\":\"Actual CPU25-bank extraction, automatic hypothesis and original pixels; explicit1m/filter12, not full corpus/precision/RSS qualification.\",\"selected_points\":569,\"supported\":true,\"transform\":[[1.717521442052154,-0.5806807984379434,493.2663511609886],[0.0662260894457567,1.8862368193007288,149.8055342549036],[-0.0002619660083535962,-0.000481954918694156,1.2212502058120005]]}\n",
+      "stderr": "       84.69 real        95.03 user         2.23 sys\n          1955610624  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n              169303  page reclaims\n                  10  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                   1  voluntary context switches\n              140316  involuntary context switches\n        858076808512  instructions retired\n        225635022988  cycles elapsed\n          1916078168  peak memory footprint\n",
+      "elapsed_seconds": 84.705786458,
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-joint-model-bank-broader-controls-qualified-20261011/200300.log",
+      "log_sha256": "490fb1082e1465d7ce344c3f403217b64fcfd5feeb86a230218b2152ed31c1d0",
+      "attempts": 25
+    },
+    {
+      "group_id": 203500,
+      "status": "inconclusive",
+      "command": [
+        "/usr/bin/time",
+        "-l",
+        "/usr/bin/env",
+        "DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+        "/Users/themoretheless/.codex/tmp/rrrah-joint-model-bank-broader-controls-qualified-20261011/joint_model_tiles_files",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/203502.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/203500.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+        "640",
+        "0.5536776036072714"
+      ],
+      "pid": 23215,
+      "returncode": 0,
+      "stdout": "{\"attempts\":25,\"geometry_inliers\":18,\"hypothesis_bank\":15,\"managed_peak\":128643456,\"managed_used\":0,\"original_dimensions\":[[800,600],[3008,2000]],\"pixels\":\"Some(AnchorRankEvidence { forward_anchors: 18, reverse_anchors: 18, forward: RankRegionEvidence { sites: 450, valid_sites: 450, informative_pairs: 167, agreeing_pairs: 167, pixel_reads: 182250 }, reverse: RankRegionEvidence { sites: 450, valid_sites: 359, informative_pairs: 391, agreeing_pairs: 391, pixel_reads: 182250 }, supported: false })\",\"raw_proposals\":989,\"scope\":\"Actual CPU25-bank extraction, automatic hypothesis and original pixels; explicit1m/filter12, not full corpus/precision/RSS qualification.\",\"selected_points\":989,\"supported\":false,\"transform\":[[4.014021852855428,-3.1763643188682384,356.41269201716926],[3.547499286589031,5.786973533300719,-2379.340958757816],[0.0000804053200362516,0.0007482635994184681,0.6235693133629174]]}\n",
+      "stderr": "       62.41 real        71.98 user         1.27 sys\n          1449754624  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n              124222  page reclaims\n                   9  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                 484  voluntary context switches\n               77700  involuntary context switches\n        879000445592  instructions retired\n        202644405719  cycles elapsed\n          1409877744  peak memory footprint\n",
+      "elapsed_seconds": 62.41883470900001,
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-joint-model-bank-broader-controls-qualified-20261011/203500.log",
+      "log_sha256": "9ad1c632e0bdda6856ce6da32a6c8ea0e87b27453ba2497b87fd9eef6e98451c",
+      "attempts": 25
+    }
+  ],
+  "scope": "Reverse200302\u2192200300 baseline7 and reverse203502\u2192203500 baseline67 through actual CPU25-bank search,1m hypotheses/window, fixed filter12/window2, original residual/pixel floors unchanged. Missing support is inconclusive, not semantic rejection. No full portfolio/precision/corpus/default claim."
+}

@@ -1,0 +1,37 @@
+{
+  "date": "2026-10-12",
+  "adapter": "Metal Apple M4 Max",
+  "fixture_generator": "scripts/generate-gray-icc-fixtures.py",
+  "generation_reproduced_identical_bytes": true,
+  "fixture_sha256": {
+    "tests/fixtures/raster/gray-gamma2-alpha16.png": "f9819d09607a4f0097b9e043519982ea0094421671b49d9c6c9f2a8035242d12",
+    "tests/fixtures/raster/gray-gamma2-16.tif": "85869ab0b6cecf2808140071f16e0e3bfff17c8740d6329800a73601c5ef76b7"
+  },
+  "gray_profile": "independently byte-authored Gray ICC v2 gamma-2, D50 white point",
+  "native_samples": [
+    0,
+    32768,
+    32769,
+    65535
+  ],
+  "checks": [
+    "native 16-bit samples exact",
+    "linear RGB agrees with squared normalized gray samples within 0.0001",
+    "16-bit alpha preserved",
+    "adjacent native samples distinct after display preparation",
+    "native/prepared swap under managed pressure preserves pixel bits/profile and SDR/RGBA16Float frames",
+    "final managed root and swap queue zero"
+  ],
+  "collection": {
+    "sources": 69,
+    "selections": 98,
+    "storage_cases": 196,
+    "passed": 1,
+    "failed": 0
+  },
+  "log_sha256": "0b5b833257b1ffc181b072af2fcb94b98fc2aa5895d6e4d80d0fa6d8e787d741",
+  "limits": [
+    "Two authored grayscale producers and one tone curve, not universal PNG/TIFF/ICC coverage",
+    "Same-renderer GPU frame comparison establishes transport consistency, not calibrated physical HDR color"
+  ]
+}

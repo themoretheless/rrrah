@@ -1,0 +1,696 @@
+{
+  "status": "complete_bounded_five_native_projected_controls_execution",
+  "producer_pid": 57185,
+  "scope": "Frozen CPU LoFTR controls for projected candidates and original-RGBA proof.",
+  "snapshot": "docs/research/dedup-projected-loftr-identity-snapshot-20261011.json",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-projected-loftr-identity-snapshot-20261011.json": "e133fb5e63906bb4d23587c092ad06e5acb37d415447dd836052ae9b07c2b2c4",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-projected-loftr-fixtures-20261011.json": "8ad999ebeef7928b6cef67b37204afecafb70bd3c5993a91c0ce698214fdd316",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-projected-loftr-identity-20261011.py": "e5b32db81a3d4eabb637d348af60dc37d23d541e27192265633502df3c2b5314",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-projected-loftr-identity-build-20261011.log": "cfb5741c67787bbce4e0f3cc3c0980d8b296a76058f8cf066611212641ebbdd7",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-loftr-native-20261010-runtime-pins.json": "8daa92d3ed2c84278338c53eedffed1fcdc272bf8ee7a419397cd7f098a6783a",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors": "59e55bf0ecd047db9c513672d121a3ea677529ad448bdc3a359e92862c74ddd7",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/projected-loftr-controls-20261011/alpha-collision.qoi": "35079025d00f3d925986b64f3041b4f27c82b120a5f53a13bcbb69423cff39a3",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/projected-loftr-controls-20261011/alpha-copy.qoi": "1cb18bbc4ca6cc87bacbcf1ef92729f178834bcd0e6b0cb5d12791ca8c468bb1",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/projected-loftr-controls-20261011/alpha.qoi": "1cb18bbc4ca6cc87bacbcf1ef92729f178834bcd0e6b0cb5d12791ca8c468bb1",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/projected-loftr-controls-20261011/hdr-collision.pfm": "3ee2ef1fd1cf317b25195ddb53a7c4dc395d0dec8a6d568a729d2a49b6ce7e29",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/projected-loftr-controls-20261011/hdr-copy.pfm": "8d65de516f8ccba6e0bc9e397dad9ef1ba21090944c27f32c91a6835d99ab7f8",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/projected-loftr-controls-20261011/hdr-unrelated.pfm": "70767553261328224686e7a72105c894b1691d5a2ca9ac5cd9ba1ea498284d4d",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/projected-loftr-controls-20261011/hdr.pfm": "8d65de516f8ccba6e0bc9e397dad9ef1ba21090944c27f32c91a6835d99ab7f8",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/209400.jpg": "d9caf92ca47a9047154bd987ee240832b1cc2a01b73fd83144043f181c127777",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/209500.jpg": "cc97ab865b9cb1dc758a35233a7b2d3a3493766dfe5fcab33ee6dfad17aeaa04",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/generate-dedup-projected-loftr-controls-20261011.py": "2299f44d3631e8b3ee44f5852aed235a3166ac8620a6608242d067b709ba8404",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libtorch_python.dylib": "cb1d5957b49b8f3c2e4b90de7b99aee835520875bce893b11eb7528a548744fa",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libtorch.dylib": "2178657b7eeffc0c0a989889ac3e2b2e3d216073b35f3a291ee89bd65c0fb406",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libtorch_global_deps.dylib": "6ff1aedff89150170f225ce821dc9355a9d5f9c80a6cc1bb761c8d209638c2c7",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libomp.dylib": "fe0670951c85401421f6cedc91971f28dc870bad4c1f0cfebe2b74dac421e5f0",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libtorch_cpu.dylib": "941f3e16a8e02b23b99bd2c8693caabaf8df859bfaa293f39a5d7dd8a8f5ca6e",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libc10.dylib": "f203c171b7a71c742ef4a84bde3af64465e545a4cc3ebfd7f245dca3ebe4e7cf",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libshm.dylib": "3a6fc248697b8809534e74d9e5fc784b385239d8c7aeef291c3968a73609f7d2",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/projected-loftr-identity-qualified-20261011/projected_files": "fe1f4e5b5b743692fc0f6e3061d875a097d7476529c9330114231cb0a2f58462",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/projected-loftr-identity-qualified-20261011/projected_input_file": "39b67a40dc7f79964a12163b9e4c80177993a3050a5bff2ea9d6c19b64336f0a",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/projected-loftr-identity-qualified-20261011/hdr.pfm.gray": "d1b3d06cc6402350826dd849145bcd05a00e291d6e9eef9015a20a9dc4fb4184",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/projected-loftr-identity-qualified-20261011/hdr-copy.pfm.gray": "d1b3d06cc6402350826dd849145bcd05a00e291d6e9eef9015a20a9dc4fb4184",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/projected-loftr-identity-qualified-20261011/hdr-collision.pfm.gray": "d1b3d06cc6402350826dd849145bcd05a00e291d6e9eef9015a20a9dc4fb4184",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/projected-loftr-identity-qualified-20261011/hdr-unrelated.pfm.gray": "64e323d7323d4d557b2130c44141ee410f97356eda06e61a5ec4649ca5d99b7b",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/projected-loftr-identity-qualified-20261011/alpha.qoi.gray": "5afdecec5dbff1e89dca7cc19bb2745ca92c0119f9bf63107c698b55c720244e",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/projected-loftr-identity-qualified-20261011/alpha-copy.qoi.gray": "5afdecec5dbff1e89dca7cc19bb2745ca92c0119f9bf63107c698b55c720244e",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/projected-loftr-identity-qualified-20261011/alpha-collision.qoi.gray": "5afdecec5dbff1e89dca7cc19bb2745ca92c0119f9bf63107c698b55c720244e"
+  },
+  "preparation": [
+    {
+      "fixture": "hdr.pfm",
+      "returncode": 0,
+      "stdout": "{\"dimensions\":[320,240],\"managed_peak\":2150416,\"managed_used\":0,\"original\":[320,240]}\n",
+      "stderr": "        5.88 real         0.21 user         0.03 sys\n           107839488  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n                7259  page reclaims\n                  11  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                   3  voluntary context switches\n                 457  involuntary context switches\n          1727295947  instructions retired\n           486964606  cycles elapsed\n            64078448  peak memory footprint\n",
+      "elapsed_seconds": 5.8982209580000005,
+      "maximum_rss_bytes_macos": 107839488,
+      "evidence": {
+        "dimensions": [
+          320,
+          240
+        ],
+        "managed_peak": 2150416,
+        "managed_used": 0,
+        "original": [
+          320,
+          240
+        ]
+      }
+    },
+    {
+      "fixture": "hdr-copy.pfm",
+      "returncode": 0,
+      "stdout": "{\"dimensions\":[320,240],\"managed_peak\":2150416,\"managed_used\":0,\"original\":[320,240]}\n",
+      "stderr": "        0.32 real         0.22 user         0.02 sys\n           106528768  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n                7182  page reclaims\n                   8  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                   0  voluntary context switches\n                 512  involuntary context switches\n          1713027518  instructions retired\n           519322249  cycles elapsed\n            62767728  peak memory footprint\n",
+      "elapsed_seconds": 0.33963108300000044,
+      "maximum_rss_bytes_macos": 106528768,
+      "evidence": {
+        "dimensions": [
+          320,
+          240
+        ],
+        "managed_peak": 2150416,
+        "managed_used": 0,
+        "original": [
+          320,
+          240
+        ]
+      }
+    },
+    {
+      "fixture": "hdr-collision.pfm",
+      "returncode": 0,
+      "stdout": "{\"dimensions\":[320,240],\"managed_peak\":2150416,\"managed_used\":0,\"original\":[320,240]}\n",
+      "stderr": "        0.55 real         0.22 user         0.03 sys\n           107855872  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n                7248  page reclaims\n                  25  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                   7  voluntary context switches\n                 445  involuntary context switches\n          1722954319  instructions retired\n           527172907  cycles elapsed\n            64111240  peak memory footprint\n",
+      "elapsed_seconds": 0.5599732080000006,
+      "maximum_rss_bytes_macos": 107855872,
+      "evidence": {
+        "dimensions": [
+          320,
+          240
+        ],
+        "managed_peak": 2150416,
+        "managed_used": 0,
+        "original": [
+          320,
+          240
+        ]
+      }
+    },
+    {
+      "fixture": "hdr-unrelated.pfm",
+      "returncode": 0,
+      "stdout": "{\"dimensions\":[320,240],\"managed_peak\":2150416,\"managed_used\":0,\"original\":[320,240]}\n",
+      "stderr": "        0.54 real         0.21 user         0.02 sys\n           106872832  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n                7206  page reclaims\n                   7  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                   0  voluntary context switches\n                 420  involuntary context switches\n          1712224905  instructions retired\n           486509952  cycles elapsed\n            63111792  peak memory footprint\n",
+      "elapsed_seconds": 0.5720785409999998,
+      "maximum_rss_bytes_macos": 106872832,
+      "evidence": {
+        "dimensions": [
+          320,
+          240
+        ],
+        "managed_peak": 2150416,
+        "managed_used": 0,
+        "original": [
+          320,
+          240
+        ]
+      }
+    },
+    {
+      "fixture": "alpha.qoi",
+      "returncode": 0,
+      "stdout": "{\"dimensions\":[320,240],\"managed_peak\":1536000,\"managed_used\":0,\"original\":[320,240]}\n",
+      "stderr": "        0.63 real         0.21 user         0.02 sys\n           106250240  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n                7162  page reclaims\n                  11  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                   0  voluntary context switches\n                 612  involuntary context switches\n          1694028929  instructions retired\n           483109470  cycles elapsed\n            62571120  peak memory footprint\n",
+      "elapsed_seconds": 0.6444785409999998,
+      "maximum_rss_bytes_macos": 106250240,
+      "evidence": {
+        "dimensions": [
+          320,
+          240
+        ],
+        "managed_peak": 1536000,
+        "managed_used": 0,
+        "original": [
+          320,
+          240
+        ]
+      }
+    },
+    {
+      "fixture": "alpha-copy.qoi",
+      "returncode": 0,
+      "stdout": "{\"dimensions\":[320,240],\"managed_peak\":1536000,\"managed_used\":0,\"original\":[320,240]}\n",
+      "stderr": "        0.69 real         0.21 user         0.02 sys\n           106070016  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n                7156  page reclaims\n                   9  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                  10  voluntary context switches\n                 351  involuntary context switches\n          1689304229  instructions retired\n           475921676  cycles elapsed\n            62390896  peak memory footprint\n",
+      "elapsed_seconds": 0.7042716670000004,
+      "maximum_rss_bytes_macos": 106070016,
+      "evidence": {
+        "dimensions": [
+          320,
+          240
+        ],
+        "managed_peak": 1536000,
+        "managed_used": 0,
+        "original": [
+          320,
+          240
+        ]
+      }
+    },
+    {
+      "fixture": "alpha-collision.qoi",
+      "returncode": 0,
+      "stdout": "{\"dimensions\":[320,240],\"managed_peak\":1536000,\"managed_used\":0,\"original\":[320,240]}\n",
+      "stderr": "        0.39 real         0.21 user         0.02 sys\n           106659840  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n                7188  page reclaims\n                  10  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                   8  voluntary context switches\n                 271  involuntary context switches\n          1686492936  instructions retired\n           449308224  cycles elapsed\n            62980720  peak memory footprint\n",
+      "elapsed_seconds": 0.39840120799999923,
+      "maximum_rss_bytes_macos": 106659840,
+      "evidence": {
+        "dimensions": [
+          320,
+          240
+        ],
+        "managed_peak": 1536000,
+        "managed_used": 0,
+        "original": [
+          320,
+          240
+        ]
+      }
+    }
+  ],
+  "results": [
+    {
+      "case": "hdr_copy",
+      "source": "hdr.pfm",
+      "target": "hdr-copy.pfm",
+      "expected_supported": true,
+      "status": "executed",
+      "returncode": 0,
+      "stdout": "{\"geometry_inliers\":244,\"managed_peak\":3456016,\"managed_used\":0,\"model_digest\":[251,248,128,60,113,119,49,0,204,125,138,137,62,0,255,47,68,141,150,91,38,37,242,55,0,75,47,168,45,71,4,147],\"original_dimensions\":[[320,240],[320,240]],\"pixel_attempts\":1,\"pixel_work\":153600,\"pixels\":[{\"compared_pixels\":76800,\"matched_pixels\":76800,\"maximum_channel_error\":0.0,\"source_pixels\":76800,\"squared_error\":0.0},{\"compared_pixels\":76800,\"matched_pixels\":76800,\"maximum_channel_error\":0.0,\"source_pixels\":76800,\"squared_error\":0.0}],\"raw_proposals\":793,\"scope\":\"CPU LoFTR, explicit CompositeReinhardV1 and original linear RGBA; tensor/workspace RSS outside managed admission; caller thresholds uncalibrated.\",\"selected_points\":793,\"status\":\"ok\",\"supported\":true,\"transform\":[[1.0,0.0,0.0],[0.0,1.0,0.0],[0.0,0.0,1.0]]}\n",
+      "stderr": "        4.08 real         1.77 user         0.23 sys\n           857325568  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n               53577  page reclaims\n                  13  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                   2  voluntary context switches\n                7377  involuntary context switches\n         11428431801  instructions retired\n          3998550128  cycles elapsed\n           807568680  peak memory footprint\n",
+      "elapsed_seconds": 4.097070834,
+      "maximum_rss_bytes_macos": 857325568,
+      "evidence": {
+        "geometry_inliers": 244,
+        "managed_peak": 3456016,
+        "managed_used": 0,
+        "model_digest": [
+          251,
+          248,
+          128,
+          60,
+          113,
+          119,
+          49,
+          0,
+          204,
+          125,
+          138,
+          137,
+          62,
+          0,
+          255,
+          47,
+          68,
+          141,
+          150,
+          91,
+          38,
+          37,
+          242,
+          55,
+          0,
+          75,
+          47,
+          168,
+          45,
+          71,
+          4,
+          147
+        ],
+        "original_dimensions": [
+          [
+            320,
+            240
+          ],
+          [
+            320,
+            240
+          ]
+        ],
+        "pixel_attempts": 1,
+        "pixel_work": 153600,
+        "pixels": [
+          {
+            "compared_pixels": 76800,
+            "matched_pixels": 76800,
+            "maximum_channel_error": 0.0,
+            "source_pixels": 76800,
+            "squared_error": 0.0
+          },
+          {
+            "compared_pixels": 76800,
+            "matched_pixels": 76800,
+            "maximum_channel_error": 0.0,
+            "source_pixels": 76800,
+            "squared_error": 0.0
+          }
+        ],
+        "raw_proposals": 793,
+        "scope": "CPU LoFTR, explicit CompositeReinhardV1 and original linear RGBA; tensor/workspace RSS outside managed admission; caller thresholds uncalibrated.",
+        "selected_points": 793,
+        "status": "ok",
+        "supported": true,
+        "transform": [
+          [
+            1.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            1.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      "expected_outcome_matches": true
+    },
+    {
+      "case": "hdr_collision",
+      "source": "hdr.pfm",
+      "target": "hdr-collision.pfm",
+      "expected_supported": false,
+      "status": "executed",
+      "returncode": 0,
+      "stdout": "{\"geometry_inliers\":238,\"managed_peak\":3456016,\"managed_used\":0,\"model_digest\":[251,248,128,60,113,119,49,0,204,125,138,137,62,0,255,47,68,141,150,91,38,37,242,55,0,75,47,168,45,71,4,147],\"original_dimensions\":[[320,240],[320,240]],\"pixel_attempts\":2,\"pixel_work\":307200,\"pixels\":[{\"compared_pixels\":76177,\"matched_pixels\":56421,\"maximum_channel_error\":10.000000000000014,\"source_pixels\":76800,\"squared_error\":5737553.027588738},{\"compared_pixels\":76307,\"matched_pixels\":56391,\"maximum_channel_error\":13.336694774699879,\"source_pixels\":76800,\"squared_error\":5787028.025714931}],\"raw_proposals\":793,\"scope\":\"CPU LoFTR, explicit CompositeReinhardV1 and original linear RGBA; tensor/workspace RSS outside managed admission; caller thresholds uncalibrated.\",\"selected_points\":793,\"status\":\"ok\",\"supported\":false,\"transform\":[[1.0004865685921198,-0.00003802405521937424,-0.0200208443980614],[0.00034471464371916297,1.0002953768680354,-0.07252508062718732],[2.927819244932357e-6,1.0127943804312827e-6,0.9994917714062245]]}\n",
+      "stderr": "        2.80 real         1.77 user         0.20 sys\n           852721664  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n               52998  page reclaims\n                  10  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                   4  voluntary context switches\n                5450  involuntary context switches\n         11491854005  instructions retired\n          3866889935  cycles elapsed\n           802981184  peak memory footprint\n",
+      "elapsed_seconds": 2.811447290999997,
+      "maximum_rss_bytes_macos": 852721664,
+      "evidence": {
+        "geometry_inliers": 238,
+        "managed_peak": 3456016,
+        "managed_used": 0,
+        "model_digest": [
+          251,
+          248,
+          128,
+          60,
+          113,
+          119,
+          49,
+          0,
+          204,
+          125,
+          138,
+          137,
+          62,
+          0,
+          255,
+          47,
+          68,
+          141,
+          150,
+          91,
+          38,
+          37,
+          242,
+          55,
+          0,
+          75,
+          47,
+          168,
+          45,
+          71,
+          4,
+          147
+        ],
+        "original_dimensions": [
+          [
+            320,
+            240
+          ],
+          [
+            320,
+            240
+          ]
+        ],
+        "pixel_attempts": 2,
+        "pixel_work": 307200,
+        "pixels": [
+          {
+            "compared_pixels": 76177,
+            "matched_pixels": 56421,
+            "maximum_channel_error": 10.000000000000014,
+            "source_pixels": 76800,
+            "squared_error": 5737553.027588738
+          },
+          {
+            "compared_pixels": 76307,
+            "matched_pixels": 56391,
+            "maximum_channel_error": 13.336694774699879,
+            "source_pixels": 76800,
+            "squared_error": 5787028.025714931
+          }
+        ],
+        "raw_proposals": 793,
+        "scope": "CPU LoFTR, explicit CompositeReinhardV1 and original linear RGBA; tensor/workspace RSS outside managed admission; caller thresholds uncalibrated.",
+        "selected_points": 793,
+        "status": "ok",
+        "supported": false,
+        "transform": [
+          [
+            1.0004865685921198,
+            -3.802405521937424e-05,
+            -0.0200208443980614
+          ],
+          [
+            0.00034471464371916297,
+            1.0002953768680354,
+            -0.07252508062718732
+          ],
+          [
+            2.927819244932357e-06,
+            1.0127943804312827e-06,
+            0.9994917714062245
+          ]
+        ]
+      },
+      "expected_outcome_matches": true
+    },
+    {
+      "case": "alpha_copy",
+      "source": "alpha.qoi",
+      "target": "alpha-copy.qoi",
+      "expected_supported": true,
+      "status": "executed",
+      "returncode": 0,
+      "stdout": "{\"geometry_inliers\":180,\"managed_peak\":2841600,\"managed_used\":0,\"model_digest\":[251,248,128,60,113,119,49,0,204,125,138,137,62,0,255,47,68,141,150,91,38,37,242,55,0,75,47,168,45,71,4,147],\"original_dimensions\":[[320,240],[320,240]],\"pixel_attempts\":1,\"pixel_work\":153600,\"pixels\":[{\"compared_pixels\":76800,\"matched_pixels\":76800,\"maximum_channel_error\":0.0,\"source_pixels\":76800,\"squared_error\":0.0},{\"compared_pixels\":76800,\"matched_pixels\":76800,\"maximum_channel_error\":0.0,\"source_pixels\":76800,\"squared_error\":0.0}],\"raw_proposals\":785,\"scope\":\"CPU LoFTR, explicit CompositeReinhardV1 and original linear RGBA; tensor/workspace RSS outside managed admission; caller thresholds uncalibrated.\",\"selected_points\":785,\"status\":\"ok\",\"supported\":true,\"transform\":[[1.0,0.0,0.0],[0.0,1.0,0.0],[0.0,0.0,1.0]]}\n",
+      "stderr": "        2.56 real         1.74 user         0.20 sys\n           846659584  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n               52916  page reclaims\n                   9  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                   2  voluntary context switches\n                6367  involuntary context switches\n         11292529316  instructions retired\n          3874082900  cycles elapsed\n           797017408  peak memory footprint\n",
+      "elapsed_seconds": 2.5729089159999994,
+      "maximum_rss_bytes_macos": 846659584,
+      "evidence": {
+        "geometry_inliers": 180,
+        "managed_peak": 2841600,
+        "managed_used": 0,
+        "model_digest": [
+          251,
+          248,
+          128,
+          60,
+          113,
+          119,
+          49,
+          0,
+          204,
+          125,
+          138,
+          137,
+          62,
+          0,
+          255,
+          47,
+          68,
+          141,
+          150,
+          91,
+          38,
+          37,
+          242,
+          55,
+          0,
+          75,
+          47,
+          168,
+          45,
+          71,
+          4,
+          147
+        ],
+        "original_dimensions": [
+          [
+            320,
+            240
+          ],
+          [
+            320,
+            240
+          ]
+        ],
+        "pixel_attempts": 1,
+        "pixel_work": 153600,
+        "pixels": [
+          {
+            "compared_pixels": 76800,
+            "matched_pixels": 76800,
+            "maximum_channel_error": 0.0,
+            "source_pixels": 76800,
+            "squared_error": 0.0
+          },
+          {
+            "compared_pixels": 76800,
+            "matched_pixels": 76800,
+            "maximum_channel_error": 0.0,
+            "source_pixels": 76800,
+            "squared_error": 0.0
+          }
+        ],
+        "raw_proposals": 785,
+        "scope": "CPU LoFTR, explicit CompositeReinhardV1 and original linear RGBA; tensor/workspace RSS outside managed admission; caller thresholds uncalibrated.",
+        "selected_points": 785,
+        "status": "ok",
+        "supported": true,
+        "transform": [
+          [
+            1.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            1.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      "expected_outcome_matches": true
+    },
+    {
+      "case": "alpha_collision",
+      "source": "alpha.qoi",
+      "target": "alpha-collision.qoi",
+      "expected_supported": false,
+      "status": "executed",
+      "returncode": 0,
+      "stdout": "{\"geometry_inliers\":195,\"managed_peak\":2841600,\"managed_used\":0,\"model_digest\":[251,248,128,60,113,119,49,0,204,125,138,137,62,0,255,47,68,141,150,91,38,37,242,55,0,75,47,168,45,71,4,147],\"original_dimensions\":[[320,240],[320,240]],\"pixel_attempts\":2,\"pixel_work\":307200,\"pixels\":[{\"compared_pixels\":76077,\"matched_pixels\":56877,\"maximum_channel_error\":0.749019593000412,\"source_pixels\":76800,\"squared_error\":10773.305246055243},{\"compared_pixels\":76407,\"matched_pixels\":57207,\"maximum_channel_error\":0.749019593000412,\"source_pixels\":76800,\"squared_error\":10769.882754791366}],\"raw_proposals\":785,\"scope\":\"CPU LoFTR, explicit CompositeReinhardV1 and original linear RGBA; tensor/workspace RSS outside managed admission; caller thresholds uncalibrated.\",\"selected_points\":785,\"status\":\"ok\",\"supported\":false,\"transform\":[[1.0003764533488335,-0.00012144540257611497,-0.006616356663727174],[0.0002635161295865857,1.0001154952668223,-0.04590362590735708],[2.479410658444983e-6,-9.623777673166516e-7,0.9997270156575797]]}\n",
+      "stderr": "        2.34 real         1.75 user         0.21 sys\n           849313792  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n               52832  page reclaims\n                   9  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                   1  voluntary context switches\n                5694  involuntary context switches\n         11408415675  instructions retired\n          3928880154  cycles elapsed\n           799671616  peak memory footprint\n",
+      "elapsed_seconds": 2.356375,
+      "maximum_rss_bytes_macos": 849313792,
+      "evidence": {
+        "geometry_inliers": 195,
+        "managed_peak": 2841600,
+        "managed_used": 0,
+        "model_digest": [
+          251,
+          248,
+          128,
+          60,
+          113,
+          119,
+          49,
+          0,
+          204,
+          125,
+          138,
+          137,
+          62,
+          0,
+          255,
+          47,
+          68,
+          141,
+          150,
+          91,
+          38,
+          37,
+          242,
+          55,
+          0,
+          75,
+          47,
+          168,
+          45,
+          71,
+          4,
+          147
+        ],
+        "original_dimensions": [
+          [
+            320,
+            240
+          ],
+          [
+            320,
+            240
+          ]
+        ],
+        "pixel_attempts": 2,
+        "pixel_work": 307200,
+        "pixels": [
+          {
+            "compared_pixels": 76077,
+            "matched_pixels": 56877,
+            "maximum_channel_error": 0.749019593000412,
+            "source_pixels": 76800,
+            "squared_error": 10773.305246055243
+          },
+          {
+            "compared_pixels": 76407,
+            "matched_pixels": 57207,
+            "maximum_channel_error": 0.749019593000412,
+            "source_pixels": 76800,
+            "squared_error": 10769.882754791366
+          }
+        ],
+        "raw_proposals": 785,
+        "scope": "CPU LoFTR, explicit CompositeReinhardV1 and original linear RGBA; tensor/workspace RSS outside managed admission; caller thresholds uncalibrated.",
+        "selected_points": 785,
+        "status": "ok",
+        "supported": false,
+        "transform": [
+          [
+            1.0003764533488335,
+            -0.00012144540257611497,
+            -0.006616356663727174
+          ],
+          [
+            0.0002635161295865857,
+            1.0001154952668223,
+            -0.04590362590735708
+          ],
+          [
+            2.479410658444983e-06,
+            -9.623777673166516e-07,
+            0.9997270156575797
+          ]
+        ]
+      },
+      "expected_outcome_matches": true
+    },
+    {
+      "case": "unrelated_hdr",
+      "source": "hdr.pfm",
+      "target": "hdr-unrelated.pfm",
+      "expected_supported": false,
+      "status": "executed",
+      "returncode": 0,
+      "stdout": "{\"geometry_inliers\":0,\"managed_peak\":3456016,\"managed_used\":0,\"model_digest\":[251,248,128,60,113,119,49,0,204,125,138,137,62,0,255,47,68,141,150,91,38,37,242,55,0,75,47,168,45,71,4,147],\"original_dimensions\":[[320,240],[320,240]],\"pixel_attempts\":0,\"pixel_work\":0,\"pixels\":null,\"raw_proposals\":56,\"scope\":\"CPU LoFTR, explicit CompositeReinhardV1 and original linear RGBA; tensor/workspace RSS outside managed admission; caller thresholds uncalibrated.\",\"selected_points\":56,\"status\":\"ok\",\"supported\":false,\"transform\":null}\n",
+      "stderr": "        1.63 real         1.37 user         0.19 sys\n           789594112  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n               49638  page reclaims\n                   9  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                   2  voluntary context switches\n                4598  involuntary context switches\n          8384871927  instructions retired\n          3157370360  cycles elapsed\n           739820792  peak memory footprint\n",
+      "elapsed_seconds": 1.6419623749999985,
+      "maximum_rss_bytes_macos": 789594112,
+      "evidence": {
+        "geometry_inliers": 0,
+        "managed_peak": 3456016,
+        "managed_used": 0,
+        "model_digest": [
+          251,
+          248,
+          128,
+          60,
+          113,
+          119,
+          49,
+          0,
+          204,
+          125,
+          138,
+          137,
+          62,
+          0,
+          255,
+          47,
+          68,
+          141,
+          150,
+          91,
+          38,
+          37,
+          242,
+          55,
+          0,
+          75,
+          47,
+          168,
+          45,
+          71,
+          4,
+          147
+        ],
+        "original_dimensions": [
+          [
+            320,
+            240
+          ],
+          [
+            320,
+            240
+          ]
+        ],
+        "pixel_attempts": 0,
+        "pixel_work": 0,
+        "pixels": null,
+        "raw_proposals": 56,
+        "scope": "CPU LoFTR, explicit CompositeReinhardV1 and original linear RGBA; tensor/workspace RSS outside managed admission; caller thresholds uncalibrated.",
+        "selected_points": 56,
+        "status": "ok",
+        "supported": false,
+        "transform": null
+      },
+      "expected_outcome_matches": true
+    }
+  ],
+  "policy": {
+    "pixel_tolerance": 0.05,
+    "minimum_coverage": 0.99,
+    "minimum_agreement": 0.999,
+    "projection": {
+      "recipe": "CompositeReinhardV1",
+      "exposure": 1,
+      "background": [
+        0,
+        0,
+        0
+      ]
+    },
+    "max_side": 320,
+    "cumulative_pixel_work_cap": 4000000,
+    "maximum_pixel_mappings": 2,
+    "threads": 2,
+    "seed": 173,
+    "managed_budget": 536870912
+  },
+  "limits": [
+    "Synthetic textured controls, not arbitrary HDR/alpha corpus qualification",
+    "No automatic projected tile/portfolio search",
+    "Torch tensor/workspace RSS not admitted",
+    "Cooperative cancellation, no individual-kernel preemption"
+  ],
+  "projected_byte_equalities": {
+    "hdr_copy": true,
+    "hdr_collision": true,
+    "alpha_copy": true,
+    "alpha_collision": true
+  },
+  "all_expected_outcomes_match": true
+}

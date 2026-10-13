@@ -1,0 +1,20 @@
+{
+  "status": "open",
+  "finding": "Finite sensor correction does not alone bound subsequent Bayer/RGBE filter accumulation, matrix dot products, exposure multiplication or binary16 conversion.",
+  "source_sha256": {
+    "crates/rrrah-gpu/src/lib.rs": "bf85853288ae0404e83b359fea3f4b05bdab0182d8d4791599670336e8b2677f",
+    "crates/rrrah-gpu/shaders/raw_view.wgsl": "00f4701fe518ca7716970bdf4e262bca955f5e1010c8a89348a51c4269d25445"
+  },
+  "evidence": [
+    "Upload checks each normalized sample and gain for finiteness in the exceptional range path.",
+    "Bilinear axial/diagonal averaging adds four samples before multiplying by 0.25.",
+    "Area integration accumulates sample times overlap before dividing by total.",
+    "Matrix rows are finite but dot-product results are not range-validated.",
+    "Exposure is bounded to +/-10 stops; linear output returns directly to attachment."
+  ],
+  "next_work": "Add an admitted finite extreme-input reproduction covering filtering and matrix/exposure, then choose explicit admission refusal or range-safe arithmetic without changing ordinary RAW appearance.",
+  "limits": [
+    "Source audit, not a demonstrated failure on current Metal hardware.",
+    "Ordinary camera corpus and current long-run transport tests remain passing."
+  ]
+}

@@ -1,0 +1,84 @@
+{
+  "status": "complete_seven_tracked_text_files_read",
+  "repository": "LinusU/blockhash-core",
+  "commit": "a0805b48bdf9c9fbfd0d7e5e82e2794f153095c1",
+  "source": "/Users/themoretheless/.codex/tmp/rrrah-blockhash-core-source-20261013",
+  "files": [
+    {
+      "path": ".gitignore",
+      "git_blob": "c2658d7d1b31848c3b71960543cb0368e56cd4c7",
+      "sha256": "4d56952b0fb13bf8f9b6c13a6d4c34a075bac3af447636a1df4335d7576e2f97",
+      "bytes": 14,
+      "lines": 1,
+      "mode": "100644"
+    },
+    {
+      "path": ".npmrc",
+      "git_blob": "43c97e719a5a824700932f72e6e7e6748ce45d01",
+      "sha256": "f3fc23758ab91be5f94a8c5eaff433d1ccd6a206cf1d381d332eb63716009337",
+      "bytes": 19,
+      "lines": 1,
+      "mode": "100644"
+    },
+    {
+      "path": "LICENSE",
+      "git_blob": "1b614ac1798df86fdfb496f0280538475712c0ec",
+      "sha256": "91c1c588def90bda564e81d2da4ca8a658687aaf05bc3eb9f7efa59b0ea926df",
+      "bytes": 1119,
+      "lines": 22,
+      "mode": "100644"
+    },
+    {
+      "path": "index.d.ts",
+      "git_blob": "239fd8869560f9b72c4105cbf8fcfb67f6d906f4",
+      "sha256": "884ec0492fa2df4bd872e703e2f50ebb12dc52f23fa754f4925adc7052ce5d63",
+      "bytes": 835,
+      "lines": 27,
+      "mode": "100644"
+    },
+    {
+      "path": "index.js",
+      "git_blob": "ed7b0b8dc7e8702cb3bb81c93ac37d212fc9cd4f",
+      "sha256": "687e2746263c9682ccd9bbe5fe2f6454523bd15bb0866cb0ea98b46dccf6687b",
+      "bytes": 4921,
+      "lines": 173,
+      "mode": "100644"
+    },
+    {
+      "path": "package.json",
+      "git_blob": "16875838a38731b6883ee8a2500908f2fcc5a01f",
+      "sha256": "2832604f853804b31e69b5b9cce144c57d457fe283c047431340ef88d8f74869",
+      "bytes": 279,
+      "lines": 13,
+      "mode": "100644"
+    },
+    {
+      "path": "readme.md",
+      "git_blob": "7ffaa924da3d5497d2c1624d3178ca4da354fcb8",
+      "sha256": "b5f25007aa83d6c87048aa65ffa297be156512354ce13134d3d20c0ceee03f59",
+      "bytes": 1421,
+      "lines": 45,
+      "mode": "100644"
+    }
+  ],
+  "implementation_files": [
+    "index.js"
+  ],
+  "binding_files": [
+    "index.d.ts"
+  ],
+  "upstream_behavioral_tests": 0,
+  "upstream_declared_checks": [
+    "standard",
+    "ts-readme-generator --check"
+  ],
+  "license": "MIT, 2019 Linus Unneback and 2014 Commons Machinery, full LICENSE read; no production copying",
+  "findings": [
+    "Independent area-intersection integrator matched128seeded RGBA images with2/4/8/16block widths",
+    "Alpha0 treated as white; alpha1..255 RGB contributes unchanged",
+    "Even core discards right/bottom remainder when dimensions are not divisible by bits, documented limited recipe",
+    "Four horizontal-band medians and brightness tie policy; distinct flat intensities collide",
+    "No input validation, cancellation or memory/work admission; short buffer produces0000, zero bits empty on even API and throws on weighted API",
+    "TypeScript binding and readme inspected completely; no standalone TypeScript typecheck"
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "scope": "Fit fallback after full source migration under GPU pressure",
+  "result": "passed",
+  "adapter": "Metal Apple M4 Max",
+  "problem": "Swapped source could not filter a smaller fit level when retained preview plus current detail exceeded GPU headroom",
+  "changes": [
+    "viewport worker job kind distinguishes region restore from retained-preview filtering",
+    "smaller fit level filtered in background from retained native linear HDR preview",
+    "pending fit jobs not replanned against their own owned output memory",
+    "ready fit level retained across upload admission failure",
+    "successful publication replaces retained preview and keeps complete source released"
+  ],
+  "controls": [
+    "20k GPU texture headroom rejects64x40 and admits32x20",
+    "worker prepares32x20 while full source remains released",
+    "exhausted upload queue preserves old exact frame and ready level",
+    "retry renders exact independent downsampled-preview HDR reference",
+    "CPU retained preview falls40960to10240 bytes",
+    "final CPU index texture queue disk credits zero"
+  ],
+  "validation": {
+    "ordinary_app_passed": 208,
+    "manual_ignored": 46,
+    "explicit_metal_viewport_passed": 6
+  },
+  "limits": [
+    "new fit reference is area-filtered retained preview; no claim of direct original-source LOD equivalence",
+    "no physical slowdisk OSwide pressure physicalHDR NVIDIA or full100-format completion claim"
+  ]
+}

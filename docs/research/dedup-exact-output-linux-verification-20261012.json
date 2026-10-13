@@ -1,0 +1,33 @@
+{
+  "status": "verified_64_current_source_linux_exact_tests",
+  "passed": 64,
+  "ignored": 2,
+  "suites": [
+    {
+      "suite": "lib",
+      "passed": 39,
+      "ignored": [
+        "gradient::batch_tests::alternating_matcher_timing",
+        "gradient::matching_tests::alternating_matcher_timing"
+      ],
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-exact-output-linux-executables-20261012/lib"
+    },
+    {
+      "suite": "exact_files",
+      "passed": 25,
+      "ignored": [],
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-exact-output-linux-executables-20261012/exact_files"
+    }
+  ],
+  "compiler": "rustc 1.98.0 (88d9e12ae 2026-08-18)\nbinary: rustc\ncommit-hash: 88d9e12ae178fab0fb5cc050a94da85685d449ea\ncommit-date: 2026-08-18\nhost: aarch64-unknown-linux-gnu\nrelease: 1.98.0\nLLVM version: 22.1.8\n",
+  "image_id": "sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exact-output-linux-prepared-20261012.json": "5b60bde52acac08259fe9a17125569e82941eb9ecc7a176fc726a5c01ab80f17",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exact-output-source-20261012.json": "49d285f960dbdd1b70c700767cdc21e4902a8f7db6caf1ce283ac237dff1b955",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-output-linux-20261012.log": "a29f023b338e7bd476a74a87b1908d10e2f3dfe98643fcff2a4e674127ada31c",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-exact-output-linux-20261012.py": "ef23a1fa2642ad3d476d36228fdf576712e96c35a3a5062b831a14d192483557",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-output-linux-executables-20261012/lib": "52971749e36530b3c356b39a9f41e0c561e15393c00e401f165b998b69fbe72a",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-output-linux-executables-20261012/exact_files": "e392a10012c426de6e7e335d1b4d4840c5d01b9d565bf46edaf7e4ea3dacd8d1"
+  },
+  "scope": "Current-identical production, default features disabled, Linux ARM64 nonroot execution. Interrupted and short reads and output writes observe cooperative cancellation between attempts. Four public copy_range writer controls and three injected reader controls pass; prior invalid UTF8 filename and block-order controls pass. Single blocked syscall/writer call cannot be preempted; partial output remains possible. No macOS filesystem invalid-byte support, Windows, all formats/full500 or visual corpus qualification."
+}

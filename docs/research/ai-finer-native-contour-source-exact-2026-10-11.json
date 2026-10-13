@@ -1,0 +1,199 @@
+{
+  "change": "Test-only native prepared contour tolerance 1e-4 to 1e-5; original vertex/work/256MiB admission limits retained",
+  "precision_experiment": [
+    {
+      "tolerance": 0.0001,
+      "different_residual_pixels": 20,
+      "vertices_both_shapes": 8196
+    },
+    {
+      "tolerance": 1e-05,
+      "different_residual_pixels": 0,
+      "vertices_both_shapes": 32772
+    },
+    {
+      "tolerance": 1e-06,
+      "different_residual_pixels": 0,
+      "vertices_both_shapes": 88924
+    },
+    {
+      "tolerance": 1e-07,
+      "different_residual_pixels": 0,
+      "vertices_both_shapes": 262148
+    }
+  ],
+  "one_ai_page0_full_independent_source_oracle": {
+    "different_pixels": 0,
+    "maximum_error": 0,
+    "rgb_sha256": "38d412ae322b74bc56dcfccee5ec41730ece92bd4365fc7c8f14a03dd7d89104",
+    "dimensions": [
+      1366,
+      768
+    ]
+  },
+  "native_diagnostic_pages": [
+    {
+      "fixture": "VectorApple.ai",
+      "page": 0,
+      "width": 301,
+      "height": 246,
+      "diagnostic_timeout_seconds": 180,
+      "peak_admitted_bytes": 232664374,
+      "final_admitted_bytes": 0,
+      "status": "native_diagnostic",
+      "native_completed": true,
+      "capture_failed": false,
+      "capture_ms": 9871.557958000001,
+      "native_replay_ms": 30300.535167,
+      "deadline_expired": false,
+      "events": 2755,
+      "native_paints": 463,
+      "raster_events": 3,
+      "raster_source_models": [
+        "event=3,model=None",
+        "event=1218,model=Some(Cmyk)",
+        "event=2298,model=Some(Cmyk)"
+      ],
+      "native_raster_components": [
+        "event=3,sample_count=Some(29488),refusal=None",
+        "event=1218,sample_count=Some(298224),refusal=None",
+        "event=2298,sample_count=Some(266084),refusal=None"
+      ],
+      "shading_events": 13,
+      "page_model": "Cmyk"
+    },
+    {
+      "fixture": "one.ai",
+      "page": 0,
+      "width": 1366,
+      "height": 768,
+      "diagnostic_timeout_seconds": 180,
+      "peak_admitted_bytes": 169698840,
+      "final_admitted_bytes": 0,
+      "status": "native_diagnostic",
+      "native_completed": true,
+      "capture_failed": false,
+      "capture_ms": 6.873833,
+      "native_replay_ms": 29553.76225,
+      "deadline_expired": false,
+      "events": 8,
+      "native_paints": 2,
+      "raster_events": 0,
+      "raster_source_models": [],
+      "native_raster_components": [],
+      "shading_events": 0,
+      "page_model": "Rgb"
+    },
+    {
+      "fixture": "one.ai",
+      "page": 1,
+      "width": 177,
+      "height": 175,
+      "diagnostic_timeout_seconds": 180,
+      "peak_admitted_bytes": 4957320,
+      "final_admitted_bytes": 0,
+      "status": "native_diagnostic",
+      "native_completed": true,
+      "capture_failed": false,
+      "capture_ms": 0.06641599999999999,
+      "native_replay_ms": 1029.0447920000001,
+      "deadline_expired": false,
+      "events": 1,
+      "native_paints": 0,
+      "raster_events": 0,
+      "raster_source_models": [],
+      "native_raster_components": [],
+      "shading_events": 0,
+      "page_model": "Rgb"
+    }
+  ],
+  "strict_poppler_pages": [
+    {
+      "fixture": "VectorApple.ai",
+      "page": 0,
+      "dimensions": [
+        301,
+        246
+      ],
+      "source_sha256": "c5fc34346629c3379cee6065c45b7de0b620be822604551d1463d8e691b03d06",
+      "native_rgba_sha256": "ecbb6bcbf532cb70c0e35be8c9d655c3cb38ddd8cfd85288e6e3c4c544020efc",
+      "native_components_f64le_sha256": "62926b25aa0701ea931fe20aa31a99a6ddab452b9d87851bd1f30f3ec23c8c67",
+      "poppler_rgb_sha256": "57b154a1760616b953cea6b8f5672ec413882128b1a8f9ecbe800e721b52b591",
+      "different_pixels": 33072,
+      "max_channel_error": 218,
+      "mean_absolute_channel_error": 3.9056082255174713,
+      "difference_bounds_inclusive": [
+        55,
+        13,
+        274,
+        240
+      ],
+      "exact": false
+    },
+    {
+      "fixture": "one.ai",
+      "page": 0,
+      "dimensions": [
+        1366,
+        768
+      ],
+      "source_sha256": "97786949c268233a446e1738fb9c2f941e4d109811bd2f972948cdb7a45d64b4",
+      "native_rgba_sha256": "4d4dc1019b440c5389a7ed8731db277513f63d501006a3d97fc6a861e78e76c8",
+      "native_components_f64le_sha256": "890cec0274060767c59cb00826d6d181cce662028840e659be6cba6ea08d849a",
+      "poppler_rgb_sha256": "d04c5ca83cfef9a672ed59480378acbe12221c1512e00cc0f80c86c6f7db58d7",
+      "different_pixels": 2494,
+      "max_channel_error": 58,
+      "mean_absolute_channel_error": 0.03262071437286481,
+      "difference_bounds_inclusive": [
+        194,
+        189,
+        1186,
+        606
+      ],
+      "exact": false
+    },
+    {
+      "fixture": "one.ai",
+      "page": 1,
+      "dimensions": [
+        177,
+        175
+      ],
+      "source_sha256": "97786949c268233a446e1738fb9c2f941e4d109811bd2f972948cdb7a45d64b4",
+      "native_rgba_sha256": "89db416a84fdc983853717f5fd73690c020e6feced867d1a3d4e02873f9d7e36",
+      "native_components_f64le_sha256": "b3ba384a292a73ea286ec3ca3a2c98fe65580dd385458cf1f025891dc405b595",
+      "poppler_rgb_sha256": "9e754d40c23ce882917a696aca9cb873a6cd863ca40a6e1ee2d6a41255e414c8",
+      "different_pixels": 0,
+      "max_channel_error": 0,
+      "mean_absolute_channel_error": 0.0,
+      "difference_bounds_inclusive": null,
+      "exact": true
+    }
+  ],
+  "regressions": {
+    "passed": 135,
+    "failed": 0,
+    "ignored": 10
+  },
+  "logs": {
+    "tolerance": {
+      "path": "docs/research/ai-finer-native-contour-source-exact-2026-10-11-tolerance.log",
+      "sha256": "e3c7f2819372367c8dc3c09ad470a5d6e33f6af6d1aff18f51c4e4d4d71ad64c"
+    },
+    "replay": {
+      "path": "docs/research/ai-finer-native-contour-source-exact-2026-10-11-replay.log",
+      "sha256": "aee0e97af93b4ea5dd20d7f357942cb6fbec3cbd591ed9ab3cb81351c932a6c7"
+    },
+    "regressions": {
+      "path": "docs/research/ai-finer-native-contour-source-exact-2026-10-11-regressions.log",
+      "sha256": "59810360cca0558fe2216938dfac33b47824ea051e4e97b590f09657c9517dbb"
+    }
+  },
+  "limitations": [
+    "Test-only native compositor change, not production AI viewer qualification",
+    "Strict Poppler equality still fails and no threshold changed",
+    "VectorApple color/compositing differences and PostScript AI remain pending",
+    "Replay time increased significantly: current VectorApple ~30.3s, one page0 ~29.6s, prior f64 ~11.9s/~10.1s; single diagnostic run not a stable benchmark",
+    "Full one.ai source oracle is numerically converged, not formal interval certification"
+  ]
+}

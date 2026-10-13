@@ -1,0 +1,130 @@
+    Blocking waiting for file lock on build directory
+   Compiling smallvec v1.16.3
+   Compiling bytemuck v1.25.2
+   Compiling zerocopy v0.8.62
+   Compiling cpufeatures v0.2.17
+   Compiling zstd-sys v2.1.1+zstd.1.5.7
+   Compiling bzip2-sys v0.1.13+1.0.8
+   Compiling num-conv v0.2.2
+   Compiling time-core v0.1.9
+   Compiling deranged v0.5.8
+   Compiling thiserror v2.0.21
+   Compiling serde v1.0.229
+   Compiling dav1d-sys v0.8.3
+   Compiling moxcms v0.8.1 (/Users/themoretheless/.codex/tmp/rrrah-exact-loftr-snapshot-20261011/vendor/moxcms)
+   Compiling zerofrom v0.1.8
+   Compiling allocator-api2 v0.2.21
+   Compiling serde_json v1.0.152
+   Compiling sha2 v0.10.9
+   Compiling zstd-safe v5.0.2+zstd.1.5.2
+   Compiling sha1 v0.10.7
+   Compiling aes v0.8.4
+   Compiling bzip2 v0.4.4
+   Compiling kurbo v0.13.1
+   Compiling kurbo v0.11.3
+   Compiling dav1d v0.11.1
+   Compiling time v0.3.55
+   Compiling zstd v0.11.2+zstd.1.5.2
+   Compiling pbkdf2 v0.11.0
+   Compiling hashbrown v0.16.1
+   Compiling hayro-syntax v0.7.2
+   Compiling svgtypes v0.15.3
+   Compiling yoke v0.8.3
+   Compiling num-complex v0.4.6
+   Compiling color v0.3.3
+   Compiling font-types v0.11.3
+   Compiling qoi v0.4.1
+   Compiling tiny-skia-path v0.11.4
+   Compiling rustybuzz v0.20.1
+   Compiling zip v0.6.6
+   Compiling blake3 v1.8.7
+   Compiling astcenc-sys v0.2.0
+   Compiling jpegxr v0.3.1
+   Compiling link-cplusplus v1.0.12
+   Compiling pulp v0.22.3
+   Compiling peniko v0.6.1
+   Compiling read-fonts v0.39.2
+   Compiling ndarray v0.16.1
+   Compiling jxl-render v0.12.4
+   Compiling charls-sys v2.4.5
+   Compiling tiny-skia v0.11.4
+   Compiling libheif-sys v5.3.1+1.23.1
+   Compiling torch-sys v0.23.0
+   Compiling half v2.7.1
+   Compiling ahash v0.8.12
+   Compiling ppv-lite86 v0.2.21
+   Compiling vello_common v0.0.8
+   Compiling openjpeg-sys v1.0.12
+   Compiling hashbrown v0.13.2
+   Compiling tiff v0.11.3
+   Compiling rand_chacha v0.3.1
+   Compiling usvg v0.45.1
+   Compiling basis-universal-sys v0.3.1
+   Compiling safetensors v0.3.3
+   Compiling fallible_collections v0.4.9
+   Compiling rand v0.8.8
+   Compiling rgb v0.8.53
+   Compiling rrrah-memory v0.1.0 (/Users/themoretheless/.codex/tmp/rrrah-exact-loftr-snapshot-20261011/crates/rrrah-memory)
+   Compiling mp4parse v0.17.0
+   Compiling vello_cpu v0.0.8
+   Compiling libheif-rs v3.0.0
+   Compiling basis-universal v0.3.1
+   Compiling jpeg2k v0.10.1
+   Compiling rrrah-core v0.1.0 (/Users/themoretheless/.codex/tmp/rrrah-exact-loftr-snapshot-20261011/crates/rrrah-core)
+   Compiling charls v0.4.2
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/.codex/tmp/rrrah-exact-loftr-snapshot-20261011/crates/rrrah-dedup)
+   Compiling resvg v0.45.1
+   Compiling exr v1.74.2
+   Compiling skrifa v0.42.1
+   Compiling image v0.25.10
+   Compiling hayro-interpret v0.7.0 (/Users/themoretheless/.codex/tmp/rrrah-exact-loftr-snapshot-20261011/vendor/hayro-interpret)
+   Compiling jxl-oxide v0.12.6
+   Compiling hayro v0.7.1 (/Users/themoretheless/.codex/tmp/rrrah-exact-loftr-snapshot-20261011/vendor/hayro)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/.codex/tmp/rrrah-exact-loftr-snapshot-20261011/crates/rrrah-decode)
+   Compiling tch v0.23.0
+   Compiling loftr v0.1.1 (/Users/themoretheless/.codex/tmp/rrrah-exact-loftr-snapshot-20261011/vendor/loftr)
+warning: method `forward_t` is never used
+   --> /Users/themoretheless/.codex/tmp/rrrah-exact-loftr-snapshot-20261011/vendor/loftr/src/backbone.rs:274:12
+    |
+221 | impl ResNetFpn8_2 {
+    | ----------------- method in this implementation
+...
+274 |     pub fn forward_t(&self, x: &Tensor, train: bool) -> Result<(Tensor, Tensor), LoftrError> {
+    |            ^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `forward_t` is never used
+   --> /Users/themoretheless/.codex/tmp/rrrah-exact-loftr-snapshot-20261011/vendor/loftr/src/backbone.rs:329:12
+    |
+328 | impl Backbone {
+    | ------------- method in this implementation
+329 |     pub fn forward_t(&self, x: &Tensor, train: bool) -> Result<(Tensor, Tensor), LoftrError> {
+    |            ^^^^^^^^^
+
+warning: method `forward` is never used
+   --> /Users/themoretheless/.codex/tmp/rrrah-exact-loftr-snapshot-20261011/vendor/loftr/src/transformer.rs:166:12
+    |
+147 | impl LocalFeatureTransformer {
+    | ---------------------------- method in this implementation
+...
+166 |     pub fn forward(
+    |            ^^^^^^^
+
+warning: `loftr` (lib) generated 3 warnings
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> /Users/themoretheless/.codex/tmp/rrrah-exact-loftr-snapshot-20261011/crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+   Compiling dedup-loftr-native-probe v0.0.0 (/Users/themoretheless/.codex/tmp/rrrah-exact-loftr-snapshot-20261011/scripts/dedup-loftr-native-probe)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1m 11s

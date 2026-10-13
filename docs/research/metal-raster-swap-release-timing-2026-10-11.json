@@ -1,0 +1,176 @@
+{
+  "date": "2026-10-11",
+  "adapter": "Metal Apple M4 Max",
+  "run_order": "decode / swap / swap / decode (ABBA)",
+  "warmup_iterations_per_run": 3,
+  "measured_iterations_per_run": 15,
+  "fixture": {
+    "path": "/tmp/rrrah-raster-swap-timing-20261011/authored-12mp-srgb.png",
+    "sha256": "3a194d3cc6495dfca4b86e6b794383d5659f4140200da68f3f185eac5b960793",
+    "width": 4000,
+    "height": 3000,
+    "png_bytes": 2890441,
+    "prepared_bytes": 192000000,
+    "producer": "CC0 authored standard-library PNG encoder, RGBA8 (x%256,y%256,(x+y)%256,255), filter zero, zlib level3, explicit sRGB chunk"
+  },
+  "cpu_budget_bytes": 536870912,
+  "gpu_budget_bytes": 536870912,
+  "observed_peaks_bytes": {
+    "managed_cpu": 240000000,
+    "renderer_gpu": 384000000
+  },
+  "verification": {
+    "swap_restores_per_swap_run": 18,
+    "all_restore_bits_and_metadata_exact": true,
+    "verification_outside_timed_intervals": true,
+    "writes_per_swap_run": 1,
+    "swap_errors": 0,
+    "final_queue_bytes": 0,
+    "final_managed_CPU_GPU_bytes": 0
+  },
+  "scope": "Release-profile ABBA raster decode versus prepared-raster swap, actual Metal completed offscreen SDR frame",
+  "profile": "release; opt-level=3, codegen-units=1, lto=thin",
+  "runs": [
+    {
+      "mode": "decode",
+      "log": "/tmp/rrrah-raster-swap-timing-20261011/release-decode-1.log",
+      "log_sha256": "9ca636f70aa3b01dac5b39631deea916f9ff4c41503c5f995f0d50728e357739",
+      "total": {
+        "p50_ms": 210.211,
+        "p95_ms": 261.338,
+        "n": 15
+      },
+      "stages": {
+        "decode": {
+          "p50_ms": 26.407,
+          "p95_ms": 60.501,
+          "n": 15
+        },
+        "prepare": {
+          "p50_ms": 75.266,
+          "p95_ms": 117.281,
+          "n": 15
+        },
+        "exposure+transfer-submit": {
+          "p50_ms": 74.431,
+          "p95_ms": 106.861,
+          "n": 15
+        },
+        "completed-frame": {
+          "p50_ms": 21.028,
+          "p95_ms": 35.947,
+          "n": 15
+        }
+      }
+    },
+    {
+      "mode": "swap",
+      "log": "/tmp/rrrah-raster-swap-timing-20261011/release-swap-1.log",
+      "log_sha256": "79dc58ce082a376dc5f2390f99f762468c8796366d4cfe343d8b4a7b85e73332",
+      "total": {
+        "p50_ms": 346.324,
+        "p95_ms": 548.263,
+        "n": 15
+      },
+      "stages": {
+        "swap-restore": {
+          "p50_ms": 251.874,
+          "p95_ms": 379.896,
+          "n": 15
+        },
+        "prepare": {
+          "p50_ms": 0.0,
+          "p95_ms": 0.0,
+          "n": 15
+        },
+        "exposure+transfer-submit": {
+          "p50_ms": 73.955,
+          "p95_ms": 147.24,
+          "n": 15
+        },
+        "completed-frame": {
+          "p50_ms": 20.402,
+          "p95_ms": 28.611,
+          "n": 15
+        }
+      }
+    },
+    {
+      "mode": "swap",
+      "log": "/tmp/rrrah-raster-swap-timing-20261011/release-swap-2.log",
+      "log_sha256": "9f3416db42533702e173022cd4e8dadc23295a6caea8c6e74e7ffa995be3c802",
+      "total": {
+        "p50_ms": 326.036,
+        "p95_ms": 657.48,
+        "n": 15
+      },
+      "stages": {
+        "swap-restore": {
+          "p50_ms": 235.408,
+          "p95_ms": 383.305,
+          "n": 15
+        },
+        "prepare": {
+          "p50_ms": 0.0,
+          "p95_ms": 0.0,
+          "n": 15
+        },
+        "exposure+transfer-submit": {
+          "p50_ms": 61.656,
+          "p95_ms": 243.264,
+          "n": 15
+        },
+        "completed-frame": {
+          "p50_ms": 21.443,
+          "p95_ms": 30.911,
+          "n": 15
+        }
+      }
+    },
+    {
+      "mode": "decode",
+      "log": "/tmp/rrrah-raster-swap-timing-20261011/release-decode-2.log",
+      "log_sha256": "2d493ca45d11e44dbebe47c350374540c1ff2bed18cc674411d70ddcd3d2b906",
+      "total": {
+        "p50_ms": 141.966,
+        "p95_ms": 183.561,
+        "n": 15
+      },
+      "stages": {
+        "decode": {
+          "p50_ms": 20.008,
+          "p95_ms": 41.995,
+          "n": 15
+        },
+        "prepare": {
+          "p50_ms": 45.872,
+          "p95_ms": 61.856,
+          "n": 15
+        },
+        "exposure+transfer-submit": {
+          "p50_ms": 58.551,
+          "p95_ms": 79.808,
+          "n": 15
+        },
+        "completed-frame": {
+          "p50_ms": 18.001,
+          "p95_ms": 29.115,
+          "n": 15
+        }
+      }
+    }
+  ],
+  "binary_sha256": "a60229660cda78e6cbb6c67552c61cc514c819d5e66a674f77893399046a48c7",
+  "finding": "For this authored PNG, prepared 192 MB swap restoration is slower than decode+prepare in both release runs; restoration p50 235.408/251.874 ms remains the profiling target.",
+  "limitations": [
+    "One authored low-entropy 12 MP PNG, not camera/format corpus or universal cache advantage",
+    "Warm local disk and OS cache; not cold/physical slow disk",
+    "GPU completion of 1920x1080 offscreen SDR frame, not swapchain/presentation/physical HDR",
+    "Unmanaged reference vectors and offscreen targets outside reported managed budgets",
+    "Reference identity scans outside timing still affect memory traffic/cache state",
+    "No measured per-frame raw sample CSV; quantiles reported per run, not pooled",
+    "NVIDIA deferred",
+    "Run-to-run variation and 15 measured samples; p95 is nearest-rank maximum; stage medians must not be summed",
+    "No physical HDR validation; no NVIDIA test"
+  ]
+}

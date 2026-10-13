@@ -1,0 +1,84 @@
+{
+  "date": "2026-10-13",
+  "scope": "Experimental native AI spatial replay diagnostics",
+  "decision": "Reject both channel certificate experiments; restore source byte-for-byte",
+  "experiments": [
+    {
+      "name": "zero",
+      "source_tests_passed": 116,
+      "compositor_tests_passed": 208,
+      "target_completed": false,
+      "target_fragments": 219616,
+      "target_event_2670_calls": 217607,
+      "target_event_2670_source_work": 1300565,
+      "target_event_2670_coordinate_work": 216751,
+      "peak_bytes": 246653464,
+      "previous_peak_bytes": 239197736,
+      "extra_bytes": 7455728,
+      "final_credit_bytes": 0,
+      "prior_seven_probes_exact": {
+        "(195,37)": true,
+        "(138,39)": true,
+        "(137,37)": true,
+        "(138,36)": true,
+        "(176,46)": true,
+        "(149,56)": true,
+        "(199,25)": true
+      },
+      "reason": "No reduced work at target despite increased retained mesh metadata; varying channels dominate"
+    },
+    {
+      "name": "constant",
+      "source_tests_passed": 117,
+      "compositor_tests_passed": 208,
+      "target_completed": false,
+      "target_fragments": 219616,
+      "target_event_2670_calls": 217607,
+      "target_event_2670_source_work": 1300565,
+      "target_event_2670_coordinate_work": 216751,
+      "peak_bytes": 246653464,
+      "previous_peak_bytes": 239197736,
+      "extra_bytes": 7455728,
+      "final_credit_bytes": 0,
+      "prior_seven_probes_exact": {
+        "(195,37)": true,
+        "(138,39)": true,
+        "(137,37)": true,
+        "(138,36)": true,
+        "(176,46)": true,
+        "(149,56)": true,
+        "(199,25)": true
+      },
+      "reason": "No reduced work at target despite increased retained mesh metadata; varying channels dominate"
+    }
+  ],
+  "restored": {
+    "source_tests_passed": 115,
+    "compositor_tests_passed": 208,
+    "compositor_ignored": 12,
+    "source_matches_pre_experiment": true
+  },
+  "remaining": {
+    "pixel": [
+      145,
+      50
+    ],
+    "prior_page_completed": 15195,
+    "total_page_pixels": 74046,
+    "normal_viewer_complete": false,
+    "independent_color_qualified": false
+  },
+  "sha256": {
+    "vendor/hayro-interpret/src/encode/native_source.rs": "d74c34d8847c3cbba814da08e3b7d84881d1c83d8a841f9eb7da6447e140b25c",
+    "docs/research/ai-mesh-zero-experiment-2026-10-13.rs.txt": "068262c6e098c27c29f576fd52397705d7ee6a1a66026ea70156c63533d757a9",
+    "docs/research/ai-mesh-constant-experiment-2026-10-13.rs.txt": "4b1d66ac42faab56b7b9071358d742b392edd8a34326524edf7f5eb87f658f64",
+    "docs/research/ai-mesh-zero-source-final-suite-2026-10-13.log": "d8bfcfe4a75eeca850bf7fb817862b7f5aa46531d341975b42d73580428c4117",
+    "docs/research/ai-mesh-zero-compositor-suite-2026-10-13.log": "f08964fe176ab3cf45735a6957ae5b5a83cf446d4f76e198fd610edd5aa3b9a2",
+    "docs/research/ai-mesh-zero-original-2026-10-13.log": "af46972f21a81aadb77b9d181e1ae197958d4cd3606e51d3c59e9150dde9e743",
+    "docs/research/ai-mesh-constant-source-suite-2026-10-13.log": "336e3a71ee5bc8d2ed642eab83b0f65fdb2a7ef53df4805bf81e9309ef960c29",
+    "docs/research/ai-mesh-constant-compositor-suite-2026-10-13.log": "b426af0b79769a0492ff0c828467f1bcb8d8e4a72554c0500bc43ca373a536ab",
+    "docs/research/ai-mesh-constant-original-2026-10-13.log": "77113a51e62b96a52e557f88aa74e54421c63be5d9433a0f75be889dafd72731",
+    "docs/research/ai-mesh-channel-restored-source-suite-2026-10-13.log": "ccca228f774616e099c11de49216f4336ce240840ffdc94041d53c2506b3b2b6",
+    "docs/research/ai-mesh-channel-restored-compositor-suite-2026-10-13.log": "277e53c2068558f3c27f0cbc63d1898796e04bdac1395b2c1e0d7235c25c5f1a"
+  }
+}

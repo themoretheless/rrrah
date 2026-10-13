@@ -1,0 +1,25 @@
+{
+  "scope": "Qualifier CLI control-flow with synthetic cargo stub; no GPU or production test evidence",
+  "scenarios": [
+    {
+      "scenario": "pass",
+      "exit_code": 0,
+      "verified": true,
+      "log_sha256_matches": true
+    },
+    {
+      "scenario": "empty",
+      "exit_code": 1,
+      "verified": false,
+      "log_sha256_matches": true
+    },
+    {
+      "scenario": "fail",
+      "exit_code": 1,
+      "verified": false,
+      "log_sha256_matches": true
+    }
+  ],
+  "artifacts": "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-qualifier-negative-20261011-z1mv90xp",
+  "script_sha256": "e8acfabfcdb59a8ddb48d23ddbf51e5fc3cce1f02b94d3117c88bbecafbb4c19"
+}

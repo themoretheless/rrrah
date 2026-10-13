@@ -7,7 +7,7 @@ pub(super) struct Buffer {
     pub(super) pixels: Vec<Pixel>,
     _credit: Credit,
 }
-fn convert_group_pixel(
+pub(super) fn convert_group_pixel(
     pixel: Pixel, source: &hayro_interpret::color::ColorSpace,
     destination: &hayro_interpret::color::ColorSpace,
 ) -> Option<Pixel> {
@@ -45,11 +45,71 @@ pub(super) struct PaintFrame {
     space: hayro_interpret::color::ColorSpace,
     _credit: Credit,
 }
+/// Exact one-pixel execution state; cache storage must be admitted by its owner.
+pub(super) struct SinglePixelState {
+    initial:Pixel,current:Pixel,coverage:PreciseCoverage,knockout:bool,
+    space:hayro_interpret::color::ColorSpace,
+}
+impl SinglePixelState {
+    fn same(&self,other:&Self)->bool {
+        self.initial.same_storage(other.initial) && self.current.same_storage(other.current)
+            && self.coverage.shape.to_bits()==other.coverage.shape.to_bits()
+            && self.coverage.alpha.to_bits()==other.coverage.alpha.to_bits()
+            && self.knockout==other.knockout && self.space.shares_blending_coordinates(&other.space)
+    }
+}
 pub(super) struct PreparedPaint {
     pixel: Pixel,
     space: hayro_interpret::color::ColorSpace,
 }
+pub(super) struct PreparedNormalBatch {
+    paint:PreparedPaint,
+    shape:f64,
+}
 impl PaintFrame {
+    /// A transparent non-knockout accumulator can represent a sequence of
+    /// Normal paints by its premultiplied result and independently accumulated shape.
+    pub(super) fn prepare_normal_batch(&self,cancelled:&dyn Fn()->bool)->Option<PreparedNormalBatch> {
+        let state=self.single_pixel_state(cancelled)?;
+        if state.knockout || state.initial.alpha()!=0. {return None;}
+        Some(PreparedNormalBatch {paint:PreparedPaint {pixel:state.current,space:self.space.clone()},
+            shape:state.coverage.shape})
+    }
+    pub(super) fn apply_normal_batch(&mut self,batch:&PreparedNormalBatch,cancelled:&dyn Fn()->bool)->Option<()> {
+        if self.frame.knockout || self.frame.failed || cancelled() ||
+            !self.space.shares_blending_coordinates(&batch.paint.space) {return None;}
+        self.frame.apply(0,batch.paint.pixel,batch.shape,1,BlendMode::Normal,cancelled)
+    }
+
+    pub(super) fn diagnostic_current_pixel(&self)->Option<Pixel> {
+        if self.frame.failed || self.frame.current.pixels.len()!=1 {return None;}
+        self.frame.current.pixels.first().copied()
+    }
+    pub(super) fn single_pixel_state(&self,cancelled:&dyn Fn()->bool)->Option<SinglePixelState> {
+        if self.frame.failed || cancelled() || self.frame.current.pixels.len()!=1
+            || self.frame.initial.pixels.len()!=1 || self.frame.coverage.values.len()!=1 {return None;}
+        Some(SinglePixelState {initial:self.frame.initial.pixels[0],current:self.frame.current.pixels[0],
+            coverage:self.frame.coverage.values[0],knockout:self.frame.knockout,space:self.space.clone()})
+    }
+    /// Restore a certified constant-paint transition only at its exact input state.
+    pub(super) fn restore_cached_transition(
+        &mut self,input:&SinglePixelState,output:&SinglePixelState,
+        cancelled:&dyn Fn()->bool,remaining:&mut usize,
+    )->Option<bool> {
+        let result=(|| {
+            if cancelled() {return None;}*remaining=remaining.checked_sub(1)?;
+            let current=self.single_pixel_state(cancelled)?;
+            if !current.same(input) {return Some(false);}
+            if !input.initial.same_storage(output.initial) || input.knockout!=output.knockout
+                || !input.space.shares_blending_coordinates(&output.space) {return None;}
+            if cancelled() {return None;}
+            self.frame.current.pixels[0]=output.current;
+            self.frame.coverage.values[0]=output.coverage;
+            Some(true)
+        })();
+        if result.is_none() {self.frame.failed=true;}
+        result
+    }
     // Backdrop components must already be expressed in `space`; cross-space
     // parent-backdrop conversion belongs to the future scene/group router.
     pub(super) fn admitted(
@@ -198,6 +258,61 @@ impl PaintFrame {
             };
         self.frame.apply(index, source, shape, 1, mode, cancelled)
     }
+    /// Nonisolated child evaluation depends on the parent's actual child backdrop.
+    pub(super) fn matches_child_backdrop(
+        &self,child:&Self,cancelled:&dyn Fn()->bool,remaining:&mut usize,
+    )->Option<bool> {
+        if self.frame.failed || child.frame.failed || cancelled() {return None;}
+        *remaining=remaining.checked_sub(1)?;
+        if !self.space.shares_blending_coordinates(&child.space) {return Some(false);}
+        let backdrop=if self.frame.knockout {&self.frame.initial} else {&self.frame.current};
+        if backdrop.pixels.len()!=child.frame.initial.pixels.len() {return Some(false);}
+        for (&a,&b) in backdrop.pixels.iter().zip(&child.frame.initial.pixels) {
+            if cancelled() {return None;}*remaining=remaining.checked_sub(1)?;
+            if !a.same_storage(b) {return Some(false);}
+        }
+        Some(true)
+    }
+    /// Reset an admitted single-pixel root to a fresh non-isolated frame.
+    pub(super) fn reset_single_pixel_root(
+        &mut self,backdrop:Pixel,space:&hayro_interpret::color::ColorSpace,cancelled:&dyn Fn()->bool,
+    )->Option<bool> {
+        if self.frame.failed || cancelled() || !backdrop.valid() {return None;}
+        if !self.space.shares_blending_coordinates(space) || self.frame.initial.pixels.len()!=1 ||
+            self.frame.current.pixels.len()!=1 || self.frame.coverage.values.len()!=1 {return Some(false);}
+        if self.frame.initial.pixels[0].model()!=backdrop.model() {return Some(false);}
+        if cancelled() {return None;}
+        self.frame.initial.pixels[0]=backdrop;self.frame.current.pixels[0]=backdrop;
+        self.frame.coverage.values[0]=PreciseCoverage::default();
+        self.frame.knockout=false;self.frame.space_key=1;
+        Some(true)
+    }
+    /// Validate exactly as finish, retaining owned storage for the next root.
+    pub(super) fn finished_single_pixel(&self,cancelled:&dyn Fn()->bool)->Option<Pixel> {
+        if self.frame.failed || cancelled() || self.frame.current.pixels.len()!=1 {return None;}
+        let pixel=self.frame.current.pixels[0];
+        if cancelled() || !pixel.valid() {return None;}
+        Some(pixel)
+    }
+    /// Reset admitted one-pixel storage to the exact state of a fresh child.
+    /// A different color space or buffer shape requires a newly admitted frame.
+    pub(super) fn reset_single_pixel_child(
+        &mut self,parent:&Self,isolated:bool,knockout:bool,cancelled:&dyn Fn()->bool,
+    )->Option<bool> {
+        if cancelled() || self.frame.failed || parent.frame.failed {return None;}
+        if !self.space.shares_blending_coordinates(&parent.space) ||
+            self.frame.initial.pixels.len()!=1 || self.frame.current.pixels.len()!=1 ||
+            self.frame.coverage.values.len()!=1 {return Some(false);}
+        let backdrop=if parent.frame.knockout {&parent.frame.initial.pixels} else {&parent.frame.current.pixels};
+        if backdrop.len()!=1 {return Some(false);}
+        let pixel=backdrop[0];if !pixel.valid() {return None;}
+        let pixel=if isolated {Pixel::from_native(pixel.model(),&[0.;4][..pixel.model().channels()],0.)?} else {pixel};
+        if cancelled() {return None;}
+        self.frame.initial.pixels[0]=pixel;self.frame.current.pixels[0]=pixel;
+        self.frame.coverage.values[0]=PreciseCoverage::default();
+        self.frame.knockout=knockout;self.frame.space_key=parent.frame.space_key;
+        Some(true)
+    }
     pub(super) fn child(
         &mut self,
         isolated: bool,
@@ -269,6 +384,14 @@ impl PaintFrame {
         mode: BlendMode,
         cancelled: &dyn Fn() -> bool,
     ) -> Option<()> {
+        self.apply_retained_group_masked(&child,opacity,alpha_is_shape,mask,mode,cancelled)
+    }
+    /// Reuse an immutable admitted child; parent mask, opacity, AIS and blending
+    /// are evaluated afresh. The child's coverage and source space remain owned.
+    pub(super) fn apply_retained_group_masked(
+        &mut self, child:&Self, opacity:f64, alpha_is_shape:bool,
+        mask:Option<&[f64]>, mode:BlendMode, cancelled:&dyn Fn()->bool,
+    )->Option<()> {
         let result = (|| {
             if self.frame.failed
                 || child.frame.failed
@@ -762,4 +885,134 @@ fn prepared_paint_applies_leaf_alpha_source_once() {
             }
         );
     }
+}
+
+#[test]
+fn retained_group_reuse_matches_fresh_children_with_masks_knockout_and_blends() {
+    use super::{native_blend::Model,native_paint::NativePaint};
+    use hayro_interpret::color::{AlphaColor,Color};
+    let admit=|_:usize|Some(Box::new(()) as Credit);
+    let color=Color::from_rgba(AlphaColor::new([0.2,0.7,0.4,0.6]));
+    let paint=NativePaint::capture(&color,&||false,&admit).unwrap();
+    let backdrop=Pixel::from_native(Model::Rgb,&[0.8,0.3,0.1],0.7).unwrap();
+    let child=|| {
+        let mut frame=PaintFrame::admitted(&[backdrop],&paint.color_space,true,true,&||false,&admit).unwrap();
+        frame.apply_paint(0,&paint,0.5,BlendMode::Normal,&||false).unwrap();frame
+    };
+    let retained=child();
+    for knockout in [false,true] {for ais in [false,true] {
+        for mode in [BlendMode::Normal,BlendMode::Multiply,BlendMode::Screen,BlendMode::HardLight] {
+            for mask in [0.,0.25,1.] {
+                let parent=||PaintFrame::admitted(&[backdrop],&paint.color_space,false,knockout,&||false,&admit).unwrap();
+                let mut reused=parent();let mut fresh=parent();
+                for _ in 0..2 {
+                    reused.apply_retained_group_masked(&retained,0.4,ais,Some(&[mask]),mode,&||false).unwrap();
+                    fresh.apply_group_masked(child(),0.4,ais,Some(&[mask]),mode,&||false).unwrap();
+                }
+                let a=reused.finish(&||false).unwrap().pixels[0];
+                let b=fresh.finish(&||false).unwrap().pixels[0];
+                assert_eq!(a.alpha(),b.alpha());assert_eq!(a.native_components(),b.native_components());
+            }
+        }
+    }}
+    let mut cancelled=PaintFrame::admitted(&[backdrop],&paint.color_space,false,false,&||false,&admit).unwrap();
+    assert!(cancelled.apply_retained_group_masked(&retained,1.,false,None,BlendMode::Normal,&||true).is_none());
+    assert!(cancelled.finish(&||false).is_none());
+    let a=retained.finish(&||false).unwrap().pixels[0];let b=child().finish(&||false).unwrap().pixels[0];
+    assert_eq!(a.alpha(),b.alpha());assert_eq!(a.native_components(),b.native_components());
+}
+
+#[test]
+fn cached_paint_transition_matches_fresh_execution_and_refuses_changed_input() {
+    use super::{native_blend::Model,native_paint::NativePaint};
+    use hayro_interpret::color::{AlphaColor,Color};
+    let admit=|_:usize|Some(Box::new(()) as Credit);
+    let color=Color::from_rgba(AlphaColor::new([0.2,0.7,0.4,0.6]));
+    let paint=NativePaint::capture(&color,&||false,&admit).unwrap();
+    let backdrop=Pixel::from_native(Model::Rgb,&[0.8,0.3,0.1],0.7).unwrap();
+    for knockout in [false,true] {for mode in [BlendMode::Normal,BlendMode::Multiply,BlendMode::Screen,BlendMode::HardLight] {
+        let make=||PaintFrame::admitted(&[backdrop],&paint.color_space,false,knockout,&||false,&admit).unwrap();
+        let mut original=make();let input=original.single_pixel_state(&||false).unwrap();
+        for _ in 0..17 {original.apply_paint(0,&paint,0.5,mode,&||false).unwrap();}
+        let output=original.single_pixel_state(&||false).unwrap();
+        let mut restored=make();let mut budget=1;
+        assert_eq!(restored.restore_cached_transition(&input,&output,&||false,&mut budget),Some(true));
+        assert_eq!(budget,0);
+        assert!(restored.single_pixel_state(&||false).unwrap().same(&output));
+        let mut changed=make();changed.apply_paint(0,&paint,1.,BlendMode::Normal,&||false).unwrap();
+        let before=changed.single_pixel_state(&||false).unwrap();
+        assert_eq!(changed.restore_cached_transition(&input,&output,&||false,&mut 1),Some(false));
+        assert!(changed.single_pixel_state(&||false).unwrap().same(&before));
+        let mut exhausted=make();assert!(exhausted.restore_cached_transition(&input,&output,&||false,&mut 0).is_none());
+        assert!(exhausted.finish(&||false).is_none());
+    }}
+}
+
+pub(super) fn assert_normal_batch_equivalence(space:&hayro_interpret::color::ColorSpace,model:super::native_blend::Model) {
+    let admit=|_:usize|Some(Box::new(()) as Credit);
+    let clear=Pixel::from_native(model,&[0.;4][..model.channels()],0.).unwrap();
+    for ais in [false,true] {for opacity in [0.,0.4,1.] {
+        let mut accumulator=PaintFrame::admitted(&[clear],space,false,false,&||false,&admit).unwrap();
+        let paints=[PreparedPaint {pixel:Pixel::from_native(model,&[0.8,0.2,0.1,0.4][..model.channels()],1.).unwrap(),space:space.clone()},
+            PreparedPaint {pixel:Pixel::from_native(model,&[0.1,0.7,0.3,0.2][..model.channels()],1.).unwrap(),space:space.clone()}];
+        for paint in &paints {accumulator.apply_prepared_masked(0,paint,1.,ais,opacity,BlendMode::Normal,&||false).unwrap();}
+        let batch=accumulator.prepare_normal_batch(&||false).unwrap();
+        for alpha in [0.,0.3,1.] {for components in [[0.2,0.5,0.9,0.3],[0.8,0.3,0.1,0.2]] {
+            let backdrop=Pixel::from_native(model,&components[..model.channels()],alpha).unwrap();
+            let make=||PaintFrame::admitted(&[backdrop],space,false,false,&||false,&admit).unwrap();
+            let mut ordinary=make();let mut combined=make();
+            for paint in &paints {ordinary.apply_prepared_masked(0,paint,1.,ais,opacity,BlendMode::Normal,&||false).unwrap();}
+            combined.apply_normal_batch(&batch,&||false).unwrap();
+            let a=ordinary.single_pixel_state(&||false).unwrap();let b=combined.single_pixel_state(&||false).unwrap();
+            assert!((a.current.alpha()-b.current.alpha()).abs()<1e-12);
+            for (a,b) in a.current.native_components().unwrap().iter().zip(b.current.native_components().unwrap()) {assert!((a-b).abs()<1e-12);}
+            assert!((a.coverage.shape-b.coverage.shape).abs()<1e-12);
+            assert!((a.coverage.alpha-b.coverage.alpha).abs()<1e-12);
+            let mut knockout=PaintFrame::admitted(&[backdrop],space,false,true,&||false,&admit).unwrap();
+            assert!(knockout.apply_normal_batch(&batch,&||false).is_none());
+            assert!(combined.apply_normal_batch(&batch,&||true).is_none());
+        }}
+    }}
+}
+
+#[test]
+fn prepared_normal_batch_preserves_varied_backdrop_alpha_and_shape() {
+    use hayro_interpret::color::{AlphaColor,Color};
+    let color=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
+    assert_normal_batch_equivalence(color.color_space(),super::native_blend::Model::Rgb);
+}
+
+#[test]
+fn reused_root_restores_fresh_frame_state_and_rejects_failed_or_multi_pixel_frames() {
+    use super::native_blend::Model;
+    use hayro_interpret::color::{AlphaColor,Color};
+    let rgb=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
+    let admit=|_:usize|Some(Box::new(()) as Credit);
+    for prior_knockout in [false,true] {for old_alpha in [0.,0.4,1.] {for new_alpha in [0.,0.6,1.] {
+        let old=Pixel::from_native(Model::Rgb,&[0.2,0.3,0.4],old_alpha).unwrap();
+        let backdrop=Pixel::from_native(Model::Rgb,&[0.7,0.1,0.9],new_alpha).unwrap();
+        let source=Pixel::from_native(Model::Rgb,&[0.3,0.8,0.2],0.7).unwrap();
+        let mut reused=PaintFrame::admitted(&[old],rgb.color_space(),false,prior_knockout,&||false,&admit).unwrap();
+        let prepared=reused.prepare_native_pixel(source,rgb.color_space(),&||false).unwrap();
+        reused.apply_prepared_masked(0,&prepared,0.3,false,0.4,BlendMode::HardLight,&||false).unwrap();
+        let before=reused.single_pixel_state(&||false).unwrap();
+        assert!(reused.reset_single_pixel_root(backdrop,rgb.color_space(),&||true).is_none());
+        assert!(before.same(&reused.single_pixel_state(&||false).unwrap()));
+        assert_eq!(reused.reset_single_pixel_root(backdrop,rgb.color_space(),&||false),Some(true));
+        let mut fresh=PaintFrame::admitted(&[backdrop],rgb.color_space(),false,false,&||false,&admit).unwrap();
+        assert!(reused.single_pixel_state(&||false).unwrap().same(&fresh.single_pixel_state(&||false).unwrap()));
+        for frame in [&mut reused,&mut fresh] {
+            let prepared=frame.prepare_native_pixel(source,rgb.color_space(),&||false).unwrap();
+            frame.apply_prepared_masked(0,&prepared,0.4,true,0.6,BlendMode::Screen,&||false).unwrap();
+        }
+        assert!(reused.finished_single_pixel(&||false).unwrap().same_storage(fresh.finish(&||false).unwrap().pixels[0]));
+    }}}
+    let clear=Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap();
+    let mut multi=PaintFrame::admitted(&[clear,clear],rgb.color_space(),false,false,&||false,&admit).unwrap();
+    assert_eq!(multi.reset_single_pixel_root(clear,rgb.color_space(),&||false),Some(false));
+    assert!(multi.finished_single_pixel(&||false).is_none());
+    let mut failed=PaintFrame::admitted(&[clear],rgb.color_space(),false,false,&||false,&admit).unwrap();
+    assert!(failed.prepare_native_pixel(clear,rgb.color_space(),&||true).is_none());
+    assert!(failed.reset_single_pixel_root(clear,rgb.color_space(),&||false).is_none());
+    assert!(failed.finished_single_pixel(&||false).is_none());
 }

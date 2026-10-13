@@ -1,0 +1,10 @@
+209400.jpg 320 True
+209400.jpg 640 True
+201400.jpg 320 False
+201400.jpg 640 False
+209000.jpg 320 False
+209000.jpg 640 False
+Traceback (most recent call last):
+  File "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-loftr-library-20261010.py", line 55, in <module>
+    assert all(row['exact_evidence_parity'] for row in r['results']), 'decision/payload evidence changed'
+AssertionError: decision/payload evidence changed

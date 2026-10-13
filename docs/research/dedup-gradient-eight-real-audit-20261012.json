@@ -1,0 +1,83 @@
+{
+  "status": "verified_exact_real_outcomes_no_consistent_timing_gain_not_adopted",
+  "controls": 10,
+  "candidate_slower_controls": 7,
+  "summary": [
+    {
+      "pair": "0:0",
+      "radius": "None",
+      "current_four_seconds": 0.08060379200000001,
+      "candidate_eight_seconds": 0.09202854199999999,
+      "four_over_eight": 0.8758564489699295
+    },
+    {
+      "pair": "0:0",
+      "radius": "Some(64.0)",
+      "current_four_seconds": 0.160016146,
+      "candidate_eight_seconds": 0.1688550835,
+      "four_over_eight": 0.947653708038941
+    },
+    {
+      "pair": "0:1",
+      "radius": "None",
+      "current_four_seconds": 0.0927231875,
+      "candidate_eight_seconds": 0.09714366599999999,
+      "four_over_eight": 0.9544954531569769
+    },
+    {
+      "pair": "0:1",
+      "radius": "Some(64.0)",
+      "current_four_seconds": 0.220696938,
+      "candidate_eight_seconds": 0.22840025,
+      "four_over_eight": 0.9662727514527677
+    },
+    {
+      "pair": "0:2",
+      "radius": "None",
+      "current_four_seconds": 0.111800104,
+      "candidate_eight_seconds": 0.139732312,
+      "four_over_eight": 0.8001020121960052
+    },
+    {
+      "pair": "0:2",
+      "radius": "Some(64.0)",
+      "current_four_seconds": 0.24432862500000002,
+      "candidate_eight_seconds": 0.2133025415,
+      "four_over_eight": 1.145455761013518
+    },
+    {
+      "pair": "0:3",
+      "radius": "None",
+      "current_four_seconds": 0.113365416,
+      "candidate_eight_seconds": 0.1067175415,
+      "four_over_eight": 1.062294112163369
+    },
+    {
+      "pair": "0:3",
+      "radius": "Some(64.0)",
+      "current_four_seconds": 0.2011466245,
+      "candidate_eight_seconds": 0.205808875,
+      "four_over_eight": 0.9773466984842126
+    },
+    {
+      "pair": "0:4",
+      "radius": "None",
+      "current_four_seconds": 0.10724349999999999,
+      "candidate_eight_seconds": 0.1032596875,
+      "four_over_eight": 1.0385805205928014
+    },
+    {
+      "pair": "0:4",
+      "radius": "Some(64.0)",
+      "current_four_seconds": 0.19554318799999998,
+      "candidate_eight_seconds": 0.2060245625,
+      "four_over_eight": 0.9491256072925769
+    }
+  ],
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-eight-real-20261012.json": "662dc1e9630a706ff8e11f344d66a0bdf036e6a11c02fbb7b4042f6f067a531e",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-gradient-eight-real-20261012.py": "a5edc397ca0aee05afe340c34cc6bdc77eadce676897e47c106b180d7548dd2a",
+    "/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup/src/gradient.rs": "700347c5d4439d572f3d004e61ccfb350733aeff9f2946171c1f9cd461c8be1a"
+  },
+  "scope": "Complete matcher alternating actual current-four versus candidate-eight on original JPEG descriptors; exact coordinates asserted in pinned executable. Seven slower medians under concurrent host load justify no adoption, not a universal performance regression. Not whole-portfolio timing or recall."
+}

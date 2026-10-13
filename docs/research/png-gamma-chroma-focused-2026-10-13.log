@@ -1,0 +1,20 @@
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+    Finished `test` profile [optimized + debuginfo] target(s) in 52.52s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_decode-3d841f18ff85d05c)
+
+running 2 tests
+test png_color::tests::gamma_chroma_profiles_obey_precedence_and_validate_chunks ... ok
+
+thread 'raster::tests::png_gamma_chroma_display_matches_full_u16_power_reference' (74763543) panicked at crates/rrrah-decode/src/raster.rs:1147:32:
+gamma=50000 p3=true code=28335 channel=0
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test raster::tests::png_gamma_chroma_display_matches_full_u16_power_reference ... FAILED
+
+failures:
+
+failures:
+    raster::tests::png_gamma_chroma_display_matches_full_u16_power_reference
+
+test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 1100 filtered out; finished in 0.02s
+
+error: test failed, to rerun pass `-p rrrah-decode --lib`

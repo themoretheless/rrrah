@@ -173,7 +173,7 @@ fn flat_support_and_invalid_visible_samples_are_explicit() {
         propose_mesh_translations(&transparent, &view, &grid, &[[32, 32]], policy(), &budget, || {
             false
         }),
-        Err(RankRegionError::Invalid)
+        Err(RankRegionError::UnsupportedPixels)
     ));
     assert_eq!(budget.used(), 0);
     let mut invalid = policy();
@@ -188,4 +188,36 @@ fn flat_support_and_invalid_visible_samples_are_explicit() {
         propose_mesh_translations(&view, &view, &grid, &[[32, 32]], weak, &budget, || false),
         Err(RankRegionError::Budget)
     ));
+}
+
+#[test]
+fn contrast_domain_refuses_above_one_before_scratch_admission() {
+    let grid = grid();
+    let data = pixels(0);
+    let view = LinearRgbaView::new(64, 64, &data, 4096, || false).unwrap();
+    for contrast in [
+        0.,
+        -1.,
+        f64::NAN,
+        f64::INFINITY,
+        f64::from_bits(1f64.to_bits() + 1),
+        2.,
+    ] {
+        let mut p = policy();
+        p.minimum_contrast = contrast;
+        let budget = MemoryBudget::new(0);
+        let result = propose_mesh_translations(&view, &view, &grid, &[[32, 32]], p, &budget, || false);
+        assert!(
+            matches!(result, Err(RankRegionError::Invalid)),
+            "contrast {contrast:?}: {result:?}"
+        );
+        assert_eq!(budget.used(), 0);
+    }
+    let mut p = policy();
+    p.minimum_contrast = 1.;
+    let budget = MemoryBudget::new(100_000);
+    let result = propose_mesh_translations(&view, &view, &grid, &[[32, 32]], p, &budget, || false).unwrap();
+    assert!(matches!(result[0], SeedRefinement::Uninformative));
+    drop(result);
+    assert_eq!(budget.used(), 0);
 }

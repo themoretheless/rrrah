@@ -1,0 +1,52 @@
+{
+  "scope": "Source component range certificate for successful selected native mesh samples; not affine integration certificate",
+  "source_tests": "118passed/1ignored",
+  "compositor_tests": "236passed/12ignored",
+  "interval": "Vertex extrema expanded outward by one f32 step, clipped to successful native0..1range; normalized nonnegative f64weights and finalf32rounding accounted",
+  "refusal": "Functions, transformed color coordinates, invalid vertices, invalid index, exhausted shared work or cancellation",
+  "original_pixels_and_centroid_comparisons_exact": true,
+  "actual_mesh_rows": [
+    {
+      "event": 2670,
+      "accepted": 682,
+      "refused": 0,
+      "narrow_1e6": 0,
+      "min_span": 0.001103043556213379,
+      "max_span": 0.009313821792602539,
+      "preparation_work": 8866
+    },
+    {
+      "event": 2670,
+      "accepted": 727,
+      "refused": 0,
+      "narrow_1e6": 0,
+      "min_span": 0.0005515813827514648,
+      "max_span": 0.028921663761138916,
+      "preparation_work": 9451
+    },
+    {
+      "event": 2670,
+      "accepted": 405,
+      "refused": 0,
+      "narrow_1e6": 0,
+      "min_span": 0.00042563676834106445,
+      "max_span": 0.0038910508155822754,
+      "preparation_work": 5265
+    },
+    {
+      "event": 2670,
+      "accepted": 64,
+      "refused": 0,
+      "narrow_1e6": 0,
+      "min_span": 0.0013481974601745605,
+      "max_span": 0.008394718170166016,
+      "preparation_work": 832
+    }
+  ],
+  "conclusion": "No sampled triangle has source-wide component span<=1e-6. Whole-triangle near-constant replacement cannot authorize the needed sampling reduction. Next bound affine integration error locally, including inverse-coordinate/projection/rounding errors.",
+  "limitations": [
+    "Range evidence does not authorize skipping native samples",
+    "No retained per-triangle metadata added",
+    "Independent native AI color correctness and working4M fullpage qualification remain open"
+  ]
+}

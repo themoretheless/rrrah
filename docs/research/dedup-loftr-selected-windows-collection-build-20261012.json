@@ -1,0 +1,64 @@
+{
+  "status": "complete_two_preserved_executables_not_executed",
+  "producer_pid": 80835,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/build-dedup-loftr-selected-windows-collection-20261012.py": "f8e280fc69d83af303019bfa2aa751ff5f2089ab3f68d27165f53923f83b4deb",
+    "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-harness-20261012/Cargo.toml": "d2fee55046ec17741ee098407a1b1a5d217c19ce45982303bcc080f1ff1fc759",
+    "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-harness-20261012/Cargo.lock": "cc5b54756fe7ede0b3d9b671f3b3b57ee56054f5197ccfbd58d4ebdb6964baca",
+    "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-harness-20261012/src/bin/disc21_heldout_negative_collection.rs": "975706f5b6fd70bc80626edfcd27498c40e53b75a6e3bb2b59eb5044db14d0a8",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-loftr-selected-windows-current-baseline-20261012.json": "75b6c2b3d370304a38c5225111e2bfee1f21cc098740a02d1dba1d7f862d30ce",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-loftr-selected-windows-source-v2-20261012.json": "f7791e127942ab759c3a25fe894a4c04fcb679ef6efbb9b890ff0973c2e12b23",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-selected-windows-collection-baseline-20261012/Cargo.toml": "88b6231488e12461c003a6c1e33f618c54113090584c4cb30a569dd2e9d28dc2",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-selected-windows-collection-baseline-20261012/Cargo.lock": "cc5b54756fe7ede0b3d9b671f3b3b57ee56054f5197ccfbd58d4ebdb6964baca",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-selected-windows-collection-baseline-20261012/src/bin/selected_window_collection_baseline.rs": "975706f5b6fd70bc80626edfcd27498c40e53b75a6e3bb2b59eb5044db14d0a8",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-selected-windows-collection-baseline-build-20261012.log": "716b2de9153f097f7f3c439a63f48cb62980659f1c2003c620bf1e04f732ec16",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-selected-windows-collection-baseline-executable-20261012": "67a2fca3ebf928ccfe8a3c22b8bfc5bd69ed66fed59c115430752df0ca81cdc0",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-selected-windows-collection-selected-20261012/Cargo.toml": "f1309e3852730083f70c2fb6dcd8821dd91cebdc139b7dbe738b94ca2f4644f2",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-selected-windows-collection-selected-20261012/Cargo.lock": "cc5b54756fe7ede0b3d9b671f3b3b57ee56054f5197ccfbd58d4ebdb6964baca",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-selected-windows-collection-selected-20261012/src/bin/selected_window_collection_selected.rs": "975706f5b6fd70bc80626edfcd27498c40e53b75a6e3bb2b59eb5044db14d0a8",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-selected-windows-collection-selected-build-20261012.log": "305df40ffb5b026f6d42302687c82ee419a64856b29f13f3f619accce9bb09b0",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-selected-windows-collection-selected-executable-20261012": "ac25b1045e4935ab93ba64abb6d8027a35757ef48987f781ffc16ffd4dfbff3d"
+  },
+  "builds": [
+    {
+      "mode": "baseline",
+      "command": [
+        "cargo",
+        "build",
+        "--manifest-path",
+        "/Users/themoretheless/.codex/tmp/rrrah-loftr-selected-windows-collection-baseline-20261012/Cargo.toml",
+        "--bin",
+        "selected_window_collection_baseline",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-exact-portfolio-20261011"
+      ],
+      "status": "compiled_not_executed",
+      "child_pid": 80863,
+      "returncode": 0,
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-loftr-selected-windows-collection-baseline-build-20261012.log",
+      "executable": "/Users/themoretheless/.codex/tmp/rrrah-loftr-selected-windows-collection-baseline-executable-20261012"
+    },
+    {
+      "mode": "selected",
+      "command": [
+        "cargo",
+        "build",
+        "--manifest-path",
+        "/Users/themoretheless/.codex/tmp/rrrah-loftr-selected-windows-collection-selected-20261012/Cargo.toml",
+        "--bin",
+        "selected_window_collection_selected",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-exact-portfolio-20261011"
+      ],
+      "status": "compiled_not_executed",
+      "child_pid": 82258,
+      "returncode": 0,
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-loftr-selected-windows-collection-selected-build-20261012.log",
+      "executable": "/Users/themoretheless/.codex/tmp/rrrah-loftr-selected-windows-collection-selected-executable-20261012"
+    }
+  ]
+}

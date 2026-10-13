@@ -1,0 +1,50 @@
+{
+  "status": "confirmed_historical_benchmark_false_acceptance_unfixed",
+  "case_index": 52,
+  "plan": {
+    "left": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/211901.jpg",
+    "right": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/207400.jpg",
+    "direction": "query_to_wrong",
+    "origin": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/211900.jpg",
+    "query": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/211901.jpg",
+    "wrong_reference": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/207400.jpg",
+    "priority_rank": 26,
+    "publisher_retrieval_groundtruth": "excluded_wrong_origin",
+    "sscd_positive_cosine": 0.1656532753112842,
+    "sscd_wrong_cosine": 0.12162966891324525,
+    "sscd_positive_rank": 1
+  },
+  "case_report": "/Users/themoretheless/.codex/tmp/rrrah-copydays-nearest-wrong-native-20261013/0052.json",
+  "case_report_sha256": "cc041c36848d2a792bc1c846c593f606ec6c367abf8b3a2fff769e9691784188",
+  "verified_prefix_audit": "docs/research/dedup-copydays-nearest-wrong-native-prefix-0059-audit-20261013.json",
+  "verified_prefix_audit_sha256": "29acf9de8ef618067b5431bdad813be56b37ec0a89fe10845b1b98be0c84b133",
+  "visual_inspection": "Query is blurred crop of alphabet transcription table; labeled true origin is full same table; wrong reference shows a bird behind wire fencing. All3actual images independently viewed. Repetitive lines are a hypothesis for false ordinal support, not independently isolated cause.",
+  "evidence": {
+    "detail": {
+      "evidence": "Model(ModelComparisonEvidence { original_dimensions: [[640, 480], [1280, 960]], model_digest: [251, 248, 128, 60, 113, 119, 49, 0, 204, 125, 138, 137, 62, 0, 255, 47, 68, 141, 150, 91, 38, 37, 242, 55, 0, 75, 47, 168, 45, 71, 4, 147], raw_proposals: 1298, selected_points: 1298, transform: Some(ProjectiveTransform { matrix: [[0.9826712218638571, 0.26154857532443376, 534.3155312233729], [-0.06604356985237858, 1.0842984111889027, 402.7340457920044], [5.629018276010106e-5, 0.00023937255083964542, 0.9209396143901012]] }), geometry_inliers: 10, hypotheses: 1000000, pixels: Some(AnchorRankEvidence { forward_anchors: 10, reverse_anchors: 10, source_window_bounds: [206, 118, 373, 333], target_window_bounds: [821, 502, 334, 342], forward: RankRegionEvidence { sites: 250, valid_sites: 250, informative_pairs: 1455, agreeing_pairs: 1339, pixel_reads: 101250 }, reverse: RankRegionEvidence { sites: 250, valid_sites: 250, informative_pairs: 1449, agreeing_pairs: 1339, pixel_reads: 101250 }, supported: true }) })",
+      "terminal": "native_or_model"
+    },
+    "left": 2,
+    "model_attempted": true,
+    "native_miss": "Some(Native { recipes: 6, candidates: 14 })",
+    "opposite_insufficient": true,
+    "right": 9,
+    "support": true
+  },
+  "managed_used": 0,
+  "raw_proposals": 1298,
+  "geometry_inliers": 10,
+  "forward": {
+    "sites": 250,
+    "informative_pairs": 1455,
+    "agreeing_pairs": 1339,
+    "fraction": 0.920274914089347
+  },
+  "reverse": {
+    "sites": 250,
+    "informative_pairs": 1449,
+    "agreeing_pairs": 1339,
+    "fraction": 0.9240855762594893
+  },
+  "scope": "Original fixed wrong-origin publisher retrieval label; historical frozen2696file native25bank executable, not latest root build. Pixel counters describe selected local windows, not whole-image coverage or byte equality. Additive geometry/competitive/deformation APIs not integrated into this acceptance policy. No repair or representative precision estimate; all59prefix cases preserved,1false/58inconclusive."
+}

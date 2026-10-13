@@ -1,0 +1,81 @@
+{
+  "scope": "Exact affine source derivative bounds and geometric moment replacement term only",
+  "source_tests": "123passed/1ignored",
+  "compositor_tests": "246passed/12ignored",
+  "rows": [
+    {
+      "source_gradient": {
+        "refused": 0,
+        "max_x": 200.05290297843663,
+        "max_y": 16.875093989800042
+      },
+      "unit_geometry_term": 3.1085303079047847e-13,
+      "geometry_refused": 0,
+      "pixel": [
+        147,
+        59
+      ],
+      "conditional_source_affine_geometry_term_upper": 6.218705120928058e-11
+    },
+    {
+      "source_gradient": {
+        "refused": 0,
+        "max_x": 8.575463185999983,
+        "max_y": 3.3804562846708004
+      },
+      "unit_geometry_term": 1.4897446527175806e-13,
+      "geometry_refused": 0,
+      "pixel": [
+        145,
+        50
+      ],
+      "conditional_source_affine_geometry_term_upper": 1.2775250425919943e-12
+    },
+    {
+      "source_gradient": {
+        "refused": 0,
+        "max_x": 0.0,
+        "max_y": 0.0
+      },
+      "pixel": [
+        199,
+        25
+      ]
+    },
+    {
+      "source_gradient": {
+        "refused": 0,
+        "max_x": 5.435823563510441,
+        "max_y": 4.795700711588326
+      },
+      "pixel": [
+        138,
+        39
+      ]
+    },
+    {
+      "source_gradient": {
+        "refused": 0,
+        "max_x": 0.634503885098525,
+        "max_y": 0.10100671843326839
+      },
+      "pixel": [
+        149,
+        56
+      ]
+    }
+  ],
+  "controls_exact": true,
+  "regressions": [
+    "Known identity/skew/reflection derivatives incl constant channel",
+    "Every insufficient work budget and cancellation checkpoint",
+    "Area/centroid corner perturbation comparisons"
+  ],
+  "term": "A_upper*(Gx*centroid_error_x+Gy*centroid_error_y)+area_error*value_bound",
+  "limitations": [
+    "Aggregate source geometry estimate conditional on source gradient and value-bound applicability; not full route certificate",
+    "Source projection/rounding, clipped-domain membership and final sum rounding excluded",
+    "No actual color sample skipped, ordinary4Mfullpage/independentcolor/viewer work unresolved"
+  ],
+  "derivation": "ai-affine-moment-error-derivation-2026-10-13.md"
+}

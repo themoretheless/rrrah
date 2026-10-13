@@ -1,0 +1,37 @@
+{
+  "change": "Explicit unqualified MEF extension route returns NativeCamera MEF color-support diagnostic instead of falling into DNG parser. Strong supported container magic still refines extension.",
+  "checks": [
+    "case-insensitive MEF route",
+    "MEF generic TIFF stays in MEF route",
+    "strong-magic override regression",
+    "recipe/decode refusal with zero managed allocation",
+    "real pinned MEF public route refusal no preview",
+    "independent full native MEF sensor oracle remains exact"
+  ],
+  "mef_tests": 11,
+  "decoder_regression": {
+    "passed": 1005,
+    "failed": 0,
+    "ignored": 78
+  },
+  "initial_failure": "One oracle test failed because RRRAH_MEF_ORACLE was omitted; complete environment rerun all11 passed.",
+  "logs": {
+    "missing-oracle-env": {
+      "path": "docs/research/mef-explicit-color-refusal-2026-10-11-missing-oracle-env.log",
+      "sha256": "a7e8a2edd72cf2bee8daee8344b4a17e791cec749a60989c0a0882213d2cc263"
+    },
+    "mef": {
+      "path": "docs/research/mef-explicit-color-refusal-2026-10-11-mef.log",
+      "sha256": "ad02883da311444d68be01d61b34e71120b852718a9eecfe799ea71bfca072d8"
+    },
+    "decode-all": {
+      "path": "docs/research/mef-explicit-color-refusal-2026-10-11-decode-all.log",
+      "sha256": "5fe2642d86ebde87ec2204aee9c2f97fd4cccd1243599fc015827592b6d37d41"
+    }
+  },
+  "source_sha256": {
+    "crates/rrrah-decode/src/native_router.rs": "410b88aa4b99d2db8a9163e58ccd7cf186fae77ffeb6c7eb92225533c3e1f9df",
+    "crates/rrrah-decode/src/image_router.rs": "d20359cd5bdc988f39d6f3ddb26e49fe690e48276d9ead80648de4f0e839cc10"
+  },
+  "remaining": "MEF WB/color/viewer still unimplemented; no increase in qualified formats."
+}

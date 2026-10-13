@@ -1,0 +1,19 @@
+warning: function `fallible_zeroed_bytes` is never used
+   --> crates/rrrah-cache/src/mosaic_payload_v1.rs:728:4
+    |
+728 | fn fallible_zeroed_bytes(len: usize) -> Result<Box<[u8]>, MosaicPayloadError> {
+    |    ^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-cache` (lib) generated 1 warning
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.47s
+     Running unittests src/main.rs (target/debug/deps/rrrah-0b4921b829754900)
+
+running 1 test
+mixed prefetch navigation adapter: Metal Apple M4 Max
+mixed prefetch navigation: 120 ping-pong steps; all visible Metal frames exact; stale requests refused; managed root final=0; six formats; SDR/HDR exact; linear CLI policy
+test foreground_loader_tests::mixed_gallery_reversals_preserve_metal_frames_and_prefetch_pressure ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 280 filtered out; finished in 2.52s
+

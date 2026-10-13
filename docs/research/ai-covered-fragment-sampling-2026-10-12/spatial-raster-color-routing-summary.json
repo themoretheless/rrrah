@@ -1,0 +1,39 @@
+{
+  "change": "native spatial raster source converts original components into verified destination coordinates using shared existing native frame conversion; cancellation checked afterward",
+  "verified": "actual PDF RGB16raster routed to captured DeviceGray target equals pertexel native float conversion then area mean",
+  "ordinary_passed": 166,
+  "ignored": 12,
+  "real_artwork": {
+    "before_refusal": {
+      "stage": "raster_source_geometry",
+      "event": 3
+    },
+    "after_refusal": {
+      "stage": "mesh_source_geometry",
+      "event": 1017
+    },
+    "preflight": "passed",
+    "route_admissions": 18,
+    "pixel_completed": false,
+    "final_managed_bytes": 0
+  },
+  "limits": [
+    "only existing verified conversion pairs supported",
+    "RGBtoCMYK still requires captured BG/UCR policy",
+    "mesh/group crossspace and production qualification pending"
+  ],
+  "logs": [
+    {
+      "path": "docs/research/ai-covered-fragment-sampling-2026-10-12/real-spatial-route-stage-tests.log",
+      "sha256": "ecf571112faac5245de1e6389e7b8eccd2267ef50bde963ea973a83fd66c21a6"
+    },
+    {
+      "path": "docs/research/ai-covered-fragment-sampling-2026-10-12/spatial-raster-color-routing-tests.log",
+      "sha256": "c6ff2533313ff20c1c2fcc5f06aaf225382ac2fa99e60155b509e74fb261e884"
+    },
+    {
+      "path": "docs/research/ai-covered-fragment-sampling-2026-10-12/real-spatial-raster-color-tests.log",
+      "sha256": "2b67cc40b5414d9969b12946fc740ac9ee3de324aa555852e965f67bbedb1a1a"
+    }
+  ]
+}

@@ -1,0 +1,180 @@
+     Locking 79 packages to latest compatible versions
+      Adding vello_cpu v0.0.8 (available: v0.1.0)
+   Compiling moxcms v0.8.1 (/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-mesh-bounds-test-2zdeq7zn/moxcms)
+   Compiling hayro-interpret v0.7.0 (/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-mesh-bounds-test-2zdeq7zn/hayro-interpret)
+   Compiling image v0.25.10
+   Compiling hayro v0.7.1 (/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-mesh-bounds-test-2zdeq7zn/hayro)
+warning: unnecessary qualification
+  --> src/knockout_interpreter.rs:11:21
+   |
+11 |     NativeColor(Box<super::native_paint::NativePaint>),
+   |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: requested on the command line with `-W unused-qualifications`
+help: remove the unnecessary path segments
+   |
+11 -     NativeColor(Box<super::native_paint::NativePaint>),
+11 +     NativeColor(Box<native_paint::NativePaint>),
+   |
+
+warning: unnecessary qualification
+  --> src/knockout_interpreter.rs:65:87
+   |
+65 |     native_mask_transfers: Vec<(usize, Option<hayro_interpret::TransferFunction>, Box<super::native_paint::NativePaint>, bool)>,
+   |                                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+help: remove the unnecessary path segments
+   |
+65 -     native_mask_transfers: Vec<(usize, Option<hayro_interpret::TransferFunction>, Box<super::native_paint::NativePaint>, bool)>,
+65 +     native_mask_transfers: Vec<(usize, Option<hayro_interpret::TransferFunction>, Box<native_paint::NativePaint>, bool)>,
+   |
+
+warning: unnecessary qualification
+   --> src/knockout_interpreter.rs:444:100
+    |
+444 | ...   if !self.capture(Some(size_of::<(usize, Option<hayro_interpret::TransferFunction>, Box<super::native_paint::NativePaint>, boo...
+    |                                                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+help: remove the unnecessary path segments
+    |
+444 -             if !self.capture(Some(size_of::<(usize, Option<hayro_interpret::TransferFunction>, Box<super::native_paint::NativePaint>, bool)>())) { return; }
+444 +             if !self.capture(Some(size_of::<(usize, Option<hayro_interpret::TransferFunction>, Box<native_paint::NativePaint>, bool)>())) { return; }
+    |
+
+warning: unnecessary qualification
+   --> src/knockout_interpreter.rs:446:41
+    |
+446 |             let Some(native_backdrop) = super::native_paint::NativePaint::capture(&mask.background_color(),&cancel,&admit) else {
+    |                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+help: remove the unnecessary path segments
+    |
+446 -             let Some(native_backdrop) = super::native_paint::NativePaint::capture(&mask.background_color(),&cancel,&admit) else {
+446 +             let Some(native_backdrop) = native_paint::NativePaint::capture(&mask.background_color(),&cancel,&admit) else {
+    |
+
+warning: unnecessary qualification
+   --> src/knockout_interpreter.rs:567:35
+    |
+567 |                 let Some(paint) = super::native_paint::NativePaint::capture(
+    |                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+help: remove the unnecessary path segments
+    |
+567 -                 let Some(paint) = super::native_paint::NativePaint::capture(
+567 +                 let Some(paint) = native_paint::NativePaint::capture(
+    |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:4918:25
+     |
+4918 |             let clear = super::native_blend::Pixel::from_native(super::native_blend::Model::Cmyk, &[0.;4], 0.).unwrap();
+     |                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+4918 -             let clear = super::native_blend::Pixel::from_native(super::native_blend::Model::Cmyk, &[0.;4], 0.).unwrap();
+4918 +             let clear = native_blend::Pixel::from_native(super::native_blend::Model::Cmyk, &[0.;4], 0.).unwrap();
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:4918:65
+     |
+4918 |             let clear = super::native_blend::Pixel::from_native(super::native_blend::Model::Cmyk, &[0.;4], 0.).unwrap();
+     |                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+4918 -             let clear = super::native_blend::Pixel::from_native(super::native_blend::Model::Cmyk, &[0.;4], 0.).unwrap();
+4918 +             let clear = super::native_blend::Pixel::from_native(native_blend::Model::Cmyk, &[0.;4], 0.).unwrap();
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:4919:29
+     |
+4919 |             let mut frame = super::native_frame::PaintFrame::admitted(&[clear], target, false, true,
+     |                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+4919 -             let mut frame = super::native_frame::PaintFrame::admitted(&[clear], target, false, true,
+4919 +             let mut frame = native_frame::PaintFrame::admitted(&[clear], target, false, true,
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:4950:59
+     |
+4950 |     space: &hayro_interpret::color::ColorSpace, backdrop: super::native_blend::Pixel,
+     |                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+4950 -     space: &hayro_interpret::color::ColorSpace, backdrop: super::native_blend::Pixel,
+4950 +     space: &hayro_interpret::color::ColorSpace, backdrop: native_blend::Pixel,
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:4953:13
+     |
+4953 | ) -> Option<super::native_frame::Buffer> {
+     |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+4953 - ) -> Option<super::native_frame::Buffer> {
+4953 + ) -> Option<native_frame::Buffer> {
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:4959:59
+     |
+4959 |     space: &hayro_interpret::color::ColorSpace, backdrop: super::native_blend::Pixel,
+     |                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+4959 -     space: &hayro_interpret::color::ColorSpace, backdrop: super::native_blend::Pixel,
+4959 +     space: &hayro_interpret::color::ColorSpace, backdrop: native_blend::Pixel,
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:4963:13
+     |
+4963 | ) -> Option<super::native_frame::Buffer> {
+     |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+4963 - ) -> Option<super::native_frame::Buffer> {
+4963 + ) -> Option<native_frame::Buffer> {
+     |
+
+warning: unnecessary qualification
+    --> src/knockout_interpreter.rs:4989:62
+     |
+4989 |     let _backdrop_credit = admit(count.checked_mul(size_of::<super::native_blend::Pixel>())?)?;
+     |                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+4989 -     let _backdrop_credit = admit(count.checked_mul(size_of::<super::native_blend::Pixel>())?)?;
+4989 +     let _backdrop_credit = admit(count.checked_mul(size_of::<native_blend::Pixel>())?)?;
+     |
+
+warning: `hayro` (lib test) generated 13 warnings (run `cargo fix --lib -p hayro --tests` to apply 13 suggestions)
+    Finished `test` profile [optimized + debuginfo] target(s) in 25.41s
+     Running unittests src/lib.rs (target/debug/deps/hayro-bd8c8927dcca1210)
+
+running 1 test
+NATIVE_SOURCE_PATH event=2676 transform=[1.0, 0.0, 0.0, 1.0, 0.0, 245.5] mode=Fill(NonZero) elements=[MoveTo((58.27397981301919, -155.985)), LineTo((88.47710000000001, -155.985)), LineTo((88.47710000000001, -65.495)), LineTo((58.27397981301919, -65.495)), ClosePath]
+NATIVE_SOURCE_CLIP event=2676 index=0 fill=NonZero elements=[MoveTo((62.409, 91.30799999999999)), CurveTo((63.94, 91.816), (63.859, 92.70400000000001), (65.295, 93.52699999999999)), LineTo((65.2951, 93.52699999999999)), CurveTo((66.577, 94.263), (69.025, 94.46700000000001), (70.204, 95.34)), LineTo((70.2041, 95.34)), CurveTo((69.973, 95.352), (69.655, 95.376), (69.444, 95.36500000000001)), LineTo((69.4441, 95.36500000000001)), CurveTo((69.723, 96.71100000000001), (71.854, 97.37200000000001), (72.782, 98.37100000000001)), LineTo((72.7821, 98.37100000000001)), CurveTo((68.696, 99.173), (73.417, 99.958), (73.473, 101.94900000000001)), LineTo((73.4731, 101.94900000000001)), CurveTo((73.497, 102.75999999999999), (72.18, 102.863), (72.382, 104.01599999999999)), LineTo((72.38210000000001, 104.01599999999999)), CurveTo((72.499, 104.68299999999999), (74.188, 105.737), (74.674, 106.333)), LineTo((74.67410000000001, 106.333)), CurveTo((74.425, 106.905), (73.37, 107.74600000000001), (73.333, 108.269)), LineTo((73.3331, 108.269)), CurveTo((73.264, 109.245), (74.522, 109.95400000000001), (74.912, 110.87700000000001)), LineTo((74.91210000000001, 110.87700000000001)), CurveTo((74.577, 110.995), (73.535, 112.44300000000001), (73.313, 112.555)), LineTo((73.3131, 112.555)), CurveTo((74.436, 113.88999999999999), (76.52, 115.30699999999999), (74.477, 116.976)), LineTo((74.47710000000001, 116.976)), CurveTo((75.389, 117.779), (77.126, 118.936), (77.531, 120.024)), LineTo((77.53110000000001, 120.024)), CurveTo((77.645, 120.327), (78.202, 123.863), (77.828, 123.506)), LineTo((77.8281, 123.506)), CurveTo((78.703, 124.342), (79.745, 124.727), (80.04, 125.996)), LineTo((80.04010000000001, 125.996)), CurveTo((78.891, 126.467), (77.475, 126.764), (78.032, 128.32299999999998)), LineTo((78.0321, 128.32299999999998)), CurveTo((78.223, 128.857), (79.356, 128.926), (79.631, 129.553)), LineTo((79.6311, 129.553)), CurveTo((80.13, 130.688), (79.645, 130.09199999999998), (79.471, 130.935)), LineTo((79.4711, 130.935)), CurveTo((79.446, 131.059), (78.858, 132.401), (78.788, 132.577)), LineTo((78.7881, 132.577)), CurveTo((78.628, 132.99200000000002), (81.348, 134.24599999999998), (80.979, 134.828)), LineTo((80.9791, 134.828)), CurveTo((80.766, 135.163), (80.389, 135.137), (79.99, 135.112)), LineTo((79.9901, 135.112)), CurveTo((79.603, 135.087), (79.196, 135.063), (78.898, 135.36599999999999)), LineTo((78.8981, 135.36599999999999)), CurveTo((79.723, 136.103), (81.159, 137.41899999999998), (81.278, 137.493)), LineTo((81.27810000000001, 137.493)), CurveTo((80.661, 138.274), (80.696, 139.26600000000002), (79.95, 139.93099999999998)), LineTo((79.9501, 139.93099999999998)), CurveTo((80.879, 140.94), (78.219, 140.893), (79.061, 141.93)), LineTo((79.06110000000001, 141.93)), CurveTo((79.756, 142.78300000000002), (78.801, 142.68099999999998), (79.831, 143.28199999999998)), LineTo((79.8311, 143.28199999999998)), CurveTo((78.6, 143.953), (78.049, 145.135), (78.152, 146.353)), LineTo((78.1521, 146.353)), CurveTo((78.202, 146.929), (78.891, 147.525), (78.913, 148.151)), LineTo((78.9131, 148.151)), CurveTo((78.935, 148.834), (78.319, 149.25900000000001), (78.329, 149.873)), LineTo((78.3291, 149.873)), CurveTo((78.348, 151.139), (79.467, 152.0), (79.452, 153.30200000000002)), LineTo((79.4521, 153.30200000000002)), CurveTo((79.438, 154.308), (78.614, 155.435), (78.309, 156.328)), LineTo((78.3091, 156.328)), CurveTo((78.416, 156.014), (77.311, 157.392), (77.286, 157.692)), LineTo((77.2861, 157.692)), CurveTo((77.204, 158.612), (77.792, 159.201), (77.264, 159.813)), LineTo((77.2641, 159.813)), CurveTo((76.139, 161.11599999999999), (75.383, 162.227), (73.819, 163.108)), LineTo((73.8191, 163.108)), CurveTo((73.949, 164.19799999999998), (73.022, 164.924), (71.996, 164.917)), LineTo((71.9961, 164.917)), CurveTo((72.634, 165.553), (72.296, 166.404), (72.499, 167.25799999999998)), LineTo((72.4991, 167.25799999999998)), CurveTo((71.403, 168.317), (69.499, 168.959), (67.999, 168.926)), LineTo((67.9991, 168.926)), CurveTo((67.973, 169.055), (67.945, 169.184), (67.92, 169.312)), LineTo((67.9201, 169.312)), CurveTo((67.79, 169.32299999999998), (67.405, 169.311), (67.296, 169.386)), LineTo((67.29610000000001, 169.386)), CurveTo((66.887, 170.563), (69.531, 173.901), (66.813, 173.594)), LineTo((66.8131, 173.594)), CurveTo((67.249, 173.846), (67.889, 174.32999999999998), (68.169, 174.886)), LineTo((68.1691, 174.886)), CurveTo((65.834, 175.178), (64.788, 178.40699999999998), (63.65, 180.005)), LineTo((63.6501, 180.005)), CurveTo((65.458, 179.31900000000002), (68.268, 179.837), (69.885, 178.684)), LineTo((69.88510000000001, 178.684)), CurveTo((71.113, 177.808), (71.637, 173.308), (73.702, 175.513)), LineTo((73.7021, 175.513)), CurveTo((73.903, 175.184), (73.989, 171.002), (74.053, 171.013)), LineTo((74.0531, 171.013)), CurveTo((74.957, 171.162), (75.61, 172.054), (76.526, 172.34199999999998)), LineTo((76.5261, 172.34199999999998)), CurveTo((78.012, 170.874), (76.513, 168.243), (76.196, 166.626)), LineTo((76.1961, 166.626)), CurveTo((77.319, 166.918), (78.035, 166.253), (78.872, 165.563)), LineTo((78.8721, 165.563)), CurveTo((78.774, 165.164), (78.044, 163.939), (78.085, 163.60500000000002)), LineTo((78.0851, 163.60500000000002)), CurveTo((78.159, 163.01999999999998), (79.024, 162.699), (79.069, 162.166)), LineTo((79.0691, 162.166)), CurveTo((78.835, 165.005), (81.096, 163.30700000000002), (81.874, 162.228)), LineTo((81.8741, 162.228)), CurveTo((82.932, 160.76), (84.764, 159.566), (85.486, 157.97899999999998)), LineTo((85.48610000000001, 157.97899999999998)), CurveTo((85.9, 157.066), (85.765, 155.997), (86.259, 155.09)), LineTo((86.2591, 155.09)), CurveTo((86.723, 154.236), (87.516, 153.88400000000001), (87.86, 152.839)), LineTo((87.8601, 152.839)), CurveTo((88.337, 151.388), (87.514, 149.725), (87.766, 148.187)), LineTo((87.76610000000001, 148.187)), CurveTo((87.778, 148.123), (88.649, 143.986), (87.549, 144.614)), LineTo((87.54910000000001, 144.614)), CurveTo((88.969, 143.804), (88.331, 141.838), (86.85, 141.378)), LineTo((86.8501, 141.378)), CurveTo((86.885, 140.458), (87.827, 140.014), (88.477, 139.55700000000002)), LineTo((88.47710000000001, 139.55700000000002)), CurveTo((87.846, 139.06799999999998), (85.805, 138.136), (85.027, 137.934)), LineTo((85.0271, 137.934)), CurveTo((85.379, 137.89100000000002), (85.784, 137.54500000000002), (86.092, 137.47899999999998)), LineTo((86.0921, 137.47899999999998)), CurveTo((85.03, 135.719), (85.78, 135.607), (87.116, 134.447)), LineTo((87.1161, 134.447)), CurveTo((85.082, 133.416), (87.182, 130.38299999999998), (87.334, 128.72)), LineTo((87.3341, 128.72)), CurveTo((87.416, 127.815), (87.35, 126.906), (87.052, 125.99)), LineTo((87.05210000000001, 125.99)), CurveTo((86.673, 124.826), (86.321, 124.743), (86.467, 123.71)), LineTo((86.4671, 123.71)), CurveTo((86.512, 123.393), (87.269, 123.2), (87.324, 122.74)), LineTo((87.3241, 122.74)), CurveTo((87.395, 122.152), (86.928, 121.953), (86.807, 121.465)), LineTo((86.8071, 121.465)), CurveTo((86.301, 119.426), (84.667, 118.623), (83.811, 116.786)), LineTo((83.81110000000001, 116.786)), CurveTo((84.081, 116.703), (84.231, 116.56), (84.469, 116.465)), LineTo((84.4691, 116.465)), CurveTo((83.452, 115.00200000000001), (80.12, 112.305), (78.324, 112.11099999999999)), LineTo((78.3241, 112.11099999999999)), CurveTo((79.03, 112.0), (79.659, 111.73400000000001), (80.257, 111.351)), LineTo((80.25710000000001, 111.351)), CurveTo((80.555, 109.91300000000001), (78.745, 109.63399999999999), (78.772, 108.18700000000001)), LineTo((78.77210000000001, 108.18700000000001)), CurveTo((78.793, 107.07400000000001), (79.926, 106.506), (79.618, 105.213)), LineTo((79.6181, 105.213)), CurveTo((79.264, 103.72800000000001), (76.361, 102.505), (78.818, 101.387)), LineTo((78.8181, 101.387)), CurveTo((78.231, 101.02799999999999), (76.571, 100.30799999999999), (76.231, 99.74100000000001)), LineTo((76.2311, 99.74100000000001)), CurveTo((75.737, 98.916), (76.313, 98.79400000000001), (76.102, 98.167)), LineTo((76.10210000000001, 98.167)), CurveTo((76.014, 97.90199999999999), (74.822, 94.81899999999999), (73.856, 95.74700000000001)), LineTo((73.8561, 95.74700000000001)), CurveTo((74.391, 95.233), (74.731, 94.858), (75.094, 94.20599999999999)), LineTo((75.0941, 94.20599999999999)), CurveTo((74.036, 93.84100000000001), (72.869, 93.84899999999999), (71.764, 93.71199999999999)), LineTo((71.7641, 93.71199999999999)), CurveTo((71.826, 93.60400000000001), (71.996, 93.566), (72.068, 93.47200000000001)), LineTo((72.0681, 93.47200000000001)), CurveTo((70.911, 92.709), (69.098, 91.834), (67.758, 92.273)), LineTo((67.7581, 92.273)), CurveTo((67.955, 91.51499999999999), (68.655, 90.862), (68.865, 90.00999999999999)), LineTo((68.8651, 90.00999999999999)), CurveTo((68.437, 89.935), (67.848, 90.06899999999999), (67.127, 90.20400000000001)), LineTo((67.1271, 90.20400000000001)), CurveTo((66.529, 90.316), (65.84, 90.42699999999999), (65.075, 90.41900000000001)), LineTo((65.0751, 90.41900000000001)), CurveTo((62.594, 90.393), (59.575, 89.797), (58.413, 89.531)), LineTo((58.4131, 89.531)), CurveTo((58.366, 89.52000000000001), (58.331, 89.51499999999999), (58.308, 89.51499999999999)), LineTo((58.3081, 89.51499999999999)), CurveTo((58.001, 89.51499999999999), (59.799, 90.439), (62.409, 91.30799999999999)), MoveTo((72.51, 167.24599999999998)), CurveTo((72.508, 167.249), (72.505, 167.251), (72.502, 167.25400000000002)), LineTo((72.5021, 167.25400000000002)), CurveTo((72.505, 167.24599999999998), (72.508, 167.24), (72.51, 167.24599999999998)), MoveTo((72.499, 167.262)), CurveTo((72.5, 167.26600000000002), (72.501, 167.269), (72.502, 167.273)), LineTo((72.5021, 167.273)), CurveTo((72.5, 167.275), (72.499, 167.275), (72.499, 167.275)), LineTo((72.4991, 167.275)), CurveTo((72.497, 167.275), (72.498, 167.268), (72.499, 167.262))]
+NATIVE_PIXEL_SOLID depth=1 event=4 coverage=255 mask=1
+NATIVE_PIXEL_RASTER depth=1 event=11 point=(63.103233895304584, 185.00365840591775) dimensions=(395, 367) interpolate=false components=[0.0, 0.0, 0.0, 0.929411768913269] alpha=1 coverage=255 mask=1 alpha_plane=None
+NATIVE_PIXEL_RASTER depth=1 event=11 point=(63.103233895304584, 185.00365840591775) dimensions=(395, 367) interpolate=false components=[0.0, 0.0, 0.0, 0.929411768913269] alpha=1 coverage=255 mask=1 alpha_plane=None
+NATIVE_PIXEL_SOLID depth=1 event=4 coverage=255 mask=1
+NATIVE_PIXEL_SHADING depth=0 event=2676 coverage=108 sample=true mask=1
+NATIVE_PIXEL_SHADING_SAMPLE depth=0 event=2676 components=[0.016602673, 0.13868213, 0.3871869, 0.0] opacity=1 model=Some(Cmyk)
+test knockout_compositor::interpreter_tests::real_ai_compositor_capture_and_replay_diagnostic ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 145 filtered out; finished in 43.89s
+

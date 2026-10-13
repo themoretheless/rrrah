@@ -2767,7 +2767,7 @@ fn compare_gradient_pyramid_selected<T>(
                     .ok_or(LocalError::Budget)?;
                 *matcher_credit.borrow_mut() =
                     Some(budget.try_reserve(bytes).map_err(|_| LocalError::Budget)?);
-                crate::gradient::match_gradients_distinct_locations(a, b, matching, radius, cancel)
+                crate::gradient::match_gradients_distinct_locations_prepaid(a, b, matching, radius, budget, cancel)
             } else {
                 crate::gradient::match_gradients(a, b, matching, cancel)
             }
@@ -4249,7 +4249,19 @@ pub fn compare_local_files_projective_candidate_union_regions_with_smoothing_man
     budget: &MemoryBudget,
     cancel: impl Fn() -> bool,
 ) -> Result<ManagedProjectiveCandidateUnionRegionsFileEvidence, LocalFileError> {
-    candidate_union_files_managed(left, right, config, factors, smoothing_radii, true, None, budget, cancel)
+    candidate_union_files_managed(
+        left,
+        right,
+        config,
+        factors,
+        smoothing_radii,
+        true,
+        true,
+        None,
+        budget,
+        cancel,
+    )
+    .map(|(e, _, _)| e)
 }
 
 #[derive(Debug)]
@@ -4270,8 +4282,22 @@ pub fn find_projective_candidate_union_geometry_files_managed(
     budget: &MemoryBudget,
     cancel: impl Fn() -> bool,
 ) -> Result<ManagedCandidateUnionGeometryFileEvidence, LocalFileError> {
-    let evidence = candidate_union_files_managed(left, right, config, factors, smoothing_radii, false, None, budget, cancel)?;
-    Ok(ManagedCandidateUnionGeometryFileEvidence { correspondences: evidence.correspondences, geometry: evidence.geometry })
+    let (evidence, _, _) = candidate_union_files_managed(
+        left,
+        right,
+        config,
+        factors,
+        smoothing_radii,
+        false,
+        true,
+        None,
+        budget,
+        cancel,
+    )?;
+    Ok(ManagedCandidateUnionGeometryFileEvidence {
+        correspondences: evidence.correspondences,
+        geometry: evidence.geometry,
+    })
 }
 
 /// Explicit reflected source descriptors for low-contrast and smoothed proposals.
@@ -4290,10 +4316,21 @@ pub fn find_projective_candidate_union_reflected_geometry_files_managed(
     budget: &MemoryBudget,
     cancel: impl Fn() -> bool,
 ) -> Result<ManagedCandidateUnionGeometryFileEvidence, LocalFileError> {
-    let evidence = candidate_union_files_managed(left, right, config, factors,
-        smoothing_radii, false, Some(maximum_reflection_bins), budget, cancel)?;
+    let (evidence, _, _) = candidate_union_files_managed(
+        left,
+        right,
+        config,
+        factors,
+        smoothing_radii,
+        false,
+        true,
+        Some(maximum_reflection_bins),
+        budget,
+        cancel,
+    )?;
     Ok(ManagedCandidateUnionGeometryFileEvidence {
-        correspondences: evidence.correspondences, geometry: evidence.geometry,
+        correspondences: evidence.correspondences,
+        geometry: evidence.geometry,
     })
 }
 
@@ -4302,8 +4339,12 @@ pub(crate) fn validate_candidate_reflection_bins(
     limit: u64,
 ) -> Result<(), LocalFileError> {
     let required = u64::try_from(config.search.gradient.search.max_total_features)
-        .map_err(|_| LocalError::Budget)?.checked_mul(256).ok_or(LocalError::Budget)?;
-    if required > limit { return Err(LocalError::Budget.into()); }
+        .map_err(|_| LocalError::Budget)?
+        .checked_mul(256)
+        .ok_or(LocalError::Budget)?;
+    if required > limit {
+        return Err(LocalError::Budget.into());
+    }
     Ok(())
 }
 
@@ -4314,10 +4355,18 @@ fn candidate_union_files_managed(
     factors: &[f64],
     smoothing_radii: [u32; 2],
     confirm_regions: bool,
+    fit_geometry: bool,
     reflection_bins: Option<u64>,
     budget: &MemoryBudget,
     cancel: impl Fn() -> bool,
-) -> Result<ManagedProjectiveCandidateUnionRegionsFileEvidence, LocalFileError> {
+) -> Result<
+    (
+        ManagedProjectiveCandidateUnionRegionsFileEvidence,
+        (u32, u32),
+        (u32, u32),
+    ),
+    LocalFileError,
+> {
     let latch = Cell::new(false);
     let cancelled = || {
         let value = latch.get()
@@ -4395,49 +4444,70 @@ fn candidate_union_files_managed(
         let source_dimensions = av.dimensions();
         let target_dimensions = bv.dimensions();
         let smoothed_matches = {
-            let aa = crate::gradient_scale::smooth_gradient_candidates_managed(
-                &av,
-                smoothing_radii[0],
-                config.max_smoothing_taps_per_image,
-                budget,
-                cancelled,
-            )?;
-            let bb = crate::gradient_scale::smooth_gradient_candidates_managed(
-                &bv,
-                smoothing_radii[1],
-                config.max_smoothing_taps_per_image,
-                budget,
-                cancelled,
-            )?;
+            let prepare = |view: &crate::linear::LinearRgbaView<'_>, radius| {
+                if radius == 0 {
+                    crate::gradient_scale::validate_unsmoothed_gradient_candidates(
+                        view,
+                        config.max_smoothing_taps_per_image,
+                        cancelled,
+                    )?;
+                    Ok(None)
+                } else {
+                    crate::gradient_scale::smooth_gradient_candidates_managed(
+                        view,
+                        radius,
+                        config.max_smoothing_taps_per_image,
+                        budget,
+                        cancelled,
+                    )
+                    .map(Some)
+                }
+            };
+            let aa = prepare(&av, smoothing_radii[0])?;
+            let bb = prepare(&bv, smoothing_radii[1])?;
             let (aw, ah) = source_dimensions;
             let (bw, bh) = target_dimensions;
-            // Original candidate pixels are no longer needed once both smoothed
-            // views exist. Release them before reserving descriptor scratch.
-            drop((a, b));
-            let av = crate::linear::LinearRgbaView::new(
-                aw,
-                ah,
-                &aa,
-                gradient.search.local.decode.max_pixels,
-                cancelled,
-            )
-            .map_err(|e| match e {
+            // Keep only zero-radius originals. Other original frames are dropped
+            // before descriptor scratch, as with the owned smoothing recipe.
+            let a = aa.is_none().then_some(a);
+            let b = bb.is_none().then_some(b);
+            let map_pixels = |e| match e {
                 crate::pixels::PixelError::Layout => LocalError::Invalid,
                 crate::pixels::PixelError::Budget => LocalError::Budget,
                 crate::pixels::PixelError::Cancelled => LocalError::Cancelled,
-            })?;
-            let bv = crate::linear::LinearRgbaView::new(
-                bw,
-                bh,
-                &bb,
-                gradient.search.local.decode.max_pixels,
-                cancelled,
-            )
-            .map_err(|e| match e {
-                crate::pixels::PixelError::Layout => LocalError::Invalid,
-                crate::pixels::PixelError::Budget => LocalError::Budget,
-                crate::pixels::PixelError::Cancelled => LocalError::Cancelled,
-            })?;
+            };
+            let av = if let Some(samples) = &aa {
+                crate::linear::LinearRgbaView::new(
+                    aw,
+                    ah,
+                    samples,
+                    gradient.search.local.decode.max_pixels,
+                    cancelled,
+                )
+                .map_err(map_pixels)?
+            } else {
+                a.as_ref()
+                    .ok_or(LocalError::Invalid)?
+                    .view(cancelled)
+                    .map_err(crate::decode::FileError::from)
+                    .map_err(CachedError::from)?
+            };
+            let bv = if let Some(samples) = &bb {
+                crate::linear::LinearRgbaView::new(
+                    bw,
+                    bh,
+                    samples,
+                    gradient.search.local.decode.max_pixels,
+                    cancelled,
+                )
+                .map_err(map_pixels)?
+            } else {
+                b.as_ref()
+                    .ok_or(LocalError::Invalid)?
+                    .view(cancelled)
+                    .map_err(crate::decode::FileError::from)
+                    .map_err(CachedError::from)?
+            };
             let mut af = extract(&av, gradient)?;
             if let Some(limit) = reflection_bins {
                 af = crate::gradient::reflect_gradient_features_managed(&af, limit, budget, cancelled)?;
@@ -4461,14 +4531,18 @@ fn candidate_union_files_managed(
             cancelled,
         )?;
         drop((original_matches, smoothed_matches));
-        let model = crate::geometry::verify_projective_sampled_for_domains(
-            &correspondences,
-            gradient.search.local.geometry,
-            gradient.search.sampling,
-            source_dimensions,
-            target_dimensions,
-            cancelled,
-        )?;
+        let model = if fit_geometry {
+            crate::geometry::verify_projective_sampled_for_domains(
+                &correspondences,
+                gradient.search.local.geometry,
+                gradient.search.sampling,
+                source_dimensions,
+                target_dimensions,
+                cancelled,
+            )?
+        } else {
+            None
+        };
         let regions = if let Some(model) = model.as_ref().filter(|_| confirm_regions) {
             Some(
                 compare_local_files_projective_bidirectional_region_grid_transform(
@@ -4514,17 +4588,53 @@ fn candidate_union_files_managed(
         };
         first.verify(cancelled)?;
         second.verify(cancelled)?;
-        Ok(ManagedProjectiveCandidateUnionRegionsFileEvidence {
-            correspondences,
-            geometry,
-            regions,
-        })
+        Ok((
+            ManagedProjectiveCandidateUnionRegionsFileEvidence {
+                correspondences,
+                geometry,
+                regions,
+            },
+            source_dimensions,
+            target_dimensions,
+        ))
     })();
     if cancelled() {
         Err(LocalFileError::Cancelled)
     } else {
         result
     }
+}
+
+pub(crate) fn extract_candidate_union_points_files_managed(
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    config: ProjectiveCandidateUnionRegionsFilePolicy,
+    factors: &[f64],
+    smoothing_radii: [u32; 2],
+    reflection_bins: Option<u64>,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<
+    (
+        rrrah_core::SharedBuffer<crate::geometry::Correspondence>,
+        (u32, u32),
+        (u32, u32),
+    ),
+    LocalFileError,
+> {
+    let (e, source, target) = candidate_union_files_managed(
+        left,
+        right,
+        config,
+        factors,
+        smoothing_radii,
+        false,
+        false,
+        reflection_bins,
+        budget,
+        cancel,
+    )?;
+    Ok((e.correspondences, source, target))
 }
 
 /// Explicit cumulative admission for symmetric and both asymmetric attempts.

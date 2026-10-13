@@ -1,0 +1,12 @@
+{
+  "change": "Do not schedule or publish swapped fit refinement while the entire image is outside the viewport; existing pending work follows normal cancellation",
+  "validation": {
+    "metal_viewport_tests": 6,
+    "app_unit_tests": 208,
+    "regression": "Release GPU pressure at 32x20, move image wholly offscreen: no pending/ready job, CPU ownership unchanged, current frame unchanged; returning to fit restores exact 64x40 original-source frame"
+  },
+  "limits": [
+    "Physical HDR and NVIDIA unverified",
+    "Full goal remains open"
+  ]
+}

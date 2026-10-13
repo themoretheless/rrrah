@@ -1,0 +1,16 @@
+{
+  "status": "measured_native_cpu_rss_exceeds_managed_payload_limit",
+  "process_peak_rss_bytes": 1389445120,
+  "managed_peak_bytes": 44450368,
+  "managed_cap_bytes": 536870912,
+  "managed_used_after_report_drop": 0,
+  "rss_over_managed_cap": 2.588043212890625,
+  "elapsed_seconds": 1042.546933791,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-disc21-exposure-recovery-collection-20261012.json": "31ab0c6878b997e3a5fa2e3beb6f7d38d8f7f1370052e2a68b9c17515a938815",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-disc21-exposure-recovery-collection-audit-20261012.json": "9905cc60a0ffacd3bcb5cde31e112ac8c8f6609dae0891254a59a2309b7784f7",
+    "/Users/themoretheless/.codex/tmp/rrrah-disc21-exposure-recovery-collection-harness-20261012/src/bin/disc21_exposure_recovery_collection.rs": "6ad56aced418cac87d48affceb2645dd047ed03abed30190704758a3de1e6647",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-cpu-resource-gap-20261012.py": "569f6308b8df0cfe1bfb5fe75cf3040430a9af8e268b6b2339fcf42f8c8e4426"
+  },
+  "scope": "Actual macOS ARM CPU three-source control /usr/bin/time -l measurement. Managed payload accounting works;512MiB is not a total RSS cap. Models, tensors, provider workspace and metadata remain external. This measurement identifies a resource-admission gap; it does not measure isolated tensor peak, prove a leak or establish a universal LoFTR worst-case bound. Resource gap remains required work."
+}

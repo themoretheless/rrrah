@@ -1,0 +1,62 @@
+{
+  "date": "2026-10-12",
+  "adapter": "Metal Apple M4 Max",
+  "formats": [
+    "PNG",
+    "GIF",
+    "EXR",
+    "HDR",
+    "PFM",
+    "ASTC"
+  ],
+  "navigation_steps_per_test": 120,
+  "prefetch_windows": [
+    {
+      "behind": 1,
+      "ahead": 2
+    },
+    {
+      "behind": 0,
+      "ahead": 3
+    },
+    {
+      "behind": 3,
+      "ahead": 0
+    },
+    {
+      "behind": 0,
+      "ahead": 0
+    }
+  ],
+  "each_policy_full_forward_backward_periods": 3,
+  "cache_max_entries": 2,
+  "cache_max_bytes": 65536,
+  "managed_memory_limit_bytes": 1048576,
+  "focused": {
+    "passed": 2,
+    "failed": 0,
+    "ignored": 0
+  },
+  "ordinary_viewer": {
+    "passed": 219,
+    "failed": 0,
+    "ignored": 62
+  },
+  "checks": [
+    "SDR/RGBA16Float exact against fresh same-renderer frames",
+    "visible float bits unchanged by neighbour admission",
+    "cache bounds",
+    "visible cached hit under full managed pressure",
+    "stale generation refusal leaves memory/cache unchanged",
+    "final managed CPU and per-frame HDR GPU budgets zero"
+  ],
+  "log_sha256": {
+    "metal-mixed-prefetch-policies-2026-10-12.log": "89c4e7fbea85ffc18e5f7bd809e6ac8f3390e43cae43d9860ec04a6bdfc96c53",
+    "viewer-mixed-policies-regression-2026-10-12.log": "9f93ef9b3e5429e70a9edf0ac98cd5d7598751797c637c96f55a0e32481c9be0"
+  },
+  "limits": [
+    "Six authored fixtures only",
+    "Same-renderer references are transport checks, not independent color or decoder oracles",
+    "Not OS memory pressure, physical slow disk or calibrated HDR display"
+  ]
+}

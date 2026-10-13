@@ -1,0 +1,32 @@
+    Checking hayro-interpret v0.7.0 (/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret)
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: hidden lifetime parameters in types are deprecated
+   --> vendor/hayro-interpret/src/shading/adaptive.rs:514:34
+    |
+514 |         let mut shared: MeshArray<SharedEdgeSample> = MeshArray::new(admit);
+    |                         ---------^----------------- expected lifetime parameter
+    |
+    = note: requested on the command line with `-W elided-lifetimes-in-paths`
+help: indicate the anonymous lifetime
+    |
+514 |         let mut shared: MeshArray<'_, SharedEdgeSample> = MeshArray::new(admit);
+    |                                   +++
+
+warning: `hayro-interpret` (lib) generated 1 warning
+    Checking hayro v0.7.1 (/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro)
+    Checking rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+    Finished `dev` profile [optimized + debuginfo] target(s) in 18.82s

@@ -1,0 +1,46 @@
+{
+  "change": "RGBE calibration normalizes a full single-component black-level repeat grid; exact quad grids remain allocation-free",
+  "backend": "Metal Apple M4 Max",
+  "tests_passed_failed_ignored": {
+    "core": [
+      [
+        13,
+        0,
+        0
+      ]
+    ],
+    "metal": [
+      [
+        2,
+        0,
+        0
+      ],
+      [
+        3,
+        0,
+        1
+      ],
+      [
+        2,
+        0,
+        0
+      ]
+    ]
+  },
+  "checks": [
+    "144 sensor sites cross odd 3x5 repetition and four CFA gains",
+    "invalid last grid cell rejected",
+    "Metal 16/32Float viewport preserves independent signed HDR RGBE matrix result",
+    "existing RGBE compute and viewport regressions pass"
+  ],
+  "log_sha256": {
+    "core": "350fb90229c7feb2af63311948be9d02031cb029d157516e81ead666f952d743",
+    "metal": "9474c2ba8b68a60f623f9f0ea63c7bb0bc7b1a4c045b448955ac3d12fc8d7b08"
+  },
+  "limits": [
+    "Dedicated arbitrary-grid normalization-to-compute integration still needs qualification",
+    "Unusual grid calibration owns a bounded metadata clone; normal exact quad avoids allocation",
+    "No genuine camera file with unusual repeat grid used",
+    "Physical HDR and NVIDIA remain open"
+  ]
+}

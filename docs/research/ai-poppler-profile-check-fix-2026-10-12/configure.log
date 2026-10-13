@@ -1,0 +1,135 @@
+-- The C compiler identification is AppleClang 21.0.0.21000334
+-- The CXX compiler identification is AppleClang 21.0.0.21000334
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found PkgConfig: /opt/homebrew/bin/pkg-config (found version "3.0.8")
+-- Checking _FILE_OFFSET_BITS for large files
+-- Checking _FILE_OFFSET_BITS for large files - not needed
+CMake Warning at CMakeLists.txt:106 (message):
+
+
+   No test data found in $testdatadir.
+   You will not be able to run 'make test' successfully.
+
+
+
+   The test data is not included in the source packages
+   and is also not part of the main git repository. Instead,
+   you can checkout the test data from its own git
+   repository with:
+
+
+
+     git clone git://git.freedesktop.org/git/poppler/test
+
+
+
+   You should checkout the test data as a sibling of your
+   poppler source folder or specify the location of your
+   checkout with -DTESTDATADIR=/path/to/checkoutdir/test.
+    
+
+
+-- Found Freetype: /opt/homebrew/lib/libfreetype.dylib (found suitable version "2.14.3", minimum required is "2.13")
+-- Found Fontconfig: /opt/homebrew/lib/libfontconfig.dylib (found suitable version "2.18.3", minimum required is "2.15")
+-- Checking for module 'nss>=3.98'
+--   Found nss, version 3.131
+-- Found NSS3: nss3;nssutil3;smime3;ssl3;plds4;plc4;nspr4 (Required is at least version "3.98")
+-- Found LibGpgError: /opt/homebrew/opt/libgpg-error/lib/libgpg-error.dylib (found suitable version "1.61", minimum required is "1.47")
+-- Found Gpgme: /opt/homebrew/Cellar/gpgme/2.2.0/lib/libgpgme.dylib (found suitable version "2.2.0", minimum required is "2.2.0")
+-- Found TIFF: /opt/homebrew/lib/libtiff.dylib (found suitable version "4.7.2", minimum required is "4.5")
+-- Checking for module 'libbrotlidec>=1.1'
+--   Found libbrotlidec, version 1.2.0
+-- Found libbrotlidec: brotlidec (Required is at least version "1.1")
+-- Checking for module 'harfbuzz'
+--   Found harfbuzz, version 14.6.0
+-- Found harfbuzz: /opt/homebrew/Cellar/harfbuzz/14.6.0/lib/libharfbuzz.dylib
+-- Checking for module 'harfbuzz-subset'
+--   Found harfbuzz-subset, version 14.6.0
+-- Found harfbuzz-subset: /opt/homebrew/Cellar/harfbuzz/14.6.0/lib/libharfbuzz-subset.dylib;/opt/homebrew/Cellar/harfbuzz/14.6.0/lib/libharfbuzz.dylib
+-- Found ZLIB: /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib/libz.tbd (found version "1.2.12")
+-- Found PNG: /opt/homebrew/lib/libpng.dylib (found version "1.6.59")
+-- Found JPEG: /opt/homebrew/lib/libjpeg.dylib (found version "80")
+-- Performing Test HAVE_JPEG_MEM_SRC
+-- Performing Test HAVE_JPEG_MEM_SRC - Success
+-- Checking for module 'cairo>=1.18.0'
+--   Found cairo, version 1.18.6
+-- Found Cairo: /opt/homebrew/Cellar/cairo/1.18.6/lib/libcairo.dylib (Required is at least version "1.18.0")
+-- Checking for module 'lcms2'
+--   Found lcms2, version 2.19
+-- Found lcms version 2.19, /opt/homebrew/lib/liblcms2.dylib
+-- Checking for module 'poppler-data'
+--   Found poppler-data, version 0.4.12
+-- Looking for fseek64
+-- Looking for fseek64 - not found
+-- Looking for fseeko
+-- Looking for fseeko - found
+-- Looking for pread64
+-- Looking for pread64 - not found
+-- Looking for lseek64
+-- Looking for lseek64 - not found
+-- Looking for gmtime_r
+-- Looking for gmtime_r - found
+-- Looking for timegm
+-- Looking for timegm - found
+-- Looking for localtime_r
+-- Looking for localtime_r - found
+-- Looking for strtok_r
+-- Looking for strtok_r - found
+-- Performing Test COMPILER_HAS_HIDDEN_VISIBILITY
+-- Performing Test COMPILER_HAS_HIDDEN_VISIBILITY - Success
+-- Performing Test COMPILER_HAS_HIDDEN_INLINE_VISIBILITY
+-- Performing Test COMPILER_HAS_HIDDEN_INLINE_VISIBILITY - Success
+-- Performing Test COMPILER_HAS_DEPRECATED_ATTR
+-- Performing Test COMPILER_HAS_DEPRECATED_ATTR - Success
+-- Found Gettext: /opt/homebrew/bin/msgmerge (found version "1.0")
+-- Found Intl: /opt/homebrew/lib/libintl.dylib (found version "1.0.0")
+-- Looking for CAIRO_HAS_PNG_FUNCTIONS
+-- Looking for CAIRO_HAS_PNG_FUNCTIONS - found
+-- Looking for CAIRO_HAS_PDF_SURFACE
+-- Looking for CAIRO_HAS_PDF_SURFACE - found
+-- Looking for CAIRO_HAS_PS_SURFACE
+-- Looking for CAIRO_HAS_PS_SURFACE - found
+-- Looking for CAIRO_HAS_SVG_SURFACE
+-- Looking for CAIRO_HAS_SVG_SURFACE - found
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+-- Found Threads: TRUE
+Building Poppler with support for:
+  font configuration:   fontconfig
+  font subsetting:      yes
+  use boost (Splash):   no
+  cairo output:         yes
+  qt5 wrapper:          no
+  qt6 wrapper:          no
+  glib wrapper:         no
+    introspection:      no
+    gtk-doc:            no
+  cpp wrapper:          no
+  use libjpeg:          yes
+  use libpng:           yes
+  use libtiff:          yes
+  use brotli:           yes
+  use zlib uncompress:  no
+  use nss3:             yes
+  use gpg:              yes
+    default signature backend:          NSS
+    enable pgp signatures in gpg backend by default:                                no
+  use curl:             no
+  use libopenjpeg2:     yes
+  use lcms2:            yes
+  command line utils:   yes
+  fuzz target:          no
+  test data dir:        /tmp/rrrah-poppler-profile-oracle-20261012/poppler-26.10.0/../test
+Warning: Use of boost is recommended for better performance.
+-- Configuring done (16.7s)
+-- Generating done (0.2s)
+-- Build files have been written to: /tmp/rrrah-poppler-profile-oracle-20261012/build

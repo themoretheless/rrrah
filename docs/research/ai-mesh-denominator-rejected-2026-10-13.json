@@ -1,0 +1,15 @@
+{
+  "decision": "Rejected and source restored",
+  "scope": "Retain exact barycentric denominator per mesh triangle instead of recomputing",
+  "native_five_pixel_values_exact": true,
+  "candidate_compositor_suite": "236 passed,12 ignored",
+  "candidate_source_suite": "117 passed,1 ignored",
+  "kernel_median_before_ns": 118771021.0,
+  "kernel_median_after_ns": 123820125.0,
+  "kernel_slowdown_percent": 4.25112452304337,
+  "peak_admitted_before": 239197736,
+  "peak_admitted_after": 246653464,
+  "extra_admitted_bytes": 7455728,
+  "reason": "No measured gain, higher median kernel runtime and7.46MBextra storage; do not retain this candidate",
+  "next": "Focus on reducing repeated native color evaluations with a bounded integration certificate rather than retaining more per-triangle metadata"
+}

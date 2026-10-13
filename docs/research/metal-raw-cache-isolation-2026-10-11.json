@@ -1,0 +1,19 @@
+{
+  "status": "passed",
+  "exit_code": 0,
+  "command": [
+    "/tmp/rrrah-required-corpus-target/debug/examples/raw_view_timing",
+    "--cache-only",
+    "tests/IMG_9043.CR3",
+    "tests/IMG_9074.CR3"
+  ],
+  "log": "IMG_9043.CR3 decode p50=217.308125ms p95=638.618584ms\nIMG_9043.CR3 disk p50=118.944375ms p95=404.885958ms\nIMG_9043.CR3 swap p50=127.153625ms p95=281.100500ms\nIMG_9043.CR3 ram p50=0.000400ms p95=0.002386ms\nIMG_9043.CR3 managed root used=0 peak=124360466 limit=536870912; restore used=0 peak=50989120 limit=101978240\nIMG_9074.CR3 decode p50=272.704667ms p95=452.424667ms\nIMG_9074.CR3 disk p50=143.803791ms p95=457.409709ms\nIMG_9074.CR3 swap p50=161.074208ms p95=399.322666ms\nIMG_9074.CR3 ram p50=0.000388ms p95=0.002688ms\nIMG_9074.CR3 managed root used=0 peak=123346706 limit=536870912; restore used=0 peak=50989120 limit=101978240\n",
+  "csv_sha256": "b610d730898bf64a7253d44c816f9aab79f2dcf6fc7acb9136ddcc8f1a364695",
+  "scope": "Rotating order decode, persistent disk, session swap, RAM; all restored pixels and metadata checked, no GPU work. Four warmups and sixteen samples per tier per fixture.",
+  "limits": [
+    "Machine workloads uncontrolled",
+    "Warm local filesystem",
+    "Separate process from GPU timing; not a paired speedup measurement"
+  ],
+  "finding": "Do not attribute the previous end-to-end delay solely to swap I/O; isolate load and upload with rotating order before changing production."
+}

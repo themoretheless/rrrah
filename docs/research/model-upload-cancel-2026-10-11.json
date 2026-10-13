@@ -1,0 +1,24 @@
+{
+  "backend": "metal",
+  "passed": 7,
+  "failed": 0,
+  "check": "rrrah passed",
+  "cancellation_checkpoints": 5,
+  "verified": "typed cancellation before/within coordinate validation, after GPU admission, during mapped buffer filling, and before commit; retained resident geometry bytes and credit; retries succeed; final credit zero",
+  "evidence": [
+    {
+      "kind": "tests",
+      "log": "docs/research/model-upload-cancel-tests-2026-10-11.log",
+      "sha256": "f68363ab322acee23771df830a11328d2124dd1a2abcaea51eb69ff7d2405ab9"
+    },
+    {
+      "kind": "check",
+      "log": "docs/research/model-upload-cancel-check-2026-10-11.log",
+      "sha256": "bd5e7639f58858de8fafde518041d4b01cebfd6ce4a0f60f3a32248e283ca310"
+    }
+  ],
+  "limitations": [
+    "Resident geometry ownership checked; this new cancellation test does not read back the previous frame.",
+    "Existing upload remains a noncancelling wrapper; viewer event-loop scheduling has not changed."
+  ]
+}

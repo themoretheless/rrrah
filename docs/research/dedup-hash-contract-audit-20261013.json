@@ -1,0 +1,19 @@
+{
+  "status": "verified_fixed_width_contract_and_5_information_controls",
+  "root_matches_executed_snapshot": {
+    "crates/rrrah-dedup/src/pixels.rs": "b42e4d3aad7e1750b2faa3cb14484f73e9b52aacf371db9a4be624025a918787",
+    "crates/rrrah-dedup/src/cache.rs": "93e8d8e6b4ca2ccb318d437b2a05a3636864d3002d04180e70d43e5623635c9b",
+    "crates/rrrah-dedup/tests/information.rs": "f633c7e95aff80b7b7d2c0bfc255dbf6aafaeac90c5d42dc8512a64c9683f163"
+  },
+  "snapshot": "/Users/themoretheless/.codex/tmp/rrrah-visual-publication-20261013",
+  "executable": "/Users/themoretheless/.codex/tmp/rrrah-visual-publication-qualified-20261013/information",
+  "executable_sha256": "64c43eb3f645bf0f410b39fd11d1755c2ecd898eebd4bce57b2ddceebf99d18c",
+  "log": "/Users/themoretheless/.codex/tmp/rrrah-hash-contract-information-20261013.log",
+  "log_sha256": "f487ce67d258c486074748d2e45680b078aef6915d2c6255c6782784e6325dee",
+  "findings": [
+    "Fingerprint::variants is [[u64;4];8]; examined comparison APIs have no textual hexadecimal parser.",
+    "Low-information images are exposed through Comparison::informative; visual candidates do not imply exact normalized pixel equality.",
+    "Cache has fixed binary record size, magic, BLAKE3 checksum, duplicate-key/trailing-byte and floating-point validity checks. These cache observations are source inspection only in this audit, not a fresh execution of cache tests."
+  ],
+  "scope": "Five actual image information controls, inspected pixels/cache contract; not exhaustive public API parsing, full cache fuzzing or semantic negative precision."
+}

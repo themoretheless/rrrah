@@ -149,6 +149,33 @@ impl MemoryBudget {
             .as_ref()
             .map_or(local, |parent| local.min(parent.available_bytes()))
     }
+    /// Advisory simultaneous admission across two budgets, including shared ancestors.
+    /// Does not reserve memory or update peaks; concurrent allocations still require
+    /// `try_reserve` at the actual allocation boundary.
+    #[must_use]
+    pub fn can_reserve_with(&self, bytes: u64, other: &Self, other_bytes: u64) -> bool {
+        for (first, amount, second, second_amount) in [
+            (self, bytes, other, other_bytes),
+            (other, other_bytes, self, bytes),
+        ] {
+            let mut current = Some(first);
+            while let Some(budget) = current {
+                let shared = if second.is_descendant_of(budget) {
+                    second_amount
+                } else {
+                    0
+                };
+                let Some(total) = amount.checked_add(shared) else {
+                    return false;
+                };
+                if total > budget.limit().saturating_sub(budget.used()) {
+                    return false;
+                }
+                current = budget.0.parent.as_ref();
+            }
+        }
+        true
+    }
     /// Nonblocking admission; the caller decides whether to evict, wait or cancel.
     ///
     /// # Errors
@@ -434,6 +461,33 @@ impl<T: Copy> PixelBuffer<T> {
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn paired_headroom_counts_shared_ancestors_without_reserving() {
+        use super::MemoryBudget;
+        let root = MemoryBudget::new(96);
+        let left = root.child(64).child(64);
+        let right = root.child(64).child(64);
+        assert!(left.can_reserve_with(48, &right, 48));
+        assert!(!left.can_reserve_with(49, &right, 48));
+        assert!(left.can_reserve_with(32, &left, 32));
+        assert!(!left.can_reserve_with(33, &left, 32));
+        assert!(left.can_reserve_with(48, &root, 48));
+        assert!(!root.can_reserve_with(49, &left, 48));
+        let pressure = root.try_reserve(1).unwrap();
+        assert!(!left.can_reserve_with(48, &right, 48));
+        drop(pressure);
+        let independent = MemoryBudget::new(64);
+        assert!(left.can_reserve_with(64, &independent, 64));
+        assert!(!left.can_reserve_with(65, &independent, 0));
+        assert_eq!(
+            (left.used(), right.used(), root.used(), independent.used()),
+            (0, 0, 0, 0)
+        );
+        assert_eq!((left.peak(), right.peak(), independent.peak()), (0, 0, 0));
+        let huge = MemoryBudget::new(u64::MAX);
+        assert!(!huge.can_reserve_with(u64::MAX, &huge, 1));
+        assert!(huge.can_reserve_with(u64::MAX - 1, &huge, 1));
+    }
     use super::*;
     #[test]
     fn merging_full_budget_transfers_credit_through_all_ancestors_without_admission() {

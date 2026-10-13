@@ -1,0 +1,35 @@
+{
+  "scope": "Coordinate-pattern verification for actual Metal supported texture extent and portable tiled address lookup",
+  "portable_extent": 8192,
+  "supported_extent": 16384,
+  "source_sizes": [
+    [
+      8193,
+      128
+    ],
+    [
+      16384,
+      128
+    ]
+  ],
+  "source_pattern": "linear RGBA [(x&1),(y&1),((x>>10)&1),1]",
+  "full_sdr_pixels_compared_exactly": 3145856,
+  "full_hdr_pixels_compared_exactly": 3145856,
+  "portable_tiled_crop_cases": 8,
+  "portable_tiled_hdr_pixels_compared_exactly": 131072,
+  "hdr_reference": "Per-coordinate exact binary16 0 or0x3c00,opaque alpha",
+  "managed_source_native_texture_portable_texture_final_bytes": 0,
+  "production_change": false,
+  "first_attempt": "One test crop extended beyond8193 source right edge and correctly returned background; restricted crop to source bounds. No shader change.",
+  "limitations": [
+    "Periodic pattern is not proof for every possible coordinate permutation or interpolation scale",
+    "Headless HDR attachment does not qualify physical HDR display",
+    "Harness readback/driver/OS memory excluded"
+  ],
+  "log_sha256": "453adc8b253dfb1093f383df06d91d80185079f58b38c6551855164a120caffa",
+  "tests": {
+    "passed": 1,
+    "failed": 0,
+    "ignored": 0
+  }
+}

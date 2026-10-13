@@ -1,0 +1,31 @@
+{
+  "change": "Thumbnail Prefetcher owns and joins worker after generation cancellation, queued/ready drain and sender disconnection; publication lock released before join",
+  "regression": "Paused active loader: drop cannot return before loader finishes; cancellation visible; release allows worker and owner shutdown",
+  "runs": [
+    {
+      "suite": "thumbnail",
+      "passed": 22,
+      "ignored": 2,
+      "log": "docs/research/thumbnail-prefetch-owned-worker-shutdown-2026-10-11-thumbnail.log",
+      "sha256": "f4ef772e6fd5a71caf3f8eaeea4db4e2d16b983630b4ee7c9d5d71c17db4eb51"
+    },
+    {
+      "suite": "gallery",
+      "passed": 38,
+      "ignored": 12,
+      "log": "docs/research/thumbnail-prefetch-owned-worker-shutdown-2026-10-11-gallery.log",
+      "sha256": "72aa69ac364869c81049357476953346cda7f2d0b1ea9e55b20d806e82d6c82f"
+    },
+    {
+      "suite": "viewer",
+      "passed": 208,
+      "ignored": 47,
+      "log": "docs/research/thumbnail-prefetch-owned-worker-shutdown-2026-10-11-viewer.log",
+      "sha256": "6d2cda46f72fc833697ac99d802ef2bfdc9070ff4369a95bc382042c7882b292"
+    }
+  ],
+  "limitations": [
+    "A non-cooperative custom loader can delay join; native loader receives generation cancellation",
+    "Ignored hardware/corpus tests remain unverified in these invocations"
+  ]
+}

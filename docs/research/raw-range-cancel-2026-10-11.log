@@ -1,0 +1,13 @@
+   Compiling rrrah-gpu v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-gpu)
+    Finished `test` profile [optimized + debuginfo] target(s) in 1.77s
+     Running tests/raw_linear_readback.rs (target/debug/deps/raw_linear_readback-9fd8b6185e48ed18)
+
+running 5 tests
+test binary16_reference_covers_signed_hdr_and_subnormals ... ok
+test nonfinite_raw_view_components_keep_previous_finite_frame ... ok
+test finite_large_bayer_values_refuse_unsafe_filter_range_before_replacement ... ok
+test signed_rgbe_hdr_saturation_preserves_float32_and_both_half_limits ... ok
+test raw_linear_float_target_preserves_hdr_and_negative_rgbe_color ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.54s
+

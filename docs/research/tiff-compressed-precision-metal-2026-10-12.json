@@ -1,0 +1,44 @@
+{
+  "scope": "Independent Deflate-compressed TIFF16/float page selection exact native samples and Metal/swap transport",
+  "producer": {
+    "tifffile": "2026.9.20",
+    "numpy": "2.5.3",
+    "pillow": "12.3.0",
+    "imagecodecs": "2026.8.16"
+  },
+  "precision_sources": 8,
+  "precision_selected_pages": 24,
+  "prepared_restores": 32,
+  "precision_output": [
+    63,
+    65
+  ],
+  "gpu_gate_passed": 133,
+  "gpu_gate_ignored": 13,
+  "verified": true,
+  "limitations": [
+    "Float producer samples are0..1, not HDR above-one",
+    "ICC rendering tested for transport consistency, not independent color fidelity",
+    "Selected page-specific distinct ICC and associated alpha remain open"
+  ],
+  "files": {
+    "crates/rrrah-dedup/tests/fixtures/tiff/precision-float32-big-changed.tif": "e291dc4f14b7d7dd34d7726b56546a68bdd66282a87daa5f29b0d1f21beec4f7",
+    "crates/rrrah-dedup/tests/fixtures/tiff/precision-float32-big-same.tif": "b7e4f06ae5639bc7ff5846b5a57131af9e0512a30b3b1963af5e229a410817aa",
+    "crates/rrrah-dedup/tests/fixtures/tiff/precision-float32-little-changed.tif": "f8ffe66d9ba3b5a776a9872ce8e6550d99ec40371c5f3034c80093bd56c8dc98",
+    "crates/rrrah-dedup/tests/fixtures/tiff/precision-float32-little-same.tif": "5330ef50518b286b8582ca5efc519dc666063ab0ee7faf2997dc725f2904dadc",
+    "crates/rrrah-dedup/tests/fixtures/tiff/precision-uint16-big-changed.tif": "aa0d494a618b079a7d088b2f9c6343753a8591c4d327e506cb55bd07776cd2d5",
+    "crates/rrrah-dedup/tests/fixtures/tiff/precision-uint16-big-same.tif": "f0a501dbad8de03574cf56c4f55f5f1dbfeb8a3c5de9dd0fb034115bebc45d30",
+    "crates/rrrah-dedup/tests/fixtures/tiff/precision-uint16-little-changed.tif": "2905cab9798b8a3a3f4ab4bdbf2baa54ca246f5784697c7b06418406811cf7c3",
+    "crates/rrrah-dedup/tests/fixtures/tiff/precision-uint16-little-same.tif": "7442f8706342c0a6a5f7a77ee5f3c2b5bdd14e9f5f76d9fe9b2a8a6a60012dac"
+  },
+  "sources": {
+    "scripts/qualify-viewer-storage-gpu.py": "42162943f769a1ab923f7dca374ff94e1cc1423968879f917db981d9fba0818b",
+    "crates/rrrah-app/tests/tiff_pages_metal.rs": "71a7a7ee19928190d885e6157eb231cf13fa32ad2022f8aa8b5fc5f416a619ef"
+  },
+  "logs": {
+    "docs/research/tiff-compressed-precision-metal-2026-10-12/report.json": "a922986f7f5acc9835b1947f66a834a80694be954dcfa3f48b3d708878a9c9ea",
+    "docs/research/tiff-compressed-precision-metal-2026-10-12/manual.log": "2262caca47af80b71aa29ab9079d92c3e4a4a3c2fd24a46116245bcf8c082dfa",
+    "docs/research/tiff-compressed-precision-metal-2026-10-12/gpu-all.log": "b1c0196bf94ba8c5db7681de32635927723e9996dd042dc13479206ca4834a14",
+    "docs/research/tiff-compressed-precision-metal-2026-10-12/gpu-tiff-pages.log": "84e1864df2b23560b75fc7c23862d5e0d51756a43659588229ba0074d2140d07"
+  }
+}

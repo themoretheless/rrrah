@@ -1,0 +1,44 @@
+{
+  "status": "complete_report_source_review_three_public_counterexamples_and_typed_error_control",
+  "commit": "a74f90d293e05856d19a4c0ac2b29b46ef16cf23",
+  "fully_read_additional_files": {
+    "fclones/src/report.rs": 939
+  },
+  "original_tests_passed": 11,
+  "additional_controls_passed": 4,
+  "tests": [
+    "report::test::test_format_autodetection",
+    "report::test::test_json_report_header",
+    "report::test::test_json_report_reader_reads_files",
+    "report::test::test_json_report_reader_reads_files_with_control_chars_in_names",
+    "report::test::test_json_report_reader_reads_files_with_non_utf8_chars_in_names",
+    "report::test::test_text_report_iterator_handles_windows_endlines",
+    "report::test::test_text_report_iterator_stops_on_error",
+    "report::test::test_text_report_reader_reads_files",
+    "report::test::test_text_report_reader_reads_files_with_control_chars_in_names",
+    "report::test::test_text_report_reader_reads_files_with_non_utf8_chars_in_names",
+    "report::test::test_text_report_reader_reads_header",
+    "controls::blank_line_silently_ends_group_stream",
+    "controls::leading_and_trailing_path_spaces_are_trimmed",
+    "controls::malformed_header_returns_typed_error_then_stops",
+    "controls::oversized_length_panics_instead_of_invalid_data"
+  ],
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/review-dedup-fclones-reports-20261012.py": "1e00decbdd10bf27bd9deef47012f9e52152988082fabf494200f2d4333d95e5",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-report-controls-tests-20261012.log": "d9f6d03ea7a5bc37b9dd7b4866e242971c86829bdb786643ef62a0135154ed2a",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-report-tests-20261012.log": "e054713b224c24e6a50ea5eaa5f0e96a7d58fbad4888007edfff18b6e95b08cd",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-report-controls-20261012/Cargo.toml": "eea7065326dfc0f9978c15cabffab7571954b1a5637f8fc96fa4fea2a92cf71b",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-report-controls-20261012/Cargo.lock": "1364b53dc74232f8501cc1f2e1e97b544123999d56300e2a10b8de399a116f1c",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-report-controls-20261012/src/lib.rs": "66efa7ae33945af89b439f3b647cac23acbe5f48e7908dffc4e8563554e2d66a",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-full-source-20261012/fclones/src/report.rs": "e20dc53fb91bc69da9be53d4a2630de9856d361f782fb7c0120a863155a3e415",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-upstream-executables-20261012/lib": "738c143872942a290b4df90b62b23527f12dfe6c5d6822069a4ad394ade7b09e"
+  },
+  "observations": [
+    "Oversized u64 file length in a syntactically matching group header panics instead of returning InvalidData; panic deliberately caught.",
+    "A blank line after first group returns terminal None before a later valid group.",
+    "Path strings with leading/trailing spaces are trimmed to a different path.",
+    "Malformed ordinary group header returns InvalidData and subsequent None.",
+    "JSON reader deserializes full report into Vec; text reader uses unbounded read_line. Source observations only, no peak memory claim."
+  ],
+  "scope": "Complete939-line report module;11 original upstream tests and4 actual public report API controls using pinned dependency source. No CLI/dedupe/removal/link/move execution, no adoption or full42tree/full500/platform/total-memory completion."
+}

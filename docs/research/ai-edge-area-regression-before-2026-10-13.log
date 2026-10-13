@@ -1,0 +1,19 @@
+   Compiling hayro-interpret v0.7.0 (/tmp/rrrah-adaptive-edge-tests-20261013)
+    Finished `test` profile [optimized + debuginfo] target(s) in 5.53s
+     Running unittests src/lib.rs (target/ai-adaptive-edges-20261013/debug/deps/hayro_interpret-d399f4c587eae283)
+
+running 1 test
+
+thread 'shading::adaptive::qualification_tests::curved_boundary_area_matches_analytic_cubic_integral' (78653210) panicked at src/shading/adaptive.rs:1111:9:
+area=64.39375000000001
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test shading::adaptive::qualification_tests::curved_boundary_area_matches_analytic_cubic_integral ... FAILED
+
+failures:
+
+failures:
+    shading::adaptive::qualification_tests::curved_boundary_area_matches_analytic_cubic_integral
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 114 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--lib`

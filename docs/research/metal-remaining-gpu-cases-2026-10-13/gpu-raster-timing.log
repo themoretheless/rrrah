@@ -1,0 +1,10 @@
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.11s
+     Running tests/raster_timing.rs (target/debug/deps/raster_timing-2961a7509b3bf11c)
+
+running 1 test
+raster timestamp adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+{"median_gpu_ms":0.0916875,"p95_gpu_ms":0.150084,"max_gpu_ms":0.290125,"warmups":5,"samples_gpu_ms":[0.093833, 0.103542, 0.107083, 0.098, 0.118125, 0.08825, 0.0865, 0.103416, 0.10325, 0.090334, 0.086458, 0.091542, 0.085041, 0.089709, 0.084, 0.088333, 0.150084, 0.089416, 0.086875, 0.086583, 0.085917, 0.290125, 0.091959, 0.105, 0.091833, 0.114458, 0.097875, 0.092916, 0.088333, 0.086708],"source":[4096,4096],"target":[2048,2048],"target_format":"Rgba16Float"}
+test raster_single_layer_gpu_timestamp_timing ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.18s
+

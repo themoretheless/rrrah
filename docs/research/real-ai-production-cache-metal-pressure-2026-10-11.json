@@ -1,0 +1,33 @@
+{
+  "scope": "Pinned original AI files through current production raster display loader/cache and actual Metal; no independent appearance comparison",
+  "sources": {
+    "VectorApple.ai": "c5fc34346629c3379cee6065c45b7de0b620be822604551d1463d8e691b03d06",
+    "one.ai": "97786949c268233a446e1738fb9c2f941e4d109811bd2f972948cdb7a45d64b4"
+  },
+  "adapter": "Metal Apple M4 Max",
+  "pages": 3,
+  "distinct_retained_cache_keys": 3,
+  "cpu_root_limit_bytes": 67108864,
+  "cache_max_bytes": 33554432,
+  "verified": [
+    "Production load of both first pages and preload of second one.ai page",
+    "Shared RAM hit returns same RGBA32F allocation and performs no decode",
+    "Hits succeed with all remaining managed root credit held by pressure reservation",
+    "Page dimensions, selection index and page count preserved",
+    "128x96 SDR pixels and HDR binary16 components exact before/after cache hit",
+    "Managed root returns to zero after cache drop"
+  ],
+  "tests": {
+    "passed": 2,
+    "failed": 0,
+    "ignored": 0
+  },
+  "production_change": false,
+  "limitations": [
+    "Production AI appearance remains independently unqualified",
+    "Does not exercise asynchronous neighbour navigation scheduler",
+    "GPU harness/readback resources use separate budgets; pressure is managed decode root, not OS-wide memory pressure",
+    "No physical HDR display claim"
+  ],
+  "log_sha256": "446b185f8d1fc68b4887d579888fc822d0bd87de1a8040731c5b407aae45f4b0"
+}

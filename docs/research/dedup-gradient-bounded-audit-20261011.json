@@ -1,0 +1,134 @@
+{
+  "status": "complete_bounded_frozen_joint_model_tests",
+  "producer_pid": 11760,
+  "source_manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-bounded-snapshot-20261011.json",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-bounded-snapshot-20261011.json": "cb6a7e5eae82d4582b7f43a6524f8698c3345e8e8b65a3b235f3b8315b43a703",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/qualify-dedup-gradient-bounded-20261011.py": "64ece3d208971a587893bcb51676afd3a70363ff12a647877d79f22b8853f972",
+    "/Users/themoretheless/.codex/tmp/rrrah-gradient-bounded-qualified-20261011/build.jsonl": "d9990d1276159c714b0f3f6518d0a545fbd04de490ff7e291a296dd372fd3d44",
+    "/Users/themoretheless/.codex/tmp/rrrah-gradient-bounded-qualified-20261011/build.log": "af26d6672cca9eb608b0662fe53fedfca55f12671af0ba95842ce2953dd0fea8"
+  },
+  "build_command": [
+    "cargo",
+    "test",
+    "--manifest-path",
+    "/Users/themoretheless/.codex/tmp/rrrah-gradient-bounded-snapshot-20261011/Cargo.toml",
+    "-p",
+    "rrrah-dedup",
+    "--no-default-features",
+    "--features",
+    "decode",
+    "--test",
+    "model_compare",
+    "--test",
+    "model_tiles",
+    "--test",
+    "search_portfolio",
+    "--test",
+    "portfolio_collection",
+    "--test",
+    "joint_witnesses",
+    "--test",
+    "geometry",
+    "--test",
+    "projective_domains",
+    "--test",
+    "joint_projective",
+    "--test",
+    "projective_pruning",
+    "--locked",
+    "--offline",
+    "--no-run",
+    "--message-format=json",
+    "--config",
+    "profile.dev.package.rrrah-dedup.opt-level=3",
+    "--target-dir",
+    "/Users/themoretheless/.codex/tmp/rrrah-opposite-native-snapshot-20261011/target"
+  ],
+  "results": [
+    {
+      "suite": "model_compare",
+      "tests": 26,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-gradient-bounded-qualified-20261011/model_compare",
+      "binary_sha256": "86e052ec50b30a623abc38e36d0be7b89e2f16bcfbc5bd613391abc27d7f5803",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-gradient-bounded-qualified-20261011/model_compare.log",
+      "log_sha256": "267f55b13f1ab3ccd2592a18b969ca8cd9e713667c034b43067b16e223dbcb76"
+    },
+    {
+      "suite": "model_tiles",
+      "tests": 21,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-gradient-bounded-qualified-20261011/model_tiles",
+      "binary_sha256": "53d65bfca11c5ce5b7a7db2b47726c32a26ecaf0533a51116ca6eb9d94bcc362",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-gradient-bounded-qualified-20261011/model_tiles.log",
+      "log_sha256": "9f5062fc28808f49143c683cf5616469a8d63f2114fec8aea73dfbc7d6a99060"
+    },
+    {
+      "suite": "search_portfolio",
+      "tests": 35,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-gradient-bounded-qualified-20261011/search_portfolio",
+      "binary_sha256": "a37e6a4e8bc494da925a546014e2fc7b1731d031d55450301c3d047cf1bb4c2b",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-gradient-bounded-qualified-20261011/search_portfolio.log",
+      "log_sha256": "f69b0b72ab1c4aeda4d87fb9a92d6f746712975b7c1af10d2ad95d72ef28e157"
+    },
+    {
+      "suite": "portfolio_collection",
+      "tests": 30,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-gradient-bounded-qualified-20261011/portfolio_collection",
+      "binary_sha256": "38a722669ee40eadfaa241d841eb4ced9947e10e292208628dc1a26307dbb24a",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-gradient-bounded-qualified-20261011/portfolio_collection.log",
+      "log_sha256": "303f7638caa24d791c1b8dda598d44073ae37fab10dc565f7c574e299ca6335a"
+    },
+    {
+      "suite": "joint_witnesses",
+      "tests": 10,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-gradient-bounded-qualified-20261011/joint_witnesses",
+      "binary_sha256": "d63b5957eea5c018f5459e50854737ee227a65da8161489bde3e1debfcee626d",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-gradient-bounded-qualified-20261011/joint_witnesses.log",
+      "log_sha256": "72f70a8b4a559e9da1c67ab305eb8b98a05b5e2a36b4f670cb09431dca8011d1"
+    },
+    {
+      "suite": "geometry",
+      "tests": 9,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-gradient-bounded-qualified-20261011/geometry",
+      "binary_sha256": "2a706f14a9e7dadc2c396630fd95efd5d113b6401e7b52ec507eab83694577c3",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-gradient-bounded-qualified-20261011/geometry.log",
+      "log_sha256": "138488b49f98ec2059b65b2a2c4918fa5a0eb4d16093401187f6bc0db0e06513"
+    },
+    {
+      "suite": "projective_domains",
+      "tests": 4,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-gradient-bounded-qualified-20261011/projective_domains",
+      "binary_sha256": "323017806af6fe26cf700ca068c6822f85bdc5ff0c583f7741b989d60a35f9a0",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-gradient-bounded-qualified-20261011/projective_domains.log",
+      "log_sha256": "829a892444f8251e140ba313b209cabfa302303e63ede88754d25f9346e9a86a"
+    },
+    {
+      "suite": "joint_projective",
+      "tests": 4,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-gradient-bounded-qualified-20261011/joint_projective",
+      "binary_sha256": "011e9615a4f0e7e32d1552ed35850dbf0e85ea682c21b252737aa35d8439c255",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-gradient-bounded-qualified-20261011/joint_projective.log",
+      "log_sha256": "372cb57a5d5ae74c69314b7d9d7f58d19eb4bdd6a59556e9bd610da4f0e97b48"
+    },
+    {
+      "suite": "projective_pruning",
+      "tests": 3,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-gradient-bounded-qualified-20261011/projective_pruning",
+      "binary_sha256": "90aede002e3b576c6afdf193d75a48dafde08574c77edb8300738c7ccc4a4589",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-gradient-bounded-qualified-20261011/projective_pruning.log",
+      "log_sha256": "f3a5cad6d482899e6f250b266acad623f6a19eddbc14e31b8352c77378bf94e9"
+    }
+  ],
+  "scope": "Frozen compatible four-crate source and lock, new joint primitive plus legacy/pair/collection tests. Source coherent before/after; root concurrent HDR edits preserved outside this gate. Not full workspace/platform/corpus/RSS qualification.",
+  "build_pid": 11762,
+  "tests": 142,
+  "owned_root_matches": {
+    "crates/rrrah-dedup/src/gradient.rs": false,
+    "crates/rrrah-dedup/src/local_scan.rs": true,
+    "crates/rrrah-dedup/src/geometry.rs": true,
+    "crates/rrrah-dedup/src/anchor_rank_file.rs": true,
+    "crates/rrrah-dedup/src/search_portfolio.rs": true,
+    "crates/rrrah-dedup/src/portfolio_collection.rs": true,
+    "crates/rrrah-dedup/src/model_loftr.rs": false
+  }
+}

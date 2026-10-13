@@ -1,0 +1,113 @@
+     Locking 271 packages to highest Rust 1.101.0-nightly compatible versions
+   Compiling syn v3.0.8
+   Compiling moxcms v0.8.1 (/Users/themoretheless/.codex/tmp/rrrah-exposure-calibration-qualified-20261011/vendor/moxcms)
+   Compiling rrrah-memory v0.1.0 (/Users/themoretheless/.codex/tmp/rrrah-exposure-calibration-qualified-20261011/crates/rrrah-memory)
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/.codex/tmp/rrrah-exposure-calibration-qualified-20261011/crates/rrrah-dedup)
+   Compiling serde_json v1.0.154
+   Compiling synstructure v0.14.0
+   Compiling bytemuck_derive v1.12.1
+   Compiling thiserror-impl v2.0.21
+   Compiling zerofrom-derive v0.1.8
+   Compiling yoke-derive v0.8.4
+   Compiling serde_derive v1.0.229
+   Compiling zerofrom v0.1.8
+   Compiling yoke v0.8.3
+   Compiling bytemuck v1.25.2
+   Compiling thiserror v2.0.21
+   Compiling num-complex v0.4.6
+   Compiling font-types v0.11.3
+   Compiling color v0.3.3
+   Compiling tiny-skia-path v0.11.4
+   Compiling qoi v0.4.1
+   Compiling rustybuzz v0.20.1
+   Compiling rgb v0.8.53
+   Compiling jxl-render v0.12.4
+   Compiling read-fonts v0.39.2
+   Compiling pulp v0.22.3
+   Compiling serde v1.0.229
+   Compiling peniko v0.6.1
+   Compiling tiny-skia v0.11.4
+   Compiling vello_common v0.0.8
+   Compiling rrrah-core v0.1.0 (/Users/themoretheless/.codex/tmp/rrrah-exposure-calibration-qualified-20261011/crates/rrrah-core)
+   Compiling vello_cpu v0.0.8
+   Compiling usvg v0.45.1
+   Compiling resvg v0.45.1
+   Compiling exr v1.74.2
+   Compiling skrifa v0.42.1
+   Compiling image v0.25.10
+   Compiling hayro-interpret v0.7.0 (/Users/themoretheless/.codex/tmp/rrrah-exposure-calibration-qualified-20261011/vendor/hayro-interpret)
+   Compiling jxl-oxide v0.12.6
+   Compiling hayro v0.7.1 (/Users/themoretheless/.codex/tmp/rrrah-exposure-calibration-qualified-20261011/vendor/hayro)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/.codex/tmp/rrrah-exposure-calibration-qualified-20261011/crates/rrrah-decode)
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> /Users/themoretheless/.codex/tmp/rrrah-exposure-calibration-qualified-20261011/crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+   Compiling dedup-exposure-replay v0.0.0 (/Users/themoretheless/.codex/tmp/rrrah-exposure-replay-harness-20261011)
+error[E0603]: struct `DecodeSourceSnapshot` is private
+  --> src/main.rs:8:30
+   |
+ 8 |  let ls=rrrah_dedup::decode::DecodeSourceSnapshot::read(&left.path,limits.max_file_bytes,&||false)?;let rs=rrrah_dedup::decode::Deco...
+   |                              ^^^^^^^^^^^^^^^^^^^^ private struct
+   |
+note: the struct `DecodeSourceSnapshot` is defined here
+  --> /Users/themoretheless/.codex/tmp/rrrah-exposure-calibration-qualified-20261011/crates/rrrah-dedup/src/decode.rs:12:1
+   |
+12 | pub(crate) struct DecodeSourceSnapshot {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0603]: struct `DecodeSourceSnapshot` is private
+  --> src/main.rs:8:129
+   |
+ 8 | ...e_bytes,&||false)?;let rs=rrrah_dedup::decode::DecodeSourceSnapshot::read(&right.path,limits.max_file_bytes,&||false)?;
+   |                                                   ^^^^^^^^^^^^^^^^^^^^ private struct
+   |
+note: the struct `DecodeSourceSnapshot` is defined here
+  --> /Users/themoretheless/.codex/tmp/rrrah-exposure-calibration-qualified-20261011/crates/rrrah-dedup/src/decode.rs:12:1
+   |
+12 | pub(crate) struct DecodeSourceSnapshot {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0624]: associated function `read` is private
+  --> src/main.rs:8:52
+   |
+ 8 |    let ls=rrrah_dedup::decode::DecodeSourceSnapshot::read(&left.path,limits.max_file_bytes,&||false)?;let rs=rrrah_dedup::decode::De...
+   |                                                      ^^^^ private associated function
+   |
+  ::: /Users/themoretheless/.codex/tmp/rrrah-exposure-calibration-qualified-20261011/crates/rrrah-dedup/src/decode.rs:17:5
+   |
+17 | /     pub(crate) fn read(
+18 | |         path: &std::path::Path,
+19 | |         max_bytes: u64,
+20 | |         cancel: impl Fn() -> bool,
+21 | |     ) -> Result<Self, crate::exact::SnapshotError> {
+   | |__________________________________________________- private associated function defined here
+
+error[E0624]: associated function `read` is private
+  --> src/main.rs:8:151
+   |
+ 8 |   ... rs=rrrah_dedup::decode::DecodeSourceSnapshot::read(&right.path,limits.max_file_bytes,&||false)?;
+   |                                                     ^^^^ private associated function
+   |
+  ::: /Users/themoretheless/.codex/tmp/rrrah-exposure-calibration-qualified-20261011/crates/rrrah-dedup/src/decode.rs:17:5
+   |
+17 | /     pub(crate) fn read(
+18 | |         path: &std::path::Path,
+19 | |         max_bytes: u64,
+20 | |         cancel: impl Fn() -> bool,
+21 | |     ) -> Result<Self, crate::exact::SnapshotError> {
+   | |__________________________________________________- private associated function defined here
+
+Some errors have detailed explanations: E0603, E0624.
+For more information about an error, try `rustc --explain E0603`.
+error: could not compile `dedup-exposure-replay` (bin "dedup-exposure-replay") due to 4 previous errors

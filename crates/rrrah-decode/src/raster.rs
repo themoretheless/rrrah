@@ -15,6 +15,10 @@ use crate::{DecodeError, DecodeRequest, bounded_io::read_bounded};
 
 #[path = "tiff_alpha.rs"]
 mod tiff_alpha;
+#[path = "tiff_pages.rs"]
+mod tiff_pages;
+#[path = "ico_pages.rs"]
+mod ico_pages;
 
 pub(crate) const MAX_RASTER_BYTES: u64 = 512 * 1024 * 1024;
 
@@ -28,6 +32,10 @@ pub enum RasterDecodeError {
     InvalidJpegColor(&'static str),
     #[error("invalid or unsupported TIFF alpha: {0}")]
     InvalidTiffAlpha(&'static str),
+    #[error("invalid TIFF page directory: {0}")]
+    InvalidTiffDirectory(&'static str),
+    #[error("invalid ICO directory: {0}")]
+    InvalidIconDirectory(&'static str),
     #[error(transparent)]
     X3f(#[from] crate::X3fError),
     #[error("invalid or unsupported PICT: {0}")]
@@ -166,6 +174,8 @@ pub enum RasterDecodeError {
     InvalidExrAlpha(&'static str),
     #[error("invalid PNG color metadata: {0}")]
     InvalidPngColor(&'static str),
+    #[error("invalid PNG physical pixel dimensions")]
+    InvalidPngPhysicalDimensions,
 }
 
 /// Decode the first raster image, retaining sample precision and straight
@@ -219,7 +229,11 @@ pub(crate) fn decode_raster_inspected(request: &DecodeRequest, eps_candidate: bo
     }
     if request.image_index != 0
         && !request.path.extension().is_some_and(|e| {
-            e.eq_ignore_ascii_case("dcm")
+            e.eq_ignore_ascii_case("cur")
+                || e.eq_ignore_ascii_case("ico")
+                || e.eq_ignore_ascii_case("tif")
+                || e.eq_ignore_ascii_case("tiff")
+                || e.eq_ignore_ascii_case("dcm")
                 || e.eq_ignore_ascii_case("dicom")
                 || e.eq_ignore_ascii_case("ase")
                 || e.eq_ignore_ascii_case("aseprite")
@@ -253,7 +267,10 @@ pub(crate) fn decode_raster_inspected(request: &DecodeRequest, eps_candidate: bo
         let selectable = std::fs::File::open(&request.path)
             .and_then(|file| file.take(216).read_to_end(&mut prefix))
             .is_ok()
-            && (crate::dicom::has_magic(&prefix)
+            && (prefix.starts_with(&[0,0,2,0])
+                || ico_pages::has_magic(&prefix)
+                || tiff_pages::has_magic(&prefix)
+                || crate::dicom::has_magic(&prefix)
                 || crate::aseprite::has_magic(&prefix)
                 || crate::webp_animation::has_animation(&prefix)
                 || crate::gif_animation::has_magic(&prefix)
@@ -284,10 +301,54 @@ pub(crate) fn decode_raster_inspected(request: &DecodeRequest, eps_candidate: bo
 }
 
 pub(crate) fn decode_raster_bytes(
-    source: impl AsMut<[u8]>,
+    mut source: impl AsMut<[u8]>,
     request: &DecodeRequest,
 ) -> Result<DecodedRaster, RasterDecodeError> {
-    let mut raster = decode_raster_bytes_inner(source, request)?;
+    request.check_cancelled()?;
+    let bytes = source.as_mut();
+    let is_png = bytes.starts_with(b"\x89PNG\r\n\x1a\n");
+    // DICOM preambles are arbitrary bytes and may themselves begin with TIFF.
+    let cursor=crate::cursor::valid_directory(bytes)
+        || (bytes.starts_with(&[0,0,2,0]) && request.path.extension().is_some_and(|e| e.eq_ignore_ascii_case("cur")));
+    let mut raster = if (ico_pages::has_magic(bytes) || cursor) && !crate::dicom::has_magic(bytes) {
+        let (mut entry,count)=ico_pages::selected_entry(bytes,request)?;
+        let hotspot=if cursor {
+            let point=(u32::from(u16::from_le_bytes([entry[4],entry[5]])),
+                u32::from(u16::from_le_bytes([entry[6],entry[7]])));
+            entry[4..8].fill(0);Some(point)
+        } else {None};
+        let original:[u8;22]=bytes[..22].try_into().unwrap();
+        bytes[2..4].copy_from_slice(&1u16.to_le_bytes());
+        bytes[4..6].copy_from_slice(&1u16.to_le_bytes());
+        bytes[6..22].copy_from_slice(&entry);
+        let mut selected_request=request.clone();selected_request.image_index=0;
+        let result=decode_raster_bytes_inner(&mut *bytes,&selected_request);
+        bytes[..22].copy_from_slice(&original);
+        result?.with_image_selection(request.image_index,count)?.with_hotspot(hotspot)?
+    } else if tiff_pages::has_magic(bytes) && !crate::dicom::has_magic(bytes) {
+        let (at, size, selected, count) = tiff_pages::selected_pointer(bytes, request)?;
+        let mut original = [0; 8];
+        original[..size].copy_from_slice(&bytes[at..at + size]);
+        bytes[at..at + size].copy_from_slice(&selected[..size]);
+        let mut page_request = request.clone();
+        page_request.image_index = 0;
+        let result = decode_raster_bytes_inner(&mut *bytes, &page_request);
+        bytes[at..at + size].copy_from_slice(&original[..size]);
+        result?.with_image_selection(request.image_index, count)?
+    } else {
+        decode_raster_bytes_inner(bytes, request)?
+    };
+    // PNG carries the original narrow-range RGB codes. Unlike video codecs
+    // that already expand YUV into normalized RGB, it needs an additional
+    // range expansion before the existing normalized HDR policy conversion.
+    if is_png
+        && ((request.pq_reference_white_nits.is_some()
+            && matches!(raster.color_space(), RasterColorSpace::Cicp { primaries: 9, transfer: 16, full_range: false, .. }))
+            || (request.hlg_display.is_some()
+            && matches!(raster.color_space(), RasterColorSpace::Cicp { primaries: 9, transfer: 18, full_range: false, .. })))
+    {
+        return Err(rrrah_core::RasterError::ColorTransformRequired.into());
+    }
     if let Some(white) = request.pq_reference_white_nits
         && matches!(
             raster.color_space(),
@@ -675,6 +736,9 @@ fn decode_raster_bytes_inner(
     if let Some([x, y, width, height]) = clean_crop {
         image = image.crop_imm(x, y, width, height);
     }
+    let png_pixel_aspect = png_color.pixel_aspect.map(|aspect| {
+        if orientation.to_exif() >= 5 { 1.0 / aspect } else { aspect }
+    });
     image.apply_orientation(orientation);
     // HEIF transforms apply rotation (counterclockwise), then mirroring.
     image = match avif_properties.rotation {
@@ -709,6 +773,9 @@ fn decode_raster_bytes_inner(
                         | ImageFormat::WebP
                         | ImageFormat::Bmp
                         | ImageFormat::Ico => RasterColorSpace::Srgb,
+                        ImageFormat::Tiff if sample_bytes == 4 && request.assume_untagged_linear_srgb => {
+                            RasterColorSpace::LinearSrgb
+                        }
                         ImageFormat::Tiff | ImageFormat::Pnm | ImageFormat::Tga
                             if request.assume_untagged_srgb =>
                         {
@@ -795,7 +862,8 @@ fn decode_raster_bytes_inner(
             RasterPixels::Rgba8(adopt_raster_output(pixels, output_reservation)?)
         }
     };
-    Ok(DecodedRaster::new(width, height, pixels, color_space)?.with_hotspot(hotspot)?)
+    Ok(DecodedRaster::new(width, height, pixels, color_space)?
+        .with_pixel_aspect(png_pixel_aspect)?.with_hotspot(hotspot)?)
 }
 
 // image 0.25.10 expands AVIF depth with a bit rotation, rather than scaling
@@ -987,6 +1055,33 @@ mod tests {
     use image::ImageEncoder;
 
     #[test]
+    fn png_physical_pixel_aspect_reaches_common_raster_without_changing_samples() {
+        let image = DynamicImage::ImageRgba8(image::RgbaImage::from_pixel(2, 2, image::Rgba([128, 64, 32, 255])));
+        let mut encoded = Cursor::new(Vec::new());
+        image.write_to(&mut encoded, ImageFormat::Png).unwrap();
+        let base = encoded.into_inner();
+        let reference = decode_fixture("square.png", &base).unwrap();
+        for (x, y, unit, expected) in [(2u32, 1u32, 0u8, Some(0.5)), (1000, 2000, 1, Some(2.)), (0, 1, 0, None)] {
+            let mut data = x.to_be_bytes().to_vec(); data.extend_from_slice(&y.to_be_bytes()); data.push(unit);
+            let physical = crate::png_color::tests::chunk(b"pHYs", &data);
+            let mut bytes = base[..33].to_vec(); bytes.extend_from_slice(&physical); bytes.extend_from_slice(&base[33..]);
+            let frame = decode_fixture("physical.png", &bytes).unwrap();
+            assert_eq!(frame.pixel_aspect(), expected);
+            let (RasterPixels::Rgba8(actual), RasterPixels::Rgba8(expected_pixels)) = (frame.pixels(), reference.pixels()) else { panic!("PNG precision"); };
+            assert_eq!(actual, expected_pixels);
+            let exif = b"II\x2a\0\x08\0\0\0\x01\0\x12\x01\x03\0\x01\0\0\0\x06\0\0\0\0\0\0\0";
+            let mut rotated = bytes[..33].to_vec();
+            rotated.extend_from_slice(&crate::png_color::tests::chunk(b"eXIf", exif));
+            rotated.extend_from_slice(&bytes[33..]);
+            assert_eq!(decode_fixture("rotated.png", &rotated).unwrap().pixel_aspect(), expected.map(|v| 1. / v));
+            let mut corrupt = bytes.clone(); corrupt[41] ^= 1;
+            assert!(matches!(decode_fixture("bad-crc.png", &corrupt), Err(RasterDecodeError::InvalidPngPhysicalDimensions)));
+            let mut duplicate = bytes[..33].to_vec(); duplicate.extend_from_slice(&physical); duplicate.extend_from_slice(&bytes[33..]);
+            assert!(decode_fixture("duplicate.png", &duplicate).is_err());
+        }
+    }
+
+    #[test]
     fn declared_png_srgb_and_linear_cicp_reach_linear_pixel_conversion() {
         let image = DynamicImage::ImageRgba8(image::RgbaImage::from_pixel(
             1,
@@ -1018,6 +1113,236 @@ mod tests {
             };
             assert!((p[0] - expected).abs() < 1e-6);
             assert!((p[3] - 64.0 / 255.0).abs() < 1e-7);
+        }
+    }
+
+    #[test]
+    fn png_gamma_chroma_display_matches_full_u16_power_reference() {
+        for (gamma, p3, custom) in [(50000u32, false, false), (45455, false, false), (100000, true, false), (50000, true, false), (50000, true, true)] {
+            let image = DynamicImage::ImageRgba16(image::ImageBuffer::<image::Rgba<u16>, Vec<u16>>::from_fn(65536, 1, |x,_| {
+                let value = x as u16;
+                image::Rgba(if p3 {[value,0,0,32768]} else {[value,value,value,32768]})
+            }));
+            let mut encoded = Cursor::new(Vec::new());
+            image.write_to(&mut encoded, ImageFormat::Png).unwrap();
+            let base = encoded.into_inner();
+            let mut bytes = base[..33].to_vec();
+            bytes.extend_from_slice(&crate::png_color::tests::chunk(b"gAMA", &gamma.to_be_bytes()));
+            let chrm = if custom {
+                let xy: [u32;8] = [34567,35850,67000,32000,21000,71000,14000,8000];
+                crate::png_color::tests::chunk(b"cHRM", &xy.into_iter().flat_map(u32::to_be_bytes).collect::<Vec<_>>())
+            } else { crate::png_color::tests::chrm(p3) };
+            bytes.extend_from_slice(&chrm);
+            bytes.extend_from_slice(&base[33..]);
+            let source = decode_fixture(&format!("gamma-chroma-{gamma}-{p3}.png"), &bytes).unwrap();
+            let RasterPixels::Rgba16(native) = source.pixels() else {panic!()};
+            for (code,rgba) in native.chunks_exact(4).enumerate() {
+                let expected = if p3 {[code as u16,0,0,32768]} else {[code as u16,code as u16,code as u16,32768]};
+                assert_eq!(rgba, &expected);
+            }
+            let root = rrrah_core::MemoryBudget::new(8 * 1024 * 1024);
+            assert!(crate::prepare_raster_for_display_with_budget_and_cancel(&source, Some(&root), ||root.used()>0).is_err());
+            assert_eq!(root.used(),0);
+            let linear = crate::prepare_raster_for_display_with_budget(&source, Some(&root)).unwrap();
+            let RasterPixels::Rgba32Float(values) = linear.pixels() else {panic!()};
+            // Custom D50 basis reference computed by independent Gaussian
+            // RGB/XYZ inversion and Bradford adaptation (probe-linear-color-oracle.py).
+            let coefficients = if custom {[1.5275477583865709,-0.04092907763779932,-0.010663721402315232]}
+                else if p3 {[1.224940176,-0.042056955,-0.019637555]} else {[1.;3]};
+            let mut maximum_error = 0_f64;
+            for (code,rgba) in values.chunks_exact(4).enumerate() {
+                let value = (code as f64 / 65535.).powf(100000. / f64::from(gamma));
+                for c in 0..3 {maximum_error = maximum_error.max((f64::from(rgba[c])-value*coefficients[c]).abs());}
+                assert!((rgba[3]-32768./65535.).abs()<1e-7);
+            }
+            eprintln!("PNG gAMA/cHRM gamma={gamma} p3={p3} custom={custom} maximum_error={maximum_error}; white={:?}", &values[values.len()-4..]);
+            assert!(maximum_error < 0.0001);
+            drop(linear);
+            assert_eq!(root.used(),0);
+        }
+    }
+
+    #[test]
+    fn png_gray_gamma_only_preserves_full_u16_ramp_and_alpha() {
+        for gamma in [50000u32, 45455, 100000] {
+          for (sixteen, alpha) in [(true,true),(true,false),(false,true),(false,false)] {
+            let levels = if sixteen {65536} else {256};
+            let image = match (sixteen, alpha) {
+                (true,true) => DynamicImage::ImageLumaA16(image::ImageBuffer::from_fn(levels, 1, |x,_| image::LumaA([x as u16,32768]))),
+                (true,false) => DynamicImage::ImageLuma16(image::ImageBuffer::from_fn(levels, 1, |x,_| image::Luma([x as u16]))),
+                (false,true) => DynamicImage::ImageLumaA8(image::ImageBuffer::from_fn(levels, 1, |x,_| image::LumaA([x as u8,128]))),
+                (false,false) => DynamicImage::ImageLuma8(image::ImageBuffer::from_fn(levels, 1, |x,_| image::Luma([x as u8]))),
+            };
+            let mut encoded = Cursor::new(Vec::new());
+            image.write_to(&mut encoded, ImageFormat::Png).unwrap();
+            let base = encoded.into_inner();
+            let mut bytes = base[..33].to_vec();
+            bytes.extend_from_slice(&crate::png_color::tests::chunk(b"gAMA", &gamma.to_be_bytes()));
+            bytes.extend_from_slice(&base[33..]);
+            let source = decode_fixture("gray-gamma.png", &bytes).unwrap();
+            let maximum_code = if sixteen {65535u32} else {255};
+            let alpha_code = if alpha {if sixteen {32768} else {128}} else {maximum_code};
+            match source.pixels() {
+                RasterPixels::Rgba16(native) if sixteen => {
+                    for (code,rgba) in native.chunks_exact(4).enumerate() { assert_eq!(rgba,&[code as u16,code as u16,code as u16,alpha_code as u16]); }
+                },
+                RasterPixels::Rgba8(native) if !sixteen => {
+                    for (code,rgba) in native.chunks_exact(4).enumerate() { assert_eq!(rgba,&[code as u8,code as u8,code as u8,alpha_code as u8]); }
+                },
+                _ => panic!("source precision changed"),
+            }
+            let root = rrrah_core::MemoryBudget::new(8*1024*1024);
+            assert!(crate::prepare_raster_for_display_with_budget_and_cancel(&source, Some(&root), || root.used()>0).is_err());
+            assert_eq!(root.used(),0);
+            let linear = crate::prepare_raster_for_display_with_budget(&source, Some(&root)).unwrap();
+            let RasterPixels::Rgba32Float(values) = linear.pixels() else {panic!()};
+            let mut maximum = 0f64;
+            for (code, rgba) in values.chunks_exact(4).enumerate() {
+                let reference = (code as f64/f64::from(maximum_code)).powf(100000./f64::from(gamma));
+                for value in &rgba[..3] { maximum = maximum.max((f64::from(*value)-reference).abs()); }
+                assert!((rgba[3]-alpha_code as f32/maximum_code as f32).abs()<1e-7);
+            }
+            eprintln!("gray gAMA={gamma} sixteen={sixteen} alpha={alpha} maximum_error={maximum}");
+            assert!(maximum<0.0001);
+            drop(linear);
+            assert_eq!(root.used(),0);
+          }
+        }
+    }
+
+    #[test]
+    fn png_packed_gray_gamma_and_trns_preserve_levels() {
+        use std::io::Write;
+        use crate::png_color::tests::chunk;
+        for depth in [1u8,2,4] {
+          for gamma in [50000u32,45455,100000] {
+           for transparent in [false,true] {
+            let maximum = (1u8<<depth)-1;
+            let mut row = vec![0u8; 1+16*usize::from(depth)/8];
+            for x in 0..16usize {
+                let code = x as u8 & maximum;
+                let bit = x*usize::from(depth);
+                row[1+bit/8] |= code << (8-usize::from(depth)-bit%8);
+            }
+            let mut compressor = flate2::write::ZlibEncoder::new(Vec::new(), flate2::Compression::default());
+            compressor.write_all(&row).unwrap();
+            let mut bytes = b"\x89PNG\r\n\x1a\n".to_vec();
+            let mut ihdr = Vec::new();
+            ihdr.extend_from_slice(&16u32.to_be_bytes());
+            ihdr.extend_from_slice(&1u32.to_be_bytes());
+            ihdr.extend_from_slice(&[depth,0,0,0,0]);
+            bytes.extend_from_slice(&chunk(b"IHDR", &ihdr));
+            bytes.extend_from_slice(&chunk(b"gAMA", &gamma.to_be_bytes()));
+            if transparent { bytes.extend_from_slice(&chunk(b"tRNS", &1u16.to_be_bytes())); }
+            bytes.extend_from_slice(&chunk(b"IDAT", &compressor.finish().unwrap()));
+            bytes.extend_from_slice(&chunk(b"IEND", &[]));
+            let source = decode_fixture("packed-gray.png", &bytes).unwrap();
+            let RasterPixels::Rgba8(native) = source.pixels() else {panic!("packed gray must expand to u8")};
+            for (x,rgba) in native.chunks_exact(4).enumerate() {
+                let code = x as u8 & maximum;
+                let expanded = code * (255/maximum);
+                let alpha = if transparent && code==1 {0} else {255};
+                assert_eq!(rgba,&[expanded,expanded,expanded,alpha]);
+            }
+            let root = rrrah_core::MemoryBudget::new(4096);
+            let ready = crate::prepare_raster_for_display_with_budget(&source,Some(&root)).unwrap();
+            let RasterPixels::Rgba32Float(values) = ready.pixels() else {panic!()};
+            let mut error = 0f64;
+            for (x,rgba) in values.chunks_exact(4).enumerate() {
+                let code = x as u8 & maximum;
+                let reference = (f64::from(code)/f64::from(maximum)).powf(100000./f64::from(gamma));
+                for value in &rgba[..3] { error=error.max((f64::from(*value)-reference).abs()); }
+                assert_eq!(rgba[3],if transparent && code==1 {0.} else {1.});
+            }
+            assert!(error<0.000001,"depth={depth} gamma={gamma} tRNS={transparent} error={error}");
+            drop(ready);
+            assert_eq!(root.used(),0);
+           }
+          }
+        }
+    }
+
+    #[test]
+    fn png_cicp_wide_linear_hdr_and_narrow_range_reach_public_apis() {
+        let image = DynamicImage::ImageRgba16(image::ImageBuffer::<image::Rgba<u16>, Vec<u16>>::from_fn(3, 1, |x, _| {
+            let value = [0, 32768, 65535][x as usize];
+            image::Rgba([value, value, value, 32768])
+        }));
+        let mut encoded = Cursor::new(Vec::new());
+        image.write_to(&mut encoded, ImageFormat::Png).unwrap();
+        let base = encoded.into_inner();
+        for (primaries, transfer, range) in [(9, 8, 1), (12, 8, 1), (12, 13, 1), (9, 16, 1), (9, 18, 1), (1, 1, 0), (9, 16, 0), (9, 18, 0)] {
+            let mut bytes = base[..33].to_vec();
+            bytes.extend_from_slice(&crate::png_color::tests::chunk(b"cICP", &[primaries, transfer, 0, range]));
+            bytes.extend_from_slice(&base[33..]);
+            let frame = decode_fixture(&format!("cicp-{primaries}-{transfer}-{range}.png"), &bytes).unwrap();
+            assert_eq!(frame.color_space(), &RasterColorSpace::Cicp {
+                primaries: u16::from(primaries), transfer: u16::from(transfer), matrix: 0, full_range: range == 1,
+            });
+            let budget = rrrah_core::MemoryBudget::new(48);
+            if range == 0 {
+                if transfer == 1 {
+                    let linear = crate::prepare_raster_for_display_with_budget(&frame, Some(&budget)).unwrap();
+                    let RasterPixels::Rgba32Float(values) = linear.pixels() else { panic!() };
+                    assert!(values[0] < 0. && values[8] > 1.);
+                    for rgba in values.chunks_exact(4) { assert!((rgba[3] - 32768. / 65535.).abs() < 1e-7); }
+                    drop(linear);
+                } else {
+                    assert!(crate::prepare_raster_for_display_with_budget(&frame, Some(&budget)).is_err());
+                }
+                assert_eq!(budget.used(), 0);
+                if transfer == 16 || transfer == 18 {
+                    let path = std::env::temp_dir().join(format!("rrrah-png-narrow-{}-{transfer}.png", std::process::id()));
+                    std::fs::write(&path, &bytes).unwrap();
+                    let root = rrrah_core::MemoryBudget::new(1024 * 1024);
+                    let mut request = DecodeRequest::new(&path);
+                    request.memory_budget = Some(root.clone());
+                    if transfer == 16 { request.pq_reference_white_nits = Some(100.); }
+                    else { request.hlg_display = Some((100., 1000., 1.2)); }
+                    let result = decode_raster(&request);
+                    std::fs::remove_file(&path).unwrap();
+                    assert!(result.is_err());
+                    assert_eq!(root.used(), 0);
+                }
+                continue;
+            }
+            if transfer == 16 || transfer == 18 {
+                assert!(crate::prepare_raster_for_display_with_budget(&frame, Some(&budget)).is_err());
+                assert_eq!(budget.used(), 0);
+            }
+            let linear = match transfer {
+                16 => frame.pq_to_linear_srgb_with_budget_and_cancel(100., Some(&budget), || false).unwrap(),
+                18 => frame.hlg_to_linear_srgb_with_budget_and_cancel(100., 1000., 1.2, Some(&budget), || false).unwrap(),
+                _ => crate::prepare_raster_for_display_with_budget(&frame, Some(&budget)).unwrap(),
+            };
+            let RasterPixels::Rgba32Float(values) = linear.pixels() else { panic!() };
+            let white = match transfer { 16 => 100., 18 => 10., _ => 1. };
+            for channel in 0..3 {
+                assert_eq!(values[channel], 0.);
+                assert!((values[8 + channel] - white).abs() < 0.0001);
+                assert!(values[4 + channel] > 0. && values[4 + channel] < white);
+            }
+            for rgba in values.chunks_exact(4) { assert!((rgba[3] - 32768. / 65535.).abs() < 1e-7); }
+            assert_eq!(budget.used(), 48);
+            if transfer == 16 || transfer == 18 {
+                let path = std::env::temp_dir().join(format!("rrrah-png-policy-{}-{transfer}.png", std::process::id()));
+                std::fs::write(&path, &bytes).unwrap();
+                let root = rrrah_core::MemoryBudget::new(1024 * 1024);
+                let mut request = DecodeRequest::new(&path);
+                request.memory_budget = Some(root.clone());
+                if transfer == 16 { request.pq_reference_white_nits = Some(100.); }
+                else { request.hlg_display = Some((100., 1000., 1.2)); }
+                let result = decode_raster(&request);
+                std::fs::remove_file(&path).unwrap();
+                let policy_frame = result.unwrap();
+                assert_eq!(policy_frame.color_space(), &RasterColorSpace::LinearSrgb);
+                let RasterPixels::Rgba32Float(actual) = policy_frame.pixels() else { panic!() };
+                assert_eq!(actual.as_slice(), values.as_slice());
+                drop(policy_frame);
+                assert_eq!(root.used(), 0);
+            }
+            drop(linear);
+            assert_eq!(budget.used(), 0);
         }
     }
 

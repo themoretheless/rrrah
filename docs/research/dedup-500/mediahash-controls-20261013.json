@@ -1,0 +1,72 @@
+{
+  "status": "verified_nine_real_dependency_controls",
+  "source": "/Users/themoretheless/.codex/tmp/rrrah-mediahash-source-20261013",
+  "controls": [
+    {
+      "control": "image_analyze",
+      "result": "AttributeError",
+      "message": "type object 'Image' has no attribute 'open'"
+    },
+    {
+      "control": "image_checksum",
+      "result": "AttributeError",
+      "message": "type object 'Image' has no attribute 'open'"
+    },
+    {
+      "control": "image_fingerprint",
+      "result": "AttributeError",
+      "message": "type object 'Image' has no attribute 'open'"
+    },
+    {
+      "control": "video_analyze_real_fixture",
+      "result": {
+        "width": 480,
+        "height": 270,
+        "size": 98599,
+        "length": 3,
+        "bitrate": 261311,
+        "format": "mov,mp4,m4a,3gp,3g2,mj2"
+      }
+    },
+    {
+      "control": "fresh_video_self_distance",
+      "result": "ValueError",
+      "message": "Input vector should be 1-D."
+    },
+    {
+      "control": "serialized_video_flat_self_distance",
+      "result": 0.0
+    },
+    {
+      "control": "sample_video_checksum",
+      "result": "StopIteration"
+    },
+    {
+      "control": "connected_component_chain",
+      "result": [
+        "A",
+        "B",
+        "C"
+      ],
+      "endpoint_distance": 2,
+      "threshold": 1
+    },
+    {
+      "control": "zero_video_self_distance",
+      "result": "NaN"
+    }
+  ],
+  "packages": {
+    "av": "15.0.0",
+    "context-utils": "0.1.0",
+    "typing_extensions": "4.16.0",
+    "Pillow": "11.3.0",
+    "ImageHash": "4.3.2",
+    "numpy": "2.2.6",
+    "scipy": "1.18.1",
+    "PyWavelets": "1.10.0",
+    "networkx": "3.7"
+  },
+  "script_sha256": "17747a3958ee9b73981c6e5a9c650cd69ff8c3aeb3dca5a3516289b9929a321b",
+  "scope": "Nine controls, unchanged full imported modules and real PyAV/Pillow/numpy/scipy/networkx/context-utils; upstream pytest not run; environment not full lock reconstruction"
+}

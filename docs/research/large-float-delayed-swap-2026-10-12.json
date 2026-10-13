@@ -1,0 +1,33 @@
+{
+  "scope": "Large float transport through real local swap files with2ms-per-I/O artificial delay;64MiB2048x2048RGBA32Float each; every bit including signedzero/HDR extreme values compared",
+  "cycles": 3,
+  "seconds": 96.628,
+  "root_limit": 134217728,
+  "queue_limit": 67108864,
+  "disk_limit": 134217856,
+  "object_limit": 2,
+  "pressure_refusals": 3,
+  "mid_read_cancellations": 3,
+  "retry_reads": 3,
+  "writes": 3,
+  "errors": 0,
+  "eviction": "Third object evicts first; old key absent",
+  "final_cpu_queue_bytes": 0,
+  "ordinary_regression": {
+    "passed": 4,
+    "ignored": 5
+  },
+  "driver": "Storage soak now requires new workload marker,duration and at least3cycles; syntax checked; full combined storage gate not rerun this turn",
+  "limits": [
+    "Artificial delayed local I/O, not physical slow drive",
+    "Managed-budget pressure, not OS-wide memory pressure",
+    "Float payload transport, not display/color qualification"
+  ],
+  "sha256": {
+    "docs/research/large-float-delayed-swap-2026-10-12/rrrah-large-float-delayed-swap-20261012.log": "b21ea7b98b1ea38bedd7bc67c694f26a70a5451419ba14259d932d6eeb337041",
+    "docs/research/large-float-delayed-swap-2026-10-12/rrrah-large-float-delayed-swap-eviction-20261012.log": "03759ddc893cd6e58bb8847e536ebe5cbd42d55ee40381faab5a22761e38e115",
+    "docs/research/large-float-delayed-swap-2026-10-12/rrrah-delayed-swap-regression-20261012.log": "f4f33aa8121527724ab2313f1b49e342321551e3cc5f37008b80663336e520df",
+    "crates/rrrah-cache/tests/sustained_swap.rs": "929651284ddea6ea971e21fc70266b9e975f71bfecd5a2f1205945fc250a3473",
+    "scripts/qualify-viewer-storage-gpu.py": "7a57fa3a7815a93c3306d0be0a97954fe728855b67d705c4af8f3097dcb16f54"
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "repository": "bunchesofdonald/photohash",
+  "registry_index": 360,
+  "commit": "2a43d23a879f1484cd59775f940853eb38168b17",
+  "status": "full_pinned_source_review_and_five_original_tests_with_explicit_pillow_adapter",
+  "source_manifest": "photohash-full-source-20261012.json",
+  "controls": "photohash-upstream-controls-20261012.json",
+  "git_blobs": 18,
+  "text_files_read": [
+    ".drone.yml",
+    ".gitignore",
+    ".travis.yml",
+    "CHANGES.txt",
+    "LICENSE.txt",
+    "MANIFEST.in",
+    "README.rst",
+    "contributors.md",
+    "photohash/__init__.py",
+    "photohash/photohash.py",
+    "photohash/tests/__init__.py",
+    "photohash/tests/test_photohash.py",
+    "requirements.txt",
+    "setup.py"
+  ],
+  "binary_fixtures_decoded": 4,
+  "license": "MIT, complete LICENSE.txt and setup.py read",
+  "findings": [
+    "hash_distance counts differing characters in hexadecimal hash strings;0/f returns1 rather than4bits. Default tolerance6 can accept24bit differences across6hex digits.",
+    "Average hash converts RGB to luminance after resize without canonical alpha composition. Fully transparent black/gradient encode identical visibility but distance8.",
+    "Opaque black and white collide at all-zero average hash and are marked similar. Full pixel confirmation and information checks remain necessary.",
+    "Unmodified original test suite on Pillow12.3 has3errors from removed Image.ANTIALIAS; aliasing only that constant to Resampling.LANCZOS yields5/5passes with unchanged original files.",
+    "Hash_size, decode size, color/EXIF/animation, mutation/cancellation and resource admission are not qualified by original5tests."
+  ],
+  "adoption": "No upstream production code or image fixture copied. Retain bit-level distance, canonical alpha, full-pixel/byte confirmation and explicit work/owner/source contracts.",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/photohash-full-source-20261012.json": "1fd9bbcdf0c7dde2147e3836723b4f92709542b59b9c93d6511bb2dd83603ef2",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/photohash-upstream-controls-20261012.json": "f0cb5b9c0563633c17bc494cd337f9658e11c364101bff02ef08f213ada1d93c"
+  },
+  "scope": "Complete18blob tree review,14text files read and4original JPEGs decoded; bounded original tests with explicit compatibility adapter. Not Python2/oldPillow/allplatform/format/precision/resource or full500-source completion."
+}

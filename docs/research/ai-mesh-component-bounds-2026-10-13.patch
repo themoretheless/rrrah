@@ -1,0 +1,96 @@
+--- a/vendor/hayro-interpret/src/encode/native_source.rs
++++ b/vendor/hayro-interpret/src/encode/native_source.rs
+@@ -583,6 +583,38 @@
+         self.mesh.is_some() && self.function.is_none() && self.count==channels
+             && self.opacity.is_finite() && (0. ..=1.).contains(&self.opacity)
+             && self.color_space.shares_blending_coordinates(destination)
++    }
++
++    /// Conservative component intervals for successful selected-triangle samples
++    /// in identical native destination coordinates, plus constant source opacity.
++    /// This certifies a range, not affine integration or geometric ownership.
++    /// Functions, color conversion and invalid vertex components refuse. Inactive
++    /// channels are zero. No persistent storage or color evaluation is performed.
++    pub fn mesh_native_component_bounds(&self,index:usize,destination:&ColorSpace,
++        cancelled:&dyn Fn()->bool,remaining:&mut usize,
++    )->Result<([[f64;2];4],f32),NativeShadingError> {
++        use NativeShadingError::*;
++        if cancelled() {return Err(Cancelled);}
++        *remaining=remaining.checked_sub(1).ok_or(WorkLimit)?;
++        if !self.mesh_has_affine_native_field(destination) {return Err(Unsupported);}
++        let triangle=self.mesh.as_ref().ok_or(Unsupported)?.triangles.get(index).ok_or(Invalid)?;
++        let mut bounds=[[0.;2];4];
++        for (channel,bound) in bounds.iter_mut().enumerate().take(self.count) {
++            if cancelled() {return Err(Cancelled);}
++            *remaining=remaining.checked_sub(3).ok_or(WorkLimit)?;
++            let values=triangle.colors.map(|color|color[channel]);
++            if values.iter().any(|v|!v.is_finite() || !(0. ..=1.).contains(v)) {return Err(Invalid);}
++            let low=values.iter().copied().fold(f32::INFINITY,f32::min);
++            let high=values.iter().copied().fold(f32::NEG_INFINITY,f32::max);
++            // Selected sampling projects to nonnegative weights and normalizes
++            // them in f64. Three divisions/products/additions perturb extrema
++            // by less than16*f64::EPSILON relatively, far below one f32 ulp.
++            // One outward f32 step includes normalization and final rounding;
++            // clamp only to the range required for a successful native sample.
++            *bound=[f64::from(low.next_down().max(0.)),f64::from(high.next_up().min(1.))];
++        }
++        if cancelled() {return Err(Cancelled);}
++        Ok((bounds,self.opacity))
+     }
+ 
+     /// Device-space lines at the two axial parameter boundaries (t=0 and t=1).
+@@ -1052,6 +1084,30 @@
+         assert!(!source.mesh_has_affine_native_field(&source.color_space));
+         source.function=None;source.mesh=None;
+         assert!(!source.mesh_has_affine_native_field(&source.color_space));
++    }
++
++    #[test]
++    fn mesh_component_bounds_cover_rounded_samples_and_refuse_unsafe_sources() {
++        let mut pattern=axial();
++        let colors=[[0.,f32::from_bits(1),0.5,1.],[0.25,f32::MIN_POSITIVE,0.5,0.75],[1.,0.125,0.5,0.]];
++        Arc::make_mut(&mut pattern.shading).shading_type=Arc::new(ShadingType::TriangleMesh {triangles:vec![native_triangle(colors,4)],function:None});
++        let source=NativeShadingSource::capture(&pattern,&||false,&no_credit).unwrap();
++        let mut budget=13;
++        let (bounds,opacity)=source.mesh_native_component_bounds(0,&source.color_space,&||false,&mut budget).unwrap();
++        assert_eq!(budget,0);assert_eq!(opacity,0.5);
++        for y in -8..=32 {for x in -8..=32 {
++            let point=Point::new(f64::from(x)/2.,f64::from(y)/2.);
++            let sample=source.sample_mesh_triangle(0,point,&||false).unwrap();
++            for channel in 0..4 {let value=f64::from(sample.components[channel]);assert!(bounds[channel][0]<=value && value<=bounds[channel][1]);}
++        }}
++        assert!(matches!(source.mesh_native_component_bounds(0,&source.color_space,&||false,&mut 12),Err(NativeShadingError::WorkLimit)));
++        assert!(matches!(source.mesh_native_component_bounds(0,&source.color_space,&||true,&mut 13),Err(NativeShadingError::Cancelled)));
++        assert!(matches!(source.mesh_native_component_bounds(1,&source.color_space,&||false,&mut 13),Err(NativeShadingError::Invalid)));
++        let axial_source=NativeShadingSource::capture(&axial(),&||false,&no_credit).unwrap();
++        assert!(matches!(axial_source.mesh_native_component_bounds(0,&axial_source.color_space,&||false,&mut 13),Err(NativeShadingError::Unsupported)));
++        let mut source=source;
++        source.mesh.as_mut().unwrap().triangles[0].colors[0][0]=f32::NAN;
++        assert!(matches!(source.mesh_native_component_bounds(0,&source.color_space,&||false,&mut 13),Err(NativeShadingError::Invalid)));
+     }
+ 
+     #[test]
+--- a/vendor/hayro/src/knockout_interpreter.rs
++++ b/vendor/hayro/src/knockout_interpreter.rs
+@@ -7186,7 +7186,20 @@
+     }
+     let mut mesh_samples=Vec::new();mesh_samples.try_reserve_exact(mesh_count).ok()?;
+     let trace_point_sources=point.is_some() && std::env::var_os("RRRAH_AI_TRACE_POINT_SOURCES").is_some();
+-    for (event,source,_) in &meshes {
++    for (event,source,geometry) in &meshes {
++        if std::env::var_os("RRRAH_AI_MESH_COMPONENT_BOUNDS").is_some() {
++            let mut work=4_000_000;let mut accepted=0;let mut refused=0;let mut narrow=0;
++            let mut min_span=f64::INFINITY;let mut max_span=0f64;
++            for &owner in &geometry.owners {
++                if cancelled() {return None;}
++                if let Ok((bounds,_))=source.mesh_native_component_bounds(owner,space,cancelled,&mut work) {
++                    let span=bounds.iter().map(|[lo,hi]|hi-lo).fold(0.,f64::max);
++                    accepted+=1;if span<=1e-6 {narrow+=1;}
++                    min_span=min_span.min(span);max_span=max_span.max(span);
++                } else {refused+=1;}
++            }
++            eprintln!("SPATIAL_MESH_COMPONENT_BOUNDS event={event} accepted={accepted} refused={refused} narrow_1e6={narrow} min_span={min_span:?} max_span={max_span:?} work={}",4_000_000-work);
++        }
+         let cost=SourceCost {event:*event,enabled:trace.enabled,calls:std::cell::Cell::new(0),
+             source:std::cell::Cell::new(0),coordinates:std::cell::Cell::new(0),
+             pixel_hits:std::cell::Cell::new(0),pixel_builds:std::cell::Cell::new(0)};

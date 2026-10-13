@@ -1,0 +1,32 @@
+{
+  "backend": "Metal Apple M4 Max",
+  "sources": 9,
+  "rounds": 50,
+  "restores": 450,
+  "duration_seconds": 30.31,
+  "stages": {
+    "restore": {
+      "samples": 450,
+      "total": 450,
+      "p50_ms": 41.346,
+      "p95_ms": 70.207,
+      "max_ms": 142.44
+    },
+    "gpu_upload_render_readback": {
+      "samples": 450,
+      "total": 450,
+      "p50_ms": 24.916,
+      "p95_ms": 42.225,
+      "max_ms": 91.302
+    }
+  },
+  "log_sha256": "74c8c8d5be833bf1c8a843f654261a2efbe7b10ec5f5df9c8c63753b63e58a98",
+  "scope": "warm repeated local swap restore; Metal upload/render/readback to 1920x1080; all samples and output exact",
+  "limits": [
+    "not initial RAW decode time",
+    "not physical display latency or refresh rate",
+    "OS filesystem cache not evicted",
+    "GPU readback overhead included",
+    "single machine single run; no universal threshold"
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "repository": "kornelski/dupe-krill",
+  "commit": "0e813b83c08543d4052523e05ca170bb1d155e91",
+  "status": "full_rust_source_review_with_bounded_runtime_controls",
+  "all_17_files_match_pinned_git_blobs": true,
+  "rust_files_read": [
+    "src/bin.rs",
+    "src/file.rs",
+    "src/hasher.rs",
+    "src/json.rs",
+    "src/lazyfile.rs",
+    "src/lib.rs",
+    "src/metadata.rs",
+    "src/reflink.rs",
+    "src/scanner.rs",
+    "src/ui.rs",
+    "tests/filetest.rs",
+    "tests/scantest.rs"
+  ],
+  "upstream_tests_passed_macos": 8,
+  "upstream_test_scope": "Original locked lib3 and filetest5 only; scanner/destructive link tests not executed.",
+  "mutation_probe_scope": "Public FileContent API, separate offline compatible-dependency harness with its own pinned lock; source unchanged, not all upstream feature/platform modes.",
+  "counterexamples": [
+    {
+      "case": "cached equal then same-length content mutation",
+      "observed": "stale equality despite different current bytes",
+      "source": [
+        "src/file.rs:70",
+        "src/hasher.rs:90"
+      ]
+    },
+    {
+      "case": "metadata captured then different suffix growth before first comparison",
+      "observed": "old size limits hashed ranges and distinct current files compare equal",
+      "source": [
+        "src/metadata.rs:8",
+        "src/file.rs:99",
+        "src/hasher.rs:75"
+      ]
+    }
+  ],
+  "adoptable": [
+    "Incremental early mismatch exit",
+    "Separate physical-file alias accounting from byte equality",
+    "Lazy file handles avoid opening every candidate concurrently"
+  ],
+  "not_adopted": [
+    "Cached range digests without source revalidation",
+    "Digest equality as final byte identity",
+    "Content comparison performing fallible IO inside Ord",
+    "Hardlink/reflink mutation as default library behavior",
+    "Unbounded per-range allocation and stderr-only diagnostics"
+  ],
+  "rrrah_regression_verification": "../dedup-exact-upstream-adversary-verification-20261011.json",
+  "production_code_copied": false,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/dupe-krill-full-source-20261011.json": "6d48f2b882f5addba4144511c0727a31305d270a6bb48843b0af66bf0a0f6351",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/kornelski--dupe-krill/tree.json": "67f976c938db14f8e41f5abda86a989765e5ead32227fad62cd928f86c2b02df",
+    "/Users/themoretheless/.codex/tmp/rrrah-dupe-krill-0e813b83-20261011.tar.gz": "2936567fe859e6f1ab5a079ef8863db5510ce3bdc7a47ecbdeccbe98aabdb315",
+    "/Users/themoretheless/.codex/tmp/rrrah-dupe-krill-tests-online-20261011.log": "dea0500e3800a1bd7a1f6d763c33d9efb44825c7af10602ad4c21c2560dbcb44",
+    "/Users/themoretheless/.codex/tmp/rrrah-dupe-krill-mutation-cargo-20261011.log": "8a4ccf2283bf32f32506d0ebb2e2779f1261092b55d9624f4d8bc13bfa2bcc73",
+    "/Users/themoretheless/.codex/tmp/rrrah-dupe-krill-mutation-harness-20261011/Cargo.toml": "00716f10bc26413d72fd1fe970f0e613938e95e9dfea49fccd69600875dca2d9",
+    "/Users/themoretheless/.codex/tmp/rrrah-dupe-krill-mutation-harness-20261011/Cargo.lock": "f606dbc1b29339ddd0a8100793c094ec309edb450ff1cb3c7a39a6ecdc236854",
+    "/Users/themoretheless/.codex/tmp/rrrah-dupe-krill-mutation-harness-20261011/src/main.rs": "91f6bf318d8a430bbfa992717d1b2009f5ea11860a194b766751f11cec83749f",
+    "/Users/themoretheless/.codex/tmp/rrrah-dupe-krill-target-20261011/debug/dupe-krill-mutation-probe": "a92eb04edfd5ecd42baedf4c6e4214c7ab9a5f74c82a2e2a4e8f747e35c4837d",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exact-upstream-adversary-verification-20261011.json": "976d57880f97de41c89eecbecfda8f17be26a520b21f2efd67118d6268113a72",
+    "/Users/themoretheless/.codex/tmp/rrrah-dupe-krill-target-20261011/debug/build/dupe-krill/83709aef0640e92b/out/dupe_krill-83709aef0640e92b": "a54b371f0944a795ab197392174c8167da0a4892f09054d29d912565a4b680d9",
+    "/Users/themoretheless/.codex/tmp/rrrah-dupe-krill-target-20261011/debug/build/dupe-krill/4e509cb79890b761/out/filetest-4e509cb79890b761": "c29f1cccc1e660da49bfe762924f641ee1b869a3e6d09c8506d3f6e67a2ad341"
+  },
+  "scope": "Deepens historical shortlist record268. Whole Rust implementation and tests read, complete archive blob verification, eight original macOS tests plus two reproduced mutation counterexamples and rrrah17-test regression qualification. Not all500 full-source/runtime qualification, native Windows/Linux or linking safety qualification."
+}

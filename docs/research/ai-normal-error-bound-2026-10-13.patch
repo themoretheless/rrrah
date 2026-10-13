@@ -1,0 +1,115 @@
+--- a/vendor/hayro/src/native_blend.rs
++++ b/vendor/hayro/src/native_blend.rs
+@@ -24,6 +24,38 @@
+     color: [f64; 4],
+     alpha: f64,
+ }
++/// Propagate component discrepancy through fixed-alpha Normal composition.
++/// Previous/backdrop bounds use additive premultiplied storage; source bounds
++/// use native components before Pixel::from_native. Matching coordinates, fixed
++/// alphas/shape and checked0..1native samples are caller obligations. This is
++/// not a group/route certificate and never authorizes a color-space conversion.
++pub(super) fn normal_premultiplied_error_bound(model:Model,previous:[f64;4],backdrop:[f64;4],
++    source:[f64;4],source_alpha:f64,shape:f64,remaining:&mut usize,cancelled:&dyn Fn()->bool,
++)->Option<[f64;4]> {
++    if cancelled() {return None;}
++    *remaining=remaining.checked_sub(1+6*model.channels())?;
++    if !source_alpha.is_finite() || !shape.is_finite() || !(0. ..=1.).contains(&shape)
++        || !(0. ..=shape).contains(&source_alpha) || (source_alpha>0. && source_alpha<1e-12) {return None;}
++    for errors in [&previous,&backdrop,&source] {
++        if errors.iter().any(|e|!e.is_finite() || *e<0.)
++            || errors[model.channels()..].iter().any(|e|*e!=0.) {return None;}
++    }
++    let add=|a:f64,b:f64|(a+b).next_up();let mul=|a:f64,b:f64|(a*b).next_up();
++    let previous_gain=(1.-shape).next_up();let backdrop_gain=(shape-source_alpha).next_up();
++    let mut result=[0.;4];
++    for channel in 0..model.channels() {
++        if cancelled() {return None;}
++        // Exact Normal algebra: alpha*Cs +(shape-alpha)*Cb +(1-shape)*Cp.
++        // CMYK complementation changes the sign of source discrepancy, not its
++        // absolute gain. Include a conservative absolute envelope for checked
++        // sample premultiplication/complement, ordered Normal arithmetic and
++        // its source normalization. Tiny positive alpha refuses above.
++        result[channel]=add(add(mul(previous_gain,previous[channel]),mul(backdrop_gain,backdrop[channel])),add(mul(source_alpha,source[channel]),256.*f64::EPSILON));
++        if !result[channel].is_finite() {return None;}
++    }
++    if cancelled() {return None;}Some(result)
++}
++
+ impl Pixel {
+     pub(super) fn same_storage(self,other:Self)->bool {
+         self.model==other.model && self.alpha.to_bits()==other.alpha.to_bits()
+@@ -263,3 +295,45 @@
+     let black = Pixel::from_native(Model::Gray, &[0.], 1.).unwrap();
+     assert!(black.remove_backdrop(gray, 0.5).is_none());
+ }
++
++#[test]
++fn normal_error_envelope_contains_native_component_perturbations_in_all_models() {
++    for model in [Model::Gray,Model::Rgb,Model::Cmyk] {
++        let n=model.channels();
++        for alpha in [0.,0.125,0.5,1.] {for shape in [alpha,1.] {for background_alpha in [0.,0.25,1.] {
++            for step in 0..64 {
++                let c=step as f64/128.;let delta=1./256.;
++                let components=[c;4];let shifted=[c+delta;4];
++                let previous=Pixel::from_native(model,&components[..n],0.75).unwrap();
++                let previous2=Pixel::from_native(model,&shifted[..n],0.75).unwrap();
++                let backdrop=Pixel::from_native(model,&components[..n],background_alpha).unwrap();
++                let backdrop2=Pixel::from_native(model,&shifted[..n],background_alpha).unwrap();
++                let source=Pixel::from_native(model,&components[..n],alpha).unwrap();
++                let source2=Pixel::from_native(model,&shifted[..n],alpha).unwrap();
++                let a=Pixel::composite(previous,backdrop,source,shape,BlendMode::Normal).unwrap();
++                let b=Pixel::composite(previous2,backdrop2,source2,shape,BlendMode::Normal).unwrap();
++                let mut pe=[0.;4];let mut be=[0.;4];let mut se=[0.;4];
++                pe[..n].fill(0.75*delta);be[..n].fill(background_alpha*delta);se[..n].fill(delta);
++                let bound=normal_premultiplied_error_bound(model,pe,be,se,alpha,shape,&mut 100,&||false).unwrap();
++                assert_eq!(a.alpha.to_bits(),b.alpha.to_bits());
++                for channel in 0..n {assert!((a.color[channel]-b.color[channel]).abs()<=bound[channel]);}
++            }
++        }}}
++    }
++}
++#[test]
++fn normal_error_envelope_refuses_unsafe_inputs_work_and_every_cancel_checkpoint() {
++    let z=[0.;4];let mut work=100;
++    normal_premultiplied_error_bound(Model::Rgb,z,z,z,0.5,1.,&mut work,&||false).unwrap();
++    for budget in 0..100-work {assert!(normal_premultiplied_error_bound(Model::Rgb,z,z,z,0.5,1.,&mut {budget},&||false).is_none());}
++    for alpha in [f64::NAN,-1.,1.1,1e-300] {assert!(normal_premultiplied_error_bound(Model::Rgb,z,z,z,alpha,1.,&mut 100,&||false).is_none());}
++    assert!(normal_premultiplied_error_bound(Model::Rgb,z,z,z,0.75,0.5,&mut 100,&||false).is_none());
++    assert!(normal_premultiplied_error_bound(Model::Rgb,z,z,[0.,0.,0.,1.],0.5,1.,&mut 100,&||false).is_none());
++    assert!(normal_premultiplied_error_bound(Model::Rgb,z,z,[f64::NAN,0.,0.,0.],0.5,1.,&mut 100,&||false).is_none());
++    let polls=std::cell::Cell::new(0);
++    normal_premultiplied_error_bound(Model::Rgb,z,z,z,0.5,1.,&mut 100,&||{polls.set(polls.get()+1);false}).unwrap();
++    for stop in 1..=polls.get() {
++        let count=std::cell::Cell::new(0);
++        assert!(normal_premultiplied_error_bound(Model::Rgb,z,z,z,0.5,1.,&mut 100,&||{count.set(count.get()+1);count.get()>=stop}).is_none());
++    }
++}
+--- a/vendor/hayro/src/knockout_interpreter.rs
++++ b/vendor/hayro/src/knockout_interpreter.rs
+@@ -7201,6 +7201,7 @@
+         if component_error || std::env::var_os("RRRAH_AI_MESH_AFFINE_BOUNDS").is_some() {
+             let mut work=4_000_000;let mut accepted=0;let mut refused=0;let mut max_deficit=0f64;
+             let mut max_component_error=0f64;let mut component_refused=0;
++            let mut max_normal_source_error=0f64;let mut normal_refused=0;
+             for (&owner,path) in geometry.owners.iter().zip(&geometry.paths) {
+                 let mut vertices=[kurbo::Point::ZERO;3];let mut count=0;let mut valid=true;
+                 for element in path.elements() {match element {
+@@ -7215,11 +7216,17 @@
+                 if component_error {
+                     if let Ok(bounds)=source.mesh_native_affine_component_error_bounds(owner,&vertices,space,cancelled,&mut work) {
+                         max_component_error=max_component_error.max(bounds.into_iter().fold(0.,f64::max));
++                        if let Ok((_,opacity))=source.mesh_native_component_bounds(owner,space,cancelled,&mut work) {
++                            if let Some(bound)=super::native_blend::normal_premultiplied_error_bound(backdrop.model(),[0.;4],[0.;4],bounds,f64::from(opacity),1.,&mut work,cancelled) {
++                                max_normal_source_error=max_normal_source_error.max(bound.into_iter().fold(0.,f64::max));
++                            } else {normal_refused+=1;}
++                        } else {normal_refused+=1;}
+                     } else {component_refused+=1;}
+                 }
+             }
+             eprintln!("SPATIAL_MESH_AFFINE_BOUNDS event={event} accepted={accepted} refused={refused} max_deficit={max_deficit:?} work={}",4_000_000-work);
+             if component_error {eprintln!("SPATIAL_MESH_COMPONENT_ERROR event={event} refused={component_refused} max_error={max_component_error:?}");}
++            if component_error {eprintln!("SPATIAL_MESH_NORMAL_SOURCE_ERROR event={event} refused={normal_refused} max_premultiplied_error={max_normal_source_error:?}");}
+         }
+         if std::env::var_os("RRRAH_AI_MESH_WEIGHT_BOUNDS").is_some() {
+             let mut work=4_000_000;let mut accepted=0;let mut refused=0;let mut inside=0;let mut max_deficit=0f64;

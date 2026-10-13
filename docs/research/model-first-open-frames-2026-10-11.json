@@ -1,0 +1,81 @@
+{
+  "backend": "Metal",
+  "suites": [
+    {
+      "suite": "gpu-all",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-gpu",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/Users/themoretheless/Documents/Sources/rrrah/target",
+        "--",
+        "--nocapture"
+      ],
+      "exit_code": 0,
+      "passed": 123,
+      "failed": 0,
+      "ignored": 13,
+      "ignored_tests": [
+        "test pinned_native_ai_planes_survive_managed_metal_display ... ignored, requires pinned RRRAH_AI_METAL_ROOT replay/source corpus and actual Metal",
+        "test full_sensor_linear_exposure_chunked_readback ... ignored, allocates about 0.8 GB of GPU buffers; full-resolution local qualification",
+        "test full_sensor_managed_exposure_budgets_and_checks_every_pixel ... ignored, full-resolution managed compute uses about 2 GB of tracked buffers",
+        "test fusion_back_full_frame_developed_raw_matches_metal_display_transport ... ignored, requires corrected production Fusion linear dumps; display transport qualification",
+        "test fusion_front_full_frame_developed_raw_matches_metal_display_transport ... ignored, requires corrected production Fusion linear dumps; display transport qualification",
+        "test hdr_exposure_saturates_to_finite_binary16_range ... ignored, Metal-specific empirical range edge; outside portable binary16 caller contract",
+        "test hdr_opposite_extreme_samples_interpolate_without_nan ... ignored, Metal-specific empirical range edge; outside portable binary16 caller contract",
+        "test hero9_full_frame_developed_raw_matches_metal_display_transport ... ignored, requires production HERO9 scene-linear dump; transport qualification, not demosaic/color oracle",
+        "test large_cancelled_upload_validation_and_admission_preserve_visible_texture ... ignored, manual 12 MP Metal upload cancellation qualification",
+        "test large_hdr_area_lod_preserves_all_output_samples_and_metal_frame ... ignored, manual 36 MP HDR area LOD and actual Metal qualification",
+        "test qualified_sd10_linear_raster_full_frame_display_readback ... ignored, requires qualified X3F linear sRGB PPM and a physical GPU",
+        "test raster_single_layer_gpu_timestamp_timing ... ignored, manual actual-GPU timestamp comparison; 4096-square input / 2048-square HDR target",
+        "test full_f828_managed_rgbe_matches_cpu_reference ... ignored, requires independent DSC-F828 full-sensor dump; authored four-channel normalization, not as-shot color qualification"
+      ],
+      "log": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/model-first-open-frames-gate-20261011/gpu-all.log",
+      "log_sha256": "ab6785bb0a8a379d38b5094e68ce64c13a1c2462e85d9bd130dc37a77c463f17",
+      "verified_execution": true
+    },
+    {
+      "suite": "gpu-model-upload-worker",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah",
+        "--bin",
+        "rrrah",
+        "model_upload_worker::",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/Users/themoretheless/Documents/Sources/rrrah/target",
+        "--",
+        "--ignored",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0,
+      "ignored_tests": [],
+      "log": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/model-first-open-frames-gate-20261011/gpu-model-upload-worker.log",
+      "log_sha256": "dca598fc57c1d1a2f00f2e3170e2bf59a46a6995f576c52b72e4bb16e0b8a800",
+      "verified_execution": true,
+      "workload_evidence_valid": true
+    }
+  ],
+  "sources": {
+    "crates/rrrah-app/src/model_upload_worker.rs": "f61f9630ba70bbe0b28045bc3167f67dc48581a961c4e289f31cc6107d6a67be",
+    "scripts/qualify-viewer-storage-gpu.py": "ca395dea316f313b5234382866c299e5fc661572ed99ab6c35357cb5d48d4d54"
+  },
+  "limits": [
+    "Frame oracle is the same renderer synchronous path; this proves worker transfer parity, not independent model appearance.",
+    "Small authored triangle; separate million-grid workload covers size.",
+    "Readback targets/driver memory are outside the explicit geometry/depth budget.",
+    "Live window and physical HDR not verified."
+  ]
+}

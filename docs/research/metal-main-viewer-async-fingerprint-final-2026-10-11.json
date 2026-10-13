@@ -1,0 +1,33 @@
+{
+  "status": "final_native_startup_and_navigation_visually_verified",
+  "adapter": "Metal Apple M4 Max",
+  "surface": {
+    "hdr": true,
+    "format": "Rgba16Float",
+    "color_space": "ExtendedSrgbLinear"
+  },
+  "observations": [
+    "Initial blank capture coincided with native surface occlusion; subsequent capture showed first RAW before navigation.",
+    "Right displayed second RAW; Left displayed first RAW again.",
+    "Filmstrip layout visible, covers mostly placeholders; no thumbnail-content qualification claimed.",
+    "All three upload consumer leases released; viewer exited via Quit."
+  ],
+  "first_present_log_ms_by_generation": {
+    "0": "3727.773",
+    "1": "245.363",
+    "2": "62.295"
+  },
+  "log": "/tmp/rrrah-main-viewer-async-fingerprint-final-20261011.log",
+  "log_sha256": "12231495a25a6a6d742b32702334eabcf7189c08c8cb39370af880694f37d7b9",
+  "binary_sha256": "8fca49a9e68e1b0ccf28dcfbe161e1e924f47177fa653cd22a895b81c31a53d2",
+  "source_sha256": {
+    "crates/rrrah-app/src/main.rs": "3405a3508bbfe65110ad38639c8445f9ee0017427195e743302e12106a300a70",
+    "crates/rrrah-app/src/source_validation.rs": "3bda01da36c2364e6031db1b99ec78fa05fbf779001ee91b6773fab5587fa3bd"
+  },
+  "limitations": [
+    "Ordinary navigation, not an in-flight source-change duplicate, was exercised in the native window.",
+    "Title/present timings are not a controlled performance benchmark.",
+    "Screenshots were tool observations, not saved local PNG files.",
+    "No physical HDR color/luminance calibration or physical slow-disk qualification."
+  ]
+}

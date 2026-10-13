@@ -1,0 +1,22 @@
+{
+  "scope": "Raster/model protected preload returns lease using actual loader-resolved key; lazy FnOnce resolver after cancellation check, no postload source fingerprint lookup",
+  "app_passed": 213,
+  "app_ignored": 58,
+  "report": "docs/research/prefetch-resolved-key-2026-10-11/report.json",
+  "logs": [
+    {
+      "log": "docs/research/prefetch-resolved-key-2026-10-11/rrrah-prefetch-single-fingerprint-20261011.log",
+      "sha256": "5920c667400af14fe99110592f11374b5be481b6a56664e8ad7456b64c0ff201"
+    },
+    {
+      "log": "docs/research/prefetch-resolved-key-2026-10-11/rrrah-prefetch-single-fingerprint-corrected-20261011.log",
+      "sha256": "e247c3906a19387ca43f68ed405aeb78d9836f6af8a59de8d413af43c238315b"
+    }
+  ],
+  "source_sha256": "a1654716db0e0fb20ad7641b18cc5a008e6a3ad1c980fa4bdd5f45f792293355",
+  "repair": "Initial legacy preload wrapper acquired leases and eagerly expired TTL0 entries, breaking4 ordinary tests; explicit retention mode restores legacy no-lease behavior",
+  "limitations": [
+    "No measured whole-viewer speedup",
+    "Not complete scheduler/collection qualification"
+  ]
+}

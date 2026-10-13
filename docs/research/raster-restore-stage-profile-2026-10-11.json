@@ -1,0 +1,198 @@
+{
+  "date": "2026-10-11",
+  "scope": "Release CPU profile of prepared-raster swap restore; no GPU in this isolated control",
+  "fixture": {
+    "width": 4000,
+    "height": 3000,
+    "kind": "authored finite RGBA32F",
+    "pixel_bytes": 192000000,
+    "payload_bytes": 192000064
+  },
+  "warmup": 3,
+  "measured": 15,
+  "quantiles": {
+    "total_ms": {
+      "p50_ms": 218.894958,
+      "p95_ms": 300.319375
+    },
+    "stream_io_hash_ms": {
+      "p50_ms": 216.144085,
+      "p95_ms": 297.349321
+    },
+    "non_stream_ms": {
+      "p50_ms": 2.627886,
+      "p95_ms": 3.156168
+    },
+    "zero_init_ms": {
+      "p50_ms": 1.765625,
+      "p95_ms": 2.107416
+    },
+    "hash_only_ms": {
+      "p50_ms": 189.884666,
+      "p95_ms": 216.695541
+    }
+  },
+  "rows": [
+    {
+      "iteration": "0",
+      "total_ms": "221.347625",
+      "stream_io_hash_ms": "218.759981",
+      "non_stream_ms": "2.587644",
+      "zero_init_ms": "1.915209",
+      "hash_only_ms": "188.981875",
+      "read_calls": "14650",
+      "bytes": "192000064"
+    },
+    {
+      "iteration": "1",
+      "total_ms": "217.284542",
+      "stream_io_hash_ms": "214.680410",
+      "non_stream_ms": "2.604132",
+      "zero_init_ms": "1.965250",
+      "hash_only_ms": "197.019708",
+      "read_calls": "14650",
+      "bytes": "192000064"
+    },
+    {
+      "iteration": "2",
+      "total_ms": "218.347334",
+      "stream_io_hash_ms": "215.758438",
+      "non_stream_ms": "2.588896",
+      "zero_init_ms": "1.533000",
+      "hash_only_ms": "157.697208",
+      "read_calls": "14650",
+      "bytes": "192000064"
+    },
+    {
+      "iteration": "3",
+      "total_ms": "211.531750",
+      "stream_io_hash_ms": "209.228708",
+      "non_stream_ms": "2.303042",
+      "zero_init_ms": "1.780459",
+      "hash_only_ms": "190.539625",
+      "read_calls": "14650",
+      "bytes": "192000064"
+    },
+    {
+      "iteration": "4",
+      "total_ms": "222.098708",
+      "stream_io_hash_ms": "218.942540",
+      "non_stream_ms": "3.156168",
+      "zero_init_ms": "1.737791",
+      "hash_only_ms": "191.300792",
+      "read_calls": "14650",
+      "bytes": "192000064"
+    },
+    {
+      "iteration": "5",
+      "total_ms": "224.853416",
+      "stream_io_hash_ms": "222.210924",
+      "non_stream_ms": "2.642492",
+      "zero_init_ms": "1.737166",
+      "hash_only_ms": "196.894291",
+      "read_calls": "14650",
+      "bytes": "192000064"
+    },
+    {
+      "iteration": "6",
+      "total_ms": "300.319375",
+      "stream_io_hash_ms": "297.349321",
+      "non_stream_ms": "2.970054",
+      "zero_init_ms": "1.741208",
+      "hash_only_ms": "187.453500",
+      "read_calls": "14650",
+      "bytes": "192000064"
+    },
+    {
+      "iteration": "7",
+      "total_ms": "209.855000",
+      "stream_io_hash_ms": "207.299979",
+      "non_stream_ms": "2.555021",
+      "zero_init_ms": "1.784125",
+      "hash_only_ms": "171.683292",
+      "read_calls": "14650",
+      "bytes": "192000064"
+    },
+    {
+      "iteration": "8",
+      "total_ms": "214.771250",
+      "stream_io_hash_ms": "212.143364",
+      "non_stream_ms": "2.627886",
+      "zero_init_ms": "1.907209",
+      "hash_only_ms": "198.408291",
+      "read_calls": "14650",
+      "bytes": "192000064"
+    },
+    {
+      "iteration": "9",
+      "total_ms": "220.720667",
+      "stream_io_hash_ms": "218.134226",
+      "non_stream_ms": "2.586441",
+      "zero_init_ms": "1.763667",
+      "hash_only_ms": "189.884666",
+      "read_calls": "14650",
+      "bytes": "192000064"
+    },
+    {
+      "iteration": "10",
+      "total_ms": "218.894958",
+      "stream_io_hash_ms": "216.144085",
+      "non_stream_ms": "2.750873",
+      "zero_init_ms": "1.772958",
+      "hash_only_ms": "194.099042",
+      "read_calls": "14650",
+      "bytes": "192000064"
+    },
+    {
+      "iteration": "11",
+      "total_ms": "213.814875",
+      "stream_io_hash_ms": "211.093206",
+      "non_stream_ms": "2.721669",
+      "zero_init_ms": "1.740542",
+      "hash_only_ms": "187.253666",
+      "read_calls": "14650",
+      "bytes": "192000064"
+    },
+    {
+      "iteration": "12",
+      "total_ms": "222.269833",
+      "stream_io_hash_ms": "219.638742",
+      "non_stream_ms": "2.631091",
+      "zero_init_ms": "1.744083",
+      "hash_only_ms": "188.093584",
+      "read_calls": "14650",
+      "bytes": "192000064"
+    },
+    {
+      "iteration": "13",
+      "total_ms": "207.626334",
+      "stream_io_hash_ms": "205.013659",
+      "non_stream_ms": "2.612675",
+      "zero_init_ms": "1.765625",
+      "hash_only_ms": "188.626958",
+      "read_calls": "14650",
+      "bytes": "192000064"
+    },
+    {
+      "iteration": "14",
+      "total_ms": "235.782917",
+      "stream_io_hash_ms": "233.048768",
+      "non_stream_ms": "2.734149",
+      "zero_init_ms": "2.107416",
+      "hash_only_ms": "216.695541",
+      "read_calls": "14650",
+      "bytes": "192000064"
+    }
+  ],
+  "csv": "/tmp/rrrah-raster-restore-profile-20261011.csv",
+  "csv_sha256": "a2bac1ea0f740b6e0ab2f884da3c7e0f20bac5ddcbfe7bab0afd5f7dffe64d11",
+  "verification": "18 full-value and metadata comparisons passed outside timing; final managed=0; peak=192000000",
+  "finding": "Stream read/hash dominates restore; independent 64 KiB-chunk BLAKE3 control is much larger than zero-init control. Controls are separate operations and must not be subtracted as exact stage attribution.",
+  "limitations": [
+    "Warm local disk/OS cache",
+    "TimedRead overhead included; non_stream is total minus timed Read calls, not pure allocation",
+    "Hash-only excludes 64-byte payload header",
+    "Source/reference and process memory outside managed restore budget",
+    "One synthetic 192 MB payload; no physical slow-disk or OS-wide memory-pressure claim"
+  ]
+}

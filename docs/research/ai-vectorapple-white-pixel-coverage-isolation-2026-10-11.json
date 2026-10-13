@@ -1,0 +1,42 @@
+{
+  "scope": "VectorApple original page0 pixel78,144 only; source geometry not independently adjudicated",
+  "native_rgb8": [
+    253,
+    237,
+    213
+  ],
+  "poppler_rgb8": [
+    255,
+    255,
+    255
+  ],
+  "poppler_four_neighbours_white": true,
+  "trace": [
+    "NATIVE_PIXEL_SOLID depth=1 event=4 coverage=255 mask=1",
+    "NATIVE_PIXEL_RASTER depth=1 event=11 point=(63.103233895304584, 185.00365840591775) dimensions=(395, 367) interpolate=false components=[0.0, 0.0, 0.0, 0.929411768913269] alpha=1 coverage=255 mask=1 alpha_plane=None",
+    "NATIVE_PIXEL_RASTER depth=1 event=11 point=(63.103233895304584, 185.00365840591775) dimensions=(395, 367) interpolate=false components=[0.0, 0.0, 0.0, 0.929411768913269] alpha=1 coverage=255 mask=1 alpha_plane=None",
+    "NATIVE_PIXEL_SOLID depth=1 event=4 coverage=255 mask=1",
+    "NATIVE_PIXEL_SHADING depth=0 event=2676 coverage=108 sample=true mask=1",
+    "NATIVE_PIXEL_SHADING_SAMPLE depth=0 event=2676 components=[0.016602673, 0.13868213, 0.3871869, 0.0] opacity=1 model=Some(Cmyk)"
+  ],
+  "selected_paint": {
+    "depth": 0,
+    "event": 2676,
+    "coverage_u8": 108,
+    "sample_present": true,
+    "mask": 1,
+    "opacity": 1,
+    "model": "Cmyk",
+    "components": [
+      0.016602673,
+      0.13868213,
+      0.3871869,
+      0
+    ]
+  },
+  "conclusion": "A partially covered root shading paints this pixel in native replay. A display-profile change alone cannot explain missing coverage in Poppler. Need original path/clip geometric oracle before choosing renderer correction. Nested mask raster trace is separate and not identified as causal.",
+  "all_six_outputs_byte_exact": true,
+  "all_pages_completed_and_final_credit_zero": true,
+  "regression_result": "test result: ok. 135 passed; 0 failed; 10 ignored; 0 measured; 1 filtered out; finished in 4.54s",
+  "change": "Trace-only raster sample geometry, components, alpha, coverage, mask and alpha-plane metadata"
+}

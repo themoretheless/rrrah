@@ -1,0 +1,73 @@
+{
+  "status": "complete_bounded_frozen_joint_model_tests",
+  "producer_pid": 59785,
+  "source_manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-joint-model-snapshot-20261011.json",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-joint-model-snapshot-20261011.json": "da813a37ba2ca427ca976b245571d0fa72bedaaad48e17e77b0031ad00e5b8d3",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/qualify-dedup-joint-model-legacy-20261011.py": "2406359e49e60648073f65c7cdc103470e820fd2d69ff5223cf67b86a9d98489",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-model-legacy-qualified-20261011/build.jsonl": "8af7f90866e957b3c7f24ec764087c713571bdb07cea7d01187b03c1732cd92e",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-model-legacy-qualified-20261011/build.log": "63beef1759f202a99b69bb462e6a0948285fc1e76fc295b5d35f8525c126dd46"
+  },
+  "build_command": [
+    "cargo",
+    "test",
+    "--manifest-path",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-model-snapshot-20261011/Cargo.toml",
+    "-p",
+    "rrrah-dedup",
+    "--no-default-features",
+    "--features",
+    "decode",
+    "--test",
+    "model_tiles",
+    "--test",
+    "model_projected_compare",
+    "--test",
+    "model_projected_tiles",
+    "--locked",
+    "--offline",
+    "--no-run",
+    "--message-format=json",
+    "--config",
+    "profile.dev.package.rrrah-dedup.opt-level=3",
+    "--target-dir",
+    "/Users/themoretheless/.codex/tmp/rrrah-opposite-native-snapshot-20261011/target"
+  ],
+  "results": [
+    {
+      "suite": "model_tiles",
+      "tests": 13,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-joint-model-legacy-qualified-20261011/model_tiles",
+      "binary_sha256": "b5b745230c517c7076d8977f6dc6498ffe3b48a44edb260782c05f349cc3de70",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-joint-model-legacy-qualified-20261011/model_tiles.log",
+      "log_sha256": "6f117a57ab000ebd3f998ad4f2b0bca59d9f3d0279500411b6c07d212520a604"
+    },
+    {
+      "suite": "model_projected_compare",
+      "tests": 8,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-joint-model-legacy-qualified-20261011/model_projected_compare",
+      "binary_sha256": "a2120023d2e989ca15e427d4fe75817bce5e76249cdb3b7bb6716c2a5fc2d1f6",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-joint-model-legacy-qualified-20261011/model_projected_compare.log",
+      "log_sha256": "d0ad876029296dce38c11d5d1d72238d955537911e7acd584faf86b0fcb763a2"
+    },
+    {
+      "suite": "model_projected_tiles",
+      "tests": 8,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-joint-model-legacy-qualified-20261011/model_projected_tiles",
+      "binary_sha256": "0f85e23948d376b647ff67cbd1920190ea0c3039ba009adc174cccbf14643b93",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-joint-model-legacy-qualified-20261011/model_projected_tiles.log",
+      "log_sha256": "dcb3916d5b20cb4b37b4de38df4bc6f3fb16a7ed730625754ef896c094ebb1ab"
+    }
+  ],
+  "scope": "Frozen compatible four-crate source and lock, new joint primitive plus legacy/pair/collection tests. Source coherent before/after; root concurrent HDR edits preserved outside this gate. Not full workspace/platform/corpus/RSS qualification.",
+  "build_pid": 59788,
+  "tests": 29,
+  "owned_root_matches": {
+    "crates/rrrah-dedup/src/local_scan.rs": true,
+    "crates/rrrah-dedup/src/geometry.rs": true,
+    "crates/rrrah-dedup/src/anchor_rank_file.rs": true,
+    "crates/rrrah-dedup/src/search_portfolio.rs": true,
+    "crates/rrrah-dedup/src/portfolio_collection.rs": true,
+    "crates/rrrah-dedup/src/model_loftr.rs": false
+  }
+}

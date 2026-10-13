@@ -1,0 +1,69 @@
+{
+  "date": "2026-10-11",
+  "scope": "Sustained production raster parallel swap, managed pressure, cancellation/retry and actual Metal SDR/HDR readback",
+  "adapter": "Metal Apple M4 Max",
+  "fixture": {
+    "kind": "original authored finite linear-sRGB RGBA32F collection",
+    "count": 8,
+    "width": 4000,
+    "height": 3000,
+    "payload_pixel_bytes": 192000000,
+    "contains": [
+      "negative values",
+      "signed zero",
+      "values above SDR white",
+      "varying alpha"
+    ]
+  },
+  "limits": {
+    "CPU_root_bytes": 576000000,
+    "queue_bytes": 192000000,
+    "queue_count": 1,
+    "restored_pixels_cap_bytes": 192000000,
+    "RAM_entries": 1,
+    "disk_bytes": 1537048576,
+    "global_hash_scratch_bytes": 4194304,
+    "global_hash_threads_max": 4
+  },
+  "results": {
+    "requested_seconds": 180,
+    "measured_loop_seconds": 180.259,
+    "whole_test_seconds": 209.25,
+    "successful_accelerated_restores": 359,
+    "cancel_after_scratch_admission": 359,
+    "full_root_pressure_refusals": 359,
+    "preallocation_cancellations": 359,
+    "successful_reads": 359,
+    "writes": 8,
+    "redundant_writes": 0,
+    "full_float_component_bit_checks": 17232000000,
+    "exact_SDR_frames": {
+      "count": 359,
+      "width": 4000,
+      "height": 3000
+    },
+    "exact_HDR_binary16_frames": {
+      "count": 359,
+      "width": 63,
+      "height": 65
+    },
+    "final_root_bytes": 0,
+    "final_queue_bytes": 0,
+    "errors": 0,
+    "dropped": 0
+  },
+  "command": "RRRAH_GPU_BACKEND=metal RRRAH_METAL_COLLECTION_SECONDS=180 cargo test -p rrrah --test ttl_swap_metal long_lived_large_collection_cache_preserves_swap_and_metal_frames --target-dir /tmp/rrrah-required-corpus-target -- --ignored --exact --nocapture",
+  "log": "/tmp/rrrah-parallel-swap-sustained-metal-20261011.log",
+  "log_sha256": "fbb4c08bc54b134793f1d82f39c70424e2d9810407c0c6b8e8191679f372f25e",
+  "test_source": "crates/rrrah-app/tests/ttl_swap_metal.rs",
+  "test_source_sha256": "c2ee1364b813b8627d95971062c546dc3128013d0c0ae3bf907faf311b198eae",
+  "limitations": [
+    "Managed pressure is reservation-based, not physical OS-wide RAM exhaustion",
+    "Warm local disk/OS cache, not physical slow-disk qualification",
+    "Cancellation occurs after scratch admission, before first read of the parallel hash batch; partial-batch physical reads are covered separately by swap integration regression",
+    "SDR full-frame and HDR 63x65 pre/post-spill GPU references establish identity, not independent color accuracy or physical display output",
+    "Reference CPU vectors, expected frame readbacks, GPU allocations and thread stacks outside the CPU root budget",
+    "Eight original synthetic frames, not a camera/100-format corpus",
+    "No universal latency or throughput claim from this integrity stress run; NVIDIA deferred"
+  ]
+}

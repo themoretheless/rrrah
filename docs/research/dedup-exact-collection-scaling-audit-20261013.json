@@ -1,0 +1,69 @@
+{
+  "status": "verified_manual_scaling_probe8_32_64_three_repeats",
+  "source": "/Users/themoretheless/.codex/tmp/rrrah-mesh-refine-error-contract-20261013",
+  "source_integrity_audit": "docs/research/dedup-full-remaining-after-mesh-refine-audit-20261013.json",
+  "executable": {
+    "path": "/Users/themoretheless/.codex/tmp/rrrah-full-remaining-qualified-20261013/projected_portfolio",
+    "sha256": "a4f5a4f827d82314e71b82475010e6bd49b27af060f2c4663ccdd551592d810c"
+  },
+  "log": "/Users/themoretheless/.codex/tmp/rrrah-exact-collection-scaling-20261013.log",
+  "log_sha256": "30ed3f4a61fdfbe8ece05c2889f1b098c4c61055562d7a169ca91a52bcc5dd76",
+  "passed": 1,
+  "failed": 0,
+  "ignored": 0,
+  "rows": [
+    {
+      "files": 8,
+      "families": 1,
+      "pairs": 28,
+      "exact_pairs": 28,
+      "file_bytes": 1048576,
+      "analytical_source_bytes": 209715200,
+      "elapsed_ns": [
+        126187125,
+        118931459,
+        112934709
+      ],
+      "managed_peak": 13120,
+      "median_ms": 118.931459
+    },
+    {
+      "files": 32,
+      "families": 1,
+      "pairs": 496,
+      "exact_pairs": 496,
+      "file_bytes": 1048576,
+      "analytical_source_bytes": 3254779904,
+      "elapsed_ns": [
+        1543461541,
+        1613817417,
+        1657408459
+      ],
+      "managed_peak": 187648,
+      "median_ms": 1613.817417
+    },
+    {
+      "files": 64,
+      "families": 1,
+      "pairs": 2016,
+      "exact_pairs": 2016,
+      "file_bytes": 1048576,
+      "analytical_source_bytes": 12952010752,
+      "elapsed_ns": [
+        8741081958,
+        7763802125,
+        8714122583
+      ],
+      "managed_peak": 735744,
+      "median_ms": 8714.122583
+    }
+  ],
+  "scope": "Identical1MiB files, one family, exact pair portfolio path, three repeats; assertions require every pair ExactBytes, no inference and managed used0 after each report drop",
+  "limits": [
+    "Concurrent unrelated builds and native test campaign; no isolated performance comparison",
+    "Analytical bytes are code-path accounting, not measured device IO",
+    "Frozen old snapshot, not latest combined source",
+    "Peak refers to MemoryBudget, not RSS"
+  ],
+  "finding": "Full pair confirmation scales quadratically with repeated payload reads:64MiB of unique file storage leads to12.95GB analytical source reads per repetition; performance remains an open requirement"
+}

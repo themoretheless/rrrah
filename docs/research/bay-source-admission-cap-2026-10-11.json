@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-11",
+  "scope": "Explicit-layout native BAY source memory admission",
+  "change": "read_bay_sensor_with_budget uses read_managed_capped with exact selected-layout source limit before allocation",
+  "layouts": {
+    "QV-2000UX": 1976352,
+    "QV-3000EX": 3217760,
+    "QV-5700": 6218368
+  },
+  "checks": {
+    "focused_tests_passed": 4,
+    "focused_tests_failed": 0,
+    "oversized_by_one_all_layouts": "InputTooLarge before allocation even with one-byte root budget; peak and final usage zero",
+    "existing_sensor_tests": "8-bit values, all 1024 ten-bit values, extra storage columns, row padding, cancellation and ownership remain passing",
+    "full_decoder_gate": {
+      "passed": 989,
+      "failed": 0,
+      "ignored": 67
+    }
+  },
+  "log": "/tmp/rrrah-bay-source-cap-tests-20261011.log",
+  "log_sha256": "e698f1ee19e8b5480a588e060ddc042a310d31bc3790d33e51b15c8a416f04e6",
+  "limitations": [
+    "Authored storage fixtures; no camera-produced BAY input",
+    "No camera identification, CFA/color/WB inference or normal-viewer qualification",
+    "No new Metal or physical HDR qualification"
+  ],
+  "full_gate_log": "/tmp/rrrah-bay-source-cap-all-tests-20261011.log",
+  "full_gate_log_sha256": "9746e065143252e677e252d20b882b8e0ab9e860735a4657877f790992526a5d"
+}

@@ -1,0 +1,53 @@
+{
+  "status": "complete1633line_dedupe_source_twenty_original_tests_and_one_public_plan_control",
+  "commit": "a74f90d293e05856d19a4c0ac2b29b46ef16cf23",
+  "fully_read_additional_files": {
+    "fclones/src/dedupe.rs": 1633
+  },
+  "original_tests_passed": 20,
+  "public_plan_controls_passed": 1,
+  "tests": [
+    "dedupe::test::test_hard_link_command_replaces_file_with_a_link",
+    "dedupe::test::test_hard_link_merges_subgroups_of_hard_links",
+    "dedupe::test::test_log_dedupe_script",
+    "dedupe::test::test_move_command_moves_file_by_copy",
+    "dedupe::test::test_move_command_moves_file_by_rename",
+    "dedupe::test::test_move_fails_if_target_exists",
+    "dedupe::test::test_partition_bails_out_if_file_modified_too_late",
+    "dedupe::test::test_partition_respects_creation_time_priority",
+    "dedupe::test::test_partition_respects_drop_patterns",
+    "dedupe::test::test_partition_respects_isolated_roots",
+    "dedupe::test::test_partition_respects_keep_patterns",
+    "dedupe::test::test_partition_respects_links",
+    "dedupe::test::test_partition_respects_modification_time_priority",
+    "dedupe::test::test_partition_selects_files_for_removal",
+    "dedupe::test::test_partition_skips_file_with_different_len",
+    "dedupe::test::test_remove_command_removes_file",
+    "dedupe::test::test_remove_removes_subgroups_of_soft_links",
+    "dedupe::test::test_run_dedupe_script",
+    "dedupe::test::test_soft_link_command_replaces_file_with_a_link",
+    "dedupe::test::test_temp_file_name_generation",
+    "controls::generated_removal_plan_trusts_report_hash_without_content_recheck"
+  ],
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/review-dedup-fclones-dedupe-20261012.py": "401920737d2333dd23242938eec6bba4e46fd2d51a97600ea8106a8eb226a820",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-dedupe-plan-controls-tests-20261012.log": "f451b26b8eb64da1b587a7d9fe6925f1a8cc9b2647fa093b1d974c7c5c15f3b3",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-dedupe-tests-20261012.log": "242499981c12fcd1569a70497965394c2d5ff3435ef1912288e977c77e5e38ae",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-dedupe-plan-controls-20261012/Cargo.toml": "98acdbe34ec1e87f0b2ea6b27f63460f915a679a37f244678d53b75f44cdac47",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-dedupe-plan-controls-20261012/Cargo.lock": "315270cb1105462e1c9ece6f489cad1c387c30539e88c62b76e6974674644c49",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-dedupe-plan-controls-20261012/src/lib.rs": "567b556776b7512ae580bfd921dede940b29cd125bda22ec36e82f671825dc60",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-full-source-20261012/fclones/src/dedupe.rs": "040f78e35e25f559fbdc68ddc9c76d78385b8f9d7d225edbc4a25de915b2f135",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-full-source-20261012/fclones/src/lock.rs": "5fd71f8b4cb934b6052768024aad35f0d657744e940c92fb910674562ab42c93",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-upstream-executables-20261012/lib": "738c143872942a290b4df90b62b23527f12dfe6c5d6822069a4ad394ade7b09e"
+  },
+  "observations": [
+    "Public dedupe+log_script plans removal of one unequal same-size file when supplied a synthetic equal report hash and default API config. Both file contents verified unchanged; no generated commands executed. CLI normally supplies report timestamp, so this control is scoped to public API default trust boundary.",
+    "Partition checks regular-file status, size and optional modification cutoff, but does not rehash or byte-compare before producing commands.",
+    "FsCommand execute assigns maybe_lock result to underscore; returned guard is not retained through the following operation. Move additionally discards lock acquisition error. Source inference, no concurrent lock counterexample.",
+    "Move checks target existence before an overwriting rename/copy; this is not atomic no-clobber. Source only.",
+    "safe_remove uses a random path without exclusive creation; rollback/cleanup failures log warnings. Source only.",
+    "run_script logs individual failures and continues; output contains successes rather than an all-or-nothing transaction.",
+    "log_script uses unbounded channel and reorder queue; no hard memory bound established."
+  ],
+  "scope": "Full1633-line source read. Twenty original upstream tests executed only in new isolated temporary fixture working directory. One public dry-plan counterexample, no generated operation execution. No user source files modified, implementation adopted, physical concurrency/Windows/full42tree/full500/resource-cap qualification."
+}

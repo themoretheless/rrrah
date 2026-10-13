@@ -1,0 +1,30 @@
+   Compiling hayro-interpret v0.7.0 (/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret)
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+   Compiling hayro v0.7.1 (/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+    Finished `test` profile [optimized + debuginfo] target(s) in 22.90s
+     Running tests/model_tiles.rs (target/debug/deps/model_tiles-f6f481734613279e)
+
+running 5 tests
+test all_eight_work_caps_overflow_invalid_policy_and_storage_refuse_before_io ... ok
+test whole_support_stops_at_one_and_late_crop_support_stops_only_after_original_pixels ... ok
+test complete_fixed_order_visits_all_twenty_five_regions_and_shared_credit_follows_last_owner ... ok
+test late_provider_failures_source_mutations_and_both_generations_discard_all_attempts ... ok
+test final_caller_checkpoint_mutation_cancellation_and_request_change_never_publish ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.34s
+

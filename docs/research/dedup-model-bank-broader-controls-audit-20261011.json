@@ -1,0 +1,68 @@
+{
+  "status": "verified_two_real_cpu_bank_controls",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-model-bank-native-audit-20261011.json": "cdafb043a7c5ebc02cb0a92fadf52060d87b4acc3a923466813256634483f45d",
+    "/Users/themoretheless/.codex/tmp/rrrah-model-bank-native-qualified-20261011/model_banks_files": "658699bb454acdccbe9bbb929f6922b51c70712d9837529956401e8b89a5370e",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-model-bank-broader-controls-qualified-20261011/joint_model_tiles_files": "658699bb454acdccbe9bbb929f6922b51c70712d9837529956401e8b89a5370e",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-publisher-positives-qualified-20261011/audits/ordering-prefix-0458.json": "a790769341341700f9abba71a364a888851021be78ee0417badbdc0a89387707",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors": "59e55bf0ecd047db9c513672d121a3ea677529ad448bdc3a359e92862c74ddd7",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-model-bank-broader-controls-20261011.py": "eda90190502cb9b55994495e62a4db57ce0dd3a78bb28c46a53dbfb282328b83",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200302.jpg": "bc4de3728d82839559134cc8155f87bdf7f8aeaca32b66bdea11f5a618420242",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200300.jpg": "0573729209c9ce6c109ea1175079960165b915dd5579121f0e15653d56f755d0",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/203502.jpg": "bf1d351e0a8259716fe65e0eb3c37a55e25bfa3d1d06042c8a50f8935b31dd1c",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/203500.jpg": "e22cba724438643ac01eb2516eab2ab466d51544218f9096c2a99fbbf07c4aac",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-model-bank-broader-controls-qualified-20261011/200300.log": "490fb1082e1465d7ce344c3f403217b64fcfd5feeb86a230218b2152ed31c1d0",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-model-bank-broader-controls-qualified-20261011/203500.log": "9ad1c632e0bdda6856ce6da32a6c8ea0e87b27453ba2497b87fd9eef6e98451c",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-joint-model-bank-broader-controls-20261011.json": "02fdb0b8c4f361bb2fefead106a6f7661d134b7cbf030da2fba1da677639afcd",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-model-bank-broader-controls-20261011.py": "c7241c11998e783bdaa2bd5223f375343b7f80bc2edc394ff8f621418ae89dbf"
+  },
+  "results": [
+    {
+      "baseline_index": 7,
+      "group_id": 200300,
+      "supported": true,
+      "selected_points": 569,
+      "joint_witnesses": 17,
+      "hypothesis_bank": 12,
+      "pixel_counts": [
+        [
+          425,
+          425,
+          2294,
+          2226
+        ],
+        [
+          400,
+          400,
+          2524,
+          2466
+        ]
+      ],
+      "elapsed_seconds": 84.705786458
+    },
+    {
+      "baseline_index": 67,
+      "group_id": 203500,
+      "supported": null,
+      "selected_points": 989,
+      "joint_witnesses": 18,
+      "hypothesis_bank": 15,
+      "pixel_counts": [
+        [
+          450,
+          450,
+          167,
+          167
+        ],
+        [
+          450,
+          359,
+          391,
+          391
+        ]
+      ],
+      "elapsed_seconds": 62.41883470900001
+    }
+  ],
+  "scope": "Frozen single-largest-candidate CPU path at filter12/window2,1m.200302 retains support; reverse203500 still lacks1000 informative pairs. No semantic negative or qualification of later pixel-qualified-candidate implementation."
+}

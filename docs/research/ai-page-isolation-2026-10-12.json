@@ -1,0 +1,176 @@
+{
+  "scope": "Test-only direct PDF page isolated before output RGB conversion/media background",
+  "specification": "PDF 1.7 section 7.3.6 pages 542-543",
+  "spec_url": "https://opensource.adobe.com/dc-acrobat-sdk-docs/pdfstandards/pdfreference1.7old.pdf",
+  "regressions": {
+    "passed": 137,
+    "ignored": 10,
+    "failed": 0
+  },
+  "real_ai_test": {
+    "passed": 1,
+    "exit_code": 0
+  },
+  "pages": [
+    {
+      "fixture": "VectorApple.ai",
+      "page": 0,
+      "rgba_sha256": "71f3382399bc1e01aa76d78bb266b1d3ad4e74a38d7b8e45783ea828206827c6",
+      "comparisons": {
+        "default": {
+          "different_pixels": 33068,
+          "max_error": 218,
+          "mae": 3.822362675453997,
+          "reference_sha256": "3a95a14c9c661ac862096f1ba8a16d923baacb25d7ab6c317245873117007f30"
+        },
+        "same_profile": {
+          "different_pixels": 28008,
+          "max_error": 216,
+          "mae": 1.7074071072936643,
+          "reference_sha256": "8e524275d04386895c04522d926535647f504e06f1b7aafd9718809dfef796f8"
+        }
+      },
+      "probe_78_144": {
+        "unassociated_rgba": [
+          250,
+          218,
+          165,
+          108
+        ],
+        "white_rgb": [
+          253,
+          239,
+          217
+        ],
+        "native_cmyk_alpha": [
+          0.01660267263650894,
+          0.13868212699890126,
+          0.3871869146823883,
+          0.0,
+          0.4235294117647059
+        ]
+      }
+    },
+    {
+      "fixture": "one.ai",
+      "page": 0,
+      "rgba_sha256": "dfc95264ce83ad1b3384e87edb2e000991da9018224916dc83709c926138dbf7",
+      "comparisons": {
+        "default": {
+          "different_pixels": 2494,
+          "max_error": 58,
+          "mae": 0.03262071437286481,
+          "reference_sha256": "ae6af5f491c3df0ff08f60629a2c195481e253b0194783677a5423106104e066"
+        }
+      }
+    },
+    {
+      "fixture": "one.ai",
+      "page": 1,
+      "rgba_sha256": "155a1e78cb7d2dd3d3aaf2832e7591b61f9ec0cbf5b97bef36a7787a5907f38f",
+      "comparisons": {
+        "default": {
+          "different_pixels": 0,
+          "max_error": 0,
+          "mae": 0.0,
+          "reference_sha256": "bfd25b3d66533ab283f274b5f31a8462e296d99d6744ad8df8e2ef708c822822"
+        }
+      }
+    }
+  ],
+  "diagnostic_pages": [
+    {
+      "fixture": "VectorApple.ai",
+      "page": 0,
+      "width": 301,
+      "height": 246,
+      "diagnostic_timeout_seconds": 180,
+      "peak_admitted_bytes": 232664374,
+      "final_admitted_bytes": 0,
+      "status": "native_diagnostic",
+      "native_completed": true,
+      "capture_failed": false,
+      "capture_ms": 7395.006332999999,
+      "native_replay_ms": 72242.801958,
+      "deadline_expired": false,
+      "events": 2755,
+      "native_paints": 463,
+      "raster_events": 3,
+      "raster_source_models": [
+        "event=3,model=None",
+        "event=1218,model=Some(Cmyk)",
+        "event=2298,model=Some(Cmyk)"
+      ],
+      "native_raster_components": [
+        "event=3,sample_count=Some(29488),refusal=None",
+        "event=1218,sample_count=Some(298224),refusal=None",
+        "event=2298,sample_count=Some(266084),refusal=None"
+      ],
+      "shading_events": 13,
+      "page_model": "Cmyk"
+    },
+    {
+      "fixture": "one.ai",
+      "page": 0,
+      "width": 1366,
+      "height": 768,
+      "diagnostic_timeout_seconds": 180,
+      "peak_admitted_bytes": 169698840,
+      "final_admitted_bytes": 0,
+      "status": "native_diagnostic",
+      "native_completed": true,
+      "capture_failed": false,
+      "capture_ms": 6.731167,
+      "native_replay_ms": 49223.868125,
+      "deadline_expired": false,
+      "events": 8,
+      "native_paints": 2,
+      "raster_events": 0,
+      "raster_source_models": [],
+      "native_raster_components": [],
+      "shading_events": 0,
+      "page_model": "Rgb"
+    },
+    {
+      "fixture": "one.ai",
+      "page": 1,
+      "width": 177,
+      "height": 175,
+      "diagnostic_timeout_seconds": 180,
+      "peak_admitted_bytes": 4957320,
+      "final_admitted_bytes": 0,
+      "status": "native_diagnostic",
+      "native_completed": true,
+      "capture_failed": false,
+      "capture_ms": 0.07166700000000001,
+      "native_replay_ms": 1363.0525,
+      "deadline_expired": false,
+      "events": 1,
+      "native_paints": 0,
+      "raster_events": 0,
+      "raster_source_models": [],
+      "native_raster_components": [],
+      "shading_events": 0,
+      "page_model": "Rgb"
+    }
+  ],
+  "output_directory": "tests/fixtures/data/metal-recovery/ai-native-page-isolation-20261012",
+  "limitations": [
+    "Test-only compositor, production AI remains pending",
+    "Strict mismatches retained; no tolerance relaxation",
+    "No physical HDR presentation qualification"
+  ],
+  "sha256": {
+    "vendor/hayro/src/knockout_interpreter.rs": "7f0d28b7303f594de4ff40e4fd622754cfa157eb2063b32df90922ba6796a576",
+    "docs/research/ai-page-isolation-2026-10-12/replay-report.json": "0eb76baaa140eadcb877c7dfe383f066b82f5ab1e40848d55f6caee6ed94f59c",
+    "docs/research/ai-page-isolation-2026-10-12/regressions.log": "24a90108d00eba6e8492cfc45cae39c8478debb5a862ee92493ea525b2093e52",
+    "docs/research/ai-page-isolation-2026-10-12/replay.log": "ebb41aea8b6081497c957b4cbda34982974dd55c61df1522f0d84d167976104b",
+    "tests/fixtures/data/metal-recovery/ai-native-page-isolation-20261012/VectorApple.ai-page-0.native.components.f64le": "57eaac251db4c57c30bdd2538d8028c1aa004280050005e125db32b999699792",
+    "tests/fixtures/data/metal-recovery/ai-native-page-isolation-20261012/report.json": "0eb76baaa140eadcb877c7dfe383f066b82f5ab1e40848d55f6caee6ed94f59c",
+    "tests/fixtures/data/metal-recovery/ai-native-page-isolation-20261012/VectorApple.ai-page-0.native.rgba": "71f3382399bc1e01aa76d78bb266b1d3ad4e74a38d7b8e45783ea828206827c6",
+    "tests/fixtures/data/metal-recovery/ai-native-page-isolation-20261012/one.ai-page-1.native.components.f64le": "eae5d4d36df846273525d3dee129563dd8634bde4e5d3e6b1ca3e243a7b762ec",
+    "tests/fixtures/data/metal-recovery/ai-native-page-isolation-20261012/one.ai-page-0.native.rgba": "dfc95264ce83ad1b3384e87edb2e000991da9018224916dc83709c926138dbf7",
+    "tests/fixtures/data/metal-recovery/ai-native-page-isolation-20261012/one.ai-page-1.native.rgba": "155a1e78cb7d2dd3d3aaf2832e7591b61f9ec0cbf5b97bef36a7787a5907f38f",
+    "tests/fixtures/data/metal-recovery/ai-native-page-isolation-20261012/one.ai-page-0.native.components.f64le": "015ee58f3840722c06cdd7b4c884caa9858239905fa440672e93d8d00542d9db"
+  }
+}

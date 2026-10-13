@@ -1,0 +1,30 @@
+{
+  "status": "verified_bounded_block_mask_memory_reduction",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-loftr-block-masks-bench-reshape-20261011.json": "edc50b6d91067b396a413122190baa9b7ffde267b04ab94790d543043dfa769d",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-loftr-block-masks-bench-reshape-harness-20261011.json": "c2c66e92d4a2949329cabb0521a894a6acf55b67c9467aeac813163f887452fa",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-loftr-block-masks-tests-audit-20261011.json": "3f64f309ea7e1652e8fb57148e7891fead1949197cf445f8d57e81b5ff00b6c0",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-loftr-block-masks-20261011.py": "0c54ec5dcfa73f3a7d1c1f3aa2b86eb8ccd650aef86119e3bd7c2e681ba51649",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-block-masks-bench-reshape-qualified-20261011/0-dense.log": "9ddc22aa8189968fd65c2960e5ae0b242bf8506d042a5a48d3f67667e20d5091",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-block-masks-bench-reshape-qualified-20261011/0-blocked.log": "a58328ae6e79d2fe9801fe85a5afcfb08bce7f3a195dd1f285b9a3f9ef214534",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-block-masks-bench-reshape-qualified-20261011/1-dense.log": "b38efa4fbcb7aefe202e0c4a2ee625d7eeac784e81462c2bb3f73d5c8195a2c4",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-block-masks-bench-reshape-qualified-20261011/1-blocked.log": "f4efc71944a924ef4f3da4616b0c35af1a8454a03c3094351bfbb18d7361cc5c",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-block-masks-bench-reshape-qualified-20261011/2-dense.log": "c0281cf6261d89ab17a2ad8576dc74e8c1fc7a5f2641dc41c3d0a8c43bb46b9d",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-block-masks-bench-reshape-qualified-20261011/2-blocked.log": "ade72ea395924bdffe49d0f68d3b6f73cd5b2a4dc78d390ac90aaf0c432cb30b"
+  },
+  "tests": 48,
+  "matches": 2589,
+  "measurements": {
+    "dense": {
+      "median_rss_bytes": 432570368,
+      "median_elapsed_seconds": 1.0677397499999994
+    },
+    "blocked": {
+      "median_rss_bytes": 287899648,
+      "median_elapsed_seconds": 0.872361417
+    }
+  },
+  "median_rss_saved_bytes": 144670720,
+  "median_rss_reduction_fraction": 0.3344443602757367,
+  "scope": "Three fresh CPU processes per selector,2threads,6400x6400 synthetic confidence. All ordered indices identical;48 current-source tests passed separately. Selector peak RSS measured, not full LoFTR/provider/collection RSS or a hard cap. Earlier loader and diagnostic flatten failures preserved. Full combined recovery replay uses older pinned LoFTR, excluding this change."
+}

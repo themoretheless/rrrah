@@ -1,0 +1,54 @@
+{
+  "change": "PNG pHYs metadata parsed before IDAT; pixel width/height=vertical density/horizontal density. Propagate to ordinary raster and APNG output, invert for rotated PNG EXIF axes.",
+  "specification": "https://www.w3.org/TR/png-3/#11pHYs",
+  "decode_checks": [
+    "unit0 and unit1 ratios",
+    "zero density leaves aspect unknown",
+    "duplicate/CRC refusal",
+    "EXIF90 rotation inverts aspect",
+    "unchanged source sample values"
+  ],
+  "metal_checks": [
+    "authored4x4 opaque white RGBA PNG pHYs2,1,0 and sRGB0",
+    "linear managed preparation retains0.5 aspect",
+    "64x64 SDR/HDR exact against explicit aspect reference",
+    "square reference differs, center white and side outside image",
+    "swap restore retains aspect and exact SDR/HDR frames",
+    "source/queue final0, one write/read, no errors"
+  ],
+  "logs": {
+    "decode-all": {
+      "path": "docs/research/png-physical-aspect-2026-10-11-decode-all.log",
+      "sha256": "f37d7b4f8dd267c4e09abb224eba3dabb8eb6baefc9ae280f253b5fd3d2db5b3",
+      "passed": 1006,
+      "ignored": 78
+    },
+    "metal-initial": {
+      "path": "docs/research/png-physical-aspect-2026-10-11-metal-initial.log",
+      "sha256": "80b9093b31b1fb44ec6acd5909ec02d799a7faef03239a09af0d22b7c02f3ba0",
+      "passed": 0,
+      "ignored": 0
+    },
+    "metal-explicit-color": {
+      "path": "docs/research/png-physical-aspect-2026-10-11-metal-explicit-color.log",
+      "sha256": "3b850759ed4a72679444cf274c5d8078febe771663eaab6ecfaaf61f376c4935",
+      "passed": 0,
+      "ignored": 0
+    },
+    "metal-prepared": {
+      "path": "docs/research/png-physical-aspect-2026-10-11-metal-prepared.log",
+      "sha256": "627fa438c6f25255bf63202176279b7c2b0d1bc1730469d039b9dd91f1e15693",
+      "passed": 1,
+      "ignored": 0
+    }
+  },
+  "source_sha256": {
+    "crates/rrrah-decode/src/png_color.rs": "3939624471488b8e5f1f5aed44a9acc2b3004368d606fbebcfd04b7f15361a16",
+    "crates/rrrah-decode/src/raster.rs": "df3aedb25f8b813cce718558fde0001363c12c3caa9ab07eff128c2a1a3f9811",
+    "crates/rrrah-decode/src/apng.rs": "1c9875859927c1cad776f58fe64fc0fd4ab2465456aaea7a418ce168058f2ad7",
+    "crates/rrrah-app/tests/png_physical_aspect.rs": "0c44db2f27951a44e5b05423e1b58a73256f0331f2e68f53582cf33dfc95c0b7",
+    "tests/fixtures/data/png-physical-aspect.png": "16f0064e2dad783a696f5a7e78c5849a20fe6c78bebb798605887e9322c03b94"
+  },
+  "initial_test_corrections": "Rgba pixel enum lacked PartialEq; compared concrete pixel storage. Initial GPU helper tests supplied encoded sRGB; corrected to required linear preparation before upload. Production shader unchanged.",
+  "limitations": "APNG aspect propagation compiled and ordinary APNG regressions pass; no dedicated selected-frame pHYs case. Authored local/offscreen fixture, no physical display or full PNG qualification."
+}

@@ -1,0 +1,2513 @@
+{
+  "status": "complete",
+  "producer_pid": 64995,
+  "plan": [
+    {
+      "query": "Q36603",
+      "reference": "R043984",
+      "distance": 17,
+      "published_label": "no_reference_match"
+    },
+    {
+      "query": "Q49849",
+      "reference": "R043984",
+      "distance": 17,
+      "published_label": "no_reference_match"
+    },
+    {
+      "query": "Q12498",
+      "reference": "R021968",
+      "distance": 19,
+      "published_label": "no_reference_match"
+    },
+    {
+      "query": "Q19641",
+      "reference": "R043984",
+      "distance": 19,
+      "published_label": "no_reference_match"
+    },
+    {
+      "query": "Q25276",
+      "reference": "R043984",
+      "distance": 19,
+      "published_label": "no_reference_match"
+    },
+    {
+      "query": "Q19815",
+      "reference": "R047843",
+      "distance": 20,
+      "published_label": "no_reference_match"
+    },
+    {
+      "query": "Q34378",
+      "reference": "R032013",
+      "distance": 20,
+      "published_label": "no_reference_match"
+    },
+    {
+      "query": "Q00992",
+      "reference": "R043984",
+      "distance": 21,
+      "published_label": "no_reference_match"
+    },
+    {
+      "query": "Q03798",
+      "reference": "R043984",
+      "distance": 21,
+      "published_label": "no_reference_match"
+    },
+    {
+      "query": "Q28037",
+      "reference": "R040062",
+      "distance": 21,
+      "published_label": "no_reference_match"
+    },
+    {
+      "query": "Q30045",
+      "reference": "R040062",
+      "distance": 21,
+      "published_label": "no_reference_match"
+    },
+    {
+      "query": "Q04612",
+      "reference": "R047843",
+      "distance": 22,
+      "published_label": "no_reference_match"
+    },
+    {
+      "query": "Q08329",
+      "reference": "R047843",
+      "distance": 22,
+      "published_label": "no_reference_match"
+    },
+    {
+      "query": "Q12675",
+      "reference": "R010286",
+      "distance": 22,
+      "published_label": "no_reference_match"
+    },
+    {
+      "query": "Q44131",
+      "reference": "R021968",
+      "distance": 22,
+      "published_label": "no_reference_match"
+    },
+    {
+      "query": "Q12235",
+      "reference": "R010286",
+      "distance": 23,
+      "published_label": "no_reference_match"
+    }
+  ],
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-disc21-heldout-negatives-prepared-20261012.json": "cf809e4ee803555fbf4519b419aaa76241031d05a89261cf516a376576264d62",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-disc21-heldout-negatives-prepared-audit-20261012.json": "dc1c8d17d17d138c5d15ad669298be3cf34837993aa29132884333c0408afe03",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-disc21-heldout-negative-build-20261012.json": "327516d2343ed30ab3f50af6de5ef7a1aa754fb7c4d4e6c2e73da22fcebb89b8",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/run-dedup-disc21-heldout-negatives-20261012.py": "c13e53a2e75f268af6725593eb1bf659a12fd609275f0a6b044ac17c9f2aee12",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors": "59e55bf0ecd047db9c513672d121a3ea677529ad448bdc3a359e92862c74ddd7"
+  },
+  "results": [
+    {
+      "query": "Q36603",
+      "reference": "R043984",
+      "distance": 17,
+      "published_label": "no_reference_match",
+      "status": "complete",
+      "command": [
+        "/usr/bin/time",
+        "-l",
+        "/usr/bin/env",
+        "DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-executable-20261012",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/Q36603.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/R043984.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+        "640",
+        "2.0"
+      ],
+      "child_pid": 65015,
+      "returncode": 0,
+      "elapsed_seconds": 356.178842583,
+      "stdout_path": "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-00-20261012.stdout",
+      "stderr_path": "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-00-20261012.stderr",
+      "stdout_sha256": "810c776fadc8a1240081b3498cac203b1d1fd81138294547c26ac77cd37c85b0",
+      "stderr_sha256": "3975114faa0befcd5a3e9f3dbc1f4922f2f69bb1754d8be6cae4e2bad9b65ca7",
+      "evidence": {
+        "evidence": {
+          "file_ids": [
+            1,
+            2
+          ],
+          "pairs": [
+            {
+              "forward": {
+                "primary": {
+                  "attempts": 25,
+                  "geometry_inliers": 0,
+                  "original_dimensions": [
+                    [
+                      1024,
+                      768
+                    ],
+                    [
+                      368,
+                      224
+                    ]
+                  ],
+                  "pixel_attempts": 0,
+                  "pixel_rank_radius": null,
+                  "pixel_window_radius": null,
+                  "pixels": "None",
+                  "raw_proposals": 416,
+                  "selected_bank": null,
+                  "selected_points": 416,
+                  "supported": false,
+                  "transform": null
+                },
+                "recovery": {
+                  "exposures": "None",
+                  "search": {
+                    "attempts": 9,
+                    "geometry_inliers": 0,
+                    "original_dimensions": [
+                      [
+                        1024,
+                        768
+                      ],
+                      [
+                        368,
+                        224
+                      ]
+                    ],
+                    "pixel_attempts": 0,
+                    "pixel_rank_radius": null,
+                    "pixel_window_radius": null,
+                    "pixels": "None",
+                    "raw_proposals": 295,
+                    "selected_bank": null,
+                    "selected_points": 295,
+                    "supported": false,
+                    "transform": null
+                  }
+                },
+                "supported": false
+              },
+              "left": 1,
+              "reverse": {
+                "primary": {
+                  "attempts": 25,
+                  "geometry_inliers": 0,
+                  "original_dimensions": [
+                    [
+                      368,
+                      224
+                    ],
+                    [
+                      1024,
+                      768
+                    ]
+                  ],
+                  "pixel_attempts": 0,
+                  "pixel_rank_radius": null,
+                  "pixel_window_radius": null,
+                  "pixels": "None",
+                  "raw_proposals": 384,
+                  "selected_bank": null,
+                  "selected_points": 384,
+                  "supported": false,
+                  "transform": null
+                },
+                "recovery": {
+                  "exposures": "None",
+                  "search": {
+                    "attempts": 9,
+                    "geometry_inliers": 0,
+                    "original_dimensions": [
+                      [
+                        368,
+                        224
+                      ],
+                      [
+                        1024,
+                        768
+                      ]
+                    ],
+                    "pixel_attempts": 0,
+                    "pixel_rank_radius": null,
+                    "pixel_window_radius": null,
+                    "pixels": "None",
+                    "raw_proposals": 105,
+                    "selected_bank": null,
+                    "selected_points": 105,
+                    "supported": false,
+                    "transform": null
+                  }
+                },
+                "supported": false
+              },
+              "right": 2,
+              "supported": false
+            }
+          ],
+          "scope": "Actual public bidirectional collection on precommitted unused publisher distractor query/reference pair. Reference has lower ID; one CPU provider spans both directions. Fixed previous caller policy, not full precision/RSS/platform/full500 qualification."
+        },
+        "managed_peak": 16208016,
+        "managed_report_used": 1520,
+        "managed_used": 0
+      },
+      "false_acceptance": false
+    },
+    {
+      "query": "Q49849",
+      "reference": "R043984",
+      "distance": 17,
+      "published_label": "no_reference_match",
+      "status": "complete",
+      "command": [
+        "/usr/bin/time",
+        "-l",
+        "/usr/bin/env",
+        "DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-executable-20261012",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/Q49849.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/R043984.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+        "640",
+        "2.0"
+      ],
+      "child_pid": 70880,
+      "returncode": 0,
+      "elapsed_seconds": 480.090131375,
+      "stdout_path": "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-01-20261012.stdout",
+      "stderr_path": "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-01-20261012.stderr",
+      "stdout_sha256": "268256893703d602ed5d59ae259bdb4da1d03cda760ecaea3f392dc0a5ecb615",
+      "stderr_sha256": "e804176d275bfb0e5a3b49a41a966e34e63686c681c25969fbe0cb55fd60d506",
+      "evidence": {
+        "evidence": {
+          "file_ids": [
+            1,
+            2
+          ],
+          "pairs": [
+            {
+              "forward": {
+                "primary": {
+                  "attempts": 25,
+                  "geometry_inliers": 0,
+                  "original_dimensions": [
+                    [
+                      1024,
+                      768
+                    ],
+                    [
+                      456,
+                      360
+                    ]
+                  ],
+                  "pixel_attempts": 0,
+                  "pixel_rank_radius": null,
+                  "pixel_window_radius": null,
+                  "pixels": "None",
+                  "raw_proposals": 551,
+                  "selected_bank": null,
+                  "selected_points": 551,
+                  "supported": false,
+                  "transform": null
+                },
+                "recovery": {
+                  "exposures": "None",
+                  "search": {
+                    "attempts": 9,
+                    "geometry_inliers": 0,
+                    "original_dimensions": [
+                      [
+                        1024,
+                        768
+                      ],
+                      [
+                        456,
+                        360
+                      ]
+                    ],
+                    "pixel_attempts": 0,
+                    "pixel_rank_radius": null,
+                    "pixel_window_radius": null,
+                    "pixels": "None",
+                    "raw_proposals": 327,
+                    "selected_bank": null,
+                    "selected_points": 327,
+                    "supported": false,
+                    "transform": null
+                  }
+                },
+                "supported": false
+              },
+              "left": 1,
+              "reverse": {
+                "primary": {
+                  "attempts": 25,
+                  "geometry_inliers": 0,
+                  "original_dimensions": [
+                    [
+                      456,
+                      360
+                    ],
+                    [
+                      1024,
+                      768
+                    ]
+                  ],
+                  "pixel_attempts": 0,
+                  "pixel_rank_radius": null,
+                  "pixel_window_radius": null,
+                  "pixels": "None",
+                  "raw_proposals": 585,
+                  "selected_bank": null,
+                  "selected_points": 585,
+                  "supported": false,
+                  "transform": null
+                },
+                "recovery": {
+                  "exposures": "None",
+                  "search": {
+                    "attempts": 9,
+                    "geometry_inliers": 0,
+                    "original_dimensions": [
+                      [
+                        456,
+                        360
+                      ],
+                      [
+                        1024,
+                        768
+                      ]
+                    ],
+                    "pixel_attempts": 0,
+                    "pixel_rank_radius": null,
+                    "pixel_window_radius": null,
+                    "pixels": "None",
+                    "raw_proposals": 231,
+                    "selected_bank": null,
+                    "selected_points": 231,
+                    "supported": false,
+                    "transform": null
+                  }
+                },
+                "supported": false
+              },
+              "right": 2,
+              "supported": false
+            }
+          ],
+          "scope": "Actual public bidirectional collection on precommitted unused publisher distractor query/reference pair. Reference has lower ID; one CPU provider spans both directions. Fixed previous caller policy, not full precision/RSS/platform/full500 qualification."
+        },
+        "managed_peak": 16372272,
+        "managed_report_used": 1520,
+        "managed_used": 0
+      },
+      "false_acceptance": false
+    },
+    {
+      "query": "Q12498",
+      "reference": "R021968",
+      "distance": 19,
+      "published_label": "no_reference_match",
+      "status": "complete",
+      "command": [
+        "/usr/bin/time",
+        "-l",
+        "/usr/bin/env",
+        "DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-executable-20261012",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/Q12498.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/R021968.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+        "640",
+        "2.0"
+      ],
+      "child_pid": 77259,
+      "returncode": 0,
+      "elapsed_seconds": 500.65822025,
+      "stdout_path": "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-02-20261012.stdout",
+      "stderr_path": "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-02-20261012.stderr",
+      "stdout_sha256": "5b53cdd1fbfa36c594564590be371b6efe8bae297a82655a4dd5224e1d949620",
+      "stderr_sha256": "ebef6e69fd17923a072de3045e4ae87c796b4b8df13b86735d3b9e33c5b035fe",
+      "evidence": {
+        "evidence": {
+          "file_ids": [
+            1,
+            2
+          ],
+          "pairs": [
+            {
+              "forward": {
+                "primary": {
+                  "attempts": 25,
+                  "geometry_inliers": 0,
+                  "original_dimensions": [
+                    [
+                      1024,
+                      544
+                    ],
+                    [
+                      672,
+                      1024
+                    ]
+                  ],
+                  "pixel_attempts": 0,
+                  "pixel_rank_radius": null,
+                  "pixel_window_radius": null,
+                  "pixels": "None",
+                  "raw_proposals": 1776,
+                  "selected_bank": null,
+                  "selected_points": 1776,
+                  "supported": false,
+                  "transform": null
+                },
+                "recovery": {
+                  "exposures": "None",
+                  "search": {
+                    "attempts": 9,
+                    "geometry_inliers": 0,
+                    "original_dimensions": [
+                      [
+                        1024,
+                        544
+                      ],
+                      [
+                        672,
+                        1024
+                      ]
+                    ],
+                    "pixel_attempts": 0,
+                    "pixel_rank_radius": null,
+                    "pixel_window_radius": null,
+                    "pixels": "None",
+                    "raw_proposals": 698,
+                    "selected_bank": null,
+                    "selected_points": 698,
+                    "supported": false,
+                    "transform": null
+                  }
+                },
+                "supported": false
+              },
+              "left": 1,
+              "reverse": {
+                "primary": {
+                  "attempts": 25,
+                  "geometry_inliers": 0,
+                  "original_dimensions": [
+                    [
+                      672,
+                      1024
+                    ],
+                    [
+                      1024,
+                      544
+                    ]
+                  ],
+                  "pixel_attempts": 0,
+                  "pixel_rank_radius": null,
+                  "pixel_window_radius": null,
+                  "pixels": "None",
+                  "raw_proposals": 1808,
+                  "selected_bank": null,
+                  "selected_points": 1808,
+                  "supported": false,
+                  "transform": null
+                },
+                "recovery": {
+                  "exposures": "None",
+                  "search": {
+                    "attempts": 9,
+                    "geometry_inliers": 0,
+                    "original_dimensions": [
+                      [
+                        672,
+                        1024
+                      ],
+                      [
+                        1024,
+                        544
+                      ]
+                    ],
+                    "pixel_attempts": 0,
+                    "pixel_rank_radius": null,
+                    "pixel_window_radius": null,
+                    "pixels": "None",
+                    "raw_proposals": 737,
+                    "selected_bank": null,
+                    "selected_points": 737,
+                    "supported": false,
+                    "transform": null
+                  }
+                },
+                "supported": false
+              },
+              "right": 2,
+              "supported": false
+            }
+          ],
+          "scope": "Actual public bidirectional collection on precommitted unused publisher distractor query/reference pair. Reference has lower ID; one CPU provider spans both directions. Fixed previous caller policy, not full precision/RSS/platform/full500 qualification."
+        },
+        "managed_peak": 14474000,
+        "managed_report_used": 1520,
+        "managed_used": 0
+      },
+      "false_acceptance": false
+    },
+    {
+      "query": "Q19641",
+      "reference": "R043984",
+      "distance": 19,
+      "published_label": "no_reference_match",
+      "status": "complete",
+      "command": [
+        "/usr/bin/time",
+        "-l",
+        "/usr/bin/env",
+        "DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-executable-20261012",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/Q19641.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/R043984.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+        "640",
+        "2.0"
+      ],
+      "child_pid": 85056,
+      "returncode": 0,
+      "elapsed_seconds": 436.9867312499998,
+      "stdout_path": "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-03-20261012.stdout",
+      "stderr_path": "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-03-20261012.stderr",
+      "stdout_sha256": "dc3d951133ed43ff2fe294816b45fc8484da56d7d8171d5f1d300fd0ef03cdfc",
+      "stderr_sha256": "0e1a693de7738b457ce8ce12b01db0b0cd571b60ebecc83f141d5b91a34e17b9",
+      "evidence": {
+        "evidence": {
+          "file_ids": [
+            1,
+            2
+          ],
+          "pairs": [
+            {
+              "forward": {
+                "primary": {
+                  "attempts": 25,
+                  "geometry_inliers": 0,
+                  "original_dimensions": [
+                    [
+                      1024,
+                      768
+                    ],
+                    [
+                      376,
+                      200
+                    ]
+                  ],
+                  "pixel_attempts": 0,
+                  "pixel_rank_radius": null,
+                  "pixel_window_radius": null,
+                  "pixels": "None",
+                  "raw_proposals": 419,
+                  "selected_bank": null,
+                  "selected_points": 419,
+                  "supported": false,
+                  "transform": null
+                },
+                "recovery": {
+                  "exposures": "None",
+                  "search": {
+                    "attempts": 9,
+                    "geometry_inliers": 0,
+                    "original_dimensions": [
+                      [
+                        1024,
+                        768
+                      ],
+                      [
+                        376,
+                        200
+                      ]
+                    ],
+                    "pixel_attempts": 0,
+                    "pixel_rank_radius": null,
+                    "pixel_window_radius": null,
+                    "pixels": "None",
+                    "raw_proposals": 291,
+                    "selected_bank": null,
+                    "selected_points": 291,
+                    "supported": false,
+                    "transform": null
+                  }
+                },
+                "supported": false
+              },
+              "left": 1,
+              "reverse": {
+                "primary": {
+                  "attempts": 25,
+                  "geometry_inliers": 0,
+                  "original_dimensions": [
+                    [
+                      376,
+                      200
+                    ],
+                    [
+                      1024,
+                      768
+                    ]
+                  ],
+                  "pixel_attempts": 0,
+                  "pixel_rank_radius": null,
+                  "pixel_window_radius": null,
+                  "pixels": "None",
+                  "raw_proposals": 433,
+                  "selected_bank": null,
+                  "selected_points": 433,
+                  "supported": false,
+                  "transform": null
+                },
+                "recovery": {
+                  "exposures": "None",
+                  "search": {
+                    "attempts": 9,
+                    "geometry_inliers": 0,
+                    "original_dimensions": [
+                      [
+                        376,
+                        200
+                      ],
+                      [
+                        1024,
+                        768
+                      ]
+                    ],
+                    "pixel_attempts": 0,
+                    "pixel_rank_radius": null,
+                    "pixel_window_radius": null,
+                    "pixels": "None",
+                    "raw_proposals": 110,
+                    "selected_bank": null,
+                    "selected_points": 110,
+                    "supported": false,
+                    "transform": null
+                  }
+                },
+                "supported": false
+              },
+              "right": 2,
+              "supported": false
+            }
+          ],
+          "scope": "Actual public bidirectional collection on precommitted unused publisher distractor query/reference pair. Reference has lower ID; one CPU provider spans both directions. Fixed previous caller policy, not full precision/RSS/platform/full500 qualification."
+        },
+        "managed_peak": 16194224,
+        "managed_report_used": 1520,
+        "managed_used": 0
+      },
+      "false_acceptance": false
+    },
+    {
+      "query": "Q25276",
+      "reference": "R043984",
+      "distance": 19,
+      "published_label": "no_reference_match",
+      "status": "complete",
+      "command": [
+        "/usr/bin/time",
+        "-l",
+        "/usr/bin/env",
+        "DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-executable-20261012",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/Q25276.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/R043984.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+        "640",
+        "2.0"
+      ],
+      "child_pid": 91945,
+      "returncode": 0,
+      "elapsed_seconds": 386.3099104999999,
+      "stdout_path": "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-04-20261012.stdout",
+      "stderr_path": "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-04-20261012.stderr",
+      "stdout_sha256": "7f089e77f5bc7395a54f442f9f12cb841d63a93247b1d71534dc273db622643d",
+      "stderr_sha256": "fda575e193761b8faaf801e1c1393ffaa6a09203577c245eac464483f7acf845",
+      "evidence": {
+        "evidence": {
+          "file_ids": [
+            1,
+            2
+          ],
+          "pairs": [
+            {
+              "forward": {
+                "primary": {
+                  "attempts": 25,
+                  "geometry_inliers": 0,
+                  "original_dimensions": [
+                    [
+                      1024,
+                      768
+                    ],
+                    [
+                      480,
+                      544
+                    ]
+                  ],
+                  "pixel_attempts": 0,
+                  "pixel_rank_radius": null,
+                  "pixel_window_radius": null,
+                  "pixels": "None",
+                  "raw_proposals": 1018,
+                  "selected_bank": null,
+                  "selected_points": 1018,
+                  "supported": false,
+                  "transform": null
+                },
+                "recovery": {
+                  "exposures": "None",
+                  "search": {
+                    "attempts": 9,
+                    "geometry_inliers": 0,
+                    "original_dimensions": [
+                      [
+                        1024,
+                        768
+                      ],
+                      [
+                        480,
+                        544
+                      ]
+                    ],
+                    "pixel_attempts": 0,
+                    "pixel_rank_radius": null,
+                    "pixel_window_radius": null,
+                    "pixels": "None",
+                    "raw_proposals": 614,
+                    "selected_bank": null,
+                    "selected_points": 614,
+                    "supported": false,
+                    "transform": null
+                  }
+                },
+                "supported": false
+              },
+              "left": 1,
+              "reverse": {
+                "primary": {
+                  "attempts": 25,
+                  "geometry_inliers": 0,
+                  "original_dimensions": [
+                    [
+                      480,
+                      544
+                    ],
+                    [
+                      1024,
+                      768
+                    ]
+                  ],
+                  "pixel_attempts": 0,
+                  "pixel_rank_radius": null,
+                  "pixel_window_radius": null,
+                  "pixels": "None",
+                  "raw_proposals": 1060,
+                  "selected_bank": null,
+                  "selected_points": 1060,
+                  "supported": false,
+                  "transform": null
+                },
+                "recovery": {
+                  "exposures": "None",
+                  "search": {
+                    "attempts": 9,
+                    "geometry_inliers": 0,
+                    "original_dimensions": [
+                      [
+                        480,
+                        544
+                      ],
+                      [
+                        1024,
+                        768
+                      ]
+                    ],
+                    "pixel_attempts": 0,
+                    "pixel_rank_radius": null,
+                    "pixel_window_radius": null,
+                    "pixels": "None",
+                    "raw_proposals": 543,
+                    "selected_bank": null,
+                    "selected_points": 543,
+                    "supported": false,
+                    "transform": null
+                  }
+                },
+                "supported": false
+              },
+              "right": 2,
+              "supported": false
+            }
+          ],
+          "scope": "Actual public bidirectional collection on precommitted unused publisher distractor query/reference pair. Reference has lower ID; one CPU provider spans both directions. Fixed previous caller policy, not full precision/RSS/platform/full500 qualification."
+        },
+        "managed_peak": 16570768,
+        "managed_report_used": 1520,
+        "managed_used": 0
+      },
+      "false_acceptance": false
+    },
+    {
+      "query": "Q19815",
+      "reference": "R047843",
+      "distance": 20,
+      "published_label": "no_reference_match",
+      "status": "complete",
+      "command": [
+        "/usr/bin/time",
+        "-l",
+        "/usr/bin/env",
+        "DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-executable-20261012",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/Q19815.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/R047843.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+        "640",
+        "2.0"
+      ],
+      "child_pid": 96795,
+      "returncode": 0,
+      "elapsed_seconds": 320.51829025000006,
+      "stdout_path": "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-05-20261012.stdout",
+      "stderr_path": "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-05-20261012.stderr",
+      "stdout_sha256": "ffa83ae7a068cccfeee3eee653a8ef48c0826bdfb9ecb4089510aba9172ae0f9",
+      "stderr_sha256": "e64877d53709814f13d429b4443e90d95188452d50d6393b1064a74cf302117a",
+      "evidence": {
+        "evidence": {
+          "file_ids": [
+            1,
+            2
+          ],
+          "pairs": [
+            {
+              "forward": {
+                "primary": {
+                  "attempts": 25,
+                  "geometry_inliers": 0,
+                  "original_dimensions": [
+                    [
+                      768,
+                      1024
+                    ],
+                    [
+                      288,
+                      256
+                    ]
+                  ],
+                  "pixel_attempts": 0,
+                  "pixel_rank_radius": null,
+                  "pixel_window_radius": null,
+                  "pixels": "None",
+                  "raw_proposals": 496,
+                  "selected_bank": null,
+                  "selected_points": 496,
+                  "supported": false,
+                  "transform": null
+                },
+                "recovery": {
+                  "exposures": "None",
+                  "search": {
+                    "attempts": 9,
+                    "geometry_inliers": 0,
+                    "original_dimensions": [
+                      [
+                        768,
+                        1024
+                      ],
+                      [
+                        288,
+                        256
+                      ]
+                    ],
+                    "pixel_attempts": 0,
+                    "pixel_rank_radius": null,
+                    "pixel_window_radius": null,
+                    "pixels": "None",
+                    "raw_proposals": 364,
+                    "selected_bank": null,
+                    "selected_points": 364,
+                    "supported": false,
+                    "transform": null
+                  }
+                },
+                "supported": false
+              },
+              "left": 1,
+              "reverse": {
+                "primary": {
+                  "attempts": 25,
+                  "geometry_inliers": 0,
+                  "original_dimensions": [
+                    [
+                      288,
+                      256
+                    ],
+                    [
+                      768,
+                      1024
+                    ]
+                  ],
+                  "pixel_attempts": 0,
+                  "pixel_rank_radius": null,
+                  "pixel_window_radius": null,
+                  "pixels": "None",
+                  "raw_proposals": 533,
+                  "selected_bank": null,
+                  "selected_points": 533,
+                  "supported": false,
+                  "transform": null
+                },
+                "recovery": {
+                  "exposures": "None",
+                  "search": {
+                    "attempts": 9,
+                    "geometry_inliers": 0,
+                    "original_dimensions": [
+                      [
+                        288,
+                        256
+                      ],
+                      [
+                        768,
+                        1024
+                      ]
+                    ],
+                    "pixel_attempts": 0,
+                    "pixel_rank_radius": null,
+                    "pixel_window_radius": null,
+                    "pixels": "None",
+                    "raw_proposals": 160,
+                    "selected_bank": null,
+                    "selected_points": 160,
+                    "supported": false,
+                    "transform": null
+                  }
+                },
+                "supported": false
+              },
+              "right": 2,
+              "supported": false
+            }
+          ],
+          "scope": "Actual public bidirectional collection on precommitted unused publisher distractor query/reference pair. Reference has lower ID; one CPU provider spans both directions. Fixed previous caller policy, not full precision/RSS/platform/full500 qualification."
+        },
+        "managed_peak": 16192272,
+        "managed_report_used": 1520,
+        "managed_used": 0
+      },
+      "false_acceptance": false
+    },
+    {
+      "query": "Q34378",
+      "reference": "R032013",
+      "distance": 20,
+      "published_label": "no_reference_match",
+      "status": "complete",
+      "command": [
+        "/usr/bin/time",
+        "-l",
+        "/usr/bin/env",
+        "DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-executable-20261012",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/Q34378.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/R032013.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+        "640",
+        "2.0"
+      ],
+      "child_pid": 3331,
+      "returncode": 0,
+      "elapsed_seconds": 346.1922983749996,
+      "stdout_path": "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-06-20261012.stdout",
+      "stderr_path": "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-06-20261012.stderr",
+      "stdout_sha256": "e1529ab5a9aeb2e4c488df8152e30f2da1e10b42647b4a4c856949f12c358b20",
+      "stderr_sha256": "77f29a53621209d9a4a203d93caeff74c68cd1e231dab9857b57bdc620ad425b",
+      "evidence": {
+        "evidence": {
+          "file_ids": [
+            1,
+            2
+          ],
+          "pairs": [
+            {
+              "forward": {
+                "primary": {
+                  "attempts": 25,
+                  "geometry_inliers": 0,
+                  "original_dimensions": [
+                    [
+                      800,
+                      600
+                    ],
+                    [
+                      384,
+                      512
+                    ]
+                  ],
+                  "pixel_attempts": 0,
+                  "pixel_rank_radius": null,
+                  "pixel_window_radius": null,
+                  "pixels": "None",
+                  "raw_proposals": 1040,
+                  "selected_bank": null,
+                  "selected_points": 1040,
+                  "supported": false,
+                  "transform": null
+                },
+                "recovery": {
+                  "exposures": "None",
+                  "search": {
+                    "attempts": 9,
+                    "geometry_inliers": 0,
+                    "original_dimensions": [
+                      [
+                        800,
+                        600
+                      ],
+                      [
+                        384,
+                        512
+                      ]
+                    ],
+                    "pixel_attempts": 0,
+                    "pixel_rank_radius": null,
+                    "pixel_window_radius": null,
+                    "pixels": "None",
+                    "raw_proposals": 579,
+                    "selected_bank": null,
+                    "selected_points": 579,
+                    "supported": false,
+                    "transform": null
+                  }
+                },
+                "supported": false
+              },
+              "left": 1,
+              "reverse": {
+                "primary": {
+                  "attempts": 25,
+                  "geometry_inliers": 0,
+                  "original_dimensions": [
+                    [
+                      384,
+                      512
+                    ],
+                    [
+                      800,
+                      600
+                    ]
+                  ],
+                  "pixel_attempts": 4,
+                  "pixel_rank_radius": null,
+                  "pixel_window_radius": null,
+                  "pixels": "None",
+                  "raw_proposals": 1086,
+                  "selected_bank": null,
+                  "selected_points": 1086,
+                  "supported": false,
+                  "transform": null
+                },
+                "recovery": {
+                  "exposures": "None",
+                  "search": {
+                    "attempts": 9,
+                    "geometry_inliers": 0,
+                    "original_dimensions": [
+                      [
+                        384,
+                        512
+                      ],
+                      [
+                        800,
+                        600
+                      ]
+                    ],
+                    "pixel_attempts": 0,
+                    "pixel_rank_radius": null,
+                    "pixel_window_radius": null,
+                    "pixels": "None",
+                    "raw_proposals": 387,
+                    "selected_bank": null,
+                    "selected_points": 387,
+                    "supported": false,
+                    "transform": null
+                  }
+                },
+                "supported": false
+              },
+              "right": 2,
+              "supported": false
+            }
+          ],
+          "scope": "Actual public bidirectional collection on precommitted unused publisher distractor query/reference pair. Reference has lower ID; one CPU provider spans both directions. Fixed previous caller policy, not full precision/RSS/platform/full500 qualification."
+        },
+        "managed_peak": 13357584,
+        "managed_report_used": 1520,
+        "managed_used": 0
+      },
+      "false_acceptance": false
+    },
+    {
+      "query": "Q00992",
+      "reference": "R043984",
+      "distance": 21,
+      "published_label": "no_reference_match",
+      "status": "complete",
+      "command": [
+        "/usr/bin/time",
+        "-l",
+        "/usr/bin/env",
+        "DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-executable-20261012",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/Q00992.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/R043984.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+        "640",
+        "2.0"
+      ],
+      "child_pid": 8783,
+      "returncode": 0,
+      "elapsed_seconds": 394.91031095900007,
+      "stdout_path": "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-07-20261012.stdout",
+      "stderr_path": "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-07-20261012.stderr",
+      "stdout_sha256": "2352843a1274a03b2bc7fa590e1d1e8225803a116035aef17ef0722660989247",
+      "stderr_sha256": "8fa8293a8aa8ef2d5cdce0820f260090d5ba21915374b11e338d50513c7722e2",
+      "evidence": {
+        "evidence": {
+          "file_ids": [
+            1,
+            2
+          ],
+          "pairs": [
+            {
+              "forward": {
+                "primary": {
+                  "attempts": 25,
+                  "geometry_inliers": 0,
+                  "original_dimensions": [
+                    [
+                      1024,
+                      768
+                    ],
+                    [
+                      1024,
+                      768
+                    ]
+                  ],
+                  "pixel_attempts": 0,
+                  "pixel_rank_radius": null,
+                  "pixel_window_radius": null,
+                  "pixels": "None",
+                  "raw_proposals": 1633,
+                  "selected_bank": null,
+                  "selected_points": 1633,
+                  "supported": false,
+                  "transform": null
+                },
+                "recovery": {
+                  "exposures": "None",
+                  "search": {
+                    "attempts": 9,
+                    "geometry_inliers": 0,
+                    "original_dimensions": [
+                      [
+                        1024,
+                        768
+                      ],
+                      [
+                        1024,
+                        768
+                      ]
+                    ],
+                    "pixel_attempts": 0,
+                    "pixel_rank_radius": null,
+                    "pixel_window_radius": null,
+                    "pixels": "None",
+                    "raw_proposals": 589,
+                    "selected_bank": null,
+                    "selected_points": 589,
+                    "supported": false,
+                    "transform": null
+                  }
+                },
+                "supported": false
+              },
+              "left": 1,
+              "reverse": {
+                "primary": {
+                  "attempts": 25,
+                  "geometry_inliers": 0,
+                  "original_dimensions": [
+                    [
+                      1024,
+                      768
+                    ],
+                    [
+                      1024,
+                      768
+                    ]
+                  ],
+                  "pixel_attempts": 0,
+                  "pixel_rank_radius": null,
+                  "pixel_window_radius": null,
+                  "pixels": "None",
+                  "raw_proposals": 1575,
+                  "selected_bank": null,
+                  "selected_points": 1575,
+                  "supported": false,
+                  "transform": null
+                },
+                "recovery": {
+                  "exposures": "None",
+                  "search": {
+                    "attempts": 9,
+                    "geometry_inliers": 0,
+                    "original_dimensions": [
+                      [
+                        1024,
+                        768
+                      ],
+                      [
+                        1024,
+                        768
+                      ]
+                    ],
+                    "pixel_attempts": 0,
+                    "pixel_rank_radius": null,
+                    "pixel_window_radius": null,
+                    "pixels": "None",
+                    "raw_proposals": 726,
+                    "selected_bank": null,
+                    "selected_points": 726,
+                    "supported": false,
+                    "transform": null
+                  }
+                },
+                "supported": false
+              },
+              "right": 2,
+              "supported": false
+            }
+          ],
+          "scope": "Actual public bidirectional collection on precommitted unused publisher distractor query/reference pair. Reference has lower ID; one CPU provider spans both directions. Fixed previous caller policy, not full precision/RSS/platform/full500 qualification."
+        },
+        "managed_peak": 16666544,
+        "managed_report_used": 1520,
+        "managed_used": 0
+      },
+      "false_acceptance": false
+    },
+    {
+      "query": "Q03798",
+      "reference": "R043984",
+      "distance": 21,
+      "published_label": "no_reference_match",
+      "status": "complete",
+      "command": [
+        "/usr/bin/time",
+        "-l",
+        "/usr/bin/env",
+        "DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-executable-20261012",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/Q03798.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/R043984.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+        "640",
+        "2.0"
+      ],
+      "child_pid": 13060,
+      "returncode": 0,
+      "elapsed_seconds": 283.2112013750002,
+      "stdout_path": "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-08-20261012.stdout",
+      "stderr_path": "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-08-20261012.stderr",
+      "stdout_sha256": "aaceef4c0a95a9eefc33acfbba4baf0bcfb5d3d6f4489710d5973b0072f4f054",
+      "stderr_sha256": "585f894d7a734c446ec5a94e67eefea952d3df73560490aab4eab77768c06e12",
+      "evidence": {
+        "evidence": {
+          "file_ids": [
+            1,
+            2
+          ],
+          "pairs": [
+            {
+              "forward": {
+                "primary": {
+                  "attempts": 25,
+                  "geometry_inliers": 0,
+                  "original_dimensions": [
+                    [
+                      1024,
+                      768
+                    ],
+                    [
+                      360,
+                      544
+                    ]
+                  ],
+                  "pixel_attempts": 0,
+                  "pixel_rank_radius": null,
+                  "pixel_window_radius": null,
+                  "pixels": "None",
+                  "raw_proposals": 864,
+                  "selected_bank": null,
+                  "selected_points": 864,
+                  "supported": false,
+                  "transform": null
+                },
+                "recovery": {
+                  "exposures": "None",
+                  "search": {
+                    "attempts": 9,
+                    "geometry_inliers": 0,
+                    "original_dimensions": [
+                      [
+                        1024,
+                        768
+                      ],
+                      [
+                        360,
+                        544
+                      ]
+                    ],
+                    "pixel_attempts": 0,
+                    "pixel_rank_radius": null,
+                    "pixel_window_radius": null,
+                    "pixels": "None",
+                    "raw_proposals": 460,
+                    "selected_bank": null,
+                    "selected_points": 460,
+                    "supported": false,
+                    "transform": null
+                  }
+                },
+                "supported": false
+              },
+              "left": 1,
+              "reverse": {
+                "primary": {
+                  "attempts": 25,
+                  "geometry_inliers": 0,
+                  "original_dimensions": [
+                    [
+                      360,
+                      544
+                    ],
+                    [
+                      1024,
+                      768
+                    ]
+                  ],
+                  "pixel_attempts": 0,
+                  "pixel_rank_radius": null,
+                  "pixel_window_radius": null,
+                  "pixels": "None",
+                  "raw_proposals": 768,
+                  "selected_bank": null,
+                  "selected_points": 768,
+                  "supported": false,
+                  "transform": null
+                },
+                "recovery": {
+                  "exposures": "None",
+                  "search": {
+                    "attempts": 9,
+                    "geometry_inliers": 0,
+                    "original_dimensions": [
+                      [
+                        360,
+                        544
+                      ],
+                      [
+                        1024,
+                        768
+                      ]
+                    ],
+                    "pixel_attempts": 0,
+                    "pixel_rank_radius": null,
+                    "pixel_window_radius": null,
+                    "pixels": "None",
+                    "raw_proposals": 236,
+                    "selected_bank": null,
+                    "selected_points": 236,
+                    "supported": false,
+                    "transform": null
+                  }
+                },
+                "supported": false
+              },
+              "right": 2,
+              "supported": false
+            }
+          ],
+          "scope": "Actual public bidirectional collection on precommitted unused publisher distractor query/reference pair. Reference has lower ID; one CPU provider spans both directions. Fixed previous caller policy, not full precision/RSS/platform/full500 qualification."
+        },
+        "managed_peak": 16436688,
+        "managed_report_used": 1520,
+        "managed_used": 0
+      },
+      "false_acceptance": false
+    },
+    {
+      "query": "Q28037",
+      "reference": "R040062",
+      "distance": 21,
+      "published_label": "no_reference_match",
+      "status": "complete",
+      "command": [
+        "/usr/bin/time",
+        "-l",
+        "/usr/bin/env",
+        "DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-executable-20261012",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/Q28037.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/R040062.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+        "640",
+        "2.0"
+      ],
+      "child_pid": 16709,
+      "returncode": 0,
+      "elapsed_seconds": 349.6887860419997,
+      "stdout_path": "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-09-20261012.stdout",
+      "stderr_path": "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-09-20261012.stderr",
+      "stdout_sha256": "2b22e557b8f332c87e0a28084f7d026e362e9c00299bc29191350a8d07721314",
+      "stderr_sha256": "9f2b4d28aedf6202bc45312c17e3361583e85fde9108bcf4d8c840195387d526",
+      "evidence": {
+        "evidence": {
+          "file_ids": [
+            1,
+            2
+          ],
+          "pairs": [
+            {
+              "forward": {
+                "primary": {
+                  "attempts": 25,
+                  "geometry_inliers": 0,
+                  "original_dimensions": [
+                    [
+                      472,
+                      456
+                    ],
+                    [
+                      656,
+                      568
+                    ]
+                  ],
+                  "pixel_attempts": 0,
+                  "pixel_rank_radius": null,
+                  "pixel_window_radius": null,
+                  "pixels": "None",
+                  "raw_proposals": 798,
+                  "selected_bank": null,
+                  "selected_points": 798,
+                  "supported": false,
+                  "transform": null
+                },
+                "recovery": {
+                  "exposures": "None",
+                  "search": {
+                    "attempts": 9,
+                    "geometry_inliers": 0,
+                    "original_dimensions": [
+                      [
+                        472,
+                        456
+                      ],
+                      [
+                        656,
+                        568
+                      ]
+                    ],
+                    "pixel_attempts": 0,
+                    "pixel_rank_radius": null,
+                    "pixel_window_radius": null,
+                    "pixels": "None",
+                    "raw_proposals": 344,
+                    "selected_bank": null,
+                    "selected_points": 344,
+                    "supported": false,
+                    "transform": null
+                  }
+                },
+                "supported": false
+              },
+              "left": 1,
+              "reverse": {
+                "primary": {
+                  "attempts": 25,
+                  "geometry_inliers": 0,
+                  "original_dimensions": [
+                    [
+                      656,
+                      568
+                    ],
+                    [
+                      472,
+                      456
+                    ]
+                  ],
+                  "pixel_attempts": 0,
+                  "pixel_rank_radius": null,
+                  "pixel_window_radius": null,
+                  "pixels": "None",
+                  "raw_proposals": 829,
+                  "selected_bank": null,
+                  "selected_points": 829,
+                  "supported": false,
+                  "transform": null
+                },
+                "recovery": {
+                  "exposures": "None",
+                  "search": {
+                    "attempts": 9,
+                    "geometry_inliers": 0,
+                    "original_dimensions": [
+                      [
+                        656,
+                        568
+                      ],
+                      [
+                        472,
+                        456
+                      ]
+                    ],
+                    "pixel_attempts": 0,
+                    "pixel_rank_radius": null,
+                    "pixel_window_radius": null,
+                    "pixels": "None",
+                    "raw_proposals": 452,
+                    "selected_bank": null,
+                    "selected_points": 452,
+                    "supported": false,
+                    "transform": null
+                  }
+                },
+                "supported": false
+              },
+              "right": 2,
+              "supported": false
+            }
+          ],
+          "scope": "Actual public bidirectional collection on precommitted unused publisher distractor query/reference pair. Reference has lower ID; one CPU provider spans both directions. Fixed previous caller policy, not full precision/RSS/platform/full500 qualification."
+        },
+        "managed_peak": 8246640,
+        "managed_report_used": 1520,
+        "managed_used": 0
+      },
+      "false_acceptance": false
+    },
+    {
+      "query": "Q30045",
+      "reference": "R040062",
+      "distance": 21,
+      "published_label": "no_reference_match",
+      "status": "complete",
+      "command": [
+        "/usr/bin/time",
+        "-l",
+        "/usr/bin/env",
+        "DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-executable-20261012",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/Q30045.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/R040062.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+        "640",
+        "2.0"
+      ],
+      "child_pid": 21662,
+      "returncode": 0,
+      "elapsed_seconds": 465.6500706669999,
+      "stdout_path": "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-10-20261012.stdout",
+      "stderr_path": "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-10-20261012.stderr",
+      "stdout_sha256": "6d5319f31e84407446952ebbd735d85ebdd41eef2a3739d2273894b2c4ad1bb4",
+      "stderr_sha256": "13450b9d7598d27d1f4761fbf78ea0e6e28370708febe9c5ead83533842d404f",
+      "evidence": {
+        "evidence": {
+          "file_ids": [
+            1,
+            2
+          ],
+          "pairs": [
+            {
+              "forward": {
+                "primary": {
+                  "attempts": 25,
+                  "geometry_inliers": 0,
+                  "original_dimensions": [
+                    [
+                      472,
+                      456
+                    ],
+                    [
+                      1024,
+                      1024
+                    ]
+                  ],
+                  "pixel_attempts": 0,
+                  "pixel_rank_radius": null,
+                  "pixel_window_radius": null,
+                  "pixels": "None",
+                  "raw_proposals": 1323,
+                  "selected_bank": null,
+                  "selected_points": 1323,
+                  "supported": false,
+                  "transform": null
+                },
+                "recovery": {
+                  "exposures": "None",
+                  "search": {
+                    "attempts": 9,
+                    "geometry_inliers": 0,
+                    "original_dimensions": [
+                      [
+                        472,
+                        456
+                      ],
+                      [
+                        1024,
+                        1024
+                      ]
+                    ],
+                    "pixel_attempts": 0,
+                    "pixel_rank_radius": null,
+                    "pixel_window_radius": null,
+                    "pixels": "None",
+                    "raw_proposals": 408,
+                    "selected_bank": null,
+                    "selected_points": 408,
+                    "supported": false,
+                    "transform": null
+                  }
+                },
+                "supported": false
+              },
+              "left": 1,
+              "reverse": {
+                "primary": {
+                  "attempts": 25,
+                  "geometry_inliers": 0,
+                  "original_dimensions": [
+                    [
+                      1024,
+                      1024
+                    ],
+                    [
+                      472,
+                      456
+                    ]
+                  ],
+                  "pixel_attempts": 0,
+                  "pixel_rank_radius": null,
+                  "pixel_window_radius": null,
+                  "pixels": "None",
+                  "raw_proposals": 1398,
+                  "selected_bank": null,
+                  "selected_points": 1398,
+                  "supported": false,
+                  "transform": null
+                },
+                "recovery": {
+                  "exposures": "None",
+                  "search": {
+                    "attempts": 9,
+                    "geometry_inliers": 0,
+                    "original_dimensions": [
+                      [
+                        1024,
+                        1024
+                      ],
+                      [
+                        472,
+                        456
+                      ]
+                    ],
+                    "pixel_attempts": 0,
+                    "pixel_rank_radius": null,
+                    "pixel_window_radius": null,
+                    "pixels": "None",
+                    "raw_proposals": 814,
+                    "selected_bank": null,
+                    "selected_points": 814,
+                    "supported": false,
+                    "transform": null
+                  }
+                },
+                "supported": false
+              },
+              "right": 2,
+              "supported": false
+            }
+          ],
+          "scope": "Actual public bidirectional collection on precommitted unused publisher distractor query/reference pair. Reference has lower ID; one CPU provider spans both directions. Fixed previous caller policy, not full precision/RSS/platform/full500 qualification."
+        },
+        "managed_peak": 21829200,
+        "managed_report_used": 1520,
+        "managed_used": 0
+      },
+      "false_acceptance": false
+    },
+    {
+      "query": "Q04612",
+      "reference": "R047843",
+      "distance": 22,
+      "published_label": "no_reference_match",
+      "status": "complete",
+      "command": [
+        "/usr/bin/time",
+        "-l",
+        "/usr/bin/env",
+        "DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-executable-20261012",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/Q04612.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/R047843.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+        "640",
+        "2.0"
+      ],
+      "child_pid": 28585,
+      "returncode": 0,
+      "elapsed_seconds": 383.13643983400016,
+      "stdout_path": "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-11-20261012.stdout",
+      "stderr_path": "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-11-20261012.stderr",
+      "stdout_sha256": "2f7143fc67b721bd7c1e0466a612fe9261a69aaf768c5e2c65765282309d7eda",
+      "stderr_sha256": "b3305b8fe077cacdbc6c53b4d70fdbb42beb6426bf9a93bb23946b4dd297687d",
+      "evidence": {
+        "evidence": {
+          "file_ids": [
+            1,
+            2
+          ],
+          "pairs": [
+            {
+              "forward": {
+                "primary": {
+                  "attempts": 25,
+                  "geometry_inliers": 0,
+                  "original_dimensions": [
+                    [
+                      768,
+                      1024
+                    ],
+                    [
+                      776,
+                      584
+                    ]
+                  ],
+                  "pixel_attempts": 0,
+                  "pixel_rank_radius": null,
+                  "pixel_window_radius": null,
+                  "pixels": "None",
+                  "raw_proposals": 1174,
+                  "selected_bank": null,
+                  "selected_points": 1174,
+                  "supported": false,
+                  "transform": null
+                },
+                "recovery": {
+                  "exposures": "None",
+                  "search": {
+                    "attempts": 9,
+                    "geometry_inliers": 0,
+                    "original_dimensions": [
+                      [
+                        768,
+                        1024
+                      ],
+                      [
+                        776,
+                        584
+                      ]
+                    ],
+                    "pixel_attempts": 0,
+                    "pixel_rank_radius": null,
+                    "pixel_window_radius": null,
+                    "pixels": "None",
+                    "raw_proposals": 488,
+                    "selected_bank": null,
+                    "selected_points": 488,
+                    "supported": false,
+                    "transform": null
+                  }
+                },
+                "supported": false
+              },
+              "left": 1,
+              "reverse": {
+                "primary": {
+                  "attempts": 25,
+                  "geometry_inliers": 0,
+                  "original_dimensions": [
+                    [
+                      776,
+                      584
+                    ],
+                    [
+                      768,
+                      1024
+                    ]
+                  ],
+                  "pixel_attempts": 0,
+                  "pixel_rank_radius": null,
+                  "pixel_window_radius": null,
+                  "pixels": "None",
+                  "raw_proposals": 1180,
+                  "selected_bank": null,
+                  "selected_points": 1180,
+                  "supported": false,
+                  "transform": null
+                },
+                "recovery": {
+                  "exposures": "None",
+                  "search": {
+                    "attempts": 9,
+                    "geometry_inliers": 0,
+                    "original_dimensions": [
+                      [
+                        776,
+                        584
+                      ],
+                      [
+                        768,
+                        1024
+                      ]
+                    ],
+                    "pixel_attempts": 0,
+                    "pixel_rank_radius": null,
+                    "pixel_window_radius": null,
+                    "pixels": "None",
+                    "raw_proposals": 525,
+                    "selected_bank": null,
+                    "selected_points": 525,
+                    "supported": false,
+                    "transform": null
+                  }
+                },
+                "supported": false
+              },
+              "right": 2,
+              "supported": false
+            }
+          ],
+          "scope": "Actual public bidirectional collection on precommitted unused publisher distractor query/reference pair. Reference has lower ID; one CPU provider spans both directions. Fixed previous caller policy, not full precision/RSS/platform/full500 qualification."
+        },
+        "managed_peak": 16662032,
+        "managed_report_used": 1520,
+        "managed_used": 0
+      },
+      "false_acceptance": false
+    },
+    {
+      "query": "Q08329",
+      "reference": "R047843",
+      "distance": 22,
+      "published_label": "no_reference_match",
+      "status": "complete",
+      "command": [
+        "/usr/bin/time",
+        "-l",
+        "/usr/bin/env",
+        "DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-executable-20261012",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/Q08329.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/R047843.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+        "640",
+        "2.0"
+      ],
+      "child_pid": 34171,
+      "returncode": 0,
+      "elapsed_seconds": 385.9411572500003,
+      "stdout_path": "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-12-20261012.stdout",
+      "stderr_path": "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-12-20261012.stderr",
+      "stdout_sha256": "31fcf6a7b4c08047535f7f9d0a139a506d35b3b85a180fcd81a025267c126163",
+      "stderr_sha256": "b23f930742045c51fbd6b20d1ba39472c6af442b249efe108906752b1bfadc1d",
+      "evidence": {
+        "evidence": {
+          "file_ids": [
+            1,
+            2
+          ],
+          "pairs": [
+            {
+              "forward": {
+                "primary": {
+                  "attempts": 25,
+                  "geometry_inliers": 0,
+                  "original_dimensions": [
+                    [
+                      768,
+                      1024
+                    ],
+                    [
+                      544,
+                      360
+                    ]
+                  ],
+                  "pixel_attempts": 0,
+                  "pixel_rank_radius": null,
+                  "pixel_window_radius": null,
+                  "pixels": "None",
+                  "raw_proposals": 852,
+                  "selected_bank": null,
+                  "selected_points": 852,
+                  "supported": false,
+                  "transform": null
+                },
+                "recovery": {
+                  "exposures": "None",
+                  "search": {
+                    "attempts": 9,
+                    "geometry_inliers": 0,
+                    "original_dimensions": [
+                      [
+                        768,
+                        1024
+                      ],
+                      [
+                        544,
+                        360
+                      ]
+                    ],
+                    "pixel_attempts": 0,
+                    "pixel_rank_radius": null,
+                    "pixel_window_radius": null,
+                    "pixels": "None",
+                    "raw_proposals": 461,
+                    "selected_bank": null,
+                    "selected_points": 461,
+                    "supported": false,
+                    "transform": null
+                  }
+                },
+                "supported": false
+              },
+              "left": 1,
+              "reverse": {
+                "primary": {
+                  "attempts": 25,
+                  "geometry_inliers": 0,
+                  "original_dimensions": [
+                    [
+                      544,
+                      360
+                    ],
+                    [
+                      768,
+                      1024
+                    ]
+                  ],
+                  "pixel_attempts": 0,
+                  "pixel_rank_radius": null,
+                  "pixel_window_radius": null,
+                  "pixels": "None",
+                  "raw_proposals": 838,
+                  "selected_bank": null,
+                  "selected_points": 838,
+                  "supported": false,
+                  "transform": null
+                },
+                "recovery": {
+                  "exposures": "None",
+                  "search": {
+                    "attempts": 9,
+                    "geometry_inliers": 0,
+                    "original_dimensions": [
+                      [
+                        544,
+                        360
+                      ],
+                      [
+                        768,
+                        1024
+                      ]
+                    ],
+                    "pixel_attempts": 0,
+                    "pixel_rank_radius": null,
+                    "pixel_window_radius": null,
+                    "pixels": "None",
+                    "raw_proposals": 363,
+                    "selected_bank": null,
+                    "selected_points": 363,
+                    "supported": false,
+                    "transform": null
+                  }
+                },
+                "supported": false
+              },
+              "right": 2,
+              "supported": false
+            }
+          ],
+          "scope": "Actual public bidirectional collection on precommitted unused publisher distractor query/reference pair. Reference has lower ID; one CPU provider spans both directions. Fixed previous caller policy, not full precision/RSS/platform/full500 qualification."
+        },
+        "managed_peak": 16437232,
+        "managed_report_used": 1520,
+        "managed_used": 0
+      },
+      "false_acceptance": false
+    },
+    {
+      "query": "Q12675",
+      "reference": "R010286",
+      "distance": 22,
+      "published_label": "no_reference_match",
+      "status": "complete",
+      "command": [
+        "/usr/bin/time",
+        "-l",
+        "/usr/bin/env",
+        "DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-executable-20261012",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/Q12675.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/R010286.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+        "640",
+        "2.0"
+      ],
+      "child_pid": 39932,
+      "returncode": 0,
+      "elapsed_seconds": 308.32208991599964,
+      "stdout_path": "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-13-20261012.stdout",
+      "stderr_path": "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-13-20261012.stderr",
+      "stdout_sha256": "3508612b02e370645c5e41474675515c5ff0f2296d7273e9cb56351baa50faf9",
+      "stderr_sha256": "5667f90fddf4f83f85ac254611907651bbf9039c879e8793aac7d2d8d3da5953",
+      "evidence": {
+        "evidence": {
+          "file_ids": [
+            1,
+            2
+          ],
+          "pairs": [
+            {
+              "forward": {
+                "primary": {
+                  "attempts": 25,
+                  "geometry_inliers": 0,
+                  "original_dimensions": [
+                    [
+                      328,
+                      496
+                    ],
+                    [
+                      432,
+                      232
+                    ]
+                  ],
+                  "pixel_attempts": 0,
+                  "pixel_rank_radius": null,
+                  "pixel_window_radius": null,
+                  "pixels": "None",
+                  "raw_proposals": 459,
+                  "selected_bank": null,
+                  "selected_points": 459,
+                  "supported": false,
+                  "transform": null
+                },
+                "recovery": {
+                  "exposures": "None",
+                  "search": {
+                    "attempts": 9,
+                    "geometry_inliers": 0,
+                    "original_dimensions": [
+                      [
+                        328,
+                        496
+                      ],
+                      [
+                        432,
+                        232
+                      ]
+                    ],
+                    "pixel_attempts": 0,
+                    "pixel_rank_radius": null,
+                    "pixel_window_radius": null,
+                    "pixels": "None",
+                    "raw_proposals": 253,
+                    "selected_bank": null,
+                    "selected_points": 253,
+                    "supported": false,
+                    "transform": null
+                  }
+                },
+                "supported": false
+              },
+              "left": 1,
+              "reverse": {
+                "primary": {
+                  "attempts": 25,
+                  "geometry_inliers": 0,
+                  "original_dimensions": [
+                    [
+                      432,
+                      232
+                    ],
+                    [
+                      328,
+                      496
+                    ]
+                  ],
+                  "pixel_attempts": 0,
+                  "pixel_rank_radius": null,
+                  "pixel_window_radius": null,
+                  "pixels": "None",
+                  "raw_proposals": 476,
+                  "selected_bank": null,
+                  "selected_points": 476,
+                  "supported": false,
+                  "transform": null
+                },
+                "recovery": {
+                  "exposures": "None",
+                  "search": {
+                    "attempts": 9,
+                    "geometry_inliers": 0,
+                    "original_dimensions": [
+                      [
+                        432,
+                        232
+                      ],
+                      [
+                        328,
+                        496
+                      ]
+                    ],
+                    "pixel_attempts": 0,
+                    "pixel_rank_radius": null,
+                    "pixel_window_radius": null,
+                    "pixels": "None",
+                    "raw_proposals": 199,
+                    "selected_bank": null,
+                    "selected_points": 199,
+                    "supported": false,
+                    "transform": null
+                  }
+                },
+                "supported": false
+              },
+              "right": 2,
+              "supported": false
+            }
+          ],
+          "scope": "Actual public bidirectional collection on precommitted unused publisher distractor query/reference pair. Reference has lower ID; one CPU provider spans both directions. Fixed previous caller policy, not full precision/RSS/platform/full500 qualification."
+        },
+        "managed_peak": 3625072,
+        "managed_report_used": 1520,
+        "managed_used": 0
+      },
+      "false_acceptance": false
+    },
+    {
+      "query": "Q44131",
+      "reference": "R021968",
+      "distance": 22,
+      "published_label": "no_reference_match",
+      "status": "complete",
+      "command": [
+        "/usr/bin/time",
+        "-l",
+        "/usr/bin/env",
+        "DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-executable-20261012",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/Q44131.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/R021968.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+        "640",
+        "2.0"
+      ],
+      "child_pid": 43983,
+      "returncode": 0,
+      "elapsed_seconds": 446.7629672920002,
+      "stdout_path": "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-14-20261012.stdout",
+      "stderr_path": "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-14-20261012.stderr",
+      "stdout_sha256": "4bff37bb526132c556561251ae58a48855d081f9f583a9bf82463bce6c5348b1",
+      "stderr_sha256": "7934f2003d5e55c8cd13cda8832b189c29d8122604917558bdd06adf82648462",
+      "evidence": {
+        "evidence": {
+          "file_ids": [
+            1,
+            2
+          ],
+          "pairs": [
+            {
+              "forward": {
+                "primary": {
+                  "attempts": 25,
+                  "geometry_inliers": 0,
+                  "original_dimensions": [
+                    [
+                      1024,
+                      544
+                    ],
+                    [
+                      1024,
+                      768
+                    ]
+                  ],
+                  "pixel_attempts": 0,
+                  "pixel_rank_radius": null,
+                  "pixel_window_radius": null,
+                  "pixels": "None",
+                  "raw_proposals": 908,
+                  "selected_bank": null,
+                  "selected_points": 908,
+                  "supported": false,
+                  "transform": null
+                },
+                "recovery": {
+                  "exposures": "None",
+                  "search": {
+                    "attempts": 9,
+                    "geometry_inliers": 0,
+                    "original_dimensions": [
+                      [
+                        1024,
+                        544
+                      ],
+                      [
+                        1024,
+                        768
+                      ]
+                    ],
+                    "pixel_attempts": 0,
+                    "pixel_rank_radius": null,
+                    "pixel_window_radius": null,
+                    "pixels": "None",
+                    "raw_proposals": 494,
+                    "selected_bank": null,
+                    "selected_points": 494,
+                    "supported": false,
+                    "transform": null
+                  }
+                },
+                "supported": false
+              },
+              "left": 1,
+              "reverse": {
+                "primary": {
+                  "attempts": 25,
+                  "geometry_inliers": 0,
+                  "original_dimensions": [
+                    [
+                      1024,
+                      768
+                    ],
+                    [
+                      1024,
+                      544
+                    ]
+                  ],
+                  "pixel_attempts": 0,
+                  "pixel_rank_radius": null,
+                  "pixel_window_radius": null,
+                  "pixels": "None",
+                  "raw_proposals": 911,
+                  "selected_bank": null,
+                  "selected_points": 911,
+                  "supported": false,
+                  "transform": null
+                },
+                "recovery": {
+                  "exposures": "None",
+                  "search": {
+                    "attempts": 9,
+                    "geometry_inliers": 0,
+                    "original_dimensions": [
+                      [
+                        1024,
+                        768
+                      ],
+                      [
+                        1024,
+                        544
+                      ]
+                    ],
+                    "pixel_attempts": 0,
+                    "pixel_rank_radius": null,
+                    "pixel_window_radius": null,
+                    "pixels": "None",
+                    "raw_proposals": 333,
+                    "selected_bank": null,
+                    "selected_points": 333,
+                    "supported": false,
+                    "transform": null
+                  }
+                },
+                "supported": false
+              },
+              "right": 2,
+              "supported": false
+            }
+          ],
+          "scope": "Actual public bidirectional collection on precommitted unused publisher distractor query/reference pair. Reference has lower ID; one CPU provider spans both directions. Fixed previous caller policy, not full precision/RSS/platform/full500 qualification."
+        },
+        "managed_peak": 16475920,
+        "managed_report_used": 1520,
+        "managed_used": 0
+      },
+      "false_acceptance": false
+    },
+    {
+      "query": "Q12235",
+      "reference": "R010286",
+      "distance": 23,
+      "published_label": "no_reference_match",
+      "status": "complete",
+      "command": [
+        "/usr/bin/time",
+        "-l",
+        "/usr/bin/env",
+        "DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-executable-20261012",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/Q12235.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/R010286.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+        "640",
+        "2.0"
+      ],
+      "child_pid": 50244,
+      "returncode": 0,
+      "elapsed_seconds": 302.88080575000004,
+      "stdout_path": "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-15-20261012.stdout",
+      "stderr_path": "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-15-20261012.stderr",
+      "stdout_sha256": "679e2f6fb84393bb7cf66cdef917917d10cd7fa29cb1df8461332593bc21510a",
+      "stderr_sha256": "e9013c2a06832934557ff76a8b61252d81c0b55f036557c2286e7b6f87ad03cf",
+      "evidence": {
+        "evidence": {
+          "file_ids": [
+            1,
+            2
+          ],
+          "pairs": [
+            {
+              "forward": {
+                "primary": {
+                  "attempts": 25,
+                  "geometry_inliers": 0,
+                  "original_dimensions": [
+                    [
+                      328,
+                      496
+                    ],
+                    [
+                      520,
+                      384
+                    ]
+                  ],
+                  "pixel_attempts": 0,
+                  "pixel_rank_radius": null,
+                  "pixel_window_radius": null,
+                  "pixels": "None",
+                  "raw_proposals": 486,
+                  "selected_bank": null,
+                  "selected_points": 486,
+                  "supported": false,
+                  "transform": null
+                },
+                "recovery": {
+                  "exposures": "None",
+                  "search": {
+                    "attempts": 9,
+                    "geometry_inliers": 0,
+                    "original_dimensions": [
+                      [
+                        328,
+                        496
+                      ],
+                      [
+                        520,
+                        384
+                      ]
+                    ],
+                    "pixel_attempts": 0,
+                    "pixel_rank_radius": null,
+                    "pixel_window_radius": null,
+                    "pixels": "None",
+                    "raw_proposals": 250,
+                    "selected_bank": null,
+                    "selected_points": 250,
+                    "supported": false,
+                    "transform": null
+                  }
+                },
+                "supported": false
+              },
+              "left": 1,
+              "reverse": {
+                "primary": {
+                  "attempts": 25,
+                  "geometry_inliers": 0,
+                  "original_dimensions": [
+                    [
+                      520,
+                      384
+                    ],
+                    [
+                      328,
+                      496
+                    ]
+                  ],
+                  "pixel_attempts": 0,
+                  "pixel_rank_radius": null,
+                  "pixel_window_radius": null,
+                  "pixels": "None",
+                  "raw_proposals": 531,
+                  "selected_bank": null,
+                  "selected_points": 531,
+                  "supported": false,
+                  "transform": null
+                },
+                "recovery": {
+                  "exposures": "None",
+                  "search": {
+                    "attempts": 9,
+                    "geometry_inliers": 0,
+                    "original_dimensions": [
+                      [
+                        520,
+                        384
+                      ],
+                      [
+                        328,
+                        496
+                      ]
+                    ],
+                    "pixel_attempts": 0,
+                    "pixel_rank_radius": null,
+                    "pixel_window_radius": null,
+                    "pixels": "None",
+                    "raw_proposals": 306,
+                    "selected_bank": null,
+                    "selected_points": 306,
+                    "supported": false,
+                    "transform": null
+                  }
+                },
+                "supported": false
+              },
+              "right": 2,
+              "supported": false
+            }
+          ],
+          "scope": "Actual public bidirectional collection on precommitted unused publisher distractor query/reference pair. Reference has lower ID; one CPU provider spans both directions. Fixed previous caller policy, not full precision/RSS/platform/full500 qualification."
+        },
+        "managed_peak": 4525840,
+        "managed_report_used": 1520,
+        "managed_used": 0
+      },
+      "false_acceptance": false
+    }
+  ],
+  "scope": "Fixed archived caller policy, public bidirectional CPU API. Hash-near publisher distractors excluded from prior local DISC21 reports; no semantic-hard-negative, pretraining holdout, general precision, full500 or full458 claim. Untagged linear sRGB caller assumption retained. Model memory outside managed budget.",
+  "false_acceptances": 0
+}

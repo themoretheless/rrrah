@@ -1,0 +1,43 @@
+{
+  "implementation": "SampledPaint evaluates native source at convex fragment centroid after geometry partition; sampled native pixels enter per-cell PaintFrame/group lifecycle before final premultiplied averaging",
+  "bounds": {
+    "sampling_cost": "explicit1..1M charged before source invocation",
+    "source_callback": "cancellation supplied and checked after invocation; None refuses,Some(None) means no source coverage",
+    "storage": "winding snapshot pre-admitted; no retained sampled image plane"
+  },
+  "tests": {
+    "ordinary_passed": 153,
+    "ignored": 11,
+    "native_pdf_control_passed": 1,
+    "retained_edge_manual_passed": 1,
+    "coverage": [
+      "affineRGB gradient over triangular region with group opacity and17repeats",
+      "actual originalCMYK PDF Type4 gradient through native source sampler",
+      "source refusal",
+      "absent source",
+      "budget refusal before source invocation",
+      "post-source cancellation",
+      "wrong model refusal",
+      "retained clipping/group/admission checks"
+    ]
+  },
+  "native_pdf_control": {
+    "alpha": 0.5,
+    "native_components": [
+      0.3333333432674408,
+      0.3333333432674408,
+      0.0,
+      0.0
+    ],
+    "expected": "Triangle area0.5; C=M=f64(f32(1/3)),Y=K=0"
+  },
+  "limits": "Final premultiplied field must be affine for exact centroid integral. Nonlinear functions/blends/varying-alpha products need further integration. Callers must include all source boundaries in geometry partition. Full raster/mask/cross-space/VectorApple scene routing and production viewer not yet connected.",
+  "qualification": "Native sampled-field foundation and authored PDF validated, not full gradient/raster/AI acceptance",
+  "hashes": {
+    "vendor/hayro/src/native_spatial.rs": "22f69b73a8d4c26b19bca3ce6e769fbb789d28f045faa00d1cfe4795d3a9ff3f",
+    "vendor/hayro/src/knockout_interpreter.rs": "5556a5273a8d5fd80cef82a3c4929bc9db908e180ae0872aa357d3a69fe250eb",
+    "docs/research/ai-covered-fragment-sampling-2026-10-12/spatial-sampled-tests.log": "bf485698bec4c384859ab2d06d8527563089f96d664e35df58206de9593539c1",
+    "docs/research/ai-covered-fragment-sampling-2026-10-12/spatial-sampled-native-pdf.log": "7a159746ffc63b3b142719510948c39498d85dfe7a835b912742ec865e713cca",
+    "docs/research/ai-covered-fragment-sampling-2026-10-12/spatial-sampled-edge-controls.log": "f4a5b28927a6b93231d65df8060dcf3f5b2ca25261ad227a218382632aef22b4"
+  }
+}

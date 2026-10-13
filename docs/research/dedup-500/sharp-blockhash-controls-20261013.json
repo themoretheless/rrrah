@@ -1,0 +1,113 @@
+{
+  "status": "passed_wrapper_controls_with_explicit_mocks",
+  "controls": [
+    {
+      "name": "no_input_constructor_leaves_options_absent",
+      "passed": true,
+      "calls": []
+    },
+    {
+      "name": "constructor_blockhash_options_reset_to_defaults",
+      "passed": true,
+      "calls": [
+        {
+          "kind": "pipeline"
+        },
+        {
+          "kind": "blockhash",
+          "width": 100,
+          "height": 100,
+          "bytes": 12,
+          "bits": 8,
+          "method": 2
+        }
+      ]
+    },
+    {
+      "name": "callback_only_overload_discards_callback",
+      "passed": true,
+      "calls": [
+        {
+          "kind": "pipeline"
+        },
+        {
+          "kind": "blockhash",
+          "width": 100,
+          "height": 100,
+          "bytes": 12,
+          "bits": 8,
+          "method": 2
+        }
+      ]
+    },
+    {
+      "name": "explicit_callback_for_file_input_is_never_called",
+      "passed": true,
+      "calls": [
+        {
+          "kind": "pipeline"
+        },
+        {
+          "kind": "blockhash",
+          "width": 100,
+          "height": 100,
+          "bytes": 12,
+          "bits": 8,
+          "method": 2
+        }
+      ]
+    },
+    {
+      "name": "stream_callback_and_promise_schedule_two_inferences",
+      "passed": true,
+      "calls": [
+        {
+          "kind": "pipeline"
+        },
+        {
+          "kind": "pipeline"
+        },
+        {
+          "kind": "blockhash",
+          "width": 100,
+          "height": 100,
+          "bytes": 12,
+          "bits": 8,
+          "method": 2
+        },
+        {
+          "kind": "blockhash",
+          "width": 100,
+          "height": 100,
+          "bytes": 12,
+          "bits": 8,
+          "method": 2
+        }
+      ]
+    },
+    {
+      "name": "raw_pipeline_payload_forwarded_with_input_metadata_dimensions",
+      "passed": true,
+      "calls": [
+        {
+          "kind": "pipeline"
+        },
+        {
+          "kind": "blockhash",
+          "width": 100,
+          "height": 100,
+          "bytes": 12,
+          "bits": 16,
+          "method": 2
+        }
+      ]
+    }
+  ],
+  "node_version": "v22.23.3",
+  "upstream_tests_executed": 0,
+  "scope": "Unmodified pinned wrapper executed in VM. Sharp, Bluebird adapter and blockhash are mocks. No real decoding, perceptual hashing, upstream Mocha suite or fixture-quality claim.",
+  "pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-sharp-blockhash-source-20261013/index.js": "ac6fdffced9c6f05603077baa1853aaa7bbe832776b0d6dc39e4f7c74854a638",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/check-dedup-sharp-blockhash-20261013.cjs": "75e4f35cbf28b0531b702861d5ae325d5bdfde64ce4c47db7ad7869751d45ea1"
+  }
+}

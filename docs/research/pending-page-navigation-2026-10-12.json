@@ -1,0 +1,27 @@
+{
+  "production_fix": "Advance/reverse page navigation from pending current-generation target rather than visible index; visible index changes only after accepted frame. Scientific window adjustments preserve pending page.",
+  "state": "Generation-bound pending page cleared on current terminal event and new file; obsolete generations ignored",
+  "regressions": [
+    "Rapid0->1->2->1->0 intent while visible page0",
+    "Prior generation token cancelled for each replacement",
+    "Lower bound produces no extra request",
+    "Obsolete RasterReady and Failed do not replace visible page or clear new target",
+    "Latest failure resets to visible page",
+    "Cancelled generation does not steer next navigation"
+  ],
+  "ordinary_app_passed": 216,
+  "ordinary_app_ignored": 60,
+  "metal_viewer_manual_passed": 1,
+  "limitations": [
+    "App event-handler/queue headless regression, not physical keyboard/live window qualification",
+    "Metal check covers actual TIFF loader/cache helper; does not claim live input/render event loop"
+  ],
+  "sources": {
+    "crates/rrrah-app/src/main.rs": "558398d785c6c948e032f8ab7f2307fa71d54325cf5db07aa9faa623d06c45f1"
+  },
+  "logs": {
+    "docs/research/pending-page-navigation-2026-10-12/rrrah-pending-page-navigation-20261012.log": "58c961dbc1dca523af5c633f4d46a44e6112ccc6f10b79f3bad39573e97d25b7",
+    "docs/research/pending-page-navigation-2026-10-12/rrrah-pending-page-navigation-final-20261012.log": "31c0ce3fcd00d58b9ae661bf5d110ac1def2c7b43497e3bd322ca16dafc6ece8",
+    "docs/research/pending-page-navigation-2026-10-12/rrrah-pending-page-navigation-metal-20261012.log": "44f3d14292e23b1b05b9b8e0bda9ec59946cadea44ac9a47853a44f3a7f14a13"
+  }
+}

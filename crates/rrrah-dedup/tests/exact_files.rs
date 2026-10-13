@@ -2,6 +2,89 @@ use rrrah_dedup::exact::{IssueKind, Options, scan};
 use std::{cell::Cell, fs};
 
 #[test]
+fn exact_content_partitions_ignore_extensions_and_check_unsampled_bytes() {
+    use std::collections::BTreeSet;
+    let root = tempfile::tempdir().unwrap();
+    let mut expected = BTreeSet::new();
+    for (family, size) in [0, 512, 128 * 1024].into_iter().enumerate() {
+        let bytes = vec![37_u8; size];
+        let mut copies = Vec::new();
+        for suffix in ["jpg", "PNG", "bin", ""] {
+            let path = root.path().join(format!("family-{family}.{suffix}"));
+            fs::write(&path, &bytes).unwrap();
+            copies.push(path);
+        }
+        copies.sort();
+        expected.insert(copies);
+        if size > 0 {
+            let mut negative = bytes;
+            negative[size / 2] ^= 1;
+            fs::write(root.path().join(format!("different-{family}.jpg")), negative).unwrap();
+        }
+    }
+    let mut roots = fs::read_dir(root.path())
+        .unwrap()
+        .map(|entry| entry.unwrap().path())
+        .collect::<Vec<_>>();
+    roots.sort();
+    for reverse in [false, true] {
+        if reverse {
+            roots.reverse();
+        }
+        for verified in [false, true] {
+            let report = if verified {
+                rrrah_dedup::exact::scan_verified(&roots, &Options::default(), || false)
+            } else {
+                scan(&roots, &Options::default(), || false)
+            };
+            assert!(report.complete(), "{report:?}");
+            assert_eq!(report.files_observed, 14);
+            let actual = report
+                .groups
+                .iter()
+                .map(|group| {
+                    let mut paths = group.paths.clone();
+                    paths.sort();
+                    paths
+                })
+                .collect::<BTreeSet<_>>();
+            assert_eq!(actual, expected);
+        }
+    }
+}
+
+#[test]
+fn reordered_middle_blocks_with_identical_sampled_edges_are_not_copies() {
+    let root = tempfile::tempdir().unwrap();
+    let paths = ["left.bin", "copy.bin", "permuted.bin"].map(|name| root.path().join(name));
+    let prefix = vec![19_u8; 4 * 4096];
+    let a = vec![37_u8; 4096];
+    let b = vec![83_u8; 4096];
+    let left = [prefix.as_slice(), &a, &b, &prefix].concat();
+    let permuted = [prefix.as_slice(), &b, &a, &prefix].concat();
+    assert_eq!(left.len(), permuted.len());
+    assert_eq!(&left[..4096], &permuted[..4096]);
+    assert_eq!(&left[left.len() - 4096..], &permuted[permuted.len() - 4096..]);
+    assert_ne!(left, permuted);
+    assert_ne!(blake3::hash(&left), blake3::hash(&permuted));
+    fs::write(&paths[0], &left).unwrap();
+    fs::write(&paths[1], &left).unwrap();
+    fs::write(&paths[2], &permuted).unwrap();
+    for roots in [paths.to_vec(), paths.iter().rev().cloned().collect()] {
+        let report = scan(&roots, &Options::default(), || false);
+        assert!(report.complete(), "{:?}", report.issues);
+        assert_eq!(report.files_observed, 3);
+        assert_eq!(report.groups.len(), 1);
+        let mut actual = report.groups[0].paths.clone();
+        actual.sort();
+        let mut expected = paths[..2].to_vec();
+        expected.sort();
+        assert_eq!(actual, expected);
+        assert_eq!(report.groups[0].bytes, left.len() as u64);
+    }
+}
+
+#[test]
 fn nested_overlapping_roots_match_the_full_authored_partition() {
     use std::collections::BTreeSet;
     let root = tempfile::tempdir().unwrap();
@@ -190,7 +273,8 @@ fn same_length_mutation_during_sample_is_detected() {
     let checks = Cell::new(0);
     let report = scan(&[a.clone(), b], &Options::default(), || {
         checks.set(checks.get() + 1);
-        if checks.get() == 4 {
+        // Two root-admission callbacks precede the original sample checkpoint.
+        if checks.get() == 6 {
             fs::write(&a, [2; 10000]).unwrap();
             // tmpfs may coalesce rapid writes to the same timestamp. Make this
             // metadata-invalidation fixture deterministic on coarse clocks.
@@ -303,6 +387,47 @@ fn changing_any_member_does_not_hide_healthy_duplicates() {
 
 #[cfg(all(unix, not(target_os = "macos")))]
 #[test]
+fn lossy_equal_non_utf8_names_preserve_distinct_copy_partitions() {
+    use std::{collections::BTreeSet, ffi::OsString, os::unix::ffi::OsStringExt};
+    let root = tempfile::tempdir().unwrap();
+    let a = root.path().join(OsString::from_vec(vec![b'x', 0xff]));
+    let b = root.path().join(OsString::from_vec(vec![b'x', 0xfe]));
+    assert_ne!(a, b);
+    assert_eq!(a.to_string_lossy(), b.to_string_lossy());
+    let acopy = root.path().join("a-copy");
+    let bcopy = root.path().join("b-copy");
+    for path in [&a, &acopy] {
+        fs::write(path, b"first family").unwrap();
+    }
+    for path in [&b, &bcopy] {
+        fs::write(path, b"other family").unwrap();
+    }
+    let partition = |pairs: Vec<Vec<std::path::PathBuf>>| {
+        pairs
+            .into_iter()
+            .map(|mut pair| {
+                pair.sort();
+                pair
+            })
+            .collect::<BTreeSet<_>>()
+    };
+    let expected = partition(vec![vec![a.clone(), acopy], vec![b.clone(), bcopy]]);
+    for roots in [
+        vec![root.path().to_path_buf(), a.clone(), b.clone()],
+        vec![b, a, root.path().to_path_buf()],
+    ] {
+        let report = scan(&roots, &Options::default(), || false);
+        assert!(report.complete(), "{report:?}");
+        assert_eq!(report.files_observed, 4);
+        assert_eq!(
+            partition(report.groups.into_iter().map(|g| g.paths).collect()),
+            expected
+        );
+    }
+}
+
+#[cfg(all(unix, not(target_os = "macos")))]
+#[test]
 fn non_utf8_paths_preserve_exact_identity_and_duplicates() {
     use std::{ffi::OsString, os::unix::ffi::OsStringExt};
     let root = tempfile::tempdir().unwrap();
@@ -328,7 +453,8 @@ fn fifo_replacement_does_not_block_or_hide_healthy_copies() {
     let report = scan(&paths, &Options::default(), || {
         calls.set(calls.get() + 1);
         // Three traversal checks precede the first sample-hash check.
-        if calls.get() == 4 {
+        // Three root-admission callbacks precede the original pre-hash checkpoint.
+        if calls.get() == 7 {
             fs::remove_file(&paths[0]).unwrap();
             assert!(
                 std::process::Command::new("mkfifo")
@@ -512,4 +638,387 @@ fn same_bytes_and_modified_time_do_not_hide_physical_file_replacement() {
         .unwrap()
         .verify(|| false)
         .unwrap();
+}
+
+#[test]
+fn repeated_exact_scan_rejects_stale_equality_after_rewrite_and_growth() {
+    for growth in [false, true] {
+        let root = tempfile::tempdir().unwrap();
+        let a = root.path().join("a");
+        let b = root.path().join("b");
+        fs::write(&a, b"same").unwrap();
+        fs::write(&b, b"same").unwrap();
+        let before = scan(&[a.clone(), b.clone()], &Options::default(), || false);
+        assert!(before.complete());
+        assert_eq!(before.groups.len(), 1);
+        if growth {
+            fs::write(&a, b"sameX").unwrap();
+            fs::write(&b, b"sameY").unwrap();
+        } else {
+            fs::write(&b, b"edit").unwrap();
+        }
+        assert_ne!(fs::read(&a).unwrap(), fs::read(&b).unwrap());
+        let after = scan(&[a, b], &Options::default(), || false);
+        assert!(after.complete());
+        assert!(after.groups.is_empty(), "growth={growth}: {after:?}");
+    }
+}
+
+#[test]
+fn restored_modified_time_does_not_hide_same_length_snapshot_edit() {
+    use rrrah_dedup::exact::{ContentSnapshot, SnapshotError};
+    let root = tempfile::tempdir().unwrap();
+    let path = root.path().join("source");
+    fs::write(&path, vec![1; 128 * 1024]).unwrap();
+    let modified = fs::metadata(&path).unwrap().modified().unwrap();
+    let before = ContentSnapshot::read(&path, 256 * 1024, || false).unwrap();
+    fs::write(&path, vec![2; 128 * 1024]).unwrap();
+    fs::File::options()
+        .write(true)
+        .open(&path)
+        .unwrap()
+        .set_times(fs::FileTimes::new().set_modified(modified))
+        .unwrap();
+    assert_eq!(fs::metadata(&path).unwrap().modified().unwrap(), modified);
+    assert!(matches!(before.verify(|| false), Err(SnapshotError::Changed)));
+    let restored = ContentSnapshot::read(&path, 256 * 1024, || false).unwrap();
+    restored.verify(|| false).unwrap();
+}
+
+#[cfg(unix)]
+#[test]
+fn restored_modified_time_does_not_hide_same_inode_edit_during_scan() {
+    use std::os::unix::fs::MetadataExt;
+    let root = tempfile::tempdir().unwrap();
+    let a = root.path().join("a");
+    let b = root.path().join("b");
+    fs::write(&a, [1; 10000]).unwrap();
+    fs::write(&b, [1; 10000]).unwrap();
+    let metadata = fs::metadata(&a).unwrap();
+    let modified = metadata.modified().unwrap();
+    let changed = (metadata.ctime(), metadata.ctime_nsec());
+    // Advance to a different ctime tick without relying on subsecond clocks.
+    std::thread::sleep(std::time::Duration::from_millis(1100));
+    let checks = Cell::new(0);
+    let report = scan(&[a.clone(), b.clone()], &Options::default(), || {
+        checks.set(checks.get() + 1);
+        // Two root-admission callbacks precede the original sample checkpoint.
+        if checks.get() == 6 {
+            fs::write(&a, [2; 10000]).unwrap();
+            fs::File::options()
+                .write(true)
+                .open(&a)
+                .unwrap()
+                .set_times(fs::FileTimes::new().set_modified(modified))
+                .unwrap();
+            let after = fs::metadata(&a).unwrap();
+            assert_eq!(
+                (after.dev(), after.ino(), after.len()),
+                (metadata.dev(), metadata.ino(), metadata.len())
+            );
+            assert_eq!(after.modified().unwrap(), modified);
+            assert_ne!((after.ctime(), after.ctime_nsec()), changed);
+        }
+        false
+    });
+    assert!(checks.get() >= 4);
+    assert!(report.groups.is_empty());
+    assert!(!report.complete());
+    assert!(
+        report
+            .issues
+            .iter()
+            .any(|issue| issue.path == a && issue.kind == IssueKind::Changed)
+    );
+    let fresh = scan(&[a, b], &Options::default(), || false);
+    assert!(fresh.complete(), "{fresh:?}");
+    assert!(fresh.groups.is_empty());
+}
+
+#[test]
+fn excess_root_admission_refuses_before_missing_source_io() {
+    let root = tempfile::tempdir().unwrap();
+    let paths = vec![root.path().join("missing-a"), root.path().join("missing-b")];
+    for roots in [paths.clone(), paths.iter().cloned().rev().collect()] {
+        let report = scan(
+            &roots,
+            &Options {
+                max_entries: 1,
+                ..Options::default()
+            },
+            || false,
+        );
+        assert!(!report.complete());
+        assert!(!report.cancelled);
+        assert_eq!(report.files_observed, 0);
+        assert!(report.groups.is_empty());
+        assert_eq!(report.issues.len(), 1);
+        assert_eq!(report.issues[0].kind, IssueKind::Limit);
+    }
+    let zero = scan(
+        &paths,
+        &Options {
+            max_entries: 0,
+            ..Options::default()
+        },
+        || false,
+    );
+    assert_eq!(zero.issues.len(), 1);
+    assert_eq!(zero.issues[0].kind, IssueKind::Limit);
+    assert_eq!(zero.files_observed, 0);
+}
+
+#[test]
+fn root_admission_cancels_before_io_at_each_preparation_checkpoint() {
+    let root = tempfile::tempdir().unwrap();
+    let paths = (0..64)
+        .map(|n| root.path().join(format!("missing-{n}")))
+        .collect::<Vec<_>>();
+    for stop in 1..=paths.len() {
+        let calls = Cell::new(0);
+        let report = scan(&paths, &Options::default(), || {
+            calls.set(calls.get() + 1);
+            calls.get() == stop
+        });
+        assert!(report.cancelled, "stop={stop}");
+        assert!(!report.complete());
+        assert!(report.issues.is_empty(), "stop={stop}: {report:?}");
+        assert!(report.groups.is_empty());
+        assert_eq!(report.files_observed, 0);
+        assert_eq!(report.bytes_read, 0);
+        assert_eq!(calls.get(), stop);
+    }
+}
+
+#[test]
+fn duplicate_root_admission_retains_boundary_and_fresh_retry() {
+    let root = tempfile::tempdir().unwrap();
+    let a = root.path().join("a");
+    let b = root.path().join("b");
+    fs::write(&a, b"same").unwrap();
+    fs::write(&b, b"same").unwrap();
+    let one = scan(
+        &vec![a.clone(); 1000],
+        &Options {
+            max_entries: 1,
+            ..Options::default()
+        },
+        || false,
+    );
+    assert!(one.complete(), "{one:?}");
+    assert_eq!(one.files_observed, 1);
+    let refused = scan(
+        &[a.clone(), b.clone()],
+        &Options {
+            max_entries: 1,
+            ..Options::default()
+        },
+        || false,
+    );
+    assert!(!refused.complete());
+    assert_eq!(refused.files_observed, 0);
+    let fresh = scan(
+        &[b.clone(), a.clone(), a.clone()],
+        &Options {
+            max_entries: 2,
+            ..Options::default()
+        },
+        || false,
+    );
+    assert!(fresh.complete(), "{fresh:?}");
+    assert_eq!(fresh.files_observed, 2);
+    assert_eq!(fresh.groups.len(), 1);
+    assert_eq!(fresh.groups[0].paths, vec![a, b]);
+}
+
+#[cfg(unix)]
+#[test]
+fn whitespace_path_names_preserve_all_authored_copy_partitions() {
+    use std::collections::BTreeSet;
+    let root = tempfile::tempdir().unwrap();
+    let left = root.path().join("left");
+    let right = root.path().join("right");
+    fs::create_dir(&left).unwrap();
+    fs::create_dir(&right).unwrap();
+    let names = [
+        "plain", " plain", "plain ", "\tplain", "plain\t", "plain\n", "\nplain", "plain\r",
+    ];
+    let mut expected = BTreeSet::new();
+    for (family, name) in names.iter().enumerate() {
+        let paths = [left.join(name), right.join(name)];
+        let mut data = vec![19; 512];
+        data[256] = family as u8;
+        for path in &paths {
+            fs::write(path, &data).unwrap();
+        }
+        let mut paths = paths.to_vec();
+        paths.sort();
+        expected.insert(paths);
+    }
+    for roots in [vec![left.clone(), right.clone(), left.clone()], vec![right, left]] {
+        for verified in [false, true] {
+            let report = if verified {
+                rrrah_dedup::exact::scan_verified(&roots, &Options::default(), || false)
+            } else {
+                scan(&roots, &Options::default(), || false)
+            };
+            assert!(report.complete(), "{report:?}");
+            assert_eq!(report.files_observed, 16);
+            let actual = report
+                .groups
+                .iter()
+                .map(|group| {
+                    assert_eq!(group.bytes, 512);
+                    let mut paths = group.paths.clone();
+                    paths.sort();
+                    paths
+                })
+                .collect::<BTreeSet<_>>();
+            assert_eq!(actual, expected);
+        }
+    }
+}
+
+#[test]
+fn verified_scan_final_callback_cannot_publish_a_changed_earlier_member() {
+    check_final_exact_callback(true);
+}
+
+#[test]
+fn ordinary_scan_final_callback_cannot_publish_a_changed_earlier_member() {
+    check_final_exact_callback(false);
+}
+
+fn check_final_exact_callback(verified: bool) {
+    let directory = tempfile::tempdir().unwrap();
+    let roots = [directory.path().join("a.bin"), directory.path().join("b.bin")];
+    let original = b"same full content";
+    for path in &roots {
+        fs::write(path, original).unwrap();
+    }
+    let run = |cancel: &dyn Fn() -> bool| {
+        if verified {
+            rrrah_dedup::exact::scan_verified(&roots, &Options::default(), cancel)
+        } else {
+            scan(&roots, &Options::default(), cancel)
+        }
+    };
+    let checkpoints = Cell::new(0_usize);
+    let healthy = run(&|| {
+        checkpoints.set(checkpoints.get() + 1);
+        false
+    });
+    assert!(healthy.complete(), "{healthy:?}");
+    assert_eq!(healthy.groups.len(), 1);
+    let calls = Cell::new(0_usize);
+    let changed = run(&|| {
+        calls.set(calls.get() + 1);
+        if calls.get() == checkpoints.get() {
+            // The final callback runs while validating the later member.
+            fs::write(&roots[0], b"changed full data").unwrap();
+        }
+        false
+    });
+    assert_eq!(calls.get(), checkpoints.get());
+    assert!(changed.groups.is_empty(), "stale exact group: {changed:?}");
+    assert!(changed.issues.iter().any(|issue| issue.path == roots[0]), "{changed:?}");
+    fs::write(&roots[0], original).unwrap();
+    let retry = run(&|| false);
+    assert!(retry.complete(), "{retry:?}");
+    assert_eq!(retry.groups.len(), 1);
+}
+
+#[test]
+fn late_exact_source_failures_preserve_healthy_members_and_other_groups() {
+    use std::collections::BTreeSet;
+    for verified in [false, true] {
+        for reverse in [false, true] {
+            for remove in [false, true] {
+                let directory = tempfile::tempdir().unwrap();
+                let paths: Vec<_> = ["a", "b", "c", "d", "e"]
+                    .iter().map(|name| directory.path().join(name)).collect();
+                let reset = || {
+                    for (i, path) in paths.iter().enumerate() {
+                        fs::write(path, if i < 3 { b"first family" } else { b"other family" }).unwrap();
+                    }
+                };
+                reset();
+                let mut roots = paths.clone();
+                if reverse { roots.reverse(); }
+                let run = |cancel: &dyn Fn() -> bool| {
+                    if verified {
+                        rrrah_dedup::exact::scan_verified(&roots, &Options::default(), cancel)
+                    } else {
+                        scan(&roots, &Options::default(), cancel)
+                    }
+                };
+                let checkpoints = Cell::new(0_usize);
+                let baseline = run(&|| {
+                    checkpoints.set(checkpoints.get() + 1);
+                    false
+                });
+                assert!(baseline.complete(), "{baseline:?}");
+                assert_eq!(baseline.groups.len(), 2);
+                let calls = Cell::new(0_usize);
+                let changed = run(&|| {
+                    calls.set(calls.get() + 1);
+                    if calls.get() == checkpoints.get() {
+                        if remove {
+                            fs::remove_file(&paths[0]).unwrap();
+                        } else {
+                            let mtime = fs::metadata(&paths[0]).unwrap().modified().unwrap();
+                            fs::write(&paths[0], b"edited bytes").unwrap();
+                            fs::OpenOptions::new().write(true).open(&paths[0]).unwrap()
+                                .set_times(fs::FileTimes::new().set_modified(mtime)).unwrap();
+                            assert_eq!(fs::metadata(&paths[0]).unwrap().modified().unwrap(), mtime);
+                        }
+                    }
+                    false
+                });
+                assert_eq!(calls.get(), checkpoints.get());
+                assert!(!changed.complete(), "{changed:?}");
+                assert!(!changed.cancelled);
+                assert_eq!(changed.issues.len(), 1, "{changed:?}");
+                assert_eq!(changed.issues[0].path, paths[0]);
+                assert!(matches!(changed.issues[0].kind, IssueKind::Changed | IssueKind::Io(_)));
+                let groups: BTreeSet<_> = changed.groups.iter().map(|g| g.paths.clone()).collect();
+                assert_eq!(groups, BTreeSet::from([paths[1..3].to_vec(), paths[3..5].to_vec()]));
+                reset();
+                let retry = run(&|| false);
+                assert!(retry.complete(), "{retry:?}");
+                assert_eq!(retry.groups, baseline.groups);
+            }
+        }
+    }
+}
+
+#[test]
+fn atomic_cancel_exact_apis_preserve_groups_refuse_pre_cancel_and_allow_retry() {
+    use std::sync::atomic::{AtomicBool, Ordering};
+    let directory = tempfile::tempdir().unwrap();
+    let paths = [directory.path().join("a"), directory.path().join("b")];
+    for path in &paths { fs::write(path, vec![13; 200_000]).unwrap(); }
+    let flag = AtomicBool::new(false);
+    for verified in [false, true] {
+        let run = |roots: &[std::path::PathBuf]| {
+            if verified {
+                rrrah_dedup::exact::scan_verified_with_cancel_flag(roots, &Options::default(), &flag)
+            } else {
+                rrrah_dedup::exact::scan_with_cancel_flag(roots, &Options::default(), &flag)
+            }
+        };
+        let healthy = run(&paths);
+        assert!(healthy.complete(), "{healthy:?}");
+        assert_eq!(healthy.groups.len(), 1);
+        flag.store(true, Ordering::Release);
+        for roots in [&paths[..], &[][..]] {
+            let cancelled = run(roots);
+            assert!(cancelled.cancelled, "{cancelled:?}");
+            assert!(cancelled.groups.is_empty());
+        }
+        flag.store(false, Ordering::Release);
+        let retry = run(&paths);
+        assert!(retry.complete(), "{retry:?}");
+        assert_eq!(retry.groups, healthy.groups);
+    }
 }

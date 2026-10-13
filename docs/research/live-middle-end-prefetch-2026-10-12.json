@@ -1,0 +1,108 @@
+{
+  "scope": "Actual automatic normal-viewer TIFF selected-image prefetch from middle/end with independent configured behind/ahead counts",
+  "adapter": "Apple M4 Max / Metal",
+  "source": "tiff-pages-hdr-deflate-le.tif in isolated one-file folder",
+  "cases": [
+    {
+      "trial": 0,
+      "selected": 1,
+      "ahead": 1,
+      "behind": 1,
+      "actual": [
+        2,
+        0
+      ],
+      "seconds_until_expected_events": 0.890711459,
+      "log": "/tmp/rrrah-pages-plan-0-i1-a1-b1.log",
+      "exit_code": -15
+    },
+    {
+      "trial": 0,
+      "selected": 2,
+      "ahead": 0,
+      "behind": 2,
+      "actual": [
+        1,
+        0
+      ],
+      "seconds_until_expected_events": 0.7685036670000001,
+      "log": "/tmp/rrrah-pages-plan-0-i2-a0-b2.log",
+      "exit_code": -15
+    },
+    {
+      "trial": 0,
+      "selected": 2,
+      "ahead": 0,
+      "behind": 1,
+      "actual": [
+        1
+      ],
+      "seconds_until_expected_events": 0.966018166,
+      "log": "/tmp/rrrah-pages-plan-0-i2-a0-b1.log",
+      "exit_code": -15
+    },
+    {
+      "trial": 1,
+      "selected": 1,
+      "ahead": 1,
+      "behind": 1,
+      "actual": [
+        2,
+        0
+      ],
+      "seconds_until_expected_events": 0.8627434169999999,
+      "log": "/tmp/rrrah-pages-plan-1-i1-a1-b1.log",
+      "exit_code": -15
+    },
+    {
+      "trial": 1,
+      "selected": 2,
+      "ahead": 0,
+      "behind": 2,
+      "actual": [
+        1,
+        0
+      ],
+      "seconds_until_expected_events": 0.7369857079999997,
+      "log": "/tmp/rrrah-pages-plan-1-i2-a0-b2.log",
+      "exit_code": -15
+    },
+    {
+      "trial": 1,
+      "selected": 2,
+      "ahead": 0,
+      "behind": 1,
+      "actual": [
+        1
+      ],
+      "seconds_until_expected_events": 0.8563166669999998,
+      "log": "/tmp/rrrah-pages-plan-1-i2-a0-b1.log",
+      "exit_code": -15
+    }
+  ],
+  "production_change": "Debug plan event records selected index/count, direction, ahead/behind and exact planned indices before queue insertion",
+  "initial_anomaly": "Initial fixed2s observation from index2/ahead0/behind2 recorded no prefetch-ready events before termination. Cause not established; original logs retained. Instrumented repeat and six event-deadline trials all succeeded. No scheduling fix claimed.",
+  "validation": "Current binary build exit0; six event-deadline actual app trials, two per configuration, all exact; whitespace check passed",
+  "shutdown": "Own qualification processes SIGTERM (-15), not normal-close evidence",
+  "limits": [
+    "Desktop locked/occluded: no physical presentation evidence",
+    "Initial nonzero selection tests previous-page limits, not dynamic navigation reversal",
+    "Initial anomaly cause unresolved",
+    "Readiness events do not distinguish RAM/swap/native-decode origin"
+  ],
+  "sha256": {
+    "docs/research/live-middle-end-prefetch-2026-10-12/rrrah-pages-plan-0-i2-a0-b2.log": "44c8497c1b425bcd75ef01074a62a5a52f6d303a891cbe1a6cfe995915102f9d",
+    "docs/research/live-middle-end-prefetch-2026-10-12/rrrah-pages-plan-0-i2-a0-b1.log": "0da942ffb7d6315282718d26e01b8591bbc133007cb55b7826540614b71c148f",
+    "docs/research/live-middle-end-prefetch-2026-10-12/rrrah-pages-plan-1-i2-a0-b2.log": "63d243e25c00d69db96e5f56a740be3fbcd19df04e1fb902c5152e2bcb9654f9",
+    "docs/research/live-middle-end-prefetch-2026-10-12/rrrah-pages-plan-1-i2-a0-b1.log": "2186b2ea3bfcfe497e49a22d8eee317f28e090de35486bfa6d37694d977718ff",
+    "docs/research/live-middle-end-prefetch-2026-10-12/rrrah-pages-plan-0-i1-a1-b1.log": "5fb2c028f1c918903617e74b3622b6522915228b7f5d355e0a8250b967a93ccd",
+    "docs/research/live-middle-end-prefetch-2026-10-12/results.json": "17691c54c91a7f81162b5889e7f0017b90b80d9d66421ff948a5e45d122e70c1",
+    "docs/research/live-middle-end-prefetch-2026-10-12/rrrah-pages-plan-1-i1-a1-b1.log": "02a77c80286300cc5c9905c451c2e8d523642bdac085cd54185001e3850c038f",
+    "docs/research/live-middle-end-prefetch-2026-10-12/instrumented-end.log": "ac1b3d253d7e496b5bc93dcf222704334ab613c03978ac89afa491772fa10c9b",
+    "docs/research/live-middle-end-prefetch-2026-10-12/initial-index2-a0-b2.log": "c9cd1ef2b6f4209cddf541bba272bd7313728fb43207914dc474232a83b030c7",
+    "docs/research/live-middle-end-prefetch-2026-10-12/initial-index1-a1-b1.log": "1fd29f73a53af8f15716e8540ddc89f46defe4ca323c89528455af2408c4be56",
+    "docs/research/live-middle-end-prefetch-2026-10-12/build.log": "042d401b03a8c3194414561620e366ecc837d3e5cd53cba3442042b7ae0b20f3",
+    "crates/rrrah-app/src/main.rs": "d24ba12848b19f9407a89cf669db14f6908c7babee73843cbf88db38b07467e5",
+    "crates/rrrah-app/src/gallery.rs": "6be3b13b5b4943f03a90e1733637fa3e7b8839a6ddc726689dce2c050ced4dc0"
+  }
+}

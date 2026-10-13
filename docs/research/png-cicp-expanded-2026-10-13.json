@@ -1,0 +1,28 @@
+{
+  "change": "Preserve PNG cICP primaries/transfer/range rather than replacing all non-sRGB declarations with Unspecified. Full-range BT709 also maps to the existing transfer; linear BT2020/P3 reaches existing display conversion and PQ/HLG reaches explicit DecodeRequest policies.",
+  "primary_source": "https://www.w3.org/TR/png-3/#11cICP",
+  "verification": {
+    "decoder_passed": 1027,
+    "decoder_ignored": 73,
+    "app_passed": 221,
+    "app_ignored": 62,
+    "controls": "Authored 16-bit black/mid/white/alpha PNG, linear BT2020/P3, full-range PQ/HLG, limited-range SDR/PQ/HLG metadata and safe refusal, unknown code preservation; 48-byte output budget and retained-source release. Explicit DecodeRequest HDR output equals direct policy conversion."
+  },
+  "limitations": [
+    "PQ/HLG requires explicit brightness policy",
+    "Narrow-range samples retained but display range expansion remains unsupported; PNG decode HDR policy refuses instead of misinterpreting codes",
+    "No new independent producer or physical HDR/Metal frame qualification in this change",
+    "Catalogue remains 94 implemented subsets and 6 Pending"
+  ],
+  "sha256": {
+    "docs/research/decode-png-cicp-verified-2026-10-13.log": "df388b4d46a12d1c10a07da21f84740d2c7d0bce44e44175b55435889497e635",
+    "docs/research/app-png-cicp-2026-10-13.log": "d1fb0248ad74019c96afbf9fb0d1c1de8833cef0d663b438d4b1b8671f7634fb",
+    "crates/rrrah-decode/src/png_color.rs": "cf9413a646b7447e54e6c5620cad4fee3a2d527d8d4f8e78120b17e3a1537b4f",
+    "crates/rrrah-decode/src/raster.rs": "6cc446e9fca27fe7515bb47e23d7cf7b6003023945ba73ffeb2d95326becfe58"
+  },
+  "failed_build_logs": [
+    "png-cicp-expanded-2026-10-13.log",
+    "decode-png-cicp-current-2026-10-13.log",
+    "decode-png-cicp-final-2026-10-13.log"
+  ]
+}

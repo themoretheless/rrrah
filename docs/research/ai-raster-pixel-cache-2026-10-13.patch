@@ -1,0 +1,73 @@
+--- a/vendor/hayro/src/knockout_interpreter.rs
++++ b/vendor/hayro/src/knockout_interpreter.rs
+@@ -6094,6 +6094,7 @@
+         let scene=record_into(pdf,32,16,Affine::IDENTITY,Recorder {capture_native_rasters:true,..Recorder::default()});
+         let image=scene.native_rasters[0].1.as_ref().unwrap();
+         let cache=RasterLastSample::new(None);
++        let pixel_cache=RasterLastPixel::new(None);
+         for point in [kurbo::Point::new(0.1,0.1),kurbo::Point::new(0.9,0.9),
+             kurbo::Point::new(1.1,0.1),kurbo::Point::new(1.9,0.9),
+             kurbo::Point::new(0.1,1.1),kurbo::Point::new(1.1,1.1),kurbo::Point::new(-1.,3.)] {
+@@ -6101,6 +6102,19 @@
+             let actual=sample_native_raster_cached(image,point,&cache,&||false,&mut 1000).unwrap();
+             assert_eq!(actual.components,expected.components);assert_eq!(actual.alpha,expected.alpha);
+             assert!(actual.space.shares_blending_coordinates(expected.space));
++            let key=nearest_raster_cell_key(image,point);
++            let fresh=native_raster_pixel_cached(expected,None,&RasterLastPixel::new(None),&||false).unwrap();
++            let cached=native_raster_pixel_cached(actual,key,&pixel_cache,&||false).unwrap();
++            let fingerprint=|pixel:super::native_blend::Pixel|(pixel.alpha(),pixel.native_components().unwrap().to_vec());
++            assert_eq!(fingerprint(cached),fingerprint(fresh));
++            assert_eq!(fingerprint(native_raster_pixel_cached(actual,key,&pixel_cache,&||false).unwrap()),fingerprint(fresh));
++            let saved=pixel_cache.get().map(|(key,pixel)|(key,fingerprint(pixel)));
++            assert!(native_raster_pixel_cached(actual,key,&pixel_cache,&||true).is_none());
++            assert_eq!(pixel_cache.get().map(|(key,pixel)|(key,fingerprint(pixel))),saved);
++            let invalid=NativeRasterSample {alpha:f64::NAN,..actual};
++            assert!(native_raster_pixel_cached(invalid,None,&pixel_cache,&||false).is_none());
++            assert_eq!(pixel_cache.get().map(|(key,pixel)|(key,fingerprint(pixel))),saved);
++
+             let mut budget=1;
+             let repeated=sample_native_raster_cached(image,point,&cache,&||false,&mut budget).unwrap();
+             assert_eq!(budget,0);assert_eq!(repeated.components,expected.components);
+@@ -6193,6 +6207,22 @@
+     Some([color,alpha])
+ }
+ type RasterLastSample<'a>=std::cell::RefCell<Option<([u64;2],NativeRasterSample<'a>)>>;
++// Per-source cache: identical nearest color/alpha cells have identical native
++// coordinates and alpha. Interpolated samples carry no key and always validate.
++type RasterLastPixel=std::cell::Cell<Option<([u64;2],super::native_blend::Pixel)>>;
++fn native_raster_pixel_cached(sample:NativeRasterSample<'_>,key:Option<[u64;2]>,
++    cache:&RasterLastPixel,cancelled:&dyn Fn()->bool)->Option<super::native_blend::Pixel> {
++    use super::native_blend::{Model,Pixel};
++    use hayro_interpret::color::BlendingModel;
++    if cancelled() {return None;}
++    if let (Some(key),Some((old,pixel)))=(key,cache.get()) {if key==old {return Some(pixel);}}
++    let model=match sample.space.blending_model()? {BlendingModel::Gray=>Model::Gray,BlendingModel::Rgb=>Model::Rgb,BlendingModel::Cmyk=>Model::Cmyk};
++    let pixel=Pixel::from_native(model,&sample.components[..model.channels()],sample.alpha)?;
++    if cancelled() {return None;}
++    if let Some(key)=key {cache.set(Some((key,pixel)));}
++    Some(pixel)
++}
++
+ fn sample_native_raster_cached<'a>(image:&'a hayro_interpret::NativeRasterComponents,point:kurbo::Point,
+     cache:&RasterLastSample<'a>,cancelled:&dyn Fn()->bool,remaining:&mut usize)->Option<NativeRasterSample<'a>> {
+     if image.interpolate() || image.alpha().is_some_and(|alpha|alpha.interpolate()) {
+@@ -7088,15 +7118,15 @@
+             source:std::cell::Cell::new(0),coordinates:std::cell::Cell::new(0)};
+         if trace.enabled {eprintln!("SPATIAL_RASTER_SOURCE event={} dimensions={:?} interpolate={} alpha={:?}",event,data.dimensions(),data.interpolate(),data.alpha().map(|a|(a.dimensions(),a.interpolate())));}
+         let cache=RasterLastSample::new(None);
++        let pixel_cache=RasterLastPixel::new(None);
+         samples.push(move |point:kurbo::Point,cancelled:&dyn Fn()->bool,remaining:&mut usize,_owner:Option<usize>| {
+         let before=*remaining;
+         let result=sample_native_raster_cached(data,*inverse*point,&cache,cancelled,remaining);
+         if cost.enabled {cost.calls.set(cost.calls.get()+1);cost.source.set(cost.source.get()+before.saturating_sub(*remaining));}
+         let sample=result?;
+-        let model=match sample.space.blending_model()? {BlendingModel::Gray=>Model::Gray,BlendingModel::Rgb=>Model::Rgb,BlendingModel::Cmyk=>Model::Cmyk};
+-        let native=Pixel::from_native(model,&sample.components[..model.channels()],sample.alpha)?;
+-        if cancelled() {return None;}
+-        Some(Some(NativeSpatialSample {cell_key:cache.borrow().as_ref().map(|(key,_)|*key),pixel:native,space:sample.space}))
++        let cell_key=cache.borrow().as_ref().map(|(key,_)|*key);
++        let native=native_raster_pixel_cached(sample,cell_key,&pixel_cache,cancelled)?;
++        Some(Some(NativeSpatialSample {cell_key,pixel:native,space:sample.space}))
+     });
+         if size_of_val(samples.last()?)>256 {return None;}
+     }

@@ -1,0 +1,30 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+    Finished `test` profile [optimized + debuginfo] target(s) in 14.59s
+     Running tests/projected_portfolio.rs (/Users/themoretheless/.codex/tmp/rrrah-dedup-exact-portfolio-20261011/debug/deps/projected_portfolio-5d1e2dc12bc6ffbe)
+
+running 8 tests
+test exact_collection_scaling_latency_probe ... ignored, bounded collection I/O scaling measurement; run explicitly
+test exact_collection_admission_refuses_before_iterator_or_model_io ... ok
+test exact_collections_empty_singleton_and_copies_need_no_decoder_weights_or_provider ... ok
+test exact_collection_global_and_every_owner_cancel_without_partial_report ... ok
+test exact_collection_late_provider_failure_discards_prior_exact_and_unknown_pairs ... ok
+test exact_collection_preserves_exact_visual_and_unknown_evidence_in_both_orders ... ok
+test exact_collection_final_callback_revalidates_every_file_and_started_weights ... ok
+test exact_collection_external_palette_change_discards_report_in_both_orders ... ok
+
+test result: ok. 7 passed; 0 failed; 1 ignored; 0 measured; 17 filtered out; finished in 1.80s
+

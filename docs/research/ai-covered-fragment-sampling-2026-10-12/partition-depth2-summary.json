@@ -1,0 +1,166 @@
+{
+  "change": "Bounded depth2 proactive spatial partition when>256 candidates; fixed512 storage per leaf; source-order incremental owners; shared40M polygon work",
+  "bounds": {
+    "max_depth": 2,
+    "max_nodes": 21,
+    "max_leaves": 16,
+    "max_query_work": 2100000,
+    "shared_polygon_work": 40000000
+  },
+  "tests": {
+    "passed": 144,
+    "ignored": 10,
+    "dense600_triangle_pdf": "area and originalCMYK preserved through both subdivision levels"
+  },
+  "pages": [
+    {
+      "fixture": "VectorApple.ai",
+      "page": 0,
+      "native_completed": true,
+      "capture_failed": false,
+      "deadline_expired": false,
+      "final_admitted_bytes": 0,
+      "native_replay_ms": 100255.984541
+    },
+    {
+      "fixture": "one.ai",
+      "page": 0,
+      "native_completed": true,
+      "capture_failed": false,
+      "deadline_expired": false,
+      "final_admitted_bytes": 0,
+      "native_replay_ms": 30587.28525
+    },
+    {
+      "fixture": "one.ai",
+      "page": 1,
+      "native_completed": true,
+      "capture_failed": false,
+      "deadline_expired": false,
+      "final_admitted_bytes": 0,
+      "native_replay_ms": 494.272542
+    }
+  ],
+  "comparison": {
+    "before": {
+      "different_pixels": 28008,
+      "max_component_error": 216,
+      "mean_absolute_component_error": 1.7074071072936643
+    },
+    "after": {
+      "different_pixels": 28168,
+      "max_component_error": 198,
+      "mean_absolute_component_error": 1.7109679568556484
+    },
+    "selected_pixels": {
+      "141,36": {
+        "native_white_rgb": [
+          214,
+          185,
+          174
+        ],
+        "reference_rgb": [
+          159,
+          83,
+          44
+        ]
+      },
+      "149,56": {
+        "native_white_rgb": [
+          231,
+          213,
+          209
+        ],
+        "reference_rgb": [
+          144,
+          60,
+          39
+        ]
+      }
+    },
+    "unchanged_one_pages": {
+      "one.ai-page-0": true,
+      "one.ai-page-1": true
+    },
+    "reference_sha256": "8e524275d04386895c04522d926535647f504e06f1b7aafd9718809dfef796f8"
+  },
+  "edge_supersampled_comparison": [
+    {
+      "pixel": [
+        141,
+        36
+      ],
+      "native_rgb": [
+        214,
+        185,
+        174
+      ],
+      "supersampled": [
+        {
+          "scale": 16,
+          "mean_rgb": [
+            212.58984375,
+            182.43359375,
+            170.97265625
+          ],
+          "nonwhite_fraction": 0.39453125
+        },
+        {
+          "scale": 64,
+          "mean_rgb": [
+            213.12548828125,
+            184.0791015625,
+            173.92822265625
+          ],
+          "nonwhite_fraction": 0.3798828125
+        }
+      ]
+    },
+    {
+      "pixel": [
+        149,
+        56
+      ],
+      "native_rgb": [
+        231,
+        213,
+        209
+      ],
+      "supersampled": [
+        {
+          "scale": 16,
+          "mean_rgb": [
+            227.6796875,
+            207.20703125,
+            202.546875
+          ],
+          "nonwhite_fraction": 0.2421875
+        },
+        {
+          "scale": 64,
+          "mean_rgb": [
+            229.8359375,
+            211.05078125,
+            207.017333984375
+          ],
+          "nonwhite_fraction": 0.22119140625
+        }
+      ]
+    }
+  ],
+  "qualification": "All3 native diagnostic pages complete; global image parity NOT qualified; mode stays opt-in; full goal incomplete",
+  "artifact_dir": "tests/fixtures/data/metal-recovery/ai-native-mesh-boundary-depth2-20261012",
+  "hashes": {
+    "tests/fixtures/data/metal-recovery/ai-native-mesh-boundary-depth2-20261012/VectorApple.ai-page-0.native.components.f64le": "effca1ae4a2c21dfc9e26d330fc9bb0852838f581620021e064a464319210f93",
+    "tests/fixtures/data/metal-recovery/ai-native-mesh-boundary-depth2-20261012/report.json": "dbcbd1406729072920e7e8f245ef4d82f264e6ea2ce4e14e75335a9ef9e0a5cf",
+    "tests/fixtures/data/metal-recovery/ai-native-mesh-boundary-depth2-20261012/VectorApple.ai-page-0.native.rgba": "475250f90399f4664fab9714b96a0e5d8a7df667cee9c8cee6ce03e8b5114b23",
+    "tests/fixtures/data/metal-recovery/ai-native-mesh-boundary-depth2-20261012/one.ai-page-1.native.components.f64le": "eae5d4d36df846273525d3dee129563dd8634bde4e5d3e6b1ca3e243a7b762ec",
+    "tests/fixtures/data/metal-recovery/ai-native-mesh-boundary-depth2-20261012/one.ai-page-0.native.rgba": "dfc95264ce83ad1b3384e87edb2e000991da9018224916dc83709c926138dbf7",
+    "tests/fixtures/data/metal-recovery/ai-native-mesh-boundary-depth2-20261012/one.ai-page-1.native.rgba": "155a1e78cb7d2dd3d3aaf2832e7591b61f9ec0cbf5b97bef36a7787a5907f38f",
+    "tests/fixtures/data/metal-recovery/ai-native-mesh-boundary-depth2-20261012/one.ai-page-0.native.components.f64le": "015ee58f3840722c06cdd7b4c884caa9858239905fa440672e93d8d00542d9db",
+    "docs/research/ai-covered-fragment-sampling-2026-10-12/partition-depth2-tests.log": "bb58adb2e40a02c03abafe9b4bd03a66b3bdeaa2ee8066f59bb416e13c5f5b9c",
+    "docs/research/ai-covered-fragment-sampling-2026-10-12/partition-depth2-replay.log": "668d550a553963291f6f8058140c1b7f5ad3242e454c1c5eea09ec87c697081f",
+    "docs/research/ai-covered-fragment-sampling-2026-10-12/partition-depth2-comparison.json": "8f9ad8021ae8655d18f40a3776ceb0cce881a39be242ee09374a0e095363af41",
+    "vendor/hayro/src/knockout_interpreter.rs": "b8350cd696c70fb30fb951b95cd6c33bb49be9321eb4d826f3606bdc1a2d0e26"
+  }
+}

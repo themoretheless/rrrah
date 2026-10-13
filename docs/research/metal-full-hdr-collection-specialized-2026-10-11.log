@@ -1,0 +1,50 @@
+warning: function `fallible_zeroed_bytes` is never used
+   --> crates/rrrah-cache/src/mosaic_payload_v1.rs:728:4
+    |
+728 | fn fallible_zeroed_bytes(len: usize) -> Result<Box<[u8]>, MosaicPayloadError> {
+    |    ^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-cache` (lib) generated 1 warning
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+warning: methods `submit` and `submit_image` are never used
+    --> crates/rrrah-app/src/main.rs:1366:8
+     |
+1078 | impl ForegroundLoader {
+     | --------------------- methods in this implementation
+...
+1366 |     fn submit(&self, path: PathBuf) -> Result<u64> {
+     |        ^^^^^^
+...
+1369 |     fn submit_image(&self, path: PathBuf, image_index: usize) -> Result<u64> {
+     |        ^^^^^^^^^^^^
+     |
+     = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah` (bin "rrrah") generated 1 warning
+    Finished `test` profile [optimized + debuginfo] target(s) in 16.39s
+     Running tests/ttl_swap_metal.rs (target/debug/deps/ttl_swap_metal-27cf7c97b7cf0284)
+
+running 1 test
+long-lived collection adapter: Metal Apple M4 Max; duration=60s; frames=8; payload=192000000; hdr_output=[4000, 3000]
+long-lived collection cycles=8; elapsed=4.598s; root=0; queue=0; reads=8; writes=8
+long-lived collection cycles=16; elapsed=7.742s; root=0; queue=0; reads=16; writes=8
+long-lived collection cycles=24; elapsed=10.850s; root=0; queue=0; reads=24; writes=8
+long-lived collection cycles=32; elapsed=14.524s; root=0; queue=0; reads=32; writes=8
+long-lived collection cycles=40; elapsed=21.304s; root=0; queue=0; reads=40; writes=8
+long-lived collection cycles=48; elapsed=26.520s; root=0; queue=0; reads=48; writes=8
+long-lived collection cycles=56; elapsed=31.254s; root=0; queue=0; reads=56; writes=8
+long-lived collection cycles=64; elapsed=35.578s; root=0; queue=0; reads=64; writes=8
+long-lived collection cycles=72; elapsed=39.823s; root=0; queue=0; reads=72; writes=8
+long-lived collection cycles=80; elapsed=44.404s; root=0; queue=0; reads=80; writes=8
+long-lived collection cycles=88; elapsed=49.117s; root=0; queue=0; reads=88; writes=8
+test long_lived_large_collection_cache_preserves_swap_and_metal_frames has been running for over 60 seconds
+long-lived collection cycles=96; elapsed=53.460s; root=0; queue=0; reads=96; writes=8
+long-lived collection cycles=104; elapsed=57.848s; root=0; queue=0; reads=104; writes=8
+long-lived collection complete: cycles=108; elapsed=60.050s; reads=108; writes=8; root=0; queue=0
+parallel collection: accelerated=108; mid_batch_cancelled=108; exact_sdr_full_frames=108; exact_hdr_half_frames=108; hdr_output=[4000, 3000]; root=0; queue=0
+test long_lived_large_collection_cache_preserves_swap_and_metal_frames ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 6 filtered out; finished in 69.83s
+

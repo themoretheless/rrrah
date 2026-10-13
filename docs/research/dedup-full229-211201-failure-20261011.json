@@ -1,0 +1,27 @@
+{
+  "status": "captured_first_full229_execution_failure",
+  "row": {
+    "query": "211201.jpg",
+    "original": "211200.jpg",
+    "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/211200.jpg",
+    "target": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/211201.jpg",
+    "source_tolerance": 2.380403906588785,
+    "status": "execution_failed",
+    "process_pid": 48616,
+    "returncode": 1,
+    "stdout": "",
+    "stderr": "Error: Pair { left: 0, right: 1, error: ModelTiles(Comparison(Pixels(Rank(InsufficientGeometry)))) }\n       83.05 real        92.30 user         4.17 sys\n          1512439808  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n              220059  page reclaims\n                   9  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                   5  voluntary context switches\n              344402  involuntary context switches\n        525546193540  instructions retired\n        191066222797  cycles elapsed\n          1472317216  peak memory footprint\n",
+    "elapsed_seconds": 83.0564904999992,
+    "process_peak_rss_bytes": 1512439808,
+    "cpu_seconds": 96.47
+  },
+  "pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/211200.jpg": "5de805d5d84796b5030a0e9af110e4bbeffc4e96c41ae0a9937638e84ffdd1a1",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/211201.jpg": "97f7a149f6f9ec28ce3f50a387c4bd5c4635c7d24cb5e2072fac3b82ad8eeee9",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-batch-production-snapshot-20261011.json": "10b51fad371c678b2877f93920b6f6f3ab6a25a378860e35943464eed9634eca",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-loftr-native-20261010-runtime-pins.json": "8daa92d3ed2c84278338c53eedffed1fcdc272bf8ee7a419397cd7f098a6783a"
+  },
+  "snapshot": "docs/research/dedup-gradient-batch-production-snapshot-20261011.json",
+  "scope": "Immutable copy of one terminal row from a still-running frozen baseline. Full mutable report is not pinned as complete evidence.",
+  "next_action": "Reproduce this pair after full baseline; investigate alternative candidate handling while preserving inconclusive/source/resource/cancellation distinctions."
+}

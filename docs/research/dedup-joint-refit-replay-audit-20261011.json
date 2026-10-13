@@ -1,0 +1,78 @@
+{
+  "status": "verified_joint_witness_refit_replay_no_recovery_or_precision_gain",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exposure-replay-audit-20261011.json": "a6c5a372281ed0e7a27f1571369cc6d8f0d6e2779c5c8be9cb59049c1778fde2",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exposure-replay-input-20261011.json": "bb6ff4ba02ad8f7e2a40345864783e400ada5cb1e0e7f2099cd922bdbda29cd1",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-joint-refit-replay-output-20261011.json": "63e2f16e5634ce80384e3d93894f3791c74e9e2d24a7499110e3d161edcde961",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-refit-replay-harness-20261011/src/main.rs": "a1247ca653c99222ea02abd0ae4702ef23fb22be70fc301773b09290766cea4b",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-refit-replay-harness-20261011/Cargo.toml": "1fe79e8fea1c5640b4b5122ad44b624f9ced03e2d8506a008538dda90e96a501",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-refit-replay-harness-20261011/Cargo.lock": "7df8e5ccf5f15f4b1b5d5f5bf4b3f4ca3f266c28d7d464888ff66ca8ad8c7c5b",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-joint-refit-replay-build-20261011.log": "01e6499a716c32e7003ce5657c1b7926ae9ff48d6709b579bcf442c682280d69",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-joint-refit-replay-runtime-20261011.log": "252878dead0b256ab6ef498d22fd0f844fdeaea4b5b59c1c2e9c65fc47f7f987",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-refit-replay-qualified-20261011/dedup-joint-refit-replay": "674639f1bfc0c02f0c750c01ac03c6d4d885c270472f86542e1564eafbf5bb6a",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-joint-refit-replay-20261011.py": "2b62e215556108eabb542cd5774fcf2703b9ebb681ce30c679a3de3424b08e9a"
+  },
+  "summaries": [
+    {
+      "case": "overlap_bank6",
+      "witnesses": 12,
+      "before": {
+        "source_max": 0.4298297772218458,
+        "source_median": 0.12464465735561375,
+        "target_max": 1.8523316174296187,
+        "target_median": 0.5512017886693541,
+        "normalized_squared_error": 2.162271689127665
+      },
+      "after": {
+        "source_max": 0.27977485246152434,
+        "source_median": 0.12437252290921194,
+        "target_max": 1.1999498253128782,
+        "target_median": 0.5336540023323895,
+        "normalized_squared_error": 1.6450915757279374
+      },
+      "maximum_target_shift_at_witness": 0.671964031356042,
+      "pixel_evidence_unchanged": false
+    },
+    {
+      "case": "overlap_bank7",
+      "witnesses": 24,
+      "before": {
+        "source_max": 0.4361823512271735,
+        "source_median": 0.2351482386179085,
+        "target_max": 1.960826418428202,
+        "target_median": 1.0409789708087902,
+        "normalized_squared_error": 8.62308603357364
+      },
+      "after": {
+        "source_max": 0.4361823512271735,
+        "source_median": 0.2351482386179085,
+        "target_max": 1.960826418428202,
+        "target_median": 1.0409789708087902,
+        "normalized_squared_error": 8.623086033573562
+      },
+      "maximum_target_shift_at_witness": 1.2710574864626038e-13,
+      "pixel_evidence_unchanged": true
+    },
+    {
+      "case": "rejected_bank12",
+      "witnesses": 11,
+      "before": {
+        "source_max": 1.6387351539443662,
+        "source_median": 0.8873228564043572,
+        "target_max": 1.676539962419689,
+        "target_median": 0.8866310159151126,
+        "normalized_squared_error": 5.070526438276793
+      },
+      "after": {
+        "source_max": 1.6387351539444008,
+        "source_median": 0.887322856404373,
+        "target_max": 1.6765399624195827,
+        "target_median": 0.8866310159150053,
+        "normalized_squared_error": 5.070526438276739
+      },
+      "maximum_target_shift_at_witness": 2.3437142008433856e-13,
+      "pixel_evidence_unchanged": true
+    }
+  ],
+  "scope": "Existing joint projective library fitter runs4096 trials/seed173 on each saved full witness set, requiring all witnesses and source/target residuals<=2 under valid whole-image domains. Independent residual/score calculation; unchanged original-policy replay exact baseline parity. Correct bank7 and misplaced bank12 retain identical original-pixel evidence, including calibrated rank2 false support. No model extraction rerun, automatic pipeline adoption, performance or general precision qualification. Geometry Vec and diagnostic JSON external to managed payload; original JPEG byte guards and calibrated scratch lifetime admission preserved."
+}

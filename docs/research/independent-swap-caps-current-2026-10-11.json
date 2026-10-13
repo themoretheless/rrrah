@@ -1,0 +1,25 @@
+{
+  "scope": "Two concurrent 60-second real-file workloads with codec delay 2ms per <=64KiB IO chunk; TTL3600 seconds, independent byte/count admission limits.",
+  "runs": {
+    "byte": {
+      "summary": "sustained swap: seconds=60.025939125 cycles=448 pressure_refusals=448 root_peak=2097152 queue_peak=262144 disk_peak_bytes=786624 disk_peak_objects=3 final=0",
+      "log": "docs/research/independent-swap-caps-current-2026-10-11-byte.log",
+      "sha256": "10f443006624b8d4cfd4c431d96caf6d320d5df74fa1d6b103233509f9ff8a12",
+      "passed": true
+    },
+    "count": {
+      "summary": "sustained swap: seconds=60.016834958 cycles=449 pressure_refusals=449 root_peak=2097152 queue_peak=262144 disk_peak_bytes=786624 disk_peak_objects=3 final=0",
+      "log": "docs/research/independent-swap-caps-current-2026-10-11-count.log",
+      "sha256": "124130f8e205ae51a19aac57d9473528a7e8cb9ee0dd67e742017feb03ea7dd4",
+      "passed": true
+    }
+  },
+  "source_sha256": "41f77bc907dcc6d9de45b0618da3e2e82aee9e88642a015a6af05859013236e5",
+  "checks": [
+    "physical files and logical bytes/count within limits every cycle",
+    "full root-budget pressure refuses restore then exact pixels/metadata retry",
+    "old capacity-evicted key unreadable for both byte and count limits",
+    "queue/root credit zero after shutdown"
+  ],
+  "limitations": "256x256 authored rasters; injected IO delay, not physical slow disk; this does not measure GPU or RAW viewer latency."
+}

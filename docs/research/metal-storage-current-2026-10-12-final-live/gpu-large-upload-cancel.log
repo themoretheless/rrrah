@@ -1,0 +1,17 @@
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.42s
+     Running tests/raster_readback.rs (target/debug/deps/raster_readback-96fa399a25885f6d)
+
+running 1 test
+large upload cancellation adapter: Metal Apple M4 Max
+raster upload pressure: texture-and-queue-refused; previous-frame-exact; temporary-credit-zero
+raster upload cancellation: total_checkpoints=2933; exercised=[1, 2, 1466, 2931, 2932, 2933]; upload_budget=192000000
+raster replacement values: format=Rgba8UnormSrgb; initial_center=[255, 0, 0, 255]; retry_center=[0, 0, 255, 255]
+raster replacement recovery: format=Rgba8UnormSrgb; pressure/cancellation previous frame exact; retry blue exact; final GPU/queue credit=0
+raster upload pressure: texture-and-queue-refused; previous-frame-exact; temporary-credit-zero
+raster upload cancellation: total_checkpoints=2933; exercised=[1, 2, 1466, 2931, 2932, 2933]; upload_budget=192000000
+raster replacement values: format=Rgba16Float; initial_center=[17408, 47104, 0, 15360]; retry_center=[46080, 0, 17408, 15360]
+raster replacement recovery: format=Rgba16Float; pressure/cancellation previous frame exact; retry blue exact; final GPU/queue credit=0
+test large_cancelled_upload_validation_and_admission_preserve_visible_texture ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 24 filtered out; finished in 4.27s
+

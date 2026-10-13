@@ -1,0 +1,65 @@
+{
+  "backend": "Metal",
+  "adapter": "Apple M4 Max",
+  "format": "RGBA16Float",
+  "color_space": "ExtendedSrgbLinear",
+  "cases": [
+    {
+      "format": "off",
+      "source": "tests/fixtures/models/off-offset64.off",
+      "source_sha256": "1f5dc62486d2dcfbc013ccc5ed98ef9285eb95a9eeff9548e38b82df1b696990",
+      "triangles": 1,
+      "frames": 173,
+      "seconds": 3.008,
+      "resize_confirmed": true,
+      "frames_after_resize": 143,
+      "log": "docs/research/metal-live-model-off-2026-10-12.log",
+      "log_sha256": "8fdc59bc5ca3561612c068892849c30f8602790b73ea7b61e204abc6f7a80a4a"
+    },
+    {
+      "format": "stl",
+      "source": "tests/fixtures/models/triangle.stl",
+      "source_sha256": "cb38a51d5a813e11f96377a701c46be622d35a0cffc438d2ae570a04ecf73fc7",
+      "triangles": 1,
+      "frames": 173,
+      "seconds": 3.014,
+      "resize_confirmed": true,
+      "frames_after_resize": 143,
+      "log": "docs/research/metal-live-model-stl-2026-10-12.log",
+      "log_sha256": "6b38b7b43bfbceacf91cd2439df85d6a39b3356bccc1bbd142be5ec532b2b0cc"
+    },
+    {
+      "format": "obj",
+      "source": "tests/fixtures/models/obj-concave-u.obj",
+      "source_sha256": "25c946020cd51a0ab38f3b5228b595ddcd3a8effff6993f527c23e8a82d107b5",
+      "triangles": 6,
+      "frames": 173,
+      "seconds": 3.006,
+      "resize_confirmed": true,
+      "frames_after_resize": 143,
+      "log": "docs/research/metal-live-model-obj-2026-10-12.log",
+      "log_sha256": "c3368da035a3d6200470781b36f399ff6a99ef193572596d95b0968ab37d68b5"
+    },
+    {
+      "format": "ply",
+      "source": "tests/fixtures/models/ply-offset64-le.ply",
+      "source_sha256": "508dd3625fab5ee1928ae4ce29abfaa99183974c2d55011e24c4a3d1b53541f6",
+      "triangles": 1,
+      "frames": 175,
+      "seconds": 3.005,
+      "resize_confirmed": true,
+      "frames_after_resize": 145,
+      "log": "docs/research/metal-live-model-ply-2026-10-12.log",
+      "log_sha256": "5626121bb7dc2422951bd8e613390b75c514b572ac54bbb64fb5346e7c0056d8"
+    }
+  ],
+  "validation_errors": false,
+  "cpu_source_released_after_upload": true,
+  "scope": "actual surface presentation and 800x400 resize, authored model subsets only",
+  "limitations": [
+    "No physical luminance/color calibration",
+    "No live mouse/keyboard interaction qualification",
+    "No broad model material/texture qualification",
+    "Frame counts are single short runs, not universal throughput benchmarks"
+  ]
+}

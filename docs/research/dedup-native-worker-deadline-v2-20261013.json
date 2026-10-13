@@ -1,0 +1,37 @@
+{
+  "status": "passed",
+  "producer_pid": 81170,
+  "source": "/Users/themoretheless/.codex/tmp/rrrah-worker-supervisor-20261013/source",
+  "command": [
+    "cargo",
+    "run",
+    "--locked",
+    "--offline",
+    "--target-dir",
+    "/Users/themoretheless/.codex/tmp/rrrah-cache-interpretation-fix-20261012/target",
+    "--",
+    "/Users/themoretheless/.codex/tmp/rrrah-real-model-miss-diagnostics-20261013/native_bank_miss_diagnostics_20261013",
+    "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/Q36603.jpg",
+    "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/R043984.jpg",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+    "640",
+    "2.0",
+    "1000000"
+  ],
+  "log": "/Users/themoretheless/.codex/tmp/rrrah-native-worker-deadline-v2-20261013/test.log",
+  "pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-native-worker-deadline-v2-20261013/Cargo.toml": "97f21ad19c864fbfae2977ae51776c3cf82076066ca547ab72d32d86e2fcee2e",
+    "/Users/themoretheless/.codex/tmp/rrrah-native-worker-deadline-v2-20261013/src/main.rs": "7b8b2652d96c9db777cde767bbc4d7ef7abc37ee5c3bef075d016ff9756ad64a",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-worker-supervisor-20261013.json": "1aef36ce228938b863edcad6abf3eb8567c784ab974563667285a034dc5330be",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/run-dedup-native-worker-deadline-v2-20261013.py": "175565ab4a864b34ebb1b3206e10a34df63e74245c9b1fa060cb10a464c2ea49",
+    "/Users/themoretheless/.codex/tmp/rrrah-real-model-miss-diagnostics-20261013/native_bank_miss_diagnostics_20261013": "983d0f08ac22b62cac5d4afe1baf799fca110697f4d2682add57ce98794f40d4",
+    "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/Q36603.jpg": "97972e3a40fa061fef6ab6a894d0d67e13d9ce083307f4dd8d027af9a8d2d38d",
+    "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/R043984.jpg": "4c0172d98f699ce49fe67e5001a8505f408e020b14988fa54f9703c2dcd0a867",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors": "59e55bf0ecd047db9c513672d121a3ea677529ad448bdc3a359e92862c74ddd7",
+    "/Users/themoretheless/.codex/tmp/rrrah-native-worker-deadline-v2-20261013/test.log": "ecbd977e2fa78c1ff08fb4a473e0ba1bd597d16125bf9dc77159e1195ecf33a7",
+    "/Users/themoretheless/.codex/tmp/rrrah-native-worker-deadline-v2-20261013/Cargo.lock": "495452b66a57ba20ff9800d381f9408cb4ee7f167c82596cb0e9e4c8205c63e7"
+  },
+  "scope": "Actual native comparison worker stopped at observed200ms deadline and waited on. No assertion that a Torch kernel had started; no RSS or hard real-time bound.",
+  "child_pid": 81172,
+  "returncode": 0
+}

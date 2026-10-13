@@ -1,0 +1,21 @@
+{
+  "fix": "Invalidate optional exact LOD cache if opening its verified reader detects length/I/O damage; preserve it on memory admission failure or cancellation",
+  "regression": [
+    "Create verified cached8x8 exact LOD from32x32 source",
+    "Exhaust output budget: refusal preserves cached entry",
+    "Cancel request: preserves cached entry",
+    "Damage a cached pixel byte: checksum rejects, cache entry removed and original source remains",
+    "Retry rebuilds exact original-source LOD",
+    "Truncate cached file: open rejects length, entry removed",
+    "Retry again rebuilds exact original-source LOD",
+    "Final output/scratch/index/disk credit zero"
+  ],
+  "validation": {
+    "cache_unit_passed": 135,
+    "actual_metal_viewport_passed": 7
+  },
+  "remaining": [
+    "Physical HDR, physical slow disk and NVIDIA unverified",
+    "Full100-format goal remains open"
+  ]
+}

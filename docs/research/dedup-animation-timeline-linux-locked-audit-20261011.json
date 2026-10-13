@@ -1,0 +1,54 @@
+{
+  "status": "complete_bounded_frozen_animation_timeline_linux_gate",
+  "tests": 20,
+  "programs": 3,
+  "suite_counts": {
+    "lib": 6,
+    "animated": 7,
+    "sequence": 7
+  },
+  "log_binding": "Exact --list/--ignored names from each unchanged ELF matched as multisets against full completed output; summaries checked globally because headings interleave",
+  "ignored_tests": 0,
+  "frozen_files": 3085,
+  "artifacts": [
+    {
+      "suite": "lib",
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-linux-native/target/debug/deps/rrrah_dedup-6cc5209a2deed122",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-animation-timeline-linux-locked-qualified-20261011/rrrah_dedup-6cc5209a2deed122.gz",
+      "executable_sha256": "c7e5804e79d23005003d3c9592e9c471ad2ed34a2ddb59c9ff6a856b4e71eb84",
+      "archive_sha256": "9c8eb01d5d25fc0fe7c9c17df34840a8f28917fbb5c7f6acea06e3e0ca14aae8",
+      "executable_bytes": 618372680
+    },
+    {
+      "suite": "animated",
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-linux-native/target/debug/deps/animated-9ecc3b9ba3a46e62",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-animation-timeline-linux-locked-qualified-20261011/animated-9ecc3b9ba3a46e62.gz",
+      "executable_sha256": "3234836e4ff5407a5aca43934a29d18fb973c161712c9e6877ae3f4e67e9d635",
+      "archive_sha256": "5bff6123d1d33ed0b78d32442f57aa693e89f8fc29303610c4d041d82a9c4b3a",
+      "executable_bytes": 353977104
+    },
+    {
+      "suite": "sequence",
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-linux-native/target/debug/deps/sequence-76d2b92e60973d37",
+      "archive": "/Users/themoretheless/.codex/tmp/rrrah-animation-timeline-linux-locked-qualified-20261011/sequence-76d2b92e60973d37.gz",
+      "executable_sha256": "6f9f6768c19f08ab4168382a1a4458319ac022b5c0a26789470867dc31508d9b",
+      "archive_sha256": "ad7e2c0c17cb5ecf177bd1ab30086550187117f39a61f394ea608ae50d964759",
+      "executable_bytes": 348826808
+    }
+  ],
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-animation-timeline-linux-locked-snapshot-20261011.json": "5ff3a5407513bd3db8f255608c5e39b7ff952707affe7627843fd1955f119e64",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-animation-timeline-linux-locked-20261011.log": "8b0ee9bc05690db7171cf7d98afe01e4cd6971ed9f6f79c0dac04436ead05474",
+    "/Users/themoretheless/.codex/tmp/rrrah-animation-timeline-linux-locked-20261011.sh": "3b38a28643301b73ef8bafd954e4c0731f49510feeac0603e5eb9a74dccbbb27",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-animation-timeline-linux-locked-platform-test-list-20261011.log": "60b476ea046611cdffe4b4682c0b7189e87cf605681e052b371a0faca33673ff",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-animation-timeline-linux-locked-20261011.py": "7d49908535239e72874e8a0cf968abdfc595e8593af861ca48c928c3fbdcba64"
+  },
+  "scope": "Linux aarch64 frozen animation unit, real GIF/APNG/WebP integration and sequence oracle tests; artifacts archived before target reuse",
+  "limits": [
+    "Bounded fixtures do not establish broad collection recall or precision",
+    "No Torch, Windows, broad negative/burst or hard total RSS qualification",
+    "Before/after source reads do not establish an atomic working-tree capture; frozen file bytes are authoritative",
+    "The earlier snapshot scope used atomically imprecisely; no atomic filesystem snapshot was created",
+    "Full229 uses an earlier independent frozen source"
+  ]
+}

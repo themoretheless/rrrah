@@ -4,7 +4,8 @@
 
 mod adaptive;
 pub use adaptive::{
-    AdaptivePatchError, AdaptivePatchLimits, AdaptivePatchRef, AdaptivePatchStats,
+    AdmittedAdaptivePatchMesh, AdaptivePatchError, AdaptivePatchLimits, AdaptivePatchRef, AdaptivePatchStats,
+    tessellate_patch_mesh_adaptive_admitted, tessellate_tensor_patch_mesh_adaptive_admitted,
     tessellate_patch_mesh_adaptive, tessellate_patch_mesh_adaptive_with_ranges,
     tessellate_tensor_patch_mesh_adaptive,
 };
@@ -54,13 +55,18 @@ impl ShadingFunction {
     /// Evaluate original color components with one shared work budget, without
     /// heap scratch or converting the source color space into display RGB.
     pub fn eval_native_bounded(&self,input:f32,output:&mut[f32],cancelled:&dyn Fn()->bool)->Option<()> {
+        self.eval_native_with_budget(input,output,cancelled,&mut 4096)
+    }
+    /// Debit the caller's remaining function operations across consecutive samples.
+    /// Refusal never publishes partially evaluated components.
+    pub fn eval_native_with_budget(&self,input:f32,output:&mut[f32],cancelled:&dyn Fn()->bool,remaining:&mut usize)->Option<()> {
         if output.is_empty() || output.len()>4 {return None;}
-        let mut values=[0.;4];let mut remaining=4096;
+        let mut values=[0.;4];
         match self {
-            Self::Single(f)=>f.eval_components_with_budget(input,&mut values[..output.len()],cancelled,&mut remaining,0)?,
+            Self::Single(f)=>f.eval_components_with_budget(input,&mut values[..output.len()],cancelled,remaining,0)?,
             Self::Multiple(functions)=>{
                 if functions.len()!=output.len() {return None;}
-                for (i,f) in functions.iter().enumerate() {f.eval_components_with_budget(input,&mut values[i..i+1],cancelled,&mut remaining,0)?;}
+                for (i,f) in functions.iter().enumerate() {f.eval_components_with_budget(input,&mut values[i..i+1],cancelled,remaining,0)?;}
             }
         }
         if cancelled() {return None;}
@@ -1027,5 +1033,28 @@ fn read_function(dict: &Dict<'_>, color_space: &ColorSpace) -> Option<ShadingFun
         Some(ShadingFunction::Single(Function::new(&obj)?))
     } else {
         None
+    }
+}
+
+#[cfg(test)]
+mod external_budget_tests {
+    use super::*;
+    use hayro_syntax::object::FromBytes;
+    #[test]
+    fn native_shading_samples_share_function_work_and_never_publish_partial_output() {
+        let object=Object::from_bytes(b"<< /FunctionType 2 /Domain [0 1] /C0 [0 1] /C1 [1 0] /N 1 >>").unwrap();
+        let function=ShadingFunction::Single(Function::new(&object).unwrap());
+        let mut remaining=4096;let mut output=[9.;2];
+        function.eval_native_with_budget(0.25,&mut output,&||false,&mut remaining).unwrap();
+        assert_eq!(output,[0.25,0.75]);let cost=4096-remaining;assert!(cost>0);
+        let mut shared=2*cost-1;
+        function.eval_native_with_budget(0.75,&mut output,&||false,&mut shared).unwrap();
+        assert_eq!(output,[0.75,0.25]);let previous=output;
+        assert!(function.eval_native_with_budget(0.25,&mut output,&||false,&mut shared).is_none());
+        assert_eq!(output,previous);
+        let mut zero=0;assert!(function.eval_native_with_budget(0.25,&mut output,&||false,&mut zero).is_none());
+        assert_eq!(output,previous);
+        assert!(function.eval_native_with_budget(0.25,&mut output,&||true,&mut 4096).is_none());
+        assert_eq!(output,previous);
     }
 }

@@ -24,7 +24,81 @@ pub(super) struct Pixel {
     color: [f64; 4],
     alpha: f64,
 }
+/// Propagate component discrepancy through fixed-alpha Normal composition.
+/// Previous/backdrop bounds use additive premultiplied storage; source bounds
+/// use native components before Pixel::from_native. Matching coordinates, fixed
+/// alphas/shape and checked0..1native samples are caller obligations. This is
+/// not a group/route certificate and never authorizes a color-space conversion.
+pub(super) fn normal_premultiplied_error_bound(model:Model,previous:[f64;4],backdrop:[f64;4],
+    source:[f64;4],source_alpha:f64,shape:f64,remaining:&mut usize,cancelled:&dyn Fn()->bool,
+)->Option<[f64;4]> {
+    if cancelled() {return None;}
+    *remaining=remaining.checked_sub(1+6*model.channels())?;
+    if !source_alpha.is_finite() || !shape.is_finite() || !(0. ..=1.).contains(&shape)
+        || !(0. ..=shape).contains(&source_alpha) || (source_alpha>0. && source_alpha<1e-12) {return None;}
+    for errors in [&previous,&backdrop,&source] {
+        if errors.iter().any(|e|!e.is_finite() || *e<0.)
+            || errors[model.channels()..].iter().any(|e|*e!=0.) {return None;}
+    }
+    let add=|a:f64,b:f64|(a+b).next_up();let mul=|a:f64,b:f64|(a*b).next_up();
+    let previous_gain=(1.-shape).next_up();let backdrop_gain=(shape-source_alpha).next_up();
+    let mut result=[0.;4];
+    for channel in 0..model.channels() {
+        if cancelled() {return None;}
+        // Exact Normal algebra: alpha*Cs +(shape-alpha)*Cb +(1-shape)*Cp.
+        // CMYK complementation changes the sign of source discrepancy, not its
+        // absolute gain. Include a conservative absolute envelope for checked
+        // sample premultiplication/complement, ordered Normal arithmetic and
+        // its source normalization. Tiny positive alpha refuses above.
+        result[channel]=add(add(mul(previous_gain,previous[channel]),mul(backdrop_gain,backdrop[channel])),add(mul(source_alpha,source[channel]),256.*f64::EPSILON));
+        if !result[channel].is_finite() {return None;}
+    }
+    if cancelled() {return None;}Some(result)
+}
+
+/// Error operation with fixed, identical alpha/opacity on both compared fields.
+/// Removal compares identically clamped results, so it does not prove affinity.
+#[derive(Clone,Copy)]
+pub(super) enum GroupErrorStep {
+    RemoveBackdrop {alpha:f64,initial:[f64;4]},
+    ScaleOpacity {factor:f64},
+    NativeComponents {alpha:f64},
+}
+/// Propagate additive premultiplied errors through a same-space group boundary.
+/// NativeComponents returns unpremultiplied native-component errors. No variant
+/// authorizes color conversion, differing alpha, or an affine integration domain.
+pub(super) fn group_error_bound(model:Model,current:[f64;4],step:GroupErrorStep,
+    remaining:&mut usize,cancelled:&dyn Fn()->bool)->Option<[f64;4]> {
+    if cancelled() {return None;}*remaining=remaining.checked_sub(1+7*model.channels())?;
+    let valid=|e:&[f64;4]|e.iter().all(|v|v.is_finite() && *v>=0.) && e[model.channels()..].iter().all(|v|*v==0.);
+    if !valid(&current) {return None;}
+    match step {
+        GroupErrorStep::RemoveBackdrop {alpha,initial}=>{if !alpha.is_finite() || !(0. ..=1.).contains(&alpha) || !valid(&initial) {return None;}},
+        GroupErrorStep::ScaleOpacity {factor}=>{if !factor.is_finite() || !(0. ..=1.).contains(&factor) {return None;}},
+        GroupErrorStep::NativeComponents {alpha}=>{if !alpha.is_finite() || !(0. ..=1.).contains(&alpha) || (alpha>0. && alpha<1e-12) {return None;}},
+    }
+    let add=|a:f64,b:f64|(a+b).next_up();let mul=|a:f64,b:f64|(a*b).next_up();
+    let mut output=[0.;4];
+    for channel in 0..model.channels() {
+        if cancelled() {return None;}
+        output[channel]=match step {
+            // Clamp to the same0..alpha interval is nonexpansive. It may still
+            // destroy affinity, which requires a separate no-active-clamp proof.
+            GroupErrorStep::RemoveBackdrop {alpha,initial}=>add(add(current[channel],mul((1.-alpha).next_up(),initial[channel])),64.*f64::EPSILON),
+            GroupErrorStep::ScaleOpacity {factor}=>if factor==0. {0.} else {add(mul(factor,current[channel]),4.*f64::EPSILON)},
+            GroupErrorStep::NativeComponents {alpha}=>if alpha==0. {0.} else {add((current[channel]/alpha).next_up(),8.*f64::EPSILON)},
+        };
+        if !output[channel].is_finite() {return None;}
+    }
+    if cancelled() {return None;}Some(output)
+}
+
 impl Pixel {
+    pub(super) fn same_storage(self,other:Self)->bool {
+        self.model==other.model && self.alpha.to_bits()==other.alpha.to_bits()
+            && self.color.iter().zip(other.color).all(|(a,b)|a.to_bits()==b.to_bits())
+    }
+
     pub(super) fn model(self) -> Model {
         self.model
     }
@@ -257,4 +331,103 @@ fn invalid_native_samples_spaces_and_modes_refuse() {
     assert!(Pixel::composite(gray, gray, gray, 1., BlendMode::Difference).is_none());
     let black = Pixel::from_native(Model::Gray, &[0.], 1.).unwrap();
     assert!(black.remove_backdrop(gray, 0.5).is_none());
+}
+
+#[test]
+fn normal_error_envelope_contains_native_component_perturbations_in_all_models() {
+    for model in [Model::Gray,Model::Rgb,Model::Cmyk] {
+        let n=model.channels();
+        for alpha in [0.,0.125,0.5,1.] {for shape in [alpha,1.] {for background_alpha in [0.,0.25,1.] {
+            for step in 0..64 {
+                let c=step as f64/128.;let delta=1./256.;
+                let components=[c;4];let shifted=[c+delta;4];
+                let previous=Pixel::from_native(model,&components[..n],0.75).unwrap();
+                let previous2=Pixel::from_native(model,&shifted[..n],0.75).unwrap();
+                let backdrop=Pixel::from_native(model,&components[..n],background_alpha).unwrap();
+                let backdrop2=Pixel::from_native(model,&shifted[..n],background_alpha).unwrap();
+                let source=Pixel::from_native(model,&components[..n],alpha).unwrap();
+                let source2=Pixel::from_native(model,&shifted[..n],alpha).unwrap();
+                let a=Pixel::composite(previous,backdrop,source,shape,BlendMode::Normal).unwrap();
+                let b=Pixel::composite(previous2,backdrop2,source2,shape,BlendMode::Normal).unwrap();
+                let mut pe=[0.;4];let mut be=[0.;4];let mut se=[0.;4];
+                pe[..n].fill(0.75*delta);be[..n].fill(background_alpha*delta);se[..n].fill(delta);
+                let bound=normal_premultiplied_error_bound(model,pe,be,se,alpha,shape,&mut 100,&||false).unwrap();
+                assert_eq!(a.alpha.to_bits(),b.alpha.to_bits());
+                for channel in 0..n {assert!((a.color[channel]-b.color[channel]).abs()<=bound[channel]);}
+            }
+        }}}
+    }
+}
+#[test]
+fn normal_error_envelope_refuses_unsafe_inputs_work_and_every_cancel_checkpoint() {
+    let z=[0.;4];let mut work=100;
+    normal_premultiplied_error_bound(Model::Rgb,z,z,z,0.5,1.,&mut work,&||false).unwrap();
+    for budget in 0..100-work {assert!(normal_premultiplied_error_bound(Model::Rgb,z,z,z,0.5,1.,&mut {budget},&||false).is_none());}
+    for alpha in [f64::NAN,-1.,1.1,1e-300] {assert!(normal_premultiplied_error_bound(Model::Rgb,z,z,z,alpha,1.,&mut 100,&||false).is_none());}
+    assert!(normal_premultiplied_error_bound(Model::Rgb,z,z,z,0.75,0.5,&mut 100,&||false).is_none());
+    assert!(normal_premultiplied_error_bound(Model::Rgb,z,z,[0.,0.,0.,1.],0.5,1.,&mut 100,&||false).is_none());
+    assert!(normal_premultiplied_error_bound(Model::Rgb,z,z,[f64::NAN,0.,0.,0.],0.5,1.,&mut 100,&||false).is_none());
+    let polls=std::cell::Cell::new(0);
+    normal_premultiplied_error_bound(Model::Rgb,z,z,z,0.5,1.,&mut 100,&||{polls.set(polls.get()+1);false}).unwrap();
+    for stop in 1..=polls.get() {
+        let count=std::cell::Cell::new(0);
+        assert!(normal_premultiplied_error_bound(Model::Rgb,z,z,z,0.5,1.,&mut 100,&||{count.set(count.get()+1);count.get()>=stop}).is_none());
+    }
+}
+
+#[test]
+fn group_error_bounds_enclose_removal_opacity_and_native_conversion_in_all_models() {
+    for model in [Model::Gray,Model::Rgb,Model::Cmyk] {
+        let n=model.channels();
+        for alpha in [0.,0.125,0.5,1.] {for background_alpha in [0.,0.5,1.] {for opacity in [0.,0.25,1.] {
+            for i in 0..32 {
+                let value=i as f64/128.;let delta=1./256.;let values=[value;4];let shifted=[value+delta;4];
+                let initial=Pixel::from_native(model,&values[..n],background_alpha).unwrap();
+                let initial2=Pixel::from_native(model,&shifted[..n],background_alpha).unwrap();
+                let source=Pixel::from_native(model,&values[..n],alpha).unwrap();
+                let source2=Pixel::from_native(model,&shifted[..n],alpha).unwrap();
+                let a=Pixel::composite(initial,initial,source,1.,BlendMode::Normal).unwrap();
+                let b=Pixel::composite(initial2,initial2,source2,1.,BlendMode::Normal).unwrap();
+                let mut current=[0.;4];let mut backdrop=[0.;4];
+                current[..n].fill((alpha+(1.-alpha)*background_alpha)*delta+64.*f64::EPSILON);
+                backdrop[..n].fill(background_alpha*delta);
+                let removed=group_error_bound(model,current,GroupErrorStep::RemoveBackdrop {alpha,initial:backdrop},&mut 100,&||false).unwrap();
+                let a=a.remove_backdrop(initial,alpha).unwrap();let b=b.remove_backdrop(initial2,alpha).unwrap();
+                for channel in 0..n {assert!((a.color[channel]-b.color[channel]).abs()<=removed[channel]);}
+                let scaled=group_error_bound(model,removed,GroupErrorStep::ScaleOpacity {factor:opacity},&mut 100,&||false).unwrap();
+                let a=a.scale_opacity(opacity).unwrap();let b=b.scale_opacity(opacity).unwrap();
+                for channel in 0..n {assert!((a.color[channel]-b.color[channel]).abs()<=scaled[channel]);}
+                let native=group_error_bound(model,scaled,GroupErrorStep::NativeComponents {alpha:a.alpha()},&mut 100,&||false).unwrap();
+                let ac=a.native_components().unwrap();let bc=b.native_components().unwrap();
+                for channel in 0..n {assert!((ac[channel]-bc[channel]).abs()<=native[channel]);}
+            }
+        }}}
+    }
+}
+#[test]
+fn group_error_bounds_refuse_invalid_storage_alpha_budgets_and_all_cancel_checkpoints() {
+    let z=[0.;4];
+    for step in [GroupErrorStep::RemoveBackdrop {alpha:0.5,initial:z},GroupErrorStep::ScaleOpacity {factor:0.5},GroupErrorStep::NativeComponents {alpha:0.5}] {
+        let mut work=100;group_error_bound(Model::Rgb,z,step,&mut work,&||false).unwrap();
+        for budget in 0..100-work {assert!(group_error_bound(Model::Rgb,z,step,&mut {budget},&||false).is_none());}
+        let polls=std::cell::Cell::new(0);group_error_bound(Model::Rgb,z,step,&mut 100,&||{polls.set(polls.get()+1);false}).unwrap();
+        for stop in 1..=polls.get() {let count=std::cell::Cell::new(0);assert!(group_error_bound(Model::Rgb,z,step,&mut 100,&||{count.set(count.get()+1);count.get()>=stop}).is_none());}
+        assert!(group_error_bound(Model::Rgb,[f64::NAN,0.,0.,0.],step,&mut 100,&||false).is_none());
+        assert!(group_error_bound(Model::Rgb,[0.,0.,0.,1.],step,&mut 100,&||false).is_none());
+    }
+    for step in [GroupErrorStep::RemoveBackdrop {alpha:-1.,initial:z},GroupErrorStep::RemoveBackdrop {alpha:0.5,initial:[-1.;4]},GroupErrorStep::ScaleOpacity {factor:1.1},GroupErrorStep::NativeComponents {alpha:1e-300}] {assert!(group_error_bound(Model::Rgb,z,step,&mut 100,&||false).is_none());}
+}
+
+#[test]
+fn nonisolated_constant_hardlight_group_after_variable_parent_is_not_affine() {
+    let evaluate=|component| {
+        let parent=Pixel::from_native(Model::Gray,&[component],1.).unwrap();
+        let constant=Pixel::from_native(Model::Gray,&[0.25],1.).unwrap();
+        let child=Pixel::composite(parent,parent,constant,1.,BlendMode::HardLight).unwrap();
+        let source=child.remove_backdrop(parent,1.).unwrap().scale_opacity(0.5).unwrap();
+        Pixel::composite(parent,parent,source,1.,BlendMode::HardLight).unwrap().native_components().unwrap()[0]
+    };
+    assert_eq!(evaluate(0.),0.);assert_eq!(evaluate(1.),1.);
+    assert_eq!(evaluate(0.5),0.375);
+    assert_ne!((evaluate(0.)+evaluate(1.))/2.,evaluate(0.5));
 }

@@ -1,0 +1,38 @@
+{
+  "date": "2026-10-12",
+  "bug": "DPX/Cineon undefined transfer/primaries ignored explicit untagged sRGB policy and refused display",
+  "fix": "Apply explicit sRGB or linear-sRGB policy only when transfer=255 and colorimetry=255; declared incompatible color remains refused; strict default unchanged",
+  "added_sources": {
+    "DPX": 24,
+    "Cineon": 12
+  },
+  "native_oracles": [
+    "FFmpeg DPX native samples",
+    "OpenImageIO Cineon native samples"
+  ],
+  "decoder_suite": {
+    "passed": 1022,
+    "failed": 0,
+    "ignored": 72
+  },
+  "metal_collection": {
+    "adapter": "Metal Apple M4 Max",
+    "source_files": 105,
+    "selections": 134,
+    "native_prepared_storage_cases": 268,
+    "passed": 1,
+    "failed": 0,
+    "final_root_bytes": 0,
+    "final_queue_bytes": 0
+  },
+  "log_sha256": {
+    "metal-dpx-cineon-collection-2026-10-12.log": "237532e59a094e0af59552ee356cc00d12a813df41c552757a6060de0e38cd27",
+    "decode-dpx-untagged-policy-2026-10-12.log": "40760ee9ff0c884c8ac7210ae1fa1aaf493f1c696b390af928256f5cd89de952",
+    "metal-dpx-cineon-fixed-2026-10-12.log": "7baae9537140ed66b96f2bf06c55e4b86817e2dcc88590c3025f7e55d6117746"
+  },
+  "limits": [
+    "105 source files are not 105 distinct formats",
+    "Explicit untagged sRGB is a user-selected interpretation, not proof of producer color or Cineon film-log development",
+    "Same-renderer frame preservation is transport evidence, not physical HDR calibration"
+  ]
+}

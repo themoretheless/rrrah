@@ -1,0 +1,117 @@
+{
+  "date": "2026-10-10",
+  "scope": "Test-only admitted polygon fragment traversal, prerequisite for covered-area source-color integration; not a completed AI rendering fix",
+  "implementation": {
+    "api": "PolygonRow::pixel_fragments",
+    "fragment_fields": [
+      "four global-coordinate vertices",
+      "area",
+      "centroid"
+    ],
+    "algorithm": "Reuse winding/crossing strips of the existing polygon intersection kernel; normalized trapezoid widths yield stable centroid moments in pixel-local X coordinates",
+    "storage": "No fragment array; reuse the existing admitted cuts/hits/winding scratch",
+    "ordinary_area_path": "Visitor is None; no centroid/fragment computation",
+    "callback_failure": "Returns None; consumers must discard earlier callback accumulation",
+    "nonlinear_color": "Centroid evaluation only integrates affine fields; nonlinear fields need additional integration"
+  },
+  "qualification": {
+    "compositor": {
+      "passed": 129,
+      "failed": 0,
+      "ignored": 10,
+      "filtered": 1
+    },
+    "focused_fragment_tests": {
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    "triangle_counterexample": {
+      "vertices_local": [
+        [
+          0,
+          0
+        ],
+        [
+          0.375,
+          0
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "pixel_center_inside": false,
+      "area_exact": 0.1875,
+      "centroid_local": [
+        0.125,
+        0.3333333333333333
+      ],
+      "original_component_fields": [
+        "0.2+0.2*x+0.3*y",
+        "0.1+0.4*x",
+        "0.6-0.3*y",
+        "0.5"
+      ],
+      "independent_component_means": [
+        0.325,
+        0.15,
+        0.5,
+        0.5
+      ],
+      "coordinate_origins": [
+        [
+          0,
+          0
+        ],
+        [
+          1000000,
+          -1000000
+        ],
+        [
+          -1000000,
+          1000000
+        ]
+      ],
+      "integral_absolute_tolerance": 2e-11
+    },
+    "evenodd_hole": {
+      "covered_area": 0.75,
+      "fragments": 4,
+      "affine_integral_x_plus_two_y": 1.125,
+      "all_fragment_centroids_outside_hole": true
+    },
+    "capacity_and_cancellation": {
+      "scratch_reservations_individually_refused": 1,
+      "cancellation_checkpoints_individually_cancelled": 20,
+      "callback_refusal_checked": true,
+      "work_exhaustion_checked": true,
+      "scratch_returns_to_retained_row_baseline": true,
+      "final_admitted_bytes_after_row_drop": 0
+    }
+  },
+  "remaining": [
+    "Intersect or arrange original shading source domains with path/clip fragments before color integration",
+    "Preserve later-triangle source ordering in overlapping mesh regions",
+    "Integrate nonlinear functions and mask/color conversion at the appropriate stage",
+    "Wire into native replay and repeat the pinned AI strict Poppler comparison",
+    "Production viewer, Metal/HDR and full 100-format qualification remain separate unfinished requirements"
+  ],
+  "prior_counterexample_report": "pdf-native-pixel-domain-2026-10-10.json",
+  "strict_poppler": "Not rerun: this turn adds a visitor API without connecting it to native shading replay; the previous two-page fidelity failures remain unresolved.",
+  "source_sha256": {
+    "vendor/hayro/src/polygon_coverage.rs": "b02e08d7191904df31adfd4eb5d08a7ed76ea6187f63d230ef3653eb72e32942"
+  },
+  "evidence_logs": {
+    "/tmp/rrrah-pixel-fragments-final-20261010.log": {
+      "sha256": "1ed0d9b606b6af23f99b5802ed732b5147824304f4ebdb895865a3c232731931"
+    },
+    "/tmp/rrrah-pixel-fragments-budget-20261010.log": {
+      "sha256": "059711880bfb94dc6f7b7448810b0971948b4f3313ab0ac2b46bc893a4f11f8a"
+    }
+  },
+  "reproduce": [
+    "python3 scripts/test-pdf-mesh-bounds.py --renderer --filter knockout_compositor --target-dir /tmp/rrrah-required-corpus-target",
+    "python3 scripts/test-pdf-mesh-bounds.py --renderer --filter pixel_fragment --target-dir /tmp/rrrah-required-corpus-target"
+  ]
+}

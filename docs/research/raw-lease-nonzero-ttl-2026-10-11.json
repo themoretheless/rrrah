@@ -1,0 +1,29 @@
+{
+  "ttl_seconds": 1,
+  "checks": [
+    "new RAM lookup misses after actual nonzero expiry",
+    "two existing leases retain exact pixels and managed allocation",
+    "first lease release cannot spill",
+    "last release permits exactly one spill",
+    "source allocation returns to zero after writer drains",
+    "restored pixels and metadata exact, no swap errors"
+  ],
+  "logs": {
+    "focused": {
+      "path": "docs/research/raw-lease-nonzero-ttl-2026-10-11-focused.log",
+      "sha256": "f9bcc22ef8acc33b30839c8153e933133467a8105a99d42262c21c40cf8babf7",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    "ram": {
+      "path": "docs/research/raw-lease-nonzero-ttl-2026-10-11-ram.log",
+      "sha256": "765809a7e97406c90f0fcecd0b800b9f30d7c448707b2241367d3daf0ab35963",
+      "passed": 28,
+      "failed": 0,
+      "ignored": 0
+    }
+  },
+  "source_sha256": "b5fedc4d617c17cf5751767b4de791676eb2967d167c7c9befd2dd2ebf616dd8",
+  "limitation": "Small authored RAW mosaic, real elapsed TTL and local disk, not live GPU presentation."
+}

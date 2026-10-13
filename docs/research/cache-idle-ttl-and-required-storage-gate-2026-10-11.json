@@ -1,0 +1,29 @@
+{
+  "ordinary_control_tests": {
+    "passed": 4,
+    "failed": 0,
+    "ignored_manual_soaks": 4
+  },
+  "driver_required_scenarios": [
+    "sustained_large_keyspace_delayed_swap_pressure_and_retry",
+    "sustained_byte_cap_evicts_without_count_or_ttl_pressure",
+    "sustained_count_cap_evicts_without_byte_or_ttl_pressure",
+    "hundred_thousand_distinct_rasters_keep_swap_index_and_memory_bounded",
+    "idle_ttl_removes_delayed_large_blobs_and_physical_files",
+    "cancelled_delayed_restore_releases_partial_pixels_and_keeps_retryable_entry",
+    "stale_slow_restore_and_cancelled_lock_waiter_release_credit_for_latest_key",
+    "burst_overload_of_delayed_writer_is_bounded_and_rejected_keys_retry"
+  ],
+  "validator_checks": {
+    "assembled_independent_successful_logs_accepted": true,
+    "each_missing_scenario_rejected": 8,
+    "insufficient_pass_count_rejected": true,
+    "ignored_execution_rejected": true
+  },
+  "limitations": [
+    "Validator acceptance uses logs assembled from separate current runs; not a new integrated driver execution",
+    "Idle TTL observes physical store accounting without foreground prune, then confirms zero physical files",
+    "Physical slow disks, OS-wide pressure, physical HDR and NVIDIA remain unqualified"
+  ],
+  "log_sha256": "ebf81027851abf118f1f5579f9e4a8fccbefdefa1212f104284111479e65257a"
+}

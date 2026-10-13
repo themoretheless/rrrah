@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-animation-timeline-linux-20261011.py", line 19, in <module>
+    if __name__=='__main__':main()
+  File "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-animation-timeline-linux-20261011.py", line 16, in main
+    cmd=['sh',str(HELPER),str(T/'rrrah-dedup-linux-native'),'/opt/rrrah-dedup-validation/sysroot',mode,str(source)];row={'mode':mode,'command':cmd};r['results'].append(row);p=subprocess.Popen(cmd,stdout=log,stderr=subprocess.STDOUT);row['pid']=p.pid;save();row['returncode']=p.wait();save();assert row['returncode']==0
+AssertionError

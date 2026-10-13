@@ -1,0 +1,257 @@
+{
+  "status": "verified_eight_direction_descriptor_microbench_candidate_not_adopted",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-natural-bound-benchmark-20261013.json": "d7c5605104abc7020eb3634d7efb3e8f30c715c62d5d5182fc5c44685ff7ea0a",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-natural-bound-benchmark-plan-20261013.json": "2f36812cd75f95d856cd060a87f6119c02e31d8e2c9b57cdcfc1ef4289fd6a21",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-gradient-natural-bound-benchmark-20261013.py": "d4bc9fe708b5d9881cecee4cab82366fa5e7844650c1ce6c92da586490625218"
+  },
+  "directions": 8,
+  "matching_modes": 2,
+  "alternating_pairs_per_group": 9,
+  "total_timed_calls": 288,
+  "rows": [
+    {
+      "index": 0,
+      "label": "self_native",
+      "direction": "forward",
+      "distinct": false,
+      "median_baseline_ns": 23957500,
+      "median_candidate_ns": 24490667,
+      "median_paired_candidate_ratio": 1.005317570514498,
+      "paired_ratio_range": [
+        0.9913440501222962,
+        1.0698755700668807
+      ],
+      "matches": 1024,
+      "nearest_tables_bit_identical": true
+    },
+    {
+      "index": 0,
+      "label": "self_native",
+      "direction": "forward",
+      "distinct": true,
+      "median_baseline_ns": 47649916,
+      "median_candidate_ns": 48815917,
+      "median_paired_candidate_ratio": 1.017880430261409,
+      "paired_ratio_range": [
+        1.0107634606565616,
+        1.0337494559231917
+      ],
+      "matches": 1024,
+      "nearest_tables_bit_identical": true
+    },
+    {
+      "index": 1,
+      "label": "self_native",
+      "direction": "reverse",
+      "distinct": false,
+      "median_baseline_ns": 23786125,
+      "median_candidate_ns": 24280250,
+      "median_paired_candidate_ratio": 1.0218396981959197,
+      "paired_ratio_range": [
+        0.9800742372586804,
+        1.0605674947054218
+      ],
+      "matches": 1024,
+      "nearest_tables_bit_identical": true
+    },
+    {
+      "index": 1,
+      "label": "self_native",
+      "direction": "reverse",
+      "distinct": true,
+      "median_baseline_ns": 47770250,
+      "median_candidate_ns": 49010458,
+      "median_paired_candidate_ratio": 1.02646914170306,
+      "paired_ratio_range": [
+        1.0129786764662627,
+        1.0582107057359684
+      ],
+      "matches": 1024,
+      "nearest_tables_bit_identical": true
+    },
+    {
+      "index": 2,
+      "label": "table_true",
+      "direction": "forward",
+      "distinct": false,
+      "median_baseline_ns": 24413542,
+      "median_candidate_ns": 24929583,
+      "median_paired_candidate_ratio": 1.0233357371904495,
+      "paired_ratio_range": [
+        0.8870461604217125,
+        1.9147070462193654
+      ],
+      "matches": 14,
+      "nearest_tables_bit_identical": true
+    },
+    {
+      "index": 2,
+      "label": "table_true",
+      "direction": "forward",
+      "distinct": true,
+      "median_baseline_ns": 66795458,
+      "median_candidate_ns": 72279541,
+      "median_paired_candidate_ratio": 1.1123273830984137,
+      "paired_ratio_range": [
+        0.5386861557940638,
+        1.716303777018363
+      ],
+      "matches": 16,
+      "nearest_tables_bit_identical": true
+    },
+    {
+      "index": 3,
+      "label": "table_true",
+      "direction": "reverse",
+      "distinct": false,
+      "median_baseline_ns": 28868625,
+      "median_candidate_ns": 27743000,
+      "median_paired_candidate_ratio": 1.0231930802708875,
+      "paired_ratio_range": [
+        0.8017815948873622,
+        1.7397733949532121
+      ],
+      "matches": 14,
+      "nearest_tables_bit_identical": true
+    },
+    {
+      "index": 3,
+      "label": "table_true",
+      "direction": "reverse",
+      "distinct": true,
+      "median_baseline_ns": 71994375,
+      "median_candidate_ns": 75335666,
+      "median_paired_candidate_ratio": 0.8949077908012039,
+      "paired_ratio_range": [
+        0.6102747144671601,
+        1.696481671249121
+      ],
+      "matches": 16,
+      "nearest_tables_bit_identical": true
+    },
+    {
+      "index": 4,
+      "label": "portrait_wrong",
+      "direction": "forward",
+      "distinct": false,
+      "median_baseline_ns": 29456333,
+      "median_candidate_ns": 34268292,
+      "median_paired_candidate_ratio": 1.2560211237508014,
+      "paired_ratio_range": [
+        0.6489443667343401,
+        1.678766056861185
+      ],
+      "matches": 8,
+      "nearest_tables_bit_identical": true
+    },
+    {
+      "index": 4,
+      "label": "portrait_wrong",
+      "direction": "forward",
+      "distinct": true,
+      "median_baseline_ns": 67489375,
+      "median_candidate_ns": 70644500,
+      "median_paired_candidate_ratio": 1.02535683271966,
+      "paired_ratio_range": [
+        0.7765436166662437,
+        1.6261115488251776
+      ],
+      "matches": 9,
+      "nearest_tables_bit_identical": true
+    },
+    {
+      "index": 5,
+      "label": "portrait_wrong",
+      "direction": "reverse",
+      "distinct": false,
+      "median_baseline_ns": 36123500,
+      "median_candidate_ns": 31674667,
+      "median_paired_candidate_ratio": 0.955247986591704,
+      "paired_ratio_range": [
+        0.6916187847883237,
+        1.4638636767976279
+      ],
+      "matches": 8,
+      "nearest_tables_bit_identical": true
+    },
+    {
+      "index": 5,
+      "label": "portrait_wrong",
+      "direction": "reverse",
+      "distinct": true,
+      "median_baseline_ns": 58226417,
+      "median_candidate_ns": 56801792,
+      "median_paired_candidate_ratio": 0.9737770911055184,
+      "paired_ratio_range": [
+        0.5865206887509934,
+        1.279953176473896
+      ],
+      "matches": 9,
+      "nearest_tables_bit_identical": true
+    },
+    {
+      "index": 6,
+      "label": "composite_square_wrong",
+      "direction": "forward",
+      "distinct": false,
+      "median_baseline_ns": 27371750,
+      "median_candidate_ns": 28133125,
+      "median_paired_candidate_ratio": 1.0256797463011338,
+      "paired_ratio_range": [
+        0.9946376525381608,
+        1.2203734415553773
+      ],
+      "matches": 31,
+      "nearest_tables_bit_identical": true
+    },
+    {
+      "index": 6,
+      "label": "composite_square_wrong",
+      "direction": "forward",
+      "distinct": true,
+      "median_baseline_ns": 53826125,
+      "median_candidate_ns": 55280000,
+      "median_paired_candidate_ratio": 1.0138284142623877,
+      "paired_ratio_range": [
+        0.9917773841889047,
+        1.0442196083324042
+      ],
+      "matches": 32,
+      "nearest_tables_bit_identical": true
+    },
+    {
+      "index": 7,
+      "label": "composite_square_wrong",
+      "direction": "reverse",
+      "distinct": false,
+      "median_baseline_ns": 26621666,
+      "median_candidate_ns": 27046000,
+      "median_paired_candidate_ratio": 1.0283414694787507,
+      "paired_ratio_range": [
+        0.9601612061460248,
+        1.0462358833104366
+      ],
+      "matches": 31,
+      "nearest_tables_bit_identical": true
+    },
+    {
+      "index": 7,
+      "label": "composite_square_wrong",
+      "direction": "reverse",
+      "distinct": true,
+      "median_baseline_ns": 52389250,
+      "median_candidate_ns": 53035459,
+      "median_paired_candidate_ratio": 1.012334763334081,
+      "paired_ratio_range": [
+        0.9608043556986692,
+        1.0288252923004855
+      ],
+      "matches": 32,
+      "nearest_tables_bit_identical": true
+    }
+  ],
+  "equal_group_geomean_ratio": 1.023528752693333,
+  "conclusion": "Not adopted: synthetic near-copy gains did not translate into a consistent natural-fixture gain; several natural directions regress. Shared-host microbench is not a universal regression/speedup claim.",
+  "scope": "Native decoded unsmoothed interpolated gradient pyramid512/level,3levels,first1024features; synthetic extracted source matcher with squared-distance2 and ratio0.8,ordinary and distinct radius2 modes. Exact nearest tables compared bitwise. Nine alternating pairs per direction. Descriptor matcher microbench only, not complete search or actual native acceptance policy parity. Shared host busy with ongoing tests; production source unchanged."
+}

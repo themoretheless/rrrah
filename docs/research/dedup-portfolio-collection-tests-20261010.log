@@ -1,0 +1,31 @@
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+    Finished `test` profile [optimized + debuginfo] target(s) in 1m 40s
+     Running tests/portfolio_collection.rs (target/debug/deps/portfolio_collection-9b773bfe39e3c0dd)
+
+running 7 tests
+test duplicate_file_and_complete_pair_limits_refuse_before_file_io ... ok
+test cumulative_overflow_policy_and_memory_preflight_precede_iterator_and_io ... ok
+test empty_and_single_file_batches_are_complete_without_invented_pairs ... ok
+test idle_owner_cancellation_and_late_provider_failure_discard_earlier_decisions ... ok
+test a_native_empty_proposal_bank_does_not_hide_model_only_collection_support ... ok
+test every_pair_is_deterministic_matches_direct_evidence_and_credit_follows_report_owners ... ok
+test final_cancellation_or_final_callback_source_mutation_never_publishes_a_stale_batch ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+

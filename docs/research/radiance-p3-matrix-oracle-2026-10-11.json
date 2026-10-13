@@ -1,0 +1,49 @@
+{
+  "source": "https://www.itu.int/rec/T-REC-H.273-202407-I",
+  "method": "Independent Gaussian inversion from Display P3/BT709 xy and D65",
+  "matrix": [
+    [
+      1.2249401762805596,
+      -0.22494017628055996,
+      -1.1102230246251565e-16
+    ],
+    [
+      -0.04205695470968818,
+      1.0420569547096883,
+      -2.0816681711721685e-17
+    ],
+    [
+      -0.019637554590334436,
+      -0.07863604555063182,
+      1.0982736001409665
+    ]
+  ],
+  "red_2_reference": [
+    2.4498803525611192,
+    -0.08411390941937635,
+    -0.03927510918066887
+  ],
+  "status": "native Display P3/D65 declared Radiance HDR qualified for authored RGBW decode, bounded preparation and swap pressure/cancel/retry through actual Metal SDR/HDR",
+  "tests": {
+    "core_passed": 109,
+    "core_ignored": 2,
+    "hdr_metal_passed": 16,
+    "hdr_metal_ignored": 3
+  },
+  "limitations": [
+    "Authored RGBW fixture, not broad producer/camera color calibration.",
+    "Arbitrary Radiance primaries and non-D65 whites remain unqualified.",
+    "Physical HDR luminance/color calibration and NVIDIA hardware remain unqualified."
+  ],
+  "logs": {
+    "core": {
+      "path": "docs/research/radiance-p3-2026-10-11.core.log",
+      "sha256": "a6b2e131235f30ab196963fdcb3627b78261c4ffa7fe42d32e606fc65c39a49d"
+    },
+    "metal": {
+      "path": "docs/research/radiance-p3-2026-10-11.metal.log",
+      "sha256": "eeaa53f9b8b8986ffa52673974ac521b7a995005ef7beec724a1cf8aecff9715"
+    }
+  },
+  "fixture_sha256": "445c12b6bf8f67bec667171f82bf7c7aee49f1b970aee5051cc48775c1e3a63c"
+}

@@ -1,0 +1,26 @@
+{
+  "scope": "Live HDR resize probe prepared and compiled; offscreen model pressure resize refreshed",
+  "live_resize_verified": false,
+  "live_result": "Occluded after120 redraw attempts; Root registry CGSSessionScreenIsLocked=Yes",
+  "offscreen_model_tests_passed": 11,
+  "probe_options": {
+    "RRRAH_HDR_RESIZE_PROBE": "1",
+    "RRRAH_HDR_SURFACE_SECONDS": "3"
+  },
+  "required_live_evidence": "actual800x400 resize event, matching acquired texture dimensions, at least30 frames after resize, no validation errors",
+  "probe_sha256": "592fae0e074445bd02c3204a36a0a0b3b729b4ba94b2183d35adec97633fcf55",
+  "logs": [
+    {
+      "log": "docs/research/rrrah-live-hdr-resize-20261011.log",
+      "sha256": "06ccf01c6c894fc0e7a8b2ebe3b52a7d287b7e36519617a4bf3cbe3b5be3a5a6"
+    },
+    {
+      "log": "docs/research/rrrah-model-resize-current-20261011.log",
+      "sha256": "8d17874538200da64e4443c4da988944a507c88ee88390195b2b0f838b09a840"
+    },
+    {
+      "log": "docs/research/rrrah-hdr-resize-probe-check-20261011.log",
+      "sha256": "5e8f7990c96528660d16a13f7750255ea1689b73b4cf6cf008152260c51a3676"
+    }
+  ]
+}

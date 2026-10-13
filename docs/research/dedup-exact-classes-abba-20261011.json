@@ -1,0 +1,355 @@
+{
+  "status": "complete_alternating_frozen_exact_classes_scaling",
+  "producer_pid": 16402,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exact-collection-scaling-baseline-20261011.json": "a0d226ea42342d6b323495625551b32b6d5ee437c3aed66c9866fe8d60f8658f",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exact-classes-scaling-20261011.json": "41db090dcf24fe7d1e381085d6405917ab8c3c0e5e47966b2a13c507f6fee738",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-exact-classes-abba-20261011.py": "8db8beef9fa16ec45fdd130bf1c0120834d9ce2acffdad4c2bf813cdbc040f6d",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exact-collection-scaling-baseline-snapshot-20261011.json": "cecc14734a906c391e6d98d329afa843bf3beb10ef2d67065f9df907da36daa6",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-exact-collection-scaling-baseline-20261011.py": "c042f322496aec6c187b1cda1df8b53a6986b39aee1df73100462cd133763702",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-collection-scaling-baseline-qualified-20261011/build.jsonl": "0c838cf56a641386c4486ba6213f3d32a77b2957a84032a56c338ebe37c8133d",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-collection-scaling-baseline-qualified-20261011/build.log": "4d4073565fdae4794509e6d39c44cae8641efe0f0ab212ea501612f148bafc70",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-collection-scaling-baseline-qualified-20261011/scaling.log": "6157118b1f3349fb1bbf73e86ffca3c37e743d0be49631bd094247da27f6eba4",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-collection-scaling-baseline-qualified-20261011/projected_portfolio": "58033b812c9ddd8a0ccde9acb557d29fcc4d97e4e34e9152a6d1b1e30bf5525f",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exact-classes-snapshot-20261011.json": "81a28bc74d1eb21de359272c3acbc6532d57e956279cc2451c4b6c57ad5fdf9c",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-exact-classes-scaling-20261011.py": "1a1bae892beac9c8c0b94246ee754672a2061f71ffc277a0949201236d5ac2f0",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-classes-scaling-qualified-20261011/build.jsonl": "f974b349129d40b43e4e784f53613a8371471f1e84cd40d64d2380d0bbc9c00d",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-classes-scaling-qualified-20261011/build.log": "5ae0697b67f77253ee92ab4382d62278b92af1626ab5ec2f17590baaff50a148",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-classes-scaling-qualified-20261011/scaling.log": "8da5a464635e1fb144d636e092a43809df31ca51c4fe95cb38a1d53cb5bb552c",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-classes-scaling-qualified-20261011/projected_portfolio": "3ea72a04ad0dfc0948cecb1675db99568116a122332cc12397fac808ffef5d72"
+  },
+  "runs": [
+    {
+      "index": 0,
+      "variant": "baseline",
+      "status": "passed",
+      "command": [
+        "/Users/themoretheless/.codex/tmp/rrrah-exact-collection-scaling-baseline-qualified-20261011/projected_portfolio",
+        "exact_collection_scaling_latency_probe",
+        "--exact",
+        "--ignored",
+        "--nocapture"
+      ],
+      "process_pid": 16408,
+      "returncode": 0,
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-exact-classes-abba-qualified-20261011/0-baseline.log",
+      "log_sha256": "9e3f83d2f5167aee0d4ed73236b78e7ba55defbb7ae0e2a95128abfc017ba9d9",
+      "elapsed_seconds": 32.596754666,
+      "rows": [
+        {
+          "files": 8,
+          "families": 1,
+          "pairs": 28,
+          "exact_pairs": 28,
+          "file_bytes": 1048576,
+          "analytical_source_bytes": 209715200,
+          "elapsed_ns": [
+            149361334,
+            152868459,
+            168786666
+          ],
+          "managed_peak": 12992
+        },
+        {
+          "files": 32,
+          "families": 1,
+          "pairs": 496,
+          "exact_pairs": 496,
+          "file_bytes": 1048576,
+          "analytical_source_bytes": 3254779904,
+          "elapsed_ns": [
+            2811424750,
+            2722772792,
+            1839083334
+          ],
+          "managed_peak": 174848
+        },
+        {
+          "files": 64,
+          "families": 1,
+          "pairs": 2016,
+          "exact_pairs": 2016,
+          "file_bytes": 1048576,
+          "analytical_source_bytes": 12952010752,
+          "elapsed_ns": [
+            7091456167,
+            8752274292,
+            8792371416
+          ],
+          "managed_peak": 677376
+        }
+      ]
+    },
+    {
+      "index": 1,
+      "variant": "candidate",
+      "status": "passed",
+      "command": [
+        "/Users/themoretheless/.codex/tmp/rrrah-exact-classes-scaling-qualified-20261011/projected_portfolio",
+        "exact_collection_scaling_latency_probe",
+        "--exact",
+        "--ignored",
+        "--nocapture"
+      ],
+      "process_pid": 16675,
+      "returncode": 0,
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-exact-classes-abba-qualified-20261011/1-candidate.log",
+      "log_sha256": "390f57d25ee2c244d1cc05d6ff94c572abc55d766c732b7d54708dc0ae73b1e2",
+      "elapsed_seconds": 36.22340029099999,
+      "rows": [
+        {
+          "files": 8,
+          "families": 1,
+          "pairs": 28,
+          "exact_pairs": 28,
+          "file_bytes": 1048576,
+          "analytical_source_bytes": 165675008,
+          "elapsed_ns": [
+            160300209,
+            169570250,
+            162642375
+          ],
+          "managed_peak": 13056
+        },
+        {
+          "files": 32,
+          "families": 1,
+          "pairs": 496,
+          "exact_pairs": 496,
+          "file_bytes": 1048576,
+          "analytical_source_bytes": 2279604224,
+          "elapsed_ns": [
+            2277216041,
+            2400494333,
+            2381723541
+          ],
+          "managed_peak": 175104
+        },
+        {
+          "files": 64,
+          "families": 1,
+          "pairs": 2016,
+          "exact_pairs": 2016,
+          "file_bytes": 1048576,
+          "analytical_source_bytes": 8856272896,
+          "elapsed_ns": [
+            9736185542,
+            9102679208,
+            9727805375
+          ],
+          "managed_peak": 677888
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "variant": "candidate",
+      "status": "passed",
+      "command": [
+        "/Users/themoretheless/.codex/tmp/rrrah-exact-classes-scaling-qualified-20261011/projected_portfolio",
+        "exact_collection_scaling_latency_probe",
+        "--exact",
+        "--ignored",
+        "--nocapture"
+      ],
+      "process_pid": 16940,
+      "returncode": 0,
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-exact-classes-abba-qualified-20261011/2-candidate.log",
+      "log_sha256": "f4a3b9f168e813368f43a5e7d2949310137141212a11011d18745767b751d640",
+      "elapsed_seconds": 26.547436875000002,
+      "rows": [
+        {
+          "files": 8,
+          "families": 1,
+          "pairs": 28,
+          "exact_pairs": 28,
+          "file_bytes": 1048576,
+          "analytical_source_bytes": 165675008,
+          "elapsed_ns": [
+            185560750,
+            298218083,
+            363720042
+          ],
+          "managed_peak": 13056
+        },
+        {
+          "files": 32,
+          "families": 1,
+          "pairs": 496,
+          "exact_pairs": 496,
+          "file_bytes": 1048576,
+          "analytical_source_bytes": 2279604224,
+          "elapsed_ns": [
+            2771531958,
+            1897553333,
+            1720484167
+          ],
+          "managed_peak": 175104
+        },
+        {
+          "files": 64,
+          "families": 1,
+          "pairs": 2016,
+          "exact_pairs": 2016,
+          "file_bytes": 1048576,
+          "analytical_source_bytes": 8856272896,
+          "elapsed_ns": [
+            6225175625,
+            6113535250,
+            6839708250
+          ],
+          "managed_peak": 677888
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "variant": "baseline",
+      "status": "passed",
+      "command": [
+        "/Users/themoretheless/.codex/tmp/rrrah-exact-collection-scaling-baseline-qualified-20261011/projected_portfolio",
+        "exact_collection_scaling_latency_probe",
+        "--exact",
+        "--ignored",
+        "--nocapture"
+      ],
+      "process_pid": 17206,
+      "returncode": 0,
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-exact-classes-abba-qualified-20261011/3-baseline.log",
+      "log_sha256": "cd32b7c60724eedecf3b3850c05a13ea19321422d9fb282eb5e1fe9db4cc02b9",
+      "elapsed_seconds": 27.899858957999996,
+      "rows": [
+        {
+          "files": 8,
+          "families": 1,
+          "pairs": 28,
+          "exact_pairs": 28,
+          "file_bytes": 1048576,
+          "analytical_source_bytes": 209715200,
+          "elapsed_ns": [
+            123816083,
+            123735167,
+            121141834
+          ],
+          "managed_peak": 12992
+        },
+        {
+          "files": 32,
+          "families": 1,
+          "pairs": 496,
+          "exact_pairs": 496,
+          "file_bytes": 1048576,
+          "analytical_source_bytes": 3254779904,
+          "elapsed_ns": [
+            1999281000,
+            1850442333,
+            1836399625
+          ],
+          "managed_peak": 174848
+        },
+        {
+          "files": 64,
+          "families": 1,
+          "pairs": 2016,
+          "exact_pairs": 2016,
+          "file_bytes": 1048576,
+          "analytical_source_bytes": 12952010752,
+          "elapsed_ns": [
+            7310607750,
+            7220674959,
+            7239926916
+          ],
+          "managed_peak": 677376
+        }
+      ]
+    }
+  ],
+  "order": [
+    "baseline",
+    "candidate",
+    "candidate",
+    "baseline"
+  ],
+  "scope": "Alternating process-local probes, all copies, 8/32/64 files, 1 MiB/file; same copied frozen programs and measurement policy; no universal host/RSS/device-I/O claim",
+  "controls": [
+    {
+      "files": 8,
+      "samples_ns": {
+        "baseline": [
+          149361334,
+          152868459,
+          168786666,
+          123816083,
+          123735167,
+          121141834
+        ],
+        "candidate": [
+          160300209,
+          169570250,
+          162642375,
+          185560750,
+          298218083,
+          363720042
+        ]
+      },
+      "median_seconds": {
+        "baseline": 0.1365887085,
+        "candidate": 0.1775655
+      },
+      "baseline_over_candidate": 0.7692299940022133
+    },
+    {
+      "files": 32,
+      "samples_ns": {
+        "baseline": [
+          2811424750,
+          2722772792,
+          1839083334,
+          1999281000,
+          1850442333,
+          1836399625
+        ],
+        "candidate": [
+          2277216041,
+          2400494333,
+          2381723541,
+          2771531958,
+          1897553333,
+          1720484167
+        ]
+      },
+      "median_seconds": {
+        "baseline": 1.9248616665,
+        "candidate": 2.329469791
+      },
+      "baseline_over_candidate": 0.8263089197107343
+    },
+    {
+      "files": 64,
+      "samples_ns": {
+        "baseline": [
+          7091456167,
+          8752274292,
+          8792371416,
+          7310607750,
+          7220674959,
+          7239926916
+        ],
+        "candidate": [
+          9736185542,
+          9102679208,
+          9727805375,
+          6225175625,
+          6113535250,
+          6839708250
+        ]
+      },
+      "median_seconds": {
+        "baseline": 7.275267333,
+        "candidate": 7.971193729
+      },
+      "baseline_over_candidate": 0.9126948334641335
+    }
+  ],
+  "samples": 36
+}

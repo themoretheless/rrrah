@@ -1,0 +1,67 @@
+{
+  "backend": "Metal Apple M4 Max",
+  "measurements": [
+    {
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/1294.cr2",
+      "sha256": "8f28465cee09844ffad95dbd3ec91923717a329c5ec4f3f405f5b4fce83aaea3",
+      "native_decode_ms": 1581.452,
+      "gpu_upload_render_readback_ms": 55.018
+    },
+    {
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/898.nef",
+      "sha256": "f90deb2819863f5a6ca9913c255fdd83a94963f4284eb88df9d389da7a6c7665",
+      "native_decode_ms": 662.066,
+      "gpu_upload_render_readback_ms": 33.148
+    },
+    {
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/2414.arw",
+      "sha256": "250784580ea527442c09004417bb0eead484f2bf3ee8f9121a776ac65bb50d0f",
+      "native_decode_ms": 153.359,
+      "gpu_upload_render_readback_ms": 44.741
+    },
+    {
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/1084.orf",
+      "sha256": "b2221977cbc6eba0d3b363351072092e5647eaa0d02a5d8432b5d985b29f669f",
+      "native_decode_ms": 1839.866,
+      "gpu_upload_render_readback_ms": 54.061
+    },
+    {
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/831.pef",
+      "sha256": "51a3f22d702353b246684dca79f83c79cfdbdf9892702ae5ac55dd469e239bb6",
+      "native_decode_ms": 1276.728,
+      "gpu_upload_render_readback_ms": 62.07
+    },
+    {
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/5025.rw2",
+      "sha256": "87516d28f8594dcfd20b0577883ad0d35662efc503674b1e3688aa894d32a2c0",
+      "native_decode_ms": 255.952,
+      "gpu_upload_render_readback_ms": 46.095
+    },
+    {
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/2883.raf",
+      "sha256": "58ad687b23138c3c49ebeb6c1f80daf13185349be364b947e2bf27e39a462d2f",
+      "native_decode_ms": 139.392,
+      "gpu_upload_render_readback_ms": 52.361
+    },
+    {
+      "source": "/Users/themoretheless/Documents/Sources/rrrah/tests/IMG_9043.CR3",
+      "sha256": "d06cbb10e84882cf130430bdc88ed2652c2622b96dea8d6a854c09e3bee37e59",
+      "native_decode_ms": 105.495,
+      "gpu_upload_render_readback_ms": 61.851
+    },
+    {
+      "source": "/Users/themoretheless/Documents/Sources/rrrah/tests/IMG_9074.CR3",
+      "sha256": "9c0d47cc2dd550eb6dc26c4ba2b2874b67f5c89e79dff5c472abf0ac6b2f6178",
+      "native_decode_ms": 111.345,
+      "gpu_upload_render_readback_ms": 58.244
+    }
+  ],
+  "log_sha256": "b8fe930fd07f1e4018fece1f352ba7bbb485b5395991b25ea13cf96d39d491a4",
+  "checks": "nine-source transport regression passed; 90 restores; original samples/metadata and Metal output exact",
+  "limitations": [
+    "single measurement per source",
+    "filesystem and decoder state not forced cold",
+    "native decode returns mosaic; GPU upload/render/readback measured separately",
+    "not physical presentation or independently certified camera color"
+  ]
+}

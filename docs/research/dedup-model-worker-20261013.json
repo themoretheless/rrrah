@@ -1,0 +1,65 @@
+{
+  "status": "passed",
+  "producer_pid": 89998,
+  "source": "/Users/themoretheless/.codex/tmp/rrrah-model-worker-20261013/source",
+  "gates": [
+    {
+      "name": "protocol",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-dedup",
+        "--features",
+        "decode",
+        "--locked",
+        "--offline",
+        "--lib",
+        "model_worker::",
+        "--jobs",
+        "2",
+        "--target-dir",
+        "/Users/themoretheless/.codex/tmp/rrrah-cache-interpretation-fix-20261012/target"
+      ],
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-model-worker-20261013/protocol.log",
+      "status": "passed",
+      "child_pid": 90012,
+      "returncode": 0,
+      "log_sha256": "6d10ee088dd5c480df123b93cd30b45f6c5e8f4bb4cf299d2a92aa7c5a9bfefb"
+    },
+    {
+      "name": "native_worker_build",
+      "command": [
+        "cargo",
+        "build",
+        "-p",
+        "rrrah-dedup",
+        "--features",
+        "loftr",
+        "--locked",
+        "--offline",
+        "--bin",
+        "rrrah-loftr-worker",
+        "--jobs",
+        "2",
+        "--target-dir",
+        "/Users/themoretheless/.codex/tmp/rrrah-cache-interpretation-fix-20261012/target"
+      ],
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-model-worker-20261013/native_worker_build.log",
+      "status": "passed",
+      "child_pid": 92085,
+      "returncode": 0,
+      "log_sha256": "592cddeb78d52238aa510b563a91d9d46d2487a6d01c5677f0e07c37963c661a"
+    }
+  ],
+  "inputs": {
+    "Cargo.toml": "91d955a405f42e0ee4cc101ebecad91187e817cccd6708de6bdc7b9a180a94a5",
+    "src/lib.rs": "9645441a0cbb9430aaea69311e8bacb35f3bef7ed686aeeabc70fed2288810fa",
+    "src/model_loftr.rs": "66a57e1ab5d80019e9bdb7cdbc18154bf3457ab0cb9ac044588730488372beb7",
+    "src/model_worker.rs": "d03c9baf51e8d554abcc44cf052877a33c34c626fab74cb32779b279b8fcda19",
+    "src/bin/rrrah-loftr-worker.rs": "37d9b8fba559b8c0b9076972479f660ce32f234e5ef196c4487f531e385c0d01"
+  },
+  "binary": "/Users/themoretheless/.codex/tmp/rrrah-model-worker-20261013/rrrah-loftr-worker",
+  "binary_sha256": "e2a141a0d5eb1c56a0021e0dcb14f445a8080827f2459b285ecb7a4d527722ba",
+  "inputs_unchanged": true
+}

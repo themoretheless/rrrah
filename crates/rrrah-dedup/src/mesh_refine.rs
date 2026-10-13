@@ -115,6 +115,7 @@ pub fn propose_mesh_translations(
         || policy.offset_radius > i32::MAX as u32
         || !policy.minimum_contrast.is_finite()
         || policy.minimum_contrast <= 0.
+        || policy.minimum_contrast > 1.
         || policy.minimum_pairs == 0
         || [
             policy.minimum_training_fraction,

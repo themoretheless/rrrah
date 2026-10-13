@@ -1,0 +1,228 @@
+{
+  "date": "2026-10-13",
+  "scope": "Experimental native AI spatial compositor, not normal viewer integration or independent color qualification",
+  "diagnostic_correction": {
+    "before": "Instant::elapsed at every cancellation checkpoint",
+    "profile_clock_top_samples": 238,
+    "profile_active_thread_samples": 452,
+    "after": "Watchdog sets AtomicBool at 180s; each checkpoint still polls cancellation; Drop stops/unparks/joins worker",
+    "deadline_guard_test": "Zero deadline expires; long deadline Drop joins without waiting and leaves signal unset",
+    "note": "Removing diagnostic timing overhead is not a production speedup claim"
+  },
+  "profile_after_correction": {
+    "active_thread_samples": 447,
+    "parked_main_and_watchdog_samples_excluded": 894,
+    "allocation_top_samples": {
+      "free": 63,
+      "tiny_malloc": 37,
+      "deduplicated_malloc_symbol": 26,
+      "malloc_zone_malloc": 15,
+      "rust_alloc": 8,
+      "libc_free": 7
+    },
+    "scope": "Three seconds after observed preflight marker, repeated target pixel"
+  },
+  "change": "Reuse one admitted single-pixel child frame across fused Begin/NativeSampledPaint/End groups. Reset initial/current/coverage, knockout and space key from actual parent; refuse failed/cancelled state; reallocate on space/shape mismatch. Release scratch before ordinary nested groups.",
+  "validation": {
+    "suite_passed": 210,
+    "suite_ignored": 12,
+    "suite_failed": 0,
+    "existing_2304_case_matrix_now_spans_two_fragments": true,
+    "fault_injection_now_spans_reused_fragment": true,
+    "absent_source_after_painted_fragment_regression": true,
+    "prior_seven_probes_exact": {
+      "(138,36)": true,
+      "(149,56)": true,
+      "(199,25)": true,
+      "(195,37)": true,
+      "(138,39)": true,
+      "(145,50)": true,
+      "(137,37)": true,
+      "(176,46)": true
+    },
+    "target_refusal_unchanged": {
+      "pixel": [
+        145,
+        50
+      ],
+      "fragments": 219616,
+      "previous_admission_requests": 2855050,
+      "current_admission_requests": 1098130
+    },
+    "peak_bytes": 239197736,
+    "final_credit_bytes": 0,
+    "limits_unchanged": true
+  },
+  "benchmark": {
+    "scope": "Capture/preflight plus two selected complete native AI pixels; replay phase includes conversion/teardown/process exit after parent observes preflight marker",
+    "blocks": 2,
+    "sequence": "ABBA",
+    "warmups_excluded": 2,
+    "measured_runs": 8,
+    "exact_pixel_checks": 20,
+    "both_versions_atomic_deadline": true,
+    "replay_ratios": [
+      1.3775656851511027,
+      1.3742050986249594
+    ],
+    "median_replay_ratio": 1.3758853918880312,
+    "overall_ratios": [
+      1.0580954357676342,
+      1.0493992861754606
+    ],
+    "median_replay_seconds": {
+      "baseline": 0.37501270799999986,
+      "candidate": 0.27214437449999984
+    },
+    "report": "ai-fused-child-reuse-phased-abba-2026-10-13.json",
+    "earlier_unphased_report": "ai-fused-child-reuse-abba-2026-10-13.json",
+    "boundary": "No full-page or ordinary-viewer speedup claim"
+  },
+  "probes": {
+    "(145,50)": {
+      "completed": false,
+      "alpha": null,
+      "components": null,
+      "white_rgb": null
+    },
+    "(176,46)": {
+      "completed": true,
+      "alpha": 0.9999999999999861,
+      "components": [
+        0.9095085325667113,
+        0.5334216125488578,
+        0.9403839642789843,
+        0.0015903303523600032
+      ],
+      "white_rgb": [
+        46.68456852436351,
+        109.6108715236207,
+        72.34475120902313
+      ]
+    },
+    "(138,39)": {
+      "completed": true,
+      "alpha": 0.23000043989211091,
+      "components": [
+        0.2760619845691583,
+        0.7164633440344005,
+        0.9244087288389119,
+        0.1528051896347068
+      ],
+      "white_rgb": [
+        234.1938250797703,
+        216.73068273985277,
+        207.15040185202014
+      ]
+    },
+    "(195,37)": {
+      "completed": true,
+      "alpha": 1.0,
+      "components": [
+        0.653609391682176,
+        0.18663448442467723,
+        0.902922408827704,
+        0.03779044552978028
+      ],
+      "white_rgb": [
+        99.64779853820801,
+        156.11963868141174,
+        77.59195804595947
+      ]
+    },
+    "(137,37)": {
+      "completed": true,
+      "alpha": 0.9757737328883405,
+      "components": [
+        0.2167979502787616,
+        0.6457726984690586,
+        0.8255252253197052,
+        0.11741609584381041
+      ],
+      "white_rgb": [
+        181.5827786284322,
+        107.32818614673408,
+        66.42946451349978
+      ]
+    },
+    "(138,36)": {
+      "completed": true,
+      "alpha": 0.9999628213382107,
+      "components": [
+        0.3383463976795398,
+        0.753939134713375,
+        0.7768495160001363,
+        0.19377905992737132
+      ],
+      "white_rgb": [
+        148.31163494679748,
+        78.09125508175765,
+        62.07648508984009
+      ]
+    },
+    "(199,25)": {
+      "completed": true,
+      "alpha": 1.0,
+      "components": [
+        0.7135069188516239,
+        0.17809831327578418,
+        0.9554537787768727,
+        0.0549916907975484
+      ],
+      "white_rgb": [
+        81.60994604229927,
+        151.66586726903915,
+        70.53911849856377
+      ]
+    },
+    "(149,56)": {
+      "completed": true,
+      "alpha": 0.21442580534571978,
+      "components": [
+        0.3285820137140101,
+        0.861481439860559,
+        0.9346276847653974,
+        0.2474774505728342
+      ],
+      "white_rgb": [
+        230.74855138884672,
+        212.56374303909558,
+        208.50489577871136
+      ]
+    }
+  },
+  "sha256": {
+    "vendor/hayro/src/native_frame.rs": "68cad24983996732f54b09cef32801a5ac9dc2ec3796dd9a46e7af7700eb58b8",
+    "vendor/hayro/src/native_spatial.rs": "d3d03c65ec2d3b1bf914b5ae1c24b1d427771d1b1b40d63fbe25fbb9744499ee",
+    "vendor/hayro/src/knockout_interpreter.rs": "2dc5b77b3dd880be82c97adbac18afcdd9bc167fea08b9d33a4dd62600bb9176",
+    "scripts/bench-ai-mesh-index.py": "398361e48b1dcb8e1902dc2fc225cf8da2e7c72a6e68632243296c2c4e09c3fb",
+    "docs/research/ai-mesh-composition-cpu-profile-2026-10-13.txt": "a4c1a9cf2ec886c4db42a5db6fc09173ae7fb1d2c1389222ecb207364db0af3a",
+    "docs/research/ai-mesh-composition-profile-run-2026-10-13.log": "efac6f43522547373880bafffe1e30c2185ef5a0ffe116a2f9ea2d6ccf697ddf",
+    "docs/research/ai-atomic-composition-cpu-profile-2026-10-13.txt": "b7be9b9cf0d60c501f263e66e5f23fb65b443a6d10e3b3ad0fca75ba155791af",
+    "docs/research/ai-atomic-composition-profile-run-2026-10-13.log": "db16da4e8d8c06a8d2fcd66ce6914e6cfb766971f6d74a354c45048a39d8acc0",
+    "docs/research/ai-atomic-deadline-suite-2026-10-13.log": "78f5e363fa2d4394d5c48cc9c66d925e670e436fcd01f1163fafee845f33b02d",
+    "docs/research/ai-fused-child-reuse-final-suite-2026-10-13.log": "8db417003f27f84fd91382f3bf0fea082494bbd27632d1ae9826d1c9913f3f91",
+    "docs/research/ai-fused-child-reuse-original-2026-10-13.log": "e455c2a97f1190189eb5a12bba78d3c6d87d3c7ccc6795c7f7699a4e8de81948",
+    "docs/research/ai-fused-child-reuse-abba-2026-10-13.json": "53e2a51ba83a31c300e26f30ac8412b0e4c27d34e2ad6c4627c72711416ad989",
+    "docs/research/ai-fused-child-reuse-phased-abba-2026-10-13.json": "40c3365a6bb3573a223de90c488058a54b716d8370dc00b873a05c36c5fc9f69",
+    "docs/research/ai-fused-child-reuse-page-2026-10-13.log": "2913491bd2f750ebcfb73421f74831a46702f502530a731745ff1be6535eba21"
+  },
+  "page": {
+    "width": 301,
+    "height": 246,
+    "completed": 15195,
+    "total": 74046,
+    "next_refusal": [
+      145,
+      50
+    ],
+    "deadline": false,
+    "peak_bytes": 239197736,
+    "final_credit_bytes": 0,
+    "elapsed_seconds": 45.51,
+    "exit_code": 101,
+    "partial_output_published": false,
+    "note": "Strict diagnostic fails at first incomplete pixel; timing includes changed diagnostic deadline mechanism and cannot be compared with prior page as isolated runtime speedup"
+  },
+  "next_action": "Root frame and execution stack still allocate per fragment; separately inspect mesh ownership/integration at unchanged target work refusal"
+}

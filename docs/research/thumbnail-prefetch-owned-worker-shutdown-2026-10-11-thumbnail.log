@@ -1,0 +1,42 @@
+warning: function `fallible_zeroed_bytes` is never used
+   --> crates/rrrah-cache/src/mosaic_payload_v1.rs:728:4
+    |
+728 | fn fallible_zeroed_bytes(len: usize) -> Result<Box<[u8]>, MosaicPayloadError> {
+    |    ^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-cache` (lib) generated 1 warning
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 21.91s
+     Running unittests src/main.rs (target/debug/deps/rrrah-0b4921b829754900)
+
+running 24 tests
+test foreground_loader_tests::raw_thumbnail_source_and_preview_share_managed_root ... ignored, requires external Sony DSC-F828 SRF fixture
+test foreground_loader_tests::cancelled_thumbnail_viewport_does_not_open_source_or_allocate ... ok
+test gallery::tests::thumbnail_submit_never_consumes_beyond_window_capacity ... ok
+test gallery::tests::thumbnail_viewport_cancels_active_loader ... ok
+test gallery::tests::thumbnail_worker_drops_an_inflight_stale_generation ... ok
+test gallery::tests::thumbnail_queue_replaces_stale_pending_window_at_capacity ... ok
+test gallery::tests::thumbnail_submit_discards_already_ready_stale_generation ... ok
+test gallery::tests::dropping_thumbnail_prefetcher_cancels_active_loader ... ok
+test gallery::tests::thumbnail_submit_evaluates_only_queue_capacity_from_large_lazy_source ... ok
+test thumbnail_retry_tests::thumbnail_budget_callbacks_progress_without_surface_redraw ... ignored, requires actual Metal device
+test source_validation::tests::expired_thumbnail_releases_pixels_while_source_reader_is_blocked ... ok
+STL: 1 triangles, bounds Some([[0.0, 0.0, 0.0], [1.0, 1.0, 0.0]]), decoded in 1.29ms
+test foreground_loader_tests::stl_discovery_inspection_and_thumbnail_boundary ... ok
+test linear_pfm_viewer_tests::linear_thumbnail_worker_reversal_cancels_astc_and_publishes_only_latest_pfm ... ok
+test linear_pfm_viewer_tests::linear_cli_pfm_thumbnail_policy_and_last_owner_release ... ok
+test thumbnail_retry_tests::retry_keeps_managed_pixels_and_rejects_expired_or_changed_source ... ok
+test foreground_loader_tests::rla_float_cli_reaches_decode_and_thumbnail_and_clears_defaults ... ok
+test foreground_loader_tests::raster_folder_thumbnail_applies_icc_and_composites_alpha ... ok
+test foreground_loader_tests::raster_thumbnail_uses_shared_budget_and_last_owner_credit ... ok
+test foreground_loader_tests::rla_offset_canvas_thumbnail_preserves_extent_and_releases_budget ... ok
+test foreground_loader_tests::rla_cli_policy_reaches_requests_and_thumbnail_loader ... ok
+test foreground_loader_tests::wal_thumbnail_rereads_palette_and_composites_transparency ... ok
+test foreground_loader_tests::pq_white_cli_separates_cache_and_reaches_thumbnail ... ok
+test linear_pfm_viewer_tests::heif_hdr_cli_reaches_preload_and_thumbnail_without_assuming_srgb ... ok
+test foreground_loader_tests::hlg_display_cli_separates_all_policy_fields_and_reaches_thumbnail ... ok
+
+test result: ok. 22 passed; 0 failed; 2 ignored; 0 measured; 231 filtered out; finished in 0.02s
+

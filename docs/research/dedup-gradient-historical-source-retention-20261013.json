@@ -1,0 +1,11 @@
+{
+  "status": "historical_mutable_source_pin_retained_exactly",
+  "original_path": "/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup/src/gradient.rs",
+  "historical_sha256": "700347c5d4439d572f3d004e61ccfb350733aeff9f2946171c1f9cd461c8be1a",
+  "retained_paths": {
+    "/Users/themoretheless/.codex/tmp/rrrah-gradient-cache-root-before-20261013/gradient.rs": "700347c5d4439d572f3d004e61ccfb350733aeff9f2946171c1f9cd461c8be1a",
+    "/Users/themoretheless/.codex/tmp/rrrah-consensus-native-source-20261013/crates/rrrah-dedup/src/gradient.rs": "700347c5d4439d572f3d004e61ccfb350733aeff9f2946171c1f9cd461c8be1a"
+  },
+  "current_sha256": "d683f74b05f8342c18399c552213608019aacb8708fdd0dc45ae568bc0812ef1",
+  "scope": "Earlier standalone experiments pinned the then-current mutable root gradient source. It now changes for a new bounded cache implementation; historical bytes are retained identically in the baseline snapshot and pre-edit backup. Do not rewrite old audits or treat their source pins as latest-source evidence. Revalidate historical baseline pins through these exact retained bytes."
+}

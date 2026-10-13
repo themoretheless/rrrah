@@ -12,6 +12,12 @@ package=rrrah-dedup
 target_dir=/validation/target
 persistent_dir=$(dirname -- "$sysroot_dir")/cache-tests
 case "$mode" in
+  model-compare-late) set -- --test model_compare; feature_flag=--features=decode ;;
+  model-compare) set -- --test model_compare --test model_input_file --test model_input --test proposals; feature_flag=--features=decode ;;
+  model-file) set -- --test model_input_file --test model_input --test proposals; feature_flag=--features=decode ;;
+  model-input) set -- --test model_input --test proposals; feature_flag=--features=raster ;;
+  scored-proposals) set -- --test proposals --test geometry --test projective_geometry --test projective_domains --test projective_exhaustive_domains; feature_flag=--features=raster ;;
+  pixel-equality) set -- --test pixels; feature_flag=--no-default-features ;;
   reflection-collection-late-tokens) set -- --test anchor_reflection_collection_tokens -- --nocapture; feature_flag=--features=decode ;;
   reflection-collection-tokens) set -- --test anchor_reflection_collection_tokens; feature_flag=--features=decode ;;
   reflection-collection) set -- --test gradient_index --test gradient_index_reflection --test anchor_reflection_collection --test anchor_reflection_collection_cancel --test anchor_rank_driven_collection; feature_flag=--features=decode ;;

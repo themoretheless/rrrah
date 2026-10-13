@@ -2,9 +2,9 @@
   "index": 480,
   "repository": "mominul/dinohash-onnx",
   "commit": "7d87d54b837ceb14b553ffc51147e20a2ed1b85d",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
-  "decision": "reference",
-  "finding": "ONNX DinoHash model/cache/downloader; weights/runtime/semantic calibration cost needs measurement.",
+  "review_scope": "All5 implementation modules,example/config/README/license fully read;12 pinned blobs verified.10 selected controls with explicit ONNX/network adapters; real NumPy/Pillow preprocessing. uv.lock/.gitignore inventory only.",
+  "decision": "reference_only_not_adopted",
+  "finding": "Global session cache ignores model/device; unvalidated output shape/nonfinite logits; transparent RGB leaks into preprocessing; mutable unverified model download. Actual model/runtime quality untested.",
   "available_source_evidence": [
     {
       "path": "src/dinohash_onnx/hash.py",
@@ -73,6 +73,14 @@
       "lines": 21,
       "source": false,
       "test": false
+    }
+  ],
+  "whole_implementation_read": true,
+  "whole_repo_complete": false,
+  "selected_controls_passed": 10,
+  "incremental_reviews": [
+    {
+      "audit": "docs/research/dedup-500/dinohash-selected-source-audit-20261013.json"
     }
   ]
 }

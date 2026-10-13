@@ -1,0 +1,53 @@
+{
+  "status": "complete_bounded_real_cpu_model_bank_collection",
+  "producer_pid": 57355,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-model-bank-collection-native-snapshot-20261011.json": "200acc79e2be3396f11523639a71c4d4fbe22fffda98eac7e117b022202292b9",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-model-bank-collection-native-harness-20261011.json": "24a59a551b4c6d69a81dd6539eea45157339c6b32be94e87c05fb8109d614092",
+    "/Users/themoretheless/.codex/tmp/dedup-model-bank-collection-native-build-20261011.jsonl": "ae6c1e5a1ab4a016ce8c81c3f1a0dd0efb7edeeb157f04ab8344001409591746",
+    "/Users/themoretheless/.codex/tmp/dedup-model-bank-collection-native-build-20261011.log": "13574b1653b873502c57e810400886b7b86dabae43d75e50a8a124fb2c18db67",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-exact-portfolio-20261011/debug/model_bank_collection_files": "ceaf2af2250bfae69a1c7ecf9f8961a52f7627b399a73307d25b6d7842143df3",
+    "/Users/themoretheless/.codex/tmp/rrrah-model-bank-collection-native-qualified-20261011/model_bank_collection_files": "ceaf2af2250bfae69a1c7ecf9f8961a52f7627b399a73307d25b6d7842143df3",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-publisher-positives-qualified-20261011/audits/ordering-prefix-0458.json": "a790769341341700f9abba71a364a888851021be78ee0417badbdc0a89387707",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors": "59e55bf0ecd047db9c513672d121a3ea677529ad448bdc3a359e92862c74ddd7",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/203502.jpg": "bf1d351e0a8259716fe65e0eb3c37a55e25bfa3d1d06042c8a50f8935b31dd1c",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/203500.jpg": "e22cba724438643ac01eb2516eab2ab466d51544218f9096c2a99fbbf07c4aac",
+    "/Users/themoretheless/.codex/tmp/rrrah-model-bank-collection-native-qualified-20261011/third-source.jpg": "bf1d351e0a8259716fe65e0eb3c37a55e25bfa3d1d06042c8a50f8935b31dd1c",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-model-bank-collection-native-20261011.py": "95cb9e96a18344c6de706b0bd30dcb4fa24dd46ff228a23d8a9b8897185d93a1"
+  },
+  "plan": {
+    "original_id": 35,
+    "query_id": 209,
+    "group_id": 203500,
+    "original": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/203500.jpg",
+    "query": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/203502.jpg",
+    "direction": "reverse",
+    "left": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/203502.jpg",
+    "right": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/203500.jpg",
+    "source_tolerance": 0.5536776036072714,
+    "gradient_minimum_distance": 0.19068231807512986,
+    "radius_0_1_proposed": false,
+    "baseline_index": 67
+  },
+  "command": [
+    "/usr/bin/time",
+    "-l",
+    "/usr/bin/env",
+    "DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+    "/Users/themoretheless/.codex/tmp/rrrah-model-bank-collection-native-qualified-20261011/model_bank_collection_files",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/203502.jpg",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/203500.jpg",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+    "640",
+    "0.5536776036072714",
+    "/Users/themoretheless/.codex/tmp/rrrah-model-bank-collection-native-qualified-20261011/third-source.jpg"
+  ],
+  "scope": "Actual ModelFirst exhaustive3-ID CPU collection: IDs2/6 identical203502 bytes, ID9 original203500; full25-window extraction per pair with radius list2/6, automatic joint bank candidate and original pixels; explicit1m/filter12, automatic radius choice within prepaid2/6. No supplied H, captured point injection, full corpus/precision/RSS qualification.",
+  "child_pid": 57356,
+  "returncode": 0,
+  "stdout": "{\"files\":[2,6,9],\"managed_peak\":128677192,\"managed_retained_before_drop\":1080,\"managed_used\":0,\"pairs\":[{\"detail\":{\"attempted_stages\":1,\"first_miss\":\"None\",\"geometry_inliers\":9585,\"pixels\":\"Some(AnchorRankEvidence { forward_anchors: 5476, reverse_anchors: 5028, forward: RankRegionEvidence { sites: 136900, valid_sites: 133974, informative_pairs: 500092, agreeing_pairs: 500092, pixel_reads: 55322795 }, reverse: RankRegionEvidence { sites: 125700, valid_sites: 124029, informative_pairs: 463303, agreeing_pairs: 463303, pixel_reads: 50836070 }, supported: true })\",\"selected_points\":17245,\"transform\":[[1.0000060412624252,-0.00008119564016414625,0.029757120395174752],[0.000013857003558001675,1.0000402929214935,0.028146100343292346],[5.957058938983242e-8,-1.294443243142825e-8,0.9999803866110302]]},\"left\":2,\"right\":6,\"support\":true},{\"detail\":{\"attempted_stages\":1,\"first_miss\":\"None\",\"geometry_inliers\":18,\"pixels\":\"Some(AnchorRankEvidence { forward_anchors: 18, reverse_anchors: 12, forward: RankRegionEvidence { sites: 3042, valid_sites: 3042, informative_pairs: 1199, agreeing_pairs: 1199, pixel_reads: 252810 }, reverse: RankRegionEvidence { sites: 2028, valid_sites: 1551, informative_pairs: 1495, agreeing_pairs: 1495, pixel_reads: 168540 }, supported: true })\",\"selected_points\":989,\"transform\":[[4.014021852855428,-3.1763643188682384,356.41269201716926],[3.547499286589031,5.786973533300719,-2379.340958757816],[0.0000804053200362516,0.0007482635994184681,0.6235693133629174]]},\"left\":2,\"right\":9,\"support\":true},{\"detail\":{\"attempted_stages\":1,\"first_miss\":\"None\",\"geometry_inliers\":18,\"pixels\":\"Some(AnchorRankEvidence { forward_anchors: 18, reverse_anchors: 12, forward: RankRegionEvidence { sites: 3042, valid_sites: 3042, informative_pairs: 1199, agreeing_pairs: 1199, pixel_reads: 252810 }, reverse: RankRegionEvidence { sites: 2028, valid_sites: 1551, informative_pairs: 1495, agreeing_pairs: 1495, pixel_reads: 168540 }, supported: true })\",\"selected_points\":989,\"transform\":[[4.014021852855428,-3.1763643188682384,356.41269201716926],[3.547499286589031,5.786973533300719,-2379.340958757816],[0.0000804053200362516,0.0007482635994184681,0.6235693133629174]]},\"left\":6,\"right\":9,\"support\":true}],\"scope\":\"Actual CPU exhaustive ModelFirst bank collection3 IDs, radii2/6,filter12/1m; no full corpus/precision/RSS qualification.\"}\n",
+  "stderr": "      905.16 real       853.79 user         7.46 sys\n          2491039744  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n              413383  page reclaims\n                  10  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                 609  voluntary context switches\n              519693  involuntary context switches\n       8313094862637  instructions retired\n       1912607561922  cycles elapsed\n          2451458520  peak memory footprint\n",
+  "elapsed_seconds": 905.1837886249999,
+  "log": "/Users/themoretheless/.codex/tmp/rrrah-model-bank-collection-native-qualified-20261011/203500.log",
+  "log_sha256": "ad30e8c88de31ecc5f9f9c7eeb0fa61a8d28fea846518646b2323d2d50504940"
+}

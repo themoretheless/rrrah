@@ -1,0 +1,93 @@
+{
+  "status": "complete_bounded_frozen_joint_model_tests",
+  "producer_pid": 43596,
+  "source_manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-model-bank-portfolio-snapshot-20261011.json",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-model-bank-portfolio-snapshot-20261011.json": "51322310de8b2656b26702f5f9e8a6c4ea1c9714e4ea69c87e75e004b861f5ad",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/qualify-dedup-model-bank-portfolio-20261011.py": "3d61ed8ebbd53a61c9ca88dadba7e18bb99ea67343fa5d1b1ccd7b0f36208d20",
+    "/Users/themoretheless/.codex/tmp/rrrah-model-bank-portfolio-qualified-20261011/build.jsonl": "62be7b22bfa05b9daa8027df323b89b6baac0ad8a7c244aea9bbaacafb492661",
+    "/Users/themoretheless/.codex/tmp/rrrah-model-bank-portfolio-qualified-20261011/build.log": "e4af6d35765e190ad579ec0bf3be167b1ddcc8fe3fb68e9e8a8cae1449b47e1c"
+  },
+  "build_command": [
+    "cargo",
+    "test",
+    "--manifest-path",
+    "/Users/themoretheless/.codex/tmp/rrrah-model-bank-portfolio-snapshot-20261011/Cargo.toml",
+    "-p",
+    "rrrah-dedup",
+    "--no-default-features",
+    "--features",
+    "decode",
+    "--test",
+    "model_compare",
+    "--test",
+    "model_tiles",
+    "--test",
+    "search_portfolio",
+    "--test",
+    "portfolio_collection",
+    "--test",
+    "joint_witnesses",
+    "--locked",
+    "--offline",
+    "--no-run",
+    "--message-format=json",
+    "--config",
+    "profile.dev.package.rrrah-dedup.opt-level=3",
+    "--target-dir",
+    "/Users/themoretheless/.codex/tmp/rrrah-opposite-native-snapshot-20261011/target"
+  ],
+  "results": [
+    {
+      "suite": "model_compare",
+      "tests": 26,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-model-bank-portfolio-qualified-20261011/model_compare",
+      "binary_sha256": "bcde1147950abede8fd3d9e6fc86437bd01b9ca3a5bc706752008d6508c32c63",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-model-bank-portfolio-qualified-20261011/model_compare.log",
+      "log_sha256": "125398f419392017f1551b60f0e4a6986812f474b371b0f6504c61280919af54"
+    },
+    {
+      "suite": "model_tiles",
+      "tests": 21,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-model-bank-portfolio-qualified-20261011/model_tiles",
+      "binary_sha256": "547f3bcc0b658316aad672ac3e93579d213e79ee45c3e1b1f3e0440545e846da",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-model-bank-portfolio-qualified-20261011/model_tiles.log",
+      "log_sha256": "60c20f1ca3d1c1bf2d2c3a83622078d3d1f99ef46837514bc2b0d1891e3649af"
+    },
+    {
+      "suite": "search_portfolio",
+      "tests": 27,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-model-bank-portfolio-qualified-20261011/search_portfolio",
+      "binary_sha256": "51b953914ea4debeb542b550444eeb01fc10fccdfc92c7c1bccbbba2b3015d62",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-model-bank-portfolio-qualified-20261011/search_portfolio.log",
+      "log_sha256": "620f36a50d1846613456f969d1435ec988539bdedb3858797f3c793586c1837e"
+    },
+    {
+      "suite": "portfolio_collection",
+      "tests": 23,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-model-bank-portfolio-qualified-20261011/portfolio_collection",
+      "binary_sha256": "cf127139d56dc1da18562d4423b7b3c25a3672050c70011fff2d1d501abef2c3",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-model-bank-portfolio-qualified-20261011/portfolio_collection.log",
+      "log_sha256": "8753184d19663cb623bc8856b6b121c2b5b775ea95c2c0031e5ae287a5bdfa7c"
+    },
+    {
+      "suite": "joint_witnesses",
+      "tests": 10,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-model-bank-portfolio-qualified-20261011/joint_witnesses",
+      "binary_sha256": "e669ea3fb18d11c13c616b5f19337277b64339104168f7b8c53dc774c6ac1bc3",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-model-bank-portfolio-qualified-20261011/joint_witnesses.log",
+      "log_sha256": "b33ae6f88b60071d22bcdaaef0d9182f6f096402979524793d95d1d9a62df855"
+    }
+  ],
+  "scope": "Frozen compatible four-crate source and lock, new joint primitive plus legacy/pair/collection tests. Source coherent before/after; root concurrent HDR edits preserved outside this gate. Not full workspace/platform/corpus/RSS qualification.",
+  "build_pid": 43612,
+  "tests": 107,
+  "owned_root_matches": {
+    "crates/rrrah-dedup/src/local_scan.rs": true,
+    "crates/rrrah-dedup/src/geometry.rs": true,
+    "crates/rrrah-dedup/src/anchor_rank_file.rs": true,
+    "crates/rrrah-dedup/src/search_portfolio.rs": true,
+    "crates/rrrah-dedup/src/portfolio_collection.rs": true,
+    "crates/rrrah-dedup/src/model_loftr.rs": true
+  }
+}

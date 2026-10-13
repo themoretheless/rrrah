@@ -1,0 +1,30 @@
+{
+  "status": "passed",
+  "producer_pid": 78569,
+  "source": "/Users/themoretheless/.codex/tmp/rrrah-worker-supervisor-20261013/source",
+  "inputs": {
+    "src/lib.rs": "bb0e1e433bd8a02805af724955adb48bcf763e7eb98bc33d3d4c15067c786026",
+    "src/worker.rs": "b5883a7d2a9156bece27887d228f669d806bfbf86c14b4c1284efca7db77202e",
+    "tests/worker.rs": "52490f2c812ff1ab6dd93d97e2777e33afb5d713fa715e2e124705e5708c4459"
+  },
+  "command": [
+    "cargo",
+    "test",
+    "-p",
+    "rrrah-dedup",
+    "--no-default-features",
+    "--locked",
+    "--offline",
+    "--test",
+    "worker",
+    "--jobs",
+    "2",
+    "--target-dir",
+    "/Users/themoretheless/.codex/tmp/rrrah-cache-interpretation-fix-20261012/target"
+  ],
+  "log": "/Users/themoretheless/.codex/tmp/rrrah-worker-supervisor-20261013/test.log",
+  "child_pid": 78580,
+  "returncode": 0,
+  "log_sha256": "08bbf401b75462c1509d1c195de019bf999aec79d710efb840894b1bef14ce3e",
+  "inputs_unchanged": true
+}

@@ -1,0 +1,448 @@
+{
+  "gpu_backend": "metal",
+  "gpu_optional": false,
+  "storage_soak_seconds_per_mode": 0,
+  "gpu_policy_cycles": 20,
+  "large_hdr_policy_cycles": 0,
+  "metal_collection_seconds": 0,
+  "metal_raw_collection_seconds": 0,
+  "metal_raw_collection_manifest": "/tmp/rrrah-real-raw-collection-20261011.txt",
+  "metal_prefetch_navigation": true,
+  "metal_raw_worker_navigation": true,
+  "metal_large_float_hdr": true,
+  "metal_viewer_ttl_prefetch": true,
+  "metal_large_upload_cancel": true,
+  "metal_compute_cache": true,
+  "metal_model_swap_cycles": 0,
+  "large_hdr_policy": true,
+  "full_sensor_compute": false,
+  "suites": [
+    {
+      "suite": "gpu-all",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-gpu",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target",
+        "--",
+        "--nocapture"
+      ],
+      "exit_code": 0,
+      "passed": 107,
+      "failed": 0,
+      "ignored": 8,
+      "ignored_tests": [
+        "test full_sensor_linear_exposure_chunked_readback ... ignored, allocates about 0.8 GB of GPU buffers; full-resolution local qualification",
+        "test full_sensor_managed_exposure_budgets_and_checks_every_pixel ... ignored, full-resolution managed compute uses about 2 GB of tracked buffers",
+        "test fusion_back_full_frame_developed_raw_matches_metal_display_transport ... ignored, requires corrected production Fusion linear dumps; display transport qualification",
+        "test fusion_front_full_frame_developed_raw_matches_metal_display_transport ... ignored, requires corrected production Fusion linear dumps; display transport qualification",
+        "test hero9_full_frame_developed_raw_matches_metal_display_transport ... ignored, requires production HERO9 scene-linear dump; transport qualification, not demosaic/color oracle",
+        "test large_cancelled_upload_validation_and_admission_preserve_visible_texture ... ignored, manual 12 MP Metal upload cancellation qualification",
+        "test qualified_sd10_linear_raster_full_frame_display_readback ... ignored, requires qualified X3F linear sRGB PPM and a physical GPU",
+        "test full_f828_managed_rgbe_matches_cpu_reference ... ignored, requires independent DSC-F828 full-sensor dump; authored four-channel normalization, not as-shot color qualification"
+      ],
+      "log": "/private/tmp/rrrah-metal-current-integrated-20261011/gpu-all.log",
+      "log_sha256": "22664da8735617716939d46b986bd23f543c8109828b0f4bb19cc9d66f0580a9",
+      "verified_execution": true
+    },
+    {
+      "suite": "gpu-policy-cycles",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah",
+        "--test",
+        "ttl_swap_metal",
+        "live_count_size_and_ttl_changes_preserve_hdr_frames_through_swap",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target",
+        "--",
+        "--exact",
+        "--include-ignored",
+        "--nocapture"
+      ],
+      "exit_code": 0,
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "ignored_tests": [],
+      "log": "/private/tmp/rrrah-metal-current-integrated-20261011/gpu-policy-cycles.log",
+      "log_sha256": "7119edee6c47a0dca0823c97eb0f088898fac59fceb7629331e4c27c7d7a8965",
+      "verified_execution": true
+    },
+    {
+      "suite": "gpu-policy-large-hdr",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah",
+        "--test",
+        "ttl_swap_metal",
+        "large_hdr_live_policy_preserves_every_component_and_metal_pixel",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target",
+        "--",
+        "--exact",
+        "--include-ignored",
+        "--nocapture"
+      ],
+      "exit_code": 0,
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "ignored_tests": [],
+      "log": "/private/tmp/rrrah-metal-current-integrated-20261011/gpu-policy-large-hdr.log",
+      "log_sha256": "089303e4afa11e2521902b059f68d0f3c522d6e0d4329fd5a4c951d2ecb0231d",
+      "verified_execution": true
+    },
+    {
+      "suite": "gpu-real-raw-collection",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah",
+        "--test",
+        "raw_collection_metal",
+        "real_raw_collection_eviction_and_swap_preserve_metal_frames",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target",
+        "--",
+        "--exact",
+        "--ignored",
+        "--nocapture"
+      ],
+      "exit_code": 0,
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "ignored_tests": [],
+      "log": "/private/tmp/rrrah-metal-current-integrated-20261011/gpu-real-raw-collection.log",
+      "log_sha256": "77ba4fb83ec08bf27522b9fcdcfce1f348e9df83549debe7e92fb10761d08481",
+      "verified_execution": true,
+      "workload_evidence_valid": true
+    },
+    {
+      "suite": "gpu-mixed-raw-worker",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah",
+        "--bin",
+        "rrrah",
+        "gallery::tests::mixed_camera_worker_prefetch_preserves_full_metal_frames",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target",
+        "--",
+        "--exact",
+        "--ignored",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "ignored_tests": [],
+      "log": "/private/tmp/rrrah-metal-current-integrated-20261011/gpu-mixed-raw-worker.log",
+      "log_sha256": "72139b3fabbba33a6ba01fd446ed9f67f16c2d910326d3d820be7f7b1674f8ad",
+      "verified_execution": true,
+      "workload_evidence_valid": true
+    },
+    {
+      "suite": "gpu-multi-neighbor-raw-worker",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah",
+        "--bin",
+        "rrrah",
+        "gallery::tests::multi_neighbor_raw_worker_preserves_metal_frames",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target",
+        "--",
+        "--exact",
+        "--ignored",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "ignored_tests": [],
+      "log": "/private/tmp/rrrah-metal-current-integrated-20261011/gpu-multi-neighbor-raw-worker.log",
+      "log_sha256": "08f89ab151d183c9efe308b101a0e78b975bffc258b1fdbe6e25874be78fb1d1",
+      "verified_execution": true,
+      "workload_evidence_valid": true
+    },
+    {
+      "suite": "gpu-prefetch-navigation",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah",
+        "--bin",
+        "rrrah",
+        "mixed_gallery_reversals_preserve_metal_frames_and_prefetch_pressure",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target",
+        "--",
+        "--ignored",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "ignored_tests": [],
+      "log": "/private/tmp/rrrah-metal-current-integrated-20261011/gpu-prefetch-navigation.log",
+      "log_sha256": "9b2c960ba11e14aa20b2897cde20dcb99d1e6ccabbd85eac8c9432205eb0a545",
+      "verified_execution": true
+    },
+    {
+      "suite": "gpu-raw-worker-navigation",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah",
+        "--bin",
+        "rrrah",
+        "navigation_reversal_worker_preserves_full_raw_metal_frames",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target",
+        "--",
+        "--ignored",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "ignored_tests": [],
+      "log": "/private/tmp/rrrah-metal-current-integrated-20261011/gpu-raw-worker-navigation.log",
+      "log_sha256": "d1249faf3808e51064205dfd4a61c1928d375fc65feb1794510375541c2b5e22",
+      "verified_execution": true
+    },
+    {
+      "suite": "gpu-large-float-hdr",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah",
+        "--test",
+        "hdr_raster_swap",
+        "large_float_hdr_swap_preserves_full_metal_attachment",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target",
+        "--",
+        "--exact",
+        "--ignored",
+        "--nocapture"
+      ],
+      "exit_code": 0,
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "ignored_tests": [],
+      "log": "/private/tmp/rrrah-metal-current-integrated-20261011/gpu-large-float-hdr.log",
+      "log_sha256": "d19164b885515cc68942c49ab9a2548d90d3a0591b8d2262c1fd562389031e62",
+      "verified_execution": true
+    },
+    {
+      "suite": "gpu-viewer-ttl-prefetch",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah",
+        "--bin",
+        "rrrah",
+        "repeated_hdr_ttl_viewer_prefetch_restore_preserves_metal_frames",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target",
+        "--",
+        "--ignored",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "ignored_tests": [],
+      "log": "/private/tmp/rrrah-metal-current-integrated-20261011/gpu-viewer-ttl-prefetch.log",
+      "log_sha256": "991219cf417a969f2df45a4103e3fa3cf36c1de6c89fd065df723a6af09d15b2",
+      "verified_execution": true
+    },
+    {
+      "suite": "gpu-large-upload-cancel",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-gpu",
+        "--test",
+        "raster_readback",
+        "large_cancelled_upload_validation_and_admission_preserve_visible_texture",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target",
+        "--",
+        "--exact",
+        "--ignored",
+        "--nocapture"
+      ],
+      "exit_code": 0,
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "ignored_tests": [],
+      "log": "/private/tmp/rrrah-metal-current-integrated-20261011/gpu-large-upload-cancel.log",
+      "log_sha256": "020ff7b992d7a869184ee165f67a5f7de22364ebd996fc39bd8e2de2542ba831",
+      "verified_execution": true
+    },
+    {
+      "suite": "gpu-compute-cache",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah",
+        "--test",
+        "compute_cache_swap",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/private/tmp/rrrah-required-corpus-target",
+        "--",
+        "--ignored",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "ignored_tests": [],
+      "log": "/private/tmp/rrrah-metal-current-integrated-20261011/gpu-compute-cache.log",
+      "log_sha256": "2fed843c21f9fd36e8c1a4dd289ab940654a7f90c46437f82f32067273f1c124",
+      "verified_execution": true
+    }
+  ],
+  "complete_suite_execution": true,
+  "limitations": [
+    "Passing host CUDA tests does not qualify NVIDIA hardware.",
+    "Metal readback does not qualify physical HDR display.",
+    "Ignored tests are unverified, not passing.",
+    "These regression suites do not prove all 100 formats or sustained slow-disk workloads.",
+    "Large HDR policy checks one authored 12 MP payload cycle and offscreen SDR output, not physical HDR or a collection soak."
+  ],
+  "external_viewer_inputs": {
+    "raw_collection": [
+      {
+        "path": "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/1294.cr2",
+        "sha256": "8f28465cee09844ffad95dbd3ec91923717a329c5ec4f3f405f5b4fce83aaea3"
+      },
+      {
+        "path": "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/898.nef",
+        "sha256": "f90deb2819863f5a6ca9913c255fdd83a94963f4284eb88df9d389da7a6c7665"
+      },
+      {
+        "path": "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/2414.arw",
+        "sha256": "250784580ea527442c09004417bb0eead484f2bf3ee8f9121a776ac65bb50d0f"
+      },
+      {
+        "path": "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/1084.orf",
+        "sha256": "b2221977cbc6eba0d3b363351072092e5647eaa0d02a5d8432b5d985b29f669f"
+      },
+      {
+        "path": "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/831.pef",
+        "sha256": "51a3f22d702353b246684dca79f83c79cfdbdf9892702ae5ac55dd469e239bb6"
+      },
+      {
+        "path": "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/5025.rw2",
+        "sha256": "87516d28f8594dcfd20b0577883ad0d35662efc503674b1e3688aa894d32a2c0"
+      },
+      {
+        "path": "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/2883.raf",
+        "sha256": "58ad687b23138c3c49ebeb6c1f80daf13185349be364b947e2bf27e39a462d2f"
+      },
+      {
+        "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/IMG_9043.CR3",
+        "sha256": "d06cbb10e84882cf130430bdc88ed2652c2622b96dea8d6a854c09e3bee37e59"
+      },
+      {
+        "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/IMG_9074.CR3",
+        "sha256": "9c0d47cc2dd550eb6dc26c4ba2b2874b67f5c89e79dff5c472abf0ac6b2f6178"
+      }
+    ]
+  },
+  "metal_mixed_raw_workers": true,
+  "all_executed_suites_verified": true,
+  "date": "2026-10-11",
+  "totals": {
+    "passed": 119,
+    "failed": 0,
+    "ignored": 8
+  },
+  "scope": "Combined current-source Metal regression after asynchronous startup admission; no source edits during run",
+  "source_sha256": {
+    "crates/rrrah-app/src/main.rs": "e3a0548fbd93b46473e5da548580f55828639044220b2a38b01873a1532e20d4",
+    "crates/rrrah-app/src/gallery.rs": "54ab8033d14d8d9b3fbf4365e6b48c9721a06a4e4d059e69e3060be98135cd84",
+    "crates/rrrah-app/src/drop_inspection.rs": "acf57758f2c8a3f0caef7ccf8c5a9775546c220198e634f2d4306da2ae269064",
+    "crates/rrrah-app/src/source_validation.rs": "3bda01da36c2364e6031db1b99ec78fa05fbf779001ee91b6773fab5587fa3bd",
+    "scripts/qualify-viewer-storage-gpu.py": "a36959a4533cc3b2b5b8de8c8c3b75a5e10853e3afc021ccbdd02283ebb31687"
+  },
+  "observations": {
+    "adapter": "Apple M4 Max Metal",
+    "live_policy_cycles": 20,
+    "real_raw_collection": {
+      "files": 9,
+      "rounds": 10,
+      "reads": 90,
+      "writes": 9,
+      "final_root_bytes": 0,
+      "final_queue_bytes": 0
+    },
+    "hdr_ttl": {
+      "restores_without_decoder_fallback": 128,
+      "preloads_with_blocked_decoder": 2,
+      "all_metal_frames_exact": true
+    },
+    "large_hdr": "12 MP; all binary16 pixels exact after swap; independent bright/negative/exposure oracle; root=0; queue=0",
+    "multi_neighbor": "two completed three-neighbor plans; six 1920x1080 Metal frames exact"
+  }
+}

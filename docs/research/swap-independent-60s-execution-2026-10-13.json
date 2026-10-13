@@ -1,0 +1,48 @@
+[
+  {
+    "mode": "bytes",
+    "returncode": 0,
+    "wall_seconds": 60.420863125,
+    "log": "docs/research/swap-independent-bytes-60s-2026-10-13.log",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "rrrah-cache",
+      "--test",
+      "sustained_swap",
+      "sustained_byte_cap_evicts_without_count_or_ttl_pressure",
+      "--locked",
+      "--offline",
+      "--target-dir",
+      "target",
+      "--",
+      "--exact",
+      "--ignored",
+      "--nocapture"
+    ]
+  },
+  {
+    "mode": "count",
+    "returncode": 0,
+    "wall_seconds": 60.191160417,
+    "log": "docs/research/swap-independent-count-60s-2026-10-13.log",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "rrrah-cache",
+      "--test",
+      "sustained_swap",
+      "sustained_count_cap_evicts_without_byte_or_ttl_pressure",
+      "--locked",
+      "--offline",
+      "--target-dir",
+      "target",
+      "--",
+      "--exact",
+      "--ignored",
+      "--nocapture"
+    ]
+  }
+]

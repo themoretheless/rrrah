@@ -1,0 +1,24 @@
+{
+  "attempted_plans": 16384,
+  "admitted_plans": 7557,
+  "dimensions_range": [
+    2,
+    65
+  ],
+  "binding_limits": [
+    256,
+    512,
+    1024,
+    4096
+  ],
+  "verified": "every admitted plan has contiguous output rows, aligned bounded bindings, all independent lattice-neighbor reads present, and exact explicit-buffer accounting",
+  "passed": 4,
+  "failed": 0,
+  "log": "docs/research/rgbe-window-geometry-2026-10-11.log",
+  "sha256": "3310779f5d8b945b2ff6e75153d79a9a87e37bc365655db353b442d21aa8cc95",
+  "limitations": [
+    "Refused geometries are not supported by this row-only planner.",
+    "CPU plan invariants, not additional actual GPU execution.",
+    "Screen remains locked; live RAW HDR unavailable."
+  ]
+}

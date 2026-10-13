@@ -1,0 +1,69 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+    Finished `test` profile [optimized + debuginfo] target(s) in 17.56s
+     Running tests/portfolio_collection.rs (/Users/themoretheless/.codex/tmp/rrrah-dedup-exact-portfolio-20261011/debug/deps/portfolio_collection-9b773bfe39e3c0dd)
+
+running 10 tests
+test cumulative_overflow_policy_and_memory_preflight_precede_iterator_and_io ... ok
+test duplicate_file_and_complete_pair_limits_refuse_before_file_io ... ok
+test empty_and_single_file_batches_are_complete_without_invented_pairs ... ok
+test idle_owner_cancellation_and_late_provider_failure_discard_earlier_decisions ... ok
+test a_native_empty_proposal_bank_does_not_hide_model_only_collection_support ... ok
+test every_pair_is_deterministic_matches_direct_evidence_and_credit_follows_report_owners ... ok
+test late_tiled_pair_failure_or_idle_owner_cancellation_discards_earlier_collection_results ... ok
+test collection_checks_every_pair_with_automatic_tiles_and_retained_attempt_credit ... ok
+test final_cancellation_or_final_callback_source_mutation_never_publishes_a_stale_batch ... ok
+test native_evidence_and_report_slots_have_independent_last_owner_credit ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.90s
+
+     Running tests/projected_collection.rs (/Users/themoretheless/.codex/tmp/rrrah-dedup-exact-portfolio-20261011/debug/deps/projected_collection-a539e42e2e400fd1)
+
+running 8 tests
+test cumulative_work_and_cancellation_refuse_before_iterator_consumption ... ok
+test collection_admission_never_truncates_and_empty_batch_still_guards_weights ... ok
+test source_weights_and_provider_failures_discard_prior_supported_pairs ... ok
+test all_pairs_recover_regions_in_id_order_and_keep_managed_ledgers ... ok
+test different_hdr_originals_remain_negative_in_complete_collection ... ok
+test last_collection_checkpoint_cannot_publish_mutated_inputs_or_weights ... ok
+test global_and_every_selected_owner_cancel_at_first_middle_and_final_checkpoint ... ok
+test external_palette_mutation_or_removal_discards_prior_support_and_final_collection ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.64s
+
+     Running tests/projected_portfolio.rs (/Users/themoretheless/.codex/tmp/rrrah-dedup-exact-portfolio-20261011/debug/deps/projected_portfolio-5d1e2dc12bc6ffbe)
+
+running 17 tests
+test aggregate_and_constituent_work_refuse_before_io_and_cancel_wins ... ok
+test exact_first_accepts_undecodable_copies_without_weights_or_provider ... ok
+test exact_first_sticky_global_and_both_owners_cancel_every_exact_checkpoint ... ok
+test native_alpha_refusal_recovers_with_projected_original_support_in_both_orders ... ok
+test provider_and_source_weight_failures_after_native_inconclusive_remain_terminal ... ok
+test collection_unknown_does_not_swallow_late_source_or_provider_failure ... ok
+test exact_first_last_callback_revalidates_sources_and_visual_weights ... ok
+test global_and_both_owner_generations_cancel_first_middle_and_last_checkpoints ... ok
+test alpha_collision_exhausts_projected_and_preserves_typed_native_inconclusive ... ok
+test hdr_regions_recover_after_whole_miss_and_exhaust_before_native_negative ... ok
+test exact_first_mismatch_runs_visual_and_keeps_projection_collision_inconclusive ... ok
+test collection_work_admission_precedes_iterator_and_unknown_reports_keep_final_source_guards ... ok
+test collection_retains_supported_and_explicit_unknown_pairs_in_both_orders ... ok
+test final_callback_source_and_weight_mutations_precede_support_and_inconclusive ... ok
+test external_palette_change_discards_projected_portfolio_collection_in_both_orders ... ok
+test native_early_support_avoids_inference_and_projected_exhaustion_can_recover_natively ... ok
+test native_anchor_inconclusive_recovers_or_stays_inconclusive_after_projected_exhaustion ... ok
+
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 10.13s
+

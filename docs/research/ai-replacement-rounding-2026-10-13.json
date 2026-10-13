@@ -1,0 +1,37 @@
+{
+  "scope": "Arithmetic enclosure of reported centroid/fallback products and their merged candidate sum; not full replacement certificate",
+  "tests": "251passed/12ignored",
+  "complete_pixel": {
+    "pixel": [
+      147,
+      59
+    ],
+    "alpha_error": 9.647838083992612e-14,
+    "integral_error": 7.316369732279783e-14,
+    "original_plus_candidate_native_arithmetic_term": 1.2413421325709739e-10
+  },
+  "incomplete_pixel": {
+    "pixel": [
+      145,
+      50
+    ],
+    "identity_fallback_buckets": 1,
+    "compared": 2192,
+    "reason": "Per-bucket original compensated reference integral interval not retained"
+  },
+  "original_five_pixels_and_prior_identity_source_centroid_controls_exact": true,
+  "final_credit": 0,
+  "design": [
+    "Separately admitted centroid and fallback sample envelopes",
+    "Outward interval merge preserves weighted-mean value bounds",
+    "Original fragment area validation1unchanged; aggregate area supports existing1+1e-12moment tolerance",
+    "Identity mismatch immediately invalidates candidate arithmetic certification while preserving original reference fallback"
+  ],
+  "limitations": [
+    "Not combined source/route/moment error or viewer accuracy",
+    "Unbounded reference fallback remains an explicit missing requirement",
+    "No source samples skipped; working4M/fullpage/independent color qualification unresolved"
+  ],
+  "next": "Retain per-bucket reference integral intervals transactionally and include their fallback values in the candidate envelope",
+  "derivation": "ai-replacement-rounding-derivation-2026-10-13.md"
+}

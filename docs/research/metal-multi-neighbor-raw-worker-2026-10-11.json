@@ -1,0 +1,38 @@
+{
+  "status": "passed",
+  "terminal_exit_code": 0,
+  "adapter": "Metal Apple M4 Max",
+  "configured_window": {
+    "behind": 1,
+    "ahead": 2
+  },
+  "forward_expected_indices": [
+    3,
+    4,
+    1
+  ],
+  "backward_expected_indices": [
+    1,
+    0,
+    3
+  ],
+  "selected_index": 2,
+  "checks": 6,
+  "fixtures": {
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/1084.orf": "b2221977cbc6eba0d3b363351072092e5647eaa0d02a5d8432b5d985b29f669f",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/831.pef": "51a3f22d702353b246684dca79f83c79cfdbdf9892702ae5ac55dd469e239bb6",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/898.nef": "f90deb2819863f5a6ca9913c255fdd83a94963f4284eb88df9d389da7a6c7665",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/1294.cr2": "8f28465cee09844ffad95dbd3ec91923717a329c5ec4f3f405f5b4fce83aaea3"
+  },
+  "source_sha256_after_execution": "377994e59fb5d47220a1c5733f6814c9f7008c4c39f3d16abef6b11f8ebdb72e",
+  "log_sha256": "83d322cc23ce6556292eed578a8d38179c279b1045460b5bc40f137d90980db4",
+  "log": "warning: function `fallible_zeroed_bytes` is never used\n   --> crates/rrrah-cache/src/mosaic_payload_v1.rs:728:4\n    |\n728 | fn fallible_zeroed_bytes(len: usize) -> Result<Box<[u8]>, MosaicPayloadError> {\n    |    ^^^^^^^^^^^^^^^^^^^^^\n    |\n    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default\n\nwarning: `rrrah-cache` (lib) generated 1 warning\n   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)\n    Finished `test` profile [optimized + debuginfo] target(s) in 1m 46s\n     Running unittests src/main.rs (/tmp/rrrah-required-corpus-target/debug/deps/rrrah-14b2e2b2b9670d3d)\n\nrunning 1 test\ntest gallery::tests::multi_neighbor_raw_worker_preserves_metal_frames ... multi RAW worker adapter: Metal Apple M4 Max\nmulti RAW worker: /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/1084.orf samples/metadata and 1920x1080 Metal frame exact; root=0\nmulti RAW worker: /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/831.pef samples/metadata and 1920x1080 Metal frame exact; root=0\nmulti RAW worker: /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/898.nef samples/metadata and 1920x1080 Metal frame exact; root=0\nmulti RAW worker: three neighbors complete; disk-count=3; failures=0\nmulti RAW worker: /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/898.nef samples/metadata and 1920x1080 Metal frame exact; root=0\nmulti RAW worker: /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/1294.cr2 samples/metadata and 1920x1080 Metal frame exact; root=0\nmulti RAW worker: /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/1084.orf samples/metadata and 1920x1080 Metal frame exact; root=0\nmulti RAW worker: three neighbors complete; disk-count=3; failures=0\nok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 205 filtered out; finished in 45.17s\n\n",
+  "scope": "One actual background RAW worker and disk cache; three eligible neighbors per submitted plan; both directions; all samples, metadata and 1920x1080 Metal pixels exact; selected input absent; disk count three; root budgets zero.",
+  "limits": [
+    "One worker processes neighbors sequentially; no claim of parallel decode",
+    "Two complete plans, no mid-flight generation reversal in this test",
+    "Four decoded camera sources; ARW is the selected source and intentionally absent",
+    "Same native decoder reference proves transport equivalence, not independent color accuracy",
+    "No physical HDR or slow-disk qualification"
+  ]
+}

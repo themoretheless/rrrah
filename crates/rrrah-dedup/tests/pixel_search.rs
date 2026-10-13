@@ -25,7 +25,7 @@ fn triple() -> (tempfile::TempDir, Vec<(u64, DecodeRequest)>) {
     let files = (1..=3)
         .map(|id| {
             let path = folder.path().join(format!("{id}.png"));
-            std::fs::copy(&source, &path).unwrap();
+            copy_writable(&source, &path).unwrap();
             (id, DecodeRequest::new(path))
         })
         .collect();
@@ -36,9 +36,9 @@ fn indexed_two_key_groups_are_deterministic_across_request_orders() {
     let (folder, mut files) = triple();
     let white =
         std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/information/white.png");
-    std::fs::copy(&white, &files[2].1.path).unwrap();
+    copy_writable(&white, &files[2].1.path).unwrap();
     let fourth = folder.path().join("fourth.png");
-    std::fs::copy(white, &fourth).unwrap();
+    copy_writable(white, &fourth).unwrap();
     files.push((4, DecodeRequest::new(fourth)));
     let budget = MemoryBudget::new(8 * 1024 * 1024);
     for order in [[0, 1, 2, 3], [3, 2, 1, 0], [2, 0, 3, 1], [1, 3, 0, 2]] {
@@ -753,4 +753,212 @@ fn indexed_wal_palette_mutation_discards_stale_source_decisions() {
             .any(|(id, error)| *id == 1 && matches!(error, rrrah_dedup::exact::SnapshotError::Changed))
     );
     assert_eq!(budget.used(), 0);
+}
+
+#[test]
+fn final_callback_source_change_cannot_publish_stale_search() {
+    let (_folder, files) = triple();
+    let budget = MemoryBudget::new(8 * 1024 * 1024);
+    let calls = std::cell::Cell::new(0usize);
+    let healthy = scan_equal_pixels(files.clone(), policy(), &budget, || {
+        calls.set(calls.get() + 1);
+        false
+    })
+    .unwrap();
+    assert_eq!(healthy.pixels.equal.len(), 3);
+    let last = calls.get();
+    calls.set(0);
+    let changed = std::cell::Cell::new(false);
+    let result = scan_equal_pixels(files.clone(), policy(), &budget, || {
+        calls.set(calls.get() + 1);
+        if calls.get() == last {
+            let mut bytes = std::fs::read(&files[0].1.path).unwrap();
+            bytes.push(0);
+            std::fs::write(&files[0].1.path, bytes).unwrap();
+            changed.set(true);
+        }
+        false
+    });
+    assert!(changed.get());
+    assert!(
+        matches!(
+            result,
+            Err(ScanError::Source {
+                id: 1,
+                error: rrrah_dedup::exact::SnapshotError::Changed
+            })
+        ),
+        "stale search: {result:?}"
+    );
+    assert_eq!(budget.used(), 0);
+    copy_writable(&files[1].1.path, &files[0].1.path).unwrap();
+    assert_eq!(
+        scan_equal_pixels(files, policy(), &budget, || false)
+            .unwrap()
+            .pixels
+            .equal
+            .len(),
+        3
+    );
+    assert_eq!(budget.used(), 0);
+}
+
+#[test]
+fn directory_final_callback_cannot_publish_stale_pairs() {
+    let (folder, files) = triple();
+    let roots = [folder.path().to_path_buf()];
+    let options = rrrah_dedup::exact::Options::default();
+    let budget = MemoryBudget::new(8 * 1024 * 1024);
+    let calls = std::cell::Cell::new(0usize);
+    let healthy = scan_equal_pixel_roots(&roots, &options, policy(), &budget, || {
+        calls.set(calls.get() + 1);
+        false
+    })
+    .unwrap();
+    assert_eq!(healthy.search.pixels.equal.len(), 3);
+    let last = calls.get();
+    calls.set(0);
+    let changed = std::cell::Cell::new(false);
+    let result = scan_equal_pixel_roots(&roots, &options, policy(), &budget, || {
+        calls.set(calls.get() + 1);
+        if calls.get() == last {
+            let mut bytes = std::fs::read(&files[0].1.path).unwrap();
+            bytes.push(0);
+            std::fs::write(&files[0].1.path, bytes).unwrap();
+            changed.set(true);
+        }
+        false
+    });
+    assert!(changed.get());
+    assert!(
+        matches!(
+            result,
+            Err(ScanError::Source {
+                error: rrrah_dedup::exact::SnapshotError::Changed,
+                ..
+            })
+        ),
+        "stale directory report: {result:?}"
+    );
+    assert_eq!(budget.used(), 0);
+    copy_writable(&files[1].1.path, &files[0].1.path).unwrap();
+    assert_eq!(
+        scan_equal_pixel_roots(&roots, &options, policy(), &budget, || false)
+            .unwrap()
+            .search
+            .pixels
+            .equal
+            .len(),
+        3
+    );
+    assert_eq!(budget.used(), 0);
+}
+
+#[test]
+fn indexed_final_callback_source_change_cannot_publish_stale_search() {
+    let (_folder, files) = triple();
+    let budget = MemoryBudget::new(8 * 1024 * 1024);
+    let calls = std::cell::Cell::new(0usize);
+    let healthy = rrrah_dedup::pixel_index::scan_indexed_pixels(files.clone(), policy(), &budget, || {
+        calls.set(calls.get() + 1);
+        false
+    })
+    .unwrap();
+    assert_eq!(healthy.pixels.equal.len(), 3);
+    let last = calls.get();
+    calls.set(0);
+    let changed = std::cell::Cell::new(false);
+    let result = rrrah_dedup::pixel_index::scan_indexed_pixels(files.clone(), policy(), &budget, || {
+        calls.set(calls.get() + 1);
+        if calls.get() == last {
+            let mut bytes = std::fs::read(&files[0].1.path).unwrap();
+            bytes.push(0);
+            std::fs::write(&files[0].1.path, bytes).unwrap();
+            changed.set(true);
+        }
+        false
+    });
+    assert!(changed.get());
+    assert!(
+        matches!(
+            result,
+            Err(ScanError::Source {
+                id: 1,
+                error: rrrah_dedup::exact::SnapshotError::Changed
+            })
+        ),
+        "stale search: {result:?}"
+    );
+    assert_eq!(budget.used(), 0);
+    copy_writable(&files[1].1.path, &files[0].1.path).unwrap();
+    assert_eq!(
+        rrrah_dedup::pixel_index::scan_indexed_pixels(files, policy(), &budget, || false)
+            .unwrap()
+            .pixels
+            .equal
+            .len(),
+        3
+    );
+    assert_eq!(budget.used(), 0);
+}
+
+#[test]
+fn indexed_directory_final_callback_cannot_publish_stale_pairs() {
+    let (folder, files) = triple();
+    let roots = [folder.path().to_path_buf()];
+    let options = rrrah_dedup::exact::Options::default();
+    let budget = MemoryBudget::new(8 * 1024 * 1024);
+    let calls = std::cell::Cell::new(0usize);
+    let healthy =
+        rrrah_dedup::pixel_index::scan_indexed_pixel_roots(&roots, &options, policy(), &budget, || {
+            calls.set(calls.get() + 1);
+            false
+        })
+        .unwrap();
+    assert_eq!(healthy.indexed.pixels.equal.len(), 3);
+    let last = calls.get();
+    calls.set(0);
+    let changed = std::cell::Cell::new(false);
+    let result =
+        rrrah_dedup::pixel_index::scan_indexed_pixel_roots(&roots, &options, policy(), &budget, || {
+            calls.set(calls.get() + 1);
+            if calls.get() == last {
+                let mut bytes = std::fs::read(&files[0].1.path).unwrap();
+                bytes.push(0);
+                std::fs::write(&files[0].1.path, bytes).unwrap();
+                changed.set(true);
+            }
+            false
+        });
+    assert!(changed.get());
+    assert!(
+        matches!(
+            result,
+            Err(ScanError::Source {
+                error: rrrah_dedup::exact::SnapshotError::Changed,
+                ..
+            })
+        ),
+        "stale directory report: {result:?}"
+    );
+    assert_eq!(budget.used(), 0);
+    copy_writable(&files[1].1.path, &files[0].1.path).unwrap();
+    assert_eq!(
+        rrrah_dedup::pixel_index::scan_indexed_pixel_roots(&roots, &options, policy(), &budget, || false)
+            .unwrap()
+            .indexed
+            .pixels
+            .equal
+            .len(),
+        3
+    );
+    assert_eq!(budget.used(), 0);
+}
+
+// Fixture sources may be read-only in an immutable qualification checkout.
+// Copy bytes without inheriting permissions so mutation tests can edit their own files.
+fn copy_writable(source: impl AsRef<std::path::Path>, target: impl AsRef<std::path::Path>) -> std::io::Result<u64> {
+    let bytes = std::fs::read(source)?;
+    std::fs::write(target, &bytes)?;
+    Ok(bytes.len() as u64)
 }

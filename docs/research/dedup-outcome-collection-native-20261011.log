@@ -1,0 +1,25 @@
+Traceback (most recent call last):
+  File "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-outcome-collection-native-20261011.py", line 52, in <module>
+    if __name__=='__main__':main()
+  File "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-outcome-collection-native-20261011.py", line 39, in main
+    assert child.returncode==0,stderr;e=json.loads(stdout);row['evidence']=e
+AssertionError: time: command terminated abnormally
+     1993.57 real      1463.12 user        21.17 sys
+          1730412544  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              722194  page reclaims
+                   9  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                  41  voluntary context switches
+             3125178  involuntary context switches
+      11516082449314  instructions retired
+       3486488691346  cycles elapsed
+          1684277192  peak memory footprint
+

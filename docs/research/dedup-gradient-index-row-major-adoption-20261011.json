@@ -1,0 +1,50 @@
+{
+  "status": "adopted_bounded_qualified_row_major_index_build",
+  "raster_tests": 48,
+  "decode_tests": 202,
+  "decode_programs": 24,
+  "benchmark_builds": 160,
+  "summary": {
+    "dense512": {
+      "baseline_median_ns": 204250.5,
+      "candidate_median_ns": 165375.0,
+      "baseline_over_candidate": 1.2350748299319727
+    },
+    "dense8192": {
+      "baseline_median_ns": 3740187.5,
+      "candidate_median_ns": 2985166.5,
+      "baseline_over_candidate": 1.2529242506238765
+    },
+    "dense32768": {
+      "baseline_median_ns": 17056750.0,
+      "candidate_median_ns": 12108583.5,
+      "baseline_over_candidate": 1.4086494923208812
+    },
+    "flat8192": {
+      "baseline_median_ns": 3181021.0,
+      "candidate_median_ns": 2411729.0,
+      "baseline_over_candidate": 1.318979454159236
+    },
+    "sparse8192": {
+      "baseline_median_ns": 4005271.5,
+      "candidate_median_ns": 3142750.0,
+      "baseline_over_candidate": 1.274448015273248
+    }
+  },
+  "source_manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-index-row-major-formatted-snapshot-20261011.json",
+  "source_change": "crates/rrrah-dedup/src/gradient_index.rs",
+  "current_changed_source_matches": true,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-index-row-major-formatted-snapshot-20261011.json": "b5d34747b1cffef9f8f1e23f778ce02f481a1e9d2ea68185bc89855c6ce331ea",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-index-row-major-snapshot-20261011.json": "e19f976e9dcf9b4b1d7d0c886ff0ebb511b5160b95b9d416743f9dd4aaf75839",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-outcome-native-profile-snapshot-20261011.json": "024ebe471a0cea413e77cc13a4624b85cc54f391624a31764dd6e4f00ff3f32b",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-index-row-major-formatted-20261011.json": "776caf32e825379655525e378ec46b4586a811f5cd82132d588ab367818f2c34",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-index-row-major-formatted-decode-20261011.json": "7881429db4081d264435b29ea6eaa126ca1475a2c7e72d255be65f2ef91d404b",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/qualify-dedup-gradient-index-row-major-20261011.py": "5d7ea8329be4c435b324eaa813f00ff0eeb232f4292750f736c524ca96f76170"
+  },
+  "scope": "Sequential per-row exact extrema replace 128 strided scans; same axis/tie/order/search results, same caller checkpoint counts and managed credit. Original constructor reference is pinned and verified. Two 128-element f64 arrays add bounded stack metadata, no heap bank.",
+  "limits": [
+    "Synthetic index construction controls, not whole-file or indexed collection throughput",
+    "No universal retrieval recall, broad corpus precision, provider RSS or all-format/platform claim"
+  ]
+}

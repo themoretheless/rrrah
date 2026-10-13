@@ -1,0 +1,40 @@
+{
+  "status": "native_startup_and_navigation_visually_verified",
+  "adapter": "Metal Apple M4 Max",
+  "surface": {
+    "hdr": true,
+    "format": "Rgba16Float",
+    "color_space": "ExtendedSrgbLinear"
+  },
+  "observations": [
+    "Initial capture blank while native surface was occluded.",
+    "Second capture showed initial RAW frame before any navigation input.",
+    "Right displayed the second RAW; Left displayed the first RAW again.",
+    "Folder filmstrip layout visible, many covers remained placeholders; no thumbnail-content qualification claimed."
+  ],
+  "first_present_log_ms_by_generation": {
+    "0": "3354.827",
+    "1": "229.575",
+    "2": "86.636"
+  },
+  "log": "/tmp/rrrah-main-viewer-async-fingerprint-20261011.log",
+  "log_sha256": "b7bd990d5cab9ba48a88be1e0a73b06ae27cb36dc46dcc71d01181255cd78c80",
+  "binary_sha256": "b49cfae6a73faab0578955a4e1c081dbb113eac4fe608eba09ced4aeb544c0a3",
+  "inputs": [
+    {
+      "path": "/tmp/rrrah-viewer-hdr-input/IMG_9043.CR3",
+      "sha256": "d06cbb10e84882cf130430bdc88ed2652c2622b96dea8d6a854c09e3bee37e59"
+    },
+    {
+      "path": "/tmp/rrrah-viewer-hdr-input/IMG_9074.CR3",
+      "sha256": "9c0d47cc2dd550eb6dc26c4ba2b2874b67f5c89e79dff5c472abf0ac6b2f6178"
+    }
+  ],
+  "limitations": [
+    "Native run exercised ordinary navigation, not a duplicate-source modification during an active decode.",
+    "Initial occlusion timing and title load timings are not a controlled performance benchmark.",
+    "Screenshots observed through computer-use tools, not persisted as local PNG files.",
+    "No physical HDR luminance/color calibration or slow-disk qualification.",
+    "This initial native binary predates the final automatic-reload prefetch-priority hook and latest-intent validation fix; those paths were not exercised by this ordinary-navigation observation."
+  ]
+}

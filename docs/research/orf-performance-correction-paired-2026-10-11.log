@@ -1,0 +1,18 @@
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+    Finished `test` profile [optimized + debuginfo] target(s) in 53.01s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_decode-3d841f18ff85d05c)
+
+running 4 tests
+test camtiff::olympus_entropy::tests::truncated_stream_and_cancellation_are_errors ... ok
+test camtiff::olympus_entropy::tests::zero_residuals_predict_full_sensor_plane ... ok
+test camtiff::olympus_entropy::tests::byte_window_matches_bit_reference_at_every_alignment_and_tail ... ok
+ORF paired bits: round=0; reference_ms=21.552; window_ms=21.914; checksum=1206070988
+ORF paired bits: round=1; reference_ms=22.426; window_ms=21.286; checksum=1206070988
+ORF paired bits: round=2; reference_ms=23.458; window_ms=20.492; checksum=1206070988
+ORF paired bits: round=3; reference_ms=21.638; window_ms=20.048; checksum=1206070988
+ORF paired bits: round=4; reference_ms=21.952; window_ms=19.491; checksum=1206070988
+ORF paired bits: round=5; reference_ms=22.108; window_ms=19.061; checksum=1206070988
+test camtiff::olympus_entropy::tests::paired_bit_reader_throughput ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 1063 filtered out; finished in 0.26s
+

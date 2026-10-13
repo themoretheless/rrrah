@@ -1,0 +1,133 @@
+{
+  "status": "complete_bounded_frozen_joint_model_tests",
+  "producer_pid": 19510,
+  "source_manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-native-bank-collection-guards-snapshot-20261011.json",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-native-bank-collection-guards-snapshot-20261011.json": "5619c6e56dd5a901c9046d3bc987749a2d651dbbf2021e98d63803df65c3e12b",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/qualify-dedup-native-bank-collection-guards-20261011.py": "cffe21279cb70b57c7ee2b422c59c5737259338e5de50eb7759122747c63e006",
+    "/Users/themoretheless/.codex/tmp/rrrah-native-bank-collection-guards-qualified-20261011/build.jsonl": "fe5a2132d38bb512c1d2230b4fb9b0ca389b2e21312e38ee54f090f28328e362",
+    "/Users/themoretheless/.codex/tmp/rrrah-native-bank-collection-guards-qualified-20261011/build.log": "5c785d5cc4496de286116a1a897f528b8ba8d2f5c782b3f119815ef487b25b39"
+  },
+  "build_command": [
+    "cargo",
+    "test",
+    "--manifest-path",
+    "/Users/themoretheless/.codex/tmp/rrrah-native-bank-collection-guards-snapshot-20261011/Cargo.toml",
+    "-p",
+    "rrrah-dedup",
+    "--no-default-features",
+    "--features",
+    "decode",
+    "--test",
+    "model_compare",
+    "--test",
+    "model_tiles",
+    "--test",
+    "search_portfolio",
+    "--test",
+    "portfolio_collection",
+    "--test",
+    "joint_witnesses",
+    "--test",
+    "geometry",
+    "--test",
+    "projective_domains",
+    "--test",
+    "joint_projective",
+    "--test",
+    "projective_pruning",
+    "--locked",
+    "--offline",
+    "--no-run",
+    "--message-format=json",
+    "--config",
+    "profile.dev.package.rrrah-dedup.opt-level=3",
+    "--target-dir",
+    "/Users/themoretheless/.codex/tmp/rrrah-opposite-native-snapshot-20261011/target"
+  ],
+  "results": [
+    {
+      "suite": "model_compare",
+      "tests": 26,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-native-bank-collection-guards-qualified-20261011/model_compare",
+      "binary_sha256": "b29af83800c5271486662673dc1596851040ea19c48325afc90f4dd18fd76088",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-native-bank-collection-guards-qualified-20261011/model_compare.log",
+      "log_sha256": "b164e964692ca3533f409587aef78b30215c19544830225961863fa8e3702cff"
+    },
+    {
+      "suite": "model_tiles",
+      "tests": 21,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-native-bank-collection-guards-qualified-20261011/model_tiles",
+      "binary_sha256": "85a057fb73996e6ad9852c2930aba52270aa66d5af8f7c799b3d7fe549b91b82",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-native-bank-collection-guards-qualified-20261011/model_tiles.log",
+      "log_sha256": "4e720c495cc5814399cd0f37805534af0aca0a73e5081b7b06ebf458371959ed"
+    },
+    {
+      "suite": "search_portfolio",
+      "tests": 35,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-native-bank-collection-guards-qualified-20261011/search_portfolio",
+      "binary_sha256": "b3fe22527934beb7b6e82c79c12b7d4b7d7a78ed102cab30bcdbd4eff0c7964a",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-native-bank-collection-guards-qualified-20261011/search_portfolio.log",
+      "log_sha256": "a9a7fc4967efe5887dc60d7cc05904cbbfa131c44cc25bc6f9c44e3ff8c27dac"
+    },
+    {
+      "suite": "portfolio_collection",
+      "tests": 36,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-native-bank-collection-guards-qualified-20261011/portfolio_collection",
+      "binary_sha256": "c68ece337d018c9437645e90fcd45391a8885cad99db2ab6283e633ca29a3a88",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-native-bank-collection-guards-qualified-20261011/portfolio_collection.log",
+      "log_sha256": "58f95540d00c285c8308ecad358fb37570a18007668e182263bd60057f81d620"
+    },
+    {
+      "suite": "joint_witnesses",
+      "tests": 10,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-native-bank-collection-guards-qualified-20261011/joint_witnesses",
+      "binary_sha256": "94c42147f094ec8269a7c434fe705c9473bbf7eb4113d64c81896555850eb1b6",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-native-bank-collection-guards-qualified-20261011/joint_witnesses.log",
+      "log_sha256": "0ebec5d799d3b719c2e468c2a401bf4641db0290dccba1c91ecafd796757cd99"
+    },
+    {
+      "suite": "geometry",
+      "tests": 9,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-native-bank-collection-guards-qualified-20261011/geometry",
+      "binary_sha256": "585e6d8bc9d818ced870c7d964f9d419ab65ce6b24ad7df99f1145fd01b62e79",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-native-bank-collection-guards-qualified-20261011/geometry.log",
+      "log_sha256": "138488b49f98ec2059b65b2a2c4918fa5a0eb4d16093401187f6bc0db0e06513"
+    },
+    {
+      "suite": "projective_domains",
+      "tests": 4,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-native-bank-collection-guards-qualified-20261011/projective_domains",
+      "binary_sha256": "dddc214c5b60579180235311d64668e49be18728d3c4bcc6d831f3e2882003e5",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-native-bank-collection-guards-qualified-20261011/projective_domains.log",
+      "log_sha256": "9a86eb5e07ba7d9bf84545366e912db2ad5164c65efc2904a5e8351ac03a2b57"
+    },
+    {
+      "suite": "joint_projective",
+      "tests": 4,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-native-bank-collection-guards-qualified-20261011/joint_projective",
+      "binary_sha256": "548cbe0f0c67bfb1cb011c14f926b2f06fbb29462887b93a52620466c29b7d6d",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-native-bank-collection-guards-qualified-20261011/joint_projective.log",
+      "log_sha256": "2a09a0184e0172dc55a63cec9cae07be794fd75853233b6543206bf78c6c6c0b"
+    },
+    {
+      "suite": "projective_pruning",
+      "tests": 3,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-native-bank-collection-guards-qualified-20261011/projective_pruning",
+      "binary_sha256": "1e766e5e504bd9e04546c4c59b643ad0095b432edd858ffbebe23fc12273c6bc",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-native-bank-collection-guards-qualified-20261011/projective_pruning.log",
+      "log_sha256": "a6d5108c0ed49e895782b3d8f09bb51cf42319286382cc8600eeaeb26ab10a1f"
+    }
+  ],
+  "scope": "Frozen compatible four-crate source and lock, new joint primitive plus legacy/pair/collection tests. Source coherent before/after; root concurrent HDR edits preserved outside this gate. Not full workspace/platform/corpus/RSS qualification.",
+  "build_pid": 19534,
+  "tests": 148,
+  "owned_root_matches": {
+    "crates/rrrah-dedup/src/local_scan.rs": true,
+    "crates/rrrah-dedup/src/geometry.rs": true,
+    "crates/rrrah-dedup/src/anchor_rank_file.rs": true,
+    "crates/rrrah-dedup/src/search_portfolio.rs": true,
+    "crates/rrrah-dedup/src/portfolio_collection.rs": true,
+    "crates/rrrah-dedup/src/model_loftr.rs": false
+  }
+}

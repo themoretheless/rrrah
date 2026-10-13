@@ -1,0 +1,16 @@
+{
+  "backend": "Metal",
+  "command": "RRRAH_GPU_BACKEND=metal RRRAH_GPU_OPTIONAL=0 cargo test -p rrrah-gpu --test model_readback --locked --offline --target-dir target",
+  "passed": 11,
+  "failed": 0,
+  "ignored": 0,
+  "log_sha256": "448c42c48609e9239b09c08d3c4ea4964fbdec1437268a3934d49e80e5bdc9d2",
+  "sources": {
+    "crates/rrrah-gpu/src/model.rs": "ab64f4eb171d5742c197ba2275bca2757bc999a942d35bdcc5f1b2d321d650dc",
+    "crates/rrrah-gpu/tests/model_readback.rs": "f0ffd616bc4e849f9f720f15e923265e7395a1e0bd351485599fa653d03ad330"
+  },
+  "behavior": "Depth resize allocates on renderer-owned device; compatibility device argument cannot redirect allocation. Independent-instance argument tested with exact SDR/HDR readback and zero final managed credit.",
+  "limits": [
+    "Neutral triangle/transport regression, not independent appearance or physical HDR qualification."
+  ]
+}

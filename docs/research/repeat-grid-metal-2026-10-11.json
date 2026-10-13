@@ -1,0 +1,34 @@
+{
+  "backend": "Metal Apple M4 Max",
+  "change": "Full single-component black-level repeat grid in Bayer viewport shader; exact 2x2-equivalent grids retain allocation-free uniform fast path",
+  "gpu_tests": {
+    "passed": 18,
+    "failed": 0,
+    "ignored": 0
+  },
+  "gpu_library_tests": {
+    "passed": 52,
+    "failed": 0,
+    "ignored": 0
+  },
+  "attachments": [
+    "Rgba16Float",
+    "Rgba32Float"
+  ],
+  "checks": [
+    "3x5 nonperiodic odd-boundary grid independently normalizes every site to 0.5",
+    "one stop exposure yields RGB=1",
+    "60 bytes included in managed resident reservation",
+    "replacement under memory pressure preserves previous frame",
+    "invalid final grid cell outside top-left quad preserves frame and credit",
+    "switch back to uniform fast path releases grid reservation",
+    "orientation, viewport readback and resource lease regressions"
+  ],
+  "log_sha256": "c95bf0d481d5d306caa652a92078f256d4892d2d863d3452e35a3b2113725966",
+  "limits": [
+    "Authored grid, not original camera appearance qualification",
+    "RGBE calibration still requires an exactly 2x2-representable grid",
+    "Compute shader paths not qualified for arbitrary repeat grids by this test",
+    "Physical HDR and NVIDIA remain pending"
+  ]
+}

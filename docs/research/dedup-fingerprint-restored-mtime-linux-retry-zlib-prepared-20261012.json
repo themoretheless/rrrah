@@ -1,0 +1,38 @@
+{
+  "status": "verified_live_linux_arm64_nonroot_cache_retry_with_copied_sysroot",
+  "container_id": "cb99f184ffadddc1c6131eebc9ccb62890d36145fc2b5ec90220ac2d8f53167d",
+  "image_id": "sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55",
+  "image_os": "linux",
+  "image_arch": "arm64",
+  "user": "65534:65534",
+  "args": [
+    "test",
+    "-p",
+    "rrrah-dedup",
+    "--features=decode",
+    "--locked",
+    "--test",
+    "decode"
+  ],
+  "sysroot_mount": {
+    "Type": "bind",
+    "Source": "/opt/rrrah-dedup-validation/sysroot-cache-zlib-20261012",
+    "Destination": "/validation/sysroot",
+    "Mode": "ro",
+    "RW": false,
+    "Propagation": "rprivate"
+  },
+  "package": {
+    "name": "zlib1g-dev",
+    "version": "1:1.3.dfsg-3.1ubuntu2.2",
+    "sha256": "de750f2515144715015e792c391bfa2ab4a926db6c370ba519af576bb3f131b5"
+  },
+  "pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-fingerprint-restored-mtime-linux-retry-zlib-20261012.sh": "9254867c094278ee9273989cd4cf3707ca67962490727f44aca8337a88a20e2b",
+    "/Users/themoretheless/.codex/tmp/rrrah-prepare-linux-cache-zlib-20261012.sh": "8f6dd89f8f23594dc77840e93b878092283d50dbd8a652d62dd3ad11597db31b",
+    "/Users/themoretheless/.codex/tmp/rrrah-prepare-linux-cache-zlib-20261012.log": "e8b20fed95cf7e9fcd09dc6399fc326c7c3d75e7b97a592f65a01c6a08934b22",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-fingerprint-restored-mtime-source-20261012.json": "7649bae1b7268e50fb5ad58e16cf034a2d9532a2a2012c51a5e7ebc4dc0e0256",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-fingerprint-restored-mtime-linux-build-failure-20261012.json": "15c7747e0fd4bce2baa1d51e2da0f92d15e2fd40377a07154cd8e2ee69dfa4b2"
+  },
+  "scope": "Original failed handle terminal101; new observed live nonroot container uses same pinned source and image, separately copied sysroot with real downloaded development package. Original sysroot unchanged. Cache/decode15test completion pending."
+}

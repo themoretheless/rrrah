@@ -1,0 +1,25 @@
+warning: function `fallible_zeroed_bytes` is never used
+   --> crates/rrrah-cache/src/mosaic_payload_v1.rs:728:4
+    |
+728 | fn fallible_zeroed_bytes(len: usize) -> Result<Box<[u8]>, MosaicPayloadError> {
+    |    ^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-cache` (lib) generated 1 warning
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 18.49s
+     Running unittests src/main.rs (target/debug/deps/rrrah-0b4921b829754900)
+
+running 2 tests
+real AI cache: pages=3; independent_keys=3; root=0; appearance_unqualified
+test foreground_loader_tests::real_ai_pages_use_shared_ram_hits_and_independent_prefetch_keys ... ok
+real AI cache adapter: Metal Apple M4 Max
+real AI cache page: VectorApple.ai; index=0; shared_full_pressure_hit; Metal_SDR_HDR_exact
+real AI cache page: one.ai; index=0; shared_full_pressure_hit; Metal_SDR_HDR_exact
+real AI cache page: one.ai; index=1; shared_full_pressure_hit; Metal_SDR_HDR_exact
+real AI cache: pages=3; independent_keys=3; root=0; appearance_unqualified
+test foreground_loader_tests::real_ai_cached_pages_preserve_metal_sdr_hdr_under_full_pressure ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 254 filtered out; finished in 5.52s
+

@@ -1,0 +1,67 @@
+{
+  "source": "https://www.itu.int/rec/T-REC-H.273-202407-I",
+  "radiance_source": "https://www.radiance-online.org/learning/documentation/manual-pages/pdfs/ra_xyze.pdf",
+  "method": "Independent Gaussian inversion from BT.2020/BT.709 xy with D65, no production matrix imported",
+  "matrix": [
+    [
+      1.6604910021084351,
+      -0.5876411387885492,
+      -0.07284986331988486
+    ],
+    [
+      -0.12455047452159074,
+      1.1328998971259596,
+      -0.008349422604369515
+    ],
+    [
+      -0.018150763354905213,
+      -0.10057889800800737,
+      1.118729661362913
+    ]
+  ],
+  "linear_red_2_reference": [
+    3.3209820042168703,
+    -0.24910094904318147,
+    -0.036301526709810426
+  ],
+  "production_change": "Recognize explicit Radiance BT.2020/D65 as linear CICP 9/8/0/full; bounded unclipped native conversion reuses existing BT.2020 matrix.",
+  "core_tests": {
+    "passed": 109,
+    "ignored": 2,
+    "log": "/tmp/rrrah-core-linear2020-20261011.log"
+  },
+  "qualification": "Focused core/decode/Metal tests passed. Physical HDR calibration and arbitrary primaries remain unqualified.",
+  "decode_tests": {
+    "passed": 4,
+    "failed": 0,
+    "ignored": 0,
+    "log": "/tmp/rrrah-hdr-linear2020-20261011.log"
+  },
+  "metal_test": {
+    "passed": 1,
+    "ignored": 0,
+    "adapter": "Metal Apple M4 Max",
+    "scope": "native declared BT.2020 decode, unclipped linear preparation, disk swap pressure/cancel/retry, SDR/HDR golden-frame equality, root zero"
+  },
+  "logs": {
+    "core": {
+      "path": "docs/research/radiance-bt2020-2026-10-11.core.log",
+      "sha256": "770e31b1222cad4e2ca9b8e9d6cb60c083e66c48a51fb680d773e141e3b5f34a"
+    },
+    "decode": {
+      "path": "docs/research/radiance-bt2020-2026-10-11.decode.log",
+      "sha256": "77c9ebfd3ebff4d6a1198f0e861eb559fb1571b982c4e52bb04607519d9dd2cb"
+    },
+    "metal": {
+      "path": "docs/research/radiance-bt2020-2026-10-11.metal.log",
+      "sha256": "94cbcdbe358a0d2cf51069f36fd40fcb558b363a4a8ceae0220348c5cde7bff1"
+    }
+  },
+  "hdr_regression": {
+    "passed": 15,
+    "failed": 0,
+    "ignored": 3,
+    "log": "docs/research/radiance-bt2020-2026-10-11.hdr-regression.log",
+    "sha256": "b8c09a1e8c981cce5262818e9c828eab7b7459053b5e0ccab6ea1b0f4e184afd"
+  }
+}

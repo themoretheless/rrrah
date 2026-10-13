@@ -1,0 +1,23 @@
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+    Finished `test` profile [optimized + debuginfo] target(s) in 2m 37s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_decode-3d841f18ff85d05c)
+
+running 9 tests
+test bay::tests::oversized_file_is_refused_before_source_admission_for_every_layout ... ok
+test bay::tests::file_source_and_sensor_share_budget_and_release_after_refusal ... ok
+BAY image-only oracle: Qv2000Ux; 1632x1211; every sample exact; output+one-row peak=3954336; final=0
+test bay::tests::streamed_truncation_growth_and_cancellation_release_partial_sensor ... ok
+test bay::tests::eight_bit_layouts_preserve_all_values_and_exact_storage_dimensions ... ok
+BAY image-only oracle: Qv3000Ex; 2080x1547; every sample exact; output+one-row peak=6437600; final=0
+test bay::tests::qv5700_trailer_changes_do_not_change_image_samples ... ok
+BAY image-only oracle: Qv5700; 2576x1924; every sample exact; output+one-row peak=9915680; final=0
+test bay::tests::image_rows_match_independent_oracles_without_trailer_or_full_copy ... ok
+test bay::tests::all_ten_bit_values_storage_columns_padding_and_managed_ownership ... ok
+test bay::tests::streamed_files_match_every_authored_sample_with_one_row_scratch ... ok
+BAY independent authored oracle: Qv2000Ux; samples=1976352; every sample exact; final=0; original_camera_color_unqualified
+BAY independent authored oracle: Qv3000Ex; samples=3217760; every sample exact; final=0; original_camera_color_unqualified
+BAY independent authored oracle: Qv5700; samples=4973540; every sample exact; final=0; original_camera_color_unqualified
+test bay::tests::authored_full_sensors_match_independent_libraw_oracles ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 1088 filtered out; finished in 0.27s
+

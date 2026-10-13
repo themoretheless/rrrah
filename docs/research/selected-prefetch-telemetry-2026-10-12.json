@@ -1,0 +1,34 @@
+{
+  "scope": "Production background raster selected-image prefetch debug observability",
+  "events": {
+    "ready": [
+      "generation",
+      "source path",
+      "actual image_index",
+      "actual image_count",
+      "cache lease retained"
+    ],
+    "refused": [
+      "generation",
+      "source path",
+      "requested image_index",
+      "error"
+    ],
+    "stale": [
+      "generation",
+      "source path",
+      "requested image_index"
+    ]
+  },
+  "validation": "cargo check --locked --offline --target-dir target -p rrrah --bin rrrah exit0; git diff --check exit0",
+  "live_blocker": "macOS IOConsoleUsers CGSSessionScreenIsLocked=Yes observed this turn",
+  "limits": [
+    "No live automatic worker proof from this change",
+    "Ready does not identify RAM versus disk versus decode source",
+    "Debug logging only; no inferred physical HDR measurement"
+  ],
+  "sha256": {
+    "crates/rrrah-app/src/main.rs": "f0786a2c071698bbf04c010274054335f177885df20a623922df16bf5459f81b",
+    "docs/research/selected-prefetch-telemetry-2026-10-12/check.log": "73a33b78676ce1cd66115d50dd52eab6a05d0cea73b41737bac58fe4caac19a0"
+  }
+}

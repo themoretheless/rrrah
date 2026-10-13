@@ -1,0 +1,26 @@
+{
+  "status": "selected_engine_scanner_modules_reviewed_with7_contents_controls",
+  "index": 1,
+  "commit": "db097a030150b3d4ea9f492b85e7e4e4bcb3f789",
+  "reviewed_complete_modules": [
+    "core/scanner.py",
+    "core/engine.py"
+  ],
+  "whole_repository_complete": false,
+  "prior_selected_modules": 3,
+  "findings": [
+    "Default bigsize0 confirms partial hash with full digest; actual5MiB negative rejected.",
+    "Configured bigsize1MiB terminates after partial+sample digest equality; actual5MiB files differing at first byte emittedMatch100 and a two-file contents group despite distinct fullMD5.",
+    "Default scanner with same-size restoredmtime edit reused stale cached full digest and grouped different actual bytes; actual xxhash not executed.",
+    "Missing-file size0 accessor defaults can match in engine, but default include_exists_check filters them before grouping; mitigation executed.",
+    "Two reference files intentionally skipped; group construction does not merge supplied nontransitive chain into triple.",
+    "getmatches word path has five-million limit and returns partial result after caughtMemoryError; static finding only, fuzzyword path not executed."
+  ],
+  "runtime_scope": "Unmodified three modules, real files/SQLite/MD5. Progress/translation and listed utility adapters supplied; fuzzy words deliberately disabled. Actual contents Scanner.get_dupe_groups exercised, no UI/deletion or whole368blob source review; no actualxxhash.",
+  "upstream_tests_executed": 0,
+  "adopted_code": false,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/dupeguru-scanner-selected-source-20261013.json": "665a10e34a2a5c94174fc2d188b11aa1c91488e600ddea34cf117b6abe866925",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/dupeguru-contents-controls-20261013.json": "9554ee6b52f76a345c968a906311e2179b8053582cda9ec0ec741b2f9b07c989"
+  }
+}

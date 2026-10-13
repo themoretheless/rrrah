@@ -1,0 +1,218 @@
+warning: function `fallible_zeroed_bytes` is never used
+   --> crates/rrrah-cache/src/mosaic_payload_v1.rs:728:4
+    |
+728 | fn fallible_zeroed_bytes(len: usize) -> Result<Box<[u8]>, MosaicPayloadError> {
+    |    ^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-cache` (lib) generated 1 warning
+warning: methods `submit` and `submit_image` are never used
+    --> crates/rrrah-app/src/main.rs:1445:8
+     |
+1097 | impl ForegroundLoader {
+     | --------------------- methods in this implementation
+...
+1445 |     fn submit(&self, path: PathBuf) -> Result<u64> {
+     |        ^^^^^^
+...
+1448 |     fn submit_image(&self, path: PathBuf, image_index: usize) -> Result<u64> {
+     |        ^^^^^^^^^^^^
+     |
+     = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: associated items `install_with_cancel`, `refresh`, and `refresh_with_cancel` are never used
+   --> crates/rrrah-app/src/raster_viewport.rs:396:19
+    |
+ 26 | impl ResidentSource {
+    | ------------------- associated items in this implementation
+...
+396 |     pub(crate) fn install_with_cancel<F: FnMut() -> bool>(
+    |                   ^^^^^^^^^^^^^^^^^^^
+...
+483 |     pub(crate) fn refresh(
+    |                   ^^^^^^^
+...
+503 |     pub(crate) fn refresh_with_cancel<F: FnMut() -> bool>(
+    |                   ^^^^^^^^^^^^^^^^^^^
+
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+warning: `rrrah` (bin "rrrah") generated 2 warnings
+    Finished `test` profile [optimized + debuginfo] target(s) in 1.28s
+     Running tests/ttl_swap_metal.rs (target/debug/deps/ttl_swap_metal-585a6570bc9d74a6)
+
+running 1 test
+long-lived collection adapter: Metal Apple M4 Max; duration=600s; frames=8; payload=192000000; hdr_output=[4000, 3000]
+long-lived collection cycles=8; elapsed=2.871s; root=0; queue=0; reads=8; writes=8
+long-lived collection cycles=16; elapsed=5.890s; root=0; queue=0; reads=16; writes=8
+long-lived collection cycles=24; elapsed=9.327s; root=0; queue=0; reads=24; writes=8
+long-lived collection cycles=32; elapsed=12.438s; root=0; queue=0; reads=32; writes=8
+long-lived collection cycles=40; elapsed=15.439s; root=0; queue=0; reads=40; writes=8
+long-lived collection cycles=48; elapsed=18.443s; root=0; queue=0; reads=48; writes=8
+long-lived collection cycles=56; elapsed=21.442s; root=0; queue=0; reads=56; writes=8
+long-lived collection cycles=64; elapsed=24.324s; root=0; queue=0; reads=64; writes=8
+long-lived collection cycles=72; elapsed=27.176s; root=0; queue=0; reads=72; writes=8
+long-lived collection cycles=80; elapsed=30.245s; root=0; queue=0; reads=80; writes=8
+long-lived collection cycles=88; elapsed=33.202s; root=0; queue=0; reads=88; writes=8
+long-lived collection cycles=96; elapsed=35.988s; root=0; queue=0; reads=96; writes=8
+long-lived collection cycles=104; elapsed=39.215s; root=0; queue=0; reads=104; writes=8
+long-lived collection cycles=112; elapsed=43.723s; root=0; queue=0; reads=112; writes=8
+long-lived collection cycles=120; elapsed=48.500s; root=0; queue=0; reads=120; writes=8
+long-lived collection cycles=128; elapsed=52.344s; root=0; queue=0; reads=128; writes=8
+test long_lived_large_collection_cache_preserves_swap_and_metal_frames has been running for over 60 seconds
+long-lived collection cycles=136; elapsed=56.365s; root=0; queue=0; reads=136; writes=8
+long-lived collection cycles=144; elapsed=59.265s; root=0; queue=0; reads=144; writes=8
+long-lived collection cycles=152; elapsed=62.278s; root=0; queue=0; reads=152; writes=8
+long-lived collection cycles=160; elapsed=65.217s; root=0; queue=0; reads=160; writes=8
+long-lived collection cycles=168; elapsed=69.866s; root=0; queue=0; reads=168; writes=8
+long-lived collection cycles=176; elapsed=76.445s; root=0; queue=0; reads=176; writes=8
+long-lived collection cycles=184; elapsed=80.413s; root=0; queue=0; reads=184; writes=8
+long-lived collection cycles=192; elapsed=83.334s; root=0; queue=0; reads=192; writes=8
+long-lived collection cycles=200; elapsed=85.979s; root=0; queue=0; reads=200; writes=8
+long-lived collection cycles=208; elapsed=88.864s; root=0; queue=0; reads=208; writes=8
+long-lived collection cycles=216; elapsed=91.747s; root=0; queue=0; reads=216; writes=8
+long-lived collection cycles=224; elapsed=94.590s; root=0; queue=0; reads=224; writes=8
+long-lived collection cycles=232; elapsed=97.632s; root=0; queue=0; reads=232; writes=8
+long-lived collection cycles=240; elapsed=101.032s; root=0; queue=0; reads=240; writes=8
+long-lived collection cycles=248; elapsed=106.078s; root=0; queue=0; reads=248; writes=8
+long-lived collection cycles=256; elapsed=110.721s; root=0; queue=0; reads=256; writes=8
+long-lived collection cycles=264; elapsed=115.957s; root=0; queue=0; reads=264; writes=8
+long-lived collection cycles=272; elapsed=119.554s; root=0; queue=0; reads=272; writes=8
+long-lived collection cycles=280; elapsed=123.575s; root=0; queue=0; reads=280; writes=8
+long-lived collection cycles=288; elapsed=128.735s; root=0; queue=0; reads=288; writes=8
+long-lived collection cycles=296; elapsed=132.410s; root=0; queue=0; reads=296; writes=8
+long-lived collection cycles=304; elapsed=136.053s; root=0; queue=0; reads=304; writes=8
+long-lived collection cycles=312; elapsed=139.051s; root=0; queue=0; reads=312; writes=8
+long-lived collection cycles=320; elapsed=141.721s; root=0; queue=0; reads=320; writes=8
+long-lived collection cycles=328; elapsed=144.651s; root=0; queue=0; reads=328; writes=8
+long-lived collection cycles=336; elapsed=147.400s; root=0; queue=0; reads=336; writes=8
+long-lived collection cycles=344; elapsed=150.463s; root=0; queue=0; reads=344; writes=8
+long-lived collection cycles=352; elapsed=153.717s; root=0; queue=0; reads=352; writes=8
+long-lived collection cycles=360; elapsed=156.834s; root=0; queue=0; reads=360; writes=8
+long-lived collection cycles=368; elapsed=159.830s; root=0; queue=0; reads=368; writes=8
+long-lived collection cycles=376; elapsed=163.419s; root=0; queue=0; reads=376; writes=8
+long-lived collection cycles=384; elapsed=166.829s; root=0; queue=0; reads=384; writes=8
+long-lived collection cycles=392; elapsed=170.040s; root=0; queue=0; reads=392; writes=8
+long-lived collection cycles=400; elapsed=173.201s; root=0; queue=0; reads=400; writes=8
+long-lived collection cycles=408; elapsed=176.352s; root=0; queue=0; reads=408; writes=8
+long-lived collection cycles=416; elapsed=179.349s; root=0; queue=0; reads=416; writes=8
+long-lived collection cycles=424; elapsed=182.318s; root=0; queue=0; reads=424; writes=8
+long-lived collection cycles=432; elapsed=185.322s; root=0; queue=0; reads=432; writes=8
+long-lived collection cycles=440; elapsed=188.331s; root=0; queue=0; reads=440; writes=8
+long-lived collection cycles=448; elapsed=191.101s; root=0; queue=0; reads=448; writes=8
+long-lived collection cycles=456; elapsed=194.137s; root=0; queue=0; reads=456; writes=8
+long-lived collection cycles=464; elapsed=197.082s; root=0; queue=0; reads=464; writes=8
+long-lived collection cycles=472; elapsed=200.003s; root=0; queue=0; reads=472; writes=8
+long-lived collection cycles=480; elapsed=202.940s; root=0; queue=0; reads=480; writes=8
+long-lived collection cycles=488; elapsed=207.573s; root=0; queue=0; reads=488; writes=8
+long-lived collection cycles=496; elapsed=211.037s; root=0; queue=0; reads=496; writes=8
+long-lived collection cycles=504; elapsed=216.301s; root=0; queue=0; reads=504; writes=8
+long-lived collection cycles=512; elapsed=219.501s; root=0; queue=0; reads=512; writes=8
+long-lived collection cycles=520; elapsed=222.632s; root=0; queue=0; reads=520; writes=8
+long-lived collection cycles=528; elapsed=226.367s; root=0; queue=0; reads=528; writes=8
+long-lived collection cycles=536; elapsed=229.392s; root=0; queue=0; reads=536; writes=8
+long-lived collection cycles=544; elapsed=233.811s; root=0; queue=0; reads=544; writes=8
+long-lived collection cycles=552; elapsed=240.176s; root=0; queue=0; reads=552; writes=8
+long-lived collection cycles=560; elapsed=245.555s; root=0; queue=0; reads=560; writes=8
+long-lived collection cycles=568; elapsed=248.803s; root=0; queue=0; reads=568; writes=8
+long-lived collection cycles=576; elapsed=251.816s; root=0; queue=0; reads=576; writes=8
+long-lived collection cycles=584; elapsed=255.045s; root=0; queue=0; reads=584; writes=8
+long-lived collection cycles=592; elapsed=258.437s; root=0; queue=0; reads=592; writes=8
+long-lived collection cycles=600; elapsed=261.489s; root=0; queue=0; reads=600; writes=8
+long-lived collection cycles=608; elapsed=264.987s; root=0; queue=0; reads=608; writes=8
+long-lived collection cycles=616; elapsed=268.785s; root=0; queue=0; reads=616; writes=8
+long-lived collection cycles=624; elapsed=273.357s; root=0; queue=0; reads=624; writes=8
+long-lived collection cycles=632; elapsed=279.133s; root=0; queue=0; reads=632; writes=8
+long-lived collection cycles=640; elapsed=283.434s; root=0; queue=0; reads=640; writes=8
+long-lived collection cycles=648; elapsed=286.741s; root=0; queue=0; reads=648; writes=8
+long-lived collection cycles=656; elapsed=290.295s; root=0; queue=0; reads=656; writes=8
+long-lived collection cycles=664; elapsed=293.873s; root=0; queue=0; reads=664; writes=8
+long-lived collection cycles=672; elapsed=297.259s; root=0; queue=0; reads=672; writes=8
+long-lived collection cycles=680; elapsed=303.644s; root=0; queue=0; reads=680; writes=8
+long-lived collection cycles=688; elapsed=309.918s; root=0; queue=0; reads=688; writes=8
+long-lived collection cycles=696; elapsed=313.570s; root=0; queue=0; reads=696; writes=8
+long-lived collection cycles=704; elapsed=316.930s; root=0; queue=0; reads=704; writes=8
+long-lived collection cycles=712; elapsed=320.217s; root=0; queue=0; reads=712; writes=8
+long-lived collection cycles=720; elapsed=323.513s; root=0; queue=0; reads=720; writes=8
+long-lived collection cycles=728; elapsed=326.752s; root=0; queue=0; reads=728; writes=8
+long-lived collection cycles=736; elapsed=329.933s; root=0; queue=0; reads=736; writes=8
+long-lived collection cycles=744; elapsed=333.241s; root=0; queue=0; reads=744; writes=8
+long-lived collection cycles=752; elapsed=336.560s; root=0; queue=0; reads=752; writes=8
+long-lived collection cycles=760; elapsed=339.994s; root=0; queue=0; reads=760; writes=8
+long-lived collection cycles=768; elapsed=344.903s; root=0; queue=0; reads=768; writes=8
+long-lived collection cycles=776; elapsed=349.149s; root=0; queue=0; reads=776; writes=8
+long-lived collection cycles=784; elapsed=354.294s; root=0; queue=0; reads=784; writes=8
+long-lived collection cycles=792; elapsed=357.933s; root=0; queue=0; reads=792; writes=8
+long-lived collection cycles=800; elapsed=361.619s; root=0; queue=0; reads=800; writes=8
+long-lived collection cycles=808; elapsed=367.224s; root=0; queue=0; reads=808; writes=8
+long-lived collection cycles=816; elapsed=370.882s; root=0; queue=0; reads=816; writes=8
+long-lived collection cycles=824; elapsed=374.632s; root=0; queue=0; reads=824; writes=8
+long-lived collection cycles=832; elapsed=378.498s; root=0; queue=0; reads=832; writes=8
+long-lived collection cycles=840; elapsed=382.332s; root=0; queue=0; reads=840; writes=8
+long-lived collection cycles=848; elapsed=386.296s; root=0; queue=0; reads=848; writes=8
+long-lived collection cycles=856; elapsed=390.442s; root=0; queue=0; reads=856; writes=8
+long-lived collection cycles=864; elapsed=394.532s; root=0; queue=0; reads=864; writes=8
+long-lived collection cycles=872; elapsed=398.300s; root=0; queue=0; reads=872; writes=8
+long-lived collection cycles=880; elapsed=401.974s; root=0; queue=0; reads=880; writes=8
+long-lived collection cycles=888; elapsed=405.778s; root=0; queue=0; reads=888; writes=8
+long-lived collection cycles=896; elapsed=409.455s; root=0; queue=0; reads=896; writes=8
+long-lived collection cycles=904; elapsed=413.302s; root=0; queue=0; reads=904; writes=8
+long-lived collection cycles=912; elapsed=417.011s; root=0; queue=0; reads=912; writes=8
+long-lived collection cycles=920; elapsed=420.766s; root=0; queue=0; reads=920; writes=8
+long-lived collection cycles=928; elapsed=423.901s; root=0; queue=0; reads=928; writes=8
+long-lived collection cycles=936; elapsed=427.044s; root=0; queue=0; reads=936; writes=8
+long-lived collection cycles=944; elapsed=430.247s; root=0; queue=0; reads=944; writes=8
+long-lived collection cycles=952; elapsed=433.686s; root=0; queue=0; reads=952; writes=8
+long-lived collection cycles=960; elapsed=437.329s; root=0; queue=0; reads=960; writes=8
+long-lived collection cycles=968; elapsed=441.367s; root=0; queue=0; reads=968; writes=8
+long-lived collection cycles=976; elapsed=445.206s; root=0; queue=0; reads=976; writes=8
+long-lived collection cycles=984; elapsed=449.227s; root=0; queue=0; reads=984; writes=8
+long-lived collection cycles=992; elapsed=453.008s; root=0; queue=0; reads=992; writes=8
+long-lived collection cycles=1000; elapsed=456.834s; root=0; queue=0; reads=1000; writes=8
+long-lived collection cycles=1008; elapsed=460.504s; root=0; queue=0; reads=1008; writes=8
+long-lived collection cycles=1016; elapsed=464.269s; root=0; queue=0; reads=1016; writes=8
+long-lived collection cycles=1024; elapsed=468.000s; root=0; queue=0; reads=1024; writes=8
+long-lived collection cycles=1032; elapsed=471.865s; root=0; queue=0; reads=1032; writes=8
+long-lived collection cycles=1040; elapsed=475.823s; root=0; queue=0; reads=1040; writes=8
+long-lived collection cycles=1048; elapsed=479.624s; root=0; queue=0; reads=1048; writes=8
+long-lived collection cycles=1056; elapsed=484.199s; root=0; queue=0; reads=1056; writes=8
+long-lived collection cycles=1064; elapsed=488.567s; root=0; queue=0; reads=1064; writes=8
+long-lived collection cycles=1072; elapsed=493.415s; root=0; queue=0; reads=1072; writes=8
+long-lived collection cycles=1080; elapsed=496.661s; root=0; queue=0; reads=1080; writes=8
+long-lived collection cycles=1088; elapsed=500.786s; root=0; queue=0; reads=1088; writes=8
+long-lived collection cycles=1096; elapsed=505.821s; root=0; queue=0; reads=1096; writes=8
+long-lived collection cycles=1104; elapsed=509.165s; root=0; queue=0; reads=1104; writes=8
+long-lived collection cycles=1112; elapsed=512.572s; root=0; queue=0; reads=1112; writes=8
+long-lived collection cycles=1120; elapsed=515.888s; root=0; queue=0; reads=1120; writes=8
+long-lived collection cycles=1128; elapsed=519.439s; root=0; queue=0; reads=1128; writes=8
+long-lived collection cycles=1136; elapsed=522.958s; root=0; queue=0; reads=1136; writes=8
+long-lived collection cycles=1144; elapsed=526.461s; root=0; queue=0; reads=1144; writes=8
+long-lived collection cycles=1152; elapsed=529.949s; root=0; queue=0; reads=1152; writes=8
+long-lived collection cycles=1160; elapsed=533.223s; root=0; queue=0; reads=1160; writes=8
+long-lived collection cycles=1168; elapsed=536.269s; root=0; queue=0; reads=1168; writes=8
+long-lived collection cycles=1176; elapsed=539.301s; root=0; queue=0; reads=1176; writes=8
+long-lived collection cycles=1184; elapsed=542.184s; root=0; queue=0; reads=1184; writes=8
+long-lived collection cycles=1192; elapsed=545.099s; root=0; queue=0; reads=1192; writes=8
+long-lived collection cycles=1200; elapsed=548.105s; root=0; queue=0; reads=1200; writes=8
+long-lived collection cycles=1208; elapsed=550.997s; root=0; queue=0; reads=1208; writes=8
+long-lived collection cycles=1216; elapsed=553.929s; root=0; queue=0; reads=1216; writes=8
+long-lived collection cycles=1224; elapsed=556.690s; root=0; queue=0; reads=1224; writes=8
+long-lived collection cycles=1232; elapsed=559.648s; root=0; queue=0; reads=1232; writes=8
+long-lived collection cycles=1240; elapsed=562.662s; root=0; queue=0; reads=1240; writes=8
+long-lived collection cycles=1248; elapsed=566.682s; root=0; queue=0; reads=1248; writes=8
+long-lived collection cycles=1256; elapsed=569.720s; root=0; queue=0; reads=1256; writes=8
+long-lived collection cycles=1264; elapsed=572.881s; root=0; queue=0; reads=1264; writes=8
+long-lived collection cycles=1272; elapsed=575.864s; root=0; queue=0; reads=1272; writes=8
+long-lived collection cycles=1280; elapsed=579.114s; root=0; queue=0; reads=1280; writes=8
+long-lived collection cycles=1288; elapsed=582.004s; root=0; queue=0; reads=1288; writes=8
+long-lived collection cycles=1296; elapsed=585.140s; root=0; queue=0; reads=1296; writes=8
+long-lived collection cycles=1304; elapsed=587.962s; root=0; queue=0; reads=1304; writes=8
+long-lived collection cycles=1312; elapsed=591.300s; root=0; queue=0; reads=1312; writes=8
+long-lived collection cycles=1320; elapsed=594.348s; root=0; queue=0; reads=1320; writes=8
+long-lived collection cycles=1328; elapsed=597.606s; root=0; queue=0; reads=1328; writes=8
+long-lived collection complete: cycles=1335; elapsed=600.006s; reads=1335; writes=8; root=0; queue=0
+parallel collection: accelerated=1335; mid_batch_cancelled=1335; exact_sdr_full_frames=1335; exact_hdr_half_frames=1335; hdr_output=[4000, 3000]; root=0; queue=0
+test long_lived_large_collection_cache_preserves_swap_and_metal_frames ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 6 filtered out; finished in 604.83s
+

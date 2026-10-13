@@ -1,0 +1,145 @@
+warning: function `fallible_zeroed_bytes` is never used
+   --> crates/rrrah-cache/src/mosaic_payload_v1.rs:728:4
+    |
+728 | fn fallible_zeroed_bytes(len: usize) -> Result<Box<[u8]>, MosaicPayloadError> {
+    |    ^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-cache` (lib) generated 1 warning
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+warning: methods `submit` and `submit_image` are never used
+    --> crates/rrrah-app/src/main.rs:1377:8
+     |
+1085 | impl ForegroundLoader {
+     | --------------------- methods in this implementation
+...
+1377 |     fn submit(&self, path: PathBuf) -> Result<u64> {
+     |        ^^^^^^
+...
+1380 |     fn submit_image(&self, path: PathBuf, image_index: usize) -> Result<u64> {
+     |        ^^^^^^^^^^^^
+     |
+     = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: associated items `install_with_cancel`, `refresh`, and `refresh_with_cancel` are never used
+   --> crates/rrrah-app/src/raster_viewport.rs:396:19
+    |
+ 26 | impl ResidentSource {
+    | ------------------- associated items in this implementation
+...
+396 |     pub(crate) fn install_with_cancel<F: FnMut() -> bool>(
+    |                   ^^^^^^^^^^^^^^^^^^^
+...
+483 |     pub(crate) fn refresh(
+    |                   ^^^^^^^
+...
+503 |     pub(crate) fn refresh_with_cancel<F: FnMut() -> bool>(
+    |                   ^^^^^^^^^^^^^^^^^^^
+
+warning: `rrrah` (bin "rrrah") generated 2 warnings
+    Finished `test` profile [optimized + debuginfo] target(s) in 6.47s
+     Running tests/raw_collection_metal.rs (target/debug/deps/raw_collection_metal-5d07d17c3f2a5a20)
+
+running 1 test
+RAW collection adapter: Metal Apple M4 Max
+seed /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/1294.cr2: 6288x4056; 25504128 samples
+seed /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/898.nef: 6032x4032; 24321024 samples
+seed /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/2414.arw: 6048x4024; 24337152 samples
+seed /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/1084.orf: 4640x3472; 16110080 samples
+seed /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/831.pef: 4352x2868; 12481536 samples
+seed /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/5025.rw2: 4760x3472; 16526720 samples
+seed /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/2883.raf: 5120x3288; 16834560 samples
+seed /Users/themoretheless/Documents/Sources/rrrah/tests/IMG_9043.CR3: 6188x4120; 25494560 samples
+seed /Users/themoretheless/Documents/Sources/rrrah/tests/IMG_9074.CR3: 6188x4120; 25494560 samples
+RAW collection rounds=1; elapsed=0.989s; reads=9; root=0; queue=0
+RAW collection rounds=2; elapsed=1.897s; reads=18; root=0; queue=0
+RAW collection rounds=3; elapsed=2.865s; reads=27; root=0; queue=0
+RAW collection rounds=4; elapsed=3.725s; reads=36; root=0; queue=0
+RAW collection rounds=5; elapsed=4.623s; reads=45; root=0; queue=0
+RAW collection rounds=6; elapsed=5.512s; reads=54; root=0; queue=0
+RAW collection rounds=7; elapsed=6.341s; reads=63; root=0; queue=0
+RAW collection rounds=8; elapsed=7.215s; reads=72; root=0; queue=0
+RAW collection rounds=9; elapsed=8.138s; reads=81; root=0; queue=0
+RAW collection rounds=10; elapsed=8.922s; reads=90; root=0; queue=0
+RAW collection rounds=11; elapsed=9.832s; reads=99; root=0; queue=0
+RAW collection rounds=12; elapsed=10.697s; reads=108; root=0; queue=0
+RAW collection rounds=13; elapsed=11.491s; reads=117; root=0; queue=0
+RAW collection rounds=14; elapsed=12.427s; reads=126; root=0; queue=0
+RAW collection rounds=15; elapsed=13.322s; reads=135; root=0; queue=0
+RAW collection rounds=16; elapsed=14.102s; reads=144; root=0; queue=0
+RAW collection rounds=17; elapsed=14.811s; reads=153; root=0; queue=0
+RAW collection rounds=18; elapsed=15.501s; reads=162; root=0; queue=0
+RAW collection rounds=19; elapsed=16.162s; reads=171; root=0; queue=0
+RAW collection rounds=20; elapsed=16.839s; reads=180; root=0; queue=0
+RAW collection rounds=21; elapsed=17.525s; reads=189; root=0; queue=0
+RAW collection rounds=22; elapsed=18.262s; reads=198; root=0; queue=0
+RAW collection rounds=23; elapsed=18.978s; reads=207; root=0; queue=0
+RAW collection rounds=24; elapsed=19.697s; reads=216; root=0; queue=0
+RAW collection rounds=25; elapsed=20.428s; reads=225; root=0; queue=0
+RAW collection rounds=26; elapsed=21.173s; reads=234; root=0; queue=0
+RAW collection rounds=27; elapsed=21.881s; reads=243; root=0; queue=0
+RAW collection rounds=28; elapsed=22.577s; reads=252; root=0; queue=0
+RAW collection rounds=29; elapsed=23.224s; reads=261; root=0; queue=0
+RAW collection rounds=30; elapsed=23.823s; reads=270; root=0; queue=0
+RAW collection rounds=31; elapsed=24.414s; reads=279; root=0; queue=0
+RAW collection rounds=32; elapsed=25.021s; reads=288; root=0; queue=0
+RAW collection rounds=33; elapsed=25.629s; reads=297; root=0; queue=0
+RAW collection rounds=34; elapsed=26.243s; reads=306; root=0; queue=0
+RAW collection rounds=35; elapsed=26.853s; reads=315; root=0; queue=0
+RAW collection rounds=36; elapsed=27.481s; reads=324; root=0; queue=0
+RAW collection rounds=37; elapsed=28.082s; reads=333; root=0; queue=0
+RAW collection rounds=38; elapsed=28.711s; reads=342; root=0; queue=0
+RAW collection rounds=39; elapsed=29.406s; reads=351; root=0; queue=0
+RAW collection rounds=40; elapsed=30.083s; reads=360; root=0; queue=0
+RAW collection rounds=41; elapsed=30.790s; reads=369; root=0; queue=0
+RAW collection rounds=42; elapsed=31.443s; reads=378; root=0; queue=0
+RAW collection rounds=43; elapsed=32.103s; reads=387; root=0; queue=0
+RAW collection rounds=44; elapsed=32.932s; reads=396; root=0; queue=0
+RAW collection rounds=45; elapsed=34.082s; reads=405; root=0; queue=0
+RAW collection rounds=46; elapsed=34.749s; reads=414; root=0; queue=0
+RAW collection rounds=47; elapsed=35.347s; reads=423; root=0; queue=0
+RAW collection rounds=48; elapsed=35.955s; reads=432; root=0; queue=0
+RAW collection rounds=49; elapsed=36.573s; reads=441; root=0; queue=0
+RAW collection rounds=50; elapsed=37.113s; reads=450; root=0; queue=0
+RAW collection rounds=51; elapsed=37.642s; reads=459; root=0; queue=0
+RAW collection rounds=52; elapsed=38.208s; reads=468; root=0; queue=0
+RAW collection rounds=53; elapsed=38.770s; reads=477; root=0; queue=0
+RAW collection rounds=54; elapsed=39.329s; reads=486; root=0; queue=0
+RAW collection rounds=55; elapsed=39.898s; reads=495; root=0; queue=0
+RAW collection rounds=56; elapsed=40.474s; reads=504; root=0; queue=0
+RAW collection rounds=57; elapsed=41.036s; reads=513; root=0; queue=0
+RAW collection rounds=58; elapsed=41.581s; reads=522; root=0; queue=0
+RAW collection rounds=59; elapsed=42.171s; reads=531; root=0; queue=0
+RAW collection rounds=60; elapsed=42.845s; reads=540; root=0; queue=0
+RAW collection rounds=61; elapsed=43.648s; reads=549; root=0; queue=0
+RAW collection rounds=62; elapsed=44.445s; reads=558; root=0; queue=0
+RAW collection rounds=63; elapsed=45.365s; reads=567; root=0; queue=0
+RAW collection rounds=64; elapsed=45.992s; reads=576; root=0; queue=0
+RAW collection rounds=65; elapsed=46.634s; reads=585; root=0; queue=0
+RAW collection rounds=66; elapsed=47.212s; reads=594; root=0; queue=0
+RAW collection rounds=67; elapsed=47.786s; reads=603; root=0; queue=0
+RAW collection rounds=68; elapsed=48.405s; reads=612; root=0; queue=0
+RAW collection rounds=69; elapsed=48.995s; reads=621; root=0; queue=0
+RAW collection rounds=70; elapsed=49.576s; reads=630; root=0; queue=0
+RAW collection rounds=71; elapsed=50.156s; reads=639; root=0; queue=0
+RAW collection rounds=72; elapsed=50.758s; reads=648; root=0; queue=0
+RAW collection rounds=73; elapsed=51.599s; reads=657; root=0; queue=0
+RAW collection rounds=74; elapsed=52.980s; reads=666; root=0; queue=0
+RAW collection rounds=75; elapsed=53.882s; reads=675; root=0; queue=0
+test real_raw_collection_eviction_and_swap_preserve_metal_frames has been running for over 60 seconds
+RAW collection rounds=76; elapsed=54.696s; reads=684; root=0; queue=0
+RAW collection rounds=77; elapsed=55.329s; reads=693; root=0; queue=0
+RAW collection rounds=78; elapsed=55.935s; reads=702; root=0; queue=0
+RAW collection rounds=79; elapsed=56.520s; reads=711; root=0; queue=0
+RAW collection rounds=80; elapsed=57.103s; reads=720; root=0; queue=0
+RAW collection rounds=81; elapsed=57.835s; reads=729; root=0; queue=0
+RAW collection rounds=82; elapsed=58.669s; reads=738; root=0; queue=0
+RAW collection rounds=83; elapsed=59.266s; reads=747; root=0; queue=0
+RAW collection rounds=84; elapsed=59.889s; reads=756; root=0; queue=0
+RAW collection rounds=85; elapsed=60.458s; reads=765; root=0; queue=0
+RAW collection complete: rounds=85; elapsed=60.458s; reads=765; writes=9; root=0; queue=0
+test real_raw_collection_eviction_and_swap_preserve_metal_frames ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 66.28s
+

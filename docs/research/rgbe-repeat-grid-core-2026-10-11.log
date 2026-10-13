@@ -1,0 +1,21 @@
+   Compiling rrrah-core v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-core)
+    Finished `test` profile [optimized + debuginfo] target(s) in 5.98s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_core-8f1ba64f95836195)
+
+running 13 tests
+test frame::rgbe_tests::rgbe_keeps_distinct_plane_identity_and_refuses_bayer_reduction ... ok
+test color::four_plane_tests::rgbe_transform_matches_independent_sony_and_numpy_oracles ... ok
+test rgbe::calibration_tests::source_phase_levels_and_four_gains_preserve_hdr ... ok
+test rgbe::calibration_tests::malformed_calibration_is_rejected ... ok
+test rgbe::calibration_tests::odd_black_grid_preserves_all_four_gains_and_repeat_boundaries ... ok
+test rgbe::calibration_tests::managed_admission_cancel_and_last_owner_release ... ok
+test rgbe::calibration_tests::cancelled_thumbnail_releases_admitted_preview ... ok
+test rgbe::tests::distinct_constants_hdr_and_edges_preserve_each_plane ... ok
+test rgbe::calibration_tests::managed_thumbnail_reserves_before_output_and_releases_on_failure ... ok
+test rgbe::calibration_tests::all_four_color_terms_negative_and_hdr_are_preserved ... ok
+test rgbe::tests::invalid_geometry_planes_or_nonfinite_samples_are_rejected ... ok
+test rgbe::tests::analytic_plane_ramps_reconstruct_and_measured_sites_remain_exact ... ok
+test develop::pipeline_tests::rgbe_full_development_preserves_emerald_color_crop_and_budget ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 105 filtered out; finished in 0.00s
+

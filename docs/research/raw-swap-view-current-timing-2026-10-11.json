@@ -1,0 +1,44 @@
+{
+  "backend": "Metal Apple M4 Max",
+  "source": "tests/IMG_9043.CR3",
+  "output": "1920x1080 offscreen sRGB",
+  "samples": 15,
+  "warmups": 3,
+  "swap_reads": 18,
+  "swap_writes": 1,
+  "p50_p95_ms": {
+    "restore": [
+      32.715,
+      33.875
+    ],
+    "upload_enqueue": [
+      15.489,
+      16.603
+    ],
+    "frame_completion": [
+      8.41,
+      11.455
+    ],
+    "total": [
+      56.925,
+      59.262
+    ],
+    "resident_zoom_pan": [
+      1.656,
+      2.859
+    ]
+  },
+  "managed_cpu_peak": 104075392,
+  "managed_gpu_peak": 146800640,
+  "managed_final_zero": true,
+  "log_sha256": "44d1681c1a64edaf6f12de653f9ef599c3f888cd74742c139b10a2b4b668d5d4",
+  "sources": {
+    "tests/IMG_9043.CR3": "d06cbb10e84882cf130430bdc88ed2652c2622b96dea8d6a854c09e3bee37e59",
+    "crates/rrrah-app/examples/raw_view_timing.rs": "a7a48b501768fe6ed92eaa490946b41ec0742ed70bb9d1f1c687d31b74e4b746"
+  },
+  "limits": [
+    "One warm local-disk source; no physical slow disk or OS pressure.",
+    "Decode/restore measurements are separate unpaired invocations; no universal speedup claim.",
+    "Target frame GPU completion, not window presentation or physical HDR."
+  ]
+}

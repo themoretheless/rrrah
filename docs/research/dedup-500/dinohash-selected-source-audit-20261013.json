@@ -1,0 +1,133 @@
+{
+  "status": "verified_all5_implementation_modules_read_and10_adapted_controls",
+  "repository": "mominul/dinohash-onnx",
+  "commit": "7d87d54b837ceb14b553ffc51147e20a2ed1b85d",
+  "source": "/Users/themoretheless/.codex/tmp/rrrah-dinohash-source-20261013",
+  "source_files": [
+    {
+      "path": ".gitignore",
+      "git_blob": "ded3967f79c396a0afefe8eca50a21981af43106",
+      "sha256": "ce0d641dbcca901abc938640ceca4767b6354a4ba7b2df9dba77a3bf38f4356d",
+      "fully_read": false
+    },
+    {
+      "path": ".python-version",
+      "git_blob": "c8cfe3959183f8e9a50f83f54cd723f2dc9c252d",
+      "sha256": "7a41a41354ab8049091ef1a00253ca00567f5a1d3f9aef5502c0b4b5ce9ae707",
+      "fully_read": true
+    },
+    {
+      "path": "LICENSE",
+      "git_blob": "925b8c06f0ec6d2a68a2f43649ecb5ef02b9f2b7",
+      "sha256": "787a4417ac6330cd2167cc6481f7c20e1afe3699744a2cfe45041e321da6e8ba",
+      "fully_read": true
+    },
+    {
+      "path": "README.md",
+      "git_blob": "f283a669ea25bc75c6f89a247c358d0471a19714",
+      "sha256": "c2d35d602009ebdf53df7401b497405aaecc0ff644b267fdb299c319a0c93749",
+      "fully_read": true
+    },
+    {
+      "path": "examples/example.py",
+      "git_blob": "9779ca41da204717a1b784a1aaa2ccd43a109ae4",
+      "sha256": "e129d3e780d0f14cb17be80f143e7fb67e25b3c7354affd10ca7a3c6c8885036",
+      "fully_read": true
+    },
+    {
+      "path": "pyproject.toml",
+      "git_blob": "fe8255a59dfa6da6258be5c82751a18d11d4b833",
+      "sha256": "4993f19319df7255562df445ff367addaf5560f006cbac13d1448554b4468ebb",
+      "fully_read": true
+    },
+    {
+      "path": "src/dinohash_onnx/__init__.py",
+      "git_blob": "d4439fb633d99b4e6718dda4a84845e79d311dc6",
+      "sha256": "972e7d376f6d5e35d4f07e36842b79f16821d970a8b01b76d33e4a52c426759a",
+      "fully_read": true
+    },
+    {
+      "path": "src/dinohash_onnx/downloader.py",
+      "git_blob": "07d68025f6ebfbcdbae39a0fb8eddb4905017a7d",
+      "sha256": "09a03f15d279b0e30fbd32db831d3ff9f81585046429cd15073edf160c3193cb",
+      "fully_read": true
+    },
+    {
+      "path": "src/dinohash_onnx/hash.py",
+      "git_blob": "97a68156f9181de66f552a091af6c8821a25ef06",
+      "sha256": "6d36ba667e470cc3f460091f22523410169540c83aa5d711e0185fa053089a96",
+      "fully_read": true
+    },
+    {
+      "path": "src/dinohash_onnx/inference.py",
+      "git_blob": "f54e8bf91ef85b4384d802b854446b463f5185aa",
+      "sha256": "f8611ccaaa45ddf32780fa2582f87d186e468cc3112d27a919dfc8a1a242d2e7",
+      "fully_read": true
+    },
+    {
+      "path": "src/dinohash_onnx/model.py",
+      "git_blob": "4140c9ff6a14005638d4bce5045403944e8dd9c3",
+      "sha256": "96e0ca3ef33bbbf09d289f988fe6d317edaf03f0111c64ceb6b671c3e84d7e52",
+      "fully_read": true
+    },
+    {
+      "path": "uv.lock",
+      "git_blob": "4d6695f6e569a872eef283a443629662565a341f",
+      "sha256": "1e3e0ed168dba93ab3f34ff9729e1030dd1a5bf1c805f71e0c65a6f8bd4b9835",
+      "fully_read": false
+    }
+  ],
+  "whole_implementation_read": true,
+  "whole_repo_complete": false,
+  "selected_controls_passed": 10,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/mominul--dinohash-onnx/tree.json": "f32601b00629e7f5b479f53e0184dadbaec5813ea01f0aa57b3007d718caff61",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/mominul--dinohash-onnx/commit-20261013.json": "55c7a4c65b28802ce3c0e0670bf9ac1723d6f0b56634975f4d781773d36aacde",
+    "/Users/themoretheless/.codex/tmp/rrrah-dinohash-controls-20261013.json": "cb54364ad02d8a5cb6bf9481d3eb8e78437738593e275e32ed02d212736765d4",
+    "/Users/themoretheless/.codex/tmp/rrrah-dinohash-controls-20261013.py": "0a1917e90647cfbfdd19c08a3b3e9864fa03dd9e46fe863b529e610f07c0a8fa",
+    "/Users/themoretheless/.codex/tmp/rrrah-dinohash-controls-20261013.log": "d5a3d50320747d5bd0d4a884d0ba43e3672df8bb12e132b1aaed8a5b2502fd0c"
+  },
+  "controls": {
+    "status": "verified10_selected_python_controls_with_explicit_adapters",
+    "controls": [
+      "normalization_shape_and_red_channel",
+      "empty_preprocess_batch_not_refused",
+      "transparent_hidden_rgb_changes_tensor",
+      "nonfinite_model_logits_are_thresholded",
+      "batch_output_mismatch_not_refused",
+      "rank3_output_is_split_into_two_hashes",
+      "512_zero_bits_serialize_without_width",
+      "existing_invalid_model_file_trusted_without_download",
+      "global_session_cache_ignores_model_and_device",
+      "cache_false_loads_requested_model_provider"
+    ],
+    "passed": 10,
+    "python": "3.12.14 (main, Aug 25 2026, 13:50:33) [Clang 22.1.3 ]",
+    "numpy": "2.2.6",
+    "pillow": "11.3.0",
+    "scope": "Actual unchanged Python preprocessing/parsing/cache branches; ONNX session/provider and requests/tqdm import adapters explicit. No ONNX Runtime/model downloaded, no actual learned inference/provider execution/network stream test or precision measurement."
+  },
+  "upstream_tests_run": false,
+  "license": "Full MIT license read; no code adopted",
+  "findings": {
+    "runtime_with_adapters": [
+      "Global Python session cache ignores requested path/device; cache=False control requests correct new instance",
+      "Nonfinite supplied logits thresholded without rejection",
+      "Wrong batch/rank output accepted and split incorrectly",
+      "512 zero bits format as0x0 without fixed width",
+      "Existing invalid model file trusted without network access"
+    ],
+    "real_preprocessing": [
+      "Authored fully transparent red/blue produce different RGB tensors",
+      "ImageNet red-channel normalization positive control",
+      "Empty batch returned shape0x3x224x224"
+    ],
+    "static_only": [
+      "Mutable main model URL, no digest/size verification",
+      "Download to final path, no timeout/cancel/byte cap/atomic publication",
+      "File-open handles lack explicit context-manager cleanup; EXIF orientation not applied",
+      "No actual ONNX Runtime/model quality or memory/latency qualification"
+    ]
+  },
+  "scope": "All5 implementation modules plus example/config/docs/license fully read,12 Git blobs pinned. uv.lock/.gitignore inventory only. ONNX/provider/network adapters explicit; no actual model downloaded or learned inference. Not full repository read or all500 completion."
+}

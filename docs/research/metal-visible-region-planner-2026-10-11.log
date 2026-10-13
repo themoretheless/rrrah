@@ -1,0 +1,108 @@
+    Blocking waiting for file lock on build directory
+   Compiling rrrah-gpu v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-gpu)
+    Finished `test` profile [optimized + debuginfo] target(s) in 2m 11s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_gpu-3fc6e742f2070fc2)
+
+running 51 tests
+test filmstrip::tests::max_scroll_is_zero_when_everything_fits ... ok
+test filmstrip::tests::strip_band_hit_region ... ok
+test filmstrip::tests::scroll_to_reveal_moves_only_when_needed ... ok
+test backend::vendor_tests::hardware_vendor_filter_rejects_other_ids_and_incompatible_surfaces ... ok
+test backend::tests::explicit_backend_masks_and_unavailable_requests_never_fallback ... ok
+test filmstrip::tests::hit_testing_finds_tiles_and_rejects_gaps_and_padding ... ok
+test raster::tile_admission_tests::rejects_unrepresentable_extents_layers_and_padded_over_budget ... ok
+test raster::tile_admission_tests::visible_region_normalizes_view_and_skips_wholly_offscreen_images ... ok
+test tests::card_layout_is_safe_for_empty_and_tiny_viewports ... ok
+test tests::card_layout_scales_for_a_retina_surface ... ok
+test rgbe_plan::tests::invalid_geometry_planes_and_device_admission_fail_before_allocating_pixels ... ok
+test rgbe_plan::tests::full_srf_plan_and_small_limit_segments_cover_without_overlap ... ok
+test tests::compact_card_metrics_keep_dense_descriptions_readable ... ok
+test tests::card_description_wraps_and_clips_by_line_count ... ok
+test tests::default_tiling_avoids_the_4096_frame_regression ... ok
+test tests::default_tiling_errors_when_layer_limit_cannot_be_met ... ok
+test tests::default_tiling_keeps_aligned_tiles_when_one_layer_is_not_smaller ... ok
+test tests::default_tiling_rejects_tiny_adapters ... ok
+test tests::default_tiling_shrinks_for_small_adapters ... ok
+test tests::default_tiling_uses_c2_optimum_with_aligned_extent ... ok
+test tests::default_tiling_uses_one_frame_tile_when_layer_growth_would_waste_atlas_space ... ok
+test tests::default_tiling_uses_one_small_frame_tile_when_atlas_is_materially_smaller ... ok
+test tests::dense_card_grid_scales_for_a_retina_surface ... ok
+test tests::direct_white_balance_preserves_backend_neutral_contract ... ok
+test tests::display_keeps_decoder_white_balance_gains_bit_exact ... ok
+test tests::edge_tiles_clamp_without_out_of_bounds_reads ... ok
+test tests::eleven_cards_use_three_columns_for_the_total_block ... ok
+test tests::five_column_dashboard_scales_exactly_for_a_retina_surface ... ok
+test tests::five_column_metrics_preserve_timing_title_and_description_capacity ... ok
+test tests::forty_one_cards_keep_algorithm_descriptions_readable ... ok
+test tests::four_cards_fill_the_nominal_telemetry_dashboard ... ok
+test tests::hud_space_is_blank_instead_of_unknown_glyph ... ok
+test tests::malformed_dimensions_do_not_panic_helper_paths ... ok
+test tests::odd_dense_card_count_keeps_row_major_order ... ok
+test tests::ten_cards_fill_a_two_column_five_row_grid ... ok
+test tests::thirty_eight_cards_fill_a_five_column_eight_row_dashboard ... ok
+test tests::tile_halo_matches_full_frame_at_internal_boundary ... ok
+test tests::tiling_override_below_minimum_is_rejected ... ok
+test tests::tiling_override_exceeding_texture_limit_is_rejected ... ok
+test tests::tiling_override_is_applied_verbatim ... ok
+test tests::tiling_override_respects_array_layer_limit ... ok
+test tests::twenty_eight_cards_fill_a_five_column_six_row_dashboard ... ok
+test tests::twenty_four_cards_fill_a_four_column_six_row_dashboard ... ok
+test tests::uniform_layout_remains_wgsl_compatible ... ok
+test tests::upload_rows_are_padded_to_webgpu_alignment ... ok
+test model::tests::model_shader_validates ... ok
+test tests::hud_shader_parses_and_validates_with_naga ... ok
+test tests::padded_upload_rows_cancel_and_preserve_bytes ... ok
+test tests::halo_packing_cancels_inside_large_tiles_and_preserves_scalar_samples ... ok
+test tests::viewport_shader_parses_and_validates_with_naga ... ok
+test tests::rowwise_tile_halo_matches_scalar_oracle_across_randomized_geometry ... ok
+
+test result: ok. 51 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/raster_readback.rs (target/debug/deps/raster_readback-96fa399a25885f6d)
+
+running 22 tests
+test fusion_back_full_frame_developed_raw_matches_metal_display_transport ... ignored, requires corrected production Fusion linear dumps; display transport qualification
+test fusion_front_full_frame_developed_raw_matches_metal_display_transport ... ignored, requires corrected production Fusion linear dumps; display transport qualification
+test hdr_exposure_saturates_to_finite_binary16_range ... ignored, Metal-specific empirical range edge; outside portable binary16 caller contract
+test hdr_opposite_extreme_samples_interpolate_without_nan ... ignored, Metal-specific empirical range edge; outside portable binary16 caller contract
+test hero9_full_frame_developed_raw_matches_metal_display_transport ... ignored, requires production HERO9 scene-linear dump; transport qualification, not demosaic/color oracle
+test large_cancelled_upload_validation_and_admission_preserve_visible_texture ... ignored, manual 12 MP Metal upload cancellation qualification
+test qualified_sd10_linear_raster_full_frame_display_readback ... ignored, requires qualified X3F linear sRGB PPM and a physical GPU
+raster queue adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+HDR raster adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+texture budget adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+upload cancellation adapter: Metal Apple M4 Max
+resident raster adapter: Metal Apple M4 Max
+aspect transition adapter: Metal Apple M4 Max
+raster readback adapter: Metal Apple M4 Max
+tiled raster adapter: Metal Apple M4 Max; negotiated extent64
+test raster_queue_admission_accounts_alignment_and_completion_ownership ... ok
+test texture_budget_preserves_loaded_image_on_refusal_and_releases_owners ... ok
+raster upload cancellation: total_checkpoints=6; exercised=[1, 2, 3, 4, 5, 6]; upload_budget=179200
+test transparent_rgb_is_removed_before_bilinear_interpolation ... ok
+test linear_hdr_attachment_preserves_bright_negative_and_exposed_channels ... ok
+test uploaded_rows_and_rgb_channels_keep_their_positions ... ok
+test linear_gray_and_straight_alpha_composite_match_display_reference ... ok
+test cancelled_upload_validation_and_admission_preserve_visible_texture ... ok
+test pixel_aspect_rejection_is_atomic_and_next_upload_resets_geometry ... ok
+resident source region=[35, 40, 130, 70]; bytes=145600; full geometry SDR/HDR exact; root/queue=0
+resident tiles: 130x5; SDR/HDR exact; padded_bytes=10560; compute/queue/texture root=0
+test developed_raw_exposure_precedes_tone_and_monotone_curve ... ok
+6000x6000 source=576000000 bytes > eager limit; resident 128x128=262144 bytes; full HDR viewport exact; root/queue=0
+test small_resident_region_renders_source_above_eager_atlas_limit ... ok
+resident source region=[35, 40, 130, 70]; bytes=147840; full geometry SDR/HDR exact; root/queue=0
+resident tiles: 5x130; SDR/HDR exact; padded_bytes=10560; compute/queue/texture root=0
+resident source region=[0, 0, 70, 70]; bytes=78400; full geometry SDR/HDR exact; root/queue=0
+resident tiles: 128x130; SDR/HDR exact; padded_bytes=270336; compute/queue/texture root=0
+resident source region=[130, 90, 70, 70]; bytes=78400; full geometry SDR/HDR exact; root/queue=0
+test resident_source_regions_preserve_full_geometry_hdr_and_transactional_admission ... ok
+test tiled_raster_seams_padding_and_partial_cancel_preserve_sdr_hdr ... ok
+resident tiles: 130x130; SDR/HDR exact; padded_bytes=278784; compute/queue/texture root=0
+test gpu_resident_compute_rows_match_cpu_exposure_reference ... ok
+resident tiles: 20000x64; SDR/HDR exact; padded_bytes=20481024; compute/queue/texture root=0
+test resident_compute_tiles_match_cpu_sdr_hdr_across_aligned_and_packed_rows ... ok
+visible-region planner: 60 exact full SDR/HDR view frames; uploads=46; offscreen_skips=14; aspects=0.5/1/2; root/queue=0
+test planned_visible_regions_match_whole_image_during_pan_zoom_and_pixel_aspect ... ok
+
+test result: ok. 15 passed; 0 failed; 7 ignored; 0 measured; 0 filtered out; finished in 2.48s
+

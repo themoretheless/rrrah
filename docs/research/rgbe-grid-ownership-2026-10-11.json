@@ -1,0 +1,26 @@
+{
+  "tests": {
+    "rgbe": {
+      "passed": 14,
+      "failed": 0,
+      "ignored": 0
+    },
+    "core": {
+      "passed": 117,
+      "failed": 0,
+      "ignored": 2
+    }
+  },
+  "checks": [
+    "exact grid plus output budget 636 bytes",
+    "635-byte budget refuses output and releases grid reservation",
+    "calibration clone shares grid payload and reservation",
+    "last calibration owner releases 60-byte grid payload",
+    "cancellation after normalized allocation releases all credit"
+  ],
+  "log_sha256": {
+    "rgbe": "fcb2a6984affdef66f35c518b988634e7df27a1210f8914b2fcf9bde16f5bd6e",
+    "core": "ce67517c17335113383247b22ebc05ae6dd113f9806c0203e1d92c5cfef89143"
+  },
+  "scope": "Managed allocation ownership and cancellation; not OS memory pressure"
+}

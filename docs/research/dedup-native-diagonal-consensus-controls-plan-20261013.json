@@ -1,0 +1,190 @@
+{
+  "status": "fixed_before_new_native_execution",
+  "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-current-decode-source-20261012",
+  "source_manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-current-decode-gate-20261012.json",
+  "executable": "/Users/themoretheless/.codex/tmp/rrrah-current-native-bank-all-positives-qualified-20261012/native_bank_current_all_positives",
+  "pins": {
+    "docs/research/dedup-bidirectional-consensus-diagnostic-20261013.json": "afe49756b03c512feea6a74c7d87ce4fe0e6c3284152876b27822e21b0a7c632",
+    "docs/research/dedup-current-native-bank-all-positives-20261012.json": "7e36c376f63e7048901b7023dde291b53d34ac77a450d3fa956671284f5336c3",
+    "docs/research/dedup-current-native-bank-complete-audit-20261013.json": "95d298aa5c74a3c255770781ddd5fbab10677b5582aa531646407d8b756e6533",
+    "docs/research/dedup-loftr-native-20261010-runtime-pins.json": "8daa92d3ed2c84278338c53eedffed1fcdc272bf8ee7a419397cd7f098a6783a",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors": "59e55bf0ecd047db9c513672d121a3ea677529ad448bdc3a359e92862c74ddd7",
+    "/Users/themoretheless/.codex/tmp/rrrah-current-native-bank-all-positives-qualified-20261012/native_bank_current_all_positives": "22419b3e8e2b8410118896f459610e40ed74406d427d4093aedad58a18f9415c",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/211901.jpg": "6c076f5642a9de92efb53cfe0734d7140a499fd44d08d2b1d93199c2bfc9bcd9",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/211900.jpg": "81faa5e0860359aa092a5b1e04de4130acd1168182bb5fdf55c7dd73af9fd8fe",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/207400.jpg": "ae2e87b8dc9d0240721ad7cdb3d4e3da91d12caf6cf35aa3cb6086e3ee46cfcf",
+    "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/Q41923.jpg": "dc05a19aef23cfd100a371752c9c8ca092c9fdc753616d16fedd6be1ed0dbdcd",
+    "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/R026396.jpg": "45ce2cd2bc8b2654e2e1a8be1fba3d881480c6425c95de8f288b28d560f6d59b"
+  },
+  "cases": [
+    {
+      "label": "table_true",
+      "left": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/211901.jpg",
+      "right": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/211900.jpg",
+      "source_dimensions": [
+        640,
+        480
+      ],
+      "target_dimensions": [
+        2560,
+        1920
+      ],
+      "source_tolerance": 0.5,
+      "groundtruth": "known_copy",
+      "command": [
+        "/usr/bin/time",
+        "-l",
+        "/usr/bin/env",
+        "DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+        "/Users/themoretheless/.codex/tmp/rrrah-current-native-bank-all-positives-qualified-20261012/native_bank_current_all_positives",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/211901.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/211900.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+        "640",
+        "0.5",
+        "1000000"
+      ]
+    },
+    {
+      "label": "table_true",
+      "left": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/211900.jpg",
+      "right": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/211901.jpg",
+      "source_dimensions": [
+        2560,
+        1920
+      ],
+      "target_dimensions": [
+        640,
+        480
+      ],
+      "source_tolerance": 8.0,
+      "groundtruth": "known_copy",
+      "command": [
+        "/usr/bin/time",
+        "-l",
+        "/usr/bin/env",
+        "DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+        "/Users/themoretheless/.codex/tmp/rrrah-current-native-bank-all-positives-qualified-20261012/native_bank_current_all_positives",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/211900.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/211901.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+        "640",
+        "8.0",
+        "1000000"
+      ]
+    },
+    {
+      "label": "table_wrong",
+      "left": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/211901.jpg",
+      "right": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/207400.jpg",
+      "source_dimensions": [
+        640,
+        480
+      ],
+      "target_dimensions": [
+        1280,
+        960
+      ],
+      "source_tolerance": 1.0,
+      "groundtruth": "published_nonmatch",
+      "command": [
+        "/usr/bin/time",
+        "-l",
+        "/usr/bin/env",
+        "DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+        "/Users/themoretheless/.codex/tmp/rrrah-current-native-bank-all-positives-qualified-20261012/native_bank_current_all_positives",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/211901.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/207400.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+        "640",
+        "1.0",
+        "1000000"
+      ]
+    },
+    {
+      "label": "table_wrong",
+      "left": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/207400.jpg",
+      "right": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/211901.jpg",
+      "source_dimensions": [
+        1280,
+        960
+      ],
+      "target_dimensions": [
+        640,
+        480
+      ],
+      "source_tolerance": 4.0,
+      "groundtruth": "published_nonmatch",
+      "command": [
+        "/usr/bin/time",
+        "-l",
+        "/usr/bin/env",
+        "DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+        "/Users/themoretheless/.codex/tmp/rrrah-current-native-bank-all-positives-qualified-20261012/native_bank_current_all_positives",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/207400.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/211901.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+        "640",
+        "4.0",
+        "1000000"
+      ]
+    },
+    {
+      "label": "portrait_wrong",
+      "left": "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/Q41923.jpg",
+      "right": "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/R026396.jpg",
+      "source_dimensions": [
+        1024,
+        680
+      ],
+      "target_dimensions": [
+        944,
+        568
+      ],
+      "source_tolerance": 2.2314767602431815,
+      "groundtruth": "published_nonmatch",
+      "command": [
+        "/usr/bin/time",
+        "-l",
+        "/usr/bin/env",
+        "DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+        "/Users/themoretheless/.codex/tmp/rrrah-current-native-bank-all-positives-qualified-20261012/native_bank_current_all_positives",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/Q41923.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/R026396.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+        "640",
+        "2.2314767602431815",
+        "1000000"
+      ]
+    },
+    {
+      "label": "portrait_wrong",
+      "left": "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/R026396.jpg",
+      "right": "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/Q41923.jpg",
+      "source_dimensions": [
+        944,
+        568
+      ],
+      "target_dimensions": [
+        1024,
+        680
+      ],
+      "source_tolerance": 1.792534912872715,
+      "groundtruth": "published_nonmatch",
+      "command": [
+        "/usr/bin/time",
+        "-l",
+        "/usr/bin/env",
+        "DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+        "/Users/themoretheless/.codex/tmp/rrrah-current-native-bank-all-positives-qualified-20261012/native_bank_current_all_positives",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/R026396.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/Q41923.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+        "640",
+        "1.792534912872715",
+        "1000000"
+      ]
+    }
+  ],
+  "scope": "Six development-case native directions, same preserved historical2696file caller/weights/runtime as458positive campaign. Sole policy change for known negative examples: sourceTolerance uses prior positive factory2*sourceDiagonal/targetDiagonal instead offixed2.0. Both known false families and true table pair, directions fixed before execution;640input/CPU2threads/seed173/native4096/opposite1m/model25banks/radii2,6. No latest-root qualification, atomic consensus API, default change, independent heldout/representative precision, universal recall or hard RSS cap. Return raw supported/inconclusive rather than treating missing joint support as noncopy."
+}

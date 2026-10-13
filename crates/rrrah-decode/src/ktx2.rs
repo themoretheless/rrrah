@@ -208,6 +208,13 @@ pub(crate) fn decode(b: &[u8], request: &DecodeRequest) -> Result<DecodedRaster,
         return Err(bad("DFD alignment or limit"));
     }
     let color = descriptor(&b[dfd.clone()], f)?;
+    // Only absent primaries may use an explicit import assumption. Known
+    // non-sRGB DFD primaries must not be relabelled as linear sRGB.
+    let color = if b[dfd.start + 13] == 0 {
+        request.qualify_linear_color(color)
+    } else {
+        color
+    };
     let kvd = range(b, word(b, 56)?.into(), word(b, 60)?.into())?;
     if kvd.len() > 4 * 1024 * 1024 || (!kvd.is_empty() && kvd.start % 4 != 0) {
         return Err(bad("metadata alignment or limit"));
@@ -362,6 +369,31 @@ pub(crate) fn decode(b: &[u8], request: &DecodeRequest) -> Result<DecodedRaster,
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn linear_assumption_only_qualifies_absent_dfd_primaries() {
+        let original = include_bytes!("../../../tests/fixtures/raster/precision-32-0.ktx2");
+        let dfd = word(original, 48).unwrap() as usize;
+        let strict = DecodeRequest::new("primaries.ktx2");
+        let mut explicit = strict.clone();
+        explicit.assume_untagged_linear_srgb = true;
+        for primaries in [0, 1, 2, 9, 255] {
+            let mut bytes = original.to_vec();
+            bytes[dfd + 13] = primaries;
+            let baseline = decode(&bytes, &strict).unwrap();
+            let frame = decode(&bytes, &explicit).unwrap();
+            let expected = if primaries == 0 || primaries == 1 {
+                RasterColorSpace::LinearSrgb
+            } else {
+                RasterColorSpace::LinearRgbUnspecified
+            };
+            assert_eq!(frame.color_space(), &expected);
+            assert_eq!(crate::prepare_raster_for_display(&frame).is_ok(), primaries <= 1);
+            assert_eq!(baseline.color_space() == &RasterColorSpace::LinearSrgb, primaries == 1);
+            let (RasterPixels::Rgba32Float(a), RasterPixels::Rgba32Float(b)) =
+                (baseline.pixels(), frame.pixels()) else { panic!("float precision lost") };
+            assert!(a.iter().zip(b.iter()).all(|(a, b)| a.to_bits() == b.to_bits()));
+        }
+    }
     #[test]
     fn all_stored_mips_match_native_sample_contracts() {
         let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/raster");

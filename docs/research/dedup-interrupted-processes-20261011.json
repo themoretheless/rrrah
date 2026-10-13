@@ -1,0 +1,26 @@
+{
+  "status": "confirmed_prior_processes_absent_after_interruption",
+  "reports": [
+    {
+      "report": "docs/research/dedup-gradient-mutual-generic-20261011.json",
+      "sha256": "4a8045c446180720f5824ed20855579540fc72930c8c6c7f1c99c6d6a60b2a7f",
+      "status_at_interruption": "running",
+      "confirmed_missing_pids": [
+        75439,
+        75533
+      ]
+    },
+    {
+      "report": "docs/research/dedup-current-all-query-origins-20261011.json",
+      "sha256": "dceda2bc35c6014e12040ebbaa5214b480b1b02a695d2d4e96c4329421d0354d",
+      "status_at_interruption": "running",
+      "confirmed_missing_pids": [
+        69765,
+        69911
+      ],
+      "preserved_checkpoint": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/current-all-query-origins-qualified-20261011/interrupted-checkpoint-20261011.json"
+    }
+  ],
+  "linux": "Docker socket absent; no live Linux gate claimed",
+  "limits": "No success or failure result inferred for unfinished work"
+}

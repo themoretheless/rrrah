@@ -1,0 +1,445 @@
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/.codex/tmp/rrrah-bidirectional-exposure-atomic-qualified-20261012/crates/rrrah-dedup)
+warning: calls to `std::mem::drop` with a value that implements `Copy` does nothing
+   --> crates/rrrah-dedup/tests/model_compare.rs:144:5
+    |
+144 | /      drop(
+145 | |/         compare_model_files_with(
+146 | ||             &r[0],
+147 | ||             &r[1],
+148 | ||             &w,
+...   ||
+157 | ||         .unwrap(),
+    | ||_________________- argument has type `ModelComparisonEvidence`
+158 | |      );
+    | |______^
+    |
+    = note: `#[warn(dropping_copy_types)]` on by default
+help: use `let _ = ...` to ignore the expression or result
+    |
+144 ~     let _ = compare_model_files_with(
+145 |             &r[0],
+...
+155 |         )
+156 ~         .unwrap();
+    |
+
+warning: calls to `std::mem::drop` with a value that implements `Copy` does nothing
+   --> crates/rrrah-dedup/tests/model_compare.rs:816:5
+    |
+816 | /      drop(
+817 | |/         compare_model_joint_files_with(
+818 | ||             &r[0],
+819 | ||             &r[1],
+820 | ||             &w,
+...   ||
+829 | ||         .unwrap(),
+    | ||_________________- argument has type `ModelComparisonEvidence`
+830 | |      );
+    | |______^
+    |
+help: use `let _ = ...` to ignore the expression or result
+    |
+816 ~     let _ = compare_model_joint_files_with(
+817 |             &r[0],
+...
+827 |         )
+828 ~         .unwrap();
+    |
+
+warning: `rrrah-dedup` (test "model_compare") generated 2 warnings
+warning: constant `LEGACY_TRANSFORM` is never used
+   --> crates/rrrah-dedup/tests/fixtures/joint-geometry-204100.bits.rs:215:7
+    |
+215 | const LEGACY_TRANSFORM: [[u64; 3]; 3] = [
+    |       ^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `LEGACY_INLIERS` is never used
+   --> crates/rrrah-dedup/tests/fixtures/joint-geometry-204100.bits.rs:220:7
+    |
+220 | const LEGACY_INLIERS: &[usize] = &[2, 3, 6, 8, 9, 12, 15, 16, 17, 21, 23, 25, 26, 29, 34, 35, 39, 44, 47, 50, 54, 56, 57, 58, 61, 6...
+    |       ^^^^^^^^^^^^^^
+
+warning: constant `LEGACY_ERROR_BITS` is never used
+   --> crates/rrrah-dedup/tests/fixtures/joint-geometry-204100.bits.rs:221:7
+    |
+221 | const LEGACY_ERROR_BITS: u64 = 4638228804479654434;
+    |       ^^^^^^^^^^^^^^^^^
+
+warning: constant `LEGACY_TRANSFORM` is never used
+   --> crates/rrrah-dedup/tests/fixtures/joint-geometry-211900.bits.rs:117:7
+    |
+117 | const LEGACY_TRANSFORM: [[u64; 3]; 3] = [
+    |       ^^^^^^^^^^^^^^^^
+
+warning: constant `LEGACY_INLIERS` is never used
+   --> crates/rrrah-dedup/tests/fixtures/joint-geometry-211900.bits.rs:122:7
+    |
+122 | const LEGACY_INLIERS: &[usize] = &[0, 1, 3, 4, 5, 6, 7, 8, 12, 13, 14, 16, 17, 20, 21, 22, 24, 26, 27, 30, 32, 33, 34, 36, 38, 39, ...
+    |       ^^^^^^^^^^^^^^
+
+warning: constant `LEGACY_ERROR_BITS` is never used
+   --> crates/rrrah-dedup/tests/fixtures/joint-geometry-211900.bits.rs:123:7
+    |
+123 | const LEGACY_ERROR_BITS: u64 = 4634837829742471289;
+    |       ^^^^^^^^^^^^^^^^^
+
+warning: `rrrah-dedup` (test "projective_pruning") generated 6 warnings
+    Finished `test` profile [optimized + debuginfo] target(s) in 2m 09s
+     Running tests/anchor_rank.rs (/Users/themoretheless/.codex/tmp/rrrah-opposite-native-snapshot-20261011/target/debug/deps/anchor_rank-d59b44c77164973c)
+
+running 5 tests
+test geometry_selected_windows_aggregate_information_and_reject_inverted_or_flat_pixels ... ok
+test overlap_bounds_aliases_and_inconsistent_geometry_are_not_hidden ... ok
+test published_bounds_follow_selected_original_windows_and_exclude_bad_geometry ... ok
+test independent_textures_reject_even_with_exact_bidirectional_geometry ... ok
+test exact_aggregate_limits_and_every_observed_cancellation_release_credits ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.28s
+
+     Running tests/exposure.rs (/Users/themoretheless/.codex/tmp/rrrah-opposite-native-snapshot-20261011/target/debug/deps/exposure-53e7e5705dee4920)
+
+running 5 tests
+test budget_precedes_reads_and_late_cancellation_discards_measurement ... ok
+test uniform_exposure_calibrates_dark_and_hdr_without_clipping ... ok
+test calibration_scratch_and_all_cancellation_boundaries_are_guarded ... ok
+test zero_negative_and_transparent_inputs_refuse_calibration ... ok
+test calibrated_rank_recovers_uniform_darkening_and_rejects_inversion ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/exposure_files.rs (/Users/themoretheless/.codex/tmp/rrrah-opposite-native-snapshot-20261011/target/debug/deps/exposure_files-ca69df3b6ae02130)
+
+running 6 tests
+test file_calibration_budget_overflow_and_cancel_precede_missing_sources ... ok
+test zero_exposure_file_is_explicitly_uninformative_and_releases_scratch ... ok
+test late_file_calibration_cancellation_and_source_mutation_discard_evidence ... ok
+test calibrated_scratch_admission_fails_after_successful_legacy_decode_and_releases_credit ... ok
+test both_request_owners_cancel_mid_calibration_and_at_final_publication ... ok
+test explicit_file_calibration_recovers_dark_rank_and_rejects_inversion ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/geometry.rs (/Users/themoretheless/.codex/tmp/rrrah-opposite-native-snapshot-20261011/target/debug/deps/geometry-20ed03faed756535)
+
+running 9 tests
+test degenerate_least_squares_refinement_preserves_prior_hypothesis ... ok
+test duplicate_and_collinear_support_cannot_inflate_evidence ... ok
+test noisy_corners_refine_to_independently_known_least_squares_solution ... ok
+test scaled_rotated_crop_translation_rejects_watermark_outliers ... ok
+test one_shot_cancel_never_publishes_partial_geometry_and_retry_recovers_support ... ok
+test alternative_geometry_keeps_degeneracy_guards_and_deduplicates_identical_models ... ok
+test reflected_geometry_keeps_support_original_coordinates_and_cancel_atomicity ... ok
+test capped_residual_candidate_preserves_exact_majority_beside_count_winner ... ok
+test alternative_geometry_budget_and_cancellation_never_publish_partial_models ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/information.rs (/Users/themoretheless/.codex/tmp/rrrah-opposite-native-snapshot-20261011/target/debug/deps/information-3cd28263c7f43796)
+
+running 5 tests
+test informative_hash_collision_remains_candidate_and_fails_full_resolution_confirmation ... ok
+test uniform_candidates_and_invisible_rgb_never_invent_visible_pixel_equality ... ok
+test standalone_pixel_search_recovers_equal_transparent_files_without_visual_candidates ... ok
+test indexed_candidates_match_exhaustive_pixel_equality_and_avoid_unrelated_pairs ... ok
+test uniform_local_search_cannot_invent_geometry_or_color_fit ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.21s
+
+     Running tests/joint_projective.rs (/Users/themoretheless/.codex/tmp/rrrah-opposite-native-snapshot-20261011/target/debug/deps/joint_projective-0b747a9709a3b147)
+
+running 4 tests
+test joint_projection_caps_overflow_invalid_and_cancellation_refuse ... ok
+test real_reverse_points_select_joint_support_instead_of_target_only_winner ... ok
+test joint_first_middle_last_cancellation_and_retry_are_deterministic ... ok
+test real_207700_recovers_with_explicit_larger_sampling_and_projection_admission ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.09s
+
+     Running tests/joint_witnesses.rs (/Users/themoretheless/.codex/tmp/rrrah-opposite-native-snapshot-20261011/target/debug/deps/joint_witnesses-a5bc536bb87e96aa)
+
+running 10 tests
+test bank_preflight_and_invalid_suffix_refuse_before_returning_candidate ... ok
+test candidate_qualifier_errors_are_atomic_and_callback_cancellation_wins ... ok
+test every_cancellation_checkpoint_releases_credit ... ok
+test invalid_policy_domain_and_empty_input_do_not_prove_nonidentity ... ok
+test preflight_work_capacity_and_invalid_suffix_refuse_atomically ... ok
+test bank_cancellation_is_atomic_and_output_ownership_is_managed ... ok
+test rejects_both_endpoint_aliases_and_filters_both_residuals ... ok
+test rejected_larger_candidate_does_not_prune_smaller_confirmed_candidate ... ok
+test real_cross_window_669_points_recover_exact_ten_witnesses ... ok
+test real_bank_search_generates_h_without_supplied_transform has been running for over 60 seconds
+test real_bank_search_generates_h_without_supplied_transform ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 85.31s
+
+     Running tests/linear.rs (/Users/themoretheless/.codex/tmp/rrrah-opposite-native-snapshot-20261011/target/debug/deps/linear-fe2d77470f42284d)
+
+running 4 tests
+test hdr_and_sub_byte_differences_are_retained ... ok
+test invalid_samples_budget_and_cancel_are_explicit ... ok
+test hdr_fingerprints_keep_highlight_structure_without_quantization ... ok
+test invisible_rgb_and_signed_zero_are_canonical ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/model_compare.rs (/Users/themoretheless/.codex/tmp/rrrah-opposite-native-snapshot-20261011/target/debug/deps/model_compare-1cb2979d293ca215)
+
+running 47 tests
+test bidirectional_exposure_collection_prepays_reverse_before_input ... ok
+test exposure_recovery_validates_suffix_cumulative_caps_and_overflow_before_io ... ok
+test exposure_collection_admits_all_totals_suffix_and_storage_before_iteration ... ok
+test file_bank_coverage_admits_all_radii_before_io_and_cancel_has_priority ... ok
+test extracted_bank_refuses_changed_source_or_weights_after_provider ... ok
+test extracted_crop_bank_retains_mapped_points_and_last_clone_credit_without_geometry ... ok
+test both_generations_and_ignored_provider_cancellation_are_sticky ... ok
+test either_source_or_model_mutation_during_provider_refuses_and_restored_retry_recovers ... ok
+test exposure_recovery_preserves_primary_support_and_skips_secondary_provider ... ok
+test file_bank_pixel_context_preflight_rejects_overflow_work_and_cancel_before_io ... ok
+test file_bank_empty_is_inconclusive_and_cancelled_provider_discards_retained_prefix ... ok
+test exposure_recovery_advances_only_after_primary_miss_with_one_shared_provider ... ok
+test file_bank_multiple_contexts_discard_last_provider_source_change_and_cancel ... ok
+test file_bank_work_refuses_before_io_and_late_source_change_discards_banks ... ok
+test final_caller_checkpoint_cannot_publish_a_model_result_after_source_or_weight_mutation ... ok
+test global_and_both_request_tokens_cancel_mid_and_final_publication ... ok
+test joint_final_caller_checkpoint_cannot_publish_a_model_result_after_source_or_weight_mutation ... ok
+test file_bank_search_extracts_all_windows_and_confirms_original_pixels ... ok
+test joint_model_projection_admission_precedes_io_and_cancellation_has_priority ... ok
+test joint_model_keeps_original_pixel_confirmation_and_releases_on_cancelled_retry ... ok
+test joint_region_lifecycle_refuses_whole_source_mutation_and_both_request_cancellations ... ok
+test malformed_regions_refuse_before_weight_io_or_provider_and_global_cancel_wins ... ok
+test joint_shifted_crop_domains_confirm_the_same_original_pixels_without_a_translation_error ... ok
+test overlap_exposure_admits_cumulative_calibration_before_io_and_cancel_wins ... ok
+test model_mutation_during_fresh_pixel_confirmation_discards_supported_evidence ... ok
+test exposure_collection_keeps_unknown_pairs_and_recovers_with_shared_provider ... ok
+test file_bank_coverage_keeps_flat_and_inverted_pixels_inconclusive ... ok
+test policy_preflight_and_proposal_count_refuse_without_partial_evidence ... ok
+test provider_cancellation_error_is_typed_cancelled_for_global_and_both_owners ... ok
+test region_lifecycle_refuses_whole_source_mutation_and_both_request_cancellations ... ok
+test shifted_crop_domains_confirm_the_same_original_pixels_without_a_translation_error ... ok
+test overlap_exposure_search_shares_nine_banks_and_retains_selected_metadata ... ok
+test supplied_provider_supports_original_pixels_empty_is_explicit_and_errors_do_not_become_misses ... ok
+test overlap_exposure_last_provider_mutation_and_owner_cancel_discard_all_banks ... ok
+test file_bank_pixels_refuse_flat_or_inverted_even_with_consistent_provider_geometry ... ok
+test overlap_exposure_flat_and_inverted_pixels_keep_compact_miss_unconfirmed ... ok
+test exposure_collection_preserves_primary_support_scheduling_and_owned_report_credit ... ok
+test exposure_recovery_last_secondary_mutation_and_both_owners_are_atomic ... ok
+test file_bank_coverage_recovers_after_insufficient_windows_without_repeating_inference ... ok
+test file_bank_multiple_rank_contexts_do_not_confirm_flat_or_inverted_pixels ... ok
+test file_bank_pixel_contexts_share_extraction_and_report_selected_context ... ok
+test bidirectional_exposure_collection_reverse_final_mutation_and_cancel_discard_batch ... ok
+test exposure_collection_final_pair_mutation_of_prior_source_and_owner_discards_batch ... ok
+test exposure_recovery_primary_success_still_checks_final_outer_weights_and_owners ... ok
+test bidirectional_exposure_collection_preserves_direction_and_skips_supported_suffix ... ok
+test bidirectional_exposure_final_reverse_invalidates_previously_supported_pairs ... ok
+test extracted_bank_empty_is_explicit_and_every_cancel_checkpoint_releases_credit ... ok
+
+test result: ok. 47 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 37.02s
+
+     Running tests/model_tiles.rs (/Users/themoretheless/.codex/tmp/rrrah-opposite-native-snapshot-20261011/target/debug/deps/model_tiles-fea33a6d23e202b9)
+
+running 21 tests
+test joint_source_tolerance_square_overflow_and_underflow_refuse_before_io ... ok
+test joint_projection_total_is_admitted_before_io_even_if_first_tile_could_support ... ok
+test all_eight_work_caps_overflow_invalid_policy_and_storage_refuse_before_io ... ok
+test insufficient_geometry_does_not_swallow_a_later_proposal_work_refusal ... ok
+test joint_insufficient_geometry_does_not_swallow_a_later_proposal_work_refusal ... ok
+test insufficient_anchor_geometry_keeps_the_attempt_and_recovers_on_a_later_rectangle ... ok
+test late_preparation_memory_refusal_discards_cached_inputs_and_all_attempts ... ok
+test joint_whole_support_stops_at_one_and_late_crop_support_stops_only_after_original_pixels ... ok
+test tiny_decoded_domains_omit_empty_quadrants_and_duplicate_full_regions ... ok
+test whole_support_stops_at_one_and_late_crop_support_stops_only_after_original_pixels ... ok
+test joint_complete_fixed_order_visits_all_twenty_five_regions_and_shared_credit_follows_last_owner ... ok
+test geometry_without_original_pixel_support_does_not_stop_the_tile_sequence ... ok
+test exhausted_insufficient_geometry_is_typed_and_retains_the_complete_managed_roster ... ok
+test repeated_regions_reuse_identical_managed_inputs_and_retained_owners_keep_credit ... ok
+test joint_exhausted_insufficient_geometry_is_typed_and_retains_the_complete_managed_roster ... ok
+test complete_fixed_order_visits_all_twenty_five_regions_and_shared_credit_follows_last_owner ... ok
+test late_provider_failures_source_mutations_and_both_generations_discard_all_attempts ... ok
+test final_source_mutation_takes_precedence_over_exhausted_insufficient_geometry ... ok
+test joint_final_source_mutation_takes_precedence_over_exhausted_insufficient_geometry ... ok
+test joint_final_caller_checkpoint_mutation_cancellation_and_request_change_never_publish ... ok
+test final_caller_checkpoint_mutation_cancellation_and_request_change_never_publish ... ok
+
+test result: ok. 21 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.09s
+
+     Running tests/palette_mutation.rs (/Users/themoretheless/.codex/tmp/rrrah-opposite-native-snapshot-20261011/target/debug/deps/palette_mutation-88d549b6e5d61c33)
+
+running 1 test
+test same_length_png_alpha_table_rewrite_invalidates_cache_and_collection_edges ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+     Running tests/palette_transparency.rs (/Users/themoretheless/.codex/tmp/rrrah-opposite-native-snapshot-20261011/target/debug/deps/palette_transparency-8449208902903cd6)
+
+running 3 tests
+test original_uniform_png_hash_collision_does_not_prove_pixel_equality ... ok
+test original_palette_alpha_tables_ignore_hidden_rgb_across_rgba_encoding ... ok
+test indexed_palette_collection_matches_exhaustive_without_uniform_false_edges ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+     Running tests/pixel_search.rs (/Users/themoretheless/.codex/tmp/rrrah-opposite-native-snapshot-20261011/target/debug/deps/pixel_search-d2ac98d7c552e9b1)
+
+running 16 tests
+test opaque_uniform_png_and_independently_encoded_bmp_are_discovered_as_equal ... ok
+test untagged_hdr_requires_color_qualification_even_with_encoded_srgb_assumption ... ok
+test changed_source_discards_every_stale_decision_and_preserves_healthy_pairs ... ok
+test indexed_wal_palette_mutation_discards_stale_source_decisions ... ok
+test indexed_roots_preserve_non_utf8_diagnostics_without_losing_healthy_equality ... ok
+test recursive_request_factory_preserves_explicit_hdr_color_and_discovered_paths ... ok
+test indexed_source_changed_before_its_decode_is_not_admitted_as_fresh ... ok
+test explicitly_qualified_linear_hdr_matches_endianness_without_losing_precision_or_scale ... ok
+test final_generation_change_and_transient_user_cancel_return_no_report ... ok
+test indexed_changed_source_discards_stale_pairs ... ok
+test recursive_pixel_search_keeps_corrupt_and_missing_sources_as_diagnostics ... ok
+test indexed_recursive_search_isolates_corruption_and_preserves_overlapping_roots ... ok
+test indexed_pixel_permission_error_preserves_healthy_pairs_and_recovers ... ok
+test indexed_final_generation_and_transient_cancel_return_no_report ... ok
+test indexed_two_key_groups_are_deterministic_across_request_orders ... ok
+test indexed_unique_collection_fits_zero_pair_budget_and_decodes_once_per_key ... ok
+
+test result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.16s
+
+     Running tests/pixels.rs (/Users/themoretheless/.codex/tmp/rrrah-opposite-native-snapshot-20261011/target/debug/deps/pixels-fa3199f24fccfc75)
+
+running 6 tests
+test invisible_rgb_is_canonical_but_visible_pixels_are_exact ... ok
+test identical_pixels_honor_each_block_and_final_cancellation_checkpoint ... ok
+test gradient_has_independently_known_difference_bits ... ok
+test validates_layout_budget_and_cancellation ... ok
+test uniform_hash_collision_is_not_informative ... ok
+test identical_and_transparent_pixel_equality_observe_late_cancellation ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/portfolio_collection.rs (/Users/themoretheless/.codex/tmp/rrrah-opposite-native-snapshot-20261011/target/debug/deps/portfolio_collection-74316a1a0fe22014)
+
+running 36 tests
+test bank_recovery_collection_checks_all_cumulative_work_before_iterator ... ok
+test bank_collection_complete_work_and_all_radii_precede_iterator_consumption ... ok
+test cumulative_overflow_policy_and_memory_preflight_precede_iterator_and_io ... ok
+test duplicate_file_and_complete_pair_limits_refuse_before_file_io ... ok
+test empty_and_single_file_batches_are_complete_without_invented_pairs ... ok
+test idle_owner_cancellation_and_late_provider_failure_discard_earlier_decisions ... ok
+test joint_model_collection_projection_preflight_and_canonical_exhaustive_support ... ok
+test a_native_empty_proposal_bank_does_not_hide_model_only_collection_support ... ok
+test native_bank_collection_checks_all_cumulative_work_before_iterator ... ok
+test every_pair_is_deterministic_matches_direct_evidence_and_credit_follows_report_owners ... ok
+test late_tiled_pair_failure_or_idle_owner_cancellation_discards_earlier_collection_results ... ok
+test fatal_failure_after_unknown_still_discards_entire_outcome_collection ... ok
+test collection_checks_every_pair_with_automatic_tiles_and_retained_attempt_credit ... ok
+test joint_model_fatal_failure_after_unknown_still_discards_entire_outcome_collection ... ok
+test recovery_collection_preflight_precedes_iterator_and_io ... ok
+test final_cancellation_or_final_callback_source_mutation_never_publishes_a_stale_batch ... ok
+test native_bank_collection_all_unknown_pairs_preserve_stage_trace ... ok
+test scheduled_fallback_retains_inconclusive_geometry_as_unknown ... ok
+test scheduled_late_provider_failure_discards_prior_confirmed_pairs ... ok
+test scheduled_mismatch_refuses_before_missing_source_or_model_io ... ok
+test scheduled_outcome_collection_keeps_all_pairs_and_canonical_report ... ok
+test bank_recovery_collection_late_fatal_discards_earlier_unknown_and_cancel_wins ... ok
+test recovery_collection_unknowns_late_provider_failure_and_final_weight_guard ... ok
+test native_bank_collection_late_fatal_discards_earlier_unknown_and_cancel_wins ... ok
+test insufficient_geometry_is_retained_for_every_pair_in_both_search_orders ... ok
+test native_evidence_and_report_slots_have_independent_last_owner_credit ... ok
+test native_bank_collection_opposite_support_skips_model_and_retains_managed_evidence ... ok
+test joint_model_insufficient_geometry_is_retained_for_every_pair_in_both_search_orders ... ok
+test bank_collection_unknown_is_retained_and_later_fatal_or_weight_change_discards_batch ... ok
+test bank_recovery_collection_unknown_advances_to_opposite_and_retains_managed_evidence ... ok
+test bank_recovery_collection_primary_support_canonical_all_pairs_both_orders_and_schedule ... ok
+test native_bank_collection_primary_support_canonical_all_pairs_both_orders_and_schedule ... ok
+test bank_collection_all_pairs_both_orders_and_scheduling_preserve_canonical_records ... ok
+test joint_collection_projection_preflight_precedes_iterator_and_exhaustive_recovery ... ok
+test native_bank_collection_final_publication_rechecks_every_file_after_last_callback ... ok
+test recovery_collection_schedule_keeps_fallback_pairs_and_canonical_publication ... ok
+
+test result: ok. 36 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 12.03s
+
+     Running tests/projective_domains.rs (/Users/themoretheless/.codex/tmp/rrrah-opposite-native-snapshot-20261011/target/debug/deps/projective_domains-2617d49aa07df2af)
+
+running 4 tests
+test inverse_horizon_is_rejected_even_when_forward_domain_is_valid ... ok
+test supported_horizon_model_is_excluded_from_whole_domains ... ok
+test admissible_model_matches_original_and_cancellation_is_atomic ... ok
+test valid_alternative_survives_a_stronger_horizon_consensus ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/projective_pruning.rs (/Users/themoretheless/.codex/tmp/rrrah-opposite-native-snapshot-20261011/target/debug/deps/projective_pruning-51c39162bbffdd54)
+
+running 3 tests
+test cancellation_and_malformed_suffix_still_refuse_before_any_evidence ... ok
+test real_reverse_correspondences_match_complete_reference_in_both_scoring_modes ... ok
+test seeded_identity_noise_and_outliers_match_unpruned_bits_and_exercise_dominance ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.24s
+
+     Running tests/rank_region.rs (/Users/themoretheless/.codex/tmp/rrrah-opposite-native-snapshot-20261011/target/debug/deps/rank_region-065b0cbe97f7efc1)
+
+running 7 tests
+test filter_zero_preserves_evidence_and_callback_work ... ok
+test filtered_overflow_and_mid_window_cancel_return_no_partial_evidence ... ok
+test flat_pixels_budget_and_cancellation_do_not_produce_evidence ... ok
+test invalid_domains_policy_alpha_and_scene_range_are_explicit ... ok
+test independent_textures_are_not_high_agreement_evidence ... ok
+test nonlinear_monotone_transfer_preserves_local_order_but_inversion_does_not ... ok
+test filtered_identity_matches_independent_box_counts_and_read_budget ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/search_portfolio.rs (/Users/themoretheless/.codex/tmp/rrrah-opposite-native-snapshot-20261011/target/debug/deps/search_portfolio-35b12520fe4864fe)
+
+running 35 tests
+test cumulative_and_both_policy_preflight_precede_io_cancel_wins ... ok
+test bank_portfolio_all_work_precedes_native_first_io_and_cancel_wins ... ok
+test bank_joint_recovery_complete_admission_and_cancel_precede_io ... ok
+test cross_stage_source_or_weight_changes_and_provider_errors_never_become_misses ... ok
+test both_orders_stop_at_support_and_misses_advance_without_leaked_payload ... ok
+test joint_model_cross_stage_source_or_weight_changes_and_provider_errors_never_become_misses ... ok
+test joint_model_projection_preflight_precedes_even_native_first_io ... ok
+test joint_model_portfolio_final_user_checkpoint_cannot_publish_mutated_sources_or_weights ... ok
+test bank_joint_recovery_late_provider_failure_cannot_enter_opposite ... ok
+test native_family_first_all_stage_work_precedes_io_and_cancel_wins ... ok
+test bank_portfolio_last_provider_weight_change_discards_all_evidence ... ok
+test global_and_both_generations_cancel_entry_and_terminal_publication ... ok
+test joint_model_automatic_tiles_recover_after_full_misses_in_both_orders_and_exhaust_before_native_fallback ... ok
+test portfolio_final_user_checkpoint_cannot_publish_mutated_sources_or_weights ... ok
+test automatic_tiles_recover_after_full_misses_in_both_orders_and_exhaust_before_native_fallback ... ok
+test provider_failure_after_an_inconclusive_tile_remains_terminal ... ok
+test recovery_preflight_admits_all_work_and_storage_before_io ... ok
+test final_source_mutation_and_cancellation_precede_portfolio_inconclusive_publication ... ok
+test complete_native_miss_cannot_turn_model_insufficiency_into_an_ordinary_negative_in_either_order ... ok
+test tiled_and_aggregate_work_refuse_before_io_even_in_native_first_order ... ok
+test bank_portfolio_empty_learned_and_native_miss_remain_typed_unknown ... ok
+test recovery_negative_cannot_erase_primary_unknown_and_publication_is_guarded ... ok
+test bank_joint_recovery_bank_support_stops_before_opposite_and_empty_stays_unknown ... ok
+test bank_portfolio_confirms_in_both_orders_after_native_miss ... ok
+test native_family_first_model_support_or_unknown_follows_both_native_misses ... ok
+test recovery_primary_support_is_lazy_and_releases_reserved_storage ... ok
+test insufficient_model_anchor_geometry_advances_to_independently_verified_native_support ... ok
+test native_early_support_never_calls_model_and_model_miss_falls_through ... ok
+test bank_unknown_advances_to_native_support_and_native_first_skips_model ... ok
+test native_family_first_support_does_not_call_provider_and_has_explicit_trace ... ok
+test native_family_first_publication_checks_weights_after_early_opposite_support ... ok
+test joint_recovery_preflight_and_real_fallback_cancel_retry ... ok
+test recovery_runs_opposite_after_primary_miss_and_cancel_retry_releases ... ok
+test bank_joint_recovery_unknown_advances_to_joint_opposite_with_final_guards ... ok
+test exhausted_native_anchor_geometry_advances_to_independently_verified_model_support ... ok
+
+test result: ok. 35 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 13.86s
+

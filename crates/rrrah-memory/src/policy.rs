@@ -82,6 +82,15 @@ impl<K: Clone + Eq + Hash, V> WeightedLru<K, V> {
         {
             return None;
         }
+        // Policy changes do not rewrite existing TTL deadlines. When membership
+        // already fits, there are no victims to plan or keys to clone/sort.
+        if self.resident <= limits.max_bytes
+            && limits.max_entries.is_none_or(|max| self.entries.len() <= max)
+        {
+            self.capacity = limits.max_bytes;
+            self.limits = limits;
+            return Some(Vec::new());
+        }
         let now = Instant::now();
         let mut candidates: Vec<_> = self
             .entries
@@ -699,6 +708,38 @@ mod tests {
 mod limit_tests {
     use super::*;
     use crate::MemoryBudget;
+    #[test]
+    fn fitting_policy_update_does_not_clone_collection_keys_or_change_lru() {
+        use std::sync::{Arc, atomic::{AtomicUsize, Ordering}};
+        #[derive(Debug)]
+        struct Key(u32, Arc<AtomicUsize>);
+        impl Clone for Key {
+            fn clone(&self) -> Self {
+                self.1.fetch_add(1, Ordering::Relaxed);
+                Self(self.0, self.1.clone())
+            }
+        }
+        impl PartialEq for Key { fn eq(&self, other: &Self) -> bool { self.0 == other.0 } }
+        impl Eq for Key {}
+        impl Hash for Key {
+            fn hash<H: std::hash::Hasher>(&self, state: &mut H) { self.0.hash(state); }
+        }
+        let clones = Arc::new(AtomicUsize::new(0));
+        let mut cache = WeightedLru::new(100_000);
+        for id in 0..100_000 {
+            assert!(cache.insert(Key(id, clones.clone()), id, 1));
+        }
+        assert_eq!(cache.get(&Key(0, clones.clone())), Some(&0));
+        clones.store(0, Ordering::Relaxed);
+        let limits = CacheLimits {
+            max_bytes: 100_000, max_entries: Some(100_000), ttl: Some(Duration::ZERO),
+        };
+        assert!(cache.set_limits(limits).unwrap().is_empty());
+        assert_eq!(clones.load(Ordering::Relaxed), 0);
+        assert_eq!(cache.len(), 100_000);
+        assert_eq!(cache.drain_expired().len(), 0, "existing deadlines stay fixed");
+        assert_eq!(cache.take_lru().map(|(key, value)| (key.0, value)), Some((1, 1)));
+    }
     #[test]
     fn resizing_preserves_pins_and_returns_ordered_spill_without_partial_failure() {
         let mut cache = WeightedLru::new(12);

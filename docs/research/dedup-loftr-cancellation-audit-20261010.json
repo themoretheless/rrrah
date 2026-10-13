@@ -1,0 +1,102 @@
+{
+  "status": "complete_adopted_cooperative_native_inference_cancellation",
+  "previous_goal_turn_classification": "progress",
+  "previous_progress": "Strip convolution adopted with verified real-case RSS reduction.",
+  "module_tests_macos": 40,
+  "generic_tests_per_platform": 7,
+  "generic_platforms": [
+    "macOS ARM64, current decoder dependencies",
+    "native aarch64 Linux, older pinned decoder dependencies"
+  ],
+  "module_test_names": [
+    "backbone::tests::build_backbone_rejects_unsupported_resolution",
+    "backbone::tests::build_backbone_supports_outdoor_config",
+    "backbone::tests::resnet_fpn_8_2_matches_expected_output_shapes",
+    "backbone::tests::strip_cancellation_never_returns_partial_convolution",
+    "backbone::tests::tiled_convolution_matches_full_convolution_at_seams_and_borders",
+    "coarse_matching::tests::border_mask_removes_all_matches_on_tiny_grid",
+    "coarse_matching::tests::dual_softmax_identity_features_match_diagonal",
+    "coarse_matching::tests::masks_remove_masked_tokens_from_matches",
+    "fine_matching::tests::empty_matches_return_coarse_points",
+    "fine_matching::tests::forward_produces_offset_for_peaked_heatmap",
+    "fine_matching::tests::forward_uses_batch_scale1_when_present",
+    "fine_preprocess::tests::empty_matches_return_empty_windows",
+    "fine_preprocess::tests::forward_selects_only_requested_windows_without_concat",
+    "fine_preprocess::tests::forward_with_concat_keeps_output_shape",
+    "fine_preprocess::tests::stride_matches_kornia_height_axis_behavior",
+    "fine_preprocess::tests::unfold_local_windows_matches_expected_patch_layout",
+    "linear_attention::tests::full_attention_preserves_shape",
+    "linear_attention::tests::linear_attention_preserves_shape",
+    "linear_attention::tests::linear_attention_zeroes_masked_queries",
+    "loftr::tests::extract_loftr_matches_parses_tuple_outputs",
+    "loftr::tests::extract_loftr_matches_rejects_wrong_arity",
+    "loftr::tests::normalize_loftr_image_accepts_rgb_chw",
+    "loftr::tests::normalize_loftr_image_rejects_invalid_rank",
+    "loftr::tests::normalize_loftr_image_scales_byte_range_to_unit_interval",
+    "loftr_config::tests::indoor_matches_outdoor_defaults",
+    "loftr_config::tests::indoor_new_only_flips_temp_bug_fix",
+    "loftr_config::tests::outdoor_config_matches_kornia_defaults",
+    "loftr_model::tests::cancellation_at_every_inference_checkpoint_discards_output_and_allows_retry",
+    "loftr_model::tests::model_forward_smoke_returns_consistent_output_shapes",
+    "loftr_model::tests::model_variable_names_match_kornia_prefixes",
+    "loftr_model::tests::regression_no_eager_debug_preserves_outputs_and_public_debug",
+    "position_encoding::tests::create_position_encoding_has_expected_shape",
+    "position_encoding::tests::forward_expands_internal_encoding_when_input_is_larger",
+    "position_encoding::tests::forward_rejects_wrong_channel_count",
+    "position_encoding::tests::temp_bug_fix_changes_encoding_values",
+    "transformer::tests::coarse_and_fine_transformer_cancellation_between_each_evaluation",
+    "transformer::tests::encoder_layer_preserves_shape",
+    "transformer::tests::transformer_accepts_masks_and_preserves_feature_shapes",
+    "transformer::tests::transformer_preserves_feature_shapes",
+    "transformer::tests::transformer_rejects_wrong_feature_dim"
+  ],
+  "generic_test_names": [
+    "both_generations_and_ignored_provider_cancellation_are_sticky",
+    "either_source_or_model_mutation_during_provider_refuses_and_restored_retry_recovers",
+    "global_and_both_request_tokens_cancel_mid_and_final_publication",
+    "model_mutation_during_fresh_pixel_confirmation_discards_supported_evidence",
+    "policy_preflight_and_proposal_count_refuse_without_partial_evidence",
+    "provider_cancellation_error_is_typed_cancelled_for_global_and_both_owners",
+    "supplied_provider_supports_original_pixels_empty_is_explicit_and_errors_do_not_become_misses"
+  ],
+  "real_native_decision_parity_cases": 6,
+  "changed_metadata_fields": [
+    "scope"
+  ],
+  "real_cancellation_points": 18,
+  "real_forward_checkpoints": [
+    317,
+    465
+  ],
+  "real_raw_proposals": [
+    263,
+    925
+  ],
+  "real_retry_exact": true,
+  "current_native_provider_check": "passed --locked --offline",
+  "generic_runtime_patch_needed": false,
+  "generic_regression_first_run": "passed existing sticky cancellation normalization",
+  "managed_credit_released": true,
+  "maximum_observed_process_rss_bytes": 1642774528,
+  "scope": "Model callback forwarded through stages, transformer evaluations and convolution strips; real model qualification is macOS CPU only.",
+  "limits": [
+    "A running libtorch kernel is not preempted; no hard cancellation latency bound.",
+    "Total tensor/RSS admission remains open, and inference still exceeds the managed payload budget.",
+    "Model weights load is checked only before/after.",
+    "Native real comparisons use previous pinned decoder dependencies; current generic runtime is identical.",
+    "Broader corpus recall/precision, other model platforms/devices and automatic six-phase integration remain open.",
+    "Current check records three unused private noncancellable wrappers and the existing missing-Debug warning."
+  ],
+  "pins": {
+    "docs/research/dedup-loftr-cancellation-measurement-20261010.json": "e1624738f1a1ed50c5f8dee9d91c3cd8a5cc672da56fafd565e4e5cc6535e1c4",
+    "docs/research/dedup-loftr-cancel-forward-20261010.json": "babf720b81acda3e965db98c876d8dbbdf1280d51ce4f0d45ccd026923a7d288",
+    "docs/research/dedup-loftr-cancellation-snapshot-20261010.json": "6d89512d78196ed71de4b3cff03114c46add6f961aa732c9bfcacc55bba06a6a",
+    "docs/research/dedup-loftr-cancellation-adoption-20261010.json": "8e1261765e0b756cc1ec598b56a78cac9d268f78c92b8d7fd20ef42ea6db5007",
+    "docs/research/dedup-loftr-provider-cancel-linux-snapshot-20261010.json": "2af0aea7b4c3f9ea828bbb4e97a9bcc54f9e4b1cad992dc3fb6913564ba1ea52",
+    "docs/research/dedup-loftr-cancellation-frozen-tests-20261010.log": "6327e9c3fc2907cd9dc301b3c100e38810bbe058f75f156986902bcef662e8d6",
+    "docs/research/dedup-loftr-provider-cancel-tests-20261010.log": "9fa5c6f40d13f82e5bdd31efb8dcdd1e5d6d594836676641fc61efd2f5974d68",
+    "docs/research/dedup-loftr-provider-cancel-linux-20261010.log": "d6a7055e95932218029dd01e59811ef7e7e8844c41ca288b5f2fa57ad0c8adf7",
+    "docs/research/dedup-loftr-provider-cancel-red-20261010.log": "5633c45d593e24315556c6fbc85d21810e3413ab14a60e19aa8489b6a3a006e4",
+    "docs/research/dedup-loftr-cancellation-adoption-check-20261010.log": "8cdb394dfa2599346892b3ab77d37676cc3077b3d80e5d8db0a2e57247a3996b"
+  }
+}

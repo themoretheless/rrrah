@@ -1,0 +1,66 @@
+{
+  "status": "verified_targeted_three_file_review_public_path_counterexamples",
+  "commit": "a74f90d293e05856d19a4c0ac2b29b46ef16cf23",
+  "fully_read_additional_files": {
+    "fclones/src/path.rs": 529,
+    "fclones/src/selector.rs": 245,
+    "fclones/src/transform.rs": 526
+  },
+  "original_tests_passed": 17,
+  "tests": [
+    "path::test::convert",
+    "path::test::encode_decode_stfu8",
+    "path::test::file_name",
+    "path::test::is_absolute",
+    "path::test::is_prefix_of",
+    "path::test::parent",
+    "path::test::root",
+    "path::test::serialize",
+    "path::test::share_parents",
+    "path::test::strip_prefix",
+    "selector::test::include_absolute",
+    "selector::test::include_exclude",
+    "selector::test::include_relative",
+    "selector::test::include_relative_root_base",
+    "selector::test::match_all",
+    "selector::test::matches_dir",
+    "selector::test::prefix_wildcard"
+  ],
+  "public_counterexamples": 3,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/fclones-hasher-source-20261012.json": "54d14fd6f77c95467e02139da2daabbbe9e237abf2d03400abfd39593e32d176",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/fclones-public-path-control-20261012.json": "b3a26bee48ae2c9b4f2dedebc8c70ba217bb575c416f9a37afb1165cc998f151",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/fclones-upstream-verification-20261012.json": "9cf8b64c4e8cc34e2100ecef5b8e20a1cc9b2c5e75c6a0891dda2952766e3dac",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-upstream-executables-20261012/lib": "738c143872942a290b4df90b62b23527f12dfe6c5d6822069a4ad394ade7b09e",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-public-path-control-executable-20261012": "73d9d1c5b7f83059fa5b9e174033271bbf22bbd79cea25ccd40ff5aafc903f32",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-fclones-path-selector-transform-20261012.py": "dd2f2c219ea4545b2417d75bdd67336eaccadc6bad8ea1510aa4ad8b9d8ce144",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-path-tests-20261012.log": "4aaa2503c27fe821edd5220e82ea483dc63503a0f30e5b77fe64db94afa2e1ac",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-selector-tests-20261012.log": "4ac7fa5e797968b3240bf035d6594dbe50fc548779442e4d894c8d3ec78d2c54",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-full-source-20261012/fclones/src/path.rs": "58ec5156606b0226840a7df82e22ba2d25262d11155c77ffe21f658bb1074b6f",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-full-source-20261012/fclones/src/selector.rs": "55a05d1c6b289321fe2cdd0bfc56b0b6ca85955c6fc0656828f847b0a5b38bd0",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-full-source-20261012/fclones/src/transform.rs": "86b3edcb0bdc2ba7d97d6170fefe708993774b037cf319ee1e7688d161cbaea9"
+  },
+  "findings": [
+    {
+      "location": "fclones/src/path.rs:150",
+      "kind": "executed_public_counterexample",
+      "detail": "strip_prefix returns Some(current directory) when the source ends before matching longer base: /foo vs /foo/bar, / vs /foo, a vs a/b. Two ordinary controls agree with std. Non-UTF8 Unix roundtrip succeeds. Current tree has no other call site except strip_root with actual root and tests; no CLI grouping impact claimed."
+    },
+    {
+      "location": "fclones/src/path.rs:40",
+      "kind": "source_observation",
+      "detail": "Arc parents share path prefixes, but components, hashing and traversal recursively follow them. No total RSS bound or Windows execution proven; Windows OsStr conversion unwrap requires Unicode."
+    },
+    {
+      "location": "fclones/src/selector.rs:54",
+      "kind": "source_observation",
+      "detail": "Pattern selection uses lossy strings for paths and names; byte-distinct invalid UTF8 names can map to the same replacement text. Original seven tests only cover text patterns."
+    },
+    {
+      "location": "fclones/src/transform.rs:293",
+      "kind": "source_observation",
+      "detail": "Execution drop drains output and waits on child, with no deadline/cancellation in this module; stderr is read into an unbounded String in background. No hanging process or memory stress control executed."
+    }
+  ],
+  "scope": "Three complete files read and public upstream path API exercised on macOS ARM64. Full42tree/full500 review remains incomplete. No upstream implementation adopted, no deletion/transform commands run by this new control, no Windows qualification."
+}

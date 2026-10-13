@@ -1,0 +1,30 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+    Finished `test` profile [optimized + debuginfo] target(s) in 16.33s
+     Running tests/model_projected_compare.rs (target/debug/deps/model_projected_compare-4e390d9d2ef936a0)
+
+running 8 tests
+test work_and_invalid_thresholds_refuse_before_provider ... ok
+test transparent_black_collision_is_rejected_by_original_alpha ... ok
+test hdr_original_proof_accepts_copy_and_rejects_equal_projection_collision ... ok
+test rejected_identity_continues_fitted_proof_and_charges_both_grids_for_each_mapping ... ok
+test identity_candidate_recovers_noisy_self_geometry_without_loosening_pixel_policy ... ok
+test each_request_generation_and_tiny_memory_refusal_release_all_owners ... ok
+test source_and_weights_mutation_in_provider_never_publish_evidence ... ok
+test cancellation_and_final_checkpoint_mutations_discard_result ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+

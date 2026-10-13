@@ -1,0 +1,295 @@
+--- before/native_spatial.rs
++++ after/native_spatial.rs
+@@ -240,6 +240,10 @@
+     }
+ }
+ 
++struct GeometryKeyTrace {enabled:bool,checks:std::cell::Cell<usize>,misses:std::cell::Cell<usize>}
++impl Drop for GeometryKeyTrace {
++    fn drop(&mut self) {if self.enabled {eprintln!("SPATIAL_GEOMETRY_FIELD_KEYS checks={} mismatches={}",self.checks.get(),self.misses.get());}}
++}
+ struct FieldObservation {key:std::cell::RefCell<Option<FieldKey>>,work:std::cell::Cell<usize>}
+ impl FieldObservation {
+     fn new()->Self {Self {key:std::cell::RefCell::new(None),work:std::cell::Cell::new(0)}}
+@@ -318,7 +322,7 @@
+ pub(super) enum SpatialCommand<'a> {
+     RetainedPaint {regions:&'a [usize],paint:&'a super::native_paint::NativePaint,mode:BlendMode},
+     // Owners must be ordered by descending original triangle index.
+-    NativeSampledPaint {field:NativeField,regions:&'a [usize],sample:&'a NativeSpatialSampler<'a>,owners:&'a [(usize,usize)],alpha_is_shape:bool,mode:BlendMode},
++    NativeSampledPaint {cells:Option<&'a RasterRegionKeys>,field:NativeField,regions:&'a [usize],sample:&'a NativeSpatialSampler<'a>,owners:&'a [(usize,usize)],alpha_is_shape:bool,mode:BlendMode},
+     BeginInSpace {space:&'a hayro_interpret::color::ColorSpace,knockout:bool,opacity:f64,alpha_is_shape:bool,mode:BlendMode},
+     /// Mask sampler supplies native alpha or separately verified luminosity;
+     /// all mask boundaries must be included in the spatial arrangement.
+@@ -413,7 +417,7 @@
+ #[test]
+ fn affine_route_qualification_ignores_inactive_sources_and_rejects_unsafe_lifecycles() {
+     let sample=|_:kurbo::Point,_:&dyn Fn()->bool,_:&mut usize,_:Option<usize>|Some(None);
+-    let make=|field,mode,ais|SpatialCommand::NativeSampledPaint {field,regions:&[0],sample:&sample,owners:&[(0,7)],alpha_is_shape:ais,mode};
++    let make=|field,mode,ais|SpatialCommand::NativeSampledPaint {cells:None,field,regions:&[0],sample:&sample,owners:&[(0,7)],alpha_is_shape:ais,mode};
+     let normal=make(NativeField::AffineOwner,BlendMode::Normal,false);
+     let unknown=make(NativeField::Unknown,BlendMode::Normal,false);
+     let constant=make(NativeField::ConstantCells,BlendMode::HardLight,false);
+@@ -665,6 +669,8 @@
+     let route_is_affine=std::cell::Cell::new(false);
+     let source_field_key=FieldObservation::new();
+     let collect_fields=observe_moments && std::env::var_os("RRRAH_AI_SOURCE_FIELD_MOMENTS").is_some();
++    let geometry_field_keys=collect_fields && std::env::var_os("RRRAH_AI_GEOMETRY_FIELD_KEYS").is_some();
++    let geometry_trace=GeometryKeyTrace {enabled:geometry_field_keys,checks:std::cell::Cell::new(0),misses:std::cell::Cell::new(0)};
+     let mut evaluate=|_winding:&[i32],point:kurbo::Point,coverage:&[u64;64],occupied_words:u64| {
+         work_trace.hit(0);
+         let local=work_trace.measure(0,remaining,|remaining| {
+@@ -863,7 +869,7 @@
+         };
+         let route_generation=routes[route_index].generation;
+         let mut resolve_native=|command_index:usize,remaining:&mut usize| {
+-            let SpatialCommand::NativeSampledPaint {sample,field,..}=&commands[command_index] else {return None;};
++            let SpatialCommand::NativeSampledPaint {sample,field,cells,..}=&commands[command_index] else {return None;};
+                 work_trace.measure(3,remaining,|remaining| {
+                         let before=*remaining;
+                         let owner=work_trace.measure(5,remaining,|remaining| {
+@@ -899,6 +905,15 @@
+                         })?;
+                         if observe_moments {
+                             let identity=field.identity(owner,source.as_ref());
++                            if geometry_field_keys && matches!(field,NativeField::ConstantCells) {
++                                let mut budget=4_000_000;
++                                let predicted=cells.and_then(|cells|cells.covered_key(coverage,&mut budget,cancelled));
++                                source_field_key.work.set(source_field_key.work.get().saturating_add(4_000_000-budget));
++                                geometry_trace.checks.set(geometry_trace.checks.get()+1);
++                                if predicted!=source.as_ref().and_then(|sample|sample.cell_key) {
++                                    geometry_trace.misses.set(geometry_trace.misses.get()+1);route_is_affine.set(false);
++                                }
++                            }
+                             if identity.is_none() {route_is_affine.set(false);}
+                             if collect_fields {
+                                 if !source_field_key.append(command_index,identity) {route_is_affine.set(false);}
+@@ -1436,6 +1451,60 @@
+     assert_eq!(used.load(Ordering::Relaxed),0);
+ }
+ 
++/// Per-source bindings into the deduplicated geometry arrangement. Equal
++/// screen geometry in different images never gives the images equal texels.
++pub(super) struct RasterRegionKeys {
++    color:Vec<(usize,u64)>,alpha:Vec<(usize,u64)>,alpha_present:bool,
++    _credit:Box<dyn std::any::Any+Send+Sync>,
++}
++impl RasterRegionKeys {
++    pub(super) fn counts(&self)->(usize,usize) {(self.color.len(),self.alpha.len())}
++    fn covered_key(&self,coverage:&[u64;64],remaining:&mut usize,cancelled:&dyn Fn()->bool)->Option<[u64;2]> {
++        let mut select=|bindings:&[(usize,u64)]| {
++            let mut selected=None;
++            for &(region,key) in bindings {
++                if cancelled() {return None;}*remaining=remaining.checked_sub(1)?;
++                if coverage[region/64]&(1u64<<(region%64))!=0 {
++                    if selected.is_some_and(|old|old!=key) {return None;}selected=Some(key);
++                }
++            }
++            selected
++        };
++        let color=select(&self.color)?;
++        let alpha=if self.alpha_present {select(&self.alpha)?} else {u64::MAX};
++        Some([color,alpha])
++    }
++}
++pub(super) fn admitted_raster_region_keys(color:&RasterCells,alpha:Option<&RasterCells>,regions:&[(&BezPath,Fill)],
++    remaining:&mut usize,cancelled:&dyn Fn()->bool,
++    admit:&dyn Fn(usize)->Option<Box<dyn std::any::Any+Send+Sync>>)->Option<RasterRegionKeys> {
++    if cancelled() || regions.len()>4095 || !color.has_texel_grid() || alpha.is_some_and(|a|!a.has_texel_grid()) {return None;}
++    let count=color.paths.len().checked_sub(1)?.checked_add(alpha.map_or(0,|a|a.paths.len().saturating_sub(1)))?;
++    let credit=admit(count.checked_mul(size_of::<(usize,u64)>())?)?;
++    let mut bind=|cells:&RasterCells| {
++        let mut keys=Vec::new();keys.try_reserve_exact(cells.paths.len().checked_sub(1)?).ok()?;
++        if keys.capacity()>cells.paths.len()-1 {return None;}
++        for (path_index,path) in cells.paths.iter().enumerate().skip(1) {
++            let key=cells.texel_key(path_index)?;let mut found=None;
++            for (region,(candidate,fill)) in regions.iter().enumerate() {
++                if cancelled() {return None;}*remaining=remaining.checked_sub(1)?;
++                if *fill==Fill::NonZero && (std::ptr::eq(*candidate,path) || candidate.elements()==path.elements()) {found=Some(region);break;}
++            }
++            if let Some(region)=found {
++                for &(old_region,old_key) in &keys {
++                    if cancelled() {return None;}*remaining=remaining.checked_sub(1)?;
++                    if old_region==region && old_key!=key {return None;}
++                }
++                keys.push((region,key));
++            }
++        }
++        Some(keys)
++    };
++    let color=bind(color)?;let alpha_present=alpha.is_some();
++    let alpha=if let Some(alpha)=alpha {bind(alpha)?} else {Vec::new()};
++    Some(RasterRegionKeys {color,alpha,alpha_present,_credit:credit})
++}
++
+ #[derive(Clone,Copy)]
+ struct RasterCellGrid {x0:u32,y0:u32,x1:u32,y1:u32}
+ pub(super) struct RasterCells {
+@@ -1882,7 +1951,7 @@
+     let clear=Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap();
+     let path=kurbo::Rect::new(0.,0.,1.,1.).to_path(0.1);let regions=[(&path,Fill::NonZero)];
+     let mint=|_:kurbo::Point,_:&dyn Fn()->bool,remaining:&mut usize,_:Option<usize>| {*remaining+=1;Some(None)};
+-    let command=|sample|SpatialCommand::NativeSampledPaint {field:NativeField::Unknown,regions:&[0],sample,owners:&[],alpha_is_shape:false,mode:BlendMode::Normal};
++    let command=|sample|SpatialCommand::NativeSampledPaint {cells:None,field:NativeField::Unknown,regions:&[0],sample,owners:&[],alpha_is_shape:false,mode:BlendMode::Normal};
+     assert!(compose_grouped_polygon_point(&regions,&[command(&mint)],rgb.color_space(),clear,
+         kurbo::Point::new(0.5,0.5),100,100,&||false,&|_|Some(Box::new(()))).is_none());
+     let cancelled=std::cell::Cell::new(false);
+@@ -2002,7 +2071,7 @@
+     let sample=|_:kurbo::Point,_:&dyn Fn()->bool,_:&mut usize,owner:Option<usize>| {
+         assert_eq!(owner,Some(7));Some(Some(NativeSpatialSample {cell_key:None,pixel:green,space:rgb.color_space()}))
+     };
+-    let commands=[SpatialCommand::NativeSampledPaint {field:NativeField::Unknown,regions:&[0],sample:&sample,owners:&[(0,7),(0,2)],alpha_is_shape:false,mode:BlendMode::Normal}];
++    let commands=[SpatialCommand::NativeSampledPaint {cells:None,field:NativeField::Unknown,regions:&[0],sample:&sample,owners:&[(0,7),(0,2)],alpha_is_shape:false,mode:BlendMode::Normal}];
+     let pixel=compose_grouped_polygon_point(&regions,&commands,rgb.color_space(),clear,
+         kurbo::Point::new(0.5,0.5),100,100,&||false,&|_|Some(Box::new(()))).unwrap();
+     assert_eq!(pixel.alpha(),1.);assert_eq!(pixel.native_components().unwrap()[..3],[0.,1.,0.]);
+@@ -2018,7 +2087,7 @@
+     let sample=|_:kurbo::Point,_:&dyn Fn()->bool,_:&mut usize,_:Option<usize>| {
+         panic!("invalid owner ordering must refuse before source sampling")
+     };
+-    let commands=[SpatialCommand::NativeSampledPaint {field:NativeField::Unknown,regions:&[0],sample:&sample,
++    let commands=[SpatialCommand::NativeSampledPaint {cells:None,field:NativeField::Unknown,regions:&[0],sample:&sample,
+         owners:&[(0,2),(0,7)],alpha_is_shape:false,mode:BlendMode::Normal}];
+     assert!(compose_grouped_polygon_point(&[(&path,Fill::NonZero)],&commands,
+         rgb.color_space(),clear,kurbo::Point::new(0.5,0.5),100,100,
+@@ -2549,7 +2618,7 @@
+         let value=owner.unwrap() as f64/1000.;
+         Some(Some(NativeSpatialSample {cell_key:None,pixel:Pixel::from_native(Model::Rgb,&[value,0.,0.],1.).unwrap(),space:rgb.color_space()}))
+     };
+-    let commands=[SpatialCommand::NativeSampledPaint {field:NativeField::Unknown,regions:&[0],sample:&sample,owners:&owners,
++    let commands=[SpatialCommand::NativeSampledPaint {cells:None,field:NativeField::Unknown,regions:&[0],sample:&sample,owners:&owners,
+         alpha_is_shape:false,mode:BlendMode::Normal}];
+     let result=compose_grouped_polygon_pixel(&regions,&commands,rgb.color_space(),clear,
+         0,0,10_000_000,100000,&||false,&|_|Some(Box::new(()))).unwrap();
+@@ -2558,7 +2627,7 @@
+     if owners.first()==Some(&(2,150)) {
+         // The source is skipped in the middle; pending changes must survive
+         // until its next invocation on the right-hand visible interval.
+-        let clipped=[SpatialCommand::NativeSampledPaint {field:NativeField::Unknown,regions:&[0,3],sample:&sample,owners:&owners,
++        let clipped=[SpatialCommand::NativeSampledPaint {cells:None,field:NativeField::Unknown,regions:&[0,3],sample:&sample,owners:&owners,
+             alpha_is_shape:false,mode:BlendMode::Normal}];
+         let result=compose_grouped_polygon_pixel(&regions,&clipped,rgb.color_space(),clear,
+             0,0,10_000_000,100000,&||false,&|_|Some(Box::new(()))).unwrap();
+@@ -2590,7 +2659,7 @@
+     let sample=|_:kurbo::Point,_:&dyn Fn()->bool,_:&mut usize,owner:Option<usize>| {
+         assert_eq!(owner,Some(7));Some(Some(NativeSpatialSample {cell_key:None,pixel:source,space:rgb.color_space()}))
+     };
+-    let commands=[SpatialCommand::NativeSampledPaint {field:NativeField::Unknown,regions:&[0],sample:&sample,owners:&[(0,7),(0,2)],
++    let commands=[SpatialCommand::NativeSampledPaint {cells:None,field:NativeField::Unknown,regions:&[0],sample:&sample,owners:&[(0,7),(0,2)],
+         alpha_is_shape:false,mode:BlendMode::Normal}];
+     let run=|cancelled:&dyn Fn()->bool|compose_grouped_polygon_point(&regions,&commands,rgb.color_space(),clear,
+         kurbo::Point::new(0.5,0.5),10000,10000,cancelled,&admit);
+@@ -2651,8 +2720,8 @@
+         let mut commands=vec![
+             SpatialCommand::Begin {isolated:false,knockout:false,opacity:0.5,alpha_is_shape:false,mode:BlendMode::HardLight},
+             SpatialCommand::Begin {isolated:false,knockout:false,opacity:1.,alpha_is_shape:true,mode:BlendMode::Normal},
+-            SpatialCommand::NativeSampledPaint {field:NativeField::Unknown,regions:&[0],sample:&sample,owners:&[],alpha_is_shape:source_ais,mode:BlendMode::Normal},
+-            SpatialCommand::NativeSampledPaint {field:NativeField::Unknown,regions:&[0],sample:&other,owners:&[],alpha_is_shape:source_ais,mode:BlendMode::Normal},
++            SpatialCommand::NativeSampledPaint {cells:None,field:NativeField::Unknown,regions:&[0],sample:&sample,owners:&[],alpha_is_shape:source_ais,mode:BlendMode::Normal},
++            SpatialCommand::NativeSampledPaint {cells:None,field:NativeField::Unknown,regions:&[0],sample:&other,owners:&[],alpha_is_shape:source_ais,mode:BlendMode::Normal},
+             SpatialCommand::End,SpatialCommand::End,
+         ];
+         let run=|commands:&[SpatialCommand<'_>]|compose_grouped_polygon_pixel(&regions,commands,rgb.color_space(),backdrop,
+@@ -2706,7 +2775,7 @@
+             let mut commands=vec![SpatialCommand::Begin {isolated:false,knockout:parent_knockout,opacity:1.,alpha_is_shape:false,mode:BlendMode::Normal}];
+             if masked {commands.push(SpatialCommand::SetMask {sample:&mask,sample_cost:1});}
+             commands.push(SpatialCommand::Begin {isolated,knockout:child_knockout,opacity,alpha_is_shape:ais,mode});
+-            commands.push(if native_path {SpatialCommand::NativeSampledPaint {field:NativeField::Unknown,regions:&[0],sample:&native,owners:&[],alpha_is_shape:ais,mode:source_mode}}
++            commands.push(if native_path {SpatialCommand::NativeSampledPaint {cells:None,field:NativeField::Unknown,regions:&[0],sample:&native,owners:&[],alpha_is_shape:ais,mode:source_mode}}
+                 else {SpatialCommand::SampledPaint {regions:&[0],sample:&generic,sample_cost:1,alpha_is_shape:ais,mode:source_mode}});
+             commands.extend([SpatialCommand::End,SpatialCommand::End]);
+             compose_grouped_polygon_pixel(&regions,&commands,rgb.color_space(),backdrop,0,0,100000,100000,&||false,&|_|Some(Box::new(()))).unwrap()
+@@ -2741,7 +2810,7 @@
+         };
+         let commands=[SpatialCommand::SetMask {sample:&mask,sample_cost:1},
+             SpatialCommand::Begin {isolated:false,knockout:true,opacity:0.5,alpha_is_shape:true,mode:BlendMode::HardLight},
+-            SpatialCommand::NativeSampledPaint {field:NativeField::Unknown,regions:&[0],sample:&sample,owners:&[],alpha_is_shape:false,mode:BlendMode::HardLight},SpatialCommand::End];
++            SpatialCommand::NativeSampledPaint {cells:None,field:NativeField::Unknown,regions:&[0],sample:&sample,owners:&[],alpha_is_shape:false,mode:BlendMode::HardLight},SpatialCommand::End];
+         compose_grouped_polygon_pixel(&regions,&commands,rgb.color_space(),clear,0,0,100000,work,cancelled,&admit)
+     };
+     let polls=std::cell::Cell::new(0);
+@@ -2776,7 +2845,7 @@
+         Some(if point.x<0.5 {Some(NativeSpatialSample {cell_key:None,pixel,space:rgb.color_space()})} else {None})
+     };
+     let commands=[SpatialCommand::Begin {isolated:false,knockout:false,opacity:0.5,alpha_is_shape:false,mode:BlendMode::Normal},
+-        SpatialCommand::NativeSampledPaint {field:NativeField::Unknown,regions:&[0],sample:&sample,owners:&[],alpha_is_shape:false,mode:BlendMode::Normal},SpatialCommand::End];
++        SpatialCommand::NativeSampledPaint {cells:None,field:NativeField::Unknown,regions:&[0],sample:&sample,owners:&[],alpha_is_shape:false,mode:BlendMode::Normal},SpatialCommand::End];
+     let actual=compose_grouped_polygon_pixel(&regions,&commands,rgb.color_space(),clear,0,0,100000,100000,&||false,&|_|Some(Box::new(()))).unwrap();
+     assert_eq!(calls.get(),2);assert_eq!(actual.alpha(),0.25);
+     assert_eq!(&actual.native_components().unwrap()[..3],&[0.2,0.7,0.4]);
+@@ -2860,3 +2929,43 @@
+     let lines=admitted_line_partition_cells(&[[kurbo::Point::new(0.5,0.),kurbo::Point::new(0.5,1.)]],kurbo::Rect::new(0.,0.,1.,1.),1000,&||false,&admit).unwrap();
+     assert_eq!(lines.texel_key(0),None);assert_eq!(lines.texel_key(1),None);
+ }
++
++#[test]
++fn raster_region_bindings_preserve_source_scope_and_release_refused_storage() {
++    use std::sync::{Arc,atomic::{AtomicUsize,Ordering}};
++    struct Credit(Arc<AtomicUsize>,usize);
++    impl Drop for Credit {fn drop(&mut self) {self.0.fetch_sub(self.1,Ordering::Relaxed);}}
++    let used=Arc::new(AtomicUsize::new(0));
++    let admit=|bytes| {used.fetch_add(bytes,Ordering::Relaxed);Some(Box::new(Credit(used.clone(),bytes)) as Box<dyn std::any::Any+Send+Sync>)};
++    let rect=kurbo::Rect::new(0.,0.,2.,1.);
++    let a=admitted_raster_pixel_cells(4,1,kurbo::Affine::IDENTITY,rect,1000,&||false,&admit).unwrap();
++    let b=admitted_raster_pixel_cells(4,1,kurbo::Affine::translate((-1.,0.)),rect,1000,&||false,&admit).unwrap();
++    let mut regions:Vec<_>=a.paths.iter().chain(&b.paths).map(|path|(path,Fill::NonZero)).collect();
++    deduplicate_regions(&mut regions,&mut [],&||false,&admit).unwrap();
++    let baseline=used.load(Ordering::Relaxed);
++    let polls=std::cell::Cell::new(0);
++    let keys=admitted_raster_region_keys(&a,None,&regions,&mut 10000,&||{polls.set(polls.get()+1);false},&admit).unwrap();
++    let other=admitted_raster_region_keys(&b,None,&regions,&mut 10000,&||false,&admit).unwrap();
++    let mut coverage=[0u64;64];
++    for (i,(path,_)) in regions.iter().enumerate() {if path.winding(kurbo::Point::new(0.25,0.5))!=0 {coverage[i/64]|=1u64<<(i%64);}}
++    assert_eq!(keys.covered_key(&coverage,&mut 1000,&||false),Some([0,u64::MAX]));
++    assert_eq!(other.covered_key(&coverage,&mut 1000,&||false),Some([1u64<<32,u64::MAX]));
++    assert!(keys.covered_key(&coverage,&mut 0,&||false).is_none());
++    for &(region,_) in &keys.color {coverage[region/64]|=1u64<<(region%64);}
++    assert!(keys.covered_key(&coverage,&mut 1000,&||false).is_none(),"ambiguous overlapping cells must not pick an arbitrary texel");
++    drop(keys);drop(other);assert_eq!(used.load(Ordering::Relaxed),baseline);
++    for stop in 1..=polls.get() {
++        let current=std::cell::Cell::new(0);
++        assert!(admitted_raster_region_keys(&a,None,&regions,&mut 10000,&||{current.set(current.get()+1);current.get()==stop},&admit).is_none());
++        assert_eq!(used.load(Ordering::Relaxed),baseline);
++    }
++    assert!(admitted_raster_region_keys(&a,None,&regions,&mut 0,&||false,&admit).is_none());
++    assert!(admitted_raster_region_keys(&a,None,&regions,&mut 10000,&||false,&|_|None).is_none());
++    assert_eq!(used.load(Ordering::Relaxed),baseline);
++    let mut bad=admitted_raster_pixel_cells(4,1,kurbo::Affine::IDENTITY,rect,1000,&||false,&admit).unwrap();
++    bad.paths[2]=bad.paths[1].clone();
++    let retained=[(&bad.paths[1],Fill::NonZero)];let before=used.load(Ordering::Relaxed);
++    assert!(admitted_raster_region_keys(&bad,None,&retained,&mut 10000,&||false,&admit).is_none());
++    assert_eq!(used.load(Ordering::Relaxed),before);
++    drop(bad);drop(regions);drop(a);drop(b);assert_eq!(used.load(Ordering::Relaxed),0);
++}
+--- before/knockout_interpreter.rs
++++ after/knockout_interpreter.rs
+@@ -7339,6 +7339,15 @@
+     let original_regions=regions.len();
+     super::native_spatial::deduplicate_regions(&mut regions,&mut requirements,cancelled,admit)?;
+     if trace.enabled {eprintln!("SPATIAL_REGION_DEDUP original={original_regions} unique={}",regions.len());}
++    let _raster_region_credit=admit(rasters.len().checked_mul(size_of::<super::native_spatial::RasterRegionKeys>())?)?;
++    let mut raster_region_keys=Vec::new();raster_region_keys.try_reserve_exact(rasters.len()).ok()?;
++    if raster_region_keys.capacity()>rasters.len() {return None;}
++    let mut raster_region_work=4_000_000usize;
++    for (event,_,_,color,mask) in &rasters {
++        let keys=super::native_spatial::admitted_raster_region_keys(color,mask.as_deref(),&regions,&mut raster_region_work,cancelled,admit)?;
++        if trace.enabled {let (color,alpha)=keys.counts();eprintln!("SPATIAL_RASTER_REGION_KEYS event={event} color={color} alpha={alpha}");}
++        raster_region_keys.push(keys);
++    }
+     let owner_count=meshes.iter().try_fold(0usize,|n,(_,_,g)|n.checked_add(g.owners.len()))?;
+     let _owner_credit=admit(owner_count.checked_mul(size_of::<(usize,usize)>())?
+         .checked_add(meshes.len().checked_mul(size_of::<Vec<(usize,usize)>>())?)?)?;
+@@ -7403,12 +7412,12 @@
+                 let field=if color.has_texel_grid() && mask.as_ref().is_none_or(|mask|mask.has_texel_grid()) {
+                     super::native_spatial::NativeField::ConstantCells
+                 } else {super::native_spatial::NativeField::Unknown};
+-                if may_touch(&requirements[cursor]) {commands.push(SpatialCommand::NativeSampledPaint {regions:&requirements[cursor],
++                if may_touch(&requirements[cursor]) {commands.push(SpatialCommand::NativeSampledPaint {cells:Some(&raster_region_keys[raster_cursor]),regions:&requirements[cursor],
+                     sample:&samples[raster_cursor],owners:&[],field,alpha_is_shape:ais,mode});}cursor+=1;raster_cursor+=1;
+             },
+             Event::Path(_,_,RecordedPaint::Shading(_),_,_)=>{
+                 if ais {return None;}
+-                if may_touch(&requirements[cursor]) {commands.push(SpatialCommand::NativeSampledPaint {regions:&requirements[cursor],
++                if may_touch(&requirements[cursor]) {commands.push(SpatialCommand::NativeSampledPaint {cells:None,regions:&requirements[cursor],
+                     sample:&mesh_samples[mesh_cursor],owners:&owner_routes[mesh_cursor],
+                     field:if meshes[mesh_cursor].1.mesh_has_affine_native_field(space) {super::native_spatial::NativeField::AffineOwner} else {super::native_spatial::NativeField::Unknown},alpha_is_shape:false,mode});}cursor+=1;mesh_cursor+=1;
+             },

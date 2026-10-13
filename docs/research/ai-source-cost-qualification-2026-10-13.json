@@ -1,0 +1,30 @@
+{
+  "retained_changes": [
+    "Optional source-cost trace splits owner lookup and sampling/color-coordinate work without changing budget",
+    "Independent owner-priority winding regression now covers nonmonotonic word priorities"
+  ],
+  "baseline_pixel": [
+    138,
+    36
+  ],
+  "baseline_owner_work": 1441000,
+  "baseline_sampling_and_coordinates_work": 1709074,
+  "rejected_experiment": {
+    "name": "Sort owner words by maximum source index and stop at proven lower priority",
+    "fragments_before": 84760,
+    "fragments_after": 84896,
+    "completed": false,
+    "reason": "Only 0.16 percent more fragments at target refusal; complexity not retained"
+  },
+  "final_suite": {
+    "passed": 200,
+    "ignored": 12,
+    "failed": 0
+  },
+  "sha256": {
+    "vendor/hayro/src/native_spatial.rs": "48814bd91808e70d5aad192f51a51797fc9182b81e03f2a2d2300e3f669e73f8",
+    "docs/research/ai-source-cost-final-suite-2026-10-13.log": "5492f0887c6cfa75a4031a746f829ef1e7f38aa973e20f6d5212cb4078cdeee4",
+    "docs/research/ai-source-cost-split-original-2026-10-13.log": "f6f20b4f2d3ddeb27ba4f5e52525c7a130a9dc17de50164ff0a71b5d4e769c02",
+    "docs/research/ai-owner-priority-original-2026-10-13.log": "df199084b851ee6d27fb2fea65b2bb7e795c48ef8490811410d9c85b4e75f09d"
+  }
+}

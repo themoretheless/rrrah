@@ -1,0 +1,26 @@
+{
+  "status": "verified_bounded_memory_comparison",
+  "report": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-loftr-row-softmax-20261011.json",
+  "report_sha256": "2cf812d620c331a1ea2574d0adf3b650b83f1053cb3f5b2e594f01bd42eff8d4",
+  "source_files": 3089,
+  "changes": [
+    "vendor/loftr/src/coarse_matching.rs"
+  ],
+  "comparisons": [
+    {
+      "direction": "forward",
+      "baseline_rss_bytes": 1694941184,
+      "candidate_rss_bytes": 1602584576,
+      "rss_reduction_fraction": 0.054489565108118865,
+      "evidence_equal": true
+    },
+    {
+      "direction": "reverse",
+      "baseline_rss_bytes": 1604108288,
+      "candidate_rss_bytes": 1509146624,
+      "rss_reduction_fraction": 0.059199035819706425,
+      "evidence_equal": true
+    }
+  ],
+  "limits": "One real positive pair, two directions, single fresh process per variant/direction; not hard RSS cap, full corpus or statistical timing qualification."
+}

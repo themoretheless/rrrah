@@ -1,0 +1,49 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+    Finished `test` profile [optimized + debuginfo] target(s) in 1m 08s
+     Running tests/anchor_reflection_fallback.rs (target/debug/deps/anchor_reflection_fallback-dd004838cd0bfb83)
+
+running 3 tests
+test all_eight_cumulative_caps_refuse_before_missing_io_and_cancel_wins ... ok
+test ordinary_mirror_and_foreign_select_correct_six_phase_recipes ... ok
+test six_phase_cancellation_and_both_source_mutations_release_memory ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 34.46s
+
+     Running tests/model_compare.rs (target/debug/deps/model_compare-cf161debc4a7e8d5)
+
+running 7 tests
+test policy_preflight_and_proposal_count_refuse_without_partial_evidence ... ok
+test both_generations_and_ignored_provider_cancellation_are_sticky ... ok
+test provider_cancellation_error_is_typed_cancelled_for_global_and_both_owners ... ok
+test model_mutation_during_fresh_pixel_confirmation_discards_supported_evidence ... ok
+test supplied_provider_supports_original_pixels_empty_is_explicit_and_errors_do_not_become_misses ... ok
+test global_and_both_request_tokens_cancel_mid_and_final_publication ... ok
+test either_source_or_model_mutation_during_provider_refuses_and_restored_retry_recovers ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+
+     Running tests/search_portfolio.rs (target/debug/deps/search_portfolio-486c88b06d33fbad)
+
+running 5 tests
+test cumulative_and_both_policy_preflight_precede_io_cancel_wins ... ok
+test cross_stage_source_or_weight_changes_and_provider_errors_never_become_misses ... ok
+test both_orders_stop_at_support_and_misses_advance_without_leaked_payload ... ok
+test global_and_both_generations_cancel_entry_and_terminal_publication ... ok
+test native_early_support_never_calls_model_and_model_miss_falls_through ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.12s
+

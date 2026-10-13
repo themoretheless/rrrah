@@ -1,0 +1,50 @@
+{
+  "date": "2026-10-11",
+  "scope": "Explicit arbitrary EXR chromaticities and lin_ap1_scene/lin_ap0_scene color routing into native chromaticity metadata and Bradford preparation; managed swap and actual Metal",
+  "sources": [
+    "https://openexr.com/en/latest/StandardAttributes.html",
+    "https://github.com/AcademySoftwareFoundation/ColorInterop/blob/main/Recommendations/01_TextureAssetColorSpaces/TextureAssetColorSpaces.md"
+  ],
+  "cases": {
+    "accepted": 12,
+    "refused": 8,
+    "unknown": 6
+  },
+  "tests": {
+    "full_hdr_passed": 21,
+    "full_hdr_ignored": 3,
+    "current_focused_passed": 1,
+    "current_focused_ignored": 0
+  },
+  "adapter": "Metal Apple M4 Max",
+  "fixture_manifest": "tests/fixtures/exr-arbitrary-color.json",
+  "file_pins_verified": 38,
+  "fixture_generation_deterministic": true,
+  "channel_payloads_unchanged": 26,
+  "oracle": "Independent Gaussian XYZ/Bradford matrix applied to existing independently decoded native float samples; source chromaticities rounded to EXR float precision for chroma-only cases and standard coordinates for authoritative known ID cases.",
+  "max_double_cone_precision_delta": 4.6667603115224665e-09,
+  "verified": [
+    "Full native sample bits match original independent EXR oracle in all accepted cases.",
+    "Coordinate metadata matches declaration, survives swap; analytical samples and full SDR/HDR Metal frames exact.",
+    "Preparation/storage memory-pressure refusal, cancellation and retry; root=0 for each accepted/refused/unknown case.",
+    "Matching adopted neutral and AP0-compatible ACES flag accepted; conflicting ID/chroma or incompatible ACES flag refused.",
+    "Unknown IDs suppress familiar chroma fallback; different adopted neutral remains unqualified."
+  ],
+  "limitations": [
+    "Authored metadata derivatives, not broad producer/layer/deep/tile qualification.",
+    "ACES flag handling qualifies color declaration consistency only; SMPTE container layout/compliance is not certified.",
+    "ACES flag alone with no explicit ID/chromaticities remains unqualified.",
+    "Unknown IDs, different adopted neutral, missing declarations, zero-alpha emission and physical HDR calibration remain unqualified.",
+    "NVIDIA hardware deferred."
+  ],
+  "logs": {
+    "full": {
+      "path": "docs/research/exr-arbitrary-color-metal-2026-10-11.full.log",
+      "sha256": "d34fdbdc02d71a39288b61cf4417db7bb2a765f93701edbde745f742de861aa6"
+    },
+    "focused": {
+      "path": "docs/research/exr-arbitrary-color-metal-2026-10-11.focused.log",
+      "sha256": "46adb1f7ce68b0f691713f7afa98b1ae201c7e35765aba5e3a29daff20fb704b"
+    }
+  }
+}

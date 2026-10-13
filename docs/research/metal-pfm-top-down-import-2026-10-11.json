@@ -1,0 +1,55 @@
+{
+  "date": "2026-10-11",
+  "scope": "Explicit PFM top-down row-order import through decoder, viewer CLI, RAM/swap and Metal",
+  "API": "DecodeRequest::pfm_top_down default false",
+  "CLI": "--pfm-top-down; combines with --untagged-color linear-srgb; conflicts with --inspect",
+  "routing": "RasterInterpretation forwards policy to foreground, neighbour preload and thumbnail loader; row policy included in shared RAM/swap key",
+  "checks": {
+    "decoder_cases": "RGB/grayscale, both endians, exact float bits including signed zero, alpha one and scale retained",
+    "focused_decoder_passed": 5,
+    "decode_gate": {
+      "passed": 990,
+      "failed": 0,
+      "ignored": 67
+    },
+    "viewer_CPU_and_actual_Metal_passed": 2,
+    "app_gate": {
+      "passed": 203,
+      "failed": 0,
+      "ignored": 37
+    },
+    "swap": "Top-down restored without decoder after same-source bottom-up insertion; incompatible row-order entries separated",
+    "Metal_adapter": "Metal Apple M4 Max",
+    "SDR_HDR_before_after_restore_exact": true,
+    "target": [
+      63,
+      65
+    ],
+    "final_managed_bytes_after_queue_idle": 0
+  },
+  "logs": [
+    {
+      "path": "/tmp/rrrah-pfm-top-down-decode-20261011.log",
+      "sha256": "e639884aeff926f2953bffdc5b4ecb9cf1a221aaf903e53f4f7be529b3f87f22"
+    },
+    {
+      "path": "/tmp/rrrah-pfm-top-down-decode-all-20261011.log",
+      "sha256": "9c22e1316aac5b51a2ba3a83e33072e0631ac2b7ed2b0d2f48f4fc0702d5a76a"
+    },
+    {
+      "path": "/tmp/rrrah-pfm-top-down-final-focused-20261011.log",
+      "sha256": "fc021b34ab76e6f1974607a19d850dadd178c740dcb9b7780882afa3838ee380"
+    },
+    {
+      "path": "/tmp/rrrah-pfm-top-down-final-app-20261011.log",
+      "sha256": "cf6fc81978f29f3eb676cd7ff0202c563603e344a19833c74cadc3a930e82aa2"
+    }
+  ],
+  "limitations": [
+    "Authored fixtures, not Adobe-exported independent corpus",
+    "Row-order flag is caller-selected; no heuristic detection",
+    "No automatic color-primaries inference",
+    "Offscreen attachment readback, not physical HDR qualification",
+    "NVIDIA deferred"
+  ]
+}

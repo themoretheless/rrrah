@@ -1,0 +1,64 @@
+{
+  "date": "2026-10-11",
+  "scope": "Repeated STL/OBJ/PLY/OFF model restore pressure/cancellation, complete serialized payload preservation and Metal frame comparison in one disk cache",
+  "adapter": "Metal Apple M4 Max",
+  "models": 6,
+  "repeated_cycles_per_model": 20,
+  "repeated_restores": 120,
+  "ordinary_control_restores": 6,
+  "suite_passed": 7,
+  "suite_failed": 0,
+  "suite_ignored": 0,
+  "output_dimensions": [
+    64,
+    64
+  ],
+  "limits": {
+    "managed_cpu_root_bytes": 131072,
+    "queue_bytes": 131072,
+    "restore_bytes": 131072,
+    "disk_bytes": 1048576,
+    "disk_entries": 8
+  },
+  "checks": [
+    "Full root reservation refuses restore without corrupting disk cache or incrementing swap errors",
+    "Canceled lookup returns no frame and allocates no restored geometry",
+    "Every restored serialized geometry/metadata payload exactly matches original",
+    "Every Metal output pixel equals initial model frame",
+    "Managed restored geometry credit equals capacity while owned and returns to zero after drop",
+    "One cache/directory retained for all six models and repeated restores",
+    "Exactly six writes and 120 reads in repeated scenario, zero errors/dropped writes, final queue zero"
+  ],
+  "fixtures_sha256": {
+    "triangle.stl": "cb38a51d5a813e11f96377a701c46be622d35a0cffc438d2ae570a04ecf73fc7",
+    "obj-shared-metadata.obj": "0a86389f06d62e3c943362f3fa4929f919f487b038682e2b08f4206c773e49f1",
+    "off-concave-u.off": "55d7df7970d0a6b9f3e4fed60d9e9398323a80cfd389e5e12d23ffc9cbb7fab3",
+    "ply-32-ascii.ply": "0638097b01c9a6a164ae25367db364b4a729bca5d73efff5b8f40c402ade8292",
+    "ply-offset64-be.ply": "f834ebcd865c13f1a1550639738d256f71f4e7cc6896f2c624d72718e2a88a20",
+    "ply-u64-le.ply": "273b80ce5477787db4e90eb604045988459e71b143a46887bb3c8713b797991e"
+  },
+  "log": {
+    "path": "/tmp/rrrah-metal-model-swap-cycles-20261011.log",
+    "sha256": "ddf6a4c6defb0072dbbd33fecabc100b336fbe3e5def0bcf4145bf23900b425d"
+  },
+  "source_sha256": {
+    "crates/rrrah-app/tests/model_readback.rs": "aad1e528ad226e7a91092264290375469af2d62794b78031e997cf6b627aa4af",
+    "scripts/qualify-viewer-storage-gpu.py": "56b5ab85241e1b5aaeb120d39548f42ebcf7d4a4cd0dc5bf990dc5b05bbab71b"
+  },
+  "reproduce": {
+    "environment": {
+      "RRRAH_GPU_OPTIONAL": "0",
+      "RRRAH_GPU_BACKEND": "metal",
+      "RRRAH_METAL_MODEL_SWAP_CYCLES": "20"
+    },
+    "command": "cargo test --locked --offline --target-dir /tmp/rrrah-required-corpus-target -p rrrah --test model_readback -- --include-ignored --nocapture --test-threads=1",
+    "integrated_runner_flag": "--metal-model-swap-cycles 20"
+  },
+  "limits_of_evidence": [
+    "Six small fixtures, not large production meshes or all 3D producer/material/texture variants",
+    "64x64 SDR offscreen frame preservation, not physical HDR model rendering",
+    "Managed restore/queue budgets do not account for every driver allocation or temporary test triangle vector",
+    "Immediate cancellation check, not every mid-stream cancellation race",
+    "Finite 120 restores are not a multi-hour 3D collection soak"
+  ]
+}

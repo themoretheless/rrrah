@@ -1,0 +1,19 @@
+{
+  "backend": "metal",
+  "passed": 8,
+  "failed": 0,
+  "ignored": 0,
+  "replacement_triangles": 2049,
+  "checkpoints_per_attachment": 9,
+  "attachments": [
+    "SDR",
+    "HDR binary16"
+  ],
+  "verified": "later validation and partially filled mapped-buffer cancellation retains exact previous pixels and credit; memory refusal preserves frame; retry changes frame; final zero credit",
+  "log": "docs/research/model-multichunk-cancel-2026-10-11.log",
+  "sha256": "98c7c5014a58a0a2fdc8ab9e4b62ceb7fa20a86192e1c6699b223d05c23bcc2c",
+  "limitations": [
+    "Viewer upload remains synchronous; generation-only callback cannot process queued UI navigation during upload.",
+    "Authored repeated geometry, not original complex model or large-model benchmark."
+  ]
+}

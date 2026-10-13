@@ -1,0 +1,105 @@
+{
+  "status": "complete_bounded_generated_negative_controls",
+  "producer_pid": 34243,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-native-bank-outcome-native-snapshot-20261011.json": "3c63225b7df7bb70b6fe5f932c50802b0c06dd89c4b72e9c3e1676228a8f742c",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-native-bank-outcome-native-compile-audit-20261011.json": "3170ff74738ac49323cdd907666dd44cc453c839cbba7edf0664c1af4b294004",
+    "/Users/themoretheless/.codex/tmp/rrrah-native-bank-generated-negatives-qualified-20261011/native_bank_outcome_files": "650714e142851bf630fb6884a45869fed11727aa53776764086a947dccb8093b",
+    "/Users/themoretheless/.codex/tmp/rrrah-native-bank-all-positives-qualified-20261011/native_bank_outcome_files": "650714e142851bf630fb6884a45869fed11727aa53776764086a947dccb8093b",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors": "59e55bf0ecd047db9c513672d121a3ea677529ad448bdc3a359e92862c74ddd7",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-loftr-native-20261010-runtime-pins.json": "8daa92d3ed2c84278338c53eedffed1fcdc272bf8ee7a419397cd7f098a6783a",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-native-bank-generated-negatives-20261011.py": "1b99472fff60969c2f56b6c5db83178a7bd50bd6db5b06039578c04b1413061d",
+    "/Users/themoretheless/.codex/tmp/rrrah-native-bank-generated-negatives-qualified-20261011/flat_brightness-0.bmp": "5fe0ff3d8ac12a48a81b574dda1771647af37ec41ac0db2e6f51f05a2555f4c5",
+    "/Users/themoretheless/.codex/tmp/rrrah-native-bank-generated-negatives-qualified-20261011/flat_brightness-1.bmp": "e2a4fce13faad048e6c29ee9437b4d1ae2507439f5ee972ebb2ecbf5fe5e48d6",
+    "/Users/themoretheless/.codex/tmp/rrrah-native-bank-generated-negatives-qualified-20261011/independent_seeded_noise-0.bmp": "944fea86c45734df0f231f64dff9ad92a4b73bc20783b0ebe9324d573916c625",
+    "/Users/themoretheless/.codex/tmp/rrrah-native-bank-generated-negatives-qualified-20261011/independent_seeded_noise-1.bmp": "14be25a1a61bb9e51a61580722ad5d245a64a0af4f68b1181df569802a90b742",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libtorch_python.dylib": "cb1d5957b49b8f3c2e4b90de7b99aee835520875bce893b11eb7528a548744fa",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libtorch.dylib": "2178657b7eeffc0c0a989889ac3e2b2e3d216073b35f3a291ee89bd65c0fb406",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libtorch_global_deps.dylib": "6ff1aedff89150170f225ce821dc9355a9d5f9c80a6cc1bb761c8d209638c2c7",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libomp.dylib": "fe0670951c85401421f6cedc91971f28dc870bad4c1f0cfebe2b74dac421e5f0",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libtorch_cpu.dylib": "941f3e16a8e02b23b99bd2c8693caabaf8df859bfaa293f39a5d7dd8a8f5ca6e",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libc10.dylib": "f203c171b7a71c742ef4a84bde3af64465e545a4cc3ebfd7f245dca3ebe4e7cf",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libshm.dylib": "3a6fc248697b8809534e74d9e5fc784b385239d8c7aeef291c3968a73609f7d2"
+  },
+  "required": 2,
+  "results": [
+    {
+      "case": "flat_brightness",
+      "status": "complete_no_support",
+      "command": [
+        "/usr/bin/time",
+        "-l",
+        "/usr/bin/env",
+        "DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+        "/Users/themoretheless/.codex/tmp/rrrah-native-bank-generated-negatives-qualified-20261011/native_bank_outcome_files",
+        "/Users/themoretheless/.codex/tmp/rrrah-native-bank-generated-negatives-qualified-20261011/flat_brightness-0.bmp",
+        "/Users/themoretheless/.codex/tmp/rrrah-native-bank-generated-negatives-qualified-20261011/flat_brightness-1.bmp",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+        "640",
+        "0.5",
+        "1000000"
+      ],
+      "pid": 34245,
+      "returncode": 0,
+      "stdout": "{\"files\":[2,9],\"managed_peak\":187023856,\"managed_retained_before_drop\":368,\"managed_used\":0,\"opposite_trials\":1000000,\"pairs\":[{\"detail\":{\"reason\":\"Model { model_digest: [251, 248, 128, 60, 113, 119, 49, 0, 204, 125, 138, 137, 62, 0, 255, 47, 68, 141, 150, 91, 38, 37, 242, 55, 0, 75, 47, 168, 45, 71, 4, 147] }\",\"terminal\":\"inconclusive\"},\"left\":2,\"model_attempted\":true,\"native_miss\":\"Some(Native { recipes: 6, candidates: 0 })\",\"opposite_insufficient\":true,\"right\":9,\"support\":null}],\"scope\":\"Actual CPU two-file complete native/opposite/bank collection; explicit2/6 coverage,model filter12,opposite filter8,caller sampling. No full corpus/precision/RSS cap qualification.\"}\n",
+      "stderr": "        5.74 real         5.06 user         0.57 sys\n           468484096  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n               29739  page reclaims\n                   9  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                   2  voluntary context switches\n               15241  involuntary context switches\n         57329840435  instructions retired\n         21876723400  cycles elapsed\n           418202656  peak memory footprint\n",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-native-bank-generated-negatives-qualified-20261011/flat_brightness.log",
+      "log_sha256": "96ae398e82509556c1d82f6d038141e2e8dc3738e7387df56ad02a9d6178fdfb",
+      "elapsed_seconds": 5.752061916,
+      "evidence": {
+        "detail": {
+          "reason": "Model { model_digest: [251, 248, 128, 60, 113, 119, 49, 0, 204, 125, 138, 137, 62, 0, 255, 47, 68, 141, 150, 91, 38, 37, 242, 55, 0, 75, 47, 168, 45, 71, 4, 147] }",
+          "terminal": "inconclusive"
+        },
+        "left": 2,
+        "model_attempted": true,
+        "native_miss": "Some(Native { recipes: 6, candidates: 0 })",
+        "opposite_insufficient": true,
+        "right": 9,
+        "support": null
+      },
+      "managed_peak": 187023856,
+      "max_rss_bytes": 468484096
+    },
+    {
+      "case": "independent_seeded_noise",
+      "status": "complete_no_support",
+      "command": [
+        "/usr/bin/time",
+        "-l",
+        "/usr/bin/env",
+        "DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+        "/Users/themoretheless/.codex/tmp/rrrah-native-bank-generated-negatives-qualified-20261011/native_bank_outcome_files",
+        "/Users/themoretheless/.codex/tmp/rrrah-native-bank-generated-negatives-qualified-20261011/independent_seeded_noise-0.bmp",
+        "/Users/themoretheless/.codex/tmp/rrrah-native-bank-generated-negatives-qualified-20261011/independent_seeded_noise-1.bmp",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+        "640",
+        "0.5",
+        "1000000"
+      ],
+      "pid": 34290,
+      "returncode": 0,
+      "stdout": "{\"files\":[2,9],\"managed_peak\":187045328,\"managed_retained_before_drop\":368,\"managed_used\":0,\"opposite_trials\":1000000,\"pairs\":[{\"detail\":{\"reason\":\"Model { model_digest: [251, 248, 128, 60, 113, 119, 49, 0, 204, 125, 138, 137, 62, 0, 255, 47, 68, 141, 150, 91, 38, 37, 242, 55, 0, 75, 47, 168, 45, 71, 4, 147] }\",\"terminal\":\"inconclusive\"},\"left\":2,\"model_attempted\":true,\"native_miss\":\"Some(Native { recipes: 6, candidates: 0 })\",\"opposite_insufficient\":true,\"right\":9,\"support\":null}],\"scope\":\"Actual CPU two-file complete native/opposite/bank collection; explicit2/6 coverage,model filter12,opposite filter8,caller sampling. No full corpus/precision/RSS cap qualification.\"}\n",
+      "stderr": "       16.27 real        16.02 user         0.58 sys\n           473317376  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n               30038  page reclaims\n                   9  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                   0  voluntary context switches\n               16803  involuntary context switches\n        298221246193  instructions retired\n         64740538355  cycles elapsed\n           422364144  peak memory footprint\n",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-native-bank-generated-negatives-qualified-20261011/independent_seeded_noise.log",
+      "log_sha256": "423655b52dbdea21122636401beb239759ca1909a476d287250ea5d7d5f43e69",
+      "elapsed_seconds": 16.277687916999998,
+      "evidence": {
+        "detail": {
+          "reason": "Model { model_digest: [251, 248, 128, 60, 113, 119, 49, 0, 204, 125, 138, 137, 62, 0, 255, 47, 68, 141, 150, 91, 38, 37, 242, 55, 0, 75, 47, 168, 45, 71, 4, 147] }",
+          "terminal": "inconclusive"
+        },
+        "left": 2,
+        "model_attempted": true,
+        "native_miss": "Some(Native { recipes: 6, candidates: 0 })",
+        "opposite_insufficient": true,
+        "right": 9,
+        "support": null
+      },
+      "managed_peak": 187045328,
+      "max_rss_bytes": 473317376
+    }
+  ],
+  "policy": "4096 direct native;1m joint opposite;25 model banks;2/6 radii;0.5 source tolerance;maxside640",
+  "scope": "Independent generated uniform-brightness and seeded-random texture controls. Non-support expected; typed unknown allowed. Actual CPU provider. No real burst/semantic/look-alike/general precision/full corpus/RSS claim."
+}

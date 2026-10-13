@@ -1,0 +1,234 @@
+--- a/vendor/hayro/src/native_moments.rs
++++ b/vendor/hayro/src/native_moments.rs
+@@ -63,6 +63,25 @@
+             if cancelled() {return None;}
+             out.components[channel]=sum(self.components[channel],other.components[channel]);
+             out.max_component_abs[channel]=self.max_component_abs[channel].max(other.max_component_abs[channel]);
++        }
++        if out.alpha.iter().chain(out.components.iter().flatten()).any(|v|!v.is_finite()) || cancelled() {return None;}
++        Some(out)
++    }
++    /// Add a proved interval for an already accumulated integral. The supplied
++    /// native-value bounds must independently bound that integral's exact
++    /// nonnegative-alpha weighted mean; they are not inferred from the interval.
++    pub(super) fn added_integral_bounds(self,alpha:[f64;2],components:[[f64;2];C],native_bounds:[f64;C],
++        work:&mut usize,cancelled:&dyn Fn()->bool)->Option<Self> {
++        debit(work,1+C.checked_mul(4)?,cancelled)?;
++        if !(1..=4).contains(&C) || !alpha[0].is_finite() || !alpha[1].is_finite() || alpha[0]>alpha[1] || alpha[1]<0.
++            || components.iter().any(|[lo,hi]|!lo.is_finite() || !hi.is_finite() || lo>hi)
++            || native_bounds.iter().any(|v|!v.is_finite() || *v<0.) {return None;}
++        let sum=|a:[f64;2],b:[f64;2]|[(a[0]+b[0]).next_down(),(a[1]+b[1]).next_up()];
++        let mut out=self;out.alpha=sum(self.alpha,[alpha[0].max(0.),alpha[1]]);out.alpha[0]=out.alpha[0].max(0.);
++        for channel in 0..C {
++            if cancelled() {return None;}
++            out.components[channel]=sum(self.components[channel],components[channel]);
++            out.max_component_abs[channel]=self.max_component_abs[channel].max(native_bounds[channel]);
+         }
+         if out.alpha.iter().chain(out.components.iter().flatten()).any(|v|!v.is_finite()) || cancelled() {return None;}
+         Some(out)
+@@ -158,6 +177,21 @@
+     }
+ }
+ 
++// Reference values are reported f64values. One outward input step also
++// encloses a single upstream multiplication (native reference alpha*component).
++fn accumulated_reference_bounds<const K:usize>(previous:[[f64;2];K],area:f64,values:[f64;K],
++    work:&mut usize,cancelled:&dyn Fn()->bool)->Option<[[f64;2];K]> {
++    debit(work,1+K.checked_mul(4)?,cancelled)?;let mut out=previous;
++    for channel in 0..K {
++        if cancelled() {return None;}
++        let lo=(area*values[channel].next_down()).next_down();
++        let hi=(area*values[channel].next_up()).next_up();
++        out[channel]=[(previous[channel][0]+lo).next_down(),(previous[channel][1]+hi).next_up()];
++        if out[channel].iter().any(|v|!v.is_finite()) {return None;}
++    }
++    if cancelled() {return None;}Some(out)
++}
++
+ struct Entry<const N:usize,const K:usize,const W:usize> {key:[u64;N],words:usize,witness:[u64;W],area:Sum,x:Sum,y:Sum,reference:[Sum;K]}
+ pub(super) struct MomentTable<const N:usize,const K:usize=0,const W:usize=0> {
+     entries:Vec<Entry<N,K,W>>,
+@@ -167,6 +201,8 @@
+     origin:Point,
+     total:Sum,
+     geometry_bounds:Option<Vec<GeometryBounds>>,
++    reference_bounds:Option<Vec<[[f64;2];K]>>,
++    _reference_credit:Option<Box<dyn std::any::Any+Send+Sync>>,
+     _geometry_credit:Option<Box<dyn std::any::Any+Send+Sync>>,
+     _credit:Box<dyn std::any::Any+Send+Sync>,
+ }
+@@ -194,7 +230,7 @@
+         let mut entries=Vec::new();entries.try_reserve_exact(capacity).ok()?;
+         let mut index=Vec::new();index.try_reserve_exact(slots).ok()?;index.resize(slots,usize::MAX);
+         if entries.capacity()>capacity || index.capacity()>slots {return None;}
+-        Some(Self {entries,slots:index,capacity,words,origin,total:Sum::default(),geometry_bounds:None,_geometry_credit:None,_credit:credit})
++        Some(Self {entries,slots:index,capacity,words,origin,total:Sum::default(),geometry_bounds:None,reference_bounds:None,_reference_credit:None,_geometry_credit:None,_credit:credit})
+     }
+     /// Opt-in separately admitted geometry interval storage. Ordinary tables
+     /// retain their original entry size and perform no interval arithmetic.
+@@ -206,6 +242,24 @@
+         let mut bounds=Vec::new();bounds.try_reserve_exact(capacity).ok()?;
+         if bounds.capacity()>capacity {return None;}
+         table.geometry_bounds=Some(bounds);table._geometry_credit=Some(credit);Some(table)
++    }
++    /// Separately admitted reference intervals; exact reported values or one
++    /// upstream correctly rounded product are enclosed before area weighting.
++    pub(super) fn admitted_prefix_with_reference_bounds(capacity:usize,origin:Point,words:usize,geometry:bool,
++        admit:&dyn Fn(usize)->Option<Box<dyn std::any::Any+Send+Sync>>,
++    )->Option<Self> {
++        if K==0 {return None;}
++        let mut table=if geometry {Self::admitted_prefix_with_geometry_bounds(capacity,origin,words,admit)?}
++            else {Self::admitted_prefix(capacity,origin,words,admit)?};
++        let credit=admit(capacity.checked_mul(size_of::<[[f64;2];K]>())?)?;
++        let mut intervals=Vec::new();intervals.try_reserve_exact(capacity).ok()?;
++        if intervals.capacity()>capacity {return None;}
++        table.reference_bounds=Some(intervals);table._reference_credit=Some(credit);Some(table)
++    }
++    pub(super) fn reference_integral_bounds(&self,index:usize,work:&mut usize,cancelled:&dyn Fn()->bool)->Option<[[f64;2];K]> {
++        debit(work,1+K,cancelled)?;
++        let bounds=*self.reference_bounds.as_ref()?.get(index)?;
++        if cancelled() {return None;}Some(bounds)
+     }
+     pub(super) fn geometry_rounding_bounds(&self,index:usize,remaining:&mut usize,cancelled:&dyn Fn()->bool)->Option<GeometryRoundingBounds> {
+         debit(remaining,32,cancelled)?;
+@@ -282,9 +336,11 @@
+                 let entry=Entry {key:stored,words:key.len(),witness:*witness,area:Sum::default().added(area)?,
+                     x:Sum::default().added(area*x)?,y:Sum::default().added(area*y)?,reference:values};
+                 let geometry=if self.geometry_bounds.is_some() {Some(GeometryBounds::default().added(area,centroid,self.origin,remaining,cancelled)?)} else {None};
++                let reference_interval=if self.reference_bounds.is_some() {Some(accumulated_reference_bounds([[0.;2];K],area,reference,remaining,cancelled)?)} else {None};
+                 if cancelled() {return None;}
+                 self.slots[slot]=self.entries.len();self.entries.push(entry);self.total=total;
+                 if let (Some(bounds),Some(geometry))=(&mut self.geometry_bounds,geometry) {bounds.push(geometry);}
++                if let (Some(bounds),Some(reference_interval))=(&mut self.reference_bounds,reference_interval) {bounds.push(reference_interval);}
+                 return Some(());
+             }
+             debit(remaining,1,cancelled)?;
+@@ -297,9 +353,11 @@
+                 let mut values=entry.reference;
+                 for (sum,value) in values.iter_mut().zip(reference) {*sum=sum.added(area*value)?;}
+                 let geometry=if let Some(bounds)=&self.geometry_bounds {Some(bounds[index].added(area,centroid,self.origin,remaining,cancelled)?)} else {None};
++                let reference_interval=if let Some(bounds)=&self.reference_bounds {Some(accumulated_reference_bounds(bounds[index],area,reference,remaining,cancelled)?)} else {None};
+                 if cancelled() {return None;}
+                 let entry=&mut self.entries[index];entry.area=a;entry.x=sx;entry.y=sy;entry.reference=values;self.total=total;
+                 if let (Some(bounds),Some(geometry))=(&mut self.geometry_bounds,geometry) {bounds[index]=geometry;}
++                if let (Some(bounds),Some(reference_interval))=(&mut self.reference_bounds,reference_interval) {bounds[index]=reference_interval;}
+                 return Some(());
+             }
+             slot=(slot+1)&(self.slots.len()-1);
+@@ -640,3 +698,70 @@
+     assert!(bounds.alpha[0]<=area*0.5 && bounds.alpha[1]>=area*0.5);
+     assert!(envelope.added_aggregate(1.+2e-12,0.5,[0.5],&mut 100,&||false).is_none());
+ }
++
++#[test]
++fn reference_intervals_cover_reported_products_and_preserve_compensated_values() {
++    let admit=|_|Some(Box::new(()) as Box<dyn std::any::Any+Send+Sync>);
++    let mut bounded=MomentTable::<1,2>::admitted_prefix_with_reference_bounds(2,Point::ZERO,1,true,&admit).unwrap();
++    let mut ordinary=MomentTable::<1,2>::admitted_prefix(2,Point::ZERO,1,&admit).unwrap();
++    for i in 0..4096 {
++        let area=1./4096.;let alpha=0.5;let component=(i as f64+0.5)/4096.;let reference=[alpha,alpha*component];let p=Point::new(component,0.5);
++        bounded.add_sample([1],area,p,reference,&mut 1000,&||false).unwrap();ordinary.add_sample([1],area,p,reference,&mut 1000,&||false).unwrap();
++    }
++    assert_eq!(bounded.iter_with_reference().collect::<Vec<_>>(),ordinary.iter_with_reference().collect::<Vec<_>>());
++    let intervals=bounded.reference_integral_bounds(0,&mut 100,&||false).unwrap();
++    for (exact,[lo,hi]) in [0.5,0.25].into_iter().zip(intervals) {assert!(lo<=exact && exact<=hi);}
++    let envelope=IntegralEnvelope::<1>::new().added_integral_bounds(intervals[0],[intervals[1]],[1.],&mut 100,&||false).unwrap();
++    assert!(envelope.finish(0.5,[0.25],&mut 100,&||false).unwrap().component_error[0]<1e-10);
++}
++#[test]
++fn reference_interval_insert_update_failures_preserve_all_states() {
++    let admit=|_|Some(Box::new(()) as Box<dyn std::any::Any+Send+Sync>);
++    let make=|| {let mut t=MomentTable::<1,1>::admitted_prefix_with_reference_bounds(2,Point::ZERO,1,true,&admit).unwrap();t.add_sample([1],0.25,Point::new(0.25,0.5),[0.5],&mut 1000,&||false).unwrap();t};
++    for key in [1,2] {
++        let mut probe=make();let mut work=1000;probe.add_sample([key],0.25,Point::new(0.75,0.5),[0.75],&mut work,&||false).unwrap();let cost=1000-work;
++        let polls=std::cell::Cell::new(0);let mut probe=make();probe.add_sample([key],0.25,Point::new(0.75,0.5),[0.75],&mut 1000,&||{polls.set(polls.get()+1);false}).unwrap();
++        for failure in 0..cost+polls.get() {
++            let mut table=make();let before=table.iter_with_reference().collect::<Vec<_>>();let geometry=table.geometry_rounding_bounds(0,&mut 100,&||false).unwrap();let bounds=table.reference_integral_bounds(0,&mut 100,&||false).unwrap();let count=std::cell::Cell::new(0);
++            let mut allowance=if failure<cost {failure} else {1000};let stop=if failure<cost {usize::MAX} else {failure-cost+1};
++            assert!(table.add_sample([key],0.25,Point::new(0.75,0.5),[0.75],&mut allowance,&||{count.set(count.get()+1);count.get()>=stop}).is_none());
++            assert_eq!(table.iter_with_reference().collect::<Vec<_>>(),before);assert_eq!(table.reference_integral_bounds(0,&mut 100,&||false),Some(bounds));assert_eq!(table.geometry_rounding_bounds(0,&mut 100,&||false),Some(geometry));assert_eq!(table.reference_bounds.as_ref().unwrap().len(),1);
++        }
++    }
++}
++#[test]
++fn reference_interval_credit_denial_and_drop_release_every_allocation() {
++    use std::sync::{Arc,atomic::{AtomicUsize,Ordering}};
++    struct Credit(Arc<AtomicUsize>,usize);impl Drop for Credit {fn drop(&mut self){self.0.fetch_sub(self.1,Ordering::Relaxed);}}
++    let used=Arc::new(AtomicUsize::new(0));
++    for denial in 1..=4 {
++        let calls=std::cell::Cell::new(0);let admit=|bytes| {calls.set(calls.get()+1);if calls.get()==denial {return None;}used.fetch_add(bytes,Ordering::Relaxed);Some(Box::new(Credit(used.clone(),bytes)) as Box<dyn std::any::Any+Send+Sync>)};
++        let table=MomentTable::<1,1>::admitted_prefix_with_reference_bounds(2,Point::ZERO,1,true,&admit);
++        assert_eq!(table.is_some(),denial==4);drop(table);assert_eq!(used.load(Ordering::Relaxed),0);
++    }
++}
++
++#[test]
++fn enclosed_reference_addition_refuses_invalid_intervals_work_and_every_cancel_checkpoint() {
++    let envelope=IntegralEnvelope::<2>::new();let alpha=[0.25,0.25000000000001];let values=[[0.1,0.10000000000001],[0.2,0.20000000000001]];
++    let mut work=100;envelope.added_integral_bounds(alpha,values,[1.;2],&mut work,&||false).unwrap();
++    for budget in 0..100-work {assert!(envelope.added_integral_bounds(alpha,values,[1.;2],&mut {budget},&||false).is_none());}
++    let polls=std::cell::Cell::new(0);envelope.added_integral_bounds(alpha,values,[1.;2],&mut 100,&||{polls.set(polls.get()+1);false}).unwrap();
++    for stop in 1..=polls.get() {let count=std::cell::Cell::new(0);assert!(envelope.added_integral_bounds(alpha,values,[1.;2],&mut 100,&||{count.set(count.get()+1);count.get()>=stop}).is_none());}
++    assert!(envelope.added_integral_bounds([1.,0.],values,[1.;2],&mut 100,&||false).is_none());
++    assert!(envelope.added_integral_bounds(alpha,[[f64::NAN,0.],[0.,0.]],[1.;2],&mut 100,&||false).is_none());
++    assert!(envelope.added_integral_bounds(alpha,values,[-1.;2],&mut 100,&||false).is_none());
++}
++
++#[test]
++fn reference_input_padding_covers_upstream_product_residual() {
++    for (a,b) in [(0.1f64,0.2f64),(1./3.,1./3.),(0.99,0.37),(0.25,-0.3)] {
++        let rounded=a*b;
++        // A fused residual supplies an independent two-product comparison;
++        // the exact residual here is representable without adding it back.
++        let residual=a.mul_add(b,-rounded);
++        let bounds=accumulated_reference_bounds([[0.;2]],1.,[rounded],&mut 100,&||false).unwrap()[0];
++        assert!(rounded-bounds[0]>=(-residual).max(0.));
++        assert!(bounds[1]-rounded>=residual.max(0.));
++    }
++}
+--- a/vendor/hayro/src/native_spatial.rs
++++ b/vendor/hayro/src/native_spatial.rs
+@@ -84,13 +84,14 @@
+     let fingerprint_moments=observe_moments && !field_moments;
+     let key_words=if field_moments {16} else {(regions.len()+63)/64};
+     let geometry_moment_bounds=observe_moments && std::env::var_os("RRRAH_AI_MOMENT_ROUNDING_BOUNDS").is_some();
++    let replacement_rounding=observe_moments && std::env::var_os("RRRAH_AI_REPLACEMENT_ROUNDING_BOUNDS").is_some();
+     let mut moments=if observe_moments {
+         let origin=kurbo::Point::new(f64::from(x),f64::from(y));
+-        if geometry_moment_bounds {super::native_moments::MomentTable::<64,5,64>::admitted_prefix_with_geometry_bounds(8192,origin,key_words,admit)}
++        if replacement_rounding {super::native_moments::MomentTable::<64,5,64>::admitted_prefix_with_reference_bounds(8192,origin,key_words,geometry_moment_bounds,admit)}
++        else if geometry_moment_bounds {super::native_moments::MomentTable::<64,5,64>::admitted_prefix_with_geometry_bounds(8192,origin,key_words,admit)}
+         else {super::native_moments::MomentTable::<64,5,64>::admitted_prefix(8192,origin,key_words,admit)}
+     } else {None};
+     let mut moment_complete=moments.is_some();let mut moment_work=256_000_000usize;
+-    let replacement_rounding=observe_moments && std::env::var_os("RRRAH_AI_REPLACEMENT_ROUNDING_BOUNDS").is_some();
+     let integral_rounding=replacement_rounding || std::env::var_os("RRRAH_AI_INTEGRAL_ROUNDING_BOUNDS").is_some();
+     let _integral_credit=if integral_rounding {admit(size_of::<super::native_moments::IntegralEnvelope<4>>())} else {None};
+     let mut integral_envelope=if _integral_credit.is_some() {Some(super::native_moments::IntegralEnvelope::<4>::new())} else {None};
+@@ -238,7 +239,7 @@
+             let mut grouped_alpha=0.;let mut grouped_integral=[0.;4];let mut compared=0usize;
+             let mut replacement_envelope=if _replacement_credit.is_some() {Some(super::native_moments::IntegralEnvelope::<4>::new())} else {None};
+             let mut bucket_errors=0usize;let mut identity_fallbacks=0usize;let mut generation_only=0usize;
+-            for (_identity,weight,centroid,reference,key,identity_words) in moments.as_ref()?.iter_with_witness() {
++            for (bucket_index,(_identity,weight,centroid,reference,key,identity_words)) in moments.as_ref()?.iter_with_witness().enumerate() {
+                 if cancelled() {break;}
+                 let Some(left)=moment_work.checked_sub(regions.len()) else {break;};moment_work=left;
+                 let mut winding=saved.borrow_mut();
+@@ -262,9 +263,14 @@
+                     let actual=source_key?.key.borrow();let actual=actual.as_ref()?;
+                     if actual.len!=identity_words || actual.words[..actual.len]!=_identity[..identity_words] {
+                         identity_fallbacks+=1;
+-                        // Original per-bucket reference uses compensated sums;
+-                        // its interval is not yet retained. Never invent a bound.
+-                        if replacement_rounding {replacement_envelope=None;}
++                        if replacement_rounding {
++                            replacement_envelope=replacement_envelope.and_then(|envelope| {
++                                let original=original_integral_bounds?;
++                                let bounds=moments.as_ref()?.reference_integral_bounds(bucket_index,&mut moment_work,cancelled)?;
++                                envelope.added_integral_bounds(bounds[0],std::array::from_fn(|i|bounds[i+1]),original.max_component_abs,&mut moment_work,cancelled)
++                            });
++                            if identity_fallbacks<=16 {eprintln!("SPATIAL_REFERENCE_FALLBACK_BOUNDS bucket={bucket_index} available={}",replacement_envelope.is_some());}
++                        }
+                         if actual.words[1..actual.len]==_identity[1..identity_words] {generation_only+=1;}
+                         if identity_fallbacks<=16 {
+                             eprintln!("SPATIAL_FIELD_CENTROID_IDENTITY_FALLBACK expected={:?} actual={:?} centroid={centroid:?}", &_identity[..identity_words],&actual.words[..actual.len]);

@@ -1,0 +1,43 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+    Finished `test` profile [optimized + debuginfo] target(s) in 53.29s
+     Running tests/anchor_reflection_fallback.rs (target/debug/deps/anchor_reflection_fallback-488b94f2fb0b2151)
+
+running 2 tests
+test three_recipe_final_callback_cannot_publish_mutated_source ... FAILED
+test six_recipe_final_callback_cannot_publish_mutated_source ... FAILED
+
+failures:
+
+---- three_recipe_final_callback_cannot_publish_mutated_source stdout ----
+
+thread 'three_recipe_final_callback_cannot_publish_mutated_source' (88878379) panicked at crates/rrrah-dedup/tests/anchor_reflection_fallback.rs:254:9:
+six=false: final callback published stale result: Ok(())
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- six_recipe_final_callback_cannot_publish_mutated_source stdout ----
+
+thread 'six_recipe_final_callback_cannot_publish_mutated_source' (88878378) panicked at crates/rrrah-dedup/tests/anchor_reflection_fallback.rs:254:9:
+six=true: final callback published stale result: Ok(())
+
+
+failures:
+    six_recipe_final_callback_cannot_publish_mutated_source
+    three_recipe_final_callback_cannot_publish_mutated_source
+
+test result: FAILED. 0 passed; 2 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.59s
+
+error: test failed, to rerun pass `-p rrrah-dedup --test anchor_reflection_fallback`

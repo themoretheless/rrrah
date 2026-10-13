@@ -1,0 +1,162 @@
+{
+  "status": "verified_actual_latest_snapshot_three_native_controls",
+  "producer_sha256": "51f8768ccec6bc7c5abb80116888a7ab056a38d141e5f06bad1d537acb13ad4f",
+  "verifier_sha256": "fde159db7134b2f4fe2976334f7d4d49077fd5e39049d0f70ae7ad0578cab13c",
+  "source_files": 3784,
+  "pins_verified": 25,
+  "cases": [
+    {
+      "label": "known_table_copy",
+      "source_tolerance": "0.5",
+      "support": true,
+      "model_attempted": false,
+      "detail": {
+        "candidate_points": 113,
+        "native_recipes": 1,
+        "pixels": {
+          "anchors": [
+            14,
+            14
+          ],
+          "directions": [
+            {
+              "agreeing_pairs": 2217,
+              "informative_pairs": 2296,
+              "sites": 350,
+              "valid_sites": 350
+            },
+            {
+              "agreeing_pairs": 2523,
+              "informative_pairs": 2535,
+              "sites": 350,
+              "valid_sites": 350
+            }
+          ],
+          "supported": true
+        },
+        "reflected_proposal_source": false,
+        "terminal": "joint_opposite_native",
+        "transform": [
+          [
+            -0.03294939064726532,
+            0.5910800201764552,
+            1265.1477281254838
+          ],
+          [
+            -0.6751547386942137,
+            -0.01812269031419069,
+            1285.6653691767506
+          ],
+          [
+            -2.8569427300617958e-05,
+            -3.485300153757727e-05,
+            1.020811511890298
+          ]
+        ]
+      },
+      "managed_used": 0,
+      "rss_bytes": 945586176,
+      "elapsed_seconds": 113.626965,
+      "result_sha256": "33f103479b8477e06cd2d15803328ce3c6f39c10089e15555ed2521477768f4d"
+    },
+    {
+      "label": "table_vs_fence_false",
+      "source_tolerance": "2.0",
+      "support": true,
+      "model_attempted": true,
+      "detail": {
+        "evidence": "Model(ModelComparisonEvidence { original_dimensions: [[640, 480], [1280, 960]], model_digest: [251, 248, 128, 60, 113, 119, 49, 0, 204, 125, 138, 137, 62, 0, 255, 47, 68, 141, 150, 91, 38, 37, 242, 55, 0, 75, 47, 168, 45, 71, 4, 147], raw_proposals: 1298, selected_points: 1298, transform: Some(ProjectiveTransform { matrix: [[0.9826712218638571, 0.26154857532443376, 534.3155312233729], [-0.06604356985237858, 1.0842984111889027, 402.7340457920044], [5.629018276010106e-5, 0.00023937255083964542, 0.9209396143901012]] }), geometry_inliers: 10, hypotheses: 1000000, pixels: Some(AnchorRankEvidence { forward_anchors: 10, reverse_anchors: 10, source_window_bounds: [206, 118, 373, 333], target_window_bounds: [821, 502, 334, 342], forward: RankRegionEvidence { sites: 250, valid_sites: 250, informative_pairs: 1455, agreeing_pairs: 1339, pixel_reads: 101250 }, reverse: RankRegionEvidence { sites: 250, valid_sites: 250, informative_pairs: 1449, agreeing_pairs: 1339, pixel_reads: 101250 }, supported: true }) })",
+        "terminal": "native_or_model"
+      },
+      "managed_used": 0,
+      "rss_bytes": 1297301504,
+      "elapsed_seconds": 184.02649662500002,
+      "result_sha256": "e3e5d33f218fd27cecde0281b8e91f8eb3eb919a59bfcc213537f13e5a0b26b4"
+    },
+    {
+      "label": "portrait_false",
+      "source_tolerance": "2.0",
+      "support": true,
+      "model_attempted": true,
+      "detail": {
+        "evidence": "Model(ModelComparisonEvidence { original_dimensions: [[1024, 680], [944, 568]], model_digest: [251, 248, 128, 60, 113, 119, 49, 0, 204, 125, 138, 137, 62, 0, 255, 47, 68, 141, 150, 91, 38, 37, 242, 55, 0, 75, 47, 168, 45, 71, 4, 147], raw_proposals: 1020, selected_points: 1020, transform: Some(ProjectiveTransform { matrix: [[1.1952971351455708, 0.025191321160329072, 25.72271115138875], [-0.3254205783129249, 2.2164960575620127, -324.22368220417286], [-0.0010828201661529015, 0.0008367268290889379, 1.1214723670411597]] }), geometry_inliers: 17, hypotheses: 1000000, pixels: Some(AnchorRankEvidence { forward_anchors: 17, reverse_anchors: 16, source_window_bounds: [267, 203, 81, 133], target_window_bounds: [329, 30, 132, 269], forward: RankRegionEvidence { sites: 425, valid_sites: 425, informative_pairs: 2320, agreeing_pairs: 2252, pixel_reads: 172125 }, reverse: RankRegionEvidence { sites: 400, valid_sites: 375, informative_pairs: 2369, agreeing_pairs: 2225, pixel_reads: 162000 }, supported: true }) })",
+        "terminal": "native_or_model"
+      },
+      "managed_used": 0,
+      "rss_bytes": 1167032320,
+      "elapsed_seconds": 181.43367545799998,
+      "result_sha256": "ad603781f617f399221773e130a30049a804b81b3cb390a5488cd0b9347d4cae"
+    }
+  ],
+  "current_root_local_and_vendor_parity": [
+    {
+      "path": "crates/rrrah-dedup",
+      "files": 615,
+      "matches": true,
+      "different_paths": []
+    },
+    {
+      "path": "crates/rrrah-core",
+      "files": 19,
+      "matches": true,
+      "different_paths": []
+    },
+    {
+      "path": "crates/rrrah-decode",
+      "files": 198,
+      "matches": true,
+      "different_paths": []
+    },
+    {
+      "path": "crates/rrrah-memory",
+      "files": 7,
+      "matches": true,
+      "different_paths": []
+    },
+    {
+      "path": "vendor/loftr",
+      "files": 38,
+      "matches": true,
+      "different_paths": []
+    },
+    {
+      "path": "vendor/hayro",
+      "files": 22,
+      "matches": false,
+      "different_paths": [
+        "vendor/hayro/src/knockout_compositor.rs",
+        "vendor/hayro/src/knockout_interpreter.rs",
+        "vendor/hayro/src/native_blend.rs",
+        "vendor/hayro/src/native_frame.rs",
+        "vendor/hayro/src/native_moments.rs",
+        "vendor/hayro/src/native_owner_transitions.rs",
+        "vendor/hayro/src/native_raster_transitions.rs",
+        "vendor/hayro/src/native_spatial.rs",
+        "vendor/hayro/src/polygon_coverage.rs"
+      ]
+    },
+    {
+      "path": "vendor/moxcms",
+      "files": 126,
+      "matches": true,
+      "different_paths": []
+    },
+    {
+      "path": "vendor/hayro-interpret",
+      "files": 75,
+      "matches": false,
+      "different_paths": [
+        "vendor/hayro-interpret/src/encode.rs",
+        "vendor/hayro-interpret/src/encode/native_source.rs"
+      ]
+    }
+  ],
+  "all_selected_root_paths_match": false,
+  "original_caller_files_unchanged": [
+    "Cargo.lock",
+    "src/native_policy.rs",
+    "src/bin/native_bank_current_all_positives.rs"
+  ],
+  "compiler_version": "rustc 1.101.0-nightly (32dba69d6 2026-10-09)\nbinary: rustc\ncommit-hash: 32dba69d69c5b10ea89a4042de8d0619f7756203\ncommit-date: 2026-10-09\nhost: aarch64-apple-darwin\nrelease: 1.101.0-nightly\nLLVM version: 23.1.3\n",
+  "scope": "ActualCPU LoFTR on current qualified snapshot with source/runtime/executable/input pins verified. Original caller production source unchanged, manifest paths only. Three historical control directions replay their respective0.5/2/2tolerances; no shared-policy458recall/representative precision or allfeature/platform qualification. Latest default+decode gate is separate evidence. Observed RSS/durations under concurrent work are not hard caps or controlled performance benchmarks."
+}

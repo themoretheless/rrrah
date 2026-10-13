@@ -2,9 +2,9 @@
   "index": 385,
   "repository": "LinusU/blockhash-core",
   "commit": "a0805b48bdf9c9fbfd0d7e5e82e2794f153095c1",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
-  "decision": "reference",
-  "finding": "MIT JS pure blockhash median core; no detected tests, use qualified oracle fixtures before importing.",
+  "review_scope": "All7tracked text files completely read and pinned to Git blobs. Actual original lint/readme checks and8external behavioral tests with128seeded independent area-overlap oracle cases; pure RGBA array core only.",
+  "decision": "reference_do_not_adopt_unqualified_verdict",
+  "finding": "Weighted core matches independent area-intersection oracle on128seeded even/uneven RGBA fixtures. Alpha0 becomes white; nonzero alpha ignored, short buffers hash without refusal, even core drops nondivisible borders. Candidate-only reference; no decoder, cancellation or managed work/memory admission.",
   "available_source_evidence": [
     {
       "path": "index.d.ts",
@@ -28,9 +28,9 @@
     }
   ],
   "license_metadata": "MIT",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "Full MIT LICENSE read at pinned commit; copyrights2019LinusUnneback/2014CommonsMachinery; no source copied into production",
   "tests_detected": 0,
-  "upstream_tests_run": false,
+  "upstream_tests_run": true,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
   "tree_truncated": false,
   "available_readme_license_evidence": [
@@ -54,5 +54,16 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_review_complete": true,
+  "whole_repo_complete": true,
+  "fully_read_files": 7,
+  "fully_reviewed_files": 7,
+  "total_files": 7,
+  "complete_source_review": "blockhash-core-complete-source-review-20261013.json",
+  "complete_runtime_audit": "blockhash-core-complete-runtime-audit-20261013.json",
+  "prior_registry_review": "blockhash-core-prior-registry-385-20261013.json",
+  "upstream_behavioral_tests": 0,
+  "upstream_declared_checks_passed": 2,
+  "authored_test_functions_passed": 8
 }

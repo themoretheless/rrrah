@@ -1,0 +1,24 @@
+{
+  "backend": "Metal Apple M4 Max",
+  "sources": 9,
+  "rounds": 85,
+  "elapsed_seconds": 60.458,
+  "disk_reads": 765,
+  "disk_writes": 9,
+  "tracked_root_final": 0,
+  "tracked_queue_final": 0,
+  "checks": [
+    "sensor samples and metadata exact on every restore",
+    "1920x1080 Metal frame exact",
+    "memory refusal and cancelled restore before each retry",
+    "visible source pinned under limit reduction",
+    "one-entry RAM cap and spill",
+    "zero swap errors"
+  ],
+  "log_sha256": "7e27ed0f03ab9b155f10407ee42fa5d59b69055940c35ce1414538a0fd59de9f",
+  "limitations": [
+    "1920x1080 output in this sustained test; full-sized output qualified separately per source",
+    "managed pressure and local disk, not physical slow disk or OS-wide memory pressure",
+    "camera color fidelity and physical HDR remain open"
+  ]
+}

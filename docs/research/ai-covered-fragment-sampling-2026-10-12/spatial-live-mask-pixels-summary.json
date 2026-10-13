@@ -1,0 +1,123 @@
+{
+  "scope": "bounded native VectorApple pixels including one actively sampled mask; test-only spatial replay",
+  "pixels": [
+    {
+      "pixel": [
+        232,
+        95
+      ],
+      "completed": true,
+      "rgb": [
+        248.66572289228884,
+        242.66095210296535,
+        236.0739358346417
+      ],
+      "oracle64": [
+        248.06591796875,
+        241.56884765625,
+        234.8310546875
+      ],
+      "max_abs_error": 1.242881147141702,
+      "work_counts": {
+        "fragments": 11225,
+        "route_hits": 11215,
+        "route_misses": 10,
+        "dispatch": 38456,
+        "groups": 2769,
+        "native_samples": 7675,
+        "fixed_samples": 0,
+        "mask_samples": 1862,
+        "constant_hits": 0,
+        "group_hits": 24,
+        "paint_run_hits": 0,
+        "hidden_commands": 0,
+        "local_signature_hits": 9644
+      },
+      "oracle_ppm": "docs/research/ai-covered-fragment-sampling-2026-10-12/spatial-mask-candidate-232-95-oracle64.ppm",
+      "oracle_sha256": "d795405ac7800109a8c240102879bc45479a03e7eb360b5354986f1ace0b0b00"
+    },
+    {
+      "pixel": [
+        225,
+        15
+      ],
+      "completed": true,
+      "rgb": [
+        130.34457399832323,
+        192.36868432219975,
+        164.0218206568766
+      ],
+      "oracle64": [
+        130.1279296875,
+        192.2607421875,
+        163.914306640625
+      ],
+      "max_abs_error": 0.21664431082322722,
+      "work_counts": {
+        "fragments": 1878,
+        "route_hits": 1872,
+        "route_misses": 6,
+        "dispatch": 9812,
+        "groups": 3756,
+        "native_samples": 2300,
+        "fixed_samples": 0,
+        "mask_samples": 0,
+        "constant_hits": 0,
+        "group_hits": 0,
+        "paint_run_hits": 0,
+        "hidden_commands": 0,
+        "local_signature_hits": 1454
+      },
+      "oracle_ppm": "docs/research/ai-covered-fragment-sampling-2026-10-12/spatial-mask-candidate-225-15-oracle64.ppm",
+      "oracle_sha256": "0f8e61699badf5faa2cb8ff784dbbd0cc9bd5c51a3be59148d0c47b6be1bb7e9"
+    },
+    {
+      "pixel": [
+        127,
+        38
+      ],
+      "completed": true,
+      "rgb": [
+        166.09565377235413,
+        184.0734162926674,
+        111.30137041211128
+      ],
+      "oracle64": [
+        184.023681640625,
+        202.663330078125,
+        123.4384765625
+      ],
+      "max_abs_error": 18.58991378545761,
+      "work_counts": {
+        "fragments": 4703,
+        "route_hits": 4690,
+        "route_misses": 13,
+        "dispatch": 280433,
+        "groups": 96613,
+        "native_samples": 14109,
+        "fixed_samples": 0,
+        "mask_samples": 0,
+        "constant_hits": 0,
+        "group_hits": 0,
+        "paint_run_hits": 0,
+        "hidden_commands": 0,
+        "local_signature_hits": 2165
+      },
+      "oracle_ppm": "docs/research/ai-covered-fragment-sampling-2026-10-12/spatial-mask-candidate-127-38-oracle64.ppm",
+      "oracle_sha256": "219e3271291d6aa63f2c310f96a8ad73d50a9a7a29d201fe2ab55b63b1a95d52",
+      "oracle128": [
+        185.04766845703125,
+        203.4061279296875,
+        123.74212646484375
+      ],
+      "oracle128_sha256": "c8057e6659df5ba655774841a8c420ebd0c9de354f025127bd300f37f987d094",
+      "max_abs_error128": 19.33271163702011,
+      "oracle64_to128_max_change": 1.02398681640625
+    }
+  ],
+  "final_credit_zero": true,
+  "log": "docs/research/ai-covered-fragment-sampling-2026-10-12/spatial-live-mask-pixels-real.log",
+  "log_sha256": "c4ca3ce24fb0d7767733484c7e5bedbf9402173be9c568ae4a53458fa134926f",
+  "full_page_qualified": false,
+  "finding": "127,38 substantial color mismatch persists at 128x; successful replay is not color qualification"
+}

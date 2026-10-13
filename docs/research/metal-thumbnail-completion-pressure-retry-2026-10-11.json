@@ -1,0 +1,28 @@
+{
+  "scope": "Actual Metal thumbnail upload queue/texture ownership callbacks without redraw or completed metadata",
+  "adapter": "Apple M4 Max Metal",
+  "rounds": 2,
+  "queue_limit_bytes": 256,
+  "texture_limit_bytes": 8,
+  "inflight_texture_bytes": 4,
+  "inflight_queue_bytes": 256,
+  "verified": [
+    "Second upload denied while queue full; provisional texture credit rolled back",
+    "Renderer drop keeps in-flight texture and queue credit alive",
+    "Explicit completion polling releases both budgets without surface redraw",
+    "Blocked metadata worker does not prevent GPU completion",
+    "Next upload succeeds after completion; same bounds and final zero again"
+  ],
+  "production_change": false,
+  "test_result": {
+    "passed": 1,
+    "failed": 0,
+    "ignored": 0
+  },
+  "log_sha256": "89d5344d772baa0b3d9c4f0bccbe6046edf88f5c4d694993b4713f41944dc128",
+  "limitations": [
+    "No physical HDR claim",
+    "Does not qualify every ignored hardware/source-corpus test",
+    "No rendering appearance claim from callback ownership test"
+  ]
+}

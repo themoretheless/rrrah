@@ -1,0 +1,26 @@
+{
+  "status": "verified_complete_identical_evidence_stage_rss_diagnostic",
+  "complete_inferences": 68,
+  "rss_peak_bytes": 1952972800,
+  "first_inference_rss_bytes": {
+    "input": 354779136,
+    "backbone": 1775583232,
+    "coarse.features": 1825849344,
+    "coarse.matches": 1827078144,
+    "coarse.released": 1827078144,
+    "fine.windows": 1827438592,
+    "features.released": 1827438592,
+    "fine.transform": 1843986432,
+    "fine.matches": 1844281344
+  },
+  "first_backbone_boundary_increase_bytes": 1420804096,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-loftr-negative-rss-profile-20261012.json": "d78df473f2a1e1641c90afe8888171045d3e8a1dfb193e2924ce08e208a8ae54",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-disc21-heldout-negative-source-20261012.json": "c187632bb92098f5f1ebd2ce313bae523b5b3040f608f2d7cb3d88790193c62c",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-disc21-heldout-negatives-runtime-20261012.json": "7aeb2485fd9789affa82063128f42ec572fa49583c91b95136165780e105704b",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-loftr-negative-rss-complete-20261012.py": "ab0f6bd9b8db66af04459459e20915f83e3998bb1f98f091e0daf1d2c3753d1e",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-negative-rss-20261012.stdout": "2352843a1274a03b2bc7fa590e1d1e8225803a116035aef17ef0722660989247",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-negative-rss-20261012.stderr": "9eb2b918cccb256cf9c1dda31ad973ced54ecda5a70f696b1a3d9582219b0cb6"
+  },
+  "scope": "All 68 ordered inference traces and entire caller JSON match the frozen negative baseline. Boundary RSS samples do not identify tensor ownership or kernel peaks. Historical source composition; no root optimization, universal memory bound or full corpus qualification."
+}

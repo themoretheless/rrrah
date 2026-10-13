@@ -24,6 +24,7 @@ struct Parameters {
 
 @group(0) @binding(0) var raw_mosaic: texture_2d_array<u32>;
 @group(0) @binding(1) var<uniform> parameters: Parameters;
+@group(0) @binding(2) var<storage, read> black_grid: array<f32>;
 
 struct VertexOutput { @builtin(position) position: vec4<f32> };
 
@@ -67,9 +68,17 @@ fn sensor_sample(position: vec2<i32>) -> f32 {
         i32(layer),
         0,
     ).r);
-    let black = parameters.black[phase];
-    let range = select(max(parameters.white[phase] - black, 1.0), parameters.white[phase] - black, parameters._padding.x == 1u);
-    return max(encoded - black, 0.0) / range;
+    var black = parameters.black[phase];
+    if parameters._padding.z != 0u {
+        let x = u32(coordinate.x) % parameters._padding.z;
+        let y = u32(coordinate.y) % parameters._padding.w;
+        black = black_grid[y * parameters._padding.z + x];
+    }
+    // Upload validates a finite, strictly positive range at every grid/CFA intersection.
+    let range = parameters.white[phase] - black;
+    let numerator = max(encoded - black, 0.0);
+    if numerator == 0.0 { return 0.0; }
+    return numerator / range;
 }
 
 fn normalized_sample(position: vec2<i32>) -> f32 {
@@ -304,5 +313,8 @@ fn fs_main(@builtin(position) fragment: vec4<f32>) -> @location(0) vec4<f32> {
         + raw_uv * vec2<f32>(parameters.crop_size) - vec2<f32>(0.5);
     let linear_rgb = developed_rgb_at(raw_position, 1.0 / scale);
     if parameters._padding.y == 1u { return vec4<f32>(linear_rgb, 1.0); }
+    if parameters._padding.y == 2u {
+        return vec4<f32>(clamp(linear_rgb, vec3<f32>(-65504.0), vec3<f32>(65504.0)), 1.0);
+    }
     return vec4<f32>(aces_tone_map(linear_rgb), 1.0);
 }

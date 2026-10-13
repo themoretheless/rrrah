@@ -1,0 +1,167 @@
+   Compiling rrrah-dedup v0.1.0 (/workspace/crates/rrrah-dedup)
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+warning: linker stderr: /validation/sysroot/usr/bin/ld: /validation/target/debug/deps/libjpegxr-8d01a0594e000fc4.rlib(2e643c6506a180d9-strenc.o): in function `StrIOEncInit':
+         /validation/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/jpegxr-0.3.1/jxrlib/image/encode/strenc.c:485:(.text.StrIOEncInit+0xf0): the use of `tmpnam' is dangerous, better use `mkstemp'
+  |
+  = note: `#[warn(linker_messages)]` on by default
+
+warning: linker stdout: /validation/sysroot/usr/bin/ld: /validation/target/debug/deps/libjpegxr-8d01a0594e000fc4.rlib(2e643c6506a180d9-strenc.o): note: the message above does not take linker garbage collection into account
+
+warning: `rrrah-dedup` (test "portfolio_collection") generated 2 warnings
+warning: `rrrah-dedup` (test "anchor_geometry_search") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "model_tiles") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "anchor_reflected_geometry") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "anchor_reflection_fallback") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "anchor_reflection_collection_lifecycle") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "anchor_fallback_collection_lifecycle") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "anchor_fallback_search") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "anchor_rank_file") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "anchor_candidate_search") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "anchor_geometry_rank_fallback") generated 2 warnings (2 duplicates)
+warning: `rrrah-dedup` (test "search_portfolio") generated 2 warnings (2 duplicates)
+    Finished `test` profile [optimized + debuginfo] target(s) in 20m 01s
+     Running tests/anchor_candidate_search.rs (/validation/target/debug/deps/anchor_candidate_search-73911dbf7a3806be)
+
+running 1 test
+test automatic_candidates_drive_guarded_anchor_pixels_with_complete_points ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 11.89s
+
+     Running tests/anchor_fallback_collection_lifecycle.rs (/validation/target/debug/deps/anchor_fallback_collection_lifecycle-12b63f653de26f84)
+
+running 1 test
+test fallback_anchor_collection_mutation_cancel_and_restored_retry has been running for over 60 seconds
+test fallback_anchor_collection_mutation_cancel_and_restored_retry ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 218.59s
+
+     Running tests/anchor_fallback_search.rs (/validation/target/debug/deps/anchor_fallback_search-d23830148e81bd2c)
+
+running 1 test
+test fallback_metadata_and_complete_points_drive_guarded_anchor_files ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.34s
+
+     Running tests/anchor_geometry_rank_fallback.rs (/validation/target/debug/deps/anchor_geometry_rank_fallback-9d2769062fca6abc)
+
+running 1 test
+test rank_driven_fallback_admission_selection_cancel_and_release ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.08s
+
+     Running tests/anchor_geometry_search.rs (/validation/target/debug/deps/anchor_geometry_search-50d4c6c1b9bd5f6a)
+
+running 1 test
+test geometry_only_anchor_pipeline_equals_legacy_anchor_confirmation ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 14.76s
+
+     Running tests/anchor_rank_file.rs (/validation/target/debug/deps/anchor_rank_file-2e7278b699210eef)
+
+running 3 tests
+test invalid_anchor_policy_refuses_before_missing_source_io ... ok
+test aggregate_work_refuses_before_missing_source_io ... ok
+test files_match_views_and_cancel_or_mutation_discard_evidence ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/anchor_reflected_geometry.rs (/validation/target/debug/deps/anchor_reflected_geometry-e2677dd0d30b77cf)
+
+running 1 test
+test reflected_file_search_common_lifecycle_and_original_pixel_parity ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 10.62s
+
+     Running tests/anchor_reflection_collection_lifecycle.rs (/validation/target/debug/deps/anchor_reflection_collection_lifecycle-a823d56a4d7bc1ea)
+
+running 1 test
+test reflected_collection_mid_late_cancel_mutation_and_restored_reverse_edges has been running for over 60 seconds
+test reflected_collection_mid_late_cancel_mutation_and_restored_reverse_edges ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 305.96s
+
+     Running tests/anchor_reflection_fallback.rs (/validation/target/debug/deps/anchor_reflection_fallback-81c518cf71d105ae)
+
+running 12 tests
+test all_eight_cumulative_caps_refuse_before_missing_io_and_cancel_wins ... ok
+test insufficient_anchor_geometry_continues_remaining_native_recipes ... ok
+test six_recipe_final_callback_cannot_publish_mutated_source ... ok
+test standalone_color_candidate_final_callback_guards_source ... ok
+test ordinary_mirror_and_foreign_select_correct_six_phase_recipes ... ok
+test standalone_geometry_final_callback_guards_source ... ok
+test standalone_rank_final_callback_guards_source ... ok
+test standalone_color_fallback_final_callback_guards_source ... ok
+test standalone_reflected_geometry_final_callback_guards_source ... ok
+test three_recipe_final_callback_cannot_publish_mutated_source ... ok
+test six_phase_cancellation_and_both_source_mutations_release_memory ... ok
+test final_callback_source_mutation_precedes_native_inconclusive_error ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 24.16s
+
+     Running tests/model_tiles.rs (/validation/target/debug/deps/model_tiles-fe5dd39f563edd2a)
+
+running 13 tests
+test all_eight_work_caps_overflow_invalid_policy_and_storage_refuse_before_io ... ok
+test complete_fixed_order_visits_all_twenty_five_regions_and_shared_credit_follows_last_owner ... ok
+test exhausted_insufficient_geometry_is_typed_and_retains_the_complete_managed_roster ... ok
+test insufficient_anchor_geometry_keeps_the_attempt_and_recovers_on_a_later_rectangle ... ok
+test insufficient_geometry_does_not_swallow_a_later_proposal_work_refusal ... ok
+test late_preparation_memory_refusal_discards_cached_inputs_and_all_attempts ... ok
+test geometry_without_original_pixel_support_does_not_stop_the_tile_sequence ... ok
+test repeated_regions_reuse_identical_managed_inputs_and_retained_owners_keep_credit ... ok
+test final_source_mutation_takes_precedence_over_exhausted_insufficient_geometry ... ok
+test tiny_decoded_domains_omit_empty_quadrants_and_duplicate_full_regions ... ok
+test whole_support_stops_at_one_and_late_crop_support_stops_only_after_original_pixels ... ok
+test late_provider_failures_source_mutations_and_both_generations_discard_all_attempts ... ok
+test final_caller_checkpoint_mutation_cancellation_and_request_change_never_publish ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.16s
+
+     Running tests/portfolio_collection.rs (/validation/target/debug/deps/portfolio_collection-407bbd2f252693b5)
+
+running 10 tests
+test cumulative_overflow_policy_and_memory_preflight_precede_iterator_and_io ... ok
+test duplicate_file_and_complete_pair_limits_refuse_before_file_io ... ok
+test empty_and_single_file_batches_are_complete_without_invented_pairs ... ok
+test every_pair_is_deterministic_matches_direct_evidence_and_credit_follows_report_owners ... ok
+test collection_checks_every_pair_with_automatic_tiles_and_retained_attempt_credit ... ok
+test idle_owner_cancellation_and_late_provider_failure_discard_earlier_decisions ... ok
+test a_native_empty_proposal_bank_does_not_hide_model_only_collection_support ... ok
+test late_tiled_pair_failure_or_idle_owner_cancellation_discards_earlier_collection_results ... ok
+test final_cancellation_or_final_callback_source_mutation_never_publishes_a_stale_batch ... ok
+test native_evidence_and_report_slots_have_independent_last_owner_credit ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.41s
+
+     Running tests/search_portfolio.rs (/validation/target/debug/deps/search_portfolio-421d382acd7fb476)
+
+running 13 tests
+test cross_stage_source_or_weight_changes_and_provider_errors_never_become_misses ... ok
+test cumulative_and_both_policy_preflight_precede_io_cancel_wins ... ok
+test both_orders_stop_at_support_and_misses_advance_without_leaked_payload ... ok
+test automatic_tiles_recover_after_full_misses_in_both_orders_and_exhaust_before_native_fallback ... ok
+test complete_native_miss_cannot_turn_model_insufficiency_into_an_ordinary_negative_in_either_order ... ok
+test global_and_both_generations_cancel_entry_and_terminal_publication ... ok
+test final_source_mutation_and_cancellation_precede_portfolio_inconclusive_publication ... ok
+test portfolio_final_user_checkpoint_cannot_publish_mutated_sources_or_weights ... ok
+test provider_failure_after_an_inconclusive_tile_remains_terminal ... ok
+test tiled_and_aggregate_work_refuse_before_io_even_in_native_first_order ... ok
+test native_early_support_never_calls_model_and_model_miss_falls_through ... ok
+test insufficient_model_anchor_geometry_advances_to_independently_verified_native_support ... ok
+test exhausted_native_anchor_geometry_advances_to_independently_verified_model_support ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 10.25s
+

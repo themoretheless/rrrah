@@ -2,7 +2,7 @@
   "index": 26,
   "repository": "m-manu/go-find-duplicates",
   "commit": "cd928ba207ba7b78d939597eb48590b1e78b52c6",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "Existing prior full/partial source-review artifacts linked after current pin verification; original limits retained. This reconciliation is not a new full-source reading or new runtime execution, except the explicit blockhash-js runtime refresh.",
   "decision": "reference",
   "finding": "Size/extension shortlist and partial versus full SHA256 digests; extension grouping would miss renamed cross-extension copies.",
   "license_metadata": "Apache-2.0",
@@ -74,5 +74,16 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "prior_selected_review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "linked_review_artifacts": [
+    {
+      "review_artifact": "go-find-duplicates-complete-source-review-20261012.json",
+      "status": "verified_existing_pins_not_new_execution",
+      "pin_errors": [],
+      "original_scope": "Five original tests and four authored controls on macOS ARM64. Passing controls document upstream defects, not desirable outcomes. No Windows/Linux, broad corpus, resource, all500 or complete-library qualification."
+    }
+  ],
+  "artifact_pin_reconciliation_audit": "unlinked-reviews-pin-audit-20261013.json",
+  "prior_registry_review": "prior-registry-026-unlinked-reconciliation-20261013.json"
 }

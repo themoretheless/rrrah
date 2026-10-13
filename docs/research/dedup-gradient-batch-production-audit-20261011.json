@@ -1,0 +1,86 @@
+{
+  "status": "complete_bounded_production_four_lane_qualification",
+  "snapshot_files": 3057,
+  "current_source_delta": [
+    "crates/rrrah-dedup/src/lib.rs",
+    "crates/rrrah-dedup/tests/gradient_index.rs"
+  ],
+  "current_source_delta_scope": "Pure index feature exposure only; decode implies raster. Separately qualified macOS raster runtime and Windows compile-only.",
+  "macos_generic_tests": 117,
+  "linux_decode_generic_tests": 117,
+  "opt_level3_numeric_tests": 3,
+  "final_source_real_matcher_samples": 24,
+  "native_file_controls": 3,
+  "exact_complete_collection_pairs": 3,
+  "real_matcher_summary": [
+    {
+      "pair": "0:0",
+      "radius": "None",
+      "median_seconds": {
+        "False": 0.8744122914999999,
+        "True": 0.34323852099999996
+      },
+      "full_to_batched_ratio": 2.5475354250812656
+    },
+    {
+      "pair": "0:0",
+      "radius": "Some(64.0)",
+      "median_seconds": {
+        "False": 1.2356452295,
+        "True": 0.795812833
+      },
+      "full_to_batched_ratio": 1.5526832167834619
+    },
+    {
+      "pair": "0:1",
+      "radius": "None",
+      "median_seconds": {
+        "False": 0.680755167,
+        "True": 0.3373237295
+      },
+      "full_to_batched_ratio": 2.018106369240768
+    },
+    {
+      "pair": "0:1",
+      "radius": "Some(64.0)",
+      "median_seconds": {
+        "False": 1.824689083,
+        "True": 1.1816235415
+      },
+      "full_to_batched_ratio": 1.5442220122693788
+    },
+    {
+      "pair": "0:2",
+      "radius": "None",
+      "median_seconds": {
+        "False": 0.709115708,
+        "True": 0.42312245849999996
+      },
+      "full_to_batched_ratio": 1.6759112964929042
+    },
+    {
+      "pair": "0:2",
+      "radius": "Some(64.0)",
+      "median_seconds": {
+        "False": 1.9187770204999999,
+        "True": 0.7980957295
+      },
+      "full_to_batched_ratio": 2.404194070430745
+    }
+  ],
+  "maximum_native_process_rss_bytes": 1986084864,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-index-raster-audit-20261011.json": "929d0d5011b9d136355c4d61e6ae14b2581251c516a52c1beae7aa3705971a42",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-batch-production-snapshot-20261011.json": "10b51fad371c678b2877f93920b6f6f3ab6a25a378860e35943464eed9634eca",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-batch-production-generic-20261011.log": "31adcc82232613e55beab4455857393436a8acb5b0a445258778774c2e58ee36",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-batch-production-linux-20261011.log": "d6ae7802a062a8d6f753a55828d397bd3d8aa4e14db4e466cacd46171704bf11",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-batch-production-opt3-tests-20261011.log": "68b335d6081e44e047d38e782da08641604f7fb5987eac76eaac324d2ce63d29",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-batch-production-real-20261011.json": "e9adfece9bcdc6721945179fec386646a10d6962001f927af047978c554f5eec",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-batch-production-collection-20261011.json": "f30ab9de66b8d2f580e500eecc5aee852e43d91c4e1ec2d82aee2203ef4be87a",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-batch-production-native-build-20261011.log": "24e5011fa989d51a481a2d3d2d47ce447da752b899430f410b7d63703f7f567a",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-batch-prototype-audit-20261011.json": "a78cfe9e132f62d8cfd580237879c011032b2450fba6125c05dbc3a2bf5c7dec",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-gradient-batch-production-20261011.py": "9825d93b106fcafe16520b12d3c22ae7cb3480797507c79a3ba5c90c09922f3b"
+  },
+  "scope": "Four ordered independent distance accumulators, scalar partial blocks, unchanged logical pairs/work/table order and tie thresholds; per-pair checkpoints precede at most four-pair arithmetic blocks. No new heap scratch. Final actual-production tests retain old scalar oracle, exact distances/correspondences/cancellation counts. Real mirror Native4 proof, whole rephoto proof and all three tiled/native pair evidences match prior reports.",
+  "limits": "Bounded CPU/macOS native corpus; Linux generic decode only, no Linux Torch. Shared-host opt-level1 matcher timings do not establish whole-library or collection speedup. Full current corpus, indexed pair scaling, all formats and hard tensor/workspace RSS admission remain open."
+}

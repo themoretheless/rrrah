@@ -1,0 +1,64 @@
+{
+  "repository": "ImShyMike/image-find",
+  "commit": "8fd77ce92f94e88413a62148ad1e17304e86f7ab",
+  "whole_repo_complete": true,
+  "direct_complete_text_reads": [
+    ".cargo/config.toml",
+    ".gitattributes",
+    ".gitignore",
+    "Cargo.toml",
+    "LICENSE",
+    "README.md",
+    "cassette.tape",
+    "src/main.rs"
+  ],
+  "structured_reviews": {
+    "Cargo.lock": "Complete135package/247resolvededge traversal",
+    "assets/demo.gif": "All188frames decoded/pixel-hashed; fourselectedframes0,62,125,187visually inspected"
+  },
+  "visual_observation": "Terminal-only demo: startup, loading4wanted hashes/search293images, match listing,18found and parent-directory found.csv path. Demo is not a verified recall/performance benchmark.",
+  "license": "Complete rootMIT read, Copyright2025ImShyMike; no source copied/adopted.",
+  "findings": [
+    {
+      "kind": "hash_collision",
+      "scope": "Executed",
+      "detail": "Distinct uniform black/white8x8RGB PNGs score1.0000under locked Gradient8x8hash. Candidate hash is not byte/visual identity."
+    },
+    {
+      "kind": "empty_reference_set",
+      "scope": "Executed",
+      "detail": "With no wanted images threshold0reports searchfile as match at0.0000because max fold starts0."
+    },
+    {
+      "kind": "errors_and_copy",
+      "scope": "Executed",
+      "detail": "Corrupt wanted/search files are skipped with stderr diagnostics and successful exit; copy failure still retains match CSV row and returns success."
+    },
+    {
+      "kind": "csv_publication",
+      "scope": "Executed",
+      "detail": "Unescaped filename commas produce7CSVcolumns; CSV is written to parent of current directory and replaces existing dedicated sentinel, contrary to README cwd statement; not atomic publication."
+    },
+    {
+      "kind": "input_filtering",
+      "scope": "Executed",
+      "detail": "Mixed-case PnG excluded, nested search files ignored, PNG payload with jpgextension decoded by guessed format."
+    },
+    {
+      "kind": "threshold_admission",
+      "scope": "Executed",
+      "detail": "Threshold150accepted producing no matches; malformed threshold silently defaults90."
+    },
+    {
+      "kind": "alpha_loss",
+      "scope": "Executed",
+      "detail": "Fully transparent RGBA PNGs differing only hidden RGB fail100%match; to_rgb8discards opacity rather than admitting a matte/alpha interpretation."
+    },
+    {
+      "kind": "resource_lifecycle",
+      "scope": "Static only",
+      "detail": "MAX_SIZE256thumbnail applies after full decode. No caller byte/pixel/RSS/work budget, source-observation publication guard, cancellation, recursive directory traversal or exact-byte confirmation. Rayon thread count is not payload/RSS admission."
+    }
+  ],
+  "decision": "Reference for candidate-only search and counterexamples; not adopted as authoritative duplicate confirmation. No upstream tests tracked;13authoredCLIcontrols separate from source/runtime/platform completeness."
+}

@@ -1,0 +1,26 @@
+{
+  "experiment": "Per-owner-word cached maximum keyed by covered region bits",
+  "retained": false,
+  "target": [
+    137,
+    37
+  ],
+  "completed": false,
+  "baseline_fragments": 137183,
+  "experimental_fragments": 137664,
+  "improvement_fraction": 0.003506265353578897,
+  "reason": "0.35percent extra fragments insufficient for added mutable cache metadata",
+  "retained_test": "Independent winding priority now covers changing multiple owner bits within same word",
+  "final_suite": {
+    "passed": 203,
+    "ignored": 12,
+    "failed": 0
+  },
+  "next_action": "Incremental changed-word propagation with bounded per-source maximum aggregation",
+  "sha256": {
+    "vendor/hayro/src/native_spatial.rs": "42828aef32a86a77063f0d8dbc3bbd73b966883c8a25e31a21e1324546210dda",
+    "docs/research/ai-owner-word-cache-original-2026-10-13.log": "61572ea911af3e72888008bbf509504caced49127c627ba085b7ed4f06d5191c",
+    "docs/research/ai-owner-word-cache-verified-suite-2026-10-13.log": "39ea2c795dfdadab3a69abdbeacc68de9e1a9aed1840a46d3d5d127d639d597e",
+    "docs/research/ai-owner-word-cache-removed-suite-2026-10-13.log": "183e081b621a2743b6bc23a121dd0a5c007a9ad107e1e70d6ece89d12a79a4fd"
+  }
+}

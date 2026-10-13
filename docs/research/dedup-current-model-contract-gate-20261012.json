@@ -1,0 +1,32 @@
+{
+  "status": "complete",
+  "producer_pid": 6403,
+  "command": [
+    "cargo",
+    "test",
+    "-p",
+    "rrrah-dedup",
+    "--features",
+    "decode",
+    "--locked",
+    "--offline",
+    "--test",
+    "model_compare",
+    "--test",
+    "opposite_native",
+    "--target-dir",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-exact-portfolio-20261011"
+  ],
+  "source": "/Users/themoretheless/.codex/tmp/rrrah-dedup-current-decode-source-20261012",
+  "source_manifest": "dedup-current-decode-gate-20261012.json",
+  "test_source_sha256": {
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-current-decode-source-20261012/crates/rrrah-dedup/tests/model_compare.rs": "e5d2fe949c379438409c7fbc0316b41a603f49e845b9f6c71527c6cea8424665",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-current-decode-source-20261012/crates/rrrah-dedup/tests/opposite_native.rs": "35cce7412ec4f5bf4fd6cf996f3ef490cd0ce5953da1b2371c2277d449e73e4d"
+  },
+  "log": "/Users/themoretheless/.codex/tmp/rrrah-dedup-current-model-contract-gate-20261012.log",
+  "started_at": 1791830125.6083982,
+  "child_pid": 6404,
+  "returncode": 0,
+  "finished_at": 1791830245.105653,
+  "log_sha256": "11079bc80e3ee27a67c795aed8d9ec92f562ec225d6dcd6a69aeca31be6869bb"
+}

@@ -1,0 +1,57 @@
+{
+  "date": "2026-10-11",
+  "scope": "Model disk-swap SDR/HDR Metal preservation",
+  "adapter": "Metal Apple M4 Max",
+  "model_sources": [
+    "triangle.stl",
+    "obj-shared-metadata.obj",
+    "off-concave-u.off",
+    "ply-32-ascii.ply",
+    "ply-offset64-be.ply",
+    "ply-u64-le.ply"
+  ],
+  "checks": {
+    "model_suite_passed": 7,
+    "repeated_cycles_per_model": 20,
+    "repeated_restores": 120,
+    "additional_single_cycle_restores": 6,
+    "payload_geometry_metadata_exact": true,
+    "SDR_pre_post_swap_exact": true,
+    "HDR_binary16_pre_post_swap_exact": true,
+    "HDR_target": [
+      63,
+      65
+    ],
+    "HDR_orbit_radians": [
+      0.4,
+      -0.2
+    ],
+    "pressure_refusal_preserves_store_entry": true,
+    "early_cancellation_and_retry": true,
+    "final_CPU_root_and_queue_bytes": 0,
+    "raster_shared_helper_regression": {
+      "sources": 65,
+      "selections": 94,
+      "cases": 188,
+      "verifier_passed": true
+    }
+  },
+  "logs": [
+    {
+      "path": "/tmp/rrrah-model-swap-hdr-expanded-20261011.log",
+      "sha256": "f9b70dbcebbeccc9710cdf442baeda607f1eac676c521c04dc48103206b2c17d"
+    },
+    {
+      "path": "/tmp/rrrah-half-readback-regression-20261011.log",
+      "sha256": "a619520943eee1eb7581587f9d32646b1416aaf1cf2d4ca73367bb61351dc50c"
+    }
+  ],
+  "limitations": [
+    "Authored model subsets; not broad independent producer qualification",
+    "Neutral material rendering; no new material/texture support",
+    "Same-source preservation references, not independent lighting/color oracle",
+    "RGBA16Float attachment readback is not physical HDR measurement",
+    "Managed pressure, not OS-wide pressure; small models, not large-CAD throughput",
+    "NVIDIA deferred"
+  ]
+}

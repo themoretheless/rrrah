@@ -1,0 +1,15 @@
+{
+  "status": "verified_native_macos_bounded_pixel_equality_cancellation",
+  "tests": 6,
+  "before_returncode": 101,
+  "after_returncode": 0,
+  "pins": {
+    "crates/rrrah-dedup/src/pixels.rs": "c76a948580e513e0d4125e548aacecc567224b3b5b0debe8f6b14ad94782d62f",
+    "crates/rrrah-dedup/tests/pixels.rs": "ebe05da1afde61c94481062ff28385cd0f19ba3ddcc448363d9459373b642e1f",
+    "docs/research/dedup-pixel-equality-cancellation-before-test.rs": "86a4f847badbc36a580e3eff4f5507ee5d8441921330d63c007f5667ece200b3",
+    "docs/research/dedup-pixels-before-bounded-equality-20261010.rs": "8015b3fed41f936f3645a216b8c96c778f87c7830d28d7668a3c7a3ea4cd8015",
+    "docs/research/dedup-pixel-equality-cancellation-before.log": "7cc57d7f1461f5514f964820175abdf4d424042fd57dc4b6723fde52b7c8f7ef",
+    "docs/research/dedup-pixel-equality-cancellation-all-checkpoints.log": "2d0ceebd918b1088f283bbe40f72390498bd5e8b58d5ac1caa6b616c9ea5b3c4"
+  },
+  "scope": "Reproduced identical-byte shortcut missing late cancellation. Bounded borrowed 4096-pixel blocks preserve fast equality and invisible RGB normalization; late and every successful checkpoint cancellation tested. No Linux, full decoder/collection or whole-library qualification."
+}

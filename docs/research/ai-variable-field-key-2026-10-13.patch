@@ -1,0 +1,212 @@
+--- before/native_moments.rs
++++ after/native_moments.rs
+@@ -12,7 +12,7 @@
+         (total.is_finite() && error.is_finite()).then_some(Self {value:total,error})
+     }
+ }
+-struct Entry<const N:usize,const K:usize,const W:usize> {key:[u64;N],witness:[u64;W],area:Sum,x:Sum,y:Sum,reference:[Sum;K]}
++struct Entry<const N:usize,const K:usize,const W:usize> {key:[u64;N],words:usize,witness:[u64;W],area:Sum,x:Sum,y:Sum,reference:[Sum;K]}
+ pub(super) struct MomentTable<const N:usize,const K:usize=0,const W:usize=0> {
+     entries:Vec<Entry<N,K,W>>,
+     slots:Vec<usize>,
+@@ -63,24 +63,30 @@
+     pub(super) fn add_prefix_sample(&mut self,key:&[u64],area:f64,centroid:Point,reference:[f64;K],
+         remaining:&mut usize,cancelled:&dyn Fn()->bool,
+     )->Option<()> {
+-        self.add_impl(key,None,&[0;W],area,centroid,reference,remaining,cancelled)
++        self.add_impl(key,false,None,&[0;W],area,centroid,reference,remaining,cancelled)
+     }
+     /// Caller supplies a stable hash of the complete key and accounts for its
+     /// computation. Collisions always require exact key equality. Never mix
+     /// hash schemes for one table: equal keys must receive equal hashes.
+     pub(super) fn add_prehashed_sample(&mut self,key:&[u64],hash:u64,area:f64,centroid:Point,reference:[f64;K],
+         remaining:&mut usize,cancelled:&dyn Fn()->bool)->Option<()> {
+-        self.add_impl(key,Some(hash),&[0;W],area,centroid,reference,remaining,cancelled)
++        self.add_impl(key,false,Some(hash),&[0;W],area,centroid,reference,remaining,cancelled)
+     }
+     /// Retain the first representative only. Caller must prove that its
+     /// interpretation remains valid for every fragment with this identity.
+     pub(super) fn add_witness_sample(&mut self,key:&[u64],prehash:Option<u64>,witness:&[u64;W],area:f64,
+         centroid:Point,reference:[f64;K],remaining:&mut usize,cancelled:&dyn Fn()->bool)->Option<()> {
+-        self.add_impl(key,prehash,witness,area,centroid,reference,remaining,cancelled)
+-    }
+-    fn add_impl(&mut self,key:&[u64],prehash:Option<u64>,witness:&[u64;W],area:f64,centroid:Point,reference:[f64;K],
++        self.add_impl(key,false,prehash,witness,area,centroid,reference,remaining,cancelled)
++    }
++    /// Variable identity uses every supplied word and its exact length. The
++    /// admission width is a maximum, not permission to truncate a longer key.
++    pub(super) fn add_variable_witness_sample(&mut self,key:&[u64],prehash:Option<u64>,witness:&[u64;W],area:f64,
++        centroid:Point,reference:[f64;K],remaining:&mut usize,cancelled:&dyn Fn()->bool)->Option<()> {
++        self.add_impl(key,true,prehash,witness,area,centroid,reference,remaining,cancelled)
++    }
++    fn add_impl(&mut self,key:&[u64],variable:bool,prehash:Option<u64>,witness:&[u64;W],area:f64,centroid:Point,reference:[f64;K],
+         remaining:&mut usize,cancelled:&dyn Fn()->bool)->Option<()> {
+-        if key.len()!=self.words {return None;}
++        if key.is_empty() || key.len()>self.words || (!variable && key.len()!=self.words) {return None;}
+         debit(remaining,8+K,cancelled)?;
+         if reference.iter().any(|v|!v.is_finite()) {return None;}
+         let x=centroid.x-self.origin.x;let y=centroid.y-self.origin.y;
+@@ -89,7 +95,7 @@
+         let total=self.total.added(area)?;
+         if total.value>1.+1e-12 {return None;}
+         let mut hash=if let Some(hash)=prehash {hash} else {
+-            debit(remaining,self.words,cancelled)?;
++            debit(remaining,key.len(),cancelled)?;
+             let mut hash=0xcbf29ce484222325u64;
+             for &word in key {hash=(hash^word).wrapping_mul(0x100000001b3);}
+             hash
+@@ -103,18 +109,20 @@
+             let index=self.slots[slot];
+             if index==usize::MAX {
+                 if self.entries.len()==self.capacity {return None;}
+-                debit(remaining,N.checked_add(self.words)?.checked_add(W)?.checked_add(3+K)?,cancelled)?;
++                debit(remaining,N.checked_add(key.len())?.checked_add(W)?.checked_add(4+K)?,cancelled)?;
+                 let mut values=[Sum::default();K];
+                 for (sum,value) in values.iter_mut().zip(reference) {*sum=sum.added(area*value)?;}
+-                let mut stored=[0u64;N];stored[..self.words].copy_from_slice(key);
+-                let entry=Entry {key:stored,witness:*witness,area:Sum::default().added(area)?,
++                let mut stored=[0u64;N];stored[..key.len()].copy_from_slice(key);
++                let entry=Entry {key:stored,words:key.len(),witness:*witness,area:Sum::default().added(area)?,
+                     x:Sum::default().added(area*x)?,y:Sum::default().added(area*y)?,reference:values};
+                 if cancelled() {return None;}
+                 self.slots[slot]=self.entries.len();self.entries.push(entry);self.total=total;
+                 return Some(());
+             }
+-            debit(remaining,self.words,cancelled)?;
+-            if self.entries[index].key[..self.words]==*key {
++            debit(remaining,1,cancelled)?;
++            if self.entries[index].words!=key.len() {slot=(slot+1)&(self.slots.len()-1);continue;}
++            debit(remaining,key.len(),cancelled)?;
++            if self.entries[index].key[..key.len()]==*key {
+                 debit(remaining,3+K,cancelled)?;
+                 let entry=&self.entries[index];
+                 let a=entry.area.added(area)?;let sx=entry.x.added(area*x)?;let sy=entry.y.added(area*y)?;
+@@ -128,14 +136,17 @@
+         }
+         None
+     }
+-    pub(super) fn iter_with_witness(&self)->impl Iterator<Item=([u64;N],f64,Point,[f64;K],[u64;W])>+'_ {
++    pub(super) fn iter_with_witness(&self)->impl Iterator<Item=([u64;N],f64,Point,[f64;K],[u64;W],usize)>+'_ {
+         self.entries.iter().map(|e|(e.key,e.area.value,
+-            Point::new(self.origin.x+e.x.value/e.area.value,self.origin.y+e.y.value/e.area.value),e.reference.map(|v|v.value),e.witness))
+-    }
++            Point::new(self.origin.x+e.x.value/e.area.value,self.origin.y+e.y.value/e.area.value),e.reference.map(|v|v.value),e.witness,e.words))
++    }
++    /// Fixed-width view. Variable-key callers must use iter_with_witness to
++    /// retain the explicit identity length as well as its zero-padded words.
+     pub(super) fn iter_with_reference(&self)->impl Iterator<Item=([u64;N],f64,Point,[f64;K])>+'_ {
+         self.entries.iter().map(|e|(e.key,e.area.value,
+             Point::new(self.origin.x+e.x.value/e.area.value,self.origin.y+e.y.value/e.area.value),e.reference.map(|v|v.value)))
+     }
++    /// Fixed-width view; use iter_with_witness for variable-length identity.
+     pub(super) fn iter(&self)->impl Iterator<Item=([u64;N],f64,Point)>+'_ {
+         self.entries.iter().map(|e|(e.key,e.area.value,
+             Point::new(self.origin.x+e.x.value/e.area.value,self.origin.y+e.y.value/e.area.value)))
+@@ -277,3 +288,23 @@
+     let entry=table.iter_with_witness().next().unwrap();assert_eq!(entry.4,[11,12]);assert_eq!(entry.1,0.5);
+     assert!(MomentTable::<1,0,65>::admitted(1,Point::ZERO,&|_|Some(Box::new(()))).is_none());
+ }
++
++#[test]
++fn variable_keys_preserve_length_under_collision_and_fixed_width_refusal() {
++    let mut table=MomentTable::<4,0,1>::admitted(4,Point::ZERO,&|_|Some(Box::new(()))).unwrap();
++    let mut work=10000;
++    for key in [&[7][..],&[7,0][..],&[7,0,0][..]] {
++        table.add_variable_witness_sample(key,Some(9),&[key.len() as u64],0.125,Point::new(0.5,0.5),[],&mut work,&||false).unwrap();
++    }
++    let before=table.iter_with_witness().collect::<Vec<_>>();assert_eq!(before.len(),3);
++    assert_eq!(before.iter().map(|e|e.5).collect::<Vec<_>>(),[1,2,3]);
++    for key in [&[][..],&[7,0,0,0,0][..]] {
++        assert!(table.add_variable_witness_sample(key,Some(9),&[99],0.1,Point::new(0.5,0.5),[],&mut work,&||false).is_none());
++    }
++    assert!(table.add_witness_sample(&[7],Some(9),&[99],0.1,Point::new(0.5,0.5),[],&mut work,&||false).is_none());
++    assert!(table.add_variable_witness_sample(&[7],Some(9),&[99],0.1,Point::new(0.5,0.5),[],&mut 0,&||false).is_none());
++    assert_eq!(table.iter_with_witness().collect::<Vec<_>>(),before);
++    table.add_variable_witness_sample(&[7],Some(9),&[99],0.125,Point::new(0.5,0.5),[],&mut work,&||false).unwrap();
++    let after=table.iter_with_witness().collect::<Vec<_>>();assert_eq!(after[0].1,0.25);assert_eq!(after[0].4,[1]);
++    for e in after {assert!(e.0[e.5..].iter().all(|&v|v==0));}
++}
+--- before/native_spatial.rs
++++ after/native_spatial.rs
+@@ -141,8 +141,14 @@
+             let a=pixel.alpha();let c=pixel.native_components()?;
+             let bits=coverage.borrow();
+             let stored_key=if field_moments {Some(source_key?.key.borrow())} else {None};
+-            let key=if field_moments {&stored_key.as_ref()?.as_ref()?.words[..]} else {&bits[..key_words]};
+-            if moments.as_mut()?.add_witness_sample(key,if field_moments {None} else {Some(coverage_hash.get())},&bits,fragment.area,fragment.centroid,[a,a*c[0],a*c[1],a*c[2],a*c[3]],&mut moment_work,cancelled).is_none() {moment_complete=false;}
++            let reference=[a,a*c[0],a*c[1],a*c[2],a*c[3]];
++            let result=if field_moments {
++                let key=stored_key.as_ref()?.as_ref()?;
++                moments.as_mut()?.add_variable_witness_sample(&key.words[..key.len],None,&bits,fragment.area,fragment.centroid,reference,&mut moment_work,cancelled)
++            } else {
++                moments.as_mut()?.add_witness_sample(&bits[..key_words],Some(coverage_hash.get()),&bits,fragment.area,fragment.centroid,reference,&mut moment_work,cancelled)
++            };
++            if result.is_none() {moment_complete=false;}
+         }
+         let weight=fragment.area*pixel.alpha();alpha+=weight;
+         for (sum,value) in integral.iter_mut().zip(pixel.native_components()?) {*sum+=weight*value;}
+@@ -163,7 +169,7 @@
+         if moment_complete {
+             let mut grouped_alpha=0.;let mut grouped_integral=[0.;4];let mut compared=0usize;
+             let mut bucket_errors=0usize;let mut identity_fallbacks=0usize;let mut generation_only=0usize;
+-            for (_identity,weight,centroid,reference,key) in moments.as_ref()?.iter_with_witness() {
++            for (_identity,weight,centroid,reference,key,identity_words) in moments.as_ref()?.iter_with_witness() {
+                 if cancelled() {break;}
+                 let Some(left)=moment_work.checked_sub(regions.len()) else {break;};moment_work=left;
+                 let mut winding=saved.borrow_mut();
+@@ -172,14 +178,14 @@
+                 let Some(pixel)=evaluate(&winding,centroid,&key,occupied) else {break;};
+                 if !affine?.get() || pixel.model()!=backdrop.model() || !pixel.valid() {break;}
+                 if field_moments {
+-                    let cost=source_key?.work.replace(0).checked_add(21)?;
++                    let cost=source_key?.work.replace(0).checked_add(identity_words.checked_add(5)?)?;
+                     let Some(left)=moment_work.checked_sub(cost) else {break;};moment_work=left;
+-                    let actual=source_key?.key.borrow();let actual=&actual.as_ref()?.words;
+-                    if actual[..]!=_identity[..16] {
++                    let actual=source_key?.key.borrow();let actual=actual.as_ref()?;
++                    if actual.len!=identity_words || actual.words[..actual.len]!=_identity[..identity_words] {
+                         identity_fallbacks+=1;
+-                        if actual[1..]==_identity[1..16] {generation_only+=1;}
++                        if actual.words[1..actual.len]==_identity[1..identity_words] {generation_only+=1;}
+                         if identity_fallbacks<=16 {
+-                            eprintln!("SPATIAL_FIELD_CENTROID_IDENTITY_FALLBACK expected={:?} actual={actual:?} centroid={centroid:?}", &_identity[..16]);
++                            eprintln!("SPATIAL_FIELD_CENTROID_IDENTITY_FALLBACK expected={:?} actual={:?} centroid={centroid:?}", &_identity[..identity_words],&actual.words[..actual.len]);
+                         }
+                         // A changed generation or field never authorizes centroid
+                         // replacement. Retain the original per-fragment integral.
+@@ -238,8 +244,16 @@
+ impl FieldObservation {
+     fn new()->Self {Self {key:std::cell::RefCell::new(None),work:std::cell::Cell::new(0)}}
+     fn reset(&self,generation:u64) {
+-        self.work.set(self.work.get().saturating_add(19));
+-        *self.key.borrow_mut()=Some(FieldKey::route(generation));
++        let mut key=self.key.borrow_mut();
++        if let Some(key)=key.as_mut() {
++            // Only the active prefix has meaning. Stale tail words are never
++            // hashed, compared or copied into a new table entry.
++            self.work.set(self.work.get().saturating_add(3));
++            key.words[0]=generation;key.words[1]=2;key.len=2;
++        } else {
++            self.work.set(self.work.get().saturating_add(19));
++            *key=Some(FieldKey::route(generation));
++        }
+     }
+     fn append(&self,command:usize,identity:Option<SourceFieldIdentity>)->bool {
+         self.work.set(self.work.get().saturating_add(4));
+@@ -2805,3 +2819,16 @@
+     assert!(!observation.append(0,Some(raster)));
+     observation.reset(2);assert!(observation.append(0,Some(raster)));
+ }
++
++#[test]
++fn field_reset_reuses_storage_without_giving_stale_tail_identity() {
++    let observation=FieldObservation::new();observation.reset(7);
++    for command in 0..4 {assert!(observation.append(command,Some(SourceFieldIdentity::RasterCells([command as u64+1,9]))));}
++    let initial=observation.work.replace(0);assert_eq!(initial,19+4*4);
++    observation.reset(8);assert_eq!(observation.work.replace(0),3);
++    assert!(observation.append(2,Some(SourceFieldIdentity::AffineOwner(11))));
++    let key=observation.key.borrow();let key=key.as_ref().unwrap();
++    let mut fresh=FieldKey::route(8);fresh.append(2,SourceFieldIdentity::AffineOwner(11)).unwrap();
++    assert_eq!(key.len,fresh.len);assert_eq!(key.words[..key.len],fresh.words[..fresh.len]);
++    assert_ne!(key.words[key.len..],fresh.words[fresh.len..]);
++}

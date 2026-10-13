@@ -1,0 +1,29 @@
+{
+  "date": "2026-10-11",
+  "scope": "Folder selection supersedes old file work even without replacement image",
+  "bug": "App::open_folder only submitted scan; empty result never submitted new foreground generation, allowing earlier file load or neighbour work to remain current",
+  "change": "ForegroundLoader::cancel_pending factors generation invalidation, duplicate/flight reset and pending queue drain from shutdown; open_folder invokes it and RawPrefetcher::begin_foreground before scan",
+  "regression": "Using real App loader submission queue and FolderScanner, active and queued generation tokens cancel, queue drains, flight clears, empty result queues no old file",
+  "tests": {
+    "focused_passed": 1,
+    "ordinary_app_passed": 202,
+    "failed": 0,
+    "ignored": 36
+  },
+  "logs": [
+    {
+      "path": "/tmp/rrrah-folder-intent-cancellation-20261011.log",
+      "sha256": "45bd4c4958784b31bb518fb48d9fdda8f7fe2d3bd82c81b70631a98f3ba7f3f3"
+    },
+    {
+      "path": "/tmp/rrrah-folder-intent-app-all-20261011.log",
+      "sha256": "a85645404cdea3e14f09e020c718fe8b962f6b8f5d48de6f79b8d95f81e5a7ec"
+    }
+  ],
+  "limits": [
+    "Cooperative generation invalidation, not interruption inside synchronous native codec",
+    "Raw prefetch admitted writes may finish according to existing store admission contract",
+    "Unit integration, not native-window scenario",
+    "Does not close remaining 100-format or physical HDR qualification"
+  ]
+}

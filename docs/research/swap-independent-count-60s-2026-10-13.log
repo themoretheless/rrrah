@@ -1,0 +1,19 @@
+warning: function `fallible_zeroed_bytes` is never used
+   --> crates/rrrah-cache/src/mosaic_payload_v1.rs:728:4
+    |
+728 | fn fallible_zeroed_bytes(len: usize) -> Result<Box<[u8]>, MosaicPayloadError> {
+    |    ^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-cache` (lib) generated 1 warning
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.09s
+     Running tests/sustained_swap.rs (target/debug/deps/sustained_swap-16217ab17c614679)
+
+running 1 test
+test sustained_count_cap_evicts_without_byte_or_ttl_pressure has been running for over 60 seconds
+sustained swap: seconds=60.058196625 cycles=528 pressure_refusals=528 root_peak=2097152 queue_peak=262144 disk_peak_bytes=786624 disk_peak_objects=3 final=0
+test sustained_count_cap_evicts_without_byte_or_ttl_pressure ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 9 filtered out; finished in 60.06s
+

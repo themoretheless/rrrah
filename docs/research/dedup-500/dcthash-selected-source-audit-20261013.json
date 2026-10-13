@@ -1,0 +1,34 @@
+{
+  "repository": "actuallydamo/dcthash",
+  "commit": "d9d177d8f8c39892e7627f3c868b48bfda8b5df5",
+  "status": "verified_selected_implementation_and_specs_with_12_real_ruby_controls",
+  "fully_read": [
+    "lib/dcthash.rb",
+    "lib/dcthash/version.rb",
+    "spec/dcthash_spec.rb",
+    "LICENSE.txt"
+  ],
+  "whole_repository_complete": false,
+  "upstream_tests_run": false,
+  "image_backend_executed": false,
+  "controls": "docs/research/dedup-500/dcthash-selected-controls-20261013.json",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/actuallydamo--dcthash/02-dcthash.rb": "b298662bc17e7dc0bbced33bda556966218c0274650fd568aa54076ce3b55928",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/actuallydamo--dcthash/03-version.rb": "48de42146e4053c9de1366190ccc68a99fdceb7b11524cc962974d686671dddd",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/actuallydamo--dcthash/04-dcthash_spec.rb": "38eb904819083965da6377392be61ffc8abc4cc64336f5494c07100d1eff197c",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/actuallydamo--dcthash/00-README.md": "1b75f95b6911c71b6b42223d586b0700f38a4d174c295d1728ad4766dba00890",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/actuallydamo--dcthash/01-LICENSE.txt": "1b5b88d6c6f3e631f822a5e9bec8c27f962e759a33c3b05432c522da9266f478",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/dcthash-selected-controls-20261013.json": "8175caace7b0d3da7d75d91d00cdb123ea31555ff5ed511c0b7a74a6a5cb2ed8",
+    "/Users/themoretheless/.codex/tmp/rrrah-dcthash-selected-20261013/controls.rb": "79a78c77fc59f5b442abd7b0619b56d738b0c5f1bf4a0bec4bbb2841eef8dceb",
+    "/Users/themoretheless/.codex/tmp/rrrah-dcthash-selected-20261013/lib/dcthash.rb": "b298662bc17e7dc0bbced33bda556966218c0274650fd568aa54076ce3b55928",
+    "/Users/themoretheless/.codex/tmp/rrrah-dcthash-selected-20261013/lib/dcthash/version.rb": "48de42146e4053c9de1366190ccc68a99fdceb7b11524cc962974d686671dddd"
+  },
+  "findings": [
+    "Fast DCT matches independent direct cosine sums for lengths 1,2,4,8,16,32 within 1e-10.",
+    "distance uses permissive String.to_i(16): garbage and empty collide at zero; ffjunk equals ff.",
+    "similar? accepts empty strings with default threshold and uses strict distance<threshold.",
+    "calculate mutates caller image using resize!, samples coefficients 1..8 in both axes, omits both zero-frequency axes, emits unpadded hexadecimal. These image-path observations are static only.",
+    "Specs include golden hashes and pairwise noncollision assertions; fixture/backend execution has not been performed."
+  ],
+  "decision": "arithmetic reference only; do not adopt permissive hash input contract or infer image parity"
+}

@@ -1,0 +1,128 @@
+{
+  "status": "fixed_before_build_and_execution",
+  "harness": "/Users/themoretheless/.codex/tmp/rrrah-model-texture-diagnostic-v3-20261013",
+  "harness_sha256": {
+    "Cargo.toml": "cb5456f3f5ac7f3ed7b3796a072b437389b9d6dc9896390e31bc6e24d5882972",
+    "src/main.rs": "df0c838f01b94883946afb2f9c365e4dc900a7f218331f68cb518c00b1a3b41c"
+  },
+  "cases": [
+    {
+      "label": "positive-1",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-model-positive-pixel-diagnostic-20261013/0001-plan.json",
+      "plan_sha256": "b80beb686572188c1725cc824a4d4f2dcae810e4d50cb59614eccdd8af3f1d69"
+    },
+    {
+      "label": "positive-2",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-model-positive-pixel-diagnostic-20261013/0002-plan.json",
+      "plan_sha256": "7c22edb616c360f1b7675b9d0cd9196c3bac8314e3a2f172d2b36822bc7ca1e9"
+    },
+    {
+      "label": "positive-6",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-model-positive-pixel-diagnostic-20261013/0006-plan.json",
+      "plan_sha256": "113398bd4e9cc80cb5b5c51df0a96bf9880252a69e360b623a97020194b5cb88"
+    },
+    {
+      "label": "positive-12",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-model-positive-pixel-diagnostic-20261013/0012-plan.json",
+      "plan_sha256": "d71898bcfd1b8d51c4b4a25d36921c7f87b761060f038eee234f7855e1d4715a"
+    },
+    {
+      "label": "positive-34",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-model-positive-pixel-diagnostic-20261013/0034-plan.json",
+      "plan_sha256": "7c57c294e6f2cb531244a0db1e0a50a0522c4177859baf5015fa626978e9ed7a"
+    },
+    {
+      "label": "positive-35",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-model-positive-pixel-diagnostic-20261013/0035-plan.json",
+      "plan_sha256": "702f391128ed3100003d3192ce7a5b1391d598ca07742b791acb9a6c4ad77fae"
+    },
+    {
+      "label": "positive-80",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-model-positive-pixel-diagnostic-20261013/0080-plan.json",
+      "plan_sha256": "9c719edb4bf55a6e5417ccbac4c7dedd471afbf2c4e84c925f60f57b24d56425"
+    },
+    {
+      "label": "positive-81",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-model-positive-pixel-diagnostic-20261013/0081-plan.json",
+      "plan_sha256": "bf8934418b7d08027792f692a14be9badef96d288566828d163cce925eff15b6"
+    },
+    {
+      "label": "positive-105",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-model-positive-pixel-diagnostic-20261013/0105-plan.json",
+      "plan_sha256": "21c291f2a859c9c3ab9a2339e371b8c908ea3d04f2ef506e5e7c2dbc76370a49"
+    },
+    {
+      "label": "positive-164",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-model-positive-pixel-diagnostic-20261013/0164-plan.json",
+      "plan_sha256": "7f5b9f098b074176ef0da146f74fa8390aff4e43bc3ee7d93fd60c57b08ec797"
+    },
+    {
+      "label": "negative",
+      "plan": "docs/research/dedup-model-pixel-diagnostic-negative-v2-plan-20261013.json",
+      "plan_sha256": "074f523ab7e00d46c6a51d2d3d3d1cd68768568b7221e57be0a348b3c3ea8498"
+    },
+    {
+      "label": "self_control",
+      "plan": "docs/research/dedup-model-pixel-diagnostic-self_control-v2-plan-20261013.json",
+      "plan_sha256": "7791f5951ea32ddaf368959820ddeb14b5a004a6064dbe12577d41ff4d3a193f"
+    },
+    {
+      "label": "control-identity",
+      "expect": "positive",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-texture-controls-20261013/identity-v3-plan.json",
+      "plan_sha256": "d5e13ff2507828a404c6b2c29b265816731c95eb4a282223b56528dbe945e8ac"
+    },
+    {
+      "label": "control-affine",
+      "expect": "positive",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-texture-controls-20261013/affine-v3-plan.json",
+      "plan_sha256": "a374fa90fce1e54f384ed7f3ba1648abd96328ed4b911dd7e632197bcc44085f"
+    },
+    {
+      "label": "control-inversion",
+      "expect": "negative",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-texture-controls-20261013/inversion-v3-plan.json",
+      "plan_sha256": "be94f92a19a4adc2237f6bf9787df9c3b29b05aeb8ead7e6c7014b6029866aa4"
+    },
+    {
+      "label": "control-independent",
+      "expect": "uncorrelated",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-texture-controls-20261013/independent-v3-plan.json",
+      "plan_sha256": "8cdd3309a9a53646e5990151773d0f441e2d533a74a3a480e77ba7626ecd95fa"
+    },
+    {
+      "label": "control-flat",
+      "expect": "flat",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-texture-controls-20261013/flat-v3-plan.json",
+      "plan_sha256": "ba42273a140c8b7a1097640f497b3a573012be1a0ce2c061c46c286a2ba2eb80"
+    },
+    {
+      "label": "control-planes",
+      "expect": "flat",
+      "plan": "/Users/themoretheless/.codex/tmp/rrrah-texture-controls-20261013/planes-v3-plan.json",
+      "plan_sha256": "50bb357553ca6fad5f0af07adb218a19974fe93a8f7616033f8b20a8f648a13a"
+    }
+  ],
+  "filter_radius": 2,
+  "scope": "Predetermined texture diagnostic on all12 cases. Per-tile mean/linear spatial gradient removed independently, luminance correlation only; not a duplicate classifier or heldout evidence.",
+  "tile_sides": [
+    16,
+    32
+  ],
+  "variance_floor": 1e-05,
+  "maximum_taps_per_direction_scale": 800000000,
+  "correction": {
+    "prior_plan_sha256": "2b79532bb52e616656ddc4164d4a656fba92f3fb7a2adb65d6907389dfdf1d74",
+    "reason": "Authored PFM controls first returned ColorTransformRequired, as designed for missing primaries. V3 adds only explicit caller linear-sRGB primaries option for authored controls; natural inputs keep defaultfalse. Same texture formula, filter, tiles and variance floor. All18 cases run through same saved v3 executable."
+  },
+  "control_inputs": {
+    "/Users/themoretheless/.codex/tmp/rrrah-texture-controls-20261013/inverse.pfm": "b1006ff5ce6c4b41bb484b13b68edb9ea6f1bcb7eef95ce486461d7d8303fe93",
+    "/Users/themoretheless/.codex/tmp/rrrah-texture-controls-20261013/affine.pfm": "b0a0b7fc9c54e2936ddbbca7cfe4c52560ce48326604cafdc6efe7395883ca32",
+    "/Users/themoretheless/.codex/tmp/rrrah-texture-controls-20261013/unrelated.pfm": "86990417344590379489dc72a3d300da63ac06ed188effbafe511194ab19c636",
+    "/Users/themoretheless/.codex/tmp/rrrah-texture-controls-20261013/plane_b.pfm": "fb7edfdb172bf82e2627c5b3334aa3ff0fd050d345a1a798e29b51ab28ebe22b",
+    "/Users/themoretheless/.codex/tmp/rrrah-texture-controls-20261013/plane_a.pfm": "8f28d9d956fa198c14babf58e6766ab4d6c57f01777283962ea9382fe03b5f49",
+    "/Users/themoretheless/.codex/tmp/rrrah-texture-controls-20261013/flat_b.pfm": "21a9deb118f5e4d01fffd427e7976600b08e59a0048313e218a3aa4ca4e346dc",
+    "/Users/themoretheless/.codex/tmp/rrrah-texture-controls-20261013/flat_a.pfm": "896648439c053e81462b63588dfd3efd7a9a016b1c9aa7bfbea8267672e30b14",
+    "/Users/themoretheless/.codex/tmp/rrrah-texture-controls-20261013/texture.pfm": "f7a669138e5b36236fb93b3e2706b0a5a4de3d6f30987eb742a2e7503a94ac7e"
+  }
+}

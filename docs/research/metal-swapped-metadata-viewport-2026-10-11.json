@@ -1,0 +1,21 @@
+{
+  "scope": "Viewport planning without complete decoded source",
+  "adapter": "Metal Apple M4 Max",
+  "result": "passed",
+  "changes": [
+    "visible_source_region_for_geometry accepts dimensions and pixel aspect metadata",
+    "SwappedRaster exposes retained pixel aspect without disk reads",
+    "whole-raster planner delegates to same geometry path"
+  ],
+  "validation": [
+    "52 GPU unit tests",
+    "actual Metal swapped region source released before metadata viewport planning and crop restore",
+    "exact SDR HDR references for aspects 0.5 1 2",
+    "zero dimensions and invalid aspect rejected; offscreen geometry skipped"
+  ],
+  "remaining": [
+    "main viewer full-source ownership and asynchronous region reads remain to integrate",
+    "physical HDR and NVIDIA qualification",
+    "full100-format acceptance"
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "status": "complete_arg_source_review_two_counterexamples_and_one_lossless_control",
+  "commit": "a74f90d293e05856d19a4c0ac2b29b46ef16cf23",
+  "fully_read_additional_files": {
+    "fclones/src/arg.rs": 474
+  },
+  "original_tests_passed": 11,
+  "additional_controls_passed": 3,
+  "tests": [
+    "arg::test::dollar_quoting",
+    "arg::test::quote_no_special_chars",
+    "arg::test::quote_path_with_control_chars",
+    "arg::test::quote_path_with_single_quotes",
+    "arg::test::quote_path_with_special_chars",
+    "arg::test::split_doubly_quoted_args",
+    "arg::test::split_escaped_single_quote",
+    "arg::test::split_quotes_escaping",
+    "arg::test::split_single_quoted_args",
+    "arg::test::split_spaces_escaping",
+    "arg::test::split_unquoted_args",
+    "controls::empty_argument_is_lost_on_quote_split_roundtrip",
+    "controls::invalid_utf8_roundtrip_preserves_bytes",
+    "controls::unicode_dollar_quoted_text_panics_at_byte_slice"
+  ],
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/review-dedup-fclones-arguments-20261012.py": "269c3e3edc97a94060b928b4efc38697d5934274f23b3a5ba20b33dc95c3a8dd",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-argument-controls-tests-20261012.log": "72492967176418e4f264581202b29a008216896aea9ff59d9e88faf88b7a426d",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-argument-controls-20261012/Cargo.toml": "3bf4addd2e3c74d82156ce838a845f26632b20f1438a40de5b927871ad17745b",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-argument-controls-20261012/Cargo.lock": "b134da6923d54664894022f8816e91e4104612a2241ae6ef8959c1ae154fb241",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-argument-controls-20261012/src/lib.rs": "c4e36a600b542da7f0eba080d60c57c25852358d2305176fccecd4165d10fc89",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-argument-controls-20261012/src/arg.rs": "a92c2b2078b0d74b27cdd4a6285136016b203a637192f8f010aa7cc6d070445a",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-full-source-20261012/fclones/src/arg.rs": "a92c2b2078b0d74b27cdd4a6285136016b203a637192f8f010aa7cc6d070445a"
+  },
+  "observations": [
+    "The dollar-quote parser advances pos per character, then slices UTF8 bytes: split of Unicode dollar-quoted \u00e9 panics; ASCII control works.",
+    "quote of empty OsString returns empty text; split then loses the argument. Explicit empty single quotes control retains it.",
+    "Unix invalid UTF8, whitespace and apostrophe roundtrip preserves exact bytes through STFU8.",
+    "SPECIAL_CHARS contains Unicode small tilde but not ASCII tilde; quote of ASCII tilde can allow shell expansion. Source observation only, no shell execution."
+  ],
+  "scope": "Entire474-line arg.rs read, byte-identical isolated module with compatible offline-resolved dependencies. Eleven original tests and three controls passed; panic deliberately caught. No CLI/script/transform execution, Windows behavior, implementation adoption, whole42tree/full500 completion or general shell correctness claim."
+}

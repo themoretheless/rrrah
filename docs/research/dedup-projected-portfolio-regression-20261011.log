@@ -1,0 +1,69 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+    Finished `test` profile [optimized + debuginfo] target(s) in 1m 33s
+     Running tests/portfolio_collection.rs (target/debug/deps/portfolio_collection-9b773bfe39e3c0dd)
+
+running 10 tests
+test cumulative_overflow_policy_and_memory_preflight_precede_iterator_and_io ... ok
+test duplicate_file_and_complete_pair_limits_refuse_before_file_io ... ok
+test empty_and_single_file_batches_are_complete_without_invented_pairs ... ok
+test idle_owner_cancellation_and_late_provider_failure_discard_earlier_decisions ... ok
+test every_pair_is_deterministic_matches_direct_evidence_and_credit_follows_report_owners ... ok
+test a_native_empty_proposal_bank_does_not_hide_model_only_collection_support ... ok
+test late_tiled_pair_failure_or_idle_owner_cancellation_discards_earlier_collection_results ... ok
+test collection_checks_every_pair_with_automatic_tiles_and_retained_attempt_credit ... ok
+test final_cancellation_or_final_callback_source_mutation_never_publishes_a_stale_batch ... ok
+test native_evidence_and_report_slots_have_independent_last_owner_credit ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 6.17s
+
+     Running tests/projected_portfolio.rs (target/debug/deps/projected_portfolio-5d1e2dc12bc6ffbe)
+
+running 11 tests
+test aggregate_and_constituent_work_refuse_before_io_and_cancel_wins ... ok
+test native_alpha_refusal_recovers_with_projected_original_support_in_both_orders ... ok
+test provider_and_source_weight_failures_after_native_inconclusive_remain_terminal ... ok
+test collection_unknown_does_not_swallow_late_source_or_provider_failure ... ok
+test alpha_collision_exhausts_projected_and_preserves_typed_native_inconclusive ... ok
+test hdr_regions_recover_after_whole_miss_and_exhaust_before_native_negative ... ok
+test global_and_both_owner_generations_cancel_first_middle_and_last_checkpoints ... ok
+test collection_retains_supported_and_explicit_unknown_pairs_in_both_orders ... ok
+test collection_work_admission_precedes_iterator_and_unknown_reports_keep_final_source_guards ... ok
+test final_callback_source_and_weight_mutations_precede_support_and_inconclusive ... ok
+test native_early_support_avoids_inference_and_projected_exhaustion_can_recover_natively ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 11.60s
+
+     Running tests/search_portfolio.rs (target/debug/deps/search_portfolio-486c88b06d33fbad)
+
+running 13 tests
+test cumulative_and_both_policy_preflight_precede_io_cancel_wins ... ok
+test tiled_and_aggregate_work_refuse_before_io_even_in_native_first_order ... ok
+test provider_failure_after_an_inconclusive_tile_remains_terminal ... ok
+test cross_stage_source_or_weight_changes_and_provider_errors_never_become_misses ... ok
+test portfolio_final_user_checkpoint_cannot_publish_mutated_sources_or_weights ... ok
+test both_orders_stop_at_support_and_misses_advance_without_leaked_payload ... ok
+test automatic_tiles_recover_after_full_misses_in_both_orders_and_exhaust_before_native_fallback ... ok
+test global_and_both_generations_cancel_entry_and_terminal_publication ... ok
+test final_source_mutation_and_cancellation_precede_portfolio_inconclusive_publication ... ok
+test complete_native_miss_cannot_turn_model_insufficiency_into_an_ordinary_negative_in_either_order ... ok
+test native_early_support_never_calls_model_and_model_miss_falls_through ... ok
+test insufficient_model_anchor_geometry_advances_to_independently_verified_native_support ... ok
+test exhausted_native_anchor_geometry_advances_to_independently_verified_model_support ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 25.65s
+

@@ -1,0 +1,70 @@
+{
+  "objective_complete": false,
+  "format_catalog": {
+    "rows": 100,
+    "implemented_subset": 94,
+    "pending_normal_viewer": [
+      "PTX",
+      "MEF",
+      "RWZ",
+      "BAY",
+      "CAP",
+      "AI"
+    ],
+    "fully_qualified_rows": 0,
+    "basis": "Current catalog explicitly says none fully qualified; subset tests cannot override per-row acceptance gaps"
+  },
+  "requirements": [
+    {
+      "requirement": "100 correct image formats",
+      "status": "incomplete",
+      "remaining": "Six missing normal-viewer implementations and broader per-row color/orientation/precision/animation/layer/producer qualification"
+    },
+    {
+      "requirement": "RAM cache, buffer, swap, TTL/size/count",
+      "status": "implemented; selected current scenarios verified",
+      "remaining": "Hours-long reliability, OS pressure and physical slow-drive qualification are absent"
+    },
+    {
+      "requirement": "Configurable previous/next prefetch",
+      "status": "implemented; existing worker/integration regressions",
+      "remaining": "Not a universal all-format responsiveness proof"
+    },
+    {
+      "requirement": "Metal GPU shaders and compute",
+      "status": "actual hardware selected-scenario verification",
+      "remaining": "No universal all-format qualification"
+    },
+    {
+      "requirement": "HDR",
+      "status": "float transport and live window presentation verified",
+      "remaining": "Physical luminance/color calibration"
+    },
+    {
+      "requirement": "NVIDIA/CUDA",
+      "status": "native CUDA library and explicit NVIDIA selection implemented; hardware deferred by user",
+      "remaining": "Actual NVIDIA host execution and scope of viewer CUDA integration unqualified"
+    },
+    {
+      "requirement": "3D formats",
+      "status": "Native STL/OBJ/PLY/OFF subsets",
+      "remaining": "Materials/textures, wider formats and original-producer viewer qualification"
+    }
+  ],
+  "next_actions": [
+    "Find original PTX/BAY/CAP/RWZ files and Mamiya WB reference",
+    "Resolve strict AI fidelity differences against independent renderer",
+    "Extend producer/variant qualification for existing94 rows",
+    "NVIDIA hardware only when user resumes that phase"
+  ],
+  "sha256": {
+    "docs/IMAGE_FORMATS_100.md": "cf0c5bdb5ae33f285a6b44bca1cbe533b07ce3a4021dd65e740c54eda0564604",
+    "docs/MODEL_FORMATS.md": "ec469d8779777618fa46fec5765ff19986c14de36000db741f7c522e50e165a4",
+    "crates/rrrah-app/src/main.rs": "b59cf0cf8b59201e4309c2b56bda35dde4cae76c00ea851d6c7e7ba0b87c6559",
+    "crates/rrrah-cuda/src/lib.rs": "aeec2c3c3b737f7b83009c74ddf187cfd3bbb34891ecb26e66f81b87f167f73a",
+    "docs/research/png-packed-gray-metal-2026-10-13.json": "f8bb124d16919247dbc23f66358a2c18b34924ec206d682cd0a16e25610f8cc4",
+    "docs/research/metal-live-ready-2026-10-13.json": "afd34b3f189e74a6f5b030c1d04d2f0550d9803b57af288fff63fd1bc09c0e5f",
+    "docs/research/100k-swap-teardown-2026-10-13.json": "77699e08b48a0d9223b604dd1b5598d407050a475fde73c847879b8e752a13b7",
+    "docs/research/app-idle-nonzero-ttl-2026-10-13.json": "a3f7ae1a5203807bc5e3698ef5bd2ca3e32ac1eef41dedb2db44454a12989a3f"
+  }
+}

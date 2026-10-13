@@ -1,0 +1,27 @@
+{
+  "status": "verified13file_source_six_controls_and_three_sanitizer_counterexamples",
+  "repository": "AzuxDario/Perceptual-image-hashes",
+  "commit": "ec33225edc08e2158f0f2198da5d4a5f8a02e465",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/azux-hashes-runtime-controls-20261013.json": "0f3e042ab00078129564273279d3b26cc130b42b0f5e8f174fd515f244085102",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/azux-hashes-full-source-20261013.json": "7719cdf591087874db2d840a80245243101a31bd2c4bcbc6c110fee30d2aaa71",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/azux-hashes-complete-source-review-20261013.json": "918f1455559dce1029c2bd7e64c9da5c00067ce63ee6e80fdf37bdc419a02003",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-azux-hashes-controls-20261013.py": "0843c2818dfa7a9508ac0cb09fcd096f5c52cb02b92817968b97f76da1752326",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/AzuxDario--Perceptual-image-hashes/tree.json": "56268172f8257d693ce83f1b55193c0cfe7ef0f8e9d023cfc5e5f572ca62d251"
+  },
+  "complete_text_files": 13,
+  "safe_distinct_controls": 6,
+  "safe_build_modes": [
+    "normal",
+    "sanitized"
+  ],
+  "seeded_mean_oracle_grids": 100,
+  "mean_mismatches": 97,
+  "top_stride_mismatches": 56,
+  "sanitizer_counterexamples": [
+    "phash",
+    "position_zero",
+    "difference_short"
+  ],
+  "scope": "Independent complete Git/source pins and actual compiler/executable/log/sanitizer result verification. Original implementation translation units unchanged; one private-method probe via access-only header macro. No upstream test/build system, decoded-pixel recipe, all-platform, performance, precision or correct full DCT claim. Source not adopted."
+}

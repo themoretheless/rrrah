@@ -1,0 +1,26 @@
+{
+  "status": "verified_one_original_pillow_test_and_pure_doctests_plus_counterexamples",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/probe-dedup-dhash-upstream-20261012.py": "9b5bb54b551fa08e3f3db2f11de96e5aed225fae5301b4299063415f227579c2",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/dhash-full-source-20261012.json": "38c9687feabdcb5e222105dab10efb734db24b46503d01fc1139dff8e500fc1e",
+    "/Users/themoretheless/.codex/tmp/rrrah-dhash-full-source-20261012/test.py": "8d791afa55686c13716657c199d968c73253cea7224dd559f075154dfeb670c1",
+    "/Users/themoretheless/.codex/tmp/rrrah-dhash-full-source-20261012/dhash.py": "b09aa8f978e42b6997cd91c6c7680f950efbaa5a60288ce2bbf8782ec5471b39",
+    "/Users/themoretheless/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3": "4158f03e1bae2b759f25a1ba1fbdab8bfb7161eba4caf22e28f0915986625bbc",
+    "/Users/themoretheless/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/PIL/Image.py": "04af3f2db7ffdd61e829fa7aa8f5481d394a0a4129a8fd8aa5b13908928fcd6d"
+  },
+  "python": "3.12.14 (main, Aug 25 2026, 13:50:33) [Clang 22.1.3 ]",
+  "pillow": "12.3.0",
+  "original_unittest_passed": 1,
+  "doctest_attempted": 24,
+  "doctest_failed": 0,
+  "test_adapter": "Original test module AST with only unavailable import wand.image removed; only test_get_grays_pil selected. No mock Wand or source-file changes. Remaining two original tests not executed.",
+  "counterexamples": {
+    "fully_invisible_palette_rgb_changes_hash": {
+      "left": 0,
+      "right": 340282366920938463444927863358058659840,
+      "hamming": 64
+    },
+    "opaque_white_and_black_share_zero_hash": true
+  },
+  "scope": "Pillow and pure-list behavior of pinned source; full upstream suite failed import because Wand/native ImageMagick unavailable. No upstream backend parity/platform or rrrah full-source/runtime qualification."
+}

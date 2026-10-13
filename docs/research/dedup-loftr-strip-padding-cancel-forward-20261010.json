@@ -1,0 +1,67 @@
+{
+  "status": "complete_real_weight_cooperative_cancellation",
+  "pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/loftr-strip-padding-cancel-forward-qualified-20261010": "95d69949e07c5bd5ec92b811f2837410441870d32e59aa36aff180b67e2b76e1",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-loftr-strip-padding-snapshot-20261010.json": "01c4d3293677acc581e7244a3dcbc18ef3a125ee1cf13eb9c5282bc80550a586",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-native-file-model-input-20261010.json": "0487581eb9ef299aa7d2ec3119f36f895c663e9fbf59005b6994d1351b29c5a9",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-loftr-native-20261010-runtime-pins.json": "8daa92d3ed2c84278338c53eedffed1fcdc272bf8ee7a419397cd7f098a6783a",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors": "59e55bf0ecd047db9c513672d121a3ea677529ad448bdc3a359e92862c74ddd7",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-loftr-strip-padding-cancel-forward-20261010.py": "63c62cf60100e58c16e9f7e33431fc888c70a56a6bf94f14737cdc94b6327e40",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-loftr-strip-padding-native-build-20261010.log": "38ccbbdb4979c57151b5eaac6fa7c16e75625c94d750b53966c1929b4575e258",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/native-file-model-input-20261010/320-0.gray": "45903d6b4f1f64f17f31780e2e3a2332abdf9ab91dd8bf2aa382d0e315248523",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/native-file-model-input-20261010/320-1.gray": "7f730664ff01b4af394e3f0e043a63b1830f829068c61299dfee80c7472b2f9d",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/native-file-model-input-20261010/640-0.gray": "f9981f6bb48d96c6caaabc7535038f7b602ee6e12e1ace06724e084d9dc7f491",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/native-file-model-input-20261010/640-1.gray": "2b776b8b070228a0cdebdf0e3f71160dc5d98bde5546a38e84a3d283db091424"
+  },
+  "results": [
+    {
+      "side": 320,
+      "returncode": 0,
+      "stdout": "{\"cancelled_at\":[1,2,16,64,158,309,312,316,317],\"checkpoints\":317,\"raw_proposals\":263,\"retry_exact\":true,\"scope\":\"Cooperative checkpoints; individual libtorch kernels are not preempted.\",\"status\":\"ok\"}\n",
+      "stderr": "",
+      "evidence": {
+        "cancelled_at": [
+          1,
+          2,
+          16,
+          64,
+          158,
+          309,
+          312,
+          316,
+          317
+        ],
+        "checkpoints": 317,
+        "raw_proposals": 263,
+        "retry_exact": true,
+        "scope": "Cooperative checkpoints; individual libtorch kernels are not preempted.",
+        "status": "ok"
+      }
+    },
+    {
+      "side": 640,
+      "returncode": 0,
+      "stdout": "{\"cancelled_at\":[1,2,16,64,232,457,460,464,465],\"checkpoints\":465,\"raw_proposals\":925,\"retry_exact\":true,\"scope\":\"Cooperative checkpoints; individual libtorch kernels are not preempted.\",\"status\":\"ok\"}\n",
+      "stderr": "",
+      "evidence": {
+        "cancelled_at": [
+          1,
+          2,
+          16,
+          64,
+          232,
+          457,
+          460,
+          464,
+          465
+        ],
+        "checkpoints": 465,
+        "raw_proposals": 925,
+        "retry_exact": true,
+        "scope": "Cooperative checkpoints; individual libtorch kernels are not preempted.",
+        "status": "ok"
+      }
+    }
+  ],
+  "scope": "Real-weight cooperative checkpoint cancellation; native-prepared gray inputs.\n\nTwo positive input sizes; nine one-shot cancellation points each and exact retry.\nThis does not prove kernel preemption, cancellation latency or a total RSS bound.\n"
+}

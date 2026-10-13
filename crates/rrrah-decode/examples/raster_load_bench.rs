@@ -1,6 +1,6 @@
 //! Warm filesystem, in-process decode + display-preparation timings; no GPU claim.
 use rrrah_core::RasterPixels;
-use rrrah_decode::{DecodeRequest, decode_raster, prepare_raster_for_display};
+use rrrah_decode::{DecodeRequest, decode_raster, prepare_raster_for_display_with_budget};
 use std::{hint::black_box, time::Instant};
 fn fingerprint(pixels: &RasterPixels) -> String {
     let mut hash = blake3::Hasher::new();
@@ -32,17 +32,22 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     if args.len() == 6 && args[4] == "--cancel-after-ms" {
         return cancellation_bench(&args);
     }
-    if args.len() != 4 {
-        return Err("usage: raster_load_bench FILE INDEX ITERATIONS".into());
+    let managed_srgb = args.len() == 5 && args[4] == "--managed-srgb";
+    if args.len() != 4 && !managed_srgb {
+        return Err("usage: raster_load_bench FILE INDEX ITERATIONS [--managed-srgb]".into());
     }
     let mut request = DecodeRequest::new(&args[1]);
     request.image_index = args[2].parse()?;
+    if managed_srgb {
+        request.assume_untagged_srgb = true;
+        request.memory_budget = Some(rrrah_core::MemoryBudget::new(512 * 1024 * 1024));
+    }
     let count: usize = args[3].parse()?;
     if count < 3 {
         return Err("at least 3 iterations required".into());
     }
     for _ in 0..3 {
-        black_box(prepare_raster_for_display(&decode_raster(&request)?)?);
+        black_box(prepare_raster_for_display_with_budget(&decode_raster(&request)?, request.memory_budget.as_ref())?);
     }
     let mut load = Vec::new();
     let mut prepare = Vec::new();
@@ -52,7 +57,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         let started = Instant::now();
         let decoded = decode_raster(black_box(&request))?;
         let loaded = Instant::now();
-        let display = prepare_raster_for_display(black_box(&decoded))?;
+        let display = prepare_raster_for_display_with_budget(black_box(&decoded), request.memory_budget.as_ref())?;
         let finished = Instant::now();
         load.push((loaded - started).as_secs_f64() * 1000.);
         prepare.push((finished - loaded).as_secs_f64() * 1000.);
@@ -63,6 +68,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
         digest = Some(current);
         black_box(display);
+    }
+    if let Some(budget) = &request.memory_budget {
+        assert_eq!(budget.used(), 0, "benchmark retained managed pixels");
+        eprintln!("managed_srgb: limit_bytes={} peak_bytes={} final_bytes=0", budget.limit(), budget.peak());
     }
     println!(
         "{{\"path\":{:?},\"index\":{},\"iterations\":{},\"load_p50_ms\":{},\"load_p95_ms\":{},\"prepare_p50_ms\":{},\"prepare_p95_ms\":{},\"cpu_ready_p50_ms\":{},\"cpu_ready_p95_ms\":{},\"display_blake3\":{:?},\"cache\":\"warm filesystem; process warm; no decoded image cache\"}}",
@@ -86,13 +95,16 @@ fn cancellation_bench(args: &[String]) -> Result<(), Box<dyn std::error::Error>>
     use std::time::Duration;
     let count: usize = args[3].parse()?;
     let delay: u64 = args[5].parse()?;
+    let budget_mb = std::env::var("RRRAH_BENCH_MEMORY_MB").ok()
+        .map(|value| value.parse::<u64>()).transpose()?.unwrap_or(64);
+    if !(1..=4096).contains(&budget_mb) { return Err("benchmark budget must be 1..=4096 MiB".into()); }
     if count < 3 || delay > 1000 { return Err("at least 3 samples; cancellation delay at most 1000 ms".into()); }
     let mut rows = Vec::new();
     let mut latencies = Vec::new();
     let mut completed = 0;
     for _ in 0..count {
         let generation = Arc::new(AtomicU64::new(0));
-        let budget = rrrah_core::MemoryBudget::new(64 * 1024 * 1024);
+        let budget = rrrah_core::MemoryBudget::new(budget_mb * 1024 * 1024);
         let mut request = DecodeRequest::new(&args[1]);
         request.image_index = args[2].parse()?;
         request.memory_budget = Some(budget.clone());
@@ -121,11 +133,21 @@ fn cancellation_bench(args: &[String]) -> Result<(), Box<dyn std::error::Error>>
             Err(error) => return Err(error.into()),
         };
         assert_eq!(budget.used(), 0, "cancelled/completed decode retained managed credit");
+        let cancel_peak = budget.peak();
+        let retry = if status == "cancelled" {
+            request.cancellation = None;
+            let image = decode_raster(&request)?;
+            let dimensions = [image.width(), image.height()];
+            drop(image);
+            assert_eq!(budget.used(), 0, "retry retained managed pixels");
+            Some(dimensions)
+        } else { None };
         rows.push(serde_json::json!({
             "status": status,
             "decode_ms": finished.duration_since(started).as_secs_f64() * 1000.,
             "actual_signal_ms": cancelled_at.duration_since(started).as_secs_f64() * 1000.,
-            "managed_peak_bytes": budget.peak(), "managed_final_bytes": budget.used()
+            "managed_peak_bytes": cancel_peak, "managed_final_bytes": budget.used(),
+            "retry_dimensions": retry
         }));
     }
     let median = if latencies.is_empty() { None } else { Some(percentile(&mut latencies, 50)) };
@@ -133,6 +155,7 @@ fn cancellation_bench(args: &[String]) -> Result<(), Box<dyn std::error::Error>>
     let maximum = latencies.iter().copied().reduce(f64::max);
     println!("{}", serde_json::to_string(&serde_json::json!({
         "path": args[1], "index": args[2], "samples": count, "requested_signal_ms": delay,
+        "managed_budget_bytes": budget_mb * 1024 * 1024,
         "cancelled": latencies.len(), "completed": completed,
         "signal_to_decoder_exit_p50_ms": median, "signal_to_decoder_exit_p95_ms": tail,
         "signal_to_decoder_exit_max_ms": maximum, "rows": rows,

@@ -1,0 +1,68 @@
+warning: unused workspace dependency `memmap2`
+  --> Cargo.toml:34:1
+   |
+34 | memmap2 = "0.9"
+   | ^^^^^^^
+   |
+   = note: `cargo::unused_workspace_dependencies` is set to `warn` by default
+help: consider removing the workspace dependency `memmap2`
+warning: unused field `repository` in `workspace.package`
+  --> Cargo.toml:23:1
+   |
+23 | repository = "https://github.com/example/rrrah"
+   | ^^^^^^^^^^
+   |
+   = note: `cargo::unused_workspace_package_fields` is set to `warn` by default
+help: consider removing the field `workspace.package.repository`
+warning: workspace (manifest) generated 2 warnings
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/.codex/tmp/rrrah-exposure-calibration-qualified-20261011/crates/rrrah-dedup)
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> crates/rrrah-dedup/src/gradient_index.rs:17:1
+   |
+17 | / pub struct GradientDescriptorIndex<'a> {
+18 | |     entries: &'a [(u64, GradientDescriptor)],
+19 | |     order: SharedBuffer<usize>,
+20 | |     axis: usize,
+21 | |     recipe: GradientCellRecipe,
+22 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+    Finished `test` profile [optimized + debuginfo] target(s) in 26.91s
+     Running tests/anchor_rank.rs (/Users/themoretheless/.codex/tmp/rrrah-opposite-native-snapshot-20261011/target/debug/build/rrrah-dedup/4f5213b6605a6821/out/anchor_rank-4f5213b6605a6821)
+
+running 5 tests
+test geometry_selected_windows_aggregate_information_and_reject_inverted_or_flat_pixels ... ok
+test overlap_bounds_aliases_and_inconsistent_geometry_are_not_hidden ... ok
+test published_bounds_follow_selected_original_windows_and_exclude_bad_geometry ... ok
+test independent_textures_reject_even_with_exact_bidirectional_geometry ... ok
+test exact_aggregate_limits_and_every_observed_cancellation_release_credits ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.34s
+
+     Running tests/exposure.rs (/Users/themoretheless/.codex/tmp/rrrah-opposite-native-snapshot-20261011/target/debug/build/rrrah-dedup/be180f261036afe1/out/exposure-be180f261036afe1)
+
+running 5 tests
+test budget_precedes_reads_and_late_cancellation_discards_measurement ... ok
+test calibrated_rank_recovers_uniform_darkening_and_rejects_inversion ... ok
+test calibration_scratch_and_all_cancellation_boundaries_are_guarded ... ok
+test uniform_exposure_calibrates_dark_and_hdr_without_clipping ... ok
+test zero_negative_and_transparent_inputs_refuse_calibration ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/rank_region.rs (/Users/themoretheless/.codex/tmp/rrrah-opposite-native-snapshot-20261011/target/debug/build/rrrah-dedup/92d1da87e96ce047/out/rank_region-92d1da87e96ce047)
+
+running 7 tests
+test filter_zero_preserves_evidence_and_callback_work ... ok
+test filtered_overflow_and_mid_window_cancel_return_no_partial_evidence ... ok
+test flat_pixels_budget_and_cancellation_do_not_produce_evidence ... ok
+test invalid_domains_policy_alpha_and_scene_range_are_explicit ... ok
+test independent_textures_are_not_high_agreement_evidence ... ok
+test nonlinear_monotone_transfer_preserves_local_order_but_inversion_does_not ... ok
+test filtered_identity_matches_independent_box_counts_and_read_budget ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+

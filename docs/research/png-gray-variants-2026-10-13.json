@@ -1,0 +1,85 @@
+{
+  "variants": [
+    {
+      "gAMA": 50000,
+      "bits": 16,
+      "alpha": true,
+      "max_error": 8.583963417851947e-08
+    },
+    {
+      "gAMA": 50000,
+      "bits": 16,
+      "alpha": false,
+      "max_error": 8.583963417851947e-08
+    },
+    {
+      "gAMA": 50000,
+      "bits": 8,
+      "alpha": true,
+      "max_error": 4.927500629747783e-08
+    },
+    {
+      "gAMA": 50000,
+      "bits": 8,
+      "alpha": false,
+      "max_error": 4.927500629747783e-08
+    },
+    {
+      "gAMA": 45455,
+      "bits": 16,
+      "alpha": true,
+      "max_error": 6.677955935452395e-07
+    },
+    {
+      "gAMA": 45455,
+      "bits": 16,
+      "alpha": false,
+      "max_error": 6.677955935452395e-07
+    },
+    {
+      "gAMA": 45455,
+      "bits": 8,
+      "alpha": true,
+      "max_error": 5.95998071895032e-07
+    },
+    {
+      "gAMA": 45455,
+      "bits": 8,
+      "alpha": false,
+      "max_error": 5.95998071895032e-07
+    },
+    {
+      "gAMA": 100000,
+      "bits": 16,
+      "alpha": true,
+      "max_error": 2.9801867640344426e-08
+    },
+    {
+      "gAMA": 100000,
+      "bits": 16,
+      "alpha": false,
+      "max_error": 2.9801867640344426e-08
+    },
+    {
+      "gAMA": 100000,
+      "bits": 8,
+      "alpha": true,
+      "max_error": 2.9685450542160652e-08
+    },
+    {
+      "gAMA": 100000,
+      "bits": 8,
+      "alpha": false,
+      "max_error": 2.9685450542160652e-08
+    }
+  ],
+  "scope": "All native integer levels for gray/gray-alpha 8/16-bit PNG gAMA-only; source codes, alpha, independent f64 transfer, admitted cancellation, same-root retry and final zero credit",
+  "limitations": [
+    "Low-bit packed PNG not covered by this test",
+    "Only gray-alpha16 has current Metal collection fixture"
+  ],
+  "sha256": {
+    "docs/research/png-gray-variants-2026-10-13.log": "2a8016df1039e7c25e6a505f3a09df979b41001af9e1852041960ee7ed85ec0d",
+    "crates/rrrah-decode/src/raster.rs": "ecae8b487104aab95ff96ef32b60980e33ad80126f235121e25d9b1d26c009fc"
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "date": "2026-10-11",
+  "scope": "43 raster sources in native/windowed and prepared storage, SDR plus linear HDR Metal attachment equality across RAM/spill/cancellation/pressure/swap",
+  "adapter": "Apple M4 Max Metal",
+  "passed": 1,
+  "failed": 0,
+  "source_count": 43,
+  "storage_cases": 86,
+  "hdr_readback_cases": 86,
+  "hdr_comparison": "Exact binary16 values at all 64x64 RGBA components before/after swap",
+  "independent_oracle": {
+    "target": [
+      63,
+      65
+    ],
+    "source_linear_rgba": [
+      4,
+      -1,
+      0.5,
+      1
+    ],
+    "exposure_stops": 1,
+    "expected_linear_rgba": [
+      8,
+      -2,
+      1,
+      1
+    ],
+    "expected_binary16": [
+      "4800",
+      "c000",
+      "3c00",
+      "3c00"
+    ],
+    "all_pixels_exact": true,
+    "checks": "above-one and signed values, exposure, opaque alpha and padding removal"
+  },
+  "gpu_credit": "Each completed HDR submission releases renderer credit to zero",
+  "log": "/tmp/rrrah-raster-collection-hdr-20261011.log",
+  "log_sha256": "3deea1df3afc4d367104e46fdedcbd02d0a0af667048f6121d5d8f289e737c41",
+  "source_sha256": {
+    "crates/rrrah-app/tests/raster_collection_metal.rs": "bf3676e38ea57cc52867127b6f6199bb0adde10b541d7194acaa068b4e31a9b8",
+    "crates/rrrah-gpu/tests/common/mod.rs": "b8f677027c358a457862bc815199d20e848e0f862fbd28600fd8356214f39669",
+    "scripts/qualify-viewer-storage-gpu.py": "3a1f14fe3fba89b912710c42f5544eff8d8fbc7d2bfabe1d56d23e8282035966"
+  },
+  "runner_evidence_controls": {
+    "actual_hdr_log": "accepted",
+    "missing HDR case": "rejected",
+    "duplicated HDR case": "rejected",
+    "missing independent HDR oracle": "rejected",
+    "SDR-only previous log": "rejected"
+  },
+  "base_fixture_and_settings_report": "docs/research/metal-raster-collection-2026-10-11.json",
+  "limitations": [
+    "43 fixture sources, not all 100 formats or all variants",
+    "Before/after equality is transport qualification, not independent color/decoder correctness",
+    "Independent constant oracle covers signed/HDR/exposure/opaque output, not every source color conversion",
+    "Scientific values use explicit display window; RLA uses explicit alpha/color interpretation",
+    "64x64 offscreen Rgba16Float is not physical HDR display/color/luminance qualification",
+    "Local-disk managed pressure is not physical slow storage or OS-wide pressure",
+    "NVIDIA deferred by user"
+  ]
+}

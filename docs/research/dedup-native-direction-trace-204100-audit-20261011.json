@@ -1,0 +1,50 @@
+{
+  "status": "verified_bounded_204100_direction_trace",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-native-direction-trace-204100-20261011.json": "bff299f0f021c32dd1118435beb0389128128654ef0ae5e6b7d76cbe31d2bb0a",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-loftr-publisher-positives-ordering-prefix-0200-audit-20261011.json": "a85facfae6d63bce559631c94b9dfef5ba3013b6fed58f208cd85c1fa44e42d1",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-native-direction-trace-204100-20261011.py": "14671ea97a463abcfbf7a3b51841244655a6e70c47e6c4e33fb99b12b8ff71e3",
+    "/Users/themoretheless/.codex/tmp/rrrah-native-direction-trace-204100-qualified-20261011/forward.log": "23e8ccdd1c7d669444da2d93884aa870e0f8e9941d4366fc7bfabc013d41ddb2",
+    "/Users/themoretheless/.codex/tmp/rrrah-native-direction-trace-204100-qualified-20261011/0.log": "0df5ab622545191026e78d1b70330f9b55bf5c135e793d0d058244e9c83fe575"
+  },
+  "observations": [
+    {
+      "phase": "forward",
+      "points": 213,
+      "target_only_inliers": 75,
+      "joint_admissible": 75,
+      "anchor_result": {
+        "anchors": [
+          72,
+          72
+        ],
+        "directions": [
+          {
+            "agreeing_pairs": 12625,
+            "informative_pairs": 12936,
+            "sites": 1800,
+            "valid_sites": 1800
+          },
+          {
+            "agreeing_pairs": 12361,
+            "informative_pairs": 12647,
+            "sites": 1800,
+            "valid_sites": 1790
+          }
+        ],
+        "supported": true
+      }
+    },
+    {
+      "phase": "0",
+      "points": 211,
+      "target_only_inliers": 83,
+      "joint_admissible": 8,
+      "anchor_result": {
+        "error": "Rank(InsufficientGeometry)"
+      }
+    }
+  ],
+  "opposite_inverse_joint_admissible": 8,
+  "scope": "Actual213 opposite proposals and211 direct reverse proposals with target-only selected transforms. Strict recorded reverse thresholds admit fewer than10 joint witnesses for both. Does not prove no alternative transform could support, or qualify a new fitter."
+}

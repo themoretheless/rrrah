@@ -1,0 +1,38 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "run": "60s",
+      "log": "docs/research/cache-independent-count-cap-2026-10-11-60s.log",
+      "sha256": "99af2b45659418b0b5870b07408775418376c0384b11b2affe0357dbb9ffbdbb",
+      "measurements": [
+        "sustained swap: seconds=60.120116667 cycles=443 pressure_refusals=443 root_peak=2097152 queue_peak=262144 disk_peak_bytes=786624 disk_peak_objects=3 final=0"
+      ]
+    },
+    {
+      "run": "final-wraparound-safe-10s",
+      "log": "docs/research/cache-independent-count-cap-2026-10-11-final-wraparound-safe-10s.log",
+      "sha256": "a2451dae223610b46b9ee5bb4d2cfbe7aec90a526a7ff405ce24d55227cd1b2a",
+      "measurements": [
+        "sustained swap: seconds=10.0614725 cycles=70 pressure_refusals=70 root_peak=2097152 queue_peak=262144 disk_peak_bytes=786624 disk_peak_objects=3 final=0"
+      ]
+    }
+  ],
+  "limits": {
+    "bytes": 8388608,
+    "count": 3,
+    "ttl_seconds": 3600
+  },
+  "assertions": [
+    "physical and reported files never exceed caps",
+    "old count-evicted keys are absent",
+    "restored pixels remain exact",
+    "memory refusal followed by retry preserves completed entry",
+    "managed credits end at zero"
+  ],
+  "limitations": [
+    "local real files with simulated 2ms codec delays",
+    "not physical slow-disk or OS-wide pressure qualification"
+  ],
+  "final_source_sha256": "1627a1b4422b2ceee357cee06629bf199ed2009bb00c50af18bebd91efc1aea8"
+}

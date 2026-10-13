@@ -1,0 +1,30 @@
+{
+  "status": "complete_824_line_config_source_review_and_six_original_tests",
+  "commit": "a74f90d293e05856d19a4c0ac2b29b46ef16cf23",
+  "fully_read_additional_files": {
+    "fclones/src/config.rs": 824
+  },
+  "original_tests_passed": 6,
+  "tests": [
+    "config::test::test_complete_command",
+    "config::test::test_dedupe_command",
+    "config::test::test_group_command",
+    "config::test::test_link_command",
+    "config::test::test_move_command",
+    "config::test::test_remove_command"
+  ],
+  "pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-full-source-20261012/fclones/src/config.rs": "fa9cfc29203906ee59626b1bfc3a97e36eac3d95a69b417621741b49cc93e484",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-config-tests-20261012.log": "935a88c0997f4cc21e178812ce967c023f828891bad343b5e7dbf291ab2d0ab0",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-upstream-executables-20261012/lib": "738c143872942a290b4df90b62b23527f12dfe6c5d6822069a4ad394ade7b09e"
+  },
+  "observations": [
+    "CLI cache is opt-in --cache, not the default. Existing stale-cache counterexamples apply to enabled caching, not default grouping.",
+    "CLI minimum size defaults to1 byte, excluding empty files. API GroupConfig::default differs from clap defaults.",
+    "Skip-content-hash option deliberately omits full content hashing; not suitable for exact-proof admission.",
+    "stdin path reader uses UTF8 lines and unwraps I/O errors, unlike OsStr command arguments; source observation, no stdin panic run.",
+    "Thread option parser consumes at most two numeric comma fields and does not validate trailing fields; source observation, no additional runtime counterexample.",
+    "Transform no-copy exposes original files to external transformation; no such execution performed."
+  ],
+  "scope": "Complete config source plus6 saved upstream unit tests on macOS ARM64. Defaults and option behavior above are source observations. No new API/CLI behavior controls or destructive operations, no adoption, full42tree/full500 incomplete."
+}

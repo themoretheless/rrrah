@@ -1,0 +1,94 @@
+--- a/vendor/hayro/src/native_spatial.rs
++++ b/vendor/hayro/src/native_spatial.rs
+@@ -291,11 +291,23 @@
+ 
+ /// Caller retains an immutable route already accepted by affine_native_route.
+ /// Source fields still require exact current geometry evidence on every call.
++#[cfg(test)]
+ fn geometry_qualified_route_field_key(commands:&[SpatialCommand<'_>],route:&[usize],generation:u64,
+     coverage:&[u64;64],rasters:Option<&RasterTransitions<'_>>,owners:Option<&OwnerTransitions>,
+     work:&mut usize,cancelled:&dyn Fn()->bool)->Option<FieldKey> {
++    if cancelled() {return None;}*work=work.checked_sub(16)?;
++    let mut key=FieldKey::route(generation);
++    geometry_qualified_route_field_key_into(commands,route,generation,coverage,rasters,owners,&mut key,work,cancelled)?;
++    Some(key)
++}
++
++/// Only the active prefix is meaningful, including after refusal. Callers must
++/// publish this scratch key only after success; a subsequent call resets it.
++fn geometry_qualified_route_field_key_into(commands:&[SpatialCommand<'_>],route:&[usize],generation:u64,
++    coverage:&[u64;64],rasters:Option<&RasterTransitions<'_>>,owners:Option<&OwnerTransitions>,
++    key:&mut FieldKey,work:&mut usize,cancelled:&dyn Fn()->bool)->Option<()> {
+     if cancelled() {return None;}
+-    *work=work.checked_sub(19)?;let mut key=FieldKey::route(generation);
++    *work=work.checked_sub(3)?;key.words[0]=generation;key.words[1]=2;key.len=2;
+     for &index in route {
+         if cancelled() {return None;}*work=work.checked_sub(1)?;
+         if let SpatialCommand::NativeSampledPaint {field,..}=commands.get(index)? {
+@@ -307,7 +319,7 @@
+             *work=work.checked_sub(4)?;key.append(index,identity)?;
+         }
+     }
+-    Some(key)
++    Some(())
+ }
+ 
+ struct GeometryKeyTrace {enabled:bool,checks:std::cell::Cell<usize>,misses:std::cell::Cell<usize>,owner_enabled:bool,owner_checks:std::cell::Cell<usize>,owner_misses:std::cell::Cell<usize>,precolor_enabled:bool,precolor_ready:std::cell::Cell<usize>,precolor_unavailable:std::cell::Cell<usize>,precolor_checks:std::cell::Cell<usize>,precolor_misses:std::cell::Cell<usize>}
+@@ -763,6 +775,8 @@
+     let owner_transitions=if owner_keys {OwnerTransitions::admitted(commands,regions.len(),&mut 4_000_000,cancelled,admit).map(std::cell::RefCell::new)} else {None};
+     if owner_keys {eprintln!("SPATIAL_OWNER_TRANSITIONS active={}",owner_transitions.is_some());}
+     let precolor_enabled=collect_fields && std::env::var_os("RRRAH_AI_PRECOLOR_KEYS").is_some();
++    let mut precolor_scratch=FieldKey::route(0);
++    if precolor_enabled {source_field_key.work.set(source_field_key.work.get().saturating_add(16));}
+     let geometry_trace=GeometryKeyTrace {enabled:geometry_field_keys,checks:std::cell::Cell::new(0),misses:std::cell::Cell::new(0),owner_enabled:owner_keys,owner_checks:std::cell::Cell::new(0),owner_misses:std::cell::Cell::new(0),precolor_enabled,precolor_ready:std::cell::Cell::new(0),precolor_unavailable:std::cell::Cell::new(0),precolor_checks:std::cell::Cell::new(0),precolor_misses:std::cell::Cell::new(0)};
+     let mut evaluate=|_winding:&[i32],point:kurbo::Point,coverage:&[u64;64],occupied_words:u64| {
+         work_trace.hit(0);
+@@ -942,8 +956,8 @@
+             let mut budget=4_000_000;
+             let rasters=transitions.as_ref().map(std::cell::RefCell::borrow);
+             let owners=owner_transitions.as_ref().map(std::cell::RefCell::borrow);
+-            let key=geometry_qualified_route_field_key(commands,&routes[route_index].commands,routes[route_index].generation,coverage,
+-                rasters.as_deref(),owners.as_deref(),&mut budget,cancelled);
++            let key=geometry_qualified_route_field_key_into(commands,&routes[route_index].commands,routes[route_index].generation,coverage,
++                rasters.as_deref(),owners.as_deref(),&mut precolor_scratch,&mut budget,cancelled).map(|()| &precolor_scratch);
+             source_field_key.work.set(source_field_key.work.get().saturating_add(4_000_000-budget));
+             if key.is_some() {geometry_trace.precolor_ready.set(geometry_trace.precolor_ready.get()+1);}
+             else {geometry_trace.precolor_unavailable.set(geometry_trace.precolor_unavailable.get()+1);}
+@@ -951,7 +965,7 @@
+         } else {None};
+         if let Some(pixel)=routes[route_index].result {
+             if cancelled() {return None;}*remaining=remaining.checked_sub(1)?;
+-            if !geometry_trace.verify_precolor(precolor_key.as_ref(),&source_field_key) {route_is_affine.set(false);}
++            if !geometry_trace.verify_precolor(precolor_key,&source_field_key) {route_is_affine.set(false);}
+             work_trace.hit(8);return Some(pixel);
+         }
+         mask_cache.fill(None);
+@@ -1258,7 +1272,7 @@
+         let root=stack.pop()?.0;
+         let pixel=root.finished_single_pixel(cancelled)?;
+         root_frame=Some(root);
+-        if !geometry_trace.verify_precolor(precolor_key.as_ref(),&source_field_key) {route_is_affine.set(false);}
++        if !geometry_trace.verify_precolor(precolor_key,&source_field_key) {route_is_affine.set(false);}
+         if routes[route_index].constant {routes[route_index].result=Some(pixel);}
+         Some(pixel)
+     };
+@@ -3112,6 +3126,19 @@
+     let cached=geometry_qualified_route_field_key(&commands,&[0,1],42,&coverage,Some(&rasters),Some(&owners),&mut cached_work,&||false).unwrap();
+     assert_eq!(&full.words[..full.len],&cached.words[..cached.len]);
+     assert_eq!(cached_work-full_work,2); // Qualification is debited once per immutable route.
++    let mut scratch=FieldKey {words:[999;16],len:16};
++    let mut reused_work=1000;
++    geometry_qualified_route_field_key_into(&commands,&[0,1],42,&coverage,Some(&rasters),Some(&owners),&mut scratch,&mut reused_work,&||false).unwrap();
++    assert_eq!(&scratch.words[..scratch.len],&cached.words[..cached.len]);
++    assert_eq!(reused_work-cached_work,16);
++    assert!(scratch.words[scratch.len..].iter().all(|&word|word==999));
++    assert!(geometry_qualified_route_field_key_into(&commands,&[0,1],9,&coverage,Some(&rasters),Some(&owners),&mut scratch,&mut 8,&||false).is_none());
++    geometry_qualified_route_field_key_into(&commands,&[0,1],42,&coverage,Some(&rasters),Some(&owners),&mut scratch,&mut 1000,&||false).unwrap();
++    assert_eq!(&scratch.words[..scratch.len],&cached.words[..cached.len]);
++    let saved=scratch.words;
++    assert!(geometry_qualified_route_field_key_into(&commands,&[0,1],9,&coverage,Some(&rasters),Some(&owners),&mut scratch,&mut 1000,&||true).is_none());
++    assert_eq!(saved,scratch.words);
++
+ 
+     assert!(geometry_route_field_key(&commands,&[0,1],42,&coverage,None,Some(&owners),&mut work,&||false).is_none());
+     assert!(geometry_route_field_key(&commands,&[0,1],42,&coverage,Some(&rasters),None,&mut work,&||false).is_none());

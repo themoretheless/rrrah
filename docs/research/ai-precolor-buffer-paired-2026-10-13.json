@@ -1,0 +1,63 @@
+{
+  "scope": "Five original AI diagnostic pixels, all observer flags active; not normal viewer throughput",
+  "order": "ABBAABBA",
+  "completed_runs": 8,
+  "runs": [
+    {
+      "variant": "A",
+      "seconds": 2.9944507500000004,
+      "log": "ai-precolor-buffer-paired-1-A-2026-10-13.log"
+    },
+    {
+      "variant": "B",
+      "seconds": 3.456490208,
+      "log": "ai-precolor-buffer-paired-2-B-2026-10-13.log"
+    },
+    {
+      "variant": "B",
+      "seconds": 2.9860672499999996,
+      "log": "ai-precolor-buffer-paired-3-B-2026-10-13.log"
+    },
+    {
+      "variant": "A",
+      "seconds": 2.9121252500000008,
+      "log": "ai-precolor-buffer-paired-4-A-2026-10-13.log"
+    },
+    {
+      "variant": "A",
+      "seconds": 2.981704500000001,
+      "log": "ai-precolor-buffer-paired-5-A-2026-10-13.log"
+    },
+    {
+      "variant": "B",
+      "seconds": 2.926998749999999,
+      "log": "ai-precolor-buffer-paired-6-B-2026-10-13.log"
+    },
+    {
+      "variant": "B",
+      "seconds": 2.9400203329999997,
+      "log": "ai-precolor-buffer-paired-7-B-2026-10-13.log"
+    },
+    {
+      "variant": "A",
+      "seconds": 2.9399679580000004,
+      "log": "ai-precolor-buffer-paired-8-A-2026-10-13.log"
+    }
+  ],
+  "binary_sha256": {
+    "A": "d5be62080337719c0505fdb861a1677cc6527edf5af6069d176d995e5c2ef111",
+    "B": "4baef69eeaaa536d14ca86d57cc56972dd106a5b8359ffd95c779f392cdc1176"
+  },
+  "median_seconds": {
+    "A": 2.9608362290000008,
+    "B": 2.9630437914999996
+  },
+  "all_original_pixels_exact": true,
+  "median_change_percent": 0.07455875061161965,
+  "conclusion": "No demonstrated wall-clock improvement: median difference0.075percent, within run variation; do not claim11.27percent counted-work reduction as throughput gain.",
+  "next_action": "Stop optimizing observer bookkeeping in isolation; reduce native color evaluation count only with exact source identity, integration error bounds and ordinary budget accounting.",
+  "source_sha256": {
+    "A": "5090af1924ed07caf6836e9f364548caf1f88dd1ea67f582799b14b26e2317b7",
+    "B": "1416a4689dcebab54911d5de3a58a13931f9f1289f2dbcab556687cca3d8991e"
+  }
+}

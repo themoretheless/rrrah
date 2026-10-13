@@ -1,0 +1,116 @@
+{
+  "gpu_backend": "metal",
+  "gpu_optional": false,
+  "storage_soak_seconds_per_mode": 0,
+  "gpu_policy_cycles": 0,
+  "large_hdr_policy_cycles": 0,
+  "metal_collection_seconds": 0,
+  "metal_raw_collection_seconds": 0,
+  "metal_raw_collection_manifest": null,
+  "metal_prefetch_navigation": false,
+  "metal_raw_worker_navigation": false,
+  "metal_large_float_hdr": false,
+  "metal_viewer_ttl_prefetch": false,
+  "metal_large_upload_cancel": false,
+  "metal_compute_cache": false,
+  "metal_model_swap_cycles": 0,
+  "large_hdr_policy": false,
+  "full_sensor_compute": false,
+  "suites": [
+    {
+      "suite": "gpu-all",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-gpu",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/Users/themoretheless/Documents/Sources/rrrah/target",
+        "--",
+        "--nocapture"
+      ],
+      "exit_code": 0,
+      "passed": 118,
+      "failed": 0,
+      "ignored": 13,
+      "ignored_tests": [
+        "test pinned_native_ai_planes_survive_managed_metal_display ... ignored, requires pinned RRRAH_AI_METAL_ROOT replay/source corpus and actual Metal",
+        "test full_sensor_linear_exposure_chunked_readback ... ignored, allocates about 0.8 GB of GPU buffers; full-resolution local qualification",
+        "test full_sensor_managed_exposure_budgets_and_checks_every_pixel ... ignored, full-resolution managed compute uses about 2 GB of tracked buffers",
+        "test fusion_back_full_frame_developed_raw_matches_metal_display_transport ... ignored, requires corrected production Fusion linear dumps; display transport qualification",
+        "test fusion_front_full_frame_developed_raw_matches_metal_display_transport ... ignored, requires corrected production Fusion linear dumps; display transport qualification",
+        "test hdr_exposure_saturates_to_finite_binary16_range ... ignored, Metal-specific empirical range edge; outside portable binary16 caller contract",
+        "test hdr_opposite_extreme_samples_interpolate_without_nan ... ignored, Metal-specific empirical range edge; outside portable binary16 caller contract",
+        "test hero9_full_frame_developed_raw_matches_metal_display_transport ... ignored, requires production HERO9 scene-linear dump; transport qualification, not demosaic/color oracle",
+        "test large_cancelled_upload_validation_and_admission_preserve_visible_texture ... ignored, manual 12 MP Metal upload cancellation qualification",
+        "test large_hdr_area_lod_preserves_all_output_samples_and_metal_frame ... ignored, manual 36 MP HDR area LOD and actual Metal qualification",
+        "test qualified_sd10_linear_raster_full_frame_display_readback ... ignored, requires qualified X3F linear sRGB PPM and a physical GPU",
+        "test raster_single_layer_gpu_timestamp_timing ... ignored, manual actual-GPU timestamp comparison; 4096-square input / 2048-square HDR target",
+        "test full_f828_managed_rgbe_matches_cpu_reference ... ignored, requires independent DSC-F828 full-sensor dump; authored four-channel normalization, not as-shot color qualification"
+      ],
+      "log": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/rgbe-input-windows-20261011/gpu-all.log",
+      "log_sha256": "ba18d879eeb378079c2ed59154ea7dfe99e19ae1ccfb87803ec13420d3749cbc",
+      "verified_execution": true,
+      "preserved_log": "docs/research/rgbe-input-windows-gpu-all-2026-10-11.log"
+    },
+    {
+      "suite": "full-f828-compute",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-gpu",
+        "--test",
+        "rgbe_compute_readback",
+        "full_f828_managed_rgbe_matches_cpu_reference",
+        "--locked",
+        "--offline",
+        "--target-dir",
+        "/Users/themoretheless/Documents/Sources/rrrah/target",
+        "--",
+        "--ignored",
+        "--nocapture"
+      ],
+      "exit_code": 0,
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "ignored_tests": [],
+      "log": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/rgbe-input-windows-20261011/full-f828-compute.log",
+      "log_sha256": "dffd97e9c48b38660e5c09b4df8d7b7f2206c9698524cc4e94e29767418cb861",
+      "verified_execution": true,
+      "preserved_log": "docs/research/rgbe-input-windows-full-f828-compute-2026-10-11.log"
+    }
+  ],
+  "complete_suite_execution": true,
+  "limitations": [
+    "Passing host CUDA tests does not qualify NVIDIA hardware.",
+    "Metal readback does not qualify physical HDR display.",
+    "Ignored tests are unverified, not passing.",
+    "These regression suites do not prove all 100 formats or sustained slow-disk workloads."
+  ],
+  "metal_swapped_residency_required": false,
+  "ai_native_metal_transport": false,
+  "ai_ram_swap_metal": false,
+  "mef_full_sensor_metal": false,
+  "metal_raster_collection": false,
+  "metal_linear_import": false,
+  "metal_required_viewer_cases": [],
+  "external_viewer_inputs": {
+    "F828-sensor-oracle": {
+      "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/rrrah-srf-refresh-20261008.u16le",
+      "sha256": "b3fc3d395950407a35d33392a97181fa51aac1afb0aa6b96d94a7eba00e95d42"
+    }
+  },
+  "metal_mixed_raw_workers": false,
+  "all_executed_suites_verified": true,
+  "focused_log": {
+    "path": "docs/research/rgbe-input-windows-focused-2026-10-11.log",
+    "sha256": "e7ec15394817921404755e47e8dbe2baf51e58d74d1860b93755ce7947f8e71f",
+    "library_passed": 53,
+    "compute_passed": 4,
+    "compute_ignored": 1
+  }
+}

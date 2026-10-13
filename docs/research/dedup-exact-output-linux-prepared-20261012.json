@@ -1,0 +1,26 @@
+{
+  "status": "verified_live_nonroot_linux_test",
+  "container_id": "703e5aa5cacfdafcc4cc74879a1f01d01d84646880f72ff5de33e61033501666",
+  "image_id": "sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55",
+  "user": "65534:65534",
+  "sysroot_mount": {
+    "Type": "bind",
+    "Source": "/opt/rrrah-dedup-validation/sysroot-cache-zlib-20261012",
+    "Destination": "/validation/sysroot",
+    "Mode": "ro",
+    "RW": false,
+    "Propagation": "rprivate"
+  },
+  "source_mount": {
+    "Type": "bind",
+    "Source": "/Users/themoretheless/.codex/tmp/rrrah-exact-output-qualified-20261012",
+    "Destination": "/workspace",
+    "Mode": "ro",
+    "RW": false,
+    "Propagation": "rprivate"
+  },
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exact-output-source-20261012.json": "49d285f960dbdd1b70c700767cdc21e4902a8f7db6caf1ce283ac237dff1b955",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-output-linux-20261012.sh": "4ced040eceb1f87ddf83f8603dc51eb38f960d3d4f8d7dcd8626ed127a45c83d"
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "date": "2026-10-11",
+  "scope": "Mixed-format production viewer loading/preload helper navigation with actual Metal readback",
+  "adapter": "Metal Apple M4 Max",
+  "steps": 120,
+  "window": {
+    "behind": 1,
+    "ahead": 2
+  },
+  "output_dimensions": [
+    128,
+    96
+  ],
+  "cache_limits": {
+    "bytes": 65536,
+    "count": 2,
+    "ttl": null
+  },
+  "managed_root_limit_bytes": 1048576,
+  "final_root_bytes": 0,
+  "checks": [
+    "PNG GIF EXR HDR ping-pong navigation and direction changes",
+    "Background preload never displaces retained visible pixels",
+    "Foreground RAM hit shares original allocation while all remaining root budget is reserved",
+    "Generation invalidation refuses stale preload without changing root or membership",
+    "Every visible Metal frame equals independent initial loading/rendering result",
+    "Separate ordinary scheduler/gate checks for bounded latest queue, directional neighbours, cancellation and foreground priority"
+  ],
+  "fixtures": {
+    "pattern.profiled.png": "3c551ef8c29f2ede5b2ed5abcf237cee9e98832885865bc59c810e6455dc377b",
+    "gif-animation-disposal-3.gif": "4d8ed22a0e1b33ef6de1f293eeb92a6548666bf95975514987903cbc8d66d5bf",
+    "float-none-rec709-declared.exr": "237d1030caf9022f441458e8a90b718df4fe07f24e473b0bcf827d1b0ac9628e",
+    "rle-hdr-rec709-declared.hdr": "7054e40d167f8f6b66768df908b25997e6f3e02c60e1c2efe1e72d2a7ddaed96"
+  },
+  "logs": [
+    {
+      "path": "/tmp/rrrah-metal-prefetch-navigation-20261011.log",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "sha256": "b807d71364454a3aaf2cc9f13af77ad4825605762fe1c177173bab71c981e82a"
+    },
+    {
+      "path": "/tmp/rrrah-metal-prefetch-related-20261011.log",
+      "passed": 27,
+      "failed": 0,
+      "ignored": 8,
+      "sha256": "da23084e4800aa03d6c461e865c78385bb790afa54485304efae9676364c0013"
+    },
+    {
+      "path": "/tmp/rrrah-metal-decode-gate-20261011.log",
+      "passed": 11,
+      "failed": 0,
+      "ignored": 0,
+      "sha256": "ab6e888dd8cd60216e9ee0870d938d48fce61754ac02910595859d4276150e01"
+    }
+  ],
+  "source_sha256": {
+    "crates/rrrah-app/src/main.rs": "17baa66b6fe17a61e937b9755f1eb50fa92c358f9bac30213ad28bc0d3282cc9",
+    "scripts/qualify-viewer-storage-gpu.py": "79d9b315cc3c1663f1edcbe78bdb742062d38e29d3fd7059f190f6f3e3f9631c"
+  },
+  "reproduce": {
+    "environment": {
+      "RRRAH_GPU_OPTIONAL": "0",
+      "RRRAH_GPU_BACKEND": "metal"
+    },
+    "command": "cargo test --locked --offline --target-dir /tmp/rrrah-required-corpus-target -p rrrah --bin rrrah mixed_gallery_reversals -- --include-ignored --nocapture --test-threads=1",
+    "integrated_runner_flag": "--metal-prefetch-navigation"
+  },
+  "limitations": [
+    "Four small fixtures do not qualify all formats or large RAW collection playback",
+    "GPU navigation test calls production preload helpers synchronously, not the asynchronous worker event loop",
+    "Scheduler/gate assertions are separate tests, not end-to-end GPU worker qualification",
+    "No disk swap or TTL exercised in this navigation scenario; those have separate tests",
+    "128x96 SDR offscreen readback does not qualify physical HDR display",
+    "Frame preservation does not prove independent decoder/color accuracy",
+    "Counts across log files overlap and must not be summed as distinct tests",
+    "Ignored external corpus checks are unverified by this run"
+  ]
+}

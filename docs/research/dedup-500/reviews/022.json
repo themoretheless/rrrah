@@ -2,9 +2,9 @@
   "index": 22,
   "repository": "benhoyt/dhash",
   "commit": "b2271b8c3b7d30fc9abdbcaf5988338a7b6bc76e",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "Complete pinned8text-file review plus current binary30x20 JPEG inspection;9total files verified. Existing1original Pillow unit and24doctests; full Wand suite not executed.",
   "decision": "shortlist",
-  "finding": "Row/column difference hash and explicit transparency fill tests; small MIT implementation suitable as hash oracle.",
+  "finding": "Independent row/column candidate hash oracle. Confirmed invisible P-mode alpha-table pixels alter hash; uniform black/white hash collision. Backend and recipe identity required. No production code adopted.",
   "license_metadata": "MIT",
   "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
   "tests_detected": 1,
@@ -64,5 +64,11 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_review_complete": true,
+  "total_files": 9,
+  "fully_read_files": 8,
+  "fully_reviewed_files": 9,
+  "complete_source_review": "dhash-current-review-reconciliation-20261012.json",
+  "bounded_upstream_runtime": "1original Pillow test and24doctest examples; full Wand suite unavailable"
 }

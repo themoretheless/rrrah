@@ -1,0 +1,28 @@
+{
+  "status": "verified_51_default_feature_tests_and_restored_mtime_guards",
+  "passed": 51,
+  "suites": [
+    {
+      "suite": "lib",
+      "passed": 32,
+      "ignored": [
+        "gradient::batch_tests::alternating_matcher_timing",
+        "gradient::matching_tests::alternating_matcher_timing"
+      ]
+    },
+    {
+      "suite": "exact_files",
+      "passed": 19,
+      "ignored": []
+    }
+  ],
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exact-restored-mtime-source-retry2-20261012.json": "9ab0d320b61d08f30474805e0036aebde2494155d64ff4920846295979709f4e",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-restored-mtime-tests-retry2-20261012.log": "b09995214d97ffa129a1f69e39744fc72d870861ab1a84c26480a56625fa3da4",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-exact-restored-mtime-20261012.py": "a75b4654abd474277495d3466c37014b2613612bec0ae4298f9f0255427295df",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-restored-mtime-qualified-retry2-20261012/Cargo.lock": "7f467ffd82d61fa1f16ab3a0e51c2797f171d26d264c5c36aa3504c8659cc062",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-restored-mtime-executables-20261012/lib": "f5e6a1244dfd338b1f37c86773e434c32df344dc82a06f50f68f720fea54f0d9",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-restored-mtime-executables-20261012/exact_files": "251119f353608fdd43db749ba36294770a6d31ec4614bbbcfbfe5b54d4b63d49"
+  },
+  "scope": "Current-identical production source and test files; default standalone build on macOS ARM64. Same-length restored-mtime snapshot edit refused and fresh retry succeeds. Unix same-inode/size/mtime mutation during scan rejected via changed metadata, with deterministic distinct ctime tick and healthy fresh retry. No Windows execution, all-feature/full-workspace/format/500 qualification. First preparation missing build_context failed before tests; retry source/log retained separately."
+}

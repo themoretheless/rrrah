@@ -1,0 +1,35 @@
+{
+  "backend": "Metal",
+  "device": "Apple M4 Max",
+  "worker": "gallery RawPrefetcher with real native EOS R8 sources",
+  "result": "1 passed; 0 failed",
+  "seconds": 6.8,
+  "checks": [
+    "blocked obsolete forward request does not publish",
+    "backward request warms sole disk slot",
+    "all restored sensor samples and metadata exact",
+    "screen SDR/HDR frame exact at1920x1080",
+    "three full6188x4120 SDR/HDR frames exact across direction reversals",
+    "every scene-linear binary16 component finite",
+    "one disk entry; obsolete direction absent",
+    "final source and reference managed roots zero"
+  ],
+  "hdr_comparisons": {
+    "1920x1080": 1,
+    "6188x4120": 3
+  },
+  "runner_workload_evidence_valid": true,
+  "permanent_runner_tests": "scripts/test-viewer-storage-gpu-evidence.py:5 passed, including incomplete/duplicate/SDR-only RAW log rejection",
+  "sources": {
+    "tests/IMG_9074.CR3": "9c0d47cc2dd550eb6dc26c4ba2b2874b67f5c89e79dff5c472abf0ac6b2f6178",
+    "tests/IMG_9043.CR3": "d06cbb10e84882cf130430bdc88ed2652c2622b96dea8d6a854c09e3bee37e59"
+  },
+  "log": "metal-raw-worker-linear-hdr-2026-10-13.log",
+  "source_sha256": "28d3f64adfaeb1e03995f6e7788443204c666029b093e562e486790356411b25",
+  "limitations": [
+    "same-native-decoder and same-renderer comparisons verify transport, not independent camera demosaic/color accuracy",
+    "gallery RAW worker is distinct from foreground shared-plan loader; latter covered by its own regressions",
+    "two files from one camera, not universal camera or format qualification",
+    "no physical HDR calibration or NVIDIA hardware qualification"
+  ]
+}

@@ -2,9 +2,9 @@
   "index": 435,
   "repository": "matteodg/blockhash-java",
   "commit": "ef7b1526ebf12dfe9b6a8c52450805cae61c2eed",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
-  "decision": "reference",
-  "finding": "Java MIT BlockHash and tests; alternative oracle for block/median/alpha behavior.",
+  "review_scope": "Complete six tracked text files read and Git blob verified at pinned commit; static source review, no Java runtime execution.",
+  "decision": "reject_as_working_hash_oracle",
+  "finding": "Public general hash and hex output unimplemented; quick path overwrites block totals; five upstream tests cover helpers only. No code adoption.",
   "available_source_evidence": [
     {
       "path": "src/main/java/blockhashjava/BlockHash.java",
@@ -28,7 +28,7 @@
     }
   ],
   "license_metadata": "MIT",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "Complete root MIT license read; no source copied.",
   "tests_detected": 1,
   "upstream_tests_run": false,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
@@ -54,5 +54,10 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_review_complete": true,
+  "full_repository_read": true,
+  "whole_repo_complete": true,
+  "complete_source_review": "blockhash-java-complete-source-review-v2-20261013.json",
+  "complete_source_audit": "blockhash-java-complete-source-audit-v2-20261013.json"
 }

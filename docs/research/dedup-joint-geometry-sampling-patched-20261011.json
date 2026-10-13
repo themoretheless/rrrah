@@ -1,0 +1,143 @@
+{
+  "status": "complete_bounded_joint_sampling_controls",
+  "producer_pid": 23767,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-joint-geometry-sampling-patched-harness-20261011.json": "ead82e770e9d5e05af89d70bd760d29fbb0cd17ac958c08a509b0ed171493773",
+    "/Users/themoretheless/.codex/tmp/dedup-joint-geometry-sampling-patched-build-20261011.jsonl": "d3490b2059b3337ebe8ca50e50108478f08444cdd852aeee858d9867b440090c",
+    "/Users/themoretheless/.codex/tmp/dedup-joint-geometry-sampling-patched-build-20261011.log": "7ce265b29a073f5bf8b96a94e45131f552b539c3ecdc43fe3ec749f6fcc82106",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-geometry-sampling-patched-qualified-20261011/sampling_trace": "53544f1466d4da3858ebfb7a61a5a3081eb5533a3281d83ee4dc7266a30fd69a",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-joint-geometry-sampling-20261011.py": "d88c778ea1e38ac8bd3b69efcc724ae6d71c7481c786d579716ab3b61f8237a6",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-geometry-sampling-patched-qualified-20261011/204100_calibration.json": "4440892a2e257fa43367f3fbc8f561a416ce8af6533bdf95178a745867b96cbb",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-projective-native-qualified-20261011/204100_opposite.json": "4440892a2e257fa43367f3fbc8f561a416ce8af6533bdf95178a745867b96cbb",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/204101.jpg": "67a3d0d7a6f5582276f3e51ed7ab6c599378e9bda2bf4416ea952411874c7d90",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/204100.jpg": "7176f6211120f9850cb05cd3498d4d8fa7b4ed231b16882bedfa6931fdae538a",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-geometry-sampling-patched-qualified-20261011/207700_opposite_100k.json": "8fcc483bc3370919f735a8c04ff6e19c56216b3e34671c27b163260bce1153da",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-projective-207700-native-qualified-20261011/207700_opposite.json": "8fcc483bc3370919f735a8c04ff6e19c56216b3e34671c27b163260bce1153da",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/207701.jpg": "ca9c18fbb0a07d1044d1f3931158072d30103853c50b5e66d93cc793cefc1109",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/207700.jpg": "b9bed14ac74d32a136768f2a52387afe7e71562c327776aeebe29755cf66147f",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-geometry-sampling-patched-qualified-20261011/207700_direct_100k.json": "de958222f6a84d260919ff69e64b608051ecb0a0d7a0035a8d06474bbdc8262f",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-projective-207700-native-qualified-20261011/207700_direct.json": "de958222f6a84d260919ff69e64b608051ecb0a0d7a0035a8d06474bbdc8262f",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-geometry-sampling-patched-qualified-20261011/207700_opposite_1m.json": "8fcc483bc3370919f735a8c04ff6e19c56216b3e34671c27b163260bce1153da",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-geometry-sampling-patched-qualified-20261011/207700_direct_1m.json": "de958222f6a84d260919ff69e64b608051ecb0a0d7a0035a8d06474bbdc8262f"
+  },
+  "plan": [
+    {
+      "case": "204100_calibration",
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-joint-geometry-sampling-patched-qualified-20261011/204100_calibration.json",
+      "trials": 4096,
+      "seed": 305441741
+    },
+    {
+      "case": "207700_opposite_100k",
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-joint-geometry-sampling-patched-qualified-20261011/207700_opposite_100k.json",
+      "trials": 100000,
+      "seed": 305441741
+    },
+    {
+      "case": "207700_direct_100k",
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-joint-geometry-sampling-patched-qualified-20261011/207700_direct_100k.json",
+      "trials": 100000,
+      "seed": 305441741
+    },
+    {
+      "case": "207700_opposite_1m",
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-joint-geometry-sampling-patched-qualified-20261011/207700_opposite_1m.json",
+      "trials": 1000000,
+      "seed": 305441741
+    },
+    {
+      "case": "207700_direct_1m",
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-joint-geometry-sampling-patched-qualified-20261011/207700_direct_1m.json",
+      "trials": 1000000,
+      "seed": 305441741
+    }
+  ],
+  "results": [
+    {
+      "case": "204100_calibration",
+      "status": "supported",
+      "command": [
+        "/Users/themoretheless/.codex/tmp/rrrah-joint-geometry-sampling-patched-qualified-20261011/sampling_trace",
+        "/Users/themoretheless/.codex/tmp/rrrah-joint-geometry-sampling-patched-qualified-20261011/204100_calibration.json",
+        "4096",
+        "305441741"
+      ],
+      "pid": 23769,
+      "returncode": 0,
+      "stdout": "{\"alias_pairs\":[],\"anchor_result\":{\"anchors\":[12,12],\"directions\":[{\"agreeing_pairs\":2123,\"informative_pairs\":2178,\"sites\":300,\"valid_sites\":300},{\"agreeing_pairs\":2127,\"informative_pairs\":2206,\"sites\":300,\"valid_sites\":300}],\"supported\":true},\"best\":{\"joint_inliers\":[58,64,67,70,75,90,92,99,100,111,145,166,198],\"normalized_bidirectional_error\":3.0845699813883547,\"transform\":[[0.6904324988215833,0.20490608715529582,1386.3791804143552],[-0.17096578482294106,1.0520355271694573,873.4522662540667],[-0.0001373562962609327,0.00012185602619493906,1.02231287947217]]},\"decimal_bit_differences\":72,\"managed_peak\":103219200,\"managed_used\":0,\"maximum_projection_checks\":1745322,\"points\":213,\"scope\":\"Public joint sampled geometry API on exact-bit captured real points, including guarded refinement and preflight projection work. Independent original-pixel confirmation. JSON/point/geometry scratch outside managed payload admission; not automatic search integration, total RSS or full corpus qualification.\",\"seed\":305441741,\"source_tolerance\":0.5,\"target_tolerance\":2.0,\"trials\":4096}\n",
+      "stderr": "",
+      "elapsed_seconds": 1.056548041,
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-joint-geometry-sampling-patched-qualified-20261011/204100_calibration.log",
+      "log_sha256": "18ffccf16149d607fbafaa3b50d3923157d88180886efad79aa464886bbc550c"
+    },
+    {
+      "case": "207700_opposite_100k",
+      "status": "inconclusive",
+      "command": [
+        "/Users/themoretheless/.codex/tmp/rrrah-joint-geometry-sampling-patched-qualified-20261011/sampling_trace",
+        "/Users/themoretheless/.codex/tmp/rrrah-joint-geometry-sampling-patched-qualified-20261011/207700_opposite_100k.json",
+        "100000",
+        "305441741"
+      ],
+      "pid": 23785,
+      "returncode": 0,
+      "stdout": "{\"alias_pairs\":[],\"anchor_result\":null,\"best\":null,\"decimal_bit_differences\":32,\"managed_peak\":0,\"managed_used\":0,\"maximum_projection_checks\":21400214,\"points\":107,\"scope\":\"Public joint sampled geometry API on exact-bit captured real points, including guarded refinement and preflight projection work. Independent original-pixel confirmation. JSON/point/geometry scratch outside managed payload admission; not automatic search integration, total RSS or full corpus qualification.\",\"seed\":305441741,\"source_tolerance\":0.5,\"target_tolerance\":2.0,\"trials\":100000}\n",
+      "stderr": "",
+      "elapsed_seconds": 0.24170712500000002,
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-joint-geometry-sampling-patched-qualified-20261011/207700_opposite_100k.log",
+      "log_sha256": "6d2628580a0feba788007a0a327a2db5c0abeaf9b9341c667b0f1587ff34d2f2"
+    },
+    {
+      "case": "207700_direct_100k",
+      "status": "inconclusive",
+      "command": [
+        "/Users/themoretheless/.codex/tmp/rrrah-joint-geometry-sampling-patched-qualified-20261011/sampling_trace",
+        "/Users/themoretheless/.codex/tmp/rrrah-joint-geometry-sampling-patched-qualified-20261011/207700_direct_100k.json",
+        "100000",
+        "305441741"
+      ],
+      "pid": 23787,
+      "returncode": 0,
+      "stdout": "{\"alias_pairs\":[],\"anchor_result\":null,\"best\":null,\"decimal_bit_differences\":34,\"managed_peak\":0,\"managed_used\":0,\"maximum_projection_checks\":20800208,\"points\":104,\"scope\":\"Public joint sampled geometry API on exact-bit captured real points, including guarded refinement and preflight projection work. Independent original-pixel confirmation. JSON/point/geometry scratch outside managed payload admission; not automatic search integration, total RSS or full corpus qualification.\",\"seed\":305441741,\"source_tolerance\":0.5,\"target_tolerance\":2.0,\"trials\":100000}\n",
+      "stderr": "",
+      "elapsed_seconds": 0.27747199999999994,
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-joint-geometry-sampling-patched-qualified-20261011/207700_direct_100k.log",
+      "log_sha256": "c3c01efb22acde00354f5798012f0b5d992e2588291c9ad1c071b32c4cf65a9d"
+    },
+    {
+      "case": "207700_opposite_1m",
+      "status": "supported",
+      "command": [
+        "/Users/themoretheless/.codex/tmp/rrrah-joint-geometry-sampling-patched-qualified-20261011/sampling_trace",
+        "/Users/themoretheless/.codex/tmp/rrrah-joint-geometry-sampling-patched-qualified-20261011/207700_opposite_1m.json",
+        "1000000",
+        "305441741"
+      ],
+      "pid": 23788,
+      "returncode": 0,
+      "stdout": "{\"alias_pairs\":[],\"anchor_result\":{\"anchors\":[10,11],\"directions\":[{\"agreeing_pairs\":1585,\"informative_pairs\":1585,\"sites\":250,\"valid_sites\":250},{\"agreeing_pairs\":1678,\"informative_pairs\":1686,\"sites\":275,\"valid_sites\":275}],\"supported\":true},\"best\":{\"joint_inliers\":[7,13,24,31,53,58,59,61,70,77,82],\"normalized_bidirectional_error\":3.2675252791226668,\"transform\":[[0.869416061701048,-0.17822409463637667,1070.7721357479818],[0.30906169453864857,0.40842473968484416,796.7880759605995],[0.0002967000076597771,-0.00012461791451335365,0.9656455963371694]]},\"decimal_bit_differences\":32,\"managed_peak\":103219200,\"managed_used\":0,\"maximum_projection_checks\":214000214,\"points\":107,\"scope\":\"Public joint sampled geometry API on exact-bit captured real points, including guarded refinement and preflight projection work. Independent original-pixel confirmation. JSON/point/geometry scratch outside managed payload admission; not automatic search integration, total RSS or full corpus qualification.\",\"seed\":305441741,\"source_tolerance\":0.5,\"target_tolerance\":2.0,\"trials\":1000000}\n",
+      "stderr": "",
+      "elapsed_seconds": 2.1775961660000003,
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-joint-geometry-sampling-patched-qualified-20261011/207700_opposite_1m.log",
+      "log_sha256": "bae220751d579cea2ab0a5f54674c8da320344c38d6bd04815e0e596ee5912b6"
+    },
+    {
+      "case": "207700_direct_1m",
+      "status": "inconclusive",
+      "command": [
+        "/Users/themoretheless/.codex/tmp/rrrah-joint-geometry-sampling-patched-qualified-20261011/sampling_trace",
+        "/Users/themoretheless/.codex/tmp/rrrah-joint-geometry-sampling-patched-qualified-20261011/207700_direct_1m.json",
+        "1000000",
+        "305441741"
+      ],
+      "pid": 23802,
+      "returncode": 0,
+      "stdout": "{\"alias_pairs\":[],\"anchor_result\":{\"error\":\"Rank(InsufficientGeometry)\"},\"best\":{\"joint_inliers\":[8,17,26,45,63,68,71,75,77,96],\"normalized_bidirectional_error\":1.7715504121189294,\"transform\":[[0.3568420422813302,-0.1174023103478577,1172.653788079535],[-0.09560884267599772,0.44439475321022526,880.7670407495625],[-0.0001390848417583626,-0.00006359206411248515,1.0509993412172105]]},\"decimal_bit_differences\":34,\"managed_peak\":103219200,\"managed_used\":0,\"maximum_projection_checks\":208000208,\"points\":104,\"scope\":\"Public joint sampled geometry API on exact-bit captured real points, including guarded refinement and preflight projection work. Independent original-pixel confirmation. JSON/point/geometry scratch outside managed payload admission; not automatic search integration, total RSS or full corpus qualification.\",\"seed\":305441741,\"source_tolerance\":0.5,\"target_tolerance\":2.0,\"trials\":1000000}\n",
+      "stderr": "",
+      "elapsed_seconds": 2.253703584,
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-joint-geometry-sampling-patched-qualified-20261011/207700_direct_1m.log",
+      "log_sha256": "565cd2fd88ddd840978b3668f734b8a1eaf2bdcea8f58b8cfe910ef36d6a6281"
+    }
+  ],
+  "scope": "Pinned production joint fitter on exact-bit previously captured native points. Larger hypothesis budgets only; source.5/target2 and pixel thresholds unchanged. Independent standalone diagnostic lock, not automatic search/provider/RSS or proof no transform exists."
+}

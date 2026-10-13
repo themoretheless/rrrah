@@ -1,0 +1,31 @@
+{
+  "status": "live presentation unqualified: Occluded",
+  "change": [
+    "optional RRRAH_HDR_RAW_SOURCE native RAW HDR renderer mode",
+    "decode uses 512 MiB managed budget; source credit zero after upload",
+    "redraw retry requests honor 16ms deadline instead of immediate about_to_wait spin"
+  ],
+  "adapter": "Metal Apple M4 Max",
+  "source": "tests/IMG_9074.CR3",
+  "sensor": [
+    6188,
+    4120
+  ],
+  "samples": 25494560,
+  "surface": "Rgba16Float / ExtendedSrgbLinear",
+  "native_setup_and_surface_configuration": "success with no configuration validation errors",
+  "presented_frames": 0,
+  "attempts": 120,
+  "control_raster_result": "also Occluded (before redraw pacing repair)",
+  "log_sha256": {
+    "raw": "18d5ae890f6feadfd1ee10935a47cd6d6e7b41453fa96b5c2fd75776ae888d60",
+    "control": "741eb37a3496191730e8e5781a23ead3ac4fd31a669b5f01a13dc496d7e957e3"
+  },
+  "source_sha256": "06b3c491c256d71b0997f70e8d8d679212c216f5dd6463313c41856c74b35c73",
+  "limitations": [
+    "No actual RAW HDR frame presentation proven in this attempt",
+    "Occluded result is not proof of decode/shader failure",
+    "Display physical luminance and calibration remain unmeasured",
+    "Original raster probe result from earlier session is historical evidence, not a passing current run"
+  ]
+}

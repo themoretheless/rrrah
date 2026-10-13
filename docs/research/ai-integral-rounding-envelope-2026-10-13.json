@@ -1,0 +1,58 @@
+{
+  "scope": "Floating accumulation and quotient discrepancy relative to exact arithmetic on reported f64sample products; no geometric/source accuracy claim",
+  "tests": "249passed/12ignored",
+  "original_five_rows": [
+    {
+      "alpha_error": 5.414213521959255e-11,
+      "integral_error": 3.8241187994003673e-11,
+      "quotient_available": true,
+      "quotient_error": 1.2390523990336484e-10,
+      "diagnostic_work": 148708061
+    },
+    {
+      "alpha_error": 2.2587265391393888e-11,
+      "integral_error": 1.8608115048834864e-11,
+      "quotient_available": true,
+      "quotient_error": 4.749864722032598e-11,
+      "diagnostic_work": 52991199
+    },
+    {
+      "alpha_error": 3.3140157285060927e-12,
+      "integral_error": 3.257283331947747e-12,
+      "quotient_available": true,
+      "quotient_error": 6.436912686336471e-12,
+      "diagnostic_work": 871672
+    },
+    {
+      "alpha_error": 4.556272026334796e-12,
+      "integral_error": 4.30797064687738e-12,
+      "quotient_available": true,
+      "quotient_error": 3.714202774065282e-11,
+      "diagnostic_work": 5868748
+    },
+    {
+      "alpha_error": 9.309220061481939e-14,
+      "integral_error": 8.912315330178445e-14,
+      "quotient_available": true,
+      "quotient_error": 8.224695403382243e-13,
+      "diagnostic_work": 106579
+    }
+  ],
+  "controls_exact": true,
+  "admitted_envelope_bytes": 112,
+  "work_per_fragment": 21,
+  "failed_certificate_keeps_baseline_rendering": true,
+  "regressions": [
+    "4096dyadic exact product/integral/ratio regression",
+    "Differing-alpha ratio comparisons including1e-300",
+    "All short budgets and cancellation checkpoints for addition/export/quotient",
+    "Invalid/negative/nonfinite inputs and quotient overflow refusal"
+  ],
+  "limitations": [
+    "Zero lower alpha refuses quotient envelope",
+    "No source-domain/clipping or full combined replacement certificate",
+    "Pixel storage/profile/display conversion excluded",
+    "No samples skipped; ordinary4Mfullpage/independent AI color qualification unresolved"
+  ],
+  "derivation": "ai-integral-rounding-envelope-derivation-2026-10-13.md"
+}

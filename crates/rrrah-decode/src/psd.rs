@@ -233,7 +233,14 @@ pub(crate) fn decode(bytes: &[u8], request: &DecodeRequest) -> Result<DecodedRas
     if r.at != bytes.len() {
         return Err(bad("trailing composition bytes"));
     }
-    let color = profile.map_or(RasterColorSpace::Unspecified, RasterColorSpace::Icc);
+    let color = profile.map_or_else(
+        || if request.assume_untagged_srgb {
+            RasterColorSpace::AssumedSrgb
+        } else {
+            RasterColorSpace::Unspecified
+        },
+        RasterColorSpace::Icc,
+    );
     let offset = |c: usize, p: usize| c * plane_bytes + p * sample;
     macro_rules! interleave {
         ($ty:ty,$read:expr,$opaque:expr,$variant:ident) => {{
@@ -317,6 +324,32 @@ mod tests {
             panic!()
         };
         assert_eq!(p.as_slice(), [32768, 1, 65534, 65535, 32769, 2, 65535, 65535]);
+    }
+    #[test]
+    fn explicit_srgb_assumption_applies_to_untagged_psd_and_psb() {
+        for version in [1u16, 2] {
+            let mut bytes = fixture(8, &[0, 255, 128, 64, 255, 0]);
+            bytes[4..6].copy_from_slice(&version.to_be_bytes());
+            // PSB uses an eight-byte layer/mask section length.
+            if version == 2 { bytes.splice(34..34, [0u8; 4]); }
+            let mut request = DecodeRequest::new("image.psd");
+            assert_eq!(decode(&bytes, &request).unwrap().color_space(), &RasterColorSpace::Unspecified);
+            request.assume_untagged_srgb = true;
+            let raster = decode(&bytes, &request).unwrap();
+            assert_eq!(raster.color_space(), &RasterColorSpace::AssumedSrgb);
+            crate::prepare_raster_for_display(&raster).unwrap();
+            // This test checks resource precedence/preservation, not ICC validity.
+            let mut resource = b"8BIM".to_vec();
+            resource.extend(1039u16.to_be_bytes());
+            resource.extend([0u8; 2]);
+            resource.extend(4u32.to_be_bytes());
+            resource.extend(b"test");
+            bytes[30..34].copy_from_slice(&(resource.len() as u32).to_be_bytes());
+            bytes.splice(34..34, resource);
+            let raster = decode(&bytes, &request).unwrap();
+            let RasterColorSpace::Icc(profile) = raster.color_space() else { panic!("ICC must win") };
+            assert_eq!(profile.as_slice(), b"test");
+        }
     }
     #[test]
     fn retains_float_values() {

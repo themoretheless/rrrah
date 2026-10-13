@@ -1,0 +1,38 @@
+{
+  "change": "Prepared Normal paint batch stores composed premultiplied pixel and independent union shape; non-knockout same-space application only",
+  "scope": "Native test-only frame primitive; not wired to AI route execution yet",
+  "proof": {
+    "space": "RGB",
+    "cases": 36,
+    "varied": [
+      "AIS",
+      "opacity0/0.4/1",
+      "backdropalpha0/0.3/1",
+      "two backdrop colors"
+    ],
+    "compared": [
+      "native components",
+      "pixel alpha",
+      "coverage shape",
+      "coverage alpha"
+    ],
+    "tolerance": 1e-12,
+    "knockout_rejected": true,
+    "cancellation_rejected": true
+  },
+  "suite": {
+    "passed": 204,
+    "ignored": 12,
+    "failed": 0
+  },
+  "remaining": [
+    "CMYK/Gray batch proof",
+    "Admitted per-route batch cache",
+    "Route integration and original-pixel replay",
+    "Independent color/full-page qualification"
+  ],
+  "sha256": {
+    "vendor/hayro/src/native_frame.rs": "0bf4ce62038d6c1c87ac4c1e18ca5fe73b34b3fc70578039b4ad8d5e0aeab122",
+    "docs/research/ai-normal-batch-proof-suite-2026-10-13.log": "51e0647faa59cceabfd61734c72a0ba845249d8f37b1555a1e978ab3de5c16c8"
+  }
+}

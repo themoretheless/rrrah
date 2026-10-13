@@ -1,0 +1,29 @@
+{
+  "metal_worker_passed": 2,
+  "application_passed": 208,
+  "application_ignored": 52,
+  "gpu_budget_refusals": 12,
+  "model_sources": 6,
+  "swap_writes": 6,
+  "swap_reads": 24,
+  "swap_errors": 0,
+  "verified": "typed GPU-memory failure releases restored CPU source; record retryable; full SDR/HDR retry exact; final GPU/CPU/queue zero",
+  "implementation_fix": "Model preparation/thread-start failures reset loading pipeline and pending-first-present; prior visible frame retained",
+  "evidence": [
+    {
+      "suite": "metal-worker",
+      "log": "docs/research/model-worker-pressure-metal-worker-2026-10-11.log",
+      "sha256": "7e40b08488c95eb34f04e9f659a728d50578a2805ace18dc470ae01c6747cf51"
+    },
+    {
+      "suite": "application",
+      "log": "docs/research/model-worker-pressure-application-2026-10-11.log",
+      "sha256": "c8d299d1ebec4a9b5256beaea6894f96aa411a18344c45c0427d7cffa956993c"
+    }
+  ],
+  "limitations": [
+    "Logical GPU budget pressure, not physical VRAM exhaustion.",
+    "Error-state UI branch source-checked and compiled; live window pending.",
+    "Driver requires added pressure marker; previous gate reports lack it."
+  ]
+}

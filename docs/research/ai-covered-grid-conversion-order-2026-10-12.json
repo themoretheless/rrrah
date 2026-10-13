@@ -1,0 +1,121 @@
+{
+  "scope": "Bounded diagnostic source sampling over covered portions of selected original AI pixel; independent ICC conversion-order experiment",
+  "test_only_change": "RRRAH_TRACE_NATIVE_PIXEL_GRID accepts1..64; grid probes path and all clips, samples original shading, reports meancomponents/hitcount/opacity; cancellation checked per sample; no change to replay output",
+  "grid": {
+    "edge": 32,
+    "hits": 436,
+    "samples": 1024,
+    "mean_cmyk": [
+      0.016505797549552465,
+      0.13780288083837666,
+      0.3855294122471722,
+      0.0
+    ],
+    "opacity_minmax": [
+      1.0,
+      1.0
+    ]
+  },
+  "center_cmyk": [
+    0.016602673,
+    0.13868213,
+    0.3871869,
+    0.0
+  ],
+  "root_native_cmyk": [
+    0.007031720175462608,
+    0.058735959670122906,
+    0.16398504621842336,
+    0.0
+  ],
+  "root_alpha": 1.0,
+  "coverage": 0.4235294117647059,
+  "independent_lcms": [
+    {
+      "sample": "center",
+      "cmyk_then_conversion_rgb255": [
+        253.14568430185318,
+        237.23900824785233,
+        213.2132774591446
+      ],
+      "conversion_then_rgb_coverage_rgb255": [
+        252.6738102436065,
+        239.33241248130795,
+        217.0061638355255
+      ]
+    },
+    {
+      "sample": "covered_grid_mean",
+      "cmyk_then_conversion_rgb255": [
+        253.16153705120087,
+        237.33243763446808,
+        213.38785529136658
+      ],
+      "conversion_then_rgb_coverage_rgb255": [
+        252.69572281837463,
+        239.41717243194577,
+        217.1729800701141
+      ]
+    }
+  ],
+  "findings": [
+    "Covered-gridmean versuscenter difference rounds to same nativeRGB[253,237,213]; center-sample hypothesis doesnot explain most discrepancy",
+    "Native root sourcecoverage composition in CMYK followed by ICC conversion independently reproduces nativeRGB",
+    "RGBconversion before spatialcoverage compositing gives different result closer to highresolutionRGBreference; this alone doesnot establish which group/rasterization policy should be changed"
+  ],
+  "validation": {
+    "real_ai_manual_passed": 1,
+    "ordinary_tests_passed": 136,
+    "ignored": 10,
+    "all3pages_completed": true,
+    "all6outputs_byte_identical": true,
+    "all_final_credit_zero": true
+  },
+  "outputs": [
+    {
+      "file": "VectorApple.ai-page-0.native.components.f64le",
+      "sha256": "62926b25aa0701ea931fe20aa31a99a6ddab452b9d87851bd1f30f3ec23c8c67",
+      "same_as_prior": true
+    },
+    {
+      "file": "VectorApple.ai-page-0.native.rgba",
+      "sha256": "ecbb6bcbf532cb70c0e35be8c9d655c3cb38ddd8cfd85288e6e3c4c544020efc",
+      "same_as_prior": true
+    },
+    {
+      "file": "one.ai-page-0.native.components.f64le",
+      "sha256": "890cec0274060767c59cb00826d6d181cce662028840e659be6cba6ea08d849a",
+      "same_as_prior": true
+    },
+    {
+      "file": "one.ai-page-0.native.rgba",
+      "sha256": "4d4dc1019b440c5389a7ed8731db277513f63d501006a3d97fc6a861e78e76c8",
+      "same_as_prior": true
+    },
+    {
+      "file": "one.ai-page-1.native.components.f64le",
+      "sha256": "b3ba384a292a73ea286ec3ca3a2c98fe65580dd385458cf1f025891dc405b595",
+      "same_as_prior": true
+    },
+    {
+      "file": "one.ai-page-1.native.rgba",
+      "sha256": "89db416a84fdc983853717f5fd73690c020e6feced867d1a3d4e02873f9d7e36",
+      "same_as_prior": true
+    }
+  ],
+  "next": "Compare PDF group-color/shape coverage semantics with reference rasterization order before changing native compositor",
+  "limits": [
+    "Diagnostic/test-only native compositor; AI production remainspending",
+    "No renderer correction/acceptance relaxation",
+    "Isolated independent oracle harness uses pinned generated lock; not root workspace dependency change"
+  ],
+  "sha256": {
+    "docs/research/ai-covered-grid-conversion-order-2026-10-12/harness.Cargo.toml": "d5a397360f2f11eb988c13cf7a004e552c9702a3f754a913d6f4607f10f96072",
+    "docs/research/ai-covered-grid-conversion-order-2026-10-12/replay-report.json": "10c9e45c727403e7a578fc121ae9e1d5e2763e3b53a08e8b1db9ae75cec06f4b",
+    "docs/research/ai-covered-grid-conversion-order-2026-10-12/regressions.log": "1023ea79d992ab309ae8b9e7f71e472520a1c27f7153bedf01dc700e8afc0fd8",
+    "docs/research/ai-covered-grid-conversion-order-2026-10-12/replay.log": "41a8f2f1c56d99c2c9dcfd270cd386575fe39c7dfcca045a1b485fb03236aa2e",
+    "docs/research/ai-covered-grid-conversion-order-2026-10-12/harness.Cargo.lock": "f7437d9f126559b5c5ebd9aced62c5654f42b24f34a477ec2b1ead15f82ae745",
+    "docs/research/ai-covered-grid-conversion-order-2026-10-12/conversion-order.json": "671b90d631ca30f4b6ac299c1e656e8469e8c4610dec8de21d46839756ddd3aa",
+    "vendor/hayro/src/knockout_interpreter.rs": "8f0a2bafb4845251bb5a56df68c53c2dacb9dc2856718eeb228caf576de07339"
+  }
+}

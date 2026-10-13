@@ -1,0 +1,30 @@
+{
+  "device": "Apple M4 Max Metal",
+  "pixels": 25494560,
+  "dispatches": 7,
+  "chunk_pixels": 4194240,
+  "checks": [
+    "both managed and interleaved output every pixel exact",
+    "nonperiodic green distinguishes window offsets and independent alpha preserved",
+    "multiple dispatch windows required and expected first pixels differ",
+    "tracked CPU/GPU zero after last shared owner release"
+  ],
+  "timing_ms": {
+    "interleaved": 182.935,
+    "managed": 141.338
+  },
+  "gpu_peak": 1223738992,
+  "cpu_peak": 815825920,
+  "logs": {
+    "initial-current": {
+      "path": "docs/research/full-exposure-distinct-windows-2026-10-11-initial-current.log",
+      "sha256": "2d595cc12bc7b60e6c2ca11fa7743d8256e572696ea87073c8d174616149dafb"
+    },
+    "final": {
+      "path": "docs/research/full-exposure-distinct-windows-2026-10-11-final.log",
+      "sha256": "dd8dce028370f1dc5ee72a7b31010d114d2f803bcd2f144aa7b92b57533a6bd1"
+    }
+  },
+  "source_sha256": "bdc0d349668cb9321abc54e8bf2792076ed5bf945434d72d2afc712f1faee521",
+  "limitations": "Authored sensor-sized buffer; single-run timing, no speedup. Original periodic1024 field could hide offsets differing by1024 multiples; actual chunk4194240 is not a1024 multiple. Strengthens evidence without claiming a production bug. No physical HDR or camera appearance qualification."
+}

@@ -1,0 +1,40 @@
+{
+  "date": "2026-10-11",
+  "hardware": "Apple M4 Max",
+  "backend": "Metal",
+  "binary_sha256": "5639eb7169fa828f1075536e17414f77131d3057759239c913f0bfe7ce8c9676",
+  "fix": "Remove self-sustaining redraw after successful telemetry present; retain data/input/resize invalidation",
+  "idle_measurement": {
+    "start": {
+      "wall_time": 1791705007.6693408,
+      "pid": 50857,
+      "ps": "0:00.54   0.0 S"
+    },
+    "end": {
+      "wall_time": 1791705029.669638,
+      "pid": 50857,
+      "ps": "0:00.54   0.0 S"
+    },
+    "interval_seconds": 22.00029706954956
+  },
+  "interpretation": "ps CPU time unchanged at0.54 seconds for22.0003 seconds; displayed CPU0.0 percent; not a claim of universally zero CPU",
+  "checks": {
+    "app_units_passed": 206,
+    "app_units_ignored": 43,
+    "explicit_metal_tests_passed": 4,
+    "native_hdr_fit_zoom_source_return": "visible complete RGB/gray bands; one foreground decode",
+    "background_viewport_level": [
+      125,
+      125
+    ],
+    "exposure_update_after_idle": "visible gray band darkens after minus",
+    "main_thread_idle_sample": "blocked in macOS event wait, not nextDrawable render loop",
+    "own_app_exit": "process absent"
+  },
+  "limits": [
+    "Single local idle observation, not long-term all-platform power benchmark",
+    "Physical HDR luminance/color accuracy unqualified",
+    "NVIDIA deferred",
+    "Out-of-core decode and full100-format qualification remain open"
+  ]
+}

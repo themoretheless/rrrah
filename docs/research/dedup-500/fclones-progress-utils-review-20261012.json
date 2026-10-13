@@ -1,0 +1,40 @@
+{
+  "status": "verified_three_complete_files_and_eight_original_tests",
+  "commit": "a74f90d293e05856d19a4c0ac2b29b46ef16cf23",
+  "fully_read_additional_files": {
+    "fclones/src/phase.rs": 62,
+    "fclones/src/progress.rs": 268,
+    "fclones/src/util.rs": 208
+  },
+  "passed": 8,
+  "ignored": 0,
+  "tests": [
+    "phase::test::format_phase",
+    "progress::test::draw_progress_bar_bytes",
+    "progress::test::draw_progress_bar",
+    "progress::test::animate_spinner",
+    "util::test::min_result_should_return_err_if_at_least_one_err",
+    "util::test::min_result_should_return_none_if_no_elements",
+    "util::test::min_result_should_return_min_if_all_ok",
+    "util::test::max_result_should_return_max_if_all_ok"
+  ],
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/fclones-hasher-source-20261012.json": "54d14fd6f77c95467e02139da2daabbbe9e237abf2d03400abfd39593e32d176",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/fclones-upstream-verification-20261012.json": "9cf8b64c4e8cc34e2100ecef5b8e20a1cc9b2c5e75c6a0891dda2952766e3dac",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-upstream-executables-20261012/lib": "738c143872942a290b4df90b62b23527f12dfe6c5d6822069a4ad394ade7b09e",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-fclones-progress-utils-20261012.py": "e17a76c72ffa5da7c5d920e6b3abea6d257d9d3400de758d3c3d2dabc5e4051c",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-phase-tests-20261012.log": "855c3d7d2ab7b8c12a63a1a5c44207ab23c9e1378f744a59014086c7f1e88539",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-progress-tests-20261012.log": "37358e85d8fb8ec04f95c8dbab287c2391505b895c60ceff60c1d477694cd566",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-util-tests-20261012.log": "815fb7b8b48a7fa8e36caebfa55a61128d316d76427b30f372821d3ea8de4c26",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-full-source-20261012/fclones/src/phase.rs": "efdd973695dec58bfa4d193988b170f825b8396a8c97e8c31605310b44b629f8",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-full-source-20261012/fclones/src/progress.rs": "ec1a4717c5c54117e14ee65d8e9872253f41e6e45eaad9a49ca6b7c3ad4fc886",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-full-source-20261012/fclones/src/util.rs": "0e2492cab0d82e4cf3c3c7627ba13c5ae1ee6c346e3ad6f886af85af0ac968cf"
+  },
+  "observations": [
+    "Phase reporting requires the requested phase to exist; missing phase unwraps.",
+    "Progress uses relaxed atomic counters and a fixed50-column display; this is reporting, not work admission or memory budgeting.",
+    "try_sort_by_key maps failed keys to None and sorts Option ascending; failures sort before successful Some keys, contrary to the comments. This is a source observation; no new runtime counterexample executed.",
+    "IteratorWrapper serialization consumes its iterator through Cell.take().unwrap(); repeated serialization is not supported."
+  ],
+  "scope": "Three full source files and eight existing macOS ARM64 cases. No implementation adopted. No total resource cap, Windows, full42tree or full500 completion claim."
+}

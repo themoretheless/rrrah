@@ -311,3 +311,32 @@ fn dense_adaptive_search_keeps_oracle_and_cancellation() {
         }
     }
 }
+
+#[test]
+fn nonfinite_fingerprint_statistics_never_claim_informative_evidence() {
+    let healthy = Fingerprint {
+        variants: [[0; 4]; 8],
+        mean_linear_rgb: [0.5; 3],
+        luminance_stddev: 0.2,
+    };
+    assert!(healthy.compare(&healthy, true).informative);
+    for invalid in [f64::NAN, f64::INFINITY, f64::NEG_INFINITY] {
+        for field in 0..4 {
+            let mut malformed = healthy.clone();
+            if field < 3 {
+                malformed.mean_linear_rgb[field] = invalid;
+            } else {
+                malformed.luminance_stddev = invalid;
+            }
+            for allow_transforms in [false, true] {
+                assert!(!healthy.compare(&malformed, allow_transforms).informative);
+                assert!(!malformed.compare(&healthy, allow_transforms).informative);
+                let index = VisualIndex::new([(42, malformed.clone())], 1, || false).unwrap();
+                let candidates = index.search(&healthy, 0, allow_transforms, || false).unwrap();
+                assert_eq!(candidates.len(), 1);
+                assert_eq!(candidates[0].evidence.distance, 0);
+                assert!(!candidates[0].evidence.informative);
+            }
+        }
+    }
+}

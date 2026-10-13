@@ -35,6 +35,7 @@ enum NativeFormat {
     Pef,
     Rw2,
     Raf,
+    UnqualifiedMef,
 }
 
 impl NativeFormat {
@@ -67,6 +68,7 @@ impl NativeFormat {
             Some("pef" | "ptx") => Ok(Self::Pef),
             Some("rw2" | "rwl") => Ok(Self::Rw2),
             Some("raf") => Ok(Self::Raf),
+            Some("mef") => Ok(Self::UnqualifiedMef),
             _ => Err(DecodeError::UnsupportedFormat {
                 path: path.to_owned(),
             }),
@@ -138,6 +140,10 @@ macro_rules! dispatch {
             NativeFormat::Crw => crate::NativeCrwDecoder.$method($request),
             NativeFormat::Cr3 => NativeCr3Decoder.$method($request),
             NativeFormat::Dng => NativeDngDecoder.$method($request),
+            NativeFormat::UnqualifiedMef => Err(DecodeError::NativeCamera {
+                format: "MEF",
+                message: "camera white balance and color profile are not implemented for viewing; explicit sensor import is available".into(),
+            }),
             NativeFormat::Cr2 => NativeCameraDecoder::new(CameraFormat::Cr2).$method($request),
             NativeFormat::Nef => NativeCameraDecoder::new(CameraFormat::Nef).$method($request),
             NativeFormat::Mrw => crate::NativeMrwDecoder.$method($request),
@@ -236,6 +242,21 @@ mod tests {
     }
 
     #[test]
+    fn mef_refuses_unimplemented_color_without_dng_or_memory_admission() {
+        let mut request = DecodeRequest::new("/rrrah-absent-color-source.MEF");
+        let budget = rrrah_core::MemoryBudget::new(0);
+        request.memory_budget = Some(budget.clone());
+        for error in [NativeRawDecoder.mosaic_recipe(&request).unwrap_err(),
+            NativeRawDecoder.decode(&request).unwrap_err()] {
+            assert!(matches!(error, DecodeError::NativeCamera { format: "MEF", .. }));
+            assert!(error.to_string().contains("white balance"));
+        }
+        assert_eq!(budget.peak(), 0);
+        assert_eq!(NativeFormat::refine(NativeFormat::UnqualifiedMef,
+            Some(SniffedFormat::TiffFamily)), NativeFormat::UnqualifiedMef);
+    }
+
+    #[test]
     fn routes_extensions_case_insensitively() {
         assert_eq!(
             NativeFormat::from_path(Path::new("a.CR3")).unwrap(),
@@ -288,6 +309,8 @@ mod tests {
             ("a.RW2", NativeFormat::Rw2),
             ("a.raf", NativeFormat::Raf),
             ("a.RAF", NativeFormat::Raf),
+            ("a.MEF", NativeFormat::UnqualifiedMef),
+            ("a.mef", NativeFormat::UnqualifiedMef),
         ];
         for (path, expected) in cases {
             assert_eq!(
@@ -316,6 +339,7 @@ mod tests {
                 NativeFormat::Arw,
                 NativeFormat::Orf,
                 NativeFormat::Pef,
+                NativeFormat::UnqualifiedMef,
                 NativeFormat::Rw2,
                 NativeFormat::Raf,
             ] {

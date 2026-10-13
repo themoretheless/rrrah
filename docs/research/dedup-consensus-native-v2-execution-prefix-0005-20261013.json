@@ -1,0 +1,94 @@
+{
+  "status": "complete_five_atomic_native_controls_pending_audit",
+  "producer_pid": 13787,
+  "plan_sha256": "674ee06240ac7fbdc8785e0bbdc63c5625ff08c93ebb9ea34a1aa0e8dd3dfa27",
+  "command": [
+    "cargo",
+    "+stable",
+    "build",
+    "--offline",
+    "--locked",
+    "--bin",
+    "native_bank_current_all_positives",
+    "--jobs",
+    "2",
+    "--target-dir",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-exact-portfolio-20261011"
+  ],
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-consensus-native-plan-20261013.json": "674ee06240ac7fbdc8785e0bbdc63c5625ff08c93ebb9ea34a1aa0e8dd3dfa27",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/run-dedup-consensus-native-v2-20261013.py": "3bda420b8ea33d4f7a88425c81085853d9cd118f529b6a4b1c07d24996c2f11b",
+    "/Users/themoretheless/.codex/tmp/rrrah-consensus-native-v2-20261013/probe": "9493c0d7ae15376d0ce1c8b0236716aa271fae7075ce56b8c6f8bc08232539be",
+    "/Users/themoretheless/.codex/tmp/rrrah-consensus-native-harness-20261013/Cargo.lock": "40d0319ff61694d6f74b709c8e2df49e5afc536af462b95fb84f38849d050aeb"
+  },
+  "results": [
+    {
+      "index": 0,
+      "label": "self_native",
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-consensus-native-v2-20261013/00.json",
+      "sha256": "a7118dfd904fcfeb990837267c123c90cf81e67a50370cc2d96f9559ba5e7415",
+      "returncode": 0,
+      "support": true,
+      "forward_support": true,
+      "reverse_support": true,
+      "forward_model_attempted": false,
+      "reverse_model_attempted": false
+    },
+    {
+      "index": 1,
+      "label": "self_learned_forced_native_miss",
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-consensus-native-v2-20261013/01.json",
+      "sha256": "2938d6001301fda8746b78f24e1a492745de2afb985e6d30e4395df825c30c3c",
+      "returncode": 0,
+      "support": true,
+      "forward_support": true,
+      "reverse_support": true,
+      "forward_model_attempted": false,
+      "reverse_model_attempted": false
+    },
+    {
+      "index": 2,
+      "label": "table_true",
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-consensus-native-v2-20261013/02.json",
+      "sha256": "734696a17d0f069950584fb099678a83b45126f69bc4a6ccc432c104e7323fd9",
+      "returncode": 0,
+      "support": true,
+      "forward_support": true,
+      "reverse_support": true,
+      "forward_model_attempted": false,
+      "reverse_model_attempted": false
+    },
+    {
+      "index": 3,
+      "label": "portrait_wrong",
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-consensus-native-v2-20261013/03.json",
+      "sha256": "fcae98392be678b47eadb463fc941b1358198c022c8bbf10261d74822d85432b",
+      "returncode": 0,
+      "support": null,
+      "forward_support": true,
+      "reverse_support": null,
+      "forward_model_attempted": true,
+      "reverse_model_attempted": true
+    },
+    {
+      "index": 4,
+      "label": "composite_square_wrong",
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-consensus-native-v2-20261013/04.json",
+      "sha256": "8f7f8971f49393b631b9e3d198c7fc6f2aaf735163fe79340e5dd471f382822d",
+      "returncode": 0,
+      "support": null,
+      "forward_support": null,
+      "reverse_support": null,
+      "forward_model_attempted": true,
+      "reverse_model_attempted": true
+    }
+  ],
+  "scope": "Real CPU LoFTR opt-in atomic consensus, exact root-derived native source snapshot; standalone optimized development harness. Runtime/inputs/cases fixed by producer before execution; not full corpus or all features.",
+  "compiler": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: aarch64-apple-darwin\nrelease: 1.98.1\nLLVM version: 22.1.8\n",
+  "prior_build_report": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-consensus-native-20261013.json",
+  "prior_build_report_sha256": "993cbc072fae9f81343e277873fa64af1e423bf67a3304101a2d9bde62aa9cc5",
+  "build_returncode": 0,
+  "active_index": 4,
+  "child_pid": 19400,
+  "source_unchanged": true
+}

@@ -2,12 +2,25 @@
 
 use crate::{
     cache::FingerprintCache,
-    decode::{CachedError, FingerprintPolicy, fingerprint_file},
+    decode::{CachedError, FingerprintPolicy, fingerprint_file_observed},
     pixels::Comparison,
     visual::{VisualError, VisualIndex},
 };
 use rrrah_core::MemoryBudget;
 use rrrah_decode::DecodeRequest;
+
+fn batch_cancellation<'a>(
+    caller: &'a impl Fn() -> bool,
+    tokens: &'a [rrrah_decode::GenerationToken],
+) -> impl Fn() -> bool + 'a {
+    let latch = std::cell::Cell::new(false);
+    move || {
+        let stopped =
+            latch.get() || caller() || tokens.iter().any(rrrah_decode::GenerationToken::is_cancelled);
+        latch.set(stopped);
+        stopped
+    }
+}
 
 #[derive(Debug, Clone, Copy)]
 pub struct VisualPolicy {
@@ -47,6 +60,8 @@ pub struct VisualReport {
 pub enum ScanError {
     #[error("invalid comparison acceptance policy")]
     InvalidPolicy,
+    #[error("pixels are unsupported by the selected native candidate recipe")]
+    UnsupportedPixels,
     #[error(transparent)]
     Group(#[from] crate::groups::GroupError),
     #[error("pair must reference two distinct known ids")]
@@ -57,6 +72,12 @@ pub enum ScanError {
     Budget,
     #[error("batch search cancelled")]
     Cancelled,
+    #[error("file {id} final batch observation: {error}")]
+    Source {
+        id: u64,
+        #[source]
+        error: crate::exact::SnapshotError,
+    },
     #[error(transparent)]
     Index(#[from] VisualError),
 }
@@ -65,10 +86,12 @@ pub enum ScanError {
 /// through the metric index. Every pair appears once in deterministic id order.
 /// A failing file is excluded with an explicit issue. Cache entries admitted
 /// before a later batch cancellation remain valid independent observations.
+/// Cancellation of any admitted request generation invalidates the batch,
+/// including during index search and final report publication.
 ///
 /// # Errors
-/// Returns duplicate-id, batch-budget or cancellation errors without a partial
-/// report. Input can have multiple selected frames per path under distinct ids.
+/// Returns duplicate-id, batch-budget, cancellation or late source-change errors
+/// without a partial report. Input can have multiple selected frames per path under distinct ids.
 pub fn scan_visual(
     files: impl IntoIterator<Item = (u64, DecodeRequest)>,
     policy: VisualPolicy,
@@ -90,6 +113,17 @@ pub fn scan_visual(
         requests.try_reserve(1).map_err(|_| ScanError::Budget)?;
         requests.insert(id, request);
     }
+    let mut tokens = Vec::new();
+    for request in requests.values() {
+        if let Some(token) = &request.cancellation {
+            tokens.try_reserve(1).map_err(|_| ScanError::Budget)?;
+            tokens.push(token.clone());
+        }
+    }
+    let cancel = batch_cancellation(&cancel, &tokens);
+    if cancel() {
+        return Err(ScanError::Cancelled);
+    }
     let mut ordered_requests = Vec::new();
     ordered_requests
         .try_reserve_exact(requests.len())
@@ -97,18 +131,22 @@ pub fn scan_visual(
     ordered_requests.extend(requests);
     ordered_requests.sort_unstable_by_key(|(id, _)| *id);
     let mut fingerprints = Vec::new();
+    let mut snapshots = Vec::new();
     let mut issues = Vec::new();
     let mut cache_hits = 0;
     for (id, request) in ordered_requests {
         if cancel() {
             return Err(ScanError::Cancelled);
         }
-        match fingerprint_file(&request, policy.fingerprint, budget, cache, &cancel) {
-            Ok(result) => {
+        match fingerprint_file_observed(&request, policy.fingerprint, budget, cache, &cancel) {
+            Ok((result, source)) => {
                 cache_hits += usize::from(result.cache_hit);
                 crate::local::reserve_slot(&mut fingerprints, policy.max_files)
                     .map_err(|_| ScanError::Budget)?;
+                crate::local::reserve_slot(&mut snapshots, policy.max_files)
+                    .map_err(|_| ScanError::Budget)?;
                 fingerprints.push((id, result.fingerprint));
+                snapshots.push((id, source));
             }
             Err(error) => {
                 crate::local::reserve_slot(&mut issues, policy.max_files).map_err(|_| ScanError::Budget)?;
@@ -154,6 +192,19 @@ pub fn scan_visual(
     if cancel() {
         return Err(ScanError::Cancelled);
     }
+    // Retain the exact observations used to create/reuse fingerprints. No user
+    // callback runs after this final source check; generations remain live.
+    let owner_only = || false;
+    let owners = batch_cancellation(&owner_only, &tokens);
+    for (id, source) in &snapshots {
+        source.verify(&owners).map_err(|error| match error {
+            crate::exact::SnapshotError::Cancelled => ScanError::Cancelled,
+            error => ScanError::Source { id: *id, error },
+        })?;
+    }
+    if owners() {
+        return Err(ScanError::Cancelled);
+    }
     Ok(VisualReport {
         analysed,
         cache_hits,
@@ -193,9 +244,11 @@ pub struct PixelIssue {
 /// pixel comparison. Each pair retains only two decoded frames. Source content
 /// is validated before and after processing; mutation never admits equality.
 /// Candidates may include uniform images omitted by perceptual-information gates.
+/// Cancellation of any admitted request generation invalidates the batch,
+/// including when no candidate pairs are supplied or during final publication.
 ///
 /// # Errors
-/// Returns invalid ids/pairs, resource limits or cancellation without a report.
+/// Returns invalid ids/pairs, resource limits, cancellation or a late source change without a report.
 pub fn confirm_pixels(
     files: impl IntoIterator<Item = (u64, DecodeRequest)>,
     pairs: impl IntoIterator<Item = (u64, u64)>,
@@ -217,6 +270,17 @@ pub fn confirm_pixels(
         }
         requests.try_reserve(1).map_err(|_| ScanError::Budget)?;
         requests.insert(id, request);
+    }
+    let mut tokens = Vec::new();
+    for request in requests.values() {
+        if let Some(token) = &request.cancellation {
+            tokens.try_reserve(1).map_err(|_| ScanError::Budget)?;
+            tokens.push(token.clone());
+        }
+    }
+    let cancel = batch_cancellation(&cancel, &tokens);
+    if cancel() {
+        return Err(ScanError::Cancelled);
     }
     let mut candidates = std::collections::HashSet::new();
     for (consumed, (a, b)) in pairs.into_iter().enumerate() {
@@ -249,6 +313,9 @@ pub fn confirm_pixels(
         .map_err(|_| ScanError::Budget)?;
     ordered_candidates.extend(candidates);
     ordered_candidates.sort_unstable();
+    let mut observations = std::collections::HashMap::new();
+    let owner_only = || false;
+    let owners = batch_cancellation(&owner_only, &tokens);
     for (a, b) in ordered_candidates {
         let left = &requests[&a];
         let right = &requests[&b];
@@ -263,7 +330,7 @@ pub fn confirm_pixels(
         if cancelled() {
             return Err(ScanError::Cancelled);
         }
-        let compare = || -> Result<bool, ConfirmationError> {
+        let compare = || -> Result<_, ConfirmationError> {
             let x = ContentSnapshot::read(&left.path, policy.fingerprint.max_file_bytes, cancelled)?;
             let y = ContentSnapshot::read(&right.path, policy.fingerprint.max_file_bytes, cancelled)?;
             let l = decode_snapshot_frame(left, &x, policy.fingerprint, budget, cancelled)?;
@@ -271,12 +338,31 @@ pub fn confirm_pixels(
             let equal = l.same_selected_frame(&r, cancelled)?;
             x.verify(cancelled)?;
             y.verify(cancelled)?;
-            Ok(equal)
+            Ok((equal, x, y))
         };
         let result = compare();
         if cancelled() {
             return Err(ScanError::Cancelled);
         }
+        // Caller checkpoints can mutate a source after compare's validation.
+        // Attribute those changes to this pair before retaining batch evidence.
+        let result = result.and_then(|(equal, x, y)| {
+            x.verify(&owners)?;
+            y.verify(&owners)?;
+            Ok((equal, x, y))
+        });
+        let result = match result {
+            Ok((equal, x, y)) => {
+                for (id, snapshot) in [(a, x), (b, y)] {
+                    if !observations.contains_key(&id) {
+                        observations.try_reserve(1).map_err(|_| ScanError::Budget)?;
+                        observations.insert(id, snapshot);
+                    }
+                }
+                Ok(equal)
+            }
+            Err(error) => Err(error),
+        };
         match result {
             Ok(true) => {
                 crate::local::reserve_slot(&mut report.equal, policy.max_pairs)
@@ -302,6 +388,23 @@ pub fn confirm_pixels(
     if cancel() {
         return Err(ScanError::Cancelled);
     }
+    // No caller code runs after this final observation. Retain the first
+    // successful version so later pairs cannot silently replace earlier evidence.
+    let mut observed_ids = Vec::new();
+    observed_ids
+        .try_reserve_exact(observations.len())
+        .map_err(|_| ScanError::Budget)?;
+    observed_ids.extend(observations.keys().copied());
+    observed_ids.sort_unstable();
+    for id in observed_ids {
+        observations[&id].verify(&owners).map_err(|error| match error {
+            crate::exact::SnapshotError::Cancelled => ScanError::Cancelled,
+            error => ScanError::Source { id, error },
+        })?;
+    }
+    if owners() {
+        return Err(ScanError::Cancelled);
+    }
     Ok(report)
 }
 
@@ -319,7 +422,8 @@ pub struct ConfirmedGroups {
 /// and missing comparisons never create an edge; their diagnostics are retained.
 ///
 /// # Errors
-/// Returns validation, batch/group budgets or cancellation without partial output.
+/// Returns validation, batch/group budgets, cancellation or a final source
+/// observation error without partial output.
 pub fn confirm_pixel_groups(
     files: impl IntoIterator<Item = (u64, DecodeRequest)>,
     pairs: impl IntoIterator<Item = (u64, u64)>,
@@ -348,8 +452,7 @@ pub fn confirm_pixel_groups(
             .iter()
             .filter_map(|(_, request)| request.cancellation.clone()),
     );
-    let caller_cancel = &cancel;
-    let cancel = || caller_cancel() || tokens.iter().any(rrrah_decode::GenerationToken::is_cancelled);
+    let cancel = batch_cancellation(&cancel, &tokens);
     let mut ids = Vec::new();
     ids.try_reserve_exact(admitted.len())
         .map_err(|_| ScanError::Budget)?;
@@ -366,7 +469,7 @@ pub fn confirm_pixel_groups(
         match crate::decode::DecodeSourceSnapshot::read(
             &request.path,
             policy.fingerprint.max_file_bytes,
-            cancel,
+            &cancel,
         ) {
             Ok(snapshot) => {
                 crate::local::reserve_slot(&mut snapshots, policy.max_files)
@@ -385,15 +488,15 @@ pub fn confirm_pixel_groups(
         }
     }
     snapshots.sort_unstable_by_key(|(id, _)| *id);
-    let mut confirmation = confirm_pixels(admitted, pairs, policy, budget, cancel)?;
-    for (id, snapshot) in snapshots {
-        match snapshot.verify(cancel) {
+    let mut confirmation = confirm_pixels(admitted, pairs, policy, budget, &cancel)?;
+    for (id, snapshot) in &snapshots {
+        match snapshot.verify(&cancel) {
             Ok(()) => {}
             Err(crate::exact::SnapshotError::Cancelled) => return Err(ScanError::Cancelled),
             Err(error) => {
                 crate::local::reserve_slot(&mut source_issues, policy.max_files)
                     .map_err(|_| ScanError::Budget)?;
-                source_issues.push((id, error));
+                source_issues.push((*id, error));
             }
         }
         if cancel() {
@@ -419,8 +522,28 @@ pub fn confirm_pixel_groups(
             .iter()
             .map(|&(left, right)| crate::groups::Pair { left, right }),
         group_budget,
-        cancel,
+        &cancel,
     )?;
+    // Grouping invokes caller code after the earlier source checks. Revalidate
+    // surviving sources after that final callback, with owner cancellation only.
+    // A late change discards the batch instead of doing unadmitted regrouping.
+    let owner_only = || false;
+    let owners = batch_cancellation(&owner_only, &tokens);
+    for (id, snapshot) in &snapshots {
+        if owners() {
+            return Err(ScanError::Cancelled);
+        }
+        if invalid.contains(id) {
+            continue;
+        }
+        snapshot.verify(&owners).map_err(|error| match error {
+            crate::exact::SnapshotError::Cancelled => ScanError::Cancelled,
+            error => ScanError::Source { id: *id, error },
+        })?;
+    }
+    if owners() {
+        return Err(ScanError::Cancelled);
+    }
     Ok(ConfirmedGroups {
         grouping,
         confirmation,
@@ -592,17 +715,17 @@ pub fn scan_equal_pixels(
         cancelled,
     )?;
     let mut invalid = std::collections::HashSet::new();
-    for (id, snapshot) in snapshots {
+    for (id, snapshot) in &snapshots {
         let result = snapshot.verify(cancelled);
         if cancelled() {
             return Err(ScanError::Cancelled);
         }
         if let Err(error) = result {
             invalid.try_reserve(1).map_err(|_| ScanError::Budget)?;
-            invalid.insert(id);
+            invalid.insert(*id);
             crate::local::reserve_slot(&mut source_issues, policy.max_files)
                 .map_err(|_| ScanError::Budget)?;
-            source_issues.push((id, error));
+            source_issues.push((*id, error));
         }
     }
     pixels
@@ -613,6 +736,28 @@ pub fn scan_equal_pixels(
         .retain(|(a, b)| !invalid.contains(a) && !invalid.contains(b));
     source_issues.sort_by_key(|(id, _)| *id);
     if cancelled() {
+        return Err(ScanError::Cancelled);
+    }
+    // The final caller checkpoint may mutate a previously verified source.
+    // Do not run caller code after observing surviving sources for publication.
+    let owners = || {
+        requests.values().any(|request| {
+            request
+                .cancellation
+                .as_ref()
+                .is_some_and(rrrah_decode::GenerationToken::is_cancelled)
+        })
+    };
+    for (id, snapshot) in &snapshots {
+        if invalid.contains(id) {
+            continue;
+        }
+        snapshot.verify(&owners).map_err(|error| match error {
+            crate::exact::SnapshotError::Cancelled => ScanError::Cancelled,
+            error => ScanError::Source { id: *id, error },
+        })?;
+    }
+    if owners() {
         return Err(ScanError::Cancelled);
     }
     Ok(PixelSearchReport {
@@ -657,9 +802,8 @@ pub fn scan_equal_pixel_roots(
         budget,
         &cancel,
     )?;
-    if cancel() {
-        return Err(ScanError::Cancelled);
-    }
+    // The inner search performs its final caller checkpoint before verifying
+    // sources. Do not reopen the publication window with another callback here.
     Ok(DirectoryPixelSearchReport {
         files,
         aliases: discovery.aliases,

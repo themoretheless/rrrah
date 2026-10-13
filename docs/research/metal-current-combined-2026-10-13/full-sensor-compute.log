@@ -1,0 +1,16 @@
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.23s
+     Running tests/compute_readback.rs (target/debug/deps/compute_readback-0f0df8525b3523e2)
+
+running 2 tests
+test full_sensor_linear_exposure_chunked_readback ... full-resolution compute adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+full-resolution compute: 25494560 pixels, 407912960 bytes per buffer, samples_ms=[3.3330830000000002, 5.9195, 6.044041, 6.1715, 10.525667], p50_ms=6.044, max_ms=10.526
+ok
+test full_sensor_managed_exposure_budgets_and_checks_every_pixel ... managed full-resolution compute adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+full sensor distinct windows: dispatches=7; chunk_pixels=4194240; nonperiodic green and independent alpha
+full sensor recovery: CPU/GPU pressure refused; admitted cancellation; source retained; temporary credits zero
+interleaved full-resolution exposure: pixels=25494560, end_to_end_ms=375.825, all pixels exact
+managed full-resolution exposure: pixels=25494560, end_to_end_ms=268.442, gpu_peak=1223738992, cpu_peak=815825920, all pixels exact, final used=0
+ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 5 filtered out; finished in 3.14s
+

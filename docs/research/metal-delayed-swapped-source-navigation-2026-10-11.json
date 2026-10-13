@@ -1,0 +1,22 @@
+{
+  "scope": "Cross-source navigation with a deterministically delayed old region job",
+  "result": "passed",
+  "adapter": "Metal Apple M4 Max",
+  "controls": [
+    "two distinct HDR sources stored in same capped swap store; complete native sources released",
+    "old region worker paused before IO and remains sole owner of old swap file",
+    "generation changes7to8 and new source submitted through same worker",
+    "old job publishes neither result nor wake; old index and file released before newest wake",
+    "only latest generation consumed and packed crop renders exact new-source HDR reference",
+    "final CPU scratch output old/new indices texture queue disk credit zero"
+  ],
+  "validation": [
+    "explicit ignored Metal navigation control passed",
+    "five existing integration/worker controls passed; manual navigation control separately run"
+  ],
+  "limits": [
+    "delay is a deterministic before-work barrier, not physical slowdisk IO",
+    "not native window file navigation stress",
+    "physical HDR OSwide pressure NVIDIA and full100-format acceptance remain open"
+  ]
+}

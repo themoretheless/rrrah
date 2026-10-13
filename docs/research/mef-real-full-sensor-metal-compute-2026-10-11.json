@@ -1,0 +1,21 @@
+{
+  "test": "crates/rrrah-app/tests/mef_sensor_compute.rs",
+  "command": "RRRAH_GPU_BACKEND=metal RRRAH_MEF_SOURCE=tests/fixtures/data/metal-recovery/Mamiya-ZD.MEF cargo test -p rrrah --test mef_sensor_compute --locked --offline -- --ignored --nocapture",
+  "source_sha256": "bcd63507c3c4cc3ea1bad2945e3f88cb4677a1a3c762e1acc38df4445714eb7c",
+  "backend": "Metal",
+  "adapter": "Apple M4 Max",
+  "sensor_samples": 21461504,
+  "all_authored_channels_exact": true,
+  "compute_transfer_readback_ms": 243.418,
+  "cpu_peak_bytes": 729691136,
+  "gpu_peak_bytes": 1030152288,
+  "final_cpu_gpu_credits": 0,
+  "passed": 1,
+  "log_sha256": "80789b45df3e750c4a2abf07d820fdd4107d5830b552f6de90a876c3076527bc",
+  "scope": "Original native MEF sensor codes mapped to authored signed/HDR/alpha test channels; +1 stop compute compared at every sensor position",
+  "limitations": [
+    "Not Mamiya WB, demosaic, color matrix or photographic color qualification",
+    "Timing excludes source decode, authored input construction, comparison and physical display",
+    "Not NVIDIA/CUDA or physical HDR qualification"
+  ]
+}

@@ -1,0 +1,118 @@
+{
+  "status": "complete_fixed12_split_validation",
+  "producer_pid": 91115,
+  "plan": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-loftr-split-validation-v2-plan-20261013.json",
+  "plan_sha256": "cea4018e25e8e4e709887cbf771e24d06b8f07c63021ce9f1974ecd7ffbe4093",
+  "source_audit_sha256": "45b0b7666f6ad340f96997ab32c28a6ff23a78d13f298f69cace9316a06e7029",
+  "harness": "/Users/themoretheless/.codex/tmp/rrrah-loftr-split-validation-harness-v2-20261013",
+  "build_log": "/Users/themoretheless/.codex/tmp/rrrah-loftr-split-validation-build-20261013.log",
+  "required": 12,
+  "completed": 12,
+  "results": [
+    {
+      "label": "negative",
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-loftr-split-validation-qualified-20261013/negative.json",
+      "report_sha256": "8dcfc05c697934c81619569f3aaf33b23a59b713be9104dfa28c748fb02fb355",
+      "terminal": "fit_and_validation"
+    },
+    {
+      "label": "positive-1",
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-loftr-split-validation-qualified-20261013/positive-1.json",
+      "report_sha256": "6e46721b0ab106a455f31eca57f750b9ffe3350bedcbcf96700d070009183473",
+      "terminal": "fit_and_validation"
+    },
+    {
+      "label": "positive-2",
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-loftr-split-validation-qualified-20261013/positive-2.json",
+      "report_sha256": "ab059599ea26193e26c2b5c98eface2b52d576291458b13b2df193c66f60d60a",
+      "terminal": "fit_and_validation"
+    },
+    {
+      "label": "positive-6",
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-loftr-split-validation-qualified-20261013/positive-6.json",
+      "report_sha256": "cc3f48f83a5d6ba1a4876fc970527b6b52c84403a44ec54374ba75ad4831ce73",
+      "terminal": "fit_and_validation"
+    },
+    {
+      "label": "positive-12",
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-loftr-split-validation-qualified-20261013/positive-12.json",
+      "report_sha256": "f2896cc7f8f75051ced44956458fee2527cb251e2af49f53bcbb36a766ca234c",
+      "terminal": "fit_and_validation"
+    },
+    {
+      "label": "positive-34",
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-loftr-split-validation-qualified-20261013/positive-34.json",
+      "report_sha256": "96724cda3b2c093c93d2f2496b44b49991504d9a7e3da736265a7065237c0f47",
+      "terminal": "fit_and_validation"
+    },
+    {
+      "label": "positive-35",
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-loftr-split-validation-qualified-20261013/positive-35.json",
+      "report_sha256": "d81fe243235a8bee0a3cf1e8357d7256809c65cbdd8ce9f2c1fe6d11369313e7",
+      "terminal": "fit_and_validation"
+    },
+    {
+      "label": "positive-80",
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-loftr-split-validation-qualified-20261013/positive-80.json",
+      "report_sha256": "5b69c9cdb82e3fbb2ab78f5d4e7be4fe781a9985a069a42204e1428f4bc76c2a",
+      "terminal": "fit_and_validation"
+    },
+    {
+      "label": "positive-81",
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-loftr-split-validation-qualified-20261013/positive-81.json",
+      "report_sha256": "f796922e5a8bcf18d318f31ce1425321e1bb559b74c837de0c74e6b03c9e358a",
+      "terminal": "fit_and_validation"
+    },
+    {
+      "label": "positive-105",
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-loftr-split-validation-qualified-20261013/positive-105.json",
+      "report_sha256": "9b837e639dc503c815c3fc6f10bc20d8d7b322f4163d33c563c8b9cdcd015837",
+      "terminal": "fit_and_validation"
+    },
+    {
+      "label": "positive-164",
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-loftr-split-validation-qualified-20261013/positive-164.json",
+      "report_sha256": "2a70fa4849c4d7382403824cae1c9dd515492c571b06270eee7c2ce465cce9a6",
+      "terminal": "fit_and_validation"
+    },
+    {
+      "label": "self_control",
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-loftr-split-validation-qualified-20261013/self_control.json",
+      "report_sha256": "bafdcddaf5ed986a467fa4045a97762f8e2ea919dee989b6cc90bd3ba85e0416",
+      "terminal": "fit_and_validation"
+    }
+  ],
+  "scope": "All10 previously model-attempted positives plus known negative and identity. Full-frame provider extraction only, not original complete native/bank recovery pipeline. No threshold tuning or duplicate decision; neural provider sees whole images, so point separation is not statistical/pixel independence.",
+  "lock_command": [
+    "cargo",
+    "generate-lockfile",
+    "--offline"
+  ],
+  "child_pid": 94212,
+  "lock_sha256": "9a90ebc4201c2ff7e4576c916834a23bec97b8245ed7aac9fed18834239f5539",
+  "build_command": [
+    "cargo",
+    "build",
+    "--offline",
+    "--locked",
+    "--jobs",
+    "2",
+    "--target-dir",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-exact-portfolio-20261011"
+  ],
+  "build_returncode": 0,
+  "build_log_sha256": "7e83fb73bc11eba37f2fb95bf10b9dddf33e0e73c322485e2e16b9e53fe3d9a3",
+  "executable": "/Users/themoretheless/.codex/tmp/rrrah-loftr-split-validation-qualified-20261013/loftr_split_validation_v2",
+  "executable_sha256": "d3351de1c684e8eaf98c348c5642d7dc9a9de1bca0227e2c3edd3f3b72382ed1",
+  "active_label": "self_control",
+  "active_command": [
+    "/usr/bin/time",
+    "-l",
+    "/usr/bin/env",
+    "DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-split-validation-qualified-20261013/loftr_split_validation_v2",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-split-validation-20261013/self_control-plan.json"
+  ],
+  "source_unchanged": true,
+  "harness_unchanged": true
+}

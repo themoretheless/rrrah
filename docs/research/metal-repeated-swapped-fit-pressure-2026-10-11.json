@@ -1,0 +1,21 @@
+{
+  "scope": "Repeated active-fit memory pressure on actual Metal",
+  "cycles": 8,
+  "transitions": [
+    "64x40 -> 32x20 under GPU texture pressure",
+    "Blocked upload queue preserves prior exact HDR frame and retains ready pixels for retry",
+    "Exhausted CPU budget prevents speculative rebuild without changing resident frame",
+    "Released pressure restores 64x40 directly from original swap source"
+  ],
+  "checks": [
+    "Every small and recovered HDR frame equals independently prepared original-source reference",
+    "Full source CPU buffer remains released",
+    "No pending/ready job at each recovered baseline",
+    "Final CPU, swap index, texture, upload queue and disk accounting all zero"
+  ],
+  "result": "passed",
+  "limits": [
+    "Bounded synthetic resident-source regression, not OS-wide pressure or physical slow disk qualification",
+    "Physical HDR and NVIDIA remain unverified"
+  ]
+}

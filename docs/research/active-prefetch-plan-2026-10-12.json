@@ -1,0 +1,35 @@
+{
+  "change": "foreground decode and UI share a generation-owned mutable prefetch plan; worker snapshots latest plan after decode before resolving neighbours",
+  "checks": [
+    "pending and dequeued requests see updated/reversed explicit plans",
+    "source-identified active request sees updated and disabled plans",
+    "unchanged generation and decode token",
+    "single pending decode",
+    "latest plan survives independent foreground flight cleanup through shared ownership"
+  ],
+  "ordinary_viewer": {
+    "passed": 220,
+    "failed": 0,
+    "ignored": 62,
+    "seconds": 3.21,
+    "log": "viewer-active-prefetch-plan-final-2026-10-12.log"
+  },
+  "metal": {
+    "device": "Apple M4 Max",
+    "backend": "Metal",
+    "passed": 1,
+    "failed": 0,
+    "steps": 120,
+    "formats": 6,
+    "sdr_hdr_exact": true,
+    "managed_final": 0,
+    "seconds": 2.95,
+    "log": "metal-active-prefetch-plan-final-2026-10-12.log"
+  },
+  "source_sha256": "15709c0ed2189ea8e5242e0995fecade87cdfdf98063849031d9d6291ee042c0",
+  "limits": [
+    "plan updates after neighbour planning has already started are outside this change",
+    "helper Metal navigation regression does not prove every thread scheduling interleaving",
+    "NVIDIA and physical HDR calibration remain unqualified"
+  ]
+}

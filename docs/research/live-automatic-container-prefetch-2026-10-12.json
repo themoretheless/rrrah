@@ -1,0 +1,48 @@
+{
+  "scope": "Actual normal application background worker automatic selected TIFF-page prefetch, no test helper invocation",
+  "adapter": "Apple M4 Max / Metal",
+  "surface": "Rgba16Float / ExtendedSrgbLinear",
+  "source": "tiff-pages-hdr-deflate-le.tif copied into isolated one-file folder",
+  "foreground_index": 0,
+  "cases": [
+    {
+      "ahead": 0,
+      "behind": 0,
+      "prefetched": []
+    },
+    {
+      "ahead": 1,
+      "behind": 0,
+      "prefetched": [
+        1
+      ]
+    },
+    {
+      "ahead": 2,
+      "behind": 1,
+      "prefetched": [
+        1,
+        2
+      ]
+    }
+  ],
+  "cache_count": 3,
+  "retention": "Successful prefetch records retained=true",
+  "shutdown": "All qualification processes terminated with SIGTERM; locked desktop exposed no accessible window close button; not normal-close evidence",
+  "limits": [
+    "Locked desktop: no frame presentation/screenshot claim",
+    "Initial forward selection only, no live backward navigation/generation reversal",
+    "No specific RAM-versus-swap/decode source inferred from ready event",
+    "No physical HDR calibration or broad format qualification"
+  ],
+  "sha256": {
+    "docs/research/live-automatic-container-prefetch-2026-10-12/ahead0.log": "c33583271d09bfc2bad914f0fd7cdb17dd24afbc2bd6bd975d62cc0032820d40",
+    "docs/research/live-automatic-container-prefetch-2026-10-12/ahead1.log": "0781e09eea134058d6c547c7e6cfd3653c3429d27897bed5556a557e85bad3c7",
+    "docs/research/live-automatic-container-prefetch-2026-10-12/ahead2.log": "2e0580c8127d69e81daf31d6cf5f0fdfbc2bc615e36ef2ccc2c28e2ddebd141a",
+    "docs/research/live-automatic-container-prefetch-2026-10-12/settings.json": "aedeb48de2a9dc3056ab68d9cbe267bc6b3d21171200cd12d2336abff8237f75",
+    "docs/research/live-automatic-container-prefetch-2026-10-12/build.log": "bad2ebfd6e3640b8eadab08ec936fdb4dd2c536e4fe0544c90785f44b2ad97f5",
+    "crates/rrrah-app/src/main.rs": "34c48639286072d3765e1e2d470276417e0cd10a9b7f2809df6ef923a170a5aa",
+    "crates/rrrah-app/src/gallery.rs": "6be3b13b5b4943f03a90e1733637fa3e7b8839a6ddc726689dce2c050ced4dc0",
+    "tests/fixtures/data/tiff-pages-hdr-deflate-le.tif": "3ca0170f80bf97ad6395e297058bb7be80404be009fa17d5154fd940c9897d7c"
+  }
+}

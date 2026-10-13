@@ -1,0 +1,45 @@
+{
+  "date": "2026-10-11",
+  "scope": "Optional adopted-neutral frame metadata, inline storage and raster swap V4 with exact native/Metal transport",
+  "representation": "RgbChromaticities retains legacy 64-byte coordinate API and encodes 80 bytes only when adopted neutral is present; source xy basis and adopted xy are separately retained. Fixed inline storage, no separate metadata heap allocation.",
+  "compatibility": "Default chromaticities remain V3/64 bytes; adopted-neutral payloads use V4/80 bytes. V1/V2/V3 remain readable. Region aspect supports V4.",
+  "tests": {
+    "cache_all_passed": 148,
+    "cache_all_ignored": 5,
+    "core_library_passed": 114,
+    "core_library_ignored": 2,
+    "core_integration_passed": 3,
+    "hdr_metal_passed": 22,
+    "hdr_metal_ignored": 3
+  },
+  "verified": [
+    "V4 metadata and pixel bits restored exactly with pixel-only 16-byte output budget.",
+    "V3 legacy conversion of same payload remains readable with original source white.",
+    "Wrong version/length/tag, nonfinite/zero/negative adopted neutral rejected with root zero.",
+    "Segmented region restoration retains adopted neutral, aspect, scale, image selection, hotspot and sample bits after releasing full source.",
+    "Rec709 and AP1 with distinct adopted white preserve all analytical RGBW samples and exact Metal SDR/HDR frames through managed preparation/storage pressure/cancel/retry; root zero."
+  ],
+  "remaining": [
+    "OpenEXR distinct adoptedNeutral decoder routing is not yet connected; existing unknown policy remains.",
+    "No distinct-adoptedNeutral EXR source file qualified yet.",
+    "Physical HDR calibration, complete format qualification and NVIDIA hardware remain open."
+  ],
+  "logs": {
+    "core-cache": {
+      "path": "docs/research/adopted-neutral-metadata-2026-10-11.core-cache.log",
+      "sha256": "b22a29685a2f2630a25acf8f4c15cf5b3324d1d1dc06783b618fafc37f89d8c4"
+    },
+    "metal": {
+      "path": "docs/research/adopted-neutral-metadata-2026-10-11.metal.log",
+      "sha256": "508b63df428e1060f96f78a97d778b05af887ee5790503dd5596a36dc3a58f60"
+    }
+  },
+  "oracles": [
+    "docs/research/adopted-neutral-rec709-oracle-2026-10-11.json",
+    "docs/research/adopted-neutral-ap1-oracle-2026-10-11.json"
+  ],
+  "fixture_pins": {
+    "tests/fixtures/raster/adopted-neutral-rec709.linear-srgb.f32": "06c4f6a1e70ae889c99b3933c97e2f820025aa508476355484859d8c04c3c75c",
+    "tests/fixtures/raster/adopted-neutral-ap1.linear-srgb.f32": "1e162caa62ba6374f09bc2fb88eb65b175bded5438fb804556bdcc16d37c7dcc"
+  }
+}

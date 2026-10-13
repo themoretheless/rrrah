@@ -1,0 +1,25 @@
+warning: function `fallible_zeroed_bytes` is never used
+   --> crates/rrrah-cache/src/mosaic_payload_v1.rs:728:4
+    |
+728 | fn fallible_zeroed_bytes(len: usize) -> Result<Box<[u8]>, MosaicPayloadError> {
+    |    ^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-cache` (lib) generated 1 warning
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.27s
+     Running tests/sustained_swap.rs (target/debug/deps/sustained_swap-16217ab17c614679)
+
+running 3 tests
+test sustained_byte_cap_evicts_without_count_or_ttl_pressure has been running for over 60 seconds
+test sustained_count_cap_evicts_without_byte_or_ttl_pressure has been running for over 60 seconds
+test sustained_large_keyspace_delayed_swap_pressure_and_retry has been running for over 60 seconds
+sustained swap: seconds=600.046821292 cycles=4462 pressure_refusals=4462 root_peak=2097152 queue_peak=262144 disk_peak_bytes=786624 disk_peak_objects=3 final=0
+test sustained_byte_cap_evicts_without_count_or_ttl_pressure ... ok
+sustained swap: seconds=600.052864458 cycles=4462 pressure_refusals=4462 root_peak=2097152 queue_peak=262144 disk_peak_bytes=4195328 disk_peak_objects=16 final=0
+test sustained_large_keyspace_delayed_swap_pressure_and_retry ... ok
+sustained swap: seconds=600.132017208 cycles=4464 pressure_refusals=4464 root_peak=2097152 queue_peak=262144 disk_peak_bytes=786624 disk_peak_objects=3 final=0
+test sustained_count_cap_evicts_without_byte_or_ttl_pressure ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 5 filtered out; finished in 600.13s
+

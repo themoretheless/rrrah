@@ -1,0 +1,25 @@
+{
+  "decision": "rejected; source restored",
+  "hypothesis": "Consecutive exact key repetition avoids hash and probe",
+  "observations": [
+    {
+      "pixel": [
+        147,
+        59
+      ],
+      "baseline_work": 47480544,
+      "candidate_work": 58572728
+    },
+    {
+      "pixel": [
+        145,
+        50
+      ],
+      "baseline_work": 16744430,
+      "candidate_work": 20680709
+    }
+  ],
+  "reason": "About 23.4 percent more diagnostic work; consecutive key locality too weak. No production acceleration enabled.",
+  "suite": "221 passed, 1 failed, 12 ignored; fixed-budget refusal regression correctly exposed cheaper repeated-key path against old test threshold; candidate rejected without changing regression",
+  "next": "Inspect incremental coverage or source-field identity rather than previous-entry locality"
+}

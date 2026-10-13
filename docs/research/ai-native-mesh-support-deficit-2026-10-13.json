@@ -1,0 +1,24 @@
+{
+  "scope": "Independent GEOS union of43captured native triangles versus original-source cubic clip at149,56",
+  "native_clip_area": 0.2144597600545532,
+  "original_clip_area": 0.21446153215456873,
+  "native_mesh_union_intersect_original_clip": 0.2118474427430499,
+  "native_composed_alpha": 0.21184744274305764,
+  "missing_area_due_to_triangle_support": 0.0026140894115188615,
+  "absolute_difference_union_vs_native_alpha": 7.743805596760467e-15,
+  "causal_finding": "Triangle support accounts for coverage deficit; clip flattening is already accurate within1.8e-6",
+  "source_tessellation_pixel_bound": 0.015625,
+  "next_action": "Improve tensor boundary/local tessellation accuracy under current admission/cancellation limits",
+  "limitations": [
+    "One original-source pixel and test-only diagnostic",
+    "Original boundary2048subdivision convergence error about2.18e-6",
+    "Union consumes captured triangle geometry; triangle generation itself not independent",
+    "Production AI remains pending"
+  ],
+  "sha256": {
+    "docs/research/ai-native-mesh-area-verified-2026-10-13.log": "c77dee4ac3df55a6e5631578fe96818c98992b510586bb21fbfa5b77671ac41a",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/diagnose-ai-native-mesh-support.py": "086afff3c7d180d31b87ae3f298446a5aaac6f7b384b7d623f6d11dc4302df42",
+    "vendor/hayro/src/knockout_interpreter.rs": "71f54c1e647f1685dd859efffae4f77b37a0c2f79e469675a6f1dcb91255631a",
+    "vendor/hayro-interpret/src/encode/native_source.rs": "d74c34d8847c3cbba814da08e3b7d84881d1c83d8a841f9eb7da6447e140b25c"
+  }
+}

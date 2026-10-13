@@ -279,6 +279,6 @@ fn interpolated_recipe_flat_alpha_work_and_cancellation_refusals() {
     let view = LinearRgbaView::new(64, 64, &transparent, 4096, || false).unwrap();
     assert!(matches!(
         describe_gradient_interpolated(&view, [32., 32.], 1., 0., 256, || false),
-        Err(LocalError::Invalid)
+        Err(LocalError::UnsupportedPixels)
     ));
 }

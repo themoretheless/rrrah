@@ -1,0 +1,57 @@
+{
+  "date": "2026-10-11",
+  "scope": "Six-format viewer loader/preload navigation with explicit linear-sRGB CLI policy",
+  "formats": [
+    "profiled PNG",
+    "animated GIF selected image zero",
+    "declared linear EXR",
+    "declared Radiance HDR",
+    "PFM explicit linear sRGB",
+    "compressed ASTC HDR explicit linear sRGB"
+  ],
+  "checks": {
+    "steps": 120,
+    "direction": "ping-pong across all six sources",
+    "prefetch_window": {
+      "behind": 1,
+      "ahead": 2
+    },
+    "RAM_limit_bytes": 65536,
+    "RAM_count_limit": 2,
+    "root_limit_bytes": 1048576,
+    "foreground_hit_under_full_managed_pressure": "same backing pixel lease, no decode",
+    "stale_generation": "refused with unchanged root use and cache count",
+    "GPU_adapter": "Metal Apple M4 Max",
+    "SDR_and_HDR_visible_readbacks": "exact against separately loaded same-source references at every step",
+    "final_managed_bytes": 0,
+    "CPU_case_passed": 1,
+    "actual_Metal_case_passed": 1,
+    "app_gate": {
+      "passed": 199,
+      "failed": 0,
+      "ignored": 36
+    }
+  },
+  "logs": [
+    {
+      "path": "/tmp/rrrah-linear-navigation-cpu-20261011.log",
+      "sha256": "9dbe77454d9716ad2fec5d36fe677c69bf67c90aa252acba3db5f50714934d29"
+    },
+    {
+      "path": "/tmp/rrrah-linear-navigation-metal-20261011.log",
+      "sha256": "aaeb396f495c2ee8ed66578322f7be905106a118fd35dd96cbbca1df335c8b30"
+    },
+    {
+      "path": "/tmp/rrrah-linear-navigation-app-all-20261011.log",
+      "sha256": "cfe5d26971e1eb105921e67fea0a6431dac9592bd6ea4249fffb69142bef66c2"
+    }
+  ],
+  "limitations": [
+    "Calls actual foreground/preload helpers synchronously; does not qualify asynchronous worker scheduling",
+    "Same-source pre/post GPU references are preservation evidence, not independent color-rendering oracle",
+    "Memory pressure is managed reservation pressure, not OS-wide pressure",
+    "No disk swap in this navigation test; per-format TTL/swap has separate evidence",
+    "No physical HDR luminance/color measurement",
+    "NVIDIA deferred"
+  ]
+}

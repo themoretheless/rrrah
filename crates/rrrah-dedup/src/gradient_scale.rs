@@ -334,7 +334,9 @@ fn extract_scales_managed_selected(
         .map(|&f| {
             let pixels = u64::from((f64::from(width) / f).floor() as u32)
                 * u64::from((f64::from(height) / f).floor() as u32);
-            pixels.checked_mul(if f == 1. { 8 } else { 24 }).ok_or(LocalError::Budget)
+            pixels
+                .checked_mul(if f == 1. { 8 } else { 24 })
+                .ok_or(LocalError::Budget)
         })
         .try_fold(0u64, |maximum, bytes| Ok::<_, LocalError>(maximum.max(bytes?)))?;
     let corners = bytes(
@@ -529,11 +531,47 @@ mod area_tests {
     }
 }
 
+// Validate the identity smoothing recipe without allocating a duplicate frame.
+// Its samples are read through LinearRgbaView, which already canonicalizes zero.
+#[cfg(feature = "raster")]
+pub(crate) fn validate_unsmoothed_gradient_candidates(
+    image: &LinearRgbaView<'_>,
+    max_sample_taps: u64,
+    cancel: impl Fn() -> bool,
+) -> Result<(), LocalError> {
+    if cancel() {
+        return Err(LocalError::Cancelled);
+    }
+    let (width, height) = image.dimensions();
+    let work = u64::from(width)
+        .checked_mul(u64::from(height))
+        .and_then(|pixels| pixels.checked_mul(2))
+        .ok_or(LocalError::Budget)?;
+    if work > max_sample_taps {
+        return Err(LocalError::Budget);
+    }
+    for y in 0..height {
+        for x in 0..width {
+            if cancel() {
+                return Err(LocalError::Cancelled);
+            }
+            if image.rgba(x, y).ok_or(LocalError::Invalid)?[3] != 1. {
+                return Err(LocalError::UnsupportedPixels);
+            }
+        }
+    }
+    if cancel() {
+        return Err(LocalError::Cancelled);
+    }
+    Ok(())
+}
+
 /// Explicit candidate-only separable box smoothing of opaque linear RGBA.
 /// Clamped borders, f64 accumulation and f32 intermediate samples define this
 /// recipe. Radius and sampling mode belong in persistent descriptor identity.
 /// Final duplicate confirmation must continue to read the original pixels.
-/// Input samples are caller-owned; only the two smoothing buffers are managed.
+/// Input samples are caller-owned. The full output and at most `2 * radius + 1`
+/// horizontally smoothed rows are managed; completed rows are reused as a ring.
 /// `max_sample_taps` counts RGBA sites across both passes, including border repeats.
 ///
 /// # Errors
@@ -586,7 +624,7 @@ pub fn smooth_gradient_candidates_managed(
                 }
                 let sample = image.rgba(x, y).ok_or(LocalError::Invalid)?;
                 if sample[3] != 1. {
-                    return Err(LocalError::Invalid);
+                    return Err(LocalError::UnsupportedPixels);
                 }
                 output.extend(sample.map(|v| (0.0_f64 + f64::from(v)) as f32));
             }
@@ -596,46 +634,70 @@ pub fn smooth_gradient_candidates_managed(
         }
         return credit.try_adopt(output).map_err(|_| LocalError::Budget);
     }
-    // Admit both overlapping buffers before allocating either one.
-    let horizontal_credit = budget.try_reserve(bytes).map_err(|_| LocalError::Budget)?;
+    // Each horizontal row is independent. Retain only the vertical window,
+    // preserving the original f64 summation and f32 intermediate rounding.
+    let ring_rows = side.min(u64::from(height));
+    let horizontal_count = u64::from(width)
+        .checked_mul(ring_rows)
+        .and_then(|v| v.checked_mul(4))
+        .and_then(|v| usize::try_from(v).ok())
+        .ok_or(LocalError::Budget)?;
+    let horizontal_bytes = horizontal_count
+        .checked_mul(std::mem::size_of::<f32>())
+        .and_then(|v| u64::try_from(v).ok())
+        .ok_or(LocalError::Budget)?;
+    // Admit scratch and retained output before allocating either one.
+    let _horizontal_credit = budget
+        .try_reserve(horizontal_bytes)
+        .map_err(|_| LocalError::Budget)?;
     let output_credit = budget.try_reserve(bytes).map_err(|_| LocalError::Budget)?;
     let mut horizontal = Vec::new();
     horizontal
-        .try_reserve_exact(count)
+        .try_reserve_exact(horizontal_count)
         .map_err(|_| LocalError::Budget)?;
-    for y in 0..height {
-        for x in 0..width {
-            let mut sum = [0.; 4];
-            for offset in -i64::from(radius)..=i64::from(radius) {
-                if cancel() {
-                    return Err(LocalError::Cancelled);
-                }
-                let sx = (i64::from(x) + offset).clamp(0, i64::from(width) - 1) as u32;
-                let sample = image.rgba(sx, y).ok_or(LocalError::Invalid)?;
-                if sample[3] != 1. {
-                    return Err(LocalError::Invalid);
-                }
-                for channel in 0..4 {
-                    sum[channel] += f64::from(sample[channel]) / side as f64;
-                }
-            }
-            horizontal.extend(sum.map(|v| v as f32));
-        }
+    if horizontal.capacity() > horizontal_count {
+        return Err(LocalError::Budget);
     }
-    let horizontal = horizontal_credit
-        .try_adopt(horizontal)
-        .map_err(|_| LocalError::Budget)?;
     let mut output = Vec::new();
     output.try_reserve_exact(count).map_err(|_| LocalError::Budget)?;
+    let mut next_row = 0;
     for y in 0..height {
+        let required_row = y.saturating_add(radius).min(height - 1);
+        while next_row <= required_row {
+            let row_slot = u64::from(next_row) % ring_rows;
+            for x in 0..width {
+                let mut sum = [0.; 4];
+                for offset in -i64::from(radius)..=i64::from(radius) {
+                    if cancel() {
+                        return Err(LocalError::Cancelled);
+                    }
+                    let sx = (i64::from(x) + offset).clamp(0, i64::from(width) - 1) as u32;
+                    let sample = image.rgba(sx, next_row).ok_or(LocalError::Invalid)?;
+                    if sample[3] != 1. {
+                        return Err(LocalError::UnsupportedPixels);
+                    }
+                    for channel in 0..4 {
+                        sum[channel] += f64::from(sample[channel]) / side as f64;
+                    }
+                }
+                let index = ((row_slot * u64::from(width) + u64::from(x)) * 4) as usize;
+                let pixel = sum.map(|v| v as f32);
+                if index == horizontal.len() {
+                    horizontal.extend(pixel);
+                } else {
+                    horizontal[index..index + 4].copy_from_slice(&pixel);
+                }
+            }
+            next_row += 1;
+        }
         for x in 0..width {
             let mut sum = [0.; 4];
             for offset in -i64::from(radius)..=i64::from(radius) {
                 if cancel() {
                     return Err(LocalError::Cancelled);
                 }
-                let sy = (i64::from(y) + offset).clamp(0, i64::from(height) - 1) as usize;
-                let index = (sy * width as usize + x as usize) * 4;
+                let sy = (i64::from(y) + offset).clamp(0, i64::from(height) - 1) as u64;
+                let index = (((sy % ring_rows) * u64::from(width) + u64::from(x)) * 4) as usize;
                 for channel in 0..4 {
                     sum[channel] += f64::from(horizontal[index + channel]) / side as f64;
                 }
@@ -647,4 +709,86 @@ pub fn smooth_gradient_candidates_managed(
         return Err(LocalError::Cancelled);
     }
     output_credit.try_adopt(output).map_err(|_| LocalError::Budget)
+}
+
+#[cfg(all(test, feature = "raster"))]
+mod zero_candidate_tests {
+    use super::*;
+    use std::cell::Cell;
+    #[test]
+    fn identity_validation_is_bitwise_owned_zero_radius_for_hdr_and_shapes() {
+        let values = [
+            -0.0,
+            0.0,
+            f32::from_bits(1),
+            -f32::from_bits(1),
+            -100.0,
+            100.0,
+            f32::MAX / 2.0,
+        ];
+        for (w, h) in [(1, 1), (2, 7), (7, 2), (1, 19), (19, 1)] {
+            let mut pixels = Vec::new();
+            for n in 0..w * h {
+                pixels.extend([
+                    values[n as usize % values.len()],
+                    values[(n as usize + 1) % values.len()],
+                    values[(n as usize + 3) % values.len()],
+                    1.0,
+                ]);
+            }
+            let view = LinearRgbaView::new(w, h, &pixels, u64::MAX, || false).unwrap();
+            validate_unsmoothed_gradient_candidates(&view, u64::from(w * h) * 2, || false).unwrap();
+            let budget = rrrah_core::MemoryBudget::new(u64::from(w * h) * 16);
+            let owned = smooth_gradient_candidates_managed(&view, 0, u64::from(w * h) * 2, &budget, || false)
+                .unwrap();
+            let converted = LinearRgbaView::new(w, h, &owned, u64::MAX, || false).unwrap();
+            for y in 0..h {
+                for x in 0..w {
+                    assert_eq!(
+                        view.rgba(x, y).unwrap().map(f32::to_bits),
+                        converted.rgba(x, y).unwrap().map(f32::to_bits)
+                    );
+                }
+            }
+            drop(owned);
+            assert_eq!(budget.used(), 0);
+        }
+    }
+    #[test]
+    fn identity_validation_work_alpha_and_every_cancel_checkpoint_are_explicit() {
+        let mut pixels = vec![0.25; 3 * 9 * 4];
+        for p in pixels.chunks_exact_mut(4) {
+            p[3] = 1.0;
+        }
+        let view = LinearRgbaView::new(3, 9, &pixels, 27, || false).unwrap();
+        assert!(matches!(
+            validate_unsmoothed_gradient_candidates(&view, 53, || false),
+            Err(LocalError::Budget)
+        ));
+        assert!(matches!(
+            validate_unsmoothed_gradient_candidates(&view, 0, || true),
+            Err(LocalError::Cancelled)
+        ));
+        let total = Cell::new(0);
+        validate_unsmoothed_gradient_candidates(&view, 54, || {
+            total.set(total.get() + 1);
+            false
+        })
+        .unwrap();
+        assert_eq!(total.get(), 29);
+        for stop in 1..=total.get() {
+            let calls = Cell::new(0);
+            let result = validate_unsmoothed_gradient_candidates(&view, 54, || {
+                calls.set(calls.get() + 1);
+                calls.get() == stop
+            });
+            assert!(matches!(result, Err(LocalError::Cancelled)), "stop={stop}");
+        }
+        pixels[3 * 9 * 4 - 1] = 0.5;
+        let view = LinearRgbaView::new(3, 9, &pixels, 27, || false).unwrap();
+        assert!(matches!(
+            validate_unsmoothed_gradient_candidates(&view, 54, || false),
+            Err(LocalError::UnsupportedPixels)
+        ));
+    }
 }

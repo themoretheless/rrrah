@@ -1,0 +1,67 @@
+{
+  "date": "2026-10-11",
+  "problem": "GPU-resident exposure results still rejected dimensions beyond a single2D texture after CPU raster tiling was added.",
+  "implementation": [
+    "GPU-resident upload uses the shared balanced texture-array layout and padded texture admission.",
+    "Aligned packed source rows copy directly as rectangles with the original source-buffer stride. Unaligned rows copy individually to array layers without intermediate CPU/GPU staging buffers.",
+    "All destination-copy commands are encoded before submission. Cancellation preserves existing texture/uniforms; source and destination resource leases and logical queue occupancy survive downstream completion.",
+    "Pixel aspect, alpha validity, extent/count checks and512MiB/device-array bounds remain active."
+  ],
+  "metal_cases": [
+    [
+      130,
+      5
+    ],
+    [
+      5,
+      130
+    ],
+    [
+      128,
+      130
+    ],
+    [
+      130,
+      130
+    ],
+    [
+      20000,
+      64
+    ]
+  ],
+  "validation": [
+    "Actual M4 Max Metal; negotiated64-pixel texture extent forces horizontal, vertical and two-axis tiles for small controls;20000x64 exceeds actual hardware2D limit.",
+    "SDR and HDR64x64 frames match CPU exposure references; HDR additionally samples cropped last layer and last source row/column.",
+    "Harness diagnostic readback checks all compute buffer components against CPU scaling; production resident-to-tile upload performs no CPU readback.",
+    "One byte below padded texture admission refuses without altering prior display; queue credit remains free.",
+    "Every cancellation checkpoint across layers/row encodings preserves old frame and releases admission; retry succeeds.",
+    "Dropping resident immediately after upload retains compute owner through queue completion. Final compute/queue/texture managed credits zero.",
+    "Separate compute-to-CPU-cache/swap regression qualifies4000x3000 full source bits/full Metal frame plus small case, roots zero. This is broader lifecycle evidence, not swapping a GPU buffer directly."
+  ],
+  "limits": [
+    "Resident arrays remain bounded512MiB and device layer count; GPU compute buffers retain their existing device/admission limits.",
+    "No out-of-core GPU tile-cache streaming implemented.",
+    "No native window interaction for this compute-resident path; native CPU-prepared tiled window was verified separately.",
+    "No shader throughput claim, physical HDR luminance/color measurement or NVIDIA run.",
+    "Full100format qualification remains open."
+  ],
+  "gates": {
+    "gpu_raster": {
+      "summary": "test result: ok. 12 passed; 0 failed; 7 ignored; 0 measured; 0 filtered out; finished in 1.58s",
+      "log_sha256": "1568b577ec77cf8dce278499265c93a71fc392ddab4eb352f315c7cb74ce5244"
+    },
+    "gpu_units": {
+      "summary": "test result: ok. 50 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+      "log_sha256": "7c5caf03a913a72a2433dd6216740b454745271b53d618497e039ca54c271b14"
+    },
+    "compute_cache_swap": {
+      "summary": "test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.78s",
+      "log_sha256": "b22f79a92be386e3abedc43dee0ff6d9d14bbfb5fae00d29a073b5ecda765893"
+    }
+  },
+  "source_hashes": {
+    "crates/rrrah-gpu/src/raster.rs": "e850c31612fd5e6d07fcbb16673d214b1bec5e8175a2ce4b5a8c939d4e994e64",
+    "crates/rrrah-gpu/tests/raster_readback.rs": "d2e37c253d5c1839d98134b486b37b21ce02d3c45a5ae3bf05b809cd7936a52b",
+    "crates/rrrah-gpu/tests/common/mod.rs": "3447302126564938c29906e6de273df0a27cd11bcb2c11d2a9518b2906695654"
+  }
+}

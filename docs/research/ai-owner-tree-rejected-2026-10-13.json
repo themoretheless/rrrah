@@ -1,0 +1,25 @@
+{
+  "experiment": "Changed-word propagation with per-source 64-leaf selected-owner maximum tree",
+  "retained": false,
+  "target": [
+    137,
+    37
+  ],
+  "completed": false,
+  "baseline_fragments": 137183,
+  "experimental_fragments": 111728,
+  "reason": "Charged tree updates reduce fragments completed before same work cap by18.55percent",
+  "retained_test": "Source hidden across middle interval must match independent winding priority after reappearing",
+  "final_suite": {
+    "passed": 203,
+    "ignored": 12,
+    "failed": 0
+  },
+  "next_action": "Evaluate added/removed owner bits against currently selected owner; avoid tree maintenance",
+  "sha256": {
+    "vendor/hayro/src/native_spatial.rs": "d2c0afa9f40392a3deb425e0ac7a2497ada01aec33e51d0f6f417c2d747ed336",
+    "docs/research/ai-incremental-owner-tree-original-2026-10-13.log": "9fd7f3a98f72dde6e1754df0684c37e68ad8b69c202cdabeeb99dd337d810f24",
+    "docs/research/ai-incremental-owner-tree-final-suite-2026-10-13.log": "2ed7c29895b9de7719ca7768415e168f9f111671b17be906742a5ff6f4fa2097",
+    "docs/research/ai-owner-tree-removed-suite-2026-10-13.log": "064728dcb841add320a6bb58178aa55974f3c5e1c57efc98309345c474363ea6"
+  }
+}

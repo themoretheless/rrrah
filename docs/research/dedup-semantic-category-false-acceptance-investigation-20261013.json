@@ -1,0 +1,55 @@
+{
+  "status": "confirmed_published_negative_false_acceptance_unfixed",
+  "pair": [
+    "Q41923",
+    "R026396"
+  ],
+  "direction": "query_to_reference",
+  "case": "/Users/themoretheless/.codex/tmp/rrrah-semantic-category-negatives-20261013/00.json",
+  "case_sha256": "e30ca7b6ecf1be6a58b1edf01639f87ce7d2b0ea9805bec4a62cc3ee6e334cc1",
+  "audit": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-semantic-category-negatives-prefix-01-audit-20261013.json",
+  "audit_sha256": "7c23e1d62115040da064aebc1668fe3c2e9e0f3c5253e979999233cacf039804",
+  "elapsed_seconds": 226.23440962499998,
+  "model_attempted": true,
+  "geometry_inliers": 17,
+  "raw_proposals": 1020,
+  "forward": {
+    "anchors": 17,
+    "sites": 425,
+    "valid_sites": 425,
+    "informative_pairs": 2320,
+    "agreeing_pairs": 2252,
+    "agreement": 0.9706896551724138,
+    "valid_fraction": 1.0
+  },
+  "reverse": {
+    "anchors": 16,
+    "sites": 400,
+    "valid_sites": 375,
+    "informative_pairs": 2369,
+    "agreeing_pairs": 2225,
+    "agreement": 0.9392148585901224,
+    "valid_fraction": 0.9375
+  },
+  "source_dimensions": [
+    1024,
+    680
+  ],
+  "target_dimensions": [
+    944,
+    568
+  ],
+  "source_window_bounding_box_fraction": 0.015471335018382352,
+  "target_window_bounding_box_fraction": 0.06622254714729052,
+  "root_source_same_as_executed": {
+    "crates/rrrah-dedup/src/anchor_rank.rs": true,
+    "crates/rrrah-dedup/src/model_compare.rs": true
+  },
+  "source_sha256": {
+    "crates/rrrah-dedup/src/anchor_rank.rs": "4f0cec36fbd63c8d297876764968ce34ca4e02eb4b22ce43161dfc09fa5a0bc1",
+    "crates/rrrah-dedup/src/model_compare.rs": "b3b29c69816dac8fcdcf00123ccc0331147ea6327d25717bcbb402a6ec687042"
+  },
+  "interpretation": "Threshold coverage is valid_sites/sites over selected anchor windows, not whole-image spatial coverage. Rank agreement describes local ordinal structure under filtering, not raw pixel identity. ModelComparisonEvidence.supported delegates to anchor rank support; documented local visual support nevertheless falsely accepts this published nonmatch under fixed benchmark policy.",
+  "next_work": "Retain original8 negative plan unchanged. Add independent original-pixel/heldout confirmation or explicit evidence-grade decision before duplicate acceptance, qualify positives including10 model-attempted directions and all458; do not tune thresholds solely to this pair.",
+  "limits": "One verified false acceptance on frozen2696-file campaign; two inspected source files match root but no full-current binary reproduction yet. Do not infer universal cause or representativeness of semantic precision."
+}

@@ -1,0 +1,46 @@
+{
+  "date": "2026-10-11",
+  "scope": "Radiance explicit arbitrary invertible linear RGB xy primary bases and physical source white route to native frame chromaticities, Bradford preparation, swap and actual Metal",
+  "tests": {
+    "hdr_passed": 20,
+    "failed": 0,
+    "ignored": 3
+  },
+  "cases": [
+    "custom-white",
+    "ap1-white",
+    "ap0-white"
+  ],
+  "oracle": "Independent partial-pivot Gaussian XYZ basis inversion and Bradford computation, no Rrrah code imported; both double cone reference and f32 cone-constant precision recorded; all columns and neutral checked via RGBW HDR payload.",
+  "admission": "Preparation/storage full-pressure refusal, cancellation, retry, exact metadata and sample retention; root zero in each case.",
+  "malformed": "Singular/nonfinite/invalid-white/duplicate declarations fail with InvalidHdrColor and no leaked admission.",
+  "limitations": [
+    "Authored RGBW sources, not a broad original-producer qualification.",
+    "Missing primary declarations remain unqualified; XYZE is not treated as RGB.",
+    "Exposure/COLORCORR calibration, scan-order corpus and physical HDR calibration remain open.",
+    "Arbitrary EXR chromaticity routing is still pending; NVIDIA deferred."
+  ],
+  "fixtures": {
+    "tests/fixtures/raster/custom-white.hdr": "b7f34614d11c474d87f7a972cd92358e7c8699c820ad55cbbeae4ef9067f102b",
+    "tests/fixtures/raster/custom-white.linear-srgb.f32": "6c0cef679db12d0aee886f98074227082e899183e116a3e116fd6b6367d4da07",
+    "tests/fixtures/raster/ap1-white.hdr": "d78cd56d04e3c9743ea32a4454e7cff0548ba14393cfa9d84bcf107edbd6f6ac",
+    "tests/fixtures/raster/ap1-white.linear-srgb.f32": "d0cb5fd1c24ad61756bd9b37cdabddf9e1643dd0901e4f1d9e62d6e382aeab25",
+    "tests/fixtures/raster/ap0-white.hdr": "379c05721972b2b08b8538e24e92e3100818f6be0ff25213289f64b53eb1dbe9",
+    "tests/fixtures/raster/ap0-white.linear-srgb.f32": "44fe8f4da1bf469b362ac7f7a702c929e00e633c1f9e2f07604802356be26ddb"
+  },
+  "logs": {
+    "metal": {
+      "path": "docs/research/radiance-arbitrary-color-metal-2026-10-11.log",
+      "sha256": "3b2355a168ecdf7719134cda2f79f8f602befcd9a85bcb69db65cfc5072f5b88"
+    },
+    "check": {
+      "path": "docs/research/radiance-arbitrary-color-check-2026-10-11.log",
+      "sha256": "cc2546e247cb66596746561f92f168813b3228ef8a01c734e6c196a14e001f1a"
+    }
+  },
+  "custom-white_oracle": "docs/research/radiance-custom-white-oracle-2026-10-11.json",
+  "ap1-white_oracle": "docs/research/radiance-ap1-white-oracle-2026-10-11.json",
+  "ap0-white_oracle": "docs/research/radiance-ap0-white-oracle-2026-10-11.json",
+  "oracle_generator_sha256": "6a5246a120812bb3d3858388fc92b5b5326034a3abc6244b41dcff12bb1f353f",
+  "decode_test_targets_typechecked": true
+}

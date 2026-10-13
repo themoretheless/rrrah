@@ -1,0 +1,181 @@
+--- before/polygon_coverage.rs
++++ after/polygon_coverage.rs
+@@ -20,16 +20,36 @@
+         if self.a.y == self.b.y {
+             0.
+         } else {
+-            (self.b.x - self.a.x) / (self.b.y - self.a.y)
++            let (a,b)=if self.a.y<self.b.y {(self.a,self.b)} else {(self.b,self.a)};
++            (b.x-a.x)/(b.y-a.y)
+         }
+     }
+     fn x(self, y: f64) -> f64 {
+-        self.a.x + (y - self.a.y) * self.slope()
++        // Shared edges use the same arithmetic anchor in either traversal
++        // direction. Winding remains oriented independently below.
++        let a=if self.a.y<=self.b.y {self.a} else {self.b};
++        a.x + (y - a.y) * self.slope()
+     }
+     fn winding(self) -> i32 {
+         if self.b.y > self.a.y { 1 } else { -1 }
+     }
+ }
++#[test]
++fn shared_edge_interpolation_is_bit_identical_under_reverse_traversal() {
++    for (a,b) in [(Point::new(0.1,0.2),Point::new(0.8,0.9)),
++        (Point::new(-10000.25,-20000.125),Point::new(10000.75,20000.875)),
++        (Point::new(-0.,-1.),Point::new(0.,1.)),
++        (Point::new(0.25,0.5),Point::new(0.75,f64::from_bits(0.5f64.to_bits()+1)))] {
++        let edge=Edge {a,b,region:0};let reversed=Edge {a:b,b:a,region:1};
++        assert_eq!(edge.slope().to_bits(),reversed.slope().to_bits());
++        assert_eq!(edge.winding(),-reversed.winding());
++        for t in [0.,0.125,0.5,0.875,1.] {
++            let y=a.y+(b.y-a.y)*t;
++            assert_eq!(edge.x(y).to_bits(),reversed.x(y).to_bits());
++        }
++    }
++}
++
+ /// One convex covered strip of a global pixel. For an affine component field,
+ /// its integral is exactly area times the value at the centroid, up to floating
+ /// point arithmetic. Arbitrary nonlinear fields need further integration.
+@@ -319,7 +339,11 @@
+         return None;
+     }
+     work.step(crossings.len().checked_mul(16)?)?;
+-    crossings.sort_unstable_by(|a, b| a.0.total_cmp(&b.0));
++    crossings.sort_unstable_by(|a,b|a.0.total_cmp(&b.0).then_with(||a.1.total_cmp(&b.1)));
++    // Identical intersections contribute the same cut; winding is carried by
++    // edges, never by this list. Retain the original allocation admission.
++    work.step(crossings.len())?;
++    crossings.dedup_by(|a,b|a.0==b.0 && a.1==b.1);
+     Some(PolygonRow {
+         top,bottom,right,
+         edges,
+@@ -495,7 +519,7 @@
+         )?;
+         let bytes = cut_count
+             .checked_mul(size_of::<f64>())?
+-            .checked_add(count.checked_mul(size_of::<(f64, usize)>())?)?
++            .checked_add(count.checked_mul(size_of::<(f64, usize)>()+3*size_of::<usize>())?)?
+             .checked_add(regions.len().checked_mul(size_of::<i32>())?)?;
+         let scratch_credit = admit(bytes)?;
+         if cancelled() {
+@@ -505,6 +529,26 @@
+         cuts.try_reserve_exact(cut_count).ok()?;
+         let mut hits = Vec::new();
+         hits.try_reserve_exact(count).ok()?;
++        let mut edge_order=Vec::new();edge_order.try_reserve_exact(count).ok()?;
++        edge_order.extend(0..count);
++        let key=|index:usize| {
++            let edge=edges[index];let (a,b)=if edge.a.y<edge.b.y || (edge.a.y==edge.b.y && edge.a.x<=edge.b.x) {(edge.a,edge.b)} else {(edge.b,edge.a)};
++            [a.x,a.y,b.x,b.y]
++        };
++        work.step(count.checked_mul(16)?)?;
++        edge_order.sort_unstable_by(|&a,&b| {
++            let ka=key(a);let kb=key(b);
++            ka.iter().zip(kb).map(|(a,b)|a.total_cmp(&b)).find(|v|!v.is_eq()).unwrap_or_else(||a.cmp(&b))
++        });
++        let mut edge_heads=Vec::new();edge_heads.try_reserve_exact(count).ok()?;edge_heads.resize(count,usize::MAX);
++        let mut edge_next=Vec::new();edge_next.try_reserve_exact(count).ok()?;edge_next.resize(count,usize::MAX);
++        let mut head=usize::MAX;let mut previous=usize::MAX;
++        for &index in &edge_order {
++            work.step(1)?;
++            if previous==usize::MAX || key(index).map(f64::to_bits)!=key(previous).map(f64::to_bits) {head=index;}
++            else {edge_next[previous]=index;}
++            edge_heads[index]=head;previous=index;
++        }
+         let mut winding = Vec::new();
+         winding.try_reserve_exact(regions.len()).ok()?;
+         winding.resize(regions.len(), 0i32);
+@@ -562,13 +606,29 @@
+                     }
+                     if x <= left {
+                         winding[edge.region] += edge.winding();
+-                    } else if x < right {
++                    } else if x < right && edge_heads[index]==index {
+                         hits.push((x, index));
+                     }
+                 }
+             }
+             work.step(hits.len().checked_mul(16)?)?;
+             hits.sort_unstable_by(|a, b| a.0.total_cmp(&b.0));
++            // Distinct lines tied at the sampled X retain legacy ordering.
++            // Identical canonical geometry can otherwise share one hit while
++            // each member still updates its own region winding below.
++            let grouped=!hits.windows(2).any(|pair|pair[0].0==pair[1].0);
++            if !grouped {
++                hits.clear();
++                for (index,&edge) in edges.iter().enumerate() {
++                    work.step(1)?;
++                    if edge.low()<=a && edge.high()>=b {
++                        let x=edge.x(a)*0.5+edge.x(b)*0.5;
++                        if x>left && x<right {hits.push((x,index));}
++                    }
++                }
++                work.step(hits.len().checked_mul(16)?)?;
++                hits.sort_unstable_by(|a,b|a.0.total_cmp(&b.0));
++            }
+             // Edges wholly left of this slab contribute only the initial winding;
+             // edges wholly right cannot affect the pixel. Sort only interior hits.
+             let mut incremental_owner = if let Some((selector,cost))=incremental.as_mut() {
+@@ -624,11 +684,17 @@
+                     area = sum;
+                 }
+                 if let Some(index) = next {
+-                    let edge = edges[index];
+-                    winding[edge.region] += edge.winding();
+-                    if let Some((selector,cost))=incremental.as_mut() {
+-                        work.step(*cost)?;
+-                        incremental_owner=selector(&winding,Some(edge.region))?;
++                    let mut member=index;
++                    loop {
++                        if member!=index {work.step(1)?;}
++                        let edge=edges[member];
++                        winding[edge.region]+=edge.winding();
++                        if let Some((selector,cost))=incremental.as_mut() {
++                            work.step(*cost)?;
++                            incremental_owner=selector(&winding,Some(edge.region))?;
++                        }
++                        if !grouped || edge_next[member]==usize::MAX {break;}
++                        member=edge_next[member];
+                     }
+                 }
+                 previous = next;
+@@ -642,6 +708,7 @@
+         }
+         drop(winding);
+         drop(hits);
++        drop(edge_order);drop(edge_heads);drop(edge_next);
+         drop(cuts);
+         drop(scratch_credit);
+         Some(area.clamp(0., 1.))
+@@ -787,6 +854,28 @@
+         out(edge)?;
+     }
+     Some(())
++}
++
++#[test]
++fn grouped_shared_edges_preserve_region_winding_and_even_odd_multiplicity() {
++    let make=|reverse:bool| {
++        let mut path=BezPath::new();path.move_to((0.,0.));
++        for p in if reverse {[(0.,1.),(1.,0.)]} else {[(1.,0.),(0.,1.)]} {path.line_to(p);}
++        path.close_path();path
++    };
++    let forward=make(false);let reverse=make(true);
++    for first in [Fill::NonZero,Fill::EvenOdd] {for second in [Fill::NonZero,Fill::EvenOdd] {
++        let regions=[(&forward,first),(&reverse,second)];
++        assert_eq!(polygon_pixel_area(&regions,0,0,1_000_000,&||false,&|_|Some(Box::new(()))),Some(0.5));
++    }}
++    for (paths,nonzero,evenodd) in [(vec![&forward,&forward],0.5,0.),
++        (vec![&forward,&reverse],0.,0.),(vec![&forward,&forward,&reverse],0.5,0.5)] {
++        let mut repeated=BezPath::new();
++        for path in paths {repeated.extend(path.elements().iter().copied());}
++        for (fill,expected) in [(Fill::NonZero,nonzero),(Fill::EvenOdd,evenodd)] {
++            assert_eq!(polygon_pixel_area(&[(&repeated,fill)],0,0,1_000_000,&||false,&|_|Some(Box::new(()))),Some(expected));
++        }
++    }
+ }
+ 
+ #[test]

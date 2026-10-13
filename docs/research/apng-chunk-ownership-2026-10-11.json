@@ -1,0 +1,26 @@
+{
+  "scope": "APNG chunk ownership validation before pixel admission, explicit default-frame geometry and nonempty frame-data chunks; valid separate static preview and split IDAT preserved",
+  "spec": "https://www.w3.org/TR/png-3/#11fcTL",
+  "logs": [
+    {
+      "log": "docs/research/rrrah-apng-chunk-ownership-20261011.log",
+      "sha256": "7b91b8a051cfc0c44dff77e245d30ae1d246e6d5f7b1b42d7f3ac5c049cf557c"
+    },
+    {
+      "log": "docs/research/rrrah-apng-preview-chunks-full-20261011.log",
+      "sha256": "ac9afef7829d89d275912539a4359499e70c861627b3dd1f21044819c364dade"
+    },
+    {
+      "log": "docs/research/rrrah-apng-chunk-ownership-metal-20261011.log",
+      "sha256": "742a3e64f4c974c3ccba93072c25f0dfc7fc538487d30875993d23c9371b11dd"
+    }
+  ],
+  "decoder_passed": 1007,
+  "decoder_ignored": 71,
+  "metal_manual_passed": 4,
+  "source_sha256": "ada4a48c63675de0779d70155ad8bb691fc9290d16f12b582f19e41f20385ffb",
+  "limitations": [
+    "Lazy compressed payload validation remains selected-frame scoped",
+    "Not complete format/playback qualification"
+  ]
+}

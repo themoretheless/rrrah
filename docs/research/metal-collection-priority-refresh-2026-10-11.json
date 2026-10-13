@@ -1,0 +1,42 @@
+{
+  "scope": "100k directory paths and sustained eight authored 12MP frames on actual Metal",
+  "directory": {
+    "paths": 100000,
+    "underlying_small_sources": 4,
+    "visits": 512,
+    "scan_navigation_seconds": 8.191802917,
+    "test_seconds": 78.45,
+    "sdr_hdr_output": [
+      128,
+      96
+    ]
+  },
+  "sustained": {
+    "frames": 8,
+    "frame_pixels": 12000000,
+    "cycles": 110,
+    "seconds": 120.23,
+    "swap_reads": 110,
+    "swap_writes": 8,
+    "full_sdr_exact": 110,
+    "hdr_exact": 110,
+    "hdr_output": [
+      63,
+      65
+    ],
+    "final_managed_bytes": 0,
+    "final_queue_bytes": 0
+  },
+  "limitations": [
+    "Not 100k independent decodes",
+    "Not physical slow disk or OS-wide pressure",
+    "Not full-resolution HDR readback or physical color calibration"
+  ],
+  "source_sha256": "9a2044850216e85fcad1fff063e1de987b82cac26a933b7af5f679f092290a06",
+  "files": {
+    "docs/research/metal-collection-priority-refresh-2026-10-11/report.json": "1e47e0cdb6692aa1f1e574d5972f57fa7b238884f5f014b91b7fc55ff020a74e",
+    "docs/research/metal-collection-priority-refresh-2026-10-11/gpu-all.log": "a4ad7767daf5754cebdae2919607083ac64f75d4cfccc87cb1b5adaa90526e80",
+    "docs/research/metal-collection-priority-refresh-2026-10-11/100k-priority.log": "5644c14d4fc6ed0678135a045d5f03ba42c64a1229c792878867cc317c67dcdc",
+    "docs/research/metal-collection-priority-refresh-2026-10-11/gpu-collection-long-lived.log": "39bc7486811da38e261eca81c852ce2217e1e0de0354d3271f79a8f91977798a"
+  }
+}

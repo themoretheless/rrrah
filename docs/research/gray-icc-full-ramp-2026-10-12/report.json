@@ -1,0 +1,61 @@
+{
+  "profiles": {
+    "gamma2": {
+      "samples": 65536,
+      "max_abs_linear_rgb_error": 1.7881393432617188e-07,
+      "error_in_16bit_linear_code_units": 0.011718571186065674,
+      "native_equal_adjacent_red_pairs": 0,
+      "oracle_equal_adjacent_red_pairs": 0,
+      "native_decreasing_pairs": 0,
+      "max_abs_alpha_error": 2.9801867640344426e-08,
+      "chunk_boundary_indices_checked": [
+        4095,
+        4096,
+        4097,
+        8191,
+        8192,
+        65535
+      ]
+    },
+    "lut17": {
+      "samples": 65536,
+      "max_abs_linear_rgb_error": 1.537799835205078e-05,
+      "error_in_16bit_linear_code_units": 1.007797122001648,
+      "native_equal_adjacent_red_pairs": 16383,
+      "oracle_equal_adjacent_red_pairs": 16383,
+      "native_decreasing_pairs": 0,
+      "max_abs_alpha_error": 2.9801867640344426e-08,
+      "chunk_boundary_indices_checked": [
+        4095,
+        4096,
+        4097,
+        8191,
+        8192,
+        65535
+      ]
+    }
+  },
+  "oracle": "LittleCMS 2190: 65536 gray inputs, relative colorimetric, double linear sRGB output",
+  "sha256": {
+    "lut17-native.log": "c5d2c68cf4e5504a3c027c03b05df82c190fc1d39b6269d6e1d5a2f5117b5113",
+    "lut17-oracle.log": "f9f5c615db82523b849512f301c596ad50e0f694bc96b3d078557086fde95bfd",
+    "generate.py": "41da164ca7308f4f12e3b0cf054b08a644631b0f8d05aec3def4c5abeebe22e5",
+    "gamma2.rgba32f": "b211b4c8d61f8196e40ddfaa078d6c055379249e5cc0fc818d8b8bc757700f57",
+    "lut17.rgb64f": "20c018facf61ecf9d043af36c48cb9a8f435784578594a0ad75efe5ca46f819f",
+    "lut17.rgba32f": "364f632af8e8d81e8eebcb82cfa3829b4f03004284dc33d7fe9ad8becd6ee8a6",
+    "gamma2.icc": "ead4c629aaf90e430020520e97f6d2b56abd6a2b6e35b04c62198ee7893b6dae",
+    "gamma2.png": "a4ec2274cbb07a1567078a739651b3c7d2474429486df917f17c3fe901910844",
+    "gamma2.rgb64f": "780dd017186ac492ae162bd052c633e057a0c780ec8f9509095e36e29a391889",
+    "gamma2-native.log": "c5d2c68cf4e5504a3c027c03b05df82c190fc1d39b6269d6e1d5a2f5117b5113",
+    "gamma2-oracle.log": "f9f5c615db82523b849512f301c596ad50e0f694bc96b3d078557086fde95bfd",
+    "observed.json": "03471d53786db390a44bc7726160011834e74fc56319078df0f285b27481cda9",
+    "lut17.png": "d3332b107960cfd0fe313908e077d045710ed1d6a8e6f049c4326cc3cc1f00d5",
+    "oracle.c": "63b0a0fb99b59feca2081d54547a2b96afd7df16558f6a6f350931cc32d3f858",
+    "lut17.icc": "e1bc755e1fb17ddfa063c69079281333f11ffb698a872477f5f79a76477828d7"
+  },
+  "limits": [
+    "Two authored Gray ICC curves, not all ICC profiles",
+    "Sampled LUT interpolation is quantized in both transforms; all adjacent values need not remain distinct",
+    "Independent CPU color conversion; no new Metal or physical display calibration"
+  ]
+}

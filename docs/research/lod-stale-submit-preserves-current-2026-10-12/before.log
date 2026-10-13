@@ -1,0 +1,28 @@
+warning: function `fallible_zeroed_bytes` is never used
+   --> crates/rrrah-cache/src/mosaic_payload_v1.rs:728:4
+    |
+728 | fn fallible_zeroed_bytes(len: usize) -> Result<Box<[u8]>, MosaicPayloadError> {
+    |    ^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-cache` (lib) generated 1 warning
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 36.09s
+     Running unittests src/main.rs (target/debug/deps/rrrah-0b4921b829754900)
+
+running 1 test
+
+thread 'raster_lod_worker::tests::stale_submission_preserves_current_completed_level_and_revision' (34547264) panicked at crates/rrrah-app/src/raster_lod_worker.rs:722:14:
+already obsolete request must be refused: 1
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test raster_lod_worker::tests::stale_submission_preserves_current_completed_level_and_revision ... FAILED
+
+failures:
+
+failures:
+    raster_lod_worker::tests::stale_submission_preserves_current_completed_level_and_revision
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 279 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p rrrah --bin rrrah`

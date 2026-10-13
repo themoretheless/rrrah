@@ -1,0 +1,488 @@
+{
+  "status": "complete_controls_not_adopted",
+  "plan": [
+    {
+      "index": 1,
+      "baseline_index": 7,
+      "left": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200302.jpg",
+      "right": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200300.jpg",
+      "source_tolerance": 0.78125,
+      "historical_model_attempted": true,
+      "historical_supported": true
+    },
+    {
+      "index": 2,
+      "baseline_index": 27,
+      "left": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/201303.jpg",
+      "right": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201300.jpg",
+      "source_tolerance": 0.5414368903667351,
+      "historical_model_attempted": true,
+      "historical_supported": true
+    }
+  ],
+  "results": [
+    {
+      "index": 0,
+      "variant": "baseline",
+      "command": [
+        "/usr/bin/time",
+        "-l",
+        "/usr/bin/env",
+        "DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+        "/Users/themoretheless/.codex/tmp/rrrah-loftr-current-stack-executable-20261012",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200302.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200300.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+        "640",
+        "0.78125"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 1027.70993425,
+      "stdout": "/Users/themoretheless/.codex/tmp/rrrah-loftr-position-positive-0-baseline-20261012.stdout",
+      "stderr": "/Users/themoretheless/.codex/tmp/rrrah-loftr-position-positive-0-baseline-20261012.stderr",
+      "evidence": {
+        "evidence": {
+          "file_ids": [
+            1,
+            2
+          ],
+          "pairs": [
+            {
+              "forward": {
+                "primary": {
+                  "attempts": 25,
+                  "geometry_inliers": 0,
+                  "original_dimensions": [
+                    [
+                      2048,
+                      1536
+                    ],
+                    [
+                      800,
+                      600
+                    ]
+                  ],
+                  "pixel_attempts": 0,
+                  "pixel_rank_radius": null,
+                  "pixel_window_radius": null,
+                  "pixels": "None",
+                  "raw_proposals": 608,
+                  "selected_bank": null,
+                  "selected_points": 608,
+                  "supported": false,
+                  "transform": null
+                },
+                "recovery": {
+                  "exposures": "None",
+                  "search": {
+                    "attempts": 9,
+                    "geometry_inliers": 0,
+                    "original_dimensions": [
+                      [
+                        2048,
+                        1536
+                      ],
+                      [
+                        800,
+                        600
+                      ]
+                    ],
+                    "pixel_attempts": 0,
+                    "pixel_rank_radius": null,
+                    "pixel_window_radius": null,
+                    "pixels": "None",
+                    "raw_proposals": 313,
+                    "selected_bank": null,
+                    "selected_points": 313,
+                    "supported": false,
+                    "transform": null
+                  }
+                },
+                "supported": false
+              },
+              "left": 1,
+              "reverse": {
+                "primary": {
+                  "attempts": 25,
+                  "geometry_inliers": 17,
+                  "original_dimensions": [
+                    [
+                      800,
+                      600
+                    ],
+                    [
+                      2048,
+                      1536
+                    ]
+                  ],
+                  "pixel_attempts": 2,
+                  "pixel_rank_radius": 2,
+                  "pixel_window_radius": 2,
+                  "pixels": "Some(AnchorRankEvidence { forward_anchors: 17, reverse_anchors: 16, source_window_bounds: [414, 127, 365, 135], target_window_bounds: [1070, 463, 765, 217], forward: RankRegionEvidence { sites: 425, valid_sites: 425, informative_pairs: 1227, agreeing_pairs: 1227, pixel_reads: 92565 }, reverse: RankRegionEvidence { sites: 400, valid_sites: 400, informative_pairs: 1566, agreeing_pairs: 1565, pixel_reads: 87120 }, supported: true })",
+                  "raw_proposals": 569,
+                  "selected_bank": 12,
+                  "selected_points": 569,
+                  "supported": true,
+                  "transform": [
+                    [
+                      1.717521442052154,
+                      -0.5806807984379434,
+                      493.2663511609886
+                    ],
+                    [
+                      0.0662260894457567,
+                      1.8862368193007288,
+                      149.8055342549036
+                    ],
+                    [
+                      -0.0002619660083535962,
+                      -0.000481954918694156,
+                      1.2212502058120005
+                    ]
+                  ]
+                },
+                "recovery": null,
+                "supported": true
+              },
+              "right": 2,
+              "supported": true
+            }
+          ],
+          "scope": "Actual public bidirectional collection on precommitted unused publisher distractor query/reference pair. Reference has lower ID; one CPU provider spans both directions. Fixed previous caller policy, not full precision/RSS/platform/full500 qualification."
+        },
+        "managed_peak": 71285712,
+        "managed_report_used": 1520,
+        "managed_used": 0
+      },
+      "supported": true,
+      "rss_bytes": 1322483712
+    },
+    {
+      "index": 0,
+      "variant": "candidate",
+      "command": [
+        "/usr/bin/time",
+        "-l",
+        "/usr/bin/env",
+        "DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+        "/Users/themoretheless/.codex/tmp/rrrah-loftr-position-floor-executable-20261012",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200302.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/200300.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+        "640",
+        "0.78125"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 284.5268159579998,
+      "stdout": "/Users/themoretheless/.codex/tmp/rrrah-loftr-position-positive-0-candidate-20261012.stdout",
+      "stderr": "/Users/themoretheless/.codex/tmp/rrrah-loftr-position-positive-0-candidate-20261012.stderr",
+      "evidence": {
+        "evidence": {
+          "file_ids": [
+            1,
+            2
+          ],
+          "pairs": [
+            {
+              "forward": {
+                "primary": {
+                  "attempts": 25,
+                  "geometry_inliers": 0,
+                  "original_dimensions": [
+                    [
+                      2048,
+                      1536
+                    ],
+                    [
+                      800,
+                      600
+                    ]
+                  ],
+                  "pixel_attempts": 0,
+                  "pixel_rank_radius": null,
+                  "pixel_window_radius": null,
+                  "pixels": "None",
+                  "raw_proposals": 608,
+                  "selected_bank": null,
+                  "selected_points": 608,
+                  "supported": false,
+                  "transform": null
+                },
+                "recovery": {
+                  "exposures": "None",
+                  "search": {
+                    "attempts": 9,
+                    "geometry_inliers": 0,
+                    "original_dimensions": [
+                      [
+                        2048,
+                        1536
+                      ],
+                      [
+                        800,
+                        600
+                      ]
+                    ],
+                    "pixel_attempts": 0,
+                    "pixel_rank_radius": null,
+                    "pixel_window_radius": null,
+                    "pixels": "None",
+                    "raw_proposals": 313,
+                    "selected_bank": null,
+                    "selected_points": 313,
+                    "supported": false,
+                    "transform": null
+                  }
+                },
+                "supported": false
+              },
+              "left": 1,
+              "reverse": {
+                "primary": {
+                  "attempts": 25,
+                  "geometry_inliers": 17,
+                  "original_dimensions": [
+                    [
+                      800,
+                      600
+                    ],
+                    [
+                      2048,
+                      1536
+                    ]
+                  ],
+                  "pixel_attempts": 2,
+                  "pixel_rank_radius": 2,
+                  "pixel_window_radius": 2,
+                  "pixels": "Some(AnchorRankEvidence { forward_anchors: 17, reverse_anchors: 16, source_window_bounds: [414, 127, 365, 135], target_window_bounds: [1070, 463, 765, 217], forward: RankRegionEvidence { sites: 425, valid_sites: 425, informative_pairs: 1227, agreeing_pairs: 1227, pixel_reads: 92565 }, reverse: RankRegionEvidence { sites: 400, valid_sites: 400, informative_pairs: 1566, agreeing_pairs: 1565, pixel_reads: 87120 }, supported: true })",
+                  "raw_proposals": 569,
+                  "selected_bank": 12,
+                  "selected_points": 569,
+                  "supported": true,
+                  "transform": [
+                    [
+                      1.717521442052154,
+                      -0.5806807984379434,
+                      493.2663511609886
+                    ],
+                    [
+                      0.0662260894457567,
+                      1.8862368193007288,
+                      149.8055342549036
+                    ],
+                    [
+                      -0.0002619660083535962,
+                      -0.000481954918694156,
+                      1.2212502058120005
+                    ]
+                  ]
+                },
+                "recovery": null,
+                "supported": true
+              },
+              "right": 2,
+              "supported": true
+            }
+          ],
+          "scope": "Actual public bidirectional collection on precommitted unused publisher distractor query/reference pair. Reference has lower ID; one CPU provider spans both directions. Fixed previous caller policy, not full precision/RSS/platform/full500 qualification."
+        },
+        "managed_peak": 71285712,
+        "managed_report_used": 1520,
+        "managed_used": 0
+      },
+      "supported": true,
+      "rss_bytes": 1321385984
+    },
+    {
+      "index": 1,
+      "variant": "baseline",
+      "command": [
+        "/usr/bin/time",
+        "-l",
+        "/usr/bin/env",
+        "DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+        "/Users/themoretheless/.codex/tmp/rrrah-loftr-current-stack-executable-20261012",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/201303.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201300.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+        "640",
+        "0.5414368903667351"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 144.6454014589999,
+      "stdout": "/Users/themoretheless/.codex/tmp/rrrah-loftr-position-positive-1-baseline-20261012.stdout",
+      "stderr": "/Users/themoretheless/.codex/tmp/rrrah-loftr-position-positive-1-baseline-20261012.stderr",
+      "evidence": {
+        "evidence": {
+          "file_ids": [
+            1,
+            2
+          ],
+          "pairs": [
+            {
+              "forward": {
+                "primary": {
+                  "attempts": 25,
+                  "geometry_inliers": 24,
+                  "original_dimensions": [
+                    [
+                      2560,
+                      1920
+                    ],
+                    [
+                      675,
+                      543
+                    ]
+                  ],
+                  "pixel_attempts": 7,
+                  "pixel_rank_radius": 2,
+                  "pixel_window_radius": 2,
+                  "pixels": "Some(AnchorRankEvidence { forward_anchors: 24, reverse_anchors: 24, source_window_bounds: [494, 287, 597, 372], target_window_bounds: [15, 136, 595, 375], forward: RankRegionEvidence { sites: 600, valid_sites: 600, informative_pairs: 1239, agreeing_pairs: 1235, pixel_reads: 130680 }, reverse: RankRegionEvidence { sites: 600, valid_sites: 600, informative_pairs: 1273, agreeing_pairs: 1266, pixel_reads: 130680 }, supported: true })",
+                  "raw_proposals": 1744,
+                  "selected_bank": 5,
+                  "selected_points": 1744,
+                  "supported": true,
+                  "transform": [
+                    [
+                      0.9917833547098147,
+                      -0.004287167794259357,
+                      -472.1985622572174
+                    ],
+                    [
+                      0.0009873072147748574,
+                      1.0160631329136933,
+                      -156.88262659980137
+                    ],
+                    [
+                      -1.8285623436039022e-05,
+                      1.158521278952499e-05,
+                      1.0085980277761175
+                    ]
+                  ]
+                },
+                "recovery": null,
+                "supported": true
+              },
+              "left": 1,
+              "reverse": null,
+              "right": 2,
+              "supported": true
+            }
+          ],
+          "scope": "Actual public bidirectional collection on precommitted unused publisher distractor query/reference pair. Reference has lower ID; one CPU provider spans both directions. Fixed previous caller policy, not full precision/RSS/platform/full500 qualification."
+        },
+        "managed_peak": 99166032,
+        "managed_report_used": 1520,
+        "managed_used": 0
+      },
+      "supported": true,
+      "rss_bytes": 1533526016
+    },
+    {
+      "index": 1,
+      "variant": "candidate",
+      "command": [
+        "/usr/bin/time",
+        "-l",
+        "/usr/bin/env",
+        "DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+        "/Users/themoretheless/.codex/tmp/rrrah-loftr-position-floor-executable-20261012",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/201303.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201300.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+        "640",
+        "0.5414368903667351"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 132.6037906670001,
+      "stdout": "/Users/themoretheless/.codex/tmp/rrrah-loftr-position-positive-1-candidate-20261012.stdout",
+      "stderr": "/Users/themoretheless/.codex/tmp/rrrah-loftr-position-positive-1-candidate-20261012.stderr",
+      "evidence": {
+        "evidence": {
+          "file_ids": [
+            1,
+            2
+          ],
+          "pairs": [
+            {
+              "forward": {
+                "primary": {
+                  "attempts": 25,
+                  "geometry_inliers": 24,
+                  "original_dimensions": [
+                    [
+                      2560,
+                      1920
+                    ],
+                    [
+                      675,
+                      543
+                    ]
+                  ],
+                  "pixel_attempts": 7,
+                  "pixel_rank_radius": 2,
+                  "pixel_window_radius": 2,
+                  "pixels": "Some(AnchorRankEvidence { forward_anchors: 24, reverse_anchors: 24, source_window_bounds: [494, 287, 597, 372], target_window_bounds: [15, 136, 595, 375], forward: RankRegionEvidence { sites: 600, valid_sites: 600, informative_pairs: 1239, agreeing_pairs: 1235, pixel_reads: 130680 }, reverse: RankRegionEvidence { sites: 600, valid_sites: 600, informative_pairs: 1273, agreeing_pairs: 1266, pixel_reads: 130680 }, supported: true })",
+                  "raw_proposals": 1744,
+                  "selected_bank": 5,
+                  "selected_points": 1744,
+                  "supported": true,
+                  "transform": [
+                    [
+                      0.9917833547098147,
+                      -0.004287167794259357,
+                      -472.1985622572174
+                    ],
+                    [
+                      0.0009873072147748574,
+                      1.0160631329136933,
+                      -156.88262659980137
+                    ],
+                    [
+                      -1.8285623436039022e-05,
+                      1.158521278952499e-05,
+                      1.0085980277761175
+                    ]
+                  ]
+                },
+                "recovery": null,
+                "supported": true
+              },
+              "left": 1,
+              "reverse": null,
+              "right": 2,
+              "supported": true
+            }
+          ],
+          "scope": "Actual public bidirectional collection on precommitted unused publisher distractor query/reference pair. Reference has lower ID; one CPU provider spans both directions. Fixed previous caller policy, not full precision/RSS/platform/full500 qualification."
+        },
+        "managed_peak": 99166032,
+        "managed_report_used": 1520,
+        "managed_used": 0
+      },
+      "supported": true,
+      "rss_bytes": 1431879680
+    }
+  ],
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-loftr-position-positive-plan-20261012.json": "300bc69a95e39bee7413fdf05a4689ed95a42f8a853451e2596e88b862a861b4",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-loftr-position-floor-runtime-20261012.json": "758ffb8dc0488978fef9ef2a4d361d8c7855e1d2827278cd597f80b22da66ee7",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-loftr-position-floor-complete-audit-20261012.json": "6dbfbc5864072fd8c71362b1921079d6f986447d9a7c53a340dde2c9d9a815c0",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-loftr-current-stack-runtime-20261012.json": "7a873fdfa057dca7e2aa4e9643c1e8dc3c3f4627715e815454bd9e52092e9252",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-loftr-position-positive-20261012.py": "c9024f1b7135ad82d12f7ca12e2eaea5799c2c3ccb5f906d1ad03db8390b4ac0",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-position-positive-0-baseline-20261012.stdout": "9d2e88a9f6a8e0162b8ebf074bf960c21a59cdc51a6f9fe822091b147931799a",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-position-positive-0-baseline-20261012.stderr": "5a1419d47b01d48f66d01b48243ce5367762a68d920f4d96d112e90625fe3c56",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-position-positive-0-candidate-20261012.stdout": "9d2e88a9f6a8e0162b8ebf074bf960c21a59cdc51a6f9fe822091b147931799a",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-position-positive-0-candidate-20261012.stderr": "95c4f522aa6762f7ba9c15ae3018c5d935a3ebb28ab1e5e76550ffdb393b23fb",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-position-positive-1-baseline-20261012.stdout": "5216471a098b6bdadec7bd154c391575f79cbbe48371c422fddb4cd0c02dd9c1",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-position-positive-1-baseline-20261012.stderr": "6e280d37a0313144c8222f1b63f4d1f1b10c2bed646b0ec3080d2b06fc7c6b52",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-position-positive-1-candidate-20261012.stdout": "5216471a098b6bdadec7bd154c391575f79cbbe48371c422fddb4cd0c02dd9c1",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-position-positive-1-candidate-20261012.stderr": "365cb6d54097709212386f66fbfa9bafb4f51548cc7743b2890ef7731362e91f"
+  },
+  "scope": "Two precommitted model-positive controls, unchanged complete current full caller and one-file position-floor candidate. Separate from historical all458 executable. One-shot RSS, no universal limits/platform/all500 completion.",
+  "active_pair": 1,
+  "active_variant": "candidate",
+  "child_pid": 53578,
+  "all_supported": true,
+  "entire_evidence_identical": true
+}

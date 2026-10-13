@@ -18,42 +18,45 @@ fn exposure_readback_cancellation_releases_mapping_and_allows_retry() {
     let cpu = rrrah_core::MemoryBudget::new(bytes);
     let gpu = rrrah_core::MemoryBudget::new(bytes * 3 + 16);
     for flat in [false, true] {
-        let mut admitted_polls = 0;
-        let mut cancel = || {
-            if gpu.used() > 0 {
-                admitted_polls += 1;
-            }
-            // Admission, before submit, first copy chunk, then second chunk.
-            admitted_polls == 4
-        };
-        let cancelled = if flat {
-            matches!(
-                compute.execute_interleaved_with_cancel(
-                    &queue,
-                    bytemuck::cast_slice(&input),
-                    1.0,
-                    &gpu,
-                    &cpu,
-                    &mut cancel,
-                ),
-                Err(rrrah_gpu::ExposureError::Cancelled)
-            )
-        } else {
-            matches!(
-                compute.execute_managed_with_cancel(&queue, &input, 1.0, &gpu, &cpu, &mut cancel,),
-                Err(rrrah_gpu::ExposureError::Cancelled)
-            )
-        };
-        assert!(cancelled);
-        assert_eq!(admitted_polls, 4);
-        assert_eq!(cpu.used(), 0);
-        assert_eq!(gpu.used(), 0);
-        let retry = compute.execute_managed(&queue, &input, 1.0, &gpu, &cpu).unwrap();
-        assert!(retry.iter().all(|pixel| *pixel == [8.0, -4.0, 0.25, 0.375]));
-        drop(retry);
-        assert_eq!(cpu.used(), 0);
-        assert_eq!(gpu.used(), 0);
+        // Admission, before submission, three bounded copy chunks, final publication.
+        for checkpoint in 1..=6 {
+            let mut admitted_polls = 0;
+            let mut cancel = || {
+                if gpu.used() > 0 {
+                    admitted_polls += 1;
+                }
+                admitted_polls == checkpoint
+            };
+            let cancelled = if flat {
+                matches!(
+                    compute.execute_interleaved_with_cancel(
+                        &queue,
+                        bytemuck::cast_slice(&input),
+                        1.0,
+                        &gpu,
+                        &cpu,
+                        &mut cancel,
+                    ),
+                    Err(rrrah_gpu::ExposureError::Cancelled)
+                )
+            } else {
+                matches!(
+                    compute.execute_managed_with_cancel(&queue, &input, 1.0, &gpu, &cpu, &mut cancel,),
+                    Err(rrrah_gpu::ExposureError::Cancelled)
+                )
+            };
+            assert!(cancelled);
+            assert_eq!(admitted_polls, checkpoint);
+            assert_eq!(cpu.used(), 0);
+            assert_eq!(gpu.used(), 0);
+            let retry = compute.execute_managed(&queue, &input, 1.0, &gpu, &cpu).unwrap();
+            assert!(retry.iter().all(|pixel| *pixel == [8.0, -4.0, 0.25, 0.375]));
+            drop(retry);
+            assert_eq!(cpu.used(), 0);
+            assert_eq!(gpu.used(), 0);
+        }
     }
+    eprintln!("compute cancellation: six admitted checkpoints in both layouts; every retry exact; CPU/GPU final=0");
 }
 
 #[test]
@@ -356,6 +359,18 @@ fn linear_exposure_compute_preserves_hdr_alpha_and_dispatch_tail() {
 #[test]
 #[ignore = "full-resolution managed compute uses about 2 GB of tracked buffers"]
 fn full_sensor_managed_exposure_budgets_and_checks_every_pixel() {
+    // Distinguish dispatch windows: the old 1024-period field could hide
+    // a wrong source offset differing by a multiple of that period.
+    fn source_pixel(index: usize) -> [f32; 4] {
+        [4.0 + (index % 1024) as f32 / 128.0,
+         -((index / 1024) as f32 + 1.0),
+         (index % 257) as f32 / 256.0,
+         (index % 251) as f32 / 256.0]
+    }
+    fn expected_pixel(index: usize) -> [f32; 4] {
+        let p = source_pixel(index);
+        [p[0] * 0.5, p[1] * 0.5, p[2] * 0.5, p[3]]
+    }
     let count = 6188_u32 * 4120;
     let bytes = u64::from(count) * 16;
     let instance = common::headless_instance();
@@ -382,13 +397,38 @@ fn full_sensor_managed_exposure_budgets_and_checks_every_pixel() {
     let maximum = (u64::from(limits.max_storage_buffer_binding_size) / 16)
         .min(u64::from(limits.max_compute_workgroups_per_dimension) * 64);
     let chunk = maximum / alignment * alignment;
+    let dispatches = u64::from(count).div_ceil(chunk);
+    assert!(dispatches > 1, "full sensor must exercise multiple dispatch windows");
+    for window in 1..dispatches {
+        assert_ne!(expected_pixel((window * chunk) as usize), expected_pixel(0));
+    }
+    eprintln!("full sensor distinct windows: dispatches={dispatches}; chunk_pixels={chunk}; nonperiodic green and independent alpha");
     let expected_gpu = bytes * 3 + u64::from(count).div_ceil(chunk) * 16;
     let gpu = rrrah_core::MemoryBudget::new(expected_gpu);
     let mut pixels = cpu.try_buffer(count as usize, [0.0_f32; 4]).unwrap();
     for (index, pixel) in pixels.iter_mut().enumerate() {
-        *pixel = [4.0 + (index % 1024) as f32 / 128.0, -0.5, 0.25, 0.75];
+        *pixel = source_pixel(index);
     }
     let compute = rrrah_gpu::LinearExposureCompute::new(&device);
+    for gpu_pressure in [false, true] {
+        let pressure = if gpu_pressure {
+            gpu.try_reserve(gpu.available_bytes()).unwrap()
+        } else {
+            cpu.try_reserve(cpu.available_bytes()).unwrap()
+        };
+        assert!(compute.execute_managed(&queue, &pixels, -1.0, &gpu, &cpu).is_err());
+        drop(pressure);
+        assert_eq!((cpu.used(), gpu.used()), (bytes, 0));
+    }
+    let mut admitted = false;
+    assert!(matches!(compute.execute_managed_with_cancel(
+        &queue, &pixels, -1.0, &gpu, &cpu, || {
+            admitted |= gpu.used() > 0;
+            admitted
+        }), Err(rrrah_gpu::ExposureError::Cancelled)));
+    assert!(admitted, "full sensor cancellation follows CPU/GPU admission");
+    assert_eq!((cpu.used(), gpu.used()), (bytes, 0));
+    eprintln!("full sensor recovery: CPU/GPU pressure refused; admitted cancellation; source retained; temporary credits zero");
     let flat_started = std::time::Instant::now();
     let flat = compute
         .execute_interleaved_with_cancel(&queue, bytemuck::cast_slice(&pixels), -1.0, &gpu, &cpu, || false)
@@ -397,7 +437,7 @@ fn full_sensor_managed_exposure_budgets_and_checks_every_pixel() {
     for (index, pixel) in flat.chunks_exact(4).enumerate() {
         assert_eq!(
             pixel,
-            [2.0 + (index % 1024) as f32 / 256.0, -0.25, 0.125, 0.75],
+            expected_pixel(index),
             "interleaved full sensor pixel {index}"
         );
     }
@@ -415,7 +455,7 @@ fn full_sensor_managed_exposure_budgets_and_checks_every_pixel() {
     for (index, pixel) in result.iter().enumerate() {
         assert_eq!(
             *pixel,
-            [2.0 + (index % 1024) as f32 / 256.0, -0.25, 0.125, 0.75],
+            expected_pixel(index),
             "managed full sensor pixel {index}"
         );
     }
@@ -608,4 +648,30 @@ fn resident_exposure_preserves_hdr_tail_and_budgeted_gpu_ownership() {
     drop(abandoned);
     device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
     assert_eq!(root.used(), 0);
+}
+
+#[test]
+fn exposure_signed_f32_boundary_values_remain_exact_and_finite() {
+    let instance = common::headless_instance();
+    let adapter = pollster::block_on(common::request_adapter(
+        &instance, &wgpu::RequestAdapterOptions::default(),
+    )).expect("actual GPU required");
+    eprintln!("exposure boundary adapter: {:?}", adapter.get_info());
+    let (device, queue) = pollster::block_on(adapter.request_device(
+        &wgpu::DeviceDescriptor::default(),
+    )).unwrap();
+    let compute = rrrah_gpu::LinearExposureCompute::new(&device);
+    let cpu = rrrah_core::MemoryBudget::new(16);
+    let gpu = rrrah_core::MemoryBudget::new(64);
+    for (stops, magnitude) in [(0f32, f32::MAX), (1., f32::MAX / 2.),
+        (32., f32::MAX / 4294967296.), (-32., f32::MAX)] {
+        let pixel = [magnitude, -magnitude, -0., -f32::MAX];
+        let gain = stops.exp2();
+        let expected = [pixel[0] * gain, pixel[1] * gain, pixel[2] * gain, pixel[3]];
+        let result = compute.execute_managed(&queue, &[pixel], stops, &gpu, &cpu).unwrap();
+        assert!(result[0].iter().all(|v| v.is_finite()));
+        assert_eq!(result[0].map(f32::to_bits), expected.map(f32::to_bits));
+        drop(result);
+        assert_eq!((cpu.used(), gpu.used()), (0, 0));
+    }
 }

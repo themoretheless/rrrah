@@ -1,0 +1,89 @@
+{
+  "date": "2026-10-11",
+  "change": "HEVC HEIF/HEIC preserves known BT.2020 PQ/HLG NCLX metadata for existing explicit HDR conversion. ICC precedence and strict default handling are retained.",
+  "adapter": "Metal Apple M4 Max",
+  "producer": "libheif 1.23.6 / x265 lossless HEVC, authored CC0 grayscale",
+  "generator": "scripts/generate-heif-hdr-fixtures.py",
+  "fixtures": {
+    "heif-pq12.heic": {
+      "sha256": "f1360358cc177e46249756969438890973fdc7ae161a5d99e7094fa6942dc474",
+      "bytes": 740
+    },
+    "heif-hlg12.heic": {
+      "sha256": "47ef1e1ddf8cc211d8765f217f3c0ccee364b767d10ff48ceb7332702ba75cb4",
+      "bytes": 740
+    }
+  },
+  "dimensions": [
+    64,
+    48
+  ],
+  "source_12bit_codes": [
+    0,
+    1024,
+    2048,
+    2049,
+    3072,
+    4095,
+    512,
+    1536
+  ],
+  "qualified": [
+    "every native 12-bit code normalized exactly to u16, including adjacent values",
+    "CICP primaries=9, transfer=16/18, matrix=0, full_range=true",
+    "strict display refusal without explicit policy",
+    "explicit PQ white / HLG white-peak-gamma to linear-sRGB float",
+    "CLI policy reaches preload, cache hit without decode, and thumbnail",
+    "float bits, SDR pixels and binary16 HDR frame exact before/after swap",
+    "pinned RAM policy, root pressure refusal, successful restore retry and final root release"
+  ],
+  "results": {
+    "focused_decode": {
+      "path": "/tmp/rrrah-heif-hdr-decode-final-20261011.log",
+      "sha256": "47f418a341afbfd94a7f79658c1a0b08640ae2683719b67cbc04fb6cab9e8586",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0
+    },
+    "decode_all": {
+      "path": "/tmp/rrrah-heif-hdr-decode-all-20261011.log",
+      "sha256": "082920290bd7886f0f1d0650caffb86cdead7515a93c3f91ad0e60999de23304",
+      "passed": 991,
+      "failed": 0,
+      "ignored": 67
+    },
+    "metal_focused": {
+      "path": "/tmp/rrrah-heif-hdr-metal-20261011.log",
+      "sha256": "f8dce54932e9152b381855293dbc5667a37360152ba1dc7fbeaffe43879cde27",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    "metal_hdr_all": {
+      "path": "/tmp/rrrah-heif-hdr-metal-all-20261011.log",
+      "sha256": "c70ec35cc13c990f5282991468800533c47a3202f9eee6caf93c9afa7766cd9b",
+      "passed": 14,
+      "failed": 0,
+      "ignored": 2
+    },
+    "viewer_all": {
+      "path": "/tmp/rrrah-heif-hdr-viewer-all-20261011.log",
+      "sha256": "4b0ff29f0cc26097e68165e2f2f9248e0f2a8b1920e1790046b43121e21c1156",
+      "passed": 204,
+      "failed": 0,
+      "ignored": 37
+    }
+  },
+  "initial_fixture_failure": "Initial encoder output used matrix 6 by default. Generator now explicitly declares matrix 0; final focused and broad runs pass.",
+  "limitations": [
+    "Authored grayscale lossless controls, not independent photographic/chromatic HEVC HDR, alpha, or codec oracle.",
+    "Source peak/sample assertions and existing shared PQ/HLG transforms do not qualify physical HDR luminance/color.",
+    "Other HEIF codecs, sequences, wider producers and complete 100-format scope remain open. NVIDIA deferred."
+  ],
+  "source_sha256": {
+    "crates/rrrah-decode/src/heif.rs": "e4d1e4ca496f05318e9881cf97a992870dd5ccdbbdb904ad5a5460f126d4d424",
+    "crates/rrrah-app/src/linear_pfm_viewer_tests.rs": "8b5ab0312fc967a2c3f2d174b66dabf34abcc916623ef525b21f29469bba4cb1",
+    "crates/rrrah-app/tests/hdr_raster_swap.rs": "be4e93cb38694b1a148a893be5230b4bc93e1694ffd1f1f385c2ef844f0e324e",
+    "scripts/generate-heif-hdr-fixtures.py": "015d16183d7c9f3fe98c3be0bc0baf7cb6c064740cefa1c3f0ca713f40e8842c"
+  }
+}

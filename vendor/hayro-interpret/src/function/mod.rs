@@ -55,7 +55,7 @@ impl Function {
         Some(result)
     }
     /// Evaluate one input into up to four original color components without
-    /// heap scratch or RGB conversion. Multi-output Type2/Type3 are supported;
+    /// heap scratch or RGB conversion. Multi-output Type2/Type3/Type4 are supported;
     /// other types currently retain only the qualified scalar evaluator.
     /// Work is limited to4096 steps and nesting to32 levels. Failed or
     /// cancelled evaluation leaves the caller's output unchanged.
@@ -67,6 +67,25 @@ impl Function {
         self.eval_components_with_budget(input, &mut scratch[..output.len()], cancelled, &mut 4096, 0)?;
         output.copy_from_slice(&scratch[..output.len()]);
         Some(())
+    }
+
+    /// Evaluate up to four inputs and outputs without heap scratch. Calculator
+    /// Type4 functions support multiple inputs; other supported types take one.
+    /// Shared work is bounded to 4096 steps and nesting to 32 levels. Refusal
+    /// or cancellation leaves the caller output unchanged.
+    pub fn eval_vector_bounded(&self,input:&[f32],output:&mut[f32],cancelled:&dyn Fn()->bool)->Option<()> {
+        self.eval_vector_with_budget(input,output,cancelled,&mut 4096,0)
+    }
+
+    pub(crate) fn eval_vector_with_budget(&self,input:&[f32],output:&mut[f32],cancelled:&dyn Fn()->bool,remaining:&mut usize,depth:usize)->Option<()> {
+        if cancelled() || depth>=32 || input.is_empty() || input.len()>4 || output.is_empty() || output.len()>4 {return None;}
+        if let FunctionType::Type4(function)=self.0.as_ref() {
+            *remaining=remaining.checked_sub(1)?;
+            function.eval_components(input,output,cancelled,remaining,depth)
+        } else {
+            if input.len()!=1 {return None;}
+            self.eval_components_with_budget(input[0],output,cancelled,remaining,depth)
+        }
     }
 
     pub(crate) fn eval_components_with_budget(
@@ -81,6 +100,7 @@ impl Function {
                 function.eval_components(input, output, cancelled)?;
             }
             FunctionType::Type3(function) => function.eval_components(input, output, cancelled, remaining, depth)?,
+            FunctionType::Type4(function) => function.eval_components(&[input],output,cancelled,remaining,depth)?,
             _ if output.len() == 1 => output[0] = self.eval_scalar_with_budget(input, cancelled, remaining, depth)?,
             _ => return None,
         }
@@ -88,7 +108,7 @@ impl Function {
         Some(())
     }
 
-    /// Conservative retained Arc/metadata capacity for native Type2/Type3
+    /// Conservative retained Arc/metadata capacity for native Type2/Type3/Type4
     /// source capture, bounded to4096 nodes and32 levels; no heap scratch.
     pub fn native_retained_capacity(&self, cancelled: &dyn Fn() -> bool) -> Option<usize> {
         self.native_retained_with_budget(cancelled, &mut 4096, 0)
@@ -100,6 +120,7 @@ impl Function {
         let dynamic=match self.0.as_ref() {
             FunctionType::Type2(f)=>f.native_retained_capacity()?,
             FunctionType::Type3(f)=>f.native_retained_capacity(cancelled,remaining,depth)?,
+            FunctionType::Type4(f)=>f.native_retained_capacity(cancelled,remaining,depth)?,
             _=>return None,
         };
         if cancelled() { return None; }
@@ -145,7 +166,11 @@ struct Clamper {
 
 impl Clamper {
     fn native_retained_capacity(&self) -> Option<usize> {
-        if self.domain.len()!=1 || self.range.as_ref().is_some_and(|r| r.is_empty() || r.len()>4) {return None;}
+        if self.domain.len()!=1 {return None;}
+        self.native_vector_retained_capacity()
+    }
+    fn native_vector_retained_capacity(&self) -> Option<usize> {
+        if self.domain.is_empty() || self.domain.len()>4 || self.range.as_ref().is_some_and(|r| r.is_empty() || r.len()>4) {return None;}
         let domain=if self.domain.spilled() {self.domain.capacity().checked_mul(size_of::<(f32,f32)>())?} else {0};
         let range=if let Some(r)=&self.range {if r.spilled() {r.capacity().checked_mul(size_of::<(f32,f32)>())?} else {0}} else {0};
         domain.checked_add(range)

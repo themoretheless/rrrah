@@ -1,0 +1,48 @@
+{
+  "status": "complete_diagnostic_memory_problem_open",
+  "native_evidence_parity_runs": 12,
+  "isolated_regression_passed": 1,
+  "production_adoption": false,
+  "reason": "Neither lazy diagnostic statistics nor explicit tensor release demonstrated a consistent RSS reduction.",
+  "first_backbone_current_rss_kib": [
+    {
+      "stage": "stem",
+      "rss_kib": 439840
+    },
+    {
+      "stage": "layer1",
+      "rss_kib": 939824
+    },
+    {
+      "stage": "layer2",
+      "rss_kib": 1219728
+    },
+    {
+      "stage": "layer3",
+      "rss_kib": 1248912
+    },
+    {
+      "stage": "fpn2",
+      "rss_kib": 1479776
+    },
+    {
+      "stage": "fpn1",
+      "rss_kib": 2185456
+    }
+  ],
+  "peak_profile_rss_bytes": 2480078848,
+  "next_target": "Measure convolution workspace and allocator retention inside ResNet layer1 and final FPN; qualify any bounded-workspace replacement before adoption.",
+  "limits": [
+    "RSS samples are stage boundaries, not individual operation peaks.",
+    "No hard tensor-memory bound or cancellation inside forward.",
+    "Six retained image variants, not broad corpus precision/recall.",
+    "Lazy-debug producer audit hit Python zip(strict=True) compatibility failure; immutable failed report retained and separately audited."
+  ],
+  "pins": {
+    "docs/research/dedup-loftr-lazy-debug-audit-20261010.json": "0d8a74c16637906fb622525cafcb93bf4b6fe46e7662f97b10e623b6ec7af1f7",
+    "docs/research/dedup-loftr-lazy-debug-measurement-20261010.json": "050ffdfd1f85578eb1119957ce04e4f0a45af4b2cd540061612d02b26baf5946",
+    "docs/research/dedup-loftr-backbone-release-measurement-20261010.json": "a0b5e369227b6d186f6aa2c90a062dda555aa0f451609cfb4f8536ea6fe488ed",
+    "docs/research/dedup-loftr-backbone-profile-20261010.json": "7ed3cdfe92992671a2f7906cc19ea0226062e9546466c9c5764f3abe9fe2c56b",
+    "docs/research/dedup-loftr-lazy-debug-tests-retry-20261010.log": "c0fa084a87b3edf777b68e9d54c8096ebff8fc433b42e4495929d9cc43f89ba6"
+  }
+}

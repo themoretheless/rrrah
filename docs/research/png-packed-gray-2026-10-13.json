@@ -1,0 +1,24 @@
+{
+  "scope": "Authored packed gray PNG; all levels at depths 1,2,4, with/without tRNS and gAMA 50000/45455/100000",
+  "combinations": 18,
+  "checks": [
+    "Exact expanded u8 RGB",
+    "Exact tRNS alpha including zero-alpha retained RGB",
+    "Independent power reference absolute error below 1e-6",
+    "Final managed display credit zero"
+  ],
+  "decoder_suite": {
+    "passed": 1032,
+    "failed": 0,
+    "ignored": 73
+  },
+  "sha256": {
+    "docs/research/png-packed-gray-suite-2026-10-13.log": "e03f769782084bd122edb5c3f4320aafc6e4d1b4e47b4a820f70fbc13afdc777",
+    "docs/research/png-packed-gray-2026-10-13.log": "c366ac86031bf3fe527d14db8aff3e350123f46a381367bfea43a43733bdc6c4",
+    "crates/rrrah-decode/src/raster.rs": "ed23d34975b154cb4f3c5bb6039982849c023bb905674dcc77e30079073252f8"
+  },
+  "limitations": [
+    "No packed low-bit Metal fixture",
+    "No interlaced or external-producer qualification in this regression"
+  ]
+}

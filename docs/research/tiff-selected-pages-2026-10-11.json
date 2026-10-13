@@ -1,0 +1,31 @@
+{
+  "scope": "Selected top-level TIFF/BigTIFF IFD decoding; bounded4096 pages and entries per IFD; no full source copy",
+  "tests": {
+    "new": 3,
+    "decoder_passed": 1012,
+    "decoder_ignored": 72
+  },
+  "validated": [
+    "Little/big endian classic TIFF and BigTIFF",
+    "Selected page orientation and pixel values",
+    "First-second-first selection preserves input bytes",
+    "Missing page, cyclic/truncated chain, excessive index refuse",
+    "Magic-based file routing under misleading extension",
+    "Failed output admission restores source and releases managed bytes"
+  ],
+  "limitations": [
+    "Authored gray8 uncompressed pages only in new selection tests",
+    "Page-specific ICC, associated alpha, compressed16/float and app RAM/swap/Metal selection not yet qualified",
+    "No automatic page playback or page-count API claim"
+  ],
+  "sources": {
+    "crates/rrrah-decode/src/tiff_pages.rs": "ea20f1bd384e2e9d6bbd286806565d991adc3028f2e61f1e5716445f4650613a",
+    "crates/rrrah-decode/src/raster.rs": "4cf2a541a98e1b68a3882505e79e3dd08b3b4980f6e707cc0fd646b41dae2bcb"
+  },
+  "logs": {
+    "docs/research/tiff-selected-pages-2026-10-11/rrrah-tiff-pages-tests-20261011.log": "7a901997d4a67e5fd8ac3e0a28645d841d7d101c6d99d4752a65cac75547f857",
+    "docs/research/tiff-selected-pages-2026-10-11/rrrah-tiff-pages-decoder-all-20261011.log": "2699b0d629baf18ca6faa433ddac20ba9db36287dfc08587850b512a26c45a2e",
+    "docs/research/tiff-selected-pages-2026-10-11/rrrah-tiff-pages-first-20261011.log": "7fd922768f7f2e0271fbe3bf3216eb5e994220f8541424cca1ebff5fc0342c83",
+    "docs/research/tiff-selected-pages-2026-10-11/rrrah-tiff-pages-tests-fixed-20261011.log": "aef112a83c1b23ddc915cc7e54e2a66a363ea66add56de7b3cc0cbe3b9e3be99"
+  }
+}

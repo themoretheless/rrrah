@@ -1,0 +1,43 @@
+{
+  "scope": "test-only point command state trace, not production rendering",
+  "point": [
+    127.5,
+    38.5
+  ],
+  "state_records": 58,
+  "initial_shading_event": 2103,
+  "last_visible_group": {
+    "isolated": false,
+    "knockout": true,
+    "opacity": 1.0,
+    "mode": "Normal"
+  },
+  "last_visible_child": {
+    "opacity": 0.4375,
+    "paint_cmyk": [
+      0.1889999955892563,
+      0.07000000029802322,
+      0.6019999980926514,
+      0.0
+    ]
+  },
+  "final_native": [
+    0.388868966139853,
+    0.15004998771473765,
+    0.7124221175909042,
+    0.005228544760029763
+  ],
+  "tests_passed": 191,
+  "tests_ignored": 12,
+  "final_credit_zero": true,
+  "log": "docs/research/ai-covered-fragment-sampling-2026-10-12/spatial-point-state-real.log",
+  "sha256": "6a5ef7c4ef745267cba5d0178f164d02b1fe6a2d410419b015836911c83f54fd",
+  "finding": "Point source is followed by a non-isolated knockout group of retained fills with progressively increasing opacity; next independently qualify group/opacity behavior rather than assume shading mismatch.",
+  "last_knockout_analytic": [
+    0.388868966139853,
+    0.15004998771473765,
+    0.7124221175909042,
+    0.005228544760029763
+  ],
+  "last_knockout_max_error": 0.0
+}

@@ -1,0 +1,79 @@
+warning: function `fallible_zeroed_bytes` is never used
+   --> crates/rrrah-cache/src/mosaic_payload_v1.rs:728:4
+    |
+728 | fn fallible_zeroed_bytes(len: usize) -> Result<Box<[u8]>, MosaicPayloadError> {
+    |    ^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-cache` (lib) generated 1 warning
+warning: methods `submit` and `submit_image` are never used
+    --> crates/rrrah-app/src/main.rs:1377:8
+     |
+1085 | impl ForegroundLoader {
+     | --------------------- methods in this implementation
+...
+1377 |     fn submit(&self, path: PathBuf) -> Result<u64> {
+     |        ^^^^^^
+...
+1380 |     fn submit_image(&self, path: PathBuf, image_index: usize) -> Result<u64> {
+     |        ^^^^^^^^^^^^
+     |
+     = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: associated items `install_with_cancel`, `refresh`, and `refresh_with_cancel` are never used
+   --> crates/rrrah-app/src/raster_viewport.rs:396:19
+    |
+ 26 | impl ResidentSource {
+    | ------------------- associated items in this implementation
+...
+396 |     pub(crate) fn install_with_cancel<F: FnMut() -> bool>(
+    |                   ^^^^^^^^^^^^^^^^^^^
+...
+483 |     pub(crate) fn refresh(
+    |                   ^^^^^^^
+...
+503 |     pub(crate) fn refresh_with_cancel<F: FnMut() -> bool>(
+    |                   ^^^^^^^^^^^^^^^^^^^
+
+warning: `rrrah` (bin "rrrah") generated 2 warnings
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.24s
+     Running tests/raw_collection_metal.rs (target/debug/deps/raw_collection_metal-5d07d17c3f2a5a20)
+
+running 1 test
+RAW collection adapter: Metal Apple M4 Max
+RAW initial latency: source=/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/1294.cr2; native_decode_ms=612.469; gpu_upload_render_readback_ms=37.580; output=1920x1080
+seed /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/1294.cr2: 6288x4056; 25504128 samples
+RAW initial latency: source=/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/898.nef; native_decode_ms=420.630; gpu_upload_render_readback_ms=26.144; output=1920x1080
+seed /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/898.nef: 6032x4032; 24321024 samples
+RAW initial latency: source=/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/2414.arw; native_decode_ms=84.938; gpu_upload_render_readback_ms=26.275; output=1920x1080
+seed /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/2414.arw: 6048x4024; 24337152 samples
+RAW initial latency: source=/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/1084.orf; native_decode_ms=630.439; gpu_upload_render_readback_ms=19.624; output=1920x1080
+seed /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/1084.orf: 4640x3472; 16110080 samples
+RAW initial latency: source=/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/831.pef; native_decode_ms=397.541; gpu_upload_render_readback_ms=18.177; output=1920x1080
+seed /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/831.pef: 4352x2868; 12481536 samples
+RAW initial latency: source=/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/5025.rw2; native_decode_ms=81.792; gpu_upload_render_readback_ms=20.634; output=1920x1080
+seed /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/5025.rw2: 4760x3472; 16526720 samples
+RAW initial latency: source=/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/2883.raf; native_decode_ms=43.196; gpu_upload_render_readback_ms=25.854; output=1920x1080
+seed /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/2883.raf: 5120x3288; 16834560 samples
+RAW initial latency: source=/Users/themoretheless/Documents/Sources/rrrah/tests/IMG_9043.CR3; native_decode_ms=58.700; gpu_upload_render_readback_ms=33.444; output=1920x1080
+seed /Users/themoretheless/Documents/Sources/rrrah/tests/IMG_9043.CR3: 6188x4120; 25494560 samples
+RAW initial latency: source=/Users/themoretheless/Documents/Sources/rrrah/tests/IMG_9074.CR3; native_decode_ms=59.812; gpu_upload_render_readback_ms=33.012; output=1920x1080
+seed /Users/themoretheless/Documents/Sources/rrrah/tests/IMG_9074.CR3: 6188x4120; 25494560 samples
+RAW collection rounds=1; elapsed=0.565s; reads=9; root=0; queue=0
+RAW collection rounds=2; elapsed=1.127s; reads=18; root=0; queue=0
+RAW collection rounds=3; elapsed=1.693s; reads=27; root=0; queue=0
+RAW collection rounds=4; elapsed=2.290s; reads=36; root=0; queue=0
+RAW collection rounds=5; elapsed=2.878s; reads=45; root=0; queue=0
+RAW collection rounds=6; elapsed=3.454s; reads=54; root=0; queue=0
+RAW collection rounds=7; elapsed=4.029s; reads=63; root=0; queue=0
+RAW collection rounds=8; elapsed=4.624s; reads=72; root=0; queue=0
+RAW collection rounds=9; elapsed=5.201s; reads=81; root=0; queue=0
+RAW collection rounds=10; elapsed=5.812s; reads=90; root=0; queue=0
+RAW collection complete: rounds=10; elapsed=5.812s; reads=90; writes=9; root=0; queue=0
+RAW collection latency: stage=restore; samples=90; total=90; window=last4096; p50_ms=41.496; p95_ms=44.876; max_ms=47.797
+RAW collection latency: stage=gpu_upload_render_readback; samples=90; total=90; window=last4096; p50_ms=26.677; p95_ms=34.836; max_ms=52.256
+test real_raw_collection_eviction_and_swap_preserve_metal_frames ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 8.84s
+

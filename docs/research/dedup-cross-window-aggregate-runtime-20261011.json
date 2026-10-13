@@ -1,0 +1,43 @@
+{
+  "status": "verified_actual_669_point_aggregation_and_pixel_parity",
+  "pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-opposite-native-snapshot-20261011/target/debug/cross_window_aggregate": "adf03eebc9f9af60c8e0f7683921f356f2c730914519ca7f89976c772920847e",
+    "/Users/themoretheless/.codex/tmp/rrrah-cross-window-aggregate-qualified-20261011": "adf03eebc9f9af60c8e0f7683921f356f2c730914519ca7f89976c772920847e",
+    "/Users/themoretheless/.codex/tmp/rrrah-cross-window-aggregate-input-20261011.json": "e19c1c5555d8a3d7f00e6a569e7da0e765b78bde1c45e002d2d814a598313cf8",
+    "/Users/themoretheless/.codex/tmp/rrrah-cross-window-aggregate-harness-20261011/Cargo.toml": "551b30acab0dcd41b2f644b79550c2665ceda6e1a3cd41ac9e7fb4e11d2417a9",
+    "/Users/themoretheless/.codex/tmp/rrrah-cross-window-aggregate-harness-20261011/Cargo.lock": "af32aa998c2ece619c603777e2ad80d99cd0740ce76948e288d7e6676a3276dd",
+    "/Users/themoretheless/.codex/tmp/rrrah-cross-window-aggregate-harness-20261011/src/bin/cross_window_aggregate.rs": "9ba8a8135ecd964a715add7e0fedb5508fe38af99b1c74734f10679623c52ac6",
+    "/Users/themoretheless/.codex/tmp/rrrah-cross-window-aggregate-harness-20261011/src/native_policy.rs": "16ddc4d9e77bbadad4312d0a491cc3e1c759fc47b03550f7c6266688ce364a17",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-joint-witnesses-domainfix-snapshot-20261011.json": "51f3fbd5500712d2dd988934af7e6a327c4c02d15a4d1851489aa08e6267349d",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-cross-window-pixels-200301-audit-20261011.json": "7a5c81705d043cecbd631173e1e69a2ba2ef87dbfb5a549e23ef921e4727dac1",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-cross-window-aggregate-20261011.py": "325ddda50c8db1cb23998dfe6b4720e02b8c8d8b99c186e240300c0592816636"
+  },
+  "command": [
+    "/Users/themoretheless/.codex/tmp/rrrah-cross-window-aggregate-qualified-20261011",
+    "/Users/themoretheless/.codex/tmp/rrrah-cross-window-aggregate-input-20261011.json"
+  ],
+  "returncode": 0,
+  "stdout": "{\"aggregate_peak\":21408,\"aggregate_used\":0,\"managed_peak\":66778688,\"managed_used\":0,\"points\":10,\"results\":[{\"evidence\":\"Ok(AnchorRankEvidence { forward_anchors: 10, reverse_anchors: 10, forward: RankRegionEvidence { sites: 250, valid_sites: 250, informative_pairs: 1233, agreeing_pairs: 1221, pixel_reads: 101250 }, reverse: RankRegionEvidence { sites: 250, valid_sites: 250, informative_pairs: 1651, agreeing_pairs: 1581, pixel_reads: 101250 }, supported: true })\",\"supported\":true,\"window_radius\":2},{\"evidence\":\"Err(Rank(InsufficientGeometry))\",\"supported\":false,\"window_radius\":6}],\"scope\":\"Explicit cross-window geometrically selected witnesses, exact input H. Original pixel floors unchanged; diagnostic not production proposal union or precision qualification.\"}\n",
+  "stderr": "",
+  "result": {
+    "aggregate_peak": 21408,
+    "aggregate_used": 0,
+    "managed_peak": 66778688,
+    "managed_used": 0,
+    "points": 10,
+    "results": [
+      {
+        "evidence": "Ok(AnchorRankEvidence { forward_anchors: 10, reverse_anchors: 10, forward: RankRegionEvidence { sites: 250, valid_sites: 250, informative_pairs: 1233, agreeing_pairs: 1221, pixel_reads: 101250 }, reverse: RankRegionEvidence { sites: 250, valid_sites: 250, informative_pairs: 1651, agreeing_pairs: 1581, pixel_reads: 101250 }, supported: true })",
+        "supported": true,
+        "window_radius": 2
+      },
+      {
+        "evidence": "Err(Rank(InsufficientGeometry))",
+        "supported": false,
+        "window_radius": 6
+      }
+    ],
+    "scope": "Explicit cross-window geometrically selected witnesses, exact input H. Original pixel floors unchanged; diagnostic not production proposal union or precision qualification."
+  },
+  "scope": "Public managed aggregation consumes all669 points and reproduces prior positive original-pixel control exactly. H supplied from diagnostic; automatic candidate generation/tile integration still open."
+}

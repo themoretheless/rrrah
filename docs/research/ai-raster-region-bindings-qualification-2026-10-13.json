@@ -1,0 +1,53 @@
+{
+  "scope": "Experimental native AI deduplicated raster region bindings and diagnostic geometry prediction",
+  "tests": {
+    "passed": 231,
+    "failed": 0,
+    "ignored": 12
+  },
+  "changes": [
+    "Per-source admitted color/alpha region-to-texel bindings built against canonical NonZero geometry; source boundaries retained across deduplication",
+    "Bindings transported with native sampled command; equal screen paths in different sources retain distinct texel identities",
+    "Explicit geometry-key observer scans active bindings and compares with existing native sampler; prediction cannot replace actual sampling",
+    "Ambiguous overlapping cells, conflicting same-source canonical mappings, missing keys, work exhaustion and cancellation refuse prediction"
+  ],
+  "preparation_work_limit": 4000000,
+  "comparison_checks_per_pixel": [
+    1852034,
+    662938,
+    41506,
+    558924,
+    10146
+  ],
+  "total_comparison_checks": 3125548,
+  "mismatches": 0,
+  "original_pixels_exactly_equal": [
+    "147,59",
+    "145,50",
+    "199,25",
+    "138,39",
+    "149,56"
+  ],
+  "moment_centroid_results_unchanged": true,
+  "peak_admitted_bytes": 239197736,
+  "diagnostic_observer_work": [
+    92527880,
+    35007609
+  ],
+  "regressions": [
+    "Shifted sources sharing canonical cell geometry keep distinct source texel coordinates",
+    "Ambiguous active cells never select arbitrary texel",
+    "Every cancellation poll, exhausted preparation work and denied admission release binding storage",
+    "Conflicting same-source canonical cell mapping refused; final retained credit0"
+  ],
+  "limitations": [
+    "Prediction still scans bindings, not transition-driven updates",
+    "Additional diagnostic work; no speedup or production sampling skipped",
+    "Working4M fullpage, integration rounding, independent color and viewer qualification remain unresolved"
+  ],
+  "next": "Build region-to-source transition index and maintain active color/alpha cells from selector updates",
+  "logs": [
+    "ai-raster-region-bindings-final-suite-2026-10-13.log",
+    "ai-raster-region-bindings-original-2026-10-13.log"
+  ]
+}

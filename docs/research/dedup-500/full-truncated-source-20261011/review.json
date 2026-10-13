@@ -1,0 +1,94 @@
+{
+  "status": "complete_eight_truncation_followups",
+  "records": [
+    {
+      "repository": "Eul45/omni-search",
+      "commit": "8dbf77bf74bb465ea168786063d9e34e345496fc",
+      "archive": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/full-truncated-source-20261011/Eul45--omni-search--06-App.tsx",
+      "classification": "text-or-generated-asset",
+      "finding": "Full App.tsx invokes find_duplicate_groups, duplicate_scan_status and cancel_duplicate_scan (lines 4584,4889,4910,4925). This is UI/transport evidence; content proof belongs to the native backend, not this file.",
+      "upstream_tests_run": false
+    },
+    {
+      "repository": "PierreCrette/VideoDedup",
+      "commit": "b7a6c897939dd22a9940134c74afec1a027ff4fc",
+      "archive": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/full-truncated-source-20261011/PierreCrette--VideoDedup--05-CompareV2",
+      "classification": "compiled-binary",
+      "finding": "CompareV2 is an ELF executable, not source. The additional pinned CompareV2.lpr source implements distanceham as PopCnt of four XOR key words (754-756), with acceptance r < threshold (995-996). Descriptor-key similarity is candidate evidence, not full video or byte equality.",
+      "upstream_tests_run": false
+    },
+    {
+      "repository": "andrewwoan/sooahs-room-folio",
+      "commit": "2a17ff26c980f6e33edfaea9300381198365a49a",
+      "archive": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/full-truncated-source-20261011/andrewwoan--sooahs-room-folio--05-draco_decoder.js",
+      "classification": "text-or-generated-asset",
+      "finding": "Full draco_decoder.js defines DracoDecoderModule with generated WebAssembly loader glue; it is a 3D mesh decoder asset, not duplicate-search logic. Retain domain rejection.",
+      "upstream_tests_run": false
+    },
+    {
+      "repository": "anvilsecure/hominoid",
+      "commit": "8ca23842e6166dbd7a1604c0b583d650610d502a",
+      "archive": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/full-truncated-source-20261011/anvilsecure--hominoid--05-Gmail.html",
+      "classification": "text-or-generated-asset",
+      "finding": "Full Gmail.html is a captured Gmail page containing bundled Closure and other UI code. It is an anti-phishing screenshot fixture, not an independently qualified general-image matcher.",
+      "upstream_tests_run": false
+    },
+    {
+      "repository": "conanhujinming/text_dedup",
+      "commit": "718b3b3aa5e750d8872fbd17e7d17a7815b849c0",
+      "archive": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/full-truncated-source-20261011/conanhujinming--text_dedup--04-xxhash.h",
+      "classification": "text-or-generated-asset",
+      "finding": "Full xxhash.h is the vendored Yann Collet xxHash header. Fast hashing is a reference only; a hash match cannot replace byte comparison or establish visual support.",
+      "upstream_tests_run": false
+    },
+    {
+      "repository": "idealo/imagededup",
+      "commit": "f0534a6ec10c02379c627696fbd486841068631c",
+      "archive": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/full-truncated-source-20261011/idealo--imagededup--06-CIFAR10_duplicates.ipynb",
+      "classification": "text-or-generated-asset",
+      "finding": "Complete notebook code installs dependencies, downloads CIFAR10, builds CNN encodings and calls find_duplicates, then filters train/test names for plotting. Outputs include embedded image payloads. This demonstrates similarity retrieval; it does not prove original-pixel equivalence.",
+      "upstream_tests_run": false
+    },
+    {
+      "repository": "mattilyra/LSH",
+      "commit": "a57069bfb70f4b620d47931f81966b5a73c1b480",
+      "archive": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/full-truncated-source-20261011/mattilyra--LSH--04-cMinhash.cpp",
+      "classification": "text-or-generated-asset",
+      "finding": "Generated Cython cMinhash.cpp corresponds to archived complete lsh/cMinhash.pyx. The source shingles strings using seeded MurmurHash, with a 64-bit minimum initialized to 2^63-1 and signed int32 intermediates in the 32-bit variant. These type/range choices need independent qualification before adoption; text shingle retrieval does not prove visual duplicate identity.",
+      "upstream_tests_run": false
+    },
+    {
+      "repository": "rsms/cgui",
+      "commit": "04a95ebd2ba99e90cb233df1e2d60b2977a82a83",
+      "archive": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/full-truncated-source-20261011/rsms--cgui--05-font_inter_medium.h",
+      "classification": "text-or-generated-asset",
+      "finding": "Full font_inter_medium.h is embedded font data. It supplies no duplicate detection algorithm; retain domain rejection.",
+      "upstream_tests_run": false
+    }
+  ],
+  "additional_video_source": {
+    "path": "docs/research/dedup-500/full-truncated-source-20261011-CompareV2.lpr",
+    "git_blob": "91e791b807eb5f30fc848f4a4eba31c7db5fcfad",
+    "sha256": "1943ba60bec99abae1b60fbd4941a5922d9d980824ad37fb71e4536b535a1faa"
+  },
+  "pins": {
+    "docs/research/dedup-500/full-truncated-source-20261011/manifest.json": "7698e4559d4b7c40cb66d7e2fb2e2cd2ef43c55140428be6adcdd780e55a1ad4",
+    "docs/research/dedup-500/full-truncated-source-20261011-CompareV2.lpr": "1943ba60bec99abae1b60fbd4941a5922d9d980824ad37fb71e4536b535a1faa",
+    "docs/research/dedup-500/evidence/PierreCrette--VideoDedup/tree.json": "a1030392a223cd6e4cd03e52e46a7dda2bc86a7cd2f4f043807f71f3ed6729a4",
+    "docs/research/dedup-500/evidence/mattilyra--LSH/06-cMinhash.pyx": "948f34abeaf16e874ef984dc2c3b6363994dc66a197c2bc57e260fd44447ebc0",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/full-truncated-source-20261011/Eul45--omni-search--06-App.tsx": "8a9d27b56a95e9b41c4eb8931f0c6a4021c44fad55fb51ffcfa3cc2b94d956ca",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/full-truncated-source-20261011/PierreCrette--VideoDedup--05-CompareV2": "b0f8baa9533cfc2b1413a9efb18941cc702a77f938fd48520f74e5d844cc4c79",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/full-truncated-source-20261011/andrewwoan--sooahs-room-folio--05-draco_decoder.js": "30e4d486fa020737af10e3c56197693e5b904bdc05b8bfa5d7b06751dec6da04",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/full-truncated-source-20261011/anvilsecure--hominoid--05-Gmail.html": "4364734bc7af17acaaaa6efaa9519c00124a801ce8dacd5c98b58d6c20eba901",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/full-truncated-source-20261011/conanhujinming--text_dedup--04-xxhash.h": "5e98051924106e21c3d371ad1b483aa2049e4517f5145d289dcdf041be985bf4",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/full-truncated-source-20261011/idealo--imagededup--06-CIFAR10_duplicates.ipynb": "9894b1d5a940fadb222a31a39133cb5f7b52e635a167c7040fef308d2ec9e6b0",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/full-truncated-source-20261011/mattilyra--LSH--04-cMinhash.cpp": "c5f212556278501a566e378fa4a50260ff9ea65b03d06e418d21a31a4fe39ad6",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/full-truncated-source-20261011/rsms--cgui--05-font_inter_medium.h": "e3c9da9133e347012baf63ce3fc89e9c9d6e4fb35c1b6dfaa436430705542c50"
+  },
+  "limits": [
+    "Full files acquired and relevant code/asset provenance inspected; not a full repository audit",
+    "One historical source selection was a compiled ELF; original manifests are preserved with this explicit correction",
+    "No upstream tests, runtime algorithm qualification or code adoption from these files",
+    "Original four source-absent repositories and broader 500-repository parity remain separate"
+  ]
+}

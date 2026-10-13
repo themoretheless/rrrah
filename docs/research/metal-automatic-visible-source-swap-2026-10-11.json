@@ -1,0 +1,42 @@
+{
+  "scope": "Automatic visible source segmented swap with shared existing quota",
+  "result": "implementation and component controls passed; native follow-ups found",
+  "adapter": "Metal Apple M4 Max",
+  "validation": {
+    "ordinary_app_passed": 208,
+    "manual_ignored": 45,
+    "explicit_viewport_metal_passed": 6
+  },
+  "changes": [
+    "ordinary raster load passes shared existing ImageSwapCache store",
+    "separate coalescing storage worker writes without blocking UI",
+    "successful identity-matched completion adopts swapped source and cancels obsolete LOD work",
+    "disabled swap creates no backing; failed persistence retains RAM source",
+    "stale published persistence drops disk index and complete input before consumption"
+  ],
+  "native": [
+    "HDR Rgba16Float ExtendedSrgbLinear surface",
+    "1000x1000 float source opened with1MiB texture limit and64MiB enabled swap",
+    "automatic adoption logged",
+    "zoom and pan each cause20x18 background region reads",
+    "fit after input visibly shows all four bands",
+    "test app exited"
+  ],
+  "native_open_issues": [
+    "first screenshot was blank; F presented image; investigate startup invalidation",
+    "one temporary swap file remained after app exit; investigate loader/cache worker shutdown"
+  ],
+  "remaining_files": [
+    {
+      "path": "/tmp/rrrah-auto-region-native-cache/rrrah-swap-tJE5Kt/.tmpw3Djwv",
+      "bytes": 16000064
+    }
+  ],
+  "binary_sha256": "61f7f72382631a633362ff02c82b00bc7283b8ae400a05fdf91ab3be9a3e8962",
+  "remaining": [
+    "native startup redraw and exit cleanup",
+    "broader pressure and navigation qualification",
+    "512MiB native payload cap and initial complete decode remain",
+    "physical HDR NVIDIA full100-format acceptance"
+  ]
+}

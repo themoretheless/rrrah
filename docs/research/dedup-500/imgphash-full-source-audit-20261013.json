@@ -1,0 +1,125 @@
+{
+  "status": "verified_full8_blob_source_read_and12_selected_controls",
+  "repository": "A5M1/imgphash",
+  "commit": "89061afa98da7ec11b885afe786aed6e56f62f3c",
+  "source": "/Users/themoretheless/.codex/tmp/rrrah-imgphash-full-source-20261013",
+  "files": [
+    {
+      "path": ".github/workflows/rust.yml",
+      "git_blob": "9fd45e090561a4fbafa690faa37c94f3a7a10313",
+      "sha256": "4e856a40ba938aaf5a9bc31baa1557d30721117133cb0fb6aab314b99bcf78fb",
+      "bytes": 316,
+      "lines": 22,
+      "fully_read": true
+    },
+    {
+      "path": ".gitignore",
+      "git_blob": "b1646c2f7ef42de0e69171f704f531fddfe90ce7",
+      "sha256": "8b787e742ac16a08841bcc9bf48183af4ae9891c69cb6ba97fe94fd3b58b200c",
+      "bytes": 14,
+      "lines": 2,
+      "fully_read": true
+    },
+    {
+      "path": "Cargo.toml",
+      "git_blob": "9a7d939991c792c16c6bd36d8d948ea7fbaba179",
+      "sha256": "3c64281608c3b44a33b857e89d6c51afebc20c8976e9075f39c3a128c8ef0ad6",
+      "bytes": 194,
+      "lines": 12,
+      "fully_read": true
+    },
+    {
+      "path": "LICENSE",
+      "git_blob": "2450dbf9aa3bd7119c7d444bf3a082fc550ed667",
+      "sha256": "a95e530c7e7373df974796a239cc240651d7e1cfe8b99ff70cfd33dd773234cd",
+      "bytes": 1061,
+      "lines": 21,
+      "fully_read": true
+    },
+    {
+      "path": "README.md",
+      "git_blob": "e0a0c3e62338d6243008651e0c314b3348ddfaa5",
+      "sha256": "5f67ee00c7dd3e0685c69e347d47505b5295b2229c6886936ce1484b22cb90ec",
+      "bytes": 2766,
+      "lines": 71,
+      "fully_read": true
+    },
+    {
+      "path": "example/capi_phash2.h",
+      "git_blob": "ca7dff4355a60dea0fe5f47d9d6fccd5422b4476",
+      "sha256": "63fe373efc3035e2441dcfd326e5d5b5db19e92a819dcdae1d899eaa57a7196d",
+      "bytes": 4914,
+      "lines": 116,
+      "fully_read": true
+    },
+    {
+      "path": "example/main.c",
+      "git_blob": "abc26193d13a9f73e259aa1793520a0597adba1b",
+      "sha256": "538ce597ca90c9ad00f25669453b9069d7e96195297feda67af83079a21e2ec7",
+      "bytes": 2440,
+      "lines": 74,
+      "fully_read": true
+    },
+    {
+      "path": "src/lib.rs",
+      "git_blob": "b7cdf6fd5e34197a56ac3b9b3dc906c9681526fc",
+      "sha256": "e6a807851a9b2c6aeef5a0db542d66ce4a0e2d0ea13c55d17a66ee881edfd0a2",
+      "bytes": 36996,
+      "lines": 1201,
+      "fully_read": true
+    }
+  ],
+  "whole_repo_complete": true,
+  "whole_implementation_read": true,
+  "license": "MIT; full LICENSE read, no code adopted",
+  "upstream_tests_run": true,
+  "upstream_actual_tests": 0,
+  "selected_controls_passed": 12,
+  "controls": [
+    "empty_multihash_is_not_reflexive",
+    "flat_parser_skips_invalid_text",
+    "generated_hash_distance_and_shape_positive_control",
+    "haar_remove_ll_discards_all_coefficients",
+    "invalid_empty_segment_distance_is_nan",
+    "invalid_hex_collides_with_empty",
+    "multihash_equality_can_be_asymmetric",
+    "multihash_equality_is_nontransitive",
+    "phash_zero_frequency_factor_panics",
+    "segments_reuse_one_counterpart",
+    "unequal_hash_lengths_ignore_trailing_difference",
+    "unicode_hex_panics"
+  ],
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/A5M1--imgphash/tree.json": "7399352e9bdc94cf973718311dfafa24a1b4ffe26330f13af1eda69af575d012",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/A5M1--imgphash/commit-20261013.json": "a33149f4a5c6f716f448cc2798ca4116cb987cac1b0cb128dc95cb7c95b9a1c3",
+    "/Users/themoretheless/.codex/tmp/rrrah-imgphash-full-source-20261013/Cargo.lock": "7320292cde185bda5a089ca37241a551e4cb9e97c392eeec19ca3160266c49b9",
+    "/Users/themoretheless/.codex/tmp/rrrah-imgphash-controls-20261013/Cargo.toml": "cc248fb4246c97f14386e8eee7a0daf2a06f50231374b9c5f9cf23863de0e10e",
+    "/Users/themoretheless/.codex/tmp/rrrah-imgphash-controls-20261013/Cargo.lock": "c55efa6cf3bee0fbbb9c4b4c8a763942a56eca27b347ef852793d2e58418ce89",
+    "/Users/themoretheless/.codex/tmp/rrrah-imgphash-controls-20261013/src/lib.rs": "bb4384d823cdd873ed66cd3c550a2f07917e4cedb39df7746cdadc19db0b9306",
+    "/Users/themoretheless/.codex/tmp/rrrah-imgphash-upstream-online-20261013.log": "ee25415d34d2a419456e77a5a5c9fd12026bfbb8b23a8b098518d89118add8b8",
+    "/Users/themoretheless/.codex/tmp/rrrah-imgphash-controls-20261013.log": "d6cb180ef1a684c4bf1f40575ff26ee39588dc1ad83d42a413f90b2a481b092f",
+    "/Users/themoretheless/.codex/tmp/rrrah-imgphash-qualified-20261013/controls": "d7f49b0a379a8c35806a7cf7770979e68947224d0f85c0f5218cd5fd4e44a944",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-imgphash-source-20261013.py": "c616ddc3d675a209b27e6911e55ed8afcd49fe2fabf591506e2a7aae1c90a064"
+  },
+  "findings": {
+    "runtime": [
+      "invalid hex equals empty at distance0",
+      "unequal lengths ignore nonmatching trailing byte",
+      "Unicode parser panic",
+      "flat parser skips invalid chars",
+      "empty MultiHash violates reflexivity",
+      "MultiHash equality violates transitivity and symmetry",
+      "empty invalid segment produces NaN score",
+      "multiple segments reuse one counterpart (directional behavior)",
+      "remove_max_haar_ll zeros all details and LL; distinct images both zero, retained-details control differs",
+      "zero highfreq factor panics",
+      "valid average_hash64-bit positive control differs for inverse gradient"
+    ],
+    "static_only": [
+      "C wrappers lack buffer length and accept raw pointers through safe public Rust functions; no hostile pointer calls executed",
+      "header average_hash mentions RGBA/RGB but implementation reads RGB24 only; README correctly specifies RGB24",
+      "no admission/cancellation contract in algorithms; unbounded dimensions/bit widths not exhaustively executed"
+    ]
+  },
+  "scope": "All8 repository blobs text read, Git-object/commit-tree checked. Upstream cargo test executed0 tests. External12-control harness links unchanged upstream library; no C FFI execution, broad corpus quality/performance/unsafe-memory proof, or all500 completion."
+}

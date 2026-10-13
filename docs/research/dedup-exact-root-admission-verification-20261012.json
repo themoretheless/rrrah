@@ -1,0 +1,28 @@
+{
+  "status": "verified_54_default_tests_with_bounded_initial_root_admission",
+  "passed": 54,
+  "suites": [
+    {
+      "suite": "lib",
+      "passed": 32,
+      "ignored": [
+        "gradient::batch_tests::alternating_matcher_timing",
+        "gradient::matching_tests::alternating_matcher_timing"
+      ]
+    },
+    {
+      "suite": "exact_files",
+      "passed": 22,
+      "ignored": []
+    }
+  ],
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exact-root-admission-source-retry2-20261012.json": "cbad385750fe3d63894e1abcfd7d9a6e8641d5a6c9eb9aaf31fecc718b02e599",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-root-admission-tests-retry2-20261012.log": "acb69b2ccca3fd70baa77a93f7fe6303b6b0e0144373a45ee2807c6350098f17",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-exact-root-admission-20261012.py": "14485130d29db1907960360be95bf3babfba92e5740af06cc9519261da6ef77f",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-root-admission-qualified-retry2-20261012/Cargo.lock": "7f467ffd82d61fa1f16ab3a0e51c2797f171d26d264c5c36aa3504c8659cc062",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-root-admission-executables-20261012/lib": "4f42a3f2dc325bc37fcebf250dd2aa7c83e7402b241bd6fb00f16a3485b46957",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-root-admission-executables-20261012/exact_files": "3ac39b0f49ce30687376d975088b92bb3bb129b89fa67f0fa6d902378ce5e20f"
+  },
+  "scope": "Current-identical adopted production source and tests; macOS ARM64 default32units+22exactintegration passes. Bounded borrowed unique-root preparation; excess roots refuse before filesystem IO,64one-shot cancellation checkpoints during preparation,duplicate1000roots fit limit1,and restored retry succeeds. Existing sample/FIFO mutation fixtures preserve original phases after new root callbacks; no assertions removed. Same-length restored-mtime snapshot and Unix during-scan guards retained. No total-byte/process cap, Windows/currentLinux/allfeature/fullworkspace/format/500 claim. Firstcandidate FIFO phase fixture failed and is preserved separately."
+}

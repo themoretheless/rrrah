@@ -1,0 +1,31 @@
+{
+  "scope": "Application idle receive maintenance helper with real RAW and profiled raster native/prepared cache paths",
+  "ttl_ms": 100,
+  "checks": [
+    "Immediate maintenance keeps unexpired entry and managed pixels",
+    "Repeated idle timer callbacks spill once after expiration without navigation input",
+    "Restoration avoids decode and color preparation",
+    "RAW exact every sensor sample and metadata",
+    "Native/prepared raster serialized payload exact",
+    "Full-root RAW pressure refuses restoration then retry succeeds",
+    "Final managed root zero"
+  ],
+  "focused_passed": 2,
+  "app_suite": {
+    "passed": 221,
+    "failed": 0,
+    "ignored": 62
+  },
+  "limitations": [
+    "Helper/cache integration, not live-window idle end-to-end",
+    "Real RAW ignored case was explicitly enabled in focused run",
+    "Default suite still skips hardware/manual tests"
+  ],
+  "sha256": {
+    "crates/rrrah-app/src/main.rs": "b59cf0cf8b59201e4309c2b56bda35dde4cae76c00ea851d6c7e7ba0b87c6559",
+    "docs/research/app-idle-nonzero-ttl-verified-2026-10-13.log": "0b280680bf4347e6df220d94d629c0eea04737737b532cff591b6c2399c9390e",
+    "docs/research/app-idle-nonzero-ttl-suite-2026-10-13.log": "5f609ed18f8448bf89478435d054e161596bfebb3976fa358c18ffba39841f21",
+    "tests/IMG_9043.CR3": "d06cbb10e84882cf130430bdc88ed2652c2622b96dea8d6a854c09e3bee37e59",
+    "tests/fixtures/raster/pattern.profiled.png": "3c551ef8c29f2ede5b2ed5abcf237cee9e98832885865bc59c810e6455dc377b"
+  }
+}

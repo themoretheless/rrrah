@@ -1,0 +1,25 @@
+{
+  "status": "execution_failed",
+  "command": [
+    "/usr/bin/time",
+    "-l",
+    "/usr/bin/env",
+    "DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/dependency-observation-collection-qualified-20261011/exact_collection_files",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+    "model-first",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/202300.jpg",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200001.jpg"
+  ],
+  "pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/dependency-observation-collection-qualified-20261011/exact_collection_files": "feb2bdef41703c489fbd87104b08f65cdd88d002a2808ad841fa14527cf60e22",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/202300.jpg": "1988d4888a2ba3dd9ab248d902cacacbca30436806f00cc8be87862bbdf60587",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200001.jpg": "509c1d92c5c644db1706d1c5d2028cc89e5b44db680745ad06d2e064333ed82e",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors": "59e55bf0ecd047db9c513672d121a3ea677529ad448bdc3a359e92862c74ddd7"
+  },
+  "returncode": 1,
+  "elapsed_seconds": 5.520225958,
+  "stdout": "",
+  "stderr": "Error: Pair { left: 0, right: 1, error: Model(Comparison(Left(Decode(Decode(Normalize(Pixels(Budget))))))) }\n        5.51 real         5.44 user         0.06 sys\n           137330688  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n                9154  page reclaims\n                   9  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                  20  voluntary context switches\n                 543  involuntary context switches\n         23898788561  instructions retired\n         14432994470  cycles elapsed\n            87212656  peak memory footprint\n",
+  "scope": "Current exact projected portfolio, max model side320 and pixel-proof thresholds; earlier failing legacy rank portfolio used side640, so this is not policy-equivalent replay"
+}

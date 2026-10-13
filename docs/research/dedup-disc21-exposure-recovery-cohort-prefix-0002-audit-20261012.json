@@ -1,0 +1,46 @@
+{
+  "status": "verified_actual_composed_recovery_completed_prefix_only",
+  "completed": 2,
+  "required": 24,
+  "totals": {
+    "copy": {
+      "supported": 2,
+      "inconclusive": 0,
+      "execution_failed": 0
+    },
+    "no_reference_match": {
+      "supported": 0,
+      "inconclusive": 0,
+      "execution_failed": 0
+    }
+  },
+  "rows": [
+    {
+      "query": "Q00061",
+      "reference": "R020965",
+      "published_label": "copy",
+      "index": 0,
+      "status": "supported",
+      "primary_supported": true,
+      "recovery_attempted": false,
+      "recovery_supported": null
+    },
+    {
+      "query": "Q00324",
+      "reference": "R044970",
+      "published_label": "copy",
+      "index": 1,
+      "status": "supported",
+      "primary_supported": true,
+      "recovery_attempted": false,
+      "recovery_supported": null
+    }
+  ],
+  "pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-disc21-exposure-recovery-prefix-0002-20261012.json": "881b945d7eec862d84c078afa36b33bc9c3348096a093ad05662b24ded09fd91",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-disc21-exposure-recovery-cohort-prefix-20261012.py": "c98892ecb01d9996bb9c761b288dd1f448c6b14007d5b6fc9ae66a44124f2fe1",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-disc21-exposure-recovery-api-audit-20261012.json": "4fc4ec37d7c2c56fe436727ada31a1cde590711ddc70d55fa0aba50d202eac8e"
+  },
+  "source_pins_verified": 3296,
+  "scope": "Direct public composed CPU API results, primary25/min10 then recovery9/min20 only on primary miss. Completed prefix only. Previously observed development cohort; no held-out hard-negative precision, localization/full-format/platform/RSS/all500 qualification or default adoption."
+}

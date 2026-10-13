@@ -1,0 +1,19 @@
+{
+  "status": "observed_unrelated_post_gate_source_drift",
+  "gate": "docs/research/dedup-joint-projective-current-audit-20261011.json",
+  "gate_sha256": "988f7f7354a16229be84bcd4231194cfc53c91dc066ad1f0ffe0d6867a7acbab",
+  "drift": {
+    "/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-core/src/raster.rs": {
+      "qualified": "6ec2e98c3f7b3f698222cd044b51d010b40da1f5a716ff97f0285309186af3e5",
+      "current": "da8c7a2c38460e4d4cfa28027cf498e4e8ae4e5860b179a1fe62a9838b31bfae"
+    },
+    "/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode/src/hdr_color.rs": {
+      "qualified": "db21f895e92b11de6ebe06313b5f47f519afc8e98a7c80743b926af97a90502b",
+      "current": "306dfbdd99a1851892694bec3d1e740e3f1875ce01373379b470803824927f3e"
+    }
+  },
+  "owned_geometry_and_fixture_pins_still_match": true,
+  "core_not_compiled_in_no_feature_geometry_gate": true,
+  "archive_and_test_binary_logs_verified": true,
+  "scope": "24-test gate remains proof of its captured source. Current whole-root equality is no longer claimed. Unrelated raster work preserved; separate decode-enabled52-test gate captures current root anew."
+}

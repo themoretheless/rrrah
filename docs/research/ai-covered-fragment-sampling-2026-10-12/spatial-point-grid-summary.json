@@ -1,0 +1,34 @@
+{
+  "scope": "test-only four fully composited point samples, converted individually, not production supersampling or color certificate",
+  "pixel": [
+    127,
+    38
+  ],
+  "grid": 2,
+  "completed_points": 4,
+  "mean_rgb": [
+    165.90838082134724,
+    183.99480611085892,
+    111.10072787851095
+  ],
+  "native_area_then_rgb": [
+    166.09565377235413,
+    184.0734162926674,
+    111.30137041211128
+  ],
+  "max_change_from_native_area": 0.20064253360033035,
+  "oracle128": [
+    185.04766845703125,
+    203.4061279296875,
+    123.74212646484375
+  ],
+  "max_error_vs_oracle128": 19.411321818828583,
+  "final_credit_zero": true,
+  "tests": {
+    "passed": 191,
+    "ignored": 12
+  },
+  "log": "docs/research/ai-covered-fragment-sampling-2026-10-12/spatial-point-grid-real.log",
+  "log_sha256": "54ebaba03d1d7dc2792d0c97b64b9313b87fc72d02e757a283826e7a15f30d95",
+  "next": "isolate original shading ownership and group compositing at point; conversion averaging is not sufficient explanation"
+}

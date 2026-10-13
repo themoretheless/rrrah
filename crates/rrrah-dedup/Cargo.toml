@@ -9,8 +9,11 @@ license.workspace = true
 default = []
 raster = ["dep:rrrah-core"]
 decode = ["raster", "dep:rrrah-decode"]
+loftr = ["decode", "dep:loftr", "dep:tch"]
 
 [dependencies]
+loftr = { path = "../../vendor/loftr", optional = true }
+tch = { version = "=0.23.0", optional = true }
 rrrah-decode = { path = "../rrrah-decode", optional = true }
 rrrah-core = { path = "../rrrah-core", optional = true }
 blake3.workspace = true
@@ -23,11 +26,22 @@ winapi-util = "0.1.11"
 [target.'cfg(unix)'.dependencies]
 libc = "0.2"
 
+[target.'cfg(any(target_os = "linux", target_os = "macos"))'.dependencies]
+rustix = { version = "=1.1.4", features = ["process"] }
+
+[target.'cfg(target_os = "macos")'.dependencies]
+libproc = "=0.14.11"
+errno = "=0.3.14"
+
 [build-dependencies]
 blake3.workspace = true
 
 [lints]
 workspace = true
+
+[[example]]
+name = "model_input_file_probe"
+required-features = ["decode"]
 
 [[example]]
 name = "raw_probe"
@@ -200,3 +214,25 @@ required-features = ["raster"]
 [[example]]
 name = "piecewise_local_rank_pixels_probe"
 required-features = ["raster"]
+
+[[example]]
+name = "gradient_corpus_index_probe"
+required-features = ["decode"]
+
+[[example]]
+name = "gradient_corpus_pyramid_index_probe"
+required-features = ["decode"]
+
+[[example]]
+name = "complete_pair_schedule_probe"
+required-features = ["raster"]
+
+[[test]]
+name = "opposite_native"
+path = "tests/opposite_native.rs"
+required-features = ["decode"]
+
+[[bin]]
+name = "rrrah-loftr-worker"
+path = "src/bin/rrrah-loftr-worker.rs"
+required-features = ["loftr"]

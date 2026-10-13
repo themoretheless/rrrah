@@ -1,0 +1,20 @@
+{
+  "status": "verified_two_complete_grouping_pipeline_stale_cache_controls",
+  "fully_read_additional": [
+    "fclones/src/group.rs"
+  ],
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/fclones-group-cache-controls-source-20261012.json": "14a085225fa1a4e75a91815a6fcf9ba1e2f2d9ec6b830950672babc6858f2cfa",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/fclones-hasher-source-20261012.json": "54d14fd6f77c95467e02139da2daabbbe9e237abf2d03400abfd39593e32d176",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/fclones-group-cache-controls-20261012.rs": "83b123aefc3f251562674c0ce7cee499d95f8427301469fc82bcdd05d98b1a94",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-group-cache-controls-tests-retry2-20261012.log": "25fe8f591bba2fa11ba9bbebde54a04bbb6728a9fbe02ee931618493fdba30f9",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-group-cache-executable-20261012": "8cee9e4ea0e65754e82748e7b366b903e600108cab34b2b1ff1e9abd3d12ebb1",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/fclones-controls-LICENSE-20261012": "fa876876689ee8c7ad01e3d332f53502bece80de772d4239dced8f3398014000",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-fclones-group-cache-20261012.py": "b15823fe672ac614a537b56e09b9ca34152bd94870ced512876d023908633bb2"
+  },
+  "findings": [
+    "After equal-byte two-file cache warm, in-place same-inode/size rewrite and exact restoredmtime produces a two-file group despite unequalbytes; uncached original public group_files returns no duplicate group.",
+    "Distinct verified submillisecondmtime inside same cached millisecond also produces the stale two-file group; uncached original public group_files separates them."
+  ],
+  "scope": "Original42-file production retained byte-for-byte; appended independent tests plus copied original whole group_files adapter changes only name/cachepathargument and supplies temporary cache after ordinary context creation. Complete ordinary grouping sequence executes; no defaultcache CLI path, concurrentmutation/race/allplatform/wholeRSS claim. Ninefiles fully read so far including2101linegroup module, not complete42file/500review. First preparation used wrong cwd and failed before source creation; successful explicit preparation/manifest retry retained. No production adoption."
+}

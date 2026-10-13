@@ -1,0 +1,149 @@
+{
+  "date": "2026-10-11",
+  "scope": "Explicit execution of every ignored hardware/corpus test from the current integrated ordinary GPU run; local Metal qualification remains bounded",
+  "gpu_backend": "Metal Apple M4 Max",
+  "base_report": "docs/research/metal-integrated-cache-prefetch-hdr-2026-10-11.json",
+  "base_report_sha256": "968272030f058cbebd3c86ce17524cd6dba6cb8dd901c7f09e6e100f51df9545",
+  "base_passing_test_executions": 114,
+  "additional_passing_test_executions": 7,
+  "combined_passing_test_executions": 121,
+  "failed": 0,
+  "ordinary_gpu_ignored_tests": [
+    "full_sensor_linear_exposure_chunked_readback",
+    "full_sensor_managed_exposure_budgets_and_checks_every_pixel",
+    "fusion_back_full_frame_developed_raw_matches_metal_display_transport",
+    "fusion_front_full_frame_developed_raw_matches_metal_display_transport",
+    "hero9_full_frame_developed_raw_matches_metal_display_transport",
+    "large_cancelled_upload_validation_and_admission_preserve_visible_texture",
+    "qualified_sd10_linear_raster_full_frame_display_readback",
+    "full_f828_managed_rgbe_matches_cpu_reference"
+  ],
+  "every_ordinary_gpu_ignored_test_executed_elsewhere": true,
+  "large_upload_cancel_evidence": "Base report gpu-large-upload-cancel suite",
+  "full_sensor_compute": {
+    "log": "/tmp/rrrah-metal-full-sensor-followup-20261011.log",
+    "sha256": "a1b01f83d0fa275e0c7db6d5a5541dd11e8bc5f6a69e41e191c08804b12c576a",
+    "passed": 2,
+    "dimensions": [
+      6188,
+      4120
+    ],
+    "pixels_checked": 25494560,
+    "gpu_peak_bytes": 1223738992,
+    "cpu_peak_bytes": 815825920,
+    "final_managed_bytes": 0
+  },
+  "external_followups": {
+    "inputs": {
+      "Fusion-back.rgba32fle": {
+        "path": "/private/tmp/rrrah-gpr-clipping-warp-after-20261007/Fusion-back.rgba32fle",
+        "sha256": "00d54286d47dab1e1a0e2d761e8f407e2dcdcdb0823e7ab91fd50f71e2a84df3"
+      },
+      "Fusion-front.rgba32fle": {
+        "path": "/private/tmp/rrrah-gpr-clipping-warp-after-20261007/Fusion-front.rgba32fle",
+        "sha256": "37871b3f2f5f9de0933a8e3b05edf4e00a1ca9503fd3fe581a94ee5a51f20fa5"
+      },
+      "HERO9.rgba32fle": {
+        "path": "/private/tmp/rrrah-gpr-full-quality-20261007/HERO9.rgba32fle",
+        "sha256": "5a13211dbf9c33a67125777d87bc85a950ac054ab051bfcfdf0175ec2475bb58"
+      },
+      "linear-srgb.ppm": {
+        "path": "/private/tmp/rrrah-x3f-restored-20261007/linear-srgb.ppm",
+        "sha256": "00f64dc46ad86366f7da089c9ba37d4aec3462dd49595c2d2049ba0e0d0b68ff"
+      },
+      "F828-sensor-oracle": {
+        "path": "/private/tmp/rrrah-srf-refresh-20261008.u16le",
+        "sha256": "b3fc3d395950407a35d33392a97181fa51aac1afb0aa6b96d94a7eba00e95d42"
+      }
+    },
+    "cases": [
+      {
+        "name": "hero9_full_frame_developed_raw_matches_metal_display_transport",
+        "command": [
+          "/private/tmp/rrrah-required-corpus-target/debug/deps/raster_readback-96fa399a25885f6d",
+          "hero9_full_frame_developed_raw_matches_metal_display_transport",
+          "--exact",
+          "--ignored",
+          "--nocapture",
+          "--test-threads=1"
+        ],
+        "log": "/tmp/rrrah-metal-followup-hero9_full_frame_developed_raw_matches_metal_display_transport-20261011.log",
+        "sha256": "50cb27009860a40e070ed409f1133189fd85f567619e8613b04c2a5a82e2a896",
+        "exit_code": 0,
+        "verified": true
+      },
+      {
+        "name": "fusion_back_full_frame_developed_raw_matches_metal_display_transport",
+        "command": [
+          "/private/tmp/rrrah-required-corpus-target/debug/deps/raster_readback-96fa399a25885f6d",
+          "fusion_back_full_frame_developed_raw_matches_metal_display_transport",
+          "--exact",
+          "--ignored",
+          "--nocapture",
+          "--test-threads=1"
+        ],
+        "log": "/tmp/rrrah-metal-followup-fusion_back_full_frame_developed_raw_matches_metal_display_transport-20261011.log",
+        "sha256": "eeebf15e0501af1f881c5e8ba63943deda4a67682d4e69439eb53d7c50c1b1b1",
+        "exit_code": 0,
+        "verified": true
+      },
+      {
+        "name": "fusion_front_full_frame_developed_raw_matches_metal_display_transport",
+        "command": [
+          "/private/tmp/rrrah-required-corpus-target/debug/deps/raster_readback-96fa399a25885f6d",
+          "fusion_front_full_frame_developed_raw_matches_metal_display_transport",
+          "--exact",
+          "--ignored",
+          "--nocapture",
+          "--test-threads=1"
+        ],
+        "log": "/tmp/rrrah-metal-followup-fusion_front_full_frame_developed_raw_matches_metal_display_transport-20261011.log",
+        "sha256": "bcf7dc302524b451e15ac085d1b561b8c96da71c966b67076a586015305ff080",
+        "exit_code": 0,
+        "verified": true
+      },
+      {
+        "name": "qualified_sd10_linear_raster_full_frame_display_readback",
+        "command": [
+          "/private/tmp/rrrah-required-corpus-target/debug/deps/raster_readback-96fa399a25885f6d",
+          "qualified_sd10_linear_raster_full_frame_display_readback",
+          "--exact",
+          "--ignored",
+          "--nocapture",
+          "--test-threads=1"
+        ],
+        "log": "/tmp/rrrah-metal-followup-qualified_sd10_linear_raster_full_frame_display_readback-20261011.log",
+        "sha256": "e12c3c3c02758c7f0e1fe74ff2b1d08ba8e66508d60a08068b1913470a89c0c2",
+        "exit_code": 0,
+        "verified": true
+      },
+      {
+        "name": "full_f828_managed_rgbe_matches_cpu_reference",
+        "command": [
+          "/private/tmp/rrrah-required-corpus-target/debug/deps/rgbe_compute_readback-5d310ff784bafb7a",
+          "full_f828_managed_rgbe_matches_cpu_reference",
+          "--exact",
+          "--ignored",
+          "--nocapture",
+          "--test-threads=1"
+        ],
+        "log": "/tmp/rrrah-metal-followup-full_f828_managed_rgbe_matches_cpu_reference-20261011.log",
+        "sha256": "77d9950be3c92ea96087db1ebceef04ec3a6f894a33bf90b4555967f1f39f62f",
+        "exit_code": 0,
+        "verified": true
+      }
+    ],
+    "complete": true,
+    "all_verified": true
+  },
+  "limitations": [
+    "Every originally ignored ordinary GPU test has explicit execution evidence here or in base report; this is not all-100-format qualification",
+    "Full-sensor compute operates authored RGBA float inputs; not all RAW demosaic pipelines",
+    "Camera transport uses pinned prepared native float dumps; does not independently requalify decode/color accuracy",
+    "F828 compute uses authored gains and independent unpacked sensor samples; not as-shot WB/color qualification",
+    "Physical HDR luminance and display calibration are unverified",
+    "NVIDIA remains deferred by user",
+    "Hour-long eight-frame cache test remains in progress and is not counted as passing",
+    "Concurrent tests/builds mean timings are not isolated performance benchmarks"
+  ]
+}

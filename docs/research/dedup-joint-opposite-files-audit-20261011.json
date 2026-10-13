@@ -1,0 +1,122 @@
+{
+  "status": "complete_bounded_frozen_joint_opposite_files_78_tests",
+  "producer_pid": 93608,
+  "source_manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-joint-opposite-files-snapshot-20261011.json",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-joint-opposite-files-snapshot-20261011.json": "49101937672a145fb494dfc58041ce585890f7190157e25a0e672aacb871cb62",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/qualify-dedup-joint-opposite-files-20261011.py": "a757668e3dc559abdd7db031611ca1c58e7f60084ac08064a6fe04405bf40a7d",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-opposite-files-qualified-20261011/build.jsonl": "6fd6c85fee74a1a3ab4f58d4594c2cd7635e57efa3f89e41a3041f9a17fd4582",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-opposite-files-qualified-20261011/build.log": "d642271efa9b8e364b19353f2c171b95f42e9be7b12adfe751ce7cbc3a3c64b2"
+  },
+  "build_command": [
+    "cargo",
+    "test",
+    "--manifest-path",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-opposite-files-snapshot-20261011/Cargo.toml",
+    "-p",
+    "rrrah-dedup",
+    "--features",
+    "decode",
+    "--test",
+    "projective_geometry",
+    "--test",
+    "projective_domains",
+    "--test",
+    "projective_exhaustive_domains",
+    "--test",
+    "joint_projective",
+    "--test",
+    "anchor_reflection_fallback",
+    "--test",
+    "opposite_native",
+    "--test",
+    "search_portfolio",
+    "--test",
+    "portfolio_collection",
+    "--locked",
+    "--offline",
+    "--no-run",
+    "--message-format=json",
+    "--config",
+    "profile.dev.package.rrrah-dedup.opt-level=3",
+    "--target-dir",
+    "/Users/themoretheless/.codex/tmp/rrrah-opposite-native-snapshot-20261011/target"
+  ],
+  "results": [
+    {
+      "suite": "projective_geometry",
+      "tests": 14,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-joint-opposite-files-qualified-20261011/projective_geometry",
+      "binary_sha256": "7452d7cc8ef4b5a7c679ec5e0421074638f435031c6608e3ab11ef1fb0bbe18d",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-joint-opposite-files-qualified-20261011/projective_geometry.log",
+      "log_sha256": "894dadb9ccc8446f8d385e1e1e000aab52d4647a7bf938c94222051eaf124e99"
+    },
+    {
+      "suite": "projective_domains",
+      "tests": 4,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-joint-opposite-files-qualified-20261011/projective_domains",
+      "binary_sha256": "fc6c7751ea49b410f67cbe5a6dab3711f6aca5f283120a991ea6f5c3c76b0072",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-joint-opposite-files-qualified-20261011/projective_domains.log",
+      "log_sha256": "9a86eb5e07ba7d9bf84545366e912db2ad5164c65efc2904a5e8351ac03a2b57"
+    },
+    {
+      "suite": "projective_exhaustive_domains",
+      "tests": 3,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-joint-opposite-files-qualified-20261011/projective_exhaustive_domains",
+      "binary_sha256": "6d981512b1b5de66fa4a2064a0330208d49b20f04aba3dfc4905a466d19033bf",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-joint-opposite-files-qualified-20261011/projective_exhaustive_domains.log",
+      "log_sha256": "b18e1f8cea135dd6f3a3ee83c8fc964fcf18ce385e89dd3a8e5530808b8b20a6"
+    },
+    {
+      "suite": "joint_projective",
+      "tests": 3,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-joint-opposite-files-qualified-20261011/joint_projective",
+      "binary_sha256": "41abdb0eabd29a29200266478927e592b52eb8a4351a50fbc745ecd4b7ca6d82",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-joint-opposite-files-qualified-20261011/joint_projective.log",
+      "log_sha256": "ea2b9a58a2329218923ff25092cd3af602aa64eb0cacec8d720cb7b522783b67"
+    },
+    {
+      "suite": "anchor_reflection_fallback",
+      "tests": 12,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-joint-opposite-files-qualified-20261011/anchor_reflection_fallback",
+      "binary_sha256": "9eb403d0496914c5a4dc55a6fb243bee60aa91c04a30988c41a5cc54985dced2",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-joint-opposite-files-qualified-20261011/anchor_reflection_fallback.log",
+      "log_sha256": "db01c4805c0972b268949dc406cbf23814b608d9cdc31b2295001cbead0e6f2c"
+    },
+    {
+      "suite": "opposite_native",
+      "tests": 6,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-joint-opposite-files-qualified-20261011/opposite_native",
+      "binary_sha256": "7c339a057f91eb6d94435e378fb4c5d0173d35da3c539ea180ce06c9bb3705d8",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-joint-opposite-files-qualified-20261011/opposite_native.log",
+      "log_sha256": "7ecf56a028ae8c0869c3fd7315b06ebfd7db0da6ff42c4e065c7b0c6785943fd"
+    },
+    {
+      "suite": "search_portfolio",
+      "tests": 17,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-joint-opposite-files-qualified-20261011/search_portfolio",
+      "binary_sha256": "cf77c8190f904a8d0b306c004eccf30273ecf66df08dc60b4ca8886bbad4df62",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-joint-opposite-files-qualified-20261011/search_portfolio.log",
+      "log_sha256": "ae0b6671ad193a786f67814b775e96b43b06166ad31c59617795dda8571698f5"
+    },
+    {
+      "suite": "portfolio_collection",
+      "tests": 19,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-joint-opposite-files-qualified-20261011/portfolio_collection",
+      "binary_sha256": "fe2cb7dfbc62ab2ad15efbc30f5c7a5c806526ecf54d96e2272ced993ed820b1",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-joint-opposite-files-qualified-20261011/portfolio_collection.log",
+      "log_sha256": "0009b3f8daead082d199e9d131ed1139c2ceb1e0c0d475fedf5877199c77b3b1"
+    }
+  ],
+  "scope": "Frozen compatible four-crate source and lock, new joint primitive plus legacy/pair/collection tests. Source coherent before/after; root concurrent HDR edits preserved outside this gate. Not full workspace/platform/corpus/RSS qualification.",
+  "build_pid": 94095,
+  "tests": 78,
+  "owned_root_matches": {
+    "crates/rrrah-dedup/src/local_scan.rs": true,
+    "crates/rrrah-dedup/src/geometry.rs": true,
+    "crates/rrrah-dedup/src/anchor_rank_file.rs": false,
+    "crates/rrrah-dedup/src/search_portfolio.rs": true,
+    "crates/rrrah-dedup/src/portfolio_collection.rs": true,
+    "crates/rrrah-dedup/src/model_loftr.rs": true
+  }
+}

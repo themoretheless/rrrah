@@ -1,0 +1,35 @@
+{
+  "change": "pending duplicate foreground selection refreshes latest explicit neighbour plan without advancing generation or requesting a second decode",
+  "scope": "same source identity still queued; an already dequeued/active job is outside this change",
+  "checks": [
+    "queued forward plan replaced by reversed plan",
+    "explicit empty plan disables queued prefetch",
+    "generation unchanged",
+    "single pending request",
+    "full ordinary viewer suite"
+  ],
+  "viewer": {
+    "passed": 220,
+    "failed": 0,
+    "ignored": 62,
+    "seconds": 3.2,
+    "log": "viewer-after-pending-plan-current-2026-10-12.log"
+  },
+  "metal": {
+    "backend": "Metal",
+    "device": "Apple M4 Max",
+    "passed": 1,
+    "failed": 0,
+    "navigation_steps": 120,
+    "formats": 6,
+    "sdr_hdr_exact": true,
+    "final_managed_root": 0,
+    "seconds": 6.85,
+    "log": "metal-prefetch-after-pending-plan-current-2026-10-12.log"
+  },
+  "source_sha256": "c7ecf77315c13655309238dd2de87fd441ce2144a52e83bfabe868bd411fe618",
+  "notes": [
+    "initial focused invocation used an unqualified exact test name and ran zero tests; full viewer suite subsequently executed the named regression successfully",
+    "Metal mixed-gallery helper validates cache/render transport, not every OS scheduling interleaving"
+  ]
+}

@@ -158,15 +158,25 @@ impl LevelGrid {
         if self.width == 2 && self.height == 2 && self.components == 1 {
             return Ok([self.values[0], self.values[1], self.values[2], self.values[3]]);
         }
-        // Preserve a position-dependent approximation for unusual DNG repeat
-        // grids. The architecture keeps the full grid so a tiled shader can
-        // consume it later; the first viewport shader samples its top-left 2x2.
-        Ok([
-            self.at(0, 0, 0).unwrap_or(0.0),
-            self.at(0, 1, 0).unwrap_or(0.0),
-            self.at(1, 0, 0).unwrap_or(0.0),
-            self.at(1, 1, 0).unwrap_or(0.0),
-        ])
+        if self.components != 1 {
+            return Err(FrameError::UnsupportedBlackLevelGrid);
+        }
+        let quad = [
+            self.at(0, 0, 0).unwrap(),
+            self.at(0, 1, 0).unwrap(),
+            self.at(1, 0, 0).unwrap(),
+            self.at(1, 1, 0).unwrap(),
+        ];
+        // Two periods also check parity across odd-sized repeat boundaries.
+        for row in 0..u32::from(self.height) * 2 {
+            for column in 0..u32::from(self.width) * 2 {
+                let phase = ((row % 2) * 2 + column % 2) as usize;
+                if self.at(row, column, 0) != Some(quad[phase]) {
+                    return Err(FrameError::UnsupportedBlackLevelGrid);
+                }
+            }
+        }
+        Ok(quad)
     }
 }
 
@@ -468,6 +478,8 @@ pub enum FrameError {
     UnsupportedCfa { width: u8, height: u8 },
     #[error("invalid black-level grid: expected {expected}, got {actual}")]
     InvalidLevelGrid { expected: usize, actual: usize },
+    #[error("black-level grid cannot be represented exactly by the GPU Bayer 2x2 correction")]
+    UnsupportedBlackLevelGrid,
     #[error("non-finite {0} metadata")]
     NonFiniteMetadata(&'static str),
     #[error("white-balance correction gains must be positive")]
@@ -486,6 +498,35 @@ mod tests {
         CfaColor, CfaPattern, DecodedMosaic, FrameError, LevelGrid, Orientation, Photometric, RawMetadata,
         Rect, WhiteLevel,
     };
+
+    #[test]
+    fn black_level_quad_requires_exact_periodic_representation() {
+        let grid = |width, height, components, values| LevelGrid {
+            width,
+            height,
+            components,
+            values,
+        };
+        assert_eq!(
+            grid(2, 4, 1, vec![1., 2., 3., 4., 1., 2., 3., 4.])
+                .bayer_quad()
+                .unwrap(),
+            [1., 2., 3., 4.]
+        );
+        assert_eq!(grid(3, 3, 1, vec![7.; 9]).bayer_quad().unwrap(), [7.; 4]);
+        // Each cell matches local parity, but an odd repeat flips global parity.
+        for invalid in [
+            grid(3, 2, 1, vec![1., 2., 1., 3., 4., 3.]),
+            grid(2, 3, 1, vec![1., 2., 3., 4., 1., 2.]),
+            grid(2, 4, 1, vec![1., 2., 3., 4., 1., 2., 3., 5.]),
+            grid(1, 1, 3, vec![1., 2., 3.]),
+        ] {
+            assert!(matches!(
+                invalid.bayer_quad(),
+                Err(FrameError::UnsupportedBlackLevelGrid)
+            ));
+        }
+    }
 
     #[test]
     fn recognizes_all_four_bayer_phases() {

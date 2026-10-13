@@ -1,0 +1,52 @@
+{
+  "scope": "Isolated PREVIOUS save/overwrite/restore and release on12MP canvas/64x64 patch;9 alternating measured pairs after3 warmup pairs; prior managed full-canvas baseline vs production rectangle helpers",
+  "pairs_ms": [
+    [
+      77.281083,
+      0.016833
+    ],
+    [
+      44.253083,
+      0.030957999999999996
+    ],
+    [
+      42.359291,
+      0.019
+    ],
+    [
+      35.449458,
+      0.047917
+    ],
+    [
+      38.17625,
+      0.018084000000000003
+    ],
+    [
+      36.371333,
+      0.029915999999999998
+    ],
+    [
+      40.914417,
+      0.018542
+    ],
+    [
+      35.490042,
+      0.030375
+    ],
+    [
+      31.461334,
+      0.018584
+    ]
+  ],
+  "old_median_ms": 38.17625,
+  "patch_median_ms": 0.019,
+  "old_peak_managed_bytes": 384000000,
+  "patch_peak_managed_bytes": 192065536,
+  "report": "docs/research/apng-previous-paired-current-2026-10-11/report.json",
+  "source_sha256": "564c2fd5bd6a9575235af4d8f9eaa634d6a4780487b77703cfe0423b7b1e762e",
+  "limitations": [
+    "Not complete decoder or viewer speedup",
+    "Shared host timing varies with other work",
+    "Managed peaks do not measure RSS or PNG private scratch"
+  ]
+}

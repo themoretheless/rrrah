@@ -1,0 +1,54 @@
+{
+  "date": "2026-10-11",
+  "scope": "Real bounded thumbnail worker generation replacement with explicit linear-sRGB loader",
+  "worker": "gallery::Prefetcher::new_with_cancel capacity one; actual thumbnail_loader_with_cancel",
+  "sequence": [
+    "ASTC HDR job starts and is held before invoking decoder",
+    "KTX2 job queued",
+    "PFM replaces queued KTX2 and cancels active generation",
+    "Held ASTC invokes actual loader with stale token and returns None",
+    "Only latest PFM invokes loader successfully and publishes exact expected thumbnail"
+  ],
+  "checks": {
+    "observed_jobs": [
+      0,
+      2
+    ],
+    "intermediate_job_never_started": true,
+    "old_result_absent": true,
+    "latest_index": 2,
+    "latest_dimensions": [
+      2,
+      2
+    ],
+    "first_pixel": [
+      255,
+      0,
+      188,
+      255
+    ],
+    "final_managed_bytes": 0,
+    "focused_test_passed": 1,
+    "ordinary_app_gate": {
+      "passed": 200,
+      "failed": 0,
+      "ignored": 36
+    }
+  },
+  "logs": [
+    {
+      "path": "/tmp/rrrah-linear-thumbnail-worker-reversal-20261011.log",
+      "sha256": "adda8da2f43e4f871c15eb5b31b1f60dcaba8209ffc89784733950ecd08f9983"
+    },
+    {
+      "path": "/tmp/rrrah-linear-thumbnail-worker-app-all-20261011.log",
+      "sha256": "7db1d2fdb1cb82eec793220ae7e205a4703a446b026002f0c6ee85c7c2879539"
+    }
+  ],
+  "limitations": [
+    "Deterministic barrier before decode, not cancellation inside native ASTC computation",
+    "CPU thumbnail worker, no new Metal readback evidence",
+    "Does not exercise ForegroundLoader native window event-loop integration",
+    "NVIDIA deferred"
+  ]
+}

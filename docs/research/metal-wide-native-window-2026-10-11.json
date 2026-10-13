@@ -1,0 +1,42 @@
+{
+  "date": "2026-10-11",
+  "scenario": "Actual native window confirms adapter-supported extent negotiation for authored 9000x1024 linear PFM, four HDR RGB bands.",
+  "bundle": "/tmp/RrrahWideMetalQualification.app",
+  "source": "/tmp/rrrah-wide-native-9000x1024.pfm",
+  "source_description": "PF little-endian RGB float32; four equal-width bands [(4,.1,.05),(.1,2,.1),(.05,.1,4),(.5,1.5,.1)], repeated for1024 rows; explicit untagged linear-sRGB policy.",
+  "launch": "RRRAH_HDR_SURFACE=1 RUST_LOG=info rrrah --gpu-backend metal --untagged-color linear-srgb --managed-memory-mb 1024 --prefetch-behind 0 --prefetch-ahead 0 SOURCE",
+  "observations": [
+    "CUA title: image9000x1024 ready in193.82ms on first launch,181.11ms on second; these are single warm observations, not performance benchmark.",
+    "Four authored bands visible in native window. Exposure minus updates visible colors; R restores brightness. First launch log contains exactly one Raster ready, no re-decode on controls.",
+    "Background-launch screenshot initially blank; after raising the fresh second-launch window bands are visible before any exposure key. No new redraw-code change was made from this observation.",
+    "Both launches report Metal M4 Max, Rgba16Float / ExtendedSrgbLinear surface.",
+    "Quit via native CmdQ; own process absence verified."
+  ],
+  "limitations": [
+    "Visual screenshot confirms displayed content and controls, not physical HDR luminance/color accuracy.",
+    "Authored PFM test, not all100format qualification.",
+    "Hardware extent remains16384 on this adapter; above-hardware raster tiling remains separate."
+  ],
+  "hashes": {
+    "source": {
+      "path": "/tmp/rrrah-wide-native-9000x1024.pfm",
+      "sha256": "772f0eb25716d43930f469ee7f30141d2080616b2b255c559bbd525d4dd3bacc"
+    },
+    "binary": {
+      "path": "/tmp/RrrahWideMetalQualification.app/Contents/MacOS/rrrah",
+      "sha256": "9c0da497170f6d2d7a978dc3c91c0b77d24e972ea70af168cdbd094410abf863"
+    },
+    "build_log": {
+      "path": "/tmp/rrrah-wide-native-build.log",
+      "sha256": "90b1e4b138f5342d4dae791a10143b5cfc68b5e358dfe1dc739e46a232b72c31"
+    },
+    "first_log": {
+      "path": "/tmp/rrrah-wide-native-window-first.log",
+      "sha256": "f0c4457d3e4274079145e61a147e48f3180ae2c0e97b5c11ce0ac304dbcb4a1b"
+    },
+    "second_log": {
+      "path": "/tmp/rrrah-wide-native-window.log",
+      "sha256": "85c9534ab3cd7c07a12b23517d6e685f2b6bc5feb85a586c390d71714a6d9e3f"
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "scope": "Foreground RAW neighbor queue retains admitted mosaics via CacheLease using existing resolved key; clear at new request/idle",
+  "report": "docs/research/raw-scoped-prefetch-priority-2026-10-11/report.json",
+  "logs": [
+    {
+      "log": "docs/research/raw-scoped-prefetch-priority-2026-10-11/rrrah-raw-scoped-priority-app-20261011.log",
+      "sha256": "a77665488462ebb451302e39ac22dd03f3209059ac1994969b6b0bca160dd27e"
+    },
+    {
+      "log": "docs/research/raw-scoped-prefetch-priority-2026-10-11/rrrah-real-cr3-scoped-prefetch-20261011.log",
+      "sha256": "20480933aa2302f1c00ad384f831537f4896cf04b3dcf33d71cf71c3707001b2"
+    }
+  ],
+  "app_passed": 211,
+  "app_ignored": 58,
+  "manual_native_cr3_passed": 1,
+  "source_sha256": "762a939ee767f968ca690a3d9bed9f166ebf6bf1a484f3787b969d7260aa7570",
+  "limitations": [
+    "Priority fixture copies one real CR3 with distinct timestamps, not independent camera/color coverage",
+    "Helper priority test is not complete worker scheduling proof",
+    "Disk writer persistence priority and long collection behavior remain separate"
+  ]
+}

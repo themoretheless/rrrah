@@ -12,7 +12,7 @@ pub enum RasterColorError {
     Frame(#[from] RasterError),
     #[error("ICC color transform failed: {0}")]
     Icc(String),
-    #[error("ICC source must describe RGB samples; grayscale/CMYK require their original channel layout")]
+    #[error("ICC source must describe RGB or replicated grayscale samples; other layouts are unsupported")]
     UnsupportedProfileSpace,
     #[error("ICC input RGB samples must be finite and normalized to zero through one")]
     InvalidInput,
@@ -68,8 +68,23 @@ pub fn prepare_raster_for_display_with_budget_and_cancel(
     let mut profile =
         ColorProfile::new_from_slice(bytes).map_err(|e| RasterColorError::Icc(e.to_string()))?;
     check()?;
-    if profile.color_space != DataColorSpace::Rgb {
+    let gray = profile.color_space == DataColorSpace::Gray;
+    if profile.color_space != DataColorSpace::Rgb && !gray {
         return Err(RasterColorError::UnsupportedProfileSpace);
+    }
+    let sample = |index: usize| match frame.pixels() {
+        RasterPixels::Rgba8(p) => f64::from(p[index]) / 255.0,
+        RasterPixels::Rgba16(p) => f64::from(p[index]) / 65535.0,
+        RasterPixels::Rgba32Float(p) => f64::from(p[index]),
+    };
+    if gray {
+        for index in 0..count / 4 {
+            if index.is_multiple_of(4096) { check()?; }
+            let at = index * 4;
+            if sample(at) != sample(at + 1) || sample(at) != sample(at + 2) {
+                return Err(RasterColorError::UnsupportedProfileSpace);
+            }
+        }
     }
     // Reject inadmissible float input before reserving the full output and rows.
     // Integer storage is normalized by construction; float ICC input has this
@@ -97,6 +112,7 @@ pub fn prepare_raster_for_display_with_budget_and_cancel(
         &mut profile.red_trc,
         &mut profile.green_trc,
         &mut profile.blue_trc,
+        &mut profile.gray_trc,
     ] {
         if let Some(ToneReprCurve::Lut(values)) = curve {
             if values.len() == 1 {
@@ -105,6 +121,10 @@ pub fn prepare_raster_for_display_with_budget_and_cancel(
         }
     }
     let mut destination = ColorProfile::new_srgb();
+    // The predefined CMS profile approximates D65 from 6504 K. The renderer
+    // and native primary transforms use the standard xy coordinates instead.
+    destination.update_rgb_colorimetry(moxcms::XyY::new(0.3127, 0.3290, 1.),
+        moxcms::ColorPrimaries::BT_709);
     let linear = ToneReprCurve::Parametric(vec![1.0]);
     destination.red_trc = Some(linear.clone());
     destination.green_trc = Some(linear.clone());
@@ -118,7 +138,7 @@ pub fn prepare_raster_for_display_with_budget_and_cancel(
         ..TransformOptions::default()
     };
     let transform = profile
-        .create_transform_f64(Layout::Rgb, &destination, Layout::Rgb, options)
+        .create_transform_f64(if gray { Layout::Gray } else { Layout::Rgb }, &destination, Layout::Rgb, options)
         .map_err(|e| RasterColorError::Icc(e.to_string()))?;
     check()?;
     let reservation = budget
@@ -139,29 +159,25 @@ pub fn prepare_raster_for_display_with_budget_and_cancel(
             None => Ok(Arc::new(vec![0.0_f64; length]).into()),
         }
     };
-    let mut source = row(width * 3)?;
+    let channels = if gray { 1 } else { 3 };
+    let mut source = row(width * channels)?;
     let mut target = row(width * 3)?;
     let source = source.get_mut().expect("exclusive conversion row");
     let target = target.get_mut().expect("exclusive conversion row");
-    let sample = |index: usize| match frame.pixels() {
-        RasterPixels::Rgba8(p) => f64::from(p[index]) / 255.0,
-        RasterPixels::Rgba16(p) => f64::from(p[index]) / 65535.0,
-        RasterPixels::Rgba32Float(p) => f64::from(p[index]),
-    };
     for y in 0..frame.height() as usize {
         for x in 0..width {
             if x.is_multiple_of(4096) {
                 check()?;
             }
-            for channel in 0..3 {
+            for channel in 0..channels {
                 let value = sample((y * width + x) * 4 + channel);
                 if !value.is_finite() || !(0.0..=1.0).contains(&value) {
                     return Err(RasterColorError::InvalidInput);
                 }
-                source[x * 3 + channel] = value;
+                source[x * channels + channel] = value;
             }
         }
-        for (input, output) in source.chunks(4096 * 3).zip(target.chunks_mut(4096 * 3)) {
+        for (input, output) in source.chunks(4096 * channels).zip(target.chunks_mut(4096 * 3)) {
             check()?;
             transform
                 .transform(input, output)
@@ -292,6 +308,74 @@ mod tests {
                 (actual - expected).abs() <= tolerance,
                 "sample {index}: {actual} vs {expected}"
             );
+        }
+    }
+    #[test]
+    fn gray_icc_uses_gray_curve_and_refuses_nonreplicated_samples() {
+        let icc = ColorProfile::new_gray_with_gamma(2.0).encode().unwrap();
+        let make = |rgb: [f32; 3]| DecodedRaster::new(1, 1,
+            RasterPixels::Rgba32Float(Arc::new(vec![rgb[0],rgb[1],rgb[2],0.25]).into()),
+            RasterColorSpace::Icc(icc.clone())).unwrap();
+        let budget = rrrah_core::MemoryBudget::new(1024);
+        let ready = prepare_raster_for_display_with_budget(&make([0.5; 3]), Some(&budget)).unwrap();
+        let RasterPixels::Rgba32Float(values) = ready.pixels() else { panic!() };
+        for value in &values[..3] { assert!((*value - 0.25).abs() < 0.0001, "{value}"); }
+        assert_eq!(values[3], 0.25);
+        drop(ready);
+        assert_eq!(budget.used(), 0);
+        assert!(matches!(prepare_raster_for_display_with_budget(&make([0.5,0.6,0.5]), Some(&budget)),
+            Err(RasterColorError::UnsupportedProfileSpace)));
+        assert_eq!(budget.used(), 0);
+    }
+    #[test]
+    fn gray_icc_png_alpha16_and_tiff16_reach_display_with_native_precision() {
+        use image::ImageEncoder;
+        let profile = ColorProfile::new_gray_with_gamma(2.0).encode().unwrap();
+        let samples = [0u16, 32768, 32769, 65535];
+        let alpha = [0u16, 16384, 32768, 65535];
+        for png in [true, false] {
+            let path = std::env::temp_dir().join(format!("rrrah-gray-icc-{}-{}.{}",
+                std::process::id(), std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_nanos(),
+                if png { "png" } else { "tif" }));
+            let mut encoded = std::io::Cursor::new(Vec::new());
+            let values: Vec<u8> = samples.iter().enumerate().flat_map(|(index, sample)| {
+                let mut bytes = sample.to_ne_bytes().to_vec();
+                if png { bytes.extend(alpha[index].to_ne_bytes()); }
+                bytes
+            }).collect();
+            if png {
+                let mut encoder = image::codecs::png::PngEncoder::new(&mut encoded);
+                encoder.set_icc_profile(profile.clone()).unwrap();
+                encoder.write_image(&values, 4, 1, image::ExtendedColorType::La16).unwrap();
+            } else {
+                let mut encoder = image::codecs::tiff::TiffEncoder::new(&mut encoded);
+                encoder.set_icc_profile(profile.clone()).unwrap();
+                encoder.write_image(&values, 4, 1, image::ExtendedColorType::L16).unwrap();
+            }
+            std::fs::write(&path, encoded.into_inner()).unwrap();
+            let budget = rrrah_core::MemoryBudget::new(1024 * 1024);
+            let mut request = crate::DecodeRequest::new(&path);
+            request.memory_budget = Some(budget.clone());
+            let decoded = crate::decode_raster(&request);
+            std::fs::remove_file(&path).unwrap();
+            let frame = decoded.unwrap();
+            let RasterPixels::Rgba16(native) = frame.pixels() else { panic!("lost 16-bit samples") };
+            for (index, pixel) in native.chunks_exact(4).enumerate() {
+                assert_eq!(&pixel[..3], &[samples[index]; 3]);
+                assert_eq!(pixel[3], if png { alpha[index] } else { 65535 });
+            }
+            let ready = prepare_raster_for_display_with_budget(&frame, Some(&budget)).unwrap();
+            let RasterPixels::Rgba32Float(linear) = ready.pixels() else { panic!() };
+            for (index, pixel) in linear.chunks_exact(4).enumerate() {
+                let expected = (f64::from(samples[index]) / 65535.).powi(2) as f32;
+                for channel in &pixel[..3] { assert!((*channel - expected).abs() < 0.0001); }
+                let expected_alpha = if png { f32::from(alpha[index]) / 65535. } else { 1. };
+                assert_eq!(pixel[3], expected_alpha);
+            }
+            assert!(linear[4] < linear[8], "adjacent 16-bit values merged");
+            drop(ready);
+            drop(frame);
+            assert_eq!(budget.used(), 0);
         }
     }
     #[test]

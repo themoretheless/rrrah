@@ -1,0 +1,28 @@
+{
+  "change": "ORF explicit WhiteLevel requires exactly one finite positive integer within sensor bit depth; no silent first-value truncation",
+  "rejected_test_cases": [
+    "empty",
+    "zero",
+    "4096 in12-bit source",
+    "multiple values"
+  ],
+  "tests": {
+    "orf": 13,
+    "nine_source_metal": 1,
+    "disk_restores": 90
+  },
+  "logs": {
+    "validation": {
+      "path": "docs/research/orf-white-validation-2026-10-11.log",
+      "sha256": "3b7ab55dba2c5a639eb43494932536462829d92c024b16bc1892343649e990c6"
+    },
+    "validation-metal": {
+      "path": "docs/research/orf-white-validation-metal-2026-10-11.log",
+      "sha256": "6b2ec55b58d899c9e8126c252922c1af3589c71b530902314067bade0e13d5eb"
+    }
+  },
+  "limits": [
+    "calibrated physical saturation is independent of metadata validity",
+    "single-component ORF explicit sensor limit only"
+  ]
+}

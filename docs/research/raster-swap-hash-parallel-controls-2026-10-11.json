@@ -1,0 +1,77 @@
+{
+  "date": "2026-10-11",
+  "scope": "Controlled BLAKE3 hash-only experiment on original 192 MB RGBA32F buffer; not production swap improvement",
+  "profile": "release",
+  "platform": "Apple M4 Max aarch64 macOS; build output confirms blake3_neon",
+  "feature": "rrrah-cache/restore-profile-parallel (optional; disabled by default)",
+  "serial": {
+    "hash_only_ms": {
+      "p50_ms": 189.289667,
+      "p95_ms": 219.027167
+    },
+    "hash_1m_ms": {
+      "p50_ms": 188.135375,
+      "p95_ms": 191.098042
+    },
+    "hash_whole_ms": {
+      "p50_ms": 187.230666,
+      "p95_ms": 199.312875
+    },
+    "total_ms": {
+      "p50_ms": 217.321125,
+      "p95_ms": 228.543375
+    }
+  },
+  "parallel": [
+    {
+      "threads": 2,
+      "chunk_bytes": 1048576,
+      "p50_ms": 119.37875,
+      "p95_ms": 383.722375,
+      "measured": 15,
+      "warmup": 3,
+      "digest_exact": true
+    },
+    {
+      "threads": 2,
+      "chunk_bytes": 4194304,
+      "p50_ms": 102.007042,
+      "p95_ms": 296.946292,
+      "measured": 15,
+      "warmup": 3,
+      "digest_exact": true
+    },
+    {
+      "threads": 4,
+      "chunk_bytes": 1048576,
+      "p50_ms": 84.532042,
+      "p95_ms": 104.1365,
+      "measured": 15,
+      "warmup": 3,
+      "digest_exact": true
+    },
+    {
+      "threads": 4,
+      "chunk_bytes": 4194304,
+      "p50_ms": 73.635208,
+      "p95_ms": 129.598833,
+      "measured": 15,
+      "warmup": 3,
+      "digest_exact": true
+    }
+  ],
+  "verification": "All 72 parallel digests equal serial whole-buffer BLAKE3; all 18 streaming restores exact; final managed=0",
+  "csv": "/tmp/rrrah-hash-parallel-20261011.csv",
+  "csv_sha256": "cd24ec5b1329d5e7767a2893746be7397bfa75c207f1a940ee19471b5905c35c",
+  "log": "/tmp/rrrah-hash-parallel-20261011.log",
+  "log_text": "18 restores exact; payload_bytes=192000064; managed_peak=192000000; final_managed=0; warm local disk; allocation/hash controls are separate operations\nparallel_hash,threads=2,chunk_bytes=1048576,p50_ms=119.378750,p95_ms=383.722375,n=15,digest_exact=true\nparallel_hash,threads=2,chunk_bytes=4194304,p50_ms=102.007042,p95_ms=296.946292,n=15,digest_exact=true\nparallel_hash,threads=4,chunk_bytes=1048576,p50_ms=84.532042,p95_ms=104.136500,n=15,digest_exact=true\nparallel_hash,threads=4,chunk_bytes=4194304,p50_ms=73.635208,p95_ms=129.598833,n=15,digest_exact=true\n",
+  "limitations": [
+    "No change to production streaming or checksum format",
+    "Hash-only controls exclude storage I/O, staging allocation and cancellation",
+    "Bounded dedicated pools; no global Rayon pool",
+    "Fixed order 2 then 4 threads, 1 MiB then 4 MiB; not randomized/ABBA",
+    "15 samples per control; p95 is maximum and tails vary substantially",
+    "Reference input outside managed budget; no proof of production scratch-memory admission",
+    "No physical HDR or NVIDIA validation"
+  ]
+}

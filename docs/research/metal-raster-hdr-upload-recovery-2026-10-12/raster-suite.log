@@ -1,0 +1,58 @@
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.43s
+     Running tests/raster_readback.rs (target/debug/deps/raster_readback-96fa399a25885f6d)
+
+running 25 tests
+test fusion_back_full_frame_developed_raw_matches_metal_display_transport ... ignored, requires corrected production Fusion linear dumps; display transport qualification
+test fusion_front_full_frame_developed_raw_matches_metal_display_transport ... ignored, requires corrected production Fusion linear dumps; display transport qualification
+test hdr_exposure_saturates_to_finite_binary16_range ... ignored, Metal-specific empirical range edge; outside portable binary16 caller contract
+test hdr_opposite_extreme_samples_interpolate_without_nan ... ignored, Metal-specific empirical range edge; outside portable binary16 caller contract
+test hero9_full_frame_developed_raw_matches_metal_display_transport ... ignored, requires production HERO9 scene-linear dump; transport qualification, not demosaic/color oracle
+test large_cancelled_upload_validation_and_admission_preserve_visible_texture ... ignored, manual 12 MP Metal upload cancellation qualification
+test large_hdr_area_lod_preserves_all_output_samples_and_metal_frame ... ignored, manual 36 MP HDR area LOD and actual Metal qualification
+test qualified_sd10_linear_raster_full_frame_display_readback ... ignored, requires qualified X3F linear sRGB PPM and a physical GPU
+HDR raster adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+texture budget adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+aspect transition adapter: Metal Apple M4 Max
+raster queue adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+resident raster adapter: Metal Apple M4 Max
+raster readback adapter: Metal Apple M4 Max
+tiled raster adapter: Metal Apple M4 Max; negotiated extent64
+test raster_queue_admission_accounts_alignment_and_completion_ownership ... ok
+test texture_budget_preserves_loaded_image_on_refusal_and_releases_owners ... ok
+upload cancellation adapter: Metal Apple M4 Max
+test uploaded_rows_and_rgb_channels_keep_their_positions ... ok
+test transparent_rgb_is_removed_before_bilinear_interpolation ... ok
+test linear_hdr_attachment_preserves_bright_negative_and_exposed_channels ... ok
+test linear_gray_and_straight_alpha_composite_match_display_reference ... ok
+test pixel_aspect_rejection_is_atomic_and_next_upload_resets_geometry ... ok
+managed area HDR LOD: signed/bright/transparent-RGB oracle SDR/HDR exact; output root=0
+test area_filtered_hdr_lod_matches_independent_alpha_reference_on_metal ... ok
+resident tiles: 130x5; SDR/HDR exact; padded_bytes=10560; compute/queue/texture root=0
+test developed_raw_exposure_precedes_tone_and_monotone_curve ... ok
+resident source region=[35, 40, 130, 70]; bytes=145600; full geometry SDR/HDR exact; root/queue=0
+raster upload pressure: texture-and-queue-refused; previous-frame-exact; temporary-credit-zero
+raster upload cancellation: total_checkpoints=6; exercised=[1, 2, 3, 4, 5, 6]; upload_budget=179200
+resident tiles: 5x130; SDR/HDR exact; padded_bytes=10560; compute/queue/texture root=0
+raster replacement recovery: format=Rgba8UnormSrgb; pressure/cancellation previous frame exact; retry blue exact; final GPU/queue credit=0
+raster upload pressure: texture-and-queue-refused; previous-frame-exact; temporary-credit-zero
+raster upload cancellation: total_checkpoints=6; exercised=[1, 2, 3, 4, 5, 6]; upload_budget=179200
+test nonfinite_raster_controls_produce_exact_finite_sdr_hdr_frames ... ok
+resident source region=[35, 40, 130, 70]; bytes=147840; full geometry SDR/HDR exact; root/queue=0
+raster replacement recovery: format=Rgba16Float; pressure/cancellation previous frame exact; retry blue exact; final GPU/queue credit=0
+resident tiles: 128x130; SDR/HDR exact; padded_bytes=270336; compute/queue/texture root=0
+test cancelled_upload_validation_and_admission_preserve_visible_texture ... ok
+6000x6000 source=576000000 bytes > eager limit; resident 128x128=262144 bytes; full HDR viewport exact; root/queue=0
+test small_resident_region_renders_source_above_eager_atlas_limit ... ok
+resident source region=[0, 0, 70, 70]; bytes=78400; full geometry SDR/HDR exact; root/queue=0
+resident source region=[130, 90, 70, 70]; bytes=78400; full geometry SDR/HDR exact; root/queue=0
+test resident_source_regions_preserve_full_geometry_hdr_and_transactional_admission ... ok
+resident tiles: 130x130; SDR/HDR exact; padded_bytes=278784; compute/queue/texture root=0
+test gpu_resident_compute_rows_match_cpu_exposure_reference ... ok
+test tiled_raster_seams_padding_and_partial_cancel_preserve_sdr_hdr ... ok
+resident tiles: 20000x64; SDR/HDR exact; padded_bytes=20481024; compute/queue/texture root=0
+test resident_compute_tiles_match_cpu_sdr_hdr_across_aligned_and_packed_rows ... ok
+visible-region planner: 60 exact full SDR/HDR view frames; uploads=46; offscreen_skips=14; aspects=0.5/1/2; root/queue=0
+test planned_visible_regions_match_whole_image_during_pan_zoom_and_pixel_aspect ... ok
+
+test result: ok. 17 passed; 0 failed; 8 ignored; 0 measured; 0 filtered out; finished in 4.68s
+

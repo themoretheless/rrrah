@@ -1,0 +1,123 @@
+   Compiling rrrah-gpu v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-gpu)
+    Finished `test` profile [optimized + debuginfo] target(s) in 2.36s
+     Running tests/raw_linear_readback.rs (target/debug/deps/raw_linear_readback-9fd8b6185e48ed18)
+
+running 2 tests
+test binary16_reference_covers_signed_hdr_and_subnormals ... ok
+RAW linear adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+RAW above file white: Rgba16Float; encoded=3989; black=15; white=3967; exposure=1; all channels retain HDR headroom
+RAW invalid levels: Rgba16Float; phases=4; equal/inverted refused; previous HDR frame exact; credit unchanged
+RAW repeat grid: Rgba16Float; 3x5 odd boundaries; independent neutral exact; extra credit=60; invalid last cell preserves frame; fast path releases grid
+RAW above file white: Rgba32Float; encoded=3989; black=15; white=3967; exposure=1; all channels retain HDR headroom
+RAW invalid levels: Rgba32Float; phases=4; equal/inverted refused; previous HDR frame exact; credit unchanged
+RAW repeat grid: Rgba32Float; 3x5 odd boundaries; independent neutral exact; extra credit=60; invalid last cell preserves frame; fast path releases grid
+test raw_linear_float_target_preserves_hdr_and_negative_rgbe_color ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.21s
+
+     Running tests/raw_orientation_readback.rs (target/debug/deps/raw_orientation_readback-2f509afec3477bdf)
+
+running 1 test
+orientation adapter: Metal Apple M4 Max
+test all_exif_orientations_preserve_the_documented_corner_order ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.38s
+
+     Running tests/readback.rs (target/debug/deps/readback-381870146e3bac04)
+
+running 11 tests
+RAW budget adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+readback: adapter Metal Apple M4 Max
+test raw_atlas_budget_accounts_halos_and_preserves_image_on_refusal ... ok
+out-of-gamut pure red: linear [1.2777706384658813, -0.1450584977865219, -0.020508810877799988] -> readback [223, 0, 72, 255] vs reference [223, 0, 72]
+out-of-gamut pure green: linear [-0.2950807213783264, 0.8427019119262695, -0.2481752634048462] -> readback [0, 222, 48, 255] vs reference [0, 222, 48]
+test black_and_white_endpoints_match_aces_contract ... ok
+test exposure_shift_raises_midtones_without_replot ... ok
+out-of-gamut pure blue: linear [0.02482142113149166, -0.411801278591156, 1.2324081659317017] -> readback [35, 0, 237, 255] vs reference [35, 0, 237]
+test out_of_gamut_camera_colors_desaturate_matching_cpu_reference ... ok
+test readback_is_bit_identical_across_rerenders ... ok
+test uniform_gray_renders_neutral_and_spatially_uniform ... ok
+test known_gray_points_match_cpu_reference_curve ... ok
+test decoder_white_balance_scale_is_preserved_through_real_camera_profile ... ok
+test tone_curve_is_monotonic_across_input_levels ... ok
+test cancelled_raw_tile_upload_preserves_previous_frame_and_budget ... ok
+
+hue preservation (CIELAB h°, input -> output, Δh):
+  red      x0.18    40.00 ->   39.09  Δh  0.91°  rgb [141, 0, 0, 255]
+  red      x0.50    40.00 ->   40.00  Δh  0.00°  rgb [206, 0, 0, 255]
+  red      x1.00    40.00 ->   40.00  Δh  0.00°  rgb [232, 0, 0, 255]
+  red      x2.00    40.00 ->   40.00  Δh  0.00°  rgb [245, 0, 0, 255]
+  red      x4.00    40.00 ->   40.00  Δh  0.00°  rgb [252, 0, 0, 255]
+  yellow   x0.18   102.85 ->  102.85  Δh  0.00°  rgb [141, 141, 0, 255]
+  yellow   x0.50   102.85 ->  102.85  Δh  0.00°  rgb [206, 206, 0, 255]
+  yellow   x1.00   102.85 ->  102.85  Δh  0.00°  rgb [232, 232, 0, 255]
+  yellow   x2.00   102.85 ->  102.85  Δh  0.00°  rgb [245, 245, 0, 255]
+  yellow   x4.00   102.85 ->  102.85  Δh  0.00°  rgb [252, 252, 0, 255]
+  green    x0.18   136.02 ->  136.02  Δh  0.00°  rgb [0, 141, 0, 255]
+  green    x0.50   136.02 ->  136.02  Δh  0.00°  rgb [0, 206, 0, 255]
+  green    x1.00   136.02 ->  136.02  Δh  0.00°  rgb [0, 232, 0, 255]
+  green    x2.00   136.02 ->  136.02  Δh  0.00°  rgb [0, 245, 0, 255]
+  green    x4.00   136.02 ->  136.02  Δh  0.00°  rgb [0, 252, 0, 255]
+  cyan     x0.18   196.38 ->  196.38  Δh  0.00°  rgb [0, 141, 141, 255]
+  cyan     x0.50   196.38 ->  196.38  Δh  0.00°  rgb [0, 206, 206, 255]
+  cyan     x1.00   196.38 ->  196.38  Δh  0.00°  rgb [0, 232, 232, 255]
+  cyan     x2.00   196.38 ->  196.38  Δh  0.00°  rgb [0, 245, 245, 255]
+  cyan     x4.00   196.38 ->  196.38  Δh  0.00°  rgb [0, 252, 252, 255]
+  blue     x0.18   306.28 ->  306.28  Δh  0.00°  rgb [0, 0, 141, 255]
+  blue     x0.50   306.28 ->  306.28  Δh  0.00°  rgb [0, 0, 206, 255]
+  blue     x1.00   306.28 ->  306.28  Δh  0.00°  rgb [0, 0, 232, 255]
+  blue     x2.00   306.28 ->  306.28  Δh  0.00°  rgb [0, 0, 245, 255]
+  blue     x4.00   306.28 ->  306.28  Δh  0.00°  rgb [0, 0, 252, 255]
+  magenta  x0.18   328.23 ->  328.23  Δh  0.00°  rgb [141, 0, 141, 255]
+  magenta  x0.50   328.23 ->  328.23  Δh  0.00°  rgb [206, 0, 206, 255]
+  magenta  x1.00   328.23 ->  328.23  Δh  0.00°  rgb [232, 0, 232, 255]
+  magenta  x2.00   328.23 ->  328.23  Δh  0.00°  rgb [245, 0, 245, 255]
+  magenta  x4.00   328.23 ->  328.23  Δh  0.00°  rgb [252, 0, 252, 255]
+  orange   x0.18    81.59 ->   81.52  Δh  0.07°  rgb [141, 102, 0, 255]
+  orange   x0.50    81.59 ->   81.68  Δh  0.09°  rgb [206, 151, 0, 255]
+  orange   x1.00    81.59 ->   81.47  Δh  0.12°  rgb [232, 170, 0, 255]
+  orange   x2.00    81.59 ->   81.58  Δh  0.01°  rgb [245, 180, 0, 255]
+  orange   x4.00    81.59 ->   81.49  Δh  0.10°  rgb [252, 185, 0, 255]
+  lime     x0.18   118.39 ->  118.43  Δh  0.04°  rgb [102, 141, 0, 255]
+  lime     x0.50   118.39 ->  118.34  Δh  0.05°  rgb [151, 206, 0, 255]
+  lime     x1.00   118.39 ->  118.45  Δh  0.06°  rgb [170, 232, 0, 255]
+  lime     x2.00   118.39 ->  118.39  Δh  0.01°  rgb [180, 245, 0, 255]
+  lime     x4.00   118.39 ->  118.44  Δh  0.05°  rgb [185, 252, 0, 255]
+  azure    x0.18   250.28 ->  250.43  Δh  0.16°  rgb [0, 102, 141, 255]
+  azure    x0.50   250.28 ->  250.09  Δh  0.19°  rgb [0, 151, 206, 255]
+  azure    x1.00   250.28 ->  250.53  Δh  0.25°  rgb [0, 170, 232, 255]
+  azure    x2.00   250.28 ->  250.30  Δh  0.02°  rgb [0, 180, 245, 255]
+  azure    x4.00   250.28 ->  250.49  Δh  0.22°  rgb [0, 185, 252, 255]
+  rose     x0.18   342.73 ->  342.78  Δh  0.05°  rgb [141, 0, 102, 255]
+  rose     x0.50   342.73 ->  342.66  Δh  0.07°  rgb [206, 0, 151, 255]
+  rose     x1.00   342.73 ->  342.82  Δh  0.09°  rgb [232, 0, 170, 255]
+  rose     x2.00   342.73 ->  342.74  Δh  0.01°  rgb [245, 0, 180, 255]
+  rose     x4.00   342.73 ->  342.80  Δh  0.08°  rgb [252, 0, 185, 255]
+  spring   x0.18   164.33 ->  164.27  Δh  0.07°  rgb [0, 141, 102, 255]
+  spring   x0.50   164.33 ->  164.41  Δh  0.08°  rgb [0, 206, 151, 255]
+  spring   x1.00   164.33 ->  164.23  Δh  0.11°  rgb [0, 232, 170, 255]
+  spring   x2.00   164.33 ->  164.33  Δh  0.01°  rgb [0, 245, 180, 255]
+  spring   x4.00   164.33 ->  164.24  Δh  0.09°  rgb [0, 252, 185, 255]
+  violet   x0.18   318.33 ->  318.31  Δh  0.03°  rgb [102, 0, 141, 255]
+  violet   x0.50   318.33 ->  318.36  Δh  0.03°  rgb [151, 0, 206, 255]
+  violet   x1.00   318.33 ->  318.29  Δh  0.04°  rgb [170, 0, 232, 255]
+  violet   x2.00   318.33 ->  318.33  Δh  0.00°  rgb [180, 0, 245, 255]
+  violet   x4.00   318.33 ->  318.30  Δh  0.04°  rgb [185, 0, 252, 255]
+worst hue shift: 0.913° (red x0.18000000715255737)
+test saturated_colors_preserve_hue_through_tone_map ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.72s
+
+     Running tests/resource_lease.rs (target/debug/deps/resource_lease-8129f30d5856efe2)
+
+running 4 tests
+shared raster upload adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+resource lease adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+replacement adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+test raster_shared_root_holds_upload_credit_through_clear_and_rejects_overlap ... ok
+test raster_replacement_accounts_for_old_texture_and_queued_upload ... ok
+test texture_upload_holds_credit_without_frame_or_explicit_resource_snapshot ... ok
+test submitted_resources_keep_credit_after_renderer_destruction_until_completion ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.28s
+

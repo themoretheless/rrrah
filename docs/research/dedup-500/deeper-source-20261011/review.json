@@ -1,0 +1,82 @@
+{
+  "status": "complete_six_ambiguous_record_followup",
+  "scope": "All six needs-deeper-source records revisited using complete pinned file trees plus selected algorithm/readme sections. Nine full files archived and verified against pinned Git blob IDs. Not a full repository audit or upstream runtime qualification. Original 500 records remain historical and unchanged.",
+  "records": [
+    {
+      "index": 28,
+      "repository": "DrizzleTime/Skiff",
+      "commit": "c1c686bb5b91d94d705c639ba2e21ca520207533",
+      "previous_decision": "needs-deeper-source",
+      "followup_decision": "reference",
+      "finding": "files.rs:299-366,513-580 implements size buckets, streamed 8KiB hashes, then byte comparison to split hash collisions. Hash/read errors are silently omitted or mapped to false; no cancellation or immutable snapshot check in these functions. Retain the funnel/byte-proof principle already present in rrrah, not these error semantics.",
+      "archived_files": [
+        "028-files.rs",
+        "028-DuplicateFilesPage.tsx"
+      ],
+      "upstream_tests_run": false
+    },
+    {
+      "index": 47,
+      "repository": "antikmozib/Dupe-Clear",
+      "commit": "3d1a4c0d7362bde0c5631e381888f36a331ef3b3",
+      "previous_decision": "needs-deeper-source",
+      "followup_decision": "reference-with-limitations",
+      "finding": "FinderService.cs:119-138 hashes JPEG after EXIF removal with MD5, and 395-429 treats matching hashes as content matches without byte confirmation. Therefore its SameContents class does not prove original byte identity. Loop cancellation is outside ComputeHash. Keep per-file error isolation as a reference; do not adopt equivalence or cancellation behavior.",
+      "archived_files": [
+        "047-FinderService.cs"
+      ],
+      "upstream_tests_run": false
+    },
+    {
+      "index": 336,
+      "repository": "TitansTech/TitanDupeFinder",
+      "commit": "a494d5dec01f160e7564daa99b6812a4ef046971",
+      "previous_decision": "needs-deeper-source",
+      "followup_decision": "reject-domain",
+      "finding": "Pinned SCFDS entrypoint loads ItemNewPath using OpenItemScript. ReadItems.cpp parses game-style item type/subtype, level, serial and attributes, rather than image/file content descriptors. These inspected modules offer no evidence of a relevant image matcher.",
+      "archived_files": [
+        "336-README.md",
+        "336-ReadItems.cpp"
+      ],
+      "upstream_tests_run": false
+    },
+    {
+      "index": 338,
+      "repository": "muldon/dupeRep",
+      "commit": "ac279e54568cbb2df42ec152bbf6db49fd0bc007",
+      "previous_decision": "needs-deeper-source",
+      "followup_decision": "reject-domain",
+      "finding": "README and ClassifyService identify Stack Overflow question duplicate ranking using BM25, cosines and classifiers over question pairs. Text/question retrieval falls outside this file/image library.",
+      "archived_files": [
+        "338-README.md",
+        "338-ClassifyService.java"
+      ],
+      "upstream_tests_run": false
+    },
+    {
+      "index": 366,
+      "repository": "Fl1s/turron",
+      "commit": "c29206a56756309d721c930dde8e829c72b39d56",
+      "previous_decision": "needs-deeper-source",
+      "followup_decision": "reference",
+      "finding": "PerceptualHash.java is a concrete image pHash: 32x32 grayscale resize, full 32x32 2D DCT, top-left 8x8 excluding DC, median threshold producing 63 bits. Four nested DCT loops compute unused frequencies; no source alpha/HDR policy or original-pixel identity proof is established. rrrah already has independently specified perceptual hashing; do not substitute this for equality.",
+      "archived_files": [
+        "366-PerceptualHash.java"
+      ],
+      "upstream_tests_run": false
+    },
+    {
+      "index": 484,
+      "repository": "avicorpRu/pHashCalc",
+      "commit": "f87bdd3c323e36c38fb22f0f832a8b9012a410ce",
+      "previous_decision": "needs-deeper-source",
+      "followup_decision": "reject-no-library-source",
+      "finding": "The complete pinned tree contains the sample and build files but no non-sample algorithm source. README advertises a separate Maven artifact. The library algorithm is not auditable from this repository revision; sample usage and percentage claims do not establish its correctness.",
+      "archived_files": [
+        "484-README.md"
+      ],
+      "upstream_tests_run": false
+    }
+  ],
+  "manifest_sha256": "a3d6195490610f13e22ceecf19dcea89c87f9249f32b452fb557b3616cf61bcb"
+}

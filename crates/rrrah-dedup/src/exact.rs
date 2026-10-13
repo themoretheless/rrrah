@@ -9,6 +9,7 @@ use std::{
     fs::{self, File, Metadata, OpenOptions},
     io::{self, Read, Seek, SeekFrom},
     path::{Path, PathBuf},
+    sync::atomic::{AtomicBool, Ordering},
     time::SystemTime,
 };
 
@@ -208,13 +209,50 @@ fn validate(entry: &Entry, file: &File) -> Result<(), Failure> {
     Ok(())
 }
 
-fn read_block(file: &mut File, buffer: &mut [u8]) -> Result<usize, Failure> {
+fn read_block(
+    reader: &mut impl Read,
+    buffer: &mut [u8],
+    cancel: &impl Fn() -> bool,
+) -> Result<usize, Failure> {
     loop {
-        match file.read(buffer) {
+        check(cancel)?;
+        match reader.read(buffer) {
             Err(error) if error.kind() == io::ErrorKind::Interrupted => {}
             value => return value.map_err(Failure::Io),
         }
     }
+}
+
+fn read_exact_cancelled(
+    reader: &mut impl Read,
+    mut buffer: &mut [u8],
+    cancel: &impl Fn() -> bool,
+) -> Result<(), Failure> {
+    while !buffer.is_empty() {
+        let count = read_block(reader, buffer, cancel)?;
+        if count == 0 {
+            return Err(Failure::Io(io::Error::from(io::ErrorKind::UnexpectedEof)));
+        }
+        buffer = &mut buffer[count..];
+    }
+    Ok(())
+}
+
+fn write_all_cancelled(
+    writer: &mut impl io::Write,
+    mut buffer: &[u8],
+    cancel: &impl Fn() -> bool,
+) -> Result<(), Failure> {
+    while !buffer.is_empty() {
+        check(cancel)?;
+        match writer.write(buffer) {
+            Ok(0) => return Err(Failure::Io(io::Error::from(io::ErrorKind::WriteZero))),
+            Ok(count) => buffer = &buffer[count..],
+            Err(error) if error.kind() == io::ErrorKind::Interrupted => {}
+            Err(error) => return Err(Failure::Io(error)),
+        }
+    }
+    Ok(())
 }
 
 fn allocate_read_buffer(length: usize) -> Result<Vec<u8>, io::Error> {
@@ -242,7 +280,7 @@ fn hash(
             file.seek(SeekFrom::Start(offset))?;
             let length = (entry.stamp.bytes - offset).min(SAMPLE as u64);
             let length = usize::try_from(length).expect("sample size fits usize");
-            file.read_exact(&mut buffer[..length])?;
+            read_exact_cancelled(&mut file, &mut buffer[..length], cancel)?;
             *bytes_read += length as u64;
             hasher.update(&buffer[..length]);
         }
@@ -250,7 +288,7 @@ fn hash(
         let mut total = 0_u64;
         loop {
             check(cancel)?;
-            let count = read_block(&mut file, &mut buffer)?;
+            let count = read_block(&mut file, &mut buffer, cancel)?;
             if count == 0 {
                 break;
             }
@@ -286,10 +324,8 @@ fn equal(
     while remaining > 0 {
         check(cancel).map_err(|failure| (false, failure))?;
         let count = usize::try_from(remaining.min(BLOCK as u64)).expect("block fits usize");
-        a.read_exact(&mut ab[..count])
-            .map_err(|error| (true, Failure::Io(error)))?;
-        b.read_exact(&mut bb[..count])
-            .map_err(|error| (false, Failure::Io(error)))?;
+        read_exact_cancelled(&mut a, &mut ab[..count], cancel).map_err(|failure| (true, failure))?;
+        read_exact_cancelled(&mut b, &mut bb[..count], cancel).map_err(|failure| (false, failure))?;
         *bytes_read += (count as u64) * 2;
         if ab[..count] != bb[..count] {
             identical = false;
@@ -330,13 +366,28 @@ fn collect(
     cancel: &impl Fn() -> bool,
     report: &mut Report,
 ) -> Vec<Entry> {
-    let mut stack: Vec<_> = roots
-        .iter()
-        .cloned()
-        .collect::<BTreeSet<_>>()
+    // Admit root bookkeeping before cloning paths or opening any source. A root
+    // list beyond the traversal limit is refused as a whole; duplicates do not
+    // consume extra entries. Borrow roots while building the bounded index.
+    let mut admitted = BTreeSet::new();
+    for path in roots {
+        if cancel() {
+            report.cancelled = true;
+            return Vec::new();
+        }
+        if admitted.contains(path) {
+            continue;
+        }
+        if admitted.len() >= options.max_entries {
+            issue(report, path, IssueKind::Limit);
+            return Vec::new();
+        }
+        admitted.insert(path);
+    }
+    let mut stack: Vec<_> = admitted
         .into_iter()
         .rev()
-        .map(|path| (path, 0_usize))
+        .map(|path| (path.clone(), 0_usize))
         .collect();
     let mut directories = BTreeSet::new();
     let mut files: BTreeMap<Identity, Entry> = BTreeMap::new();
@@ -427,6 +478,8 @@ fn collect(
 /// Cancellation is checked during traversal and every bounded read. All groups
 /// require full hashes and fresh byte confirmation. Aliases are reported
 /// separately and cannot inflate the number of independent duplicate copies.
+/// The final publication pass does not invoke `cancel`; use
+/// [`scan_with_cancel_flag`] for cancellation during that pass.
 pub fn scan(roots: &[PathBuf], options: &Options, cancel: impl Fn() -> bool) -> Report {
     scan_with_digest(roots, options, cancel, |digest| digest)
 }
@@ -434,10 +487,40 @@ pub fn scan(roots: &[PathBuf], options: &Options, cancel: impl Fn() -> bool) -> 
 /// Scan with full-content observations for every admitted physical file,
 /// including files pruned by size or sampled hashes. Revalidate all observations
 /// before publication and discard groups involving changed sources.
-/// This costs at least two full reads of each successfully observed file.
+/// This costs at least three full reads of each successfully observed file.
 /// Observations still do not form an atomic filesystem snapshot.
+/// The final pass does not invoke `cancel`; [`scan_verified_with_cancel_flag`]
+/// supports cancellation during its reads.
 pub fn scan_verified(roots: &[PathBuf], options: &Options, cancel: impl Fn() -> bool) -> Report {
-    let mut report = scan_observed(roots, options, cancel, |digest| digest, true);
+    let mut report = scan_observed(roots, options, cancel, |digest| digest, true, None);
+    if report.cancelled {
+        report.groups.clear();
+    }
+    report
+}
+
+/// Exact scan with an externally owned cancellation flag, including the final
+/// publication reads. Cancellation discards all groups. Keep the flag set until
+/// the call returns; an in-flight filesystem operation is not preempted.
+pub fn scan_with_cancel_flag(roots: &[PathBuf], options: &Options, cancel: &AtomicBool) -> Report {
+    scan_flagged(roots, options, cancel, false)
+}
+
+/// Fully observed exact scan with the same cancellation contract as
+/// [`scan_with_cancel_flag`]. No user callback runs during publication.
+pub fn scan_verified_with_cancel_flag(
+    roots: &[PathBuf],
+    options: &Options,
+    cancel: &AtomicBool,
+) -> Report {
+    scan_flagged(roots, options, cancel, true)
+}
+
+fn scan_flagged(roots: &[PathBuf], options: &Options, cancel: &AtomicBool, verify_all: bool) -> Report {
+    let mut report = scan_observed(
+        roots, options, || cancel.load(Ordering::Acquire), |digest| digest,
+        verify_all, Some(cancel),
+    );
     if report.cancelled {
         report.groups.clear();
     }
@@ -452,7 +535,7 @@ fn scan_with_digest(
     cancel: impl Fn() -> bool,
     digest_identity: impl Fn([u8; 32]) -> [u8; 32],
 ) -> Report {
-    scan_observed(roots, options, cancel, digest_identity, false)
+    scan_observed(roots, options, cancel, digest_identity, false, None)
 }
 
 #[allow(clippy::too_many_lines)] // Keep staged collision partitioning and representative recovery together.
@@ -462,6 +545,7 @@ fn scan_observed(
     cancel: impl Fn() -> bool,
     digest_identity: impl Fn([u8; 32]) -> [u8; 32],
     verify_all: bool,
+    publication_cancel: Option<&AtomicBool>,
 ) -> Report {
     let mut report = Report::default();
     let entries = collect(roots, options, &cancel, &mut report);
@@ -582,6 +666,18 @@ fn scan_observed(
     }
     if verify_all {
         validate_observations(&entries, &baseline, &cancel, &mut report);
+    }
+    if !report.cancelled {
+        // A later callback can mutate a member already validated above or in
+        // an earlier group. Publication owns this last pass: no caller code
+        // runs after an observation is checked.
+        let publication_observations = if verify_all { &baseline } else { &observed_content };
+        let publication_stopped = || publication_cancel.is_some_and(|flag| flag.load(Ordering::Acquire));
+        validate_observations(&entries, publication_observations, &publication_stopped, &mut report);
+        if publication_stopped() {
+            report.cancelled = true;
+            report.groups.clear();
+        }
     }
     report.groups.sort_by(|a, b| a.paths.cmp(&b.paths));
     report.issues.sort_by(|a, b| a.path.cmp(&b.path));
@@ -727,7 +823,105 @@ impl From<Failure> for SnapshotError {
     }
 }
 
+/// Compare two regular files without decoding or loading a model.
+///
+/// `max_file_bytes` limits each file. A positive result requires streaming byte
+/// confirmation, not just matching digests. Both positive and negative results
+/// validate both original observations after the last caller checkpoint.
+/// Symlinks are followed initially. This observes file bytes only, not decoded
+/// pixels or external resources, and is not an atomic filesystem snapshot.
+///
+/// # Errors
+/// Rejects nonregular/oversized sources, mutation, I/O failure and cancellation.
+pub fn compare_files(
+    left: &Path,
+    right: &Path,
+    max_file_bytes: u64,
+    cancel: impl Fn() -> bool,
+) -> Result<bool, SnapshotError> {
+    let stopped = std::cell::Cell::new(false);
+    let cancelled = || {
+        let value = stopped.get() || cancel();
+        stopped.set(value);
+        value
+    };
+    let result: Result<_, SnapshotError> = (|| {
+        let first = ContentSnapshot::read(left, max_file_bytes, &cancelled)?;
+        let second = ContentSnapshot::read(right, max_file_bytes, &cancelled)?;
+        let identical = compare_observed(&first, &second, &cancelled)?;
+        Ok((identical, first, second))
+    })();
+    // No caller callback after this point: it could mutate either source after
+    // that source had already passed its final validation.
+    if cancelled() {
+        return Err(SnapshotError::Cancelled);
+    }
+    let (identical, first, second) = result?;
+    first.verify(|| false)?;
+    second.verify(|| false)?;
+    Ok(identical)
+}
+
+pub(crate) fn compare_observed(
+    first: &ContentSnapshot,
+    second: &ContentSnapshot,
+    cancel: &impl Fn() -> bool,
+) -> Result<bool, SnapshotError> {
+    compare_observed_tagged(first, second, cancel).map_err(|(_, error)| error)
+}
+
+/// The bool in an error identifies the left (true) or right (false) source.
+pub(crate) fn compare_observed_tagged(
+    first: &ContentSnapshot,
+    second: &ContentSnapshot,
+    cancel: &impl Fn() -> bool,
+) -> Result<bool, (bool, SnapshotError)> {
+    check(cancel).map_err(|error| (true, SnapshotError::from(error)))?;
+    if first.entry.stamp.bytes != second.entry.stamp.bytes || first.digest != second.digest {
+        return Ok(false);
+    }
+    equal(&first.entry, &second.entry, cancel, &mut 0)
+        .map_err(|(left, failure)| (left, SnapshotError::from(failure)))
+}
+
 impl ContentSnapshot {
+    /// Read at most 64 prefix bytes from the same streaming observation that
+    /// revalidates the full original digest. Unlike `read_prefix`, this binds the
+    /// returned header to the original content even if metadata misses a rewrite.
+    /// # Errors
+    /// Policy, I/O, mutation or cancellation failure; no unverified prefix escapes.
+    pub fn read_verified_prefix(
+        &self,
+        length: usize,
+        cancel: impl Fn() -> bool,
+    ) -> Result<Vec<u8>, SnapshotError> {
+        check(&cancel)?;
+        if length > 64 || length as u64 > self.byte_count() {
+            return Err(SnapshotError::Policy);
+        }
+        let mut file = open(&self.entry)?;
+        let mut prefix = allocate_read_buffer(length)?;
+        let mut buffer = allocate_read_buffer(BLOCK)?;
+        let mut remaining = self.byte_count();
+        let mut hasher = blake3::Hasher::new();
+        while remaining > 0 {
+            check(&cancel)?;
+            let count = usize::try_from(remaining.min(BLOCK as u64)).expect("block fits usize");
+            read_exact_cancelled(&mut file, &mut buffer[..count], &cancel)?;
+            if remaining == self.byte_count() {
+                prefix.copy_from_slice(&buffer[..length]);
+            }
+            hasher.update(&buffer[..count]);
+            remaining -= count as u64;
+        }
+        check(&cancel)?;
+        validate(&self.entry, &file)?;
+        if hasher.finalize().as_bytes() != &self.digest {
+            return Err(SnapshotError::Changed);
+        }
+        Ok(prefix)
+    }
+
     /// Capture identity and full content, following the initial path's symlinks.
     ///
     /// # Errors
@@ -776,7 +970,7 @@ impl ContentSnapshot {
         }
         let mut file = open(&self.entry)?;
         let mut prefix = allocate_read_buffer(length)?;
-        file.read_exact(&mut prefix)?;
+        read_exact_cancelled(&mut file, &mut prefix, &cancel)?;
         check(&cancel)?;
         validate(&self.entry, &file)?;
         Ok(prefix)
@@ -787,6 +981,8 @@ impl ContentSnapshot {
     }
 
     /// Stream a bounded source range through a validated regular-file handle.
+    /// Cancellation is checked between write attempts; failure may leave a written prefix.
+    /// An individual blocking writer call cannot be preempted.
     ///
     /// # Errors
     /// Rejects invalid ranges, source mutation, I/O failure or cancellation.
@@ -808,8 +1004,8 @@ impl ContentSnapshot {
         while remaining != 0 {
             check(&cancel)?;
             let length = usize::try_from(remaining.min(BLOCK as u64)).map_err(|_| SnapshotError::Policy)?;
-            file.read_exact(&mut buffer[..length])?;
-            output.write_all(&buffer[..length])?;
+            read_exact_cancelled(&mut file, &mut buffer[..length], &cancel)?;
+            write_all_cancelled(&mut output, &buffer[..length], &cancel)?;
             remaining -= length as u64;
         }
         check(&cancel)?;
@@ -837,6 +1033,234 @@ impl ContentSnapshot {
 #[cfg(test)]
 mod collision_tests {
     use super::*;
+
+    #[test]
+    fn formerly_empty_entries_are_reopened_before_hash_or_equality() {
+        let root = tempfile::tempdir().unwrap();
+        let paths = ["a", "b", "healthy-a", "healthy-b"].map(|name| root.path().join(name));
+        for path in &paths {
+            fs::write(path, []).unwrap();
+        }
+        let mut report = Report::default();
+        let entries = collect(&paths, &Options::default(), &|| false, &mut report);
+        assert!(report.complete());
+        let entry = |path: &Path| entries.iter().find(|entry| entry.path == path).unwrap();
+        fs::write(&paths[0], b"AAAA").unwrap();
+        fs::write(&paths[1], b"BBBB").unwrap();
+        for sampled in [true, false] {
+            for path in &paths[..2] {
+                assert!(matches!(
+                    hash(entry(path), sampled, &|| false, &mut report.bytes_read),
+                    Err(Failure::Changed)
+                ));
+            }
+            assert_eq!(
+                hash(entry(&paths[2]), sampled, &|| false, &mut report.bytes_read).unwrap(),
+                *blake3::hash(&[]).as_bytes()
+            );
+        }
+        assert!(matches!(
+            equal(
+                entry(&paths[0]),
+                entry(&paths[2]),
+                &|| false,
+                &mut report.bytes_read
+            ),
+            Err((true, Failure::Changed))
+        ));
+        assert!(matches!(
+            equal(
+                entry(&paths[2]),
+                entry(&paths[1]),
+                &|| false,
+                &mut report.bytes_read
+            ),
+            Err((false, Failure::Changed))
+        ));
+        assert!(
+            equal(
+                entry(&paths[2]),
+                entry(&paths[3]),
+                &|| false,
+                &mut report.bytes_read
+            )
+            .unwrap()
+        );
+        // A fresh public scan must retain the healthy empty pair and separate
+        // the now nonempty files rather than reusing the zero-size observation.
+        let fresh = scan_verified(&paths, &Options::default(), || false);
+        assert!(fresh.complete());
+        assert_eq!(fresh.groups.len(), 1);
+        assert_eq!(fresh.groups[0].bytes, 0);
+        assert_eq!(fresh.groups[0].paths, paths[2..]);
+    }
+
+    #[test]
+    fn verified_prefix_binds_header_and_body_even_when_metadata_matches() {
+        let dir = tempfile::tempdir().unwrap();
+        let path = dir.path().join("source");
+        let original = vec![7u8; BLOCK + 19];
+        for offset in [0, BLOCK + 9] {
+            fs::write(&path, &original).unwrap();
+            let mut snapshot = ContentSnapshot::read(&path, u64::MAX, || false).unwrap();
+            let mut changed = original.clone();
+            changed[offset] ^= 8;
+            fs::write(&path, &changed).unwrap();
+            // Simulate a filesystem whose metadata cannot reveal the rewrite.
+            snapshot.entry.stamp =
+                Stamp::new(&fs::metadata(&path).unwrap(), &snapshot.entry.canonical).unwrap();
+            assert_eq!(snapshot.read_prefix(64, || false).unwrap(), changed[..64]);
+            assert!(matches!(
+                snapshot.read_verified_prefix(64, || false),
+                Err(SnapshotError::Changed)
+            ));
+        }
+    }
+
+    #[test]
+    fn verified_prefix_policy_cancel_and_final_mutation_do_not_publish_headers() {
+        let dir = tempfile::tempdir().unwrap();
+        let path = dir.path().join("source");
+        for bytes in [Vec::new(), vec![7u8], vec![9u8; 2 * BLOCK + 9]] {
+            fs::write(&path, &bytes).unwrap();
+            let snapshot = ContentSnapshot::read(&path, u64::MAX, || false).unwrap();
+            let length = bytes.len().min(64);
+            let calls = std::cell::Cell::new(0);
+            assert_eq!(
+                snapshot
+                    .read_verified_prefix(length, || {
+                        calls.set(calls.get() + 1);
+                        false
+                    })
+                    .unwrap(),
+                bytes[..length]
+            );
+            assert!(matches!(
+                snapshot.read_verified_prefix(65, || false),
+                Err(SnapshotError::Policy)
+            ));
+            for stop in 1..=calls.get() {
+                let current = std::cell::Cell::new(0);
+                assert!(matches!(
+                    snapshot.read_verified_prefix(length, || {
+                        current.set(current.get() + 1);
+                        current.get() == stop
+                    }),
+                    Err(SnapshotError::Cancelled)
+                ));
+            }
+            let last = calls.get();
+            calls.set(0);
+            assert!(matches!(
+                snapshot.read_verified_prefix(length, || {
+                    calls.set(calls.get() + 1);
+                    if calls.get() == last {
+                        let mut changed = bytes.clone();
+                        changed.push(0);
+                        fs::write(&path, changed).unwrap();
+                    }
+                    false
+                }),
+                Err(SnapshotError::Changed)
+            ));
+        }
+    }
+
+    #[test]
+    fn pair_comparison_confirms_bytes_and_refuses_digest_collision() {
+        let dir = tempfile::tempdir().unwrap();
+        let a = dir.path().join("a");
+        let b = dir.path().join("b");
+        for data in [Vec::new(), vec![17; BLOCK * 2 + 7]] {
+            fs::write(&a, &data).unwrap();
+            fs::write(&b, &data).unwrap();
+            assert!(compare_files(&a, &b, data.len() as u64, || false).unwrap());
+            assert!(compare_files(&a, &a, data.len() as u64, || false).unwrap());
+        }
+        let mut data = fs::read(&b).unwrap();
+        *data.last_mut().unwrap() ^= 1;
+        fs::write(&b, &data).unwrap();
+        let first = ContentSnapshot::read(&a, u64::MAX, || false).unwrap();
+        let mut second = ContentSnapshot::read(&b, u64::MAX, || false).unwrap();
+        second.digest = first.digest;
+        assert!(!compare_observed(&first, &second, &|| false).unwrap());
+        assert!(!compare_files(&a, &b, u64::MAX, || false).unwrap());
+        fs::write(&b, b"short").unwrap();
+        assert!(!compare_files(&a, &b, u64::MAX, || false).unwrap());
+    }
+
+    #[test]
+    fn pair_comparison_checks_policy_and_cancellation_at_every_checkpoint() {
+        let dir = tempfile::tempdir().unwrap();
+        let a = dir.path().join("a");
+        let b = dir.path().join("b");
+        fs::write(&a, vec![1; BLOCK + 1]).unwrap();
+        for different in [false, true] {
+            fs::write(&b, vec![if different { 2 } else { 1 }; BLOCK + 1]).unwrap();
+            let calls = std::cell::Cell::new(0);
+            assert_eq!(
+                compare_files(&a, &b, u64::MAX, || {
+                    calls.set(calls.get() + 1);
+                    false
+                })
+                .unwrap(),
+                !different
+            );
+            for stop in 1..=calls.get() {
+                let current = std::cell::Cell::new(0);
+                assert!(
+                    matches!(
+                        compare_files(&a, &b, u64::MAX, || {
+                            current.set(current.get() + 1);
+                            current.get() == stop
+                        }),
+                        Err(SnapshotError::Cancelled)
+                    ),
+                    "checkpoint {stop}"
+                );
+            }
+        }
+        assert!(matches!(
+            compare_files(&a, &b, 0, || false),
+            Err(SnapshotError::Policy)
+        ));
+        assert!(matches!(
+            compare_files(dir.path(), &b, u64::MAX, || false),
+            Err(SnapshotError::Policy)
+        ));
+        assert!(matches!(
+            compare_files(&a, &dir.path().join("absent"), u64::MAX, || false),
+            Err(SnapshotError::Io(_))
+        ));
+    }
+
+    #[test]
+    fn pair_comparison_rejects_last_checkpoint_mutations_on_both_outcomes() {
+        let dir = tempfile::tempdir().unwrap();
+        let paths = [dir.path().join("a"), dir.path().join("b")];
+        for different in [false, true] {
+            for victim in &paths {
+                fs::write(&paths[0], b"first").unwrap();
+                fs::write(&paths[1], if different { b"other" } else { b"first" }).unwrap();
+                let calls = std::cell::Cell::new(0);
+                compare_files(&paths[0], &paths[1], 5, || {
+                    calls.set(calls.get() + 1);
+                    false
+                })
+                .unwrap();
+                let final_checkpoint = calls.get();
+                calls.set(0);
+                let result = compare_files(&paths[0], &paths[1], 5, || {
+                    calls.set(calls.get() + 1);
+                    if calls.get() == final_checkpoint {
+                        fs::write(victim, b"new!!").unwrap();
+                    }
+                    false
+                });
+                assert!(matches!(result, Err(SnapshotError::Changed)));
+            }
+        }
+    }
 
     #[test]
     fn read_buffer_capacity_failure_is_explicit_and_retry_succeeds() {
@@ -1005,5 +1429,215 @@ mod observed_snapshot_policy_tests {
         let retry = ContentSnapshot::read(&path, 16, || false).unwrap();
         assert_eq!(retry.byte_count(), 16);
         retry.verify(|| false).unwrap();
+    }
+}
+
+#[cfg(test)]
+mod interrupted_read_tests {
+    use super::*;
+    use std::cell::Cell;
+    struct InterruptedReader<'a> {
+        calls: &'a Cell<usize>,
+    }
+    impl Read for InterruptedReader<'_> {
+        fn read(&mut self, _: &mut [u8]) -> io::Result<usize> {
+            self.calls.set(self.calls.get() + 1);
+            Err(io::ErrorKind::Interrupted.into())
+        }
+    }
+    #[test]
+    fn interrupted_reads_observe_cancellation_before_retry() {
+        let calls = Cell::new(0);
+        let mut reader = InterruptedReader { calls: &calls };
+        let result = read_exact_cancelled(&mut reader, &mut [0; 8], &|| calls.get() >= 3);
+        assert!(matches!(result, Err(Failure::Cancelled)));
+        assert_eq!(calls.get(), 3);
+    }
+    #[test]
+    fn read_cancelled_before_first_attempt_does_not_touch_reader() {
+        let calls = Cell::new(0);
+        let mut reader = InterruptedReader { calls: &calls };
+        assert!(matches!(
+            read_block(&mut reader, &mut [0; 1], &|| true),
+            Err(Failure::Cancelled)
+        ));
+        assert_eq!(calls.get(), 0);
+    }
+    #[test]
+    fn short_reads_and_interruptions_preserve_content_and_eof_errors() {
+        struct Chunked {
+            calls: usize,
+            data: io::Cursor<Vec<u8>>,
+        }
+        impl Read for Chunked {
+            fn read(&mut self, buffer: &mut [u8]) -> io::Result<usize> {
+                self.calls += 1;
+                if self.calls % 2 == 1 {
+                    return Err(io::ErrorKind::Interrupted.into());
+                }
+                let count = buffer.len().min(2);
+                self.data.read(&mut buffer[..count])
+            }
+        }
+        let mut reader = Chunked {
+            calls: 0,
+            data: io::Cursor::new(b"abcdefg".to_vec()),
+        };
+        let mut buffer = [0; 7];
+        read_exact_cancelled(&mut reader, &mut buffer, &|| false).unwrap();
+        assert_eq!(&buffer, b"abcdefg");
+        assert!(
+            matches!(read_exact_cancelled(&mut reader, &mut [0; 1], &|| false), Err(Failure::Io(e)) if e.kind() == io::ErrorKind::UnexpectedEof)
+        );
+        read_exact_cancelled(&mut reader, &mut [], &|| false).unwrap();
+    }
+}
+
+#[cfg(test)]
+mod cancelled_output_tests {
+    use super::*;
+    use std::cell::{Cell, RefCell};
+    struct Writer<'a> {
+        calls: &'a Cell<usize>,
+        bytes: &'a RefCell<Vec<u8>>,
+        mode: u8,
+    }
+    impl io::Write for Writer<'_> {
+        fn write(&mut self, bytes: &[u8]) -> io::Result<usize> {
+            self.calls.set(self.calls.get() + 1);
+            match self.mode {
+                0 if self.calls.get() <= 3 => return Err(io::ErrorKind::Interrupted.into()),
+                2 if self.calls.get() % 2 == 1 => return Err(io::ErrorKind::Interrupted.into()),
+                3 => return Ok(0),
+                4 => return Err(io::ErrorKind::BrokenPipe.into()),
+                _ => {}
+            }
+            let count = if self.mode == 0 {
+                bytes.len()
+            } else {
+                bytes.len().min(2)
+            };
+            self.bytes.borrow_mut().extend_from_slice(&bytes[..count]);
+            Ok(count)
+        }
+        fn flush(&mut self) -> io::Result<()> {
+            Ok(())
+        }
+    }
+    fn snapshot() -> (tempfile::TempDir, ContentSnapshot) {
+        let root = tempfile::tempdir().unwrap();
+        let path = root.path().join("source");
+        fs::write(&path, b"0123456789").unwrap();
+        let snapshot = ContentSnapshot::read(&path, 10, || false).unwrap();
+        (root, snapshot)
+    }
+    #[test]
+    fn interrupted_output_cancels_before_next_write_attempt() {
+        let (_root, snapshot) = snapshot();
+        let calls = Cell::new(0);
+        let bytes = RefCell::new(Vec::new());
+        let writer = Writer {
+            calls: &calls,
+            bytes: &bytes,
+            mode: 0,
+        };
+        assert!(matches!(
+            snapshot.copy_range(1, 8, writer, || calls.get() >= 3),
+            Err(SnapshotError::Cancelled)
+        ));
+        assert_eq!(calls.get(), 3);
+        assert!(bytes.borrow().is_empty());
+    }
+    #[test]
+    fn partial_output_cancels_without_writing_remaining_bytes() {
+        let (_root, snapshot) = snapshot();
+        let calls = Cell::new(0);
+        let bytes = RefCell::new(Vec::new());
+        let writer = Writer {
+            calls: &calls,
+            bytes: &bytes,
+            mode: 1,
+        };
+        assert!(matches!(
+            snapshot.copy_range(1, 8, writer, || calls.get() >= 2),
+            Err(SnapshotError::Cancelled)
+        ));
+        assert_eq!(calls.get(), 2);
+        assert_eq!(&*bytes.borrow(), b"1234");
+    }
+    #[test]
+    fn healthy_short_interrupted_output_preserves_exact_range() {
+        let (_root, snapshot) = snapshot();
+        let calls = Cell::new(0);
+        let bytes = RefCell::new(Vec::new());
+        let writer = Writer {
+            calls: &calls,
+            bytes: &bytes,
+            mode: 2,
+        };
+        snapshot.copy_range(1, 8, writer, || false).unwrap();
+        assert_eq!(&*bytes.borrow(), b"12345678");
+        assert_eq!(calls.get(), 8);
+    }
+    #[test]
+    fn zero_progress_and_output_errors_remain_typed_io_failures() {
+        let (_root, snapshot) = snapshot();
+        for (mode, expected) in [(3, io::ErrorKind::WriteZero), (4, io::ErrorKind::BrokenPipe)] {
+            let calls = Cell::new(0);
+            let bytes = RefCell::new(Vec::new());
+            let writer = Writer {
+                calls: &calls,
+                bytes: &bytes,
+                mode,
+            };
+            assert!(
+                matches!(snapshot.copy_range(1, 8, writer, || false), Err(SnapshotError::Io(e)) if e.kind() == expected)
+            );
+            assert_eq!(calls.get(), 1);
+            assert!(bytes.borrow().is_empty());
+        }
+    }
+}
+
+#[cfg(test)]
+mod cancellation_flag_tests {
+    use super::*;
+    use std::cell::Cell;
+
+    #[test]
+    fn final_publication_observes_flag_without_reentering_caller() {
+        let directory = tempfile::tempdir().unwrap();
+        let paths = [directory.path().join("a"), directory.path().join("b")];
+        for path in &paths {
+            fs::write(path, vec![91; BLOCK * 3]).unwrap();
+        }
+        for verified in [false, true] {
+            let calls = Cell::new(0);
+            let baseline = scan_observed(&paths, &Options::default(), || {
+                calls.set(calls.get() + 1);
+                false
+            }, |digest| digest, verified, None);
+            assert!(baseline.complete());
+            assert_eq!(baseline.groups.len(), 1);
+            let last = calls.get();
+            calls.set(0);
+            let flag = AtomicBool::new(false);
+            let cancelled = scan_observed(&paths, &Options::default(), || {
+                calls.set(calls.get() + 1);
+                if calls.get() == last {
+                    flag.store(true, Ordering::Release);
+                }
+                // Only the publication flag can observe this cancellation.
+                false
+            }, |digest| digest, verified, Some(&flag));
+            assert_eq!(calls.get(), last);
+            assert!(cancelled.cancelled);
+            assert!(cancelled.groups.is_empty());
+            assert!(cancelled.bytes_read < baseline.bytes_read);
+            flag.store(false, Ordering::Release);
+            let retry = scan_flagged(&paths, &Options::default(), &flag, verified);
+            assert!(retry.complete());
+            assert_eq!(retry.groups, baseline.groups);
+        }
     }
 }

@@ -1,0 +1,126 @@
+warning: function `fallible_zeroed_bytes` is never used
+   --> crates/rrrah-cache/src/mosaic_payload_v1.rs:728:4
+    |
+728 | fn fallible_zeroed_bytes(len: usize) -> Result<Box<[u8]>, MosaicPayloadError> {
+    |    ^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-cache` (lib) generated 1 warning
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+warning: methods `submit` and `submit_image` are never used
+    --> crates/rrrah-app/src/main.rs:1377:8
+     |
+1085 | impl ForegroundLoader {
+     | --------------------- methods in this implementation
+...
+1377 |     fn submit(&self, path: PathBuf) -> Result<u64> {
+     |        ^^^^^^
+...
+1380 |     fn submit_image(&self, path: PathBuf, image_index: usize) -> Result<u64> {
+     |        ^^^^^^^^^^^^
+     |
+     = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: associated items `install_with_cancel`, `refresh`, and `refresh_with_cancel` are never used
+   --> crates/rrrah-app/src/raster_viewport.rs:396:19
+    |
+ 26 | impl ResidentSource {
+    | ------------------- associated items in this implementation
+...
+396 |     pub(crate) fn install_with_cancel<F: FnMut() -> bool>(
+    |                   ^^^^^^^^^^^^^^^^^^^
+...
+483 |     pub(crate) fn refresh(
+    |                   ^^^^^^^
+...
+503 |     pub(crate) fn refresh_with_cancel<F: FnMut() -> bool>(
+    |                   ^^^^^^^^^^^^^^^^^^^
+
+warning: `rrrah` (bin "rrrah") generated 2 warnings
+    Finished `test` profile [optimized + debuginfo] target(s) in 2.89s
+     Running tests/raw_collection_metal.rs (target/debug/deps/raw_collection_metal-5d07d17c3f2a5a20)
+
+running 1 test
+RAW collection adapter: Metal Apple M4 Max
+RAW initial latency: source=/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/1294.cr2; native_decode_ms=609.884; gpu_upload_render_readback_ms=518.871; output=1920x1080
+seed /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/1294.cr2: 6288x4056; 25504128 samples
+RAW initial latency: source=/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/898.nef; native_decode_ms=422.109; gpu_upload_render_readback_ms=26.801; output=1920x1080
+seed /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/898.nef: 6032x4032; 24321024 samples
+RAW initial latency: source=/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/2414.arw; native_decode_ms=87.413; gpu_upload_render_readback_ms=26.572; output=1920x1080
+seed /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/2414.arw: 6048x4024; 24337152 samples
+RAW initial latency: source=/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/1084.orf; native_decode_ms=559.458; gpu_upload_render_readback_ms=20.088; output=1920x1080
+seed /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/1084.orf: 4640x3472; 16110080 samples
+RAW initial latency: source=/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/831.pef; native_decode_ms=400.114; gpu_upload_render_readback_ms=18.643; output=1920x1080
+seed /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/831.pef: 4352x2868; 12481536 samples
+RAW initial latency: source=/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/5025.rw2; native_decode_ms=81.352; gpu_upload_render_readback_ms=21.428; output=1920x1080
+seed /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/5025.rw2: 4760x3472; 16526720 samples
+RAW initial latency: source=/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/2883.raf; native_decode_ms=43.616; gpu_upload_render_readback_ms=25.960; output=1920x1080
+seed /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/2883.raf: 5120x3288; 16834560 samples
+RAW initial latency: source=/Users/themoretheless/Documents/Sources/rrrah/tests/IMG_9043.CR3; native_decode_ms=65.615; gpu_upload_render_readback_ms=34.271; output=1920x1080
+seed /Users/themoretheless/Documents/Sources/rrrah/tests/IMG_9043.CR3: 6188x4120; 25494560 samples
+RAW initial latency: source=/Users/themoretheless/Documents/Sources/rrrah/tests/IMG_9074.CR3; native_decode_ms=67.358; gpu_upload_render_readback_ms=32.874; output=1920x1080
+seed /Users/themoretheless/Documents/Sources/rrrah/tests/IMG_9074.CR3: 6188x4120; 25494560 samples
+RAW collection rounds=1; elapsed=0.565s; reads=9; root=0; queue=0
+RAW collection rounds=2; elapsed=1.088s; reads=18; root=0; queue=0
+RAW collection rounds=3; elapsed=1.654s; reads=27; root=0; queue=0
+RAW collection rounds=4; elapsed=2.190s; reads=36; root=0; queue=0
+RAW collection rounds=5; elapsed=2.755s; reads=45; root=0; queue=0
+RAW collection rounds=6; elapsed=3.291s; reads=54; root=0; queue=0
+RAW collection rounds=7; elapsed=3.829s; reads=63; root=0; queue=0
+RAW collection rounds=8; elapsed=4.378s; reads=72; root=0; queue=0
+RAW collection rounds=9; elapsed=4.924s; reads=81; root=0; queue=0
+RAW collection rounds=10; elapsed=5.462s; reads=90; root=0; queue=0
+RAW collection rounds=11; elapsed=6.021s; reads=99; root=0; queue=0
+RAW collection rounds=12; elapsed=6.584s; reads=108; root=0; queue=0
+RAW collection rounds=13; elapsed=7.148s; reads=117; root=0; queue=0
+RAW collection rounds=14; elapsed=7.700s; reads=126; root=0; queue=0
+RAW collection rounds=15; elapsed=8.232s; reads=135; root=0; queue=0
+RAW collection rounds=16; elapsed=8.793s; reads=144; root=0; queue=0
+RAW collection rounds=17; elapsed=9.335s; reads=153; root=0; queue=0
+RAW collection rounds=18; elapsed=9.874s; reads=162; root=0; queue=0
+RAW collection rounds=19; elapsed=10.439s; reads=171; root=0; queue=0
+RAW collection rounds=20; elapsed=11.003s; reads=180; root=0; queue=0
+RAW collection rounds=21; elapsed=11.571s; reads=189; root=0; queue=0
+RAW collection rounds=22; elapsed=12.104s; reads=198; root=0; queue=0
+RAW collection rounds=23; elapsed=12.666s; reads=207; root=0; queue=0
+RAW collection rounds=24; elapsed=13.235s; reads=216; root=0; queue=0
+RAW collection rounds=25; elapsed=13.795s; reads=225; root=0; queue=0
+RAW collection rounds=26; elapsed=14.367s; reads=234; root=0; queue=0
+RAW collection rounds=27; elapsed=14.930s; reads=243; root=0; queue=0
+RAW collection rounds=28; elapsed=15.501s; reads=252; root=0; queue=0
+RAW collection rounds=29; elapsed=16.033s; reads=261; root=0; queue=0
+RAW collection rounds=30; elapsed=16.586s; reads=270; root=0; queue=0
+RAW collection rounds=31; elapsed=17.125s; reads=279; root=0; queue=0
+RAW collection rounds=32; elapsed=17.664s; reads=288; root=0; queue=0
+RAW collection rounds=33; elapsed=18.215s; reads=297; root=0; queue=0
+RAW collection rounds=34; elapsed=18.754s; reads=306; root=0; queue=0
+RAW collection rounds=35; elapsed=19.303s; reads=315; root=0; queue=0
+RAW collection rounds=36; elapsed=19.857s; reads=324; root=0; queue=0
+RAW collection rounds=37; elapsed=20.412s; reads=333; root=0; queue=0
+RAW collection rounds=38; elapsed=20.970s; reads=342; root=0; queue=0
+RAW collection rounds=39; elapsed=21.521s; reads=351; root=0; queue=0
+RAW collection rounds=40; elapsed=22.061s; reads=360; root=0; queue=0
+RAW collection rounds=41; elapsed=22.623s; reads=369; root=0; queue=0
+RAW collection rounds=42; elapsed=23.172s; reads=378; root=0; queue=0
+RAW collection rounds=43; elapsed=23.713s; reads=387; root=0; queue=0
+RAW collection rounds=44; elapsed=24.267s; reads=396; root=0; queue=0
+RAW collection rounds=45; elapsed=24.834s; reads=405; root=0; queue=0
+RAW collection rounds=46; elapsed=25.390s; reads=414; root=0; queue=0
+RAW collection rounds=47; elapsed=25.923s; reads=423; root=0; queue=0
+RAW collection rounds=48; elapsed=26.482s; reads=432; root=0; queue=0
+RAW collection rounds=49; elapsed=27.020s; reads=441; root=0; queue=0
+RAW collection rounds=50; elapsed=27.554s; reads=450; root=0; queue=0
+RAW collection rounds=51; elapsed=28.086s; reads=459; root=0; queue=0
+RAW collection rounds=52; elapsed=28.642s; reads=468; root=0; queue=0
+RAW collection rounds=53; elapsed=29.170s; reads=477; root=0; queue=0
+RAW collection rounds=54; elapsed=29.709s; reads=486; root=0; queue=0
+RAW collection rounds=55; elapsed=30.241s; reads=495; root=0; queue=0
+RAW collection complete: rounds=55; elapsed=30.241s; reads=495; writes=9; root=0; queue=0
+RAW collection latency: stage=restore; samples=495; total=495; window=last4096; p50_ms=41.714; p95_ms=44.269; max_ms=51.934
+RAW collection latency: stage=gpu_upload_render_readback; samples=495; total=495; window=last4096; p50_ms=24.184; p95_ms=33.012; max_ms=41.471
+RAW persistent GPU complete: resident_peak=146800640; upload_peak=2097152; queue_peak=73400320; resident=0; upload=0; queue=0
+test real_raw_collection_eviction_and_swap_preserve_metal_frames ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 33.83s
+

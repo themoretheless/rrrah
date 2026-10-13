@@ -57,6 +57,23 @@ fn image(invert: bool) -> Vec<f32> {
         .collect()
 }
 #[test]
+fn published_bounds_follow_selected_original_windows_and_exclude_bad_geometry() {
+    let source=image(false);
+    let target:Vec<f32>=(0..64i32).flat_map(|y|(0..64i32).flat_map(move|x| {
+        let v=0.2+(((x-4)*13+(y-6)*7).rem_euclid(29)) as f32/50.;[v,v,v,1.]
+    })).collect();
+    let a=LinearRgbaView::new(64,64,&source,4096,||false).unwrap();
+    let b=LinearRgbaView::new(64,64,&target,4096,||false).unwrap();
+    let mut pts=points();for p in &mut pts {p.target[0]+=4.;p.target[1]+=6.;}
+    pts.push(Correspondence{source:[56.,56.],target:[56.,56.]});
+    let mut p=policy();p.local.maximum_points=11;p.local.maximum_point_checks=66;p.maximum_selection_checks=176;p.local.rank.maximum_sites=1078;p.local.rank.maximum_pixel_reads=5390;
+    let transform=ProjectiveTransform{matrix:[[1.,0.,4.],[0.,1.,6.],[0.,0.,1.]]};
+    let budget=MemoryBudget::new(100000);
+    let e=compare_anchor_rank(&a,&b,transform,&pts,p,&budget,||false).unwrap();
+    assert!(e.supported);assert_eq!((e.forward_anchors,e.reverse_anchors),(10,10));
+    assert_eq!(e.source_window_bounds,[7,7,35,19]);assert_eq!(e.target_window_bounds,[11,13,35,19]);assert_eq!(budget.used(),0);
+}
+#[test]
 fn geometry_selected_windows_aggregate_information_and_reject_inverted_or_flat_pixels() {
     let a = image(false);
     let b = image(true);

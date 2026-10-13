@@ -1,0 +1,176 @@
+{
+  "date": "2026-10-13",
+  "scope": "Experimental native AI spatial diagnostic only; normal viewer and independent color fidelity remain incomplete",
+  "change": "Fuse Begin -> NativeSampledPaint -> End route execution; preserve actual child frame, source blending, shape, mask and group exit; share unchanged bounded source resolver",
+  "limits_unchanged": {
+    "pixel_work": 4000000,
+    "managed_admission_bytes": 268435456,
+    "route_cache": 64
+  },
+  "rejected_experiment": {
+    "name": "opaque-native Normal direct group exit",
+    "reason": "No progress at (138,39); same 257898 fragments and 1645479 dispatches",
+    "suite_passed": 207,
+    "runtime_reverted": true
+  },
+  "validation": {
+    "suite_passed": 208,
+    "suite_ignored": 12,
+    "suite_failed": 0,
+    "matrix_cases": 2304,
+    "matrix_reference": "general SampledPaint group path",
+    "all_admission_failures_and_cancellation_polls_tested": true,
+    "empty_and_failed_source_tested": true,
+    "retry_exact": true,
+    "prior_five_probes_exact": {
+      "(199,25)": true,
+      "(137,37)": true,
+      "(149,56)": true,
+      "(138,36)": true,
+      "(195,37)": true
+    },
+    "final_managed_credit_bytes": 0
+  },
+  "probes": {
+    "(138,39)": {
+      "completed": true,
+      "alpha": 0.23000043989211091,
+      "components": [
+        0.2760619845691583,
+        0.7164633440344005,
+        0.9244087288389119,
+        0.1528051896347068
+      ],
+      "white_rgb": [
+        234.1938250797703,
+        216.73068273985277,
+        207.15040185202014
+      ]
+    },
+    "(195,37)": {
+      "completed": true,
+      "alpha": 1.0,
+      "components": [
+        0.653609391682176,
+        0.18663448442467723,
+        0.902922408827704,
+        0.03779044552978028
+      ],
+      "white_rgb": [
+        99.64779853820801,
+        156.11963868141174,
+        77.59195804595947
+      ]
+    },
+    "(137,37)": {
+      "completed": true,
+      "alpha": 0.9757737328883405,
+      "components": [
+        0.2167979502787616,
+        0.6457726984690586,
+        0.8255252253197052,
+        0.11741609584381041
+      ],
+      "white_rgb": [
+        181.5827786284322,
+        107.32818614673408,
+        66.42946451349978
+      ]
+    },
+    "(138,36)": {
+      "completed": true,
+      "alpha": 0.9999628213382107,
+      "components": [
+        0.3383463976795398,
+        0.753939134713375,
+        0.7768495160001363,
+        0.19377905992737132
+      ],
+      "white_rgb": [
+        148.31163494679748,
+        78.09125508175765,
+        62.07648508984009
+      ]
+    },
+    "(199,25)": {
+      "completed": true,
+      "alpha": 1.0,
+      "components": [
+        0.7135069188516239,
+        0.17809831327578418,
+        0.9554537787768727,
+        0.0549916907975484
+      ],
+      "white_rgb": [
+        81.60994604229927,
+        151.66586726903915,
+        70.53911849856377
+      ]
+    },
+    "(149,56)": {
+      "completed": true,
+      "alpha": 0.21442580534571978,
+      "components": [
+        0.3285820137140101,
+        0.861481439860559,
+        0.9346276847653974,
+        0.2474774505728342
+      ],
+      "white_rgb": [
+        230.74855138884672,
+        212.56374303909558,
+        208.50489577871136
+      ]
+    }
+  },
+  "page": {
+    "width": 301,
+    "height": 246,
+    "completed": 14022,
+    "previous_completed": 11877,
+    "total": 74046,
+    "next_refusal": [
+      176,
+      46
+    ],
+    "deadline": false,
+    "elapsed_seconds": 95.94,
+    "peak_bytes": 239197736,
+    "final_credit_bytes": 0,
+    "partial_output_published": false,
+    "exit_code": 101,
+    "note": "Strict full-page test intentionally fails at first refusal; page run predates only final added refusal test, with runtime code unchanged"
+  },
+  "performance_boundary": "Reduced route dispatch and broader completion demonstrated; no paired wall-clock throughput claim",
+  "sha256": {
+    "vendor/hayro/src/native_spatial.rs": "86a20c08a43590e2e86934a9d847dd19e0b637c6ecfff3ca24d68866fb51ce20",
+    "docs/research/ai-fused-native-group-original-2026-10-13.log": "12258af06c6ad93661bd75adfc3f58d73c6185aad5ddca088e60e0b3765583e1",
+    "docs/research/ai-fused-native-group-final-suite-2026-10-13.log": "3e5b8c889c592ff0797ec1a4ef9218b86cdd3069833d2acf1c0c55caa5b6c0db",
+    "docs/research/ai-fused-native-group-page-2026-10-13.log": "c4e7f8a2dc59585c65cd150f1e5690dded1ae1097ef3e0732c5ccc463da6f52b",
+    "docs/research/ai-ninth-refusal-localized-2026-10-13.log": "1a14182ba0e5d13e05167516276ea0c35950352b14f50c2dd0b5c96300c26018",
+    "docs/research/ai-opaque-native-group-original-2026-10-13.log": "87f08c718cce725f2120d22d1b8a369cda52fc669d489523af505c83277ee68c",
+    "docs/research/ai-opaque-native-group-final-suite-2026-10-13.log": "10ce1e6e9df11c2516fa4a85dd8bf1da9f69d4834c397358a5e2384555f9f97b",
+    "docs/research/ai-opaque-native-group-experiment-2026-10-13.rs.txt": "b6c5ae41c7e34d5c273035c818d7813c3e4f9671b59aea58987c48e45ffe94b4",
+    "docs/research/ai-tenth-refusal-localized-2026-10-13.log": "6ca5040726943473f69b3fcaf77e4b618cd494344c72dcf2ae25a5b696dadff0"
+  },
+  "next_refusal_diagnosis": {
+    "pixel": [
+      176,
+      46
+    ],
+    "fragments_before_refusal": 111206,
+    "regions": 65,
+    "route_misses": 179,
+    "native_source_work": 1899571,
+    "route_lookup_work": 840216,
+    "route_preparation_work": 156314,
+    "source_events": [
+      1023,
+      2097,
+      1218
+    ],
+    "deadline": false,
+    "final_credit_bytes": 0,
+    "next_action": "Inspect repeated axial-source evaluation and route lookup at the unchanged 64-route cache limit"
+  }
+}

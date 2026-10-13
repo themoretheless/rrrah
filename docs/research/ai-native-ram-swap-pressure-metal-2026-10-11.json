@@ -1,0 +1,28 @@
+{
+  "scope": "RAM lease/count eviction and native AI replay-plane disk swap/Metal transport only; not production AI decode or original appearance",
+  "adapter": "Metal Apple M4 Max",
+  "pages": 3,
+  "storage_cases": 6,
+  "storage_representations": [
+    "Srgb RGBA8",
+    "Linear RGBA32F"
+  ],
+  "source_and_plane_pins": "tests/fixtures/ai-metal-replay-planes.json",
+  "verified": [
+    "Live RAM lease prevents destructive eviction; later zero-size eviction succeeds",
+    "Restore refuses under full managed CPU pressure; no swap corruption/error counter",
+    "Cancellation returns no frame according to cache contract",
+    "Retry restores exact metadata and full sample plane",
+    "Restored render is byte-exact against initial Metal frame",
+    "Each case writes once, reads once, errors zero",
+    "CPU, texture and upload/queue credits released"
+  ],
+  "limitations": [
+    "Harness readback, driver and OS allocations outside tracked budgets",
+    "Local disk and managed pressure do not qualify physical slow disk or OS-wide pressure",
+    "Pinned inputs are test-only AI replay outputs; production AI fidelity remains unqualified"
+  ],
+  "test_result": "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 10.74s",
+  "first_attempt": "Corrected test cancellation expectation from Err to Ok(None); production code unchanged.",
+  "log_sha256": "b3a6af6a39af9c43b7e01240b3ab9117fa70d6a5b50eeb49fc8f4656c176ca82"
+}

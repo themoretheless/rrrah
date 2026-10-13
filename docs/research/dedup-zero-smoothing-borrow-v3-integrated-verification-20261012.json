@@ -1,0 +1,51 @@
+{
+  "status": "verified_isolated_zero_borrow_v3_integrated_gate",
+  "passed": 122,
+  "ignored": 5,
+  "suites": [
+    {
+      "suite": "lib",
+      "passed": 90,
+      "ignored": [
+        "gradient::batch_tests::alternating_matcher_timing",
+        "gradient::batch_tests::real_photo_matcher_timing",
+        "gradient::matching_tests::alternating_matcher_timing",
+        "gradient::matching_tests::real_photo_matcher_timing",
+        "gradient_index::row_major_tests::row_major_index_build_latency_probe"
+      ],
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-zero-smoothing-borrow-v3-integrated-executables-20261012/lib",
+      "sha256": "37b6b8658171e4c8640e042d9372069fb883c7504c5722191b8ffef11d88b2ca"
+    },
+    {
+      "suite": "candidate_union_files",
+      "passed": 9,
+      "ignored": [],
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-zero-smoothing-borrow-v3-integrated-executables-20261012/candidate_union_files",
+      "sha256": "73d9c0735167d2da88b907b490861b80f55016a6e77429d244a6e257fbbf8013"
+    },
+    {
+      "suite": "gradient_candidate_smoothing",
+      "passed": 6,
+      "ignored": [],
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-zero-smoothing-borrow-v3-integrated-executables-20261012/gradient_candidate_smoothing",
+      "sha256": "26b5239c63a998b27bb2741e05f7adb669257168aba95176d0d52c76d7b4e94c"
+    },
+    {
+      "suite": "local_collection",
+      "passed": 17,
+      "ignored": [],
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-zero-smoothing-borrow-v3-integrated-executables-20261012/local_collection",
+      "sha256": "ae1911c59a7e71090e4fe08cdcaf6f0fc717a572838e67ec10f497480f0ce3a5"
+    }
+  ],
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-zero-smoothing-borrow-source-v3-20261012.json": "f0c2bfa1585ae50d55e2672b617e463dd0f0022eef323e4bc8124030544ce428",
+    "/Users/themoretheless/.codex/tmp/rrrah-zero-smoothing-borrow-v3-integrated-tests-20261012.log": "974e7ddebdde79e1bc446bcb22ac9a3890d5737db3acefa98f49fab12d562f3f",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-zero-smoothing-borrow-v3-integrated-20261012.py": "0f2341788efc3ab47bbbdf8299b137c9414d7fbcecec749ae977d27c803f41e6",
+    "/Users/themoretheless/.codex/tmp/rrrah-zero-smoothing-borrow-v3-integrated-executables-20261012/lib": "37b6b8658171e4c8640e042d9372069fb883c7504c5722191b8ffef11d88b2ca",
+    "/Users/themoretheless/.codex/tmp/rrrah-zero-smoothing-borrow-v3-integrated-executables-20261012/candidate_union_files": "73d9c0735167d2da88b907b490861b80f55016a6e77429d244a6e257fbbf8013",
+    "/Users/themoretheless/.codex/tmp/rrrah-zero-smoothing-borrow-v3-integrated-executables-20261012/gradient_candidate_smoothing": "26b5239c63a998b27bb2741e05f7adb669257168aba95176d0d52c76d7b4e94c",
+    "/Users/themoretheless/.codex/tmp/rrrah-zero-smoothing-borrow-v3-integrated-executables-20261012/local_collection": "ae1911c59a7e71090e4fe08cdcaf6f0fc717a572838e67ec10f497480f0ce3a5"
+  },
+  "scope": "Isolated v3 candidate, not adopted. All decode-feature units and three existing integration suites; exact test names, frozen source and preserved binaries verified. Five ignored manual controls are not passes. New v4 explicit bothzero collection integration test not included here. No wholepairRSS/Linuxcandidate/fullcorpus/full500qualification."
+}

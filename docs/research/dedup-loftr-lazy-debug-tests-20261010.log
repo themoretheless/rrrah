@@ -1,0 +1,97 @@
+   Compiling libc v0.2.190
+   Compiling cfg-if v1.0.5
+   Compiling version_check v0.9.5
+   Compiling typenum v1.20.1
+   Compiling find-msvc-tools v0.1.14
+   Compiling shlex v2.0.1
+   Compiling proc-macro2 v1.0.107
+   Compiling pkg-config v0.3.34
+   Compiling quote v1.0.47
+   Compiling unicode-ident v1.0.26
+   Compiling subtle v2.6.1
+   Compiling adler2 v2.0.1
+   Compiling crc32fast v1.5.2
+   Compiling autocfg v1.5.1
+   Compiling base64ct v1.8.3
+   Compiling zstd-safe v5.0.2+zstd.1.5.2
+   Compiling powerfmt v0.2.1
+   Compiling time-core v0.1.7
+   Compiling simd-adler32 v0.3.10
+   Compiling num-conv v0.1.0
+   Compiling deranged v0.5.8
+   Compiling rand_core v0.6.4
+   Compiling constant_time_eq v0.1.5
+   Compiling anyhow v1.0.104
+   Compiling miniz_oxide v0.9.1
+   Compiling byteorder v1.5.0
+   Compiling zerocopy v0.8.62
+   Compiling serde_core v1.0.229
+   Compiling generic-array v0.14.7
+   Compiling num-traits v0.2.19
+   Compiling password-hash v0.4.2
+   Compiling zmij v1.0.23
+   Compiling matrixmultiply v0.3.11
+   Compiling serde_json v1.0.152
+   Compiling flate2 v1.1.10
+   Compiling serde v1.0.229
+   Compiling itoa v1.0.18
+   Compiling memchr v2.8.3
+   Compiling rawpointer v0.2.1
+   Compiling thiserror v1.0.69
+   Compiling miniz_oxide v0.8.9
+   Compiling fdeflate v0.3.7
+   Compiling zune-core v0.5.3
+   Compiling tch v0.23.0
+   Compiling time v0.3.45
+   Compiling bitflags v2.13.2
+   Compiling pxfm v0.1.30
+   Compiling png v0.18.1
+   Compiling syn v2.0.119
+   Compiling syn v3.0.7
+   Compiling zune-jpeg v0.5.15
+   Compiling lazy_static v1.5.1
+   Compiling byteorder-lite v0.1.0
+   Compiling bytemuck v1.25.2
+   Compiling jobserver v0.1.35
+   Compiling cpufeatures v0.2.17
+   Compiling getrandom v0.2.17
+   Compiling cc v1.7.0
+   Compiling crypto-common v0.1.7
+   Compiling block-buffer v0.10.4
+   Compiling inout v0.1.4
+   Compiling digest v0.10.7
+   Compiling cipher v0.4.4
+   Compiling sha2 v0.10.9
+   Compiling hmac v0.12.1
+   Compiling sha1 v0.10.7
+   Compiling aes v0.8.4
+   Compiling pbkdf2 v0.11.0
+   Compiling num-complex v0.4.6
+   Compiling num-integer v0.1.47
+   Compiling serde_derive v1.0.229
+   Compiling ndarray v0.16.1
+   Compiling zstd-sys v2.1.1+zstd.1.5.7
+   Compiling bzip2-sys v0.1.13+1.0.8
+   Compiling moxcms v0.7.11
+   Compiling zerocopy-derive v0.8.62
+   Compiling thiserror-impl v1.0.69
+   Compiling bzip2 v0.4.4
+   Compiling safetensors v0.3.3
+   Compiling zstd v0.11.2+zstd.1.5.2
+   Compiling zip v0.6.6
+   Compiling image v0.25.9
+   Compiling torch-sys v0.23.0
+   Compiling ppv-lite86 v0.2.21
+   Compiling half v2.7.1
+   Compiling rand_chacha v0.3.1
+   Compiling rand v0.8.8
+   Compiling loftr v0.1.1 (/Users/themoretheless/.codex/tmp/rrrah-loftr-lazy-debug-20261010/loftr)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 30.77s
+     Running unittests src/lib.rs (/Users/themoretheless/.codex/tmp/rrrah-loftr-native-target-20261010/debug/deps/loftr-ea3f3fa278b1abfb)
+dyld[18152]: Library not loaded: @rpath/libtorch_cpu.dylib
+  Referenced from: <3A62E527-66A8-35C9-B147-A47F8CBC8D04> /Users/themoretheless/.codex/tmp/rrrah-loftr-native-target-20261010/debug/deps/loftr-ea3f3fa278b1abfb
+  Reason: tried: '/Users/themoretheless/.codex/tmp/rrrah-loftr-native-target-20261010/debug/build/torch-sys-805342b4c493a54e/out/libtorch_cpu.dylib' (no such file), '/Users/themoretheless/.codex/tmp/rrrah-loftr-native-target-20261010/debug/build/zstd-sys-b21973a7c5b8f2cd/out/libtorch_cpu.dylib' (no such file), '/Users/themoretheless/.codex/tmp/rrrah-loftr-native-target-20261010/debug/libtorch_cpu.dylib' (no such file), '/Users/themoretheless/.codex/tmp/rrrah-loftr-native-target-20261010/debug/deps/libtorch_cpu.dylib' (no such file), '/Users/themoretheless/.rustup/toolchains/stable-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/lib/libtorch_cpu.dylib' (no such file), '/Users/themoretheless/.rustup/toolchains/stable-aarch64-apple-darwin/lib/libtorch_cpu.dylib' (no such file), '/Users/themoretheless/lib/libtorch_cpu.dylib' (no such file), '/usr/local/lib/libtorch_cpu.dylib' (no such file), '/usr/lib/libtorch_cpu.dylib' (no such file, not in dyld cache)
+error: test failed, to rerun pass `--lib`
+
+Caused by:
+  process didn't exit successfully: `/Users/themoretheless/.codex/tmp/rrrah-loftr-native-target-20261010/debug/deps/loftr-ea3f3fa278b1abfb regression_no_eager_debug` (signal: 6, SIGABRT: process abort signal)

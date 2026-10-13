@@ -1,0 +1,54 @@
+{
+  "date": "2026-10-12",
+  "source_sha256": "2c8a8165d53dc08afcad0c9f5945a1014d7f03ca399e590340d1318586b25fc9",
+  "source_dimensions": [
+    4000,
+    3000
+  ],
+  "managed_budget_bytes": 134217728,
+  "samples": 33,
+  "cancelled": 33,
+  "completed_before_cancel": 0,
+  "successful_same_budget_retries": 33,
+  "runs": [
+    {
+      "requested_signal_ms": 1,
+      "cancelled": 11,
+      "completed": 0,
+      "signal_to_decoder_exit_p50_ms": 0.01375,
+      "signal_to_decoder_exit_p95_ms": 2.094333,
+      "signal_to_decoder_exit_max_ms": 2.094333
+    },
+    {
+      "requested_signal_ms": 25,
+      "cancelled": 11,
+      "completed": 0,
+      "signal_to_decoder_exit_p50_ms": 0.024624999999999998,
+      "signal_to_decoder_exit_p95_ms": 0.030667000000000003,
+      "signal_to_decoder_exit_max_ms": 0.030667000000000003
+    },
+    {
+      "requested_signal_ms": 60,
+      "cancelled": 11,
+      "completed": 0,
+      "signal_to_decoder_exit_p50_ms": 0.028458999999999998,
+      "signal_to_decoder_exit_p95_ms": 0.21087499999999998,
+      "signal_to_decoder_exit_max_ms": 0.21087499999999998
+    }
+  ],
+  "late_cancellation_peak_bytes": 84002048,
+  "every_final_managed_byte_count": 0,
+  "logs": {
+    "delay-60.json": "aa3b3e6c9eef3830753ec995f2b0d569b5b3d7039b74daa9e0d1f6addd36781b",
+    "bench-tests.log": "a44fff59d9156cf25dcae24275f36cb0e1046b347dedbc5918ec22327bc60685",
+    "delay-1.json": "1c598450dbd395124a9882260a90121b6307819072f8351648f1f1cf91d6db26",
+    "build.log": "26cb70cbca0bf4bfaa7fd0c98cd86fd4ffb817239e0ebd6c62bd4fab38305d1b",
+    "delay-25.json": "ef2528964107b86afa8711d0aed610bbfd1a2964bb11bad5887a51c9c08acbb4"
+  },
+  "limits": [
+    "Warm filesystem, local CPU, dev opt-level=1; includes scheduling/cleanup",
+    "No universal latency bound or physical slow-disk claim",
+    "Retries verify successful decode/dimensions and release, not independent full-frame color",
+    "No new GPU presentation or OS RSS qualification"
+  ]
+}

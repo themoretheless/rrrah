@@ -1,0 +1,179 @@
+{
+  "experiment": "Repeat same pinned native AI replay with RRRAH_AI_CANONICAL_F32 unset; other capture settings unchanged",
+  "replay_passed": true,
+  "independent_full_page_source_oracle": "docs/research/one-ai-full-page-source-polynomial-oracle-2026-10-11.json",
+  "baseline_canonical_f32_differing_pixels": 17,
+  "f64_differing_pixels": 20,
+  "f64_maximum_channel_error": 1,
+  "all_differences_native_lighter_by_one": true,
+  "differences": [
+    {
+      "pixel": [
+        266,
+        210
+      ],
+      "native": 116,
+      "oracle": 115
+    },
+    {
+      "pixel": [
+        381,
+        210
+      ],
+      "native": 116,
+      "oracle": 115
+    },
+    {
+      "pixel": [
+        983,
+        249
+      ],
+      "native": 49,
+      "oracle": 48
+    },
+    {
+      "pixel": [
+        1150,
+        249
+      ],
+      "native": 49,
+      "oracle": 48
+    },
+    {
+      "pixel": [
+        975,
+        264
+      ],
+      "native": 90,
+      "oracle": 89
+    },
+    {
+      "pixel": [
+        1158,
+        264
+      ],
+      "native": 90,
+      "oracle": 89
+    },
+    {
+      "pixel": [
+        217,
+        277
+      ],
+      "native": 173,
+      "oracle": 172
+    },
+    {
+      "pixel": [
+        430,
+        277
+      ],
+      "native": 173,
+      "oracle": 172
+    },
+    {
+      "pixel": [
+        194,
+        391
+      ],
+      "native": 14,
+      "oracle": 13
+    },
+    {
+      "pixel": [
+        453,
+        391
+      ],
+      "native": 14,
+      "oracle": 13
+    },
+    {
+      "pixel": [
+        194,
+        403
+      ],
+      "native": 14,
+      "oracle": 13
+    },
+    {
+      "pixel": [
+        453,
+        403
+      ],
+      "native": 14,
+      "oracle": 13
+    },
+    {
+      "pixel": [
+        217,
+        517
+      ],
+      "native": 173,
+      "oracle": 172
+    },
+    {
+      "pixel": [
+        430,
+        517
+      ],
+      "native": 173,
+      "oracle": 172
+    },
+    {
+      "pixel": [
+        975,
+        530
+      ],
+      "native": 90,
+      "oracle": 89
+    },
+    {
+      "pixel": [
+        1158,
+        530
+      ],
+      "native": 90,
+      "oracle": 89
+    },
+    {
+      "pixel": [
+        983,
+        545
+      ],
+      "native": 49,
+      "oracle": 48
+    },
+    {
+      "pixel": [
+        1150,
+        545
+      ],
+      "native": 49,
+      "oracle": 48
+    },
+    {
+      "pixel": [
+        266,
+        584
+      ],
+      "native": 116,
+      "oracle": 115
+    },
+    {
+      "pixel": [
+        381,
+        584
+      ],
+      "native": 116,
+      "oracle": 115
+    }
+  ],
+  "strict_poppler_report": "docs/research/ai-native-f64-strict-current-2026-10-11.json",
+  "finding": "Removing extra f32 contour canonicalization does not fix the full-page residual; do not adopt it as a fidelity fix",
+  "next_hypothesis": "Inscribed flattened-curve approximation loses area near RGB8 rounding boundaries; requires direct tolerance/area verification before production change",
+  "limitations": [
+    "Hypothesis is not proof of root cause",
+    "No renderer implementation or acceptance tolerance changed",
+    "AI viewing and strict comparison remain unqualified"
+  ]
+}

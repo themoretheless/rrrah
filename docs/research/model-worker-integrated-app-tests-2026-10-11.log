@@ -1,0 +1,41 @@
+warning: function `fallible_zeroed_bytes` is never used
+   --> crates/rrrah-cache/src/mosaic_payload_v1.rs:728:4
+    |
+728 | fn fallible_zeroed_bytes(len: usize) -> Result<Box<[u8]>, MosaicPayloadError> {
+    |    ^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-cache` (lib) generated 1 warning
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 12.16s
+     Running unittests src/main.rs (target/debug/deps/rrrah-0b4921b829754900)
+
+running 23 tests
+test foreground_loader_tests::model_cache_hit_shares_geometry_and_bypasses_decoder ... ok
+test foreground_loader_tests::model_cache_policy_is_independent_and_expired_hits_decode_again ... ok
+test foreground_loader_tests::model_cancelled_resident_does_not_transfer_visible_pin ... ok
+test foreground_loader_tests::model_cancelled_swap_lookup_does_not_fall_through_to_decode ... ok
+test foreground_loader_tests::model_prefetch_headroom_skips_cold_load_but_keeps_ready_geometry ... ok
+test foreground_loader_tests::obj_uses_common_model_discovery_and_inspection ... OBJ: 4 triangles, bounds Some([[0.0, 0.0, 0.0], [2.0, 2.0, 0.0]]), decoded in 396.83µs
+ok
+test foreground_loader_tests::real_model_preload_is_available_without_foreground_decode ... ok
+test foreground_loader_tests::rejected_model_transition_restores_the_visible_pin ... ok
+test foreground_loader_tests::speculative_model_admission_cannot_replace_visible_count_one ... ok
+test gallery::tests::mixed_gallery_submits_raw_neighbours_from_raster_or_model_selection ... ok
+test managed_model_ttl_tests::disabled_ttl_waits_for_request_without_maintenance ... ok
+test managed_model_ttl_tests::expired_model_entry_preserves_visible_and_external_geometry_owners ... ok
+test managed_model_ttl_tests::idle_receive_expires_managed_model_and_accepts_next_request ... ok
+test model_gpu_cli_tests::model_gpu_budget_is_opt_in_and_accepts_zero ... ok
+test model_retry_tests::real_stl_retry_releases_off_neighbour_and_preserves_visible_mesh ... ok
+test model_source_pressure_tests::tiff_classification_releases_only_unpinned_model_storage ... ok
+test model_swap::tests::malformed_all_model_codecs_refuse_geometry_without_large_reservations ... ok
+test model_swap_viewer_tests::expired_models_spill_and_restore_without_redecoding ... ok
+test model_swap_viewer_tests::impossible_restore_limit_does_not_evict_unpinned_models ... ok
+test model_swap_viewer_tests::model_consumer_leases_block_background_eviction_then_allow_exact_swap ... ok
+test model_swap_viewer_tests::model_swap_cli_is_independent_and_no_cache_disables_it ... ok
+test model_swap_viewer_tests::native_model_eviction_restores_before_decoder_and_preserves_managed_credit ... ok
+test model_upload_worker::tests::latest_model_upload_wins_and_cancel_releases_worker_credit ... ignored, requires actual GPU for bounded model worker qualification
+
+test result: ok. 22 passed; 0 failed; 1 ignored; 0 measured; 236 filtered out; finished in 0.06s
+

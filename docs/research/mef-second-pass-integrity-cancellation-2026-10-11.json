@@ -1,0 +1,44 @@
+{
+  "change": "File importer and fault tests share read_verified_sensor; publication requires matching BLAKE3 and non-cancelled generation",
+  "faults": {
+    "changed_sensor_byte_offsets": [
+      0,
+      16096128,
+      32192255
+    ],
+    "truncated_by_bytes": 1,
+    "cancel_after_row_reads": [
+      1,
+      2672,
+      5344
+    ]
+  },
+  "invariants": {
+    "no_sensor_returned_on_fault": true,
+    "final_managed_credits": 0,
+    "peak_bytes": 42929032,
+    "unchanged_authored_samples_exact": true,
+    "original_full_sensor_independent_oracle_exact": true
+  },
+  "runs": [
+    {
+      "suite": "mef",
+      "passed": 10,
+      "ignored": 0,
+      "log": "docs/research/mef-second-pass-integrity-cancellation-2026-10-11-mef.log",
+      "sha256": "9f0a27970fc49371989ae8129f0d2d73abdd40f129e824421870ef60828035e6"
+    },
+    {
+      "suite": "decoder",
+      "passed": 996,
+      "ignored": 67,
+      "log": "docs/research/mef-second-pass-integrity-cancellation-2026-10-11-decoder.log",
+      "sha256": "bb7f185ac450d4eeb08573b2dea9f09d5d568e41709ee1bd6e669a70f22a1e30"
+    }
+  ],
+  "limitations": [
+    "Injected reader faults exercise second sensor pass; no OS-wide pressure or physical slow disk claimed",
+    "Final file-length-change check has no new deterministic fault injection in this test",
+    "MEF camera WB/color viewing remains unqualified"
+  ]
+}

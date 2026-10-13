@@ -1,0 +1,51 @@
+{
+  "backend": "Metal Apple M4 Max",
+  "change": "Managed RGBE calibration accounts full repeat-grid payload; calibration clones share data and credit",
+  "core_tests": {
+    "passed": 13,
+    "failed": 0
+  },
+  "gpu_tests": {
+    "passed": 6,
+    "failed": 0,
+    "ignored": 1
+  },
+  "integration": {
+    "grid": [
+      3,
+      5
+    ],
+    "sensor": [
+      17,
+      33
+    ],
+    "sites": 561,
+    "storage_binding_limit": 8192,
+    "multiple_dispatches_asserted": true,
+    "independent_planes": [
+      1,
+      1.5,
+      2,
+      2.5
+    ]
+  },
+  "checks": [
+    "per-site normalization across odd grid/CFA boundaries",
+    "independent constant four-plane result at every edge and dispatch boundary",
+    "normalization payload and grid reservation coexist with output",
+    "GPU credit zero after completed readback",
+    "output clone retains credit until last owner",
+    "calibration retains 60-byte grid payload until drop",
+    "final CPU/GPU credit zero"
+  ],
+  "log_sha256": {
+    "metal": "8cd24eaf00a0d321faba261f6e6c485dbc724bea72b7c563e8d815832e385fc3",
+    "core": "bd999f9c85ef1ca6d91aaac6c7a4e538881b8e7dc4269b97d91828e970c60b9f"
+  },
+  "remaining": [
+    "Original unusual-grid camera appearance unqualified",
+    "17-wide rows with a 1024-byte binding limit are explicitly refused by aligned-row planner; no fallback implemented",
+    "Unmanaged calibration remains explicitly without a memory budget",
+    "Physical HDR and NVIDIA remain pending"
+  ]
+}

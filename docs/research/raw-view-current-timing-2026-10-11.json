@@ -1,0 +1,45 @@
+{
+  "backend": "Metal Apple M4 Max",
+  "source": "tests/IMG_9043.CR3",
+  "output": "1920x1080 Rgba8UnormSrgb offscreen",
+  "samples": 15,
+  "warmups": 3,
+  "p50_p95_ms": {
+    "native_decode": [
+      84.145,
+      112.936
+    ],
+    "upload_enqueue": [
+      27.907,
+      33.606
+    ],
+    "frame_completion": [
+      8.99,
+      16.964
+    ],
+    "total": [
+      126.323,
+      155.527
+    ],
+    "resident_zoom_pan": [
+      1.779,
+      3.157
+    ]
+  },
+  "resident_frames": 60,
+  "managed_cpu_peak": 124360466,
+  "managed_gpu_peak": 146800640,
+  "managed_final_zero": true,
+  "log_sha256": "b401606df59e72ceba7a692f6e27679ea0a97acba71ffeea1f452faa3452952e",
+  "source_hashes": {
+    "tests/IMG_9043.CR3": "d06cbb10e84882cf130430bdc88ed2652c2622b96dea8d6a854c09e3bee37e59",
+    "crates/rrrah-app/examples/raw_view_timing.rs": "a7a48b501768fe6ed92eaa490946b41ec0742ed70bb9d1f1c687d31b74e4b746",
+    "crates/rrrah-gpu/src/lib.rs": "9b77f5c7ad35db5f9397cb9717ace7dab2f727ed118657c58d0557c84820aadf",
+    "crates/rrrah-gpu/shaders/raw_view.wgsl": "1ddc40ac3e76107f13b7d3c680cc220726545f638bbc691f8c41a394a2a57068"
+  },
+  "limits": [
+    "Offscreen completed GPU frame; excludes window/swapchain/presentation/physical HDR.",
+    "One warm filesystem fixture, not collection-wide latency or cold disk.",
+    "RGBE compute API timing is a separate stage; ordinary RAW viewer uses fragment interpolation."
+  ]
+}

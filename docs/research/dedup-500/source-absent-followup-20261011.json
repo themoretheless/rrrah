@@ -1,0 +1,57 @@
+{
+  "status": "complete_four_pinned_source_absence_followups",
+  "records": [
+    {
+      "repository": "DuPAL-PAL-DUmper/DuPAL_Board",
+      "commit": "a8e19a8700ddf113d743d13a2920727c53209b01",
+      "tree_entries": 102,
+      "finding": "Hardware PCB/schematic repository for programmable logic dumping; name collision, outside file/image duplicate detection.",
+      "tree_complete": true,
+      "upstream_tests_run": false
+    },
+    {
+      "repository": "HackWithSumit/WindowsPhishingPayloads-CreatorTools",
+      "commit": "720ea6559a45bbf9c4263738ef9dac4f18ec6f60",
+      "tree_entries": 3,
+      "finding": "Three-file README/license/gitignore snapshot with external download links; no duplicate-search implementation. External binaries were not downloaded or executed.",
+      "tree_complete": true,
+      "upstream_tests_run": false
+    },
+    {
+      "repository": "anton-matosov/PerceHash",
+      "commit": "121760f836c6670626785d7b4e57672e5cb448b3",
+      "tree_entries": 3,
+      "finding": "Three-file README/license/gitignore snapshot. README names a perceptual hashing library but this commit contains no implementation.",
+      "tree_complete": true,
+      "upstream_tests_run": false
+    },
+    {
+      "repository": "objectionary/dedup",
+      "commit": "bc33344393673f61846c23e92e71aa860822bd66",
+      "tree_entries": 8,
+      "finding": "Eight-file documentation/build configuration snapshot for EO/XMIR object deduplication, outside file/image identity; no implementation in this pinned tree.",
+      "tree_complete": true,
+      "upstream_tests_run": false
+    }
+  ],
+  "pins": {
+    "docs/research/dedup-500/evidence/DuPAL-PAL-DUmper--DuPAL_Board/manifest.json": "51ca55a07e3f43bbadcf3da4610afe784ea95cc5f74d77b89056c994f0494469",
+    "docs/research/dedup-500/evidence/DuPAL-PAL-DUmper--DuPAL_Board/tree.json": "036a0dd628119ac0f3d7b195db693f93efbef682adccd1349a63a6cab356af5c",
+    "docs/research/dedup-500/evidence/DuPAL-PAL-DUmper--DuPAL_Board/00-README.md": "a8c7494127625a2b29cfff348c000301f317b0d610dc0cfa228728a7983eddb4",
+    "docs/research/dedup-500/evidence/HackWithSumit--WindowsPhishingPayloads-CreatorTools/manifest.json": "eefb13bee74409512e5d2269d08f076948850c58e7fc23f78f7622ecebf7e98a",
+    "docs/research/dedup-500/evidence/HackWithSumit--WindowsPhishingPayloads-CreatorTools/tree.json": "e9f36a77703ed544798d4da428411897c310b5fafa045d01ab17add92532c412",
+    "docs/research/dedup-500/evidence/HackWithSumit--WindowsPhishingPayloads-CreatorTools/00-README.md": "4ee764873041998d8012513e79fe780c9dd5bbd68ec97884c18b7baa12d6f9c4",
+    "docs/research/dedup-500/evidence/anton-matosov--PerceHash/manifest.json": "0492922a19d58252f267583ef6fe90d3c08dd49fffa8e9ee3866587e863119e0",
+    "docs/research/dedup-500/evidence/anton-matosov--PerceHash/tree.json": "d29921f292284d376b6ed9f81fafe4a17332aedb07ed9320a40847f77f7aaeb4",
+    "docs/research/dedup-500/evidence/anton-matosov--PerceHash/00-README.md": "ff2e01a6b6d0caf5a51e6ff104a7c9d26715e24a5a1727a7af50c14d03575d6c",
+    "docs/research/dedup-500/evidence/objectionary--dedup/manifest.json": "d7522a2374dc64e0b2afb232dd15e49a6f22dcd77ce741734f71869355d138b6",
+    "docs/research/dedup-500/evidence/objectionary--dedup/tree.json": "6fe9152e897b05dfdd9f3fd2798e5859f20c5c58601df2c5d1536a57d3683392",
+    "docs/research/dedup-500/evidence/objectionary--dedup/00-README.md": "7c9ad49a1afe97fa7c5e046c8a0766447b8b55af876b6223b5f51750bab234f2"
+  },
+  "scope": "Complete archived tree and README inspection at the original pinned commits; no claim about later upstream revisions.",
+  "limits": [
+    "No algorithm exists in these pinned selected source domains to qualify",
+    "Does not turn 500 source triage records into 500 fully qualified upstream implementations",
+    "Original manifests/reviews remain unchanged"
+  ]
+}

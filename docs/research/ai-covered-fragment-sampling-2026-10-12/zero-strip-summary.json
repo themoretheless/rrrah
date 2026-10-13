@@ -1,0 +1,98 @@
+{
+  "diagnosed_refusal": "Polygon work exhausted: work_left178 requested266 at VectorApple pixel138,39",
+  "change": "Skip ownership scans for exactly zero-area strips; preserve winding updates/cancellation/positive-area owner validation",
+  "regression": {
+    "coincident_regions": 300,
+    "expected_area": 0.5,
+    "owner": 299,
+    "selector_calls": 3
+  },
+  "tests": {
+    "passed": 139,
+    "ignored": 10
+  },
+  "real_replay": [
+    {
+      "fixture": "VectorApple.ai",
+      "page": 0,
+      "width": 301,
+      "height": 246,
+      "diagnostic_timeout_seconds": 180,
+      "peak_admitted_bytes": 232664374,
+      "final_admitted_bytes": 0,
+      "status": "native_diagnostic",
+      "native_completed": false,
+      "capture_failed": false,
+      "capture_ms": 7029.003583,
+      "native_replay_ms": 37106.449458999996,
+      "deadline_expired": false,
+      "events": 2755,
+      "native_paints": 463,
+      "raster_events": 3,
+      "raster_source_models": [
+        "event=3,model=None",
+        "event=1218,model=Some(Cmyk)",
+        "event=2298,model=Some(Cmyk)"
+      ],
+      "native_raster_components": [
+        "event=3,sample_count=Some(29488),refusal=None",
+        "event=1218,sample_count=Some(298224),refusal=None",
+        "event=2298,sample_count=Some(266084),refusal=None"
+      ],
+      "shading_events": 13,
+      "page_model": "Cmyk"
+    },
+    {
+      "fixture": "one.ai",
+      "page": 0,
+      "width": 1366,
+      "height": 768,
+      "diagnostic_timeout_seconds": 180,
+      "peak_admitted_bytes": 169698840,
+      "final_admitted_bytes": 0,
+      "status": "native_diagnostic",
+      "native_completed": true,
+      "capture_failed": false,
+      "capture_ms": 10.744290999999999,
+      "native_replay_ms": 29199.304167000002,
+      "deadline_expired": false,
+      "events": 8,
+      "native_paints": 2,
+      "raster_events": 0,
+      "raster_source_models": [],
+      "native_raster_components": [],
+      "shading_events": 0,
+      "page_model": "Rgb"
+    },
+    {
+      "fixture": "one.ai",
+      "page": 1,
+      "width": 177,
+      "height": 175,
+      "diagnostic_timeout_seconds": 180,
+      "peak_admitted_bytes": 4957320,
+      "final_admitted_bytes": 0,
+      "status": "native_diagnostic",
+      "native_completed": true,
+      "capture_failed": false,
+      "capture_ms": 0.06999999999999999,
+      "native_replay_ms": 956.738459,
+      "deadline_expired": false,
+      "events": 1,
+      "native_paints": 0,
+      "raster_events": 0,
+      "raster_source_models": [],
+      "native_raster_components": [],
+      "shading_events": 0,
+      "page_model": "Rgb"
+    }
+  ],
+  "remaining": "Same pixel still exhausts20M work after optimization; opt-in experimental integration remains incomplete",
+  "hashes": {
+    "worktrace-replay.log": "4bbaa62367aaaaab1c5f2b765d9cd4689f78ba5e03cfcf4f0b4738f4671197ee",
+    "zero-strip-tests.log": "6a7888a7c09ec68a30ed1f40b9262dd1f7c27decb89a833fb824a43869cb9868",
+    "zero-strip-replay.log": "4dd367e7d6439374a0a0d4b223599e766b415812e58eac44a2795c59d7913f6e",
+    "zero-strip-report.json": "102d8f539dc0df8f4a6b0d06723a93a0efdda486cf71d5512a6a9ae9b78814b0",
+    "polygon_coverage.rs": "eeb5ff61c1d6cc85ce4b43781edb7cb614ad788cb34f5e94be0fbbfece678dfc"
+  }
+}

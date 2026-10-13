@@ -1,0 +1,21 @@
+{
+  "scope": "Same-space fixed-parameter group error propagation and correction of unsafe affine route predicate",
+  "tests": "241passed/12ignored",
+  "group_pair_cases": 3456,
+  "group_stage_active_component_checks": 27648,
+  "operations": [
+    "Remove identical initial backdrop then identical clamp",
+    "Scale group opacity",
+    "Extract native components with identical alpha"
+  ],
+  "unsafe_route_counterexample": "Constant HardLight child after variable parent yields0.5*q*q+0.5*q; midpoint0.375 versus endpoint mean0.5",
+  "fix": "Groups after a variable source refuse affine qualification pending lifecycle proof; constant group prefix remains eligible",
+  "original_five_pixels_moments_identity_and_error_diagnostics_unchanged": true,
+  "limitations": [
+    "Group error helpers do not establish affine fields or hull membership",
+    "Tiny positive alpha below1e-12 refuses conversion envelope",
+    "Color-space conversion and differing alpha excluded",
+    "No native sample skipping or ordinary4Mfullpage qualification"
+  ],
+  "derivation": "ai-group-error-bound-derivation-2026-10-13.md"
+}

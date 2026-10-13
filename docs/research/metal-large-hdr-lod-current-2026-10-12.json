@@ -1,0 +1,47 @@
+{
+  "adapter": "Metal Apple M4 Max",
+  "passed": 1,
+  "failed": 0,
+  "ignored": 0,
+  "source_dimensions": [
+    6000,
+    6000
+  ],
+  "source_bytes": 576000000,
+  "output_dimensions": [
+    1000,
+    1000
+  ],
+  "output_bytes": 16000000,
+  "verified_output_pixels": 1000000,
+  "output_expected_rgba": [
+    -2,
+    8,
+    0.5,
+    0.375
+  ],
+  "gpu_frame_dimensions": [
+    64,
+    64
+  ],
+  "first_downsample_seconds": 0.621641583,
+  "second_downsample_seconds": 1.338911417,
+  "verified": [
+    "Alpha-weighted area downsample excludes arbitrary RGB in transparent source samples",
+    "Every output float channel equals independently specified constant result",
+    "Full64x64 SDR and binary16 HDR readbacks equal authored reference",
+    "Output managed memory holds16MB until final owner dropped then returns0"
+  ],
+  "limitations": [
+    "Authored periodic source only; no independent image producer/decoder qualification",
+    "CPU source576MB is untracked; output-only budget asserted",
+    "Output1000x1000 fully CPU-checked; GPU readback is64x64, not full-resolution output",
+    "Two timings under uncontrolled load, not repeatable performance benchmark",
+    "No physical HDR/live window or all100-format completion"
+  ],
+  "sha256": {
+    "crates/rrrah-gpu/tests/raster_readback.rs": "31ba992c460ce3017d5f3fa330d9e11da7b982823d581652ff733ffc5c1d6f21",
+    "docs/research/metal-large-hdr-lod-current-2026-10-12/test.log": "82ccebf90dbdde12a49f04214af4267070f5961f9872f604986deb0369426be1",
+    "docs/research/metal-large-hdr-lod-current-2026-10-12/first-pass.log": "5570e12ab890ba9436f9ea0dedc1da8e49fec86cfd4062347364c946cf95b043"
+  }
+}

@@ -1,0 +1,264 @@
+{
+  "status": "complete_bounded_policy_equivalent_corpus_unknown_replay",
+  "producer_pid": 66699,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-outcome-collection-snapshot-20261011.json": "ec6ae5cc68073bcf661d78f516985d44afd0163eaa8f06cbd9be56cb2d09b368",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-outcome-collection-native-optimized-20261011.py": "0a3af6bacc5dec3b4adae70d2be07077a7bc0cb0e9f954894356b7f794309b0a",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/outcome-collection-native-optimized-qualified-20261011/tile_outcome_collection_files": "0e2932e2fb6896101572fd7b576aa7c04ee991f438426b06d2d5014f4616f2fe",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/202300.jpg": "1988d4888a2ba3dd9ab248d902cacacbca30436806f00cc8be87862bbdf60587",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200001.jpg": "509c1d92c5c644db1706d1c5d2028cc89e5b44db680745ad06d2e064333ed82e",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors": "59e55bf0ecd047db9c513672d121a3ea677529ad448bdc3a359e92862c74ddd7",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/current-all-query-origins-qualified-20261011/00023.json.gz": "a04ac2834643fd5d1e7493b6b3af588d8a290f3bff411115e7e6afe8b3d4f6e2",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-loftr-native-20261010-runtime-pins.json": "8daa92d3ed2c84278338c53eedffed1fcdc272bf8ee7a419397cd7f098a6783a",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-outcome-collection-native-fullopt3-isolated-build-20261011.log": "acb9a7bcbf077ec477af3549c4bfe9b0776ada49701d682660a5fac6e14f6d93",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-outcome-collection-native-fullopt3-runtime-metadata-20261011.json": "a279bd5c3611d2e968dfcbcd76bf52c6bdf63b056f5503416804a706a063b641",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-outcome-collection-native-fullopt3-isolated-build-artifacts-20261011.jsonl": "23ae24606cd1934a0c6619434e0b061211ebb5e54450352662a5d5e2292caa56",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libtorch_python.dylib": "cb1d5957b49b8f3c2e4b90de7b99aee835520875bce893b11eb7528a548744fa",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libtorch.dylib": "2178657b7eeffc0c0a989889ac3e2b2e3d216073b35f3a291ee89bd65c0fb406",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libtorch_global_deps.dylib": "6ff1aedff89150170f225ce821dc9355a9d5f9c80a6cc1bb761c8d209638c2c7",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libomp.dylib": "fe0670951c85401421f6cedc91971f28dc870bad4c1f0cfebe2b74dac421e5f0",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libtorch_cpu.dylib": "941f3e16a8e02b23b99bd2c8693caabaf8df859bfaa293f39a5d7dd8a8f5ca6e",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libc10.dylib": "f203c171b7a71c742ef4a84bde3af64465e545a4cc3ebfd7f245dca3ebe4e7cf",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libshm.dylib": "3a6fc248697b8809534e74d9e5fc784b385239d8c7aeef291c3968a73609f7d2"
+  },
+  "results": [
+    {
+      "case": "corpus_unknown",
+      "status": "passed",
+      "command": [
+        "/usr/bin/time",
+        "-l",
+        "/usr/bin/env",
+        "DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/outcome-collection-native-optimized-qualified-20261011/tile_outcome_collection_files",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+        "640",
+        "3.4214785442741977",
+        "model-first",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/202300.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200001.jpg"
+      ],
+      "process_pid": 66712,
+      "returncode": 0,
+      "stdout": "{\"files\":[0,1],\"managed_peak\":277111984,\"managed_retained_before_drop\":368,\"managed_used\":0,\"pairs\":[{\"evidence\":{\"reason\":\"ModelTiles { attempts: 25, insufficient_attempts: 1, model_digest: [251, 248, 128, 60, 113, 119, 49, 0, 204, 125, 138, 137, 62, 0, 255, 47, 68, 141, 150, 91, 38, 37, 242, 55, 0, 75, 47, 168, 45, 71, 4, 147] }\",\"supported\":null,\"terminal\":\"inconclusive\"},\"left\":0,\"right\":1}],\"scope\":\"Complete bounded pair enumeration, no retrieval pruning or transitive grouping. Metadata slot capacities and managed inputs/evidence are admitted; provider tensors/workspaces remain outside total RSS admission. Final caller cancellation checkpoint is followed by read-only source revalidation with generation checks.\",\"source_paths\":[\"/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/202300.jpg\",\"/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200001.jpg\"],\"status\":\"ok\"}\n",
+      "stderr": "      220.00 real       226.81 user         3.28 sys\n          1721204736  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n              341504  page reclaims\n                   9  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                  19  voluntary context switches\n              353391  involuntary context switches\n       2290004952585  instructions retired\n        533274986146  cycles elapsed\n          1681262464  peak memory footprint\n",
+      "elapsed_seconds": 220.002746125,
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/outcome-collection-native-optimized-qualified-20261011/corpus_unknown.log",
+      "log_sha256": "927b522808334116158bdc2bb3b1b7d161898e0a493cf1a99d79cb941c872ed1",
+      "evidence": {
+        "files": [
+          0,
+          1
+        ],
+        "managed_peak": 277111984,
+        "managed_retained_before_drop": 368,
+        "managed_used": 0,
+        "pairs": [
+          {
+            "evidence": {
+              "reason": "ModelTiles { attempts: 25, insufficient_attempts: 1, model_digest: [251, 248, 128, 60, 113, 119, 49, 0, 204, 125, 138, 137, 62, 0, 255, 47, 68, 141, 150, 91, 38, 37, 242, 55, 0, 75, 47, 168, 45, 71, 4, 147] }",
+              "supported": null,
+              "terminal": "inconclusive"
+            },
+            "left": 0,
+            "right": 1
+          }
+        ],
+        "scope": "Complete bounded pair enumeration, no retrieval pruning or transitive grouping. Metadata slot capacities and managed inputs/evidence are admitted; provider tensors/workspaces remain outside total RSS admission. Final caller cancellation checkpoint is followed by read-only source revalidation with generation checks.",
+        "source_paths": [
+          "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/202300.jpg",
+          "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/200001.jpg"
+        ],
+        "status": "ok"
+      }
+    },
+    {
+      "case": "self_support",
+      "status": "passed",
+      "command": [
+        "/usr/bin/time",
+        "-l",
+        "/usr/bin/env",
+        "DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/outcome-collection-native-optimized-qualified-20261011/tile_outcome_collection_files",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+        "640",
+        "2",
+        "model-first",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/202300.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/202300.jpg"
+      ],
+      "process_pid": 69050,
+      "returncode": 0,
+      "stdout": "{\"files\":[0,1],\"managed_peak\":114005240,\"managed_retained_before_drop\":7768,\"managed_used\":0,\"pairs\":[{\"attempted_stages\":1,\"evidence\":{\"attempts\":[{\"evidence\":{\"geometry_inliers\":4253,\"hypotheses\":20000,\"model_digest\":[251,248,128,60,113,119,49,0,204,125,138,137,62,0,255,47,68,141,150,91,38,37,242,55,0,75,47,168,45,71,4,147],\"original_dimensions\":[[2048,1536],[2048,1536]],\"pixels\":{\"anchors\":[4253,4253],\"directions\":[{\"agreeing_pairs\":465094,\"informative_pairs\":465094,\"sites\":106325,\"valid_sites\":106325},{\"agreeing_pairs\":465365,\"informative_pairs\":465365,\"sites\":106325,\"valid_sites\":106325}],\"supported\":true},\"raw_proposals\":4256,\"selected_points\":4256,\"supported\":true,\"transform\":[[0.9999672071950247,0.00022572537062654887,-0.1432927634424459],[0.00008727977504583021,1.0002670283805133,-0.20459720497058242],[2.758555378323077e-8,2.3443371473267113e-7,0.9998005984377089]]},\"left_rectangle\":[0,0,2048,1536],\"right_rectangle\":[0,0,2048,1536]}],\"supported\":true,\"terminal\":\"model_tiles\"},\"first_miss\":null,\"left\":0,\"right\":1}],\"scope\":\"Complete bounded pair enumeration, no retrieval pruning or transitive grouping. Metadata slot capacities and managed inputs/evidence are admitted; provider tensors/workspaces remain outside total RSS admission. Final caller cancellation checkpoint is followed by read-only source revalidation with generation checks.\",\"source_paths\":[\"/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/202300.jpg\",\"/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/202300.jpg\"],\"status\":\"ok\"}\n",
+      "stderr": "        9.12 real        11.04 user         0.58 sys\n          2501935104  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n              154295  page reclaims\n                   9  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                  26  voluntary context switches\n               13266  involuntary context switches\n        106702464660  instructions retired\n         26430692746  cycles elapsed\n          2451999144  peak memory footprint\n",
+      "elapsed_seconds": 9.13378800000001,
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/outcome-collection-native-optimized-qualified-20261011/self_support.log",
+      "log_sha256": "34807282a6e30257605d268d39b4d5fcd1adf18eac118dcf818019d80bd81044",
+      "evidence": {
+        "files": [
+          0,
+          1
+        ],
+        "managed_peak": 114005240,
+        "managed_retained_before_drop": 7768,
+        "managed_used": 0,
+        "pairs": [
+          {
+            "attempted_stages": 1,
+            "evidence": {
+              "attempts": [
+                {
+                  "evidence": {
+                    "geometry_inliers": 4253,
+                    "hypotheses": 20000,
+                    "model_digest": [
+                      251,
+                      248,
+                      128,
+                      60,
+                      113,
+                      119,
+                      49,
+                      0,
+                      204,
+                      125,
+                      138,
+                      137,
+                      62,
+                      0,
+                      255,
+                      47,
+                      68,
+                      141,
+                      150,
+                      91,
+                      38,
+                      37,
+                      242,
+                      55,
+                      0,
+                      75,
+                      47,
+                      168,
+                      45,
+                      71,
+                      4,
+                      147
+                    ],
+                    "original_dimensions": [
+                      [
+                        2048,
+                        1536
+                      ],
+                      [
+                        2048,
+                        1536
+                      ]
+                    ],
+                    "pixels": {
+                      "anchors": [
+                        4253,
+                        4253
+                      ],
+                      "directions": [
+                        {
+                          "agreeing_pairs": 465094,
+                          "informative_pairs": 465094,
+                          "sites": 106325,
+                          "valid_sites": 106325
+                        },
+                        {
+                          "agreeing_pairs": 465365,
+                          "informative_pairs": 465365,
+                          "sites": 106325,
+                          "valid_sites": 106325
+                        }
+                      ],
+                      "supported": true
+                    },
+                    "raw_proposals": 4256,
+                    "selected_points": 4256,
+                    "supported": true,
+                    "transform": [
+                      [
+                        0.9999672071950247,
+                        0.00022572537062654887,
+                        -0.1432927634424459
+                      ],
+                      [
+                        8.727977504583021e-05,
+                        1.0002670283805133,
+                        -0.20459720497058242
+                      ],
+                      [
+                        2.758555378323077e-08,
+                        2.3443371473267113e-07,
+                        0.9998005984377089
+                      ]
+                    ]
+                  },
+                  "left_rectangle": [
+                    0,
+                    0,
+                    2048,
+                    1536
+                  ],
+                  "right_rectangle": [
+                    0,
+                    0,
+                    2048,
+                    1536
+                  ]
+                }
+              ],
+              "supported": true,
+              "terminal": "model_tiles"
+            },
+            "first_miss": null,
+            "left": 0,
+            "right": 1
+          }
+        ],
+        "scope": "Complete bounded pair enumeration, no retrieval pruning or transitive grouping. Metadata slot capacities and managed inputs/evidence are admitted; provider tensors/workspaces remain outside total RSS admission. Final caller cancellation checkpoint is followed by read-only source revalidation with generation checks.",
+        "source_paths": [
+          "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/202300.jpg",
+          "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/202300.jpg"
+        ],
+        "status": "ok"
+      }
+    },
+    {
+      "case": "missing_weights",
+      "status": "passed",
+      "command": [
+        "/usr/bin/time",
+        "-l",
+        "/usr/bin/env",
+        "DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/outcome-collection-native-optimized-qualified-20261011/tile_outcome_collection_files",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/outcome-collection-native-optimized-qualified-20261011/missing-weights",
+        "640",
+        "2",
+        "model-first",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/202300.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/202300.jpg"
+      ],
+      "process_pid": 69119,
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "Error: ModelSource(Io(Os { code: 2, kind: NotFound, message: \"No such file or directory\" }))\n        0.20 real         0.18 user         0.01 sys\n           104939520  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n                7106  page reclaims\n                   9  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                   0  voluntary context switches\n                  51  involuntary context switches\n          1606942003  instructions retired\n           406916769  cycles elapsed\n            61293144  peak memory footprint\n",
+      "elapsed_seconds": 0.2123564169999952,
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/outcome-collection-native-optimized-qualified-20261011/missing_weights.log",
+      "log_sha256": "bbd3e8b0b60417743c026b43a54bdea55d6811546383f6c7923ddb92c8da5526"
+    }
+  ],
+  "source_manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-outcome-collection-snapshot-20261011.json",
+  "runtime_packages_optimized": 225,
+  "resolved_unbuilt_normal_packages": [
+    "registry+https://github.com/rust-lang/crates.io-index#glifo@0.1.1",
+    "registry+https://github.com/rust-lang/crates.io-index#vello_common@0.0.9"
+  ],
+  "scope": "Independent same-source full opt-level3 build including dependencies and binary; policy-equivalent corpus unknown replay. Both earlier runs remain intact.",
+  "invocations": 3
+}

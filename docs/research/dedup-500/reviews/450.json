@@ -2,9 +2,9 @@
   "index": 450,
   "repository": "AzuxDario/Perceptual-image-hashes",
   "commit": "ec33225edc08e2158f0f2198da5d4a5f8a02e465",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
-  "decision": "reference",
-  "finding": "C++ average/difference/DCT hash implementations; useful independent math after pixel-input contract established.",
+  "review_scope": "Complete13tracked text files read and Git blob verified; unchanged original four C++implementation units compiled with external controls, normal/ASan/UBSan.",
+  "decision": "reject_as_correct_math_oracle",
+  "finding": "Mean formula wrong97/100seeded grids; top coefficient stride wrong56/64; actual public pHash NaN conversion UB, coordinate zero division, short dHash memory overflow. No adoption.",
   "available_source_evidence": [
     {
       "path": "Source/Hash/Implementation/AverageHash.cpp",
@@ -48,7 +48,7 @@
     }
   ],
   "license_metadata": "MIT",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "Complete rootMIT read; no source adopted.",
   "tests_detected": 0,
   "upstream_tests_run": false,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
@@ -74,5 +74,10 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_review_complete": true,
+  "full_repository_read": true,
+  "whole_repo_complete": true,
+  "complete_source_review": "azux-hashes-complete-source-review-20261013.json",
+  "complete_runtime_audit": "azux-hashes-complete-runtime-audit-20261013.json"
 }

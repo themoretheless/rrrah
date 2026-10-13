@@ -1,0 +1,719 @@
+=== /tmp/rrrah-region-final-validated.log ===
+   Compiling rrrah-gpu v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-gpu)
+    Finished `test` profile [optimized + debuginfo] target(s) in 3.59s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_gpu-3fc6e742f2070fc2)
+
+running 50 tests
+test backend::tests::explicit_backend_masks_and_unavailable_requests_never_fallback ... ok
+test filmstrip::tests::hit_testing_finds_tiles_and_rejects_gaps_and_padding ... ok
+test filmstrip::tests::max_scroll_is_zero_when_everything_fits ... ok
+test backend::vendor_tests::hardware_vendor_filter_rejects_other_ids_and_incompatible_surfaces ... ok
+test filmstrip::tests::scroll_to_reveal_moves_only_when_needed ... ok
+test filmstrip::tests::strip_band_hit_region ... ok
+test raster::tile_admission_tests::rejects_unrepresentable_extents_layers_and_padded_over_budget ... ok
+test rgbe_plan::tests::full_srf_plan_and_small_limit_segments_cover_without_overlap ... ok
+test rgbe_plan::tests::invalid_geometry_planes_and_device_admission_fail_before_allocating_pixels ... ok
+test tests::card_description_wraps_and_clips_by_line_count ... ok
+test tests::card_layout_scales_for_a_retina_surface ... ok
+test tests::card_layout_is_safe_for_empty_and_tiny_viewports ... ok
+test tests::compact_card_metrics_keep_dense_descriptions_readable ... ok
+test tests::default_tiling_avoids_the_4096_frame_regression ... ok
+test tests::default_tiling_errors_when_layer_limit_cannot_be_met ... ok
+test tests::default_tiling_keeps_aligned_tiles_when_one_layer_is_not_smaller ... ok
+test tests::default_tiling_rejects_tiny_adapters ... ok
+test tests::default_tiling_shrinks_for_small_adapters ... ok
+test tests::default_tiling_uses_c2_optimum_with_aligned_extent ... ok
+test tests::default_tiling_uses_one_frame_tile_when_layer_growth_would_waste_atlas_space ... ok
+test tests::default_tiling_uses_one_small_frame_tile_when_atlas_is_materially_smaller ... ok
+test tests::dense_card_grid_scales_for_a_retina_surface ... ok
+test tests::direct_white_balance_preserves_backend_neutral_contract ... ok
+test model::tests::model_shader_validates ... ok
+test tests::display_keeps_decoder_white_balance_gains_bit_exact ... ok
+test tests::edge_tiles_clamp_without_out_of_bounds_reads ... ok
+test tests::eleven_cards_use_three_columns_for_the_total_block ... ok
+test tests::five_column_dashboard_scales_exactly_for_a_retina_surface ... ok
+test tests::five_column_metrics_preserve_timing_title_and_description_capacity ... ok
+test tests::forty_one_cards_keep_algorithm_descriptions_readable ... ok
+test tests::four_cards_fill_the_nominal_telemetry_dashboard ... ok
+test tests::hud_space_is_blank_instead_of_unknown_glyph ... ok
+test tests::malformed_dimensions_do_not_panic_helper_paths ... ok
+test tests::odd_dense_card_count_keeps_row_major_order ... ok
+test tests::hud_shader_parses_and_validates_with_naga ... ok
+test tests::ten_cards_fill_a_two_column_five_row_grid ... ok
+test tests::thirty_eight_cards_fill_a_five_column_eight_row_dashboard ... ok
+test tests::tile_halo_matches_full_frame_at_internal_boundary ... ok
+test tests::tiling_override_below_minimum_is_rejected ... ok
+test tests::tiling_override_exceeding_texture_limit_is_rejected ... ok
+test tests::tiling_override_is_applied_verbatim ... ok
+test tests::tiling_override_respects_array_layer_limit ... ok
+test tests::twenty_eight_cards_fill_a_five_column_six_row_dashboard ... ok
+test tests::twenty_four_cards_fill_a_four_column_six_row_dashboard ... ok
+test tests::uniform_layout_remains_wgsl_compatible ... ok
+test tests::upload_rows_are_padded_to_webgpu_alignment ... ok
+test tests::halo_packing_cancels_inside_large_tiles_and_preserves_scalar_samples ... ok
+test tests::padded_upload_rows_cancel_and_preserve_bytes ... ok
+test tests::viewport_shader_parses_and_validates_with_naga ... ok
+test tests::rowwise_tile_halo_matches_scalar_oracle_across_randomized_geometry ... ok
+
+test result: ok. 50 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/raster_readback.rs (target/debug/deps/raster_readback-96fa399a25885f6d)
+
+running 21 tests
+test fusion_back_full_frame_developed_raw_matches_metal_display_transport ... ignored, requires corrected production Fusion linear dumps; display transport qualification
+test fusion_front_full_frame_developed_raw_matches_metal_display_transport ... ignored, requires corrected production Fusion linear dumps; display transport qualification
+test hdr_exposure_saturates_to_finite_binary16_range ... ignored, Metal-specific empirical range edge; outside portable binary16 caller contract
+test hdr_opposite_extreme_samples_interpolate_without_nan ... ignored, Metal-specific empirical range edge; outside portable binary16 caller contract
+test hero9_full_frame_developed_raw_matches_metal_display_transport ... ignored, requires production HERO9 scene-linear dump; transport qualification, not demosaic/color oracle
+test large_cancelled_upload_validation_and_admission_preserve_visible_texture ... ignored, manual 12 MP Metal upload cancellation qualification
+test qualified_sd10_linear_raster_full_frame_display_readback ... ignored, requires qualified X3F linear sRGB PPM and a physical GPU
+HDR raster adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+texture budget adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+raster queue adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+raster readback adapter: Metal Apple M4 Max
+resident raster adapter: Metal Apple M4 Max
+upload cancellation adapter: Metal Apple M4 Max
+aspect transition adapter: Metal Apple M4 Max
+tiled raster adapter: Metal Apple M4 Max; negotiated extent64
+test raster_queue_admission_accounts_alignment_and_completion_ownership ... ok
+test texture_budget_preserves_loaded_image_on_refusal_and_releases_owners ... ok
+raster upload cancellation: total_checkpoints=6; exercised=[1, 2, 3, 4, 5, 6]; upload_budget=179200
+test linear_hdr_attachment_preserves_bright_negative_and_exposed_channels ... ok
+test uploaded_rows_and_rgb_channels_keep_their_positions ... ok
+test transparent_rgb_is_removed_before_bilinear_interpolation ... ok
+test linear_gray_and_straight_alpha_composite_match_display_reference ... ok
+test cancelled_upload_validation_and_admission_preserve_visible_texture ... ok
+test pixel_aspect_rejection_is_atomic_and_next_upload_resets_geometry ... ok
+resident source region=[35, 40, 130, 70]; bytes=145600; full geometry SDR/HDR exact; root/queue=0
+resident tiles: 130x5; SDR/HDR exact; padded_bytes=10560; compute/queue/texture root=0
+test developed_raw_exposure_precedes_tone_and_monotone_curve ... ok
+resident source region=[35, 40, 130, 70]; bytes=147840; full geometry SDR/HDR exact; root/queue=0
+6000x6000 source=576000000 bytes > eager limit; resident 128x128=262144 bytes; full HDR viewport exact; root/queue=0
+test small_resident_region_renders_source_above_eager_atlas_limit ... ok
+resident tiles: 5x130; SDR/HDR exact; padded_bytes=10560; compute/queue/texture root=0
+resident source region=[0, 0, 70, 70]; bytes=78400; full geometry SDR/HDR exact; root/queue=0
+resident tiles: 128x130; SDR/HDR exact; padded_bytes=270336; compute/queue/texture root=0
+resident source region=[130, 90, 70, 70]; bytes=78400; full geometry SDR/HDR exact; root/queue=0
+test resident_source_regions_preserve_full_geometry_hdr_and_transactional_admission ... ok
+resident tiles: 130x130; SDR/HDR exact; padded_bytes=278784; compute/queue/texture root=0
+test tiled_raster_seams_padding_and_partial_cancel_preserve_sdr_hdr ... ok
+test gpu_resident_compute_rows_match_cpu_exposure_reference ... ok
+resident tiles: 20000x64; SDR/HDR exact; padded_bytes=20481024; compute/queue/texture root=0
+test resident_compute_tiles_match_cpu_sdr_hdr_across_aligned_and_packed_rows ... ok
+
+test result: ok. 14 passed; 0 failed; 7 ignored; 0 measured; 0 filtered out; finished in 2.16s
+
+
+=== /tmp/rrrah-region-hdr-final.log ===
+   Compiling rrrah-gpu v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-gpu)
+warning: function `fallible_zeroed_bytes` is never used
+   --> crates/rrrah-cache/src/mosaic_payload_v1.rs:728:4
+    |
+728 | fn fallible_zeroed_bytes(len: usize) -> Result<Box<[u8]>, MosaicPayloadError> {
+    |    ^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-cache` (lib) generated 1 warning
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+warning: methods `submit` and `submit_image` are never used
+    --> crates/rrrah-app/src/main.rs:1366:8
+     |
+1078 | impl ForegroundLoader {
+     | --------------------- methods in this implementation
+...
+1366 |     fn submit(&self, path: PathBuf) -> Result<u64> {
+     |        ^^^^^^
+...
+1369 |     fn submit_image(&self, path: PathBuf, image_index: usize) -> Result<u64> {
+     |        ^^^^^^^^^^^^
+     |
+     = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah` (bin "rrrah") generated 1 warning
+    Finished `test` profile [optimized + debuginfo] target(s) in 3.95s
+     Running tests/hdr_raster_swap.rs (target/debug/deps/hdr_raster_swap-222eb73fe889e4ba)
+
+running 17 tests
+test large_float_hdr_swap_preserves_full_metal_attachment ... ignored, manual 12 MP float HDR attachment and disk swap qualification
+test photographic_heif_pq_full_resolution_swap_and_metal ... ignored, requires external Canon DPP 6000x4000 HDR PQ HIF and FFmpeg RGBA16 oracle
+test pict_external_directbits_oracle_swap_pressure_and_metal ... ignored, requires actual GPU and external PICT/TwelveMonkeys corpus
+test corrupt_raster_swap_entries_release_memory_and_allow_replacement ... ok
+HDR raster adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+HDR raster adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+HDR float adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+Masked XCF adapter: Metal Apple M4 Max
+Raster transport adapter: Metal Apple M4 Max
+QOI transport adapter: Metal Apple M4 Max
+native Farbfeld adapter: Metal Apple M4 Max
+HDR still adapter: Metal Apple M4 Max
+Raster transport adapter: Metal Apple M4 Max
+HDR still adapter: Metal Apple M4 Max
+ICC raster swap adapter: Metal Apple M4 Max
+HDR still adapter: Metal Apple M4 Max
+Raster transport adapter: Metal Apple M4 Max
+HDR float adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+HDR float adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+HDR float adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+test float_rla_swap_preserves_hdr_samples_and_linear_metal_output ... ok
+test hdr_raster_swap_preserves_samples_and_linear_metal_output ... ok
+HDR float adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+HDR float adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+HDR float adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+test pict_public_route_lease_swap_pressure_and_metal_preserve_rgba ... ok
+HDR float adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+Raster transport adapter: Metal Apple M4 Max
+Raster transport adapter: Metal Apple M4 Max
+HDR float adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+test native_farbfeld_preserves_u16_and_display_through_budgeted_swap ... ok
+test pict_unpacked_xrgb_macos_pixels_survive_swap_pressure_and_metal ... ok
+HDR float adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+HDR still adapter: Metal Apple M4 Max
+HDR still adapter: Metal Apple M4 Max
+HDR float adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+Raster transport adapter: Metal Apple M4 Max
+HDR float adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+HDR still adapter: Metal Apple M4 Max
+HDR float adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+test icc_images_prepare_and_restore_exactly_for_linear_hdr_metal ... ok
+HDR float adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+HDR float adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+HDR float adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+test qoi_transfer_flags_and_alpha_survive_native_prepared_swap_and_metal ... ok
+Raster transport adapter: Metal Apple M4 Max
+test hlg_avif_linear_pixels_survive_pressure_swap_and_metal ... ok
+HDR still adapter: Metal Apple M4 Max
+HDR float adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backendtest pq_avif_linear_pixels_survive_pressure_swap_and_metal ... ok
+: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+Raster transport adapter: Metal Apple M4 Max
+HDR float adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+Raster transport adapter: Metal Apple M4 Max
+test profiled_png_and_archives_keep_color_through_swap_and_metal ... ok
+HDR still adapter: Metal Apple M4 Max
+Raster transport adapter: Metal Apple M4 Max
+HDR float adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+Raster transport adapter: Metal Apple M4 Max
+HDR float adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+HDR still adapter: Metal Apple M4 Max
+Raster transport adapter: Metal Apple M4 Max
+HDR float adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+HEVC HDR alpha: heif-pq12-color-alpha.heic; 16 interior controls match linear premultiplied composition
+Raster transport adapter: Metal Apple M4 Max
+HDR float adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+test masked_legacy_xcf_preserves_explicit_color_assumption_through_swap_and_metal ... ok
+Raster transport adapter: Metal Apple M4 Max
+HDR still adapter: Metal Apple M4 Max
+HDR float adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+HEVC HDR alpha: heif-hlg12-color-alpha.heic; 16 interior controls match linear premultiplied composition
+HDR float adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+Raster transport adapter: Metal Apple M4 Max
+Raster transport adapter: Metal Apple M4 Max
+test hdr_hevc_linear_pixels_survive_pressure_swap_and_metal ... ok
+Raster transport adapter: Metal Apple M4 Max
+Raster transport adapter: Metal Apple M4 Max
+Raster transport adapter: Metal Apple M4 Max
+Raster transport adapter: Metal Apple M4 Max
+Raster transport adapter: Metal Apple M4 Max
+Raster transport adapter: Metal Apple M4 Max
+Raster transport adapter: Metal Apple M4 Max
+Raster transport adapter: Metal Apple M4 Max
+Raster transport adapter: Metal Apple M4 Max
+Raster transport adapter: Metal Apple M4 Max
+Raster transport adapter: Metal Apple M4 Max
+test avif_clean_aperture_ram_swap_and_metal_preserve_pixels ... ok
+
+test result: ok. 14 passed; 0 failed; 3 ignored; 0 measured; 0 filtered out; finished in 3.38s
+
+
+=== /tmp/rrrah-region-collection-final.log ===
+    Blocking waiting for file lock on build directory
+warning: function `fallible_zeroed_bytes` is never used
+   --> crates/rrrah-cache/src/mosaic_payload_v1.rs:728:4
+    |
+728 | fn fallible_zeroed_bytes(len: usize) -> Result<Box<[u8]>, MosaicPayloadError> {
+    |    ^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-cache` (lib) generated 1 warning
+warning: methods `submit` and `submit_image` are never used
+    --> crates/rrrah-app/src/main.rs:1366:8
+     |
+1078 | impl ForegroundLoader {
+     | --------------------- methods in this implementation
+...
+1366 |     fn submit(&self, path: PathBuf) -> Result<u64> {
+     |        ^^^^^^
+...
+1369 |     fn submit_image(&self, path: PathBuf, image_index: usize) -> Result<u64> {
+     |        ^^^^^^^^^^^^
+     |
+     = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+warning: `rrrah` (bin "rrrah") generated 1 warning
+    Finished `test` profile [optimized + debuginfo] target(s) in 4.20s
+     Running tests/raster_collection_metal.rs (target/debug/deps/raster_collection_metal-b66d2bf8c1e7d397)
+
+running 1 test
+raster collection adapter: Metal Apple M4 Max
+raster collection HDR oracle: 63x65; 8,-2,1,1; every binary16 pixel exact
+raster collection bounds: raster/pattern.png; rejected_index=1; retained_bytes_unchanged
+raster collection HDR: raster/pattern.png; index=0; prepared=false; binary16 frame exact
+raster collection: raster/pattern.png; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/pattern.png; index=0; prepared=true; binary16 frame exact
+raster collection: raster/pattern.png; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: raster/pattern.jpg; rejected_index=1; retained_bytes_unchanged
+raster collection HDR: raster/pattern.jpg; index=0; prepared=false; binary16 frame exact
+raster collection: raster/pattern.jpg; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/pattern.jpg; index=0; prepared=true; binary16 frame exact
+raster collection: raster/pattern.jpg; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: raster/webp-animation-0.webp; rejected_index=4; retained_bytes_unchanged
+raster collection HDR: raster/webp-animation-0.webp; index=0; prepared=false; binary16 frame exact
+raster collection: raster/webp-animation-0.webp; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/webp-animation-0.webp; index=0; prepared=true; binary16 frame exact
+raster collection: raster/webp-animation-0.webp; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/webp-animation-0.webp; index=1; prepared=false; binary16 frame exact
+raster collection: raster/webp-animation-0.webp; index=1; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/webp-animation-0.webp; index=1; prepared=true; binary16 frame exact
+raster collection: raster/webp-animation-0.webp; index=1; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/webp-animation-0.webp; index=2; prepared=false; binary16 frame exact
+raster collection: raster/webp-animation-0.webp; index=2; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/webp-animation-0.webp; index=2; prepared=true; binary16 frame exact
+raster collection: raster/webp-animation-0.webp; index=2; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/webp-animation-0.webp; index=3; prepared=false; binary16 frame exact
+raster collection: raster/webp-animation-0.webp; index=3; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/webp-animation-0.webp; index=3; prepared=true; binary16 frame exact
+raster collection: raster/webp-animation-0.webp; index=3; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: raster/pattern.bmp; rejected_index=1; retained_bytes_unchanged
+raster collection HDR: raster/pattern.bmp; index=0; prepared=false; binary16 frame exact
+raster collection: raster/pattern.bmp; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/pattern.bmp; index=0; prepared=true; binary16 frame exact
+raster collection: raster/pattern.bmp; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: raster/pattern.tga; rejected_index=1; retained_bytes_unchanged
+raster collection HDR: raster/pattern.tga; index=0; prepared=false; binary16 frame exact
+raster collection: raster/pattern.tga; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/pattern.tga; index=0; prepared=true; binary16 frame exact
+raster collection: raster/pattern.tga; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: raster/pattern.profiled.tif; rejected_index=1; retained_bytes_unchanged
+raster collection HDR: raster/pattern.profiled.tif; index=0; prepared=false; binary16 frame exact
+raster collection: raster/pattern.profiled.tif; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/pattern.profiled.tif; index=0; prepared=true; binary16 frame exact
+raster collection: raster/pattern.profiled.tif; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: raster/gif-animation-disposal-1.gif; rejected_index=4; retained_bytes_unchanged
+raster collection HDR: raster/gif-animation-disposal-1.gif; index=0; prepared=false; binary16 frame exact
+raster collection: raster/gif-animation-disposal-1.gif; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/gif-animation-disposal-1.gif; index=0; prepared=true; binary16 frame exact
+raster collection: raster/gif-animation-disposal-1.gif; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/gif-animation-disposal-1.gif; index=1; prepared=false; binary16 frame exact
+raster collection: raster/gif-animation-disposal-1.gif; index=1; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/gif-animation-disposal-1.gif; index=1; prepared=true; binary16 frame exact
+raster collection: raster/gif-animation-disposal-1.gif; index=1; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/gif-animation-disposal-1.gif; index=2; prepared=false; binary16 frame exact
+raster collection: raster/gif-animation-disposal-1.gif; index=2; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/gif-animation-disposal-1.gif; index=2; prepared=true; binary16 frame exact
+raster collection: raster/gif-animation-disposal-1.gif; index=2; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/gif-animation-disposal-1.gif; index=3; prepared=false; binary16 frame exact
+raster collection: raster/gif-animation-disposal-1.gif; index=3; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/gif-animation-disposal-1.gif; index=3; prepared=true; binary16 frame exact
+raster collection: raster/gif-animation-disposal-1.gif; index=3; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: raster/pattern.bitmap.ico; rejected_index=1; retained_bytes_unchanged
+raster collection HDR: raster/pattern.bitmap.ico; index=0; prepared=false; binary16 frame exact
+raster collection: raster/pattern.bitmap.ico; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/pattern.bitmap.ico; index=0; prepared=true; binary16 frame exact
+raster collection: raster/pattern.bitmap.ico; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: qoi/all-opcodes-0.qoi; rejected_index=1; retained_bytes_unchanged
+raster collection HDR: qoi/all-opcodes-0.qoi; index=0; prepared=false; binary16 frame exact
+raster collection: qoi/all-opcodes-0.qoi; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: qoi/all-opcodes-0.qoi; index=0; prepared=true; binary16 frame exact
+raster collection: qoi/all-opcodes-0.qoi; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: pcx/indexed.pcx; rejected_index=1; retained_bytes_unchanged
+raster collection HDR: pcx/indexed.pcx; index=0; prepared=false; binary16 frame exact
+raster collection: pcx/indexed.pcx; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: pcx/indexed.pcx; index=0; prepared=true; binary16 frame exact
+raster collection: pcx/indexed.pcx; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: raster/pattern.ppm; rejected_index=1; retained_bytes_unchanged
+raster collection HDR: raster/pattern.ppm; index=0; prepared=false; binary16 frame exact
+raster collection: raster/pattern.ppm; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/pattern.ppm; index=0; prepared=true; binary16 frame exact
+raster collection: raster/pattern.ppm; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: raster/color-alpha15.pam; rejected_index=1; retained_bytes_unchanged
+raster collection HDR: raster/color-alpha15.pam; index=0; prepared=false; binary16 frame exact
+raster collection: raster/color-alpha15.pam; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/color-alpha15.pam; index=0; prepared=true; binary16 frame exact
+raster collection: raster/color-alpha15.pam; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: raster/float-none-rec709-declared.exr; rejected_index=1; retained_bytes_unchanged
+raster collection HDR: raster/float-none-rec709-declared.exr; index=0; prepared=false; binary16 frame exact
+raster collection: raster/float-none-rec709-declared.exr; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/float-none-rec709-declared.exr; index=0; prepared=true; binary16 frame exact
+raster collection: raster/float-none-rec709-declared.exr; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: raster/rle-hdr-rec709-declared.hdr; rejected_index=1; retained_bytes_unchanged
+raster collection HDR: raster/rle-hdr-rec709-declared.hdr; index=0; prepared=false; binary16 frame exact
+raster collection: raster/rle-hdr-rec709-declared.hdr; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/rle-hdr-rec709-declared.hdr; index=0; prepared=true; binary16 frame exact
+raster collection: raster/rle-hdr-rec709-declared.hdr; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: raster/alpha-merged.psd; rejected_index=1; retained_bytes_unchanged
+raster collection HDR: raster/alpha-merged.psd; index=0; prepared=false; binary16 frame exact
+raster collection: raster/alpha-merged.psd; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/alpha-merged.psd; index=0; prepared=true; binary16 frame exact
+raster collection: raster/alpha-merged.psd; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: raster/composite-2-0.psb; rejected_index=1; retained_bytes_unchanged
+raster collection HDR: raster/composite-2-0.psb; index=0; prepared=false; binary16 frame exact
+raster collection: raster/composite-2-0.psb; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/composite-2-0.psb; index=0; prepared=true; binary16 frame exact
+raster collection: raster/composite-2-0.psb; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: raster/pattern.png.ora; rejected_index=1; retained_bytes_unchanged
+raster collection HDR: raster/pattern.png.ora; index=0; prepared=false; binary16 frame exact
+raster collection: raster/pattern.png.ora; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/pattern.png.ora; index=0; prepared=true; binary16 frame exact
+raster collection: raster/pattern.png.ora; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: raster/pattern.png.kra; rejected_index=1; retained_bytes_unchanged
+raster collection HDR: raster/pattern.png.kra; index=0; prepared=false; binary16 frame exact
+raster collection: raster/pattern.png.kra; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/pattern.png.kra; index=0; prepared=true; binary16 frame exact
+raster collection: raster/pattern.png.kra; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: xcf/indexed-v1-kind-4.xcf; rejected_index=1; retained_bytes_unchanged
+raster collection HDR: xcf/indexed-v1-kind-4.xcf; index=0; prepared=false; binary16 frame exact
+raster collection: xcf/indexed-v1-kind-4.xcf; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: xcf/indexed-v1-kind-4.xcf; index=0; prepared=true; binary16 frame exact
+raster collection: xcf/indexed-v1-kind-4.xcf; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: raster/dds-mips-bc1-srgb.dds; rejected_index=4; retained_bytes_unchanged
+raster collection HDR: raster/dds-mips-bc1-srgb.dds; index=0; prepared=false; binary16 frame exact
+raster collection: raster/dds-mips-bc1-srgb.dds; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/dds-mips-bc1-srgb.dds; index=0; prepared=true; binary16 frame exact
+raster collection: raster/dds-mips-bc1-srgb.dds; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/dds-mips-bc1-srgb.dds; index=1; prepared=false; binary16 frame exact
+raster collection: raster/dds-mips-bc1-srgb.dds; index=1; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/dds-mips-bc1-srgb.dds; index=1; prepared=true; binary16 frame exact
+raster collection: raster/dds-mips-bc1-srgb.dds; index=1; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/dds-mips-bc1-srgb.dds; index=2; prepared=false; binary16 frame exact
+raster collection: raster/dds-mips-bc1-srgb.dds; index=2; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/dds-mips-bc1-srgb.dds; index=2; prepared=true; binary16 frame exact
+raster collection: raster/dds-mips-bc1-srgb.dds; index=2; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/dds-mips-bc1-srgb.dds; index=3; prepared=false; binary16 frame exact
+raster collection: raster/dds-mips-bc1-srgb.dds; index=3; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/dds-mips-bc1-srgb.dds; index=3; prepared=true; binary16 frame exact
+raster collection: raster/dds-mips-bc1-srgb.dds; index=3; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: raster/ktx-mips-4ch-8-0.ktx; rejected_index=4; retained_bytes_unchanged
+raster collection HDR: raster/ktx-mips-4ch-8-0.ktx; index=0; prepared=false; binary16 frame exact
+raster collection: raster/ktx-mips-4ch-8-0.ktx; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/ktx-mips-4ch-8-0.ktx; index=0; prepared=true; binary16 frame exact
+raster collection: raster/ktx-mips-4ch-8-0.ktx; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/ktx-mips-4ch-8-0.ktx; index=1; prepared=false; binary16 frame exact
+raster collection: raster/ktx-mips-4ch-8-0.ktx; index=1; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/ktx-mips-4ch-8-0.ktx; index=1; prepared=true; binary16 frame exact
+raster collection: raster/ktx-mips-4ch-8-0.ktx; index=1; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/ktx-mips-4ch-8-0.ktx; index=2; prepared=false; binary16 frame exact
+raster collection: raster/ktx-mips-4ch-8-0.ktx; index=2; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/ktx-mips-4ch-8-0.ktx; index=2; prepared=true; binary16 frame exact
+raster collection: raster/ktx-mips-4ch-8-0.ktx; index=2; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/ktx-mips-4ch-8-0.ktx; index=3; prepared=false; binary16 frame exact
+raster collection: raster/ktx-mips-4ch-8-0.ktx; index=3; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/ktx-mips-4ch-8-0.ktx; index=3; prepared=true; binary16 frame exact
+raster collection: raster/ktx-mips-4ch-8-0.ktx; index=3; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: raster/ktx2-mips-29-0-lu.ktx2; rejected_index=4; retained_bytes_unchanged
+raster collection HDR: raster/ktx2-mips-29-0-lu.ktx2; index=0; prepared=false; binary16 frame exact
+raster collection: raster/ktx2-mips-29-0-lu.ktx2; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/ktx2-mips-29-0-lu.ktx2; index=0; prepared=true; binary16 frame exact
+raster collection: raster/ktx2-mips-29-0-lu.ktx2; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/ktx2-mips-29-0-lu.ktx2; index=1; prepared=false; binary16 frame exact
+raster collection: raster/ktx2-mips-29-0-lu.ktx2; index=1; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/ktx2-mips-29-0-lu.ktx2; index=1; prepared=true; binary16 frame exact
+raster collection: raster/ktx2-mips-29-0-lu.ktx2; index=1; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/ktx2-mips-29-0-lu.ktx2; index=2; prepared=false; binary16 frame exact
+raster collection: raster/ktx2-mips-29-0-lu.ktx2; index=2; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/ktx2-mips-29-0-lu.ktx2; index=2; prepared=true; binary16 frame exact
+raster collection: raster/ktx2-mips-29-0-lu.ktx2; index=2; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/ktx2-mips-29-0-lu.ktx2; index=3; prepared=false; binary16 frame exact
+raster collection: raster/ktx2-mips-29-0-lu.ktx2; index=3; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/ktx2-mips-29-0-lu.ktx2; index=3; prepared=true; binary16 frame exact
+raster collection: raster/ktx2-mips-29-0-lu.ktx2; index=3; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: raster/pvr-bgra8.pvr; rejected_index=3; retained_bytes_unchanged
+raster collection HDR: raster/pvr-bgra8.pvr; index=0; prepared=false; binary16 frame exact
+raster collection: raster/pvr-bgra8.pvr; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/pvr-bgra8.pvr; index=0; prepared=true; binary16 frame exact
+raster collection: raster/pvr-bgra8.pvr; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/pvr-bgra8.pvr; index=1; prepared=false; binary16 frame exact
+raster collection: raster/pvr-bgra8.pvr; index=1; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/pvr-bgra8.pvr; index=1; prepared=true; binary16 frame exact
+raster collection: raster/pvr-bgra8.pvr; index=1; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/pvr-bgra8.pvr; index=2; prepared=false; binary16 frame exact
+raster collection: raster/pvr-bgra8.pvr; index=2; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/pvr-bgra8.pvr; index=2; prepared=true; binary16 frame exact
+raster collection: raster/pvr-bgra8.pvr; index=2; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: raster/cropped.pkm; rejected_index=1; retained_bytes_unchanged
+raster collection HDR: raster/cropped.pkm; index=0; prepared=false; binary16 frame exact
+raster collection: raster/cropped.pkm; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/cropped.pkm; index=0; prepared=true; binary16 frame exact
+raster collection: raster/cropped.pkm; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: raster/alpha-10x10.astc; rejected_index=1; retained_bytes_unchanged
+raster collection HDR: raster/alpha-10x10.astc; index=0; prepared=false; binary16 frame exact
+raster collection: raster/alpha-10x10.astc; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/alpha-10x10.astc; index=0; prepared=true; binary16 frame exact
+raster collection: raster/alpha-10x10.astc; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: raster/hdr-compressed.astc; rejected_index=1; retained_bytes_unchanged
+raster collection HDR: raster/hdr-compressed.astc; index=0; prepared=false; binary16 frame exact
+raster collection: raster/hdr-compressed.astc; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/hdr-compressed.astc; index=0; prepared=true; binary16 frame exact
+raster collection: raster/hdr-compressed.astc; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: raster/precision-32-0.ktx2; rejected_index=1; retained_bytes_unchanged
+raster collection HDR: raster/precision-32-0.ktx2; index=0; prepared=false; binary16 frame exact
+raster collection: raster/precision-32-0.ktx2; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/precision-32-0.ktx2; index=0; prepared=true; binary16 frame exact
+raster collection: raster/precision-32-0.ktx2; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: raster/precision-32-3.ktx2; rejected_index=1; retained_bytes_unchanged
+raster collection HDR: raster/precision-32-3.ktx2; index=0; prepared=false; binary16 frame exact
+raster collection: raster/precision-32-3.ktx2; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/precision-32-3.ktx2; index=0; prepared=true; binary16 frame exact
+raster collection: raster/precision-32-3.ktx2; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: raster/alpha-container-0.jxl; rejected_index=1; retained_bytes_unchanged
+raster collection HDR: raster/alpha-container-0.jxl; index=0; prepared=false; binary16 frame exact
+raster collection: raster/alpha-container-0.jxl; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/alpha-container-0.jxl; index=0; prepared=true; binary16 frame exact
+raster collection: raster/alpha-container-0.jxl; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: raster/avif-alpha-icc.avif; rejected_index=1; retained_bytes_unchanged
+raster collection HDR: raster/avif-alpha-icc.avif; index=0; prepared=false; binary16 frame exact
+raster collection: raster/avif-alpha-icc.avif; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/avif-alpha-icc.avif; index=0; prepared=true; binary16 frame exact
+raster collection: raster/avif-alpha-icc.avif; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: raster/alpha.heic; rejected_index=1; retained_bytes_unchanged
+raster collection HDR: raster/alpha.heic; index=0; prepared=false; binary16 frame exact
+raster collection: raster/alpha.heic; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/alpha.heic; index=0; prepared=true; binary16 frame exact
+raster collection: raster/alpha.heic; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: raster/pattern-rgb.jp2; rejected_index=1; retained_bytes_unchanged
+raster collection HDR: raster/pattern-rgb.jp2; index=0; prepared=false; binary16 frame exact
+raster collection: raster/pattern-rgb.jp2; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/pattern-rgb.jp2; index=0; prepared=true; binary16 frame exact
+raster collection: raster/pattern-rgb.jp2; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: raster/pattern-rgb.j2k; rejected_index=1; retained_bytes_unchanged
+raster collection HDR: raster/pattern-rgb.j2k; index=0; prepared=false; binary16 frame exact
+raster collection: raster/pattern-rgb.j2k; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/pattern-rgb.j2k; index=0; prepared=true; binary16 frame exact
+raster collection: raster/pattern-rgb.j2k; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: raster/fits-f32.fits; rejected_index=2; retained_bytes_unchanged
+raster collection HDR: raster/fits-f32.fits; index=0; prepared=false; binary16 frame exact
+raster collection: raster/fits-f32.fits; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/fits-f32.fits; index=0; prepared=true; binary16 frame exact
+raster collection: raster/fits-f32.fits; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/fits-f32.fits; index=1; prepared=false; binary16 frame exact
+raster collection: raster/fits-f32.fits; index=1; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/fits-f32.fits; index=1; prepared=true; binary16 frame exact
+raster collection: raster/fits-f32.fits; index=1; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: raster/nrrd-f32-ascii-little.nrrd; rejected_index=2; retained_bytes_unchanged
+raster collection HDR: raster/nrrd-f32-ascii-little.nrrd; index=0; prepared=false; binary16 frame exact
+raster collection: raster/nrrd-f32-ascii-little.nrrd; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/nrrd-f32-ascii-little.nrrd; index=0; prepared=true; binary16 frame exact
+raster collection: raster/nrrd-f32-ascii-little.nrrd; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/nrrd-f32-ascii-little.nrrd; index=1; prepared=false; binary16 frame exact
+raster collection: raster/nrrd-f32-ascii-little.nrrd; index=1; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/nrrd-f32-ascii-little.nrrd; index=1; prepared=true; binary16 frame exact
+raster collection: raster/nrrd-f32-ascii-little.nrrd; index=1; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: raster/mrc-f16-little.mrc; rejected_index=2; retained_bytes_unchanged
+raster collection HDR: raster/mrc-f16-little.mrc; index=0; prepared=false; binary16 frame exact
+raster collection: raster/mrc-f16-little.mrc; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/mrc-f16-little.mrc; index=0; prepared=true; binary16 frame exact
+raster collection: raster/mrc-f16-little.mrc; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/mrc-f16-little.mrc; index=1; prepared=false; binary16 frame exact
+raster collection: raster/mrc-f16-little.mrc; index=1; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/mrc-f16-little.mrc; index=1; prepared=true; binary16 frame exact
+raster collection: raster/mrc-f16-little.mrc; index=1; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: raster/dicom-signed12-rescale.dcm; rejected_index=2; retained_bytes_unchanged
+raster collection HDR: raster/dicom-signed12-rescale.dcm; index=0; prepared=false; binary16 frame exact
+raster collection: raster/dicom-signed12-rescale.dcm; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/dicom-signed12-rescale.dcm; index=0; prepared=true; binary16 frame exact
+raster collection: raster/dicom-signed12-rescale.dcm; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/dicom-signed12-rescale.dcm; index=1; prepared=false; binary16 frame exact
+raster collection: raster/dicom-signed12-rescale.dcm; index=1; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/dicom-signed12-rescale.dcm; index=1; prepared=true; binary16 frame exact
+raster collection: raster/dicom-signed12-rescale.dcm; index=1; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: raster/rla-16-c1-a16-mixed0.rla; rejected_index=1; retained_bytes_unchanged
+raster collection HDR: raster/rla-16-c1-a16-mixed0.rla; index=0; prepared=false; binary16 frame exact
+raster collection: raster/rla-16-c1-a16-mixed0.rla; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/rla-16-c1-a16-mixed0.rla; index=0; prepared=true; binary16 frame exact
+raster collection: raster/rla-16-c1-a16-mixed0.rla; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: sti/etrle-two-images.sti; rejected_index=2; retained_bytes_unchanged
+raster collection HDR: sti/etrle-two-images.sti; index=0; prepared=false; binary16 frame exact
+raster collection: sti/etrle-two-images.sti; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: sti/etrle-two-images.sti; index=0; prepared=true; binary16 frame exact
+raster collection: sti/etrle-two-images.sti; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection HDR: sti/etrle-two-images.sti; index=1; prepared=false; binary16 frame exact
+raster collection: sti/etrle-two-images.sti; index=1; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: sti/etrle-two-images.sti; index=1; prepared=true; binary16 frame exact
+raster collection: sti/etrle-two-images.sti; index=1; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: raster/wad3-textures.wad; rejected_index=2; retained_bytes_unchanged
+raster collection HDR: raster/wad3-textures.wad; index=0; prepared=false; binary16 frame exact
+raster collection: raster/wad3-textures.wad; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/wad3-textures.wad; index=0; prepared=true; binary16 frame exact
+raster collection: raster/wad3-textures.wad; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/wad3-textures.wad; index=1; prepared=false; binary16 frame exact
+raster collection: raster/wad3-textures.wad; index=1; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/wad3-textures.wad; index=1; prepared=true; binary16 frame exact
+raster collection: raster/wad3-textures.wad; index=1; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: raster/ase-16-0-2019-1.aseprite; rejected_index=3; retained_bytes_unchanged
+raster collection HDR: raster/ase-16-0-2019-1.aseprite; index=0; prepared=false; binary16 frame exact
+raster collection: raster/ase-16-0-2019-1.aseprite; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/ase-16-0-2019-1.aseprite; index=0; prepared=true; binary16 frame exact
+raster collection: raster/ase-16-0-2019-1.aseprite; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/ase-16-0-2019-1.aseprite; index=1; prepared=false; binary16 frame exact
+raster collection: raster/ase-16-0-2019-1.aseprite; index=1; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/ase-16-0-2019-1.aseprite; index=1; prepared=true; binary16 frame exact
+raster collection: raster/ase-16-0-2019-1.aseprite; index=1; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/ase-16-0-2019-1.aseprite; index=2; prepared=false; binary16 frame exact
+raster collection: raster/ase-16-0-2019-1.aseprite; index=2; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/ase-16-0-2019-1.aseprite; index=2; prepared=true; binary16 frame exact
+raster collection: raster/ase-16-0-2019-1.aseprite; index=2; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: pdf/cairo-circle.svg; rejected_index=1; retained_bytes_unchanged
+raster collection HDR: pdf/cairo-circle.svg; index=0; prepared=false; binary16 frame exact
+raster collection: pdf/cairo-circle.svg; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: pdf/cairo-circle.svg; index=0; prepared=true; binary16 frame exact
+raster collection: pdf/cairo-circle.svg; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: emf/bezier16.emf; rejected_index=1; retained_bytes_unchanged
+raster collection HDR: emf/bezier16.emf; index=0; prepared=false; binary16 frame exact
+raster collection: emf/bezier16.emf; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: emf/bezier16.emf; index=0; prepared=true; binary16 frame exact
+raster collection: emf/bezier16.emf; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: wmf/blue.wmf; rejected_index=1; retained_bytes_unchanged
+raster collection HDR: wmf/blue.wmf; index=0; prepared=false; binary16 frame exact
+raster collection: wmf/blue.wmf; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: wmf/blue.wmf; index=0; prepared=true; binary16 frame exact
+raster collection: wmf/blue.wmf; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: mng/gray16-trns.mng; rejected_index=1; retained_bytes_unchanged
+raster collection HDR: mng/gray16-trns.mng; index=0; prepared=false; binary16 frame exact
+raster collection: mng/gray16-trns.mng; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: mng/gray16-trns.mng; index=0; prepared=true; binary16 frame exact
+raster collection: mng/gray16-trns.mng; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: raster/apng-compose-0-0.apng; rejected_index=4; retained_bytes_unchanged
+raster collection HDR: raster/apng-compose-0-0.apng; index=0; prepared=false; binary16 frame exact
+raster collection: raster/apng-compose-0-0.apng; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/apng-compose-0-0.apng; index=0; prepared=true; binary16 frame exact
+raster collection: raster/apng-compose-0-0.apng; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/apng-compose-0-0.apng; index=1; prepared=false; binary16 frame exact
+raster collection: raster/apng-compose-0-0.apng; index=1; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/apng-compose-0-0.apng; index=1; prepared=true; binary16 frame exact
+raster collection: raster/apng-compose-0-0.apng; index=1; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/apng-compose-0-0.apng; index=2; prepared=false; binary16 frame exact
+raster collection: raster/apng-compose-0-0.apng; index=2; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/apng-compose-0-0.apng; index=2; prepared=true; binary16 frame exact
+raster collection: raster/apng-compose-0-0.apng; index=2; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/apng-compose-0-0.apng; index=3; prepared=false; binary16 frame exact
+raster collection: raster/apng-compose-0-0.apng; index=3; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/apng-compose-0-0.apng; index=3; prepared=true; binary16 frame exact
+raster collection: raster/apng-compose-0-0.apng; index=3; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: raster/pattern.bitmap.ico.cur; rejected_index=1; retained_bytes_unchanged
+raster collection HDR: raster/pattern.bitmap.ico.cur; index=0; prepared=false; binary16 frame exact
+raster collection: raster/pattern.bitmap.ico.cur; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/pattern.bitmap.ico.cur; index=0; prepared=true; binary16 frame exact
+raster collection: raster/pattern.bitmap.ico.cur; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: raster/jng-L-8-0.jng; rejected_index=1; retained_bytes_unchanged
+raster collection HDR: raster/jng-L-8-0.jng; index=0; prepared=false; binary16 frame exact
+raster collection: raster/jng-L-8-0.jng; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/jng-L-8-0.jng; index=0; prepared=true; binary16 frame exact
+raster collection: raster/jng-L-8-0.jng; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: raster/jls-ffmpeg-16-1-0-0.jls; rejected_index=1; retained_bytes_unchanged
+raster collection HDR: raster/jls-ffmpeg-16-1-0-0.jls; index=0; prepared=false; binary16 frame exact
+raster collection: raster/jls-ffmpeg-16-1-0-0.jls; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/jls-ffmpeg-16-1-0-0.jls; index=0; prepared=true; binary16 frame exact
+raster collection: raster/jls-ffmpeg-16-1-0-0.jls; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: raster/jxr-uint8-3-icc.jxr; rejected_index=1; retained_bytes_unchanged
+raster collection HDR: raster/jxr-uint8-3-icc.jxr; index=0; prepared=false; binary16 frame exact
+raster collection: raster/jxr-uint8-3-icc.jxr; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/jxr-uint8-3-icc.jxr; index=0; prepared=true; binary16 frame exact
+raster collection: raster/jxr-uint8-3-icc.jxr; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: raster/adjacent16.ff; rejected_index=1; retained_bytes_unchanged
+raster collection HDR: raster/adjacent16.ff; index=0; prepared=false; binary16 frame exact
+raster collection: raster/adjacent16.ff; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/adjacent16.ff; index=0; prepared=true; binary16 frame exact
+raster collection: raster/adjacent16.ff; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: basis/etc1s-colored-alpha.basis; rejected_index=1; retained_bytes_unchanged
+raster collection HDR: basis/etc1s-colored-alpha.basis; index=0; prepared=false; binary16 frame exact
+raster collection: basis/etc1s-colored-alpha.basis; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: basis/etc1s-colored-alpha.basis; index=0; prepared=true; binary16 frame exact
+raster collection: basis/etc1s-colored-alpha.basis; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: raster/pattern.xbm; rejected_index=1; retained_bytes_unchanged
+raster collection HDR: raster/pattern.xbm; index=0; prepared=false; binary16 frame exact
+raster collection: raster/pattern.xbm; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/pattern.xbm; index=0; prepared=true; binary16 frame exact
+raster collection: raster/pattern.xbm; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: raster/palette.xpm; rejected_index=1; retained_bytes_unchanged
+raster collection HDR: raster/palette.xpm; index=0; prepared=false; binary16 frame exact
+raster collection: raster/palette.xpm; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/palette.xpm; index=0; prepared=true; binary16 frame exact
+raster collection: raster/palette.xpm; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: raster/two-pages.dcx; rejected_index=2; retained_bytes_unchanged
+raster collection HDR: raster/two-pages.dcx; index=0; prepared=false; binary16 frame exact
+raster collection: raster/two-pages.dcx; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/two-pages.dcx; index=0; prepared=true; binary16 frame exact
+raster collection: raster/two-pages.dcx; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/two-pages.dcx; index=1; prepared=false; binary16 frame exact
+raster collection: raster/two-pages.dcx; index=1; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/two-pages.dcx; index=1; prepared=true; binary16 frame exact
+raster collection: raster/two-pages.dcx; index=1; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: raster/pattern.rgb; rejected_index=1; retained_bytes_unchanged
+raster collection HDR: raster/pattern.rgb; index=0; prepared=false; binary16 frame exact
+raster collection: raster/pattern.rgb; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/pattern.rgb; index=0; prepared=true; binary16 frame exact
+raster collection: raster/pattern.rgb; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: raster/sun-bgr.ras; rejected_index=1; retained_bytes_unchanged
+raster collection HDR: raster/sun-bgr.ras; index=0; prepared=false; binary16 frame exact
+raster collection: raster/sun-bgr.ras; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/sun-bgr.ras; index=0; prepared=true; binary16 frame exact
+raster collection: raster/sun-bgr.ras; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: raster/ilbm-truecolor.iff; rejected_index=1; retained_bytes_unchanged
+raster collection HDR: raster/ilbm-truecolor.iff; index=0; prepared=false; binary16 frame exact
+raster collection: raster/ilbm-truecolor.iff; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/ilbm-truecolor.iff; index=0; prepared=true; binary16 frame exact
+raster collection: raster/ilbm-truecolor.iff; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: raster/pbm-1-0.iff; rejected_index=1; retained_bytes_unchanged
+raster collection HDR: raster/pbm-1-0.iff; index=0; prepared=false; binary16 frame exact
+raster collection: raster/pbm-1-0.iff; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/pbm-1-0.iff; index=0; prepared=true; binary16 frame exact
+raster collection: raster/pbm-1-0.iff; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: pict/drop-pad-rgb.pict; rejected_index=1; retained_bytes_unchanged
+raster collection HDR: pict/drop-pad-rgb.pict; index=0; prepared=false; binary16 frame exact
+raster collection: pict/drop-pad-rgb.pict; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: pict/drop-pad-rgb.pict; index=0; prepared=true; binary16 frame exact
+raster collection: pict/drop-pad-rgb.pict; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: raster/paint-v2-literal.mac; rejected_index=1; retained_bytes_unchanged
+raster collection HDR: raster/paint-v2-literal.mac; index=0; prepared=false; binary16 frame exact
+raster collection: raster/paint-v2-literal.mac; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/paint-v2-literal.mac; index=0; prepared=true; binary16 frame exact
+raster collection: raster/paint-v2-literal.mac; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: raster/softimage-16-a1-rle0.pic; rejected_index=1; retained_bytes_unchanged
+raster collection HDR: raster/softimage-16-a1-rle0.pic; index=0; prepared=false; binary16 frame exact
+raster collection: raster/softimage-16-a1-rle0.pic; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/softimage-16-a1-rle0.pic; index=0; prepared=true; binary16 frame exact
+raster collection: raster/softimage-16-a1-rle0.pic; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: raster/row-runs-24.pix; rejected_index=1; retained_bytes_unchanged
+raster collection HDR: raster/row-runs-24.pix; index=0; prepared=false; binary16 frame exact
+raster collection: raster/row-runs-24.pix; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/row-runs-24.pix; index=0; prepared=true; binary16 frame exact
+raster collection: raster/row-runs-24.pix; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: raster/transport-linear.pfm; rejected_index=1; retained_bytes_unchanged
+raster collection HDR: raster/transport-linear.pfm; index=0; prepared=false; binary16 frame exact
+raster collection: raster/transport-linear.pfm; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/transport-linear.pfm; index=0; prepared=true; binary16 frame exact
+raster collection: raster/transport-linear.pfm; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection bounds: raster/palette-grid.wal; rejected_index=1; retained_bytes_unchanged
+raster collection HDR: raster/palette-grid.wal; index=0; prepared=false; binary16 frame exact
+raster collection: raster/palette-grid.wal; index=0; prepared=false; bits/color/frame exact; root=0; queue=0
+raster collection HDR: raster/palette-grid.wal; index=0; prepared=true; binary16 frame exact
+raster collection: raster/palette-grid.wal; index=0; prepared=true; bits/color/frame exact; root=0; queue=0
+raster collection complete: sources=65; selections=94; storage_cases=188; root=0; queue=0
+test raster_collection_native_and_prepared_swap_preserve_metal_frames ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 8.49s
+
+
+=== /tmp/rrrah-region-timing-final.log ===
+   Compiling rrrah-gpu v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-gpu)
+    Finished `test` profile [optimized + debuginfo] target(s) in 4.84s
+     Running tests/raster_timing.rs (target/debug/deps/raster_timing-2961a7509b3bf11c)
+
+running 1 test
+raster timestamp adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+{"median_gpu_ms":0.35525,"samples_gpu_ms":[0.355125, 0.354875, 0.35525, 0.35525, 0.356208, 0.355083, 0.355125, 0.3555, 0.355, 0.354917, 0.3565, 0.355166, 0.355625, 0.355542, 0.35475, 0.354958, 0.355667, 0.355542, 0.355667, 0.355292, 0.355542, 0.355042, 0.355208, 0.35525, 0.355417, 0.355084, 0.355083, 0.35525, 0.355917, 0.355625],"source":[4096,4096],"target":[2048,2048]}
+test raster_single_layer_gpu_timestamp_timing ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.53s
+

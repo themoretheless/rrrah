@@ -1,0 +1,231 @@
+   Compiling typenum v1.20.1
+   Compiling subtle v2.6.1
+   Compiling base64ct v1.8.3
+   Compiling cpufeatures v0.2.17
+   Compiling zstd-sys v2.1.1+zstd.1.5.7
+   Compiling bzip2-sys v0.1.13+1.0.8
+   Compiling powerfmt v0.2.1
+   Compiling num-conv v0.2.2
+   Compiling time-core v0.1.9
+   Compiling deranged v0.5.8
+   Compiling miniz_oxide v0.9.1
+   Compiling getrandom v0.2.17
+   Compiling constant_time_eq v0.1.5
+   Compiling ppv-lite86 v0.2.21
+   Compiling rawpointer v0.2.1
+   Compiling zstd-safe v5.0.2+zstd.1.5.2
+   Compiling bzip2 v0.4.4
+   Compiling rand_core v0.6.4
+   Compiling serde_json v1.0.151
+   Compiling matrixmultiply v0.3.11
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+   Compiling password-hash v0.4.2
+   Compiling flate2 v1.1.10
+   Compiling generic-array v0.14.7
+   Compiling time v0.3.55
+   Compiling zstd v0.11.2+zstd.1.5.2
+   Compiling rand_chacha v0.3.1
+   Compiling ndarray v0.16.1
+   Compiling rand v0.8.8
+   Compiling safetensors v0.3.3
+   Compiling crypto-common v0.1.7
+   Compiling block-buffer v0.10.4
+   Compiling inout v0.1.4
+   Compiling digest v0.10.7
+   Compiling cipher v0.4.4
+   Compiling hmac v0.12.1
+   Compiling sha2 v0.10.9
+   Compiling sha1 v0.10.7
+   Compiling aes v0.8.4
+   Compiling pbkdf2 v0.11.0
+   Compiling zip v0.6.6
+   Compiling torch-sys v0.23.0
+   Compiling tch v0.23.0
+   Compiling loftr v0.1.1 (/Users/themoretheless/Documents/Sources/rrrah/vendor/loftr)
+warning: method `forward_t` is never used
+   --> vendor/loftr/src/backbone.rs:274:12
+    |
+221 | impl ResNetFpn8_2 {
+    | ----------------- method in this implementation
+...
+274 |     pub fn forward_t(&self, x: &Tensor, train: bool) -> Result<(Tensor, Tensor), LoftrError> {
+    |            ^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `forward_t` is never used
+   --> vendor/loftr/src/backbone.rs:329:12
+    |
+328 | impl Backbone {
+    | ------------- method in this implementation
+329 |     pub fn forward_t(&self, x: &Tensor, train: bool) -> Result<(Tensor, Tensor), LoftrError> {
+    |            ^^^^^^^^^
+
+warning: method `forward` is never used
+   --> vendor/loftr/src/transformer.rs:166:12
+    |
+147 | impl LocalFeatureTransformer {
+    | ---------------------------- method in this implementation
+...
+166 |     pub fn forward(
+    |            ^^^^^^^
+
+warning: `loftr` (lib) generated 3 warnings
+error[E0308]: mismatched types
+   --> crates/rrrah-dedup/src/model_loftr.rs:170:40
+    |
+170 |         let budget = MemoryBudget::new(bytes);
+    |                      ----------------- ^^^^^ expected `u64`, found `usize`
+    |                      |
+    |                      arguments to this function are incorrect
+    |
+note: associated function defined here
+   --> crates/rrrah-memory/src/lib.rs:94:12
+    |
+ 94 |     pub fn new(limit: u64) -> Self {
+    |            ^^^
+help: you can convert a `usize` to a `u64` and panic if the converted value doesn't fit
+    |
+170 |         let budget = MemoryBudget::new(bytes.try_into().unwrap());
+    |                                             ++++++++++++++++++++
+
+error[E0308]: mismatched types
+   --> crates/rrrah-dedup/src/model_loftr.rs:177:9
+    |
+177 |         assert_eq!(budget.used(), bytes);
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `u64`, found `usize`
+
+error[E0277]: can't compare `u64` with `usize`
+    --> crates/rrrah-dedup/src/model_loftr.rs:177:9
+     |
+ 177 |         assert_eq!(budget.used(), bytes);
+     |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no implementation for `u64 == usize`
+     |
+     = help: the trait `PartialEq<usize>` is not implemented for `u64`
+help: `u64` implements trait `PartialEq<Rhs>`
+    --> /Users/themoretheless/.rustup/toolchains/stable-aarch64-apple-darwin/lib/rustlib/src/rust/library/core/src/cmp.rs:1876:13
+     |
+1876 |               const impl PartialEq for $t {
+     |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^ `PartialEq`
+...
+1898 | /     partial_eq_impl! {
+1899 | |         bool char usize u8 u16 u32 u64 u128 isize i8 i16 i32 i64 i128 f16 f32 f64 f128
+1900 | |     }
+     | |_____- in this macro invocation
+     |
+    ::: /Users/themoretheless/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde_json-1.0.151/src/value/partial_eq.rs:76:13
+     |
+  76 |               impl PartialEq<Value> for $ty {
+     |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `PartialEq<serde_json::value::Value>`
+...
+  97 | / partialeq_numeric! {
+  98 | |     eq_i64[i8 i16 i32 i64 isize]
+  99 | |     eq_u64[u8 u16 u32 u64 usize]
+ 100 | |     eq_f32[f32]
+ 101 | |     eq_f64[f64]
+ 102 | |     eq_bool[bool]
+ 103 | | }
+     | |_- in this macro invocation
+     = note: this error originates in the macro `assert_eq` which comes from the expansion of the macro `partialeq_numeric` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0308]: mismatched types
+   --> crates/rrrah-dedup/src/model_loftr.rs:180:46
+    |
+180 |         let insufficient = MemoryBudget::new(bytes - 1);
+    |                            ----------------- ^^^^^^^^^ expected `u64`, found `usize`
+    |                            |
+    |                            arguments to this function are incorrect
+    |
+note: associated function defined here
+   --> crates/rrrah-memory/src/lib.rs:94:12
+    |
+ 94 |     pub fn new(limit: u64) -> Self {
+    |            ^^^
+help: you can convert a `usize` to a `u64` and panic if the converted value doesn't fit
+    |
+180 |         let insufficient = MemoryBudget::new((bytes - 1).try_into().unwrap());
+    |                                              +         +++++++++++++++++++++
+
+warning: taking a mutable reference to a `const` item
+    --> crates/rrrah-dedup/src/managed_metric.rs:218:59
+     |
+ 218 |                     .search(query, radius, entries.len(), &mut usize::MAX, &budget, || false)
+     |                                                           ^^^^^^^^^^^^^^^
+     |
+     = note: each usage of a `const` item creates a new temporary
+     = note: the mutable reference will refer to this temporary, not the original `const` item
+note: `const` item defined here
+    --> /Users/themoretheless/.rustup/toolchains/stable-aarch64-apple-darwin/lib/rustlib/src/rust/library/core/src/num/uint_macros.rs:51:9
+     |
+  51 |           pub const MAX: Self = !0;
+     |           ^^^^^^^^^^^^^^^^^^^
+     |
+    ::: /Users/themoretheless/.rustup/toolchains/stable-aarch64-apple-darwin/lib/rustlib/src/rust/library/core/src/num/mod.rs:1449:5
+     |
+1449 | /     uint_impl! {
+1450 | |         Self = usize,
+1451 | |         ActualT = u64,
+1452 | |         SignedT = isize,
+...    |
+1472 | |         bound_condition = " on 64-bit targets",
+1473 | |     }
+     | |_____- in this macro invocation
+     = note: `#[warn(const_item_mutation)]` on by default
+     = note: this warning originates in the macro `uint_impl` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+warning: taking a mutable reference to a `const` item
+    --> crates/rrrah-dedup/src/managed_metric.rs:237:36
+     |
+ 237 |             index.search(0, 64, 0, &mut usize::MAX, &budget, || false),
+     |                                    ^^^^^^^^^^^^^^^
+     |
+     = note: each usage of a `const` item creates a new temporary
+     = note: the mutable reference will refer to this temporary, not the original `const` item
+note: `const` item defined here
+    --> /Users/themoretheless/.rustup/toolchains/stable-aarch64-apple-darwin/lib/rustlib/src/rust/library/core/src/num/uint_macros.rs:51:9
+     |
+  51 |           pub const MAX: Self = !0;
+     |           ^^^^^^^^^^^^^^^^^^^
+     |
+    ::: /Users/themoretheless/.rustup/toolchains/stable-aarch64-apple-darwin/lib/rustlib/src/rust/library/core/src/num/mod.rs:1449:5
+     |
+1449 | /     uint_impl! {
+1450 | |         Self = usize,
+1451 | |         ActualT = u64,
+1452 | |         SignedT = isize,
+...    |
+1472 | |         bound_condition = " on 64-bit targets",
+1473 | |     }
+     | |_____- in this macro invocation
+     = note: this warning originates in the macro `uint_impl` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+warning: taking a mutable reference to a `const` item
+    --> crates/rrrah-dedup/src/managed_metric.rs:242:37
+     |
+ 242 |             index.search(0, 64, 96, &mut usize::MAX, &budget, || true),
+     |                                     ^^^^^^^^^^^^^^^
+     |
+     = note: each usage of a `const` item creates a new temporary
+     = note: the mutable reference will refer to this temporary, not the original `const` item
+note: `const` item defined here
+    --> /Users/themoretheless/.rustup/toolchains/stable-aarch64-apple-darwin/lib/rustlib/src/rust/library/core/src/num/uint_macros.rs:51:9
+     |
+  51 |           pub const MAX: Self = !0;
+     |           ^^^^^^^^^^^^^^^^^^^
+     |
+    ::: /Users/themoretheless/.rustup/toolchains/stable-aarch64-apple-darwin/lib/rustlib/src/rust/library/core/src/num/mod.rs:1449:5
+     |
+1449 | /     uint_impl! {
+1450 | |         Self = usize,
+1451 | |         ActualT = u64,
+1452 | |         SignedT = isize,
+...    |
+1472 | |         bound_condition = " on 64-bit targets",
+1473 | |     }
+     | |_____- in this macro invocation
+     = note: this warning originates in the macro `uint_impl` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+Some errors have detailed explanations: E0277, E0308.
+For more information about an error, try `rustc --explain E0277`.
+warning: `rrrah-dedup` (lib test) generated 3 warnings
+error: could not compile `rrrah-dedup` (lib test) due to 4 previous errors; 3 warnings emitted

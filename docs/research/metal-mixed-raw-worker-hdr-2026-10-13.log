@@ -1,0 +1,37 @@
+warning: function `fallible_zeroed_bytes` is never used
+   --> crates/rrrah-cache/src/mosaic_payload_v1.rs:728:4
+    |
+728 | fn fallible_zeroed_bytes(len: usize) -> Result<Box<[u8]>, MosaicPayloadError> {
+    |    ^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-cache` (lib) generated 1 warning
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 9.55s
+     Running unittests src/main.rs (target/debug/deps/rrrah-0b4921b829754900)
+
+running 1 test
+mixed RAW worker adapter: Metal Apple M4 Max
+mixed RAW worker HDR: /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/1294.cr2; 6288x4056; every scene-linear binary16 component exact and finite
+mixed RAW worker: /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/1294.cr2 full=6288x4056; original samples and frame exact; disk-count=1; root=0
+mixed RAW worker HDR: /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/898.nef; 6032x4032; every scene-linear binary16 component exact and finite
+mixed RAW worker: /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/898.nef full=6032x4032; original samples and frame exact; disk-count=1; root=0
+mixed RAW worker HDR: /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/2414.arw; 6048x4024; every scene-linear binary16 component exact and finite
+mixed RAW worker: /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/2414.arw full=6048x4024; original samples and frame exact; disk-count=1; root=0
+mixed RAW worker HDR: /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/1084.orf; 4640x3472; every scene-linear binary16 component exact and finite
+mixed RAW worker: /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/1084.orf full=4640x3472; original samples and frame exact; disk-count=1; root=0
+mixed RAW worker HDR: /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/831.pef; 4352x2868; every scene-linear binary16 component exact and finite
+mixed RAW worker: /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/831.pef full=4352x2868; original samples and frame exact; disk-count=1; root=0
+mixed RAW worker HDR: /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/5025.rw2; 4760x3472; every scene-linear binary16 component exact and finite
+mixed RAW worker: /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/5025.rw2 full=4760x3472; original samples and frame exact; disk-count=1; root=0
+mixed RAW worker HDR: /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/2883.raf; 5120x3288; every scene-linear binary16 component exact and finite
+mixed RAW worker: /Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/2883.raf full=5120x3288; original samples and frame exact; disk-count=1; root=0
+mixed RAW worker HDR: /Users/themoretheless/Documents/Sources/rrrah/tests/IMG_9043.CR3; 6188x4120; every scene-linear binary16 component exact and finite
+mixed RAW worker: /Users/themoretheless/Documents/Sources/rrrah/tests/IMG_9043.CR3 full=6188x4120; original samples and frame exact; disk-count=1; root=0
+mixed RAW worker HDR: /Users/themoretheless/Documents/Sources/rrrah/tests/IMG_9074.CR3; 6188x4120; every scene-linear binary16 component exact and finite
+mixed RAW worker: /Users/themoretheless/Documents/Sources/rrrah/tests/IMG_9074.CR3 full=6188x4120; original samples and frame exact; disk-count=1; root=0
+test gallery::tests::mixed_camera_worker_prefetch_preserves_full_metal_frames ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 281 filtered out; finished in 16.56s
+

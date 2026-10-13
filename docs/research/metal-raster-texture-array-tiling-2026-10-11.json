@@ -1,0 +1,74 @@
+{
+  "date": "2026-10-11",
+  "problem": "CPU-prepared linear rasters wider/taller than a device 2D texture limit were refused even if retained texture bytes fit admission.",
+  "implementation": [
+    "Balanced texture-array tiles constrained by device 2D extent and array-layer count. Padded edge allocation is included in retained texture admission and resident_bytes.",
+    "Packed CPU source is uploaded by addressed rectangles; no additional CPU packed-tile Vec is constructed. Queue staging remains driver work, with conservative aligned tile-payload credit.",
+    "Unified array shader maps each of four clamped global bilinear sample coordinates to its own layer; premultiply precedes interpolation, including across seams. Single-layer and resident compute textures use the same array view.",
+    "Cancellation during multi-tile upload preserves old texture/uniforms; queued partial transfers hold resource/queue credit through completion.",
+    "Public texture_bytes_for_extent exposes actual padded footprint for caller admission."
+  ],
+  "validation": [
+    "Real Metal with a negotiated64-pixel texture limit: horizontal130x5, vertical5x130, two-axis130x130 sources; exact SDR and HDR frames against untiled control at seams/corners and fractional alpha.",
+    "Cancellation after first tile queued keeps previous displayed pixels; queued/new texture credits return after completion; retry succeeds and accounts padded footprint.",
+    "Boundary unit verifies zero/overflow dimensions, too many layers and padded512MiB ceiling.",
+    "65 corpus sources,94 selections,188 native/prepared storage cases retain float bits and SDR/HDR frames through swap, roots/queues zero.",
+    "Normal native HDR window displays authored20000x512 PFM on M4 Max with16384 hardware extent, using two10000x512 layers. Warm title ready220ms is one observation, not benchmark. Native CmdQ closes own process."
+  ],
+  "limits": [
+    "Resident atlas remains bounded to512MiB actual padded bytes and device array-layer count; out-of-core GPU tile cache is not implemented.",
+    "GPU-resident compute transfer still uses one-layer dimensions and its existing device-extent guard; above-device resident compute tiling remains separate.",
+    "Driver allocation/staging overhead is not exhaustively measured by managed credits.",
+    "No shader throughput comparison with the former single-layer binding is claimed.",
+    "No physical HDR display calibration/nits or NVIDIA qualification.",
+    "Full100format acceptance remains open."
+  ],
+  "gates": {
+    "gpu_units": {
+      "summary": "test result: ok. 50 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+      "sha256": "c31f4425763eb366e6ee669edea99467efc5370f02496d3f665af21fd2ef2a35"
+    },
+    "gpu_raster": {
+      "summary": "test result: ok. 11 passed; 0 failed; 7 ignored; 0 measured; 0 filtered out; finished in 4.64s",
+      "sha256": "7eac76a42d0b90d10902cf73fabe15cb09a8f64cc359c1e28dccf2f9c8fae0a4"
+    },
+    "viewer_units": {
+      "summary": "test result: ok. 204 passed; 0 failed; 39 ignored; 0 measured; 0 filtered out; finished in 0.42s",
+      "sha256": "1c01ae1b5ffe5bc6cdd0d1a9057c9447ee39bc1c407adcfbde32ccf112d3cb79"
+    },
+    "viewer_extent": {
+      "summary": "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 242 filtered out; finished in 2.29s",
+      "sha256": "803df7e354c085bfbe5c8252a7f7af46c6be95debb9e03dc0473221fa5d90288"
+    },
+    "hdr_transport": {
+      "summary": "test result: ok. 14 passed; 0 failed; 3 ignored; 0 measured; 0 filtered out; finished in 3.72s",
+      "sha256": "21197751a13cd4033041d3bf1b80b3b1e7d82c38f57e5d9d2a9ea8530bf29450"
+    },
+    "collection": {
+      "summary": "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 6.20s",
+      "sha256": "3bfd3a2f361baa1c2a1db9f208385e183d74d245b0a0c9284222a372a48877b5"
+    }
+  },
+  "artifacts": {
+    "native_source": {
+      "path": "/tmp/rrrah-tiled-native-20000x512.pfm",
+      "sha256": "a482efb435d11cd0d30a6065335199baddd5f2494b45c9d4765ca4b6df04223a"
+    },
+    "native_binary": {
+      "path": "/tmp/RrrahTiledMetalQualification.app/Contents/MacOS/rrrah",
+      "sha256": "07be47a82461c64a060ffb54cb8c1378da6c62b63583cee1627bdd9c4a84c186"
+    },
+    "native_log": {
+      "path": "/tmp/rrrah-tiled-native-window.log",
+      "sha256": "f1aa2baafec8cbc1b1114805d87e83524e8202931d3513b28106c0762890cae3"
+    },
+    "renderer": {
+      "path": "crates/rrrah-gpu/src/raster.rs",
+      "sha256": "13eb124f298866b9c740e974e9b6d80449f6cc3000239fd3c9f06437d66cd982"
+    },
+    "shader": {
+      "path": "crates/rrrah-gpu/shaders/raster_view.wgsl",
+      "sha256": "51196dbb76d1facfe23a90b011a1b51a6c6d1617a65ea81996760f9f9347cd19"
+    }
+  }
+}

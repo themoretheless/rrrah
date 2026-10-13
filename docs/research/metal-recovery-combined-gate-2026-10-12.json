@@ -1,0 +1,52 @@
+{
+  "passed": 133,
+  "failed": 0,
+  "ignored": 13,
+  "all_executed_suites_verified": true,
+  "suites": [
+    {
+      "suite": "gpu-all",
+      "passed": 131,
+      "failed": 0,
+      "ignored": 13,
+      "verified_execution": true
+    },
+    {
+      "suite": "gpu-large-upload-cancel",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "verified_execution": true
+    },
+    {
+      "suite": "gpu-selected-page-cancel",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "verified_execution": true
+    }
+  ],
+  "new_flags": [
+    "--metal-selected-page-cancel"
+  ],
+  "strengthened_flags": [
+    "--metal-large-upload-cancel"
+  ],
+  "evidence_verifier_tests": 3,
+  "scope": "Current ordinary GPU suite plus actual Metal signed12MP upload and admitted selected-page cancellation recovery",
+  "limitations": [
+    "13 manual GPU tests explicitly ignored",
+    "Offscreen transport/recovery only; no physical HDR calibration or full100-format qualification",
+    "NVIDIA/CUDA hardware qualification remains deferred by user"
+  ],
+  "sha256": {
+    "scripts/qualify-viewer-storage-gpu.py": "d5b0a08fae01afdbae24eea64b4b1ae7cb77d74b6c99bf5c6fb1622ca22d1159",
+    "scripts/test_metal_recovery_evidence.py": "00656ae1313be201acb39e04ea0e8a3560377c9843fc3f10ff682a1e5b437216",
+    "docs/research/metal-recovery-combined-gate-2026-10-12/report.json": "187fe0b9b359214c0140b88b612dca5e541f9317b605359994b11c921cdfbd35",
+    "docs/research/metal-recovery-combined-gate-2026-10-12/gpu-large-upload-cancel.log": "c8bacdf985f957c5783be9acc7698a7808b6e40a1ec15c6bafa7f70f47bd820d",
+    "docs/research/metal-recovery-combined-gate-2026-10-12/gpu-selected-page-cancel.log": "d85238803bd18009dacef66dd3280424e3cb74ac9209a70a905938921e5661e4",
+    "docs/research/metal-recovery-combined-gate-2026-10-12/gpu-all.log": "9d4068c493efa37bf4e11ec443df51740dc0a1c43ae58f737edea19166348ee2",
+    "docs/research/metal-recovery-combined-gate-2026-10-12/evidence-tests.log": "33060fd73862c5e1af97335504d5b45211fce6d229657f556d8deceeadc52ce4",
+    "docs/research/metal-recovery-combined-gate-2026-10-12/driver.log": "63727f2237aed67b9a650af30dca526b7657593702c3f827d5d5ab5581947ed5"
+  }
+}

@@ -1,0 +1,112 @@
+{
+  "status": "executed_ten_real_cli_controls",
+  "source": "/Users/themoretheless/.codex/tmp/rrrah-kevingliewe-imghash-source-20261013",
+  "executable": "/Users/themoretheless/.codex/tmp/rrrah-kevingliewe-imghash-qualified-20261013/imghash",
+  "executable_sha256": "ebb30e9c637e0fc7e563f86f47e4e1b647e4539539aea0022446682ccf5aab64",
+  "script_sha256": "d86ea0fe1af9bd9b0578f37dd703300abedc9feaae5927cae301daaf133ae68e",
+  "controls": [
+    {
+      "control": "hash",
+      "args": [
+        "/Users/themoretheless/.codex/tmp/rrrah-kevingliewe-imghash-source-20261013/testdata/Lenna.png"
+      ],
+      "returncode": 0,
+      "stdout": "6e0e9edaccc85a1c\n",
+      "stderr": ""
+    },
+    {
+      "control": "self",
+      "args": [
+        "/Users/themoretheless/.codex/tmp/rrrah-kevingliewe-imghash-source-20261013/testdata/Lenna.png",
+        "/Users/themoretheless/.codex/tmp/rrrah-kevingliewe-imghash-source-20261013/testdata/Lenna.png"
+      ],
+      "returncode": 0,
+      "stdout": "0\n",
+      "stderr": ""
+    },
+    {
+      "control": "different",
+      "args": [
+        "/Users/themoretheless/.codex/tmp/rrrah-kevingliewe-imghash-source-20261013/testdata/Lenna.png",
+        "/Users/themoretheless/.codex/tmp/rrrah-kevingliewe-imghash-source-20261013/testdata/Peppers.png"
+      ],
+      "returncode": 0,
+      "stdout": "37\n",
+      "stderr": ""
+    },
+    {
+      "control": "flat_collision",
+      "args": [
+        "/Users/themoretheless/.codex/tmp/rrrah-kevingliewe-imghash-qualified-20261013/black.png",
+        "/Users/themoretheless/.codex/tmp/rrrah-kevingliewe-imghash-qualified-20261013/white.png"
+      ],
+      "returncode": 0,
+      "stdout": "0\n",
+      "stderr": ""
+    },
+    {
+      "control": "lowercase_alg",
+      "args": [
+        "-a",
+        "gradient",
+        "/Users/themoretheless/.codex/tmp/rrrah-kevingliewe-imghash-source-20261013/testdata/Lenna.png"
+      ],
+      "returncode": 4,
+      "stdout": "Invalid hash alg: gradient\n",
+      "stderr": ""
+    },
+    {
+      "control": "invalid_width",
+      "args": [
+        "-w",
+        "abc",
+        "/Users/themoretheless/.codex/tmp/rrrah-kevingliewe-imghash-source-20261013/testdata/Lenna.png"
+      ],
+      "returncode": 1,
+      "stdout": "Invalid width value: abc\n",
+      "stderr": ""
+    },
+    {
+      "control": "invalid_height",
+      "args": [
+        "-h",
+        "abc",
+        "/Users/themoretheless/.codex/tmp/rrrah-kevingliewe-imghash-source-20261013/testdata/Lenna.png"
+      ],
+      "returncode": 2,
+      "stdout": "Invalid height value: abc\n",
+      "stderr": ""
+    },
+    {
+      "control": "missing_first",
+      "args": [
+        "/Users/themoretheless/.codex/tmp/rrrah-kevingliewe-imghash-qualified-20261013/absent.png"
+      ],
+      "returncode": 6,
+      "stdout": "Error opening image: No such file or directory (os error 2)\n",
+      "stderr": ""
+    },
+    {
+      "control": "missing_second",
+      "args": [
+        "/Users/themoretheless/.codex/tmp/rrrah-kevingliewe-imghash-source-20261013/testdata/Lenna.png",
+        "/Users/themoretheless/.codex/tmp/rrrah-kevingliewe-imghash-qualified-20261013/absent.png"
+      ],
+      "returncode": 7,
+      "stdout": "Error opening image: No such file or directory (os error 2)\n",
+      "stderr": ""
+    },
+    {
+      "control": "zero_width",
+      "args": [
+        "-w",
+        "0",
+        "/Users/themoretheless/.codex/tmp/rrrah-kevingliewe-imghash-source-20261013/testdata/Lenna.png"
+      ],
+      "returncode": 0,
+      "stdout": "\n",
+      "stderr": ""
+    }
+  ],
+  "scope": "Unchanged pinned source built with original Cargo.lock; actual image-rs/img_hash backends; zero-width outcome recorded, not presumed"
+}

@@ -1,0 +1,104 @@
+{
+  "status": "candidate_rejected_qualified_production_restored",
+  "reason": "Managed equality certificates reduce analytical source payload reads but regress matched alternating all-copy latency at all three sizes. Preserve existing production until a beneficial design is verified.",
+  "candidate_generic_tests": 162,
+  "alternating_samples": 36,
+  "controls": [
+    {
+      "files": 8,
+      "samples_ns": {
+        "baseline": [
+          149361334,
+          152868459,
+          168786666,
+          123816083,
+          123735167,
+          121141834
+        ],
+        "candidate": [
+          160300209,
+          169570250,
+          162642375,
+          185560750,
+          298218083,
+          363720042
+        ]
+      },
+      "median_seconds": {
+        "baseline": 0.1365887085,
+        "candidate": 0.1775655
+      },
+      "baseline_over_candidate": 0.7692299940022133
+    },
+    {
+      "files": 32,
+      "samples_ns": {
+        "baseline": [
+          2811424750,
+          2722772792,
+          1839083334,
+          1999281000,
+          1850442333,
+          1836399625
+        ],
+        "candidate": [
+          2277216041,
+          2400494333,
+          2381723541,
+          2771531958,
+          1897553333,
+          1720484167
+        ]
+      },
+      "median_seconds": {
+        "baseline": 1.9248616665,
+        "candidate": 2.329469791
+      },
+      "baseline_over_candidate": 0.8263089197107343
+    },
+    {
+      "files": 64,
+      "samples_ns": {
+        "baseline": [
+          7091456167,
+          8752274292,
+          8792371416,
+          7310607750,
+          7220674959,
+          7239926916
+        ],
+        "candidate": [
+          9736185542,
+          9102679208,
+          9727805375,
+          6225175625,
+          6113535250,
+          6839708250
+        ]
+      },
+      "median_seconds": {
+        "baseline": 7.275267333,
+        "candidate": 7.971193729
+      },
+      "baseline_over_candidate": 0.9126948334641335
+    }
+  ],
+  "restored_files": {
+    "crates/rrrah-dedup/src/collection.rs": "93185c7709b3fd236c815253d4f7f2c24e5fe63482845be3018ba796d09a481c",
+    "crates/rrrah-dedup/tests/projected_portfolio.rs": "a53a1d6c493bafc4f27596e5e484aadf439daf41b46a42a24d0cd0af41fb5363"
+  },
+  "production_baseline_manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exact-collection-scaling-baseline-snapshot-20261011.json",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exact-collection-scaling-baseline-snapshot-20261011.json": "cecc14734a906c391e6d98d329afa843bf3beb10ef2d67065f9df907da36daa6",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exact-classes-generic-20261011.json": "72d00e859b53e80c0da66aa01ddda85993bb1deca0575e13e12046e9ef510653",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exact-classes-abba-20261011.json": "ccafa714c9ee0f8c0b8d8b3b4fef9814cf0474247bf0d906f0ab10b99b65a880",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exact-classes-snapshot-20261011.json": "81a28bc74d1eb21de359272c3acbc6532d57e956279cc2451c4b6c57ad5fdf9c",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exact-classes-scaling-20261011.json": "41db090dcf24fe7d1e381085d6405917ab8c3c0e5e47966b2a13c507f6fee738"
+  },
+  "limits": [
+    "One ABBA round on a shared host; this rejects current adoption rather than proving universal regression",
+    "Candidate source and logs preserved; candidate tests do not qualify restored source",
+    "Existing baseline 159 generic and nine native collection controls remain scoped to their own frozen sources"
+  ],
+  "next_action": "Investigate duplicated original-file verification in ExactObservation.original and ExactObservation.visual.source; factor dependency observations without weakening initial/per-pair/final original-source guards."
+}

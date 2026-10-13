@@ -1,0 +1,31 @@
+{
+  "scope": "Original ORF 4640x3472 to queue-completed offscreen 1920x1080 sRGB frame on Metal; 3 warmups + 15 load samples and 3 warmups + 60 resident frames.",
+  "runs": {
+    "native": {
+      "log": "docs/research/orf-metal-view-timing-2026-10-11-native.log",
+      "sha256": "84cc91ff8e2514e89fd236f11eb3e770ee183bf63f7bd4d729000e8c2ae90ded",
+      "summaries": [
+        "1084.orf: 15 samples / 3 warmups; decode p50/p95 358.741/417.112 ms; upload enqueue 9.347/13.157 ms; frame completion 7.243/8.820 ms; total 374.563/434.679 ms",
+        "1084.orf: resident zoom/pan 60 frames; p50/p95 1.780/2.063 ms",
+        "managed_cpu: used=0 peak=79219782 limit=536870912",
+        "managed_gpu: used=0 peak=83886080 limit=536870912"
+      ]
+    },
+    "swap": {
+      "log": "docs/research/orf-metal-view-timing-2026-10-11-swap.log",
+      "sha256": "a0a4e32074bc31a4f4c590ac9d166f30644dcfe80277d0fe0d72773c7331bc9a",
+      "summaries": [
+        "1084.orf: 15 samples / 3 warmups; swap_restore p50/p95 20.709/20.910 ms; upload enqueue 9.318/9.723 ms; frame completion 7.300/7.517 ms; total 37.303/37.788 ms",
+        "1084.orf: resident zoom/pan 60 frames; p50/p95 1.788/2.234 ms",
+        "managed_cpu: used=0 peak=66537472 limit=536870912",
+        "managed_gpu: used=0 peak=83886080 limit=536870912"
+      ]
+    }
+  },
+  "sha256": {
+    "crates/rrrah-app/examples/raw_view_timing.rs": "a7a48b501768fe6ed92eaa490946b41ec0742ed70bb9d1f1c687d31b74e4b746",
+    "crates/rrrah-decode/src/camtiff/olympus_entropy.rs": "798fa6d136096d83cfd6b129404691aa48e0b9e2515603860ff895278dab5d14",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-raw-independent/1084.orf": "b2221977cbc6eba0d3b363351072092e5647eaa0d02a5d8432b5d985b29f669f"
+  },
+  "limitations": "Separate native/swap invocations on warm local disk. Excludes pipeline construction and physical presentation. Historical nine-original run is not a paired baseline; no whole-viewer optimization speedup claim."
+}

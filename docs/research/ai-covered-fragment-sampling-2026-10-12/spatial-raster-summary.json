@@ -1,0 +1,28 @@
+{
+  "scope": "bounded nearest-neighbor raster texel geometry in native spatial diagnostic compositor",
+  "tests_passed": 159,
+  "tests_ignored": 11,
+  "repeat_count": 17,
+  "single_alpha": 0.75,
+  "repeated_alpha": 0.9999961853027344,
+  "limits": {
+    "regions": 4095,
+    "explicit_work_budget": true,
+    "pre_admission": true
+  },
+  "verified": [
+    "texel color and alpha before area averaging",
+    "repeated translucent and opaque texel correlation",
+    "cancellation releases credit",
+    "dense and singular geometry refused before allocation",
+    "work and admission refusal"
+  ],
+  "not_qualified": [
+    "actual PDF raster source bridge",
+    "bilinear interpolation",
+    "full AI scene routing",
+    "physical HDR presentation"
+  ],
+  "log": "docs/research/ai-covered-fragment-sampling-2026-10-12/spatial-raster-final-tests.log",
+  "log_sha256": "26a5370f0112301ef68dad42afecb86d2c562f237d588cb7d84b703bc95cede7"
+}

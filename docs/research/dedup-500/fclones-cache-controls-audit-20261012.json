@@ -1,0 +1,20 @@
+{
+  "status": "verified_original_cached_hasher_stale_results_two_controls",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/fclones-cache-controls-source-20261012.json": "cc29cf6003418686dac34724dac3fd56f90b526b2f3e343abbc0c6b0c018d34f",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/fclones-hasher-source-20261012.json": "54d14fd6f77c95467e02139da2daabbbe9e237abf2d03400abfd39593e32d176",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/fclones-cache-controls-20261012.rs": "9ba934b5f706ee3bbdd4986ae035c0ceb3c7e21cff33ee89c8da3a13a9ecb94d",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-cache-controls-tests-retry2-20261012.log": "098f87f88c9e8d1a5610378f938b5bdaf22739e973a668dda0a167c79dcf51cf",
+    "/Users/themoretheless/.codex/tmp/rrrah-fclones-cache-controls-executable-20261012": "14ae68eb7b357b00929cc1a014c1ebde3c1d5626b690feb61e878ff05b9b0560",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-fclones-cache-controls-20261012.py": "8b9a321b3e837e889c121c6d1584c02aa9e11e2fdf4643db9574069cf6f38333"
+  },
+  "fully_read_source_files_additional": [
+    "fclones/src/cache.rs",
+    "fclones/src/file.rs"
+  ],
+  "findings": [
+    "Original FileHasher+HashCache returns old BLAKE3 after same physical file/length/exact restored mtime but changed bytes; fresh uncached hash differs.",
+    "Original FileHasher+HashCache returns old BLAKE3 after distinct verified nanosecond mtime in same cached millisecond; fresh uncached hash differs."
+  ],
+  "scope": "Original production unchanged in separate copied tree; private independent tests appended to cache.rs only. Isolated temporary cache. No whole scanner CLI false-positive or scheduled race claim, no production adoption or full42file/500 review. First test command selected wrong workspace and failed package selection; preserved initial log; explicit manifest retry passed."
+}

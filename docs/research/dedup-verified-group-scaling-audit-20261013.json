@@ -1,0 +1,148 @@
+{
+  "status": "verified_groups8_32_64_256_and_four_changed_content_controls",
+  "source": "/Users/themoretheless/.codex/tmp/rrrah-current-combined-validation-v2-20261013/source",
+  "source_manifest": "/Users/themoretheless/.codex/tmp/rrrah-current-combined-validation-v2-20261013/source/validation-snapshot.json",
+  "source_manifest_sha256": "32b2ff5c75000234153df7bfebdd040092b6e6ea98096aae250832ce5c1e7829",
+  "source_files": 3771,
+  "source_unchanged": true,
+  "harness": "/Users/themoretheless/.codex/tmp/rrrah-verified-group-scaling-20261013",
+  "harness_pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-verified-group-scaling-20261013/Cargo.toml": "0bd9df3218b9a461f77bf586a51dba94c8f5a985269031c290492d48ccb76822",
+    "/Users/themoretheless/.codex/tmp/rrrah-verified-group-scaling-20261013/Cargo.lock": "c7904a99977b8b8df764708e705bc7fb50395e102af8c7faadf8f17b8a0ff4e0",
+    "/Users/themoretheless/.codex/tmp/rrrah-verified-group-scaling-20261013/src/main.rs": "3c4738642f6592aa0cccc787330c8acc61fc274fd523add53e1f2cf86715bf01"
+  },
+  "executable": "/Users/themoretheless/.codex/tmp/rrrah-verified-group-scaling-20261013/qualified-group-scaling",
+  "executable_sha256": "f216322728e199f8d75d44db3259da4a631cade81829873014f20138885590ca",
+  "log": "/Users/themoretheless/.codex/tmp/rrrah-verified-group-scaling-20261013/run.log",
+  "log_sha256": "edde9fcd478d48eb35cab9fc666fde51548c32e374247b265ed6a861f4007e15",
+  "returncode": 0,
+  "rows": [
+    {
+      "files": 8,
+      "repeat": 0,
+      "file_bytes": 1048576,
+      "elapsed_ns": 475217250,
+      "measured_bytes_read": 48300032,
+      "group_members": 8
+    },
+    {
+      "files": 8,
+      "repeat": 1,
+      "file_bytes": 1048576,
+      "elapsed_ns": 493073417,
+      "measured_bytes_read": 48300032,
+      "group_members": 8
+    },
+    {
+      "files": 8,
+      "repeat": 2,
+      "file_bytes": 1048576,
+      "elapsed_ns": 484789083,
+      "measured_bytes_read": 48300032,
+      "group_members": 8
+    },
+    {
+      "files": 32,
+      "repeat": 0,
+      "file_bytes": 1048576,
+      "elapsed_ns": 2009727958,
+      "measured_bytes_read": 199491584,
+      "group_members": 32
+    },
+    {
+      "files": 32,
+      "repeat": 1,
+      "file_bytes": 1048576,
+      "elapsed_ns": 2005038791,
+      "measured_bytes_read": 199491584,
+      "group_members": 32
+    },
+    {
+      "files": 32,
+      "repeat": 2,
+      "file_bytes": 1048576,
+      "elapsed_ns": 1957749625,
+      "measured_bytes_read": 199491584,
+      "group_members": 32
+    },
+    {
+      "files": 64,
+      "repeat": 0,
+      "file_bytes": 1048576,
+      "elapsed_ns": 4131965500,
+      "measured_bytes_read": 401080320,
+      "group_members": 64
+    },
+    {
+      "files": 64,
+      "repeat": 1,
+      "file_bytes": 1048576,
+      "elapsed_ns": 4252070125,
+      "measured_bytes_read": 401080320,
+      "group_members": 64
+    },
+    {
+      "files": 64,
+      "repeat": 2,
+      "file_bytes": 1048576,
+      "elapsed_ns": 4285270458,
+      "measured_bytes_read": 401080320,
+      "group_members": 64
+    },
+    {
+      "files": 256,
+      "repeat": 0,
+      "file_bytes": 1048576,
+      "elapsed_ns": 17677388583,
+      "measured_bytes_read": 1610612736,
+      "group_members": 256
+    },
+    {
+      "files": 256,
+      "repeat": 1,
+      "file_bytes": 1048576,
+      "elapsed_ns": 16781148792,
+      "measured_bytes_read": 1610612736,
+      "group_members": 256
+    },
+    {
+      "files": 256,
+      "repeat": 2,
+      "file_bytes": 1048576,
+      "elapsed_ns": 17429210000,
+      "measured_bytes_read": 1610612736,
+      "group_members": 256
+    }
+  ],
+  "summary": [
+    {
+      "files": 8,
+      "measured_bytes_read": 48300032,
+      "median_ms": 484.789083
+    },
+    {
+      "files": 32,
+      "measured_bytes_read": 199491584,
+      "median_ms": 2005.038791
+    },
+    {
+      "files": 64,
+      "measured_bytes_read": 401080320,
+      "median_ms": 4252.070125
+    },
+    {
+      "files": 256,
+      "measured_bytes_read": 1610612736,
+      "median_ms": 17429.21
+    }
+  ],
+  "changed_content_controls": 4,
+  "scope": "Actual exact::scan_verified default-feature-free API, all-equal1MiB files, three repeats per size. After repeats one middle byte changed; remaining n-1 group and exclusion checked for every size. All reports complete. No source mutation during scanning injected here.",
+  "limits": [
+    "Private harness resolves cached dependencies in its own pinned lock",
+    "Unoptimized dev profile, concurrent workloads, not a paired time comparison",
+    "bytes_read is library accounting, not physical storage IO",
+    "No total RSS or million-file claim"
+  ],
+  "decision": "Use verified exact groups for group-only identity discovery; exhaustive portfolio pair enumeration remains separate and quadratic"
+}

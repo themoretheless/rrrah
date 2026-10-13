@@ -1,0 +1,31 @@
+{
+  "backend": "Metal Apple M4 Max",
+  "dimensions": [
+    3360,
+    2460
+  ],
+  "values_per_case": 33062400,
+  "cases": [
+    {
+      "binding_bytes": 134217728,
+      "dispatches": 1
+    },
+    {
+      "binding_bytes": 1048576,
+      "dispatches": 130
+    }
+  ],
+  "passed": 1,
+  "failed": 0,
+  "cpu_gpu_final_zero": true,
+  "log_sha256": "bfee47392a5b5f6c25f40966046d827a900ce3761c5e0bc1aa13c3cf5f31beac",
+  "sources": {
+    "crates/rrrah-gpu/src/rgbe_interpolate.wgsl": "b304ab05369604d7ab3901addff87b616747955570a4e5284df94e5dfcd0c7e8",
+    "crates/rrrah-gpu/tests/rgbe_compute_readback.rs": "513b084e7e2eead05d3c19953f0403652f6bd1551675ab962c9da52f0c896f65",
+    "tests/fixtures/data/metal-recovery/rrrah-srf-refresh-20261008.u16le": "b3fc3d395950407a35d33392a97181fa51aac1afb0aa6b96d94a7eba00e95d42"
+  },
+  "limits": [
+    "Authored normalization and four-channel gains over independent sensor dump; not as-shot Emerald WB or camera appearance qualification.",
+    "Numerical correctness and managed ownership; not comparative performance measurement."
+  ]
+}

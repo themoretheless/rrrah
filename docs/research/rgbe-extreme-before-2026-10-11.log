@@ -1,0 +1,22 @@
+   Compiling rrrah-gpu v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-gpu)
+    Finished `test` profile [optimized + debuginfo] target(s) in 2.01s
+     Running tests/rgbe_compute_readback.rs (target/debug/deps/rgbe_compute_readback-5d310ff784bafb7a)
+
+running 1 test
+test signed_f32_extremes_interpolate_finitely_against_f64_reference ... FAILED
+
+failures:
+
+---- signed_f32_extremes_interpolate_finitely_against_f64_reference stdout ----
+
+thread 'signed_f32_extremes_interpolate_finitely_against_f64_reference' (13384930) panicked at crates/rrrah-gpu/tests/rgbe_compute_readback.rs:464:9:
+(0,0) channel=0: NaN
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    signed_f32_extremes_interpolate_finitely_against_f64_reference
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 6 filtered out; finished in 0.25s
+
+error: test failed, to rerun pass `-p rrrah-gpu --test rgbe_compute_readback`

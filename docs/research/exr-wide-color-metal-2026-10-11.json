@@ -1,0 +1,44 @@
+{
+  "date": "2026-10-11",
+  "scope": "OpenEXR explicit linear Rec2020/D65 and P3/D65 color declarations through native preparation, swap and actual Metal SDR/HDR",
+  "sources": [
+    "https://openexr.com/en/latest/StandardAttributes.html",
+    "https://github.com/AcademySoftwareFoundation/ColorInterop/blob/main/Recommendations/01_TextureAssetColorSpaces/TextureAssetColorSpaces.md"
+  ],
+  "metadata_cases": {
+    "qualified": 6,
+    "conflicts_refused": 4,
+    "unknown_or_adopted_neutral_unqualified": 4
+  },
+  "fixture_provenance": "14 metadata derivatives of existing independently encoded float-none.exr; scanline channel payloads verified byte-identical; absolute offsets relocated; independent analytical matrices reused from xy/D65 Gaussian inversion reports",
+  "fixture_manifest": "tests/fixtures/exr-wide-color.json",
+  "fixture_generation_deterministic": true,
+  "pins_verified": 16,
+  "full_hdr_regression": {
+    "passed": 17,
+    "failed": 0,
+    "ignored": 3
+  },
+  "focused_current_source": {
+    "passed": 1,
+    "failed": 0,
+    "ignored": 0
+  },
+  "adapter": "Metal Apple M4 Max",
+  "memory": "Preparation and swap pressure/cancel/retry; root=0 in each accepted case. Unknown/neutral frames remain unprepared and release root.",
+  "limitations": [
+    "Authored float fixture; not broad producer/layer/deep/tile qualification.",
+    "Other interop IDs/primaries/white points remain unsupported.",
+    "Zero-alpha emission remains explicitly refused. Physical HDR calibration and NVIDIA hardware unqualified."
+  ],
+  "logs": {
+    "full": {
+      "path": "docs/research/exr-wide-color-metal-2026-10-11.full.log",
+      "sha256": "c200dfd3b0da7686a2faa666468d6d0cb20bef6c205fe9b1dc172cc5d9af8e18"
+    },
+    "focused": {
+      "path": "docs/research/exr-wide-color-metal-2026-10-11.focused.log",
+      "sha256": "d8f0f05c0a85467b9bdb2d42f3fd7301108aea5c8aeb274ab5136a8e068aa9bb"
+    }
+  }
+}

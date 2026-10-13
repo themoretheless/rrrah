@@ -1,0 +1,11 @@
+   Compiling rrrah-gpu v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-gpu)
+    Finished `test` profile [optimized + debuginfo] target(s) in 5.41s
+     Running tests/raster_timing.rs (target/debug/deps/raster_timing-2961a7509b3bf11c)
+
+running 1 test
+raster timestamp adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+{"median_gpu_ms":0.108271,"p95_gpu_ms":0.554042,"max_gpu_ms":0.651125,"warmups":5,"samples_gpu_ms":[0.106625, 0.5265, 0.108209, 0.10725, 0.086166, 0.0935, 0.101958, 0.088292, 0.1235, 0.093208, 0.095084, 0.147208, 0.109416, 0.193167, 0.476583, 0.097458, 0.554042, 0.102875, 0.113334, 0.1055, 0.651125, 0.108333, 0.100417, 0.099167, 0.109875, 0.116125, 0.112, 0.101833, 0.244583, 0.110875],"source":[4096,4096],"target":[2048,2048],"target_format":"Rgba16Float"}
+test raster_single_layer_gpu_timestamp_timing ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.69s
+

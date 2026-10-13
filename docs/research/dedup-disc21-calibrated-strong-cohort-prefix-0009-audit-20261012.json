@@ -1,0 +1,89 @@
+{
+  "status": "verified_fixed_calibrated_strong_completed_prefix_only",
+  "completed": 9,
+  "required": 24,
+  "totals": {
+    "copy": {
+      "supported": 6,
+      "inconclusive": 2,
+      "execution_failed": 0
+    },
+    "no_reference_match": {
+      "supported": 0,
+      "inconclusive": 1,
+      "execution_failed": 0
+    }
+  },
+  "rows": [
+    {
+      "query": "Q00061",
+      "reference": "R020965",
+      "published_label": "copy",
+      "index": 0,
+      "status": "inconclusive"
+    },
+    {
+      "query": "Q00324",
+      "reference": "R044970",
+      "published_label": "copy",
+      "index": 1,
+      "status": "inconclusive"
+    },
+    {
+      "query": "Q00338",
+      "reference": "R003142",
+      "published_label": "copy",
+      "index": 2,
+      "status": "supported"
+    },
+    {
+      "query": "Q00748",
+      "reference": "R007851",
+      "published_label": "copy",
+      "index": 3,
+      "status": "supported"
+    },
+    {
+      "query": "Q00814",
+      "reference": "R032607",
+      "published_label": "copy",
+      "index": 4,
+      "status": "supported"
+    },
+    {
+      "query": "Q00846",
+      "reference": "R033260",
+      "published_label": "copy",
+      "index": 5,
+      "status": "supported"
+    },
+    {
+      "query": "Q00906",
+      "reference": "R014120",
+      "published_label": "copy",
+      "index": 6,
+      "status": "supported"
+    },
+    {
+      "query": "Q00911",
+      "reference": "R044290",
+      "published_label": "copy",
+      "index": 7,
+      "status": "supported"
+    },
+    {
+      "query": "Q00000",
+      "reference": "R020965",
+      "published_label": "no_reference_match",
+      "index": 8,
+      "status": "inconclusive"
+    }
+  ],
+  "pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-disc21-calibrated-strong-prefix-0009-20261012.json": "b88fb45b08bde611d9891f9ea0a8fe76314de3bf99351b71999071881f864a6e",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-disc21-calibrated-strong-cohort-prefix-20261012.py": "f41e58a24588195ed39fba3f6b4196b90c51e66c8f587eeac10d68438cdacb4e",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-disc21-overlap-calibrated-strong-audit-20261011.json": "4c18cfb9c38430e8da9c74a3451c7578e6beefd82ca094dd6cf73da61afb04c9"
+  },
+  "source_pins_verified": 3296,
+  "scope": "Separate min20 calibrated-overlap candidate; no merge with native/rank2 recall. Previously observed development cohort, not independent hard-negative qualification. First Q00061 remains inconclusive, so this recipe cannot replace earlier rank2 search. Unfinished suffix not qualified; image-level supports need separate localization evidence."
+}

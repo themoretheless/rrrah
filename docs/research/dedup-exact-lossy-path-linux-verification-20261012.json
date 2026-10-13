@@ -1,0 +1,33 @@
+{
+  "status": "verified_57_current_source_linux_exact_tests",
+  "passed": 57,
+  "ignored": 2,
+  "suites": [
+    {
+      "suite": "lib",
+      "passed": 32,
+      "ignored": [
+        "gradient::batch_tests::alternating_matcher_timing",
+        "gradient::matching_tests::alternating_matcher_timing"
+      ],
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-exact-lossy-path-linux-executables-20261012/lib"
+    },
+    {
+      "suite": "exact_files",
+      "passed": 25,
+      "ignored": [],
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-exact-lossy-path-linux-executables-20261012/exact_files"
+    }
+  ],
+  "compiler": "rustc 1.98.0 (88d9e12ae 2026-08-18)\nbinary: rustc\ncommit-hash: 88d9e12ae178fab0fb5cc050a94da85685d449ea\ncommit-date: 2026-08-18\nhost: aarch64-unknown-linux-gnu\nrelease: 1.98.0\nLLVM version: 22.1.8\n",
+  "image_id": "sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exact-lossy-path-linux-prepared-20261012.json": "c7b31dd45e0b4704dbeed869e0b20c84cd08693c49685620eac94768d50d707b",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exact-lossy-path-source-20261012.json": "97d61de3442d500eda6328af84162a090bb5283b9e8e56d3d0845a2c69901908",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-lossy-path-linux-20261012.log": "e4cd44d97ce7bad09e6227d6e4dab67c523012073f4ac4847bca6a7c41a6a99b",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-exact-lossy-path-linux-20261012.py": "cf79bacae24df39af5c4d7120c1dcf4a3342ed613f416f13c50eb26990135bd5",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-lossy-path-linux-executables-20261012/lib": "066716b1327ebb89c872ac2282a49284fbf465fb889de9259d07d591f754e276",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-lossy-path-linux-executables-20261012/exact_files": "b19b8de616ddd3063be767f6aa00a866d38ea5df9841f1e98f549780c659871e"
+  },
+  "scope": "Current-identical production, default features disabled, Linux ARM64 nonroot execution. Two invalid UTF8 filenames have identical lossy text but distinct bytes and retain two correct copy families in both overlapping root orders. Includes prior block-order regression. No macOS filesystem invalid-byte support, Windows, all formats/full500 or visual corpus qualification."
+}

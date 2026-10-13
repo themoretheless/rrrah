@@ -1,0 +1,38 @@
+{
+  "date": "2026-10-11",
+  "problem": "Normal viewer requested portable default device limits, capping 2D textures at8192 even when the selected adapter supports16384. Valid narrow/tall/wide rasters could be refused before upload despite fitting byte budgets.",
+  "fix": "Main viewer requests adapter-supported max_texture_dimension_2d. Other device limits remain defaults; renderer texture extent checks and byte/queue admission remain active. Telemetry device is unchanged.",
+  "hardware": "Apple M4 Max Metal",
+  "portable_extent": 8192,
+  "supported_extent": 16384,
+  "regression_extent": [
+    8193,
+    128
+  ],
+  "regression": [
+    "Same raster refuses on a device created with the previous default descriptor.",
+    "Device created through production viewer_device_limits negotiates actual adapter extent.",
+    "Managed GPU texture upload succeeds, retained byte count matches source; dropping renderer releases credit.",
+    "Same negotiated device renders red center correctly through both SDR and linear HDR paths; HDR binary16 center exactly[0x3c00,0,0,0x3c00]."
+  ],
+  "limits": [
+    "This raises negotiation to real adapter support; images exceeding hardware extent still require tiling and are not qualified by this test.",
+    "No NVIDIA hardware run.",
+    "No physical HDR display measurement.",
+    "Actual native window interaction is not included in this headless device/regression test."
+  ],
+  "gates": {
+    "actual_metal": {
+      "result": "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 242 filtered out; finished in 2.44s",
+      "log_sha256": "7d3020f7c92c9db240d8ff799e87d99967a823c3fad0ccce73a0d350177a22c5"
+    },
+    "viewer_units": {
+      "result": "test result: ok. 204 passed; 0 failed; 39 ignored; 0 measured; 0 filtered out; finished in 0.34s",
+      "log_sha256": "e6b64b6db3019273e00020a64cff1a5aa965011d48584a24e03de2b2d70da955"
+    }
+  },
+  "commands": [
+    "RRRAH_GPU_OPTIONAL=0 cargo test -p rrrah --bin rrrah viewer_uses_supported_metal_texture_extent_above_default -- --ignored --nocapture",
+    "cargo test -p rrrah --bin rrrah"
+  ]
+}

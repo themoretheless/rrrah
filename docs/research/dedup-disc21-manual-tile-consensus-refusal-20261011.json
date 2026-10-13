@@ -1,0 +1,13 @@
+{
+  "status": "failed_diagnostic_duplicate_endpoint_refusal",
+  "points": 158,
+  "unique_source_endpoints": 140,
+  "unique_target_endpoints": 158,
+  "pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-disc21-manual-tile-consensus-20261011/raw.json": "90be9550106738866710a9415ad9378e5236ab8e0541cedfec2ce82d3777a728",
+    "/Users/themoretheless/.codex/tmp/rrrah-disc21-manual-tile-consensus-20261011/raw.log": "f1f9cd9dbd7b051c5b83b21ac642169453a9322b575a7443819a7cd6d5215864",
+    "docs/research/dedup-disc21-manual-tile-consensus-20261011.json": "622453860977ceb8d7fad35cfe2471be9ff5d1dddea065b33587f24c0b89a5d3"
+  },
+  "reason": "Concatenated cross-bank points contain duplicate endpoints; generic geometry validator returns Invalid. Original producer exited1 before updating its running report. No execution remains live; evidence preserved.",
+  "next": "New uniquely named diagnostic explicitly removes exact endpoint aliases in caller order before geometry. This is a manual-oracle feasibility check, not production behavior."
+}

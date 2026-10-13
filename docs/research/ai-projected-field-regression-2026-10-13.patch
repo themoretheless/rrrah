@@ -1,0 +1,32 @@
+--- a/vendor/hayro-interpret/src/encode/native_source.rs
++++ b/vendor/hayro-interpret/src/encode/native_source.rs
+@@ -1108,6 +1108,29 @@
+         let mut source=source;
+         source.mesh.as_mut().unwrap().triangles[0].colors[0][0]=f32::NAN;
+         assert!(matches!(source.mesh_native_component_bounds(0,&source.color_space,&||false,&mut 13),Err(NativeShadingError::Invalid)));
++    }
++
++    #[test]
++    fn selected_mesh_owner_identity_does_not_certify_affine_integration_across_projection() {
++        let mut pattern=axial();
++        Arc::make_mut(&mut pattern.shading).shading_type=Arc::new(ShadingType::TriangleMesh {
++            triangles:vec![native_triangle([[0.;4],[1.;4],[0.;4]],4)],function:None,
++        });
++        let source=NativeShadingSource::capture(&pattern,&||false,&no_credit).unwrap();
++        assert!(source.mesh_has_affine_native_field(&source.color_space));
++        let sample=|point|source.sample_mesh_triangle(0,point,&||false).unwrap().components[0];
++        let left=Point::new(-4.,0.);let right=Point::new(4.,0.);
++        let midpoint=Point::new(0.,0.);
++        // Both samples explicitly use the same retained owner. Exterior weight
++        // projection makes their midpoint identity insufficient for integration.
++        assert_eq!(sample(left),0.);assert_eq!(sample(right),0.5);
++        let average=(f64::from(sample(left))+f64::from(sample(right)))/2.;
++        assert_eq!(average,0.25);assert_eq!(sample(midpoint),0.);
++        assert!(source.sample(left,&||false).unwrap().is_none());
++        // The analogous fully contained segment does preserve its affine mean.
++        assert_eq!((sample(Point::new(0.,0.))+sample(right))/2.,sample(Point::new(2.,0.)));
++        let (bounds,_)=source.mesh_native_component_bounds(0,&source.color_space,&||false,&mut 13).unwrap();
++        assert!(bounds[0][0]<=0. && bounds[0][1]>=0.5);
+     }
+ 
+     #[test]

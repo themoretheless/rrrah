@@ -1,0 +1,56 @@
+{
+  "command": "cargo test -p rrrah-cache --test sustained_swap --locked --offline -- --ignored --nocapture --test-threads=1",
+  "exit_code": 0,
+  "passed": 3,
+  "failed": 0,
+  "ignored": 0,
+  "scenarios": [
+    {
+      "test": "hundred_thousand_distinct_rasters_keep_swap_index_and_memory_bounded",
+      "measurements": {
+        "seconds": "93.354683542",
+        "writes": "100000",
+        "reads": "100000",
+        "pressure_refusals": "1000",
+        "root_peak": "131072",
+        "queue_peak": "4",
+        "final": "0"
+      }
+    },
+    {
+      "test": "sustained_byte_cap_evicts_without_count_or_ttl_pressure",
+      "measurements": {
+        "seconds": "60.08682925",
+        "cycles": "443",
+        "pressure_refusals": "443",
+        "root_peak": "2097152",
+        "queue_peak": "262144",
+        "disk_peak_bytes": "786624",
+        "disk_peak_objects": "3",
+        "final": "0"
+      }
+    },
+    {
+      "test": "sustained_large_keyspace_delayed_swap_pressure_and_retry",
+      "measurements": {
+        "seconds": "60.0430365",
+        "cycles": "438",
+        "pressure_refusals": "438",
+        "root_peak": "2097152",
+        "queue_peak": "262144",
+        "disk_peak_bytes": "4195328",
+        "disk_peak_objects": "16",
+        "final": "0"
+      }
+    }
+  ],
+  "log": "docs/research/cache-sustained-three-scenarios-current-2026-10-11.log",
+  "log_sha256": "298a0efb08a6608ca82acd818195a53b3b39f6148734cf8fc575cf06a4a06674",
+  "source_sha256": "90830d1a1073d360d9ff2725fcc9486f1bdd84378697a1b2235bf862046d1d55",
+  "limitations": [
+    "100000 distinct keys use tiny 1x1 payloads to isolate key/index churn, not 100000 full-resolution images",
+    "Delayed codec reads/writes use 2ms sleeps and real local files, not a physically slow drive",
+    "Managed reservation pressure does not qualify OS-wide memory pressure",
+    "This is storage qualification; Metal rendering is covered by separate GPU/viewer gates"
+  ]
+}

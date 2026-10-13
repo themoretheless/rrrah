@@ -1,0 +1,17 @@
+{
+  "backend": "Metal Apple M4 Max",
+  "passed": 7,
+  "failed": 0,
+  "ignored": 0,
+  "models": 6,
+  "repeated_cycles": 20,
+  "repeated_restores": 120,
+  "verified": "each model cycle cancels before read and after geometry credit admission; final CPU credit zero, no cache error; retry geometry/metadata and SDR/HDR frames exact",
+  "test_source_sha256": "0e7ba9920cf8fa543efbd6b8116e162b8cb4cb2f0fac7610455089ccace01018",
+  "log": "docs/research/model-admitted-cancel-2026-10-11.log",
+  "sha256": "7cca7ff20898a5bfe8f7de754b3d707c051b975b4b1028334c30c2dd3b9f618d",
+  "limitations": [
+    "Small STL/OBJ/OFF/PLY subset fixtures, not all 3D syntax or large collections.",
+    "Offscreen HDR frame transport, not physical display calibration."
+  ]
+}

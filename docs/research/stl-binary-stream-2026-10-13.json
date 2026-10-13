@@ -1,0 +1,61 @@
+{
+  "change": "shared decode_model/viewer binary STL route streams1024-facet blocks into pre-admitted final geometry; no whole-file source allocation",
+  "source_limit_bytes": 2147483648,
+  "heap_geometry_limit_bytes": 536870912,
+  "stack_scratch_bytes": 51200,
+  "header_stack_bytes": 84,
+  "control": {
+    "facets": 2050,
+    "payload_blocks": 3,
+    "source_bytes": 102584,
+    "managed_geometry_peak_bytes": 106656,
+    "prior_source_plus_geometry_requirement_bytes": 209240,
+    "prior_requirement_is_calculated_not_paired_measurement": true,
+    "all_normals_vertices_attributes_and_bounds_exact": true,
+    "admitted_cancellations": 4,
+    "same_root_retries": 4,
+    "truncation_growth_refusals": 2,
+    "final_managed_bytes": 0
+  },
+  "tests": {
+    "focused": {
+      "passed": 7,
+      "failed": 0,
+      "log": "stl-binary-stream-final-2026-10-13.log"
+    },
+    "decoder": {
+      "passed": 1025,
+      "failed": 0,
+      "ignored": 73,
+      "log": "decode-stl-stream-final-2026-10-13.log"
+    },
+    "viewer": {
+      "passed": 220,
+      "failed": 0,
+      "ignored": 62,
+      "log": "viewer-model-after-stl-stream-2026-10-13.log"
+    },
+    "metal_model": {
+      "passed": 6,
+      "failed": 0,
+      "log": "viewer-model-after-stl-stream-2026-10-13.log"
+    },
+    "metal_model_cycles": {
+      "passed": 1,
+      "failed": 0,
+      "cycles": 5,
+      "models": 6,
+      "sdr_hdr_exact": true,
+      "pressure_cancel_retry": true,
+      "final_root_queue_zero": true,
+      "log": "metal-model-cycles-after-stl-stream-2026-10-13.log"
+    }
+  },
+  "source_sha256": "0ad1d24ba36de951e60d310c317347d09672f069db3c1eb563e47953a51c416f",
+  "limits": [
+    "stack scratch is outside managed heap credits; no RSS cap claim",
+    "no measured speedup or cold-disk latency claim",
+    "ASCII and low-level decode_stl API retain bounded whole-file source",
+    "other3Dformats/materials/textures and original100format scope unchanged"
+  ]
+}

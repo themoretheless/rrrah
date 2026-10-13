@@ -5,6 +5,12 @@ use wgpu::util::DeviceExt;
 
 #[derive(Debug, Error)]
 pub enum ModelUploadError {
+    #[error("prepared model is not bound to this renderer")]
+    RendererMismatch,
+    #[error("prepared model uses an incompatible memory budget")]
+    BudgetMismatch,
+    #[error("model upload cancelled")]
+    Cancelled,
     #[error(transparent)]
     Memory(#[from] rrrah_core::BufferError),
     #[error("model exceeds GPU geometry budget")]
@@ -18,8 +24,42 @@ struct Parameters {
     view: [f32; 4],
 }
 
+/// Prepared geometry owns its GPU allocation and admission credit until installed or dropped.
+/// Prepare and install with the same wgpu device.
+#[derive(Debug)]
+pub struct PreparedModelUpload {
+    owner: Option<std::sync::Arc<()>>,
+    vertices: Option<wgpu::Buffer>,
+    reservation: Option<std::sync::Arc<rrrah_core::Reservation>>,
+    vertex_count: u32,
+    budget: Option<rrrah_core::MemoryBudget>,
+}
+
+/// Cloneable worker context bound to one renderer, device and memory budget.
+#[derive(Debug, Clone)]
+pub struct ModelUploadPreparer {
+    device: wgpu::Device,
+    budget: Option<rrrah_core::MemoryBudget>,
+    owner: std::sync::Arc<()>,
+}
+impl ModelUploadPreparer {
+    pub fn prepare_with_cancel<T: Copy + Into<f64>>(
+        &self,
+        triangles: impl ExactSizeIterator<Item = [[T; 3]; 3]> + Clone,
+        cancelled: impl FnMut() -> bool,
+    ) -> Result<PreparedModelUpload, ModelUploadError> {
+        let mut prepared = ModelRenderer::prepare_upload_with_cancel(
+            &self.device, triangles, self.budget.as_ref(), cancelled,
+        )?;
+        prepared.owner = Some(self.owner.clone());
+        Ok(prepared)
+    }
+}
+
 #[derive(Debug)]
 pub struct ModelRenderer {
+    device: wgpu::Device,
+    upload_owner: std::sync::Arc<()>,
     pipeline: wgpu::RenderPipeline,
     uniform: wgpu::Buffer,
     bind_group: wgpu::BindGroup,
@@ -123,6 +163,8 @@ impl ModelRenderer {
             }],
         });
         Self {
+            device: device.clone(),
+            upload_owner: std::sync::Arc::new(()),
             pipeline,
             uniform,
             bind_group,
@@ -153,6 +195,29 @@ impl ModelRenderer {
         device: &wgpu::Device,
         triangles: impl ExactSizeIterator<Item = [[T; 3]; 3]> + Clone,
     ) -> Result<(), ModelUploadError> {
+        self.upload_with_cancel(device, triangles, || false)
+    }
+
+    pub fn upload_with_cancel<T: Copy + Into<f64>>(
+        &mut self,
+        device: &wgpu::Device,
+        triangles: impl ExactSizeIterator<Item = [[T; 3]; 3]> + Clone,
+        cancelled: impl FnMut() -> bool,
+    ) -> Result<(), ModelUploadError> {
+        if *device != self.device { return Err(ModelUploadError::RendererMismatch); }
+        let prepared = self.upload_preparer().prepare_with_cancel(triangles, cancelled)?;
+        self.install_prepared_upload(prepared)?;
+        Ok(())
+    }
+
+    /// May run on a worker. Dropping an obsolete result releases its allocation.
+    pub fn prepare_upload_with_cancel<T: Copy + Into<f64>>(
+        device: &wgpu::Device,
+        triangles: impl ExactSizeIterator<Item = [[T; 3]; 3]> + Clone,
+        budget: Option<&rrrah_core::MemoryBudget>,
+        mut cancelled: impl FnMut() -> bool,
+    ) -> Result<PreparedModelUpload, ModelUploadError> {
+        if cancelled() { return Err(ModelUploadError::Cancelled); }
         let count = triangles
             .len()
             .checked_mul(3)
@@ -167,7 +232,8 @@ impl ModelRenderer {
         }
         let mut visited = 0;
         let mut bounds = [[f64::INFINITY; 3], [f64::NEG_INFINITY; 3]];
-        for triangle in triangles.clone() {
+        for (index, triangle) in triangles.clone().enumerate() {
+            if index % 1024 == 0 && cancelled() { return Err(ModelUploadError::Cancelled); }
             for source_vertex in triangle {
                 let vertex = source_vertex.map(Into::into);
                 if visited == count {
@@ -187,8 +253,7 @@ impl ModelRenderer {
             return Err(ModelUploadError::GeometryLimit);
         }
         if count == 0 {
-            self.clear_model();
-            return Ok(());
+            return Ok(PreparedModelUpload { owner: None, vertices: None, reservation: None, vertex_count: 0, budget: budget.cloned() });
         }
         // Rebase in scaled local coordinates. This avoids both overflowing
         // opposite-sign f64 bounds and underflowing half-extents near zero.
@@ -207,11 +272,10 @@ impl ModelRenderer {
         let center = extents.map(|v| v / scale * 0.5);
         let radius = center.into_iter().fold(0_f64, f64::hypot);
         let divisor = if radius > 0. { radius } else { 1. };
-        let reservation = self
-            .memory_budget
-            .as_ref()
+        let reservation = budget
             .map(|budget| budget.try_reserve(bytes))
             .transpose()?;
+        if cancelled() { return Err(ModelUploadError::Cancelled); }
         let buffer = device.create_buffer(&wgpu::BufferDescriptor {
             label: Some("Rrrah model vertices"),
             size: bytes,
@@ -223,7 +287,8 @@ impl ModelRenderer {
                 .get_mapped_range_mut(..)
                 .map_err(|_| ModelUploadError::GeometryLimit)?;
             let mut offset = 0;
-            for triangle in triangles {
+            for (index, triangle) in triangles.enumerate() {
+                if index % 1024 == 0 && cancelled() { return Err(ModelUploadError::Cancelled); }
                 for source_vertex in triangle {
                     let vertex = source_vertex.map(Into::into);
                     if !vertex.iter().all(|v| v.is_finite()) {
@@ -249,9 +314,37 @@ impl ModelRenderer {
             }
         }
         buffer.unmap();
-        self.vertices = Some(buffer);
-        self.vertex_reservation = reservation.map(std::sync::Arc::new);
-        self.vertex_count = count as u32;
+        if cancelled() { return Err(ModelUploadError::Cancelled); }
+        Ok(PreparedModelUpload {
+            owner: None,
+            vertices: Some(buffer),
+            reservation: reservation.map(std::sync::Arc::new),
+            vertex_count: count as u32,
+            budget: budget.cloned(),
+        })
+    }
+
+    pub fn upload_preparer(&self) -> ModelUploadPreparer {
+        ModelUploadPreparer {
+            device: self.device.clone(),
+            budget: self.memory_budget.clone(),
+            owner: self.upload_owner.clone(),
+        }
+    }
+
+    /// Atomically replaces visible geometry after the caller accepts the result generation.
+    pub fn install_prepared_upload(&mut self, prepared: PreparedModelUpload) -> Result<(), ModelUploadError> {
+        if prepared.vertices.is_some() && self.memory_budget.as_ref().is_some_and(|expected| {
+            !prepared.budget.as_ref().is_some_and(|actual| actual.is_descendant_of(expected))
+        }) {
+            return Err(ModelUploadError::BudgetMismatch);
+        }
+        if !prepared.owner.as_ref().is_some_and(|owner| std::sync::Arc::ptr_eq(owner, &self.upload_owner)) {
+            return Err(ModelUploadError::RendererMismatch);
+        }
+        self.vertices = prepared.vertices;
+        self.vertex_reservation = prepared.reservation;
+        self.vertex_count = prepared.vertex_count;
         Ok(())
     }
     pub fn clear_model(&mut self) {
@@ -267,7 +360,10 @@ impl ModelRenderer {
                 .map_or(0, |(t, _)| u64::from(t.width()) * u64::from(t.height()) * 4)
     }
     /// Call on viewport resize; unchanged dimensions reuse the depth attachment.
-    pub fn resize(&mut self, device: &wgpu::Device, size: [u32; 2]) -> Result<(), ModelUploadError> {
+    /// Resources always use the renderer's device. The device argument remains
+    /// for compatibility and cannot redirect allocation to another device.
+    pub fn resize(&mut self, _device: &wgpu::Device, size: [u32; 2]) -> Result<(), ModelUploadError> {
+        let device = &self.device;
         if size.contains(&0)
             || size.iter().any(|v| *v > device.limits().max_texture_dimension_2d)
             || u64::from(size[0]) * u64::from(size[1]) * 4 > crate::MAX_EAGER_ATLAS_BYTES

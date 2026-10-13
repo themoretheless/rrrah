@@ -1,0 +1,82 @@
+{
+  "date": "2026-10-11",
+  "scope": "Independent HEVC sample-code qualification and chromatic PQ/HLG primary conversion, plus four-file Metal RAM/swap transport. Full goal remains open.",
+  "independent_sample_evidence": {
+    "producer": "1.23.6\nlibheif: 1.23.6\nplugin path: /opt/homebrew/lib/libheif",
+    "independent_decoder": "ffmpeg version 9.0.2 Copyright (c) 2000-2026 the FFmpeg developers",
+    "cases": [
+      {
+        "source": "tests/fixtures/raster/heif-pq12.heic",
+        "source_sha256": "f1360358cc177e46249756969438890973fdc7ae161a5d99e7094fa6942dc474",
+        "ffmpeg_oracle": "tests/fixtures/raster/heif-pq12.heic.rgba16le",
+        "oracle_sha256": "bc77d07b42bc588b4fa3a14d7b9c46d1e144452f247d66f8c631b6680495d0f2",
+        "pixels": 3072,
+        "recovered_12bit_codes_exact": true
+      },
+      {
+        "source": "tests/fixtures/raster/heif-hlg12.heic",
+        "source_sha256": "47ef1e1ddf8cc211d8765f217f3c0ccee364b767d10ff48ceb7332702ba75cb4",
+        "ffmpeg_oracle": "tests/fixtures/raster/heif-hlg12.heic.rgba16le",
+        "oracle_sha256": "bc77d07b42bc588b4fa3a14d7b9c46d1e144452f247d66f8c631b6680495d0f2",
+        "pixels": 3072,
+        "recovered_12bit_codes_exact": true
+      },
+      {
+        "source": "tests/fixtures/raster/heif-pq12-color.heic",
+        "source_sha256": "9aae203aec10cf8f8945fbf6fac7b875812adf2b7b3a663580e39d7dc4feb328",
+        "ffmpeg_oracle": "tests/fixtures/raster/heif-pq12-color.heic.rgba16le",
+        "oracle_sha256": "39a9532200bc2e48ee63658f6bd400faa8a055886ec502a514a96916d08cb2f5",
+        "pixels": 3072,
+        "recovered_12bit_codes_exact": true
+      },
+      {
+        "source": "tests/fixtures/raster/heif-hlg12-color.heic",
+        "source_sha256": "23a848546ed4d62a59508d3118a4d0215035033ff64342d264dc4c72343584dc",
+        "ffmpeg_oracle": "tests/fixtures/raster/heif-hlg12-color.heic.rgba16le",
+        "oracle_sha256": "39a9532200bc2e48ee63658f6bd400faa8a055886ec502a514a96916d08cb2f5",
+        "pixels": 3072,
+        "recovered_12bit_codes_exact": true
+      }
+    ],
+    "normalization_note": "FFmpeg grayscale RGBA16 uses left shift; RGB uses full-range scaling. Compare recovered 12-bit codes, not their distinct u16 expansion."
+  },
+  "color_oracle": "Existing 60-digit Decimal transfer and exact Fraction chromaticity-derived BT.2020-to-sRGB matrix in scripts/generate-pq-color-oracle.py; no production coefficients imported.",
+  "color_oracle_scope": "All pixels of pure red/green/blue bands compared at white=100, HLG peak=1000 gamma=1.2, relative tolerance 2e-6 (minimum absolute tolerance 2e-6). Mixed band checked at native-code and transport levels, not independently at linear-conversion level.",
+  "metal": "Apple M4 Max; four files (gray/color PQ/HLG), exact float component bits and SDR/HDR pre/post swap, negative out-of-gamut values retained, memory pressure retry and final release.",
+  "results": {
+    "focused": {
+      "path": "/tmp/rrrah-heif-hdr-color-decode-20261011.log",
+      "sha256": "f88ee191067a1715566e4753e0ffe807854e1a21112980656993ab5d3d73a85f",
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0
+    },
+    "all_decode": {
+      "path": "/tmp/rrrah-heif-hdr-color-decode-all-20261011.log",
+      "sha256": "e820c0f7abdfca90a050125881b66739300b1881e0865113d2d0d8dc629b5a32",
+      "passed": 992,
+      "failed": 0,
+      "ignored": 67
+    },
+    "metal": {
+      "path": "/tmp/rrrah-heif-hdr-color-metal-20261011.log",
+      "sha256": "68c83292a24b52e5dcd413cc8db237cfa703b5b70de7750372b942e4d01792a9",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    }
+  },
+  "initial_generator_refinement": "FFmpeg expands grayscale with left shift while RGB uses full-range u16 normalization. All four sources are compared as recovered 12-bit codes; not falsely claimed byte-identical u16 normalization.",
+  "limitations": [
+    "Independent FFmpeg decoding of synthetic lossless HEVC controls; independent photographic/camera producers remain unqualified.",
+    "Opaque RGB only; HDR alpha, sequence, other HEIF codecs and wide producer metadata remain open.",
+    "Offscreen Metal readback does not qualify physical HDR brightness/color. NVIDIA remains deferred."
+  ],
+  "source_sha256": {
+    "scripts/generate-heif-hdr-fixtures.py": "00c7fcb6492ac8b1fec4a655a6e1682e80a47a39974b9091cce462b49008fdc9",
+    "crates/rrrah-decode/src/heif.rs": "c31ae8b41864d2224da9aefbfe2791f7c44f2a29bbbc8ce8a8f804cad7a7f3f5",
+    "crates/rrrah-app/tests/hdr_raster_swap.rs": "3dd07f455db849a3b138eee074a856ba92ee76c15dfaea42024cb99e774fed03",
+    "tests/fixtures/raster/pq-color-decimal-oracle.tsv": "3aa04e598246679294619c079e4cd90dc2a8098420011c2e28a7175e86dcd9ae",
+    "tests/fixtures/raster/hlg-color-decimal-oracle.tsv": "2d82b2eb5ccbdc9f91c8d91204cbd6a32dd681695dafe13c8f05abb5bbd0c53b"
+  }
+}

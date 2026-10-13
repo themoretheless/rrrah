@@ -1,0 +1,132 @@
+--- before/polygon_coverage.rs
++++ after/polygon_coverage.rs
+@@ -519,7 +519,7 @@
+         )?;
+         let bytes = cut_count
+             .checked_mul(size_of::<f64>())?
+-            .checked_add(count.checked_mul(size_of::<(f64, usize)>()+3*size_of::<usize>())?)?
++            .checked_add(count.checked_mul(2*size_of::<(f64, usize)>()+4*size_of::<usize>())?)?
+             .checked_add(regions.len().checked_mul(size_of::<i32>())?)?;
+         let scratch_credit = admit(bytes)?;
+         if cancelled() {
+@@ -529,6 +529,9 @@
+         cuts.try_reserve_exact(cut_count).ok()?;
+         let mut hits = Vec::new();
+         hits.try_reserve_exact(count).ok()?;
++        let mut ordered_hits=Vec::new();ordered_hits.try_reserve_exact(count).ok()?;
++        let mut hit_ranks=Vec::new();hit_ranks.try_reserve_exact(count).ok()?;hit_ranks.resize(count,usize::MAX);
++        let mut previous_hit_len=usize::MAX;
+         let mut edge_order=Vec::new();edge_order.try_reserve_exact(count).ok()?;
+         edge_order.extend(0..count);
+         let key=|index:usize| {
+@@ -614,8 +617,7 @@
+                     }
+                 }
+             }
+-            work.step(hits.len().checked_mul(16)?)?;
+-            hits.sort_unstable_by(|a, b| a.0.total_cmp(&b.0));
++            order_slab_hits(&mut hits,&mut ordered_hits,&mut hit_ranks,&mut previous_hit_len,work)?;
+             // Distinct lines tied at the sampled X retain legacy ordering.
+             // Identical canonical geometry can otherwise share one hit while
+             // each member still updates its own region winding below.
+@@ -712,10 +714,100 @@
+         drop(winding);
+         drop(hits);
+         drop(edge_order);drop(edge_heads);drop(edge_next);
++        drop(ordered_hits);drop(hit_ranks);
+         drop(cuts);
+         drop(scratch_credit);
+         Some(area.clamp(0., 1.))
+     }
++}
++
++// Reuse a previous strict ordering only after proving identical membership
++// and strict current X order after bounded adjacent-crossing repair. Ties or
++// excessive disorder use the original unstable sort and its exact tie behavior.
++fn order_slab_hits(hits:&mut Vec<(f64,usize)>,ordered:&mut Vec<(f64,usize)>,ranks:&mut [usize],
++    previous_len:&mut usize,work:&mut Work<'_>)->Option<()> {
++    let mut reusable=hits.len()==*previous_len;
++    if reusable {
++        work.step(hits.len().checked_mul(2)?)?;
++        ordered.clear();ordered.resize(hits.len(),(0.,usize::MAX));
++        for &hit in hits.iter() {
++            let rank=*ranks.get(hit.1)?;
++            if rank>=hits.len() {reusable=false;break;}
++            ordered[rank]=hit;
++        }
++        if reusable {
++            // Adjacent crossing cuts usually exchange only a few neighbors.
++            // Repair that permutation with a bounded insertion pass. Preserve
++            // the original input for exact fallback on ties or excessive swaps.
++            let mut swaps=0usize;let maximum=hits.len().checked_mul(2)?;
++            'repair: for index in 1..ordered.len() {
++                let mut at=index;
++                while at>0 {
++                    work.step(1)?;
++                    if ordered[at-1].0<ordered[at].0 {break;}
++                    if ordered[at-1].0==ordered[at].0 || swaps==maximum {reusable=false;break 'repair;}
++                    work.step(1)?;ordered.swap(at-1,at);swaps+=1;at-=1;
++                }
++            }
++            if reusable && swaps>0 {
++                work.step(ordered.len())?;
++                for (rank,&(_,index)) in ordered.iter().enumerate() {*ranks.get_mut(index)?=rank;}
++            }
++        }
++    }
++    if reusable {
++        std::mem::swap(hits,ordered);
++    } else {
++        work.step(hits.len().checked_mul(16)?)?;
++        hits.sort_unstable_by(|a,b|a.0.total_cmp(&b.0));
++        work.step(ranks.len().checked_add(hits.len())?)?;
++        ranks.fill(usize::MAX);
++        for (rank,&(_,index)) in hits.iter().enumerate() {*ranks.get_mut(index)?=rank;}
++        *previous_len=hits.len();
++    }
++    if (work.cancelled)() {return None;}
++    Some(())
++}
++
++#[test]
++fn slab_order_reuse_matches_original_sort_across_membership_crossings_and_ties() {
++    let mut ordered=Vec::with_capacity(8);let mut ranks=[usize::MAX;8];let mut len=usize::MAX;
++    let mut work=Work {left:100_000,cancelled:&||false};
++    for input in [vec![(0.3f64,2usize),(0.1,0),(0.2,1)],vec![(0.32,2),(0.12,0),(0.22,1)],
++        vec![(0.1,2),(0.3,0),(0.2,1)],vec![(0.1,2),(0.1,0),(0.2,1)],
++        vec![(0.1,3),(0.3,0),(0.2,1)],vec![(0.1,3)],vec![],vec![],vec![(0.4,4),(0.2,2)]] {
++        let mut expected=input.clone();expected.sort_unstable_by(|a,b|a.0.total_cmp(&b.0));
++        let mut hits=input;
++        order_slab_hits(&mut hits,&mut ordered,&mut ranks,&mut len,&mut work).unwrap();
++        assert_eq!(hits,expected);
++    }
++    // Deterministic varying membership, input permutation, near crossings,
++    // large disorder and ties; compare the complete (X,index) sequence.
++    let mut ranks=[usize::MAX;64];let mut len=usize::MAX;
++    let mut ordered=Vec::with_capacity(64);
++    let mut work=Work {left:usize::MAX,cancelled:&||false};
++    let mut state=17u64;
++    for step in 0..1024 {
++        let mut hits=Vec::new();
++        for index in 0..64 {
++            state=state.wrapping_mul(6364136223846793005).wrapping_add(1);
++            if step%7==0 && state%5==0 {continue;}
++            let x=match step%4 {
++                0=>index as f64+(state%3) as f64*0.75,
++                1=>(state%8) as f64,
++                2=>(state%128) as f64*0.5,
++                _=>index as f64,
++            };
++            hits.push((x,index));
++        }
++        if !hits.is_empty() {let rotate=step%hits.len();hits.rotate_left(rotate);}
++        let mut expected=hits.clone();expected.sort_unstable_by(|a,b|a.0.total_cmp(&b.0));
++        order_slab_hits(&mut hits,&mut ordered,&mut ranks,&mut len,&mut work).unwrap();
++        assert_eq!(hits,expected,"step {step}");
++    }
++    let mut hits=vec![(0.1,0),(0.2,1)];len=usize::MAX;
++    assert!(order_slab_hits(&mut hits,&mut ordered,&mut ranks,&mut len,&mut Work {left:0,cancelled:&||false}).is_none());
++    assert!(order_slab_hits(&mut hits,&mut ordered,&mut ranks,&mut len,&mut Work {left:1000,cancelled:&||true}).is_none());
+ }
+ 
+ /// Count and then emit the same subdivision cuts. Disjoint segment X ranges

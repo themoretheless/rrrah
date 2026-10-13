@@ -41,6 +41,15 @@ fn main() {
         for name in ["Cargo.toml", "Cargo.lock"] {
             files(&root.join(name), &mut paths);
         }
+        // Local patches can change decoded pixels without changing Cargo.lock.
+        // Watch the absent path too, so adding a vendor tree invalidates Cargo's
+        // cached build-script output.
+        let vendor = root.join("vendor");
+        if vendor.exists() {
+            files(&vendor, &mut paths);
+        } else {
+            println!("cargo:rerun-if-changed={}", vendor.display());
+        }
     } else {
         assert!(
             env::var_os("CARGO_FEATURE_DECODE").is_none(),
@@ -50,7 +59,7 @@ fn main() {
     }
     paths.sort_unstable();
     let mut hash = blake3::Hasher::new();
-    hash.update(b"rrrah-built-source-recipe-v1");
+    hash.update(b"rrrah-built-source-recipe-v2");
     hash.update(&[u8::from(complete_workspace)]);
     let compiler = std::process::Command::new(env::var_os("RUSTC").expect("Rust compiler"))
         .arg("-vV")

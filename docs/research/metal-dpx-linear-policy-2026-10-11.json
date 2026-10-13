@@ -1,0 +1,62 @@
+{
+  "date": "2026-10-11",
+  "scope": "DPX normalized linear transfer and undefined colorimetry through viewer preload/swap/Metal",
+  "fixture": {
+    "base": "tests/fixtures/raster/dpx-8-be-50-p0.dpx",
+    "dimensions": [
+      5,
+      3
+    ],
+    "changes": "transfer=2, reference high code=255, reference high quantity=1; colorimetry remains 255",
+    "pixel_oracle": "tests/fixtures/raster/dpx-8-be-50-p0.dpx.u8",
+    "oracle_provenance": "FFmpeg raw RGBA extraction of original authored DPX; normalized to binary32 for prepared frame"
+  },
+  "boundary": "Only undefined colorimetry 255 accepts explicit linear-sRGB; user-defined 0 and other declared values unchanged; only normalized linear references qualify",
+  "checks": {
+    "unit_tests_passed": 3,
+    "decode_gate_passed": 988,
+    "decode_gate_ignored": 67,
+    "app_gate_passed": 199,
+    "app_gate_ignored": 36,
+    "actual_Metal_case_passed": 1,
+    "adapter": "Metal Apple M4 Max",
+    "prepared_float_bits_exact": true,
+    "TTL_spill_decoder_free_restore": true,
+    "incompatible_policy_cache_reuse_refused": true,
+    "SDR_HDR_pre_post_swap_exact": true,
+    "output_dimensions": [
+      63,
+      65
+    ],
+    "exposure_stops": 1,
+    "final_managed_bytes": 0
+  },
+  "logs": [
+    {
+      "path": "/tmp/rrrah-dpx-linear-policy-tests-20261011.log",
+      "sha256": "1d3b18eb2cd466211bc2eee9681aa3cfe424fce64df1e9167504e02b0f35dcb7"
+    },
+    {
+      "path": "/tmp/rrrah-dpx-linear-viewer-tests-20261011.log",
+      "sha256": "5b0269f570dd904d5854338dc0d2c046af2beef603e98844de850c7e2c9dd9b1"
+    },
+    {
+      "path": "/tmp/rrrah-dpx-linear-cli-metal-20261011.log",
+      "sha256": "ebd0edb0f192d4e2ee1f8d1d90036e7a8e4a7f5a2478c649d51a1427b29dcabc"
+    },
+    {
+      "path": "/tmp/rrrah-dpx-linear-decode-all-20261011.log",
+      "sha256": "e12550e8b92d0002dde7bea2060342bf56573fcdc60692f8ee2ffeb8a59ac8f5"
+    },
+    {
+      "path": "/tmp/rrrah-dpx-linear-app-all-20261011.log",
+      "sha256": "d92a4fbe9faf62dd04c3a8e948ce17f553e2ee052860e83f204106780b85fd3f"
+    }
+  ],
+  "limitations": [
+    "One authored 8-bit RGB big-endian subset; not broad DPX producer qualification",
+    "No physical HDR luminance or color measurement",
+    "Unknown or unsupported colorimetry is not transformed",
+    "NVIDIA deferred"
+  ]
+}

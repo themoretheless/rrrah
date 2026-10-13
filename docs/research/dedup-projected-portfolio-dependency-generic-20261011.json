@@ -1,0 +1,49 @@
+{
+  "status": "complete_bounded_frozen_projected_portfolio_dependency_execution",
+  "producer_pid": 56933,
+  "command": [
+    "cargo",
+    "test",
+    "--manifest-path",
+    "/Users/themoretheless/.codex/tmp/rrrah-projected-portfolio-dependency-snapshot-20261011/Cargo.toml",
+    "--target-dir",
+    "/Users/themoretheless/Documents/Sources/rrrah/target",
+    "-p",
+    "rrrah-dedup",
+    "--locked",
+    "--offline",
+    "--no-default-features",
+    "--features",
+    "decode",
+    "--no-run",
+    "--message-format=json",
+    "--test",
+    "projected_portfolio"
+  ],
+  "source_manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-projected-portfolio-dependency-snapshot-20261011.json",
+  "source_manifest_sha256": "31180eb516d106fa4ee8fa63ca7e0c40b4be09ea2c79a96f800caafe36533715",
+  "results": [
+    {
+      "suite": "projected_portfolio",
+      "status": "passed",
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-projected-portfolio-dependency-generic-qualified-20261011/projected_portfolio",
+      "binary_sha256": "96f84661f11618521ad01784913aa8f453ec5c8c30b22670da514193aa64caa6",
+      "process_pid": 58689,
+      "returncode": 0,
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-projected-portfolio-dependency-generic-qualified-20261011/projected_portfolio.log",
+      "log_sha256": "8e8b1ff04451f11c728d1e7d7682fa3c54d75a6abed42da1c3c1d99e1cc6d092",
+      "tests": 13
+    }
+  ],
+  "build_pid": 57153,
+  "build_returncode": 0,
+  "tests": 13,
+  "frozen_files": 3076,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-projected-portfolio-dependency-snapshot-20261011.json": "31180eb516d106fa4ee8fa63ca7e0c40b4be09ea2c79a96f800caafe36533715",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-projected-portfolio-dependency-generic-20261011.py": "9785e64195119767ded0abb0ce8b69a21dbb5e757fe87f469273ad97d042bb90",
+    "/Users/themoretheless/.codex/tmp/rrrah-projected-portfolio-dependency-generic-qualified-20261011/build.jsonl": "bf7a36f24540a55fbfcd75e420a0b434baa12ee1ec64ae72d486836365cb5c5d",
+    "/Users/themoretheless/.codex/tmp/rrrah-projected-portfolio-dependency-generic-qualified-20261011/build.log": "0230fc6518c69167a8fbec051b8730ff7b51c33ff1f0816afc33681acc9c9c92"
+  },
+  "scope": "macOS decode-feature generic providers on frozen dependencies and copied pre-execution programs; no Torch or total RSS qualification"
+}

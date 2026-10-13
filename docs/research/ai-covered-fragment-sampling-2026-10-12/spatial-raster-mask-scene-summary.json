@@ -1,0 +1,28 @@
+{
+  "implementation": "nearest-neighbor native raster mask scenes; include independent image/alpha footprints and captured raster clips in parent partition",
+  "verified": "actual Gray16 luminosity image mask with straight/curved clipping, interior samples on both sides match existing original-component controls within1e-14",
+  "ordinary_passed": 164,
+  "ignored": 12,
+  "real_artwork": {
+    "first_unsupported_event": 13,
+    "reason": "complex_mask_source_not_routed",
+    "completed": false,
+    "route_admissions": 0,
+    "final_managed_bytes": 0
+  },
+  "limits": [
+    "curved boundary integral not qualified by interior controls",
+    "mask shading/nested masks/calibrated luminosity/interpolation pending",
+    "production AI pending"
+  ],
+  "logs": [
+    {
+      "path": "docs/research/ai-covered-fragment-sampling-2026-10-12/spatial-raster-mask-scene-tests.log",
+      "sha256": "793abb3e904bc0704c3ea8608fd055d23ab30b6a502e3c2c7bed931b3eb60b8a"
+    },
+    {
+      "path": "docs/research/ai-covered-fragment-sampling-2026-10-12/real-spatial-raster-mask-tests.log",
+      "sha256": "3c522354ee101885bea6c7fd1d6ae799aafdeaa15ea8adad18de235315595a86"
+    }
+  ]
+}

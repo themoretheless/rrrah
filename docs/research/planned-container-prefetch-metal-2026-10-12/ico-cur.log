@@ -1,0 +1,25 @@
+warning: function `fallible_zeroed_bytes` is never used
+   --> crates/rrrah-cache/src/mosaic_payload_v1.rs:728:4
+    |
+728 | fn fallible_zeroed_bytes(len: usize) -> Result<Box<[u8]>, MosaicPayloadError> {
+    |    ^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-cache` (lib) generated 1 warning
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 42.61s
+     Running unittests src/main.rs (target/debug/deps/rrrah-0b4921b829754900)
+
+running 1 test
+ICO/CUR viewer adapter: Metal Apple M4 Max
+Selected container planned prefetch ico-selected-images.ico: backward2 -> [1,0]; forward1 -> [2]; swap bypasses blocked decoder; final=0
+ICO/CUR viewer ico-selected-images.ico: selected keys; pressure RAM hits; TTL; blocked decoder reverse prefetch; payload/hotspot/SDR/HDR exact; final=0
+Selected container planned prefetch cur-selected-images.cur: backward2 -> [1,0]; forward1 -> [2]; swap bypasses blocked decoder; final=0
+ICO/CUR viewer cur-selected-images.cur: selected keys; pressure RAM hits; TTL; blocked decoder reverse prefetch; payload/hotspot/SDR/HDR exact; final=0
+Selected container planned prefetch cur-selected-dib.cur: backward2 -> [1,0]; forward1 -> [2]; swap bypasses blocked decoder; final=0
+ICO/CUR viewer cur-selected-dib.cur: selected keys; pressure RAM hits; TTL; blocked decoder reverse prefetch; payload/hotspot/SDR/HDR exact; final=0
+test raster_swap_viewer_tests::ico_cur_selected_images_loader_cache_and_blocked_prefetch_metal ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 277 filtered out; finished in 5.22s
+

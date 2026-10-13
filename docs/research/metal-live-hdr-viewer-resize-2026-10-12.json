@@ -1,0 +1,56 @@
+{
+  "scope": "Actual main viewer Metal HDR TIFF selection and live window resizing",
+  "adapter": "Apple M4 Max / Metal",
+  "surface": "Rgba16Float / ExtendedSrgbLinear",
+  "source": "tiff-pages-hdr-deflate-le.tif",
+  "policy": "--untagged-color linear-srgb",
+  "window_sizes_logical": [
+    [
+      640,
+      480
+    ],
+    [
+      900,
+      650
+    ]
+  ],
+  "selection_indices": [
+    0,
+    1,
+    2,
+    1,
+    0
+  ],
+  "page_dimensions": [
+    [
+      3,
+      2
+    ],
+    [
+      3,
+      2
+    ],
+    [
+      2,
+      3
+    ]
+  ],
+  "cache_count": 1,
+  "ttl_seconds": 1,
+  "exit_code": 0,
+  "visual_inspection": "Page3 screenshots at both sizes show rotated2x3content and correcttitle",
+  "limits": [
+    "No injected memory-pressure recovery in this run",
+    "Screenshots cannot qualify physical HDR luminance/color",
+    "No specific swap hit inferred from elapsed times"
+  ],
+  "sha256": {
+    "docs/research/metal-live-hdr-viewer-resize-2026-10-12/viewer.log": "e55eef584a46b4a12306d5312a82542baaedfe02bb25d465c7aa5eba79130f51",
+    "docs/research/metal-live-hdr-viewer-resize-2026-10-12/final-window-state.txt": "6179bf502eac8d7836be78a5931f263fcac5130b7a732b339d56dbdf164ba4aa",
+    "docs/research/metal-live-hdr-viewer-resize-2026-10-12/tiff-page3-large.png": "b12806d837e0d6466ce0ea6f5a8a9b489c7c3a9e81b3071775edf6f502ff4c3a",
+    "docs/research/metal-live-hdr-viewer-resize-2026-10-12/tiff-page1-return.png": "6be88674b95ea341f4392bc23176bb5b73caacac25f82e21a481def079a9898f",
+    "docs/research/metal-live-hdr-viewer-resize-2026-10-12/tiff-page3-small.png": "b625472109bebf1debd3681d4d2f8b9381a61795d1e3533004dcdb88bdd51b71",
+    "crates/rrrah-app/src/main.rs": "12aadff2aaa50e2a87a699fb2f448e2970bf5a58be536674f06c56cbe2f9b410",
+    "tests/fixtures/data/tiff-pages-hdr-deflate-le.tif": "3ca0170f80bf97ad6395e297058bb7be80404be009fa17d5154fd940c9897d7c"
+  }
+}

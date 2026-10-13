@@ -1,0 +1,21 @@
+{
+  "backend": "metal",
+  "optional": false,
+  "passed": 5,
+  "failed": 0,
+  "ignored": 1,
+  "geometry": [
+    17,
+    33
+  ],
+  "binding_limit": 1024,
+  "source_bytes": 2244,
+  "cancellation_checkpoints": 18,
+  "verified": "each cancellation checkpoint returns Cancelled and releases CPU/GPU credits; exact-budget retry matches nonconstant CPU interpolation reference",
+  "log": "docs/research/rgbe-segment-cancel-2026-10-11.log",
+  "sha256": "25cee591b91498a3504a9ebcf86b6c0207f5d6e233c3df53b918944ba4799338",
+  "limitations": [
+    "Small authored sensor; full-sensor successful segmentation verified separately.",
+    "Cancellation during command encoding is not partial submitted execution cancellation."
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "sample_cmyk": [
+    0.8794023,
+    0.23389284,
+    0.99231184,
+    0.08509913
+  ],
+  "profile_sha256": "73e1ba37d2bad5bab2a964f40a9eed96209666efc067c3322626214bbef234a0",
+  "explicit_pdf_sha256": "b553494347bc2e4796b5c1e37ae550b4ac4b6990f91c40d8944c74e5da398a1b",
+  "poppler_explicit_rgb8": [
+    [
+      0,
+      134,
+      67
+    ]
+  ],
+  "littlecms_profile_rgb": [
+    -0.058302853256464005,
+    0.5280224084854126,
+    0.2648545801639557
+  ],
+  "original_native_rgb8": [
+    0,
+    135,
+    68
+  ],
+  "original_bare_poppler_rgb8": [
+    38,
+    135,
+    62
+  ],
+  "scope": "Authored isolated color sample only. Adding DefaultCMYK changes source color semantics and does not qualify original AI.",
+  "littlecms_profile_unclipped_rgb8": [
+    -14,
+    135,
+    68
+  ],
+  "littlecms_profile_clipped_rgb8": [
+    0,
+    135,
+    68
+  ],
+  "littlecms_library_sha256": "faf9c8f2322a2bb47d04d3077a79cc7103fba68a186697cf91e5f6ef467d1b77",
+  "littlecms_intent": 0,
+  "littlecms_flags": 256,
+  "regression_scope": "Current native interpreter color tests",
+  "test_result": "test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 99 filtered out; finished in 0.00s",
+  "conclusion": "Independent clipped LittleCMS RGB8 matches current native selected sample exactly. Bare DeviceCMYK policy difference explains the large selected red-channel mismatch; explicit-profile Poppler still differs by one in green/blue. No default-profile or acceptance change."
+}

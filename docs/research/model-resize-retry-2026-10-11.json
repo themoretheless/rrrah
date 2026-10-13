@@ -1,0 +1,13 @@
+{
+  "application_passed": 208,
+  "application_ignored": 54,
+  "log_sha256": "ac43887cea25833910a5ad4a4eb89fd44ee79f9071d7bcbfbcdc48ef5c80d6a1",
+  "source": "crates/rrrah-app/src/main.rs",
+  "source_sha256": "942af4671defb439c15943ff4930b2e294d1d7f4dee400da7241ac8a513d2fad",
+  "behavior": "Managed-memory resize refusal retains viewport and schedules retry in 250ms; success redraws; newest resize supersedes old; invalid geometry not retried.",
+  "limits": [
+    "Ordinary regression tests compile and exercise application logic but do not directly drive a live Surface resize/retry.",
+    "Related GPU depth pressure/frame/retry regression is recorded separately in model-resize-retention-2026-10-11.json.",
+    "Live event-loop recovery and physical HDR require unlocked desktop."
+  ]
+}

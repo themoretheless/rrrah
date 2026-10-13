@@ -1,0 +1,23 @@
+{
+  "status": "verified_failed_integration_gate_and20fast_exit_permission_errors",
+  "pins": {
+    "docs/research/dedup-model-worker-group-fixed-20261013.json": "dede955daffcc7f84fd7e1cab0f7d5566aae76fde5935091ed8974bd786df745",
+    "/Users/themoretheless/.codex/tmp/rrrah-model-worker-group-fixed-20261013.log": "4622f507dffe176a29cf1770f84610aecc119c39489b4ae3548c51afdd44b249",
+    "/Users/themoretheless/.codex/tmp/rrrah-model-worker-group-fixed-failed-qualified-20261013/inventory.json": "b6d8e6f4d62add2f6d55d302c3248b6acf856c9cc2689632a629a4ef1a4b7ea9",
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-fast-exit-probe-20261013.log": "7d47eb0a5479d22052da8d3cab413704264ad833e3fb30ae005afff6c9215517",
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-fast-exit-probe-20261013/src/main.rs": "139dc284c84f91f9d37a071396721bc175f8f75ca77095aefd6bb9641f3a7dd1",
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-fast-exit-probe-20261013/Cargo.toml": "f0229b1d19ed6a1d3b9c55bcb7dfed6ece9d10193d5e346366e0e940db1bb2b9",
+    "/Users/themoretheless/.codex/tmp/rrrah-model-worker-group-fixed-failed-qualified-20261013/rrrah_dedup-13b7549945193301": "4333d2f2c890e9dc786ad4703df8b2fda1757b152ad1293f1073fbbddcac8331",
+    "/Users/themoretheless/.codex/tmp/rrrah-model-worker-group-fixed-failed-qualified-20261013/worker-5ffe9a300ddd9ce8": "79321cf571903c864d99e440309c7b0bf4ce06c05d14c60d91de4907e35cd6b7",
+    "/Users/themoretheless/.codex/tmp/rrrah-model-worker-group-fixed-failed-qualified-20261013/worker_group-f874182d13a2a2a0": "5364ddcdec7d6e2b616109d583f794b0123a99cc0944be145194e76c1681b1d9"
+  },
+  "passed": 121,
+  "failed": 2,
+  "ignored": 5,
+  "executed_targets": 3,
+  "failed_tests": [
+    "model_worker::tests::successful_child_with_no_protocol_is_an_error_not_an_empty_bank",
+    "model_worker::tests::retained_failed_child_diagnostics_keep_capture_credit_until_dropped"
+  ],
+  "scope": "V1 integration is not qualified. New descendant regression and both worker targets pass, but fast empty native process groups return macOS EPERM rather than preserving successful/nonzero leader result. Twenty separate native true/sh probe calls repeat actual PermissionDenied. No corrected-gate result or permission-error suppression claim."
+}

@@ -1,0 +1,33 @@
+warning: function `fallible_zeroed_bytes` is never used
+   --> crates/rrrah-cache/src/mosaic_payload_v1.rs:728:4
+    |
+728 | fn fallible_zeroed_bytes(len: usize) -> Result<Box<[u8]>, MosaicPayloadError> {
+    |    ^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-cache` (lib) generated 1 warning
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.58s
+     Running tests/sustained_swap.rs (target/debug/deps/sustained_swap-16217ab17c614679)
+
+running 9 tests
+test burst_overload_of_delayed_writer_is_bounded_and_rejected_keys_retry ... burst delayed swap: queue_bytes=524288 queue_count=8 accepted=48 rejected=992 root_peak=786432 queue_peak=524288 final=0
+burst delayed swap: queue_bytes=2097152 queue_count=1 accepted=45 rejected=995 root_peak=786432 queue_peak=786432 final=0
+ok
+test cancelled_delayed_restore_releases_partial_pixels_and_keeps_retryable_entry ... ok
+test hundred_thousand_distinct_rasters_keep_swap_index_and_memory_bounded ... 100k swap: seconds=92.328953292 writes=100000 reads=100000 pressure_refusals=1000 root_peak=131072 queue_peak=4 final=0
+ok
+test idle_ttl_removes_delayed_large_blobs_and_physical_files ... ok
+test stale_slow_restore_and_cancelled_lock_waiter_release_credit_for_latest_key ... slow restore contention: cycles=8 cancelled_waiters=8 stale_reads=8 successful_reads=16 root_peak=262144 final=0
+ok
+test sustained_byte_cap_evicts_without_count_or_ttl_pressure ... sustained swap: seconds=10.041760291 cycles=72 pressure_refusals=72 root_peak=2097152 queue_peak=262144 disk_peak_bytes=786624 disk_peak_objects=3 final=0
+ok
+test sustained_count_cap_evicts_without_byte_or_ttl_pressure ... sustained swap: seconds=10.060984333 cycles=72 pressure_refusals=72 root_peak=2097152 queue_peak=262144 disk_peak_bytes=786624 disk_peak_objects=3 final=0
+ok
+test sustained_float_hdr_delayed_swap_pressure_cancel_and_retry ... large float delayed swap: cycles=3; seconds=101.166;2048x2048;64MiB; every signed/HDR/negative-zero bit exact; full pressure and admitted cancellation after64KiB read each cycle; disk count2/bytes bounded; final=0
+ok
+test sustained_large_keyspace_delayed_swap_pressure_and_retry ... sustained swap: seconds=10.107084708 cycles=67 pressure_refusals=67 root_peak=2097152 queue_peak=262144 disk_peak_bytes=3933120 disk_peak_objects=15 final=0
+ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 241.51s
+

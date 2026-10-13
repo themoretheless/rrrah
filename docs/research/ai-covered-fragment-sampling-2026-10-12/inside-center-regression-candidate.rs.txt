@@ -1,0 +1,22 @@
+// Proposed reproducer; not executed or admitted into the passing suite.
+#[test]
+fn native_triangle_edge_with_inside_center_uses_mesh_area() {
+    let records = [[0u8,0,0,64,128,192,0], [0,255,0,64,128,192,0], [0,0,255,64,128,192,0]];
+    let hex = records.iter().flatten().map(|v|format!("{v:02X}")).collect::<String>()+">";
+    let shading = format!("<< /ShadingType 4 /ColorSpace /DeviceCMYK /BitsPerCoordinate 8 /BitsPerComponent 8 /BitsPerFlag 8 /Decode [0 0.75 0 16 0 1 0 1 0 1 0 1] /Filter /ASCIIHexDecode /Length {} >>\nstream\n{hex}\nendstream",hex.len());
+    let pdf = authored_pdf_with_font(true, 1., "/form Do", "", "/S1 sh",
+        "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>", Some(&shading));
+    let scene = record_into(pdf,32,16,Affine::IDENTITY,
+        Recorder {capture_native_shadings:true,integrate_native_mesh_boundaries:true,global_contour:true,native_polygon:true,..Recorder::default()});
+    let space = scene.events.iter().find_map(|event| match event {
+        Event::Path(_,_,RecordedPaint::Shading(paint),_,_) => paint.native.as_ref().map(|s|s.color_space.clone()),
+        _ => None,
+    }).unwrap();
+    let output = replay_native_page_scene(&scene,32,16,&space,&||false,&|_|Some(Box::new(()))).unwrap();
+    let pixel = output.pixels[2*32];
+    assert!((pixel.alpha()-0.75*(1.-2.5/16.)).abs()<1e-12, "inside center still requires actual mesh area: {}",pixel.alpha());
+    let expected = [64.,128.,192.,0.].map(|v| f64::from(v as f32 / 255.));
+    for (a,b) in pixel.native_components().unwrap().into_iter().zip(expected) { assert!((a-b).abs()<1e-12); }
+    assert_eq!(output.pixels[2*32+1].alpha(),0.);
+}
+

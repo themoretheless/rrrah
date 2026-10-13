@@ -1,0 +1,133 @@
+{
+  "status": "complete_bounded_frozen_joint_model_tests",
+  "producer_pid": 64700,
+  "source_manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-projective-joint-pruning-snapshot-20261011.json",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-projective-joint-pruning-snapshot-20261011.json": "920b525a3329e577ac3f461413a5a531918066157f517e89999add4f3bfd99b2",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/qualify-dedup-projective-joint-pruning-20261011.py": "dcec422f9ca2dc75deb9f299b1759e8b6539b52c5b5cd8b362dbe3bf3b065773",
+    "/Users/themoretheless/.codex/tmp/rrrah-projective-joint-pruning-qualified-20261011/build.jsonl": "c63f9f79852c76606844ebe5b677bcf659f1c121b94a39df922fbd956df164a4",
+    "/Users/themoretheless/.codex/tmp/rrrah-projective-joint-pruning-qualified-20261011/build.log": "5f682aca5572bc517907eb5de9baac82e33e1a421b44cd80e6d6bb46815c641a"
+  },
+  "build_command": [
+    "cargo",
+    "test",
+    "--manifest-path",
+    "/Users/themoretheless/.codex/tmp/rrrah-projective-joint-pruning-snapshot-20261011/Cargo.toml",
+    "-p",
+    "rrrah-dedup",
+    "--no-default-features",
+    "--features",
+    "decode",
+    "--test",
+    "model_compare",
+    "--test",
+    "model_tiles",
+    "--test",
+    "search_portfolio",
+    "--test",
+    "portfolio_collection",
+    "--test",
+    "joint_witnesses",
+    "--test",
+    "geometry",
+    "--test",
+    "projective_domains",
+    "--test",
+    "joint_projective",
+    "--test",
+    "projective_pruning",
+    "--locked",
+    "--offline",
+    "--no-run",
+    "--message-format=json",
+    "--config",
+    "profile.dev.package.rrrah-dedup.opt-level=3",
+    "--target-dir",
+    "/Users/themoretheless/.codex/tmp/rrrah-opposite-native-snapshot-20261011/target"
+  ],
+  "results": [
+    {
+      "suite": "model_compare",
+      "tests": 26,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-projective-joint-pruning-qualified-20261011/model_compare",
+      "binary_sha256": "b63d4ec09307f1629c6fff0ff27c8531972fdad72b4e269b12e6e5a811391b00",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-projective-joint-pruning-qualified-20261011/model_compare.log",
+      "log_sha256": "9971b1a2a86f6fb638f4f18bbb81ce6a2c9c857a7ae39d05d1e7cbb0e3f52dec"
+    },
+    {
+      "suite": "model_tiles",
+      "tests": 21,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-projective-joint-pruning-qualified-20261011/model_tiles",
+      "binary_sha256": "7c22c58dafcdbc84f4897bdadbb470cf370ccfeafaf2d8f9a23ac3fd54a95340",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-projective-joint-pruning-qualified-20261011/model_tiles.log",
+      "log_sha256": "bbfaff945a8cc3919edaabfea128d874afab15a2d71217185825177cc248ccf5"
+    },
+    {
+      "suite": "search_portfolio",
+      "tests": 27,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-projective-joint-pruning-qualified-20261011/search_portfolio",
+      "binary_sha256": "1f0192fd9b88b06d53747c4a82341baeeb58b0b24b760cbddc275ebe75d0bc69",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-projective-joint-pruning-qualified-20261011/search_portfolio.log",
+      "log_sha256": "b9a68d8c8a6571c41f4f343b99dbddfb68d35b72083fbe9e140beb9109fde4b1"
+    },
+    {
+      "suite": "portfolio_collection",
+      "tests": 26,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-projective-joint-pruning-qualified-20261011/portfolio_collection",
+      "binary_sha256": "ff2450ec9d923e151d6e2274310065872e48acdb3a299f8801885e91f1ac2376",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-projective-joint-pruning-qualified-20261011/portfolio_collection.log",
+      "log_sha256": "885ca641e0c24815ecc8a9e441ef26cf8e46b37cbc04dd64372a705dddfb0d13"
+    },
+    {
+      "suite": "joint_witnesses",
+      "tests": 10,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-projective-joint-pruning-qualified-20261011/joint_witnesses",
+      "binary_sha256": "959eb8d35adce5f8cd3bd11f71a69b34650f1a1a07b9c38ad5494118940a9ff7",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-projective-joint-pruning-qualified-20261011/joint_witnesses.log",
+      "log_sha256": "66e75f1e7ef926f0976b24a80376a4699663a357192a3c255583b8f63793cc9b"
+    },
+    {
+      "suite": "geometry",
+      "tests": 9,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-projective-joint-pruning-qualified-20261011/geometry",
+      "binary_sha256": "c558c73a5b5ae91f9dc66714bdf075ce9d01d467481387a6aed93aff70afd8ff",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-projective-joint-pruning-qualified-20261011/geometry.log",
+      "log_sha256": "138488b49f98ec2059b65b2a2c4918fa5a0eb4d16093401187f6bc0db0e06513"
+    },
+    {
+      "suite": "projective_domains",
+      "tests": 4,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-projective-joint-pruning-qualified-20261011/projective_domains",
+      "binary_sha256": "7f25a8d3be4a56ec614e56843560c9fb0a3a377ad9c64cb385aee90eea1f2498",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-projective-joint-pruning-qualified-20261011/projective_domains.log",
+      "log_sha256": "829a892444f8251e140ba313b209cabfa302303e63ede88754d25f9346e9a86a"
+    },
+    {
+      "suite": "joint_projective",
+      "tests": 4,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-projective-joint-pruning-qualified-20261011/joint_projective",
+      "binary_sha256": "8e3c42c0e9ff90011eecb2b8dcd3783d0f4e6d7949ff3a96048bb8df889b70c7",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-projective-joint-pruning-qualified-20261011/joint_projective.log",
+      "log_sha256": "69f5eeca571e1d5b44150dc85646223fa4ac2c798bb39735dcf51584d4746955"
+    },
+    {
+      "suite": "projective_pruning",
+      "tests": 3,
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-projective-joint-pruning-qualified-20261011/projective_pruning",
+      "binary_sha256": "f589f7ce1b8ed6dc9f2a1ae6f04227ece9711ceb32828e4cb5954b98de7e8b10",
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-projective-joint-pruning-qualified-20261011/projective_pruning.log",
+      "log_sha256": "c9f8bf6e7450964ae834e18fd267f204a66a48fdf37f84d11864fdfc2d99a104"
+    }
+  ],
+  "scope": "Frozen compatible four-crate source and lock, new joint primitive plus legacy/pair/collection tests. Source coherent before/after; root concurrent HDR edits preserved outside this gate. Not full workspace/platform/corpus/RSS qualification.",
+  "build_pid": 64735,
+  "tests": 130,
+  "owned_root_matches": {
+    "crates/rrrah-dedup/src/local_scan.rs": true,
+    "crates/rrrah-dedup/src/geometry.rs": true,
+    "crates/rrrah-dedup/src/anchor_rank_file.rs": true,
+    "crates/rrrah-dedup/src/search_portfolio.rs": true,
+    "crates/rrrah-dedup/src/portfolio_collection.rs": true,
+    "crates/rrrah-dedup/src/model_loftr.rs": true
+  }
+}

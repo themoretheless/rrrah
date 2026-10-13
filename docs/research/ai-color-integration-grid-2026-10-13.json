@@ -1,0 +1,49 @@
+{
+  "scope": "Diagnostic at original VectorApple149,56; area native conversion versus256 converted native point samples",
+  "test_only_change": "Allowed point grid up to16 instead4; report mean alpha alongsideRGB; cancellation180sec and256MiB admission unchanged",
+  "area_native_rgb": [
+    231.03394201389878,
+    213.0600062820241,
+    209.0639760523648
+  ],
+  "area_alpha": 0.21184744274305764,
+  "point_grid16_mean_rgb": [
+    231.56926841824315,
+    213.9966219611233,
+    210.1034487618017
+  ],
+  "point_grid16_mean_alpha": 0.20703125,
+  "point_rgb_normalized_to_area_alpha": [
+    231.02419650562808,
+    213.0427554711529,
+    209.05901491782055
+  ],
+  "normalized_channel_errors": [
+    0.0097455082706972,
+    0.017250810871189515,
+    0.004961134544259949
+  ],
+  "findings": [
+    "Grid4 heavily aliases this thin boundary",
+    "Grid16 covers53of256opaque samples (alpha0.20703125), versusarea0.21184744",
+    "At matched alpha, source RGB differs by at most0.017251RGB8; supports boundary coverage as dominant remaining local discrepancy rather than a large conversion-order error"
+  ],
+  "next_action": "Independently adjudicate original curved boundary/mask area at149,56; do not change ICC or loosen tolerances from this point diagnostic",
+  "suite": {
+    "passed": 192,
+    "failed": 0,
+    "ignored": 12
+  },
+  "limitations": [
+    "Coverage normalization is a local diagnostic approximation, not a general color-integral proof",
+    "Sampling16x16 is not converged exact area",
+    "Same native renderer point calculations are not independent color oracle",
+    "Production rendering unchanged; AI remains pending"
+  ],
+  "sha256": {
+    "docs/research/ai-color-integration-grid16-2026-10-13.log": "6421c19d104e58e47eeb8a125642e9a65f9be79782d01b9ca6ace8047eef46ca",
+    "docs/research/ai-color-integration-grid4-2026-10-13.log": "2b073b5acffadcb2246301cce03a0668bcf5ef8e4d27b18a5306c55572466cd3",
+    "docs/research/ai-grid-diagnostic-suite-2026-10-13.log": "4ba554e7bf680fad9f901ced8bf93cccd3a3182ee10b204aedbca36e319798de",
+    "vendor/hayro/src/knockout_interpreter.rs": "d55567a82b2636110bfde40349e7e9aec9aca00ff06e1f042105afbcd685629a"
+  }
+}

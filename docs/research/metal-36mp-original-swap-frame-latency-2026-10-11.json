@@ -1,0 +1,40 @@
+{
+  "scope": "36MP original-swap worker to actual Metal HDR frame",
+  "source": [
+    6000,
+    6000
+  ],
+  "format": "variable scene-linear RGBA32F with transparent and partially transparent pixels",
+  "pixel_aspect": 1.25,
+  "lod": [
+    128,
+    128
+  ],
+  "framebuffer": [
+    128,
+    128
+  ],
+  "released_source_bytes": 576000000,
+  "measurement": {
+    "worker_ms": 608.927584,
+    "publish_render_readback_ms": 4.805167,
+    "total_ms": 615.668292,
+    "managed_peak": 427776.0,
+    "index_bytes": 281280.0,
+    "source_cpu": 0.0
+  },
+  "validation": [
+    "Exact Metal HDR frame equals independent native original-source area-filter reference prepared before releasing source",
+    "Managed LOD workspace exactly 427776 bytes",
+    "Retained swap index 281280 bytes",
+    "Full CPU source absent during worker/readback",
+    "Final CPU/output/scratch/index/texture/queue/disk credit all zero"
+  ],
+  "limits": [
+    "Single warm-filesystem sample",
+    "Worker processing dominates: approximately 609ms; not interactive large-source latency qualification",
+    "Total includes worker scheduling, renderer setup, publication/render/readback; excludes initial decode/swap write and physical presentation",
+    "Initial full decode remains required",
+    "Physical HDR and NVIDIA unverified"
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "status": "verified_current_root_admission_recursive_decode_consumer_gate",
+  "passed": 173,
+  "ignored": 5,
+  "suites": [
+    {
+      "suite": "lib",
+      "passed": 86,
+      "ignored": [
+        "gradient::batch_tests::alternating_matcher_timing",
+        "gradient::batch_tests::real_photo_matcher_timing",
+        "gradient::matching_tests::alternating_matcher_timing",
+        "gradient::matching_tests::real_photo_matcher_timing",
+        "gradient_index::row_major_tests::row_major_index_build_latency_probe"
+      ],
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-exact-root-admission-consumers-executables-20261012/lib",
+      "sha256": "ba75821e6889d6221f3e39c9e3d1d083df5c6bd56b62647223df514b973cece8"
+    },
+    {
+      "suite": "container",
+      "passed": 14,
+      "ignored": [],
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-exact-root-admission-consumers-executables-20261012/container",
+      "sha256": "6aea7bc8d7c3aba6681c80182d3b5b5647717b73b9fd2a5f0466c3d1e0dc7ccc"
+    },
+    {
+      "suite": "exact_files",
+      "passed": 22,
+      "ignored": [],
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-exact-root-admission-consumers-executables-20261012/exact_files",
+      "sha256": "f53aa99546864ab4c7a63f424cb7ae8b9cbb1fd52511126aa1551220d8b008da"
+    },
+    {
+      "suite": "local_collection",
+      "passed": 17,
+      "ignored": [],
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-exact-root-admission-consumers-executables-20261012/local_collection",
+      "sha256": "3cc6793c5af5ca3b9f6202c3964a5d7e49e9831dde25b6c90f15e9d59cf58faf"
+    },
+    {
+      "suite": "local_scan",
+      "passed": 11,
+      "ignored": [],
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-exact-root-admission-consumers-executables-20261012/local_scan",
+      "sha256": "9752ac33168e832a51e9822a5069c8e9008abf9c2e98d331743f3be93711c9e0"
+    },
+    {
+      "suite": "pixel_search",
+      "passed": 16,
+      "ignored": [],
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-exact-root-admission-consumers-executables-20261012/pixel_search",
+      "sha256": "2b7c80931eb8bd4b7420d02e312f75a5a3b9dd6eafb38b2179afdb824e1e09d4"
+    },
+    {
+      "suite": "scan",
+      "passed": 7,
+      "ignored": [],
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-exact-root-admission-consumers-executables-20261012/scan",
+      "sha256": "2ee8435c4be56242c532a510e39be109f05009da169768eadb42d058e5e6f786"
+    }
+  ],
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exact-root-admission-consumers-source-20261012.json": "a8583775ffa2614f06e783106673f419f42f65512fe9ab142b9db2988edf650e",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-root-admission-consumers-tests-20261012.log": "513feab8dae9576698cd8ca7f63e2c3e3481207bdbcff86fef89837396e4780f",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-exact-root-admission-consumers-20261012.py": "5fff50d828c1dbb37b2e444b4e432cdfd924cab80613ed9f477673b9c6c7c085",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-root-admission-consumers-executables-20261012/lib": "ba75821e6889d6221f3e39c9e3d1d083df5c6bd56b62647223df514b973cece8",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-root-admission-consumers-executables-20261012/container": "6aea7bc8d7c3aba6681c80182d3b5b5647717b73b9fd2a5f0466c3d1e0dc7ccc",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-root-admission-consumers-executables-20261012/exact_files": "f53aa99546864ab4c7a63f424cb7ae8b9cbb1fd52511126aa1551220d8b008da",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-root-admission-consumers-executables-20261012/local_collection": "3cc6793c5af5ca3b9f6202c3964a5d7e49e9831dde25b6c90f15e9d59cf58faf",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-root-admission-consumers-executables-20261012/local_scan": "9752ac33168e832a51e9822a5069c8e9008abf9c2e98d331743f3be93711c9e0",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-root-admission-consumers-executables-20261012/pixel_search": "2b7c80931eb8bd4b7420d02e312f75a5a3b9dd6eafb38b2179afdb824e1e09d4",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-root-admission-consumers-executables-20261012/scan": "2ee8435c4be56242c532a510e39be109f05009da169768eadb42d058e5e6f786"
+  },
+  "scope": "Current-identical dedup production and6selected integration suites plus all decode-feature units on compatible frozen dependencies. Root preparation is shared by exact and recursive visual/pixel/container/local search/collection; all exact reported test names, source and owned executables verified. Ignored controls listed per suite. No allfeature/dirtyworkspace/Windows/fullLinux/fullcorpus/heldoutprecision/processcap/full500completion claim."
+}

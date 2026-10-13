@@ -1,0 +1,92 @@
+{
+  "status": "passed",
+  "producer_pid": 64913,
+  "source": "/Users/themoretheless/.codex/tmp/rrrah-model-miss-diagnostics-20261012/source",
+  "target": "/Users/themoretheless/.codex/tmp/rrrah-cache-interpretation-fix-20261012/target",
+  "gates": [
+    {
+      "test": "model_compare",
+      "filter": null,
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-dedup",
+        "--features",
+        "decode",
+        "--locked",
+        "--offline",
+        "--test",
+        "model_compare",
+        "--jobs",
+        "2",
+        "--target-dir",
+        "/Users/themoretheless/.codex/tmp/rrrah-cache-interpretation-fix-20261012/target"
+      ],
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-model-miss-diagnostics-20261012/model_compare.log",
+      "status": "passed",
+      "child_pid": 64933,
+      "returncode": 0,
+      "log_sha256": "258df4e60864fcddd516ffa55d5f268e9d746b7cafddc80862b21563dd42467f"
+    },
+    {
+      "test": "search_portfolio",
+      "filter": "native_bank",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-dedup",
+        "--features",
+        "decode",
+        "--locked",
+        "--offline",
+        "--test",
+        "search_portfolio",
+        "--jobs",
+        "2",
+        "--target-dir",
+        "/Users/themoretheless/.codex/tmp/rrrah-cache-interpretation-fix-20261012/target",
+        "native_bank"
+      ],
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-model-miss-diagnostics-20261012/search_portfolio.log",
+      "status": "passed",
+      "child_pid": 66355,
+      "returncode": 0,
+      "log_sha256": "0fa9a75f30de7b2414676b9c29d69c2ad6f51e21c7c22782894cfb84ed77821d"
+    },
+    {
+      "test": "portfolio_collection",
+      "filter": "native_bank",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-dedup",
+        "--features",
+        "decode",
+        "--locked",
+        "--offline",
+        "--test",
+        "portfolio_collection",
+        "--jobs",
+        "2",
+        "--target-dir",
+        "/Users/themoretheless/.codex/tmp/rrrah-cache-interpretation-fix-20261012/target",
+        "native_bank"
+      ],
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-model-miss-diagnostics-20261012/portfolio_collection.log",
+      "status": "passed",
+      "child_pid": 67508,
+      "returncode": 0,
+      "log_sha256": "c0606e8c0bd66950d1488195fccf69ca083a72e30dcca2dc8589bfd5d8bce55b"
+    }
+  ],
+  "inputs": {
+    "src/model_banks.rs": "da14d486f70ba61c71d636db47cb316ee240930fc5cbba81640c442e54691f23",
+    "src/search_portfolio.rs": "b18b45d2e3ea244dd9128d9087eff1529a3151449b9729c1bb25e4037afd4788",
+    "tests/model_compare.rs": "facc6350a93f3f98bee8541081f120ffb49607bfe88774dc215fde6a96aeb12c",
+    "tests/portfolio_collection.rs": "39426841c5f5c6c0cb87711ba7199a18a7fc0a5ec20ef2469079affc7764697d"
+  },
+  "inputs_unchanged": true
+}

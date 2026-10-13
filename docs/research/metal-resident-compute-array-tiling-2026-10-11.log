@@ -1,0 +1,15 @@
+gpu_raster
+resident tiles: 130x5; SDR/HDR exact; padded_bytes=10560; compute/queue/texture root=0
+resident tiles: 5x130; SDR/HDR exact; padded_bytes=10560; compute/queue/texture root=0
+resident tiles: 128x130; SDR/HDR exact; padded_bytes=270336; compute/queue/texture root=0
+resident tiles: 130x130; SDR/HDR exact; padded_bytes=278784; compute/queue/texture root=0
+resident tiles: 20000x64; SDR/HDR exact; padded_bytes=20481024; compute/queue/texture root=0
+test result: ok. 12 passed; 0 failed; 7 ignored; 0 measured; 0 filtered out; finished in 1.58s
+
+gpu_units
+test result: ok. 50 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+compute_cache_swap
+compute cache pipeline: 164x50; all component bits and 128x96 Metal frames exact; root=0; gpu=0; one swap write/read
+compute cache pipeline: 4000x3000; all component bits and 4000x3000 Metal frames exact; root=0; gpu=0; one swap write/read
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.78s

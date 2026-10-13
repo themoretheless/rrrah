@@ -1,0 +1,22 @@
+   Compiling rrrah-gpu v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-gpu)
+    Finished `test` profile [optimized + debuginfo] target(s) in 2.39s
+     Running tests/raw_linear_readback.rs (target/debug/deps/raw_linear_readback-9fd8b6185e48ed18)
+
+running 1 test
+test finite_large_bayer_values_survive_filter_averaging_in_float32 ... FAILED
+
+failures:
+
+---- finite_large_bayer_values_survive_filter_averaging_in_float32 stdout ----
+
+thread 'finite_large_bayer_values_survive_filter_averaging_in_float32' (13058944) panicked at crates/rrrah-gpu/tests/raw_linear_readback.rs:377:13:
+zoom=2: [inf, inf, NaN, 1.0]
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    finite_large_bayer_values_survive_filter_averaging_in_float32
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.40s
+
+error: test failed, to rerun pass `-p rrrah-gpu --test raw_linear_readback`

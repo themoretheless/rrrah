@@ -1,0 +1,50 @@
+     Locking 2 packages to latest Rust 1.98.1 compatible versions
+      Adding rrrah-core v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-core)
+      Adding rrrah-memory v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-memory)
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+   Compiling rrrah-memory v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-memory)
+   Compiling rrrah-core v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-core)
+warning: unused variable: `cancel`
+   --> /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup/src/local_index.rs:715:5
+    |
+715 |     cancel: impl Fn() -> bool,
+    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_cancel`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-dedup` (lib) generated 1 warning (run `cargo fix --lib -p rrrah-dedup` to apply 1 suggestion)
+   Compiling dedup-loftr-native-probe v0.0.0 (/Users/themoretheless/Documents/Sources/rrrah/scripts/dedup-loftr-native-probe)
+warning: unused import: `select_scored_proposals`
+ --> src/bin/geometry.rs:5:78
+  |
+5 | use rrrah_dedup::proposals::{ProposalDomain, ProposalPolicy, ScoredProposal, select_scored_proposals};
+  |                                                                              ^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+error[E0425]: cannot find function `select_scored_proposals_managed` in this scope
+  --> src/bin/geometry.rs:61:20
+   |
+61 |       let selected = select_scored_proposals_managed(
+   |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+  ::: /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup/src/proposals.rs:38:1
+   |
+38 | / pub fn select_scored_proposals(
+39 | |     proposals: &[ScoredProposal],
+40 | |     source: ProposalDomain,
+41 | |     target: ProposalDomain,
+42 | |     policy: ProposalPolicy,
+43 | |     cancel: impl Fn() -> bool,
+44 | | ) -> Result<Vec<Correspondence>, GeometryError> {
+   | |_______________________________________________- similarly named function `select_scored_proposals` defined here
+   |
+help: a function with a similar name exists
+   |
+61 -     let selected = select_scored_proposals_managed(
+61 +     let selected = select_scored_proposals(
+   |
+
+For more information about this error, try `rustc --explain E0425`.
+warning: `dedup-loftr-native-probe` (bin "geometry") generated 1 warning
+error: could not compile `dedup-loftr-native-probe` (bin "geometry") due to 1 previous error; 1 warning emitted

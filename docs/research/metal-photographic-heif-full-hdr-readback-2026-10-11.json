@@ -1,0 +1,43 @@
+{
+  "date": "2026-10-11",
+  "scenario": "Real external 24 MP Canon DPP HDR PQ HEIF, full-resolution Metal Rgba16Float attachment readback before/after pressure swap.",
+  "adapter": "Apple M4 Max, Metal",
+  "source_extent": [
+    6000,
+    4000
+  ],
+  "hdr_attachment_extent": [
+    6000,
+    4000
+  ],
+  "hdr_binary16_components": 96000000,
+  "hdr_payload_bytes": 192000000,
+  "hdr_padded_readback_bytes": 192512000,
+  "hdr_zoom": 1.0,
+  "exposure_stops": 1.0,
+  "sdr_attachment_extent": [
+    128,
+    96
+  ],
+  "assertions": [
+    "Full 384000000-byte linear float source payload digest exact after swap.",
+    "All 96000000 binary16 HDR components compare bit-for-bit across restore.",
+    "Every HDR component finite, every output alpha exactly 1, image nonconstant.",
+    "Ready visible lease prevents shrink/spill until released.",
+    "Full managed root pressure refuses restore; releasing pressure permits retry.",
+    "Final managed CPU root zero; swap reads=1, writes=1, errors=0; queue idle.",
+    "Renderer upload credit returns to zero on each helper invocation."
+  ],
+  "limits": [
+    "This closes the earlier reduced HDR attachment scope for this photographic source; SDR remains reduced.",
+    "Test attachment/readback buffers and returned host readbacks are harness allocations outside the production managed CPU root; no global GPU/host peak-memory qualification is claimed.",
+    "Transport/readback equality does not independently establish physical display color or luminance accuracy.",
+    "Canon DPP export, not broad straight-out-of-camera producer qualification.",
+    "NVIDIA deferred."
+  ],
+  "command": "RRRAH_HEIF_CAMERA_SOURCE=/tmp/rrrah-canon-dpp-cardinal-IMG_5499cpq.HIF RRRAH_HEIF_CAMERA_ORACLE=/tmp/rrrah-canon-dpp-cardinal-ffmpeg.rgba16le RRRAH_HEIF_FULL_HDR_READBACK=1 RRRAH_GPU_OPTIONAL=0 cargo test -p rrrah --test hdr_raster_swap photographic_heif_pq_full_resolution_swap_and_metal -- --ignored --nocapture",
+  "gate": "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 16 filtered out; finished in 9.47s",
+  "source_sha256": "a816325fdf92fe04db1da0b29ffbb91e952bf426038108b982e159629fcacc1e",
+  "test_source_sha256": "3424c3ffbb513183c64e53bb0543fb18a11ad4229293d74129dbf50f7b8f606d",
+  "full_log_sha256": "af759482ec161ac612ef078eb71f472d44df0afe16e5714dfaba85e440e1716c"
+}

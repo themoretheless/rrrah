@@ -2,7 +2,7 @@
   "index": 5,
   "repository": "pkolaczk/fclones",
   "commit": "a74f90d293e05856d19a4c0ac2b29b46ef16cf23",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "Existing prior full/partial source-review artifacts linked after current pin verification; original limits retained. This reconciliation is not a new full-source reading or new runtime execution, except the explicit blockhash-js runtime refresh.",
   "decision": "shortlist",
   "finding": "Rust file identity, staged hasher and dedupe operations. Inspect grouping and mutation behavior before adapting the MIT algorithms.",
   "license_metadata": "MIT",
@@ -74,5 +74,21 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "prior_selected_review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "linked_review_artifacts": [
+    {
+      "review_artifact": "fclones-complete-source-review-20261012.json",
+      "status": "verified_existing_pins_not_new_execution",
+      "pin_errors": [],
+      "original_scope": [
+        "No independent source audit of197registry dependencies; generated Cargo.lock metadata/graph inspected only.",
+        "No full physical Linux/Windows reflink, concurrency/advisory-lock race, ACL/xattr failure preservation or hard total-memory qualification.",
+        "No CI/package/release execution or contemporary benchmark confirmation.",
+        "This completes pinned fclones tree review only; it does not complete all500repositories, full458positive corpus, broad semantic negatives, formats/platforms or whole duplicate-library goal."
+      ]
+    }
+  ],
+  "artifact_pin_reconciliation_audit": "unlinked-reviews-pin-audit-20261013.json",
+  "prior_registry_review": "prior-registry-005-unlinked-reconciliation-20261013.json"
 }

@@ -1,0 +1,85 @@
+{
+  "date": "2026-10-13",
+  "scope": "Native AI mesh index construction; experimental replay evidence, not normal-viewer qualification",
+  "change": "Replace full sorting at each balanced tree node with median selection; same unique center/source-index total order and partition membership, unchanged original source-order ownership checks",
+  "profile": {
+    "duration_seconds": 3,
+    "interval_ms": 5,
+    "scope": "Early process capture/index construction; does not profile later replay",
+    "observation": "225 collapsed top-of-stack samples in native mesh index quicksort partitioning; 448 active-thread samples; main test thread is parked and excluded from denominator",
+    "managed_peak_bytes": 239197736,
+    "physical_footprint_report": "275.3M; OS metric distinct from managed admission"
+  },
+  "validation": {
+    "source_tests_passed": 115,
+    "compositor_tests_passed": 208,
+    "compositor_ignored": 12,
+    "prior_seven_probes_exact": {
+      "(137,37)": true,
+      "(138,39)": true,
+      "(195,37)": true,
+      "(138,36)": true,
+      "(149,56)": true,
+      "(199,25)": true,
+      "(176,46)": true
+    },
+    "managed_peak_bytes": 239197736,
+    "final_credit_bytes": 0,
+    "admission_and_capacity_unchanged": true
+  },
+  "benchmark": {
+    "report": "ai-mesh-median-abba-2026-10-13.json",
+    "blocks": 2,
+    "sequence": "ABBA",
+    "warmups_excluded": 2,
+    "measured_process_runs": 8,
+    "complete_pixel_checks": 20,
+    "pixel_coordinates": [
+      [
+        199,
+        25
+      ],
+      [
+        138,
+        39
+      ]
+    ],
+    "exact_native_results": true,
+    "block_ratios": [
+      1.8128984846059173,
+      1.7351212706884986
+    ],
+    "median_block_baseline_over_candidate": 1.774009877647208,
+    "median_seconds": {
+      "baseline": 5.963073792000001,
+      "candidate": 3.316329729499998
+    },
+    "boundary": "End-to-end process for capture/preflight and two selected native pixels; not whole-page or general format throughput"
+  },
+  "remaining": {
+    "pixel": [
+      145,
+      50
+    ],
+    "completed": false,
+    "refusal_fragments": 219616,
+    "deadline": false,
+    "page_prefix_last_verified": 15195,
+    "whole_page_not_rerun_for_index_only_change": true,
+    "independent_color_qualified": false,
+    "normal_viewer_complete": false
+  },
+  "baseline_source_sha256": "d74c34d8847c3cbba814da08e3b7d84881d1c83d8a841f9eb7da6447e140b25c",
+  "sha256": {
+    "vendor/hayro-interpret/src/encode/native_source.rs": "155f7954b58987be04c4ba01cd3a06b0fbd2cd0c6246f3ee7d2cc8ba16ff3cb6",
+    "scripts/bench-ai-mesh-index.py": "6a9c2d77570cec978969ba3d5330e7269208d27532a7cacf20bc55b7b71102a2",
+    "docs/research/ai-mesh-median-source-suite-2026-10-13.log": "3a11e3e406bc422b94cf4eb7aaa2df3cf77695e50cfd5a9fe70081855798397f",
+    "docs/research/ai-mesh-median-compositor-suite-2026-10-13.log": "7fff8141e08a6741cb0fa45a2c93963fbc7866504e1801df41d4fc5e036352da",
+    "docs/research/ai-mesh-median-original-2026-10-13.log": "8c7310ef4037274997be661a65c4c89524f2cb0f2ca79bc0ec17abf10f5f12dc",
+    "docs/research/ai-mesh-median-abba-2026-10-13.json": "0af6005583d4ae86d08a32d6eb2f61ed4b3588cb958fe943a7ee38ac5e70e6c6",
+    "docs/research/ai-mesh-median-change-2026-10-13.patch": "4dcfeec1762a614160e2a2c2e7ae7dc56e91f6d0d2441d4d3a7eb19333a5128c",
+    "docs/research/ai-mesh-refusal-cpu-profile-2026-10-13.txt": "0222edaa928728817432ab1d0c67464ae2beee3c243570341679f672449509d0",
+    "docs/research/ai-mesh-refusal-profile-run-2026-10-13.log": "c1b792b51bfca647d72bc2bd599932aeb44d72b4afb32c6deba5c36ee7a2f6ae",
+    "docs/research/ai-mesh-refusal-profile-tool-2026-10-13.log": "5141578e28f2cb739bccc5d01cc4822b7771a5c2ec569d0974bb9155c81119a8"
+  }
+}

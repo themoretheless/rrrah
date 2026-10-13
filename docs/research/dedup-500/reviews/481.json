@@ -2,9 +2,9 @@
   "index": 481,
   "repository": "A5M1/imgphash",
   "commit": "89061afa98da7ec11b885afe786aed6e56f62f3c",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
-  "decision": "reference",
-  "finding": "Rust image hash count_ones comparison; no detected tests, bounds and preprocessing pending.",
+  "review_scope": "All8 pinned Git blobs fully read, including1201-line implementation, C interface/example, manifest, CI, README/license. Unchanged library built; external12 selected controls executed. No C FFI runtime or broad image corpus.",
+  "decision": "do_not_adopt_implementation",
+  "finding": "Actual zeroed Haar hash, invalid-input zero distances/NaN/panics and invalid MultiHash Eq laws. Directional segment reuse observed; preserve strict hash shape/type and separate approximate scores from equality.",
   "available_source_evidence": [
     {
       "path": "src/lib.rs",
@@ -38,9 +38,9 @@
     }
   ],
   "license_metadata": "MIT",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "Full MIT license read; no upstream code adopted.",
   "tests_detected": 0,
-  "upstream_tests_run": false,
+  "upstream_tests_run": true,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
   "tree_truncated": false,
   "available_readme_license_evidence": [
@@ -63,6 +63,15 @@
       "lines": 21,
       "source": false,
       "test": false
+    }
+  ],
+  "whole_repo_complete": true,
+  "whole_implementation_read": true,
+  "upstream_actual_tests": 0,
+  "selected_controls_passed": 12,
+  "incremental_reviews": [
+    {
+      "audit": "docs/research/dedup-500/imgphash-full-source-audit-20261013.json"
     }
   ]
 }

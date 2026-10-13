@@ -1,0 +1,184 @@
+{
+  "date": "2026-10-10",
+  "scope": "Bounded native calculator vectors, original DeviceN/Separation gradient capture and test-only AI replay; not production AI or Metal qualification",
+  "changes": [
+    "Type4 evaluates 1..4 inputs/outputs with fixed stack, 4096-step shared budget, cancellation and output rollback",
+    "Native metadata capacity includes all retained calculator program Vec capacities, including conditional children, bounded to 32 nesting levels",
+    "Color-space metadata capture admits explicit Separation/DeviceN alternates and tint functions before retaining references",
+    "DeviceN alternate samples use the bounded original tint program without RGB8 reconstruction",
+    "Axial source accepts two original DeviceN channels; sample remains in original coordinates until explicit alternate transform before blending",
+    "Diagnostic exports original float64 root components and alpha, plus device-to-RGB preview with actual rounded alpha"
+  ],
+  "qualification": {
+    "interpreter": {
+      "passed": 105,
+      "failed": 0,
+      "ignored": 0
+    },
+    "compositor": {
+      "passed": 126,
+      "failed": 0,
+      "ignored": 10,
+      "filtered": 1
+    },
+    "real_cyan_magenta_program": {
+      "grid_samples": 121,
+      "independent_oracle": "Cyan/Magenta identity alternate, zero Yellow/Black",
+      "absolute_float_tolerance": 1e-07
+    },
+    "authored_nonlinear_device_n_pdf": {
+      "pixels_compared": 512,
+      "every_native_cmyk_component_exact": true,
+      "original_source_channels_retained": 2,
+      "nonlinear_tint": "Cyan squared, Magenta unchanged, Yellow/Black zero"
+    },
+    "failure_and_cancellation": "Vector evaluator leaves caller output unchanged; existing replay denial/cancellation sweep now includes the DeviceN PDF"
+  },
+  "real_ai": {
+    "pages": [
+      {
+        "fixture": "VectorApple.ai",
+        "page": 0,
+        "width": 301,
+        "height": 246,
+        "diagnostic_timeout_seconds": 180,
+        "peak_admitted_bytes": 196387440,
+        "final_admitted_bytes": 0,
+        "status": "native_diagnostic",
+        "native_completed": true,
+        "capture_failed": false,
+        "capture_ms": 2983.310125,
+        "native_replay_ms": 10592.604040999999,
+        "deadline_expired": false,
+        "events": 2755,
+        "native_paints": 463,
+        "raster_events": 3,
+        "raster_source_models": [
+          "event=3,model=None",
+          "event=1218,model=Some(Cmyk)",
+          "event=2298,model=Some(Cmyk)"
+        ],
+        "native_raster_components": [
+          "event=3,sample_count=Some(29488),refusal=None",
+          "event=1218,sample_count=Some(298224),refusal=None",
+          "event=2298,sample_count=Some(266084),refusal=None"
+        ],
+        "shading_events": 13,
+        "page_model": "Cmyk"
+      },
+      {
+        "fixture": "one.ai",
+        "page": 0,
+        "width": 1366,
+        "height": 768,
+        "diagnostic_timeout_seconds": 180,
+        "peak_admitted_bytes": 168322584,
+        "final_admitted_bytes": 0,
+        "status": "native_diagnostic",
+        "native_completed": true,
+        "capture_failed": false,
+        "capture_ms": 1.622875,
+        "native_replay_ms": 9868.221792,
+        "deadline_expired": false,
+        "events": 8,
+        "native_paints": 2,
+        "raster_events": 0,
+        "raster_source_models": [],
+        "native_raster_components": [],
+        "shading_events": 0,
+        "page_model": "Rgb"
+      },
+      {
+        "fixture": "one.ai",
+        "page": 1,
+        "width": 177,
+        "height": 175,
+        "diagnostic_timeout_seconds": 180,
+        "peak_admitted_bytes": 4957320,
+        "final_admitted_bytes": 0,
+        "status": "native_diagnostic",
+        "native_completed": true,
+        "capture_failed": false,
+        "capture_ms": 0.051082999999999996,
+        "native_replay_ms": 286.736917,
+        "deadline_expired": false,
+        "events": 1,
+        "native_paints": 0,
+        "raster_events": 0,
+        "raster_source_models": [],
+        "native_raster_components": [],
+        "shading_events": 0,
+        "page_model": "Rgb"
+      }
+    ],
+    "vector_apple_events_completed": 2755,
+    "prior_refusal_cleared": "root axial shading event1017, explicit DeviceN alternate using calculator Type4 tint",
+    "all_native_replays_completed": true,
+    "all_final_admitted_bytes_zero": true,
+    "strict_fidelity_qualified": false
+  },
+  "strict_poppler_report": "ai-native-devicen-poppler-2026-10-10.json",
+  "strict_gate": {
+    "exit_code": 1,
+    "expected_failures": [
+      {
+        "fixture": "VectorApple.ai",
+        "page": 0,
+        "different_pixels": 33072,
+        "max_channel_error": 218
+      },
+      {
+        "fixture": "one.ai",
+        "page": 0,
+        "different_pixels": 2494,
+        "max_channel_error": 58
+      }
+    ],
+    "exact_pages": [
+      {
+        "fixture": "one.ai",
+        "page": 1
+      }
+    ],
+    "visually_inspected": "Both 301x246 VectorApple images show the complete apple/leaves/sticker/shadow; visual similarity does not pass the strict gate"
+  },
+  "limitations": [
+    "Native compositor remains test-only; no production renderer or Metal integration",
+    "Full strict RGB fidelity fails on two pinned pages; native completion is not AI qualification",
+    "DeviceN vector input count is bounded to four; Lab/profiles, None paint semantics and broader source formats remain separate gaps",
+    "Tensor bounds concern original components, not amplification by subsequent nonlinear tint transforms",
+    "Metadata parsing, allocator bookkeeping and process RSS are outside the logical admitted capacity",
+    "Diagnostic timings under concurrent machine load are not latency benchmarks"
+  ],
+  "source_sha256": {
+    "vendor/hayro-interpret/src/function/mod.rs": "cb47328b861576c3d079df6ebb6511a21f2a942b77a386f61c3718854588401e",
+    "vendor/hayro-interpret/src/function/type4.rs": "1f576962af25c8ba1a6c1c740deaedcacf025a0ec2440da5f192267e85e0c5f2",
+    "vendor/hayro-interpret/src/color.rs": "16dfcb99de39cfd937d46d826d1108943dd65de50216744389734fa2b5bc9103",
+    "vendor/hayro-interpret/src/encode/native_source.rs": "3754490d04f7db9825ccf01335ceca5eb3581940d5e6e6d271e578371b4497ef",
+    "vendor/hayro/src/knockout_interpreter.rs": "d8ec58e2d7bc2d90e2b4dcddda9579abd47222c63de3c8c316cd999879a866b7",
+    "scripts/qualify-native-ai-poppler.py": "38b2045c7df6b4a9b5c4bf1445f036bb571db51179f1be8ed11374cfe59e3950"
+  },
+  "evidence_logs": {
+    "/tmp/rrrah-devicen-interpreter-20261010.log": {
+      "sha256": "22d7c1dc5a2f437972a258795092190a5a37cd2a0529684695576142b4f86f75"
+    },
+    "/tmp/rrrah-devicen-compositor-export-20261010.log": {
+      "sha256": "944aa57870b237b51339c98fdf075e55ec22d9942b8c2e4c76188c388ef94824"
+    },
+    "/tmp/rrrah-devicen-real-ai-20261010.log": {
+      "sha256": "fc0b2e99a126ba8340bcb651e5291b2f7dc15e02dd8d06b88178f9987f35d4ca"
+    },
+    "/tmp/rrrah-devicen-real-ai-export-fixed-20261010.log": {
+      "sha256": "a810ba0f3bd771e44c3a90681ce8180dbe234f957af38d68627543e71dc235a0"
+    },
+    "/tmp/rrrah-devicen-poppler-cli-20261010.log": {
+      "sha256": "c92e86e636950447e170463d9ac689f00bc80889225b87794283c39651b01e2d"
+    }
+  },
+  "reproduce": [
+    "python3 scripts/test-pdf-mesh-bounds.py --filter :: --target-dir /tmp/rrrah-required-corpus-target",
+    "python3 scripts/test-pdf-mesh-bounds.py --renderer --filter knockout_compositor --target-dir /tmp/rrrah-required-corpus-target",
+    "RRRAH_AI_REPLAY_TIMEOUT_SECONDS=180 with the native diagnostic environment documented in pdf-native-raster-clips-separation-2026-10-10.json",
+    "python3 scripts/qualify-native-ai-poppler.py --native-dir <diagnostic-results> --corpus <pinned-corpus> --artifact-dir <fresh-directory> --report <report.json>"
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "status": "complete_bounded_all_copy_collection_scaling_baseline_audit",
+  "controls": 3,
+  "samples": 9,
+  "frozen_files": 3080,
+  "production_unchanged": true,
+  "rows": [
+    {
+      "files": 8,
+      "families": 1,
+      "pairs": 28,
+      "exact_pairs": 28,
+      "file_bytes": 1048576,
+      "analytical_source_bytes": 209715200,
+      "elapsed_ns": [
+        183158625,
+        189476583,
+        173358875
+      ],
+      "managed_peak": 12992,
+      "median_seconds": 0.183158625
+    },
+    {
+      "files": 32,
+      "families": 1,
+      "pairs": 496,
+      "exact_pairs": 496,
+      "file_bytes": 1048576,
+      "analytical_source_bytes": 3254779904,
+      "elapsed_ns": [
+        2511327334,
+        2347677333,
+        2257856166
+      ],
+      "managed_peak": 174848,
+      "median_seconds": 2.347677333
+    },
+    {
+      "files": 64,
+      "families": 1,
+      "pairs": 2016,
+      "exact_pairs": 2016,
+      "file_bytes": 1048576,
+      "analytical_source_bytes": 12952010752,
+      "elapsed_ns": [
+        8896842792,
+        8631943000,
+        11218525083
+      ],
+      "managed_peak": 677376,
+      "median_seconds": 8.896842792
+    }
+  ],
+  "next_action": "Evaluate managed operation-local exact equivalence certificates to avoid repeated byte confirmation while retaining every existing per-pair and final source guard; qualify collision partitioning, cancellation, memory admission and mixed collections before adoption.",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exact-collection-scaling-baseline-20261011.json": "a0d226ea42342d6b323495625551b32b6d5ee437c3aed66c9866fe8d60f8658f",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exact-collection-scaling-baseline-snapshot-20261011.json": "cecc14734a906c391e6d98d329afa843bf3beb10ef2d67065f9df907da36daa6",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exact-collection-loftr-fixed-snapshot-20261011.json": "11e991fdb094a85dc7b749cd39d7f9839f5cce61c23753d069bac9d642656422",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-exact-collection-scaling-baseline-20261011.py": "aeb83772a24afa7cc3538f2bc6e88b7a912495ffe206471ab37938a218219f30"
+  },
+  "limits": [
+    "Elapsed times from a shared macOS host; not a universal benchmark",
+    "Payload byte counts are analytical, not measured physical I/O",
+    "All-copy collections only; no broad visual scaling or RSS qualification"
+  ]
+}

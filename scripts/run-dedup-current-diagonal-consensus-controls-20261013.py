@@ -1,0 +1,17 @@
+#!/usr/bin/env python3
+from pathlib import Path
+import json,hashlib,subprocess,os,re
+R=Path(__file__).resolve().parents[1];D=R/'docs/research';T=Path('/Users/themoretheless/.codex/tmp');P=D/'dedup-current-diagonal-consensus-controls-plan-20261013.json';p=json.loads(P.read_text());sha=lambda v:hashlib.sha256(Path(v).read_bytes()).hexdigest();S=Path(p['source']);assert all(sha(S/k)==h for k,h in p['source_sha256'].items());assert sha(p['old_normalized_plan'])==p['old_normalized_plan_sha256'];old=json.loads(Path(p['old_normalized_plan']).read_text());assert all(sha(k)==h for k,h in old['pins'].items());H=Path(p['harness']);assert sha(H/'Cargo.toml')==p['manifest_sha256'] and all(sha(H/k)==h for k,h in p['harness_rust_sha256'].items());F=T/'rrrah-current-diagonal-consensus-controls-20261013';assert not F.exists();F.mkdir();O=D/'dedup-current-diagonal-consensus-controls-20261013.json';assert not O.exists();L=F/'build.log';cmd=['cargo','+stable','build','--offline','--bin','native_bank_current_all_positives','--jobs','2','--target-dir',str(T/'rrrah-dedup-exact-portfolio-20261011')];env=os.environ.copy();env['LIBTORCH_USE_PYTORCH']='1';env['PATH']=str(T/'rrrah-loftr-native-runtime-20261010/bin')+os.pathsep+env['PATH'];d=dict(status='building',producer_pid=os.getpid(),plan_sha256=sha(P),build_command=cmd,pins={str(P):sha(P),str(Path(__file__)):sha(__file__)},results=[],scope=p['scope'],compiler=subprocess.run(['rustc','+stable','-vV'],cwd=H,capture_output=True,text=True,check=True).stdout)
+def save():
+ q=O.with_suffix('.tmp');q.write_text(json.dumps(d,indent=2)+'\n');q.replace(O)
+save()
+with L.open('x') as f:
+ child=subprocess.Popen(cmd,cwd=H,env=env,stdout=f,stderr=subprocess.STDOUT);d['child_pid']=child.pid;save();code=child.wait()
+d['build_returncode']=code;d['pins'][str(L)]=sha(L)
+if code:d['status']='terminal_build_failure';save();raise SystemExit(code)
+exe=F/'native_bank_current_all_positives';subprocess.run(['cp','-cp',str(T/'rrrah-dedup-exact-portfolio-20261011/debug/native_bank_current_all_positives'),str(exe)],check=True);d['pins'][str(exe)]=sha(exe);d['pins'][str(H/'Cargo.lock')]=sha(H/'Cargo.lock');d['status']='running';save()
+for i,c in enumerate(p['cases']):
+ cmd=list(c['command']);cmd[-7]=str(exe);assert cmd[-6]==c['left'] and cmd[-5]==c['right'];child=subprocess.Popen(cmd,cwd=R,env=env,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True);d.update(active_index=i,child_pid=child.pid);save();out,err=child.communicate();report=F/('%02d.json'%i);rss=re.search(r'(\d+)\s+maximum resident set size',err);report.write_text(json.dumps(dict(index=i,label=c['label'],command=cmd,returncode=child.returncode,stdout=out,stderr=err,rss_bytes=int(rss[1]) if rss else None),indent=2)+'\n');row=dict(index=i,label=c['label'],report=str(report),sha256=sha(report),returncode=child.returncode)
+ if child.returncode!=0:d['results'].append(row);d['status']='terminal_runtime_failure';save();raise SystemExit(child.returncode)
+ v=json.loads(out);assert v['managed_used']==0 and v['opposite_trials']==1000000;row.update(support=v['pairs'][0]['support'],model_attempted=v['pairs'][0]['model_attempted']);d['results'].append(row);save()
+assert all(sha(S/k)==h for k,h in p['source_sha256'].items()) and all(sha(k)==h for k,h in old['pins'].items()) and all(sha(k)==h for k,h in d['pins'].items());d.update(status='complete_six_current_directions_pending_audit',source_unchanged=True);save();print(d['status'])

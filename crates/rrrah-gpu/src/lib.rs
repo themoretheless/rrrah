@@ -31,7 +31,7 @@ pub use backend::{BackendError, GpuBackend, GpuVendor};
 mod compute;
 pub use compute::{ExposureError, LinearExposureCompute, ResidentExposure};
 mod model;
-pub use model::{ModelRenderer, ModelUploadError};
+pub use model::{ModelRenderer, ModelUploadError, ModelUploadPreparer, PreparedModelUpload};
 
 mod filmstrip;
 mod raster;
@@ -1312,6 +1312,16 @@ impl RawRenderer {
                     },
                     count: None,
                 },
+                wgpu::BindGroupLayoutEntry {
+                    binding: 2,
+                    visibility: wgpu::ShaderStages::FRAGMENT,
+                    ty: wgpu::BindingType::Buffer {
+                        ty: wgpu::BufferBindingType::Storage { read_only: true },
+                        has_dynamic_offset: false,
+                        min_binding_size: None,
+                    },
+                    count: None,
+                },
             ],
         });
         let pipeline_layout = device.create_pipeline_layout(&wgpu::PipelineLayoutDescriptor {
@@ -1348,7 +1358,7 @@ impl RawRenderer {
         let uniform_buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
             label: Some("Rrrah RAW parameters"),
             contents: bytemuck::bytes_of(&parameters),
-            usage: wgpu::BufferUsages::UNIFORM | wgpu::BufferUsages::COPY_DST,
+            usage: wgpu::BufferUsages::UNIFORM | wgpu::BufferUsages::COPY_DST | wgpu::BufferUsages::STORAGE,
         });
         Self {
             target_format,
@@ -1448,6 +1458,13 @@ impl RawRenderer {
         }
         let cfa_pattern = metadata.cfa.as_ref().ok_or(GpuError::MissingCfa)?;
         metadata.validate()?;
+        let expected_samples = (metadata.width as usize).checked_mul(metadata.height as usize)
+            .ok_or(rrrah_core::FrameError::DimensionOverflow)?;
+        if mosaic.pixels.len() != expected_samples {
+            return Err(rrrah_core::FrameError::InvalidPixelCount {
+                expected: expected_samples, actual: mosaic.pixels.len(),
+            }.into());
+        }
         let rgbe = cfa_pattern.rgbe_quad().ok();
         let cfa = match rgbe {
             Some(quad) => quad,
@@ -1456,16 +1473,20 @@ impl RawRenderer {
         if rgbe.is_some() {
             rrrah_core::rgbe::Calibration::new(metadata).map_err(|_| GpuError::InvalidColorProfile)?;
         }
-        let black = metadata.black_level.bayer_quad()?;
-        let white = metadata.white_level.bayer_quad(cfa_pattern)?;
-        for index in 0..4 {
-            if white[index] <= black[index] {
-                return Err(GpuError::InvalidLevels {
-                    black: black[index],
-                    white: white[index],
-                });
-            }
+        let grid = &metadata.black_level;
+        if grid.components != 1 {
+            return Err(rrrah_core::FrameError::UnsupportedBlackLevelGrid.into());
         }
+        let quad = grid.bayer_quad().ok();
+        let black = quad.unwrap_or([0.; 4]);
+        let grid_bytes = if quad.is_none() { grid.values.len() as u64 * 4 } else { 0 };
+        let white = metadata.white_level.bayer_quad(cfa_pattern)?;
+        let gains = display_white_balance(metadata.white_balance);
+        let first_green = usize::from(cfa[0] != 1);
+        let phase_gain = std::array::from_fn::<_, 4, _>(|phase| {
+            if rgbe.is_none() && cfa[phase] == 1 && phase != first_green { gains[3] }
+            else { gains[cfa[phase] as usize] }
+        });
         let camera_to_rgb = if rgbe.is_some() {
             rrrah_core::camera4_to_linear_srgb_precise(metadata.xyz_to_camera.map(|r| r.map(f64::from)))
                 .map_err(|_| GpuError::InvalidColorProfile)?
@@ -1477,6 +1498,51 @@ impl RawRenderer {
         };
         if camera_to_rgb.iter().flatten().any(|v| !v.is_finite()) {
             return Err(GpuError::InvalidColorProfile);
+        }
+        // Bound unnormalized filter accumulation even for a full-sensor footprint.
+        let filter_sample_limit = f64::from(f32::MAX)
+            / (f64::from(metadata.width) * f64::from(metadata.height) * 4.0).max(16.0);
+        let matrix_norm = camera_to_rgb.iter().map(|row| row.iter()
+            .map(|v| f64::from(*v).abs()).sum::<f64>()).fold(1.0_f64, f64::max);
+        // Reserve exposure (+10 stops), gamut mapping and quadratic ACES headroom.
+        let color_sample_limit = f64::from(f32::MAX).sqrt() / (16.0 * 1024.0 * matrix_norm);
+        let filter_sample_limit = filter_sample_limit.min(color_sample_limit);
+        let mut inspect_samples = false;
+        // Validate every intersection of grid repetition and CFA phase, including
+        // parity flips at odd-width/height boundaries, before replacing resources.
+        for row in 0..u32::from(grid.height) * 2 {
+            for column in 0..u32::from(grid.width) * 2 {
+                let level = grid.at(row, column, 0).unwrap();
+                let phase = ((row % 2) * 2 + column % 2) as usize;
+                if white[phase] <= level || !(white[phase] - level).is_finite() {
+                    return Err(GpuError::InvalidLevels { black: level, white: white[phase] });
+                }
+                let range = white[phase] - level;
+                let largest = (65535.0 - level).max(0.0) / range * phase_gain[phase];
+                inspect_samples |= !largest.is_finite() || range.is_subnormal()
+                    || f64::from(largest) > filter_sample_limit;
+            }
+        }
+        if inspect_samples {
+            for (y, row) in mosaic.pixels.chunks(metadata.width as usize).enumerate() {
+                if cancelled() { return Err(GpuError::Cancelled); }
+                for (x, encoded) in row.iter().enumerate() {
+                    let phase = (y % 2) * 2 + x % 2;
+                    let level = grid.at(y as u32, x as u32, 0).unwrap();
+                    let range = white[phase] - level;
+                    let normalized = (f32::from(*encoded) - level).max(0.0) / range;
+                    // Metal may flush subnormal divisors. Exact zero sites are
+                    // handled explicitly in the shader and remain admissible.
+                    if !normalized.is_finite() || !(normalized * phase_gain[phase]).is_finite()
+                        || (normalized != 0.0 && range.is_subnormal()) {
+                        return Err(GpuError::NonFiniteSensorCorrection { x: x as u32, y: y as u32 });
+                    }
+                    if f64::from(normalized * phase_gain[phase]) > filter_sample_limit {
+                        return Err(GpuError::ShaderFilterRangeExceeded { x: x as u32, y: y as u32 });
+                    }
+
+                }
+            }
         }
         let crop = metadata.effective_crop();
         let validate = validate_started.elapsed();
@@ -1495,7 +1561,7 @@ impl RawRenderer {
         let layer_count = plan.layer_count;
         let texture_width = plan.texture_extent;
         let texture_height = plan.texture_extent;
-        let atlas_bytes = plan.atlas_bytes;
+        let atlas_bytes = plan.atlas_bytes + grid_bytes;
         if cancelled() { return Err(GpuError::Cancelled); }
         let reservation = self
             .memory_budget
@@ -1538,6 +1604,8 @@ impl RawRenderer {
         parameters.crop_size = [crop.width, crop.height];
         parameters.cfa = cfa;
         parameters._padding[0] = u32::from(rgbe.is_some());
+        parameters._padding[2] = if quad.is_none() { u32::from(grid.width) } else { 0 };
+        parameters._padding[3] = u32::from(grid.height);
         parameters.black = black;
         parameters.white = white;
         parameters.white_balance = display_white_balance(metadata.white_balance);
@@ -1620,6 +1688,14 @@ impl RawRenderer {
             }
         }
         if cancelled() { return Err(GpuError::Cancelled); }
+        let black_grid_buffer = (quad.is_none()).then(|| device.create_buffer_init(
+            &wgpu::util::BufferInitDescriptor {
+                label: Some("Rrrah exact black-level repeat grid"),
+                contents: bytemuck::cast_slice(&grid.values),
+                usage: wgpu::BufferUsages::STORAGE,
+            },
+        ));
+        if cancelled() { return Err(GpuError::Cancelled); }
         let uniform_write_started = Instant::now();
         queue.write_buffer(&self.uniform_buffer, 0, bytemuck::bytes_of(&parameters));
         let uniform_write = uniform_write_started.elapsed();
@@ -1645,6 +1721,12 @@ impl RawRenderer {
                     binding: 1,
                     resource: self.uniform_buffer.as_entire_binding(),
                 },
+                wgpu::BindGroupEntry {
+                    binding: 2,
+                    // Fast 2x2 uses uniforms; the unused storage binding aliases
+                    // the same allocation, avoiding a dummy GPU allocation.
+                    resource: black_grid_buffer.as_ref().unwrap_or(&self.uniform_buffer).as_entire_binding(),
+                },
             ],
         }));
         self.parameters = parameters;
@@ -1666,6 +1748,7 @@ impl RawRenderer {
     }
 
     /// Select linear HDR output only on targets that retain signed HDR values.
+    /// Float16 output saturates outside [-65504, 65504]; float32 retains its range.
     /// Refusal leaves the current mode and uniforms unchanged.
     pub fn set_output_mode(&mut self, queue: &wgpu::Queue, mode: RawOutputMode) -> Result<(), GpuError> {
         if mode == RawOutputMode::SceneLinear
@@ -1676,16 +1759,24 @@ impl RawRenderer {
         {
             return Err(GpuError::InvalidLinearTarget(self.target_format));
         }
-        self.parameters._padding[1] = u32::from(mode == RawOutputMode::SceneLinear);
+        self.parameters._padding[1] = match mode {
+            RawOutputMode::DisplaySdr => 0,
+            RawOutputMode::SceneLinear if self.target_format == wgpu::TextureFormat::Rgba16Float => 2,
+            RawOutputMode::SceneLinear => 1,
+        };
         queue.write_buffer(&self.uniform_buffer, 0, bytemuck::bytes_of(&self.parameters));
         Ok(())
     }
 
     pub fn update_view(&mut self, queue: &wgpu::Queue, view: ViewParameters) {
-        self.parameters.viewport = [view.viewport[0].max(1.0), view.viewport[1].max(1.0)];
-        self.parameters.pan = view.pan;
-        self.parameters.zoom = view.zoom.clamp(0.02, 128.0);
-        self.parameters.exposure_stops = view.exposure_stops.clamp(-10.0, 10.0);
+        // Invalid control input must not poison an otherwise valid resident frame.
+        let finite = |value: f32, previous: f32| if value.is_finite() { value } else { previous };
+        for axis in 0..2 {
+            self.parameters.viewport[axis] = finite(view.viewport[axis], self.parameters.viewport[axis]).max(1.0);
+            self.parameters.pan[axis] = finite(view.pan[axis], self.parameters.pan[axis]);
+        }
+        self.parameters.zoom = finite(view.zoom, self.parameters.zoom).clamp(0.02, 128.0);
+        self.parameters.exposure_stops = finite(view.exposure_stops, self.parameters.exposure_stops).clamp(-10.0, 10.0);
         queue.write_buffer(&self.uniform_buffer, 0, bytemuck::bytes_of(&self.parameters));
     }
 
@@ -1874,6 +1965,10 @@ pub enum GpuError {
     MissingCfa,
     #[error("invalid sensor levels: black {black}, white {white}")]
     InvalidLevels { black: f32, white: f32 },
+    #[error("sensor correction at ({x}, {y}) cannot remain finite on the GPU")]
+    NonFiniteSensorCorrection { x: u32, y: u32 },
+    #[error("RAW correction exceeds safe shader filter range at ({x}, {y})")]
+    ShaderFilterRangeExceeded { x: u32, y: u32 },
     #[error("RAW dimensions {width}x{height} exceed GPU texture limit {max}")]
     DimensionsTooLarge { width: u32, height: u32, max: u32 },
     #[error("GPU adapter cannot fit a tile in texture limit {max}")]

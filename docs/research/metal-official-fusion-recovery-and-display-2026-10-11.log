@@ -1,0 +1,74 @@
+
+SOURCE /tmp/rrrah-metal-recovery-Fusion-back-development.log
+    Blocking waiting for file lock on build directory
+    Finished `dev` profile [optimized + debuginfo] target(s) in 36.10s
+     Running `target/debug/examples/raw_developed_dump /Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/Fusion-back.GPR /Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/Fusion-back.rgba32fle`
+camera=GoPro FUSION white_balance=[2.0263672, 1.0, 1.6479487, 1.0] xyz_to_camera=[[1.0539697, -0.41059214, -0.08049763], [-0.22486137, 1.0617604, 0.15823649], [0.007290797, 0.111837536, 0.45956096], [0.0, 0.0, 0.0]]
+highlight_recovery=true
+dimensions=3104x3000 color=LinearSrgb peak=352932608
+
+
+SOURCE /tmp/rrrah-metal-recovery-Fusion-front-development.log
+    Finished `dev` profile [optimized + debuginfo] target(s) in 0.20s
+     Running `target/debug/examples/raw_developed_dump /Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/Fusion-front.GPR /Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/Fusion-front.rgba32fle`
+camera=GoPro FUSION white_balance=[2.0263672, 1.0, 1.6479487, 1.0] xyz_to_camera=[[1.0539697, -0.41059214, -0.08049763], [-0.22486137, 1.0617604, 0.15823649], [0.007290797, 0.111837536, 0.45956096], [0.0, 0.0, 0.0]]
+highlight_recovery=true
+dimensions=3104x3000 color=LinearSrgb peak=352932608
+
+
+SOURCE /tmp/rrrah-metal-recovered-fusion-display.log
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.10s
+     Running tests/raster_readback.rs (target/debug/deps/raster_readback-96fa399a25885f6d)
+
+running 2 tests
+test fusion_back_full_frame_developed_raw_matches_metal_display_transport ... Fusion-back full-frame display adapter: Metal Apple M4 Max
+Fusion-back pixels checked: 9312000; maximum RGB8 difference: 1
+ok
+test fusion_front_full_frame_developed_raw_matches_metal_display_transport ... Fusion-front full-frame display adapter: Metal Apple M4 Max
+Fusion-front pixels checked: 9312000; maximum RGB8 difference: 1
+ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 22 filtered out; finished in 2.58s
+
+
+
+SOURCE /tmp/rrrah-metal-required-inputs-recovered-gopro-audit.log
+{
+  "manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/metal-current-manual-followups-2026-10-11.json",
+  "verified": false,
+  "inputs": [
+    {
+      "name": "Fusion-back.rgba32fle",
+      "path": "tests/fixtures/data/metal-recovery/Fusion-back.rgba32fle",
+      "expected_sha256": "00d54286d47dab1e1a0e2d761e8f407e2dcdcdb0823e7ab91fd50f71e2a84df3",
+      "actual_sha256": "00d54286d47dab1e1a0e2d761e8f407e2dcdcdb0823e7ab91fd50f71e2a84df3",
+      "status": "verified"
+    },
+    {
+      "name": "Fusion-front.rgba32fle",
+      "path": "tests/fixtures/data/metal-recovery/Fusion-front.rgba32fle",
+      "expected_sha256": "37871b3f2f5f9de0933a8e3b05edf4e00a1ca9503fd3fe581a94ee5a51f20fa5",
+      "actual_sha256": "37871b3f2f5f9de0933a8e3b05edf4e00a1ca9503fd3fe581a94ee5a51f20fa5",
+      "status": "verified"
+    },
+    {
+      "name": "HERO9.rgba32fle",
+      "path": "tests/fixtures/data/metal-recovery/HERO9.rgba32fle",
+      "expected_sha256": "5a13211dbf9c33a67125777d87bc85a950ac054ab051bfcfdf0175ec2475bb58",
+      "actual_sha256": "5a13211dbf9c33a67125777d87bc85a950ac054ab051bfcfdf0175ec2475bb58",
+      "status": "verified"
+    },
+    {
+      "name": "linear-srgb.ppm",
+      "path": "tests/fixtures/data/metal-recovery/linear-srgb.ppm",
+      "expected_sha256": "00f64dc46ad86366f7da089c9ba37d4aec3462dd49595c2d2049ba0e0d0b68ff",
+      "status": "missing"
+    },
+    {
+      "name": "F828-sensor-oracle",
+      "path": "tests/fixtures/data/metal-recovery/rrrah-srf-refresh-20261008.u16le",
+      "expected_sha256": "b3fc3d395950407a35d33392a97181fa51aac1afb0aa6b96d94a7eba00e95d42",
+      "status": "missing"
+    }
+  ]
+}

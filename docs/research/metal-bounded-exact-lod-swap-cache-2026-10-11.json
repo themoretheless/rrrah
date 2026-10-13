@@ -1,0 +1,38 @@
+{
+  "change": "Source-owned optional exact LOD swap cache, at most one level; retain larger cached level through smaller pressure fallback",
+  "integration": "Original-source worker caches validated direct-source LOD; repeated target restores verified native pixels directly into admitted storage; viewer quality recovery reuses larger exact cached level",
+  "bounds": [
+    "Shared source SwapStore disk bytes and object quota",
+    "Shared managed digest index budget",
+    "No retained extra CPU pixels",
+    "Released with last source owner; no independent unbounded cache"
+  ],
+  "failure_behavior": [
+    "Full disk/object/index quota skips caching without failing successful filtering",
+    "Memory refusal and cancellation preserve retryable cached level",
+    "Malformed/corrupt cached payload invalidates optional level and refuses current result; later request can regenerate from original source"
+  ],
+  "validation": {
+    "full_cache_units_before_new_quota_case": 133,
+    "additional_single_object_quota_regression": 1,
+    "cache_integration": 11,
+    "app_units": 208,
+    "actual_metal_viewport": 7,
+    "36mp_first_worker_ms": 609.698041,
+    "36mp_cached_worker_ms": 0.305458,
+    "36mp_hit_managed_peak_bytes": 327680,
+    "36mp_first_managed_peak_bytes": 427776,
+    "source_plus_cached_index_bytes": 281440,
+    "cached_objects_including_source": 2,
+    "512x320_recovery_total_ms_range": [
+      0.463834,
+      0.701458
+    ]
+  },
+  "limits": [
+    "Warm filesystem sample; repeated exact-level request, not first-open speed",
+    "One cached level per live source; no independent TTL policy, lifetime follows source ownership",
+    "Initial full decode remains required",
+    "Physical HDR, physical slow disks, NVIDIA and full100-format qualification remain open"
+  ]
+}

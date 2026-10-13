@@ -1,0 +1,111 @@
+{
+  "inputs": [
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/211900.jpg",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/212600.jpg",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/212800.jpg",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/209202.jpg",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/211901.jpg",
+    "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/Q41923.jpg",
+    "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/R026396.jpg"
+  ],
+  "cases": [
+    {
+      "label": "self_native",
+      "left": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/212600.jpg",
+      "right": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/212600.jpg",
+      "max_side": 160,
+      "forward_tolerance": 2.0,
+      "reverse_tolerance": 2.0,
+      "force_model": false,
+      "diagonal_normalized": true,
+      "arguments": [
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/212600.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/212600.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+        "160",
+        "2.0",
+        "1000000",
+        "2.0",
+        "false"
+      ]
+    },
+    {
+      "label": "table_true",
+      "left": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/211901.jpg",
+      "right": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/211900.jpg",
+      "max_side": 640,
+      "forward_tolerance": 0.5,
+      "reverse_tolerance": 8.0,
+      "force_model": false,
+      "diagonal_normalized": true,
+      "arguments": [
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/211901.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/211900.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+        "640",
+        "0.5",
+        "1000000",
+        "8.0",
+        "false"
+      ]
+    },
+    {
+      "label": "portrait_wrong",
+      "left": "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/Q41923.jpg",
+      "right": "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/R026396.jpg",
+      "max_side": 640,
+      "forward_tolerance": 2.2314767602431815,
+      "reverse_tolerance": 1.792534912872715,
+      "force_model": false,
+      "diagonal_normalized": true,
+      "arguments": [
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/Q41923.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/R026396.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+        "640",
+        "2.2314767602431815",
+        "1000000",
+        "1.792534912872715",
+        "false"
+      ]
+    },
+    {
+      "label": "composite_square_wrong",
+      "left": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/209202.jpg",
+      "right": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/212800.jpg",
+      "max_side": 640,
+      "forward_tolerance": 1.0140343312728617,
+      "reverse_tolerance": 3.944639620809504,
+      "force_model": false,
+      "diagonal_normalized": true,
+      "arguments": [
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/209202.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/212800.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+        "640",
+        "1.0140343312728617",
+        "1000000",
+        "3.944639620809504",
+        "false"
+      ]
+    }
+  ],
+  "pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/211900.jpg": "81faa5e0860359aa092a5b1e04de4130acd1168182bb5fdf55c7dd73af9fd8fe",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/212600.jpg": "1f0be0e87dc2e9d925b8745f448727f215e0f96c9f8ee637635cc7a630aca890",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/212800.jpg": "6e37f3398960edff918f695c06146b4cf7c871584743d9bc9beba4ef7e06220e",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/209202.jpg": "b2d2781ff3bcc4a946150b143c27d251da56e028f6750eec0a56e637a5182ff0",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/211901.jpg": "6c076f5642a9de92efb53cfe0734d7140a499fd44d08d2b1d93199c2bfc9bcd9",
+    "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/Q41923.jpg": "dc05a19aef23cfd100a371752c9c8ca092c9fdc753616d16fedd6be1ed0dbdcd",
+    "/Users/themoretheless/.codex/tmp/rrrah-disc21-heldout-negative-inputs-20261012/R026396.jpg": "45ce2cd2bc8b2654e2e1a8be1fba3d881480c6425c95de8f288b28d560f6d59b",
+    "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/gradient_dump": "f0ac23a20166d3404e7780be1bb6c88e5e09dfe24fcb19e6fe5d67e168b0cbd1",
+    "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/experiment": "5342207c0176a07094aeec9c82569bdceda3010261c6b18586992031f80166c0",
+    "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-dump-harness-20261013/Cargo.toml": "d9720ade6ad3f146b60443799e198c71691e4ca7f67797e927945caf32998d4b",
+    "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-dump-harness-20261013/Cargo.lock": "40d0319ff61694d6f74b709c8e2df49e5afc536af462b95fb84f38849d050aeb",
+    "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-dump-harness-20261013/src/bin/gradient_dump.rs": "f43fdff570f3fe1e2e87d0c873a6a9ded95d19c8b44bc470d4804c17b6bf1bae",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-consensus-native-plan-20261013.json": "674ee06240ac7fbdc8785e0bbdc63c5625ff08c93ebb9ea34a1aa0e8dd3dfa27",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/run-dedup-gradient-natural-bound-benchmark-20261013.py": "690a42336a6283d9f3250e66488b61df2338274f3bf3741b1e0133b3ba17f37b",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-bound-trace-v2-experiment-20261013.json": "f17046992f64884616706ac65cc503d68eb766bf4d212e56f604f48d1b9a715d"
+  },
+  "scope": "Native decoded unsmoothed interpolated gradient pyramid512/level,3levels,first1024features; synthetic extracted source matcher with squared-distance2 and ratio0.8,ordinary and distinct radius2 modes. Exact nearest tables compared bitwise. Nine alternating pairs per direction. Descriptor matcher microbench only, not complete search or actual native acceptance policy parity. Shared host busy with ongoing tests; production source unchanged."
+}

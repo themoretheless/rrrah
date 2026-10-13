@@ -1,0 +1,41 @@
+{
+  "status": "verified_24_exact_file_tests_with_authored_whitespace_partitions",
+  "passed": 24,
+  "ignored": 0,
+  "tests": [
+    "excess_root_admission_refuses_before_missing_source_io",
+    "root_admission_cancels_before_io_at_each_preparation_checkpoint",
+    "missing_input_and_overlap_do_not_lose_valid_results",
+    "hardlink_aliases_and_followed_symlink_cycles",
+    "cancellation_during_full_hash_is_bounded",
+    "unavailable_non_utf8_path_preserves_diagnostic_bytes",
+    "size_depth_and_entry_limits_are_visible",
+    "physical_hardlinks_are_aliases_while_copied_bytes_are_separate_files",
+    "restored_modified_time_does_not_hide_same_length_snapshot_edit",
+    "reordered_middle_blocks_with_identical_sampled_edges_are_not_copies",
+    "same_bytes_and_modified_time_do_not_hide_physical_file_replacement",
+    "duplicate_root_admission_retains_boundary_and_fresh_retry",
+    "same_length_mutation_during_sample_is_detected",
+    "copies_empty_files_and_equal_size_negatives",
+    "repeated_exact_scan_rejects_stale_equality_after_rewrite_and_growth",
+    "same_samples_different_middle_are_not_duplicates",
+    "unreadable_file_is_explicit_and_does_not_hide_healthy_copies",
+    "verified_scan_preserves_groups_and_observes_every_admitted_file",
+    "fifo_replacement_does_not_block_or_hide_healthy_copies",
+    "whitespace_path_names_preserve_all_authored_copy_partitions",
+    "verified_scan_discards_groups_for_one_shot_cancel_at_every_checkpoint",
+    "nested_overlapping_roots_match_the_full_authored_partition",
+    "changing_any_member_does_not_hide_healthy_duplicates",
+    "restored_modified_time_does_not_hide_same_inode_edit_during_scan"
+  ],
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exact-output-source-20261012.json": "49d285f960dbdd1b70c700767cdc21e4902a8f7db6caf1ce283ac237dff1b955",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-whitespace-path-before-20261012.rs": "e82627052bf7b144ae31f02aba131694cfb7f07477a48aade62c324e5c5c98e8",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exact-whitespace-path-controls-20261012.rs": "fd5daa234a0373366524987503675e014beab078b2f1d6f9d3c2ff4c0d2eb406",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-whitespace-path-macos-20261012.log": "821891592351702cf3031ee64e78ba9efffdea061ab9bcc11583e36a4ddea01a",
+    "/Users/themoretheless/.codex/tmp/rrrah-exact-whitespace-path-macos-executable-20261012": "7d6e6475084ee811e448955abfaf86d042368b7757cadf40837ae1348087dfc1",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-exact-whitespace-path-source-20261012.json": "b29f262ba778051293cf93ffb21137c541d7e57ec34db85d1ef7d168dc3550cb",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-exact-whitespace-path-20261012.py": "278e5c566a19b0144f729a3da845b421d8aeacb28dd6b1964694ac7f97d4ffed"
+  },
+  "scope": "Current-identical production source unchanged; only a Unix-specific regression appended. Actual macOS ARM64 filesystem:8 same-size distinct families,2 copies each, leading/trailing space/tab/newline/CR names, ordinary and verified scanning, both root orders with repeated root. Full24exact integration tests pass. No Windows path qualification, new Linux test execution, full500/full458/totalRSS or general import/export contract claim."
+}

@@ -1,0 +1,130 @@
+{
+  "date": "2026-10-11",
+  "scope": "Native Metal HDR/SDR window and dynamic macOS EDR activation; view redraw bug reproduction and repair",
+  "adapter": "Metal Apple M4 Max",
+  "display": "Built-in Liquid Retina XDR",
+  "control": {
+    "producer": "Original CC0 authored Radiance RGBE control; declared Rec709 primaries",
+    "width": 1024,
+    "height": 512,
+    "linear_neutral_stripes": [
+      0.125,
+      0.25,
+      0.5,
+      1,
+      2,
+      4,
+      8,
+      16
+    ],
+    "sha256": "dcc2d40001c38e905908c3b9be5175b4afa6bed62ed0e7ba8886d474a2f88d61"
+  },
+  "reproduce_control": "python3 scripts/make-hdr-display-control.py OUTPUT.hdr",
+  "reproduce_EDR": "swift scripts/inspect-metal-display.swift",
+  "EDR_snapshots": {
+    "edr-hdr-visible": {
+      "displays": [
+        {
+          "currentEDR": 16,
+          "name": "Built-in Retina Display",
+          "potentialEDR": 16,
+          "referenceEDR": 0
+        }
+      ],
+      "observedAt": "2026-10-11T01:05:17Z",
+      "schemaVersion": 1
+    },
+    "edr-after-hdr-quit": {
+      "displays": [
+        {
+          "currentEDR": 1,
+          "name": "Built-in Retina Display",
+          "potentialEDR": 16,
+          "referenceEDR": 0
+        }
+      ],
+      "observedAt": "2026-10-11T01:07:15Z",
+      "schemaVersion": 1
+    },
+    "edr-fixed-hdr-visible": {
+      "displays": [
+        {
+          "currentEDR": 16,
+          "name": "Built-in Retina Display",
+          "potentialEDR": 16,
+          "referenceEDR": 0
+        }
+      ],
+      "observedAt": "2026-10-11T01:10:31Z",
+      "schemaVersion": 1
+    },
+    "edr-fixed-sdr-visible": {
+      "displays": [
+        {
+          "currentEDR": 1,
+          "name": "Built-in Retina Display",
+          "potentialEDR": 16,
+          "referenceEDR": 0
+        }
+      ],
+      "observedAt": "2026-10-11T01:11:06Z",
+      "schemaVersion": 1
+    }
+  },
+  "native_observations": [
+    "CUA displayed the authored 1024x512 control in the real application window; floating-point values above 1 appear clipped in the SDR screenshot representation",
+    "Before repair: sixteen minus keys (-4 stops) left the screenshot unchanged; G requested redraw and then eight distinct neutral stripes appeared",
+    "After repair: sixteen minus keys immediately exposed eight distinct neutral stripes with filmstrip still visible and no unrelated UI action",
+    "After repair: R immediately restored the original exposure appearance",
+    "Fixed SDR surface also updated all eight stripes from minus keys alone",
+    "HDR visible current EDR=16; after HDR quit=1; fixed HDR visible=16; fixed SDR visible=1",
+    "Test application quit; previous temporary bundle launcher restored; no viewer process remains"
+  ],
+  "change": {
+    "file": "crates/rrrah-app/src/main.rs",
+    "function": "App::update_view",
+    "behavior": "Request a window redraw after uploading view uniforms, covering exposure, zoom, pan and reset",
+    "new_production_lines": 5
+  },
+  "validation": {
+    "ordinary_viewer_passed": 194,
+    "failed": 0,
+    "ignored_actual_GPU_or_manual": 32,
+    "native_HDR_and_SDR_observed": true,
+    "generator_reproduced_exact_bytes": true,
+    "diff_check_passed": true
+  },
+  "artifacts": {
+    "viewer.log": {
+      "path": "/tmp/rrrah-native-edr-20261011/viewer.log",
+      "sha256": "c0ba7a05174a5ddf9182a66fe75f7ef373cba5cd7b9b3f0d8f7fc1da2c26a952"
+    },
+    "viewer-fixed-hdr.log": {
+      "path": "/tmp/rrrah-native-edr-20261011/viewer-fixed-hdr.log",
+      "sha256": "105ea5190f5fa00d762626ace8074ea4fc01774059d1f4a85f3b0e0045f9608d"
+    },
+    "viewer-fixed-sdr.log": {
+      "path": "/tmp/rrrah-native-edr-20261011/viewer-fixed-sdr.log",
+      "sha256": "93098c75f68fd9333bd107923a0c6f90e6a4419fd15338c1edb688a9cfd47268"
+    },
+    "viewer-tests.log": {
+      "path": "/tmp/rrrah-native-edr-20261011/viewer-tests.log",
+      "sha256": "b459bf9ddaf4c745d5dfa28f3e1e70872ff69cec9f914659911e7afa246eb3ca"
+    },
+    "rrrah-before-redraw": {
+      "path": "/tmp/rrrah-native-edr-20261011/rrrah-before-redraw",
+      "sha256": "6161d14b5017a4a5bd4a5ed747aafa1b88b928af5aa4060c2a84f7ca8e06d6e5"
+    }
+  },
+  "fixed_binary": {
+    "path": "/tmp/rrrah-required-corpus-target/debug/rrrah",
+    "sha256": "f69c029af76ef4414b199426eb7ba5c10702c568f72fe07a9cdaf9ffd2e24c0f"
+  },
+  "limitations": [
+    "EDR is OS-reported dynamic headroom; no physical nits, tone-mapping or colorimetry measurement",
+    "CUA screenshots are visual UI evidence, not HDR radiometric readback; screenshots shown in the task were not exported to local files",
+    "One original neutral Rec709/RGBE control, not full 100-format or broad HDR mastering qualification",
+    "No system brightness, color profile or display preference changes",
+    "NVIDIA deferred"
+  ]
+}

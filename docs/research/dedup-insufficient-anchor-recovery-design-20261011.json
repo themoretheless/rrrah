@@ -1,0 +1,22 @@
+{
+  "status": "design_not_implemented",
+  "evidence": [
+    "docs/research/dedup-full229-211201-native-first-20261011.json",
+    "docs/research/dedup-full229-211201-failure-20261011.json"
+  ],
+  "target": [
+    "crates/rrrah-dedup/src/model_tiles.rs",
+    "crates/rrrah-dedup/src/search_portfolio.rs"
+  ],
+  "requirements": [
+    "ModelFirst must reach verified alternatives despite per-candidate InsufficientGeometry; do not just change the default order.",
+    "Use explicit typed attempt outcome for insufficient anchor geometry; do not fabricate an ordinary no-geometry comparison evidence.",
+    "Keep every attempted rectangle and index in the fixed 25-attempt roster.",
+    "Successful later candidate/stage may return independently pixel-verified support.",
+    "If all alternatives miss and any attempt was inconclusive, return preserved typed inconclusive, not an ordinary negative.",
+    "Source/dependency/weight mutation, provider error, allocation/work refusal and cancellation stay terminal.",
+    "Retain full operation snapshots and final post-caller source/generation validation.",
+    "Regression controls must include same-stage recovery, native-stage recovery, all-negative-plus-inconclusive, ordinary complete misses, source/cancel/resource failure precedence.",
+    "Re-run the captured 211201 pair in ModelFirst with original tolerances and bounded full attempts, then qualify the changed full corpus."
+  ]
+}

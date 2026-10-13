@@ -1,0 +1,42 @@
+{
+  "date": "2026-10-12",
+  "test": "gray_icc_png_alpha16_and_tiff16_reach_display_with_native_precision",
+  "inputs": [
+    "authored PNG La16 with Gray ICC gamma 2",
+    "authored TIFF Gray16 with Gray ICC gamma 2"
+  ],
+  "source_samples": [
+    0,
+    32768,
+    32769,
+    65535
+  ],
+  "png_alpha_samples": [
+    0,
+    16384,
+    32768,
+    65535
+  ],
+  "checks": [
+    "normal file decode and profile preservation",
+    "native RGBA16 exact samples",
+    "linear RGB versus (sample/65535)^2 within 0.0001",
+    "adjacent 16-bit samples remain distinct after preparation",
+    "alpha remains normalized linear coverage",
+    "managed credit zero after source/prepared owners drop"
+  ],
+  "focused_passed": 1,
+  "decoder_suite": {
+    "passed": 1021,
+    "failed": 0,
+    "ignored": 72
+  },
+  "logs": {
+    "gray-icc-png-tiff-2026-10-12.log": "de356a06e7b30190a0dd7e9172e07716f6c5b4e136da001b3189c1ba055c82fb",
+    "decode-gray-png-tiff-regression-2026-10-12.log": "19caba32ea89c2818663084fbe0754339c02a04d325a16d457c600f2ae681310"
+  },
+  "limits": [
+    "One authored Gray ICC gamma curve; broader profiles remain unqualified",
+    "No new Metal readback or physical display claim"
+  ]
+}

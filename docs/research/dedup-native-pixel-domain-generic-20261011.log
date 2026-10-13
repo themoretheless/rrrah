@@ -1,0 +1,17 @@
+model_compare 11
+model_input_file 10
+model_projected_compare 8
+model_projected_tiles 8
+model_tiles 13
+portfolio_collection 10
+search_portfolio 13
+native_anchor_recovery 2
+projected_collection 8
+native_pixel_domain 3
+gradient 9
+Traceback (most recent call last):
+  File "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-native-pixel-domain-generic-20261011.py", line 72, in <module>
+    if __name__=='__main__':main()
+  File "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-native-pixel-domain-generic-20261011.py", line 59, in main
+    assert process.returncode==0,(name,stdout,stderr)
+AssertionError: ('gradient_candidate_smoothing', "\nrunning 3 tests\ntest smoothing_matches_independent_footprints_and_exact_last_owner_credit ... ok\ntest work_memory_opacity_and_every_cancellation_refuse_without_retained_output ... ok\ntest zero_radius_exact_bits_half_memory_and_all_cancellation_points ... FAILED\n\nfailures:\n\n---- zero_radius_exact_bits_half_memory_and_all_cancellation_points stdout ----\n\nthread 'zero_radius_exact_bits_half_memory_and_all_cancellation_points' (92554462) panicked at crates/rrrah-dedup/tests/gradient_candidate_smoothing.rs:158:5:\nassertion failed: matches!(smooth_gradient_candidates_managed(&view, 0, 4, &budget, || false),\n    Err(LocalError::Invalid))\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n\n\nfailures:\n    zero_radius_exact_bits_half_memory_and_all_cancellation_points\n\ntest result: FAILED. 2 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n", '')

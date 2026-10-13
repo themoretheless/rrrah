@@ -1,0 +1,74 @@
+{
+  "status": "complete_bounded_frozen_actual_work_raster_execution",
+  "producer_pid": 98289,
+  "command": [
+    "cargo",
+    "test",
+    "--manifest-path",
+    "/Users/themoretheless/.codex/tmp/rrrah-gradient-index-actual-work-bounded-snapshot-20261011/Cargo.toml",
+    "--target-dir",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-exact-portfolio-20261011",
+    "-p",
+    "rrrah-dedup",
+    "--locked",
+    "--offline",
+    "--no-default-features",
+    "--features",
+    "raster",
+    "--no-run",
+    "--message-format=json",
+    "--lib",
+    "--test",
+    "gradient_index",
+    "--test",
+    "gradient_index_reflection"
+  ],
+  "source_manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-index-actual-work-bounded-snapshot-20261011.json",
+  "source_manifest_sha256": "d15910b1f680752a3dc4e2285c54ea72faf389c0a172f03e373129705e5373a2",
+  "results": [
+    {
+      "suite": "rrrah_dedup",
+      "status": "passed",
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-gradient-index-actual-work-bounded-raster-full-qualified-20261011/rrrah_dedup",
+      "binary_sha256": "311c1985f24174e75d1266640c93ba298e4ee0222f8ad44351d5f94c042431fc",
+      "process_pid": 1119,
+      "returncode": 0,
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-gradient-index-actual-work-bounded-raster-full-qualified-20261011/rrrah_dedup.log",
+      "log_sha256": "a793bbe3df780675a9525a50741abe48cf278cb3b984f80e3b9e37941673fda7",
+      "tests": 39
+    },
+    {
+      "suite": "gradient_index",
+      "status": "passed",
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-gradient-index-actual-work-bounded-raster-full-qualified-20261011/gradient_index",
+      "binary_sha256": "f9433e76a4806d789ae29c083a558d27f1070526a4d39d17fc4776ecfb90f68f",
+      "process_pid": 1122,
+      "returncode": 0,
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-gradient-index-actual-work-bounded-raster-full-qualified-20261011/gradient_index.log",
+      "log_sha256": "589cf11595092c1b892e874628653a65da592c6122e8c8c8b7b7d3077b166516",
+      "tests": 12
+    },
+    {
+      "suite": "gradient_index_reflection",
+      "status": "passed",
+      "binary": "/Users/themoretheless/.codex/tmp/rrrah-gradient-index-actual-work-bounded-raster-full-qualified-20261011/gradient_index_reflection",
+      "binary_sha256": "87b169a93aaf98df7646ca8eedc12482725c9f43ac850b659c989e33e182791d",
+      "process_pid": 1134,
+      "returncode": 0,
+      "log": "/Users/themoretheless/.codex/tmp/rrrah-gradient-index-actual-work-bounded-raster-full-qualified-20261011/gradient_index_reflection.log",
+      "log_sha256": "8f8a52940176b1ac00c68dfcb2ae983bfaed19c8fb2927648718a75107d20237",
+      "tests": 2
+    }
+  ],
+  "build_pid": 98304,
+  "build_returncode": 0,
+  "tests": 53,
+  "frozen_files": 3081,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-index-actual-work-bounded-snapshot-20261011.json": "d15910b1f680752a3dc4e2285c54ea72faf389c0a172f03e373129705e5373a2",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-gradient-index-actual-work-bounded-raster-full-20261011.py": "a313b80169fba22b823deb8d6370dab5d9813b1ecdd8a60167905c032b5ddcbe",
+    "/Users/themoretheless/.codex/tmp/rrrah-gradient-index-actual-work-bounded-raster-full-qualified-20261011/build.jsonl": "72f6c88a25436f57e10a234dba5f3a000fb74c57b4e61d33a42e8a627b58b0a1",
+    "/Users/themoretheless/.codex/tmp/rrrah-gradient-index-actual-work-bounded-raster-full-qualified-20261011/build.log": "92c69d7ef1d93dfafab101beee9b823bf9a96d9b8d9e354449ba8eaaf4e14c5d"
+  },
+  "scope": "macOS raster-feature generic providers on frozen dependencies and copied pre-execution programs; no Torch or total RSS qualification"
+}

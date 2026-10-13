@@ -16,6 +16,8 @@ def main():
     parser.add_argument("--filter", help="Override the vendor test filter")
     parser.add_argument("--include-ignored", action="store_true",
                         help="Explicitly run ignored external-fixture diagnostics")
+    parser.add_argument("--nocapture", action="store_true",
+                        help="Keep diagnostic output from successful vendor tests")
     args = parser.parse_args()
     project = Path(__file__).resolve().parents[1]
     # Patched dependency packages are not workspace members. Isolate their
@@ -39,7 +41,9 @@ def main():
             args.filter or ("renderer_cancellation_tests" if args.renderer else "sample_bounds_tests"),
             "--offline", "--target-dir",
             str(args.target_dir.resolve()),
-            *(["--", "--include-ignored"] if args.include_ignored else []),
+            *(["--"] if args.include_ignored or args.nocapture else []),
+            *(["--include-ignored"] if args.include_ignored else []),
+            *(["--nocapture"] if args.nocapture else []),
         ], check=True)
 
 

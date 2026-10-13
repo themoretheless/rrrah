@@ -1,0 +1,51 @@
+{
+  "status": "running",
+  "producer_pid": 34855,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-model-points-trace-snapshot-20261011.json": "9e8afe838afa63f08d8fb5ee2ff89d65b4491d1139816ff122ed14bab3842563",
+    "/Users/themoretheless/.codex/tmp/dedup-model-points-trace-build-20261011.jsonl": "3b2f112e20b8bae1fd3b665388a718d68798751e5380b08295e43a9c661f6277",
+    "/Users/themoretheless/.codex/tmp/dedup-model-points-trace-build-20261011.log": "b4ac6d52aeb75244445aaa49809ede5847e1d10fa4c7aaaff316cdd16b27d3e4",
+    "/Users/themoretheless/.codex/tmp/rrrah-model-points-trace-qualified-20261011/model_points_trace_files": "ba3823687c0dd59d39eb4f9c74860032a77b4ba81bd0cbb605d4a4fcc3b75cb3",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-loftr-publisher-positives-ordering-prefix-0200-audit-20261011.json": "a85facfae6d63bce559631c94b9dfef5ba3013b6fed58f208cd85c1fa44e42d1",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-publisher-positives-qualified-20261011/audits/ordering-prefix-0200.json": "a9d39b6918bb4496daa0381e9d4851545002a07d2dd4f8a98a0c444e82cc49d9",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-loftr-native-20261010-runtime-pins.json": "8daa92d3ed2c84278338c53eedffed1fcdc272bf8ee7a419397cd7f098a6783a",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors": "59e55bf0ecd047db9c513672d121a3ea677529ad448bdc3a359e92862c74ddd7",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/201303.jpg": "162003ef18f481a33e8bb6713fe9169bc0af0675b8ce1b3d21508447032a9ae5",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201300.jpg": "f2819f6d37def6b0dcc04c3f1670bb2b46318d2c451ee6ef0ebec59d8ce8c98d",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-model-points-trace-20261011.py": "c0fd7acc01d99c7b7c736efe1cf917607d359560ae86620d441cf5a313cc9037",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libtorch_python.dylib": "cb1d5957b49b8f3c2e4b90de7b99aee835520875bce893b11eb7528a548744fa",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libtorch.dylib": "2178657b7eeffc0c0a989889ac3e2b2e3d216073b35f3a291ee89bd65c0fb406",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libtorch_global_deps.dylib": "6ff1aedff89150170f225ce821dc9355a9d5f9c80a6cc1bb761c8d209638c2c7",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libomp.dylib": "fe0670951c85401421f6cedc91971f28dc870bad4c1f0cfebe2b74dac421e5f0",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libtorch_cpu.dylib": "941f3e16a8e02b23b99bd2c8693caabaf8df859bfaa293f39a5d7dd8a8f5ca6e",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libc10.dylib": "f203c171b7a71c742ef4a84bde3af64465e545a4cc3ebfd7f245dca3ebe4e7cf",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libshm.dylib": "3a6fc248697b8809534e74d9e5fc784b385239d8c7aeef291c3968a73609f7d2"
+  },
+  "plan": {
+    "original_id": 13,
+    "query_id": 177,
+    "group_id": 201300,
+    "original": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201300.jpg",
+    "query": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/201303.jpg",
+    "direction": "reverse",
+    "left": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/201303.jpg",
+    "right": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201300.jpg",
+    "source_tolerance": 0.5414368903667351,
+    "gradient_minimum_distance": 0.24827130516380255,
+    "radius_0_1_proposed": false
+  },
+  "command": [
+    "/usr/bin/time",
+    "-l",
+    "/usr/bin/env",
+    "DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+    "/Users/themoretheless/.codex/tmp/rrrah-model-points-trace-qualified-20261011/model_points_trace_files",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/201303.jpg",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201300.jpg",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+    "640",
+    "0.5414368903667351"
+  ],
+  "scope": "201300 reverse real LoFTR model-only25-window trace. Actual points after full-coordinate mapping/selection, exact bits; target-only fitter and pixel algorithm unchanged. Diagnostic-only frozen instrumentation, logs/trace scratch unmanaged, no production adoption or total memory/corpus claim.",
+  "child_pid": 34868
+}

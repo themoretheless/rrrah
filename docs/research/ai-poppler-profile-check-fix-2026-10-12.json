@@ -1,0 +1,68 @@
+{
+  "scope": "Fix external diagnostic Poppler input ICC acceptance check and isolate source CMYK quantization from fixed-profile color policy",
+  "upstream_archive": "https://poppler.freedesktop.org/poppler-26.10.0.tar.xz",
+  "archive_sha256": "6792cb7c69205007ad87d2e936cecc5b3a31fac29ab54ffc3175fdb6b2a6ce35",
+  "upstream_checker_sha256": "2ba2fdc3562685954ec4619751ce8c8acc6fd2323503c11defb455f54d1fcbb1",
+  "patch": "checkICCProfile uses UsedDirection for the Perceptual branch, as it already does for other intents; unmodified original incorrectly uses LCMS_USED_AS_OUTPUT",
+  "reproduction": "Original nativeICC supports Perceptual input only; original Poppler rejects it. Patched standalone pdftoppm accepts exact original ICC without profile data/header changes.",
+  "build": "Separate /tmp CMake Release build with lcms2, targetpdftoppm -j8 exit0; no repository/runtime dependency or upstream installation changed",
+  "observations": {
+    "original_float_native_rgb": [
+      0,
+      135,
+      68
+    ],
+    "original_float_lcms_rgb": [
+      0,
+      135,
+      68
+    ],
+    "poppler_default_rgb": [
+      38,
+      135,
+      62
+    ],
+    "patched_same_profile_poppler_rgb": [
+      0,
+      134,
+      67
+    ],
+    "lcms_quantized_source_rgb": [
+      0,
+      134,
+      67
+    ],
+    "quantized_authored_pdf_both_renderers_rgb": [
+      0,
+      134,
+      67
+    ],
+    "quantized_all256pixels_exact": true
+  },
+  "conclusion": "Selected source sample difference decomposes into default display policy plus CMYK source quantization. Do not change native float colors to reproduce quantized reference.",
+  "limits": [
+    "One constant sample, not full VectorApple or allICC policies",
+    "No production AI/compositor fix or relaxed acceptance",
+    "Poppler source built with disabled Boost; no full-page geometric qualification inferred",
+    "Full-profile AI comparison still outstanding"
+  ],
+  "sha256": {
+    "docs/research/ai-poppler-profile-check-fix-2026-10-12/quantized-result.json": "e37375dbe2c208e6194d4642d122b99cabfc93b05073924ed92eb21e52c8159e",
+    "docs/research/ai-poppler-profile-check-fix-2026-10-12/constant.pdf": "1e19ed4733998eaf9c8f92b3e973e0115384d2c870f3857d63fc03cc652166ba",
+    "docs/research/ai-poppler-profile-check-fix-2026-10-12/precision-destination-matrix.json": "1bfda87842e2bae12e23d886f290db7a03b891e8c696f028c8cb9be457778f12",
+    "docs/research/ai-poppler-profile-check-fix-2026-10-12/matched-result.json": "724947e4c9b40a2fa45ef33c9e59ef8cbe18b7bb46b1f62a64a14157d0e43e4c",
+    "docs/research/ai-poppler-profile-check-fix-2026-10-12/configure.log": "e0fab15a0459c7b6177f92dfa3ac0b044ac71b7de4c32840483aafc4ce61ce8c",
+    "docs/research/ai-poppler-profile-check-fix-2026-10-12/quantized-native.log": "d96a689e9b4f4c0f4978009ac2e4c2fa8fa13c015c4a98e3ff2ebdfa3c6ab66f",
+    "docs/research/ai-poppler-profile-check-fix-2026-10-12/quantized-poppler.ppm": "98dfc9e678a73e9de4ae3bfe9d14584793e80157f996e31edf5723b074a6849e",
+    "docs/research/ai-poppler-profile-check-fix-2026-10-12/quantized-native.rgba": "4c2d0c2d74eedceef10c8b83bf240683a80846aceb9fe73f00448800735bbb96",
+    "docs/research/ai-poppler-profile-check-fix-2026-10-12/matched-render.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/research/ai-poppler-profile-check-fix-2026-10-12/native.rgba": "aa514bdbbb142640f3ac990df792e5ab037e641fec158a6822a205da9cba54fd",
+    "docs/research/ai-poppler-profile-check-fix-2026-10-12/patched-cmyk-only.ppm": "98dfc9e678a73e9de4ae3bfe9d14584793e80157f996e31edf5723b074a6849e",
+    "docs/research/ai-poppler-profile-check-fix-2026-10-12/intent-support.json": "25dbfb411232ed969b67958810fd38933cb0b255d79ed25bc3f7a87d8f80e5b3",
+    "docs/research/ai-poppler-profile-check-fix-2026-10-12/sanitychecks.patch": "ed66e064a8a6761c7da2e647a8002408d5c3f27b2c3cf5376624cd543f064f55",
+    "docs/research/ai-poppler-profile-check-fix-2026-10-12/quantized.pdf": "63901aa374628943c55b923619b1197204048987780048db4370cfdbb5e3fa8e",
+    "docs/research/ai-poppler-profile-check-fix-2026-10-12/patched-matched.ppm": "98dfc9e678a73e9de4ae3bfe9d14584793e80157f996e31edf5723b074a6849e",
+    "docs/research/ai-poppler-profile-check-fix-2026-10-12/build.log": "ff5409f50ed79430420f5fed7409e6e4dd4b46c99f9907dbb58d4e91e49c8508",
+    "vendor/hayro-interpret/assets/CGATS001Compat-v2-micro.icc": "73e1ba37d2bad5bab2a964f40a9eed96209666efc067c3322626214bbef234a0"
+  }
+}

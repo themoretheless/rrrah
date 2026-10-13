@@ -1,0 +1,18 @@
+{
+  "scope": "PTX primary-source boundary audit, no new decoder qualification",
+  "sources": [
+    {
+      "url": "https://www.ricoh-imaging.co.jp/english/support/man-pdf/k100d-sp_soft.pdf",
+      "title": "PENTAX PHOTO Browser 3 / PHOTO Laboratory 3 Operating Manual v3.10",
+      "physical_page": 8,
+      "finding": "Supported camera RAW extension .pef and DNG; no .ptx match in extracted 112-page manual"
+    },
+    {
+      "url": "https://www.ricoh-imaging.co.jp/english/support/man-pdf/k10d.pdf",
+      "finding": "RAW recording choices PEF or DNG; does not establish PTX distinct storage"
+    }
+  ],
+  "current_route": "NativeFormat::from_path maps ptx to Pef; compatibility routing test only",
+  "conclusion": "Independent producer-original PTX and distinct storage contract still unproven. Manufacturer manual absence does not prove PTX never existed. Do not promote renamed PEF or extension aliases to distinct-format completion.",
+  "catalogue_counts_changed": false
+}

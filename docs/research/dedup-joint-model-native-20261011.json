@@ -1,0 +1,35 @@
+{
+  "status": "complete_bounded_native_joint_model",
+  "producer_pid": 62600,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-joint-model-native-snapshot-20261011.json": "ae6cf2e0d3f0f22e08d84fef550ecae251ed87f420b331ca2316ea9ac80e6334",
+    "/Users/themoretheless/.codex/tmp/dedup-joint-model-native-build-20261011.jsonl": "e38bdf0ae97b311560329d2c2bab3908aa23a016889a6609ce707a9dcaa0d975",
+    "/Users/themoretheless/.codex/tmp/dedup-joint-model-native-build-20261011.log": "7c855441f8812fb06cd8b61d0d3fa5a47243c9ffab2fb1faa91a6f360f5d1f41",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-model-native-qualified-20261011/joint_model_files": "c5825a2207f20bccf22a1c7509a9e275efb02c15ab2db509d820b14c92e13ddb",
+    "/Users/themoretheless/.codex/tmp/rrrah-model-joint-refit-qualified-20261011/201300-0.json": "b53bd4b93bf664e6821e5d29325991fa75b14b7c5688b3a8dcc002a8e335f126",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/201303.jpg": "162003ef18f481a33e8bb6713fe9169bc0af0675b8ce1b3d21508447032a9ae5",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201300.jpg": "f2819f6d37def6b0dcc04c3f1670bb2b46318d2c451ee6ef0ebec59d8ce8c98d",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors": "59e55bf0ecd047db9c513672d121a3ea677529ad448bdc3a359e92862c74ddd7",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/measure-dedup-joint-model-native-20261011.py": "7bcb16277053af5960665a1406fbc7b2706f4fbec5a35126c13e4abf68a69b58"
+  },
+  "command": [
+    "/usr/bin/time",
+    "-l",
+    "/usr/bin/env",
+    "DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+    "/Users/themoretheless/.codex/tmp/rrrah-joint-model-native-qualified-20261011/joint_model_files",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/201303.jpg",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/201300.jpg",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+    "640",
+    "0.5414368903667351"
+  ],
+  "scope": "Real whole-image CPU joint model comparison;1m admitted hypotheses/filter12 fixed explicitly. Not full search, automatic scale choice, annotated precision or full corpus.",
+  "child_pid": 62601,
+  "returncode": 0,
+  "stdout": "{\"geometry_inliers\":11,\"managed_peak\":104808816,\"managed_used\":0,\"original_dimensions\":[[675,543],[2560,1920]],\"pixels\":\"Some(AnchorRankEvidence { forward_anchors: 11, reverse_anchors: 11, forward: RankRegionEvidence { sites: 275, valid_sites: 275, informative_pairs: 1227, agreeing_pairs: 1129, pixel_reads: 111375 }, reverse: RankRegionEvidence { sites: 275, valid_sites: 275, informative_pairs: 1202, agreeing_pairs: 1108, pixel_reads: 111375 }, supported: true })\",\"raw_proposals\":173,\"scope\":\"Real CPU proposals, explicit1m joint hypotheses and filter12; same strict residual/pixel thresholds. Whole-image diagnostic, not automatic scale/tile/collection or full corpus qualification.\",\"selected_points\":173,\"supported\":true,\"transform\":[[0.9893488610633348,-0.06458413144881481,505.18271712949047],[-0.008255715237170955,0.9512831228016387,167.7828048232427],[-0.000017640605204939312,-0.00009997499525884028,1.0361358130980567]]}\n",
+  "stderr": "        3.57 real         3.98 user         0.19 sys\n          1344700416  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n               83457  page reclaims\n                   9  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                 642  voluntary context switches\n                4246  involuntary context switches\n         44985008428  instructions retired\n         11859625035  cycles elapsed\n          1294534240  peak memory footprint\n",
+  "elapsed_seconds": 3.582673875,
+  "log": "/Users/themoretheless/.codex/tmp/rrrah-joint-model-native-qualified-20261011/201300.log",
+  "log_sha256": "80dfa49009d2c8a695467bf176cf175466daf630f0ffc073dc7feba4d3bfb1de"
+}

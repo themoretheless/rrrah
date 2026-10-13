@@ -1,0 +1,39 @@
+{
+  "status": "complete_bounded_native_pixel_control",
+  "pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-opposite-native-snapshot-20261011/target/debug/cross_window_pixels": "49fa8a870efd7738f47f4ff4e063d084103671d5f6b0ecda9837c9e5c47746e0",
+    "/Users/themoretheless/.codex/tmp/rrrah-cross-window-pixels-qualified-20261011": "49fa8a870efd7738f47f4ff4e063d084103671d5f6b0ecda9837c9e5c47746e0",
+    "/Users/themoretheless/.codex/tmp/rrrah-cross-window-200301-input-20261011.json": "f36ebaf7b22d7532dad814215114b764814c6e67906f333f63ebbc3306c14231",
+    "/Users/themoretheless/.codex/tmp/rrrah-cross-window-pixel-harness-20261011/Cargo.toml": "f3ec8171ef12a3277575b6e3038f96f1fe03aabbd3448e4692531b9afc663f8f",
+    "/Users/themoretheless/.codex/tmp/rrrah-cross-window-pixel-harness-20261011/Cargo.lock": "af32aa998c2ece619c603777e2ad80d99cd0740ce76948e288d7e6676a3276dd",
+    "/Users/themoretheless/.codex/tmp/rrrah-cross-window-pixel-harness-20261011/src/bin/cross_window_pixels.rs": "1e9a58a8684c247e0dc0088e4789ceb5f33ea6020b674de122615b2cdd894630",
+    "/Users/themoretheless/.codex/tmp/rrrah-cross-window-pixel-harness-20261011/src/native_policy.rs": "16ddc4d9e77bbadad4312d0a491cc3e1c759fc47b03550f7c6266688ce364a17",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-projective-buffer-reuse-snapshot-20261011.json": "81a88b2e8c8c6fa4c69387a16cdde2452bfe4ee109036fe0c0cba69aebec7879",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-cross-window-consensus-200301-20261011.json": "7559606079f10db7271b008cd8891114a5307948416fb96ee4b0760292525a1d"
+  },
+  "command": [
+    "/Users/themoretheless/.codex/tmp/rrrah-cross-window-pixels-qualified-20261011",
+    "/Users/themoretheless/.codex/tmp/rrrah-cross-window-200301-input-20261011.json"
+  ],
+  "returncode": 0,
+  "stdout": "{\"managed_peak\":66778688,\"managed_used\":0,\"points\":10,\"results\":[{\"evidence\":\"Ok(AnchorRankEvidence { forward_anchors: 10, reverse_anchors: 10, forward: RankRegionEvidence { sites: 250, valid_sites: 250, informative_pairs: 1233, agreeing_pairs: 1221, pixel_reads: 101250 }, reverse: RankRegionEvidence { sites: 250, valid_sites: 250, informative_pairs: 1651, agreeing_pairs: 1581, pixel_reads: 101250 }, supported: true })\",\"supported\":true,\"window_radius\":2},{\"evidence\":\"Err(Rank(InsufficientGeometry))\",\"supported\":false,\"window_radius\":6}],\"scope\":\"Explicit cross-window geometrically selected witnesses, exact input H. Original pixel floors unchanged; diagnostic not production proposal union or precision qualification.\"}\n",
+  "stderr": "",
+  "result": {
+    "managed_peak": 66778688,
+    "managed_used": 0,
+    "points": 10,
+    "results": [
+      {
+        "evidence": "Ok(AnchorRankEvidence { forward_anchors: 10, reverse_anchors: 10, forward: RankRegionEvidence { sites: 250, valid_sites: 250, informative_pairs: 1233, agreeing_pairs: 1221, pixel_reads: 101250 }, reverse: RankRegionEvidence { sites: 250, valid_sites: 250, informative_pairs: 1651, agreeing_pairs: 1581, pixel_reads: 101250 }, supported: true })",
+        "supported": true,
+        "window_radius": 2
+      },
+      {
+        "evidence": "Err(Rank(InsufficientGeometry))",
+        "supported": false,
+        "window_radius": 6
+      }
+    ],
+    "scope": "Explicit cross-window geometrically selected witnesses, exact input H. Original pixel floors unchanged; diagnostic not production proposal union or precision qualification."
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "backend": "Metal",
+  "passed": 1,
+  "control_cases": 6,
+  "attachments_per_case": [
+    "SDR",
+    "HDR binary16"
+  ],
+  "comparison": "Every 64x64 output sample equals normalized finite control; all HDR encodings finite.",
+  "log_sha256": "2899aa1c06d757ec3881b22e57dd96274e26ec28396a66bfa0548926c992850b",
+  "source_sha256": {
+    "crates/rrrah-gpu/src/raster.rs": "2f98d3dad5d7bf2b4479382228883f1cdaaf2403cda147de8a410970f422f794",
+    "crates/rrrah-gpu/tests/raster_readback.rs": "abf3fc5700c6fea1a10e4c5c83042204e4c762dcb9729e1ceaeffaa2c026cbe6"
+  },
+  "limits": [
+    "Existing raster fallback defaults retained; this differs from RAW previous-component retention.",
+    "Authored two-pixel raster and offscreen readback, not live UI or physical HDR."
+  ]
+}

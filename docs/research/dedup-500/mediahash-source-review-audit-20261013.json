@@ -1,0 +1,138 @@
+{
+  "status": "verified_all_implementation_and_tests_reviewed_nine_controls",
+  "repository": "studioph/mediahash",
+  "commit": "e14ff15a2b918a957c80082f586c14df501e8bcd",
+  "source": "/Users/themoretheless/.codex/tmp/rrrah-mediahash-source-20261013",
+  "files": {
+    ".devcontainer/Dockerfile": {
+      "git_blob": "004d241dc7f827fddcf7405f40db6b9c8eea4040",
+      "sha256": "5fad47afef6a7674aee42931d8dba6d7ffadc38f756aec17aee24093f3eec214",
+      "bytes": 153,
+      "kind": "text"
+    },
+    ".devcontainer/devcontainer.json": {
+      "git_blob": "92a2ea4feb13215662b202ff7d810fc955ab0f08",
+      "sha256": "cb0a51f827411a12198680b500980a56f3c40eabf524a91f988292faf3f2b9a0",
+      "bytes": 1264,
+      "kind": "text"
+    },
+    ".gitignore": {
+      "git_blob": "aca7d157393ffe977911092d3f63785e0bb6ff70",
+      "sha256": "f709d2ade93715c565e6714306eafd595c25d3f7ca9ec1e933d60df690eda5b1",
+      "bytes": 3122,
+      "kind": "text"
+    },
+    "LICENSE": {
+      "git_blob": "f288702d2fa16d3cdf0035b15a9fcbc552cd88e7",
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "bytes": 35149,
+      "kind": "text"
+    },
+    "README.md": {
+      "git_blob": "870f886a5ec47e95bc2b82710b8d27fe048759e7",
+      "sha256": "fa6cd10bd284a29915b67884e24956d6cc0e5d663f61aee10f120f961f99c60a",
+      "bytes": 12,
+      "kind": "text"
+    },
+    "__test__/data/frame.jpg": {
+      "git_blob": "b0a35c1f19fab5ce91ff6f565231cda09ee6514b",
+      "sha256": "066cf8b48d097b5945f41566188cc5ee3fef13b31e6d66e28cf1c2cac471dfc5",
+      "bytes": 93722,
+      "kind": "binary fixture"
+    },
+    "__test__/data/sample.mp4": {
+      "git_blob": "47c3f1fd7d624e8266e69471502d3fecca9bdce6",
+      "sha256": "d085630e19f76856a4559f288c6b5b0cda8961cc4a071081963de5d9aef86598",
+      "bytes": 98599,
+      "kind": "binary fixture"
+    },
+    "__test__/image_test.py": {
+      "git_blob": "21ccd36f017e05b1fc609c47f4d10a0c8b1c47a3",
+      "sha256": "a13538ce44bef79b12938fc3c8964c2a2da1f1be0f1f578d132d19a533b23c34",
+      "bytes": 556,
+      "kind": "text"
+    },
+    "__test__/video_test.py": {
+      "git_blob": "46acc9503f6f03576b6935d11b2e5aefc56b1893",
+      "sha256": "95efea4fb1a56143ce73b8ff49c185db60e72600f18d534888e5a3ec6e7eda3b",
+      "bytes": 675,
+      "kind": "text"
+    },
+    "pdm.lock": {
+      "git_blob": "93c106aa8333d885caa599635a09881cd25af970",
+      "sha256": "2629b95851700600347c510fa294eb4ba116635773bf7e939e42a8c1bde0afa5",
+      "bytes": 57369,
+      "kind": "text"
+    },
+    "pyproject.toml": {
+      "git_blob": "95b3b844ffc1a3fc8354682f7a5a89c11dd08a05",
+      "sha256": "8d2378d446032a8967eab82ed259697e3bf713615ad92b7103052608c15bc8ea",
+      "bytes": 923,
+      "kind": "text"
+    },
+    "src/mediahash/__init__.py": {
+      "git_blob": "8509779c56df8d223957ff678bb34327fbe600ed",
+      "sha256": "1da9e1369e9a33270441c22a98477a7f3562ec819c206870ba73d09d3f9b0dc7",
+      "bytes": 167,
+      "kind": "text"
+    },
+    "src/mediahash/image.py": {
+      "git_blob": "09eb885af973e1f390753056a364d52efb57d8e9",
+      "sha256": "289281934fa1e55c871a836b380ee9758a3dd0f99d49ce0f58f447fc80178136",
+      "bytes": 2017,
+      "kind": "text"
+    },
+    "src/mediahash/types.py": {
+      "git_blob": "5886f79bb3d74853e3ceea7bcb72a1034b99362c",
+      "sha256": "e564dc1c557d3c749043a589407e5571b11685b4acbed7eac02fb374952bd23d",
+      "bytes": 744,
+      "kind": "text"
+    },
+    "src/mediahash/util.py": {
+      "git_blob": "b6048ef3e24478e550ca5a3343b777652a7b6a5d",
+      "sha256": "fb263a2eb519e12c650467c8ad2bdb8625b119d493a5375672e3b428c9dc49f0",
+      "bytes": 950,
+      "kind": "text"
+    },
+    "src/mediahash/video.py": {
+      "git_blob": "02916acdab89031eb06b0b52d5b2bceed4cc4d1c",
+      "sha256": "cc4852e524231b39307ebde8c9bb3172ead21469c73b9e0b428a480c7f3b444b",
+      "bytes": 5507,
+      "kind": "text"
+    }
+  },
+  "implementation_and_test_files_fully_read": [
+    "src/mediahash/__init__.py",
+    "src/mediahash/image.py",
+    "src/mediahash/video.py",
+    "src/mediahash/types.py",
+    "src/mediahash/util.py",
+    "__test__/image_test.py",
+    "__test__/video_test.py"
+  ],
+  "config_read": [
+    "pyproject.toml",
+    ".devcontainer/Dockerfile",
+    ".devcontainer/devcontainer.json",
+    ".gitignore",
+    "README.md"
+  ],
+  "lock_scope": "Complete TOML parsed and package inventory inspected; runtime not reconstructed from full lock",
+  "license_scope": "Included GPLv3 text identified; no code adopted",
+  "controls": "docs/research/dedup-500/mediahash-controls-20261013.json",
+  "controls_sha256": "3c4991847904040d6c7075dd3fc0a18083e236a6b86de56a3c8097a16cdf3892",
+  "upstream_pytest_run": false,
+  "binary_fixtures": "Both git-blob verified; actual JPEG passed to broken image functions; MP4 actually decoded, no visual QA",
+  "whole_implementation_complete": true,
+  "whole_repo_complete": false,
+  "first_harness_attempt": "All assertions reached JSON write, failed on numpy float32 serialization; preserved first script, corrected float conversion, rerun passed",
+  "first_harness": "/Users/themoretheless/.codex/tmp/rrrah-mediahash-first-controls-20261013.py",
+  "findings": [
+    "Global dataclass Image shadows PIL.Image: analyze/checksum/fingerprint AttributeError",
+    "Fresh video descriptor is 8x8 but scipy cosine requires1D: self subtraction ValueError; parsed flattened self passes",
+    "Default two64KiB video checksum raises StopIteration on actual sample.mp4",
+    "Connected components merge A-B-C above endpoint threshold",
+    "Zero-valued flat video self-distance NaN",
+    "Static: image checksum omits dimensions and mode; actual path blocked by shadowing bug; not claimed executed collision"
+  ]
+}

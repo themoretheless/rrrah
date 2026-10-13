@@ -1,0 +1,10 @@
+{
+  "status": "failed_compile_no_cpu_run",
+  "build_returncode": 101,
+  "pins": {
+    "docs/research/dedup-disc21-overlap-regions-native-20261011.json": "bc27aaa2c1576682aec84c8bfd67e1720f97c8b8d72678c5890daf0a3725bb69",
+    "/Users/themoretheless/.codex/tmp/dedup-disc21-overlap-regions-native-build-20261011.log": "d576f70f14e76c513ba72c79343d63dd7f6df3d15d9d0475e53487342a0fc375"
+  },
+  "reason": "New extraction wrapper passed a borrowed generic closure, preventing higher-ranked provider lifetime inference. Producer exited1 after build101; its building report is terminal failure, not a live job.",
+  "correction": "Pass generic provider closure by value as other generic extraction wrappers do. Rebuild under a fresh v2 snapshot and binary name; original failed source/log retained."
+}

@@ -1,0 +1,18 @@
+{
+  "test": "hundred_thousand_distinct_rasters_keep_swap_index_and_memory_bounded",
+  "passed": 1,
+  "failed": 0,
+  "ignored": 0,
+  "result": "100k swap: seconds=26.045261125 writes=100000 reads=100000 pressure_refusals=1000 root_peak=131072 queue_peak=4 final=0",
+  "checks": [
+    "100000 distinct keys and unique four-byte payloads",
+    "100000 exact completed restores",
+    "1000 full-root pressure refusals followed by retry",
+    "disk objects <=17 and bytes <=4096",
+    "physical files verified every 1000 keys",
+    "evicted keys absent",
+    "root and queue zero after every cycle and final drop"
+  ],
+  "scope": "Small payload real-file churn isolates key/index retention; not large-image throughput, OS-wide memory pressure, or physical slow disk",
+  "log_sha256": "4b95291865421a55de24a04382b1c08414ef2fde2ca34271bb93c0992325ab54"
+}

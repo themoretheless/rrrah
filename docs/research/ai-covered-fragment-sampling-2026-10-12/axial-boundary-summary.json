@@ -1,0 +1,33 @@
+{
+  "implementation": "native axial source exposes original t0/t1 boundary lines transformed into device coordinates, without allocation/color conversion",
+  "verified": [
+    "identity/shear/reflection preserve original axial parameter at both line endpoints",
+    "radial source returns no axial lines"
+  ],
+  "native_focused_passed": 1,
+  "hayro_passed": 166,
+  "ignored": 12,
+  "real_artwork": {
+    "event": 1017,
+    "axial": true,
+    "source_direct_blending_model": null,
+    "pixel_completed": false,
+    "final_managed_bytes": 0
+  },
+  "next": "clip axial boundary lines to pixel partition and resolve original alternate tint/function coordinates before composition",
+  "limits": "boundary API only; axial scene routing and final pixel qualification incomplete",
+  "logs": [
+    {
+      "path": "docs/research/ai-covered-fragment-sampling-2026-10-12/axial-boundary-native-tests.log",
+      "sha256": "d76df0924c92690ced5998dadb9a9b61dbf9cacc0ac9c184dbfc5bd654568b11"
+    },
+    {
+      "path": "docs/research/ai-covered-fragment-sampling-2026-10-12/axial-boundary-hayro-tests.log",
+      "sha256": "28b105aa7e5e17068f5d3fc2e10b008757d92f9521f09ff2e406de08e898e130"
+    },
+    {
+      "path": "docs/research/ai-covered-fragment-sampling-2026-10-12/real-spatial-axial-kind-tests.log",
+      "sha256": "dbded8b35d4356d46057c65cfd5ccde2629b4f27bc62b935823eb413eaf45f5d"
+    }
+  ]
+}

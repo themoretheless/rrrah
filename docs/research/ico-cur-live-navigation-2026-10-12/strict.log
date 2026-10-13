@@ -1,0 +1,79 @@
+   Compiling bindgen v0.69.5
+   Compiling bindgen v0.72.1
+warning: function `fallible_zeroed_bytes` is never used
+   --> crates/rrrah-cache/src/mosaic_payload_v1.rs:728:4
+    |
+728 | fn fallible_zeroed_bytes(len: usize) -> Result<Box<[u8]>, MosaicPayloadError> {
+    |    ^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-cache` (lib) generated 1 warning
+   Compiling jpegxr v0.3.1
+   Compiling astcenc-sys v0.2.0
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+warning: methods `submit` and `submit_image` are never used
+    --> crates/rrrah-app/src/main.rs:1389:8
+     |
+1087 | impl ForegroundLoader {
+     | --------------------- methods in this implementation
+...
+1389 |     fn submit(&self, path: PathBuf) -> Result<u64> {
+     |        ^^^^^^
+...
+1392 |     fn submit_image(&self, path: PathBuf, image_index: usize) -> Result<u64> {
+     |        ^^^^^^^^^^^^
+     |
+     = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: associated items `install_with_cancel`, `refresh`, and `refresh_with_cancel` are never used
+   --> crates/rrrah-app/src/raster_viewport.rs:396:19
+    |
+ 26 | impl ResidentSource {
+    | ------------------- associated items in this implementation
+...
+396 |     pub(crate) fn install_with_cancel<F: FnMut() -> bool>(
+    |                   ^^^^^^^^^^^^^^^^^^^
+...
+483 |     pub(crate) fn refresh(
+    |                   ^^^^^^^
+...
+503 |     pub(crate) fn refresh_with_cancel<F: FnMut() -> bool>(
+    |                   ^^^^^^^^^^^^^^^^^^^
+
+warning: `rrrah` (bin "rrrah") generated 2 warnings
+    Finished `dev` profile [optimized + debuginfo] target(s) in 1m 15s
+     Running `target/debug/rrrah tests/fixtures/data/cur-selected-images.cur --cache-dir /tmp/rrrah-live-cur-cache-20261012 --raster-cache-count 1 --raster-cache-ttl-secs 1`
+[2026-10-11T20:58:14Z INFO  rrrah] GPU adapter: backend=Metal name=Apple M4 Max vendor=0x0000 device=0x0000
+[2026-10-11T20:58:14Z INFO  rrrah] Viewer surface: hdr=false format=Bgra8UnormSrgb color_space=Auto
+[2026-10-11T20:58:15Z INFO  rrrah] Raster ready: generation=0 path=tests/fixtures/data/cur-selected-images.cur index=0 dimensions=2x2 elapsed=2.189625ms
+[2026-10-11T20:58:17Z INFO  rrrah] Raster ready: generation=1 path=tests/fixtures/data/ico-selected-images.ico index=0 dimensions=2x2 elapsed=210.833µs
+[2026-10-11T20:58:17Z INFO  rrrah] Raster ready: generation=2 path=tests/fixtures/data/png-physical-aspect.png index=0 dimensions=4x4 elapsed=501.125µs
+[2026-10-11T20:58:18Z INFO  rrrah] Raster ready: generation=3 path=tests/fixtures/data/tiff-distinct-page-profiles.tif index=0 dimensions=2x1 elapsed=267.25µs
+[2026-10-11T20:58:19Z WARN  rrrah] Image load failed: generation=4 path=tests/fixtures/data/tiff-pages-big-be.tif error=raster needs an ICC or source-primary transform before display
+[2026-10-11T20:58:19Z WARN  rrrah] Image load failed: generation=5 path=tests/fixtures/data/tiff-pages-big-le.tif error=raster needs an ICC or source-primary transform before display
+[2026-10-11T20:58:19Z WARN  rrrah] Image load failed: generation=6 path=tests/fixtures/data/tiff-pages-classic-be.tif error=raster needs an ICC or source-primary transform before display
+[2026-10-11T20:58:19Z WARN  rrrah] Image load failed: generation=7 path=tests/fixtures/data/tiff-pages-classic-le.tif error=raster needs an ICC or source-primary transform before display
+[2026-10-11T20:58:20Z WARN  rrrah] Image load failed: generation=8 path=tests/fixtures/data/tiff-pages-classic-be.tif error=raster needs an ICC or source-primary transform before display
+[2026-10-11T20:58:20Z WARN  rrrah] Image load failed: generation=9 path=tests/fixtures/data/tiff-pages-big-le.tif error=raster needs an ICC or source-primary transform before display
+[2026-10-11T20:58:20Z WARN  rrrah] Image load failed: generation=10 path=tests/fixtures/data/tiff-pages-big-be.tif error=raster needs an ICC or source-primary transform before display
+[2026-10-11T20:58:20Z INFO  rrrah] Raster ready: generation=11 path=tests/fixtures/data/tiff-distinct-page-profiles.tif index=0 dimensions=2x1 elapsed=241.666µs
+[2026-10-11T20:58:21Z WARN  rrrah] Image load failed: generation=12 path=tests/fixtures/data/tiff-pages-big-be.tif error=raster needs an ICC or source-primary transform before display
+[2026-10-11T20:58:21Z WARN  rrrah] Image load failed: generation=13 path=tests/fixtures/data/tiff-pages-big-le.tif error=raster needs an ICC or source-primary transform before display
+[2026-10-11T20:58:21Z WARN  rrrah] Image load failed: generation=14 path=tests/fixtures/data/tiff-pages-classic-be.tif error=raster needs an ICC or source-primary transform before display
+[2026-10-11T20:58:21Z WARN  rrrah] Image load failed: generation=15 path=tests/fixtures/data/tiff-pages-classic-le.tif error=raster needs an ICC or source-primary transform before display
+[2026-10-11T20:58:21Z WARN  rrrah] Image load failed: generation=16 path=tests/fixtures/data/tiff-pages-hdr-deflate-be.tif error=raster needs an ICC or source-primary transform before display
+[2026-10-11T20:58:25Z WARN  rrrah] Image load failed: generation=17 path=tests/fixtures/data/tiff-pages-hdr-deflate-le.tif error=raster needs an ICC or source-primary transform before display
+[2026-10-11T20:58:26Z WARN  rrrah] Image load failed: generation=18 path=tests/fixtures/data/tiff-pages-hdr-deflate-be.tif error=raster needs an ICC or source-primary transform before display
+[2026-10-11T20:58:26Z WARN  rrrah] Image load failed: generation=19 path=tests/fixtures/data/tiff-pages-classic-le.tif error=raster needs an ICC or source-primary transform before display
+[2026-10-11T20:58:26Z WARN  rrrah] Image load failed: generation=20 path=tests/fixtures/data/tiff-pages-classic-be.tif error=raster needs an ICC or source-primary transform before display
+[2026-10-11T20:58:29Z WARN  rrrah] Image load failed: generation=21 path=tests/fixtures/data/tiff-pages-classic-le.tif error=raster needs an ICC or source-primary transform before display
+[2026-10-11T20:58:30Z INFO  rrrah] Raster ready: generation=23 path=tests/fixtures/pcx/indexed.pcx index=0 dimensions=3x2 elapsed=369.375µs
+[2026-10-11T20:58:31Z INFO  rrrah] Raster ready: generation=25 path=tests/fixtures/pdf/blend-rgb-hardlight.pdf index=0 dimensions=12x8 elapsed=224.541µs
+[2026-10-11T20:58:31Z WARN  rrrah] Image load failed: generation=27 path=tests/fixtures/pict/drop-pad-cropped-odd.pict error=raster needs an ICC or source-primary transform before display
+[2026-10-11T20:58:32Z INFO  rrrah] Raster ready: generation=29 path=tests/fixtures/qoi/all-opcodes-0.qoi index=0 dimensions=17x4 elapsed=169.708µs
+[2026-10-11T20:58:32Z INFO  rrrah] Raster ready: generation=31 path=tests/fixtures/raster/adjacent16.ff index=0 dimensions=2x1 elapsed=173.625µs
+[2026-10-11T20:58:33Z INFO  rrrah] Raster ready: generation=33 path=tests/fixtures/sti/etrle-two-images.sti index=0 dimensions=3x2 elapsed=170.333µs
+[2026-10-11T20:58:35Z INFO  rrrah] Raster ready: generation=35 path=tests/fixtures/qoi/all-opcodes-0.qoi index=0 dimensions=17x4 elapsed=137.792µs
+[2026-10-11T20:58:38Z INFO  rrrah] Viewer transient storage shutdown complete

@@ -1,0 +1,45 @@
+{
+  "production": [
+    "Selected CUR images use bounded managed directory ranking shared with ICO",
+    "Hotspot fields are validated as coordinates rather than scored as bit depth",
+    "Pixel entry and hotspot selected together; image ordinal/count retained",
+    "Default tie rule now matches actual ICO pixel decoder: prior normalization could select hotspot from different equal-area entry",
+    "Admitted source header restored after decode; no payload copy",
+    "TGA overlapping-signature and DICOM-precedence regressions remain passing"
+  ],
+  "fixture": "Three PNG-backed CUR entries; two largest equal-area different hotspots plus final smaller image; nativeRGBA and matched point authored independently",
+  "tests": {
+    "decoder_passed": 1016,
+    "decoder_ignored": 72,
+    "app_passed": 216,
+    "app_ignored": 60,
+    "metal_gate_passed": 138,
+    "metal_gate_ignored": 13
+  },
+  "metal": "CUR/ICO3 selections each:64byte/count1RAM, full-pressure hit, visibleTTL, reverse2->0->1->2 swaps, exact63x65SDR/HDR and restored hotspots; finalCPUqueue0",
+  "limitations": [
+    "Selected cursor tests are PNG-backed; broad DIB mask variants remain open",
+    "Hotspot metadata verified; live OS cursor positioning is not tested",
+    "PhysicalHDR/full100-format qualification remains open"
+  ],
+  "sources": {
+    "crates/rrrah-decode/src/cursor.rs": "3d5daf29e72a5f2e94a56f3ea5cee1609263262f7539bb26029f4381384e6027",
+    "crates/rrrah-decode/src/ico_pages.rs": "d1b7a25881704c42002eb367b46609f22a3f4507b928b3987db946908abb7176",
+    "crates/rrrah-decode/src/raster.rs": "db29cf80cd2bde845900036bd1d6aa9619f3fd9382003a20b7d05467c3f67ac5",
+    "crates/rrrah-app/tests/ico_pages_metal.rs": "b05281b48d7705c9b0b9c0cc9b02aa5af2a8102901d9f0b215a8b8031b13d340",
+    "scripts/generate-cur-selected-images.py": "af3adb8d8f1332818665df84fd51a731135b62684660bcdb1dd4f68fab23534b",
+    "scripts/qualify-viewer-storage-gpu.py": "2d4f9a349720ac84a90acb5175a0b106e574e0882507216d29d10e14abe6ff50",
+    "tests/fixtures/data/cur-selected-images.cur": "335d23953f576d98e0ae81a79d22eaadfc97047f4a208915973067a040dde11d",
+    "tests/fixtures/data/cur-selected-images.json": "dda33e37828a162ff512faadbb89b7a0e8f9fdc049447a76a547a027300e5230"
+  },
+  "logs": {
+    "docs/research/cur-selected-hotspots-2026-10-12/gpu-tiff-viewer-pages.log": "a76054ab4ccdb1368c7a2491db98e7bd8bbe3a877549e9e55624daf6dfa87df1",
+    "docs/research/cur-selected-hotspots-2026-10-12/report.json": "4a95ebdfc4fff9a8fff4b36876c6c0f9f128bab1950d4449c3d69dd2e1b40644",
+    "docs/research/cur-selected-hotspots-2026-10-12/gpu-ico-pages.log": "77b9953aec27b38b8e74daf2f4dab8c17f68c9bc2c38e8d1416d11100a8c51ba",
+    "docs/research/cur-selected-hotspots-2026-10-12/gpu-all.log": "f45c7990f553bb89e760e7cc2bb0ed46c2a99bbb50f33ffa3e3b5d5bbf339e98",
+    "docs/research/cur-selected-hotspots-2026-10-12/rrrah-cur-selection-app-20261012.log": "8d9aab5945ef16e3dc5cc7bca3beac4245f89d43bf4eaaabc3a29bd4da34a4bb",
+    "docs/research/cur-selected-hotspots-2026-10-12/gpu-tiff-pages.log": "0bed8bd2ef63c276b219e3d0f998b4e5ea8233f931f872315ec902c8d8678d17",
+    "docs/research/cur-selected-hotspots-2026-10-12/rrrah-cur-selection-decoder-20261012.log": "8f4a13bdfe93c977c527d42998b2fce8fb40e05ee6f14a533063243570cf886e",
+    "docs/research/cur-selected-hotspots-2026-10-12/rrrah-cur-ico-selection-metal-20261012.log": "02862b2ab70f9c85ddcf9e4feb1215091eabe51e8eb9a31cab5571f22918f4e7"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "status": "clarified_frozen_loftr_source_after_masked_value_fix_adoption",
+  "previous": "dedup-disc21-heldout-negatives-dependency-scope-20261012.json",
+  "deltas": [
+    {
+      "path": "vendor/loftr/src/coarse_matching/tests.rs",
+      "frozen_sha256": "818515d108e62a65e4c0896b8bbe855c96806eae9821f34d13d266c4500e263a",
+      "root_sha256": "b79e23be71ecd8e3c375c9dd312e137408d72329b30966d17ee55a2e42d2bee9"
+    },
+    {
+      "path": "vendor/loftr/src/coarse_matching.rs",
+      "frozen_sha256": "99d6a33aa5838d122eedd5ef26971fe0d66ebb5ec3b11cf2e7eb8e61295a3a80",
+      "root_sha256": "ef9363e326ba0de200c420ad7ea63701cce4ce29f796bb458f66ae6886994c4d"
+    },
+    {
+      "path": "vendor/loftr/src/linear_attention/tests.rs",
+      "frozen_sha256": "6bffbda30990a6876956b336812c92bf24220b3c914961887d321e97546ee4be",
+      "root_sha256": "ac060dac3e28d773c878aa0ca377ffa69bbf23c2e4110d59c75844cf797c658d"
+    },
+    {
+      "path": "vendor/loftr/src/linear_attention.rs",
+      "frozen_sha256": "7a62894c332e8c67571d38e6c04af2130311c9f11a215e216b5550b2edfd30e9",
+      "root_sha256": "905288a0f333d277be238463499783855f9bf9a5cd63ad6608146929b5016a33"
+    }
+  ],
+  "scope": "The16pair run remains frozen and live. Its dedup production matches current root; LoFTR has two older coarse files plus the pre-fix attention source/tests. This public caller uses unmasked LoFTR, whose arithmetic was unchanged by the new ownership fix. Evidence applies to the recorded frozen composition, not full current-root stack/RSS/platform/precision qualification."
+}

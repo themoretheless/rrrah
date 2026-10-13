@@ -1,0 +1,15 @@
+{
+  "change": "Skip key cloning/sorting for fitting byte/count policy updates; fixed TTL deadlines preserved",
+  "regression": "100000 entries; zero key clones; LRU and existing TTL unchanged",
+  "memory_cache_passed": 192,
+  "ignored": 5,
+  "metal_full_resolution_verified": true,
+  "metal_summary": "long-lived collection complete: cycles=13; elapsed=10.442s; reads=13; writes=8; root=0; queue=0",
+  "sources": {
+    "crates/rrrah-memory/src/policy.rs": "c791b438a702636e3a8aefea910f578405efbf85ef8b5a3eea43b67484b10c65"
+  },
+  "logs": {
+    "docs/research/cache-fitting-limit-update-2026-10-11/rrrah-fitting-policy-metal-20261011.log": "4a763d15893554f61617ec63d8dec1820e393c45aa6f3b22d905d7a159bed3aa",
+    "docs/research/cache-fitting-limit-update-2026-10-11/rrrah-fitting-policy-20261011.log": "f4b0f295c8fcd2ba461a3c2ebed44e0c94ea7422a4d25ab75aa020a6c6a34e7d"
+  }
+}

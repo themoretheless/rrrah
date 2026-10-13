@@ -1,0 +1,17 @@
+{
+  "change": "Range and strided-row restores now share the scoped verified reader with streamed HDR LOD",
+  "new_regression": "Cancellation after replacement block I/O but before verification invalidates cached block identity; subsequent corruption is detected; repair permits exact retry",
+  "validation": {
+    "cache_units": 133,
+    "cache_integration": 11,
+    "swap_units": 16,
+    "swap_integration": 6,
+    "swap_doctests": 2,
+    "metal_viewport": 6
+  },
+  "limits": [
+    "Synthetic cancellation checkpoints do not qualify a physical slow disk",
+    "Physical HDR and NVIDIA remain unverified",
+    "Full 100-format scope remains open"
+  ]
+}
