@@ -633,7 +633,14 @@ pub(crate) fn match_gradients_distinct_locations_prepaid(
         policy,
         Some(competitor_radius.powi(2)),
         |pairs| {
+            let bytes = u64::try_from(pairs).ok()?.checked_mul(8)?;
+            if budget.available_bytes() < bytes {
+                return None;
+            }
+            // Limit capacity credit as well as requested length. The child is
+            // created only after the complete feature suffix is validated.
             budget
+                .child(MAX_DISTANCE_CACHE_BYTES)
                 .try_buffer(pairs, 0.)
                 .ok()
                 .filter(|buffer| buffer.capacity_bytes() <= MAX_DISTANCE_CACHE_BYTES)
