@@ -49,7 +49,10 @@ impl ModelUploadPreparer {
         cancelled: impl FnMut() -> bool,
     ) -> Result<PreparedModelUpload, ModelUploadError> {
         let mut prepared = ModelRenderer::prepare_upload_with_cancel(
-            &self.device, triangles, self.budget.as_ref(), cancelled,
+            &self.device,
+            triangles,
+            self.budget.as_ref(),
+            cancelled,
         )?;
         prepared.owner = Some(self.owner.clone());
         Ok(prepared)
@@ -82,7 +85,10 @@ impl ModelRenderer {
     }
 
     pub fn new(device: &wgpu::Device, target: wgpu::TextureFormat) -> Self {
-        assert!(target.is_srgb() || target == wgpu::TextureFormat::Rgba16Float, "model target must be sRGB or linear RGBA16Float");
+        assert!(
+            target.is_srgb() || target == wgpu::TextureFormat::Rgba16Float,
+            "model target must be sRGB or linear RGBA16Float"
+        );
         let shader = device.create_shader_module(wgpu::ShaderModuleDescriptor {
             label: Some("Rrrah model shader"),
             source: wgpu::ShaderSource::Wgsl(include_str!("../shaders/model_view.wgsl").into()),
@@ -204,7 +210,9 @@ impl ModelRenderer {
         triangles: impl ExactSizeIterator<Item = [[T; 3]; 3]> + Clone,
         cancelled: impl FnMut() -> bool,
     ) -> Result<(), ModelUploadError> {
-        if *device != self.device { return Err(ModelUploadError::RendererMismatch); }
+        if *device != self.device {
+            return Err(ModelUploadError::RendererMismatch);
+        }
         let prepared = self.upload_preparer().prepare_with_cancel(triangles, cancelled)?;
         self.install_prepared_upload(prepared)?;
         Ok(())
@@ -217,7 +225,9 @@ impl ModelRenderer {
         budget: Option<&rrrah_core::MemoryBudget>,
         mut cancelled: impl FnMut() -> bool,
     ) -> Result<PreparedModelUpload, ModelUploadError> {
-        if cancelled() { return Err(ModelUploadError::Cancelled); }
+        if cancelled() {
+            return Err(ModelUploadError::Cancelled);
+        }
         let count = triangles
             .len()
             .checked_mul(3)
@@ -233,7 +243,9 @@ impl ModelRenderer {
         let mut visited = 0;
         let mut bounds = [[f64::INFINITY; 3], [f64::NEG_INFINITY; 3]];
         for (index, triangle) in triangles.clone().enumerate() {
-            if index % 1024 == 0 && cancelled() { return Err(ModelUploadError::Cancelled); }
+            if index % 1024 == 0 && cancelled() {
+                return Err(ModelUploadError::Cancelled);
+            }
             for source_vertex in triangle {
                 let vertex = source_vertex.map(Into::into);
                 if visited == count {
@@ -253,7 +265,13 @@ impl ModelRenderer {
             return Err(ModelUploadError::GeometryLimit);
         }
         if count == 0 {
-            return Ok(PreparedModelUpload { owner: None, vertices: None, reservation: None, vertex_count: 0, budget: budget.cloned() });
+            return Ok(PreparedModelUpload {
+                owner: None,
+                vertices: None,
+                reservation: None,
+                vertex_count: 0,
+                budget: budget.cloned(),
+            });
         }
         // Rebase in scaled local coordinates. This avoids both overflowing
         // opposite-sign f64 bounds and underflowing half-extents near zero.
@@ -272,10 +290,10 @@ impl ModelRenderer {
         let center = extents.map(|v| v / scale * 0.5);
         let radius = center.into_iter().fold(0_f64, f64::hypot);
         let divisor = if radius > 0. { radius } else { 1. };
-        let reservation = budget
-            .map(|budget| budget.try_reserve(bytes))
-            .transpose()?;
-        if cancelled() { return Err(ModelUploadError::Cancelled); }
+        let reservation = budget.map(|budget| budget.try_reserve(bytes)).transpose()?;
+        if cancelled() {
+            return Err(ModelUploadError::Cancelled);
+        }
         let buffer = device.create_buffer(&wgpu::BufferDescriptor {
             label: Some("Rrrah model vertices"),
             size: bytes,
@@ -288,7 +306,9 @@ impl ModelRenderer {
                 .map_err(|_| ModelUploadError::GeometryLimit)?;
             let mut offset = 0;
             for (index, triangle) in triangles.enumerate() {
-                if index % 1024 == 0 && cancelled() { return Err(ModelUploadError::Cancelled); }
+                if index % 1024 == 0 && cancelled() {
+                    return Err(ModelUploadError::Cancelled);
+                }
                 for source_vertex in triangle {
                     let vertex = source_vertex.map(Into::into);
                     if !vertex.iter().all(|v| v.is_finite()) {
@@ -314,7 +334,9 @@ impl ModelRenderer {
             }
         }
         buffer.unmap();
-        if cancelled() { return Err(ModelUploadError::Cancelled); }
+        if cancelled() {
+            return Err(ModelUploadError::Cancelled);
+        }
         Ok(PreparedModelUpload {
             owner: None,
             vertices: Some(buffer),
@@ -334,12 +356,21 @@ impl ModelRenderer {
 
     /// Atomically replaces visible geometry after the caller accepts the result generation.
     pub fn install_prepared_upload(&mut self, prepared: PreparedModelUpload) -> Result<(), ModelUploadError> {
-        if prepared.vertices.is_some() && self.memory_budget.as_ref().is_some_and(|expected| {
-            !prepared.budget.as_ref().is_some_and(|actual| actual.is_descendant_of(expected))
-        }) {
+        if prepared.vertices.is_some()
+            && self.memory_budget.as_ref().is_some_and(|expected| {
+                !prepared
+                    .budget
+                    .as_ref()
+                    .is_some_and(|actual| actual.is_descendant_of(expected))
+            })
+        {
             return Err(ModelUploadError::BudgetMismatch);
         }
-        if !prepared.owner.as_ref().is_some_and(|owner| std::sync::Arc::ptr_eq(owner, &self.upload_owner)) {
+        if !prepared
+            .owner
+            .as_ref()
+            .is_some_and(|owner| std::sync::Arc::ptr_eq(owner, &self.upload_owner))
+        {
             return Err(ModelUploadError::RendererMismatch);
         }
         self.vertices = prepared.vertices;

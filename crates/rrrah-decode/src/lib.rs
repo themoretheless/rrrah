@@ -12,8 +12,8 @@ pub use optio_s4::{
 mod bay;
 mod jpeg_cmyk;
 pub use bay::{
-    BayReadError, BaySensorError, BaySensorLayout, read_bay_sensor_with_budget,
-    read_bay_image_sensor_with_budget, unpack_bay_sensor,
+    BayReadError, BaySensorError, BaySensorLayout, read_bay_image_sensor_with_budget,
+    read_bay_sensor_with_budget, unpack_bay_sensor,
 };
 
 mod ciff;
@@ -67,8 +67,8 @@ pub use stl::{StlDecodeError, StlFacet, StlMesh, decode_stl};
 mod eip;
 mod x3f;
 pub use eip::{
-    EipEntry, EipError, EipManifest, EipRaw, EipSensor, decode_eip_file_sensor, decode_eip_sensor, eip_file_sensor_recipe,
-    inspect_eip, read_eip_raw, read_eip_raw_with_budget,
+    EipEntry, EipError, EipManifest, EipRaw, EipSensor, decode_eip_file_sensor, decode_eip_sensor,
+    eip_file_sensor_recipe, inspect_eip, read_eip_raw, read_eip_raw_with_budget,
 };
 pub use x3f::{
     X3fCamf, X3fCamfEntry, X3fCamfMatrix, X3fColorTransform, X3fEntry, X3fError, X3fImageInfo, X3fInventory,
@@ -106,8 +106,8 @@ pub use apng::{ApngImage, decode_apng};
 mod avif_color;
 mod bounded_io;
 mod camtiff;
-pub use camtiff::{decode_mef_zd_sensor, decode_mef_zd_sensor_file};
 pub use camtiff::erf::{EpsonMakerMetadata, read_erf_maker_metadata};
+pub use camtiff::{decode_mef_zd_sensor, decode_mef_zd_sensor_file};
 mod mrw;
 pub use mrw::{MrwLayout, NativeMrwDecoder};
 mod cineon;
@@ -121,8 +121,8 @@ pub mod dng;
 mod dng_backend;
 mod dpx;
 mod exr_color;
-mod hdr_color;
 mod fits;
+mod hdr_color;
 mod heif;
 mod iff;
 mod image_router;
@@ -648,10 +648,15 @@ mod eps_program;
 pub use eps_program::{EpsCompileError, EpsCompileLimits, EpsInstruction, EpsProgram, compile_eps_program};
 
 mod eps_vm;
-pub use eps_vm::{EpsEvaluation, EpsOperator, EpsValue, EpsVmError, EpsVmLimit, EpsVmLimits, evaluate_eps_program};
+pub use eps_vm::{
+    EpsEvaluation, EpsOperator, EpsValue, EpsVmError, EpsVmLimit, EpsVmLimits, evaluate_eps_program,
+};
 
 mod eps_graphics;
-pub use eps_graphics::{EpsDeviceColor, EpsGraphics, EpsGraphicsError, EpsGraphicsLimit, EpsGraphicsLimits, EpsMatrix, EpsPaint, EpsPaintKind, EpsPathSegment, EpsPoint, EpsStrokeStyle, EpsVectorScene};
+pub use eps_graphics::{
+    EpsDeviceColor, EpsGraphics, EpsGraphicsError, EpsGraphicsLimit, EpsGraphicsLimits, EpsMatrix, EpsPaint,
+    EpsPaintKind, EpsPathSegment, EpsPoint, EpsStrokeStyle, EpsVectorScene,
+};
 
 pub use eps_vm::{EpsVectorExecution, evaluate_eps_vectors};
 
@@ -662,19 +667,19 @@ mod eps_fill;
 pub use eps_fill::{EpsFillError, EpsFillLimits, fill_eps_path};
 
 mod eps_raster;
-pub use eps_raster::{EpsRasterColorPolicy, EpsRasterError, EpsRasterLimits, rasterize_eps_fills};
 pub use eps_raster::rasterize_eps_scene;
+pub use eps_raster::{EpsRasterColorPolicy, EpsRasterError, EpsRasterLimits, rasterize_eps_fills};
 
 mod eps_bounds;
 pub use eps_bounds::{EpsBounds, EpsBoundsError, inspect_eps_bounds};
 
 mod eps_stroke;
-pub use eps_stroke::{EpsStrokeError, outline_eps_segment, outline_eps_join, outline_eps_polyline};
+pub use eps_stroke::{EpsStrokeError, outline_eps_join, outline_eps_polyline, outline_eps_segment};
 
 mod eps_stroke_prepare;
 pub use eps_stroke_prepare::{EpsPreparedStroke, EpsStrokePrepareError, prepare_eps_stroke};
 pub use eps_stroke_prepare::{EpsStrokeAssemblyLimits, outline_eps_prepared_stroke};
 
 mod eps_document;
-pub use eps_document::{EpsDocumentError, EpsDocumentLimits, decode_eps_document};
 pub use eps_document::decode_eps_file_document;
+pub use eps_document::{EpsDocumentError, EpsDocumentLimits, decode_eps_document};

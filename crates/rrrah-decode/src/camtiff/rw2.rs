@@ -697,7 +697,10 @@ fn white_level(ifd0: &CameraDirectory<'_>, bits: u8) -> Result<WhiteLevel, Decod
             let value = u16::try_from(value)
                 .map_err(|_| camera_error(FORMAT, "Panasonic linearity limit exceeds u16"))?;
             if value == 0 || u32::from(value) > (1_u32 << bits) - 1 {
-                return Err(camera_error(FORMAT, "Panasonic linearity limit is outside the sensor bit depth"));
+                return Err(camera_error(
+                    FORMAT,
+                    "Panasonic linearity limit is outside the sensor bit depth",
+                ));
             }
             Ok(f32::from(value))
         })

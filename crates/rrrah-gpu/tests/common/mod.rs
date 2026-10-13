@@ -207,7 +207,12 @@ impl GpuReadback {
         self.render_replacing_raw(&mut renderer, mosaic, size)
     }
 
-    pub fn render_replacing_raw(&self, renderer: &mut RawRenderer, mosaic: &DecodedMosaic, size: [u32; 2]) -> RgbaFrame {
+    pub fn render_replacing_raw(
+        &self,
+        renderer: &mut RawRenderer,
+        mosaic: &DecodedMosaic,
+        size: [u32; 2],
+    ) -> RgbaFrame {
         let view = Self::raw_cover_view(mosaic, size);
         renderer.upload_mosaic(&self.device, &self.queue, mosaic).unwrap();
         renderer.update_view(&self.queue, view);
@@ -228,11 +233,18 @@ impl GpuReadback {
 
     pub fn render_raw_half(&self, mosaic: &DecodedMosaic, size: [u32; 2]) -> Vec<u16> {
         let mut renderer = RawRenderer::new(&self.device, wgpu::TextureFormat::Rgba16Float);
-        renderer.set_output_mode(&self.queue, rrrah_gpu::RawOutputMode::SceneLinear).unwrap();
+        renderer
+            .set_output_mode(&self.queue, rrrah_gpu::RawOutputMode::SceneLinear)
+            .unwrap();
         self.render_replacing_raw_half(&mut renderer, mosaic, size)
     }
 
-    pub fn render_replacing_raw_half(&self, renderer: &mut RawRenderer, mosaic: &DecodedMosaic, size: [u32; 2]) -> Vec<u16> {
+    pub fn render_replacing_raw_half(
+        &self,
+        renderer: &mut RawRenderer,
+        mosaic: &DecodedMosaic,
+        size: [u32; 2],
+    ) -> Vec<u16> {
         renderer.upload_mosaic(&self.device, &self.queue, mosaic).unwrap();
         renderer.update_view(&self.queue, Self::raw_cover_view(mosaic, size));
         self.read_half_frame(size, |encoder, target| renderer.encode(encoder, target))
@@ -472,7 +484,10 @@ impl GpuReadback {
                     self.read_half_frame(size, |encoder, target| renderer.encode(encoder, target))
                 } else {
                     self.read_frame(size, |encoder, target| renderer.encode(encoder, target))
-                        .pixels.into_iter().map(u16::from).collect()
+                        .pixels
+                        .into_iter()
+                        .map(u16::from)
+                        .collect()
                 }
             };
             let first_bytes = u64::from(first.width()) * u64::from(first.height()) * 16;
@@ -485,7 +500,8 @@ impl GpuReadback {
                 rrrah_gpu::RasterRenderer::new_linear_hdr_with_budget(&self.device, gpu.clone())
             } else {
                 rrrah_gpu::RasterRenderer::new_with_budget(&self.device, format, gpu.clone())
-            }.with_upload_queue_budget(uploads.clone());
+            }
+            .with_upload_queue_budget(uploads.clone());
             renderer.upload(&self.device, &self.queue, first).unwrap();
             renderer.update_view(&self.queue, view);
             let before = read(&renderer);
@@ -511,7 +527,9 @@ impl GpuReadback {
                 drop(pressure);
                 assert_eq!((gpu.used(), uploads.used()), (first_bytes, 0));
             }
-            eprintln!("raster upload pressure: texture-and-queue-refused; previous-frame-exact; temporary-credit-zero");
+            eprintln!(
+                "raster upload pressure: texture-and-queue-refused; previous-frame-exact; temporary-credit-zero"
+            );
             let blocks = (replacement.width() as usize * replacement.height() as usize).div_ceil(4096);
             let total = blocks + 3; // Initial check, validation blocks, before/after admission.
             let checkpoints: Vec<_> = if total <= 64 {
@@ -547,12 +565,17 @@ impl GpuReadback {
                 [0, 0, 255, 255]
             };
             assert_eq!(&after[center..center + 4], &expected_center);
-            eprintln!("raster replacement values: format={format:?}; initial_center={:?}; retry_center={:?}",
-                &before[center..center + 4], &after[center..center + 4]);
+            eprintln!(
+                "raster replacement values: format={format:?}; initial_center={:?}; retry_center={:?}",
+                &before[center..center + 4],
+                &after[center..center + 4]
+            );
             assert_eq!((gpu.used(), uploads.used()), (replacement_bytes, 0));
             drop(renderer);
             assert_eq!((gpu.used(), uploads.used()), (0, 0));
-            eprintln!("raster replacement recovery: format={format:?}; pressure/cancellation previous frame exact; retry blue exact; final GPU/queue credit=0");
+            eprintln!(
+                "raster replacement recovery: format={format:?}; pressure/cancellation previous frame exact; retry blue exact; final GPU/queue credit=0"
+            );
         }
     }
 

@@ -32,7 +32,15 @@ mod cache_telemetry;
 #[path = "../src/gallery.rs"]
 mod gallery;
 
-use gallery::{MAX_ITEMS, is_supported, scan_folder};
+#[allow(dead_code, unused_imports)]
+#[path = "../src/filmstrip_ui.rs"]
+mod filmstrip_ui;
+
+#[cfg(test)]
+#[path = "../../rrrah-gpu/tests/common/mod.rs"]
+mod navigation_metal_readback;
+
+use gallery::{is_supported, scan_folder};
 use std::{
     fs,
     path::{Path, PathBuf},
@@ -112,7 +120,6 @@ fn scan_folder_instrumented(folder: &Path) -> (Vec<PathBuf>, u64, u64) {
             .map(|n| n.to_string_lossy().to_ascii_lowercase())
             .unwrap_or_default()
     });
-    paths.truncate(MAX_ITEMS);
     let sort_ns = u64::try_from(sort_started.elapsed().as_nanos()).unwrap_or(u64::MAX);
 
     (paths, enumerate_ns, sort_ns)

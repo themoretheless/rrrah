@@ -169,12 +169,9 @@ fn raster_shared_root_holds_upload_credit_through_clear_and_rejects_overlap() {
     let errors = device.push_error_scope(wgpu::ErrorFilter::Validation);
     // One RGBA32F pixel plus one aligned transfer row, sharing a single root.
     let root = rrrah_core::MemoryBudget::new(16 + 256);
-    let mut renderer = rrrah_gpu::RasterRenderer::new_with_budget(
-        &device,
-        common::READBACK_FORMAT,
-        root.child(32),
-    )
-    .with_upload_queue_budget(root.child(256));
+    let mut renderer =
+        rrrah_gpu::RasterRenderer::new_with_budget(&device, common::READBACK_FORMAT, root.child(32))
+            .with_upload_queue_budget(root.child(256));
     let image = rrrah_core::DecodedRaster::new(
         1,
         1,

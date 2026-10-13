@@ -36,9 +36,7 @@ fn retrieval_equals_exhaustive_including_boundaries_and_collisions() {
                 radii.extend([boundary.next_down().max(0.), boundary, boundary.next_up()]);
             }
             for radius in radii {
-                let actual = index
-                    .search(&query, recipe, radius, 90, 90, || false)
-                    .unwrap();
+                let actual = index.search(&query, recipe, radius, 90, 90, || false).unwrap();
                 let mut expected = entries
                     .iter()
                     .filter_map(|(id, d)| {
@@ -84,14 +82,9 @@ fn admission_cancel_recipe_and_owned_reservation() {
         Err(LocalError::Budget)
     ));
     assert!(matches!(
-        index.search(
-            &entries[0].1,
-            GradientCellRecipe::Interpolated,
-            4.,
-            2,
-            2,
-            || { false }
-        ),
+        index.search(&entries[0].1, GradientCellRecipe::Interpolated, 4., 2, 2, || {
+            false
+        }),
         Err(LocalError::Invalid)
     ));
     let calls = std::cell::Cell::new(0);
@@ -193,18 +186,9 @@ fn file_proposals_equal_exhaustive_without_ambiguity_loss() {
     let budget = MemoryBudget::new(10000);
     for recipe in [GradientCellRecipe::Fixed, GradientCellRecipe::Interpolated] {
         for radius in [0., 0.1, 0.5, 4.] {
-            let actual = gradient_file_pairs(
-                &entries,
-                &owners,
-                recipe,
-                radius,
-                576,
-                576,
-                28,
-                &budget,
-                || false,
-            )
-            .unwrap();
+            let actual =
+                gradient_file_pairs(&entries, &owners, recipe, radius, 576, 576, 28, &budget, || false)
+                    .unwrap();
             let mut expected = std::collections::BTreeSet::new();
             for (i, a) in entries.iter().enumerate() {
                 for (j, b) in entries.iter().enumerate() {
@@ -294,9 +278,7 @@ fn file_proposal_cancellation_never_returns_partial_pairs() {
         );
     }
     assert!(matches!(
-        gradient_file_pairs(&entries, &owners[..2], recipe, 4., 9, 9, 3, &budget, || {
-            false
-        }),
+        gradient_file_pairs(&entries, &owners[..2], recipe, 4., 9, 9, 3, &budget, || { false }),
         Err(LocalError::Invalid)
     ));
     calls.set(0);
@@ -327,16 +309,14 @@ fn proposal_scratch_and_retained_report_admit_exact_peak() {
     let recipe = GradientCellRecipe::Fixed;
     let budget = MemoryBudget::new(10000);
     let report =
-        gradient_file_pair_report(&entries, &owners, recipe, 4., 9, 9, 3, &budget, || false)
-            .unwrap();
+        gradient_file_pair_report(&entries, &owners, recipe, 4., 9, 9, 3, &budget, || false).unwrap();
     assert_eq!(report.pairs, vec![(7, 8), (7, 9), (8, 9)]);
     assert!(budget.used() >= (report.pairs.capacity() * std::mem::size_of::<(u64, u64)>()) as u64);
     let peak = budget.peak();
     drop(report);
     assert_eq!(budget.used(), 0);
     let exact = MemoryBudget::new(peak);
-    let retry = gradient_file_pair_report(&entries, &owners, recipe, 4., 9, 9, 3, &exact, || false)
-        .unwrap();
+    let retry = gradient_file_pair_report(&entries, &owners, recipe, 4., 9, 9, 3, &exact, || false).unwrap();
     assert_eq!(retry.pairs.len(), 3);
     drop(retry);
     assert_eq!(exact.used(), 0);
@@ -359,20 +339,10 @@ fn repeated_descriptor_hits_retain_one_pair_with_bounded_memory() {
     for recipe in [GradientCellRecipe::Fixed, GradientCellRecipe::Interpolated] {
         let budget = MemoryBudget::new(2048);
         let calls = Cell::new(0);
-        let report = gradient_file_pair_report(
-            &entries,
-            &owners,
-            recipe,
-            0.,
-            1024,
-            1024,
-            1,
-            &budget,
-            || {
-                calls.set(calls.get() + 1);
-                false
-            },
-        )
+        let report = gradient_file_pair_report(&entries, &owners, recipe, 0., 1024, 1024, 1, &budget, || {
+            calls.set(calls.get() + 1);
+            false
+        })
         .unwrap();
         assert_eq!(report.pairs, [(0, u64::MAX)]);
         assert_eq!(report.descriptor_hits, 1024);
@@ -382,17 +352,8 @@ fn repeated_descriptor_hits_retain_one_pair_with_bounded_memory() {
         assert_eq!(budget.used(), 0);
         for limit in [peak, peak - 1] {
             let budget = MemoryBudget::new(limit);
-            let result = gradient_file_pair_report(
-                &entries,
-                &owners,
-                recipe,
-                0.,
-                1024,
-                1024,
-                1,
-                &budget,
-                || false,
-            );
+            let result =
+                gradient_file_pair_report(&entries, &owners, recipe, 0., 1024, 1024, 1, &budget, || false);
             assert_eq!(result.is_ok(), limit == peak);
             drop(result);
             assert_eq!(budget.used(), 0);
@@ -401,37 +362,17 @@ fn repeated_descriptor_hits_retain_one_pair_with_bounded_memory() {
             let seen = Cell::new(0);
             let budget = MemoryBudget::new(2048);
             assert!(matches!(
-                gradient_file_pair_report(
-                    &entries,
-                    &owners,
-                    recipe,
-                    0.,
-                    1024,
-                    1024,
-                    1,
-                    &budget,
-                    || {
-                        seen.set(seen.get() + 1);
-                        seen.get() == stop
-                    }
-                ),
+                gradient_file_pair_report(&entries, &owners, recipe, 0., 1024, 1024, 1, &budget, || {
+                    seen.set(seen.get() + 1);
+                    seen.get() == stop
+                }),
                 Err(LocalError::Cancelled)
             ));
             assert_eq!(budget.used(), 0);
         }
         let budget = MemoryBudget::new(2048);
         assert!(matches!(
-            gradient_file_pair_report(
-                &entries,
-                &owners,
-                recipe,
-                0.,
-                1024,
-                1024,
-                0,
-                &budget,
-                || false
-            ),
+            gradient_file_pair_report(&entries, &owners, recipe, 0., 1024, 1024, 0, &budget, || false),
             Err(LocalError::Budget)
         ));
         assert_eq!(budget.used(), 0);
@@ -444,9 +385,7 @@ fn actual_work_admits_sparse_pairs_without_quadratic_prepayment() {
         gradient_file_pair_report, gradient_file_pair_report_with_actual_work,
     };
     use std::cell::Cell;
-    let mut entries = (0..32)
-        .map(|id| (id, descriptor(id + 173)))
-        .collect::<Vec<_>>();
+    let mut entries = (0..32).map(|id| (id, descriptor(id + 173))).collect::<Vec<_>>();
     entries.push((32, entries[0].1));
     entries.push((33, entries[3].1));
     let owners = (0..34).collect::<Vec<_>>();
@@ -674,17 +613,10 @@ fn actual_work_minimum_self_work_and_late_refusal() {
     )
     .unwrap();
     assert!(report.pairs.is_empty());
-    assert_eq!(
-        (report.descriptor_comparisons, report.descriptor_hits),
-        (2, 2)
-    );
+    assert_eq!((report.descriptor_comparisons, report.descriptor_hits), (2, 2));
     drop(report);
     assert_eq!(budget.used(), 0);
-    let entries = [
-        (1, descriptor(173)),
-        (2, descriptor(173)),
-        (3, descriptor(211)),
-    ];
+    let entries = [(1, descriptor(173)), (2, descriptor(173)), (3, descriptor(211))];
     let budget = MemoryBudget::new(4096);
     assert!(matches!(
         query(
@@ -719,9 +651,9 @@ fn actual_work_pair_union_matches_independent_exhaustive_oracle() {
         GradientDescriptor(result)
     }
     fn distance(a: &GradientDescriptor, b: &GradientDescriptor) -> f64 {
-        a.0.iter().zip(b.0.iter()).fold(0., |sum, (a,b)| {
-            let delta = a-b;
-            sum + delta*delta
+        a.0.iter().zip(b.0.iter()).fold(0., |sum, (a, b)| {
+            let delta = a - b;
+            sum + delta * delta
         })
     }
     for n in [0, 1, 2, 7, 32] {
@@ -757,17 +689,48 @@ fn actual_work_pair_union_matches_independent_exhaustive_oracle() {
                         }
                     }
                     let cap = n * n * if reflected { 2 } else { 1 };
-                    let budget = MemoryBudget::new(1024*1024);
-                    let report = query(&entries, &owners, recipe, radius, cap as u64, cap, n*n, &budget, reflected.then_some(n as u64 *128), || false).unwrap();
-                    assert_eq!(report.pairs, pairs.into_iter().collect::<Vec<_>>(), "n={n} reflected={reflected} radius={radius}");
+                    let budget = MemoryBudget::new(1024 * 1024);
+                    let report = query(
+                        &entries,
+                        &owners,
+                        recipe,
+                        radius,
+                        cap as u64,
+                        cap,
+                        n * n,
+                        &budget,
+                        reflected.then_some(n as u64 * 128),
+                        || false,
+                    )
+                    .unwrap();
+                    assert_eq!(
+                        report.pairs,
+                        pairs.into_iter().collect::<Vec<_>>(),
+                        "n={n} reflected={reflected} radius={radius}"
+                    );
                     assert_eq!(report.descriptor_hits, hits);
-                    assert!((hits as u64) <= report.descriptor_comparisons && report.descriptor_comparisons <= cap as u64);
+                    assert!(
+                        (hits as u64) <= report.descriptor_comparisons
+                            && report.descriptor_comparisons <= cap as u64
+                    );
                     let exact_comparisons = report.descriptor_comparisons;
                     let expected_pairs = report.pairs.clone();
                     drop(report);
                     assert_eq!(budget.used(), 0);
                     // Re-admit at the precise measured distance/hit/pair caps.
-                    let report = query(&entries, &owners, recipe, radius, exact_comparisons, hits, expected_pairs.len(), &budget, reflected.then_some(n as u64 *128), || false).unwrap();
+                    let report = query(
+                        &entries,
+                        &owners,
+                        recipe,
+                        radius,
+                        exact_comparisons,
+                        hits,
+                        expected_pairs.len(),
+                        &budget,
+                        reflected.then_some(n as u64 * 128),
+                        || false,
+                    )
+                    .unwrap();
                     assert_eq!(report.pairs, expected_pairs);
                     assert_eq!(report.descriptor_hits, hits);
                     drop(report);

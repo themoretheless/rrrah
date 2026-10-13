@@ -38,28 +38,38 @@ fn short_flag_tensor_pages_swap_preserves_pixels_and_metal_frame() {
 #[ignore = "requires actual GPU adapter"]
 fn independently_referenced_soft_masks_preserve_ram_swap_and_metal() {
     let corpus = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/pdf");
-    qualify_pdf_swap_pages_impl(&corpus, &[
-        ("soft-mask-device-rgb-bands.pdf", 0, (24, 8), 1),
-        ("soft-mask-shared-group.pdf", 0, (24, 8), 1),
-        // The integer-edge alpha rectangle uses the independent area oracle
-        // below; Poppler's edge filtering adds coverage outside its geometry.
-    ], Some("rgba"));
+    qualify_pdf_swap_pages_impl(
+        &corpus,
+        &[
+            ("soft-mask-device-rgb-bands.pdf", 0, (24, 8), 1),
+            ("soft-mask-shared-group.pdf", 0, (24, 8), 1),
+            // The integer-edge alpha rectangle uses the independent area oracle
+            // below; Poppler's edge filtering adds coverage outside its geometry.
+        ],
+        Some("rgba"),
+    );
 }
 
 #[test]
 #[ignore = "requires actual GPU adapter"]
 fn exact_area_alpha_mask_preserves_ram_swap_and_metal() {
     let corpus = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/pdf");
-    qualify_pdf_swap_pages_impl(&corpus, &[
-        ("soft-mask-alpha-without-group-cs.pdf", 0, (16, 8), 1),
-    ], Some("analytic.rgba"));
+    qualify_pdf_swap_pages_impl(
+        &corpus,
+        &[("soft-mask-alpha-without-group-cs.pdf", 0, (16, 8), 1)],
+        Some("analytic.rgba"),
+    );
 }
 
 fn qualify_pdf_swap_pages(corpus: &std::path::Path, cases: &[(&str, usize, (u32, u32), usize)]) {
     qualify_pdf_swap_pages_impl(corpus, cases, None);
 }
 
-fn qualify_pdf_swap_pages_impl(corpus: &std::path::Path, cases: &[(&str, usize, (u32, u32), usize)], independent: Option<&str>) {
+fn qualify_pdf_swap_pages_impl(
+    corpus: &std::path::Path,
+    cases: &[(&str, usize, (u32, u32), usize)],
+    independent: Option<&str>,
+) {
     let gpu = common::qualification_gpu().expect("actual GPU required");
     eprintln!("PDF adapter: {}", gpu.adapter_name());
     for &(name, index, extent, count) in cases {
@@ -69,7 +79,10 @@ fn qualify_pdf_swap_pages_impl(corpus: &std::path::Path, cases: &[(&str, usize, 
         request.image_index = index;
         request.memory_budget = Some(budget.clone());
         let native = rrrah_decode::decode_raster(&request).unwrap();
-        eprintln!("PDF native decode: {name} page={index} managed_peak={}", budget.peak());
+        eprintln!(
+            "PDF native decode: {name} page={index} managed_peak={}",
+            budget.peak()
+        );
         assert_eq!((native.width(), native.height()), extent);
         assert_eq!((native.image_index(), native.image_count()), (index, count));
         let prepared = rrrah_decode::prepare_raster_for_display_with_budget(&native, Some(&budget)).unwrap();
@@ -82,23 +95,37 @@ fn qualify_pdf_swap_pages_impl(corpus: &std::path::Path, cases: &[(&str, usize, 
         let expected = gpu.render_raster(&prepared, parameters, [96, 64]).pixels;
         if let Some(extension) = independent {
             let oracle = std::fs::read(corpus.join(name).with_extension(extension)).unwrap();
-            let rrrah_core::RasterPixels::Rgba8(actual) = native.pixels() else { panic!("RGBA8 expected") };
-            let first = actual.iter().zip(&oracle).position(|(a,b)| a != b);
-            assert!(first.is_none(), "independent source pixels: {name}; first differing byte {first:?}");
-            let golden = rrrah_core::DecodedRaster::new(extent.0, extent.1,
+            let rrrah_core::RasterPixels::Rgba8(actual) = native.pixels() else {
+                panic!("RGBA8 expected")
+            };
+            let first = actual.iter().zip(&oracle).position(|(a, b)| a != b);
+            assert!(
+                first.is_none(),
+                "independent source pixels: {name}; first differing byte {first:?}"
+            );
+            let golden = rrrah_core::DecodedRaster::new(
+                extent.0,
+                extent.1,
                 rrrah_core::RasterPixels::Rgba8(std::sync::Arc::new(oracle).into()),
-                rrrah_core::RasterColorSpace::Srgb).unwrap();
+                rrrah_core::RasterColorSpace::Srgb,
+            )
+            .unwrap();
             let golden = rrrah_decode::prepare_raster_for_display(&golden).unwrap();
-            assert_eq!(expected, gpu.render_raster(&golden, parameters, [96,64]).pixels,
-                "independent GPU frame: {name}");
+            assert_eq!(
+                expected,
+                gpu.render_raster(&golden, parameters, [96, 64]).pixels,
+                "independent GPU frame: {name}"
+            );
             let left = (32 * 96 + 16) * 4;
             let right = (32 * 96 + 80) * 4;
-            assert_ne!(&expected[left..left + 3], &expected[right..right + 3],
-                "mask bands must visibly reach the GPU frame: {name}");
+            assert_ne!(
+                &expected[left..left + 3],
+                &expected[right..right + 3],
+                "mask bands must visibly reach the GPU frame: {name}"
+            );
         }
-        let mut ram = rrrah_cache::RasterRamCache::new(rrrah_cache::CacheLimits::bytes(
-            prepared.capacity_bytes(),
-        ));
+        let mut ram =
+            rrrah_cache::RasterRamCache::new(rrrah_cache::CacheLimits::bytes(prepared.capacity_bytes()));
         assert!(ram.insert(1u8, prepared.clone()));
         let lease = ram.get_lease(&1).unwrap();
         assert!(ram.set_limits(rrrah_cache::CacheLimits::bytes(0)).is_none());
@@ -149,7 +176,11 @@ fn qualify_pdf_swap_pages_impl(corpus: &std::path::Path, cases: &[(&str, usize, 
             assert_eq!(gpu.render_raster(&display, parameters, [96, 64]).pixels, expected);
         }
         assert_eq!(budget.used(), 0);
-        eprintln!("PDF RAM/swap/GPU case passed: {name} page={index} managed_peak={} managed_final={}", budget.peak(), budget.used());
+        eprintln!(
+            "PDF RAM/swap/GPU case passed: {name} page={index} managed_peak={} managed_final={}",
+            budget.peak(),
+            budget.used()
+        );
     }
 }
 

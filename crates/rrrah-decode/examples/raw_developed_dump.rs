@@ -24,8 +24,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         ..Default::default()
     };
     eprintln!("highlight_recovery={}", options.recover_highlights);
-    let raster =
-        rrrah_core::develop::develop_raw(&mosaic, &options, &lists, Some(&budget), &|| false)?;
+    let raster = rrrah_core::develop::develop_raw(&mosaic, &options, &lists, Some(&budget), &|| false)?;
     let rrrah_core::RasterPixels::Rgba32Float(pixels) = raster.pixels() else {
         return Err("expected linear float development".into());
     };

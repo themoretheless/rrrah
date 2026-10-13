@@ -228,11 +228,7 @@ impl SwapStore {
     fn reserve(&self, bytes: u64) -> Result<Reservation> {
         let mut usage = self.0.usage.lock().map_err(|_| SwapError::Poisoned)?;
         if bytes > self.0.limits.max_bytes - usage.bytes
-            || self
-                .0
-                .limits
-                .max_objects
-                .is_some_and(|max| usage.objects >= max)
+            || self.0.limits.max_objects.is_some_and(|max| usage.objects >= max)
         {
             return Err(SwapError::Quota);
         }
@@ -573,15 +569,12 @@ impl Read for ReadStream<'_> {
                     .scratch_budget
                     .filter(|budget| {
                         budget.available_bytes()
-                            >= self
-                                .remaining
-                                .saturating_add(PARALLEL_HASH_SCRATCH_BYTES as u64)
+                            >= self.remaining.saturating_add(PARALLEL_HASH_SCRATCH_BYTES as u64)
                     })
                     .and_then(HashScratch::try_new);
             }
             if let Some(scratch) = self.scratch.as_mut() {
-                let capacity =
-                    usize::try_from((*self.remaining).min(scratch.bytes.len() as u64)).unwrap();
+                let capacity = usize::try_from((*self.remaining).min(scratch.bytes.len() as u64)).unwrap();
                 self.start = 0;
                 self.end = 0;
                 for block in scratch.bytes[..capacity].chunks_mut(BLOCK) {
@@ -632,20 +625,27 @@ mod tests {
     fn mixed_small_and_bulk_restore_keeps_prefix_tail_and_hash_exact() {
         let source: Vec<u8> = (0..BLOCK * 4 + 97).map(|i| (i % 251) as u8).collect();
         let store = make_store(source.len() as u64, Some(1));
-        let handle = store.write_stream(source.len() as u64, || false,
-            |writer| writer.write_all(&source)).unwrap();
-        let restored = store.read_stream(&handle, || false, |reader| {
-            let mut prefix = [0u8; 17];
-            reader.read_exact(&mut prefix)?;
-            let mut bulk = vec![0u8; BLOCK * 3];
-            reader.read_exact(&mut bulk)?;
-            let mut tail = Vec::new();
-            reader.read_to_end(&mut tail)?;
-            let mut result = prefix.to_vec();
-            result.extend(bulk);
-            result.extend(tail);
-            Ok(result)
-        }).unwrap();
+        let handle = store
+            .write_stream(source.len() as u64, || false, |writer| writer.write_all(&source))
+            .unwrap();
+        let restored = store
+            .read_stream(
+                &handle,
+                || false,
+                |reader| {
+                    let mut prefix = [0u8; 17];
+                    reader.read_exact(&mut prefix)?;
+                    let mut bulk = vec![0u8; BLOCK * 3];
+                    reader.read_exact(&mut bulk)?;
+                    let mut tail = Vec::new();
+                    reader.read_to_end(&mut tail)?;
+                    let mut result = prefix.to_vec();
+                    result.extend(bulk);
+                    result.extend(tail);
+                    Ok(result)
+                },
+            )
+            .unwrap();
         assert_eq!(restored, source);
     }
 

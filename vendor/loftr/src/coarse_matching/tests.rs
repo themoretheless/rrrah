@@ -136,11 +136,17 @@ fn blocked_confidence_matches_dense_across_block_boundaries() -> Result<(), Loft
 
 fn assert_same_coarse_output(a: &CoarseMatchingOutput, b: &CoarseMatchingOutput) {
     for (x, y) in [
-        (&a.conf_matrix, &b.conf_matrix), (&a.b_ids, &b.b_ids),
-        (&a.i_ids, &b.i_ids), (&a.j_ids, &b.j_ids),
-        (&a.m_bids, &b.m_bids), (&a.mkpts0_c, &b.mkpts0_c),
-        (&a.mkpts1_c, &b.mkpts1_c), (&a.mconf, &b.mconf),
-    ] { assert!(x.equal(y)); }
+        (&a.conf_matrix, &b.conf_matrix),
+        (&a.b_ids, &b.b_ids),
+        (&a.i_ids, &b.i_ids),
+        (&a.j_ids, &b.j_ids),
+        (&a.m_bids, &b.m_bids),
+        (&a.mkpts0_c, &b.mkpts0_c),
+        (&a.mkpts1_c, &b.mkpts1_c),
+        (&a.mconf, &b.mconf),
+    ] {
+        assert!(x.equal(y));
+    }
 }
 
 #[test]
@@ -155,22 +161,30 @@ fn coarse_cancellation_at_every_checkpoint_discards_output_and_retries() -> Resu
     let right = Tensor::randn([2, 11, 256], (Kind::Float, Device::Cpu));
     let mask0 = Tensor::ones([2, 257], (Kind::Bool, Device::Cpu));
     let mask1 = Tensor::ones([2, 11], (Kind::Bool, Device::Cpu));
-    let data = CoarseMatchingData { hw0_i: (8,2056), hw1_i: (8,88),
-        hw0_c: (1,257), hw1_c: (1,11), scale0: None, scale1: None };
+    let data = CoarseMatchingData {
+        hw0_i: (8, 2056),
+        hw1_i: (8, 88),
+        hw0_c: (1, 257),
+        hw1_c: (1, 11),
+        scale0: None,
+        scale1: None,
+    };
     for masked in [false, true] {
         let m0 = masked.then_some(&mask0);
         let m1 = masked.then_some(&mask1);
         let reference = module.forward(&left, &right, &data, m0, m1)?;
         let calls = Cell::new(0);
         let output = module.forward_cancellable(&left, &right, &data, m0, m1, &|| {
-            calls.set(calls.get()+1); false
+            calls.set(calls.get() + 1);
+            false
         })?;
         assert_same_coarse_output(&reference, &output);
         assert!(calls.get() >= 12);
         for stop in 1..=calls.get() {
             let seen = Cell::new(0);
             let result = module.forward_cancellable(&left, &right, &data, m0, m1, &|| {
-                seen.set(seen.get()+1); seen.get()==stop
+                seen.set(seen.get() + 1);
+                seen.get() == stop
             });
             assert!(matches!(result, Err(LoftrError::Cancelled)));
             assert_eq!(seen.get(), stop, "no evaluations after cancellation");
@@ -182,20 +196,28 @@ fn coarse_cancellation_at_every_checkpoint_discards_output_and_retries() -> Resu
 }
 
 #[test]
-fn softmax_cancellation_covers_blocks_and_autograd_without_input_mutation() -> Result<(), LoftrError> {
+fn softmax_cancellation_covers_blocks_and_autograd_without_input_mutation() -> Result<(), LoftrError>
+{
     use std::cell::Cell;
     tch::set_num_threads(2);
     for grad in [false, true] {
-        let values = Tensor::randn([2,257,11], (Kind::Float, Device::Cpu)).set_requires_grad(grad);
+        let values =
+            Tensor::randn([2, 257, 11], (Kind::Float, Device::Cpu)).set_requires_grad(grad);
         let saved = &values + 0.0;
         let expected = values.softmax(1, Kind::Float) * values.softmax(2, Kind::Float);
         let calls = Cell::new(0);
-        let actual = dual_softmax_confidence_cancellable(&values, &|| {calls.set(calls.get()+1);false})?;
+        let actual = dual_softmax_confidence_cancellable(&values, &|| {
+            calls.set(calls.get() + 1);
+            false
+        })?;
         assert!(actual.equal(&expected));
-        assert!(calls.get() >= if grad {3} else {6});
+        assert!(calls.get() >= if grad { 3 } else { 6 });
         for stop in 1..=calls.get() {
             let seen = Cell::new(0);
-            let result = dual_softmax_confidence_cancellable(&values, &|| {seen.set(seen.get()+1);seen.get()==stop});
+            let result = dual_softmax_confidence_cancellable(&values, &|| {
+                seen.set(seen.get() + 1);
+                seen.get() == stop
+            });
             assert!(matches!(result, Err(LoftrError::Cancelled)));
             assert_eq!(seen.get(), stop);
             assert!(values.equal(&saved));
@@ -206,32 +228,76 @@ fn softmax_cancellation_covers_blocks_and_autograd_without_input_mutation() -> R
 }
 
 #[test]
-fn blocked_selection_matches_dense_order_ties_borders_and_thresholds() -> Result<(),LoftrError> {
+fn blocked_selection_matches_dense_order_ties_borders_and_thresholds() -> Result<(), LoftrError> {
     tch::manual_seed(418);
-    for (b,h,w,h1,w1) in [(1,1,1,1,1),(2,10,13,5,7),(2,20,13,5,7)] {
-        let data=CoarseMatchingData{hw0_i:(h,w),hw1_i:(h1,w1),hw0_c:(h,w),hw1_c:(h1,w1),scale0:None,scale1:None};
-        for confidence in [Tensor::rand([b,h*w,h1*w1],(Kind::Float,Device::Cpu)),Tensor::ones([b,h*w,h1*w1],(Kind::Float,Device::Cpu)),Tensor::zeros([b,h*w,h1*w1],(Kind::Float,Device::Cpu))] {
-            for border in [-1,0,1,8] {for threshold in [-0.1,0.,0.5,1.] {
-                let dense=confidence_threshold_mask(&confidence,&data,threshold,border)
-                    .logical_and(&confidence.eq_tensor(&confidence.max_dim(2,true).0))
-                    .logical_and(&confidence.eq_tensor(&confidence.max_dim(1,true).0)).nonzero();
-                let actual=coarse_match_indices_blocked(&confidence,&data,threshold,border,&||false)?;
-                assert!(actual.equal(&dense),"b{b}, rows{}, border{border}, threshold{threshold}",h*w);
-            }}
+    for (b, h, w, h1, w1) in [(1, 1, 1, 1, 1), (2, 10, 13, 5, 7), (2, 20, 13, 5, 7)] {
+        let data = CoarseMatchingData {
+            hw0_i: (h, w),
+            hw1_i: (h1, w1),
+            hw0_c: (h, w),
+            hw1_c: (h1, w1),
+            scale0: None,
+            scale1: None,
+        };
+        for confidence in [
+            Tensor::rand([b, h * w, h1 * w1], (Kind::Float, Device::Cpu)),
+            Tensor::ones([b, h * w, h1 * w1], (Kind::Float, Device::Cpu)),
+            Tensor::zeros([b, h * w, h1 * w1], (Kind::Float, Device::Cpu)),
+        ] {
+            for border in [-1, 0, 1, 8] {
+                for threshold in [-0.1, 0., 0.5, 1.] {
+                    let dense = confidence_threshold_mask(&confidence, &data, threshold, border)
+                        .logical_and(&confidence.eq_tensor(&confidence.max_dim(2, true).0))
+                        .logical_and(&confidence.eq_tensor(&confidence.max_dim(1, true).0))
+                        .nonzero();
+                    let actual = coarse_match_indices_blocked(
+                        &confidence,
+                        &data,
+                        threshold,
+                        border,
+                        &|| false,
+                    )?;
+                    assert!(
+                        actual.equal(&dense),
+                        "b{b}, rows{}, border{border}, threshold{threshold}",
+                        h * w
+                    );
+                }
+            }
         }
     }
     Ok(())
 }
 
 #[test]
-fn blocked_selection_cancels_between_batches_and_blocks_without_mutation() -> Result<(),LoftrError> {
+fn blocked_selection_cancels_between_batches_and_blocks_without_mutation() -> Result<(), LoftrError>
+{
     use std::cell::Cell;
-    let confidence=Tensor::ones([2,260,35],(Kind::Float,Device::Cpu));let original=confidence.copy();
-    let data=CoarseMatchingData{hw0_i:(20,13),hw1_i:(5,7),hw0_c:(20,13),hw1_c:(5,7),scale0:None,scale1:None};
-    let count=Cell::new(0);let expected=coarse_match_indices_blocked(&confidence,&data,0.,0,&||{count.set(count.get()+1);false})?;
+    let confidence = Tensor::ones([2, 260, 35], (Kind::Float, Device::Cpu));
+    let original = confidence.copy();
+    let data = CoarseMatchingData {
+        hw0_i: (20, 13),
+        hw1_i: (5, 7),
+        hw0_c: (20, 13),
+        hw1_c: (5, 7),
+        scale0: None,
+        scale1: None,
+    };
+    let count = Cell::new(0);
+    let expected = coarse_match_indices_blocked(&confidence, &data, 0., 0, &|| {
+        count.set(count.get() + 1);
+        false
+    })?;
     for stop in 1..=count.get() {
-        let calls=Cell::new(0);let result=coarse_match_indices_blocked(&confidence,&data,0.,0,&||{calls.set(calls.get()+1);calls.get()==stop});
-        assert!(matches!(result,Err(LoftrError::Cancelled)));assert_eq!(calls.get(),stop);assert!(confidence.equal(&original));
+        let calls = Cell::new(0);
+        let result = coarse_match_indices_blocked(&confidence, &data, 0., 0, &|| {
+            calls.set(calls.get() + 1);
+            calls.get() == stop
+        });
+        assert!(matches!(result, Err(LoftrError::Cancelled)));
+        assert_eq!(calls.get(), stop);
+        assert!(confidence.equal(&original));
     }
-    assert!(coarse_match_indices_blocked(&confidence,&data,0.,0,&||false)?.equal(&expected));Ok(())
+    assert!(coarse_match_indices_blocked(&confidence, &data, 0., 0, &|| false)?.equal(&expected));
+    Ok(())
 }

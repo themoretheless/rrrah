@@ -876,8 +876,8 @@ fn apply_warp_rectilinear(
             )?;
         }
     } else {
-        use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
         use std::sync::Mutex;
+        use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
 
         let is_cancelled = AtomicBool::new(false);
         let error: Mutex<Option<super::DevelopError>> = Mutex::new(None);
@@ -1026,7 +1026,8 @@ fn warp_row(
             )?;
             let (indices, weights) = rectilinear_footprint([w, h], point);
             row_dest[x] = sample_footprint_rgb(source, indices, weights);
-            if let (Some(source_mask), Some(destination)) = (source_clipped, row_dest_clipped.as_deref_mut()) {
+            if let (Some(source_mask), Some(destination)) = (source_clipped, row_dest_clipped.as_deref_mut())
+            {
                 let mut mask = [false; 3];
                 for (index, &weight) in indices.into_iter().zip(weights) {
                     if weight != 0.0 {
@@ -1052,7 +1053,9 @@ fn warp_row(
                 )?;
                 let (indices, weights) = rectilinear_footprint([w, h], point);
                 row_dest[x][c] = sample_footprint(source, indices, weights, c);
-                if let (Some(source_mask), Some(destination)) = (source_clipped, row_dest_clipped.as_deref_mut()) {
+                if let (Some(source_mask), Some(destination)) =
+                    (source_clipped, row_dest_clipped.as_deref_mut())
+                {
                     destination[x][c] = indices
                         .iter()
                         .zip(weights)
@@ -1105,8 +1108,10 @@ mod gain_map_sdk_tests {
         assert_eq!(oracle.len(), sensor.len());
         let maps = super::parse_list(&std::fs::read(root.join("opcodes.bin")).unwrap()).unwrap();
         assert_eq!(maps.len(), 4);
-        let mut samples: Vec<f32> = sensor.chunks_exact(2)
-            .map(|b| f32::from(u16::from_le_bytes([b[0], b[1]])) / 16383.0).collect();
+        let mut samples: Vec<f32> = sensor
+            .chunks_exact(2)
+            .map(|b| f32::from(u16::from_le_bytes([b[0], b[1]])) / 16383.0)
+            .collect();
         super::apply_list(&maps, &mut samples, 5568, 4176, 1, None, 1.0).unwrap();
         let mut maximum = 0.0f32;
         for (actual, encoded) in samples.iter().zip(oracle.chunks_exact(2)) {
@@ -1335,7 +1340,7 @@ pub fn rectilinear_sample(
         return Err(super::DevelopError::Invalid("invalid warp sampling layout"));
     }
     let (indices, weights) = rectilinear_footprint(extent, point);
-    Ok(sample_footprint(source,indices,weights,channel))
+    Ok(sample_footprint(source, indices, weights, channel))
 }
 
 fn sample_footprint(source: &[[f32; 3]], indices: [usize; 16], weights: &[f32; 16], channel: usize) -> f32 {

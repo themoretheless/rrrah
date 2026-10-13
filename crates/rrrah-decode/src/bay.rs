@@ -98,15 +98,23 @@ fn read_bay_source(
     }
     let (_, height) = layout.dimensions();
     let source_bytes = layout.row_bytes() as u64 * u64::from(height);
-    let io_error = |source| crate::DecodeError::Io { path: request.path.clone(), source };
+    let io_error = |source| crate::DecodeError::Io {
+        path: request.path.clone(),
+        source,
+    };
     let mut file = std::fs::File::open(&request.path).map_err(io_error)?;
     let declared = file.metadata().map_err(io_error)?.len();
     if declared > source_bytes {
         return Err(crate::DecodeError::InputTooLarge {
-            path: request.path.clone(), actual: declared, limit: source_bytes,
-        }.into());
+            path: request.path.clone(),
+            actual: declared,
+            limit: source_bytes,
+        }
+        .into());
     }
-    if declared != source_bytes { return Err(BaySensorError::Length.into()); }
+    if declared != source_bytes {
+        return Err(BaySensorError::Length.into());
+    }
     read_bay_image_rows(&mut file, request, layout, budget, width)
 }
 
@@ -129,9 +137,15 @@ fn read_bay_image_rows(
 ) -> Result<rrrah_core::PixelBuffer<u16>, BayReadError> {
     request.check_cancelled()?;
     let (_, height) = layout.dimensions();
-    let io_error = |source| crate::DecodeError::Io { path: request.path.clone(), source };
-    let mut row = budget.try_buffer(layout.row_bytes(), 0u8).map_err(BaySensorError::from)?;
-    let mut output = budget.try_buffer(width * height as usize, 0u16)
+    let io_error = |source| crate::DecodeError::Io {
+        path: request.path.clone(),
+        source,
+    };
+    let mut row = budget
+        .try_buffer(layout.row_bytes(), 0u8)
+        .map_err(BaySensorError::from)?;
+    let mut output = budget
+        .try_buffer(width * height as usize, 0u16)
         .map_err(BaySensorError::from)?;
     for pixels in output.chunks_exact_mut(width) {
         request.check_cancelled()?;
@@ -141,8 +155,11 @@ fn read_bay_image_rows(
     request.check_cancelled()?;
     let mut extra = [0u8; 1];
     if file.read(&mut extra).map_err(io_error)? != 0 {
-        return Err(io_error(std::io::Error::new(std::io::ErrorKind::InvalidData,
-            "BAY source grew during streamed read")).into());
+        return Err(io_error(std::io::Error::new(
+            std::io::ErrorKind::InvalidData,
+            "BAY source grew during streamed read",
+        ))
+        .into());
     }
     request.check_cancelled()?;
     Ok(output.freeze().into())
@@ -182,27 +199,27 @@ pub fn unpack_bay_sensor(
 }
 
 fn unpack_row(row: &[u8], pixels: &mut [u16], layout: BaySensorLayout) {
-        let width = pixels.len();
-        if layout == BaySensorLayout::Qv5700 {
-            for (group, samples) in row[..width * 10 / 8]
-                .chunks_exact(5)
-                .zip(pixels.chunks_exact_mut(4))
-            {
-                let packed = u64::from_be_bytes([0, 0, 0, group[0], group[1], group[2], group[3], group[4]]);
-                for (index, sample) in samples.iter_mut().enumerate() {
-                    *sample = ((packed >> (30 - index * 10)) & 1023) as u16;
-                }
-            }
-            // 2584 samples occupy 3230 bytes; the last sample is the high ten
-            // bits of the remaining two bytes, independent of six padding bits.
-            if width == layout.dimensions().0 as usize {
-                pixels[width - 1] = u16::from_be_bytes([row[3230], row[3231]]) >> 6;
-            }
-        } else {
-            for (sample, &value) in pixels.iter_mut().zip(row) {
-                *sample = u16::from(value);
+    let width = pixels.len();
+    if layout == BaySensorLayout::Qv5700 {
+        for (group, samples) in row[..width * 10 / 8]
+            .chunks_exact(5)
+            .zip(pixels.chunks_exact_mut(4))
+        {
+            let packed = u64::from_be_bytes([0, 0, 0, group[0], group[1], group[2], group[3], group[4]]);
+            for (index, sample) in samples.iter_mut().enumerate() {
+                *sample = ((packed >> (30 - index * 10)) & 1023) as u16;
             }
         }
+        // 2584 samples occupy 3230 bytes; the last sample is the high ten
+        // bits of the remaining two bytes, independent of six padding bits.
+        if width == layout.dimensions().0 as usize {
+            pixels[width - 1] = u16::from_be_bytes([row[3230], row[3231]]) >> 6;
+        }
+    } else {
+        for (sample, &value) in pixels.iter_mut().zip(row) {
+            *sample = u16::from(value);
+        }
+    }
 }
 
 #[cfg(test)]
@@ -224,11 +241,20 @@ mod tests {
         }
         let second = unpack_bay_sensor(&bytes, layout, &budget, || false).unwrap();
         let mut trailer_changed = false;
-        for (a, b) in first.chunks_exact(width as usize).zip(second.chunks_exact(width as usize)) {
-            assert_eq!(&a[..layout.image_samples_per_row()], &b[..layout.image_samples_per_row()]);
+        for (a, b) in first
+            .chunks_exact(width as usize)
+            .zip(second.chunks_exact(width as usize))
+        {
+            assert_eq!(
+                &a[..layout.image_samples_per_row()],
+                &b[..layout.image_samples_per_row()]
+            );
             trailer_changed |= a[layout.image_samples_per_row()..] != b[layout.image_samples_per_row()..];
         }
-        assert!(trailer_changed, "storage trailer samples must not be presented as image pixels");
+        assert!(
+            trailer_changed,
+            "storage trailer samples must not be presented as image pixels"
+        );
         drop((first, second));
         assert_eq!(budget.used(), 0);
     }
@@ -236,44 +262,77 @@ mod tests {
     #[test]
     #[ignore = "requires pinned authored BAY and independent LibRaw dumps at RRRAH_BAY_AUTHORED_CORPUS; not camera/color qualification"]
     fn authored_full_sensors_match_independent_libraw_oracles() {
-        let root = std::path::PathBuf::from(std::env::var_os("RRRAH_BAY_AUTHORED_CORPUS").expect("authored corpus"));
+        let root =
+            std::path::PathBuf::from(std::env::var_os("RRRAH_BAY_AUTHORED_CORPUS").expect("authored corpus"));
         let manifest: serde_json::Value = serde_json::from_str(include_str!(concat!(
-            env!("CARGO_MANIFEST_DIR"), "/../../tests/fixtures/bay-authored-oracles.json"))).unwrap();
-        let layouts = [BaySensorLayout::Qv2000Ux, BaySensorLayout::Qv3000Ex, BaySensorLayout::Qv5700];
+            env!("CARGO_MANIFEST_DIR"),
+            "/../../tests/fixtures/bay-authored-oracles.json"
+        )))
+        .unwrap();
+        let layouts = [
+            BaySensorLayout::Qv2000Ux,
+            BaySensorLayout::Qv3000Ex,
+            BaySensorLayout::Qv5700,
+        ];
         let fixtures = manifest["fixtures"].as_array().unwrap();
         assert_eq!(fixtures.len(), layouts.len());
         for (fixture, layout) in fixtures.iter().zip(layouts) {
             for (file, digest) in [("source", "source_sha256"), ("oracle", "oracle_sha256")] {
                 let path = root.join(fixture[file].as_str().unwrap());
-                let result = std::process::Command::new("shasum").args(["-a", "256"]).arg(path).output().unwrap();
+                let result = std::process::Command::new("shasum")
+                    .args(["-a", "256"])
+                    .arg(path)
+                    .output()
+                    .unwrap();
                 assert!(result.status.success());
-                assert_eq!(String::from_utf8(result.stdout).unwrap().split_whitespace().next().unwrap(),
-                    fixture[digest].as_str().unwrap());
+                assert_eq!(
+                    String::from_utf8(result.stdout)
+                        .unwrap()
+                        .split_whitespace()
+                        .next()
+                        .unwrap(),
+                    fixture[digest].as_str().unwrap()
+                );
             }
             let (width, height) = layout.dimensions();
             let bytes = u64::from(width) * u64::from(height) * 2;
             let budget = rrrah_core::MemoryBudget::new(bytes + layout.row_bytes() as u64);
             let source = root.join(fixture["source"].as_str().unwrap());
-            let output = read_bay_sensor_with_budget(&crate::DecodeRequest::new(source), layout, &budget).unwrap();
+            let output =
+                read_bay_sensor_with_budget(&crate::DecodeRequest::new(source), layout, &budget).unwrap();
             let reference = std::fs::read(root.join(fixture["oracle"].as_str().unwrap())).unwrap();
             assert_eq!(reference.len() as u64, bytes);
             for (i, (&actual, expected)) in output.iter().zip(reference.chunks_exact(2)).enumerate() {
-                assert_eq!(actual, u16::from_le_bytes([expected[0], expected[1]]), "{layout:?} sample {i}");
+                assert_eq!(
+                    actual,
+                    u16::from_le_bytes([expected[0], expected[1]]),
+                    "{layout:?} sample {i}"
+                );
             }
             assert_eq!(budget.peak(), budget.limit());
             drop(output);
             assert_eq!(budget.used(), 0);
-            eprintln!("BAY independent authored oracle: {layout:?}; samples={}; every sample exact; final=0; original_camera_color_unqualified", width as u64 * height as u64);
+            eprintln!(
+                "BAY independent authored oracle: {layout:?}; samples={}; every sample exact; final=0; original_camera_color_unqualified",
+                width as u64 * height as u64
+            );
         }
     }
     #[test]
     #[ignore = "requires pinned authored BAY and independent dumps at RRRAH_BAY_AUTHORED_CORPUS"]
     fn image_rows_match_independent_oracles_without_trailer_or_full_copy() {
-        let root = std::path::PathBuf::from(std::env::var_os("RRRAH_BAY_AUTHORED_CORPUS").expect("authored corpus"));
+        let root =
+            std::path::PathBuf::from(std::env::var_os("RRRAH_BAY_AUTHORED_CORPUS").expect("authored corpus"));
         let manifest: serde_json::Value = serde_json::from_str(include_str!(concat!(
-            env!("CARGO_MANIFEST_DIR"), "/../../tests/fixtures/bay-authored-oracles.json"))).unwrap();
+            env!("CARGO_MANIFEST_DIR"),
+            "/../../tests/fixtures/bay-authored-oracles.json"
+        )))
+        .unwrap();
         for (fixture, layout) in manifest["fixtures"].as_array().unwrap().iter().zip([
-            BaySensorLayout::Qv2000Ux, BaySensorLayout::Qv3000Ex, BaySensorLayout::Qv5700]) {
+            BaySensorLayout::Qv2000Ux,
+            BaySensorLayout::Qv3000Ex,
+            BaySensorLayout::Qv5700,
+        ]) {
             let (width, height) = layout.image_dimensions();
             let bytes = u64::from(width) * u64::from(height) * 2;
             let total = bytes + layout.row_bytes() as u64;
@@ -285,8 +344,10 @@ mod tests {
             let output = read_bay_image_sensor_with_budget(&request, layout, &budget).unwrap();
             assert_eq!(output.len(), width as usize * height as usize);
             let reference = std::fs::read(root.join(fixture["oracle"].as_str().unwrap())).unwrap();
-            for (actual, row) in output.chunks_exact(width as usize).zip(
-                reference.chunks_exact(layout.dimensions().0 as usize * 2)) {
+            for (actual, row) in output
+                .chunks_exact(width as usize)
+                .zip(reference.chunks_exact(layout.dimensions().0 as usize * 2))
+            {
                 for (&value, expected) in actual.iter().zip(row.chunks_exact(2)) {
                     assert_eq!(value, u16::from_le_bytes([expected[0], expected[1]]));
                 }
@@ -295,13 +356,18 @@ mod tests {
             assert_eq!(budget.used(), bytes);
             drop(output);
             assert_eq!(budget.used(), 0);
-            eprintln!("BAY image-only oracle: {layout:?}; {width}x{height}; every sample exact; output+one-row peak={total}; final=0");
+            eprintln!(
+                "BAY image-only oracle: {layout:?}; {width}x{height}; every sample exact; output+one-row peak={total}; final=0"
+            );
         }
     }
 
     #[test]
     fn streamed_truncation_growth_and_cancellation_release_partial_sensor() {
-        use std::sync::{Arc, atomic::{AtomicU64, Ordering}};
+        use std::sync::{
+            Arc,
+            atomic::{AtomicU64, Ordering},
+        };
         struct CancelRead {
             bytes: std::io::Cursor<Vec<u8>>,
             generation: Arc<AtomicU64>,
@@ -312,7 +378,9 @@ mod tests {
             fn read(&mut self, output: &mut [u8]) -> std::io::Result<usize> {
                 self.calls += 1;
                 let count = std::io::Read::read(&mut self.bytes, output)?;
-                if self.calls == self.cancel_at { self.generation.store(2, Ordering::Release); }
+                if self.calls == self.cancel_at {
+                    self.generation.store(2, Ordering::Release);
+                }
                 Ok(count)
             }
         }
@@ -322,44 +390,68 @@ mod tests {
             (BaySensorLayout::Qv5700, false),
             (BaySensorLayout::Qv5700, true),
         ] {
-        let (width, height) = if image_only { layout.image_dimensions() } else { layout.dimensions() };
-        let read = |input: &mut CancelRead, request: &crate::DecodeRequest, budget: &rrrah_core::MemoryBudget| {
-            if image_only {
-                read_bay_image_rows(input, request, layout, budget, width as usize)
+            let (width, height) = if image_only {
+                layout.image_dimensions()
             } else {
-                read_bay_rows(input, request, layout, budget)
+                layout.dimensions()
+            };
+            let read = |input: &mut CancelRead,
+                        request: &crate::DecodeRequest,
+                        budget: &rrrah_core::MemoryBudget| {
+                if image_only {
+                    read_bay_image_rows(input, request, layout, budget, width as usize)
+                } else {
+                    read_bay_rows(input, request, layout, budget)
+                }
+            };
+            let bytes = layout.row_bytes() * height as usize;
+            let capacity = u64::from(width) * u64::from(height) * 2 + layout.row_bytes() as u64;
+            // The final read checks EOF; cancellation there must still refuse publication.
+            for cancel_at in [1, height as usize / 2, height as usize, height as usize + 1] {
+                let generation = Arc::new(AtomicU64::new(1));
+                let mut request = crate::DecodeRequest::new("authored-stream.bay");
+                request.cancellation = Some(crate::GenerationToken::new(generation.clone(), 1));
+                let budget = rrrah_core::MemoryBudget::new(capacity);
+                let mut input = CancelRead {
+                    bytes: std::io::Cursor::new(vec![173; bytes]),
+                    generation,
+                    calls: 0,
+                    cancel_at,
+                };
+                assert!(matches!(
+                    read(&mut input, &request, &budget),
+                    Err(BayReadError::Source(crate::DecodeError::Cancelled))
+                ));
+                assert_eq!(budget.peak(), capacity);
+                assert_eq!(budget.used(), 0);
+                request.cancellation = None;
+                let mut retry = std::io::Cursor::new(vec![173; bytes]);
+                let output =
+                    read_bay_image_rows(&mut retry, &request, layout, &budget, width as usize).unwrap();
+                assert_eq!(output.len(), width as usize * height as usize);
+                assert_eq!(budget.used(), u64::from(width) * u64::from(height) * 2);
+                drop(output);
+                assert_eq!(budget.used(), 0);
             }
-        };
-        let bytes = layout.row_bytes() * height as usize;
-        let capacity = u64::from(width) * u64::from(height) * 2 + layout.row_bytes() as u64;
-        // The final read checks EOF; cancellation there must still refuse publication.
-        for cancel_at in [1, height as usize / 2, height as usize, height as usize + 1] {
-            let generation = Arc::new(AtomicU64::new(1));
-            let mut request = crate::DecodeRequest::new("authored-stream.bay");
-            request.cancellation = Some(crate::GenerationToken::new(generation.clone(), 1));
-            let budget = rrrah_core::MemoryBudget::new(capacity);
-            let mut input = CancelRead { bytes: std::io::Cursor::new(vec![173; bytes]), generation, calls: 0, cancel_at };
-            assert!(matches!(read(&mut input, &request, &budget),
-                Err(BayReadError::Source(crate::DecodeError::Cancelled))));
-            assert_eq!(budget.peak(), capacity);
-            assert_eq!(budget.used(), 0);
-            request.cancellation = None;
-            let mut retry = std::io::Cursor::new(vec![173; bytes]);
-            let output = read_bay_image_rows(&mut retry, &request, layout, &budget, width as usize).unwrap();
-            assert_eq!(output.len(), width as usize * height as usize);
-            assert_eq!(budget.used(), u64::from(width) * u64::from(height) * 2);
-            drop(output);
-            assert_eq!(budget.used(), 0);
-        }
-        for length in [bytes - 1, bytes + 1] {
-            let budget = rrrah_core::MemoryBudget::new(capacity);
-            let mut input = std::io::Cursor::new(vec![173; length]);
-            assert!(matches!(read_bay_image_rows(&mut input, &crate::DecodeRequest::new("changed.bay"), layout, &budget, width as usize),
-                Err(BayReadError::Source(crate::DecodeError::Io { .. }))));
-            assert_eq!(budget.peak(), capacity);
-            assert_eq!(budget.used(), 0);
-        }
-        eprintln!("BAY streamed recovery: {layout:?}; image_only={image_only}; four admitted cancellations and same-budget retries, truncation/growth refused; final=0");
+            for length in [bytes - 1, bytes + 1] {
+                let budget = rrrah_core::MemoryBudget::new(capacity);
+                let mut input = std::io::Cursor::new(vec![173; length]);
+                assert!(matches!(
+                    read_bay_image_rows(
+                        &mut input,
+                        &crate::DecodeRequest::new("changed.bay"),
+                        layout,
+                        &budget,
+                        width as usize
+                    ),
+                    Err(BayReadError::Source(crate::DecodeError::Io { .. }))
+                ));
+                assert_eq!(budget.peak(), capacity);
+                assert_eq!(budget.used(), 0);
+            }
+            eprintln!(
+                "BAY streamed recovery: {layout:?}; image_only={image_only}; four admitted cancellations and same-budget retries, truncation/growth refused; final=0"
+            );
         }
     }
     #[test]
@@ -367,10 +459,16 @@ mod tests {
         let path = std::env::temp_dir().join(format!("rrrah-bay-stream-{}.bay", std::process::id()));
         struct Cleanup(std::path::PathBuf);
         impl Drop for Cleanup {
-            fn drop(&mut self) { let _ = std::fs::remove_file(&self.0); }
+            fn drop(&mut self) {
+                let _ = std::fs::remove_file(&self.0);
+            }
         }
         let _cleanup = Cleanup(path.clone());
-        for layout in [BaySensorLayout::Qv2000Ux, BaySensorLayout::Qv3000Ex, BaySensorLayout::Qv5700] {
+        for layout in [
+            BaySensorLayout::Qv2000Ux,
+            BaySensorLayout::Qv3000Ex,
+            BaySensorLayout::Qv5700,
+        ] {
             let (width, height) = layout.dimensions();
             let width = width as usize;
             let mut source = vec![0u8; layout.row_bytes() * height as usize];
@@ -387,14 +485,21 @@ mod tests {
                         }
                     }
                 } else {
-                    for (x, byte) in row.iter_mut().enumerate() { *byte = ((y * 17 + x) % 256) as u8; }
+                    for (x, byte) in row.iter_mut().enumerate() {
+                        *byte = ((y * 17 + x) % 256) as u8;
+                    }
                 }
             }
             std::fs::write(&path, &source).unwrap();
             let output_bytes = width as u64 * u64::from(height) * 2;
             let budget = rrrah_core::MemoryBudget::new(output_bytes + layout.row_bytes() as u64);
-            let pixels = read_bay_sensor_with_budget(&crate::DecodeRequest::new(&path), layout, &budget).unwrap();
-            let modulus = if layout == BaySensorLayout::Qv5700 { 1024 } else { 256 };
+            let pixels =
+                read_bay_sensor_with_budget(&crate::DecodeRequest::new(&path), layout, &budget).unwrap();
+            let modulus = if layout == BaySensorLayout::Qv5700 {
+                1024
+            } else {
+                256
+            };
             for (i, &sample) in pixels.iter().enumerate() {
                 assert_eq!(usize::from(sample), ((i / width) * 17 + i % width) % modulus);
             }
@@ -405,10 +510,15 @@ mod tests {
             let image_width = layout.image_samples_per_row();
             let image_bytes = image_width as u64 * u64::from(height) * 2;
             let image_budget = rrrah_core::MemoryBudget::new(image_bytes + layout.row_bytes() as u64);
-            let image = read_bay_image_sensor_with_budget(&crate::DecodeRequest::new(&path), layout, &image_budget).unwrap();
+            let image =
+                read_bay_image_sensor_with_budget(&crate::DecodeRequest::new(&path), layout, &image_budget)
+                    .unwrap();
             assert_eq!(image.len(), image_width * height as usize);
             for (i, &sample) in image.iter().enumerate() {
-                assert_eq!(usize::from(sample), ((i / image_width) * 17 + i % image_width) % modulus);
+                assert_eq!(
+                    usize::from(sample),
+                    ((i / image_width) * 17 + i % image_width) % modulus
+                );
             }
             assert_eq!(image_budget.peak(), image_budget.limit());
             drop(image);
@@ -420,13 +530,22 @@ mod tests {
         let path = std::env::temp_dir().join(format!("rrrah-bay-oversized-{}.bay", std::process::id()));
         struct Cleanup(std::path::PathBuf);
         impl Drop for Cleanup {
-            fn drop(&mut self) { let _ = std::fs::remove_file(&self.0); }
+            fn drop(&mut self) {
+                let _ = std::fs::remove_file(&self.0);
+            }
         }
         let _cleanup = Cleanup(path.clone());
-        for layout in [BaySensorLayout::Qv2000Ux, BaySensorLayout::Qv3000Ex, BaySensorLayout::Qv5700] {
+        for layout in [
+            BaySensorLayout::Qv2000Ux,
+            BaySensorLayout::Qv3000Ex,
+            BaySensorLayout::Qv5700,
+        ] {
             let (_, height) = layout.dimensions();
             let expected = layout.row_bytes() as u64 * u64::from(height);
-            std::fs::File::create(&path).unwrap().set_len(expected + 1).unwrap();
+            std::fs::File::create(&path)
+                .unwrap()
+                .set_len(expected + 1)
+                .unwrap();
             let root = rrrah_core::MemoryBudget::new(1);
             let request = crate::DecodeRequest::new(path.clone());
             assert!(matches!(read_bay_sensor_with_budget(&request, layout, &root),

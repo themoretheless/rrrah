@@ -501,7 +501,9 @@ mod tests {
         let root = rrrah_memory::MemoryBudget::new(4);
         let ttl = std::time::Duration::from_secs(1);
         assert!(cache.set_limits_and_spill(crate::CacheLimits {
-            max_bytes: 4, max_entries: Some(1), ttl: Some(ttl),
+            max_bytes: 4,
+            max_entries: Some(1),
+            ttl: Some(ttl),
         }));
         assert!(cache.insert(key(1), mosaic(2).try_manage_pixels(&root).unwrap()));
         let lease = cache.get_lease(&key(1)).unwrap();

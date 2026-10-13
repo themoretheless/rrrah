@@ -14,11 +14,18 @@ fn invalid(message: &'static str) -> RasterDecodeError {
     RasterDecodeError::InvalidPngColor(message)
 }
 
-fn gamma_chroma_color(gamma: Option<u32>, xy: Option<[f64;8]>) -> Result<Option<RasterColorSpace>, RasterDecodeError> {
-    let (Some(gamma), Some(xy)) = (gamma, xy) else { return Ok(None); };
+fn gamma_chroma_color(
+    gamma: Option<u32>,
+    xy: Option<[f64; 8]>,
+) -> Result<Option<RasterColorSpace>, RasterDecodeError> {
+    let (Some(gamma), Some(xy)) = (gamma, xy) else {
+        return Ok(None);
+    };
     let chroma = rrrah_core::RgbChromaticities::new(xy)
         .ok_or_else(|| invalid("invalid or singular cHRM coordinates"))?;
-    if gamma == 100000 { return Ok(Some(RasterColorSpace::LinearRgb(chroma))); }
+    if gamma == 100000 {
+        return Ok(Some(RasterColorSpace::LinearRgb(chroma)));
+    }
     let exponent = 100000. / f64::from(gamma);
     // ICC parametric curves store signed 16.16 coefficients. Do not silently
     // clamp a valid PNG declaration outside that representation.
@@ -30,16 +37,30 @@ fn gamma_chroma_color(gamma: Option<u32>, xy: Option<[f64;8]>) -> Result<Option<
     profile.description = None;
     profile.copyright = None;
     profile.media_white_point = Some(XyY::new(xy[6], xy[7], 1.).to_xyzd());
-    profile.update_rgb_colorimetry(XyY::new(xy[6], xy[7], 1.), ColorPrimaries {
-        red: Chromaticity {x:xy[0] as f32, y:xy[1] as f32},
-        green: Chromaticity {x:xy[2] as f32, y:xy[3] as f32},
-        blue: Chromaticity {x:xy[4] as f32, y:xy[5] as f32},
-    });
+    profile.update_rgb_colorimetry(
+        XyY::new(xy[6], xy[7], 1.),
+        ColorPrimaries {
+            red: Chromaticity {
+                x: xy[0] as f32,
+                y: xy[1] as f32,
+            },
+            green: Chromaticity {
+                x: xy[2] as f32,
+                y: xy[3] as f32,
+            },
+            blue: Chromaticity {
+                x: xy[4] as f32,
+                y: xy[5] as f32,
+            },
+        },
+    );
     let curve = ToneReprCurve::Parametric(vec![exponent as f32]);
     profile.red_trc = Some(curve.clone());
     profile.green_trc = Some(curve.clone());
     profile.blue_trc = Some(curve);
-    let bytes = profile.encode().map_err(|_| invalid("gAMA/cHRM profile encoding failed"))?;
+    let bytes = profile
+        .encode()
+        .map_err(|_| invalid("gAMA/cHRM profile encoding failed"))?;
     Ok(Some(RasterColorSpace::Icc(bytes)))
 }
 
@@ -51,7 +72,9 @@ fn gray_gamma_color(gamma: u32) -> Result<Option<RasterColorSpace>, RasterDecode
     }
     let mut profile = moxcms::ColorProfile::new_gray_with_gamma(exponent as f32);
     profile.gray_trc = Some(moxcms::ToneReprCurve::Parametric(vec![exponent as f32]));
-    let bytes = profile.encode().map_err(|_| invalid("gray gAMA profile encoding failed"))?;
+    let bytes = profile
+        .encode()
+        .map_err(|_| invalid("gray gAMA profile encoding failed"))?;
     Ok(Some(RasterColorSpace::Icc(bytes)))
 }
 
@@ -132,31 +155,47 @@ pub(crate) fn declaration(bytes: &[u8]) -> Result<Declaration, RasterDecodeError
                 return Err(RasterDecodeError::InvalidPngPhysicalDimensions);
             }
             phys_seen = true;
-            if data[8] > 1 { return Err(RasterDecodeError::InvalidPngPhysicalDimensions); }
+            if data[8] > 1 {
+                return Err(RasterDecodeError::InvalidPngPhysicalDimensions);
+            }
             let x = u32::from_be_bytes(data[..4].try_into().unwrap());
             let y = u32::from_be_bytes(data[4..8].try_into().unwrap());
             // Width/height is the inverse of horizontal/vertical density.
             // Zero density conveys no usable aspect; keep square-pixel default.
-            if x != 0 && y != 0 { pixel_aspect = Some((f64::from(y) / f64::from(x)) as f32); }
+            if x != 0 && y != 0 {
+                pixel_aspect = Some((f64::from(y) / f64::from(x)) as f32);
+            }
         }
         match kind {
             b"IHDR" => {
-                if data.len() != 13 { return Err(invalid("invalid IHDR length")); }
+                if data.len() != 13 {
+                    return Err(invalid("invalid IHDR length"));
+                }
                 grayscale = matches!(data[9], 0 | 4);
             }
             b"gAMA" => {
-                if gamma.is_some() || data.len() != 4 { return Err(invalid("invalid or duplicate gAMA")); }
+                if gamma.is_some() || data.len() != 4 {
+                    return Err(invalid("invalid or duplicate gAMA"));
+                }
                 let value = u32::from_be_bytes(data.try_into().unwrap());
-                if value == 0 { return Err(invalid("zero gAMA")); }
+                if value == 0 {
+                    return Err(invalid("zero gAMA"));
+                }
                 gamma = Some(value);
             }
             b"cHRM" => {
-                if chroma.is_some() || data.len() != 32 { return Err(invalid("invalid or duplicate cHRM")); }
-                let mut coordinates = [0.;8];
-                for (i, value) in data.chunks_exact(4).enumerate() {
-                    coordinates[(i+6)%8] = f64::from(u32::from_be_bytes(value.try_into().unwrap())) / 100000.;
+                if chroma.is_some() || data.len() != 32 {
+                    return Err(invalid("invalid or duplicate cHRM"));
                 }
-                if coordinates.chunks_exact(2).any(|v| v[0] > 1. || v[1] > 1. || v[0] + v[1] > 1.) {
+                let mut coordinates = [0.; 8];
+                for (i, value) in data.chunks_exact(4).enumerate() {
+                    coordinates[(i + 6) % 8] =
+                        f64::from(u32::from_be_bytes(value.try_into().unwrap())) / 100000.;
+                }
+                if coordinates
+                    .chunks_exact(2)
+                    .any(|v| v[0] > 1. || v[1] > 1. || v[0] + v[1] > 1.)
+                {
                     return Err(invalid("cHRM coordinate outside chromaticity diagram"));
                 }
                 if rrrah_core::RgbChromaticities::new(coordinates).is_none() {
@@ -224,40 +263,84 @@ pub(crate) mod tests {
         bytes
     }
     pub(crate) fn chrm(p3: bool) -> Vec<u8> {
-        let xy: [u32;8] = if p3 { [31270,32900,68000,32000,26500,69000,15000,6000] }
-            else { [31270,32900,64000,33000,30000,60000,15000,6000] };
-        chunk(b"cHRM", &xy.into_iter().flat_map(u32::to_be_bytes).collect::<Vec<_>>())
+        let xy: [u32; 8] = if p3 {
+            [31270, 32900, 68000, 32000, 26500, 69000, 15000, 6000]
+        } else {
+            [31270, 32900, 64000, 33000, 30000, 60000, 15000, 6000]
+        };
+        chunk(
+            b"cHRM",
+            &xy.into_iter().flat_map(u32::to_be_bytes).collect::<Vec<_>>(),
+        )
     }
     #[test]
     fn gamma_only_requires_gray_ihdr_and_respects_srgb() {
         let gamma = chunk(b"gAMA", &50000u32.to_be_bytes());
-        for kind in [0,4] {
-            let mut ihdr = [0u8;13];
+        for kind in [0, 4] {
+            let mut ihdr = [0u8; 13];
             ihdr[9] = kind;
             let header = chunk(b"IHDR", &ihdr);
-            assert!(matches!(declaration(&png(&[header.clone(), gamma.clone()])).unwrap().color, Some(RasterColorSpace::Icc(_))));
-            assert_eq!(declaration(&png(&[header.clone(), gamma.clone(), chunk(b"sRGB", &[0])])).unwrap().color, Some(RasterColorSpace::Srgb));
+            assert!(matches!(
+                declaration(&png(&[header.clone(), gamma.clone()])).unwrap().color,
+                Some(RasterColorSpace::Icc(_))
+            ));
+            assert_eq!(
+                declaration(&png(&[header.clone(), gamma.clone(), chunk(b"sRGB", &[0])]))
+                    .unwrap()
+                    .color,
+                Some(RasterColorSpace::Srgb)
+            );
             assert!(declaration(&png(&[header, chunk(b"gAMA", &1u32.to_be_bytes())])).is_err());
         }
-        let mut rgb = [0u8;13]; rgb[9]=2;
-        assert!(declaration(&png(&[chunk(b"IHDR", &rgb), gamma])).unwrap().color.is_none());
+        let mut rgb = [0u8; 13];
+        rgb[9] = 2;
+        assert!(
+            declaration(&png(&[chunk(b"IHDR", &rgb), gamma]))
+                .unwrap()
+                .color
+                .is_none()
+        );
     }
 
     #[test]
     fn gamma_chroma_profiles_obey_precedence_and_validate_chunks() {
         let gamma = chunk(b"gAMA", &50000u32.to_be_bytes());
-        assert!(matches!(declaration(&png(&[gamma.clone(), chrm(false)])).unwrap().color, Some(RasterColorSpace::Icc(_))));
-        assert!(matches!(declaration(&png(&[chunk(b"gAMA", &100000u32.to_be_bytes()), chrm(true)])).unwrap().color, Some(RasterColorSpace::LinearRgb(_))));
-        assert_eq!(declaration(&png(&[gamma.clone(), chrm(false), chunk(b"sRGB", &[0])])).unwrap().color, Some(RasterColorSpace::Srgb));
-        assert_eq!(declaration(&png(&[gamma.clone(), chrm(false), chunk(b"cICP", &[1,8,0,1])])).unwrap().color, Some(RasterColorSpace::LinearSrgb));
+        assert!(matches!(
+            declaration(&png(&[gamma.clone(), chrm(false)])).unwrap().color,
+            Some(RasterColorSpace::Icc(_))
+        ));
+        assert!(matches!(
+            declaration(&png(&[chunk(b"gAMA", &100000u32.to_be_bytes()), chrm(true)]))
+                .unwrap()
+                .color,
+            Some(RasterColorSpace::LinearRgb(_))
+        ));
+        assert_eq!(
+            declaration(&png(&[gamma.clone(), chrm(false), chunk(b"sRGB", &[0])]))
+                .unwrap()
+                .color,
+            Some(RasterColorSpace::Srgb)
+        );
+        assert_eq!(
+            declaration(&png(&[gamma.clone(), chrm(false), chunk(b"cICP", &[1, 8, 0, 1])]))
+                .unwrap()
+                .color,
+            Some(RasterColorSpace::LinearSrgb)
+        );
         assert!(declaration(&png(&[gamma.clone()])).unwrap().color.is_none());
         assert!(declaration(&png(&[chrm(false)])).unwrap().color.is_none());
         let mut corrupt = gamma.clone();
         *corrupt.last_mut().unwrap() ^= 1;
-        for chunks in [vec![corrupt], vec![gamma.clone(), gamma], vec![chrm(false),chrm(false)],
-            vec![chunk(b"gAMA", &[0;4])], vec![chunk(b"gAMA", &[1;3])],
+        for chunks in [
+            vec![corrupt],
+            vec![gamma.clone(), gamma],
+            vec![chrm(false), chrm(false)],
+            vec![chunk(b"gAMA", &[0; 4])],
+            vec![chunk(b"gAMA", &[1; 3])],
             vec![chunk(b"gAMA", &1u32.to_be_bytes()), chrm(false)],
-            vec![chunk(b"cHRM", &[0;32])], vec![chunk(b"cHRM", &[0;31])]] {
+            vec![chunk(b"cHRM", &[0; 32])],
+            vec![chunk(b"cHRM", &[0; 31])],
+        ] {
             assert!(declaration(&png(&chunks)).is_err());
         }
     }
@@ -267,9 +350,15 @@ pub(crate) mod tests {
         assert_eq!(result.color, Some(RasterColorSpace::LinearSrgb));
         assert!(result.override_icc);
         let result = declaration(&png(&[chunk(b"cICP", &[9, 16, 0, 1])])).unwrap();
-        assert_eq!(result.color, Some(RasterColorSpace::Cicp {
-            primaries: 9, transfer: 16, matrix: 0, full_range: true,
-        }));
+        assert_eq!(
+            result.color,
+            Some(RasterColorSpace::Cicp {
+                primaries: 9,
+                transfer: 16,
+                matrix: 0,
+                full_range: true,
+            })
+        );
         assert_eq!(
             declaration(&png(&[chunk(b"sRGB", &[2])])).unwrap().color,
             Some(RasterColorSpace::Srgb)
@@ -277,12 +366,24 @@ pub(crate) mod tests {
     }
     #[test]
     fn cicp_preserves_hdr_unknown_and_narrow_range_declarations() {
-        for (primaries, transfer, range) in [(9, 16, 1), (9, 18, 1), (12, 8, 1), (9, 8, 1), (1, 1, 0), (255, 255, 1)] {
+        for (primaries, transfer, range) in [
+            (9, 16, 1),
+            (9, 18, 1),
+            (12, 8, 1),
+            (9, 8, 1),
+            (1, 1, 0),
+            (255, 255, 1),
+        ] {
             let result = declaration(&png(&[chunk(b"cICP", &[primaries, transfer, 0, range])])).unwrap();
-            assert_eq!(result.color, Some(RasterColorSpace::Cicp {
-                primaries: u16::from(primaries), transfer: u16::from(transfer),
-                matrix: 0, full_range: range == 1,
-            }));
+            assert_eq!(
+                result.color,
+                Some(RasterColorSpace::Cicp {
+                    primaries: u16::from(primaries),
+                    transfer: u16::from(transfer),
+                    matrix: 0,
+                    full_range: range == 1,
+                })
+            );
             assert!(result.override_icc);
         }
         assert!(declaration(&png(&[chunk(b"cICP", &[1, 13, 0, 2])])).is_err());

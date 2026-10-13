@@ -54,9 +54,11 @@ pub fn search_exact_projected_portfolio_files_with(
 ) -> Result<ExactPortfolioEvidence, ProjectedPortfolioError> {
     let latch = Cell::new(false);
     let cancelled = || {
-        let stop = latch.get() || cancel() || [left, right].iter().any(|r| {
-            r.cancellation.as_ref().is_some_and(GenerationToken::is_cancelled)
-        });
+        let stop = latch.get()
+            || cancel()
+            || [left, right]
+                .iter()
+                .any(|r| r.cancellation.as_ref().is_some_and(GenerationToken::is_cancelled));
         latch.set(stop);
         stop
     };
@@ -65,7 +67,16 @@ pub fn search_exact_projected_portfolio_files_with(
             return Err(ProjectedPortfolioError::Cancelled);
         }
         validate_projected_portfolio(policy, factors, &cancelled)?;
-        let native = policy.native.search.search.search.search.gradient.search.local.decode;
+        let native = policy
+            .native
+            .search
+            .search
+            .search
+            .search
+            .gradient
+            .search
+            .local
+            .decode;
         let max_bytes = native.max_file_bytes.min(policy.model.decode.max_file_bytes);
         let first = ContentSnapshot::read(&left.path, max_bytes, &cancelled)?;
         let second = ContentSnapshot::read(&right.path, max_bytes, &cancelled)?;
@@ -85,7 +96,11 @@ pub fn search_exact_projected_portfolio_files_with(
             second.verify(&owners)?;
             Ok(evidence)
         })();
-        if owners() { Err(ProjectedPortfolioError::Cancelled) } else { verified }
+        if owners() {
+            Err(ProjectedPortfolioError::Cancelled)
+        } else {
+            verified
+        }
     })();
     // Error outcomes publish no evidence; allow cancellation to take priority.
     if result.is_err() && cancelled() {

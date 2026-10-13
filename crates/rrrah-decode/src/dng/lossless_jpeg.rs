@@ -1235,30 +1235,30 @@ fn decode_scan(
                 } else if y == interval_start_row {
                     i32::from(samples[sample_index - frame_components])
                 } else if x == 0 {
-                i32::from(samples[sample_index - width * frame_components])
-            } else {
-                let left = i32::from(samples[sample_index - frame_components]);
-                let above = i32::from(samples[sample_index - width * frame_components]);
-                let upper_left = i32::from(samples[sample_index - (width + 1) * frame_components]);
-                select_predictor(scan.predictor, left, above, upper_left)
-            };
-            let reconstructed = (predictor + difference) & 0xffff;
-            let reconstructed =
-                u32::try_from(reconstructed).map_err(|_| LosslessJpegError::SampleCountOverflow)?;
-            if reconstructed > transformed_maximum {
-                return Err(LosslessJpegError::ReconstructedSampleOutOfRange {
-                    component_id: frame.components[component.frame_index].id,
-                    sample_index: mcu,
-                    value: reconstructed,
-                    maximum: transformed_maximum,
-                });
+                    i32::from(samples[sample_index - width * frame_components])
+                } else {
+                    let left = i32::from(samples[sample_index - frame_components]);
+                    let above = i32::from(samples[sample_index - width * frame_components]);
+                    let upper_left = i32::from(samples[sample_index - (width + 1) * frame_components]);
+                    select_predictor(scan.predictor, left, above, upper_left)
+                };
+                let reconstructed = (predictor + difference) & 0xffff;
+                let reconstructed =
+                    u32::try_from(reconstructed).map_err(|_| LosslessJpegError::SampleCountOverflow)?;
+                if reconstructed > transformed_maximum {
+                    return Err(LosslessJpegError::ReconstructedSampleOutOfRange {
+                        component_id: frame.components[component.frame_index].id,
+                        sample_index: mcu,
+                        value: reconstructed,
+                        maximum: transformed_maximum,
+                    });
+                }
+                samples[sample_index] =
+                    u16::try_from(reconstructed).map_err(|_| LosslessJpegError::SampleCountOverflow)?;
             }
-            samples[sample_index] =
-                u16::try_from(reconstructed).map_err(|_| LosslessJpegError::SampleCountOverflow)?;
+            mcu += 1;
         }
-        mcu += 1;
     }
-}
 
     if dcs_tail
         && entropy.bit_count == 11

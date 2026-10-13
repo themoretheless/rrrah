@@ -955,8 +955,11 @@ fn joint_complete_fixed_order_visits_all_twenty_five_regions_and_shared_credit_f
         &r[0],
         &r[1],
         &w,
-        rrrah_dedup::model_compare::JointModelComparisonPolicy {comparison:p, maximum_projection_checks:2*16*65},
-         2*16*65*25,
+        rrrah_dedup::model_compare::JointModelComparisonPolicy {
+            comparison: p,
+            maximum_projection_checks: 2 * 16 * 65,
+        },
+        2 * 16 * 65 * 25,
         ModelTileWorkLimits::for_model(p).unwrap(),
         &budget,
         |_, _, _, b, _| {
@@ -1005,8 +1008,11 @@ fn joint_whole_support_stops_at_one_and_late_crop_support_stops_only_after_origi
             &r[0],
             &r[1],
             &w,
-            rrrah_dedup::model_compare::JointModelComparisonPolicy {comparison:p, maximum_projection_checks:2*16*65},
-             2*16*65*25,
+            rrrah_dedup::model_compare::JointModelComparisonPolicy {
+                comparison: p,
+                maximum_projection_checks: 2 * 16 * 65,
+            },
+            2 * 16 * 65 * 25,
             ModelTileWorkLimits::for_model(p).unwrap(),
             &budget,
             |_, a, b, budget, _| {
@@ -1060,8 +1066,11 @@ fn joint_final_caller_checkpoint_mutation_cancellation_and_request_change_never_
             &r[0],
             &r[1],
             &w,
-            rrrah_dedup::model_compare::JointModelComparisonPolicy {comparison:p, maximum_projection_checks:2*16*65},
-             2*16*65*25,
+            rrrah_dedup::model_compare::JointModelComparisonPolicy {
+                comparison: p,
+                maximum_projection_checks: 2 * 16 * 65,
+            },
+            2 * 16 * 65 * 25,
             work,
             &budget,
             |_, _, _, b, _| empty(b),
@@ -1080,8 +1089,11 @@ fn joint_final_caller_checkpoint_mutation_cancellation_and_request_change_never_
             &r[0],
             &r[1],
             &w,
-            rrrah_dedup::model_compare::JointModelComparisonPolicy {comparison:p, maximum_projection_checks:2*16*65},
-             2*16*65*25,
+            rrrah_dedup::model_compare::JointModelComparisonPolicy {
+                comparison: p,
+                maximum_projection_checks: 2 * 16 * 65,
+            },
+            2 * 16 * 65 * 25,
             work,
             &budget,
             |_, _, _, b, _| empty(b),
@@ -1105,8 +1117,11 @@ fn joint_final_caller_checkpoint_mutation_cancellation_and_request_change_never_
             &r[0],
             &r[1],
             &w,
-            rrrah_dedup::model_compare::JointModelComparisonPolicy {comparison:p, maximum_projection_checks:2*16*65},
-             2*16*65*25,
+            rrrah_dedup::model_compare::JointModelComparisonPolicy {
+                comparison: p,
+                maximum_projection_checks: 2 * 16 * 65
+            },
+            2 * 16 * 65 * 25,
             work,
             &budget,
             |_, _, _, b, _| empty(b),
@@ -1127,8 +1142,11 @@ fn joint_final_caller_checkpoint_mutation_cancellation_and_request_change_never_
                 &requests[0],
                 &requests[1],
                 &w,
-                rrrah_dedup::model_compare::JointModelComparisonPolicy {comparison:p, maximum_projection_checks:2*16*65},
-                 2*16*65*25,
+                rrrah_dedup::model_compare::JointModelComparisonPolicy {
+                    comparison: p,
+                    maximum_projection_checks: 2 * 16 * 65
+                },
+                2 * 16 * 65 * 25,
                 work,
                 &budget,
                 |_, _, _, b, _| empty(b),
@@ -1148,16 +1166,35 @@ fn joint_final_caller_checkpoint_mutation_cancellation_and_request_change_never_
 
 #[test]
 fn joint_projection_total_is_admitted_before_io_even_if_first_tile_could_support() {
-    let r=DecodeRequest::new("missing");let budget=MemoryBudget::new(0);let p=policy();
-    for (per,total) in [(2*16*65-1,u64::MAX),(2*16*65,2*16*65*25-1),(u64::MAX,u64::MAX)] {
-        for stop in [false,true] {
-            let result=rrrah_dedup::model_tiles::search_joint_model_tiles_files_with(&r,&r,Path::new("missing-weights"),
-                rrrah_dedup::model_compare::JointModelComparisonPolicy {comparison:p,maximum_projection_checks:per},
-                total, ModelTileWorkLimits::for_model(p).unwrap(),&budget,
-                |_,_,_,_,_| panic!("no provider before work admission"),||stop);
-            if stop {assert!(matches!(result,Err(ModelTileError::Cancelled)));}
-            else {assert!(matches!(result,Err(ModelTileError::Work)));}
-            assert_eq!(budget.used(),0);
+    let r = DecodeRequest::new("missing");
+    let budget = MemoryBudget::new(0);
+    let p = policy();
+    for (per, total) in [
+        (2 * 16 * 65 - 1, u64::MAX),
+        (2 * 16 * 65, 2 * 16 * 65 * 25 - 1),
+        (u64::MAX, u64::MAX),
+    ] {
+        for stop in [false, true] {
+            let result = rrrah_dedup::model_tiles::search_joint_model_tiles_files_with(
+                &r,
+                &r,
+                Path::new("missing-weights"),
+                rrrah_dedup::model_compare::JointModelComparisonPolicy {
+                    comparison: p,
+                    maximum_projection_checks: per,
+                },
+                total,
+                ModelTileWorkLimits::for_model(p).unwrap(),
+                &budget,
+                |_, _, _, _, _| panic!("no provider before work admission"),
+                || stop,
+            );
+            if stop {
+                assert!(matches!(result, Err(ModelTileError::Cancelled)));
+            } else {
+                assert!(matches!(result, Err(ModelTileError::Work)));
+            }
+            assert_eq!(budget.used(), 0);
         }
     }
 }
@@ -1173,8 +1210,11 @@ fn joint_exhausted_insufficient_geometry_is_typed_and_retains_the_complete_manag
         &r[0],
         &r[1],
         &w,
-        rrrah_dedup::model_compare::JointModelComparisonPolicy {comparison:p, maximum_projection_checks:2*16*65},
-         2*16*65*25,
+        rrrah_dedup::model_compare::JointModelComparisonPolicy {
+            comparison: p,
+            maximum_projection_checks: 2 * 16 * 65,
+        },
+        2 * 16 * 65 * 25,
         ModelTileWorkLimits::for_model(p).unwrap(),
         &budget,
         |_, _, _, b, _| {
@@ -1217,8 +1257,11 @@ fn joint_insufficient_geometry_does_not_swallow_a_later_proposal_work_refusal() 
         &r[0],
         &r[1],
         &w,
-        rrrah_dedup::model_compare::JointModelComparisonPolicy {comparison:p, maximum_projection_checks:2*16*65},
-         2*16*65*25,
+        rrrah_dedup::model_compare::JointModelComparisonPolicy {
+            comparison: p,
+            maximum_projection_checks: 2 * 16 * 65,
+        },
+        2 * 16 * 65 * 25,
         ModelTileWorkLimits::for_model(p).unwrap(),
         &budget,
         |_, _, _, b, _| {
@@ -1262,8 +1305,11 @@ fn joint_final_source_mutation_takes_precedence_over_exhausted_insufficient_geom
             &r[0],
             &r[1],
             &w,
-            rrrah_dedup::model_compare::JointModelComparisonPolicy {comparison:p, maximum_projection_checks:2*16*65},
-             2*16*65*25,
+            rrrah_dedup::model_compare::JointModelComparisonPolicy {
+                comparison: p,
+                maximum_projection_checks: 2 * 16 * 65,
+            },
+            2 * 16 * 65 * 25,
             ModelTileWorkLimits::for_model(p).unwrap(),
             &budget,
             |_, _, _, b, _| {
@@ -1309,18 +1355,43 @@ fn joint_final_source_mutation_takes_precedence_over_exhausted_insufficient_geom
 
 #[test]
 fn joint_source_tolerance_square_overflow_and_underflow_refuse_before_io() {
-    use rrrah_dedup::model_compare::{JointModelComparisonPolicy,ModelComparisonError,compare_model_joint_files_with};
-    let r=DecodeRequest::new("missing");let budget=MemoryBudget::new(0);
-    for tolerance in [1e300,1e-300] {
-        let mut p=policy();p.anchors.local.source_tolerance=tolerance;
-        let joint=JointModelComparisonPolicy {comparison:p,maximum_projection_checks:2*16*65};
-        let single=compare_model_joint_files_with(&r,&r,Path::new("missing"),joint,&budget,
-            |_,_,_,_,_|panic!("preflight"),||false);
-        assert!(matches!(single,Err(ModelComparisonError::Policy)));
-        let tiles=rrrah_dedup::model_tiles::search_joint_model_tiles_files_with(&r,&r,Path::new("missing"),joint,
-            2*16*65*25,ModelTileWorkLimits::for_model(p).unwrap(),&budget,
-            |_,_,_,_,_|panic!("preflight"),||false);
-        assert!(matches!(tiles,Err(ModelTileError::Comparison(ModelComparisonError::Policy))));
-        assert_eq!(budget.used(),0);
+    use rrrah_dedup::model_compare::{
+        JointModelComparisonPolicy, ModelComparisonError, compare_model_joint_files_with,
+    };
+    let r = DecodeRequest::new("missing");
+    let budget = MemoryBudget::new(0);
+    for tolerance in [1e300, 1e-300] {
+        let mut p = policy();
+        p.anchors.local.source_tolerance = tolerance;
+        let joint = JointModelComparisonPolicy {
+            comparison: p,
+            maximum_projection_checks: 2 * 16 * 65,
+        };
+        let single = compare_model_joint_files_with(
+            &r,
+            &r,
+            Path::new("missing"),
+            joint,
+            &budget,
+            |_, _, _, _, _| panic!("preflight"),
+            || false,
+        );
+        assert!(matches!(single, Err(ModelComparisonError::Policy)));
+        let tiles = rrrah_dedup::model_tiles::search_joint_model_tiles_files_with(
+            &r,
+            &r,
+            Path::new("missing"),
+            joint,
+            2 * 16 * 65 * 25,
+            ModelTileWorkLimits::for_model(p).unwrap(),
+            &budget,
+            |_, _, _, _, _| panic!("preflight"),
+            || false,
+        );
+        assert!(matches!(
+            tiles,
+            Err(ModelTileError::Comparison(ModelComparisonError::Policy))
+        ));
+        assert_eq!(budget.used(), 0);
     }
 }

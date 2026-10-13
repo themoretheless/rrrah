@@ -605,22 +605,45 @@ fn raster_view_timing(
             let raster = rrrah_decode::prepare_raster_for_display_with_budget(&source, Some(&cpu))?;
             drop(source);
             let expected = raster_sample_bits(&raster);
-            let metadata = (raster.width(), raster.height(), raster.color_space().clone(),
-                raster.image_index(), raster.image_count(), raster.hotspot(),
-                raster.pixel_aspect().map(f32::to_bits), raster.sample_scale().to_bits());
+            let metadata = (
+                raster.width(),
+                raster.height(),
+                raster.color_space().clone(),
+                raster.image_index(),
+                raster.image_count(),
+                raster.hotspot(),
+                raster.pixel_aspect().map(f32::to_bits),
+                raster.sample_scale().to_bits(),
+            );
             let weight = raster.capacity_bytes();
             let directory = tempfile::tempdir()?;
-            let swap = rrrah_cache::RasterSwapCache::<u8>::new_with_budgets(directory.path(),
+            let swap = rrrah_cache::RasterSwapCache::<u8>::new_with_budgets(
+                directory.path(),
                 rrrah_cache::ImageSwapConfig {
-                    limits: rrrah_cache::CacheLimits { max_bytes: weight.saturating_mul(2), max_entries: Some(1), ttl: None },
-                    queue_bytes: weight, queue_count: 1, restore_bytes: weight,
-                }, rrrah_core::MemoryBudget::new(weight), cpu.clone())?;
+                    limits: rrrah_cache::CacheLimits {
+                        max_bytes: weight.saturating_mul(2),
+                        max_entries: Some(1),
+                        ttl: None,
+                    },
+                    queue_bytes: weight,
+                    queue_count: 1,
+                    restore_bytes: weight,
+                },
+                rrrah_core::MemoryBudget::new(weight),
+                cpu.clone(),
+            )?;
             swap.enqueue(1, raster);
             swap.wait_idle()?;
             assert_eq!(swap.stats().writes, 1);
-            assert_eq!(cpu.used(), 0, "seed allocation must leave RAM before timing restores");
+            assert_eq!(
+                cpu.used(),
+                0,
+                "seed allocation must leave RAM before timing restores"
+            );
             Some((directory, swap, expected, metadata))
-        } else { None };
+        } else {
+            None
+        };
         let mut times = Vec::new();
         let mut stage_times = [Vec::new(), Vec::new(), Vec::new(), Vec::new()];
         for iteration in 0..18 {
@@ -629,21 +652,22 @@ fn raster_view_timing(
                 let raster = swap.try_get(&1, || false)?.ok_or("raster swap restore missed")?;
                 (raster, ms(started), 0.)
             } else {
-            let mut request = rrrah_decode::DecodeRequest::new(path);
-            request.memory_budget = Some(cpu.clone());
-            if rrrah_decode::image_source_kind(&request)? != rrrah_decode::ImageSourceKind::Raster {
-                return Err("raster mode requires a raster source".into());
-            }
-            let source = rrrah_decode::decode_raster(&request)?;
-            let decode_ms = ms(started);
-            let prepare_started = Instant::now();
-            let raster =
-                rrrah_decode::prepare_raster_for_display_with_budget_and_cancel(&source, Some(&cpu), || {
-                    false
-                })?;
-            drop(source);
-            let prepare_ms = ms(prepare_started);
-            (raster, decode_ms, prepare_ms)
+                let mut request = rrrah_decode::DecodeRequest::new(path);
+                request.memory_budget = Some(cpu.clone());
+                if rrrah_decode::image_source_kind(&request)? != rrrah_decode::ImageSourceKind::Raster {
+                    return Err("raster mode requires a raster source".into());
+                }
+                let source = rrrah_decode::decode_raster(&request)?;
+                let decode_ms = ms(started);
+                let prepare_started = Instant::now();
+                let raster = rrrah_decode::prepare_raster_for_display_with_budget_and_cancel(
+                    &source,
+                    Some(&cpu),
+                    || false,
+                )?;
+                drop(source);
+                let prepare_ms = ms(prepare_started);
+                (raster, decode_ms, prepare_ms)
             };
             let transfer_started = Instant::now();
             let raster = if let Some((compute, stops, cuda_gpu)) = &cuda {
@@ -707,9 +731,19 @@ fn raster_view_timing(
             // Identity verification and reference copies are outside timed intervals.
             if let Some((_, _, expected, metadata)) = &swap_source {
                 assert_eq!(&raster_sample_bits(&raster), expected);
-                assert_eq!(&(raster.width(), raster.height(), raster.color_space().clone(),
-                    raster.image_index(), raster.image_count(), raster.hotspot(),
-                    raster.pixel_aspect().map(f32::to_bits), raster.sample_scale().to_bits()), metadata);
+                assert_eq!(
+                    &(
+                        raster.width(),
+                        raster.height(),
+                        raster.color_space().clone(),
+                        raster.image_index(),
+                        raster.image_count(),
+                        raster.hotspot(),
+                        raster.pixel_aspect().map(f32::to_bits),
+                        raster.sample_scale().to_bits()
+                    ),
+                    metadata
+                );
             }
             if iteration >= 3 {
                 times.push(elapsed);
@@ -727,7 +761,11 @@ fn raster_view_timing(
         println!(
             "{} raster {}{}+upload+completed-frame p50={:.3} p95={:.3} ms n={}",
             path.display(),
-            if swap_view { "swap-restore" } else { "decode+prepare" },
+            if swap_view {
+                "swap-restore"
+            } else {
+                "decode+prepare"
+            },
             if cuda.is_some() {
                 "+CUDA-exposure-transfers"
             } else if compute.is_some() {
@@ -739,9 +777,14 @@ fn raster_view_timing(
             percentile(&times, 0.95),
             times.len()
         );
-        for (name, samples) in [if swap_view { "swap-restore" } else { "decode" }, "prepare", "exposure+transfer-submit", "completed-frame"]
-            .into_iter()
-            .zip(&stage_times)
+        for (name, samples) in [
+            if swap_view { "swap-restore" } else { "decode" },
+            "prepare",
+            "exposure+transfer-submit",
+            "completed-frame",
+        ]
+        .into_iter()
+        .zip(&stage_times)
         {
             println!(
                 "stage,{name},p50={:.3},p95={:.3},ms,n={}",
@@ -752,8 +795,14 @@ fn raster_view_timing(
         }
         if let Some((_, swap, _, _)) = &swap_source {
             let stats = swap.stats();
-            assert_eq!((stats.writes, stats.reads, stats.errors, stats.queued_bytes), (1, 18, 0, 0));
-            eprintln!("raster swap {}: 18 restores exact; writes=1 errors=0 queue=0; managed CPU=0", path.display());
+            assert_eq!(
+                (stats.writes, stats.reads, stats.errors, stats.queued_bytes),
+                (1, 18, 0, 0)
+            );
+            eprintln!(
+                "raster swap {}: 18 restores exact; writes=1 errors=0 queue=0; managed CPU=0",
+                path.display()
+            );
         }
     }
     drop(renderer);

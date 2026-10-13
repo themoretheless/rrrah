@@ -169,7 +169,9 @@ impl Calibration {
             .rgbe_quad()?;
         let grid = &metadata.black_level;
         if grid.components != 1 {
-            return Err(CalibrationError::Invalid("black-level grid must have one component"));
+            return Err(CalibrationError::Invalid(
+                "black-level grid must have one component",
+            ));
         }
         let white = match metadata.white_level.0.as_slice() {
             [one] => [*one; 4],
@@ -183,10 +185,11 @@ impl Calibration {
                 let phase = ((y % 2) * 2 + x % 2) as usize;
                 let black = grid.at(y, x, 0).unwrap();
                 let range = white[phase] - black;
-                let largest = (65535. - black).max(0.) / range
-                    * metadata.white_balance[quad[phase] as usize];
+                let largest = (65535. - black).max(0.) / range * metadata.white_balance[quad[phase] as usize];
                 if !range.is_finite() || range <= 0. || !largest.is_finite() {
-                    return Err(CalibrationError::Invalid("level/gain range is not finite and positive"));
+                    return Err(CalibrationError::Invalid(
+                        "level/gain range is not finite and positive",
+                    ));
                 }
             }
         }
@@ -263,8 +266,12 @@ impl Calibration {
         let grid = &mosaic.metadata.black_level;
         grid.validate()?;
         let black_credit = if grid.bayer_quad().is_err() {
-            Some(std::sync::Arc::new(budget.try_reserve(grid.values.len() as u64 * 4)?))
-        } else { None };
+            Some(std::sync::Arc::new(
+                budget.try_reserve(grid.values.len() as u64 * 4)?,
+            ))
+        } else {
+            None
+        };
         let mut calibration = Self::new(&mosaic.metadata)?;
         calibration._black_credit = black_credit;
         let expected = (calibration.dimensions[0] as usize)
@@ -437,7 +444,9 @@ mod calibration_tests {
         m.height = 12;
         m.white_level.0 = vec![1000.; 4];
         m.black_level = LevelGrid {
-            width: 3, height: 5, components: 1,
+            width: 3,
+            height: 5,
+            components: 1,
             values: (0..15).map(|i| (i * 20) as f32).collect(),
         };
         let calibration = Calibration::new(&m).unwrap();
@@ -446,7 +455,10 @@ mod calibration_tests {
                 let black = (((y % 5) * 3 + x % 3) * 20) as u16;
                 let phase = ((y % 2) * 2 + x % 2) as usize;
                 let gain = [5., 2., 4., 3.][phase];
-                assert_eq!(calibration.normalize_site(x, y, (1000 + black) / 2), Some(0.5 * gain));
+                assert_eq!(
+                    calibration.normalize_site(x, y, (1000 + black) / 2),
+                    Some(0.5 * gain)
+                );
             }
         }
         m.black_level.values[14] = 1000.;
@@ -460,7 +472,9 @@ mod calibration_tests {
         m.height = 12;
         m.white_level.0 = vec![1000.; 4];
         m.black_level = LevelGrid {
-            width: 3, height: 5, components: 1,
+            width: 3,
+            height: 5,
+            components: 1,
             values: (0..15).map(|i| (i * 20) as f32).collect(),
         };
         let mosaic = DecodedMosaic::new(m, std::sync::Arc::new(vec![500; 144])).unwrap();
@@ -485,8 +499,10 @@ mod calibration_tests {
             calls.set(count + 1);
             count >= 2
         };
-        assert!(matches!(Calibration::normalize_managed(&mosaic, &budget, &cancelled),
-            Err(CalibrationError::Cancelled)));
+        assert!(matches!(
+            Calibration::normalize_managed(&mosaic, &budget, &cancelled),
+            Err(CalibrationError::Cancelled)
+        ));
         assert_eq!(budget.used(), 0);
     }
 

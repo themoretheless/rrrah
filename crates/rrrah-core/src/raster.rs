@@ -108,10 +108,14 @@ fn srgb_linear(value: f32) -> f32 {
     }
 }
 fn apply_rgb_matrix(rgb: [f32; 3], matrix: Option<[[f64; 3]; 3]>) -> Result<[f32; 3], RasterError> {
-    let Some(matrix) = matrix else { return Ok(rgb); };
+    let Some(matrix) = matrix else {
+        return Ok(rgb);
+    };
     let rgb = rgb.map(f64::from);
     let result = matrix.map(|row| (row[0] * rgb[0] + row[1] * rgb[1] + row[2] * rgb[2]) as f32);
-    if result.iter().any(|v| !v.is_finite()) { return Err(RasterError::NonFiniteSample); }
+    if result.iter().any(|v| !v.is_finite()) {
+        return Err(RasterError::NonFiniteSample);
+    }
     Ok(result)
 }
 impl DecodedRaster {
@@ -491,18 +495,40 @@ impl DecodedRaster {
             return Err(RasterError::Cancelled);
         }
         let linear_matrix = match self.color_space.space {
-            RasterColorSpace::LinearRgb(ref chroma) => Some(chroma.to_linear_srgb_matrix()
-                .ok_or(RasterError::ColorTransformRequired)?),
-            RasterColorSpace::Cicp { primaries: 9, transfer: 8, matrix: 0, full_range: true } => Some(crate::linear_rgb_to_srgb_from_xy(
-                [0.708, 0.292, 0.170, 0.797, 0.131, 0.046, 0.3127, 0.3290]
-            ).ok_or(RasterError::ColorTransformRequired)?),
-            RasterColorSpace::Cicp { primaries: 12, transfer: 8 | 13, matrix: 0, full_range: true } => Some(crate::linear_rgb_to_srgb_from_xy(
-                [0.680, 0.320, 0.265, 0.690, 0.150, 0.060, 0.3127, 0.3290]
-            ).ok_or(RasterError::ColorTransformRequired)?),
+            RasterColorSpace::LinearRgb(ref chroma) => Some(
+                chroma
+                    .to_linear_srgb_matrix()
+                    .ok_or(RasterError::ColorTransformRequired)?,
+            ),
+            RasterColorSpace::Cicp {
+                primaries: 9,
+                transfer: 8,
+                matrix: 0,
+                full_range: true,
+            } => Some(
+                crate::linear_rgb_to_srgb_from_xy([0.708, 0.292, 0.170, 0.797, 0.131, 0.046, 0.3127, 0.3290])
+                    .ok_or(RasterError::ColorTransformRequired)?,
+            ),
+            RasterColorSpace::Cicp {
+                primaries: 12,
+                transfer: 8 | 13,
+                matrix: 0,
+                full_range: true,
+            } => Some(
+                crate::linear_rgb_to_srgb_from_xy([0.680, 0.320, 0.265, 0.690, 0.150, 0.060, 0.3127, 0.3290])
+                    .ok_or(RasterError::ColorTransformRequired)?,
+            ),
             _ => None,
         };
-        let narrow_bt709 = matches!(self.color_space.space,
-            RasterColorSpace::Cicp { primaries: 1, transfer: 1, matrix: 0, full_range: false });
+        let narrow_bt709 = matches!(
+            self.color_space.space,
+            RasterColorSpace::Cicp {
+                primaries: 1,
+                transfer: 1,
+                matrix: 0,
+                full_range: false
+            }
+        );
         // Narrow-range RGB integer codes use 16..235 at eight bits, with
         // code values scaled by 2^(bit_depth-8). Alpha remains full-range.
         let narrow_codes = if narrow_bt709 {
@@ -511,9 +537,18 @@ impl DecodedRaster {
                 RasterPixels::Rgba16(_) => (65535_f64, 4096_f64, 56064_f64),
                 RasterPixels::Rgba32Float(_) => return Err(RasterError::ColorTransformRequired),
             })
-        } else { None };
-        let encoded_p3 = matches!(self.color_space.space,
-            RasterColorSpace::Cicp { primaries: 12, transfer: 13, matrix: 0, full_range: true });
+        } else {
+            None
+        };
+        let encoded_p3 = matches!(
+            self.color_space.space,
+            RasterColorSpace::Cicp {
+                primaries: 12,
+                transfer: 13,
+                matrix: 0,
+                full_range: true
+            }
+        );
         let encoded = match self.color_space.space {
             RasterColorSpace::Srgb | RasterColorSpace::AssumedSrgb | RasterColorSpace::Bt709 => true,
             RasterColorSpace::LinearSrgb => false,
@@ -523,7 +558,10 @@ impl DecodedRaster {
             _ => return Err(RasterError::ColorTransformRequired),
         };
         let bt709 = self.color_space.space == RasterColorSpace::Bt709 || narrow_bt709;
-        if !encoded && linear_matrix.is_none() && let RasterPixels::Rgba32Float(pixels) = &self.pixels {
+        if !encoded
+            && linear_matrix.is_none()
+            && let RasterPixels::Rgba32Float(pixels) = &self.pixels
+        {
             for (index, rgba) in pixels.as_chunks::<4>().0.iter().enumerate() {
                 if index.is_multiple_of(4096) && cancel() {
                     return Err(RasterError::Cancelled);
@@ -592,20 +630,29 @@ impl DecodedRaster {
                     // Input here came from an integer sample divided into f32.
                     // Recover its exact code before expanding the legal range.
                     (((f64::from(value) * maximum).round() - black) / span) as f32
-                } else { value };
+                } else {
+                    value
+                };
                 let linear = if bt709 {
                     if narrow_bt709 {
                         let magnitude = value.abs();
-                        value.signum() * if magnitude < 0.081 { magnitude / 4.5 }
-                        else { ((magnitude + 0.099) / 1.099).powf(1.0 / 0.45) }
+                        value.signum()
+                            * if magnitude < 0.081 {
+                                magnitude / 4.5
+                            } else {
+                                ((magnitude + 0.099) / 1.099).powf(1.0 / 0.45)
+                            }
                     } else if value < 0.081 {
                         value / 4.5
                     } else {
                         ((value + 0.099) / 1.099).powf(1.0 / 0.45)
                     }
                 } else if encoded {
-                    if encoded_p3 { value.signum() * srgb_linear(value.abs()) }
-                    else { srgb_linear(value) }
+                    if encoded_p3 {
+                        value.signum() * srgb_linear(value.abs())
+                    } else {
+                        srgb_linear(value)
+                    }
                 } else {
                     value
                 };
@@ -629,7 +676,14 @@ impl DecodedRaster {
                     if index.is_multiple_of(4096) && cancel() {
                         return Err(RasterError::Cancelled);
                     }
-                    let rgb = apply_rgb_matrix([table[rgba[0] as usize], table[rgba[1] as usize], table[rgba[2] as usize]], linear_matrix)?;
+                    let rgb = apply_rgb_matrix(
+                        [
+                            table[rgba[0] as usize],
+                            table[rgba[1] as usize],
+                            table[rgba[2] as usize],
+                        ],
+                        linear_matrix,
+                    )?;
                     output.extend_from_slice(&[rgb[0], rgb[1], rgb[2], f32::from(rgba[3]) / 255.0]);
                 }
             }
@@ -651,7 +705,14 @@ impl DecodedRaster {
                     if index.is_multiple_of(4096) && cancel() {
                         return Err(RasterError::Cancelled);
                     }
-                    let rgb = apply_rgb_matrix([table16[rgba[0] as usize], table16[rgba[1] as usize], table16[rgba[2] as usize]], linear_matrix)?;
+                    let rgb = apply_rgb_matrix(
+                        [
+                            table16[rgba[0] as usize],
+                            table16[rgba[1] as usize],
+                            table16[rgba[2] as usize],
+                        ],
+                        linear_matrix,
+                    )?;
                     output.extend_from_slice(&[rgb[0], rgb[1], rgb[2], f32::from(rgba[3]) / 65535.0]);
                 }
             }
@@ -1091,59 +1152,126 @@ mod tests {
     #[test]
     fn encoded_p3_integer_and_float_paths_match_independent_matrix() {
         use super::*;
-        let samples = [[1.,0.,0.,0.5], [0.,1.,0.,0.5], [0.,0.,1.,0.5], [0.5,0.2,0.7,0.5], [1.,1.,1.,0.5], [-0.5,0.2,1.2,0.5]];
+        let samples = [
+            [1., 0., 0., 0.5],
+            [0., 1., 0., 0.5],
+            [0., 0., 1., 0.5],
+            [0.5, 0.2, 0.7, 0.5],
+            [1., 1., 1., 0.5],
+            [-0.5, 0.2, 1.2, 0.5],
+        ];
         // Fixed D65 P3-to-linear-sRGB matrix, independent of production xy derivation.
-        let matrix = [[1.224940176, -0.224940176, 0.], [-0.042056955, 1.042056955, 0.], [-0.019637555, -0.078636046, 1.098273601]];
+        let matrix = [
+            [1.224940176, -0.224940176, 0.],
+            [-0.042056955, 1.042056955, 0.],
+            [-0.019637555, -0.078636046, 1.098273601],
+        ];
         for kind in 0..3 {
             let count = if kind == 1 { 65536 } else { 6 };
             let input: Vec<f32> = (0..count).flat_map(|i| samples[i % samples.len()]).collect();
             let pixels = match kind {
-                0 => RasterPixels::Rgba8(Arc::new(input.iter().map(|v| (v * 255.).round() as u8).collect::<Vec<_>>()).into()),
-                1 => RasterPixels::Rgba16(Arc::new((0..count).flat_map(|i| [
-                    (65535-i) as u16, ((i*37)%65536) as u16, ((i*113)%65536) as u16, 32768,
-                ]).collect::<Vec<_>>()).into()),
+                0 => RasterPixels::Rgba8(
+                    Arc::new(input.iter().map(|v| (v * 255.).round() as u8).collect::<Vec<_>>()).into(),
+                ),
+                1 => RasterPixels::Rgba16(
+                    Arc::new(
+                        (0..count)
+                            .flat_map(|i| {
+                                [
+                                    (65535 - i) as u16,
+                                    ((i * 37) % 65536) as u16,
+                                    ((i * 113) % 65536) as u16,
+                                    32768,
+                                ]
+                            })
+                            .collect::<Vec<_>>(),
+                    )
+                    .into(),
+                ),
                 _ => RasterPixels::Rgba32Float(Arc::new(input).into()),
             };
-            let source = DecodedRaster::new(count as u32, 1, pixels, RasterColorSpace::Cicp {
-                primaries: 12, transfer: 13, matrix: 0, full_range: true,
-            }).unwrap();
+            let source = DecodedRaster::new(
+                count as u32,
+                1,
+                pixels,
+                RasterColorSpace::Cicp {
+                    primaries: 12,
+                    transfer: 13,
+                    matrix: 0,
+                    full_range: true,
+                },
+            )
+            .unwrap();
             let root = rrrah_memory::MemoryBudget::new(count as u64 * 16);
-            assert!(source.to_linear_srgb_with_budget_and_cancel(Some(&root), || root.used() > 0).is_err());
+            assert!(
+                source
+                    .to_linear_srgb_with_budget_and_cancel(Some(&root), || root.used() > 0)
+                    .is_err()
+            );
             assert_eq!(root.used(), 0);
             let linear = source.to_linear_srgb_with_budget(Some(&root)).unwrap();
-            let RasterPixels::Rgba32Float(output) = linear.pixels() else { panic!() };
+            let RasterPixels::Rgba32Float(output) = linear.pixels() else {
+                panic!()
+            };
             for (i, rgba) in output.chunks_exact(4).enumerate() {
                 let sample = |c| match source.pixels() {
-                    RasterPixels::Rgba8(p) => f64::from(p[i*4+c]) / 255.,
-                    RasterPixels::Rgba16(p) => f64::from(p[i*4+c]) / 65535.,
-                    RasterPixels::Rgba32Float(p) => f64::from(p[i*4+c]),
+                    RasterPixels::Rgba8(p) => f64::from(p[i * 4 + c]) / 255.,
+                    RasterPixels::Rgba16(p) => f64::from(p[i * 4 + c]) / 65535.,
+                    RasterPixels::Rgba32Float(p) => f64::from(p[i * 4 + c]),
                 };
-                let rgb: [f64;3] = std::array::from_fn(|c| { let v = sample(c);
+                let rgb: [f64; 3] = std::array::from_fn(|c| {
+                    let v = sample(c);
                     let magnitude = v.abs();
-                    v.signum() * if magnitude <= 0.04045 { magnitude / 12.92 }
-                    else { ((magnitude + 0.055) / 1.055).powf(2.4) } });
+                    v.signum()
+                        * if magnitude <= 0.04045 {
+                            magnitude / 12.92
+                        } else {
+                            ((magnitude + 0.055) / 1.055).powf(2.4)
+                        }
+                });
                 for c in 0..3 {
-                    let expected = matrix[c][0]*rgb[0]+matrix[c][1]*rgb[1]+matrix[c][2]*rgb[2];
-                    assert!((f64::from(rgba[c])-expected).abs() < 2e-6, "kind={kind} pixel={i} channel={c}");
+                    let expected = matrix[c][0] * rgb[0] + matrix[c][1] * rgb[1] + matrix[c][2] * rgb[2];
+                    assert!(
+                        (f64::from(rgba[c]) - expected).abs() < 2e-6,
+                        "kind={kind} pixel={i} channel={c}"
+                    );
                 }
-                assert!((f64::from(rgba[3])-sample(3)).abs() < 1e-7);
+                assert!((f64::from(rgba[3]) - sample(3)).abs() < 1e-7);
             }
             assert!(output[0] > 1. && output[1] < 0.);
             if kind == 1 {
                 let room = rrrah_memory::MemoryBudget::new(count as u64 * 16 + 65536 * 4);
-                assert!(source.to_linear_srgb_with_budget_and_cancel(Some(&room),
-                    || room.used() > count as u64 * 16).is_err());
+                assert!(
+                    source
+                        .to_linear_srgb_with_budget_and_cancel(Some(&room), || room.used()
+                            > count as u64 * 16)
+                        .is_err()
+                );
                 assert_eq!(room.used(), 0);
                 let table = source.to_linear_srgb_with_budget(Some(&room)).unwrap();
-                let RasterPixels::Rgba32Float(table_values) = table.pixels() else { panic!() };
-                assert!(output.iter().zip(table_values.iter()).all(|(a,b)| a.to_bits()==b.to_bits()));
+                let RasterPixels::Rgba32Float(table_values) = table.pixels() else {
+                    panic!()
+                };
+                assert!(
+                    output
+                        .iter()
+                        .zip(table_values.iter())
+                        .all(|(a, b)| a.to_bits() == b.to_bits())
+                );
                 assert_eq!(room.peak(), room.limit());
                 drop(table);
                 assert_eq!(room.used(), 0);
                 let short = rrrah_memory::MemoryBudget::new(room.limit() - 1);
                 let fallback = source.to_linear_srgb_with_budget(Some(&short)).unwrap();
-                let RasterPixels::Rgba32Float(fallback_values) = fallback.pixels() else { panic!() };
-                assert!(output.iter().zip(fallback_values.iter()).all(|(a,b)| a.to_bits()==b.to_bits()));
+                let RasterPixels::Rgba32Float(fallback_values) = fallback.pixels() else {
+                    panic!()
+                };
+                assert!(
+                    output
+                        .iter()
+                        .zip(fallback_values.iter())
+                        .all(|(a, b)| a.to_bits() == b.to_bits())
+                );
                 assert_eq!(short.peak(), count as u64 * 16);
                 drop(fallback);
                 assert_eq!(short.used(), 0);
@@ -1159,33 +1287,68 @@ mod tests {
         for sixteen in [false, true] {
             let count = if sixteen { 65536 } else { 256 };
             let pixels = if sixteen {
-                RasterPixels::Rgba16(Arc::new((0..count).flat_map(|v| [v as u16, v as u16, v as u16, 32768]).collect::<Vec<_>>()).into())
+                RasterPixels::Rgba16(
+                    Arc::new(
+                        (0..count)
+                            .flat_map(|v| [v as u16, v as u16, v as u16, 32768])
+                            .collect::<Vec<_>>(),
+                    )
+                    .into(),
+                )
             } else {
-                RasterPixels::Rgba8(Arc::new((0..count).flat_map(|v| [v as u8, v as u8, v as u8, 128]).collect::<Vec<_>>()).into())
+                RasterPixels::Rgba8(
+                    Arc::new(
+                        (0..count)
+                            .flat_map(|v| [v as u8, v as u8, v as u8, 128])
+                            .collect::<Vec<_>>(),
+                    )
+                    .into(),
+                )
             };
-            let source = DecodedRaster::new(count, 1, pixels, RasterColorSpace::Cicp {
-                primaries: 1, transfer: 1, matrix: 0, full_range: false,
-            }).unwrap();
+            let source = DecodedRaster::new(
+                count,
+                1,
+                pixels,
+                RasterColorSpace::Cicp {
+                    primaries: 1,
+                    transfer: 1,
+                    matrix: 0,
+                    full_range: false,
+                },
+            )
+            .unwrap();
             let bytes = u64::from(count) * 16;
             let short = rrrah_memory::MemoryBudget::new(bytes - 1);
             assert!(source.to_linear_srgb_with_budget(Some(&short)).is_err());
             assert_eq!(short.used(), 0);
             let root = rrrah_memory::MemoryBudget::new(bytes);
-            assert!(source.to_linear_srgb_with_budget_and_cancel(Some(&root), || root.used() > 0).is_err());
+            assert!(
+                source
+                    .to_linear_srgb_with_budget_and_cancel(Some(&root), || root.used() > 0)
+                    .is_err()
+            );
             assert_eq!(root.used(), 0);
             let linear = source.to_linear_srgb_with_budget(Some(&root)).unwrap();
-            let RasterPixels::Rgba32Float(output) = linear.pixels() else { panic!() };
+            let RasterPixels::Rgba32Float(output) = linear.pixels() else {
+                panic!()
+            };
             let scale = if sixteen { 256. } else { 1. };
             let alpha = if sixteen { 32768. / 65535. } else { 128. / 255. };
             for (code, rgba) in output.chunks_exact(4).enumerate() {
                 let value = (code as f64 - 16. * scale) / (219. * scale);
                 let magnitude = value.abs();
-                let expected = value.signum() * if magnitude < 0.081 { magnitude / 4.5 }
-                    else { ((magnitude + 0.099) / 1.099).powf(1. / 0.45) };
-                for actual in &rgba[..3] { assert!((f64::from(*actual) - expected).abs() < 1e-6, "code={code}"); }
+                let expected = value.signum()
+                    * if magnitude < 0.081 {
+                        magnitude / 4.5
+                    } else {
+                        ((magnitude + 0.099) / 1.099).powf(1. / 0.45)
+                    };
+                for actual in &rgba[..3] {
+                    assert!((f64::from(*actual) - expected).abs() < 1e-6, "code={code}");
+                }
                 assert_eq!(rgba[3], alpha);
             }
-            assert!(output[0] < 0. && output[output.len()-4] > 1.);
+            assert!(output[0] < 0. && output[output.len() - 4] > 1.);
             assert_eq!(root.used(), bytes);
             drop(linear);
             assert_eq!(root.used(), 0);

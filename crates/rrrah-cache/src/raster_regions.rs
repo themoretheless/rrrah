@@ -52,9 +52,11 @@ mod tests {
                 .unwrap(),
         );
         let pressure = output.try_reserve(output.available_bytes()).unwrap();
-        assert!(source
-            .downsample_linear([8, 8], &output, &scratch, || false)
-            .is_err());
+        assert!(
+            source
+                .downsample_linear([8, 8], &output, &scratch, || false)
+                .is_err()
+        );
         assert!(source.cached_lod.lock().unwrap().is_some());
         drop(pressure);
         assert!(matches!(
@@ -76,9 +78,11 @@ mod tests {
                 file.seek(SeekFrom::Start(100)).unwrap();
                 file.write_all(&[255]).unwrap();
             }
-            assert!(source
-                .downsample_linear([8, 8], &output, &scratch, || false)
-                .is_err());
+            assert!(
+                source
+                    .downsample_linear([8, 8], &output, &scratch, || false)
+                    .is_err()
+            );
             assert!(source.cached_lod.lock().unwrap().is_none());
             assert_eq!(
                 (output.used(), scratch.used(), store.usage().unwrap().objects),
@@ -221,9 +225,11 @@ mod tests {
         let output = MemoryBudget::new(300000);
         let scratch = output.child(65536);
         let pressure = output.try_reserve(output.available_bytes()).unwrap();
-        assert!(source
-            .downsample_linear([17, 11], &output, &scratch, || false)
-            .is_err());
+        assert!(
+            source
+                .downsample_linear([17, 11], &output, &scratch, || false)
+                .is_err()
+        );
         drop(pressure);
         assert_eq!(output.used(), 0);
         for (size, reference) in sizes.into_iter().zip(references) {
@@ -256,12 +262,16 @@ mod tests {
             Err(RasterRegionError::Swap(rrrah_swap::SwapError::Cancelled))
         ));
         assert_eq!(output.used(), 0);
-        assert!(source
-            .downsample_linear([0, 1], &output, &scratch, || false)
-            .is_err());
-        assert!(source
-            .downsample_linear([130, 1], &output, &scratch, || false)
-            .is_err());
+        assert!(
+            source
+                .downsample_linear([0, 1], &output, &scratch, || false)
+                .is_err()
+        );
+        assert!(
+            source
+                .downsample_linear([130, 1], &output, &scratch, || false)
+                .is_err()
+        );
         drop(source);
         assert_eq!(
             (
@@ -299,9 +309,11 @@ mod tests {
         let source = SwappedRaster::write(&store, &frame, &index, || false).unwrap();
         let rect = [2, 3, 8, 8];
         let scratch = MemoryBudget::new(65536);
-        assert!(!source
-            .can_restore_region(rect, &MemoryBudget::new(2111), &scratch)
-            .unwrap());
+        assert!(
+            !source
+                .can_restore_region(rect, &MemoryBudget::new(2111), &scratch)
+                .unwrap()
+        );
         let output = MemoryBudget::new(2112);
         assert!(source.can_restore_region(rect, &output, &scratch).unwrap());
         assert_eq!(
@@ -324,9 +336,11 @@ mod tests {
             }
             assert_eq!(root.used(), 0);
         }
-        assert!(source
-            .can_restore_region([64, 0, 1, 1], &output, &scratch)
-            .is_err());
+        assert!(
+            source
+                .can_restore_region([64, 0, 1, 1], &output, &scratch)
+                .is_err()
+        );
         drop(source);
         assert_eq!((index.used(), store.usage().unwrap().bytes), (0, 0));
     }
@@ -338,7 +352,13 @@ mod tests {
             match channel {
                 0 => 8. + (x % 17) as f32 / 16.,
                 1 => -0.5 - (y % 19) as f32 / 32.,
-                2 => if (x+y)%2==0 {-0.} else {0.25},
+                2 => {
+                    if (x + y) % 2 == 0 {
+                        -0.
+                    } else {
+                        0.25
+                    }
+                }
                 _ => 1.,
             }
         }
@@ -355,7 +375,14 @@ mod tests {
         let frame = DecodedRaster::new(
             6000,
             6000,
-            RasterPixels::Rgba32Float(Arc::new((0..6000*6000*4usize).map(|i| sample((i/4)%6000, (i/4)/6000, i%4)).collect::<Vec<_>>()).into()),
+            RasterPixels::Rgba32Float(
+                Arc::new(
+                    (0..6000 * 6000 * 4usize)
+                        .map(|i| sample((i / 4) % 6000, (i / 4) / 6000, i % 4))
+                        .collect::<Vec<_>>(),
+                )
+                .into(),
+            ),
             RasterColorSpace::LinearSrgb,
         )
         .unwrap()
@@ -386,7 +413,10 @@ mod tests {
             panic!()
         };
         for (i, value) in pixels.iter().enumerate() {
-            assert_eq!(value.to_bits(), sample(5983+(i/4)%17, 5989+(i/4)/17, i%4).to_bits());
+            assert_eq!(
+                value.to_bits(),
+                sample(5983 + (i / 4) % 17, 5989 + (i / 4) / 17, i % 4).to_bits()
+            );
         }
         assert_eq!(output.used(), 17 * 11 * 16);
         eprintln!(
@@ -433,103 +463,121 @@ mod tests {
     #[test]
     fn hdr_region_survives_release_of_full_source_and_preserves_metadata_and_bits() {
         for color in [
-            RasterColorSpace::Cicp { primaries: 9, transfer: 16, matrix: 0, full_range: true },
-            RasterColorSpace::LinearRgb(rrrah_core::RgbChromaticities::new(
-                [0.713,0.293,0.165,0.830,0.128,0.044,0.32168,0.33767]).unwrap()),
-            RasterColorSpace::LinearRgb(rrrah_core::RgbChromaticities::new(
-                [0.713,0.293,0.165,0.830,0.128,0.044,0.32168,0.33767]).unwrap()
-                .with_adopted_neutral([0.34567,0.35850]).unwrap()),
-        ] {
-        let directory = tempfile::tempdir().unwrap();
-        let store = SwapStore::new(
-            directory.path(),
-            SwapLimits {
-                max_bytes: 3_000_000,
-                max_objects: Some(1),
+            RasterColorSpace::Cicp {
+                primaries: 9,
+                transfer: 16,
+                matrix: 0,
+                full_range: true,
             },
-        )
-        .unwrap();
-        let source_budget = MemoryBudget::new(512 * 320 * 16);
-        let sample = |i: usize| [8_f32, -0_f32, -2_f32, f32::from_bits(0x7fc01234)][i % 4];
-        let frame = DecodedRaster::new(
-            512,
-            320,
-            RasterPixels::Rgba32Float(Arc::new((0..512 * 320 * 4).map(sample).collect::<Vec<_>>()).into()),
-            color.clone(),
-        )
-        .unwrap()
-        .with_sample_scale(1.5)
-        .unwrap()
-        .with_pixel_aspect(Some(1.25))
-        .unwrap()
-        .with_hotspot(Some((300, 160)))
-        .unwrap()
-        .with_image_selection(2, 3)
-        .unwrap()
-        .try_manage_pixels(&source_budget)
-        .unwrap();
-        let index = MemoryBudget::new(4096);
-        let swapped = SwappedRaster::write(&store, &frame, &index, || false).unwrap();
-        assert_eq!(swapped.pixel_aspect(), Some(1.25));
-        drop(frame);
-        assert_eq!(
-            source_budget.used(),
-            0,
-            "swapped raster must not retain original pixels"
-        );
-        let output = MemoryBudget::new(100000);
-        let scratch = output.child(65536);
-        let rect = [292, 153, 17, 11];
-        let region = swapped.restore_region(rect, &output, &scratch, || false).unwrap();
-        assert_eq!((region.source_size, region.rect), ([512, 320], rect));
-        assert_eq!((region.frame.width(), region.frame.height()), (17, 11));
-        assert_eq!(region.frame.hotspot(), Some((8, 7)));
-        assert_eq!(region.frame.pixel_aspect(), Some(1.25));
-        assert_eq!(region.frame.sample_scale(), 1.5);
-        assert_eq!((region.frame.image_index(), region.frame.image_count()), (2, 3));
-        assert_eq!(region.frame.color_space(), &color);
-        let RasterPixels::Rgba32Float(pixels) = region.frame.pixels() else {
-            panic!()
-        };
-        for (i, value) in pixels.iter().enumerate() {
-            assert_eq!(value.to_bits(), sample(i).to_bits());
-        }
-        assert_eq!(output.used(), 17 * 11 * 16);
-        drop(region);
-        assert_eq!((output.used(), scratch.used()), (0, 0));
-        for rect in [[0, 0, 0, 1], [512, 0, 1, 1], [0, 320, 1, 1], [u32::MAX, 0, 1, 1]] {
-            assert!(matches!(
-                swapped.restore_region(rect, &output, &scratch, || false),
-                Err(RasterRegionError::Invalid)
-            ));
-        }
-        let small = MemoryBudget::new(1);
-        assert!(swapped
-            .restore_region([0, 0, 1, 1], &small, &scratch, || false)
-            .is_err());
-        assert_eq!(small.used(), 0);
-        assert!(matches!(
-            swapped.restore_region([0, 0, 1, 1], &output, &scratch, || true),
-            Err(RasterRegionError::Swap(rrrah_swap::SwapError::Cancelled))
-        ));
-        let outside = swapped
-            .restore_region([0, 0, 2, 2], &output, &scratch, || false)
-            .unwrap();
-        assert_eq!(outside.frame.hotspot(), None);
-        drop(outside);
-        drop(swapped);
-        assert_eq!(
-            (
-                source_budget.used(),
-                index.used(),
-                output.used(),
-                store.usage().unwrap().bytes
+            RasterColorSpace::LinearRgb(
+                rrrah_core::RgbChromaticities::new([
+                    0.713, 0.293, 0.165, 0.830, 0.128, 0.044, 0.32168, 0.33767,
+                ])
+                .unwrap(),
             ),
-            (0, 0, 0, 0)
-        );
-        eprintln!(
-            "swapped HDR region: full2621440-byte source released;17x11 native crop; CICP/aspect/selection/scale/hotspot and all sample bits exact; credits=0"
-        );
+            RasterColorSpace::LinearRgb(
+                rrrah_core::RgbChromaticities::new([
+                    0.713, 0.293, 0.165, 0.830, 0.128, 0.044, 0.32168, 0.33767,
+                ])
+                .unwrap()
+                .with_adopted_neutral([0.34567, 0.35850])
+                .unwrap(),
+            ),
+        ] {
+            let directory = tempfile::tempdir().unwrap();
+            let store = SwapStore::new(
+                directory.path(),
+                SwapLimits {
+                    max_bytes: 3_000_000,
+                    max_objects: Some(1),
+                },
+            )
+            .unwrap();
+            let source_budget = MemoryBudget::new(512 * 320 * 16);
+            let sample = |i: usize| [8_f32, -0_f32, -2_f32, f32::from_bits(0x7fc01234)][i % 4];
+            let frame = DecodedRaster::new(
+                512,
+                320,
+                RasterPixels::Rgba32Float(
+                    Arc::new((0..512 * 320 * 4).map(sample).collect::<Vec<_>>()).into(),
+                ),
+                color.clone(),
+            )
+            .unwrap()
+            .with_sample_scale(1.5)
+            .unwrap()
+            .with_pixel_aspect(Some(1.25))
+            .unwrap()
+            .with_hotspot(Some((300, 160)))
+            .unwrap()
+            .with_image_selection(2, 3)
+            .unwrap()
+            .try_manage_pixels(&source_budget)
+            .unwrap();
+            let index = MemoryBudget::new(4096);
+            let swapped = SwappedRaster::write(&store, &frame, &index, || false).unwrap();
+            assert_eq!(swapped.pixel_aspect(), Some(1.25));
+            drop(frame);
+            assert_eq!(
+                source_budget.used(),
+                0,
+                "swapped raster must not retain original pixels"
+            );
+            let output = MemoryBudget::new(100000);
+            let scratch = output.child(65536);
+            let rect = [292, 153, 17, 11];
+            let region = swapped.restore_region(rect, &output, &scratch, || false).unwrap();
+            assert_eq!((region.source_size, region.rect), ([512, 320], rect));
+            assert_eq!((region.frame.width(), region.frame.height()), (17, 11));
+            assert_eq!(region.frame.hotspot(), Some((8, 7)));
+            assert_eq!(region.frame.pixel_aspect(), Some(1.25));
+            assert_eq!(region.frame.sample_scale(), 1.5);
+            assert_eq!((region.frame.image_index(), region.frame.image_count()), (2, 3));
+            assert_eq!(region.frame.color_space(), &color);
+            let RasterPixels::Rgba32Float(pixels) = region.frame.pixels() else {
+                panic!()
+            };
+            for (i, value) in pixels.iter().enumerate() {
+                assert_eq!(value.to_bits(), sample(i).to_bits());
+            }
+            assert_eq!(output.used(), 17 * 11 * 16);
+            drop(region);
+            assert_eq!((output.used(), scratch.used()), (0, 0));
+            for rect in [[0, 0, 0, 1], [512, 0, 1, 1], [0, 320, 1, 1], [u32::MAX, 0, 1, 1]] {
+                assert!(matches!(
+                    swapped.restore_region(rect, &output, &scratch, || false),
+                    Err(RasterRegionError::Invalid)
+                ));
+            }
+            let small = MemoryBudget::new(1);
+            assert!(
+                swapped
+                    .restore_region([0, 0, 1, 1], &small, &scratch, || false)
+                    .is_err()
+            );
+            assert_eq!(small.used(), 0);
+            assert!(matches!(
+                swapped.restore_region([0, 0, 1, 1], &output, &scratch, || true),
+                Err(RasterRegionError::Swap(rrrah_swap::SwapError::Cancelled))
+            ));
+            let outside = swapped
+                .restore_region([0, 0, 2, 2], &output, &scratch, || false)
+                .unwrap();
+            assert_eq!(outside.frame.hotspot(), None);
+            drop(outside);
+            drop(swapped);
+            assert_eq!(
+                (
+                    source_budget.used(),
+                    index.used(),
+                    output.used(),
+                    store.usage().unwrap().bytes
+                ),
+                (0, 0, 0, 0)
+            );
+            eprintln!(
+                "swapped HDR region: full2621440-byte source released;17x11 native crop; CICP/aspect/selection/scale/hotspot and all sample bits exact; credits=0"
+            );
         }
     }
 
@@ -562,9 +610,11 @@ mod tests {
             let output = MemoryBudget::new(100000);
             let scratch = output.child(65536);
             let pressure = output.try_reserve(output.available_bytes()).unwrap();
-            assert!(swapped
-                .restore_region([3, 7, 9, 5], &output, &scratch, || false)
-                .is_err());
+            assert!(
+                swapped
+                    .restore_region([3, 7, 9, 5], &output, &scratch, || false)
+                    .is_err()
+            );
             drop(pressure);
             let region = swapped
                 .restore_region([3, 7, 9, 5], &output, &scratch, || false)
@@ -661,7 +711,11 @@ impl SwappedRaster {
     /// Physical pixel aspect retained without loading source pixels or ICC data.
     pub fn pixel_aspect(&self) -> Option<f32> {
         let value = f32::from_le_bytes(self.header[60..64].try_into().unwrap());
-        ((self.header[..8] == *b"RRRAST2\0" || self.header[..8] == *b"RRRAST3\0" || self.header[..8] == *b"RRRAST4\0") && value != 0.0).then_some(value)
+        ((self.header[..8] == *b"RRRAST2\0"
+            || self.header[..8] == *b"RRRAST3\0"
+            || self.header[..8] == *b"RRRAST4\0")
+            && value != 0.0)
+            .then_some(value)
     }
 
     /// Area-filter verified source rows directly from swap. Managed storage is

@@ -113,48 +113,99 @@ fn factors() -> [f64; 4] {
 
 #[test]
 fn reflected_geometry_recovers_original_coordinate_mirror_and_refuses_before_io() {
-    let root=std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/rotation");
-    let left=rrrah_decode::DecodeRequest::new(root.join("base.png"));
-    let right=rrrah_decode::DecodeRequest::new(root.join("mirrored.png"));
-    let c=config();
-    let limit=256*c.search.gradient.search.max_total_features as u64;
-    let budget=rrrah_core::MemoryBudget::new(128*1024*1024);
-    let e=rrrah_dedup::local_scan::find_projective_candidate_union_reflected_geometry_files_managed(
-        &left,&right,c,&factors(),[2,2],limit,&budget,||false).unwrap();
-    let geometry=e.geometry.as_ref().expect("mirrored geometry missing");
-    assert!(e.correspondences.len()>=10);
-    let H=geometry.transform.matrix;
-    let determinant=H[0][0]*(H[1][1]*H[2][2]-H[1][2]*H[2][1])
-        -H[0][1]*(H[1][0]*H[2][2]-H[1][2]*H[2][0])
-        +H[0][2]*(H[1][0]*H[2][1]-H[1][1]*H[2][0]);
-    assert!(determinant<0.,"reflection expected: {H:?}");
+    let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/rotation");
+    let left = rrrah_decode::DecodeRequest::new(root.join("base.png"));
+    let right = rrrah_decode::DecodeRequest::new(root.join("mirrored.png"));
+    let c = config();
+    let limit = 256 * c.search.gradient.search.max_total_features as u64;
+    let budget = rrrah_core::MemoryBudget::new(128 * 1024 * 1024);
+    let e = rrrah_dedup::local_scan::find_projective_candidate_union_reflected_geometry_files_managed(
+        &left,
+        &right,
+        c,
+        &factors(),
+        [2, 2],
+        limit,
+        &budget,
+        || false,
+    )
+    .unwrap();
+    let geometry = e.geometry.as_ref().expect("mirrored geometry missing");
+    assert!(e.correspondences.len() >= 10);
+    let H = geometry.transform.matrix;
+    let determinant = H[0][0] * (H[1][1] * H[2][2] - H[1][2] * H[2][1])
+        - H[0][1] * (H[1][0] * H[2][2] - H[1][2] * H[2][0])
+        + H[0][2] * (H[1][0] * H[2][1] - H[1][1] * H[2][0]);
+    assert!(determinant < 0., "reflection expected: {H:?}");
     for p in e.correspondences.iter() {
         assert!((0. ..160.).contains(&p.source[0]) && (0. ..160.).contains(&p.target[0]));
     }
-    let anchors=rrrah_dedup::anchor_rank::AnchorRankPolicy {
-        local:rrrah_dedup::local_rank::LocalRankPolicy {
-            rank:rrrah_dedup::rank_region::RankRegionPolicy {
-                radius:8,minimum_contrast:0.005,minimum_pairs:1000,
-                maximum_sites:12800000,maximum_pixel_reads:64000000,
+    let anchors = rrrah_dedup::anchor_rank::AnchorRankPolicy {
+        local: rrrah_dedup::local_rank::LocalRankPolicy {
+            rank: rrrah_dedup::rank_region::RankRegionPolicy {
+                radius: 8,
+                minimum_contrast: 0.005,
+                minimum_pairs: 1000,
+                maximum_sites: 12800000,
+                maximum_pixel_reads: 64000000,
             },
-            filter_radius:8,minimum_witnesses:10,maximum_points:4000,
-            maximum_point_checks:8002000,minimum_point_separation:2.,
-            target_tolerance:2.,source_tolerance:2.,minimum_coverage:0.3,minimum_agreement:0.9,
-        },window_radius:2,maximum_selection_checks:24002000,
+            filter_radius: 8,
+            minimum_witnesses: 10,
+            maximum_points: 4000,
+            maximum_point_checks: 8002000,
+            minimum_point_separation: 2.,
+            target_tolerance: 2.,
+            source_tolerance: 2.,
+            minimum_coverage: 0.3,
+            minimum_agreement: 0.9,
+        },
+        window_radius: 2,
+        maximum_selection_checks: 24002000,
     };
-    let pixels=rrrah_dedup::anchor_rank_file::compare_anchor_rank_files(
-        &left,&right,geometry.transform,&e.correspondences,
-        c.search.gradient.search.local.decode,anchors,&budget,||false).unwrap();
-    assert!(pixels.supported,"{pixels:?}");
+    let pixels = rrrah_dedup::anchor_rank_file::compare_anchor_rank_files(
+        &left,
+        &right,
+        geometry.transform,
+        &e.correspondences,
+        c.search.gradient.search.local.decode,
+        anchors,
+        &budget,
+        || false,
+    )
+    .unwrap();
+    assert!(pixels.supported, "{pixels:?}");
     drop(e);
-    assert_eq!(budget.used(),0);
-    let missing=rrrah_decode::DecodeRequest::new(root.join("does-not-exist.png"));
-    for cancelled in [false,true] {
-        let fresh=rrrah_core::MemoryBudget::new(128*1024*1024);
-        let result=rrrah_dedup::local_scan::find_projective_candidate_union_reflected_geometry_files_managed(
-            &missing,&missing,c,&factors(),[2,2],limit-1,&fresh,||cancelled);
-        if cancelled {assert!(matches!(result,Err(rrrah_dedup::local_scan::LocalFileError::Cancelled)));}
-        else {assert!(matches!(result,Err(rrrah_dedup::local_scan::LocalFileError::Features(rrrah_dedup::local::LocalError::Budget))),"{result:?}");}
-        assert_eq!(fresh.peak(),0);
+    assert_eq!(budget.used(), 0);
+    let missing = rrrah_decode::DecodeRequest::new(root.join("does-not-exist.png"));
+    for cancelled in [false, true] {
+        let fresh = rrrah_core::MemoryBudget::new(128 * 1024 * 1024);
+        let result =
+            rrrah_dedup::local_scan::find_projective_candidate_union_reflected_geometry_files_managed(
+                &missing,
+                &missing,
+                c,
+                &factors(),
+                [2, 2],
+                limit - 1,
+                &fresh,
+                || cancelled,
+            );
+        if cancelled {
+            assert!(matches!(
+                result,
+                Err(rrrah_dedup::local_scan::LocalFileError::Cancelled)
+            ));
+        } else {
+            assert!(
+                matches!(
+                    result,
+                    Err(rrrah_dedup::local_scan::LocalFileError::Features(
+                        rrrah_dedup::local::LocalError::Budget
+                    ))
+                ),
+                "{result:?}"
+            );
+        }
+        assert_eq!(fresh.peak(), 0);
     }
 }

@@ -47,8 +47,8 @@ impl<T: Read> Read for SlowIo<'_, T> {
     fn read(&mut self, data: &mut [u8]) -> std::io::Result<usize> {
         std::thread::sleep(Duration::from_millis(2));
         let length = data.len().min(65536);
-        let count=self.0.read(&mut data[..length])?;
-        SLOW_READ_BYTES.with(|bytes|bytes.set(bytes.get()+count as u64));
+        let count = self.0.read(&mut data[..length])?;
+        SLOW_READ_BYTES.with(|bytes| bytes.set(bytes.get() + count as u64));
         Ok(count)
     }
 }
@@ -171,7 +171,9 @@ fn sustained_swap_with_limits(disk_max_bytes: u64, disk_max_objects: usize, ttl:
         assert_eq!(root.used(), 0);
         if (disk_max_objects == 3 || disk_max_objects == 100) && cycles >= 3 {
             assert!(
-                swap.try_get(&((cycles - 3) % 100_000), || false).unwrap().is_none(),
+                swap.try_get(&((cycles - 3) % 100_000), || false)
+                    .unwrap()
+                    .is_none(),
                 "capacity-evicted key remained readable"
             );
         }
@@ -603,11 +605,17 @@ fn hundred_thousand_distinct_rasters_keep_swap_index_and_memory_bounded() {
     // releases its index/store after recv wakes. Do not require synchronous I/O
     // cleanup on the render thread, but do require bounded eventual teardown.
     let teardown_start = Instant::now();
-    while physical_usage(directory.path()) != (0,0) || root.used()!=0 || queue.used()!=0 {
-        assert!(teardown_start.elapsed()<Duration::from_secs(2), "detached swap worker retained files or memory after shutdown");
+    while physical_usage(directory.path()) != (0, 0) || root.used() != 0 || queue.used() != 0 {
+        assert!(
+            teardown_start.elapsed() < Duration::from_secs(2),
+            "detached swap worker retained files or memory after shutdown"
+        );
         std::thread::sleep(Duration::from_millis(2));
     }
-    eprintln!("100k swap asynchronous teardown: {:?}; physical files/bytes and root/queue=0",teardown_start.elapsed());
+    eprintln!(
+        "100k swap asynchronous teardown: {:?}; physical files/bytes and root/queue=0",
+        teardown_start.elapsed()
+    );
     assert_eq!(root.used(), 0);
     assert_eq!(queue.used(), 0);
     eprintln!(
@@ -621,88 +629,184 @@ fn hundred_thousand_distinct_rasters_keep_swap_index_and_memory_bounded() {
 #[test]
 #[ignore = "manual large float HDR delayed disk pressure/cancel qualification"]
 fn sustained_float_hdr_delayed_swap_pressure_cancel_and_retry() {
-    let seconds=std::env::var("RRRAH_STRESS_SECONDS").map(|s|s.parse::<u64>().unwrap()).unwrap_or(60);
-    assert!(seconds>=10);
-    let directory=tempfile::tempdir().unwrap();
-    let root=MemoryBudget::new(128*1024*1024);let queue=MemoryBudget::new(64*1024*1024);
-    let pixel_bytes=2048*2048*16u64;
-    let swap:ImageSwapCache<u64,SlowRaster>=ImageSwapCache::new_with_budgets(directory.path(),ImageSwapConfig {
-        limits:CacheLimits {max_bytes:2*(pixel_bytes+64),max_entries:Some(2),ttl:None},
-        queue_bytes:pixel_bytes,queue_count:1,restore_bytes:pixel_bytes,
-    },queue.clone(),root.clone()).unwrap();
-    let values=[0f32,-0f32,0.5,2.,65504.,-65504.,1.,0.25];
-    let start=Instant::now();let mut cycles=0;
-    while start.elapsed()<Duration::from_secs(seconds) || cycles<3 {
-        let pixels=(0..2048*2048*4).map(|i|values[(i+cycles as usize)%values.len()]).collect::<Vec<_>>();
-        let raster=DecodedRaster::new(2048,2048,RasterPixels::Rgba32Float(Arc::new(pixels).into()),RasterColorSpace::LinearSrgb)
-            .unwrap().try_manage_pixels(&root).unwrap();
-        swap.enqueue(cycles,SlowRaster(raster));swap.wait_idle().unwrap();
-        assert_eq!((root.used(),queue.used()),(0,0));
-        let usage=physical_usage(directory.path());assert!(usage.0<=2*(pixel_bytes+64));assert!(usage.1<=2);
-        let held=root.try_reserve(root.limit()).unwrap();assert!(swap.try_get(&cycles,||false).is_err());drop(held);
-        SLOW_READ_BYTES.with(|bytes|bytes.set(0));
-        let mut allocation_seen=false;
-        assert!(swap.try_get(&cycles,|| {
-            allocation_seen |= root.used()==pixel_bytes;
-            allocation_seen && SLOW_READ_BYTES.with(|bytes|bytes.get()>=65536+64)
-        }).unwrap().is_none());
-        assert!(allocation_seen,"cancel only after the64MiB pixel allocation is admitted");
-        assert!(SLOW_READ_BYTES.with(|bytes|bytes.get()>=65536+64),"cancel after real payload read progress");
-        assert_eq!(root.used(),0);
-        let restored=swap.try_get(&cycles,||false).unwrap().unwrap();
-        let RasterPixels::Rgba32Float(pixels)=restored.0.pixels() else {panic!()};
-        assert_eq!((restored.0.width(),restored.0.height()),(2048,2048));
-        for (i,pixel) in pixels.iter().enumerate() {assert_eq!(pixel.to_bits(),values[(i+cycles as usize)%values.len()].to_bits());}
-        drop(restored);assert_eq!(root.used(),0);
-        if cycles>=2 {assert!(swap.try_get(&(cycles-2),||false).unwrap().is_none());}
-        cycles+=1;
+    let seconds = std::env::var("RRRAH_STRESS_SECONDS")
+        .map(|s| s.parse::<u64>().unwrap())
+        .unwrap_or(60);
+    assert!(seconds >= 10);
+    let directory = tempfile::tempdir().unwrap();
+    let root = MemoryBudget::new(128 * 1024 * 1024);
+    let queue = MemoryBudget::new(64 * 1024 * 1024);
+    let pixel_bytes = 2048 * 2048 * 16u64;
+    let swap: ImageSwapCache<u64, SlowRaster> = ImageSwapCache::new_with_budgets(
+        directory.path(),
+        ImageSwapConfig {
+            limits: CacheLimits {
+                max_bytes: 2 * (pixel_bytes + 64),
+                max_entries: Some(2),
+                ttl: None,
+            },
+            queue_bytes: pixel_bytes,
+            queue_count: 1,
+            restore_bytes: pixel_bytes,
+        },
+        queue.clone(),
+        root.clone(),
+    )
+    .unwrap();
+    let values = [0f32, -0f32, 0.5, 2., 65504., -65504., 1., 0.25];
+    let start = Instant::now();
+    let mut cycles = 0;
+    while start.elapsed() < Duration::from_secs(seconds) || cycles < 3 {
+        let pixels = (0..2048 * 2048 * 4)
+            .map(|i| values[(i + cycles as usize) % values.len()])
+            .collect::<Vec<_>>();
+        let raster = DecodedRaster::new(
+            2048,
+            2048,
+            RasterPixels::Rgba32Float(Arc::new(pixels).into()),
+            RasterColorSpace::LinearSrgb,
+        )
+        .unwrap()
+        .try_manage_pixels(&root)
+        .unwrap();
+        swap.enqueue(cycles, SlowRaster(raster));
+        swap.wait_idle().unwrap();
+        assert_eq!((root.used(), queue.used()), (0, 0));
+        let usage = physical_usage(directory.path());
+        assert!(usage.0 <= 2 * (pixel_bytes + 64));
+        assert!(usage.1 <= 2);
+        let held = root.try_reserve(root.limit()).unwrap();
+        assert!(swap.try_get(&cycles, || false).is_err());
+        drop(held);
+        SLOW_READ_BYTES.with(|bytes| bytes.set(0));
+        let mut allocation_seen = false;
+        assert!(
+            swap.try_get(&cycles, || {
+                allocation_seen |= root.used() == pixel_bytes;
+                allocation_seen && SLOW_READ_BYTES.with(|bytes| bytes.get() >= 65536 + 64)
+            })
+            .unwrap()
+            .is_none()
+        );
+        assert!(
+            allocation_seen,
+            "cancel only after the64MiB pixel allocation is admitted"
+        );
+        assert!(
+            SLOW_READ_BYTES.with(|bytes| bytes.get() >= 65536 + 64),
+            "cancel after real payload read progress"
+        );
+        assert_eq!(root.used(), 0);
+        let restored = swap.try_get(&cycles, || false).unwrap().unwrap();
+        let RasterPixels::Rgba32Float(pixels) = restored.0.pixels() else {
+            panic!()
+        };
+        assert_eq!((restored.0.width(), restored.0.height()), (2048, 2048));
+        for (i, pixel) in pixels.iter().enumerate() {
+            assert_eq!(
+                pixel.to_bits(),
+                values[(i + cycles as usize) % values.len()].to_bits()
+            );
+        }
+        drop(restored);
+        assert_eq!(root.used(), 0);
+        if cycles >= 2 {
+            assert!(swap.try_get(&(cycles - 2), || false).unwrap().is_none());
+        }
+        cycles += 1;
     }
-    let stats=swap.stats();assert_eq!((stats.writes,stats.reads,stats.errors),(cycles,cycles,0));
-    drop(swap);assert_eq!((root.used(),queue.used()),(0,0));
-    eprintln!("large float delayed swap: cycles={cycles}; seconds={:.3};2048x2048;64MiB; every signed/HDR/negative-zero bit exact; full pressure and admitted cancellation after64KiB read each cycle; disk count2/bytes bounded; final=0",start.elapsed().as_secs_f64());
+    let stats = swap.stats();
+    assert_eq!((stats.writes, stats.reads, stats.errors), (cycles, cycles, 0));
+    drop(swap);
+    assert_eq!((root.used(), queue.used()), (0, 0));
+    eprintln!(
+        "large float delayed swap: cycles={cycles}; seconds={:.3};2048x2048;64MiB; every signed/HDR/negative-zero bit exact; full pressure and admitted cancellation after64KiB read each cycle; disk count2/bytes bounded; final=0",
+        start.elapsed().as_secs_f64()
+    );
 }
 
 #[test]
 fn ttl_prune_during_admitted_restore_keeps_blob_until_reader_finishes() {
     use std::sync::mpsc;
-    let directory=tempfile::tempdir().unwrap();
-    let root=MemoryBudget::new(1024*1024);
-    let queue=MemoryBudget::new(1024*1024);
-    let swap=Arc::new(ImageSwapCache::<u64,SlowRaster>::new_with_budgets(
-        directory.path(),ImageSwapConfig {
-            limits:CacheLimits {max_bytes:1024*1024,max_entries:Some(1),ttl:Some(Duration::from_millis(200))},
-            queue_bytes:1024*1024,queue_count:1,restore_bytes:1024*1024,
-        },queue.clone(),root.clone()).unwrap());
-    let expected:Vec<u8>=(0..256*256*4).map(|i|(i%251) as u8).collect();
-    let frame=DecodedRaster::new(256,256,RasterPixels::Rgba8(Arc::new(expected.clone()).into()),
-        RasterColorSpace::Srgb).unwrap().try_manage_pixels(&root).unwrap();
-    swap.enqueue(7,SlowRaster(frame));swap.wait_idle().unwrap();
-    assert_eq!(root.used(),0);
-    let (entered_tx,entered_rx)=mpsc::sync_channel(0);
-    let (resume_tx,resume_rx)=mpsc::sync_channel(0);
-    let reader_swap=swap.clone();let reader_root=root.clone();
-    let reader=std::thread::spawn(move || {
-        SLOW_READ_BYTES.with(|bytes|bytes.set(0));let mut paused=false;
-        reader_swap.try_get(&7,|| {
-            if !paused && reader_root.used()>=262144 && SLOW_READ_BYTES.with(|bytes|bytes.get())>=65536 {
-                paused=true;entered_tx.send(()).unwrap();
-                resume_rx.recv_timeout(Duration::from_secs(5)).unwrap();
-            }
-            false
-        }).unwrap().unwrap()
+    let directory = tempfile::tempdir().unwrap();
+    let root = MemoryBudget::new(1024 * 1024);
+    let queue = MemoryBudget::new(1024 * 1024);
+    let swap = Arc::new(
+        ImageSwapCache::<u64, SlowRaster>::new_with_budgets(
+            directory.path(),
+            ImageSwapConfig {
+                limits: CacheLimits {
+                    max_bytes: 1024 * 1024,
+                    max_entries: Some(1),
+                    ttl: Some(Duration::from_millis(200)),
+                },
+                queue_bytes: 1024 * 1024,
+                queue_count: 1,
+                restore_bytes: 1024 * 1024,
+            },
+            queue.clone(),
+            root.clone(),
+        )
+        .unwrap(),
+    );
+    let expected: Vec<u8> = (0..256 * 256 * 4).map(|i| (i % 251) as u8).collect();
+    let frame = DecodedRaster::new(
+        256,
+        256,
+        RasterPixels::Rgba8(Arc::new(expected.clone()).into()),
+        RasterColorSpace::Srgb,
+    )
+    .unwrap()
+    .try_manage_pixels(&root)
+    .unwrap();
+    swap.enqueue(7, SlowRaster(frame));
+    swap.wait_idle().unwrap();
+    assert_eq!(root.used(), 0);
+    let (entered_tx, entered_rx) = mpsc::sync_channel(0);
+    let (resume_tx, resume_rx) = mpsc::sync_channel(0);
+    let reader_swap = swap.clone();
+    let reader_root = root.clone();
+    let reader = std::thread::spawn(move || {
+        SLOW_READ_BYTES.with(|bytes| bytes.set(0));
+        let mut paused = false;
+        reader_swap
+            .try_get(&7, || {
+                if !paused
+                    && reader_root.used() >= 262144
+                    && SLOW_READ_BYTES.with(|bytes| bytes.get()) >= 65536
+                {
+                    paused = true;
+                    entered_tx.send(()).unwrap();
+                    resume_rx.recv_timeout(Duration::from_secs(5)).unwrap();
+                }
+                false
+            })
+            .unwrap()
+            .unwrap()
     });
     entered_rx.recv_timeout(Duration::from_secs(5)).unwrap();
     std::thread::sleep(Duration::from_millis(250));
     swap.prune_expired().unwrap();
-    assert_eq!(swap.disk_usage().unwrap().objects,1,"active reader must retain disk reservation");
-    assert!(physical_usage(directory.path()).1>0);
+    assert_eq!(
+        swap.disk_usage().unwrap().objects,
+        1,
+        "active reader must retain disk reservation"
+    );
+    assert!(physical_usage(directory.path()).1 > 0);
     resume_tx.send(()).unwrap();
-    let restored=reader.join().unwrap();
-    let RasterPixels::Rgba8(pixels)=restored.0.pixels() else {panic!("wrong precision")};
-    assert_eq!(pixels.as_ref(),expected.as_slice());
-    assert!(swap.get(&7,||false).is_none(),"expired membership must not be republished");
-    assert_eq!(swap.disk_usage().unwrap().objects,0);
-    assert_eq!(physical_usage(directory.path()),(0,0));
-    assert_eq!(root.used(),262144);
-    drop(restored);assert_eq!(root.used(),0);assert_eq!(queue.used(),0);
+    let restored = reader.join().unwrap();
+    let RasterPixels::Rgba8(pixels) = restored.0.pixels() else {
+        panic!("wrong precision")
+    };
+    assert_eq!(pixels.as_ref(), expected.as_slice());
+    assert!(
+        swap.get(&7, || false).is_none(),
+        "expired membership must not be republished"
+    );
+    assert_eq!(swap.disk_usage().unwrap().objects, 0);
+    assert_eq!(physical_usage(directory.path()), (0, 0));
+    assert_eq!(root.used(), 262144);
+    drop(restored);
+    assert_eq!(root.used(), 0);
+    assert_eq!(queue.used(), 0);
 }

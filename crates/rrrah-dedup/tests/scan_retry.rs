@@ -7,7 +7,9 @@ use rrrah_dedup::{
     scan::{VisualPolicy, confirm_pixels, scan_visual},
 };
 
-fn no_cancel() -> bool { false }
+fn no_cancel() -> bool {
+    false
+}
 
 fn two_pixel_bmp() -> Vec<u8> {
     let mut bytes = vec![0; 62];
@@ -32,11 +34,17 @@ fn same_cache_retries_repaired_sources_and_never_retains_old_pair_reports() {
     let requests = vec![(2, DecodeRequest::new(&right)), (1, DecodeRequest::new(&left))];
     let policy = VisualPolicy {
         fingerprint: FingerprintPolicy {
-            recipe: [17; 32], max_file_bytes: 1024, max_pixels: 2,
-            max_frames: 10, max_cache_entries: 10,
+            recipe: [17; 32],
+            max_file_bytes: 1024,
+            max_pixels: 2,
+            max_frames: 10,
+            max_cache_entries: 10,
         },
-        max_files: 2, max_pairs: 1, radius: 0,
-        allow_transforms: false, require_information: true,
+        max_files: 2,
+        max_pairs: 1,
+        radius: 0,
+        allow_transforms: false,
+        require_information: true,
     };
     let budget = MemoryBudget::new(1024 * 1024);
     let mut cache = FingerprintCache::default();
@@ -59,7 +67,14 @@ fn same_cache_retries_repaired_sources_and_never_retains_old_pair_reports() {
     changed[57..60].fill(0);
     std::fs::write(&right, &changed).unwrap();
     let mutated = scan_visual(requests.clone(), policy, &budget, &mut cache, no_cancel).unwrap();
-    let fresh = scan_visual(requests.clone(), policy, &budget, &mut FingerprintCache::default(), no_cancel).unwrap();
+    let fresh = scan_visual(
+        requests.clone(),
+        policy,
+        &budget,
+        &mut FingerprintCache::default(),
+        no_cancel,
+    )
+    .unwrap();
     assert_eq!(mutated.cache_hits, 1);
     assert_eq!(mutated.analysed, fresh.analysed);
     assert_eq!(mutated.pairs, fresh.pairs);

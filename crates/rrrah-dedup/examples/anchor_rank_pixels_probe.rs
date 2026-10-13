@@ -1,11 +1,11 @@
 //! Geometric anchor pixel diagnostic; no automatic identity policy.
 use rrrah_core::{MemoryBudget, SharedBuffer};
 use rrrah_dedup::{
+    anchor_rank::{AnchorRankPolicy, compare_anchor_rank},
     exact::ContentSnapshot,
     geometry::{Correspondence, ProjectiveTransform},
     linear::LinearRgbaView,
     local_rank::LocalRankPolicy,
-    anchor_rank::{AnchorRankPolicy, compare_anchor_rank},
     rank_region::RankRegionPolicy,
 };
 use std::{
@@ -55,7 +55,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .split_whitespace()
         .map(str::parse)
         .collect::<Result<_, _>>()?;
-    if values.len() != 9 { return Err("invalid model".into()); }
+    if values.len() != 9 {
+        return Err("invalid model".into());
+    }
     let model = ProjectiveTransform {
         matrix: std::array::from_fn(|i| std::array::from_fn(|j| values[i * 3 + j])),
     };
@@ -100,7 +102,19 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             minimum_coverage: 0.3,
             minimum_agreement: 0.9,
         };
-        match compare_anchor_rank(&av, &bv, model, &points, AnchorRankPolicy { local: policy, window_radius: 2, maximum_selection_checks: 1176014000 }, &budget, || false) {
+        match compare_anchor_rank(
+            &av,
+            &bv,
+            model,
+            &points,
+            AnchorRankPolicy {
+                local: policy,
+                window_radius: 2,
+                maximum_selection_checks: 1176014000,
+            },
+            &budget,
+            || false,
+        ) {
             Ok(e) => println!(
                 "{{\"filter_radius\":{radius},\"status\":\"ok\",\"forward_anchors\":{},\"reverse_anchors\":{},\"supported\":{},\"directions\":[{{\"sites\":{},\"valid_sites\":{},\"informative_pairs\":{},\"agreeing_pairs\":{}}},{{\"sites\":{},\"valid_sites\":{},\"informative_pairs\":{},\"agreeing_pairs\":{}}}]}}",
                 e.forward_anchors,

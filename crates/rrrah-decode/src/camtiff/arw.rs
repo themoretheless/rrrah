@@ -957,11 +957,7 @@ fn decode_lsb_packed_row(
             if tail_output.is_empty() {
                 return Ok(());
             }
-            return decode_lsb_packed_bytewise(
-                &row_bytes[grouped_bytes..],
-                tail_output,
-                bits_per_sample,
-            );
+            return decode_lsb_packed_bytewise(&row_bytes[grouped_bytes..], tail_output, bits_per_sample);
         }
     } else if bits_per_sample == 14 {
         let groups = row_output.len() / 4;
@@ -988,11 +984,7 @@ fn decode_lsb_packed_row(
             if tail_output.is_empty() {
                 return Ok(());
             }
-            return decode_lsb_packed_bytewise(
-                &row_bytes[grouped_bytes..],
-                tail_output,
-                bits_per_sample,
-            );
+            return decode_lsb_packed_bytewise(&row_bytes[grouped_bytes..], tail_output, bits_per_sample);
         }
     }
     decode_lsb_packed_bytewise(row_bytes, row_output, bits_per_sample)
@@ -1031,7 +1023,6 @@ fn packed_row_bytes(width: usize, bits_per_sample: u8) -> Result<usize, DecodeEr
         .map(|bits| bits / 8)
         .ok_or_else(|| error("packed row byte length overflows"))
 }
-
 
 #[cfg(test)]
 mod tests {

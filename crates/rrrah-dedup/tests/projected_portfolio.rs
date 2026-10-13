@@ -1042,23 +1042,41 @@ use rrrah_dedup::exact_portfolio::{ExactPortfolioEvidence, search_exact_projecte
 fn exact_first_accepts_undecodable_copies_without_weights_or_provider() {
     let dir = tempfile::tempdir().unwrap();
     let (r, w) = fixture(dir.path(), true);
-    for request in &r { std::fs::write(&request.path, b"not an image").unwrap(); }
+    for request in &r {
+        std::fs::write(&request.path, b"not an image").unwrap();
+    }
     std::fs::remove_file(&w).unwrap();
     let b = MemoryBudget::new(0);
     for order in [SearchOrder::NativeFirst, SearchOrder::ModelFirst] {
         let evidence = search_exact_projected_portfolio_files_with(
-            &r[0], &r[1], &w, combined(order), &[1.], &b,
-            |_, _, _, _, _| panic!("exact bytes must not invoke inference"), || false,
-        ).unwrap();
+            &r[0],
+            &r[1],
+            &w,
+            combined(order),
+            &[1.],
+            &b,
+            |_, _, _, _, _| panic!("exact bytes must not invoke inference"),
+            || false,
+        )
+        .unwrap();
         assert!(matches!(evidence, ExactPortfolioEvidence::ExactBytes));
         assert_eq!(b.used(), 0);
     }
     let mut p = combined(SearchOrder::NativeFirst);
     p.work.point_checks = 0;
-    assert!(matches!(search_exact_projected_portfolio_files_with(
-        &r[0], &r[1], &w, p, &[1.], &b,
-        |_, _, _, _, _| panic!("preflight must precede IO"), || false,
-    ), Err(ProjectedPortfolioError::Work)));
+    assert!(matches!(
+        search_exact_projected_portfolio_files_with(
+            &r[0],
+            &r[1],
+            &w,
+            p,
+            &[1.],
+            &b,
+            |_, _, _, _, _| panic!("preflight must precede IO"),
+            || false,
+        ),
+        Err(ProjectedPortfolioError::Work)
+    ));
 }
 
 #[test]
@@ -1078,13 +1096,28 @@ fn exact_first_mismatch_runs_visual_and_keeps_projection_collision_inconclusive(
             let b = MemoryBudget::new(8 * 1024 * 1024);
             let calls = Cell::new(0);
             let result = search_exact_projected_portfolio_files_with(
-                &r[0], &r[1], &w, combined(order), &[1.], &b,
-                |_, _, _, b, _| { calls.set(calls.get() + 1); proposals(b) }, || false,
+                &r[0],
+                &r[1],
+                &w,
+                combined(order),
+                &[1.],
+                &b,
+                |_, _, _, b, _| {
+                    calls.set(calls.get() + 1);
+                    proposals(b)
+                },
+                || false,
             );
             if collision {
-                assert!(matches!(result, Err(ProjectedPortfolioError::InconclusiveNative { .. })), "{result:?}");
+                assert!(
+                    matches!(result, Err(ProjectedPortfolioError::InconclusiveNative { .. })),
+                    "{result:?}"
+                );
             } else {
-                assert!(matches!(result, Ok(ExactPortfolioEvidence::Visual(ref e)) if e.supported()), "{result:?}");
+                assert!(
+                    matches!(result, Ok(ExactPortfolioEvidence::Visual(ref e)) if e.supported()),
+                    "{result:?}"
+                );
             }
             assert!(calls.get() > 0);
             drop(result);
@@ -1107,14 +1140,30 @@ fn exact_first_last_callback_revalidates_sources_and_visual_weights() {
             let b = MemoryBudget::new(8 * 1024 * 1024);
             let calls = Cell::new(0);
             search_exact_projected_portfolio_files_with(
-                &r[0], &r[1], &w, combined(SearchOrder::ModelFirst), &[1.], &b,
-                |_, _, _, b, _| proposals(b), || { calls.set(calls.get() + 1); false },
-            ).unwrap();
+                &r[0],
+                &r[1],
+                &w,
+                combined(SearchOrder::ModelFirst),
+                &[1.],
+                &b,
+                |_, _, _, b, _| proposals(b),
+                || {
+                    calls.set(calls.get() + 1);
+                    false
+                },
+            )
+            .unwrap();
             let last = calls.get();
             calls.set(0);
             let result = search_exact_projected_portfolio_files_with(
-                &r[0], &r[1], &w, combined(SearchOrder::ModelFirst), &[1.], &b,
-                |_, _, _, b, _| proposals(b), || {
+                &r[0],
+                &r[1],
+                &w,
+                combined(SearchOrder::ModelFirst),
+                &[1.],
+                &b,
+                |_, _, _, b, _| proposals(b),
+                || {
                     calls.set(calls.get() + 1);
                     if calls.get() == last {
                         let path = if target == 2 { &w } else { &r[target].path };
@@ -1125,7 +1174,10 @@ fn exact_first_last_callback_revalidates_sources_and_visual_weights() {
                     false
                 },
             );
-            assert!(matches!(result, Err(ProjectedPortfolioError::Source(_))), "{result:?}");
+            assert!(
+                matches!(result, Err(ProjectedPortfolioError::Source(_))),
+                "{result:?}"
+            );
             assert_eq!(b.used(), 0);
         }
     }
@@ -1133,7 +1185,10 @@ fn exact_first_last_callback_revalidates_sources_and_visual_weights() {
 
 #[test]
 fn exact_first_sticky_global_and_both_owners_cancel_every_exact_checkpoint() {
-    use std::sync::{Arc, atomic::{AtomicU64, Ordering}};
+    use std::sync::{
+        Arc,
+        atomic::{AtomicU64, Ordering},
+    };
     for owner in 0..3 {
         let dir = tempfile::tempdir().unwrap();
         let (mut r, w) = fixture(dir.path(), true);
@@ -1144,21 +1199,42 @@ fn exact_first_sticky_global_and_both_owners_cancel_every_exact_checkpoint() {
         let b = MemoryBudget::new(0);
         let calls = Cell::new(0);
         search_exact_projected_portfolio_files_with(
-            &r[0], &r[1], &w, combined(SearchOrder::NativeFirst), &[1.], &b,
-            |_, _, _, _, _| panic!("no inference"), || { calls.set(calls.get() + 1); false },
-        ).unwrap();
+            &r[0],
+            &r[1],
+            &w,
+            combined(SearchOrder::NativeFirst),
+            &[1.],
+            &b,
+            |_, _, _, _, _| panic!("no inference"),
+            || {
+                calls.set(calls.get() + 1);
+                false
+            },
+        )
+        .unwrap();
         for stop in 1..=calls.get() {
             generation.store(1, Ordering::Release);
             let current = Cell::new(0);
             let result = search_exact_projected_portfolio_files_with(
-                &r[0], &r[1], &w, combined(SearchOrder::NativeFirst), &[1.], &b,
-                |_, _, _, _, _| panic!("no inference"), || {
+                &r[0],
+                &r[1],
+                &w,
+                combined(SearchOrder::NativeFirst),
+                &[1.],
+                &b,
+                |_, _, _, _, _| panic!("no inference"),
+                || {
                     current.set(current.get() + 1);
-                    if current.get() == stop && owner < 2 { generation.store(2, Ordering::Release); }
+                    if current.get() == stop && owner < 2 {
+                        generation.store(2, Ordering::Release);
+                    }
                     owner == 2 && current.get() == stop
                 },
             );
-            assert!(matches!(result, Err(ProjectedPortfolioError::Cancelled)), "owner={owner} stop={stop}: {result:?}");
+            assert!(
+                matches!(result, Err(ProjectedPortfolioError::Cancelled)),
+                "owner={owner} stop={stop}: {result:?}"
+            );
             assert_eq!(b.used(), 0);
         }
     }
@@ -1167,25 +1243,42 @@ fn exact_first_sticky_global_and_both_owners_cancel_every_exact_checkpoint() {
 use rrrah_dedup::exact_portfolio_collection::*;
 fn exact_collection_policy(order: SearchOrder) -> ExactPortfolioCollectionPolicy {
     let p = collection_policy(order);
-    ExactPortfolioCollectionPolicy { search: p.search, max_files: p.max_files, max_pairs: p.max_pairs, work: p.work }
+    ExactPortfolioCollectionPolicy {
+        search: p.search,
+        max_files: p.max_files,
+        max_pairs: p.max_pairs,
+        work: p.work,
+    }
 }
 #[test]
 fn exact_collections_empty_singleton_and_copies_need_no_decoder_weights_or_provider() {
     for n in 0..=3 {
         let dir = tempfile::tempdir().unwrap();
         let (mut files, w) = collection_fixture(dir.path());
-        for (_, r) in &files { std::fs::write(&r.path, b"undecodable exact copies").unwrap(); }
+        for (_, r) in &files {
+            std::fs::write(&r.path, b"undecodable exact copies").unwrap();
+        }
         std::fs::remove_file(&w).unwrap();
         files.truncate(n);
         let b = MemoryBudget::new(8 * 1024 * 1024);
         let e = scan_exact_projected_portfolio_collection_with(
-            files, &w, exact_collection_policy(SearchOrder::NativeFirst), &[1.], &b,
-            |_, _, _, _, _| panic!("exact collection must skip inference"), || false,
-        ).unwrap();
+            files,
+            &w,
+            exact_collection_policy(SearchOrder::NativeFirst),
+            &[1.],
+            &b,
+            |_, _, _, _, _| panic!("exact collection must skip inference"),
+            || false,
+        )
+        .unwrap();
         assert_eq!(e.file_ids().len(), n);
         assert!(e.file_ids().windows(2).all(|p| p[0] < p[1]));
         assert_eq!(e.pairs().len(), n * n.saturating_sub(1) / 2);
-        assert!(e.pairs().iter().all(|p| matches!(p.evidence, ExactPortfolioPairOutcome::ExactBytes)));
+        assert!(
+            e.pairs()
+                .iter()
+                .all(|p| matches!(p.evidence, ExactPortfolioPairOutcome::ExactBytes))
+        );
         drop(e);
         assert_eq!(b.used(), 0);
     }
@@ -1203,13 +1296,30 @@ fn exact_collection_preserves_exact_visual_and_unknown_evidence_in_both_orders()
             }
             let b = MemoryBudget::new(8 * 1024 * 1024);
             let e = scan_exact_projected_portfolio_collection_with(
-                files, &w, exact_collection_policy(order), &[1.], &b,
-                |_, _, _, b, _| proposals(b), || false,
-            ).unwrap();
+                files,
+                &w,
+                exact_collection_policy(order),
+                &[1.],
+                &b,
+                |_, _, _, b, _| proposals(b),
+                || false,
+            )
+            .unwrap();
             assert_eq!(e.file_ids(), [1, 3, 9]);
-            assert_eq!(e.pairs().iter().map(|p| p.evidence.support()).collect::<Vec<_>>(), [Some(true), None, None]);
-            assert_eq!(matches!(e.pairs()[0].evidence, ExactPortfolioPairOutcome::ExactBytes), !visual_copy);
-            if visual_copy { assert!(matches!(e.pairs()[0].evidence, ExactPortfolioPairOutcome::Complete(_))); }
+            assert_eq!(
+                e.pairs().iter().map(|p| p.evidence.support()).collect::<Vec<_>>(),
+                [Some(true), None, None]
+            );
+            assert_eq!(
+                matches!(e.pairs()[0].evidence, ExactPortfolioPairOutcome::ExactBytes),
+                !visual_copy
+            );
+            if visual_copy {
+                assert!(matches!(
+                    e.pairs()[0].evidence,
+                    ExactPortfolioPairOutcome::Complete(_)
+                ));
+            }
             drop(e);
             assert_eq!(b.used(), 0);
         }
@@ -1220,22 +1330,75 @@ fn exact_collection_admission_refuses_before_iterator_or_model_io() {
     let p = exact_collection_policy(SearchOrder::NativeFirst);
     let b = MemoryBudget::new(8 * 1024 * 1024);
     let absent = Path::new("absent-model");
-    let never = || std::iter::from_fn(|| -> Option<(u64, DecodeRequest)> { panic!("preflight must precede iteration") });
+    let never = || {
+        std::iter::from_fn(|| -> Option<(u64, DecodeRequest)> { panic!("preflight must precede iteration") })
+    };
     let mut bad = p;
     bad.work.point_checks = 0;
-    assert!(matches!(scan_exact_projected_portfolio_collection_with(never(), absent, bad, &[1.], &b,
-        |_, _, _, _, _| panic!(), || false), Err(ExactPortfolioCollectionError::Work)));
-    assert!(matches!(scan_exact_projected_portfolio_collection_with(never(), absent, p, &[1.], &MemoryBudget::new(0),
-        |_, _, _, _, _| panic!(), || false), Err(ExactPortfolioCollectionError::Memory(_))));
-    assert!(matches!(scan_exact_projected_portfolio_collection_with(never(), absent, p, &[1.], &b,
-        |_, _, _, _, _| panic!(), || true), Err(ExactPortfolioCollectionError::Cancelled)));
+    assert!(matches!(
+        scan_exact_projected_portfolio_collection_with(
+            never(),
+            absent,
+            bad,
+            &[1.],
+            &b,
+            |_, _, _, _, _| panic!(),
+            || false
+        ),
+        Err(ExactPortfolioCollectionError::Work)
+    ));
+    assert!(matches!(
+        scan_exact_projected_portfolio_collection_with(
+            never(),
+            absent,
+            p,
+            &[1.],
+            &MemoryBudget::new(0),
+            |_, _, _, _, _| panic!(),
+            || false
+        ),
+        Err(ExactPortfolioCollectionError::Memory(_))
+    ));
+    assert!(matches!(
+        scan_exact_projected_portfolio_collection_with(
+            never(),
+            absent,
+            p,
+            &[1.],
+            &b,
+            |_, _, _, _, _| panic!(),
+            || true
+        ),
+        Err(ExactPortfolioCollectionError::Cancelled)
+    ));
     for kind in 0..3 {
         let mut p = p;
-        let files: Vec<_> = (0..if kind == 0 { 4 } else { 3 }).map(|id| (if kind == 1 { 0 } else { id }, DecodeRequest::new("absent-source"))).collect();
-        if kind == 2 { p.max_pairs = 2; p.work = p.search.work.for_pairs(2).unwrap(); }
-        let e = scan_exact_projected_portfolio_collection_with(files, absent, p, &[1.], &b,
-            |_, _, _, _, _| panic!(), || false);
-        assert!(match kind { 0 => matches!(e, Err(ExactPortfolioCollectionError::Files)), 1 => matches!(e, Err(ExactPortfolioCollectionError::DuplicateId(0))), _ => matches!(e, Err(ExactPortfolioCollectionError::Pairs)) });
+        let files: Vec<_> = (0..if kind == 0 { 4 } else { 3 })
+            .map(|id| {
+                (
+                    if kind == 1 { 0 } else { id },
+                    DecodeRequest::new("absent-source"),
+                )
+            })
+            .collect();
+        if kind == 2 {
+            p.max_pairs = 2;
+            p.work = p.search.work.for_pairs(2).unwrap();
+        }
+        let e = scan_exact_projected_portfolio_collection_with(
+            files,
+            absent,
+            p,
+            &[1.],
+            &b,
+            |_, _, _, _, _| panic!(),
+            || false,
+        );
+        assert!(match kind {
+            0 => matches!(e, Err(ExactPortfolioCollectionError::Files)),
+            1 => matches!(e, Err(ExactPortfolioCollectionError::DuplicateId(0))),
+            _ => matches!(e, Err(ExactPortfolioCollectionError::Pairs)),
+        });
         assert_eq!(b.used(), 0);
     }
 }
@@ -1245,23 +1408,54 @@ fn exact_collection_final_callback_revalidates_every_file_and_started_weights() 
         for target in 0..if visual { 4 } else { 3 } {
             let dir = tempfile::tempdir().unwrap();
             let (files, w) = collection_fixture(dir.path());
-            if !visual { for (_, r) in &files { std::fs::write(&r.path, b"copies").unwrap(); } }
+            if !visual {
+                for (_, r) in &files {
+                    std::fs::write(&r.path, b"copies").unwrap();
+                }
+            }
             let b = MemoryBudget::new(8 * 1024 * 1024);
             let callbacks = Cell::new(0);
-            let e = scan_exact_projected_portfolio_collection_with(files.clone(), &w, exact_collection_policy(SearchOrder::ModelFirst), &[1.], &b,
-                |_, _, _, b, _| proposals(b), || { callbacks.set(callbacks.get() + 1); false }).unwrap();
+            let e = scan_exact_projected_portfolio_collection_with(
+                files.clone(),
+                &w,
+                exact_collection_policy(SearchOrder::ModelFirst),
+                &[1.],
+                &b,
+                |_, _, _, b, _| proposals(b),
+                || {
+                    callbacks.set(callbacks.get() + 1);
+                    false
+                },
+            )
+            .unwrap();
             let last = callbacks.replace(0);
             drop(e);
-            let e = scan_exact_projected_portfolio_collection_with(files.clone(), &w, exact_collection_policy(SearchOrder::ModelFirst), &[1.], &b,
-                |_, _, _, b, _| proposals(b), || {
+            let e = scan_exact_projected_portfolio_collection_with(
+                files.clone(),
+                &w,
+                exact_collection_policy(SearchOrder::ModelFirst),
+                &[1.],
+                &b,
+                |_, _, _, b, _| proposals(b),
+                || {
                     callbacks.set(callbacks.get() + 1);
                     if callbacks.get() == last {
                         let path = if target == 3 { &w } else { &files[target].1.path };
-                        let mut bytes = std::fs::read(path).unwrap();bytes.push(0);std::fs::write(path, bytes).unwrap();
+                        let mut bytes = std::fs::read(path).unwrap();
+                        bytes.push(0);
+                        std::fs::write(path, bytes).unwrap();
                     }
                     false
-                });
-            assert!(matches!(e, Err(ExactPortfolioCollectionError::Source { .. } | ExactPortfolioCollectionError::ModelSource(_))), "{e:?}");
+                },
+            );
+            assert!(
+                matches!(
+                    e,
+                    Err(ExactPortfolioCollectionError::Source { .. }
+                        | ExactPortfolioCollectionError::ModelSource(_))
+                ),
+                "{e:?}"
+            );
             assert_eq!(callbacks.get(), last);
             assert_eq!(b.used(), 0);
         }
@@ -1361,10 +1555,7 @@ fn exact_collection_external_palette_change_discards_report_in_both_orders() {
                     },
                 );
                 assert!(
-                    matches!(
-                        result,
-                        Err(ExactPortfolioCollectionError::Source { id: 9, .. })
-                    ),
+                    matches!(result, Err(ExactPortfolioCollectionError::Source { id: 9, .. })),
                     "{order:?} remove={remove} final={final_checkpoint}: {result:?}"
                 );
                 assert_eq!(providers.get(), if final_checkpoint { 51 } else { 1 });
@@ -1379,28 +1570,58 @@ fn exact_collection_external_palette_change_discards_report_in_both_orders() {
 
 #[test]
 fn exact_collection_global_and_every_owner_cancel_without_partial_report() {
-    use std::sync::{Arc, atomic::{AtomicU64, Ordering}};
+    use std::sync::{
+        Arc,
+        atomic::{AtomicU64, Ordering},
+    };
     for owner in 0..4 {
         let dir = tempfile::tempdir().unwrap();
         let (mut files, w) = collection_fixture(dir.path());
-        for (_, r) in &files { std::fs::write(&r.path, b"copies").unwrap(); }
+        for (_, r) in &files {
+            std::fs::write(&r.path, b"copies").unwrap();
+        }
         let generation = Arc::new(AtomicU64::new(1));
-        if owner < 3 { files[owner].1.cancellation = Some(rrrah_decode::GenerationToken::new(generation.clone(), 1)); }
+        if owner < 3 {
+            files[owner].1.cancellation = Some(rrrah_decode::GenerationToken::new(generation.clone(), 1));
+        }
         let b = MemoryBudget::new(8 * 1024 * 1024);
         let callbacks = Cell::new(0);
-        let e = scan_exact_projected_portfolio_collection_with(files.clone(), &w, exact_collection_policy(SearchOrder::NativeFirst), &[1.], &b,
-            |_, _, _, _, _| panic!(), || { callbacks.set(callbacks.get() + 1); false }).unwrap();
+        let e = scan_exact_projected_portfolio_collection_with(
+            files.clone(),
+            &w,
+            exact_collection_policy(SearchOrder::NativeFirst),
+            &[1.],
+            &b,
+            |_, _, _, _, _| panic!(),
+            || {
+                callbacks.set(callbacks.get() + 1);
+                false
+            },
+        )
+        .unwrap();
         drop(e);
         for stop in [1, callbacks.get() / 2, callbacks.get()] {
             generation.store(1, Ordering::Release);
             let current = Cell::new(0);
-            let e = scan_exact_projected_portfolio_collection_with(files.clone(), &w, exact_collection_policy(SearchOrder::NativeFirst), &[1.], &b,
-                |_, _, _, _, _| panic!(), || {
+            let e = scan_exact_projected_portfolio_collection_with(
+                files.clone(),
+                &w,
+                exact_collection_policy(SearchOrder::NativeFirst),
+                &[1.],
+                &b,
+                |_, _, _, _, _| panic!(),
+                || {
                     current.set(current.get() + 1);
-                    if current.get() == stop && owner < 3 { generation.store(2, Ordering::Release); }
+                    if current.get() == stop && owner < 3 {
+                        generation.store(2, Ordering::Release);
+                    }
                     owner == 3 && current.get() == stop
-                });
-            assert!(matches!(e, Err(ExactPortfolioCollectionError::Cancelled)), "owner={owner} stop={stop}: {e:?}");
+                },
+            );
+            assert!(
+                matches!(e, Err(ExactPortfolioCollectionError::Cancelled)),
+                "owner={owner} stop={stop}: {e:?}"
+            );
             assert_eq!(b.used(), 0);
         }
     }
@@ -1412,13 +1633,32 @@ fn exact_collection_late_provider_failure_discards_prior_exact_and_unknown_pairs
     let (files, w) = collection_fixture(dir.path());
     let b = MemoryBudget::new(8 * 1024 * 1024);
     let calls = Cell::new(0);
-    let e = scan_exact_projected_portfolio_collection_with(files, &w, exact_collection_policy(SearchOrder::ModelFirst), &[1.], &b,
+    let e = scan_exact_projected_portfolio_collection_with(
+        files,
+        &w,
+        exact_collection_policy(SearchOrder::ModelFirst),
+        &[1.],
+        &b,
         |_, _, _, b, _| {
             calls.set(calls.get() + 1);
-            if calls.get() == 26 { return Err("late provider failure".into()); }
+            if calls.get() == 26 {
+                return Err("late provider failure".into());
+            }
             proposals(b)
-        }, || false);
-    assert!(matches!(e, Err(ExactPortfolioCollectionError::Pair { left: 3, right: 9, .. })), "{e:?}");
+        },
+        || false,
+    );
+    assert!(
+        matches!(
+            e,
+            Err(ExactPortfolioCollectionError::Pair {
+                left: 3,
+                right: 9,
+                ..
+            })
+        ),
+        "{e:?}"
+    );
     assert_eq!(calls.get(), 26);
     assert_eq!(b.used(), 0);
 }
@@ -1437,12 +1677,14 @@ fn exact_collection_scaling_latency_probe() {
                 state = state.wrapping_mul(1664525).wrapping_add(1013904223);
                 *byte = (state >> 24) as u8;
             }
-            let files: Vec<_> = (0..n).map(|id| {
-                let path = dir.path().join(format!("{id}.bytes"));
-                payload[..8].copy_from_slice(&(id as u64 % families as u64).to_le_bytes());
-                std::fs::write(&path, &payload).unwrap();
-                (id as u64, DecodeRequest::new(path))
-            }).collect();
+            let files: Vec<_> = (0..n)
+                .map(|id| {
+                    let path = dir.path().join(format!("{id}.bytes"));
+                    payload[..8].copy_from_slice(&(id as u64 % families as u64).to_le_bytes());
+                    std::fs::write(&path, &payload).unwrap();
+                    (id as u64, DecodeRequest::new(path))
+                })
+                .collect();
             let pairs = n * (n - 1) / 2;
             let mut p = exact_collection_policy(SearchOrder::NativeFirst);
             p.max_files = n;
@@ -1456,12 +1698,21 @@ fn exact_collection_scaling_latency_probe() {
             for _ in 0..3 {
                 let start = Instant::now();
                 let result = scan_exact_projected_portfolio_collection_with(
-                    files.clone(), &weights, p, &[1.], &b,
-                    |_, _, _, _, _| panic!("exact copies must never reach inference"), || false,
+                    files.clone(),
+                    &weights,
+                    p,
+                    &[1.],
+                    &b,
+                    |_, _, _, _, _| panic!("exact copies must never reach inference"),
+                    || false,
                 );
                 let report = result.unwrap();
                 assert_eq!(report.pairs().len(), pairs);
-                exact_pairs = report.pairs().iter().filter(|p| matches!(p.evidence, ExactPortfolioPairOutcome::ExactBytes)).count();
+                exact_pairs = report
+                    .pairs()
+                    .iter()
+                    .filter(|p| matches!(p.evidence, ExactPortfolioPairOutcome::ExactBytes))
+                    .count();
                 assert_eq!(exact_pairs, pairs);
                 drop(report);
                 assert_eq!(b.used(), 0);
@@ -1472,7 +1723,10 @@ fn exact_collection_scaling_latency_probe() {
                 // initial/final full observations plus per-pair verification and
                 // streaming byte confirmation. This is not measured device I/O.
                 let expected_source_bytes = (4 * n + 6 * pairs) as u64 * SIZE as u64;
-                println!("RRRAH_EXACT_SCALING {{\"files\":{n},\"families\":{families},\"pairs\":{pairs},\"exact_pairs\":{exact_pairs},\"file_bytes\":{SIZE},\"analytical_source_bytes\":{expected_source_bytes},\"elapsed_ns\":{samples:?},\"managed_peak\":{}}}", b.peak());
+                println!(
+                    "RRRAH_EXACT_SCALING {{\"files\":{n},\"families\":{families},\"pairs\":{pairs},\"exact_pairs\":{exact_pairs},\"file_bytes\":{SIZE},\"analytical_source_bytes\":{expected_source_bytes},\"elapsed_ns\":{samples:?},\"managed_peak\":{}}}",
+                    b.peak()
+                );
             }
         }
     }

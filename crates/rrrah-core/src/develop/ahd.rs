@@ -47,8 +47,8 @@ pub(crate) fn ahd(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, D
             }
         }
     } else {
-        use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
         use std::sync::Mutex;
+        use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
 
         let is_cancelled = AtomicBool::new(false);
         let next = AtomicUsize::new(0);
@@ -80,8 +80,7 @@ pub(crate) fn ahd(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, D
                 let tw = TILE.min(w - x0);
                 let px = tile(m, x0, y0, tw, th);
                 for y in 0..th {
-                    band[y * w + x0..y * w + x0 + tw]
-                        .copy_from_slice(&px[y * tw..(y + 1) * tw]);
+                    band[y * w + x0..y * w + x0 + tw].copy_from_slice(&px[y * tw..(y + 1) * tw]);
                 }
             }
         };
@@ -117,8 +116,7 @@ pub(crate) fn ahd(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, D
                     let tw = TILE.min(w - x0);
                     let px = tile(m, x0, y0, tw, th);
                     for y in 0..th {
-                        band[y * w + x0..y * w + x0 + tw]
-                            .copy_from_slice(&px[y * tw..(y + 1) * tw]);
+                        band[y * w + x0..y * w + x0 + tw].copy_from_slice(&px[y * tw..(y + 1) * tw]);
                     }
                 }
             }

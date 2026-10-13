@@ -8,9 +8,9 @@
 //! Cancellation is cooperative; a running libtorch kernel is not preempted.
 use crate::{
     model_compare::{
-        ModelComparisonError, ModelComparisonEvidence, ModelComparisonPolicy, ProposalProviderError,
-        compare_model_files_with, compare_model_regions_files_with, JointModelComparisonPolicy,
-        compare_model_joint_files_with, compare_model_joint_regions_files_with,
+        JointModelComparisonPolicy, ModelComparisonError, ModelComparisonEvidence, ModelComparisonPolicy,
+        ProposalProviderError, compare_model_files_with, compare_model_joint_files_with,
+        compare_model_joint_regions_files_with, compare_model_regions_files_with,
     },
     model_input::GrayModelInput,
     proposals::ScoredProposal,
@@ -33,13 +33,27 @@ use tch::{Device, Kind, Tensor};
 /// cancellation abort extraction without publishing partial proposals.
 #[allow(clippy::too_many_arguments)]
 pub fn extract_loftr_region_points_files(
-    left:&DecodeRequest,right:&DecodeRequest,weights:&Path,
-    left_rectangle:[u32;4],right_rectangle:[u32;4],policy:ModelComparisonPolicy,
-    budget:&MemoryBudget,cancel:impl Fn()->bool,
-)->Result<crate::model_compare::ModelPointBank,ModelComparisonError> {
-    let cap=policy.proposals.max_proposals;
-    crate::model_compare::extract_model_region_points_files_with(left,right,weights,left_rectangle,right_rectangle,policy,budget,
-        |weights,left,right,budget,cancel|proposals(weights,left,right,cap,budget,cancel),cancel)
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    weights: &Path,
+    left_rectangle: [u32; 4],
+    right_rectangle: [u32; 4],
+    policy: ModelComparisonPolicy,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<crate::model_compare::ModelPointBank, ModelComparisonError> {
+    let cap = policy.proposals.max_proposals;
+    crate::model_compare::extract_model_region_points_files_with(
+        left,
+        right,
+        weights,
+        left_rectangle,
+        right_rectangle,
+        policy,
+        budget,
+        |weights, left, right, budget, cancel| proposals(weights, left, right, cap, budget, cancel),
+        cancel,
+    )
 }
 
 /// Compare selected file frames using local outdoor LoFTR weights, native
@@ -758,10 +772,18 @@ pub fn search_loftr_recovery_files(
 ) -> Result<crate::search_portfolio::SearchRecoveryOutcome, crate::search_portfolio::SearchPortfolioError> {
     let cap = policy.primary.model.proposals.max_proposals;
     let mut model = None;
-    crate::search_portfolio::search_recovery_files_with(left, right, weights, policy,
-        factors, budget, |weights, left, right, budget, cancel| {
+    crate::search_portfolio::search_recovery_files_with(
+        left,
+        right,
+        weights,
+        policy,
+        factors,
+        budget,
+        |weights, left, right, budget, cancel| {
             proposals_with_model(&mut model, weights, left, right, cap, budget, cancel)
-        }, cancel)
+        },
+        cancel,
+    )
 }
 
 /// Exhaustive collection recovery using one lazily loaded CPU LoFTR model.
@@ -780,14 +802,24 @@ pub fn scan_loftr_recovery_collection(
     factors: &[f64],
     budget: &MemoryBudget,
     cancel: impl Fn() -> bool,
-) -> Result<crate::portfolio_collection::RecoveryCollectionReport,
-    crate::portfolio_collection::PortfolioCollectionError> {
+) -> Result<
+    crate::portfolio_collection::RecoveryCollectionReport,
+    crate::portfolio_collection::PortfolioCollectionError,
+> {
     let cap = policy.search.primary.model.proposals.max_proposals;
     let mut model = None;
-    crate::portfolio_collection::scan_recovery_collection_with(files, schedule,
-        weights, policy, factors, budget, |weights, left, right, budget, cancel| {
+    crate::portfolio_collection::scan_recovery_collection_with(
+        files,
+        schedule,
+        weights,
+        policy,
+        factors,
+        budget,
+        |weights, left, right, budget, cancel| {
             proposals_with_model(&mut model, weights, left, right, cap, budget, cancel)
-        }, cancel)
+        },
+        cancel,
+    )
 }
 
 /// Primary CPU LoFTR/native search followed by joint opposite-native recovery.
@@ -809,10 +841,19 @@ pub fn search_loftr_joint_recovery_files(
 ) -> Result<crate::search_portfolio::SearchRecoveryOutcome, crate::search_portfolio::SearchPortfolioError> {
     let cap = policy.primary.model.proposals.max_proposals;
     let mut model = None;
-    crate::search_portfolio::search_joint_recovery_files_with(left, right, weights, policy,
-        factors, budget, maximum_projection_checks, |weights, left, right, budget, cancel| {
+    crate::search_portfolio::search_joint_recovery_files_with(
+        left,
+        right,
+        weights,
+        policy,
+        factors,
+        budget,
+        maximum_projection_checks,
+        |weights, left, right, budget, cancel| {
             proposals_with_model(&mut model, weights, left, right, cap, budget, cancel)
-        }, cancel)
+        },
+        cancel,
+    )
 }
 
 /// Exhaustive collection recovery using one lazily loaded CPU LoFTR model.
@@ -833,14 +874,26 @@ pub fn scan_loftr_joint_recovery_collection(
     maximum_pair_projection_checks: u64,
     maximum_total_projection_checks: u64,
     cancel: impl Fn() -> bool,
-) -> Result<crate::portfolio_collection::RecoveryCollectionReport,
-    crate::portfolio_collection::PortfolioCollectionError> {
+) -> Result<
+    crate::portfolio_collection::RecoveryCollectionReport,
+    crate::portfolio_collection::PortfolioCollectionError,
+> {
     let cap = policy.search.primary.model.proposals.max_proposals;
     let mut model = None;
-    crate::portfolio_collection::scan_joint_recovery_collection_with(files, schedule,
-        weights, policy, factors, budget, maximum_pair_projection_checks, maximum_total_projection_checks, |weights, left, right, budget, cancel| {
+    crate::portfolio_collection::scan_joint_recovery_collection_with(
+        files,
+        schedule,
+        weights,
+        policy,
+        factors,
+        budget,
+        maximum_pair_projection_checks,
+        maximum_total_projection_checks,
+        |weights, left, right, budget, cancel| {
             proposals_with_model(&mut model, weights, left, right, cap, budget, cancel)
-        }, cancel)
+        },
+        cancel,
+    )
 }
 
 /// Local CPU LoFTR with explicit prepaid bidirectional geometry.
@@ -928,8 +981,8 @@ pub fn search_loftr_joint_model_portfolio_files(
     right: &DecodeRequest,
     weights: &Path,
     policy: crate::search_portfolio::SearchPortfolioPolicy,
-    maximum_model_projection_checks:u64,
-    maximum_total_model_projection_checks:u64,
+    maximum_model_projection_checks: u64,
+    maximum_total_model_projection_checks: u64,
     factors: &[f64],
     budget: &MemoryBudget,
     cancel: impl Fn() -> bool,
@@ -960,9 +1013,9 @@ pub fn scan_loftr_joint_model_portfolio_outcome_collection(
     files: impl IntoIterator<Item = (u64, DecodeRequest)>,
     weights: &Path,
     policy: crate::portfolio_collection::PortfolioCollectionPolicy,
-    maximum_model_projection_checks:u64,
-    maximum_pair_projection_checks:u64,
-    maximum_total_projection_checks:u64,
+    maximum_model_projection_checks: u64,
+    maximum_pair_projection_checks: u64,
+    maximum_total_projection_checks: u64,
     factors: &[f64],
     budget: &MemoryBudget,
     cancel: impl Fn() -> bool,
@@ -1001,10 +1054,19 @@ pub fn search_loftr_model_banks_files(
     budget: &MemoryBudget,
     cancel: impl Fn() -> bool,
 ) -> Result<crate::model_banks::ModelBankSearchEvidence, crate::model_tiles::ModelTileError> {
-    let cap=policy.comparison.proposals.max_proposals;
-    let mut model=None;
-    crate::model_banks::search_model_banks_files_with(left,right,weights,policy,budget,
-        &mut |weights,left,right,budget,cancel|proposals_with_model(&mut model,weights,left,right,cap,budget,cancel),cancel)
+    let cap = policy.comparison.proposals.max_proposals;
+    let mut model = None;
+    crate::model_banks::search_model_banks_files_with(
+        left,
+        right,
+        weights,
+        policy,
+        budget,
+        &mut |weights, left, right, budget, cancel| {
+            proposals_with_model(&mut model, weights, left, right, cap, budget, cancel)
+        },
+        cancel,
+    )
 }
 
 /// Cached CPU LoFTR with bounded caller-ordered pixel coverage fallback.
@@ -1012,13 +1074,28 @@ pub fn search_loftr_model_banks_files(
 /// remain mandatory. Tensor/workspace RSS is outside managed payload credit.
 #[allow(clippy::too_many_arguments)]
 pub fn search_loftr_model_banks_coverage_files(
-    left:&DecodeRequest,right:&DecodeRequest,weights:&Path,
-    policy:crate::model_banks::ModelBankSearchPolicy,radii:&[u32],
-    budget:&MemoryBudget,cancel:impl Fn()->bool,
-)->Result<crate::model_banks::ModelBankSearchEvidence,crate::model_tiles::ModelTileError> {
-    let cap=policy.comparison.proposals.max_proposals;let mut model=None;
-    crate::model_banks::search_model_banks_coverage_files_with(left,right,weights,policy,radii,budget,
-        &mut |weights,left,right,budget,cancel|proposals_with_model(&mut model,weights,left,right,cap,budget,cancel),cancel)
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    weights: &Path,
+    policy: crate::model_banks::ModelBankSearchPolicy,
+    radii: &[u32],
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<crate::model_banks::ModelBankSearchEvidence, crate::model_tiles::ModelTileError> {
+    let cap = policy.comparison.proposals.max_proposals;
+    let mut model = None;
+    crate::model_banks::search_model_banks_coverage_files_with(
+        left,
+        right,
+        weights,
+        policy,
+        radii,
+        budget,
+        &mut |weights, left, right, budget, cancel| {
+            proposals_with_model(&mut model, weights, left, right, cap, budget, cancel)
+        },
+        cancel,
+    )
 }
 
 /// Cached CPU LoFTR with explicit original-pixel window/rank contexts.
@@ -1030,14 +1107,28 @@ pub fn search_loftr_model_banks_coverage_files(
 /// failure or cancellation abort the operation without a partial result.
 #[allow(clippy::too_many_arguments)]
 pub fn search_loftr_model_banks_pixel_coverage_files(
-    left:&DecodeRequest,right:&DecodeRequest,weights:&Path,
-    policy:crate::model_banks::ModelBankSearchPolicy,
-    recipes:&[crate::model_banks::ModelBankPixelRecipe],
-    budget:&MemoryBudget,cancel:impl Fn()->bool,
-)->Result<crate::model_banks::ModelBankSearchEvidence,crate::model_tiles::ModelTileError> {
-    let cap=policy.comparison.proposals.max_proposals;let mut model=None;
-    crate::model_banks::search_model_banks_pixel_coverage_files_with(left,right,weights,policy,recipes,budget,
-        &mut |weights,left,right,budget,cancel|proposals_with_model(&mut model,weights,left,right,cap,budget,cancel),cancel)
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    weights: &Path,
+    policy: crate::model_banks::ModelBankSearchPolicy,
+    recipes: &[crate::model_banks::ModelBankPixelRecipe],
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<crate::model_banks::ModelBankSearchEvidence, crate::model_tiles::ModelTileError> {
+    let cap = policy.comparison.proposals.max_proposals;
+    let mut model = None;
+    crate::model_banks::search_model_banks_pixel_coverage_files_with(
+        left,
+        right,
+        weights,
+        policy,
+        recipes,
+        budget,
+        &mut |weights, left, right, budget, cancel| {
+            proposals_with_model(&mut model, weights, left, right, cap, budget, cancel)
+        },
+        cancel,
+    )
 }
 
 /// Explicit nine-overlapping-region calibrated recovery with one cached CPU
@@ -1045,15 +1136,30 @@ pub fn search_loftr_model_banks_pixel_coverage_files(
 /// generic entry point. Torch allocations remain outside managed admission.
 #[allow(clippy::too_many_arguments)]
 pub fn search_loftr_model_banks_overlap_exposure_files(
-    left:&DecodeRequest,right:&DecodeRequest,weights:&Path,
-    policy:crate::model_banks::ModelBankSearchPolicy,
-    recipes:&[crate::model_banks::ModelBankPixelRecipe],maximum_calibration_pixel_reads:u64,
-    budget:&MemoryBudget,cancel:impl Fn()->bool,
-)->Result<crate::model_banks::ExposureModelBankSearchEvidence,crate::model_tiles::ModelTileError> {
-    let cap=policy.comparison.proposals.max_proposals;let mut model=None;
-    crate::model_banks::search_model_banks_overlap_exposure_files_with(left,right,weights,policy,
-        recipes,maximum_calibration_pixel_reads,budget,
-        &mut |weights,left,right,budget,cancel|proposals_with_model(&mut model,weights,left,right,cap,budget,cancel),cancel)
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    weights: &Path,
+    policy: crate::model_banks::ModelBankSearchPolicy,
+    recipes: &[crate::model_banks::ModelBankPixelRecipe],
+    maximum_calibration_pixel_reads: u64,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<crate::model_banks::ExposureModelBankSearchEvidence, crate::model_tiles::ModelTileError> {
+    let cap = policy.comparison.proposals.max_proposals;
+    let mut model = None;
+    crate::model_banks::search_model_banks_overlap_exposure_files_with(
+        left,
+        right,
+        weights,
+        policy,
+        recipes,
+        maximum_calibration_pixel_reads,
+        budget,
+        &mut |weights, left, right, budget, cancel| {
+            proposals_with_model(&mut model, weights, left, right, cap, budget, cancel)
+        },
+        cancel,
+    )
 }
 
 /// Ordinary bank evidence first, explicit exposure recovery only after a miss.
@@ -1063,24 +1169,42 @@ pub fn search_loftr_model_banks_overlap_exposure_files(
 /// allocations remain outside managed payload admission.
 #[allow(clippy::too_many_arguments)]
 pub fn search_loftr_model_banks_exposure_recovery_files(
-    left:&DecodeRequest,right:&DecodeRequest,weights:&Path,
-    policy:crate::model_banks::ModelBankExposureRecoveryPolicy,
-    primary_recipes:&[crate::model_banks::ModelBankPixelRecipe],
-    recovery_recipes:&[crate::model_banks::ModelBankPixelRecipe],
-    budget:&MemoryBudget,cancel:impl Fn()->bool,
-)->Result<crate::model_banks::ModelBankExposureRecoveryEvidence,crate::model_tiles::ModelTileError> {
-    let cap=policy.primary.comparison.proposals.max_proposals;
-    if cap!=policy.recovery.comparison.proposals.max_proposals {
-        if cancel() || [left,right].iter().any(|r|r.cancellation.as_ref()
-            .is_some_and(rrrah_decode::GenerationToken::is_cancelled)) {
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    weights: &Path,
+    policy: crate::model_banks::ModelBankExposureRecoveryPolicy,
+    primary_recipes: &[crate::model_banks::ModelBankPixelRecipe],
+    recovery_recipes: &[crate::model_banks::ModelBankPixelRecipe],
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<crate::model_banks::ModelBankExposureRecoveryEvidence, crate::model_tiles::ModelTileError> {
+    let cap = policy.primary.comparison.proposals.max_proposals;
+    if cap != policy.recovery.comparison.proposals.max_proposals {
+        if cancel()
+            || [left, right].iter().any(|r| {
+                r.cancellation
+                    .as_ref()
+                    .is_some_and(rrrah_decode::GenerationToken::is_cancelled)
+            })
+        {
             return Err(crate::model_tiles::ModelTileError::Cancelled);
         }
         return Err(crate::model_compare::ModelComparisonError::Policy.into());
     }
-    let mut model=None;
-    crate::model_banks::search_model_banks_exposure_recovery_files_with(left,right,weights,policy,
-        primary_recipes,recovery_recipes,budget,
-        &mut |weights,left,right,budget,cancel|proposals_with_model(&mut model,weights,left,right,cap,budget,cancel),cancel)
+    let mut model = None;
+    crate::model_banks::search_model_banks_exposure_recovery_files_with(
+        left,
+        right,
+        weights,
+        policy,
+        primary_recipes,
+        recovery_recipes,
+        budget,
+        &mut |weights, left, right, budget, cancel| {
+            proposals_with_model(&mut model, weights, left, right, cap, budget, cancel)
+        },
+        cancel,
+    )
 }
 
 /// Native/learned portfolio with cached CPU LoFTR bank aggregation and coverage.
@@ -1088,14 +1212,34 @@ pub fn search_loftr_model_banks_exposure_recovery_files(
 /// Torch tensors/workspaces remain outside managed payload admission.
 #[allow(clippy::too_many_arguments)]
 pub fn search_loftr_model_bank_portfolio_files(
-    left:&DecodeRequest,right:&DecodeRequest,weights:&Path,
-    policy:crate::search_portfolio::SearchPortfolioPolicy,
-    banks:crate::joint_witnesses::JointBankPolicy,work:crate::model_tiles::ModelTileWorkLimits,
-    radii:&[u32],factors:&[f64],budget:&MemoryBudget,cancel:impl Fn()->bool,
-)->Result<crate::search_portfolio::SearchPortfolioEvidence,crate::search_portfolio::SearchPortfolioError> {
-    let cap=policy.model.proposals.max_proposals;let mut model=None;
-    crate::search_portfolio::search_model_bank_portfolio_files_with(left,right,weights,policy,banks,work,radii,factors,budget,
-        |weights,left,right,budget,cancel|proposals_with_model(&mut model,weights,left,right,cap,budget,cancel),cancel)
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    weights: &Path,
+    policy: crate::search_portfolio::SearchPortfolioPolicy,
+    banks: crate::joint_witnesses::JointBankPolicy,
+    work: crate::model_tiles::ModelTileWorkLimits,
+    radii: &[u32],
+    factors: &[f64],
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<crate::search_portfolio::SearchPortfolioEvidence, crate::search_portfolio::SearchPortfolioError> {
+    let cap = policy.model.proposals.max_proposals;
+    let mut model = None;
+    crate::search_portfolio::search_model_bank_portfolio_files_with(
+        left,
+        right,
+        weights,
+        policy,
+        banks,
+        work,
+        radii,
+        factors,
+        budget,
+        |weights, left, right, budget, cancel| {
+            proposals_with_model(&mut model, weights, left, right, cap, budget, cancel)
+        },
+        cancel,
+    )
 }
 
 /// Exhaustive or complete scheduled bank collection with one cached CPU model.
@@ -1103,31 +1247,75 @@ pub fn search_loftr_model_bank_portfolio_files(
 /// allocations remain outside managed payload admission.
 #[allow(clippy::too_many_arguments)]
 pub fn scan_loftr_model_bank_portfolio_outcome_collection(
-    files:impl IntoIterator<Item=(u64,DecodeRequest)>,
-    schedule:Option<&crate::pair_schedule::CompletePairSchedule>,
-    weights:&Path,policy:crate::portfolio_collection::PortfolioCollectionPolicy,
-    banks:crate::joint_witnesses::JointBankPolicy,work:crate::model_tiles::ModelTileWorkLimits,
-    radii:&[u32],total:crate::portfolio_collection::ModelBankCollectionWorkLimits,
-    factors:&[f64],budget:&MemoryBudget,cancel:impl Fn()->bool,
-)->Result<crate::portfolio_collection::PortfolioOutcomeCollectionReport,crate::portfolio_collection::PortfolioCollectionError> {
-    let cap=policy.search.model.proposals.max_proposals;let mut model=None;
-    crate::portfolio_collection::scan_model_bank_portfolio_outcome_collection_with(files,schedule,weights,policy,banks,work,radii,total,factors,budget,
-        |weights,left,right,budget,cancel|proposals_with_model(&mut model,weights,left,right,cap,budget,cancel),cancel)
+    files: impl IntoIterator<Item = (u64, DecodeRequest)>,
+    schedule: Option<&crate::pair_schedule::CompletePairSchedule>,
+    weights: &Path,
+    policy: crate::portfolio_collection::PortfolioCollectionPolicy,
+    banks: crate::joint_witnesses::JointBankPolicy,
+    work: crate::model_tiles::ModelTileWorkLimits,
+    radii: &[u32],
+    total: crate::portfolio_collection::ModelBankCollectionWorkLimits,
+    factors: &[f64],
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<
+    crate::portfolio_collection::PortfolioOutcomeCollectionReport,
+    crate::portfolio_collection::PortfolioCollectionError,
+> {
+    let cap = policy.search.model.proposals.max_proposals;
+    let mut model = None;
+    crate::portfolio_collection::scan_model_bank_portfolio_outcome_collection_with(
+        files,
+        schedule,
+        weights,
+        policy,
+        banks,
+        work,
+        radii,
+        total,
+        factors,
+        budget,
+        |weights, left, right, budget, cancel| {
+            proposals_with_model(&mut model, weights, left, right, cap, budget, cancel)
+        },
+        cancel,
+    )
 }
 
 /// Cached CPU bank coverage plus joint opposite recovery under shared guards.
 /// Tensor/workspace allocations remain outside managed payload admission.
 #[allow(clippy::too_many_arguments)]
 pub fn search_loftr_model_bank_joint_recovery_files(
-    left:&DecodeRequest,right:&DecodeRequest,weights:&Path,
-    policy:crate::search_portfolio::SearchRecoveryPolicy,
-    banks:crate::joint_witnesses::JointBankPolicy,work:crate::model_tiles::ModelTileWorkLimits,
-    radii:&[u32],maximum_projection_checks:u64,factors:&[f64],budget:&MemoryBudget,
-    cancel:impl Fn()->bool,
-)->Result<crate::search_portfolio::SearchRecoveryOutcome,crate::search_portfolio::SearchPortfolioError> {
-    let cap=policy.primary.model.proposals.max_proposals;let mut model=None;
-    crate::search_portfolio::search_model_bank_joint_recovery_files_with(left,right,weights,policy,banks,work,radii,maximum_projection_checks,factors,budget,
-        |weights,left,right,budget,cancel|proposals_with_model(&mut model,weights,left,right,cap,budget,cancel),cancel)
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    weights: &Path,
+    policy: crate::search_portfolio::SearchRecoveryPolicy,
+    banks: crate::joint_witnesses::JointBankPolicy,
+    work: crate::model_tiles::ModelTileWorkLimits,
+    radii: &[u32],
+    maximum_projection_checks: u64,
+    factors: &[f64],
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<crate::search_portfolio::SearchRecoveryOutcome, crate::search_portfolio::SearchPortfolioError> {
+    let cap = policy.primary.model.proposals.max_proposals;
+    let mut model = None;
+    crate::search_portfolio::search_model_bank_joint_recovery_files_with(
+        left,
+        right,
+        weights,
+        policy,
+        banks,
+        work,
+        radii,
+        maximum_projection_checks,
+        factors,
+        budget,
+        |weights, left, right, budget, cancel| {
+            proposals_with_model(&mut model, weights, left, right, cap, budget, cancel)
+        },
+        cancel,
+    )
 }
 
 /// Bank primary and joint opposite recovery for every collection pair, sharing
@@ -1135,50 +1323,122 @@ pub fn search_loftr_model_bank_joint_recovery_files(
 /// Torch tensors/workspaces remain outside managed payload admission.
 #[allow(clippy::too_many_arguments)]
 pub fn scan_loftr_model_bank_joint_recovery_collection(
-    files:impl IntoIterator<Item=(u64,DecodeRequest)>,
-    schedule:Option<&crate::pair_schedule::CompletePairSchedule>,weights:&Path,
-    policy:crate::portfolio_collection::RecoveryCollectionPolicy,
-    banks:crate::joint_witnesses::JointBankPolicy,work:crate::model_tiles::ModelTileWorkLimits,
-    radii:&[u32],total:crate::portfolio_collection::ModelBankCollectionWorkLimits,
-    maximum_pair_projection_checks:u64,maximum_total_projection_checks:u64,
-    factors:&[f64],budget:&MemoryBudget,cancel:impl Fn()->bool,
-)->Result<crate::portfolio_collection::RecoveryCollectionReport,crate::portfolio_collection::PortfolioCollectionError> {
-    let cap=policy.search.primary.model.proposals.max_proposals;let mut model=None;
-    crate::portfolio_collection::scan_model_bank_joint_recovery_collection_with(files,schedule,weights,policy,banks,work,radii,total,
-        maximum_pair_projection_checks,maximum_total_projection_checks,factors,budget,
-        |weights,left,right,budget,cancel|proposals_with_model(&mut model,weights,left,right,cap,budget,cancel),cancel)
+    files: impl IntoIterator<Item = (u64, DecodeRequest)>,
+    schedule: Option<&crate::pair_schedule::CompletePairSchedule>,
+    weights: &Path,
+    policy: crate::portfolio_collection::RecoveryCollectionPolicy,
+    banks: crate::joint_witnesses::JointBankPolicy,
+    work: crate::model_tiles::ModelTileWorkLimits,
+    radii: &[u32],
+    total: crate::portfolio_collection::ModelBankCollectionWorkLimits,
+    maximum_pair_projection_checks: u64,
+    maximum_total_projection_checks: u64,
+    factors: &[f64],
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<
+    crate::portfolio_collection::RecoveryCollectionReport,
+    crate::portfolio_collection::PortfolioCollectionError,
+> {
+    let cap = policy.search.primary.model.proposals.max_proposals;
+    let mut model = None;
+    crate::portfolio_collection::scan_model_bank_joint_recovery_collection_with(
+        files,
+        schedule,
+        weights,
+        policy,
+        banks,
+        work,
+        radii,
+        total,
+        maximum_pair_projection_checks,
+        maximum_total_projection_checks,
+        factors,
+        budget,
+        |weights, left, right, budget, cancel| {
+            proposals_with_model(&mut model, weights, left, right, cap, budget, cancel)
+        },
+        cancel,
+    )
 }
 
 /// Fixed native/opposite/bank cascade; the cached CPU model is created only if
 /// both native stages miss. Full original-source/model guards remain mandatory.
 #[allow(clippy::too_many_arguments)]
 pub fn search_loftr_native_bank_recovery_files(
-    left:&DecodeRequest,right:&DecodeRequest,weights:&Path,
-    policy:crate::search_portfolio::SearchRecoveryPolicy,
-    banks:crate::joint_witnesses::JointBankPolicy,work:crate::model_tiles::ModelTileWorkLimits,
-    radii:&[u32],maximum_projection_checks:u64,factors:&[f64],budget:&MemoryBudget,
-    cancel:impl Fn()->bool,
-)->Result<crate::search_portfolio::NativeBankRecoveryEvidence,crate::search_portfolio::SearchPortfolioError> {
-    let cap=policy.primary.model.proposals.max_proposals;let mut model=None;
-    crate::search_portfolio::search_native_bank_recovery_files_with(left,right,weights,policy,banks,work,radii,maximum_projection_checks,factors,budget,
-        |weights,left,right,budget,cancel|proposals_with_model(&mut model,weights,left,right,cap,budget,cancel),cancel)
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    weights: &Path,
+    policy: crate::search_portfolio::SearchRecoveryPolicy,
+    banks: crate::joint_witnesses::JointBankPolicy,
+    work: crate::model_tiles::ModelTileWorkLimits,
+    radii: &[u32],
+    maximum_projection_checks: u64,
+    factors: &[f64],
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<crate::search_portfolio::NativeBankRecoveryEvidence, crate::search_portfolio::SearchPortfolioError>
+{
+    let cap = policy.primary.model.proposals.max_proposals;
+    let mut model = None;
+    crate::search_portfolio::search_native_bank_recovery_files_with(
+        left,
+        right,
+        weights,
+        policy,
+        banks,
+        work,
+        radii,
+        maximum_projection_checks,
+        factors,
+        budget,
+        |weights, left, right, budget, cancel| {
+            proposals_with_model(&mut model, weights, left, right, cap, budget, cancel)
+        },
+        cancel,
+    )
 }
 
 /// Complete native-first collection with one lazily cached CPU model.
 #[allow(clippy::too_many_arguments)]
 pub fn scan_loftr_native_bank_recovery_collection(
-    files:impl IntoIterator<Item=(u64,DecodeRequest)>,
-    schedule:Option<&crate::pair_schedule::CompletePairSchedule>,weights:&Path,
-    policy:crate::portfolio_collection::RecoveryCollectionPolicy,
-    banks:crate::joint_witnesses::JointBankPolicy,work:crate::model_tiles::ModelTileWorkLimits,
-    radii:&[u32],total:crate::portfolio_collection::ModelBankCollectionWorkLimits,
-    maximum_pair_projection_checks:u64,maximum_total_projection_checks:u64,
-    factors:&[f64],budget:&MemoryBudget,cancel:impl Fn()->bool,
-)->Result<crate::collection::CollectionReport<crate::search_portfolio::NativeBankRecoveryEvidence>,crate::portfolio_collection::PortfolioCollectionError> {
-    let cap=policy.search.primary.model.proposals.max_proposals;let mut model=None;
-    crate::portfolio_collection::scan_native_bank_recovery_collection_with(files,schedule,weights,policy,banks,work,radii,total,
-        maximum_pair_projection_checks,maximum_total_projection_checks,factors,budget,
-        |weights,left,right,budget,cancel|proposals_with_model(&mut model,weights,left,right,cap,budget,cancel),cancel)
+    files: impl IntoIterator<Item = (u64, DecodeRequest)>,
+    schedule: Option<&crate::pair_schedule::CompletePairSchedule>,
+    weights: &Path,
+    policy: crate::portfolio_collection::RecoveryCollectionPolicy,
+    banks: crate::joint_witnesses::JointBankPolicy,
+    work: crate::model_tiles::ModelTileWorkLimits,
+    radii: &[u32],
+    total: crate::portfolio_collection::ModelBankCollectionWorkLimits,
+    maximum_pair_projection_checks: u64,
+    maximum_total_projection_checks: u64,
+    factors: &[f64],
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<
+    crate::collection::CollectionReport<crate::search_portfolio::NativeBankRecoveryEvidence>,
+    crate::portfolio_collection::PortfolioCollectionError,
+> {
+    let cap = policy.search.primary.model.proposals.max_proposals;
+    let mut model = None;
+    crate::portfolio_collection::scan_native_bank_recovery_collection_with(
+        files,
+        schedule,
+        weights,
+        policy,
+        banks,
+        work,
+        radii,
+        total,
+        maximum_pair_projection_checks,
+        maximum_total_projection_checks,
+        factors,
+        budget,
+        |weights, left, right, budget, cancel| {
+            proposals_with_model(&mut model, weights, left, right, cap, budget, cancel)
+        },
+        cancel,
+    )
 }
 
 /// Explicit exhaustive/scheduled ordinary-bank then exposure-recovery collection.
@@ -1187,43 +1447,83 @@ pub fn scan_loftr_native_bank_recovery_collection(
 /// allocations and provider workspace are outside managed payload admission.
 #[allow(clippy::too_many_arguments)]
 pub fn scan_loftr_model_banks_exposure_recovery_collection(
-    files:impl IntoIterator<Item=(u64,DecodeRequest)>,
-    schedule:Option<&crate::pair_schedule::CompletePairSchedule>,weights:&Path,
-    policy:crate::model_banks::ModelBankExposureCollectionPolicy,
-    primary_recipes:&[crate::model_banks::ModelBankPixelRecipe],
-    recovery_recipes:&[crate::model_banks::ModelBankPixelRecipe],
-    budget:&MemoryBudget,cancel:impl Fn()->bool,
-)->Result<crate::model_banks::ModelBankExposureCollectionReport,crate::model_banks::ModelBankExposureCollectionError>{
-    let cap=policy.search.primary.comparison.proposals.max_proposals;
-    if cap!=policy.search.recovery.comparison.proposals.max_proposals {
-        return Err(if cancel(){crate::collection::CollectionError::Cancelled}else{
-            crate::collection::CollectionError::Policy(crate::model_compare::ModelComparisonError::Policy.into())});
+    files: impl IntoIterator<Item = (u64, DecodeRequest)>,
+    schedule: Option<&crate::pair_schedule::CompletePairSchedule>,
+    weights: &Path,
+    policy: crate::model_banks::ModelBankExposureCollectionPolicy,
+    primary_recipes: &[crate::model_banks::ModelBankPixelRecipe],
+    recovery_recipes: &[crate::model_banks::ModelBankPixelRecipe],
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<
+    crate::model_banks::ModelBankExposureCollectionReport,
+    crate::model_banks::ModelBankExposureCollectionError,
+> {
+    let cap = policy.search.primary.comparison.proposals.max_proposals;
+    if cap != policy.search.recovery.comparison.proposals.max_proposals {
+        return Err(if cancel() {
+            crate::collection::CollectionError::Cancelled
+        } else {
+            crate::collection::CollectionError::Policy(
+                crate::model_compare::ModelComparisonError::Policy.into(),
+            )
+        });
     }
-    let mut model=None;
-    crate::model_banks::scan_model_banks_exposure_recovery_collection_with(files,schedule,weights,policy,
-        primary_recipes,recovery_recipes,budget,&mut|weights,left,right,budget,cancel|
-            proposals_with_model(&mut model,weights,left,right,cap,budget,cancel),cancel)
+    let mut model = None;
+    crate::model_banks::scan_model_banks_exposure_recovery_collection_with(
+        files,
+        schedule,
+        weights,
+        policy,
+        primary_recipes,
+        recovery_recipes,
+        budget,
+        &mut |weights, left, right, budget, cancel| {
+            proposals_with_model(&mut model, weights, left, right, cap, budget, cancel)
+        },
+        cancel,
+    )
 }
 
 /// Bidirectional collection with one lazy CPU model shared across both directions.
 #[allow(clippy::too_many_arguments)]
 pub fn scan_loftr_model_banks_bidirectional_exposure_recovery_collection(
-    files:impl IntoIterator<Item=(u64,DecodeRequest)>,
-    schedule:Option<&crate::pair_schedule::CompletePairSchedule>,weights:&Path,
-    policy:crate::model_banks::ModelBankExposureCollectionPolicy,
-    primary_recipes:&[crate::model_banks::ModelBankPixelRecipe],
-    recovery_recipes:&[crate::model_banks::ModelBankPixelRecipe],
-    budget:&MemoryBudget,cancel:impl Fn()->bool,
-)->Result<crate::model_banks::BidirectionalExposureCollectionReport,crate::model_banks::ModelBankExposureCollectionError>{
-    let cap=policy.search.primary.comparison.proposals.max_proposals;
-    if cap!=policy.search.recovery.comparison.proposals.max_proposals {
-        return Err(if cancel(){crate::collection::CollectionError::Cancelled}else{
-            crate::collection::CollectionError::Policy(crate::model_compare::ModelComparisonError::Policy.into())});
+    files: impl IntoIterator<Item = (u64, DecodeRequest)>,
+    schedule: Option<&crate::pair_schedule::CompletePairSchedule>,
+    weights: &Path,
+    policy: crate::model_banks::ModelBankExposureCollectionPolicy,
+    primary_recipes: &[crate::model_banks::ModelBankPixelRecipe],
+    recovery_recipes: &[crate::model_banks::ModelBankPixelRecipe],
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<
+    crate::model_banks::BidirectionalExposureCollectionReport,
+    crate::model_banks::ModelBankExposureCollectionError,
+> {
+    let cap = policy.search.primary.comparison.proposals.max_proposals;
+    if cap != policy.search.recovery.comparison.proposals.max_proposals {
+        return Err(if cancel() {
+            crate::collection::CollectionError::Cancelled
+        } else {
+            crate::collection::CollectionError::Policy(
+                crate::model_compare::ModelComparisonError::Policy.into(),
+            )
+        });
     }
-    let mut model=None;
-    crate::model_banks::scan_model_banks_bidirectional_exposure_recovery_collection_with(files,schedule,weights,policy,
-        primary_recipes,recovery_recipes,budget,&mut|weights,left,right,budget,cancel|
-            proposals_with_model(&mut model,weights,left,right,cap,budget,cancel),cancel)
+    let mut model = None;
+    crate::model_banks::scan_model_banks_bidirectional_exposure_recovery_collection_with(
+        files,
+        schedule,
+        weights,
+        policy,
+        primary_recipes,
+        recovery_recipes,
+        budget,
+        &mut |weights, left, right, budget, cancel| {
+            proposals_with_model(&mut model, weights, left, right, cap, budget, cancel)
+        },
+        cancel,
+    )
 }
 
 /// Explicit two-direction confirmation with one operation-local lazy CPU model.
@@ -1241,13 +1541,27 @@ pub fn search_loftr_native_bank_consensus_files(
     maximum_projection_checks: u64,
     budget: &MemoryBudget,
     cancel: impl Fn() -> bool,
-) -> Result<crate::search_portfolio::NativeBankConsensusEvidence, crate::search_portfolio::SearchPortfolioError> {
+) -> Result<crate::search_portfolio::NativeBankConsensusEvidence, crate::search_portfolio::SearchPortfolioError>
+{
     let mut model = None;
     crate::search_portfolio::search_native_bank_consensus_files_directional(
-        left, right, weights, forward, reverse, work, maximum_projection_checks, budget,
+        left,
+        right,
+        weights,
+        forward,
+        reverse,
+        work,
+        maximum_projection_checks,
+        budget,
         |is_forward, weights, left, right, budget, cancel| {
-            let cap = if is_forward { forward } else { reverse }.search.primary.model.proposals.max_proposals;
+            let cap = if is_forward { forward } else { reverse }
+                .search
+                .primary
+                .model
+                .proposals
+                .max_proposals;
             proposals_with_model(&mut model, weights, left, right, cap, budget, cancel)
-        }, cancel,
+        },
+        cancel,
     )
 }

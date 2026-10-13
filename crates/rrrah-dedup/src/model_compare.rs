@@ -6,9 +6,8 @@ use crate::{
     animated::AnimationBudget,
     exact::{ContentSnapshot, SnapshotError},
     geometry::{
-        GeometryError, GeometryPolicy, ProjectiveSamplingPolicy, ProjectiveTransform,
-        verify_projective_sampled_for_domains, JointProjectivePolicy,
-        verify_projective_sampled_joint_for_domains,
+        GeometryError, GeometryPolicy, JointProjectivePolicy, ProjectiveSamplingPolicy, ProjectiveTransform,
+        verify_projective_sampled_for_domains, verify_projective_sampled_joint_for_domains,
     },
     model_input::{GrayModelInput, ModelInputPolicy},
     model_input_file::{ModelFileError, PreparedModelFile, prepare_file},
@@ -154,7 +153,8 @@ pub fn compare_model_files_with(
         None,
         None,
         false,
-).map(|(evidence, _)| evidence)
+    )
+    .map(|(evidence, _)| evidence)
 }
 
 /// Compare two explicit original-pixel rectangles through a model provider,
@@ -197,7 +197,8 @@ pub fn compare_model_regions_files_with(
         None,
         None,
         false,
-).map(|(evidence, _)| evidence)
+    )
+    .map(|(evidence, _)| evidence)
 }
 
 pub(crate) type Provider<'a> = dyn FnMut(
@@ -240,7 +241,8 @@ pub(crate) fn compare_prepared_files(
         Some((left_input, right_input, model)),
         joint_projection_checks,
         false,
-).map(|(evidence, _)| evidence)
+    )
+    .map(|(evidence, _)| evidence)
 }
 
 enum Retained<'a, T> {
@@ -271,7 +273,13 @@ fn compare_files(
     prepared: Option<(&PreparedModelFile, &PreparedModelFile, &ContentSnapshot)>,
     joint_projection_checks: Option<u64>,
     capture_only: bool,
-) -> Result<(ModelComparisonEvidence, Option<SharedBuffer<crate::geometry::Correspondence>>), ModelComparisonError> {
+) -> Result<
+    (
+        ModelComparisonEvidence,
+        Option<SharedBuffer<crate::geometry::Correspondence>>,
+    ),
+    ModelComparisonError,
+> {
     let latch = Cell::new(false);
     let cancelled = || {
         let stop = latch.get()
@@ -291,9 +299,16 @@ fn compare_files(
         if !source_tolerance2.is_finite() || source_tolerance2 <= 0. {
             return Err(ModelComparisonError::Policy);
         }
-        let required = u64::try_from(policy.geometry.max_points).ok()
+        let required = u64::try_from(policy.geometry.max_points)
+            .ok()
             .and_then(|n| n.checked_mul(2))
-            .and_then(|n| policy.sampling.trials.checked_add(1).and_then(|t| n.checked_mul(t)))
+            .and_then(|n| {
+                policy
+                    .sampling
+                    .trials
+                    .checked_add(1)
+                    .and_then(|t| n.checked_mul(t))
+            })
             .ok_or(ModelComparisonError::Geometry(GeometryError::Budget))?;
         if required > limit {
             return Err(ModelComparisonError::Geometry(GeometryError::Budget));
@@ -390,7 +405,9 @@ fn compare_files(
         drop(raw);
         let ld = left_input.original_dimensions();
         let rd = right_input.original_dimensions();
-        let geometry = if capture_only { None } else if let Some(maximum_projection_checks) = joint_projection_checks {
+        let geometry = if capture_only {
+            None
+        } else if let Some(maximum_projection_checks) = joint_projection_checks {
             verify_projective_sampled_joint_for_domains(
                 &selected,
                 JointProjectivePolicy {
@@ -398,13 +415,22 @@ fn compare_files(
                     source_tolerance: policy.anchors.local.source_tolerance,
                     maximum_projection_checks,
                 },
-                policy.sampling, (ld[0], ld[1]), (rd[0], rd[1]), cancelled,
-            )?.map(|g| (g.transform, g.inliers.len(), g.hypotheses))
+                policy.sampling,
+                (ld[0], ld[1]),
+                (rd[0], rd[1]),
+                cancelled,
+            )?
+            .map(|g| (g.transform, g.inliers.len(), g.hypotheses))
         } else {
             verify_projective_sampled_for_domains(
-                &selected, policy.geometry, policy.sampling,
-                (ld[0], ld[1]), (rd[0], rd[1]), cancelled,
-            )?.map(|g| (g.transform, g.inliers.len(), g.hypotheses))
+                &selected,
+                policy.geometry,
+                policy.sampling,
+                (ld[0], ld[1]),
+                (rd[0], rd[1]),
+                cancelled,
+            )?
+            .map(|g| (g.transform, g.inliers.len(), g.hypotheses))
         };
         let mut evidence = ModelComparisonEvidence {
             original_dimensions: [ld, rd],
@@ -435,7 +461,12 @@ fn compare_files(
                 cancelled,
             )?);
         }
-        let captured = if capture_only { Some(selected) } else { drop(selected); None };
+        let captured = if capture_only {
+            Some(selected)
+        } else {
+            drop(selected);
+            None
+        };
         verify()?;
         Ok((evidence, left_input, right_input, model, captured))
     })();
@@ -506,7 +537,8 @@ pub fn compare_model_joint_files_with(
         None,
         Some(policy.maximum_projection_checks),
         false,
-).map(|(evidence, _)| evidence)
+    )
+    .map(|(evidence, _)| evidence)
 }
 
 /// Fit jointly in both original domains, with projection admission before I/O.
@@ -544,9 +576,9 @@ pub fn compare_model_joint_regions_files_with(
         None,
         Some(policy.maximum_projection_checks),
         false,
-).map(|(evidence, _)| evidence)
+    )
+    .map(|(evidence, _)| evidence)
 }
-
 
 /// Managed, original-coordinate model correspondences for geometric aggregation.
 /// This value carries no geometry/pixel verdict. Files are observed throughout
@@ -572,12 +604,33 @@ pub fn extract_model_region_points_files_with(
     right_rectangle: [u32; 4],
     policy: ModelComparisonPolicy,
     budget: &MemoryBudget,
-    mut provider: impl FnMut(&Path, &GrayModelInput, &GrayModelInput, &MemoryBudget, &dyn Fn() -> bool)
-        -> Result<SharedBuffer<ScoredProposal>, ProposalProviderError>,
+    mut provider: impl FnMut(
+        &Path,
+        &GrayModelInput,
+        &GrayModelInput,
+        &MemoryBudget,
+        &dyn Fn() -> bool,
+    ) -> Result<SharedBuffer<ScoredProposal>, ProposalProviderError>,
     cancel: impl Fn() -> bool,
 ) -> Result<ModelPointBank, ModelComparisonError> {
-    let (evidence, points) = compare_files(left,right,weights,Some(left_rectangle),Some(right_rectangle),
-        policy,budget,&mut provider,&cancel,None,None,true)?;
-    Ok(ModelPointBank{original_dimensions:evidence.original_dimensions,model_digest:evidence.model_digest,
-        raw_proposals:evidence.raw_proposals,points:points.ok_or(ModelComparisonError::Policy)?})
+    let (evidence, points) = compare_files(
+        left,
+        right,
+        weights,
+        Some(left_rectangle),
+        Some(right_rectangle),
+        policy,
+        budget,
+        &mut provider,
+        &cancel,
+        None,
+        None,
+        true,
+    )?;
+    Ok(ModelPointBank {
+        original_dimensions: evidence.original_dimensions,
+        model_digest: evidence.model_digest,
+        raw_proposals: evidence.raw_proposals,
+        points: points.ok_or(ModelComparisonError::Policy)?,
+    })
 }

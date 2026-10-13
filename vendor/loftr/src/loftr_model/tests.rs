@@ -118,11 +118,25 @@ fn sequential_backbone_matches_stacked_features_exactly() -> Result<(), LoftrErr
         let left = Tensor::rand([batch, 1, height, width], (Kind::Float, Device::Cpu));
         let right = Tensor::rand([batch, 1, height, width], (Kind::Float, Device::Cpu));
         let joined = Tensor::cat(&[left.shallow_clone(), right.shallow_clone()], 0);
-        let (oracle_coarse, oracle_fine) = model.backbone.forward_cancellable(&joined, false, &|| false)?;
-        let oc = oracle_coarse.split(batch, 0); let of = oracle_fine.split(batch, 0);
-        let stacked = BackboneFeatures { coarse0: oc[0].shallow_clone(), coarse1: oc[1].shallow_clone(), fine0: of[0].shallow_clone(), fine1: of[1].shallow_clone() };
+        let (oracle_coarse, oracle_fine) =
+            model
+                .backbone
+                .forward_cancellable(&joined, false, &|| false)?;
+        let oc = oracle_coarse.split(batch, 0);
+        let of = oracle_fine.split(batch, 0);
+        let stacked = BackboneFeatures {
+            coarse0: oc[0].shallow_clone(),
+            coarse1: oc[1].shallow_clone(),
+            fine0: of[0].shallow_clone(),
+            fine1: of[1].shallow_clone(),
+        };
         let sequential = model.backbone_features(&left, &right, &|| false)?;
-        let BackboneFeatures {coarse0, coarse1, fine0, fine1} = sequential;
+        let BackboneFeatures {
+            coarse0,
+            coarse1,
+            fine0,
+            fine1,
+        } = sequential;
         for (label, actual, expected) in [
             ("coarse0", coarse0, stacked.coarse0),
             ("coarse1", coarse1, stacked.coarse1),
@@ -130,8 +144,14 @@ fn sequential_backbone_matches_stacked_features_exactly() -> Result<(), LoftrErr
             ("fine1", fine1, stacked.fine1),
         ] {
             let difference = (&actual - &expected).abs().max().double_value(&[]);
-            eprintln!("sequential_backbone batch={batch} height={height} width={width} output={label} equal={} max_abs={difference}", actual.equal(&expected));
-            assert!(actual.equal(&expected), "batch={batch}, {height}x{width}, {label}, max_abs={difference}");
+            eprintln!(
+                "sequential_backbone batch={batch} height={height} width={width} output={label} equal={} max_abs={difference}",
+                actual.equal(&expected)
+            );
+            assert!(
+                actual.equal(&expected),
+                "batch={batch}, {height}x{width}, {label}, max_abs={difference}"
+            );
         }
     }
     Ok(())

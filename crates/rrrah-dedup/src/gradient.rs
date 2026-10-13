@@ -617,15 +617,29 @@ pub fn match_gradients_distinct_locations(
 /// cache storage, charged to the same budget and dropped before returning points.
 #[cfg(feature = "raster")]
 pub(crate) fn match_gradients_distinct_locations_prepaid(
-    left: &[GradientFeature], right: &[GradientFeature], policy: GradientMatchPolicy,
-    competitor_radius: f64, budget: &rrrah_core::MemoryBudget, cancel: impl Fn() -> bool,
+    left: &[GradientFeature],
+    right: &[GradientFeature],
+    policy: GradientMatchPolicy,
+    competitor_radius: f64,
+    budget: &rrrah_core::MemoryBudget,
+    cancel: impl Fn() -> bool,
 ) -> Result<Vec<crate::geometry::Correspondence>, LocalError> {
     if !competitor_radius.is_finite() || competitor_radius < 0. || !competitor_radius.powi(2).is_finite() {
         return Err(LocalError::Invalid);
     }
-    match_gradients_selected_with_cache(left, right, policy, Some(competitor_radius.powi(2)),
-        |pairs| budget.try_buffer(pairs, 0.).ok()
-            .filter(|buffer| buffer.capacity_bytes() <= MAX_DISTANCE_CACHE_BYTES), cancel)
+    match_gradients_selected_with_cache(
+        left,
+        right,
+        policy,
+        Some(competitor_radius.powi(2)),
+        |pairs| {
+            budget
+                .try_buffer(pairs, 0.)
+                .ok()
+                .filter(|buffer| buffer.capacity_bytes() <= MAX_DISTANCE_CACHE_BYTES)
+        },
+        cancel,
+    )
 }
 
 /// Managed variant of distinct-location matching. Input features are caller-owned.
@@ -683,19 +697,20 @@ pub fn match_gradients_distinct_locations_managed(
         .ok_or(LocalError::Budget)?;
     let _scratch = budget.try_reserve(scratch).map_err(|_| LocalError::Budget)?;
     let retained = budget.try_reserve(retained).map_err(|_| LocalError::Budget)?;
-    let output = match_gradients_distinct_locations_prepaid(left, right, policy, competitor_radius, budget, &cancel)?;
+    let output =
+        match_gradients_distinct_locations_prepaid(left, right, policy, competitor_radius, budget, &cancel)?;
     if cancel() {
         return Err(LocalError::Cancelled);
     }
     retained.try_adopt(output).map_err(|_| LocalError::Budget)
 }
 
-#[cfg(all(test, feature = "raster"))]
-#[path = "gradient_cache_tests.rs"]
-mod cache_tests;
 #[cfg(test)]
 #[path = "gradient_batch_tests.rs"]
 mod batch_tests;
+#[cfg(all(test, feature = "raster"))]
+#[path = "gradient_cache_tests.rs"]
+mod cache_tests;
 #[cfg(test)]
 #[path = "gradient_matching_tests.rs"]
 mod matching_tests;
@@ -742,16 +757,25 @@ fn match_gradients_selected(
     distinct_radius_squared: Option<f64>,
     cancel: impl Fn() -> bool,
 ) -> Result<Vec<crate::geometry::Correspondence>, LocalError> {
-    match_gradients_selected_with_cache(left, right, policy, distinct_radius_squared,
-        |_| None::<Vec<f64>>, cancel)
+    match_gradients_selected_with_cache(
+        left,
+        right,
+        policy,
+        distinct_radius_squared,
+        |_| None::<Vec<f64>>,
+        cancel,
+    )
 }
 
 // Cache only immutable pair distances within one matcher call. Refused optional
 // scratch never changes admission of the original exhaustive recipe.
 const MAX_DISTANCE_CACHE_BYTES: u64 = 16 * 1024 * 1024;
 fn distance_cache_pairs(left: usize, right: usize, distinct: bool) -> Option<usize> {
-    if !distinct { return None; }
-    left.checked_mul(right).filter(|&n| n >= 4096 && n <= MAX_DISTANCE_CACHE_BYTES as usize / std::mem::size_of::<f64>())
+    if !distinct {
+        return None;
+    }
+    left.checked_mul(right)
+        .filter(|&n| n >= 4096 && n <= MAX_DISTANCE_CACHE_BYTES as usize / std::mem::size_of::<f64>())
 }
 
 fn match_gradients_selected_with_cache<C: std::ops::DerefMut<Target = [f64]>>(

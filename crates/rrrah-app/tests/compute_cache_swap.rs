@@ -66,15 +66,23 @@ fn qualify_compute_cache_swap(width: u32, height: u32, output: [u32; 2]) {
         ..Default::default()
     };
     let expected_frame = gpu.render_raster(&oracle, view, output).pixels;
-    assert!(expected_frame.chunks_exact(4).any(|pixel| pixel[0] > 100 || pixel[2] > 100));
+    assert!(
+        expected_frame
+            .chunks_exact(4)
+            .any(|pixel| pixel[0] > 100 || pixel[2] > 100)
+    );
     let expected_hdr = gpu.render_raster_half(&oracle, view, output);
     assert!(expected_hdr.iter().all(|v| v & 0x7c00 != 0x7c00));
-    assert!(expected_hdr.chunks_exact(4).any(|p| {
-        p[..3].iter().any(|v| v & 0x8000 == 0 && *v > 0x3c00)
-    }));
-    assert!(expected_hdr.chunks_exact(4).any(|p| {
-        p[..3].iter().any(|v| v & 0x8000 != 0 && v & 0x7fff != 0)
-    }));
+    assert!(
+        expected_hdr
+            .chunks_exact(4)
+            .any(|p| { p[..3].iter().any(|v| v & 0x8000 == 0 && *v > 0x3c00) })
+    );
+    assert!(
+        expected_hdr
+            .chunks_exact(4)
+            .any(|p| { p[..3].iter().any(|v| v & 0x8000 != 0 && v & 0x7fff != 0) })
+    );
     assert_eq!(gpu.render_raster_half(&raster, view, output), expected_hdr);
     assert_eq!(gpu.render_raster(&raster, view, output).pixels, expected_frame);
     let mut ram = rrrah_cache::RasterRamCache::new(rrrah_cache::CacheLimits::bytes(bytes));
@@ -106,15 +114,22 @@ fn qualify_compute_cache_swap(width: u32, height: u32, output: [u32; 2]) {
     assert_eq!(root.used(), root.limit());
     drop(pressure);
     let mut cancelled_after_admission = false;
-    assert!(swap.try_get(&1, || {
-        if root.used() != 0 {
-            cancelled_after_admission = true;
-            true
-        } else {
-            false
-        }
-    }).unwrap().is_none());
-    assert!(cancelled_after_admission, "cancellation must observe admitted restore memory");
+    assert!(
+        swap.try_get(&1, || {
+            if root.used() != 0 {
+                cancelled_after_admission = true;
+                true
+            } else {
+                false
+            }
+        })
+        .unwrap()
+        .is_none()
+    );
+    assert!(
+        cancelled_after_admission,
+        "cancellation must observe admitted restore memory"
+    );
     assert_eq!((root.used(), queue_root.used()), (0, 0));
     let restored = swap.try_get(&1, || false).unwrap().unwrap();
     let RasterPixels::Rgba32Float(values) = restored.pixels() else {
@@ -124,10 +139,7 @@ fn qualify_compute_cache_swap(width: u32, height: u32, output: [u32; 2]) {
         values.iter().map(|v| v.to_bits()).collect::<Vec<_>>(),
         expected_bits
     );
-    assert_eq!(
-        gpu.render_raster(&restored, view, output).pixels,
-        expected_frame
-    );
+    assert_eq!(gpu.render_raster(&restored, view, output).pixels, expected_frame);
     assert_eq!(gpu.render_raster_half(&restored, view, output), expected_hdr);
     drop(restored);
     assert_eq!((root.used(), queue_root.used(), gpu_root.used()), (0, 0, 0));
@@ -135,7 +147,14 @@ fn qualify_compute_cache_swap(width: u32, height: u32, output: [u32; 2]) {
         (swap.stats().writes, swap.stats().reads, swap.stats().errors),
         (1, 1, 0)
     );
-    eprintln!("compute cache recovery: {width}x{height}; full-budget refusal; admitted cancellation; exact SDR-HDR retry; final=0");
-    eprintln!("compute cache HDR: {width}x{height}; finite signed HDR; computed-pinned-restored binary16 exact");
-    eprintln!("compute cache pipeline: {width}x{height}; all component bits and {}x{} Metal frames exact; root=0; gpu=0; one swap write/read", output[0], output[1]);
+    eprintln!(
+        "compute cache recovery: {width}x{height}; full-budget refusal; admitted cancellation; exact SDR-HDR retry; final=0"
+    );
+    eprintln!(
+        "compute cache HDR: {width}x{height}; finite signed HDR; computed-pinned-restored binary16 exact"
+    );
+    eprintln!(
+        "compute cache pipeline: {width}x{height}; all component bits and {}x{} Metal frames exact; root=0; gpu=0; one swap write/read",
+        output[0], output[1]
+    );
 }

@@ -1087,17 +1087,20 @@ fn final_callback_mutation_cannot_publish_incident_local_pairs() {
     use std::{cell::Cell, io::Write};
     let dir = tempfile::tempdir().unwrap();
     let original = std::fs::read(files()[0].1.path.clone()).unwrap();
-    let inputs: Vec<_> = (1..=2).map(|id| {
-        let path = dir.path().join(format!("{id}.png"));
-        std::fs::write(&path, &original).unwrap();
-        (id, DecodeRequest::new(path))
-    }).collect();
+    let inputs: Vec<_> = (1..=2)
+        .map(|id| {
+            let path = dir.path().join(format!("{id}.png"));
+            std::fs::write(&path, &original).unwrap();
+            (id, DecodeRequest::new(path))
+        })
+        .collect();
     let budget = MemoryBudget::new(64 * 1024 * 1024);
     let calls = Cell::new(0usize);
     let healthy = scan_local_collection(inputs.clone(), policy(), &budget, || {
         calls.set(calls.get() + 1);
         false
-    }).unwrap();
+    })
+    .unwrap();
     assert_eq!(healthy.local.pairs.len(), 1);
     let total = calls.get();
     drop(healthy);
@@ -1107,15 +1110,23 @@ fn final_callback_mutation_cannot_publish_incident_local_pairs() {
     let result = scan_local_collection(inputs.clone(), policy(), &budget, || {
         calls.set(calls.get() + 1);
         if calls.get() == total {
-            std::fs::OpenOptions::new().append(true).open(&inputs[1].1.path).unwrap().write_all(&[0]).unwrap();
+            std::fs::OpenOptions::new()
+                .append(true)
+                .open(&inputs[1].1.path)
+                .unwrap()
+                .write_all(&[0])
+                .unwrap();
             changed.set(true);
         }
         false
     });
     assert!(changed.get());
     match result {
-        Ok(report) => assert!(report.local.pairs.iter().all(|p| p.left != 2 && p.right != 2), "stale local pair after final callback: {report:?}"),
-        Err(rrrah_dedup::scan::ScanError::Source { id: 2, .. }) => {},
+        Ok(report) => assert!(
+            report.local.pairs.iter().all(|p| p.left != 2 && p.right != 2),
+            "stale local pair after final callback: {report:?}"
+        ),
+        Err(rrrah_dedup::scan::ScanError::Source { id: 2, .. }) => {}
         Err(error) => panic!("unexpected publication error: {error:?}"),
     }
     assert_eq!(budget.used(), 0);
@@ -1126,20 +1137,34 @@ fn final_directory_callback_mutation_cannot_publish_incident_local_pairs() {
     use std::{cell::Cell, io::Write};
     let dir = tempfile::tempdir().unwrap();
     let original = std::fs::read(files()[0].1.path.clone()).unwrap();
-    let inputs: Vec<_> = (1..=2).map(|id| {
-        let path = dir.path().join(format!("{id}.png"));
-        std::fs::write(&path, &original).unwrap();
-        (id, DecodeRequest::new(path))
-    }).collect();
+    let inputs: Vec<_> = (1..=2)
+        .map(|id| {
+            let path = dir.path().join(format!("{id}.png"));
+            std::fs::write(&path, &original).unwrap();
+            (id, DecodeRequest::new(path))
+        })
+        .collect();
     let budget = MemoryBudget::new(64 * 1024 * 1024);
     let roots = vec![dir.path().to_path_buf()];
     let traversal = rrrah_dedup::exact::Options::default();
     let changed_id = Cell::new(u64::MAX);
     let run = |cancel: &dyn Fn() -> bool| {
         rrrah_dedup::local_collection::scan_local_collection_roots(
-            &roots, &traversal, policy(), &budget, cancel,
-        ).map(|report| {
-            changed_id.set(report.files.iter().find(|(_, path)| *path == inputs[1].1.path).unwrap().0);
+            &roots,
+            &traversal,
+            policy(),
+            &budget,
+            cancel,
+        )
+        .map(|report| {
+            changed_id.set(
+                report
+                    .files
+                    .iter()
+                    .find(|(_, path)| *path == inputs[1].1.path)
+                    .unwrap()
+                    .0,
+            );
             report.indexed
         })
     };
@@ -1147,7 +1172,8 @@ fn final_directory_callback_mutation_cannot_publish_incident_local_pairs() {
     let healthy = run(&|| {
         calls.set(calls.get() + 1);
         false
-    }).unwrap();
+    })
+    .unwrap();
     assert_eq!(healthy.local.pairs.len(), 1);
     let total = calls.get();
     drop(healthy);
@@ -1157,15 +1183,27 @@ fn final_directory_callback_mutation_cannot_publish_incident_local_pairs() {
     let result = run(&|| {
         calls.set(calls.get() + 1);
         if calls.get() == total {
-            std::fs::OpenOptions::new().append(true).open(&inputs[1].1.path).unwrap().write_all(&[0]).unwrap();
+            std::fs::OpenOptions::new()
+                .append(true)
+                .open(&inputs[1].1.path)
+                .unwrap()
+                .write_all(&[0])
+                .unwrap();
             changed.set(true);
         }
         false
     });
     assert!(changed.get());
     match result {
-        Ok(report) => assert!(report.local.pairs.iter().all(|p| p.left != changed_id.get() && p.right != changed_id.get()), "stale local pair after final callback: {report:?}"),
-        Err(rrrah_dedup::scan::ScanError::Source { id, .. }) if id == changed_id.get() => {},
+        Ok(report) => assert!(
+            report
+                .local
+                .pairs
+                .iter()
+                .all(|p| p.left != changed_id.get() && p.right != changed_id.get()),
+            "stale local pair after final callback: {report:?}"
+        ),
+        Err(rrrah_dedup::scan::ScanError::Source { id, .. }) if id == changed_id.get() => {}
         Err(error) => panic!("unexpected publication error: {error:?}"),
     }
     assert_eq!(budget.used(), 0);
@@ -1176,25 +1214,39 @@ fn early_bad_source_is_isolated_but_late_healthy_mutation_refuses_publication() 
     use std::{cell::Cell, io::Write};
     let dir = tempfile::tempdir().unwrap();
     let original = std::fs::read(files()[0].1.path.clone()).unwrap();
-    let inputs: Vec<_> = (1..=3).map(|id| {
-        let path = dir.path().join(format!("{id}.png"));
-        std::fs::write(&path, &original).unwrap();
-        (id, DecodeRequest::new(path))
-    }).collect();
+    let inputs: Vec<_> = (1..=3)
+        .map(|id| {
+            let path = dir.path().join(format!("{id}.png"));
+            std::fs::write(&path, &original).unwrap();
+            (id, DecodeRequest::new(path))
+        })
+        .collect();
     let budget = MemoryBudget::new(64 * 1024 * 1024);
     let mut last = 0;
     for late in [false, true] {
-        for (_, request) in &inputs { std::fs::write(&request.path, &original).unwrap(); }
+        for (_, request) in &inputs {
+            std::fs::write(&request.path, &original).unwrap();
+        }
         let calls = Cell::new(0usize);
         let early_changed = Cell::new(false);
         let late_changed = Cell::new(false);
         let result = scan_local_collection(inputs.clone(), policy(), &budget, || {
             calls.set(calls.get() + 1);
             if budget.used() > 0 && !early_changed.replace(true) {
-                std::fs::OpenOptions::new().append(true).open(&inputs[1].1.path).unwrap().write_all(&[0]).unwrap();
+                std::fs::OpenOptions::new()
+                    .append(true)
+                    .open(&inputs[1].1.path)
+                    .unwrap()
+                    .write_all(&[0])
+                    .unwrap();
             }
             if late && calls.get() == last {
-                std::fs::OpenOptions::new().append(true).open(&inputs[2].1.path).unwrap().write_all(&[0]).unwrap();
+                std::fs::OpenOptions::new()
+                    .append(true)
+                    .open(&inputs[2].1.path)
+                    .unwrap()
+                    .write_all(&[0])
+                    .unwrap();
                 late_changed.set(true);
             }
             false
@@ -1202,18 +1254,43 @@ fn early_bad_source_is_isolated_but_late_healthy_mutation_refuses_publication() 
         assert!(early_changed.get());
         if late {
             assert!(late_changed.get());
-            assert!(matches!(result, Err(rrrah_dedup::scan::ScanError::Source {
-                id: 3, error: rrrah_dedup::exact::SnapshotError::Changed
-            })), "late healthy source was published: {result:?}");
+            assert!(
+                matches!(
+                    result,
+                    Err(rrrah_dedup::scan::ScanError::Source {
+                        id: 3,
+                        error: rrrah_dedup::exact::SnapshotError::Changed
+                    })
+                ),
+                "late healthy source was published: {result:?}"
+            );
         } else {
             last = calls.get();
             let report = result.unwrap();
-            assert_eq!(report.local.source_issues.iter().map(|(id, _)| *id).collect::<Vec<_>>(), [2]);
-            assert_eq!(report.local.pairs.iter().map(|p| (p.left, p.right)).collect::<Vec<_>>(), [(1, 3)]);
+            assert_eq!(
+                report
+                    .local
+                    .source_issues
+                    .iter()
+                    .map(|(id, _)| *id)
+                    .collect::<Vec<_>>(),
+                [2]
+            );
+            assert_eq!(
+                report
+                    .local
+                    .pairs
+                    .iter()
+                    .map(|p| (p.left, p.right))
+                    .collect::<Vec<_>>(),
+                [(1, 3)]
+            );
         }
         assert_eq!(budget.used(), 0);
     }
-    for (_, request) in &inputs { std::fs::write(&request.path, &original).unwrap(); }
+    for (_, request) in &inputs {
+        std::fs::write(&request.path, &original).unwrap();
+    }
     let retry = scan_local_collection(inputs, policy(), &budget, || false).unwrap();
     assert_eq!(retry.local.pairs.len(), 3);
     assert!(retry.local.source_issues.is_empty());
@@ -1223,7 +1300,10 @@ fn early_bad_source_is_isolated_but_late_healthy_mutation_refuses_publication() 
 
 // Fixture sources may be read-only in an immutable qualification checkout.
 // Copy bytes without inheriting permissions so mutation tests can edit their own files.
-fn copy_writable(source: impl AsRef<std::path::Path>, target: impl AsRef<std::path::Path>) -> std::io::Result<u64> {
+fn copy_writable(
+    source: impl AsRef<std::path::Path>,
+    target: impl AsRef<std::path::Path>,
+) -> std::io::Result<u64> {
     let bytes = std::fs::read(source)?;
     std::fs::write(target, &bytes)?;
     Ok(bytes.len() as u64)

@@ -111,54 +111,90 @@ fn factors() -> [f64; 4] {
     [1., std::f64::consts::SQRT_2, 2., 2. * std::f64::consts::SQRT_2]
 }
 
-
 fn anchors() -> rrrah_dedup::anchor_rank::AnchorRankPolicy {
-rrrah_dedup::anchor_rank::AnchorRankPolicy {
-        local:rrrah_dedup::local_rank::LocalRankPolicy {
-            rank:rrrah_dedup::rank_region::RankRegionPolicy {
-                radius:8,minimum_contrast:0.005,minimum_pairs:1000,
-                maximum_sites:12800000,maximum_pixel_reads:64000000,
+    rrrah_dedup::anchor_rank::AnchorRankPolicy {
+        local: rrrah_dedup::local_rank::LocalRankPolicy {
+            rank: rrrah_dedup::rank_region::RankRegionPolicy {
+                radius: 8,
+                minimum_contrast: 0.005,
+                minimum_pairs: 1000,
+                maximum_sites: 12800000,
+                maximum_pixel_reads: 64000000,
             },
-            filter_radius:8,minimum_witnesses:10,maximum_points:4000,
-            maximum_point_checks:8002000,minimum_point_separation:2.,
-            target_tolerance:2.,source_tolerance:2.,minimum_coverage:0.3,minimum_agreement:0.9,
-        },window_radius:2,maximum_selection_checks:24002000,
+            filter_radius: 8,
+            minimum_witnesses: 10,
+            maximum_points: 4000,
+            maximum_point_checks: 8002000,
+            minimum_point_separation: 2.,
+            target_tolerance: 2.,
+            source_tolerance: 2.,
+            minimum_coverage: 0.3,
+            minimum_agreement: 0.9,
+        },
+        window_radius: 2,
+        maximum_selection_checks: 24002000,
     }
 }
 
-
 fn portfolio() -> rrrah_dedup::anchor_rank_file::AnchorReflectionFallbackPolicy {
-    let c=config();let p=anchors();
+    let c = config();
+    let p = anchors();
     rrrah_dedup::anchor_rank_file::AnchorReflectionFallbackPolicy {
-        search:rrrah_dedup::anchor_rank_file::AnchorGeometryFallbackPolicy {
-            search:rrrah_dedup::local_scan::ProjectiveCandidateUnionFallbackFilePolicy {
-                search:c,asymmetric_radius:4,
-                max_total_gradient_samples:6*c.max_total_gradient_samples,
-                max_total_match_comparisons:6*c.max_total_match_comparisons,
-                max_total_union_comparisons:6*c.max_union_comparisons,
-            },anchors:p,
-            maximum_total_point_checks:6*p.local.maximum_point_checks,
-            maximum_total_selection_checks:6*p.maximum_selection_checks,
-            maximum_total_rank_sites:6*p.local.rank.maximum_sites,
-            maximum_total_pixel_reads:6*p.local.rank.maximum_pixel_reads,
-        },maximum_reflection_bins:768*c.search.gradient.search.max_total_features as u64,
+        search: rrrah_dedup::anchor_rank_file::AnchorGeometryFallbackPolicy {
+            search: rrrah_dedup::local_scan::ProjectiveCandidateUnionFallbackFilePolicy {
+                search: c,
+                asymmetric_radius: 4,
+                max_total_gradient_samples: 6 * c.max_total_gradient_samples,
+                max_total_match_comparisons: 6 * c.max_total_match_comparisons,
+                max_total_union_comparisons: 6 * c.max_union_comparisons,
+            },
+            anchors: p,
+            maximum_total_point_checks: 6 * p.local.maximum_point_checks,
+            maximum_total_selection_checks: 6 * p.maximum_selection_checks,
+            maximum_total_rank_sites: 6 * p.local.rank.maximum_sites,
+            maximum_total_pixel_reads: 6 * p.local.rank.maximum_pixel_reads,
+        },
+        maximum_reflection_bins: 768 * c.search.gradient.search.max_total_features as u64,
     }
 }
 #[test]
 fn reflected_collection_early_and_extraction_cancellation_releases_all_memory() {
-    use rrrah_dedup::local_collection::{AnchorReflectionFallbackCollectionPolicy,scan_anchor_rank_reflection_fallback_collection};
-    let root=std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/rotation");
-    let left=rrrah_decode::DecodeRequest::new(root.join("base.png"));let right=rrrah_decode::DecodeRequest::new(root.join("mirrored.png"));
-    let config=AnchorReflectionFallbackCollectionPolicy {
-        search:portfolio(),budgets:rrrah_dedup::local_index::FileFeatureBudgets {max_files:2,max_features:24000,max_hits:128000000,max_pair_counts:1,max_pairs:1},
-        max_retrieval_comparisons:1152000000,maximum_retrieval_reflection_bins:3072000,
+    use rrrah_dedup::local_collection::{
+        AnchorReflectionFallbackCollectionPolicy, scan_anchor_rank_reflection_fallback_collection,
     };
-    for stop in [1,1000,10000] {
-        let budget=rrrah_core::MemoryBudget::new(128*1024*1024);
-        let seen=std::cell::Cell::new(0);
-        let result=scan_anchor_rank_reflection_fallback_collection([(1,left.clone()),(2,right.clone())],config,&factors(),&budget,||{seen.set(seen.get()+1);seen.get()==stop});
-        assert!(seen.get()>=stop);
-        assert!(matches!(result,Err(rrrah_dedup::scan::ScanError::Cancelled)),"stop={stop}: {result:?}");
-        assert_eq!(budget.used(),0);
+    let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/rotation");
+    let left = rrrah_decode::DecodeRequest::new(root.join("base.png"));
+    let right = rrrah_decode::DecodeRequest::new(root.join("mirrored.png"));
+    let config = AnchorReflectionFallbackCollectionPolicy {
+        search: portfolio(),
+        budgets: rrrah_dedup::local_index::FileFeatureBudgets {
+            max_files: 2,
+            max_features: 24000,
+            max_hits: 128000000,
+            max_pair_counts: 1,
+            max_pairs: 1,
+        },
+        max_retrieval_comparisons: 1152000000,
+        maximum_retrieval_reflection_bins: 3072000,
+    };
+    for stop in [1, 1000, 10000] {
+        let budget = rrrah_core::MemoryBudget::new(128 * 1024 * 1024);
+        let seen = std::cell::Cell::new(0);
+        let result = scan_anchor_rank_reflection_fallback_collection(
+            [(1, left.clone()), (2, right.clone())],
+            config,
+            &factors(),
+            &budget,
+            || {
+                seen.set(seen.get() + 1);
+                seen.get() == stop
+            },
+        );
+        assert!(seen.get() >= stop);
+        assert!(
+            matches!(result, Err(rrrah_dedup::scan::ScanError::Cancelled)),
+            "stop={stop}: {result:?}"
+        );
+        assert_eq!(budget.used(), 0);
     }
 }

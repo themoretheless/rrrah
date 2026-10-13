@@ -1,5 +1,5 @@
 //! Managed source/LOD ownership for whole-image GPU upload fallback.
-use rrrah_core::{develop::MonotoneCurve, DecodedRaster, MemoryBudget};
+use rrrah_core::{DecodedRaster, MemoryBudget, develop::MonotoneCurve};
 use rrrah_gpu::{RasterRenderer, RasterUploadError, ViewParameters};
 
 #[derive(Clone, Copy, PartialEq, Eq)]
@@ -687,9 +687,15 @@ mod tests {
         renderer.upload(&gpu.device, &gpu.queue, &frame).unwrap();
         renderer.update_view(&gpu.queue, view);
         assert_eq!(gpu.render_existing_raster_half(&renderer, [128, 128]), expected);
-        eprintln!("36MP swapped HDR Metal: worker_ms={} publish_render_readback_ms={} total_ms={} managed_peak={} index_bytes={} source_cpu={} exact_frame=true",
-            prepared.as_secs_f64()*1000., publish_started.elapsed().as_secs_f64()*1000.,
-            started.elapsed().as_secs_f64()*1000., output.peak(), index.used(), cpu.used());
+        eprintln!(
+            "36MP swapped HDR Metal: worker_ms={} publish_render_readback_ms={} total_ms={} managed_peak={} index_bytes={} source_cpu={} exact_frame=true",
+            prepared.as_secs_f64() * 1000.,
+            publish_started.elapsed().as_secs_f64() * 1000.,
+            started.elapsed().as_secs_f64() * 1000.,
+            output.peak(),
+            index.used(),
+            cpu.used()
+        );
         assert_eq!(output.peak(), 427776);
         drop(frame);
         assert_eq!(store.usage().unwrap().objects, 2);
@@ -714,7 +720,11 @@ mod tests {
         renderer.update_view(&gpu.queue, view);
         assert_eq!(gpu.render_existing_raster_half(&renderer, [128, 128]), expected);
         assert_eq!(hit_budget.peak(), 327680);
-        eprintln!("36MP exact LOD swap cache: hit_worker_ms={hit_ms} hit_peak={} source_cpu={} exact_frame=true objects=2", hit_budget.peak(), cpu.used());
+        eprintln!(
+            "36MP exact LOD swap cache: hit_worker_ms={hit_ms} hit_peak={} source_cpu={} exact_frame=true objects=2",
+            hit_budget.peak(),
+            cpu.used()
+        );
         drop(cached_frame);
         assert_eq!((hit_budget.used(), hit_scratch.used()), (0, 0));
         drop(worker);
@@ -907,16 +917,18 @@ mod tests {
             file.seek(SeekFrom::Start(offset)).unwrap();
             file.write_all(&[original[0] ^ 0x80]).unwrap();
             file.flush().unwrap();
-            assert!(!state
-                .refresh_swapped(
-                    &mut renderer,
-                    &gpu.device,
-                    &gpu.queue,
-                    views[0],
-                    &mut worker,
-                    token()
-                )
-                .unwrap());
+            assert!(
+                !state
+                    .refresh_swapped(
+                        &mut renderer,
+                        &gpu.device,
+                        &gpu.queue,
+                        views[0],
+                        &mut worker,
+                        token()
+                    )
+                    .unwrap()
+            );
             wake_rx.recv_timeout(std::time::Duration::from_secs(10)).unwrap();
             let error = state
                 .refresh_swapped(
@@ -954,42 +966,48 @@ mod tests {
             // Exhaust the shared output/scratch parent before the first disk read.
             let pressure = budget.try_reserve(budget.available_bytes()).unwrap();
             let old = gpu.render_existing_raster_half(&renderer, [64, 64]);
-            assert!(!state
-                .refresh_swapped(
-                    &mut renderer,
-                    &gpu.device,
-                    &gpu.queue,
-                    views[0],
-                    &mut worker,
-                    token()
-                )
-                .unwrap());
+            assert!(
+                !state
+                    .refresh_swapped(
+                        &mut renderer,
+                        &gpu.device,
+                        &gpu.queue,
+                        views[0],
+                        &mut worker,
+                        token()
+                    )
+                    .unwrap()
+            );
             wake_rx.recv_timeout(std::time::Duration::from_secs(10)).unwrap();
-            assert!(state
-                .refresh_swapped(
-                    &mut renderer,
-                    &gpu.device,
-                    &gpu.queue,
-                    views[0],
-                    &mut worker,
-                    token()
-                )
-                .is_err());
+            assert!(
+                state
+                    .refresh_swapped(
+                        &mut renderer,
+                        &gpu.device,
+                        &gpu.queue,
+                        views[0],
+                        &mut worker,
+                        token()
+                    )
+                    .is_err()
+            );
             assert!(state.pending_region.is_none() && state.ready_region.is_none());
             assert_eq!(gpu.render_existing_raster_half(&renderer, [64, 64]), old);
             drop(pressure);
             assert_eq!(cpu.used(), 64 * 40 * 16);
             for (step, (view, expected)) in views.iter().zip(&expected).enumerate() {
-                assert!(!state
-                    .refresh_swapped(
-                        &mut renderer,
-                        &gpu.device,
-                        &gpu.queue,
-                        *view,
-                        &mut worker,
-                        token()
-                    )
-                    .unwrap());
+                assert!(
+                    !state
+                        .refresh_swapped(
+                            &mut renderer,
+                            &gpu.device,
+                            &gpu.queue,
+                            *view,
+                            &mut worker,
+                            token()
+                        )
+                        .unwrap()
+                );
                 wake_rx.recv_timeout(std::time::Duration::from_secs(10)).unwrap();
                 let old = gpu.render_existing_raster_half(&renderer, [64, 64]);
                 let pressure = if step % 2 == 0 {
@@ -997,47 +1015,55 @@ mod tests {
                 } else {
                     queued.try_reserve(queued.available_bytes()).unwrap()
                 };
-                assert!(state
-                    .refresh_swapped(
-                        &mut renderer,
-                        &gpu.device,
-                        &gpu.queue,
-                        *view,
-                        &mut worker,
-                        token()
-                    )
-                    .is_err());
+                assert!(
+                    state
+                        .refresh_swapped(
+                            &mut renderer,
+                            &gpu.device,
+                            &gpu.queue,
+                            *view,
+                            &mut worker,
+                            token()
+                        )
+                        .is_err()
+                );
                 assert!(state.ready_region.is_some());
                 assert!(state.pending_region.is_none());
                 assert_eq!(gpu.render_existing_raster_half(&renderer, [64, 64]), old);
                 drop(pressure);
-                assert!(state
-                    .refresh_swapped(
-                        &mut renderer,
-                        &gpu.device,
-                        &gpu.queue,
-                        *view,
-                        &mut worker,
-                        token()
-                    )
-                    .unwrap());
+                assert!(
+                    state
+                        .refresh_swapped(
+                            &mut renderer,
+                            &gpu.device,
+                            &gpu.queue,
+                            *view,
+                            &mut worker,
+                            token()
+                        )
+                        .unwrap()
+                );
                 renderer.update_view(&gpu.queue, *view);
                 assert_eq!(gpu.render_existing_raster_half(&renderer, [64, 64]), *expected);
-                assert!(!state
-                    .refresh_swapped(
-                        &mut renderer,
-                        &gpu.device,
-                        &gpu.queue,
-                        *view,
-                        &mut worker,
-                        token()
-                    )
-                    .unwrap());
+                assert!(
+                    !state
+                        .refresh_swapped(
+                            &mut renderer,
+                            &gpu.device,
+                            &gpu.queue,
+                            *view,
+                            &mut worker,
+                            token()
+                        )
+                        .unwrap()
+                );
                 assert_eq!(cpu.used(), 64 * 40 * 16);
             }
-            assert!(state
-                .refresh_deferred(&mut renderer, &gpu.device, &gpu.queue, fit)
-                .unwrap());
+            assert!(
+                state
+                    .refresh_deferred(&mut renderer, &gpu.device, &gpu.queue, fit)
+                    .unwrap()
+            );
             renderer.update_view(&gpu.queue, fit);
             assert_eq!(gpu.render_existing_raster_half(&renderer, [64, 64]), expected_fit);
             cycles += 1;
@@ -1072,62 +1098,72 @@ mod tests {
         worker.set_waker(move || {
             let _ = wake_tx.try_send(());
         });
-        assert!(!state
-            .refresh_swapped(
-                &mut renderer,
-                &gpu.device,
-                &gpu.queue,
-                views[0],
-                &mut worker,
-                token()
-            )
-            .unwrap());
-        entered_rx
-            .recv_timeout(std::time::Duration::from_secs(10))
-            .unwrap();
-        for view in &views[1..] {
-            assert!(!state
+        assert!(
+            !state
                 .refresh_swapped(
                     &mut renderer,
                     &gpu.device,
                     &gpu.queue,
-                    *view,
+                    views[0],
                     &mut worker,
                     token()
                 )
-                .unwrap());
+                .unwrap()
+        );
+        entered_rx
+            .recv_timeout(std::time::Duration::from_secs(10))
+            .unwrap();
+        for view in &views[1..] {
+            assert!(
+                !state
+                    .refresh_swapped(
+                        &mut renderer,
+                        &gpu.device,
+                        &gpu.queue,
+                        *view,
+                        &mut worker,
+                        token()
+                    )
+                    .unwrap()
+            );
         }
         assert_eq!(cpu.used(), 64 * 40 * 16);
         resume_tx.send(()).unwrap();
         wake_rx.recv_timeout(std::time::Duration::from_secs(10)).unwrap();
-        assert!(state
-            .refresh_swapped(
-                &mut renderer,
-                &gpu.device,
-                &gpu.queue,
-                views[2],
-                &mut worker,
-                token()
-            )
-            .unwrap());
+        assert!(
+            state
+                .refresh_swapped(
+                    &mut renderer,
+                    &gpu.device,
+                    &gpu.queue,
+                    views[2],
+                    &mut worker,
+                    token()
+                )
+                .unwrap()
+        );
         renderer.update_view(&gpu.queue, views[2]);
         assert_eq!(gpu.render_existing_raster_half(&renderer, [64, 64]), expected[2]);
         assert!(state.pending_region.is_none() && state.ready_region.is_none());
         assert_eq!(cpu.used(), 64 * 40 * 16);
         let old = gpu.render_existing_raster_half(&renderer, [64, 64]);
         let texture_pressure = texture.try_reserve(texture.available_bytes() - 20000).unwrap();
-        assert!(!state
-            .refresh_swapped(&mut renderer, &gpu.device, &gpu.queue, fit, &mut worker, token())
-            .unwrap());
+        assert!(
+            !state
+                .refresh_swapped(&mut renderer, &gpu.device, &gpu.queue, fit, &mut worker, token())
+                .unwrap()
+        );
         assert!(matches!(
             state.pending_region,
             Some((_, ViewportWork::Fit([32, 20])))
         ));
         wake_rx.recv_timeout(std::time::Duration::from_secs(10)).unwrap();
         let queue_pressure = queued.try_reserve(queued.available_bytes()).unwrap();
-        assert!(state
-            .refresh_swapped(&mut renderer, &gpu.device, &gpu.queue, fit, &mut worker, token())
-            .is_err());
+        assert!(
+            state
+                .refresh_swapped(&mut renderer, &gpu.device, &gpu.queue, fit, &mut worker, token())
+                .is_err()
+        );
         assert!(matches!(
             state.ready_region,
             Some((ViewportWork::Fit([32, 20]), _))
@@ -1135,9 +1171,11 @@ mod tests {
         assert_eq!(gpu.render_existing_raster_half(&renderer, [64, 64]), old);
         assert_eq!(cpu.used(), (64 * 40 + 32 * 20) * 16);
         drop(queue_pressure);
-        assert!(state
-            .refresh_swapped(&mut renderer, &gpu.device, &gpu.queue, fit, &mut worker, token())
-            .unwrap());
+        assert!(
+            state
+                .refresh_swapped(&mut renderer, &gpu.device, &gpu.queue, fit, &mut worker, token())
+                .unwrap()
+        );
         renderer.update_view(&gpu.queue, fit);
         assert_eq!(
             gpu.render_existing_raster_half(&renderer, [64, 64]),
@@ -1151,54 +1189,62 @@ mod tests {
             pan: [1e20, 0.],
             ..fit
         };
-        assert!(RasterRenderer::visible_source_region_for_geometry(
-            state.dimensions,
-            state.aspect,
-            offscreen
-        )
-        .unwrap()
-        .is_none());
-        assert!(!state
-            .refresh_swapped(
-                &mut renderer,
-                &gpu.device,
-                &gpu.queue,
-                offscreen,
-                &mut worker,
-                token()
-            )
-            .unwrap());
+        assert!(
+            RasterRenderer::visible_source_region_for_geometry(state.dimensions, state.aspect, offscreen)
+                .unwrap()
+                .is_none()
+        );
+        assert!(
+            !state
+                .refresh_swapped(
+                    &mut renderer,
+                    &gpu.device,
+                    &gpu.queue,
+                    offscreen,
+                    &mut worker,
+                    token()
+                )
+                .unwrap()
+        );
         assert!(state.pending_region.is_none() && state.ready_region.is_none());
         assert_eq!(cpu.used(), 32 * 20 * 16);
         assert_eq!(
             gpu.render_existing_raster_half(&renderer, [64, 64]),
             small_fit_reference
         );
-        assert!(!state
-            .refresh_swapped(&mut renderer, &gpu.device, &gpu.queue, fit, &mut worker, token())
-            .unwrap());
+        assert!(
+            !state
+                .refresh_swapped(&mut renderer, &gpu.device, &gpu.queue, fit, &mut worker, token())
+                .unwrap()
+        );
         assert!(matches!(
             state.pending_region,
             Some((_, ViewportWork::Fit([64, 40])))
         ));
         wake_rx.recv_timeout(std::time::Duration::from_secs(10)).unwrap();
-        assert!(state
-            .refresh_swapped(&mut renderer, &gpu.device, &gpu.queue, fit, &mut worker, token())
-            .unwrap());
+        assert!(
+            state
+                .refresh_swapped(&mut renderer, &gpu.device, &gpu.queue, fit, &mut worker, token())
+                .unwrap()
+        );
         renderer.update_view(&gpu.queue, fit);
         assert_eq!(gpu.render_existing_raster_half(&renderer, [64, 64]), expected_fit);
         assert_eq!(cpu.used(), 64 * 40 * 16);
         assert!(state.source.is_none());
-        assert!(!state
-            .refresh_swapped(&mut renderer, &gpu.device, &gpu.queue, fit, &mut worker, token())
-            .unwrap());
+        assert!(
+            !state
+                .refresh_swapped(&mut renderer, &gpu.device, &gpu.queue, fit, &mut worker, token())
+                .unwrap()
+        );
         assert!(state.pending_region.is_none());
         let mut recovery_timings = Vec::new();
         for _ in 0..8 {
             let pressure = texture.try_reserve(texture.available_bytes() - 20000).unwrap();
-            assert!(!state
-                .refresh_swapped(&mut renderer, &gpu.device, &gpu.queue, fit, &mut worker, token())
-                .unwrap());
+            assert!(
+                !state
+                    .refresh_swapped(&mut renderer, &gpu.device, &gpu.queue, fit, &mut worker, token())
+                    .unwrap()
+            );
             assert!(matches!(
                 state.pending_region,
                 Some((_, ViewportWork::Fit([32, 20])))
@@ -1206,14 +1252,18 @@ mod tests {
             assert_eq!(gpu.render_existing_raster_half(&renderer, [64, 64]), expected_fit);
             wake_rx.recv_timeout(std::time::Duration::from_secs(10)).unwrap();
             let blocked_queue = queued.try_reserve(queued.available_bytes()).unwrap();
-            assert!(state
-                .refresh_swapped(&mut renderer, &gpu.device, &gpu.queue, fit, &mut worker, token())
-                .is_err());
+            assert!(
+                state
+                    .refresh_swapped(&mut renderer, &gpu.device, &gpu.queue, fit, &mut worker, token())
+                    .is_err()
+            );
             assert_eq!(gpu.render_existing_raster_half(&renderer, [64, 64]), expected_fit);
             drop(blocked_queue);
-            assert!(state
-                .refresh_swapped(&mut renderer, &gpu.device, &gpu.queue, fit, &mut worker, token())
-                .unwrap());
+            assert!(
+                state
+                    .refresh_swapped(&mut renderer, &gpu.device, &gpu.queue, fit, &mut worker, token())
+                    .unwrap()
+            );
             renderer.update_view(&gpu.queue, fit);
             assert_eq!(
                 gpu.render_existing_raster_half(&renderer, [64, 64]),
@@ -1223,9 +1273,11 @@ mod tests {
             drop(pressure);
             // CPU exhaustion prevents speculative rebuilding without harming the resident frame.
             let blocked_cpu = budget.try_reserve(budget.available_bytes()).unwrap();
-            assert!(!state
-                .refresh_swapped(&mut renderer, &gpu.device, &gpu.queue, fit, &mut worker, token())
-                .unwrap());
+            assert!(
+                !state
+                    .refresh_swapped(&mut renderer, &gpu.device, &gpu.queue, fit, &mut worker, token())
+                    .unwrap()
+            );
             assert!(state.pending_region.is_none());
             assert_eq!(
                 gpu.render_existing_raster_half(&renderer, [64, 64]),
@@ -1233,9 +1285,11 @@ mod tests {
             );
             drop(blocked_cpu);
             let started = std::time::Instant::now();
-            assert!(!state
-                .refresh_swapped(&mut renderer, &gpu.device, &gpu.queue, fit, &mut worker, token())
-                .unwrap());
+            assert!(
+                !state
+                    .refresh_swapped(&mut renderer, &gpu.device, &gpu.queue, fit, &mut worker, token())
+                    .unwrap()
+            );
             assert!(matches!(
                 state.pending_region,
                 Some((_, ViewportWork::Fit([64, 40])))
@@ -1243,9 +1297,11 @@ mod tests {
             wake_rx.recv_timeout(std::time::Duration::from_secs(10)).unwrap();
             let prepared = started.elapsed();
             let publish_started = std::time::Instant::now();
-            assert!(state
-                .refresh_swapped(&mut renderer, &gpu.device, &gpu.queue, fit, &mut worker, token())
-                .unwrap());
+            assert!(
+                state
+                    .refresh_swapped(&mut renderer, &gpu.device, &gpu.queue, fit, &mut worker, token())
+                    .unwrap()
+            );
             renderer.update_view(&gpu.queue, fit);
             assert_eq!(gpu.render_existing_raster_half(&renderer, [64, 64]), expected_fit);
             recovery_timings.push((
@@ -1256,9 +1312,15 @@ mod tests {
             assert_eq!(cpu.used(), 64 * 40 * 16);
             assert!(state.source.is_none() && state.pending_region.is_none() && state.ready_region.is_none());
         }
-        eprintln!("Metal swapped fit timings ms (worker preparation, publish+GPU render+readback, total): {recovery_timings:?}; source512x320 RGBA32F, LOD64x40, framebuffer64x64; warm filesystem; includes readback, excludes display presentation");
-        eprintln!("swapped fit repeated pressure:8 downgrade/recovery cycles; blocked queue retains frame; blocked CPU schedules nothing; exact original HDR references; no retained full source");
-        eprintln!("swapped fit recovery:32x20->64x40 from original disk source; exact original fit frame; no redundant job");
+        eprintln!(
+            "Metal swapped fit timings ms (worker preparation, publish+GPU render+readback, total): {recovery_timings:?}; source512x320 RGBA32F, LOD64x40, framebuffer64x64; warm filesystem; includes readback, excludes display presentation"
+        );
+        eprintln!(
+            "swapped fit repeated pressure:8 downgrade/recovery cycles; blocked queue retains frame; blocked CPU schedules nothing; exact original HDR references; no retained full source"
+        );
+        eprintln!(
+            "swapped fit recovery:32x20->64x40 from original disk source; exact original fit frame; no redundant job"
+        );
         eprintln!(
             "swapped fit pressure: original swapped source streamed on worker to32x20; queue failure preserves old frame/ready level; retry exact; full source stays released"
         );
@@ -1506,9 +1568,11 @@ mod tests {
             assert_eq!(state.region, old);
             assert_eq!(queue.used(), 0);
             drop(pressure);
-            assert!(state
-                .refresh(&mut renderer, &gpu.device, &gpu.queue, retry)
-                .unwrap());
+            assert!(
+                state
+                    .refresh(&mut renderer, &gpu.device, &gpu.queue, retry)
+                    .unwrap()
+            );
             renderer.update_view(&gpu.queue, retry);
             whole.update_view(&gpu.queue, retry);
             assert_eq!(
@@ -1516,17 +1580,19 @@ mod tests {
                 gpu.render_existing_raster_half(&whole, [64, 64])
             );
             let prior_bytes = root.used();
-            assert!(!state
-                .refresh(
-                    &mut renderer,
-                    &gpu.device,
-                    &gpu.queue,
-                    ViewParameters {
-                        pan: [10000., 0.],
-                        ..base
-                    }
-                )
-                .unwrap());
+            assert!(
+                !state
+                    .refresh(
+                        &mut renderer,
+                        &gpu.device,
+                        &gpu.queue,
+                        ViewParameters {
+                            pan: [10000., 0.],
+                            ..base
+                        }
+                    )
+                    .unwrap()
+            );
             assert_eq!(root.used(), prior_bytes);
             // A fit requiring the whole source fails honestly; LOD is still separate.
             assert!(matches!(
@@ -1673,9 +1739,11 @@ mod tests {
                 // The cached level can itself exceed headroom during region replacement.
                 // Build and admit a smaller level without dropping the old frame/cache first.
                 let detail = ViewParameters { zoom: 16., ..fit };
-                assert!(state
-                    .refresh(&mut renderer, &gpu.device, &gpu.queue, detail)
-                    .unwrap());
+                assert!(
+                    state
+                        .refresh(&mut renderer, &gpu.device, &gpu.queue, detail)
+                        .unwrap()
+                );
                 renderer.update_view(&gpu.queue, detail);
                 if hdr {
                     gpu.render_existing_raster_half(&renderer, [64, 64]);
@@ -1683,9 +1751,11 @@ mod tests {
                     gpu.render_existing_raster(&renderer, [64, 64]);
                 }
                 let pressure = root.try_reserve(root.available_bytes() - 20000).unwrap();
-                assert!(state
-                    .refresh(&mut renderer, &gpu.device, &gpu.queue, fit)
-                    .unwrap());
+                assert!(
+                    state
+                        .refresh(&mut renderer, &gpu.device, &gpu.queue, fit)
+                        .unwrap()
+                );
                 assert!(state.lod_active);
                 let smaller = state.lod.as_ref().unwrap();
                 assert_eq!((smaller.width(), smaller.height()), (32, 20));
@@ -1822,9 +1892,11 @@ mod tests {
         let after = gpu.render_existing_raster_half(&renderer, [64, 64]);
         assert_ne!(after, before);
         let detail = ViewParameters { zoom: 16., ..fit };
-        assert!(state
-            .refresh(&mut renderer, &gpu.device, &gpu.queue, detail)
-            .unwrap());
+        assert!(
+            state
+                .refresh(&mut renderer, &gpu.device, &gpu.queue, detail)
+                .unwrap()
+        );
         renderer.update_view(&gpu.queue, detail);
         let old_detail = gpu.render_existing_raster_half(&renderer, [64, 64]);
         let old_region = state.region;
@@ -1844,9 +1916,11 @@ mod tests {
         assert!(!state.lod_active);
         assert_eq!(gpu.render_existing_raster_half(&renderer, [64, 64]), old_detail);
         drop(pressure);
-        assert!(state
-            .refresh(&mut renderer, &gpu.device, &gpu.queue, fit)
-            .unwrap());
+        assert!(
+            state
+                .refresh(&mut renderer, &gpu.device, &gpu.queue, fit)
+                .unwrap()
+        );
         renderer.update_view(&gpu.queue, fit);
         gpu.render_existing_raster_half(&renderer, [64, 64]);
         drop(state);

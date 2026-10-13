@@ -115,32 +115,113 @@ fn original_regions_config(
 }
 
 fn main() {
-    let args:Vec<_>=std::env::args().skip(1).collect(); assert!(args.len()==2 || args.len()==3);
-    let retained_features:usize=args[1].parse().unwrap();
-    let policy=original_regions_config(true,true);let g=policy.gradient;
-    let ceiling:u64=args.get(2).map(|v|v.parse().unwrap()).unwrap_or(512*1024*1024);
-    let budget=rrrah_core::MemoryBudget::new(ceiling);
+    let args: Vec<_> = std::env::args().skip(1).collect();
+    assert!(args.len() == 2 || args.len() == 3);
+    let retained_features: usize = args[1].parse().unwrap();
+    let policy = original_regions_config(true, true);
+    let g = policy.gradient;
+    let ceiling: u64 = args
+        .get(2)
+        .map(|v| v.parse().unwrap())
+        .unwrap_or(512 * 1024 * 1024);
+    let budget = rrrah_core::MemoryBudget::new(ceiling);
     println!("memory ceiling={ceiling}");
-    let held=budget.try_reserve((retained_features*std::mem::size_of::<rrrah_dedup::gradient::GradientFeature>()) as u64).unwrap();
-    println!("prior feature lower bound bytes={}",held.bytes());
-    let request=rrrah_decode::DecodeRequest::new(&args[0]);
-    let image=rrrah_dedup::decode::decode_selected_frame_bounded(&request,g.search.local.decode,&budget,||false).unwrap();
-    println!("decoded used={} peak={}",budget.used(),budget.peak());
-    let view=image.view(||false).unwrap();
-    let factors:Vec<_>=(0..=6).map(|n|2f64.powf(f64::from(n)/2.)).collect();
-    let mut batches=Vec::new();
-    for radius in [None,Some(2),Some(4),Some(0)] {
-        let samples=radius.map(|r|rrrah_dedup::gradient_scale::smooth_gradient_candidates_managed(&view,r,128000000,&budget,||false));
-        let samples=match samples {Some(Ok(v))=>Some(v),Some(Err(e))=>{println!("smooth {radius:?}: {e:?} used={} peak={}",budget.used(),budget.peak());break},None=>None};
-        let (w,h)=view.dimensions();
-        let smooth=samples.as_ref().map(|v|rrrah_dedup::linear::LinearRgbaView::new(w,h,v,g.search.local.decode.max_pixels,||false).unwrap());
-        let mut local=g.search.local.extract;if radius.is_none(){local.minimum_corner_score=0.000001;}
-        println!("extract {radius:?} begin used={} peak={}",budget.used(),budget.peak());
-        let result=rrrah_dedup::gradient_scale::extract_spatial_gradient_scales_area_managed(
-            smooth.as_ref().unwrap_or(&view),rrrah_dedup::pyramid::PyramidPolicy {local,max_levels:g.search.max_levels,max_total_pixels:g.search.max_total_pixels,max_total_features:g.search.max_total_features},
-            &factors,g.max_total_gradient_samples,policy.recipe,(policy.spatial.columns,policy.spatial.rows,policy.spatial.max_per_cell),128000000,&budget,||false);
-        match result {Ok(batch)=>{println!("extract {radius:?} count={} capacity={} used={} peak={}",batch.len(),batch.capacity_bytes(),budget.used(),budget.peak());batches.push(batch)},Err(e)=>{println!("extract {radius:?}: {e:?} used={} peak={}",budget.used(),budget.peak());break}}
+    let held = budget
+        .try_reserve(
+            (retained_features * std::mem::size_of::<rrrah_dedup::gradient::GradientFeature>()) as u64,
+        )
+        .unwrap();
+    println!("prior feature lower bound bytes={}", held.bytes());
+    let request = rrrah_decode::DecodeRequest::new(&args[0]);
+    let image =
+        rrrah_dedup::decode::decode_selected_frame_bounded(&request, g.search.local.decode, &budget, || {
+            false
+        })
+        .unwrap();
+    println!("decoded used={} peak={}", budget.used(), budget.peak());
+    let view = image.view(|| false).unwrap();
+    let factors: Vec<_> = (0..=6).map(|n| 2f64.powf(f64::from(n) / 2.)).collect();
+    let mut batches = Vec::new();
+    for radius in [None, Some(2), Some(4), Some(0)] {
+        let samples = radius.map(|r| {
+            rrrah_dedup::gradient_scale::smooth_gradient_candidates_managed(
+                &view,
+                r,
+                128000000,
+                &budget,
+                || false,
+            )
+        });
+        let samples = match samples {
+            Some(Ok(v)) => Some(v),
+            Some(Err(e)) => {
+                println!(
+                    "smooth {radius:?}: {e:?} used={} peak={}",
+                    budget.used(),
+                    budget.peak()
+                );
+                break;
+            }
+            None => None,
+        };
+        let (w, h) = view.dimensions();
+        let smooth = samples.as_ref().map(|v| {
+            rrrah_dedup::linear::LinearRgbaView::new(w, h, v, g.search.local.decode.max_pixels, || false)
+                .unwrap()
+        });
+        let mut local = g.search.local.extract;
+        if radius.is_none() {
+            local.minimum_corner_score = 0.000001;
+        }
+        println!(
+            "extract {radius:?} begin used={} peak={}",
+            budget.used(),
+            budget.peak()
+        );
+        let result = rrrah_dedup::gradient_scale::extract_spatial_gradient_scales_area_managed(
+            smooth.as_ref().unwrap_or(&view),
+            rrrah_dedup::pyramid::PyramidPolicy {
+                local,
+                max_levels: g.search.max_levels,
+                max_total_pixels: g.search.max_total_pixels,
+                max_total_features: g.search.max_total_features,
+            },
+            &factors,
+            g.max_total_gradient_samples,
+            policy.recipe,
+            (
+                policy.spatial.columns,
+                policy.spatial.rows,
+                policy.spatial.max_per_cell,
+            ),
+            128000000,
+            &budget,
+            || false,
+        );
+        match result {
+            Ok(batch) => {
+                println!(
+                    "extract {radius:?} count={} capacity={} used={} peak={}",
+                    batch.len(),
+                    batch.capacity_bytes(),
+                    budget.used(),
+                    budget.peak()
+                );
+                batches.push(batch)
+            }
+            Err(e) => {
+                println!(
+                    "extract {radius:?}: {e:?} used={} peak={}",
+                    budget.used(),
+                    budget.peak()
+                );
+                break;
+            }
+        }
     }
-    drop(batches);drop(image);drop(held);assert_eq!(budget.used(),0);
-    println!("released used={} peak={}",budget.used(),budget.peak());
+    drop(batches);
+    drop(image);
+    drop(held);
+    assert_eq!(budget.used(), 0);
+    println!("released used={} peak={}", budget.used(), budget.peak());
 }

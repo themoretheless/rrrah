@@ -496,7 +496,11 @@ fn indexed_recursive_modes_retain_labelled_groups_with_candidate_only_budget() {
         ("split.apng", "nested/b.apng"),
         ("changed-pixels.apng", "nested/c.apng"),
     ] {
-        std::fs::write(dir.path().join(destination), std::fs::read(fixtures.join(source)).unwrap()).unwrap();
+        std::fs::write(
+            dir.path().join(destination),
+            std::fs::read(fixtures.join(source)).unwrap(),
+        )
+        .unwrap();
     }
     let policy = PresentationPolicy {
         max_files: 3,
@@ -702,7 +706,11 @@ fn indexed_recursive_source_change_removes_stale_edges_and_retry_restores_them()
         ("split.apng", "b.apng"),
         ("zero-prefix.apng", "c.apng"),
     ] {
-        std::fs::write(dir.path().join(destination), std::fs::read(fixtures.join(source)).unwrap()).unwrap();
+        std::fs::write(
+            dir.path().join(destination),
+            std::fs::read(fixtures.join(source)).unwrap(),
+        )
+        .unwrap();
     }
     let policy = PresentationPolicy {
         max_files: 3,
@@ -905,7 +913,11 @@ fn indexed_recursive_memory_refusals_are_attributed_and_retry_recovers_all_edges
         ("split.apng", "b.apng"),
         ("zero-prefix.apng", "c.apng"),
     ] {
-        std::fs::write(dir.path().join(destination), std::fs::read(fixtures.join(source)).unwrap()).unwrap();
+        std::fs::write(
+            dir.path().join(destination),
+            std::fs::read(fixtures.join(source)).unwrap(),
+        )
+        .unwrap();
     }
     let policy = PresentationPolicy {
         max_files: 3,

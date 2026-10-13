@@ -224,7 +224,7 @@ fn ordinary_mirror_and_foreign_select_correct_six_phase_recipes() {
 }
 #[test]
 fn all_eight_cumulative_caps_refuse_before_missing_io_and_cancel_wins() {
-    use rrrah_dedup::anchor_rank_file::{search_anchor_rank_reflection_fallback_files, AnchorRankFileError};
+    use rrrah_dedup::anchor_rank_file::{AnchorRankFileError, search_anchor_rank_reflection_fallback_files};
     let directory = tempfile::tempdir().unwrap();
     let missing = rrrah_decode::DecodeRequest::new(directory.path().join("missing.png"));
     for case in 0..8 {
@@ -269,7 +269,7 @@ fn all_eight_cumulative_caps_refuse_before_missing_io_and_cancel_wins() {
 
 #[test]
 fn six_phase_cancellation_and_both_source_mutations_release_memory() {
-    use rrrah_dedup::anchor_rank_file::{search_anchor_rank_reflection_fallback_files, AnchorRankFileError};
+    use rrrah_dedup::anchor_rank_file::{AnchorRankFileError, search_anchor_rank_reflection_fallback_files};
     use std::cell::Cell;
     let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/rotation");
     let temporary = tempfile::tempdir().unwrap();
@@ -362,8 +362,8 @@ fn six_phase_cancellation_and_both_source_mutations_release_memory() {
 
 fn final_native_callback_mutation_is_rejected(six: bool, inconclusive: bool) {
     use rrrah_dedup::anchor_rank_file::{
-        search_anchor_rank_geometry_fallback_files, search_anchor_rank_reflection_fallback_files,
-        AnchorRankFileError,
+        AnchorRankFileError, search_anchor_rank_geometry_fallback_files,
+        search_anchor_rank_reflection_fallback_files,
     };
     use std::cell::Cell;
     let dir = tempfile::tempdir().unwrap();
@@ -463,8 +463,8 @@ fn six_recipe_final_callback_cannot_publish_mutated_source() {
 #[test]
 fn insufficient_anchor_geometry_continues_remaining_native_recipes() {
     use rrrah_dedup::anchor_rank_file::{
-        search_anchor_rank_geometry_fallback_files, search_anchor_rank_geometry_files_with_smoothing,
-        search_anchor_rank_reflection_fallback_files, AnchorRankFileError,
+        AnchorRankFileError, search_anchor_rank_geometry_fallback_files,
+        search_anchor_rank_geometry_files_with_smoothing, search_anchor_rank_reflection_fallback_files,
     };
     use rrrah_dedup::local_rank::LocalRankError;
     let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/rotation");

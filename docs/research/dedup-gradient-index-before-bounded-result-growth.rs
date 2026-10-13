@@ -238,7 +238,18 @@ pub fn gradient_file_pair_report(
     budget: &MemoryBudget,
     cancel: impl Fn() -> bool,
 ) -> Result<GradientFilePairReport, LocalError> {
-    gradient_file_pair_report_selected(entries, owners, recipe, radius, max_comparisons, max_hits, max_pairs, budget, None, cancel)
+    gradient_file_pair_report_selected(
+        entries,
+        owners,
+        recipe,
+        radius,
+        max_comparisons,
+        max_hits,
+        max_pairs,
+        budget,
+        None,
+        cancel,
+    )
 }
 
 /// Ordinary and reflected-source proposals share one index and cumulative hit/pair limits.
@@ -255,7 +266,18 @@ pub fn gradient_file_pair_report_with_reflection(
     maximum_reflection_bins: u64,
     cancel: impl Fn() -> bool,
 ) -> Result<GradientFilePairReport, LocalError> {
-    gradient_file_pair_report_selected(entries, owners, recipe, radius, max_comparisons, max_hits, max_pairs, budget, Some(maximum_reflection_bins), cancel)
+    gradient_file_pair_report_selected(
+        entries,
+        owners,
+        recipe,
+        radius,
+        max_comparisons,
+        max_hits,
+        max_pairs,
+        budget,
+        Some(maximum_reflection_bins),
+        cancel,
+    )
 }
 
 fn gradient_file_pair_report_selected(
@@ -278,7 +300,11 @@ fn gradient_file_pair_report_selected(
     }
     let n = u64::try_from(entries.len()).map_err(|_| LocalError::Budget)?;
     let phases = if reflection_bins.is_some() { 2 } else { 1 };
-    if n.checked_mul(n).and_then(|v|v.checked_mul(phases)).ok_or(LocalError::Budget)? > max_comparisons {
+    if n.checked_mul(n)
+        .and_then(|v| v.checked_mul(phases))
+        .ok_or(LocalError::Budget)?
+        > max_comparisons
+    {
         return Err(LocalError::Budget);
     }
     if reflection_bins.is_some_and(|limit| n.checked_mul(128).is_none_or(|required| required > limit)) {
@@ -301,65 +327,60 @@ fn gradient_file_pair_report_selected(
     let mut hits = 0_usize;
     let mut pairs = Vec::new();
     for ((_, descriptor), &owner) in entries.iter().zip(owners) {
-      for phase in 0..phases {
-        let query_bytes = entries
-            .len()
-            .min(max_hits.saturating_sub(hits))
-            .checked_mul(std::mem::size_of::<GradientCandidate>())
-            .and_then(|n| u64::try_from(n).ok())
-            .ok_or(LocalError::Budget)?;
-        let _query_credit = budget.try_reserve(query_bytes).map_err(|_| LocalError::Budget)?;
-        let reflected;
-        let query = if phase == 1 {
-            reflected = crate::gradient::reflect_gradient_descriptor(descriptor, &cancel)?;
-            &reflected
-        } else { descriptor };
-        let results = index.search(
-            query,
-            recipe,
-            radius,
-            n,
-            max_hits.saturating_sub(hits),
-            &cancel,
-        )?;
-        hits = hits.checked_add(results.len()).ok_or(LocalError::Budget)?;
-        for result in results {
-            if cancel() {
-                return Err(LocalError::Cancelled);
-            }
-            let i = ids
-                .binary_search_by_key(&result.id, |v| v.0)
-                .map_err(|_| LocalError::Invalid)?;
-            let other = ids[i].1;
-            if owner != other {
-                let pair = (owner.min(other), owner.max(other));
-                // Descriptor hits may repeat the same file pair millions of times.
-                // Keep only unique proposals; the independent hit count stays intact.
-                let position = match pairs.binary_search(&pair) {
-                    Ok(_) => continue,
-                    Err(position) => position,
-                };
-                let required = pairs.len().checked_add(1).ok_or(LocalError::Budget)?;
-                if required > max_pairs {
-                    return Err(LocalError::Budget);
+        for phase in 0..phases {
+            let query_bytes = entries
+                .len()
+                .min(max_hits.saturating_sub(hits))
+                .checked_mul(std::mem::size_of::<GradientCandidate>())
+                .and_then(|n| u64::try_from(n).ok())
+                .ok_or(LocalError::Budget)?;
+            let _query_credit = budget.try_reserve(query_bytes).map_err(|_| LocalError::Budget)?;
+            let reflected;
+            let query = if phase == 1 {
+                reflected = crate::gradient::reflect_gradient_descriptor(descriptor, &cancel)?;
+                &reflected
+            } else {
+                descriptor
+            };
+            let results = index.search(query, recipe, radius, n, max_hits.saturating_sub(hits), &cancel)?;
+            hits = hits.checked_add(results.len()).ok_or(LocalError::Budget)?;
+            for result in results {
+                if cancel() {
+                    return Err(LocalError::Cancelled);
                 }
-                let bytes = required
-                    .checked_mul(std::mem::size_of::<(u64, u64)>())
-                    .and_then(|n| u64::try_from(n).ok())
-                    .ok_or(LocalError::Budget)?;
-                pair_credit.ensure_bytes(bytes).map_err(|_| LocalError::Budget)?;
-                pairs.try_reserve_exact(1).map_err(|_| LocalError::Budget)?;
-                let actual = pairs
-                    .capacity()
-                    .checked_mul(std::mem::size_of::<(u64, u64)>())
-                    .and_then(|n| u64::try_from(n).ok())
-                    .ok_or(LocalError::Budget)?;
-                pair_credit.ensure_bytes(actual).map_err(|_| LocalError::Budget)?;
-                pairs.insert(position, pair);
+                let i = ids
+                    .binary_search_by_key(&result.id, |v| v.0)
+                    .map_err(|_| LocalError::Invalid)?;
+                let other = ids[i].1;
+                if owner != other {
+                    let pair = (owner.min(other), owner.max(other));
+                    // Descriptor hits may repeat the same file pair millions of times.
+                    // Keep only unique proposals; the independent hit count stays intact.
+                    let position = match pairs.binary_search(&pair) {
+                        Ok(_) => continue,
+                        Err(position) => position,
+                    };
+                    let required = pairs.len().checked_add(1).ok_or(LocalError::Budget)?;
+                    if required > max_pairs {
+                        return Err(LocalError::Budget);
+                    }
+                    let bytes = required
+                        .checked_mul(std::mem::size_of::<(u64, u64)>())
+                        .and_then(|n| u64::try_from(n).ok())
+                        .ok_or(LocalError::Budget)?;
+                    pair_credit.ensure_bytes(bytes).map_err(|_| LocalError::Budget)?;
+                    pairs.try_reserve_exact(1).map_err(|_| LocalError::Budget)?;
+                    let actual = pairs
+                        .capacity()
+                        .checked_mul(std::mem::size_of::<(u64, u64)>())
+                        .and_then(|n| u64::try_from(n).ok())
+                        .ok_or(LocalError::Budget)?;
+                    pair_credit.ensure_bytes(actual).map_err(|_| LocalError::Budget)?;
+                    pairs.insert(position, pair);
+                }
             }
         }
     }
-      }
     pairs.sort_unstable();
     pairs.dedup();
     if pairs.len() > max_pairs {

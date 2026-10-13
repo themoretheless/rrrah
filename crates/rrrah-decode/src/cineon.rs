@@ -92,12 +92,17 @@ pub(crate) fn decode(b: &[u8], request: &DecodeRequest) -> Result<DecodedRaster,
         return Err(RasterDecodeError::OutputTooLarge);
     }
     let envelope_bytes = 2048 + b.len() - start;
-    let _envelope_credit = request.memory_budget.as_ref()
-        .map(|budget| budget.try_reserve(envelope_bytes as u64)).transpose()
+    let _envelope_credit = request
+        .memory_budget
+        .as_ref()
+        .map(|budget| budget.try_reserve(envelope_bytes as u64))
+        .transpose()
         .map_err(crate::DecodeError::Memory)?;
     request.check_cancelled()?;
     let mut envelope = Vec::new();
-    envelope.try_reserve_exact(envelope_bytes).map_err(|_| RasterDecodeError::OutputTooLarge)?;
+    envelope
+        .try_reserve_exact(envelope_bytes)
+        .map_err(|_| RasterDecodeError::OutputTooLarge)?;
     envelope.resize(2048, 0u8);
     envelope[..4].copy_from_slice(if be { b"SDPX" } else { b"XPDS" });
     envelope[8..12].copy_from_slice(b"V2.0");
@@ -151,7 +156,10 @@ mod tests {
             let budget = rrrah_core::MemoryBudget::new(total - 1);
             let mut request = DecodeRequest::new("image.cin");
             request.memory_budget = Some(budget.clone());
-            assert!(matches!(decode(bytes, &request), Err(RasterDecodeError::Source(crate::DecodeError::Memory(_)))));
+            assert!(matches!(
+                decode(bytes, &request),
+                Err(RasterDecodeError::Source(crate::DecodeError::Memory(_)))
+            ));
             assert_eq!(budget.used(), 0);
             let budget = rrrah_core::MemoryBudget::new(total);
             request.memory_budget = Some(budget.clone());

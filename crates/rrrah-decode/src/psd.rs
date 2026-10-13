@@ -234,10 +234,12 @@ pub(crate) fn decode(bytes: &[u8], request: &DecodeRequest) -> Result<DecodedRas
         return Err(bad("trailing composition bytes"));
     }
     let color = profile.map_or_else(
-        || if request.assume_untagged_srgb {
-            RasterColorSpace::AssumedSrgb
-        } else {
-            RasterColorSpace::Unspecified
+        || {
+            if request.assume_untagged_srgb {
+                RasterColorSpace::AssumedSrgb
+            } else {
+                RasterColorSpace::Unspecified
+            }
         },
         RasterColorSpace::Icc,
     );
@@ -331,9 +333,14 @@ mod tests {
             let mut bytes = fixture(8, &[0, 255, 128, 64, 255, 0]);
             bytes[4..6].copy_from_slice(&version.to_be_bytes());
             // PSB uses an eight-byte layer/mask section length.
-            if version == 2 { bytes.splice(34..34, [0u8; 4]); }
+            if version == 2 {
+                bytes.splice(34..34, [0u8; 4]);
+            }
             let mut request = DecodeRequest::new("image.psd");
-            assert_eq!(decode(&bytes, &request).unwrap().color_space(), &RasterColorSpace::Unspecified);
+            assert_eq!(
+                decode(&bytes, &request).unwrap().color_space(),
+                &RasterColorSpace::Unspecified
+            );
             request.assume_untagged_srgb = true;
             let raster = decode(&bytes, &request).unwrap();
             assert_eq!(raster.color_space(), &RasterColorSpace::AssumedSrgb);
@@ -347,7 +354,9 @@ mod tests {
             bytes[30..34].copy_from_slice(&(resource.len() as u32).to_be_bytes());
             bytes.splice(34..34, resource);
             let raster = decode(&bytes, &request).unwrap();
-            let RasterColorSpace::Icc(profile) = raster.color_space() else { panic!("ICC must win") };
+            let RasterColorSpace::Icc(profile) = raster.color_space() else {
+                panic!("ICC must win")
+            };
             assert_eq!(profile.as_slice(), b"test");
         }
     }

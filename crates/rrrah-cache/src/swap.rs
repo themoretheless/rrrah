@@ -50,7 +50,9 @@ impl std::error::Error for SwapPayloadError {}
 pub trait SwapPayload: Send + 'static + Sized {
     /// Opt in only when allocations made after stream reads begin are bounded
     /// by unread wire bytes. Compressed/custom payloads remain serial by default.
-    fn permits_hash_scratch() -> bool { false }
+    fn permits_hash_scratch() -> bool {
+        false
+    }
     fn capacity_bytes(&self) -> u64;
     fn payload_len(&self) -> std::io::Result<u64>;
     fn write_payload(&self, writer: &mut impl Write) -> std::io::Result<()>;
@@ -87,7 +89,9 @@ impl SwapPayload for DecodedMosaic {
     }
 }
 impl SwapPayload for DecodedRaster {
-    fn permits_hash_scratch() -> bool { true }
+    fn permits_hash_scratch() -> bool {
+        true
+    }
     fn capacity_bytes(&self) -> u64 {
         self.capacity_bytes()
     }
@@ -235,7 +239,9 @@ impl<K: Clone + Eq + Hash + Send + 'static, V: SwapPayload> ImageSwapCache<K, V>
                 let maintenance_period = std::time::Duration::from_secs(1);
                 let mut next_maintenance = std::time::Instant::now() + maintenance_period;
                 loop {
-                    if worker_cancel.load(Ordering::Acquire) { break; }
+                    if worker_cancel.load(Ordering::Acquire) {
+                        break;
+                    }
                     let command = if config.limits.ttl.is_some() {
                         // A busy command stream must not keep resetting TTL
                         // maintenance. In particular, barriers do not touch LRU.
@@ -416,7 +422,9 @@ impl<K: Clone + Eq + Hash + Send + 'static, V: SwapPayload> ImageSwapCache<K, V>
     }
     /// Share the same disk quota for a visible image's segmented region backing.
     /// The returned handle remains charged until its last owner drops.
-    pub fn region_store(&self) -> SwapStore { self.store.clone() }
+    pub fn region_store(&self) -> SwapStore {
+        self.store.clone()
+    }
 
     pub fn restore_budget(&self) -> &MemoryBudget {
         &self.restore_budget
@@ -505,7 +513,8 @@ impl<K: Clone + Eq + Hash + Send + 'static, V: SwapPayload> ImageSwapCache<K, V>
             }
         };
         let result = if V::permits_hash_scratch() {
-            self.store.read_stream_with_scratch(&handle, &mut cancelled, decode, &self.scratch_budget)
+            self.store
+                .read_stream_with_scratch(&handle, &mut cancelled, decode, &self.scratch_budget)
         } else {
             self.store.read_stream(&handle, &mut cancelled, decode)
         };
@@ -560,7 +569,12 @@ impl<K: Clone + Eq + Hash + Send + 'static, V: SwapPayload> ImageSwapCache<K, V>
         self.cancelled.store(true, Ordering::Release);
         let (wake, _) = mpsc::channel();
         let _ = self.tx.try_send(Command::Barrier(wake));
-        if let Some(worker) = self.worker.lock().unwrap_or_else(std::sync::PoisonError::into_inner).take() {
+        if let Some(worker) = self
+            .worker
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner)
+            .take()
+        {
             let _ = worker.join();
         }
     }
@@ -626,19 +640,35 @@ mod write_cancellation_tests {
         for ttl in [None, Some(std::time::Duration::from_secs(3600))] {
             let directory = tempfile::tempdir().unwrap();
             let root = MemoryBudget::new(3);
-            let swap = ImageSwapCache::<u8, Payload>::new(directory.path(), ImageSwapConfig {
-                limits: CacheLimits { max_bytes:3, max_entries:Some(1), ttl },
-                queue_bytes:3, queue_count:1, restore_bytes:3,
-            }).unwrap();
-            swap.enqueue(1,Payload { buffer:root.try_buffer(3,7).unwrap().freeze(),pause:None });
+            let swap = ImageSwapCache::<u8, Payload>::new(
+                directory.path(),
+                ImageSwapConfig {
+                    limits: CacheLimits {
+                        max_bytes: 3,
+                        max_entries: Some(1),
+                        ttl,
+                    },
+                    queue_bytes: 3,
+                    queue_count: 1,
+                    restore_bytes: 3,
+                },
+            )
+            .unwrap();
+            swap.enqueue(
+                1,
+                Payload {
+                    buffer: root.try_buffer(3, 7).unwrap().freeze(),
+                    pause: None,
+                },
+            );
             swap.wait_idle().unwrap();
-            assert_eq!(swap.disk_usage().unwrap().objects,1);
+            assert_eq!(swap.disk_usage().unwrap().objects, 1);
             swap.shutdown();
             swap.shutdown();
             assert!(swap.worker.lock().unwrap().is_none());
             drop(swap);
-            assert_eq!(root.used(),0);
-            assert_eq!(std::fs::read_dir(directory.path()).unwrap().count(),0);
+            assert_eq!(root.used(), 0);
+            assert_eq!(std::fs::read_dir(directory.path()).unwrap().count(), 0);
         }
     }
 
@@ -772,16 +802,28 @@ mod write_cancellation_tests {
             root.clone(),
         )
         .unwrap();
-        swap.enqueue(1, Payload { buffer: root.try_buffer(1, 41).unwrap().freeze(), pause: None });
+        swap.enqueue(
+            1,
+            Payload {
+                buffer: root.try_buffer(1, 41).unwrap().freeze(),
+                pause: None,
+            },
+        );
         swap.wait_idle().unwrap();
         assert_eq!(root.used(), 0);
         let mut polls = 0;
         let mut allocation_seen = false;
-        assert!(swap.try_get(&1, || {
-            polls += 1;
-            if polls == 3 { allocation_seen = root.used() == 1; }
-            polls == 3
-        }).unwrap().is_none());
+        assert!(
+            swap.try_get(&1, || {
+                polls += 1;
+                if polls == 3 {
+                    allocation_seen = root.used() == 1;
+                }
+                polls == 3
+            })
+            .unwrap()
+            .is_none()
+        );
         assert!(allocation_seen);
         assert_eq!(root.used(), 0);
         assert_eq!(swap.stats().errors, 0);
@@ -1672,7 +1714,8 @@ mod raster_tests {
                 max_entries: Some(1),
                 ttl: Some(ttl),
             }),
-        ).unwrap();
+        )
+        .unwrap();
         swap.enqueue(1u32, frame(&source));
         swap.wait_idle().unwrap();
         assert_eq!(swap.stats().writes, 1);
@@ -1686,8 +1729,10 @@ mod raster_tests {
         // Only observe physical accounting: no get, barrier, or prune can cause
         // expiration here. The background worker must release the stored file.
         while swap.store.usage().unwrap().objects != 0 {
-            assert!(std::time::Instant::now() < deadline,
-                "nonzero TTL worker did not reclaim idle swap");
+            assert!(
+                std::time::Instant::now() < deadline,
+                "nonzero TTL worker did not reclaim idle swap"
+            );
             std::thread::sleep(Duration::from_millis(10));
         }
         assert_eq!(swap.store.usage().unwrap().bytes, 0);

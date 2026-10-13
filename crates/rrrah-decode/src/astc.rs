@@ -56,7 +56,12 @@ pub(crate) fn decode(bytes: &[u8], request: &DecodeRequest) -> Result<DecodedRas
         return Err(bad("payload size mismatch"));
     }
     let (pixels, color) = native::decode_surface(&bytes[16..], width, height, bx, by, request)?;
-    Ok(DecodedRaster::new(width, height, pixels, request.qualify_linear_color(color))?)
+    Ok(DecodedRaster::new(
+        width,
+        height,
+        pixels,
+        request.qualify_linear_color(color),
+    )?)
 }
 
 #[cfg(test)]
@@ -132,8 +137,12 @@ mod tests {
         request.assume_untagged_linear_srgb = true;
         let explicit = decode(bytes, &request).unwrap();
         assert_eq!(explicit.color_space(), &RasterColorSpace::LinearSrgb);
-        let (RasterPixels::Rgba32Float(a), RasterPixels::Rgba32Float(b)) = (strict.pixels(), explicit.pixels()) else { panic!() };
-        assert!(a.iter().zip(b.iter()).all(|(a,b)| a.to_bits() == b.to_bits()));
+        let (RasterPixels::Rgba32Float(a), RasterPixels::Rgba32Float(b)) =
+            (strict.pixels(), explicit.pixels())
+        else {
+            panic!()
+        };
+        assert!(a.iter().zip(b.iter()).all(|(a, b)| a.to_bits() == b.to_bits()));
         assert!(crate::prepare_raster_for_display(&strict).is_err());
         assert!(crate::prepare_raster_for_display(&explicit).is_ok());
         let ldr = decode(&constant(false), &request).unwrap();

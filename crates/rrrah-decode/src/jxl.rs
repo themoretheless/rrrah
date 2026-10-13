@@ -34,16 +34,21 @@ pub(crate) fn decode(bytes: &[u8], request: &DecodeRequest) -> Result<DecodedRas
     }
     // Admit the retained RGBA allocation before pixel decoding/conversion.
     let output_bytes = u64::from(width) * u64::from(height) * 4 * sample_bytes;
-    let output_reservation = request.memory_budget.as_ref()
-        .map(|budget| budget.try_reserve(output_bytes)).transpose()
+    let output_reservation = request
+        .memory_budget
+        .as_ref()
+        .map(|budget| budget.try_reserve(output_bytes))
+        .transpose()
         .map_err(crate::DecodeError::Memory)?;
     // Bound tracker-managed codec allocations independently of retained output.
     // Reserve an additional source-image equivalent for DynamicImage/RGBA overlap.
     // Header parsing precedes this admission; tracker limits are not an RSS bound.
-    let codec_bytes = (65536 + u64::from(width) * u64::from(height) * 64)
-        .min(MAX_RASTER_BYTES);
-    let _working = request.memory_budget.as_ref()
-        .map(|budget| budget.try_reserve(codec_bytes + output_bytes)).transpose()
+    let codec_bytes = (65536 + u64::from(width) * u64::from(height) * 64).min(MAX_RASTER_BYTES);
+    let _working = request
+        .memory_budget
+        .as_ref()
+        .map(|budget| budget.try_reserve(codec_bytes + output_bytes))
+        .transpose()
         .map_err(crate::DecodeError::Memory)?;
     let mut limits = Limits::default();
     limits.max_image_width = Some(65536);
@@ -60,20 +65,35 @@ pub(crate) fn decode(bytes: &[u8], request: &DecodeRequest) -> Result<DecodedRas
         2 => {
             let values = image.into_rgba16().into_raw();
             RasterPixels::Rgba16(if let Some(reservation) = output_reservation {
-                reservation.try_adopt(values).map_err(crate::DecodeError::Memory)?.into()
-            } else { Arc::new(values).into() })
+                reservation
+                    .try_adopt(values)
+                    .map_err(crate::DecodeError::Memory)?
+                    .into()
+            } else {
+                Arc::new(values).into()
+            })
         }
         4 => {
             let values = image.into_rgba32f().into_raw();
             RasterPixels::Rgba32Float(if let Some(reservation) = output_reservation {
-                reservation.try_adopt(values).map_err(crate::DecodeError::Memory)?.into()
-            } else { Arc::new(values).into() })
+                reservation
+                    .try_adopt(values)
+                    .map_err(crate::DecodeError::Memory)?
+                    .into()
+            } else {
+                Arc::new(values).into()
+            })
         }
         _ => {
             let values = image.into_rgba8().into_raw();
             RasterPixels::Rgba8(if let Some(reservation) = output_reservation {
-                reservation.try_adopt(values).map_err(crate::DecodeError::Memory)?.into()
-            } else { Arc::new(values).into() })
+                reservation
+                    .try_adopt(values)
+                    .map_err(crate::DecodeError::Memory)?
+                    .into()
+            } else {
+                Arc::new(values).into()
+            })
         }
     };
     Ok(DecodedRaster::new(width, height, pixels, color)?)
@@ -97,7 +117,10 @@ mod tests {
             drop(result);
             assert_eq!(budget.used(), 0, "truncated at {end}");
         }
-        assert!(admitted_failures > 0, "must exercise errors after working admission");
+        assert!(
+            admitted_failures > 0,
+            "must exercise errors after working admission"
+        );
     }
     #[test]
     fn output_admission_precedes_pixel_decode_and_tracks_shared_owners() {
@@ -110,14 +133,18 @@ mod tests {
             let budget = rrrah_core::MemoryBudget::new(weight - 1);
             let mut request = DecodeRequest::new("image.jxl");
             request.memory_budget = Some(budget.clone());
-            assert!(matches!(decode(bytes, &request),
-                Err(RasterDecodeError::Source(crate::DecodeError::Memory(_)))));
+            assert!(matches!(
+                decode(bytes, &request),
+                Err(RasterDecodeError::Source(crate::DecodeError::Memory(_)))
+            ));
             assert_eq!(budget.peak(), 0);
             let working = 65536 + u64::from(reference.width()) * u64::from(reference.height()) * 64 + weight;
             let budget = rrrah_core::MemoryBudget::new(weight);
             request.memory_budget = Some(budget.clone());
-            assert!(matches!(decode(bytes, &request),
-                Err(RasterDecodeError::Source(crate::DecodeError::Memory(_)))));
+            assert!(matches!(
+                decode(bytes, &request),
+                Err(RasterDecodeError::Source(crate::DecodeError::Memory(_)))
+            ));
             assert_eq!(budget.used(), 0);
             let budget = rrrah_core::MemoryBudget::new(weight + working);
             request.memory_budget = Some(budget.clone());

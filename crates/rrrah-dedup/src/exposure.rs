@@ -40,7 +40,9 @@ pub fn calibrate_rank_exposure_into<'a>(
     }
     let (width, height) = image.dimensions();
     let pixels = u64::from(width) * u64::from(height);
-    let samples = pixels.checked_mul(4).and_then(|v| usize::try_from(v).ok())
+    let samples = pixels
+        .checked_mul(4)
+        .and_then(|v| usize::try_from(v).ok())
         .ok_or(ExposureError::Layout)?;
     if scratch.len() != samples {
         return Err(ExposureError::Layout);
@@ -63,11 +65,10 @@ pub fn calibrate_rank_exposure_into<'a>(
             scratch[offset + 3] = 1.0;
         }
     }
-    let view = LinearRgbaView::new(width, height, scratch, pixels, &cancel)
-        .map_err(|e| match e {
-            crate::pixels::PixelError::Cancelled => ExposureError::Cancelled,
-            _ => ExposureError::UnsupportedPixels,
-        })?;
+    let view = LinearRgbaView::new(width, height, scratch, pixels, &cancel).map_err(|e| match e {
+        crate::pixels::PixelError::Cancelled => ExposureError::Cancelled,
+        _ => ExposureError::UnsupportedPixels,
+    })?;
     exposure.pixel_reads = reads;
     Ok((view, exposure))
 }
@@ -111,5 +112,9 @@ pub fn measure_rank_exposure(
     if peak == 0.0 {
         return Err(ExposureError::Uninformative);
     }
-    Ok(RankExposure { peak_rgb: peak, gain: peak.recip(), pixel_reads: reads })
+    Ok(RankExposure {
+        peak_rgb: peak,
+        gain: peak.recip(),
+        pixel_reads: reads,
+    })
 }

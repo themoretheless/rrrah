@@ -146,13 +146,16 @@ impl Animation {
             return Err(SequenceError::Pixels(PixelError::Cancelled).into());
         }
         let bytes = |capacity: usize| {
-            capacity.checked_mul(std::mem::size_of::<Frame<'_>>())
+            capacity
+                .checked_mul(std::mem::size_of::<Frame<'_>>())
                 .and_then(|n| u64::try_from(n).ok())
                 .ok_or(rrrah_core::BufferError::Overflow)
         };
         let mut credit = self.scratch_budget.try_reserve(bytes(self.frames.len())?)?;
         let mut frames = Vec::new();
-        frames.try_reserve_exact(self.frames.len()).map_err(rrrah_core::BufferError::Allocate)?;
+        frames
+            .try_reserve_exact(self.frames.len())
+            .map_err(rrrah_core::BufferError::Allocate)?;
         credit.ensure_bytes(bytes(frames.capacity())?)?;
         for (raster, duration) in &self.frames {
             frames.push(Frame {
@@ -161,11 +164,14 @@ impl Animation {
             });
         }
         let sequence = Sequence::from_prepared_frames(
-            Playback::Animation { repetitions: self.total_plays }, frames, &cancel,
+            Playback::Animation {
+                repetitions: self.total_plays,
+            },
+            frames,
+            &cancel,
         )?;
         Ok((sequence, credit))
     }
-
 }
 
 fn frame_slots(
@@ -173,13 +179,16 @@ fn frame_slots(
     budget: &MemoryBudget,
 ) -> Result<(Vec<(NormalizedRaster, Duration)>, rrrah_core::Reservation), AnimationError> {
     let bytes = |capacity: usize| {
-        capacity.checked_mul(std::mem::size_of::<(NormalizedRaster, Duration)>())
+        capacity
+            .checked_mul(std::mem::size_of::<(NormalizedRaster, Duration)>())
             .and_then(|n| u64::try_from(n).ok())
             .ok_or(rrrah_core::BufferError::Overflow)
     };
     let mut credit = budget.try_reserve(bytes(count)?)?;
     let mut frames = Vec::new();
-    frames.try_reserve_exact(count).map_err(rrrah_core::BufferError::Allocate)?;
+    frames
+        .try_reserve_exact(count)
+        .map_err(rrrah_core::BufferError::Allocate)?;
     credit.ensure_bytes(bytes(frames.capacity())?)?;
     Ok((frames, credit))
 }
@@ -359,27 +368,47 @@ mod frame_slot_tests {
         let budget = MemoryBudget::new(bytes);
         let (frames, credit) = frame_slots(3, &budget).unwrap();
         assert!(frames.capacity() >= 3);
-        assert_eq!(budget.used(), frames.capacity() as u64 * std::mem::size_of::<(NormalizedRaster, Duration)>() as u64);
-        drop(frames);drop(credit);assert_eq!(budget.used(), 0);
+        assert_eq!(
+            budget.used(),
+            frames.capacity() as u64 * std::mem::size_of::<(NormalizedRaster, Duration)>() as u64
+        );
+        drop(frames);
+        drop(credit);
+        assert_eq!(budget.used(), 0);
         let budget = MemoryBudget::new(bytes - 1);
         assert!(matches!(frame_slots(3, &budget), Err(AnimationError::Memory(_))));
-        assert_eq!((budget.used(), budget.peak()), (0,0));
+        assert_eq!((budget.used(), budget.peak()), (0, 0));
         let budget = MemoryBudget::new(u64::MAX);
-        assert!(matches!(frame_slots(usize::MAX, &budget), Err(AnimationError::Memory(rrrah_core::BufferError::Overflow))));
-        assert_eq!((budget.used(), budget.peak()), (0,0));
+        assert!(matches!(
+            frame_slots(usize::MAX, &budget),
+            Err(AnimationError::Memory(rrrah_core::BufferError::Overflow))
+        ));
+        assert_eq!((budget.used(), budget.peak()), (0, 0));
     }
     #[test]
     fn decoded_animation_retains_actual_frame_table_credit() {
         let budget = MemoryBudget::new(4 * 1024 * 1024);
         let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/timeline");
-        let animation = decode_animation(&DecodeRequest::new(root.join("split.apng")), AnimationKind::Apng,
-            AnimationBudget { max_frames:1000000,max_pixels:100,max_file_bytes:100000 }, &budget, || false).unwrap();
-        assert_eq!(animation.frame_count(),4);
-        let metadata = animation.frames.capacity() as u64 * std::mem::size_of::<(NormalizedRaster, Duration)>() as u64;
+        let animation = decode_animation(
+            &DecodeRequest::new(root.join("split.apng")),
+            AnimationKind::Apng,
+            AnimationBudget {
+                max_frames: 1000000,
+                max_pixels: 100,
+                max_file_bytes: 100000,
+            },
+            &budget,
+            || false,
+        )
+        .unwrap();
+        assert_eq!(animation.frame_count(), 4);
+        let metadata =
+            animation.frames.capacity() as u64 * std::mem::size_of::<(NormalizedRaster, Duration)>() as u64;
         assert!(budget.used() >= metadata);
         assert!(metadata < 1000000);
         assert!(animation.same_timeline(&animation, || false).unwrap());
-        drop(animation);assert_eq!(budget.used(),0);
+        drop(animation);
+        assert_eq!(budget.used(), 0);
     }
 }
 
@@ -388,46 +417,89 @@ mod timeline_scratch_tests {
     use super::*;
     fn load(name: &str, budget: &MemoryBudget) -> Animation {
         let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/timeline");
-        decode_animation(&DecodeRequest::new(root.join(name)), AnimationKind::Apng,
-            AnimationBudget { max_frames:10,max_pixels:100,max_file_bytes:100000 },budget,||false).unwrap()
+        decode_animation(
+            &DecodeRequest::new(root.join(name)),
+            AnimationKind::Apng,
+            AnimationBudget {
+                max_frames: 10,
+                max_pixels: 100,
+                max_file_bytes: 100000,
+            },
+            budget,
+            || false,
+        )
+        .unwrap()
     }
     #[test]
     fn timeline_scratch_refuses_early_and_late_releases_and_retries() {
-        let budget=MemoryBudget::new(4*1024*1024);
-        let left=load("split.apng",&budget);let right=load("base.png",&budget);
-        let baseline=budget.used();
-        let needed=(left.frame_count()+right.frame_count()) as u64 * std::mem::size_of::<crate::sequence::Frame<'_>>() as u64;
-        for available in [0,needed-1] {
-            let hold=budget.try_reserve(budget.available_bytes()-available).unwrap();
-            let before=budget.used();
-            assert!(matches!(left.same_timeline(&right,||false),Err(AnimationError::Memory(_))));
-            assert_eq!(budget.used(),before);
-            drop(hold);assert_eq!(budget.used(),baseline);
-            assert!(left.same_timeline(&right,||false).unwrap());
-            assert_eq!(budget.used(),baseline);
+        let budget = MemoryBudget::new(4 * 1024 * 1024);
+        let left = load("split.apng", &budget);
+        let right = load("base.png", &budget);
+        let baseline = budget.used();
+        let needed = (left.frame_count() + right.frame_count()) as u64
+            * std::mem::size_of::<crate::sequence::Frame<'_>>() as u64;
+        for available in [0, needed - 1] {
+            let hold = budget.try_reserve(budget.available_bytes() - available).unwrap();
+            let before = budget.used();
+            assert!(matches!(
+                left.same_timeline(&right, || false),
+                Err(AnimationError::Memory(_))
+            ));
+            assert_eq!(budget.used(), before);
+            drop(hold);
+            assert_eq!(budget.used(), baseline);
+            assert!(left.same_timeline(&right, || false).unwrap());
+            assert_eq!(budget.used(), baseline);
         }
         // Each input uses its own budget, even when the other side has room.
-        let other_budget=MemoryBudget::new(4*1024*1024);let other=load("base.png",&other_budget);
-        let before=other_budget.used();let hold=other_budget.try_reserve(other_budget.available_bytes()).unwrap();
-        assert!(matches!(left.same_timeline(&other,||false),Err(AnimationError::Memory(_))));
-        assert_eq!(budget.used(),baseline);
-        drop(hold);assert_eq!(other_budget.used(),before);
-        assert!(left.same_timeline(&other,||false).unwrap());
-        drop((left,right,other));assert_eq!(budget.used(),0);assert_eq!(other_budget.used(),0);
+        let other_budget = MemoryBudget::new(4 * 1024 * 1024);
+        let other = load("base.png", &other_budget);
+        let before = other_budget.used();
+        let hold = other_budget.try_reserve(other_budget.available_bytes()).unwrap();
+        assert!(matches!(
+            left.same_timeline(&other, || false),
+            Err(AnimationError::Memory(_))
+        ));
+        assert_eq!(budget.used(), baseline);
+        drop(hold);
+        assert_eq!(other_budget.used(), before);
+        assert!(left.same_timeline(&other, || false).unwrap());
+        drop((left, right, other));
+        assert_eq!(budget.used(), 0);
+        assert_eq!(other_budget.used(), 0);
     }
     #[test]
     fn every_timeline_scratch_cancel_checkpoint_releases_both_tables() {
         use std::cell::Cell;
-        let budget=MemoryBudget::new(4*1024*1024);
-        let left=load("split.apng",&budget);let right=load("base.png",&budget);let baseline=budget.used();
-        let calls=Cell::new(0);
-        assert!(left.same_timeline(&right,||{calls.set(calls.get()+1);false}).unwrap());
+        let budget = MemoryBudget::new(4 * 1024 * 1024);
+        let left = load("split.apng", &budget);
+        let right = load("base.png", &budget);
+        let baseline = budget.used();
+        let calls = Cell::new(0);
+        assert!(
+            left.same_timeline(&right, || {
+                calls.set(calls.get() + 1);
+                false
+            })
+            .unwrap()
+        );
         for stop in 1..=calls.get() {
-            let seen=Cell::new(0);
-            assert!(matches!(left.same_timeline(&right,||{seen.set(seen.get()+1);seen.get()==stop}),Err(AnimationError::Sequence(SequenceError::Pixels(PixelError::Cancelled)))|Err(AnimationError::Decode(FileError::Normalize(crate::raster::AdapterError::Pixels(PixelError::Cancelled))))));
-            assert_eq!(budget.used(),baseline);
+            let seen = Cell::new(0);
+            assert!(matches!(
+                left.same_timeline(&right, || {
+                    seen.set(seen.get() + 1);
+                    seen.get() == stop
+                }),
+                Err(AnimationError::Sequence(SequenceError::Pixels(
+                    PixelError::Cancelled
+                ))) | Err(AnimationError::Decode(FileError::Normalize(
+                    crate::raster::AdapterError::Pixels(PixelError::Cancelled)
+                )))
+            ));
+            assert_eq!(budget.used(), baseline);
         }
-        assert!(left.same_timeline(&right,||false).unwrap());
-        drop((left,right));assert_eq!(budget.used(),0);
+        assert!(left.same_timeline(&right, || false).unwrap());
+        drop((left, right));
+        assert_eq!(budget.used(), 0);
     }
 }

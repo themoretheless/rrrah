@@ -38,25 +38,71 @@ fn contrast_domain_matches_direct_comparison_before_scratch_admission() {
     let image = LinearRgbaView::new(32, 32, &data, 1024, || false).unwrap();
     let budget = MemoryBudget::new(100000);
     let grid = build_projective_grid(
-        model(), (32, 32), (32, 32), [0, 0, 32, 32],
-        ProjectiveGridPolicy { maximum_sites: 1024 }, &budget, || false,
-    ).unwrap();
+        model(),
+        (32, 32),
+        (32, 32),
+        [0, 0, 32, 32],
+        ProjectiveGridPolicy { maximum_sites: 1024 },
+        &budget,
+        || false,
+    )
+    .unwrap();
     for contrast in [0., -1., f64::NAN, f64::INFINITY, 1.0000000000000002, 2.] {
-        let p = RankRegionPolicy { minimum_contrast: contrast, ..policy() };
-        assert!(matches!(compare_filtered_rank_region(
-            &image, &image, model(), [0, 0, 32, 32], [10, 10, 8, 8], p, 1, || false,
-        ), Err(RankRegionError::Invalid)));
+        let p = RankRegionPolicy {
+            minimum_contrast: contrast,
+            ..policy()
+        };
+        assert!(matches!(
+            compare_filtered_rank_region(
+                &image,
+                &image,
+                model(),
+                [0, 0, 32, 32],
+                [10, 10, 8, 8],
+                p,
+                1,
+                || false,
+            ),
+            Err(RankRegionError::Invalid)
+        ));
         let empty_budget = MemoryBudget::new(0);
-        assert!(matches!(compare_mesh_rank_region(
-            &image, &image, &grid, [0, 0, 32, 32], [10, 10, 8, 8], p, 1,
-            &empty_budget, || false,
-        ), Err(RankRegionError::Invalid)), "contrast {contrast:?}");
+        assert!(
+            matches!(
+                compare_mesh_rank_region(
+                    &image,
+                    &image,
+                    &grid,
+                    [0, 0, 32, 32],
+                    [10, 10, 8, 8],
+                    p,
+                    1,
+                    &empty_budget,
+                    || false,
+                ),
+                Err(RankRegionError::Invalid)
+            ),
+            "contrast {contrast:?}"
+        );
         assert_eq!(empty_budget.used(), 0);
     }
-    let p = RankRegionPolicy { minimum_contrast: 1., ..policy() };
-    assert!(matches!(compare_mesh_rank_region(
-        &image, &image, &grid, [0, 0, 32, 32], [10, 10, 8, 8], p, 1, &budget, || false,
-    ), Err(RankRegionError::Uninformative)));
+    let p = RankRegionPolicy {
+        minimum_contrast: 1.,
+        ..policy()
+    };
+    assert!(matches!(
+        compare_mesh_rank_region(
+            &image,
+            &image,
+            &grid,
+            [0, 0, 32, 32],
+            [10, 10, 8, 8],
+            p,
+            1,
+            &budget,
+            || false,
+        ),
+        Err(RankRegionError::Uninformative)
+    ));
     drop(grid);
     assert_eq!(budget.used(), 0);
 }

@@ -2767,7 +2767,9 @@ fn compare_gradient_pyramid_selected<T>(
                     .ok_or(LocalError::Budget)?;
                 *matcher_credit.borrow_mut() =
                     Some(budget.try_reserve(bytes).map_err(|_| LocalError::Budget)?);
-                crate::gradient::match_gradients_distinct_locations_prepaid(a, b, matching, radius, budget, cancel)
+                crate::gradient::match_gradients_distinct_locations_prepaid(
+                    a, b, matching, radius, budget, cancel,
+                )
             } else {
                 crate::gradient::match_gradients(a, b, matching, cancel)
             }

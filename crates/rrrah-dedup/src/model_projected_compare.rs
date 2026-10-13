@@ -3,19 +3,19 @@ use crate::{
     animated::AnimationBudget,
     exact::{ContentSnapshot, SnapshotError},
     geometry::{
-        verify_projective_sampled_for_domains, GeometryError, GeometryPolicy, ProjectiveSamplingPolicy,
-        ProjectiveTransform,
+        GeometryError, GeometryPolicy, ProjectiveSamplingPolicy, ProjectiveTransform,
+        verify_projective_sampled_for_domains,
     },
     model_compare::ProposalProviderError,
     model_input::{GrayModelInput, ModelInputPolicy},
-    model_input_file::{prepare_file_retaining_original, ModelFileError, PreparedModelFile},
+    model_input_file::{ModelFileError, PreparedModelFile, prepare_file_retaining_original},
     model_projection::ModelInputProjection,
     proposals::{
-        select_scored_region_proposals_managed, ProposalDomain, ProposalPolicy, RegionProposalDomain,
-        ScoredProposal,
+        ProposalDomain, ProposalPolicy, RegionProposalDomain, ScoredProposal,
+        select_scored_region_proposals_managed,
     },
     raster::NormalizedRaster,
-    warp::{verify_projective_bidirectional, BidirectionalEvidence, WarpError, WarpPolicy},
+    warp::{BidirectionalEvidence, WarpError, WarpPolicy, verify_projective_bidirectional},
 };
 use rrrah_core::{MemoryBudget, SharedBuffer};
 use rrrah_decode::{DecodeRequest, GenerationToken};

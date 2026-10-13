@@ -115,9 +115,15 @@ fn original_regions_config(
 }
 
 fn main() {
-    use rrrah_dedup::{anchor_rank::AnchorRankPolicy,anchor_rank_file::{search_anchor_rank_geometry_fallback_files,AnchorGeometryFallbackPolicy},local_rank::LocalRankPolicy,rank_region::RankRegionPolicy};
-    let args:Vec<_>=std::env::args().skip(1).collect();assert_eq!(args.len(),4);
-    let source_tolerance:f64=args[3].parse().unwrap();
+    use rrrah_dedup::{
+        anchor_rank::AnchorRankPolicy,
+        anchor_rank_file::{AnchorGeometryFallbackPolicy, search_anchor_rank_geometry_fallback_files},
+        local_rank::LocalRankPolicy,
+        rank_region::RankRegionPolicy,
+    };
+    let args: Vec<_> = std::env::args().skip(1).collect();
+    assert_eq!(args.len(), 4);
+    let source_tolerance: f64 = args[3].parse().unwrap();
     let mut config = rrrah_dedup::local_scan::ProjectiveCandidateUnionRegionsFilePolicy {
         search: original_regions_config(true, true),
         low_contrast_corner_score: 0.000001,
@@ -140,31 +146,87 @@ fn main() {
             .max_source_pixels = 12800000;
     }
 
-    config.search.gradient.search.filter.filter.radius=7;
-    let factors:Vec<_>=(0..=6).map(|n|2f64.powf(f64::from(n)/2.)).collect();
-    let budget=rrrah_core::MemoryBudget::new(512*1024*1024);
-    let fallback=rrrah_dedup::local_scan::ProjectiveCandidateUnionFallbackFilePolicy { search:config,asymmetric_radius:4,max_total_gradient_samples:3*config.max_total_gradient_samples,max_total_match_comparisons:3*config.max_total_match_comparisons,max_total_union_comparisons:3*config.max_union_comparisons };
-    let policy=AnchorRankPolicy {local:LocalRankPolicy {rank:RankRegionPolicy {radius:8,minimum_contrast:0.005,minimum_pairs:1000,maximum_sites:80000000,maximum_pixel_reads:400000000},filter_radius:8,minimum_witnesses:10,maximum_points:28000,maximum_point_checks:392014000,minimum_point_separation:2.,target_tolerance:2.,source_tolerance,minimum_coverage:0.3,minimum_agreement:0.9},window_radius:2,maximum_selection_checks:1176014000};
-    let native_policy=AnchorGeometryFallbackPolicy {search:fallback,anchors:policy,
-        maximum_total_point_checks:3*policy.local.maximum_point_checks,
-        maximum_total_selection_checks:3*policy.maximum_selection_checks,
-        maximum_total_rank_sites:3*policy.local.rank.maximum_sites,
-        maximum_total_pixel_reads:3*policy.local.rank.maximum_pixel_reads};
-    let files:Vec<_>=(0..3).map(|i|((i+1) as u64,rrrah_decode::DecodeRequest::new(&args[i]))).collect();
-    let collection_policy=rrrah_dedup::local_collection::AnchorGeometryFallbackCollectionPolicy {
-        search:native_policy,
-        budgets:rrrah_dedup::local_index::FileFeatureBudgets {max_files:3,max_features:336000,max_hits:12000000000,max_pair_counts:3,max_pairs:3},
-        max_retrieval_comparisons:12000000000,
+    config.search.gradient.search.filter.filter.radius = 7;
+    let factors: Vec<_> = (0..=6).map(|n| 2f64.powf(f64::from(n) / 2.)).collect();
+    let budget = rrrah_core::MemoryBudget::new(512 * 1024 * 1024);
+    let fallback = rrrah_dedup::local_scan::ProjectiveCandidateUnionFallbackFilePolicy {
+        search: config,
+        asymmetric_radius: 4,
+        max_total_gradient_samples: 3 * config.max_total_gradient_samples,
+        max_total_match_comparisons: 3 * config.max_total_match_comparisons,
+        max_total_union_comparisons: 3 * config.max_union_comparisons,
     };
-    let mut total=0u64;
+    let policy = AnchorRankPolicy {
+        local: LocalRankPolicy {
+            rank: RankRegionPolicy {
+                radius: 8,
+                minimum_contrast: 0.005,
+                minimum_pairs: 1000,
+                maximum_sites: 80000000,
+                maximum_pixel_reads: 400000000,
+            },
+            filter_radius: 8,
+            minimum_witnesses: 10,
+            maximum_points: 28000,
+            maximum_point_checks: 392014000,
+            minimum_point_separation: 2.,
+            target_tolerance: 2.,
+            source_tolerance,
+            minimum_coverage: 0.3,
+            minimum_agreement: 0.9,
+        },
+        window_radius: 2,
+        maximum_selection_checks: 1176014000,
+    };
+    let native_policy = AnchorGeometryFallbackPolicy {
+        search: fallback,
+        anchors: policy,
+        maximum_total_point_checks: 3 * policy.local.maximum_point_checks,
+        maximum_total_selection_checks: 3 * policy.maximum_selection_checks,
+        maximum_total_rank_sites: 3 * policy.local.rank.maximum_sites,
+        maximum_total_pixel_reads: 3 * policy.local.rank.maximum_pixel_reads,
+    };
+    let files: Vec<_> = (0..3)
+        .map(|i| ((i + 1) as u64, rrrah_decode::DecodeRequest::new(&args[i])))
+        .collect();
+    let collection_policy = rrrah_dedup::local_collection::AnchorGeometryFallbackCollectionPolicy {
+        search: native_policy,
+        budgets: rrrah_dedup::local_index::FileFeatureBudgets {
+            max_files: 3,
+            max_features: 336000,
+            max_hits: 12000000000,
+            max_pair_counts: 3,
+            max_pairs: 3,
+        },
+        max_retrieval_comparisons: 12000000000,
+    };
+    let mut total = 0u64;
     for file in files {
-        let report=rrrah_dedup::local_collection::scan_anchor_rank_geometry_fallback_collection(vec![file.clone()],collection_policy,&factors,&budget,||false).expect("single-file collection refused");
-        assert!(report.file_issues.is_empty() && report.local.issues.is_empty() && report.local.source_issues.is_empty(),"{report:?}");
-        let count=report.indexed_features as u64;
-        println!("file={} features={} peak={}",file.0,count,budget.peak());
-        total+=count;
+        let report = rrrah_dedup::local_collection::scan_anchor_rank_geometry_fallback_collection(
+            vec![file.clone()],
+            collection_policy,
+            &factors,
+            &budget,
+            || false,
+        )
+        .expect("single-file collection refused");
+        assert!(
+            report.file_issues.is_empty()
+                && report.local.issues.is_empty()
+                && report.local.source_issues.is_empty(),
+            "{report:?}"
+        );
+        let count = report.indexed_features as u64;
+        println!("file={} features={} peak={}", file.0, count, budget.peak());
+        total += count;
         drop(report);
-        assert_eq!(budget.used(),0);
+        assert_eq!(budget.used(), 0);
     }
-    println!("total={} required_comparisons={} configured_comparisons={} memory_used={}",total,total*total,collection_policy.max_retrieval_comparisons,budget.used());
+    println!(
+        "total={} required_comparisons={} configured_comparisons={} memory_used={}",
+        total,
+        total * total,
+        collection_policy.max_retrieval_comparisons,
+        budget.used()
+    );
 }

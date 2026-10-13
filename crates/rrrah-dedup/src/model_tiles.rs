@@ -5,11 +5,11 @@ use crate::{
     exact::{ContentSnapshot, SnapshotError},
     local_rank::LocalRankError,
     model_compare::{
-        compare_prepared_files, validate_model_comparison_policy, ModelComparisonError,
-        ModelComparisonEvidence, ModelComparisonPolicy, ProposalProviderError, JointModelComparisonPolicy,
+        JointModelComparisonPolicy, ModelComparisonError, ModelComparisonEvidence, ModelComparisonPolicy,
+        ProposalProviderError, compare_prepared_files, validate_model_comparison_policy,
     },
     model_input::GrayModelInput,
-    model_input_file::{prepare_file, PreparedModelFile},
+    model_input_file::{PreparedModelFile, prepare_file},
     proposals::ScoredProposal,
 };
 use rrrah_core::{BufferError, MemoryBudget, SharedBuffer};
@@ -227,7 +227,17 @@ pub fn search_model_tiles_files_with(
     ) -> Result<SharedBuffer<ScoredProposal>, ProposalProviderError>,
     cancel: impl Fn() -> bool,
 ) -> Result<ModelTileEvidence, ModelTileError> {
-    search(left, right, weights, policy, work, budget, &mut provider, &cancel, None)
+    search(
+        left,
+        right,
+        weights,
+        policy,
+        work,
+        budget,
+        &mut provider,
+        &cancel,
+        None,
+    )
 }
 
 #[allow(clippy::too_many_arguments)]
@@ -258,12 +268,22 @@ fn search(
             if !source_tolerance2.is_finite() || source_tolerance2 <= 0. {
                 return Err(ModelComparisonError::Policy.into());
             }
-            let required = u64::try_from(policy.geometry.max_points).ok()
+            let required = u64::try_from(policy.geometry.max_points)
+                .ok()
                 .and_then(|n| n.checked_mul(2))
-                .and_then(|n| policy.sampling.trials.checked_add(1).and_then(|t| n.checked_mul(t)))
+                .and_then(|n| {
+                    policy
+                        .sampling
+                        .trials
+                        .checked_add(1)
+                        .and_then(|t| n.checked_mul(t))
+                })
                 .ok_or(ModelTileError::Work)?;
-            if required > per_attempt || per_attempt.checked_mul(MAX_MODEL_TILE_ATTEMPTS as u64)
-                .is_none_or(|all| all > total) {
+            if required > per_attempt
+                || per_attempt
+                    .checked_mul(MAX_MODEL_TILE_ATTEMPTS as u64)
+                    .is_none_or(|all| all > total)
+            {
                 return Err(ModelTileError::Work);
             }
         }
@@ -453,8 +473,8 @@ fn classify_attempt(
 mod tests {
     use super::*;
     use std::sync::{
-        atomic::{AtomicU64, Ordering},
         Arc,
+        atomic::{AtomicU64, Ordering},
     };
     #[test]
     fn odd_tiny_and_maximum_domains_partition_without_empty_or_duplicate_rectangles() {
@@ -517,6 +537,15 @@ pub fn search_joint_model_tiles_files_with(
     ) -> Result<SharedBuffer<ScoredProposal>, ProposalProviderError>,
     cancel: impl Fn() -> bool,
 ) -> Result<ModelTileEvidence, ModelTileError> {
-    search(left, right, weights, policy.comparison, work, budget, &mut provider, &cancel,
-        Some((policy.maximum_projection_checks, maximum_total_projection_checks)))
+    search(
+        left,
+        right,
+        weights,
+        policy.comparison,
+        work,
+        budget,
+        &mut provider,
+        &cancel,
+        Some((policy.maximum_projection_checks, maximum_total_projection_checks)),
+    )
 }

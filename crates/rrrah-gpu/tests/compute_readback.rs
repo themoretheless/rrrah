@@ -56,7 +56,9 @@ fn exposure_readback_cancellation_releases_mapping_and_allows_retry() {
             assert_eq!(gpu.used(), 0);
         }
     }
-    eprintln!("compute cancellation: six admitted checkpoints in both layouts; every retry exact; CPU/GPU final=0");
+    eprintln!(
+        "compute cancellation: six admitted checkpoints in both layouts; every retry exact; CPU/GPU final=0"
+    );
 }
 
 #[test]
@@ -362,10 +364,12 @@ fn full_sensor_managed_exposure_budgets_and_checks_every_pixel() {
     // Distinguish dispatch windows: the old 1024-period field could hide
     // a wrong source offset differing by a multiple of that period.
     fn source_pixel(index: usize) -> [f32; 4] {
-        [4.0 + (index % 1024) as f32 / 128.0,
-         -((index / 1024) as f32 + 1.0),
-         (index % 257) as f32 / 256.0,
-         (index % 251) as f32 / 256.0]
+        [
+            4.0 + (index % 1024) as f32 / 128.0,
+            -((index / 1024) as f32 + 1.0),
+            (index % 257) as f32 / 256.0,
+            (index % 251) as f32 / 256.0,
+        ]
     }
     fn expected_pixel(index: usize) -> [f32; 4] {
         let p = source_pixel(index);
@@ -398,11 +402,16 @@ fn full_sensor_managed_exposure_budgets_and_checks_every_pixel() {
         .min(u64::from(limits.max_compute_workgroups_per_dimension) * 64);
     let chunk = maximum / alignment * alignment;
     let dispatches = u64::from(count).div_ceil(chunk);
-    assert!(dispatches > 1, "full sensor must exercise multiple dispatch windows");
+    assert!(
+        dispatches > 1,
+        "full sensor must exercise multiple dispatch windows"
+    );
     for window in 1..dispatches {
         assert_ne!(expected_pixel((window * chunk) as usize), expected_pixel(0));
     }
-    eprintln!("full sensor distinct windows: dispatches={dispatches}; chunk_pixels={chunk}; nonperiodic green and independent alpha");
+    eprintln!(
+        "full sensor distinct windows: dispatches={dispatches}; chunk_pixels={chunk}; nonperiodic green and independent alpha"
+    );
     let expected_gpu = bytes * 3 + u64::from(count).div_ceil(chunk) * 16;
     let gpu = rrrah_core::MemoryBudget::new(expected_gpu);
     let mut pixels = cpu.try_buffer(count as usize, [0.0_f32; 4]).unwrap();
@@ -416,19 +425,27 @@ fn full_sensor_managed_exposure_budgets_and_checks_every_pixel() {
         } else {
             cpu.try_reserve(cpu.available_bytes()).unwrap()
         };
-        assert!(compute.execute_managed(&queue, &pixels, -1.0, &gpu, &cpu).is_err());
+        assert!(
+            compute
+                .execute_managed(&queue, &pixels, -1.0, &gpu, &cpu)
+                .is_err()
+        );
         drop(pressure);
         assert_eq!((cpu.used(), gpu.used()), (bytes, 0));
     }
     let mut admitted = false;
-    assert!(matches!(compute.execute_managed_with_cancel(
-        &queue, &pixels, -1.0, &gpu, &cpu, || {
+    assert!(matches!(
+        compute.execute_managed_with_cancel(&queue, &pixels, -1.0, &gpu, &cpu, || {
             admitted |= gpu.used() > 0;
             admitted
-        }), Err(rrrah_gpu::ExposureError::Cancelled)));
+        }),
+        Err(rrrah_gpu::ExposureError::Cancelled)
+    ));
     assert!(admitted, "full sensor cancellation follows CPU/GPU admission");
     assert_eq!((cpu.used(), gpu.used()), (bytes, 0));
-    eprintln!("full sensor recovery: CPU/GPU pressure refused; admitted cancellation; source retained; temporary credits zero");
+    eprintln!(
+        "full sensor recovery: CPU/GPU pressure refused; admitted cancellation; source retained; temporary credits zero"
+    );
     let flat_started = std::time::Instant::now();
     let flat = compute
         .execute_interleaved_with_cancel(&queue, bytemuck::cast_slice(&pixels), -1.0, &gpu, &cpu, || false)
@@ -453,11 +470,7 @@ fn full_sensor_managed_exposure_budgets_and_checks_every_pixel() {
         .unwrap();
     let elapsed_ms = started.elapsed().as_secs_f64() * 1000.0;
     for (index, pixel) in result.iter().enumerate() {
-        assert_eq!(
-            *pixel,
-            expected_pixel(index),
-            "managed full sensor pixel {index}"
-        );
+        assert_eq!(*pixel, expected_pixel(index), "managed full sensor pixel {index}");
     }
     assert_eq!(gpu.peak(), expected_gpu);
     assert_eq!(gpu.used(), 0);
@@ -654,21 +667,28 @@ fn resident_exposure_preserves_hdr_tail_and_budgeted_gpu_ownership() {
 fn exposure_signed_f32_boundary_values_remain_exact_and_finite() {
     let instance = common::headless_instance();
     let adapter = pollster::block_on(common::request_adapter(
-        &instance, &wgpu::RequestAdapterOptions::default(),
-    )).expect("actual GPU required");
+        &instance,
+        &wgpu::RequestAdapterOptions::default(),
+    ))
+    .expect("actual GPU required");
     eprintln!("exposure boundary adapter: {:?}", adapter.get_info());
-    let (device, queue) = pollster::block_on(adapter.request_device(
-        &wgpu::DeviceDescriptor::default(),
-    )).unwrap();
+    let (device, queue) =
+        pollster::block_on(adapter.request_device(&wgpu::DeviceDescriptor::default())).unwrap();
     let compute = rrrah_gpu::LinearExposureCompute::new(&device);
     let cpu = rrrah_core::MemoryBudget::new(16);
     let gpu = rrrah_core::MemoryBudget::new(64);
-    for (stops, magnitude) in [(0f32, f32::MAX), (1., f32::MAX / 2.),
-        (32., f32::MAX / 4294967296.), (-32., f32::MAX)] {
+    for (stops, magnitude) in [
+        (0f32, f32::MAX),
+        (1., f32::MAX / 2.),
+        (32., f32::MAX / 4294967296.),
+        (-32., f32::MAX),
+    ] {
         let pixel = [magnitude, -magnitude, -0., -f32::MAX];
         let gain = stops.exp2();
         let expected = [pixel[0] * gain, pixel[1] * gain, pixel[2] * gain, pixel[3]];
-        let result = compute.execute_managed(&queue, &[pixel], stops, &gpu, &cpu).unwrap();
+        let result = compute
+            .execute_managed(&queue, &[pixel], stops, &gpu, &cpu)
+            .unwrap();
         assert!(result[0].iter().all(|v| v.is_finite()));
         assert_eq!(result[0].map(f32::to_bits), expected.map(f32::to_bits));
         drop(result);

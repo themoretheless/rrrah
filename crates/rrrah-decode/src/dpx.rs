@@ -98,17 +98,25 @@ pub(crate) fn decode(b: &[u8], request: &DecodeRequest) -> Result<DecodedRaster,
     }
     let (ow, oh) = if orient >= 4 { (h, w) } else { (w, h) };
     let output_bytes = u64::from(w) * u64::from(h) * if bits == 8 { 4 } else { 8 };
-    let admit = |bytes| request.memory_budget.as_ref()
-        .map(|budget| budget.try_reserve(bytes)).transpose().map_err(crate::DecodeError::Memory);
+    let admit = |bytes| {
+        request
+            .memory_budget
+            .as_ref()
+            .map(|budget| budget.try_reserve(bytes))
+            .transpose()
+            .map_err(crate::DecodeError::Memory)
+    };
     let output_reservation = admit(output_bytes)?;
     let count = w as usize * h as usize * 4;
     let mut out = Vec::new();
     let mut out8 = Vec::new();
     if bits == 8 {
-        out8.try_reserve_exact(count).map_err(|_| RasterDecodeError::OutputTooLarge)?;
+        out8.try_reserve_exact(count)
+            .map_err(|_| RasterDecodeError::OutputTooLarge)?;
         out8.resize(count, 0u8);
     } else {
-        out.try_reserve_exact(count).map_err(|_| RasterDecodeError::OutputTooLarge)?;
+        out.try_reserve_exact(count)
+            .map_err(|_| RasterDecodeError::OutputTooLarge)?;
         out.resize(count, 0u16);
     }
     let max = (1u32 << bits) - 1;
@@ -235,7 +243,9 @@ pub(crate) fn decode(b: &[u8], request: &DecodeRequest) -> Result<DecodedRaster,
             RasterColorSpace::LinearSrgb
         } else if request.assume_untagged_srgb {
             RasterColorSpace::AssumedSrgb
-        } else { color }
+        } else {
+            color
+        }
     } else if b[802] == 255 {
         request.qualify_linear_color(color)
     } else {
@@ -243,12 +253,22 @@ pub(crate) fn decode(b: &[u8], request: &DecodeRequest) -> Result<DecodedRaster,
     };
     let pixels = if bits == 8 {
         RasterPixels::Rgba8(if let Some(reservation) = output_reservation {
-            reservation.try_adopt(out8).map_err(crate::DecodeError::Memory)?.into()
-        } else { Arc::new(out8).into() })
+            reservation
+                .try_adopt(out8)
+                .map_err(crate::DecodeError::Memory)?
+                .into()
+        } else {
+            Arc::new(out8).into()
+        })
     } else {
         RasterPixels::Rgba16(if let Some(reservation) = output_reservation {
-            reservation.try_adopt(out).map_err(crate::DecodeError::Memory)?.into()
-        } else { Arc::new(out).into() })
+            reservation
+                .try_adopt(out)
+                .map_err(crate::DecodeError::Memory)?
+                .into()
+        } else {
+            Arc::new(out).into()
+        })
     };
     Ok(DecodedRaster::new(ow, oh, pixels, color)?)
 }
@@ -261,14 +281,20 @@ mod tests {
     }
     #[test]
     fn direct_output_is_admitted_without_eight_bit_intermediate_allocation() {
-        for bytes in [fixture(), include_bytes!("../../../tests/fixtures/raster/dpx-16-be-50-p0.dpx").to_vec()] {
+        for bytes in [
+            fixture(),
+            include_bytes!("../../../tests/fixtures/raster/dpx-16-be-50-p0.dpx").to_vec(),
+        ] {
             let reference = decode(&bytes, &DecodeRequest::new("image.dpx")).unwrap();
             let weight = reference.pixel_capacity_bytes();
             let total = weight;
             let budget = rrrah_core::MemoryBudget::new(total - 1);
             let mut request = DecodeRequest::new("image.dpx");
             request.memory_budget = Some(budget.clone());
-            assert!(matches!(decode(&bytes, &request), Err(RasterDecodeError::Source(crate::DecodeError::Memory(_)))));
+            assert!(matches!(
+                decode(&bytes, &request),
+                Err(RasterDecodeError::Source(crate::DecodeError::Memory(_)))
+            ));
             assert_eq!(budget.used(), 0);
             let budget = rrrah_core::MemoryBudget::new(total);
             request.memory_budget = Some(budget.clone());
@@ -285,21 +311,32 @@ mod tests {
             let mut request = DecodeRequest::new("untagged.dpx");
             request.assume_untagged_srgb = !linear;
             request.assume_untagged_linear_srgb = linear;
-            for (transfer, primaries) in [(255,255),(1,255),(255,0),(1,6)] {
+            for (transfer, primaries) in [(255, 255), (1, 255), (255, 0), (1, 6)] {
                 let mut bytes = fixture();
                 bytes[801] = transfer;
                 bytes[802] = primaries;
                 let frame = decode(&bytes, &request).unwrap();
-                if (transfer,primaries) == (255,255) {
-                    assert_eq!(frame.color_space(), &if linear { RasterColorSpace::LinearSrgb } else { RasterColorSpace::AssumedSrgb });
+                if (transfer, primaries) == (255, 255) {
+                    assert_eq!(
+                        frame.color_space(),
+                        &if linear {
+                            RasterColorSpace::LinearSrgb
+                        } else {
+                            RasterColorSpace::AssumedSrgb
+                        }
+                    );
                     crate::prepare_raster_for_display(&frame).unwrap();
                 } else {
                     assert_eq!(frame.color_space(), &RasterColorSpace::Unspecified);
                     assert!(crate::prepare_raster_for_display(&frame).is_err());
                 }
             }
-            assert_eq!(decode(&fixture(), &DecodeRequest::new("strict.dpx")).unwrap().color_space(),
-                &RasterColorSpace::Unspecified);
+            assert_eq!(
+                decode(&fixture(), &DecodeRequest::new("strict.dpx"))
+                    .unwrap()
+                    .color_space(),
+                &RasterColorSpace::Unspecified
+            );
         }
     }
     #[test]
@@ -313,13 +350,18 @@ mod tests {
                 b[801] = 2;
                 b[802] = colorimetry;
                 b[792..796].copy_from_slice(&255u32.to_be_bytes());
-                b[796..800].copy_from_slice(&(if normalized { 1.0_f32 } else { 2.0 }).to_bits().to_be_bytes());
+                b[796..800]
+                    .copy_from_slice(&(if normalized { 1.0_f32 } else { 2.0 }).to_bits().to_be_bytes());
                 let baseline = decode(&b, &strict).unwrap();
                 let frame = decode(&b, &explicit).unwrap();
-                assert_eq!(crate::prepare_raster_for_display(&frame).is_ok(),
-                    normalized && matches!(colorimetry, 6 | 255));
-                let (RasterPixels::Rgba8(a), RasterPixels::Rgba8(c)) =
-                    (baseline.pixels(), frame.pixels()) else { panic!() };
+                assert_eq!(
+                    crate::prepare_raster_for_display(&frame).is_ok(),
+                    normalized && matches!(colorimetry, 6 | 255)
+                );
+                let (RasterPixels::Rgba8(a), RasterPixels::Rgba8(c)) = (baseline.pixels(), frame.pixels())
+                else {
+                    panic!()
+                };
                 assert_eq!(a.as_slice(), c.as_slice());
                 if colorimetry != 255 || !normalized {
                     assert_eq!(baseline.color_space(), frame.color_space());

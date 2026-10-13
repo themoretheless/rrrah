@@ -748,42 +748,79 @@ fn cached_wal_tracks_external_palette_changes_and_removal() {
 
 #[test]
 fn memory_and_persisted_fingerprint_cache_revalidate_same_size_restored_mtime() {
-    use rrrah_dedup::{cache::FingerprintCache, decode::{FingerprintPolicy, fingerprint_file}};
-    use std::{fs, time::{Duration, UNIX_EPOCH}};
+    use rrrah_dedup::{
+        cache::FingerprintCache,
+        decode::{FingerprintPolicy, fingerprint_file},
+    };
+    use std::{
+        fs,
+        time::{Duration, UNIX_EPOCH},
+    };
     for nanos in [123_400_100, 123_400_900] {
         let dir = tempfile::tempdir().unwrap();
         let path = dir.path().join("source.bmp");
         let disk = dir.path().join("cache.bin");
         fs::write(&path, bmp([0, 0, 255], 0)).unwrap();
         let initial_time = UNIX_EPOCH + Duration::new(1_700_000_000, 123_400_100);
-        fs::File::options().write(true).open(&path).unwrap()
-            .set_times(fs::FileTimes::new().set_modified(initial_time)).unwrap();
+        fs::File::options()
+            .write(true)
+            .open(&path)
+            .unwrap()
+            .set_times(fs::FileTimes::new().set_modified(initial_time))
+            .unwrap();
         let before = fs::metadata(&path).unwrap();
         let budget = MemoryBudget::new(1024 * 1024);
-        let policy = FingerprintPolicy { recipe: [1; 32], max_file_bytes: 1024, max_pixels: 1, max_frames: 10, max_cache_entries: 10 };
+        let policy = FingerprintPolicy {
+            recipe: [1; 32],
+            max_file_bytes: 1024,
+            max_pixels: 1,
+            max_frames: 10,
+            max_cache_entries: 10,
+        };
         let request = DecodeRequest::new(&path);
         let mut memory = FingerprintCache::default();
         let original = fingerprint_file(&request, policy, &budget, &mut memory, || false).unwrap();
         assert!(!original.cache_hit);
-        assert!(fingerprint_file(&request, policy, &budget, &mut memory, || false).unwrap().cache_hit);
+        assert!(
+            fingerprint_file(&request, policy, &budget, &mut memory, || false)
+                .unwrap()
+                .cache_hit
+        );
         memory.save_atomic(&disk, || false).unwrap();
         fs::write(&path, bmp([0, 255, 0], 0)).unwrap();
         let edited_time = UNIX_EPOCH + Duration::new(1_700_000_000, nanos);
-        fs::File::options().write(true).open(&path).unwrap()
-            .set_times(fs::FileTimes::new().set_modified(edited_time)).unwrap();
+        fs::File::options()
+            .write(true)
+            .open(&path)
+            .unwrap()
+            .set_times(fs::FileTimes::new().set_modified(edited_time))
+            .unwrap();
         let after = fs::metadata(&path).unwrap();
         assert_eq!(before.len(), after.len());
         assert_eq!(before.modified().unwrap(), initial_time);
         assert_eq!(after.modified().unwrap(), edited_time);
-        assert_eq!(initial_time.duration_since(UNIX_EPOCH).unwrap().as_millis(), edited_time.duration_since(UNIX_EPOCH).unwrap().as_millis());
+        assert_eq!(
+            initial_time.duration_since(UNIX_EPOCH).unwrap().as_millis(),
+            edited_time.duration_since(UNIX_EPOCH).unwrap().as_millis()
+        );
         let mut persisted = FingerprintCache::load_file(&disk, 10, || false).unwrap();
         let memory_changed = fingerprint_file(&request, policy, &budget, &mut memory, || false).unwrap();
         let disk_changed = fingerprint_file(&request, policy, &budget, &mut persisted, || false).unwrap();
-        let fresh = fingerprint_file(&request, policy, &budget, &mut FingerprintCache::default(), || false).unwrap();
+        let fresh = fingerprint_file(
+            &request,
+            policy,
+            &budget,
+            &mut FingerprintCache::default(),
+            || false,
+        )
+        .unwrap();
         assert!(!memory_changed.cache_hit && !disk_changed.cache_hit && !fresh.cache_hit);
         assert_eq!(memory_changed.fingerprint, fresh.fingerprint);
         assert_eq!(disk_changed.fingerprint, fresh.fingerprint);
-        assert_ne!(fresh.fingerprint.mean_linear_rgb[0].to_bits(), original.fingerprint.mean_linear_rgb[0].to_bits());
+        assert_ne!(
+            fresh.fingerprint.mean_linear_rgb[0].to_bits(),
+            original.fingerprint.mean_linear_rgb[0].to_bits()
+        );
         for cache in [&mut memory, &mut persisted] {
             let reused = fingerprint_file(&request, policy, &budget, cache, || false).unwrap();
             assert!(reused.cache_hit);
@@ -799,7 +836,9 @@ fn actual_pfm_retains_hdr_precision_and_refuses_nonfinite_samples() {
     let path = dir.path().join("precision.pfm");
     let write = |samples: [f32; 3]| {
         let mut bytes = b"PF\n1 1\n-1.0\n".to_vec();
-        for sample in samples { bytes.extend_from_slice(&sample.to_le_bytes()); }
+        for sample in samples {
+            bytes.extend_from_slice(&sample.to_le_bytes());
+        }
         std::fs::write(&path, bytes).unwrap();
     };
     let mut request = DecodeRequest::new(&path);
@@ -810,11 +849,19 @@ fn actual_pfm_retains_hdr_precision_and_refuses_nonfinite_samples() {
     let base = decode_selected_frame(&request, 1, &budget, || false).unwrap();
     let expected = [samples[0], samples[1], samples[2], 1.0];
     let expected = rrrah_dedup::linear::LinearRgbaView::new(1, 1, &expected, 1, || false).unwrap();
-    assert!(base.view(|| false).unwrap().same_pixels(&expected, || false).unwrap());
+    assert!(
+        base.view(|| false)
+            .unwrap()
+            .same_pixels(&expected, || false)
+            .unwrap()
+    );
     write([2.0, -0.1, 0.1235]);
     let changed = decode_selected_frame(&request, 1, &budget, || false).unwrap();
     assert!(!base.same_selected_frame(&changed, || false).unwrap());
-    assert_ne!(base.selected_frame_digest(|| false).unwrap(), changed.selected_frame_digest(|| false).unwrap());
+    assert_ne!(
+        base.selected_frame_digest(|| false).unwrap(),
+        changed.selected_frame_digest(|| false).unwrap()
+    );
     drop((base, changed));
     assert_eq!(budget.used(), 0);
     for invalid in [f32::NAN, f32::INFINITY, f32::NEG_INFINITY] {
@@ -823,7 +870,13 @@ fn actual_pfm_retains_hdr_precision_and_refuses_nonfinite_samples() {
         assert_eq!(budget.used(), 0);
         write(samples);
         let retry = decode_selected_frame(&request, 1, &budget, || false).unwrap();
-        assert!(retry.view(|| false).unwrap().same_pixels(&expected, || false).unwrap());
+        assert!(
+            retry
+                .view(|| false)
+                .unwrap()
+                .same_pixels(&expected, || false)
+                .unwrap()
+        );
         drop(retry);
         assert_eq!(budget.used(), 0);
     }

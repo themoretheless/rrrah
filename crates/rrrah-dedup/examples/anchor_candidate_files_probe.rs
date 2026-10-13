@@ -115,18 +115,18 @@ fn original_regions_config(
 }
 
 fn main() {
-    use rrrah_dedup::{anchor_rank::AnchorRankPolicy,anchor_rank_file::search_anchor_rank_files,local_rank::LocalRankPolicy,rank_region::RankRegionPolicy};
-    let args:Vec<_>=std::env::args().skip(1).collect();assert_eq!(args.len(),3);
-    let source_tolerance:f64=args[2].parse().unwrap();
+    use rrrah_dedup::{
+        anchor_rank::AnchorRankPolicy, anchor_rank_file::search_anchor_rank_files,
+        local_rank::LocalRankPolicy, rank_region::RankRegionPolicy,
+    };
+    let args: Vec<_> = std::env::args().skip(1).collect();
+    assert_eq!(args.len(), 3);
+    let source_tolerance: f64 = args[2].parse().unwrap();
     let mut config = rrrah_dedup::local_scan::ProjectiveCandidateUnionRegionsFilePolicy {
         search: original_regions_config(true, true),
         low_contrast_corner_score: 0.000001,
         smoothing_radius: 2,
-        max_smoothing_taps_per_image: if true {
-            64000000
-        } else {
-            128000000
-        },
+        max_smoothing_taps_per_image: if true { 64000000 } else { 128000000 },
         max_area_taps_per_extraction: 128000000,
         max_total_gradient_samples: 28672000,
         max_total_match_comparisons: 784000000,
@@ -144,20 +144,73 @@ fn main() {
             .max_source_pixels = 12800000;
     }
 
-    config.search.gradient.search.filter.filter.radius=8;
-    let factors:Vec<_>=(0..=6).map(|n|2f64.powf(f64::from(n)/2.)).collect();
-    let budget=rrrah_core::MemoryBudget::new(512*1024*1024);
-    let policy=AnchorRankPolicy {local:LocalRankPolicy {rank:RankRegionPolicy {radius:8,minimum_contrast:0.005,minimum_pairs:1000,maximum_sites:80000000,maximum_pixel_reads:400000000},filter_radius:8,minimum_witnesses:10,maximum_points:28000,maximum_point_checks:392014000,minimum_point_separation:2.,target_tolerance:2.,source_tolerance,minimum_coverage:0.3,minimum_agreement:0.9},window_radius:2,maximum_selection_checks:1176014000};
-    match search_anchor_rank_files(&rrrah_decode::DecodeRequest::new(&args[0]),&rrrah_decode::DecodeRequest::new(&args[1]),config,&factors,policy,&budget,||false) {
-        Ok(e)=> {
-            let matrix=e.search.geometry.as_ref().map_or("null".to_string(),|g|format!("{:?}",g.transform.matrix));
-            let points:Vec<_>=e.search.correspondences.iter().map(|p|[p.source,p.target]).collect();
-            if let Some(a)=e.anchors {
-                println!("{{\"status\":\"ok\",\"supported\":{},\"matrix\":{matrix},\"points\":{points:?},\"anchors\":[{},{}],\"directions\":[{{\"sites\":{},\"valid_sites\":{},\"informative_pairs\":{},\"agreeing_pairs\":{}}},{{\"sites\":{},\"valid_sites\":{},\"informative_pairs\":{},\"agreeing_pairs\":{}}}]}}",a.supported,a.forward_anchors,a.reverse_anchors,a.forward.sites,a.forward.valid_sites,a.forward.informative_pairs,a.forward.agreeing_pairs,a.reverse.sites,a.reverse.valid_sites,a.reverse.informative_pairs,a.reverse.agreeing_pairs);
-            } else {println!("{{\"status\":\"no_geometry\",\"supported\":false}}");}
-            drop(e);
+    config.search.gradient.search.filter.filter.radius = 8;
+    let factors: Vec<_> = (0..=6).map(|n| 2f64.powf(f64::from(n) / 2.)).collect();
+    let budget = rrrah_core::MemoryBudget::new(512 * 1024 * 1024);
+    let policy = AnchorRankPolicy {
+        local: LocalRankPolicy {
+            rank: RankRegionPolicy {
+                radius: 8,
+                minimum_contrast: 0.005,
+                minimum_pairs: 1000,
+                maximum_sites: 80000000,
+                maximum_pixel_reads: 400000000,
+            },
+            filter_radius: 8,
+            minimum_witnesses: 10,
+            maximum_points: 28000,
+            maximum_point_checks: 392014000,
+            minimum_point_separation: 2.,
+            target_tolerance: 2.,
+            source_tolerance,
+            minimum_coverage: 0.3,
+            minimum_agreement: 0.9,
         },
-        Err(e)=>println!("{{\"status\":\"refusal:{e:?}\",\"supported\":false}}"),
+        window_radius: 2,
+        maximum_selection_checks: 1176014000,
+    };
+    match search_anchor_rank_files(
+        &rrrah_decode::DecodeRequest::new(&args[0]),
+        &rrrah_decode::DecodeRequest::new(&args[1]),
+        config,
+        &factors,
+        policy,
+        &budget,
+        || false,
+    ) {
+        Ok(e) => {
+            let matrix = e
+                .search
+                .geometry
+                .as_ref()
+                .map_or("null".to_string(), |g| format!("{:?}", g.transform.matrix));
+            let points: Vec<_> = e
+                .search
+                .correspondences
+                .iter()
+                .map(|p| [p.source, p.target])
+                .collect();
+            if let Some(a) = e.anchors {
+                println!(
+                    "{{\"status\":\"ok\",\"supported\":{},\"matrix\":{matrix},\"points\":{points:?},\"anchors\":[{},{}],\"directions\":[{{\"sites\":{},\"valid_sites\":{},\"informative_pairs\":{},\"agreeing_pairs\":{}}},{{\"sites\":{},\"valid_sites\":{},\"informative_pairs\":{},\"agreeing_pairs\":{}}}]}}",
+                    a.supported,
+                    a.forward_anchors,
+                    a.reverse_anchors,
+                    a.forward.sites,
+                    a.forward.valid_sites,
+                    a.forward.informative_pairs,
+                    a.forward.agreeing_pairs,
+                    a.reverse.sites,
+                    a.reverse.valid_sites,
+                    a.reverse.informative_pairs,
+                    a.reverse.agreeing_pairs
+                );
+            } else {
+                println!("{{\"status\":\"no_geometry\",\"supported\":false}}");
+            }
+            drop(e);
+        }
+        Err(e) => println!("{{\"status\":\"refusal:{e:?}\",\"supported\":false}}"),
     }
-    assert_eq!(budget.used(),0);
+    assert_eq!(budget.used(), 0);
 }

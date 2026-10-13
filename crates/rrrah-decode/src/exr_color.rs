@@ -5,18 +5,29 @@ use rrrah_core::RasterColorSpace;
 const REC709: [f32; 8] = [0.64, 0.33, 0.30, 0.60, 0.15, 0.06, 0.3127, 0.3290];
 const REC2020: [f32; 8] = [0.708, 0.292, 0.170, 0.797, 0.131, 0.046, 0.3127, 0.3290];
 const P3_D65: [f32; 8] = [0.680, 0.320, 0.265, 0.690, 0.150, 0.060, 0.3127, 0.3290];
-const AP1: [f64; 8] = [0.713,0.293,0.165,0.830,0.128,0.044,0.32168,0.33767];
-const AP0: [f64; 8] = [0.7347,0.2653,0.0,1.0,0.0001,-0.0770,0.32168,0.33767];
+const AP1: [f64; 8] = [0.713, 0.293, 0.165, 0.830, 0.128, 0.044, 0.32168, 0.33767];
+const AP0: [f64; 8] = [0.7347, 0.2653, 0.0, 1.0, 0.0001, -0.0770, 0.32168, 0.33767];
 fn same_xy(a: &[f32], b: &[f64]) -> bool {
-    a.iter().zip(b).all(|(a,b)| (f64::from(*a)-b).abs() <= 0.000001)
+    a.iter()
+        .zip(b)
+        .all(|(a, b)| (f64::from(*a) - b).abs() <= 0.000001)
 }
-fn explicit_color(xy: [f64;8]) -> Result<RasterColorSpace,RasterDecodeError> {
-    rrrah_core::RgbChromaticities::new(xy).map(RasterColorSpace::LinearRgb)
-        .ok_or_else(||invalid("invalid or singular chromaticities"))
+fn explicit_color(xy: [f64; 8]) -> Result<RasterColorSpace, RasterDecodeError> {
+    rrrah_core::RgbChromaticities::new(xy)
+        .map(RasterColorSpace::LinearRgb)
+        .ok_or_else(|| invalid("invalid or singular chromaticities"))
 }
 fn linear_color(primaries: u16) -> RasterColorSpace {
-    if primaries == 1 { RasterColorSpace::LinearSrgb }
-    else { RasterColorSpace::Cicp { primaries, transfer: 8, matrix: 0, full_range: true } }
+    if primaries == 1 {
+        RasterColorSpace::LinearSrgb
+    } else {
+        RasterColorSpace::Cicp {
+            primaries,
+            transfer: 8,
+            matrix: 0,
+            full_range: true,
+        }
+    }
 }
 fn invalid(reason: &'static str) -> RasterDecodeError {
     RasterDecodeError::InvalidExrColor(reason)
@@ -59,42 +70,65 @@ pub(crate) fn declaration(bytes: &[u8]) -> Result<Option<RasterColorSpace>, Rast
         }
         let name = text(bytes, &mut at)?;
         if name.is_empty() {
-            let chroma_color = chroma.as_ref().map(|c| {
-                let xy = std::array::from_fn(|i| f64::from(c[i]));
-                let explicit = explicit_color(xy)?;
-                Ok::<_,RasterDecodeError>([(1,&REC709),(9,&REC2020),(12,&P3_D65)]
-                    .into_iter().find_map(|(id,reference)| same(c,reference).then(||linear_color(id)))
-                    .unwrap_or(explicit))
-            }).transpose()?;
+            let chroma_color = chroma
+                .as_ref()
+                .map(|c| {
+                    let xy = std::array::from_fn(|i| f64::from(c[i]));
+                    let explicit = explicit_color(xy)?;
+                    Ok::<_, RasterDecodeError>(
+                        [(1, &REC709), (9, &REC2020), (12, &P3_D65)]
+                            .into_iter()
+                            .find_map(|(id, reference)| same(c, reference).then(|| linear_color(id)))
+                            .unwrap_or(explicit),
+                    )
+                })
+                .transpose()?;
             let declared_id = match interop {
-                Some(b"lin_rec709_scene") => Some((linear_color(1),[0.64,0.33,0.30,0.60,0.15,0.06,0.3127,0.3290])),
-                Some(b"lin_rec2020_scene") => Some((linear_color(9),[0.708,0.292,0.170,0.797,0.131,0.046,0.3127,0.3290])),
-                Some(b"lin_p3d65_scene") => Some((linear_color(12),[0.680,0.320,0.265,0.690,0.150,0.060,0.3127,0.3290])),
-                Some(b"lin_ap1_scene") => Some((explicit_color(AP1)?,AP1)),
-                Some(b"lin_ap0_scene") => Some((explicit_color(AP0)?,AP0)),
+                Some(b"lin_rec709_scene") => Some((
+                    linear_color(1),
+                    [0.64, 0.33, 0.30, 0.60, 0.15, 0.06, 0.3127, 0.3290],
+                )),
+                Some(b"lin_rec2020_scene") => Some((
+                    linear_color(9),
+                    [0.708, 0.292, 0.170, 0.797, 0.131, 0.046, 0.3127, 0.3290],
+                )),
+                Some(b"lin_p3d65_scene") => Some((
+                    linear_color(12),
+                    [0.680, 0.320, 0.265, 0.690, 0.150, 0.060, 0.3127, 0.3290],
+                )),
+                Some(b"lin_ap1_scene") => Some((explicit_color(AP1)?, AP1)),
+                Some(b"lin_ap0_scene") => Some((explicit_color(AP0)?, AP0)),
                 _ => None,
             };
-            if let (Some((_,reference)),Some(c)) = (&declared_id,&chroma) {
-                if !same_xy(c,reference) {
+            if let (Some((_, reference)), Some(c)) = (&declared_id, &chroma) {
+                if !same_xy(c, reference) {
                     return Err(invalid("conflicting colorInteropID and chromaticities"));
                 }
             }
-            if aces == Some(1) && (declared_id.as_ref().is_some_and(|(_,xy)| *xy != AP0)
-                || chroma.as_ref().is_some_and(|c| !same_xy(c,&AP0))) {
+            if aces == Some(1)
+                && (declared_id.as_ref().is_some_and(|(_, xy)| *xy != AP0)
+                    || chroma.as_ref().is_some_and(|c| !same_xy(c, &AP0)))
+            {
                 return Err(invalid("ACES flag conflicts with declared non-AP0 RGB"));
             }
-            let (known,xy) = if interop.is_some() {
-                match declared_id { Some((color,xy)) => (Some(color),Some(xy)),
-                    None => (None,None) }
+            let (known, xy) = if interop.is_some() {
+                match declared_id {
+                    Some((color, xy)) => (Some(color), Some(xy)),
+                    None => (None, None),
+                }
             } else {
-                (chroma_color,chroma.as_ref().map(|c|std::array::from_fn(|i|f64::from(c[i]))))
+                (
+                    chroma_color,
+                    chroma.as_ref().map(|c| std::array::from_fn(|i| f64::from(c[i]))),
+                )
             };
-            return Ok(Some(match (known,xy,neutral) {
-                (Some(_),Some(xy),Some(n)) => RasterColorSpace::LinearRgb(
+            return Ok(Some(match (known, xy, neutral) {
+                (Some(_), Some(xy), Some(n)) => RasterColorSpace::LinearRgb(
                     rrrah_core::RgbChromaticities::new(xy)
-                        .and_then(|c|c.with_adopted_neutral([f64::from(n[0]),f64::from(n[1])]))
-                        .ok_or_else(||invalid("invalid adopted neutral"))?),
-                (Some(color),_,_) => color,
+                        .and_then(|c| c.with_adopted_neutral([f64::from(n[0]), f64::from(n[1])]))
+                        .ok_or_else(|| invalid("invalid adopted neutral"))?,
+                ),
+                (Some(color), _, _) => color,
                 _ => RasterColorSpace::LinearRgbUnspecified,
             }));
         }
@@ -150,7 +184,8 @@ pub(crate) fn declaration(bytes: &[u8]) -> Result<Option<RasterColorSpace>, Rast
                 if values.iter().any(|v| !v.is_finite()) {
                     return Err(invalid("non-finite adoptedNeutral"));
                 }
-                if values[0] <= 0.0 || values[1] <= 0.0 || f64::from(values[0])+f64::from(values[1]) >= 1.0 {
+                if values[0] <= 0.0 || values[1] <= 0.0 || f64::from(values[0]) + f64::from(values[1]) >= 1.0
+                {
                     return Err(invalid("invalid adopted neutral"));
                 }
                 neutral = Some(values);
@@ -226,10 +261,13 @@ mod tests {
             ]))
             .is_err()
         );
-        assert!(declaration(&header(&[
-            ("chromaticities", "chromaticities", chroma()),
-            ("adoptedNeutral", "v2f", vec![0;8]),
-        ])).is_err());
+        assert!(
+            declaration(&header(&[
+                ("chromaticities", "chromaticities", chroma()),
+                ("adoptedNeutral", "v2f", vec![0; 8]),
+            ]))
+            .is_err()
+        );
     }
     #[test]
     fn truncation_invalid_types_duplicates_and_nonfinite_are_rejected() {

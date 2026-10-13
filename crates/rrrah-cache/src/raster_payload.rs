@@ -58,7 +58,13 @@ fn descriptor_with_limit(
         h[..8].copy_from_slice(b"RRRAST2\0");
         h[60..64].copy_from_slice(&aspect.to_bits().to_le_bytes());
     }
-    if color == 8 { h[..8].copy_from_slice(if profile.len()==80 {b"RRRAST4\0"} else {b"RRRAST3\0"}); }
+    if color == 8 {
+        h[..8].copy_from_slice(if profile.len() == 80 {
+            b"RRRAST4\0"
+        } else {
+            b"RRRAST3\0"
+        });
+    }
     h[8..12].copy_from_slice(&frame.width().to_le_bytes());
     h[12..16].copy_from_slice(&frame.height().to_le_bytes());
     h[16] = kind;
@@ -195,14 +201,18 @@ fn read_raster_payload_impl(
     reader.read_exact(&mut h)?;
     let neutral_version = &h[..8] == b"RRRAST4\0";
     let chroma_version = &h[..8] == b"RRRAST3\0" || neutral_version;
-    let aspect_version = &h[..8] == b"RRRAST2\0" || (chroma_version && h[60..64] != [0;4]);
+    let aspect_version = &h[..8] == b"RRRAST2\0" || (chroma_version && h[60..64] != [0; 4]);
     let extension_end = if aspect_version || chroma_version { 60 } else { 64 };
     let invalid_color_extension = if h[17] == 7 {
         h[58] > 1 || h[59..extension_end].iter().any(|&b| b != 0)
     } else {
         h[52..extension_end].iter().any(|&b| b != 0)
     };
-    if (!aspect_version && !chroma_version && &h[..8] != b"RRRAST1\0") || h[19] != 0 || invalid_color_extension || h[18] > 1 {
+    if (!aspect_version && !chroma_version && &h[..8] != b"RRRAST1\0")
+        || h[19] != 0
+        || invalid_color_extension
+        || h[18] > 1
+    {
         return Err(RasterPayloadError::Invalid("header"));
     }
     let u32_at = |i| u32::from_le_bytes(h[i..i + 4].try_into().unwrap());
@@ -233,7 +243,7 @@ fn read_raster_payload_impl(
         || profile_len > MAX_PROFILE
         || h[17] > 8
         || (chroma_version != (h[17] == 8))
-        || (h[17] == 8 && profile_len != if neutral_version {80} else {64})
+        || (h[17] == 8 && profile_len != if neutral_version { 80 } else { 64 })
         || (h[17] != 4 && h[17] != 8 && profile_len != 0)
         || !scale.is_finite()
         || scale <= 0.
@@ -278,7 +288,7 @@ fn read_raster_payload_impl(
                 rrrah_core::RgbChromaticities::from_le_bytes(bytes[..64].try_into().unwrap())
             };
             RasterColorSpace::LinearRgb(chroma.ok_or(RasterPayloadError::Invalid("chromaticities/neutral"))?)
-        },
+        }
         0 => RasterColorSpace::Srgb,
         1 => RasterColorSpace::AssumedSrgb,
         2 => RasterColorSpace::LinearSrgb,
@@ -321,78 +331,111 @@ mod tests {
     use std::{io::Cursor, sync::Arc};
     #[test]
     fn chromaticity_v3_is_exact_inline_bounded_and_refuses_malformed_metadata() {
-        let color = RasterColorSpace::LinearRgb(rrrah_core::RgbChromaticities::new(
-            [0.713,0.293,0.165,0.830,0.128,0.044,0.32168,0.33767]).unwrap());
+        let color = RasterColorSpace::LinearRgb(
+            rrrah_core::RgbChromaticities::new([0.713, 0.293, 0.165, 0.830, 0.128, 0.044, 0.32168, 0.33767])
+                .unwrap(),
+        );
         for aspect in [None, Some(1.25)] {
-            let frame = DecodedRaster::new(1,1,
-                RasterPixels::Rgba32Float(Arc::new(vec![2.0,-0.5,0.25,1.0]).into()),color.clone())
-                .unwrap().with_pixel_aspect(aspect).unwrap();
-            let mut bytes=Vec::new();
-            write_raster_payload(&mut bytes,&frame).unwrap();
+            let frame = DecodedRaster::new(
+                1,
+                1,
+                RasterPixels::Rgba32Float(Arc::new(vec![2.0, -0.5, 0.25, 1.0]).into()),
+                color.clone(),
+            )
+            .unwrap()
+            .with_pixel_aspect(aspect)
+            .unwrap();
+            let mut bytes = Vec::new();
+            write_raster_payload(&mut bytes, &frame).unwrap();
             assert_eq!(&bytes[..8], b"RRRAST3\0");
-            assert_eq!(bytes.len(),64+64+16);
-            let budget=MemoryBudget::new(16);
-            let restored=read_raster_payload(&mut Cursor::new(&bytes),&budget).unwrap();
-            assert_eq!(restored.color_space(),&color);
-            assert_eq!(restored.pixel_aspect(),aspect);
-            let (RasterPixels::Rgba32Float(a),RasterPixels::Rgba32Float(b))=(frame.pixels(),restored.pixels()) else {panic!()};
-            assert!(a.iter().zip(b.iter()).all(|(a,b)|a.to_bits()==b.to_bits()));
-            assert_eq!(budget.used(),16);
-            drop(restored);assert_eq!(budget.used(),0);
+            assert_eq!(bytes.len(), 64 + 64 + 16);
+            let budget = MemoryBudget::new(16);
+            let restored = read_raster_payload(&mut Cursor::new(&bytes), &budget).unwrap();
+            assert_eq!(restored.color_space(), &color);
+            assert_eq!(restored.pixel_aspect(), aspect);
+            let (RasterPixels::Rgba32Float(a), RasterPixels::Rgba32Float(b)) =
+                (frame.pixels(), restored.pixels())
+            else {
+                panic!()
+            };
+            assert!(a.iter().zip(b.iter()).all(|(a, b)| a.to_bits() == b.to_bits()));
+            assert_eq!(budget.used(), 16);
+            drop(restored);
+            assert_eq!(budget.used(), 0);
             for kind in 0..5 {
-                let mut bad=bytes.clone();
+                let mut bad = bytes.clone();
                 match kind {
-                    0=>bad[..8].copy_from_slice(b"RRRAST1\0"),
-                    1=>bad[48..52].copy_from_slice(&63u32.to_le_bytes()),
-                    2=>bad[64..72].copy_from_slice(&f64::NAN.to_le_bytes()),
-                    3=>bad[64..128].fill(0),
-                    _=>bad[17]=7,
+                    0 => bad[..8].copy_from_slice(b"RRRAST1\0"),
+                    1 => bad[48..52].copy_from_slice(&63u32.to_le_bytes()),
+                    2 => bad[64..72].copy_from_slice(&f64::NAN.to_le_bytes()),
+                    3 => bad[64..128].fill(0),
+                    _ => bad[17] = 7,
                 }
-                assert!(read_raster_payload(&mut Cursor::new(bad),&budget).is_err());
-                assert_eq!(budget.used(),0);
+                assert!(read_raster_payload(&mut Cursor::new(bad), &budget).is_err());
+                assert_eq!(budget.used(), 0);
             }
         }
     }
 
     #[test]
     fn adopted_neutral_v4_preserves_metadata_and_rejects_corruption_without_scratch() {
-        let base=rrrah_core::RgbChromaticities::new(
-            [0.713,0.293,0.165,0.830,0.128,0.044,0.32168,0.33767]).unwrap();
-        let chroma=base.clone().with_adopted_neutral([0.34567,0.35850]).unwrap();
-        assert_eq!(chroma.as_le_bytes(),base.as_le_bytes());
-        assert_eq!(chroma.adopted_neutral(),Some([0.34567,0.35850]));
-        assert_ne!(chroma,base);
-        for aspect in [None,Some(1.25)] {
-            let frame=DecodedRaster::new(1,1,
-                RasterPixels::Rgba32Float(Arc::new(vec![2.0,-0.5,0.25,1.0]).into()),
-                RasterColorSpace::LinearRgb(chroma.clone())).unwrap().with_pixel_aspect(aspect).unwrap();
-            let mut bytes=Vec::new();write_raster_payload(&mut bytes,&frame).unwrap();
-            assert_eq!(&bytes[..8],b"RRRAST4\0");assert_eq!(bytes.len(),64+80+16);
-            let root=MemoryBudget::new(16);
-            let restored=read_raster_payload(&mut Cursor::new(&bytes),&root).unwrap();
-            assert_eq!(restored.color_space(),frame.color_space());
-            assert_eq!(restored.pixel_aspect(),aspect);
-            let (RasterPixels::Rgba32Float(a),RasterPixels::Rgba32Float(b))=(frame.pixels(),restored.pixels()) else {panic!()};
-            assert!(a.iter().zip(b.iter()).all(|(a,b)|a.to_bits()==b.to_bits()));
-            assert_eq!(root.used(),16);drop(restored);assert_eq!(root.used(),0);
+        let base =
+            rrrah_core::RgbChromaticities::new([0.713, 0.293, 0.165, 0.830, 0.128, 0.044, 0.32168, 0.33767])
+                .unwrap();
+        let chroma = base.clone().with_adopted_neutral([0.34567, 0.35850]).unwrap();
+        assert_eq!(chroma.as_le_bytes(), base.as_le_bytes());
+        assert_eq!(chroma.adopted_neutral(), Some([0.34567, 0.35850]));
+        assert_ne!(chroma, base);
+        for aspect in [None, Some(1.25)] {
+            let frame = DecodedRaster::new(
+                1,
+                1,
+                RasterPixels::Rgba32Float(Arc::new(vec![2.0, -0.5, 0.25, 1.0]).into()),
+                RasterColorSpace::LinearRgb(chroma.clone()),
+            )
+            .unwrap()
+            .with_pixel_aspect(aspect)
+            .unwrap();
+            let mut bytes = Vec::new();
+            write_raster_payload(&mut bytes, &frame).unwrap();
+            assert_eq!(&bytes[..8], b"RRRAST4\0");
+            assert_eq!(bytes.len(), 64 + 80 + 16);
+            let root = MemoryBudget::new(16);
+            let restored = read_raster_payload(&mut Cursor::new(&bytes), &root).unwrap();
+            assert_eq!(restored.color_space(), frame.color_space());
+            assert_eq!(restored.pixel_aspect(), aspect);
+            let (RasterPixels::Rgba32Float(a), RasterPixels::Rgba32Float(b)) =
+                (frame.pixels(), restored.pixels())
+            else {
+                panic!()
+            };
+            assert!(a.iter().zip(b.iter()).all(|(a, b)| a.to_bits() == b.to_bits()));
+            assert_eq!(root.used(), 16);
+            drop(restored);
+            assert_eq!(root.used(), 0);
             for kind in 0..6 {
-                let mut bad=bytes.clone();
+                let mut bad = bytes.clone();
                 match kind {
-                    0=>bad[..8].copy_from_slice(b"RRRAST3\0"),
-                    1=>bad[48..52].copy_from_slice(&79u32.to_le_bytes()),
-                    2=>bad[128..136].copy_from_slice(&f64::NAN.to_le_bytes()),
-                    3=>bad[128..144].fill(0),
-                    4=>bad[136..144].copy_from_slice(&(-0.1f64).to_le_bytes()),
-                    _=>bad[17]=7,
+                    0 => bad[..8].copy_from_slice(b"RRRAST3\0"),
+                    1 => bad[48..52].copy_from_slice(&79u32.to_le_bytes()),
+                    2 => bad[128..136].copy_from_slice(&f64::NAN.to_le_bytes()),
+                    3 => bad[128..144].fill(0),
+                    4 => bad[136..144].copy_from_slice(&(-0.1f64).to_le_bytes()),
+                    _ => bad[17] = 7,
                 }
-                assert!(read_raster_payload(&mut Cursor::new(bad),&root).is_err());assert_eq!(root.used(),0);
+                assert!(read_raster_payload(&mut Cursor::new(bad), &root).is_err());
+                assert_eq!(root.used(), 0);
             }
             // A real V3 prefix remains readable and retains its original white.
-            let mut legacy=bytes.clone();legacy[..8].copy_from_slice(b"RRRAST3\0");
-            legacy[48..52].copy_from_slice(&64u32.to_le_bytes());legacy.drain(128..144);
-            let restored=read_raster_payload(&mut Cursor::new(legacy),&root).unwrap();
-            assert_eq!(restored.color_space(),&RasterColorSpace::LinearRgb(base.clone()));
-            assert_eq!(restored.pixel_aspect(),aspect);drop(restored);assert_eq!(root.used(),0);
+            let mut legacy = bytes.clone();
+            legacy[..8].copy_from_slice(b"RRRAST3\0");
+            legacy[48..52].copy_from_slice(&64u32.to_le_bytes());
+            legacy.drain(128..144);
+            let restored = read_raster_payload(&mut Cursor::new(legacy), &root).unwrap();
+            assert_eq!(restored.color_space(), &RasterColorSpace::LinearRgb(base.clone()));
+            assert_eq!(restored.pixel_aspect(), aspect);
+            drop(restored);
+            assert_eq!(root.used(), 0);
         }
     }
 
@@ -582,8 +625,12 @@ mod tests {
             RasterColorSpace::AssumedSrgb,
             RasterColorSpace::LinearSrgb,
             RasterColorSpace::LinearRgbUnspecified,
-            RasterColorSpace::LinearRgb(rrrah_core::RgbChromaticities::new(
-                [0.713,0.293,0.165,0.830,0.128,0.044,0.32168,0.33767]).unwrap()),
+            RasterColorSpace::LinearRgb(
+                rrrah_core::RgbChromaticities::new([
+                    0.713, 0.293, 0.165, 0.830, 0.128, 0.044, 0.32168, 0.33767,
+                ])
+                .unwrap(),
+            ),
             RasterColorSpace::Icc(vec![1, 2, 3]),
             RasterColorSpace::Unspecified,
             RasterColorSpace::Bt709,

@@ -153,7 +153,11 @@ fn files_match_views_and_cancel_or_mutation_discard_evidence() {
 #[test]
 fn invalid_anchor_policy_refuses_before_missing_source_io() {
     let request = DecodeRequest::new("/nonexistent/rrrah-invalid-anchor-policy.bmp");
-    let decode = AnimationBudget { max_frames: 1, max_pixels: 4096, max_file_bytes: 65536 };
+    let decode = AnimationBudget {
+        max_frames: 1,
+        max_pixels: 4096,
+        max_file_bytes: 65536,
+    };
     let budget = MemoryBudget::new(1000000);
     for case in 0..10 {
         let mut p = policy();
@@ -169,10 +173,24 @@ fn invalid_anchor_policy_refuses_before_missing_source_io() {
             8 => p.local.minimum_witnesses = 3,
             _ => p.local.maximum_points = 9,
         }
-        assert!(matches!(compare_anchor_rank_files(&request, &request, model(), &points(), decode, p, &budget, || false),
-                         Err(AnchorRankFileError::Rank(LocalRankError::Invalid))), "case={case}");
-        assert!(matches!(compare_anchor_rank_files(&request, &request, model(), &points(), decode, p, &budget, || true),
-                         Err(AnchorRankFileError::Cancelled)), "case={case}");
+        assert!(
+            matches!(
+                compare_anchor_rank_files(&request, &request, model(), &points(), decode, p, &budget, || {
+                    false
+                }),
+                Err(AnchorRankFileError::Rank(LocalRankError::Invalid))
+            ),
+            "case={case}"
+        );
+        assert!(
+            matches!(
+                compare_anchor_rank_files(&request, &request, model(), &points(), decode, p, &budget, || {
+                    true
+                }),
+                Err(AnchorRankFileError::Cancelled)
+            ),
+            "case={case}"
+        );
     }
     assert_eq!(budget.peak(), 0);
 }

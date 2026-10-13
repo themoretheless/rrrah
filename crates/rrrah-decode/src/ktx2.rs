@@ -388,9 +388,15 @@ mod tests {
             };
             assert_eq!(frame.color_space(), &expected);
             assert_eq!(crate::prepare_raster_for_display(&frame).is_ok(), primaries <= 1);
-            assert_eq!(baseline.color_space() == &RasterColorSpace::LinearSrgb, primaries == 1);
+            assert_eq!(
+                baseline.color_space() == &RasterColorSpace::LinearSrgb,
+                primaries == 1
+            );
             let (RasterPixels::Rgba32Float(a), RasterPixels::Rgba32Float(b)) =
-                (baseline.pixels(), frame.pixels()) else { panic!("float precision lost") };
+                (baseline.pixels(), frame.pixels())
+            else {
+                panic!("float precision lost")
+            };
             assert!(a.iter().zip(b.iter()).all(|(a, b)| a.to_bits() == b.to_bits()));
         }
     }

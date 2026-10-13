@@ -140,8 +140,8 @@ pub fn compare_anchor_rank(
     let bc = budget.try_reserve(bytes).map_err(|_| LocalRankError::Budget)?;
     let mut aw = Vec::new();
     let mut bw = Vec::new();
-    let mut source_bounds=None::<[u32;4]>;
-    let mut target_bounds=None::<[u32;4]>;
+    let mut source_bounds = None::<[u32; 4]>;
+    let mut target_bounds = None::<[u32; 4]>;
     aw.try_reserve_exact(points.len())
         .map_err(|_| LocalRankError::Budget)?;
     bw.try_reserve_exact(points.len())
@@ -199,13 +199,14 @@ pub fn compare_anchor_rank(
                     // All endpoints were checked by `window`; the union stays
                     // within the same image. Piggyback on admitted selection,
                     // with no second pass or retained allocation.
-                    *bounds=Some(match *bounds {
-                        None=>rect,
-                        Some(prior)=>{
-                            let x=prior[0].min(rect[0]);let y=prior[1].min(rect[1]);
-                            let right=(prior[0]+prior[2]).max(rect[0]+rect[2]);
-                            let bottom=(prior[1]+prior[3]).max(rect[1]+rect[3]);
-                            [x,y,right-x,bottom-y]
+                    *bounds = Some(match *bounds {
+                        None => rect,
+                        Some(prior) => {
+                            let x = prior[0].min(rect[0]);
+                            let y = prior[1].min(rect[1]);
+                            let right = (prior[0] + prior[2]).max(rect[0] + rect[2]);
+                            let bottom = (prior[1] + prior[3]).max(rect[1] + rect[3]);
+                            [x, y, right - x, bottom - y]
                         }
                     });
                     windows.push(rect)

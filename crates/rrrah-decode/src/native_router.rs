@@ -158,7 +158,13 @@ macro_rules! dispatch {
 }
 
 fn eip_request(request: &DecodeRequest) -> Option<DecodeRequest> {
-    if !request.path.extension().is_some_and(|ext| ext.eq_ignore_ascii_case("eip")) { return None; }
+    if !request
+        .path
+        .extension()
+        .is_some_and(|ext| ext.eq_ignore_ascii_case("eip"))
+    {
+        return None;
+    }
     let mut bounded = request.clone();
     if bounded.memory_budget.is_none() {
         bounded.memory_budget = Some(rrrah_core::MemoryBudget::new(512 * 1024 * 1024));
@@ -171,7 +177,10 @@ fn eip_error(error: crate::EipError) -> DecodeError {
         crate::EipError::Decode(error) => error,
         crate::EipError::Memory(error) => DecodeError::Memory(error),
         crate::EipError::Cancelled => DecodeError::Cancelled,
-        error => DecodeError::NativeCamera { format: "EIP original RAW", message: error.to_string() },
+        error => DecodeError::NativeCamera {
+            format: "EIP original RAW",
+            message: error.to_string(),
+        },
     }
 }
 
@@ -197,7 +206,9 @@ impl RawDecoder for NativeRawDecoder {
             });
         }
         if let Some(request) = eip_request(request) {
-            return crate::decode_eip_file_sensor(&request).map(|sensor| sensor.decoded).map_err(eip_error);
+            return crate::decode_eip_file_sensor(&request)
+                .map(|sensor| sensor.decoded)
+                .map_err(eip_error);
         }
         dispatch!(NativeFormat::resolve(&request.path)?, decode, request)
     }
@@ -246,14 +257,18 @@ mod tests {
         let mut request = DecodeRequest::new("/rrrah-absent-color-source.MEF");
         let budget = rrrah_core::MemoryBudget::new(0);
         request.memory_budget = Some(budget.clone());
-        for error in [NativeRawDecoder.mosaic_recipe(&request).unwrap_err(),
-            NativeRawDecoder.decode(&request).unwrap_err()] {
+        for error in [
+            NativeRawDecoder.mosaic_recipe(&request).unwrap_err(),
+            NativeRawDecoder.decode(&request).unwrap_err(),
+        ] {
             assert!(matches!(error, DecodeError::NativeCamera { format: "MEF", .. }));
             assert!(error.to_string().contains("white balance"));
         }
         assert_eq!(budget.peak(), 0);
-        assert_eq!(NativeFormat::refine(NativeFormat::UnqualifiedMef,
-            Some(SniffedFormat::TiffFamily)), NativeFormat::UnqualifiedMef);
+        assert_eq!(
+            NativeFormat::refine(NativeFormat::UnqualifiedMef, Some(SniffedFormat::TiffFamily)),
+            NativeFormat::UnqualifiedMef
+        );
     }
 
     #[test]

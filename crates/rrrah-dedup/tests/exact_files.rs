@@ -921,7 +921,10 @@ fn check_final_exact_callback(verified: bool) {
     });
     assert_eq!(calls.get(), checkpoints.get());
     assert!(changed.groups.is_empty(), "stale exact group: {changed:?}");
-    assert!(changed.issues.iter().any(|issue| issue.path == roots[0]), "{changed:?}");
+    assert!(
+        changed.issues.iter().any(|issue| issue.path == roots[0]),
+        "{changed:?}"
+    );
     fs::write(&roots[0], original).unwrap();
     let retry = run(&|| false);
     assert!(retry.complete(), "{retry:?}");
@@ -936,7 +939,9 @@ fn late_exact_source_failures_preserve_healthy_members_and_other_groups() {
             for remove in [false, true] {
                 let directory = tempfile::tempdir().unwrap();
                 let paths: Vec<_> = ["a", "b", "c", "d", "e"]
-                    .iter().map(|name| directory.path().join(name)).collect();
+                    .iter()
+                    .map(|name| directory.path().join(name))
+                    .collect();
                 let reset = || {
                     for (i, path) in paths.iter().enumerate() {
                         fs::write(path, if i < 3 { b"first family" } else { b"other family" }).unwrap();
@@ -944,7 +949,9 @@ fn late_exact_source_failures_preserve_healthy_members_and_other_groups() {
                 };
                 reset();
                 let mut roots = paths.clone();
-                if reverse { roots.reverse(); }
+                if reverse {
+                    roots.reverse();
+                }
                 let run = |cancel: &dyn Fn() -> bool| {
                     if verified {
                         rrrah_dedup::exact::scan_verified(&roots, &Options::default(), cancel)
@@ -968,8 +975,12 @@ fn late_exact_source_failures_preserve_healthy_members_and_other_groups() {
                         } else {
                             let mtime = fs::metadata(&paths[0]).unwrap().modified().unwrap();
                             fs::write(&paths[0], b"edited bytes").unwrap();
-                            fs::OpenOptions::new().write(true).open(&paths[0]).unwrap()
-                                .set_times(fs::FileTimes::new().set_modified(mtime)).unwrap();
+                            fs::OpenOptions::new()
+                                .write(true)
+                                .open(&paths[0])
+                                .unwrap()
+                                .set_times(fs::FileTimes::new().set_modified(mtime))
+                                .unwrap();
                             assert_eq!(fs::metadata(&paths[0]).unwrap().modified().unwrap(), mtime);
                         }
                     }
@@ -980,9 +991,15 @@ fn late_exact_source_failures_preserve_healthy_members_and_other_groups() {
                 assert!(!changed.cancelled);
                 assert_eq!(changed.issues.len(), 1, "{changed:?}");
                 assert_eq!(changed.issues[0].path, paths[0]);
-                assert!(matches!(changed.issues[0].kind, IssueKind::Changed | IssueKind::Io(_)));
+                assert!(matches!(
+                    changed.issues[0].kind,
+                    IssueKind::Changed | IssueKind::Io(_)
+                ));
                 let groups: BTreeSet<_> = changed.groups.iter().map(|g| g.paths.clone()).collect();
-                assert_eq!(groups, BTreeSet::from([paths[1..3].to_vec(), paths[3..5].to_vec()]));
+                assert_eq!(
+                    groups,
+                    BTreeSet::from([paths[1..3].to_vec(), paths[3..5].to_vec()])
+                );
                 reset();
                 let retry = run(&|| false);
                 assert!(retry.complete(), "{retry:?}");
@@ -997,7 +1014,9 @@ fn atomic_cancel_exact_apis_preserve_groups_refuse_pre_cancel_and_allow_retry() 
     use std::sync::atomic::{AtomicBool, Ordering};
     let directory = tempfile::tempdir().unwrap();
     let paths = [directory.path().join("a"), directory.path().join("b")];
-    for path in &paths { fs::write(path, vec![13; 200_000]).unwrap(); }
+    for path in &paths {
+        fs::write(path, vec![13; 200_000]).unwrap();
+    }
     let flag = AtomicBool::new(false);
     for verified in [false, true] {
         let run = |roots: &[std::path::PathBuf]| {

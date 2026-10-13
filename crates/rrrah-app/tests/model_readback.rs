@@ -149,7 +149,8 @@ fn real_model_swap_preserves_gpu_pixels_and_releases_restored_geometry() {
 #[ignore = "manual repeated model swap pressure and Metal frame qualification"]
 fn repeated_model_swap_pressure_and_cancellation_preserve_metal_frames() {
     let cycles = std::env::var("RRRAH_METAL_MODEL_SWAP_CYCLES")
-        .map(|value| value.parse::<usize>().expect("valid model cycle count")).unwrap_or(20);
+        .map(|value| value.parse::<usize>().expect("valid model cycle count"))
+        .unwrap_or(20);
     assert!((1..=1000).contains(&cycles));
     qualify_model_swap_cycles(cycles);
 }
@@ -196,7 +197,8 @@ fn qualify_model_swap_cycles(cycles: usize) {
         request.memory_budget = Some(root.clone());
         let original = rrrah_decode::decode_model(&request).unwrap();
         let reference = gpu.render_model(&original.triangles().collect::<Vec<_>>(), [64, 64], 0., 0.);
-        let hdr_reference = gpu.render_model_half(&original.triangles().collect::<Vec<_>>(), [63, 65], 0.4, -0.2);
+        let hdr_reference =
+            gpu.render_model_half(&original.triangles().collect::<Vec<_>>(), [63, 65], 0.4, -0.2);
         let payload = model_swap::ModelPayload::from_model(original).unwrap();
         let mut expected = Vec::new();
         payload.write_payload(&mut expected).unwrap();
@@ -212,25 +214,37 @@ fn qualify_model_swap_cycles(cycles: usize) {
             assert!(cache.try_get(&key, || true).unwrap().is_none());
             assert_eq!(root.used(), 0);
             let mut cancelled_with_geometry_credit = false;
-            assert!(cache.try_get(&key, || {
-                if root.used() > 0 {
-                    cancelled_with_geometry_credit = true;
-                    true
-                } else {
-                    false
-                }
-            }).unwrap().is_none());
-            assert!(cancelled_with_geometry_credit, "{name}: cancellation after geometry admission");
+            assert!(
+                cache
+                    .try_get(&key, || {
+                        if root.used() > 0 {
+                            cancelled_with_geometry_credit = true;
+                            true
+                        } else {
+                            false
+                        }
+                    })
+                    .unwrap()
+                    .is_none()
+            );
+            assert!(
+                cancelled_with_geometry_credit,
+                "{name}: cancellation after geometry admission"
+            );
             assert_eq!(root.used(), 0);
             assert_eq!(cache.stats().errors, 0);
             let restored = cache.try_get(&key, || false).unwrap().unwrap();
             assert_eq!(root.used(), restored.0.capacity_bytes(), "restore credit: {name}");
             let mut actual_payload = Vec::new();
             restored.write_payload(&mut actual_payload).unwrap();
-            assert_eq!(actual_payload, expected, "{name}: cycle={cycle} geometry and metadata");
+            assert_eq!(
+                actual_payload, expected,
+                "{name}: cycle={cycle} geometry and metadata"
+            );
             let actual = gpu.render_model(&restored.0.triangles().collect::<Vec<_>>(), [64, 64], 0., 0.);
             assert_eq!(actual.pixels, reference.pixels, "{name}: cycle={cycle}");
-            let hdr_actual = gpu.render_model_half(&restored.0.triangles().collect::<Vec<_>>(), [63, 65], 0.4, -0.2);
+            let hdr_actual =
+                gpu.render_model_half(&restored.0.triangles().collect::<Vec<_>>(), [63, 65], 0.4, -0.2);
             assert_eq!(hdr_actual, hdr_reference, "HDR {name}: cycle={cycle}");
             drop(restored);
             assert_eq!(root.used(), 0, "restore release: {name}");
@@ -238,6 +252,11 @@ fn qualify_model_swap_cycles(cycles: usize) {
     }
     assert_eq!(cache.stats().writes, 6);
     assert_eq!(cache.stats().reads, 6 * cycles as u64);
-    assert_eq!((cache.stats().errors, cache.stats().dropped, queue_root.used()), (0, 0, 0));
-    eprintln!("model swap cycles={cycles}; models=6; all payloads and Metal frames exact; pressure/cancel recover; root=0; queue=0; SDR/HDR exact");
+    assert_eq!(
+        (cache.stats().errors, cache.stats().dropped, queue_root.used()),
+        (0, 0, 0)
+    );
+    eprintln!(
+        "model swap cycles={cycles}; models=6; all payloads and Metal frames exact; pressure/cancel recover; root=0; queue=0; SDR/HDR exact"
+    );
 }

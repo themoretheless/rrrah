@@ -363,13 +363,17 @@ fn xyz_to_camera(image: &DngImage<'_>, indices: [usize; 3]) -> Result<[[f32; 3];
     let metadata = &image.metadata;
     let resolved = if metadata.neutral_matrix_compatible {
         select_xyz_to_camera_neutral(metadata)
-    } else { None };
-    let Some(matrix) = resolved.or_else(|| select_xyz_to_camera_d65(
-        metadata.color_matrix_1.as_deref(),
-        metadata.calibration_illuminant_1,
-        metadata.color_matrix_2.as_deref(),
-        metadata.calibration_illuminant_2,
-    )) else {
+    } else {
+        None
+    };
+    let Some(matrix) = resolved.or_else(|| {
+        select_xyz_to_camera_d65(
+            metadata.color_matrix_1.as_deref(),
+            metadata.calibration_illuminant_1,
+            metadata.color_matrix_2.as_deref(),
+            metadata.calibration_illuminant_2,
+        )
+    }) else {
         return crate::camtiff::color::profile(&metadata.make, &metadata.model)
             .ok_or_else(|| dng_adapt_error("no DNG color matrix or calibrated camera profile"));
     };
@@ -392,8 +396,14 @@ fn select_xyz_to_camera_neutral(metadata: &dng::DngMetadata) -> Option<[[f64; 3]
             illuminant,
         })
     };
-    let first = candidate(metadata.color_matrix_1.as_deref()?, metadata.calibration_illuminant_1)?;
-    let second = candidate(metadata.color_matrix_2.as_deref()?, metadata.calibration_illuminant_2)?;
+    let first = candidate(
+        metadata.color_matrix_1.as_deref()?,
+        metadata.calibration_illuminant_1,
+    )?;
+    let second = candidate(
+        metadata.color_matrix_2.as_deref()?,
+        metadata.calibration_illuminant_2,
+    )?;
     let neutral: [f64; 3] = metadata.as_shot_neutral.as_deref()?.try_into().ok()?;
     rrrah_core::resolve_dng_neutral_matrix(first, second, neutral)
 }
@@ -599,28 +609,32 @@ mod tests {
         let bytes = color_fixture(true, true);
         let mut image = dng::parse(&bytes).unwrap();
         assert!(image.metadata.neutral_matrix_compatible);
-        image.metadata.color_matrix_1 = Some(vec![1.8331,-0.8166,-0.2478,0.1391,0.8961,-0.0367,0.0822,0.0662,0.2597]);
-        image.metadata.color_matrix_2 = Some(vec![1.0344,-0.421,-0.062,-0.2315,1.0625,0.1948,0.0093,0.1058,0.5541]);
+        image.metadata.color_matrix_1 = Some(vec![
+            1.8331, -0.8166, -0.2478, 0.1391, 0.8961, -0.0367, 0.0822, 0.0662, 0.2597,
+        ]);
+        image.metadata.color_matrix_2 = Some(vec![
+            1.0344, -0.421, -0.062, -0.2315, 1.0625, 0.1948, 0.0093, 0.1058, 0.5541,
+        ]);
         image.metadata.calibration_illuminant_1 = Some(3);
         image.metadata.calibration_illuminant_2 = Some(23);
-        image.metadata.as_shot_neutral = Some(vec![0.463768,1.0,0.565121]);
-        let resolved = xyz_to_camera(&image,[0,1,2]).unwrap();
+        image.metadata.as_shot_neutral = Some(vec![0.463768, 1.0, 0.565121]);
+        let resolved = xyz_to_camera(&image, [0, 1, 2]).unwrap();
         assert!((resolved[0][0] - 1.0443232).abs() < 1e-6);
         image.metadata.neutral_matrix_compatible = false;
-        assert_ne!(resolved, xyz_to_camera(&image,[0,1,2]).unwrap());
+        assert_ne!(resolved, xyz_to_camera(&image, [0, 1, 2]).unwrap());
     }
 
     #[test]
     fn calibration_tags_gate_neutral_solver_at_parse_time() {
         for (tag, values, compatible) in [
-            (50727_u16, vec![1.0,1.0,1.0], true),
-            (50727, vec![1.1,1.0,1.0], false),
-            (50723, vec![1.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,1.0], true),
-            (50724, vec![1.1,0.0,0.0,0.0,1.0,0.0,0.0,0.0,1.0], false),
-            (50964, vec![1.0;9], false),
-            (50965, vec![1.0;9], false),
+            (50727_u16, vec![1.0, 1.0, 1.0], true),
+            (50727, vec![1.1, 1.0, 1.0], false),
+            (50723, vec![1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0], true),
+            (50724, vec![1.1, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0], false),
+            (50964, vec![1.0; 9], false),
+            (50965, vec![1.0; 9], false),
         ] {
-            let mut bytes = color_fixture(true,true);
+            let mut bytes = color_fixture(true, true);
             let count = usize::from(u16::from_le_bytes(bytes[8..10].try_into().unwrap()));
             let offset = bytes.len() as u32;
             for value in &values {
@@ -628,13 +642,17 @@ mod tests {
                 bytes.extend_from_slice(&10000_u32.to_le_bytes());
             }
             let at = 10 + count * 12;
-            bytes[at..at+2].copy_from_slice(&tag.to_le_bytes());
-            bytes[at+2..at+4].copy_from_slice(&5_u16.to_le_bytes());
-            bytes[at+4..at+8].copy_from_slice(&(values.len() as u32).to_le_bytes());
-            bytes[at+8..at+12].copy_from_slice(&offset.to_le_bytes());
-            bytes[at+12..at+16].fill(0);
-            bytes[8..10].copy_from_slice(&((count+1) as u16).to_le_bytes());
-            assert_eq!(dng::parse(&bytes).unwrap().metadata.neutral_matrix_compatible,compatible,"tag {tag}");
+            bytes[at..at + 2].copy_from_slice(&tag.to_le_bytes());
+            bytes[at + 2..at + 4].copy_from_slice(&5_u16.to_le_bytes());
+            bytes[at + 4..at + 8].copy_from_slice(&(values.len() as u32).to_le_bytes());
+            bytes[at + 8..at + 12].copy_from_slice(&offset.to_le_bytes());
+            bytes[at + 12..at + 16].fill(0);
+            bytes[8..10].copy_from_slice(&((count + 1) as u16).to_le_bytes());
+            assert_eq!(
+                dng::parse(&bytes).unwrap().metadata.neutral_matrix_compatible,
+                compatible,
+                "tag {tag}"
+            );
         }
     }
 
@@ -673,9 +691,22 @@ mod tests {
 
     #[test]
     fn neutral_color_revision_invalidates_previously_cached_dng_metadata() {
-        let old = MosaicRecipeManifest::new(NATIVE_DNG_BACKEND_ID,3,1,1,NATIVE_DECODE_FLAGS,crate::WORKSPACE_LOCK_DIGEST);
-        assert_ne!(old.canonical_bytes(),NATIVE_DNG_MOSAIC_CONTRACT_1.canonical_bytes());
-        assert_eq!(&NATIVE_DNG_MOSAIC_CONTRACT_1.canonical_bytes()[16..20],&2_u32.to_le_bytes());
+        let old = MosaicRecipeManifest::new(
+            NATIVE_DNG_BACKEND_ID,
+            3,
+            1,
+            1,
+            NATIVE_DECODE_FLAGS,
+            crate::WORKSPACE_LOCK_DIGEST,
+        );
+        assert_ne!(
+            old.canonical_bytes(),
+            NATIVE_DNG_MOSAIC_CONTRACT_1.canonical_bytes()
+        );
+        assert_eq!(
+            &NATIVE_DNG_MOSAIC_CONTRACT_1.canonical_bytes()[16..20],
+            &2_u32.to_le_bytes()
+        );
     }
 
     #[test]
@@ -773,7 +804,9 @@ mod gpr_admission_tests {
     #[ignore = "requires pinned HERO9 source and independent full Bayer oracle"]
     fn hero9_native_dng_matches_sensor_oracle_and_releases_budget() {
         let source = std::env::var("RRRAH_GPR_SOURCE").expect("RRRAH_GPR_SOURCE");
-        let oracle = std::fs::read(std::env::var("RRRAH_GPR_SENSOR_ORACLE").expect("RRRAH_GPR_SENSOR_ORACLE")).unwrap();
+        let oracle =
+            std::fs::read(std::env::var("RRRAH_GPR_SENSOR_ORACLE").expect("RRRAH_GPR_SENSOR_ORACLE"))
+                .unwrap();
         let budget = rrrah_core::MemoryBudget::new(128 * 1024 * 1024);
         let mut request = DecodeRequest::new(&source);
         request.memory_budget = Some(budget.clone());
@@ -799,21 +832,32 @@ mod gpr_admission_tests {
         let source = std::fs::read(&path).unwrap();
         assert_eq!(source.len(), 6_763_778);
         let ifd = u32::from_le_bytes(source[4..8].try_into().unwrap()) as usize;
-        let entries = u16::from_le_bytes(source[ifd..ifd+2].try_into().unwrap()) as usize;
-        let entry = |tag: u16| (0..entries).map(|i| ifd+2+i*12)
-            .find(|o| u16::from_le_bytes(source[*o..*o+2].try_into().unwrap())==tag).unwrap();
+        let entries = u16::from_le_bytes(source[ifd..ifd + 2].try_into().unwrap()) as usize;
+        let entry = |tag: u16| {
+            (0..entries)
+                .map(|i| ifd + 2 + i * 12)
+                .find(|o| u16::from_le_bytes(source[*o..*o + 2].try_into().unwrap()) == tag)
+                .unwrap()
+        };
         let tile_entry = entry(324);
-        let tile = u32::from_le_bytes(source[tile_entry+8..tile_entry+12].try_into().unwrap()) as usize;
-        let width_record = crate::vc5::Vc5Records::new(&source[tile..]).unwrap()
-            .map(Result::unwrap).find(|r| r.tag==20).unwrap().offset;
+        let tile = u32::from_le_bytes(source[tile_entry + 8..tile_entry + 12].try_into().unwrap()) as usize;
+        let width_record = crate::vc5::Vc5Records::new(&source[tile..])
+            .unwrap()
+            .map(Result::unwrap)
+            .find(|r| r.tag == 20)
+            .unwrap()
+            .offset;
         let mut wrong_width = source.clone();
-        wrong_width[tile+width_record+2..tile+width_record+4].copy_from_slice(&5566u16.to_be_bytes());
+        wrong_width[tile + width_record + 2..tile + width_record + 4].copy_from_slice(&5566u16.to_be_bytes());
         let mut invalid_white = source.clone();
         let white = entry(50717);
-        assert_eq!(u16::from_le_bytes(source[white+2..white+4].try_into().unwrap()),3);
-        invalid_white[white+8..white+10].copy_from_slice(&8191u16.to_le_bytes());
+        assert_eq!(
+            u16::from_le_bytes(source[white + 2..white + 4].try_into().unwrap()),
+            3
+        );
+        invalid_white[white + 8..white + 10].copy_from_slice(&8191u16.to_le_bytes());
         let mut bad_signature = source.clone();
-        bad_signature[tile..tile+4].copy_from_slice(b"BAD!");
+        bad_signature[tile..tile + 4].copy_from_slice(b"BAD!");
         let mut truncated = source.clone();
         truncated.pop();
         for (data, expected) in [
@@ -825,7 +869,9 @@ mod gpr_admission_tests {
             let budget = rrrah_core::MemoryBudget::new(128 * 1024 * 1024);
             let mut request = DecodeRequest::new(&path);
             request.memory_budget = Some(budget.clone());
-            let error = NativeDngDecoder.decode_source(&request, data, Default::default(), Instant::now()).unwrap_err();
+            let error = NativeDngDecoder
+                .decode_source(&request, data, Default::default(), Instant::now())
+                .unwrap_err();
             assert!(error.to_string().contains(expected), "{error}");
             assert_eq!(budget.used(), 0);
             assert_eq!(budget.peak(), 0, "invalid framing must precede sensor allocation");

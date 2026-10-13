@@ -738,8 +738,8 @@ fn empty_provider(
 #[test]
 fn global_and_both_generations_cancel_entry_and_terminal_publication() -> TestResult {
     use std::sync::{
-        atomic::{AtomicU64, Ordering},
         Arc,
+        atomic::{AtomicU64, Ordering},
     };
     let dir = tempfile::tempdir()?;
     let (requests, weights) = model_fixture::fixture(dir.path());
@@ -861,8 +861,8 @@ fn insufficient_model_anchor_geometry_advances_to_independently_verified_native_
     Ok(())
 }
 #[test]
-fn complete_native_miss_cannot_turn_model_insufficiency_into_an_ordinary_negative_in_either_order(
-) -> TestResult {
+fn complete_native_miss_cannot_turn_model_insufficiency_into_an_ordinary_negative_in_either_order()
+-> TestResult {
     let dir = tempfile::tempdir()?;
     let (r, w) = model_fixture::fixture(dir.path());
     let budget = MemoryBudget::new(128 * 1024 * 1024);
@@ -1107,31 +1107,61 @@ fn recovery_preflight_admits_all_work_and_storage_before_io() -> TestResult {
             _ => p.opposite.maximum_swapped_points = usize::MAX,
         }
         let budget = MemoryBudget::new(128 * 1024 * 1024);
-        let result = search_recovery_files_with(&missing, &missing, weights, p,
-            &factors(), &budget, |_, _, _, _, _| panic!("preflight provider"), || false);
-        if field < 6 { assert!(matches!(result, Err(SearchPortfolioError::Work))); }
-        else { assert!(matches!(result, Err(SearchPortfolioError::Native(_)))); }
+        let result = search_recovery_files_with(
+            &missing,
+            &missing,
+            weights,
+            p,
+            &factors(),
+            &budget,
+            |_, _, _, _, _| panic!("preflight provider"),
+            || false,
+        );
+        if field < 6 {
+            assert!(matches!(result, Err(SearchPortfolioError::Work)));
+        } else {
+            assert!(matches!(result, Err(SearchPortfolioError::Native(_))));
+        }
         assert_eq!(budget.used(), 0);
     }
     let budget = MemoryBudget::new(0);
-    assert!(matches!(search_recovery_files_with(&missing, &missing, weights,
-        recovery_policy(), &factors(), &budget, |_, _, _, _, _| panic!("provider"), || false),
-        Err(SearchPortfolioError::Native(_))));
+    assert!(matches!(
+        search_recovery_files_with(
+            &missing,
+            &missing,
+            weights,
+            recovery_policy(),
+            &factors(),
+            &budget,
+            |_, _, _, _, _| panic!("provider"),
+            || false
+        ),
+        Err(SearchPortfolioError::Native(_))
+    ));
     assert_eq!(budget.used(), 0);
     Ok(())
 }
 
 #[test]
 fn recovery_primary_support_is_lazy_and_releases_reserved_storage() -> TestResult {
-    use rrrah_dedup::search_portfolio::{search_recovery_files_with, SearchRecoveryOutcome};
+    use rrrah_dedup::search_portfolio::{SearchRecoveryOutcome, search_recovery_files_with};
     let dir = tempfile::tempdir()?;
     let weights = dir.path().join("weights");
     std::fs::write(&weights, b"fixture provider")?;
-    let source = DecodeRequest::new(std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
-        .join("tests/fixtures/rotation/base.png"));
+    let source = DecodeRequest::new(
+        std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/rotation/base.png"),
+    );
     let budget = MemoryBudget::new(128 * 1024 * 1024);
-    let e = search_recovery_files_with(&source, &source, &weights, recovery_policy(),
-        &factors(), &budget, |_, _, _, _, _| panic!("native support must avoid model"), || false)?;
+    let e = search_recovery_files_with(
+        &source,
+        &source,
+        &weights,
+        recovery_policy(),
+        &factors(),
+        &budget,
+        |_, _, _, _, _| panic!("native support must avoid model"),
+        || false,
+    )?;
     assert_eq!(e.supported(), Some(true));
     assert!(matches!(e, SearchRecoveryOutcome::Primary(_)));
     drop(e);
@@ -1141,7 +1171,7 @@ fn recovery_primary_support_is_lazy_and_releases_reserved_storage() -> TestResul
 
 #[test]
 fn recovery_negative_cannot_erase_primary_unknown_and_publication_is_guarded() -> TestResult {
-    use rrrah_dedup::search_portfolio::{search_recovery_files_with, SearchRecoveryOutcome};
+    use rrrah_dedup::search_portfolio::{SearchRecoveryOutcome, search_recovery_files_with};
     let dir = tempfile::tempdir()?;
     let (requests, weights) = model_fixture::fixture(dir.path());
     let budget = MemoryBudget::new(128 * 1024 * 1024);
@@ -1152,36 +1182,64 @@ fn recovery_negative_cannot_erase_primary_unknown_and_publication_is_guarded() -
     p.opposite.search = p.primary.native;
     p.work = p.required_work()?;
     let checkpoints = Cell::new(0);
-    let outcome = search_recovery_files_with(&requests[0], &requests[1], &weights, p,
-        &factors(), &budget, |_, _, _, b, _| model_fixture::proposals(b), || {
-            checkpoints.set(checkpoints.get() + 1); false
-        })?;
+    let outcome = search_recovery_files_with(
+        &requests[0],
+        &requests[1],
+        &weights,
+        p,
+        &factors(),
+        &budget,
+        |_, _, _, b, _| model_fixture::proposals(b),
+        || {
+            checkpoints.set(checkpoints.get() + 1);
+            false
+        },
+    )?;
     assert_eq!(outcome.supported(), None);
-    assert!(matches!(outcome, SearchRecoveryOutcome::Inconclusive {
-        primary_insufficient: Some(_), opposite_insufficient: false }));
+    assert!(matches!(
+        outcome,
+        SearchRecoveryOutcome::Inconclusive {
+            primary_insufficient: Some(_),
+            opposite_insufficient: false
+        }
+    ));
     drop(outcome);
     assert_eq!(budget.used(), 0);
     let last = checkpoints.get();
     checkpoints.set(0);
-    let result = search_recovery_files_with(&requests[0], &requests[1], &weights, p,
-        &factors(), &budget, |_, _, _, b, _| model_fixture::proposals(b), || {
+    let result = search_recovery_files_with(
+        &requests[0],
+        &requests[1],
+        &weights,
+        p,
+        &factors(),
+        &budget,
+        |_, _, _, b, _| model_fixture::proposals(b),
+        || {
             checkpoints.set(checkpoints.get() + 1);
-            if checkpoints.get() == last { std::fs::write(&weights, b"changed weights").unwrap(); }
+            if checkpoints.get() == last {
+                std::fs::write(&weights, b"changed weights").unwrap();
+            }
             false
-        });
-    assert!(matches!(result, Err(SearchPortfolioError::Source(_))), "{result:?}");
+        },
+    );
+    assert!(
+        matches!(result, Err(SearchPortfolioError::Source(_))),
+        "{result:?}"
+    );
     assert_eq!(budget.used(), 0);
     Ok(())
 }
 
 #[test]
 fn recovery_runs_opposite_after_primary_miss_and_cancel_retry_releases() -> TestResult {
-    use rrrah_dedup::search_portfolio::{search_recovery_files_with, SearchRecoveryOutcome};
+    use rrrah_dedup::search_portfolio::{SearchRecoveryOutcome, search_recovery_files_with};
     let dir = tempfile::tempdir()?;
     let weights = dir.path().join("weights");
     std::fs::write(&weights, b"fixture provider")?;
-    let source = DecodeRequest::new(std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
-        .join("tests/fixtures/rotation/base.png"));
+    let source = DecodeRequest::new(
+        std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/rotation/base.png"),
+    );
     let budget = MemoryBudget::new(128 * 1024 * 1024);
     let mut p = recovery_policy();
     native_miss(&mut p.primary);
@@ -1192,10 +1250,24 @@ fn recovery_runs_opposite_after_primary_miss_and_cancel_retry_releases() -> Test
     p.work = p.required_work()?;
     let calls = Cell::new(0);
     let checkpoints = Cell::new(0);
-    let run = |stop_at| search_recovery_files_with(&source, &source, &weights, p,
-        &factors(), &budget, |_, _, _, b, _| {
-            calls.set(calls.get() + 1); empty_model_proposals(b)
-        }, || { checkpoints.set(checkpoints.get() + 1); checkpoints.get() == stop_at });
+    let run = |stop_at| {
+        search_recovery_files_with(
+            &source,
+            &source,
+            &weights,
+            p,
+            &factors(),
+            &budget,
+            |_, _, _, b, _| {
+                calls.set(calls.get() + 1);
+                empty_model_proposals(b)
+            },
+            || {
+                checkpoints.set(checkpoints.get() + 1);
+                checkpoints.get() == stop_at
+            },
+        )
+    };
     let outcome = run(usize::MAX)?;
     assert_eq!(outcome.supported(), Some(true));
     assert!(matches!(outcome, SearchRecoveryOutcome::Opposite { .. }));
@@ -1216,32 +1288,72 @@ fn recovery_runs_opposite_after_primary_miss_and_cancel_retry_releases() -> Test
 
 #[test]
 fn joint_recovery_preflight_and_real_fallback_cancel_retry() -> TestResult {
-    use rrrah_dedup::search_portfolio::{search_joint_recovery_files_with,SearchRecoveryOutcome};
-    let mut p=recovery_policy();
+    use rrrah_dedup::search_portfolio::{SearchRecoveryOutcome, search_joint_recovery_files_with};
+    let mut p = recovery_policy();
     native_miss(&mut p.primary);
-    p.primary.model.decode.max_pixels=200000;
-    p.primary.model.input.max_source_pixels=200000;
-    p.primary.model.input.max_pixel_reads=800000;
-    p.primary.work=p.primary.required_work()?;p.work=p.required_work()?;
-    let g=p.opposite.search.search.search.search.search.gradient.search;
-    let projections=12*g.local.geometry.max_points as u64*(g.sampling.trials+1);
-    let budget=MemoryBudget::new(128*1024*1024);
-    let missing=DecodeRequest::new("missing-joint-recovery");
-    assert!(matches!(search_joint_recovery_files_with(&missing,&missing,Path::new("missing-weights"),p,
-        &factors(),&budget,projections-1,|_,_,_,_,_|panic!("preflight"),||false),Err(SearchPortfolioError::Native(_))));
-    let dir=tempfile::tempdir()?;let weights=dir.path().join("weights");std::fs::write(&weights,b"fixture")?;
-    let source=DecodeRequest::new(Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/rotation/base.png"));
-    let count=Cell::new(0);
-    let run=|stop|search_joint_recovery_files_with(&source,&source,&weights,p,&factors(),&budget,projections,
-        |_,_,_,b,_|empty_model_proposals(b),||{count.set(count.get()+1);count.get()==stop});
-    let evidence=run(usize::MAX)?;assert!(matches!(evidence,SearchRecoveryOutcome::Opposite{..}));assert_eq!(evidence.supported(),Some(true));drop(evidence);assert_eq!(budget.used(),0);
-    let last=count.get();count.set(0);assert!(run(last).is_err());assert_eq!(budget.used(),0);
-    count.set(0);drop(run(usize::MAX)?);assert_eq!(budget.used(),0);Ok(())
+    p.primary.model.decode.max_pixels = 200000;
+    p.primary.model.input.max_source_pixels = 200000;
+    p.primary.model.input.max_pixel_reads = 800000;
+    p.primary.work = p.primary.required_work()?;
+    p.work = p.required_work()?;
+    let g = p.opposite.search.search.search.search.search.gradient.search;
+    let projections = 12 * g.local.geometry.max_points as u64 * (g.sampling.trials + 1);
+    let budget = MemoryBudget::new(128 * 1024 * 1024);
+    let missing = DecodeRequest::new("missing-joint-recovery");
+    assert!(matches!(
+        search_joint_recovery_files_with(
+            &missing,
+            &missing,
+            Path::new("missing-weights"),
+            p,
+            &factors(),
+            &budget,
+            projections - 1,
+            |_, _, _, _, _| panic!("preflight"),
+            || false
+        ),
+        Err(SearchPortfolioError::Native(_))
+    ));
+    let dir = tempfile::tempdir()?;
+    let weights = dir.path().join("weights");
+    std::fs::write(&weights, b"fixture")?;
+    let source =
+        DecodeRequest::new(Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/rotation/base.png"));
+    let count = Cell::new(0);
+    let run = |stop| {
+        search_joint_recovery_files_with(
+            &source,
+            &source,
+            &weights,
+            p,
+            &factors(),
+            &budget,
+            projections,
+            |_, _, _, b, _| empty_model_proposals(b),
+            || {
+                count.set(count.get() + 1);
+                count.get() == stop
+            },
+        )
+    };
+    let evidence = run(usize::MAX)?;
+    assert!(matches!(evidence, SearchRecoveryOutcome::Opposite { .. }));
+    assert_eq!(evidence.supported(), Some(true));
+    drop(evidence);
+    assert_eq!(budget.used(), 0);
+    let last = count.get();
+    count.set(0);
+    assert!(run(last).is_err());
+    assert_eq!(budget.used(), 0);
+    count.set(0);
+    drop(run(usize::MAX)?);
+    assert_eq!(budget.used(), 0);
+    Ok(())
 }
 
 #[test]
-fn joint_model_automatic_tiles_recover_after_full_misses_in_both_orders_and_exhaust_before_native_fallback() -> TestResult
-{
+fn joint_model_automatic_tiles_recover_after_full_misses_in_both_orders_and_exhaust_before_native_fallback()
+-> TestResult {
     let dir = tempfile::tempdir()?;
     let (r, w) = model_fixture::fixture(dir.path());
     let budget = rrrah_core::MemoryBudget::new(8 * 1024 * 1024);
@@ -1254,8 +1366,8 @@ fn joint_model_automatic_tiles_recover_after_full_misses_in_both_orders_and_exha
             &r[1],
             &w,
             p,
-             2*(p.model.geometry.max_points as u64)*(p.model.sampling.trials+1),
-             25*2*(p.model.geometry.max_points as u64)*(p.model.sampling.trials+1),
+            2 * (p.model.geometry.max_points as u64) * (p.model.sampling.trials + 1),
+            25 * 2 * (p.model.geometry.max_points as u64) * (p.model.sampling.trials + 1),
             &[1.],
             &budget,
             |_, _, _, b, _| {
@@ -1302,8 +1414,8 @@ fn joint_model_automatic_tiles_recover_after_full_misses_in_both_orders_and_exha
         &r[1],
         &w,
         p,
-         2*(p.model.geometry.max_points as u64)*(p.model.sampling.trials+1),
-         25*2*(p.model.geometry.max_points as u64)*(p.model.sampling.trials+1),
+        2 * (p.model.geometry.max_points as u64) * (p.model.sampling.trials + 1),
+        25 * 2 * (p.model.geometry.max_points as u64) * (p.model.sampling.trials + 1),
         &[1.],
         &budget,
         |_, _, _, b, _| {
@@ -1339,21 +1451,23 @@ fn joint_model_portfolio_final_user_checkpoint_cannot_publish_mutated_sources_or
     let budget = rrrah_core::MemoryBudget::new(8 * 1024 * 1024);
     let p = combined(SearchOrder::ModelFirst);
     let calls = Cell::new(0);
-    drop(rrrah_dedup::search_portfolio::search_joint_model_portfolio_files_with(
-        &r[0],
-        &r[1],
-        &w,
-        p,
-         2*(p.model.geometry.max_points as u64)*(p.model.sampling.trials+1),
-         25*2*(p.model.geometry.max_points as u64)*(p.model.sampling.trials+1),
-        &[1.],
-        &budget,
-        |_, _, _, b, _| model_fixture::proposals(b),
-        || {
-            calls.set(calls.get() + 1);
-            false
-        },
-    )?);
+    drop(
+        rrrah_dedup::search_portfolio::search_joint_model_portfolio_files_with(
+            &r[0],
+            &r[1],
+            &w,
+            p,
+            2 * (p.model.geometry.max_points as u64) * (p.model.sampling.trials + 1),
+            25 * 2 * (p.model.geometry.max_points as u64) * (p.model.sampling.trials + 1),
+            &[1.],
+            &budget,
+            |_, _, _, b, _| model_fixture::proposals(b),
+            || {
+                calls.set(calls.get() + 1);
+                false
+            },
+        )?,
+    );
     let last = calls.get();
     for path in [&r[0].path, &r[1].path, &w] {
         let original = std::fs::read(path)?;
@@ -1363,8 +1477,8 @@ fn joint_model_portfolio_final_user_checkpoint_cannot_publish_mutated_sources_or
             &r[1],
             &w,
             p,
-             2*(p.model.geometry.max_points as u64)*(p.model.sampling.trials+1),
-             25*2*(p.model.geometry.max_points as u64)*(p.model.sampling.trials+1),
+            2 * (p.model.geometry.max_points as u64) * (p.model.sampling.trials + 1),
+            25 * 2 * (p.model.geometry.max_points as u64) * (p.model.sampling.trials + 1),
             &[1.],
             &budget,
             |_, _, _, b, _| model_fixture::proposals(b),
@@ -1399,8 +1513,8 @@ fn joint_model_cross_stage_source_or_weight_changes_and_provider_errors_never_be
             &requests[1],
             &weights,
             p,
-             2*(p.model.geometry.max_points as u64)*(p.model.sampling.trials+1),
-             25*2*(p.model.geometry.max_points as u64)*(p.model.sampling.trials+1),
+            2 * (p.model.geometry.max_points as u64) * (p.model.sampling.trials + 1),
+            25 * 2 * (p.model.geometry.max_points as u64) * (p.model.sampling.trials + 1),
             &factors(),
             &budget,
             |_, _, _, b, _| {
@@ -1440,7 +1554,7 @@ fn joint_model_cross_stage_source_or_weight_changes_and_provider_errors_never_be
         &requests[1],
         &weights,
         combined(SearchOrder::ModelFirst),
-        u64::MAX/25,
+        u64::MAX / 25,
         u64::MAX,
         &factors(),
         &budget,
@@ -1457,185 +1571,879 @@ fn joint_model_cross_stage_source_or_weight_changes_and_provider_errors_never_be
     Ok(())
 }
 
-
 #[test]
 fn joint_model_projection_preflight_precedes_even_native_first_io() -> TestResult {
-    let request=rrrah_decode::DecodeRequest::new("missing");let budget=rrrah_core::MemoryBudget::new(0);
-    for order in [SearchOrder::NativeFirst,SearchOrder::ModelFirst] {
-        let p=tiled(combined(order));let per=2*(p.model.geometry.max_points as u64)*(p.model.sampling.trials+1);
-        for (cap,total) in [(per-1,u64::MAX),(per,per*25-1),(u64::MAX,u64::MAX)] {
-            for stop in [false,true] {
-                let result=rrrah_dedup::search_portfolio::search_joint_model_portfolio_files_with(&request,&request,Path::new("missing-weights"),p,cap,total,&[1.],&budget,
-                    |_,_,_,_,_|panic!("no inference before preflight"),||stop);
-                if stop {assert!(matches!(result,Err(SearchPortfolioError::Cancelled)));}
-                else {assert!(matches!(result,Err(SearchPortfolioError::Model(rrrah_dedup::model_compare::ModelComparisonError::Geometry(rrrah_dedup::geometry::GeometryError::Budget)))));}
-                assert_eq!(budget.used(),0);
+    let request = rrrah_decode::DecodeRequest::new("missing");
+    let budget = rrrah_core::MemoryBudget::new(0);
+    for order in [SearchOrder::NativeFirst, SearchOrder::ModelFirst] {
+        let p = tiled(combined(order));
+        let per = 2 * (p.model.geometry.max_points as u64) * (p.model.sampling.trials + 1);
+        for (cap, total) in [(per - 1, u64::MAX), (per, per * 25 - 1), (u64::MAX, u64::MAX)] {
+            for stop in [false, true] {
+                let result = rrrah_dedup::search_portfolio::search_joint_model_portfolio_files_with(
+                    &request,
+                    &request,
+                    Path::new("missing-weights"),
+                    p,
+                    cap,
+                    total,
+                    &[1.],
+                    &budget,
+                    |_, _, _, _, _| panic!("no inference before preflight"),
+                    || stop,
+                );
+                if stop {
+                    assert!(matches!(result, Err(SearchPortfolioError::Cancelled)));
+                } else {
+                    assert!(matches!(
+                        result,
+                        Err(SearchPortfolioError::Model(
+                            rrrah_dedup::model_compare::ModelComparisonError::Geometry(
+                                rrrah_dedup::geometry::GeometryError::Budget
+                            )
+                        ))
+                    ));
+                }
+                assert_eq!(budget.used(), 0);
             }
         }
     }
     Ok(())
 }
 
-fn bank_setup(mut p:SearchPortfolioPolicy)->(SearchPortfolioPolicy,rrrah_dedup::joint_witnesses::JointBankPolicy,rrrah_dedup::model_tiles::ModelTileWorkLimits) {
- use rrrah_dedup::{geometry::JointProjectivePolicy,joint_witnesses::{JointBankPolicy,JointWitnessPolicy},model_tiles::ModelTileWorkLimits};
- p.model.anchors.local.maximum_points=400;p.model.anchors.local.maximum_point_checks=100000;p.model.anchors.maximum_selection_checks=250000;
- let m=p.model;let n=25*m.proposals.max_proposals as u64;let fit=2*m.geometry.max_points as u64*(m.sampling.trials+1);let sep=n*(n-1)/2;let mut target=m.geometry;target.min_inliers=4;
- let banks=JointBankPolicy{hypothesis:JointProjectivePolicy{target,source_tolerance:m.anchors.local.source_tolerance,maximum_projection_checks:fit},sampling:m.sampling,witnesses:JointWitnessPolicy{source_tolerance:m.anchors.local.source_tolerance,target_tolerance:m.geometry.tolerance,minimum_separation:2.,maximum_points:n as usize,maximum_projection_checks:2*n,maximum_separation_checks:sep},minimum_witnesses:10,maximum_banks:25,maximum_total_projection_checks:25*(fit+2*n),maximum_total_separation_checks:25*sep};
- let mut work=ModelTileWorkLimits::for_model(m).unwrap();work.model_input_reads=52*m.input.max_pixel_reads;work.point_checks*=2;work.selection_checks*=2;work.rank_sites*=2;work.pixel_reads*=2;p.work=required_model_bank_portfolio_work(p,work).unwrap();(p,banks,work)
+fn bank_setup(
+    mut p: SearchPortfolioPolicy,
+) -> (
+    SearchPortfolioPolicy,
+    rrrah_dedup::joint_witnesses::JointBankPolicy,
+    rrrah_dedup::model_tiles::ModelTileWorkLimits,
+) {
+    use rrrah_dedup::{
+        geometry::JointProjectivePolicy,
+        joint_witnesses::{JointBankPolicy, JointWitnessPolicy},
+        model_tiles::ModelTileWorkLimits,
+    };
+    p.model.anchors.local.maximum_points = 400;
+    p.model.anchors.local.maximum_point_checks = 100000;
+    p.model.anchors.maximum_selection_checks = 250000;
+    let m = p.model;
+    let n = 25 * m.proposals.max_proposals as u64;
+    let fit = 2 * m.geometry.max_points as u64 * (m.sampling.trials + 1);
+    let sep = n * (n - 1) / 2;
+    let mut target = m.geometry;
+    target.min_inliers = 4;
+    let banks = JointBankPolicy {
+        hypothesis: JointProjectivePolicy {
+            target,
+            source_tolerance: m.anchors.local.source_tolerance,
+            maximum_projection_checks: fit,
+        },
+        sampling: m.sampling,
+        witnesses: JointWitnessPolicy {
+            source_tolerance: m.anchors.local.source_tolerance,
+            target_tolerance: m.geometry.tolerance,
+            minimum_separation: 2.,
+            maximum_points: n as usize,
+            maximum_projection_checks: 2 * n,
+            maximum_separation_checks: sep,
+        },
+        minimum_witnesses: 10,
+        maximum_banks: 25,
+        maximum_total_projection_checks: 25 * (fit + 2 * n),
+        maximum_total_separation_checks: 25 * sep,
+    };
+    let mut work = ModelTileWorkLimits::for_model(m).unwrap();
+    work.model_input_reads = 52 * m.input.max_pixel_reads;
+    work.point_checks *= 2;
+    work.selection_checks *= 2;
+    work.rank_sites *= 2;
+    work.pixel_reads *= 2;
+    p.work = required_model_bank_portfolio_work(p, work).unwrap();
+    (p, banks, work)
 }
 #[test]
 fn bank_portfolio_confirms_in_both_orders_after_native_miss() -> TestResult {
- let dir=tempfile::tempdir()?;let (r,w)=model_fixture::fixture(dir.path());let b=MemoryBudget::new(128*1024*1024);
- for order in [SearchOrder::ModelFirst,SearchOrder::NativeFirst] {let mut p=combined(order);native_miss(&mut p);let(p,banks,work)=bank_setup(p);let calls=Cell::new(0);let e=search_model_bank_portfolio_files_with(&r[0],&r[1],&w,p,banks,work,&[12,1],&factors(),&b,|_,_,_,b,_|{calls.set(calls.get()+1);model_fixture::proposals(b)},||false)?;assert!(e.supported());assert_eq!(calls.get(),25);assert_eq!(e.attempted_stages,if order==SearchOrder::ModelFirst{1}else{2});assert!(matches!(e.terminal,SearchStageEvidence::Model(_)));drop(e);assert_eq!(b.used(),0);}
- Ok(())
-}
-#[test]
-fn bank_portfolio_empty_learned_and_native_miss_remain_typed_unknown() -> TestResult {
- let dir=tempfile::tempdir()?;let(r,w)=model_fixture::fixture(dir.path());let b=MemoryBudget::new(128*1024*1024);
- for order in [SearchOrder::ModelFirst,SearchOrder::NativeFirst] {let mut p=combined(order);native_miss(&mut p);let(p,banks,work)=bank_setup(p);let e=search_model_bank_portfolio_files_with(&r[0],&r[1],&w,p,banks,work,&[2,6],&factors(),&b,empty_provider,||false);assert!(matches!(e,Err(SearchPortfolioError::InsufficientAnchorGeometry(_))));assert_eq!(b.used(),0);}
- Ok(())
-}
-#[test]
-fn bank_portfolio_all_work_precedes_native_first_io_and_cancel_wins() {
- let(p,banks,work)=bank_setup(combined(SearchOrder::NativeFirst));let r=DecodeRequest::new("missing");let b=MemoryBudget::new(1024);
- let mut low=p;low.work.pixel_reads-=1;let e=search_model_bank_portfolio_files_with(&r,&r,Path::new("missing"),low,banks,work,&[2,6],&factors(),&b,|_,_,_,_,_|panic!("preflight"),||false);assert!(matches!(e,Err(SearchPortfolioError::Work)));assert_eq!(b.used(),0);
- let e=search_model_bank_portfolio_files_with(&r,&r,Path::new("missing"),p,banks,work,&[],&factors(),&b,|_,_,_,_,_|panic!("cancel"),||true);assert!(matches!(e,Err(SearchPortfolioError::Cancelled)));assert_eq!(b.used(),0);
-}
-#[test]
-fn bank_portfolio_last_provider_weight_change_discards_all_evidence() -> TestResult {
- let dir=tempfile::tempdir()?;let(r,w)=model_fixture::fixture(dir.path());let(p,banks,work)=bank_setup(combined(SearchOrder::ModelFirst));let b=MemoryBudget::new(128*1024*1024);let calls=Cell::new(0);
- let e=search_model_bank_portfolio_files_with(&r[0],&r[1],&w,p,banks,work,&[2,6],&factors(),&b,|_,_,_,b,_|{calls.set(calls.get()+1);let points=model_fixture::proposals(b)?;if calls.get()==25{std::fs::write(&w,b"changed")?;}Ok(points)},||false);assert!(e.is_err());assert_eq!(calls.get(),25);assert_eq!(b.used(),0);Ok(())
-}
-#[test]
-fn bank_unknown_advances_to_native_support_and_native_first_skips_model() -> TestResult {
- let dir=tempfile::tempdir()?;let w=dir.path().join("weights");std::fs::write(&w,b"fixture")?;let source=DecodeRequest::new(Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/rotation/base.png"));let b=MemoryBudget::new(128*1024*1024);
- for order in [SearchOrder::ModelFirst,SearchOrder::NativeFirst] {let mut p=combined(order);p.model.decode.max_pixels=200000;p.model.input.max_source_pixels=200000;p.model.input.max_pixel_reads=800000;let(p,banks,work)=bank_setup(p);let calls=Cell::new(0);let e=search_model_bank_portfolio_files_with(&source,&source,&w,p,banks,work,&[2,6],&factors(),&b,|a,l,r,b,c|{calls.set(calls.get()+1);empty_provider(a,l,r,b,c)},||false)?;assert!(e.supported());assert!(matches!(e.terminal,SearchStageEvidence::Native(_)));assert_eq!(calls.get(),if order==SearchOrder::ModelFirst{25}else{0});drop(e);assert_eq!(b.used(),0);}
- Ok(())
-}
-
-fn bank_recovery_setup(mut p:SearchRecoveryPolicy)->(SearchRecoveryPolicy,rrrah_dedup::joint_witnesses::JointBankPolicy,rrrah_dedup::model_tiles::ModelTileWorkLimits,u64) {
-    let(primary,banks,work)=bank_setup(p.primary);p.primary=primary;p.work=required_model_bank_recovery_work(p,work).unwrap();
-    let g=p.opposite.search.search.search.search.search.gradient.search;
-    let projections=12*g.local.geometry.max_points as u64*(g.sampling.trials+1);
-    (p,banks,work,projections)
-}
-#[test]
-fn bank_joint_recovery_complete_admission_and_cancel_precede_io() {
-    let(p,banks,work,projections)=bank_recovery_setup(recovery_policy());let r=DecodeRequest::new("missing");let b=MemoryBudget::new(128*1024*1024);
-    for case in 0..5 {let mut p=p;let mut cap=projections;let mut radii=&[2,6][..];match case{0=>p.work.pixel_reads-=1,1=>p.primary.work.model_input_reads-=1,2=>cap-=1,3=>radii=&[],_=>p.opposite.maximum_swapped_points=0}
-        for stop in [false,true] {let e=search_model_bank_joint_recovery_files_with(&r,&r,Path::new("missing"),p,banks,work,radii,cap,&factors(),&b,|_,_,_,_,_|panic!("preflight before provider"),||stop);assert!(e.is_err());if stop{assert!(matches!(e,Err(SearchPortfolioError::Cancelled)));}assert_eq!(b.used(),0);}}
-}
-#[test]
-fn bank_joint_recovery_bank_support_stops_before_opposite_and_empty_stays_unknown()->TestResult {
-    let dir=tempfile::tempdir()?;let(r,w)=model_fixture::fixture(dir.path());let b=MemoryBudget::new(128*1024*1024);
-    let mut p=recovery_policy();p.primary.order=SearchOrder::ModelFirst;native_miss(&mut p.primary);
-    let(p,banks,work,projections)=bank_recovery_setup(p);let calls=Cell::new(0);
-    let e=search_model_bank_joint_recovery_files_with(&r[0],&r[1],&w,p,banks,work,&[12,1],projections,&factors(),&b,|_,_,_,b,_|{calls.set(calls.get()+1);model_fixture::proposals(b)},||false)?;
-    assert!(matches!(e,SearchRecoveryOutcome::Primary(_)));assert_eq!(e.supported(),Some(true));assert_eq!(calls.get(),25);drop(e);assert_eq!(b.used(),0);
-    let mut p=p;p.opposite.search=p.primary.native;let e=search_model_bank_joint_recovery_files_with(&r[0],&r[1],&w,p,banks,work,&[2,6],projections,&factors(),&b,empty_provider,||false)?;assert!(matches!(e,SearchRecoveryOutcome::Inconclusive{..}));assert_eq!(e.supported(),None);drop(e);assert_eq!(b.used(),0);Ok(())
-}
-#[test]
-fn bank_joint_recovery_unknown_advances_to_joint_opposite_with_final_guards()->TestResult {
-    let dir=tempfile::tempdir()?;let w=dir.path().join("weights");std::fs::write(&w,b"fixture")?;let source=DecodeRequest::new(Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/rotation/base.png"));let b=MemoryBudget::new(128*1024*1024);
-    let mut p=recovery_policy();native_miss(&mut p.primary);p.primary.model.decode.max_pixels=200000;p.primary.model.input.max_source_pixels=200000;p.primary.model.input.max_pixel_reads=800000;
-    let(p,banks,work,projections)=bank_recovery_setup(p);
-    for order in [SearchOrder::ModelFirst,SearchOrder::NativeFirst] {let mut p=p;p.primary.order=order;let checkpoints=Cell::new(0);let providers=Cell::new(0);
-        let e=search_model_bank_joint_recovery_files_with(&source,&source,&w,p,banks,work,&[2,6],projections,&factors(),&b,|a,l,r,b,c|{providers.set(providers.get()+1);empty_provider(a,l,r,b,c)},||{checkpoints.set(checkpoints.get()+1);false})?;assert_eq!(providers.get(),25);assert_eq!(e.supported(),Some(true));assert!(matches!(e,SearchRecoveryOutcome::Opposite{primary_insufficient:Some(_),..}));drop(e);assert_eq!(b.used(),0);
-        let last=checkpoints.get();let count=Cell::new(0);let bytes=std::fs::read(&w)?;let e=search_model_bank_joint_recovery_files_with(&source,&source,&w,p,banks,work,&[2,6],projections,&factors(),&b,empty_provider,||{count.set(count.get()+1);if count.get()==last{std::fs::write(&w,b"changed at publication").unwrap();}false});assert!(matches!(e,Err(SearchPortfolioError::Source(_))),"{e:?}");assert_eq!(b.used(),0);std::fs::write(&w,bytes)?;
+    let dir = tempfile::tempdir()?;
+    let (r, w) = model_fixture::fixture(dir.path());
+    let b = MemoryBudget::new(128 * 1024 * 1024);
+    for order in [SearchOrder::ModelFirst, SearchOrder::NativeFirst] {
+        let mut p = combined(order);
+        native_miss(&mut p);
+        let (p, banks, work) = bank_setup(p);
+        let calls = Cell::new(0);
+        let e = search_model_bank_portfolio_files_with(
+            &r[0],
+            &r[1],
+            &w,
+            p,
+            banks,
+            work,
+            &[12, 1],
+            &factors(),
+            &b,
+            |_, _, _, b, _| {
+                calls.set(calls.get() + 1);
+                model_fixture::proposals(b)
+            },
+            || false,
+        )?;
+        assert!(e.supported());
+        assert_eq!(calls.get(), 25);
+        assert_eq!(
+            e.attempted_stages,
+            if order == SearchOrder::ModelFirst { 1 } else { 2 }
+        );
+        assert!(matches!(e.terminal, SearchStageEvidence::Model(_)));
+        drop(e);
+        assert_eq!(b.used(), 0);
     }
     Ok(())
 }
 #[test]
-fn bank_joint_recovery_late_provider_failure_cannot_enter_opposite()->TestResult {
-    let dir=tempfile::tempdir()?;let(r,w)=model_fixture::fixture(dir.path());let mut p=recovery_policy();p.primary.order=SearchOrder::ModelFirst;let(p,banks,work,projections)=bank_recovery_setup(p);let b=MemoryBudget::new(128*1024*1024);let calls=Cell::new(0);
-    let e=search_model_bank_joint_recovery_files_with(&r[0],&r[1],&w,p,banks,work,&[2,6],projections,&factors(),&b,|a,l,r,b,c|{calls.set(calls.get()+1);if calls.get()==25{return Err(std::io::Error::other("provider fatal on last bank").into());}empty_provider(a,l,r,b,c)},||false);assert!(e.is_err());assert_eq!(calls.get(),25);assert_eq!(b.used(),0);Ok(())
-}
-
-#[test]
-fn native_family_first_support_does_not_call_provider_and_has_explicit_trace()->TestResult {
-    let dir=tempfile::tempdir()?;let w=dir.path().join("weights");std::fs::write(&w,b"fixture")?;let r=DecodeRequest::new(Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/rotation/base.png"));let b=MemoryBudget::new(128*1024*1024);
-    for opposite in [false,true] {let mut p=recovery_policy();if opposite{native_miss(&mut p.primary);}p.primary.model.decode.max_pixels=200000;p.primary.model.input.max_source_pixels=200000;p.primary.model.input.max_pixel_reads=800000;let(p,banks,work,cap)=bank_recovery_setup(p);let e=search_native_bank_recovery_files_with(&r,&r,&w,p,banks,work,&[2,6],cap,&factors(),&b,|_,_,_,_,_|panic!("native positive must skip provider"),||false)?;assert_eq!(e.supported(),Some(true));assert!(!e.model_attempted());assert_eq!(e.opposite_insufficient,opposite.then_some(false));assert_eq!(e.native_miss.is_some(),opposite);if opposite{assert!(matches!(e.terminal,NativeBankRecoveryTerminal::Opposite(_)));}else{assert!(matches!(e.terminal,NativeBankRecoveryTerminal::Native(_)));}drop(e);assert_eq!(b.used(),0);}
+fn bank_portfolio_empty_learned_and_native_miss_remain_typed_unknown() -> TestResult {
+    let dir = tempfile::tempdir()?;
+    let (r, w) = model_fixture::fixture(dir.path());
+    let b = MemoryBudget::new(128 * 1024 * 1024);
+    for order in [SearchOrder::ModelFirst, SearchOrder::NativeFirst] {
+        let mut p = combined(order);
+        native_miss(&mut p);
+        let (p, banks, work) = bank_setup(p);
+        let e = search_model_bank_portfolio_files_with(
+            &r[0],
+            &r[1],
+            &w,
+            p,
+            banks,
+            work,
+            &[2, 6],
+            &factors(),
+            &b,
+            empty_provider,
+            || false,
+        );
+        assert!(matches!(
+            e,
+            Err(SearchPortfolioError::InsufficientAnchorGeometry(_))
+        ));
+        assert_eq!(b.used(), 0);
+    }
     Ok(())
 }
 #[test]
-fn native_family_first_model_support_or_unknown_follows_both_native_misses()->TestResult {
-    let dir=tempfile::tempdir()?;let(r,w)=model_fixture::fixture(dir.path());let b=MemoryBudget::new(128*1024*1024);let mut p=recovery_policy();native_miss(&mut p.primary);p.opposite.search=p.primary.native;let(p,banks,work,cap)=bank_recovery_setup(p);
-    for positive in [true,false] {let calls=Cell::new(0);let e=search_native_bank_recovery_files_with(&r[0],&r[1],&w,p,banks,work,&[12,1],cap,&factors(),&b,|a,l,r,b,c|{calls.set(calls.get()+1);if positive{model_fixture::proposals(b)}else{empty_provider(a,l,r,b,c)}},||false)?;assert_eq!(calls.get(),25);assert!(e.model_attempted());assert!(e.native_miss.is_some());assert!(e.opposite_insufficient.is_some());assert_eq!(e.supported(),if positive{Some(true)}else{None});drop(e);assert_eq!(b.used(),0);}
+fn bank_portfolio_all_work_precedes_native_first_io_and_cancel_wins() {
+    let (p, banks, work) = bank_setup(combined(SearchOrder::NativeFirst));
+    let r = DecodeRequest::new("missing");
+    let b = MemoryBudget::new(1024);
+    let mut low = p;
+    low.work.pixel_reads -= 1;
+    let e = search_model_bank_portfolio_files_with(
+        &r,
+        &r,
+        Path::new("missing"),
+        low,
+        banks,
+        work,
+        &[2, 6],
+        &factors(),
+        &b,
+        |_, _, _, _, _| panic!("preflight"),
+        || false,
+    );
+    assert!(matches!(e, Err(SearchPortfolioError::Work)));
+    assert_eq!(b.used(), 0);
+    let e = search_model_bank_portfolio_files_with(
+        &r,
+        &r,
+        Path::new("missing"),
+        p,
+        banks,
+        work,
+        &[],
+        &factors(),
+        &b,
+        |_, _, _, _, _| panic!("cancel"),
+        || true,
+    );
+    assert!(matches!(e, Err(SearchPortfolioError::Cancelled)));
+    assert_eq!(b.used(), 0);
+}
+#[test]
+fn bank_portfolio_last_provider_weight_change_discards_all_evidence() -> TestResult {
+    let dir = tempfile::tempdir()?;
+    let (r, w) = model_fixture::fixture(dir.path());
+    let (p, banks, work) = bank_setup(combined(SearchOrder::ModelFirst));
+    let b = MemoryBudget::new(128 * 1024 * 1024);
+    let calls = Cell::new(0);
+    let e = search_model_bank_portfolio_files_with(
+        &r[0],
+        &r[1],
+        &w,
+        p,
+        banks,
+        work,
+        &[2, 6],
+        &factors(),
+        &b,
+        |_, _, _, b, _| {
+            calls.set(calls.get() + 1);
+            let points = model_fixture::proposals(b)?;
+            if calls.get() == 25 {
+                std::fs::write(&w, b"changed")?;
+            }
+            Ok(points)
+        },
+        || false,
+    );
+    assert!(e.is_err());
+    assert_eq!(calls.get(), 25);
+    assert_eq!(b.used(), 0);
+    Ok(())
+}
+#[test]
+fn bank_unknown_advances_to_native_support_and_native_first_skips_model() -> TestResult {
+    let dir = tempfile::tempdir()?;
+    let w = dir.path().join("weights");
+    std::fs::write(&w, b"fixture")?;
+    let source =
+        DecodeRequest::new(Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/rotation/base.png"));
+    let b = MemoryBudget::new(128 * 1024 * 1024);
+    for order in [SearchOrder::ModelFirst, SearchOrder::NativeFirst] {
+        let mut p = combined(order);
+        p.model.decode.max_pixels = 200000;
+        p.model.input.max_source_pixels = 200000;
+        p.model.input.max_pixel_reads = 800000;
+        let (p, banks, work) = bank_setup(p);
+        let calls = Cell::new(0);
+        let e = search_model_bank_portfolio_files_with(
+            &source,
+            &source,
+            &w,
+            p,
+            banks,
+            work,
+            &[2, 6],
+            &factors(),
+            &b,
+            |a, l, r, b, c| {
+                calls.set(calls.get() + 1);
+                empty_provider(a, l, r, b, c)
+            },
+            || false,
+        )?;
+        assert!(e.supported());
+        assert!(matches!(e.terminal, SearchStageEvidence::Native(_)));
+        assert_eq!(calls.get(), if order == SearchOrder::ModelFirst { 25 } else { 0 });
+        drop(e);
+        assert_eq!(b.used(), 0);
+    }
+    Ok(())
+}
+
+fn bank_recovery_setup(
+    mut p: SearchRecoveryPolicy,
+) -> (
+    SearchRecoveryPolicy,
+    rrrah_dedup::joint_witnesses::JointBankPolicy,
+    rrrah_dedup::model_tiles::ModelTileWorkLimits,
+    u64,
+) {
+    let (primary, banks, work) = bank_setup(p.primary);
+    p.primary = primary;
+    p.work = required_model_bank_recovery_work(p, work).unwrap();
+    let g = p.opposite.search.search.search.search.search.gradient.search;
+    let projections = 12 * g.local.geometry.max_points as u64 * (g.sampling.trials + 1);
+    (p, banks, work, projections)
+}
+#[test]
+fn bank_joint_recovery_complete_admission_and_cancel_precede_io() {
+    let (p, banks, work, projections) = bank_recovery_setup(recovery_policy());
+    let r = DecodeRequest::new("missing");
+    let b = MemoryBudget::new(128 * 1024 * 1024);
+    for case in 0..5 {
+        let mut p = p;
+        let mut cap = projections;
+        let mut radii = &[2, 6][..];
+        match case {
+            0 => p.work.pixel_reads -= 1,
+            1 => p.primary.work.model_input_reads -= 1,
+            2 => cap -= 1,
+            3 => radii = &[],
+            _ => p.opposite.maximum_swapped_points = 0,
+        }
+        for stop in [false, true] {
+            let e = search_model_bank_joint_recovery_files_with(
+                &r,
+                &r,
+                Path::new("missing"),
+                p,
+                banks,
+                work,
+                radii,
+                cap,
+                &factors(),
+                &b,
+                |_, _, _, _, _| panic!("preflight before provider"),
+                || stop,
+            );
+            assert!(e.is_err());
+            if stop {
+                assert!(matches!(e, Err(SearchPortfolioError::Cancelled)));
+            }
+            assert_eq!(b.used(), 0);
+        }
+    }
+}
+#[test]
+fn bank_joint_recovery_bank_support_stops_before_opposite_and_empty_stays_unknown() -> TestResult {
+    let dir = tempfile::tempdir()?;
+    let (r, w) = model_fixture::fixture(dir.path());
+    let b = MemoryBudget::new(128 * 1024 * 1024);
+    let mut p = recovery_policy();
+    p.primary.order = SearchOrder::ModelFirst;
+    native_miss(&mut p.primary);
+    let (p, banks, work, projections) = bank_recovery_setup(p);
+    let calls = Cell::new(0);
+    let e = search_model_bank_joint_recovery_files_with(
+        &r[0],
+        &r[1],
+        &w,
+        p,
+        banks,
+        work,
+        &[12, 1],
+        projections,
+        &factors(),
+        &b,
+        |_, _, _, b, _| {
+            calls.set(calls.get() + 1);
+            model_fixture::proposals(b)
+        },
+        || false,
+    )?;
+    assert!(matches!(e, SearchRecoveryOutcome::Primary(_)));
+    assert_eq!(e.supported(), Some(true));
+    assert_eq!(calls.get(), 25);
+    drop(e);
+    assert_eq!(b.used(), 0);
+    let mut p = p;
+    p.opposite.search = p.primary.native;
+    let e = search_model_bank_joint_recovery_files_with(
+        &r[0],
+        &r[1],
+        &w,
+        p,
+        banks,
+        work,
+        &[2, 6],
+        projections,
+        &factors(),
+        &b,
+        empty_provider,
+        || false,
+    )?;
+    assert!(matches!(e, SearchRecoveryOutcome::Inconclusive { .. }));
+    assert_eq!(e.supported(), None);
+    drop(e);
+    assert_eq!(b.used(), 0);
+    Ok(())
+}
+#[test]
+fn bank_joint_recovery_unknown_advances_to_joint_opposite_with_final_guards() -> TestResult {
+    let dir = tempfile::tempdir()?;
+    let w = dir.path().join("weights");
+    std::fs::write(&w, b"fixture")?;
+    let source =
+        DecodeRequest::new(Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/rotation/base.png"));
+    let b = MemoryBudget::new(128 * 1024 * 1024);
+    let mut p = recovery_policy();
+    native_miss(&mut p.primary);
+    p.primary.model.decode.max_pixels = 200000;
+    p.primary.model.input.max_source_pixels = 200000;
+    p.primary.model.input.max_pixel_reads = 800000;
+    let (p, banks, work, projections) = bank_recovery_setup(p);
+    for order in [SearchOrder::ModelFirst, SearchOrder::NativeFirst] {
+        let mut p = p;
+        p.primary.order = order;
+        let checkpoints = Cell::new(0);
+        let providers = Cell::new(0);
+        let e = search_model_bank_joint_recovery_files_with(
+            &source,
+            &source,
+            &w,
+            p,
+            banks,
+            work,
+            &[2, 6],
+            projections,
+            &factors(),
+            &b,
+            |a, l, r, b, c| {
+                providers.set(providers.get() + 1);
+                empty_provider(a, l, r, b, c)
+            },
+            || {
+                checkpoints.set(checkpoints.get() + 1);
+                false
+            },
+        )?;
+        assert_eq!(providers.get(), 25);
+        assert_eq!(e.supported(), Some(true));
+        assert!(matches!(
+            e,
+            SearchRecoveryOutcome::Opposite {
+                primary_insufficient: Some(_),
+                ..
+            }
+        ));
+        drop(e);
+        assert_eq!(b.used(), 0);
+        let last = checkpoints.get();
+        let count = Cell::new(0);
+        let bytes = std::fs::read(&w)?;
+        let e = search_model_bank_joint_recovery_files_with(
+            &source,
+            &source,
+            &w,
+            p,
+            banks,
+            work,
+            &[2, 6],
+            projections,
+            &factors(),
+            &b,
+            empty_provider,
+            || {
+                count.set(count.get() + 1);
+                if count.get() == last {
+                    std::fs::write(&w, b"changed at publication").unwrap();
+                }
+                false
+            },
+        );
+        assert!(matches!(e, Err(SearchPortfolioError::Source(_))), "{e:?}");
+        assert_eq!(b.used(), 0);
+        std::fs::write(&w, bytes)?;
+    }
+    Ok(())
+}
+#[test]
+fn bank_joint_recovery_late_provider_failure_cannot_enter_opposite() -> TestResult {
+    let dir = tempfile::tempdir()?;
+    let (r, w) = model_fixture::fixture(dir.path());
+    let mut p = recovery_policy();
+    p.primary.order = SearchOrder::ModelFirst;
+    let (p, banks, work, projections) = bank_recovery_setup(p);
+    let b = MemoryBudget::new(128 * 1024 * 1024);
+    let calls = Cell::new(0);
+    let e = search_model_bank_joint_recovery_files_with(
+        &r[0],
+        &r[1],
+        &w,
+        p,
+        banks,
+        work,
+        &[2, 6],
+        projections,
+        &factors(),
+        &b,
+        |a, l, r, b, c| {
+            calls.set(calls.get() + 1);
+            if calls.get() == 25 {
+                return Err(std::io::Error::other("provider fatal on last bank").into());
+            }
+            empty_provider(a, l, r, b, c)
+        },
+        || false,
+    );
+    assert!(e.is_err());
+    assert_eq!(calls.get(), 25);
+    assert_eq!(b.used(), 0);
+    Ok(())
+}
+
+#[test]
+fn native_family_first_support_does_not_call_provider_and_has_explicit_trace() -> TestResult {
+    let dir = tempfile::tempdir()?;
+    let w = dir.path().join("weights");
+    std::fs::write(&w, b"fixture")?;
+    let r =
+        DecodeRequest::new(Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/rotation/base.png"));
+    let b = MemoryBudget::new(128 * 1024 * 1024);
+    for opposite in [false, true] {
+        let mut p = recovery_policy();
+        if opposite {
+            native_miss(&mut p.primary);
+        }
+        p.primary.model.decode.max_pixels = 200000;
+        p.primary.model.input.max_source_pixels = 200000;
+        p.primary.model.input.max_pixel_reads = 800000;
+        let (p, banks, work, cap) = bank_recovery_setup(p);
+        let e = search_native_bank_recovery_files_with(
+            &r,
+            &r,
+            &w,
+            p,
+            banks,
+            work,
+            &[2, 6],
+            cap,
+            &factors(),
+            &b,
+            |_, _, _, _, _| panic!("native positive must skip provider"),
+            || false,
+        )?;
+        assert_eq!(e.supported(), Some(true));
+        assert!(!e.model_attempted());
+        assert_eq!(e.opposite_insufficient, opposite.then_some(false));
+        assert_eq!(e.native_miss.is_some(), opposite);
+        if opposite {
+            assert!(matches!(e.terminal, NativeBankRecoveryTerminal::Opposite(_)));
+        } else {
+            assert!(matches!(e.terminal, NativeBankRecoveryTerminal::Native(_)));
+        }
+        drop(e);
+        assert_eq!(b.used(), 0);
+    }
+    Ok(())
+}
+#[test]
+fn native_family_first_model_support_or_unknown_follows_both_native_misses() -> TestResult {
+    let dir = tempfile::tempdir()?;
+    let (r, w) = model_fixture::fixture(dir.path());
+    let b = MemoryBudget::new(128 * 1024 * 1024);
+    let mut p = recovery_policy();
+    native_miss(&mut p.primary);
+    p.opposite.search = p.primary.native;
+    let (p, banks, work, cap) = bank_recovery_setup(p);
+    for positive in [true, false] {
+        let calls = Cell::new(0);
+        let e = search_native_bank_recovery_files_with(
+            &r[0],
+            &r[1],
+            &w,
+            p,
+            banks,
+            work,
+            &[12, 1],
+            cap,
+            &factors(),
+            &b,
+            |a, l, r, b, c| {
+                calls.set(calls.get() + 1);
+                if positive {
+                    model_fixture::proposals(b)
+                } else {
+                    empty_provider(a, l, r, b, c)
+                }
+            },
+            || false,
+        )?;
+        assert_eq!(calls.get(), 25);
+        assert!(e.model_attempted());
+        assert!(e.native_miss.is_some());
+        assert!(e.opposite_insufficient.is_some());
+        assert_eq!(e.supported(), if positive { Some(true) } else { None });
+        drop(e);
+        assert_eq!(b.used(), 0);
+    }
     Ok(())
 }
 #[test]
 fn native_family_first_all_stage_work_precedes_io_and_cancel_wins() {
-    let(p,banks,work,cap)=bank_recovery_setup(recovery_policy());let r=DecodeRequest::new("missing");let b=MemoryBudget::new(128*1024*1024);
-    for case in 0..3 {let mut p=p;let mut radii=&[2,6][..];let mut cap=cap;match case{0=>p.work.pixel_reads-=1,1=>radii=&[],_=>cap-=1};for stop in [false,true]{let e=search_native_bank_recovery_files_with(&r,&r,Path::new("missing"),p,banks,work,radii,cap,&factors(),&b,|_,_,_,_,_|panic!("no provider before admission"),||stop);assert!(e.is_err());assert!(!matches!(e,Err(SearchPortfolioError::Source(_))));if stop{assert!(matches!(e,Err(SearchPortfolioError::Cancelled)));}assert_eq!(b.used(),0);}}
-}
-#[test]
-fn native_family_first_publication_checks_weights_after_early_opposite_support()->TestResult {
-    let dir=tempfile::tempdir()?;let w=dir.path().join("weights");std::fs::write(&w,b"fixture")?;let r=DecodeRequest::new(Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/rotation/base.png"));let b=MemoryBudget::new(128*1024*1024);let mut p=recovery_policy();native_miss(&mut p.primary);p.primary.model.decode.max_pixels=200000;p.primary.model.input.max_source_pixels=200000;p.primary.model.input.max_pixel_reads=800000;let(p,banks,work,cap)=bank_recovery_setup(p);let count=Cell::new(0);drop(search_native_bank_recovery_files_with(&r,&r,&w,p,banks,work,&[2,6],cap,&factors(),&b,|_,_,_,_,_|panic!("no model"),||{count.set(count.get()+1);false})?);let last=count.get();count.set(0);let e=search_native_bank_recovery_files_with(&r,&r,&w,p,banks,work,&[2,6],cap,&factors(),&b,|_,_,_,_,_|panic!("no model"),||{count.set(count.get()+1);if count.get()==last{std::fs::write(&w,b"changed at final checkpoint").unwrap();}false});assert!(matches!(e,Err(SearchPortfolioError::Source(_))));assert_eq!(b.used(),0);Ok(())
-}
-
-use rrrah_dedup::search_portfolio::{NativeBankDirectionPolicy, required_native_bank_consensus_work, search_native_bank_consensus_files_with};
-#[test]
-fn consensus_admits_reverse_and_total_work_before_io() {
-    let (p,banks,model_work,cap)=bank_recovery_setup(recovery_policy());
-    let factors=factors();
-    let forward=NativeBankDirectionPolicy{search:p,banks,model_work,radii:&[2,6],maximum_projection_checks:cap,factors:&factors};
-    let total=required_native_bank_consensus_work(forward,forward).unwrap();
-    let r=DecodeRequest::new("missing");let b=MemoryBudget::new(128*1024*1024);
-    for case in 0..5 {
-        let mut reverse=forward;let mut work=total;let mut projections=2*cap;
-        match case {0=>reverse.radii=&[],1=>work.pixel_reads-=1,2=>projections-=1,3=>reverse.search.work.point_checks-=1,_=>reverse.maximum_projection_checks=u64::MAX}
-        for stop in [false,true] {
-            let e=search_native_bank_consensus_files_with(&r,&r,Path::new("missing"),forward,reverse,work,projections,&b,|_,_,_,_,_|panic!("preflight"),||stop);
-            assert!(e.is_err());assert!(!matches!(e,Err(SearchPortfolioError::Source(_))));
-            if stop {assert!(matches!(e,Err(SearchPortfolioError::Cancelled)));}
-            assert_eq!(b.used(),0);
+    let (p, banks, work, cap) = bank_recovery_setup(recovery_policy());
+    let r = DecodeRequest::new("missing");
+    let b = MemoryBudget::new(128 * 1024 * 1024);
+    for case in 0..3 {
+        let mut p = p;
+        let mut radii = &[2, 6][..];
+        let mut cap = cap;
+        match case {
+            0 => p.work.pixel_reads -= 1,
+            1 => radii = &[],
+            _ => cap -= 1,
+        };
+        for stop in [false, true] {
+            let e = search_native_bank_recovery_files_with(
+                &r,
+                &r,
+                Path::new("missing"),
+                p,
+                banks,
+                work,
+                radii,
+                cap,
+                &factors(),
+                &b,
+                |_, _, _, _, _| panic!("no provider before admission"),
+                || stop,
+            );
+            assert!(e.is_err());
+            assert!(!matches!(e, Err(SearchPortfolioError::Source(_))));
+            if stop {
+                assert!(matches!(e, Err(SearchPortfolioError::Cancelled)));
+            }
+            assert_eq!(b.used(), 0);
         }
     }
 }
 #[test]
-fn consensus_native_support_and_final_mutation_cancel_are_guarded()->TestResult {
-    let dir=tempfile::tempdir()?;let w=dir.path().join("weights");std::fs::write(&w,b"fixture")?;
-    let r=DecodeRequest::new(Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/rotation/base.png"));
-    let b=MemoryBudget::new(128*1024*1024);let mut p=recovery_policy();
-    p.primary.model.decode.max_pixels=200000;p.primary.model.input.max_source_pixels=200000;p.primary.model.input.max_pixel_reads=800000;
-    let(p,banks,model_work,cap)=bank_recovery_setup(p);let factors=factors();
-    let direction=NativeBankDirectionPolicy{search:p,banks,model_work,radii:&[2,6],maximum_projection_checks:cap,factors:&factors};
-    let work=required_native_bank_consensus_work(direction,direction)?;
-    let run=|cancel:&dyn Fn()->bool|search_native_bank_consensus_files_with(&r,&r,&w,direction,direction,work,2*cap,&b,|_,_,_,_,_|panic!("native supports"),cancel);
-    let count=Cell::new(0);let e=run(&||{count.set(count.get()+1);false})?;
-    assert_eq!(e.supported(),Some(true));assert!(!e.forward.model_attempted&&!e.reverse.model_attempted);assert_eq!(b.used(),0);
-    let last=count.get();count.set(0);
-    let e=run(&||{count.set(count.get()+1);if count.get()==last{std::fs::write(&w,b"changed").unwrap();}false});
-    assert!(matches!(e,Err(SearchPortfolioError::Source(_))));assert_eq!(b.used(),0);std::fs::write(&w,b"fixture")?;
-    count.set(0);let e=run(&||{count.set(count.get()+1);count.get()==last});assert!(matches!(e,Err(SearchPortfolioError::Cancelled)));assert_eq!(b.used(),0);
+fn native_family_first_publication_checks_weights_after_early_opposite_support() -> TestResult {
+    let dir = tempfile::tempdir()?;
+    let w = dir.path().join("weights");
+    std::fs::write(&w, b"fixture")?;
+    let r =
+        DecodeRequest::new(Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/rotation/base.png"));
+    let b = MemoryBudget::new(128 * 1024 * 1024);
+    let mut p = recovery_policy();
+    native_miss(&mut p.primary);
+    p.primary.model.decode.max_pixels = 200000;
+    p.primary.model.input.max_source_pixels = 200000;
+    p.primary.model.input.max_pixel_reads = 800000;
+    let (p, banks, work, cap) = bank_recovery_setup(p);
+    let count = Cell::new(0);
+    drop(search_native_bank_recovery_files_with(
+        &r,
+        &r,
+        &w,
+        p,
+        banks,
+        work,
+        &[2, 6],
+        cap,
+        &factors(),
+        &b,
+        |_, _, _, _, _| panic!("no model"),
+        || {
+            count.set(count.get() + 1);
+            false
+        },
+    )?);
+    let last = count.get();
+    count.set(0);
+    let e = search_native_bank_recovery_files_with(
+        &r,
+        &r,
+        &w,
+        p,
+        banks,
+        work,
+        &[2, 6],
+        cap,
+        &factors(),
+        &b,
+        |_, _, _, _, _| panic!("no model"),
+        || {
+            count.set(count.get() + 1);
+            if count.get() == last {
+                std::fs::write(&w, b"changed at final checkpoint").unwrap();
+            }
+            false
+        },
+    );
+    assert!(matches!(e, Err(SearchPortfolioError::Source(_))));
+    assert_eq!(b.used(), 0);
+    Ok(())
+}
+
+use rrrah_dedup::search_portfolio::{
+    NativeBankDirectionPolicy, required_native_bank_consensus_work, search_native_bank_consensus_files_with,
+};
+#[test]
+fn consensus_admits_reverse_and_total_work_before_io() {
+    let (p, banks, model_work, cap) = bank_recovery_setup(recovery_policy());
+    let factors = factors();
+    let forward = NativeBankDirectionPolicy {
+        search: p,
+        banks,
+        model_work,
+        radii: &[2, 6],
+        maximum_projection_checks: cap,
+        factors: &factors,
+    };
+    let total = required_native_bank_consensus_work(forward, forward).unwrap();
+    let r = DecodeRequest::new("missing");
+    let b = MemoryBudget::new(128 * 1024 * 1024);
+    for case in 0..5 {
+        let mut reverse = forward;
+        let mut work = total;
+        let mut projections = 2 * cap;
+        match case {
+            0 => reverse.radii = &[],
+            1 => work.pixel_reads -= 1,
+            2 => projections -= 1,
+            3 => reverse.search.work.point_checks -= 1,
+            _ => reverse.maximum_projection_checks = u64::MAX,
+        }
+        for stop in [false, true] {
+            let e = search_native_bank_consensus_files_with(
+                &r,
+                &r,
+                Path::new("missing"),
+                forward,
+                reverse,
+                work,
+                projections,
+                &b,
+                |_, _, _, _, _| panic!("preflight"),
+                || stop,
+            );
+            assert!(e.is_err());
+            assert!(!matches!(e, Err(SearchPortfolioError::Source(_))));
+            if stop {
+                assert!(matches!(e, Err(SearchPortfolioError::Cancelled)));
+            }
+            assert_eq!(b.used(), 0);
+        }
+    }
+}
+#[test]
+fn consensus_native_support_and_final_mutation_cancel_are_guarded() -> TestResult {
+    let dir = tempfile::tempdir()?;
+    let w = dir.path().join("weights");
+    std::fs::write(&w, b"fixture")?;
+    let r =
+        DecodeRequest::new(Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/rotation/base.png"));
+    let b = MemoryBudget::new(128 * 1024 * 1024);
+    let mut p = recovery_policy();
+    p.primary.model.decode.max_pixels = 200000;
+    p.primary.model.input.max_source_pixels = 200000;
+    p.primary.model.input.max_pixel_reads = 800000;
+    let (p, banks, model_work, cap) = bank_recovery_setup(p);
+    let factors = factors();
+    let direction = NativeBankDirectionPolicy {
+        search: p,
+        banks,
+        model_work,
+        radii: &[2, 6],
+        maximum_projection_checks: cap,
+        factors: &factors,
+    };
+    let work = required_native_bank_consensus_work(direction, direction)?;
+    let run = |cancel: &dyn Fn() -> bool| {
+        search_native_bank_consensus_files_with(
+            &r,
+            &r,
+            &w,
+            direction,
+            direction,
+            work,
+            2 * cap,
+            &b,
+            |_, _, _, _, _| panic!("native supports"),
+            cancel,
+        )
+    };
+    let count = Cell::new(0);
+    let e = run(&|| {
+        count.set(count.get() + 1);
+        false
+    })?;
+    assert_eq!(e.supported(), Some(true));
+    assert!(!e.forward.model_attempted && !e.reverse.model_attempted);
+    assert_eq!(b.used(), 0);
+    let last = count.get();
+    count.set(0);
+    let e = run(&|| {
+        count.set(count.get() + 1);
+        if count.get() == last {
+            std::fs::write(&w, b"changed").unwrap();
+        }
+        false
+    });
+    assert!(matches!(e, Err(SearchPortfolioError::Source(_))));
+    assert_eq!(b.used(), 0);
+    std::fs::write(&w, b"fixture")?;
+    count.set(0);
+    let e = run(&|| {
+        count.set(count.get() + 1);
+        count.get() == last
+    });
+    assert!(matches!(e, Err(SearchPortfolioError::Cancelled)));
+    assert_eq!(b.used(), 0);
     Ok(())
 }
 #[test]
-fn consensus_unknown_runs_reverse_and_provider_failure_stays_error()->TestResult {
-    let dir=tempfile::tempdir()?;let(r,w)=model_fixture::fixture(dir.path());let b=MemoryBudget::new(128*1024*1024);
-    let mut p=recovery_policy();native_miss(&mut p.primary);p.opposite.search=p.primary.native;
-    let(p,banks,model_work,cap)=bank_recovery_setup(p);let factors=factors();
-    let direction=NativeBankDirectionPolicy{search:p,banks,model_work,radii:&[2,6],maximum_projection_checks:cap,factors:&factors};
-    let work=required_native_bank_consensus_work(direction,direction)?;
-    let original_weights=std::fs::read(&w)?;
+fn consensus_unknown_runs_reverse_and_provider_failure_stays_error() -> TestResult {
+    let dir = tempfile::tempdir()?;
+    let (r, w) = model_fixture::fixture(dir.path());
+    let b = MemoryBudget::new(128 * 1024 * 1024);
+    let mut p = recovery_policy();
+    native_miss(&mut p.primary);
+    p.opposite.search = p.primary.native;
+    let (p, banks, model_work, cap) = bank_recovery_setup(p);
+    let factors = factors();
+    let direction = NativeBankDirectionPolicy {
+        search: p,
+        banks,
+        model_work,
+        radii: &[2, 6],
+        maximum_projection_checks: cap,
+        factors: &factors,
+    };
+    let work = required_native_bank_consensus_work(direction, direction)?;
+    let original_weights = std::fs::read(&w)?;
     for mode in 0..5 {
-        let calls=Cell::new(0);let stop=Cell::new(false);
-        let result=search_native_bank_consensus_files_with(&r[0],&r[1],&w,direction,direction,work,2*cap,&b,|a,l,r,b,c|{
-            calls.set(calls.get()+1);
-            if calls.get()==26 {
-                if mode==1{return Err(std::io::Error::other("reverse provider failed").into());}
-                if mode==3{std::fs::write(&w,b"changed during reverse").unwrap();}
-                if mode==4{stop.set(true);}
-            }
-            if mode>=2&&calls.get()<=25{model_fixture::proposals(b)}else{empty_provider(a,l,r,b,c)}
-        },||stop.get());
+        let calls = Cell::new(0);
+        let stop = Cell::new(false);
+        let result = search_native_bank_consensus_files_with(
+            &r[0],
+            &r[1],
+            &w,
+            direction,
+            direction,
+            work,
+            2 * cap,
+            &b,
+            |a, l, r, b, c| {
+                calls.set(calls.get() + 1);
+                if calls.get() == 26 {
+                    if mode == 1 {
+                        return Err(std::io::Error::other("reverse provider failed").into());
+                    }
+                    if mode == 3 {
+                        std::fs::write(&w, b"changed during reverse").unwrap();
+                    }
+                    if mode == 4 {
+                        stop.set(true);
+                    }
+                }
+                if mode >= 2 && calls.get() <= 25 {
+                    model_fixture::proposals(b)
+                } else {
+                    empty_provider(a, l, r, b, c)
+                }
+            },
+            || stop.get(),
+        );
         match mode {
-            1=>{assert!(result.is_err());assert_eq!(calls.get(),26);}
-            3=>{assert!(matches!(result,Err(SearchPortfolioError::ModelTiles(rrrah_dedup::model_tiles::ModelTileError::Comparison(rrrah_dedup::model_compare::ModelComparisonError::ModelSource(_))))),"{result:?}");std::fs::write(&w,&original_weights)?;}
-            4=>assert!(matches!(result,Err(SearchPortfolioError::Cancelled))),
-            _=>{let e=result?;assert_eq!(e.supported(),None);assert_eq!(e.forward.support,if mode==2{Some(true)}else{None});assert_eq!(e.reverse.support,None);assert_eq!(calls.get(),50);}
+            1 => {
+                assert!(result.is_err());
+                assert_eq!(calls.get(), 26);
+            }
+            3 => {
+                assert!(
+                    matches!(
+                        result,
+                        Err(SearchPortfolioError::ModelTiles(
+                            rrrah_dedup::model_tiles::ModelTileError::Comparison(
+                                rrrah_dedup::model_compare::ModelComparisonError::ModelSource(_)
+                            )
+                        ))
+                    ),
+                    "{result:?}"
+                );
+                std::fs::write(&w, &original_weights)?;
+            }
+            4 => assert!(matches!(result, Err(SearchPortfolioError::Cancelled))),
+            _ => {
+                let e = result?;
+                assert_eq!(e.supported(), None);
+                assert_eq!(e.forward.support, if mode == 2 { Some(true) } else { None });
+                assert_eq!(e.reverse.support, None);
+                assert_eq!(calls.get(), 50);
+            }
         }
-        assert_eq!(b.used(),0);
+        assert_eq!(b.used(), 0);
     }
     Ok(())
 }

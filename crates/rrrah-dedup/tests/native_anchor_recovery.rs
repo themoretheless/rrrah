@@ -159,8 +159,8 @@ fn portfolio() -> rrrah_dedup::anchor_rank_file::AnchorReflectionFallbackPolicy 
 }
 fn independently_confirmed_later_recipe_recovers(six: bool) {
     use rrrah_dedup::anchor_rank_file::{
-        search_anchor_rank_geometry_fallback_files, search_anchor_rank_geometry_files_with_smoothing,
-        search_anchor_rank_reflection_fallback_files, AnchorRankFileError,
+        AnchorRankFileError, search_anchor_rank_geometry_fallback_files,
+        search_anchor_rank_geometry_files_with_smoothing, search_anchor_rank_reflection_fallback_files,
     };
     use rrrah_dedup::local_rank::LocalRankError;
     let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/rotation");

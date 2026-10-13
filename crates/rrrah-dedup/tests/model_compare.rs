@@ -685,12 +685,29 @@ fn joint_model_projection_admission_precedes_io_and_cancellation_has_priority() 
     for max_points in [16, usize::MAX] {
         p.geometry.max_points = max_points;
         for cancelled in [false, true] {
-            let result = compare_model_joint_files_with(&request, &request, Path::new("missing-model"),
-                JointModelComparisonPolicy { comparison:p, maximum_projection_checks:0 }, &budget,
-                |_,_,_,_,_| panic!("provider must not run"), || cancelled);
-            if cancelled { assert!(matches!(result,Err(ModelComparisonError::Cancelled))); }
-            else { assert!(matches!(result,Err(ModelComparisonError::Geometry(rrrah_dedup::geometry::GeometryError::Budget)))); }
-            assert_eq!(budget.used(),0);
+            let result = compare_model_joint_files_with(
+                &request,
+                &request,
+                Path::new("missing-model"),
+                JointModelComparisonPolicy {
+                    comparison: p,
+                    maximum_projection_checks: 0,
+                },
+                &budget,
+                |_, _, _, _, _| panic!("provider must not run"),
+                || cancelled,
+            );
+            if cancelled {
+                assert!(matches!(result, Err(ModelComparisonError::Cancelled)));
+            } else {
+                assert!(matches!(
+                    result,
+                    Err(ModelComparisonError::Geometry(
+                        rrrah_dedup::geometry::GeometryError::Budget
+                    ))
+                ));
+            }
+            assert_eq!(budget.used(), 0);
         }
     }
 }
@@ -698,16 +715,36 @@ fn joint_model_projection_admission_precedes_io_and_cancellation_has_priority() 
 #[test]
 fn joint_model_keeps_original_pixel_confirmation_and_releases_on_cancelled_retry() {
     use rrrah_dedup::model_compare::{JointModelComparisonPolicy, compare_model_joint_files_with};
-    let dir = tempfile::tempdir().unwrap(); let (r,w)=fixture(dir.path());
-    let budget=MemoryBudget::new(8*1024*1024);
-    let p=JointModelComparisonPolicy {comparison:policy(),maximum_projection_checks:2*16*65};
-    for cancel_provider in [false,true,false] {
-        let cancelled=Cell::new(false);
-        let result=compare_model_joint_files_with(&r[0],&r[1],&w,p,&budget,
-            |_,_,_,b,_| {let points=proposals(b)?;cancelled.set(cancel_provider);Ok(points)},||cancelled.get());
-        if cancel_provider {assert!(matches!(result,Err(ModelComparisonError::Cancelled)));}
-        else {let evidence=result.unwrap();assert!(evidence.supported());assert_eq!(evidence.geometry_inliers,10);}
-        assert_eq!(budget.used(),0);
+    let dir = tempfile::tempdir().unwrap();
+    let (r, w) = fixture(dir.path());
+    let budget = MemoryBudget::new(8 * 1024 * 1024);
+    let p = JointModelComparisonPolicy {
+        comparison: policy(),
+        maximum_projection_checks: 2 * 16 * 65,
+    };
+    for cancel_provider in [false, true, false] {
+        let cancelled = Cell::new(false);
+        let result = compare_model_joint_files_with(
+            &r[0],
+            &r[1],
+            &w,
+            p,
+            &budget,
+            |_, _, _, b, _| {
+                let points = proposals(b)?;
+                cancelled.set(cancel_provider);
+                Ok(points)
+            },
+            || cancelled.get(),
+        );
+        if cancel_provider {
+            assert!(matches!(result, Err(ModelComparisonError::Cancelled)));
+        } else {
+            let evidence = result.unwrap();
+            assert!(evidence.supported());
+            assert_eq!(evidence.geometry_inliers, 10);
+        }
+        assert_eq!(budget.used(), 0);
     }
 }
 
@@ -723,7 +760,10 @@ fn joint_shifted_crop_domains_confirm_the_same_original_pixels_without_a_transla
         &w,
         [16, 8, 32, 32],
         [8, 16, 32, 32],
-        rrrah_dedup::model_compare::JointModelComparisonPolicy { comparison: policy(), maximum_projection_checks: 2*16*65 },
+        rrrah_dedup::model_compare::JointModelComparisonPolicy {
+            comparison: policy(),
+            maximum_projection_checks: 2 * 16 * 65,
+        },
         &budget,
         |_, a, b, budget, _| {
             assert_eq!(a.dimensions, [32, 32]);
@@ -759,7 +799,10 @@ fn joint_region_lifecycle_refuses_whole_source_mutation_and_both_request_cancell
             &w,
             [16, 8, 32, 32],
             [8, 16, 32, 32],
-            rrrah_dedup::model_compare::JointModelComparisonPolicy { comparison: policy(), maximum_projection_checks: 2*16*65 },
+            rrrah_dedup::model_compare::JointModelComparisonPolicy {
+                comparison: policy(),
+                maximum_projection_checks: 2 * 16 * 65,
+            },
             &budget,
             |_, _, _, b, _| {
                 let mut changed = original.clone();
@@ -791,7 +834,10 @@ fn joint_region_lifecycle_refuses_whole_source_mutation_and_both_request_cancell
             &w,
             [16, 8, 32, 32],
             [8, 16, 32, 32],
-            rrrah_dedup::model_compare::JointModelComparisonPolicy { comparison: policy(), maximum_projection_checks: 2*16*65 },
+            rrrah_dedup::model_compare::JointModelComparisonPolicy {
+                comparison: policy(),
+                maximum_projection_checks: 2 * 16 * 65,
+            },
             &budget,
             |_, _, _, b, cancel| {
                 generation.store(2, Ordering::Release);
@@ -818,7 +864,10 @@ fn joint_final_caller_checkpoint_cannot_publish_a_model_result_after_source_or_w
             &r[0],
             &r[1],
             &w,
-            rrrah_dedup::model_compare::JointModelComparisonPolicy { comparison: policy(), maximum_projection_checks: 2*16*65 },
+            rrrah_dedup::model_compare::JointModelComparisonPolicy {
+                comparison: policy(),
+                maximum_projection_checks: 2 * 16 * 65,
+            },
             &budget,
             |_, _, _, b, _| proposals(b),
             || {
@@ -836,7 +885,10 @@ fn joint_final_caller_checkpoint_cannot_publish_a_model_result_after_source_or_w
             &r[0],
             &r[1],
             &w,
-            rrrah_dedup::model_compare::JointModelComparisonPolicy { comparison: policy(), maximum_projection_checks: 2*16*65 },
+            rrrah_dedup::model_compare::JointModelComparisonPolicy {
+                comparison: policy(),
+                maximum_projection_checks: 2 * 16 * 65,
+            },
             &budget,
             |_, _, _, b, _| proposals(b),
             || {
@@ -865,283 +917,1774 @@ fn joint_final_caller_checkpoint_cannot_publish_a_model_result_after_source_or_w
 
 #[test]
 fn extracted_crop_bank_retains_mapped_points_and_last_clone_credit_without_geometry() {
- use rrrah_dedup::model_compare::extract_model_region_points_files_with as extract;
- let dir=tempfile::tempdir().unwrap();let (r,w)=fixture(dir.path());let b=MemoryBudget::new(1_000_000);
- let bank=extract(&r[0],&r[1],&w,[0,0,32,32],[16,8,32,32],policy(),&b,|_,_,_,b,_|proposals(b),||false).unwrap();
- assert_eq!(bank.original_dimensions,[[64,64],[64,64]]);assert_eq!(bank.raw_proposals,10);assert_eq!(bank.points.len(),6);
- for p in bank.points.iter(){assert_eq!(p.target[0]-p.source[0],16.);assert_eq!(p.target[1]-p.source[1],8.);}
- let held=bank.clone();drop(bank);assert!(b.used()>0);drop(held);assert_eq!(b.used(),0);
+    use rrrah_dedup::model_compare::extract_model_region_points_files_with as extract;
+    let dir = tempfile::tempdir().unwrap();
+    let (r, w) = fixture(dir.path());
+    let b = MemoryBudget::new(1_000_000);
+    let bank = extract(
+        &r[0],
+        &r[1],
+        &w,
+        [0, 0, 32, 32],
+        [16, 8, 32, 32],
+        policy(),
+        &b,
+        |_, _, _, b, _| proposals(b),
+        || false,
+    )
+    .unwrap();
+    assert_eq!(bank.original_dimensions, [[64, 64], [64, 64]]);
+    assert_eq!(bank.raw_proposals, 10);
+    assert_eq!(bank.points.len(), 6);
+    for p in bank.points.iter() {
+        assert_eq!(p.target[0] - p.source[0], 16.);
+        assert_eq!(p.target[1] - p.source[1], 8.);
+    }
+    let held = bank.clone();
+    drop(bank);
+    assert!(b.used() > 0);
+    drop(held);
+    assert_eq!(b.used(), 0);
 }
 #[test]
 fn extracted_bank_refuses_changed_source_or_weights_after_provider() {
- use rrrah_dedup::model_compare::extract_model_region_points_files_with as extract;
- for which in 0..3 {let dir=tempfile::tempdir().unwrap();let (r,w)=fixture(dir.path());let b=MemoryBudget::new(1_000_000);let changed=if which==2 {w.clone()} else {r[which].path.clone()};
- let result=extract(&r[0],&r[1],&w,[0,0,64,64],[0,0,64,64],policy(),&b,|_,_,_,b,_|{let p=proposals(b)?;std::fs::write(&changed,b"changed")?;Ok(p)},||false);assert!(result.is_err());assert_eq!(b.used(),0);}
+    use rrrah_dedup::model_compare::extract_model_region_points_files_with as extract;
+    for which in 0..3 {
+        let dir = tempfile::tempdir().unwrap();
+        let (r, w) = fixture(dir.path());
+        let b = MemoryBudget::new(1_000_000);
+        let changed = if which == 2 {
+            w.clone()
+        } else {
+            r[which].path.clone()
+        };
+        let result = extract(
+            &r[0],
+            &r[1],
+            &w,
+            [0, 0, 64, 64],
+            [0, 0, 64, 64],
+            policy(),
+            &b,
+            |_, _, _, b, _| {
+                let p = proposals(b)?;
+                std::fs::write(&changed, b"changed")?;
+                Ok(p)
+            },
+            || false,
+        );
+        assert!(result.is_err());
+        assert_eq!(b.used(), 0);
+    }
 }
 #[test]
 fn extracted_bank_empty_is_explicit_and_every_cancel_checkpoint_releases_credit() {
- use rrrah_dedup::model_compare::extract_model_region_points_files_with as extract;
- let dir=tempfile::tempdir().unwrap();let (r,w)=fixture(dir.path());let b=MemoryBudget::new(1_000_000);
- let empty=extract(&r[0],&r[1],&w,[0,0,64,64],[0,0,64,64],policy(),&b,|_,_,_,b,_|Ok(b.try_buffer(0,ScoredProposal{source:[0.;2],target:[0.;2],confidence:1.})?.freeze()),||false).unwrap();assert!(empty.points.is_empty());drop(empty);assert_eq!(b.used(),0);
- let calls=Cell::new(0);let bank=extract(&r[0],&r[1],&w,[0,0,64,64],[0,0,64,64],policy(),&b,|_,_,_,b,_|proposals(b),||{calls.set(calls.get()+1);false}).unwrap();drop(bank);
- for at in 1..=calls.get(){let n=Cell::new(0);let result=extract(&r[0],&r[1],&w,[0,0,64,64],[0,0,64,64],policy(),&b,|_,_,_,b,_|proposals(b),||{n.set(n.get()+1);n.get()>=at});assert!(matches!(result,Err(ModelComparisonError::Cancelled)));assert_eq!(b.used(),0);}
+    use rrrah_dedup::model_compare::extract_model_region_points_files_with as extract;
+    let dir = tempfile::tempdir().unwrap();
+    let (r, w) = fixture(dir.path());
+    let b = MemoryBudget::new(1_000_000);
+    let empty = extract(
+        &r[0],
+        &r[1],
+        &w,
+        [0, 0, 64, 64],
+        [0, 0, 64, 64],
+        policy(),
+        &b,
+        |_, _, _, b, _| {
+            Ok(b.try_buffer(
+                0,
+                ScoredProposal {
+                    source: [0.; 2],
+                    target: [0.; 2],
+                    confidence: 1.,
+                },
+            )?
+            .freeze())
+        },
+        || false,
+    )
+    .unwrap();
+    assert!(empty.points.is_empty());
+    drop(empty);
+    assert_eq!(b.used(), 0);
+    let calls = Cell::new(0);
+    let bank = extract(
+        &r[0],
+        &r[1],
+        &w,
+        [0, 0, 64, 64],
+        [0, 0, 64, 64],
+        policy(),
+        &b,
+        |_, _, _, b, _| proposals(b),
+        || {
+            calls.set(calls.get() + 1);
+            false
+        },
+    )
+    .unwrap();
+    drop(bank);
+    for at in 1..=calls.get() {
+        let n = Cell::new(0);
+        let result = extract(
+            &r[0],
+            &r[1],
+            &w,
+            [0, 0, 64, 64],
+            [0, 0, 64, 64],
+            policy(),
+            &b,
+            |_, _, _, b, _| proposals(b),
+            || {
+                n.set(n.get() + 1);
+                n.get() >= at
+            },
+        );
+        assert!(matches!(result, Err(ModelComparisonError::Cancelled)));
+        assert_eq!(b.used(), 0);
+    }
 }
 
-fn file_bank_policy()->rrrah_dedup::model_banks::ModelBankSearchPolicy {
- use rrrah_dedup::{geometry::JointProjectivePolicy,joint_witnesses::{JointBankPolicy,JointWitnessPolicy},model_tiles::ModelTileWorkLimits};
- let mut p=policy();p.anchors.local.maximum_points=400;p.anchors.local.maximum_point_checks=100000;p.anchors.maximum_selection_checks=250000;let n=25*p.proposals.max_proposals as u64;let fit=2*p.geometry.max_points as u64*(p.sampling.trials+1);let sep=n*(n-1)/2;let mut hypothesis=p.geometry;hypothesis.min_inliers=4;
- let b=JointBankPolicy{hypothesis:JointProjectivePolicy{target:hypothesis,source_tolerance:p.anchors.local.source_tolerance,maximum_projection_checks:fit},sampling:p.sampling,witnesses:JointWitnessPolicy{source_tolerance:p.anchors.local.source_tolerance,target_tolerance:p.geometry.tolerance,minimum_separation:2.,maximum_points:n as usize,maximum_projection_checks:2*n,maximum_separation_checks:sep},minimum_witnesses:10,maximum_banks:25,maximum_total_projection_checks:25*(fit+2*n),maximum_total_separation_checks:25*sep};let mut work=ModelTileWorkLimits::for_model(p).unwrap();work.model_input_reads=p.input.max_pixel_reads*52;
- rrrah_dedup::model_banks::ModelBankSearchPolicy{comparison:p,banks:b,work}
+fn file_bank_policy() -> rrrah_dedup::model_banks::ModelBankSearchPolicy {
+    use rrrah_dedup::{
+        geometry::JointProjectivePolicy,
+        joint_witnesses::{JointBankPolicy, JointWitnessPolicy},
+        model_tiles::ModelTileWorkLimits,
+    };
+    let mut p = policy();
+    p.anchors.local.maximum_points = 400;
+    p.anchors.local.maximum_point_checks = 100000;
+    p.anchors.maximum_selection_checks = 250000;
+    let n = 25 * p.proposals.max_proposals as u64;
+    let fit = 2 * p.geometry.max_points as u64 * (p.sampling.trials + 1);
+    let sep = n * (n - 1) / 2;
+    let mut hypothesis = p.geometry;
+    hypothesis.min_inliers = 4;
+    let b = JointBankPolicy {
+        hypothesis: JointProjectivePolicy {
+            target: hypothesis,
+            source_tolerance: p.anchors.local.source_tolerance,
+            maximum_projection_checks: fit,
+        },
+        sampling: p.sampling,
+        witnesses: JointWitnessPolicy {
+            source_tolerance: p.anchors.local.source_tolerance,
+            target_tolerance: p.geometry.tolerance,
+            minimum_separation: 2.,
+            maximum_points: n as usize,
+            maximum_projection_checks: 2 * n,
+            maximum_separation_checks: sep,
+        },
+        minimum_witnesses: 10,
+        maximum_banks: 25,
+        maximum_total_projection_checks: 25 * (fit + 2 * n),
+        maximum_total_separation_checks: 25 * sep,
+    };
+    let mut work = ModelTileWorkLimits::for_model(p).unwrap();
+    work.model_input_reads = p.input.max_pixel_reads * 52;
+    rrrah_dedup::model_banks::ModelBankSearchPolicy {
+        comparison: p,
+        banks: b,
+        work,
+    }
 }
 #[test]
 fn file_bank_search_extracts_all_windows_and_confirms_original_pixels() {
- use rrrah_dedup::model_banks::search_model_banks_files_with as search;
- let dir=tempfile::tempdir().unwrap();let (r,w)=fixture(dir.path());let b=MemoryBudget::new(1_000_000);let calls=Cell::new(0);
- let result=search(&r[0],&r[1],&w,file_bank_policy(),&b,&mut |_,_,_,b,_|{calls.set(calls.get()+1);proposals(b)},||false).unwrap();assert_eq!(calls.get(),25);assert_eq!(result.attempts,25);assert!(result.supported());assert!(result.comparison.geometry_inliers>=10);assert_eq!(b.used(),0);
+    use rrrah_dedup::model_banks::search_model_banks_files_with as search;
+    let dir = tempfile::tempdir().unwrap();
+    let (r, w) = fixture(dir.path());
+    let b = MemoryBudget::new(1_000_000);
+    let calls = Cell::new(0);
+    let result = search(
+        &r[0],
+        &r[1],
+        &w,
+        file_bank_policy(),
+        &b,
+        &mut |_, _, _, b, _| {
+            calls.set(calls.get() + 1);
+            proposals(b)
+        },
+        || false,
+    )
+    .unwrap();
+    assert_eq!(calls.get(), 25);
+    assert_eq!(result.attempts, 25);
+    assert!(result.supported());
+    assert!(result.comparison.geometry_inliers >= 10);
+    assert_eq!(b.used(), 0);
 }
 #[test]
 fn file_bank_work_refuses_before_io_and_late_source_change_discards_banks() {
- use rrrah_dedup::{model_banks::search_model_banks_files_with as search,model_tiles::ModelTileError};
- let r=DecodeRequest::new("missing");let b=MemoryBudget::new(1_000_000);let mut p=file_bank_policy();p.banks.maximum_total_projection_checks-=1;let result=search(&r,&r,Path::new("missing"),p,&b,&mut |_,_,_,_,_|panic!("preflight"),||false);assert!(matches!(result,Err(ModelTileError::Work)));assert_eq!(b.used(),0);
- let dir=tempfile::tempdir().unwrap();let (r,w)=fixture(dir.path());let calls=Cell::new(0);let result=search(&r[0],&r[1],&w,file_bank_policy(),&b,&mut |_,_,_,b,_|{calls.set(calls.get()+1);let v=proposals(b)?;if calls.get()==25{std::fs::write(&w,b"mutated weights")?;}Ok(v)},||false);assert!(result.is_err());assert_eq!(calls.get(),25);assert_eq!(b.used(),0);
+    use rrrah_dedup::{model_banks::search_model_banks_files_with as search, model_tiles::ModelTileError};
+    let r = DecodeRequest::new("missing");
+    let b = MemoryBudget::new(1_000_000);
+    let mut p = file_bank_policy();
+    p.banks.maximum_total_projection_checks -= 1;
+    let result = search(
+        &r,
+        &r,
+        Path::new("missing"),
+        p,
+        &b,
+        &mut |_, _, _, _, _| panic!("preflight"),
+        || false,
+    );
+    assert!(matches!(result, Err(ModelTileError::Work)));
+    assert_eq!(b.used(), 0);
+    let dir = tempfile::tempdir().unwrap();
+    let (r, w) = fixture(dir.path());
+    let calls = Cell::new(0);
+    let result = search(
+        &r[0],
+        &r[1],
+        &w,
+        file_bank_policy(),
+        &b,
+        &mut |_, _, _, b, _| {
+            calls.set(calls.get() + 1);
+            let v = proposals(b)?;
+            if calls.get() == 25 {
+                std::fs::write(&w, b"mutated weights")?;
+            }
+            Ok(v)
+        },
+        || false,
+    );
+    assert!(result.is_err());
+    assert_eq!(calls.get(), 25);
+    assert_eq!(b.used(), 0);
 }
 #[test]
 fn file_bank_empty_is_inconclusive_and_cancelled_provider_discards_retained_prefix() {
- use rrrah_dedup::{model_banks::search_model_banks_files_with as search,model_tiles::ModelTileError};
- let dir=tempfile::tempdir().unwrap();let (r,w)=fixture(dir.path());let b=MemoryBudget::new(1_000_000);
- let empty=search(&r[0],&r[1],&w,file_bank_policy(),&b,&mut |_,_,_,b,_|Ok(b.try_buffer(0,ScoredProposal{source:[0.;2],target:[0.;2],confidence:1.})?.freeze()),||false).unwrap();assert_eq!(empty.diagnostics,Default::default());assert_eq!(empty.pixel_attempts,0);assert_eq!(empty.attempts,25);assert!(!empty.supported());assert!(empty.comparison.transform.is_none());assert_eq!(b.used(),0);
- let calls=Cell::new(0);let stop=Cell::new(false);let result=search(&r[0],&r[1],&w,file_bank_policy(),&b,&mut |_,_,_,b,_|{calls.set(calls.get()+1);let p=proposals(b)?;if calls.get()==5 {stop.set(true);}Ok(p)},||stop.get());assert!(matches!(result,Err(ModelTileError::Cancelled)));assert_eq!(b.used(),0);
+    use rrrah_dedup::{model_banks::search_model_banks_files_with as search, model_tiles::ModelTileError};
+    let dir = tempfile::tempdir().unwrap();
+    let (r, w) = fixture(dir.path());
+    let b = MemoryBudget::new(1_000_000);
+    let empty = search(
+        &r[0],
+        &r[1],
+        &w,
+        file_bank_policy(),
+        &b,
+        &mut |_, _, _, b, _| {
+            Ok(b.try_buffer(
+                0,
+                ScoredProposal {
+                    source: [0.; 2],
+                    target: [0.; 2],
+                    confidence: 1.,
+                },
+            )?
+            .freeze())
+        },
+        || false,
+    )
+    .unwrap();
+    assert_eq!(empty.diagnostics, Default::default());
+    assert_eq!(empty.pixel_attempts, 0);
+    assert_eq!(empty.attempts, 25);
+    assert!(!empty.supported());
+    assert!(empty.comparison.transform.is_none());
+    assert_eq!(b.used(), 0);
+    let calls = Cell::new(0);
+    let stop = Cell::new(false);
+    let result = search(
+        &r[0],
+        &r[1],
+        &w,
+        file_bank_policy(),
+        &b,
+        &mut |_, _, _, b, _| {
+            calls.set(calls.get() + 1);
+            let p = proposals(b)?;
+            if calls.get() == 5 {
+                stop.set(true);
+            }
+            Ok(p)
+        },
+        || stop.get(),
+    );
+    assert!(matches!(result, Err(ModelTileError::Cancelled)));
+    assert_eq!(b.used(), 0);
 }
 
 #[test]
 fn file_bank_pixels_refuse_flat_or_inverted_even_with_consistent_provider_geometry() {
- use rrrah_dedup::model_banks::search_model_banks_files_with as search;
- for invert in [false,true] {
-  let dir=tempfile::tempdir().unwrap();let (r,w)=fixture(dir.path());
-  for (side,request) in r.iter().enumerate() {
-   let mut bytes=std::fs::read(&request.path).unwrap();
-   for y in 0..64 {for x in 0..64 {let value=if invert {40+((x*13+y*7)%160) as u8}else{100};let value=if invert && side==1 {255-value}else{value};let at=54+(y*64+x)*3;bytes[at..at+3].fill(value);}}
-   std::fs::write(&request.path,bytes).unwrap();
-  }
-  let b=MemoryBudget::new(1_000_000);let calls=Cell::new(0);
-  let result=search(&r[0],&r[1],&w,file_bank_policy(),&b,&mut |_,_,_,b,_|{calls.set(calls.get()+1);proposals(b)},||false).unwrap();
-  assert_eq!(calls.get(),25);assert!(!result.supported(),"invert={invert}: {result:?}");assert!(result.comparison.transform.is_none());assert_eq!(b.used(),0);
- }
+    use rrrah_dedup::model_banks::search_model_banks_files_with as search;
+    for invert in [false, true] {
+        let dir = tempfile::tempdir().unwrap();
+        let (r, w) = fixture(dir.path());
+        for (side, request) in r.iter().enumerate() {
+            let mut bytes = std::fs::read(&request.path).unwrap();
+            for y in 0..64 {
+                for x in 0..64 {
+                    let value = if invert {
+                        40 + ((x * 13 + y * 7) % 160) as u8
+                    } else {
+                        100
+                    };
+                    let value = if invert && side == 1 { 255 - value } else { value };
+                    let at = 54 + (y * 64 + x) * 3;
+                    bytes[at..at + 3].fill(value);
+                }
+            }
+            std::fs::write(&request.path, bytes).unwrap();
+        }
+        let b = MemoryBudget::new(1_000_000);
+        let calls = Cell::new(0);
+        let result = search(
+            &r[0],
+            &r[1],
+            &w,
+            file_bank_policy(),
+            &b,
+            &mut |_, _, _, b, _| {
+                calls.set(calls.get() + 1);
+                proposals(b)
+            },
+            || false,
+        )
+        .unwrap();
+        assert_eq!(calls.get(), 25);
+        assert!(!result.supported(), "invert={invert}: {result:?}");
+        assert!(result.comparison.transform.is_none());
+        assert_eq!(b.used(), 0);
+    }
 }
 
 #[test]
 fn file_bank_coverage_recovers_after_insufficient_windows_without_repeating_inference() {
- use rrrah_dedup::model_banks::{search_model_banks_files_with as single,search_model_banks_coverage_files_with as search};
- let dir=tempfile::tempdir().unwrap();let (r,w)=fixture(dir.path());let b=MemoryBudget::new(1_000_000);let p=file_bank_policy();
- let old=single(&r[0],&r[1],&w,p,&b,&mut |_,_,_,b,_|proposals(b),||false).unwrap();let same=search(&r[0],&r[1],&w,p,&[1],&b,&mut |_,_,_,b,_|proposals(b),||false).unwrap();assert_eq!(format!("{old:?}"),format!("{same:?}"));
- let mut p=p;p.work.point_checks*=2;p.work.selection_checks*=2;p.work.rank_sites*=2;p.work.pixel_reads*=2;let calls=Cell::new(0);
- let result=search(&r[0],&r[1],&w,p,&[12,1],&b,&mut |_,_,_,b,_|{calls.set(calls.get()+1);proposals(b)},||false).unwrap();
- assert!(result.supported());assert_eq!(result.pixel_window_radius,Some(1));assert!(result.pixel_attempts>=2 && result.pixel_attempts<=50);assert_eq!(calls.get(),25);assert_eq!(b.used(),0);
+    use rrrah_dedup::model_banks::{
+        search_model_banks_coverage_files_with as search, search_model_banks_files_with as single,
+    };
+    let dir = tempfile::tempdir().unwrap();
+    let (r, w) = fixture(dir.path());
+    let b = MemoryBudget::new(1_000_000);
+    let p = file_bank_policy();
+    let old = single(&r[0], &r[1], &w, p, &b, &mut |_, _, _, b, _| proposals(b), || {
+        false
+    })
+    .unwrap();
+    let same = search(
+        &r[0],
+        &r[1],
+        &w,
+        p,
+        &[1],
+        &b,
+        &mut |_, _, _, b, _| proposals(b),
+        || false,
+    )
+    .unwrap();
+    assert_eq!(format!("{old:?}"), format!("{same:?}"));
+    let mut p = p;
+    p.work.point_checks *= 2;
+    p.work.selection_checks *= 2;
+    p.work.rank_sites *= 2;
+    p.work.pixel_reads *= 2;
+    let calls = Cell::new(0);
+    let result = search(
+        &r[0],
+        &r[1],
+        &w,
+        p,
+        &[12, 1],
+        &b,
+        &mut |_, _, _, b, _| {
+            calls.set(calls.get() + 1);
+            proposals(b)
+        },
+        || false,
+    )
+    .unwrap();
+    assert!(result.supported());
+    assert_eq!(result.pixel_window_radius, Some(1));
+    assert!(result.pixel_attempts >= 2 && result.pixel_attempts <= 50);
+    assert_eq!(calls.get(), 25);
+    assert_eq!(b.used(), 0);
 }
 #[test]
 fn file_bank_coverage_admits_all_radii_before_io_and_cancel_has_priority() {
- use rrrah_dedup::{model_banks::search_model_banks_coverage_files_with as search,model_tiles::ModelTileError};
- let r=DecodeRequest::new("missing");let b=MemoryBudget::new(1_000_000);let p=file_bank_policy();
- for radii in [vec![],vec![1;9],vec![u32::MAX],vec![1,2]] {
-  let result=search(&r,&r,Path::new("missing"),p,&radii,&b,&mut |_,_,_,_,_|panic!("preflight"),||false);assert!(matches!(result,Err(ModelTileError::Work)|Err(ModelTileError::Comparison(ModelComparisonError::Policy))));assert_eq!(b.used(),0);
- }
- let result=search(&r,&r,Path::new("missing"),p,&[],&b,&mut |_,_,_,_,_|panic!("cancel"),||true);assert!(matches!(result,Err(ModelTileError::Cancelled)));assert_eq!(b.used(),0);
+    use rrrah_dedup::{
+        model_banks::search_model_banks_coverage_files_with as search, model_tiles::ModelTileError,
+    };
+    let r = DecodeRequest::new("missing");
+    let b = MemoryBudget::new(1_000_000);
+    let p = file_bank_policy();
+    for radii in [vec![], vec![1; 9], vec![u32::MAX], vec![1, 2]] {
+        let result = search(
+            &r,
+            &r,
+            Path::new("missing"),
+            p,
+            &radii,
+            &b,
+            &mut |_, _, _, _, _| panic!("preflight"),
+            || false,
+        );
+        assert!(matches!(
+            result,
+            Err(ModelTileError::Work) | Err(ModelTileError::Comparison(ModelComparisonError::Policy))
+        ));
+        assert_eq!(b.used(), 0);
+    }
+    let result = search(
+        &r,
+        &r,
+        Path::new("missing"),
+        p,
+        &[],
+        &b,
+        &mut |_, _, _, _, _| panic!("cancel"),
+        || true,
+    );
+    assert!(matches!(result, Err(ModelTileError::Cancelled)));
+    assert_eq!(b.used(), 0);
 }
 
 #[test]
 fn file_bank_coverage_keeps_flat_and_inverted_pixels_inconclusive() {
- use rrrah_dedup::model_banks::search_model_banks_coverage_files_with as search;
- for invert in [false,true] {
-  let dir=tempfile::tempdir().unwrap();let (r,w)=fixture(dir.path());
-  for (side,request) in r.iter().enumerate() {
-   let mut bytes=std::fs::read(&request.path).unwrap();
-   for y in 0..64 {for x in 0..64 {let value=if invert {40+((x*13+y*7)%160) as u8}else{100};let value=if invert && side==1 {255-value}else{value};let at=54+(y*64+x)*3;bytes[at..at+3].fill(value);}}
-   std::fs::write(&request.path,bytes).unwrap();
-  }
-  let mut p=file_bank_policy();p.work.point_checks*=2;p.work.selection_checks*=2;p.work.rank_sites*=2;p.work.pixel_reads*=2;
-  let b=MemoryBudget::new(1_000_000);let calls=Cell::new(0);let result=search(&r[0],&r[1],&w,p,&[2,6],&b,&mut |_,_,_,b,_|{calls.set(calls.get()+1);proposals(b)},||false).unwrap();
-  assert_eq!(calls.get(),25);assert!(!result.supported(),"invert={invert}: {result:?}");assert!(result.pixel_window_radius.is_none());assert!(result.pixel_attempts>=2 && result.pixel_attempts<=50);assert!(result.diagnostics.geometry_candidates>0);assert_eq!(result.pixel_attempts,result.diagnostics.pixel_geometry_refusals+result.diagnostics.pixel_rejections);if invert {assert!(result.diagnostics.pixel_rejections>0);}else{assert!(result.diagnostics.pixel_geometry_refusals>0);}assert_eq!(b.used(),0);
- }
+    use rrrah_dedup::model_banks::search_model_banks_coverage_files_with as search;
+    for invert in [false, true] {
+        let dir = tempfile::tempdir().unwrap();
+        let (r, w) = fixture(dir.path());
+        for (side, request) in r.iter().enumerate() {
+            let mut bytes = std::fs::read(&request.path).unwrap();
+            for y in 0..64 {
+                for x in 0..64 {
+                    let value = if invert {
+                        40 + ((x * 13 + y * 7) % 160) as u8
+                    } else {
+                        100
+                    };
+                    let value = if invert && side == 1 { 255 - value } else { value };
+                    let at = 54 + (y * 64 + x) * 3;
+                    bytes[at..at + 3].fill(value);
+                }
+            }
+            std::fs::write(&request.path, bytes).unwrap();
+        }
+        let mut p = file_bank_policy();
+        p.work.point_checks *= 2;
+        p.work.selection_checks *= 2;
+        p.work.rank_sites *= 2;
+        p.work.pixel_reads *= 2;
+        let b = MemoryBudget::new(1_000_000);
+        let calls = Cell::new(0);
+        let result = search(
+            &r[0],
+            &r[1],
+            &w,
+            p,
+            &[2, 6],
+            &b,
+            &mut |_, _, _, b, _| {
+                calls.set(calls.get() + 1);
+                proposals(b)
+            },
+            || false,
+        )
+        .unwrap();
+        assert_eq!(calls.get(), 25);
+        assert!(!result.supported(), "invert={invert}: {result:?}");
+        assert!(result.pixel_window_radius.is_none());
+        assert!(result.pixel_attempts >= 2 && result.pixel_attempts <= 50);
+        assert!(result.diagnostics.geometry_candidates > 0);
+        assert_eq!(
+            result.pixel_attempts,
+            result.diagnostics.pixel_geometry_refusals + result.diagnostics.pixel_rejections
+        );
+        if invert {
+            assert!(result.diagnostics.pixel_rejections > 0);
+        } else {
+            assert!(result.diagnostics.pixel_geometry_refusals > 0);
+        }
+        assert_eq!(b.used(), 0);
+    }
 }
 
 #[test]
 fn file_bank_pixel_contexts_share_extraction_and_report_selected_context() {
- use rrrah_dedup::model_banks::{ModelBankPixelRecipe as Recipe,search_model_banks_pixel_coverage_files_with as search,search_model_banks_coverage_files_with as legacy};
- let dir=tempfile::tempdir().unwrap();let (r,w)=fixture(dir.path());let b=MemoryBudget::new(1_000_000);let mut p=file_bank_policy();
- let old=legacy(&r[0],&r[1],&w,p,&[1],&b,&mut |_,_,_,b,_|proposals(b),||false).unwrap();
- let same=search(&r[0],&r[1],&w,p,&[Recipe{window_radius:1,rank_radius:p.comparison.anchors.local.rank.radius}],&b,&mut |_,_,_,b,_|proposals(b),||false).unwrap();assert_eq!(format!("{old:?}"),format!("{same:?}"));
- p.work.point_checks*=2;p.work.selection_checks*=2;p.work.rank_sites*=2;p.work.pixel_reads*=2;let calls=Cell::new(0);
- let result=search(&r[0],&r[1],&w,p,&[Recipe{window_radius:12,rank_radius:8},Recipe{window_radius:1,rank_radius:2}],&b,&mut |_,_,_,b,_|{calls.set(calls.get()+1);proposals(b)},||false).unwrap();
- assert!(result.supported());assert_eq!(result.pixel_window_radius,Some(1));assert_eq!(result.pixel_rank_radius,Some(2));assert!(result.pixel_attempts>=2);assert_eq!(calls.get(),25);assert_eq!(b.used(),0);
+    use rrrah_dedup::model_banks::{
+        ModelBankPixelRecipe as Recipe, search_model_banks_coverage_files_with as legacy,
+        search_model_banks_pixel_coverage_files_with as search,
+    };
+    let dir = tempfile::tempdir().unwrap();
+    let (r, w) = fixture(dir.path());
+    let b = MemoryBudget::new(1_000_000);
+    let mut p = file_bank_policy();
+    let old = legacy(
+        &r[0],
+        &r[1],
+        &w,
+        p,
+        &[1],
+        &b,
+        &mut |_, _, _, b, _| proposals(b),
+        || false,
+    )
+    .unwrap();
+    let same = search(
+        &r[0],
+        &r[1],
+        &w,
+        p,
+        &[Recipe {
+            window_radius: 1,
+            rank_radius: p.comparison.anchors.local.rank.radius,
+        }],
+        &b,
+        &mut |_, _, _, b, _| proposals(b),
+        || false,
+    )
+    .unwrap();
+    assert_eq!(format!("{old:?}"), format!("{same:?}"));
+    p.work.point_checks *= 2;
+    p.work.selection_checks *= 2;
+    p.work.rank_sites *= 2;
+    p.work.pixel_reads *= 2;
+    let calls = Cell::new(0);
+    let result = search(
+        &r[0],
+        &r[1],
+        &w,
+        p,
+        &[
+            Recipe {
+                window_radius: 12,
+                rank_radius: 8,
+            },
+            Recipe {
+                window_radius: 1,
+                rank_radius: 2,
+            },
+        ],
+        &b,
+        &mut |_, _, _, b, _| {
+            calls.set(calls.get() + 1);
+            proposals(b)
+        },
+        || false,
+    )
+    .unwrap();
+    assert!(result.supported());
+    assert_eq!(result.pixel_window_radius, Some(1));
+    assert_eq!(result.pixel_rank_radius, Some(2));
+    assert!(result.pixel_attempts >= 2);
+    assert_eq!(calls.get(), 25);
+    assert_eq!(b.used(), 0);
 }
 
 #[test]
 fn file_bank_pixel_context_preflight_rejects_overflow_work_and_cancel_before_io() {
- use rrrah_dedup::{model_banks::{ModelBankPixelRecipe as Recipe,search_model_banks_pixel_coverage_files_with as search},model_tiles::ModelTileError};
- let r=DecodeRequest::new("missing");let b=MemoryBudget::new(1_000_000);let p=file_bank_policy();
- for recipes in [vec![],vec![Recipe{window_radius:1,rank_radius:2};9],vec![Recipe{window_radius:1,rank_radius:0}],vec![Recipe{window_radius:1,rank_radius:u32::MAX}],vec![Recipe{window_radius:1,rank_radius:2};2]] {
-  let result=search(&r,&r,Path::new("missing"),p,&recipes,&b,&mut |_,_,_,_,_|panic!("preflight"),||false);assert!(matches!(result,Err(ModelTileError::Work)|Err(ModelTileError::Comparison(ModelComparisonError::Policy))));assert_eq!(b.used(),0);
- }
- let result=search(&r,&r,Path::new("missing"),p,&[],&b,&mut |_,_,_,_,_|panic!("cancel"),||true);assert!(matches!(result,Err(ModelTileError::Cancelled)));assert_eq!(b.used(),0);
+    use rrrah_dedup::{
+        model_banks::{
+            ModelBankPixelRecipe as Recipe, search_model_banks_pixel_coverage_files_with as search,
+        },
+        model_tiles::ModelTileError,
+    };
+    let r = DecodeRequest::new("missing");
+    let b = MemoryBudget::new(1_000_000);
+    let p = file_bank_policy();
+    for recipes in [
+        vec![],
+        vec![
+            Recipe {
+                window_radius: 1,
+                rank_radius: 2
+            };
+            9
+        ],
+        vec![Recipe {
+            window_radius: 1,
+            rank_radius: 0,
+        }],
+        vec![Recipe {
+            window_radius: 1,
+            rank_radius: u32::MAX,
+        }],
+        vec![
+            Recipe {
+                window_radius: 1,
+                rank_radius: 2
+            };
+            2
+        ],
+    ] {
+        let result = search(
+            &r,
+            &r,
+            Path::new("missing"),
+            p,
+            &recipes,
+            &b,
+            &mut |_, _, _, _, _| panic!("preflight"),
+            || false,
+        );
+        assert!(matches!(
+            result,
+            Err(ModelTileError::Work) | Err(ModelTileError::Comparison(ModelComparisonError::Policy))
+        ));
+        assert_eq!(b.used(), 0);
+    }
+    let result = search(
+        &r,
+        &r,
+        Path::new("missing"),
+        p,
+        &[],
+        &b,
+        &mut |_, _, _, _, _| panic!("cancel"),
+        || true,
+    );
+    assert!(matches!(result, Err(ModelTileError::Cancelled)));
+    assert_eq!(b.used(), 0);
 }
 
 #[test]
 fn file_bank_multiple_rank_contexts_do_not_confirm_flat_or_inverted_pixels() {
- use rrrah_dedup::model_banks::{ModelBankPixelRecipe as Recipe,search_model_banks_pixel_coverage_files_with as search};
- for invert in [false,true] {
-  let dir=tempfile::tempdir().unwrap();let (r,w)=fixture(dir.path());
-  for (side,request) in r.iter().enumerate() {
-   let mut bytes=std::fs::read(&request.path).unwrap();
-   for y in 0..64 {for x in 0..64 {let value=if invert {40+((x*13+y*7)%160) as u8}else{100};let value=if invert && side==1 {255-value}else{value};let at=54+(y*64+x)*3;bytes[at..at+3].fill(value);}}
-   std::fs::write(&request.path,bytes).unwrap();
-  }
-  let mut p=file_bank_policy();p.work.point_checks*=4;p.work.selection_checks*=4;p.work.rank_sites*=4;p.work.pixel_reads*=4;
-  let recipes=[Recipe{window_radius:2,rank_radius:8},Recipe{window_radius:6,rank_radius:8},Recipe{window_radius:2,rank_radius:2},Recipe{window_radius:6,rank_radius:2}];
-  let budget=MemoryBudget::new(1_000_000);let calls=Cell::new(0);let result=search(&r[0],&r[1],&w,p,&recipes,&budget,&mut |_,_,_,b,_|{calls.set(calls.get()+1);proposals(b)},||false).unwrap();
-  assert_eq!(calls.get(),25);assert!(!result.supported(),"invert={invert}: {result:?}");assert!(result.pixel_window_radius.is_none() && result.pixel_rank_radius.is_none());assert!(result.pixel_attempts>=4);assert_eq!(budget.used(),0);
- }
+    use rrrah_dedup::model_banks::{
+        ModelBankPixelRecipe as Recipe, search_model_banks_pixel_coverage_files_with as search,
+    };
+    for invert in [false, true] {
+        let dir = tempfile::tempdir().unwrap();
+        let (r, w) = fixture(dir.path());
+        for (side, request) in r.iter().enumerate() {
+            let mut bytes = std::fs::read(&request.path).unwrap();
+            for y in 0..64 {
+                for x in 0..64 {
+                    let value = if invert {
+                        40 + ((x * 13 + y * 7) % 160) as u8
+                    } else {
+                        100
+                    };
+                    let value = if invert && side == 1 { 255 - value } else { value };
+                    let at = 54 + (y * 64 + x) * 3;
+                    bytes[at..at + 3].fill(value);
+                }
+            }
+            std::fs::write(&request.path, bytes).unwrap();
+        }
+        let mut p = file_bank_policy();
+        p.work.point_checks *= 4;
+        p.work.selection_checks *= 4;
+        p.work.rank_sites *= 4;
+        p.work.pixel_reads *= 4;
+        let recipes = [
+            Recipe {
+                window_radius: 2,
+                rank_radius: 8,
+            },
+            Recipe {
+                window_radius: 6,
+                rank_radius: 8,
+            },
+            Recipe {
+                window_radius: 2,
+                rank_radius: 2,
+            },
+            Recipe {
+                window_radius: 6,
+                rank_radius: 2,
+            },
+        ];
+        let budget = MemoryBudget::new(1_000_000);
+        let calls = Cell::new(0);
+        let result = search(
+            &r[0],
+            &r[1],
+            &w,
+            p,
+            &recipes,
+            &budget,
+            &mut |_, _, _, b, _| {
+                calls.set(calls.get() + 1);
+                proposals(b)
+            },
+            || false,
+        )
+        .unwrap();
+        assert_eq!(calls.get(), 25);
+        assert!(!result.supported(), "invert={invert}: {result:?}");
+        assert!(result.pixel_window_radius.is_none() && result.pixel_rank_radius.is_none());
+        assert!(result.pixel_attempts >= 4);
+        assert_eq!(budget.used(), 0);
+    }
 }
 
 #[test]
 fn file_bank_multiple_contexts_discard_last_provider_source_change_and_cancel() {
- use rrrah_dedup::{model_banks::{ModelBankPixelRecipe as Recipe,search_model_banks_pixel_coverage_files_with as search},model_tiles::ModelTileError};
- for cancelled in [false,true] {
-  let dir=tempfile::tempdir().unwrap();let (r,w)=fixture(dir.path());let mut p=file_bank_policy();p.work.point_checks*=2;p.work.selection_checks*=2;p.work.rank_sites*=2;p.work.pixel_reads*=2;let calls=Cell::new(0);let stop=Cell::new(false);let budget=MemoryBudget::new(1_000_000);
-  let result=search(&r[0],&r[1],&w,p,&[Recipe{window_radius:1,rank_radius:8},Recipe{window_radius:1,rank_radius:2}],&budget,&mut |_,_,_,b,_|{calls.set(calls.get()+1);let points=proposals(b);if calls.get()==25 {std::fs::write(&w,b"changed weights").unwrap();stop.set(cancelled);}points},||stop.get());
-  assert!(result.is_err());if cancelled {assert!(matches!(result,Err(ModelTileError::Cancelled)));}assert_eq!(calls.get(),25);assert_eq!(budget.used(),0);
- }
+    use rrrah_dedup::{
+        model_banks::{
+            ModelBankPixelRecipe as Recipe, search_model_banks_pixel_coverage_files_with as search,
+        },
+        model_tiles::ModelTileError,
+    };
+    for cancelled in [false, true] {
+        let dir = tempfile::tempdir().unwrap();
+        let (r, w) = fixture(dir.path());
+        let mut p = file_bank_policy();
+        p.work.point_checks *= 2;
+        p.work.selection_checks *= 2;
+        p.work.rank_sites *= 2;
+        p.work.pixel_reads *= 2;
+        let calls = Cell::new(0);
+        let stop = Cell::new(false);
+        let budget = MemoryBudget::new(1_000_000);
+        let result = search(
+            &r[0],
+            &r[1],
+            &w,
+            p,
+            &[
+                Recipe {
+                    window_radius: 1,
+                    rank_radius: 8,
+                },
+                Recipe {
+                    window_radius: 1,
+                    rank_radius: 2,
+                },
+            ],
+            &budget,
+            &mut |_, _, _, b, _| {
+                calls.set(calls.get() + 1);
+                let points = proposals(b);
+                if calls.get() == 25 {
+                    std::fs::write(&w, b"changed weights").unwrap();
+                    stop.set(cancelled);
+                }
+                points
+            },
+            || stop.get(),
+        );
+        assert!(result.is_err());
+        if cancelled {
+            assert!(matches!(result, Err(ModelTileError::Cancelled)));
+        }
+        assert_eq!(calls.get(), 25);
+        assert_eq!(budget.used(), 0);
+    }
 }
 
-fn overlap_proposals(index:usize,budget:&MemoryBudget)->Result<SharedBuffer<ScoredProposal>,ProposalProviderError>{
- let mut p=budget.try_buffer(10,ScoredProposal{source:[0.;2],target:[0.;2],confidence:1.})?;
- for(i,point)in p.iter_mut().enumerate(){let xy=[4.+(i%5)as f64*5.,8.+(i/5)as f64*8.];point.source=xy;point.target=[xy[0]+(index%3)as f64*16.,xy[1]+(index/3)as f64*16.];}Ok(p.freeze())
+fn overlap_proposals(
+    index: usize,
+    budget: &MemoryBudget,
+) -> Result<SharedBuffer<ScoredProposal>, ProposalProviderError> {
+    let mut p = budget.try_buffer(
+        10,
+        ScoredProposal {
+            source: [0.; 2],
+            target: [0.; 2],
+            confidence: 1.,
+        },
+    )?;
+    for (i, point) in p.iter_mut().enumerate() {
+        let xy = [4. + (i % 5) as f64 * 5., 8. + (i / 5) as f64 * 8.];
+        point.source = xy;
+        point.target = [xy[0] + (index % 3) as f64 * 16., xy[1] + (index / 3) as f64 * 16.];
+    }
+    Ok(p.freeze())
 }
 #[test]
-fn overlap_exposure_search_shares_nine_banks_and_retains_selected_metadata(){
- use rrrah_dedup::model_banks::{search_model_banks_overlap_exposure_files_with as search,ModelBankPixelRecipe};
- let dir=tempfile::tempdir().unwrap();let(r,w)=fixture(dir.path());let b=MemoryBudget::new(2_000_000);let calls=Cell::new(0);let recipes=[ModelBankPixelRecipe{window_radius:1,rank_radius:2}];
- let result=search(&r[0],&r[1],&w,file_bank_policy(),&recipes,6*4096*25,&b,&mut|_,left,right,b,_|{assert_eq!(left.original,[32,32]);assert_eq!(right.original,[64,64]);let i=calls.get();calls.set(i+1);overlap_proposals(i,b)},||false).unwrap();
- assert_eq!(calls.get(),9);assert_eq!(result.search.attempts,9);assert!(result.search.supported());assert_eq!(result.search.pixel_window_radius,Some(1));assert_eq!(result.search.pixel_rank_radius,Some(2));let e=result.exposures.unwrap();assert_eq!(e[0],e[1]);assert_eq!(e[0].pixel_reads,12288);assert_eq!(b.used(),0);
+fn overlap_exposure_search_shares_nine_banks_and_retains_selected_metadata() {
+    use rrrah_dedup::model_banks::{
+        ModelBankPixelRecipe, search_model_banks_overlap_exposure_files_with as search,
+    };
+    let dir = tempfile::tempdir().unwrap();
+    let (r, w) = fixture(dir.path());
+    let b = MemoryBudget::new(2_000_000);
+    let calls = Cell::new(0);
+    let recipes = [ModelBankPixelRecipe {
+        window_radius: 1,
+        rank_radius: 2,
+    }];
+    let result = search(
+        &r[0],
+        &r[1],
+        &w,
+        file_bank_policy(),
+        &recipes,
+        6 * 4096 * 25,
+        &b,
+        &mut |_, left, right, b, _| {
+            assert_eq!(left.original, [32, 32]);
+            assert_eq!(right.original, [64, 64]);
+            let i = calls.get();
+            calls.set(i + 1);
+            overlap_proposals(i, b)
+        },
+        || false,
+    )
+    .unwrap();
+    assert_eq!(calls.get(), 9);
+    assert_eq!(result.search.attempts, 9);
+    assert!(result.search.supported());
+    assert_eq!(result.search.pixel_window_radius, Some(1));
+    assert_eq!(result.search.pixel_rank_radius, Some(2));
+    let e = result.exposures.unwrap();
+    assert_eq!(e[0], e[1]);
+    assert_eq!(e[0].pixel_reads, 12288);
+    assert_eq!(b.used(), 0);
 }
 #[test]
-fn overlap_exposure_admits_cumulative_calibration_before_io_and_cancel_wins(){
- use rrrah_dedup::{model_banks::{search_model_banks_overlap_exposure_files_with as search,ModelBankPixelRecipe},model_tiles::ModelTileError};
- let r=DecodeRequest::new("missing-overlap-exposure-source");let b=MemoryBudget::new(1000);let recipes=[ModelBankPixelRecipe{window_radius:1,rank_radius:2}];
- assert!(matches!(search(&r,&r,Path::new("missing"),file_bank_policy(),&recipes,6*4096*25-1,&b,&mut|_,_,_,_,_|panic!("preflight"),||false),Err(ModelTileError::Work)));
- assert!(matches!(search(&r,&r,Path::new("missing"),file_bank_policy(),&recipes,0,&b,&mut|_,_,_,_,_|panic!("cancelled"),||true),Err(ModelTileError::Cancelled)));assert_eq!(b.used(),0);
+fn overlap_exposure_admits_cumulative_calibration_before_io_and_cancel_wins() {
+    use rrrah_dedup::{
+        model_banks::{ModelBankPixelRecipe, search_model_banks_overlap_exposure_files_with as search},
+        model_tiles::ModelTileError,
+    };
+    let r = DecodeRequest::new("missing-overlap-exposure-source");
+    let b = MemoryBudget::new(1000);
+    let recipes = [ModelBankPixelRecipe {
+        window_radius: 1,
+        rank_radius: 2,
+    }];
+    assert!(matches!(
+        search(
+            &r,
+            &r,
+            Path::new("missing"),
+            file_bank_policy(),
+            &recipes,
+            6 * 4096 * 25 - 1,
+            &b,
+            &mut |_, _, _, _, _| panic!("preflight"),
+            || false
+        ),
+        Err(ModelTileError::Work)
+    ));
+    assert!(matches!(
+        search(
+            &r,
+            &r,
+            Path::new("missing"),
+            file_bank_policy(),
+            &recipes,
+            0,
+            &b,
+            &mut |_, _, _, _, _| panic!("cancelled"),
+            || true
+        ),
+        Err(ModelTileError::Cancelled)
+    ));
+    assert_eq!(b.used(), 0);
 }
 #[test]
-fn overlap_exposure_last_provider_mutation_and_owner_cancel_discard_all_banks(){
- use rrrah_dedup::{model_banks::{search_model_banks_overlap_exposure_files_with as search,ModelBankPixelRecipe},model_tiles::ModelTileError};
- for owner in [None,Some(0),Some(1)]{let dir=tempfile::tempdir().unwrap();let(mut r,w)=fixture(dir.path());let generation=Arc::new(AtomicU64::new(1));if let Some(i)=owner{r[i].cancellation=Some(GenerationToken::new(generation.clone(),1));}let b=MemoryBudget::new(2_000_000);let n=Cell::new(0);let recipes=[ModelBankPixelRecipe{window_radius:1,rank_radius:2}];
- let result=search(&r[0],&r[1],&w,file_bank_policy(),&recipes,6*4096*25,&b,&mut|_,_,_,b,_|{let i=n.get();n.set(i+1);let p=overlap_proposals(i,b)?;if i==8{if owner.is_some(){generation.store(2,Ordering::Relaxed);}else{std::fs::write(&w,b"changed after last overlap provider")?;}}Ok(p)},||false);
- assert!(result.is_err());if owner.is_some(){assert!(matches!(result,Err(ModelTileError::Cancelled)));}assert_eq!(n.get(),9);assert_eq!(b.used(),0);}
+fn overlap_exposure_last_provider_mutation_and_owner_cancel_discard_all_banks() {
+    use rrrah_dedup::{
+        model_banks::{ModelBankPixelRecipe, search_model_banks_overlap_exposure_files_with as search},
+        model_tiles::ModelTileError,
+    };
+    for owner in [None, Some(0), Some(1)] {
+        let dir = tempfile::tempdir().unwrap();
+        let (mut r, w) = fixture(dir.path());
+        let generation = Arc::new(AtomicU64::new(1));
+        if let Some(i) = owner {
+            r[i].cancellation = Some(GenerationToken::new(generation.clone(), 1));
+        }
+        let b = MemoryBudget::new(2_000_000);
+        let n = Cell::new(0);
+        let recipes = [ModelBankPixelRecipe {
+            window_radius: 1,
+            rank_radius: 2,
+        }];
+        let result = search(
+            &r[0],
+            &r[1],
+            &w,
+            file_bank_policy(),
+            &recipes,
+            6 * 4096 * 25,
+            &b,
+            &mut |_, _, _, b, _| {
+                let i = n.get();
+                n.set(i + 1);
+                let p = overlap_proposals(i, b)?;
+                if i == 8 {
+                    if owner.is_some() {
+                        generation.store(2, Ordering::Relaxed);
+                    } else {
+                        std::fs::write(&w, b"changed after last overlap provider")?;
+                    }
+                }
+                Ok(p)
+            },
+            || false,
+        );
+        assert!(result.is_err());
+        if owner.is_some() {
+            assert!(matches!(result, Err(ModelTileError::Cancelled)));
+        }
+        assert_eq!(n.get(), 9);
+        assert_eq!(b.used(), 0);
+    }
 }
 #[test]
-fn overlap_exposure_flat_and_inverted_pixels_keep_compact_miss_unconfirmed(){
- use rrrah_dedup::model_banks::{search_model_banks_overlap_exposure_files_with as search,ModelBankPixelRecipe};
- for invert in [false,true]{let dir=tempfile::tempdir().unwrap();let(r,w)=fixture(dir.path());for(side,request)in r.iter().enumerate(){let mut bytes=std::fs::read(&request.path).unwrap();for y in 0..64{for x in 0..64{let v=if invert{40+((x*13+y*7)%160)as u8}else{100};let v=if invert&&side==1{255-v}else{v};let at=54+(y*64+x)*3;bytes[at..at+3].fill(v);}}std::fs::write(&request.path,bytes).unwrap();}
- let b=MemoryBudget::new(2_000_000);let n=Cell::new(0);let recipes=[ModelBankPixelRecipe{window_radius:1,rank_radius:2}];let e=search(&r[0],&r[1],&w,file_bank_policy(),&recipes,6*4096*25,&b,&mut|_,_,_,b,_|{let i=n.get();n.set(i+1);overlap_proposals(i,b)},||false).unwrap();assert_eq!(n.get(),9);assert!(!e.search.supported());assert!(e.search.comparison.transform.is_none());assert!(e.exposures.is_none());assert_eq!(b.used(),0);}
+fn overlap_exposure_flat_and_inverted_pixels_keep_compact_miss_unconfirmed() {
+    use rrrah_dedup::model_banks::{
+        ModelBankPixelRecipe, search_model_banks_overlap_exposure_files_with as search,
+    };
+    for invert in [false, true] {
+        let dir = tempfile::tempdir().unwrap();
+        let (r, w) = fixture(dir.path());
+        for (side, request) in r.iter().enumerate() {
+            let mut bytes = std::fs::read(&request.path).unwrap();
+            for y in 0..64 {
+                for x in 0..64 {
+                    let v = if invert {
+                        40 + ((x * 13 + y * 7) % 160) as u8
+                    } else {
+                        100
+                    };
+                    let v = if invert && side == 1 { 255 - v } else { v };
+                    let at = 54 + (y * 64 + x) * 3;
+                    bytes[at..at + 3].fill(v);
+                }
+            }
+            std::fs::write(&request.path, bytes).unwrap();
+        }
+        let b = MemoryBudget::new(2_000_000);
+        let n = Cell::new(0);
+        let recipes = [ModelBankPixelRecipe {
+            window_radius: 1,
+            rank_radius: 2,
+        }];
+        let e = search(
+            &r[0],
+            &r[1],
+            &w,
+            file_bank_policy(),
+            &recipes,
+            6 * 4096 * 25,
+            &b,
+            &mut |_, _, _, b, _| {
+                let i = n.get();
+                n.set(i + 1);
+                overlap_proposals(i, b)
+            },
+            || false,
+        )
+        .unwrap();
+        assert_eq!(n.get(), 9);
+        assert!(!e.search.supported());
+        assert!(e.search.comparison.transform.is_none());
+        assert!(e.exposures.is_none());
+        assert_eq!(b.used(), 0);
+    }
 }
 
-fn exposure_recovery_policy()->rrrah_dedup::model_banks::ModelBankExposureRecoveryPolicy{
- rrrah_dedup::model_banks::ModelBankExposureRecoveryPolicy::for_stages(file_bank_policy(),file_bank_policy(),6*4096*25).unwrap()
+fn exposure_recovery_policy() -> rrrah_dedup::model_banks::ModelBankExposureRecoveryPolicy {
+    rrrah_dedup::model_banks::ModelBankExposureRecoveryPolicy::for_stages(
+        file_bank_policy(),
+        file_bank_policy(),
+        6 * 4096 * 25,
+    )
+    .unwrap()
 }
 #[test]
-fn exposure_recovery_preserves_primary_support_and_skips_secondary_provider(){
- use rrrah_dedup::model_banks::{search_model_banks_exposure_recovery_files_with as search,ModelBankPixelRecipe};
- let dir=tempfile::tempdir().unwrap();let(r,w)=fixture(dir.path());let b=MemoryBudget::new(2_000_000);let n=Cell::new(0);let recipes=[ModelBankPixelRecipe{window_radius:1,rank_radius:2}];
- let e=search(&r[0],&r[1],&w,exposure_recovery_policy(),&recipes,&recipes,&b,&mut|_,_,_,b,_|{n.set(n.get()+1);assert!(n.get()<=25);proposals(b)},||false).unwrap();assert!(e.supported());assert!(e.primary.supported());assert!(e.recovery.is_none());assert_eq!(n.get(),25);assert_eq!(b.used(),0);
+fn exposure_recovery_preserves_primary_support_and_skips_secondary_provider() {
+    use rrrah_dedup::model_banks::{
+        ModelBankPixelRecipe, search_model_banks_exposure_recovery_files_with as search,
+    };
+    let dir = tempfile::tempdir().unwrap();
+    let (r, w) = fixture(dir.path());
+    let b = MemoryBudget::new(2_000_000);
+    let n = Cell::new(0);
+    let recipes = [ModelBankPixelRecipe {
+        window_radius: 1,
+        rank_radius: 2,
+    }];
+    let e = search(
+        &r[0],
+        &r[1],
+        &w,
+        exposure_recovery_policy(),
+        &recipes,
+        &recipes,
+        &b,
+        &mut |_, _, _, b, _| {
+            n.set(n.get() + 1);
+            assert!(n.get() <= 25);
+            proposals(b)
+        },
+        || false,
+    )
+    .unwrap();
+    assert!(e.supported());
+    assert!(e.primary.supported());
+    assert!(e.recovery.is_none());
+    assert_eq!(n.get(), 25);
+    assert_eq!(b.used(), 0);
 }
 #[test]
-fn exposure_recovery_advances_only_after_primary_miss_with_one_shared_provider(){
- use rrrah_dedup::model_banks::{search_model_banks_exposure_recovery_files_with as search,ModelBankPixelRecipe};
- let dir=tempfile::tempdir().unwrap();let(r,w)=fixture(dir.path());let b=MemoryBudget::new(2_000_000);let n=Cell::new(0);let recipes=[ModelBankPixelRecipe{window_radius:1,rank_radius:2}];
- let e=search(&r[0],&r[1],&w,exposure_recovery_policy(),&recipes,&recipes,&b,&mut|_,_,_,b,_|{let i=n.get();n.set(i+1);if i<25{Ok(b.try_buffer(0,ScoredProposal{source:[0.;2],target:[0.;2],confidence:1.})?.freeze())}else{overlap_proposals(i-25,b)}},||false).unwrap();assert!(!e.primary.supported());let r=e.recovery.unwrap();assert!(r.search.supported());assert!(r.exposures.is_some());assert_eq!(n.get(),34);assert_eq!(b.used(),0);
+fn exposure_recovery_advances_only_after_primary_miss_with_one_shared_provider() {
+    use rrrah_dedup::model_banks::{
+        ModelBankPixelRecipe, search_model_banks_exposure_recovery_files_with as search,
+    };
+    let dir = tempfile::tempdir().unwrap();
+    let (r, w) = fixture(dir.path());
+    let b = MemoryBudget::new(2_000_000);
+    let n = Cell::new(0);
+    let recipes = [ModelBankPixelRecipe {
+        window_radius: 1,
+        rank_radius: 2,
+    }];
+    let e = search(
+        &r[0],
+        &r[1],
+        &w,
+        exposure_recovery_policy(),
+        &recipes,
+        &recipes,
+        &b,
+        &mut |_, _, _, b, _| {
+            let i = n.get();
+            n.set(i + 1);
+            if i < 25 {
+                Ok(b.try_buffer(
+                    0,
+                    ScoredProposal {
+                        source: [0.; 2],
+                        target: [0.; 2],
+                        confidence: 1.,
+                    },
+                )?
+                .freeze())
+            } else {
+                overlap_proposals(i - 25, b)
+            }
+        },
+        || false,
+    )
+    .unwrap();
+    assert!(!e.primary.supported());
+    let r = e.recovery.unwrap();
+    assert!(r.search.supported());
+    assert!(r.exposures.is_some());
+    assert_eq!(n.get(), 34);
+    assert_eq!(b.used(), 0);
 }
 #[test]
-fn exposure_recovery_validates_suffix_cumulative_caps_and_overflow_before_io(){
- use rrrah_dedup::{model_banks::{search_model_banks_exposure_recovery_files_with as search,ModelBankPixelRecipe,ModelBankExposureRecoveryPolicy},model_tiles::ModelTileError};
- let r=DecodeRequest::new("missing-exposure-recovery");let b=MemoryBudget::new(1000);let recipes=[ModelBankPixelRecipe{window_radius:1,rank_radius:2}];
- for calibration in [false,true]{let mut p=exposure_recovery_policy();if calibration{p.maximum_calibration_pixel_reads-=1;}else{p.work.model_input_reads-=1;}
- assert!(matches!(search(&r,&r,Path::new("missing"),p,&recipes,&recipes,&b,&mut|_,_,_,_,_|panic!("preflight"),||false),Err(ModelTileError::Work)));}
- let bad=[ModelBankPixelRecipe{window_radius:1,rank_radius:0}];assert!(search(&r,&r,Path::new("missing"),exposure_recovery_policy(),&recipes,&bad,&b,&mut|_,_,_,_,_|panic!("suffix"),||false).is_err());
- let mut p=file_bank_policy();p.work.pixel_reads=u64::MAX;assert!(matches!(ModelBankExposureRecoveryPolicy::for_stages(p,p,6*4096*25),Err(ModelTileError::Work)));assert_eq!(b.used(),0);
+fn exposure_recovery_validates_suffix_cumulative_caps_and_overflow_before_io() {
+    use rrrah_dedup::{
+        model_banks::{
+            ModelBankExposureRecoveryPolicy, ModelBankPixelRecipe,
+            search_model_banks_exposure_recovery_files_with as search,
+        },
+        model_tiles::ModelTileError,
+    };
+    let r = DecodeRequest::new("missing-exposure-recovery");
+    let b = MemoryBudget::new(1000);
+    let recipes = [ModelBankPixelRecipe {
+        window_radius: 1,
+        rank_radius: 2,
+    }];
+    for calibration in [false, true] {
+        let mut p = exposure_recovery_policy();
+        if calibration {
+            p.maximum_calibration_pixel_reads -= 1;
+        } else {
+            p.work.model_input_reads -= 1;
+        }
+        assert!(matches!(
+            search(
+                &r,
+                &r,
+                Path::new("missing"),
+                p,
+                &recipes,
+                &recipes,
+                &b,
+                &mut |_, _, _, _, _| panic!("preflight"),
+                || false
+            ),
+            Err(ModelTileError::Work)
+        ));
+    }
+    let bad = [ModelBankPixelRecipe {
+        window_radius: 1,
+        rank_radius: 0,
+    }];
+    assert!(
+        search(
+            &r,
+            &r,
+            Path::new("missing"),
+            exposure_recovery_policy(),
+            &recipes,
+            &bad,
+            &b,
+            &mut |_, _, _, _, _| panic!("suffix"),
+            || false
+        )
+        .is_err()
+    );
+    let mut p = file_bank_policy();
+    p.work.pixel_reads = u64::MAX;
+    assert!(matches!(
+        ModelBankExposureRecoveryPolicy::for_stages(p, p, 6 * 4096 * 25),
+        Err(ModelTileError::Work)
+    ));
+    assert_eq!(b.used(), 0);
 }
 #[test]
-fn exposure_recovery_last_secondary_mutation_and_both_owners_are_atomic(){
- use rrrah_dedup::{model_banks::{search_model_banks_exposure_recovery_files_with as search,ModelBankPixelRecipe},model_tiles::ModelTileError};
- for owner in [None,Some(0),Some(1)]{let dir=tempfile::tempdir().unwrap();let(mut r,w)=fixture(dir.path());let generation=Arc::new(AtomicU64::new(1));if let Some(i)=owner{r[i].cancellation=Some(GenerationToken::new(generation.clone(),1));}let b=MemoryBudget::new(2_000_000);let n=Cell::new(0);let recipes=[ModelBankPixelRecipe{window_radius:1,rank_radius:2}];
- let result=search(&r[0],&r[1],&w,exposure_recovery_policy(),&recipes,&recipes,&b,&mut|_,_,_,b,_|{let i=n.get();n.set(i+1);if i<25{return Ok(b.try_buffer(0,ScoredProposal{source:[0.;2],target:[0.;2],confidence:1.})?.freeze());}let p=overlap_proposals(i-25,b)?;if i==33{if owner.is_some(){generation.store(2,Ordering::Relaxed);}else{std::fs::write(&r[0].path,b"source replaced after last secondary provider")?;}}Ok(p)},||false);
- assert!(result.is_err());if owner.is_some(){assert!(matches!(result,Err(ModelTileError::Cancelled)));}assert_eq!(n.get(),34);assert_eq!(b.used(),0);}
+fn exposure_recovery_last_secondary_mutation_and_both_owners_are_atomic() {
+    use rrrah_dedup::{
+        model_banks::{ModelBankPixelRecipe, search_model_banks_exposure_recovery_files_with as search},
+        model_tiles::ModelTileError,
+    };
+    for owner in [None, Some(0), Some(1)] {
+        let dir = tempfile::tempdir().unwrap();
+        let (mut r, w) = fixture(dir.path());
+        let generation = Arc::new(AtomicU64::new(1));
+        if let Some(i) = owner {
+            r[i].cancellation = Some(GenerationToken::new(generation.clone(), 1));
+        }
+        let b = MemoryBudget::new(2_000_000);
+        let n = Cell::new(0);
+        let recipes = [ModelBankPixelRecipe {
+            window_radius: 1,
+            rank_radius: 2,
+        }];
+        let result = search(
+            &r[0],
+            &r[1],
+            &w,
+            exposure_recovery_policy(),
+            &recipes,
+            &recipes,
+            &b,
+            &mut |_, _, _, b, _| {
+                let i = n.get();
+                n.set(i + 1);
+                if i < 25 {
+                    return Ok(b
+                        .try_buffer(
+                            0,
+                            ScoredProposal {
+                                source: [0.; 2],
+                                target: [0.; 2],
+                                confidence: 1.,
+                            },
+                        )?
+                        .freeze());
+                }
+                let p = overlap_proposals(i - 25, b)?;
+                if i == 33 {
+                    if owner.is_some() {
+                        generation.store(2, Ordering::Relaxed);
+                    } else {
+                        std::fs::write(&r[0].path, b"source replaced after last secondary provider")?;
+                    }
+                }
+                Ok(p)
+            },
+            || false,
+        );
+        assert!(result.is_err());
+        if owner.is_some() {
+            assert!(matches!(result, Err(ModelTileError::Cancelled)));
+        }
+        assert_eq!(n.get(), 34);
+        assert_eq!(b.used(), 0);
+    }
 }
 #[test]
-fn exposure_recovery_primary_success_still_checks_final_outer_weights_and_owners(){
- use rrrah_dedup::{model_banks::{search_model_banks_exposure_recovery_files_with as search,ModelBankPixelRecipe},model_tiles::ModelTileError};
- let recipes=[ModelBankPixelRecipe{window_radius:1,rank_radius:2}];
- for owner in [None,Some(0),Some(1)]{let dir=tempfile::tempdir().unwrap();let(mut r,w)=fixture(dir.path());let b=MemoryBudget::new(2_000_000);let calls=Cell::new(0);search(&r[0],&r[1],&w,exposure_recovery_policy(),&recipes,&recipes,&b,&mut|_,_,_,b,_|proposals(b),||{calls.set(calls.get()+1);false}).unwrap();let stop=calls.get();let generation=Arc::new(AtomicU64::new(1));if let Some(i)=owner{r[i].cancellation=Some(GenerationToken::new(generation.clone(),1));}let n=Cell::new(0);
- let result=search(&r[0],&r[1],&w,exposure_recovery_policy(),&recipes,&recipes,&b,&mut|_,_,_,b,_|proposals(b),||{n.set(n.get()+1);if n.get()==stop{if owner.is_some(){generation.store(2,Ordering::Relaxed);}else{std::fs::write(&w,b"changed on final outer caller checkpoint").unwrap();}}false});assert!(result.is_err());if owner.is_some(){assert!(matches!(result,Err(ModelTileError::Cancelled)));}assert_eq!(b.used(),0);}
+fn exposure_recovery_primary_success_still_checks_final_outer_weights_and_owners() {
+    use rrrah_dedup::{
+        model_banks::{ModelBankPixelRecipe, search_model_banks_exposure_recovery_files_with as search},
+        model_tiles::ModelTileError,
+    };
+    let recipes = [ModelBankPixelRecipe {
+        window_radius: 1,
+        rank_radius: 2,
+    }];
+    for owner in [None, Some(0), Some(1)] {
+        let dir = tempfile::tempdir().unwrap();
+        let (mut r, w) = fixture(dir.path());
+        let b = MemoryBudget::new(2_000_000);
+        let calls = Cell::new(0);
+        search(
+            &r[0],
+            &r[1],
+            &w,
+            exposure_recovery_policy(),
+            &recipes,
+            &recipes,
+            &b,
+            &mut |_, _, _, b, _| proposals(b),
+            || {
+                calls.set(calls.get() + 1);
+                false
+            },
+        )
+        .unwrap();
+        let stop = calls.get();
+        let generation = Arc::new(AtomicU64::new(1));
+        if let Some(i) = owner {
+            r[i].cancellation = Some(GenerationToken::new(generation.clone(), 1));
+        }
+        let n = Cell::new(0);
+        let result = search(
+            &r[0],
+            &r[1],
+            &w,
+            exposure_recovery_policy(),
+            &recipes,
+            &recipes,
+            &b,
+            &mut |_, _, _, b, _| proposals(b),
+            || {
+                n.set(n.get() + 1);
+                if n.get() == stop {
+                    if owner.is_some() {
+                        generation.store(2, Ordering::Relaxed);
+                    } else {
+                        std::fs::write(&w, b"changed on final outer caller checkpoint").unwrap();
+                    }
+                }
+                false
+            },
+        );
+        assert!(result.is_err());
+        if owner.is_some() {
+            assert!(matches!(result, Err(ModelTileError::Cancelled)));
+        }
+        assert_eq!(b.used(), 0);
+    }
 }
 
 #[test]
-fn exposure_collection_preserves_primary_support_scheduling_and_owned_report_credit(){
- use rrrah_dedup::model_banks::{scan_model_banks_exposure_recovery_collection_with as scan,ModelBankExposureCollectionPolicy,ModelBankPixelRecipe};
- let dir=tempfile::tempdir().unwrap();let(r,w)=fixture(dir.path());let third=dir.path().join("third.bmp");std::fs::copy(&r[0].path,&third).unwrap();let files=[(30,DecodeRequest::new(third)),(10,r[0].clone()),(20,r[1].clone())];let b=MemoryBudget::new(4_000_000);let recipes=[ModelBankPixelRecipe{window_radius:1,rank_radius:2}];let p=ModelBankExposureCollectionPolicy::for_pairs(exposure_recovery_policy(),3,3).unwrap();
- let schedule=rrrah_dedup::pair_schedule::CompletePairSchedule::new(&[30,10,20],&[(20,30)],3,3,1,&b,||false).unwrap();
- let n=Cell::new(0);let e=scan(files,Some(&schedule),&w,p,&recipes,&recipes,&b,&mut|_,_,_,b,_|{n.set(n.get()+1);proposals(b)},||false).unwrap();
- assert_eq!(e.file_ids(),[10,20,30]);assert_eq!(e.pairs().iter().map(|p|(p.left,p.right)).collect::<Vec<_>>(),[(10,20),(10,30),(20,30)]);assert!(e.pairs().iter().all(|p|p.evidence.primary.supported()&&p.evidence.recovery.is_none()));assert_eq!(n.get(),75);drop(schedule);assert!(b.used()>0);drop(e);assert_eq!(b.used(),0);
+fn exposure_collection_preserves_primary_support_scheduling_and_owned_report_credit() {
+    use rrrah_dedup::model_banks::{
+        ModelBankExposureCollectionPolicy, ModelBankPixelRecipe,
+        scan_model_banks_exposure_recovery_collection_with as scan,
+    };
+    let dir = tempfile::tempdir().unwrap();
+    let (r, w) = fixture(dir.path());
+    let third = dir.path().join("third.bmp");
+    std::fs::copy(&r[0].path, &third).unwrap();
+    let files = [
+        (30, DecodeRequest::new(third)),
+        (10, r[0].clone()),
+        (20, r[1].clone()),
+    ];
+    let b = MemoryBudget::new(4_000_000);
+    let recipes = [ModelBankPixelRecipe {
+        window_radius: 1,
+        rank_radius: 2,
+    }];
+    let p = ModelBankExposureCollectionPolicy::for_pairs(exposure_recovery_policy(), 3, 3).unwrap();
+    let schedule = rrrah_dedup::pair_schedule::CompletePairSchedule::new(
+        &[30, 10, 20],
+        &[(20, 30)],
+        3,
+        3,
+        1,
+        &b,
+        || false,
+    )
+    .unwrap();
+    let n = Cell::new(0);
+    let e = scan(
+        files,
+        Some(&schedule),
+        &w,
+        p,
+        &recipes,
+        &recipes,
+        &b,
+        &mut |_, _, _, b, _| {
+            n.set(n.get() + 1);
+            proposals(b)
+        },
+        || false,
+    )
+    .unwrap();
+    assert_eq!(e.file_ids(), [10, 20, 30]);
+    assert_eq!(
+        e.pairs().iter().map(|p| (p.left, p.right)).collect::<Vec<_>>(),
+        [(10, 20), (10, 30), (20, 30)]
+    );
+    assert!(
+        e.pairs()
+            .iter()
+            .all(|p| p.evidence.primary.supported() && p.evidence.recovery.is_none())
+    );
+    assert_eq!(n.get(), 75);
+    drop(schedule);
+    assert!(b.used() > 0);
+    drop(e);
+    assert_eq!(b.used(), 0);
 }
 #[test]
-fn exposure_collection_keeps_unknown_pairs_and_recovers_with_shared_provider(){
- use rrrah_dedup::model_banks::{scan_model_banks_exposure_recovery_collection_with as scan,ModelBankExposureCollectionPolicy,ModelBankPixelRecipe};
- let dir=tempfile::tempdir().unwrap();let(r,w)=fixture(dir.path());let b=MemoryBudget::new(4_000_000);let recipes=[ModelBankPixelRecipe{window_radius:1,rank_radius:2}];let p=ModelBankExposureCollectionPolicy::for_pairs(exposure_recovery_policy(),2,1).unwrap();
- for recover in [false,true]{let n=Cell::new(0);let e=scan([(1,r[0].clone()),(2,r[1].clone())],None,&w,p,&recipes,&recipes,&b,&mut|_,_,_,b,_|{let i=n.get();n.set(i+1);if recover&&i>=25{overlap_proposals(i-25,b)}else{Ok(b.try_buffer(0,ScoredProposal{source:[0.;2],target:[0.;2],confidence:1.})?.freeze())}},||false).unwrap();assert_eq!(n.get(),34);let pair=&e.pairs()[0].evidence;assert!(!pair.primary.supported());assert_eq!(pair.supported(),recover);assert_eq!(pair.recovery.unwrap().search.attempts,9);assert_eq!(pair.recovery.unwrap().exposures.is_some(),recover);drop(e);assert_eq!(b.used(),0);}
+fn exposure_collection_keeps_unknown_pairs_and_recovers_with_shared_provider() {
+    use rrrah_dedup::model_banks::{
+        ModelBankExposureCollectionPolicy, ModelBankPixelRecipe,
+        scan_model_banks_exposure_recovery_collection_with as scan,
+    };
+    let dir = tempfile::tempdir().unwrap();
+    let (r, w) = fixture(dir.path());
+    let b = MemoryBudget::new(4_000_000);
+    let recipes = [ModelBankPixelRecipe {
+        window_radius: 1,
+        rank_radius: 2,
+    }];
+    let p = ModelBankExposureCollectionPolicy::for_pairs(exposure_recovery_policy(), 2, 1).unwrap();
+    for recover in [false, true] {
+        let n = Cell::new(0);
+        let e = scan(
+            [(1, r[0].clone()), (2, r[1].clone())],
+            None,
+            &w,
+            p,
+            &recipes,
+            &recipes,
+            &b,
+            &mut |_, _, _, b, _| {
+                let i = n.get();
+                n.set(i + 1);
+                if recover && i >= 25 {
+                    overlap_proposals(i - 25, b)
+                } else {
+                    Ok(b.try_buffer(
+                        0,
+                        ScoredProposal {
+                            source: [0.; 2],
+                            target: [0.; 2],
+                            confidence: 1.,
+                        },
+                    )?
+                    .freeze())
+                }
+            },
+            || false,
+        )
+        .unwrap();
+        assert_eq!(n.get(), 34);
+        let pair = &e.pairs()[0].evidence;
+        assert!(!pair.primary.supported());
+        assert_eq!(pair.supported(), recover);
+        assert_eq!(pair.recovery.unwrap().search.attempts, 9);
+        assert_eq!(pair.recovery.unwrap().exposures.is_some(), recover);
+        drop(e);
+        assert_eq!(b.used(), 0);
+    }
 }
 #[test]
-fn exposure_collection_admits_all_totals_suffix_and_storage_before_iteration(){
- use rrrah_dedup::{model_banks::{scan_model_banks_exposure_recovery_collection_with as scan,ModelBankExposureCollectionPolicy,ModelBankPixelRecipe},collection::CollectionError as E};
- let b=MemoryBudget::new(4_000_000);let recipes=[ModelBankPixelRecipe{window_radius:1,rank_radius:2}];let base=ModelBankExposureCollectionPolicy::for_pairs(exposure_recovery_policy(),3,3).unwrap();
- for field in 0..9{let mut p=base;match field{0=>p.work.model_input_reads=0,1=>p.work.proposal_ranking_checks=0,2=>p.work.proposal_separation_checks=0,3=>p.work.geometry_hypotheses=0,4=>p.work.point_checks=0,5=>p.work.selection_checks=0,6=>p.work.rank_sites=0,7=>p.work.pixel_reads=0,_=>p.maximum_calibration_pixel_reads=0};assert!(matches!(scan(std::iter::from_fn(||panic!("iterator consumed")),None,Path::new("missing"),p,&recipes,&recipes,&b,&mut|_,_,_,_,_|panic!("provider"),||false),Err(E::Work)));assert_eq!(b.used(),0);}
- let bad=[ModelBankPixelRecipe{window_radius:1,rank_radius:0}];assert!(matches!(scan(std::iter::from_fn(||panic!("iterator")),None,Path::new("missing"),base,&recipes,&bad,&b,&mut|_,_,_,_,_|panic!("provider"),||false),Err(E::Policy(_))));
- let tiny=MemoryBudget::new(1);assert!(matches!(scan(std::iter::from_fn(||panic!("iterator")),None,Path::new("missing"),base,&recipes,&recipes,&tiny,&mut|_,_,_,_,_|panic!("provider"),||false),Err(E::Memory(_))));assert_eq!(tiny.used(),0);
- assert!(matches!(scan(std::iter::from_fn(||panic!("iterator")),None,Path::new("missing"),base,&bad,&bad,&b,&mut|_,_,_,_,_|panic!("provider"),||true),Err(E::Cancelled)));
- let mut overflowing=exposure_recovery_policy();overflowing.work.model_input_reads=u64::MAX;assert!(ModelBankExposureCollectionPolicy::for_pairs(overflowing,2,2).is_err());
+fn exposure_collection_admits_all_totals_suffix_and_storage_before_iteration() {
+    use rrrah_dedup::{
+        collection::CollectionError as E,
+        model_banks::{
+            ModelBankExposureCollectionPolicy, ModelBankPixelRecipe,
+            scan_model_banks_exposure_recovery_collection_with as scan,
+        },
+    };
+    let b = MemoryBudget::new(4_000_000);
+    let recipes = [ModelBankPixelRecipe {
+        window_radius: 1,
+        rank_radius: 2,
+    }];
+    let base = ModelBankExposureCollectionPolicy::for_pairs(exposure_recovery_policy(), 3, 3).unwrap();
+    for field in 0..9 {
+        let mut p = base;
+        match field {
+            0 => p.work.model_input_reads = 0,
+            1 => p.work.proposal_ranking_checks = 0,
+            2 => p.work.proposal_separation_checks = 0,
+            3 => p.work.geometry_hypotheses = 0,
+            4 => p.work.point_checks = 0,
+            5 => p.work.selection_checks = 0,
+            6 => p.work.rank_sites = 0,
+            7 => p.work.pixel_reads = 0,
+            _ => p.maximum_calibration_pixel_reads = 0,
+        };
+        assert!(matches!(
+            scan(
+                std::iter::from_fn(|| panic!("iterator consumed")),
+                None,
+                Path::new("missing"),
+                p,
+                &recipes,
+                &recipes,
+                &b,
+                &mut |_, _, _, _, _| panic!("provider"),
+                || false
+            ),
+            Err(E::Work)
+        ));
+        assert_eq!(b.used(), 0);
+    }
+    let bad = [ModelBankPixelRecipe {
+        window_radius: 1,
+        rank_radius: 0,
+    }];
+    assert!(matches!(
+        scan(
+            std::iter::from_fn(|| panic!("iterator")),
+            None,
+            Path::new("missing"),
+            base,
+            &recipes,
+            &bad,
+            &b,
+            &mut |_, _, _, _, _| panic!("provider"),
+            || false
+        ),
+        Err(E::Policy(_))
+    ));
+    let tiny = MemoryBudget::new(1);
+    assert!(matches!(
+        scan(
+            std::iter::from_fn(|| panic!("iterator")),
+            None,
+            Path::new("missing"),
+            base,
+            &recipes,
+            &recipes,
+            &tiny,
+            &mut |_, _, _, _, _| panic!("provider"),
+            || false
+        ),
+        Err(E::Memory(_))
+    ));
+    assert_eq!(tiny.used(), 0);
+    assert!(matches!(
+        scan(
+            std::iter::from_fn(|| panic!("iterator")),
+            None,
+            Path::new("missing"),
+            base,
+            &bad,
+            &bad,
+            &b,
+            &mut |_, _, _, _, _| panic!("provider"),
+            || true
+        ),
+        Err(E::Cancelled)
+    ));
+    let mut overflowing = exposure_recovery_policy();
+    overflowing.work.model_input_reads = u64::MAX;
+    assert!(ModelBankExposureCollectionPolicy::for_pairs(overflowing, 2, 2).is_err());
 }
 #[test]
-fn exposure_collection_final_pair_mutation_of_prior_source_and_owner_discards_batch(){
- use rrrah_dedup::{model_banks::{scan_model_banks_exposure_recovery_collection_with as scan,ModelBankExposureCollectionPolicy,ModelBankPixelRecipe},collection::CollectionError as E};
- for owner in [false,true]{let dir=tempfile::tempdir().unwrap();let(mut r,w)=fixture(dir.path());let prior=r[0].path.clone();let third=dir.path().join("third.bmp");std::fs::copy(&prior,&third).unwrap();let generation=Arc::new(AtomicU64::new(1));r[0].cancellation=Some(GenerationToken::new(generation.clone(),1));let b=MemoryBudget::new(4_000_000);let recipes=[ModelBankPixelRecipe{window_radius:1,rank_radius:2}];let p=ModelBankExposureCollectionPolicy::for_pairs(exposure_recovery_policy(),3,3).unwrap();let n=Cell::new(0);
- let e=scan([(1,r[0].clone()),(2,r[1].clone()),(3,DecodeRequest::new(third))],None,&w,p,&recipes,&recipes,&b,&mut|_,_,_,b,_|{n.set(n.get()+1);let result=proposals(b)?;if n.get()==75{if owner{generation.store(2,Ordering::Release);}else{std::fs::write(&prior,b"changed prior source")?;}}Ok(result)},||false);
- assert_eq!(n.get(),75);if owner{assert!(matches!(e,Err(E::Cancelled)));}else{assert!(matches!(e,Err(E::Source{id:1,..})));}assert_eq!(b.used(),0);}
+fn exposure_collection_final_pair_mutation_of_prior_source_and_owner_discards_batch() {
+    use rrrah_dedup::{
+        collection::CollectionError as E,
+        model_banks::{
+            ModelBankExposureCollectionPolicy, ModelBankPixelRecipe,
+            scan_model_banks_exposure_recovery_collection_with as scan,
+        },
+    };
+    for owner in [false, true] {
+        let dir = tempfile::tempdir().unwrap();
+        let (mut r, w) = fixture(dir.path());
+        let prior = r[0].path.clone();
+        let third = dir.path().join("third.bmp");
+        std::fs::copy(&prior, &third).unwrap();
+        let generation = Arc::new(AtomicU64::new(1));
+        r[0].cancellation = Some(GenerationToken::new(generation.clone(), 1));
+        let b = MemoryBudget::new(4_000_000);
+        let recipes = [ModelBankPixelRecipe {
+            window_radius: 1,
+            rank_radius: 2,
+        }];
+        let p = ModelBankExposureCollectionPolicy::for_pairs(exposure_recovery_policy(), 3, 3).unwrap();
+        let n = Cell::new(0);
+        let e = scan(
+            [
+                (1, r[0].clone()),
+                (2, r[1].clone()),
+                (3, DecodeRequest::new(third)),
+            ],
+            None,
+            &w,
+            p,
+            &recipes,
+            &recipes,
+            &b,
+            &mut |_, _, _, b, _| {
+                n.set(n.get() + 1);
+                let result = proposals(b)?;
+                if n.get() == 75 {
+                    if owner {
+                        generation.store(2, Ordering::Release);
+                    } else {
+                        std::fs::write(&prior, b"changed prior source")?;
+                    }
+                }
+                Ok(result)
+            },
+            || false,
+        );
+        assert_eq!(n.get(), 75);
+        if owner {
+            assert!(matches!(e, Err(E::Cancelled)));
+        } else {
+            assert!(matches!(e, Err(E::Source { id: 1, .. })));
+        }
+        assert_eq!(b.used(), 0);
+    }
 }
 
 #[test]
-fn bidirectional_exposure_collection_preserves_direction_and_skips_supported_suffix(){
- use rrrah_dedup::model_banks::{scan_model_banks_bidirectional_exposure_recovery_collection_with as scan,ModelBankExposureCollectionPolicy,ModelBankPixelRecipe};
- let dir=tempfile::tempdir().unwrap();let(r,w)=fixture(dir.path());let b=MemoryBudget::new(4_000_000);let recipes=[ModelBankPixelRecipe{window_radius:1,rank_radius:2}];let p=ModelBankExposureCollectionPolicy::for_bidirectional_pairs(exposure_recovery_policy(),2,1).unwrap();
- for mode in 0..4 {let n=Cell::new(0);let e=scan([(2,r[1].clone()),(1,r[0].clone())],None,&w,p,&recipes,&recipes,&b,&mut|_,_,_,b,_|{let i=n.get();n.set(i+1);if mode==0 || (mode==1&&i>=34&&i<59){proposals(b)}else if mode==2&&i>=59{overlap_proposals(i-59,b)}else{Ok(b.try_buffer(0,ScoredProposal{source:[0.;2],target:[0.;2],confidence:1.})?.freeze())}},||false).unwrap();
- let pair=&e.pairs()[0];assert_eq!((pair.left,pair.right),(1,2));let v=pair.evidence;assert_eq!(v.supported(),mode!=3);assert_eq!(v.forward.supported(),mode==0);assert_eq!(v.reverse.is_none(),mode==0);assert_eq!(n.get(),[25,59,68,68][mode]);if mode==2{assert!(v.reverse.unwrap().recovery.unwrap().search.supported());}assert!(b.used()>0);drop(e);assert_eq!(b.used(),0);}
+fn bidirectional_exposure_collection_preserves_direction_and_skips_supported_suffix() {
+    use rrrah_dedup::model_banks::{
+        ModelBankExposureCollectionPolicy, ModelBankPixelRecipe,
+        scan_model_banks_bidirectional_exposure_recovery_collection_with as scan,
+    };
+    let dir = tempfile::tempdir().unwrap();
+    let (r, w) = fixture(dir.path());
+    let b = MemoryBudget::new(4_000_000);
+    let recipes = [ModelBankPixelRecipe {
+        window_radius: 1,
+        rank_radius: 2,
+    }];
+    let p =
+        ModelBankExposureCollectionPolicy::for_bidirectional_pairs(exposure_recovery_policy(), 2, 1).unwrap();
+    for mode in 0..4 {
+        let n = Cell::new(0);
+        let e = scan(
+            [(2, r[1].clone()), (1, r[0].clone())],
+            None,
+            &w,
+            p,
+            &recipes,
+            &recipes,
+            &b,
+            &mut |_, _, _, b, _| {
+                let i = n.get();
+                n.set(i + 1);
+                if mode == 0 || (mode == 1 && i >= 34 && i < 59) {
+                    proposals(b)
+                } else if mode == 2 && i >= 59 {
+                    overlap_proposals(i - 59, b)
+                } else {
+                    Ok(b.try_buffer(
+                        0,
+                        ScoredProposal {
+                            source: [0.; 2],
+                            target: [0.; 2],
+                            confidence: 1.,
+                        },
+                    )?
+                    .freeze())
+                }
+            },
+            || false,
+        )
+        .unwrap();
+        let pair = &e.pairs()[0];
+        assert_eq!((pair.left, pair.right), (1, 2));
+        let v = pair.evidence;
+        assert_eq!(v.supported(), mode != 3);
+        assert_eq!(v.forward.supported(), mode == 0);
+        assert_eq!(v.reverse.is_none(), mode == 0);
+        assert_eq!(n.get(), [25, 59, 68, 68][mode]);
+        if mode == 2 {
+            assert!(v.reverse.unwrap().recovery.unwrap().search.supported());
+        }
+        assert!(b.used() > 0);
+        drop(e);
+        assert_eq!(b.used(), 0);
+    }
 }
 #[test]
-fn bidirectional_exposure_collection_prepays_reverse_before_input(){
- use rrrah_dedup::{model_banks::{scan_model_banks_bidirectional_exposure_recovery_collection_with as scan,ModelBankExposureCollectionPolicy,ModelBankPixelRecipe},collection::CollectionError as E};
- let b=MemoryBudget::new(4_000_000);let recipes=[ModelBankPixelRecipe{window_radius:1,rank_radius:2}];let full=ModelBankExposureCollectionPolicy::for_bidirectional_pairs(exposure_recovery_policy(),2,1).unwrap();let half=ModelBankExposureCollectionPolicy::for_pairs(exposure_recovery_policy(),2,1).unwrap();
- for field in 0..9{let mut p=full;match field{0=>p.work.model_input_reads=half.work.model_input_reads,1=>p.work.proposal_ranking_checks=half.work.proposal_ranking_checks,2=>p.work.proposal_separation_checks=half.work.proposal_separation_checks,3=>p.work.geometry_hypotheses=half.work.geometry_hypotheses,4=>p.work.point_checks=half.work.point_checks,5=>p.work.selection_checks=half.work.selection_checks,6=>p.work.rank_sites=half.work.rank_sites,7=>p.work.pixel_reads=half.work.pixel_reads,_=>p.maximum_calibration_pixel_reads=half.maximum_calibration_pixel_reads};assert!(matches!(scan(std::iter::from_fn(||panic!("input consumed")),None,Path::new("missing"),p,&recipes,&recipes,&b,&mut|_,_,_,_,_|panic!("provider"),||false),Err(E::Work)));assert_eq!(b.used(),0);}
- assert!(ModelBankExposureCollectionPolicy::for_bidirectional_pairs(exposure_recovery_policy(),2,usize::MAX).is_err());
+fn bidirectional_exposure_collection_prepays_reverse_before_input() {
+    use rrrah_dedup::{
+        collection::CollectionError as E,
+        model_banks::{
+            ModelBankExposureCollectionPolicy, ModelBankPixelRecipe,
+            scan_model_banks_bidirectional_exposure_recovery_collection_with as scan,
+        },
+    };
+    let b = MemoryBudget::new(4_000_000);
+    let recipes = [ModelBankPixelRecipe {
+        window_radius: 1,
+        rank_radius: 2,
+    }];
+    let full =
+        ModelBankExposureCollectionPolicy::for_bidirectional_pairs(exposure_recovery_policy(), 2, 1).unwrap();
+    let half = ModelBankExposureCollectionPolicy::for_pairs(exposure_recovery_policy(), 2, 1).unwrap();
+    for field in 0..9 {
+        let mut p = full;
+        match field {
+            0 => p.work.model_input_reads = half.work.model_input_reads,
+            1 => p.work.proposal_ranking_checks = half.work.proposal_ranking_checks,
+            2 => p.work.proposal_separation_checks = half.work.proposal_separation_checks,
+            3 => p.work.geometry_hypotheses = half.work.geometry_hypotheses,
+            4 => p.work.point_checks = half.work.point_checks,
+            5 => p.work.selection_checks = half.work.selection_checks,
+            6 => p.work.rank_sites = half.work.rank_sites,
+            7 => p.work.pixel_reads = half.work.pixel_reads,
+            _ => p.maximum_calibration_pixel_reads = half.maximum_calibration_pixel_reads,
+        };
+        assert!(matches!(
+            scan(
+                std::iter::from_fn(|| panic!("input consumed")),
+                None,
+                Path::new("missing"),
+                p,
+                &recipes,
+                &recipes,
+                &b,
+                &mut |_, _, _, _, _| panic!("provider"),
+                || false
+            ),
+            Err(E::Work)
+        ));
+        assert_eq!(b.used(), 0);
+    }
+    assert!(
+        ModelBankExposureCollectionPolicy::for_bidirectional_pairs(exposure_recovery_policy(), 2, usize::MAX)
+            .is_err()
+    );
 }
 #[test]
-fn bidirectional_exposure_collection_reverse_final_mutation_and_cancel_discard_batch(){
- use rrrah_dedup::{model_banks::{scan_model_banks_bidirectional_exposure_recovery_collection_with as scan,ModelBankExposureCollectionPolicy,ModelBankPixelRecipe},collection::CollectionError as E};
- for owner in [false,true]{let dir=tempfile::tempdir().unwrap();let(mut r,w)=fixture(dir.path());let generation=Arc::new(AtomicU64::new(1));r[0].cancellation=Some(GenerationToken::new(generation.clone(),1));let b=MemoryBudget::new(4_000_000);let recipes=[ModelBankPixelRecipe{window_radius:1,rank_radius:2}];let p=ModelBankExposureCollectionPolicy::for_bidirectional_pairs(exposure_recovery_policy(),2,1).unwrap();let n=Cell::new(0);
- let e=scan([(1,r[0].clone()),(2,r[1].clone())],None,&w,p,&recipes,&recipes,&b,&mut|_,_,_,b,_|{let i=n.get();n.set(i+1);if i==67{if owner{generation.store(2,Ordering::Release);}else{std::fs::write(&w,b"changed during final reverse attempt")?;}}Ok(b.try_buffer(0,ScoredProposal{source:[0.;2],target:[0.;2],confidence:1.})?.freeze())},||false);
- assert_eq!(n.get(),68);assert!(e.is_err());if owner{assert!(matches!(e,Err(E::Cancelled)));}assert_eq!(b.used(),0);}
+fn bidirectional_exposure_collection_reverse_final_mutation_and_cancel_discard_batch() {
+    use rrrah_dedup::{
+        collection::CollectionError as E,
+        model_banks::{
+            ModelBankExposureCollectionPolicy, ModelBankPixelRecipe,
+            scan_model_banks_bidirectional_exposure_recovery_collection_with as scan,
+        },
+    };
+    for owner in [false, true] {
+        let dir = tempfile::tempdir().unwrap();
+        let (mut r, w) = fixture(dir.path());
+        let generation = Arc::new(AtomicU64::new(1));
+        r[0].cancellation = Some(GenerationToken::new(generation.clone(), 1));
+        let b = MemoryBudget::new(4_000_000);
+        let recipes = [ModelBankPixelRecipe {
+            window_radius: 1,
+            rank_radius: 2,
+        }];
+        let p = ModelBankExposureCollectionPolicy::for_bidirectional_pairs(exposure_recovery_policy(), 2, 1)
+            .unwrap();
+        let n = Cell::new(0);
+        let e = scan(
+            [(1, r[0].clone()), (2, r[1].clone())],
+            None,
+            &w,
+            p,
+            &recipes,
+            &recipes,
+            &b,
+            &mut |_, _, _, b, _| {
+                let i = n.get();
+                n.set(i + 1);
+                if i == 67 {
+                    if owner {
+                        generation.store(2, Ordering::Release);
+                    } else {
+                        std::fs::write(&w, b"changed during final reverse attempt")?;
+                    }
+                }
+                Ok(b.try_buffer(
+                    0,
+                    ScoredProposal {
+                        source: [0.; 2],
+                        target: [0.; 2],
+                        confidence: 1.,
+                    },
+                )?
+                .freeze())
+            },
+            || false,
+        );
+        assert_eq!(n.get(), 68);
+        assert!(e.is_err());
+        if owner {
+            assert!(matches!(e, Err(E::Cancelled)));
+        }
+        assert_eq!(b.used(), 0);
+    }
 }
 
 #[test]
-fn bidirectional_exposure_final_reverse_invalidates_previously_supported_pairs(){
- use rrrah_dedup::{model_banks::{scan_model_banks_bidirectional_exposure_recovery_collection_with as scan,ModelBankExposureCollectionPolicy,ModelBankPixelRecipe},collection::CollectionError as E};
- for mode in 0..4 {let dir=tempfile::tempdir().unwrap();let(mut r,w)=fixture(dir.path());let prior=r[0].path.clone();let third=dir.path().join("third.bmp");std::fs::copy(&prior,&third).unwrap();let generation=Arc::new(AtomicU64::new(1));r[0].cancellation=Some(GenerationToken::new(generation.clone(),1));let b=MemoryBudget::new(4_000_000);let recipes=[ModelBankPixelRecipe{window_radius:1,rank_radius:2}];let p=ModelBankExposureCollectionPolicy::for_bidirectional_pairs(exposure_recovery_policy(),3,3).unwrap();let n=Cell::new(0);let stop=Cell::new(false);
- let result=scan([(3,DecodeRequest::new(third)),(1,r[0].clone()),(2,r[1].clone())],None,&w,p,&recipes,&recipes,&b,&mut|_,_,_,b,_|{let i=n.get();n.set(i+1);if i<50{return proposals(b);}if i==117 {match mode{0=>std::fs::write(&prior,b"earlier supported source replaced")?,1=>generation.store(2,Ordering::Release),2=>stop.set(true),_=>return Err(std::io::Error::other("reverse provider failed after two supported pairs").into())}}Ok(b.try_buffer(0,ScoredProposal{source:[0.;2],target:[0.;2],confidence:1.})?.freeze())},||stop.get());
- assert_eq!(n.get(),118);match mode{0=>assert!(matches!(result,Err(E::Source{id:1,..}))),1|2=>assert!(matches!(result,Err(E::Cancelled))),_=>assert!(matches!(result,Err(E::Pair{left:2,right:3,..})))}assert_eq!(b.used(),0);
- }
+fn bidirectional_exposure_final_reverse_invalidates_previously_supported_pairs() {
+    use rrrah_dedup::{
+        collection::CollectionError as E,
+        model_banks::{
+            ModelBankExposureCollectionPolicy, ModelBankPixelRecipe,
+            scan_model_banks_bidirectional_exposure_recovery_collection_with as scan,
+        },
+    };
+    for mode in 0..4 {
+        let dir = tempfile::tempdir().unwrap();
+        let (mut r, w) = fixture(dir.path());
+        let prior = r[0].path.clone();
+        let third = dir.path().join("third.bmp");
+        std::fs::copy(&prior, &third).unwrap();
+        let generation = Arc::new(AtomicU64::new(1));
+        r[0].cancellation = Some(GenerationToken::new(generation.clone(), 1));
+        let b = MemoryBudget::new(4_000_000);
+        let recipes = [ModelBankPixelRecipe {
+            window_radius: 1,
+            rank_radius: 2,
+        }];
+        let p = ModelBankExposureCollectionPolicy::for_bidirectional_pairs(exposure_recovery_policy(), 3, 3)
+            .unwrap();
+        let n = Cell::new(0);
+        let stop = Cell::new(false);
+        let result = scan(
+            [
+                (3, DecodeRequest::new(third)),
+                (1, r[0].clone()),
+                (2, r[1].clone()),
+            ],
+            None,
+            &w,
+            p,
+            &recipes,
+            &recipes,
+            &b,
+            &mut |_, _, _, b, _| {
+                let i = n.get();
+                n.set(i + 1);
+                if i < 50 {
+                    return proposals(b);
+                }
+                if i == 117 {
+                    match mode {
+                        0 => std::fs::write(&prior, b"earlier supported source replaced")?,
+                        1 => generation.store(2, Ordering::Release),
+                        2 => stop.set(true),
+                        _ => {
+                            return Err(std::io::Error::other(
+                                "reverse provider failed after two supported pairs",
+                            )
+                            .into());
+                        }
+                    }
+                }
+                Ok(b.try_buffer(
+                    0,
+                    ScoredProposal {
+                        source: [0.; 2],
+                        target: [0.; 2],
+                        confidence: 1.,
+                    },
+                )?
+                .freeze())
+            },
+            || stop.get(),
+        );
+        assert_eq!(n.get(), 118);
+        match mode {
+            0 => assert!(matches!(result, Err(E::Source { id: 1, .. }))),
+            1 | 2 => assert!(matches!(result, Err(E::Cancelled))),
+            _ => assert!(matches!(
+                result,
+                Err(E::Pair {
+                    left: 2,
+                    right: 3,
+                    ..
+                })
+            )),
+        }
+        assert_eq!(b.used(), 0);
+    }
 }

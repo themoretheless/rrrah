@@ -508,18 +508,18 @@ pub fn scan_with_cancel_flag(roots: &[PathBuf], options: &Options, cancel: &Atom
 
 /// Fully observed exact scan with the same cancellation contract as
 /// [`scan_with_cancel_flag`]. No user callback runs during publication.
-pub fn scan_verified_with_cancel_flag(
-    roots: &[PathBuf],
-    options: &Options,
-    cancel: &AtomicBool,
-) -> Report {
+pub fn scan_verified_with_cancel_flag(roots: &[PathBuf], options: &Options, cancel: &AtomicBool) -> Report {
     scan_flagged(roots, options, cancel, true)
 }
 
 fn scan_flagged(roots: &[PathBuf], options: &Options, cancel: &AtomicBool, verify_all: bool) -> Report {
     let mut report = scan_observed(
-        roots, options, || cancel.load(Ordering::Acquire), |digest| digest,
-        verify_all, Some(cancel),
+        roots,
+        options,
+        || cancel.load(Ordering::Acquire),
+        |digest| digest,
+        verify_all,
+        Some(cancel),
     );
     if report.cancelled {
         report.groups.clear();
@@ -673,7 +673,12 @@ fn scan_observed(
         // runs after an observation is checked.
         let publication_observations = if verify_all { &baseline } else { &observed_content };
         let publication_stopped = || publication_cancel.is_some_and(|flag| flag.load(Ordering::Acquire));
-        validate_observations(&entries, publication_observations, &publication_stopped, &mut report);
+        validate_observations(
+            &entries,
+            publication_observations,
+            &publication_stopped,
+            &mut report,
+        );
         if publication_stopped() {
             report.cancelled = true;
             report.groups.clear();
@@ -1613,23 +1618,37 @@ mod cancellation_flag_tests {
         }
         for verified in [false, true] {
             let calls = Cell::new(0);
-            let baseline = scan_observed(&paths, &Options::default(), || {
-                calls.set(calls.get() + 1);
-                false
-            }, |digest| digest, verified, None);
+            let baseline = scan_observed(
+                &paths,
+                &Options::default(),
+                || {
+                    calls.set(calls.get() + 1);
+                    false
+                },
+                |digest| digest,
+                verified,
+                None,
+            );
             assert!(baseline.complete());
             assert_eq!(baseline.groups.len(), 1);
             let last = calls.get();
             calls.set(0);
             let flag = AtomicBool::new(false);
-            let cancelled = scan_observed(&paths, &Options::default(), || {
-                calls.set(calls.get() + 1);
-                if calls.get() == last {
-                    flag.store(true, Ordering::Release);
-                }
-                // Only the publication flag can observe this cancellation.
-                false
-            }, |digest| digest, verified, Some(&flag));
+            let cancelled = scan_observed(
+                &paths,
+                &Options::default(),
+                || {
+                    calls.set(calls.get() + 1);
+                    if calls.get() == last {
+                        flag.store(true, Ordering::Release);
+                    }
+                    // Only the publication flag can observe this cancellation.
+                    false
+                },
+                |digest| digest,
+                verified,
+                Some(&flag),
+            );
             assert_eq!(calls.get(), last);
             assert!(cancelled.cancelled);
             assert!(cancelled.groups.is_empty());

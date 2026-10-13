@@ -33,16 +33,20 @@ fn hdr_exposure_saturates_to_finite_binary16_range() {
     ] {
         let output = gpu.render_raster_half(
             &source,
-            ViewParameters { exposure_stops, ..view() },
+            ViewParameters {
+                exposure_stops,
+                ..view()
+            },
             [64, 64],
         );
         assert_eq!(output.len(), 64 * 64 * 4);
         for pixel in output.chunks_exact(4) {
             assert_eq!(pixel, expected, "exposure={exposure_stops}");
         }
-        eprintln!("HDR finite-range: exposure={exposure_stops}; all4096 pixels exact; finite signed binary16");
+        eprintln!(
+            "HDR finite-range: exposure={exposure_stops}; all4096 pixels exact; finite signed binary16"
+        );
     }
-
 }
 
 #[test]
@@ -468,8 +472,13 @@ fn cancelled_upload_validation_and_admission_preserve_visible_texture() {
         RasterColorSpace::LinearSrgb,
     )
     .unwrap();
-    gpu.verify_cancelled_raster_upload_keeps_previous_frame(&first, &replacement, view(), [64, 64],
-        [[0x3c00, 0, 0, 0x3c00], [0, 0, 0x3c00, 0x3c00]]);
+    gpu.verify_cancelled_raster_upload_keeps_previous_frame(
+        &first,
+        &replacement,
+        view(),
+        [64, 64],
+        [[0x3c00, 0, 0, 0x3c00], [0, 0, 0x3c00, 0x3c00]],
+    );
 }
 
 #[test]
@@ -1297,8 +1306,10 @@ fn large_hdr_area_lod_preserves_all_output_samples_and_metal_frame() {
             gpu.render_raster_half(&lod, view, output_size),
             gpu.render_raster_half(&reference, view, output_size)
         );
-        eprintln!("36 MP HDR area LOD full output: {}x{}; every SDR/HDR component matches independent constant reference",
-            output_size[0], output_size[1]);
+        eprintln!(
+            "36 MP HDR area LOD full output: {}x{}; every SDR/HDR component matches independent constant reference",
+            output_size[0], output_size[1]
+        );
     }
     assert_eq!(budget.used(), 16000000);
     drop(lod);
@@ -1310,16 +1321,27 @@ fn large_hdr_area_lod_preserves_all_output_samples_and_metal_frame() {
 
 #[test]
 fn nonfinite_raster_controls_produce_exact_finite_sdr_hdr_frames() {
-    let Some(gpu) = common::qualification_gpu() else { return; };
+    let Some(gpu) = common::qualification_gpu() else {
+        return;
+    };
     let source = frame(2, vec![8., -2., 1., 1., 0.25, 2., 0., 1.]);
     for invalid in [f32::NAN, f32::INFINITY, f32::NEG_INFINITY] {
         for invalid_viewport in [false, true] {
             let viewport = if invalid_viewport { [1., 1.] } else { [64., 64.] };
-            let expected = ViewParameters { viewport, ..Default::default() };
-            let actual = ViewParameters { viewport: if invalid_viewport { [invalid; 2] } else { viewport },
-                pan: [invalid; 2], zoom: invalid, exposure_stops: invalid };
-            assert_eq!(gpu.render_raster(&source, actual, [64, 64]).pixels,
-                gpu.render_raster(&source, expected, [64, 64]).pixels);
+            let expected = ViewParameters {
+                viewport,
+                ..Default::default()
+            };
+            let actual = ViewParameters {
+                viewport: if invalid_viewport { [invalid; 2] } else { viewport },
+                pan: [invalid; 2],
+                zoom: invalid,
+                exposure_stops: invalid,
+            };
+            assert_eq!(
+                gpu.render_raster(&source, actual, [64, 64]).pixels,
+                gpu.render_raster(&source, expected, [64, 64]).pixels
+            );
             let hdr = gpu.render_raster_half(&source, actual, [64, 64]);
             assert!(hdr.iter().all(|bits| bits & 0x7c00 != 0x7c00));
             assert_eq!(hdr, gpu.render_raster_half(&source, expected, [64, 64]));

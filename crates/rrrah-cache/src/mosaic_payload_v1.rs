@@ -711,7 +711,9 @@ fn write_pixels(writer: &mut impl Write, pixels: &[u16]) -> Result<(), MosaicPay
 fn read_pixels(reader: &mut impl Read, sample_count: u64) -> Result<Vec<u16>, MosaicPayloadError> {
     let count = usize::try_from(sample_count).map_err(|_| MosaicPayloadError::LengthOverflow)?;
     let mut pixels = Vec::new();
-    pixels.try_reserve_exact(count).map_err(|_| MosaicPayloadError::AllocationFailed)?;
+    pixels
+        .try_reserve_exact(count)
+        .map_err(|_| MosaicPayloadError::AllocationFailed)?;
     pixels.resize(count, 0u16);
     for samples in pixels.chunks_mut(PIXEL_BUFFER_BYTES / 2) {
         // u16 has no invalid bit patterns; the initialized destination can be
@@ -725,6 +727,7 @@ fn read_pixels(reader: &mut impl Read, sample_count: u64) -> Result<Vec<u16>, Mo
     Ok(pixels)
 }
 
+#[cfg(target_endian = "big")]
 fn fallible_zeroed_bytes(len: usize) -> Result<Box<[u8]>, MosaicPayloadError> {
     let mut bytes = Vec::new();
     bytes
@@ -1092,27 +1095,47 @@ mod tests {
     fn pixel_block_boundaries_are_canonical_and_truncated_reads_release_budget() {
         let block = PIXEL_BUFFER_BYTES / 2;
         for count in [1, block - 1, block, block + 1, block * 2 + 1] {
-            let values: Vec<u16> = (0..count).map(|i| ((i.wrapping_mul(257)) ^ (i >> 3)) as u16).collect();
+            let values: Vec<u16> = (0..count)
+                .map(|i| ((i.wrapping_mul(257)) ^ (i >> 3)) as u16)
+                .collect();
             let expected_bytes: Vec<u8> = values.iter().flat_map(|n| n.to_le_bytes()).collect();
-            let mut writer=CountingWriter::default();write_pixels(&mut writer,&values).unwrap();
-            assert_eq!(writer.bytes,expected_bytes);assert_eq!(writer.writes,count.div_ceil(block));
-            let mut reader=CountingReader::new(&expected_bytes);
-            assert_eq!(read_pixels(&mut reader,count as u64).unwrap(),values);
-            assert_eq!(reader.reads,count.div_ceil(block));
-            let mut metadata=mosaic().metadata;
-            metadata.width=count as u32;metadata.height=1;metadata.active_area=None;metadata.crop_area=None;
-            metadata.black_level=LevelGrid {width:1,height:1,components:1,values:vec![0.]};
-            let source=DecodedMosaic::new(metadata,Arc::new(values.clone())).unwrap();
-            let mut encoded=Vec::new();encode_mosaic_payload_v1(&mut encoded,&source).unwrap();
-            let root=rrrah_memory::MemoryBudget::new((count*2) as u64);
-            let restored=decode_mosaic_payload_v1_with_budget(&mut encoded.as_slice(),encoded.len() as u64,&root).unwrap();
-            assert_eq!(&restored.pixels[..],&values[..]);assert_eq!(root.used(),(count*2) as u64);
-            drop(restored);assert_eq!(root.used(),0);
-            for missing in [1,2,(PIXEL_BUFFER_BYTES+1).min(count*2)] {
-                let truncated=&encoded[..encoded.len()-missing];
-                assert!(decode_mosaic_payload_v1_with_budget(&mut &truncated[..],encoded.len() as u64,&root).is_err());
-                assert_eq!(root.used(),0,"count={count} missing={missing}");
-                assert!(decode_mosaic_payload_v1(&mut &truncated[..],encoded.len() as u64).is_err());
+            let mut writer = CountingWriter::default();
+            write_pixels(&mut writer, &values).unwrap();
+            assert_eq!(writer.bytes, expected_bytes);
+            assert_eq!(writer.writes, count.div_ceil(block));
+            let mut reader = CountingReader::new(&expected_bytes);
+            assert_eq!(read_pixels(&mut reader, count as u64).unwrap(), values);
+            assert_eq!(reader.reads, count.div_ceil(block));
+            let mut metadata = mosaic().metadata;
+            metadata.width = count as u32;
+            metadata.height = 1;
+            metadata.active_area = None;
+            metadata.crop_area = None;
+            metadata.black_level = LevelGrid {
+                width: 1,
+                height: 1,
+                components: 1,
+                values: vec![0.],
+            };
+            let source = DecodedMosaic::new(metadata, Arc::new(values.clone())).unwrap();
+            let mut encoded = Vec::new();
+            encode_mosaic_payload_v1(&mut encoded, &source).unwrap();
+            let root = rrrah_memory::MemoryBudget::new((count * 2) as u64);
+            let restored =
+                decode_mosaic_payload_v1_with_budget(&mut encoded.as_slice(), encoded.len() as u64, &root)
+                    .unwrap();
+            assert_eq!(&restored.pixels[..], &values[..]);
+            assert_eq!(root.used(), (count * 2) as u64);
+            drop(restored);
+            assert_eq!(root.used(), 0);
+            for missing in [1, 2, (PIXEL_BUFFER_BYTES + 1).min(count * 2)] {
+                let truncated = &encoded[..encoded.len() - missing];
+                assert!(
+                    decode_mosaic_payload_v1_with_budget(&mut &truncated[..], encoded.len() as u64, &root)
+                        .is_err()
+                );
+                assert_eq!(root.used(), 0, "count={count} missing={missing}");
+                assert!(decode_mosaic_payload_v1(&mut &truncated[..], encoded.len() as u64).is_err());
             }
         }
     }

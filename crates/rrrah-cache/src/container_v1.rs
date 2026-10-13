@@ -475,8 +475,6 @@ pub enum ContainerError {
 
 #[cfg(test)]
 mod tests {
-    use std::io::{Read as _, Write as _};
-
     use super::*;
 
     fn key() -> ArtifactKey {

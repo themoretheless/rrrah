@@ -111,119 +111,273 @@ fn factors() -> [f64; 4] {
     [1., std::f64::consts::SQRT_2, 2., 2. * std::f64::consts::SQRT_2]
 }
 
-
 fn anchors() -> rrrah_dedup::anchor_rank::AnchorRankPolicy {
-rrrah_dedup::anchor_rank::AnchorRankPolicy {
-        local:rrrah_dedup::local_rank::LocalRankPolicy {
-            rank:rrrah_dedup::rank_region::RankRegionPolicy {
-                radius:8,minimum_contrast:0.005,minimum_pairs:1000,
-                maximum_sites:12800000,maximum_pixel_reads:64000000,
+    rrrah_dedup::anchor_rank::AnchorRankPolicy {
+        local: rrrah_dedup::local_rank::LocalRankPolicy {
+            rank: rrrah_dedup::rank_region::RankRegionPolicy {
+                radius: 8,
+                minimum_contrast: 0.005,
+                minimum_pairs: 1000,
+                maximum_sites: 12800000,
+                maximum_pixel_reads: 64000000,
             },
-            filter_radius:8,minimum_witnesses:10,maximum_points:4000,
-            maximum_point_checks:8002000,minimum_point_separation:2.,
-            target_tolerance:2.,source_tolerance:2.,minimum_coverage:0.3,minimum_agreement:0.9,
-        },window_radius:2,maximum_selection_checks:24002000,
+            filter_radius: 8,
+            minimum_witnesses: 10,
+            maximum_points: 4000,
+            maximum_point_checks: 8002000,
+            minimum_point_separation: 2.,
+            target_tolerance: 2.,
+            source_tolerance: 2.,
+            minimum_coverage: 0.3,
+            minimum_agreement: 0.9,
+        },
+        window_radius: 2,
+        maximum_selection_checks: 24002000,
     }
 }
 
-
 fn portfolio() -> rrrah_dedup::anchor_rank_file::AnchorReflectionFallbackPolicy {
-    let c=config();let p=anchors();
+    let c = config();
+    let p = anchors();
     rrrah_dedup::anchor_rank_file::AnchorReflectionFallbackPolicy {
-        search:rrrah_dedup::anchor_rank_file::AnchorGeometryFallbackPolicy {
-            search:rrrah_dedup::local_scan::ProjectiveCandidateUnionFallbackFilePolicy {
-                search:c,asymmetric_radius:4,
-                max_total_gradient_samples:6*c.max_total_gradient_samples,
-                max_total_match_comparisons:6*c.max_total_match_comparisons,
-                max_total_union_comparisons:6*c.max_union_comparisons,
-            },anchors:p,
-            maximum_total_point_checks:6*p.local.maximum_point_checks,
-            maximum_total_selection_checks:6*p.maximum_selection_checks,
-            maximum_total_rank_sites:6*p.local.rank.maximum_sites,
-            maximum_total_pixel_reads:6*p.local.rank.maximum_pixel_reads,
-        },maximum_reflection_bins:768*c.search.gradient.search.max_total_features as u64,
+        search: rrrah_dedup::anchor_rank_file::AnchorGeometryFallbackPolicy {
+            search: rrrah_dedup::local_scan::ProjectiveCandidateUnionFallbackFilePolicy {
+                search: c,
+                asymmetric_radius: 4,
+                max_total_gradient_samples: 6 * c.max_total_gradient_samples,
+                max_total_match_comparisons: 6 * c.max_total_match_comparisons,
+                max_total_union_comparisons: 6 * c.max_union_comparisons,
+            },
+            anchors: p,
+            maximum_total_point_checks: 6 * p.local.maximum_point_checks,
+            maximum_total_selection_checks: 6 * p.maximum_selection_checks,
+            maximum_total_rank_sites: 6 * p.local.rank.maximum_sites,
+            maximum_total_pixel_reads: 6 * p.local.rank.maximum_pixel_reads,
+        },
+        maximum_reflection_bins: 768 * c.search.gradient.search.max_total_features as u64,
     }
 }
 #[test]
 fn indexed_mirror_equals_direct_original_pixel_confirmation() {
-    use rrrah_dedup::local_collection::{AnchorReflectionFallbackCollectionPolicy,scan_anchor_rank_reflection_fallback_collection};
-    let root=std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/rotation");
-    let left=rrrah_decode::DecodeRequest::new(root.join("base.png"));let right=rrrah_decode::DecodeRequest::new(root.join("mirrored.png"));
-    let policy=AnchorReflectionFallbackCollectionPolicy {
-        search:portfolio(),budgets:rrrah_dedup::local_index::FileFeatureBudgets {max_files:2,max_features:24000,max_hits:128000000,max_pair_counts:1,max_pairs:1},
-        max_retrieval_comparisons:1152000000,maximum_retrieval_reflection_bins:3072000,
+    use rrrah_dedup::local_collection::{
+        AnchorReflectionFallbackCollectionPolicy, scan_anchor_rank_reflection_fallback_collection,
     };
-    let budget=rrrah_core::MemoryBudget::new(128*1024*1024);
-    let report=scan_anchor_rank_reflection_fallback_collection([(1,left.clone()),(2,right.clone())],policy,&factors(),&budget,||false).unwrap();
-    assert!(report.file_issues.is_empty(),"{report:?}");assert!(report.local.issues.is_empty(),"{report:?}");assert_eq!(report.local.pairs.len(),1,"{report:?}");
-    let direct=rrrah_dedup::anchor_rank_file::search_anchor_rank_reflection_fallback_files(&left,&right,portfolio(),&factors(),&budget,||false).unwrap();
-    let indexed=&report.local.pairs[0].evidence;assert_eq!(indexed.attempted_recipes,4);assert!(indexed.reflected_source);
-    assert_eq!(indexed.evidence.anchors,direct.evidence.anchors);
-    assert_eq!(indexed.evidence.search.correspondences.iter().map(|p|(p.source,p.target)).collect::<Vec<_>>(),direct.evidence.search.correspondences.iter().map(|p|(p.source,p.target)).collect::<Vec<_>>());
-    assert!(indexed.evidence.anchors.unwrap().supported);drop((direct,report));assert_eq!(budget.used(),0);
+    let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/rotation");
+    let left = rrrah_decode::DecodeRequest::new(root.join("base.png"));
+    let right = rrrah_decode::DecodeRequest::new(root.join("mirrored.png"));
+    let policy = AnchorReflectionFallbackCollectionPolicy {
+        search: portfolio(),
+        budgets: rrrah_dedup::local_index::FileFeatureBudgets {
+            max_files: 2,
+            max_features: 24000,
+            max_hits: 128000000,
+            max_pair_counts: 1,
+            max_pairs: 1,
+        },
+        max_retrieval_comparisons: 1152000000,
+        maximum_retrieval_reflection_bins: 3072000,
+    };
+    let budget = rrrah_core::MemoryBudget::new(128 * 1024 * 1024);
+    let report = scan_anchor_rank_reflection_fallback_collection(
+        [(1, left.clone()), (2, right.clone())],
+        policy,
+        &factors(),
+        &budget,
+        || false,
+    )
+    .unwrap();
+    assert!(report.file_issues.is_empty(), "{report:?}");
+    assert!(report.local.issues.is_empty(), "{report:?}");
+    assert_eq!(report.local.pairs.len(), 1, "{report:?}");
+    let direct = rrrah_dedup::anchor_rank_file::search_anchor_rank_reflection_fallback_files(
+        &left,
+        &right,
+        portfolio(),
+        &factors(),
+        &budget,
+        || false,
+    )
+    .unwrap();
+    let indexed = &report.local.pairs[0].evidence;
+    assert_eq!(indexed.attempted_recipes, 4);
+    assert!(indexed.reflected_source);
+    assert_eq!(indexed.evidence.anchors, direct.evidence.anchors);
+    assert_eq!(
+        indexed
+            .evidence
+            .search
+            .correspondences
+            .iter()
+            .map(|p| (p.source, p.target))
+            .collect::<Vec<_>>(),
+        direct
+            .evidence
+            .search
+            .correspondences
+            .iter()
+            .map(|p| (p.source, p.target))
+            .collect::<Vec<_>>()
+    );
+    assert!(indexed.evidence.anchors.unwrap().supported);
+    drop((direct, report));
+    assert_eq!(budget.used(), 0);
 }
 
 #[test]
 fn foreign_pairs_are_rejected_by_indexed_and_all_direct_reflected_searches() {
-    use rrrah_dedup::local_collection::{AnchorReflectionFallbackCollectionPolicy,scan_anchor_rank_reflection_fallback_collection};
-    let root=std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/rotation");
-    let left=rrrah_decode::DecodeRequest::new(root.join("base.png"));let right=rrrah_decode::DecodeRequest::new(root.join("mirrored.png"));
-    let policy=AnchorReflectionFallbackCollectionPolicy {
-        search:portfolio(),budgets:rrrah_dedup::local_index::FileFeatureBudgets {max_files:3,max_features:24000,max_hits:128000000,max_pair_counts:3,max_pairs:3},
-        max_retrieval_comparisons:1152000000,maximum_retrieval_reflection_bins:3072000,
+    use rrrah_dedup::local_collection::{
+        AnchorReflectionFallbackCollectionPolicy, scan_anchor_rank_reflection_fallback_collection,
     };
-    let budget=rrrah_core::MemoryBudget::new(128*1024*1024);
-    let foreign=rrrah_decode::DecodeRequest::new(root.join("unrelated.png"));
-    let report=scan_anchor_rank_reflection_fallback_collection([(1,left.clone()),(2,right.clone()),(3,foreign.clone())],policy,&factors(),&budget,||false).unwrap();
-    assert!(report.file_issues.is_empty(),"{report:?}");assert!(report.local.issues.is_empty(),"{report:?}");assert_eq!(report.local.pairs.iter().filter(|p|p.evidence.evidence.anchors.is_some_and(|a|a.supported)).count(),1,"{report:?}");
-    let direct=rrrah_dedup::anchor_rank_file::search_anchor_rank_reflection_fallback_files(&left,&right,portfolio(),&factors(),&budget,||false).unwrap();
-    let indexed=&report.local.pairs.iter().find(|p|(p.left,p.right)==(1,2)).unwrap().evidence;assert_eq!(indexed.attempted_recipes,4);assert!(indexed.reflected_source);
-    assert_eq!(indexed.evidence.anchors,direct.evidence.anchors);
-    assert_eq!(indexed.evidence.search.correspondences.iter().map(|p|(p.source,p.target)).collect::<Vec<_>>(),direct.evidence.search.correspondences.iter().map(|p|(p.source,p.target)).collect::<Vec<_>>());
+    let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/rotation");
+    let left = rrrah_decode::DecodeRequest::new(root.join("base.png"));
+    let right = rrrah_decode::DecodeRequest::new(root.join("mirrored.png"));
+    let policy = AnchorReflectionFallbackCollectionPolicy {
+        search: portfolio(),
+        budgets: rrrah_dedup::local_index::FileFeatureBudgets {
+            max_files: 3,
+            max_features: 24000,
+            max_hits: 128000000,
+            max_pair_counts: 3,
+            max_pairs: 3,
+        },
+        max_retrieval_comparisons: 1152000000,
+        maximum_retrieval_reflection_bins: 3072000,
+    };
+    let budget = rrrah_core::MemoryBudget::new(128 * 1024 * 1024);
+    let foreign = rrrah_decode::DecodeRequest::new(root.join("unrelated.png"));
+    let report = scan_anchor_rank_reflection_fallback_collection(
+        [(1, left.clone()), (2, right.clone()), (3, foreign.clone())],
+        policy,
+        &factors(),
+        &budget,
+        || false,
+    )
+    .unwrap();
+    assert!(report.file_issues.is_empty(), "{report:?}");
+    assert!(report.local.issues.is_empty(), "{report:?}");
+    assert_eq!(
+        report
+            .local
+            .pairs
+            .iter()
+            .filter(|p| p.evidence.evidence.anchors.is_some_and(|a| a.supported))
+            .count(),
+        1,
+        "{report:?}"
+    );
+    let direct = rrrah_dedup::anchor_rank_file::search_anchor_rank_reflection_fallback_files(
+        &left,
+        &right,
+        portfolio(),
+        &factors(),
+        &budget,
+        || false,
+    )
+    .unwrap();
+    let indexed = &report
+        .local
+        .pairs
+        .iter()
+        .find(|p| (p.left, p.right) == (1, 2))
+        .unwrap()
+        .evidence;
+    assert_eq!(indexed.attempted_recipes, 4);
+    assert!(indexed.reflected_source);
+    assert_eq!(indexed.evidence.anchors, direct.evidence.anchors);
+    assert_eq!(
+        indexed
+            .evidence
+            .search
+            .correspondences
+            .iter()
+            .map(|p| (p.source, p.target))
+            .collect::<Vec<_>>(),
+        direct
+            .evidence
+            .search
+            .correspondences
+            .iter()
+            .map(|p| (p.source, p.target))
+            .collect::<Vec<_>>()
+    );
     assert!(indexed.evidence.anchors.unwrap().supported);
     drop(direct);
-    for (id,source) in [(1,&left),(2,&right)] {
-        let negative=rrrah_dedup::anchor_rank_file::search_anchor_rank_reflection_fallback_files(source,&foreign,portfolio(),&factors(),&budget,||false).unwrap();
-        assert!(!negative.evidence.anchors.is_some_and(|a|a.supported));
-        assert_eq!(negative.attempted_recipes,6);
-        if let Some(pair)=report.local.pairs.iter().find(|p|(p.left,p.right)==(id,3)) {
-            assert_eq!(pair.evidence.evidence.anchors,negative.evidence.anchors);
-            assert_eq!(pair.evidence.attempted_recipes,negative.attempted_recipes);
+    for (id, source) in [(1, &left), (2, &right)] {
+        let negative = rrrah_dedup::anchor_rank_file::search_anchor_rank_reflection_fallback_files(
+            source,
+            &foreign,
+            portfolio(),
+            &factors(),
+            &budget,
+            || false,
+        )
+        .unwrap();
+        assert!(!negative.evidence.anchors.is_some_and(|a| a.supported));
+        assert_eq!(negative.attempted_recipes, 6);
+        if let Some(pair) = report.local.pairs.iter().find(|p| (p.left, p.right) == (id, 3)) {
+            assert_eq!(pair.evidence.evidence.anchors, negative.evidence.anchors);
+            assert_eq!(pair.evidence.attempted_recipes, negative.attempted_recipes);
         }
         drop(negative);
     }
-    drop(report);assert_eq!(budget.used(),0);
+    drop(report);
+    assert_eq!(budget.used(), 0);
 }
 
 #[test]
 fn six_phase_collection_caps_refuse_before_iteration_and_cancel_wins() {
-    use rrrah_dedup::local_collection::{AnchorReflectionFallbackCollectionPolicy,scan_anchor_rank_reflection_fallback_collection};
+    use rrrah_dedup::local_collection::{
+        AnchorReflectionFallbackCollectionPolicy, scan_anchor_rank_reflection_fallback_collection,
+    };
     for case in 0..10 {
-        let mut search=portfolio();
+        let mut search = portfolio();
         match case {
-            0=>search.search.maximum_total_point_checks-=1,
-            1=>search.search.maximum_total_selection_checks-=1,
-            2=>search.search.maximum_total_rank_sites-=1,
-            3=>search.search.maximum_total_pixel_reads-=1,
-            4=>search.search.search.max_total_gradient_samples-=1,
-            5=>search.search.search.max_total_match_comparisons-=1,
-            6=>search.search.search.max_total_union_comparisons-=1,
-            7=>search.maximum_reflection_bins-=1,
-            _=>{},
+            0 => search.search.maximum_total_point_checks -= 1,
+            1 => search.search.maximum_total_selection_checks -= 1,
+            2 => search.search.maximum_total_rank_sites -= 1,
+            3 => search.search.maximum_total_pixel_reads -= 1,
+            4 => search.search.search.max_total_gradient_samples -= 1,
+            5 => search.search.search.max_total_match_comparisons -= 1,
+            6 => search.search.search.max_total_union_comparisons -= 1,
+            7 => search.maximum_reflection_bins -= 1,
+            _ => {}
         }
-        let mut config=AnchorReflectionFallbackCollectionPolicy {
-            search,budgets:rrrah_dedup::local_index::FileFeatureBudgets {max_files:2,max_features:24000,max_hits:128000000,max_pair_counts:1,max_pairs:1},
-            max_retrieval_comparisons:1152000000,maximum_retrieval_reflection_bins:3072000,
+        let mut config = AnchorReflectionFallbackCollectionPolicy {
+            search,
+            budgets: rrrah_dedup::local_index::FileFeatureBudgets {
+                max_files: 2,
+                max_features: 24000,
+                max_hits: 128000000,
+                max_pair_counts: 1,
+                max_pairs: 1,
+            },
+            max_retrieval_comparisons: 1152000000,
+            maximum_retrieval_reflection_bins: 3072000,
         };
-        if case==8 {config.max_retrieval_comparisons-=1;}
-        if case==9 {config.maximum_retrieval_reflection_bins-=1;}
-        for cancelled in [false,true] {
-            let files=std::iter::from_fn(|| -> Option<(u64,rrrah_decode::DecodeRequest)> {panic!("refusal must precede iteration")});
-            let budget=rrrah_core::MemoryBudget::new(128*1024*1024);
-            let result=scan_anchor_rank_reflection_fallback_collection(files,config,&factors(),&budget,||cancelled);
-            if cancelled {assert!(matches!(result,Err(rrrah_dedup::scan::ScanError::Cancelled)));}
-            else {assert!(matches!(result,Err(rrrah_dedup::scan::ScanError::Budget)),"case={case}: {result:?}");}
-            assert_eq!(budget.peak(),0);
+        if case == 8 {
+            config.max_retrieval_comparisons -= 1;
+        }
+        if case == 9 {
+            config.maximum_retrieval_reflection_bins -= 1;
+        }
+        for cancelled in [false, true] {
+            let files = std::iter::from_fn(|| -> Option<(u64, rrrah_decode::DecodeRequest)> {
+                panic!("refusal must precede iteration")
+            });
+            let budget = rrrah_core::MemoryBudget::new(128 * 1024 * 1024);
+            let result =
+                scan_anchor_rank_reflection_fallback_collection(files, config, &factors(), &budget, || {
+                    cancelled
+                });
+            if cancelled {
+                assert!(matches!(result, Err(rrrah_dedup::scan::ScanError::Cancelled)));
+            } else {
+                assert!(
+                    matches!(result, Err(rrrah_dedup::scan::ScanError::Budget)),
+                    "case={case}: {result:?}"
+                );
+            }
+            assert_eq!(budget.peak(), 0);
         }
     }
 }

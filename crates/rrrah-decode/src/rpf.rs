@@ -170,9 +170,12 @@ pub fn inspect_rpf(bytes: &[u8]) -> Result<RpfInspection<'_>, RpfInspectError> {
 
 /// Header candidate only. The importer still validates framing and all rows.
 pub(crate) fn has_magic(bytes: &[u8]) -> bool {
-    let Some(h) = bytes.get(..740) else { return false; };
+    let Some(h) = bytes.get(..740) else {
+        return false;
+    };
     let word = |at| u16::from_be_bytes([h[at], h[at + 1]]);
-    word(26) == 0xfffd && (1..=32767).contains(&word(20))
+    word(26) == 0xfffd
+        && (1..=32767).contains(&word(20))
         && matches!(word(658), 8 | 16 | 32)
         && (word(0) as i16) <= (word(2) as i16)
         && (word(4) as i16) <= (word(6) as i16)
@@ -2878,7 +2881,8 @@ pub fn decode_rpf_file_raster_with_budget(
             },
         )
         .map_err(RpfRasterReadError::Display)?;
-    let raster = raster.with_pixel_aspect(aspect.map(|value| value as f32))
+    let raster = raster
+        .with_pixel_aspect(aspect.map(|value| value as f32))
         .map_err(|error| RpfRasterReadError::Display(RpfDisplayError::Raster(error)))?;
     Ok((raster, aspect))
 }
@@ -2962,18 +2966,26 @@ mod file_raster_tests {
             let common_root = rrrah_core::MemoryBudget::new(root_limit);
             let mut common_request = request.clone();
             common_request.memory_budget = Some(common_root.clone());
-            assert!(matches!(crate::decode_raster(&common_request),
-                Err(crate::RasterDecodeError::RpfInterpretationRequired)));
+            assert!(matches!(
+                crate::decode_raster(&common_request),
+                Err(crate::RasterDecodeError::RpfInterpretationRequired)
+            ));
             assert_eq!(common_root.used(), 0);
             common_request.rpf_interpretation = Some(interpretation.clone());
-            let crate::DecodedImage::Raster(common) = crate::decode_image(&common_request).unwrap()
-                else { panic!("RPF must route to raster") };
+            let crate::DecodedImage::Raster(common) = crate::decode_image(&common_request).unwrap() else {
+                panic!("RPF must route to raster")
+            };
             assert_eq!(common.pixel_aspect(), Some(1.5));
             assert_eq!(common.color_space(), raster.color_space());
-            let (rrrah_core::RasterPixels::Rgba32Float(a), rrrah_core::RasterPixels::Rgba32Float(b))
-                = (common.pixels(), raster.pixels()) else { panic!() };
-            assert_eq!(a.iter().map(|v| v.to_bits()).collect::<Vec<_>>(),
-                b.iter().map(|v| v.to_bits()).collect::<Vec<_>>());
+            let (rrrah_core::RasterPixels::Rgba32Float(a), rrrah_core::RasterPixels::Rgba32Float(b)) =
+                (common.pixels(), raster.pixels())
+            else {
+                panic!()
+            };
+            assert_eq!(
+                a.iter().map(|v| v.to_bits()).collect::<Vec<_>>(),
+                b.iter().map(|v| v.to_bits()).collect::<Vec<_>>()
+            );
             drop(common);
             assert_eq!(common_root.used(), 0);
             for suffix in ["png", "CR3", "unknown"] {
@@ -2981,14 +2993,24 @@ mod file_raster_tests {
                 let _renamed_cleanup = Cleanup(renamed.clone());
                 std::fs::write(&renamed, &bytes).unwrap();
                 common_request.path = renamed;
-                assert_eq!(crate::image_source_kind(&common_request).unwrap(), crate::ImageSourceKind::Raster);
-                let crate::DecodedImage::Raster(frame) = crate::decode_image(&common_request).unwrap()
-                    else { panic!("renamed RPF routed to sensor") };
+                assert_eq!(
+                    crate::image_source_kind(&common_request).unwrap(),
+                    crate::ImageSourceKind::Raster
+                );
+                let crate::DecodedImage::Raster(frame) = crate::decode_image(&common_request).unwrap() else {
+                    panic!("renamed RPF routed to sensor")
+                };
                 assert_eq!(frame.pixel_aspect(), Some(1.5));
-                let rrrah_core::RasterPixels::Rgba32Float(values) = frame.pixels() else { panic!() };
-                let rrrah_core::RasterPixels::Rgba32Float(reference) = raster.pixels() else { panic!() };
-                assert_eq!(values.iter().map(|v| v.to_bits()).collect::<Vec<_>>(),
-                    reference.iter().map(|v| v.to_bits()).collect::<Vec<_>>());
+                let rrrah_core::RasterPixels::Rgba32Float(values) = frame.pixels() else {
+                    panic!()
+                };
+                let rrrah_core::RasterPixels::Rgba32Float(reference) = raster.pixels() else {
+                    panic!()
+                };
+                assert_eq!(
+                    values.iter().map(|v| v.to_bits()).collect::<Vec<_>>(),
+                    reference.iter().map(|v| v.to_bits()).collect::<Vec<_>>()
+                );
                 drop(frame);
                 drop(crate::decode_raster(&common_request).unwrap());
                 assert_eq!(common_root.used(), 0);

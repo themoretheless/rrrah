@@ -256,8 +256,7 @@ impl LoFTRModel {
         let hw0_i = (image0.size()[2], image0.size()[3]);
         let hw1_i = (image1.size()[2], image1.size()[3]);
 
-        let backbone_features =
-            self.backbone_features(&image0, &image1, cancel)?;
+        let backbone_features = self.backbone_features(&image0, &image1, cancel)?;
         let coarse_features = self.coarse_features(&backbone_features, batch_size, cancel)?;
 
         crate::error::check_cancel(cancel)?;

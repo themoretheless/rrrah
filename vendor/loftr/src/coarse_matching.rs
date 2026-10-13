@@ -100,7 +100,11 @@ impl CoarseMatching {
 
         crate::error::check_cancel(cancel)?;
         let match_indices = coarse_match_indices_blocked(
-            &conf_matrix, data, self.config.thr, self.config.border_rm, cancel,
+            &conf_matrix,
+            data,
+            self.config.thr,
+            self.config.border_rm,
+            cancel,
         )?;
 
         let (b_ids, i_ids, j_ids, mconf) = if match_indices.size()[0] == 0 {
@@ -240,43 +244,63 @@ fn validate_coarse_matching_inputs(
 // nonzero ordering identical, including all tied maxima. Only the returned
 // indices may scale with the number of matches; boolean scratch is block-sized.
 fn coarse_match_indices_blocked(
-    confidence: &Tensor, data: &CoarseMatchingData, threshold: f64,
-    border: i64, cancel: &dyn Fn()->bool,
-) -> Result<Tensor,LoftrError> {
+    confidence: &Tensor,
+    data: &CoarseMatchingData,
+    threshold: f64,
+    border: i64,
+    cancel: &dyn Fn() -> bool,
+) -> Result<Tensor, LoftrError> {
     crate::error::check_cancel(cancel)?;
-    let rows=confidence.size()[1];let columns=confidence.size()[2];
-    let row_max=confidence.f_max_dim(2,true)?.0;
+    let rows = confidence.size()[1];
+    let columns = confidence.size()[2];
+    let row_max = confidence.f_max_dim(2, true)?.0;
     crate::error::check_cancel(cancel)?;
-    let column_max=confidence.f_max_dim(1,true)?.0;
-    let valid = |(h,w):(i64,i64)| {
-        if border<=0 {Tensor::ones([h*w],(Kind::Bool,confidence.device()))}
-        else {border_axis_mask(h,border,confidence.device()).unsqueeze(1)
-            .logical_and(&border_axis_mask(w,border,confidence.device()).unsqueeze(0)).reshape([h*w])}
+    let column_max = confidence.f_max_dim(1, true)?.0;
+    let valid = |(h, w): (i64, i64)| {
+        if border <= 0 {
+            Tensor::ones([h * w], (Kind::Bool, confidence.device()))
+        } else {
+            border_axis_mask(h, border, confidence.device())
+                .unsqueeze(1)
+                .logical_and(&border_axis_mask(w, border, confidence.device()).unsqueeze(0))
+                .reshape([h * w])
+        }
     };
-    let left=valid(data.hw0_c);let right=valid(data.hw1_c).view([1,1,columns]);
-    let mut indices=Vec::new();
+    let left = valid(data.hw0_c);
+    let right = valid(data.hw1_c).view([1, 1, columns]);
+    let mut indices = Vec::new();
     for batch in 0..confidence.size()[0] {
-        let mut start=0;
-        while start<rows {
+        let mut start = 0;
+        while start < rows {
             crate::error::check_cancel(cancel)?;
-            let count=128.min(rows-start);
-            let block=confidence.f_narrow(0,batch,1)?.f_narrow(1,start,count)?;
-            let mask=block.f_gt(threshold)?
-                .logical_and(&block.f_eq_tensor(&row_max.f_narrow(0,batch,1)?.f_narrow(1,start,count)?)?)
-                .logical_and(&block.f_eq_tensor(&column_max.f_narrow(0,batch,1)?)?)
-                .logical_and(&left.f_narrow(0,start,count)?.view([1,count,1]))
+            let count = 128.min(rows - start);
+            let block = confidence
+                .f_narrow(0, batch, 1)?
+                .f_narrow(1, start, count)?;
+            let mask = block
+                .f_gt(threshold)?
+                .logical_and(
+                    &block
+                        .f_eq_tensor(&row_max.f_narrow(0, batch, 1)?.f_narrow(1, start, count)?)?,
+                )
+                .logical_and(&block.f_eq_tensor(&column_max.f_narrow(0, batch, 1)?)?)
+                .logical_and(&left.f_narrow(0, start, count)?.view([1, count, 1]))
                 .logical_and(&right);
-            let local=mask.f_nonzero()?;
-            if local.size()[0]>0 {
-                let offset=Tensor::f_from_slice(&[batch,start,0])?.f_to_device(confidence.device())?;
+            let local = mask.f_nonzero()?;
+            if local.size()[0] > 0 {
+                let offset =
+                    Tensor::f_from_slice(&[batch, start, 0])?.f_to_device(confidence.device())?;
                 indices.push(local.f_add(&offset)?);
             }
-            start+=count;
+            start += count;
         }
     }
     crate::error::check_cancel(cancel)?;
-    if indices.is_empty() {Ok(Tensor::zeros([0,3],(Kind::Int64,confidence.device())))}
-    else {Ok(Tensor::f_cat(&indices,0)?)}
+    if indices.is_empty() {
+        Ok(Tensor::zeros([0, 3], (Kind::Int64, confidence.device())))
+    } else {
+        Ok(Tensor::f_cat(&indices, 0)?)
+    }
 }
 
 #[cfg(test)]

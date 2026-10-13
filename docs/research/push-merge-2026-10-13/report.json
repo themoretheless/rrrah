@@ -1,0 +1,49 @@
+{
+  "base": "1b57ea2b",
+  "merged": [
+    "origin/codex/ci-hygiene-20260731",
+    "origin/codex/shared-rust-actions-20260804",
+    "origin/codex/shared-actions"
+  ],
+  "checks": {
+    "workspace-tests": {
+      "log": "docs/research/push-merge-2026-10-13/workspace-tests.log",
+      "sha256": "4ce0f39579ed1c158e42936df3de315997f6be51e669ba4fc4967b5106723ae1",
+      "passed": 1671,
+      "ignored": 142
+    },
+    "hayro-tests": {
+      "log": "docs/research/push-merge-2026-10-13/hayro-tests.log",
+      "sha256": "f239449db1732897817eec529a7a148fc32e6f533b08bed585075a7dedbfbd73",
+      "passed": 256,
+      "ignored": 12
+    },
+    "cache-tests": {
+      "log": "docs/research/push-merge-2026-10-13/cache-tests.log",
+      "sha256": "6b3387bbf984abe150eb339762c17686480e1417ff45a094fd2d54c1bb73b0e9",
+      "passed": 139,
+      "ignored": 1
+    },
+    "all-targets-all-features": {
+      "log": "docs/research/push-merge-2026-10-13/all-targets-all-features.log",
+      "sha256": "2ad9bdc1032b06e18ad5cbd4e77236797665d201b663fd4252db53a48b271e09",
+      "passed": 0,
+      "ignored": 0
+    }
+  },
+  "fixes": [
+    "Scope AI source observations before consuming combined numeric diagnostic",
+    "Keep current colour exports, dependencies and GPU CI settings during old branch merges",
+    "Update folder-scan and prefetch benchmark module wiring; remove obsolete scan cap",
+    "Apply workspace rustfmt; gate endian-only helper and remove unused cache test imports"
+  ],
+  "limitations": [
+    "All-features check uses installed PyTorch 2.10 runtime",
+    "Warnings remain in diagnostic/example/test targets; strict clippy and remote CI not certified",
+    "Ignored hardware/corpus tests not included",
+    "Background dedup benchmarks remain active; later writes may remain local",
+    "Historical logs and patch evidence kept byte-for-byte, including whitespace"
+  ],
+  "stash_count": 0,
+  "worktree_count": 1
+}

@@ -143,11 +143,22 @@ fn qualify_collection(external: Option<String>) {
     let additional: Vec<_> = [
         include_str!("../../../tests/fixtures/raster/dpx-manifest.tsv"),
         include_str!("../../../tests/fixtures/raster/cineon-manifest.tsv"),
-    ].into_iter().flat_map(str::lines)
-        .map(|line| format!("raster/{}", line.split('\t').next().unwrap())).collect();
+    ]
+    .into_iter()
+    .flat_map(str::lines)
+    .map(|line| format!("raster/{}", line.split('\t').next().unwrap()))
+    .collect();
     assert_eq!(additional.len(), 36);
-    let sources: Vec<_> = sources.iter().copied().chain(additional.iter().map(String::as_str)).collect();
-    let sources = if let Some(source) = external.as_deref() { vec![source] } else { sources };
+    let sources: Vec<_> = sources
+        .iter()
+        .copied()
+        .chain(additional.iter().map(String::as_str))
+        .collect();
+    let sources = if let Some(source) = external.as_deref() {
+        vec![source]
+    } else {
+        sources
+    };
     let mut selection_count = 0;
     for name in sources.iter().copied() {
         let mut indices = std::collections::VecDeque::from([0]);
@@ -158,8 +169,12 @@ fn qualify_collection(external: Option<String>) {
                 let mut request = rrrah_decode::DecodeRequest::new(fixtures.join(name));
                 request.image_index = image_index;
                 request.memory_budget = Some(budget.clone());
-                if name.ends_with("cicp-pq-2020.png") { request.pq_reference_white_nits = Some(100.); }
-                if name.ends_with("cicp-hlg-2020.png") { request.hlg_display = Some((100., 1000., 1.2)); }
+                if name.ends_with("cicp-pq-2020.png") {
+                    request.pq_reference_white_nits = Some(100.);
+                }
+                if name.ends_with("cicp-hlg-2020.png") {
+                    request.hlg_display = Some((100., 1000., 1.2));
+                }
                 if name.ends_with("cicp-narrow-709.png") {
                     // Global folder HDR policies must leave this SDR transfer alone.
                     request.pq_reference_white_nits = Some(100.);
@@ -197,11 +212,19 @@ fn qualify_collection(external: Option<String>) {
                     let mut invalid = request.clone();
                     invalid.image_index = decoded.image_count();
                     let retained_bytes = budget.used();
-                    assert!(rrrah_decode::decode_image(&invalid).is_err(),
-                        "{name}: index at image_count must be refused");
-                    assert_eq!(budget.used(), retained_bytes,
-                        "{name}: out-of-range decode must release its allocations");
-                    eprintln!("raster collection bounds: {name}; rejected_index={}; retained_bytes_unchanged", invalid.image_index);
+                    assert!(
+                        rrrah_decode::decode_image(&invalid).is_err(),
+                        "{name}: index at image_count must be refused"
+                    );
+                    assert_eq!(
+                        budget.used(),
+                        retained_bytes,
+                        "{name}: out-of-range decode must release its allocations"
+                    );
+                    eprintln!(
+                        "raster collection bounds: {name}; rejected_index={}; retained_bytes_unchanged",
+                        invalid.image_index
+                    );
                 }
                 if name.ends_with(".pfm") {
                     let oracle = std::fs::read(fixtures.join("raster/transport-linear.pfm.rgba32f")).unwrap();
@@ -221,29 +244,46 @@ fn qualify_collection(external: Option<String>) {
                     let expected = if suffix == "u8" {
                         oracle.into_iter().map(u32::from).collect::<Vec<_>>()
                     } else {
-                        oracle.chunks_exact(2).map(|v| u32::from(u16::from_le_bytes(v.try_into().unwrap()))).collect()
+                        oracle
+                            .chunks_exact(2)
+                            .map(|v| u32::from(u16::from_le_bytes(v.try_into().unwrap())))
+                            .collect()
                     };
-                    assert_eq!(bits(&decoded), expected, "DPX/Cineon independent native sample oracle");
+                    assert_eq!(
+                        bits(&decoded),
+                        expected,
+                        "DPX/Cineon independent native sample oracle"
+                    );
                 }
                 if name.ends_with("alpha-container-0.jxl") || name.ends_with("alpha-container-1.jxl") {
                     let oracle = std::fs::read(fixtures.join(format!("{name}.rgba"))).unwrap();
-                    assert_eq!(bits(&decoded), oracle.into_iter().map(u32::from).collect::<Vec<_>>(),
-                        "JXL independent libjxl RGBA oracle");
+                    assert_eq!(
+                        bits(&decoded),
+                        oracle.into_iter().map(u32::from).collect::<Vec<_>>(),
+                        "JXL independent libjxl RGBA oracle"
+                    );
                 }
                 if name.ends_with("precision16.jxl") {
                     assert!(matches!(decoded.pixels(), RasterPixels::Rgba16(_)));
-                    assert_eq!(bits(&decoded), vec![32768,32768,32768,65535,32769,32769,32769,65535],
-                        "JXL adjacent authored 16-bit samples");
+                    assert_eq!(
+                        bits(&decoded),
+                        vec![32768, 32768, 32768, 65535, 32769, 32769, 32769, 65535],
+                        "JXL adjacent authored 16-bit samples"
+                    );
                 }
                 if name.ends_with("hdr-compressed.astc") {
                     let oracle = std::fs::read(fixtures.join("raster/hdr-compressed.astc.rgba32f")).unwrap();
-                    let expected: Vec<_> = oracle.chunks_exact(4)
-                        .map(|p| u32::from_le_bytes(p.try_into().unwrap())).collect();
+                    let expected: Vec<_> = oracle
+                        .chunks_exact(4)
+                        .map(|p| u32::from_le_bytes(p.try_into().unwrap()))
+                        .collect();
                     assert_eq!(bits(&decoded), expected, "ASTC reference float oracle");
                 }
                 if name.ends_with("precision-32-0.ktx2") || name.ends_with("precision-32-3.ktx2") {
                     let expected: Vec<_> = [0.5_f32, 0.1, 0.3, 1.0, 2.0, 0.2, 0.4, 1.0]
-                        .into_iter().map(f32::to_bits).collect();
+                        .into_iter()
+                        .map(f32::to_bits)
+                        .collect();
                     assert_eq!(bits(&decoded), expected, "KTX2 authored float samples");
                 }
                 if name.ends_with(".wal") {
@@ -287,74 +327,135 @@ fn qualify_collection(external: Option<String>) {
                 let ready =
                     rrrah_decode::prepare_raster_for_display_with_budget(&decoded, Some(&budget)).unwrap();
                 if name.contains("gamma-gray-packed-") {
-                    let depth = if name.ends_with("-1.png") {1} else if name.ends_with("-2.png") {2} else {4};
-                    let maximum = (1u32<<depth)-1;
-                    assert_eq!((decoded.width(), decoded.height()), (16,1));
-                    assert!(matches!(decoded.color_space(), rrrah_core::RasterColorSpace::Icc(_)));
-                    let expected: Vec<u32> = (0..16u32).flat_map(|x| {
-                        let code = x & maximum;
-                        let value = code*(255/maximum);
-                        [value,value,value,if code==1 {0} else {255}]
-                    }).collect();
+                    let depth = if name.ends_with("-1.png") {
+                        1
+                    } else if name.ends_with("-2.png") {
+                        2
+                    } else {
+                        4
+                    };
+                    let maximum = (1u32 << depth) - 1;
+                    assert_eq!((decoded.width(), decoded.height()), (16, 1));
+                    assert!(matches!(
+                        decoded.color_space(),
+                        rrrah_core::RasterColorSpace::Icc(_)
+                    ));
+                    let expected: Vec<u32> = (0..16u32)
+                        .flat_map(|x| {
+                            let code = x & maximum;
+                            let value = code * (255 / maximum);
+                            [value, value, value, if code == 1 { 0 } else { 255 }]
+                        })
+                        .collect();
                     assert_eq!(bits(&decoded), expected);
-                    let RasterPixels::Rgba32Float(values) = ready.pixels() else {panic!()};
-                    for (x,rgba) in values.chunks_exact(4).enumerate() {
+                    let RasterPixels::Rgba32Float(values) = ready.pixels() else {
+                        panic!()
+                    };
+                    for (x, rgba) in values.chunks_exact(4).enumerate() {
                         let code = x as u32 & maximum;
-                        let reference = (f64::from(code)/f64::from(maximum)).powi(2);
-                        for value in &rgba[..3] {assert!((f64::from(*value)-reference).abs()<1e-6);}
-                        assert_eq!(rgba[3],if code==1 {0.} else {1.});
+                        let reference = (f64::from(code) / f64::from(maximum)).powi(2);
+                        for value in &rgba[..3] {
+                            assert!((f64::from(*value) - reference).abs() < 1e-6);
+                        }
+                        assert_eq!(rgba[3], if code == 1 { 0. } else { 1. });
                     }
                 } else if name.contains("gamma-chrm-") || name.ends_with("gamma-gray.png") {
                     let p3 = name.ends_with("gamma-chrm-p3.png");
-                    assert_eq!((decoded.width(), decoded.height()), (4,1));
-                    assert!(matches!(decoded.color_space(), rrrah_core::RasterColorSpace::Icc(_)));
-                    let expected: Vec<u32> = [0,32768,32769,65535].into_iter()
-                        .flat_map(|code| [code,if p3 {0} else {code},if p3 {0} else {code},32768]).collect();
+                    assert_eq!((decoded.width(), decoded.height()), (4, 1));
+                    assert!(matches!(
+                        decoded.color_space(),
+                        rrrah_core::RasterColorSpace::Icc(_)
+                    ));
+                    let expected: Vec<u32> = [0, 32768, 32769, 65535]
+                        .into_iter()
+                        .flat_map(|code| [code, if p3 { 0 } else { code }, if p3 { 0 } else { code }, 32768])
+                        .collect();
                     assert_eq!(bits(&decoded), expected);
-                    let RasterPixels::Rgba32Float(values) = ready.pixels() else {panic!()};
-                    let coefficients = if p3 {[1.224940176,-0.042056955,-0.019637555]} else {[1.;3]};
-                    for (i,code) in [0,32768,32769,65535].into_iter().enumerate() {
-                        let value = (f64::from(code)/65535.).powi(2);
-                        for c in 0..3 {assert!((f64::from(values[i*4+c])-value*coefficients[c]).abs()<0.0001);}
-                        assert!((values[i*4+3]-32768./65535.).abs()<1e-7);
+                    let RasterPixels::Rgba32Float(values) = ready.pixels() else {
+                        panic!()
+                    };
+                    let coefficients = if p3 {
+                        [1.224940176, -0.042056955, -0.019637555]
+                    } else {
+                        [1.; 3]
+                    };
+                    for (i, code) in [0, 32768, 32769, 65535].into_iter().enumerate() {
+                        let value = (f64::from(code) / 65535.).powi(2);
+                        for c in 0..3 {
+                            assert!((f64::from(values[i * 4 + c]) - value * coefficients[c]).abs() < 0.0001);
+                        }
+                        assert!((values[i * 4 + 3] - 32768. / 65535.).abs() < 1e-7);
                     }
                     assert!(values[4] < values[8]);
                 } else if name.contains("cicp-narrow-") {
                     assert_eq!((decoded.width(), decoded.height()), (5, 1));
-                    let expected: Vec<u32> = [0,4096,32768,60160,65535].into_iter()
-                        .flat_map(|code| [code,code,code,32768]).collect();
+                    let expected: Vec<u32> = [0, 4096, 32768, 60160, 65535]
+                        .into_iter()
+                        .flat_map(|code| [code, code, code, 32768])
+                        .collect();
                     assert_eq!(bits(&decoded), expected);
-                    let RasterPixels::Rgba32Float(values) = ready.pixels() else { panic!() };
+                    let RasterPixels::Rgba32Float(values) = ready.pixels() else {
+                        panic!()
+                    };
                     assert!(values[0] < 0. && values[16] > 1.);
                     assert_eq!(values[4], 0.);
                     assert_eq!(values[12], 1.);
-                    for rgba in values.chunks_exact(4) { assert!((rgba[3] - 32768. / 65535.).abs() < 1e-7); }
+                    for rgba in values.chunks_exact(4) {
+                        assert!((rgba[3] - 32768. / 65535.).abs() < 1e-7);
+                    }
                 } else if name.contains("cicp-") {
                     assert_eq!((decoded.width(), decoded.height()), (3, 1));
-                    let RasterPixels::Rgba32Float(values) = ready.pixels() else { panic!() };
-                    for rgba in values.chunks_exact(4) { assert!((rgba[3] - 32768. / 65535.).abs() < 1e-7); }
-                    if name.contains("cicp-linear-") || name.contains("cicp-encoded-") {
-                        assert_eq!(bits(&decoded), vec![0,0,0,32768,65535,0,0,32768,65535,65535,65535,32768]);
-                        assert!(matches!(decoded.color_space(), rrrah_core::RasterColorSpace::Cicp { transfer: 8 | 13, .. }));
-                        assert!(values[4] > 1. && values[5] < 0., "wide red must retain out-of-sRGB components");
+                    let RasterPixels::Rgba32Float(values) = ready.pixels() else {
+                        panic!()
+                    };
+                    for rgba in values.chunks_exact(4) {
+                        assert!((rgba[3] - 32768. / 65535.).abs() < 1e-7);
                     }
-                    let white = if name.contains("cicp-pq-") {100.} else if name.contains("cicp-hlg-") {10.} else {1.};
-                    for channel in 0..3 { assert!((values[8 + channel] - white).abs() < 0.0001); }
+                    if name.contains("cicp-linear-") || name.contains("cicp-encoded-") {
+                        assert_eq!(
+                            bits(&decoded),
+                            vec![0, 0, 0, 32768, 65535, 0, 0, 32768, 65535, 65535, 65535, 32768]
+                        );
+                        assert!(matches!(
+                            decoded.color_space(),
+                            rrrah_core::RasterColorSpace::Cicp { transfer: 8 | 13, .. }
+                        ));
+                        assert!(
+                            values[4] > 1. && values[5] < 0.,
+                            "wide red must retain out-of-sRGB components"
+                        );
+                    }
+                    let white = if name.contains("cicp-pq-") {
+                        100.
+                    } else if name.contains("cicp-hlg-") {
+                        10.
+                    } else {
+                        1.
+                    };
+                    for channel in 0..3 {
+                        assert!((values[8 + channel] - white).abs() < 0.0001);
+                    }
                 }
                 let output = if external.is_some() {
                     assert_eq!((ready.width(), ready.height()), (4000, 3000));
                     [4000, 3000]
-                } else { [64, 64] };
+                } else {
+                    [64, 64]
+                };
                 if name.contains("gray-gamma2-") {
-                    let RasterPixels::Rgba16(native) = decoded.pixels() else { panic!() };
-                    let RasterPixels::Rgba32Float(linear) = ready.pixels() else { panic!() };
-                    for (index, value) in [0u16,32768,32769,65535].into_iter().enumerate() {
-                        assert_eq!(&native[index*4..index*4+3], &[value;3]);
+                    let RasterPixels::Rgba16(native) = decoded.pixels() else {
+                        panic!()
+                    };
+                    let RasterPixels::Rgba32Float(linear) = ready.pixels() else {
+                        panic!()
+                    };
+                    for (index, value) in [0u16, 32768, 32769, 65535].into_iter().enumerate() {
+                        assert_eq!(&native[index * 4..index * 4 + 3], &[value; 3]);
                         let expected = (f64::from(value) / 65535.).powi(2) as f32;
-                        for channel in &linear[index*4..index*4+3] {
+                        for channel in &linear[index * 4..index * 4 + 3] {
                             assert!((*channel - expected).abs() < 0.0001);
                         }
-                        assert_eq!(linear[index*4+3], f32::from(native[index*4+3])/65535.);
+                        assert_eq!(linear[index * 4 + 3], f32::from(native[index * 4 + 3]) / 65535.);
                     }
                     assert!(linear[4] < linear[8]);
                 }
@@ -387,7 +488,11 @@ fn qualify_collection(external: Option<String>) {
                     directory.path(),
                     ImageSwapConfig {
                         limits: CacheLimits {
-                            max_bytes: if external.is_some() { weight + 4096 } else { 64 * 1024 * 1024 },
+                            max_bytes: if external.is_some() {
+                                weight + 4096
+                            } else {
+                                64 * 1024 * 1024
+                            },
                             max_entries: Some(1),
                             ttl: None,
                         },

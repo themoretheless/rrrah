@@ -50,10 +50,15 @@ fn packed_12(
 }
 fn metadata_disjoint(source: &[u8], encoded: &[u8], begin: usize, end: usize) -> Result<(), DecodeError> {
     // Classic TIFF keeps up to four bytes inline, already protected by the IFD table.
-    if encoded.len() <= 4 { return Ok(()); }
-    let field_begin = (encoded.as_ptr() as usize).checked_sub(source.as_ptr() as usize)
+    if encoded.len() <= 4 {
+        return Ok(());
+    }
+    let field_begin = (encoded.as_ptr() as usize)
+        .checked_sub(source.as_ptr() as usize)
         .ok_or_else(|| error("metadata field outside source"))?;
-    let field_end = field_begin.checked_add(encoded.len()).filter(|end| *end <= source.len())
+    let field_end = field_begin
+        .checked_add(encoded.len())
+        .filter(|end| *end <= source.len())
         .ok_or_else(|| error("metadata field outside source"))?;
     if begin < field_end && field_begin < end {
         return Err(error("sensor strip overlaps TIFF metadata field"));
@@ -151,7 +156,9 @@ fn validated_sensor_range(
             metadata_disjoint(bytes, entry.raw_bytes(), offset, end)?;
         }
     }
-    bytes.get(offset..end).ok_or_else(|| error("truncated packed sensor"))?;
+    bytes
+        .get(offset..end)
+        .ok_or_else(|| error("truncated packed sensor"))?;
     Ok(offset..end)
 }
 /// Read a qualified ZD sensor file in two stages under one root budget.
@@ -169,15 +176,23 @@ pub fn decode_mef_zd_sensor_file(
         });
     }
     use std::io::{Read, Seek, SeekFrom};
-    let io_error = |source| DecodeError::Io { path: request.path.clone(), source };
+    let io_error = |source| DecodeError::Io {
+        path: request.path.clone(),
+        source,
+    };
     let mut file = std::fs::File::open(&request.path).map_err(io_error)?;
     let length = file.metadata().map_err(io_error)?.len();
     if length > crate::bounded_io::MAX_INPUT_BYTES {
-        return Err(DecodeError::InputTooLarge { path: request.path.clone(), actual: length,
-            limit: crate::bounded_io::MAX_INPUT_BYTES });
+        return Err(DecodeError::InputTooLarge {
+            path: request.path.clone(),
+            actual: length,
+            limit: crate::bounded_io::MAX_INPUT_BYTES,
+        });
     }
-    let mut source = budget.try_buffer(usize::try_from(length)
-        .map_err(|_| DecodeError::DimensionOverflow)?, 0u8)?;
+    let mut source = budget.try_buffer(
+        usize::try_from(length).map_err(|_| DecodeError::DimensionOverflow)?,
+        0u8,
+    )?;
     for chunk in source.chunks_mut(64 * 1024) {
         request.check_cancelled()?;
         file.read_exact(chunk).map_err(io_error)?;
@@ -207,7 +222,10 @@ fn read_verified_sensor(
     expected: blake3::Hash,
 ) -> Result<PixelBuffer<u16>, DecodeError> {
     request.check_cancelled()?;
-    let io_error = |source| DecodeError::Io { path: request.path.clone(), source };
+    let io_error = |source| DecodeError::Io {
+        path: request.path.clone(),
+        source,
+    };
     let mut row = budget.try_buffer(4016 / 2 * 3, 0u8)?;
     let mut output = budget.try_buffer(4016 * 5344, 0u16)?;
     let mut actual = blake3::Hasher::new();
@@ -233,7 +251,10 @@ mod tests {
     use super::*;
     #[test]
     fn second_pass_rejects_changed_truncated_or_cancelled_sensor_without_credit_leak() {
-        use std::sync::{Arc, atomic::{AtomicU64, Ordering}};
+        use std::sync::{
+            Arc,
+            atomic::{AtomicU64, Ordering},
+        };
         let source = vec![0x35; 32192256];
         let expected = blake3::hash(&source);
         let request = crate::DecodeRequest::new("authored-second-pass.mef");
@@ -242,15 +263,18 @@ mod tests {
             let mut changed = source.clone();
             changed[position] ^= 1;
             let budget = MemoryBudget::new(peak);
-            let result = read_verified_sensor(&mut std::io::Cursor::new(changed), &request, &budget, expected);
+            let result =
+                read_verified_sensor(&mut std::io::Cursor::new(changed), &request, &budget, expected);
             assert!(matches!(result, Err(DecodeError::NativeCamera { message, .. })
                 if message == "source changed during staged sensor import"));
             assert_eq!(budget.peak(), peak);
             assert_eq!(budget.used(), 0);
         }
         let budget = MemoryBudget::new(peak);
-        assert!(matches!(read_verified_sensor(&mut &source[..source.len()-1], &request, &budget, expected),
-            Err(DecodeError::Io { .. })));
+        assert!(matches!(
+            read_verified_sensor(&mut &source[..source.len() - 1], &request, &budget, expected),
+            Err(DecodeError::Io { .. })
+        ));
         assert_eq!(budget.used(), 0);
         struct CancellingReader<'a> {
             bytes: &'a [u8],
@@ -262,7 +286,9 @@ mod tests {
             fn read(&mut self, bytes: &mut [u8]) -> std::io::Result<usize> {
                 let n = std::io::Read::read(&mut self.bytes, bytes)?;
                 self.calls += 1;
-                if self.calls == self.cancel_at { self.generation.store(2, Ordering::Release); }
+                if self.calls == self.cancel_at {
+                    self.generation.store(2, Ordering::Release);
+                }
                 Ok(n)
             }
         }
@@ -271,15 +297,24 @@ mod tests {
             let mut request = request.clone();
             request.cancellation = Some(crate::GenerationToken::new(generation.clone(), 1));
             let budget = MemoryBudget::new(peak);
-            let mut reader = CancellingReader { bytes: &source, calls: 0, cancel_at, generation };
-            assert!(matches!(read_verified_sensor(&mut reader, &request, &budget, expected),
-                Err(DecodeError::Cancelled)));
+            let mut reader = CancellingReader {
+                bytes: &source,
+                calls: 0,
+                cancel_at,
+                generation,
+            };
+            assert!(matches!(
+                read_verified_sensor(&mut reader, &request, &budget, expected),
+                Err(DecodeError::Cancelled)
+            ));
             assert_eq!(budget.peak(), peak);
             assert_eq!(budget.used(), 0);
         }
         let budget = MemoryBudget::new(peak);
         let output = read_verified_sensor(&mut &source[..], &request, &budget, expected).unwrap();
-        for pair in output.chunks_exact(2) { assert_eq!(pair, &[0x353, 0x535]); }
+        for pair in output.chunks_exact(2) {
+            assert_eq!(pair, &[0x353, 0x535]);
+        }
         assert_eq!(budget.used(), 42_923_008);
         drop(output);
         assert_eq!(budget.used(), 0);

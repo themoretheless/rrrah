@@ -157,8 +157,8 @@ fn compute_clipping_mask(
             compute_clipping_mask_row(samples, w, h, cfa, y, &mut clipped[y * w..(y + 1) * w]);
         }
     } else {
-        use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
         use std::sync::Mutex;
+        use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
 
         let is_cancelled = AtomicBool::new(false);
         let next = AtomicUsize::new(0);
@@ -422,7 +422,9 @@ pub fn develop_raw(
             };
             let range = white - black;
             if !range.is_finite() || range <= 0. {
-                return Err(DevelopError::Invalid("white-minus-black range must be finite and positive"));
+                return Err(DevelopError::Invalid(
+                    "white-minus-black range must be finite and positive",
+                ));
             }
             let normalized = (samples[y * w + x] - black).max(0.0) / range;
             if !normalized.is_finite() {
@@ -885,10 +887,22 @@ mod pipeline_tests {
         mosaic.metadata.black_level.values[0] = -f32::MAX;
         mosaic.metadata.white_level.0[0] = f32::MAX;
         let budget = MemoryBudget::new(16 * 1024 * 1024);
-        let result = develop_raw(&mosaic, &DevelopOptions::default(),
-            &OpcodeLists::default(), Some(&budget), &|| false);
-        assert!(matches!(result,
-            Err(DevelopError::Invalid("white-minus-black range must be finite and positive"))), "{result:?}");
+        let result = develop_raw(
+            &mosaic,
+            &DevelopOptions::default(),
+            &OpcodeLists::default(),
+            Some(&budget),
+            &|| false,
+        );
+        assert!(
+            matches!(
+                result,
+                Err(DevelopError::Invalid(
+                    "white-minus-black range must be finite and positive"
+                ))
+            ),
+            "{result:?}"
+        );
         assert_eq!(budget.used(), 0);
     }
 
@@ -897,20 +911,40 @@ mod pipeline_tests {
         let budget = MemoryBudget::new(16 * 1024 * 1024);
         let mut tiny_range = sensor();
         tiny_range.metadata.white_level.0[0] = f32::from_bits(1);
-        assert!(matches!(develop_raw(&tiny_range, &DevelopOptions::default(),
-            &OpcodeLists::default(), Some(&budget), &|| false),
-            Err(DevelopError::Invalid("non-finite normalized sensor samples"))));
+        assert!(matches!(
+            develop_raw(
+                &tiny_range,
+                &DevelopOptions::default(),
+                &OpcodeLists::default(),
+                Some(&budget),
+                &|| false
+            ),
+            Err(DevelopError::Invalid("non-finite normalized sensor samples"))
+        ));
         assert_eq!(budget.used(), 0);
         let mut overflowing_gain = sensor();
         overflowing_gain.metadata.white_level.0[0] = 100.;
         overflowing_gain.metadata.white_balance = [f32::MAX; 4];
-        assert!(matches!(develop_raw(&overflowing_gain, &DevelopOptions::default(),
-            &OpcodeLists::default(), Some(&budget), &|| false),
-            Err(DevelopError::Invalid("non-finite corrected sensor samples"))));
+        assert!(matches!(
+            develop_raw(
+                &overflowing_gain,
+                &DevelopOptions::default(),
+                &OpcodeLists::default(),
+                Some(&budget),
+                &|| false
+            ),
+            Err(DevelopError::Invalid("non-finite corrected sensor samples"))
+        ));
         assert_eq!(budget.used(), 0);
         // Refusals must leave the same budget immediately usable by a valid HDR decode.
-        let valid = develop_raw(&sensor(), &DevelopOptions::default(),
-            &OpcodeLists::default(), Some(&budget), &|| false).unwrap();
+        let valid = develop_raw(
+            &sensor(),
+            &DevelopOptions::default(),
+            &OpcodeLists::default(),
+            Some(&budget),
+            &|| false,
+        )
+        .unwrap();
         assert!(budget.used() > 0);
         drop(valid);
         assert_eq!(budget.used(), 0);

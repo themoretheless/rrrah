@@ -88,9 +88,7 @@ impl<'a> GradientDescriptorIndex<'a> {
         if cancel() {
             return Err(LocalError::Cancelled);
         }
-        let order = reservation
-            .try_adopt(order)
-            .map_err(|_| LocalError::Budget)?;
+        let order = reservation.try_adopt(order).map_err(|_| LocalError::Budget)?;
         Ok(Self {
             entries,
             order,
@@ -118,14 +116,7 @@ impl<'a> GradientDescriptorIndex<'a> {
             return Err(LocalError::Budget);
         }
         let reflected = crate::gradient::reflect_gradient_descriptor(query, &cancel)?;
-        self.search(
-            &reflected,
-            recipe,
-            radius,
-            max_comparisons,
-            max_results,
-            cancel,
-        )
+        self.search(&reflected, recipe, radius, max_comparisons, max_results, cancel)
     }
     /// Exact inclusive radius retrieval, ordered by(distance,id). Work counts full descriptor comparisons.
     /// Result storage is fallibly allocated and bounded by max_results; source descriptors remain borrowed.
@@ -153,11 +144,7 @@ impl<'a> GradientDescriptorIndex<'a> {
         if cancel() {
             return Err(LocalError::Cancelled);
         }
-        if recipe != self.recipe
-            || !valid(query)
-            || !radius.is_finite()
-            || !(0. ..=4.).contains(&radius)
-        {
+        if recipe != self.recipe || !valid(query) || !radius.is_finite() || !(0. ..=4.).contains(&radius) {
             return Err(LocalError::Invalid);
         }
         let q = query.0[self.axis];
@@ -202,9 +189,7 @@ impl<'a> GradientDescriptorIndex<'a> {
                     let limit = max_results.min(end - start);
                     let remaining = limit - result.len();
                     let growth = result.capacity().max(1).min(remaining);
-                    result
-                        .try_reserve_exact(growth)
-                        .map_err(|_| LocalError::Budget)?;
+                    result.try_reserve_exact(growth).map_err(|_| LocalError::Budget)?;
                 }
                 result.push(GradientCandidate {
                     id: self.entries[i].0,
@@ -394,9 +379,7 @@ fn gradient_file_pair_report_selected(
     {
         return Err(LocalError::Budget);
     }
-    if reflection_bins
-        .is_some_and(|limit| n.checked_mul(128).is_none_or(|required| required > limit))
-    {
+    if reflection_bins.is_some_and(|limit| n.checked_mul(128).is_none_or(|required| required > limit)) {
         return Err(LocalError::Budget);
     }
     let index = GradientDescriptorIndex::new(entries, recipe, entries.len(), budget, &cancel)?;
@@ -405,18 +388,11 @@ fn gradient_file_pair_report_selected(
         .checked_mul(std::mem::size_of::<(u64, u64)>())
         .and_then(|n| u64::try_from(n).ok())
         .ok_or(LocalError::Budget)?;
-    let ids_credit = budget
-        .try_reserve(id_bytes)
-        .map_err(|_| LocalError::Budget)?;
+    let ids_credit = budget.try_reserve(id_bytes).map_err(|_| LocalError::Budget)?;
     let mut ids = Vec::new();
     ids.try_reserve_exact(entries.len())
         .map_err(|_| LocalError::Budget)?;
-    ids.extend(
-        entries
-            .iter()
-            .zip(owners)
-            .map(|((id, _), owner)| (*id, *owner)),
-    );
+    ids.extend(entries.iter().zip(owners).map(|((id, _), owner)| (*id, *owner)));
     ids.sort_unstable_by_key(|entry| entry.0);
     let ids = ids_credit.try_adopt(ids).map_err(|_| LocalError::Budget)?;
     let mut pair_credit = budget.try_reserve(0).map_err(|_| LocalError::Budget)?;
@@ -431,9 +407,7 @@ fn gradient_file_pair_report_selected(
                 .checked_mul(std::mem::size_of::<GradientCandidate>())
                 .and_then(|n| u64::try_from(n).ok())
                 .ok_or(LocalError::Budget)?;
-            let _query_credit = budget
-                .try_reserve(query_bytes)
-                .map_err(|_| LocalError::Budget)?;
+            let _query_credit = budget.try_reserve(query_bytes).map_err(|_| LocalError::Budget)?;
             let reflected;
             let query = if phase == 1 {
                 reflected = crate::gradient::reflect_gradient_descriptor(descriptor, &cancel)?;
@@ -454,9 +428,7 @@ fn gradient_file_pair_report_selected(
                 max_hits.saturating_sub(hits),
                 &cancel,
             )?;
-            comparisons = comparisons
-                .checked_add(attempted)
-                .ok_or(LocalError::Budget)?;
+            comparisons = comparisons.checked_add(attempted).ok_or(LocalError::Budget)?;
             hits = hits.checked_add(results.len()).ok_or(LocalError::Budget)?;
             for result in results {
                 if cancel() {
@@ -482,18 +454,14 @@ fn gradient_file_pair_report_selected(
                         .checked_mul(std::mem::size_of::<(u64, u64)>())
                         .and_then(|n| u64::try_from(n).ok())
                         .ok_or(LocalError::Budget)?;
-                    pair_credit
-                        .ensure_bytes(bytes)
-                        .map_err(|_| LocalError::Budget)?;
+                    pair_credit.ensure_bytes(bytes).map_err(|_| LocalError::Budget)?;
                     pairs.try_reserve_exact(1).map_err(|_| LocalError::Budget)?;
                     let actual = pairs
                         .capacity()
                         .checked_mul(std::mem::size_of::<(u64, u64)>())
                         .and_then(|n| u64::try_from(n).ok())
                         .ok_or(LocalError::Budget)?;
-                    pair_credit
-                        .ensure_bytes(actual)
-                        .map_err(|_| LocalError::Budget)?;
+                    pair_credit.ensure_bytes(actual).map_err(|_| LocalError::Budget)?;
                     pairs.insert(position, pair);
                 }
             }
@@ -578,9 +546,7 @@ mod row_major_tests {
         if cancel() {
             return Err(LocalError::Cancelled);
         }
-        let order = reservation
-            .try_adopt(order)
-            .map_err(|_| LocalError::Budget)?;
+        let order = reservation.try_adopt(order).map_err(|_| LocalError::Budget)?;
         Ok(GradientDescriptorIndex {
             entries,
             order,
@@ -637,10 +603,8 @@ mod row_major_tests {
                     for (_, query) in entries.iter().take(4) {
                         for radius in [0., 0.001, 0.1, 4.] {
                             assert_eq!(
-                                a.search(query, recipe, radius, n as u64, n, || false)
-                                    .unwrap(),
-                                b.search(query, recipe, radius, n as u64, n, || false)
-                                    .unwrap()
+                                a.search(query, recipe, radius, n as u64, n, || false).unwrap(),
+                                b.search(query, recipe, radius, n as u64, n, || false).unwrap()
                             );
                         }
                     }
@@ -708,13 +672,7 @@ mod row_major_tests {
                     let index = if baseline {
                         reference(&entries, GradientCellRecipe::Fixed, n, &budget, cancel)
                     } else {
-                        GradientDescriptorIndex::new(
-                            &entries,
-                            GradientCellRecipe::Fixed,
-                            n,
-                            &budget,
-                            cancel,
-                        )
+                        GradientDescriptorIndex::new(&entries, GradientCellRecipe::Fixed, n, &budget, cancel)
                     }
                     .unwrap();
                     let elapsed = start.elapsed().as_nanos();

@@ -1,5 +1,5 @@
 //! A single swap object with managed per-block integrity for bounded random reads.
-use super::{Result, SwapError, SwapHandle, SwapStore, BLOCK};
+use super::{BLOCK, Result, SwapError, SwapHandle, SwapStore};
 use rrrah_memory::{MemoryBudget, SharedBuffer};
 use std::{
     io::{Read, Seek, SeekFrom, Write},
@@ -364,27 +364,35 @@ mod tests {
         // Source and comparison storage are outside the managed API budgets.
         let mut restored = vec![0u8; bytes.len()];
         for block in 0..7 {
-          for scoped in [false,true,true,false] {
-            let start = std::time::Instant::now();
-            if scoped {
-                let mut reader = store.segmented_reader(&handle, &scratch, || false).unwrap();
-                let mut row = output.try_buffer(2048, 0_u8).unwrap();
-                for (offset,destination) in restored.chunks_exact_mut(2048).enumerate() {
-                    reader.read_into((offset*2048) as u64, &mut row, || false).unwrap();
-                    destination.copy_from_slice(&row);
+            for scoped in [false, true, true, false] {
+                let start = std::time::Instant::now();
+                if scoped {
+                    let mut reader = store.segmented_reader(&handle, &scratch, || false).unwrap();
+                    let mut row = output.try_buffer(2048, 0_u8).unwrap();
+                    for (offset, destination) in restored.chunks_exact_mut(2048).enumerate() {
+                        reader
+                            .read_into((offset * 2048) as u64, &mut row, || false)
+                            .unwrap();
+                        destination.copy_from_slice(&row);
+                    }
+                } else {
+                    for (offset, destination) in restored.chunks_exact_mut(2048).enumerate() {
+                        let row = store
+                            .restore_range(&handle, (offset * 2048) as u64, 2048, &output, &scratch, || false)
+                            .unwrap();
+                        destination.copy_from_slice(&row);
+                    }
                 }
-            } else {
-                for (offset,destination) in restored.chunks_exact_mut(2048).enumerate() {
-                    let row = store.restore_range(&handle, (offset*2048) as u64, 2048, &output, &scratch, || false).unwrap();
-                    destination.copy_from_slice(&row);
-                }
+                let elapsed = start.elapsed();
+                // Compare every byte after timing, including allocation teardown above.
+                assert_eq!(restored, bytes);
+                assert_eq!((output.used(), scratch.used()), (0, 0));
+                eprintln!(
+                    "warm row ABBA block={block}; measured={}; scoped={scoped}; ns={}; 8MiB;4096rows; all bytes exact; output=0;scratch=0",
+                    block >= 2,
+                    elapsed.as_nanos()
+                );
             }
-            let elapsed = start.elapsed();
-            // Compare every byte after timing, including allocation teardown above.
-            assert_eq!(restored,bytes);
-            assert_eq!((output.used(),scratch.used()),(0,0));
-            eprintln!("warm row ABBA block={block}; measured={}; scoped={scoped}; ns={}; 8MiB;4096rows; all bytes exact; output=0;scratch=0",block>=2,elapsed.as_nanos());
-          }
         }
         drop(handle);
         assert_eq!(
@@ -733,15 +741,17 @@ mod tests {
         )
         .unwrap();
         let budget = MemoryBudget::new(BLOCK as u64 + 4096);
-        assert!(store
-            .write_segmented(
-                &mut Cursor::new(&bytes),
-                bytes.len() as u64,
-                &budget,
-                &budget,
-                || false
-            )
-            .is_err());
+        assert!(
+            store
+                .write_segmented(
+                    &mut Cursor::new(&bytes),
+                    bytes.len() as u64,
+                    &budget,
+                    &budget,
+                    || false
+                )
+                .is_err()
+        );
         assert_eq!(
             (
                 budget.used(),
@@ -758,15 +768,17 @@ mod tests {
             },
         )
         .unwrap();
-        assert!(store
-            .write_segmented(
-                &mut Cursor::new(&bytes[..BLOCK]),
-                bytes.len() as u64,
-                &budget,
-                &budget,
-                || false
-            )
-            .is_err());
+        assert!(
+            store
+                .write_segmented(
+                    &mut Cursor::new(&bytes[..BLOCK]),
+                    bytes.len() as u64,
+                    &budget,
+                    &budget,
+                    || false
+                )
+                .is_err()
+        );
         assert!(matches!(
             store.write_segmented(&mut Cursor::new(&bytes), BLOCK as u64, &budget, &budget, || false),
             Err(SwapError::Length)
@@ -798,17 +810,19 @@ mod tests {
             .unwrap();
         let baseline = budget.used();
         let empty_budget = MemoryBudget::new(0);
-        assert!(store
-            .restore_range(
-                &handle,
-                handle.byte_len(),
-                0,
-                &empty_budget,
-                &empty_budget,
-                || false
-            )
-            .unwrap()
-            .is_empty());
+        assert!(
+            store
+                .restore_range(
+                    &handle,
+                    handle.byte_len(),
+                    0,
+                    &empty_budget,
+                    &empty_budget,
+                    || false
+                )
+                .unwrap()
+                .is_empty()
+        );
         let output = MemoryBudget::new(32);
         let small_scratch = MemoryBudget::new(BLOCK as u64 - 1);
         assert!(matches!(

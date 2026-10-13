@@ -243,16 +243,25 @@ pub(crate) fn parse(data: &[u8]) -> Result<DngImage<'_>, DngError> {
     // Non-identity calibration/analog gains and ForwardMatrix require their
     // own transform; retain the existing profile path for those inputs.
     let mut neutral_matrix_compatible = color_planes == 3;
-    for tag in [50723, 50724] { // CameraCalibration1/2
+    for tag in [50723, 50724] {
+        // CameraCalibration1/2
         if let Some(values) = parse_optional_matrix(raw, &root.ifd, tag, color_planes * color_planes)? {
-            neutral_matrix_compatible &= values.iter().enumerate().all(|(i, v)|
-                (*v - if i / color_planes == i % color_planes { 1.0 } else { 0.0 }).abs() < 1e-12);
+            neutral_matrix_compatible &= values.iter().enumerate().all(|(i, v)| {
+                (*v - if i / color_planes == i % color_planes {
+                    1.0
+                } else {
+                    0.0
+                })
+                .abs()
+                    < 1e-12
+            });
         }
     }
     if let Some(values) = parse_optional_vector(raw, &root.ifd, 50727, color_planes)? {
         neutral_matrix_compatible &= values.iter().all(|v| (*v - 1.0).abs() < 1e-12);
     }
-    for tag in [50964, 50965] { // ForwardMatrix1/2
+    for tag in [50964, 50965] {
+        // ForwardMatrix1/2
         neutral_matrix_compatible &= raw.entry(tag)?.or(root.ifd.entry(tag)?).is_none();
     }
 

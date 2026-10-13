@@ -71,18 +71,29 @@ pub(crate) fn decode_stl_for_model(request: &DecodeRequest) -> Result<crate::mod
 // length, including headers beginning with `solid`, selects the binary path.
 fn try_stream_binary_model(request: &DecodeRequest) -> Result<Option<crate::model::ModelBuffer<StlMesh>>> {
     use std::io::Read;
-    let io_error = |source| DecodeError::Io { path: request.path.clone(), source };
+    let io_error = |source| DecodeError::Io {
+        path: request.path.clone(),
+        source,
+    };
     let mut file = std::fs::File::open(&request.path).map_err(io_error)?;
     let length = file.metadata().map_err(io_error)?.len();
     if length > crate::bounded_io::MAX_INPUT_BYTES {
-        return Err(DecodeError::InputTooLarge { path: request.path.clone(), actual: length,
-            limit: crate::bounded_io::MAX_INPUT_BYTES }.into());
+        return Err(DecodeError::InputTooLarge {
+            path: request.path.clone(),
+            actual: length,
+            limit: crate::bounded_io::MAX_INPUT_BYTES,
+        }
+        .into());
     }
-    if length < 84 { return Ok(None); }
+    if length < 84 {
+        return Ok(None);
+    }
     let mut header = [0u8; 84];
     file.read_exact(&mut header).map_err(io_error)?;
     let count = u32::from_le_bytes(header[80..84].try_into().unwrap()) as usize;
-    if count as u64 * 50 + 84 != length { return Ok(None); }
+    if count as u64 * 50 + 84 != length {
+        return Ok(None);
+    }
     let (mesh, reservation) = stream_binary_facets(&mut file, count, request)?;
     Ok(Some(match reservation {
         Some(reservation) => crate::model::ModelBuffer::from_reserved(mesh, reservation),
@@ -96,17 +107,31 @@ fn stream_binary_facets(
     request: &DecodeRequest,
 ) -> Result<(StlMesh, Option<rrrah_core::Reservation>)> {
     request.check_cancelled()?;
-    if count > MAX_FACETS { return Err(StlDecodeError::Invalid("facet budget exceeded")); }
-    let mut reservation = request.memory_budget.as_ref()
+    if count > MAX_FACETS {
+        return Err(StlDecodeError::Invalid("facet budget exceeded"));
+    }
+    let mut reservation = request
+        .memory_budget
+        .as_ref()
         .map(|budget| budget.try_reserve((count * size_of::<StlFacet>() + size_of::<StlMesh>()) as u64))
-        .transpose().map_err(DecodeError::Memory)?;
-    let mut mesh = StlMesh { facets: Vec::new(), bounds: None };
-    mesh.facets.try_reserve_exact(count).map_err(|_| StlDecodeError::Invalid("allocation failed"))?;
+        .transpose()
+        .map_err(DecodeError::Memory)?;
+    let mut mesh = StlMesh {
+        facets: Vec::new(),
+        bounds: None,
+    };
+    mesh.facets
+        .try_reserve_exact(count)
+        .map_err(|_| StlDecodeError::Invalid("allocation failed"))?;
     if let Some(credit) = &mut reservation {
-        credit.ensure_bytes((mesh.facets.capacity() * size_of::<StlFacet>() + size_of::<StlMesh>()) as u64)
+        credit
+            .ensure_bytes((mesh.facets.capacity() * size_of::<StlFacet>() + size_of::<StlMesh>()) as u64)
             .map_err(DecodeError::Memory)?;
     }
-    let io_error = |source| DecodeError::Io { path: request.path.clone(), source };
+    let io_error = |source| DecodeError::Io {
+        path: request.path.clone(),
+        source,
+    };
     let mut block = [0u8; 1024 * 50];
     let mut remaining = count;
     while remaining > 0 {
@@ -135,7 +160,11 @@ fn binary_facet(chunk: &[u8]) -> StlFacet {
     }
     StlFacet {
         normal: values[..3].try_into().unwrap(),
-        vertices: [values[3..6].try_into().unwrap(), values[6..9].try_into().unwrap(), values[9..12].try_into().unwrap()],
+        vertices: [
+            values[3..6].try_into().unwrap(),
+            values[6..9].try_into().unwrap(),
+            values[9..12].try_into().unwrap(),
+        ],
         attribute: u16::from_le_bytes(chunk[48..50].try_into().unwrap()),
     }
 }
@@ -321,22 +350,29 @@ mod tests {
     }
     #[test]
     fn streamed_binary_blocks_preserve_facets_cancel_and_recover() {
-        use std::sync::{Arc, atomic::{AtomicU64, Ordering}};
         use std::io::Read;
+        use std::sync::{
+            Arc,
+            atomic::{AtomicU64, Ordering},
+        };
         let count = 2050usize;
         let mut data = vec![0; 84];
         data[..5].copy_from_slice(b"solid");
         data[80..84].copy_from_slice(&(count as u32).to_le_bytes());
         for index in 0..count {
             let x = index as f32;
-            for value in [0., 0., 1., x, 0., 0., x+1., 0., 0., x, 1., 0.] {
+            for value in [0., 0., 1., x, 0., 0., x + 1., 0., 0., x, 1., 0.] {
                 data.extend_from_slice(&value.to_le_bytes());
             }
             data.extend_from_slice(&(index as u16).to_le_bytes());
         }
         let path = std::env::temp_dir().join(format!("rrrah-stl-stream-blocks-{}.stl", std::process::id()));
         struct Cleanup(std::path::PathBuf);
-        impl Drop for Cleanup { fn drop(&mut self) { let _ = std::fs::remove_file(&self.0); } }
+        impl Drop for Cleanup {
+            fn drop(&mut self) {
+                let _ = std::fs::remove_file(&self.0);
+            }
+        }
         let _cleanup = Cleanup(path.clone());
         std::fs::write(&path, &data).unwrap();
         let bytes = (count * size_of::<StlFacet>() + size_of::<StlMesh>()) as u64;
@@ -344,42 +380,67 @@ mod tests {
         let mut request = DecodeRequest::new(&path);
         request.memory_budget = Some(budget.clone());
         let model = crate::decode_model(&request).unwrap();
-        let crate::DecodedModel::Stl(mesh) = &model else { panic!() };
+        let crate::DecodedModel::Stl(mesh) = &model else {
+            panic!()
+        };
         for (index, facet) in mesh.facets.iter().enumerate() {
             let x = index as f32;
-            assert_eq!(*facet, StlFacet { normal: [0., 0., 1.],
-                vertices: [[x, 0., 0.], [x+1., 0., 0.], [x, 1., 0.]], attribute: index as u16 });
+            assert_eq!(
+                *facet,
+                StlFacet {
+                    normal: [0., 0., 1.],
+                    vertices: [[x, 0., 0.], [x + 1., 0., 0.], [x, 1., 0.]],
+                    attribute: index as u16
+                }
+            );
         }
         assert_eq!(mesh.bounds, Some([[0., 0., 0.], [2050., 1., 0.]]));
         assert_eq!(budget.peak(), bytes);
         drop(model);
         assert_eq!(budget.used(), 0);
-        struct CancelRead { source: std::io::Cursor<Vec<u8>>, generation: Arc<AtomicU64>, calls: usize, cancel_at: usize }
+        struct CancelRead {
+            source: std::io::Cursor<Vec<u8>>,
+            generation: Arc<AtomicU64>,
+            calls: usize,
+            cancel_at: usize,
+        }
         impl Read for CancelRead {
             fn read(&mut self, output: &mut [u8]) -> std::io::Result<usize> {
                 let n = self.source.read(output)?;
                 self.calls += 1;
-                if self.calls == self.cancel_at { self.generation.store(2, Ordering::Release); }
+                if self.calls == self.cancel_at {
+                    self.generation.store(2, Ordering::Release);
+                }
                 Ok(n)
             }
         }
         for cancel_at in 1..=4 {
             let generation = Arc::new(AtomicU64::new(1));
             request.cancellation = Some(crate::GenerationToken::new(generation.clone(), 1));
-            let mut reader = CancelRead { source: std::io::Cursor::new(data[84..].to_vec()), generation, calls: 0, cancel_at };
-            assert!(matches!(stream_binary_facets(&mut reader, count, &request), Err(StlDecodeError::Source(DecodeError::Cancelled))));
+            let mut reader = CancelRead {
+                source: std::io::Cursor::new(data[84..].to_vec()),
+                generation,
+                calls: 0,
+                cancel_at,
+            };
+            assert!(matches!(
+                stream_binary_facets(&mut reader, count, &request),
+                Err(StlDecodeError::Source(DecodeError::Cancelled))
+            ));
             assert_eq!(budget.used(), 0);
             request.cancellation = None;
             drop(crate::decode_model(&request).unwrap());
             assert_eq!(budget.used(), 0);
         }
-        for length in [data.len()-85, data.len()-83] {
+        for length in [data.len() - 85, data.len() - 83] {
             let mut payload = data[84..].to_vec();
             payload.resize(length, 0);
             assert!(stream_binary_facets(&mut std::io::Cursor::new(payload), count, &request).is_err());
             assert_eq!(budget.used(), 0);
         }
-        eprintln!("STL stream: 2050 facets/all fields exact; three blocks; four admitted cancellations and same-root retries; truncation/growth refused; geometry-only peak={bytes}; final=0");
+        eprintln!(
+            "STL stream: 2050 facets/all fields exact; three blocks; four admitted cancellations and same-root retries; truncation/growth refused; geometry-only peak={bytes}; final=0"
+        );
     }
 
     #[test]

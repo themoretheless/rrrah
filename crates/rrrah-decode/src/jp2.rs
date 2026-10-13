@@ -273,7 +273,10 @@ mod tests {
     fn explicit_srgb_assumption_only_changes_untagged_codestream() {
         let mut request = DecodeRequest::new("image.j2k");
         let bytes = include_bytes!("../../../tests/fixtures/raster/pattern-rgb.j2k");
-        assert_eq!(decode(bytes, &request).unwrap().color_space(), &RasterColorSpace::Unspecified);
+        assert_eq!(
+            decode(bytes, &request).unwrap().color_space(),
+            &RasterColorSpace::Unspecified
+        );
         request.assume_untagged_srgb = true;
         let frame = decode(bytes, &request).unwrap();
         assert_eq!(frame.color_space(), &RasterColorSpace::AssumedSrgb);
@@ -281,7 +284,10 @@ mod tests {
         let bytes = include_bytes!("../../../tests/fixtures/raster/pattern-rgb.jp2");
         let strict = decode(bytes, &DecodeRequest::new("image.jp2")).unwrap();
         assert_ne!(strict.color_space(), &RasterColorSpace::Unspecified);
-        assert_eq!(decode(bytes, &request).unwrap().color_space(), strict.color_space());
+        assert_eq!(
+            decode(bytes, &request).unwrap().color_space(),
+            strict.color_space()
+        );
     }
     #[test]
     fn retains_adjacent_sixteen_bit_values() {

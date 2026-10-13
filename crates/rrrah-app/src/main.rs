@@ -105,7 +105,12 @@ struct RasterInterpretation {
     rla_color: Option<rrrah_decode::RlaColorSpace>,
     pq_white: Option<f32>,
     hlg_display: Option<(f32, f32, f32)>,
-    rpf: Option<([u16; 3], Option<u16>, rrrah_decode::RlaAlphaMode, rrrah_decode::RlaColorSpace)>,
+    rpf: Option<(
+        [u16; 3],
+        Option<u16>,
+        rrrah_decode::RlaAlphaMode,
+        rrrah_decode::RlaColorSpace,
+    )>,
 }
 impl From<UntaggedColor> for RasterInterpretation {
     fn from(color: UntaggedColor) -> Self {
@@ -130,24 +135,39 @@ impl RasterInterpretation {
         request.rla_color_space = self.rla_color;
         request.pq_reference_white_nits = self.pq_white;
         request.hlg_display = self.hlg_display;
-        request.rpf_interpretation = self.rpf.map(|(rgb, matte, alpha_mode, color)|
-            rrrah_decode::RpfRasterInterpretation {
-                rgb, matte, alpha_mode, color_space: match color {
-                    rrrah_decode::RlaColorSpace::Srgb => rrrah_core::RasterColorSpace::Srgb,
-                    rrrah_decode::RlaColorSpace::LinearSrgb => rrrah_core::RasterColorSpace::LinearSrgb,
+        request.rpf_interpretation =
+            self.rpf.map(
+                |(rgb, matte, alpha_mode, color)| rrrah_decode::RpfRasterInterpretation {
+                    rgb,
+                    matte,
+                    alpha_mode,
+                    color_space: match color {
+                        rrrah_decode::RlaColorSpace::Srgb => rrrah_core::RasterColorSpace::Srgb,
+                        rrrah_decode::RlaColorSpace::LinearSrgb => rrrah_core::RasterColorSpace::LinearSrgb,
+                    },
                 },
-            });
+            );
     }
 }
 impl Cli {
     fn raster_interpretation(&self) -> RasterInterpretation {
         RasterInterpretation {
-            rpf: self.rpf_rgb.as_ref().zip(self.rpf_alpha).zip(self.rpf_color)
-                .map(|((rgb, alpha), color)| ([rgb[0], rgb[1], rgb[2]], self.rpf_matte,
-                    match alpha { RlaAlphaChoice::Straight => rrrah_decode::RlaAlphaMode::Straight,
-                        RlaAlphaChoice::Premultiplied => rrrah_decode::RlaAlphaMode::Premultiplied },
-                    match color { RlaColorChoice::Srgb => rrrah_decode::RlaColorSpace::Srgb,
-                        RlaColorChoice::LinearSrgb => rrrah_decode::RlaColorSpace::LinearSrgb })),
+            rpf: self.rpf_rgb.as_ref().zip(self.rpf_alpha).zip(self.rpf_color).map(
+                |((rgb, alpha), color)| {
+                    (
+                        [rgb[0], rgb[1], rgb[2]],
+                        self.rpf_matte,
+                        match alpha {
+                            RlaAlphaChoice::Straight => rrrah_decode::RlaAlphaMode::Straight,
+                            RlaAlphaChoice::Premultiplied => rrrah_decode::RlaAlphaMode::Premultiplied,
+                        },
+                        match color {
+                            RlaColorChoice::Srgb => rrrah_decode::RlaColorSpace::Srgb,
+                            RlaColorChoice::LinearSrgb => rrrah_decode::RlaColorSpace::LinearSrgb,
+                        },
+                    )
+                },
+            ),
             color: self.untagged_color,
             pfm_top_down: self.pfm_top_down,
             pq_white: self.pq_reference_white_nits,
@@ -915,8 +935,12 @@ fn run_viewer(
         untagged_color,
     );
     let model_proxy = proxy.clone();
-    app.model_upload_worker.set_waker(move || { let _ = model_proxy.send_event(WakeEvent::LoadProgress); });
-    app.raster_lod_worker.set_waker(move || {let _=proxy.send_event(WakeEvent::LoadProgress);});
+    app.model_upload_worker.set_waker(move || {
+        let _ = model_proxy.send_event(WakeEvent::LoadProgress);
+    });
+    app.raster_lod_worker.set_waker(move || {
+        let _ = proxy.send_event(WakeEvent::LoadProgress);
+    });
     app.image_index = image_index;
     app.scalar_window = scalar_window;
     event_loop.run_app(&mut app).context("run event loop")?;
@@ -962,9 +986,12 @@ struct ForegroundIdentity {
 
 impl ForegroundIdentity {
     fn same_decode(&self, other: &Self) -> bool {
-        self.path == other.path && self.source == other.source
-            && self.image_index == other.image_index && self.scalar_window == other.scalar_window
-            && self.development == other.development && self.decode_first == other.decode_first
+        self.path == other.path
+            && self.source == other.source
+            && self.image_index == other.image_index
+            && self.scalar_window == other.scalar_window
+            && self.development == other.development
+            && self.decode_first == other.decode_first
             && self.automatic_policy == other.automatic_policy
     }
 }
@@ -989,9 +1016,13 @@ fn admit_foreground_source(
     token: &GenerationToken,
     read: impl FnOnce(&Path) -> Result<gallery::SourceStamp, rrrah_cache::CacheError>,
 ) -> Option<Result<gallery::SourceStamp, String>> {
-    if token.is_cancelled() { return None; }
+    if token.is_cancelled() {
+        return None;
+    }
     let result = read(path);
-    if token.is_cancelled() { return None; }
+    if token.is_cancelled() {
+        return None;
+    }
     Some(result.map_err(|error| error.to_string()))
 }
 
@@ -1015,7 +1046,9 @@ struct ForegroundLoader {
 }
 
 impl Drop for ForegroundLoader {
-    fn drop(&mut self) { self.shutdown(); }
+    fn drop(&mut self) {
+        self.shutdown();
+    }
 }
 
 impl ForegroundLoader {
@@ -1023,12 +1056,17 @@ impl ForegroundLoader {
         self.cancel_pending();
         let (disconnected, _) = bounded(1);
         drop(std::mem::replace(&mut self.tx, disconnected));
-        if let Some(worker) = self.worker.take() { let _ = worker.join(); }
+        if let Some(worker) = self.worker.take() {
+            let _ = worker.join();
+        }
     }
     /// Supersede a file selection even when no replacement file is available.
     fn cancel_pending(&self) {
         self.generation.fetch_add(1, Ordering::AcqRel);
-        self.duplicate.lock().unwrap_or_else(std::sync::PoisonError::into_inner).take();
+        self.duplicate
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner)
+            .take();
         *self
             .flight
             .lock()
@@ -1069,9 +1107,12 @@ fn foreground_neighbour_supported(path: &Path) -> bool {
         });
     rrrah_decode::is_supported_model_path(path)
         || (rrrah_decode::is_supported_image_path(path)
-            && (!rrrah_decode::is_supported_raw_path(path) || tiff
-                || matches!(rrrah_decode::image_source_kind(&DecodeRequest::new(path)),
-                    Ok(rrrah_decode::ImageSourceKind::Raster))))
+            && (!rrrah_decode::is_supported_raw_path(path)
+                || tiff
+                || matches!(
+                    rrrah_decode::image_source_kind(&DecodeRequest::new(path)),
+                    Ok(rrrah_decode::ImageSourceKind::Raster)
+                )))
 }
 
 fn resolve_foreground_prefetch_paths(
@@ -1081,14 +1122,27 @@ fn resolve_foreground_prefetch_paths(
     window: gallery::PrefetchWindow,
     scan: impl FnOnce(&Path) -> Option<Vec<PathBuf>>,
 ) -> Vec<PathBuf> {
-    if let Some(paths) = known { return paths; }
-    let Some(folder) = path.parent() else { return Vec::new() };
-    let Some(paths) = scan(folder) else { return Vec::new() };
-    let Some(selected) = paths.iter().position(|candidate| candidate == path) else { return Vec::new() };
-    let direction = previous.filter(|old| old.parent() == path.parent())
+    if let Some(paths) = known {
+        return paths;
+    }
+    let Some(folder) = path.parent() else {
+        return Vec::new();
+    };
+    let Some(paths) = scan(folder) else {
+        return Vec::new();
+    };
+    let Some(selected) = paths.iter().position(|candidate| candidate == path) else {
+        return Vec::new();
+    };
+    let direction = previous
+        .filter(|old| old.parent() == path.parent())
         .and_then(|old| paths.iter().position(|candidate| candidate == old))
         .map_or(NavDirection::None, |old| {
-            if selected < old { NavDirection::Backward } else { NavDirection::Forward }
+            if selected < old {
+                NavDirection::Backward
+            } else {
+                NavDirection::Forward
+            }
         });
     gallery::neighbour_prefetch_paths(&paths, selected, direction, window)
 }
@@ -1492,17 +1546,23 @@ impl ForegroundLoader {
             identity.source = current.source.clone();
             if current.same_decode(&identity) && *generation == self.current_generation() {
                 if prefetch_paths.is_some() {
-                    *current.prefetch_paths.lock().unwrap_or_else(std::sync::PoisonError::into_inner) = prefetch_paths.clone();
+                    *current
+                        .prefetch_paths
+                        .lock()
+                        .unwrap_or_else(std::sync::PoisonError::into_inner) = prefetch_paths.clone();
                 }
                 if let Some(source) = current.source.as_ref() {
-                    let mut duplicate = self.duplicate.lock()
+                    let mut duplicate = self
+                        .duplicate
+                        .lock()
                         .unwrap_or_else(std::sync::PoisonError::into_inner);
                     // Each new intent replaces validation evidence: a result
                     // completed before this request cannot prove that the file
                     // is still unchanged. The validator keeps only one queued
                     // check, while the useful decode remains uninterrupted.
                     *duplicate = Some(DuplicateForeground {
-                        identity: current.clone(), generation: *generation,
+                        identity: current.clone(),
+                        generation: *generation,
                         check: self.duplicate_validator.submit(path, source.clone()),
                     });
                 }
@@ -1515,7 +1575,10 @@ impl ForegroundLoader {
         if flight.as_ref().is_none_or(|(current, _)| current.path != path) {
             identity.source = None;
         }
-        self.duplicate.lock().unwrap_or_else(std::sync::PoisonError::into_inner).take();
+        self.duplicate
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner)
+            .take();
         self.enqueue_foreground(identity, advance, prefetch_paths, &mut flight)
     }
 
@@ -1533,7 +1596,10 @@ impl ForegroundLoader {
             self.current_generation()
         };
         self.telemetry.begin_lookup(generation);
-        *identity.prefetch_paths.lock().unwrap_or_else(std::sync::PoisonError::into_inner) = prefetch_paths;
+        *identity
+            .prefetch_paths
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner) = prefetch_paths;
         let result = self.replace_pending(LoadRequest {
             prefetch_paths: Arc::clone(&identity.prefetch_paths),
             decode_first: self.decode_first,
@@ -1551,14 +1617,23 @@ impl ForegroundLoader {
     }
 
     fn has_pending_duplicate(&self) -> bool {
-        self.duplicate.lock().unwrap_or_else(std::sync::PoisonError::into_inner).is_some()
+        self.duplicate
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner)
+            .is_some()
     }
 
     /// Called by the event loop; never waits for filesystem I/O. Only the
     /// generation that requested validation may schedule a replacement decode.
     fn poll_duplicate(&self) -> Option<Result<u64>> {
-        let mut flight = self.flight.lock().unwrap_or_else(std::sync::PoisonError::into_inner);
-        let mut duplicate = self.duplicate.lock().unwrap_or_else(std::sync::PoisonError::into_inner);
+        let mut flight = self
+            .flight
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner);
+        let mut duplicate = self
+            .duplicate
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner);
         let pending = duplicate.as_ref()?;
         if pending.generation != self.current_generation()
             || pending.identity.development != self.development
@@ -1570,12 +1645,18 @@ impl ForegroundLoader {
         }
         let valid = pending.check.poll()?;
         let mut pending = duplicate.take()?;
-        if valid { return None; }
+        if valid {
+            return None;
+        }
         pending.identity.source = None;
         // A duplicate without an explicit plan leaves the shared plan intact.
         // Carry that latest plan through a source-change retry as well.
-        let prefetch_paths = pending.identity.prefetch_paths.lock()
-            .unwrap_or_else(std::sync::PoisonError::into_inner).clone();
+        let prefetch_paths = pending
+            .identity
+            .prefetch_paths
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner)
+            .clone();
         Some(self.enqueue_foreground(pending.identity, true, prefetch_paths, &mut flight))
     }
 
@@ -1658,17 +1739,15 @@ impl ModelLoadError {
 
 type ModelDisplayKey = (PathBuf, u64, u128, [u8; 32], usize);
 fn model_display_key(request: &DecodeRequest) -> Option<ModelDisplayKey> {
-    SourceFingerprint::from_path(&request.path)
-            .ok()
-            .map(|source| {
-                (
-                    request.path.clone(),
-                    source.file_size,
-                    source.modified_ns,
-                    source.sampled_blake3,
-                    request.image_index,
-                )
-            })
+    SourceFingerprint::from_path(&request.path).ok().map(|source| {
+        (
+            request.path.clone(),
+            source.file_size,
+            source.modified_ns,
+            source.sampled_blake3,
+            request.image_index,
+        )
+    })
 }
 struct ModelDisplayCache {
     swap: Option<rrrah_cache::ImageSwapCache<ModelDisplayKey, model_swap::ModelPayload>>,
@@ -1716,8 +1795,10 @@ impl ModelDisplayCache {
         admitted
     }
     #[cfg(test)]
-    fn prefetch_lease(&mut self, request: &DecodeRequest)
-        -> Option<rrrah_cache::CacheLease<rrrah_decode::DecodedModel>> {
+    fn prefetch_lease(
+        &mut self,
+        request: &DecodeRequest,
+    ) -> Option<rrrah_cache::CacheLease<rrrah_decode::DecodedModel>> {
         self.entries.get(&model_display_key(request)?)
     }
     fn visible_lease_for(
@@ -1912,7 +1993,13 @@ fn preload_model_with_lease(
     request: &DecodeRequest,
     cache: &mut ModelDisplayCache,
     gate: &Arc<DecodeGate>,
-) -> Result<(rrrah_decode::DecodedModel, Option<rrrah_cache::CacheLease<rrrah_decode::DecodedModel>>), String> {
+) -> Result<
+    (
+        rrrah_decode::DecodedModel,
+        Option<rrrah_cache::CacheLease<rrrah_decode::DecodedModel>>,
+    ),
+    String,
+> {
     preload_model_mode(request, cache, gate, true)
 }
 
@@ -1921,36 +2008,60 @@ fn preload_model_mode(
     cache: &mut ModelDisplayCache,
     gate: &Arc<DecodeGate>,
     retain: bool,
-) -> Result<(rrrah_decode::DecodedModel, Option<rrrah_cache::CacheLease<rrrah_decode::DecodedModel>>), String> {
+) -> Result<
+    (
+        rrrah_decode::DecodedModel,
+        Option<rrrah_cache::CacheLease<rrrah_decode::DecodedModel>>,
+    ),
+    String,
+> {
     let mut resolved = None;
-    let model = cache.load_with_cancel_resolving_key(|| {
-        resolved = model_display_key(request);
-        resolved.clone()
-    }, false, || {
-        let cancelled = || {
+    let model = cache.load_with_cancel_resolving_key(
+        || {
+            resolved = model_display_key(request);
+            resolved.clone()
+        },
+        false,
+        || {
+            let cancelled = || {
+                request
+                    .cancellation
+                    .as_ref()
+                    .is_some_and(|token| token.is_cancelled())
+            };
+            let Some(permit) = gate.acquire_prefetch(cancelled) else {
+                return Err("model prefetch cancelled".into());
+            };
+            if !prefetch_source_fits(request) {
+                return Err("model prefetch skipped: insufficient source memory headroom".into());
+            }
+            let model = rrrah_decode::decode_model(request).map_err(ModelLoadError::Decode);
+            drop(permit);
+            model
+        },
+        || {
             request
                 .cancellation
                 .as_ref()
-                .is_some_and(|token| token.is_cancelled())
-        };
-        let Some(permit) = gate.acquire_prefetch(cancelled) else {
-            return Err("model prefetch cancelled".into());
-        };
-        if !prefetch_source_fits(request) {
-            return Err("model prefetch skipped: insufficient source memory headroom".into());
-        }
-        let model = rrrah_decode::decode_model(request).map_err(ModelLoadError::Decode);
-        drop(permit);
-        model
-    }, || request.cancellation.as_ref().is_some_and(GenerationToken::is_cancelled))?;
-    let lease = if retain {resolved.and_then(|key| cache.entries.get(&key))} else {None};
+                .is_some_and(GenerationToken::is_cancelled)
+        },
+    )?;
+    let lease = if retain {
+        resolved.and_then(|key| cache.entries.get(&key))
+    } else {
+        None
+    };
     Ok((model, lease))
 }
 
 #[cfg(test)]
 fn preload_raw(
-    request: &DecodeRequest, disk: &DiskMosaicCache, ram: &mut MosaicRamCache,
-    writer: Option<&CacheWriter>, generation: u64, gate: &Arc<DecodeGate>,
+    request: &DecodeRequest,
+    disk: &DiskMosaicCache,
+    ram: &mut MosaicRamCache,
+    writer: Option<&CacheWriter>,
+    generation: u64,
+    gate: &Arc<DecodeGate>,
 ) -> Result<bool, String> {
     preload_raw_with_lease(request, disk, ram, writer, generation, gate).map(|(admitted, _)| admitted)
 }
@@ -2040,7 +2151,14 @@ fn preload_raster_with_lease(
     window: Option<rrrah_decode::ScalarWindow>,
     cache: &mut RasterDisplayCache,
     gate: &Arc<DecodeGate>,
-) -> Result<(rrrah_core::DecodedRaster, bool, Option<rrrah_cache::CacheLease<rrrah_core::DecodedRaster>>), String> {
+) -> Result<
+    (
+        rrrah_core::DecodedRaster,
+        bool,
+        Option<rrrah_cache::CacheLease<rrrah_core::DecodedRaster>>,
+    ),
+    String,
+> {
     preload_raster_mode(request, window, cache, gate, true)
 }
 
@@ -2050,35 +2168,53 @@ fn preload_raster_mode(
     cache: &mut RasterDisplayCache,
     gate: &Arc<DecodeGate>,
     retain: bool,
-) -> Result<(rrrah_core::DecodedRaster, bool, Option<rrrah_cache::CacheLease<rrrah_core::DecodedRaster>>), String> {
+) -> Result<
+    (
+        rrrah_core::DecodedRaster,
+        bool,
+        Option<rrrah_cache::CacheLease<rrrah_core::DecodedRaster>>,
+    ),
+    String,
+> {
     let mut resolved = None;
-    let (frame, assumed) = load_cached_raster_mode_resolving_key(request, || {
-        resolved = raster_display_key(request, window);
-        resolved.clone()
-    }, cache, false, || {
-        let cancelled = || {
-            request
-                .cancellation
-                .as_ref()
-                .is_some_and(|token| token.is_cancelled())
-        };
-        let Some(permit) = gate.acquire_prefetch(cancelled) else {
-            return Err("raster prefetch cancelled".into());
-        };
-        // Whole-file decoding needs at least the source allocation. Check after
-        // waiting and after cache probes; a ready RAM frame needs no new buffer.
-        if !prefetch_source_fits(request) {
-            return Err(RasterLoadError::Message(
-                "raster prefetch skipped: insufficient source memory headroom".into(),
-            ));
-        }
-        let result = load_raster_for_display_typed(request, window);
-        drop(permit);
-        result
-    })?;
+    let (frame, assumed) = load_cached_raster_mode_resolving_key(
+        request,
+        || {
+            resolved = raster_display_key(request, window);
+            resolved.clone()
+        },
+        cache,
+        false,
+        || {
+            let cancelled = || {
+                request
+                    .cancellation
+                    .as_ref()
+                    .is_some_and(|token| token.is_cancelled())
+            };
+            let Some(permit) = gate.acquire_prefetch(cancelled) else {
+                return Err("raster prefetch cancelled".into());
+            };
+            // Whole-file decoding needs at least the source allocation. Check after
+            // waiting and after cache probes; a ready RAM frame needs no new buffer.
+            if !prefetch_source_fits(request) {
+                return Err(RasterLoadError::Message(
+                    "raster prefetch skipped: insufficient source memory headroom".into(),
+                ));
+            }
+            let result = load_raster_for_display_typed(request, window);
+            drop(permit);
+            result
+        },
+    )?;
     let lease = if retain {
-        resolved.and_then(|mut key| {key.6 = assumed; cache.get_lease(&key)})
-    } else {None};
+        resolved.and_then(|mut key| {
+            key.6 = assumed;
+            cache.get_lease(&key)
+        })
+    } else {
+        None
+    };
     Ok((frame, assumed, lease))
 }
 
@@ -2157,7 +2293,10 @@ fn load_cached_raster_with(
 ) -> Result<(rrrah_core::DecodedRaster, bool), String> {
     load_cached_raster_mode(request, window, cache, true, load)
 }
-fn raster_display_key(request: &DecodeRequest, window: Option<rrrah_decode::ScalarWindow>) -> Option<RasterDisplayKey> {
+fn raster_display_key(
+    request: &DecodeRequest,
+    window: Option<rrrah_decode::ScalarWindow>,
+) -> Option<RasterDisplayKey> {
     let fingerprint = SourceFingerprint::from_path(&request.path).ok();
     fingerprint.map(|source| {
         (
@@ -2186,7 +2325,9 @@ fn raster_display_key(request: &DecodeRequest, window: Option<rrrah_decode::Scal
 }
 #[cfg(test)]
 fn retain_prefetched_raster(
-    request: &DecodeRequest, window: Option<rrrah_decode::ScalarWindow>, assumed: bool,
+    request: &DecodeRequest,
+    window: Option<rrrah_decode::ScalarWindow>,
+    assumed: bool,
     cache: &mut RasterDisplayCache,
 ) -> Option<rrrah_cache::CacheLease<rrrah_core::DecodedRaster>> {
     let mut key = raster_display_key(request, window)?;
@@ -2201,7 +2342,13 @@ fn load_cached_raster_mode(
     visible: bool,
     load: impl FnMut() -> Result<(rrrah_core::DecodedRaster, bool), RasterLoadError>,
 ) -> Result<(rrrah_core::DecodedRaster, bool), String> {
-    load_cached_raster_mode_resolving_key(request, || raster_display_key(request, window), cache, visible, load)
+    load_cached_raster_mode_resolving_key(
+        request,
+        || raster_display_key(request, window),
+        cache,
+        visible,
+        load,
+    )
 }
 
 fn load_cached_raster_mode_resolving_key(
@@ -2303,7 +2450,7 @@ impl std::fmt::Display for RasterLoadError {
 impl RasterLoadError {
     fn retryable_memory_pressure(&self) -> bool {
         let memory = match self {
-            Self::Decode(rrrah_decode::RasterDecodeError::Eps(error))=>error.memory_error(),
+            Self::Decode(rrrah_decode::RasterDecodeError::Eps(error)) => error.memory_error(),
             Self::Decode(rrrah_decode::RasterDecodeError::X3f(rrrah_decode::X3fError::Memory(error))) => {
                 Some(error)
             }
@@ -3043,14 +3190,14 @@ struct DeferredThumbnail {
 
 impl DeferredThumbnail {
     fn matches_tile(&self, tiles: &[gallery::FolderTile]) -> bool {
-        tiles.get(self.ready.index).is_some_and(|tile| {
-            tile.folder == self.folder && tile.cover == self.cover
-        })
+        tiles
+            .get(self.ready.index)
+            .is_some_and(|tile| tile.folder == self.folder && tile.cover == self.cover)
     }
     fn poll_source(&mut self, validator: &source_validation::SourceValidator) -> Option<bool> {
-        let check = self.validation.get_or_insert_with(|| {
-            validator.submit(self.cover.clone(), self.ready.source_stamp.clone())
-        });
+        let check = self
+            .validation
+            .get_or_insert_with(|| validator.submit(self.cover.clone(), self.ready.source_stamp.clone()));
         check.poll()
     }
     fn expired(&self, now: Instant) -> bool {
@@ -3129,7 +3276,7 @@ struct App {
     raster_gpu_budget: Option<rrrah_core::MemoryBudget>,
     raster_lod_budget: rrrah_core::MemoryBudget,
     raster_lod_worker: raster_lod_worker::LodWorker,
-    pending_raster_lod: Option<(u64,u64,LoadEvent)>,
+    pending_raster_lod: Option<(u64, u64, LoadEvent)>,
     model_upload_worker: model_upload_worker::ModelUploadWorker,
     pending_model_upload: Option<(u64, u64, LoadEvent, Instant)>,
     model_gpu_budget: Option<rrrah_core::MemoryBudget>,
@@ -3231,8 +3378,9 @@ impl App {
             model_upload_worker: model_upload_worker::ModelUploadWorker::default(),
             pending_model_upload: None,
             raster_lod_budget: managed_budget.as_ref().map_or_else(
-                || rrrah_core::MemoryBudget::new(16*1024*1024),
-                |root| root.child(16*1024*1024)),
+                || rrrah_core::MemoryBudget::new(16 * 1024 * 1024),
+                |root| root.child(16 * 1024 * 1024),
+            ),
             model_gpu_budget,
             raw_gpu_budget,
             filmstrip_gpu_budget,
@@ -3261,7 +3409,11 @@ impl App {
 
     fn drain_load_events(&mut self) {
         // A worker wake can carry a viewport replacement without a loader event.
-        if self.gpu.as_ref().is_some_and(|gpu| gpu.viewport_worker.has_completed() || gpu.storage_worker.has_completed()) {
+        if self
+            .gpu
+            .as_ref()
+            .is_some_and(|gpu| gpu.viewport_worker.has_completed() || gpu.storage_worker.has_completed())
+        {
             self.update_view();
         }
         loop {
@@ -3274,7 +3426,11 @@ impl App {
                 self.pending_raster_lod = None;
                 self.raster_lod_worker.cancel();
             }
-            if self.pending_model_upload.as_ref().is_some_and(|(_, g, _, _)| *g != current) {
+            if self
+                .pending_model_upload
+                .as_ref()
+                .is_some_and(|(_, g, _, _)| *g != current)
+            {
                 self.pending_model_upload = None;
                 self.model_upload_worker.cancel();
             }
@@ -3284,8 +3440,9 @@ impl App {
             let mut prepared_lod = None;
             let mut completed_event = None;
             if let Some(completed) = self.model_upload_worker.try_take() {
-                if self.pending_model_upload.as_ref().is_some_and(|(id, g, _, _)|
-                    *id == completed.id && *g == completed.generation && *g == current) {
+                if self.pending_model_upload.as_ref().is_some_and(|(id, g, _, _)| {
+                    *id == completed.id && *g == completed.generation && *g == current
+                }) {
                     let (_, _, event, started) = self.pending_model_upload.take().unwrap();
                     match completed.result {
                         Ok(prepared) => {
@@ -3306,12 +3463,14 @@ impl App {
                     }
                 }
             }
-            if let Some(completed) = completed_event.is_none().then(|| self.raster_lod_worker.try_take()).flatten() {
-                if self
-                    .pending_raster_lod
-                    .as_ref()
-                    .is_some_and(|(id, g, _)| *id == completed.id && *g == completed.generation && *g == current)
-                {
+            if let Some(completed) = completed_event
+                .is_none()
+                .then(|| self.raster_lod_worker.try_take())
+                .flatten()
+            {
+                if self.pending_raster_lod.as_ref().is_some_and(|(id, g, _)| {
+                    *id == completed.id && *g == completed.generation && *g == current
+                }) {
                     let (_, _, event) = self.pending_raster_lod.take().unwrap();
                     match completed.into_frame() {
                         Ok(lod) => {
@@ -3334,17 +3493,32 @@ impl App {
             };
             if prepared_model.is_none() {
                 if let LoadEvent::ModelReady { generation, mesh, .. } = &event {
-                    if *generation != current { continue; }
+                    if *generation != current {
+                        continue;
+                    }
                     if let Some(gpu) = self.gpu.as_mut() {
                         if gpu.config.format.is_srgb()
                             || (gpu.config.format == wgpu::TextureFormat::Rgba16Float
-                                && gpu.config.color_space == wgpu::SurfaceColorSpace::ExtendedSrgbLinear) {
+                                && gpu.config.color_space == wgpu::SurfaceColorSpace::ExtendedSrgbLinear)
+                        {
                             let started = Instant::now();
-                            let token = GenerationToken::new(self.foreground_loader.generation.clone(), *generation);
+                            let token =
+                                GenerationToken::new(self.foreground_loader.generation.clone(), *generation);
                             let submitted = match gpu.model.as_ref() {
-                                Some(renderer) => self.model_upload_worker.submit(mesh.clone(), renderer.upload_preparer(), *generation, token),
-                                None => self.model_upload_worker.submit_new(mesh.clone(), gpu.device.clone(), gpu.config.format,
-                                    self.model_gpu_budget.clone(), *generation, token),
+                                Some(renderer) => self.model_upload_worker.submit(
+                                    mesh.clone(),
+                                    renderer.upload_preparer(),
+                                    *generation,
+                                    token,
+                                ),
+                                None => self.model_upload_worker.submit_new(
+                                    mesh.clone(),
+                                    gpu.device.clone(),
+                                    gpu.config.format,
+                                    self.model_gpu_budget.clone(),
+                                    *generation,
+                                    token,
+                                ),
                             };
                             match submitted {
                                 Ok(id) => {
@@ -3385,8 +3559,11 @@ impl App {
                             let region_fits = region.as_ref().is_ok_and(|r| {
                                 r.is_none_or(|r| renderer.can_admit_texture_extent(&gpu.device, r[2], r[3]))
                             });
-                            if !renderer.can_admit_texture_extent(&gpu.device, raster.width(), raster.height())
-                                && !region_fits
+                            if !renderer.can_admit_texture_extent(
+                                &gpu.device,
+                                raster.width(),
+                                raster.height(),
+                            ) && !region_fits
                             {
                                 let size = match raster_viewport::ResidentSource::plan_lod_size(
                                     raster,
@@ -3484,10 +3661,16 @@ impl App {
                         decode.as_ref(),
                         ui_dispatch,
                     );
-                    let upload_token = GenerationToken::new(Arc::clone(&self.foreground_loader.generation), generation);
+                    let upload_token =
+                        GenerationToken::new(Arc::clone(&self.foreground_loader.generation), generation);
                     let gpu_prepare_result: Option<Result<(GpuUploadTimings, Duration), String>> =
                         if let Some(gpu) = self.gpu.as_mut() {
-                            match gpu.renderer.upload_mosaic_with_cancel(&gpu.device, &gpu.queue, &mosaic, || upload_token.is_cancelled()) {
+                            match gpu.renderer.upload_mosaic_with_cancel(
+                                &gpu.device,
+                                &gpu.queue,
+                                &mosaic,
+                                || upload_token.is_cancelled(),
+                            ) {
                                 Ok(upload_timings) => {
                                     gpu.upload_completions.track_submitted(&gpu.queue);
                                     // Transfer the consumer lease through actual GPU completion.
@@ -3591,9 +3774,12 @@ impl App {
                         renderer
                             .resize(&gpu.device, [gpu.size.width.max(1), gpu.size.height.max(1)])
                             .map_err(|e| e.to_string())?;
-                        let prepared = prepared_model.take()
+                        let prepared = prepared_model
+                            .take()
                             .ok_or_else(|| "model preparation unavailable".to_string())?;
-                        renderer.install_prepared_upload(prepared).map_err(|e| e.to_string())?;
+                        renderer
+                            .install_prepared_upload(prepared)
+                            .map_err(|e| e.to_string())?;
                         if let Some(lease) = lease {
                             submit_upload_lease(&gpu.queue, &gpu.upload_completions, lease);
                         }
@@ -3648,7 +3834,8 @@ impl App {
                     }
                     self.pending_first_present = None;
                     self.pipeline = PipelineSnapshot::idle(generation);
-                    let upload_token = GenerationToken::new(Arc::clone(&self.foreground_loader.generation), generation);
+                    let upload_token =
+                        GenerationToken::new(Arc::clone(&self.foreground_loader.generation), generation);
                     let result = self.gpu.as_mut().map(|gpu| {
                         let renderer = gpu
                             .raster
@@ -3656,21 +3843,30 @@ impl App {
                             .ok_or_else(|| "surface has no sRGB target".to_string())?;
                         self.view.viewport = [gpu.size.width as f32, gpu.size.height as f32];
                         let retained = raster_viewport::ResidentSource::install_with_prepared_lod(
-                            renderer, &gpu.device, &gpu.queue, &raster, self.view,
+                            renderer,
+                            &gpu.device,
+                            &gpu.queue,
+                            &raster,
+                            self.view,
                             development.as_ref().map(|options| &options.curve),
                             &self.raster_lod_budget,
                             prepared_lod.take(),
                             || upload_token.is_cancelled(),
-                        ).map_err(|e| e.to_string())?;
+                        )
+                        .map_err(|e| e.to_string())?;
                         gpu.raster_viewport = retained;
                         gpu.storage_worker.cancel();
                         gpu.storage_pending = None;
                         if let (Some(store), Some(source)) = (region_store, gpu.raster_viewport.as_ref()) {
                             if let Some((pixels, index)) = source.persistence_source() {
                                 let identity = source.identity();
-                                gpu.viewport_generation.store(identity, std::sync::atomic::Ordering::Release);
+                                gpu.viewport_generation
+                                    .store(identity, std::sync::atomic::Ordering::Release);
                                 let token = GenerationToken::new(gpu.viewport_generation.clone(), identity);
-                                match gpu.storage_worker.submit_swap(pixels, store, index, identity, token) {
+                                match gpu
+                                    .storage_worker
+                                    .submit_swap(pixels, store, index, identity, token)
+                                {
                                     Ok(id) => gpu.storage_pending = Some((id, identity)),
                                     Err(error) => log::warn!("visible raster swap unavailable: {error}"),
                                 }
@@ -3696,10 +3892,17 @@ impl App {
                     });
                     // A superseded upload must not overwrite the current request's status
                     // or start neighbour work from this stale ready event.
-                    if upload_token.is_cancelled() { continue; }
+                    if upload_token.is_cancelled() {
+                        continue;
+                    }
                     self.status = match result {
                         Some(Ok(())) => {
-                            log::info!("Raster ready: generation={generation} path={} index={image_index} dimensions={}x{} elapsed={elapsed:?}", self.path.display(), raster.width(), raster.height());
+                            log::info!(
+                                "Raster ready: generation={generation} path={} index={image_index} dimensions={}x{} elapsed={elapsed:?}",
+                                self.path.display(),
+                                raster.width(),
+                                raster.height()
+                            );
                             self.image_index = image_index;
                             self.scalar_window = scalar_window;
                             self.image_count = raster.image_count();
@@ -3719,9 +3922,12 @@ impl App {
                             )
                         }
                         Some(Err(error)) => {
-                            log::warn!("Raster GPU upload rejected: generation={generation} path={} index={image_index} error={error}", self.path.display());
+                            log::warn!(
+                                "Raster GPU upload rejected: generation={generation} path={} index={image_index} error={error}",
+                                self.path.display()
+                            );
                             format!("GPU upload rejected image: {error}")
-                        },
+                        }
                         None => "image ready; waiting for window".into(),
                     };
                     if let Some(telemetry) = self.telemetry.as_mut() {
@@ -3731,7 +3937,10 @@ impl App {
                 }
                 LoadEvent::Failed { generation, error } => {
                     if generation == self.foreground_loader.current_generation() {
-                        log::warn!("Image load failed: generation={generation} path={} error={error}", self.path.display());
+                        log::warn!(
+                            "Image load failed: generation={generation} path={} error={error}",
+                            self.path.display()
+                        );
                         self.status = format!("image load failed: {error}");
                         self.pending_first_present = None;
                         if self.pipeline.generation() != generation {
@@ -3784,14 +3993,18 @@ impl App {
     }
 
     fn request_folder_scan(&mut self, folder: PathBuf, open_first: bool) {
-        let generation = self.folder_scanner.submit_with_sources(folder, self.strip_thumbs.source_snapshot());
+        let generation = self
+            .folder_scanner
+            .submit_with_sources(folder, self.strip_thumbs.source_snapshot());
         self.pending_folder_scan = Some((generation, open_first));
     }
 
     fn drain_folder_scan(&mut self) {
         // Keep earlier folder context until the drop is accepted or rejected.
         // An invalid drop must not lose an already running sibling scan.
-        if self.pending_drop.is_some() { return; }
+        if self.pending_drop.is_some() {
+            return;
+        }
         let ready = match self.folder_scanner.try_recv() {
             Ok(Some(ready)) => ready,
             Ok(None) => return,
@@ -3802,8 +4015,12 @@ impl App {
                 return;
             }
         };
-        let Some((generation, open_first)) = self.pending_folder_scan else { return };
-        if ready.generation != generation { return; }
+        let Some((generation, open_first)) = self.pending_folder_scan else {
+            return;
+        };
+        if ready.generation != generation {
+            return;
+        }
         self.pending_folder_scan = None;
         let has_paths = !ready.paths.is_empty();
         if !has_paths && open_first {
@@ -3814,15 +4031,20 @@ impl App {
         self.gallery_index = ready.paths.iter().position(|candidate| candidate == &self.path);
         self.gallery = ready.paths;
         for id in self.strip_thumbs.invalidate_sources(ready.stale_thumbnails) {
-            if let Some(gpu) = self.gpu.as_mut() { gpu.filmstrip.remove_tile(id); }
+            if let Some(gpu) = self.gpu.as_mut() {
+                gpu.filmstrip.remove_tile(id);
+            }
         }
-        self.strip.set_folder(ready.tiles, &ready.folder, self.view.viewport[0]);
+        self.strip
+            .set_folder(ready.tiles, &ready.folder, self.view.viewport[0]);
         self.submit_thumb_jobs();
         if open_first && has_paths {
             self.last_nav_direction = NavDirection::None;
             self.open_gallery_index(0);
         }
-        if let Some(window) = &self.window { window.request_redraw(); }
+        if let Some(window) = &self.window {
+            window.request_redraw();
+        }
     }
 
     fn submit_thumb_jobs(&mut self) {
@@ -3868,7 +4090,7 @@ impl App {
                     continue;
                 }
                 match deferred.poll_source(&self.thumbnail_validator) {
-                    Some(true) => {},
+                    Some(true) => {}
                     Some(false) => continue,
                     None => {
                         deferred.retry_at = now + Duration::from_millis(25);
@@ -3977,7 +4199,9 @@ impl App {
                 return;
             }
         };
-        if self.pending_drop != Some(ready.generation) { return; }
+        if self.pending_drop != Some(ready.generation) {
+            return;
+        }
         self.pending_drop = None;
         match ready.kind {
             Ok(drop_inspection::DropKind::Folder) => self.open_folder(ready.path),
@@ -4013,16 +4237,23 @@ impl App {
         }
         let neighbours = self.pending_folder_scan.is_none().then(|| {
             gallery::neighbour_prefetch_paths(
-                &self.gallery, index, self.last_nav_direction, self.prefetch_window)
+                &self.gallery,
+                index,
+                self.last_nav_direction,
+                self.prefetch_window,
+            )
         });
-        let generation = match self.foreground_loader.submit_request_with_prefetch(
-            path.clone(), 0, None, true, neighbours) {
-            Ok(generation) => generation,
-            Err(error) => {
-                self.set_status(format!("image loader failed: {error}"));
-                return;
-            }
-        };
+        let generation =
+            match self
+                .foreground_loader
+                .submit_request_with_prefetch(path.clone(), 0, None, true, neighbours)
+            {
+                Ok(generation) => generation,
+                Err(error) => {
+                    self.set_status(format!("image loader failed: {error}"));
+                    return;
+                }
+            };
         self.pending_first_present = None;
         self.pipeline = PipelineSnapshot::waiting(generation, RawKind::from_path(&path));
         if let Some(telemetry) = self.telemetry.as_mut() {
@@ -4077,11 +4308,10 @@ impl App {
         self.cancel_drop();
         self.raw_prefetcher.begin_foreground();
         let index = self.image_navigation_index();
-        match self.foreground_loader.submit_image_with_window(
-            self.path.clone(),
-            index,
-            Some(window),
-        ) {
+        match self
+            .foreground_loader
+            .submit_image_with_window(self.path.clone(), index, Some(window))
+        {
             Ok(generation) => {
                 self.pending_image_index = Some((generation, index));
                 self.pending_first_present = None;
@@ -4148,17 +4378,16 @@ impl ApplicationHandler<WakeEvent> for App {
     }
 
     fn resumed(&mut self, event_loop: &ActiveEventLoop) {
-        let window = match event_loop
-            .create_window(Window::default_attributes().with_title("Rrrah — loading…"))
-        {
-            Ok(window) => Arc::new(window),
-            Err(error) => {
-                log::error!("failed to create viewer window: {error}");
-                self.status = format!("window creation failed: {error}");
-                event_loop.exit();
-                return;
-            }
-        };
+        let window =
+            match event_loop.create_window(Window::default_attributes().with_title("Rrrah — loading…")) {
+                Ok(window) => Arc::new(window),
+                Err(error) => {
+                    log::error!("failed to create viewer window: {error}");
+                    self.status = format!("window creation failed: {error}");
+                    event_loop.exit();
+                    return;
+                }
+            };
         let gpu = match pollster::block_on(GpuState::new(
             event_loop.owned_display_handle(),
             window.clone(),
@@ -4265,7 +4494,11 @@ impl ApplicationHandler<WakeEvent> for App {
             .as_ref()
             .map(|thumbnail| thumbnail.retry_at)
             .into_iter()
-            .chain(self.gpu.as_ref().and_then(|gpu| gpu.model_resize_retry.map(|(_, deadline)| deadline)))
+            .chain(
+                self.gpu
+                    .as_ref()
+                    .and_then(|gpu| gpu.model_resize_retry.map(|(_, deadline)| deadline)),
+            )
             .min();
         if retry.is_some()
             && let Some(gpu) = &self.gpu
@@ -4275,14 +4508,19 @@ impl ApplicationHandler<WakeEvent> for App {
                 log::warn!("thumbnail upload completion polling failed: {error}");
             }
         }
-        event_loop.set_control_flow(if pending || self.pending_folder_scan.is_some() || self.pending_drop.is_some()
-            || self.foreground_loader.has_pending_duplicate() {
-            ControlFlow::WaitUntil(Instant::now() + Duration::from_millis(10))
-        } else if let Some(deadline) = retry {
-            ControlFlow::WaitUntil(deadline)
-        } else {
-            ControlFlow::Wait
-        });
+        event_loop.set_control_flow(
+            if pending
+                || self.pending_folder_scan.is_some()
+                || self.pending_drop.is_some()
+                || self.foreground_loader.has_pending_duplicate()
+            {
+                ControlFlow::WaitUntil(Instant::now() + Duration::from_millis(10))
+            } else if let Some(deadline) = retry {
+                ControlFlow::WaitUntil(deadline)
+            } else {
+                ControlFlow::Wait
+            },
+        );
     }
 
     fn user_event(&mut self, _event_loop: &ActiveEventLoop, _event: WakeEvent) {
@@ -4374,7 +4612,9 @@ impl ApplicationHandler<WakeEvent> for App {
         }
         match event {
             WindowEvent::Focused(true) => {
-                if let Some(window) = &self.window { window.request_redraw(); }
+                if let Some(window) = &self.window {
+                    window.request_redraw();
+                }
             }
             WindowEvent::CloseRequested => event_loop.exit(),
             WindowEvent::HoveredFile(path) => {
@@ -4751,9 +4991,9 @@ impl TelemetryState {
     }
 }
 
-mod raster_viewport;
-mod raster_lod_worker;
 mod model_upload_worker;
+mod raster_lod_worker;
+mod raster_viewport;
 
 struct GpuState {
     _instance: wgpu::Instance,
@@ -4929,9 +5169,13 @@ impl GpuState {
             );
         }
         self.renderer.update_view(&self.queue, view);
-        let identity = self.raster_viewport.as_ref().filter(|_| self.raster_active)
+        let identity = self
+            .raster_viewport
+            .as_ref()
+            .filter(|_| self.raster_active)
             .map_or(0, |source| source.identity());
-        self.viewport_generation.store(identity, std::sync::atomic::Ordering::Release);
+        self.viewport_generation
+            .store(identity, std::sync::atomic::Ordering::Release);
         if self.storage_pending.is_some_and(|(_, source)| source != identity) {
             self.storage_worker.cancel();
             self.storage_pending = None;
@@ -4941,21 +5185,34 @@ impl GpuState {
                 self.storage_pending = None;
                 match completed.into_swapped() {
                     Ok(swapped) => {
-                        if self.raster_viewport.as_mut().is_some_and(|source| source.adopt_swapped(identity, swapped)) {
+                        if self
+                            .raster_viewport
+                            .as_mut()
+                            .is_some_and(|source| source.adopt_swapped(identity, swapped))
+                        {
                             self.viewport_worker.cancel();
                             self.viewport_pending = None;
                             self.viewport_ready = None;
-                            log::info!("Visible raster source migrated to segmented swap: identity={identity}");
+                            log::info!(
+                                "Visible raster source migrated to segmented swap: identity={identity}"
+                            );
                         }
                     }
                     Err(error) => log::warn!("visible raster swap retained source in RAM: {error}"),
                 }
             }
         }
-        if self.viewport_ready.as_ref().is_some_and(|(source, _)| *source != identity) {
+        if self
+            .viewport_ready
+            .as_ref()
+            .is_some_and(|(source, _)| *source != identity)
+        {
             self.viewport_ready = None;
         }
-        if self.viewport_pending.is_some_and(|(_, source, _)| source != identity) {
+        if self
+            .viewport_pending
+            .is_some_and(|(_, source, _)| source != identity)
+        {
             self.viewport_worker.cancel();
             self.viewport_pending = None;
         }
@@ -4964,27 +5221,40 @@ impl GpuState {
                 if let Some(source) = self.raster_viewport.as_mut() {
                     if source.is_swapped() {
                         let token = GenerationToken::new(self.viewport_generation.clone(), identity);
-                        match source.refresh_swapped(raster, &self.device, &self.queue, view,
-                            &mut self.viewport_worker, token) {
+                        match source.refresh_swapped(
+                            raster,
+                            &self.device,
+                            &self.queue,
+                            view,
+                            &mut self.viewport_worker,
+                            token,
+                        ) {
                             Ok(uploaded) => {
                                 self.raster_region_error = None;
-                                if uploaded { self.upload_completions.track_submitted(&self.queue); }
+                                if uploaded {
+                                    self.upload_completions.track_submitted(&self.queue);
+                                }
                             }
-                            Err(error) => self.raster_region_error = Some(format!("Image region unavailable: {error}")),
+                            Err(error) => {
+                                self.raster_region_error = Some(format!("Image region unavailable: {error}"))
+                            }
                         }
                         raster.update_view(&self.queue, view);
                         return;
                     }
                     let needed = source.needs_lod(raster, &self.device, view).unwrap_or(false);
                     if let Some(completed) = self.viewport_worker.try_take() {
-                        if self.viewport_pending.is_some_and(|(id, state, _)|
-                            id == completed.id && state == identity) {
+                        if self
+                            .viewport_pending
+                            .is_some_and(|(id, state, _)| id == completed.id && state == identity)
+                        {
                             self.viewport_pending = None;
                             if needed {
                                 match completed.into_frame() {
                                     Ok(lod) => self.viewport_ready = Some((identity, lod)),
                                     Err(error) => {
-                                        self.raster_region_error = Some(format!("Image region unavailable: {error}"));
+                                        self.raster_region_error =
+                                            Some(format!("Image region unavailable: {error}"));
                                         raster.update_view(&self.queue, view);
                                         return;
                                     }
@@ -5002,7 +5272,8 @@ impl GpuState {
                                 Err(error) => {
                                     // Keep the prepared pixels: resource pressure must not
                                     // start a filter/wake/retry loop on the same image.
-                                    self.raster_region_error = Some(format!("Image region unavailable: {error}"));
+                                    self.raster_region_error =
+                                        Some(format!("Image region unavailable: {error}"));
                                     raster.update_view(&self.queue, view);
                                     return;
                                 }
@@ -5016,13 +5287,20 @@ impl GpuState {
                         if self.viewport_pending.is_none() {
                             match source.refresh_job(raster, &self.device, view) {
                                 Ok(Some((pixels, size, budget))) => {
-                                    let token = GenerationToken::new(self.viewport_generation.clone(), identity);
+                                    let token =
+                                        GenerationToken::new(self.viewport_generation.clone(), identity);
                                     match self.viewport_worker.submit(pixels, size, budget, identity, token) {
                                         Ok(id) => self.viewport_pending = Some((id, identity, size)),
-                                        Err(error) => self.raster_region_error = Some(format!("Image region unavailable: {error}")),
+                                        Err(error) => {
+                                            self.raster_region_error =
+                                                Some(format!("Image region unavailable: {error}"))
+                                        }
                                     }
                                 }
-                                Err(error) => self.raster_region_error = Some(format!("Image region unavailable: {error}")),
+                                Err(error) => {
+                                    self.raster_region_error =
+                                        Some(format!("Image region unavailable: {error}"))
+                                }
                                 Ok(None) => {}
                             }
                         }
@@ -5035,7 +5313,9 @@ impl GpuState {
                     match source.refresh_deferred(raster, &self.device, &self.queue, view) {
                         Ok(uploaded) => {
                             self.raster_region_error = None;
-                            if uploaded { self.upload_completions.track_submitted(&self.queue); }
+                            if uploaded {
+                                self.upload_completions.track_submitted(&self.queue);
+                            }
                         }
                         Err(error) => {
                             self.raster_region_error = Some(format!("Image region unavailable: {error}"));
@@ -5685,67 +5965,109 @@ mod foreground_loader_tests {
     fn real_ai_cached_pages_preserve_metal_sdr_hdr_under_full_pressure() {
         assert_eq!(std::env::var("RRRAH_GPU_BACKEND").as_deref(), Ok("metal"));
         let gpu = navigation_metal_readback::qualification_gpu().expect("actual Metal required");
-        eprintln!("real AI cache adapter: {}",gpu.adapter_name());
+        eprintln!("real AI cache adapter: {}", gpu.adapter_name());
         qualify_real_ai_pages(Some(&gpu));
     }
     #[test]
     #[ignore = "requires pinned VectorApple original and actual Metal; observes render scratch admission"]
     fn real_ai_cancel_after_render_scratch_admission_recovers_metal() {
-        assert_eq!(std::env::var("RRRAH_GPU_BACKEND").as_deref(),Ok("metal"));
-        let source=PathBuf::from(std::env::var_os("RRRAH_AI_CORPUS").expect("AI corpus")).join("VectorApple.ai");
-        let hash=std::process::Command::new("shasum").args(["-a","256"]).arg(&source).output().unwrap();
+        assert_eq!(std::env::var("RRRAH_GPU_BACKEND").as_deref(), Ok("metal"));
+        let source =
+            PathBuf::from(std::env::var_os("RRRAH_AI_CORPUS").expect("AI corpus")).join("VectorApple.ai");
+        let hash = std::process::Command::new("shasum")
+            .args(["-a", "256"])
+            .arg(&source)
+            .output()
+            .unwrap();
         assert!(hash.status.success());
-        assert_eq!(String::from_utf8(hash.stdout).unwrap().split_whitespace().next(),Some("c5fc34346629c3379cee6065c45b7de0b620be822604551d1463d8e691b03d06"));
-        let gpu=navigation_metal_readback::qualification_gpu().expect("actual Metal required");
-        eprintln!("AI render cancellation adapter: {}",gpu.adapter_name());
-        let reference_root=rrrah_core::MemoryBudget::new(64*1024*1024);
-        let mut reference_request=DecodeRequest::new(&source);
-        reference_request.memory_budget=Some(reference_root.clone());
-        let (reference,_)=load_raster_for_display_typed(&reference_request,None).unwrap();
-        let view=rrrah_gpu::ViewParameters {viewport:[128.,96.],..Default::default()};
-        let sdr=gpu.render_raster(&reference,view,[128,96]).pixels;
-        let hdr=gpu.render_raster_half(&reference,view,[128,96]);
-        let budget=rrrah_core::MemoryBudget::new(64*1024*1024);
-        let generation=Arc::new(AtomicU64::new(1));
-        let mut request=DecodeRequest::new(&source);
-        request.memory_budget=Some(budget.clone());
-        request.cancellation=Some(GenerationToken::new(generation.clone(),1));
+        assert_eq!(
+            String::from_utf8(hash.stdout).unwrap().split_whitespace().next(),
+            Some("c5fc34346629c3379cee6065c45b7de0b620be822604551d1463d8e691b03d06")
+        );
+        let gpu = navigation_metal_readback::qualification_gpu().expect("actual Metal required");
+        eprintln!("AI render cancellation adapter: {}", gpu.adapter_name());
+        let reference_root = rrrah_core::MemoryBudget::new(64 * 1024 * 1024);
+        let mut reference_request = DecodeRequest::new(&source);
+        reference_request.memory_budget = Some(reference_root.clone());
+        let (reference, _) = load_raster_for_display_typed(&reference_request, None).unwrap();
+        let view = rrrah_gpu::ViewParameters {
+            viewport: [128., 96.],
+            ..Default::default()
+        };
+        let sdr = gpu.render_raster(&reference, view, [128, 96]).pixels;
+        let hdr = gpu.render_raster_half(&reference, view, [128, 96]);
+        let budget = rrrah_core::MemoryBudget::new(64 * 1024 * 1024);
+        let generation = Arc::new(AtomicU64::new(1));
+        let mut request = DecodeRequest::new(&source);
+        request.memory_budget = Some(budget.clone());
+        request.cancellation = Some(GenerationToken::new(generation.clone(), 1));
         // Two owned source copies plus final RGBA8 and renderer pixmap credit.
         // More live credit proves renderer scratch admission after page setup.
-        let before_scratch=std::fs::metadata(&source).unwrap().len()*2+301*246*8;
-        let worker=thread::spawn(move||load_raster_for_display_typed(&request,None));
-        let deadline=Instant::now()+Duration::from_secs(10);
-        let mut observed=0;
-        while Instant::now()<deadline && !worker.is_finished() {
-            observed=observed.max(budget.used());
-            if observed>before_scratch {break;}
+        let before_scratch = std::fs::metadata(&source).unwrap().len() * 2 + 301 * 246 * 8;
+        let worker = thread::spawn(move || load_raster_for_display_typed(&request, None));
+        let deadline = Instant::now() + Duration::from_secs(10);
+        let mut observed = 0;
+        while Instant::now() < deadline && !worker.is_finished() {
+            observed = observed.max(budget.used());
+            if observed > before_scratch {
+                break;
+            }
             thread::yield_now();
         }
-        generation.store(2,Ordering::Release);
-        let result=worker.join().unwrap();
-        assert!(observed>before_scratch,"renderer scratch never observed: {observed} <= {before_scratch}");
-        assert!(matches!(result,Err(RasterLoadError::Decode(rrrah_decode::RasterDecodeError::Source(rrrah_decode::DecodeError::Cancelled)))));
-        assert_eq!(budget.used(),0);
-        let mut latest=DecodeRequest::new(&source);
-        latest.memory_budget=Some(budget.clone());
-        latest.cancellation=Some(GenerationToken::new(generation,2));
-        let mut cache=RasterDisplayCache::new(rrrah_cache::CacheLimits::bytes(32*1024*1024));
-        let (retry,_)=load_cached_raster_for_display(&latest,None,&mut cache).unwrap();
-        let (rrrah_core::RasterPixels::Rgba32Float(a),rrrah_core::RasterPixels::Rgba32Float(b))=(reference.pixels(),retry.pixels()) else {panic!()};
-        assert_eq!(&a[..],&b[..]);
-        assert_eq!(gpu.render_raster(&retry,view,[128,96]).pixels,sdr);
-        assert_eq!(gpu.render_raster_half(&retry,view,[128,96]),hdr);
-        drop((reference,retry,cache));
-        assert_eq!((budget.used(),reference_root.used()),(0,0));
-        eprintln!("AI render cancellation: live_credit={observed}; setup_credit={before_scratch}; typed_cancelled; retry_samples_Metal_SDR_HDR_exact; root=0; reference_root=0; appearance_unqualified");
+        generation.store(2, Ordering::Release);
+        let result = worker.join().unwrap();
+        assert!(
+            observed > before_scratch,
+            "renderer scratch never observed: {observed} <= {before_scratch}"
+        );
+        assert!(matches!(
+            result,
+            Err(RasterLoadError::Decode(rrrah_decode::RasterDecodeError::Source(
+                rrrah_decode::DecodeError::Cancelled
+            )))
+        ));
+        assert_eq!(budget.used(), 0);
+        let mut latest = DecodeRequest::new(&source);
+        latest.memory_budget = Some(budget.clone());
+        latest.cancellation = Some(GenerationToken::new(generation, 2));
+        let mut cache = RasterDisplayCache::new(rrrah_cache::CacheLimits::bytes(32 * 1024 * 1024));
+        let (retry, _) = load_cached_raster_for_display(&latest, None, &mut cache).unwrap();
+        let (rrrah_core::RasterPixels::Rgba32Float(a), rrrah_core::RasterPixels::Rgba32Float(b)) =
+            (reference.pixels(), retry.pixels())
+        else {
+            panic!()
+        };
+        assert_eq!(&a[..], &b[..]);
+        assert_eq!(gpu.render_raster(&retry, view, [128, 96]).pixels, sdr);
+        assert_eq!(gpu.render_raster_half(&retry, view, [128, 96]), hdr);
+        drop((reference, retry, cache));
+        assert_eq!((budget.used(), reference_root.used()), (0, 0));
+        eprintln!(
+            "AI render cancellation: live_credit={observed}; setup_credit={before_scratch}; typed_cancelled; retry_samples_Metal_SDR_HDR_exact; root=0; reference_root=0; appearance_unqualified"
+        );
     }
     fn qualify_real_ai_pages(gpu: Option<&navigation_metal_readback::GpuReadback>) {
         let corpus = PathBuf::from(std::env::var("RRRAH_AI_CORPUS").unwrap());
-        for (name,expected) in [("VectorApple.ai","c5fc34346629c3379cee6065c45b7de0b620be822604551d1463d8e691b03d06"),
-            ("one.ai","97786949c268233a446e1738fb9c2f941e4d109811bd2f972948cdb7a45d64b4")] {
-            let hash=std::process::Command::new("shasum").args(["-a","256"]).arg(corpus.join(name)).output().unwrap();
+        for (name, expected) in [
+            (
+                "VectorApple.ai",
+                "c5fc34346629c3379cee6065c45b7de0b620be822604551d1463d8e691b03d06",
+            ),
+            (
+                "one.ai",
+                "97786949c268233a446e1738fb9c2f941e4d109811bd2f972948cdb7a45d64b4",
+            ),
+        ] {
+            let hash = std::process::Command::new("shasum")
+                .args(["-a", "256"])
+                .arg(corpus.join(name))
+                .output()
+                .unwrap();
             assert!(hash.status.success());
-            assert_eq!(String::from_utf8(hash.stdout).unwrap().split_whitespace().next(),Some(expected));
+            assert_eq!(
+                String::from_utf8(hash.stdout).unwrap().split_whitespace().next(),
+                Some(expected)
+            );
         }
         let budget = rrrah_cache::MemoryBudget::new(64 * 1024 * 1024);
         let mut cache = RasterDisplayCache::new(rrrah_cache::CacheLimits::bytes(32 * 1024 * 1024));
@@ -5767,11 +6089,18 @@ mod foreground_loader_tests {
                 preload_raster(&request, None, &mut cache, &gate).unwrap()
             };
             let used = budget.used();
-            let view=rrrah_gpu::ViewParameters {viewport:[128.,96.],..Default::default()};
-            let expected=gpu.map(|gpu|(gpu.render_raster(&original,view,[128,96]).pixels,
-                gpu.render_raster_half(&original,view,[128,96])));
-            let pressure=budget.try_reserve(budget.available_bytes()).unwrap();
-            assert_eq!(budget.available_bytes(),0);
+            let view = rrrah_gpu::ViewParameters {
+                viewport: [128., 96.],
+                ..Default::default()
+            };
+            let expected = gpu.map(|gpu| {
+                (
+                    gpu.render_raster(&original, view, [128, 96]).pixels,
+                    gpu.render_raster_half(&original, view, [128, 96]),
+                )
+            });
+            let pressure = budget.try_reserve(budget.available_bytes()).unwrap();
+            assert_eq!(budget.available_bytes(), 0);
             let (hit, _) = load_cached_raster_with(&request, None, &mut cache, || {
                 panic!("resident AI was decoded again")
             })
@@ -5784,10 +6113,12 @@ mod foreground_loader_tests {
                 panic!()
             };
             assert!(a.ptr_eq(b));
-            if let (Some(gpu),Some((sdr,hdr)))=(gpu,expected) {
-                assert_eq!(gpu.render_raster(&hit,view,[128,96]).pixels,sdr);
-                assert_eq!(gpu.render_raster_half(&hit,view,[128,96]),hdr);
-                eprintln!("real AI cache page: {name}; index={index}; shared_full_pressure_hit; Metal_SDR_HDR_exact");
+            if let (Some(gpu), Some((sdr, hdr))) = (gpu, expected) {
+                assert_eq!(gpu.render_raster(&hit, view, [128, 96]).pixels, sdr);
+                assert_eq!(gpu.render_raster_half(&hit, view, [128, 96]), hdr);
+                eprintln!(
+                    "real AI cache page: {name}; index={index}; shared_full_pressure_hit; Metal_SDR_HDR_exact"
+                );
             }
             drop(pressure);
             assert_eq!(budget.used(), used);
@@ -6582,29 +6913,43 @@ mod foreground_loader_tests {
             development: None,
         };
         let first = loader.submit(path.clone()).unwrap();
-        assert!(loader.flight.lock().unwrap().as_ref().unwrap().0.source.is_none(),
-            "a fresh selection leaves file fingerprinting to the worker");
+        assert!(
+            loader.flight.lock().unwrap().as_ref().unwrap().0.source.is_none(),
+            "a fresh selection leaves file fingerprinting to the worker"
+        );
         assert_eq!(loader.submit(path.clone()).unwrap(), first);
-        assert!(loader.flight.lock().unwrap().as_ref().unwrap().0.source.is_none(),
-            "a pending duplicate must not read the source on its caller");
-        loader.flight.lock().unwrap().as_mut().unwrap().0.source =
-            Some(gallery::SourceStamp::read(&path)); // Simulate the worker starting.
+        assert!(
+            loader.flight.lock().unwrap().as_ref().unwrap().0.source.is_none(),
+            "a pending duplicate must not read the source on its caller"
+        );
+        loader.flight.lock().unwrap().as_mut().unwrap().0.source = Some(gallery::SourceStamp::read(&path)); // Simulate the worker starting.
         let active = worker_rx.try_recv().unwrap();
         let token = GenerationToken::new(Arc::clone(&loader.generation), first);
         let gate_generation = loader.decode_gate.speculative_generation();
         let gate_before = gate_generation.load(Ordering::Acquire);
         let neighbours = vec![root.join("previous.png"), root.join("next.png")];
-        assert_eq!(loader.submit_request_with_prefetch(path.clone(), 0, None, true,
-            Some(neighbours.clone())).unwrap(), first);
+        assert_eq!(
+            loader
+                .submit_request_with_prefetch(path.clone(), 0, None, true, Some(neighbours.clone()))
+                .unwrap(),
+            first
+        );
         assert_eq!(*active.prefetch_paths.lock().unwrap(), Some(neighbours));
-        assert_eq!(loader.submit_request_with_prefetch(path.clone(), 0, None, true,
-            Some(Vec::new())).unwrap(), first);
+        assert_eq!(
+            loader
+                .submit_request_with_prefetch(path.clone(), 0, None, true, Some(Vec::new()))
+                .unwrap(),
+            first
+        );
         assert_eq!(*active.prefetch_paths.lock().unwrap(), Some(Vec::new()));
         assert!(!token.is_cancelled());
         assert!(worker_rx.try_recv().is_err());
         let deadline = Instant::now() + Duration::from_secs(5);
         while loader.has_pending_duplicate() {
-            assert!(loader.poll_duplicate().is_none(), "unchanged source must not restart decode");
+            assert!(
+                loader.poll_duplicate().is_none(),
+                "unchanged source must not restart decode"
+            );
             assert!(Instant::now() < deadline);
             thread::yield_now();
         }
@@ -6646,7 +6991,9 @@ mod foreground_loader_tests {
         assert_eq!(joined, recipe);
         let deadline = Instant::now() + Duration::from_secs(5);
         let changed = loop {
-            if let Some(result) = loader.poll_duplicate() { break result.unwrap(); }
+            if let Some(result) = loader.poll_duplicate() {
+                break result.unwrap();
+            }
             assert!(Instant::now() < deadline, "changed source was not reloaded");
             thread::yield_now();
         };
@@ -6684,12 +7031,18 @@ mod foreground_loader_tests {
             let directory = tempfile::tempdir().unwrap();
             let path = directory.path().join("source.png");
             std::fs::write(&path, b"original source").unwrap();
-            let plan = if disabled { Vec::new() } else {
-                vec![directory.path().join("previous.png"), directory.path().join("next.png")]
+            let plan = if disabled {
+                Vec::new()
+            } else {
+                vec![
+                    directory.path().join("previous.png"),
+                    directory.path().join("next.png"),
+                ]
             };
             let (loader, requests) = loader_with_validator(source_validation::SourceValidator::new());
-            let generation = loader.submit_request_with_prefetch(
-                path.clone(), 0, None, true, Some(plan.clone())).unwrap();
+            let generation = loader
+                .submit_request_with_prefetch(path.clone(), 0, None, true, Some(plan.clone()))
+                .unwrap();
             let active = requests.try_recv().unwrap();
             loader.flight.lock().unwrap().as_mut().unwrap().0.source =
                 Some(gallery::SourceStamp::read(&path));
@@ -6699,7 +7052,9 @@ mod foreground_loader_tests {
             assert_eq!(loader.submit(path.clone()).unwrap(), generation);
             let deadline = Instant::now() + Duration::from_secs(5);
             let replacement = loop {
-                if let Some(result) = loader.poll_duplicate() { break result.unwrap(); }
+                if let Some(result) = loader.poll_duplicate() {
+                    break result.unwrap();
+                }
                 assert!(Instant::now() < deadline);
                 thread::yield_now();
             };
@@ -6713,16 +7068,23 @@ mod foreground_loader_tests {
         }
     }
 
-    fn loader_with_validator(validator: source_validation::SourceValidator) -> (ForegroundLoader, Receiver<LoadRequest>) {
+    fn loader_with_validator(
+        validator: source_validation::SourceValidator,
+    ) -> (ForegroundLoader, Receiver<LoadRequest>) {
         let (tx, requests) = bounded(1);
         let loader = ForegroundLoader {
             worker: None,
-            decode_first: true, automatic_policy: false,
+            decode_first: true,
+            automatic_policy: false,
             flight: Arc::new(std::sync::Mutex::new(None)),
-            duplicate_validator: validator, duplicate: std::sync::Mutex::new(None),
-            tx, pending: requests.clone(), generation: Arc::new(AtomicU64::new(0)),
+            duplicate_validator: validator,
+            duplicate: std::sync::Mutex::new(None),
+            tx,
+            pending: requests.clone(),
+            generation: Arc::new(AtomicU64::new(0)),
             decode_gate: Arc::new(DecodeGate::new()),
-            telemetry: Arc::new(CacheTelemetry::new(true, 1024)), development: None,
+            telemetry: Arc::new(CacheTelemetry::new(true, 1024)),
+            development: None,
         };
         (loader, requests)
     }
@@ -6732,11 +7094,29 @@ mod foreground_loader_tests {
         let gate = loader.decode_gate.clone();
         let telemetry = loader.telemetry.clone();
         let (_, receiver) = unbounded();
-        let mut app = App::new(PathBuf::new(), None, true, receiver, loader, gate, telemetry,
+        let mut app = App::new(
+            PathBuf::new(),
+            None,
+            true,
+            receiver,
+            loader,
+            gate,
+            telemetry,
             gallery::PrefetchWindow { behind: 0, ahead: 0 },
-            rrrah_cache::CacheLimits { max_bytes: 0, max_entries: Some(0), ttl: None },
-            None, None, None, None, None, rrrah_gpu::GpuBackend::Auto,
-            rrrah_gpu::GpuVendor::Any, UntaggedColor::Strict.into());
+            rrrah_cache::CacheLimits {
+                max_bytes: 0,
+                max_entries: Some(0),
+                ttl: None,
+            },
+            None,
+            None,
+            None,
+            None,
+            None,
+            rrrah_gpu::GpuBackend::Auto,
+            rrrah_gpu::GpuVendor::Any,
+            UntaggedColor::Strict.into(),
+        );
         app.drop_inspector = inspector;
         (app, requests)
     }
@@ -6744,55 +7124,105 @@ mod foreground_loader_tests {
     #[test]
     fn rapid_page_navigation_accumulates_pending_intent_and_reverses() {
         let (mut app, requests) = app_with_drop_inspector(drop_inspection::DropInspector::new());
-        app.path = PathBuf::from("pages.tif"); app.image_count = 3;
+        app.path = PathBuf::from("pages.tif");
+        app.image_count = 3;
         let mut previous = None;
-        for (direction, index) in [(1,1),(1,2),(-1,1),(-1,0)] {
+        for (direction, index) in [(1, 1), (1, 2), (-1, 1), (-1, 0)] {
             app.navigate_image(direction);
             let request = requests.try_recv().unwrap();
-            assert_eq!(request.image_index,index);
-            assert_eq!(app.image_index,0,"visible page changes only when accepted");
-            assert_eq!(app.image_navigation_index(),index);
-            if let Some(token) = previous { assert!(GenerationToken::is_cancelled(&token)); }
-            previous = Some(GenerationToken::new(app.foreground_loader.generation.clone(),request.generation));
+            assert_eq!(request.image_index, index);
+            assert_eq!(app.image_index, 0, "visible page changes only when accepted");
+            assert_eq!(app.image_navigation_index(), index);
+            if let Some(token) = previous {
+                assert!(GenerationToken::is_cancelled(&token));
+            }
+            previous = Some(GenerationToken::new(
+                app.foreground_loader.generation.clone(),
+                request.generation,
+            ));
         }
-        let generation=app.foreground_loader.current_generation();
+        let generation = app.foreground_loader.current_generation();
         app.navigate_image(-1);
-        assert_eq!(app.foreground_loader.current_generation(),generation);
+        assert_eq!(app.foreground_loader.current_generation(), generation);
         assert!(requests.try_recv().is_err());
     }
 
     #[test]
     fn stale_page_failure_retains_latest_intent_and_current_failure_resets_it() {
         let (mut app, requests) = app_with_drop_inspector(drop_inspection::DropInspector::new());
-        let (events,receiver)=unbounded();app.receiver=receiver;
-        app.path=PathBuf::from("pages.tif");app.image_count=3;
-        app.navigate_image(1);let old=requests.try_recv().unwrap();
-        app.navigate_image(1);let latest=requests.try_recv().unwrap();
-        let raster=rrrah_core::DecodedRaster::new(1,1,
-            rrrah_core::RasterPixels::Rgba32Float(Arc::new(vec![1.,0.,0.,1.]).into()),
-            rrrah_core::RasterColorSpace::LinearSrgb).unwrap().with_image_selection(1,3).unwrap();
-        events.send(LoadEvent::RasterReady {region_store:None,generation:old.generation,
-            image_index:1,scalar_window:None,raster,lease:None,assumed_srgb:false,
-            development:None,elapsed:Duration::ZERO}).unwrap();
-        events.send(LoadEvent::Failed {generation:old.generation,error:"obsolete".into()}).unwrap();
-        app.drain_load_events();assert_eq!(app.image_navigation_index(),2);
-        assert_eq!(app.image_index,0,"stale raster must not replace visible page");
-        events.send(LoadEvent::Failed {generation:latest.generation,error:"current".into()}).unwrap();
-        app.drain_load_events();assert_eq!(app.image_navigation_index(),0);
-        app.navigate_image(1);assert_eq!(requests.try_recv().unwrap().image_index,1);
+        let (events, receiver) = unbounded();
+        app.receiver = receiver;
+        app.path = PathBuf::from("pages.tif");
+        app.image_count = 3;
+        app.navigate_image(1);
+        let old = requests.try_recv().unwrap();
+        app.navigate_image(1);
+        let latest = requests.try_recv().unwrap();
+        let raster = rrrah_core::DecodedRaster::new(
+            1,
+            1,
+            rrrah_core::RasterPixels::Rgba32Float(Arc::new(vec![1., 0., 0., 1.]).into()),
+            rrrah_core::RasterColorSpace::LinearSrgb,
+        )
+        .unwrap()
+        .with_image_selection(1, 3)
+        .unwrap();
+        events
+            .send(LoadEvent::RasterReady {
+                region_store: None,
+                generation: old.generation,
+                image_index: 1,
+                scalar_window: None,
+                raster,
+                lease: None,
+                assumed_srgb: false,
+                development: None,
+                elapsed: Duration::ZERO,
+            })
+            .unwrap();
+        events
+            .send(LoadEvent::Failed {
+                generation: old.generation,
+                error: "obsolete".into(),
+            })
+            .unwrap();
+        app.drain_load_events();
+        assert_eq!(app.image_navigation_index(), 2);
+        assert_eq!(app.image_index, 0, "stale raster must not replace visible page");
+        events
+            .send(LoadEvent::Failed {
+                generation: latest.generation,
+                error: "current".into(),
+            })
+            .unwrap();
+        app.drain_load_events();
+        assert_eq!(app.image_navigation_index(), 0);
+        app.navigate_image(1);
+        assert_eq!(requests.try_recv().unwrap().image_index, 1);
         app.foreground_loader.cancel_pending();
-        assert_eq!(app.image_navigation_index(),0,"cancelled generation cannot steer navigation");
+        assert_eq!(
+            app.image_navigation_index(),
+            0,
+            "cancelled generation cannot steer navigation"
+        );
     }
 
     #[test]
     fn opening_empty_folder_cancels_old_load_and_drains_queued_file() {
         let root = tempfile::tempdir().unwrap();
         let (mut app, requests) = app_with_drop_inspector(drop_inspection::DropInspector::new());
-        app.foreground_loader.submit(root.path().join("active.png")).unwrap();
+        app.foreground_loader
+            .submit(root.path().join("active.png"))
+            .unwrap();
         let active = requests.try_recv().unwrap();
         let active_token = GenerationToken::new(app.foreground_loader.generation.clone(), active.generation);
-        app.foreground_loader.submit(root.path().join("queued.png")).unwrap();
-        let queued_token = GenerationToken::new(app.foreground_loader.generation.clone(), app.foreground_loader.current_generation());
+        app.foreground_loader
+            .submit(root.path().join("queued.png"))
+            .unwrap();
+        let queued_token = GenerationToken::new(
+            app.foreground_loader.generation.clone(),
+            app.foreground_loader.current_generation(),
+        );
         assert!(!queued_token.is_cancelled());
         app.open_folder(root.path().to_owned());
         assert!(active_token.is_cancelled());
@@ -6902,8 +7332,12 @@ mod foreground_loader_tests {
     fn cancelled_startup_admission_never_reads_the_source() {
         let generation = Arc::new(AtomicU64::new(2));
         let token = GenerationToken::new(generation, 1);
-        assert!(admit_foreground_source(Path::new("cancelled.png"), &token,
-            |_| panic!("cancelled source must not be inspected")).is_none());
+        assert!(
+            admit_foreground_source(Path::new("cancelled.png"), &token, |_| panic!(
+                "cancelled source must not be inspected"
+            ))
+            .is_none()
+        );
     }
 
     #[test]
@@ -6948,8 +7382,13 @@ mod foreground_loader_tests {
         let request = requests.try_recv().unwrap();
         let token = GenerationToken::new(app.foreground_loader.generation.clone(), request.generation);
         let error = admit_foreground_source(&missing, &token, gallery::SourceStamp::try_read)
-            .unwrap().unwrap_err();
-        send.send(LoadEvent::Failed { generation: request.generation, error }).unwrap();
+            .unwrap()
+            .unwrap_err();
+        send.send(LoadEvent::Failed {
+            generation: request.generation,
+            error,
+        })
+        .unwrap();
         drop(request);
         app.drain_load_events();
         assert!(app.status.starts_with("image load failed:"));
@@ -7013,7 +7452,15 @@ mod foreground_loader_tests {
         loader.flight.lock().unwrap().as_mut().unwrap().0.source = Some(stamp);
         assert_eq!(loader.submit(path.clone()).unwrap(), first);
         let deadline = Instant::now() + Duration::from_secs(5);
-        while !loader.duplicate.lock().unwrap().as_ref().unwrap().check.has_result() {
+        while !loader
+            .duplicate
+            .lock()
+            .unwrap()
+            .as_ref()
+            .unwrap()
+            .check
+            .has_result()
+        {
             assert!(Instant::now() < deadline);
             thread::yield_now();
         }
@@ -7021,8 +7468,13 @@ mod foreground_loader_tests {
         std::fs::write(&path, b"new").unwrap();
         assert_eq!(loader.submit(path.clone()).unwrap(), first);
         let replacement = loop {
-            if let Some(result) = loader.poll_duplicate() { break result.unwrap(); }
-            assert!(Instant::now() < deadline, "new request reused obsolete validation");
+            if let Some(result) = loader.poll_duplicate() {
+                break result.unwrap();
+            }
+            assert!(
+                Instant::now() < deadline,
+                "new request reused obsolete validation"
+            );
             thread::yield_now();
         };
         assert_ne!(replacement, first);
@@ -7046,7 +7498,9 @@ mod foreground_loader_tests {
         finish_foreground_flight(&loader.flight, first);
         let deadline = Instant::now() + Duration::from_secs(5);
         let replacement = loop {
-            if let Some(result) = loader.poll_duplicate() { break result.unwrap(); }
+            if let Some(result) = loader.poll_duplicate() {
+                break result.unwrap();
+            }
             assert!(Instant::now() < deadline);
             thread::yield_now();
         };
@@ -7132,9 +7586,17 @@ mod foreground_loader_tests {
     fn known_prefetch_windows_bypass_scanning_and_keep_exact_priority() {
         let selected = Path::new("collection/050000.png");
         let window = gallery::PrefetchWindow { behind: 2, ahead: 5 };
-        for known in [Vec::new(), vec![PathBuf::from("collection/050001.png"), PathBuf::from("collection/049999.png")]] {
-            let result = resolve_foreground_prefetch_paths(Some(known.clone()), selected,
-                None, window, |_| panic!("known window rescanned directory"));
+        for known in [
+            Vec::new(),
+            vec![
+                PathBuf::from("collection/050001.png"),
+                PathBuf::from("collection/049999.png"),
+            ],
+        ] {
+            let result =
+                resolve_foreground_prefetch_paths(Some(known.clone()), selected, None, window, |_| {
+                    panic!("known window rescanned directory")
+                });
             assert_eq!(result, known);
         }
     }
@@ -7142,35 +7604,68 @@ mod foreground_loader_tests {
     #[test]
     fn unknown_prefetch_window_scans_once_and_preserves_backward_order() {
         let scans = std::cell::Cell::new(0);
-        let paths: Vec<_> = (0..100_000).map(|index| PathBuf::from(format!("collection/{index:06}.png"))).collect();
+        let paths: Vec<_> = (0..100_000)
+            .map(|index| PathBuf::from(format!("collection/{index:06}.png")))
+            .collect();
         let selected = paths[50_000].clone();
         let previous = paths[50_001].clone();
-        let expected = [49_999, 49_998, 49_997, 49_996, 49_995, 50_001, 50_002]
-            .map(|index| paths[index].clone());
-        let result = resolve_foreground_prefetch_paths(None, &selected, Some(&previous),
-            gallery::PrefetchWindow { behind: 2, ahead: 5 }, |folder| {
+        let expected =
+            [49_999, 49_998, 49_997, 49_996, 49_995, 50_001, 50_002].map(|index| paths[index].clone());
+        let result = resolve_foreground_prefetch_paths(
+            None,
+            &selected,
+            Some(&previous),
+            gallery::PrefetchWindow { behind: 2, ahead: 5 },
+            |folder| {
                 assert_eq!(folder, Path::new("collection"));
                 scans.set(scans.get() + 1);
                 Some(paths)
-            });
+            },
+        );
         assert_eq!(scans.get(), 1);
         assert_eq!(result, expected);
-        assert!(resolve_foreground_prefetch_paths(None, &selected, None,
-            gallery::PrefetchWindow::default(), |_| None).is_empty());
+        assert!(
+            resolve_foreground_prefetch_paths(
+                None,
+                &selected,
+                None,
+                gallery::PrefetchWindow::default(),
+                |_| None
+            )
+            .is_empty()
+        );
     }
 
     #[test]
     fn foreground_prefetch_respects_asymmetric_and_disabled_windows() {
-        let paths: Vec<_> = (0..8).map(|index| PathBuf::from(format!("collection/{index}.png"))).collect();
+        let paths: Vec<_> = (0..8)
+            .map(|index| PathBuf::from(format!("collection/{index}.png")))
+            .collect();
         for (selected, previous, window, expected) in [
-            (3, 2, gallery::PrefetchWindow { behind: 1, ahead: 3 }, vec![4, 5, 6, 2]),
+            (
+                3,
+                2,
+                gallery::PrefetchWindow { behind: 1, ahead: 3 },
+                vec![4, 5, 6, 2],
+            ),
             (6, 5, gallery::PrefetchWindow { behind: 1, ahead: 3 }, vec![7, 5]),
             (1, 2, gallery::PrefetchWindow { behind: 1, ahead: 3 }, vec![0, 2]),
             (3, 2, gallery::PrefetchWindow { behind: 0, ahead: 0 }, vec![]),
         ] {
-            let result = resolve_foreground_prefetch_paths(None, &paths[selected],
-                Some(&paths[previous]), window, |_| Some(paths.clone()));
-            assert_eq!(result, expected.into_iter().map(|index| paths[index].clone()).collect::<Vec<_>>());
+            let result = resolve_foreground_prefetch_paths(
+                None,
+                &paths[selected],
+                Some(&paths[previous]),
+                window,
+                |_| Some(paths.clone()),
+            );
+            assert_eq!(
+                result,
+                expected
+                    .into_iter()
+                    .map(|index| paths[index].clone())
+                    .collect::<Vec<_>>()
+            );
         }
     }
 
@@ -7223,33 +7718,64 @@ mod foreground_loader_tests {
         assert_eq!(ordinary.scalar_window, None);
         assert!(ordinary.prefetch_paths.lock().unwrap().is_none());
         let planned = vec![PathBuf::from("next.png"), PathBuf::from("previous.png")];
-        loader.submit_request_with_prefetch(PathBuf::from("selected.png"), 0, None, true,
-            Some(planned.clone())).unwrap();
+        loader
+            .submit_request_with_prefetch(
+                PathBuf::from("selected.png"),
+                0,
+                None,
+                true,
+                Some(planned.clone()),
+            )
+            .unwrap();
         let original_generation = loader.current_generation();
         let reversed = vec![PathBuf::from("previous.png"), PathBuf::from("next.png")];
-        assert_eq!(loader.submit_request_with_prefetch(PathBuf::from("selected.png"), 0, None, true,
-            Some(reversed.clone())).unwrap(), original_generation);
+        assert_eq!(
+            loader
+                .submit_request_with_prefetch(
+                    PathBuf::from("selected.png"),
+                    0,
+                    None,
+                    true,
+                    Some(reversed.clone())
+                )
+                .unwrap(),
+            original_generation
+        );
         assert_eq!(loader.current_generation(), original_generation);
         let selected = worker_rx.try_recv().unwrap();
         assert_eq!(*selected.prefetch_paths.lock().unwrap(), Some(reversed));
         assert_eq!(selected.generation, original_generation);
         assert!(worker_rx.try_recv().is_err());
-        loader.submit_request_with_prefetch(PathBuf::from("last.png"), 0, None, true,
-            Some(Vec::new())).unwrap();
+        loader
+            .submit_request_with_prefetch(PathBuf::from("last.png"), 0, None, true, Some(Vec::new()))
+            .unwrap();
         let original_generation = loader.current_generation();
-        loader.submit_request_with_prefetch(PathBuf::from("last.png"), 0, None, true,
-            Some(planned)).unwrap();
-        loader.submit_request_with_prefetch(PathBuf::from("last.png"), 0, None, true,
-            Some(Vec::new())).unwrap();
+        loader
+            .submit_request_with_prefetch(PathBuf::from("last.png"), 0, None, true, Some(planned))
+            .unwrap();
+        loader
+            .submit_request_with_prefetch(PathBuf::from("last.png"), 0, None, true, Some(Vec::new()))
+            .unwrap();
         let disabled = worker_rx.try_recv().unwrap();
         assert_eq!(*disabled.prefetch_paths.lock().unwrap(), Some(Vec::new()));
         // The worker may already own the request while the UI revises its plan.
         let new_plan = vec![PathBuf::from("closer.png")];
-        assert_eq!(loader.submit_request_with_prefetch(PathBuf::from("last.png"), 0, None, true,
-            Some(new_plan.clone())).unwrap(), original_generation);
+        assert_eq!(
+            loader
+                .submit_request_with_prefetch(
+                    PathBuf::from("last.png"),
+                    0,
+                    None,
+                    true,
+                    Some(new_plan.clone())
+                )
+                .unwrap(),
+            original_generation
+        );
         assert_eq!(*disabled.prefetch_paths.lock().unwrap(), Some(new_plan));
-        loader.submit_request_with_prefetch(PathBuf::from("last.png"), 0, None, true,
-            Some(Vec::new())).unwrap();
+        loader
+            .submit_request_with_prefetch(PathBuf::from("last.png"), 0, None, true, Some(Vec::new()))
+            .unwrap();
         assert_eq!(*disabled.prefetch_paths.lock().unwrap(), Some(Vec::new()));
         assert_eq!(disabled.generation, original_generation);
         assert!(worker_rx.try_recv().is_err());
@@ -7401,8 +7927,7 @@ mod foreground_loader_tests {
     #[test]
     fn model_cancelled_resident_does_not_transfer_visible_pin() {
         let request = DecodeRequest::new(
-            PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-                .join("../../tests/fixtures/models/triangle.stl"),
+            PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/models/triangle.stl"),
         );
         let mut cache = ModelDisplayCache::new(rrrah_cache::CacheLimits::bytes(1024 * 1024));
         cache
@@ -7442,8 +7967,7 @@ mod foreground_loader_tests {
             Some(&root),
         );
         let request = DecodeRequest::new(
-            PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-                .join("../../tests/fixtures/models/triangle.stl"),
+            PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/models/triangle.stl"),
         );
         let mut polls = 0;
         assert!(
@@ -7641,14 +8165,23 @@ mod foreground_loader_tests {
     }
     #[test]
     fn profiled_jpeg_neighbour_windows_preserve_visible_and_respect_count_size_ttl() {
-        let fixtures = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-            .join("../../tests/fixtures/raster");
-        let paths: Vec<_> = (1..=5).map(|i| fixtures.join(format!(
-            "{}-profiled-orientation-{i}.jpg", if i % 2 == 0 { "ycck" } else { "cmyk" }))).collect();
+        let fixtures = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/raster");
+        let paths: Vec<_> = (1..=5)
+            .map(|i| {
+                fixtures.join(format!(
+                    "{}-profiled-orientation-{i}.jpg",
+                    if i % 2 == 0 { "ycck" } else { "cmyk" }
+                ))
+            })
+            .collect();
         let weight = 17 * 13 * 16;
         for limits in [
             rrrah_cache::CacheLimits::bytes(weight * 2),
-            rrrah_cache::CacheLimits { max_bytes: weight * 10, max_entries: Some(2), ttl: None },
+            rrrah_cache::CacheLimits {
+                max_bytes: weight * 10,
+                max_entries: Some(2),
+                ttl: None,
+            },
         ] {
             let budget = rrrah_cache::MemoryBudget::new(1024 * 1024);
             let request_for = |path| {
@@ -7662,30 +8195,50 @@ mod foreground_loader_tests {
             let (frame, _) = load_cached_raster_for_display(&visible, None, &mut cache).unwrap();
             assert_eq!(frame.capacity_bytes(), weight);
             for direction in [gallery::NavDirection::Forward, gallery::NavDirection::Backward] {
-                let planned = gallery::neighbour_prefetch_paths(&paths, 2, direction,
-                    gallery::PrefetchWindow { behind: 1, ahead: 2 });
+                let planned = gallery::neighbour_prefetch_paths(
+                    &paths,
+                    2,
+                    direction,
+                    gallery::PrefetchWindow { behind: 1, ahead: 2 },
+                );
                 assert_eq!(planned.len(), 3);
-                assert_eq!(planned[0], paths[if direction == gallery::NavDirection::Forward { 3 } else { 1 }]);
+                assert_eq!(
+                    planned[0],
+                    paths[if direction == gallery::NavDirection::Forward {
+                        3
+                    } else {
+                        1
+                    }]
+                );
                 for path in planned {
                     drop(preload_raster(&request_for(path), None, &mut cache, &gate).unwrap());
                     assert_eq!(cache.len(), 2);
                     assert_eq!(cache.resident_bytes(), weight * 2);
-                    let (hit, _) = load_cached_raster_with(&visible, None, &mut cache,
-                        || panic!("JPEG prefetch displaced visible image")).unwrap();
+                    let (hit, _) = load_cached_raster_with(&visible, None, &mut cache, || {
+                        panic!("JPEG prefetch displaced visible image")
+                    })
+                    .unwrap();
                     let (rrrah_core::RasterPixels::Rgba32Float(a), rrrah_core::RasterPixels::Rgba32Float(b)) =
-                        (frame.pixels(), hit.pixels()) else { panic!() };
+                        (frame.pixels(), hit.pixels())
+                    else {
+                        panic!()
+                    };
                     assert!(a.ptr_eq(b));
                 }
             }
             assert!(cache.set_limits_and_spill(rrrah_cache::CacheLimits {
-                max_bytes: weight * 2, max_entries: Some(2), ttl: Some(Duration::ZERO),
+                max_bytes: weight * 2,
+                max_entries: Some(2),
+                ttl: Some(Duration::ZERO),
             }));
             drop(preload_raster(&request_for(paths[4].clone()), None, &mut cache, &gate).unwrap());
             cache.spill_expired();
             assert_eq!(cache.len(), 1);
             assert_eq!(cache.resident_bytes(), weight);
-            drop(load_cached_raster_with(&visible, None, &mut cache,
-                || panic!("TTL expired pinned JPEG")).unwrap());
+            drop(
+                load_cached_raster_with(&visible, None, &mut cache, || panic!("TTL expired pinned JPEG"))
+                    .unwrap(),
+            );
             drop(frame);
             drop(cache);
             assert_eq!(budget.used(), 0);
@@ -7764,16 +8317,24 @@ mod foreground_loader_tests {
     #[test]
     #[ignore = "manual100k valid sources with actual Metal SDR/HDR and nearest prefetch protection"]
     fn hundred_thousand_valid_sources_preserve_metal_frames_and_priority() {
-        let gpu=crate::navigation_metal_readback::qualification_gpu().expect("actual GPU required");
-        eprintln!("100k source adapter: {}",gpu.adapter_name());
+        let gpu = crate::navigation_metal_readback::qualification_gpu().expect("actual GPU required");
+        eprintln!("100k source adapter: {}", gpu.adapter_name());
         qualify_hundred_thousand_sources(Some(&gpu));
-        eprintln!("100k source Metal: 512 steps; SDR/HDR exact; nearest protected; full pressure and stale cancellation; final=0");
+        eprintln!(
+            "100k source Metal: 512 steps; SDR/HDR exact; nearest protected; full pressure and stale cancellation; final=0"
+        );
     }
     fn qualify_hundred_thousand_sources(gpu: Option<&crate::navigation_metal_readback::GpuReadback>) {
         let fixtures = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/raster");
-        let originals: Vec<_> = ["pattern.profiled.png", "gif-animation-disposal-3.gif",
-            "float-none-rec709-declared.exr", "rle-hdr-rec709-declared.hdr"]
-            .into_iter().map(|name| fixtures.join(name)).collect();
+        let originals: Vec<_> = [
+            "pattern.profiled.png",
+            "gif-animation-disposal-3.gif",
+            "float-none-rec709-declared.exr",
+            "rle-hdr-rec709-declared.hdr",
+        ]
+        .into_iter()
+        .map(|name| fixtures.join(name))
+        .collect();
         let directory = tempfile::tempdir().unwrap();
         for index in 0..100_000 {
             let original = &originals[index % 4];
@@ -7786,26 +8347,45 @@ mod foreground_loader_tests {
         let budget = rrrah_cache::MemoryBudget::new(1024 * 1024);
         let mut oracle_cache = RasterDisplayCache::new(rrrah_cache::CacheLimits::bytes(64 * 1024));
         let mut expected = Vec::new();
-        let mut expected_frames=Vec::new();
-        let view=rrrah_gpu::ViewParameters {viewport:[128.,96.],..Default::default()};
+        let mut expected_frames = Vec::new();
+        let view = rrrah_gpu::ViewParameters {
+            viewport: [128., 96.],
+            ..Default::default()
+        };
         for original in &originals {
             let mut request = DecodeRequest::new(original);
             request.memory_budget = Some(budget.clone());
             let (raster, _) = load_cached_raster_for_display(&request, None, &mut oracle_cache).unwrap();
-            let rrrah_core::RasterPixels::Rgba32Float(pixels) = raster.pixels() else { panic!() };
-            expected.push((raster.width(), raster.height(), pixels.iter().map(|v| v.to_bits()).collect::<Vec<_>>()));
-            expected_frames.push(gpu.map(|gpu|(gpu.render_raster(&raster,view,[128,96]).pixels,
-                gpu.render_raster_half(&raster,view,[128,96]))));
+            let rrrah_core::RasterPixels::Rgba32Float(pixels) = raster.pixels() else {
+                panic!()
+            };
+            expected.push((
+                raster.width(),
+                raster.height(),
+                pixels.iter().map(|v| v.to_bits()).collect::<Vec<_>>(),
+            ));
+            expected_frames.push(gpu.map(|gpu| {
+                (
+                    gpu.render_raster(&raster, view, [128, 96]).pixels,
+                    gpu.render_raster_half(&raster, view, [128, 96]),
+                )
+            }));
         }
         drop(oracle_cache);
         assert_eq!(budget.used(), 0);
         let generation = Arc::new(AtomicU64::new(0));
         let gate = Arc::new(DecodeGate::new());
         let mut cache = RasterDisplayCache::new(rrrah_cache::CacheLimits {
-            max_bytes: 64 * 1024, max_entries: Some(2), ttl: None,
+            max_bytes: 64 * 1024,
+            max_entries: Some(2),
+            ttl: None,
         });
         for step in 0..512usize {
-            let selected = match step { 0 => 0, 1 => 99_999, _ => (step * 7919) % paths.len() };
+            let selected = match step {
+                0 => 0,
+                1 => 99_999,
+                _ => (step * 7919) % paths.len(),
+            };
             let epoch = step as u64 * 2 + 1;
             generation.store(epoch, Ordering::Release);
             let request_for = |path: &Path| {
@@ -7816,37 +8396,69 @@ mod foreground_loader_tests {
             };
             let request = request_for(&paths[selected]);
             let (visible, _) = load_cached_raster_for_display(&request, None, &mut cache).unwrap();
-            let rrrah_core::RasterPixels::Rgba32Float(pixels) = visible.pixels() else { panic!() };
+            let rrrah_core::RasterPixels::Rgba32Float(pixels) = visible.pixels() else {
+                panic!()
+            };
             let reference = &expected[selected % 4];
             assert_eq!((visible.width(), visible.height()), (reference.0, reference.1));
-            assert_eq!(pixels.iter().map(|v| v.to_bits()).collect::<Vec<_>>(), reference.2);
-            if let Some(gpu)=gpu {
-                let (sdr,hdr)=expected_frames[selected%4].as_ref().unwrap();
-                assert_eq!(gpu.render_raster(&visible,view,[128,96]).pixels,*sdr);
-                assert_eq!(gpu.render_raster_half(&visible,view,[128,96]),*hdr);
+            assert_eq!(
+                pixels.iter().map(|v| v.to_bits()).collect::<Vec<_>>(),
+                reference.2
+            );
+            if let Some(gpu) = gpu {
+                let (sdr, hdr) = expected_frames[selected % 4].as_ref().unwrap();
+                assert_eq!(gpu.render_raster(&visible, view, [128, 96]).pixels, *sdr);
+                assert_eq!(gpu.render_raster_half(&visible, view, [128, 96]), *hdr);
             }
-            let direction = if step % 2 == 0 { NavDirection::Forward } else { NavDirection::Backward };
-            let neighbours = gallery::neighbour_prefetch_paths(&paths, selected, direction,
-                gallery::PrefetchWindow { behind: 1, ahead: 2 });
+            let direction = if step % 2 == 0 {
+                NavDirection::Forward
+            } else {
+                NavDirection::Backward
+            };
+            let neighbours = gallery::neighbour_prefetch_paths(
+                &paths,
+                selected,
+                direction,
+                gallery::PrefetchWindow { behind: 1, ahead: 2 },
+            );
             assert!(neighbours.len() <= 3);
-            let nearest=neighbours.first().cloned().unwrap();
-            let mut protected=Vec::new();
-            for (index,path) in neighbours.into_iter().enumerate() {
-                let (_,_,lease)=preload_raster_with_lease(&request_for(&path),None,&mut cache,&gate).unwrap();
-                if index==0 {assert!(lease.is_some());}
-                if let Some(lease)=lease {protected.push(lease);}
+            let nearest = neighbours.first().cloned().unwrap();
+            let mut protected = Vec::new();
+            for (index, path) in neighbours.into_iter().enumerate() {
+                let (_, _, lease) =
+                    preload_raster_with_lease(&request_for(&path), None, &mut cache, &gate).unwrap();
+                if index == 0 {
+                    assert!(lease.is_some());
+                }
+                if let Some(lease) = lease {
+                    protected.push(lease);
+                }
                 assert!(cache.len() <= 2 && cache.resident_bytes() <= 64 * 1024);
-                assert_eq!(pixels.iter().map(|v| v.to_bits()).collect::<Vec<_>>(), reference.2);
+                assert_eq!(
+                    pixels.iter().map(|v| v.to_bits()).collect::<Vec<_>>(),
+                    reference.2
+                );
             }
-            let (nearest_hit,_)=load_cached_raster_mode(&request_for(&nearest),None,&mut cache,false,
-                ||panic!("100k priority: farther neighbor displaced nearest")).unwrap();
-            let (rrrah_core::RasterPixels::Rgba32Float(a),rrrah_core::RasterPixels::Rgba32Float(b))=
-                (nearest_hit.pixels(),protected[0].pixels()) else {panic!()};
-            assert!(a.ptr_eq(b));drop(nearest_hit);
+            let (nearest_hit, _) =
+                load_cached_raster_mode(&request_for(&nearest), None, &mut cache, false, || {
+                    panic!("100k priority: farther neighbor displaced nearest")
+                })
+                .unwrap();
+            let (rrrah_core::RasterPixels::Rgba32Float(a), rrrah_core::RasterPixels::Rgba32Float(b)) =
+                (nearest_hit.pixels(), protected[0].pixels())
+            else {
+                panic!()
+            };
+            assert!(a.ptr_eq(b));
+            drop(nearest_hit);
             let blocker = budget.try_reserve(budget.available_bytes()).unwrap();
-            let (hit, _) = load_cached_raster_with(&request, None, &mut cache,
-                || panic!("visible frame decoded under pressure")).unwrap();
-            let rrrah_core::RasterPixels::Rgba32Float(hit_pixels) = hit.pixels() else { panic!() };
+            let (hit, _) = load_cached_raster_with(&request, None, &mut cache, || {
+                panic!("visible frame decoded under pressure")
+            })
+            .unwrap();
+            let rrrah_core::RasterPixels::Rgba32Float(hit_pixels) = hit.pixels() else {
+                panic!()
+            };
             assert!(pixels.ptr_eq(hit_pixels));
             drop(hit);
             drop(blocker);
@@ -7859,7 +8471,11 @@ mod foreground_loader_tests {
         }
         drop(cache);
         assert_eq!(budget.used(), 0);
-        eprintln!("100k valid-source navigation: seconds={} steps=512 cpu_peak={} final=0", start.elapsed().as_secs_f64(), budget.peak());
+        eprintln!(
+            "100k valid-source navigation: seconds={} steps=512 cpu_peak={} final=0",
+            start.elapsed().as_secs_f64(),
+            budget.peak()
+        );
     }
 
     #[test]
@@ -7873,31 +8489,55 @@ mod foreground_loader_tests {
         let gpu = crate::navigation_metal_readback::qualification_gpu().expect("actual GPU required");
         eprintln!("mixed prefetch navigation adapter: {}", gpu.adapter_name());
         qualify_mixed_gallery_reversals(Some(&gpu));
-        eprintln!("mixed prefetch navigation: 120 ping-pong steps; all visible Metal frames exact; stale requests refused; managed root final=0; six formats; SDR/HDR exact; linear CLI policy");
+        eprintln!(
+            "mixed prefetch navigation: 120 ping-pong steps; all visible Metal frames exact; stale requests refused; managed root final=0; six formats; SDR/HDR exact; linear CLI policy"
+        );
     }
 
     fn qualify_mixed_gallery_reversals(gpu: Option<&crate::navigation_metal_readback::GpuReadback>) {
         let fixtures = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/raster");
-        let paths: Vec<_> = ["pattern.profiled.png", "gif-animation-disposal-3.gif",
-            "float-none-rec709-declared.exr", "rle-hdr-rec709-declared.hdr",
-            "transport-linear.pfm", "hdr-compressed.astc"]
-            .into_iter().map(|name| fixtures.join(name)).collect();
+        let paths: Vec<_> = [
+            "pattern.profiled.png",
+            "gif-animation-disposal-3.gif",
+            "float-none-rec709-declared.exr",
+            "rle-hdr-rec709-declared.hdr",
+            "transport-linear.pfm",
+            "hdr-compressed.astc",
+        ]
+        .into_iter()
+        .map(|name| fixtures.join(name))
+        .collect();
         let interpretation = Cli::try_parse_from(["rrrah", "--untagged-color", "linear-srgb"])
-            .unwrap().raster_interpretation();
-        let params = rrrah_gpu::ViewParameters { viewport: [128.0, 96.0], ..Default::default() };
-        let expected_frames = gpu.map(|gpu| paths.iter().map(|path| {
-            let mut reference_cache = RasterDisplayCache::new(rrrah_cache::CacheLimits::bytes(1024 * 1024));
-            let mut request = DecodeRequest::new(path);
-            interpretation.apply(&mut request);
-            let (reference, _) = load_cached_raster_for_display(&request, None, &mut reference_cache).unwrap();
-            (gpu.render_raster(&reference, params, [128, 96]).pixels,
-                gpu.render_raster_half(&reference, params, [128, 96]))
-        }).collect::<Vec<_>>());
+            .unwrap()
+            .raster_interpretation();
+        let params = rrrah_gpu::ViewParameters {
+            viewport: [128.0, 96.0],
+            ..Default::default()
+        };
+        let expected_frames = gpu.map(|gpu| {
+            paths
+                .iter()
+                .map(|path| {
+                    let mut reference_cache =
+                        RasterDisplayCache::new(rrrah_cache::CacheLimits::bytes(1024 * 1024));
+                    let mut request = DecodeRequest::new(path);
+                    interpretation.apply(&mut request);
+                    let (reference, _) =
+                        load_cached_raster_for_display(&request, None, &mut reference_cache).unwrap();
+                    (
+                        gpu.render_raster(&reference, params, [128, 96]).pixels,
+                        gpu.render_raster_half(&reference, params, [128, 96]),
+                    )
+                })
+                .collect::<Vec<_>>()
+        });
         let budget = rrrah_cache::MemoryBudget::new(1024 * 1024);
         let generation = Arc::new(AtomicU64::new(1));
         let gate = Arc::new(DecodeGate::new());
         let mut cache = RasterDisplayCache::new(rrrah_cache::CacheLimits {
-            max_bytes: 64 * 1024, max_entries: Some(2), ttl: None,
+            max_bytes: 64 * 1024,
+            max_entries: Some(2),
+            ttl: None,
         });
         let request_for = |index: usize, epoch| {
             let mut request = DecodeRequest::new(paths[index].clone());
@@ -7910,14 +8550,24 @@ mod foreground_loader_tests {
         for step in 0..120 {
             let period = (paths.len() - 1) * 2;
             let phase = step % period;
-            let selected = if phase < paths.len() { phase } else { period - phase };
+            let selected = if phase < paths.len() {
+                phase
+            } else {
+                period - phase
+            };
             let epoch = step as u64 + 1;
             generation.store(epoch, Ordering::Release);
             let request = request_for(selected, epoch);
             let (visible, _) = load_cached_raster_for_display(&request, None, &mut cache).unwrap();
-            let rrrah_core::RasterPixels::Rgba32Float(pixels) = visible.pixels() else { panic!() };
+            let rrrah_core::RasterPixels::Rgba32Float(pixels) = visible.pixels() else {
+                panic!()
+            };
             let expected: Vec<_> = pixels.iter().map(|v| v.to_bits()).collect();
-            let direction = if phase < paths.len() { NavDirection::Forward } else { NavDirection::Backward };
+            let direction = if phase < paths.len() {
+                NavDirection::Forward
+            } else {
+                NavDirection::Backward
+            };
             // Each window spans a full forward/backward period, including both
             // collection boundaries, rather than coupling a policy to one file.
             let window = [
@@ -7926,8 +8576,7 @@ mod foreground_loader_tests {
                 gallery::PrefetchWindow { behind: 3, ahead: 0 },
                 gallery::PrefetchWindow { behind: 0, ahead: 0 },
             ][(step / period) % 4];
-            let neighbours = gallery::neighbour_prefetch_paths(&paths, selected, direction,
-                window);
+            let neighbours = gallery::neighbour_prefetch_paths(&paths, selected, direction, window);
             assert!(neighbours.len() <= window.behind + window.ahead);
             for path in neighbours {
                 let index = paths.iter().position(|p| *p == path).unwrap();
@@ -7939,9 +8588,13 @@ mod foreground_loader_tests {
             }
             // Ready foreground pixels require no allocation under full pressure.
             let blocker = budget.try_reserve(budget.available_bytes()).unwrap();
-            let (hit, _) = load_cached_raster_with(&request, None, &mut cache,
-                || panic!("visible frame decoded under pressure")).unwrap();
-            let rrrah_core::RasterPixels::Rgba32Float(hit_pixels) = hit.pixels() else { panic!() };
+            let (hit, _) = load_cached_raster_with(&request, None, &mut cache, || {
+                panic!("visible frame decoded under pressure")
+            })
+            .unwrap();
+            let rrrah_core::RasterPixels::Rgba32Float(hit_pixels) = hit.pixels() else {
+                panic!()
+            };
             assert!(pixels.ptr_eq(hit_pixels));
             drop(hit);
             drop(blocker);
@@ -7952,10 +8605,16 @@ mod foreground_loader_tests {
             assert_eq!(budget.used(), used);
             assert_eq!(cache.len(), count);
             if let Some(gpu) = gpu {
-                assert_eq!(gpu.render_raster(&visible, params, [128, 96]).pixels,
-                    expected_frames.as_ref().unwrap()[selected].0, "step={step} selected={selected}");
-                assert_eq!(gpu.render_raster_half(&visible, params, [128, 96]),
-                    expected_frames.as_ref().unwrap()[selected].1, "HDR step={step} selected={selected}");
+                assert_eq!(
+                    gpu.render_raster(&visible, params, [128, 96]).pixels,
+                    expected_frames.as_ref().unwrap()[selected].0,
+                    "step={step} selected={selected}"
+                );
+                assert_eq!(
+                    gpu.render_raster_half(&visible, params, [128, 96]),
+                    expected_frames.as_ref().unwrap()[selected].1,
+                    "HDR step={step} selected={selected}"
+                );
             }
             drop(visible);
         }
@@ -7965,107 +8624,175 @@ mod foreground_loader_tests {
     }
     #[test]
     fn rpf_cli_preload_and_cache_keys_keep_explicit_interpretations_separate() {
-        let cli = Cli::try_parse_from(["rrrah", "--rpf-rgb", "0", "1", "2",
-            "--rpf-matte", "0", "--rpf-alpha", "straight", "--rpf-color", "linear-srgb"]).unwrap();
+        let cli = Cli::try_parse_from([
+            "rrrah",
+            "--rpf-rgb",
+            "0",
+            "1",
+            "2",
+            "--rpf-matte",
+            "0",
+            "--rpf-alpha",
+            "straight",
+            "--rpf-color",
+            "linear-srgb",
+        ])
+        .unwrap();
         assert!(Cli::try_parse_from(["rrrah", "--rpf-rgb", "0", "1", "2"]).is_err());
         let parent = tempfile::tempdir().unwrap();
         let path = parent.path().join("synthetic.rpf");
         let mut bytes = vec![0u8; 744];
-        for (at, value) in [(2,1u16),(10,1),(20,3),(22,1),(26,0xfffd),(658,32),(662,32)] {
-            bytes[at..at+2].copy_from_slice(&value.to_be_bytes());
+        for (at, value) in [
+            (2, 1u16),
+            (10, 1),
+            (20, 3),
+            (22, 1),
+            (26, 0xfffd),
+            (658, 32),
+            (662, 32),
+        ] {
+            bytes[at..at + 2].copy_from_slice(&value.to_be_bytes());
         }
         bytes[400..413].copy_from_slice(b"3ds max : ( )");
         bytes[572..580].copy_from_slice(b"3.00000\0");
         bytes[740..744].copy_from_slice(&744u32.to_be_bytes());
-        for channel in [[0.125f32,1.0],[0.25,2.0],[0.5,4.0],[0.25,0.5]] {
+        for channel in [[0.125f32, 1.0], [0.25, 2.0], [0.5, 4.0], [0.25, 0.5]] {
             bytes.extend(8u16.to_be_bytes());
-            for value in channel { bytes.extend(value.to_bits().to_be_bytes()); }
+            for value in channel {
+                bytes.extend(value.to_bits().to_be_bytes());
+            }
         }
-        std::fs::write(&path,bytes).unwrap();
+        std::fs::write(&path, bytes).unwrap();
         let renamed = parent.path().join("synthetic.CR3");
-        std::fs::copy(&path,&renamed).unwrap();
+        std::fs::copy(&path, &renamed).unwrap();
         assert!(foreground_neighbour_supported(&renamed));
-        let budget = rrrah_core::MemoryBudget::new(1024*1024);
+        let budget = rrrah_core::MemoryBudget::new(1024 * 1024);
         let mut request = DecodeRequest::new(&path);
         request.memory_budget = Some(budget.clone());
         cli.raster_interpretation().apply(&mut request);
-        let mut cache = RasterDisplayCache::new(rrrah_cache::CacheLimits::bytes(1024*1024));
+        let mut cache = RasterDisplayCache::new(rrrah_cache::CacheLimits::bytes(1024 * 1024));
         let gate = Arc::new(DecodeGate::new());
-        let (warmed, _) = preload_raster(&request,None,&mut cache,&gate).unwrap();
+        let (warmed, _) = preload_raster(&request, None, &mut cache, &gate).unwrap();
         let mut renamed_request = request.clone();
         renamed_request.path = renamed;
-        let (renamed_frame, _) = preload_raster(&renamed_request,None,&mut cache,&gate).unwrap();
-        assert_eq!(renamed_frame.pixel_aspect(),Some(1.5));
-        let rrrah_core::RasterPixels::Rgba32Float(renamed_pixels) = renamed_frame.pixels() else { panic!() };
-        assert_eq!(renamed_pixels[0],0.125);
+        let (renamed_frame, _) = preload_raster(&renamed_request, None, &mut cache, &gate).unwrap();
+        assert_eq!(renamed_frame.pixel_aspect(), Some(1.5));
+        let rrrah_core::RasterPixels::Rgba32Float(renamed_pixels) = renamed_frame.pixels() else {
+            panic!()
+        };
+        assert_eq!(renamed_pixels[0], 0.125);
         // Use a separate cache for the renamed-source route so policy-count
         // checks below still count only variants of the original source.
         drop(renamed_frame);
         drop(warmed);
         drop(cache);
-        let mut cache = RasterDisplayCache::new(rrrah_cache::CacheLimits::bytes(1024*1024));
-        let (warmed, _) = preload_raster(&request,None,&mut cache,&gate).unwrap();
-        assert_eq!(warmed.pixel_aspect(),Some(1.5));
-        let (hit, _) = load_cached_raster_with(&request,None,&mut cache,
-            || panic!("configured RPF preload decoded again")).unwrap();
-        let rrrah_core::RasterPixels::Rgba32Float(a) = warmed.pixels() else { panic!() };
-        let rrrah_core::RasterPixels::Rgba32Float(b) = hit.pixels() else { panic!() };
+        let mut cache = RasterDisplayCache::new(rrrah_cache::CacheLimits::bytes(1024 * 1024));
+        let (warmed, _) = preload_raster(&request, None, &mut cache, &gate).unwrap();
+        assert_eq!(warmed.pixel_aspect(), Some(1.5));
+        let (hit, _) = load_cached_raster_with(&request, None, &mut cache, || {
+            panic!("configured RPF preload decoded again")
+        })
+        .unwrap();
+        let rrrah_core::RasterPixels::Rgba32Float(a) = warmed.pixels() else {
+            panic!()
+        };
+        let rrrah_core::RasterPixels::Rgba32Float(b) = hit.pixels() else {
+            panic!()
+        };
         assert!(a.ptr_eq(b));
         let mut changed = request.clone();
         changed.rpf_interpretation.as_mut().unwrap().alpha_mode = rrrah_decode::RlaAlphaMode::Premultiplied;
-        let (other, _) = load_cached_raster_for_display(&changed,None,&mut cache).unwrap();
-        let rrrah_core::RasterPixels::Rgba32Float(values) = other.pixels() else { panic!() };
-        assert_eq!(a[0],0.125); assert_eq!(values[0],0.5);
-        assert_eq!(cache.len(),2);
+        let (other, _) = load_cached_raster_for_display(&changed, None, &mut cache).unwrap();
+        let rrrah_core::RasterPixels::Rgba32Float(values) = other.pixels() else {
+            panic!()
+        };
+        assert_eq!(a[0], 0.125);
+        assert_eq!(values[0], 0.5);
+        assert_eq!(cache.len(), 2);
         let mut swapped = request.clone();
-        swapped.rpf_interpretation.as_mut().unwrap().rgb = [2,1,0];
-        let (swapped, _) = load_cached_raster_for_display(&swapped,None,&mut cache).unwrap();
-        let rrrah_core::RasterPixels::Rgba32Float(values) = swapped.pixels() else { panic!() };
-        assert_eq!(values[0],0.5); assert_eq!(values[2],0.125);
-        assert_eq!(cache.len(),3);
+        swapped.rpf_interpretation.as_mut().unwrap().rgb = [2, 1, 0];
+        let (swapped, _) = load_cached_raster_for_display(&swapped, None, &mut cache).unwrap();
+        let rrrah_core::RasterPixels::Rgba32Float(values) = swapped.pixels() else {
+            panic!()
+        };
+        assert_eq!(values[0], 0.5);
+        assert_eq!(values[2], 0.125);
+        assert_eq!(cache.len(), 3);
         let mut encoded = request.clone();
         encoded.rpf_interpretation.as_mut().unwrap().color_space = rrrah_core::RasterColorSpace::Srgb;
-        let (encoded, _) = load_cached_raster_for_display(&encoded,None,&mut cache).unwrap();
-        let rrrah_core::RasterPixels::Rgba32Float(values) = encoded.pixels() else { panic!() };
+        let (encoded, _) = load_cached_raster_for_display(&encoded, None, &mut cache).unwrap();
+        let rrrah_core::RasterPixels::Rgba32Float(values) = encoded.pixels() else {
+            panic!()
+        };
         assert!(values[0] < a[0]);
-        assert_eq!(cache.len(),4);
+        assert_eq!(cache.len(), 4);
         let mut opaque = request.clone();
         opaque.rpf_interpretation.as_mut().unwrap().matte = None;
-        let (opaque, _) = load_cached_raster_for_display(&opaque,None,&mut cache).unwrap();
-        let rrrah_core::RasterPixels::Rgba32Float(values) = opaque.pixels() else { panic!() };
-        assert_eq!(values[3],1.0);
-        assert_eq!(cache.len(),5);
-        Cli::try_parse_from(["rrrah"]).unwrap().raster_interpretation().apply(&mut request);
+        let (opaque, _) = load_cached_raster_for_display(&opaque, None, &mut cache).unwrap();
+        let rrrah_core::RasterPixels::Rgba32Float(values) = opaque.pixels() else {
+            panic!()
+        };
+        assert_eq!(values[3], 1.0);
+        assert_eq!(cache.len(), 5);
+        Cli::try_parse_from(["rrrah"])
+            .unwrap()
+            .raster_interpretation()
+            .apply(&mut request);
         assert!(request.rpf_interpretation.is_none());
-        assert!(load_cached_raster_for_display(&request,None,&mut cache).is_err());
-        assert_eq!(cache.len(),5);
-        drop(warmed); drop(hit); drop(other); drop(swapped); drop(encoded); drop(opaque); drop(cache);
-        assert_eq!(budget.used(),0);
-        let mut cache = raster_cache_with_swap(Some(parent.path()), false,
-            rrrah_cache::CacheLimits { max_bytes:1024*1024, max_entries:Some(1), ttl:None },
+        assert!(load_cached_raster_for_display(&request, None, &mut cache).is_err());
+        assert_eq!(cache.len(), 5);
+        drop(warmed);
+        drop(hit);
+        drop(other);
+        drop(swapped);
+        drop(encoded);
+        drop(opaque);
+        drop(cache);
+        assert_eq!(budget.used(), 0);
+        let mut cache = raster_cache_with_swap(
+            Some(parent.path()),
+            false,
+            rrrah_cache::CacheLimits {
+                max_bytes: 1024 * 1024,
+                max_entries: Some(1),
+                ttl: None,
+            },
             Some(rrrah_cache::ImageSwapConfig {
-                limits:rrrah_cache::CacheLimits::bytes(4096), queue_bytes:1024, queue_count:2,
-                restore_bytes:1024,
-            }), Some(&budget));
+                limits: rrrah_cache::CacheLimits::bytes(4096),
+                queue_bytes: 1024,
+                queue_count: 2,
+                restore_bytes: 1024,
+            }),
+            Some(&budget),
+        );
         cli.raster_interpretation().apply(&mut request);
-        let (first, _) = load_cached_raster_for_display(&request,None,&mut cache).unwrap();
+        let (first, _) = load_cached_raster_for_display(&request, None, &mut cache).unwrap();
         let mut changed = request.clone();
         changed.rpf_interpretation.as_mut().unwrap().alpha_mode = rrrah_decode::RlaAlphaMode::Premultiplied;
-        drop(load_cached_raster_for_display(&changed,None,&mut cache).unwrap());
+        drop(load_cached_raster_for_display(&changed, None, &mut cache).unwrap());
         cache.swap().unwrap().wait_idle().unwrap();
-        assert_eq!(cache.swap().unwrap().stats().writes,1);
-        let (restored, _) = load_cached_raster_with(&request,None,&mut cache,
-            || panic!("configured RPF swap entry decoded again")).unwrap();
-        assert_eq!(restored.pixel_aspect(),Some(1.5));
-        let (rrrah_core::RasterPixels::Rgba32Float(a),rrrah_core::RasterPixels::Rgba32Float(b)) =
-            (first.pixels(),restored.pixels()) else { panic!() };
-        assert_eq!(a.iter().map(|v| v.to_bits()).collect::<Vec<_>>(),
-            b.iter().map(|v| v.to_bits()).collect::<Vec<_>>());
+        assert_eq!(cache.swap().unwrap().stats().writes, 1);
+        let (restored, _) = load_cached_raster_with(&request, None, &mut cache, || {
+            panic!("configured RPF swap entry decoded again")
+        })
+        .unwrap();
+        assert_eq!(restored.pixel_aspect(), Some(1.5));
+        let (rrrah_core::RasterPixels::Rgba32Float(a), rrrah_core::RasterPixels::Rgba32Float(b)) =
+            (first.pixels(), restored.pixels())
+        else {
+            panic!()
+        };
+        assert_eq!(
+            a.iter().map(|v| v.to_bits()).collect::<Vec<_>>(),
+            b.iter().map(|v| v.to_bits()).collect::<Vec<_>>()
+        );
         cache.swap().unwrap().wait_idle().unwrap();
-        assert_eq!(cache.len(),1);
-        assert_eq!(cache.swap().unwrap().stats().reads,1);
-        drop(first); drop(restored); drop(cache);
-        assert_eq!(budget.used(),0);
+        assert_eq!(cache.len(), 1);
+        assert_eq!(cache.swap().unwrap().stats().reads, 1);
+        drop(first);
+        drop(restored);
+        drop(cache);
+        assert_eq!(budget.used(), 0);
     }
     #[test]
     fn tiff_neighbour_is_classified_and_reuses_preloaded_managed_pixels() {
@@ -8542,16 +9269,31 @@ mod foreground_loader_tests {
     #[test]
     #[ignore = "requires pinned AI corpus and actual Metal for queued page navigation"]
     fn queued_ai_page_reversal_cancels_stale_preload_and_preserves_metal() {
-        assert_eq!(std::env::var("RRRAH_GPU_BACKEND").as_deref(),Ok("metal"));
-        let corpus=PathBuf::from(std::env::var_os("RRRAH_AI_CORPUS").expect("AI corpus"));
-        for (name,expected) in [("VectorApple.ai","c5fc34346629c3379cee6065c45b7de0b620be822604551d1463d8e691b03d06"),
-            ("one.ai","97786949c268233a446e1738fb9c2f941e4d109811bd2f972948cdb7a45d64b4")] {
-            let hash=std::process::Command::new("shasum").args(["-a","256"]).arg(corpus.join(name)).output().unwrap();
+        assert_eq!(std::env::var("RRRAH_GPU_BACKEND").as_deref(), Ok("metal"));
+        let corpus = PathBuf::from(std::env::var_os("RRRAH_AI_CORPUS").expect("AI corpus"));
+        for (name, expected) in [
+            (
+                "VectorApple.ai",
+                "c5fc34346629c3379cee6065c45b7de0b620be822604551d1463d8e691b03d06",
+            ),
+            (
+                "one.ai",
+                "97786949c268233a446e1738fb9c2f941e4d109811bd2f972948cdb7a45d64b4",
+            ),
+        ] {
+            let hash = std::process::Command::new("shasum")
+                .args(["-a", "256"])
+                .arg(corpus.join(name))
+                .output()
+                .unwrap();
             assert!(hash.status.success());
-            assert_eq!(String::from_utf8(hash.stdout).unwrap().split_whitespace().next(),Some(expected));
+            assert_eq!(
+                String::from_utf8(hash.stdout).unwrap().split_whitespace().next(),
+                Some(expected)
+            );
         }
-        let gpu=navigation_metal_readback::qualification_gpu().expect("actual Metal required");
-        eprintln!("AI queued navigation adapter: {}",gpu.adapter_name());
+        let gpu = navigation_metal_readback::qualification_gpu().expect("actual Metal required");
+        eprintln!("AI queued navigation adapter: {}", gpu.adapter_name());
         let (tx, worker_rx) = bounded(1);
         let gate = Arc::new(DecodeGate::new());
         let loader = ForegroundLoader {
@@ -8586,43 +9328,64 @@ mod foreground_loader_tests {
             assert!(result.is_err());
             assert_eq!(cache.len(), 0);
         });
-        loader.submit_image(corpus.join("one.ai"),1).unwrap();
-        loader.submit_image(corpus.join("one.ai"),0).unwrap();
-        let latest=loader.submit_image(corpus.join("one.ai"),1).unwrap();
+        loader.submit_image(corpus.join("one.ai"), 1).unwrap();
+        loader.submit_image(corpus.join("one.ai"), 0).unwrap();
+        let latest = loader.submit_image(corpus.join("one.ai"), 1).unwrap();
         assert!(token.is_cancelled());
         drop(held);
         worker.join().unwrap();
         assert_eq!(budget.used(), 0);
         let selected = worker_rx.try_recv().unwrap();
         assert_eq!(selected.generation, latest);
-        assert_eq!(selected.path,corpus.join("one.ai"));
-        assert_eq!(selected.image_index,1);
+        assert_eq!(selected.path, corpus.join("one.ai"));
+        assert_eq!(selected.image_index, 1);
         assert!(worker_rx.try_recv().is_err());
         // Real source decoding and display preparation remain possible after cancellation.
         drop(selected.foreground);
         let mut request = DecodeRequest::new(selected.path);
-        request.image_index=selected.image_index;
+        request.image_index = selected.image_index;
         request.memory_budget = Some(budget.clone());
         request.cancellation = Some(GenerationToken::new(loader.generation.clone(), latest));
         let mut cache = RasterDisplayCache::new(rrrah_cache::CacheLimits::bytes(budget.limit()));
         let (ready, _) = preload_raster(&request, None, &mut cache, &gate).unwrap();
-        assert_eq!((ready.width(),ready.height(),ready.image_index(),ready.image_count()),(177,175,1,2));
-        let view=rrrah_gpu::ViewParameters {viewport:[128.,96.],..Default::default()};
-        let sdr=gpu.render_raster(&ready,view,[128,96]).pixels;
-        let hdr=gpu.render_raster_half(&ready,view,[128,96]);
-        let mut neighbour=request.clone();neighbour.image_index=0;
-        let (other,_)=preload_raster(&neighbour,None,&mut cache,&gate).unwrap();
-        assert_eq!((other.width(),other.height()),(1366,768));
-        assert_eq!(cache.len(),2);
-        let pressure=budget.try_reserve(budget.available_bytes()).unwrap();
-        let (hit,_)=load_cached_raster_with(&request,None,&mut cache,||panic!("latest AI page decoded under pressure")).unwrap();
-        let (rrrah_core::RasterPixels::Rgba32Float(a),rrrah_core::RasterPixels::Rgba32Float(b))=(ready.pixels(),hit.pixels()) else {panic!()};
+        assert_eq!(
+            (
+                ready.width(),
+                ready.height(),
+                ready.image_index(),
+                ready.image_count()
+            ),
+            (177, 175, 1, 2)
+        );
+        let view = rrrah_gpu::ViewParameters {
+            viewport: [128., 96.],
+            ..Default::default()
+        };
+        let sdr = gpu.render_raster(&ready, view, [128, 96]).pixels;
+        let hdr = gpu.render_raster_half(&ready, view, [128, 96]);
+        let mut neighbour = request.clone();
+        neighbour.image_index = 0;
+        let (other, _) = preload_raster(&neighbour, None, &mut cache, &gate).unwrap();
+        assert_eq!((other.width(), other.height()), (1366, 768));
+        assert_eq!(cache.len(), 2);
+        let pressure = budget.try_reserve(budget.available_bytes()).unwrap();
+        let (hit, _) = load_cached_raster_with(&request, None, &mut cache, || {
+            panic!("latest AI page decoded under pressure")
+        })
+        .unwrap();
+        let (rrrah_core::RasterPixels::Rgba32Float(a), rrrah_core::RasterPixels::Rgba32Float(b)) =
+            (ready.pixels(), hit.pixels())
+        else {
+            panic!()
+        };
         assert!(a.ptr_eq(b));
-        assert_eq!(gpu.render_raster(&hit,view,[128,96]).pixels,sdr);
-        assert_eq!(gpu.render_raster_half(&hit,view,[128,96]),hdr);
-        drop((pressure,hit,other,ready,cache));
-        assert_eq!(budget.used(),0);
-        eprintln!("AI queued navigation: page1->page0->page1; stale preload refused; pending_latest_only; independent_keys=2; full_pressure_shared_hit; Metal_SDR_HDR_exact; root=0; appearance_unqualified");
+        assert_eq!(gpu.render_raster(&hit, view, [128, 96]).pixels, sdr);
+        assert_eq!(gpu.render_raster_half(&hit, view, [128, 96]), hdr);
+        drop((pressure, hit, other, ready, cache));
+        assert_eq!(budget.used(), 0);
+        eprintln!(
+            "AI queued navigation: page1->page0->page1; stale preload refused; pending_latest_only; independent_keys=2; full_pressure_shared_hit; Metal_SDR_HDR_exact; root=0; appearance_unqualified"
+        );
     }
 
     #[test]
@@ -8722,35 +9485,60 @@ mod foreground_loader_tests {
             let budget = rrrah_cache::MemoryBudget::new(1024 * 1024);
             let mut srgb = DecodeRequest::new(fixtures.join(name));
             srgb.memory_budget = Some(budget.clone());
-            Cli::try_parse_from(["rrrah", "--untagged-color", "srgb"]).unwrap()
-                .raster_interpretation().apply(&mut srgb);
+            Cli::try_parse_from(["rrrah", "--untagged-color", "srgb"])
+                .unwrap()
+                .raster_interpretation()
+                .apply(&mut srgb);
             let mut linear = srgb.clone();
-            Cli::try_parse_from(["rrrah", "--untagged-color", "linear-srgb"]).unwrap()
-                .raster_interpretation().apply(&mut linear);
+            Cli::try_parse_from(["rrrah", "--untagged-color", "linear-srgb"])
+                .unwrap()
+                .raster_interpretation()
+                .apply(&mut linear);
             let gate = Arc::new(DecodeGate::new());
             let mut cache = RasterDisplayCache::new(rrrah_cache::CacheLimits::bytes(budget.limit()));
             let (a, _) = preload_raster(&srgb, None, &mut cache, &gate).unwrap();
             let (b, _) = preload_raster(&linear, None, &mut cache, &gate).unwrap();
             assert_eq!(cache.len(), 2);
             let (rrrah_core::RasterPixels::Rgba32Float(pa), rrrah_core::RasterPixels::Rgba32Float(pb)) =
-                (a.pixels(), b.pixels()) else { panic!() };
+                (a.pixels(), b.pixels())
+            else {
+                panic!()
+            };
             assert!(!pa.ptr_eq(pb));
-            assert!(pa.iter().zip(pb.iter()).enumerate().any(|(index,(a,b))| index%4!=3 && a < b),
-                "policies must produce different prepared colors");
-            assert!(pa.chunks_exact(4).zip(pb.chunks_exact(4)).all(|(a,b)| a[3] == b[3]));
+            assert!(
+                pa.iter()
+                    .zip(pb.iter())
+                    .enumerate()
+                    .any(|(index, (a, b))| index % 4 != 3 && a < b),
+                "policies must produce different prepared colors"
+            );
+            assert!(
+                pa.chunks_exact(4)
+                    .zip(pb.chunks_exact(4))
+                    .all(|(a, b)| a[3] == b[3])
+            );
             let mut strict = srgb.clone();
-            Cli::try_parse_from(["rrrah"]).unwrap().raster_interpretation().apply(&mut strict);
+            Cli::try_parse_from(["rrrah"])
+                .unwrap()
+                .raster_interpretation()
+                .apply(&mut strict);
             assert!(preload_raster(&strict, None, &mut cache, &gate).is_err());
             assert_eq!(cache.len(), 2);
             let pressure = budget.try_reserve(budget.available_bytes()).unwrap();
             for (request, expected) in [(&srgb, pa), (&linear, pb)] {
-                let (hit, _) = load_cached_raster_with(request, None, &mut cache,
-                    || panic!("prefetched policy decoded again under pressure")).unwrap();
-                let rrrah_core::RasterPixels::Rgba32Float(values) = hit.pixels() else { panic!() };
+                let (hit, _) = load_cached_raster_with(request, None, &mut cache, || {
+                    panic!("prefetched policy decoded again under pressure")
+                })
+                .unwrap();
+                let rrrah_core::RasterPixels::Rgba32Float(values) = hit.pixels() else {
+                    panic!()
+                };
                 assert!(values.ptr_eq(expected));
             }
             drop(pressure);
-            drop(a); drop(b); drop(cache);
+            drop(a);
+            drop(b);
+            drop(cache);
             assert_eq!(budget.used(), 0);
         }
     }
@@ -9381,119 +10169,228 @@ mod raster_swap_viewer_tests {
     use super::*;
     #[test]
     fn cancelled_loads_skip_lazy_key_resolution_and_decode() {
-        let mut models=ModelDisplayCache::new(rrrah_cache::CacheLimits::bytes(4096));
-        assert!(models.load_with_cancel_resolving_key(||panic!("cancelled model fingerprint"),false,
-            ||panic!("cancelled model decode"),||true).is_err());
-        let mut rasters=RasterDisplayCache::new(rrrah_cache::CacheLimits::bytes(4096));
-        let mut request=DecodeRequest::new("missing.png");
-        request.cancellation=Some(GenerationToken::new(Arc::new(AtomicU64::new(2)),1));
-        assert!(load_cached_raster_mode_resolving_key(&request,||panic!("cancelled raster fingerprint"),
-            &mut rasters,false,||panic!("cancelled raster decode")).is_err());
-        assert!(models.entries.is_empty());assert!(rasters.is_empty());
+        let mut models = ModelDisplayCache::new(rrrah_cache::CacheLimits::bytes(4096));
+        assert!(
+            models
+                .load_with_cancel_resolving_key(
+                    || panic!("cancelled model fingerprint"),
+                    false,
+                    || panic!("cancelled model decode"),
+                    || true
+                )
+                .is_err()
+        );
+        let mut rasters = RasterDisplayCache::new(rrrah_cache::CacheLimits::bytes(4096));
+        let mut request = DecodeRequest::new("missing.png");
+        request.cancellation = Some(GenerationToken::new(Arc::new(AtomicU64::new(2)), 1));
+        assert!(
+            load_cached_raster_mode_resolving_key(
+                &request,
+                || panic!("cancelled raster fingerprint"),
+                &mut rasters,
+                false,
+                || panic!("cancelled raster decode")
+            )
+            .is_err()
+        );
+        assert!(models.entries.is_empty());
+        assert!(rasters.is_empty());
     }
     #[test]
     fn protected_preloads_return_leases_for_the_loaded_allocation() {
-        let root=rrrah_cache::MemoryBudget::new(1024*1024);
-        let gate=Arc::new(DecodeGate::new());
-        let base=PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures");
-        let mut models=ModelDisplayCache::new(rrrah_cache::CacheLimits::bytes(1024*1024));
-        let mut request=DecodeRequest::new(base.join("models/triangle.stl"));
-        request.memory_budget=Some(root.clone());
-        let (model,lease)=preload_model_with_lease(&request,&mut models,&gate).unwrap();
-        let lease=lease.unwrap();
-        let (rrrah_decode::DecodedModel::Stl(a),rrrah_decode::DecodedModel::Stl(b))=(&model,&*lease) else {panic!()};
-        assert!(a.ptr_eq(b));drop(model);drop(models);
-        assert!(root.used()>0);drop(lease);assert_eq!(root.used(),0);
-        let mut rasters=RasterDisplayCache::new(rrrah_cache::CacheLimits::bytes(1024*1024));
-        request.path=base.join("data/apng-16bit-precision.png");
-        request.image_index=1;
-        let (frame,assumed,lease)=preload_raster_with_lease(&request,None,&mut rasters,&gate).unwrap();
-        assert!(!assumed);let lease=lease.unwrap();
-        let (rrrah_core::RasterPixels::Rgba32Float(a),rrrah_core::RasterPixels::Rgba32Float(b))=
-            (frame.pixels(),lease.pixels()) else {panic!()};
-        assert!(a.ptr_eq(b));assert_eq!((lease.image_index(),lease.image_count()),(1,2));
-        drop(frame);drop(rasters);assert_eq!(root.used(),16);drop(lease);assert_eq!(root.used(),0);
+        let root = rrrah_cache::MemoryBudget::new(1024 * 1024);
+        let gate = Arc::new(DecodeGate::new());
+        let base = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures");
+        let mut models = ModelDisplayCache::new(rrrah_cache::CacheLimits::bytes(1024 * 1024));
+        let mut request = DecodeRequest::new(base.join("models/triangle.stl"));
+        request.memory_budget = Some(root.clone());
+        let (model, lease) = preload_model_with_lease(&request, &mut models, &gate).unwrap();
+        let lease = lease.unwrap();
+        let (rrrah_decode::DecodedModel::Stl(a), rrrah_decode::DecodedModel::Stl(b)) = (&model, &*lease)
+        else {
+            panic!()
+        };
+        assert!(a.ptr_eq(b));
+        drop(model);
+        drop(models);
+        assert!(root.used() > 0);
+        drop(lease);
+        assert_eq!(root.used(), 0);
+        let mut rasters = RasterDisplayCache::new(rrrah_cache::CacheLimits::bytes(1024 * 1024));
+        request.path = base.join("data/apng-16bit-precision.png");
+        request.image_index = 1;
+        let (frame, assumed, lease) = preload_raster_with_lease(&request, None, &mut rasters, &gate).unwrap();
+        assert!(!assumed);
+        let lease = lease.unwrap();
+        let (rrrah_core::RasterPixels::Rgba32Float(a), rrrah_core::RasterPixels::Rgba32Float(b)) =
+            (frame.pixels(), lease.pixels())
+        else {
+            panic!()
+        };
+        assert!(a.ptr_eq(b));
+        assert_eq!((lease.image_index(), lease.image_count()), (1, 2));
+        drop(frame);
+        drop(rasters);
+        assert_eq!(root.used(), 16);
+        drop(lease);
+        assert_eq!(root.used(), 0);
     }
 
     #[test]
     fn model_prefetch_priority_survives_count_bytes_and_failed_neighbor() {
-        for name in ["triangle.stl","off-attributes-binary.off","obj-shared-metadata.obj","ply-64-le.ply"] {
-            let source=PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/models").join(name);
-            let weight=rrrah_decode::decode_model(&DecodeRequest::new(&source)).unwrap().capacity_bytes();
-            for limits in [rrrah_cache::CacheLimits {max_bytes:128*1024,max_entries:Some(2),ttl:None},
-                rrrah_cache::CacheLimits {max_bytes:weight*2,max_entries:None,ttl:None}] {
-                let root=rrrah_cache::MemoryBudget::new(128*1024);
-                let dir=tempfile::tempdir().unwrap();
-                let mut cache=ModelDisplayCache::new(limits);
-                let mut selected=DecodeRequest::new(&source);selected.memory_budget=Some(root.clone());
-                let model=cache.load(&selected,true,||rrrah_decode::decode_model(&selected).map_err(ModelLoadError::Decode)).unwrap();
+        for name in [
+            "triangle.stl",
+            "off-attributes-binary.off",
+            "obj-shared-metadata.obj",
+            "ply-64-le.ply",
+        ] {
+            let source = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+                .join("../../tests/fixtures/models")
+                .join(name);
+            let weight = rrrah_decode::decode_model(&DecodeRequest::new(&source))
+                .unwrap()
+                .capacity_bytes();
+            for limits in [
+                rrrah_cache::CacheLimits {
+                    max_bytes: 128 * 1024,
+                    max_entries: Some(2),
+                    ttl: None,
+                },
+                rrrah_cache::CacheLimits {
+                    max_bytes: weight * 2,
+                    max_entries: None,
+                    ttl: None,
+                },
+            ] {
+                let root = rrrah_cache::MemoryBudget::new(128 * 1024);
+                let dir = tempfile::tempdir().unwrap();
+                let mut cache = ModelDisplayCache::new(limits);
+                let mut selected = DecodeRequest::new(&source);
+                selected.memory_budget = Some(root.clone());
+                let model = cache
+                    .load(&selected, true, || {
+                        rrrah_decode::decode_model(&selected).map_err(ModelLoadError::Decode)
+                    })
+                    .unwrap();
                 drop(model);
-                let mut bad=selected.clone();bad.path=dir.path().join("corrupt.stl");
-                std::fs::write(&bad.path,b"truncated").unwrap();
-                assert!(cache.load(&bad,false,||rrrah_decode::decode_model(&bad).map_err(ModelLoadError::Decode)).is_err());
+                let mut bad = selected.clone();
+                bad.path = dir.path().join("corrupt.stl");
+                std::fs::write(&bad.path, b"truncated").unwrap();
+                assert!(
+                    cache
+                        .load(&bad, false, || rrrah_decode::decode_model(&bad)
+                            .map_err(ModelLoadError::Decode))
+                        .is_err()
+                );
                 assert!(cache.prefetch_lease(&bad).is_none());
-                assert_eq!(cache.entries.len(),1);
-                let mut nearest=selected.clone();nearest.path=dir.path().join(format!("nearest-{name}"));
-                std::fs::copy(&source,&nearest.path).unwrap();
-                let model=cache.load(&nearest,false,||rrrah_decode::decode_model(&nearest).map_err(ModelLoadError::Decode)).unwrap();
-                let protected=cache.prefetch_lease(&nearest).unwrap();drop(model);
-                let mut farther=selected.clone();farther.path=dir.path().join(format!("farther-{name}"));
-                std::fs::copy(&source,&farther.path).unwrap();
-                let model=cache.load(&farther,false,||rrrah_decode::decode_model(&farther).map_err(ModelLoadError::Decode)).unwrap();drop(model);
-                let hit=cache.load(&nearest,false,||panic!("farther model displaced protected nearest: {name}")).unwrap();drop(hit);
-                assert_eq!(cache.entries.len(),2);
+                assert_eq!(cache.entries.len(), 1);
+                let mut nearest = selected.clone();
+                nearest.path = dir.path().join(format!("nearest-{name}"));
+                std::fs::copy(&source, &nearest.path).unwrap();
+                let model = cache
+                    .load(&nearest, false, || {
+                        rrrah_decode::decode_model(&nearest).map_err(ModelLoadError::Decode)
+                    })
+                    .unwrap();
+                let protected = cache.prefetch_lease(&nearest).unwrap();
+                drop(model);
+                let mut farther = selected.clone();
+                farther.path = dir.path().join(format!("farther-{name}"));
+                std::fs::copy(&source, &farther.path).unwrap();
+                let model = cache
+                    .load(&farther, false, || {
+                        rrrah_decode::decode_model(&farther).map_err(ModelLoadError::Decode)
+                    })
+                    .unwrap();
+                drop(model);
+                let hit = cache
+                    .load(&nearest, false, || {
+                        panic!("farther model displaced protected nearest: {name}")
+                    })
+                    .unwrap();
+                drop(hit);
+                assert_eq!(cache.entries.len(), 2);
                 drop(protected);
-                let model=cache.load(&farther,false,||rrrah_decode::decode_model(&farther).map_err(ModelLoadError::Decode)).unwrap();drop(model);
+                let model = cache
+                    .load(&farther, false, || {
+                        rrrah_decode::decode_model(&farther).map_err(ModelLoadError::Decode)
+                    })
+                    .unwrap();
+                drop(model);
                 assert!(cache.prefetch_lease(&nearest).is_none());
-                drop(cache);assert_eq!(root.used(),0);
+                drop(cache);
+                assert_eq!(root.used(), 0);
             }
         }
     }
 
     #[test]
     fn nearest_prefetched_raster_survives_count_and_byte_pressure_after_failed_neighbor() {
-        let bad_dir=tempfile::tempdir().unwrap();
-        let bad_path=bad_dir.path().join("corrupt.png");
-        std::fs::write(&bad_path,b"\x89PNG\r\n\x1a\ntruncated").unwrap();
+        let bad_dir = tempfile::tempdir().unwrap();
+        let bad_path = bad_dir.path().join("corrupt.png");
+        std::fs::write(&bad_path, b"\x89PNG\r\n\x1a\ntruncated").unwrap();
         for limits in [
-            rrrah_cache::CacheLimits {max_bytes:1024*1024,max_entries:Some(2),ttl:None},
-            rrrah_cache::CacheLimits {max_bytes:80,max_entries:None,ttl:None},
+            rrrah_cache::CacheLimits {
+                max_bytes: 1024 * 1024,
+                max_entries: Some(2),
+                ttl: None,
+            },
+            rrrah_cache::CacheLimits {
+                max_bytes: 80,
+                max_entries: None,
+                ttl: None,
+            },
         ] {
-        let root=rrrah_cache::MemoryBudget::new(1024*1024);
-        let mut cache=RasterDisplayCache::new(limits);
-        let base=PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/data");
-        let mut selected=DecodeRequest::new(base.join("apng-16bit-precision.png"));
-        selected.memory_budget=Some(root.clone());
-        let (visible,_)=load_cached_raster_with(&selected,None,&mut cache,
-            ||load_raster_for_display_typed(&selected,None)).unwrap();
-        drop(visible);
-        let mut bad=DecodeRequest::new(&bad_path);
-        bad.memory_budget=Some(root.clone());
-        assert!(load_cached_raster_mode(&bad,None,&mut cache,false,
-            ||load_raster_for_display_typed(&bad,None)).is_err());
-        assert!(retain_prefetched_raster(&bad,None,false,&mut cache).is_none());
-        assert_eq!((cache.len(),root.used()),(1,16));
-        let mut nearest=DecodeRequest::new(base.join("apng-2bit-packed.png"));
-        nearest.memory_budget=Some(root.clone());
-        let (frame,assumed)=load_cached_raster_mode(&nearest,None,&mut cache,false,
-            ||load_raster_for_display_typed(&nearest,None)).unwrap();
-        let protected=retain_prefetched_raster(&nearest,None,assumed,&mut cache).unwrap();
-        drop(frame);
-        let mut farther=DecodeRequest::new(base.join("apng-4bit-packed.png"));
-        farther.memory_budget=Some(root.clone());
-        let (frame,_)=load_cached_raster_mode(&farther,None,&mut cache,false,
-            ||load_raster_for_display_typed(&farther,None)).unwrap();
-        drop(frame);
-        let (hit,_)=load_cached_raster_mode(&nearest,None,&mut cache,false,
-            ||panic!("farther preload evicted protected nearest")).unwrap();
-        drop(hit);
-        assert_eq!(cache.len(),2);
-        drop(protected);
-        let (frame,_)=load_cached_raster_mode(&farther,None,&mut cache,false,
-            ||load_raster_for_display_typed(&farther,None)).unwrap();
-        drop(frame);
-        assert!(retain_prefetched_raster(&nearest,None,assumed,&mut cache).is_none());
-        drop(cache);assert_eq!(root.used(),0);
+            let root = rrrah_cache::MemoryBudget::new(1024 * 1024);
+            let mut cache = RasterDisplayCache::new(limits);
+            let base = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/data");
+            let mut selected = DecodeRequest::new(base.join("apng-16bit-precision.png"));
+            selected.memory_budget = Some(root.clone());
+            let (visible, _) = load_cached_raster_with(&selected, None, &mut cache, || {
+                load_raster_for_display_typed(&selected, None)
+            })
+            .unwrap();
+            drop(visible);
+            let mut bad = DecodeRequest::new(&bad_path);
+            bad.memory_budget = Some(root.clone());
+            assert!(
+                load_cached_raster_mode(&bad, None, &mut cache, false, || load_raster_for_display_typed(
+                    &bad, None
+                ))
+                .is_err()
+            );
+            assert!(retain_prefetched_raster(&bad, None, false, &mut cache).is_none());
+            assert_eq!((cache.len(), root.used()), (1, 16));
+            let mut nearest = DecodeRequest::new(base.join("apng-2bit-packed.png"));
+            nearest.memory_budget = Some(root.clone());
+            let (frame, assumed) = load_cached_raster_mode(&nearest, None, &mut cache, false, || {
+                load_raster_for_display_typed(&nearest, None)
+            })
+            .unwrap();
+            let protected = retain_prefetched_raster(&nearest, None, assumed, &mut cache).unwrap();
+            drop(frame);
+            let mut farther = DecodeRequest::new(base.join("apng-4bit-packed.png"));
+            farther.memory_budget = Some(root.clone());
+            let (frame, _) = load_cached_raster_mode(&farther, None, &mut cache, false, || {
+                load_raster_for_display_typed(&farther, None)
+            })
+            .unwrap();
+            drop(frame);
+            let (hit, _) = load_cached_raster_mode(&nearest, None, &mut cache, false, || {
+                panic!("farther preload evicted protected nearest")
+            })
+            .unwrap();
+            drop(hit);
+            assert_eq!(cache.len(), 2);
+            drop(protected);
+            let (frame, _) = load_cached_raster_mode(&farther, None, &mut cache, false, || {
+                load_raster_for_display_typed(&farther, None)
+            })
+            .unwrap();
+            drop(frame);
+            assert!(retain_prefetched_raster(&nearest, None, assumed, &mut cache).is_none());
+            drop(cache);
+            assert_eq!(root.used(), 0);
         }
     }
 
@@ -9508,7 +10405,9 @@ mod raster_swap_viewer_tests {
         let gpu = crate::navigation_metal_readback::qualification_gpu().expect("actual GPU required");
         eprintln!("APNG viewer TTL adapter: {}", gpu.adapter_name());
         qualify_apng_selected_frame_ttl(Some(&gpu));
-        eprintln!("APNG viewer TTL: four distinct frames; nonzero expiry; reverse prefetch under blocked decoder; SDR/HDR exact; final=0");
+        eprintln!(
+            "APNG viewer TTL: four distinct frames; nonzero expiry; reverse prefetch under blocked decoder; SDR/HDR exact; final=0"
+        );
     }
 
     #[test]
@@ -9530,7 +10429,11 @@ mod raster_swap_viewer_tests {
 
     #[test]
     fn ico_cur_selected_images_loader_cache_and_blocked_prefetch() {
-        for name in ["ico-selected-images.ico", "cur-selected-images.cur", "cur-selected-dib.cur"] {
+        for name in [
+            "ico-selected-images.ico",
+            "cur-selected-images.cur",
+            "cur-selected-dib.cur",
+        ] {
             qualify_selected_container_loader(None, name);
         }
     }
@@ -9538,9 +10441,13 @@ mod raster_swap_viewer_tests {
     #[test]
     #[ignore = "actual Metal ICO/CUR production loader cache and blocked prefetch"]
     fn ico_cur_selected_images_loader_cache_and_blocked_prefetch_metal() {
-        let gpu=crate::navigation_metal_readback::GpuReadback::new().expect("actual Metal required");
-        eprintln!("ICO/CUR viewer adapter: {}",gpu.adapter_name());
-        for name in ["ico-selected-images.ico", "cur-selected-images.cur", "cur-selected-dib.cur"] {
+        let gpu = crate::navigation_metal_readback::GpuReadback::new().expect("actual Metal required");
+        eprintln!("ICO/CUR viewer adapter: {}", gpu.adapter_name());
+        for name in [
+            "ico-selected-images.ico",
+            "cur-selected-images.cur",
+            "cur-selected-dib.cur",
+        ] {
             qualify_selected_container_loader(Some(&gpu), name);
         }
     }
@@ -9549,30 +10456,63 @@ mod raster_swap_viewer_tests {
     #[ignore = "manual 64MiB selected-page swap cancellation after admission and Metal retry"]
     fn selected_page_prefetch_cancel_after_restore_admission_metal() {
         let gpu = crate::navigation_metal_readback::GpuReadback::new().expect("actual Metal required");
-        eprintln!("Selected-page admitted cancellation adapter: {}", gpu.adapter_name());
+        eprintln!(
+            "Selected-page admitted cancellation adapter: {}",
+            gpu.adapter_name()
+        );
         let bytes = 2048u64 * 2048 * 16;
         let root = rrrah_cache::MemoryBudget::new(bytes * 2);
         let dir = tempfile::tempdir().unwrap();
-        let mut cache = raster_cache_with_swap(Some(dir.path()), false,
-            rrrah_cache::CacheLimits { max_bytes: bytes, max_entries: Some(0), ttl: None },
+        let mut cache = raster_cache_with_swap(
+            Some(dir.path()),
+            false,
+            rrrah_cache::CacheLimits {
+                max_bytes: bytes,
+                max_entries: Some(0),
+                ttl: None,
+            },
             Some(rrrah_cache::ImageSwapConfig {
-                limits: rrrah_cache::CacheLimits { max_bytes: bytes * 3, max_entries: Some(2), ttl: None },
-                queue_bytes: bytes, queue_count: 1, restore_bytes: bytes,
-            }), Some(&root));
+                limits: rrrah_cache::CacheLimits {
+                    max_bytes: bytes * 3,
+                    max_entries: Some(2),
+                    ttl: None,
+                },
+                queue_bytes: bytes,
+                queue_count: 1,
+                restore_bytes: bytes,
+            }),
+            Some(&root),
+        );
         let generation = Arc::new(AtomicU64::new(1));
-        let mut request = DecodeRequest::new(PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-            .join("../../tests/fixtures/data/ico-selected-images.ico"));
+        let mut request = DecodeRequest::new(
+            PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+                .join("../../tests/fixtures/data/ico-selected-images.ico"),
+        );
         // The source provides a stable key only; these authored transport payloads
         // deliberately avoid decoder work in the blocked foreground-gate scenario.
         request.memory_budget = Some(root.clone());
         for index in [1, 2] {
             request.image_index = index;
-            let values = if index == 1 { [4., -0.5, 0.25, 1.] } else { [-0.25, 0.5, 4., 1.] };
-            let frame = rrrah_core::DecodedRaster::new(2048, 2048,
+            let values = if index == 1 {
+                [4., -0.5, 0.25, 1.]
+            } else {
+                [-0.25, 0.5, 4., 1.]
+            };
+            let frame = rrrah_core::DecodedRaster::new(
+                2048,
+                2048,
                 rrrah_core::RasterPixels::Rgba32Float(Arc::new(values.repeat(2048 * 2048)).into()),
-                rrrah_core::RasterColorSpace::LinearSrgb).unwrap()
-                .with_image_selection(index, 3).unwrap().try_manage_pixels(&root).unwrap();
-            cache.swap().unwrap().enqueue(raster_display_key(&request, None).unwrap(), frame);
+                rrrah_core::RasterColorSpace::LinearSrgb,
+            )
+            .unwrap()
+            .with_image_selection(index, 3)
+            .unwrap()
+            .try_manage_pixels(&root)
+            .unwrap();
+            cache
+                .swap()
+                .unwrap()
+                .enqueue(raster_display_key(&request, None).unwrap(), frame);
             cache.swap().unwrap().wait_idle().unwrap();
             assert_eq!(root.used(), 0);
         }
@@ -9595,14 +10535,20 @@ mod raster_swap_viewer_tests {
         });
         let deadline = Instant::now() + Duration::from_secs(10);
         while root.used() < bytes && !worker.is_finished() {
-            assert!(Instant::now() < deadline, "selected-page restore admission not observed");
+            assert!(
+                Instant::now() < deadline,
+                "selected-page restore admission not observed"
+            );
             thread::yield_now();
         }
         let admitted = root.used() >= bytes;
         generation.store(2, Ordering::Release);
         let (mut cache, result) = worker.join().unwrap();
         assert!(admitted, "must cancel an actually admitted restore");
-        assert!(result.is_err(), "obsolete restored page must not publish a frame or lease");
+        assert!(
+            result.is_err(),
+            "obsolete restored page must not publish a frame or lease"
+        );
         assert_eq!(root.used(), 0);
         assert!(cache.is_empty());
         assert_eq!(cache.swap().unwrap().stats().reads, 0);
@@ -9611,131 +10557,223 @@ mod raster_swap_viewer_tests {
         let (frame, _, lease) = preload_raster_with_lease(&request, None, &mut cache, &gate).unwrap();
         assert!(lease.is_none());
         assert_eq!((frame.image_index(), frame.image_count()), (2, 3));
-        let rrrah_core::RasterPixels::Rgba32Float(samples) = frame.pixels() else { panic!() };
+        let rrrah_core::RasterPixels::Rgba32Float(samples) = frame.pixels() else {
+            panic!()
+        };
         for pixel in samples.chunks_exact(4) {
             assert_eq!(pixel, &[-0.25, 0.5, 4., 1.]);
         }
-        let view = rrrah_gpu::ViewParameters { viewport: [128., 96.], ..Default::default() };
-        let reference = rrrah_core::DecodedRaster::new(2, 2,
+        let view = rrrah_gpu::ViewParameters {
+            viewport: [128., 96.],
+            ..Default::default()
+        };
+        let reference = rrrah_core::DecodedRaster::new(
+            2,
+            2,
             rrrah_core::RasterPixels::Rgba32Float(Arc::new([-0.25, 0.5, 4., 1.].repeat(4)).into()),
-            rrrah_core::RasterColorSpace::LinearSrgb).unwrap();
-        assert_eq!(gpu.render_raster(&frame, view, [128,96]).pixels,
-            gpu.render_raster(&reference, view, [128,96]).pixels);
-        assert_eq!(gpu.render_raster_half(&frame, view, [128,96]),
-            gpu.render_raster_half(&reference, view, [128,96]));
-        assert_eq!((cache.swap().unwrap().stats().writes,
-            cache.swap().unwrap().stats().reads, cache.swap().unwrap().stats().errors), (2, 1, 0));
-        drop(frame); drop(ticket); drop(cache);
+            rrrah_core::RasterColorSpace::LinearSrgb,
+        )
+        .unwrap();
+        assert_eq!(
+            gpu.render_raster(&frame, view, [128, 96]).pixels,
+            gpu.render_raster(&reference, view, [128, 96]).pixels
+        );
+        assert_eq!(
+            gpu.render_raster_half(&frame, view, [128, 96]),
+            gpu.render_raster_half(&reference, view, [128, 96])
+        );
+        assert_eq!(
+            (
+                cache.swap().unwrap().stats().writes,
+                cache.swap().unwrap().stats().reads,
+                cache.swap().unwrap().stats().errors
+            ),
+            (2, 1, 0)
+        );
+        drop(frame);
+        drop(ticket);
+        drop(cache);
         let _ = stop.send(());
         watchdog.join().unwrap();
         assert_eq!(root.used(), 0);
-        eprintln!("Selected-page admitted cancellation: bytes={bytes}; obsolete page1 unpublished; RAM=0; page2 retry payload/SDR/HDR exact; blocked decoder bypassed; final=0");
+        eprintln!(
+            "Selected-page admitted cancellation: bytes={bytes}; obsolete page1 unpublished; RAM=0; page2 retry payload/SDR/HDR exact; blocked decoder bypassed; final=0"
+        );
     }
 
-    fn qualify_selected_container_loader(gpu: Option<&crate::navigation_metal_readback::GpuReadback>, name: &str) {
-        let tiff=name.starts_with("tiff");
-        let max_bytes=if tiff {96} else {192};
-        let queue_bytes=if tiff {128} else {256};
+    fn qualify_selected_container_loader(
+        gpu: Option<&crate::navigation_metal_readback::GpuReadback>,
+        name: &str,
+    ) {
+        let tiff = name.starts_with("tiff");
+        let max_bytes = if tiff { 96 } else { 192 };
+        let queue_bytes = if tiff { 128 } else { 256 };
         let dir = tempfile::tempdir().unwrap();
         let root = rrrah_cache::MemoryBudget::new(64 * 1024);
-        let mut cache = raster_cache_with_swap(Some(dir.path()), false,
-            rrrah_cache::CacheLimits { max_bytes, max_entries: Some(3), ttl: Some(Duration::from_secs(1)) },
+        let mut cache = raster_cache_with_swap(
+            Some(dir.path()),
+            false,
+            rrrah_cache::CacheLimits {
+                max_bytes,
+                max_entries: Some(3),
+                ttl: Some(Duration::from_secs(1)),
+            },
             Some(rrrah_cache::ImageSwapConfig {
-                limits: rrrah_cache::CacheLimits {max_bytes: 65536, max_entries: Some(3), ttl: None},
-                queue_bytes, queue_count: 3, restore_bytes: queue_bytes,
-            }), Some(&root));
-        let mut request = DecodeRequest::new(PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-            .join("../../tests/fixtures/data").join(name));
+                limits: rrrah_cache::CacheLimits {
+                    max_bytes: 65536,
+                    max_entries: Some(3),
+                    ttl: None,
+                },
+                queue_bytes,
+                queue_count: 3,
+                restore_bytes: queue_bytes,
+            }),
+            Some(&root),
+        );
+        let mut request = DecodeRequest::new(
+            PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+                .join("../../tests/fixtures/data")
+                .join(name),
+        );
         request.memory_budget = Some(root.clone());
-        let params = rrrah_gpu::ViewParameters {viewport: [128.,96.], ..Default::default()};
+        let params = rrrah_gpu::ViewParameters {
+            viewport: [128., 96.],
+            ..Default::default()
+        };
         let mut expected = Vec::new();
         for index in 0..3 {
             request.image_index = index;
-            let (frame, _) = load_cached_raster_mode(&request, None, &mut cache, false,
-                || load_raster_for_display_typed(&request, None)).unwrap();
-            assert_eq!((frame.image_index(), frame.image_count()), (index,3));
+            let (frame, _) = load_cached_raster_mode(&request, None, &mut cache, false, || {
+                load_raster_for_display_typed(&request, None)
+            })
+            .unwrap();
+            assert_eq!((frame.image_index(), frame.image_count()), (index, 3));
             let mut payload = Vec::new();
             rrrah_cache::SwapPayload::write_payload(&frame, &mut payload).unwrap();
-            expected.push((payload,
-                gpu.map(|gpu| gpu.render_raster(&frame, params, [128,96]).pixels),
-                gpu.map(|gpu| gpu.render_raster_half(&frame, params, [128,96]))));
+            expected.push((
+                payload,
+                gpu.map(|gpu| gpu.render_raster(&frame, params, [128, 96]).pixels),
+                gpu.map(|gpu| gpu.render_raster_half(&frame, params, [128, 96])),
+            ));
         }
-        assert_eq!(cache.len(),3);
+        assert_eq!(cache.len(), 3);
         if gpu.is_some() && tiff {
-            assert_eq!(expected[0].1,expected[2].1);
-            assert_ne!(expected[0].1,expected[1].1);
+            assert_eq!(expected[0].1, expected[2].1);
+            assert_ne!(expected[0].1, expected[1].1);
         }
         let pressure = root.try_reserve(root.available_bytes()).unwrap();
-        for index in [1usize,2,0] {
-            request.image_index=index;
-            let (hit,_) = load_cached_raster_mode(&request,None,&mut cache,false,
-                || panic!("selected TIFF RAM hit decoded again")).unwrap();
-            assert_eq!((hit.image_index(),hit.image_count()),(index,3));
-            let mut payload=Vec::new();rrrah_cache::SwapPayload::write_payload(&hit,&mut payload).unwrap();
-            assert_eq!(payload,expected[index].0);
+        for index in [1usize, 2, 0] {
+            request.image_index = index;
+            let (hit, _) = load_cached_raster_mode(&request, None, &mut cache, false, || {
+                panic!("selected TIFF RAM hit decoded again")
+            })
+            .unwrap();
+            assert_eq!((hit.image_index(), hit.image_count()), (index, 3));
+            let mut payload = Vec::new();
+            rrrah_cache::SwapPayload::write_payload(&hit, &mut payload).unwrap();
+            assert_eq!(payload, expected[index].0);
         }
         drop(pressure);
-        let deadline=Instant::now()+Duration::from_secs(5);
+        let deadline = Instant::now() + Duration::from_secs(5);
         while !cache.is_empty() {
             cache.spill_expired();
-            assert!(Instant::now()<deadline,"TIFF selected page TTL did not expire");
+            assert!(Instant::now() < deadline, "TIFF selected page TTL did not expire");
             thread::sleep(Duration::from_millis(10));
         }
-        cache.swap().unwrap().wait_idle().unwrap();assert_eq!(root.used(),0);
-        assert!(cache.set_limits_and_spill(rrrah_cache::CacheLimits {max_bytes,max_entries:Some(0),ttl:None}));
-        let gate=Arc::new(DecodeGate::new());let ticket=gate.request_foreground();
-        let generation=Arc::new(AtomicU64::new(1));
-        request.cancellation=Some(GenerationToken::new(generation.clone(),0));
-        let (stop,stopped)=std::sync::mpsc::channel();
+        cache.swap().unwrap().wait_idle().unwrap();
+        assert_eq!(root.used(), 0);
+        assert!(cache.set_limits_and_spill(rrrah_cache::CacheLimits {
+            max_bytes,
+            max_entries: Some(0),
+            ttl: None
+        }));
+        let gate = Arc::new(DecodeGate::new());
+        let ticket = gate.request_foreground();
+        let generation = Arc::new(AtomicU64::new(1));
+        request.cancellation = Some(GenerationToken::new(generation.clone(), 0));
+        let (stop, stopped) = std::sync::mpsc::channel();
         let watchdog_generation = generation.clone();
-        let watchdog=thread::spawn(move || {
-            if stopped.recv_timeout(Duration::from_secs(5)).is_err() {watchdog_generation.store(2,Ordering::Release);}
+        let watchdog = thread::spawn(move || {
+            if stopped.recv_timeout(Duration::from_secs(5)).is_err() {
+                watchdog_generation.store(2, Ordering::Release);
+            }
         });
         let window = gallery::PrefetchWindow { behind: 0, ahead: 2 };
-        let mut planned = gallery::neighbour_prefetch_indices(
-            3, 2, gallery::NavDirection::Backward, window,
-        );
+        let mut planned = gallery::neighbour_prefetch_indices(3, 2, gallery::NavDirection::Backward, window);
         planned.extend(gallery::neighbour_prefetch_indices(
-            3, 1, gallery::NavDirection::Forward,
+            3,
+            1,
+            gallery::NavDirection::Forward,
             gallery::PrefetchWindow { behind: 0, ahead: 1 },
         ));
         assert_eq!(planned, [1, 0, 2]);
         for &index in &planned {
             request.image_index = index;
-            assert!(preload_raster_with_lease(&request, None, &mut cache, &gate).is_err(),
-                "obsolete selected-page prefetch must refuse before swap or decode");
+            assert!(
+                preload_raster_with_lease(&request, None, &mut cache, &gate).is_err(),
+                "obsolete selected-page prefetch must refuse before swap or decode"
+            );
             assert_eq!(cache.swap().unwrap().stats().reads, 0);
             assert_eq!(root.used(), 0);
             assert!(cache.is_empty());
         }
         request.cancellation = Some(GenerationToken::new(generation, 1));
-        eprintln!("Selected container stale prefetch {name}: three obsolete indices refused; swap reads=0; RAM entries=0; shared credit=0; fresh generation retry follows");
+        eprintln!(
+            "Selected container stale prefetch {name}: three obsolete indices refused; swap reads=0; RAM entries=0; shared credit=0; fresh generation retry follows"
+        );
         for index in planned {
-            request.image_index=index;
-            let (frame,_) = preload_raster(&request,None,&mut cache,&gate)
+            request.image_index = index;
+            let (frame, _) = preload_raster(&request, None, &mut cache, &gate)
                 .expect("TIFF selected-page swap hit must bypass blocked decoder");
-            assert_eq!((frame.image_index(),frame.image_count()),(index,3));
-            let mut payload=Vec::new();rrrah_cache::SwapPayload::write_payload(&frame,&mut payload).unwrap();
-            assert_eq!(payload,expected[index].0);
-            if let Some(gpu)=gpu {
-                assert_eq!(gpu.render_raster(&frame,params,[128,96]).pixels,*expected[index].1.as_ref().unwrap());
-                assert_eq!(gpu.render_raster_half(&frame,params,[128,96]),*expected[index].2.as_ref().unwrap());
+            assert_eq!((frame.image_index(), frame.image_count()), (index, 3));
+            let mut payload = Vec::new();
+            rrrah_cache::SwapPayload::write_payload(&frame, &mut payload).unwrap();
+            assert_eq!(payload, expected[index].0);
+            if let Some(gpu) = gpu {
+                assert_eq!(
+                    gpu.render_raster(&frame, params, [128, 96]).pixels,
+                    *expected[index].1.as_ref().unwrap()
+                );
+                assert_eq!(
+                    gpu.render_raster_half(&frame, params, [128, 96]),
+                    *expected[index].2.as_ref().unwrap()
+                );
             }
-            drop(frame);assert_eq!(root.used(),0);
+            drop(frame);
+            assert_eq!(root.used(), 0);
         }
-        let _=stop.send(());watchdog.join().unwrap();drop(ticket);
-        eprintln!("Selected container planned prefetch {name}: backward2 -> [1,0]; forward1 -> [2]; swap bypasses blocked decoder; final=0");
-        assert_eq!((cache.swap().unwrap().stats().writes,cache.swap().unwrap().stats().reads,
-            cache.swap().unwrap().stats().errors),(3,3,0));
-        drop(cache);assert_eq!(root.used(),0);
+        let _ = stop.send(());
+        watchdog.join().unwrap();
+        drop(ticket);
+        eprintln!(
+            "Selected container planned prefetch {name}: backward2 -> [1,0]; forward1 -> [2]; swap bypasses blocked decoder; final=0"
+        );
+        assert_eq!(
+            (
+                cache.swap().unwrap().stats().writes,
+                cache.swap().unwrap().stats().reads,
+                cache.swap().unwrap().stats().errors
+            ),
+            (3, 3, 0)
+        );
+        drop(cache);
+        assert_eq!(root.used(), 0);
         if !tiff && gpu.is_none() {
-            eprintln!("ICO/CUR viewer CPU {name}: selected keys; pressure RAM hits; TTL; blocked decoder reverse prefetch; payload exact; final=0");
+            eprintln!(
+                "ICO/CUR viewer CPU {name}: selected keys; pressure RAM hits; TTL; blocked decoder reverse prefetch; payload exact; final=0"
+            );
         } else if !tiff {
-            eprintln!("ICO/CUR viewer {name}: selected keys; pressure RAM hits; TTL; blocked decoder reverse prefetch; payload/hotspot/SDR/HDR exact; final=0");
+            eprintln!(
+                "ICO/CUR viewer {name}: selected keys; pressure RAM hits; TTL; blocked decoder reverse prefetch; payload/hotspot/SDR/HDR exact; final=0"
+            );
         } else if gpu.is_some() {
-            eprintln!("TIFF viewer pages: three independent selected keys; full-pressure RAM hits; nonzero TTL; blocked decoder reverse prefetch; payload and SDR/HDR exact; final=0");
+            eprintln!(
+                "TIFF viewer pages: three independent selected keys; full-pressure RAM hits; nonzero TTL; blocked decoder reverse prefetch; payload and SDR/HDR exact; final=0"
+            );
         } else {
-            eprintln!("TIFF viewer pages CPU: three selected keys; full-pressure RAM hits; nonzero TTL; blocked decoder reverse prefetch; payload exact; final=0");
+            eprintln!(
+                "TIFF viewer pages CPU: three selected keys; full-pressure RAM hits; nonzero TTL; blocked decoder reverse prefetch; payload exact; final=0"
+            );
         }
     }
 
@@ -9743,71 +10781,114 @@ mod raster_swap_viewer_tests {
         for name in ["apng-16bit-precision.png", "apng-2bit-packed.png"] {
             let dir = tempfile::tempdir().unwrap();
             let root = rrrah_cache::MemoryBudget::new(64 * 1024);
-            let mut cache = raster_cache_with_swap(Some(dir.path()), false,
-                rrrah_cache::CacheLimits { max_bytes: 128, max_entries: Some(2), ttl: Some(Duration::from_secs(1)) },
+            let mut cache = raster_cache_with_swap(
+                Some(dir.path()),
+                false,
+                rrrah_cache::CacheLimits {
+                    max_bytes: 128,
+                    max_entries: Some(2),
+                    ttl: Some(Duration::from_secs(1)),
+                },
                 Some(rrrah_cache::ImageSwapConfig {
-                    limits: rrrah_cache::CacheLimits {max_bytes: 65536, max_entries: Some(2), ttl: None},
-                    queue_bytes: 128, queue_count: 2, restore_bytes: 128,
-                }), Some(&root));
-            let mut request = DecodeRequest::new(PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-                .join("../../tests/fixtures/data").join(name));
+                    limits: rrrah_cache::CacheLimits {
+                        max_bytes: 65536,
+                        max_entries: Some(2),
+                        ttl: None,
+                    },
+                    queue_bytes: 128,
+                    queue_count: 2,
+                    restore_bytes: 128,
+                }),
+                Some(&root),
+            );
+            let mut request = DecodeRequest::new(
+                PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+                    .join("../../tests/fixtures/data")
+                    .join(name),
+            );
             request.memory_budget = Some(root.clone());
-            let params = rrrah_gpu::ViewParameters {viewport: [128.,96.], ..Default::default()};
+            let params = rrrah_gpu::ViewParameters {
+                viewport: [128., 96.],
+                ..Default::default()
+            };
             let mut expected = Vec::new();
             for index in 0..2 {
                 request.image_index = index;
-                let (frame, _) = load_cached_raster_mode(&request, None, &mut cache, false,
-                    || load_raster_for_display_typed(&request, None)).unwrap();
-                assert_eq!((frame.image_index(), frame.image_count()), (index,2));
+                let (frame, _) = load_cached_raster_mode(&request, None, &mut cache, false, || {
+                    load_raster_for_display_typed(&request, None)
+                })
+                .unwrap();
+                assert_eq!((frame.image_index(), frame.image_count()), (index, 2));
                 let mut payload = Vec::new();
                 rrrah_cache::SwapPayload::write_payload(&frame, &mut payload).unwrap();
-                let sdr = gpu.map(|gpu| gpu.render_raster(&frame, params, [128,96]).pixels);
-                let hdr = gpu.map(|gpu| gpu.render_raster_half(&frame, params, [128,96]));
-                expected.push((payload,sdr,hdr));
+                let sdr = gpu.map(|gpu| gpu.render_raster(&frame, params, [128, 96]).pixels);
+                let hdr = gpu.map(|gpu| gpu.render_raster_half(&frame, params, [128, 96]));
+                expected.push((payload, sdr, hdr));
             }
             assert_ne!(expected[0].0, expected[1].0);
-            assert_eq!(cache.len(),2);
-            assert_eq!(cache.spill_expired(),0);
-            let deadline = Instant::now()+Duration::from_secs(5);
+            assert_eq!(cache.len(), 2);
+            assert_eq!(cache.spill_expired(), 0);
+            let deadline = Instant::now() + Duration::from_secs(5);
             let mut expired = 0;
             while !cache.is_empty() {
                 expired += cache.spill_expired();
-                assert!(Instant::now()<deadline, "nonzero TTL did not expire selected frames");
+                assert!(
+                    Instant::now() < deadline,
+                    "nonzero TTL did not expire selected frames"
+                );
                 thread::sleep(Duration::from_millis(10));
             }
             cache.swap().unwrap().wait_idle().unwrap();
-            assert_eq!(expired,2);
-            assert_eq!(root.used(),0);
+            assert_eq!(expired, 2);
+            assert_eq!(root.used(), 0);
             assert!(cache.set_limits_and_spill(rrrah_cache::CacheLimits {
-                max_bytes:128, max_entries:Some(0), ttl:None,
+                max_bytes: 128,
+                max_entries: Some(0),
+                ttl: None,
             }));
             let gate = Arc::new(DecodeGate::new());
             let ticket = gate.request_foreground();
             let generation = Arc::new(AtomicU64::new(0));
-            request.cancellation = Some(GenerationToken::new(generation.clone(),0));
+            request.cancellation = Some(GenerationToken::new(generation.clone(), 0));
             let (stop, stopped) = std::sync::mpsc::channel();
             let watchdog = thread::spawn(move || {
-                if stopped.recv_timeout(Duration::from_secs(5)).is_err() {generation.store(1,Ordering::Release);}
+                if stopped.recv_timeout(Duration::from_secs(5)).is_err() {
+                    generation.store(1, Ordering::Release);
+                }
             });
-            for index in [1usize,0] {
+            for index in [1usize, 0] {
                 request.image_index = index;
-                let (frame, _) = preload_raster(&request,None,&mut cache,&gate)
+                let (frame, _) = preload_raster(&request, None, &mut cache, &gate)
                     .expect("APNG swap preload must bypass blocked decoder");
                 let mut payload = Vec::new();
-                rrrah_cache::SwapPayload::write_payload(&frame,&mut payload).unwrap();
-                assert_eq!(payload,expected[index].0);
+                rrrah_cache::SwapPayload::write_payload(&frame, &mut payload).unwrap();
+                assert_eq!(payload, expected[index].0);
                 if let Some(gpu) = gpu {
-                    assert_eq!(gpu.render_raster(&frame,params,[128,96]).pixels,*expected[index].1.as_ref().unwrap());
-                    assert_eq!(gpu.render_raster_half(&frame,params,[128,96]),*expected[index].2.as_ref().unwrap());
+                    assert_eq!(
+                        gpu.render_raster(&frame, params, [128, 96]).pixels,
+                        *expected[index].1.as_ref().unwrap()
+                    );
+                    assert_eq!(
+                        gpu.render_raster_half(&frame, params, [128, 96]),
+                        *expected[index].2.as_ref().unwrap()
+                    );
                 }
                 drop(frame);
-                assert_eq!(root.used(),0);
+                assert_eq!(root.used(), 0);
             }
-            let _ = stop.send(()); watchdog.join().unwrap(); drop(ticket);
-            assert_eq!((cache.swap().unwrap().stats().writes,cache.swap().unwrap().stats().reads,
-                cache.swap().unwrap().stats().errors),(2,2,0));
+            let _ = stop.send(());
+            watchdog.join().unwrap();
+            drop(ticket);
+            assert_eq!(
+                (
+                    cache.swap().unwrap().stats().writes,
+                    cache.swap().unwrap().stats().reads,
+                    cache.swap().unwrap().stats().errors
+                ),
+                (2, 2, 0)
+            );
             drop(cache);
-            assert_eq!(root.used(),0);
+            assert_eq!(root.used(), 0);
         }
     }
 
@@ -9962,7 +11043,9 @@ mod raster_swap_viewer_tests {
         let gpu = crate::navigation_metal_readback::qualification_gpu().expect("actual GPU required");
         eprintln!("viewer HDR TTL adapter: {}", gpu.adapter_name());
         qualify_hdr_ttl_viewer_restore(Some(&gpu));
-        eprintln!("viewer HDR TTL: 128 restores without decoder fallback plus 2 real preloads under blocked decoder; all Metal frames exact; final=0");
+        eprintln!(
+            "viewer HDR TTL: 128 restores without decoder fallback plus 2 real preloads under blocked decoder; all Metal frames exact; final=0"
+        );
         eprintln!("viewer HDR TTL binary16: 130 finite HDR frames exact; above-one oracle retained");
     }
 
@@ -9970,27 +11053,46 @@ mod raster_swap_viewer_tests {
         let parent = tempfile::tempdir().unwrap();
         let root = rrrah_cache::MemoryBudget::new(64 * 1024);
         let cli = cli();
-        let mut cache = raster_cache_with_swap(Some(parent.path()), false,
-            rrrah_cache::CacheLimits { max_bytes: 4096, max_entries: Some(1), ttl: Some(Duration::ZERO) },
-            cli.raster_swap_config(), Some(&root));
+        let mut cache = raster_cache_with_swap(
+            Some(parent.path()),
+            false,
+            rrrah_cache::CacheLimits {
+                max_bytes: 4096,
+                max_entries: Some(1),
+                ttl: Some(Duration::ZERO),
+            },
+            cli.raster_swap_config(),
+            Some(&root),
+        );
         for name in ["float-none-rec709-declared.exr", "rle-hdr-rec709-declared.hdr"] {
-            let mut request = DecodeRequest::new(PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-                .join("../../tests/fixtures/raster").join(name));
+            let mut request = DecodeRequest::new(
+                PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+                    .join("../../tests/fixtures/raster")
+                    .join(name),
+            );
             request.memory_budget = Some(root.clone());
-            let (frame, _) = load_cached_raster_mode(&request, None, &mut cache, false,
-                || load_raster_for_display_typed(&request, None)).unwrap();
-            let rrrah_core::RasterPixels::Rgba32Float(samples) = frame.pixels() else { panic!() };
+            let (frame, _) = load_cached_raster_mode(&request, None, &mut cache, false, || {
+                load_raster_for_display_typed(&request, None)
+            })
+            .unwrap();
+            let rrrah_core::RasterPixels::Rgba32Float(samples) = frame.pixels() else {
+                panic!()
+            };
             assert!(samples.iter().any(|v| *v > 1.0));
             let mut expected = Vec::new();
             rrrah_cache::SwapPayload::write_payload(&frame, &mut expected).unwrap();
-            let params = rrrah_gpu::ViewParameters { viewport: [128.0, 96.0], ..Default::default() };
+            let params = rrrah_gpu::ViewParameters {
+                viewport: [128.0, 96.0],
+                ..Default::default()
+            };
             let expected_frame = gpu.map(|gpu| gpu.render_raster(&frame, params, [128, 96]).pixels);
             let expected_hdr = gpu.map(|gpu| {
                 let hdr = gpu.render_raster_half(&frame, params, [128, 96]);
                 assert!(hdr.iter().all(|v| v & 0x7c00 != 0x7c00));
-                assert!(hdr.chunks_exact(4).any(|p| {
-                    p[..3].iter().any(|v| v & 0x8000 == 0 && *v > 0x3c00)
-                }));
+                assert!(
+                    hdr.chunks_exact(4)
+                        .any(|p| { p[..3].iter().any(|v| v & 0x8000 == 0 && *v > 0x3c00) })
+                );
                 hdr
             });
             drop(frame);
@@ -10013,8 +11115,14 @@ mod raster_swap_viewer_tests {
                 let (prefetched, _) = result.expect("swap preload must bypass blocked decoder gate");
                 drop(ticket);
                 request.cancellation = None;
-                assert_eq!(gpu.render_raster(&prefetched, params, [128, 96]).pixels, *expected_frame.as_ref().unwrap());
-                assert_eq!(gpu.render_raster_half(&prefetched, params, [128, 96]), *expected_hdr.as_ref().unwrap());
+                assert_eq!(
+                    gpu.render_raster(&prefetched, params, [128, 96]).pixels,
+                    *expected_frame.as_ref().unwrap()
+                );
+                assert_eq!(
+                    gpu.render_raster_half(&prefetched, params, [128, 96]),
+                    *expected_hdr.as_ref().unwrap()
+                );
                 drop(prefetched);
             }
             for _ in 0..64 {
@@ -10022,14 +11130,22 @@ mod raster_swap_viewer_tests {
                 cache.swap().unwrap().wait_idle().unwrap();
                 assert!(cache.is_empty());
                 assert_eq!(root.used(), 0);
-                let (restored, _) = load_cached_raster_mode(&request, None, &mut cache, false,
-                    || panic!("expired HDR frame decoded instead of restored")).unwrap();
+                let (restored, _) = load_cached_raster_mode(&request, None, &mut cache, false, || {
+                    panic!("expired HDR frame decoded instead of restored")
+                })
+                .unwrap();
                 let mut actual = Vec::new();
                 rrrah_cache::SwapPayload::write_payload(&restored, &mut actual).unwrap();
                 assert_eq!(actual, expected);
                 if let Some(gpu) = gpu {
-                    assert_eq!(gpu.render_raster(&restored, params, [128, 96]).pixels, *expected_frame.as_ref().unwrap());
-                    assert_eq!(gpu.render_raster_half(&restored, params, [128, 96]), *expected_hdr.as_ref().unwrap());
+                    assert_eq!(
+                        gpu.render_raster(&restored, params, [128, 96]).pixels,
+                        *expected_frame.as_ref().unwrap()
+                    );
+                    assert_eq!(
+                        gpu.render_raster_half(&restored, params, [128, 96]),
+                        *expected_hdr.as_ref().unwrap()
+                    );
                 }
                 assert_eq!(cache.len(), 1);
                 assert!(cache.resident_bytes() <= 4096);
@@ -10039,7 +11155,10 @@ mod raster_swap_viewer_tests {
             cache.swap().unwrap().wait_idle().unwrap();
             assert_eq!(root.used(), 0);
         }
-        assert_eq!(cache.swap().unwrap().stats().reads, if gpu.is_some() { 130 } else { 128 });
+        assert_eq!(
+            cache.swap().unwrap().stats().reads,
+            if gpu.is_some() { 130 } else { 128 }
+        );
         drop(cache);
         assert_eq!(root.used(), 0);
     }
@@ -10084,12 +11203,21 @@ mod raster_swap_viewer_tests {
             drop(original);
             drop(raster);
             let (tx, rx) = bounded(1);
-            assert_eq!(cache.spill_expired(), 0, "unexpired entry must survive maintenance");
-            assert!(root.used()>0);
-            let deadline = Instant::now()+Duration::from_secs(3);
+            assert_eq!(
+                cache.spill_expired(),
+                0,
+                "unexpired entry must survive maintenance"
+            );
+            assert!(root.used() > 0);
+            let deadline = Instant::now() + Duration::from_secs(3);
             receive_with_maintenance(&rx, Some(Duration::from_millis(1)), || {
-                assert!(Instant::now()<deadline, "idle TTL must expire without navigation");
-                if cache.spill_expired()==1 { tx.try_send(()).unwrap(); }
+                assert!(
+                    Instant::now() < deadline,
+                    "idle TTL must expire without navigation"
+                );
+                if cache.spill_expired() == 1 {
+                    tx.try_send(()).unwrap();
+                }
             })
             .unwrap();
             cache.swap().unwrap().wait_idle().unwrap();
@@ -10354,11 +11482,16 @@ mod raw_ram_preload_tests {
         assert!(ram.insert(key, mosaic));
         let (tx, rx) = bounded(1);
         assert_eq!(ram.spill_expired(), 0, "unexpired entry must survive maintenance");
-        assert!(root.used()>0);
-        let deadline = Instant::now()+Duration::from_secs(3);
+        assert!(root.used() > 0);
+        let deadline = Instant::now() + Duration::from_secs(3);
         receive_with_maintenance(&rx, Some(Duration::from_millis(1)), || {
-            assert!(Instant::now()<deadline, "idle TTL must expire without navigation");
-            if ram.spill_expired()==1 { tx.try_send(()).unwrap(); }
+            assert!(
+                Instant::now() < deadline,
+                "idle TTL must expire without navigation"
+            );
+            if ram.spill_expired() == 1 {
+                tx.try_send(()).unwrap();
+            }
         })
         .unwrap();
         ram.swap().unwrap().wait_idle().unwrap();
@@ -11083,9 +12216,12 @@ mod thumbnail_retry_tests {
         observed.recv_timeout(Duration::from_secs(5)).unwrap();
         for _ in 0..2 {
             let mut strip = rrrah_gpu::FilmstripRenderer::new(
-                &device, wgpu::TextureFormat::Rgba8UnormSrgb, [640.0, 480.0])
-                .with_texture_budget(textures.clone())
-                .with_upload_queue_budget(budget.clone());
+                &device,
+                wgpu::TextureFormat::Rgba8UnormSrgb,
+                [640.0, 480.0],
+            )
+            .with_texture_budget(textures.clone())
+            .with_upload_queue_budget(budget.clone());
             strip.try_upload_tile(&device, &queue, 1, 1, &[255; 4]).unwrap();
             assert_eq!((textures.used(), budget.used()), (4, 256));
             assert!(strip.try_upload_tile(&device, &queue, 1, 1, &[0; 4]).is_err());
@@ -11101,9 +12237,14 @@ mod thumbnail_retry_tests {
                 thread::sleep(Duration::from_millis(1));
             }
             assert_eq!((textures.used(), budget.used()), (0, 0));
-            assert!(inspector.try_recv().unwrap().is_none(), "GPU completion must not wait for metadata");
+            assert!(
+                inspector.try_recv().unwrap().is_none(),
+                "GPU completion must not wait for metadata"
+            );
         }
-        eprintln!("thumbnail upload completion: rounds=2; pressure_refused=2; metadata_blocked=true; root=0; queue=0");
+        eprintln!(
+            "thumbnail upload completion: rounds=2; pressure_refused=2; metadata_blocked=true; root=0; queue=0"
+        );
         release.send(()).unwrap();
     }
 
@@ -11144,7 +12285,10 @@ mod thumbnail_retry_tests {
         let validator = source_validation::SourceValidator::new();
         let deadline = Instant::now() + Duration::from_secs(5);
         loop {
-            if let Some(valid) = retry.poll_source(&validator) { assert!(!valid); break; }
+            if let Some(valid) = retry.poll_source(&validator) {
+                assert!(!valid);
+                break;
+            }
             assert!(Instant::now() < deadline);
             thread::sleep(Duration::from_millis(1));
         }
@@ -11235,54 +12379,107 @@ mod gpr_preload_tests {
     #[test]
     #[ignore = "manual original CR3 foreground prefetch priority qualification"]
     fn real_cr3_prefetch_leases_keep_nearest_in_both_directions() {
-        let source=PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/IMG_9043.CR3");
-        let dir=tempfile::tempdir().unwrap();
-        let paths:Vec<_>=(0..5).map(|i| {
-            let path=dir.path().join(format!("{i}.CR3"));std::fs::copy(&source,&path).unwrap();
-            std::fs::File::open(&path).unwrap().set_times(std::fs::FileTimes::new().set_modified(
-                std::time::UNIX_EPOCH+Duration::from_secs(1_700_000_000+i))).unwrap();path
-        }).collect();
-        let root=rrrah_cache::MemoryBudget::new(512*1024*1024);
-        let disk=DiskMosaicCache::with_max_bytes(dir.path().join("cache"),512*1024*1024);
-        let gate=Arc::new(DecodeGate::new());
-        let request_for=|path:PathBuf| {let mut r=DecodeRequest::new(path);r.memory_budget=Some(root.clone());r};
-        let key_for=|r:&DecodeRequest|CacheKey::for_mosaic_recipe(&SourceFingerprint::from_path(&r.path).unwrap(),0,
-            NativeRawDecoder.mosaic_recipe(r).unwrap());
-        let selected=request_for(paths[2].clone());let key=key_for(&selected);
-        let visible=NativeRawDecoder.decode(&selected).unwrap().mosaic;
-        let weight=visible.pixels.capacity_bytes();
-        for direction in [gallery::NavDirection::Forward,gallery::NavDirection::Backward] {
-            for limits in [rrrah_cache::CacheLimits {max_bytes:512*1024*1024,max_entries:Some(2),ttl:None},
-                rrrah_cache::CacheLimits {max_bytes:weight*2,max_entries:None,ttl:None}] {
-                let mut ram=MosaicRamCache::with_limits(limits);
-                assert!(ram.insert_visible(key,visible.clone()));
-                let bad=dir.path().join("corrupt.CR3");std::fs::write(&bad,b"truncated").unwrap();
-                assert!(preload_raw_with_lease(&request_for(bad),&disk,&mut ram,None,1,&gate).is_err());
-                assert_eq!(ram.len(),1);
-                let planned=gallery::neighbour_prefetch_paths(&paths,2,direction,gallery::PrefetchWindow {behind:1,ahead:2});
-                assert_eq!(planned.len(),3);
-                let nearest=request_for(planned[0].clone());let near_key=key_for(&nearest);
-                assert_ne!(key,near_key);
-                let (admitted,lease)=preload_raw_with_lease(&nearest,&disk,&mut ram,None,1,&gate).unwrap();
-                assert!(admitted);let lease=lease.unwrap();
+        let source = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/IMG_9043.CR3");
+        let dir = tempfile::tempdir().unwrap();
+        let paths: Vec<_> = (0..5)
+            .map(|i| {
+                let path = dir.path().join(format!("{i}.CR3"));
+                std::fs::copy(&source, &path).unwrap();
+                std::fs::File::open(&path)
+                    .unwrap()
+                    .set_times(
+                        std::fs::FileTimes::new()
+                            .set_modified(std::time::UNIX_EPOCH + Duration::from_secs(1_700_000_000 + i)),
+                    )
+                    .unwrap();
+                path
+            })
+            .collect();
+        let root = rrrah_cache::MemoryBudget::new(512 * 1024 * 1024);
+        let disk = DiskMosaicCache::with_max_bytes(dir.path().join("cache"), 512 * 1024 * 1024);
+        let gate = Arc::new(DecodeGate::new());
+        let request_for = |path: PathBuf| {
+            let mut r = DecodeRequest::new(path);
+            r.memory_budget = Some(root.clone());
+            r
+        };
+        let key_for = |r: &DecodeRequest| {
+            CacheKey::for_mosaic_recipe(
+                &SourceFingerprint::from_path(&r.path).unwrap(),
+                0,
+                NativeRawDecoder.mosaic_recipe(r).unwrap(),
+            )
+        };
+        let selected = request_for(paths[2].clone());
+        let key = key_for(&selected);
+        let visible = NativeRawDecoder.decode(&selected).unwrap().mosaic;
+        let weight = visible.pixels.capacity_bytes();
+        for direction in [gallery::NavDirection::Forward, gallery::NavDirection::Backward] {
+            for limits in [
+                rrrah_cache::CacheLimits {
+                    max_bytes: 512 * 1024 * 1024,
+                    max_entries: Some(2),
+                    ttl: None,
+                },
+                rrrah_cache::CacheLimits {
+                    max_bytes: weight * 2,
+                    max_entries: None,
+                    ttl: None,
+                },
+            ] {
+                let mut ram = MosaicRamCache::with_limits(limits);
+                assert!(ram.insert_visible(key, visible.clone()));
+                let bad = dir.path().join("corrupt.CR3");
+                std::fs::write(&bad, b"truncated").unwrap();
+                assert!(preload_raw_with_lease(&request_for(bad), &disk, &mut ram, None, 1, &gate).is_err());
+                assert_eq!(ram.len(), 1);
+                let planned = gallery::neighbour_prefetch_paths(
+                    &paths,
+                    2,
+                    direction,
+                    gallery::PrefetchWindow { behind: 1, ahead: 2 },
+                );
+                assert_eq!(planned.len(), 3);
+                let nearest = request_for(planned[0].clone());
+                let near_key = key_for(&nearest);
+                assert_ne!(key, near_key);
+                let (admitted, lease) =
+                    preload_raw_with_lease(&nearest, &disk, &mut ram, None, 1, &gate).unwrap();
+                assert!(admitted);
+                let lease = lease.unwrap();
                 for path in &planned[1..] {
-                    let (admitted,extra)=preload_raw_with_lease(&request_for(path.clone()),&disk,&mut ram,None,1,&gate).unwrap();
-                    assert!(!admitted);assert!(extra.is_none());
+                    let (admitted, extra) =
+                        preload_raw_with_lease(&request_for(path.clone()), &disk, &mut ram, None, 1, &gate)
+                            .unwrap();
+                    assert!(!admitted);
+                    assert!(extra.is_none());
                 }
-                let pressure=root.try_reserve(root.available_bytes()).unwrap();
-                let (admitted,hit)=preload_raw_with_lease(&nearest,&disk,&mut ram,None,1,&gate).unwrap();
-                assert!(admitted);let hit=hit.unwrap();assert!(hit.pixels.ptr_eq(&lease.pixels));
-                assert_eq!(ram.visible(),Some(key));assert_eq!(ram.len(),2);
-                drop(hit);drop(pressure);drop(lease);
-                let last=request_for(planned[2].clone());
-                let (admitted,last_lease)=preload_raw_with_lease(&last,&disk,&mut ram,None,1,&gate).unwrap();
-                assert!(admitted);drop(last_lease);
+                let pressure = root.try_reserve(root.available_bytes()).unwrap();
+                let (admitted, hit) =
+                    preload_raw_with_lease(&nearest, &disk, &mut ram, None, 1, &gate).unwrap();
+                assert!(admitted);
+                let hit = hit.unwrap();
+                assert!(hit.pixels.ptr_eq(&lease.pixels));
+                assert_eq!(ram.visible(), Some(key));
+                assert_eq!(ram.len(), 2);
+                drop(hit);
+                drop(pressure);
+                drop(lease);
+                let last = request_for(planned[2].clone());
+                let (admitted, last_lease) =
+                    preload_raw_with_lease(&last, &disk, &mut ram, None, 1, &gate).unwrap();
+                assert!(admitted);
+                drop(last_lease);
                 assert!(ram.get_resident(&near_key).is_none());
-                drop(ram);assert_eq!(root.used(),weight);
+                drop(ram);
+                assert_eq!(root.used(), weight);
             }
         }
-        drop(visible);assert_eq!(root.used(),0);
-        eprintln!("RAW scoped prefetch: original CR3; both directions; count/bytes; failed neighbor; nearest retained; release admits farther; final=0");
+        drop(visible);
+        assert_eq!(root.used(), 0);
+        eprintln!(
+            "RAW scoped prefetch: original CR3; both directions; count/bytes; failed neighbor; nearest retained; release admits farther; final=0"
+        );
     }
 
     #[test]
@@ -11339,14 +12536,20 @@ mod gpr_preload_tests {
     fn gpr_neighbour_windows_preserve_visible_and_bound_count_and_bytes() {
         let source = std::env::var("RRRAH_GPR_SOURCE").expect("RRRAH_GPR_SOURCE");
         let dir = tempfile::tempdir().unwrap();
-        let paths: Vec<_> = (0..5).map(|i| {
-            let path = dir.path().join(format!("{i}.GPR"));
-            std::fs::copy(&source, &path).unwrap();
-            std::fs::File::open(&path).unwrap().set_times(std::fs::FileTimes::new().set_modified(
-                std::time::UNIX_EPOCH + Duration::from_secs(1_700_000_000 + i),
-            )).unwrap();
-            path
-        }).collect();
+        let paths: Vec<_> = (0..5)
+            .map(|i| {
+                let path = dir.path().join(format!("{i}.GPR"));
+                std::fs::copy(&source, &path).unwrap();
+                std::fs::File::open(&path)
+                    .unwrap()
+                    .set_times(
+                        std::fs::FileTimes::new()
+                            .set_modified(std::time::UNIX_EPOCH + Duration::from_secs(1_700_000_000 + i)),
+                    )
+                    .unwrap();
+                path
+            })
+            .collect();
         let root = rrrah_cache::MemoryBudget::new(256 * 1024 * 1024);
         let disk = DiskMosaicCache::with_max_bytes(dir.path().join("cache"), 256 * 1024 * 1024);
         let gate = Arc::new(DecodeGate::new());
@@ -11355,23 +12558,39 @@ mod gpr_preload_tests {
             request.memory_budget = Some(root.clone());
             request
         };
-        let key_for = |request: &DecodeRequest| CacheKey::for_mosaic_recipe(
-            &SourceFingerprint::from_path(&request.path).unwrap(), 0,
-            NativeRawDecoder.mosaic_recipe(request).unwrap(),
-        );
+        let key_for = |request: &DecodeRequest| {
+            CacheKey::for_mosaic_recipe(
+                &SourceFingerprint::from_path(&request.path).unwrap(),
+                0,
+                NativeRawDecoder.mosaic_recipe(request).unwrap(),
+            )
+        };
         let visible_request = request_for(paths[2].clone());
         let visible_key = key_for(&visible_request);
         let visible = NativeRawDecoder.decode(&visible_request).unwrap().mosaic;
         let sensor_bytes = visible.pixels.capacity_bytes();
         let mut ram = MosaicRamCache::with_limits(rrrah_cache::CacheLimits {
-            max_bytes: 2 * sensor_bytes, max_entries: Some(2), ttl: None,
+            max_bytes: 2 * sensor_bytes,
+            max_entries: Some(2),
+            ttl: None,
         });
         assert!(ram.insert_visible(visible_key, visible.clone()));
         for direction in [gallery::NavDirection::Forward, gallery::NavDirection::Backward] {
-            let planned = gallery::neighbour_prefetch_paths(&paths, 2, direction,
-                gallery::PrefetchWindow { behind: 1, ahead: 2 });
+            let planned = gallery::neighbour_prefetch_paths(
+                &paths,
+                2,
+                direction,
+                gallery::PrefetchWindow { behind: 1, ahead: 2 },
+            );
             assert_eq!(planned.len(), 3);
-            assert_eq!(planned[0], paths[if direction == gallery::NavDirection::Forward { 3 } else { 1 }]);
+            assert_eq!(
+                planned[0],
+                paths[if direction == gallery::NavDirection::Forward {
+                    3
+                } else {
+                    1
+                }]
+            );
             for path in planned {
                 assert!(rrrah_decode::is_supported_raw_path(&path));
                 let request = request_for(path);
@@ -11407,7 +12626,9 @@ mod gpr_development_tests {
         let mut request = DecodeRequest::new(std::env::var("RRRAH_GPR_SOURCE").unwrap());
         request.memory_budget = Some(budget.clone());
         let mosaic = NativeRawDecoder.decode(&request).unwrap().mosaic;
-        let (raster, _) = prepare_quality_raw(&mosaic, &request, None).unwrap().expect("GPR corrections must trigger development");
+        let (raster, _) = prepare_quality_raw(&mosaic, &request, None)
+            .unwrap()
+            .expect("GPR corrections must trigger development");
         assert_eq!((raster.width(), raster.height()), (5568, 4176));
         assert!(budget.peak() <= budget.limit());
         drop(raster);
@@ -11447,7 +12668,6 @@ mod gpr_development_tests {
         assert_eq!(retained.pixels.len(), 23_251_968);
         drop(retained);
         assert_eq!(small.used(), 0);
-
     }
 }
 
@@ -11457,18 +12677,35 @@ mod fusion_warp_tests {
     #[test]
     #[ignore = "requires pinned official Fusion GPR"]
     fn fusion_warp_triggers_quality_and_changes_corrected_channels() {
-        let path=PathBuf::from(std::env::var("RRRAH_GPR_CORPUS").unwrap()).join("Fusion-back.GPR");
-        let budget=rrrah_core::MemoryBudget::new(512*1024*1024);
-        let mut request=DecodeRequest::new(path);request.memory_budget=Some(budget.clone());
-        let mosaic=NativeRawDecoder.decode(&request).unwrap().mosaic;
-        let lists=rrrah_decode::raw_development_opcodes(&request).unwrap();
-        assert_eq!(lists.list3.len(),1);
-        let (corrected,_)=prepare_quality_raw(&mosaic,&request,None).unwrap().expect("warp must trigger quality");
-        let plain=rrrah_core::develop::develop_raw(&mosaic,&Default::default(),&Default::default(),Some(&budget),&||false).unwrap();
-        assert_eq!((corrected.width(),corrected.height()),(3104,3000));
-        let (rrrah_core::RasterPixels::Rgba32Float(a),rrrah_core::RasterPixels::Rgba32Float(b))=(corrected.pixels(),plain.pixels()) else {panic!()};
-        assert!(a.iter().zip(b.iter()).any(|(x,y)|x.to_bits()!=y.to_bits()));
-        drop(corrected);drop(plain);drop(mosaic);assert_eq!(budget.used(),0);
+        let path = PathBuf::from(std::env::var("RRRAH_GPR_CORPUS").unwrap()).join("Fusion-back.GPR");
+        let budget = rrrah_core::MemoryBudget::new(512 * 1024 * 1024);
+        let mut request = DecodeRequest::new(path);
+        request.memory_budget = Some(budget.clone());
+        let mosaic = NativeRawDecoder.decode(&request).unwrap().mosaic;
+        let lists = rrrah_decode::raw_development_opcodes(&request).unwrap();
+        assert_eq!(lists.list3.len(), 1);
+        let (corrected, _) = prepare_quality_raw(&mosaic, &request, None)
+            .unwrap()
+            .expect("warp must trigger quality");
+        let plain = rrrah_core::develop::develop_raw(
+            &mosaic,
+            &Default::default(),
+            &Default::default(),
+            Some(&budget),
+            &|| false,
+        )
+        .unwrap();
+        assert_eq!((corrected.width(), corrected.height()), (3104, 3000));
+        let (rrrah_core::RasterPixels::Rgba32Float(a), rrrah_core::RasterPixels::Rgba32Float(b)) =
+            (corrected.pixels(), plain.pixels())
+        else {
+            panic!()
+        };
+        assert!(a.iter().zip(b.iter()).any(|(x, y)| x.to_bits() != y.to_bits()));
+        drop(corrected);
+        drop(plain);
+        drop(mosaic);
+        assert_eq!(budget.used(), 0);
     }
 }
 
@@ -11486,7 +12723,9 @@ mod eps_preload_tests {
             let mut request = DecodeRequest::new(&path);
             request.memory_budget = Some(root.clone());
             let mut cache = RasterDisplayCache::new(rrrah_cache::CacheLimits {
-                max_bytes, max_entries, ttl: Some(std::time::Duration::ZERO),
+                max_bytes,
+                max_entries,
+                ttl: Some(std::time::Duration::ZERO),
             });
             let gate = Arc::new(DecodeGate::new());
             let (warmed, _) = preload_raster(&request, None, &mut cache, &gate).unwrap();
@@ -11494,10 +12733,14 @@ mod eps_preload_tests {
             let (fresh, _) = load_cached_raster_mode(&request, None, &mut cache, false, || {
                 loads += 1;
                 load_raster_for_display_typed(&request, None)
-            }).unwrap();
+            })
+            .unwrap();
             assert_eq!(loads, 1, "expired preload must not produce a cache hit");
             let (rrrah_core::RasterPixels::Rgba32Float(a), rrrah_core::RasterPixels::Rgba32Float(b)) =
-                (warmed.pixels(), fresh.pixels()) else { panic!() };
+                (warmed.pixels(), fresh.pixels())
+            else {
+                panic!()
+            };
             assert!(!a.ptr_eq(b));
             assert_eq!(&a[..], &b[..]);
             drop(cache);
@@ -11510,45 +12753,104 @@ mod eps_preload_tests {
     }
     #[test]
     fn eps_neighbour_windows_reuse_preload_preserve_visible_and_cancel_stale() {
-        let dir=tempfile::tempdir().unwrap();
-        let paths:Vec<_>=(0..5).map(|i| {let path=dir.path().join(format!("{i}.eps"));std::fs::write(&path,EPS).unwrap();path}).collect();
+        let dir = tempfile::tempdir().unwrap();
+        let paths: Vec<_> = (0..5)
+            .map(|i| {
+                let path = dir.path().join(format!("{i}.eps"));
+                std::fs::write(&path, EPS).unwrap();
+                path
+            })
+            .collect();
         for limits in [
-            rrrah_cache::CacheLimits {max_bytes:512,max_entries:None,ttl:None},
-            rrrah_cache::CacheLimits {max_bytes:4096,max_entries:Some(2),ttl:None},
+            rrrah_cache::CacheLimits {
+                max_bytes: 512,
+                max_entries: None,
+                ttl: None,
+            },
+            rrrah_cache::CacheLimits {
+                max_bytes: 4096,
+                max_entries: Some(2),
+                ttl: None,
+            },
         ] {
-        let root=rrrah_core::MemoryBudget::new(32*1024*1024);
-        let request_for=|path:PathBuf| {let mut request=DecodeRequest::new(path);request.memory_budget=Some(root.clone());request};
-        let mut cache=RasterDisplayCache::new(limits);
-        let gate=Arc::new(DecodeGate::new());let visible=request_for(paths[2].clone());
-        let (frame,_)=load_cached_raster_for_display(&visible,None,&mut cache).unwrap();
-        for direction in [gallery::NavDirection::Forward,gallery::NavDirection::Backward] {
-            let planned=gallery::neighbour_prefetch_paths(&paths,2,direction,gallery::PrefetchWindow {behind:1,ahead:2});
-            assert_eq!(planned.len(),3);
-            assert_eq!(planned[0],paths[if direction==gallery::NavDirection::Forward {3}else{1}]);
-            for path in planned {
-                assert!(foreground_neighbour_supported(&path));let request=request_for(path);
-                let (warmed,_)=preload_raster(&request,None,&mut cache,&gate).unwrap();
-                let (hit,_)=load_cached_raster_mode(&request,None,&mut cache,false,||panic!("EPS preload decoded again")).unwrap();
-                let (rrrah_core::RasterPixels::Rgba32Float(a),rrrah_core::RasterPixels::Rgba32Float(b))=(warmed.pixels(),hit.pixels()) else {panic!()};
-                assert!(a.ptr_eq(b));assert_eq!(cache.len(),2);assert_eq!(cache.resident_bytes(),512);
-                drop(hit);drop(warmed);
-                drop(load_cached_raster_with(&visible,None,&mut cache,||panic!("visible EPS displaced")).unwrap());
+            let root = rrrah_core::MemoryBudget::new(32 * 1024 * 1024);
+            let request_for = |path: PathBuf| {
+                let mut request = DecodeRequest::new(path);
+                request.memory_budget = Some(root.clone());
+                request
+            };
+            let mut cache = RasterDisplayCache::new(limits);
+            let gate = Arc::new(DecodeGate::new());
+            let visible = request_for(paths[2].clone());
+            let (frame, _) = load_cached_raster_for_display(&visible, None, &mut cache).unwrap();
+            for direction in [gallery::NavDirection::Forward, gallery::NavDirection::Backward] {
+                let planned = gallery::neighbour_prefetch_paths(
+                    &paths,
+                    2,
+                    direction,
+                    gallery::PrefetchWindow { behind: 1, ahead: 2 },
+                );
+                assert_eq!(planned.len(), 3);
+                assert_eq!(
+                    planned[0],
+                    paths[if direction == gallery::NavDirection::Forward {
+                        3
+                    } else {
+                        1
+                    }]
+                );
+                for path in planned {
+                    assert!(foreground_neighbour_supported(&path));
+                    let request = request_for(path);
+                    let (warmed, _) = preload_raster(&request, None, &mut cache, &gate).unwrap();
+                    let (hit, _) = load_cached_raster_mode(&request, None, &mut cache, false, || {
+                        panic!("EPS preload decoded again")
+                    })
+                    .unwrap();
+                    let (rrrah_core::RasterPixels::Rgba32Float(a), rrrah_core::RasterPixels::Rgba32Float(b)) =
+                        (warmed.pixels(), hit.pixels())
+                    else {
+                        panic!()
+                    };
+                    assert!(a.ptr_eq(b));
+                    assert_eq!(cache.len(), 2);
+                    assert_eq!(cache.resident_bytes(), 512);
+                    drop(hit);
+                    drop(warmed);
+                    drop(
+                        load_cached_raster_with(&visible, None, &mut cache, || {
+                            panic!("visible EPS displaced")
+                        })
+                        .unwrap(),
+                    );
+                }
             }
-        }
-        let generation=Arc::new(std::sync::atomic::AtomicU64::new(1));
-        let mut stale=request_for(paths[0].clone());stale.cancellation=Some(rrrah_decode::GenerationToken::new(generation.clone(),1));
-        generation.store(2,std::sync::atomic::Ordering::Release);
-        let used=root.used();assert!(preload_raster(&stale,None,&mut cache,&gate).is_err());assert_eq!(root.used(),used);
-        drop(frame);drop(cache);assert_eq!(root.used(),0);
+            let generation = Arc::new(std::sync::atomic::AtomicU64::new(1));
+            let mut stale = request_for(paths[0].clone());
+            stale.cancellation = Some(rrrah_decode::GenerationToken::new(generation.clone(), 1));
+            generation.store(2, std::sync::atomic::Ordering::Release);
+            let used = root.used();
+            assert!(preload_raster(&stale, None, &mut cache, &gate).is_err());
+            assert_eq!(root.used(), used);
+            drop(frame);
+            drop(cache);
+            assert_eq!(root.used(), 0);
         }
     }
     #[test]
     fn eps_source_vm_and_graphics_admission_errors_are_retryable() {
-        let dir=tempfile::tempdir().unwrap();let path=dir.path().join("pressure.eps");std::fs::write(&path,EPS).unwrap();
-        for limit in [1,1024,65536,1024*1024] {
-            let root=rrrah_core::MemoryBudget::new(32*1024*1024);let held=root.try_reserve(root.limit()-limit).unwrap();let mut request=DecodeRequest::new(&path);request.memory_budget=Some(root.clone());
-            let error=load_raster_for_display_typed(&request,None).unwrap_err();
-            assert!(error.retryable_memory_pressure(),"available {limit}: {error}");drop(held);assert_eq!(root.used(),0);
+        let dir = tempfile::tempdir().unwrap();
+        let path = dir.path().join("pressure.eps");
+        std::fs::write(&path, EPS).unwrap();
+        for limit in [1, 1024, 65536, 1024 * 1024] {
+            let root = rrrah_core::MemoryBudget::new(32 * 1024 * 1024);
+            let held = root.try_reserve(root.limit() - limit).unwrap();
+            let mut request = DecodeRequest::new(&path);
+            request.memory_budget = Some(root.clone());
+            let error = load_raster_for_display_typed(&request, None).unwrap_err();
+            assert!(error.retryable_memory_pressure(), "available {limit}: {error}");
+            drop(held);
+            assert_eq!(root.used(), 0);
         }
     }
 }

@@ -390,9 +390,14 @@ fn finish_source_guard<T>(
 /// All supplied points are preserved; evidence is local support, never identity.
 #[allow(clippy::too_many_arguments)]
 pub fn compare_anchor_rank_files(
-    left: &DecodeRequest, right: &DecodeRequest, model: ProjectiveTransform,
-    points: &[Correspondence], decode: AnimationBudget, policy: AnchorRankPolicy,
-    budget: &MemoryBudget, cancel: impl Fn() -> bool,
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    model: ProjectiveTransform,
+    points: &[Correspondence],
+    decode: AnimationBudget,
+    policy: AnchorRankPolicy,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
 ) -> Result<AnchorRankEvidence, AnchorRankFileError> {
     compare_anchor_rank_files_impl(left, right, model, points, decode, policy, None, budget, cancel)
         .map(|(anchors, _)| anchors)
@@ -414,15 +419,31 @@ pub struct ExposureAnchorRankEvidence {
 /// thresholds still apply. Calibration refuses alpha/negative/zero RGB explicitly.
 #[allow(clippy::too_many_arguments)]
 pub fn compare_exposure_anchor_rank_files(
-    left: &DecodeRequest, right: &DecodeRequest, model: ProjectiveTransform,
-    points: &[Correspondence], decode: AnimationBudget, policy: AnchorRankPolicy,
-    maximum_calibration_pixel_reads: u64, budget: &MemoryBudget, cancel: impl Fn() -> bool,
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    model: ProjectiveTransform,
+    points: &[Correspondence],
+    decode: AnimationBudget,
+    policy: AnchorRankPolicy,
+    maximum_calibration_pixel_reads: u64,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
 ) -> Result<ExposureAnchorRankEvidence, AnchorRankFileError> {
-    compare_anchor_rank_files_impl(left, right, model, points, decode, policy,
-        Some(maximum_calibration_pixel_reads), budget, cancel)
-        .map(|(anchors, exposures)| ExposureAnchorRankEvidence {
-            anchors, exposures: exposures.expect("explicit calibration returns exposure metadata"),
-        })
+    compare_anchor_rank_files_impl(
+        left,
+        right,
+        model,
+        points,
+        decode,
+        policy,
+        Some(maximum_calibration_pixel_reads),
+        budget,
+        cancel,
+    )
+    .map(|(anchors, exposures)| ExposureAnchorRankEvidence {
+        anchors,
+        exposures: exposures.expect("explicit calibration returns exposure metadata"),
+    })
 }
 
 #[allow(clippy::too_many_arguments)]
@@ -510,19 +531,29 @@ fn compare_anchor_rank_files_impl(
         let (evidence, exposures) = if maximum_calibration_pixel_reads.is_some() {
             let samples = |view: &crate::linear::LinearRgbaView<'_>| {
                 let (w, h) = view.dimensions();
-                (u64::from(w) * u64::from(h)).checked_mul(4)
-                    .and_then(|n| usize::try_from(n).ok()).ok_or(LocalRankError::Budget)
+                (u64::from(w) * u64::from(h))
+                    .checked_mul(4)
+                    .and_then(|n| usize::try_from(n).ok())
+                    .ok_or(LocalRankError::Budget)
             };
-            let an = samples(&av)?; let bn = samples(&bv)?;
-            let _ac = budget.try_reserve((an as u64).checked_mul(4).ok_or(LocalRankError::Budget)?)
+            let an = samples(&av)?;
+            let bn = samples(&bv)?;
+            let _ac = budget
+                .try_reserve((an as u64).checked_mul(4).ok_or(LocalRankError::Budget)?)
                 .map_err(|_| LocalRankError::Budget)?;
-            let _bc = budget.try_reserve((bn as u64).checked_mul(4).ok_or(LocalRankError::Budget)?)
+            let _bc = budget
+                .try_reserve((bn as u64).checked_mul(4).ok_or(LocalRankError::Budget)?)
                 .map_err(|_| LocalRankError::Budget)?;
-            let mut ab = Vec::new(); let mut bb = Vec::new();
+            let mut ab = Vec::new();
+            let mut bb = Vec::new();
             for (buffer, count) in [(&mut ab, an), (&mut bb, bn)] {
-                buffer.try_reserve_exact(count).map_err(|_| LocalRankError::Budget)?;
+                buffer
+                    .try_reserve_exact(count)
+                    .map_err(|_| LocalRankError::Budget)?;
                 while buffer.len() < count {
-                    if cancelled() { return Err(AnchorRankFileError::Cancelled); }
+                    if cancelled() {
+                        return Err(AnchorRankFileError::Cancelled);
+                    }
                     buffer.resize(buffer.len().saturating_add(4096).min(count), 0.0);
                 }
             }
@@ -536,13 +567,21 @@ fn compare_anchor_rank_files_impl(
                     E::Uninformative => LocalRankError::Rank(R::Uninformative),
                 }
             };
-            let (a, ae) = crate::exposure::calibrate_rank_exposure_into(&av, &mut ab,
-                (an as u64 / 4) * 3, &cancelled).map_err(map_error)?;
-            let (b, be) = crate::exposure::calibrate_rank_exposure_into(&bv, &mut bb,
-                (bn as u64 / 4) * 3, &cancelled).map_err(map_error)?;
-            (compare_anchor_rank(&a, &b, model, points, policy, budget, &cancelled)?, Some([ae, be]))
+            let (a, ae) =
+                crate::exposure::calibrate_rank_exposure_into(&av, &mut ab, (an as u64 / 4) * 3, &cancelled)
+                    .map_err(map_error)?;
+            let (b, be) =
+                crate::exposure::calibrate_rank_exposure_into(&bv, &mut bb, (bn as u64 / 4) * 3, &cancelled)
+                    .map_err(map_error)?;
+            (
+                compare_anchor_rank(&a, &b, model, points, policy, budget, &cancelled)?,
+                Some([ae, be]),
+            )
         } else {
-            (compare_anchor_rank(&av, &bv, model, points, policy, budget, &cancelled)?, None)
+            (
+                compare_anchor_rank(&av, &bv, model, points, policy, budget, &cancelled)?,
+                None,
+            )
         };
         first.verify(&cancelled)?;
         second.verify(&cancelled)?;
@@ -913,7 +952,8 @@ pub(crate) fn validate_opposite_policy(
     if policy.maximum_swapped_points < policy.search.search.search.search.max_union_points {
         return Err(LocalRankError::Budget.into());
     }
-    policy.maximum_swapped_points
+    policy
+        .maximum_swapped_points
         .checked_mul(std::mem::size_of::<Correspondence>())
         .and_then(|n| u64::try_from(n).ok())
         .ok_or_else(|| LocalRankError::Budget.into())
@@ -958,9 +998,7 @@ pub(crate) fn search_anchor_rank_opposite_files_prepaid(
     prepaid: Option<rrrah_core::Reservation>,
     cancel: impl Fn() -> bool,
 ) -> Result<OppositeAnchorSearchEvidence, AnchorRankFileError> {
-    search_anchor_rank_opposite_files_selected(
-        left, right, policy, factors, budget, prepaid, None, cancel,
-    )
+    search_anchor_rank_opposite_files_selected(left, right, policy, factors, budget, prepaid, None, cancel)
 }
 
 pub(crate) fn validate_joint_opposite_projection_policy(
@@ -1022,9 +1060,7 @@ pub(crate) fn search_anchor_rank_opposite_files_selected(
         let credit = match prepaid {
             Some(credit) if credit.bytes() >= bytes => credit,
             Some(_) => return Err(LocalRankError::Budget.into()),
-            None => budget
-                .try_reserve(bytes)
-                .map_err(|_| LocalRankError::Budget)?,
+            None => budget.try_reserve(bytes).map_err(|_| LocalRankError::Budget)?,
         };
         let mut initial_credit = Some(credit);
         let decode = phase.search.gradient.search.local.decode;
@@ -1042,9 +1078,7 @@ pub(crate) fn search_anchor_rank_opposite_files_selected(
             }
             let credit = match initial_credit.take() {
                 Some(credit) => credit,
-                None => budget
-                    .try_reserve(bytes)
-                    .map_err(|_| LocalRankError::Budget)?,
+                None => budget.try_reserve(bytes).map_err(|_| LocalRankError::Budget)?,
             };
             first.verify(&cancelled)?;
             second.verify(&cancelled)?;
@@ -1074,9 +1108,15 @@ pub(crate) fn search_anchor_rank_opposite_files_selected(
                     )?
                 } else {
                     crate::local_scan::find_projective_candidate_union_reflected_geometry_files_managed(
-                    right, left, phase, factors, radii[index % 3],
-                    policy.search.maximum_reflection_bins / 3, budget, &cancelled,
-                )?
+                        right,
+                        left,
+                        phase,
+                        factors,
+                        radii[index % 3],
+                        policy.search.maximum_reflection_bins / 3,
+                        budget,
+                        &cancelled,
+                    )?
                 };
                 let transform = proposal
                     .geometry
@@ -1105,9 +1145,7 @@ pub(crate) fn search_anchor_rank_opposite_files_selected(
             if swapped.capacity() > policy.maximum_swapped_points {
                 return Err(LocalRankError::Budget.into());
             }
-            let points = credit
-                .try_adopt(swapped)
-                .map_err(|_| LocalRankError::Budget)?;
+            let points = credit.try_adopt(swapped).map_err(|_| LocalRankError::Budget)?;
             drop(proposal_points);
             let transform = if let Some(joint) = joint {
                 let (source, target) = dimensions.expect("joint extraction dimensions");
@@ -1153,9 +1191,7 @@ pub(crate) fn search_anchor_rank_opposite_files_selected(
             let supported = anchors.is_some_and(|e| e.supported);
             if supported || index == 5 {
                 let outcome = if !supported && inconclusive {
-                    Err(AnchorRankFileError::Rank(
-                        LocalRankError::InsufficientGeometry,
-                    ))
+                    Err(AnchorRankFileError::Rank(LocalRankError::InsufficientGeometry))
                 } else {
                     Ok(OppositeAnchorSearchEvidence {
                         correspondences: points,

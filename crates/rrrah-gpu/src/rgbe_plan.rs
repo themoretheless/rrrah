@@ -46,9 +46,7 @@ impl RgbePlan {
             .ok_or_else(|| fail("shader indexing overflow"))?;
         let source_bytes = u64::from(count) * 4;
         let output_bytes = u64::from(count) * 16;
-        if source_bytes > limits.max_buffer_size
-            || output_bytes > limits.max_buffer_size
-        {
+        if source_bytes > limits.max_buffer_size || output_bytes > limits.max_buffer_size {
             return Err(fail("sensor buffers exceed device limits"));
         }
         let xgroups = width.div_ceil(8);
@@ -95,7 +93,9 @@ impl RgbePlan {
             let source_end = (first + rows + 2).min(u64::from(height)) * input_row_bytes;
             let dispatch_source_bytes = source_end - source_offset;
             if rows == 0 {
-                return Err(fail("cannot fit sensor halo and output row in aligned binding windows"));
+                return Err(fail(
+                    "cannot fit sensor halo and output row in aligned binding windows",
+                ));
             }
             if dispatches.len() >= 4096 {
                 return Err(fail("too many row dispatches"));
@@ -153,7 +153,10 @@ mod tests {
     }
     #[test]
     fn source_larger_than_binding_is_windowed_with_interpolation_halo() {
-        let limits = wgpu::Limits { max_storage_buffer_binding_size: 1024, ..Default::default() };
+        let limits = wgpu::Limits {
+            max_storage_buffer_binding_size: 1024,
+            ..Default::default()
+        };
         let plan = RgbePlan::new([17, 33], [3, 0, 2, 1], &limits).unwrap();
         assert!(plan.source_bytes > 1024);
         assert!(plan.dispatches.iter().any(|d| d.source_offset > 0));
@@ -161,8 +164,10 @@ mod tests {
             assert_eq!(d.source_offset % 256, 0);
             assert!(d.source_bytes <= 1024);
             assert!(d.source_offset <= u64::from(d.first_row.saturating_sub(2)) * 17 * 4);
-            assert_eq!(d.source_offset + d.source_bytes,
-                u64::from((d.first_row + d.rows + 2).min(33)) * 17 * 4);
+            assert_eq!(
+                d.source_offset + d.source_bytes,
+                u64::from((d.first_row + d.rows + 2).min(33)) * 17 * 4
+            );
         }
     }
     #[test]
@@ -194,31 +199,43 @@ mod tests {
                             // sample on every second row, clamped at sensor edges.
                             for phase in 0..2u32 {
                                 let lattice: Vec<_> = (phase..height).step_by(2).collect();
-                                let lower = lattice.iter().copied().filter(|v| *v <= y)
-                                    .last().unwrap_or(lattice[0]);
-                                let upper = lattice.iter().copied().find(|v| *v >= y)
+                                let lower = lattice
+                                    .iter()
+                                    .copied()
+                                    .filter(|v| *v <= y)
+                                    .last()
+                                    .unwrap_or(lattice[0]);
+                                let upper = lattice
+                                    .iter()
+                                    .copied()
+                                    .find(|v| *v >= y)
                                     .unwrap_or(*lattice.last().unwrap());
                                 for row in [lower, upper] {
                                     assert!(u64::from(row) * u64::from(width) * 4 >= d.source_offset);
-                                    assert!(u64::from(row + 1) * u64::from(width) * 4
-                                        <= d.source_offset + d.source_bytes);
+                                    assert!(
+                                        u64::from(row + 1) * u64::from(width) * 4
+                                            <= d.source_offset + d.source_bytes
+                                    );
                                 }
                             }
                             let first_pixel = u64::from(y) * u64::from(width) * 16;
                             assert!(first_pixel >= d.output_offset);
-                            assert!(first_pixel + u64::from(width) * 16
-                                <= d.output_offset + d.output_bytes);
+                            assert!(first_pixel + u64::from(width) * 16 <= d.output_offset + d.output_bytes);
                         }
                         next += d.rows;
                     }
                     assert_eq!(next, height);
-                    assert_eq!(plan.gpu_buffer_bytes,
-                        plan.source_bytes + plan.output_bytes * 2 + plan.dispatches.len() as u64 * 48);
+                    assert_eq!(
+                        plan.gpu_buffer_bytes,
+                        plan.source_bytes + plan.output_bytes * 2 + plan.dispatches.len() as u64 * 48
+                    );
                 }
             }
         }
         assert!(accepted >= 64 * 64, "all tested extents fit the 4096-byte cap");
-        eprintln!("RGBE geometry sweep: attempted=16384; admitted={accepted}; every lattice read/output row in bounds");
+        eprintln!(
+            "RGBE geometry sweep: attempted=16384; admitted={accepted}; every lattice read/output row in bounds"
+        );
     }
     #[test]
     fn invalid_geometry_planes_and_device_admission_fail_before_allocating_pixels() {
@@ -241,12 +258,17 @@ mod tests {
             assert_eq!(d.output_offset % 256, 0);
             assert_eq!(u64::from(d.output_first_pixel) * 16, d.output_offset);
             assert!(d.output_bytes <= 1024);
-            assert_eq!(d.output_offset + d.output_bytes,
-                u64::from(d.first_row + d.rows) * 17 * 16);
+            assert_eq!(
+                d.output_offset + d.output_bytes,
+                u64::from(d.first_row + d.rows) * 17 * 16
+            );
             next_row += d.rows;
         }
         assert_eq!(next_row, 13);
-        let too_narrow = wgpu::Limits { max_storage_buffer_binding_size: 32, ..Default::default() };
+        let too_narrow = wgpu::Limits {
+            max_storage_buffer_binding_size: 32,
+            ..Default::default()
+        };
         assert!(RgbePlan::new([3, 2], [3, 0, 2, 1], &too_narrow).is_err());
         assert!(RgbePlan::new([17, 2], [3, 0, 2, 1], &small).is_ok()); // One small complete binding needs no next aligned offset.
     }

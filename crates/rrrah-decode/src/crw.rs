@@ -28,14 +28,23 @@ pub fn decode_crw_10d_with_tables(
     decode_with_timings(request, table_zero).map(|output| output.mosaic)
 }
 
-fn decode_with_timings(request: &DecodeRequest, table_zero: &[u8]) -> Result<crate::DecodeOutput, DecodeError> {
+fn decode_with_timings(
+    request: &DecodeRequest,
+    table_zero: &[u8],
+) -> Result<crate::DecodeOutput, DecodeError> {
     let total = std::time::Instant::now();
     request.check_cancelled()?;
     if request.image_index != 0 {
-        return Err(DecodeError::NativeCamera { format: "CRW", message: "CRW image index must be zero".into() });
+        return Err(DecodeError::NativeCamera {
+            format: "CRW",
+            message: "CRW image index must be zero".into(),
+        });
     }
     if request.memory_budget.is_none() {
-        return Err(DecodeError::NativeCamera { format: "CRW", message: "explicit CRW memory budget required".into() });
+        return Err(DecodeError::NativeCamera {
+            format: "CRW",
+            message: "explicit CRW memory budget required".into(),
+        });
     }
     validate_table_zero(table_zero)?;
     let source_started = std::time::Instant::now();
@@ -44,15 +53,24 @@ fn decode_with_timings(request: &DecodeRequest, table_zero: &[u8]) -> Result<cra
 }
 
 fn validate_table_zero(table_zero: &[u8]) -> Result<(), DecodeError> {
-    if table_zero.len() != 209 || blake3::hash(table_zero).to_hex().as_str() != "47f131299f596ac3ba864797e19735428b8808a068f2b50edf250d6dec1b7916" {
-        return Err(DecodeError::NativeCamera { format: "CRW", message: "unqualified CRW table-zero data".into() });
+    if table_zero.len() != 209
+        || blake3::hash(table_zero).to_hex().as_str()
+            != "47f131299f596ac3ba864797e19735428b8808a068f2b50edf250d6dec1b7916"
+    {
+        return Err(DecodeError::NativeCamera {
+            format: "CRW",
+            message: "unqualified CRW table-zero data".into(),
+        });
     }
     Ok(())
 }
 
 fn decode_source_with_tables<S: std::ops::Deref<Target = [u8]>>(
-    request: &DecodeRequest, table_zero: &[u8], source: S,
-    source_open: std::time::Duration, total: std::time::Instant,
+    request: &DecodeRequest,
+    table_zero: &[u8],
+    source: S,
+    source_open: std::time::Duration,
+    total: std::time::Instant,
 ) -> Result<crate::DecodeOutput, DecodeError> {
     let select_started = std::time::Instant::now();
     let error = |message: &str| DecodeError::NativeCamera {
@@ -133,10 +151,19 @@ mod tests {
 
 impl NativeCrwDecoder {
     pub(crate) fn decode_source<S: std::ops::Deref<Target = [u8]>>(
-        &self, request: &DecodeRequest, source: S, source_open: std::time::Duration,
+        &self,
+        request: &DecodeRequest,
+        source: S,
+        source_open: std::time::Duration,
         total: std::time::Instant,
     ) -> Result<crate::DecodeOutput, DecodeError> {
-        decode_source_with_tables(request, include_bytes!("../data/crw/table-zero.bin"), source, source_open, total)
+        decode_source_with_tables(
+            request,
+            include_bytes!("../data/crw/table-zero.bin"),
+            source,
+            source_open,
+            total,
+        )
     }
 }
 

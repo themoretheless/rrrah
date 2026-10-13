@@ -8,7 +8,10 @@ struct Bits<'a> {
 }
 impl Bits<'_> {
     fn take(&mut self, count: usize) -> Result<i32, DecodeError> {
-        let end = self.position.checked_add(count).ok_or(DecodeError::DimensionOverflow)?;
+        let end = self
+            .position
+            .checked_add(count)
+            .ok_or(DecodeError::DimensionOverflow)?;
         if end > self.bytes.len().saturating_mul(8) {
             return Err(camera_error("ORF", "truncated Olympus entropy stream"));
         }
@@ -21,7 +24,9 @@ impl Bits<'_> {
     }
     #[inline]
     fn take_mode<const WINDOW: bool>(&mut self, count: usize) -> Result<i32, DecodeError> {
-        if WINDOW { return self.take_window(count); }
+        if WINDOW {
+            return self.take_window(count);
+        }
         self.take(count)
     }
     #[inline]
@@ -110,7 +115,8 @@ fn decode_impl<const WINDOW: bool, const PREFIX: bool>(
                 high += 1;
             }
             if high == 12 {
-                high = bits.take_mode::<WINDOW>(usize::try_from(15 - low_bits).expect("validated residual width"))?;
+                high = bits
+                    .take_mode::<WINDOW>(usize::try_from(15 - low_bits).expect("validated residual width"))?;
                 bits.take_mode::<WINDOW>(1)?;
             }
             carry[0] = (high << low_bits)
@@ -159,14 +165,18 @@ mod tests {
             let source = &bytes[..length];
             for position in length.saturating_sub(3) * 8..=length * 8 {
                 for count in 0..=16 {
-                    let mut bits = Bits { bytes: source, position };
+                    let mut bits = Bits {
+                        bytes: source,
+                        position,
+                    };
                     let result = bits.take_window(count);
                     if position + count > length * 8 {
                         assert!(result.is_err());
                         assert_eq!(bits.position, position);
                     } else {
-                        let expected = (position..position + count).fold(0, |v, bit|
-                            (v << 1) | i32::from((source[bit / 8] >> (7 - bit % 8)) & 1));
+                        let expected = (position..position + count).fold(0, |v, bit| {
+                            (v << 1) | i32::from((source[bit / 8] >> (7 - bit % 8)) & 1)
+                        });
                         assert_eq!(result.unwrap(), expected);
                         assert_eq!(bits.position, position + count);
                     }
@@ -184,7 +194,10 @@ mod tests {
             let mut results = [(0_u64, 0.0); 2];
             for mode in if round % 2 == 0 { [0, 1] } else { [1, 0] } {
                 let started = Instant::now();
-                let mut reader = Bits { bytes: black_box(&bytes), position: 0 };
+                let mut reader = Bits {
+                    bytes: black_box(&bytes),
+                    position: 0,
+                };
                 let mut checksum = 0_u64;
                 let mut index = 0;
                 while reader.position + 16 <= bytes.len() * 8 {
@@ -200,7 +213,10 @@ mod tests {
                 results[mode] = (checksum, started.elapsed().as_secs_f64() * 1000.0);
             }
             assert_eq!(results[0].0, results[1].0);
-            eprintln!("ORF paired bits: round={round}; reference_ms={:.3}; window_ms={:.3}; checksum={}", results[0].1, results[1].1, results[0].0);
+            eprintln!(
+                "ORF paired bits: round={round}; reference_ms={:.3}; window_ms={:.3}; checksum={}",
+                results[0].1, results[1].1, results[0].0
+            );
         }
     }
 
@@ -215,12 +231,18 @@ mod tests {
             let mut times = [0.0; 2];
             for mode in if round % 2 == 0 { [0, 1] } else { [1, 0] } {
                 let start = std::time::Instant::now();
-                if mode == 0 { decode_impl::<false, false>(&bytes, &mut baseline, 4640, &|| false).unwrap(); }
-                else { decode_impl::<true, true>(&bytes, &mut candidate, 4640, &|| false).unwrap(); }
+                if mode == 0 {
+                    decode_impl::<false, false>(&bytes, &mut baseline, 4640, &|| false).unwrap();
+                } else {
+                    decode_impl::<true, true>(&bytes, &mut candidate, 4640, &|| false).unwrap();
+                }
                 times[mode] = start.elapsed().as_secs_f64() * 1000.0;
             }
             assert_eq!(baseline, candidate);
-            eprintln!("ORF paired real: round={round}; reference_ms={:.3}; window_ms={:.3}; samples=16110080; all_exact", times[0], times[1]);
+            eprintln!(
+                "ORF paired real: round={round}; reference_ms={:.3}; window_ms={:.3}; samples=16110080; all_exact",
+                times[0], times[1]
+            );
         }
     }
 
@@ -234,12 +256,18 @@ mod tests {
             let mut times = [0.; 2];
             for mode in if round % 2 == 0 { [0, 1] } else { [1, 0] } {
                 let start = std::time::Instant::now();
-                if mode == 0 { decode_impl::<true, false>(&bytes, &mut old, 4640, &|| false).unwrap(); }
-                else { decode_impl::<true, true>(&bytes, &mut fused, 4640, &|| false).unwrap(); }
-                times[mode] = start.elapsed().as_secs_f64()*1000.;
+                if mode == 0 {
+                    decode_impl::<true, false>(&bytes, &mut old, 4640, &|| false).unwrap();
+                } else {
+                    decode_impl::<true, true>(&bytes, &mut fused, 4640, &|| false).unwrap();
+                }
+                times[mode] = start.elapsed().as_secs_f64() * 1000.;
             }
             assert_eq!(old, fused);
-            eprintln!("ORF fused prefix: round={round}; old_ms={:.3}; fused_ms={:.3}; samples=16110080; exact", times[0], times[1]);
+            eprintln!(
+                "ORF fused prefix: round={round}; old_ms={:.3}; fused_ms={:.3}; samples=16110080; exact",
+                times[0], times[1]
+            );
         }
     }
 

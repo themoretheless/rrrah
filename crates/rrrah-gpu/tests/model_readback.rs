@@ -48,7 +48,10 @@ fn float64_translation_and_scale_preserve_small_geometry() {
         reference.pixels,
         gpu.render_model(&translated, [64, 64], 0., 0.).pixels
     );
-    assert_eq!(reference_hdr, gpu.render_model_half(&translated, [64, 64], 0., 0.));
+    assert_eq!(
+        reference_hdr,
+        gpu.render_model_half(&translated, [64, 64], 0., 0.)
+    );
     for scale in [1e300, f64::from_bits(1), f64::MAX] {
         let scaled = source.map(|t| t.map(|p| p.map(|v| v * scale)));
         assert_eq!(
@@ -56,8 +59,11 @@ fn float64_translation_and_scale_preserve_small_geometry() {
             gpu.render_model(&scaled, [64, 64], 0., 0.).pixels,
             "scale {scale}"
         );
-        assert_eq!(reference_hdr, gpu.render_model_half(&scaled, [64, 64], 0., 0.),
-            "HDR scale {scale}");
+        assert_eq!(
+            reference_hdr,
+            gpu.render_model_half(&scaled, [64, 64], 0., 0.),
+            "HDR scale {scale}"
+        );
     }
 }
 
@@ -158,50 +164,108 @@ fn raster_and_model_resources_share_parent_admission() {
 #[test]
 fn model_linear_hdr_target_matches_analytic_material_and_releases_budget() {
     let instance = common::headless_instance();
-    let adapter = pollster::block_on(common::request_adapter(&instance, &wgpu::RequestAdapterOptions::default())).unwrap();
-    let (device, queue) = pollster::block_on(adapter.request_device(&wgpu::DeviceDescriptor::default())).unwrap();
+    let adapter = pollster::block_on(common::request_adapter(
+        &instance,
+        &wgpu::RequestAdapterOptions::default(),
+    ))
+    .unwrap();
+    let (device, queue) =
+        pollster::block_on(adapter.request_device(&wgpu::DeviceDescriptor::default())).unwrap();
     let budget = rrrah_core::MemoryBudget::new(65536);
-    let mut renderer = rrrah_gpu::ModelRenderer::new_with_budget(&device, wgpu::TextureFormat::Rgba16Float, budget.clone());
-    renderer.upload(&device, [[[-1f32, -1., 0.], [1., -1., 0.], [0., 1., 0.]]].into_iter()).unwrap();
+    let mut renderer =
+        rrrah_gpu::ModelRenderer::new_with_budget(&device, wgpu::TextureFormat::Rgba16Float, budget.clone());
+    renderer
+        .upload(
+            &device,
+            [[[-1f32, -1., 0.], [1., -1., 0.], [0., 1., 0.]]].into_iter(),
+        )
+        .unwrap();
     renderer.resize(&device, [64, 64]).unwrap();
     renderer.update_view(&queue, 1., 0., 0., 1.);
     let target = device.create_texture(&wgpu::TextureDescriptor {
-        label: Some("model HDR target"), size: wgpu::Extent3d { width: 64, height: 64, depth_or_array_layers: 1 },
-        mip_level_count: 1, sample_count: 1, dimension: wgpu::TextureDimension::D2,
+        label: Some("model HDR target"),
+        size: wgpu::Extent3d {
+            width: 64,
+            height: 64,
+            depth_or_array_layers: 1,
+        },
+        mip_level_count: 1,
+        sample_count: 1,
+        dimension: wgpu::TextureDimension::D2,
         format: wgpu::TextureFormat::Rgba16Float,
-        usage: wgpu::TextureUsages::RENDER_ATTACHMENT | wgpu::TextureUsages::COPY_SRC, view_formats: &[],
+        usage: wgpu::TextureUsages::RENDER_ATTACHMENT | wgpu::TextureUsages::COPY_SRC,
+        view_formats: &[],
     });
-    let buffer = device.create_buffer(&wgpu::BufferDescriptor { label: None, size: 64 * 64 * 8,
-        usage: wgpu::BufferUsages::COPY_DST | wgpu::BufferUsages::MAP_READ, mapped_at_creation: false });
+    let buffer = device.create_buffer(&wgpu::BufferDescriptor {
+        label: None,
+        size: 64 * 64 * 8,
+        usage: wgpu::BufferUsages::COPY_DST | wgpu::BufferUsages::MAP_READ,
+        mapped_at_creation: false,
+    });
     let mut encoder = device.create_command_encoder(&Default::default());
     renderer.encode(&mut encoder, &target.create_view(&Default::default()));
-    encoder.copy_texture_to_buffer(wgpu::TexelCopyTextureInfo { texture: &target, mip_level: 0, origin: wgpu::Origin3d::ZERO, aspect: wgpu::TextureAspect::All },
-        wgpu::TexelCopyBufferInfo { buffer: &buffer, layout: wgpu::TexelCopyBufferLayout { offset: 0, bytes_per_row: Some(512), rows_per_image: Some(64) } },
-        wgpu::Extent3d { width: 64, height: 64, depth_or_array_layers: 1 });
+    encoder.copy_texture_to_buffer(
+        wgpu::TexelCopyTextureInfo {
+            texture: &target,
+            mip_level: 0,
+            origin: wgpu::Origin3d::ZERO,
+            aspect: wgpu::TextureAspect::All,
+        },
+        wgpu::TexelCopyBufferInfo {
+            buffer: &buffer,
+            layout: wgpu::TexelCopyBufferLayout {
+                offset: 0,
+                bytes_per_row: Some(512),
+                rows_per_image: Some(64),
+            },
+        },
+        wgpu::Extent3d {
+            width: 64,
+            height: 64,
+            depth_or_array_layers: 1,
+        },
+    );
     let submitted = queue.submit([encoder.finish()]);
     let (tx, rx) = std::sync::mpsc::channel();
-    buffer.slice(..).map_async(wgpu::MapMode::Read, move |result| tx.send(result).unwrap());
-    device.poll(wgpu::PollType::Wait { submission_index: Some(submitted), timeout: None }).unwrap();
+    buffer
+        .slice(..)
+        .map_async(wgpu::MapMode::Read, move |result| tx.send(result).unwrap());
+    device
+        .poll(wgpu::PollType::Wait {
+            submission_index: Some(submitted),
+            timeout: None,
+        })
+        .unwrap();
     rx.recv().unwrap().unwrap();
     let mapped = buffer.slice(..).get_mapped_range().unwrap();
-    let pixel = |index: usize| -> [f32; 4] { std::array::from_fn(|channel| {
-        let offset = index * 8 + channel * 2;
-        let bits = u16::from_le_bytes([mapped[offset], mapped[offset + 1]]);
-        let exponent = ((bits >> 10) & 31) as i32;
-        let mantissa = (bits & 1023) as f32;
-        assert_eq!(bits & 0x8000, 0, "expected nonnegative model channel");
-        assert!(exponent < 31, "nonfinite model channel");
-        if exponent == 0 { mantissa * 2f32.powi(-24) }
-        else { (1. + mantissa / 1024.) * 2f32.powi(exponent - 15) }
-    }) };
+    let pixel = |index: usize| -> [f32; 4] {
+        std::array::from_fn(|channel| {
+            let offset = index * 8 + channel * 2;
+            let bits = u16::from_le_bytes([mapped[offset], mapped[offset + 1]]);
+            let exponent = ((bits >> 10) & 31) as i32;
+            let mantissa = (bits & 1023) as f32;
+            assert_eq!(bits & 0x8000, 0, "expected nonnegative model channel");
+            assert!(exponent < 31, "nonfinite model channel");
+            if exponent == 0 {
+                mantissa * 2f32.powi(-24)
+            } else {
+                (1. + mantissa / 1024.) * 2f32.powi(exponent - 15)
+            }
+        })
+    };
     let center = pixel(32 * 64 + 32);
     let light = 0.2 + 0.8 / 1.34f32.sqrt();
     for (actual, material) in center[..3].iter().zip([0.45, 0.55, 0.65]) {
-        assert!((actual - material * light).abs() < 0.001, "linear material changed: {center:?}");
+        assert!(
+            (actual - material * light).abs() < 0.001,
+            "linear material changed: {center:?}"
+        );
     }
     assert_eq!(center[3], 1.);
     let background = pixel(0);
-    for channel in &background[..3] { assert!((channel - 0.018).abs() < 0.0001); }
+    for channel in &background[..3] {
+        assert!((channel - 0.018).abs() < 0.0001);
+    }
     assert_eq!(background[3], 1.);
     drop(mapped);
     buffer.unmap();
@@ -215,15 +279,19 @@ fn cancelled_model_upload_preserves_resident_geometry_and_credit() {
     let adapter = pollster::block_on(common::request_adapter(&instance, &Default::default())).unwrap();
     let (device, _) = pollster::block_on(adapter.request_device(&wgpu::DeviceDescriptor::default())).unwrap();
     let budget = rrrah_core::MemoryBudget::new(72);
-    let mut renderer = rrrah_gpu::ModelRenderer::new_with_budget(&device, common::READBACK_FORMAT, budget.clone());
+    let mut renderer =
+        rrrah_gpu::ModelRenderer::new_with_budget(&device, common::READBACK_FORMAT, budget.clone());
     let triangles = [[[-1f64, -1., 0.], [1., -1., 0.], [0., 1., 0.]]];
     renderer.upload(&device, triangles.into_iter()).unwrap();
     for checkpoint in 1..=5 {
         let mut checks = 0;
-        assert!(matches!(renderer.upload_with_cancel(&device, triangles.into_iter(), || {
-            checks += 1;
-            checks == checkpoint
-        }), Err(rrrah_gpu::ModelUploadError::Cancelled)));
+        assert!(matches!(
+            renderer.upload_with_cancel(&device, triangles.into_iter(), || {
+                checks += 1;
+                checks == checkpoint
+            }),
+            Err(rrrah_gpu::ModelUploadError::Cancelled)
+        ));
         assert_eq!(checks, checkpoint);
         assert_eq!((budget.used(), renderer.resident_bytes()), (36, 36));
         renderer.upload(&device, triangles.into_iter()).unwrap();
@@ -250,38 +318,56 @@ fn cancelled_model_replacement_keeps_sdr_and_hdr_pixels_exact() {
                 gpu.read_half_frame(size, |encoder, target| renderer.encode(encoder, target))
             } else {
                 gpu.read_frame(size, |encoder, target| renderer.encode(encoder, target))
-                    .pixels.into_iter().map(u16::from).collect()
+                    .pixels
+                    .into_iter()
+                    .map(u16::from)
+                    .collect()
             }
         };
         let expected = read(&renderer);
         let retained = budget.used();
         let foreign_instance = common::headless_instance();
-        let foreign_adapter = pollster::block_on(common::request_adapter(&foreign_instance, &Default::default())).unwrap();
-        let (foreign_device, _) = pollster::block_on(foreign_adapter.request_device(&wgpu::DeviceDescriptor::default())).unwrap();
+        let foreign_adapter =
+            pollster::block_on(common::request_adapter(&foreign_instance, &Default::default())).unwrap();
+        let (foreign_device, _) =
+            pollster::block_on(foreign_adapter.request_device(&wgpu::DeviceDescriptor::default())).unwrap();
         let foreign = rrrah_gpu::ModelRenderer::new_with_budget(&foreign_device, format, budget.clone());
-        let wrong_owner = foreign.upload_preparer().prepare_with_cancel(
-            replacement.iter().copied(), || false,
-        ).unwrap();
-        assert!(matches!(renderer.install_prepared_upload(wrong_owner),
-            Err(rrrah_gpu::ModelUploadError::RendererMismatch)));
+        let wrong_owner = foreign
+            .upload_preparer()
+            .prepare_with_cancel(replacement.iter().copied(), || false)
+            .unwrap();
+        assert!(matches!(
+            renderer.install_prepared_upload(wrong_owner),
+            Err(rrrah_gpu::ModelUploadError::RendererMismatch)
+        ));
         assert_eq!(budget.used(), retained);
         assert_eq!(read(&renderer), expected);
         drop(foreign);
         let other_budget = rrrah_core::MemoryBudget::new(2049 * 36);
         for source_budget in [None, Some(&other_budget)] {
             let incompatible = rrrah_gpu::ModelRenderer::prepare_upload_with_cancel(
-                &gpu.device, replacement.iter().copied(), source_budget, || false,
-            ).unwrap();
-            assert!(matches!(renderer.install_prepared_upload(incompatible),
-                Err(rrrah_gpu::ModelUploadError::BudgetMismatch)));
+                &gpu.device,
+                replacement.iter().copied(),
+                source_budget,
+                || false,
+            )
+            .unwrap();
+            assert!(matches!(
+                renderer.install_prepared_upload(incompatible),
+                Err(rrrah_gpu::ModelUploadError::BudgetMismatch)
+            ));
             assert_eq!(other_budget.used(), 0);
             assert_eq!(read(&renderer), expected);
         }
         let worker_preparer = renderer.upload_preparer();
         let worker_geometry = replacement.clone();
         let obsolete = std::thread::spawn(move || {
-            worker_preparer.prepare_with_cancel(worker_geometry.into_iter(), || false).unwrap()
-        }).join().unwrap();
+            worker_preparer
+                .prepare_with_cancel(worker_geometry.into_iter(), || false)
+                .unwrap()
+        })
+        .join()
+        .unwrap();
         assert_eq!(budget.used(), retained + 2049 * 36);
         assert_eq!(read(&renderer), expected);
         drop(obsolete);
@@ -289,29 +375,37 @@ fn cancelled_model_replacement_keeps_sdr_and_hdr_pixels_exact() {
         assert_eq!(read(&renderer), expected);
         for checkpoint in 1..=9 {
             let mut checks = 0;
-            assert!(matches!(renderer.upload_with_cancel(&gpu.device, replacement.iter().copied(), || {
-                checks += 1;
-                checks == checkpoint
-            }), Err(rrrah_gpu::ModelUploadError::Cancelled)));
+            assert!(matches!(
+                renderer.upload_with_cancel(&gpu.device, replacement.iter().copied(), || {
+                    checks += 1;
+                    checks == checkpoint
+                }),
+                Err(rrrah_gpu::ModelUploadError::Cancelled)
+            ));
             assert_eq!(checks, checkpoint);
             assert_eq!(budget.used(), retained);
             assert_eq!(read(&renderer), expected);
         }
         let pressure = budget.try_reserve(1).unwrap();
-        assert!(matches!(renderer.upload(&gpu.device, replacement.iter().copied()),
-            Err(rrrah_gpu::ModelUploadError::Memory(_))));
+        assert!(matches!(
+            renderer.upload(&gpu.device, replacement.iter().copied()),
+            Err(rrrah_gpu::ModelUploadError::Memory(_))
+        ));
         assert_eq!(read(&renderer), expected);
         drop(pressure);
-        let prepared = renderer.upload_preparer().prepare_with_cancel(
-            replacement.iter().copied(), || false,
-        ).unwrap();
+        let prepared = renderer
+            .upload_preparer()
+            .prepare_with_cancel(replacement.iter().copied(), || false)
+            .unwrap();
         assert_eq!(read(&renderer), expected);
         renderer.install_prepared_upload(prepared).unwrap();
         assert_ne!(read(&renderer), expected);
         drop(renderer);
         assert_eq!(budget.used(), 0);
     }
-    eprintln!("model replacement failures: SDR/HDR; nine cancellations and memory refusal retain exact frame; retry changes frame; final credit zero");
+    eprintln!(
+        "model replacement failures: SDR/HDR; nine cancellations and memory refusal retain exact frame; retry changes frame; final credit zero"
+    );
 }
 
 #[test]
@@ -320,8 +414,8 @@ fn prepared_model_replacement_keeps_submitted_resource_credit_until_completion()
     let size = [63, 65];
     let depth_bytes = 63 * 65 * 4;
     let budget = rrrah_core::MemoryBudget::new(depth_bytes + 72);
-    let mut renderer = rrrah_gpu::ModelRenderer::new_with_budget(
-        &gpu.device, common::READBACK_FORMAT, budget.clone());
+    let mut renderer =
+        rrrah_gpu::ModelRenderer::new_with_budget(&gpu.device, common::READBACK_FORMAT, budget.clone());
     let triangle = [[[-1f64, -1., 0.], [1., -1., 0.], [0., 1., 0.]]];
     renderer.upload(&gpu.device, triangle.into_iter()).unwrap();
     renderer.resize(&gpu.device, size).unwrap();
@@ -329,16 +423,26 @@ fn prepared_model_replacement_keeps_submitted_resource_credit_until_completion()
     let lease = renderer.resource_lease();
     let target = gpu.device.create_texture(&wgpu::TextureDescriptor {
         label: Some("old model submission after replacement"),
-        size: wgpu::Extent3d { width: size[0], height: size[1], depth_or_array_layers: 1 },
-        mip_level_count: 1, sample_count: 1, dimension: wgpu::TextureDimension::D2,
-        format: common::READBACK_FORMAT, usage: wgpu::TextureUsages::RENDER_ATTACHMENT,
+        size: wgpu::Extent3d {
+            width: size[0],
+            height: size[1],
+            depth_or_array_layers: 1,
+        },
+        mip_level_count: 1,
+        sample_count: 1,
+        dimension: wgpu::TextureDimension::D2,
+        format: common::READBACK_FORMAT,
+        usage: wgpu::TextureUsages::RENDER_ATTACHMENT,
         view_formats: &[],
     });
     let errors = gpu.device.push_error_scope(wgpu::ErrorFilter::Validation);
     let mut encoder = gpu.device.create_command_encoder(&Default::default());
     renderer.encode(&mut encoder, &target.create_view(&Default::default()));
     let commands = encoder.finish();
-    let prepared = renderer.upload_preparer().prepare_with_cancel(triangle.into_iter(), || false).unwrap();
+    let prepared = renderer
+        .upload_preparer()
+        .prepare_with_cancel(triangle.into_iter(), || false)
+        .unwrap();
     assert_eq!(budget.used(), depth_bytes + 72);
     renderer.install_prepared_upload(prepared).unwrap();
     assert_eq!(budget.used(), depth_bytes + 72);
@@ -346,17 +450,29 @@ fn prepared_model_replacement_keeps_submitted_resource_credit_until_completion()
     assert_eq!(budget.used(), depth_bytes + 36);
     let submission = gpu.queue.submit([commands]);
     lease.retain_until_complete(&gpu.queue);
-    gpu.device.poll(wgpu::PollType::Wait { submission_index: Some(submission), timeout: None }).unwrap();
+    gpu.device
+        .poll(wgpu::PollType::Wait {
+            submission_index: Some(submission),
+            timeout: None,
+        })
+        .unwrap();
     assert!(pollster::block_on(errors.pop()).is_none());
     assert_eq!(budget.used(), 0);
-    eprintln!("prepared model lifetime: old encoded geometry/depth credit retained across replacement/drop; submission completed; final zero");
+    eprintln!(
+        "prepared model lifetime: old encoded geometry/depth credit retained across replacement/drop; submission completed; final zero"
+    );
 }
 
 #[test]
 fn refused_depth_resize_preserves_sdr_hdr_frame_and_retries() {
-    let Some(gpu) = common::qualification_gpu() else { return; };
+    let Some(gpu) = common::qualification_gpu() else {
+        return;
+    };
     let triangles = [[[-1f64, -1., 0.], [1., -1., 0.], [0., 1., 0.]]];
-    for format in [wgpu::TextureFormat::Rgba8UnormSrgb, wgpu::TextureFormat::Rgba16Float] {
+    for format in [
+        wgpu::TextureFormat::Rgba8UnormSrgb,
+        wgpu::TextureFormat::Rgba16Float,
+    ] {
         let budget = rrrah_core::MemoryBudget::new(36 + 63 * 65 * 4 + 67 * 69 * 4);
         let mut renderer = rrrah_gpu::ModelRenderer::new_with_budget(&gpu.device, format, budget.clone());
         renderer.upload(&gpu.device, triangles.into_iter()).unwrap();
@@ -366,13 +482,20 @@ fn refused_depth_resize_preserves_sdr_hdr_frame_and_retries() {
             if format == wgpu::TextureFormat::Rgba16Float {
                 gpu.read_half_frame(size, |e, t| renderer.encode(e, t))
             } else {
-                gpu.read_frame(size, |e, t| renderer.encode(e, t)).pixels.into_iter().map(u16::from).collect()
+                gpu.read_frame(size, |e, t| renderer.encode(e, t))
+                    .pixels
+                    .into_iter()
+                    .map(u16::from)
+                    .collect()
             }
         };
         let before = read(&renderer, [63, 65]);
         let resident = budget.used();
         let pressure = budget.try_reserve(budget.available_bytes()).unwrap();
-        assert!(matches!(renderer.resize(&gpu.device, [67, 69]), Err(rrrah_gpu::ModelUploadError::Memory(_))));
+        assert!(matches!(
+            renderer.resize(&gpu.device, [67, 69]),
+            Err(rrrah_gpu::ModelUploadError::Memory(_))
+        ));
         assert_eq!(budget.used(), budget.limit());
         assert_eq!(read(&renderer, [63, 65]), before);
         renderer.resize(&gpu.device, [63, 65]).unwrap();
@@ -393,12 +516,19 @@ fn refused_depth_resize_preserves_sdr_hdr_frame_and_retries() {
 
 #[test]
 fn model_depth_stays_on_renderer_device_with_foreign_resize_argument() {
-    let Some(gpu) = common::qualification_gpu() else { return; };
+    let Some(gpu) = common::qualification_gpu() else {
+        return;
+    };
     let foreign_instance = common::headless_instance();
-    let foreign_adapter = pollster::block_on(common::request_adapter(&foreign_instance, &Default::default())).unwrap();
-    let (foreign_device, _) = pollster::block_on(foreign_adapter.request_device(&wgpu::DeviceDescriptor::default())).unwrap();
+    let foreign_adapter =
+        pollster::block_on(common::request_adapter(&foreign_instance, &Default::default())).unwrap();
+    let (foreign_device, _) =
+        pollster::block_on(foreign_adapter.request_device(&wgpu::DeviceDescriptor::default())).unwrap();
     let triangles = [[[-1f64, -1., 0.], [1., -1., 0.], [0., 1., 0.]]];
-    for format in [wgpu::TextureFormat::Rgba8UnormSrgb, wgpu::TextureFormat::Rgba16Float] {
+    for format in [
+        wgpu::TextureFormat::Rgba8UnormSrgb,
+        wgpu::TextureFormat::Rgba16Float,
+    ] {
         let budget = rrrah_core::MemoryBudget::new(36 + 63 * 65 * 4);
         let mut renderer = rrrah_gpu::ModelRenderer::new_with_budget(&gpu.device, format, budget.clone());
         renderer.upload(&gpu.device, triangles.into_iter()).unwrap();
@@ -409,11 +539,15 @@ fn model_depth_stays_on_renderer_device_with_foreign_resize_argument() {
         reference.resize(&gpu.device, [63, 65]).unwrap();
         reference.update_view(&gpu.queue, 63. / 65., 0.4, -0.2, 1.);
         if format == wgpu::TextureFormat::Rgba16Float {
-            assert_eq!(gpu.read_half_frame([63, 65], |e, t| renderer.encode(e, t)),
-                gpu.read_half_frame([63, 65], |e, t| reference.encode(e, t)));
+            assert_eq!(
+                gpu.read_half_frame([63, 65], |e, t| renderer.encode(e, t)),
+                gpu.read_half_frame([63, 65], |e, t| reference.encode(e, t))
+            );
         } else {
-            assert_eq!(gpu.read_frame([63, 65], |e, t| renderer.encode(e, t)).pixels,
-                gpu.read_frame([63, 65], |e, t| reference.encode(e, t)).pixels);
+            assert_eq!(
+                gpu.read_frame([63, 65], |e, t| renderer.encode(e, t)).pixels,
+                gpu.read_frame([63, 65], |e, t| reference.encode(e, t)).pixels
+            );
         }
         assert_eq!(budget.used(), budget.limit());
         drop(renderer);

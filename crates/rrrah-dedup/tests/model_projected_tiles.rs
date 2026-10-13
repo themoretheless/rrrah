@@ -109,8 +109,8 @@ fn region_proposals(budget: &MemoryBudget) -> Result<SharedBuffer<ScoredProposal
     Ok(b.freeze())
 }
 use rrrah_dedup::model_projected_tiles::{
-    search_projected_model_tiles_files_with, ProjectedTileAttempt, ProjectedTileError,
-    ProjectedTileWorkLimits,
+    ProjectedTileAttempt, ProjectedTileError, ProjectedTileWorkLimits,
+    search_projected_model_tiles_files_with,
 };
 fn empty(budget: &MemoryBudget) -> Result<SharedBuffer<ScoredProposal>, ProposalProviderError> {
     Ok(budget
@@ -408,8 +408,8 @@ fn last_caller_source_and_weight_mutations_cannot_publish_a_negative_ledger() {
 #[test]
 fn global_and_both_owner_generations_cancel_first_middle_and_final_checkpoints() {
     use std::sync::{
-        atomic::{AtomicU64, Ordering},
         Arc,
+        atomic::{AtomicU64, Ordering},
     };
     let dir = tempfile::tempdir().unwrap();
     let (r, w) = fixture(dir.path());

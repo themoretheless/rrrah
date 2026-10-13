@@ -26,6 +26,14 @@ mod cache_telemetry;
 mod gallery;
 
 use crossbeam_channel::bounded;
+#[allow(dead_code, unused_imports)]
+#[path = "../src/filmstrip_ui.rs"]
+mod filmstrip_ui;
+
+#[cfg(test)]
+#[path = "../../rrrah-gpu/tests/common/mod.rs"]
+mod navigation_metal_readback;
+
 use gallery::{Prefetcher, THUMB_EDGE, ThumbnailJob, ThumbnailReady};
 use std::{
     path::PathBuf,

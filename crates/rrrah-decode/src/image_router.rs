@@ -31,9 +31,9 @@ pub fn is_supported_image_path(path: &Path) -> bool {
                 "fit", "fts", "mrc", "mrcs", "map", "nrrd", "wad", "rla", "pic", "cin", "cineon", "dpx",
                 "wal", "mac", "macp", "pntg", "mpnt", "pam", "ff", "exr", "hdr", "pfm", "pcx", "sgi", "rgb",
                 "rgba", "bw", "ras", "sun", "sunras", "dds", "avif", "xbm", "xpm", "cur", "svg", "ora",
-                "pdf", "ai", "eps", "basis", "ktx2", "ktx", "pkm", "iff", "ilbm", "lbm", "pix", "astc", "heic",
-                "heif", "hif", "x3f", "pict", "pct", "kra", "xcf", "psd", "psb", "dcx", "mng", "sti", "wmf",
-                "emf", "jxl", "jp2", "j2k", "j2c", "jpc", "rpf",
+                "pdf", "ai", "eps", "basis", "ktx2", "ktx", "pkm", "iff", "ilbm", "lbm", "pix", "astc",
+                "heic", "heif", "hif", "x3f", "pict", "pct", "kra", "xcf", "psd", "psb", "dcx", "mng", "sti",
+                "wmf", "emf", "jxl", "jp2", "j2k", "j2c", "jpc", "rpf",
             ]
             .iter()
             .any(|ext| s.eq_ignore_ascii_case(ext))
@@ -45,9 +45,9 @@ pub fn is_supported_image_path(path: &Path) -> bool {
 pub fn is_supported_raw_path(path: &Path) -> bool {
     path.extension().and_then(|s| s.to_str()).is_some_and(|s| {
         [
-            "eip", "crw", "cr3", "cr2", "dng", "gpr", "nef", "nrw", "arw", "sr2", "mrw", "erf", "kdc", "srw", "3fr", "fff",
-            "dcr", "mos", "iiq", "srf", "dcs", "orf", "pef", "ptx", "rw2", "rwl", "raw", "raf", "tif",
-            "tiff",
+            "eip", "crw", "cr3", "cr2", "dng", "gpr", "nef", "nrw", "arw", "sr2", "mrw", "erf", "kdc", "srw",
+            "3fr", "fff", "dcr", "mos", "iiq", "srf", "dcs", "orf", "pef", "ptx", "rw2", "rwl", "raw", "raf",
+            "tif", "tiff",
         ]
         .iter()
         .any(|ext| s.eq_ignore_ascii_case(ext))
@@ -72,13 +72,24 @@ fn inspect_image_source(request: &DecodeRequest) -> Result<(ImageSourceKind, boo
     let bytes = &header[..length];
     request.check_cancelled()?;
     let eps_candidate = crate::eps::has_magic(bytes);
-    Ok((classify_image_source(request, bytes)?, eps_candidate, crate::rpf::has_magic(bytes)))
+    Ok((
+        classify_image_source(request, bytes)?,
+        eps_candidate,
+        crate::rpf::has_magic(bytes),
+    ))
 }
 
-fn classify_image_source(request: &DecodeRequest, bytes: &[u8]) -> Result<ImageSourceKind, RasterDecodeError> {
+fn classify_image_source(
+    request: &DecodeRequest,
+    bytes: &[u8],
+) -> Result<ImageSourceKind, RasterDecodeError> {
     // EIP opens the original sensor member. Its ZIP assets do not select an
     // ORA/KRA raster or a preview, and Capture One adjustments are not applied.
-    if request.path.extension().is_some_and(|ext| ext.eq_ignore_ascii_case("eip")) {
+    if request
+        .path
+        .extension()
+        .is_some_and(|ext| ext.eq_ignore_ascii_case("eip"))
+    {
         return Ok(ImageSourceKind::Sensor);
     }
     if bytes.starts_with(b"FOVb") || crate::dicom::has_magic(bytes) || crate::rpf::has_magic(bytes) {
@@ -182,7 +193,11 @@ pub fn decode_image(request: &DecodeRequest) -> Result<DecodedImage, RasterDecod
     let (kind, eps_candidate, rpf_candidate) = inspect_image_source(request)?;
     match kind {
         ImageSourceKind::Sensor => Ok(DecodedImage::Sensor(Box::new(NativeRawDecoder.decode(request)?))),
-        ImageSourceKind::Raster => Ok(DecodedImage::Raster(crate::raster::decode_raster_inspected(request, eps_candidate, rpf_candidate)?)),
+        ImageSourceKind::Raster => Ok(DecodedImage::Raster(crate::raster::decode_raster_inspected(
+            request,
+            eps_candidate,
+            rpf_candidate,
+        )?)),
     }
 }
 
@@ -283,8 +298,8 @@ mod tests {
         let path = std::env::temp_dir().join(format!("rrrah-mef-routing-{}.MEF", std::process::id()));
         // A rendered TIFF preview cannot establish that the RAW camera's
         // sensor/color route is implemented. MEF stays a sensor request.
-        let fixture = Path::new(env!("CARGO_MANIFEST_DIR"))
-            .join("../../tests/fixtures/raster/pattern.profiled.tif");
+        let fixture =
+            Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/raster/pattern.profiled.tif");
         std::fs::copy(fixture, &path).unwrap();
         let budget = rrrah_core::MemoryBudget::new(0);
         let mut request = DecodeRequest::new(&path);

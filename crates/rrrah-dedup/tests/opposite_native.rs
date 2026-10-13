@@ -160,100 +160,219 @@ fn portfolio() -> rrrah_dedup::anchor_rank_file::AnchorReflectionFallbackPolicy 
 fn opposite_policy() -> rrrah_dedup::anchor_rank_file::OppositeAnchorSearchPolicy {
     let search = portfolio();
     rrrah_dedup::anchor_rank_file::OppositeAnchorSearchPolicy {
-        maximum_swapped_points: search.search.search.search.max_union_points, search,
+        maximum_swapped_points: search.search.search.search.max_union_points,
+        search,
     }
 }
 #[test]
 fn opposite_real_fixture_support_reflection_and_release() {
     use rrrah_dedup::anchor_rank_file::search_anchor_rank_opposite_files;
-    let root=std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/rotation");
-    let left=rrrah_decode::DecodeRequest::new(root.join("base.png"));
-    let budget=rrrah_core::MemoryBudget::new(128*1024*1024);
-    for (name,supported) in [("base.png",true),("mirrored.png",true),("unrelated.png",false)] {
-        let right=rrrah_decode::DecodeRequest::new(root.join(name));
-        let e=search_anchor_rank_opposite_files(&left,&right,opposite_policy(),&factors(),&budget,||false).unwrap();
-        assert_eq!(e.anchors.is_some_and(|a|a.supported),supported,"{name}");
+    let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/rotation");
+    let left = rrrah_decode::DecodeRequest::new(root.join("base.png"));
+    let budget = rrrah_core::MemoryBudget::new(128 * 1024 * 1024);
+    for (name, supported) in [
+        ("base.png", true),
+        ("mirrored.png", true),
+        ("unrelated.png", false),
+    ] {
+        let right = rrrah_decode::DecodeRequest::new(root.join(name));
+        let e =
+            search_anchor_rank_opposite_files(&left, &right, opposite_policy(), &factors(), &budget, || {
+                false
+            })
+            .unwrap();
+        assert_eq!(e.anchors.is_some_and(|a| a.supported), supported, "{name}");
         assert!((1..=6).contains(&e.attempted_recipes));
-        if supported {assert!(e.transform.is_some());assert!(!e.correspondences.is_empty());}
-        drop(e);assert_eq!(budget.used(),0);
+        if supported {
+            assert!(e.transform.is_some());
+            assert!(!e.correspondences.is_empty());
+        }
+        drop(e);
+        assert_eq!(budget.used(), 0);
     }
 }
 #[test]
 fn opposite_preflight_swap_work_overflow_memory_and_cancel_before_io() {
-    use rrrah_dedup::anchor_rank_file::{search_anchor_rank_opposite_files,AnchorRankFileError};
-    let missing=rrrah_decode::DecodeRequest::new("does-not-exist-opposite-native");
-    let budget=rrrah_core::MemoryBudget::new(128*1024*1024);
+    use rrrah_dedup::anchor_rank_file::{AnchorRankFileError, search_anchor_rank_opposite_files};
+    let missing = rrrah_decode::DecodeRequest::new("does-not-exist-opposite-native");
+    let budget = rrrah_core::MemoryBudget::new(128 * 1024 * 1024);
     for case in 0..4 {
-        let mut p=opposite_policy();
-        match case {0=>p.maximum_swapped_points=0,1=>p.maximum_swapped_points=usize::MAX,2=>p.search.maximum_reflection_bins-=1,_=>p.search.search.maximum_total_point_checks=0}
-        assert!(matches!(search_anchor_rank_opposite_files(&missing,&missing,p,&factors(),&budget,||false),Err(AnchorRankFileError::Rank(_))));
-        assert_eq!(budget.used(),0);
+        let mut p = opposite_policy();
+        match case {
+            0 => p.maximum_swapped_points = 0,
+            1 => p.maximum_swapped_points = usize::MAX,
+            2 => p.search.maximum_reflection_bins -= 1,
+            _ => p.search.search.maximum_total_point_checks = 0,
+        }
+        assert!(matches!(
+            search_anchor_rank_opposite_files(&missing, &missing, p, &factors(), &budget, || false),
+            Err(AnchorRankFileError::Rank(_))
+        ));
+        assert_eq!(budget.used(), 0);
     }
-    let small=rrrah_core::MemoryBudget::new(1);
-    assert!(matches!(search_anchor_rank_opposite_files(&missing,&missing,opposite_policy(),&factors(),&small,||false),Err(AnchorRankFileError::Rank(_))));
-    assert_eq!(small.used(),0);
-    assert!(matches!(search_anchor_rank_opposite_files(&missing,&missing,opposite_policy(),&factors(),&budget,||true),Err(AnchorRankFileError::Cancelled)));
+    let small = rrrah_core::MemoryBudget::new(1);
+    assert!(matches!(
+        search_anchor_rank_opposite_files(&missing, &missing, opposite_policy(), &factors(), &small, || {
+            false
+        }),
+        Err(AnchorRankFileError::Rank(_))
+    ));
+    assert_eq!(small.used(), 0);
+    assert!(matches!(
+        search_anchor_rank_opposite_files(&missing, &missing, opposite_policy(), &factors(), &budget, || {
+            true
+        }),
+        Err(AnchorRankFileError::Cancelled)
+    ));
 }
 #[test]
 fn opposite_unknown_is_preserved_and_releases() {
-    use rrrah_dedup::anchor_rank_file::{search_anchor_rank_opposite_files,AnchorRankFileError};
-    let root=std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/rotation/base.png");
-    let file=rrrah_decode::DecodeRequest::new(root);let budget=rrrah_core::MemoryBudget::new(128*1024*1024);
-    let mut p=opposite_policy();p.search.search.anchors.local.minimum_witnesses=1000;
-    assert!(matches!(search_anchor_rank_opposite_files(&file,&file,p,&factors(),&budget,||false),Err(AnchorRankFileError::Rank(rrrah_dedup::local_rank::LocalRankError::InsufficientGeometry))));
-    assert_eq!(budget.used(),0);
+    use rrrah_dedup::anchor_rank_file::{AnchorRankFileError, search_anchor_rank_opposite_files};
+    let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/rotation/base.png");
+    let file = rrrah_decode::DecodeRequest::new(root);
+    let budget = rrrah_core::MemoryBudget::new(128 * 1024 * 1024);
+    let mut p = opposite_policy();
+    p.search.search.anchors.local.minimum_witnesses = 1000;
+    assert!(matches!(
+        search_anchor_rank_opposite_files(&file, &file, p, &factors(), &budget, || false),
+        Err(AnchorRankFileError::Rank(
+            rrrah_dedup::local_rank::LocalRankError::InsufficientGeometry
+        ))
+    ));
+    assert_eq!(budget.used(), 0);
 }
 #[test]
 fn opposite_final_callback_mutation_cannot_publish() {
-    use rrrah_dedup::anchor_rank_file::{search_anchor_rank_opposite_files,AnchorRankFileError};
+    use rrrah_dedup::anchor_rank_file::{AnchorRankFileError, search_anchor_rank_opposite_files};
     use std::cell::Cell;
-    let dir=tempfile::tempdir().unwrap();let root=std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/rotation/base.png");let original=std::fs::read(root).unwrap();
-    let paths=[dir.path().join("left.png"),dir.path().join("right.png")];for path in &paths {std::fs::write(path,&original).unwrap();}
-    let left=rrrah_decode::DecodeRequest::new(&paths[0]);let right=rrrah_decode::DecodeRequest::new(&paths[1]);let budget=rrrah_core::MemoryBudget::new(128*1024*1024);
-    let calls=Cell::new(0);drop(search_anchor_rank_opposite_files(&left,&right,opposite_policy(),&factors(),&budget,||{calls.set(calls.get()+1);false}).unwrap());let total=calls.get();assert!(total>10);
+    let dir = tempfile::tempdir().unwrap();
+    let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/rotation/base.png");
+    let original = std::fs::read(root).unwrap();
+    let paths = [dir.path().join("left.png"), dir.path().join("right.png")];
+    for path in &paths {
+        std::fs::write(path, &original).unwrap();
+    }
+    let left = rrrah_decode::DecodeRequest::new(&paths[0]);
+    let right = rrrah_decode::DecodeRequest::new(&paths[1]);
+    let budget = rrrah_core::MemoryBudget::new(128 * 1024 * 1024);
+    let calls = Cell::new(0);
+    drop(
+        search_anchor_rank_opposite_files(&left, &right, opposite_policy(), &factors(), &budget, || {
+            calls.set(calls.get() + 1);
+            false
+        })
+        .unwrap(),
+    );
+    let total = calls.get();
+    assert!(total > 10);
     for owner in 0..2 {
-        let seen=Cell::new(0);let changed=Cell::new(false);
-        let result=search_anchor_rank_opposite_files(&left,&right,opposite_policy(),&factors(),&budget,||{seen.set(seen.get()+1);if seen.get()==total {let mut data=original.clone();let n=data.len();data[n-1]^=1;std::fs::write(&paths[owner],data).unwrap();changed.set(true);}false});
-        assert!(changed.get());assert!(matches!(result,Err(AnchorRankFileError::Source(_))),"{result:?}");assert_eq!(budget.used(),0);std::fs::write(&paths[owner],&original).unwrap();
+        let seen = Cell::new(0);
+        let changed = Cell::new(false);
+        let result =
+            search_anchor_rank_opposite_files(&left, &right, opposite_policy(), &factors(), &budget, || {
+                seen.set(seen.get() + 1);
+                if seen.get() == total {
+                    let mut data = original.clone();
+                    let n = data.len();
+                    data[n - 1] ^= 1;
+                    std::fs::write(&paths[owner], data).unwrap();
+                    changed.set(true);
+                }
+                false
+            });
+        assert!(changed.get());
+        assert!(
+            matches!(result, Err(AnchorRankFileError::Source(_))),
+            "{result:?}"
+        );
+        assert_eq!(budget.used(), 0);
+        std::fs::write(&paths[owner], &original).unwrap();
     }
-    for stop in [1,total/2,total] {
-        let seen=Cell::new(0);let result=search_anchor_rank_opposite_files(&left,&right,opposite_policy(),&factors(),&budget,||{seen.set(seen.get()+1);seen.get()==stop});
-        assert!(matches!(result,Err(AnchorRankFileError::Cancelled)));assert_eq!(budget.used(),0);
+    for stop in [1, total / 2, total] {
+        let seen = Cell::new(0);
+        let result =
+            search_anchor_rank_opposite_files(&left, &right, opposite_policy(), &factors(), &budget, || {
+                seen.set(seen.get() + 1);
+                seen.get() == stop
+            });
+        assert!(matches!(result, Err(AnchorRankFileError::Cancelled)));
+        assert_eq!(budget.used(), 0);
     }
-    drop(search_anchor_rank_opposite_files(&left,&right,opposite_policy(),&factors(),&budget,||false).unwrap());assert_eq!(budget.used(),0);
+    drop(
+        search_anchor_rank_opposite_files(&left, &right, opposite_policy(), &factors(), &budget, || false)
+            .unwrap(),
+    );
+    assert_eq!(budget.used(), 0);
 }
 
 fn joint_policy() -> rrrah_dedup::anchor_rank_file::JointOppositeAnchorSearchPolicy {
-    let opposite=opposite_policy();
-    let phase=opposite.search.search.search.search;
-    let g=phase.search.gradient.search;
+    let opposite = opposite_policy();
+    let phase = opposite.search.search.search.search;
+    let g = phase.search.gradient.search;
     rrrah_dedup::anchor_rank_file::JointOppositeAnchorSearchPolicy {
-        opposite, maximum_total_projection_checks:6*2*g.local.geometry.max_points as u64*(g.sampling.trials+1),
+        opposite,
+        maximum_total_projection_checks: 6 * 2 * g.local.geometry.max_points as u64 * (g.sampling.trials + 1),
     }
 }
 #[test]
 fn joint_opposite_preflight_and_unknown_do_not_publish_negative() {
-    use rrrah_dedup::anchor_rank_file::{search_anchor_rank_joint_opposite_files,AnchorRankFileError};
-    let missing=rrrah_decode::DecodeRequest::new("missing-joint-opposite");
-    let budget=rrrah_core::MemoryBudget::new(128*1024*1024);
-    let mut p=joint_policy();p.maximum_total_projection_checks-=1;
-    assert!(matches!(search_anchor_rank_joint_opposite_files(&missing,&missing,p,&factors(),&budget,||false),Err(AnchorRankFileError::Search(rrrah_dedup::local_scan::LocalFileError::Geometry(rrrah_dedup::geometry::GeometryError::Budget)))));
-    assert!(matches!(search_anchor_rank_joint_opposite_files(&missing,&missing,p,&factors(),&budget,||true),Err(AnchorRankFileError::Cancelled)));
-    let file=rrrah_decode::DecodeRequest::new(std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/rotation/base.png"));
-    let mut p=joint_policy();p.opposite.search.search.search.search.search.gradient.search.local.geometry.min_inliers=2000;
-    assert!(matches!(search_anchor_rank_joint_opposite_files(&file,&file,p,&factors(),&budget,||false),Err(AnchorRankFileError::Rank(rrrah_dedup::local_rank::LocalRankError::InsufficientGeometry))));
-    assert_eq!(budget.used(),0);
+    use rrrah_dedup::anchor_rank_file::{AnchorRankFileError, search_anchor_rank_joint_opposite_files};
+    let missing = rrrah_decode::DecodeRequest::new("missing-joint-opposite");
+    let budget = rrrah_core::MemoryBudget::new(128 * 1024 * 1024);
+    let mut p = joint_policy();
+    p.maximum_total_projection_checks -= 1;
+    assert!(matches!(
+        search_anchor_rank_joint_opposite_files(&missing, &missing, p, &factors(), &budget, || false),
+        Err(AnchorRankFileError::Search(
+            rrrah_dedup::local_scan::LocalFileError::Geometry(rrrah_dedup::geometry::GeometryError::Budget)
+        ))
+    ));
+    assert!(matches!(
+        search_anchor_rank_joint_opposite_files(&missing, &missing, p, &factors(), &budget, || true),
+        Err(AnchorRankFileError::Cancelled)
+    ));
+    let file = rrrah_decode::DecodeRequest::new(
+        std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/rotation/base.png"),
+    );
+    let mut p = joint_policy();
+    p.opposite
+        .search
+        .search
+        .search
+        .search
+        .search
+        .gradient
+        .search
+        .local
+        .geometry
+        .min_inliers = 2000;
+    assert!(matches!(
+        search_anchor_rank_joint_opposite_files(&file, &file, p, &factors(), &budget, || false),
+        Err(AnchorRankFileError::Rank(
+            rrrah_dedup::local_rank::LocalRankError::InsufficientGeometry
+        ))
+    ));
+    assert_eq!(budget.used(), 0);
 }
 #[test]
 fn joint_opposite_original_pixels_support_and_release() {
     use rrrah_dedup::anchor_rank_file::search_anchor_rank_joint_opposite_files;
-    let root=std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/rotation");
-    let left=rrrah_decode::DecodeRequest::new(root.join("base.png"));
-    let budget=rrrah_core::MemoryBudget::new(128*1024*1024);
-    for name in ["base.png","mirrored.png"] {
-        let right=rrrah_decode::DecodeRequest::new(root.join(name));
-        let e=search_anchor_rank_joint_opposite_files(&left,&right,joint_policy(),&factors(),&budget,||false).unwrap();
-        assert!(e.anchors.is_some_and(|a|a.supported),"{name}");
-        drop(e);assert_eq!(budget.used(),0);
+    let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/rotation");
+    let left = rrrah_decode::DecodeRequest::new(root.join("base.png"));
+    let budget = rrrah_core::MemoryBudget::new(128 * 1024 * 1024);
+    for name in ["base.png", "mirrored.png"] {
+        let right = rrrah_decode::DecodeRequest::new(root.join(name));
+        let e = search_anchor_rank_joint_opposite_files(
+            &left,
+            &right,
+            joint_policy(),
+            &factors(),
+            &budget,
+            || false,
+        )
+        .unwrap();
+        assert!(e.anchors.is_some_and(|a| a.supported), "{name}");
+        drop(e);
+        assert_eq!(budget.used(), 0);
     }
 }

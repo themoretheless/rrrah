@@ -86,15 +86,24 @@ impl ApplicationHandler for Probe {
                         ..Default::default()
                     };
                     match &mut gpu.renderer {
-                        ProbeRenderer::Raster(renderer) => renderer.update_view(&gpu.queue,
-                            rrrah_gpu::ViewParameters { zoom: 40., ..view }),
+                        ProbeRenderer::Raster(renderer) => {
+                            renderer.update_view(&gpu.queue, rrrah_gpu::ViewParameters { zoom: 40., ..view })
+                        }
                         ProbeRenderer::Raw(renderer) => renderer.update_view(&gpu.queue, view),
                         ProbeRenderer::Model(renderer) => {
-                            if let Err(error)=renderer.resize(&gpu.device,[size.width,size.height]) {
-                                self.error=Some(error.to_string());event_loop.exit();return;
+                            if let Err(error) = renderer.resize(&gpu.device, [size.width, size.height]) {
+                                self.error = Some(error.to_string());
+                                event_loop.exit();
+                                return;
                             }
-                            renderer.update_view(&gpu.queue,size.width as f32/size.height as f32,0.3,0.2,1.);
-                        },
+                            renderer.update_view(
+                                &gpu.queue,
+                                size.width as f32 / size.height as f32,
+                                0.3,
+                                0.2,
+                                1.,
+                            );
+                        }
                     }
                     if self.resize_probe && size.width == 800 && size.height == 400 {
                         self.resize_confirmed = true;
@@ -113,8 +122,11 @@ impl ApplicationHandler for Probe {
                 wgpu::CurrentSurfaceTexture::Success(frame)
                 | wgpu::CurrentSurfaceTexture::Suboptimal(frame) => {
                     self.unavailable_since = None;
-                    assert_eq!([frame.texture.width(), frame.texture.height()],
-                        [gpu.config.width, gpu.config.height], "surface dimensions must match configured viewport");
+                    assert_eq!(
+                        [frame.texture.width(), frame.texture.height()],
+                        [gpu.config.width, gpu.config.height],
+                        "surface dimensions must match configured viewport"
+                    );
                     let view = frame.texture.create_view(&Default::default());
                     let mut encoder = gpu.device.create_command_encoder(&Default::default());
                     gpu.renderer.encode(&mut encoder, &view);
@@ -123,7 +135,9 @@ impl ApplicationHandler for Probe {
                     gpu.queue.present(frame);
                     gpu.device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
                     self.presented += 1;
-                    if self.resize_confirmed { self.frames_after_resize += 1; }
+                    if self.resize_confirmed {
+                        self.frames_after_resize += 1;
+                    }
                     if self.resize_probe && self.presented == 30 {
                         let _ = window.request_inner_size(winit::dpi::PhysicalSize::new(800, 400));
                         println!("live resize requested: 800x400");
@@ -132,25 +146,35 @@ impl ApplicationHandler for Probe {
                     if self.presented == 1 || self.presented % 30 == 0 {
                         println!(
                             "display after present: frames={} elapsed={:.3}s {:?}",
-                            self.presented, first.elapsed().as_secs_f64(),
+                            self.presented,
+                            first.elapsed().as_secs_f64(),
                             gpu.surface.display_hdr_info(&gpu.adapter)
                         );
                     }
                     if first.elapsed() < std::time::Duration::from_secs(self.hold_seconds) {
-                        self.next_redraw = Some(std::time::Instant::now() + std::time::Duration::from_millis(16));
+                        self.next_redraw =
+                            Some(std::time::Instant::now() + std::time::Duration::from_millis(16));
                         event_loop.set_control_flow(winit::event_loop::ControlFlow::WaitUntil(
                             std::time::Instant::now() + std::time::Duration::from_millis(16),
                         ));
                         return;
                     }
-                    println!("presentation complete: frames={} elapsed={:.3}s", self.presented, first.elapsed().as_secs_f64());
+                    println!(
+                        "presentation complete: frames={} elapsed={:.3}s",
+                        self.presented,
+                        first.elapsed().as_secs_f64()
+                    );
                     if self.resize_probe {
                         if !self.resize_confirmed || self.frames_after_resize < 30 {
-                            self.error = Some(format!("live resize incomplete: confirmed={} frames={}",
-                                self.resize_confirmed, self.frames_after_resize));
+                            self.error = Some(format!(
+                                "live resize incomplete: confirmed={} frames={}",
+                                self.resize_confirmed, self.frames_after_resize
+                            ));
                         }
-                        println!("live resize presentation: confirmed={} frames_after_resize={}",
-                            self.resize_confirmed, self.frames_after_resize);
+                        println!(
+                            "live resize presentation: confirmed={} frames_after_resize={}",
+                            self.resize_confirmed, self.frames_after_resize
+                        );
                     }
                     let gpu = self.gpu.take().unwrap();
                     let error = pollster::block_on(gpu.validation.pop());
@@ -164,17 +188,25 @@ impl ApplicationHandler for Probe {
                 other => {
                     // Redraw frequency varies with focus and window visibility. Bound
                     // consecutive unavailability by elapsed time, not total frames.
-                    let unavailable = self.unavailable_since
-                        .get_or_insert_with(std::time::Instant::now).elapsed();
+                    let unavailable = self
+                        .unavailable_since
+                        .get_or_insert_with(std::time::Instant::now)
+                        .elapsed();
                     if unavailable >= std::time::Duration::from_secs(10) {
-                        self.error = Some(format!("surface frame unavailable for {unavailable:?}: {other:?}"));
+                        self.error = Some(format!(
+                            "surface frame unavailable for {unavailable:?}: {other:?}"
+                        ));
                         let gpu = self.gpu.take().unwrap();
                         gpu.device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
                         let validation = pollster::block_on(gpu.validation.pop());
-                        println!("configuration validation: {validation:?}; frames presented={}", self.presented);
+                        println!(
+                            "configuration validation: {validation:?}; frames presented={}",
+                            self.presented
+                        );
                         event_loop.exit();
                     } else {
-                        self.next_redraw = Some(std::time::Instant::now() + std::time::Duration::from_millis(16));
+                        self.next_redraw =
+                            Some(std::time::Instant::now() + std::time::Duration::from_millis(16));
                         event_loop.set_control_flow(winit::event_loop::ControlFlow::WaitUntil(
                             std::time::Instant::now() + std::time::Duration::from_millis(16),
                         ));
@@ -232,19 +264,34 @@ impl ApplicationHandler for Probe {
                     surface.display_hdr_info(&adapter)
                 );
                 let renderer = if let Some(path) = std::env::var_os("RRRAH_HDR_MODEL_SOURCE") {
-                    anyhow::ensure!(std::env::var_os("RRRAH_HDR_RAW_SOURCE").is_none(),
-                        "choose exactly one RAW or model source");
-                    let mut request=rrrah_decode::DecodeRequest::new(std::path::PathBuf::from(path));
-                    let budget=rrrah_core::MemoryBudget::new(512*1024*1024);
-                    request.memory_budget=Some(budget.clone());
-                    let model=rrrah_decode::decode_model(&request)?;
-                    println!("native model HDR surface: triangles={}; source={}",model.triangle_count(),request.path.display());
-                    let mut renderer=rrrah_gpu::ModelRenderer::new(&device,config.format);
-                    renderer.upload(&device,model.triangles())?;
-                    renderer.resize(&device,[size.width.max(1),size.height.max(1)])?;
-                    renderer.update_view(&queue,size.width.max(1) as f32/size.height.max(1) as f32,0.3,0.2,1.);
+                    anyhow::ensure!(
+                        std::env::var_os("RRRAH_HDR_RAW_SOURCE").is_none(),
+                        "choose exactly one RAW or model source"
+                    );
+                    let mut request = rrrah_decode::DecodeRequest::new(std::path::PathBuf::from(path));
+                    let budget = rrrah_core::MemoryBudget::new(512 * 1024 * 1024);
+                    request.memory_budget = Some(budget.clone());
+                    let model = rrrah_decode::decode_model(&request)?;
+                    println!(
+                        "native model HDR surface: triangles={}; source={}",
+                        model.triangle_count(),
+                        request.path.display()
+                    );
+                    let mut renderer = rrrah_gpu::ModelRenderer::new(&device, config.format);
+                    renderer.upload(&device, model.triangles())?;
+                    renderer.resize(&device, [size.width.max(1), size.height.max(1)])?;
+                    renderer.update_view(
+                        &queue,
+                        size.width.max(1) as f32 / size.height.max(1) as f32,
+                        0.3,
+                        0.2,
+                        1.,
+                    );
                     drop(model);
-                    anyhow::ensure!(budget.used()==0,"native model source credit retained after upload");
+                    anyhow::ensure!(
+                        budget.used() == 0,
+                        "native model source credit retained after upload"
+                    );
                     ProbeRenderer::Model(renderer)
                 } else if let Some(path) = std::env::var_os("RRRAH_HDR_RAW_SOURCE") {
                     use rrrah_decode::RawDecoder;
@@ -252,39 +299,50 @@ impl ApplicationHandler for Probe {
                     let budget = rrrah_core::MemoryBudget::new(512 * 1024 * 1024);
                     request.memory_budget = Some(budget.clone());
                     let mosaic = rrrah_decode::NativeRawDecoder.decode(&request)?.mosaic;
-                    println!("native RAW HDR surface: {}x{}; samples={}; source={}",
-                        mosaic.metadata.width, mosaic.metadata.height, mosaic.pixels.len(), request.path.display());
+                    println!(
+                        "native RAW HDR surface: {}x{}; samples={}; source={}",
+                        mosaic.metadata.width,
+                        mosaic.metadata.height,
+                        mosaic.pixels.len(),
+                        request.path.display()
+                    );
                     let mut renderer = rrrah_gpu::RawRenderer::new(&device, config.format);
                     renderer.set_output_mode(&queue, rrrah_gpu::RawOutputMode::SceneLinear)?;
                     renderer.upload_mosaic(&device, &queue, &mosaic)?;
-                    renderer.update_view(&queue, rrrah_gpu::ViewParameters {
-                        viewport: [size.width as f32, size.height as f32],
-                        ..Default::default()
-                    });
+                    renderer.update_view(
+                        &queue,
+                        rrrah_gpu::ViewParameters {
+                            viewport: [size.width as f32, size.height as f32],
+                            ..Default::default()
+                        },
+                    );
                     drop(mosaic);
-                    anyhow::ensure!(budget.used() == 0, "native RAW source credit retained after upload");
+                    anyhow::ensure!(
+                        budget.used() == 0,
+                        "native RAW source credit retained after upload"
+                    );
                     ProbeRenderer::Raw(renderer)
                 } else {
-                let pixels: Vec<f32> = [0.18, 1., 2., 4.]
-                    .into_iter()
-                    .flat_map(|v| [v, v, v, 1.])
-                    .collect();
-                let raster = rrrah_core::DecodedRaster::new(
-                    4,
-                    1,
-                    rrrah_core::RasterPixels::Rgba32Float(Arc::new(pixels).into()),
-                    rrrah_core::RasterColorSpace::LinearSrgb,
-                )?;
-                let mut renderer = rrrah_gpu::RasterRenderer::new_linear_hdr(&device);
-                renderer.upload(&device, &queue, &raster)?;
-                renderer.update_view(
-                    &queue,
-                    rrrah_gpu::ViewParameters {
-                        viewport: [size.width as f32, size.height as f32],
-                        zoom: 40.,
-                        ..Default::default()
-                    },
-                );
+                    let pixels: Vec<f32> = [0.18, 1., 2., 4.]
+                        .into_iter()
+                        .flat_map(|v| [v, v, v, 1.])
+                        .collect();
+                    let raster = rrrah_core::DecodedRaster::new(
+                        4,
+                        1,
+                        rrrah_core::RasterPixels::Rgba32Float(Arc::new(pixels).into()),
+                        rrrah_core::RasterColorSpace::LinearSrgb,
+                    )?;
+                    let mut renderer = rrrah_gpu::RasterRenderer::new_linear_hdr(&device);
+                    renderer.upload(&device, &queue, &raster)?;
+                    renderer.update_view(
+                        &queue,
+                        rrrah_gpu::ViewParameters {
+                            viewport: [size.width as f32, size.height as f32],
+                            zoom: 40.,
+                            ..Default::default()
+                        },
+                    );
                     ProbeRenderer::Raster(renderer)
                 };
                 Ok::<_, anyhow::Error>(Gpu {
@@ -310,7 +368,10 @@ impl ApplicationHandler for Probe {
         }
     }
     fn about_to_wait(&mut self, _: &ActiveEventLoop) {
-        if self.next_redraw.is_none_or(|deadline| std::time::Instant::now() >= deadline) {
+        if self
+            .next_redraw
+            .is_none_or(|deadline| std::time::Instant::now() >= deadline)
+        {
             if let Some(window) = &self.window {
                 window.request_redraw();
             }
@@ -324,10 +385,20 @@ fn main() -> anyhow::Result<()> {
         Err(std::env::VarError::NotPresent) => 0,
         Err(error) => return Err(error.into()),
     };
-    anyhow::ensure!(hold_seconds <= 60, "HDR probe duration must be between 0 and 60 seconds");
+    anyhow::ensure!(
+        hold_seconds <= 60,
+        "HDR probe duration must be between 0 and 60 seconds"
+    );
     let resize_probe = std::env::var("RRRAH_HDR_RESIZE_PROBE").is_ok_and(|v| v == "1");
-    anyhow::ensure!(!resize_probe || hold_seconds >= 3, "resize probe requires at least3 seconds");
-    let mut probe = Probe { hold_seconds, resize_probe, ..Default::default() };
+    anyhow::ensure!(
+        !resize_probe || hold_seconds >= 3,
+        "resize probe requires at least3 seconds"
+    );
+    let mut probe = Probe {
+        hold_seconds,
+        resize_probe,
+        ..Default::default()
+    };
     events.run_app(&mut probe)?;
     if let Some(error) = probe.error {
         anyhow::bail!(error);

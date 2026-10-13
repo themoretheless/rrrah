@@ -71,14 +71,26 @@ pub(crate) fn declaration(bytes: &[u8]) -> Result<Option<RasterColorSpace>, Rast
         } else if format == Some("32-bit_rle_rgbe")
             && primaries.is_some_and(|p| p.iter().zip(REC2020).all(|(a, b)| (a - b).abs() <= 1e-7))
         {
-            RasterColorSpace::Cicp { primaries: 9, transfer: 8, matrix: 0, full_range: true }
+            RasterColorSpace::Cicp {
+                primaries: 9,
+                transfer: 8,
+                matrix: 0,
+                full_range: true,
+            }
         } else if format == Some("32-bit_rle_rgbe")
             && primaries.is_some_and(|p| p.iter().zip(DISPLAY_P3).all(|(a, b)| (a - b).abs() <= 1e-7))
         {
-            RasterColorSpace::Cicp { primaries: 12, transfer: 8, matrix: 0, full_range: true }
+            RasterColorSpace::Cicp {
+                primaries: 12,
+                transfer: 8,
+                matrix: 0,
+                full_range: true,
+            }
         } else if let (Some("32-bit_rle_rgbe"), Some(p)) = (format, primaries) {
-            RasterColorSpace::LinearRgb(rrrah_core::RgbChromaticities::new(p)
-                .ok_or_else(|| invalid("invalid or singular chromaticities"))?)
+            RasterColorSpace::LinearRgb(
+                rrrah_core::RgbChromaticities::new(p)
+                    .ok_or_else(|| invalid("invalid or singular chromaticities"))?,
+            )
         } else {
             RasterColorSpace::LinearRgbUnspecified
         },
@@ -97,17 +109,28 @@ mod tests {
         let path = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
             .join("../../tests/fixtures/raster/rec2020-linear-red.hdr");
         let source = crate::decode_raster(&crate::DecodeRequest::new(path)).unwrap();
-        assert_eq!(source.color_space(), &RasterColorSpace::Cicp {
-            primaries: 9, transfer: 8, matrix: 0, full_range: true,
-        });
+        assert_eq!(
+            source.color_space(),
+            &RasterColorSpace::Cicp {
+                primaries: 9,
+                transfer: 8,
+                matrix: 0,
+                full_range: true,
+            }
+        );
         let budget = rrrah_core::MemoryBudget::new(16);
         let held = budget.try_reserve(16).unwrap();
         assert!(crate::prepare_raster_for_display_with_budget(&source, Some(&budget)).is_err());
         drop(held);
-        assert!(crate::prepare_raster_for_display_with_budget_and_cancel(&source, Some(&budget), || true).is_err());
+        assert!(
+            crate::prepare_raster_for_display_with_budget_and_cancel(&source, Some(&budget), || true)
+                .is_err()
+        );
         assert_eq!(budget.used(), 0);
         let result = crate::prepare_raster_for_display_with_budget(&source, Some(&budget)).unwrap();
-        let rrrah_core::RasterPixels::Rgba32Float(pixels) = result.pixels() else { panic!() };
+        let rrrah_core::RasterPixels::Rgba32Float(pixels) = result.pixels() else {
+            panic!()
+        };
         // Rounded analytical reference for 2.0 red in BT.2020/D65.
         for (actual, expected) in pixels.iter().zip([3.320982, -0.24910095, -0.03630153, 1.0]) {
             assert!((actual - expected).abs() < 0.000002);
@@ -116,7 +139,9 @@ mod tests {
         assert_eq!(budget.used(), 16);
         drop(result);
         assert_eq!(budget.used(), 0);
-        let rrrah_core::RasterPixels::Rgba32Float(original) = source.pixels() else { panic!() };
+        let rrrah_core::RasterPixels::Rgba32Float(original) = source.pixels() else {
+            panic!()
+        };
         assert_eq!(&original[..], &[2.0, 0.0, 0.0, 1.0]);
     }
 
@@ -175,8 +200,10 @@ mod tests {
                 Some(RasterColorSpace::LinearRgbUnspecified)
             );
         }
-        assert!(matches!(declaration(&header(&TAG.replace(".30", ".29"))).unwrap(),
-            Some(RasterColorSpace::LinearRgb(_))));
+        assert!(matches!(
+            declaration(&header(&TAG.replace(".30", ".29"))).unwrap(),
+            Some(RasterColorSpace::LinearRgb(_))
+        ));
         for tag in [
             "PRIMARIES= 1 2",
             "PRIMARIES= NaN .33 .30 .60 .15 .06 .3127 .3290",

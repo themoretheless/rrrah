@@ -609,9 +609,13 @@ fn render_hdr_float_metal_sized(source: &DecodedRaster, output: [u32; 2], zoom: 
         .unwrap();
     rx.recv().unwrap().unwrap();
     let mapped = readback.slice(..).get_mapped_range().unwrap();
-    let result: Vec<u16> = mapped.chunks_exact(row_bytes as usize)
-        .flat_map(|row| row[..output[0] as usize * 8].chunks_exact(2)
-            .map(|v| u16::from_le_bytes([v[0], v[1]])))
+    let result: Vec<u16> = mapped
+        .chunks_exact(row_bytes as usize)
+        .flat_map(|row| {
+            row[..output[0] as usize * 8]
+                .chunks_exact(2)
+                .map(|v| u16::from_le_bytes([v[0], v[1]]))
+        })
         .collect();
     drop(mapped);
     readback.unmap();
@@ -636,8 +640,14 @@ fn hlg_avif_linear_pixels_survive_pressure_swap_and_metal() {
 
 #[test]
 fn hdr_hevc_linear_pixels_survive_pressure_swap_and_metal() {
-    for name in ["heif-pq12.heic", "heif-hlg12.heic", "heif-pq12-color.heic", "heif-hlg12-color.heic",
-        "heif-pq12-color-alpha.heic", "heif-hlg12-color-alpha.heic"] {
+    for name in [
+        "heif-pq12.heic",
+        "heif-hlg12.heic",
+        "heif-pq12-color.heic",
+        "heif-hlg12-color.heic",
+        "heif-pq12-color-alpha.heic",
+        "heif-hlg12-color-alpha.heic",
+    ] {
         qualify_hdr_still_transport(name);
     }
 }
@@ -646,18 +656,30 @@ fn hdr_hevc_linear_pixels_survive_pressure_swap_and_metal() {
 #[ignore = "requires external Canon DPP 6000x4000 HDR PQ HIF and FFmpeg RGBA16 oracle"]
 fn photographic_heif_pq_full_resolution_swap_and_metal() {
     let source_path = std::env::var_os("RRRAH_HEIF_CAMERA_SOURCE").expect("external source required");
-    let oracle_path = std::env::var_os("RRRAH_HEIF_CAMERA_ORACLE").expect("independent FFmpeg oracle required");
+    let oracle_path =
+        std::env::var_os("RRRAH_HEIF_CAMERA_ORACLE").expect("independent FFmpeg oracle required");
     let budget = rrrah_core::MemoryBudget::new(1024 * 1024 * 1024);
     let mut request = rrrah_decode::DecodeRequest::new(std::path::PathBuf::from(source_path));
     request.memory_budget = Some(budget.clone());
     let native_started = std::time::Instant::now();
     let native = rrrah_decode::decode_raster(&request).unwrap();
-    eprintln!("photographic HEIF native decode ms={:.3}", native_started.elapsed().as_secs_f64()*1000.);
+    eprintln!(
+        "photographic HEIF native decode ms={:.3}",
+        native_started.elapsed().as_secs_f64() * 1000.
+    );
     assert_eq!((native.width(), native.height()), (6000, 4000));
-    assert_eq!(native.color_space(), &RasterColorSpace::Cicp {
-        primaries: 9, transfer: 16, matrix: 9, full_range: true,
-    });
-    let RasterPixels::Rgba16(native_pixels) = native.pixels() else { panic!("10-bit source precision lost") };
+    assert_eq!(
+        native.color_space(),
+        &RasterColorSpace::Cicp {
+            primaries: 9,
+            transfer: 16,
+            matrix: 9,
+            full_range: true,
+        }
+    );
+    let RasterPixels::Rgba16(native_pixels) = native.pixels() else {
+        panic!("10-bit source precision lost")
+    };
     let oracle = std::fs::read(oracle_path).unwrap();
     assert_eq!(oracle.len(), native_pixels.len() * 2);
     let mut max_difference = 0_u16;
@@ -665,16 +687,19 @@ fn photographic_heif_pq_full_resolution_swap_and_metal() {
     let mut above_256 = 0_u64;
     for (index, (actual, bytes)) in native_pixels.iter().zip(oracle.chunks_exact(2)).enumerate() {
         let expected = u16::from_le_bytes(bytes.try_into().unwrap());
-        if index % 4 == 3 { assert_eq!((*actual, expected), (65535, 65535)); }
-        else {
+        if index % 4 == 3 {
+            assert_eq!((*actual, expected), (65535, 65535));
+        } else {
             let difference = actual.abs_diff(expected);
             max_difference = max_difference.max(difference);
             sum_difference += u64::from(difference);
             above_256 += u64::from(difference > 256);
         }
     }
-    eprintln!("photographic HEIF independent RGB comparison: max_u16={max_difference}; mean_u16={:.6}; components_above_256={above_256}; RGB_components=72000000; alpha exact",
-        sum_difference as f64 / 72_000_000.);
+    eprintln!(
+        "photographic HEIF independent RGB comparison: max_u16={max_difference}; mean_u16={:.6}; components_above_256={above_256}; RGB_components=72000000; alpha exact",
+        sum_difference as f64 / 72_000_000.
+    );
     // The two decoders use different u16 expansion/color-conversion rounding.
     // Bound this pinned photographic case to two 10-bit source code steps;
     // do not present it as byte-identical independent RGB reconstruction.
@@ -686,10 +711,15 @@ fn photographic_heif_pq_full_resolution_swap_and_metal() {
     request.pq_reference_white_nits = Some(100.);
     let linear_started = std::time::Instant::now();
     let source = rrrah_decode::decode_raster(&request).unwrap();
-    eprintln!("photographic HEIF decode plus PQ conversion ms={:.3}", linear_started.elapsed().as_secs_f64()*1000.);
+    eprintln!(
+        "photographic HEIF decode plus PQ conversion ms={:.3}",
+        linear_started.elapsed().as_secs_f64() * 1000.
+    );
     assert_eq!(source.color_space(), &RasterColorSpace::LinearSrgb);
     let digest = |raster: &DecodedRaster| {
-        let RasterPixels::Rgba32Float(pixels) = raster.pixels() else { panic!() };
+        let RasterPixels::Rgba32Float(pixels) = raster.pixels() else {
+            panic!()
+        };
         let mut hash = rrrah_cache::ObjectPayloadHasher::new();
         hash.update(bytemuck::cast_slice(pixels.as_slice()));
         hash.finalize()
@@ -697,26 +727,54 @@ fn photographic_heif_pq_full_resolution_swap_and_metal() {
     let expected = digest(&source);
     let gpu = common::qualification_gpu().expect("actual Metal GPU required");
     eprintln!("photographic HEIF adapter: {}", gpu.adapter_name());
-    let parameters = ViewParameters { viewport: [128., 96.], ..Default::default() };
+    let parameters = ViewParameters {
+        viewport: [128., 96.],
+        ..Default::default()
+    };
     let sdr = gpu.render_raster(&source, parameters, [128, 96]).pixels;
     let full_hdr = std::env::var("RRRAH_HEIF_FULL_HDR_READBACK").as_deref() == Ok("1");
-    let hdr_size = if full_hdr { [source.width(), source.height()] } else { [128, 64] };
+    let hdr_size = if full_hdr {
+        [source.width(), source.height()]
+    } else {
+        [128, 64]
+    };
     let hdr_zoom = if full_hdr { 1.0 } else { 2.0 };
     let hdr = render_hdr_float_metal_sized(&source, hdr_size, hdr_zoom);
     assert_eq!(hdr.len(), hdr_size[0] as usize * hdr_size[1] as usize * 4);
-    assert!(hdr.iter().all(|v| v & 0x7c00 != 0x7c00), "finite HDR attachment required");
-    assert!(hdr.chunks_exact(4).all(|p| p[3] == 0x3c00), "opaque HDR attachment required");
-    assert!(hdr.chunks_exact(4).any(|p| p[..3] != hdr[..3]), "nonconstant photographic HDR required");
-    eprintln!("photographic HEIF HDR readback: {}x{}; {} binary16 components; finite, opaque, nonconstant", hdr_size[0], hdr_size[1], hdr.len());
+    assert!(
+        hdr.iter().all(|v| v & 0x7c00 != 0x7c00),
+        "finite HDR attachment required"
+    );
+    assert!(
+        hdr.chunks_exact(4).all(|p| p[3] == 0x3c00),
+        "opaque HDR attachment required"
+    );
+    assert!(
+        hdr.chunks_exact(4).any(|p| p[..3] != hdr[..3]),
+        "nonconstant photographic HDR required"
+    );
+    eprintln!(
+        "photographic HEIF HDR readback: {}x{}; {} binary16 components; finite, opaque, nonconstant",
+        hdr_size[0],
+        hdr_size[1],
+        hdr.len()
+    );
     assert!(sdr.chunks_exact(4).any(|p| p != &sdr[..4]));
     let weight = source.capacity_bytes();
     assert_eq!(weight, 384_000_000);
     let directory = tempfile::tempdir().unwrap();
     let swap = rrrah_cache::RasterSwapCache::<u8>::new_with_budgets(
-        directory.path(), rrrah_cache::ImageSwapConfig {
+        directory.path(),
+        rrrah_cache::ImageSwapConfig {
             limits: rrrah_cache::CacheLimits::bytes(1024 * 1024 * 1024),
-            queue_bytes: weight, queue_count: 1, restore_bytes: weight,
-        }, rrrah_core::MemoryBudget::new(weight), budget.clone()).unwrap();
+            queue_bytes: weight,
+            queue_count: 1,
+            restore_bytes: weight,
+        },
+        rrrah_core::MemoryBudget::new(weight),
+        budget.clone(),
+    )
+    .unwrap();
     let mut ram = rrrah_cache::RasterRamCache::new(rrrah_cache::CacheLimits::bytes(weight));
     ram.enable_swap(swap);
     assert!(ram.insert_visible(1, source));
@@ -739,8 +797,13 @@ fn photographic_heif_pq_full_resolution_swap_and_metal() {
     assert_eq!(render_hdr_float_metal_sized(&restored, hdr_size, hdr_zoom), hdr);
     drop(restored);
     assert_eq!(budget.used(), 0);
-    assert_eq!((swap.stats().reads, swap.stats().writes, swap.stats().errors), (1, 1, 0));
-    eprintln!("photographic HEIF: 6000x4000; all float bits digest exact; Metal SDR/HDR exact; pressure retry; root=0; queue=0");
+    assert_eq!(
+        (swap.stats().reads, swap.stats().writes, swap.stats().errors),
+        (1, 1, 0)
+    );
+    eprintln!(
+        "photographic HEIF: 6000x4000; all float bits digest exact; Metal SDR/HDR exact; pressure retry; root=0; queue=0"
+    );
 }
 
 fn qualify_hdr_still_transport(name: &str) {
@@ -776,20 +839,25 @@ fn qualify_hdr_still_transport(name: &str) {
             let sign = if bits & 0x8000 == 0 { 1. } else { -1. };
             let exponent = (bits >> 10) & 31;
             assert_ne!(exponent, 31, "finite HDR composition");
-            sign * if exponent == 0 { f64::from(bits & 1023) * 2f64.powi(-24) }
-            else { f64::from(1024 + (bits & 1023)) * 2f64.powi(i32::from(exponent) - 25) }
+            sign * if exponent == 0 {
+                f64::from(bits & 1023) * 2f64.powi(-24)
+            } else {
+                f64::from(1024 + (bits & 1023)) * 2f64.powi(i32::from(exponent) - 25)
+            }
         };
         // 64x48 image fitted into 128x64 with zoom=2: these coordinates
         // lie strictly inside each constant RGB/alpha band, away from filtering edges.
         for (row, y) in [8_usize, 24, 40, 56].into_iter().enumerate() {
             for (band, x) in [32_usize, 53, 75, 96].into_iter().enumerate() {
-                let source = &pixels[((row*12+6)*64+band*16+8)*4..];
+                let source = &pixels[((row * 12 + 6) * 64 + band * 16 + 8) * 4..];
                 let alpha = f64::from(source[3]);
                 for channel in 0..3 {
-                    let expected = f64::from(source[channel]) * alpha * 2. + 0.018 * (1.-alpha);
-                    let actual = half_value(float_before[(y*128+x)*4+channel]);
-                    assert!((actual-expected).abs() <= expected.abs().max(0.01)*0.001,
-                        "{name} band {band} alpha row {row} channel {channel}: {actual} != {expected}");
+                    let expected = f64::from(source[channel]) * alpha * 2. + 0.018 * (1. - alpha);
+                    let actual = half_value(float_before[(y * 128 + x) * 4 + channel]);
+                    assert!(
+                        (actual - expected).abs() <= expected.abs().max(0.01) * 0.001,
+                        "{name} band {band} alpha row {row} channel {channel}: {actual} != {expected}"
+                    );
                 }
             }
         }
@@ -1037,25 +1105,47 @@ fn native_farbfeld_preserves_u16_and_display_through_budgeted_swap() {
         request.memory_budget = Some(budget.clone());
         let native = rrrah_decode::decode_raster(&request).unwrap();
         let bytes = std::fs::read(&path).unwrap();
-        let RasterPixels::Rgba16(values) = native.pixels() else { panic!() };
-        let expected: Vec<u16> = bytes[16..].chunks_exact(2)
-            .map(|v| u16::from_be_bytes([v[0], v[1]])).collect();
+        let RasterPixels::Rgba16(values) = native.pixels() else {
+            panic!()
+        };
+        let expected: Vec<u16> = bytes[16..]
+            .chunks_exact(2)
+            .map(|v| u16::from_be_bytes([v[0], v[1]]))
+            .collect();
         assert_eq!(&values[..], expected.as_slice());
         let prepared = rrrah_decode::prepare_raster_for_display_with_budget(&native, Some(&budget)).unwrap();
         let parameters = ViewParameters { zoom: 1.0, ..view() };
-        let expected_frame = gpu.render_raster(&prepared, parameters, [64,64]).pixels;
-        let frame = if prepared_swap { drop(native); prepared } else { drop(prepared); native };
+        let expected_frame = gpu.render_raster(&prepared, parameters, [64, 64]).pixels;
+        let frame = if prepared_swap {
+            drop(native);
+            prepared
+        } else {
+            drop(prepared);
+            native
+        };
         let weight = frame.capacity_bytes();
         let color = frame.color_space().clone();
         let mut expected_payload = Vec::new();
         rrrah_cache::SwapPayload::write_payload(&frame, &mut expected_payload).unwrap();
         let directory = tempfile::tempdir().unwrap();
         let swap: rrrah_cache::RasterSwapCache<u8> = rrrah_cache::ImageSwapCache::new_with_budgets(
-            directory.path(), rrrah_cache::ImageSwapConfig {
-                limits: rrrah_cache::CacheLimits { max_bytes:4096, max_entries:Some(1), ttl:None },
-                queue_bytes:weight, queue_count:1, restore_bytes:weight,
-            }, rrrah_core::MemoryBudget::new(weight), budget.clone()).unwrap();
-        swap.enqueue(1, frame); swap.wait_idle().unwrap();
+            directory.path(),
+            rrrah_cache::ImageSwapConfig {
+                limits: rrrah_cache::CacheLimits {
+                    max_bytes: 4096,
+                    max_entries: Some(1),
+                    ttl: None,
+                },
+                queue_bytes: weight,
+                queue_count: 1,
+                restore_bytes: weight,
+            },
+            rrrah_core::MemoryBudget::new(weight),
+            budget.clone(),
+        )
+        .unwrap();
+        swap.enqueue(1, frame);
+        swap.wait_idle().unwrap();
         assert_eq!(budget.used(), 0);
         let pressure = budget.try_reserve(budget.limit()).unwrap();
         assert!(swap.try_get(&1, || false).is_err());
@@ -1068,8 +1158,12 @@ fn native_farbfeld_preserves_u16_and_display_through_budgeted_swap() {
         rrrah_cache::SwapPayload::write_payload(&restored, &mut payload).unwrap();
         assert_eq!(payload, expected_payload);
         let display = rrrah_decode::prepare_raster_for_display_with_budget(&restored, Some(&budget)).unwrap();
-        assert_eq!(gpu.render_raster(&display, parameters, [64,64]).pixels, expected_frame);
-        drop(display); drop(restored);
+        assert_eq!(
+            gpu.render_raster(&display, parameters, [64, 64]).pixels,
+            expected_frame
+        );
+        drop(display);
+        drop(restored);
         assert_eq!(budget.used(), 0);
         assert_eq!(swap.stats().reads, 1);
         assert_eq!(swap.stats().writes, 1);
@@ -1086,18 +1180,32 @@ fn icc_images_prepare_and_restore_exactly_for_linear_hdr_metal() {
         let mut request = rrrah_decode::DecodeRequest::new(fixtures.join(name));
         request.memory_budget = Some(root.clone());
         let decoded = rrrah_decode::decode_raster(&request).unwrap();
-        let RasterColorSpace::Icc(profile) = decoded.color_space() else { panic!("ICC missing") };
+        let RasterColorSpace::Icc(profile) = decoded.color_space() else {
+            panic!("ICC missing")
+        };
         let profile = profile.clone();
         let prepared = rrrah_decode::prepare_raster_for_display_with_budget(&decoded, Some(&root)).unwrap();
         assert_eq!(prepared.color_space(), &RasterColorSpace::LinearSrgb);
         let expected = render_hdr_float_metal(&prepared);
-        assert!(expected.chunks_exact(4).any(|pixel| pixel[..3].iter().any(|&v| v > 0x3c00 && v < 0x7c00)), "HDR exposure was clipped to SDR");
+        assert!(
+            expected
+                .chunks_exact(4)
+                .any(|pixel| pixel[..3].iter().any(|&v| v > 0x3c00 && v < 0x7c00)),
+            "HDR exposure was clipped to SDR"
+        );
         let directory = tempfile::tempdir().unwrap();
         let swap: rrrah_cache::RasterSwapCache<u8> = rrrah_cache::ImageSwapCache::new_with_budgets(
-            directory.path(), rrrah_cache::ImageSwapConfig {
-                limits: rrrah_cache::CacheLimits::bytes(1024 * 1024), queue_bytes: 1024 * 1024,
-                queue_count: 2, restore_bytes: 1024 * 1024,
-            }, rrrah_core::MemoryBudget::new(1024 * 1024), root.clone()).unwrap();
+            directory.path(),
+            rrrah_cache::ImageSwapConfig {
+                limits: rrrah_cache::CacheLimits::bytes(1024 * 1024),
+                queue_bytes: 1024 * 1024,
+                queue_count: 2,
+                restore_bytes: 1024 * 1024,
+            },
+            rrrah_core::MemoryBudget::new(1024 * 1024),
+            root.clone(),
+        )
+        .unwrap();
         swap.enqueue(1, decoded);
         swap.wait_idle().unwrap();
         drop(prepared);
@@ -1108,7 +1216,11 @@ fn icc_images_prepare_and_restore_exactly_for_linear_hdr_metal() {
         let restored = swap.try_get(&1, || false).unwrap().unwrap();
         assert_eq!(restored.color_space(), &RasterColorSpace::Icc(profile));
         let prepared = rrrah_decode::prepare_raster_for_display_with_budget(&restored, Some(&root)).unwrap();
-        assert_eq!(render_hdr_float_metal(&prepared), expected, "{name}: HDR float frame changed through ICC swap");
+        assert_eq!(
+            render_hdr_float_metal(&prepared),
+            expected,
+            "{name}: HDR float frame changed through ICC swap"
+        );
         drop(prepared);
         drop(restored);
         drop(swap);
@@ -1120,7 +1232,9 @@ fn icc_images_prepare_and_restore_exactly_for_linear_hdr_metal() {
 fn qoi_transfer_flags_and_alpha_survive_native_prepared_swap_and_metal() {
     let gpu = common::qualification_gpu().expect("actual GPU required");
     eprintln!("QOI transport adapter: {}", gpu.adapter_name());
-    let rgba = [128u8, 64, 32, 255, 16, 96, 192, 128, 240, 10, 50, 0, 80, 160, 240, 255];
+    let rgba = [
+        128u8, 64, 32, 255, 16, 96, 192, 128, 240, 10, 50, 0, 80, 160, 240, 255,
+    ];
     let directory = tempfile::tempdir().unwrap();
     let mut prior_frame = None;
     for flag in [0u8, 1] {
@@ -1129,13 +1243,27 @@ fn qoi_transfer_flags_and_alpha_survive_native_prepared_swap_and_metal() {
         bytes.extend(4u32.to_be_bytes());
         bytes.extend(1u32.to_be_bytes());
         bytes.extend([4, flag]);
-        for pixel in rgba.chunks_exact(4) { bytes.push(0xff); bytes.extend(pixel); }
+        for pixel in rgba.chunks_exact(4) {
+            bytes.push(0xff);
+            bytes.extend(pixel);
+        }
         bytes.extend([0, 0, 0, 0, 0, 0, 0, 1]);
         let path = directory.path().join(format!("transfer-{flag}.qoi"));
         std::fs::write(&path, bytes).unwrap();
-        let color = if flag == 0 { RasterColorSpace::Srgb } else { RasterColorSpace::LinearSrgb };
-        let golden = DecodedRaster::new(4, 1, RasterPixels::Rgba8(Arc::new(rgba.to_vec()).into()), color.clone())
-            .unwrap().to_linear_srgb().unwrap();
+        let color = if flag == 0 {
+            RasterColorSpace::Srgb
+        } else {
+            RasterColorSpace::LinearSrgb
+        };
+        let golden = DecodedRaster::new(
+            4,
+            1,
+            RasterPixels::Rgba8(Arc::new(rgba.to_vec()).into()),
+            color.clone(),
+        )
+        .unwrap()
+        .to_linear_srgb()
+        .unwrap();
         let parameters = ViewParameters { zoom: 1.0, ..view() };
         let expected_frame = gpu.render_raster(&golden, parameters, [64, 64]).pixels;
         if let Some(prior) = prior_frame.replace(expected_frame.clone()) {
@@ -1147,18 +1275,41 @@ fn qoi_transfer_flags_and_alpha_survive_native_prepared_swap_and_metal() {
             request.memory_budget = Some(budget.clone());
             let native = rrrah_decode::decode_raster(&request).unwrap();
             assert_eq!(native.color_space(), &color);
-            let RasterPixels::Rgba8(pixels) = native.pixels() else { panic!() };
+            let RasterPixels::Rgba8(pixels) = native.pixels() else {
+                panic!()
+            };
             assert_eq!(&pixels[..], &rgba);
-            let prepared = rrrah_decode::prepare_raster_for_display_with_budget(&native, Some(&budget)).unwrap();
-            assert_eq!(gpu.render_raster(&prepared, parameters, [64, 64]).pixels, expected_frame);
-            let frame = if prepared_swap { drop(native); prepared } else { drop(prepared); native };
+            let prepared =
+                rrrah_decode::prepare_raster_for_display_with_budget(&native, Some(&budget)).unwrap();
+            assert_eq!(
+                gpu.render_raster(&prepared, parameters, [64, 64]).pixels,
+                expected_frame
+            );
+            let frame = if prepared_swap {
+                drop(native);
+                prepared
+            } else {
+                drop(prepared);
+                native
+            };
             let weight = frame.capacity_bytes();
             let swap_dir = tempfile::tempdir().unwrap();
             let swap: rrrah_cache::RasterSwapCache<u8> = rrrah_cache::ImageSwapCache::new_with_budgets(
-                swap_dir.path(), rrrah_cache::ImageSwapConfig {
-                    limits: rrrah_cache::CacheLimits { max_bytes:4096, max_entries:Some(1), ttl:None },
-                    queue_bytes:weight, queue_count:1, restore_bytes:weight,
-                }, rrrah_core::MemoryBudget::new(weight), budget.clone()).unwrap();
+                swap_dir.path(),
+                rrrah_cache::ImageSwapConfig {
+                    limits: rrrah_cache::CacheLimits {
+                        max_bytes: 4096,
+                        max_entries: Some(1),
+                        ttl: None,
+                    },
+                    queue_bytes: weight,
+                    queue_count: 1,
+                    restore_bytes: weight,
+                },
+                rrrah_core::MemoryBudget::new(weight),
+                budget.clone(),
+            )
+            .unwrap();
             let mut expected_payload = Vec::new();
             rrrah_cache::SwapPayload::write_payload(&frame, &mut expected_payload).unwrap();
             swap.enqueue(1, frame);
@@ -1173,9 +1324,14 @@ fn qoi_transfer_flags_and_alpha_survive_native_prepared_swap_and_metal() {
             let mut payload = Vec::new();
             rrrah_cache::SwapPayload::write_payload(&restored, &mut payload).unwrap();
             assert_eq!(payload, expected_payload);
-            let display = rrrah_decode::prepare_raster_for_display_with_budget(&restored, Some(&budget)).unwrap();
-            assert_eq!(gpu.render_raster(&display, parameters, [64,64]).pixels, expected_frame);
-            drop(display); drop(restored);
+            let display =
+                rrrah_decode::prepare_raster_for_display_with_budget(&restored, Some(&budget)).unwrap();
+            assert_eq!(
+                gpu.render_raster(&display, parameters, [64, 64]).pixels,
+                expected_frame
+            );
+            drop(display);
+            drop(restored);
             assert_eq!(budget.used(), 0);
             assert_eq!(swap.stats().reads, 1);
             assert_eq!(swap.stats().writes, 1);
@@ -1192,34 +1348,62 @@ fn large_float_hdr_swap_preserves_full_metal_attachment() {
     const BYTES: u64 = WIDTH as u64 * HEIGHT as u64 * 16;
     let root = rrrah_core::MemoryBudget::new(BYTES);
     let queue = rrrah_core::MemoryBudget::new(BYTES);
-    let colors = [[4.0f32, 2.0, -0.5, 1.0], [0.25, 8.0, 2.0, 1.0],
-        [16.0, -1.0, 0.5, 1.0], [-0.25, 0.0, 32.0, 1.0]];
-    let expected_half = [[0x4800u16, 0x4400, 0xbc00, 0x3c00],
-        [0x3800, 0x4c00, 0x4400, 0x3c00], [0x5000, 0xc000, 0x3c00, 0x3c00],
-        [0xb800, 0x0000, 0x5400, 0x3c00]];
+    let colors = [
+        [4.0f32, 2.0, -0.5, 1.0],
+        [0.25, 8.0, 2.0, 1.0],
+        [16.0, -1.0, 0.5, 1.0],
+        [-0.25, 0.0, 32.0, 1.0],
+    ];
+    let expected_half = [
+        [0x4800u16, 0x4400, 0xbc00, 0x3c00],
+        [0x3800, 0x4c00, 0x4400, 0x3c00],
+        [0x5000, 0xc000, 0x3c00, 0x3c00],
+        [0xb800, 0x0000, 0x5400, 0x3c00],
+    ];
     let quadrant = |x: u32, y: u32| usize::from(x >= WIDTH / 2) + 2 * usize::from(y >= HEIGHT / 2);
     let mut values = Vec::with_capacity((BYTES / 4) as usize);
-    for y in 0..HEIGHT { for x in 0..WIDTH { values.extend_from_slice(&colors[quadrant(x, y)]); } }
-    let source = DecodedRaster::new(WIDTH, HEIGHT,
-        RasterPixels::Rgba32Float(Arc::new(values).into()), RasterColorSpace::LinearSrgb)
-        .unwrap().try_manage_pixels(&root).unwrap();
+    for y in 0..HEIGHT {
+        for x in 0..WIDTH {
+            values.extend_from_slice(&colors[quadrant(x, y)]);
+        }
+    }
+    let source = DecodedRaster::new(
+        WIDTH,
+        HEIGHT,
+        RasterPixels::Rgba32Float(Arc::new(values).into()),
+        RasterColorSpace::LinearSrgb,
+    )
+    .unwrap()
+    .try_manage_pixels(&root)
+    .unwrap();
     // Match one source pixel to one output pixel despite the viewer fit margin.
     let zoom = HEIGHT as f32 / (HEIGHT - 32) as f32;
     let before = render_hdr_float_metal_sized(&source, [WIDTH, HEIGHT], zoom);
     assert_eq!(before.len(), WIDTH as usize * HEIGHT as usize * 4);
-    for y in 0..HEIGHT { for x in 0..WIDTH {
-        // Exclude the one-pixel boundary neighbourhood from the independent
-        // constant-region oracle; the full before/after comparison includes it.
-        if x.abs_diff(WIDTH / 2) <= 1 || y.abs_diff(HEIGHT / 2) <= 1 { continue; }
-        let at = (y as usize * WIDTH as usize + x as usize) * 4;
-        assert_eq!(&before[at..at + 4], &expected_half[quadrant(x, y)], "x={x} y={y}");
-    } }
+    for y in 0..HEIGHT {
+        for x in 0..WIDTH {
+            // Exclude the one-pixel boundary neighbourhood from the independent
+            // constant-region oracle; the full before/after comparison includes it.
+            if x.abs_diff(WIDTH / 2) <= 1 || y.abs_diff(HEIGHT / 2) <= 1 {
+                continue;
+            }
+            let at = (y as usize * WIDTH as usize + x as usize) * 4;
+            assert_eq!(&before[at..at + 4], &expected_half[quadrant(x, y)], "x={x} y={y}");
+        }
+    }
     let directory = tempfile::tempdir().unwrap();
     let swap: rrrah_cache::RasterSwapCache<u8> = rrrah_cache::RasterSwapCache::new_with_budgets(
-        directory.path(), rrrah_cache::ImageSwapConfig {
+        directory.path(),
+        rrrah_cache::ImageSwapConfig {
             limits: rrrah_cache::CacheLimits::bytes(BYTES + 65536),
-            queue_bytes: BYTES, queue_count: 1, restore_bytes: BYTES,
-        }, queue.clone(), root.clone()).unwrap();
+            queue_bytes: BYTES,
+            queue_count: 1,
+            restore_bytes: BYTES,
+        },
+        queue.clone(),
+        root.clone(),
+    )
+    .unwrap();
     swap.enqueue(1, source);
     swap.wait_idle().unwrap();
     assert_eq!((root.used(), queue.used()), (0, 0));
@@ -1227,41 +1411,87 @@ fn large_float_hdr_swap_preserves_full_metal_attachment() {
     assert!(swap.try_get(&1, || false).is_err());
     drop(pressure);
     let mut admitted = false;
-    assert!(swap.try_get(&1, || {
-        admitted |= root.used() > 0;
-        admitted
-    }).unwrap().is_none());
-    assert!(admitted, "12 MP float cancellation must follow allocation admission");
+    assert!(
+        swap.try_get(&1, || {
+            admitted |= root.used() > 0;
+            admitted
+        })
+        .unwrap()
+        .is_none()
+    );
+    assert!(
+        admitted,
+        "12 MP float cancellation must follow allocation admission"
+    );
     assert_eq!((root.used(), queue.used()), (0, 0));
     let restored = swap.try_get(&1, || false).unwrap().unwrap();
-    let RasterPixels::Rgba32Float(values) = restored.pixels() else { panic!() };
+    let RasterPixels::Rgba32Float(values) = restored.pixels() else {
+        panic!()
+    };
     for (index, actual) in values.chunks_exact(4).enumerate() {
         let reference = colors[quadrant((index % WIDTH as usize) as u32, (index / WIDTH as usize) as u32)];
-        for channel in 0..4 { assert_eq!(actual[channel].to_bits(), reference[channel].to_bits()); }
+        for channel in 0..4 {
+            assert_eq!(actual[channel].to_bits(), reference[channel].to_bits());
+        }
     }
-    assert_eq!(render_hdr_float_metal_sized(&restored, [WIDTH, HEIGHT], zoom), before);
-    assert_eq!((swap.stats().writes, swap.stats().reads, swap.stats().errors), (1, 1, 0));
+    assert_eq!(
+        render_hdr_float_metal_sized(&restored, [WIDTH, HEIGHT], zoom),
+        before
+    );
+    assert_eq!(
+        (swap.stats().writes, swap.stats().reads, swap.stats().errors),
+        (1, 1, 0)
+    );
     drop(restored);
     drop(swap);
     assert_eq!((root.used(), queue.used()), (0, 0));
-    eprintln!("12 MP HDR float attachment: all binary16 pixels exact after swap; independent bright/negative/exposure oracle; root=0; queue=0");
+    eprintln!(
+        "12 MP HDR float attachment: all binary16 pixels exact after swap; independent bright/negative/exposure oracle; root=0; queue=0"
+    );
 }
 
 #[test]
 fn declared_radiance_bt2020_keeps_extended_gamut_through_gpu() {
-    qualify_declared_linear_gamut("rec2020-linear-red.hdr", 9,
-        frame(1, vec![3.320982, -0.24910095, -0.03630153, 1.0]));
+    qualify_declared_linear_gamut(
+        "rec2020-linear-red.hdr",
+        9,
+        frame(1, vec![3.320982, -0.24910095, -0.03630153, 1.0]),
+    );
 }
 
 #[test]
 fn declared_radiance_p3_keeps_rgbw_hdr_through_swap_and_gpu() {
-    qualify_declared_linear_gamut("p3-linear-rgbw.hdr", 12,
-        frame(4, vec![2.4498803525611192,-0.08411390941937635,-0.03927510918066887,1.0,-0.4498803525611199,2.0841139094193766,-0.15727209110126364,1.0,-2.220446049250313e-16,-4.163336342344337e-17,2.196547200281933,1.0,2.0,2.0,2.0,1.0]));
+    qualify_declared_linear_gamut(
+        "p3-linear-rgbw.hdr",
+        12,
+        frame(
+            4,
+            vec![
+                2.4498803525611192,
+                -0.08411390941937635,
+                -0.03927510918066887,
+                1.0,
+                -0.4498803525611199,
+                2.0841139094193766,
+                -0.15727209110126364,
+                1.0,
+                -2.220446049250313e-16,
+                -4.163336342344337e-17,
+                2.196547200281933,
+                1.0,
+                2.0,
+                2.0,
+                2.0,
+                1.0,
+            ],
+        ),
+    );
 }
 
 fn qualify_declared_linear_gamut(name: &str, primaries: u16, golden: DecodedRaster) {
     let path = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-        .join("../../tests/fixtures/raster").join(name);
+        .join("../../tests/fixtures/raster")
+        .join(name);
     let root = rrrah_core::MemoryBudget::new(1024 * 1024);
     let mut request = rrrah_decode::DecodeRequest::new(path);
     request.memory_budget = Some(root.clone());
@@ -1269,36 +1499,60 @@ fn qualify_declared_linear_gamut(name: &str, primaries: u16, golden: DecodedRast
     qualify_linear_source(source, root, primaries, golden, name);
 }
 
-fn qualify_linear_source(source: DecodedRaster, root: rrrah_core::MemoryBudget,
-    primaries: u16, golden: DecodedRaster, name: &str) {
-    let Some(gpu) = common::qualification_gpu() else { return; };
+fn qualify_linear_source(
+    source: DecodedRaster,
+    root: rrrah_core::MemoryBudget,
+    primaries: u16,
+    golden: DecodedRaster,
+    name: &str,
+) {
+    let Some(gpu) = common::qualification_gpu() else {
+        return;
+    };
     eprintln!("Declared linear gamut adapter: {}", gpu.adapter_name());
     let expected_color = source.color_space().clone();
     let source_weight = root.used();
     let pressure = root.try_reserve(root.available_bytes()).unwrap();
     assert!(rrrah_decode::prepare_raster_for_display_with_budget(&source, Some(&root)).is_err());
     drop(pressure);
-    assert!(rrrah_decode::prepare_raster_for_display_with_budget_and_cancel(&source, Some(&root), || true).is_err());
+    assert!(
+        rrrah_decode::prepare_raster_for_display_with_budget_and_cancel(&source, Some(&root), || true)
+            .is_err()
+    );
     assert_eq!(root.used(), source_weight);
     let linear = rrrah_decode::prepare_raster_for_display_with_budget(&source, Some(&root)).unwrap();
     let (RasterPixels::Rgba32Float(actual), RasterPixels::Rgba32Float(expected)) =
-        (linear.pixels(), golden.pixels()) else { panic!() };
+        (linear.pixels(), golden.pixels())
+    else {
+        panic!()
+    };
     for (actual, expected) in actual.iter().zip(expected.iter()) {
         assert!((actual - expected).abs() < 0.000002);
     }
     assert!(actual.iter().any(|v| *v > 1.0));
     assert!(actual.iter().any(|v| *v < 0.0));
-    assert_eq!(gpu.render_raster(&linear, view(), [64,64]).pixels,
-        gpu.render_raster(&golden, view(), [64,64]).pixels);
-    assert_eq!(gpu.render_raster_half(&linear, view(), [64,64]),
-        gpu.render_raster_half(&golden, view(), [64,64]));
+    assert_eq!(
+        gpu.render_raster(&linear, view(), [64, 64]).pixels,
+        gpu.render_raster(&golden, view(), [64, 64]).pixels
+    );
+    assert_eq!(
+        gpu.render_raster_half(&linear, view(), [64, 64]),
+        gpu.render_raster_half(&golden, view(), [64, 64])
+    );
     let weight = source.capacity_bytes();
     let directory = tempfile::tempdir().unwrap();
     let swap = rrrah_cache::RasterSwapCache::<u8>::new_with_budgets(
-        directory.path(), rrrah_cache::ImageSwapConfig {
+        directory.path(),
+        rrrah_cache::ImageSwapConfig {
             limits: rrrah_cache::CacheLimits::bytes(1024 * 1024),
-            queue_bytes: weight, queue_count: 1, restore_bytes: weight,
-        }, rrrah_core::MemoryBudget::new(weight), root.clone()).unwrap();
+            queue_bytes: weight,
+            queue_count: 1,
+            restore_bytes: weight,
+        },
+        rrrah_core::MemoryBudget::new(weight),
+        root.clone(),
+    )
+    .unwrap();
     swap.enqueue(1, source);
     swap.wait_idle().unwrap();
     drop(linear);
@@ -1311,38 +1565,58 @@ fn qualify_linear_source(source: DecodedRaster, root: rrrah_core::MemoryBudget,
     let restored = swap.try_get(&1, || false).unwrap().unwrap();
     assert_eq!(restored.color_space(), &expected_color);
     let linear = rrrah_decode::prepare_raster_for_display_with_budget(&restored, Some(&root)).unwrap();
-    assert_eq!(gpu.render_raster(&linear, view(), [64,64]).pixels,
-        gpu.render_raster(&golden, view(), [64,64]).pixels);
-    assert_eq!(gpu.render_raster_half(&linear, view(), [64,64]),
-        gpu.render_raster_half(&golden, view(), [64,64]));
+    assert_eq!(
+        gpu.render_raster(&linear, view(), [64, 64]).pixels,
+        gpu.render_raster(&golden, view(), [64, 64]).pixels
+    );
+    assert_eq!(
+        gpu.render_raster_half(&linear, view(), [64, 64]),
+        gpu.render_raster_half(&golden, view(), [64, 64])
+    );
     assert_eq!(swap.stats().errors, 0);
     drop((restored, linear, swap));
-    assert_eq!(root.used(),0);
-    eprintln!("Declared linear gamut {primaries}: {name}; declared source preserved; pressure/cancel/swap retry; SDR/HDR analytical frame exact; root=0");
+    assert_eq!(root.used(), 0);
+    eprintln!(
+        "Declared linear gamut {primaries}: {name}; declared source preserved; pressure/cancel/swap retry; SDR/HDR analytical frame exact; root=0"
+    );
 }
 
 #[test]
 fn declared_exr_wide_gamuts_preserve_native_color_and_metal_swap() {
-    let fixtures = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-        .join("../../tests/fixtures/raster");
+    let fixtures = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/raster");
     for primaries in [9, 12] {
         for tag in ["chroma", "id", "both", "neutral", "id-neutral"] {
-            let oracle=if tag.contains("neutral") {format!("wide-{primaries}-{tag}.linear-srgb.f32")}
-                else {format!("wide-{primaries}.linear-srgb.f32")};
+            let oracle = if tag.contains("neutral") {
+                format!("wide-{primaries}-{tag}.linear-srgb.f32")
+            } else {
+                format!("wide-{primaries}.linear-srgb.f32")
+            };
             let bytes = std::fs::read(fixtures.join(oracle)).unwrap();
-            let values = bytes.chunks_exact(4).map(|v| f32::from_le_bytes(v.try_into().unwrap())).collect::<Vec<_>>();
-            let golden = DecodedRaster::new(3, 2, RasterPixels::Rgba32Float(Arc::new(values).into()),
-                RasterColorSpace::LinearSrgb).unwrap();
+            let values = bytes
+                .chunks_exact(4)
+                .map(|v| f32::from_le_bytes(v.try_into().unwrap()))
+                .collect::<Vec<_>>();
+            let golden = DecodedRaster::new(
+                3,
+                2,
+                RasterPixels::Rgba32Float(Arc::new(values).into()),
+                RasterColorSpace::LinearSrgb,
+            )
+            .unwrap();
             qualify_declared_linear_gamut(&format!("wide-{primaries}-{tag}.exr"), primaries, golden);
         }
         for tag in ["conflict", "aces"] {
-            let request = rrrah_decode::DecodeRequest::new(fixtures.join(format!("wide-{primaries}-{tag}.exr")));
-            assert!(matches!(rrrah_decode::decode_raster(&request),
-                Err(rrrah_decode::RasterDecodeError::InvalidExrColor(_))));
+            let request =
+                rrrah_decode::DecodeRequest::new(fixtures.join(format!("wide-{primaries}-{tag}.exr")));
+            assert!(matches!(
+                rrrah_decode::decode_raster(&request),
+                Err(rrrah_decode::RasterDecodeError::InvalidExrColor(_))
+            ));
         }
         for tag in ["unknown"] {
             let root = rrrah_core::MemoryBudget::new(1024 * 1024);
-            let mut request = rrrah_decode::DecodeRequest::new(fixtures.join(format!("wide-{primaries}-{tag}.exr")));
+            let mut request =
+                rrrah_decode::DecodeRequest::new(fixtures.join(format!("wide-{primaries}-{tag}.exr")));
             request.memory_budget = Some(root.clone());
             let source = rrrah_decode::decode_raster(&request).unwrap();
             assert_eq!(source.color_space(), &RasterColorSpace::LinearRgbUnspecified);
@@ -1351,119 +1625,229 @@ fn declared_exr_wide_gamuts_preserve_native_color_and_metal_swap() {
             assert_eq!(root.used(), 0);
         }
     }
-    eprintln!("EXR wide color: 10 qualified metadata cases; 4 conflicting cases refused; 2 unknown-ID cases remain unqualified; root=0");
+    eprintln!(
+        "EXR wide color: 10 qualified metadata cases; 4 conflicting cases refused; 2 unknown-ID cases remain unqualified; root=0"
+    );
 }
 
 #[test]
 fn explicit_chromaticity_metadata_survives_swap_and_metal() {
-    let root = rrrah_core::MemoryBudget::new(1024*1024);
-    let color = RasterColorSpace::LinearRgb(rrrah_core::RgbChromaticities::new(
-        [0.680,0.320,0.265,0.690,0.150,0.060,0.3127,0.3290]).unwrap());
-    let source = DecodedRaster::new(1,1,
-        RasterPixels::Rgba32Float(Arc::new(vec![2.0,0.0,0.0,1.0]).into()),color)
-        .unwrap().try_manage_pixels(&root).unwrap();
-    qualify_linear_source(source, root, 0,
-        frame(1, vec![2.4498803525611192,-0.08411390941937635,-0.03927510918066887,1.0]),
-        "explicit xy metadata");
+    let root = rrrah_core::MemoryBudget::new(1024 * 1024);
+    let color = RasterColorSpace::LinearRgb(
+        rrrah_core::RgbChromaticities::new([0.680, 0.320, 0.265, 0.690, 0.150, 0.060, 0.3127, 0.3290])
+            .unwrap(),
+    );
+    let source = DecodedRaster::new(
+        1,
+        1,
+        RasterPixels::Rgba32Float(Arc::new(vec![2.0, 0.0, 0.0, 1.0]).into()),
+        color,
+    )
+    .unwrap()
+    .try_manage_pixels(&root)
+    .unwrap();
+    qualify_linear_source(
+        source,
+        root,
+        0,
+        frame(
+            1,
+            vec![
+                2.4498803525611192,
+                -0.08411390941937635,
+                -0.03927510918066887,
+                1.0,
+            ],
+        ),
+        "explicit xy metadata",
+    );
 }
 
 #[test]
 fn radiance_arbitrary_primaries_and_non_d65_white_survive_swap_and_metal() {
-    let fixtures = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-        .join("../../tests/fixtures/raster");
+    let fixtures = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/raster");
     for name in ["custom-white", "ap1-white", "ap0-white"] {
         let bytes = std::fs::read(fixtures.join(format!("{name}.linear-srgb.f32"))).unwrap();
-        let values = bytes.chunks_exact(4).map(|v|f32::from_le_bytes(v.try_into().unwrap())).collect::<Vec<_>>();
-        qualify_declared_linear_gamut(&format!("{name}.hdr"),0,frame(4,values));
-        let source = rrrah_decode::decode_raster(&rrrah_decode::DecodeRequest::new(fixtures.join(format!("{name}.hdr")))).unwrap();
-        assert!(matches!(source.color_space(),RasterColorSpace::LinearRgb(_)));
-        let RasterPixels::Rgba32Float(values)=source.pixels() else { panic!() };
-        assert_eq!(&values[..],&[2.,0.,0.,1.,0.,2.,0.,1.,0.,0.,2.,1.,2.,2.,2.,1.]);
+        let values = bytes
+            .chunks_exact(4)
+            .map(|v| f32::from_le_bytes(v.try_into().unwrap()))
+            .collect::<Vec<_>>();
+        qualify_declared_linear_gamut(&format!("{name}.hdr"), 0, frame(4, values));
+        let source = rrrah_decode::decode_raster(&rrrah_decode::DecodeRequest::new(
+            fixtures.join(format!("{name}.hdr")),
+        ))
+        .unwrap();
+        assert!(matches!(source.color_space(), RasterColorSpace::LinearRgb(_)));
+        let RasterPixels::Rgba32Float(values) = source.pixels() else {
+            panic!()
+        };
+        assert_eq!(
+            &values[..],
+            &[2., 0., 0., 1., 0., 2., 0., 1., 0., 0., 2., 1., 2., 2., 2., 1.]
+        );
     }
-    eprintln!("Radiance arbitrary color: 3 non-D65 RGBW sources; independent full matrix oracle; native samples unchanged; Metal SDR/HDR and swap retry exact");
+    eprintln!(
+        "Radiance arbitrary color: 3 non-D65 RGBW sources; independent full matrix oracle; native samples unchanged; Metal SDR/HDR and swap retry exact"
+    );
 }
 
 #[test]
 fn malformed_radiance_primaries_release_decode_admission() {
-    let directory=tempfile::tempdir().unwrap();
-    let path=directory.path().join("malformed.hdr");
+    let directory = tempfile::tempdir().unwrap();
+    let path = directory.path().join("malformed.hdr");
     for declaration in [
         "PRIMARIES= .64 .33 .64 .33 .64 .33 .3127 .3290",
         "PRIMARIES= NaN .33 .30 .60 .15 .06 .3127 .3290",
         "PRIMARIES= .64 .33 .30 .60 .15 .06 .3127 0",
         "PRIMARIES= .64 .33 .30 .60 .15 .06 .3127 .3290\nPRIMARIES= .64 .33 .30 .60 .15 .06 .3127 .3290",
     ] {
-        let mut bytes=format!("#?RADIANCE\nFORMAT=32-bit_rle_rgbe\n{declaration}\n\n-Y 1 +X 1\n").into_bytes();
-        bytes.extend([128,0,0,130]);std::fs::write(&path,bytes).unwrap();
-        let root=rrrah_core::MemoryBudget::new(1024*1024);
-        let mut request=rrrah_decode::DecodeRequest::new(&path);request.memory_budget=Some(root.clone());
-        assert!(matches!(rrrah_decode::decode_raster(&request),Err(rrrah_decode::RasterDecodeError::InvalidHdrColor(_))));
-        assert_eq!(root.used(),0);
+        let mut bytes =
+            format!("#?RADIANCE\nFORMAT=32-bit_rle_rgbe\n{declaration}\n\n-Y 1 +X 1\n").into_bytes();
+        bytes.extend([128, 0, 0, 130]);
+        std::fs::write(&path, bytes).unwrap();
+        let root = rrrah_core::MemoryBudget::new(1024 * 1024);
+        let mut request = rrrah_decode::DecodeRequest::new(&path);
+        request.memory_budget = Some(root.clone());
+        assert!(matches!(
+            rrrah_decode::decode_raster(&request),
+            Err(rrrah_decode::RasterDecodeError::InvalidHdrColor(_))
+        ));
+        assert_eq!(root.used(), 0);
     }
 }
 
 #[test]
 fn exr_arbitrary_primaries_and_aces_ids_preserve_color_through_metal_swap() {
-    let fixtures=std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures");
-    let manifest:serde_json::Value=serde_json::from_slice(&std::fs::read(fixtures.join("exr-arbitrary-color.json")).unwrap()).unwrap();
-    let native_bytes=std::fs::read(fixtures.join("raster/float-none.exr.f32")).unwrap();
-    let native=native_bytes.chunks_exact(4).map(|v|f32::from_le_bytes(v.try_into().unwrap())).collect::<Vec<_>>();
-    let mut counts=[0usize;3];
+    let fixtures = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures");
+    let manifest: serde_json::Value =
+        serde_json::from_slice(&std::fs::read(fixtures.join("exr-arbitrary-color.json")).unwrap()).unwrap();
+    let native_bytes = std::fs::read(fixtures.join("raster/float-none.exr.f32")).unwrap();
+    let native = native_bytes
+        .chunks_exact(4)
+        .map(|v| f32::from_le_bytes(v.try_into().unwrap()))
+        .collect::<Vec<_>>();
+    let mut counts = [0usize; 3];
     for case in manifest["cases"].as_array().unwrap() {
-        let name=case["name"].as_str().unwrap();
-        let root=rrrah_core::MemoryBudget::new(1024*1024);
-        let mut request=rrrah_decode::DecodeRequest::new(fixtures.join("raster").join(name));
-        request.memory_budget=Some(root.clone());
+        let name = case["name"].as_str().unwrap();
+        let root = rrrah_core::MemoryBudget::new(1024 * 1024);
+        let mut request = rrrah_decode::DecodeRequest::new(fixtures.join("raster").join(name));
+        request.memory_budget = Some(root.clone());
         match case["outcome"].as_str().unwrap() {
-            "accepted"=>{
-                let bytes=std::fs::read(fixtures.join("raster").join(case["oracle"].as_str().unwrap())).unwrap();
-                let values=bytes.chunks_exact(4).map(|v|f32::from_le_bytes(v.try_into().unwrap())).collect::<Vec<_>>();
-                let golden=DecodedRaster::new(3,2,RasterPixels::Rgba32Float(Arc::new(values).into()),RasterColorSpace::LinearSrgb).unwrap();
-                qualify_declared_linear_gamut(name,0,golden);
-                let source=rrrah_decode::decode_raster(&request).unwrap();
-                let RasterColorSpace::LinearRgb(chroma)=source.color_space() else {panic!()};
-                for (actual,reference) in chroma.xy().iter().zip(case["xy"].as_array().unwrap()) {
-                    assert!((actual-reference.as_f64().unwrap()).abs()<1e-15);
+            "accepted" => {
+                let bytes =
+                    std::fs::read(fixtures.join("raster").join(case["oracle"].as_str().unwrap())).unwrap();
+                let values = bytes
+                    .chunks_exact(4)
+                    .map(|v| f32::from_le_bytes(v.try_into().unwrap()))
+                    .collect::<Vec<_>>();
+                let golden = DecodedRaster::new(
+                    3,
+                    2,
+                    RasterPixels::Rgba32Float(Arc::new(values).into()),
+                    RasterColorSpace::LinearSrgb,
+                )
+                .unwrap();
+                qualify_declared_linear_gamut(name, 0, golden);
+                let source = rrrah_decode::decode_raster(&request).unwrap();
+                let RasterColorSpace::LinearRgb(chroma) = source.color_space() else {
+                    panic!()
+                };
+                for (actual, reference) in chroma.xy().iter().zip(case["xy"].as_array().unwrap()) {
+                    assert!((actual - reference.as_f64().unwrap()).abs() < 1e-15);
                 }
-                let expected_neutral=case["adopted_neutral"].as_array().map(|v|[v[0].as_f64().unwrap(),v[1].as_f64().unwrap()]);
-                assert_eq!(chroma.adopted_neutral().is_some(),expected_neutral.is_some());
-                if let (Some(actual),Some(expected))=(chroma.adopted_neutral(),expected_neutral) {
-                    for (actual,expected) in actual.into_iter().zip(expected) {assert!((actual-expected).abs()<1e-15);}
+                let expected_neutral = case["adopted_neutral"]
+                    .as_array()
+                    .map(|v| [v[0].as_f64().unwrap(), v[1].as_f64().unwrap()]);
+                assert_eq!(chroma.adopted_neutral().is_some(), expected_neutral.is_some());
+                if let (Some(actual), Some(expected)) = (chroma.adopted_neutral(), expected_neutral) {
+                    for (actual, expected) in actual.into_iter().zip(expected) {
+                        assert!((actual - expected).abs() < 1e-15);
+                    }
                 }
-                let RasterPixels::Rgba32Float(actual)=source.pixels() else {panic!()};
-                assert!(actual.iter().zip(native.iter()).all(|(a,b)|a.to_bits()==b.to_bits()));
-                counts[0]+=1;
-            },
-            "refused"=>{assert!(matches!(rrrah_decode::decode_raster(&request),Err(rrrah_decode::RasterDecodeError::InvalidExrColor(_))));counts[1]+=1;},
-            "unknown"=>{
-                let source=rrrah_decode::decode_raster(&request).unwrap();
-                assert_eq!(source.color_space(),&RasterColorSpace::LinearRgbUnspecified);
-                assert!(rrrah_decode::prepare_raster_for_display(&source).is_err());counts[2]+=1;
-            },
-            _=>panic!("unexpected outcome"),
+                let RasterPixels::Rgba32Float(actual) = source.pixels() else {
+                    panic!()
+                };
+                assert!(
+                    actual
+                        .iter()
+                        .zip(native.iter())
+                        .all(|(a, b)| a.to_bits() == b.to_bits())
+                );
+                counts[0] += 1;
+            }
+            "refused" => {
+                assert!(matches!(
+                    rrrah_decode::decode_raster(&request),
+                    Err(rrrah_decode::RasterDecodeError::InvalidExrColor(_))
+                ));
+                counts[1] += 1;
+            }
+            "unknown" => {
+                let source = rrrah_decode::decode_raster(&request).unwrap();
+                assert_eq!(source.color_space(), &RasterColorSpace::LinearRgbUnspecified);
+                assert!(rrrah_decode::prepare_raster_for_display(&source).is_err());
+                counts[2] += 1;
+            }
+            _ => panic!("unexpected outcome"),
         }
-        assert_eq!(root.used(),0);
+        assert_eq!(root.used(), 0);
     }
-    assert_eq!(counts,[17,11,6]);
-    eprintln!("EXR arbitrary color: accepted=17; refused=11; unknown=6; independent full matrix; native/swap/Metal SDR/HDR exact; root=0");
+    assert_eq!(counts, [17, 11, 6]);
+    eprintln!(
+        "EXR arbitrary color: accepted=17; refused=11; unknown=6; independent full matrix; native/swap/Metal SDR/HDR exact; root=0"
+    );
 }
 
 #[test]
 fn adopted_neutral_metadata_survives_v4_swap_pressure_and_metal() {
-    let fixtures=std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/raster");
-    for (name,xy,neutral) in [
-        ("rec709",[0.64,0.33,0.30,0.60,0.15,0.06,0.3127,0.3290],[0.3333,0.3333]),
-        ("ap1",[0.713,0.293,0.165,0.830,0.128,0.044,0.32168,0.33767],[0.34567,0.35850]),
+    let fixtures = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/raster");
+    for (name, xy, neutral) in [
+        (
+            "rec709",
+            [0.64, 0.33, 0.30, 0.60, 0.15, 0.06, 0.3127, 0.3290],
+            [0.3333, 0.3333],
+        ),
+        (
+            "ap1",
+            [0.713, 0.293, 0.165, 0.830, 0.128, 0.044, 0.32168, 0.33767],
+            [0.34567, 0.35850],
+        ),
     ] {
-        let bytes=std::fs::read(fixtures.join(format!("adopted-neutral-{name}.linear-srgb.f32"))).unwrap();
-        let values=bytes.chunks_exact(4).map(|v|f32::from_le_bytes(v.try_into().unwrap())).collect::<Vec<_>>();
-        let root=rrrah_core::MemoryBudget::new(1024*1024);
-        let color=RasterColorSpace::LinearRgb(rrrah_core::RgbChromaticities::new(xy).unwrap()
-            .with_adopted_neutral(neutral).unwrap());
-        let source=DecodedRaster::new(4,1,RasterPixels::Rgba32Float(Arc::new(
-            vec![2.,0.,0.,1.,0.,2.,0.,1.,0.,0.,2.,1.,2.,2.,2.,1.]).into()),color)
-            .unwrap().try_manage_pixels(&root).unwrap();
-        qualify_linear_source(source,root,0,frame(4,values),&format!("adopted-neutral-{name}"));
+        let bytes = std::fs::read(fixtures.join(format!("adopted-neutral-{name}.linear-srgb.f32"))).unwrap();
+        let values = bytes
+            .chunks_exact(4)
+            .map(|v| f32::from_le_bytes(v.try_into().unwrap()))
+            .collect::<Vec<_>>();
+        let root = rrrah_core::MemoryBudget::new(1024 * 1024);
+        let color = RasterColorSpace::LinearRgb(
+            rrrah_core::RgbChromaticities::new(xy)
+                .unwrap()
+                .with_adopted_neutral(neutral)
+                .unwrap(),
+        );
+        let source = DecodedRaster::new(
+            4,
+            1,
+            RasterPixels::Rgba32Float(
+                Arc::new(vec![
+                    2., 0., 0., 1., 0., 2., 0., 1., 0., 0., 2., 1., 2., 2., 2., 1.,
+                ])
+                .into(),
+            ),
+            color,
+        )
+        .unwrap()
+        .try_manage_pixels(&root)
+        .unwrap();
+        qualify_linear_source(
+            source,
+            root,
+            0,
+            frame(4, values),
+            &format!("adopted-neutral-{name}"),
+        );
     }
-    eprintln!("Adopted neutral metadata: cases=2; independent full matrix; V4 pressure/cancel/retry; Metal SDR/HDR exact; root=0");
+    eprintln!(
+        "Adopted neutral metadata: cases=2; independent full matrix; V4 pressure/cancel/retry; Metal SDR/HDR exact; root=0"
+    );
 }

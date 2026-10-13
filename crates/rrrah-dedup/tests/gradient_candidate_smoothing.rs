@@ -197,26 +197,50 @@ fn full_two_pass_reference(pixels: &[f32], width: usize, height: usize, radius: 
 
 #[test]
 fn row_ring_is_bitwise_full_two_pass_for_wraps_borders_and_hdr() {
-    let values = [-0., f32::from_bits(1), f32::MIN_POSITIVE, -1e20,
-        f32::MAX / 8., 12.345, -0.3, f32::MAX / 2.];
+    let values = [
+        -0.,
+        f32::from_bits(1),
+        f32::MIN_POSITIVE,
+        -1e20,
+        f32::MAX / 8.,
+        12.345,
+        -0.3,
+        f32::MAX / 2.,
+    ];
     for (width, height) in [(1, 1), (1, 19), (19, 1), (3, 2), (7, 9), (9, 7), (17, 31)] {
         let pixels: Vec<_> = (0..width * height)
-            .flat_map(|i| [values[(i % 8) as usize], values[((i * 3 + 1) % 8) as usize],
-                values[((i * 5 + 2) % 8) as usize], 1.])
+            .flat_map(|i| {
+                [
+                    values[(i % 8) as usize],
+                    values[((i * 3 + 1) % 8) as usize],
+                    values[((i * 5 + 2) % 8) as usize],
+                    1.,
+                ]
+            })
             .collect();
-        let view = LinearRgbaView::new(width, height, &pixels,
-            u64::from(width) * u64::from(height), || false).unwrap();
+        let view = LinearRgbaView::new(
+            width,
+            height,
+            &pixels,
+            u64::from(width) * u64::from(height),
+            || false,
+        )
+        .unwrap();
         for radius in [0, 1, 2, 4, 32] {
             let full_bytes = u64::from(width) * u64::from(height) * 16;
-            let scratch = if radius == 0 { 0 } else {
+            let scratch = if radius == 0 {
+                0
+            } else {
                 u64::from(width) * u64::from(height.min(2 * radius + 1)) * 16
             };
             let budget = MemoryBudget::new(full_bytes + scratch);
             let taps = u64::from(width) * u64::from(height) * u64::from(2 * radius + 1) * 2;
             let output = smooth_gradient_candidates_managed(&view, radius, taps, &budget, || false).unwrap();
-            assert_eq!(output.iter().map(|v| v.to_bits()).collect::<Vec<_>>(),
+            assert_eq!(
+                output.iter().map(|v| v.to_bits()).collect::<Vec<_>>(),
                 full_two_pass_reference(&pixels, width as usize, height as usize, radius),
-                "{width}x{height} radius{radius}");
+                "{width}x{height} radius{radius}"
+            );
             assert_eq!(budget.peak(), full_bytes + scratch);
             assert_eq!(budget.used(), full_bytes);
             let last = output.clone();
@@ -242,12 +266,16 @@ fn row_ring_admits_only_window_scratch_and_refuses_one_byte_short() {
     drop(output);
     assert_eq!(budget.used(), 0);
     let denied = MemoryBudget::new(limit - 1);
-    assert!(matches!(smooth_gradient_candidates_managed(&view, 2, 570, &denied, || false),
-        Err(LocalError::Budget)));
+    assert!(matches!(
+        smooth_gradient_candidates_managed(&view, 2, 570, &denied, || false),
+        Err(LocalError::Budget)
+    ));
     assert_eq!(denied.used(), 0);
     let work_denied = MemoryBudget::new(limit);
-    assert!(matches!(smooth_gradient_candidates_managed(&view, 2, 569, &work_denied, || false),
-        Err(LocalError::Budget)));
+    assert!(matches!(
+        smooth_gradient_candidates_managed(&view, 2, 569, &work_denied, || false),
+        Err(LocalError::Budget)
+    ));
     assert_eq!(work_denied.peak(), 0);
 }
 
@@ -258,22 +286,32 @@ fn row_ring_wrap_cancellation_and_late_alpha_never_retain_partial_output() {
     let limit = (3 * 9 + 3 * 5) * 16;
     let calls = std::cell::Cell::new(0);
     let b = MemoryBudget::new(limit);
-    drop(smooth_gradient_candidates_managed(&view, 2, 270, &b, || {
-        calls.set(calls.get() + 1); false
-    }).unwrap());
+    drop(
+        smooth_gradient_candidates_managed(&view, 2, 270, &b, || {
+            calls.set(calls.get() + 1);
+            false
+        })
+        .unwrap(),
+    );
     assert_eq!(calls.get(), 272); // Initial/final plus all two-pass sample taps.
     for stop in 1..=calls.get() {
         let seen = std::cell::Cell::new(0);
         let budget = MemoryBudget::new(limit);
-        assert!(matches!(smooth_gradient_candidates_managed(&view, 2, 270, &budget, || {
-            seen.set(seen.get() + 1); seen.get() == stop
-        }), Err(LocalError::Cancelled)));
+        assert!(matches!(
+            smooth_gradient_candidates_managed(&view, 2, 270, &budget, || {
+                seen.set(seen.get() + 1);
+                seen.get() == stop
+            }),
+            Err(LocalError::Cancelled)
+        ));
         assert_eq!(budget.used(), 0);
     }
     let mut late_alpha = pixels;
     *late_alpha.last_mut().unwrap() = 0.5;
     let view = LinearRgbaView::new(3, 9, &late_alpha, 27, || false).unwrap();
-    assert!(matches!(smooth_gradient_candidates_managed(&view, 2, 270, &b, || false),
-        Err(LocalError::UnsupportedPixels)));
+    assert!(matches!(
+        smooth_gradient_candidates_managed(&view, 2, 270, &b, || false),
+        Err(LocalError::UnsupportedPixels)
+    ));
     assert_eq!(b.used(), 0);
 }

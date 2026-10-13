@@ -67,7 +67,9 @@ fn identical_and_transparent_pixel_equality_observe_late_cancellation() {
     use std::cell::Cell;
     for count in [1_u32, 4096, 4097, 8193] {
         let mut a = vec![37_u8; count as usize * 4];
-        for pixel in a.chunks_exact_mut(4) { pixel[3] = 255; }
+        for pixel in a.chunks_exact_mut(4) {
+            pixel[3] = 255;
+        }
         for transparent in [false, true] {
             let mut left = a.clone();
             let mut right = a.clone();
@@ -84,7 +86,11 @@ fn identical_and_transparent_pixel_equality_observe_late_cancellation() {
                 calls.set(calls.get() + 1);
                 calls.get() == 2
             });
-            assert_eq!(result, Err(PixelError::Cancelled), "count={count}, transparent={transparent}");
+            assert_eq!(
+                result,
+                Err(PixelError::Cancelled),
+                "count={count}, transparent={transparent}"
+            );
             assert_eq!(calls.get(), 2);
         }
     }
@@ -96,15 +102,28 @@ fn identical_pixels_honor_each_block_and_final_cancellation_checkpoint() {
     let bytes = vec![255; 8193 * 4];
     let view = Rgba8View::new(8193, 1, &bytes, 8193).unwrap();
     let calls = Cell::new(0);
-    assert_eq!(view.same_pixels(&view, || { calls.set(calls.get() + 1); false }), Ok(true));
+    assert_eq!(
+        view.same_pixels(&view, || {
+            calls.set(calls.get() + 1);
+            false
+        }),
+        Ok(true)
+    );
     let total = calls.get();
-    assert!(total >= 3, "equality requires intermediate and final cancellation checks");
+    assert!(
+        total >= 3,
+        "equality requires intermediate and final cancellation checks"
+    );
     for stop in 1..=total {
         calls.set(0);
-        assert_eq!(view.same_pixels(&view, || {
-            calls.set(calls.get() + 1);
-            calls.get() == stop
-        }), Err(PixelError::Cancelled), "checkpoint={stop}");
+        assert_eq!(
+            view.same_pixels(&view, || {
+                calls.set(calls.get() + 1);
+                calls.get() == stop
+            }),
+            Err(PixelError::Cancelled),
+            "checkpoint={stop}"
+        );
         assert_eq!(calls.get(), stop);
     }
 }

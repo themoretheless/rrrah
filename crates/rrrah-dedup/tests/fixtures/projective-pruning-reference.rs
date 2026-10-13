@@ -565,7 +565,16 @@ fn verify_projective_selected(
             }
         }
     }
-    refine_projective_evidence(points, policy, tolerance2, best, hypotheses, &cancel, &eligible, ProjectiveScoring::Target)
+    refine_projective_evidence(
+        points,
+        policy,
+        tolerance2,
+        best,
+        hypotheses,
+        &cancel,
+        &eligible,
+        ProjectiveScoring::Target,
+    )
 }
 
 #[allow(clippy::too_many_arguments)]
@@ -939,7 +948,14 @@ pub fn verify_projective_sampled(
     sampling: ProjectiveSamplingPolicy,
     cancel: impl Fn() -> bool,
 ) -> Result<Option<ProjectiveEvidence>, GeometryError> {
-    verify_projective_sampled_selected(points, policy, sampling, cancel, |_| true, ProjectiveScoring::Target)
+    verify_projective_sampled_selected(
+        points,
+        policy,
+        sampling,
+        cancel,
+        |_| true,
+        ProjectiveScoring::Target,
+    )
 }
 
 /// Sample only models valid on both whole-image rectangles, including refinement.
@@ -959,9 +975,14 @@ pub fn verify_projective_sampled_for_domains(
     if source.0 == 0 || source.1 == 0 || target.0 == 0 || target.1 == 0 {
         return Err(GeometryError::Invalid);
     }
-    verify_projective_sampled_selected(points, policy, sampling, cancel, |transform| {
-        projective_domain_eligible(transform, source, target)
-    }, ProjectiveScoring::Target)
+    verify_projective_sampled_selected(
+        points,
+        policy,
+        sampling,
+        cancel,
+        |transform| projective_domain_eligible(transform, source, target),
+        ProjectiveScoring::Target,
+    )
 }
 
 pub(crate) fn projective_domain_eligible(
@@ -1083,7 +1104,6 @@ fn verify_projective_sampled_selected(
         scoring,
     )
 }
-
 
 #[derive(Clone, Copy)]
 enum ProjectiveScoring {

@@ -611,7 +611,10 @@ fn spatial_file_policy_preserves_pixel_proof_errors_and_source_guards() {
 
 // Fixture sources may be read-only in an immutable qualification checkout.
 // Copy bytes without inheriting permissions so mutation tests can edit their own files.
-fn copy_writable(source: impl AsRef<std::path::Path>, target: impl AsRef<std::path::Path>) -> std::io::Result<u64> {
+fn copy_writable(
+    source: impl AsRef<std::path::Path>,
+    target: impl AsRef<std::path::Path>,
+) -> std::io::Result<u64> {
     let bytes = std::fs::read(source)?;
     std::fs::write(target, &bytes)?;
     Ok(bytes.len() as u64)

@@ -1422,10 +1422,19 @@ impl RawRenderer {
     }
 
     pub fn upload_mosaic_with_cancel(
-        &mut self, device: &wgpu::Device, queue: &wgpu::Queue,
-        mosaic: &DecodedMosaic, cancelled: impl Fn() -> bool,
+        &mut self,
+        device: &wgpu::Device,
+        queue: &wgpu::Queue,
+        mosaic: &DecodedMosaic,
+        cancelled: impl Fn() -> bool,
     ) -> Result<GpuUploadTimings, GpuError> {
-        self.upload_mosaic_with_tiling_and_cancel(device, queue, mosaic, TilingOverrides::default(), cancelled)
+        self.upload_mosaic_with_tiling_and_cancel(
+            device,
+            queue,
+            mosaic,
+            TilingOverrides::default(),
+            cancelled,
+        )
     }
 
     /// Upload one decoded mosaic with an explicit tiling override. Overrides
@@ -1444,12 +1453,17 @@ impl RawRenderer {
     /// Cancel between admission, tile preparation and publication. A refused
     /// upload preserves the previous texture and display uniforms.
     pub fn upload_mosaic_with_tiling_and_cancel(
-        &mut self, device: &wgpu::Device, queue: &wgpu::Queue,
-        mosaic: &DecodedMosaic, tiling: TilingOverrides,
+        &mut self,
+        device: &wgpu::Device,
+        queue: &wgpu::Queue,
+        mosaic: &DecodedMosaic,
+        tiling: TilingOverrides,
         cancelled: impl Fn() -> bool,
     ) -> Result<GpuUploadTimings, GpuError> {
         let total_started = Instant::now();
-        if cancelled() { return Err(GpuError::Cancelled); }
+        if cancelled() {
+            return Err(GpuError::Cancelled);
+        }
         let validate_started = Instant::now();
         let metadata = &mosaic.metadata;
         let max_dimension = device.limits().max_texture_dimension_2d;
@@ -1458,12 +1472,15 @@ impl RawRenderer {
         }
         let cfa_pattern = metadata.cfa.as_ref().ok_or(GpuError::MissingCfa)?;
         metadata.validate()?;
-        let expected_samples = (metadata.width as usize).checked_mul(metadata.height as usize)
+        let expected_samples = (metadata.width as usize)
+            .checked_mul(metadata.height as usize)
             .ok_or(rrrah_core::FrameError::DimensionOverflow)?;
         if mosaic.pixels.len() != expected_samples {
             return Err(rrrah_core::FrameError::InvalidPixelCount {
-                expected: expected_samples, actual: mosaic.pixels.len(),
-            }.into());
+                expected: expected_samples,
+                actual: mosaic.pixels.len(),
+            }
+            .into());
         }
         let rgbe = cfa_pattern.rgbe_quad().ok();
         let cfa = match rgbe {
@@ -1479,13 +1496,20 @@ impl RawRenderer {
         }
         let quad = grid.bayer_quad().ok();
         let black = quad.unwrap_or([0.; 4]);
-        let grid_bytes = if quad.is_none() { grid.values.len() as u64 * 4 } else { 0 };
+        let grid_bytes = if quad.is_none() {
+            grid.values.len() as u64 * 4
+        } else {
+            0
+        };
         let white = metadata.white_level.bayer_quad(cfa_pattern)?;
         let gains = display_white_balance(metadata.white_balance);
         let first_green = usize::from(cfa[0] != 1);
         let phase_gain = std::array::from_fn::<_, 4, _>(|phase| {
-            if rgbe.is_none() && cfa[phase] == 1 && phase != first_green { gains[3] }
-            else { gains[cfa[phase] as usize] }
+            if rgbe.is_none() && cfa[phase] == 1 && phase != first_green {
+                gains[3]
+            } else {
+                gains[cfa[phase] as usize]
+            }
         });
         let camera_to_rgb = if rgbe.is_some() {
             rrrah_core::camera4_to_linear_srgb_precise(metadata.xyz_to_camera.map(|r| r.map(f64::from)))
@@ -1500,10 +1524,12 @@ impl RawRenderer {
             return Err(GpuError::InvalidColorProfile);
         }
         // Bound unnormalized filter accumulation even for a full-sensor footprint.
-        let filter_sample_limit = f64::from(f32::MAX)
-            / (f64::from(metadata.width) * f64::from(metadata.height) * 4.0).max(16.0);
-        let matrix_norm = camera_to_rgb.iter().map(|row| row.iter()
-            .map(|v| f64::from(*v).abs()).sum::<f64>()).fold(1.0_f64, f64::max);
+        let filter_sample_limit =
+            f64::from(f32::MAX) / (f64::from(metadata.width) * f64::from(metadata.height) * 4.0).max(16.0);
+        let matrix_norm = camera_to_rgb
+            .iter()
+            .map(|row| row.iter().map(|v| f64::from(*v).abs()).sum::<f64>())
+            .fold(1.0_f64, f64::max);
         // Reserve exposure (+10 stops), gamut mapping and quadratic ACES headroom.
         let color_sample_limit = f64::from(f32::MAX).sqrt() / (16.0 * 1024.0 * matrix_norm);
         let filter_sample_limit = filter_sample_limit.min(color_sample_limit);
@@ -1515,17 +1541,22 @@ impl RawRenderer {
                 let level = grid.at(row, column, 0).unwrap();
                 let phase = ((row % 2) * 2 + column % 2) as usize;
                 if white[phase] <= level || !(white[phase] - level).is_finite() {
-                    return Err(GpuError::InvalidLevels { black: level, white: white[phase] });
+                    return Err(GpuError::InvalidLevels {
+                        black: level,
+                        white: white[phase],
+                    });
                 }
                 let range = white[phase] - level;
                 let largest = (65535.0 - level).max(0.0) / range * phase_gain[phase];
-                inspect_samples |= !largest.is_finite() || range.is_subnormal()
-                    || f64::from(largest) > filter_sample_limit;
+                inspect_samples |=
+                    !largest.is_finite() || range.is_subnormal() || f64::from(largest) > filter_sample_limit;
             }
         }
         if inspect_samples {
             for (y, row) in mosaic.pixels.chunks(metadata.width as usize).enumerate() {
-                if cancelled() { return Err(GpuError::Cancelled); }
+                if cancelled() {
+                    return Err(GpuError::Cancelled);
+                }
                 for (x, encoded) in row.iter().enumerate() {
                     let phase = (y % 2) * 2 + x % 2;
                     let level = grid.at(y as u32, x as u32, 0).unwrap();
@@ -1533,14 +1564,21 @@ impl RawRenderer {
                     let normalized = (f32::from(*encoded) - level).max(0.0) / range;
                     // Metal may flush subnormal divisors. Exact zero sites are
                     // handled explicitly in the shader and remain admissible.
-                    if !normalized.is_finite() || !(normalized * phase_gain[phase]).is_finite()
-                        || (normalized != 0.0 && range.is_subnormal()) {
-                        return Err(GpuError::NonFiniteSensorCorrection { x: x as u32, y: y as u32 });
+                    if !normalized.is_finite()
+                        || !(normalized * phase_gain[phase]).is_finite()
+                        || (normalized != 0.0 && range.is_subnormal())
+                    {
+                        return Err(GpuError::NonFiniteSensorCorrection {
+                            x: x as u32,
+                            y: y as u32,
+                        });
                     }
                     if f64::from(normalized * phase_gain[phase]) > filter_sample_limit {
-                        return Err(GpuError::ShaderFilterRangeExceeded { x: x as u32, y: y as u32 });
+                        return Err(GpuError::ShaderFilterRangeExceeded {
+                            x: x as u32,
+                            y: y as u32,
+                        });
                     }
-
                 }
             }
         }
@@ -1562,7 +1600,9 @@ impl RawRenderer {
         let texture_width = plan.texture_extent;
         let texture_height = plan.texture_extent;
         let atlas_bytes = plan.atlas_bytes + grid_bytes;
-        if cancelled() { return Err(GpuError::Cancelled); }
+        if cancelled() {
+            return Err(GpuError::Cancelled);
+        }
         let reservation = self
             .memory_budget
             .as_ref()
@@ -1615,7 +1655,9 @@ impl RawRenderer {
         parameters.orientation = metadata.orientation.shader_code();
         let atlas_plan = atlas_plan_started.elapsed();
 
-        if cancelled() { return Err(GpuError::Cancelled); }
+        if cancelled() {
+            return Err(GpuError::Cancelled);
+        }
         let texture_allocate_started = Instant::now();
         let texture = device.create_texture(&wgpu::TextureDescriptor {
             label: Some("Rrrah decoded u16 sensor mosaic"),
@@ -1638,7 +1680,9 @@ impl RawRenderer {
         let mut tile_scratch = Vec::new();
         for tile_y in 0..tile_grid[1] {
             for tile_x in 0..tile_grid[0] {
-                if cancelled() { return Err(GpuError::Cancelled); }
+                if cancelled() {
+                    return Err(GpuError::Cancelled);
+                }
                 let halo_pack_started = Instant::now();
                 tile_with_halo_into(
                     &mut tile_scratch,
@@ -1662,7 +1706,9 @@ impl RawRenderer {
                     };
                     reservation.ensure_bytes(tile_scratch.capacity() as u64 * 2 + padding_capacity)?;
                 }
-                if cancelled() { return Err(GpuError::Cancelled); }
+                if cancelled() {
+                    return Err(GpuError::Cancelled);
+                }
                 let layer = tile_y * tile_grid[0] + tile_x;
                 let texture_write_started = Instant::now();
                 queue.write_texture(
@@ -1687,15 +1733,19 @@ impl RawRenderer {
                 texture_write_enqueue += texture_write_started.elapsed();
             }
         }
-        if cancelled() { return Err(GpuError::Cancelled); }
-        let black_grid_buffer = (quad.is_none()).then(|| device.create_buffer_init(
-            &wgpu::util::BufferInitDescriptor {
+        if cancelled() {
+            return Err(GpuError::Cancelled);
+        }
+        let black_grid_buffer = (quad.is_none()).then(|| {
+            device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
                 label: Some("Rrrah exact black-level repeat grid"),
                 contents: bytemuck::cast_slice(&grid.values),
                 usage: wgpu::BufferUsages::STORAGE,
-            },
-        ));
-        if cancelled() { return Err(GpuError::Cancelled); }
+            })
+        });
+        if cancelled() {
+            return Err(GpuError::Cancelled);
+        }
         let uniform_write_started = Instant::now();
         queue.write_buffer(&self.uniform_buffer, 0, bytemuck::bytes_of(&parameters));
         let uniform_write = uniform_write_started.elapsed();
@@ -1709,26 +1759,31 @@ impl RawRenderer {
             array_layer_count: Some(layer_count),
             ..wgpu::TextureViewDescriptor::default()
         });
-        self.bind_group = Some(device.create_bind_group(&wgpu::BindGroupDescriptor {
-            label: Some("Rrrah RAW bind group"),
-            layout: &self.bind_group_layout,
-            entries: &[
-                wgpu::BindGroupEntry {
-                    binding: 0,
-                    resource: wgpu::BindingResource::TextureView(&view),
-                },
-                wgpu::BindGroupEntry {
-                    binding: 1,
-                    resource: self.uniform_buffer.as_entire_binding(),
-                },
-                wgpu::BindGroupEntry {
-                    binding: 2,
-                    // Fast 2x2 uses uniforms; the unused storage binding aliases
-                    // the same allocation, avoiding a dummy GPU allocation.
-                    resource: black_grid_buffer.as_ref().unwrap_or(&self.uniform_buffer).as_entire_binding(),
-                },
-            ],
-        }));
+        self.bind_group = Some(
+            device.create_bind_group(&wgpu::BindGroupDescriptor {
+                label: Some("Rrrah RAW bind group"),
+                layout: &self.bind_group_layout,
+                entries: &[
+                    wgpu::BindGroupEntry {
+                        binding: 0,
+                        resource: wgpu::BindingResource::TextureView(&view),
+                    },
+                    wgpu::BindGroupEntry {
+                        binding: 1,
+                        resource: self.uniform_buffer.as_entire_binding(),
+                    },
+                    wgpu::BindGroupEntry {
+                        binding: 2,
+                        // Fast 2x2 uses uniforms; the unused storage binding aliases
+                        // the same allocation, avoiding a dummy GPU allocation.
+                        resource: black_grid_buffer
+                            .as_ref()
+                            .unwrap_or(&self.uniform_buffer)
+                            .as_entire_binding(),
+                    },
+                ],
+            }),
+        );
         self.parameters = parameters;
         self.raw_texture = Some(texture);
         self.atlas_reservation = reservation;
@@ -1772,11 +1827,13 @@ impl RawRenderer {
         // Invalid control input must not poison an otherwise valid resident frame.
         let finite = |value: f32, previous: f32| if value.is_finite() { value } else { previous };
         for axis in 0..2 {
-            self.parameters.viewport[axis] = finite(view.viewport[axis], self.parameters.viewport[axis]).max(1.0);
+            self.parameters.viewport[axis] =
+                finite(view.viewport[axis], self.parameters.viewport[axis]).max(1.0);
             self.parameters.pan[axis] = finite(view.pan[axis], self.parameters.pan[axis]);
         }
         self.parameters.zoom = finite(view.zoom, self.parameters.zoom).clamp(0.02, 128.0);
-        self.parameters.exposure_stops = finite(view.exposure_stops, self.parameters.exposure_stops).clamp(-10.0, 10.0);
+        self.parameters.exposure_stops =
+            finite(view.exposure_stops, self.parameters.exposure_stops).clamp(-10.0, 10.0);
         queue.write_buffer(&self.uniform_buffer, 0, bytemuck::bytes_of(&self.parameters));
     }
 
@@ -1816,8 +1873,14 @@ fn mosaic_bytes(pixels: &[u16], width: u32) -> (Cow<'_, [u8]>, u32) {
 }
 
 #[cfg(target_endian = "little")]
-fn mosaic_bytes_with_cancel<'a>(pixels: &'a [u16], width: u32, cancelled: &dyn Fn() -> bool) -> Result<(Cow<'a, [u8]>, u32), GpuError> {
-    if cancelled() { return Err(GpuError::Cancelled); }
+fn mosaic_bytes_with_cancel<'a>(
+    pixels: &'a [u16],
+    width: u32,
+    cancelled: &dyn Fn() -> bool,
+) -> Result<(Cow<'a, [u8]>, u32), GpuError> {
+    if cancelled() {
+        return Err(GpuError::Cancelled);
+    }
     if width == 0 {
         return Ok((Cow::Owned(Vec::new()), 0));
     }
@@ -1834,20 +1897,32 @@ fn mosaic_bytes_with_cancel<'a>(pixels: &'a [u16], width: u32, cancelled: &dyn F
         let mut padded = vec![0_u8; row_pitch.saturating_mul(height)];
         let source = bytemuck::cast_slice::<u16, u8>(pixels);
         for row in 0..height {
-            if row % 64 == 0 && cancelled() { return Err(GpuError::Cancelled); }
+            if row % 64 == 0 && cancelled() {
+                return Err(GpuError::Cancelled);
+            }
             let source_range = row * row_bytes..(row + 1) * row_bytes;
             let destination_range = row * row_pitch..row * row_pitch + row_bytes;
             padded[destination_range].copy_from_slice(&source[source_range]);
         }
         {
-            if cancelled() { return Err(GpuError::Cancelled); }
+            if cancelled() {
+                return Err(GpuError::Cancelled);
+            }
             Ok((Cow::Owned(padded), row_pitch as u32))
         }
     }
 }
 
 #[cfg(test)]
-fn tile_with_halo(pixels: &[u16], width: u32, height: u32, tile_x: u32, tile_y: u32, tile_size: u32, halo: u32) -> Vec<u16> {
+fn tile_with_halo(
+    pixels: &[u16],
+    width: u32,
+    height: u32,
+    tile_x: u32,
+    tile_y: u32,
+    tile_size: u32,
+    halo: u32,
+) -> Vec<u16> {
     tile_with_halo_with_cancel(pixels, width, height, tile_x, tile_y, tile_size, halo, &|| false).unwrap()
 }
 
@@ -1862,7 +1937,9 @@ fn tile_with_halo_into(
     halo: u32,
     cancelled: &dyn Fn() -> bool,
 ) -> Result<(), GpuError> {
-    if cancelled() { return Err(GpuError::Cancelled); }
+    if cancelled() {
+        return Err(GpuError::Cancelled);
+    }
     let extent_u32 = tile_size.checked_add(halo.saturating_mul(2)).unwrap_or(0);
     let extent = usize::try_from(extent_u32).unwrap_or(0);
     let total_samples = extent.saturating_mul(extent);
@@ -1883,7 +1960,9 @@ fn tile_with_halo_into(
         .saturating_sub(source_x)
         .min(extent.saturating_sub(left_fill));
     for local_y in 0..extent {
-        if local_y % 64 == 0 && cancelled() { return Err(GpuError::Cancelled); }
+        if local_y % 64 == 0 && cancelled() {
+            return Err(GpuError::Cancelled);
+        }
         let source_y = tile_y
             .saturating_add(local_y)
             .saturating_sub(halo)
@@ -1902,7 +1981,9 @@ fn tile_with_halo_into(
             output_row[left_fill + copy_len..].fill(source_row[width - 1]);
         }
     }
-    if cancelled() { return Err(GpuError::Cancelled); }
+    if cancelled() {
+        return Err(GpuError::Cancelled);
+    }
     Ok(())
 }
 
@@ -1918,13 +1999,29 @@ fn tile_with_halo_with_cancel(
     cancelled: &dyn Fn() -> bool,
 ) -> Result<Vec<u16>, GpuError> {
     let mut output = Vec::new();
-    tile_with_halo_into(&mut output, pixels, width, height, tile_x, tile_y, tile_size, halo, cancelled)?;
+    tile_with_halo_into(
+        &mut output,
+        pixels,
+        width,
+        height,
+        tile_x,
+        tile_y,
+        tile_size,
+        halo,
+        cancelled,
+    )?;
     Ok(output)
 }
 
 #[cfg(target_endian = "big")]
-fn mosaic_bytes_with_cancel<'a>(pixels: &'a [u16], width: u32, cancelled: &dyn Fn() -> bool) -> Result<(Cow<'a, [u8]>, u32), GpuError> {
-    if cancelled() { return Err(GpuError::Cancelled); }
+fn mosaic_bytes_with_cancel<'a>(
+    pixels: &'a [u16],
+    width: u32,
+    cancelled: &dyn Fn() -> bool,
+) -> Result<(Cow<'a, [u8]>, u32), GpuError> {
+    if cancelled() {
+        return Err(GpuError::Cancelled);
+    }
     if width == 0 {
         return Ok((Cow::Owned(Vec::new()), 0));
     }
@@ -1937,16 +2034,20 @@ fn mosaic_bytes_with_cancel<'a>(pixels: &'a [u16], width: u32, cancelled: &dyn F
         .unwrap_or(0);
     let mut padded = vec![0_u8; row_pitch.saturating_mul(height)];
     for (index, sample) in pixels.iter().enumerate() {
-        if index % 4096 == 0 && cancelled() { return Err(GpuError::Cancelled); }
+        if index % 4096 == 0 && cancelled() {
+            return Err(GpuError::Cancelled);
+        }
         let row = index / usize::try_from(width).unwrap_or(1);
         let column = index % usize::try_from(width).unwrap_or(1);
         padded[row * row_pitch + column * 2..row * row_pitch + column * 2 + 2]
             .copy_from_slice(&sample.to_le_bytes());
     }
     {
-            if cancelled() { return Err(GpuError::Cancelled); }
-            Ok((Cow::Owned(padded), row_pitch as u32))
+        if cancelled() {
+            return Err(GpuError::Cancelled);
         }
+        Ok((Cow::Owned(padded), row_pitch as u32))
+    }
 }
 
 #[derive(Debug, Error)]
@@ -1994,7 +2095,8 @@ mod tests {
     use super::{
         GpuError, GpuParameters, HUD_SHADER, TilingOverrides, display_white_balance, floor_to_usize,
         glyph_rows, hud_card_layout, hud_card_metrics, hud_card_metrics_for_count, hud_card_scale,
-        hud_card_scale_for_count, mosaic_bytes, mosaic_bytes_with_cancel, plan_tiling, tile_with_halo, tile_with_halo_with_cancel, wrap_hud_text,
+        hud_card_scale_for_count, mosaic_bytes, mosaic_bytes_with_cancel, plan_tiling, tile_with_halo,
+        tile_with_halo_with_cancel, wrap_hud_text,
     };
 
     #[test]
@@ -2003,15 +2105,27 @@ mod tests {
         let (bytes, pitch) = mosaic_bytes_with_cancel(&pixels, 257, &|| false).unwrap();
         assert_eq!(pitch, 768);
         for (source, row) in pixels.chunks_exact(257).zip(bytes.chunks_exact(pitch as usize)) {
-            for (sample, encoded) in source.iter().zip(row[..514].chunks_exact(2)) { assert_eq!(*sample, u16::from_le_bytes(encoded.try_into().unwrap())); }
+            for (sample, encoded) in source.iter().zip(row[..514].chunks_exact(2)) {
+                assert_eq!(*sample, u16::from_le_bytes(encoded.try_into().unwrap()));
+            }
             assert!(row[514..].iter().all(|value| *value == 0));
         }
         let polls = std::cell::Cell::new(0usize);
-        mosaic_bytes_with_cancel(&pixels, 257, &|| { polls.set(polls.get() + 1); false }).unwrap();
+        mosaic_bytes_with_cancel(&pixels, 257, &|| {
+            polls.set(polls.get() + 1);
+            false
+        })
+        .unwrap();
         assert!(polls.get() >= 11);
         for stop in 1..=polls.get() {
             let calls = std::cell::Cell::new(0usize);
-            assert!(matches!(mosaic_bytes_with_cancel(&pixels, 257, &|| { calls.set(calls.get() + 1); calls.get() == stop }), Err(GpuError::Cancelled)));
+            assert!(matches!(
+                mosaic_bytes_with_cancel(&pixels, 257, &|| {
+                    calls.set(calls.get() + 1);
+                    calls.get() == stop
+                }),
+                Err(GpuError::Cancelled)
+            ));
         }
     }
 
@@ -2019,11 +2133,23 @@ mod tests {
     fn halo_packing_cancels_inside_large_tiles_and_preserves_scalar_samples() {
         let pixels: Vec<u16> = (0..513 * 257).map(|value| (value % 65536) as u16).collect();
         let expected = scalar_tile_with_halo(&pixels, 513, 257, 0, 0, 512, 1);
-        assert_eq!(tile_with_halo_with_cancel(&pixels, 513, 257, 0, 0, 512, 1, &|| false).unwrap(), expected);
+        assert_eq!(
+            tile_with_halo_with_cancel(&pixels, 513, 257, 0, 0, 512, 1, &|| false).unwrap(),
+            expected
+        );
         // Initial check, nine 64-row intervals in a 514-row tile, final check.
         for stop in 1..=11 {
             let calls = std::cell::Cell::new(0usize);
-            assert!(matches!(tile_with_halo_with_cancel(&pixels, 513, 257, 0, 0, 512, 1, &|| { calls.set(calls.get() + 1); calls.get() == stop }), Err(GpuError::Cancelled)), "checkpoint {stop}");
+            assert!(
+                matches!(
+                    tile_with_halo_with_cancel(&pixels, 513, 257, 0, 0, 512, 1, &|| {
+                        calls.set(calls.get() + 1);
+                        calls.get() == stop
+                    }),
+                    Err(GpuError::Cancelled)
+                ),
+                "checkpoint {stop}"
+            );
             assert_eq!(calls.get(), stop);
         }
     }

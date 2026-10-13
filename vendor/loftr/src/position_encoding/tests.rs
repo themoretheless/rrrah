@@ -60,7 +60,11 @@ fn alternating_aspect_ratios_retain_only_the_current_extent_and_preserve_values(
             prior = Some((output.shallow_clone(), output.copy()));
         }
         let before = reused.pe.size();
-        assert!(reused.forward(&Tensor::zeros([1, 4, 64, 64], (Kind::Float, Device::Cpu))).is_err());
+        assert!(
+            reused
+                .forward(&Tensor::zeros([1, 4, 64, 64], (Kind::Float, Device::Cpu)))
+                .is_err()
+        );
         assert_eq!(reused.pe.size(), before);
     }
     Ok(())
@@ -71,7 +75,15 @@ fn small_floor_matches_original_floor_for_reused_inputs() -> Result<(), LoftrErr
     for fixed in [false, true] {
         let mut original = PositionEncodingSine::new(256, (256, 256), fixed, Device::Cpu)?;
         let mut candidate = PositionEncodingSine::new(256, (1, 1), fixed, Device::Cpu)?;
-        for (height, width) in [(80, 80), (48, 80), (80, 48), (1, 1), (257, 2), (2, 257), (80, 80)] {
+        for (height, width) in [
+            (80, 80),
+            (48, 80),
+            (80, 48),
+            (1, 1),
+            (257, 2),
+            (2, 257),
+            (80, 80),
+        ] {
             let input = Tensor::randn([1, 256, height, width], (Kind::Float, Device::Cpu));
             let expected = original.forward(&input)?;
             let actual = candidate.forward(&input)?;

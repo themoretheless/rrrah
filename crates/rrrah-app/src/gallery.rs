@@ -537,7 +537,9 @@ pub fn neighbour_prefetch_paths(
     window: PrefetchWindow,
 ) -> Vec<PathBuf> {
     neighbour_prefetch_indices(gallery.len(), selected, direction, window)
-        .into_iter().map(|index| gallery[index].clone()).collect()
+        .into_iter()
+        .map(|index| gallery[index].clone())
+        .collect()
 }
 
 /// Shared ordering for neighbouring files and selected images inside a container.
@@ -749,21 +751,36 @@ pub fn scan_folder(folder: &Path) -> Vec<PathBuf> {
 }
 
 pub(crate) fn scan_folder_with_cancel(folder: &Path, cancelled: &dyn Fn() -> bool) -> Option<Vec<PathBuf>> {
-    if cancelled() { return None; }
-    let Ok(entries) = std::fs::read_dir(folder) else { return Some(Vec::new()) };
+    if cancelled() {
+        return None;
+    }
+    let Ok(entries) = std::fs::read_dir(folder) else {
+        return Some(Vec::new());
+    };
     let mut paths = Vec::new();
     for entry in entries.filter_map(Result::ok) {
-        if cancelled() { return None; }
+        if cancelled() {
+            return None;
+        }
         let path = entry.path();
-        let Ok(metadata) = std::fs::symlink_metadata(&path) else { continue };
+        let Ok(metadata) = std::fs::symlink_metadata(&path) else {
+            continue;
+        };
         if metadata.file_type().is_file() && is_supported(&path) {
-            let name = path.file_name().map(|name| name.to_string_lossy().to_ascii_lowercase()).unwrap_or_default();
+            let name = path
+                .file_name()
+                .map(|name| name.to_string_lossy().to_ascii_lowercase())
+                .unwrap_or_default();
             paths.push((name, path));
         }
     }
-    if cancelled() { return None; }
+    if cancelled() {
+        return None;
+    }
     paths.sort_unstable();
-    if cancelled() { return None; }
+    if cancelled() {
+        return None;
+    }
     Some(paths.into_iter().map(|(_, path)| path).collect())
 }
 
@@ -818,38 +835,68 @@ impl FolderScanner {
         let current = generation.clone();
         let publication = Arc::new(Mutex::new(()));
         let worker_publication = publication.clone();
-        let spawn = thread::Builder::new().name("rrrah-folder-scan".into()).spawn(move || {
-            while let Ok((generation, folder, cached)) = jobs.recv() {
-                let cancelled = || current.load(Ordering::Acquire) != generation;
-                let Some(paths) = scan_folder_with_cancel(&folder, &cancelled) else { continue };
-                if cancelled() { continue; }
-                let tiles = sibling_folder_tiles_with_cancel(&folder, &cancelled);
-                let mut stale_thumbnails = Vec::new();
-                for snapshot in cached {
-                    if cancelled() { break; }
-                    let cover_changed = tiles.iter().any(|tile|
-                        tile.folder == snapshot.folder && tile.cover != snapshot.source);
-                    if cover_changed || reader(&snapshot.source) != snapshot.stamp {
-                        stale_thumbnails.push(snapshot);
+        let spawn = thread::Builder::new()
+            .name("rrrah-folder-scan".into())
+            .spawn(move || {
+                while let Ok((generation, folder, cached)) = jobs.recv() {
+                    let cancelled = || current.load(Ordering::Acquire) != generation;
+                    let Some(paths) = scan_folder_with_cancel(&folder, &cancelled) else {
+                        continue;
+                    };
+                    if cancelled() {
+                        continue;
+                    }
+                    let tiles = sibling_folder_tiles_with_cancel(&folder, &cancelled);
+                    let mut stale_thumbnails = Vec::new();
+                    for snapshot in cached {
+                        if cancelled() {
+                            break;
+                        }
+                        let cover_changed = tiles
+                            .iter()
+                            .any(|tile| tile.folder == snapshot.folder && tile.cover != snapshot.source);
+                        if cover_changed || reader(&snapshot.source) != snapshot.stamp {
+                            stale_thumbnails.push(snapshot);
+                        }
+                    }
+                    let _guard = worker_publication
+                        .lock()
+                        .unwrap_or_else(std::sync::PoisonError::into_inner);
+                    if !cancelled() {
+                        let _ = ready.try_send(FolderScanReady {
+                            generation,
+                            folder,
+                            paths,
+                            tiles,
+                            stale_thumbnails,
+                        });
                     }
                 }
-                let _guard = worker_publication.lock().unwrap_or_else(std::sync::PoisonError::into_inner);
-                if !cancelled() {
-                    let _ = ready.try_send(FolderScanReady { generation, folder, paths, tiles, stale_thumbnails });
-                }
-            }
-        });
+            });
         if let Err(error) = spawn {
             log::warn!("failed to start folder scan worker: {error}");
         }
-        Self { tx, pending, rx, generation, publication }
+        Self {
+            tx,
+            pending,
+            rx,
+            generation,
+            publication,
+        }
     }
     #[cfg(test)]
     pub fn submit(&self, folder: PathBuf) -> u64 {
         self.submit_with_sources(folder, Vec::new())
     }
-    pub fn submit_with_sources(&self, folder: PathBuf, cached: Vec<crate::filmstrip_ui::CachedThumbSource>) -> u64 {
-        let _guard = self.publication.lock().unwrap_or_else(std::sync::PoisonError::into_inner);
+    pub fn submit_with_sources(
+        &self,
+        folder: PathBuf,
+        cached: Vec<crate::filmstrip_ui::CachedThumbSource>,
+    ) -> u64 {
+        let _guard = self
+            .publication
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner);
         let generation = self.generation.fetch_add(1, Ordering::AcqRel).wrapping_add(1);
         while self.pending.try_recv().is_ok() {}
         while self.rx.try_recv().is_ok() {}
@@ -857,7 +904,10 @@ impl FolderScanner {
         generation
     }
     pub fn try_recv(&self) -> Result<Option<FolderScanReady>, crossbeam_channel::TryRecvError> {
-        let _guard = self.publication.lock().unwrap_or_else(std::sync::PoisonError::into_inner);
+        let _guard = self
+            .publication
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner);
         match self.rx.try_recv() {
             Ok(ready) => Ok(Some(ready)),
             Err(crossbeam_channel::TryRecvError::Empty) => Ok(None),
@@ -865,11 +915,16 @@ impl FolderScanner {
         }
     }
     #[cfg(test)]
-    pub(super) fn has_ready(&self) -> bool { !self.rx.is_empty() }
+    pub(super) fn has_ready(&self) -> bool {
+        !self.rx.is_empty()
+    }
 }
 impl Drop for FolderScanner {
     fn drop(&mut self) {
-        let _guard = self.publication.lock().unwrap_or_else(std::sync::PoisonError::into_inner);
+        let _guard = self
+            .publication
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner);
         self.generation.fetch_add(1, Ordering::AcqRel);
         while self.pending.try_recv().is_ok() {}
         while self.rx.try_recv().is_ok() {}
@@ -955,10 +1010,16 @@ mod tests {
         let paths = scan_folder(directory.path());
         assert_eq!(paths.len(), 100_000);
         for (index, path) in paths.iter().enumerate() {
-            assert_eq!(path.file_name().unwrap().to_str().unwrap(), format!("{index:06}.png"));
+            assert_eq!(
+                path.file_name().unwrap().to_str().unwrap(),
+                format!("{index:06}.png")
+            );
         }
         assert_eq!(paths.last().unwrap(), &directory.path().join("099999.png"));
-        eprintln!("100k directory enumeration: seconds={} retained=100000", start.elapsed().as_secs_f64());
+        eprintln!(
+            "100k directory enumeration: seconds={} retained=100000",
+            start.elapsed().as_secs_f64()
+        );
     }
 
     #[test]
@@ -1108,18 +1169,27 @@ mod tests {
         let file = root.path().join("image.png");
         std::fs::write(&file, b"source bytes").unwrap();
         assert_eq!(SourceStamp::try_read(&file).unwrap(), SourceStamp::read(&file));
-        assert!(matches!(SourceStamp::try_read(root.path()), Err(rrrah_cache::CacheError::NotAFile(_))));
+        assert!(matches!(
+            SourceStamp::try_read(root.path()),
+            Err(rrrah_cache::CacheError::NotAFile(_))
+        ));
         assert!(matches!(SourceStamp::try_read(&root.path().join("missing.png")),
             Err(rrrah_cache::CacheError::Io { source, .. }) if source.kind() == std::io::ErrorKind::NotFound));
         #[cfg(unix)]
         {
             let link = root.path().join("link.png");
             std::os::unix::fs::symlink(&file, &link).unwrap();
-            assert_eq!(SourceStamp::try_read(&link).unwrap(), SourceStamp::try_read(&file).unwrap(),
-                "CLI regular-file policy continues to follow a file symlink");
+            assert_eq!(
+                SourceStamp::try_read(&link).unwrap(),
+                SourceStamp::try_read(&file).unwrap(),
+                "CLI regular-file policy continues to follow a file symlink"
+            );
             let socket = root.path().join("socket.png");
             let _listener = std::os::unix::net::UnixListener::bind(&socket).unwrap();
-            assert!(matches!(SourceStamp::try_read(&socket), Err(rrrah_cache::CacheError::NotAFile(_))));
+            assert!(matches!(
+                SourceStamp::try_read(&socket),
+                Err(rrrah_cache::CacheError::NotAFile(_))
+            ));
         }
     }
 
@@ -1146,11 +1216,17 @@ mod tests {
         let (ready, rx) = bounded::<FolderScanReady>(1);
         drop(ready);
         let scanner = FolderScanner {
-            tx, pending, rx, generation: Arc::new(AtomicU64::new(0)),
+            tx,
+            pending,
+            rx,
+            generation: Arc::new(AtomicU64::new(0)),
             publication: Arc::new(Mutex::new(())),
         };
         scanner.submit(PathBuf::from("unavailable"));
-        assert!(matches!(scanner.try_recv(), Err(crossbeam_channel::TryRecvError::Disconnected)));
+        assert!(matches!(
+            scanner.try_recv(),
+            Err(crossbeam_channel::TryRecvError::Disconnected)
+        ));
     }
 
     #[test]
@@ -1172,7 +1248,9 @@ mod tests {
             SourceStamp::read(path)
         });
         let cached = vec![crate::filmstrip_ui::CachedThumbSource {
-            folder: folder.clone(), source: source.clone(), stamp,
+            folder: folder.clone(),
+            source: source.clone(),
+            stamp,
             id: rrrah_gpu::FilmstripTileId::from_raw_for_test(1),
         }];
         scanner.submit_with_sources(folder.clone(), cached.clone());
@@ -1199,10 +1277,15 @@ mod tests {
         let stamp = SourceStamp::read(&source);
         write_file(&folder.join("a.png"));
         let scanner = FolderScanner::new();
-        let generation = scanner.submit_with_sources(folder.clone(), vec![crate::filmstrip_ui::CachedThumbSource {
-            folder: folder.clone(), source: source.clone(), stamp: stamp.clone(),
-            id: rrrah_gpu::FilmstripTileId::from_raw_for_test(1),
-        }]);
+        let generation = scanner.submit_with_sources(
+            folder.clone(),
+            vec![crate::filmstrip_ui::CachedThumbSource {
+                folder: folder.clone(),
+                source: source.clone(),
+                stamp: stamp.clone(),
+                id: rrrah_gpu::FilmstripTileId::from_raw_for_test(1),
+            }],
+        );
         let ready = scanner.rx.recv_timeout(Duration::from_secs(5)).unwrap();
         assert_eq!(ready.generation, generation);
         assert_eq!(ready.tiles[0].cover, folder.join("a.png"));
@@ -1218,19 +1301,26 @@ mod tests {
         let before = generation.load(Ordering::Acquire);
         drop(scanner);
         assert_eq!(generation.load(Ordering::Acquire), before + 1);
-        assert!(matches!(ready.recv_timeout(Duration::from_secs(5)),
-            Err(crossbeam_channel::RecvTimeoutError::Disconnected)));
+        assert!(matches!(
+            ready.recv_timeout(Duration::from_secs(5)),
+            Err(crossbeam_channel::RecvTimeoutError::Disconnected)
+        ));
     }
 
     #[test]
     fn folder_scan_cancels_during_enumeration_without_partial_publication() {
         let directory = tempfile::tempdir().unwrap();
-        for index in 0..100 { write_file(&directory.path().join(format!("{index}.png"))); }
+        for index in 0..100 {
+            write_file(&directory.path().join(format!("{index}.png")));
+        }
         let polls = std::cell::Cell::new(0);
-        assert!(scan_folder_with_cancel(directory.path(), &|| {
-            polls.set(polls.get() + 1);
-            polls.get() >= 10
-        }).is_none());
+        assert!(
+            scan_folder_with_cancel(directory.path(), &|| {
+                polls.set(polls.get() + 1);
+                polls.get() >= 10
+            })
+            .is_none()
+        );
         assert_eq!(polls.get(), 10);
         assert_eq!(scan_folder(directory.path()).len(), 100);
     }
@@ -1253,8 +1343,13 @@ mod tests {
         let generation = scanner.submit(latest.clone());
         let deadline = std::time::Instant::now() + Duration::from_secs(5);
         let result = loop {
-            if let Some(result) = scanner.try_recv().unwrap() { break result; }
-            assert!(std::time::Instant::now() < deadline, "folder scanner did not finish");
+            if let Some(result) = scanner.try_recv().unwrap() {
+                break result;
+            }
+            assert!(
+                std::time::Instant::now() < deadline,
+                "folder scanner did not finish"
+            );
             std::thread::yield_now();
         };
         assert_eq!(result.generation, generation);
@@ -1271,7 +1366,9 @@ mod tests {
         let generation = scanner.submit(latest.clone());
         let deadline = std::time::Instant::now() + Duration::from_secs(5);
         let result = loop {
-            if let Some(result) = scanner.try_recv().unwrap() { break result; }
+            if let Some(result) = scanner.try_recv().unwrap() {
+                break result;
+            }
             assert!(std::time::Instant::now() < deadline);
             std::thread::yield_now();
         };
@@ -1288,7 +1385,11 @@ mod tests {
             prefetcher.submit((0..100_000).map(|index| {
                 evaluated.set(evaluated.get() + 1);
                 assert!(evaluated.get() <= 4, "evaluated distant thumbnail jobs");
-                ThumbnailJob { index, source: PathBuf::from(format!("{index}.png")), edge: THUMB_EDGE }
+                ThumbnailJob {
+                    index,
+                    source: PathBuf::from(format!("{index}.png")),
+                    edge: THUMB_EDGE,
+                }
             }));
             assert_eq!(evaluated.get(), 4);
             assert!(prefetcher.pending.len() <= 4);
@@ -1297,13 +1398,19 @@ mod tests {
 
     #[test]
     fn large_gallery_rapid_jumps_keep_only_latest_bounded_prefetch_command() {
-        let paths: Vec<_> = (0..100_000).map(|index| PathBuf::from(format!("{index}.cr3"))).collect();
+        let paths: Vec<_> = (0..100_000)
+            .map(|index| PathBuf::from(format!("{index}.cr3")))
+            .collect();
         let mut worker = raw_prefetcher_without_worker();
         worker.window = PrefetchWindow { behind: 2, ahead: 5 };
         let mut last_generation = 0;
         for step in 0..10_000usize {
             let selected = (step * 7919) % paths.len();
-            let direction = if step % 2 == 0 { NavDirection::Forward } else { NavDirection::Backward };
+            let direction = if step % 2 == 0 {
+                NavDirection::Forward
+            } else {
+                NavDirection::Backward
+            };
             worker.begin_foreground();
             assert!(worker.pending.is_empty());
             worker.finish_foreground_and_submit(&paths, selected, direction);
@@ -1318,13 +1425,23 @@ mod tests {
             last_generation = command.generation;
             assert!(command.paths.len() <= 7);
             let expected_indices: Vec<_> = match direction {
-                NavDirection::Forward => (1..=5).filter_map(|delta| latest.checked_add(delta).filter(|&x| x < paths.len()))
-                    .chain((1..=2).filter_map(|delta| latest.checked_sub(delta))).collect(),
-                NavDirection::Backward => (1..=5).filter_map(|delta| latest.checked_sub(delta))
-                    .chain((1..=2).filter_map(|delta| latest.checked_add(delta).filter(|&x| x < paths.len()))).collect(),
+                NavDirection::Forward => (1..=5)
+                    .filter_map(|delta| latest.checked_add(delta).filter(|&x| x < paths.len()))
+                    .chain((1..=2).filter_map(|delta| latest.checked_sub(delta)))
+                    .collect(),
+                NavDirection::Backward => (1..=5)
+                    .filter_map(|delta| latest.checked_sub(delta))
+                    .chain((1..=2).filter_map(|delta| latest.checked_add(delta).filter(|&x| x < paths.len())))
+                    .collect(),
                 NavDirection::None => unreachable!(),
             };
-            assert_eq!(command.paths, expected_indices.into_iter().map(|index| paths[index].clone()).collect::<Vec<_>>());
+            assert_eq!(
+                command.paths,
+                expected_indices
+                    .into_iter()
+                    .map(|index| paths[index].clone())
+                    .collect::<Vec<_>>()
+            );
             assert!(!command.paths.contains(&paths[latest]));
             assert!(worker.pending.is_empty());
         }
@@ -1354,13 +1471,22 @@ mod tests {
     #[test]
     fn raw_worker_skips_rasters_even_with_raw_suffix_without_decoding_failure() {
         let directory = tempfile::tempdir().unwrap();
-        let raster = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/raster/pattern.tif");
+        let raster =
+            PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/raster/pattern.tif");
         let renamed = directory.path().join("renamed.CR3");
         std::fs::copy(&raster, &renamed).unwrap();
         let rpf = directory.path().join("render.NEF");
         let mut bytes = vec![0u8; 744];
-        for (at, value) in [(2,1u16),(10,1),(20,3),(22,1),(26,0xfffd),(658,32),(662,32)] {
-            bytes[at..at+2].copy_from_slice(&value.to_be_bytes());
+        for (at, value) in [
+            (2, 1u16),
+            (10, 1),
+            (20, 3),
+            (22, 1),
+            (26, 0xfffd),
+            (658, 32),
+            (662, 32),
+        ] {
+            bytes[at..at + 2].copy_from_slice(&value.to_be_bytes());
         }
         bytes[400..413].copy_from_slice(b"3ds max : ( )");
         bytes[740..744].copy_from_slice(&744u32.to_be_bytes());
@@ -1369,42 +1495,39 @@ mod tests {
             bytes.extend(0.5f32.to_bits().to_be_bytes());
             bytes.extend(1.0f32.to_bits().to_be_bytes());
         }
-        std::fs::write(&rpf,bytes).unwrap();
+        std::fs::write(&rpf, bytes).unwrap();
         for source in [raster, renamed, rpf] {
-        let budget = rrrah_cache::MemoryBudget::new(4096);
-        let telemetry = Arc::new(CacheTelemetry::new(true, 4096));
-        let worker = RawPrefetcher::with_budget(
-            Some(directory.path().to_owned()),
-            false,
-            Arc::new(DecodeGate::new()),
-            telemetry.clone(),
-            PrefetchWindow { behind: 0, ahead: 1 },
-            rrrah_cache::CacheLimits::bytes(4096),
-            Some(budget.clone()),
-        );
-        let paths = [
-            PathBuf::from("selected.png"),
-            source,
-        ];
-        worker.finish_foreground_and_submit(&paths, 0, NavDirection::Forward);
-        let deadline = std::time::Instant::now() + Duration::from_secs(5);
-        while telemetry.snapshot().prefetch_completed == 0 && std::time::Instant::now() < deadline {
-            thread::sleep(Duration::from_millis(1));
-        }
-        let snapshot = telemetry.snapshot();
-        assert_eq!(snapshot.prefetch_planned, 1);
-        assert_eq!(snapshot.prefetch_completed, 1);
-        assert_eq!(snapshot.prefetch_failures, 0);
-        assert_eq!(snapshot.prefetch_stored, 0);
-        assert_eq!(snapshot.prefetch_cached, 0);
-        assert_eq!(budget.peak(), 0);
-        assert_eq!(
-            rrrah_cache::DiskMosaicCache::new(directory.path())
-                .usage()
-                .unwrap()
-                .entries,
-            0
-        );
+            let budget = rrrah_cache::MemoryBudget::new(4096);
+            let telemetry = Arc::new(CacheTelemetry::new(true, 4096));
+            let worker = RawPrefetcher::with_budget(
+                Some(directory.path().to_owned()),
+                false,
+                Arc::new(DecodeGate::new()),
+                telemetry.clone(),
+                PrefetchWindow { behind: 0, ahead: 1 },
+                rrrah_cache::CacheLimits::bytes(4096),
+                Some(budget.clone()),
+            );
+            let paths = [PathBuf::from("selected.png"), source];
+            worker.finish_foreground_and_submit(&paths, 0, NavDirection::Forward);
+            let deadline = std::time::Instant::now() + Duration::from_secs(5);
+            while telemetry.snapshot().prefetch_completed == 0 && std::time::Instant::now() < deadline {
+                thread::sleep(Duration::from_millis(1));
+            }
+            let snapshot = telemetry.snapshot();
+            assert_eq!(snapshot.prefetch_planned, 1);
+            assert_eq!(snapshot.prefetch_completed, 1);
+            assert_eq!(snapshot.prefetch_failures, 0);
+            assert_eq!(snapshot.prefetch_stored, 0);
+            assert_eq!(snapshot.prefetch_cached, 0);
+            assert_eq!(budget.peak(), 0);
+            assert_eq!(
+                rrrah_cache::DiskMosaicCache::new(directory.path())
+                    .usage()
+                    .unwrap()
+                    .entries,
+                0
+            );
         }
     }
 
@@ -1634,8 +1757,12 @@ mod tests {
     #[ignore = "requires real RAW manifest and actual Metal"]
     fn mixed_camera_worker_prefetch_preserves_full_metal_frames() {
         let manifest = std::env::var("RRRAH_RAW_COLLECTION_MANIFEST").unwrap();
-        let sources: Vec<_> = std::fs::read_to_string(manifest).unwrap().lines()
-            .filter(|line| !line.trim().is_empty()).map(PathBuf::from).collect();
+        let sources: Vec<_> = std::fs::read_to_string(manifest)
+            .unwrap()
+            .lines()
+            .filter(|line| !line.trim().is_empty())
+            .map(PathBuf::from)
+            .collect();
         assert!(sources.len() >= 2);
         let gpu = crate::navigation_metal_readback::qualification_gpu().expect("actual GPU required");
         eprintln!("mixed RAW worker adapter: {}", gpu.adapter_name());
@@ -1643,49 +1770,102 @@ mod tests {
         let root = rrrah_cache::MemoryBudget::new(256 * 1024 * 1024);
         let reference_root = rrrah_cache::MemoryBudget::new(256 * 1024 * 1024);
         let telemetry = Arc::new(CacheTelemetry::new(true, 128 * 1024 * 1024));
-        let worker = RawPrefetcher::with_budget(Some(directory.path().to_owned()), false,
-            Arc::new(DecodeGate::new()), telemetry.clone(),
+        let worker = RawPrefetcher::with_budget(
+            Some(directory.path().to_owned()),
+            false,
+            Arc::new(DecodeGate::new()),
+            telemetry.clone(),
             PrefetchWindow { behind: 1, ahead: 2 },
-            rrrah_cache::CacheLimits { max_bytes: 128 * 1024 * 1024, max_entries: Some(1), ttl: None },
-            Some(root.clone()));
+            rrrah_cache::CacheLimits {
+                max_bytes: 128 * 1024 * 1024,
+                max_entries: Some(1),
+                ttl: None,
+            },
+            Some(root.clone()),
+        );
         let cache = rrrah_cache::DiskMosaicCache::new(directory.path());
         let mut previous = None;
         for (index, source) in sources.iter().enumerate() {
             let mut request = DecodeRequest::new(source);
             request.memory_budget = Some(reference_root.clone());
-            let key = CacheKey::for_mosaic_recipe(&SourceFingerprint::from_path(source).unwrap(), 0,
-                NativeRawDecoder.mosaic_recipe(&request).unwrap());
+            let key = CacheKey::for_mosaic_recipe(
+                &SourceFingerprint::from_path(source).unwrap(),
+                0,
+                NativeRawDecoder.mosaic_recipe(&request).unwrap(),
+            );
             let reference = NativeRawDecoder.decode(&request).unwrap().mosaic;
             worker.begin_foreground();
             let backward = index % 2 != 0;
-            let paths = if backward { vec![source.clone(), PathBuf::from("selected.png")] }
-                else { vec![PathBuf::from("selected.png"), source.clone()] };
-            worker.finish_foreground_and_submit(&paths, if backward { 1 } else { 0 },
-                if backward { NavDirection::Backward } else { NavDirection::Forward });
+            let paths = if backward {
+                vec![source.clone(), PathBuf::from("selected.png")]
+            } else {
+                vec![PathBuf::from("selected.png"), source.clone()]
+            };
+            worker.finish_foreground_and_submit(
+                &paths,
+                if backward { 1 } else { 0 },
+                if backward {
+                    NavDirection::Backward
+                } else {
+                    NavDirection::Forward
+                },
+            );
             let deadline = std::time::Instant::now() + Duration::from_secs(60);
             while (telemetry.snapshot().prefetch_completed == 0 || root.used() != 0)
-                && std::time::Instant::now() < deadline { thread::sleep(Duration::from_millis(1)); }
+                && std::time::Instant::now() < deadline
+            {
+                thread::sleep(Duration::from_millis(1));
+            }
             let snapshot = telemetry.snapshot();
-            assert!(snapshot.prefetch_completed > 0, "worker timeout: {}", source.display());
-            assert_eq!((snapshot.prefetch_planned, snapshot.prefetch_stored, snapshot.prefetch_failures), (1, 1, 0));
+            assert!(
+                snapshot.prefetch_completed > 0,
+                "worker timeout: {}",
+                source.display()
+            );
+            assert_eq!(
+                (
+                    snapshot.prefetch_planned,
+                    snapshot.prefetch_stored,
+                    snapshot.prefetch_failures
+                ),
+                (1, 1, 0)
+            );
             assert_eq!(root.used(), 0);
             assert_eq!(cache.usage().unwrap().entries, 1);
-            if let Some(previous) = previous { assert!(!cache.contains(previous), "one-entry disk cap must evict previous camera"); }
+            if let Some(previous) = previous {
+                assert!(
+                    !cache.contains(previous),
+                    "one-entry disk cap must evict previous camera"
+                );
+            }
             let restored = cache.load_with_budget(key, &root).unwrap().unwrap().mosaic;
             assert_eq!(restored.metadata, reference.metadata);
             assert_eq!(restored.pixels, reference.pixels);
             let full = [reference.metadata.width, reference.metadata.height];
-            assert_eq!(gpu.render(&restored, full).pixels, gpu.render(&reference, full).pixels);
+            assert_eq!(
+                gpu.render(&restored, full).pixels,
+                gpu.render(&reference, full).pixels
+            );
             let hdr = gpu.render_raw_half(&restored, full);
             assert_eq!(hdr.len(), full[0] as usize * full[1] as usize * 4);
             assert!(hdr.iter().all(|v| v & 0x7c00 != 0x7c00));
             assert_eq!(hdr, gpu.render_raw_half(&reference, full));
-            eprintln!("mixed RAW worker HDR: {}; {}x{}; every scene-linear binary16 component exact and finite", source.display(), full[0], full[1]);
+            eprintln!(
+                "mixed RAW worker HDR: {}; {}x{}; every scene-linear binary16 component exact and finite",
+                source.display(),
+                full[0],
+                full[1]
+            );
             drop(restored);
             drop(reference);
             assert_eq!((root.used(), reference_root.used()), (0, 0));
             previous = Some(key);
-            eprintln!("mixed RAW worker: {} full={}x{}; original samples and frame exact; disk-count=1; root=0", source.display(), full[0], full[1]);
+            eprintln!(
+                "mixed RAW worker: {} full={}x{}; original samples and frame exact; disk-count=1; root=0",
+                source.display(),
+                full[0],
+                full[1]
+            );
         }
     }
 
@@ -1693,8 +1873,12 @@ mod tests {
     #[ignore = "requires real RAW manifest and actual Metal"]
     fn multi_neighbor_raw_worker_preserves_metal_frames() {
         let manifest = std::env::var("RRRAH_RAW_COLLECTION_MANIFEST").unwrap();
-        let paths: Vec<_> = std::fs::read_to_string(manifest).unwrap().lines()
-            .filter(|line| !line.trim().is_empty()).map(PathBuf::from).collect();
+        let paths: Vec<_> = std::fs::read_to_string(manifest)
+            .unwrap()
+            .lines()
+            .filter(|line| !line.trim().is_empty())
+            .map(PathBuf::from)
+            .collect();
         assert!(paths.len() >= 5);
         let gpu = crate::navigation_metal_readback::qualification_gpu().expect("actual GPU required");
         eprintln!("multi RAW worker adapter: {}", gpu.adapter_name());
@@ -1703,46 +1887,101 @@ mod tests {
         let reference_root = rrrah_cache::MemoryBudget::new(256 * 1024 * 1024);
         let telemetry = Arc::new(CacheTelemetry::new(true, 256 * 1024 * 1024));
         let window = PrefetchWindow { behind: 1, ahead: 2 };
-        let worker = RawPrefetcher::with_budget(Some(directory.path().to_owned()), false,
-            Arc::new(DecodeGate::new()), telemetry.clone(), window,
-            rrrah_cache::CacheLimits { max_bytes: 256 * 1024 * 1024, max_entries: Some(3), ttl: None },
-            Some(root.clone()));
+        let worker = RawPrefetcher::with_budget(
+            Some(directory.path().to_owned()),
+            false,
+            Arc::new(DecodeGate::new()),
+            telemetry.clone(),
+            window,
+            rrrah_cache::CacheLimits {
+                max_bytes: 256 * 1024 * 1024,
+                max_entries: Some(3),
+                ttl: None,
+            },
+            Some(root.clone()),
+        );
         let cache = rrrah_cache::DiskMosaicCache::new(directory.path());
-        let key = |path: &PathBuf| CacheKey::for_mosaic_recipe(
-            &SourceFingerprint::from_path(path).unwrap(), 0,
-            NativeRawDecoder.mosaic_recipe(&DecodeRequest::new(path)).unwrap());
-        for (direction, indexes) in [(NavDirection::Forward, [3usize, 4, 1]), (NavDirection::Backward, [1, 0, 3])] {
-            assert_eq!(neighbour_prefetch_paths(&paths, 2, direction, window), indexes.map(|i| paths[i].clone()));
+        let key = |path: &PathBuf| {
+            CacheKey::for_mosaic_recipe(
+                &SourceFingerprint::from_path(path).unwrap(),
+                0,
+                NativeRawDecoder.mosaic_recipe(&DecodeRequest::new(path)).unwrap(),
+            )
+        };
+        for (direction, indexes) in [
+            (NavDirection::Forward, [3usize, 4, 1]),
+            (NavDirection::Backward, [1, 0, 3]),
+        ] {
+            assert_eq!(
+                neighbour_prefetch_paths(&paths, 2, direction, window),
+                indexes.map(|i| paths[i].clone())
+            );
             worker.begin_foreground();
             worker.finish_foreground_and_submit(&paths, 2, direction);
             let deadline = std::time::Instant::now() + Duration::from_secs(60);
             while (telemetry.snapshot().prefetch_completed < 3 || root.used() != 0)
-                && std::time::Instant::now() < deadline { thread::sleep(Duration::from_millis(1)); }
+                && std::time::Instant::now() < deadline
+            {
+                thread::sleep(Duration::from_millis(1));
+            }
             let snapshot = telemetry.snapshot();
-            assert_eq!((snapshot.prefetch_planned, snapshot.prefetch_completed, snapshot.prefetch_failures), (3, 3, 0));
+            assert_eq!(
+                (
+                    snapshot.prefetch_planned,
+                    snapshot.prefetch_completed,
+                    snapshot.prefetch_failures
+                ),
+                (3, 3, 0)
+            );
             assert_eq!(root.used(), 0);
             assert_eq!(cache.usage().unwrap().entries, 3);
-            assert!(!cache.contains(key(&paths[2])), "selected file must not be speculatively decoded");
+            assert!(
+                !cache.contains(key(&paths[2])),
+                "selected file must not be speculatively decoded"
+            );
             for index in indexes {
-                let restored = cache.load_with_budget(key(&paths[index]), &root).unwrap().unwrap().mosaic;
+                let restored = cache
+                    .load_with_budget(key(&paths[index]), &root)
+                    .unwrap()
+                    .unwrap()
+                    .mosaic;
                 let mut request = DecodeRequest::new(&paths[index]);
                 request.memory_budget = Some(reference_root.clone());
                 let reference = NativeRawDecoder.decode(&request).unwrap().mosaic;
                 assert_eq!(restored.metadata, reference.metadata);
                 assert_eq!(restored.pixels, reference.pixels);
-                assert_eq!(gpu.render(&restored, [1920, 1080]).pixels, gpu.render(&reference, [1920, 1080]).pixels);
+                assert_eq!(
+                    gpu.render(&restored, [1920, 1080]).pixels,
+                    gpu.render(&reference, [1920, 1080]).pixels
+                );
                 let full = [reference.metadata.width, reference.metadata.height];
-                assert_eq!(gpu.render(&restored, full).pixels, gpu.render(&reference, full).pixels);
+                assert_eq!(
+                    gpu.render(&restored, full).pixels,
+                    gpu.render(&reference, full).pixels
+                );
                 let hdr = gpu.render_raw_half(&restored, full);
                 assert_eq!(hdr.len(), full[0] as usize * full[1] as usize * 4);
                 assert!(hdr.iter().all(|v| v & 0x7c00 != 0x7c00));
                 assert_eq!(hdr, gpu.render_raw_half(&reference, full));
-                eprintln!("multi RAW worker HDR: {}; {}x{}; every scene-linear binary16 component exact and finite", paths[index].display(), full[0], full[1]);
-                eprintln!("multi RAW full frame: {}x{}; samples/metadata and every Metal pixel exact; root_before_release={}", full[0], full[1], root.used());
+                eprintln!(
+                    "multi RAW worker HDR: {}; {}x{}; every scene-linear binary16 component exact and finite",
+                    paths[index].display(),
+                    full[0],
+                    full[1]
+                );
+                eprintln!(
+                    "multi RAW full frame: {}x{}; samples/metadata and every Metal pixel exact; root_before_release={}",
+                    full[0],
+                    full[1],
+                    root.used()
+                );
                 drop(restored);
                 drop(reference);
                 assert_eq!((root.used(), reference_root.used()), (0, 0));
-                eprintln!("multi RAW worker: {} samples/metadata and 1920x1080 Metal frame exact; root=0", paths[index].display());
+                eprintln!(
+                    "multi RAW worker: {} samples/metadata and 1920x1080 Metal frame exact; root=0",
+                    paths[index].display()
+                );
             }
             eprintln!("multi RAW worker: three neighbors complete; disk-count=3; failures=0");
         }
@@ -1759,10 +1998,7 @@ mod tests {
             false,
             gate.clone(),
             telemetry.clone(),
-            PrefetchWindow {
-                behind: 0,
-                ahead: 1,
-            },
+            PrefetchWindow { behind: 0, ahead: 1 },
             rrrah_cache::CacheLimits {
                 max_bytes: 128 * 1024 * 1024,
                 max_entries: Some(1),
@@ -1834,15 +2070,27 @@ mod tests {
         if let Some(gpu) = gpu {
             let full = [reference.metadata.width, reference.metadata.height];
             for output in [[1920, 1080], full] {
-                assert_eq!(gpu.render(&restored, output).pixels, gpu.render(&reference, output).pixels,
-                    "actual background-prefetched RAW must preserve every Metal output pixel");
+                assert_eq!(
+                    gpu.render(&restored, output).pixels,
+                    gpu.render(&reference, output).pixels,
+                    "actual background-prefetched RAW must preserve every Metal output pixel"
+                );
                 let hdr = gpu.render_raw_half(&restored, output);
                 assert_eq!(hdr.len(), output[0] as usize * output[1] as usize * 4);
                 assert!(hdr.iter().all(|v| v & 0x7c00 != 0x7c00));
-                assert_eq!(hdr, gpu.render_raw_half(&reference, output),
-                    "background-prefetched RAW must preserve every scene-linear binary16 component");
-                eprintln!("RAW worker HDR: {}x{}; all scene-linear binary16 components exact and finite", output[0], output[1]);
-                eprintln!("RAW worker navigation: {}x{} Metal frame exact", output[0], output[1]);
+                assert_eq!(
+                    hdr,
+                    gpu.render_raw_half(&reference, output),
+                    "background-prefetched RAW must preserve every scene-linear binary16 component"
+                );
+                eprintln!(
+                    "RAW worker HDR: {}x{}; all scene-linear binary16 components exact and finite",
+                    output[0], output[1]
+                );
+                eprintln!(
+                    "RAW worker navigation: {}x{} Metal frame exact",
+                    output[0], output[1]
+                );
             }
         }
         eprintln!(
@@ -1859,47 +2107,81 @@ mod tests {
             // trade the sole disk-cache slot across further direction changes.
             for index in [2usize, 0] {
                 worker.begin_foreground();
-                worker.finish_foreground_and_submit(&paths, 1,
-                    if index == 2 { NavDirection::Forward } else { NavDirection::Backward });
+                worker.finish_foreground_and_submit(
+                    &paths,
+                    1,
+                    if index == 2 {
+                        NavDirection::Forward
+                    } else {
+                        NavDirection::Backward
+                    },
+                );
                 let deadline = std::time::Instant::now() + Duration::from_secs(10);
                 while (telemetry.snapshot().prefetch_completed == 0 || root.used() != 0)
-                    && std::time::Instant::now() < deadline {
+                    && std::time::Instant::now() < deadline
+                {
                     thread::sleep(Duration::from_millis(1));
                 }
                 let snapshot = telemetry.snapshot();
-                assert_eq!((snapshot.prefetch_planned, snapshot.prefetch_stored, snapshot.prefetch_failures), (1, 1, 0));
+                assert_eq!(
+                    (
+                        snapshot.prefetch_planned,
+                        snapshot.prefetch_stored,
+                        snapshot.prefetch_failures
+                    ),
+                    (1, 1, 0)
+                );
                 assert!(snapshot.prefetch_completed > 0);
                 assert_eq!(cache.usage().unwrap().entries, 1);
                 assert!(!cache.contains(key(&paths[2 - index])));
-                let restored = cache.load_with_budget(key(&paths[index]), &root).unwrap().unwrap().mosaic;
+                let restored = cache
+                    .load_with_budget(key(&paths[index]), &root)
+                    .unwrap()
+                    .unwrap()
+                    .mosaic;
                 let mut request = DecodeRequest::new(&paths[index]);
                 request.memory_budget = Some(reference_root.clone());
                 let reference = NativeRawDecoder.decode(&request).unwrap().mosaic;
                 assert_eq!(restored.metadata, reference.metadata);
                 assert_eq!(restored.pixels, reference.pixels);
                 let full = [reference.metadata.width, reference.metadata.height];
-                assert_eq!(gpu.render(&restored, full).pixels, gpu.render(&reference, full).pixels);
+                assert_eq!(
+                    gpu.render(&restored, full).pixels,
+                    gpu.render(&reference, full).pixels
+                );
                 let hdr = gpu.render_raw_half(&restored, full);
                 assert_eq!(hdr.len(), full[0] as usize * full[1] as usize * 4);
                 assert!(hdr.iter().all(|v| v & 0x7c00 != 0x7c00));
                 assert_eq!(hdr, gpu.render_raw_half(&reference, full));
-                eprintln!("RAW worker HDR: {}x{}; all scene-linear binary16 components exact and finite", full[0], full[1]);
+                eprintln!(
+                    "RAW worker HDR: {}x{}; all scene-linear binary16 components exact and finite",
+                    full[0], full[1]
+                );
                 drop(reference);
                 drop(restored);
                 assert_eq!((root.used(), reference_root.used()), (0, 0));
-                eprintln!("RAW worker navigation: direction-index={index}; {}x{} frame and original samples exact; disk-count=1; final=0", full[0], full[1]);
+                eprintln!(
+                    "RAW worker navigation: direction-index={index}; {}x{} frame and original samples exact; disk-count=1; final=0",
+                    full[0], full[1]
+                );
             }
         }
     }
     #[test]
     #[ignore = "requires authored EIP pair and local EOS R8 CR3"]
     fn eip_prefetch_restores_exact_sensor_and_fingerprints_complete_package() {
-        let packages = [PathBuf::from(std::env::var("RRRAH_EIP_APP_FIRST").unwrap()), PathBuf::from(std::env::var("RRRAH_EIP_APP_SECOND").unwrap())];
+        let packages = [
+            PathBuf::from(std::env::var("RRRAH_EIP_APP_FIRST").unwrap()),
+            PathBuf::from(std::env::var("RRRAH_EIP_APP_SECOND").unwrap()),
+        ];
         let first_fingerprint = SourceFingerprint::from_path(&packages[0]).unwrap();
         let second_fingerprint = SourceFingerprint::from_path(&packages[1]).unwrap();
         assert_eq!(first_fingerprint.file_size, second_fingerprint.file_size);
         assert_eq!(first_fingerprint.modified_ns, second_fingerprint.modified_ns);
-        assert_ne!(first_fingerprint.sampled_blake3, second_fingerprint.sampled_blake3);
+        assert_ne!(
+            first_fingerprint.sampled_blake3,
+            second_fingerprint.sampled_blake3
+        );
         let original = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/IMG_9043.CR3");
         let reference_root = rrrah_cache::MemoryBudget::new(96 * 1024 * 1024);
         let mut reference_request = DecodeRequest::new(original);
@@ -1910,17 +2192,43 @@ mod tests {
         let telemetry = Arc::new(CacheTelemetry::new(true, 128 * 1024 * 1024));
         let mut limits = rrrah_cache::CacheLimits::bytes(128 * 1024 * 1024);
         limits.max_entries = Some(1);
-        let worker = RawPrefetcher::with_budget(Some(directory.path().to_owned()), false, Arc::new(DecodeGate::new()), telemetry.clone(), PrefetchWindow { behind: 1, ahead: 1 }, limits, Some(budget.clone()));
+        let worker = RawPrefetcher::with_budget(
+            Some(directory.path().to_owned()),
+            false,
+            Arc::new(DecodeGate::new()),
+            telemetry.clone(),
+            PrefetchWindow { behind: 1, ahead: 1 },
+            limits,
+            Some(budget.clone()),
+        );
         let mut keys = Vec::new();
         for (index, package) in packages.iter().enumerate() {
             let mut request = DecodeRequest::new(package);
             request.memory_budget = Some(budget.clone());
-            let key = CacheKey::for_mosaic_recipe(&SourceFingerprint::from_path(package).unwrap(), 0, NativeRawDecoder.mosaic_recipe(&request).unwrap());
+            let key = CacheKey::for_mosaic_recipe(
+                &SourceFingerprint::from_path(package).unwrap(),
+                0,
+                NativeRawDecoder.mosaic_recipe(&request).unwrap(),
+            );
             keys.push(key);
-            let paths = if index == 0 { vec![PathBuf::from("selected.eip"), package.clone()] } else { vec![package.clone(), PathBuf::from("selected.eip")] };
-            worker.finish_foreground_and_submit(&paths, if index == 0 { 0 } else { 1 }, if index == 0 { NavDirection::Forward } else { NavDirection::Backward });
+            let paths = if index == 0 {
+                vec![PathBuf::from("selected.eip"), package.clone()]
+            } else {
+                vec![package.clone(), PathBuf::from("selected.eip")]
+            };
+            worker.finish_foreground_and_submit(
+                &paths,
+                if index == 0 { 0 } else { 1 },
+                if index == 0 {
+                    NavDirection::Forward
+                } else {
+                    NavDirection::Backward
+                },
+            );
             let deadline = std::time::Instant::now() + Duration::from_secs(10);
-            while telemetry.snapshot().prefetch_completed == 0 && std::time::Instant::now() < deadline { std::thread::sleep(Duration::from_millis(1)); }
+            while telemetry.snapshot().prefetch_completed == 0 && std::time::Instant::now() < deadline {
+                std::thread::sleep(Duration::from_millis(1));
+            }
             assert_eq!(telemetry.snapshot().prefetch_failures, 0);
             assert_eq!(telemetry.snapshot().prefetch_stored, 1);
             assert_eq!(budget.used(), 0);
@@ -1932,11 +2240,17 @@ mod tests {
             drop(restored);
             assert_eq!(budget.used(), 0);
         }
-        assert_ne!(keys[0], keys[1], "different settings packages must not share a sensor cache key");
+        assert_ne!(
+            keys[0], keys[1],
+            "different settings packages must not share a sensor cache key"
+        );
         drop(worker);
         drop(reference);
         assert_eq!(reference_root.used(), 0);
-        eprintln!("EIP forward/backward preload: two complete-package keys, one disk entry, all sensor samples exact, managed peak={}, final=0", budget.peak());
+        eprintln!(
+            "EIP forward/backward preload: two complete-package keys, one disk entry, all sensor samples exact, managed peak={}, final=0",
+            budget.peak()
+        );
     }
 
     #[test]
@@ -1991,7 +2305,10 @@ mod tests {
     #[ignore = "requires local EOS R8 tests/IMG_9043.CR3 fixture"]
     fn raw_prefetch_failed_nearest_does_not_consume_count_slot_in_either_direction() {
         let fixture = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/IMG_9043.CR3");
-        let reference = NativeRawDecoder.decode(&DecodeRequest::new(&fixture)).unwrap().mosaic;
+        let reference = NativeRawDecoder
+            .decode(&DecodeRequest::new(&fixture))
+            .unwrap()
+            .mosaic;
         for direction in [NavDirection::Forward, NavDirection::Backward] {
             let root = tempfile::tempdir().unwrap();
             let broken = root.path().join("broken.cr3");
@@ -1999,15 +2316,26 @@ mod tests {
             let budget = rrrah_cache::MemoryBudget::new(96 * 1024 * 1024);
             let telemetry = Arc::new(CacheTelemetry::new(true, 128 * 1024 * 1024));
             let limits = rrrah_cache::CacheLimits {
-                max_bytes: 128 * 1024 * 1024, max_entries: Some(1), ttl: None,
+                max_bytes: 128 * 1024 * 1024,
+                max_entries: Some(1),
+                ttl: None,
             };
             let worker = RawPrefetcher::with_budget(
-                Some(root.path().join("cache")), false, Arc::new(DecodeGate::new()),
-                telemetry.clone(), PrefetchWindow { behind: 2, ahead: 2 },
-                limits, Some(budget.clone()),
+                Some(root.path().join("cache")),
+                false,
+                Arc::new(DecodeGate::new()),
+                telemetry.clone(),
+                PrefetchWindow { behind: 2, ahead: 2 },
+                limits,
+                Some(budget.clone()),
             );
             let mut paths = vec![root.path().join("selected.cr3"), broken, fixture.clone()];
-            let selected = if direction == NavDirection::Backward { paths.reverse(); 2 } else { 0 };
+            let selected = if direction == NavDirection::Backward {
+                paths.reverse();
+                2
+            } else {
+                0
+            };
             worker.finish_foreground_and_submit(&paths, selected, direction);
             let deadline = std::time::Instant::now() + Duration::from_secs(10);
             while telemetry.snapshot().prefetch_completed < 2 && std::time::Instant::now() < deadline {
@@ -2019,8 +2347,11 @@ mod tests {
             assert_eq!(snapshot.prefetch_stored, 1);
             assert_eq!(budget.used(), 0);
             let key = CacheKey::for_mosaic_recipe(
-                &SourceFingerprint::from_path(&fixture).unwrap(), 0,
-                NativeRawDecoder.mosaic_recipe(&DecodeRequest::new(&fixture)).unwrap(),
+                &SourceFingerprint::from_path(&fixture).unwrap(),
+                0,
+                NativeRawDecoder
+                    .mosaic_recipe(&DecodeRequest::new(&fixture))
+                    .unwrap(),
             );
             let cache = rrrah_cache::DiskMosaicCache::new(root.path().join("cache"));
             assert_eq!(cache.usage().unwrap().entries, 1);
@@ -2031,7 +2362,9 @@ mod tests {
             assert_eq!(budget.used(), 0);
             drop(worker);
         }
-        eprintln!("RAW failed-nearest fallback: forward/backward; count=1; full original sensor and metadata exact; final=0");
+        eprintln!(
+            "RAW failed-nearest fallback: forward/backward; count=1; full original sensor and metadata exact; final=0"
+        );
     }
 
     #[test]
@@ -2045,17 +2378,33 @@ mod tests {
         let budget = rrrah_cache::MemoryBudget::new(96 * 1024 * 1024);
         let telemetry = Arc::new(CacheTelemetry::new(true, 128 * 1024 * 1024));
         let worker = RawPrefetcher::with_budget(
-            Some(root.path().join("cache")), false, Arc::new(DecodeGate::new()),
-            telemetry.clone(), PrefetchWindow { behind: 0, ahead: 4 },
-            rrrah_cache::CacheLimits { max_bytes: 128 * 1024 * 1024, max_entries: Some(2), ttl: None },
+            Some(root.path().join("cache")),
+            false,
+            Arc::new(DecodeGate::new()),
+            telemetry.clone(),
+            PrefetchWindow { behind: 0, ahead: 4 },
+            rrrah_cache::CacheLimits {
+                max_bytes: 128 * 1024 * 1024,
+                max_entries: Some(2),
+                ttl: None,
+            },
             Some(budget.clone()),
         );
         worker.finish_foreground_and_submit(
-            &[root.path().join("selected.cr3"), fixture.clone(), fixture.clone(), copied, other.clone()],
-            0, NavDirection::Forward,
+            &[
+                root.path().join("selected.cr3"),
+                fixture.clone(),
+                fixture.clone(),
+                copied,
+                other.clone(),
+            ],
+            0,
+            NavDirection::Forward,
         );
         let deadline = std::time::Instant::now() + Duration::from_secs(10);
-        while telemetry.snapshot().prefetch_phase != PrefetchPhase::Complete && std::time::Instant::now() < deadline {
+        while telemetry.snapshot().prefetch_phase != PrefetchPhase::Complete
+            && std::time::Instant::now() < deadline
+        {
             std::thread::sleep(Duration::from_millis(1));
         }
         let snapshot = telemetry.snapshot();
@@ -2067,8 +2416,11 @@ mod tests {
         assert_eq!(cache.usage().unwrap().entries, 2);
         for path in [&fixture, &other] {
             let request = DecodeRequest::new(path);
-            let key = CacheKey::for_mosaic_recipe(&SourceFingerprint::from_path(path).unwrap(), 0,
-                NativeRawDecoder.mosaic_recipe(&request).unwrap());
+            let key = CacheKey::for_mosaic_recipe(
+                &SourceFingerprint::from_path(path).unwrap(),
+                0,
+                NativeRawDecoder.mosaic_recipe(&request).unwrap(),
+            );
             let restored = cache.load_with_budget(key, &budget).unwrap().unwrap().mosaic;
             let reference = NativeRawDecoder.decode(&request).unwrap().mosaic;
             assert_eq!(restored.pixels, reference.pixels);
@@ -2077,7 +2429,9 @@ mod tests {
         }
         assert_eq!(budget.used(), 0);
         drop(worker);
-        eprintln!("RAW duplicate preload: four neighbours, duplicate path and duplicate content skipped; two unique full sensors and metadata exact; count=2; final=0");
+        eprintln!(
+            "RAW duplicate preload: four neighbours, duplicate path and duplicate content skipped; two unique full sensors and metadata exact; count=2; final=0"
+        );
     }
 
     #[test]
@@ -2251,9 +2605,15 @@ mod tests {
                                     (!priority_side, index.abs_diff(selected))
                                 });
                             }
-                            assert_eq!(neighbour_prefetch_indices(
-                                len, selected, direction, PrefetchWindow { behind, ahead },
-                            ), expected);
+                            assert_eq!(
+                                neighbour_prefetch_indices(
+                                    len,
+                                    selected,
+                                    direction,
+                                    PrefetchWindow { behind, ahead },
+                                ),
+                                expected
+                            );
                             let expected: Vec<_> = expected.into_iter().map(|i| paths[i].clone()).collect();
                             assert_eq!(
                                 actual, expected,
@@ -2424,7 +2784,10 @@ mod tests {
             thread::yield_now();
         }
         assert!(token.is_cancelled());
-        assert!(dropped_rx.try_recv().is_err(), "drop returned before loader finished");
+        assert!(
+            dropped_rx.try_recv().is_err(),
+            "drop returned before loader finished"
+        );
         assert_eq!(budget.used(), 64);
         release_tx.send(()).unwrap();
         assert!(recv_test(&finished_rx));

@@ -11,8 +11,8 @@ pub enum ThumbnailError {
 }
 // Bounded CPU RAW previews using the display color contract.
 use crate::{DecodedMosaic, Photometric, aces_tone_map_rgb, apply_3x3, camera_to_linear_srgb};
-use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
 use std::sync::Mutex;
+use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
 
 #[allow(
     clippy::cast_possible_truncation,
@@ -211,8 +211,7 @@ fn render_thumbnail_row(
         let uv = metadata
             .orientation
             .map_display_uv([(x as f32 + 0.5) / out_w as f32, (y as f32 + 0.5) / out_h as f32]);
-        let sx =
-            i64::from(crop.x) + (uv[0] * crop.width as f32).floor().min((crop.width - 1) as f32) as i64;
+        let sx = i64::from(crop.x) + (uv[0] * crop.width as f32).floor().min((crop.width - 1) as f32) as i64;
         let sy =
             i64::from(crop.y) + (uv[1] * crop.height as f32).floor().min((crop.height - 1) as f32) as i64;
         let (axis_w, axis_h) = if metadata.orientation.swaps_dimensions() {
@@ -575,8 +574,7 @@ fn render_xtrans_row(
         for sy in bounds[1].floor() as u32..bounds[3].ceil() as u32 {
             for sx in bounds[0].floor() as u32..bounds[2].ceil() as u32 {
                 let color = cfa.color_at(sy, sx).expect("validated CFA") as usize;
-                let weight = ((f64::from(sx) + 1.0).min(bounds[2]) - (f64::from(sx)).max(bounds[0]))
-                    .max(0.0)
+                let weight = ((f64::from(sx) + 1.0).min(bounds[2]) - (f64::from(sx)).max(bounds[0])).max(0.0)
                     * ((f64::from(sy) + 1.0).min(bounds[3]) - (f64::from(sy)).max(bounds[1])).max(0.0);
                 let Some(black) = md.black_level.at(sy, sx, 0) else {
                     return false;

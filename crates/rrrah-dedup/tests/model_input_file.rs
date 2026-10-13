@@ -5,13 +5,13 @@ use rrrah_dedup::{
     animated::AnimationBudget,
     exact::SnapshotError,
     model_input::ModelInputPolicy,
-    model_input_file::{prepare_gray_model_file, ModelFileError},
+    model_input_file::{ModelFileError, prepare_gray_model_file},
 };
 use std::{
     cell::Cell,
     sync::{
-        atomic::{AtomicU64, Ordering},
         Arc,
+        atomic::{AtomicU64, Ordering},
     },
 };
 const LIMITS: AnimationBudget = AnimationBudget {

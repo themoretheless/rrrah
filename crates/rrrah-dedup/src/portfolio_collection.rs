@@ -7,9 +7,9 @@ use crate::{
     proposals::ScoredProposal,
     search_portfolio::{
         PortfolioWorkLimits, SearchPortfolioError, SearchPortfolioEvidence, SearchPortfolioPolicy,
-        search_portfolio_files_with, validate_search_portfolio_policy,
-        search_joint_model_portfolio_files_with, validate_joint_model_portfolio_policy,
-        search_model_bank_portfolio_files_with, validate_model_bank_portfolio_policy,
+        search_joint_model_portfolio_files_with, search_model_bank_portfolio_files_with,
+        search_portfolio_files_with, validate_joint_model_portfolio_policy,
+        validate_model_bank_portfolio_policy, validate_search_portfolio_policy,
     },
 };
 use rrrah_core::{BufferError, MemoryBudget, SharedBuffer};
@@ -68,7 +68,9 @@ fn validate(
     validate_collection_work(policy)
 }
 
-fn validate_collection_work(policy:PortfolioCollectionPolicy)->Result<(),EngineError<SearchPortfolioError>> {
+fn validate_collection_work(
+    policy: PortfolioCollectionPolicy,
+) -> Result<(), EngineError<SearchPortfolioError>> {
     let count = u64::try_from(policy.max_pairs).map_err(|_| EngineError::Work)?;
     let p = policy.search.work;
     let t = policy.work;
@@ -258,33 +260,54 @@ fn scan_collection_with_outcome<O>(
     ) -> Result<SharedBuffer<ScoredProposal>, ProposalProviderError>,
     cancel: impl Fn() -> bool,
     order: Option<&crate::pair_schedule::CompletePairSchedule>,
-    joint_model: Option<(u64,u64,u64)>,
-    bank_model: Option<(crate::joint_witnesses::JointBankPolicy,crate::model_tiles::ModelTileWorkLimits,&[u32],ModelBankCollectionWorkLimits)>,
+    joint_model: Option<(u64, u64, u64)>,
+    bank_model: Option<(
+        crate::joint_witnesses::JointBankPolicy,
+        crate::model_tiles::ModelTileWorkLimits,
+        &[u32],
+        ModelBankCollectionWorkLimits,
+    )>,
     outcome: impl Fn(Result<SearchPortfolioEvidence, SearchPortfolioError>) -> Result<O, SearchPortfolioError>,
 ) -> Result<crate::collection::CollectionReport<O>, PortfolioCollectionError> {
     scan_guarded_collection_ordered(
         files,
         weights,
         |cancel| {
-            if let Some((banks,work,radii,total))=bank_model {
-                validate_model_bank_portfolio_policy(policy.search,banks,work,radii,factors,budget,&cancel)
-                    .map_err(EngineError::Policy)?;
+            if let Some((banks, work, radii, total)) = bank_model {
+                validate_model_bank_portfolio_policy(
+                    policy.search,
+                    banks,
+                    work,
+                    radii,
+                    factors,
+                    budget,
+                    &cancel,
+                )
+                .map_err(EngineError::Policy)?;
                 validate_collection_work(policy)?;
-                let pairs=u64::try_from(policy.max_pairs).map_err(|_|EngineError::Work)?;
-                for (per_pair,total) in [(banks.maximum_total_projection_checks,total.projection_checks),
-                    (banks.maximum_total_separation_checks,total.separation_checks)] {
-                    if per_pair.checked_mul(pairs).is_none_or(|required|required>total) {
+                let pairs = u64::try_from(policy.max_pairs).map_err(|_| EngineError::Work)?;
+                for (per_pair, total) in [
+                    (banks.maximum_total_projection_checks, total.projection_checks),
+                    (banks.maximum_total_separation_checks, total.separation_checks),
+                ] {
+                    if per_pair
+                        .checked_mul(pairs)
+                        .is_none_or(|required| required > total)
+                    {
                         return Err(EngineError::Work);
                     }
                 }
             } else {
                 validate(policy, factors, &cancel)?;
             }
-            if let Some((per_attempt,per_pair,total))=joint_model {
-                validate_joint_model_portfolio_policy(policy.search,factors,&cancel,per_attempt,per_pair)
+            if let Some((per_attempt, per_pair, total)) = joint_model {
+                validate_joint_model_portfolio_policy(policy.search, factors, &cancel, per_attempt, per_pair)
                     .map_err(EngineError::Policy)?;
-                let pairs=u64::try_from(policy.max_pairs).map_err(|_|EngineError::Work)?;
-                if per_pair.checked_mul(pairs).is_none_or(|required|required>total) {
+                let pairs = u64::try_from(policy.max_pairs).map_err(|_| EngineError::Work)?;
+                if per_pair
+                    .checked_mul(pairs)
+                    .is_none_or(|required| required > total)
+                {
                     return Err(EngineError::Work);
                 }
             }
@@ -310,14 +333,44 @@ fn scan_collection_with_outcome<O>(
         },
         budget,
         |left, right, cancel| {
-            let result=if let Some((banks,work,radii,_))=bank_model {
-                search_model_bank_portfolio_files_with(left,right,weights,policy.search,banks,work,radii,
-                    factors,budget,&mut provider,cancel)
-            } else if let Some((per_attempt,per_pair,_))=joint_model {
-                search_joint_model_portfolio_files_with(left,right,weights,policy.search,per_attempt,per_pair,
-                    factors,budget,&mut provider,cancel)
+            let result = if let Some((banks, work, radii, _)) = bank_model {
+                search_model_bank_portfolio_files_with(
+                    left,
+                    right,
+                    weights,
+                    policy.search,
+                    banks,
+                    work,
+                    radii,
+                    factors,
+                    budget,
+                    &mut provider,
+                    cancel,
+                )
+            } else if let Some((per_attempt, per_pair, _)) = joint_model {
+                search_joint_model_portfolio_files_with(
+                    left,
+                    right,
+                    weights,
+                    policy.search,
+                    per_attempt,
+                    per_pair,
+                    factors,
+                    budget,
+                    &mut provider,
+                    cancel,
+                )
             } else {
-                search_portfolio_files_with(left,right,weights,policy.search,factors,budget,&mut provider,cancel)
+                search_portfolio_files_with(
+                    left,
+                    right,
+                    weights,
+                    policy.search,
+                    factors,
+                    budget,
+                    &mut provider,
+                    cancel,
+                )
             };
             outcome(result)
         },
@@ -433,10 +486,7 @@ pub fn scan_joint_recovery_collection_with(
         policy,
         factors,
         budget,
-        Some((
-            maximum_pair_projection_checks,
-            maximum_total_projection_checks,
-        )),
+        Some((maximum_pair_projection_checks, maximum_total_projection_checks)),
         None,
         provider,
         cancel,
@@ -452,7 +502,12 @@ fn scan_recovery_collection_selected(
     factors: &[f64],
     budget: &MemoryBudget,
     joint_projection_checks: Option<(u64, u64)>,
-    bank_model:Option<(crate::joint_witnesses::JointBankPolicy,crate::model_tiles::ModelTileWorkLimits,&[u32],ModelBankCollectionWorkLimits)>,
+    bank_model: Option<(
+        crate::joint_witnesses::JointBankPolicy,
+        crate::model_tiles::ModelTileWorkLimits,
+        &[u32],
+        ModelBankCollectionWorkLimits,
+    )>,
     mut provider: impl FnMut(
         &Path,
         &GrayModelInput,
@@ -462,13 +517,31 @@ fn scan_recovery_collection_selected(
     ) -> Result<SharedBuffer<ScoredProposal>, ProposalProviderError>,
     cancel: impl Fn() -> bool,
 ) -> Result<RecoveryCollectionReport, PortfolioCollectionError> {
-    scan_recovery_collection_engine(files,schedule,weights,policy,factors,budget,
-        joint_projection_checks,bank_model,
-        |left,right,cancel| crate::search_portfolio::search_recovery_files_selected(
-            left,right,weights,policy.search,factors,budget,
-            joint_projection_checks.map(|p|p.0),
-            bank_model.map(|(banks,work,radii,_)|(banks,work,radii)),
-            &mut provider,cancel),cancel)
+    scan_recovery_collection_engine(
+        files,
+        schedule,
+        weights,
+        policy,
+        factors,
+        budget,
+        joint_projection_checks,
+        bank_model,
+        |left, right, cancel| {
+            crate::search_portfolio::search_recovery_files_selected(
+                left,
+                right,
+                weights,
+                policy.search,
+                factors,
+                budget,
+                joint_projection_checks.map(|p| p.0),
+                bank_model.map(|(banks, work, radii, _)| (banks, work, radii)),
+                &mut provider,
+                cancel,
+            )
+        },
+        cancel,
+    )
 }
 
 fn scan_recovery_collection_engine<E>(
@@ -479,29 +552,48 @@ fn scan_recovery_collection_engine<E>(
     factors: &[f64],
     budget: &MemoryBudget,
     joint_projection_checks: Option<(u64, u64)>,
-    bank_model:Option<(crate::joint_witnesses::JointBankPolicy,crate::model_tiles::ModelTileWorkLimits,&[u32],ModelBankCollectionWorkLimits)>,
-    mut pair_search: impl FnMut(&DecodeRequest,&DecodeRequest,&dyn Fn()->bool)
-        ->Result<E,SearchPortfolioError>,
+    bank_model: Option<(
+        crate::joint_witnesses::JointBankPolicy,
+        crate::model_tiles::ModelTileWorkLimits,
+        &[u32],
+        ModelBankCollectionWorkLimits,
+    )>,
+    mut pair_search: impl FnMut(
+        &DecodeRequest,
+        &DecodeRequest,
+        &dyn Fn() -> bool,
+    ) -> Result<E, SearchPortfolioError>,
     cancel: impl Fn() -> bool,
 ) -> Result<crate::collection::CollectionReport<E>, PortfolioCollectionError> {
-    use crate::search_portfolio::{
-        validate_search_recovery_policy,
-    };
+    use crate::search_portfolio::validate_search_recovery_policy;
     scan_guarded_collection_ordered(
         files,
         weights,
         |cancel| {
-            let bytes=if let Some((banks,work,radii,total))=bank_model {
-                let bytes=crate::search_portfolio::validate_model_bank_recovery_policy(policy.search,banks,work,radii,factors,budget,&cancel)
-                    .map_err(EngineError::Policy)?;
-                let count=u64::try_from(policy.max_pairs).map_err(|_|EngineError::Work)?;
-                for (pair,total) in [(banks.maximum_total_projection_checks,total.projection_checks),
-                    (banks.maximum_total_separation_checks,total.separation_checks)] {
-                    if pair.checked_mul(count).is_none_or(|required|required>total) {return Err(EngineError::Work);}
+            let bytes = if let Some((banks, work, radii, total)) = bank_model {
+                let bytes = crate::search_portfolio::validate_model_bank_recovery_policy(
+                    policy.search,
+                    banks,
+                    work,
+                    radii,
+                    factors,
+                    budget,
+                    &cancel,
+                )
+                .map_err(EngineError::Policy)?;
+                let count = u64::try_from(policy.max_pairs).map_err(|_| EngineError::Work)?;
+                for (pair, total) in [
+                    (banks.maximum_total_projection_checks, total.projection_checks),
+                    (banks.maximum_total_separation_checks, total.separation_checks),
+                ] {
+                    if pair.checked_mul(count).is_none_or(|required| required > total) {
+                        return Err(EngineError::Work);
+                    }
                 }
                 bytes
             } else {
-                validate_search_recovery_policy(policy.search,factors,&cancel).map_err(EngineError::Policy)?
+                validate_search_recovery_policy(policy.search, factors, &cancel)
+                    .map_err(EngineError::Policy)?
             };
             if let Some((pair, total)) = joint_projection_checks {
                 crate::anchor_rank_file::validate_joint_opposite_projection_policy(
@@ -522,10 +614,7 @@ fn scan_recovery_collection_engine<E>(
                 (required.selection_checks, policy.work.selection_checks),
                 (required.rank_sites, policy.work.rank_sites),
                 (required.pixel_reads, policy.work.pixel_reads),
-                (
-                    required.geometry_hypotheses,
-                    policy.work.geometry_hypotheses,
-                ),
+                (required.geometry_hypotheses, policy.work.geometry_hypotheses),
                 (required.model_input_reads, policy.work.model_input_reads),
             ]
             .iter()
@@ -571,7 +660,7 @@ fn scan_recovery_collection_engine<E>(
             })
         },
         budget,
-        |left,right,cancel| pair_search(left,right,cancel),
+        |left, right, cancel| pair_search(left, right, cancel),
         schedule,
         cancel,
     )
@@ -586,9 +675,9 @@ pub fn scan_joint_model_portfolio_outcome_collection_with(
     files: impl IntoIterator<Item = (u64, DecodeRequest)>,
     weights: &Path,
     policy: PortfolioCollectionPolicy,
-    maximum_model_projection_checks:u64,
-    maximum_pair_projection_checks:u64,
-    maximum_total_projection_checks:u64,
+    maximum_model_projection_checks: u64,
+    maximum_pair_projection_checks: u64,
+    maximum_total_projection_checks: u64,
     factors: &[f64],
     budget: &MemoryBudget,
     provider: impl FnMut(
@@ -609,7 +698,11 @@ pub fn scan_joint_model_portfolio_outcome_collection_with(
         provider,
         cancel,
         None,
-        Some((maximum_model_projection_checks,maximum_pair_projection_checks,maximum_total_projection_checks)),
+        Some((
+            maximum_model_projection_checks,
+            maximum_pair_projection_checks,
+            maximum_total_projection_checks,
+        )),
         None,
         |result| {
             result
@@ -625,10 +718,10 @@ pub fn scan_joint_model_portfolio_outcome_collection_with(
 }
 
 /// Prepaid joint fitting/witness work across all admitted collection pairs.
-#[derive(Debug,Clone,Copy)]
+#[derive(Debug, Clone, Copy)]
 pub struct ModelBankCollectionWorkLimits {
-    pub projection_checks:u64,
-    pub separation_checks:u64,
+    pub projection_checks: u64,
+    pub separation_checks: u64,
 }
 
 /// Exhaust every pair with managed learned bank aggregation and bounded pixel
@@ -637,22 +730,45 @@ pub struct ModelBankCollectionWorkLimits {
 /// Insufficient evidence remains unknown; fatal errors discard the whole report.
 #[allow(clippy::too_many_arguments)]
 pub fn scan_model_bank_portfolio_outcome_collection_with(
-    files:impl IntoIterator<Item=(u64,DecodeRequest)>,
-    schedule:Option<&crate::pair_schedule::CompletePairSchedule>,
-    weights:&Path,policy:PortfolioCollectionPolicy,
-    banks:crate::joint_witnesses::JointBankPolicy,
-    work:crate::model_tiles::ModelTileWorkLimits,radii:&[u32],
-    total:ModelBankCollectionWorkLimits,
-    factors:&[f64],budget:&MemoryBudget,
-    provider:impl FnMut(&Path,&GrayModelInput,&GrayModelInput,&MemoryBudget,&dyn Fn()->bool)
-        ->Result<SharedBuffer<ScoredProposal>,ProposalProviderError>,
-    cancel:impl Fn()->bool,
-)->Result<PortfolioOutcomeCollectionReport,PortfolioCollectionError> {
-    scan_collection_with_outcome(files,weights,policy,factors,budget,provider,cancel,schedule,
-        None,Some((banks,work,radii,total)),|result|result.map(PortfolioPairOutcome::Complete).or_else(|e|match e {
-            SearchPortfolioError::InsufficientAnchorGeometry(reason)=>Ok(PortfolioPairOutcome::Inconclusive(reason)),
-            other=>Err(other),
-        }))
+    files: impl IntoIterator<Item = (u64, DecodeRequest)>,
+    schedule: Option<&crate::pair_schedule::CompletePairSchedule>,
+    weights: &Path,
+    policy: PortfolioCollectionPolicy,
+    banks: crate::joint_witnesses::JointBankPolicy,
+    work: crate::model_tiles::ModelTileWorkLimits,
+    radii: &[u32],
+    total: ModelBankCollectionWorkLimits,
+    factors: &[f64],
+    budget: &MemoryBudget,
+    provider: impl FnMut(
+        &Path,
+        &GrayModelInput,
+        &GrayModelInput,
+        &MemoryBudget,
+        &dyn Fn() -> bool,
+    ) -> Result<SharedBuffer<ScoredProposal>, ProposalProviderError>,
+    cancel: impl Fn() -> bool,
+) -> Result<PortfolioOutcomeCollectionReport, PortfolioCollectionError> {
+    scan_collection_with_outcome(
+        files,
+        weights,
+        policy,
+        factors,
+        budget,
+        provider,
+        cancel,
+        schedule,
+        None,
+        Some((banks, work, radii, total)),
+        |result| {
+            result.map(PortfolioPairOutcome::Complete).or_else(|e| match e {
+                SearchPortfolioError::InsufficientAnchorGeometry(reason) => {
+                    Ok(PortfolioPairOutcome::Inconclusive(reason))
+                }
+                other => Err(other),
+            })
+        },
+    )
 }
 
 /// Exhaustive or complete scheduled collection: bank primary then joint opposite
@@ -660,18 +776,39 @@ pub fn scan_model_bank_portfolio_outcome_collection_with(
 /// Fatal errors discard the entire report; unresolved support remains unknown.
 #[allow(clippy::too_many_arguments)]
 pub fn scan_model_bank_joint_recovery_collection_with(
-    files:impl IntoIterator<Item=(u64,DecodeRequest)>,
-    schedule:Option<&crate::pair_schedule::CompletePairSchedule>,weights:&Path,
-    policy:RecoveryCollectionPolicy,banks:crate::joint_witnesses::JointBankPolicy,
-    work:crate::model_tiles::ModelTileWorkLimits,radii:&[u32],total:ModelBankCollectionWorkLimits,
-    maximum_pair_projection_checks:u64,maximum_total_projection_checks:u64,
-    factors:&[f64],budget:&MemoryBudget,
-    provider:impl FnMut(&Path,&GrayModelInput,&GrayModelInput,&MemoryBudget,&dyn Fn()->bool)
-        ->Result<SharedBuffer<ScoredProposal>,ProposalProviderError>,cancel:impl Fn()->bool,
-)->Result<RecoveryCollectionReport,PortfolioCollectionError> {
-    scan_recovery_collection_selected(files,schedule,weights,policy,factors,budget,
-        Some((maximum_pair_projection_checks,maximum_total_projection_checks)),
-        Some((banks,work,radii,total)),provider,cancel)
+    files: impl IntoIterator<Item = (u64, DecodeRequest)>,
+    schedule: Option<&crate::pair_schedule::CompletePairSchedule>,
+    weights: &Path,
+    policy: RecoveryCollectionPolicy,
+    banks: crate::joint_witnesses::JointBankPolicy,
+    work: crate::model_tiles::ModelTileWorkLimits,
+    radii: &[u32],
+    total: ModelBankCollectionWorkLimits,
+    maximum_pair_projection_checks: u64,
+    maximum_total_projection_checks: u64,
+    factors: &[f64],
+    budget: &MemoryBudget,
+    provider: impl FnMut(
+        &Path,
+        &GrayModelInput,
+        &GrayModelInput,
+        &MemoryBudget,
+        &dyn Fn() -> bool,
+    ) -> Result<SharedBuffer<ScoredProposal>, ProposalProviderError>,
+    cancel: impl Fn() -> bool,
+) -> Result<RecoveryCollectionReport, PortfolioCollectionError> {
+    scan_recovery_collection_selected(
+        files,
+        schedule,
+        weights,
+        policy,
+        factors,
+        budget,
+        Some((maximum_pair_projection_checks, maximum_total_projection_checks)),
+        Some((banks, work, radii, total)),
+        provider,
+        cancel,
+    )
 }
 
 /// Exhaust every scheduled or canonical pair using native, joint opposite, then
@@ -679,19 +816,55 @@ pub fn scan_model_bank_joint_recovery_collection_with(
 /// and typed unknowns survive publication; fatal failures discard the batch.
 #[allow(clippy::too_many_arguments)]
 pub fn scan_native_bank_recovery_collection_with(
-    files:impl IntoIterator<Item=(u64,DecodeRequest)>,
-    schedule:Option<&crate::pair_schedule::CompletePairSchedule>,weights:&Path,
-    policy:RecoveryCollectionPolicy,banks:crate::joint_witnesses::JointBankPolicy,
-    work:crate::model_tiles::ModelTileWorkLimits,radii:&[u32],total:ModelBankCollectionWorkLimits,
-    maximum_pair_projection_checks:u64,maximum_total_projection_checks:u64,
-    factors:&[f64],budget:&MemoryBudget,
-    mut provider:impl FnMut(&Path,&GrayModelInput,&GrayModelInput,&MemoryBudget,&dyn Fn()->bool)
-        ->Result<SharedBuffer<ScoredProposal>,ProposalProviderError>,cancel:impl Fn()->bool,
-)->Result<crate::collection::CollectionReport<crate::search_portfolio::NativeBankRecoveryEvidence>,PortfolioCollectionError> {
-    scan_recovery_collection_engine(files,schedule,weights,policy,factors,budget,
-        Some((maximum_pair_projection_checks,maximum_total_projection_checks)),
-        Some((banks,work,radii,total)),
-        |left,right,cancel| crate::search_portfolio::search_native_bank_recovery_files_with(
-            left,right,weights,policy.search,banks,work,radii,maximum_pair_projection_checks,
-            factors,budget,&mut provider,cancel),cancel)
+    files: impl IntoIterator<Item = (u64, DecodeRequest)>,
+    schedule: Option<&crate::pair_schedule::CompletePairSchedule>,
+    weights: &Path,
+    policy: RecoveryCollectionPolicy,
+    banks: crate::joint_witnesses::JointBankPolicy,
+    work: crate::model_tiles::ModelTileWorkLimits,
+    radii: &[u32],
+    total: ModelBankCollectionWorkLimits,
+    maximum_pair_projection_checks: u64,
+    maximum_total_projection_checks: u64,
+    factors: &[f64],
+    budget: &MemoryBudget,
+    mut provider: impl FnMut(
+        &Path,
+        &GrayModelInput,
+        &GrayModelInput,
+        &MemoryBudget,
+        &dyn Fn() -> bool,
+    ) -> Result<SharedBuffer<ScoredProposal>, ProposalProviderError>,
+    cancel: impl Fn() -> bool,
+) -> Result<
+    crate::collection::CollectionReport<crate::search_portfolio::NativeBankRecoveryEvidence>,
+    PortfolioCollectionError,
+> {
+    scan_recovery_collection_engine(
+        files,
+        schedule,
+        weights,
+        policy,
+        factors,
+        budget,
+        Some((maximum_pair_projection_checks, maximum_total_projection_checks)),
+        Some((banks, work, radii, total)),
+        |left, right, cancel| {
+            crate::search_portfolio::search_native_bank_recovery_files_with(
+                left,
+                right,
+                weights,
+                policy.search,
+                banks,
+                work,
+                radii,
+                maximum_pair_projection_checks,
+                factors,
+                budget,
+                &mut provider,
+                cancel,
+            )
+        },
+        cancel,
+    )
 }

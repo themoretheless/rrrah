@@ -1,10 +1,10 @@
 //! File-backed model input with retained source/dependency observations.
 use crate::{
     animated::AnimationBudget,
-    decode::{decode_selected_frame_bounded, CachedError, DecodeSourceSnapshot},
+    decode::{CachedError, DecodeSourceSnapshot, decode_selected_frame_bounded},
     exact::SnapshotError,
     model_input::{
-        prepare_gray_model_region_input_with_projection, GrayModelInput, ModelInputError, ModelInputPolicy,
+        GrayModelInput, ModelInputError, ModelInputPolicy, prepare_gray_model_region_input_with_projection,
     },
     model_projection::ModelInputProjection,
     raster::NormalizedRaster,

@@ -68,7 +68,11 @@ pub(crate) fn decode(mut bytes: &[u8], request: &DecodeRequest) -> Result<Decode
         .map_err(|_| RasterDecodeError::OutputTooLarge)?;
     let row_bytes = width as usize * channels * 4;
     for y in 0..height as usize {
-        let source_y = if request.pfm_top_down { y } else { height as usize - 1 - y };
+        let source_y = if request.pfm_top_down {
+            y
+        } else {
+            height as usize - 1 - y
+        };
         let row = &bytes[source_y * row_bytes..(source_y + 1) * row_bytes];
         request.check_cancelled()?;
         for (index, pixel) in row.chunks_exact(channels * 4).enumerate() {
@@ -108,7 +112,12 @@ mod tests {
     fn explicit_top_down_keeps_row_order_for_both_endians_and_channel_counts() {
         for little in [false, true] {
             for channels in [1, 3] {
-                let mut bytes = format!("{}\n1 2\n{}2.5\n", if channels == 1 { "Pf" } else { "PF" }, if little { "-" } else { "" }).into_bytes();
+                let mut bytes = format!(
+                    "{}\n1 2\n{}2.5\n",
+                    if channels == 1 { "Pf" } else { "PF" },
+                    if little { "-" } else { "" }
+                )
+                .into_bytes();
                 let values = [0.25_f32, -0.0, 4.0, 2.0, -1.0, 8.0];
                 for v in values.iter().take(channels * 2) {
                     bytes.extend(if little { v.to_le_bytes() } else { v.to_be_bytes() });
@@ -116,7 +125,9 @@ mod tests {
                 let mut request = DecodeRequest::new("rows.pfm");
                 request.pfm_top_down = true;
                 let frame = decode(&bytes, &request).unwrap();
-                let RasterPixels::Rgba32Float(p) = frame.pixels() else { panic!() };
+                let RasterPixels::Rgba32Float(p) = frame.pixels() else {
+                    panic!()
+                };
                 for row in 0..2 {
                     for channel in 0..3 {
                         let source = row * channels + if channels == 1 { 0 } else { channel };

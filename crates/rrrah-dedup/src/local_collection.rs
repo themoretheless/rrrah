@@ -884,7 +884,12 @@ fn scan_reflected_collection_selected(
         return Err(ScanError::Cancelled);
     }
     verify_publication_sources(&snapshots, &invalid, || {
-        requests.values().any(|request| request.cancellation.as_ref().is_some_and(rrrah_decode::GenerationToken::is_cancelled))
+        requests.values().any(|request| {
+            request
+                .cancellation
+                .as_ref()
+                .is_some_and(rrrah_decode::GenerationToken::is_cancelled)
+        })
     })?;
     Ok(ReflectedCollectionReport {
         analysed,

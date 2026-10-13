@@ -111,46 +111,67 @@ fn factors() -> [f64; 4] {
     [1., std::f64::consts::SQRT_2, 2., 2. * std::f64::consts::SQRT_2]
 }
 
-
 fn anchors() -> rrrah_dedup::anchor_rank::AnchorRankPolicy {
-rrrah_dedup::anchor_rank::AnchorRankPolicy {
-        local:rrrah_dedup::local_rank::LocalRankPolicy {
-            rank:rrrah_dedup::rank_region::RankRegionPolicy {
-                radius:8,minimum_contrast:0.005,minimum_pairs:1000,
-                maximum_sites:12800000,maximum_pixel_reads:64000000,
+    rrrah_dedup::anchor_rank::AnchorRankPolicy {
+        local: rrrah_dedup::local_rank::LocalRankPolicy {
+            rank: rrrah_dedup::rank_region::RankRegionPolicy {
+                radius: 8,
+                minimum_contrast: 0.005,
+                minimum_pairs: 1000,
+                maximum_sites: 12800000,
+                maximum_pixel_reads: 64000000,
             },
-            filter_radius:8,minimum_witnesses:10,maximum_points:4000,
-            maximum_point_checks:8002000,minimum_point_separation:2.,
-            target_tolerance:2.,source_tolerance:2.,minimum_coverage:0.3,minimum_agreement:0.9,
-        },window_radius:2,maximum_selection_checks:24002000,
+            filter_radius: 8,
+            minimum_witnesses: 10,
+            maximum_points: 4000,
+            maximum_point_checks: 8002000,
+            minimum_point_separation: 2.,
+            target_tolerance: 2.,
+            source_tolerance: 2.,
+            minimum_coverage: 0.3,
+            minimum_agreement: 0.9,
+        },
+        window_radius: 2,
+        maximum_selection_checks: 24002000,
     }
 }
 
-
 fn portfolio() -> rrrah_dedup::anchor_rank_file::AnchorReflectionFallbackPolicy {
-    let c=config();let p=anchors();
+    let c = config();
+    let p = anchors();
     rrrah_dedup::anchor_rank_file::AnchorReflectionFallbackPolicy {
-        search:rrrah_dedup::anchor_rank_file::AnchorGeometryFallbackPolicy {
-            search:rrrah_dedup::local_scan::ProjectiveCandidateUnionFallbackFilePolicy {
-                search:c,asymmetric_radius:4,
-                max_total_gradient_samples:6*c.max_total_gradient_samples,
-                max_total_match_comparisons:6*c.max_total_match_comparisons,
-                max_total_union_comparisons:6*c.max_union_comparisons,
-            },anchors:p,
-            maximum_total_point_checks:6*p.local.maximum_point_checks,
-            maximum_total_selection_checks:6*p.maximum_selection_checks,
-            maximum_total_rank_sites:6*p.local.rank.maximum_sites,
-            maximum_total_pixel_reads:6*p.local.rank.maximum_pixel_reads,
-        },maximum_reflection_bins:768*c.search.gradient.search.max_total_features as u64,
+        search: rrrah_dedup::anchor_rank_file::AnchorGeometryFallbackPolicy {
+            search: rrrah_dedup::local_scan::ProjectiveCandidateUnionFallbackFilePolicy {
+                search: c,
+                asymmetric_radius: 4,
+                max_total_gradient_samples: 6 * c.max_total_gradient_samples,
+                max_total_match_comparisons: 6 * c.max_total_match_comparisons,
+                max_total_union_comparisons: 6 * c.max_union_comparisons,
+            },
+            anchors: p,
+            maximum_total_point_checks: 6 * p.local.maximum_point_checks,
+            maximum_total_selection_checks: 6 * p.maximum_selection_checks,
+            maximum_total_rank_sites: 6 * p.local.rank.maximum_sites,
+            maximum_total_pixel_reads: 6 * p.local.rank.maximum_pixel_reads,
+        },
+        maximum_reflection_bins: 768 * c.search.gradient.search.max_total_features as u64,
     }
 }
 #[test]
 fn reflected_collection_mid_late_cancel_mutation_and_restored_reverse_edges() {
-    let root=std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/rotation");
-    let budget=rrrah_core::MemoryBudget::new(128*1024*1024);
-    let config=rrrah_dedup::local_collection::AnchorReflectionFallbackCollectionPolicy {
-        search:portfolio(),budgets:rrrah_dedup::local_index::FileFeatureBudgets {max_files:3,max_features:24000,max_hits:128000000,max_pair_counts:3,max_pairs:3},
-        max_retrieval_comparisons:1152000000,maximum_retrieval_reflection_bins:3072000,
+    let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/rotation");
+    let budget = rrrah_core::MemoryBudget::new(128 * 1024 * 1024);
+    let config = rrrah_dedup::local_collection::AnchorReflectionFallbackCollectionPolicy {
+        search: portfolio(),
+        budgets: rrrah_dedup::local_index::FileFeatureBudgets {
+            max_files: 3,
+            max_features: 24000,
+            max_hits: 128000000,
+            max_pair_counts: 3,
+            max_pairs: 3,
+        },
+        max_retrieval_comparisons: 1152000000,
+        maximum_retrieval_reflection_bins: 3072000,
     };
     use std::{cell::Cell, io::Write};
     let dir = tempfile::tempdir().unwrap();
@@ -159,7 +180,7 @@ fn reflected_collection_mid_late_cancel_mutation_and_restored_reverse_edges() {
     let files: Vec<_> = (1..=3)
         .map(|id| {
             let path = dir.path().join(format!("{id}.png"));
-            std::fs::write(&path, if id==2 {&mirror} else {&bytes}).unwrap();
+            std::fs::write(&path, if id == 2 { &mirror } else { &bytes }).unwrap();
             (id, rrrah_decode::DecodeRequest::new(path))
         })
         .collect();
@@ -177,8 +198,18 @@ fn reflected_collection_mid_late_cancel_mutation_and_restored_reverse_edges() {
     .unwrap();
     assert_eq!(baseline.local.pairs.len(), 3);
     let total = calls.get();
-    eprintln!("baseline callback count={total}; edges={}",baseline.local.pairs.len());
-    assert!(baseline.local.pairs.iter().filter(|p|p.left==2||p.right==2).all(|p|p.evidence.reflected_source));
+    eprintln!(
+        "baseline callback count={total}; edges={}",
+        baseline.local.pairs.len()
+    );
+    assert!(
+        baseline
+            .local
+            .pairs
+            .iter()
+            .filter(|p| p.left == 2 || p.right == 2)
+            .all(|p| p.evidence.reflected_source)
+    );
     drop(baseline);
     assert_eq!(budget.used(), 0);
     for stop in [1, total / 2, total] {

@@ -13,11 +13,11 @@ mod mosaic_payload_v1;
 mod ram;
 mod raster_payload;
 mod raster_regions;
-pub use raster_regions::{SwappedRaster, RasterRegion, RasterRegionError};
 pub use raster_payload::{
     RasterPayloadError, raster_payload_len, read_raster_payload, read_raster_payload_with_length,
     write_raster_payload,
 };
+pub use raster_regions::{RasterRegion, RasterRegionError, SwappedRaster};
 mod raster_ram;
 pub use raster_ram::RasterRamCache;
 mod swap;

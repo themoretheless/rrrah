@@ -48,11 +48,18 @@ impl ThumbCache {
 
     /// A count-bounded inventory; cloning this never accesses the filesystem.
     pub fn source_snapshot(&self) -> Vec<CachedThumbSource> {
-        self.sources.iter().filter_map(|(folder, (source, stamp))| {
-            let (id, _) = self.entries.get(folder)?;
-            Some(CachedThumbSource { folder: folder.clone(), source: source.clone(),
-                stamp: stamp.clone(), id: *id })
-        }).collect()
+        self.sources
+            .iter()
+            .filter_map(|(folder, (source, stamp))| {
+                let (id, _) = self.entries.get(folder)?;
+                Some(CachedThumbSource {
+                    folder: folder.clone(),
+                    source: source.clone(),
+                    stamp: stamp.clone(),
+                    id: *id,
+                })
+            })
+            .collect()
     }
 
     /// Apply worker evidence only to the entry it actually checked. A newly
@@ -61,10 +68,16 @@ impl ThumbCache {
         stale
             .into_iter()
             .filter_map(|snapshot| {
-                let matches = self.entries.get(&snapshot.folder).is_some_and(|(id, _)| *id == snapshot.id)
-                    && self.sources.get(&snapshot.folder).is_some_and(|(path, stamp)|
-                        *path == snapshot.source && *stamp == snapshot.stamp);
-                if !matches { return None; }
+                let matches =
+                    self.entries
+                        .get(&snapshot.folder)
+                        .is_some_and(|(id, _)| *id == snapshot.id)
+                        && self.sources.get(&snapshot.folder).is_some_and(|(path, stamp)| {
+                            *path == snapshot.source && *stamp == snapshot.stamp
+                        });
+                if !matches {
+                    return None;
+                }
                 self.sources.remove(&snapshot.folder);
                 self.entries.remove(&snapshot.folder).map(|(id, _)| id)
             })
@@ -72,8 +85,11 @@ impl ThumbCache {
     }
     #[cfg(test)]
     fn invalidate_changed_sources(&mut self) -> Vec<FilmstripTileId> {
-        let stale = self.source_snapshot().into_iter()
-            .filter(|snapshot| SourceStamp::read(&snapshot.source) != snapshot.stamp).collect();
+        let stale = self
+            .source_snapshot()
+            .into_iter()
+            .filter(|snapshot| SourceStamp::read(&snapshot.source) != snapshot.stamp)
+            .collect();
         self.invalidate_sources(stale)
     }
     #[cfg(test)]

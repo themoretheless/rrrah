@@ -171,8 +171,10 @@ impl LodWorker {
         token: GenerationToken,
     ) -> std::io::Result<u64> {
         if token.is_cancelled() {
-            return Err(std::io::Error::new(std::io::ErrorKind::Interrupted,
-                "obsolete raster worker request"));
+            return Err(std::io::Error::new(
+                std::io::ErrorKind::Interrupted,
+                "obsolete raster worker request",
+            ));
         }
         if self.thread.is_none() {
             let shared = self.shared.clone();
@@ -269,8 +271,10 @@ impl LodWorker {
         // Recheck after acquiring the queue lock: an old request must not
         // invalidate current work or discard its already prepared allocation.
         if token.is_cancelled() {
-            return Err(std::io::Error::new(std::io::ErrorKind::Interrupted,
-                "obsolete raster worker request"));
+            return Err(std::io::Error::new(
+                std::io::ErrorKind::Interrupted,
+                "obsolete raster worker request",
+            ));
         }
         let id = self.shared.revision.fetch_add(1, Ordering::AcqRel) + 1;
         slots.completed = None;
@@ -721,33 +725,52 @@ mod tests {
     }
     #[test]
     fn stale_submission_preserves_current_completed_level_and_revision() {
-        let source = DecodedRaster::new(16, 16,
+        let source = DecodedRaster::new(
+            16,
+            16,
             RasterPixels::Rgba32Float(Arc::new([4., -0.5, 0.25, 1.].repeat(256)).into()),
-            RasterColorSpace::LinearSrgb).unwrap();
+            RasterColorSpace::LinearSrgb,
+        )
+        .unwrap();
         let budget = MemoryBudget::new(1024);
         let generation = Arc::new(AtomicU64::new(8));
         let mut worker = LodWorker::default();
         let stale = || GenerationToken::new(generation.clone(), 7);
-        let error = worker.submit(source.clone(), [8, 8], budget.clone(), 7, stale())
+        let error = worker
+            .submit(source.clone(), [8, 8], budget.clone(), 7, stale())
             .expect_err("already obsolete request must be refused");
         assert_eq!(error.kind(), std::io::ErrorKind::Interrupted);
         assert!(worker.thread.is_none());
         assert_eq!(worker.shared.revision.load(Ordering::Acquire), 0);
         let (wake_tx, wake_rx) = crossbeam_channel::bounded(1);
-        worker.set_waker(move || { let _ = wake_tx.try_send(()); });
-        let id = worker.submit(source.clone(), [8, 8], budget.clone(), 8,
-            GenerationToken::new(generation.clone(), 8)).unwrap();
+        worker.set_waker(move || {
+            let _ = wake_tx.try_send(());
+        });
+        let id = worker
+            .submit(
+                source.clone(),
+                [8, 8],
+                budget.clone(),
+                8,
+                GenerationToken::new(generation.clone(), 8),
+            )
+            .unwrap();
         wake_rx.recv_timeout(std::time::Duration::from_secs(10)).unwrap();
         assert!(worker.has_completed());
         assert_eq!(budget.used(), 1024);
         assert!(worker.submit(source, [4, 4], budget.clone(), 7, stale()).is_err());
         assert_eq!(worker.shared.revision.load(Ordering::Acquire), id);
-        assert_eq!(budget.used(), 1024, "stale submission must retain ready current level");
+        assert_eq!(
+            budget.used(),
+            1024,
+            "stale submission must retain ready current level"
+        );
         let completed = worker.try_take().unwrap();
         assert_eq!((completed.id, completed.generation), (id, 8));
         let frame = completed.into_frame().unwrap();
         assert_eq!((frame.width(), frame.height()), (8, 8));
-        drop(frame); drop(worker);
+        drop(frame);
+        drop(worker);
         assert_eq!(budget.used(), 0);
     }
 

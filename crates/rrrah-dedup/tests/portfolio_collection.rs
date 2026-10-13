@@ -1147,7 +1147,12 @@ fn recovery_collection() -> RecoveryCollectionPolicy {
         work: primary.work,
     };
     search.work = search.required_work().unwrap();
-    let mut p = RecoveryCollectionPolicy { search, max_files: 3, max_pairs: 3, work: search.work };
+    let mut p = RecoveryCollectionPolicy {
+        search,
+        max_files: 3,
+        max_pairs: 3,
+        work: search.work,
+    };
     p.work = p.required_work().unwrap();
     p
 }
@@ -1169,15 +1174,38 @@ fn recovery_collection_preflight_precedes_iterator_and_io() -> TestResult {
             8 => p.search.work.point_checks -= 1,
             _ => p.search.opposite.maximum_swapped_points = usize::MAX,
         }
-        let files = std::iter::from_fn(|| -> Option<(u64, DecodeRequest)> { panic!("iterator before preflight") });
-        assert!(scan_recovery_collection_with(files, None, std::path::Path::new("/missing/weights"), p,
-            &factors(), &budget, |_, _, _, _, _| panic!("provider"), || false).is_err());
+        let files =
+            std::iter::from_fn(|| -> Option<(u64, DecodeRequest)> { panic!("iterator before preflight") });
+        assert!(
+            scan_recovery_collection_with(
+                files,
+                None,
+                std::path::Path::new("/missing/weights"),
+                p,
+                &factors(),
+                &budget,
+                |_, _, _, _, _| panic!("provider"),
+                || false
+            )
+            .is_err()
+        );
         assert_eq!(budget.used(), 0);
     }
     let budget = MemoryBudget::new(0);
     let files = std::iter::from_fn(|| -> Option<(u64, DecodeRequest)> { panic!("metadata before iterator") });
-    assert!(matches!(scan_recovery_collection_with(files, None, std::path::Path::new("/missing/weights"),
-        recovery_collection(), &factors(), &budget, fake, || false), Err(PortfolioCollectionError::Memory(_))));
+    assert!(matches!(
+        scan_recovery_collection_with(
+            files,
+            None,
+            std::path::Path::new("/missing/weights"),
+            recovery_collection(),
+            &factors(),
+            &budget,
+            fake,
+            || false
+        ),
+        Err(PortfolioCollectionError::Memory(_))
+    ));
     Ok(())
 }
 
@@ -1194,32 +1222,62 @@ fn recovery_collection_unknowns_late_provider_failure_and_final_weight_guard() -
     p.search.work = p.search.required_work()?;
     p.work = p.required_work()?;
     let checkpoints = Cell::new(0);
-    let report = scan_recovery_collection_with(files.clone(), None, &weights, p,
-        &factors(), &budget, fake, || { checkpoints.set(checkpoints.get() + 1); false })?;
+    let report = scan_recovery_collection_with(
+        files.clone(),
+        None,
+        &weights,
+        p,
+        &factors(),
+        &budget,
+        fake,
+        || {
+            checkpoints.set(checkpoints.get() + 1);
+            false
+        },
+    )?;
     assert_eq!(report.file_ids(), &[0, 7, u64::MAX]);
     assert_eq!(report.pairs().len(), 3);
-    assert!(report.pairs().iter().all(|pair| pair.evidence.supported().is_none()));
+    assert!(
+        report
+            .pairs()
+            .iter()
+            .all(|pair| pair.evidence.supported().is_none())
+    );
     drop(report);
     assert_eq!(budget.used(), 0);
     let last = checkpoints.get();
     let calls = Cell::new(0);
-    let result = scan_recovery_collection_with(files.clone(), None, &weights, p,
-        &factors(), &budget, |_, _, _, b, _| {
+    let result = scan_recovery_collection_with(
+        files.clone(),
+        None,
+        &weights,
+        p,
+        &factors(),
+        &budget,
+        |_, _, _, b, _| {
             calls.set(calls.get() + 1);
-            if calls.get() == 2 { return Err(std::io::Error::other("late provider").into()); }
+            if calls.get() == 2 {
+                return Err(std::io::Error::other("late provider").into());
+            }
             model_fixture::proposals(b)
-        }, || false);
+        },
+        || false,
+    );
     assert!(matches!(result, Err(PortfolioCollectionError::Pair { .. })));
     assert_eq!(calls.get(), 2);
     assert_eq!(budget.used(), 0);
     checkpoints.set(0);
-    let result = scan_recovery_collection_with(files, None, &weights, p,
-        &factors(), &budget, fake, || {
-            checkpoints.set(checkpoints.get() + 1);
-            if checkpoints.get() == last { std::fs::write(&weights, b"changed weights").unwrap(); }
-            false
-        });
-    assert!(matches!(result, Err(PortfolioCollectionError::ModelSource(_))), "{result:?}");
+    let result = scan_recovery_collection_with(files, None, &weights, p, &factors(), &budget, fake, || {
+        checkpoints.set(checkpoints.get() + 1);
+        if checkpoints.get() == last {
+            std::fs::write(&weights, b"changed weights").unwrap();
+        }
+        false
+    });
+    assert!(
+        matches!(result, Err(PortfolioCollectionError::ModelSource(_))),
+        "{result:?}"
+    );
     assert_eq!(budget.used(), 0);
     Ok(())
 }
@@ -1230,12 +1288,13 @@ fn recovery_collection_schedule_keeps_fallback_pairs_and_canonical_publication()
     let dir = tempfile::tempdir()?;
     let weights = dir.path().join("weights");
     std::fs::write(&weights, b"fixture provider")?;
-    let source = DecodeRequest::new(std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
-        .join("tests/fixtures/rotation/base.png"));
+    let source = DecodeRequest::new(
+        std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/rotation/base.png"),
+    );
     let files = [(7, source.clone()), (0, source.clone()), (u64::MAX, source)];
     let budget = MemoryBudget::new(128 * 1024 * 1024);
-    let schedule = CompletePairSchedule::new(&[7, 0, u64::MAX], &[(7, u64::MAX)],
-        3, 3, 1, &budget, || false)?;
+    let schedule =
+        CompletePairSchedule::new(&[7, 0, u64::MAX], &[(7, u64::MAX)], 3, 3, 1, &budget, || false)?;
     let schedule_bytes = budget.used();
     let mut p = recovery_collection();
     native_miss(&mut p.search.primary);
@@ -1246,23 +1305,59 @@ fn recovery_collection_schedule_keeps_fallback_pairs_and_canonical_publication()
     p.search.work = p.search.required_work()?;
     p.work = p.required_work()?;
     let calls = Cell::new(0);
-    let report = scan_recovery_collection_with(files.clone(), Some(&schedule), &weights, p,
-        &factors(), &budget, |_, _, _, b, _| {
+    let report = scan_recovery_collection_with(
+        files.clone(),
+        Some(&schedule),
+        &weights,
+        p,
+        &factors(),
+        &budget,
+        |_, _, _, b, _| {
             calls.set(calls.get() + 1);
-            Ok(b.try_buffer(0, rrrah_dedup::proposals::ScoredProposal {
-                source: [0.; 2], target: [0.; 2], confidence: 0.,
-            })?.freeze())
-        }, || false)?;
+            Ok(b.try_buffer(
+                0,
+                rrrah_dedup::proposals::ScoredProposal {
+                    source: [0.; 2],
+                    target: [0.; 2],
+                    confidence: 0.,
+                },
+            )?
+            .freeze())
+        },
+        || false,
+    )?;
     assert_eq!(calls.get(), 3);
-    assert_eq!(report.pairs().iter().map(|pair| (pair.left, pair.right)).collect::<Vec<_>>(),
-        vec![(0, 7), (0, u64::MAX), (7, u64::MAX)]);
-    assert!(report.pairs().iter().all(|pair| pair.evidence.supported() == Some(true)
-        && matches!(pair.evidence, SearchRecoveryOutcome::Opposite { .. })));
+    assert_eq!(
+        report
+            .pairs()
+            .iter()
+            .map(|pair| (pair.left, pair.right))
+            .collect::<Vec<_>>(),
+        vec![(0, 7), (0, u64::MAX), (7, u64::MAX)]
+    );
+    assert!(
+        report
+            .pairs()
+            .iter()
+            .all(|pair| pair.evidence.supported() == Some(true)
+                && matches!(pair.evidence, SearchRecoveryOutcome::Opposite { .. }))
+    );
     drop(report);
     assert_eq!(budget.used(), schedule_bytes);
     let mismatch = CompletePairSchedule::new(&[0, 7], &[], 2, 1, 0, &budget, || false)?;
-    assert!(scan_recovery_collection_with(files, Some(&mismatch), &weights, p,
-        &factors(), &budget, |_, _, _, _, _| panic!("schedule mismatch provider"), || false).is_err());
+    assert!(
+        scan_recovery_collection_with(
+            files,
+            Some(&mismatch),
+            &weights,
+            p,
+            &factors(),
+            &budget,
+            |_, _, _, _, _| panic!("schedule mismatch provider"),
+            || false
+        )
+        .is_err()
+    );
     drop(mismatch);
     drop(schedule);
     assert_eq!(budget.used(), 0);
@@ -1271,27 +1366,77 @@ fn recovery_collection_schedule_keeps_fallback_pairs_and_canonical_publication()
 
 #[test]
 fn joint_collection_projection_preflight_precedes_iterator_and_exhaustive_recovery() -> TestResult {
-    use std::path::Path;
     use rrrah_dedup::portfolio_collection::scan_joint_recovery_collection_with;
-    let mut p=recovery_collection();
-    let g=p.search.opposite.search.search.search.search.search.gradient.search;
-    let pair=12*g.local.geometry.max_points as u64*(g.sampling.trials+1);
-    let budget=MemoryBudget::new(128*1024*1024);
-    for (per,total) in [(pair-1,3*pair),(pair,3*pair-1)] {
-        let files=std::iter::from_fn(||->Option<(u64,DecodeRequest)>{panic!("preflight iterator")});
-        assert!(scan_joint_recovery_collection_with(files,None,Path::new("missing-weights"),p,&factors(),&budget,per,total,fake,||false).is_err());assert_eq!(budget.used(),0);
+    use std::path::Path;
+    let mut p = recovery_collection();
+    let g = p
+        .search
+        .opposite
+        .search
+        .search
+        .search
+        .search
+        .search
+        .gradient
+        .search;
+    let pair = 12 * g.local.geometry.max_points as u64 * (g.sampling.trials + 1);
+    let budget = MemoryBudget::new(128 * 1024 * 1024);
+    for (per, total) in [(pair - 1, 3 * pair), (pair, 3 * pair - 1)] {
+        let files = std::iter::from_fn(|| -> Option<(u64, DecodeRequest)> { panic!("preflight iterator") });
+        assert!(
+            scan_joint_recovery_collection_with(
+                files,
+                None,
+                Path::new("missing-weights"),
+                p,
+                &factors(),
+                &budget,
+                per,
+                total,
+                fake,
+                || false
+            )
+            .is_err()
+        );
+        assert_eq!(budget.used(), 0);
     }
-    native_miss(&mut p.search.primary);p.search.primary.model.anchors.local.minimum_witnesses=11;
-    p.search.primary.model.decode.max_pixels=200000;
-    p.search.primary.model.input.max_source_pixels=200000;
-    p.search.primary.model.input.max_pixel_reads=800000;
-    p.search.primary.work=p.search.primary.required_work()?;p.search.work=p.search.required_work()?;p.work=p.required_work()?;
-    let dir=tempfile::tempdir()?;let weights=dir.path().join("weights");std::fs::write(&weights,b"fixture")?;
-    let source=DecodeRequest::new(Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/rotation/base.png"));
-    let files=[(9,source.clone()),(2,source.clone()),(6,source)];
-    let report=scan_joint_recovery_collection_with(files,None,&weights,p,&factors(),&budget,pair,3*pair,fake,||false)?;
-    assert_eq!(report.file_ids(),&[2,6,9]);assert_eq!(report.pairs().len(),3);assert!(report.pairs().iter().all(|r|r.evidence.supported()==Some(true)));
-    drop(report);assert_eq!(budget.used(),0);Ok(())
+    native_miss(&mut p.search.primary);
+    p.search.primary.model.anchors.local.minimum_witnesses = 11;
+    p.search.primary.model.decode.max_pixels = 200000;
+    p.search.primary.model.input.max_source_pixels = 200000;
+    p.search.primary.model.input.max_pixel_reads = 800000;
+    p.search.primary.work = p.search.primary.required_work()?;
+    p.search.work = p.search.required_work()?;
+    p.work = p.required_work()?;
+    let dir = tempfile::tempdir()?;
+    let weights = dir.path().join("weights");
+    std::fs::write(&weights, b"fixture")?;
+    let source =
+        DecodeRequest::new(Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/rotation/base.png"));
+    let files = [(9, source.clone()), (2, source.clone()), (6, source)];
+    let report = scan_joint_recovery_collection_with(
+        files,
+        None,
+        &weights,
+        p,
+        &factors(),
+        &budget,
+        pair,
+        3 * pair,
+        fake,
+        || false,
+    )?;
+    assert_eq!(report.file_ids(), &[2, 6, 9]);
+    assert_eq!(report.pairs().len(), 3);
+    assert!(
+        report
+            .pairs()
+            .iter()
+            .all(|r| r.evidence.supported() == Some(true))
+    );
+    drop(report);
+    assert_eq!(budget.used(), 0);
+    Ok(())
 }
 
 #[test]
@@ -1313,33 +1458,38 @@ fn joint_model_insufficient_geometry_is_retained_for_every_pair_in_both_search_o
             p.search.work = p.search.required_work()?;
             p.work = work(p.search.work, 3);
             let calls = Cell::new(0);
-            let report = rrrah_dedup::portfolio_collection::scan_joint_model_portfolio_outcome_collection_with(
-                files.clone(),
-                &weights,
-                p,
-                 2*(p.search.model.geometry.max_points as u64)*(p.search.model.sampling.trials+1),
-                 25*2*(p.search.model.geometry.max_points as u64)*(p.search.model.sampling.trials+1),
-                 75*2*(p.search.model.geometry.max_points as u64)*(p.search.model.sampling.trials+1),
-                &factors(),
-                &budget,
-                |_, _, _, b, _| {
-                    calls.set(calls.get() + 1);
-                    if !tiled || (calls.get() - 1) % 25 == 0 {
-                        model_fixture::proposals(b)
-                    } else {
-                        Ok(b.try_buffer(
-                            0,
-                            rrrah_dedup::proposals::ScoredProposal {
-                                source: [0.; 2],
-                                target: [0.; 2],
-                                confidence: 0.,
-                            },
-                        )?
-                        .freeze())
-                    }
-                },
-                || false,
-            )?;
+            let report =
+                rrrah_dedup::portfolio_collection::scan_joint_model_portfolio_outcome_collection_with(
+                    files.clone(),
+                    &weights,
+                    p,
+                    2 * (p.search.model.geometry.max_points as u64) * (p.search.model.sampling.trials + 1),
+                    25 * 2
+                        * (p.search.model.geometry.max_points as u64)
+                        * (p.search.model.sampling.trials + 1),
+                    75 * 2
+                        * (p.search.model.geometry.max_points as u64)
+                        * (p.search.model.sampling.trials + 1),
+                    &factors(),
+                    &budget,
+                    |_, _, _, b, _| {
+                        calls.set(calls.get() + 1);
+                        if !tiled || (calls.get() - 1) % 25 == 0 {
+                            model_fixture::proposals(b)
+                        } else {
+                            Ok(b.try_buffer(
+                                0,
+                                rrrah_dedup::proposals::ScoredProposal {
+                                    source: [0.; 2],
+                                    target: [0.; 2],
+                                    confidence: 0.,
+                                },
+                            )?
+                            .freeze())
+                        }
+                    },
+                    || false,
+                )?;
             assert_eq!(report.file_ids(), &[0, 7, u64::MAX]);
             assert_eq!(report.pairs().len(), 3);
             assert_eq!(calls.get(), if tiled { 75 } else { 3 });
@@ -1384,9 +1534,9 @@ fn joint_model_fatal_failure_after_unknown_still_discards_entire_outcome_collect
             owned,
             &weights,
             p,
-             2*(p.search.model.geometry.max_points as u64)*(p.search.model.sampling.trials+1),
-             25*2*(p.search.model.geometry.max_points as u64)*(p.search.model.sampling.trials+1),
-             75*2*(p.search.model.geometry.max_points as u64)*(p.search.model.sampling.trials+1),
+            2 * (p.search.model.geometry.max_points as u64) * (p.search.model.sampling.trials + 1),
+            25 * 2 * (p.search.model.geometry.max_points as u64) * (p.search.model.sampling.trials + 1),
+            75 * 2 * (p.search.model.geometry.max_points as u64) * (p.search.model.sampling.trials + 1),
             &factors(),
             &budget,
             |_, _, _, b, cancel| {
@@ -1418,121 +1568,745 @@ fn joint_model_fatal_failure_after_unknown_still_discards_entire_outcome_collect
 #[test]
 fn joint_model_collection_projection_preflight_and_canonical_exhaustive_support() -> TestResult {
     use rrrah_dedup::portfolio_collection::scan_joint_model_portfolio_outcome_collection_with as scan;
-    let p=tiled_collection();let per=2*(p.search.model.geometry.max_points as u64)*(p.search.model.sampling.trials+1);
-    let budget=MemoryBudget::new(128*1024*1024);
-    for (attempt,pair,total) in [(per-1,per*25,per*75),(per,per*25-1,per*75),(per,per*25,per*75-1),(per,u64::MAX,u64::MAX)] {
-        let files=std::iter::from_fn(||->Option<(u64,DecodeRequest)>{panic!("iterator before full projection admission")});
-        assert!(scan(files,std::path::Path::new("missing"),p,attempt,pair,total,&factors(),&budget,fake,||false).is_err());
-        assert_eq!(budget.used(),0);
+    let p = tiled_collection();
+    let per = 2 * (p.search.model.geometry.max_points as u64) * (p.search.model.sampling.trials + 1);
+    let budget = MemoryBudget::new(128 * 1024 * 1024);
+    for (attempt, pair, total) in [
+        (per - 1, per * 25, per * 75),
+        (per, per * 25 - 1, per * 75),
+        (per, per * 25, per * 75 - 1),
+        (per, u64::MAX, u64::MAX),
+    ] {
+        let files = std::iter::from_fn(|| -> Option<(u64, DecodeRequest)> {
+            panic!("iterator before full projection admission")
+        });
+        assert!(
+            scan(
+                files,
+                std::path::Path::new("missing"),
+                p,
+                attempt,
+                pair,
+                total,
+                &factors(),
+                &budget,
+                fake,
+                || false
+            )
+            .is_err()
+        );
+        assert_eq!(budget.used(), 0);
     }
-    let dir=tempfile::tempdir()?;let (files,weights)=three(dir.path())?;
-    let report=scan(files,&weights,p,per,25*per,75*per,&factors(),&budget,fake,||false)?;
-    assert_eq!(report.file_ids(),&[0,7,u64::MAX]);assert_eq!(report.pairs().len(),3);
-    assert!(report.pairs().iter().all(|p|p.evidence.support()==Some(true)));
-    let retained=budget.used();assert!(retained>0);let report=Arc::new(report);let cloned=report.clone();drop(report);assert_eq!(budget.used(),retained);drop(cloned);assert_eq!(budget.used(),0);
+    let dir = tempfile::tempdir()?;
+    let (files, weights) = three(dir.path())?;
+    let report = scan(
+        files,
+        &weights,
+        p,
+        per,
+        25 * per,
+        75 * per,
+        &factors(),
+        &budget,
+        fake,
+        || false,
+    )?;
+    assert_eq!(report.file_ids(), &[0, 7, u64::MAX]);
+    assert_eq!(report.pairs().len(), 3);
+    assert!(report.pairs().iter().all(|p| p.evidence.support() == Some(true)));
+    let retained = budget.used();
+    assert!(retained > 0);
+    let report = Arc::new(report);
+    let cloned = report.clone();
+    drop(report);
+    assert_eq!(budget.used(), retained);
+    drop(cloned);
+    assert_eq!(budget.used(), 0);
     Ok(())
 }
 
-fn bank_setup(mut p:SearchPortfolioPolicy)->(SearchPortfolioPolicy,rrrah_dedup::joint_witnesses::JointBankPolicy,rrrah_dedup::model_tiles::ModelTileWorkLimits) {
- use rrrah_dedup::{geometry::JointProjectivePolicy,joint_witnesses::{JointBankPolicy,JointWitnessPolicy},model_tiles::ModelTileWorkLimits};
- p.model.anchors.local.maximum_points=400;p.model.anchors.local.maximum_point_checks=100000;p.model.anchors.maximum_selection_checks=250000;
- let m=p.model;let n=25*m.proposals.max_proposals as u64;let fit=2*m.geometry.max_points as u64*(m.sampling.trials+1);let sep=n*(n-1)/2;let mut target=m.geometry;target.min_inliers=4;
- let banks=JointBankPolicy{hypothesis:JointProjectivePolicy{target,source_tolerance:m.anchors.local.source_tolerance,maximum_projection_checks:fit},sampling:m.sampling,witnesses:JointWitnessPolicy{source_tolerance:m.anchors.local.source_tolerance,target_tolerance:m.geometry.tolerance,minimum_separation:2.,maximum_points:n as usize,maximum_projection_checks:2*n,maximum_separation_checks:sep},minimum_witnesses:10,maximum_banks:25,maximum_total_projection_checks:25*(fit+2*n),maximum_total_separation_checks:25*sep};
- let mut work=ModelTileWorkLimits::for_model(m).unwrap();work.model_input_reads=52*m.input.max_pixel_reads;work.point_checks*=2;work.selection_checks*=2;work.rank_sites*=2;work.pixel_reads*=2;p.work=rrrah_dedup::search_portfolio::required_model_bank_portfolio_work(p,work).unwrap();(p,banks,work)
+fn bank_setup(
+    mut p: SearchPortfolioPolicy,
+) -> (
+    SearchPortfolioPolicy,
+    rrrah_dedup::joint_witnesses::JointBankPolicy,
+    rrrah_dedup::model_tiles::ModelTileWorkLimits,
+) {
+    use rrrah_dedup::{
+        geometry::JointProjectivePolicy,
+        joint_witnesses::{JointBankPolicy, JointWitnessPolicy},
+        model_tiles::ModelTileWorkLimits,
+    };
+    p.model.anchors.local.maximum_points = 400;
+    p.model.anchors.local.maximum_point_checks = 100000;
+    p.model.anchors.maximum_selection_checks = 250000;
+    let m = p.model;
+    let n = 25 * m.proposals.max_proposals as u64;
+    let fit = 2 * m.geometry.max_points as u64 * (m.sampling.trials + 1);
+    let sep = n * (n - 1) / 2;
+    let mut target = m.geometry;
+    target.min_inliers = 4;
+    let banks = JointBankPolicy {
+        hypothesis: JointProjectivePolicy {
+            target,
+            source_tolerance: m.anchors.local.source_tolerance,
+            maximum_projection_checks: fit,
+        },
+        sampling: m.sampling,
+        witnesses: JointWitnessPolicy {
+            source_tolerance: m.anchors.local.source_tolerance,
+            target_tolerance: m.geometry.tolerance,
+            minimum_separation: 2.,
+            maximum_points: n as usize,
+            maximum_projection_checks: 2 * n,
+            maximum_separation_checks: sep,
+        },
+        minimum_witnesses: 10,
+        maximum_banks: 25,
+        maximum_total_projection_checks: 25 * (fit + 2 * n),
+        maximum_total_separation_checks: 25 * sep,
+    };
+    let mut work = ModelTileWorkLimits::for_model(m).unwrap();
+    work.model_input_reads = 52 * m.input.max_pixel_reads;
+    work.point_checks *= 2;
+    work.selection_checks *= 2;
+    work.rank_sites *= 2;
+    work.pixel_reads *= 2;
+    p.work = rrrah_dedup::search_portfolio::required_model_bank_portfolio_work(p, work).unwrap();
+    (p, banks, work)
 }
-fn bank_collection()->(PortfolioCollectionPolicy,rrrah_dedup::joint_witnesses::JointBankPolicy,rrrah_dedup::model_tiles::ModelTileWorkLimits,ModelBankCollectionWorkLimits) {
-    let mut search=combined(SearchOrder::ModelFirst);native_miss(&mut search);
-    let(search,banks,bank_work)=bank_setup(search);
-    (PortfolioCollectionPolicy{search,max_files:3,max_pairs:3,work:work(search.work,3)},banks,bank_work,
-     ModelBankCollectionWorkLimits{projection_checks:3*banks.maximum_total_projection_checks,separation_checks:3*banks.maximum_total_separation_checks})
+fn bank_collection() -> (
+    PortfolioCollectionPolicy,
+    rrrah_dedup::joint_witnesses::JointBankPolicy,
+    rrrah_dedup::model_tiles::ModelTileWorkLimits,
+    ModelBankCollectionWorkLimits,
+) {
+    let mut search = combined(SearchOrder::ModelFirst);
+    native_miss(&mut search);
+    let (search, banks, bank_work) = bank_setup(search);
+    (
+        PortfolioCollectionPolicy {
+            search,
+            max_files: 3,
+            max_pairs: 3,
+            work: work(search.work, 3),
+        },
+        banks,
+        bank_work,
+        ModelBankCollectionWorkLimits {
+            projection_checks: 3 * banks.maximum_total_projection_checks,
+            separation_checks: 3 * banks.maximum_total_separation_checks,
+        },
+    )
 }
 #[test]
-fn bank_collection_all_pairs_both_orders_and_scheduling_preserve_canonical_records()->TestResult {
-    let dir=tempfile::tempdir()?;let(files,weights)=three(dir.path())?;let budget=MemoryBudget::new(128*1024*1024);
-    let schedule=rrrah_dedup::pair_schedule::CompletePairSchedule::new(&[u64::MAX,0,7],&[],3,3,0,&budget,||false)?;
-    for order in [SearchOrder::ModelFirst,SearchOrder::NativeFirst] {
-        for scheduled in [false,true] {
-            let(mut p,banks,w,total)=bank_collection();p.search.order=order;let calls=Cell::new(0);
-            let report=scan_model_bank_portfolio_outcome_collection_with(files.clone(),scheduled.then_some(&schedule),&weights,p,banks,w,&[12,1],total,&factors(),&budget,|a,l,r,b,c|{calls.set(calls.get()+1);fake(a,l,r,b,c)},||false)?;
-            assert_eq!(calls.get(),75);assert_eq!(report.file_ids(),&[0,7,u64::MAX]);assert_eq!(report.pairs().len(),3);assert!(report.pairs().iter().all(|p|p.evidence.support()==Some(true)));
-            let retained=budget.used();let report=Arc::new(report);let clone=report.clone();drop(report);assert_eq!(budget.used(),retained);drop(clone);
+fn bank_collection_all_pairs_both_orders_and_scheduling_preserve_canonical_records() -> TestResult {
+    let dir = tempfile::tempdir()?;
+    let (files, weights) = three(dir.path())?;
+    let budget = MemoryBudget::new(128 * 1024 * 1024);
+    let schedule = rrrah_dedup::pair_schedule::CompletePairSchedule::new(
+        &[u64::MAX, 0, 7],
+        &[],
+        3,
+        3,
+        0,
+        &budget,
+        || false,
+    )?;
+    for order in [SearchOrder::ModelFirst, SearchOrder::NativeFirst] {
+        for scheduled in [false, true] {
+            let (mut p, banks, w, total) = bank_collection();
+            p.search.order = order;
+            let calls = Cell::new(0);
+            let report = scan_model_bank_portfolio_outcome_collection_with(
+                files.clone(),
+                scheduled.then_some(&schedule),
+                &weights,
+                p,
+                banks,
+                w,
+                &[12, 1],
+                total,
+                &factors(),
+                &budget,
+                |a, l, r, b, c| {
+                    calls.set(calls.get() + 1);
+                    fake(a, l, r, b, c)
+                },
+                || false,
+            )?;
+            assert_eq!(calls.get(), 75);
+            assert_eq!(report.file_ids(), &[0, 7, u64::MAX]);
+            assert_eq!(report.pairs().len(), 3);
+            assert!(report.pairs().iter().all(|p| p.evidence.support() == Some(true)));
+            let retained = budget.used();
+            let report = Arc::new(report);
+            let clone = report.clone();
+            drop(report);
+            assert_eq!(budget.used(), retained);
+            drop(clone);
         }
     }
-    drop(schedule);assert_eq!(budget.used(),0);Ok(())
+    drop(schedule);
+    assert_eq!(budget.used(), 0);
+    Ok(())
 }
 #[test]
-fn bank_collection_complete_work_and_all_radii_precede_iterator_consumption()->TestResult {
-    let budget=MemoryBudget::new(128*1024*1024);
+fn bank_collection_complete_work_and_all_radii_precede_iterator_consumption() -> TestResult {
+    let budget = MemoryBudget::new(128 * 1024 * 1024);
     for case in 0..6 {
-        let(mut p,banks,w,mut total)=bank_collection();let mut radii=&[2,6][..];
-        match case {0=>p.work.pixel_reads-=1,1=>total.projection_checks-=1,2=>total.separation_checks-=1,3=>radii=&[],4=>p.search.work.model_input_reads-=1,_=>p.max_pairs=usize::MAX}
-        let files=std::iter::from_fn(||->Option<(u64,DecodeRequest)>{panic!("iterator before admission")});
-        let e=scan_model_bank_portfolio_outcome_collection_with(files,None,std::path::Path::new("missing"),p,banks,w,radii,total,&factors(),&budget,fake,||false);assert!(e.is_err(),"case{case}");assert_eq!(budget.used(),0);
+        let (mut p, banks, w, mut total) = bank_collection();
+        let mut radii = &[2, 6][..];
+        match case {
+            0 => p.work.pixel_reads -= 1,
+            1 => total.projection_checks -= 1,
+            2 => total.separation_checks -= 1,
+            3 => radii = &[],
+            4 => p.search.work.model_input_reads -= 1,
+            _ => p.max_pairs = usize::MAX,
+        }
+        let files =
+            std::iter::from_fn(|| -> Option<(u64, DecodeRequest)> { panic!("iterator before admission") });
+        let e = scan_model_bank_portfolio_outcome_collection_with(
+            files,
+            None,
+            std::path::Path::new("missing"),
+            p,
+            banks,
+            w,
+            radii,
+            total,
+            &factors(),
+            &budget,
+            fake,
+            || false,
+        );
+        assert!(e.is_err(), "case{case}");
+        assert_eq!(budget.used(), 0);
     }
-    let(p,banks,w,total)=bank_collection();let files=std::iter::from_fn(||->Option<(u64,DecodeRequest)>{panic!("cancel before iterator")});let e=scan_model_bank_portfolio_outcome_collection_with(files,None,std::path::Path::new("missing"),p,banks,w,&[],total,&factors(),&budget,fake,||true);assert!(matches!(e,Err(PortfolioCollectionError::Cancelled)));assert_eq!(budget.used(),0);Ok(())
+    let (p, banks, w, total) = bank_collection();
+    let files = std::iter::from_fn(|| -> Option<(u64, DecodeRequest)> { panic!("cancel before iterator") });
+    let e = scan_model_bank_portfolio_outcome_collection_with(
+        files,
+        None,
+        std::path::Path::new("missing"),
+        p,
+        banks,
+        w,
+        &[],
+        total,
+        &factors(),
+        &budget,
+        fake,
+        || true,
+    );
+    assert!(matches!(e, Err(PortfolioCollectionError::Cancelled)));
+    assert_eq!(budget.used(), 0);
+    Ok(())
 }
 #[test]
-fn bank_collection_unknown_is_retained_and_later_fatal_or_weight_change_discards_batch()->TestResult {
+fn bank_collection_unknown_is_retained_and_later_fatal_or_weight_change_discards_batch() -> TestResult {
     for failure in 0..4 {
-        let dir=tempfile::tempdir()?;let(files,weights)=three(dir.path())?;let budget=MemoryBudget::new(128*1024*1024);let(p,banks,w,total)=bank_collection();let calls=Cell::new(0);
-        let generation=Arc::new(AtomicU64::new(1));let mut owned=files.clone();owned[2].1.cancellation=Some(rrrah_decode::GenerationToken::new(generation.clone(),1));
-        let e=scan_model_bank_portfolio_outcome_collection_with(owned,None,&weights,p,banks,w,&[2,6],total,&factors(),&budget,|_,_,_,b,c|{calls.set(calls.get()+1);if calls.get()==26 {match failure {1=>return Err(std::io::Error::other("provider after first unknown").into()),2=>{generation.store(2,Ordering::Release);assert!(c());generation.store(1,Ordering::Release);},3=>std::fs::write(&weights,b"changed")?,_=>{}}}Ok(b.try_buffer(0,rrrah_dedup::proposals::ScoredProposal{source:[0.;2],target:[0.;2],confidence:0.})?.freeze())},||false);
-        if failure==0 {let report=e?;assert_eq!(calls.get(),75);assert_eq!(report.pairs().len(),3);assert!(report.pairs().iter().all(|p|p.evidence.support().is_none()));drop(report);}
-        else {assert!(e.is_err());assert_eq!(calls.get(),26);if failure==2{assert!(matches!(e,Err(PortfolioCollectionError::Cancelled)));}}
-        assert_eq!(budget.used(),0);
+        let dir = tempfile::tempdir()?;
+        let (files, weights) = three(dir.path())?;
+        let budget = MemoryBudget::new(128 * 1024 * 1024);
+        let (p, banks, w, total) = bank_collection();
+        let calls = Cell::new(0);
+        let generation = Arc::new(AtomicU64::new(1));
+        let mut owned = files.clone();
+        owned[2].1.cancellation = Some(rrrah_decode::GenerationToken::new(generation.clone(), 1));
+        let e = scan_model_bank_portfolio_outcome_collection_with(
+            owned,
+            None,
+            &weights,
+            p,
+            banks,
+            w,
+            &[2, 6],
+            total,
+            &factors(),
+            &budget,
+            |_, _, _, b, c| {
+                calls.set(calls.get() + 1);
+                if calls.get() == 26 {
+                    match failure {
+                        1 => return Err(std::io::Error::other("provider after first unknown").into()),
+                        2 => {
+                            generation.store(2, Ordering::Release);
+                            assert!(c());
+                            generation.store(1, Ordering::Release);
+                        }
+                        3 => std::fs::write(&weights, b"changed")?,
+                        _ => {}
+                    }
+                }
+                Ok(b.try_buffer(
+                    0,
+                    rrrah_dedup::proposals::ScoredProposal {
+                        source: [0.; 2],
+                        target: [0.; 2],
+                        confidence: 0.,
+                    },
+                )?
+                .freeze())
+            },
+            || false,
+        );
+        if failure == 0 {
+            let report = e?;
+            assert_eq!(calls.get(), 75);
+            assert_eq!(report.pairs().len(), 3);
+            assert!(report.pairs().iter().all(|p| p.evidence.support().is_none()));
+            drop(report);
+        } else {
+            assert!(e.is_err());
+            assert_eq!(calls.get(), 26);
+            if failure == 2 {
+                assert!(matches!(e, Err(PortfolioCollectionError::Cancelled)));
+            }
+        }
+        assert_eq!(budget.used(), 0);
     }
     Ok(())
 }
 
-fn bank_recovery_collection()->(RecoveryCollectionPolicy,rrrah_dedup::joint_witnesses::JointBankPolicy,rrrah_dedup::model_tiles::ModelTileWorkLimits,ModelBankCollectionWorkLimits,u64) {
-    let mut p=recovery_collection();native_miss(&mut p.search.primary);let(primary,banks,w)=bank_setup(p.search.primary);p.search.primary=primary;p.search.work=rrrah_dedup::search_portfolio::required_model_bank_recovery_work(p.search,w).unwrap();p.work=p.required_work().unwrap();let g=p.search.opposite.search.search.search.search.search.gradient.search;let projections=12*g.local.geometry.max_points as u64*(g.sampling.trials+1);
-    (p,banks,w,ModelBankCollectionWorkLimits{projection_checks:3*banks.maximum_total_projection_checks,separation_checks:3*banks.maximum_total_separation_checks},projections)
+fn bank_recovery_collection() -> (
+    RecoveryCollectionPolicy,
+    rrrah_dedup::joint_witnesses::JointBankPolicy,
+    rrrah_dedup::model_tiles::ModelTileWorkLimits,
+    ModelBankCollectionWorkLimits,
+    u64,
+) {
+    let mut p = recovery_collection();
+    native_miss(&mut p.search.primary);
+    let (primary, banks, w) = bank_setup(p.search.primary);
+    p.search.primary = primary;
+    p.search.work = rrrah_dedup::search_portfolio::required_model_bank_recovery_work(p.search, w).unwrap();
+    p.work = p.required_work().unwrap();
+    let g = p
+        .search
+        .opposite
+        .search
+        .search
+        .search
+        .search
+        .search
+        .gradient
+        .search;
+    let projections = 12 * g.local.geometry.max_points as u64 * (g.sampling.trials + 1);
+    (
+        p,
+        banks,
+        w,
+        ModelBankCollectionWorkLimits {
+            projection_checks: 3 * banks.maximum_total_projection_checks,
+            separation_checks: 3 * banks.maximum_total_separation_checks,
+        },
+        projections,
+    )
 }
 #[test]
 fn bank_recovery_collection_checks_all_cumulative_work_before_iterator() {
-    let b=MemoryBudget::new(128*1024*1024);
-    for case in 0..6 {let(mut p,banks,w,mut total,cap)=bank_recovery_collection();let mut opposite_total=3*cap;let mut radii=&[2,6][..];match case{0=>p.work.pixel_reads-=1,1=>total.projection_checks-=1,2=>total.separation_checks-=1,3=>opposite_total-=1,4=>radii=&[],_=>p.max_pairs=usize::MAX}
-        let files=std::iter::from_fn(||->Option<(u64,DecodeRequest)>{panic!("iterator before complete recovery admission")});let e=scan_model_bank_joint_recovery_collection_with(files,None,std::path::Path::new("missing"),p,banks,w,radii,total,cap,opposite_total,&factors(),&b,fake,||false);assert!(e.is_err());assert_eq!(b.used(),0);
+    let b = MemoryBudget::new(128 * 1024 * 1024);
+    for case in 0..6 {
+        let (mut p, banks, w, mut total, cap) = bank_recovery_collection();
+        let mut opposite_total = 3 * cap;
+        let mut radii = &[2, 6][..];
+        match case {
+            0 => p.work.pixel_reads -= 1,
+            1 => total.projection_checks -= 1,
+            2 => total.separation_checks -= 1,
+            3 => opposite_total -= 1,
+            4 => radii = &[],
+            _ => p.max_pairs = usize::MAX,
+        }
+        let files = std::iter::from_fn(|| -> Option<(u64, DecodeRequest)> {
+            panic!("iterator before complete recovery admission")
+        });
+        let e = scan_model_bank_joint_recovery_collection_with(
+            files,
+            None,
+            std::path::Path::new("missing"),
+            p,
+            banks,
+            w,
+            radii,
+            total,
+            cap,
+            opposite_total,
+            &factors(),
+            &b,
+            fake,
+            || false,
+        );
+        assert!(e.is_err());
+        assert_eq!(b.used(), 0);
     }
 }
 #[test]
-fn bank_recovery_collection_primary_support_canonical_all_pairs_both_orders_and_schedule()->TestResult {
-    let dir=tempfile::tempdir()?;let(files,weights)=three(dir.path())?;let b=MemoryBudget::new(128*1024*1024);let schedule=rrrah_dedup::pair_schedule::CompletePairSchedule::new(&[u64::MAX,0,7],&[],3,3,0,&b,||false)?;
-    for order in [SearchOrder::ModelFirst,SearchOrder::NativeFirst] {let(mut p,banks,w,total,cap)=bank_recovery_collection();p.search.primary.order=order;let calls=Cell::new(0);let report=scan_model_bank_joint_recovery_collection_with(files.clone(),Some(&schedule),&weights,p,banks,w,&[12,1],total,cap,3*cap,&factors(),&b,|a,l,r,b,c|{calls.set(calls.get()+1);fake(a,l,r,b,c)},||false)?;assert_eq!(report.file_ids(),&[0,7,u64::MAX]);assert_eq!(report.pairs().len(),3);assert!(report.pairs().iter().all(|p|p.evidence.supported()==Some(true)));assert_eq!(calls.get(),75);drop(report);}
-    drop(schedule);assert_eq!(b.used(),0);Ok(())
+fn bank_recovery_collection_primary_support_canonical_all_pairs_both_orders_and_schedule() -> TestResult {
+    let dir = tempfile::tempdir()?;
+    let (files, weights) = three(dir.path())?;
+    let b = MemoryBudget::new(128 * 1024 * 1024);
+    let schedule =
+        rrrah_dedup::pair_schedule::CompletePairSchedule::new(&[u64::MAX, 0, 7], &[], 3, 3, 0, &b, || false)?;
+    for order in [SearchOrder::ModelFirst, SearchOrder::NativeFirst] {
+        let (mut p, banks, w, total, cap) = bank_recovery_collection();
+        p.search.primary.order = order;
+        let calls = Cell::new(0);
+        let report = scan_model_bank_joint_recovery_collection_with(
+            files.clone(),
+            Some(&schedule),
+            &weights,
+            p,
+            banks,
+            w,
+            &[12, 1],
+            total,
+            cap,
+            3 * cap,
+            &factors(),
+            &b,
+            |a, l, r, b, c| {
+                calls.set(calls.get() + 1);
+                fake(a, l, r, b, c)
+            },
+            || false,
+        )?;
+        assert_eq!(report.file_ids(), &[0, 7, u64::MAX]);
+        assert_eq!(report.pairs().len(), 3);
+        assert!(
+            report
+                .pairs()
+                .iter()
+                .all(|p| p.evidence.supported() == Some(true))
+        );
+        assert_eq!(calls.get(), 75);
+        drop(report);
+    }
+    drop(schedule);
+    assert_eq!(b.used(), 0);
+    Ok(())
 }
 #[test]
-fn bank_recovery_collection_unknown_advances_to_opposite_and_retains_managed_evidence()->TestResult {
-    let dir=tempfile::tempdir()?;let weights=dir.path().join("weights");std::fs::write(&weights,b"fixture")?;let source=DecodeRequest::new(std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/rotation/base.png"));let b=MemoryBudget::new(128*1024*1024);let(mut p,banks,mut w,total,cap)=bank_recovery_collection();p.search.primary.model.decode.max_pixels=200000;p.search.primary.model.input.max_source_pixels=200000;p.search.primary.model.input.max_pixel_reads=800000;w.model_input_reads=52*p.search.primary.model.input.max_pixel_reads;p.search.primary.work=rrrah_dedup::search_portfolio::required_model_bank_portfolio_work(p.search.primary,w)?;p.search.work=rrrah_dedup::search_portfolio::required_model_bank_recovery_work(p.search,w)?;p.work=p.required_work()?;
-    let report=scan_model_bank_joint_recovery_collection_with([(9,source.clone()),(2,source)],None,&weights,p,banks,w,&[2,6],total,cap,3*cap,&factors(),&b,|_,_,_,b,_|Ok(b.try_buffer(0,rrrah_dedup::proposals::ScoredProposal{source:[0.;2],target:[0.;2],confidence:0.})?.freeze()),||false)?;assert_eq!(report.pairs().len(),1);assert_eq!(report.pairs()[0].evidence.supported(),Some(true));assert!(matches!(report.pairs()[0].evidence,rrrah_dedup::search_portfolio::SearchRecoveryOutcome::Opposite{primary_insufficient:Some(_),..}));let retained=b.used();assert!(retained>0);let report=Arc::new(report);let clone=report.clone();drop(report);assert_eq!(b.used(),retained);drop(clone);assert_eq!(b.used(),0);Ok(())
+fn bank_recovery_collection_unknown_advances_to_opposite_and_retains_managed_evidence() -> TestResult {
+    let dir = tempfile::tempdir()?;
+    let weights = dir.path().join("weights");
+    std::fs::write(&weights, b"fixture")?;
+    let source = DecodeRequest::new(
+        std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/rotation/base.png"),
+    );
+    let b = MemoryBudget::new(128 * 1024 * 1024);
+    let (mut p, banks, mut w, total, cap) = bank_recovery_collection();
+    p.search.primary.model.decode.max_pixels = 200000;
+    p.search.primary.model.input.max_source_pixels = 200000;
+    p.search.primary.model.input.max_pixel_reads = 800000;
+    w.model_input_reads = 52 * p.search.primary.model.input.max_pixel_reads;
+    p.search.primary.work =
+        rrrah_dedup::search_portfolio::required_model_bank_portfolio_work(p.search.primary, w)?;
+    p.search.work = rrrah_dedup::search_portfolio::required_model_bank_recovery_work(p.search, w)?;
+    p.work = p.required_work()?;
+    let report = scan_model_bank_joint_recovery_collection_with(
+        [(9, source.clone()), (2, source)],
+        None,
+        &weights,
+        p,
+        banks,
+        w,
+        &[2, 6],
+        total,
+        cap,
+        3 * cap,
+        &factors(),
+        &b,
+        |_, _, _, b, _| {
+            Ok(b.try_buffer(
+                0,
+                rrrah_dedup::proposals::ScoredProposal {
+                    source: [0.; 2],
+                    target: [0.; 2],
+                    confidence: 0.,
+                },
+            )?
+            .freeze())
+        },
+        || false,
+    )?;
+    assert_eq!(report.pairs().len(), 1);
+    assert_eq!(report.pairs()[0].evidence.supported(), Some(true));
+    assert!(matches!(
+        report.pairs()[0].evidence,
+        rrrah_dedup::search_portfolio::SearchRecoveryOutcome::Opposite {
+            primary_insufficient: Some(_),
+            ..
+        }
+    ));
+    let retained = b.used();
+    assert!(retained > 0);
+    let report = Arc::new(report);
+    let clone = report.clone();
+    drop(report);
+    assert_eq!(b.used(), retained);
+    drop(clone);
+    assert_eq!(b.used(), 0);
+    Ok(())
 }
 #[test]
-fn bank_recovery_collection_late_fatal_discards_earlier_unknown_and_cancel_wins()->TestResult {
-    for failure in 0..3 {let dir=tempfile::tempdir()?;let(files,weights)=three(dir.path())?;let b=MemoryBudget::new(128*1024*1024);let(mut p,banks,w,total,cap)=bank_recovery_collection();p.search.opposite.search=p.search.primary.native;let calls=Cell::new(0);let generation=Arc::new(AtomicU64::new(1));let mut owned=files.clone();owned[2].1.cancellation=Some(rrrah_decode::GenerationToken::new(generation.clone(),1));let e=scan_model_bank_joint_recovery_collection_with(owned,None,&weights,p,banks,w,&[2,6],total,cap,3*cap,&factors(),&b,|_,_,_,b,c|{calls.set(calls.get()+1);if calls.get()==26{match failure{0=>return Err(std::io::Error::other("fatal after unknown").into()),1=>std::fs::write(&weights,b"changed")?,_=>{generation.store(2,Ordering::Release);assert!(c());generation.store(1,Ordering::Release);}}}Ok(b.try_buffer(0,rrrah_dedup::proposals::ScoredProposal{source:[0.;2],target:[0.;2],confidence:0.})?.freeze())},||false);assert!(e.is_err());assert_eq!(calls.get(),26);if failure==2{assert!(matches!(e,Err(PortfolioCollectionError::Cancelled)));}assert_eq!(b.used(),0);}
+fn bank_recovery_collection_late_fatal_discards_earlier_unknown_and_cancel_wins() -> TestResult {
+    for failure in 0..3 {
+        let dir = tempfile::tempdir()?;
+        let (files, weights) = three(dir.path())?;
+        let b = MemoryBudget::new(128 * 1024 * 1024);
+        let (mut p, banks, w, total, cap) = bank_recovery_collection();
+        p.search.opposite.search = p.search.primary.native;
+        let calls = Cell::new(0);
+        let generation = Arc::new(AtomicU64::new(1));
+        let mut owned = files.clone();
+        owned[2].1.cancellation = Some(rrrah_decode::GenerationToken::new(generation.clone(), 1));
+        let e = scan_model_bank_joint_recovery_collection_with(
+            owned,
+            None,
+            &weights,
+            p,
+            banks,
+            w,
+            &[2, 6],
+            total,
+            cap,
+            3 * cap,
+            &factors(),
+            &b,
+            |_, _, _, b, c| {
+                calls.set(calls.get() + 1);
+                if calls.get() == 26 {
+                    match failure {
+                        0 => return Err(std::io::Error::other("fatal after unknown").into()),
+                        1 => std::fs::write(&weights, b"changed")?,
+                        _ => {
+                            generation.store(2, Ordering::Release);
+                            assert!(c());
+                            generation.store(1, Ordering::Release);
+                        }
+                    }
+                }
+                Ok(b.try_buffer(
+                    0,
+                    rrrah_dedup::proposals::ScoredProposal {
+                        source: [0.; 2],
+                        target: [0.; 2],
+                        confidence: 0.,
+                    },
+                )?
+                .freeze())
+            },
+            || false,
+        );
+        assert!(e.is_err());
+        assert_eq!(calls.get(), 26);
+        if failure == 2 {
+            assert!(matches!(e, Err(PortfolioCollectionError::Cancelled)));
+        }
+        assert_eq!(b.used(), 0);
+    }
     Ok(())
 }
 
 #[test]
 fn native_bank_collection_checks_all_cumulative_work_before_iterator() {
-    let b=MemoryBudget::new(128*1024*1024);
-    for case in 0..6 {let(mut p,banks,w,mut total,cap)=bank_recovery_collection();let mut opposite_total=3*cap;let mut radii=&[2,6][..];match case{0=>p.work.pixel_reads-=1,1=>total.projection_checks-=1,2=>total.separation_checks-=1,3=>opposite_total-=1,4=>radii=&[],_=>p.max_pairs=usize::MAX}
-        let files=std::iter::from_fn(||->Option<(u64,DecodeRequest)>{panic!("iterator before complete recovery admission")});let e=rrrah_dedup::portfolio_collection::scan_native_bank_recovery_collection_with(files,None,std::path::Path::new("missing"),p,banks,w,radii,total,cap,opposite_total,&factors(),&b,fake,||false);assert!(e.is_err());assert_eq!(b.used(),0);
+    let b = MemoryBudget::new(128 * 1024 * 1024);
+    for case in 0..6 {
+        let (mut p, banks, w, mut total, cap) = bank_recovery_collection();
+        let mut opposite_total = 3 * cap;
+        let mut radii = &[2, 6][..];
+        match case {
+            0 => p.work.pixel_reads -= 1,
+            1 => total.projection_checks -= 1,
+            2 => total.separation_checks -= 1,
+            3 => opposite_total -= 1,
+            4 => radii = &[],
+            _ => p.max_pairs = usize::MAX,
+        }
+        let files = std::iter::from_fn(|| -> Option<(u64, DecodeRequest)> {
+            panic!("iterator before complete recovery admission")
+        });
+        let e = rrrah_dedup::portfolio_collection::scan_native_bank_recovery_collection_with(
+            files,
+            None,
+            std::path::Path::new("missing"),
+            p,
+            banks,
+            w,
+            radii,
+            total,
+            cap,
+            opposite_total,
+            &factors(),
+            &b,
+            fake,
+            || false,
+        );
+        assert!(e.is_err());
+        assert_eq!(b.used(), 0);
     }
 }
 #[test]
-fn native_bank_collection_primary_support_canonical_all_pairs_both_orders_and_schedule()->TestResult {
-    let dir=tempfile::tempdir()?;let(files,weights)=three(dir.path())?;let b=MemoryBudget::new(128*1024*1024);let schedule=rrrah_dedup::pair_schedule::CompletePairSchedule::new(&[u64::MAX,0,7],&[],3,3,0,&b,||false)?;
-    for order in [SearchOrder::ModelFirst,SearchOrder::NativeFirst] {let(mut p,banks,w,total,cap)=bank_recovery_collection();p.search.primary.order=order;p.search.opposite.search=p.search.primary.native;let calls=Cell::new(0);let report=rrrah_dedup::portfolio_collection::scan_native_bank_recovery_collection_with(files.clone(),Some(&schedule),&weights,p,banks,w,&[12,1],total,cap,3*cap,&factors(),&b,|a,l,r,b,c|{calls.set(calls.get()+1);fake(a,l,r,b,c)},||false)?;assert_eq!(report.file_ids(),&[0,7,u64::MAX]);assert_eq!(report.pairs().len(),3);assert!(report.pairs().iter().all(|p|p.evidence.supported()==Some(true)));assert_eq!(calls.get(),75);drop(report);}
-    drop(schedule);assert_eq!(b.used(),0);Ok(())
+fn native_bank_collection_primary_support_canonical_all_pairs_both_orders_and_schedule() -> TestResult {
+    let dir = tempfile::tempdir()?;
+    let (files, weights) = three(dir.path())?;
+    let b = MemoryBudget::new(128 * 1024 * 1024);
+    let schedule =
+        rrrah_dedup::pair_schedule::CompletePairSchedule::new(&[u64::MAX, 0, 7], &[], 3, 3, 0, &b, || false)?;
+    for order in [SearchOrder::ModelFirst, SearchOrder::NativeFirst] {
+        let (mut p, banks, w, total, cap) = bank_recovery_collection();
+        p.search.primary.order = order;
+        p.search.opposite.search = p.search.primary.native;
+        let calls = Cell::new(0);
+        let report = rrrah_dedup::portfolio_collection::scan_native_bank_recovery_collection_with(
+            files.clone(),
+            Some(&schedule),
+            &weights,
+            p,
+            banks,
+            w,
+            &[12, 1],
+            total,
+            cap,
+            3 * cap,
+            &factors(),
+            &b,
+            |a, l, r, b, c| {
+                calls.set(calls.get() + 1);
+                fake(a, l, r, b, c)
+            },
+            || false,
+        )?;
+        assert_eq!(report.file_ids(), &[0, 7, u64::MAX]);
+        assert_eq!(report.pairs().len(), 3);
+        assert!(
+            report
+                .pairs()
+                .iter()
+                .all(|p| p.evidence.supported() == Some(true))
+        );
+        assert_eq!(calls.get(), 75);
+        drop(report);
+    }
+    drop(schedule);
+    assert_eq!(b.used(), 0);
+    Ok(())
 }
 #[test]
-fn native_bank_collection_opposite_support_skips_model_and_retains_managed_evidence()->TestResult {
-    let dir=tempfile::tempdir()?;let weights=dir.path().join("weights");std::fs::write(&weights,b"fixture")?;let source=DecodeRequest::new(std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/rotation/base.png"));let b=MemoryBudget::new(128*1024*1024);let(mut p,banks,mut w,total,cap)=bank_recovery_collection();p.search.primary.model.decode.max_pixels=200000;p.search.primary.model.input.max_source_pixels=200000;p.search.primary.model.input.max_pixel_reads=800000;w.model_input_reads=52*p.search.primary.model.input.max_pixel_reads;p.search.primary.work=rrrah_dedup::search_portfolio::required_model_bank_portfolio_work(p.search.primary,w)?;p.search.work=rrrah_dedup::search_portfolio::required_model_bank_recovery_work(p.search,w)?;p.work=p.required_work()?;
-    let report=rrrah_dedup::portfolio_collection::scan_native_bank_recovery_collection_with([(9,source.clone()),(2,source)],None,&weights,p,banks,w,&[2,6],total,cap,3*cap,&factors(),&b,|_,_,_,_,_|panic!("opposite support must skip model"),||false)?;assert_eq!(report.pairs().len(),1);assert_eq!(report.pairs()[0].evidence.supported(),Some(true));assert!(matches!(report.pairs()[0].evidence,rrrah_dedup::search_portfolio::NativeBankRecoveryEvidence{native_miss:Some(_),opposite_insufficient:Some(false),terminal:rrrah_dedup::search_portfolio::NativeBankRecoveryTerminal::Opposite(_),..}));let retained=b.used();assert!(retained>0);let report=Arc::new(report);let clone=report.clone();drop(report);assert_eq!(b.used(),retained);drop(clone);assert_eq!(b.used(),0);Ok(())
+fn native_bank_collection_opposite_support_skips_model_and_retains_managed_evidence() -> TestResult {
+    let dir = tempfile::tempdir()?;
+    let weights = dir.path().join("weights");
+    std::fs::write(&weights, b"fixture")?;
+    let source = DecodeRequest::new(
+        std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/rotation/base.png"),
+    );
+    let b = MemoryBudget::new(128 * 1024 * 1024);
+    let (mut p, banks, mut w, total, cap) = bank_recovery_collection();
+    p.search.primary.model.decode.max_pixels = 200000;
+    p.search.primary.model.input.max_source_pixels = 200000;
+    p.search.primary.model.input.max_pixel_reads = 800000;
+    w.model_input_reads = 52 * p.search.primary.model.input.max_pixel_reads;
+    p.search.primary.work =
+        rrrah_dedup::search_portfolio::required_model_bank_portfolio_work(p.search.primary, w)?;
+    p.search.work = rrrah_dedup::search_portfolio::required_model_bank_recovery_work(p.search, w)?;
+    p.work = p.required_work()?;
+    let report = rrrah_dedup::portfolio_collection::scan_native_bank_recovery_collection_with(
+        [(9, source.clone()), (2, source)],
+        None,
+        &weights,
+        p,
+        banks,
+        w,
+        &[2, 6],
+        total,
+        cap,
+        3 * cap,
+        &factors(),
+        &b,
+        |_, _, _, _, _| panic!("opposite support must skip model"),
+        || false,
+    )?;
+    assert_eq!(report.pairs().len(), 1);
+    assert_eq!(report.pairs()[0].evidence.supported(), Some(true));
+    assert!(matches!(
+        report.pairs()[0].evidence,
+        rrrah_dedup::search_portfolio::NativeBankRecoveryEvidence {
+            native_miss: Some(_),
+            opposite_insufficient: Some(false),
+            terminal: rrrah_dedup::search_portfolio::NativeBankRecoveryTerminal::Opposite(_),
+            ..
+        }
+    ));
+    let retained = b.used();
+    assert!(retained > 0);
+    let report = Arc::new(report);
+    let clone = report.clone();
+    drop(report);
+    assert_eq!(b.used(), retained);
+    drop(clone);
+    assert_eq!(b.used(), 0);
+    Ok(())
 }
 #[test]
-fn native_bank_collection_late_fatal_discards_earlier_unknown_and_cancel_wins()->TestResult {
-    for failure in 0..3 {let dir=tempfile::tempdir()?;let(files,weights)=three(dir.path())?;let b=MemoryBudget::new(128*1024*1024);let(mut p,banks,w,total,cap)=bank_recovery_collection();p.search.opposite.search=p.search.primary.native;let calls=Cell::new(0);let generation=Arc::new(AtomicU64::new(1));let mut owned=files.clone();owned[2].1.cancellation=Some(rrrah_decode::GenerationToken::new(generation.clone(),1));let e=rrrah_dedup::portfolio_collection::scan_native_bank_recovery_collection_with(owned,None,&weights,p,banks,w,&[2,6],total,cap,3*cap,&factors(),&b,|_,_,_,b,c|{calls.set(calls.get()+1);if calls.get()==26{match failure{0=>return Err(std::io::Error::other("fatal after unknown").into()),1=>std::fs::write(&weights,b"changed")?,_=>{generation.store(2,Ordering::Release);assert!(c());generation.store(1,Ordering::Release);}}}Ok(b.try_buffer(0,rrrah_dedup::proposals::ScoredProposal{source:[0.;2],target:[0.;2],confidence:0.})?.freeze())},||false);assert!(e.is_err());assert_eq!(calls.get(),26);if failure==2{assert!(matches!(e,Err(PortfolioCollectionError::Cancelled)));}assert_eq!(b.used(),0);}
+fn native_bank_collection_late_fatal_discards_earlier_unknown_and_cancel_wins() -> TestResult {
+    for failure in 0..3 {
+        let dir = tempfile::tempdir()?;
+        let (files, weights) = three(dir.path())?;
+        let b = MemoryBudget::new(128 * 1024 * 1024);
+        let (mut p, banks, w, total, cap) = bank_recovery_collection();
+        p.search.opposite.search = p.search.primary.native;
+        let calls = Cell::new(0);
+        let generation = Arc::new(AtomicU64::new(1));
+        let mut owned = files.clone();
+        owned[2].1.cancellation = Some(rrrah_decode::GenerationToken::new(generation.clone(), 1));
+        let e = rrrah_dedup::portfolio_collection::scan_native_bank_recovery_collection_with(
+            owned,
+            None,
+            &weights,
+            p,
+            banks,
+            w,
+            &[2, 6],
+            total,
+            cap,
+            3 * cap,
+            &factors(),
+            &b,
+            |_, _, _, b, c| {
+                calls.set(calls.get() + 1);
+                if calls.get() == 26 {
+                    match failure {
+                        0 => return Err(std::io::Error::other("fatal after unknown").into()),
+                        1 => std::fs::write(&weights, b"changed")?,
+                        _ => {
+                            generation.store(2, Ordering::Release);
+                            assert!(c());
+                            generation.store(1, Ordering::Release);
+                        }
+                    }
+                }
+                Ok(b.try_buffer(
+                    0,
+                    rrrah_dedup::proposals::ScoredProposal {
+                        source: [0.; 2],
+                        target: [0.; 2],
+                        confidence: 0.,
+                    },
+                )?
+                .freeze())
+            },
+            || false,
+        );
+        assert!(e.is_err());
+        assert_eq!(calls.get(), 26);
+        if failure == 2 {
+            assert!(matches!(e, Err(PortfolioCollectionError::Cancelled)));
+        }
+        assert_eq!(b.used(), 0);
+    }
     Ok(())
 }
 
@@ -1546,13 +2320,33 @@ fn native_bank_collection_all_unknown_pairs_preserve_stage_trace() -> TestResult
     let (mut p, banks, w, total, cap) = bank_recovery_collection();
     p.search.opposite.search = p.search.primary.native;
     let calls = Cell::new(0);
-    let report = scan(files, None, &weights, p, banks, w, &[2, 6], total,
-        cap, 3 * cap, &factors(), &budget, |_, _, _, b, _| {
+    let report = scan(
+        files,
+        None,
+        &weights,
+        p,
+        banks,
+        w,
+        &[2, 6],
+        total,
+        cap,
+        3 * cap,
+        &factors(),
+        &budget,
+        |_, _, _, b, _| {
             calls.set(calls.get() + 1);
-            Ok(b.try_buffer(0, rrrah_dedup::proposals::ScoredProposal {
-                source: [0.; 2], target: [0.; 2], confidence: 0.,
-            })?.freeze())
-        }, || false)?;
+            Ok(b.try_buffer(
+                0,
+                rrrah_dedup::proposals::ScoredProposal {
+                    source: [0.; 2],
+                    target: [0.; 2],
+                    confidence: 0.,
+                },
+            )?
+            .freeze())
+        },
+        || false,
+    )?;
     assert_eq!(calls.get(), 75);
     assert_eq!(report.file_ids(), &[0, 7, u64::MAX]);
     assert_eq!(report.pairs().len(), 3);
@@ -1561,8 +2355,15 @@ fn native_bank_collection_all_unknown_pairs_preserve_stage_trace() -> TestResult
         assert!(pair.evidence.model_attempted());
         assert!(pair.evidence.native_miss.is_some());
         assert_eq!(pair.evidence.opposite_insufficient, Some(true));
-        assert!(matches!(pair.evidence.terminal, NativeBankRecoveryTerminal::Inconclusive(_)));
-        let model = pair.evidence.model_search.as_ref().expect("unknown retains model diagnostics");
+        assert!(matches!(
+            pair.evidence.terminal,
+            NativeBankRecoveryTerminal::Inconclusive(_)
+        ));
+        let model = pair
+            .evidence
+            .model_search
+            .as_ref()
+            .expect("unknown retains model diagnostics");
         assert_eq!(model.attempts, 25);
         assert_eq!(model.comparison.raw_proposals, 0);
         assert_eq!(model.comparison.selected_points, 0);
@@ -1583,31 +2384,73 @@ fn native_bank_collection_final_publication_rechecks_every_file_after_last_callb
         let budget = MemoryBudget::new(128 * 1024 * 1024);
         let (mut p, banks, w, total, cap) = bank_recovery_collection();
         p.search.opposite.search = p.search.primary.native;
-        let empty = |_: &std::path::Path, _: &rrrah_dedup::model_input::GrayModelInput,
-            _: &rrrah_dedup::model_input::GrayModelInput, b: &MemoryBudget,
-            _: &dyn Fn() -> bool| -> Result<_, rrrah_dedup::model_compare::ProposalProviderError> {
-            Ok(b.try_buffer(0, rrrah_dedup::proposals::ScoredProposal {
-                source: [0.; 2], target: [0.; 2], confidence: 0.,
-            })?.freeze())
+        let empty = |_: &std::path::Path,
+                     _: &rrrah_dedup::model_input::GrayModelInput,
+                     _: &rrrah_dedup::model_input::GrayModelInput,
+                     b: &MemoryBudget,
+                     _: &dyn Fn() -> bool|
+         -> Result<_, rrrah_dedup::model_compare::ProposalProviderError> {
+            Ok(b.try_buffer(
+                0,
+                rrrah_dedup::proposals::ScoredProposal {
+                    source: [0.; 2],
+                    target: [0.; 2],
+                    confidence: 0.,
+                },
+            )?
+            .freeze())
         };
         let checkpoints = Cell::new(0);
-        let report = scan(files.clone(), None, &weights, p, banks, w, &[2, 6], total,
-            cap, 3 * cap, &factors(), &budget, empty,
-            || { checkpoints.set(checkpoints.get() + 1); false })?;
+        let report = scan(
+            files.clone(),
+            None,
+            &weights,
+            p,
+            banks,
+            w,
+            &[2, 6],
+            total,
+            cap,
+            3 * cap,
+            &factors(),
+            &budget,
+            empty,
+            || {
+                checkpoints.set(checkpoints.get() + 1);
+                false
+            },
+        )?;
         drop(report);
         assert_eq!(budget.used(), 0);
         let last = checkpoints.get();
         checkpoints.set(0);
-        let result = scan(files.clone(), None, &weights, p, banks, w, &[2, 6], total,
-            cap, 3 * cap, &factors(), &budget, empty, || {
+        let result = scan(
+            files.clone(),
+            None,
+            &weights,
+            p,
+            banks,
+            w,
+            &[2, 6],
+            total,
+            cap,
+            3 * cap,
+            &factors(),
+            &budget,
+            empty,
+            || {
                 checkpoints.set(checkpoints.get() + 1);
                 if checkpoints.get() == last {
                     std::fs::write(&files[changed].1.path, b"source changed at publication").unwrap();
                 }
                 false
-            });
-        assert!(matches!(result, Err(PortfolioCollectionError::Source { id, .. })
-            if id == files[changed].0), "{result:?}");
+            },
+        );
+        assert!(
+            matches!(result, Err(PortfolioCollectionError::Source { id, .. })
+            if id == files[changed].0),
+            "{result:?}"
+        );
         assert_eq!(budget.used(), 0);
     }
     Ok(())
