@@ -1,0 +1,32 @@
+'use strict';
+const assert=require('node:assert/strict');
+const path=require('node:path');
+const {Readable}=require('node:stream');
+const root=process.argv[2];
+const dedupe=require(root);
+const Vinyl=require(path.join(root,'node_modules/vinyl'));
+const rows=[];
+const file=(name,bytes)=>new Vinyl({path:name,contents:bytes});
+function run(name,inputs,options,expectedCount,expectedErrors,onData){
+ const stream=dedupe(options),out=[],errors=[];
+ stream.on('data',f=>{out.push({path:f.path,hex:Buffer.isBuffer(f.contents)?f.contents.toString('hex'):null});if(onData)onData(f,out.length);});
+ stream.on('error',e=>errors.push({name:e.name,message:e.message}));
+ for(const f of inputs)stream.write(f);
+ stream.end();assert.equal(out.length,expectedCount,name);assert.equal(errors.length,expectedErrors,name);rows.push({control:name,out,errors});
+}
+run('identical_bytes_different_paths_are_not_deduplicated',[file('a',Buffer.from('x')),file('b',Buffer.from('x'))],undefined,2,0);
+run('same_path_identical_bytes',[file('a',Buffer.from('x')),file('a',Buffer.from('x'))],undefined,1,0);
+run('same_path_different_ascii_emits_error',[file('a',Buffer.from('x')),file('a',Buffer.from('y'))],undefined,1,1);
+assert(rows.at(-1).errors[0].message.includes('different contents'));
+run('different_invalid_utf8_bytes_silently_equal',[file('a',Buffer.from([255])),file('a',Buffer.from([254]))],undefined,1,0);
+assert.notDeepEqual(Buffer.from([255]),Buffer.from([254]));assert.equal(Buffer.from([255]).toString(),Buffer.from([254]).toString());
+run('explicit_error_option',[file('a',Buffer.from('x')),file('a',Buffer.from('x'))],{error:true},1,1);
+run('explicit_same_false_drops_different_contents',[file('a',Buffer.from('x')),file('a',Buffer.from('y'))],{same:false},1,0);
+run('null_contents_dropped_without_reserving_path',[file('a',null),file('a',Buffer.from('x'))],undefined,1,0);
+run('streamed_contents_refused',[file('a',Readable.from(['x']))],undefined,0,1);assert(rows.at(-1).errors[0].message.includes('Streaming not supported'));
+run('downstream_mutation_changes_future_equality',[file('a',Buffer.from('x')),file('a',Buffer.from('x'))],undefined,1,1,f=>{f.contents=Buffer.from('y');});
+run('normalized_path_alias',[file('dir/a',Buffer.from('x')),file('dir/../dir/a',Buffer.from('x'))],undefined,1,0);
+run('empty_buffer_is_not_null',[file('a',Buffer.alloc(0)),file('a',Buffer.alloc(0))],undefined,1,0);
+run('emitted_error_does_not_stop_later_input',[file('a',Buffer.from('x')),file('a',Buffer.from('y')),file('b',Buffer.from('z'))],undefined,2,1);
+run('diff_mode_reports_ascii_mismatch',[file('a',Buffer.from('x')),file('a',Buffer.from('y'))],{diff:true},1,1);assert(rows.at(-1).errors[0].message.includes('different contents:\n'));
+console.log(JSON.stringify({node:process.version,controls:rows,scope:'Original unchanged module and actual installed dependencies.13virtual Vinyl/through controls. Not filesystem byte comparison, image dedup, upstream Node6/8/10/platform or managed resource qualification.'}));

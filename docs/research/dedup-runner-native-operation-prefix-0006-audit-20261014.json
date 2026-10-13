@@ -1,0 +1,114 @@
+{
+  "status": "verified_execution_prefix_not_speedup_proof",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-runner-native-operation-prefix-0006-20261014.json": "40b8b827190dde025851322e97edd1aebab090eb32c8f2bf70edf591617c2807",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-runner-native-operation-prefix-20261014.py": "765d002fa310b828549e5d435ff1e81bbc062cdcd56cc620e9b31302497f63f8"
+  },
+  "rows": [
+    {
+      "case": "self_native",
+      "pair": 0,
+      "version": "baseline",
+      "elapsed_ns": 157851785500,
+      "semantic_result": {
+        "support": true,
+        "forward_support": true,
+        "reverse_support": true,
+        "forward_model_attempted": false,
+        "reverse_model_attempted": false
+      },
+      "managed_peak": 271162112
+    },
+    {
+      "case": "self_native",
+      "pair": 0,
+      "version": "runner",
+      "elapsed_ns": 127308105542,
+      "semantic_result": {
+        "support": true,
+        "forward_support": true,
+        "reverse_support": true,
+        "forward_model_attempted": false,
+        "reverse_model_attempted": false
+      },
+      "managed_peak": 271162112
+    },
+    {
+      "case": "self_native",
+      "pair": 1,
+      "version": "runner",
+      "elapsed_ns": 134140792666,
+      "semantic_result": {
+        "support": true,
+        "forward_support": true,
+        "reverse_support": true,
+        "forward_model_attempted": false,
+        "reverse_model_attempted": false
+      },
+      "managed_peak": 271162112
+    },
+    {
+      "case": "self_native",
+      "pair": 1,
+      "version": "baseline",
+      "elapsed_ns": 153954648458,
+      "semantic_result": {
+        "support": true,
+        "forward_support": true,
+        "reverse_support": true,
+        "forward_model_attempted": false,
+        "reverse_model_attempted": false
+      },
+      "managed_peak": 271162112
+    },
+    {
+      "case": "self_native",
+      "pair": 2,
+      "version": "baseline",
+      "elapsed_ns": 121639123416,
+      "semantic_result": {
+        "support": true,
+        "forward_support": true,
+        "reverse_support": true,
+        "forward_model_attempted": false,
+        "reverse_model_attempted": false
+      },
+      "managed_peak": 271162112
+    },
+    {
+      "case": "self_native",
+      "pair": 2,
+      "version": "runner",
+      "elapsed_ns": 142878527125,
+      "semantic_result": {
+        "support": true,
+        "forward_support": true,
+        "reverse_support": true,
+        "forward_model_attempted": false,
+        "reverse_model_attempted": false
+      },
+      "managed_peak": 271162112
+    }
+  ],
+  "paired": [
+    {
+      "case": "self_native",
+      "pair": 0,
+      "runner_over_baseline_wall_ratio": 0.8065040578334162,
+      "runner_over_baseline_cpu_ratio": 0.9134523118099677
+    },
+    {
+      "case": "self_native",
+      "pair": 1,
+      "runner_over_baseline_wall_ratio": 0.8713006980272806,
+      "runner_over_baseline_cpu_ratio": 0.9457934689121448
+    },
+    {
+      "case": "self_native",
+      "pair": 2,
+      "runner_over_baseline_wall_ratio": 1.174609970152138,
+      "runner_over_baseline_cpu_ratio": 0.9874230884147316
+    }
+  ],
+  "scope": "Whole fresh-process native atomic consensus baseline-source versus latest linear-runner-source comparison including startup, decode and both directions. Two controls, three alternating pairs each. Source versions also include formatting drift; this is version comparison, not isolated linear-runner causal proof. Host shared with test/corpus jobs; child process user+system CPU also recorded to reduce wall contention bias; still a small control sample. Uncontrolled shared-host wall timings cannot establish isolated cache improvement/regression. Retain slow outcomes; do not publish component gain as whole-search speedup."
+}

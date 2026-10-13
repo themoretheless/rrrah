@@ -1,0 +1,52 @@
+{
+  "status": "verified_standalone_bounded_dense_fallback",
+  "pins": {
+    "docs/research/dedup-gradient-runner-up-stress-v5-20261014.json": "271a79d41fc4b82ef1c923855fa2b0483e719876a61764867d79774ba3313898",
+    "/Users/themoretheless/.codex/tmp/rrrah-gradient-runner-up-stress-v5-20261014/results.jsonl": "606d695f72e45a26e8e5ba47e50b43a4373e5b0a8ae22e6b5b61fb8d97b318b4"
+  },
+  "fixtures": 1200,
+  "groups": [
+    {
+      "mode": 0,
+      "radius_squared": 4,
+      "median_ratio": 0.4888316537647599
+    },
+    {
+      "mode": 0,
+      "radius_squared": 1000000,
+      "median_ratio": 0.9079006357638267
+    },
+    {
+      "mode": 1,
+      "radius_squared": 4,
+      "median_ratio": 0.5012003053630631
+    },
+    {
+      "mode": 1,
+      "radius_squared": 1000000,
+      "median_ratio": 1.0581135818119995
+    },
+    {
+      "mode": 2,
+      "radius_squared": 4,
+      "median_ratio": 0.5254974042270857
+    },
+    {
+      "mode": 2,
+      "radius_squared": 1000000,
+      "median_ratio": 0.9248743257814918
+    },
+    {
+      "mode": 3,
+      "radius_squared": 4,
+      "median_ratio": 0.527742546858492
+    },
+    {
+      "mode": 3,
+      "radius_squared": 1000000,
+      "median_ratio": 1.0124349775799868
+    }
+  ],
+  "adopted": false,
+  "scope": "Prototypev3 adds baseline early dispatch for ordinary mode and bank spatial bounding diameter within radius, plus no-resolved fallback after firstpass. Exact bits/cancellation/errors match. Large1537banks/72paired timings; shared-host wall time noisy. Not managed production integration, cancellation-latency/allocation admission or whole-search proof."
+}

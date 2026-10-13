@@ -1,0 +1,8 @@
+#!/usr/bin/env python3
+from pathlib import Path
+import json,hashlib
+R=Path(__file__).resolve().parents[1];D=R/'docs/research/dedup-500';P=D/'seanwong-image-deduplicator-full-source-20261014.json';Q=D/'seanwong-image-deduplicator-full-review-20261014.json';p=json.loads(P.read_text());q=json.loads(Q.read_text());sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest();S=Path(p['snapshot']);assert len(p['file_hashes'])==5 and set(q['fully_read'])==set(p['file_hashes']);assert all(sha(S/k)==h for k,h in p['file_hashes'].items()) and all(sha(k)==h for k,h in q['pins'].items());E=D/'evidence/SeanWong17--Image-Deduplicator';t=json.loads((E/'tree.json').read_text());assert not t['truncated'] and {e['path'] for e in t['tree']}==set(p['file_hashes']) and sha(E/'tree.json')==p['tree_file_sha256']
+for e in t['tree']:
+ b=(S/e['path']).read_bytes();assert hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()==e['sha']
+assert len(q['controls'])==14 and len({r['control'] for r in q['controls']})==14;assert next(r for r in q['controls'] if r['control']=='nontransitive_chain_order_A_B_C')['result']==[0,2];assert next(r for r in q['controls'] if r['control']=='nontransitive_chain_order_B_A_C')['result']==[0]
+O=D/'seanwong-image-deduplicator-full-audit-20261014.json';assert not O.exists();O.write_text(json.dumps(dict(status='verified_complete_five_file_read_original_method_control_artifacts',registry_index=160,pins={str(f):sha(f) for f in [P,Q,Path(__file__)]},full_text_files=5,controls=14,whole_repo_source_read=True,whole_runtime_qualified=False,scope=q['scope']),indent=2)+'\n');print(O)

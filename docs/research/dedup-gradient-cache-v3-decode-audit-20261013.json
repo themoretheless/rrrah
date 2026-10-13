@@ -1,0 +1,50 @@
+{
+  "status": "verified_frozen_isolated_cache_cap_selected_tests",
+  "mode": "decode",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-cache-v3-decode-20261013.json": "f6e245d9e82430e70fd4b2da86ab36a9a4b854c91bb9ed9a000ce6a5504adc34",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-cache-v3-source-20261013.json": "a709940c45b6948e340a496140dd44f28ae9894640209f0fd493ccb44e95738a",
+    "/Users/themoretheless/.codex/tmp/rrrah-gradient-cache-v3-decode-20261013.log": "6e5edbb79adb0a472272797d864a68a96631eda2bb21b24303735971282880d3",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-gradient-cache-v3-focused-20261013.py": "64bd61f775b549b70361e10695a3f5beb2eb2946faff2418a039ef947f3fcce4"
+  },
+  "source": "/Users/themoretheless/.codex/tmp/rrrah-gradient-cache-v3-source-20261013",
+  "passed": 176,
+  "failed": 0,
+  "ignored": 5,
+  "targets": 4,
+  "rows": [
+    {
+      "target": "unittests src/lib.rs",
+      "passed": 115,
+      "failed": 0,
+      "ignored": 5,
+      "executable": "/Users/themoretheless/.codex/tmp/rrrah-gradient-cache-v3-decode-qualified-20261013/rrrah_dedup-76646137647c9ff2",
+      "executable_sha256": "7f2cb4373e561f4d32b33492eb240cac3d78d46901dfd1b2e319b0086c10ea72"
+    },
+    {
+      "target": "tests/gradient_distinct_locations.rs",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/Users/themoretheless/.codex/tmp/rrrah-gradient-cache-v3-decode-qualified-20261013/gradient_distinct_locations-a5a4fd29f4b3dc6b",
+      "executable_sha256": "fcfe28698c337570b3a77aec4fd9f51c591687b6f700296aa961b3fb14cd7a34"
+    },
+    {
+      "target": "tests/gradient_scale_files.rs",
+      "passed": 19,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/Users/themoretheless/.codex/tmp/rrrah-gradient-cache-v3-decode-qualified-20261013/gradient_scale_files-0ce18d3e0e13e24b",
+      "executable_sha256": "7939b74d6a272a5317bf603439ec92425f9f85e4a2ee1c33e37d8f7b83f19a07"
+    },
+    {
+      "target": "tests/search_portfolio.rs",
+      "passed": 38,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/Users/themoretheless/.codex/tmp/rrrah-gradient-cache-v3-decode-qualified-20261013/search_portfolio-dc465169dd9968cc",
+      "executable_sha256": "9c14e7cf0431507465c4a78da674761188b1117ef2673fd8c468ec3a4082de36"
+    }
+  ],
+  "scope": "Execute from fresh frozen current selected source after formatting drift and isolated16MiBcache-child refinement. Decode mode selected four targets; default mode library only. Not full-all-target/allfeatures/platform/corpus or whole-operation speedup proof. Source snapshot verified unchanged before/after; all executed binaries retained. Root source may change independently. Corpus229/233uses earlier pre-cache native snapshot, not this latest source."
+}

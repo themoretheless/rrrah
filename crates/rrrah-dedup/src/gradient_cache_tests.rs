@@ -179,3 +179,88 @@ fn cache_capacity_and_overflow_keep_exhaustive_fallback_available() {
     assert_eq!(distance_cache_pairs(64, 64, false), None);
     assert_eq!(distance_cache_pairs(63, 64, true), None);
 }
+
+#[test]
+fn linear_runner_large_banks_preserve_results_checkpoints_and_budget_fallback() {
+    let left = bank(1537, 173);
+    let mut copy = left.clone();
+    for f in &mut copy {
+        f.position[0] += 10.;
+    }
+    let negative = bank(1537, 991);
+    let mut repeated = copy.clone();
+    for i in 0..100 {
+        repeated[i].descriptor = repeated[i + 100].descriptor;
+    }
+    let policy = GradientMatchPolicy {
+        max_comparisons: 10_000_000,
+        max_squared_distance: 0.5,
+        squared_ratio: 0.64,
+    };
+    for right in [&copy, &negative, &repeated] {
+        let calls = Cell::new(0);
+        let expected = match_gradients_distinct_locations(&left, right, policy, 2., || {
+            calls.set(calls.get() + 1);
+            false
+        })
+        .unwrap();
+        let expected_calls = calls.get();
+        let base = baseline_bytes(left.len(), right.len());
+        let extra = ((left.len() + right.len()) * std::mem::size_of::<(usize, bool)>()) as u64;
+        for headroom in [0, extra] {
+            let budget = MemoryBudget::new(base + headroom);
+            calls.set(0);
+            let actual =
+                match_gradients_distinct_locations_managed(&left, right, policy, 2., &budget, || {
+                    calls.set(calls.get() + 1);
+                    false
+                })
+                .unwrap();
+            assert_eq!(coordinates(&actual), coordinates(&expected));
+            // Managed public wrapper adds admission and final-adoption checkpoints.
+            assert_eq!(calls.get(), expected_calls + 2);
+            assert_eq!(budget.peak(), base + headroom);
+            drop(actual);
+            assert_eq!(budget.used(), 0);
+        }
+        for stop in [1, expected_calls / 2, expected_calls] {
+            calls.set(0);
+            let expected = match_gradients_distinct_locations(&left, right, policy, 2., || {
+                calls.set(calls.get() + 1);
+                calls.get() == stop
+            });
+            calls.set(0);
+            let budget = MemoryBudget::new(base + extra);
+            let actual =
+                match_gradients_distinct_locations_managed(&left, right, policy, 2., &budget, || {
+                    calls.set(calls.get() + 1);
+                    calls.get() == stop
+                });
+            assert_eq!(actual.as_ref().err(), expected.as_ref().err());
+            assert_eq!(budget.used(), 0);
+        }
+    }
+}
+
+#[test]
+fn linear_runner_dense_banks_do_not_allocate_optional_indices() {
+    let mut left = bank(1537, 173);
+    for f in &mut left {
+        f.position = [0., 0.];
+    }
+    let base = baseline_bytes(left.len(), left.len());
+    let budget = MemoryBudget::new(base + 1_000_000);
+    let policy = GradientMatchPolicy {
+        max_comparisons: 10_000_000,
+        ..policy()
+    };
+    let out =
+        match_gradients_distinct_locations_managed(&left, &left, policy, 2., &budget, || false).unwrap();
+    assert!(out.is_empty());
+    assert_eq!(budget.peak(), base);
+    drop(out);
+    assert_eq!(budget.used(), 0);
+    assert_eq!(distance_runner_entries(1024, 2048), None);
+    assert_eq!(distance_runner_entries(1537, 1537), Some(3074));
+    assert_eq!(distance_runner_entries(usize::MAX, 2), None);
+}

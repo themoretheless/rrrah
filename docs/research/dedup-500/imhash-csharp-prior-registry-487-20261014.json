@@ -1,0 +1,68 @@
+{
+  "index": 487,
+  "repository": "Ghasan/ImHash",
+  "commit": "a0f7f304c3eef9f7b3ab178868a525c36594c09e",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "C# average/difference AreSimilar bool APIs; do not interpret uncalibrated boolean as exact proof.",
+  "available_source_evidence": [
+    {
+      "path": "ImHash/IImHash.cs",
+      "local": "02-IImHash.cs",
+      "url": "https://github.com/Ghasan/ImHash/blob/a0f7f304c3eef9f7b3ab178868a525c36594c09e/ImHash/IImHash.cs",
+      "sha256": "066d747cc1df76d1d6d65b50e122d0d0f6649668330dccb9b5330e50362b55b6",
+      "truncated": false,
+      "lines": 8,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "ImHash/ImAvgHash.cs",
+      "local": "03-ImAvgHash.cs",
+      "url": "https://github.com/Ghasan/ImHash/blob/a0f7f304c3eef9f7b3ab178868a525c36594c09e/ImHash/ImAvgHash.cs",
+      "sha256": "4e12dfc1e183174d1670d7af8f126e5563ca72b9c77ef4bf828b0e23437006e5",
+      "truncated": false,
+      "lines": 87,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "ImHash/ImDiffHash.cs",
+      "local": "04-ImDiffHash.cs",
+      "url": "https://github.com/Ghasan/ImHash/blob/a0f7f304c3eef9f7b3ab178868a525c36594c09e/ImHash/ImDiffHash.cs",
+      "sha256": "649c9cb9fe1669b297dbdee9d79699c92635506addd996cc35862404e20a0c57",
+      "truncated": false,
+      "lines": 88,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/Ghasan/ImHash/blob/a0f7f304c3eef9f7b3ab178868a525c36594c09e/README.md",
+      "sha256": "3c29ecfbca0bb2b9690a4d0b248e7fe088b11dde28df8594f396ff63ed9b8983",
+      "truncated": false,
+      "lines": 19,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/Ghasan/ImHash/blob/a0f7f304c3eef9f7b3ab178868a525c36594c09e/LICENSE",
+      "sha256": "9a56d7078afea885ec7993cfc1c836b1e1b54a7ca698dc63b064c0e9df909979",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

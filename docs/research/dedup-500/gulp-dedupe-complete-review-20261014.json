@@ -1,0 +1,221 @@
+{
+  "status": "complete_seven_text_file_read_five_original_tests_thirteen_original_module_controls",
+  "repository": "hoho/gulp-dedupe",
+  "registry_index": 243,
+  "commit": "468dabc327b8f450cdafe5f2cab457a1293b9057",
+  "source": "/Users/themoretheless/.codex/tmp/rrrah-gulp-dedupe-source-20261014",
+  "runtime_copy": "/Users/themoretheless/.codex/tmp/rrrah-gulp-dedupe-runtime-20261014",
+  "fully_read": [
+    ".gitignore",
+    ".travis.yml",
+    "LICENSE",
+    "README.md",
+    "index.js",
+    "package.json",
+    "test/main.js"
+  ],
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/gulp-dedupe-full-source-20261014.json": "0d0cc949286a6c13d8820656373de54ac306fce4e49591a0d2b0662f748129c1",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/control-dedup-gulp-20261014.cjs": "930f4166dd314bb666243ff3fa8dcd65e34ac6ba8155f720e67496f52c7c5c22",
+    "/Users/themoretheless/.codex/tmp/rrrah-gulp-dedupe-runtime-20261014/package-lock.json": "cf810e98b628b61207003a2a2b63dccb9683ca0232e08261808d0627f72c3269",
+    "/Users/themoretheless/.codex/tmp/rrrah-gulp-dedupe-runtime-20261014/upstream-tests.json": "3c73020d81557b87afc40af1affd3711cf60896499362dcf7833e0c310a9385e",
+    "/Users/themoretheless/.codex/tmp/rrrah-gulp-dedupe-runtime-20261014/upstream-tests.stderr": "5c40587ab4fab9d5ed7b16716d16f05fde1239c09c6470d4148817ee971c721a",
+    "/Users/themoretheless/.codex/tmp/rrrah-gulp-dedupe-runtime-20261014/controls.json": "3fe72748fb9c5b533ff41d162b662e77a27b9ba52405b6de31a7c269d2e0d539",
+    "/Users/themoretheless/.codex/tmp/rrrah-gulp-dedupe-runtime-20261014/controls.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/Users/themoretheless/.codex/tmp/rrrah-gulp-dedupe-runtime-20261014/install.log": "ce5311f3fe19959a475f6c40df5fa9f230ebf43bafada16214455cb318c17a2b",
+    "/Users/themoretheless/.codex/tmp/rrrah-gulp-dedupe-runtime-20261014/install-public.log": "f6b5bfd69f0b882021430b2ebb379bd9a8368895abe4c67fa43b8e75f7756482",
+    "/Users/themoretheless/.codex/tmp/rrrah-gulp-dedupe-source-20261014/.gitignore": "81bf90f62348f59662aa2dc83a5bdde1cb0e094a2a357963396b4c186746bd9a",
+    "/Users/themoretheless/.codex/tmp/rrrah-gulp-dedupe-source-20261014/.travis.yml": "b15b83271339425ab9cfc5740acb9fbbf1bf0c01c3b246305c72a888285798b9",
+    "/Users/themoretheless/.codex/tmp/rrrah-gulp-dedupe-source-20261014/LICENSE": "ee53775eab5d8e29152c25594e3fc136599e6208b5f8f3310158390cec02dfd4",
+    "/Users/themoretheless/.codex/tmp/rrrah-gulp-dedupe-source-20261014/README.md": "c6cb255582d130536ed2123ae0d90a2a0e8438addd8763c1b8b2ee0482b4d9cd",
+    "/Users/themoretheless/.codex/tmp/rrrah-gulp-dedupe-source-20261014/index.js": "3fc20fe40814e197797af9c8e84a536ea090ccd8d5aa70458fa4e305b777957c",
+    "/Users/themoretheless/.codex/tmp/rrrah-gulp-dedupe-source-20261014/package.json": "2816f4d826854ac32e794088ceaa1557be589f890660471be3472e2ce74a7277",
+    "/Users/themoretheless/.codex/tmp/rrrah-gulp-dedupe-source-20261014/test/main.js": "a50fcfc526767b13a21919c21c79010e46e60db6c63a1b96520b7b6bd729aaa9"
+  },
+  "node": "v22.23.3",
+  "upstream_test_stats": {
+    "suites": 2,
+    "tests": 5,
+    "passes": 5,
+    "pending": 0,
+    "failures": 0,
+    "start": "2026-10-13T20:58:06.513Z",
+    "end": "2026-10-13T20:58:06.536Z",
+    "duration": 23
+  },
+  "controls": [
+    {
+      "control": "identical_bytes_different_paths_are_not_deduplicated",
+      "out": [
+        {
+          "path": "a",
+          "hex": "78"
+        },
+        {
+          "path": "b",
+          "hex": "78"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "control": "same_path_identical_bytes",
+      "out": [
+        {
+          "path": "a",
+          "hex": "78"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "control": "same_path_different_ascii_emits_error",
+      "out": [
+        {
+          "path": "a",
+          "hex": "78"
+        }
+      ],
+      "errors": [
+        {
+          "name": "Error",
+          "message": "Duplicate file `a` with different contents"
+        }
+      ]
+    },
+    {
+      "control": "different_invalid_utf8_bytes_silently_equal",
+      "out": [
+        {
+          "path": "a",
+          "hex": "ff"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "control": "explicit_error_option",
+      "out": [
+        {
+          "path": "a",
+          "hex": "78"
+        }
+      ],
+      "errors": [
+        {
+          "name": "Error",
+          "message": "Duplicate `a`"
+        }
+      ]
+    },
+    {
+      "control": "explicit_same_false_drops_different_contents",
+      "out": [
+        {
+          "path": "a",
+          "hex": "78"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "control": "null_contents_dropped_without_reserving_path",
+      "out": [
+        {
+          "path": "a",
+          "hex": "78"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "control": "streamed_contents_refused",
+      "out": [],
+      "errors": [
+        {
+          "name": "Error",
+          "message": "Streaming not supported"
+        }
+      ]
+    },
+    {
+      "control": "downstream_mutation_changes_future_equality",
+      "out": [
+        {
+          "path": "a",
+          "hex": "78"
+        }
+      ],
+      "errors": [
+        {
+          "name": "Error",
+          "message": "Duplicate file `a` with different contents"
+        }
+      ]
+    },
+    {
+      "control": "normalized_path_alias",
+      "out": [
+        {
+          "path": "dir/a",
+          "hex": "78"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "control": "empty_buffer_is_not_null",
+      "out": [
+        {
+          "path": "a",
+          "hex": ""
+        }
+      ],
+      "errors": []
+    },
+    {
+      "control": "emitted_error_does_not_stop_later_input",
+      "out": [
+        {
+          "path": "a",
+          "hex": "78"
+        },
+        {
+          "path": "b",
+          "hex": "7a"
+        }
+      ],
+      "errors": [
+        {
+          "name": "Error",
+          "message": "Duplicate file `a` with different contents"
+        }
+      ]
+    },
+    {
+      "control": "diff_mode_reports_ascii_mismatch",
+      "out": [
+        {
+          "path": "a",
+          "hex": "78"
+        }
+      ],
+      "errors": [
+        {
+          "name": "Error",
+          "message": "Duplicate file `a` with different contents:\n\u001b[32mx\u001b[39m\u001b[31my\u001b[39m"
+        }
+      ]
+    }
+  ],
+  "decision": "reference_domain_path_stream_filter_no_code_adoption",
+  "findings": [
+    "Keys are resolved paths, not content identities: identical buffers at different paths both emitted.",
+    "Buffer.toString UTF8 makes distinctFFandFEbytes equal; same-path different binary bytes silently suppressed without error.",
+    "Retains each first whole Vinyl object/buffer indefinitely; downstream mutation changes later comparisons. Buffered stream API rejects streamed contents; not bounded content streaming.",
+    "Error event does not itself terminate this through stream; later writes may emit data. Null contents silently dropped.",
+    "No byte proof, immutable snapshots, file-generation/dependency guards or managed memory/work/cancellation; options.error/same/diff are build-pipeline collision controls.",
+    "MITactuallicense read; modern resolved dependencies independently locked for reproducibility, no lock in original tree."
+  ],
+  "scope": "All7stored pinned-tree files fully read, blobs checked on snapshot preparation. Unchanged original index.js/test/main.js and dependencies executed on currentNode22:5upstream tests and13virtualVinylcontrols. npm lifecycle scripts disabled; user-configured GitHubnpm registry first returned404, preserved failure log; explicit public registry succeeded with65packages. No user/globalnpm config changed. New package-lock pins this execution, not historical upstream dependencies. No originalNode6/8/10/platform, filesystem/image identity or hard-resource qualification."
+}

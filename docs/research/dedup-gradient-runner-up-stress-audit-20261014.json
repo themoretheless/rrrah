@@ -1,0 +1,53 @@
+{
+  "status": "verified_standalone_stress_with_dense_regression_risk",
+  "pins": {
+    "docs/research/dedup-gradient-runner-up-stress-v3-20261014.json": "7fbe9b4a895da6e305f3cff97f45a9e06ffbf3fda29b9ca32aa02489207ed0d9",
+    "/Users/themoretheless/.codex/tmp/rrrah-gradient-runner-up-stress-v3-20261014/results.jsonl": "ad57dbfdb53b565e5f29d199b27c1edb8b9ebb6b9b1e165a6226f291e1c11aa0"
+  },
+  "fixtures": 1200,
+  "large_pairs": 2362369,
+  "timing_groups": [
+    {
+      "mode": 0,
+      "radius_squared": 4,
+      "median_ratio": 0.506123970791236
+    },
+    {
+      "mode": 0,
+      "radius_squared": 1000000,
+      "median_ratio": 1.1036203996560467
+    },
+    {
+      "mode": 1,
+      "radius_squared": 4,
+      "median_ratio": 0.5159802736103549
+    },
+    {
+      "mode": 1,
+      "radius_squared": 1000000,
+      "median_ratio": 1.0111294345066228
+    },
+    {
+      "mode": 2,
+      "radius_squared": 4,
+      "median_ratio": 0.5927338036784312
+    },
+    {
+      "mode": 2,
+      "radius_squared": 1000000,
+      "median_ratio": 1.0929025490205946
+    },
+    {
+      "mode": 3,
+      "radius_squared": 4,
+      "median_ratio": 0.44412207336761556
+    },
+    {
+      "mode": 3,
+      "radius_squared": 1000000,
+      "median_ratio": 1.0515162575938939
+    }
+  ],
+  "adopted": false,
+  "scope": "Standalone historical-source prototype; callback/error/bitwise nearest-table assertions passed. Three alternating timings per group on heavily shared host: dense/no-resolved cases expose regression risk, so natural41to48percent component gain alone does not justify production adoption. Add no-resolved fallback and repeat. Initial stress generator failed Rust compilation due quote escaping; preserved build.log and stress.rs under rrrah-gradient-runner-up-stress-20261014; v2/v3 corrected generator, no library edits."
+}

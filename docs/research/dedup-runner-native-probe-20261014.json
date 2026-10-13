@@ -1,0 +1,37 @@
+{
+  "status": "built_pending_execution",
+  "pid": 11800,
+  "source": "/Users/themoretheless/.codex/tmp/rrrah-gradient-runner-source-20261014",
+  "harness": "/Users/themoretheless/.codex/tmp/rrrah-runner-native-harness-20261014",
+  "source_manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-runner-source-20261014.json",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-runner-source-20261014.json": "07cf8dd36d6c33d0005eb9b74c4790bca7bf8ff37f21bdb1e977981021c1889e",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-consensus-native-plan-20261013.json": "674ee06240ac7fbdc8785e0bbdc63c5625ff08c93ebb9ea34a1aa0e8dd3dfa27",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/build-dedup-runner-native-probe-20261014.py": "f8de55e8238e764aa5270b7cb7db91953e879b95dd53e766a6ca89434724db61",
+    "/Users/themoretheless/.codex/tmp/rrrah-runner-native-harness-20261014/Cargo.toml": "ddf3afbb0712a63cfae348cfacbb3bca5d3935558398b520dd1ed28632ce4d2e",
+    "/Users/themoretheless/.codex/tmp/rrrah-runner-native-harness-20261014/Cargo.lock": "40d0319ff61694d6f74b709c8e2df49e5afc536af462b95fb84f38849d050aeb",
+    "/Users/themoretheless/.codex/tmp/rrrah-runner-native-harness-20261014/src/native_policy.rs": "16ddc4d9e77bbadad4312d0a491cc3e1c759fc47b03550f7c6266688ce364a17",
+    "/Users/themoretheless/.codex/tmp/rrrah-runner-native-harness-20261014/src/bin/native_bank_current_all_positives.rs": "4472c0735ac0cd5cfb3f3e872ed84616ff697ac7f423e5f0e43ce2e99aad6624"
+  },
+  "command": [
+    "cargo",
+    "+stable",
+    "build",
+    "--offline",
+    "--locked",
+    "--bin",
+    "native_bank_current_all_positives",
+    "--jobs",
+    "2",
+    "--target-dir",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-exact-portfolio-20261011"
+  ],
+  "log": "/Users/themoretheless/.codex/tmp/rrrah-runner-native-probe-20261014/build.log",
+  "scope": "Actual native atomic consensus probe linked to frozen managed linear-runner source; exact retained policy harness. Build only until execution reports exist. Not whole-operation speedup evidence.",
+  "child_pid": 11821,
+  "returncode": 0,
+  "log_sha256": "fca4f3875777d4168647bb2086964a022434dd13725ef3266429f626503fba5d",
+  "source_unchanged": true,
+  "executable": "/Users/themoretheless/.codex/tmp/rrrah-runner-native-probe-20261014/probe",
+  "executable_sha256": "4d659a397f6483f0ff3a8413c51bd4406462b0d06aaa00020f42ba90c9041a78"
+}

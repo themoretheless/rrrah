@@ -1,0 +1,37 @@
+{
+  "status": "built_pending_execution",
+  "pid": 75786,
+  "source": "/Users/themoretheless/.codex/tmp/rrrah-gradient-cache-v3-source-20261013",
+  "harness": "/Users/themoretheless/.codex/tmp/rrrah-cache-native-harness-20261014",
+  "source_manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-cache-v3-source-20261013.json",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-cache-v3-source-20261013.json": "a709940c45b6948e340a496140dd44f28ae9894640209f0fd493ccb44e95738a",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-consensus-native-plan-20261013.json": "674ee06240ac7fbdc8785e0bbdc63c5625ff08c93ebb9ea34a1aa0e8dd3dfa27",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/build-dedup-cache-native-probe-20261014.py": "0498ea916b7586f6fb24f325b52f4ed440f889a5dd87c09e667aaf32ab4b5761",
+    "/Users/themoretheless/.codex/tmp/rrrah-cache-native-harness-20261014/Cargo.toml": "8ef25c513a99a989ad33b743079b9d3735055afdeae60718e50802cf18581ddf",
+    "/Users/themoretheless/.codex/tmp/rrrah-cache-native-harness-20261014/Cargo.lock": "40d0319ff61694d6f74b709c8e2df49e5afc536af462b95fb84f38849d050aeb",
+    "/Users/themoretheless/.codex/tmp/rrrah-cache-native-harness-20261014/src/native_policy.rs": "16ddc4d9e77bbadad4312d0a491cc3e1c759fc47b03550f7c6266688ce364a17",
+    "/Users/themoretheless/.codex/tmp/rrrah-cache-native-harness-20261014/src/bin/native_bank_current_all_positives.rs": "4472c0735ac0cd5cfb3f3e872ed84616ff697ac7f423e5f0e43ce2e99aad6624"
+  },
+  "command": [
+    "cargo",
+    "+stable",
+    "build",
+    "--offline",
+    "--locked",
+    "--bin",
+    "native_bank_current_all_positives",
+    "--jobs",
+    "2",
+    "--target-dir",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-exact-portfolio-20261011"
+  ],
+  "log": "/Users/themoretheless/.codex/tmp/rrrah-cache-native-probe-20261014/build.log",
+  "scope": "Actual native atomic consensus probe linked to frozen cache-v3 source; exact retained policy harness. Build only until execution reports exist. Not whole-operation speedup evidence.",
+  "child_pid": 75813,
+  "returncode": 0,
+  "log_sha256": "efca98e8fb65eb5c9370db096fc817596954ce17275942fbb48b94183eda3d0e",
+  "source_unchanged": true,
+  "executable": "/Users/themoretheless/.codex/tmp/rrrah-cache-native-probe-20261014/probe",
+  "executable_sha256": "1209b93f92e24b321542f294cfcb5772f4f55d7dae29e9584e79b208e008e6dc"
+}

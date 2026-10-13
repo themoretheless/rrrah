@@ -1,0 +1,160 @@
+{
+  "status": "complete_five_text_file_review_with14_original_method_controls",
+  "repository": "SeanWong17/Image-Deduplicator",
+  "registry_index": 160,
+  "commit": "71d1016a0eb2de9cccd8594e4e9f47136297eec4",
+  "fully_read": [
+    ".gitignore",
+    "LICENSE",
+    "README.md",
+    "deduplicator.py",
+    "main.py"
+  ],
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/seanwong-image-deduplicator-full-source-20261014.json": "bbe4702ce4b91b0dd149ec6eaa8731c272952fee1cef2f6650f3338d60ec5d93",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/review-dedup-seanwong-image-20261014.py": "459da2eb8b283616222c198568fe8363c26b098a812d3f65847e9f4674961866",
+    "/Users/themoretheless/.codex/tmp/rrrah-seanwong-image-deduplicator-source-20261014/.gitignore": "26268c7deea70b2def2bcbe42415a0abebe7abc7f213e6e33d807ab514779eaf",
+    "/Users/themoretheless/.codex/tmp/rrrah-seanwong-image-deduplicator-source-20261014/LICENSE": "fa385c980eefc5fcf390b130edec56c9e7776c77dca678b043549c49237d3946",
+    "/Users/themoretheless/.codex/tmp/rrrah-seanwong-image-deduplicator-source-20261014/README.md": "0ff41077791edd28c90b054c6b96b12042f2d4a4c8f1ff901c9ce418bb240c4f",
+    "/Users/themoretheless/.codex/tmp/rrrah-seanwong-image-deduplicator-source-20261014/deduplicator.py": "85237bf270b9d3657c4df3c0d74e3ea939affca61d2cb62909a05cfa765e0446",
+    "/Users/themoretheless/.codex/tmp/rrrah-seanwong-image-deduplicator-source-20261014/main.py": "26310f63c19884cb23a4feb5bb83e4c9dc93e08276ba13b69dccafa633dbcef3"
+  },
+  "numpy_version": "2.5.3",
+  "controls": [
+    {
+      "control": "identical_and_orthogonal_vectors",
+      "result": [
+        0,
+        2
+      ],
+      "error": null,
+      "warnings": [],
+      "stdout": ""
+    },
+    {
+      "control": "zero_vectors_retained_with_nan_normalization",
+      "result": [
+        0,
+        1
+      ],
+      "error": null,
+      "warnings": [
+        "invalid value encountered in divide"
+      ],
+      "stdout": ""
+    },
+    {
+      "control": "integer_dtype_rejected_during_inplace_normalization",
+      "result": null,
+      "error": "UFuncTypeError",
+      "warnings": [],
+      "stdout": ""
+    },
+    {
+      "control": "caller_matrix_mutated",
+      "result": [
+        0
+      ],
+      "error": null,
+      "warnings": [],
+      "stdout": ""
+    },
+    {
+      "control": "zero_batch_size_raises",
+      "result": null,
+      "error": "ValueError",
+      "warnings": [],
+      "stdout": ""
+    },
+    {
+      "control": "negative_batch_size_silently_keeps_identical_vectors",
+      "result": [
+        0,
+        1
+      ],
+      "error": null,
+      "warnings": [],
+      "stdout": ""
+    },
+    {
+      "control": "nan_threshold_silently_keeps_identical_vectors",
+      "result": [
+        0,
+        1
+      ],
+      "error": null,
+      "warnings": [],
+      "stdout": ""
+    },
+    {
+      "control": "nontransitive_chain_order_A_B_C",
+      "result": [
+        0,
+        2
+      ],
+      "error": null,
+      "warnings": [],
+      "stdout": ""
+    },
+    {
+      "control": "nontransitive_chain_order_B_A_C",
+      "result": [
+        0
+      ],
+      "error": null,
+      "warnings": [],
+      "stdout": ""
+    },
+    {
+      "control": "negative_threshold_excludes_orthogonal_vectors",
+      "result": [
+        0
+      ],
+      "error": null,
+      "warnings": [],
+      "stdout": ""
+    },
+    {
+      "control": "threshold_one_keeps_identical_vectors_strict_comparison",
+      "result": [
+        0,
+        1
+      ],
+      "error": null,
+      "warnings": [],
+      "stdout": ""
+    },
+    {
+      "control": "readonly_input_rejected",
+      "result": null,
+      "error": "ValueError",
+      "warnings": [],
+      "stdout": ""
+    },
+    {
+      "control": "failed_feature_omitted_from_returned_paths",
+      "result": [
+        "one"
+      ],
+      "error": null,
+      "warnings": [],
+      "stdout": "Found 3 images to process.\n"
+    },
+    {
+      "control": "all_failed_features_return_empty_success",
+      "result": [],
+      "error": null,
+      "warnings": [],
+      "stdout": "Found 1 images to process.\nNo valid features extracted. Exiting.\n"
+    }
+  ],
+  "decision": "reference_no_production_code_adoption",
+  "findings": [
+    "Batched all-pairs cosine remains quadratic in unrelated case; all decoded features and executor results retained, no managed memory/admission/cancellation.",
+    "Greedy nontransitive threshold exclusion depends on input order. Semantic ResNet features are candidate signals, no byte/pixel/geometric identity confirmation.",
+    "Feature failures omitted from success path lists; all failures yield empty success. No source mutation/dependency/model generation guards.",
+    "Input feature matrix normalized in place; zero norms, NaN threshold and negative batch sizes unchecked. Integer/readonly inputs fail.",
+    "Source README references requirements.txt absent from complete5filetree. ActualMITtext read, copyright retains placeholder; pretrained model/dependency licenses separate."
+  ],
+  "scope": "All5stored pinned-tree text files fully read. Original class AST compiled without import statements; real NumPy and ThreadPoolExecutor, identity progress wrapper, constructor skipped. Fourteen grouping/error/input controls; feature extraction injected only for two None/path controls. Not original complete CLI/import, torchvision/ResNet weights/inference, image preprocessing, real corrupt-file handling, CUDA, platform/resource/concurrency or image-quality qualification. No upstream test files in tree."
+}

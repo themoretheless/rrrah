@@ -1,0 +1,37 @@
+{
+  "status": "verified_uncached_managed_version_component_comparison",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-managed-large-version-benchmark-20261014.json": "9b749b96e0b1a5e1b29b205fbb6a4ea3f36a895a596a9d57f17a3cbd7d391b0b",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-managed-large-version-20261014.py": "50c4b089ff667a3b21cf6ab99ea23d688508425931c3d12a74ed819cd8d0444a"
+  },
+  "pairs": [
+    {
+      "case": "derived_large",
+      "pair": 0,
+      "cpu_ratio": 1.0307710003740287,
+      "wall_ratio": 1.2031659693847814
+    },
+    {
+      "case": "derived_large",
+      "pair": 1,
+      "cpu_ratio": 1.0138053638471813,
+      "wall_ratio": 1.1528267925166291
+    },
+    {
+      "case": "derived_large",
+      "pair": 2,
+      "cpu_ratio": 1.0040815476080243,
+      "wall_ratio": 1.0844312157885143
+    },
+    {
+      "case": "derived_large",
+      "pair": 3,
+      "cpu_ratio": 1.0289059629806252,
+      "wall_ratio": 1.083074229427101
+    }
+  ],
+  "median_cpu_ratio": {
+    "derived_large": 1.0213556634139032
+  },
+  "scope": "Derived1537feature synthetic repeated natural bank,2.36million pairs exceeding cache cap; source manifest in rrrah-managed-large-features-20261014. and native distance0.5/ratio0.64/radius2 policy. Baseline frozen source versus cache-v3 with zero optional headroom in both paths. Four alternating fresh-process pairs for one derived case, each process performs20same uncached managed calls. Child user+systemCPU measured independently of wall contention. Correspondence counts compared across versions, exact bits only internally per executable; source versions include formatting drift. Derived1537bank and standalone release compiler context; does not rule out large-bank/callback/whole-search regression. Does not establish cross-version point-bit equality from counts."
+}

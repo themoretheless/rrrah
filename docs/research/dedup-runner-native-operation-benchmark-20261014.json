@@ -1,0 +1,58 @@
+{
+  "status": "running",
+  "pid": 41356,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-runner-native-probe-20261014.json": "886a6fe507ded28f51980ee5286a7a228e38c279a22d841dd5955fb3cc0f72e3",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-consensus-native-plan-20261013.json": "674ee06240ac7fbdc8785e0bbdc63c5625ff08c93ebb9ea34a1aa0e8dd3dfa27",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/benchmark-dedup-runner-native-operation-20261014.py": "667ac379ce59463cec99588b6decc6758d16751d4dcbf7f6572bd1abc43163ed",
+    "/Users/themoretheless/.codex/tmp/rrrah-consensus-native-v2-20261013/probe": "9493c0d7ae15376d0ce1c8b0236716aa271fae7075ce56b8c6f8bc08232539be",
+    "/Users/themoretheless/.codex/tmp/rrrah-runner-native-probe-20261014/probe": "4d659a397f6483f0ff3a8413c51bd4406462b0d06aaa00020f42ba90c9041a78",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/212600.jpg": "1f0be0e87dc2e9d925b8745f448727f215e0f96c9f8ee637635cc7a630aca890",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors": "59e55bf0ecd047db9c513672d121a3ea677529ad448bdc3a359e92862c74ddd7",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/211901.jpg": "6c076f5642a9de92efb53cfe0734d7140a499fd44d08d2b1d93199c2bfc9bcd9",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/211900.jpg": "81faa5e0860359aa092a5b1e04de4130acd1168182bb5fdf55c7dd73af9fd8fe"
+  },
+  "results": [
+    {
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-runner-native-operation-benchmark-20261014/self_native-0-baseline.json",
+      "sha256": "92d66f4cf31707e360758578dc10e3db704364bdae8bc0401183a70a384c4c83",
+      "returncode": 0
+    },
+    {
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-runner-native-operation-benchmark-20261014/self_native-0-runner.json",
+      "sha256": "2d856addfa9fbb7d03532396408884fc363905dbfcb8d0af36f0db6b50489f5b",
+      "returncode": 0
+    },
+    {
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-runner-native-operation-benchmark-20261014/self_native-1-runner.json",
+      "sha256": "3d03b7cb8c3ee9ad320503d2633acf6c53a4d7ce52a39a3f41dc485b0d50f2ac",
+      "returncode": 0
+    },
+    {
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-runner-native-operation-benchmark-20261014/self_native-1-baseline.json",
+      "sha256": "4a5e26e7848a790070a7ec8349500204c8cd4d8284352b52a040de45bd89ceb6",
+      "returncode": 0
+    },
+    {
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-runner-native-operation-benchmark-20261014/self_native-2-baseline.json",
+      "sha256": "fafa825ff22e2ee394d17b4d5400c6f1f6a867930c78a59c8cca23e29de01902",
+      "returncode": 0
+    },
+    {
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-runner-native-operation-benchmark-20261014/self_native-2-runner.json",
+      "sha256": "438f50e0a54f425a9f471487a02971fd5dd2905bb5e6690c3e9e158de0747719",
+      "returncode": 0
+    },
+    {
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-runner-native-operation-benchmark-20261014/table_true-0-baseline.json",
+      "sha256": "a9cb4abefcefd4bb538ef1b22eaeb42d94a5979c37b8a54d4b5616536f37e311",
+      "returncode": 0
+    },
+    {
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-runner-native-operation-benchmark-20261014/table_true-0-runner.json",
+      "sha256": "9688b1ac721d83b77a42ab243529b681c3f337b84f559b320db91eed69186b3a",
+      "returncode": 0
+    }
+  ],
+  "scope": "Whole fresh-process native atomic consensus baseline-source versus latest linear-runner-source comparison including startup, decode and both directions. Two controls, three alternating pairs each. Source versions also include formatting drift; this is version comparison, not isolated linear-runner causal proof. Host shared with test/corpus jobs; child process user+system CPU also recorded to reduce wall contention bias; still a small control sample."
+}

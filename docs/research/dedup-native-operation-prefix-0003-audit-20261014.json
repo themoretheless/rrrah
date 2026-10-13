@@ -1,0 +1,59 @@
+{
+  "status": "verified_execution_prefix_not_speedup_proof",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-native-operation-prefix-0003-20261014.json": "14c7a3ecc6753d103514edd920258b28d806fbfa5d6f75d933e50e9e178fe9a9",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-native-operation-prefix-20261014.py": "b25c67d4569774c592871594a5c29f671a1d8479e2fb05b2888871361b63e69b"
+  },
+  "rows": [
+    {
+      "case": "self_native",
+      "pair": 0,
+      "version": "baseline",
+      "elapsed_ns": 111381715583,
+      "semantic_result": {
+        "support": true,
+        "forward_support": true,
+        "reverse_support": true,
+        "forward_model_attempted": false,
+        "reverse_model_attempted": false
+      },
+      "managed_peak": 271162112
+    },
+    {
+      "case": "self_native",
+      "pair": 0,
+      "version": "cache_v3",
+      "elapsed_ns": 150411116125,
+      "semantic_result": {
+        "support": true,
+        "forward_support": true,
+        "reverse_support": true,
+        "forward_model_attempted": false,
+        "reverse_model_attempted": false
+      },
+      "managed_peak": 271162112
+    },
+    {
+      "case": "self_native",
+      "pair": 1,
+      "version": "cache_v3",
+      "elapsed_ns": 156622022625,
+      "semantic_result": {
+        "support": true,
+        "forward_support": true,
+        "reverse_support": true,
+        "forward_model_attempted": false,
+        "reverse_model_attempted": false
+      },
+      "managed_peak": 271162112
+    }
+  ],
+  "paired": [
+    {
+      "case": "self_native",
+      "pair": 0,
+      "cache_v3_over_baseline_wall_ratio": 1.3504111993401275
+    }
+  ],
+  "scope": "Whole fresh-process native atomic consensus baseline-source versus cache-v3-source comparison including startup, decode and both directions. Two controls, three alternating pairs each. Source versions also include formatting drift; this is version comparison, not isolated cache causal proof. Host shared with test/corpus jobs; timing exploratory. Uncontrolled shared-host wall timings cannot establish isolated cache improvement/regression. Retain slow outcomes; do not publish component gain as whole-search speedup."
+}

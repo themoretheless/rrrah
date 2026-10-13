@@ -2,9 +2,9 @@
   "index": 190,
   "repository": "mrighele/zfs-find-deduped",
   "commit": "e9664740b41fee269a96331c7699e4d12ddb2d63",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
-  "decision": "reject-domain",
-  "finding": "Queries already-deduped ZFS files; reports filesystem state rather than independently comparing content.",
+  "review_scope": "All3tracked pinned-tree text files fully read;12unchanged function AST parser controls using substituted Popen/stdout. No actualZFS/zdb/platform execution.",
+  "decision": "reject_domain_no_content_identity_or_code_adoption",
+  "finding": "ReportsDDTblock sharing rather than complete equality. Synthetic parser controls reproduce lost final file without blank separator, unchecked token/UTF8/refcount failures, ignored external command failure and eager full-outputreadlines.",
   "available_source_evidence": [
     {
       "path": "zfs_find_deduped.py",
@@ -18,7 +18,7 @@
     }
   ],
   "license_metadata": "MIT",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "Actual completeMITtext read; no code adopted.",
   "tests_detected": 0,
   "upstream_tests_run": false,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
@@ -44,5 +44,13 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "full_repository_review_complete": true,
+  "fully_read_files": 3,
+  "total_files": 3,
+  "complete_source_review": "zfs-find-deduped-complete-review-v2-20261014.json",
+  "complete_parser_audit": "zfs-find-deduped-complete-audit-20261014.json",
+  "prior_registry_review": "zfs-find-deduped-prior-registry-190-20261014.json",
+  "whole_runtime_qualified": false
 }

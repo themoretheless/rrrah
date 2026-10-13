@@ -1,0 +1,67 @@
+{
+  "status": "verified_production_managed_component_paired_benchmark",
+  "producer_sha256": "a57f631bb11d989240c66811d8dfb76561e83b05e6a325d1f4916844897e36ca",
+  "auditor_sha256": "9d54c19ef05b0909d90bec8a9743357a240d42dd080faedb698564d2cf60c442",
+  "cases": [
+    {
+      "index": 0,
+      "label": "self_native",
+      "median_ratio": 0.5803351093204934,
+      "matches": 1024,
+      "paired_measurements": 9
+    },
+    {
+      "index": 1,
+      "label": "self_native",
+      "median_ratio": 0.5718001496270261,
+      "matches": 1024,
+      "paired_measurements": 9
+    },
+    {
+      "index": 2,
+      "label": "table_true",
+      "median_ratio": 0.5724638553350806,
+      "matches": 3,
+      "paired_measurements": 9
+    },
+    {
+      "index": 3,
+      "label": "table_true",
+      "median_ratio": 0.5732577754216607,
+      "matches": 3,
+      "paired_measurements": 9
+    },
+    {
+      "index": 4,
+      "label": "portrait_wrong",
+      "median_ratio": 0.555378590013236,
+      "matches": 1,
+      "paired_measurements": 9
+    },
+    {
+      "index": 5,
+      "label": "portrait_wrong",
+      "median_ratio": 0.5713690470927449,
+      "matches": 1,
+      "paired_measurements": 9
+    },
+    {
+      "index": 6,
+      "label": "composite_square_wrong",
+      "median_ratio": 0.5709539616167165,
+      "matches": 0,
+      "paired_measurements": 9
+    },
+    {
+      "index": 7,
+      "label": "composite_square_wrong",
+      "median_ratio": 0.5675695226575662,
+      "matches": 0,
+      "paired_measurements": 9
+    }
+  ],
+  "paired_measurements": 72,
+  "timed_calls": 144,
+  "scope": "Actual managed public matcher; eight retained natural feature directions, nine alternating pairs, distance0.5 ratio0.64 radius2. Component timing including admission/allocation; not whole search timing. Shared host.",
+  "limitations": "Eight natural feature directions, seven source images, fixed1024features/bank and8MiBcache. Not full-operation speedup, larger matrices, fresh full-corpus parity or all-case coverage."
+}

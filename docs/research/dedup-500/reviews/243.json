@@ -2,9 +2,9 @@
   "index": 243,
   "repository": "hoho/gulp-dedupe",
   "commit": "468dabc327b8f450cdafe5f2cab457a1293b9057",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
-  "decision": "reference",
-  "finding": "Gulp stream duplicate filter/error behavior; useful API isolation idea, not image features.",
+  "review_scope": "All7tracked pinned-tree text files fully read; unchanged original5Mocha tests and13actual original-module/Vinyl controls pass onNode22 with locked modern dependencies. Not fullhistoricalplatform/resource/image support.",
+  "decision": "reference_path_collision_filter_no_code_adoption",
+  "finding": "Resolved-path filtering, not content deduplication. DistinctFF/FEbinary bytes stringify identically and are silently dropped at same path. Downstream object mutation changes future comparisons; whole buffers retained, streamed contents rejected, error event permits later data.",
   "available_source_evidence": [
     {
       "path": "index.js",
@@ -28,9 +28,9 @@
     }
   ],
   "license_metadata": "MIT",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "Complete actualMITtext read; execution dependency licenses not adopted/reviewed as upstream source.",
   "tests_detected": 1,
-  "upstream_tests_run": false,
+  "upstream_tests_run": true,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
   "tree_truncated": false,
   "available_readme_license_evidence": [
@@ -54,5 +54,14 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "full_repository_review_complete": true,
+  "fully_read_files": 7,
+  "total_files": 7,
+  "complete_source_review": "gulp-dedupe-complete-review-20261014.json",
+  "complete_runtime_audit": "gulp-dedupe-complete-audit-20261014.json",
+  "prior_registry_review": "gulp-dedupe-prior-registry-243-20261014.json",
+  "upstream_tests_passed": 5,
+  "whole_runtime_qualified": false
 }

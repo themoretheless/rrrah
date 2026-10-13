@@ -3381,7 +3381,7 @@
         "status": "verified_finite_local_translation_envelope",
         "report": "docs/research/dedup-screen-local-translation-envelope.json",
         "accepted_regions": 0,
-        "scope": "Best independent per-target selection amongnineoffsets still0; excludes onlyfinite\u00b11pixel envelope."
+        "scope": "Best independent per-target selection amongnineoffsets still0; excludes onlyfinite±1pixel envelope."
       }
     },
     "screen_regional_geometry": {
@@ -5564,7 +5564,7 @@
     "status": "verified_four_real_pairs_exact_native_evidence",
     "report": "docs/research/dedup-anchor-geometry-real-parity.json",
     "audit": "docs/research/dedup-anchor-geometry-real-parity-audit.json",
-    "scope": "Four difficult real pairs; exact complete native anchor evidence. Observed 31.17\u201359.50 seconds per pair under concurrent workloads; no relative speed claim."
+    "scope": "Four difficult real pairs; exact complete native anchor evidence. Observed 31.17–59.50 seconds per pair under concurrent workloads; no relative speed claim."
   },
   "geometry_only_alternating_benchmark": {
     "status": "verified_twelve_alternating_runs",
@@ -11403,7 +11403,7 @@
     "state": "verified_cache_and_indexed_rescan",
     "audit": "dedup-palette-mutation-verification-20261012.json",
     "test": "crates/rrrah-dedup/tests/palette_mutation.rs",
-    "scope": "Same encoded length, tRNS entry80 plus CRC rewrite only; cached miss/hit\u2192rewrite\u2192miss/hit, 3equal pairs\u21921unchanged equal pair. Independent PNG CRC/Pillow semantics audit. Sequential rescan, not concurrent/restored-metadata race; unchanged184 source, no fresh188 full gate."
+    "scope": "Same encoded length, tRNS entry80 plus CRC rewrite only; cached miss/hit→rewrite→miss/hit, 3equal pairs→1unchanged equal pair. Independent PNG CRC/Pillow semantics audit. Sequential rescan, not concurrent/restored-metadata race; unchanged184 source, no fresh188 full gate."
   },
   "pixel_search_information_gate_20261012": {
     "state": "verified_21_existing_tests",
@@ -13202,5 +13202,11 @@
       "required": 233
     },
     "scope": "Live pair-quality campaigns, same current frozen native executable640/1m/25banks/radii2,6 and independently diagonal-normalized tolerances for both labels. Exact prior atomic argument/binary matches may be reused. Not collection/default or full completion proof."
-  }
+  },
+  "latest_linear_runner_implementation": "docs/research/dedup-gradient-runner-implementation-20261014.json",
+  "latest_linear_runner_native_build": "docs/research/dedup-runner-native-probe-20261014.json",
+  "latest_linear_runner_operation_campaign": "docs/research/dedup-runner-native-operation-benchmark-20261014.json",
+  "latest_source500_inventory": "docs/research/dedup-500/registry-coverage-audit-v18-20261014.json",
+  "latest_coverage_ledger": "docs/research/dedup-goal-coverage-ledger-v23-20261014.json",
+  "latest_scope_note": "Latest runner only58raster unit+one derived component control verified; native whole-op campaign/decode focused running. Full cache-v3 predecessor gate still running;229positive corpus pre-cache source. Original500full source reviews incomplete;41detailed rows20declarations are not500proof."
 }

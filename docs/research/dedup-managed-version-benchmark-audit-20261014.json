@@ -1,0 +1,62 @@
+{
+  "status": "verified_uncached_managed_version_component_comparison",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-managed-version-benchmark-20261014.json": "586b9bc736d600ce3c76454cef378688a8e12e63bae888b4a246d46ccb115d73",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-managed-version-20261014.py": "90cffafc0b417b69c02f5c462fe0febb654ca44782cad4f9b16c7026ccee0029"
+  },
+  "pairs": [
+    {
+      "case": "self",
+      "pair": 0,
+      "cpu_ratio": 0.9645272883867729,
+      "wall_ratio": 0.6356903981912212
+    },
+    {
+      "case": "self",
+      "pair": 1,
+      "cpu_ratio": 0.9969949978875812,
+      "wall_ratio": 0.9614057155996641
+    },
+    {
+      "case": "self",
+      "pair": 2,
+      "cpu_ratio": 1.0093789836601024,
+      "wall_ratio": 1.045157308745184
+    },
+    {
+      "case": "self",
+      "pair": 3,
+      "cpu_ratio": 0.9848604020033171,
+      "wall_ratio": 1.0150084013993734
+    },
+    {
+      "case": "different",
+      "pair": 0,
+      "cpu_ratio": 1.0343929556563372,
+      "wall_ratio": 1.2969471197713198
+    },
+    {
+      "case": "different",
+      "pair": 1,
+      "cpu_ratio": 1.017876340620055,
+      "wall_ratio": 1.1023109769400687
+    },
+    {
+      "case": "different",
+      "pair": 2,
+      "cpu_ratio": 0.995042331438567,
+      "wall_ratio": 1.0207977624329962
+    },
+    {
+      "case": "different",
+      "pair": 3,
+      "cpu_ratio": 1.052857790222885,
+      "wall_ratio": 1.1536822013984436
+    }
+  ],
+  "median_cpu_ratio": {
+    "self": 0.9909276999454492,
+    "different": 1.026134648138196
+  },
+  "scope": "Same1024natural-feature banks and native distance0.5/ratio0.64/radius2 policy. Baseline frozen source versus cache-v3 with zero optional headroom in both paths. Four alternating fresh-process pairs per case, each process performs20same uncached managed calls. Child user+systemCPU measured independently of wall contention. Correspondence counts compared across versions, exact bits only internally per executable; source versions include formatting drift. Only1024banks and standalone release compiler context; does not rule out large-bank/callback/whole-search regression. Does not establish cross-version point-bit equality from counts."
+}

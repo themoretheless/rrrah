@@ -627,7 +627,7 @@ pub(crate) fn match_gradients_distinct_locations_prepaid(
     if !competitor_radius.is_finite() || competitor_radius < 0. || !competitor_radius.powi(2).is_finite() {
         return Err(LocalError::Invalid);
     }
-    match_gradients_selected_with_cache(
+    match_gradients_selected_with_scratch(
         left,
         right,
         policy,
@@ -645,6 +645,19 @@ pub(crate) fn match_gradients_distinct_locations_prepaid(
                 .ok()
                 .filter(|buffer| buffer.capacity_bytes() <= MAX_DISTANCE_CACHE_BYTES)
         },
+        |entries| {
+            let bytes = u64::try_from(entries)
+                .ok()?
+                .checked_mul(std::mem::size_of::<(usize, bool)>() as u64)?;
+            if budget.available_bytes() < bytes {
+                return None;
+            }
+            budget
+                .child(MAX_DISTANCE_CACHE_BYTES)
+                .try_buffer(entries, (usize::MAX, false))
+                .ok()
+                .filter(|buffer| buffer.capacity_bytes() <= MAX_DISTANCE_CACHE_BYTES)
+        },
         cancel,
     )
 }
@@ -655,7 +668,10 @@ pub(crate) fn match_gradients_distinct_locations_prepaid(
 /// managed allocation admission, not a process RSS bound. An optional exact
 /// distance cache uses up to16MiB additional admitted scratch for the second
 /// pass. Refused cache admission falls back to recomputation; full work limits
-/// and all cancellation checkpoints remain enforced.
+/// and all cancellation checkpoints remain enforced. Matrices above the cache
+/// cap may use up to16MiB of optional linear runner-up indices instead. A global
+/// runner-up outside the exclusion radius proves the exact distinct competitor;
+/// unresolved directions still recompute. Dense banks retain the original path.
 /// # Errors
 /// Same validation/work/cancellation errors plus memory-budget refusal.
 #[cfg(feature = "raster")]
@@ -793,6 +809,42 @@ fn match_gradients_selected_with_cache<C: std::ops::DerefMut<Target = [f64]>>(
     make_cache: impl FnOnce(usize) -> Option<C>,
     cancel: impl Fn() -> bool,
 ) -> Result<Vec<crate::geometry::Correspondence>, LocalError> {
+    match_gradients_selected_with_scratch(
+        left,
+        right,
+        policy,
+        distinct_radius_squared,
+        make_cache,
+        |_| None::<Vec<(usize, bool)>>,
+        cancel,
+    )
+}
+
+fn distance_runner_entries(left: usize, right: usize) -> Option<usize> {
+    let pairs = left.checked_mul(right)?;
+    if pairs <= MAX_DISTANCE_CACHE_BYTES as usize / std::mem::size_of::<f64>() {
+        return None;
+    }
+    left.checked_add(right).filter(|&entries| {
+        entries
+            .checked_mul(std::mem::size_of::<(usize, bool)>())
+            .is_some_and(|bytes| bytes <= MAX_DISTANCE_CACHE_BYTES as usize)
+    })
+}
+
+#[allow(clippy::too_many_arguments)]
+fn match_gradients_selected_with_scratch<
+    C: std::ops::DerefMut<Target = [f64]>,
+    U: std::ops::DerefMut<Target = [(usize, bool)]>,
+>(
+    left: &[GradientFeature],
+    right: &[GradientFeature],
+    policy: GradientMatchPolicy,
+    distinct_radius_squared: Option<f64>,
+    make_cache: impl FnOnce(usize) -> Option<C>,
+    make_runners: impl FnOnce(usize) -> Option<U>,
+    cancel: impl Fn() -> bool,
+) -> Result<Vec<crate::geometry::Correspondence>, LocalError> {
     if !policy.max_squared_distance.is_finite()
         || !(0. ..=4.).contains(&policy.max_squared_distance)
         || !policy.squared_ratio.is_finite()
@@ -814,7 +866,10 @@ fn match_gradients_selected_with_cache<C: std::ops::DerefMut<Target = [f64]>>(
     if work > policy.max_comparisons {
         return Err(LocalError::Budget);
     }
-    for feature in left.iter().chain(right) {
+    let runner_entries =
+        distinct_radius_squared.and_then(|_| distance_runner_entries(left.len(), right.len()));
+    let mut bounds = [([f64::INFINITY; 2], [f64::NEG_INFINITY; 2]); 2];
+    for (index, feature) in left.iter().chain(right).enumerate() {
         if cancel() {
             return Err(LocalError::Cancelled);
         }
@@ -824,6 +879,13 @@ fn match_gradients_selected_with_cache<C: std::ops::DerefMut<Target = [f64]>>(
             || (d.iter().map(|v| v * v).sum::<f64>() - 1.).abs() > 1e-6
         {
             return Err(LocalError::Invalid);
+        }
+        if runner_entries.is_some() {
+            let (low, high) = &mut bounds[usize::from(index >= left.len())];
+            for axis in 0..2 {
+                low[axis] = low[axis].min(feature.position[axis]);
+                high[axis] = high[axis].max(feature.position[axis]);
+            }
         }
     }
     if left.is_empty() || right.is_empty() {
@@ -842,6 +904,23 @@ fn match_gradients_selected_with_cache<C: std::ops::DerefMut<Target = [f64]>>(
     let mut reverse = allocate(right.len())?;
     let mut distance_cache = distance_cache_pairs(left.len(), right.len(), distinct_radius_squared.is_some())
         .and_then(|pairs| make_cache(pairs).filter(|values| values.len() == pairs));
+    let contained = distinct_radius_squared.is_some_and(|radius| {
+        bounds
+            .iter()
+            .any(|(low, high)| (high[0] - low[0]).powi(2) + (high[1] - low[1]).powi(2) <= radius)
+    });
+    let mut runners = runner_entries
+        .filter(|_| !contained)
+        .and_then(|entries| make_runners(entries).filter(|values| values.len() == entries));
+    let update_runner = |best: &mut (f64, f64, usize), runner: &mut (usize, bool), distance: f64, index| {
+        if distance < best.0 {
+            runner.0 = best.2;
+            *best = (distance, best.0, index);
+        } else if distance < best.1 {
+            best.1 = distance;
+            runner.0 = index;
+        }
+    };
     let update = |best: &mut (f64, f64, usize), distance, index| {
         if distance < best.0 {
             *best = (distance, best.0, index);
@@ -865,14 +944,47 @@ fn match_gradients_selected_with_cache<C: std::ops::DerefMut<Target = [f64]>>(
                 let j = block * 4 + lane;
 
                 let distance = distances[lane];
-                update(&mut forward[i], distance, j);
-                update(&mut reverse[j], distance, i);
+                if let Some(runners) = runners.as_mut() {
+                    update_runner(&mut forward[i], &mut runners[i], distance, j);
+                    update_runner(&mut reverse[j], &mut runners[left.len() + j], distance, i);
+                } else {
+                    update(&mut forward[i], distance, j);
+                    update(&mut reverse[j], distance, i);
+                }
             }
         }
     }
     if let Some(radius) = distinct_radius_squared {
-        for best in forward.iter_mut().chain(reverse.iter_mut()) {
-            best.1 = f64::INFINITY;
+        if let Some(runners) = runners.as_mut() {
+            let (forward_runners, reverse_runners) = runners.split_at_mut(left.len());
+            for (best, runner) in forward.iter_mut().zip(forward_runners) {
+                if runner.0 != usize::MAX {
+                    let a = right[best.2].position;
+                    let b = right[runner.0].position;
+                    runner.1 = (a[0] - b[0]).powi(2) + (a[1] - b[1]).powi(2) > radius;
+                }
+                if !runner.1 {
+                    best.1 = f64::INFINITY;
+                }
+            }
+            for (best, runner) in reverse.iter_mut().zip(reverse_runners) {
+                if runner.0 != usize::MAX {
+                    let a = left[best.2].position;
+                    let b = left[runner.0].position;
+                    runner.1 = (a[0] - b[0]).powi(2) + (a[1] - b[1]).powi(2) > radius;
+                }
+                if !runner.1 {
+                    best.1 = f64::INFINITY;
+                }
+            }
+            // No proved competitor: remove per-pair optimized-path branches.
+        } else {
+            for best in forward.iter_mut().chain(reverse.iter_mut()) {
+                best.1 = f64::INFINITY;
+            }
+        }
+        if runners.as_ref().is_some_and(|r| !r.iter().any(|runner| runner.1)) {
+            runners = None;
         }
         for (i, a) in left.iter().enumerate() {
             for (block, chunk) in right.chunks(4).enumerate() {
@@ -880,6 +992,14 @@ fn match_gradients_selected_with_cache<C: std::ops::DerefMut<Target = [f64]>>(
                     if cancel() {
                         return Err(LocalError::Cancelled);
                     }
+                }
+                if runners.as_ref().is_some_and(|r| {
+                    r[i].1
+                        && r[left.len() + block * 4..left.len() + block * 4 + chunk.len()]
+                            .iter()
+                            .all(|runner| runner.1)
+                }) {
+                    continue;
                 }
                 let distances = if let Some(cache) = distance_cache.as_ref() {
                     let start = i * right.len() + block * 4;
@@ -894,11 +1014,17 @@ fn match_gradients_selected_with_cache<C: std::ops::DerefMut<Target = [f64]>>(
 
                     let distance = distances[lane];
                     let nearest = right[forward[i].2].position;
-                    if (b.position[0] - nearest[0]).powi(2) + (b.position[1] - nearest[1]).powi(2) > radius {
+                    if !runners.as_ref().is_some_and(|r| r[i].1)
+                        && (b.position[0] - nearest[0]).powi(2) + (b.position[1] - nearest[1]).powi(2)
+                            > radius
+                    {
                         forward[i].1 = forward[i].1.min(distance);
                     }
                     let nearest = left[reverse[j].2].position;
-                    if (a.position[0] - nearest[0]).powi(2) + (a.position[1] - nearest[1]).powi(2) > radius {
+                    if !runners.as_ref().is_some_and(|r| r[left.len() + j].1)
+                        && (a.position[0] - nearest[0]).powi(2) + (a.position[1] - nearest[1]).powi(2)
+                            > radius
+                    {
                         reverse[j].1 = reverse[j].1.min(distance);
                     }
                 }

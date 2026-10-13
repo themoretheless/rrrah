@@ -1,0 +1,33 @@
+{
+  "status": "passed_pending_audit",
+  "mode": "raster",
+  "producer_pid": 9248,
+  "source": "/Users/themoretheless/.codex/tmp/rrrah-gradient-runner-source-20261014",
+  "source_manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-runner-source-20261014.json",
+  "source_manifest_sha256": "07cf8dd36d6c33d0005eb9b74c4790bca7bf8ff37f21bdb1e977981021c1889e",
+  "producer_sha256": "31c4534459979a3ef80562ca9f905c8be5eb788213e957def44a651f4ef6c637",
+  "command": [
+    "cargo",
+    "+stable",
+    "test",
+    "-p",
+    "rrrah-dedup",
+    "--lib",
+    "--features",
+    "raster",
+    "--offline",
+    "--locked",
+    "--no-fail-fast",
+    "--jobs",
+    "2",
+    "--target-dir",
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013"
+  ],
+  "log": "/Users/themoretheless/.codex/tmp/rrrah-gradient-runner-raster-20261014.log",
+  "compiler": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: aarch64-apple-darwin\nrelease: 1.98.1\nLLVM version: 22.1.8\n",
+  "scope": "Execute from fresh frozen current selected source after formatting drift and isolated16MiBcache-child refinement. Frozen runner source library with raster, including both new large/dense regressions; only this target. Not full-all-target/allfeatures/platform/corpus or whole-operation speedup proof.",
+  "child_pid": 9266,
+  "returncode": 0,
+  "log_sha256": "93820e909c842006dd8fea2b0f9e2600d46d90fb7922111d6b9d7311a0bf2ed2",
+  "source_unchanged": true
+}

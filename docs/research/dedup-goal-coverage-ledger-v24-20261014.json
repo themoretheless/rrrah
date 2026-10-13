@@ -1,0 +1,244 @@
+{
+  "status": "incomplete",
+  "objective": "ускорение и оптимизация, библиотека покрывает все кейсы",
+  "scope": "Original exact plus visual library,500-source review, positive/negative quality, formats/platforms, mutation/cancellation/cache, resources and scale; no reduction to implemented subset",
+  "requirements": [
+    {
+      "requirement": "exact_identity",
+      "status": "partial_verified",
+      "evidence": "docs/research/dedup-exact-full-controls-audit-20261013.json",
+      "evidence_sha256": "b225dc14380262264eed36b1abb096b7ee61fff6794d437621d028d55884d79b",
+      "remaining_or_scope": "Targeted exact controls plus complete frozen initial-consensus991test inventory. Other-platform/huge-file qualification remains missing; full gate predates two native-wrapper/helper file changes."
+    },
+    {
+      "requirement": "pixel_publication",
+      "status": "partial_verified",
+      "evidence": "docs/research/dedup-indexed-publication-audit-20261013.json",
+      "evidence_sha256": "1c433387774356a315422af53a4671bd7f865d9f9cd9ead47b67fead3d26dbda",
+      "remaining_or_scope": "Targeted publication/collision controls plus foreign four-PNG exact pipeline crosscheck and full991frozen inventory. Other-platform/all-format/frame matrix remains open."
+    },
+    {
+      "requirement": "verified_group_scaling",
+      "status": "partial_verified",
+      "evidence": "docs/research/dedup-verified-group-scaling-audit-20261013.json",
+      "evidence_sha256": "6f6722d6ba849466548969863e022bd8a2050f6e043fcf7711523387417e561a",
+      "remaining_or_scope": "8/32/64/2561MiB files; does not prove million-file scalability or hard memory cap"
+    },
+    {
+      "requirement": "exhaustive_pair_scaling",
+      "status": "open",
+      "evidence": "docs/research/dedup-exact-collection-scaling-audit-20261013.json",
+      "evidence_sha256": "844d44cbc00d67b2b50d274c45b44d327fc3108e22ec4f998014fc3a72fd1d26",
+      "remaining_or_scope": "Quadratic repeated full reads remain; previously rejected cache not readopted"
+    },
+    {
+      "requirement": "worker_control",
+      "status": "partial_verified",
+      "evidence": "docs/research/dedup-model-worker-group-fixed-v2-audit-20261013.json",
+      "evidence_sha256": "e334b227b023c0e1f85869bb6ae4e7693652727f92a3f2bddb4d0f496653e4ce",
+      "remaining_or_scope": "Mac focused125, Linux default55 and Windows default compile-only evidence retained; full initial-consensus991 inventory passes. Actual group-parent native self and corrected atomic learned self controls pass. Hard RSS/disk/scheduling, escaped groups, descendant reaping beyond owned child, persistent workers and broader platform execution remain open.",
+      "previous_evidence": "docs/research/dedup-model-worker-decode-parent-audit-20261013.json",
+      "previous_evidence_sha256": "0571dae364957635717d6c693b391c80fbadf1e20896bec17eb11fab8e44eca2",
+      "previous_focused_evidence": "docs/research/dedup-worker-group-focused-audit-20261013.json"
+    },
+    {
+      "requirement": "negative_quality",
+      "status": "open_confirmed_false_acceptances",
+      "evidence": "docs/research/dedup-latest-native-false-controls-audit-20261013.json",
+      "evidence_sha256": "da2ac6b425a9f10be142e9cc342089cfe24b826cccf4a4b3dbb7dab1d5bec368",
+      "remaining_or_scope": "Historical one-direction false accepts remain. Current atomic common-policy negative campaign incomplete; latest observed48unknown of233, not verified rejections. New optimized runner full heldout negative corpus missing; no default/collection/universal precision proof."
+    },
+    {
+      "requirement": "source_review500",
+      "status": "open",
+      "evidence": "docs/research/dedup-500/registry-coverage-audit-v19-20261014.json",
+      "evidence_sha256": "119d52a2402bd3759dad7ff6497877fe3991fefc88fa30b7ef8966b1a96abd2a",
+      "remaining_or_scope": "500unique2938storedpins42detailed-reference rows21full-review declarations. Original243complete7file source,5upstreamtests13modulecontrols; original160fivefiles14ASTmethodcontrols. All500fullsource reviews still unproven."
+    },
+    {
+      "requirement": "combined_decode",
+      "status": "partial_verified",
+      "evidence": "docs/research/dedup-vendor-recipe-full-decode-audit-20261013.json",
+      "evidence_sha256": "521508154610fbf7085b1db6bff70f78b00400f98df40db84bfc9cb52d5709f8",
+      "remaining_or_scope": "Previously verified initial-consensus991gate is frozen historical source. Full cache-v3 predecessor all-target gate still running. Latest runner58raster unit tests pass; latest runner decode focused gate running. No current full-alltargets/allfeatures/formats/platforms proof."
+    },
+    {
+      "requirement": "native458",
+      "status": "verified_fixed_old_snapshot_not_current_parity",
+      "evidence": "docs/research/dedup-current-native-bank-complete-audit-20261013.json",
+      "evidence_sha256": "95d298aa5c74a3c255770781ddd5fbab10677b5582aa531646407d8b756e6533",
+      "remaining_or_scope": "Historical458directions and later full229atomic positivepairs verified on their respective older frozen sources. Current linear runner only small synthetic/actual self controls; full latest-source native corpus parity missing."
+    },
+    {
+      "requirement": "formats_and_platforms",
+      "status": "open",
+      "evidence": "docs/DUPLICATE_LIBRARY_CONTRACT.md",
+      "evidence_sha256": "81a1c2015190c1d14c9c1100bae5d036625fd438e753012a2102167b8cb679ce",
+      "remaining_or_scope": "Frozen Mac default+decode991 inventory and actual native controls. Linux default worker55 and Windows default compile-only retained. Full latest-source formats/frames/IO/platform/feature matrix remains unproven."
+    },
+    {
+      "requirement": "visual_publication",
+      "status": "partial_verified",
+      "evidence": "docs/research/dedup-visual-publication-audit-20261013.json",
+      "evidence_sha256": "58495988ec7e17c78cf9cf229a4843ab73866823f48d4491af8caf110e3d2a35",
+      "remaining_or_scope": "Targeted publication60tests/8targets included in frozen991 inventory. Latest-root/platform/all specialized wrapper matrix missing; new consensus not yet routed through collection/publication defaults."
+    },
+    {
+      "requirement": "local_publication",
+      "status": "partial_verified",
+      "evidence": "docs/research/dedup-local-mixed-publication-audit-20261013.json",
+      "evidence_sha256": "314e0c92a339a40bbb8526e67baf2127c57a8bed57c35100145c18d50e97aa4d",
+      "remaining_or_scope": "Targeted20tests and frozen991 inventory. Every specialized wrapper/current native consensus collection/publication route still unqualified."
+    }
+  ],
+  "completion_proven": false,
+  "previous_ledger": "docs/research/dedup-goal-coverage-ledger-v23-20261014.json",
+  "hash_scope": "Evidence hashes captured at this audit; mutable producer reports may later change.",
+  "previous_ledger_sha256": "ee14864a5effd9e0248063ac6ec57c2990d19b8995c5fb8e0489d5deebdad23e",
+  "new_additive_geometry_evidence": {
+    "component_partition_audit": "docs/research/dedup-bank-partition-audit-20261013.json",
+    "fixed_split_geometry_audit": "docs/research/dedup-geometry-validation-fit-audit-v2-20261013.json",
+    "bank_geometry_audit": "docs/research/dedup-bank-geometry-v2-audit-20261013.json",
+    "scope": "Focused source snapshots only; no acceptance fix or current full458 preservation."
+  },
+  "current_full_gate": "docs/research/dedup-consensus-complete-decode-20261013.json",
+  "latest_quality_diagnostics": {
+    "docs/research/dedup-competitive-rank-v2-audit-20261013.json": "ff9318b357a876d7c753b4af0befcffe54546110973879784e68ea58ad96b27b",
+    "docs/research/dedup-competitive-rank-diagnostic-audit-20261013.json": "779cf9254a2d14541ad72f8a0244f937a35805ec914d45a099c7ff3255a3e0cd",
+    "docs/research/dedup-local-deformation-diagnostic-audit-20261013.json": "0332bbfc3fa1fa0e2c09bbb09cbdb109e6d99588e8a850ac4538e33f2f4eff7a",
+    "docs/research/dedup-local-deformation-outer-diagnostic-audit-20261013.json": "660547afb0f5857c50f1f30f3a6d1c6c3be6a8ab0a9c5b1e16c51c9043a1b113",
+    "docs/research/dedup-copydays-nearest-wrong-native-prefix-0007-audit-20261013.json": "dbc8a4030a5bc7f18a5aa11e6149e44cf6f66ed16b1c37ace43f01193dee9d89",
+    "docs/research/dedup-500/registry-coverage-audit-v5-20261013.json": "1d339b9be396f53ffe267d296dd7a8c938aad85464b05ee15e81cd6975ff1b65"
+  },
+  "quality_conclusion": "Opt-in atomic two-direction consensus implemented. All229common-policy positives independently verified on pre-cache frozen source. Negative corpus incomplete; unknown is not rejection. Collection/default integration and general precision remain unproven.",
+  "current_full_gate_excludes_competitive_rank": false,
+  "latest_full_gate": {
+    "status": "verified_frozen_initial_consensus_default_decode_991passed6ignored154targets",
+    "audit": "docs/research/dedup-consensus-complete-decode-audit-20261013.json",
+    "audit_sha256": "5b2ea981380594dd86f198dfbe2ce30a3a16c8d5545560b56d8ad2174081871f",
+    "later_source_delta": [
+      "crates/rrrah-dedup/src/search_portfolio.rs",
+      "crates/rrrah-dedup/src/model_loftr.rs"
+    ],
+    "scope": "Latest complete gate is frozen initial consensus source. Later helper/native adapter separately verified; do not claim current-source complete gate.",
+    "later_source_delta_scope": "Runner snapshot adds optional linear scratch and two tests after cache-v3. No complete current-source gate. Cache-v3 complete predecessor gate still running."
+  },
+  "deformation_replay": {
+    "audit": "docs/research/dedup-mesh-deformation-replay-audit-20261013.json",
+    "audit_sha256": "964cf7fc3d43d3993707c3e0288bf3206f0c30e48bffcbc04c54a5e6d80efb8c",
+    "acceptance_fix_proven": false
+  },
+  "latest_source500": {
+    "inventory": "docs/research/dedup-500/registry-coverage-audit-v19-20261014.json",
+    "inventory_sha256": "119d52a2402bd3759dad7ff6497877fe3991fefc88fa30b7ef8966b1a96abd2a",
+    "entries_with_detailed_references": 42,
+    "full_review_declarations": 21,
+    "all500_full_reviews_proven": false,
+    "latest_actual_review": "Original243all7textfiles read;5unchanged upstream tests and13actual module/Vinyl controls. No identity or broad runtime adoption."
+  },
+  "vendor_recipe_focused_audit": "docs/research/dedup-vendor-recipe-focused-audit-20261013.json",
+  "competitive_grid_diagnostic": "docs/research/dedup-grid-fence-competitive-audit-20261013.json",
+  "aligned_sscd_diagnostic_audit": "docs/research/dedup-aligned-sscd-diagnostic-audit-20261013.json",
+  "latest_hard_negative_prefix_audit": {
+    "path": "docs/research/dedup-copydays-nearest-wrong-native-resume-prefix-0140-audit-20261013.json",
+    "sha256": "f3c8910ae9bc55ddc76b995d23c7e45d4648dfc2fd8b57c6af4859bd835c9f10",
+    "completed": 140,
+    "false_acceptance": 2,
+    "inconclusive": 138
+  },
+  "worker_windows_compile_audit": "docs/research/dedup-worker-group-v2-windows-check-audit-20261013.json",
+  "worker_linux_audit": "docs/research/dedup-worker-group-v2-linux-audit-20261013.json",
+  "worker_native_parent_audit": "docs/research/dedup-model-worker-group-native-parent-audit-20261013.json",
+  "worker_failed_v1_audit": "docs/research/dedup-model-worker-group-fixed-failure-audit-20261013.json",
+  "worker_group_complete_decode_audit": {
+    "path": "docs/research/dedup-worker-group-complete-decode-audit-20261013.json",
+    "sha256": "3f8536f8ab3f8662a408d8e76a1400e1feeb71d2b492beac69d5230f4e495848",
+    "passed": 988,
+    "failed": 0,
+    "ignored": 6,
+    "targets": 154
+  },
+  "current_diagonal_controls_audit": {
+    "path": "docs/research/dedup-current-diagonal-consensus-controls-audit-20261013.json",
+    "sha256": "76fdb820d5ef7a7468e8e70e258a586e68888bc482867caecf2c01a92a489ef5"
+  },
+  "native_foreign_pixel_crosscheck_audit": {
+    "path": "docs/research/dedup-image-find-native-crosscheck-audit-20261013.json",
+    "sha256": "69094a5577c3d34a2b9a742c3933a33d3cfff4fdb201f32fc3bd83494a4a3799"
+  },
+  "native_bank_consensus_api": {
+    "status": "implemented_opt_in_positive_corpus_verified_default_integration_open",
+    "implementation": "docs/research/dedup-native-bank-consensus-implementation-20261013.json",
+    "gate": "docs/research/dedup-consensus-complete-decode-20261013.json"
+  },
+  "second_hard_negative_diagnostic": "docs/research/dedup-second-hard-negative-diagnostic-20261013.json",
+  "native_consensus_adapter": {
+    "report": "docs/research/dedup-native-bank-consensus-native-adapter-20261013.json",
+    "sha256": "d83efff4b78a43a71a7ba791441c96c69c5289c75aaeefb10073a46d4e734748"
+  },
+  "actual_atomic_natural_controls_audit": {
+    "path": "docs/research/dedup-consensus-native-v2-execution-prefix-0005-audit-20261013.json",
+    "sha256": "3a7db9ec89f2ee37681250b743b22308b06c3a812c43df728bdc04f2f9853aaa"
+  },
+  "native_gradient_profile": {
+    "path": "docs/research/dedup-consensus-native-gradient-profile-20261013.json",
+    "sha256": "86210ef7646f409f0b781c0c4914d1c68b7f56f1b93b7532b1ab8f38277aefdc"
+  },
+  "current_full_gate_matches_latest_native_source": false,
+  "performance_experiments": {
+    "path": "docs/research/dedup-gradient-performance-experiments-audit-20261013.json",
+    "sha256": "22a7d26c21e38091f5e7e783e2639b7d5926579398b083e21f575b907eef19d2",
+    "adopted": false,
+    "scope": "Earlier rejected bound approaches only; later exact admitted cache is separately implemented and benchmarked."
+  },
+  "current_atomic_corpus_campaigns": {
+    "positive": "docs/research/dedup-consensus-current-positive-20261013.json",
+    "negative": "docs/research/dedup-consensus-current-negative-20261013.json",
+    "required": [
+      229,
+      233
+    ],
+    "scope": "229positive pairs independently verified, on pre-cache snapshot;233negative campaign incomplete. Not latestcache/fullcollection proof.",
+    "positive_complete_audit": "docs/research/dedup-consensus-current-positive-prefix-0229-audit-20261013.json"
+  },
+  "managed_cache": {
+    "source": "docs/research/dedup-gradient-cache-v3-source-20261013.json",
+    "component_benchmark_audit": "docs/research/dedup-managed-cache-benchmark-audit-20261014.json",
+    "focused_decode_audit": "docs/research/dedup-gradient-cache-v3-decode-audit-20261013.json",
+    "focused_default_audit": "docs/research/dedup-gradient-cache-v3-default-audit-20261013.json",
+    "complete_gate": "docs/research/dedup-gradient-cache-v3-complete-decode-20261013.json",
+    "whole_search_speedup_proven": false,
+    "uncached_version_comparison_audits": [
+      "docs/research/dedup-managed-version-benchmark-audit-20261014.json",
+      "docs/research/dedup-managed-large-version-benchmark-audit-20261014.json"
+    ]
+  },
+  "current_evidence_pins": {
+    "docs/research/dedup-gradient-cache-v3-source-20261013.json": "a709940c45b6948e340a496140dd44f28ae9894640209f0fd493ccb44e95738a",
+    "docs/research/dedup-managed-cache-benchmark-audit-20261014.json": "e43dcf80819ac2fd3596d8261e2f1adbbe963edf0dc58b81a3270b789f27ea12",
+    "docs/research/dedup-gradient-cache-v3-decode-audit-20261013.json": "6fb91f38badd5f1bbfcbe7e9719656d6a0aa06e3f30148ffbfa64ec5f40c305f",
+    "docs/research/dedup-gradient-cache-v3-default-audit-20261013.json": "2ba9ca8b9b6500bf47f290248f0511eefccd9914163dbbb99db1457cbb684a81",
+    "docs/research/dedup-gradient-cache-v3-complete-decode-20261013.json": "5a53090f207d9df5829ae97214a2c84d047966b71f0f902e8050b051c82c2977"
+  },
+  "linear_runner_optimization": {
+    "implementation": "docs/research/dedup-gradient-runner-implementation-20261014.json",
+    "implementation_sha256": "2c401ad6f02c329699dc3cb88d7f1b0d4bea2e65180f8e308ae37937e93256a8",
+    "raster_passed": 58,
+    "raster_failed": 0,
+    "raster_ignored": 3,
+    "managed_component_ratio": 0.5152242980695797,
+    "whole_search_speedup_proven": false,
+    "latest_source_full_gate_proven": false,
+    "native_build": {
+      "path": "docs/research/dedup-runner-native-probe-20261014.json",
+      "status": "built_pending_execution_at_build_report",
+      "operation_campaign": "docs/research/dedup-runner-native-operation-benchmark-20261014.json",
+      "scope": "Runtime campaign running; no whole-operation speedup proof."
+    },
+    "first_operation_prefix": {
+      "path": "docs/research/dedup-runner-native-operation-prefix-0003-audit-20261014.json",
+      "sha256": "03b971d6b7d622c706b608517feb61a682cc4f2b2a39e2307c9872250f23c393",
+      "scope": "First completed self-control pair CPUratio0.91345,wall0.80650,semantics unchanged and credit released. Onecase only, not universal whole-search proof."
+    }
+  }
+}

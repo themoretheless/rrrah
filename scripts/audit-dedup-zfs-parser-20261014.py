@@ -1,0 +1,7 @@
+#!/usr/bin/env python3
+from pathlib import Path
+import json,hashlib
+R=Path(__file__).resolve().parents[1];D=R/'docs/research/dedup-500';P=D/'zfs-find-deduped-complete-review-v2-20261014.json';p=json.loads(P.read_text());sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest();assert all(sha(k)==h for k,h in p['pins'].items());assert sha(p['prior_control_report']['path'])==p['prior_control_report']['sha256'];S=Path(p['source']);tree=json.loads((D/'evidence/mrighele--zfs-find-deduped/tree.json').read_text());assert not tree['truncated'] and len(tree['tree'])==len(p['fully_read'])==3;assert {e['path'] for e in tree['tree']}==set(p['file_hashes'])
+for e in tree['tree']:
+ b=(S/e['path']).read_bytes();assert sha(S/e['path'])==p['file_hashes'][e['path']];assert hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()==e['sha']
+assert len(p['controls'])==12 and next(r for r in p['controls'] if r['control']=='last_file_without_blank_is_lost')['result']==[];assert next(r for r in p['controls'] if r['control']=='nonzero_zdb_status_ignored_ddt')['result']=={};O=D/'zfs-find-deduped-complete-audit-20261014.json';assert not O.exists();O.write_text(json.dumps(dict(status='verified_three_file_source_twelve_AST_parser_controls_not_ZFS_execution',registry_index=190,pins={str(f):sha(f) for f in [P,Path(__file__)]},whole_repo_source_read=True,whole_runtime_qualified=False,controls=12,scope=p['scope'],pin_relocation=p['pin_relocation']),indent=2)+'\n');print(O)

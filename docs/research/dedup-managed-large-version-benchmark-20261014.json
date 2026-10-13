@@ -1,0 +1,59 @@
+{
+  "status": "complete_pending_audit",
+  "pid": 28573,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/benchmark-dedup-managed-large-version-20261014.py": "35850dd33382cc2ea6c54f1f12ca7de54b3929a6edcf6db7180bbc667009ca15",
+    "/Users/themoretheless/.codex/tmp/rrrah-managed-baseline-benchmark-20261014/target/release/managed-baseline-benchmark": "afbe5ee70d912b4e51a491345f6ebcc90d04843235df75a13c852e4d5ff3b3a8",
+    "/Users/themoretheless/.codex/tmp/rrrah-managed-cache-benchmark-20261014/target/release/managed-cache-off-benchmark": "9b392aeeafb1fec7ba02480955f00d0e8a2420ee5b16b5db02e632de024567f5",
+    "/Users/themoretheless/.codex/tmp/rrrah-managed-large-features-20261014/derived-1537.bin": "a87402e08992f97d20ca2b015b3fcf53ef0eeb7c2a37f8fa6a0f84742545dce9",
+    "/Users/themoretheless/.codex/tmp/rrrah-managed-baseline-benchmark-20261014/Cargo.toml": "391bf0a65b628948c07caa63fa913cba580f703f4af024a0effc98757716458d",
+    "/Users/themoretheless/.codex/tmp/rrrah-managed-baseline-benchmark-20261014/Cargo.lock": "09d2988f47b6c431bc6afc754a2cb5f63a30fe7667be87475264837321f9f89a",
+    "/Users/themoretheless/.codex/tmp/rrrah-managed-baseline-benchmark-20261014/src/main.rs": "512f5f1f78f8c76802a1263e3c5561fbd5f8e8fe1acfb81bc7eccb7b9ff09937",
+    "/Users/themoretheless/.codex/tmp/rrrah-managed-cache-off-benchmark-20261014/Cargo.toml": "83c1b50405b364d57ad37da13777ac59b380154f9770b383f283c0ce3adb5b0a",
+    "/Users/themoretheless/.codex/tmp/rrrah-managed-cache-off-benchmark-20261014/Cargo.lock": "759157e5eb2b4761c720eaefc21c5b401a03d0dd59d2cc2e53bbab636cdc6a11",
+    "/Users/themoretheless/.codex/tmp/rrrah-managed-cache-off-benchmark-20261014/src/main.rs": "f015c74fa3352d55625bf862c23bfc7e51eca036a57d393588837c3ff32bdde2"
+  },
+  "results": [
+    {
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-managed-large-version-benchmark-20261014/derived_large-0-baseline.json",
+      "sha256": "939e5e8e28970d9c9f25965b7d7615eb24f1c565f569f45dbe34fdcec0361db9",
+      "returncode": 0
+    },
+    {
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-managed-large-version-benchmark-20261014/derived_large-0-cache_disabled.json",
+      "sha256": "d0e65d6a645fcf02a0c3c07fac757969c3a537778b32caa8ce2cb541703b962f",
+      "returncode": 0
+    },
+    {
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-managed-large-version-benchmark-20261014/derived_large-1-cache_disabled.json",
+      "sha256": "b859913c06b56ef8a2625536d3286d7f7aa689506215012162359d8acd8d886e",
+      "returncode": 0
+    },
+    {
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-managed-large-version-benchmark-20261014/derived_large-1-baseline.json",
+      "sha256": "f95087e7b818d8c1c6bc2a4e1d5538b3dde165c7a2d87ae23ea2e8b8ffb452e1",
+      "returncode": 0
+    },
+    {
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-managed-large-version-benchmark-20261014/derived_large-2-baseline.json",
+      "sha256": "729d009703882a510cfe67fac07d51ca719a076d12f7589ee5e22971208102db",
+      "returncode": 0
+    },
+    {
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-managed-large-version-benchmark-20261014/derived_large-2-cache_disabled.json",
+      "sha256": "81aaa25452358989464f379c94786d3dd563e8ee4c6183af546ace03d9f0973b",
+      "returncode": 0
+    },
+    {
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-managed-large-version-benchmark-20261014/derived_large-3-cache_disabled.json",
+      "sha256": "030666a7f25477fc99350fca5677fb141e7e32845350671227fc0c2f297dbced",
+      "returncode": 0
+    },
+    {
+      "report": "/Users/themoretheless/.codex/tmp/rrrah-managed-large-version-benchmark-20261014/derived_large-3-baseline.json",
+      "sha256": "61bd703127c3ee8185f8d093f949dee96c5e18197ab3b60a96298927e4e799a9",
+      "returncode": 0
+    }
+  ],
+  "scope": "Derived1537feature synthetic repeated natural bank,2.36million pairs exceeding cache cap; source manifest in rrrah-managed-large-features-20261014. and native distance0.5/ratio0.64/radius2 policy. Baseline frozen source versus cache-v3 with zero optional headroom in both paths. Four alternating fresh-process pairs for one derived case, each process performs20same uncached managed calls. Child user+systemCPU measured independently of wall contention. Correspondence counts compared across versions, exact bits only internally per executable; source versions include formatting drift."
+}

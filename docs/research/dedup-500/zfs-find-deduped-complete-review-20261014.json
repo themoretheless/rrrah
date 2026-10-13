@@ -1,0 +1,270 @@
+{
+  "status": "complete_three_text_file_read_twelve_original_ast_parser_controls",
+  "registry_index": 190,
+  "repository": "mrighele/zfs-find-deduped",
+  "commit": "e9664740b41fee269a96331c7699e4d12ddb2d63",
+  "source": "/Users/themoretheless/.codex/tmp/rrrah-zfs-find-deduped-source-20261014",
+  "file_hashes": {
+    "LICENSE": "3c5db45d667480fdab1dbd8e43904f65f9c8dd4a23f3b0ebc2975cad3e23e468",
+    "README.md": "aa7b02a1c566a2b4a0781e60ef4afd40e3e7dd7b86967780dd2c30ccf0d10e28",
+    "zfs_find_deduped.py": "bf549ea676a3fa82a96802b94ecefe8d1c79277faf4488d331d05af400c0402c"
+  },
+  "fully_read": [
+    "LICENSE",
+    "README.md",
+    "zfs_find_deduped.py"
+  ],
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/review-dedup-zfs-parser-20261014.py": "0f9c3622db55e0f9add4303bf2bc3b9ebda7a112afcf61fa3c1f2d7e87f564ed",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/mrighele--zfs-find-deduped/tree.json": "83a600c7437cdf64b11dc41063bebf0f2aa124a022b2067683f49d17ef435ac3",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/reviews/190.json": "270d6fe4bb1c1f39934c4e323c4f6299a7f9945639f480648ab4a33c44ddcd97",
+    "/Users/themoretheless/.codex/tmp/rrrah-zfs-find-deduped-source-20261014/LICENSE": "3c5db45d667480fdab1dbd8e43904f65f9c8dd4a23f3b0ebc2975cad3e23e468",
+    "/Users/themoretheless/.codex/tmp/rrrah-zfs-find-deduped-source-20261014/README.md": "aa7b02a1c566a2b4a0781e60ef4afd40e3e7dd7b86967780dd2c30ccf0d10e28",
+    "/Users/themoretheless/.codex/tmp/rrrah-zfs-find-deduped-source-20261014/zfs_find_deduped.py": "bf549ea676a3fa82a96802b94ecefe8d1c79277faf4488d331d05af400c0402c"
+  },
+  "controls": [
+    {
+      "control": "file_terminated_by_blank_is_emitted",
+      "result": [
+        [
+          "/a",
+          [
+            "ABC"
+          ]
+        ]
+      ],
+      "error": null,
+      "child_exitcode": 0,
+      "calls": [
+        {
+          "argv": [
+            "/sbin/zdb",
+            "-ddddd",
+            "pool/fs"
+          ],
+          "text": false
+        },
+        {
+          "readlines_materialized_rows": 4
+        }
+      ]
+    },
+    {
+      "control": "last_file_without_blank_is_lost",
+      "result": [],
+      "error": null,
+      "child_exitcode": 0,
+      "calls": [
+        {
+          "argv": [
+            "/sbin/zdb",
+            "-ddddd",
+            "pool/fs"
+          ],
+          "text": false
+        },
+        {
+          "readlines_materialized_rows": 3
+        }
+      ]
+    },
+    {
+      "control": "short_indirect_record_raises",
+      "result": null,
+      "error": "IndexError",
+      "child_exitcode": 0,
+      "calls": [
+        {
+          "argv": [
+            "/sbin/zdb",
+            "-ddddd",
+            "pool/fs"
+          ],
+          "text": false
+        },
+        {
+          "readlines_materialized_rows": 3
+        }
+      ]
+    },
+    {
+      "control": "invalid_utf8_block_raises",
+      "result": null,
+      "error": "UnicodeDecodeError",
+      "child_exitcode": 0,
+      "calls": [
+        {
+          "argv": [
+            "/sbin/zdb",
+            "-ddddd",
+            "pool/fs"
+          ],
+          "text": false
+        },
+        {
+          "readlines_materialized_rows": 3
+        }
+      ]
+    },
+    {
+      "control": "synthetic_ddt_row_parsed",
+      "result": {
+        "ABC": 2
+      },
+      "error": null,
+      "child_exitcode": 0,
+      "calls": [
+        {
+          "argv": [
+            "/sbin/zdb",
+            "-DDDDD",
+            "pool"
+          ],
+          "text": true
+        },
+        {
+          "readlines_materialized_rows": 1
+        }
+      ]
+    },
+    {
+      "control": "duplicate_ddt_key_last_wins",
+      "result": {
+        "ABC": 1
+      },
+      "error": null,
+      "child_exitcode": 0,
+      "calls": [
+        {
+          "argv": [
+            "/sbin/zdb",
+            "-DDDDD",
+            "pool"
+          ],
+          "text": true
+        },
+        {
+          "readlines_materialized_rows": 2
+        }
+      ]
+    },
+    {
+      "control": "short_ddt_record_raises",
+      "result": null,
+      "error": "IndexError",
+      "child_exitcode": 0,
+      "calls": [
+        {
+          "argv": [
+            "/sbin/zdb",
+            "-DDDDD",
+            "pool"
+          ],
+          "text": true
+        },
+        {
+          "readlines_materialized_rows": 1
+        }
+      ]
+    },
+    {
+      "control": "invalid_ddt_refcount_raises",
+      "result": null,
+      "error": "ValueError",
+      "child_exitcode": 0,
+      "calls": [
+        {
+          "argv": [
+            "/sbin/zdb",
+            "-DDDDD",
+            "pool"
+          ],
+          "text": true
+        },
+        {
+          "readlines_materialized_rows": 1
+        }
+      ]
+    },
+    {
+      "control": "nonzero_zdb_status_ignored_ddt",
+      "result": {},
+      "error": null,
+      "child_exitcode": 42,
+      "calls": [
+        {
+          "argv": [
+            "/sbin/zdb",
+            "-DDDDD",
+            "pool"
+          ],
+          "text": true
+        },
+        {
+          "readlines_materialized_rows": 0
+        }
+      ]
+    },
+    {
+      "control": "nonzero_zdb_status_ignored_files",
+      "result": [],
+      "error": null,
+      "child_exitcode": 42,
+      "calls": [
+        {
+          "argv": [
+            "/sbin/zdb",
+            "-ddddd",
+            "pool/fs"
+          ],
+          "text": false
+        },
+        {
+          "readlines_materialized_rows": 0
+        }
+      ]
+    },
+    {
+      "control": "missing_blank_before_next_path_loses_previous_file",
+      "result": [
+        [
+          "/b",
+          [
+            "DEF"
+          ]
+        ]
+      ],
+      "error": null,
+      "child_exitcode": 0,
+      "calls": [
+        {
+          "argv": [
+            "/sbin/zdb",
+            "-ddddd",
+            "pool/fs"
+          ],
+          "text": false
+        },
+        {
+          "readlines_materialized_rows": 7
+        }
+      ]
+    },
+    {
+      "control": "pool_extracted_without_validation",
+      "result": "",
+      "error": null,
+      "child_exitcode": 0,
+      "calls": []
+    }
+  ],
+  "decision": "reject_domain_no_content_identity_or_code_adoption",
+  "findings": [
+    "ReportsDDTblock sharing/uniqueness, not complete file equality; shared blocks do not prove identical file bytes.",
+    "Externalzdbexitstatus ignored; empty output on failure becomes successful empty result.",
+    "Parser relies on blank line terminators; final unterminated or replaced current path omitted. Unvalidated token positions/refcounts/UTF8 can raise.",
+    "Both command outputs fully materialized withreadlines; fullDDTmap/results retained. No cancellation, memory/work cap, source generation consistency or output-format version guards.",
+    "ActualMITtext read. No upstream tests/config/dependency manifest in complete3filetree."
+  ],
+  "scope": "All3stored pinned-tree files completely read and Gitblob IDs checked.12original function AST controls with substituted Popen/stdout only; no /sbin/zdb execution, no privilege escalation, no actualZFSdump/pool/filesystem/OS qualification. Synthetic tokens exercise parser assumptions, not validated actualZDBformat or real file duplicates. Source unchanged."
+}

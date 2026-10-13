@@ -1,0 +1,16 @@
+#!/usr/bin/env python3
+from pathlib import Path
+import json,hashlib,subprocess,os
+R=Path(__file__).resolve().parents[1];D=R/'docs/research';T=Path('/Users/themoretheless/.codex/tmp');F=T/'rrrah-gradient-natural-runner-up-benchmark-20261014';assert not F.exists();F.mkdir();sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest();old_path=D/'dedup-gradient-natural-bound-benchmark-20261013.json';old=json.loads(old_path.read_text());old_plan_path=D/'dedup-gradient-natural-bound-benchmark-plan-20261013.json';old_plan=json.loads(old_plan_path.read_text());assert old['status']=='complete_eight_direction_microbench_pending_audit' and all(sha(k)==h for k,h in old_plan['pins'].items());proto_path=D/'dedup-gradient-runner-up-experiment-20261014.json';proto=json.loads(proto_path.read_text());assert proto['returncode']==0 and all(sha(k)==h for k,h in proto['pins'].items());exe=F/'experiment';subprocess.run(['cp','-cp',str(T/'rrrah-gradient-runner-up-experiment-20261014/experiment'),str(exe)],check=True);cases=[];pins={str(p):sha(p) for p in [old_path,old_plan_path,proto_path,exe,Path(__file__)]}
+for e in old['extractions']:assert sha(e['features_file'])==e['features_sha256'];pins[e['features_file']]=e['features_sha256'];pins[e['input']]=old_plan['pins'][e['input']]
+for r in old['results']:
+ v=json.loads(Path(r['report']).read_text());assert sha(r['report'])==r['sha256'];cases.append(dict(index=v['index'],label=v['label'],left=v['left'],right=v['right'],command=[str(exe)]+v['command'][1:]))
+P=D/'dedup-gradient-natural-runner-up-benchmark-plan-20261014.json';assert not P.exists();P.write_text(json.dumps(dict(cases=cases,pins=pins,scope='Same retained7image descriptor fixtures/8direction runs/2matching modes/9alternating pairs as rejected bound experiment; exact runner-up distinct-distance proof with linear auxiliary indices/flags. Exact nearest table bits and cancellation/correspondence/error properties from standalone source extraction. Microbench policy distance2/ratio0.8,not complete native acceptance settings or whole-operation timing. Prototype only, production managed admission not implemented; host shared with corpus jobs.'),indent=2)+'\n');O=D/'dedup-gradient-natural-runner-up-benchmark-20261014.json';assert not O.exists();d=dict(status='running',producer_pid=os.getpid(),plan_sha256=sha(P),results=[])
+def save():
+ q=O.with_suffix('.tmp');q.write_text(json.dumps(d,indent=2)+'\n');q.replace(O)
+save()
+for c in cases:
+ child=subprocess.Popen(c['command'],cwd=R,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True);d.update(active_index=c['index'],child_pid=child.pid);save();out,err=child.communicate();p=F/f"case-{c['index']:02}.json";p.write_text(json.dumps(dict(c,returncode=child.returncode,stdout=out,stderr=err),indent=2)+'\n');d['results'].append(dict(index=c['index'],report=str(p),sha256=sha(p),returncode=child.returncode))
+ if child.returncode:d['status']='terminal_failure';save();raise SystemExit(child.returncode)
+ rows=[json.loads(l) for l in out.splitlines()];assert len(rows)==19 and rows[0]['fixtures']==164 and all(r['nearest_tables_bit_identical'] for r in rows[1:]);save()
+assert all(sha(k)==h for k,h in pins.items());d['status']='complete_eight_direction_runner_up_microbench_pending_audit';save();print(d['status'])
