@@ -1017,7 +1017,7 @@ mod tests {
             ..Default::default()
         };
         opcodes::validate_lists(&lists).unwrap();
-        let mut data = vec![0.5; 16];
+        let mut data = vec![0.5_f64; 16];
         opcodes::apply_list(&parsed, &mut data, 4, 4, 1, None, 1.0).unwrap();
         assert_eq!(data[0], 0.875);
         assert_eq!(data[5], 1.0);

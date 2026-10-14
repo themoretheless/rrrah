@@ -8,8 +8,12 @@ pub use rrrah_memory::{BufferError, MemoryBudget, MutableBuffer, PixelBuffer, Re
 
 mod color;
 pub mod edit;
+pub mod histogram;
 pub mod develop;
-pub use develop::{DemosaicAlgorithm, DemosaicConfig, demosaic_bayer_superpixel, demosaic_f32, demosaic_u16};
+pub use develop::{
+    DemosaicAlgorithm, DemosaicConfig, demosaic_bayer_superpixel, demosaic_bayer_superpixel_f64, demosaic_f32,
+    demosaic_f64, demosaic_u16, demosaic_u16_f64,
+};
 mod frame;
 mod geometry;
 mod raster;
@@ -24,11 +28,11 @@ pub use raster::{DecodedRaster, RasterColorSpace, RasterError, RasterPixels};
 pub use color::{
     BRADFORD, CameraProfileError, DNG_ILLUMINANT_D65, DngColorMatrix, GREEN_PLANE_RELATIVE_TOLERANCE,
     GreenPlane, RgbChromaticities, SRGB_TO_XYZ_D65, SRGB_TO_XYZ_D65_F64, WB_LUMINANCE_WEIGHTS, XYZ_WHITE_D65,
-    aces_fitted, aces_tone_map_rgb, apply_3x3, apply_exposure, bradford_adaptation, bradford_adaptation_f64,
+    aces_fitted, aces_fitted_f64, aces_tone_map_rgb, aces_tone_map_rgb_f64, apply_3x3, apply_3x3_f64, apply_exposure, apply_exposure_f64, bradford_adaptation, bradford_adaptation_f64,
     camera_to_linear_srgb, camera_to_linear_srgb_precise, camera4_to_linear_srgb_precise,
     diagnose_green_planes, display_wb_gains, dng_illuminant_white, green_relative_wb_gains, invert_3x3,
     invert_3x3_f64, linear_rgb_to_srgb_from_xy, linear_rgb_to_srgb_with_adopted_neutral_from_xy,
-    luminance_normalize_wb_gains, multiply_3x3, multiply_3x3_f64, reconstruct_clipped_camera_highlight,
+    luminance_normalize_wb_gains, multiply_3x3, multiply_3x3_f64, reconstruct_clipped_camera_highlight, reconstruct_clipped_camera_highlight_f64,
     resolve_dng_neutral_matrix, select_dng_xyz_to_camera, xy_chromaticity_to_xyz,
 };
 pub use frame::{

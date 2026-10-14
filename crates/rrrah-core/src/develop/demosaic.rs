@@ -36,7 +36,7 @@
 
 use super::{Cfa, DevelopError, Mosaic, Rgb32f, par_rows, reflect};
 
-const EPS: f32 = 1e-5;
+const EPS: f64 = 1e-8;
 const TILE: usize = 128;
 
 /// Exhaustive set of demosaicing algorithms for [`super::DevelopOptions`] and standalone [`demosaic_cfa`].
@@ -183,7 +183,7 @@ impl DemosaicAlgorithm {
 fn run_tiled_bayer<S: Default>(
     m: &Mosaic,
     cancelled: &impl Fn() -> bool,
-    tile_fn: impl Fn(&Mosaic, usize, usize, usize, usize, &mut S, &mut [[f32; 3]]) + Sync,
+    tile_fn: impl Fn(&Mosaic, usize, usize, usize, usize, &mut S, &mut [[f64; 3]]) + Sync,
 ) -> Result<Rgb32f, DevelopError> {
     let (w, h) = (m.w, m.h);
     let mut out = Rgb32f::new(w, h);
@@ -198,7 +198,7 @@ fn run_tiled_bayer<S: Default>(
 
     if workers <= 1 {
         let mut scratch = S::default();
-        let mut px = vec![[0.0f32; 3]; TILE * TILE];
+        let mut px = vec![[0.0f64; 3]; TILE * TILE];
         for y0 in (0..h).step_by(TILE) {
             for x0 in (0..w).step_by(TILE) {
                 if cancelled() {
@@ -227,7 +227,7 @@ fn run_tiled_bayer<S: Default>(
 
         let do_work = || {
             let mut scratch = S::default();
-            let mut px = vec![[0.0f32; 3]; TILE * TILE];
+            let mut px = vec![[0.0f64; 3]; TILE * TILE];
             loop {
                 if is_cancelled.load(Ordering::Relaxed) {
                     break;
@@ -264,7 +264,7 @@ fn run_tiled_bayer<S: Default>(
                     .spawn_scoped(scope, shared_worker);
             }
             let mut scratch = S::default();
-            let mut px = vec![[0.0f32; 3]; TILE * TILE];
+            let mut px = vec![[0.0f64; 3]; TILE * TILE];
             loop {
                 if cancelled() {
                     is_cancelled.store(true, Ordering::Relaxed);
@@ -343,9 +343,9 @@ pub(super) fn nearest(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32
 pub(super) fn smooth_hue(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, DevelopError> {
     #[derive(Default)]
     struct SmoothHueScratch {
-        mos: Vec<f32>,
+        mos: Vec<f64>,
         col: Vec<u8>,
-        g: Vec<f32>,
+        g: Vec<f64>,
     }
     const MARGIN: usize = 2;
     run_tiled_bayer(
@@ -382,8 +382,8 @@ pub(super) fn smooth_hue(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rg
                     };
                 }
             }
-            let ratio = |idx: usize| -> f32 { (scratch.mos[idx] + 1e-3) / (scratch.g[idx].max(0.0) + 1e-3) };
-            let from_ratio = |gp: f32, r_avg: f32, lo: f32, hi: f32| -> f32 {
+            let ratio = |idx: usize| -> f64 { (scratch.mos[idx] + 1e-3) / (scratch.g[idx].max(0.0) + 1e-3) };
+            let from_ratio = |gp: f64, r_avg: f64, lo: f64, hi: f64| -> f64 {
                 ((gp.max(0.0) + 1e-3) * r_avg - 1e-3).clamp(lo, hi)
             };
             for y in 0..th {
@@ -459,9 +459,9 @@ pub(super) fn smooth_hue(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rg
 pub(super) fn laroche_prescott(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, DevelopError> {
     #[derive(Default)]
     struct LpScratch {
-        mos: Vec<f32>,
+        mos: Vec<f64>,
         col: Vec<u8>,
-        g: Vec<f32>,
+        g: Vec<f64>,
     }
     const MARGIN: usize = 3;
     run_tiled_bayer(m, cancelled, |m, x0, y0, tw, th, scratch: &mut LpScratch, out| {
@@ -567,9 +567,9 @@ pub(super) fn laroche_prescott(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Res
 pub(super) fn hamilton_adams(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, DevelopError> {
     #[derive(Default)]
     struct HaScratch {
-        mos: Vec<f32>,
+        mos: Vec<f64>,
         col: Vec<u8>,
-        g: Vec<f32>,
+        g: Vec<f64>,
     }
     const MARGIN: usize = 3;
     run_tiled_bayer(m, cancelled, |m, x0, y0, tw, th, scratch: &mut HaScratch, out| {
@@ -769,7 +769,7 @@ pub(super) fn malvar_he_cutler(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Res
         let interior_y = y >= 2 && y + 2 < h;
         for (x, px) in row.iter_mut().enumerate() {
             let xi = x as isize;
-            let sample = |dx: isize, dy: isize| -> f32 {
+            let sample = |dx: isize, dy: isize| -> f64 {
                 if interior_y && x >= 2 && x + 2 < w {
                     m.data[(yi + dy) as usize * w + (xi + dx) as usize]
                 } else {
@@ -793,7 +793,7 @@ pub(super) fn malvar_he_cutler(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Res
             let own = m.cfa.color_at(x, y);
             // Clamp cross-channel gradient-corrected estimates to the range of the positive
             // support taps so extreme HDR highlights or negative noise never ring below 0.
-            let clamp_support = |val: f32, lo: f32, hi: f32| val.clamp(lo, hi);
+            let clamp_support = |val: f64, lo: f64, hi: f64| val.clamp(lo, hi);
 
             match own {
                 0 | 2 => {
@@ -853,9 +853,9 @@ pub(super) fn malvar_he_cutler(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Res
 pub(super) fn ppg(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, DevelopError> {
     #[derive(Default)]
     struct PpgScratch {
-        mos: Vec<f32>,
+        mos: Vec<f64>,
         col: Vec<u8>,
-        g: Vec<f32>,
+        g: Vec<f64>,
     }
     const MARGIN: usize = 4;
     run_tiled_bayer(
@@ -928,7 +928,7 @@ pub(super) fn ppg(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, D
                     let i = cl(bx, by);
                     let own = scratch.col[i] as usize;
                     let gp = scratch.g[i];
-                    let mut p = [0.0f32; 3];
+                    let mut p = [0.0f64; 3];
                     p[1] = gp;
                     let d = |dx: isize, dy: isize| {
                         let j = cl(bx + dx, by + dy);
@@ -989,7 +989,7 @@ pub(super) fn vng(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, D
         let interior_y = y >= 2 && y + 2 < h;
         for (x, px) in row.iter_mut().enumerate() {
             let xi = x as isize;
-            let mut s = [[0.0f32; 5]; 5];
+            let mut s = [[0.0f64; 5]; 5];
             if interior_y && x >= 2 && x + 2 < w {
                 for dy in -2isize..=2 {
                     let r_off = (yi + dy) as usize * w;
@@ -1040,8 +1040,8 @@ pub(super) fn vng(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, D
                 + 0.5 * ((s[4][1] - s[3][2]).abs() + (s[3][0] - s[2][1]).abs());
 
             let grads = [g_n, g_e, g_s, g_w, g_ne, g_se, g_nw, g_sw];
-            let min_g = grads.into_iter().fold(f32::INFINITY, f32::min);
-            let max_g = grads.into_iter().fold(0.0f32, f32::max);
+            let min_g = grads.into_iter().fold(f64::INFINITY, f64::min);
+            let max_g = grads.into_iter().fold(0.0f64, f64::max);
             let thresh = (1.5 * min_g + 0.5 * (max_g - min_g) * 0.25).max(EPS);
 
             let own = m.cfa.color_at(x, y) as usize;
@@ -1051,8 +1051,8 @@ pub(super) fn vng(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, D
             let h_color = m.cfa.color_at((x + 1) % m.cfa.width, y % m.cfa.height) as usize;
             let v_color = m.cfa.color_at(x % m.cfa.width, (y + 1) % m.cfa.height) as usize;
 
-            let dir_rgb = |dir: usize| -> [f32; 3] {
-                let mut rgb = [0.0f32; 3];
+            let dir_rgb = |dir: usize| -> [f64; 3] {
+                let mut rgb = [0.0f64; 3];
                 if own == 1 {
                     // Green center: h_color is at E/W, v_color is at N/S
                     let (g_est, h_est, v_est) = match dir {
@@ -1104,8 +1104,8 @@ pub(super) fn vng(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, D
                 rgb
             };
 
-            let mut sum = [0.0f32; 3];
-            let mut count = 0.0f32;
+            let mut sum = [0.0f64; 3];
+            let mut count = 0.0f64;
             for (d, &g) in grads.iter().enumerate() {
                 if g <= thresh {
                     let est = dir_rgb(d);
@@ -1121,7 +1121,7 @@ pub(super) fn vng(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, D
                 count = 1.0;
             }
             let avg = sum.map(|v| v / count);
-            let mut out_px = [0.0f32; 3];
+            let mut out_px = [0.0f64; 3];
             for c in 0..3 {
                 if c == own {
                     out_px[c] = c_val;
@@ -1143,11 +1143,11 @@ pub(super) fn vng(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, D
 pub(super) fn rcd(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, DevelopError> {
     #[derive(Default)]
     struct RcdScratch {
-        mos: Vec<f32>,
+        mos: Vec<f64>,
         col: Vec<u8>,
-        vh_dir: Vec<f32>,
-        g: Vec<f32>,
-        rgb: Vec<[f32; 3]>,
+        vh_dir: Vec<f64>,
+        g: Vec<f64>,
+        rgb: Vec<[f64; 3]>,
     }
     const MARGIN: usize = 5;
     run_tiled_bayer(
@@ -1258,7 +1258,7 @@ pub(super) fn rcd(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, D
                         continue;
                     }
                     let gp = scratch.g[i];
-                    let mut p = [0.0f32; 3];
+                    let mut p = [0.0f64; 3];
                     p[1] = gp;
                     for c in [0usize, 2] {
                         let d = |dx: isize, dy: isize| {
@@ -1292,14 +1292,14 @@ pub(super) fn rcd(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, D
 pub(super) fn lmmse(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, DevelopError> {
     #[derive(Default)]
     struct LmmseScratch {
-        mos: Vec<f32>,
+        mos: Vec<f64>,
         col: Vec<u8>,
-        dh: Vec<f32>,
-        dv: Vec<f32>,
-        sh: Vec<f32>,
-        sv: Vec<f32>,
-        g: Vec<f32>,
-        rgb: Vec<[f32; 3]>,
+        dh: Vec<f64>,
+        dv: Vec<f64>,
+        sh: Vec<f64>,
+        sv: Vec<f64>,
+        g: Vec<f64>,
+        rgb: Vec<[f64; 3]>,
     }
     const MARGIN: usize = 6;
     run_tiled_bayer(
@@ -1377,8 +1377,8 @@ pub(super) fn lmmse(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f,
                         scratch.g[i] = scratch.mos[i];
                         continue;
                     }
-                    let mut var_h = 0.0f32;
-                    let mut var_v = 0.0f32;
+                    let mut var_h = 0.0f64;
+                    let mut var_v = 0.0f64;
                     for d in -2isize..=2 {
                         let jh = cl(x + d, y);
                         let dh_err = scratch.dh[jh] - scratch.sh[jh];
@@ -1439,7 +1439,7 @@ pub(super) fn lmmse(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f,
                         continue;
                     }
                     let gp = scratch.g[i];
-                    let mut p = [0.0f32; 3];
+                    let mut p = [0.0f64; 3];
                     p[1] = gp;
                     let ch = scratch.col[cl(bx + 1, by)] as usize;
                     let cv = scratch.col[cl(bx, by + 1)] as usize;
@@ -1466,12 +1466,12 @@ pub(super) fn lmmse(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f,
 pub(super) fn dcb(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, DevelopError> {
     #[derive(Default)]
     struct DcbScratch {
-        mos: Vec<f32>,
+        mos: Vec<f64>,
         col: Vec<u8>,
-        gh: Vec<f32>,
-        gv: Vec<f32>,
-        g: Vec<f32>,
-        rgb: Vec<[f32; 3]>,
+        gh: Vec<f64>,
+        gv: Vec<f64>,
+        g: Vec<f64>,
+        rgb: Vec<[f64; 3]>,
     }
     const MARGIN: usize = 6;
     run_tiled_bayer(
@@ -1567,7 +1567,7 @@ pub(super) fn dcb(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, D
                     let d_sw = scratch.mos[sw] - scratch.g[sw];
                     let w1 = 1.0 / (EPS + (d_nw - d_se).abs() + (scratch.mos[nw] - scratch.mos[se]).abs());
                     let w2 = 1.0 / (EPS + (d_ne - d_sw).abs() + (scratch.mos[ne] - scratch.mos[sw]).abs());
-                    let mut p = [0.0f32; 3];
+                    let mut p = [0.0f64; 3];
                     p[own] = scratch.mos[i];
                     p[1] = gp;
                     p[opp] = gp + (w1 * 0.5 * (d_nw + d_se) + w2 * 0.5 * (d_ne + d_sw)) / (w1 + w2);
@@ -1587,7 +1587,7 @@ pub(super) fn dcb(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, D
                         continue;
                     }
                     let gp = scratch.g[i];
-                    let mut p = [0.0f32; 3];
+                    let mut p = [0.0f64; 3];
                     p[1] = gp;
                     let ch = scratch.col[cl(bx + 1, by)] as usize;
                     let cv = scratch.col[cl(bx, by + 1)] as usize;
@@ -1617,10 +1617,10 @@ pub(super) fn dcb(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, D
 pub(super) fn igv(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, DevelopError> {
     #[derive(Default)]
     struct IgvScratch {
-        mos: Vec<f32>,
+        mos: Vec<f64>,
         col: Vec<u8>,
-        g: Vec<f32>,
-        rgb: Vec<[f32; 3]>,
+        g: Vec<f64>,
+        rgb: Vec<[f64; 3]>,
     }
     const MARGIN: usize = 6;
     run_tiled_bayer(
@@ -1719,7 +1719,7 @@ pub(super) fn igv(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, D
                         1.0 / (EPS + (d_nw - d_se).powi(2) + (scratch.mos[nw] - scratch.mos[se]).powi(2));
                     let w2 =
                         1.0 / (EPS + (d_ne - d_sw).powi(2) + (scratch.mos[ne] - scratch.mos[sw]).powi(2));
-                    let mut p = [0.0f32; 3];
+                    let mut p = [0.0f64; 3];
                     p[own] = scratch.mos[i];
                     p[1] = gp;
                     p[opp] = gp + (w1 * 0.5 * (d_nw + d_se) + w2 * 0.5 * (d_ne + d_sw)) / (w1 + w2);
@@ -1739,7 +1739,7 @@ pub(super) fn igv(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, D
                         continue;
                     }
                     let gp = scratch.g[i];
-                    let mut p = [0.0f32; 3];
+                    let mut p = [0.0f64; 3];
                     p[1] = gp;
                     let ch = scratch.col[cl(bx + 1, by)] as usize;
                     let cv = scratch.col[cl(bx, by + 1)] as usize;
@@ -1769,12 +1769,12 @@ pub(super) fn igv(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, D
 pub(super) fn amaze(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, DevelopError> {
     #[derive(Default)]
     struct AmazeScratch {
-        mos: Vec<f32>,
+        mos: Vec<f64>,
         col: Vec<u8>,
-        dg_h: Vec<f32>,
-        dg_v: Vec<f32>,
-        g: Vec<f32>,
-        rgb: Vec<[f32; 3]>,
+        dg_h: Vec<f64>,
+        dg_v: Vec<f64>,
+        g: Vec<f64>,
+        rgb: Vec<[f64; 3]>,
     }
     const MARGIN: usize = 8;
     run_tiled_bayer(
@@ -1843,8 +1843,8 @@ pub(super) fn amaze(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f,
                         scratch.g[i] = c;
                         continue;
                     }
-                    let mut var_h = 0.0f32;
-                    let mut var_v = 0.0f32;
+                    let mut var_h = 0.0f64;
+                    let mut var_v = 0.0f64;
                     for d in [-2isize, 0, 2] {
                         let jh1 = cl(x + d, y);
                         let jh2 = cl(x, y);
@@ -1907,7 +1907,7 @@ pub(super) fn amaze(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f,
                             + (d_ne - d_sw).abs()
                             + (scratch.mos[ne] - scratch.mos[sw]).abs()
                             + 0.5 * (2.0 * gp - scratch.g[ne] - scratch.g[sw]).abs());
-                    let mut p = [0.0f32; 3];
+                    let mut p = [0.0f64; 3];
                     p[own] = scratch.mos[i];
                     p[1] = gp;
                     p[opp] = gp
@@ -1928,7 +1928,7 @@ pub(super) fn amaze(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f,
                         continue;
                     }
                     let gp = scratch.g[i];
-                    let mut p = [0.0f32; 3];
+                    let mut p = [0.0f64; 3];
                     p[1] = gp;
                     let ch = scratch.col[cl(bx + 1, by)] as usize;
                     let cv = scratch.col[cl(bx, by + 1)] as usize;
@@ -1959,7 +1959,7 @@ pub(super) fn dual_demosaic(
     m: &Mosaic,
     sharp: Rgb32f,
     smooth: &Rgb32f,
-    threshold: f32,
+    threshold: f64,
     cancelled: &impl Fn() -> bool,
 ) -> Result<Rgb32f, DevelopError> {
     let (w, h) = (m.w, m.h);
@@ -1973,9 +1973,9 @@ pub(super) fn dual_demosaic(
         let yi = y as isize;
         for (x, px) in row.iter_mut().enumerate() {
             let xi = x as isize;
-            let mut g_min = f32::INFINITY;
-            let mut g_max = f32::NEG_INFINITY;
-            let mut g_sum = 0.0f32;
+            let mut g_min = f64::INFINITY;
+            let mut g_max = f64::NEG_INFINITY;
+            let mut g_sum = 0.0f64;
             for dy in -1isize..=1 {
                 let sy = reflect(yi + dy, h);
                 for dx in -1isize..=1 {
@@ -2018,14 +2018,14 @@ pub(super) fn dual_demosaic(
 pub(super) fn xtrans_markesteijn(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, DevelopError> {
     #[derive(Default)]
     struct XTransScratch {
-        mos: Vec<f32>,
+        mos: Vec<f64>,
         col: Vec<u8>,
-        gh: Vec<f32>,
-        gv: Vec<f32>,
-        rh: Vec<[f32; 3]>,
-        rv: Vec<[f32; 3]>,
-        lh: Vec<[f32; 3]>,
-        lv: Vec<[f32; 3]>,
+        gh: Vec<f64>,
+        gv: Vec<f64>,
+        rh: Vec<[f64; 3]>,
+        rv: Vec<[f64; 3]>,
+        lh: Vec<[f64; 3]>,
+        lv: Vec<[f64; 3]>,
         hh: Vec<u8>,
         hv: Vec<u8>,
     }
@@ -2070,9 +2070,9 @@ pub(super) fn xtrans_markesteijn(m: &Mosaic, cancelled: &impl Fn() -> bool) -> R
                         continue;
                     }
                     // Gather green neighbours in 5×5 with directional weights (H-favoured vs V-favoured)
-                    let (mut sh, mut wsh) = (0.0f32, 0.0f32);
-                    let (mut sv, mut wsv) = (0.0f32, 0.0f32);
-                    let (mut g_min, mut g_max) = (f32::INFINITY, f32::NEG_INFINITY);
+                    let (mut sh, mut wsh) = (0.0f64, 0.0f64);
+                    let (mut sv, mut wsv) = (0.0f64, 0.0f64);
+                    let (mut g_min, mut g_max) = (f64::INFINITY, f64::NEG_INFINITY);
                     let grad_h = (scratch.mos[cl(x - 1, y)] - scratch.mos[cl(x + 1, y)]).abs();
                     let grad_v = (scratch.mos[cl(x, y - 1)] - scratch.mos[cl(x, y + 1)]).abs();
                     for dy in -2isize..=2 {
@@ -2089,7 +2089,7 @@ pub(super) fn xtrans_markesteijn(m: &Mosaic, cancelled: &impl Fn() -> bool) -> R
                                 g_min = g_min.min(gv);
                                 g_max = g_max.max(gv);
                             }
-                            let d2 = (dx * dx + dy * dy) as f32;
+                            let d2 = (dx * dx + dy * dy) as f64;
                             let base_w = 1.0 / (d2 * d2);
                             let h_bias = if dy == 0 {
                                 4.0
@@ -2126,7 +2126,7 @@ pub(super) fn xtrans_markesteijn(m: &Mosaic, cancelled: &impl Fn() -> bool) -> R
             }
 
             // 2. Complete R and B for both candidates
-            let complete_rb = |g: &[f32], mos: &[f32], col: &[u8], rgb: &mut [[f32; 3]]| {
+            let complete_rb = |g: &[f64], mos: &[f64], col: &[u8], rgb: &mut [[f64; 3]]| {
                 for y in 0..bh as isize {
                     for x in 0..bw as isize {
                         let i = cl(x, y);
@@ -2138,7 +2138,7 @@ pub(super) fn xtrans_markesteijn(m: &Mosaic, cancelled: &impl Fn() -> bool) -> R
                                 p[c] = mos[i];
                                 continue;
                             }
-                            let (mut s, mut ws) = (0.0f32, 0.0f32);
+                            let (mut s, mut ws) = (0.0f64, 0.0f64);
                             for dy in -2isize..=2 {
                                 for dx in -2isize..=2 {
                                     let j = cl(x + dx, y + dy);
@@ -2146,7 +2146,7 @@ pub(super) fn xtrans_markesteijn(m: &Mosaic, cancelled: &impl Fn() -> bool) -> R
                                         continue;
                                     }
                                     let gq = g[j];
-                                    let d2 = (dx * dx + dy * dy) as f32;
+                                    let d2 = (dx * dx + dy * dy) as f64;
                                     let wt = 1.0 / (d2 * (1e-3 + (gq - gp).abs()));
                                     s += wt * (mos[j] - gq);
                                     ws += wt;
@@ -2166,8 +2166,8 @@ pub(super) fn xtrans_markesteijn(m: &Mosaic, cancelled: &impl Fn() -> bool) -> R
                 scratch.lh[i] = super::ahd::lab(scratch.rh[i]);
                 scratch.lv[i] = super::ahd::lab(scratch.rv[i]);
             }
-            let dl = |a: &[f32; 3], b: &[f32; 3]| (a[0] - b[0]).abs();
-            let dc = |a: &[f32; 3], b: &[f32; 3]| (a[1] - b[1]).powi(2) + (a[2] - b[2]).powi(2);
+            let dl = |a: &[f64; 3], b: &[f64; 3]| (a[0] - b[0]).abs();
+            let dc = |a: &[f64; 3], b: &[f64; 3]| (a[1] - b[1]).powi(2) + (a[2] - b[2]).powi(2);
             for y in 1..bh as isize - 1 {
                 for x in 1..bw as isize - 1 {
                     let i = cl(x, y);
@@ -2239,14 +2239,14 @@ pub(super) fn xtrans_markesteijn_3pass(
 ) -> Result<Rgb32f, DevelopError> {
     #[derive(Default)]
     struct XTrans3Scratch {
-        mos: Vec<f32>,
+        mos: Vec<f64>,
         col: Vec<u8>,
-        gh: Vec<f32>,
-        gv: Vec<f32>,
-        rh: Vec<[f32; 3]>,
-        rv: Vec<[f32; 3]>,
-        lh: Vec<[f32; 3]>,
-        lv: Vec<[f32; 3]>,
+        gh: Vec<f64>,
+        gv: Vec<f64>,
+        rh: Vec<[f64; 3]>,
+        rv: Vec<[f64; 3]>,
+        lh: Vec<[f64; 3]>,
+        lv: Vec<[f64; 3]>,
         hh: Vec<u8>,
         hv: Vec<u8>,
     }
@@ -2290,9 +2290,9 @@ pub(super) fn xtrans_markesteijn_3pass(
                         scratch.gv[i] = c;
                         continue;
                     }
-                    let (mut sh, mut wsh) = (0.0f32, 0.0f32);
-                    let (mut sv, mut wsv) = (0.0f32, 0.0f32);
-                    let (mut g_min, mut g_max) = (f32::INFINITY, f32::NEG_INFINITY);
+                    let (mut sh, mut wsh) = (0.0f64, 0.0f64);
+                    let (mut sv, mut wsv) = (0.0f64, 0.0f64);
+                    let (mut g_min, mut g_max) = (f64::INFINITY, f64::NEG_INFINITY);
                     let grad_h = (scratch.mos[cl(x - 1, y)] - scratch.mos[cl(x + 1, y)]).abs();
                     let grad_v = (scratch.mos[cl(x, y - 1)] - scratch.mos[cl(x, y + 1)]).abs();
                     for dy in -2isize..=2 {
@@ -2309,7 +2309,7 @@ pub(super) fn xtrans_markesteijn_3pass(
                                 g_min = g_min.min(gv);
                                 g_max = g_max.max(gv);
                             }
-                            let d2 = (dx * dx + dy * dy) as f32;
+                            let d2 = (dx * dx + dy * dy) as f64;
                             let base_w = 1.0 / (d2 * d2);
                             let h_bias = if dy == 0 {
                                 4.5
@@ -2345,7 +2345,7 @@ pub(super) fn xtrans_markesteijn_3pass(
                 }
             }
 
-            let complete_rb = |g: &[f32], mos: &[f32], col: &[u8], rgb: &mut [[f32; 3]]| {
+            let complete_rb = |g: &[f64], mos: &[f64], col: &[u8], rgb: &mut [[f64; 3]]| {
                 for y in 0..bh as isize {
                     for x in 0..bw as isize {
                         let i = cl(x, y);
@@ -2357,7 +2357,7 @@ pub(super) fn xtrans_markesteijn_3pass(
                                 p[c] = mos[i];
                                 continue;
                             }
-                            let (mut s, mut ws) = (0.0f32, 0.0f32);
+                            let (mut s, mut ws) = (0.0f64, 0.0f64);
                             for dy in -2isize..=2 {
                                 for dx in -2isize..=2 {
                                     let j = cl(x + dx, y + dy);
@@ -2365,7 +2365,7 @@ pub(super) fn xtrans_markesteijn_3pass(
                                         continue;
                                     }
                                     let gq = g[j];
-                                    let d2 = (dx * dx + dy * dy) as f32;
+                                    let d2 = (dx * dx + dy * dy) as f64;
                                     let wt = 1.0 / (d2 * (1e-3 + (gq - gp).abs()));
                                     s += wt * (mos[j] - gq);
                                     ws += wt;
@@ -2391,7 +2391,7 @@ pub(super) fn xtrans_markesteijn_3pass(
                         }
                         let c = scratch.mos[i];
                         // Gather 3×3 green minimum/maximum so iterative refinement never overshoots constant fields
-                        let (mut g_min, mut g_max) = (f32::INFINITY, f32::NEG_INFINITY);
+                        let (mut g_min, mut g_max) = (f64::INFINITY, f64::NEG_INFINITY);
                         for dy in -1isize..=1 {
                             for dx in -1isize..=1 {
                                 let j = cl(x + dx, y + dy);
@@ -2434,8 +2434,8 @@ pub(super) fn xtrans_markesteijn_3pass(
                 scratch.lh[i] = super::ahd::lab(scratch.rh[i]);
                 scratch.lv[i] = super::ahd::lab(scratch.rv[i]);
             }
-            let dl = |a: &[f32; 3], b: &[f32; 3]| (a[0] - b[0]).abs();
-            let dc = |a: &[f32; 3], b: &[f32; 3]| (a[1] - b[1]).powi(2) + (a[2] - b[2]).powi(2);
+            let dl = |a: &[f64; 3], b: &[f64; 3]| (a[0] - b[0]).abs();
+            let dc = |a: &[f64; 3], b: &[f64; 3]| (a[1] - b[1]).powi(2) + (a[2] - b[2]).powi(2);
             for y in 2..bh as isize - 2 {
                 for x in 2..bw as isize - 2 {
                     let i = cl(x, y);
@@ -2505,7 +2505,7 @@ pub(super) fn xtrans_markesteijn_3pass(
 /// edges with smooth directional colour-difference interpolation on flat/low-contrast areas.
 pub(super) fn xtrans_dual(
     m: &Mosaic,
-    contrast_threshold: f32,
+    contrast_threshold: f64,
     cancelled: &impl Fn() -> bool,
 ) -> Result<Rgb32f, DevelopError> {
     let sharp = xtrans_markesteijn_3pass(m, cancelled)?;
@@ -2579,7 +2579,7 @@ pub(super) fn clustered_bayer(
     cancelled: &impl Fn() -> bool,
 ) -> Result<Rgb32f, DevelopError> {
     let (w, h) = (m.w, m.h);
-    let mut g = vec![0.0f32; w * h];
+    let mut g = vec![0.0f64; w * h];
     if w == 0 || h == 0 {
         return Ok(Rgb32f::new(w, h));
     }
@@ -2594,16 +2594,16 @@ pub(super) fn clustered_bayer(
                 continue;
             }
             let c = m.get(xi, yi);
-            let (mut sh, mut wsh) = (0.0f32, 0.0f32);
-            let (mut sv, mut wsv) = (0.0f32, 0.0f32);
+            let (mut sh, mut wsh) = (0.0f64, 0.0f64);
+            let (mut sv, mut wsv) = (0.0f64, 0.0f64);
             for d in -radius..=radius {
                 if d != 0 && m.color(xi + d, yi) == 1 {
-                    let wt = 1.0 / (d.abs() as f32);
+                    let wt = 1.0 / (d.abs() as f64);
                     sh += wt * m.get(xi + d, yi);
                     wsh += wt;
                 }
                 if d != 0 && m.color(xi, yi + d) == 1 {
-                    let wt = 1.0 / (d.abs() as f32);
+                    let wt = 1.0 / (d.abs() as f64);
                     sv += wt * m.get(xi, yi + d);
                     wsv += wt;
                 }
@@ -2635,14 +2635,14 @@ pub(super) fn clustered_bayer(
                     px[c] = m.get(xi, yi);
                     continue;
                 }
-                let (mut s, mut ws) = (0.0f32, 0.0f32);
+                let (mut s, mut ws) = (0.0f64, 0.0f64);
                 for dy in -radius..=radius {
                     for dx in -radius..=radius {
                         if m.color(xi + dx, yi + dy) as usize != c {
                             continue;
                         }
                         let gq = gg(xi + dx, yi + dy);
-                        let d2 = (dx * dx + dy * dy) as f32;
+                        let d2 = (dx * dx + dy * dy) as f64;
                         let wt = 1.0 / (d2 * (1e-3 + (gq - gp).abs()));
                         s += wt * (m.get(xi + dx, yi + dy) - gq);
                         ws += wt;
@@ -2675,7 +2675,7 @@ pub(super) fn hexadeca_bayer(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Resul
 /// - `0` (Red), `1` (Green), `2` (Blue) map directly to channels `0, 1, 2`.
 /// - `3` (Cyan ≈ G+B), `4` (Magenta ≈ R+B), `5` (Yellow ≈ R+G), `6` (White ≈ R+G+B), `7` (Emerald ≈ G).
 #[inline]
-fn decode_complementary_to_rgb(planes: &[f32; 8]) -> [f32; 3] {
+fn decode_complementary_to_rgb(planes: &[f64; 8]) -> [f64; 3] {
     // CYGM sensors have Cyan (3), Magenta (4), Yellow (5), and Green (1) without primary Red (0) or Blue (2).
     let has_rb = planes[0] > 0.0 || planes[2] > 0.0;
     let has_cygm = planes[3] > 0.0 || planes[4] > 0.0 || planes[5] > 0.0;
@@ -2729,8 +2729,8 @@ pub(super) fn generic_cfa(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<R
             let xi = x as isize;
             let center_val = m.get(xi, yi);
             let center_col = m.color(xi, yi) as usize;
-            let mut sums = [0.0f32; 8];
-            let mut weights = [0.0f32; 8];
+            let mut sums = [0.0f64; 8];
+            let mut weights = [0.0f64; 8];
             if center_col < 8 {
                 sums[center_col] = center_val;
                 weights[center_col] = 1.0;
@@ -2745,13 +2745,13 @@ pub(super) fn generic_cfa(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<R
                         continue;
                     }
                     let v = m.get(xi + dx, yi + dy);
-                    let d2 = (dx * dx + dy * dy) as f32;
+                    let d2 = (dx * dx + dy * dy) as f64;
                     let wt = 1.0 / (d2 * (1e-3 + (v - center_val).abs()));
                     sums[c] += wt * v;
                     weights[c] += wt;
                 }
             }
-            let mut planes = [0.0f32; 8];
+            let mut planes = [0.0f64; 8];
             for c in 0..8 {
                 if weights[c] > 0.0 {
                     planes[c] = sums[c] / weights[c];
@@ -2773,11 +2773,11 @@ pub(super) fn generic_cfa(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<R
 /// preserving real local edges. `strength` in `0.0..=1.0` controls the maximum relative
 /// threshold below which G1/G2 differences are treated as sensor crosstalk rather than image detail.
 pub(super) fn equilibrate_bayer_greens(
-    samples: &mut [f32],
+    samples: &mut [f64],
     w: usize,
     h: usize,
     cfa: &Cfa,
-    strength: f32,
+    strength: f64,
     cancelled: &impl Fn() -> bool,
 ) -> Result<(), DevelopError> {
     let strength = strength.clamp(0.0, 1.0);
@@ -2814,11 +2814,11 @@ pub(super) fn equilibrate_bayer_greens(
 /// Detects isolated salt-and-pepper spikes on same-colour CFA neighbours within a 5×5 window
 /// and replaces outliers exceeding `threshold` times the local same-colour interquartile range.
 pub(super) fn suppress_cfa_impulse_noise(
-    samples: &mut [f32],
+    samples: &mut [f64],
     w: usize,
     h: usize,
     cfa: &Cfa,
-    threshold: f32,
+    threshold: f64,
     cancelled: &impl Fn() -> bool,
 ) -> Result<(), DevelopError> {
     if threshold <= 0.0 || w < 5 || h < 5 {
@@ -2828,7 +2828,7 @@ pub(super) fn suppress_cfa_impulse_noise(
     let get = |x: isize, y: isize| src[reflect(y, h) * w + reflect(x, w)];
     par_rows(samples, w, cancelled, |y, row| {
         let yi = y as isize;
-        let mut ring = [0.0f32; 24];
+        let mut ring = [0.0f64; 24];
         for (x, out) in row.iter_mut().enumerate() {
             let xi = x as isize;
             let own = cfa.color_at(x, y);
@@ -2879,7 +2879,7 @@ pub(super) fn suppress_false_color(
         return Ok(());
     }
     let passes = passes.min(4);
-    let mut prev = vec![[0.0f32; 3]; w * h];
+    let mut prev = vec![[0.0f64; 3]; w * h];
     for _ in 0..passes {
         if cancelled() {
             return Err(DevelopError::Cancelled);
@@ -2888,8 +2888,8 @@ pub(super) fn suppress_false_color(
         let src = &prev;
         par_rows(&mut rgb.data, w, cancelled, |y, row| {
             let yi = y as isize;
-            let mut dr = [0.0f32; 9];
-            let mut db = [0.0f32; 9];
+            let mut dr = [0.0f64; 9];
+            let mut db = [0.0f64; 9];
             for (x, px) in row.iter_mut().enumerate() {
                 let xi = x as isize;
                 let mut k = 0;
@@ -2964,7 +2964,7 @@ pub(super) fn suppress_chromatic_fringe(
             if lum_grad < 0.05 * p0[1].max(0.05) {
                 continue;
             }
-            let (mut sum_rg, mut sum_bg, mut wsum) = (0.0f32, 0.0f32, 0.0f32);
+            let (mut sum_rg, mut sum_bg, mut wsum) = (0.0f64, 0.0f64, 0.0f64);
             for dy in -2isize..=2 {
                 for dx in -2isize..=2 {
                     let q = get(xi + dx, yi + dy);
@@ -3051,7 +3051,7 @@ impl Default for DemosaicConfig {
 pub(super) fn dispatch_demosaic(
     source: &Mosaic,
     algo: DemosaicAlgorithm,
-    dual_contrast_threshold: f32,
+    dual_contrast_threshold: f64,
     is_bayer_2x2: bool,
     cancelled: &impl Fn() -> bool,
 ) -> Result<Rgb32f, DevelopError> {
@@ -3125,14 +3125,51 @@ pub(super) fn dispatch_demosaic(
 /// a single-channel CFA buffer `samples` without requiring camera metadata or DNG opcodes.
 /// All memory allocations are pre-admitted against `budget` when provided.
 pub fn demosaic_f32(
-    samples: &[f32],
+    samples: &[f32], width: u32, height: u32, cfa_pattern: &crate::CfaPattern,
+    config: &DemosaicConfig, budget: Option<&crate::MemoryBudget>, cancelled: &impl Fn() -> bool,
+) -> Result<rrrah_memory::PixelBuffer<[f32; 3]>, DevelopError> {
+    if cancelled() { return Err(DevelopError::Cancelled); }
+    let count = (width as usize).checked_mul(height as usize).ok_or(DevelopError::Invalid("dimension overflow"))?;
+    if samples.len() != count { return Err(DevelopError::Invalid("sensor sample count mismatch")); }
+    let managed = budget.cloned().unwrap_or_else(|| crate::MemoryBudget::new(u64::MAX));
+    let input_credit = managed.try_reserve((count as u64).checked_mul(8).ok_or(DevelopError::Invalid("input size overflow"))?)?;
+    let mut values = Vec::with_capacity(count);
+    for (index, &value) in samples.iter().enumerate() {
+        if index % 4096 == 0 && cancelled() { return Err(DevelopError::Cancelled); }
+        values.push(f64::from(value));
+    }
+    let wide: rrrah_memory::PixelBuffer<f64> = input_credit.try_adopt(values)?.into();
+    let rgb = demosaic_f64(&wide, width, height, cfa_pattern, config, Some(&managed), cancelled)?;
+    drop(wide);
+    narrow_demosaic_output(rgb, &managed, cancelled)
+}
+
+fn narrow_demosaic_output(
+    rgb: rrrah_memory::PixelBuffer<[f64; 3]>, budget: &crate::MemoryBudget,
+    cancelled: &impl Fn() -> bool,
+) -> Result<rrrah_memory::PixelBuffer<[f32; 3]>, DevelopError> {
+    let count = rgb.len();
+    let output_credit = budget.try_reserve((count as u64).checked_mul(12).ok_or(DevelopError::Invalid("output size overflow"))?)?;
+    let mut out = Vec::with_capacity(count);
+    for (index, pixel) in rgb.iter().enumerate() {
+        if index % 4096 == 0 && cancelled() { return Err(DevelopError::Cancelled); }
+        let narrow = pixel.map(|value| value as f32);
+        if narrow.iter().any(|value| !value.is_finite()) { return Err(DevelopError::Invalid("demosaic output exceeds f32 range")); }
+        out.push(narrow);
+    }
+    Ok(output_credit.try_adopt(out)?.into())
+}
+
+/// Standalone scene-linear f64 demosaicing with f64 reconstruction and retained output.
+pub fn demosaic_f64(
+    samples: &[f64],
     width: u32,
     height: u32,
     cfa_pattern: &crate::CfaPattern,
     config: &DemosaicConfig,
     budget: Option<&crate::MemoryBudget>,
     cancelled: &impl Fn() -> bool,
-) -> Result<rrrah_memory::PixelBuffer<[f32; 3]>, DevelopError> {
+) -> Result<rrrah_memory::PixelBuffer<[f64; 3]>, DevelopError> {
     if cancelled() {
         return Err(DevelopError::Cancelled);
     }
@@ -3153,27 +3190,28 @@ pub fn demosaic_f32(
         return Err(DevelopError::Invalid("non-finite sensor samples"));
     }
     let out_bytes = (n as u64)
-        .checked_mul(12)
+        .checked_mul(24)
         .ok_or(DevelopError::Invalid("output size overflow"))?;
     let scratch_bytes = (n as u64)
-        .checked_mul(16)
+        .checked_mul(32)
         .and_then(|v| v.checked_add(8 * 1024 * 1024))
         .ok_or(DevelopError::Invalid("scratch size overflow"))?;
+    let total_bytes = out_bytes.checked_add(scratch_bytes).ok_or(DevelopError::Invalid("working size overflow"))?;
     let managed = budget
         .cloned()
-        .unwrap_or_else(|| crate::MemoryBudget::new(out_bytes + scratch_bytes));
+        .unwrap_or_else(|| crate::MemoryBudget::new(total_bytes));
     let scratch_credit = managed.try_reserve(scratch_bytes)?;
     let out_credit = managed.try_reserve(out_bytes)?;
 
     let is_bayer = cfa_pattern.bayer_quad().is_ok();
-    let mut conditioned: Option<Vec<f32>> = None;
+    let mut conditioned: Option<Vec<f64>> = None;
     if config.impulse_threshold > 0.0 || (is_bayer && config.green_equilibration > 0.0) {
         let mut buf = samples.to_vec();
         if config.impulse_threshold > 0.0 {
-            suppress_cfa_impulse_noise(&mut buf, w, h, &cfa, config.impulse_threshold, cancelled)?;
+            suppress_cfa_impulse_noise(&mut buf, w, h, &cfa, f64::from(config.impulse_threshold), cancelled)?;
         }
         if is_bayer && config.green_equilibration > 0.0 {
-            equilibrate_bayer_greens(&mut buf, w, h, &cfa, config.green_equilibration, cancelled)?;
+            equilibrate_bayer_greens(&mut buf, w, h, &cfa, f64::from(config.green_equilibration), cancelled)?;
         }
         conditioned = Some(buf);
     }
@@ -3187,7 +3225,7 @@ pub fn demosaic_f32(
     let mut rgb = dispatch_demosaic(
         &source,
         config.algorithm,
-        config.dual_contrast_threshold,
+        f64::from(config.dual_contrast_threshold),
         is_bayer,
         cancelled,
     )?;
@@ -3217,6 +3255,23 @@ pub fn demosaic_u16(
     budget: Option<&crate::MemoryBudget>,
     cancelled: &impl Fn() -> bool,
 ) -> Result<rrrah_memory::PixelBuffer<[f32; 3]>, DevelopError> {
+    let managed = budget.cloned().unwrap_or_else(|| crate::MemoryBudget::new(u64::MAX));
+    let rgb = demosaic_u16_f64(samples, width, height, f64::from(black_level), f64::from(white_level), cfa_pattern, config, Some(&managed), cancelled)?;
+    narrow_demosaic_output(rgb, &managed, cancelled)
+}
+
+/// Integer sensor normalization and reconstruction in f64.
+pub fn demosaic_u16_f64(
+    samples: &[u16],
+    width: u32,
+    height: u32,
+    black_level: f64,
+    white_level: f64,
+    cfa_pattern: &crate::CfaPattern,
+    config: &DemosaicConfig,
+    budget: Option<&crate::MemoryBudget>,
+    cancelled: &impl Fn() -> bool,
+) -> Result<rrrah_memory::PixelBuffer<[f64; 3]>, DevelopError> {
     let range = white_level - black_level;
     if !range.is_finite() || range <= 0.0 {
         return Err(DevelopError::Invalid(
@@ -3224,11 +3279,18 @@ pub fn demosaic_u16(
         ));
     }
     let inv = 1.0 / range;
-    let normalized: Vec<f32> = samples
-        .iter()
-        .map(|&s| ((f32::from(s) - black_level).max(0.0)) * inv)
-        .collect();
-    demosaic_f32(&normalized, width, height, cfa_pattern, config, budget, cancelled)
+    let count = (width as usize).checked_mul(height as usize).ok_or(DevelopError::Invalid("dimension overflow"))?;
+    if samples.len() != count { return Err(DevelopError::Invalid("sensor sample count mismatch")); }
+    if cancelled() { return Err(DevelopError::Cancelled); }
+    let managed = budget.cloned().unwrap_or_else(|| crate::MemoryBudget::new(u64::MAX));
+    let input_credit = managed.try_reserve((samples.len() as u64).checked_mul(8).ok_or(DevelopError::Invalid("input size overflow"))?)?;
+    let mut normalized = Vec::with_capacity(samples.len());
+    for (index, &sample) in samples.iter().enumerate() {
+        if index % 4096 == 0 && cancelled() { return Err(DevelopError::Cancelled); }
+        normalized.push((f64::from(sample) - black_level).max(0.0) * inv);
+    }
+    let normalized: rrrah_memory::PixelBuffer<f64> = input_credit.try_adopt(normalized)?.into();
+    demosaic_f64(&normalized, width, height, cfa_pattern, config, Some(&managed), cancelled)
 }
 
 /// Exact half-resolution 2×2 Bayer superpixel extractor (no spatial interpolation).
@@ -3294,6 +3356,65 @@ pub fn demosaic_bayer_superpixel(
     Ok((ow as u32, oh as u32, out_credit.try_adopt(out)?.into()))
 }
 
+/// Half-resolution Bayer extraction retaining f64 sensor precision.
+pub fn demosaic_bayer_superpixel_f64(
+    samples: &[f64],
+    width: u32,
+    height: u32,
+    cfa_pattern: &crate::CfaPattern,
+    budget: Option<&crate::MemoryBudget>,
+    cancelled: &impl Fn() -> bool,
+) -> Result<(u32, u32, rrrah_memory::PixelBuffer<[f64; 3]>), DevelopError> {
+    if cancelled() {
+        return Err(DevelopError::Cancelled);
+    }
+    let quad = cfa_pattern
+        .bayer_quad()
+        .map_err(|_| DevelopError::Invalid("superpixel demosaic requires a 2x2 RGB Bayer CFA"))?;
+    let (w, h) = (width as usize, height as usize);
+    if samples.len()
+        != w.checked_mul(h)
+            .ok_or(DevelopError::Invalid("dimension overflow"))?
+    {
+        return Err(DevelopError::Invalid("sensor sample count mismatch"));
+    }
+    let (ow, oh) = (w / 2, h / 2);
+    if ow == 0 || oh == 0 {
+        return Err(DevelopError::Invalid(
+            "superpixel demosaic requires dimensions >= 2x2",
+        ));
+    }
+    let out_bytes = (ow * oh) as u64 * 24;
+    let managed = budget
+        .cloned()
+        .unwrap_or_else(|| crate::MemoryBudget::new(out_bytes));
+    let out_credit = managed.try_reserve(out_bytes)?;
+    let mut out = vec![[0.0f64; 3]; ow * oh];
+    par_rows(&mut out, ow, cancelled, |oy, row| {
+        let sy = oy * 2;
+        for (ox, px) in row.iter_mut().enumerate() {
+            let sx = ox * 2;
+            let mut sums = [0.0f64; 3];
+            let (mut s00, mut s10, mut s01, mut s11) = (
+                samples[sy * w + sx],
+                samples[sy * w + sx + 1],
+                samples[(sy + 1) * w + sx],
+                samples[(sy + 1) * w + sx + 1],
+            );
+            for (val, c) in [
+                (&mut s00, quad[0]),
+                (&mut s10, quad[1]),
+                (&mut s01, quad[2]),
+                (&mut s11, quad[3]),
+            ] {
+                sums[c as usize] += *val;
+            }
+            *px = [sums[0], sums[1] * 0.5, sums[2]];
+        }
+    })?;
+    Ok((ow as u32, oh as u32, out_credit.try_adopt(out)?.into()))
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -3302,6 +3423,66 @@ mod tests {
         RawMetadata, WhiteLevel,
         develop::{DevelopOptions, OpcodeLists, develop_raw},
     };
+
+    #[test]
+    fn f64_entry_points_preserve_sub_f32_sensor_precision_and_memory_ownership() {
+        let cfa = CfaPattern { width: 2, height: 2, cells: vec![CfaColor::Red, CfaColor::Green, CfaColor::Green, CfaColor::Blue] };
+        let epsilon = 2f64.powi(-40);
+        let values = [1. + epsilon, 2. + epsilon, 2. + epsilon, 3. + epsilon];
+        let budget = MemoryBudget::new(16 * 1024 * 1024);
+        let (width, height, pixels) = demosaic_bayer_superpixel_f64(&values, 2, 2, &cfa, Some(&budget), &|| false).unwrap();
+        assert_eq!((width, height), (1, 1));
+        assert_eq!(pixels[0], [1. + epsilon, 2. + epsilon, 3. + epsilon]);
+        assert_ne!(pixels[0][0], f64::from(pixels[0][0] as f32));
+        assert_eq!(budget.used(), 24);
+        drop(pixels);
+        assert_eq!(budget.used(), 0);
+        let config = DemosaicConfig { algorithm: DemosaicAlgorithm::Nearest, ..Default::default() };
+        let pixels = demosaic_f64(&values, 2, 2, &cfa, &config, Some(&budget), &|| false).unwrap();
+        assert_eq!(pixels[0][0], values[0]);
+        assert_eq!(budget.used(), 4 * 24);
+        drop(pixels);
+        assert_eq!(budget.used(), 0);
+        let input = [1f32, 2., 2., 3.];
+        let pixels = demosaic_f32(&input, 2, 2, &cfa, &config, Some(&budget), &|| false).unwrap();
+        assert_eq!(pixels[0][0], 1.);
+        assert_eq!(budget.used(), 4 * 12);
+        drop(pixels);
+        assert_eq!(budget.used(), 0);
+        let pixels = demosaic_u16_f64(&[1, 2, 2, 3], 2, 2, 0., 3., &cfa, &config, Some(&budget), &|| false).unwrap();
+        assert_eq!(pixels[0][0], 1. / 3.);
+        drop(pixels);
+        assert_eq!(budget.used(), 0);
+        let insufficient = MemoryBudget::new(8);
+        assert!(demosaic_f32(&input, 2, 2, &cfa, &config, Some(&insufficient), &|| false).is_err());
+        assert_eq!(insufficient.used(), 0);
+        let calls = std::sync::atomic::AtomicUsize::new(0);
+        assert!(demosaic_f32(&input, 2, 2, &cfa, &config, Some(&budget), &|| calls.fetch_add(1, std::sync::atomic::Ordering::Relaxed) >= 1).is_err());
+        assert_eq!(budget.used(), 0);
+    }
+
+    #[test]
+    fn sample_conversion_cancels_before_reconstruction_and_releases_admitted_staging() {
+        let cfa = CfaPattern { width: 2, height: 2, cells: vec![CfaColor::Red, CfaColor::Green, CfaColor::Green, CfaColor::Blue] };
+        let config = DemosaicConfig { algorithm: DemosaicAlgorithm::Nearest, ..Default::default() };
+        let float = vec![0.5f32; 8192];
+        let integer = vec![2048u16; 8192];
+        // Enough for the conversion staging, but no demosaic scratch. Cancel must
+        // win inside conversion rather than falling through to a memory refusal.
+        for integer_input in [false, true] {
+            let budget = MemoryBudget::new(8192 * 8);
+            let calls = std::sync::atomic::AtomicUsize::new(0);
+            let cancelled = || calls.fetch_add(1, std::sync::atomic::Ordering::Relaxed) >= 2;
+            let result = if integer_input {
+                demosaic_u16(&integer, 128, 64, 0., 4095., &cfa, &config, Some(&budget), &cancelled)
+            } else {
+                demosaic_f32(&float, 128, 64, &cfa, &config, Some(&budget), &cancelled)
+            };
+            assert!(matches!(result, Err(DevelopError::Cancelled)));
+            assert_eq!(budget.used(), 0);
+            assert_eq!(calls.load(std::sync::atomic::Ordering::Relaxed), 3);
+        }
+    }
 
     fn all_bayer_cfas() -> [Cfa; 4] {
         [
@@ -3394,9 +3575,9 @@ mod tests {
     fn all_bayer_algorithms_preserve_constant_hdr_color_and_exact_sites_across_phases() {
         // Cross 128x128 tile boundaries and odd dimensions.
         let (w, h) = (139, 133);
-        let color = [1.85_f32, 0.42, 3.15]; // Scene-linear HDR > 1.0
+        let color = [1.85_f64, 0.42, 3.15]; // Scene-linear HDR > 1.0
         for cfa in all_bayer_cfas() {
-            let data: Vec<f32> = (0..w * h)
+            let data: Vec<f64> = (0..w * h)
                 .map(|i| color[cfa.color_at(i % w, i / w) as usize])
                 .collect();
             let m = Mosaic {
@@ -3431,7 +3612,7 @@ mod tests {
                 for (i, p) in out.data.iter().enumerate() {
                     for c in 0..3 {
                         assert!(
-                            (p[c] - color[c]).abs() < 5e-5,
+                            (p[c] - color[c]).abs() < 1e-12,
                             "{algo:?} pixel {i} ch {c}: got {p:?}, want {color:?}"
                         );
                     }
@@ -3447,7 +3628,7 @@ mod tests {
                 for (i, p) in out.data.iter().enumerate() {
                     for c in 0..3 {
                         assert!(
-                            (p[c] - color[c]).abs() < 5e-5,
+                            (p[c] - color[c]).abs() < 1e-12,
                             "{algo:?}+post pixel {i} ch {c}: got {p:?}, want {color:?}"
                         );
                     }
@@ -3461,7 +3642,7 @@ mod tests {
     #[test]
     fn xtrans_and_clustered_bayer_families_preserve_constant_hdr_and_measured_sites() {
         let (w, h) = (140, 134);
-        let color = [2.4_f32, 0.75, 1.35];
+        let color = [2.4_f64, 0.75, 1.35];
         for (name, cfa, algo) in [
             ("xtrans_dir", xtrans_cfa(), DemosaicAlgorithm::XTransDirectional),
             ("xtrans_1pass", xtrans_cfa(), DemosaicAlgorithm::XTransMarkesteijn),
@@ -3479,7 +3660,7 @@ mod tests {
                 DemosaicAlgorithm::HexadecaBayer,
             ),
         ] {
-            let data: Vec<f32> = (0..w * h)
+            let data: Vec<f64> = (0..w * h)
                 .map(|i| color[cfa.color_at(i % w, i / w) as usize])
                 .collect();
             let m = Mosaic {
@@ -3492,7 +3673,7 @@ mod tests {
             for (i, p) in out.data.iter().enumerate() {
                 for c in 0..3 {
                     assert!(
-                        (p[c] - color[c]).abs() < 1e-5,
+                        (p[c] - color[c]).abs() < 1e-12,
                         "{name} pixel {i} ch {c}: got {p:?}, want {color:?}"
                     );
                 }
@@ -3510,7 +3691,7 @@ mod tests {
             // Cyan (3) = G+B, Yellow (5) = R+G, Green (1) = G, Magenta (4) = R+B
             cells: vec![3, 5, 1, 4],
         };
-        let (r, g, b) = (0.4_f32, 0.6_f32, 0.8_f32);
+        let (r, g, b) = (0.4_f64, 0.6_f64, 0.8_f64);
         let cygm_vals = |code: u8| match code {
             3 => g + b,
             5 => r + g,
@@ -3519,7 +3700,7 @@ mod tests {
             _ => unreachable!(),
         };
         let (w, h) = (16, 16);
-        let data: Vec<f32> = (0..w * h)
+        let data: Vec<f64> = (0..w * h)
             .map(|i| cygm_vals(cfa.color_at(i % w, i / w)))
             .collect();
         let m = Mosaic {
@@ -3530,9 +3711,9 @@ mod tests {
         };
         let out = generic_cfa(&m, &|| false).unwrap();
         for p in &out.data {
-            assert!((p[0] - r).abs() < 1e-5, "R: {:?}", p);
-            assert!((p[1] - g).abs() < 1e-5, "G: {:?}", p);
-            assert!((p[2] - b).abs() < 1e-5, "B: {:?}", p);
+            assert!((p[0] - r).abs() < 1e-12, "R: {:?}", p);
+            assert!((p[1] - g).abs() < 1e-12, "G: {:?}", p);
+            assert!((p[2] - b).abs() < 1e-12, "B: {:?}", p);
         }
     }
 
@@ -3542,13 +3723,13 @@ mod tests {
         // where bilinear produces severe zippering while directional/gradient-corrected methods excel.
         let (w, h) = (64, 64);
         let cfa = &all_bayer_cfas()[0];
-        let mut gt = vec![[0.0f32; 3]; w * h];
-        let mut data = vec![0.0f32; w * h];
+        let mut gt = vec![[0.0f64; 3]; w * h];
+        let mut data = vec![0.0f64; w * h];
         for y in 0..h {
             for x in 0..w {
                 // Vertical edge at x == 32 plus horizontal high-frequency modulation
-                let base = if x < 32 { 0.2f32 } else { 0.8f32 };
-                let wave = 0.15 * ((x as f32 * 1.3).sin() + (y as f32 * 0.4).cos());
+                let base = if x < 32 { 0.2f64 } else { 0.8f64 };
+                let wave = 0.15 * ((x as f64 * 1.3).sin() + (y as f64 * 0.4).cos());
                 let lum = (base + wave).clamp(0.05, 0.95);
                 let rgb = [lum * 0.9, lum, lum * 0.7];
                 gt[y * w + x] = rgb;
@@ -3569,7 +3750,7 @@ mod tests {
                     let a = img.data[y * w + x];
                     let b = gt[y * w + x];
                     for c in 0..3 {
-                        let d = f64::from(a[c] - b[c]);
+                        let d = a[c] - b[c];
                         sum += d * d;
                         count += 1;
                     }
@@ -3659,6 +3840,34 @@ mod tests {
         drop(rgb);
         assert_eq!(budget.used(), 0);
 
+        // Native 64-bit f64 entry points preserve full double precision
+        let color64 = [
+            0.612_345_678_901_234_f64,
+            0.523_456_789_012_345,
+            0.434_567_890_123_456,
+        ];
+        let mut samples64: Vec<f64> = (0..(w * h) as usize)
+            .map(|i| {
+                let x = i % w as usize;
+                let y = i / w as usize;
+                let c = cfa_pat.cells[(y % 2) * 2 + (x % 2)] as usize;
+                color64[c]
+            })
+            .collect();
+        samples64[10 * w as usize + 10] = 50.0;
+        let rgb64 = demosaic_f64(&samples64, w, h, &cfa_pat, &cfg, Some(&budget), &|| false).unwrap();
+        assert_eq!(rgb64.len(), (w * h) as usize);
+        for p in rgb64.iter() {
+            for c in 0..3 {
+                assert!(
+                    (p[c] - color64[c]).abs() < 1e-12,
+                    "64-bit demosaic lost precision: got {p:?}, want {color64:?}"
+                );
+            }
+        }
+        drop(rgb64);
+        assert_eq!(budget.used(), 0);
+
         // Test u16 entry point and superpixel entry point
         let u16_samples = vec![2000u16; (w * h) as usize];
         let rgb16 = demosaic_u16(
@@ -3680,11 +3889,37 @@ mod tests {
         drop(rgb16);
         assert_eq!(budget.used(), 0);
 
+        let rgb16_f64 = demosaic_u16_f64(
+            &u16_samples,
+            w,
+            h,
+            0.0,
+            6000.0,
+            &cfa_pat,
+            &DemosaicConfig {
+                algorithm: DemosaicAlgorithm::RcdLmmse,
+                ..Default::default()
+            },
+            Some(&budget),
+            &|| false,
+        )
+        .unwrap();
+        assert!(rgb16_f64.iter().all(|p| (p[0] - (1.0 / 3.0)).abs() < 1e-14));
+        drop(rgb16_f64);
+        assert_eq!(budget.used(), 0);
+
         let (sw, sh, super_rgb) =
             demosaic_bayer_superpixel(&samples[..], w, h, &cfa_pat, Some(&budget), &|| false).unwrap();
         assert_eq!((sw, sh), (w / 2, h / 2));
         assert_eq!(super_rgb.len(), (sw * sh) as usize);
         drop(super_rgb);
+        assert_eq!(budget.used(), 0);
+
+        let (sw64, sh64, super_rgb64) =
+            demosaic_bayer_superpixel_f64(&samples64[..], w, h, &cfa_pat, Some(&budget), &|| false).unwrap();
+        assert_eq!((sw64, sh64), (w / 2, h / 2));
+        assert_eq!(super_rgb64.len(), (sw64 * sh64) as usize);
+        drop(super_rgb64);
         assert_eq!(budget.used(), 0);
     }
 
@@ -3692,7 +3927,7 @@ mod tests {
     fn cancellation_and_cfa_mismatch_validation_across_all_algorithms() {
         let (w, h) = (140, 140);
         let bayer = &all_bayer_cfas()[0];
-        let data = vec![0.5f32; w * h];
+        let data = vec![0.5f64; w * h];
         let m = Mosaic {
             w,
             h,
