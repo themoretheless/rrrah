@@ -21,6 +21,69 @@ fn view() -> ViewParameters {
 }
 
 #[test]
+fn split_comparison_reuses_resident_pixels_and_matches_both_reference_exposures() {
+    let Some(gpu) = common::qualification_gpu() else {
+        return;
+    };
+    let source = frame(1, vec![0.18, 0.36, 4., 0.5]);
+    eprintln!("split comparison adapter: {}", gpu.adapter_name());
+    for format in [common::READBACK_FORMAT, wgpu::TextureFormat::Rgba16Float] {
+        let budget = rrrah_core::MemoryBudget::new(16);
+        let mut renderer = if format == wgpu::TextureFormat::Rgba16Float {
+            rrrah_gpu::RasterRenderer::new_linear_hdr_with_budget(&gpu.device, budget.clone())
+        } else {
+            rrrah_gpu::RasterRenderer::new_with_budget(&gpu.device, format, budget.clone())
+        };
+        renderer.upload(&gpu.device, &gpu.queue, &source).unwrap();
+        let render = |renderer: &rrrah_gpu::RasterRenderer| -> Vec<u8> {
+            if format == wgpu::TextureFormat::Rgba16Float {
+                gpu.render_existing_raster_half(renderer, [64, 64])
+                    .into_iter()
+                    .flat_map(u16::to_le_bytes)
+                    .collect()
+            } else {
+                gpu.render_existing_raster(renderer, [64, 64]).pixels
+            }
+        };
+        renderer.update_view(&gpu.queue, view());
+        let before = render(&renderer);
+        renderer.update_view(
+            &gpu.queue,
+            ViewParameters {
+                exposure_stops: 1.,
+                ..view()
+            },
+        );
+        let after = render(&renderer);
+        assert_ne!(before, after);
+        renderer.set_comparison(&gpu.queue, 0.5, 0.);
+        let split = render(&renderer);
+        let bytes_per_pixel = if format == wgpu::TextureFormat::Rgba16Float {
+            8
+        } else {
+            4
+        };
+        for index in 0..4096 {
+            let offset = index * bytes_per_pixel;
+            let reference = if index % 64 < 32 { &before } else { &after };
+            assert_eq!(
+                &split[offset..offset + bytes_per_pixel],
+                &reference[offset..offset + bytes_per_pixel]
+            );
+        }
+        assert_eq!(
+            budget.used(),
+            16,
+            "comparison must not allocate another pixel texture"
+        );
+        renderer.set_comparison(&gpu.queue, 0., 0.);
+        assert_eq!(render(&renderer), after);
+        drop(renderer);
+        assert_eq!(budget.used(), 0);
+    }
+}
+
+#[test]
 #[ignore = "Metal-specific empirical range edge; outside portable binary16 caller contract"]
 fn hdr_exposure_saturates_to_finite_binary16_range() {
     let gpu = common::qualification_gpu().expect("actual GPU required");

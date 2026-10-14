@@ -11,6 +11,26 @@
 
 use super::Rgb32f;
 
+// Maximum simultaneously live chromaticity/validity pyramid payload. Sum
+// rounded dimensions explicitly: a 1-pixel-wide image does not shrink by 4.
+pub(super) fn pyramid_capacity_bytes(mut w: usize, mut h: usize) -> Option<u64> {
+    if w == 0 || h == 0 {
+        return Some(0);
+    }
+    let mut total = 0u64;
+    loop {
+        w = w.div_ceil(2);
+        h = h.div_ceil(2);
+        let pixels = (w as u64).checked_mul(h as u64)?;
+        let bytes =
+            pixels.checked_mul((std::mem::size_of::<[f64; 3]>() + std::mem::size_of::<bool>()) as u64)?;
+        total = total.checked_add(bytes)?;
+        if w == 1 && h == 1 {
+            return Some(total);
+        }
+    }
+}
+
 /// Fill `values` (per-pixel vectors) where `valid` is false from valid neighbours, coarse to fine.
 fn fill_invalid(w: usize, h: usize, values: &mut [[f64; 3]], valid: &mut [bool]) {
     if w == 0 || h == 0 || valid.iter().all(|&v| v) || !valid.iter().any(|&v| v) {
@@ -180,4 +200,19 @@ pub(super) fn reconstruct(img: &mut Rgb32f, wb: [f64; 3], clip: f64, clipped: &[
         }
     });
     count
+}
+
+#[cfg(test)]
+mod memory_admission_tests {
+    #[test]
+    fn pyramid_payload_counts_rounded_and_narrow_levels() {
+        use super::pyramid_capacity_bytes as bytes;
+        assert_eq!(bytes(0, 9), Some(0));
+        assert_eq!(bytes(1, 1), Some(25));
+        assert_eq!(bytes(1, 9), Some((5 + 3 + 2 + 1) * 25));
+        assert_eq!(bytes(9, 1), bytes(1, 9));
+        assert_eq!(bytes(9, 9), Some((25 + 9 + 4 + 1) * 25));
+        assert_eq!(bytes(8, 8), Some((16 + 4 + 1) * 25));
+        assert_eq!(bytes(usize::MAX, usize::MAX), None);
+    }
 }

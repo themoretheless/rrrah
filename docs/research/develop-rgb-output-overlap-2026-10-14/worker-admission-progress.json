@@ -1,0 +1,102 @@
+{
+  "status": "production_worker_cap_implemented_full_core_suite_queued",
+  "source": "crates/rrrah-core/src/develop/demosaic.rs",
+  "source_sha256": "04d5ef604f97545257298b0a0102fcd12a772c5fb8e942801bc05bd8183f11c8",
+  "policy": "algorithm-specific simultaneous tile payload fits existing 8 MiB worker allowance; frame-wide temporary accounting remains separate",
+  "scratch_declarations": 12,
+  "planner_test": {
+    "passed": 1,
+    "failed": 0,
+    "scope": "extracted production planner with tall/wide and high-core scenarios"
+  },
+  "crop_followup_session": 66991,
+  "full_core_session": 92006,
+  "full_core_log": "/tmp/demosaic-worker-budget-core.log",
+  "limitations": [
+    "Full current core suite is waiting for previous live compiler",
+    "Not full allocation accounting for dual-frame intermediates or opcodes",
+    "No throughput improvement claimed"
+  ],
+  "sources_sha256": {
+    "crates/rrrah-core/src/develop/mod.rs": "86d6bfabaf426a176a89a75d79987c0ad552dc808570fea274d9ea5cd6302665",
+    "crates/rrrah-core/src/develop/demosaic.rs": "58d9eed979f93ad97c6b90d06ae1e3b5c310dd779cdc0c4ac9e8a0d93031b94f",
+    "crates/rrrah-core/src/develop/ahd.rs": "43a0b191109f272377968cf32934a2a1a37330153817b7aa967ebae44fde6726",
+    "crates/rrrah-core/src/develop/highlight.rs": "e7888f1184dd818ce27e7c0e74aec1426943a263b85cd05f4b1b13b3e450a30b"
+  },
+  "remaining_frame_overlap_findings": [
+    "Full current core validation remains running or queued",
+    "Thread stack, allocator bookkeeping and runtime worker handles are not pixel-buffer payload and not qualified by these reservations",
+    "Source-derived stage bounds do not establish OS RSS limits"
+  ],
+  "additional_production_fix": "develop_raw stage peaks include RGB64 filter snapshot with live sensor input and optional clipping mask, and non-identity WarpRectilinear RGB/mask snapshots after sensor input release",
+  "new_regression": "filter_snapshot_memory_is_admitted_before_processing: three filter combinations and non-identity warp one-byte-short admission; execution pending",
+  "typecheck_session": 23293,
+  "typecheck_log": "/tmp/core-memory-check-20261014.log",
+  "dual_frame_admission": "develop_raw reserves max of concurrent two-RGB plus green snapshot and second tiled solver; standalone conditioned dual increases scratch from 32 to 40 bytes per pixel",
+  "highlight_admission": "explicit checked sum of rounded half-resolution RGB64-plus-bool levels, combined with RGB64 and clipping mask",
+  "pyramid_test": {
+    "passed": 1,
+    "failed": 0,
+    "scope": "extracted production helper, zero/one/odd/square/narrow dimensions and overflow"
+  },
+  "band_dispatch": "AHD and generic tiled driver distribute disjoint output bands using a Mutex<Enumerate<ChunksMut>>; height-proportional slot vector removed",
+  "band_driver_test": {
+    "passed": 1,
+    "failed": 0,
+    "scope": "extracted production tiled driver, 257x2049 coordinate payload checked at every pixel and cancellation; also added as crate regression"
+  },
+  "current_typecheck": {
+    "exit_code": 0,
+    "log": "/tmp/core-memory-check-current-20261014.log",
+    "scope": "rrrah-core --tests, current worker/stage/pyramid/band changes",
+    "source_sha256": {
+      "crates/rrrah-core/src/develop/mod.rs": "5fe6cc89544e2e98f1d0e7f517227b2a63e96bee27005422ba0463ece8ed9b51",
+      "crates/rrrah-core/src/develop/demosaic.rs": "29230549407b8c147d1f9535c291804fb18c88fe12a4a8429cf1d19c63992045",
+      "crates/rrrah-core/src/develop/ahd.rs": "43a0b191109f272377968cf32934a2a1a37330153817b7aa967ebae44fde6726",
+      "crates/rrrah-core/src/develop/highlight.rs": "e7888f1184dd818ce27e7c0e74aec1426943a263b85cd05f4b1b13b3e450a30b"
+    }
+  },
+  "unoptimized_core_execution": {
+    "session": 31466,
+    "log": "/tmp/core-memory-unoptimized-tests-20261014.log",
+    "status": "compiling_rrrah_core",
+    "purpose": "current native correctness tests; no performance evidence",
+    "profile_overrides": {
+      "test_opt_level": 0,
+      "test_debug": 0
+    }
+  },
+  "conditioned_dual_regression": "conditioned_dual_frames_are_admitted_before_sensor_copy: one-byte-short refusal before input-copy processing; execution pending",
+  "green_plane_admission": "develop_raw includes full f64 green plane for clustered Bayer and directional X-Trans, including non-Bayer Auto, alongside sensor samples, RGB64 and optional mask",
+  "latest_typecheck_session": 46145,
+  "latest_typecheck_log": "/tmp/core-memory-check-green-plane-20261014.log",
+  "ahd_full_frame_comparison": {
+    "session": 12674,
+    "log": "/tmp/rrrah-ahd-current-correctness.log",
+    "status": "terminal_pass",
+    "dimensions": [
+      [
+        259,
+        141
+      ],
+      [
+        128,
+        2048
+      ],
+      [
+        7,
+        257
+      ],
+      [
+        1,
+        129
+      ]
+    ],
+    "scope": "current production AHD kernel/planner and actual Mosaic accessors extracted without doc comments; all output components compared by f64 bits",
+    "harness_sha256": "4852c979dddbec309ecf3ea59ca1f3fe30d460e10719220744806a8b5f96c07e",
+    "exit_code": 0,
+    "passed": 1,
+    "failed": 0,
+    "log_sha256": "d49360d5bf5331deef1265b1dc99139dc3cd93e230c124b52c90caea2eb476e0"
+  }
+}

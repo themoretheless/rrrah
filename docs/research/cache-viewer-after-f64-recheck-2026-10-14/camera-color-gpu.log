@@ -1,0 +1,34 @@
+   Compiling rrrah-core v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-core)
+   Compiling rrrah-gpu v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-gpu)
+    Finished `test` profile [optimized + debuginfo] target(s) in 4.30s
+     Running tests/camera_color_readback.rs (target/debug/deps/camera_color_readback-4692fa6fd663bc99)
+
+running 12 tests
+test real_camera_profiles_match_independent_linear_transforms ... ok
+test color_thumbnail_uses_crop_and_oriented_dimensions ... ok
+HERO9 neutral matrix adapter: Metal Apple M4 Max
+Minified Bayer qualification adapter: Metal Apple M4 Max
+Bayer boundary qualification adapter: Metal Apple M4 Max
+six GPR camera color adapter: Metal Apple M4 Max
+Oriented Bayer qualification adapter: Metal Apple M4 Max
+RAW color qualification adapter: Metal Apple M4 Max
+Affine demosaic qualification adapter: Metal Apple M4 Max
+test minification_integrates_all_sensor_cells_instead_of_aliasing_the_stride ... ok
+test distinct_green_wb_is_applied_before_demosaic ... ok
+test sensor_clipped_near_white_is_neutral_but_chromatic_highlights_keep_color ... ok
+HERO5: four independent fields passed
+test hero9_dual_illuminant_colors_match_independent_adobe_matrix_on_gpu ... ok
+test all_bayer_phases_reconstruct_affine_color_fields_on_metal ... ok
+HERO6: four independent fields passed
+HERO7: four independent fields passed
+test bayer_sensor_boundaries_and_small_tiles_match_cpu_preview ... ok
+HERO9: four independent fields passed
+Fusion-back: four independent fields passed
+Fusion-front: four independent fields passed
+test six_official_gpr_camera_fields_match_independent_color_oracles_on_metal ... ok
+test real_camera_colors_match_gpu_readback ... ok
+test minified_cropped_bayer_all_orientations_match_cpu_and_tiled_metal ... ok
+test cropped_bayer_all_orientations_match_cpu_and_tiled_metal ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.70s
+

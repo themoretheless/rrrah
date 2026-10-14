@@ -4,7 +4,10 @@ import json,hashlib,subprocess,os
 R=Path(__file__).resolve().parents[1];D=R/'docs/research';P=D/'dedup-consensus-collection-v3-source-20261014.json';m=json.loads(P.read_text());S=Path(m['source']);sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest();assert all(sha(S/k)==h for k,h in m['source_sha256'].items());O=D/'dedup-consensus-collection-v3-focused-20261014.json';L=Path('/private/tmp/rrrah-consensus-collection-v3-focused-20261014.log');assert not O.exists() and not L.exists();cmd=['cargo','+stable','test','-p','rrrah-dedup','--features','decode','--lib','--test','search_portfolio','--test','portfolio_collection','--offline','--locked','--no-fail-fast','--jobs','2','--target-dir','/private/tmp/rrrah-consensus-collection-target-20261014'];env=os.environ.copy();env['CARGO_HOME']='/private/tmp/rrrah-runner-full-cargo-home-20261014';d=dict(status='running',producer_pid=os.getpid(),source=str(S),source_manifest=str(P),source_manifest_sha256=sha(P),producer_sha256=sha(__file__),command=cmd,log=str(L),scope='Frozen v3consensus collection/shared pair-preflight plus implicit NN proposal-cap overflow checks, library plus pair and collection integration targets. Rootselected four-crate/vendor/fixtures captured, including parallelAPNG/ICOdecoder changes, but not their complete own-suite/app qualification. Fake proposal providers in unit/integration fixtures are not actual learned inference.')
 def save():
  t=O.with_suffix('.tmp');t.write_text(json.dumps(d,indent=2)+'\n');t.replace(O)
-assert (D/'dedup-consensus-collection-focused-audit-20261014.json').is_file(), 'Preserve first-variant binaries before target reuse'
+first_audit=D/'dedup-collection_first-split-gate-audit-20261014.json'
+first=json.loads(first_audit.read_text());assert first['status']=='verified_frozen_complete_inventory_in_split_permissioned_runs' and first['targets']==3 and first['failed']==0
+assert all(sha(row['retained_executable'])==row['executable_sha256'] for row in first['rows']), 'Preserve first-variant binaries before target reuse'
+d['first_variant_split_audit']=str(first_audit);d['first_variant_split_audit_sha256']=sha(first_audit)
 save()
 with L.open('x') as f:
  c=subprocess.Popen(cmd,cwd=S,env=env,stdout=f,stderr=subprocess.STDOUT);d['child_pid']=c.pid;save();rc=c.wait()

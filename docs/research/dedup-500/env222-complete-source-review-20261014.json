@@ -1,0 +1,57 @@
+{
+  "status": "complete5file_source_review_36pure_C_controls",
+  "repository": "alexjp/env-dedup",
+  "commit": "9df9f75c47bef6957245b0bf6f32720a67dad3a0",
+  "index": 222,
+  "whole_repo_complete": true,
+  "whole_runtime_qualified": false,
+  "fully_read_files": [
+    {
+      "path": "env_dedup.c",
+      "local": "docs/research/dedup-500/evidence/alexjp--env-dedup/02-env_dedup.c",
+      "sha256": "2d28b1c0c117bda07b12a1911c5a2e3412e8a6bd15c931b16486d64e2be3b435",
+      "git_blob_sha1": "abbec964afba0d0e101ed85729395e61e5e32cf3",
+      "bytes": 3309
+    },
+    {
+      "path": "env_dedup_dynamic.c",
+      "local": "docs/research/dedup-500/evidence/alexjp--env-dedup/03-env_dedup_dynamic.c",
+      "sha256": "44e255eb9621cc4eaeb691c031c9c9276d83e4227b44a49de286fe9fba67bdba",
+      "git_blob_sha1": "e46e510fc3383f55ffeaa71c07c4e56e7877a032",
+      "bytes": 3872
+    },
+    {
+      "path": "env_dedup_dynamic_optimised.c",
+      "local": "docs/research/dedup-500/evidence/alexjp--env-dedup/04-env_dedup_dynamic_optimised.c",
+      "sha256": "fd754de1e11c7d025bb58ab2be7ef05a44f43f55b280e0f697c08dabea95310d",
+      "git_blob_sha1": "8468cd1620bcb3c8e07e3d44d8110c04d9082dad",
+      "bytes": 4675
+    },
+    {
+      "path": "README.md",
+      "local": "docs/research/dedup-500/evidence/alexjp--env-dedup/00-README.md",
+      "sha256": "ffeed2e211865f34d1e2727ee622aa7776233a309a5e5568c064f771b26323c2",
+      "git_blob_sha1": "7312dd90a963e5a8c1e4aabd3d8ce3cc922851ed",
+      "bytes": 1394
+    },
+    {
+      "path": "LICENSE",
+      "local": "docs/research/dedup-500/evidence/alexjp--env-dedup/01-LICENSE",
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "git_blob_sha1": "f288702d2fa16d3cdf0035b15a9fcbc552cd88e7",
+      "bytes": 35149
+    }
+  ],
+  "controls": "docs/research/dedup-env222-controls-20261014.json",
+  "controls_sha256": "f78f4f563bcfcfd7c2b26019100c50f1d6d69590acb4d1f8ec3382b050aa5d6c",
+  "auditor_sha256": "f975cd39972c14d6efbf42108b8dccfc145ce6b90f63c9fc6a0d6c275b1f8629",
+  "findings": [
+    "Stable exact case-sensitive token deduplication verified, including65unique tokens triggering growth and200repeatedtokens. Empty colon segments discarded: empty/current-directory entries cannot be preserved.",
+    "Original helpers repeatedly allocate/copy and scan prior tokens; optimized helper stores pointers into one copy and scans unique tokens, stillquadratic for alluniqueinput. seen_mask is unused.",
+    "Allocation and growth failures unchecked, lengths/capacities not overflow-checked; no cancellation or resource policy.",
+    "Process-wide interposition modifies15allowlisted variables, not file content or visual duplicates. Staticconstructor cleans existingenvironment; dynamicconstructors onlycache dlsym.",
+    "Source has unsynchronized globalfunctionpointers and environment edits; no thread qualification. dlsym errors and setenv/putenv failure handling are unchecked; no hooks executed in controls.",
+    "GPLv3text read, no code adopted; README Linux LD_PRELOAD workflow not validated on macOS."
+  ],
+  "scope": "All5captured blobs fully read/pinned.3exact extracted original pure helper bodies compiled with macOS clang; compatibility reallocarray wrapper in harness only.12synthetic strings each, no actual environment enumeration, preloading, hooks, dlsym or constructor execution. No Linux/glibc runtime, threads, allocation-failure or whole-program qualification. No upstream tests in tree, no source adoption. Captured commit-to-tree binding not independently fetched."
+}

@@ -1,0 +1,255 @@
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.09s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_gpu-3fc6e742f2070fc2)
+
+running 0 tests
+
+successes:
+
+successes:
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 57 filtered out; finished in 0.00s
+
+     Running tests/ai_native_transport.rs (target/debug/deps/ai_native_transport-d29a9cb33d3c49e6)
+
+running 1 test
+test pinned_native_ai_planes_survive_managed_metal_display ... ok
+
+successes:
+
+---- pinned_native_ai_planes_survive_managed_metal_display stdout ----
+AI transport Metal adapter: Metal Apple M4 Max
+AI Metal plane: VectorApple.ai-page-0.native.rgba; pixels=74046; max_RGB8_error=0; final_credit=0
+AI Metal plane: one.ai-page-0.native.rgba; pixels=1049088; max_RGB8_error=0; final_credit=0
+AI Metal plane: one.ai-page-1.native.rgba; pixels=30975; max_RGB8_error=0; final_credit=0
+AI Metal transport: pages=3; checked_pixels=1154109; production_AI_fidelity_unqualified
+
+
+successes:
+    pinned_native_ai_planes_survive_managed_metal_display
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.14s
+
+     Running tests/camera_color_readback.rs (target/debug/deps/camera_color_readback-4692fa6fd663bc99)
+
+running 0 tests
+
+successes:
+
+successes:
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 12 filtered out; finished in 0.00s
+
+     Running tests/compute_readback.rs (target/debug/deps/compute_readback-0f0df8525b3523e2)
+
+running 2 tests
+test full_sensor_linear_exposure_chunked_readback ... ok
+test full_sensor_managed_exposure_budgets_and_checks_every_pixel ... ok
+
+successes:
+
+---- full_sensor_linear_exposure_chunked_readback stdout ----
+full-resolution compute adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+full-resolution compute: 25494560 pixels, 407912960 bytes per buffer, samples_ms=[12.666084, 15.996125, 16.004167, 16.146125, 16.160708], p50_ms=16.004, max_ms=16.161
+
+---- full_sensor_managed_exposure_budgets_and_checks_every_pixel stdout ----
+managed full-resolution compute adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+full sensor distinct windows: dispatches=7; chunk_pixels=4194240; nonperiodic green and independent alpha
+full sensor recovery: CPU/GPU pressure refused; admitted cancellation; source retained; temporary credits zero
+interleaved full-resolution exposure: pixels=25494560, end_to_end_ms=228.063, all pixels exact
+managed full-resolution exposure: pixels=25494560, end_to_end_ms=185.225, gpu_peak=1223738992, cpu_peak=815825920, all pixels exact, final used=0
+
+
+successes:
+    full_sensor_linear_exposure_chunked_readback
+    full_sensor_managed_exposure_budgets_and_checks_every_pixel
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 5 filtered out; finished in 1.95s
+
+     Running tests/filmstrip_readback.rs (target/debug/deps/filmstrip_readback-846abeeec2a0d920)
+
+running 0 tests
+
+successes:
+
+successes:
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.00s
+
+     Running tests/model_readback.rs (target/debug/deps/model_readback-cb73a0cd6a7f5d18)
+
+running 0 tests
+
+successes:
+
+successes:
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 11 filtered out; finished in 0.00s
+
+     Running tests/raster_readback.rs (target/debug/deps/raster_readback-96fa399a25885f6d)
+
+running 8 tests
+test fusion_back_full_frame_developed_raw_matches_metal_display_transport ... ok
+test fusion_front_full_frame_developed_raw_matches_metal_display_transport ... ok
+test hdr_exposure_saturates_to_finite_binary16_range ... ok
+test hdr_opposite_extreme_samples_interpolate_without_nan ... ok
+test hero9_full_frame_developed_raw_matches_metal_display_transport ... ok
+test large_cancelled_upload_validation_and_admission_preserve_visible_texture ... ok
+test large_hdr_area_lod_preserves_all_output_samples_and_metal_frame ... ok
+test qualified_sd10_linear_raster_full_frame_display_readback ... ok
+
+successes:
+
+---- fusion_back_full_frame_developed_raw_matches_metal_display_transport stdout ----
+Fusion-back full-frame display adapter: Metal Apple M4 Max
+Fusion-back pixels checked: 9312000; maximum RGB8 difference: 1
+
+---- fusion_front_full_frame_developed_raw_matches_metal_display_transport stdout ----
+Fusion-front full-frame display adapter: Metal Apple M4 Max
+Fusion-front pixels checked: 9312000; maximum RGB8 difference: 1
+
+---- hdr_exposure_saturates_to_finite_binary16_range stdout ----
+HDR finite-range adapter: Metal Apple M4 Max
+HDR finite-range: exposure=-10; all4096 pixels exact; finite signed binary16
+HDR finite-range: exposure=0; all4096 pixels exact; finite signed binary16
+HDR finite-range: exposure=10; all4096 pixels exact; finite signed binary16
+
+---- hdr_opposite_extreme_samples_interpolate_without_nan stdout ----
+HDR opposite-extreme adapter: Metal Apple M4 Max
+HDR opposite-extreme: 63x65; symmetric center exact; all components finite
+
+---- hero9_full_frame_developed_raw_matches_metal_display_transport stdout ----
+HERO9 full-frame display adapter: Metal Apple M4 Max
+HERO9 pixels checked: 23251968; maximum RGB8 difference: 1
+
+---- large_cancelled_upload_validation_and_admission_preserve_visible_texture stdout ----
+large upload cancellation adapter: Metal Apple M4 Max
+raster upload pressure: texture-and-queue-refused; previous-frame-exact; temporary-credit-zero
+raster upload cancellation: total_checkpoints=2933; exercised=[1, 2, 1466, 2931, 2932, 2933]; upload_budget=192000000
+raster replacement values: format=Rgba8UnormSrgb; initial_center=[255, 0, 0, 255]; retry_center=[0, 0, 255, 255]
+raster replacement recovery: format=Rgba8UnormSrgb; pressure/cancellation previous frame exact; retry blue exact; final GPU/queue credit=0
+raster upload pressure: texture-and-queue-refused; previous-frame-exact; temporary-credit-zero
+raster upload cancellation: total_checkpoints=2933; exercised=[1, 2, 1466, 2931, 2932, 2933]; upload_budget=192000000
+raster replacement values: format=Rgba16Float; initial_center=[17408, 47104, 0, 15360]; retry_center=[46080, 0, 17408, 15360]
+raster replacement recovery: format=Rgba16Float; pressure/cancellation previous frame exact; retry blue exact; final GPU/queue credit=0
+
+---- large_hdr_area_lod_preserves_all_output_samples_and_metal_frame stdout ----
+36 MP HDR LOD adapter: Metal Apple M4 Max
+36 MP HDR area LOD full output: 64x64; every SDR/HDR component matches independent constant reference
+36 MP HDR area LOD full output: 1000x1000; every SDR/HDR component matches independent constant reference
+36 MP HDR area LOD: source=576000000; output=16000000; all1000000 pixels exact; SDR/HDR Metal exact; elapsed=95.227ms; output root=0
+
+---- qualified_sd10_linear_raster_full_frame_display_readback stdout ----
+X3F 2267x1513 raster adapter: Metal Apple M4 Max
+X3F 2267x1513 full-frame GPU sRGB max deviation=1; CPU leases released
+
+
+successes:
+    fusion_back_full_frame_developed_raw_matches_metal_display_transport
+    fusion_front_full_frame_developed_raw_matches_metal_display_transport
+    hdr_exposure_saturates_to_finite_binary16_range
+    hdr_opposite_extreme_samples_interpolate_without_nan
+    hero9_full_frame_developed_raw_matches_metal_display_transport
+    large_cancelled_upload_validation_and_admission_preserve_visible_texture
+    large_hdr_area_lod_preserves_all_output_samples_and_metal_frame
+    qualified_sd10_linear_raster_full_frame_display_readback
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 18 filtered out; finished in 3.55s
+
+     Running tests/raster_timing.rs (target/debug/deps/raster_timing-2961a7509b3bf11c)
+
+running 1 test
+test raster_single_layer_gpu_timestamp_timing ... ok
+
+successes:
+
+---- raster_single_layer_gpu_timestamp_timing stdout ----
+raster timestamp adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+{"median_gpu_ms":0.08931249999999999,"p95_gpu_ms":0.117166,"max_gpu_ms":0.459083,"warmups":5,"samples_gpu_ms":[0.090167, 0.0875, 0.105209, 0.106291, 0.084125, 0.086333, 0.085833, 0.104666, 0.106417, 0.081708, 0.084166, 0.094458, 0.105917, 0.08575, 0.090542, 0.087083, 0.1085, 0.459083, 0.08825, 0.083833, 0.086334, 0.086917, 0.117166, 0.106708, 0.087375, 0.091417, 0.107709, 0.103708, 0.087958, 0.088458],"source":[4096,4096],"target":[2048,2048],"target_format":"Rgba16Float"}
+
+
+successes:
+    raster_single_layer_gpu_timestamp_timing
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.15s
+
+     Running tests/raw_linear_readback.rs (target/debug/deps/raw_linear_readback-9fd8b6185e48ed18)
+
+running 0 tests
+
+successes:
+
+successes:
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 7 filtered out; finished in 0.00s
+
+     Running tests/raw_orientation_readback.rs (target/debug/deps/raw_orientation_readback-2f509afec3477bdf)
+
+running 0 tests
+
+successes:
+
+successes:
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+     Running tests/readback.rs (target/debug/deps/readback-381870146e3bac04)
+
+running 0 tests
+
+successes:
+
+successes:
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 11 filtered out; finished in 0.00s
+
+     Running tests/resource_lease.rs (target/debug/deps/resource_lease-8129f30d5856efe2)
+
+running 0 tests
+
+successes:
+
+successes:
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.00s
+
+     Running tests/rgbe_compute_readback.rs (target/debug/deps/rgbe_compute_readback-5d310ff784bafb7a)
+
+running 1 test
+test full_f828_managed_rgbe_matches_cpu_reference ... ok
+
+successes:
+
+---- full_f828_managed_rgbe_matches_cpu_reference stdout ----
+full RGBE adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+full RGBE managed timing: binding=134217728; runs=3; min_ms=41.323; p50_ms=47.130; max_ms=49.320; includes validation/upload/execute/readback; excludes pipeline/source preparation
+full RGBE binding window: limit=134217728; dispatches=1; all channel values equal; GPU credit zero
+full RGBE managed timing: binding=1048576; runs=3; min_ms=41.495; p50_ms=45.876; max_ms=1090.228; includes validation/upload/execute/readback; excludes pipeline/source preparation
+full RGBE binding window: limit=1048576; dispatches=130; all channel values equal; GPU credit zero
+full RGBE: 33,062,400 channel values equal; CPU/GPU final usage zero
+
+
+successes:
+    full_f828_managed_rgbe_matches_cpu_reference
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 6 filtered out; finished in 2.88s
+
+     Running tests/rgbe_view_readback.rs (target/debug/deps/rgbe_view_readback-e71f7d8542d54b99)
+
+running 0 tests
+
+successes:
+
+successes:
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+   Doc-tests rrrah_gpu
+
+running 0 tests
+
+successes:
+
+successes:
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

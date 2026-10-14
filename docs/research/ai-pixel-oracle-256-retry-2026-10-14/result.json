@@ -1,0 +1,38 @@
+{
+  "scope": "Original resources and content, derived one-pixel page box experiment",
+  "oracle": "/opt/homebrew/Cellar/poppler/26.10.0/bin/pdftoppm",
+  "box": [
+    199,
+    219.5,
+    200,
+    220.5
+  ],
+  "runs": [
+    {
+      "mode": "media-and-crop",
+      "scale": 256,
+      "valid": false,
+      "exit_code": 0,
+      "stderr": "Bogus memory allocation size\nBogus memory allocation size\n",
+      "mean_rgb": null,
+      "ppm_sha256": "7b51a6fbb10ddd74d21c9fd874792d51205d38a7e4785b0ff136f37f09da948b"
+    }
+  ],
+  "source_sha256": "c5fc34346629c3379cee6065c45b7de0b620be822604551d1463d8e691b03d06",
+  "profile_sha256": "b7489fae125cad80ef663bdcd187f4951bc326a012be5b06d7d551ff96e8b0ca",
+  "original_profile_sha256": "73e1ba37d2bad5bab2a964f40a9eed96209666efc067c3322626214bbef234a0",
+  "perceptual_lut_aliased_to_relative": true,
+  "oracle_sha256": "3bdab16e11c8d10b4fd9615231210125dbb195ae3ec2f22d641758242b159cb1",
+  "limitations": [
+    "derived page, not full-page fidelity",
+    "Poppler rendering is an independent comparator, not exact analytical area",
+    "changing MediaBox may affect page-dependent clipping and group behavior",
+    "no native renderer acceptance from this experiment",
+    "optional A2B1 alias exposes original perceptual LUT; this is a diagnostic profile derivative"
+  ],
+  "terminal": true,
+  "media-and-crop-last-scale-delta": null,
+  "derived_pdf_sha256": {
+    "media-and-crop.pdf": "f68df355d9a42fe872b9357a888c13710e213def194352e852abba5e97146075"
+  }
+}

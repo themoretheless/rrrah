@@ -582,13 +582,97 @@ pub fn develop_raw(
             "opcode coordinate domains currently require full-sensor ActiveArea",
         ));
     }
-    // Admission budget reservation contract.
-    let bytes = (n as u64)
+    // Keep the algorithm working estimate, but also cover the conversion stage:
+    // its full RGB64 frame remains alive while the cropped RGBA32 output is built.
+    let mut working_bytes = (n as u64)
         .checked_mul(35)
         .and_then(|n| n.checked_add(8 * 1024 * 1024))
         .ok_or(DevelopError::Invalid("scratch size overflow"))?;
-    let scratch_budget = budget.cloned().unwrap_or_else(|| MemoryBudget::new(bytes));
+    // Post-demosaic filters retain normalized sensor samples, RGB64 output,
+    // and a full RGB64 snapshot. They run sequentially, so take the stage peak
+    // rather than summing the snapshots of every enabled filter.
+    let mask_bytes_per_pixel = if options.recover_highlights {
+        std::mem::size_of::<[bool; 3]>() as u64
+    } else {
+        0
+    };
+    // Clustered Bayer and directional X-Trans retain a full green plane
+    // alongside normalized sensor data and RGB64 output.
+    let has_green_plane = matches!(
+        options.demosaic,
+        DemosaicAlgorithm::QuadBayer
+            | DemosaicAlgorithm::NonaBayer
+            | DemosaicAlgorithm::HexadecaBayer
+            | DemosaicAlgorithm::XTransDirectional
+    ) || (options.demosaic == DemosaicAlgorithm::Auto
+        && cfa_pattern.bayer_quad().is_err());
+    if has_green_plane {
+        let green_peak = (n as u64)
+            .checked_mul(
+                std::mem::size_of::<[f64; 3]>() as u64
+                    + 2 * std::mem::size_of::<f64>() as u64
+                    + mask_bytes_per_pixel,
+            )
+            .and_then(|v| v.checked_add(8 * 1024 * 1024))
+            .ok_or(DevelopError::Invalid("green plane size overflow"))?;
+        working_bytes = working_bytes.max(green_peak);
+    }
+    if demosaic::uses_dual_frames(options.demosaic) {
+        let dual_frames = (n as u64)
+            .checked_mul(
+                2 * std::mem::size_of::<[f64; 3]>() as u64
+                    + 2 * std::mem::size_of::<f64>() as u64
+                    + mask_bytes_per_pixel,
+            )
+            .ok_or(DevelopError::Invalid("dual frame size overflow"))?;
+        let dual_tiles = (n as u64)
+            .checked_mul(
+                2 * std::mem::size_of::<[f64; 3]>() as u64
+                    + std::mem::size_of::<f64>() as u64
+                    + mask_bytes_per_pixel,
+            )
+            .and_then(|v| v.checked_add(8 * 1024 * 1024))
+            .ok_or(DevelopError::Invalid("dual tile size overflow"))?;
+        working_bytes = working_bytes.max(dual_frames).max(dual_tiles);
+    }
+    if options.recover_highlights {
+        let pyramid = highlight::pyramid_capacity_bytes(w, h)
+            .ok_or(DevelopError::Invalid("highlight pyramid size overflow"))?;
+        let highlight_peak = (n as u64)
+            .checked_mul(std::mem::size_of::<[f64; 3]>() as u64 + mask_bytes_per_pixel)
+            .and_then(|v| v.checked_add(pyramid))
+            .ok_or(DevelopError::Invalid("highlight scratch size overflow"))?;
+        working_bytes = working_bytes.max(highlight_peak);
+    }
+    if options.false_color_passes > 0 || options.suppress_fringe {
+        let filter_peak = (n as u64)
+            .checked_mul(
+                2 * std::mem::size_of::<[f64; 3]>() as u64
+                    + std::mem::size_of::<f64>() as u64
+                    + mask_bytes_per_pixel,
+            )
+            .ok_or(DevelopError::Invalid("filter scratch size overflow"))?;
+        working_bytes = working_bytes.max(filter_peak);
+    }
+    // Rectilinear warping runs after sensor samples are released, but keeps
+    // another RGB frame and, when enabled, another sensor clipping mask.
+    if lists.list3.iter().any(|op| {
+        matches!(op,
+        Opcode::WarpRectilinear { planes, .. }
+            if planes.iter().any(|plane| *plane != [1.0, 0.0, 0.0, 0.0, 0.0, 0.0]))
+    }) {
+        let warp_peak = (n as u64)
+            .checked_mul(2 * (std::mem::size_of::<[f64; 3]>() as u64 + mask_bytes_per_pixel))
+            .ok_or(DevelopError::Invalid("warp scratch size overflow"))?;
+        working_bytes = working_bytes.max(warp_peak);
+    }
     let output_bytes = u64::from(md.display_dimensions().0) * u64::from(md.display_dimensions().1) * 16;
+    let conversion_peak = (n as u64)
+        .checked_mul(std::mem::size_of::<[f64; 3]>() as u64)
+        .and_then(|rgb| rgb.checked_add(output_bytes))
+        .ok_or(DevelopError::Invalid("conversion size overflow"))?;
+    let bytes = working_bytes.max(conversion_peak);
+    let scratch_budget = budget.cloned().unwrap_or_else(|| MemoryBudget::new(bytes));
     let scratch_credit = scratch_budget.try_reserve(bytes - output_bytes)?;
     let output_credit = scratch_budget.try_reserve(output_bytes)?;
     let mut samples: Vec<f64> = mosaic.pixels.iter().map(|p| f64::from(*p)).collect();
@@ -724,11 +808,7 @@ pub fn develop_raw(
     if options.recover_highlights {
         highlight::reconstruct(
             &mut rgb,
-            [
-                wb_f64[0],
-                wb_f64[1].min(wb_f64[3]),
-                wb_f64[2],
-            ],
+            [wb_f64[0], wb_f64[1].min(wb_f64[3]), wb_f64[2]],
             0.999,
             &clipped,
         );
@@ -748,11 +828,18 @@ pub fn develop_raw(
             return Err(DevelopError::Cancelled);
         }
         for x in 0..ow {
-            let uv = md
-                .orientation
-                .map_display_uv_f64([(f64::from(x) + 0.5) / f64::from(ow), (f64::from(y) + 0.5) / f64::from(oh)]);
-            let sx = crop.x + (uv[0] * f64::from(crop.width)).floor().min(f64::from(crop.width - 1)) as u32;
-            let sy = crop.y + (uv[1] * f64::from(crop.height)).floor().min(f64::from(crop.height - 1)) as u32;
+            let uv = md.orientation.map_display_uv_f64([
+                (f64::from(x) + 0.5) / f64::from(ow),
+                (f64::from(y) + 0.5) / f64::from(oh),
+            ]);
+            let sx = crop.x
+                + (uv[0] * f64::from(crop.width))
+                    .floor()
+                    .min(f64::from(crop.width - 1)) as u32;
+            let sy = crop.y
+                + (uv[1] * f64::from(crop.height))
+                    .floor()
+                    .min(f64::from(crop.height - 1)) as u32;
             let linear64 = crate::apply_3x3_f64(matrix, rgb.data[sy as usize * w + sx as usize]);
             let linear = linear64.map(|v| v as f32);
             if linear64.iter().any(|p| !p.is_finite()) || linear.iter().any(|p| !p.is_finite()) {
@@ -801,11 +888,18 @@ fn develop_rgbe(
             return Err(DevelopError::Cancelled);
         }
         for x in 0..ow {
-            let uv = md
-                .orientation
-                .map_display_uv_f64([(f64::from(x) + 0.5) / f64::from(ow), (f64::from(y) + 0.5) / f64::from(oh)]);
-            let sx = crop.x + (uv[0] * f64::from(crop.width)).floor().min(f64::from(crop.width - 1)) as u32;
-            let sy = crop.y + (uv[1] * f64::from(crop.height)).floor().min(f64::from(crop.height - 1)) as u32;
+            let uv = md.orientation.map_display_uv_f64([
+                (f64::from(x) + 0.5) / f64::from(ow),
+                (f64::from(y) + 0.5) / f64::from(oh),
+            ]);
+            let sx = crop.x
+                + (uv[0] * f64::from(crop.width))
+                    .floor()
+                    .min(f64::from(crop.width - 1)) as u32;
+            let sy = crop.y
+                + (uv[1] * f64::from(crop.height))
+                    .floor()
+                    .min(f64::from(crop.height - 1)) as u32;
             let rgb64 = calibration
                 .reconstruct_linear_rgb([sx, sy], |px, py| {
                     mosaic.pixels[py as usize * md.width as usize + px as usize]
@@ -1070,6 +1164,64 @@ mod tests {
 #[cfg(test)]
 mod pipeline_tests {
     use super::*;
+    #[test]
+    fn filter_snapshot_memory_is_admitted_before_processing() {
+        use std::cell::Cell;
+        let count = 1024 * 1024;
+        let mut metadata = sensor().metadata;
+        metadata.width = 1024;
+        metadata.height = 1024;
+        metadata.active_area = None;
+        metadata.crop_area = None;
+        let mosaic = DecodedMosaic::new(metadata, std::sync::Arc::new(vec![200u16; count])).unwrap();
+        for (algorithm, false_color_passes, suppress_fringe, live_bytes_per_pixel) in [
+            (DemosaicAlgorithm::Nearest, 1, false, 56),
+            (DemosaicAlgorithm::Nearest, 0, true, 56),
+            (DemosaicAlgorithm::Nearest, 1, true, 56),
+            (DemosaicAlgorithm::RcdLmmse, 0, false, 64),
+        ] {
+            let options = DevelopOptions {
+                demosaic: algorithm,
+                recover_highlights: false,
+                false_color_passes,
+                suppress_fringe,
+                ..Default::default()
+            };
+            let known_live_payload = count as u64 * live_bytes_per_pixel;
+            let budget = MemoryBudget::new(known_live_payload - 1);
+            let calls = Cell::new(0);
+            let result = develop_raw(&mosaic, &options, &OpcodeLists::default(), Some(&budget), &|| {
+                calls.set(calls.get() + 1);
+                calls.get() > 1
+            });
+            assert!(matches!(result, Err(DevelopError::Buffer(_))));
+            assert_eq!(calls.get(), 1, "must refuse before normalizing sensor samples");
+            assert_eq!(budget.used(), 0);
+        }
+        let options = DevelopOptions {
+            demosaic: DemosaicAlgorithm::Nearest,
+            recover_highlights: false,
+            ..Default::default()
+        };
+        let lists = OpcodeLists {
+            list3: vec![Opcode::WarpRectilinear {
+                planes: vec![[1.01, 0.0, 0.0, 0.0, 0.0, 0.0]],
+                center: [0.5, 0.5],
+            }],
+            ..Default::default()
+        };
+        let budget = MemoryBudget::new(count as u64 * 48 - 1);
+        let calls = Cell::new(0);
+        let result = develop_raw(&mosaic, &options, &lists, Some(&budget), &|| {
+            calls.set(calls.get() + 1);
+            calls.get() > 1
+        });
+        assert!(matches!(result, Err(DevelopError::Buffer(_))));
+        assert_eq!(calls.get(), 1);
+        assert_eq!(budget.used(), 0);
+        assert!(mosaic.pixels.iter().all(|&sample| sample == 200));
+    }
+
     fn sensor() -> DecodedMosaic {
         use crate::{CfaColor, LevelGrid, Orientation, Photometric, RawMetadata, WhiteLevel};
         let md = RawMetadata {
@@ -1268,6 +1420,67 @@ mod pipeline_tests {
             Err(DevelopError::Invalid(_))
         ));
     }
+    #[test]
+    fn large_development_admits_live_rgb64_and_rgba32_overlap() {
+        let mut metadata = sensor().metadata;
+        metadata.width = 2048;
+        metadata.height = 1024;
+        let count = metadata.width as usize * metadata.height as usize;
+        let mosaic = DecodedMosaic::new(metadata, std::sync::Arc::new(vec![200u16; count])).unwrap();
+        let options = DevelopOptions {
+            demosaic: DemosaicAlgorithm::Nearest,
+            recover_highlights: false,
+            ..Default::default()
+        };
+        let cancelled = || false;
+        let budget = MemoryBudget::new(128 * 1024 * 1024);
+        let output = develop_raw(&mosaic, &options, &OpcodeLists::default(), Some(&budget), &|| {
+            false
+        })
+        .unwrap();
+        // During conversion the full RGB64 source still exists while the final
+        // RGBA32 allocation is populated. Derive its lower bound from actual
+        // element sizes and retained output capacity, not an admission multiplier.
+        let required_overlap = (count * std::mem::size_of::<[f64; 3]>()) as u64 + output.capacity_bytes();
+        assert!(
+            budget.peak() >= required_overlap,
+            "reserved peak={} below live buffer payload={required_overlap}",
+            budget.peak()
+        );
+        assert_eq!(budget.used(), output.capacity_bytes());
+        drop(output);
+        assert_eq!(budget.used(), 0);
+        let insufficient = MemoryBudget::new(required_overlap - 1);
+        assert!(matches!(
+            develop_raw(
+                &mosaic,
+                &options,
+                &OpcodeLists::default(),
+                Some(&insufficient),
+                &cancelled
+            ),
+            Err(DevelopError::Buffer(_))
+        ));
+        assert_eq!(insufficient.used(), 0);
+        let mut cropped_metadata = mosaic.metadata.clone();
+        cropped_metadata.crop_area = Some(crate::Rect::new(0, 0, 1024, 1024));
+        let cropped = DecodedMosaic::new(cropped_metadata, mosaic.pixels.clone()).unwrap();
+        let crop_budget = MemoryBudget::new(required_overlap - 1);
+        let output = develop_raw(
+            &cropped,
+            &options,
+            &OpcodeLists::default(),
+            Some(&crop_budget),
+            &cancelled,
+        )
+        .unwrap();
+        assert_eq!((output.width(), output.height()), (1024, 1024));
+        assert_eq!(crop_budget.used(), output.capacity_bytes());
+        drop(output);
+        assert_eq!(crop_budget.used(), 0);
+        assert!(mosaic.pixels.iter().all(|&v| v == 200));
+    }
+
     #[test]
     fn scene_linear_output_retains_g2_hdr_and_managed_ownership() {
         let mut m = sensor();

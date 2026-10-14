@@ -1,0 +1,115 @@
+{
+  "status": "verified126fresh_process_reports_seven_cases",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-fused-exact-pair-benchmark-v3-20261014.json": "5ae2b862eb351df7c3414d516be1b5036ab2ef7f0befb7e28dc6c840954a9c6a",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-fused-exact-pair-controls-v3-20261014.json": "dd8e8ba2ecba53924a404b5d7a2399c43cb189a6f048f61611de9ed29856dab4",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-fused-exact-benchmark-v3-20261014.py": "84324759e0baf0b0cb4ac09f43c892dbef76cd216fd0d451cc4d6250beb603f6"
+  },
+  "processes": 126,
+  "calls": 185760,
+  "warmup_pairs": 7,
+  "measured_pairs": 56,
+  "summary": [
+    {
+      "case": "empty",
+      "median_candidate_cpu_ratio": 0.7116144600714709,
+      "paired_ratios": [
+        0.6902503153441463,
+        0.7286144372046773,
+        0.6714510884876912,
+        0.7754599170263591,
+        0.7412820203363832,
+        0.6734531835205975,
+        0.6946144829382644,
+        0.7420284000597157
+      ]
+    },
+    {
+      "case": "tiny",
+      "median_candidate_cpu_ratio": 0.6961190147379958,
+      "paired_ratios": [
+        0.6828000371527112,
+        0.7009211535639106,
+        0.6910830287269377,
+        0.7724311464909898,
+        0.6947484140187578,
+        0.6758059826466042,
+        0.6974896154572338,
+        0.7543581269533568
+      ]
+    },
+    {
+      "case": "block",
+      "median_candidate_cpu_ratio": 0.8167439429139808,
+      "paired_ratios": [
+        0.7653707092799527,
+        0.8469375491148096,
+        0.8402516734677349,
+        0.844663108426183,
+        0.820708345511109,
+        0.8127795403168525,
+        0.7569216456296588,
+        0.7846351808607364
+      ]
+    },
+    {
+      "case": "large_same",
+      "median_candidate_cpu_ratio": 0.9419854378971313,
+      "paired_ratios": [
+        0.953927443778603,
+        0.9161414790997209,
+        1.0183147222189688,
+        0.9763022191320384,
+        0.8922350036712772,
+        0.9795796003550187,
+        0.9191466595331149,
+        0.9300434320156596
+      ]
+    },
+    {
+      "case": "large_early_different",
+      "median_candidate_cpu_ratio": 1.0121255969987772,
+      "paired_ratios": [
+        0.9924844189173565,
+        0.9583044921806535,
+        1.0338891014327105,
+        1.0019904845131868,
+        1.0222607094843679,
+        1.0307726444620038,
+        1.0425759902847684,
+        0.9925058657358792
+      ]
+    },
+    {
+      "case": "large_late_different",
+      "median_candidate_cpu_ratio": 0.9775740369282616,
+      "paired_ratios": [
+        0.9131481361004241,
+        0.8873949404792756,
+        0.9842413835953179,
+        1.0219136677057623,
+        0.9799531372039152,
+        1.0007799964342328,
+        0.975194936652608,
+        0.945238302692235
+      ]
+    },
+    {
+      "case": "large_size_different",
+      "median_candidate_cpu_ratio": 1.0297062950278741,
+      "paired_ratios": [
+        1.036917504469576,
+        0.9761566691423961,
+        1.04098943067773,
+        1.0304497720518997,
+        1.0308584232508724,
+        0.9840910837606368,
+        1.0289628180038486,
+        0.9896298626403486
+      ]
+    }
+  ],
+  "root_adopted": false,
+  "decision": "performance_review_required_before_adoption",
+  "scope": "Actual public compare_files over synthetic stable regular files, nofeature isolated current-root baseline versus fusedcandidate, opt-level1 realdeps. Alternating fresh processes, childCPU from RUSAGE_CHILDREN deltas, wall recorded separately. No physicaldeviceIO measurement, coldcache/Windows/Linux/release/collection/decode/native/corpus/allcase or hardRSS claim. Production unchanged. Raw output/commands/cpuvalues and paired medians independently recomputed. CPU deltas independently recomputed from retained RUSAGE_CHILDREN user/system before/after snapshots; original kernel syscalls themselves are not replayed. Broad allcase performance remains unproven."
+}

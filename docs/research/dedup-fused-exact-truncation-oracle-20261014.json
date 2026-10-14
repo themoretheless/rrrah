@@ -1,0 +1,18 @@
+{
+  "status": "original_api_eof_refusal_confirmed_test_oracle_corrected",
+  "original_control": {
+    "callbacks": 21,
+    "refusals": 20,
+    "unexpected_eof": 2
+  },
+  "pins": {
+    "/private/tmp/rrrah-fused-exact-pair-20261014/truncate-oracle.rs": "479e8b528d9c4452a7cccd596a9b4eaee746c91fdd74d81041e8f1679aa4248e",
+    "/private/tmp/rrrah-fused-exact-pair-20261014/truncate-oracle": "dd2ffdc980c8b98b93550ba3e8a48e9e0412d68e4e381dbed93fda9d4d68115f",
+    "/private/tmp/rrrah-fused-exact-pair-benchmark-v3-20261014/baseline/librrrah_dedup.rlib": "195274c7dd9651683df53f4660d626eb2eb365775e1c7f892fa79ea47454c951",
+    "/private/tmp/rrrah-fused-exact-pair-20261014/candidate-stress-v5-tests.log": "1e7d124c03572976a51392b75962f30e65c1885748b2955514d8d77f6b3726a1",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-fused-exact-pair-stress-v5-20261014.json": "e4aac2e7f3db527b495d091dc8a8c215509d653a797bbee5f76c96d98317a15d"
+  },
+  "candidate_initial_failure": "len1 same stop3 lefttruncate: Err(Io(UnexpectedEof)); correct refusal, not false successful match.",
+  "corrected_oracle": "Changed required for overwrite/replacement; truncation may additionally return IO UnexpectedEof. All successful bool results after persistent post-observation mutation remain forbidden.",
+  "scope": "Originalretained publicAPI callback sweep and isolatedtestoracle change only, no runtimebody change/rootadoption. Originalfailure preserved; v6stress gate pending."
+}

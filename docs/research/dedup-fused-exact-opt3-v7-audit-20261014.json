@@ -1,0 +1,115 @@
+{
+  "status": "verified126fresh_process_reports_seven_cases",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-fused-exact-opt3-v7-20261014.json": "4e3ea4651a585aae20a45ab2485200da034f39c897b060552f7635ec4853344a",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-fused-exact-pair-stress-opt3-v7-20261014.json": "1cdfe021ef445dfac84abaa2bc28f59fbf43883931d48ba43493172b1e3a6dbf",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-fused-exact-opt3-v7-benchmark-20261014.py": "4be35be1072523751917087ff5a7262a8802ac181461d8e51841d6809dd65395"
+  },
+  "processes": 126,
+  "calls": 272160,
+  "warmup_pairs": 7,
+  "measured_pairs": 56,
+  "summary": [
+    {
+      "case": "empty",
+      "median_candidate_cpu_ratio": 0.6947065527798861,
+      "paired_ratios": [
+        0.6632465417956948,
+        0.6982863363416061,
+        0.7243470415986356,
+        0.7109164160126638,
+        0.6911267692181662,
+        0.6758762886597922,
+        0.7028351235087825,
+        0.6895146633105567
+      ]
+    },
+    {
+      "case": "tiny",
+      "median_candidate_cpu_ratio": 0.6703674982249948,
+      "paired_ratios": [
+        0.7057556177614943,
+        0.6417257484557799,
+        0.6461982931758714,
+        0.6701424853910275,
+        0.7001060702425322,
+        0.6705925110589619,
+        0.6205390828911105,
+        0.7104361342614801
+      ]
+    },
+    {
+      "case": "block",
+      "median_candidate_cpu_ratio": 0.8226500459555706,
+      "paired_ratios": [
+        0.8033038811686258,
+        0.831404231770226,
+        0.8263459416480594,
+        0.8189541502630817,
+        0.7995894623276425,
+        0.7692318268238628,
+        0.8263647561696921,
+        0.8355731587600043
+      ]
+    },
+    {
+      "case": "large_same",
+      "median_candidate_cpu_ratio": 0.9578464457937539,
+      "paired_ratios": [
+        0.9562723975338284,
+        0.9589136180125871,
+        0.9567981030209769,
+        0.9473053791646092,
+        0.9545218339962053,
+        0.9592438875817395,
+        0.9588947885665309,
+        0.962730266886753
+      ]
+    },
+    {
+      "case": "large_early_different",
+      "median_candidate_cpu_ratio": 0.9968452141782673,
+      "paired_ratios": [
+        1.0037643828419525,
+        1.0020819332448714,
+        0.9916084951116633,
+        1.0076948162499897,
+        0.9800577018030143,
+        0.9579303955973211,
+        0.9322649360565008,
+        1.0189593971078446
+      ]
+    },
+    {
+      "case": "large_late_different",
+      "median_candidate_cpu_ratio": 1.0064178888002013,
+      "paired_ratios": [
+        0.9918406169743538,
+        0.967445705621225,
+        1.0089832179323506,
+        1.0288832055394699,
+        1.0038525596680519,
+        1.0170804568243452,
+        1.011593079647883,
+        0.9624613382138391
+      ]
+    },
+    {
+      "case": "large_size_different",
+      "median_candidate_cpu_ratio": 1.006504314730805,
+      "paired_ratios": [
+        0.9605214249081224,
+        0.9810619024625847,
+        1.0122439553330256,
+        1.0203313639043456,
+        0.9633470423304128,
+        1.0059544835641272,
+        1.0109221326799742,
+        1.0070541458974827
+      ]
+    }
+  ],
+  "root_adopted": false,
+  "decision": "performance_review_required_before_adoption",
+  "scope": "Actual public compare_files over synthetic stable regular files, nofeature isolated current-root baseline versus fusedcandidate, opt-level3 realdeps; optimized directrustc, not Cargo release/LTO. Alternating fresh processes, childCPU from RUSAGE_CHILDREN deltas, wall recorded separately. No physicaldeviceIO measurement, coldcache/Windows/Linux/release/collection/decode/native/corpus/allcase or hardRSS claim. Production unchanged. Raw output/commands/cpuvalues and paired medians independently recomputed. CPU deltas independently recomputed from retained RUSAGE_CHILDREN user/system before/after snapshots; original kernel syscalls themselves are not replayed. Broad allcase performance remains unproven."
+}

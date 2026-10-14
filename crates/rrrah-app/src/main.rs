@@ -43,13 +43,17 @@ use winit::{
     window::{Window, WindowId},
 };
 
+mod accessibility;
 mod cache_maintenance;
 mod cache_telemetry;
 mod cache_writer;
 mod decode_gate;
 mod drop_inspection;
+mod edit_store;
+mod editor;
 mod filmstrip_ui;
 mod gallery;
+mod histogram_worker;
 mod model_swap;
 mod pipeline_telemetry;
 mod raw_load_policy;
@@ -1100,6 +1104,15 @@ fn run_viewer(
         gpu_demosaic,
         untagged_color,
     );
+    app.event_proxy = Some(proxy.clone());
+    let histogram_proxy = proxy.clone();
+    app.histogram_worker.set_waker(move || {
+        let _ = histogram_proxy.send_event(WakeEvent::LoadProgress);
+    });
+    let editor_proxy = proxy.clone();
+    app.editor.set_waker(move || {
+        let _ = editor_proxy.send_event(WakeEvent::LoadProgress);
+    });
     let model_proxy = proxy.clone();
     app.model_upload_worker.set_waker(move || {
         let _ = model_proxy.send_event(WakeEvent::LoadProgress);
@@ -1113,9 +1126,15 @@ fn run_viewer(
     Ok(())
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug)]
 enum WakeEvent {
+    AccessKit(accesskit_winit::Event),
     LoadProgress,
+}
+impl From<accesskit_winit::Event> for WakeEvent {
+    fn from(event: accesskit_winit::Event) -> Self {
+        Self::AccessKit(event)
+    }
 }
 
 #[derive(Debug)]
@@ -3417,6 +3436,16 @@ fn submit_upload_lease<V: Send + Sync + 'static>(
 }
 
 struct App {
+    editor: editor::Editor,
+    accesskit: Option<accesskit_winit::Adapter>,
+    access_focus: accesskit::NodeId,
+    event_proxy: Option<EventLoopProxy<WakeEvent>>,
+    before: bool,
+    ready_generation: Option<u64>,
+    command_focus_visible: bool,
+    split_comparison: bool,
+    histogram_worker: histogram_worker::HistogramWorker,
+    histogram: Option<rrrah_core::histogram::Histogram>,
     path: PathBuf,
     receiver: Receiver<LoadEvent>,
     foreground_loader: ForegroundLoader,
@@ -3502,6 +3531,11 @@ impl App {
             32,
             thumbnail_loader_with_cancel(Arc::clone(&decode_gate), managed_budget.clone(), untagged_color),
         );
+        let edit_journal_root = cache_root
+            .clone()
+            .or_else(default_cache_dir)
+            .unwrap_or_else(std::env::temp_dir)
+            .join("edit-journal");
         let raw_prefetcher = gallery::RawPrefetcher::with_budget(
             cache_root,
             no_cache,
@@ -3557,6 +3591,22 @@ impl App {
             gpu_backend,
             gpu_vendor,
             gpu_demosaic,
+            editor: editor::Editor::new(
+                managed_budget.as_ref().map_or_else(
+                    || rrrah_core::MemoryBudget::new(1024 * 1024),
+                    |b| b.child(1024 * 1024),
+                ),
+                edit_journal_root,
+            ),
+            before: false,
+            ready_generation: None,
+            command_focus_visible: false,
+            split_comparison: false,
+            histogram_worker: histogram_worker::HistogramWorker::default(),
+            histogram: None,
+            accesskit: None,
+            access_focus: accesskit::NodeId(10),
+            event_proxy: None,
             upload_memory_budget: managed_budget,
             telemetry_window: None,
             telemetry: None,
@@ -3850,6 +3900,7 @@ impl App {
                                         submit_upload_lease(&gpu.queue, &gpu.upload_completions, lease);
                                     }
                                     self.image_index = 0;
+                                    self.ready_generation = Some(generation);
                                     self.image_count = 1;
                                     gpu.raster_active = false;
                                     gpu.raster_viewport = None;
@@ -3972,6 +4023,7 @@ impl App {
                     self.status = match result {
                         Some(Ok(())) => {
                             self.image_index = 0;
+                            self.ready_generation = Some(generation);
                             self.image_count = 1;
                             self.scalar_window = None;
                             format!(
@@ -4007,6 +4059,14 @@ impl App {
                     self.pipeline = PipelineSnapshot::idle(generation);
                     let upload_token =
                         GenerationToken::new(Arc::clone(&self.foreground_loader.generation), generation);
+                    self.histogram = None;
+                    if raster.color_space() == &rrrah_core::RasterColorSpace::LinearSrgb {
+                        let token =
+                            GenerationToken::new(Arc::clone(&self.foreground_loader.generation), generation);
+                        if let Err(error) = self.histogram_worker.submit(raster.pixels().clone(), token) {
+                            log::warn!("histogram unavailable: {error}");
+                        }
+                    }
                     let result = self.gpu.as_mut().map(|gpu| {
                         let renderer = gpu
                             .raster
@@ -4075,6 +4135,7 @@ impl App {
                                 raster.height()
                             );
                             self.image_index = image_index;
+                            self.ready_generation = Some(generation);
                             self.scalar_window = scalar_window;
                             self.image_count = raster.image_count();
                             let page = if raster.image_count() > 1 {
@@ -4128,25 +4189,167 @@ impl App {
                 }
             }
             if let Some(window) = &self.window {
-                window.set_title(&format!("Rrrah — {}", self.status));
+                window.set_title(&self.window_title());
                 window.request_redraw();
             }
         }
     }
 
+    fn window_title(&self) -> String {
+        let command = if self.command_focus_visible {
+            accessibility::COMMANDS
+                .get(self.access_focus.0.saturating_sub(accessibility::FIRST_COMMAND) as usize)
+                .map_or_else(String::new, |label| format!("{label} (Enter) — "))
+        } else {
+            String::new()
+        };
+        format!("Rrrah — {command}{}", self.status)
+    }
+    fn accessibility_tree(&self) -> accesskit::TreeUpdate {
+        let name = format!(
+            "{}; image {} of {}; exposure {:+.2} stops{}",
+            display_name(&self.path),
+            self.image_index + 1,
+            self.image_count,
+            self.view.exposure_stops,
+            if self.before { "; before" } else { "" }
+        );
+        let folder = self
+            .strip
+            .current
+            .and_then(|i| self.strip.tiles.get(i))
+            .map(|t| t.folder.display().to_string());
+        accessibility::tree(&name, &self.status, folder.as_deref(), self.access_focus)
+    }
+    fn update_accessibility(&mut self) {
+        if self.accesskit.is_some() {
+            let tree = self.accessibility_tree();
+            self.accesskit.as_mut().unwrap().update_if_active(|| tree);
+        }
+    }
+    fn access_command(&mut self, id: accesskit::NodeId) {
+        match id.0 {
+            10 => self.navigate_gallery(-1),
+            11 => self.navigate_gallery(1),
+            12 => self.set_exposure((self.editor.current().exposure_stops - 0.25).max(-10.)),
+            13 => self.set_exposure((self.editor.current().exposure_stops + 0.25).min(10.)),
+            14 => {
+                self.undo_redo_edit(false);
+            }
+            15 => {
+                self.undo_redo_edit(true);
+            }
+            16 => self.save_edits(),
+            17 => {
+                self.before = !self.before;
+                self.update_view();
+            }
+            _ => {}
+        }
+    }
+    fn sync_editor(&mut self) {
+        if self.ready_generation != Some(self.foreground_loader.current_generation()) {
+            return;
+        }
+        if self.path.as_os_str().is_empty() {
+            return;
+        }
+        match self.editor.activate(self.path.clone(), self.image_index) {
+            Ok(true) => {
+                self.before = false;
+            }
+            Ok(false) => {}
+            Err(error) => {
+                self.status = format!("edit session unavailable: {error:#}");
+            }
+        }
+    }
+    fn edit_ready(&mut self) -> bool {
+        if self.ready_generation != Some(self.foreground_loader.current_generation()) {
+            self.set_status("wait for the requested image to finish loading before editing".into());
+            return false;
+        }
+        self.sync_editor();
+        if !self.editor.is_ready() {
+            self.set_status(
+                "wait for edit recovery or resolve the source/recovery error before editing".into(),
+            );
+            return false;
+        }
+        true
+    }
+    fn undo_redo_edit(&mut self, redo: bool) {
+        if self.edit_ready() {
+            self.editor.undo_redo(redo);
+            self.update_view();
+        }
+    }
+    fn save_edits(&mut self) {
+        if !self.edit_ready() {
+            return;
+        }
+        if self.editor.request_save() {
+            self.set_status("saving XMP edits…".into());
+        } else {
+            self.set_status("edits cannot be saved: resolve source/recovery errors first".into());
+        }
+    }
+    fn set_exposure(&mut self, exposure: f32) {
+        if !self.edit_ready() {
+            return;
+        }
+        self.sync_editor();
+        if let Err(error) = self.editor.apply_exposure(exposure) {
+            self.set_status(format!("edit refused: {error:#}"));
+        }
+        self.update_view();
+    }
+    fn poll_editor_without_view(&mut self) {
+        let (_, message) = self.editor.poll();
+        if let Some(message) = message {
+            self.status = message;
+        }
+    }
+    fn poll_editor(&mut self) {
+        let (changed, message) = self.editor.poll();
+        if let Some(message) = message {
+            self.set_status(message);
+        }
+        if changed {
+            self.update_view();
+        }
+    }
     fn update_view(&mut self) {
+        self.poll_editor_without_view();
+        self.sync_editor();
+        self.view.exposure_stops = if self.before {
+            self.editor.original().exposure_stops
+        } else {
+            self.editor.current().exposure_stops
+        };
         if let Some(gpu) = self.gpu.as_mut() {
             gpu.update_view(self.view);
+            let split = if self.split_comparison && !self.before {
+                0.5
+            } else {
+                0.
+            };
+            gpu.renderer
+                .set_comparison(&gpu.queue, split, self.editor.original().exposure_stops);
+            if let Some(raster) = gpu.raster.as_mut() {
+                raster.set_comparison(&gpu.queue, split, self.editor.original().exposure_stops);
+            }
             if let Some(error) = gpu.raster_region_error.take() {
                 self.status = error;
             } else if self.status.starts_with("Image region unavailable:") {
                 self.status = "image region ready".into();
             }
         }
+        self.update_accessibility();
         // Uniform writes alone do not wake the event-driven renderer. Exposure,
         // zoom, pan and reset must present their new state without another event.
         if let Some(window) = &self.window {
-            window.set_title(&format!("Rrrah — {}", self.status));
+            window.set_title(&self.window_title());
             window.request_redraw();
         }
     }
@@ -4400,6 +4603,8 @@ impl App {
         self.scalar_window = None;
         self.raw_prefetcher.begin_foreground();
         self.path.clone_from(&path);
+        self.histogram_worker.cancel();
+        self.histogram = None;
         if let Some(gpu) = self.gpu.as_ref() {
             self.view = ViewParameters {
                 viewport: [gpu.size.width as f32, gpu.size.height as f32],
@@ -4518,8 +4723,9 @@ impl App {
 
     fn set_status(&mut self, status: String) {
         self.status = status;
+        self.update_accessibility();
         if let Some(window) = &self.window {
-            window.set_title(&format!("Rrrah — {}", self.status));
+            window.set_title(&self.window_title());
             window.request_redraw();
         }
     }
@@ -4538,6 +4744,8 @@ fn display_name(path: &Path) -> String {
 
 impl ApplicationHandler<WakeEvent> for App {
     fn exiting(&mut self, _event_loop: &ActiveEventLoop) {
+        self.editor.shutdown();
+        self.histogram_worker.cancel();
         self.raster_lod_worker.cancel();
         self.pending_raster_lod = None;
         // macOS terminate may exit without Rust stack unwinding. Release transient
@@ -4549,16 +4757,25 @@ impl ApplicationHandler<WakeEvent> for App {
     }
 
     fn resumed(&mut self, event_loop: &ActiveEventLoop) {
-        let window =
-            match event_loop.create_window(Window::default_attributes().with_title("Rrrah — loading…")) {
-                Ok(window) => Arc::new(window),
-                Err(error) => {
-                    log::error!("failed to create viewer window: {error}");
-                    self.status = format!("window creation failed: {error}");
-                    event_loop.exit();
-                    return;
-                }
-            };
+        let window = match event_loop.create_window(
+            Window::default_attributes()
+                .with_title("Rrrah — loading…")
+                .with_visible(false),
+        ) {
+            Ok(window) => Arc::new(window),
+            Err(error) => {
+                log::error!("failed to create viewer window: {error}");
+                self.status = format!("window creation failed: {error}");
+                event_loop.exit();
+                return;
+            }
+        };
+        if let Some(proxy) = self.event_proxy.clone() {
+            self.accesskit = Some(accesskit_winit::Adapter::with_event_loop_proxy(
+                event_loop, &window, proxy,
+            ));
+        }
+        window.set_visible(true);
         let gpu = match pollster::block_on(GpuState::new(
             event_loop.owned_display_handle(),
             window.clone(),
@@ -4579,6 +4796,8 @@ impl ApplicationHandler<WakeEvent> for App {
                 return;
             }
         };
+        self.sync_editor();
+        self.view.exposure_stops = self.editor.current().exposure_stops;
         self.view.viewport = [gpu.size.width as f32, gpu.size.height as f32];
         self.window = Some(window.clone());
         let mut gpu = gpu;
@@ -4641,6 +4860,9 @@ impl ApplicationHandler<WakeEvent> for App {
         }
         self.drain_folder_scan();
         self.drain_load_events();
+        if !self.path.as_os_str().is_empty() && !self.editor.is_current(&self.path, self.image_index) {
+            self.update_view();
+        }
         self.drain_thumbnails();
         if let Some(gpu) = self.gpu.as_mut() {
             if let Some((size, deadline)) = gpu.model_resize_retry {
@@ -4695,8 +4917,38 @@ impl ApplicationHandler<WakeEvent> for App {
         );
     }
 
-    fn user_event(&mut self, _event_loop: &ActiveEventLoop, _event: WakeEvent) {
+    fn user_event(&mut self, _event_loop: &ActiveEventLoop, event: WakeEvent) {
+        if let WakeEvent::AccessKit(event) = event {
+            if self.window.as_ref().is_some_and(|w| w.id() == event.window_id) {
+                match event.window_event {
+                    accesskit_winit::WindowEvent::InitialTreeRequested => self.update_accessibility(),
+                    accesskit_winit::WindowEvent::ActionRequested(request) => {
+                        if request.target_tree != accesskit::TreeId::ROOT
+                            || !(accessibility::FIRST_COMMAND
+                                ..accessibility::FIRST_COMMAND + accessibility::COMMANDS.len() as u64)
+                                .contains(&request.target_node.0)
+                        {
+                            return;
+                        }
+                        if request.action == accesskit::Action::Focus {
+                            self.access_focus = request.target_node;
+                            self.update_accessibility();
+                        } else if request.action == accesskit::Action::Click {
+                            self.access_command(request.target_node);
+                        }
+                    }
+                    accesskit_winit::WindowEvent::AccessibilityDeactivated => {}
+                }
+            }
+        }
+        self.poll_editor();
+        if let Some(histogram) = self.histogram_worker.poll() {
+            self.histogram = Some(histogram);
+        }
         self.drain_load_events();
+        if !self.path.as_os_str().is_empty() && !self.editor.is_current(&self.path, self.image_index) {
+            self.update_view();
+        }
         self.drain_thumbnails();
         if let Some(window) = &self.window {
             window.request_redraw();
@@ -4704,6 +4956,11 @@ impl ApplicationHandler<WakeEvent> for App {
     }
 
     fn window_event(&mut self, event_loop: &ActiveEventLoop, id: WindowId, event: WindowEvent) {
+        if let (Some(adapter), Some(window)) = (self.accesskit.as_mut(), self.window.as_ref()) {
+            if window.id() == id {
+                adapter.process_event(window, &event);
+            }
+        }
         if self
             .telemetry_window
             .as_ref()
@@ -4783,6 +5040,20 @@ impl ApplicationHandler<WakeEvent> for App {
             return;
         }
         match event {
+            WindowEvent::ModifiersChanged(modifiers) => {
+                self.modifiers = modifiers.state();
+            }
+            WindowEvent::Focused(false) => {
+                self.before = false;
+                self.update_view();
+            }
+            WindowEvent::KeyboardInput { event, .. }
+                if event.state == ElementState::Released
+                    && event.physical_key == PhysicalKey::Code(KeyCode::KeyB) =>
+            {
+                self.before = false;
+                self.update_view();
+            }
             WindowEvent::Focused(true) => {
                 if let Some(window) = &self.window {
                     window.request_redraw();
@@ -4903,6 +5174,50 @@ impl ApplicationHandler<WakeEvent> for App {
                 if event.state == ElementState::Pressed && !event.repeat =>
             {
                 match event.physical_key {
+                    PhysicalKey::Code(KeyCode::Tab) => {
+                        self.command_focus_visible = true;
+                        self.access_focus =
+                            accessibility::next_focus(self.access_focus, self.modifiers.shift_key());
+                        self.update_accessibility();
+                        if let Some(window) = &self.window {
+                            window.set_title(&self.window_title());
+                        }
+                    }
+                    PhysicalKey::Code(KeyCode::Enter) | PhysicalKey::Code(KeyCode::Space)
+                        if self.command_focus_visible =>
+                    {
+                        self.access_command(self.access_focus)
+                    }
+                    PhysicalKey::Code(KeyCode::KeyZ)
+                        if self.modifiers.control_key() || self.modifiers.super_key() =>
+                    {
+                        self.undo_redo_edit(self.modifiers.shift_key());
+                    }
+                    PhysicalKey::Code(KeyCode::KeyY)
+                        if self.modifiers.control_key() || self.modifiers.super_key() =>
+                    {
+                        self.undo_redo_edit(true);
+                    }
+                    PhysicalKey::Code(KeyCode::KeyS)
+                        if self.modifiers.control_key() || self.modifiers.super_key() =>
+                    {
+                        self.save_edits();
+                    }
+                    PhysicalKey::Code(KeyCode::KeyH) => {
+                        let message = self.histogram.as_ref().map_or_else(|| "Source-linear histogram unavailable for this frame".to_string(), |h| {
+                            let peaks: Vec<_> = h.channels.iter().map(|bins| bins.iter().enumerate().max_by_key(|(_, n)| *n).map_or(0, |(i, _)| i)).collect();
+                            format!("Source-linear HDR histogram: {} sampled; R/G/B/Y peak bins {:?}; negative {:?}; overflow {:?}; invalid {}", h.sampled, peaks, h.negative, h.overflow, h.invalid)
+                        });
+                        self.set_status(message);
+                    }
+                    PhysicalKey::Code(KeyCode::KeyC) => {
+                        self.split_comparison = !self.split_comparison;
+                        self.update_view();
+                    }
+                    PhysicalKey::Code(KeyCode::KeyB) => {
+                        self.before = true;
+                        self.update_view();
+                    }
                     PhysicalKey::Code(KeyCode::BracketLeft) => self.navigate_image(-1),
                     PhysicalKey::Code(KeyCode::BracketRight) => self.navigate_image(1),
                     PhysicalKey::Code(KeyCode::ArrowLeft) => self.navigate_gallery(-1),
@@ -4923,6 +5238,7 @@ impl ApplicationHandler<WakeEvent> for App {
                         self.update_view();
                     }
                     PhysicalKey::Code(KeyCode::KeyR) => {
+                        self.set_exposure(0.);
                         self.view = ViewParameters {
                             viewport: self.view.viewport,
                             ..ViewParameters::default()
@@ -4930,12 +5246,10 @@ impl ApplicationHandler<WakeEvent> for App {
                         self.update_view();
                     }
                     PhysicalKey::Code(KeyCode::Equal) | PhysicalKey::Code(KeyCode::NumpadAdd) => {
-                        self.view.exposure_stops = (self.view.exposure_stops + 0.25).min(10.0);
-                        self.update_view();
+                        self.set_exposure((self.editor.current().exposure_stops + 0.25).min(10.0));
                     }
                     PhysicalKey::Code(KeyCode::Minus) | PhysicalKey::Code(KeyCode::NumpadSubtract) => {
-                        self.view.exposure_stops = (self.view.exposure_stops - 0.25).max(-10.0);
-                        self.update_view();
+                        self.set_exposure((self.editor.current().exposure_stops - 0.25).max(-10.0));
                     }
                     _ => {}
                 }

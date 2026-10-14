@@ -34,7 +34,7 @@ class SuiteTimeoutTests(unittest.TestCase):
             log.seek(0)
             text = log.read()
             self.assertIn('started', text)
-            self.assertIn('process tree terminated', text)
+            self.assertIn('process tree termination requested', text)
 
 
 if __name__ == '__main__':

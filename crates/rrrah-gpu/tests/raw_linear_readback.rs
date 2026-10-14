@@ -1,6 +1,68 @@
 mod common;
 use rrrah_gpu::{RawOutputMode, RawRenderer, ViewParameters};
 #[test]
+fn raw_split_comparison_matches_baseline_and_edit_without_another_atlas() {
+    let Some(gpu) = common::qualification_gpu() else {
+        return;
+    };
+    let source = common::uniform_mosaic(64, 64, 1024, 4095.);
+    eprintln!("RAW split comparison adapter: {}", gpu.adapter_name());
+    for format in [common::READBACK_FORMAT, wgpu::TextureFormat::Rgba16Float] {
+        let mut renderer = RawRenderer::new(&gpu.device, format);
+        if format == wgpu::TextureFormat::Rgba16Float {
+            renderer
+                .set_output_mode(&gpu.queue, RawOutputMode::SceneLinear)
+                .unwrap();
+        }
+        renderer.upload_mosaic(&gpu.device, &gpu.queue, &source).unwrap();
+        let bytes = renderer.resident_bytes();
+        let render = |renderer: &RawRenderer| -> Vec<u8> {
+            if format == wgpu::TextureFormat::Rgba16Float {
+                gpu.render_existing_raw_half(renderer, [64, 64])
+                    .into_iter()
+                    .flat_map(u16::to_le_bytes)
+                    .collect()
+            } else {
+                gpu.render_existing_raw(renderer, [64, 64]).pixels
+            }
+        };
+        let view = ViewParameters {
+            viewport: [64.; 2],
+            zoom: 2.,
+            ..Default::default()
+        };
+        renderer.update_view(&gpu.queue, view);
+        let before = render(&renderer);
+        renderer.update_view(
+            &gpu.queue,
+            ViewParameters {
+                exposure_stops: 1.,
+                ..view
+            },
+        );
+        let after = render(&renderer);
+        assert_ne!(before, after);
+        renderer.set_comparison(&gpu.queue, 0.5, 0.);
+        let split = render(&renderer);
+        let stride = if format == wgpu::TextureFormat::Rgba16Float {
+            8
+        } else {
+            4
+        };
+        for pixel in 0..4096 {
+            let offset = pixel * stride;
+            let reference = if pixel % 64 < 32 { &before } else { &after };
+            assert_eq!(
+                &split[offset..offset + stride],
+                &reference[offset..offset + stride]
+            );
+        }
+        assert_eq!(renderer.resident_bytes(), bytes);
+        renderer.set_comparison(&gpu.queue, 0., 0.);
+        assert_eq!(render(&renderer), after);
+    }
+}
+#[test]
 fn raw_linear_float_target_preserves_hdr_and_negative_rgbe_color() {
     let instance = common::headless_instance();
     let adapter = pollster::block_on(common::request_adapter(

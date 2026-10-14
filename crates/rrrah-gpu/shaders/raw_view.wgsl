@@ -20,6 +20,7 @@ struct Parameters {
     orientation: u32,
     algorithm: u32,
     _padding: vec4<u32>,
+    comparison: vec4<f32>,
 };
 
 @group(0) @binding(0) var raw_mosaic: texture_2d_array<u32>;
@@ -496,10 +497,10 @@ fn rgbe_filtered(position:vec2<f32>,distance:f32)->vec4<f32> {
     }}
     return sum/max(total,0.00000001);
 }
-fn developed_rgb_at(raw_position: vec2<f32>, raw_pixel_footprint: f32) -> vec3<f32> {
+fn developed_rgb_at(raw_position: vec2<f32>, raw_pixel_footprint: f32, exposure: f32) -> vec3<f32> {
     if parameters._padding.x == 1u {
         let planes=rgbe_filtered(raw_position,raw_pixel_footprint);
-        return vec3<f32>(dot(parameters.camera_to_rgb_0,planes),dot(parameters.camera_to_rgb_1,planes),dot(parameters.camera_to_rgb_2,planes))*exp2(parameters.exposure_stops);
+        return vec3<f32>(dot(parameters.camera_to_rgb_0,planes),dot(parameters.camera_to_rgb_1,planes),dot(parameters.camera_to_rgb_2,planes))*exp2(exposure);
     }
     var camera_rgb: vec3<f32>;
     if raw_pixel_footprint >= 2.0 {
@@ -518,7 +519,7 @@ fn developed_rgb_at(raw_position: vec2<f32>, raw_pixel_footprint: f32) -> vec3<f
         dot(parameters.camera_to_rgb_1.xyz, camera_rgb),
         dot(parameters.camera_to_rgb_2.xyz, camera_rgb),
     );
-    return linear_rgb * exp2(parameters.exposure_stops);
+    return linear_rgb * exp2(exposure);
 }
 
 fn aces_scalar(value: f32) -> f32 {
@@ -580,7 +581,9 @@ fn fs_main(@builtin(position) fragment: vec4<f32>) -> @location(0) vec4<f32> {
     // recover sensor-cell boundaries; shrinking by one distorts footprints.
     let raw_position = vec2<f32>(parameters.crop_origin)
         + raw_uv * vec2<f32>(parameters.crop_size) - vec2<f32>(0.5);
-    let linear_rgb = developed_rgb_at(raw_position, 1.0 / scale);
+    let before = parameters.comparison.x > 0.0 && fragment.x < parameters.viewport.x * parameters.comparison.x;
+    let exposure = select(parameters.exposure_stops, parameters.comparison.y, before);
+    let linear_rgb = developed_rgb_at(raw_position, 1.0 / scale, exposure);
     if parameters._padding.y == 1u { return vec4<f32>(linear_rgb, 1.0); }
     if parameters._padding.y == 2u {
         return vec4<f32>(clamp(linear_rgb, vec3<f32>(-65504.0), vec3<f32>(65504.0)), 1.0);

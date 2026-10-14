@@ -1,0 +1,18 @@
+#!/usr/bin/env python3
+"""Execute only exact extracted pure string helpers, never preload environment hooks."""
+from pathlib import Path
+import hashlib,json,subprocess
+R=Path(__file__).resolve().parents[1];D=R/'docs/research';E=D/'dedup-500/evidence/alexjp--env-dedup';reg=json.loads((D/'dedup-500/reviews/222.json').read_text());tree=json.loads((E/'tree.json').read_text());sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest();mapping={r['path']:r['local']for k in ['available_source_evidence','available_readme_license_evidence']for r in reg[k]};blobs={v['path']:v for v in tree['tree']if v['type']=='blob'};assert not tree['truncated'] and set(mapping)==set(blobs) and len(blobs)==5;files=[]
+for name,local in mapping.items():
+ p=E/local;b=p.read_bytes();assert len(b)==blobs[name]['size']and hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()==blobs[name]['sha'];files.append(dict(path=name,local=str(p.relative_to(R)),sha256=sha(p),git_blob_sha1=blobs[name]['sha'],bytes=len(b)))
+F=Path('/private/tmp/rrrah-env222-controls-20261014');F.mkdir(exist_ok=False);K=D/'dedup-env222-controls-20261014';K.mkdir(exist_ok=False);rows=[]
+cases=[None,'','a','a:a','a:b:a:c:b',':a::b:',':', 'a:A:a','a: a:a','/tmp/a:/tmp/a/:/tmp/a',':'.join(f'p{i}'for i in range(65)),':'.join(['a','b']*100)]
+for index,v in enumerate(reg['available_source_evidence']):
+ s=(E/v['local']).read_text();name='dedup_var_value'if index==0 else'dedup_colon_string';start=s.index('static '+('inline 'if index==2 else'')+'char *'+name);brace=s.index('{',start);depth=1;end=brace+1
+ while depth:
+  depth+=(s[end]=='{')-(s[end]=='}');end+=1
+ helper=s[start:end];source=K/f'{index}.c';source.write_text('#include <stdio.h>\n#include <stdlib.h>\n#include <string.h>\n#include <stdint.h>\n#include <stdbool.h>\nstatic void *review_reallocarray(void *p,size_t n,size_t size){if(size && n>SIZE_MAX/size)return NULL;return realloc(p,n*size);}\n#define reallocarray review_reallocarray\n'+helper+'\nint main(int argc,char **argv){char *p='+name+'(argc>1?argv[1]:NULL);if(!p)return 2;puts(p);free(p);return 0;}\n');exe=F/f'helper-{index}';cmd=['clang','-std=c17','-O2',str(source),'-o',str(exe)];c=subprocess.run(cmd,capture_output=True,text=True);(K/f'{index}-compile.log').write_text(c.stdout+c.stderr);assert c.returncode==0,c.stderr;results=[]
+ for i,value in enumerate(cases):
+  expected=':'.join(dict.fromkeys(x for x in (value or '').split(':')if x));cmd=[str(exe)]+([]if value is None else[value]);r=subprocess.run(cmd,capture_output=True,text=True);assert r.returncode==0 and r.stdout==expected+'\n'and r.stderr=='';results.append(dict(case=i,input=value,output=r.stdout.rstrip('\n'),returncode=r.returncode))
+ rows.append(dict(original=v['path'],helper_sha256=hashlib.sha256(helper.encode()).hexdigest(),harness=str(source.relative_to(R)),harness_sha256=sha(source),binary=str(exe),binary_sha256=sha(exe),compile_command=c.args,compile_log_sha256=sha(K/f'{index}-compile.log'),results=results))
+O=D/'dedup-env222-controls-20261014.json';assert not O.exists();O.write_text(json.dumps(dict(status='verified36pure_helper_controls',repository=reg['repository'],commit=reg['commit'],files=files,rows=rows,controls_passed=36,producer_sha256=sha(__file__),scope='All5captured blobs fully read/pinned.3exact extracted original pure helper bodies compiled with macOS clang; compatibility reallocarray wrapper in harness only.12synthetic strings each, no actual environment enumeration, preloading, hooks, dlsym or constructor execution. No Linux/glibc runtime, threads, allocation-failure or whole-program qualification. No upstream tests in tree, no source adoption.'),indent=2)+'\n');print('36pure string controls passed')

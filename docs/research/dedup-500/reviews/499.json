@@ -2,9 +2,9 @@
   "index": 499,
   "repository": "bryanbarcelona/retinahash",
   "commit": "4c93845d87c17ccb72888bb12ecf655f6fb919d4",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All14captured tree blobs reviewed,5originalPython modules exercised with28synthetic controls and independent DCT/resize oracles; full runtime/corpus/platform qualification absent.",
   "decision": "reference",
-  "finding": "NumPy pHash strategy separated from transform/engine; good boundary design, no detected tests.",
+  "finding": "All14files read;28controls pass. Alpha ignored, normalized border crop fails, degenerate/oversized hashes and malformed inputs unguarded, CLI target absent. Rotation/DCT/resize controls verified; no source adoption.",
   "available_source_evidence": [
     {
       "path": "src/retinahash/strategies/phash.py",
@@ -45,6 +45,16 @@
       "lines": 50,
       "source": true,
       "test": false
+    },
+    {
+      "path": "src/retinahash/core/utils.py",
+      "local": "12-utils.py",
+      "url": "https://github.com/bryanbarcelona/retinahash/blob/4c93845d87c17ccb72888bb12ecf655f6fb919d4/src/retinahash/core/utils.py",
+      "sha256": "c94e25426227cf9cdd34f27efe00d9d1c267dbd59e5d92a0d614e1864fc16f23",
+      "truncated": false,
+      "lines": 28,
+      "source": true,
+      "test": false
     }
   ],
   "license_metadata": "MIT",
@@ -73,6 +83,82 @@
       "lines": 21,
       "source": false,
       "test": false
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "local": "06-ci.yml",
+      "url": "https://github.com/bryanbarcelona/retinahash/blob/4c93845d87c17ccb72888bb12ecf655f6fb919d4/.github/workflows/ci.yml",
+      "sha256": "a023c4699cdcca2c1e17bb20c7fd68d8940b37612b273125e1815eff88cc3a64",
+      "truncated": false,
+      "lines": 69,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "local": "07-release.yml",
+      "url": "https://github.com/bryanbarcelona/retinahash/blob/4c93845d87c17ccb72888bb12ecf655f6fb919d4/.github/workflows/release.yml",
+      "sha256": "b7f2eb865a853506eb9b541b6ea7d0780fbd9b08d145d654fc9733d1b5a45d34",
+      "truncated": false,
+      "lines": 136,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": ".gitignore",
+      "local": "08-gitignore",
+      "url": "https://github.com/bryanbarcelona/retinahash/blob/4c93845d87c17ccb72888bb12ecf655f6fb919d4/.gitignore",
+      "sha256": "b80c17b6765c7e3a2512b4c0cce550e2221ab160c882494aace9bfc7e5351154",
+      "truncated": false,
+      "lines": 18,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": ".python-version",
+      "local": "09-python-version",
+      "url": "https://github.com/bryanbarcelona/retinahash/blob/4c93845d87c17ccb72888bb12ecf655f6fb919d4/.python-version",
+      "sha256": "7b55f8e67b5623c4bef3fa691288da9437d79d3aba156de48d481db32ac7d16d",
+      "truncated": false,
+      "lines": 1,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "CHANGELOG.md",
+      "local": "10-CHANGELOG.md",
+      "url": "https://github.com/bryanbarcelona/retinahash/blob/4c93845d87c17ccb72888bb12ecf655f6fb919d4/CHANGELOG.md",
+      "sha256": "1c23bd9e6a756821d1bd989dc5e74b462305c2b6936ffa33e9fddb988f9b56e6",
+      "truncated": false,
+      "lines": 7,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "pyproject.toml",
+      "local": "11-pyproject.toml",
+      "url": "https://github.com/bryanbarcelona/retinahash/blob/4c93845d87c17ccb72888bb12ecf655f6fb919d4/pyproject.toml",
+      "sha256": "2c8e563841f5b2128531c4603ff4b0b0946a3b6dcd17ba50c3b42c80bdb5e828",
+      "truncated": false,
+      "lines": 78,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "uv.lock",
+      "local": "13-uv.lock",
+      "url": "https://github.com/bryanbarcelona/retinahash/blob/4c93845d87c17ccb72888bb12ecf655f6fb919d4/uv.lock",
+      "sha256": "298036301f289dc096a730d6bf0f568da1ac7629d47476d3b5ea79bd05f391d1",
+      "truncated": false,
+      "lines": 150,
+      "source": false,
+      "test": false
     }
+  ],
+  "full_repository_review_complete": true,
+  "whole_repo_complete": true,
+  "whole_runtime_qualified": false,
+  "linked_review_artifacts": [
+    "retinahash499-complete-source-review-20261014.json"
   ]
 }

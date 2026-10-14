@@ -1,0 +1,53 @@
+{
+  "status": "six_live_raster_hdr_presentations_passed",
+  "build_exit_code": 101,
+  "build_failure": "rrrah-core unresolved f64 exports/entry points and mixed f32/f64 interfaces; 239 compiler errors",
+  "source_files_changed_concurrently": true,
+  "live_raster_cases_executed": 6,
+  "synthetic_verifier_tests_passed": 5,
+  "synthetic_verifier_is_hardware_evidence": false,
+  "planned_fixtures": [
+    "heif-physical-alpha.heic",
+    "heif-physical-rotate90.heic",
+    "heif-physical-mirror.heif",
+    "float-shifted-window-negative.exr",
+    "float-shifted-window-positive-crop.exr",
+    "float-shifted-window-translated.exr"
+  ],
+  "source_sha256_at_report": {
+    "crates/rrrah-app/examples/hdr_surface_probe.rs": "9610200ea4574ae7b92e2ed5ea38da6cf7bb252932741cca4c468158162bb254",
+    "scripts/qualify-live-raster-hdr.py": "13a90c2326f527812fdb35986cc34d7411579d94777cbd646255d9ccbaf94eb5",
+    "scripts/test-live-raster-hdr-evidence.py": "e6198d5da23779bb96fba4fb3347bb5aec0fa24b588b940c9dbc87b88b2a7d65",
+    "crates/rrrah-core/src/lib.rs": "44fb7d4ce0a1196c02f520abb74d257abdfb9e872db658b34d20dc5d1884cc2e",
+    "crates/rrrah-core/src/develop/mod.rs": "ac4d199492a02d13718ebcd9969c8684ffd12d6cb32a3daee0311e10a295564a",
+    "crates/rrrah-core/src/develop/demosaic.rs": "e338762340d4198dbe212e526de73b8dd9d5488a3f45f3008e19db908705bf4c",
+    "Cargo.lock": "5cfaa6a40ba81a8fcb33d10b6e5c45dc33058fa3090ac909f2c04290fe15ce2d"
+  },
+  "next_command": "python3 scripts/qualify-live-raster-hdr.py --binary target/debug/examples/hdr_surface_probe --output-dir docs/research/live-raster-hdr-2026-10-14",
+  "next_step": "finish current core f64 integration, rebuild example successfully, then run six live cases; do not run stale binary",
+  "limitations": [
+    "four verifier tests are synthetic only",
+    "no new live HDR or full viewer qualification",
+    "existing offscreen fixture tests remain separate prior evidence"
+  ],
+  "current_core_recheck_exit_code": 101,
+  "hdr_activation_requirement": "same post-presentation telemetry sample must report high_dynamic_range Some(true) and current headroom >1",
+  "logs_sha256": {
+    "verifier-hdr-active.log": "baf49b59538192f3e136ca0404cac516ecb8dd2fe5ba1416604056f3080fa49c",
+    "core-recheck.log": "ff068db081477b66747f754f0b92f857fea96fcd4ff8534381a3387a8d7f57ac",
+    "verifier-tests.log": "af55efa5c3ceb122f8184c380aa405d3f3b4e7e0c1e892773d0eff31d0645c8a",
+    "build.log": "64335a3832d4393f264a7882e4f15effa95d4361c1ac7ec59c9eaa56a00a5d58"
+  },
+  "current_build_exit_code": 0,
+  "frozen_binary": "target/live-raster-hdr-20261014/hdr_surface_probe",
+  "binary_sha256": "506705557c207c57476a657bb496fa146a0a775392b02dd009f083393c5d81b9",
+  "sources_at_live_launch": {
+    "crates/rrrah-app/examples/hdr_surface_probe.rs": "9610200ea4574ae7b92e2ed5ea38da6cf7bb252932741cca4c468158162bb254",
+    "crates/rrrah-decode/src/heif.rs": "d2b29a3a18d4a7488d873bdafe328ce0e8c84a8c4dc1878105ed1eb5d57a91fe",
+    "crates/rrrah-decode/src/exr_color.rs": "18eef69329d5e5a2426dec1970e5bffff236458b555e5d7b7884ea6cdae8eca7",
+    "crates/rrrah-decode/src/raster.rs": "cebe3152c8eae7e5686850496407a236371d0e8b87e28ed3c9e29f79bdf8dbd7",
+    "scripts/qualify-live-raster-hdr.py": "13a90c2326f527812fdb35986cc34d7411579d94777cbd646255d9ccbaf94eb5",
+    "Cargo.lock": "5cfaa6a40ba81a8fcb33d10b6e5c45dc33058fa3090ac909f2c04290fe15ce2d"
+  },
+  "live_evidence": "../live-raster-hdr-2026-10-14/result.json"
+}

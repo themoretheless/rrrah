@@ -1,0 +1,37 @@
+{
+  "status": "diagnostic_complete_media_box_hypothesis_rejected",
+  "valid_renders": 3,
+  "excluded_renders": 6,
+  "valid_64_128_match_prior_reference_byte_exact": true,
+  "lut_control": {
+    "vectors": 4096,
+    "max_rgb8_error": 0,
+    "comparison": "original perceptual vs derivative relative, same CMYK8 to RGB8 sampled transform",
+    "limitation": "sampled control, not proof for every float input"
+  },
+  "largest_valid_scale": 128,
+  "valid_scale_64_to_128_delta_rgb8": 1.787109375,
+  "converged": false,
+  "findings": [
+    "installed Poppler rejects original profile; LittleCMS supports only perceptual input intent",
+    "diagnostic A2B1 alias preserves original LUT bytes; 4096 sampled CMYK8 vectors match original perceptual transform",
+    "both page-box variants exactly reproduce prior valid 64/128 pixel arrays",
+    "MediaBox reduction does not remove mask/group allocation failure at 256/512",
+    "no rendering success inferred from zero exit when stderr reports allocation failure"
+  ],
+  "next_action": "Adjudicate native source composition with synthetic isolated groups or independent exact geometry/color oracle; page-box-only crop convergence is insufficient",
+  "limitations": [
+    "derived page, not full-page fidelity",
+    "Poppler rendering is an independent comparator, not exact analytical area",
+    "changing MediaBox may affect page-dependent clipping and group behavior",
+    "no native renderer acceptance from this experiment",
+    "optional A2B1 alias exposes original perceptual LUT; this is a diagnostic profile derivative",
+    "no native production fix or AI qualification",
+    "sampled ICC equivalence control is not all float inputs"
+  ],
+  "source_sha256": {
+    "scripts/diagnose-ai-pixel-oracle-convergence.py": "d8158b5aa638a64c6b80a3877c76520eae9806af0bc2f9c41c6a0dc447ac1dce",
+    "vendor/hayro-interpret/assets/CGATS001Compat-v2-micro.icc": "73e1ba37d2bad5bab2a964f40a9eed96209666efc067c3322626214bbef234a0",
+    "tests/fixtures/data/metal-recovery/ai-corpus/VectorApple.ai": "c5fc34346629c3379cee6065c45b7de0b620be822604551d1463d8e691b03d06"
+  }
+}

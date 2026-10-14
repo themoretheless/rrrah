@@ -12,7 +12,7 @@
 //!    adaptive luminance / chrominance tolerances (ε_L, ε_C from the paper) — the homogeneity.
 //! 4. Sum homogeneity over a 3×3 window and pick the more homogeneous candidate (average on ties).
 //!
-//! Work is done in overlapping tiles (bounded memory, sequential tile scratch).
+//! Work is done in overlapping tiles; concurrent tile scratch is capped by the working-memory allowance.
 
 use super::Rgb32f;
 use super::{DevelopError, Mosaic};
@@ -34,17 +34,23 @@ struct AhdScratch {
     hv: Vec<u8>,
 }
 
+impl super::demosaic::TileScratch for AhdScratch {
+    const MARGIN: usize = MARGIN;
+    const BYTES_PER_PIXEL: usize =
+        3 * std::mem::size_of::<f64>() + 4 * std::mem::size_of::<[f64; 3]>() + 3 * std::mem::size_of::<u8>();
+}
+
 pub(crate) fn ahd(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, DevelopError> {
     let (w, h) = (m.w, m.h);
     let mut out = Rgb32f::new(w, h);
     if w == 0 || h == 0 {
         return Ok(out);
     }
-    let num_bands = h.div_ceil(TILE);
-    let workers = std::thread::available_parallelism()
-        .map_or(1, usize::from)
-        .min(num_bands)
-        .max(1);
+    let workers = super::demosaic::tiled_worker_count::<AhdScratch>(
+        w,
+        h,
+        std::thread::available_parallelism().map_or(1, usize::from),
+    );
 
     if workers <= 1 {
         let mut scratch = AhdScratch::default();
@@ -64,15 +70,12 @@ pub(crate) fn ahd(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, D
         }
     } else {
         use std::sync::Mutex;
-        use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
+        use std::sync::atomic::{AtomicBool, Ordering};
 
         let is_cancelled = AtomicBool::new(false);
-        let next = AtomicUsize::new(0);
-        let slots: Vec<_> = out
-            .data
-            .chunks_mut(TILE * w)
-            .map(|chunk| Mutex::new(Some(chunk)))
-            .collect();
+        // Hand out disjoint mutable bands directly from the iterator. This
+        // avoids a slot allocation proportional to image height.
+        let bands = Mutex::new(out.data.chunks_mut(TILE * w).enumerate());
 
         let do_work = || {
             let mut scratch = AhdScratch::default();
@@ -81,15 +84,10 @@ pub(crate) fn ahd(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, D
                 if is_cancelled.load(Ordering::Relaxed) {
                     break;
                 }
-                let band_idx = next.fetch_add(1, Ordering::Relaxed);
-                if band_idx >= num_bands {
+                let Some((band_idx, band)) = bands.lock().expect("band iterator lock never poisoned").next()
+                else {
                     break;
-                }
-                let band = slots[band_idx]
-                    .lock()
-                    .expect("unit slot lock is never poisoned")
-                    .take()
-                    .expect("each band is claimed exactly once");
+                };
                 let y0 = band_idx * TILE;
                 let th = TILE.min(h - y0);
                 for x0 in (0..w).step_by(TILE) {
@@ -119,15 +117,10 @@ pub(crate) fn ahd(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, D
                     is_cancelled.store(true, Ordering::Relaxed);
                     break;
                 }
-                let band_idx = next.fetch_add(1, Ordering::Relaxed);
-                if band_idx >= num_bands {
+                let Some((band_idx, band)) = bands.lock().expect("band iterator lock never poisoned").next()
+                else {
                     break;
-                }
-                let band = slots[band_idx]
-                    .lock()
-                    .expect("unit slot lock is never poisoned")
-                    .take()
-                    .expect("each band is claimed exactly once");
+                };
                 let y0 = band_idx * TILE;
                 let th = TILE.min(h - y0);
                 for x0 in (0..w).step_by(TILE) {

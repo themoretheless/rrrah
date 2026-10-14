@@ -40,6 +40,7 @@ struct Parameters {
     raw_development: [u32; 4],
     curve: [[f32; 4]; 256],
     resident_rect: [u32; 4],
+    comparison: [f32; 4],
 }
 
 // Balanced tiles minimize padding while respecting negotiated device extents.
@@ -216,6 +217,7 @@ impl RasterRenderer {
             raw_development: [0; 4],
             curve: [[0.0; 4]; 256],
             resident_rect: [0, 0, 1, 1],
+            comparison: [0.; 4],
         };
         let uniform = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
             label: Some("Rrrah raster parameters"),
@@ -816,13 +818,40 @@ impl RasterRenderer {
         Ok(())
     }
 
+    /// A shared-geometry split: left uses baseline exposure, right uses the current view.
+    /// Zero disables comparison. Invalid inputs preserve the previous state.
+    pub fn set_comparison(&mut self, queue: &wgpu::Queue, split: f32, baseline: f32) {
+        if !split.is_finite() || !baseline.is_finite() {
+            return;
+        }
+        let comparison = [split.clamp(0., 1.), baseline.clamp(-10., 10.), 0., 0.];
+        if self.parameters.comparison != comparison {
+            self.parameters.comparison = comparison;
+            queue.write_buffer(&self.uniform, 0, bytemuck::bytes_of(&self.parameters));
+        }
+    }
+
     pub fn update_view(&mut self, queue: &wgpu::Queue, view: ViewParameters) {
+        let view_bits = |p: &Parameters| {
+            [
+                p.viewport[0],
+                p.viewport[1],
+                p.pan[0],
+                p.pan[1],
+                p.zoom,
+                p.exposure,
+            ]
+            .map(f32::to_bits)
+        };
+        let previous = view_bits(&self.parameters);
         let view = normalized_view(view);
         self.parameters.viewport = view.viewport;
         self.parameters.pan = view.pan;
         self.parameters.zoom = view.zoom;
         self.parameters.exposure = view.exposure_stops;
-        queue.write_buffer(&self.uniform, 0, bytemuck::bytes_of(&self.parameters));
+        if view_bits(&self.parameters) != previous {
+            queue.write_buffer(&self.uniform, 0, bytemuck::bytes_of(&self.parameters));
+        }
     }
 
     pub fn encode(&self, encoder: &mut wgpu::CommandEncoder, target: &wgpu::TextureView) {
@@ -907,6 +936,57 @@ fn normalized_view(view: ViewParameters) -> ViewParameters {
 #[cfg(test)]
 mod tile_admission_tests {
     use super::*;
+    #[test]
+    #[ignore = "manual actual Metal paired uniform-update timing for RR-0027"]
+    fn repeated_view_uniform_ab_probe() {
+        let mut descriptor = wgpu::InstanceDescriptor::new_without_display_handle();
+        descriptor.backends = wgpu::Backends::METAL;
+        let instance = wgpu::Instance::new(descriptor);
+        let adapter =
+            pollster::block_on(instance.request_adapter(&wgpu::RequestAdapterOptions::default())).unwrap();
+        eprintln!("uniform AB adapter: {:?}", adapter.get_info());
+        let (device, queue) =
+            pollster::block_on(adapter.request_device(&wgpu::DeviceDescriptor::default())).unwrap();
+        let mut renderer = RasterRenderer::new_linear_hdr(&device);
+        let view = ViewParameters {
+            viewport: [64.; 2],
+            ..Default::default()
+        };
+        renderer.update_view(&queue, view);
+        queue.submit([]);
+        device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
+        for pair in 0..13 {
+            let mut ns = [0u128; 2];
+            for mode in [pair % 2, 1 - pair % 2] {
+                let started = std::time::Instant::now();
+                for _ in 0..1000 {
+                    if mode == 0 {
+                        // Exact pre-change setter, retained only as the A/B control.
+                        let v = normalized_view(view);
+                        renderer.parameters.viewport = v.viewport;
+                        renderer.parameters.pan = v.pan;
+                        renderer.parameters.zoom = v.zoom;
+                        renderer.parameters.exposure = v.exposure_stops;
+                        queue.write_buffer(&renderer.uniform, 0, bytemuck::bytes_of(&renderer.parameters));
+                    } else {
+                        renderer.update_view(&queue, view);
+                    }
+                }
+                queue.submit([]);
+                device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
+                ns[mode] = started.elapsed().as_nanos();
+            }
+            if pair >= 3 {
+                eprintln!(
+                    "uniform AB: pair={}; baseline_ns={}; candidate_ns={}; iterations=1000; uniform_bytes={}",
+                    pair - 3,
+                    ns[0],
+                    ns[1],
+                    std::mem::size_of::<Parameters>()
+                );
+            }
+        }
+    }
 
     #[test]
     fn metadata_region_rejects_invalid_geometry_without_source_allocation() {

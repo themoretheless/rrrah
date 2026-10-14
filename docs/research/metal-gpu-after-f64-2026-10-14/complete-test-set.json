@@ -1,0 +1,61 @@
+{
+  "status": "all150_named_gpu_tests_passed_on_metal",
+  "ordinary_passed": 137,
+  "manual_passed": 13,
+  "total_unique_passed": 150,
+  "failed": 0,
+  "remaining_ignored_in_named_set": 0,
+  "backend": "Metal",
+  "adapter": "Apple M4 Max",
+  "manual_test_names": [
+    "full_f828_managed_rgbe_matches_cpu_reference",
+    "full_sensor_linear_exposure_chunked_readback",
+    "full_sensor_managed_exposure_budgets_and_checks_every_pixel",
+    "fusion_back_full_frame_developed_raw_matches_metal_display_transport",
+    "fusion_front_full_frame_developed_raw_matches_metal_display_transport",
+    "hdr_exposure_saturates_to_finite_binary16_range",
+    "hdr_opposite_extreme_samples_interpolate_without_nan",
+    "hero9_full_frame_developed_raw_matches_metal_display_transport",
+    "large_cancelled_upload_validation_and_admission_preserve_visible_texture",
+    "large_hdr_area_lod_preserves_all_output_samples_and_metal_frame",
+    "pinned_native_ai_planes_survive_managed_metal_display",
+    "qualified_sd10_linear_raster_full_frame_display_readback",
+    "raster_single_layer_gpu_timestamp_timing"
+  ],
+  "required_numeric_evidence_valid": true,
+  "updated_split_comparison_tests": [
+    "raw_split_comparison_matches_baseline_and_edit_without_another_atlas",
+    "split_comparison_reuses_resident_pixels_and_matches_both_reference_exposures"
+  ],
+  "source_drift_since_pre_manual_snapshot": [],
+  "source_scope": "ordinary run followed by cargo no-run freshness check with no compilation; source snapshot before manual run",
+  "binary_sha256": {
+    "target/debug/deps/rrrah_gpu-3fc6e742f2070fc2": "a71cd090e23065a8f319d952e0b4d25e07904782cae9740e38000ad247577fa7",
+    "target/debug/deps/ai_native_transport-d29a9cb33d3c49e6": "67acee4c0558b45fc65b3ed5459b5800c2b21a46e01e188fc7e9f22a3f877460",
+    "target/debug/deps/camera_color_readback-4692fa6fd663bc99": "99e029e4885d2915c37ca0227ef0b8941a47eaea66db1a32bb4efa3e7ac9f74e",
+    "target/debug/deps/compute_readback-0f0df8525b3523e2": "4173ac206a877aec7ebd80169bbff55a8182df67a43e33f20b3833bd51ea0acc",
+    "target/debug/deps/filmstrip_readback-846abeeec2a0d920": "4d1c07e9b2de5df1b277d759999de64f6b9e7ddbb4d940dbc8593ab88cbd096e",
+    "target/debug/deps/model_readback-cb73a0cd6a7f5d18": "28c583be4ddcafd466f66e2dd19ee74f0f1a8e3883e6282eb6c75f1bf2b8943a",
+    "target/debug/deps/raster_readback-96fa399a25885f6d": "d327a4f6941b14b67876fea199453172c4f7ee1a1b98270d720ca17252cf2f3d",
+    "target/debug/deps/raster_timing-2961a7509b3bf11c": "9237c8c55489f2b2a62adeceba6ed3d3b670d482cea9b1cb2f0d52940a7da988",
+    "target/debug/deps/raw_linear_readback-9fd8b6185e48ed18": "8d88149d481c0749af842e0a921d0903ea44cce5e8efe2fd7edf36cf1b503a99",
+    "target/debug/deps/raw_orientation_readback-2f509afec3477bdf": "dd6239a58f8f5c2369e5bb538ea55e0580a225b837bf63d31c1a0b282aa8080c",
+    "target/debug/deps/readback-381870146e3bac04": "7f5a57f9514de4d58153352c05437ccd9111594d3d861884ee3f704d15f35797",
+    "target/debug/deps/resource_lease-8129f30d5856efe2": "d4025f0d6060ab1743a08e2f3a235b3c26dea281d4cc392a420ad04cdbc41423",
+    "target/debug/deps/rgbe_compute_readback-5d310ff784bafb7a": "09b4f4808f4c798d150a595da06c19753a8690668adfbf49f11a260d980ff362",
+    "target/debug/deps/rgbe_view_readback-e71f7d8542d54b99": "adfb0401faf4eb4b1e00e0c2ac324b42ec255851c71bd9918073f09b8aa67d2a"
+  },
+  "logs_sha256": {
+    "build-freshness.log": "977f111585c4c0b425bcb688a2a873d65b7b39154c92bb2d85a327046d7fe788",
+    "gpu-all.log": "a872db388dfb8a945660bc7f29d4dc5a8e39b52f011ad0bc89cd9770e3a2464a",
+    "manual-all.log": "049850561af81ec0397ed70c590c0dbed4b9ad7c0ee7ac602547dc876a3c103a"
+  },
+  "limitations": [
+    "150 named GPU tests, not full100-format fidelity",
+    "prepared camera and AI transport not independent decoding/color/geometry qualification",
+    "GPU timestamp samples not whole-viewer latency",
+    "NVIDIA/CUDA hardware deferred",
+    "physical HDR luminance/color calibration separate",
+    "cache/app integration and long soaks are separate evidence"
+  ]
+}

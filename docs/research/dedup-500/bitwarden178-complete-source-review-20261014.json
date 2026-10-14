@@ -1,0 +1,43 @@
+{
+  "status": "complete3file_source_review_18synthetic_original_module_controls",
+  "index": 178,
+  "repository": "biplobice/bitwarden-deduplicator",
+  "commit": "40bc66588d3b2a004cda947011959dcf6d9b8ee6",
+  "whole_repo_complete": true,
+  "whole_runtime_qualified": false,
+  "fully_read_files": [
+    {
+      "path": "deduplicate_bitwarden.py",
+      "local": "docs/research/dedup-500/evidence/biplobice--bitwarden-deduplicator/02-deduplicate_bitwarden.py",
+      "sha256": "4e2e850ae9a0a2f62e3c24c530fb92649c1b8cf0e8cbb6456a40823e3702a758",
+      "git_blob_sha1": "fc691e5f07754bbf563b6092c5a38563baef819f",
+      "bytes": 9590
+    },
+    {
+      "path": "README.md",
+      "local": "docs/research/dedup-500/evidence/biplobice--bitwarden-deduplicator/00-README.md",
+      "sha256": "7aa71ad0323f209097529b0df3f2c806ed4bc2dbc8e3089a299fb6f41573d05e",
+      "git_blob_sha1": "78e4642fe3ed5763918b2385d3c519660d417c24",
+      "bytes": 4241
+    },
+    {
+      "path": "LICENSE",
+      "local": "docs/research/dedup-500/evidence/biplobice--bitwarden-deduplicator/01-LICENSE",
+      "sha256": "3bed3331b7048bac17cf50e249d560ccc9508c970da8d7b9283bf4f2e633a91d",
+      "git_blob_sha1": "3e4c4339bb797ed6d5d17beae5643be7f7d563b1",
+      "bytes": 1055
+    }
+  ],
+  "controls": "docs/research/dedup-bitwarden178-controls-20261014.json",
+  "controls_sha256": "6c11c2a2b97d279a5e5d1f4bc696c1eeabd2e75253a3334f201b7e4cfe679ad9",
+  "auditor_sha256": "8ec069f0bfbc1ea54539d31f01f313a39455e11fe2612b37fb79601b7801d6ac",
+  "findings": [
+    "Actualkey is type|lowercasedusername|normalizedhost, despite README/summary claiming name participates; password/TOTP/notes/card/identity/customfields ignored. Differentrecords collapse.",
+    "Lasttwolabel URI normalization collapses unrelated co.uk hosts and IPaddresses, strips path/port/scheme; key delimiter notescaped.",
+    "Firstavailable URI only is indexed: two identicalmultiURI records can bothsurvive, verified on syntheticfixture.",
+    "Foldermapping is built afterduplicatefolders removed, so items referencingremovedfolder IDs remain dangling; empty-namedfolders dropped.",
+    "NullURI lists/nonnumericusername mismatch fail viauntypedexceptions; malformedJSON exits1. WholeJSON load/uncheckedwrites, no resource/cancel/sourceguard or atomicpublication. Inplaceoverwrite accepted on syntheticfile.",
+    "OriginalquietCLI/defaultoutput/summary exercised on syntheticexports only. No realvault/account/API/credential access. MIT license read; rejectdomain/semanticloss, no adoption."
+  ],
+  "scope": "All3capturedGitblobs fullyread and verified. Original252line module imported unmodified and originalCLI executed only on newlycreated syntheticJSON files. No uservault, realcredential, Bitwardenaccount/API, private file, source adoption, file/pixel identity or platform/resource qualification. No upstream tests in capturedtree; module semanticloss and duplicate misses are observations, not endorsement. Capturedcommit-to-treebinding notindependentlyfetched; no upstreamtests present."
+}

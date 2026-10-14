@@ -1,0 +1,37 @@
+{
+  "status": "verified_current_root_seven_pixel_tests",
+  "producer_pid": 8627,
+  "command": [
+    "cargo",
+    "test",
+    "--locked",
+    "-p",
+    "rrrah-dedup",
+    "--no-default-features",
+    "--test",
+    "pixels"
+  ],
+  "source_manifest": "docs/research/dedup-alpha-projection-current-source-20261014.json",
+  "source_manifest_sha256": "39244c3945eee1978b93f08d872ad3fc8ad8277f891e69fc8f0b6f2cebcc5f6e",
+  "producer_sha256": "69aab7119b1688e88711571a2a1e4db82eb97c4d0bcb02c63851541272b9b2b5",
+  "scope": "Current root no-default pixel integration gate only. Exact hiddenRGB canonicalization, complete fingerprint equality and independently expected white-projection64bits. Not native/decode/core/allformats/fullsuite proof.",
+  "child_pid": 8975,
+  "returncode": 0,
+  "log_sha256": "8a545901a0d6d183f577506ab01d88efd2c5a9909b1746e92da80c1f0f9cf560",
+  "source_unchanged": true,
+  "passed": 7,
+  "failed": 0,
+  "ignored": 0,
+  "retained_executable": "docs/research/dedup-alpha-projection-current-20261014/pixels",
+  "executable_sha256": "02bd06aaef425fb01c55cb336505e226a3c35b35f84ad54e41c1d0f8d0b6098a",
+  "inventory_sha256": "a348db14b052af59d3abb3d79425d63f3a47d60e90badee214b9e6c157eef411",
+  "tests": [
+    "gradient_has_independently_known_difference_bits",
+    "identical_and_transparent_pixel_equality_observe_late_cancellation",
+    "identical_pixels_honor_each_block_and_final_cancellation_checkpoint",
+    "invisible_rgb_is_canonical_but_visible_pixels_are_exact",
+    "transparent_texture_is_canonical_and_alpha_gradient_survives_white_projection",
+    "uniform_hash_collision_is_not_informative",
+    "validates_layout_budget_and_cancellation"
+  ]
+}

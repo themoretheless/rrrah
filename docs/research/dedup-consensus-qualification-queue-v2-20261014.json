@@ -1,0 +1,12 @@
+{
+  "status": "stopped_on_failure",
+  "producer_pid": 14181,
+  "completed": [
+    "run-dedup-consensus-collection-v3-focused-20261014.py",
+    "audit-dedup-consensus-collection-v3-focused-20261014.py",
+    "run-dedup-consensus-duration-v4-focused-20261014.py"
+  ],
+  "scope": "Preserve each version binaries before shared Cargo target reuse; stop on any failed producer/audit. No native-feature inference qualification.",
+  "stage": "audit-dedup-consensus-duration-v4-focused-20261014.py",
+  "error": "CalledProcessError(1, ['/Library/Developer/CommandLineTools/usr/bin/python3', '/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-consensus-duration-v4-focused-20261014.py'])"
+}

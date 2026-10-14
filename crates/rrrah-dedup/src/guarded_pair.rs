@@ -45,7 +45,9 @@ pub(crate) fn guarded_pair<T, E: PairError>(
             || [left, right]
                 .iter()
                 .any(|r| r.cancellation.as_ref().is_some_and(GenerationToken::is_cancelled));
-        latch.set(stop);
+        if stop {
+            latch.set(true);
+        }
         stop
     };
     let result = (|| {

@@ -1,0 +1,40 @@
+{
+  "status": "current_coherent31_suite_integration_passed",
+  "suites": 31,
+  "successful_test_executions": 598,
+  "unique_count_claimed": false,
+  "failed": 0,
+  "cache_passed": 151,
+  "viewer_passed": 226,
+  "raster_collection": {
+    "files": 118,
+    "selections": 147,
+    "native_and_prepared_storage_cases": 294,
+    "final_root_and_queue_credits": 0
+  },
+  "model_swap": {
+    "cycles": 2,
+    "models": 6
+  },
+  "backend": "Metal",
+  "source_drift": [],
+  "source_manifest": "sources-at-launch.json",
+  "prior_run": "../cache-viewer-after-f64-2026-10-14/summary.json",
+  "skipped_counts_by_suite": {
+    "cache": 6,
+    "cuda-host": 1,
+    "viewer": 62,
+    "qoi-native": 1,
+    "model-gpu": 1,
+    "hdr-ttl-gpu": 8,
+    "gpu": 12
+  },
+  "limitations": [
+    "passing execution counts include repeats, not598 unique tests",
+    "ignored cases excluded; selected hardware cases explicitly included",
+    "CUDA host tests not NVIDIA hardware evidence",
+    "fixture and integration correctness does not qualify all100 format variants",
+    "physical HDR calibration and long soaks separate"
+  ],
+  "report_sha256": "c0d22fc7ac568e67767e1906c11293f7a382fea8bddd42a8e7bcb9a37b3787ac"
+}

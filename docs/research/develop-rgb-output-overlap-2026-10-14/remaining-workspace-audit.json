@@ -1,0 +1,17 @@
+{
+  "status": "open_source_derived_capacity_risk",
+  "observed_available_workers": 16,
+  "example_algorithm": "LMMSE",
+  "example_dimensions": [
+    128,
+    2048
+  ],
+  "tile": 128,
+  "margin": 6,
+  "scratch_bytes_per_padded_pixel": 73,
+  "per_worker_potential_payload": 1824016,
+  "sixteen_worker_potential_payload": 29184256,
+  "standalone_estimated_scratch_for_example": 16777216,
+  "scope": "source-derived possible simultaneous worker capacities; not measured allocation/RSS peak",
+  "next_action": "admit per-worker scratch before spawning/growing buffers, or plan worker count against available working credit; preserve output correctness and cancellation"
+}

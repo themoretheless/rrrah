@@ -1,0 +1,61 @@
+{
+  "status": "f64_boundary_conversion_cancellation_and_dual_snapshot_validated",
+  "baseline_core_check_exit": 101,
+  "baseline_errors": 239,
+  "library_check_exit": 0,
+  "full_test_session_id": 28924,
+  "full_test_log": "/tmp/core-dual-green-tests.log",
+  "test_command": "cargo test -p rrrah-core --lib --target-dir target/core-f64-current-20261014 --locked --offline",
+  "source_drift_since_launch": [
+    "crates/rrrah-core/src/edit.rs",
+    "crates/rrrah-core/src/histogram.rs"
+  ],
+  "implemented": [
+    "f64 internal demosaic arithmetic and scratch types",
+    "f64 public float/u16/superpixel entry points",
+    "missing f64 color and demosaic exports",
+    "legacy f32 entry point retains managed f64 staging and managed f32 output",
+    "precision/ownership/pressure/cancel regression added",
+    "float sample widening checks cancellation every4096 samples",
+    "legacy u16 path uses admitted f64 normalization instead of unmanaged f32 staging",
+    "normalization checks geometry before allocation and cancellation during conversion",
+    "checked sum for default native working budget"
+  ],
+  "tests_terminal": true,
+  "next_action": "poll session28924 and current HDR probe build, then run six live fixture cases only after successful current binary build",
+  "limitations": [
+    "successful library compilation is not full test success",
+    "public f32 conversion working footprint increases with f64 reconstruction; no throughput benchmark claim",
+    "full per-algorithm native scratch allocations remain conservatively reserved, not individually instrumented",
+    "live HDR six-fixture run not executed"
+  ],
+  "compiler_pid_observed": 41993,
+  "compiler_phase_observed": "LLVM optimization (ModuleInlinerWrapperPass, IndVarSimplifyPass, ScalarEvolution)",
+  "compiler_sample_sha256": "2aa03d2858e051a8cf0e3e4604b88ec338120129875a420296a27253e7a505bc",
+  "previous_test_session_terminal": true,
+  "previous_test_session_exit_code": 0,
+  "previous_full_suite": {
+    "passed": 132,
+    "failed": 0,
+    "ignored": 2
+  },
+  "previous_suite_scope": "sources-at-launch snapshot, prior to cancellation/staging follow-up",
+  "followup_regression": "sample_conversion_cancels_before_reconstruction_and_releases_admitted_staging",
+  "followup_full_suite": {
+    "passed": 133,
+    "failed": 0,
+    "ignored": 2
+  },
+  "followup_session_exit_code": 0,
+  "followup_source_drift": [
+    "crates/rrrah-core/src/develop/demosaic.rs"
+  ],
+  "followup_source_drift_scope": "compared after applying green snapshot optimization; demosaic.rs is expected to change",
+  "full_test_exit_code": 0,
+  "full_core_suite": {
+    "passed": 134,
+    "failed": 0,
+    "ignored": 2
+  },
+  "current_evidence": "../dual-green-snapshot-2026-10-14/result.json"
+}

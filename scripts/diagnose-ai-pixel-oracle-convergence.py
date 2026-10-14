@@ -15,11 +15,16 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--oracle', type=Path, required=True)
 parser.add_argument('--output-dir', type=Path, required=True)
 parser.add_argument('--scales', default='64,128,256,512')
+parser.add_argument('--modes', default='crop-only,media-and-crop')
+parser.add_argument('--timeout', type=int, default=55)
 parser.add_argument('--alias-perceptual-table', action='store_true', help='Diagnostic only: expose the existing A2B0 LUT as A2B1 for Poppler input validation')
 args = parser.parse_args()
 scales = [int(v) for v in args.scales.split(',')]
 assert len(set(scales)) == len(scales) and scales == sorted(scales)
 assert all(1 <= v <= 1024 for v in scales)
+modes = args.modes.split(',')
+assert modes and len(set(modes)) == len(modes) and all(v in ['crop-only', 'media-and-crop'] for v in modes)
+assert 1 <= args.timeout <= 180
 root = Path(__file__).resolve().parents[1]
 source = root / 'tests/fixtures/data/metal-recovery/ai-corpus/VectorApple.ai'
 profile = root / 'vendor/hayro-interpret/assets/CGATS001Compat-v2-micro.icc'
@@ -57,7 +62,7 @@ report = {'scope': 'Original resources and content, derived one-pixel page box e
                           'changing MediaBox may affect page-dependent clipping and group behavior',
                           'no native renderer acceptance from this experiment',
                           'optional A2B1 alias exposes original perceptual LUT; this is a diagnostic profile derivative']}
-for mode in ['crop-only', 'media-and-crop']:
+for mode in modes:
     writer = PdfWriter()
     writer.add_page(reader.pages[0])
     writer.pages[0].cropbox = RectangleObject(box)
@@ -71,7 +76,7 @@ for mode in ['crop-only', 'media-and-crop']:
         command = [str(args.oracle.resolve()), '-r', str(72 * scale), '-f', '1', '-l', '1', '-singlefile',
                    '-cropbox', '-defaultcmykprofile', str(profile), str(pdf), str(prefix)]
         try:
-            process = subprocess.run(command, capture_output=True, text=True, timeout=55)
+            process = subprocess.run(command, capture_output=True, text=True, timeout=args.timeout)
             ppm = prefix.with_suffix('.ppm')
             pixels = np.asarray(Image.open(ppm), dtype=np.float64) if process.returncode == 0 and ppm.exists() else None
             valid = process.returncode == 0 and not process.stderr.strip() and pixels is not None and pixels.shape == (scale, scale, 3)
@@ -79,12 +84,12 @@ for mode in ['crop-only', 'media-and-crop']:
                     'stderr': process.stderr, 'mean_rgb': pixels.mean(axis=(0, 1)).tolist() if valid else None,
                     'ppm_sha256': hashlib.sha256(ppm.read_bytes()).hexdigest() if ppm.exists() else None}
         except subprocess.TimeoutExpired:
-            item = {'mode': mode, 'scale': scale, 'valid': False, 'timeout_seconds': 55}
+            item = {'mode': mode, 'scale': scale, 'valid': False, 'timeout_seconds': args.timeout}
         report['runs'].append(item)
         (args.output_dir / 'result.json').write_text(json.dumps(report, indent=2) + '\n')
         print(json.dumps(item), flush=True)
 report['terminal'] = True
-for mode in ['crop-only', 'media-and-crop']:
+for mode in modes:
     valid = [v for v in report['runs'] if v['mode'] == mode and v['valid']]
     report[f'{mode}-last-scale-delta'] = max(abs(a-b) for a,b in zip(valid[-1]['mean_rgb'],valid[-2]['mean_rgb'])) if len(valid)>1 else None
 report['derived_pdf_sha256'] = {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in args.output_dir.glob('*.pdf')}

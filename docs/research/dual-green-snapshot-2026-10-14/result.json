@@ -1,0 +1,32 @@
+{
+  "isolated_exact_cases": 84,
+  "isolated_samples_per_variant": 8,
+  "scratch_bytes_per_pixel": {
+    "legacy": 24,
+    "candidate": 8
+  },
+  "saved_bytes_at_12mp": 192000000,
+  "timing_claim": "none; shared load and paired results mixed",
+  "production_change": "green-only immutable neighbor snapshot; read each owned current RGB before mutation; cancellable chunked copy",
+  "production_regression": "dual_green_snapshot_matches_full_rgb_snapshot_bit_exact",
+  "status": "production_memory_optimization_and_full_core_suite_passed",
+  "full_test_session_id": 28924,
+  "full_test_log": "/tmp/core-dual-green-tests.log",
+  "test_terminal": true,
+  "full_test_exit_code": 0,
+  "full_core_suite": {
+    "passed": 134,
+    "failed": 0,
+    "ignored": 2
+  },
+  "source_drift": [],
+  "production_exact_cases": 84,
+  "all_native_scratch_accounting_qualified": false,
+  "limitations": [
+    "one RGB snapshot allocation reduced from24 to8 bytes/pixel; not OS RSS measurement",
+    "mixed timing samples do not establish a throughput gain",
+    "other algorithm scratch accounting remains conservatively estimated",
+    "two ignored tests not counted as passed"
+  ],
+  "log_sha256": "c1e72239dbe97ea13168d6efb289746a8467bc6e48c1f55c33829fbc5b1bfbc5"
+}

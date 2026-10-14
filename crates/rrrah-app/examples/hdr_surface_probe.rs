@@ -322,6 +322,38 @@ impl ApplicationHandler for Probe {
                         "native RAW source credit retained after upload"
                     );
                     ProbeRenderer::Raw(renderer)
+                } else if let Some(path) = std::env::var_os("RRRAH_HDR_RASTER_SOURCE") {
+                    let mut request = rrrah_decode::DecodeRequest::new(std::path::PathBuf::from(path));
+                    let budget = rrrah_core::MemoryBudget::new(512 * 1024 * 1024);
+                    request.memory_budget = Some(budget.clone());
+                    let decoded = rrrah_decode::decode_raster(&request)?;
+                    let raster =
+                        rrrah_decode::prepare_raster_for_display_with_budget(&decoded, Some(&budget))?;
+                    println!(
+                        "native raster HDR surface: {}x{}; pixel_aspect={:?}; source={}",
+                        raster.width(),
+                        raster.height(),
+                        raster.pixel_aspect(),
+                        request.path.display()
+                    );
+                    let mut renderer = rrrah_gpu::RasterRenderer::new_linear_hdr(&device);
+                    renderer.upload(&device, &queue, &raster)?;
+                    renderer.update_view(
+                        &queue,
+                        rrrah_gpu::ViewParameters {
+                            viewport: [size.width as f32, size.height as f32],
+                            zoom: 4.,
+                            ..Default::default()
+                        },
+                    );
+                    drop(raster);
+                    drop(decoded);
+                    anyhow::ensure!(
+                        budget.used() == 0,
+                        "native raster source credit retained after upload"
+                    );
+                    println!("native raster source credit after upload: 0");
+                    ProbeRenderer::Raster(renderer)
                 } else {
                     let pixels: Vec<f32> = [0.18, 1., 2., 4.]
                         .into_iter()
@@ -379,6 +411,15 @@ impl ApplicationHandler for Probe {
     }
 }
 fn main() -> anyhow::Result<()> {
+    let selected = [
+        "RRRAH_HDR_RASTER_SOURCE",
+        "RRRAH_HDR_RAW_SOURCE",
+        "RRRAH_HDR_MODEL_SOURCE",
+    ]
+    .into_iter()
+    .filter(|name| std::env::var_os(name).is_some())
+    .count();
+    anyhow::ensure!(selected <= 1, "choose at most one raster, RAW or model source");
     let events = EventLoop::new()?;
     let hold_seconds = match std::env::var("RRRAH_HDR_SURFACE_SECONDS") {
         Ok(value) => value.parse::<u64>()?,

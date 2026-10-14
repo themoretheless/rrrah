@@ -157,10 +157,23 @@ pub(crate) fn properties(bytes: &[u8]) -> Result<Properties, RasterDecodeError> 
     let mut mirror = None;
     let mut color = None;
     let mut bit_depth = None;
+    let mut pixel_aspect_seen = false;
     let mut icc = None;
     for (index, association_offset) in selected {
         let (kind, data) = properties[index];
         match &kind {
+            b"pasp" => {
+                if pixel_aspect_seen || data.len() != 8 {
+                    return Err(invalid("invalid or duplicate pixel aspect ratio"));
+                }
+                let horizontal = u32::from_be_bytes(data[..4].try_into().unwrap());
+                let vertical = u32::from_be_bytes(data[4..].try_into().unwrap());
+                // AVIF requires square pixels; compare integers without rounding.
+                if horizontal == 0 || horizontal != vertical {
+                    return Err(invalid("AVIF pixel aspect ratio must be positive and square"));
+                }
+                pixel_aspect_seen = true;
+            }
             b"av1C" => {
                 if data.len() < 4 || data[0] != 0x81 || data[2] & 0x60 == 0x20 {
                     return Err(invalid("invalid AV1 configuration depth"));
@@ -326,6 +339,50 @@ mod tests {
         assert!(parsed.clean_aperture.is_some());
         assert!(parsed.mirror.is_some());
     }
+    #[test]
+    fn primary_pixel_aspect_must_be_positive_square_and_unique() {
+        fn bx(tag: &[u8; 4], payload: &[u8]) -> Vec<u8> {
+            let mut out = ((payload.len() + 8) as u32).to_be_bytes().to_vec();
+            out.extend(tag);
+            out.extend(payload);
+            out
+        }
+        let build = |payload: &[u8], item: u16, count: u8| {
+            let mut association = vec![0, 0, 0, 0, 0, 0, 0, 1];
+            association.extend(item.to_be_bytes());
+            association.push(count);
+            association.extend(std::iter::repeat_n(1u8, count as usize));
+            let mut iprp = bx(b"ipco", &bx(b"pasp", payload));
+            iprp.extend(bx(b"ipma", &association));
+            let mut meta = vec![0; 4];
+            meta.extend(bx(b"pitm", &[0, 0, 0, 0, 0, 1]));
+            meta.extend(bx(b"iprp", &iprp));
+            let mut image = bx(b"ftyp", b"avif\0\0\0\0avif");
+            image.extend(bx(b"meta", &meta));
+            image
+        };
+        let payload = |h: u32, v: u32| [h.to_be_bytes(), v.to_be_bytes()].concat();
+        for (h, v) in [(2, 1), (1, 2), (0, 0), (0, 1), (1, 0)] {
+            assert!(
+                matches!(
+                    properties(&build(&payload(h, v), 1, 1)),
+                    Err(RasterDecodeError::InvalidAvif(_))
+                ),
+                "spacing {h}:{v}"
+            );
+        }
+        for spacing in [1, 2, u32::MAX] {
+            assert!(properties(&build(&payload(spacing, spacing), 1, 1)).is_ok());
+        }
+        assert!(properties(&build(&payload(1, 1), 1, 2)).is_err());
+        for malformed in [vec![], vec![0; 7], vec![0; 9]] {
+            assert!(properties(&build(&malformed, 1, 1)).is_err());
+        }
+        // Unassociated properties do not change the selected primary image.
+        assert!(properties(&build(&payload(2, 1), 2, 1)).is_ok());
+        assert!(properties(&build(&payload(2, 1), 1, 0)).is_ok());
+    }
+
     #[test]
     fn clean_aperture_follows_primary_association_and_rejects_duplicates() {
         fn bx(tag: &[u8; 4], payload: &[u8]) -> Vec<u8> {

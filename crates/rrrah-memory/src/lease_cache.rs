@@ -104,6 +104,8 @@ impl<K: Clone + Eq + Hash, V> LeaseCache<K, V> {
         self.inner.get(key).map(|value| (**value).clone())
     }
     /// Explicit invalidation clears the owner pin, but refuses live consumer leases.
+    /// # Panics
+    /// Panics if internal ownership bookkeeping would evict a still-shared value.
     pub fn remove(&mut self, key: &K) -> Option<V> {
         self.reconcile();
         if self.leased.contains_key(key) {
@@ -114,6 +116,8 @@ impl<K: Clone + Eq + Hash, V> LeaseCache<K, V> {
             .remove(key)
             .map(|value| Arc::try_unwrap(value).ok().expect("removed value has no lease"))
     }
+    /// # Panics
+    /// Panics if internal ownership bookkeeping would evict a still-shared value.
     pub fn take_lru(&mut self) -> Option<(K, V)> {
         self.reconcile();
         self.inner.take_lru().map(|(key, value)| {
@@ -137,6 +141,10 @@ impl<K: Clone + Eq + Hash, V> LeaseCache<K, V> {
     }
     /// Active leases forbid replacement as well as eviction. Rejection returns
     /// the caller's value without modifying resident membership.
+    /// # Panics
+    /// Panics if internal ownership bookkeeping would evict a still-shared value.
+    /// # Errors
+    /// Returns the supplied value when live leases or cache limits refuse admission.
     pub fn insert(&mut self, key: K, value: V, weight: u64) -> Result<Vec<(K, V)>, V> {
         self.reconcile();
         if self.leased.contains_key(&key) {
@@ -162,6 +170,8 @@ impl<K: Clone + Eq + Hash, V> LeaseCache<K, V> {
             .collect())
     }
     /// Failure preserves limits and membership when held leases cannot fit.
+    /// # Panics
+    /// Panics if internal ownership bookkeeping would evict a still-shared value.
     pub fn set_limits(&mut self, limits: CacheLimits) -> Option<Vec<(K, V)>> {
         self.reconcile();
         self.inner.set_limits(limits).map(|victims| {
@@ -179,6 +189,8 @@ impl<K: Clone + Eq + Hash, V> LeaseCache<K, V> {
     /// Transfers expired values for optional background spill. Live consumer leases
     /// and explicit owner pins retain their entries; no payload cloning or I/O occurs.
     /// Returned values continue to own their managed memory reservations.
+    /// # Panics
+    /// Panics if internal ownership bookkeeping would evict a still-shared value.
     pub fn drain_expired(&mut self) -> Vec<(K, V)> {
         self.reconcile();
         self.inner

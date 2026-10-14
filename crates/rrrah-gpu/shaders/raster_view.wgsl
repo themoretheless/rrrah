@@ -12,6 +12,7 @@ struct Parameters {
     raw_development: vec4<u32>,
     curve: array<vec4<f32>, 256>,
     resident_rect: vec4<u32>,
+    comparison: vec4<f32>,
 };
 @group(0) @binding(0) var image: texture_2d_array<f32>;
 @group(0) @binding(1) var<uniform> p: Parameters;
@@ -124,9 +125,11 @@ fn fs_main(@builtin(position) position: vec4<f32>) -> @location(0) vec4<f32> {
     let top = mix(premultiplied_at(base), premultiplied_at(base+vec2<i32>(1,0)), weight.x);
     let bottom = mix(premultiplied_at(base+vec2<i32>(0,1)), premultiplied_at(base+vec2<i32>(1,1)), weight.x);
     let color = mix(top,bottom,weight.y);
-    var rgb = color.rgb * exp2(p.exposure);
+    let before = p.comparison.x > 0.0 && position.x < p.viewport.x * p.comparison.x;
+    let exposure = select(p.exposure, p.comparison.y, before);
+    var rgb = color.rgb * exp2(exposure);
     if p.raw_development.x != 0u {
-        rgb = aces_tone_map(color.rgb,p.exposure);
+        rgb = aces_tone_map(color.rgb,exposure);
         let luminance = dot(rgb, vec3<f32>(0.2126,0.7152,0.0722));
         let curve_luminance=evaluate_curve(luminance);
         if luminance > 0.0 { rgb *= curve_luminance / luminance; } else { rgb=vec3<f32>(curve_luminance); }

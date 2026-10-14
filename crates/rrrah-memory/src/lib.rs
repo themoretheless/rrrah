@@ -259,6 +259,8 @@ impl Reservation {
     /// Allocate mutable storage from already admitted credit without charging
     /// it twice. Conservative excess credit remains attached to the buffer.
     /// Additional capacity is admitted before initialization; errors roll back.
+    /// # Errors
+    /// Returns an error on byte-size overflow, exhausted memory credit or allocation failure.
     pub fn try_buffer<T: Copy>(mut self, length: usize, value: T) -> Result<MutableBuffer<T>, BufferError> {
         self.ensure_bytes(buffer_bytes::<T>(length)?)?;
         let mut values = Vec::new();

@@ -1,0 +1,51 @@
+{
+  "status": "complete3file_source_review_six_controlled_adapter_scenarios",
+  "repository": "cameronmcefee/Duplicate-to-All",
+  "commit": "5ad15a1d5ccf8832886c8e5c7a158c5025ef7c6a",
+  "index": 59,
+  "whole_repo_complete": true,
+  "whole_runtime_qualified": false,
+  "fully_read_files": [
+    {
+      "path": "Duplicate-to-All.js",
+      "local": "docs/research/dedup-500/evidence/cameronmcefee--Duplicate-to-All/02-Duplicate-to-All.js",
+      "sha256": "8ebf9da901827d4570887d60edb3237d2c87dcfe475e64ad579ff3bbd5e1ec00",
+      "git_blob_sha1": "78eeb5c00afe7cf887893550af73f69c2ccb16bc",
+      "bytes": 1553
+    },
+    {
+      "path": "README.md",
+      "local": "docs/research/dedup-500/evidence/cameronmcefee--Duplicate-to-All/00-README.md",
+      "sha256": "38fad5457e7477b003d8b59069fef33c01eb823e36f528f006486ee9ccd1e53e",
+      "git_blob_sha1": "61fddfcb5389995c5bc280c25e43e69a0c20472d",
+      "bytes": 824
+    },
+    {
+      "path": "LICENSE",
+      "local": "docs/research/dedup-500/evidence/cameronmcefee--Duplicate-to-All/01-LICENSE",
+      "sha256": "bbeacaf12d8a117b3d8f10d9393f886c1999e6f8a3cf1957749953c3f4e2cb92",
+      "git_blob_sha1": "bb17b440d48cbf3c63a250db422bba849e95a7de",
+      "bytes": 1081
+    }
+  ],
+  "command": [
+    "/opt/homebrew/opt/node@22/bin/node",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/check-dedup-duplicate59-20261014.js",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/cameronmcefee--Duplicate-to-All/02-Duplicate-to-All.js"
+  ],
+  "node_version": "v22.23.3",
+  "pins": {
+    "scripts/check-dedup-duplicate59-20261014.js": "4c50233dd4c37edc605c78aa0dab357dd5dae90f4dd16444f6b798c95d4f198a",
+    "scripts/check-dedup-duplicate59-20261014.py": "238570925c6f7c39ce24f9e78bcaa2c000ffe9fe1671b72c4a3b7765a1b0b48d",
+    "docs/research/dedup-duplicate59-controls-20261014/stdout.json": "b278c651b5886fc49d1a4b4d1a39376c544c83ddd65a4fa7839b7ce6f0a2e362",
+    "docs/research/dedup-duplicate59-controls-20261014/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "findings": [
+    "Creates new Photoshop layer copies in every other open document; no duplicate detection, hashes, comparison, storage dedup, index or equality evidence.",
+    "Zero documents do nothing; singleton still groups/ungroups source and alerts.4document control copies to3targets.",
+    "Function-scoped var curLayer is not reset each iteration. When a later target activeLayer getter throws, previous target layer is reused for move; reproduced with explicit adapter.",
+    "Duplicate failure propagates without final source ungroup/alert; earlier document changes are not rolled back.",
+    "Leaked docs/curDoc globals, no limits/cancellation or exception-safe transactional cleanup. MIT license read; no code adoption."
+  ],
+  "scope": "Original43line source unmodified in Node vm with explicit synthetic Photoshop adapter. No actual Photoshop execution, UI edits, image corpus, detection or file identity qualification. All3captured Git blobs fully read and pinned. No upstream tests in tree. Adapter behavior is a codepath control, not Adobe API compatibility. Captured commit-to-tree binding not independently fetched."
+}

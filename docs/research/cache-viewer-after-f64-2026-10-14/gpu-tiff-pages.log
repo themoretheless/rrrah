@@ -1,0 +1,48 @@
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 2.03s
+     Running tests/tiff_pages_metal.rs (target/debug/deps/tiff_pages_metal-aeed5fc1e2b70249)
+
+running 4 tests
+test distinct_tiff_page_profiles_keep_selected_color_through_swap ... ok
+test signed_hdr_tiff_pages_preserve_alpha_orientation_and_metal ... ok
+test selected_tiff_pages_survive_ram_ttl_swap_and_metal ... ok
+test independent_compressed_tiff_pages_keep_native_bits_and_metal_swap ... ok
+
+successes:
+
+---- distinct_tiff_page_profiles_keep_selected_color_through_swap stdout ----
+TIFF page ICC adapter: Metal Apple M4 Max
+TIFF page ICC: sRGB->linear->sRGB; identical source codes; LittleCMS RGB8 within1; fallback override refused; reverse swap SDR/HDR exact; final=0
+
+---- signed_hdr_tiff_pages_preserve_alpha_orientation_and_metal stdout ----
+TIFF signed HDR adapter: Metal Apple M4 Max
+TIFF signed HDR: le; above-one negative signed-zero; straight/associated alpha; orientation6; pressure/cancel retry; native bits and SDR/HDR exact; final=0
+TIFF signed HDR: be; above-one negative signed-zero; straight/associated alpha; orientation6; pressure/cancel retry; native bits and SDR/HDR exact; final=0
+
+---- selected_tiff_pages_survive_ram_ttl_swap_and_metal stdout ----
+TIFF pages adapter: Metal Apple M4 Max
+TIFF pages: classic-le; selected metadata; visible TTL pin; full-pressure RAM hit; reverse swap; SDR/HDR exact; final=0
+TIFF pages: classic-be; selected metadata; visible TTL pin; full-pressure RAM hit; reverse swap; SDR/HDR exact; final=0
+TIFF pages: big-le; selected metadata; visible TTL pin; full-pressure RAM hit; reverse swap; SDR/HDR exact; final=0
+TIFF pages: big-be; selected metadata; visible TTL pin; full-pressure RAM hit; reverse swap; SDR/HDR exact; final=0
+
+---- independent_compressed_tiff_pages_keep_native_bits_and_metal_swap stdout ----
+TIFF precision adapter: Metal Apple M4 Max
+TIFF precision: precision-uint16-little-same.tif; native samples exact; ICC selected metadata; reverse swap; SDR/HDR exact; final=0
+TIFF precision: precision-uint16-little-changed.tif; native samples exact; ICC selected metadata; reverse swap; SDR/HDR exact; final=0
+TIFF precision: precision-uint16-big-same.tif; native samples exact; ICC selected metadata; reverse swap; SDR/HDR exact; final=0
+TIFF precision: precision-uint16-big-changed.tif; native samples exact; ICC selected metadata; reverse swap; SDR/HDR exact; final=0
+TIFF precision: precision-float32-little-same.tif; native samples exact; ICC selected metadata; reverse swap; SDR/HDR exact; final=0
+TIFF precision: precision-float32-little-changed.tif; native samples exact; ICC selected metadata; reverse swap; SDR/HDR exact; final=0
+TIFF precision: precision-float32-big-same.tif; native samples exact; ICC selected metadata; reverse swap; SDR/HDR exact; final=0
+TIFF precision: precision-float32-big-changed.tif; native samples exact; ICC selected metadata; reverse swap; SDR/HDR exact; final=0
+
+
+successes:
+    distinct_tiff_page_profiles_keep_selected_color_through_swap
+    independent_compressed_tiff_pages_keep_native_bits_and_metal_swap
+    selected_tiff_pages_survive_ram_ttl_swap_and_metal
+    signed_hdr_tiff_pages_preserve_alpha_orientation_and_metal
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.45s
+

@@ -1,0 +1,98 @@
+{
+  "status": "primary_avif_square_pixel_validation_cpu_ram_swap_metal_passed",
+  "baseline": "primary metadata parser silently accepted associated2:1 pasp",
+  "policy": "selected primary pasp must have8-byte body, positive equal u32 spacings, unique association; unused properties do not alter selected image",
+  "metadata_controls": [
+    "non-square",
+    "zero numerator/denominator",
+    "malformed lengths",
+    "duplicate association",
+    "positive equal1,2,UINT32_MAX",
+    "nonprimary and unassociated controls"
+  ],
+  "fixture_cases": {
+    "source": "avif-rgb.avif",
+    "source_sha256": "f7bbb02fd97086d2e9584333cdeb87174300e7572e41f1860ed36cd987e86c84",
+    "cases": [
+      {
+        "fixture": "avif-pasp-square.avif",
+        "spacing": [
+          2,
+          2
+        ],
+        "essential": false,
+        "sha256": "464e61da40d7d63897084c543026aeb8822834ad0968c00d5d8241b6412dea1d",
+        "media_unchanged": true
+      },
+      {
+        "fixture": "avif-pasp-square-essential.avif",
+        "spacing": [
+          2,
+          2
+        ],
+        "essential": true,
+        "sha256": "641abb596b698ba42426b8cc43b7890722bf84e871f023bd5586b80a1ba01ac0",
+        "media_unchanged": true
+      },
+      {
+        "fixture": "avif-pasp-nonsquare.avif",
+        "spacing": [
+          2,
+          1
+        ],
+        "essential": false,
+        "sha256": "190ea73c2ab23b608ce75b80dcb68b726361a41e3d6b4c30d53176fd9f92b8d9",
+        "media_unchanged": true
+      },
+      {
+        "fixture": "avif-pasp-zero.avif",
+        "spacing": [
+          0,
+          0
+        ],
+        "essential": false,
+        "sha256": "651a392b10ec0c020e236f02a6f1aba20eae8b873ee3bbdd44c4bf04e7bafbbd",
+        "media_unchanged": true
+      }
+    ],
+    "scope": "pinned iloc-v0 absolute-extent layout; metadata only, no AV1 re-encode"
+  },
+  "cpu_full_suite": {
+    "passed": 1039,
+    "failed": 0,
+    "ignored": 73
+  },
+  "metal_hdr_swap_suite": {
+    "passed": 24,
+    "failed": 0,
+    "ignored": 3
+  },
+  "native_pixels_color_and_prepared_float_bits_unchanged": true,
+  "square_essential_property_backend_supported": true,
+  "invalid_public_decode_scoped_credits_zero": true,
+  "valid_ram_swap_metal_pressure_cancel_retry_and_source_deletion_passed": true,
+  "source_sha256_at_completion": {
+    "crates/rrrah-decode/src/avif_color.rs": "6498159d9527f19a741c5fb3ec8e26023e7ebd3f8dcb677a85bcf4d196382e9f",
+    "crates/rrrah-decode/src/raster.rs": "b6fee891cb694e39f2e477a49ddf18581f4f6b43a3e5db328475a585651f6531",
+    "crates/rrrah-app/tests/hdr_raster_swap.rs": "b90095a7da90a3c6061c283fdd6d65e0b35c35000cf0adfb5ab47a75e857e053",
+    "scripts/generate-avif-square-pixel-fixtures.py": "e41c65f3ec9a6b63e2b0ddb803ae6ab823cd3f25dbdbc4425edc6399c20579c3",
+    "tests/fixtures/raster/avif-square-pixel-fixtures.json": "636e3120738af04a5168695593612cbb5c5d9c184f09b8ccf1b760daeac66265",
+    "Cargo.lock": "5cfaa6a40ba81a8fcb33d10b6e5c45dc33058fa3090ac909f2c04290fe15ce2d"
+  },
+  "log_sha256": {
+    "metadata-after.log": "cd55ad9b22c3dfc48c8dd4c6ec6539bb2ce62dbc13dd987de4f3358c11c6ab78",
+    "metal-build.log": "40fc8731158c3a38ca39968e2e63aadb4a2672d51d89f68fb7d3b409fd100890",
+    "metal-suite.log": "26237b5d3b8080244b604a5b59b0ea945f6222c54efc87bc518ce3c8b17727fb",
+    "before.log": "3aefff01cafe1c023ebae36ce25016c904e46856ffa0d66fe25d96f990d17dc9",
+    "real-fixtures.log": "97157902bed45bf1371d62b30d5fb4cb0b12428774d7d8f7fde9594531f73b70",
+    "full-decode.log": "478fcda8bc995ffe30045207f45291fcb4d797e503ee970c78aec8c1e512c0f0"
+  },
+  "specification": "https://aomediacodec.github.io/av1-avif/",
+  "limitations": [
+    "selected primary property validation, not all item graph or sequence conformance",
+    "authored metadata-only variants of one pinned8-bit libavif producer",
+    "offscreen Metal exact frames, not new live-window or physical calibration evidence",
+    "ignored manual/corpus cases excluded",
+    "no increase in fully qualified100-format rows"
+  ]
+}

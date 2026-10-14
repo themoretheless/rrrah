@@ -1,0 +1,32 @@
+{
+  "status": "conversion_overlap_fix_full_core_suite_passed_crop_followup_running",
+  "before_reserved_peak": 81788928,
+  "known_live_rgb64_plus_rgba32_payload": 83886080,
+  "under_reserved_bytes": 2097152,
+  "fixture_dimensions": [
+    2048,
+    1024
+  ],
+  "policy": "max(existing working estimate, full RGB64 bytes + actual cropped RGBA32 output bytes)",
+  "full_core_suite": {
+    "passed": 135,
+    "failed": 0,
+    "ignored": 2
+  },
+  "one_byte_short_budget_refused_without_retained_credit": true,
+  "source_sensor_unchanged": true,
+  "crop_followup_session_id": 66991,
+  "crop_followup_log": "/tmp/develop-overlap-crop-final.log",
+  "crop_followup_terminal": false,
+  "production_module_sha256": "62339f412cc344be14cff05927b5cab90b579e98fa6a9b0452a10da8202d608e",
+  "source_sha256_at_report": {
+    "crates/rrrah-core/src/develop/mod.rs": "ff35c2cbe45b009a60f0963c4567f21fd1f59663180c71c94ab89fdb6d58b4cc",
+    "Cargo.lock": "5cfaa6a40ba81a8fcb33d10b6e5c45dc33058fa3090ac909f2c04290fe15ce2d"
+  },
+  "limitations": [
+    "buffer payload overlap bound, not OS RSS accounting",
+    "parallel per-algorithm scratch and opcode temporary buffers not fully instrumented",
+    "two ignored tests excluded",
+    "cropped acceptance strengthening still compiling"
+  ]
+}

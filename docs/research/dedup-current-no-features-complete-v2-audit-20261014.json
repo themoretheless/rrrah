@@ -1,0 +1,1555 @@
+{
+  "status": "verified_current_root_complete_no_feature_inventory",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-current-no-features-complete-v2-20261014.json": "73b737bdade692f64b327253cdc9472e5d67c450b8fabb3e396da58df4efa99d",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-current-no-features-complete-v2-source-20261014.json": "af7fa27fe1bb2fb8acbab1548faa1e849bd021048ab05881e9a8a1ee046be760",
+    "/private/tmp/rrrah-current-no-features-complete-v2-20261014/cargo.log": "5a8a25b270135d13fee531adc7b684168ed802b6a4bb4ed97cdede220b0c9c3d",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-current-no-features-complete-v2-20261014.py": "aa7c806185815a05316c85cf85f74a964351a19c30f79b7769342c9544c148d8"
+  },
+  "passed": 264,
+  "failed": 0,
+  "ignored": 2,
+  "targets": 153,
+  "metadata_sha256": "101578d6a59042dc210a5941763c6d2787b7fbb24d853619f11d6b2046d12905",
+  "feature_gated_targets_excluded": [
+    {
+      "name": "opposite_native",
+      "features": [
+        "decode"
+      ]
+    }
+  ],
+  "rows": [
+    {
+      "target": "unittests src/lib.rs",
+      "passed": 45,
+      "failed": 0,
+      "ignored": 2,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/rrrah_dedup-24d0870e67010502",
+      "executable_sha256": "4c06c64248b954314b9ee36fb4ab63b6432c3af4b5bde84624702e6b6fb9d9cb",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/000-inventory.log",
+      "inventory_sha256": "132c8946ae2d5bed9c8b77df581e788d18693b5b9d63ace8c7f7f30550723e64"
+    },
+    {
+      "target": "tests/affine_candidate_search.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/affine_candidate_search-ecd45a3dc1295539",
+      "executable_sha256": "cf354ca1493af09cd89b343c3375ee38b41b51414679e6bc5f1e74040afbfd7a",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/001-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/affine_color.rs",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/affine_color-9a334660cb79168f",
+      "executable_sha256": "24d66bad2162d471970658bee6b335624e57c0fc1a59f4d837e2891c3421e6b0",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/002-inventory.log",
+      "inventory_sha256": "ced1af97a46b929a95e9298d43544cbb9401b7fc2eae9843d5a0d14b2e6ffd8a"
+    },
+    {
+      "target": "tests/affine_color_heldout_negative.rs",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/affine_color_heldout_negative-8f244b8d51b3f710",
+      "executable_sha256": "3c9b535a99dd168c3edba81bb0be60abda9108fd9269f5f106f95d48fe8c7c9a",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/003-inventory.log",
+      "inventory_sha256": "32de5106242f494d4fd354ac01a33207a559464e7ab716c60366e537e3947c9a"
+    },
+    {
+      "target": "tests/affine_region.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/affine_region-0b3951904735612b",
+      "executable_sha256": "935b97dcb9c870fad4ee5b55ae48f4a0a5b29b20c7feb8f0fdacd44b67ff1a7b",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/004-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/affine_region_file.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/affine_region_file-c2c29e72c5976266",
+      "executable_sha256": "4ccd6aa7127d9ed3cffbadbe66584bcb15aedfa53d3a0ce093c4a547a599f91b",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/005-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/affine_region_grid.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/affine_region_grid-1f481ee8ee824589",
+      "executable_sha256": "ebd8a76f5c30ecf19d15e28159573401daa7fe07b00ea4e90996a2f89b2dcfe4",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/006-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/affine_region_input_contract.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/affine_region_input_contract-986d187174940ee3",
+      "executable_sha256": "c7cceaa124a1545f1ca71d2013c5f1e5317d3ac3d8689c7871a9a0c74979de0d",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/007-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/anchor_candidate_search.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/anchor_candidate_search-fc694b6342d56d91",
+      "executable_sha256": "fb3ad05262f34deacba331bb93f350196b07b7cd9c6b5bedb3f95961e27a0ab5",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/008-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/anchor_collection.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/anchor_collection-8c18346fbc58e299",
+      "executable_sha256": "73d581dc2a175aee19586fe2efdb0c260d7e0977483dfa8193bc1f5d65ef3193",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/009-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/anchor_collection_preflight.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/anchor_collection_preflight-39f5efc396d884bf",
+      "executable_sha256": "92041e747e72c9bbc0608d3d22494ccdc73752e68eaa27b4fba910dfc4cc3986",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/010-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/anchor_collection_scaled.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/anchor_collection_scaled-54ab23ac78b335dd",
+      "executable_sha256": "62a4ce2cf15795797871f0a53ae4e8eab0accad4cec3924f3473999bcc831330",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/011-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/anchor_fallback_collection.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/anchor_fallback_collection-ff8adbe57ae58faa",
+      "executable_sha256": "8b8c1a51a8f02bae939dd99cf2fab053fc9f171401c9bab397feaa235836b6e7",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/012-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/anchor_fallback_collection_lifecycle.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/anchor_fallback_collection_lifecycle-d27b8bbc325268d8",
+      "executable_sha256": "2d0fa67ac57a4251eb19353cce4d691dc480789715a0dc426d0b739a07b533ff",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/013-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/anchor_fallback_collection_preflight.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/anchor_fallback_collection_preflight-a21e3e8583f5bc6c",
+      "executable_sha256": "31a7b920d05a0ce487d65450c63677466e5beac227bda3dc53d3f7e73ecd82f6",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/014-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/anchor_fallback_search.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/anchor_fallback_search-6cb7f7df1bb5e1ba",
+      "executable_sha256": "de95db16d6c3e120e6b29cc6ffa5f124195e91926b15b98523a8c0512424186d",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/015-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/anchor_file_search_preflight.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/anchor_file_search_preflight-ef3d23b43228448b",
+      "executable_sha256": "89abef1575663868d47dc98d79722bcba78956127fc1fec3207573607062f7e9",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/016-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/anchor_geometry_collection.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/anchor_geometry_collection-73e2bc2e7ceb71b9",
+      "executable_sha256": "667d5b143fe3d2bfeb025302daeb4e423ba4f008096d77c0d508826f4576d326",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/017-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/anchor_geometry_collection_lifecycle.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/anchor_geometry_collection_lifecycle-6c1d559ad417f937",
+      "executable_sha256": "33018cd34c091709619c9fe3244e33b685a06b3f5804c04fce1dd3a6d2a8770b",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/018-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/anchor_geometry_collection_preflight.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/anchor_geometry_collection_preflight-ebabe28d2ff8edd5",
+      "executable_sha256": "e0066b76895d6d537f58e9f8d5c21f49073204be01edaab2f8dca1150568e38f",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/019-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/anchor_geometry_rank_fallback.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/anchor_geometry_rank_fallback-457e1b636307cb47",
+      "executable_sha256": "177f84c58e640ec3f2aaf516afbe0d68f5f8800bcae662f91931b52e64cc141c",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/020-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/anchor_geometry_search.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/anchor_geometry_search-55a3d52b44de6ff3",
+      "executable_sha256": "64a3fbb18ca401f80034c099116c7e62350291f18cbe2cf7bee227d45f5a8095",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/021-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/anchor_geometry_smoothing.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/anchor_geometry_smoothing-3772664a7e0b43ae",
+      "executable_sha256": "b63668bcdc4ccedc805d9a733f48d7e085176867fe343b5d56c4751235123056",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/022-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/anchor_rank.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/anchor_rank-048f74e7640d0ceb",
+      "executable_sha256": "046acfe105b50ea6490d2d3130992c50475a6f223b84d68b9147db6f5571face",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/023-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/anchor_rank_driven_collection.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/anchor_rank_driven_collection-45f25659815409d7",
+      "executable_sha256": "15bbe48a1d2c7ad89fe0f3cec7e90a2ecbb6585764c42955b8b673c36db33585",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/024-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/anchor_rank_driven_collection_lifecycle.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/anchor_rank_driven_collection_lifecycle-99271d1c834ed740",
+      "executable_sha256": "8d6d218aafff6ee496b2f3c74954e5d0aad2b72db333ba71684075e69e606979",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/025-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/anchor_rank_driven_collection_preflight.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/anchor_rank_driven_collection_preflight-d17722c99e178331",
+      "executable_sha256": "1590fcdd36f242878eeceb1d35e13df37719becb201792f0f43401c9ef7f7588",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/026-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/anchor_rank_file.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/anchor_rank_file-130d4c6c27ee0a5b",
+      "executable_sha256": "1764eaa001d5cd844130d755aad180627d84101261064a4cd173f4316986d328",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/027-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/anchor_reflected_geometry.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/anchor_reflected_geometry-83b5033006df0288",
+      "executable_sha256": "ad8488b97d074694d94610ea9bf353c8b0238b3465511e71444c31ea6d68f31c",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/028-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/anchor_reflection_collection.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/anchor_reflection_collection-7095eb0378931445",
+      "executable_sha256": "6ebd1a8f10dc10e662bba55d67e7b075ed9892576b858b460c053c1fe0941108",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/029-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/anchor_reflection_collection_cancel.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/anchor_reflection_collection_cancel-781d61fd768c19de",
+      "executable_sha256": "7cb2ab56504452e4f8582f1f5932470bdf8204a72adec349a95fa1a684f4c1bc",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/030-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/anchor_reflection_collection_lifecycle.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/anchor_reflection_collection_lifecycle-4e9d7ec9f05ec0cb",
+      "executable_sha256": "8e47a72a003f7b9532f8279fcd35bd2b512741748c98b6fb8cac2b255986deb6",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/031-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/anchor_reflection_collection_tokens.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/anchor_reflection_collection_tokens-21b9c2a1340086f0",
+      "executable_sha256": "07e3aa30a43abc89725cff32f56431d89ac8b6eb0156acdc1dfd067e7852492a",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/032-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/anchor_reflection_fallback.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/anchor_reflection_fallback-b67a6138ea5b5f43",
+      "executable_sha256": "fd7fa0e0545a6e9aea8698ba45993604bac21f1ca63d36cf8a30ecd472382a01",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/033-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/animated.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/animated-f2dca904f8a1bc72",
+      "executable_sha256": "c8d92abfe746487b27dc5d9b0d88e414df8a8976c6d9465e3b8d839cb02fdc7f",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/034-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/bank_geometry.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/bank_geometry-4c190e92890921c1",
+      "executable_sha256": "017145201209c1852431874acd47645970cc2091cf1c4ca4b0cc97fcbf7409b6",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/035-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/bank_partition.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/bank_partition-738358b5f79bd6e3",
+      "executable_sha256": "0c80af1ff067325c55a04a21ededb8607e1d0ac55f96acd4a61a1bc20f066b97",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/036-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/build_context.rs",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/build_context-b6b28b81af1878a7",
+      "executable_sha256": "245557e53c928fa909381833ce1d1b248015f5106d24be23b33f54a469b3ecf9",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/037-inventory.log",
+      "inventory_sha256": "d35aac534dd08a1d45da6f1d43c047a8a99cc79547e65a291f835594ba909a79"
+    },
+    {
+      "target": "tests/cache.rs",
+      "passed": 7,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/cache-8720780c5ae9c73b",
+      "executable_sha256": "e0c21333b3f416c0dd23b5f7104cf4782874f510f0cf1cbb4d7ffd572239a714",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/038-inventory.log",
+      "inventory_sha256": "42e279ed721b061d3b5d8a226bbaaeb8434e4ccc0e6be2f8249590a0fd13c215"
+    },
+    {
+      "target": "tests/cache_interpretation.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/cache_interpretation-ee23a13d9c5fe402",
+      "executable_sha256": "e16ac1a8809129e52d1fc2fc03805cd860ac71344645db62e70badf84ade187c",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/039-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/cache_rla_interpretation.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/cache_rla_interpretation-eb0043d02b1f6d9e",
+      "executable_sha256": "fb9bb73e669492901735888b1f5510e36c29572061eb75a4bb9b593119e70899",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/040-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/candidate_geometry_only.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/candidate_geometry_only-7b4487493ba963cd",
+      "executable_sha256": "15eacb7ce381fe0ed01c382a42fa06f811d3b262b15063b8bd527b9da0833471",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/041-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/candidate_reflected_geometry.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/candidate_reflected_geometry-ece12700d5398e14",
+      "executable_sha256": "1e2070b8687a63e274c19c0cae5a3aa0d089b1f18d914f6f9d983fcf612598c7",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/042-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/candidate_union_files.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/candidate_union_files-45f00c7480187c23",
+      "executable_sha256": "5a9d43ab9d98224b685b41a86ce49cdd10df83315bfd3a02c2a49233576d8b80",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/043-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/competitive_rank.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/competitive_rank-7c31b8a92aa359dd",
+      "executable_sha256": "4a50e83ed46a7bb200ef2e66537f7ca0ca4efade7c7e79c25c212b03f251692e",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/044-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/container.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/container-543df3932fa68c19",
+      "executable_sha256": "ffb8b3469a94efc7f20c7fb26dc78545ab8f16e89b7e2b13b97d013c79348976",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/045-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/content_snapshot.rs",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/content_snapshot-f49627afb5668f84",
+      "executable_sha256": "84744f1a70fac3801561163fb1c48c7b1f0979ec0f74935733537770041b90c1",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/046-inventory.log",
+      "inventory_sha256": "fcb7ee716c4c8aca51ff507dce8e1356275587fcdb6431283f43200b65e2e6c9"
+    },
+    {
+      "target": "tests/correspondence_union.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/correspondence_union-2dca031be2912720",
+      "executable_sha256": "d5f674a5fbeb3971fa321905d94802a9a1968eeb1b2ea567ec65f3fc2e76a396",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/047-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/crop.rs",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/crop-ed21ed214258dd4e",
+      "executable_sha256": "5753bb312cf600d34d527b67a4d23cb1d7a5b63d5192a876bf12e8f7394ce57a",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/048-inventory.log",
+      "inventory_sha256": "56b27445b875ea379544d4bfdbb5e29a349114c32e24162480356b72f96a20ee"
+    },
+    {
+      "target": "tests/decode.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/decode-7bfd3ae72abbc5fd",
+      "executable_sha256": "1d90412cec309ed4c444393789c05dd64198b30a14aa9dfbf9dd7e09241ebaf1",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/049-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/diagonal_proposals.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/diagonal_proposals-f84df3ff0724a9e4",
+      "executable_sha256": "c31482b98f337cb91aab193054b4a7505f9dee3525e8de569bb6d140e565f8f5",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/050-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/encoded_srgb.rs",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/encoded_srgb-0ef665a4367a9681",
+      "executable_sha256": "927f99e5ec39b27469491d6f64427b7d7c8c3c9ac941bc4ab3cc27e50a83d9b5",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/051-inventory.log",
+      "inventory_sha256": "9813600081978abf9828aa6b05edcb4828a1b6c66c10e41dd5a945a7e9dce71b"
+    },
+    {
+      "target": "tests/exact_files.rs",
+      "passed": 29,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/exact_files-40bb7ff71202deaf",
+      "executable_sha256": "d5a361cdd7f4d84fa153d0a4bcd68996303fe295173eaf89087f8e32b84912c2",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/052-inventory.log",
+      "inventory_sha256": "8507f75fe18dfa1796342f62b24a631366ea4aa91c744d3f07a18bf72b02c7e1"
+    },
+    {
+      "target": "tests/exposure.rs",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/exposure-8009a97111fe3cf7",
+      "executable_sha256": "17648fe6e5ecd568b6c591a27fd553cf7d9273d6efa347ef668f9c65d6cea6b9",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/053-inventory.log",
+      "inventory_sha256": "bde405a4211094b37ae4fc895d69522d627772acb757ec1dfc60a5709035a6ea"
+    },
+    {
+      "target": "tests/exposure_files.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/exposure_files-6cfc31091fc57567",
+      "executable_sha256": "b8e2a65ede2c0caf918759abb8d503db2a9b0583782e55ab5442497c7c1c717e",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/054-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/filtered.rs",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/filtered-3a0f1ca82cdcaa5f",
+      "executable_sha256": "70ea6db4c16bd67da5061e5ca8c04d95f8d92472ea3d36776cf3fd716569114f",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/055-inventory.log",
+      "inventory_sha256": "34359568ab5f3d9d4dc0769d608cd3547b93a9057a2e21f4f6812a57e37bd0d3"
+    },
+    {
+      "target": "tests/five_collection.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/five_collection-fb3eeced9a768950",
+      "executable_sha256": "53c9b999579d16a659cff493e4f9cf02088963aa23de0170585119d1d561e851",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/056-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/five_gradient_region_lifecycle.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/five_gradient_region_lifecycle-d261e4031fb381f7",
+      "executable_sha256": "703209b35b6646838af6a96998a7d7d558f04d82ab2c67efdc86d42a5288d12a",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/057-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/five_lifecycle.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/five_lifecycle-66cfafd5d2b6da4e",
+      "executable_sha256": "9bf14da3eb6777d378c760ca95ed9627d268f3c64d7c26e8b01c3aa24acbc090",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/058-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/five_region_admission.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/five_region_admission-4a878cf188f29dc6",
+      "executable_sha256": "bf38adfd5d3a00529577fa002beeb6807cecfcbacc25f595de4f4c91f6b91faa",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/059-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/five_region_lifecycle.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/five_region_lifecycle-3ceaccf81bf04f1b",
+      "executable_sha256": "18c4f5e38ca1b5e8a35f47d92fc0b87d1e96a6d0f7d54ac6f0259b8e248f4278",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/060-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/geometry.rs",
+      "passed": 9,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/geometry-2d585902151f8da8",
+      "executable_sha256": "6ab4915a4aaa3a54b24e73c29be016d82fd4ddf13a20cab4afc048da8275277b",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/061-inventory.log",
+      "inventory_sha256": "7ad8ecd082edf03f51360ed3f563b96a1679a5cb5b826ba5bdbd82d9e6d40796"
+    },
+    {
+      "target": "tests/geometry_validation.rs",
+      "passed": 10,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/geometry_validation-c980cfb7118ca2c3",
+      "executable_sha256": "a76afef0464fe001019d8662923c563851e4dd10497fbe90aff5c147b47262b7",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/062-inventory.log",
+      "inventory_sha256": "7d38ced099bdaead4a47c5675d8ed74bf03b252e7235ff61b732ce8110022ccb"
+    },
+    {
+      "target": "tests/gradient.rs",
+      "passed": 8,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/gradient-f212cf75738f9a05",
+      "executable_sha256": "1f9cdbadea7ef9e255a6ee2f4c5f37f2e0ca3ace618faa53be464402ae7e0f28",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/063-inventory.log",
+      "inventory_sha256": "138d5a4889d1fa7ccb6e254c708b6d32e4e7fbe048188c99862821ea6e512664"
+    },
+    {
+      "target": "tests/gradient_candidate_smoothing.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/gradient_candidate_smoothing-03e8593fc60ff0e1",
+      "executable_sha256": "14197aaf497ed4a000aa9725f43e7a4303506398076f531aec17bd9815dbfd4b",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/064-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/gradient_collection.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/gradient_collection-ce6d2737ae46a23b",
+      "executable_sha256": "d0a597bb38d999a568d6d034996bbfb16014a1645e0c09f68b53435e24e4ce8f",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/065-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/gradient_distinct_locations.rs",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/gradient_distinct_locations-fe8d3658a4c7337d",
+      "executable_sha256": "18a9122196fe94eb5de779789a2c662680b03a972610e8cf9ffee42fbe7a3eb5",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/066-inventory.log",
+      "inventory_sha256": "320226fa4d77d62be4129409db2e04e9d5f6e16c311c6c97ddf908d5652909e9"
+    },
+    {
+      "target": "tests/gradient_empty.rs",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/gradient_empty-c4d0de7ed62e03e9",
+      "executable_sha256": "b77265b0d5373c03e41b57c48b1105a8ec02e8e64dfa08f920e0620ef50a9102",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/067-inventory.log",
+      "inventory_sha256": "b6b162b377be05ed7959240835b2d61e5a890026ce1aa314f1fb3db0352e351a"
+    },
+    {
+      "target": "tests/gradient_index.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/gradient_index-84accebb22fadc9b",
+      "executable_sha256": "60a4b0ac808b3f3e26baf1b9d8b2506ef9e6bdfbcca0b809d953931cecc07202",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/068-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/gradient_index_reflection.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/gradient_index_reflection-4e7ec30e8438c658",
+      "executable_sha256": "079a6e5dd584a800dfcf36c92845b0b3b0f1b942b223d7be37152542d3d5db7b",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/069-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/gradient_interpolated.rs",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/gradient_interpolated-fed898e9c074ce4e",
+      "executable_sha256": "c717b48f70af584dcf41ec0c4c477e334699b062444a3cfd8c8c8e759e49a862",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/070-inventory.log",
+      "inventory_sha256": "ee324eeb4001875266a794b432f99ae22b6c1d1d14732374ef90c75937fda0fa"
+    },
+    {
+      "target": "tests/gradient_reflection.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/gradient_reflection-5967f6fdf1703f7f",
+      "executable_sha256": "3cf74a342a5431dd4ca07adf5cafca3ebc1d36a336aa5a4a0bb994aa6b0f37a3",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/071-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/gradient_scale.rs",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/gradient_scale-39024afeffe68947",
+      "executable_sha256": "84bb62ca6ffc789636250f646acb3a6dd3d8cb2179295c5906d8af6af4627c44",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/072-inventory.log",
+      "inventory_sha256": "0e5701af45bb73949210845328d5e997aa967900354b95009c1f250ef1da5592"
+    },
+    {
+      "target": "tests/gradient_scale_files.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/gradient_scale_files-6ce6eb5a28736c63",
+      "executable_sha256": "335490164d1f594eb3ff02be796cbf2864bd4c41ff75a0cb6917451fbc5b86dc",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/073-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/groups.rs",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/groups-848c10923760bdab",
+      "executable_sha256": "5735e75468ce740b6741e986a4ae80bf9d4603d8f7f88b040479ec983def99ef",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/074-inventory.log",
+      "inventory_sha256": "ccdaf77cbd09bd2a168fc985ffa8a46e731d9278bb9cf246f50055c1683781ad"
+    },
+    {
+      "target": "tests/icc_oracle.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/icc_oracle-9ba047b09edffa65",
+      "executable_sha256": "2912e4b38eb2264b2a4c5e28dc37470c78f6dd29aacd3031caad138f8180e8a8",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/075-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/information.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/information-8095b784d505dccf",
+      "executable_sha256": "acf5e9e85938e5c45437e7db90de2fb3a68a2a39866fd5268c5b6d71f2e9231c",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/076-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/joint_projective.rs",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/joint_projective-38bcd1349b2aa3c3",
+      "executable_sha256": "e54077ec6c2596a28c5ca85df6f603f45367fb593f2e630e517555ef8459ac0f",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/077-inventory.log",
+      "inventory_sha256": "73996d44b5db7c4b5d538dc56af6c550e84611a1f75165137d39d316f71a37b9"
+    },
+    {
+      "target": "tests/joint_witnesses.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/joint_witnesses-870dfc234637ad77",
+      "executable_sha256": "61b43bf1dec9b5d4bd84115b92e337728cf9a582705c682f52b05b5a8f2cdb17",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/078-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/jpeg_orientation.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/jpeg_orientation-0beec4e7e8ddadba",
+      "executable_sha256": "1add9257092b4962971cbdeb32e013d15eeae6248d503f9a81a08c38f7922c1b",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/079-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/linear.rs",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/linear-30c2025d817c97de",
+      "executable_sha256": "c7741c9d9c28f9aacbf2258fd1c6d497028ed490c38b9ee271449ae8e7d84ead",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/080-inventory.log",
+      "inventory_sha256": "91a7d6760cf027045f8983d8f3fcfae022412a246b17696a1904df11d01fd7e7"
+    },
+    {
+      "target": "tests/local.rs",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/local-93fd96512932246b",
+      "executable_sha256": "855beef2a5a111ab331a0fc007ff0bc2dff8a02b9bbb0a432aa81e3236e14f7a",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/081-inventory.log",
+      "inventory_sha256": "aac00c68ef9b3e75db7e335b4d61239af6a7e517975b957a58f54d9bf32d6ccd"
+    },
+    {
+      "target": "tests/local_collection.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/local_collection-85d6aba2221b621a",
+      "executable_sha256": "4bcaf979aaf96241ae284f9f6ee235999e21bed7cbc988c31eba5cb7b2fa5bd7",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/082-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/local_index.rs",
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/local_index-3a4b996d2a7b5d5e",
+      "executable_sha256": "4785c6a436ef2bf322035ee829e00ca9d60d850fc3722e07725aebb9f370d567",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/083-inventory.log",
+      "inventory_sha256": "af48cd2616aa47df420328440fd83f0c9a413ce8b9fa1b83652a6321b219ca8e"
+    },
+    {
+      "target": "tests/local_rank.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/local_rank-cf4ed7a274e2f275",
+      "executable_sha256": "46149d5f57cb8409d91fa2de5df7d0131b65f9f8d1cf679459a8af370ed62720",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/084-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/local_rank_cached.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/local_rank_cached-45f9d0b16b2160ce",
+      "executable_sha256": "24451bec70b577c54521f38ff0f9b797ea9e06e3f8434bccb978cfdea7df9304",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/085-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/local_scan.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/local_scan-260f0883c6c5f869",
+      "executable_sha256": "af129a625840a4c2c14f48d6889d3284733db6d0d1082452cb28d9d332e3dcd2",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/086-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/managed_evidence.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/managed_evidence-d1b371cb98bf8b4c",
+      "executable_sha256": "4fe94666f93037859544fdb180f7d3b98fb7b3258e59fa3061eef2b798d256f7",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/087-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/mesh_deformation.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/mesh_deformation-bbc8f918b6174aa7",
+      "executable_sha256": "b28bf174ac1b41bbb2aa3b2b5e5460876bd576ac29efe4db75f81fd51c9c9e15",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/088-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/mesh_grid.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/mesh_grid-b9d3d0b0a7f62ee5",
+      "executable_sha256": "49ce89eac0cc693a658fbe2a0c3f23d8124bdfab68f899920300ebaa256bf10b",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/089-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/mesh_landmark_admission.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/mesh_landmark_admission-9ffae963a8d0c36f",
+      "executable_sha256": "67467ce793c0cd2cd9ca8baa08b56afc45a1c104eb3b2f203c94a570f995a1c8",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/090-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/mesh_rank.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/mesh_rank-9792fb8dba034705",
+      "executable_sha256": "6226a6f36381c7d208116970e93e7ba1cf3926e1817fcc59bc21c1b6345a48c5",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/091-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/mesh_rank_regions.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/mesh_rank_regions-dc8fc441c0fbeb12",
+      "executable_sha256": "3d798b5575bc0c365e359964c3a934f8eabbeadba2e970071e198fa829993761",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/092-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/mesh_refine.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/mesh_refine-6c9ee18c552ceed3",
+      "executable_sha256": "b271226e6c9e95383356a8a5b25fd2d28f4f7d9bfb54a33da42d357fc1ffdcab",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/093-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/model_compare.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/model_compare-d86e0a74ee50b880",
+      "executable_sha256": "55c3bdaf76fe26acf5199a2981432e36ae83cdad57f33377052601345dd2c929",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/094-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/model_input.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/model_input-de5743376e67611c",
+      "executable_sha256": "9b1e875347fb7b7579e99dd8aedc074a262c279658a2e4e1b7081873ef6e7666",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/095-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/model_input_file.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/model_input_file-0ef9ffae3a6a2ccd",
+      "executable_sha256": "f4b10906748056d14563597b9ee1390bc912c5264806e342c60497a68f707d64",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/096-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/model_projected_compare.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/model_projected_compare-b60cb6f553ddc63a",
+      "executable_sha256": "7d99b203c01ee424fb68fdb6ac3ff9f54e62cea38dfe3524e2c36d1ced0b0a45",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/097-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/model_projected_tiles.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/model_projected_tiles-42f5e3d839d2a2e6",
+      "executable_sha256": "b3a243b6a3d9ee019e0f3dd20b05bff22745947ab53730087ee549369d6727ac",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/098-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/model_tiles.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/model_tiles-dba538a1c2ede5b3",
+      "executable_sha256": "df2ba31ad95984c45314db4249cab19ad7a6fe9553b866dbd5b3e411f1a7ba87",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/099-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/native_anchor_recovery.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/native_anchor_recovery-0d3611ecffba71b1",
+      "executable_sha256": "fe1efe27e4f99279538720102780d6f8859be613700c375969ba1c1aa4c6366e",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/100-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/native_pixel_domain.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/native_pixel_domain-f4be711fe06fead3",
+      "executable_sha256": "e3b98bcef4ef5e38e6f531efc87a9ead9d7084e3681bb25453d700710a4acbb2",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/101-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/ordinal.rs",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/ordinal-ea69c5d8933fc49e",
+      "executable_sha256": "359de31d04fc2f2edf2bd57701e6735756a4e466449b585a48def707536df487",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/102-inventory.log",
+      "inventory_sha256": "f30827318ca65fbdf5b33675d401c88b4c5248262d9f0d585b3399a5875cb6ea"
+    },
+    {
+      "target": "tests/oriented.rs",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/oriented-0e15bef258825f58",
+      "executable_sha256": "8a044b0bedfc614fad5519884a948e9cf94dbd31d938debc315efabf4621cdaa",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/103-inventory.log",
+      "inventory_sha256": "62de29825846fbf0e1ad36fad816b4a6dd423e684f324ea6b6aba5b009e366f3"
+    },
+    {
+      "target": "tests/pages.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/pages-ea049fdc9c6e6b5a",
+      "executable_sha256": "cb9241fd5c591d6b744ab42db94530c534c9b423ca5988f4401ad709423ca648",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/104-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/pair_schedule.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/pair_schedule-9599b4f58dde2c64",
+      "executable_sha256": "545ebd6042e4923cbce9ae960263cff437d96608023dae4cb05d4cf6a1cdf754",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/105-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/palette_mutation.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/palette_mutation-8d7f0b524959724e",
+      "executable_sha256": "3035732ae537d25d7479266b8d6423e7cec3c17012b4050257dad9063bc0aede",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/106-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/palette_transparency.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/palette_transparency-25deb6791b2af402",
+      "executable_sha256": "c4c5466848591f755f75db16b17ef48e5a6310cf0a70fc3c58a818586eeb247e",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/107-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/periodic_capture.rs",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/periodic_capture-7a36e7f13ccf44da",
+      "executable_sha256": "e622b7f5791637e8b27a77df347547df7e224206be858c3ca04276055950edb2",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/108-inventory.log",
+      "inventory_sha256": "c0b32e1807d4c0d878bfe32f7ff4998757c728f93e3ad900aab8e27b2c6e1d55"
+    },
+    {
+      "target": "tests/photo_collages.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/photo_collages-7510b0df5ed22a8c",
+      "executable_sha256": "e6f5c82de7ad9be9c651c7c1303ec00dc3f55448b9d0e02d5bc2ba76d6d6b1bf",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/109-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/photo_files.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/photo_files-458b348112833615",
+      "executable_sha256": "5e3c8a4290a1866d98a4e839489fb1829e00b10f905ffe0b5193423fa6d5aa5b",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/110-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/photo_jpeg_oracle.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/photo_jpeg_oracle-009550113264271c",
+      "executable_sha256": "2914921aeeb9c6ed3dda747282a647a83b00a0c48239c7921cdffcec98a01fbe",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/111-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/photometric.rs",
+      "passed": 7,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/photometric-090115487caa7121",
+      "executable_sha256": "8ae23c7df7a7abfe455cc84a2a1ab689036c9e12f0fbb151adbdb6d968a93440",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/112-inventory.log",
+      "inventory_sha256": "f422d6a1a24d01d6d2a49f1118886a20ae571b01657ea97966c7fe063fc31066"
+    },
+    {
+      "target": "tests/photos_heldout.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/photos_heldout-2516b0300d68d2b4",
+      "executable_sha256": "5257f8e62842c4c428183831037d971336ed2513a4a37ad49baea0baf2875242",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/113-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/piecewise_local_rank.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/piecewise_local_rank-6649f157ac1f503d",
+      "executable_sha256": "dcf817b13d1eaeeb047e89fd599062a253c0b7a1830b92831aa7ceff1c72b823",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/114-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/piecewise_warp.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/piecewise_warp-24bf83fb469d43a8",
+      "executable_sha256": "b13b313c98173f7d8bfa7d2d0a2432f60bdb30abdb373d846fdd9effdc088038",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/115-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/pixel_search.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/pixel_search-d0236991fbd420fb",
+      "executable_sha256": "9491aea56e560af6f7d6d909bbbf3a264729ee91c45d8a496851f020b8599db4",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/116-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/pixels.rs",
+      "passed": 7,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/pixels-9978470939dcf85d",
+      "executable_sha256": "8c8c66094642aa91aff8a7ee75a3c3bf1cdde98796c6f81739a30674aee3f59d",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/117-inventory.log",
+      "inventory_sha256": "a348db14b052af59d3abb3d79425d63f3a47d60e90badee214b9e6c157eef411"
+    },
+    {
+      "target": "tests/portfolio_collection.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/portfolio_collection-fc85cf4859b0faf5",
+      "executable_sha256": "8a854572234ac9f40c70072400e1a21255910c48e34b477f5df67ba29b24858d",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/118-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/presentation_digest.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/presentation_digest-95007daefe313b03",
+      "executable_sha256": "9be1969e7033f5e6174a03ddb052db6f5914866c0e2c4a29a433ab40070aebc2",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/119-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/presentation_kind.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/presentation_kind-aa2d8097c5cfb481",
+      "executable_sha256": "71dfa6e38b0b963da2a6598397a5e09ee4afa8b7eae19c6a2f17525a773d623c",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/120-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/projected_collection.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/projected_collection-9e912f4b0a15a5c6",
+      "executable_sha256": "1df261783935e70b71455edd2232dc51172d40e602d1fe327f2d847b83889879",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/121-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/projected_portfolio.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/projected_portfolio-70590a3263ec65a7",
+      "executable_sha256": "2f9f342cea379c0802592f1be14cdbc0e100ec653e4bcbe09b77ef4b6943386a",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/122-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/projective_domains.rs",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/projective_domains-874644e1bbfb4e9f",
+      "executable_sha256": "a4d61e06c5e143041384d18f1b20cf37bc371776d03a9a0be57923fb4b349b4c",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/123-inventory.log",
+      "inventory_sha256": "fe1a40f1b130aab2b94e9552b31a5ad90a92e3bb276c97ce8754b59798e2354e"
+    },
+    {
+      "target": "tests/projective_exhaustive_domains.rs",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/projective_exhaustive_domains-9aa5be2f2a6bf09c",
+      "executable_sha256": "75113412e34c678fcf937288e2507d5df02ea16cc21ebe84bd680e9390dedbe5",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/124-inventory.log",
+      "inventory_sha256": "32fd305a881c6f64c29e86eb1adc7982000987c9ba483c712576949b7806c31e"
+    },
+    {
+      "target": "tests/projective_files.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/projective_files-963470bc71855336",
+      "executable_sha256": "61a0a1674da3a5fcd95707c3b9ce44eb94940b422a7fc2dba582bb8545ea7071",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/125-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/projective_geometry.rs",
+      "passed": 14,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/projective_geometry-af8eedd05bd8636f",
+      "executable_sha256": "e2a7dbd2aa7335bf2c9f4b4ae434b5968e37f75f4bdd623b5c3fde0830455180",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/126-inventory.log",
+      "inventory_sha256": "f1f3c41190eff6e324a8d725635363d8f04c07b8f1fd2aabc84eb3f5884cc244"
+    },
+    {
+      "target": "tests/projective_grid.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/projective_grid-e31ac806fc46ac80",
+      "executable_sha256": "ee67406512827fec06990561959db6a106fb3cb67504359922bd08036a36edc9",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/127-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/projective_pruning.rs",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/projective_pruning-840eabb04dd7825b",
+      "executable_sha256": "8f7af194dfe04b627b482b75cd6d408e2d60ef1a07c1874f509baa91a4d78910",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/128-inventory.log",
+      "inventory_sha256": "9289fb919d1418b2babbe53f4650c4f18302f4070f98ac00699c1396782aa74f"
+    },
+    {
+      "target": "tests/proposals.rs",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/proposals-75911987406d8bd8",
+      "executable_sha256": "1c27d6ea93b4704d5325f39f6c0c048c4319be8130a733e93266d6083fea0757",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/129-inventory.log",
+      "inventory_sha256": "c3e8853c6b9a477d8368cf3dab847bdbf9cb6ac7c9ad279cb62d78e1167e1830"
+    },
+    {
+      "target": "tests/pyramid.rs",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/pyramid-17c47caadd9fcf0d",
+      "executable_sha256": "a1848a4a3b33dee39623718d749b763bc43c6911f1fc6d02315344868e59373b",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/130-inventory.log",
+      "inventory_sha256": "7090f4d803b1181deb945e46cb3d73dffc1f45c7ae9c3c2d4efb57968492dca5"
+    },
+    {
+      "target": "tests/rank_region.rs",
+      "passed": 7,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/rank_region-59d37bc851d3f7c1",
+      "executable_sha256": "e2a29149a49213d168a3474bae8a1658b09112b3167140fc37b5f6ea339aa998",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/131-inventory.log",
+      "inventory_sha256": "8b5d9431689f82522ab13e7afcfa15147ae35cb40612ec8996f2fa547fd6c2b3"
+    },
+    {
+      "target": "tests/raster.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/raster-d2e1082a117f6fcb",
+      "executable_sha256": "f4f01746f709d832de9db9b0826abe69269c8d4b33e4c78a0268ec56c782f6b0",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/132-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/raster_equality.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/raster_equality-1175ecc09206870c",
+      "executable_sha256": "3ca76346bbfe1d02b6f8518f7a5bb7271e6b1748f6c3872f646deed492b99332",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/133-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/raw_selected.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/raw_selected-43ea721fca2af971",
+      "executable_sha256": "cfedd36021833ab1aa3c5ba0c7eb4e86089971908a23bd62a0f205cf8cb3eeb1",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/134-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/region_footprint.rs",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/region_footprint-3542d904853c7442",
+      "executable_sha256": "1656826e6364a7a50e09e20e87e0f074b4bfff53e62cd8a8111572089a210eb3",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/135-inventory.log",
+      "inventory_sha256": "10cf46bb54f22f9c2fd2e419b5bee7936be7dadf0a3edc048c45304b01befa9c"
+    },
+    {
+      "target": "tests/region_grid.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/region_grid-1ec8b47bd2f06c0c",
+      "executable_sha256": "c993eb2399865ad803cc0c4d1a6aba0c7a415dd8018273451624239b396b39a3",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/136-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/region_grid_files.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/region_grid_files-242e2b4bf484d3b0",
+      "executable_sha256": "85f3029120b2acbfabdd2e06fafb33e2346ae0dd247984b124a0d0ef411d97d0",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/137-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/region_transform.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/region_transform-533e3f9f44e1eec1",
+      "executable_sha256": "95c0c3d0f19a96fbfa6021f7aa1da72f00b0629943a29d985978ddc9f3c0b565",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/138-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/scan.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/scan-30eecfef3bdd25cb",
+      "executable_sha256": "0d77776eb33980c85232256bde08b76fe7bc3341432b4e2d99cd620a563dd606",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/139-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/scan_cancellation_checkpoints.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/scan_cancellation_checkpoints-dcf1fc8424c7c9a0",
+      "executable_sha256": "32bb3ae69ffbed192ab45298856b47472ab23cfe6e7e240fa6de4faccc78880f",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/140-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/scan_group_publication.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/scan_group_publication-643e9bd243649374",
+      "executable_sha256": "d1a3e0c464b5f9603b9373c04c3d39ad6884c0d29ee0fb2e1bc71e2cb3acd11f",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/141-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/scan_retry.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/scan_retry-c3a4fab99eb869ec",
+      "executable_sha256": "a02f8a538901fa23b12cc997a81a3b8de7aa052430d52a9cb6b1ae621774dd96",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/142-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/search_portfolio.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/search_portfolio-4f568eecc4ccc450",
+      "executable_sha256": "c22d20b3372f2c13803dfcb6a368a156c4fd26a51bbf972a9a6a46a878e9f67c",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/143-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/sequence.rs",
+      "passed": 7,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/sequence-b129464dd17b993e",
+      "executable_sha256": "38d15e7a95cd4321987c9db616cd488128cdfb4227f6a0da3b0143cf0f142d71",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/144-inventory.log",
+      "inventory_sha256": "d1181c80bb268ccd5cc5db56acaf12b974d7b92412a70e1e6bc58e0ac7eccc99"
+    },
+    {
+      "target": "tests/spatial.rs",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/spatial-3f0272bb5d4de552",
+      "executable_sha256": "8f8e01aa4290325c372399656a95b7816366c5fd8fa8284ecdcab56169410403",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/145-inventory.log",
+      "inventory_sha256": "727e642599a153c685abd906fd1152fac3aecb41801d31a00159d4650d5f4d14"
+    },
+    {
+      "target": "tests/triangulation.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/triangulation-1cdc5a15d4df7539",
+      "executable_sha256": "ebe53dd2a6c2ad8394532d814fa0b1efaaf750e5e60cb39f02118ef29bc2d3a3",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/146-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/visual.rs",
+      "passed": 9,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/visual-7bb0cc2f51186f97",
+      "executable_sha256": "83a27eeac9f6a1516efee7060d92120ec83443b4fdaca4b43573523983a2c28f",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/147-inventory.log",
+      "inventory_sha256": "1188c54382851fde35c6b25ec7c72342b7acc2b14e80506d9b8e6bdf0f3b1d7d"
+    },
+    {
+      "target": "tests/visual_publication.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/visual_publication-ed5ea71657cc5fb3",
+      "executable_sha256": "5a05912dcde2013f66c9000c30d4ee5aefb2bf293290eaf3fcc6a0576ac31c15",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/148-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/wal_dependency.rs",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/wal_dependency-88b481c0882c18c4",
+      "executable_sha256": "cc501dccc90be00032937c3a57dd3b30430e4a89c05ddb1faafc6f068141324d",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/149-inventory.log",
+      "inventory_sha256": "414c144fa67f1df75f7b14a69af5641637772e81c4c3fa0a171e3228adbb922e"
+    },
+    {
+      "target": "tests/warp.rs",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/warp-bb884090168d4396",
+      "executable_sha256": "edf615b45b9aeaede846758ffb9a416fc646eefc23ce0575cc0393b5ce59d246",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/150-inventory.log",
+      "inventory_sha256": "f69932c377b8a206a4c2447433e72e31d4efa3b972fbe4714e9b1a011787dfb6"
+    },
+    {
+      "target": "tests/worker.rs",
+      "passed": 7,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/worker-c6dc8c252d6e6584",
+      "executable_sha256": "8a80f7444317322a6dc66d6e8c5746de807984caf2d1fe489772ee327421c99f",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/151-inventory.log",
+      "inventory_sha256": "1c851e7222b51cadb52dc34ccf89cf9a90fa464ceade458e9f5f32d9477b16f5"
+    },
+    {
+      "target": "tests/worker_group.rs",
+      "passed": 8,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-current-no-features-qualified-v2-20261014/worker_group-b6b5a474bbe7ed1f",
+      "executable_sha256": "f176449d260c80395734ec5cb94fba2654c55b9faabb3b5904ebcdfb0b536ab9",
+      "inventory": "docs/research/dedup-current-no-features-complete-v2-20261014/152-inventory.log",
+      "inventory_sha256": "2060f63e931e6367932ff3489fba569bec67814c2fd56dd1a6892e070f7f16b9"
+    }
+  ],
+  "scope": "Complete current root no-default-feature library and all declared integration targets. Includes current Mac16gradient and transparent-texture pixel regression. Permissioned ps observes own synthetic descendants; no process-test weakening/skips. Decode/raster/LoFTR/allfeatures/platform/format/corpus/workspace not qualified. Cargo metadata declared eligible targets matched exactly to full retained test-name inventories and executed raw results. Tests gated within source may have zero inventory without features; this does not qualify their feature-enabled behavior."
+}

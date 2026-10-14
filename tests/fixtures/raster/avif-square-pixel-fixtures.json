@@ -1,0 +1,47 @@
+{
+  "source": "avif-rgb.avif",
+  "source_sha256": "f7bbb02fd97086d2e9584333cdeb87174300e7572e41f1860ed36cd987e86c84",
+  "cases": [
+    {
+      "fixture": "avif-pasp-square.avif",
+      "spacing": [
+        2,
+        2
+      ],
+      "essential": false,
+      "sha256": "464e61da40d7d63897084c543026aeb8822834ad0968c00d5d8241b6412dea1d",
+      "media_unchanged": true
+    },
+    {
+      "fixture": "avif-pasp-square-essential.avif",
+      "spacing": [
+        2,
+        2
+      ],
+      "essential": true,
+      "sha256": "641abb596b698ba42426b8cc43b7890722bf84e871f023bd5586b80a1ba01ac0",
+      "media_unchanged": true
+    },
+    {
+      "fixture": "avif-pasp-nonsquare.avif",
+      "spacing": [
+        2,
+        1
+      ],
+      "essential": false,
+      "sha256": "190ea73c2ab23b608ce75b80dcb68b726361a41e3d6b4c30d53176fd9f92b8d9",
+      "media_unchanged": true
+    },
+    {
+      "fixture": "avif-pasp-zero.avif",
+      "spacing": [
+        0,
+        0
+      ],
+      "essential": false,
+      "sha256": "651a392b10ec0c020e236f02a6f1aba20eae8b873ee3bbdd44c4bf04e7bafbbd",
+      "media_unchanged": true
+    }
+  ],
+  "scope": "pinned iloc-v0 absolute-extent layout; metadata only, no AV1 re-encode"
+}

@@ -1,0 +1,61 @@
+{
+  "status": "verified_frozen_complete_inventory_in_split_permissioned_runs",
+  "label": "collection_first",
+  "original_report": "docs/research/dedup-consensus-collection-focused-20261014.json",
+  "original_report_sha256": "4bda64bb4aabcdb89a2cec34fc40e30242b5143c8f7f074c28089b886da50b07",
+  "source_manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-consensus-collection-source-20261014.json",
+  "source_manifest_sha256": "30c3822c7bc3ca50df9fa5e97175eaaf835001cb3bde20ebb724a12a963ee9d4",
+  "process_observation_repair": "docs/research/dedup-terminal-process-observers-20261014.json",
+  "process_observation_repair_sha256": "9297b418301fea9ea1e8a3c8b9956f6e11b7d38ae2e034b8dff12e8f5e820e24",
+  "auditor_sha256": "247ccf4cbc8cb9117c0596903fc528efdb5011fbdca0e6746d4d6a4fdf1588f9",
+  "targets": 3,
+  "passed": 194,
+  "failed": 0,
+  "ignored": 5,
+  "original_sandbox_failures": [
+    {
+      "target": "unittests src/lib.rs",
+      "test": "model_worker::tests::successful_worker_response_does_not_leave_background_process"
+    }
+  ],
+  "rows": [
+    {
+      "target": "unittests src/lib.rs",
+      "retained_executable": "/private/tmp/rrrah-collection_first-terminal-binaries-20261014/rrrah_dedup-76646137647c9ff2",
+      "executable_sha256": "8eaa5a0ab634e783d805763ffa57e233ef3b2a736c73ba7e54ccb636ae0f5600",
+      "inventory": "docs/research/dedup-terminal-split-gates-20261014/collection_first-0.list",
+      "inventory_sha256": "fbc91e2b22b520b8bbf973a5fffe048c96b119acebe49f7ae1b83e3396f90396",
+      "passed": 117,
+      "manual_ignored": 5,
+      "original_failed_names": [
+        "model_worker::tests::successful_worker_response_does_not_leave_background_process"
+      ],
+      "permission_rechecked_names": [
+        "model_worker::tests::successful_worker_response_does_not_leave_background_process"
+      ]
+    },
+    {
+      "target": "tests/portfolio_collection.rs",
+      "retained_executable": "/private/tmp/rrrah-collection_first-terminal-binaries-20261014/portfolio_collection-e9eadcc2efbbde4c",
+      "executable_sha256": "051fec18e70e54bfb96871ee527f0052eb06ae8d6bd07089802c0479f4bab5c9",
+      "inventory": "docs/research/dedup-terminal-split-gates-20261014/collection_first-1.list",
+      "inventory_sha256": "87ba7ec4085dbab1f0d89e9631e90126a73b5c0454a30e1b30d42891f938c684",
+      "passed": 39,
+      "manual_ignored": 0,
+      "original_failed_names": [],
+      "permission_rechecked_names": []
+    },
+    {
+      "target": "tests/search_portfolio.rs",
+      "retained_executable": "/private/tmp/rrrah-collection_first-terminal-binaries-20261014/search_portfolio-dc465169dd9968cc",
+      "executable_sha256": "97f97fd478b6cf491053f1969b44da75d8d2791d6a66aeab002fafabbb964a49",
+      "inventory": "docs/research/dedup-terminal-split-gates-20261014/collection_first-2.list",
+      "inventory_sha256": "bbb1837a00fa446482176a7d4df1e07ede7d35834e8668e67f8e4107fc086b94",
+      "passed": 38,
+      "manual_ignored": 0,
+      "original_failed_names": [],
+      "permission_rechecked_names": []
+    }
+  ],
+  "scope": "Original full declared test inventory retained, all original passed/ignored results plus exact same binary permission-only process-observation reruns. Original failures are preserved in raw reports, not rewritten as a pristine one-shot pass. Frozen source6runner default+decode154targets or initial collection variant3targets only; not current root16, later v3/v4/v5collection, native learned corpus/default/UI/platform/workspace proof."
+}

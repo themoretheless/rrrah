@@ -180,7 +180,24 @@ impl DemosaicAlgorithm {
 
 /// Run a tiled Bayer demosaicing kernel in parallel across horizontal tile bands,
 /// checking cooperative cancellation between tiles and reusing per-worker tile scratch.
-fn run_tiled_bayer<S: Default>(
+pub(super) trait TileScratch: Default {
+    const MARGIN: usize;
+    const BYTES_PER_PIXEL: usize;
+}
+
+// The caller's working reservation includes 8 MiB for tiled worker payloads.
+// Keep all concurrently live tile buffers inside that allowance, even on
+// machines with many cores or tall, narrow sensors.
+pub(super) fn tiled_worker_count<S: TileScratch>(width: usize, height: usize, available: usize) -> usize {
+    let padded_width = TILE.min(width) + 2 * S::MARGIN;
+    let padded_height = TILE.min(height) + 2 * S::MARGIN;
+    let per_worker =
+        padded_width * padded_height * S::BYTES_PER_PIXEL + TILE * TILE * std::mem::size_of::<[f64; 3]>();
+    let admitted = (8 * 1024 * 1024 / per_worker).max(1);
+    available.min(height.div_ceil(TILE)).min(admitted).max(1)
+}
+
+fn run_tiled_bayer<S: TileScratch>(
     m: &Mosaic,
     cancelled: &impl Fn() -> bool,
     tile_fn: impl Fn(&Mosaic, usize, usize, usize, usize, &mut S, &mut [[f64; 3]]) + Sync,
@@ -190,11 +207,7 @@ fn run_tiled_bayer<S: Default>(
     if w == 0 || h == 0 {
         return Ok(out);
     }
-    let num_bands = h.div_ceil(TILE);
-    let workers = std::thread::available_parallelism()
-        .map_or(1, usize::from)
-        .min(num_bands)
-        .max(1);
+    let workers = tiled_worker_count::<S>(w, h, std::thread::available_parallelism().map_or(1, usize::from));
 
     if workers <= 1 {
         let mut scratch = S::default();
@@ -214,15 +227,12 @@ fn run_tiled_bayer<S: Default>(
         }
     } else {
         use std::sync::Mutex;
-        use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
+        use std::sync::atomic::{AtomicBool, Ordering};
 
         let is_cancelled = AtomicBool::new(false);
-        let next = AtomicUsize::new(0);
-        let slots: Vec<_> = out
-            .data
-            .chunks_mut(TILE * w)
-            .map(|chunk| Mutex::new(Some(chunk)))
-            .collect();
+        // Hand out disjoint mutable bands directly from the iterator. This
+        // avoids a slot allocation proportional to image height.
+        let bands = Mutex::new(out.data.chunks_mut(TILE * w).enumerate());
         let tile_ref = &tile_fn;
 
         let do_work = || {
@@ -232,15 +242,10 @@ fn run_tiled_bayer<S: Default>(
                 if is_cancelled.load(Ordering::Relaxed) {
                     break;
                 }
-                let band_idx = next.fetch_add(1, Ordering::Relaxed);
-                if band_idx >= num_bands {
+                let Some((band_idx, band)) = bands.lock().expect("band iterator lock never poisoned").next()
+                else {
                     break;
-                }
-                let band = slots[band_idx]
-                    .lock()
-                    .expect("slot lock never poisoned")
-                    .take()
-                    .expect("each band claimed once");
+                };
                 let y0 = band_idx * TILE;
                 let th = TILE.min(h - y0);
                 for x0 in (0..w).step_by(TILE) {
@@ -270,15 +275,10 @@ fn run_tiled_bayer<S: Default>(
                     is_cancelled.store(true, Ordering::Relaxed);
                     break;
                 }
-                let band_idx = next.fetch_add(1, Ordering::Relaxed);
-                if band_idx >= num_bands {
+                let Some((band_idx, band)) = bands.lock().expect("band iterator lock never poisoned").next()
+                else {
                     break;
-                }
-                let band = slots[band_idx]
-                    .lock()
-                    .expect("slot lock never poisoned")
-                    .take()
-                    .expect("each band claimed once");
+                };
                 let y0 = band_idx * TILE;
                 let th = TILE.min(h - y0);
                 for x0 in (0..w).step_by(TILE) {
@@ -348,6 +348,11 @@ pub(super) fn smooth_hue(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rg
         g: Vec<f64>,
     }
     const MARGIN: usize = 2;
+    impl TileScratch for SmoothHueScratch {
+        const MARGIN: usize = MARGIN;
+        const BYTES_PER_PIXEL: usize =
+            std::mem::size_of::<f64>() + std::mem::size_of::<u8>() + std::mem::size_of::<f64>();
+    }
     run_tiled_bayer(
         m,
         cancelled,
@@ -464,6 +469,11 @@ pub(super) fn laroche_prescott(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Res
         g: Vec<f64>,
     }
     const MARGIN: usize = 3;
+    impl TileScratch for LpScratch {
+        const MARGIN: usize = MARGIN;
+        const BYTES_PER_PIXEL: usize =
+            std::mem::size_of::<f64>() + std::mem::size_of::<u8>() + std::mem::size_of::<f64>();
+    }
     run_tiled_bayer(m, cancelled, |m, x0, y0, tw, th, scratch: &mut LpScratch, out| {
         let (bw, bh) = (tw + 2 * MARGIN, th + 2 * MARGIN);
         let n = bw * bh;
@@ -572,6 +582,11 @@ pub(super) fn hamilton_adams(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Resul
         g: Vec<f64>,
     }
     const MARGIN: usize = 3;
+    impl TileScratch for HaScratch {
+        const MARGIN: usize = MARGIN;
+        const BYTES_PER_PIXEL: usize =
+            std::mem::size_of::<f64>() + std::mem::size_of::<u8>() + std::mem::size_of::<f64>();
+    }
     run_tiled_bayer(m, cancelled, |m, x0, y0, tw, th, scratch: &mut HaScratch, out| {
         let (bw, bh) = (tw + 2 * MARGIN, th + 2 * MARGIN);
         let n = bw * bh;
@@ -858,6 +873,11 @@ pub(super) fn ppg(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, D
         g: Vec<f64>,
     }
     const MARGIN: usize = 4;
+    impl TileScratch for PpgScratch {
+        const MARGIN: usize = MARGIN;
+        const BYTES_PER_PIXEL: usize =
+            std::mem::size_of::<f64>() + std::mem::size_of::<u8>() + std::mem::size_of::<f64>();
+    }
     run_tiled_bayer(
         m,
         cancelled,
@@ -1150,6 +1170,14 @@ pub(super) fn rcd(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, D
         rgb: Vec<[f64; 3]>,
     }
     const MARGIN: usize = 5;
+    impl TileScratch for RcdScratch {
+        const MARGIN: usize = MARGIN;
+        const BYTES_PER_PIXEL: usize = std::mem::size_of::<f64>()
+            + std::mem::size_of::<u8>()
+            + std::mem::size_of::<f64>()
+            + std::mem::size_of::<f64>()
+            + std::mem::size_of::<[f64; 3]>();
+    }
     run_tiled_bayer(
         m,
         cancelled,
@@ -1302,6 +1330,17 @@ pub(super) fn lmmse(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f,
         rgb: Vec<[f64; 3]>,
     }
     const MARGIN: usize = 6;
+    impl TileScratch for LmmseScratch {
+        const MARGIN: usize = MARGIN;
+        const BYTES_PER_PIXEL: usize = std::mem::size_of::<f64>()
+            + std::mem::size_of::<u8>()
+            + std::mem::size_of::<f64>()
+            + std::mem::size_of::<f64>()
+            + std::mem::size_of::<f64>()
+            + std::mem::size_of::<f64>()
+            + std::mem::size_of::<f64>()
+            + std::mem::size_of::<[f64; 3]>();
+    }
     run_tiled_bayer(
         m,
         cancelled,
@@ -1474,6 +1513,15 @@ pub(super) fn dcb(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, D
         rgb: Vec<[f64; 3]>,
     }
     const MARGIN: usize = 6;
+    impl TileScratch for DcbScratch {
+        const MARGIN: usize = MARGIN;
+        const BYTES_PER_PIXEL: usize = std::mem::size_of::<f64>()
+            + std::mem::size_of::<u8>()
+            + std::mem::size_of::<f64>()
+            + std::mem::size_of::<f64>()
+            + std::mem::size_of::<f64>()
+            + std::mem::size_of::<[f64; 3]>();
+    }
     run_tiled_bayer(
         m,
         cancelled,
@@ -1623,6 +1671,13 @@ pub(super) fn igv(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, D
         rgb: Vec<[f64; 3]>,
     }
     const MARGIN: usize = 6;
+    impl TileScratch for IgvScratch {
+        const MARGIN: usize = MARGIN;
+        const BYTES_PER_PIXEL: usize = std::mem::size_of::<f64>()
+            + std::mem::size_of::<u8>()
+            + std::mem::size_of::<f64>()
+            + std::mem::size_of::<[f64; 3]>();
+    }
     run_tiled_bayer(
         m,
         cancelled,
@@ -1777,6 +1832,15 @@ pub(super) fn amaze(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f,
         rgb: Vec<[f64; 3]>,
     }
     const MARGIN: usize = 8;
+    impl TileScratch for AmazeScratch {
+        const MARGIN: usize = MARGIN;
+        const BYTES_PER_PIXEL: usize = std::mem::size_of::<f64>()
+            + std::mem::size_of::<u8>()
+            + std::mem::size_of::<f64>()
+            + std::mem::size_of::<f64>()
+            + std::mem::size_of::<f64>()
+            + std::mem::size_of::<[f64; 3]>();
+    }
     run_tiled_bayer(
         m,
         cancelled,
@@ -1968,7 +2032,15 @@ pub(super) fn dual_demosaic(
         return Ok(out);
     }
     let thresh = threshold.max(1e-4);
-    let sharp_copy = out.data.clone();
+    // Contrast reads only neighboring greens. Read the current pixel's original
+    // RGB before writing it, retaining one f64 per pixel instead of three.
+    let mut green_copy = Vec::with_capacity(out.data.len());
+    for chunk in out.data.chunks(4096) {
+        if cancelled() {
+            return Err(DevelopError::Cancelled);
+        }
+        green_copy.extend(chunk.iter().map(|pixel| pixel[1]));
+    }
     par_rows(&mut out.data, w, cancelled, |y, row| {
         let yi = y as isize;
         for (x, px) in row.iter_mut().enumerate() {
@@ -1980,7 +2052,7 @@ pub(super) fn dual_demosaic(
                 let sy = reflect(yi + dy, h);
                 for dx in -1isize..=1 {
                     let sx = reflect(xi + dx, w);
-                    let g = sharp_copy[sy * w + sx][1];
+                    let g = green_copy[sy * w + sx];
                     g_min = g_min.min(g);
                     g_max = g_max.max(g);
                     g_sum += g;
@@ -1991,7 +2063,7 @@ pub(super) fn dual_demosaic(
             // Smooth S-curve weight in [0, 1] around `thresh`
             let t = (rel_contrast / (2.0 * thresh)).clamp(0.0, 1.0);
             let alpha = t * t * (3.0 - 2.0 * t);
-            let a = sharp_copy[y * w + x];
+            let a = *px;
             let b = smooth.data[y * w + x];
             let mut blended = [
                 b[0] + alpha * (a[0] - b[0]),
@@ -2030,6 +2102,19 @@ pub(super) fn xtrans_markesteijn(m: &Mosaic, cancelled: &impl Fn() -> bool) -> R
         hv: Vec<u8>,
     }
     const MARGIN: usize = 6;
+    impl TileScratch for XTransScratch {
+        const MARGIN: usize = MARGIN;
+        const BYTES_PER_PIXEL: usize = std::mem::size_of::<f64>()
+            + std::mem::size_of::<u8>()
+            + std::mem::size_of::<f64>()
+            + std::mem::size_of::<f64>()
+            + std::mem::size_of::<[f64; 3]>()
+            + std::mem::size_of::<[f64; 3]>()
+            + std::mem::size_of::<[f64; 3]>()
+            + std::mem::size_of::<[f64; 3]>()
+            + std::mem::size_of::<u8>()
+            + std::mem::size_of::<u8>();
+    }
     run_tiled_bayer(
         m,
         cancelled,
@@ -2251,6 +2336,19 @@ pub(super) fn xtrans_markesteijn_3pass(
         hv: Vec<u8>,
     }
     const MARGIN: usize = 8;
+    impl TileScratch for XTrans3Scratch {
+        const MARGIN: usize = MARGIN;
+        const BYTES_PER_PIXEL: usize = std::mem::size_of::<f64>()
+            + std::mem::size_of::<u8>()
+            + std::mem::size_of::<f64>()
+            + std::mem::size_of::<f64>()
+            + std::mem::size_of::<[f64; 3]>()
+            + std::mem::size_of::<[f64; 3]>()
+            + std::mem::size_of::<[f64; 3]>()
+            + std::mem::size_of::<[f64; 3]>()
+            + std::mem::size_of::<u8>()
+            + std::mem::size_of::<u8>();
+    }
     run_tiled_bayer(
         m,
         cancelled,
@@ -3047,6 +3145,18 @@ impl Default for DemosaicConfig {
     }
 }
 
+pub(super) fn uses_dual_frames(algorithm: DemosaicAlgorithm) -> bool {
+    matches!(
+        algorithm,
+        DemosaicAlgorithm::AmazeVng
+            | DemosaicAlgorithm::AmazeLmmse
+            | DemosaicAlgorithm::RcdVng
+            | DemosaicAlgorithm::RcdLmmse
+            | DemosaicAlgorithm::DcbVng
+            | DemosaicAlgorithm::XTransDual
+    )
+}
+
 /// Dispatch any [`DemosaicAlgorithm`] on a prepared internal [`Mosaic`].
 pub(super) fn dispatch_demosaic(
     source: &Mosaic,
@@ -3125,36 +3235,72 @@ pub(super) fn dispatch_demosaic(
 /// a single-channel CFA buffer `samples` without requiring camera metadata or DNG opcodes.
 /// All memory allocations are pre-admitted against `budget` when provided.
 pub fn demosaic_f32(
-    samples: &[f32], width: u32, height: u32, cfa_pattern: &crate::CfaPattern,
-    config: &DemosaicConfig, budget: Option<&crate::MemoryBudget>, cancelled: &impl Fn() -> bool,
+    samples: &[f32],
+    width: u32,
+    height: u32,
+    cfa_pattern: &crate::CfaPattern,
+    config: &DemosaicConfig,
+    budget: Option<&crate::MemoryBudget>,
+    cancelled: &impl Fn() -> bool,
 ) -> Result<rrrah_memory::PixelBuffer<[f32; 3]>, DevelopError> {
-    if cancelled() { return Err(DevelopError::Cancelled); }
-    let count = (width as usize).checked_mul(height as usize).ok_or(DevelopError::Invalid("dimension overflow"))?;
-    if samples.len() != count { return Err(DevelopError::Invalid("sensor sample count mismatch")); }
-    let managed = budget.cloned().unwrap_or_else(|| crate::MemoryBudget::new(u64::MAX));
-    let input_credit = managed.try_reserve((count as u64).checked_mul(8).ok_or(DevelopError::Invalid("input size overflow"))?)?;
+    if cancelled() {
+        return Err(DevelopError::Cancelled);
+    }
+    let count = (width as usize)
+        .checked_mul(height as usize)
+        .ok_or(DevelopError::Invalid("dimension overflow"))?;
+    if samples.len() != count {
+        return Err(DevelopError::Invalid("sensor sample count mismatch"));
+    }
+    let managed = budget
+        .cloned()
+        .unwrap_or_else(|| crate::MemoryBudget::new(u64::MAX));
+    let input_credit = managed.try_reserve(
+        (count as u64)
+            .checked_mul(8)
+            .ok_or(DevelopError::Invalid("input size overflow"))?,
+    )?;
     let mut values = Vec::with_capacity(count);
     for (index, &value) in samples.iter().enumerate() {
-        if index % 4096 == 0 && cancelled() { return Err(DevelopError::Cancelled); }
+        if index % 4096 == 0 && cancelled() {
+            return Err(DevelopError::Cancelled);
+        }
         values.push(f64::from(value));
     }
     let wide: rrrah_memory::PixelBuffer<f64> = input_credit.try_adopt(values)?.into();
-    let rgb = demosaic_f64(&wide, width, height, cfa_pattern, config, Some(&managed), cancelled)?;
+    let rgb = demosaic_f64(
+        &wide,
+        width,
+        height,
+        cfa_pattern,
+        config,
+        Some(&managed),
+        cancelled,
+    )?;
     drop(wide);
     narrow_demosaic_output(rgb, &managed, cancelled)
 }
 
 fn narrow_demosaic_output(
-    rgb: rrrah_memory::PixelBuffer<[f64; 3]>, budget: &crate::MemoryBudget,
+    rgb: rrrah_memory::PixelBuffer<[f64; 3]>,
+    budget: &crate::MemoryBudget,
     cancelled: &impl Fn() -> bool,
 ) -> Result<rrrah_memory::PixelBuffer<[f32; 3]>, DevelopError> {
     let count = rgb.len();
-    let output_credit = budget.try_reserve((count as u64).checked_mul(12).ok_or(DevelopError::Invalid("output size overflow"))?)?;
+    let output_credit = budget.try_reserve(
+        (count as u64)
+            .checked_mul(12)
+            .ok_or(DevelopError::Invalid("output size overflow"))?,
+    )?;
     let mut out = Vec::with_capacity(count);
     for (index, pixel) in rgb.iter().enumerate() {
-        if index % 4096 == 0 && cancelled() { return Err(DevelopError::Cancelled); }
+        if index % 4096 == 0 && cancelled() {
+            return Err(DevelopError::Cancelled);
+        }
         let narrow = pixel.map(|value| value as f32);
-        if narrow.iter().any(|value| !value.is_finite()) { return Err(DevelopError::Invalid("demosaic output exceeds f32 range")); }
+        if narrow.iter().any(|value| !value.is_finite()) {
+            return Err(DevelopError::Invalid("demosaic output exceeds f32 range"));
+        }
         out.push(narrow);
     }
     Ok(output_credit.try_adopt(out)?.into())
@@ -3192,11 +3338,22 @@ pub fn demosaic_f64(
     let out_bytes = (n as u64)
         .checked_mul(24)
         .ok_or(DevelopError::Invalid("output size overflow"))?;
+    // Dual blending retains two RGB64 frames and a green snapshot. A
+    // conditioned sensor copy, when present, stays alive through that blend.
+    let conditioned_input = config.impulse_threshold > 0.0
+        || (cfa_pattern.bayer_quad().is_ok() && config.green_equilibration > 0.0);
+    let scratch_per_pixel = if uses_dual_frames(config.algorithm) && conditioned_input {
+        40
+    } else {
+        32
+    };
     let scratch_bytes = (n as u64)
-        .checked_mul(32)
+        .checked_mul(scratch_per_pixel)
         .and_then(|v| v.checked_add(8 * 1024 * 1024))
         .ok_or(DevelopError::Invalid("scratch size overflow"))?;
-    let total_bytes = out_bytes.checked_add(scratch_bytes).ok_or(DevelopError::Invalid("working size overflow"))?;
+    let total_bytes = out_bytes
+        .checked_add(scratch_bytes)
+        .ok_or(DevelopError::Invalid("working size overflow"))?;
     let managed = budget
         .cloned()
         .unwrap_or_else(|| crate::MemoryBudget::new(total_bytes));
@@ -3208,10 +3365,24 @@ pub fn demosaic_f64(
     if config.impulse_threshold > 0.0 || (is_bayer && config.green_equilibration > 0.0) {
         let mut buf = samples.to_vec();
         if config.impulse_threshold > 0.0 {
-            suppress_cfa_impulse_noise(&mut buf, w, h, &cfa, f64::from(config.impulse_threshold), cancelled)?;
+            suppress_cfa_impulse_noise(
+                &mut buf,
+                w,
+                h,
+                &cfa,
+                f64::from(config.impulse_threshold),
+                cancelled,
+            )?;
         }
         if is_bayer && config.green_equilibration > 0.0 {
-            equilibrate_bayer_greens(&mut buf, w, h, &cfa, f64::from(config.green_equilibration), cancelled)?;
+            equilibrate_bayer_greens(
+                &mut buf,
+                w,
+                h,
+                &cfa,
+                f64::from(config.green_equilibration),
+                cancelled,
+            )?;
         }
         conditioned = Some(buf);
     }
@@ -3255,8 +3426,20 @@ pub fn demosaic_u16(
     budget: Option<&crate::MemoryBudget>,
     cancelled: &impl Fn() -> bool,
 ) -> Result<rrrah_memory::PixelBuffer<[f32; 3]>, DevelopError> {
-    let managed = budget.cloned().unwrap_or_else(|| crate::MemoryBudget::new(u64::MAX));
-    let rgb = demosaic_u16_f64(samples, width, height, f64::from(black_level), f64::from(white_level), cfa_pattern, config, Some(&managed), cancelled)?;
+    let managed = budget
+        .cloned()
+        .unwrap_or_else(|| crate::MemoryBudget::new(u64::MAX));
+    let rgb = demosaic_u16_f64(
+        samples,
+        width,
+        height,
+        f64::from(black_level),
+        f64::from(white_level),
+        cfa_pattern,
+        config,
+        Some(&managed),
+        cancelled,
+    )?;
     narrow_demosaic_output(rgb, &managed, cancelled)
 }
 
@@ -3279,18 +3462,40 @@ pub fn demosaic_u16_f64(
         ));
     }
     let inv = 1.0 / range;
-    let count = (width as usize).checked_mul(height as usize).ok_or(DevelopError::Invalid("dimension overflow"))?;
-    if samples.len() != count { return Err(DevelopError::Invalid("sensor sample count mismatch")); }
-    if cancelled() { return Err(DevelopError::Cancelled); }
-    let managed = budget.cloned().unwrap_or_else(|| crate::MemoryBudget::new(u64::MAX));
-    let input_credit = managed.try_reserve((samples.len() as u64).checked_mul(8).ok_or(DevelopError::Invalid("input size overflow"))?)?;
+    let count = (width as usize)
+        .checked_mul(height as usize)
+        .ok_or(DevelopError::Invalid("dimension overflow"))?;
+    if samples.len() != count {
+        return Err(DevelopError::Invalid("sensor sample count mismatch"));
+    }
+    if cancelled() {
+        return Err(DevelopError::Cancelled);
+    }
+    let managed = budget
+        .cloned()
+        .unwrap_or_else(|| crate::MemoryBudget::new(u64::MAX));
+    let input_credit = managed.try_reserve(
+        (samples.len() as u64)
+            .checked_mul(8)
+            .ok_or(DevelopError::Invalid("input size overflow"))?,
+    )?;
     let mut normalized = Vec::with_capacity(samples.len());
     for (index, &sample) in samples.iter().enumerate() {
-        if index % 4096 == 0 && cancelled() { return Err(DevelopError::Cancelled); }
+        if index % 4096 == 0 && cancelled() {
+            return Err(DevelopError::Cancelled);
+        }
         normalized.push((f64::from(sample) - black_level).max(0.0) * inv);
     }
     let normalized: rrrah_memory::PixelBuffer<f64> = input_credit.try_adopt(normalized)?.into();
-    demosaic_f64(&normalized, width, height, cfa_pattern, config, Some(&managed), cancelled)
+    demosaic_f64(
+        &normalized,
+        width,
+        height,
+        cfa_pattern,
+        config,
+        Some(&managed),
+        cancelled,
+    )
 }
 
 /// Exact half-resolution 2×2 Bayer superpixel extractor (no spatial interpolation).
@@ -3417,6 +3622,81 @@ pub fn demosaic_bayer_superpixel_f64(
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn tiled_band_iterator_visits_every_pixel_and_cancels() {
+        #[derive(Default)]
+        struct Scratch;
+        impl TileScratch for Scratch {
+            const MARGIN: usize = 0;
+            const BYTES_PER_PIXEL: usize = 1;
+        }
+        let (w, h) = (257, 2049);
+        let cfa = Cfa {
+            width: 2,
+            height: 2,
+            cells: vec![0, 1, 1, 2],
+        };
+        let data = vec![0.0; w * h];
+        let source = Mosaic {
+            w,
+            h,
+            data: &data,
+            cfa: &cfa,
+        };
+        let fill = |_: &Mosaic,
+                    x0: usize,
+                    y0: usize,
+                    tw: usize,
+                    th: usize,
+                    _: &mut Scratch,
+                    out: &mut [[f64; 3]]| {
+            for y in 0..th {
+                for x in 0..tw {
+                    out[y * tw + x] = [(x0 + x) as f64, (y0 + y) as f64, 1.0];
+                }
+            }
+        };
+        let output = run_tiled_bayer(&source, &|| false, fill).unwrap();
+        for y in 0..h {
+            for x in 0..w {
+                assert_eq!(output.data[y * w + x], [x as f64, y as f64, 1.0]);
+            }
+        }
+        assert!(matches!(
+            run_tiled_bayer(&source, &|| true, fill),
+            Err(DevelopError::Cancelled)
+        ));
+    }
+
+    #[test]
+    fn tiled_workers_fit_reserved_allowance_on_tall_and_wide_sensors() {
+        #[derive(Default)]
+        struct Lmmse;
+        impl TileScratch for Lmmse {
+            const MARGIN: usize = 6;
+            const BYTES_PER_PIXEL: usize = 73;
+        }
+        #[derive(Default)]
+        struct XTrans3;
+        impl TileScratch for XTrans3 {
+            const MARGIN: usize = 8;
+            const BYTES_PER_PIXEL: usize = 123;
+        }
+        assert_eq!(tiled_worker_count::<Lmmse>(128, 2048, 16), 4);
+        assert_eq!(tiled_worker_count::<XTrans3>(128, 2048, 16), 2);
+        assert_eq!(tiled_worker_count::<Lmmse>(128, 2048, 1), 1);
+        assert_eq!(tiled_worker_count::<Lmmse>(8192, 1, 16), 1);
+        for width in [1, 7, 127, 128, 129, 8192] {
+            for height in [1, 127, 128, 129, 2048, 8192] {
+                let workers = tiled_worker_count::<XTrans3>(width, height, 256);
+                let per_worker = (width.min(TILE) + 16) * (height.min(TILE) + 16) * 123
+                    + TILE * TILE * std::mem::size_of::<[f64; 3]>();
+                assert!(workers * per_worker <= 8 * 1024 * 1024);
+                assert!(workers <= height.div_ceil(TILE));
+            }
+        }
+    }
+
     use super::*;
     use crate::{
         CfaColor, CfaPattern, DecodedMosaic, LevelGrid, MemoryBudget, Orientation, Photometric, RasterPixels,
@@ -3425,19 +3705,55 @@ mod tests {
     };
 
     #[test]
+    fn conditioned_dual_frames_are_admitted_before_sensor_copy() {
+        use std::cell::Cell;
+        let cfa = CfaPattern {
+            width: 2,
+            height: 2,
+            cells: vec![CfaColor::Red, CfaColor::Green, CfaColor::Green, CfaColor::Blue],
+        };
+        let samples = vec![0.25f64; 1024 * 1024];
+        let config = DemosaicConfig {
+            algorithm: DemosaicAlgorithm::RcdLmmse,
+            impulse_threshold: 0.1,
+            ..Default::default()
+        };
+        // Output + two-frame/green/conditioned scratch + bounded tile allowance.
+        let required = samples.len() as u64 * (24 + 40) + 8 * 1024 * 1024;
+        let budget = MemoryBudget::new(required - 1);
+        let calls = Cell::new(0);
+        let result = demosaic_f64(&samples, 1024, 1024, &cfa, &config, Some(&budget), &|| {
+            calls.set(calls.get() + 1);
+            calls.get() > 1
+        });
+        assert!(matches!(result, Err(DevelopError::Buffer(_))));
+        assert_eq!(calls.get(), 1);
+        assert_eq!(budget.used(), 0);
+        assert!(samples.iter().all(|&value| value == 0.25));
+    }
+
+    #[test]
     fn f64_entry_points_preserve_sub_f32_sensor_precision_and_memory_ownership() {
-        let cfa = CfaPattern { width: 2, height: 2, cells: vec![CfaColor::Red, CfaColor::Green, CfaColor::Green, CfaColor::Blue] };
+        let cfa = CfaPattern {
+            width: 2,
+            height: 2,
+            cells: vec![CfaColor::Red, CfaColor::Green, CfaColor::Green, CfaColor::Blue],
+        };
         let epsilon = 2f64.powi(-40);
         let values = [1. + epsilon, 2. + epsilon, 2. + epsilon, 3. + epsilon];
         let budget = MemoryBudget::new(16 * 1024 * 1024);
-        let (width, height, pixels) = demosaic_bayer_superpixel_f64(&values, 2, 2, &cfa, Some(&budget), &|| false).unwrap();
+        let (width, height, pixels) =
+            demosaic_bayer_superpixel_f64(&values, 2, 2, &cfa, Some(&budget), &|| false).unwrap();
         assert_eq!((width, height), (1, 1));
         assert_eq!(pixels[0], [1. + epsilon, 2. + epsilon, 3. + epsilon]);
         assert_ne!(pixels[0][0], f64::from(pixels[0][0] as f32));
         assert_eq!(budget.used(), 24);
         drop(pixels);
         assert_eq!(budget.used(), 0);
-        let config = DemosaicConfig { algorithm: DemosaicAlgorithm::Nearest, ..Default::default() };
+        let config = DemosaicConfig {
+            algorithm: DemosaicAlgorithm::Nearest,
+            ..Default::default()
+        };
         let pixels = demosaic_f64(&values, 2, 2, &cfa, &config, Some(&budget), &|| false).unwrap();
         assert_eq!(pixels[0][0], values[0]);
         assert_eq!(budget.used(), 4 * 24);
@@ -3449,7 +3765,10 @@ mod tests {
         assert_eq!(budget.used(), 4 * 12);
         drop(pixels);
         assert_eq!(budget.used(), 0);
-        let pixels = demosaic_u16_f64(&[1, 2, 2, 3], 2, 2, 0., 3., &cfa, &config, Some(&budget), &|| false).unwrap();
+        let pixels = demosaic_u16_f64(&[1, 2, 2, 3], 2, 2, 0., 3., &cfa, &config, Some(&budget), &|| {
+            false
+        })
+        .unwrap();
         assert_eq!(pixels[0][0], 1. / 3.);
         drop(pixels);
         assert_eq!(budget.used(), 0);
@@ -3457,14 +3776,26 @@ mod tests {
         assert!(demosaic_f32(&input, 2, 2, &cfa, &config, Some(&insufficient), &|| false).is_err());
         assert_eq!(insufficient.used(), 0);
         let calls = std::sync::atomic::AtomicUsize::new(0);
-        assert!(demosaic_f32(&input, 2, 2, &cfa, &config, Some(&budget), &|| calls.fetch_add(1, std::sync::atomic::Ordering::Relaxed) >= 1).is_err());
+        assert!(
+            demosaic_f32(&input, 2, 2, &cfa, &config, Some(&budget), &|| calls
+                .fetch_add(1, std::sync::atomic::Ordering::Relaxed)
+                >= 1)
+            .is_err()
+        );
         assert_eq!(budget.used(), 0);
     }
 
     #[test]
     fn sample_conversion_cancels_before_reconstruction_and_releases_admitted_staging() {
-        let cfa = CfaPattern { width: 2, height: 2, cells: vec![CfaColor::Red, CfaColor::Green, CfaColor::Green, CfaColor::Blue] };
-        let config = DemosaicConfig { algorithm: DemosaicAlgorithm::Nearest, ..Default::default() };
+        let cfa = CfaPattern {
+            width: 2,
+            height: 2,
+            cells: vec![CfaColor::Red, CfaColor::Green, CfaColor::Green, CfaColor::Blue],
+        };
+        let config = DemosaicConfig {
+            algorithm: DemosaicAlgorithm::Nearest,
+            ..Default::default()
+        };
         let float = vec![0.5f32; 8192];
         let integer = vec![2048u16; 8192];
         // Enough for the conversion staging, but no demosaic scratch. Cancel must
@@ -3474,13 +3805,108 @@ mod tests {
             let calls = std::sync::atomic::AtomicUsize::new(0);
             let cancelled = || calls.fetch_add(1, std::sync::atomic::Ordering::Relaxed) >= 2;
             let result = if integer_input {
-                demosaic_u16(&integer, 128, 64, 0., 4095., &cfa, &config, Some(&budget), &cancelled)
+                demosaic_u16(
+                    &integer,
+                    128,
+                    64,
+                    0.,
+                    4095.,
+                    &cfa,
+                    &config,
+                    Some(&budget),
+                    &cancelled,
+                )
             } else {
                 demosaic_f32(&float, 128, 64, &cfa, &config, Some(&budget), &cancelled)
             };
             assert!(matches!(result, Err(DevelopError::Cancelled)));
             assert_eq!(budget.used(), 0);
             assert_eq!(calls.load(std::sync::atomic::Ordering::Relaxed), 3);
+        }
+    }
+
+    #[test]
+    fn dual_green_snapshot_matches_full_rgb_snapshot_bit_exact() {
+        for (w, h) in [(0, 0), (1, 1), (1, 7), (9, 1), (2, 2), (17, 19), (139, 133)] {
+            for cfa in all_bayer_cfas() {
+                let sharp: Vec<[f64; 3]> = (0..w * h)
+                    .map(|i| {
+                        let v = ((i * 73 + i / 17) % 1021) as f64 / 127.;
+                        [v + 0.13, v * 0.37 - 0.5, v * 1.7]
+                    })
+                    .collect();
+                let data: Vec<f64> = sharp.iter().map(|p| p[0]).collect();
+                let smooth = Rgb32f {
+                    width: w,
+                    height: h,
+                    data: sharp
+                        .iter()
+                        .map(|p| [p[2] * 0.7, p[0] * 0.2, p[1] * 0.8])
+                        .collect(),
+                };
+                let mosaic = Mosaic {
+                    w,
+                    h,
+                    data: &data,
+                    cfa: &cfa,
+                };
+                for threshold in [0f64, 0.04, 0.8] {
+                    let mut expected = sharp.clone();
+                    let thresh = threshold.max(1e-4);
+                    for y in 0..h {
+                        for x in 0..w {
+                            let (mut lo, mut hi, mut sum) = (f64::INFINITY, f64::NEG_INFINITY, 0f64);
+                            for dy in -1isize..=1 {
+                                for dx in -1isize..=1 {
+                                    let g = sharp
+                                        [reflect(y as isize + dy, h) * w + reflect(x as isize + dx, w)][1];
+                                    lo = lo.min(g);
+                                    hi = hi.max(g);
+                                    sum += g;
+                                }
+                            }
+                            let mean = (sum / 9.).abs().max(1e-3);
+                            let contrast = (hi - lo) / mean;
+                            let t = (contrast / (2. * thresh)).clamp(0., 1.);
+                            let alpha = t * t * (3. - 2. * t);
+                            let a = sharp[y * w + x];
+                            let b = smooth.data[y * w + x];
+                            let mut blended = [
+                                b[0] + alpha * (a[0] - b[0]),
+                                b[1] + alpha * (a[1] - b[1]),
+                                b[2] + alpha * (a[2] - b[2]),
+                            ];
+                            let own = cfa.color_at(x, y) as usize;
+                            if own < 3 {
+                                blended[own] = data[y * w + x];
+                            }
+                            expected[y * w + x] = blended;
+                        }
+                    }
+                    let actual = dual_demosaic(
+                        &mosaic,
+                        Rgb32f {
+                            width: w,
+                            height: h,
+                            data: sharp.clone(),
+                        },
+                        &smooth,
+                        threshold,
+                        &|| false,
+                    )
+                    .unwrap();
+                    assert!(
+                        actual
+                            .data
+                            .iter()
+                            .flatten()
+                            .zip(expected.iter().flatten())
+                            .all(|(a, b)| a.to_bits() == b.to_bits()),
+                        "{w}x{h}, threshold={threshold}, phase={:?}",
+                        cfa.cells
+                    );
+                }
+            }
         }
     }
 

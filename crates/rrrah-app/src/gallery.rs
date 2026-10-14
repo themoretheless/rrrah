@@ -983,8 +983,12 @@ fn first_supported_image_with_cancel(folder: &Path, cancelled: &dyn Fn() -> bool
         .filter_map(Result::ok)
         .filter_map(|entry| {
             let path = entry.path();
-            let metadata = std::fs::symlink_metadata(&path).ok()?;
-            (metadata.file_type().is_file() && is_supported(&path)).then_some(path)
+            // DirEntry retains no-follow file type from enumeration on common
+            // filesystems. Sources are still validated by the loading worker.
+            if !is_supported(&path) {
+                return None;
+            }
+            entry.file_type().ok()?.is_file().then_some(path)
         });
     smallest_paths(candidates, 1).pop()
 }

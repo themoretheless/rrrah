@@ -127,3 +127,38 @@ fn identical_pixels_honor_each_block_and_final_cancellation_checkpoint() {
         assert_eq!(calls.get(), stop);
     }
 }
+
+#[test]
+fn transparent_texture_is_canonical_and_alpha_gradient_survives_white_projection() {
+    let mut hidden_a = Vec::new();
+    let mut hidden_b = Vec::new();
+    let mut alpha_rising = Vec::new();
+    let mut alpha_falling = Vec::new();
+    for y in 0_u8..9 {
+        for x in 0_u8..9 {
+            hidden_a.extend_from_slice(&[x * 28, y * 28, 17, 0]);
+            hidden_b.extend_from_slice(&[255 - x * 28, 255 - y * 28, 231, 0]);
+            alpha_rising.extend_from_slice(&[0, 0, 0, x * 28]);
+            alpha_falling.extend_from_slice(&[0, 0, 0, 224 - x * 28]);
+        }
+    }
+    let view = |bytes| Rgba8View::new(9, 9, bytes, 81).unwrap();
+    let a = view(&hidden_a);
+    let b = view(&hidden_b);
+    assert!(a.same_pixels(&b, || false).unwrap());
+    assert_eq!(a.pixel_digest(|| false), b.pixel_digest(|| false));
+    let fa = a.fingerprint(|| false).unwrap();
+    let fb = b.fingerprint(|| false).unwrap();
+    assert_eq!(fa, fb);
+    assert!(!fa.compare(&fb, true).informative);
+    let rising = view(&alpha_rising);
+    let falling = view(&alpha_falling);
+    assert!(!rising.same_pixels(&falling, || false).unwrap());
+    let fr = rising.fingerprint(|| false).unwrap();
+    let ff = falling.fingerprint(|| false).unwrap();
+    // Black RGB projects to zero on black for every alpha. On white the
+    // signal is 1-alpha: only the reversed alpha ramp rises horizontally.
+    assert_eq!(fr.variants[0], [0, 0, 0, 0]);
+    assert_eq!(ff.variants[0], [0, 0, u64::MAX, 0]);
+    assert_eq!(fr.compare(&ff, false).distance, 64);
+}

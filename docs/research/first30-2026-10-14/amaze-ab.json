@@ -1,0 +1,192 @@
+{
+  "profile": "release, same host, three warmups per process, alternating pairs; 1024x768 synthetic RGGB; no camera/viewport claim",
+  "comparisons": [
+    {
+      "case": "boundaries",
+      "exact_bytes_equal": true,
+      "bytes": 2752808,
+      "sha256": "b5fcfd95baa7bd7c3f3fbc96ad3c6c146c3eed472a9dc91a304643ee3471deb5"
+    },
+    {
+      "case": "large",
+      "exact_bytes_equal": true,
+      "bytes": 18874376,
+      "sha256": "220449de279981b02ef45a66da449b700f6e8bd2fc95243a979442079e955531"
+    }
+  ],
+  "pairs": [
+    {
+      "pair": 0,
+      "baseline": {
+        "width": 1024,
+        "height": 768,
+        "ns": 6420792,
+        "f64_bits_hash": 13050067550265621453,
+        "managed_peak": 58720256
+      },
+      "candidate": {
+        "width": 1024,
+        "height": 768,
+        "ns": 6036000,
+        "f64_bits_hash": 13050067550265621453,
+        "managed_peak": 58720256
+      }
+    },
+    {
+      "pair": 1,
+      "candidate": {
+        "width": 1024,
+        "height": 768,
+        "ns": 5508000,
+        "f64_bits_hash": 13050067550265621453,
+        "managed_peak": 58720256
+      },
+      "baseline": {
+        "width": 1024,
+        "height": 768,
+        "ns": 5043667,
+        "f64_bits_hash": 13050067550265621453,
+        "managed_peak": 58720256
+      }
+    },
+    {
+      "pair": 2,
+      "baseline": {
+        "width": 1024,
+        "height": 768,
+        "ns": 5496625,
+        "f64_bits_hash": 13050067550265621453,
+        "managed_peak": 58720256
+      },
+      "candidate": {
+        "width": 1024,
+        "height": 768,
+        "ns": 4992083,
+        "f64_bits_hash": 13050067550265621453,
+        "managed_peak": 58720256
+      }
+    },
+    {
+      "pair": 3,
+      "candidate": {
+        "width": 1024,
+        "height": 768,
+        "ns": 5787667,
+        "f64_bits_hash": 13050067550265621453,
+        "managed_peak": 58720256
+      },
+      "baseline": {
+        "width": 1024,
+        "height": 768,
+        "ns": 5830000,
+        "f64_bits_hash": 13050067550265621453,
+        "managed_peak": 58720256
+      }
+    },
+    {
+      "pair": 4,
+      "baseline": {
+        "width": 1024,
+        "height": 768,
+        "ns": 6849792,
+        "f64_bits_hash": 13050067550265621453,
+        "managed_peak": 58720256
+      },
+      "candidate": {
+        "width": 1024,
+        "height": 768,
+        "ns": 4822166,
+        "f64_bits_hash": 13050067550265621453,
+        "managed_peak": 58720256
+      }
+    },
+    {
+      "pair": 5,
+      "candidate": {
+        "width": 1024,
+        "height": 768,
+        "ns": 5823875,
+        "f64_bits_hash": 13050067550265621453,
+        "managed_peak": 58720256
+      },
+      "baseline": {
+        "width": 1024,
+        "height": 768,
+        "ns": 4761959,
+        "f64_bits_hash": 13050067550265621453,
+        "managed_peak": 58720256
+      }
+    },
+    {
+      "pair": 6,
+      "baseline": {
+        "width": 1024,
+        "height": 768,
+        "ns": 5455167,
+        "f64_bits_hash": 13050067550265621453,
+        "managed_peak": 58720256
+      },
+      "candidate": {
+        "width": 1024,
+        "height": 768,
+        "ns": 4694750,
+        "f64_bits_hash": 13050067550265621453,
+        "managed_peak": 58720256
+      }
+    },
+    {
+      "pair": 7,
+      "candidate": {
+        "width": 1024,
+        "height": 768,
+        "ns": 4161708,
+        "f64_bits_hash": 13050067550265621453,
+        "managed_peak": 58720256
+      },
+      "baseline": {
+        "width": 1024,
+        "height": 768,
+        "ns": 4963333,
+        "f64_bits_hash": 13050067550265621453,
+        "managed_peak": 58720256
+      }
+    },
+    {
+      "pair": 8,
+      "baseline": {
+        "width": 1024,
+        "height": 768,
+        "ns": 4897209,
+        "f64_bits_hash": 13050067550265621453,
+        "managed_peak": 58720256
+      },
+      "candidate": {
+        "width": 1024,
+        "height": 768,
+        "ns": 5897208,
+        "f64_bits_hash": 13050067550265621453,
+        "managed_peak": 58720256
+      }
+    },
+    {
+      "pair": 9,
+      "candidate": {
+        "width": 1024,
+        "height": 768,
+        "ns": 4362000,
+        "f64_bits_hash": 13050067550265621453,
+        "managed_peak": 58720256
+      },
+      "baseline": {
+        "width": 1024,
+        "height": 768,
+        "ns": 4644000,
+        "f64_bits_hash": 13050067550265621453,
+        "managed_peak": 58720256
+      }
+    }
+  ],
+  "median_baseline_over_candidate": 1.0641993732242037,
+  "wins": 7,
+  "adopt": false
+}

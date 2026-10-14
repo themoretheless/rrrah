@@ -171,6 +171,7 @@ impl GpuReadback {
         self.read_frame(size, |encoder, target| renderer.encode(encoder, target))
     }
 
+
     pub fn render_with_tiling(
         &self,
         mosaic: &DecodedMosaic,

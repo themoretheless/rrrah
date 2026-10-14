@@ -1,0 +1,109 @@
+{
+  "scope": "Original resources and content, derived one-pixel page box experiment",
+  "oracle": "/opt/homebrew/Cellar/poppler/26.10.0/bin/pdftoppm",
+  "box": [
+    199,
+    219.5,
+    200,
+    220.5
+  ],
+  "runs": [
+    {
+      "mode": "crop-only",
+      "scale": 64,
+      "valid": true,
+      "exit_code": 0,
+      "stderr": "",
+      "mean_rgb": [
+        88.9931640625,
+        162.2861328125,
+        63.91748046875
+      ],
+      "ppm_sha256": "8df42f87f505ae4d4cd5ccb27687d4b62e4b1638cb44c983179c5cd972a42d5e"
+    },
+    {
+      "mode": "crop-only",
+      "scale": 128,
+      "valid": false,
+      "timeout_seconds": 55
+    },
+    {
+      "mode": "crop-only",
+      "scale": 256,
+      "valid": false,
+      "exit_code": 0,
+      "stderr": "Bogus memory allocation size\nBogus memory allocation size\n",
+      "mean_rgb": null,
+      "ppm_sha256": "7b51a6fbb10ddd74d21c9fd874792d51205d38a7e4785b0ff136f37f09da948b"
+    },
+    {
+      "mode": "crop-only",
+      "scale": 512,
+      "valid": false,
+      "exit_code": 0,
+      "stderr": "Bogus memory allocation size\nBogus memory allocation size\nBogus memory allocation size\n",
+      "mean_rgb": null,
+      "ppm_sha256": "a7f4416cc447314f55c73ab001f8ef9fec4968373fa0af5576448e6938bf93f6"
+    },
+    {
+      "mode": "media-and-crop",
+      "scale": 64,
+      "valid": true,
+      "exit_code": 0,
+      "stderr": "",
+      "mean_rgb": [
+        88.9931640625,
+        162.2861328125,
+        63.91748046875
+      ],
+      "ppm_sha256": "8df42f87f505ae4d4cd5ccb27687d4b62e4b1638cb44c983179c5cd972a42d5e"
+    },
+    {
+      "mode": "media-and-crop",
+      "scale": 128,
+      "valid": true,
+      "exit_code": 0,
+      "stderr": "",
+      "mean_rgb": [
+        90.7802734375,
+        163.28289794921875,
+        63.7958984375
+      ],
+      "ppm_sha256": "607b7c72e6ba1e26b85a22f7c22c8cfde10c7c6ac3f033c4c42559fdd0cbddee"
+    },
+    {
+      "mode": "media-and-crop",
+      "scale": 256,
+      "valid": false,
+      "timeout_seconds": 55
+    },
+    {
+      "mode": "media-and-crop",
+      "scale": 512,
+      "valid": false,
+      "exit_code": 0,
+      "stderr": "Bogus memory allocation size\nBogus memory allocation size\nBogus memory allocation size\n",
+      "mean_rgb": null,
+      "ppm_sha256": "a7f4416cc447314f55c73ab001f8ef9fec4968373fa0af5576448e6938bf93f6"
+    }
+  ],
+  "source_sha256": "c5fc34346629c3379cee6065c45b7de0b620be822604551d1463d8e691b03d06",
+  "profile_sha256": "b7489fae125cad80ef663bdcd187f4951bc326a012be5b06d7d551ff96e8b0ca",
+  "original_profile_sha256": "73e1ba37d2bad5bab2a964f40a9eed96209666efc067c3322626214bbef234a0",
+  "perceptual_lut_aliased_to_relative": true,
+  "oracle_sha256": "3bdab16e11c8d10b4fd9615231210125dbb195ae3ec2f22d641758242b159cb1",
+  "limitations": [
+    "derived page, not full-page fidelity",
+    "Poppler rendering is an independent comparator, not exact analytical area",
+    "changing MediaBox may affect page-dependent clipping and group behavior",
+    "no native renderer acceptance from this experiment",
+    "optional A2B1 alias exposes original perceptual LUT; this is a diagnostic profile derivative"
+  ],
+  "terminal": true,
+  "crop-only-last-scale-delta": null,
+  "media-and-crop-last-scale-delta": 1.787109375,
+  "derived_pdf_sha256": {
+    "crop-only.pdf": "c084dd96918692ae24dd55c0dad760d688d621f8d79758cf7ceee6c46fc71713",
+    "media-and-crop.pdf": "f68df355d9a42fe872b9357a888c13710e213def194352e852abba5e97146075"
+  }
+}

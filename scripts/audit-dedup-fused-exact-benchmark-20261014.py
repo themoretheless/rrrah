@@ -1,0 +1,17 @@
+#!/usr/bin/env python3
+from pathlib import Path
+import json,hashlib,statistics
+R=Path(__file__).resolve().parents[1];D=R/'docs/research';P=D/'dedup-fused-exact-pair-benchmark-20261014.json';d=json.loads(P.read_text());sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest();assert d['status']=='completed_pending_independent_audit' and sha(R/'scripts/benchmark-dedup-fused-exact-pair-20261014.py')==d['producer_sha256'];G=D/'dedup-fused-exact-pair-controls-v2-20261014.json';assert sha(G)==d['gate_sha256'];g=json.loads(G.read_text());S=Path(g['source']);assert all(sha(S/k)==h for k,h in g['source_sha256'].items())and all(sha(k)==h for k,h in d['dependency_pins'].items());plan=json.loads((D/'dedup-fused-exact-pair-experiment-20261014.json').read_text());assert all(sha(S.parent/'baseline'/k)==h for k,h in plan['variants']['baseline'].items());F=Path('/private/tmp/rrrah-fused-exact-pair-benchmark-20261014');assert sha(F/'probe.rs')==d['probe_sha256'];assert 'rrrah_dedup::exact::compare_files'in (F/'probe.rs').read_text();assert len(d['builds'])==4 and all(v['returncode']==0 for v in d['builds']);versions={}
+for v in d['builds']:
+ L=D/'dedup-fused-exact-pair-benchmark-20261014'/f"{v['version']}-{v['label']}-build.log";assert sha(L)==v['log_sha256']
+ if v['label']=='probe':assert sha(F/v['version']/'probe')==v['executable_sha256'];versions[v['version']]=v['executable_sha256']
+assert set(versions)=={'baseline','candidate'}and len(d['cases'])==7 and len(d['results'])==126;summary=[];calls=0
+for c in d['cases']:
+ assert [sha(c['left']),sha(c['right'])]==c['input_sha256'];left=Path(c['left']).read_bytes();right=Path(c['right']).read_bytes();assert (left==right)==c['expected'];ratios=[]
+ for pair in range(9):
+  rows=[r for r in d['results']if r['case']==c['label']and r['pair']==pair];assert len(rows)==2 and [r['version']for r in rows]==(['baseline','candidate']if pair%2==0 else['candidate','baseline']);values={}
+  for r in rows:
+   raw=R/r['raw'];assert sha(raw)==r['raw_sha256'];v=json.loads(raw.read_text());assert v['returncode']==0 and v['stderr']==''and v['child_cpu_seconds']==r['cpu_seconds']and v['child_cpu_seconds']>0 and r['warmup']==(pair==0);assert v['command']==[str(F/r['version']/'probe'),c['left'],c['right'],str(c['reps']),str(c['expected']).lower()];out=json.loads(v['stdout']);assert out==dict(calls=c['reps'],supported=c['reps']if c['expected']else 0);calls+=out['calls'];values[r['version']]=r['cpu_seconds']
+  if pair:ratios.append(values['candidate']/values['baseline'])
+ summary.append(dict(case=c['label'],median_candidate_cpu_ratio=statistics.median(ratios),paired_ratios=ratios))
+assert summary==d['summary'];O=D/'dedup-fused-exact-pair-benchmark-audit-20261014.json';assert not O.exists();O.write_text(json.dumps(dict(status='verified126fresh_process_reports_seven_cases',pins={str(p):sha(p)for p in [P,G,Path(__file__)]},processes=126,calls=calls,warmup_pairs=7,measured_pairs=56,summary=summary,root_adopted=False,decision='mixed_results_do_not_adopt_as_universal_fastpath',scope=d['scope']+' Raw output/commands/cpuvalues and paired medians independently recomputed. CPU deltas were recorded by pinnedproducer; per-child kernelusage before/after snapshots were not separately retained, so this audit does not reconstruct original accounting syscalls. Broad allcase performance remains unproven.'),indent=2)+'\n');print('126reports independently verified;',calls,'API calls; mixed result, no root adoption')

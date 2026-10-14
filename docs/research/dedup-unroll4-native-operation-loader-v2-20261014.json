@@ -1,5 +1,5 @@
 {
-  "status": "running",
+  "status": "complete_pending_audit",
   "producer_pid": 20605,
   "plan": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-unroll4-native-operation-plan-20261014.json",
   "plan_sha256": "35cd8f39b7bfb9e489f3db3b734148ff38cfab7032ecf7eecf650bb0c2cadb83",
@@ -36,10 +36,131 @@
       "executable": "/private/tmp/rrrah-unroll4-native-operation-loader-v2-20261014/candidate/probe"
     }
   ],
-  "results": [],
+  "results": [
+    {
+      "case": "self_native",
+      "pair": 0,
+      "version": "baseline",
+      "report": "/private/tmp/rrrah-unroll4-native-operation-loader-v2-20261014/self_native-0-baseline.json",
+      "report_sha256": "4c214b7ce993deedc28caa950234c516ce3592bfd7bc227b76a959b0bf3ed97c",
+      "cpu_seconds": 175.23071799999997,
+      "wall_seconds": 1397.037626375,
+      "managed_peak": 271162112
+    },
+    {
+      "case": "self_native",
+      "pair": 0,
+      "version": "candidate",
+      "report": "/private/tmp/rrrah-unroll4-native-operation-loader-v2-20261014/self_native-0-candidate.json",
+      "report_sha256": "6e7ce43110c19518a3e9a942735c4f88110f6e0089b7312b6818f01a8fcf9a64",
+      "cpu_seconds": 169.511132,
+      "wall_seconds": 804.3064764170001,
+      "managed_peak": 271162112
+    },
+    {
+      "case": "self_native",
+      "pair": 1,
+      "version": "candidate",
+      "report": "/private/tmp/rrrah-unroll4-native-operation-loader-v2-20261014/self_native-1-candidate.json",
+      "report_sha256": "981a535fd625cd459dadb755c605d9c7eb747d6881e124d22e69ef743e1b43c8",
+      "cpu_seconds": 145.856997,
+      "wall_seconds": 1082.240069042,
+      "managed_peak": 271162112
+    },
+    {
+      "case": "self_native",
+      "pair": 1,
+      "version": "baseline",
+      "report": "/private/tmp/rrrah-unroll4-native-operation-loader-v2-20261014/self_native-1-baseline.json",
+      "report_sha256": "efcd1f67ef9a0d4e8e3ba9bfa891fa2d3eef9a6c983e26cffcffffa2e1776329",
+      "cpu_seconds": 115.9480769999999,
+      "wall_seconds": 227.71516350000002,
+      "managed_peak": 271162112
+    },
+    {
+      "case": "self_native",
+      "pair": 2,
+      "version": "baseline",
+      "report": "/private/tmp/rrrah-unroll4-native-operation-loader-v2-20261014/self_native-2-baseline.json",
+      "report_sha256": "6b7ba1ac5ecc6391e9a390a3aacb219e050a017c9d735a202d3681a976835473",
+      "cpu_seconds": 66.0831620000001,
+      "wall_seconds": 103.32507974999999,
+      "managed_peak": 271162112
+    },
+    {
+      "case": "self_native",
+      "pair": 2,
+      "version": "candidate",
+      "report": "/private/tmp/rrrah-unroll4-native-operation-loader-v2-20261014/self_native-2-candidate.json",
+      "report_sha256": "989a441d8ae653178dce0f058d38219d97c5d2e5b9635fb96ef6d89b2e8a90a8",
+      "cpu_seconds": 93.40831800000004,
+      "wall_seconds": 231.49751187499987,
+      "managed_peak": 271162112
+    },
+    {
+      "case": "table_true",
+      "pair": 0,
+      "version": "baseline",
+      "report": "/private/tmp/rrrah-unroll4-native-operation-loader-v2-20261014/table_true-0-baseline.json",
+      "report_sha256": "78319e2fb3468bfe887956282dfecaea4058753d58114f9fcc323f1d07d6bd4b",
+      "cpu_seconds": 120.86341799999994,
+      "wall_seconds": 215.43460908299994,
+      "managed_peak": 329062128
+    },
+    {
+      "case": "table_true",
+      "pair": 0,
+      "version": "candidate",
+      "report": "/private/tmp/rrrah-unroll4-native-operation-loader-v2-20261014/table_true-0-candidate.json",
+      "report_sha256": "4569f2a42cadaa7ec29e8a453d81785cd6a21e9269025bae8a5c137bafe0d63c",
+      "cpu_seconds": 114.26939100000001,
+      "wall_seconds": 215.54649645900008,
+      "managed_peak": 329062128
+    },
+    {
+      "case": "table_true",
+      "pair": 1,
+      "version": "candidate",
+      "report": "/private/tmp/rrrah-unroll4-native-operation-loader-v2-20261014/table_true-1-candidate.json",
+      "report_sha256": "e1160d1a8626aef2d67c8990c27cca3636f39b451963d7ab6a80bcea367d0f85",
+      "cpu_seconds": 112.85557600000001,
+      "wall_seconds": 198.51161795900043,
+      "managed_peak": 329062128
+    },
+    {
+      "case": "table_true",
+      "pair": 1,
+      "version": "baseline",
+      "report": "/private/tmp/rrrah-unroll4-native-operation-loader-v2-20261014/table_true-1-baseline.json",
+      "report_sha256": "529748e7eb57282d154213e8f35b39e1b6c123c81745d73369056cb497b73d5e",
+      "cpu_seconds": 104.28742399999992,
+      "wall_seconds": 130.01611108399993,
+      "managed_peak": 329062128
+    },
+    {
+      "case": "table_true",
+      "pair": 2,
+      "version": "baseline",
+      "report": "/private/tmp/rrrah-unroll4-native-operation-loader-v2-20261014/table_true-2-baseline.json",
+      "report_sha256": "c57573bfdb57aee7cba2303455cf96d5a23e716d8a5424d0ef12f7c833173583",
+      "cpu_seconds": 106.02841299999989,
+      "wall_seconds": 156.23507195799993,
+      "managed_peak": 329062128
+    },
+    {
+      "case": "table_true",
+      "pair": 2,
+      "version": "candidate",
+      "report": "/private/tmp/rrrah-unroll4-native-operation-loader-v2-20261014/table_true-2-candidate.json",
+      "report_sha256": "a31fbd9da3ac1e807fc7b5170e3183eca4a71b022e7a95610c00749abb1f279c",
+      "cpu_seconds": 106.57471799999996,
+      "wall_seconds": 166.693456125,
+      "managed_peak": 329062128
+    }
+  ],
   "scope": "Full atomic forward/reverse native/opposite/model-bank operation. Same two retained development controls and explicit policy, three alternating fresh-process pairs each. Version source difference only distance kernel and test source. Source/dependency/weights guards included. No universal speedup, learned-route forcing, default/UI/full-corpus/platform/RSS qualification. Reuses both successful binaries after terminal loader failure. /usr/bin/time default clock only, /usr/bin/env restores explicit DYLD after protected executable; no RSS sysctl or binary patch/rebuild. This is earlier V5vsV7dimensionunroll4, not current firstpass16qualification.",
-  "child_pid": 34289,
-  "active_case": "self_native",
-  "active_pair": 0,
-  "active_version": "baseline"
+  "child_pid": 66787,
+  "active_case": "table_true",
+  "active_pair": 2,
+  "active_version": "candidate"
 }

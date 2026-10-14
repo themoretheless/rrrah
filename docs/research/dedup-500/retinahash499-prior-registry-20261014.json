@@ -1,0 +1,78 @@
+{
+  "index": 499,
+  "repository": "bryanbarcelona/retinahash",
+  "commit": "4c93845d87c17ccb72888bb12ecf655f6fb919d4",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "NumPy pHash strategy separated from transform/engine; good boundary design, no detected tests.",
+  "available_source_evidence": [
+    {
+      "path": "src/retinahash/strategies/phash.py",
+      "local": "02-phash.py",
+      "url": "https://github.com/bryanbarcelona/retinahash/blob/4c93845d87c17ccb72888bb12ecf655f6fb919d4/src/retinahash/strategies/phash.py",
+      "sha256": "230d808b005832e1d1a127f0a7927755c68b7fea2b3aa013ba97370022e63e59",
+      "truncated": false,
+      "lines": 21,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/retinahash/__init__.py",
+      "local": "03-__init__.py",
+      "url": "https://github.com/bryanbarcelona/retinahash/blob/4c93845d87c17ccb72888bb12ecf655f6fb919d4/src/retinahash/__init__.py",
+      "sha256": "531d02f8bd2edfc37062a880b26b917b07a224716a0e000cc723e0565093ffa1",
+      "truncated": false,
+      "lines": 3,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/retinahash/core/engine.py",
+      "local": "04-engine.py",
+      "url": "https://github.com/bryanbarcelona/retinahash/blob/4c93845d87c17ccb72888bb12ecf655f6fb919d4/src/retinahash/core/engine.py",
+      "sha256": "9d6e1eb2bc8932440600cfd67483ba83e21bdd825f0f1343ee89df27eb562e2a",
+      "truncated": false,
+      "lines": 64,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/retinahash/core/transforms.py",
+      "local": "05-transforms.py",
+      "url": "https://github.com/bryanbarcelona/retinahash/blob/4c93845d87c17ccb72888bb12ecf655f6fb919d4/src/retinahash/core/transforms.py",
+      "sha256": "ff816185a4ace05ef09f67c5808e5fca2c4487c318d72bed44a3c10f0503542b",
+      "truncated": false,
+      "lines": 50,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/bryanbarcelona/retinahash/blob/4c93845d87c17ccb72888bb12ecf655f6fb919d4/README.md",
+      "sha256": "36cb4082acdce78168bfee9b06d938d31cf535a00e76a0f498d075d5bad6f317",
+      "truncated": false,
+      "lines": 66,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/bryanbarcelona/retinahash/blob/4c93845d87c17ccb72888bb12ecf655f6fb919d4/LICENSE",
+      "sha256": "54f64a5b940b7130104f68e71319187347631b6fd4835798d17a1aafdacd7200",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

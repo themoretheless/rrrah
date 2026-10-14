@@ -1,0 +1,22 @@
+   Compiling rrrah-memory v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-memory)
+   Compiling rrrah-swap v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-swap)
+   Compiling rrrah-core v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-core)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+    Finished `test` profile [optimized + debuginfo] target(s) in 59.30s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_decode-3d841f18ff85d05c)
+
+running 1 test
+
+thread 'avif_color::tests::primary_pixel_aspect_must_be_positive_square_and_unique' (15023755) panicked at crates/rrrah-decode/src/avif_color.rs:349:13:
+spacing 2:1
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test avif_color::tests::primary_pixel_aspect_must_be_positive_square_and_unique ... FAILED
+
+failures:
+
+failures:
+    avif_color::tests::primary_pixel_aspect_must_be_positive_square_and_unique
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 1110 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p rrrah-decode --lib`

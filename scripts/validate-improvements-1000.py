@@ -31,6 +31,17 @@ def validate(data, markdown, root=ROOT, strict_snapshot=False):
         errors.append("unsupported schema_version")
     if data.get("first_30") != expected[:30]:
         errors.append("first_30 must contain the first thirty task IDs")
+    if data.get("execution_schema_version") is not None:
+        if data["execution_schema_version"] != 1:
+            errors.append("unsupported execution_schema_version")
+        if any(not isinstance(t.get("execution"), dict) for t in tasks[:30]):
+            errors.append("first 30 tasks require execution metadata")
+        counts = collections.Counter(
+            t.get("execution", {}).get("status") for t in tasks[:30]
+            if isinstance(t.get("execution"), dict)
+        )
+        if dict(counts) != data.get("execution_summary"):
+            errors.append("execution_summary inconsistent")
     titles, outcomes = set(), set()
     graph = {}
     source_cache = {}
@@ -44,6 +55,24 @@ def validate(data, markdown, root=ROOT, strict_snapshot=False):
     }
     for task in tasks:
         ident = task.get("id", "<missing>")
+        execution = task.get("execution")
+        if execution is not None:
+            if not isinstance(execution, dict) or execution.get("status") not in {
+                "pending", "verified", "partial", "blocked", "reviewed", "rejected", "measured_no_change"
+            }:
+                errors.append(f"{ident}: invalid execution status")
+            else:
+                for key in ("updated_at", "result", "remaining", "report"):
+                    if not isinstance(execution.get(key), str) or not execution[key].strip():
+                        errors.append(f"{ident}: missing execution {key}")
+                refs = execution.get("evidence_files")
+                if not isinstance(refs, list):
+                    errors.append(f"{ident}: invalid execution evidence_files")
+                    refs = []
+                for ref in refs + [execution.get("report", "")]:
+                    path = (root / ref).resolve()
+                    if not path.is_relative_to(root.resolve()) or not path.is_file():
+                        errors.append(f"{ident}: missing/unsafe execution evidence {ref}")
         missing = REQUIRED - task.keys()
         if missing:
             errors.append(f"{ident}: missing fields {sorted(missing)}")
@@ -107,6 +136,9 @@ def validate(data, markdown, root=ROOT, strict_snapshot=False):
         if evidence["path"] not in data.get("source_sha256", {}):
             errors.append(f"{ident}: no source fingerprint")
         block = blocks.get(ident, "")
+        if execution is not None and isinstance(execution, dict):
+            if f"Выполнение: {execution.get('status')}" not in block or execution.get("result", "") not in block:
+                errors.append(f"{ident}: Markdown execution inconsistent")
         if f"### {ident} — {task['title']}" not in block:
             errors.append(f"{ident}: Markdown title missing or inconsistent")
         for key in ("proposed_change", "acceptance", "public_api"):

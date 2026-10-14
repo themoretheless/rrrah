@@ -1167,6 +1167,65 @@ mod tests {
     use image::ImageEncoder;
 
     #[test]
+    fn avif_square_pixel_property_preserves_samples_and_rejects_invalid_geometry() {
+        let fixtures = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+            .join("../../tests/fixtures/raster");
+        let reference = decode_raster_file(&fixtures.join("avif-rgb.avif")).unwrap();
+        let reference_prepared = crate::prepare_raster_for_display(&reference).unwrap();
+        for (name, valid) in [
+            ("avif-pasp-square.avif", true),
+            ("avif-pasp-square-essential.avif", true),
+            ("avif-pasp-nonsquare.avif", false),
+            ("avif-pasp-zero.avif", false),
+        ] {
+            let budget = rrrah_core::MemoryBudget::new(1024 * 1024);
+            let mut request = crate::DecodeRequest::new(fixtures.join(name));
+            request.memory_budget = Some(budget.clone());
+            let result = decode_raster(&request);
+            if valid {
+                let decoded = result.unwrap_or_else(|e| panic!("{name}: {e}"));
+                assert_eq!(
+                    (decoded.width(), decoded.height()),
+                    (reference.width(), reference.height())
+                );
+                assert_eq!(decoded.color_space(), reference.color_space());
+                let (RasterPixels::Rgba8(actual), RasterPixels::Rgba8(expected)) =
+                    (decoded.pixels(), reference.pixels())
+                else {
+                    panic!("AVIF precision")
+                };
+                assert_eq!(&actual[..], &expected[..]);
+                let prepared =
+                    crate::prepare_raster_for_display_with_budget(&decoded, Some(&budget)).unwrap();
+                assert_eq!(
+                    (prepared.width(), prepared.height()),
+                    (reference.width(), reference.height())
+                );
+                let (RasterPixels::Rgba32Float(actual), RasterPixels::Rgba32Float(expected)) =
+                    (prepared.pixels(), reference_prepared.pixels())
+                else {
+                    panic!("prepared precision")
+                };
+                assert_eq!(actual.len(), expected.len());
+                assert!(
+                    actual
+                        .iter()
+                        .zip(expected.iter())
+                        .all(|(a, b)| a.to_bits() == b.to_bits())
+                );
+                drop(prepared);
+                drop(decoded);
+            } else {
+                assert!(
+                    matches!(result, Err(RasterDecodeError::InvalidAvif(_))),
+                    "{name}: {result:?}"
+                );
+            }
+            assert_eq!(budget.used(), 0, "{name}");
+        }
+    }
+
+    #[test]
     fn exr_display_window_crops_and_places_data_in_pixel_coordinates() {
         let base = include_bytes!("../../../tests/fixtures/raster/float-none-rec709-declared.exr");
         let attribute = b"displayWindow\0box2i\0\x10\0\0\0";

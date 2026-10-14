@@ -1,0 +1,156 @@
+    Blocking waiting for file lock on build directory
+   Compiling rrrah-memory v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-memory)
+   Compiling rrrah-cuda v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-cuda)
+   Compiling rrrah-bench v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-bench)
+   Compiling rrrah-swap v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-swap)
+    Finished `test` profile [optimized + debuginfo] target(s) in 5m 04s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_bench-10294ba30487424b)
+
+running 3 tests
+test tests::slow_live_listener_is_bounded_and_never_backpressures_producer ... ok
+test tests::trace_lanes_are_distinct_and_moved_span_keeps_its_origin ... ok
+test tests::emits_jsonl_and_closes_trace ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/debug/deps/rrrah_cuda-f0352b093584e568)
+
+running 6 tests
+test tests::nvidia_full_output_boundaries_hdr_alpha_and_managed_limits ... ignored, requires CUDA-capable NVIDIA driver on 64-bit Linux/Windows; never a CPU fallback
+test tests::unsupported_host_reports_cuda_unavailable_without_fallback ... ok
+test readback::tests::readback_offsets_tail_cancellation_and_overflow ... ok
+test tests::signed_hdr_and_alpha_are_accepted_but_nonfinite_and_overflow_refused ... ok
+test tests::interleaved_validation_prioritizes_cancellation_and_borrows_complete_pixels ... ok
+test readback::upload_tests::bounded_upload_borrows_source_preserves_tail_and_stops_on_cancel_or_error ... ok
+
+test result: ok. 5 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running unittests src/lib.rs (target/debug/deps/rrrah_memory-a0d195a99e254284)
+
+running 40 tests
+test policy::limit_tests::ttl_is_insertion_age_not_idle_age_and_boundary_is_exact ... ok
+test policy::limit_tests::spill_receives_only_successful_unpinned_evictions ... ok
+test policy::limit_tests::count_and_byte_limits_are_independent_and_replacement_is_transactional ... ok
+test policy::limit_tests::expired_entries_are_preferred_over_live_lru_victims ... ok
+test lease_cache::tests::drain_expired_respects_owner_pins_and_returns_ownership ... ok
+test policy::limit_tests::maximum_byte_capacity_keeps_admission_arithmetic_exact ... ok
+test lease_cache::tests::zero_ttl_entries_expire_without_invalidating_existing_leases ... ok
+test lease_cache::tests::explicit_invalidation_refuses_consumers_and_clears_owner_pin ... ok
+test policy::limit_tests::resizing_preserves_pins_and_returns_ordered_spill_without_partial_failure ... ok
+test policy::limit_tests::disabling_ttl_does_not_resurrect_entries_or_change_expiration_order ... ok
+test policy::limit_tests::expired_pinned_data_and_external_owners_keep_memory_accounted ... ok
+test lease_cache::tests::last_consumer_release_allows_spill_and_preserves_allocation_accounting ... ok
+test lease_cache::tests::cross_thread_clone_release_notifies_after_ownership_changes ... ok
+test staged_buffer_tests::staged_buffer_reuses_credit_and_preserves_child_and_last_owner_accounting ... ok
+test staged_buffer_tests::staged_growth_charges_all_ancestors_and_overflow_releases_credit ... ok
+test policy::tests::next_expiry_skips_future_and_protected_entries_then_tracks_unpin ... ok
+test policy::limit_tests::unrepresentable_ttl_rejects_admission_without_eviction_or_replacement ... ok
+test policy::tests::deadline_tracking_survives_replacement_pins_and_expiry ... ok
+test policy::tests::eviction_index_tracks_pin_unpin_hits_and_clock_rollover ... ok
+test policy::tests::evicts_by_bytes_and_recency ... ok
+test policy::tests::extreme_byte_weights_cannot_overflow_admission ... ok
+test policy::tests::prefetch_does_not_evict_pinned_visible_frame ... ok
+test policy::tests::rejected_replacement_preserves_old_value_other_entries_and_recency ... ok
+test policy::tests::rejects_an_entry_larger_than_budget ... ok
+test tests::merging_different_local_budgets_preserves_credit_even_with_shared_parent ... ok
+test policy::tests::indexed_policy_matches_sequence_model_under_mixed_pressure ... ok
+test tests::adoption_keeps_allocation_and_float_bits_unchanged ... ok
+test tests::available_bytes_tracks_ancestor_pressure_and_last_buffer_owner ... ok
+test tests::capacity_overflow_cancellation_and_adoption ... ok
+test policy::tests::bulk_admission_preserves_visible_and_orders_thousands_of_victims ... ok
+test tests::child_budgets_share_parent_and_keep_live_buffer_reservations ... ok
+test tests::legacy_arc_adoption_preserves_allocation_and_last_owner_accounting ... ok
+test tests::merging_full_budget_transfers_credit_through_all_ancestors_without_admission ... ok
+test tests::paired_headroom_counts_shared_ancestors_without_reserving ... ok
+test tests::shared_legacy_arc_is_rejected_without_reservation_or_data_changes ... ok
+test tests::shared_owners_hold_reservation_until_last_drop ... ok
+test tests::concurrent_reservations_never_overcommit ... ok
+test policy::limit_tests::fitting_policy_update_does_not_clone_collection_keys_or_change_lru ... ok
+test lease_cache::tests::concurrent_release_and_eviction_retain_budget_until_last_owner ... ok
+test lease_cache::tests::expired_last_lease_and_owner_pin_independently_block_replacement ... ok
+
+test result: ok. 40 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.02s
+
+     Running tests/ttl_ownership.rs (target/debug/deps/ttl_ownership-5975a2cf3f6bdc6e)
+
+running 1 test
+test real_ttl_refuses_new_consumers_but_retains_leases_and_external_allocation_owners ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.11s
+
+     Running unittests src/lib.rs (target/debug/deps/rrrah_swap-5f4634a443639d29)
+
+running 17 tests
+test segmented::tests::scoped_reader_row_timing_comparison ... ignored, manual warm-filesystem scoped reader timing comparison
+test tests::corruption_truncation_trailing_and_foreign_handles_reject ... ok
+test concurrency_tests::already_cancelled_restore_allocates_no_managed_memory ... ok
+test tests::cancellation_failed_length_and_ram_failure_leave_source_and_usage_intact ... ok
+test tests::handles_keep_store_alive_and_zero_count_refuses_admission ... ok
+test concurrency_tests::multiblock_restore_cancellation_releases_ram_and_preserves_retry ... ok
+test tests::streaming_cancellation_stays_cancelled_after_a_single_signal ... ok
+test tests::roundtrip_shared_handles_and_buffers_retain_their_own_quotas ... ok
+test tests::mixed_small_and_bulk_restore_keeps_prefix_tail_and_hash_exact ... ok
+test stream_tests::stream_roundtrip_rejects_partial_decoders_and_bad_encoders ... ok
+test segmented::tests::bounded_ranges_preserve_hdr_bits_verify_requested_blocks_and_release_owners ... ok
+test concurrency_tests::concurrent_writes_share_disk_quota_and_reservations_roll_back ... ok
+test segmented::tests::scoped_reader_reuses_verified_bytes_and_invalidates_failed_block ... ok
+test segmented::tests::failed_writes_ranges_and_cancellation_roll_back_all_credits ... ok
+test concurrency_tests::concurrent_restores_share_ram_cap_without_consuming_disk_object ... ok
+test segmented::tests::packed_rows_match_independent_source_slices_and_skip_unrequested_blocks ... ok
+test segmented::tests::generated_large_source_and_tiny_range_stay_within_one_block_plus_index ... ok
+
+test result: ok. 16 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/cancelled_restore.rs (target/debug/deps/cancelled_restore-d3b082964fbd28a4)
+
+running 1 test
+test partially_read_cancelled_restore_releases_ram_and_preserves_retryable_handle ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/expired_cache_spill.rs (target/debug/deps/expired_cache_spill-0749cfd9d3ab4e31)
+
+running 1 test
+test expired_values_transfer_to_streamed_swap_without_copy_or_early_budget_release ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.10s
+
+     Running tests/parallel_restore.rs (target/debug/deps/parallel_restore-ffa61d79fd4bddf2)
+
+running 4 tests
+test cancellation_during_batch_is_latched_and_releases_scratch ... ok
+test concurrent_stores_share_one_scratch_slot_and_do_not_wait ... ok
+test exact_stream_and_memory_pressure_fallback ... ok
+test parallel_integrity_rejects_partial_corrupt_trailing_and_truncated_objects ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.23s
+
+   Doc-tests rrrah_bench
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests rrrah_cuda
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests rrrah_memory
+
+running 1 test
+test crates/rrrah-memory/src/lib.rs - (line 25) ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+all doctests ran in 2.48s; merged doctests compilation took 2.13s
+   Doc-tests rrrah_swap
+
+running 2 tests
+test crates/rrrah-swap/src/lib.rs - (line 50) ... ok
+test crates/rrrah-swap/src/lib.rs - (line 18) ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+all doctests ran in 2.39s; merged doctests compilation took 2.04s

@@ -2,9 +2,9 @@
   "index": 178,
   "repository": "biplobice/bitwarden-deduplicator",
   "commit": "40bc66588d3b2a004cda947011959dcf6d9b8ee6",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All3capturedGitblobs fullyread/pinned;18originalmodule syntheticexport/CLI controls. No realvault/account/privatecredential or BitwardenAPI qualification.",
   "decision": "reject-domain",
-  "finding": "Bitwarden JSON folders/items; not file contents.",
+  "finding": "All3files read;18syntheticcontrols. Passwords/notes/cards ignored, domain/keycollisions merge distinctrecords, identicalmultiURI copies survive and deletedfolder references dangle. No adoption.",
   "available_source_evidence": [
     {
       "path": "deduplicate_bitwarden.py",
@@ -44,5 +44,11 @@
       "source": false,
       "test": false
     }
+  ],
+  "full_repository_review_complete": true,
+  "whole_repo_complete": true,
+  "whole_runtime_qualified": false,
+  "linked_review_artifacts": [
+    "bitwarden178-complete-source-review-20261014.json"
   ]
 }

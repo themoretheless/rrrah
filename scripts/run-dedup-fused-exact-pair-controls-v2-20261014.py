@@ -1,0 +1,15 @@
+#!/usr/bin/env python3
+from pathlib import Path
+import json,hashlib,os,subprocess,re
+R=Path(__file__).resolve().parents[1];D=R/'docs/research';P=D/'dedup-fused-exact-pair-experiment-20261014.json';p=json.loads(P.read_text());F=Path(p['source']);prior_path=D/'dedup-gradient-unroll4-managed-focused-v2-20261014.json';prior=json.loads(prior_path.read_text());sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest();assert all(sha(k)==h for k,h in prior['dependency_pins'].items());S=F/'candidate';pins={str(f.relative_to(S)):sha(f)for f in list((S/'src').glob('*.rs'))+[S/'tests/fixtures/encoded-srgb/transfer.tsv']};assert all(pins[k]==h for k,h in p['variants']['candidate'].items()if k!='src/exact.rs');O=D/'dedup-fused-exact-pair-controls-v2-20261014.json';assert not O.exists();cmd=[str(S/'src/lib.rs')if v==str(Path(prior['source'])/'crates/rrrah-dedup/src/lib.rs')else str(F/'candidate-v2-tests')if v==prior['executable']else v for v in prior['command']];cmd=[v for v in cmd if v not in ['--cfg','feature="raster"']];env=os.environ.copy();env['CARGO_MANIFEST_DIR']=str(R/'crates/rrrah-dedup');d=dict(status='building',producer_pid=os.getpid(),command=cmd,source=str(S),source_sha256=pins,dependency_pins=prior['dependency_pins'],producer_sha256=sha(__file__),initial_experiment_sha256=sha(P),scope=p['scope']+' Candidate exact.rs subsequently adds independent block-boundary/byte-mismatch test, captured by this source manifest; initial manifest remains historical. Directrustc realdependencies only, no Cargo/decode/core/workspace proof.')
+def save():
+ t=O.with_suffix('.tmp');t.write_text(json.dumps(d,indent=2)+'\n');t.replace(O)
+save()
+with (F/'candidate-v2-build.log').open('x')as f:
+ c=subprocess.Popen(cmd,cwd=R,env=env,stdout=f,stderr=subprocess.STDOUT);d['child_pid']=c.pid;save();rc=c.wait()
+d.update(build_returncode=rc,status='build_succeeded' if rc==0 else 'terminal_compile_failure');save();assert rc==0
+for label,args in [('inventory',['--list']),('tests',['--test-threads','2'])]:
+ with (F/f'candidate-v2-{label}.log').open('x')as f:
+  c=subprocess.Popen([str(F/'candidate-v2-tests'),*args],cwd=R,env=env,stdout=f,stderr=subprocess.STDOUT);d.update(status=label,child_pid=c.pid);save();rc=c.wait()
+ assert rc==0
+s=(F/'candidate-v2-tests.log').read_text();v=re.search(r'test result: ok\. (\d+) passed; (\d+) failed; (\d+) ignored;',s);assert v and v[2]=='0';names=re.findall(r'^(.+): test$',(F/'candidate-v2-inventory.log').read_text(),re.M);results=dict(re.findall(r'^test (.+) \.\.\. (ok|ignored(?:,.*)?)$',s,re.M));assert set(names)==set(results)and len(names)==len(results)==int(v[1])+int(v[3]);assert 'exact::fused_pair_controls::fused_pair_matches_independent_bytes_across_block_edges_and_mismatch_positions' in results;assert all(sha(S/k)==h for k,h in pins.items());d.update(status='passed_pending_performance_and_independent_audit',passed=int(v[1]),failed=0,ignored=int(v[3]),pins={str(f):sha(f)for f in [F/'candidate-v2-tests',F/'candidate-v2-build.log',F/'candidate-v2-tests.log',F/'candidate-v2-inventory.log']});save();print(d['passed'],'candidate unit tests passed')

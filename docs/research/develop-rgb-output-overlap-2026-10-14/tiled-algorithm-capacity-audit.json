@@ -1,0 +1,189 @@
+{
+  "status": "source_derived_worker_payload_audit",
+  "source": "crates/rrrah-core/src/develop/demosaic.rs",
+  "sha256": "5f22756a456c19cf24ba99a51b980b86c8390f3bcd04ad96d1484351f93c8e36",
+  "example_dimensions": [
+    128,
+    2048
+  ],
+  "workers": 16,
+  "standalone_scratch_estimate": 16777216,
+  "algorithms": [
+    {
+      "scratch": "SmoothHueScratch",
+      "margin": 2,
+      "fields": {
+        "mos": "f64",
+        "col": "u8",
+        "g": "f64"
+      },
+      "bytes_per_padded_pixel": 17,
+      "per_worker_payload": 689424,
+      "potential_16_worker_payload": 11030784,
+      "exceeds_example_standalone_scratch": false
+    },
+    {
+      "scratch": "LpScratch",
+      "margin": 3,
+      "fields": {
+        "mos": "f64",
+        "col": "u8",
+        "g": "f64"
+      },
+      "bytes_per_padded_pixel": 17,
+      "per_worker_payload": 698468,
+      "potential_16_worker_payload": 11175488,
+      "exceeds_example_standalone_scratch": false
+    },
+    {
+      "scratch": "HaScratch",
+      "margin": 3,
+      "fields": {
+        "mos": "f64",
+        "col": "u8",
+        "g": "f64"
+      },
+      "bytes_per_padded_pixel": 17,
+      "per_worker_payload": 698468,
+      "potential_16_worker_payload": 11175488,
+      "exceeds_example_standalone_scratch": false
+    },
+    {
+      "scratch": "PpgScratch",
+      "margin": 4,
+      "fields": {
+        "mos": "f64",
+        "col": "u8",
+        "g": "f64"
+      },
+      "bytes_per_padded_pixel": 17,
+      "per_worker_payload": 707648,
+      "potential_16_worker_payload": 11322368,
+      "exceeds_example_standalone_scratch": false
+    },
+    {
+      "scratch": "RcdScratch",
+      "margin": 5,
+      "fields": {
+        "mos": "f64",
+        "col": "u8",
+        "vh_dir": "f64",
+        "g": "f64",
+        "rgb": "[f64; 3]"
+      },
+      "bytes_per_padded_pixel": 49,
+      "per_worker_payload": 1326372,
+      "potential_16_worker_payload": 21221952,
+      "exceeds_example_standalone_scratch": true
+    },
+    {
+      "scratch": "LmmseScratch",
+      "margin": 6,
+      "fields": {
+        "mos": "f64",
+        "col": "u8",
+        "dh": "f64",
+        "dv": "f64",
+        "sh": "f64",
+        "sv": "f64",
+        "g": "f64",
+        "rgb": "[f64; 3]"
+      },
+      "bytes_per_padded_pixel": 73,
+      "per_worker_payload": 1824016,
+      "potential_16_worker_payload": 29184256,
+      "exceeds_example_standalone_scratch": true
+    },
+    {
+      "scratch": "DcbScratch",
+      "margin": 6,
+      "fields": {
+        "mos": "f64",
+        "col": "u8",
+        "gh": "f64",
+        "gv": "f64",
+        "g": "f64",
+        "rgb": "[f64; 3]"
+      },
+      "bytes_per_padded_pixel": 57,
+      "per_worker_payload": 1510416,
+      "potential_16_worker_payload": 24166656,
+      "exceeds_example_standalone_scratch": true
+    },
+    {
+      "scratch": "IgvScratch",
+      "margin": 6,
+      "fields": {
+        "mos": "f64",
+        "col": "u8",
+        "g": "f64",
+        "rgb": "[f64; 3]"
+      },
+      "bytes_per_padded_pixel": 41,
+      "per_worker_payload": 1196816,
+      "potential_16_worker_payload": 19149056,
+      "exceeds_example_standalone_scratch": true
+    },
+    {
+      "scratch": "AmazeScratch",
+      "margin": 8,
+      "fields": {
+        "mos": "f64",
+        "col": "u8",
+        "dg_h": "f64",
+        "dg_v": "f64",
+        "g": "f64",
+        "rgb": "[f64; 3]"
+      },
+      "bytes_per_padded_pixel": 57,
+      "per_worker_payload": 1575168,
+      "potential_16_worker_payload": 25202688,
+      "exceeds_example_standalone_scratch": true
+    },
+    {
+      "scratch": "XTransScratch",
+      "margin": 6,
+      "fields": {
+        "mos": "f64",
+        "col": "u8",
+        "gh": "f64",
+        "gv": "f64",
+        "rh": "[f64; 3]",
+        "rv": "[f64; 3]",
+        "lh": "[f64; 3]",
+        "lv": "[f64; 3]",
+        "hh": "u8",
+        "hv": "u8"
+      },
+      "bytes_per_padded_pixel": 123,
+      "per_worker_payload": 2804016,
+      "potential_16_worker_payload": 44864256,
+      "exceeds_example_standalone_scratch": true
+    },
+    {
+      "scratch": "XTrans3Scratch",
+      "margin": 8,
+      "fields": {
+        "mos": "f64",
+        "col": "u8",
+        "gh": "f64",
+        "gv": "f64",
+        "rh": "[f64; 3]",
+        "rv": "[f64; 3]",
+        "lh": "[f64; 3]",
+        "lv": "[f64; 3]",
+        "hh": "u8",
+        "hv": "u8"
+      },
+      "bytes_per_padded_pixel": 123,
+      "per_worker_payload": 2943744,
+      "potential_16_worker_payload": 47099904,
+      "exceeds_example_standalone_scratch": true
+    }
+  ],
+  "limitations": [
+    "Potential simultaneous vector payload only; not observed peak or RSS",
+    "Allocator bookkeeping, capacity growth, frame-wide intermediates and opcode temporaries excluded",
+    "Worker budgeting fix remains open"
+  ]
+}

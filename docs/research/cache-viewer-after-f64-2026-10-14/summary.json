@@ -1,0 +1,40 @@
+{
+  "status": "all31_suites_passed_with_concurrent_renderer_source_drift",
+  "suite_count": 31,
+  "test_executions_passed": 598,
+  "unique_test_count_claimed": false,
+  "failed": 0,
+  "cache_passed": 151,
+  "viewer_passed": 226,
+  "raster_collection": {
+    "sources": 118,
+    "selections": 147,
+    "native_and_prepared_storage_cases": 294,
+    "final_root_credit": 0,
+    "final_queue_credit": 0
+  },
+  "backend": "Metal",
+  "source_drift": [
+    "crates/rrrah-gpu/src/raster.rs"
+  ],
+  "requested_enabled_hardware_cases_verified": true,
+  "skipped_counts_by_suite": {
+    "cache": 6,
+    "cuda-host": 1,
+    "viewer": 62,
+    "qoi-native": 1,
+    "model-gpu": 1,
+    "hdr-ttl-gpu": 8,
+    "gpu": 11
+  },
+  "limitations": [
+    "test executions include repeated names across suites; not a unique count",
+    "ignored ordinary cases are not counted as passed; selected hardware cases ran separately",
+    "CUDA host tests do not qualify NVIDIA hardware",
+    "native/prepared fixture transport is not all100-format fidelity",
+    "long soaks and physical HDR calibration remain separate evidence",
+    "raster renderer changed during run; coherent current graph requires recheck"
+  ],
+  "report_sha256": "7df480c7746dfdbeb25b76c175ed613e1c00d6bc601f2d665406bd6184161b27",
+  "current_whole_graph_qualification": false
+}

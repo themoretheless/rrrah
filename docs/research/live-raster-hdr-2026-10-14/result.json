@@ -1,0 +1,92 @@
+{
+  "status": "passed",
+  "binary_sha256": "506705557c207c57476a657bb496fa146a0a775392b02dd009f083393c5d81b9",
+  "cases": [
+    {
+      "fixture": "heif-physical-alpha.heic",
+      "sha256": "47dbc6f47f6d52a79ac48abc50c7d6511c0703ce46a277c097d334e283e5d09b",
+      "exit_code": 0,
+      "passed": true,
+      "presented_frames": 150,
+      "elapsed_seconds": 3.001,
+      "frames_after_resize": 120,
+      "log_sha256": "2db4e50442144ba2ad74719b6989d8d246c228c065a0bba5290fc34e8329b9b7",
+      "maximum_sampled_active_headroom": 16.0
+    },
+    {
+      "fixture": "heif-physical-rotate90.heic",
+      "sha256": "344ee76cab184873f07d91eb42f9dfeaa54825376b22fc31a4c1e34c09dbd00f",
+      "exit_code": 0,
+      "passed": true,
+      "presented_frames": 180,
+      "elapsed_seconds": 3.013,
+      "frames_after_resize": 150,
+      "log_sha256": "03676035d0126dda663fb846b1a3887274c618dee67d7a9d25f7fee0a0393ec6",
+      "maximum_sampled_active_headroom": 16.0
+    },
+    {
+      "fixture": "heif-physical-mirror.heif",
+      "sha256": "d7fe7412b06a069ec94fa91095216a88ab6ff25976840fb0d65fcb4fa87d1332",
+      "exit_code": 0,
+      "passed": true,
+      "presented_frames": 172,
+      "elapsed_seconds": 3.116,
+      "frames_after_resize": 142,
+      "log_sha256": "5e5e1d05549fb1992a54107e71204f86b9c958e9212aab9793cdcd372720af8d",
+      "maximum_sampled_active_headroom": 16.0
+    },
+    {
+      "fixture": "float-shifted-window-negative.exr",
+      "sha256": "70fe9844ea7ea6e32020b79f9cae433bde4644c023b99809ab902507489b990b",
+      "exit_code": 0,
+      "passed": true,
+      "presented_frames": 169,
+      "elapsed_seconds": 3.011,
+      "frames_after_resize": 139,
+      "log_sha256": "26b34aedbf953de793c0d1d6cff26a68c40603fc83bf7dda688c966d1c7a2c7b",
+      "maximum_sampled_active_headroom": 16.0
+    },
+    {
+      "fixture": "float-shifted-window-positive-crop.exr",
+      "sha256": "f1f2957336bfe41abd9b954698d395a8cb9c1ca2f182d5b2464db6d938be0d4f",
+      "exit_code": 0,
+      "passed": true,
+      "presented_frames": 180,
+      "elapsed_seconds": 3.011,
+      "frames_after_resize": 150,
+      "log_sha256": "4712d74a8a816811ae0f8c5561fef097bc5fbd37bbfbcf37580ecc1280fc6ab4",
+      "maximum_sampled_active_headroom": 16.0
+    },
+    {
+      "fixture": "float-shifted-window-translated.exr",
+      "sha256": "2239c8940dba59aa5ca09662e452919119ab90d15691943d1a62440aa61e7fd1",
+      "exit_code": 0,
+      "passed": true,
+      "presented_frames": 179,
+      "elapsed_seconds": 3.009,
+      "frames_after_resize": 149,
+      "log_sha256": "c2c6acc59cc72cb60c76ab4096386403ce72121716be639e4c4ea14b24d15206",
+      "maximum_sampled_active_headroom": 16.0
+    }
+  ],
+  "limitations": [
+    "live probe, not full viewer navigation or prefetch",
+    "presentation is not calibrated luminance/color measurement",
+    "offscreen exact pixel tests are separate evidence"
+  ],
+  "total_presented_frames": 1030,
+  "source_drift": [],
+  "source_sha256": {
+    "crates/rrrah-app/examples/hdr_surface_probe.rs": "9610200ea4574ae7b92e2ed5ea38da6cf7bb252932741cca4c468158162bb254",
+    "crates/rrrah-decode/src/heif.rs": "d2b29a3a18d4a7488d873bdafe328ce0e8c84a8c4dc1878105ed1eb5d57a91fe",
+    "crates/rrrah-decode/src/exr_color.rs": "18eef69329d5e5a2426dec1970e5bffff236458b555e5d7b7884ea6cdae8eca7",
+    "crates/rrrah-decode/src/raster.rs": "cebe3152c8eae7e5686850496407a236371d0e8b87e28ed3c9e29f79bdf8dbd7",
+    "scripts/qualify-live-raster-hdr.py": "13a90c2326f527812fdb35986cc34d7411579d94777cbd646255d9ccbaf94eb5",
+    "Cargo.lock": "5cfaa6a40ba81a8fcb33d10b6e5c45dc33058fa3090ac909f2c04290fe15ce2d"
+  },
+  "adapter": "Metal Apple M4 Max",
+  "hdr_active_each_case": true,
+  "source_cpu_credit_zero_after_upload_each_case": true,
+  "frames_after_resize": 850,
+  "physical_luminance_color_calibrated": false
+}

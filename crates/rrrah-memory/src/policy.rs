@@ -73,6 +73,8 @@ impl<K: Clone + Eq + Hash, V> WeightedLru<K, V> {
     /// Returns `None` without changing entries or recency when pinned entries
     /// cannot fit. TTL changes affect future insertions; existing deadlines stay
     /// fixed. Expired entries are preferred over live LRU victims.
+    /// # Panics
+    /// Panics if a protected key is missing from the internal entry index.
     pub fn set_limits(&mut self, limits: CacheLimits) -> Option<Vec<(K, V)>> {
         let pinned_bytes = self
             .protected

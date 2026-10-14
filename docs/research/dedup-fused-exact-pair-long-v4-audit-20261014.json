@@ -1,0 +1,87 @@
+{
+  "status": "verified90fresh_process_reports_five_ambiguous_cases",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-fused-exact-pair-long-v4-20261014.json": "b54e9424640e454d5ef0a39718e495d8e3d7ed5ea2ba5c60d53e42921b6d6a5a",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-fused-exact-pair-controls-v3-20261014.json": "dd8e8ba2ecba53924a404b5d7a2399c43cb189a6f048f61611de9ed29856dab4",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-fused-exact-long-v4-20261014.py": "42e057f74fd870fcbef461610a142a610a8c5e7150ff80bc721dbff4905a54f5"
+  },
+  "processes": 90,
+  "calls": 92160,
+  "warmup_pairs": 5,
+  "measured_pairs": 40,
+  "summary": [
+    {
+      "case": "block",
+      "median_candidate_cpu_ratio": 0.8109270749896011,
+      "paired_ratios": [
+        0.8052360985246236,
+        0.8166180514545788,
+        0.8241960905045879,
+        0.8216897119381064,
+        0.8454695793006566,
+        0.8045491437265264,
+        0.7828238869911629,
+        0.8008046588932611
+      ]
+    },
+    {
+      "case": "large_same",
+      "median_candidate_cpu_ratio": 0.9451262584682671,
+      "paired_ratios": [
+        0.9185934132275609,
+        0.9385140073081599,
+        0.9724993299364717,
+        0.9191334925078135,
+        0.9614699085584044,
+        0.9517385096283744,
+        0.9370148290567529,
+        0.963028240290256
+      ]
+    },
+    {
+      "case": "large_early_different",
+      "median_candidate_cpu_ratio": 1.0007706700148935,
+      "paired_ratios": [
+        0.9738642254914477,
+        1.00199319139929,
+        1.0010205005573758,
+        0.9879173183388013,
+        1.0005208394724112,
+        0.9838453981960104,
+        1.0191893209903289,
+        1.0280105657222152
+      ]
+    },
+    {
+      "case": "large_late_different",
+      "median_candidate_cpu_ratio": 1.005556119115374,
+      "paired_ratios": [
+        1.018400005293275,
+        1.0079076998953493,
+        1.0032045383353987,
+        0.9802869562462188,
+        0.9988461962205775,
+        1.0137193827960187,
+        0.9926521128585819,
+        1.0150518403833253
+      ]
+    },
+    {
+      "case": "large_size_different",
+      "median_candidate_cpu_ratio": 1.0183596895563443,
+      "paired_ratios": [
+        0.9657807600795886,
+        0.9755857273203977,
+        1.0141892223688318,
+        1.0356792436000413,
+        1.0225301567438567,
+        1.042396746407397,
+        1.0282408055611316,
+        0.9815211373693614
+      ]
+    }
+  ],
+  "root_adopted": false,
+  "decision": "performance_review_required_before_adoption",
+  "scope": "Actual public compare_files over synthetic stable regular files, nofeature isolated current-root baseline versus fusedcandidate, opt-level1 realdeps. Alternating fresh processes, childCPU from RUSAGE_CHILDREN deltas, wall recorded separately. No physicaldeviceIO measurement, coldcache/Windows/Linux/release/collection/decode/native/corpus/allcase or hardRSS claim. Production unchanged. Reuses exact retained v3executables and originalbuildlogs; no recompilation. Only5ambiguouslarger cases repeat at16xmorecalls perprocess; empty/tiny robust cases are not repeated. No codechange or claimednewvariant. Raw output/commands/cpuvalues and paired medians independently recomputed. CPU deltas independently recomputed from retained RUSAGE_CHILDREN user/system before/after snapshots; original kernel syscalls themselves are not replayed. Broad allcase performance remains unproven."
+}

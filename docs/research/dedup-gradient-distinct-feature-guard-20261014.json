@@ -1,0 +1,11 @@
+{
+  "status": "test_feature_guard_fixed_pending_both_feature_gates",
+  "path": "crates/rrrah-dedup/tests/gradient_distinct_locations.rs",
+  "before_sha256": "b476c0877390c7cea18907963cdac19a742b17107c73cbce6ae5e6e83ace17bd",
+  "after_sha256": "bbd79c3797045cbc0247acf7b919965ff7d034914944ea12b0acd492cc6a887b",
+  "only_delta": "Add cfg(feature=raster) on managed-only integration test; body unchanged. Other tests not gated.",
+  "reason": "match_gradients_distinct_locations_managed and optional rrrah_core exist only with raster. Full nofeature gate compilefailed6errors before executing tests.",
+  "original_failure_report": "docs/research/dedup-current-no-features-complete-20261014.json",
+  "original_failure_report_sha256": "8d3518c74f618e1ac57d5ec80697ef02bdf2127f992dba11625846a4714f324b",
+  "scope": "Test buildconfiguration fix only; no productionbehavior change or feature-test weakening. Both eligible nofeature and rasterbody execution must be qualified separately."
+}

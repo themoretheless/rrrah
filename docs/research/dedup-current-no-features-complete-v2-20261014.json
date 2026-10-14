@@ -1,0 +1,27 @@
+{
+  "status": "passed_pending_inventory_audit",
+  "producer_pid": 59091,
+  "source": "/Users/themoretheless/Documents/Sources/rrrah",
+  "source_manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-current-no-features-complete-v2-source-20261014.json",
+  "source_manifest_sha256": "af7fa27fe1bb2fb8acbab1548faa1e849bd021048ab05881e9a8a1ee046be760",
+  "producer_sha256": "3f49cf2f6ab059c9c4ce4ab5078bfb7fe73a339bcd0a3d65630b3d2b57ffdbf7",
+  "command": [
+    "cargo",
+    "test",
+    "--locked",
+    "-p",
+    "rrrah-dedup",
+    "--no-default-features",
+    "--lib",
+    "--tests",
+    "--no-fail-fast",
+    "--jobs",
+    "2"
+  ],
+  "log": "/private/tmp/rrrah-current-no-features-complete-v2-20261014/cargo.log",
+  "scope": "Complete current root no-default-feature library and all declared integration targets. Includes current Mac16gradient and transparent-texture pixel regression. Permissioned ps observes own synthetic descendants; no process-test weakening/skips. Decode/raster/LoFTR/allfeatures/platform/format/corpus/workspace not qualified.",
+  "child_pid": 59093,
+  "returncode": 0,
+  "log_sha256": "5a8a25b270135d13fee531adc7b684168ed802b6a4bb4ed97cdede220b0c9c3d",
+  "source_unchanged": true
+}

@@ -39,15 +39,22 @@ def run_suite(command, stream, environment, timeout_seconds):
                 pass
         else:
             try:
-                subprocess.run(['taskkill', '/PID', str(process.pid), '/T', '/F'],
-                               stdout=stream, stderr=subprocess.STDOUT, timeout=10, check=False)
+                cleanup = subprocess.run(['taskkill', '/PID', str(process.pid), '/T', '/F'],
+                                         stdout=stream, stderr=subprocess.STDOUT, timeout=10, check=False)
+                if cleanup.returncode:
+                    print('Process tree cleanup was not confirmed by taskkill', file=stream, flush=True)
+            except (OSError, subprocess.TimeoutExpired) as error:
+                print(f'Process tree cleanup failed: {error}', file=stream, flush=True)
             finally:
                 if process.poll() is None:
                     process.kill()
-        process.wait(timeout=10)
-        print(f'Qualification timed out after {timeout_seconds}s; process tree terminated',
+        try:
+            process.wait(timeout=10)
+        except subprocess.TimeoutExpired:
+            print('Process termination was not confirmed after the kill deadline', file=stream, flush=True)
+        print(f'Qualification timed out after {timeout_seconds}s; process tree termination requested',
               file=stream, flush=True)
-        return process.returncode, True
+        return process.returncode if process.returncode is not None else 124, True
 
 
 def collection_evidence(text, seconds, full_hdr, passed, ignored):
@@ -305,8 +312,8 @@ def large_float_storage_evidence(text, minimum_seconds):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--suite-timeout-seconds', type=float, default=14400,
-                        help='Hard limit per cargo/test process tree, including build (default: 4 hours)')
+    parser.add_argument('--suite-timeout-seconds', type=float,
+                        help='Hard limit per cargo/test process tree, including build (default: at least 4 hours, extended for requested soaks)')
     parser.add_argument('--target-dir', type=Path, required=True)
     parser.add_argument('--output-dir', type=Path, required=True,
                         help='New directory; existing results are never overwritten')
@@ -384,6 +391,10 @@ def main():
     parser.add_argument('--ai-native-root', type=Path,
                         help='Run pinned native AI replay-plane Metal transport; production AI fidelity remains unqualified')
     args = parser.parse_args()
+    if args.suite_timeout_seconds is None:
+        longest_soak = max(args.storage_soak_seconds, args.metal_collection_seconds,
+                           args.metal_raw_collection_seconds)
+        args.suite_timeout_seconds = max(14400, longest_soak * 4 + 1800)
     if not math.isfinite(args.suite_timeout_seconds) or args.suite_timeout_seconds <= 0:
         parser.error('--suite-timeout-seconds must be finite and positive')
     if args.storage_soak_seconds and args.storage_soak_seconds < 10:

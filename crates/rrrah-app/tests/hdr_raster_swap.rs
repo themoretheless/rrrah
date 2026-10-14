@@ -230,28 +230,30 @@ fn exr_physical_pixels_survive_ram_spill_pressure_retry_and_metal() {
 }
 
 #[test]
-fn heif_physical_pixels_survive_ram_spill_pressure_retry_and_metal() {
+fn heif_and_avif_physical_pixels_survive_ram_spill_pressure_retry_and_metal() {
     let Some(gpu) = common::qualification_gpu() else {
         return;
     };
-    eprintln!("HEIF physical swap adapter: {}", gpu.adapter_name());
-    let fixtures = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-        .join("../../tests/fixtures/raster");
-    for (original, physical) in [
-        ("alpha.heic", "heif-physical-alpha.heic"),
-        ("rotate90.heic", "heif-physical-rotate90.heic"),
-        ("mirror.heif", "heif-physical-mirror.heif"),
+    eprintln!("HEIF/AVIF physical swap adapter: {}", gpu.adapter_name());
+    let fixtures =
+        std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/raster");
+    for (original, physical, aspect) in [
+        ("alpha.heic", "heif-physical-alpha.heic", Some(2.0)),
+        ("rotate90.heic", "heif-physical-rotate90.heic", Some(2.0)),
+        ("mirror.heif", "heif-physical-mirror.heif", Some(2.0)),
+        ("avif-rgb.avif", "avif-pasp-square.avif", None),
+        ("avif-rgb.avif", "avif-pasp-square-essential.avif", None),
     ] {
         let reference = rrrah_decode::prepare_raster_for_display(
             &rrrah_decode::decode_raster_file(&fixtures.join(original)).unwrap(),
-        ).unwrap();
-        let aspect = 2f32;
+        )
+        .unwrap();
         let parameters = ViewParameters { zoom: 1., ..view() };
         let square = gpu.render_raster(&reference, parameters, [64, 64]);
-        let expected = reference.clone().with_pixel_aspect(Some(aspect)).unwrap();
+        let expected = reference.clone().with_pixel_aspect(aspect).unwrap();
         let expected_sdr = gpu.render_raster(&expected, parameters, [64, 64]);
         let expected_hdr = gpu.render_raster_half(&expected, parameters, [64, 64]);
-        if aspect != 1. {
+        if aspect.is_some_and(|value| value != 1.) {
             assert_ne!(
                 expected_sdr.pixels, square.pixels,
                 "geometry control must distinguish square pixels"
@@ -264,7 +266,8 @@ fn heif_physical_pixels_survive_ram_spill_pressure_retry_and_metal() {
         let mut request = rrrah_decode::DecodeRequest::new(path.clone());
         request.memory_budget = Some(root.clone());
         let raw = rrrah_decode::decode_raster(&request).unwrap();
-        let decoded = rrrah_decode::prepare_raster_for_display_with_budget(&raw, Some(&root)).unwrap();
+        let decoded =
+            rrrah_decode::prepare_raster_for_display_with_budget(&raw, Some(&root)).unwrap();
         drop(raw);
         let weight = decoded.capacity_bytes();
         assert_eq!(root.used(), weight);
@@ -295,7 +298,7 @@ fn heif_physical_pixels_survive_ram_spill_pressure_retry_and_metal() {
         assert!(ram.insert(1, decoded));
         let pressure = root.try_reserve(root.limit() - root.used()).unwrap();
         let resident = ram.get_background_with_cancel(&1, || false).unwrap();
-        assert_eq!(resident.pixel_aspect(), Some(aspect));
+        assert_eq!(resident.pixel_aspect(), aspect);
         drop(resident);
         drop(pressure);
         assert!(ram.set_limits_and_spill(rrrah_cache::CacheLimits::bytes(0)));
@@ -310,7 +313,7 @@ fn heif_physical_pixels_survive_ram_spill_pressure_retry_and_metal() {
         assert!(ram.get_background_with_cancel(&1, || true).is_none());
         assert_eq!(root.used(), 0);
         let restored = ram.get_background_with_cancel(&1, || false).unwrap();
-        assert_eq!(restored.pixel_aspect(), Some(aspect));
+        assert_eq!(restored.pixel_aspect(), aspect);
         let (RasterPixels::Rgba32Float(actual), RasterPixels::Rgba32Float(golden)) =
             (restored.pixels(), expected.pixels())
         else {
@@ -323,7 +326,8 @@ fn heif_physical_pixels_survive_ram_spill_pressure_retry_and_metal() {
                 .zip(golden.iter())
                 .all(|(a, b)| a.to_bits() == b.to_bits())
         );
-        let prepared = rrrah_decode::prepare_raster_for_display_with_budget(&restored, Some(&root)).unwrap();
+        let prepared =
+            rrrah_decode::prepare_raster_for_display_with_budget(&restored, Some(&root)).unwrap();
         assert_eq!(
             gpu.render_raster(&prepared, parameters, [64, 64]).pixels,
             expected_sdr.pixels
@@ -343,7 +347,7 @@ fn heif_physical_pixels_survive_ram_spill_pressure_retry_and_metal() {
         );
         assert_eq!((root.used(), queue.used()), (0, 0));
         eprintln!(
-            "HEIF physical swap: aspect={aspect}; source deleted; float bits and SDR/HDR exact; one write/read; root=0; queue=0"
+            "HEIF/AVIF physical swap: fixture={physical}; aspect={aspect:?}; source deleted; float bits and SDR/HDR exact; one write/read; root=0; queue=0"
         );
     }
 }

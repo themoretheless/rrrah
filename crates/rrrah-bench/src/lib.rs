@@ -17,7 +17,11 @@ use std::{
     fs::{File, OpenOptions},
     io::{BufWriter, Write},
     path::Path,
-    sync::{Arc, Mutex, mpsc, atomic::{AtomicU64, Ordering}},
+    sync::{
+        Arc, Mutex,
+        atomic::{AtomicU64, Ordering},
+        mpsc,
+    },
     time::{Duration, Instant, SystemTime, UNIX_EPOCH},
 };
 
@@ -26,7 +30,9 @@ use serde::{Deserialize, Serialize};
 
 static NEXT_THREAD_ID: AtomicU64 = AtomicU64::new(1);
 thread_local! { static TRACE_THREAD_ID: u64 = NEXT_THREAD_ID.fetch_add(1, Ordering::Relaxed); }
-fn trace_thread_id() -> u64 { TRACE_THREAD_ID.with(|id| *id) }
+fn trace_thread_id() -> u64 {
+    TRACE_THREAD_ID.with(|id| *id)
+}
 
 const SCHEMA: u32 = 1;
 
@@ -353,9 +359,12 @@ mod tests {
             std::thread::spawn(move || {
                 other.counter("worker", "test", 1., "events");
                 span.finish();
-            }).join().unwrap();
+            })
+            .join()
+            .unwrap();
         }
-        let trace: serde_json::Value = serde_json::from_str(&std::fs::read_to_string(trace).unwrap()).unwrap();
+        let trace: serde_json::Value =
+            serde_json::from_str(&std::fs::read_to_string(trace).unwrap()).unwrap();
         assert_ne!(trace[0]["tid"], trace[1]["tid"]);
         assert_eq!(trace[0]["tid"], trace[2]["tid"]);
         let line = std::fs::read_to_string(jsonl).unwrap();

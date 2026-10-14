@@ -1,0 +1,70 @@
+{
+  "status": "verified_diagnostic_guard_expression_benchmark",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-guard-latch-20261014.json": "0832f43169811ca283050358c8f202de28c6b52a0c2767f310b3292919364c59",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-guard-latch-20261014.py": "0d2302638c304d6a59da7d5940f0d57a50f1805994103c9d396274dd2622d5fb"
+  },
+  "processes": 72,
+  "user_callback_calls": 900000000,
+  "controls_per_variant": 272,
+  "summary": [
+    {
+      "case": "depth1-owners1",
+      "median_cpu_ratio": 1.0078451649635867,
+      "ratios": [
+        0.9662182195537732,
+        1.022933383093859,
+        0.890518693162681,
+        1.0345395051570108,
+        0.9012143539364167,
+        0.9927569468333144,
+        1.0432579258898842,
+        1.0419735503560543
+      ]
+    },
+    {
+      "case": "depth3-owners0",
+      "median_cpu_ratio": 0.9456788095368184,
+      "ratios": [
+        0.8273210191264254,
+        0.9864578631202462,
+        0.9342762063227946,
+        0.939843612581352,
+        0.9252691889755974,
+        0.9515140064922848,
+        1.0130171931786431,
+        0.9534807788145899
+      ]
+    },
+    {
+      "case": "depth3-owners1",
+      "median_cpu_ratio": 0.8325225206015212,
+      "ratios": [
+        0.8230259619895407,
+        0.8149663999652583,
+        0.9205240607276463,
+        0.8382960890690986,
+        0.8762839279511753,
+        0.8178305440095538,
+        0.826748952133944,
+        0.8880068882545848
+      ]
+    },
+    {
+      "case": "depth3-owners2",
+      "median_cpu_ratio": 0.9616985043939181,
+      "ratios": [
+        0.9751114818897878,
+        0.9739714192081144,
+        0.9441634084404793,
+        1.00995796220761,
+        0.9930709590769335,
+        0.9494255895797218,
+        0.8890820130007189,
+        0.9047415472017127
+      ]
+    }
+  ],
+  "root_adopted": false,
+  "scope": "Diagnostic only: exact currentguard cancellation expression and originalGenerationToken implementation, controlledRequest adapter containing only cancellation field, dynFn one/three-layer chain, realAtomicU64 owners. Inline helper removes harness-onlycall; no actual DecodeRequest layout, IO/sourceguards, core/decoder/nativepipeline or wholeoperation/RSS qualification. Only false-latch stores changed; no usercallback or ownercheck omitted. Root not modified. CPUdeltas/order/rawoutputs independently recomputed. Sharedrequest-adapter microbenchmark only; no descriptor/body-layout/fullsource/neuralroute or wholeoperation speedup proof."
+}

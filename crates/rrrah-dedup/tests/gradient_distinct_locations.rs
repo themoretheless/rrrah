@@ -176,6 +176,7 @@ fn distinct_location_results_equal_independent_sorted_distance_oracle() {
         );
     }
 }
+#[cfg(feature = "raster")]
 #[test]
 fn managed_distinct_match_admission_last_owner_and_cancellation() {
     use rrrah_dedup::gradient::match_gradients_distinct_locations_managed as managed;

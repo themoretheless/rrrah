@@ -1162,9 +1162,10 @@ struct GpuParameters {
     camera_to_rgb_2: [f32; 4],
     orientation: u32,
     algorithm: u32,
-    // WGSL rounds the trailing vec4 to offset 208 and the struct to 224.
+    // WGSL rounds the trailing vec4 to offset 208 and the struct to 224 before comparison at offset 224.
     _tail_alignment: [u32; 2],
     _padding: [u32; 4],
+    comparison: [f32; 4],
 }
 
 impl Default for GpuParameters {
@@ -1193,6 +1194,7 @@ impl Default for GpuParameters {
             algorithm: 0,
             _tail_alignment: [0; 2],
             _padding: [0; 4],
+            comparison: [0.; 4],
         }
     }
 }
@@ -1849,6 +1851,19 @@ impl RawRenderer {
             1 => GpuDemosaicAlgorithm::MalvarHeCutler,
             2 => GpuDemosaicAlgorithm::Directional,
             _ => GpuDemosaicAlgorithm::Bilinear,
+        }
+    }
+
+    /// A shared-geometry split: left uses baseline exposure, right uses the current view.
+    /// Zero disables comparison. Invalid inputs preserve the previous state.
+    pub fn set_comparison(&mut self, queue: &wgpu::Queue, split: f32, baseline: f32) {
+        if !split.is_finite() || !baseline.is_finite() {
+            return;
+        }
+        let comparison = [split.clamp(0., 1.), baseline.clamp(-10., 10.), 0., 0.];
+        if self.parameters.comparison != comparison {
+            self.parameters.comparison = comparison;
+            queue.write_buffer(&self.uniform_buffer, 0, bytemuck::bytes_of(&self.parameters));
         }
     }
 
@@ -2588,7 +2603,7 @@ mod tests {
 
     #[test]
     fn uniform_layout_remains_wgsl_compatible() {
-        assert_eq!(size_of::<GpuParameters>(), 224);
+        assert_eq!(size_of::<GpuParameters>(), 240);
         assert_eq!(align_of::<GpuParameters>(), 16);
     }
 

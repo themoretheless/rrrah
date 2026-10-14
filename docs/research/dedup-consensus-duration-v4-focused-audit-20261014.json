@@ -1,0 +1,57 @@
+{
+  "status": "verified_frozen_duration_and_collection_five_targets",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-consensus-duration-v4-focused-20261014.json": "b29a8d4b1903eabba4d52014716e9255dc4224b9b3359b4c883a4f08eced3715",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-consensus-duration-v4-source-20261014.json": "67fb72d5e51c14508ae5554ffaaba1316baa171ee2c02e787c71c536fb3c36ef",
+    "/private/tmp/rrrah-consensus-duration-v4-focused-20261014.log": "e940427651535c6020fc903c36bbc3c24216d1d88b4e84e126912d68b3ab381b",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-consensus-duration-v4-focused-20261014.py": "12e266c6678b39bce8fdc311cefd0eef27ab46582bb5ff8794b9ed8a9868e9b6"
+  },
+  "source": "/private/tmp/rrrah-consensus-duration-v4-source-20261014",
+  "passed": 212,
+  "failed": 0,
+  "ignored": 5,
+  "targets": 5,
+  "rows": [
+    {
+      "target": "unittests src/lib.rs",
+      "passed": 120,
+      "failed": 0,
+      "ignored": 5,
+      "executable": "/private/tmp/rrrah-consensus-duration-v4-focused-qualified-20261014/rrrah_dedup-76646137647c9ff2",
+      "executable_sha256": "c26a45230bb1b0f13b93699c737c10564a36296842070eb86b72feabfc2706c5"
+    },
+    {
+      "target": "tests/animated.rs",
+      "passed": 7,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-consensus-duration-v4-focused-qualified-20261014/animated-362e956458951f72",
+      "executable_sha256": "f4b8b7ef13fcedc32a2cd67ae3f85d0309c977b3d97da10784cd10ec0fc65d68"
+    },
+    {
+      "target": "tests/portfolio_collection.rs",
+      "passed": 40,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-consensus-duration-v4-focused-qualified-20261014/portfolio_collection-e9eadcc2efbbde4c",
+      "executable_sha256": "79f4c05efba3cd33b3d0b61b82cdcca5956de205cc5c96193c8a2d464139fb36"
+    },
+    {
+      "target": "tests/search_portfolio.rs",
+      "passed": 38,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-consensus-duration-v4-focused-qualified-20261014/search_portfolio-dc465169dd9968cc",
+      "executable_sha256": "3f1ae3768ab70ce9db60b496f51109d8edb72e4c872c9b03aa5e8b6ffce90568"
+    },
+    {
+      "target": "tests/sequence.rs",
+      "passed": 7,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-consensus-duration-v4-focused-qualified-20261014/sequence-e5f05cbe042d131e",
+      "executable_sha256": "4c513f92ad59d64a9e9851e7ee0abcadf09b27b6e92e67a478d56af4d51063d2"
+    }
+  ],
+  "scope": "Frozen final collection v3 plus duration arithmetic fix and real animation timeline-key regression; library, pair, collection, animation and sequence targets. Other sources inherited frozen v3 capture, not current workspace parity. Fake proposal providers are not actual learned inference. Includes actual animation timeline-key and duration arithmetic regressions, plus collection final-publication guards. Native inference not enabled; no whole workspace or corpus qualification."
+}

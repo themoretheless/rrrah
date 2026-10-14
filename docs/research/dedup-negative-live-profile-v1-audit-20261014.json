@@ -1,0 +1,48 @@
+{
+  "status": "verified_three_second_frozen_probe_profile",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-negative-live-profile-v1-20261014.json": "a0e32689bfbc667ec08a4e474d9f4ba25a7dabddd6bda4e25b0bd0225b51b581",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-negative-live-profile-v1-20261014/sample.txt": "d5bc0b02250f0299c4dd2be6d95c0cd2995b6d264d5287bb2f57e7ebd4334be7",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-negative-live-profile-v1-20261014/controller-snapshot.json": "882a8d36a598ad6258f7a56bc9ed5bb8865591b6772ce665656b9cd2800aab7f",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-negative-live-profile-v1-20261014.py": "cd690a15447d0a4bac7b1aceec1bce694a25245360279520fc55b8fc932428ec"
+  },
+  "active_index": 76,
+  "main_thread_samples": 480,
+  "distance_four_top_samples": 237,
+  "guarded_pair_top_samples": 173,
+  "distance_fraction_of_main_samples": 0.49375,
+  "guard_fraction_of_main_samples": 0.36041666666666666,
+  "physical_footprint_display": "643.4M",
+  "peak_physical_footprint_display": "1.1G",
+  "collapsed_top_rows": [
+    {
+      "symbol": "__psynch_cvwait",
+      "samples": 480
+    },
+    {
+      "symbol": "__workq_kernreturn",
+      "samples": 480
+    },
+    {
+      "symbol": "_RNvNtCsjBWuIAvAT1K_11rrrah_dedup8gradient14distances_four",
+      "samples": 237
+    },
+    {
+      "symbol": "_RNCINvNtCsjBWuIAvAT1K_11rrrah_dedup12guarded_pair12guarded_pairNtNtB6_16search_portfolio27NativeBankConsensusEvidenceNtB11_20SearchPortfolioErrorNCINvB11_46search_native_bank_consensus_files_directionalNCINvNtB6_11model_loftr40search_loftr_native_bank_consensus_filesNCNvCs7SGumiYBJj5_33native_bank_current_all_positives4main0E0B4h_Es_0NCB2l_s0_0B4h_E0B4l_",
+      "samples": 158
+    },
+    {
+      "symbol": "_RINvNtCsjBWuIAvAT1K_11rrrah_dedup8gradient34match_gradients_distinct_locationsRNCINvNtB4_10local_scan29candidate_union_files_managedRNCINvNtB4_16anchor_rank_file42search_anchor_rank_geometry_files_selectedRNCINvB2c_44search_anchor_rank_reflection_fallback_filesRDINtNtNtCs8Mbv00yxnRz_4core3ops8function2FnuEp6OutputbEL_E0E0E0ECs7SGumiYBJj5_33native_bank_current_all_positives",
+      "samples": 22
+    },
+    {
+      "symbol": "_RNCINvNtCsjBWuIAvAT1K_11rrrah_dedup12guarded_pair12guarded_pairNtNtB6_16search_portfolio26NativeBankRecoveryEvidenceNtB11_20SearchPortfolioErrorNCINvB11_38search_native_bank_recovery_files_withNCNCNCINvB11_46search_native_bank_consensus_files_directionalNCINvNtB6_11model_loftr40search_loftr_native_bank_consensus_filesNCNvCs7SGumiYBJj5_33native_bank_current_all_positives4main0E0B57_Es0_000RDINtNtNtCs8Mbv00yxnRz_4core3ops8function2FnuEp6OutputbEL_E0NCB2k_s_0B6h_E0B5b_",
+      "samples": 15
+    },
+    {
+      "symbol": "_RNvXNtNtNtCs8Mbv00yxnRz_4core3ops8function5implsRNCINvNtCsjBWuIAvAT1K_11rrrah_dedup10local_scan29candidate_union_files_managedRNCINvNtBS_16anchor_rank_file42search_anchor_rank_geometry_files_selectedRNCINvB26_44search_anchor_rank_reflection_fallback_filesRDINtB4_2FnuEp6OutputbEL_E0E0E0IB48_uE4callCs7SGumiYBJj5_33native_bank_current_all_positives",
+      "samples": 14
+    }
+  ],
+  "scope": "Three-second5ms sampling of confirmed own running frozen pre-cache negative probe. No new corpus execution or job restart, no whole-operation profile/speedup/Root16/model-completion claim. Mainthread samplecounts only; waitingthreads excluded from denominator. This snapshot implicates gradient distances and nested cancellation callbacks, not neuralmodelcompute in the sampledinterval. Physicalfootprint is macOS sampler metric, not RSS or MemoryBudget;Observed physicalfootprint displays exceed the managedbudget scale and do not establish a hard512MiBwholeprocesscap. No wholeoperation CPUpercentage or speedup inferred."
+}
