@@ -1,0 +1,16 @@
+#!/usr/bin/env python3
+from pathlib import Path
+import json,hashlib
+R=Path(__file__).resolve().parents[1];D=R/'docs/research/dedup-500';sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()
+for index,repo in [(309,'HackWithSumit/WindowsPhishingPayloads-CreatorTools'),(473,'anton-matosov/PerceHash')]:
+ E=D/'evidence'/repo.replace('/','--');tree=json.loads((E/'tree.json').read_text());assert not tree['truncated'];blobs={v['path']:v for v in tree['tree']if v['type']=='blob'};mapping={'README.md':'00-README.md','LICENSE':'01-LICENSE','.gitignore':'02-gitignore'};assert set(blobs)==set(mapping)and not any(v['type']=='tree'for v in tree['tree']);files=[]
+ for name,local in mapping.items():
+  p=E/local;b=p.read_bytes();h=hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest();assert h==blobs[name]['sha']and len(b)==blobs[name]['size'];files.append(dict(path=name,local=str(p.relative_to(R)),sha256=sha(p),git_blob_sha1=h,bytes=len(b),lines=len(b.splitlines())))
+ readme=(E/'00-README.md').read_text()
+ if index==309:
+  other=D/'evidence/alash3al--xmg/01-LICENSE';assert (E/'01-LICENSE').read_bytes().rstrip(b'\n')==other.read_bytes().rstrip(b'\n')
+  findings=['All3captured blobs are README/license/ignore only; no source implementation, test, dependency manifest or duplicate-detection algorithm.','README describes unrelated social-engineering tools and external executable download links. Domain falsepositive from prose, not file/image dedup. No links followed, no external binaries downloaded/inspected/executed, no payload/workflow guidance or code adoption.','Apache2license text matches previously fullyread xmglicense byte-for-byte after terminal-newline normalization; repository-specific blob SHA1/size/SHA256 verified. Ignorefile fullyread.']
+ else:
+  assert 'Perceptual Image Hashing Library'in readme
+  findings=['README names a perceptual image hashing library, but captured entiretree contains only README/license/ignore. No implementation/API/hashalgorithm/test/build/dependencies to qualify or transfer.','Apache2license fullyread; ignorepatterns cover compiled object/dynamic/static library files, not actual tracked artifacts.','Placeholder excluded from implementation candidates; original500row retained, no functionality/runtime claim or source adoption.']
+ O=D/f'noimplementation{index}-complete-source-review-20261015.json';assert not O.exists();O.write_text(json.dumps(dict(status='complete3blob_static_repository_review_no_implementation',index=index,repository=repo,commit=json.loads((E/'manifest.json').read_text())['commit'],whole_repo_complete=True,whole_runtime_qualified=False,fully_read_files=files,auditor_sha256=sha(__file__),source_implementation_files=0,upstream_functions_executed=0,findings=findings,decision='exclude_no_implementation_or_wrong_domain',scope='All3captured repository blobs fullyread and Gitblob SHA1/size/SHA256 matched. Static review only, no runtime/test/build/tool/dependency/binary/network/privateinput execution. External README links are outside captured repository and not followed or qualified. Current upstream tree/lifecycle beyond capturedcommit not inferred; commit-to-tree binding not independently fetched.'),indent=2)+'\n');print(index,'3fullblobs,0implementation files')

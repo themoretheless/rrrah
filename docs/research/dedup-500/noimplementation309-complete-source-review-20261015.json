@@ -1,0 +1,44 @@
+{
+  "status": "complete3blob_static_repository_review_no_implementation",
+  "index": 309,
+  "repository": "HackWithSumit/WindowsPhishingPayloads-CreatorTools",
+  "commit": "720ea6559a45bbf9c4263738ef9dac4f18ec6f60",
+  "whole_repo_complete": true,
+  "whole_runtime_qualified": false,
+  "fully_read_files": [
+    {
+      "path": "README.md",
+      "local": "docs/research/dedup-500/evidence/HackWithSumit--WindowsPhishingPayloads-CreatorTools/00-README.md",
+      "sha256": "4ee764873041998d8012513e79fe780c9dd5bbd68ec97884c18b7baa12d6f9c4",
+      "git_blob_sha1": "1a9c09d51578a3c3268b7bc0b70e3e627bed04d8",
+      "bytes": 936,
+      "lines": 26
+    },
+    {
+      "path": "LICENSE",
+      "local": "docs/research/dedup-500/evidence/HackWithSumit--WindowsPhishingPayloads-CreatorTools/01-LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "git_blob_sha1": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+      "bytes": 11357,
+      "lines": 201
+    },
+    {
+      "path": ".gitignore",
+      "local": "docs/research/dedup-500/evidence/HackWithSumit--WindowsPhishingPayloads-CreatorTools/02-gitignore",
+      "sha256": "2ef767385125df7d546a79f251e267fab5c0e68a652128987a6982cb61d53584",
+      "git_blob_sha1": "5d947ca8879f8a9072fe485c566204e3c2929e80",
+      "bytes": 350,
+      "lines": 18
+    }
+  ],
+  "auditor_sha256": "80ff4250ab57dbc5c66baa25594e9e00942845b808954aa18f3e7081bf0a2f9e",
+  "source_implementation_files": 0,
+  "upstream_functions_executed": 0,
+  "findings": [
+    "All3captured blobs are README/license/ignore only; no source implementation, test, dependency manifest or duplicate-detection algorithm.",
+    "README describes unrelated social-engineering tools and external executable download links. Domain falsepositive from prose, not file/image dedup. No links followed, no external binaries downloaded/inspected/executed, no payload/workflow guidance or code adoption.",
+    "Apache2license text matches previously fullyread xmglicense byte-for-byte after terminal-newline normalization; repository-specific blob SHA1/size/SHA256 verified. Ignorefile fullyread."
+  ],
+  "decision": "exclude_no_implementation_or_wrong_domain",
+  "scope": "All3captured repository blobs fullyread and Gitblob SHA1/size/SHA256 matched. Static review only, no runtime/test/build/tool/dependency/binary/network/privateinput execution. External README links are outside captured repository and not followed or qualified. Current upstream tree/lifecycle beyond capturedcommit not inferred; commit-to-tree binding not independently fetched."
+}

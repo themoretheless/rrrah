@@ -1,0 +1,44 @@
+{
+  "status": "complete3blob_static_repository_review_no_implementation",
+  "index": 473,
+  "repository": "anton-matosov/PerceHash",
+  "commit": "121760f836c6670626785d7b4e57672e5cb448b3",
+  "whole_repo_complete": true,
+  "whole_runtime_qualified": false,
+  "fully_read_files": [
+    {
+      "path": "README.md",
+      "local": "docs/research/dedup-500/evidence/anton-matosov--PerceHash/00-README.md",
+      "sha256": "ff2e01a6b6d0caf5a51e6ff104a7c9d26715e24a5a1727a7af50c14d03575d6c",
+      "git_blob_sha1": "69dbee5debb6c211465d349651087e3c0c53c929",
+      "bytes": 54,
+      "lines": 4
+    },
+    {
+      "path": "LICENSE",
+      "local": "docs/research/dedup-500/evidence/anton-matosov--PerceHash/01-LICENSE",
+      "sha256": "73ba74dfaa520b49a401b5d21459a8523a146f3b7518a833eea5efa85130bf68",
+      "git_blob_sha1": "37ec93a14fdcd0d6e525d97c0cfa6b314eaa98d8",
+      "bytes": 10273,
+      "lines": 191
+    },
+    {
+      "path": ".gitignore",
+      "local": "docs/research/dedup-500/evidence/anton-matosov--PerceHash/02-gitignore",
+      "sha256": "6e3a992a9fc5374369bf885108070d72cc54dc418eb359af0e910be426d00aa5",
+      "git_blob_sha1": "620d3dc8a49200fcfae26619eb8a01741fcc41c5",
+      "bytes": 126,
+      "lines": 13
+    }
+  ],
+  "auditor_sha256": "80ff4250ab57dbc5c66baa25594e9e00942845b808954aa18f3e7081bf0a2f9e",
+  "source_implementation_files": 0,
+  "upstream_functions_executed": 0,
+  "findings": [
+    "README names a perceptual image hashing library, but captured entiretree contains only README/license/ignore. No implementation/API/hashalgorithm/test/build/dependencies to qualify or transfer.",
+    "Apache2license fullyread; ignorepatterns cover compiled object/dynamic/static library files, not actual tracked artifacts.",
+    "Placeholder excluded from implementation candidates; original500row retained, no functionality/runtime claim or source adoption."
+  ],
+  "decision": "exclude_no_implementation_or_wrong_domain",
+  "scope": "All3captured repository blobs fullyread and Gitblob SHA1/size/SHA256 matched. Static review only, no runtime/test/build/tool/dependency/binary/network/privateinput execution. External README links are outside captured repository and not followed or qualified. Current upstream tree/lifecycle beyond capturedcommit not inferred; commit-to-tree binding not independently fetched."
+}
