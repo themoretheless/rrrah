@@ -1,0 +1,2098 @@
+{
+  "scope": "Renderer-owned managed-credit hard caps for exact scratch reuse, not OS RSS/pressure",
+  "policies": [
+    "old via RRRAH_AI_DISABLE_GENERAL_CHILD_REUSE=1",
+    "new default"
+  ],
+  "cases": [
+    {
+      "strips": 2,
+      "nested": false,
+      "old_peak": 74576,
+      "new_peak": 74576,
+      "observed_success_cap": 74576,
+      "observed_refusal_cap": 74575
+    },
+    {
+      "strips": 2,
+      "nested": true,
+      "old_peak": 83444,
+      "new_peak": 83444,
+      "observed_success_cap": 83444,
+      "observed_refusal_cap": 83443
+    },
+    {
+      "strips": 16,
+      "nested": false,
+      "old_peak": 137436,
+      "new_peak": 137436,
+      "observed_success_cap": 137436,
+      "observed_refusal_cap": 137435
+    },
+    {
+      "strips": 16,
+      "nested": true,
+      "old_peak": 146304,
+      "new_peak": 146304,
+      "observed_success_cap": 146304,
+      "observed_refusal_cap": 146303
+    },
+    {
+      "strips": 80,
+      "nested": false,
+      "old_peak": 425308,
+      "new_peak": 425308,
+      "observed_success_cap": 425308,
+      "observed_refusal_cap": 425307
+    },
+    {
+      "strips": 80,
+      "nested": true,
+      "old_peak": 434176,
+      "new_peak": 434176,
+      "observed_success_cap": 434176,
+      "observed_refusal_cap": 434175
+    }
+  ],
+  "unique_cap_observations": {
+    "new": 126,
+    "old": 126
+  },
+  "observations": {
+    "new": [
+      {
+        "count": 2,
+        "nested": false,
+        "cap": 0,
+        "completed": false,
+        "peak": 0,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": false,
+        "cap": 37288,
+        "completed": false,
+        "peak": 6528,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": false,
+        "cap": 55932,
+        "completed": false,
+        "peak": 6528,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": false,
+        "cap": 65254,
+        "completed": false,
+        "peak": 6528,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": false,
+        "cap": 69915,
+        "completed": false,
+        "peak": 6528,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": false,
+        "cap": 72245,
+        "completed": false,
+        "peak": 72172,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": false,
+        "cap": 73410,
+        "completed": false,
+        "peak": 73328,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": false,
+        "cap": 73993,
+        "completed": false,
+        "peak": 73968,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": false,
+        "cap": 74284,
+        "completed": false,
+        "peak": 74272,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": false,
+        "cap": 74430,
+        "completed": false,
+        "peak": 74272,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": false,
+        "cap": 74503,
+        "completed": false,
+        "peak": 74464,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": false,
+        "cap": 74539,
+        "completed": false,
+        "peak": 74512,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": false,
+        "cap": 74557,
+        "completed": false,
+        "peak": 74512,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": false,
+        "cap": 74566,
+        "completed": false,
+        "peak": 74560,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": false,
+        "cap": 74571,
+        "completed": false,
+        "peak": 74560,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": false,
+        "cap": 74573,
+        "completed": false,
+        "peak": 74560,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": false,
+        "cap": 74574,
+        "completed": false,
+        "peak": 74560,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": false,
+        "cap": 74575,
+        "completed": false,
+        "peak": 74560,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": false,
+        "cap": 74576,
+        "completed": true,
+        "peak": 74576,
+        "refusals": 0
+      },
+      {
+        "count": 2,
+        "nested": false,
+        "cap": 74880,
+        "completed": true,
+        "peak": 74576,
+        "refusals": 0
+      },
+      {
+        "count": 2,
+        "nested": true,
+        "cap": 0,
+        "completed": false,
+        "peak": 0,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": true,
+        "cap": 41722,
+        "completed": false,
+        "peak": 7680,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": true,
+        "cap": 62583,
+        "completed": false,
+        "peak": 7680,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": true,
+        "cap": 73013,
+        "completed": false,
+        "peak": 7680,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": true,
+        "cap": 78228,
+        "completed": false,
+        "peak": 7680,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": true,
+        "cap": 80836,
+        "completed": false,
+        "peak": 80528,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": true,
+        "cap": 82140,
+        "completed": false,
+        "peak": 81844,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": true,
+        "cap": 82792,
+        "completed": false,
+        "peak": 82772,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": true,
+        "cap": 83118,
+        "completed": false,
+        "peak": 83076,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": true,
+        "cap": 83281,
+        "completed": false,
+        "peak": 83140,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": true,
+        "cap": 83362,
+        "completed": false,
+        "peak": 83332,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": true,
+        "cap": 83403,
+        "completed": false,
+        "peak": 83380,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": true,
+        "cap": 83423,
+        "completed": false,
+        "peak": 83380,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": true,
+        "cap": 83433,
+        "completed": false,
+        "peak": 83428,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": true,
+        "cap": 83438,
+        "completed": false,
+        "peak": 83428,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": true,
+        "cap": 83441,
+        "completed": false,
+        "peak": 83428,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": true,
+        "cap": 83442,
+        "completed": false,
+        "peak": 83428,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": true,
+        "cap": 83443,
+        "completed": false,
+        "peak": 83428,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": true,
+        "cap": 83444,
+        "completed": true,
+        "peak": 83444,
+        "refusals": 0
+      },
+      {
+        "count": 2,
+        "nested": true,
+        "cap": 83748,
+        "completed": true,
+        "peak": 83444,
+        "refusals": 0
+      },
+      {
+        "count": 16,
+        "nested": false,
+        "cap": 0,
+        "completed": false,
+        "peak": 0,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": false,
+        "cap": 68718,
+        "completed": false,
+        "peak": 14592,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": false,
+        "cap": 103077,
+        "completed": false,
+        "peak": 14592,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": false,
+        "cap": 120256,
+        "completed": false,
+        "peak": 14592,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": false,
+        "cap": 128846,
+        "completed": false,
+        "peak": 14592,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": false,
+        "cap": 133141,
+        "completed": false,
+        "peak": 132900,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": false,
+        "cap": 135288,
+        "completed": false,
+        "peak": 134340,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": false,
+        "cap": 136362,
+        "completed": false,
+        "peak": 134340,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": false,
+        "cap": 136899,
+        "completed": false,
+        "peak": 136828,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": false,
+        "cap": 137167,
+        "completed": false,
+        "peak": 137132,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": false,
+        "cap": 137301,
+        "completed": false,
+        "peak": 137132,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": false,
+        "cap": 137368,
+        "completed": false,
+        "peak": 137324,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": false,
+        "cap": 137402,
+        "completed": false,
+        "peak": 137372,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": false,
+        "cap": 137419,
+        "completed": false,
+        "peak": 137372,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": false,
+        "cap": 137427,
+        "completed": false,
+        "peak": 137420,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": false,
+        "cap": 137431,
+        "completed": false,
+        "peak": 137420,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": false,
+        "cap": 137433,
+        "completed": false,
+        "peak": 137420,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": false,
+        "cap": 137434,
+        "completed": false,
+        "peak": 137420,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": false,
+        "cap": 137435,
+        "completed": false,
+        "peak": 137420,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": false,
+        "cap": 137436,
+        "completed": true,
+        "peak": 137436,
+        "refusals": 0
+      },
+      {
+        "count": 16,
+        "nested": false,
+        "cap": 137740,
+        "completed": true,
+        "peak": 137436,
+        "refusals": 0
+      },
+      {
+        "count": 16,
+        "nested": true,
+        "cap": 0,
+        "completed": false,
+        "peak": 0,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": true,
+        "cap": 73152,
+        "completed": false,
+        "peak": 15744,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": true,
+        "cap": 109728,
+        "completed": false,
+        "peak": 15744,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": true,
+        "cap": 128016,
+        "completed": false,
+        "peak": 15744,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": true,
+        "cap": 137160,
+        "completed": false,
+        "peak": 15744,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": true,
+        "cap": 141732,
+        "completed": false,
+        "peak": 141416,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": true,
+        "cap": 144018,
+        "completed": false,
+        "peak": 142856,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": true,
+        "cap": 145161,
+        "completed": false,
+        "peak": 142856,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": true,
+        "cap": 145732,
+        "completed": false,
+        "peak": 145696,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": true,
+        "cap": 146018,
+        "completed": false,
+        "peak": 146000,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": true,
+        "cap": 146161,
+        "completed": false,
+        "peak": 146000,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": true,
+        "cap": 146232,
+        "completed": false,
+        "peak": 146192,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": true,
+        "cap": 146268,
+        "completed": false,
+        "peak": 146240,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": true,
+        "cap": 146286,
+        "completed": false,
+        "peak": 146240,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": true,
+        "cap": 146295,
+        "completed": false,
+        "peak": 146288,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": true,
+        "cap": 146299,
+        "completed": false,
+        "peak": 146288,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": true,
+        "cap": 146301,
+        "completed": false,
+        "peak": 146288,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": true,
+        "cap": 146302,
+        "completed": false,
+        "peak": 146288,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": true,
+        "cap": 146303,
+        "completed": false,
+        "peak": 146288,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": true,
+        "cap": 146304,
+        "completed": true,
+        "peak": 146304,
+        "refusals": 0
+      },
+      {
+        "count": 16,
+        "nested": true,
+        "cap": 146608,
+        "completed": true,
+        "peak": 146304,
+        "refusals": 0
+      },
+      {
+        "count": 80,
+        "nested": false,
+        "cap": 0,
+        "completed": false,
+        "peak": 0,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": false,
+        "cap": 212654,
+        "completed": false,
+        "peak": 51456,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": false,
+        "cap": 318981,
+        "completed": false,
+        "peak": 51456,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": false,
+        "cap": 372144,
+        "completed": false,
+        "peak": 51456,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": false,
+        "cap": 398726,
+        "completed": false,
+        "peak": 398568,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": false,
+        "cap": 412017,
+        "completed": false,
+        "peak": 407204,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": false,
+        "cap": 418662,
+        "completed": false,
+        "peak": 413764,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": false,
+        "cap": 421985,
+        "completed": false,
+        "peak": 413764,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": false,
+        "cap": 423646,
+        "completed": false,
+        "peak": 413764,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": false,
+        "cap": 424477,
+        "completed": false,
+        "peak": 413764,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": false,
+        "cap": 424892,
+        "completed": false,
+        "peak": 424892,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": false,
+        "cap": 425100,
+        "completed": false,
+        "peak": 425004,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": false,
+        "cap": 425204,
+        "completed": false,
+        "peak": 425196,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": false,
+        "cap": 425256,
+        "completed": false,
+        "peak": 425244,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": false,
+        "cap": 425282,
+        "completed": false,
+        "peak": 425244,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": false,
+        "cap": 425295,
+        "completed": false,
+        "peak": 425292,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": false,
+        "cap": 425301,
+        "completed": false,
+        "peak": 425292,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": false,
+        "cap": 425304,
+        "completed": false,
+        "peak": 425292,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": false,
+        "cap": 425306,
+        "completed": false,
+        "peak": 425292,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": false,
+        "cap": 425307,
+        "completed": false,
+        "peak": 425292,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": false,
+        "cap": 425308,
+        "completed": true,
+        "peak": 425308,
+        "refusals": 0
+      },
+      {
+        "count": 80,
+        "nested": false,
+        "cap": 425612,
+        "completed": true,
+        "peak": 425308,
+        "refusals": 0
+      },
+      {
+        "count": 80,
+        "nested": true,
+        "cap": 0,
+        "completed": false,
+        "peak": 0,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": true,
+        "cap": 217088,
+        "completed": false,
+        "peak": 52608,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": true,
+        "cap": 325632,
+        "completed": false,
+        "peak": 52608,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": true,
+        "cap": 379904,
+        "completed": false,
+        "peak": 52608,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": true,
+        "cap": 407040,
+        "completed": false,
+        "peak": 406924,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": true,
+        "cap": 420608,
+        "completed": false,
+        "peak": 415720,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": true,
+        "cap": 427392,
+        "completed": false,
+        "peak": 422280,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": true,
+        "cap": 430784,
+        "completed": false,
+        "peak": 422280,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": true,
+        "cap": 432480,
+        "completed": false,
+        "peak": 422280,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": true,
+        "cap": 433328,
+        "completed": false,
+        "peak": 433264,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": true,
+        "cap": 433752,
+        "completed": false,
+        "peak": 433568,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": true,
+        "cap": 433964,
+        "completed": false,
+        "peak": 433872,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": true,
+        "cap": 434070,
+        "completed": false,
+        "peak": 434064,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": true,
+        "cap": 434123,
+        "completed": false,
+        "peak": 434112,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": true,
+        "cap": 434149,
+        "completed": false,
+        "peak": 434112,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": true,
+        "cap": 434162,
+        "completed": false,
+        "peak": 434160,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": true,
+        "cap": 434169,
+        "completed": false,
+        "peak": 434160,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": true,
+        "cap": 434172,
+        "completed": false,
+        "peak": 434160,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": true,
+        "cap": 434174,
+        "completed": false,
+        "peak": 434160,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": true,
+        "cap": 434175,
+        "completed": false,
+        "peak": 434160,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": true,
+        "cap": 434176,
+        "completed": true,
+        "peak": 434176,
+        "refusals": 0
+      },
+      {
+        "count": 80,
+        "nested": true,
+        "cap": 434480,
+        "completed": true,
+        "peak": 434176,
+        "refusals": 0
+      }
+    ],
+    "old": [
+      {
+        "count": 2,
+        "nested": false,
+        "cap": 0,
+        "completed": false,
+        "peak": 0,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": false,
+        "cap": 37288,
+        "completed": false,
+        "peak": 6528,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": false,
+        "cap": 55932,
+        "completed": false,
+        "peak": 6528,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": false,
+        "cap": 65254,
+        "completed": false,
+        "peak": 6528,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": false,
+        "cap": 69915,
+        "completed": false,
+        "peak": 6528,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": false,
+        "cap": 72245,
+        "completed": false,
+        "peak": 72172,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": false,
+        "cap": 73410,
+        "completed": false,
+        "peak": 73328,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": false,
+        "cap": 73993,
+        "completed": false,
+        "peak": 73968,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": false,
+        "cap": 74284,
+        "completed": false,
+        "peak": 74272,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": false,
+        "cap": 74430,
+        "completed": false,
+        "peak": 74272,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": false,
+        "cap": 74503,
+        "completed": false,
+        "peak": 74464,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": false,
+        "cap": 74539,
+        "completed": false,
+        "peak": 74512,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": false,
+        "cap": 74557,
+        "completed": false,
+        "peak": 74512,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": false,
+        "cap": 74566,
+        "completed": false,
+        "peak": 74560,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": false,
+        "cap": 74571,
+        "completed": false,
+        "peak": 74560,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": false,
+        "cap": 74573,
+        "completed": false,
+        "peak": 74560,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": false,
+        "cap": 74574,
+        "completed": false,
+        "peak": 74560,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": false,
+        "cap": 74575,
+        "completed": false,
+        "peak": 74560,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": false,
+        "cap": 74576,
+        "completed": true,
+        "peak": 74576,
+        "refusals": 0
+      },
+      {
+        "count": 2,
+        "nested": false,
+        "cap": 74880,
+        "completed": true,
+        "peak": 74576,
+        "refusals": 0
+      },
+      {
+        "count": 2,
+        "nested": true,
+        "cap": 0,
+        "completed": false,
+        "peak": 0,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": true,
+        "cap": 41722,
+        "completed": false,
+        "peak": 7680,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": true,
+        "cap": 62583,
+        "completed": false,
+        "peak": 7680,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": true,
+        "cap": 73013,
+        "completed": false,
+        "peak": 7680,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": true,
+        "cap": 78228,
+        "completed": false,
+        "peak": 7680,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": true,
+        "cap": 80836,
+        "completed": false,
+        "peak": 80528,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": true,
+        "cap": 82140,
+        "completed": false,
+        "peak": 81844,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": true,
+        "cap": 82792,
+        "completed": false,
+        "peak": 82772,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": true,
+        "cap": 83118,
+        "completed": false,
+        "peak": 83076,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": true,
+        "cap": 83281,
+        "completed": false,
+        "peak": 83140,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": true,
+        "cap": 83362,
+        "completed": false,
+        "peak": 83332,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": true,
+        "cap": 83403,
+        "completed": false,
+        "peak": 83380,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": true,
+        "cap": 83423,
+        "completed": false,
+        "peak": 83380,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": true,
+        "cap": 83433,
+        "completed": false,
+        "peak": 83428,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": true,
+        "cap": 83438,
+        "completed": false,
+        "peak": 83428,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": true,
+        "cap": 83441,
+        "completed": false,
+        "peak": 83428,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": true,
+        "cap": 83442,
+        "completed": false,
+        "peak": 83428,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": true,
+        "cap": 83443,
+        "completed": false,
+        "peak": 83428,
+        "refusals": 1
+      },
+      {
+        "count": 2,
+        "nested": true,
+        "cap": 83444,
+        "completed": true,
+        "peak": 83444,
+        "refusals": 0
+      },
+      {
+        "count": 2,
+        "nested": true,
+        "cap": 83748,
+        "completed": true,
+        "peak": 83444,
+        "refusals": 0
+      },
+      {
+        "count": 16,
+        "nested": false,
+        "cap": 0,
+        "completed": false,
+        "peak": 0,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": false,
+        "cap": 68718,
+        "completed": false,
+        "peak": 14592,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": false,
+        "cap": 103077,
+        "completed": false,
+        "peak": 14592,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": false,
+        "cap": 120256,
+        "completed": false,
+        "peak": 14592,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": false,
+        "cap": 128846,
+        "completed": false,
+        "peak": 14592,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": false,
+        "cap": 133141,
+        "completed": false,
+        "peak": 132900,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": false,
+        "cap": 135288,
+        "completed": false,
+        "peak": 134340,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": false,
+        "cap": 136362,
+        "completed": false,
+        "peak": 134340,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": false,
+        "cap": 136899,
+        "completed": false,
+        "peak": 136828,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": false,
+        "cap": 137167,
+        "completed": false,
+        "peak": 137132,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": false,
+        "cap": 137301,
+        "completed": false,
+        "peak": 137132,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": false,
+        "cap": 137368,
+        "completed": false,
+        "peak": 137324,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": false,
+        "cap": 137402,
+        "completed": false,
+        "peak": 137372,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": false,
+        "cap": 137419,
+        "completed": false,
+        "peak": 137372,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": false,
+        "cap": 137427,
+        "completed": false,
+        "peak": 137420,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": false,
+        "cap": 137431,
+        "completed": false,
+        "peak": 137420,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": false,
+        "cap": 137433,
+        "completed": false,
+        "peak": 137420,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": false,
+        "cap": 137434,
+        "completed": false,
+        "peak": 137420,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": false,
+        "cap": 137435,
+        "completed": false,
+        "peak": 137420,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": false,
+        "cap": 137436,
+        "completed": true,
+        "peak": 137436,
+        "refusals": 0
+      },
+      {
+        "count": 16,
+        "nested": false,
+        "cap": 137740,
+        "completed": true,
+        "peak": 137436,
+        "refusals": 0
+      },
+      {
+        "count": 16,
+        "nested": true,
+        "cap": 0,
+        "completed": false,
+        "peak": 0,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": true,
+        "cap": 73152,
+        "completed": false,
+        "peak": 15744,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": true,
+        "cap": 109728,
+        "completed": false,
+        "peak": 15744,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": true,
+        "cap": 128016,
+        "completed": false,
+        "peak": 15744,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": true,
+        "cap": 137160,
+        "completed": false,
+        "peak": 15744,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": true,
+        "cap": 141732,
+        "completed": false,
+        "peak": 141416,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": true,
+        "cap": 144018,
+        "completed": false,
+        "peak": 142856,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": true,
+        "cap": 145161,
+        "completed": false,
+        "peak": 142856,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": true,
+        "cap": 145732,
+        "completed": false,
+        "peak": 145696,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": true,
+        "cap": 146018,
+        "completed": false,
+        "peak": 146000,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": true,
+        "cap": 146161,
+        "completed": false,
+        "peak": 146000,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": true,
+        "cap": 146232,
+        "completed": false,
+        "peak": 146192,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": true,
+        "cap": 146268,
+        "completed": false,
+        "peak": 146240,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": true,
+        "cap": 146286,
+        "completed": false,
+        "peak": 146240,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": true,
+        "cap": 146295,
+        "completed": false,
+        "peak": 146288,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": true,
+        "cap": 146299,
+        "completed": false,
+        "peak": 146288,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": true,
+        "cap": 146301,
+        "completed": false,
+        "peak": 146288,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": true,
+        "cap": 146302,
+        "completed": false,
+        "peak": 146288,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": true,
+        "cap": 146303,
+        "completed": false,
+        "peak": 146288,
+        "refusals": 1
+      },
+      {
+        "count": 16,
+        "nested": true,
+        "cap": 146304,
+        "completed": true,
+        "peak": 146304,
+        "refusals": 0
+      },
+      {
+        "count": 16,
+        "nested": true,
+        "cap": 146608,
+        "completed": true,
+        "peak": 146304,
+        "refusals": 0
+      },
+      {
+        "count": 80,
+        "nested": false,
+        "cap": 0,
+        "completed": false,
+        "peak": 0,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": false,
+        "cap": 212654,
+        "completed": false,
+        "peak": 51456,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": false,
+        "cap": 318981,
+        "completed": false,
+        "peak": 51456,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": false,
+        "cap": 372144,
+        "completed": false,
+        "peak": 51456,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": false,
+        "cap": 398726,
+        "completed": false,
+        "peak": 398568,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": false,
+        "cap": 412017,
+        "completed": false,
+        "peak": 407204,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": false,
+        "cap": 418662,
+        "completed": false,
+        "peak": 413764,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": false,
+        "cap": 421985,
+        "completed": false,
+        "peak": 413764,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": false,
+        "cap": 423646,
+        "completed": false,
+        "peak": 413764,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": false,
+        "cap": 424477,
+        "completed": false,
+        "peak": 413764,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": false,
+        "cap": 424892,
+        "completed": false,
+        "peak": 424892,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": false,
+        "cap": 425100,
+        "completed": false,
+        "peak": 425004,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": false,
+        "cap": 425204,
+        "completed": false,
+        "peak": 425196,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": false,
+        "cap": 425256,
+        "completed": false,
+        "peak": 425244,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": false,
+        "cap": 425282,
+        "completed": false,
+        "peak": 425244,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": false,
+        "cap": 425295,
+        "completed": false,
+        "peak": 425292,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": false,
+        "cap": 425301,
+        "completed": false,
+        "peak": 425292,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": false,
+        "cap": 425304,
+        "completed": false,
+        "peak": 425292,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": false,
+        "cap": 425306,
+        "completed": false,
+        "peak": 425292,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": false,
+        "cap": 425307,
+        "completed": false,
+        "peak": 425292,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": false,
+        "cap": 425308,
+        "completed": true,
+        "peak": 425308,
+        "refusals": 0
+      },
+      {
+        "count": 80,
+        "nested": false,
+        "cap": 425612,
+        "completed": true,
+        "peak": 425308,
+        "refusals": 0
+      },
+      {
+        "count": 80,
+        "nested": true,
+        "cap": 0,
+        "completed": false,
+        "peak": 0,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": true,
+        "cap": 217088,
+        "completed": false,
+        "peak": 52608,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": true,
+        "cap": 325632,
+        "completed": false,
+        "peak": 52608,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": true,
+        "cap": 379904,
+        "completed": false,
+        "peak": 52608,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": true,
+        "cap": 407040,
+        "completed": false,
+        "peak": 406924,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": true,
+        "cap": 420608,
+        "completed": false,
+        "peak": 415720,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": true,
+        "cap": 427392,
+        "completed": false,
+        "peak": 422280,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": true,
+        "cap": 430784,
+        "completed": false,
+        "peak": 422280,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": true,
+        "cap": 432480,
+        "completed": false,
+        "peak": 422280,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": true,
+        "cap": 433328,
+        "completed": false,
+        "peak": 433264,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": true,
+        "cap": 433752,
+        "completed": false,
+        "peak": 433568,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": true,
+        "cap": 433964,
+        "completed": false,
+        "peak": 433872,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": true,
+        "cap": 434070,
+        "completed": false,
+        "peak": 434064,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": true,
+        "cap": 434123,
+        "completed": false,
+        "peak": 434112,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": true,
+        "cap": 434149,
+        "completed": false,
+        "peak": 434112,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": true,
+        "cap": 434162,
+        "completed": false,
+        "peak": 434160,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": true,
+        "cap": 434169,
+        "completed": false,
+        "peak": 434160,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": true,
+        "cap": 434172,
+        "completed": false,
+        "peak": 434160,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": true,
+        "cap": 434174,
+        "completed": false,
+        "peak": 434160,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": true,
+        "cap": 434175,
+        "completed": false,
+        "peak": 434160,
+        "refusals": 1
+      },
+      {
+        "count": 80,
+        "nested": true,
+        "cap": 434176,
+        "completed": true,
+        "peak": 434176,
+        "refusals": 0
+      },
+      {
+        "count": 80,
+        "nested": true,
+        "cap": 434480,
+        "completed": true,
+        "peak": 434176,
+        "refusals": 0
+      }
+    ]
+  },
+  "checks": [
+    "Every run stays within admitted cap",
+    "Every successful result bit-matches its unlimited policy reference",
+    "Each refusal and success releases all managed credit",
+    "Sampled success monotonicity and one-byte boundary bracket checked",
+    "Old/new peaks and observed transition caps identical in all six cases"
+  ],
+  "source_sha256": "8a74c9be6b83dfb580be608b6234135452354540eb8b1d290d21ed88ff2c821d",
+  "tests_run": "New hard-cap test passed separately under both policies; earlier262-test suite covers unchanged compositor core",
+  "limitations": [
+    "Finite six authored scenes and sampled caps, not exhaustive arbitrary-scene memory behavior",
+    "Inputs and observation bookkeeping are caller/test-owned outside renderer credit budget",
+    "No actual slow disk, sustained OS memory pressure, physicalHDR or NVIDIA test",
+    "Full100format and independent AI fidelity qualification remain open"
+  ]
+}

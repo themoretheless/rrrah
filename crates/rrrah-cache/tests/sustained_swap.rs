@@ -714,6 +714,15 @@ fn sustained_float_hdr_delayed_swap_pressure_cancel_and_retry() {
             assert!(swap.try_get(&(cycles - 2), || false).unwrap().is_none());
         }
         cycles += 1;
+        if std::env::var_os("RRRAH_SLOW_SWAP_PROGRESS").is_some() {
+            let usage = physical_usage(directory.path());
+            eprintln!(
+                "large float delayed progress: cycles={cycles}; elapsed={:.3}s; root=0; queue=0; disk_bytes={}; disk_count={}",
+                start.elapsed().as_secs_f64(),
+                usage.0,
+                usage.1
+            );
+        }
     }
     let stats = swap.stats();
     assert_eq!((stats.writes, stats.reads, stats.errors), (cycles, cycles, 0));

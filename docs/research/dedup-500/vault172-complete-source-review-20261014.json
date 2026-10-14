@@ -1,0 +1,33 @@
+{
+  "status": "complete_five_file_source_review_with21real_pandas_function_controls",
+  "index": 172,
+  "repository": "niqifan007/bitwarden_deduplicator",
+  "commit": "8b6f052ad32dcdc6a6f479b0d5c5e166b8d52ab4",
+  "whole_repo_complete": true,
+  "whole_runtime_qualified": false,
+  "fully_read_files": [
+    ".gitignore",
+    "LICENSE",
+    "README.md",
+    "bitwarden_deduplicator.py",
+    "requirements.txt"
+  ],
+  "license": "Full MIT text read; copyright year present, holder blank. No production source adopted.",
+  "controls": "docs/research/dedup-vault172-controls-20261014.json",
+  "controls_sha256": "66c3d590070fe310ed47ddd29598558bdbb43c90af329d86b640e811de01c6da",
+  "control_producer": "scripts/check-dedup-vault172-20261014.py",
+  "control_producer_sha256": "b0dbda1ddb8abd8bf503bf92175839ceb54233dac38fb7f048a7f5a364e31c29",
+  "decision": "Reject domain-specific selected-field identity and destructive/inferred-type export for file/image library.",
+  "findings": [
+    "Real pandas dtype inference collapses numeric strings0012and12 and numeric usernames001and1.",
+    "Literal NA and empty values coerce to missing data and collapse.",
+    "Notes, folders and TOTP differences omitted from identity key and lost with dropped rows.",
+    "Domain mode intentionally merges paths/schemes, exports an extra domain column, preserves hostname case and includes userinfo/port in netloc.",
+    "Malformed CSV read returns None, missing columns leave previous output untouched; success also returns None.",
+    "Encoding read occurs outside handler, missing input propagates; output parent error propagates.",
+    "Same input/output allowed and original source overwritten, without atomic publication or rollback.",
+    "Whole-file encoding sniff plus pandas dataframes; no managed resource/work/cancellation cap.",
+    "Requirements specify lower bounds only, no locked versions or upstream tests."
+  ],
+  "limits": "Five pinned files read and Git blob hashes verified. Unchanged original function ASTs with real bundled pandas on synthetic temporary records only. UTF8 chardet adapter explicit; no complete CLI/interactive, automatic encoding detection, user vaults or real credentials."
+}

@@ -1,0 +1,65 @@
+{
+  "status": "verified_public_managed_matcher_version_comparison",
+  "rows": [
+    {
+      "case": "table_natural",
+      "extra_bytes": 0,
+      "matches": 3,
+      "peak_bytes": 81920,
+      "median_cpu_ratio": 0.9312306713424956,
+      "ratio_range": [
+        0.8798330743762997,
+        0.9882728954894369
+      ],
+      "expected": "/private/tmp/rrrah-gradient-unroll4-managed-benchmark-20261014/table_natural-0-expected.txt",
+      "expected_sha256": "04bff284a6c89c87fdd1791c0957f470af8cc2a4bcc56fb75f464fa4b8c48556"
+    },
+    {
+      "case": "table_natural",
+      "extra_bytes": 16777216,
+      "matches": 3,
+      "peak_bytes": 8470528,
+      "median_cpu_ratio": 0.9310108659861708,
+      "ratio_range": [
+        0.7787928184926074,
+        0.9484465594574395
+      ],
+      "expected": "/private/tmp/rrrah-gradient-unroll4-managed-benchmark-20261014/table_natural-16777216-expected.txt",
+      "expected_sha256": "b477decbc1ec5b0286a4cec179c8e683f42b7eb3a8223bea2a1fd0108f5b307b"
+    },
+    {
+      "case": "derived_large_self",
+      "extra_bytes": 0,
+      "matches": 511,
+      "peak_bytes": 122960,
+      "median_cpu_ratio": 0.9349022518707448,
+      "ratio_range": [
+        0.8603372632855382,
+        1.017255207024635
+      ],
+      "expected": "/private/tmp/rrrah-gradient-unroll4-managed-benchmark-20261014/derived_large_self-0-expected.txt",
+      "expected_sha256": "a9552eb5be43bd4e670b2b1777907c4bec52ed28e1d212746e8f2b9d2354d1bd"
+    },
+    {
+      "case": "derived_large_self",
+      "extra_bytes": 16777216,
+      "matches": 511,
+      "peak_bytes": 172144,
+      "median_cpu_ratio": 0.9085163675127984,
+      "ratio_range": [
+        0.7932515708071225,
+        0.9927112336689015
+      ],
+      "expected": "/private/tmp/rrrah-gradient-unroll4-managed-benchmark-20261014/derived_large_self-16777216-expected.txt",
+      "expected_sha256": "b2e7021d8f036c1ac44ef2e2e7768ef57199a5cb5236323a2bdda8f04314b560"
+    }
+  ],
+  "timed_fresh_processes": 80,
+  "warmup_pairs_per_group": 1,
+  "measured_pairs_per_group": 9,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-unroll4-managed-benchmark-20261014.json": "a3e3b84b2455022518fc7ac8c398cd0433e59536be4d5fc4871de1a2072a5ccd",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-gradient-unroll4-managed-benchmark-20261014.py": "67cedd24e851b49a19cb612c4d81664a2a4de1b1e2357e3d300a058f375b3293"
+  },
+  "scope": "Actual public managed distinct-location matcher, current V5vsV7frozen libraries differing only in distance kernel and test source. Direct optimized rustc build with identical real cached dependencies, raster-only; no Cargo recipe/decode/native whole operation/platform/corpus claim. Natural table pair plus derived1537selfbank, with baseline-only or16MiBextra managed admission. Output coordinate bits and allocator peaks match across versions and both memory paths. Kernel unroll is the only compiled non-test source difference. This is component CPU including startup/input-load/output/teardown; not whole native search or universal performance evidence."
+}

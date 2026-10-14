@@ -1,0 +1,30 @@
+{
+  "status": "complete_three_file_source_review_with_eight_bounded_original_function_controls",
+  "index": 259,
+  "repository": "x-stp/deduplicatz",
+  "commit": "2840c76c6a03615b7c7d7edf06eca54511db73fc",
+  "whole_repo_complete": true,
+  "whole_runtime_qualified": false,
+  "license": "Actual full AGPLv3 license and source author/license header read; no production code adoption.",
+  "fully_read_files": [
+    "LICENSE",
+    "README.md",
+    "deduplicatz.c"
+  ],
+  "tree_truncated": false,
+  "controls": "docs/research/dedup-deduplicatz-controls-20261014/audit.json",
+  "controls_sha256": "22637a5a08c8228b6db0bbfc002059fc99451241f109afa2417af92087c99fb6",
+  "findings": [
+    "A hash of zero is also the empty-slot sentinel: repeated insertions count as unique.",
+    "64-probe limit returns duplicate for a unique explicit hash under moderate table load.",
+    "Rehash 64-probe limit silently loses an occupied hash while retaining count.",
+    "Final unterminated input line is dropped.",
+    "Overlong line resets buffer and emits a suffix, rather than refusing or preserving the record.",
+    "Chunk data references are borrowed; deterministic pre-worker mutation changes output. Actual io_uring path resubmits the same buffer immediately after enqueue.",
+    "Input chunks can complete out of order and are shared among workers with independent partial-line state. Multiworker line correctness is unqualified.",
+    "writev result/partial writes/errors ignored; output opened/truncated even when input open fails.",
+    "Same input/output path is not refused; fixed roughly80MB initial hash table plus32x64KiB ring allocations and perworker buffers.",
+    "No source mutation snapshot, byte-confirmation after hash match or complete read-error publication guard."
+  ],
+  "scope": "All three pinned source files read and Git blob hashes checked; extracted unchanged functions executed on macOS with explicit controlled hash adapter. No Linux io_uring/O_DIRECT, full CLI, throughput benchmark, actual xxHash collision or concurrent stress qualification."
+}

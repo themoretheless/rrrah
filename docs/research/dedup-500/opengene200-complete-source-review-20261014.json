@@ -1,0 +1,29 @@
+{
+  "status": "complete_four_file_source_review_with12bounded_comparison_controls",
+  "index": 200,
+  "repository": "OpenGene/dedup",
+  "commit": "f8d48bc9fd9a65103c6058be46f098545d21303a",
+  "whole_repo_complete": true,
+  "whole_runtime_qualified": false,
+  "fully_read_files": [
+    ".gitignore",
+    "LICENSE",
+    "README.md",
+    "dedup.py"
+  ],
+  "license": "Full MIT text read; no production source adopted.",
+  "controls": "docs/research/dedup-opengene200-controls-20261014.json",
+  "controls_sha256": "1b14717d6ec4606241026adb0c51ba4322e6cf20432cb2a5f6ec49caa7e8ace8",
+  "decision": "Reject domain-specific similarity/deletion semantics for file-image library; retain nontransitive comparison regression requirement.",
+  "findings": [
+    "Quality-dependent comparison is nontransitive; source block loop can use already-duplicate middle record to remove a later record unmatched to the surviving representative.",
+    "First-position low-quality mismatch always refuses, later low-quality mismatch can pass.",
+    "Forward/reverse sequences concatenated without retaining mate boundary.",
+    "Equal sequence returns before quality-shape validation; mismatched sequences can index missing quality and raise.",
+    "Legacy Python2syntax, pysam dependency without pinned version or upstream tests.",
+    "Source algorithm holds chromosome dictionaries plus global retained/deleted indices; no hard memory/work admission.",
+    "Missing reverse chromosome dictionary can raise in source cleanup; not executed with real BAM.",
+    "No source snapshot across two input reads; output same-as-input safety unqualified."
+  ],
+  "limits": "All four pinned files read and exact Git blob hashes verified. Original str_compare/block_compare source executed with standard quality-array adapter only. No Python2/pysam/BAM/file replacement, sequencing corpus, biological or clinical qualification."
+}

@@ -2,9 +2,9 @@
   "index": 463,
   "repository": "happy91512/MediaDeduplicationTool",
   "commit": "1cefb405db27263eda5d94fa5ea3502fde690841",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All six pinned repository files read; exact Git blob hashes verified; original modules exercised by 18 synthetic controls with progress-only adapter.",
   "decision": "wrapper",
-  "finding": "Media utility calls imagehash.phash and samples video; no independent normalization or full temporal proof.",
+  "finding": "Fifth-frame-only video identity, malformed-image TypeError, CSV truncation and basename overwrite reproduced. No implementation adoption.",
   "available_source_evidence": [
     {
       "path": "main.py",
@@ -25,10 +25,28 @@
       "lines": 95,
       "source": true,
       "test": false
+    },
+    {
+      "path": ".gitignore",
+      "local": "04-gitignore",
+      "sha256": "1674ac8ed7488af605be80c1f3a20bc1f4c2b47b8549346722948385ffc87e8c",
+      "truncated": false,
+      "lines": 162,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "Pipfile",
+      "local": "05-Pipfile",
+      "sha256": "01a215d2cd82bcd60b01538ef4b7af8780c8d4cb9353a8fae7dd495f319c94ec",
+      "truncated": false,
+      "lines": 15,
+      "source": false,
+      "test": false
     }
   ],
   "license_metadata": "MIT",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "Full MIT text read; no production copying.",
   "tests_detected": 0,
   "upstream_tests_run": false,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
@@ -54,5 +72,13 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "full_repository_review_complete": true,
+  "fully_read_files": 6,
+  "total_files": 6,
+  "whole_runtime_qualified": false,
+  "complete_source_review": "docs/research/dedup-media463-full-source-review-20261014.json",
+  "complete_runtime_audit": "docs/research/dedup-media463-controls-20261014.json",
+  "prior_registry_review": "media463-prior-registry-20261014.json"
 }

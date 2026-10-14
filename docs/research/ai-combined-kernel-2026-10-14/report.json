@@ -1,0 +1,36 @@
+{
+  "scope": "Conditional opaque native replacement numerical kernel; not PDF/display fidelity or a production optimization",
+  "change": "Enforce finite unit magnitude component bounds on original and candidate streams before applying unit absolute error terms",
+  "suite": {
+    "passed": 259,
+    "ignored": 12
+  },
+  "new_tests": {
+    "perturbation_scenarios": 144,
+    "quotient_component_comparisons": 576,
+    "all_short_budgets": "0..63 refused without spending remaining work",
+    "all_cancellation_checkpoints": "refused",
+    "invalid_cases": "nonfinite, negative errors, inverted/nonpositive alpha, out-of-unit original/candidate bounds, overflow",
+    "tiny_alpha": "1e-300 accepted if finite; smallest positive subnormal refuses after lower padding"
+  },
+  "original_diagnostic": {
+    "passed": 1,
+    "pixel_controls_identical": 5,
+    "comparison_log": "docs/research/ai-reference-interval-original-2026-10-13.log",
+    "comparison_log_sha256": "72c32819caf4dd2a207486a30535980ef9ea08045cd2aa78f77927cccc83e31e",
+    "conditional_bounds": [
+      "SPATIAL_COMBINED_NATIVE_BOUND complete=true max_error=Some(2.388288673245401e-7) source_complete=true required_points=Some(915362) observed_points=915362",
+      "SPATIAL_COMBINED_NATIVE_BOUND complete=true max_error=Some(2.384820879765391e-7) source_complete=true required_points=Some(326252) observed_points=326253"
+    ],
+    "without_certificate": 3,
+    "peak_bytes": 239197736,
+    "final_credit": 0
+  },
+  "limitations": [
+    "Source coverage and opaque-route proof remain caller obligations",
+    "Fixed opaque-tail arithmetic allowance is a separate prerequisite; tests are not a general derivation of all Pixel operations",
+    "No polygon clipping, final Pixel storage, ICC conversion or display-error certification",
+    "Ordinary4M/full-page execution and independent AI color fidelity remain open",
+    "No source samples skipped; no production merging enabled"
+  ]
+}

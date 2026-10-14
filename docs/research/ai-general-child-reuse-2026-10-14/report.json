@@ -1,0 +1,69 @@
+{
+  "scope": "Test-only native AI/PDF exact scratch-frame reuse; full-format/viewer qualification is separate",
+  "change": "General same-coordinate groups consume/reset the existing single scratch frame; non-retained End returns its child to that same slot. Different-space entry still releases the slot. No larger cache or sample skipping.",
+  "correctness": {
+    "suite_passed": 262,
+    "suite_ignored": 12,
+    "new_parity_cases": 32,
+    "reference": "Fresh execution stack independently for every fragment; exact Pixel storage equality",
+    "faults": "Every admission refusal/cancellation checkpoint of nested-group fixture releases all credit; missing sources and retry checked",
+    "negative_control": "Old policy deliberately fails the allocation-regression assertion:33 frame-size requests versus48 fresh-reference requests",
+    "original_pixel_controls_identical": 5,
+    "source_work_dispatch_and_conditional_bounds_identical": true,
+    "peak_managed_bytes": 239197736,
+    "final_credit": 0
+  },
+  "admissions_with_diagnostic_certificates": {
+    "before": [
+      70,
+      70,
+      317003,
+      66,
+      66
+    ],
+    "after": [
+      70,
+      70,
+      158531,
+      66,
+      66
+    ]
+  },
+  "benchmark": {
+    "old_median_ns": 739378479.0,
+    "new_median_ns": 324940833.5,
+    "speedup": 2.2754249474773998,
+    "reduction_percent": 56.05216506443651,
+    "order_after_warmup": "ABBA BAAB",
+    "scope": "Pixel replay only; excludes scene recording and profiling histograms",
+    "warmups": 2,
+    "measured_runs": 8,
+    "adjacent_pair_speedups": [
+      1.9355564929065048,
+      3.3779003276559756,
+      2.5966557208873646,
+      1.6306918698401922
+    ],
+    "all_four_pairs_faster": true,
+    "normal_work_limit": 4000000,
+    "old_admissions": 316997,
+    "new_admissions": 158525,
+    "request_reduction_percent": 49.99164029943501,
+    "timing_scope": "One complex pixel (199,25), excludes scene preparation; same frozen binary, no histogram in timing runs",
+    "variability": "Raw timings vary; all runs and discarded warmups retained"
+  },
+  "provenance": {
+    "benchmark_source_core_sha256": "793d703a629742571c330fcf261289a4e599c1507a8aaf5dc30e233b5d28ab45",
+    "current_source_has_same_optimization_core": true,
+    "benchmark_binary_sha256": "d8472cdf9fd79cbb839fcecd0662f891dd914689e95a02d202cbf0f0ca904ad2",
+    "final_test_binary_sha256": "1b23f14e57f484e447c668b037f4d931eb7a74e8cb63f8f0cd28a6d12837f1a8",
+    "note": "Only the additional refusal/cancellation test was appended after the timing binary was frozen; optimized function source unchanged"
+  },
+  "limitations": [
+    "Experimental CPU compositor; no production AI opening speedup claim",
+    "Credit request counts are not malloc-event counts or RSS",
+    "One-pixel benchmark does not establish full-page or100format throughput",
+    "Normal4M heavy pixels/full-page completion and independent AI geometry/color fidelity remain open",
+    "No NVIDIA/CUDA/physicalHDR qualification performed here"
+  ]
+}

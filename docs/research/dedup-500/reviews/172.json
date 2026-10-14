@@ -2,9 +2,9 @@
   "index": 172,
   "repository": "niqifan007/bitwarden_deduplicator",
   "commit": "8b6f052ad32dcdc6a6f479b0d5c5e166b8d52ab4",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "Complete five-file pinned source review with21real-pandas original-function controls; UTF8 detection adapter, full CLI unqualified.",
   "decision": "reject-domain",
-  "finding": "Bitwarden vault normalization and item removal; no image processing.",
+  "finding": "Numeric and NA coercion, ignored field differences, stale output and in-place overwrite reproduced on synthetic CSV. Domain rejected; no adoption.",
   "available_source_evidence": [
     {
       "path": "bitwarden_deduplicator.py",
@@ -15,10 +15,28 @@
       "lines": 195,
       "source": true,
       "test": false
+    },
+    {
+      "path": ".gitignore",
+      "local": "03-gitignore",
+      "sha256": "13c95eb09431300f8ce21a3d23f4dbab528bb3953cf10df2bc85b5303ad1d16c",
+      "truncated": false,
+      "lines": 28,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "requirements.txt",
+      "local": "04-requirements.txt",
+      "sha256": "792f7a62dbfbbf298807a7871e24500a265c5a353d412b2e538ae17fca5255ae",
+      "truncated": false,
+      "lines": 2,
+      "source": false,
+      "test": false
     }
   ],
   "license_metadata": "MIT",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "Actual full MIT read; no production copying.",
   "tests_detected": 0,
   "upstream_tests_run": false,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
@@ -44,5 +62,13 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "full_repository_review_complete": true,
+  "fully_read_files": 5,
+  "total_files": 5,
+  "whole_runtime_qualified": false,
+  "complete_source_review": "vault172-complete-source-review-20261014.json",
+  "complete_runtime_audit": "docs/research/dedup-vault172-controls-20261014.json",
+  "prior_registry_review": "vault172-prior-registry-20261014.json"
 }

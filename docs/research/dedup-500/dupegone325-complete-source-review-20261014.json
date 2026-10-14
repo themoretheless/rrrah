@@ -1,0 +1,32 @@
+{
+  "status": "complete_five_file_source_review_with15original_cpp_controls",
+  "index": 325,
+  "repository": "phiresky/dupegone",
+  "commit": "8044570b22cc0e87b6b4302611a41e0a71bd3520",
+  "whole_repo_complete": true,
+  "whole_runtime_qualified": false,
+  "fully_read_files": [
+    ".gitignore",
+    "LICENSE",
+    "Makefile",
+    "README.md",
+    "dupegone.cpp"
+  ],
+  "license": "Full GPLv3 text read; no production copying.",
+  "controls": "docs/research/dedup-dupegone325-controls-20261014.json",
+  "controls_sha256": "1e8f9b68dcc81c27d3d2e189217d66a071c0234324eadc1f6e0bea05d1e0b0ac",
+  "control_producer": "scripts/check-dedup-dupegone325-20261014.py",
+  "control_producer_sha256": "239f5397c688beaa1f6bf156f65cf8ee097557b5bce1dd0c7e2b9d8d02e8c1dc",
+  "findings": [
+    "Actual unchanged CLI reports distinct unreadable same-size files as duplicates: failed ifstream read hashes empty data without error.",
+    "File sizes narrow into int keys;1and2^32+1share bucket key on tested host. Size bucket ordering can interleave actual sizes; full multi-GB CLI miss not tested.",
+    "Digest-table hasher collapses65536distinct explicit keys into256hash outputs. Full digest key equality still distinguishes bucket collisions; this is performance weakness, not a demonstrated SHA1 collision.",
+    "SHA1 maxlen helper may read full8192-byte block beyond a shorter requested prefix. Normal64KiBprefix is block-aligned.",
+    "Cached hashes remain stale after content changes; no final source verification.",
+    "Computing fullhash on a copied file_info does not retain that cache in stored entry; repeated comparisons can reread contents.",
+    "Four equal files emit all six pair edges; physical hardlink aliases reported as duplicate path pair.",
+    "Initial documented Boost.System link flag fails on installed header-only Boost.System. Removing only obsolete link flag builds unchanged C++11 source against real Boost.Filesystem/OpenSSL.",
+    "Source accepts SHA1 match without direct byte confirmation; no source/error/cancellation/resource admission guards."
+  ],
+  "limits": "Five pinned repository files read and exact Git blob hashes verified. Fifteen original-function/actual CLI controls on synthetic local files; dependencies/link flags documented. No actual SHA1 collision, large sparse-file CLI, measured throughput, source concurrency stress or cross-platform qualification. README external benchmark image/figures not independently qualified."
+}

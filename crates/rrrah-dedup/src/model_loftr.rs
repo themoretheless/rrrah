@@ -1565,3 +1565,48 @@ pub fn search_loftr_native_bank_consensus_files(
         cancel,
     )
 }
+
+/// Exhaustive or completely scheduled two-direction collection confirmation.
+/// One lazy CPU model is shared across all pairs and directions; each direction
+/// retains its own proposal cap. Batch source/weights/generation guards and
+/// cumulative admission remain authoritative. Tensor allocations are not a
+/// hard process RSS bound. Outcomes establish local support, not file identity.
+///
+/// # Errors
+/// Policy/work refusal, source/model/provider failure or cancellation discards
+/// the report under the generic collection's publication rules.
+#[allow(clippy::too_many_arguments)]
+pub fn scan_loftr_native_bank_consensus_collection(
+    files: impl IntoIterator<Item = (u64, DecodeRequest)>,
+    schedule: Option<&crate::pair_schedule::CompletePairSchedule>,
+    weights: &Path,
+    policy: crate::portfolio_collection::NativeBankConsensusCollectionPolicy<'_>,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<
+    crate::collection::CollectionReport<crate::search_portfolio::NativeBankConsensusEvidence>,
+    crate::portfolio_collection::PortfolioCollectionError,
+> {
+    let mut model = None;
+    crate::portfolio_collection::scan_native_bank_consensus_collection_directional(
+        files,
+        schedule,
+        weights,
+        policy,
+        budget,
+        |is_forward, weights, left, right, budget, cancel| {
+            let cap = if is_forward {
+                policy.forward
+            } else {
+                policy.reverse
+            }
+            .search
+            .primary
+            .model
+            .proposals
+            .max_proposals;
+            proposals_with_model(&mut model, weights, left, right, cap, budget, cancel)
+        },
+        cancel,
+    )
+}

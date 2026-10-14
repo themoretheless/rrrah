@@ -1,0 +1,27 @@
+{
+  "status": "building",
+  "producer_pid": 73493,
+  "command": [
+    "cargo",
+    "+stable",
+    "test",
+    "--offline",
+    "--locked",
+    "--no-run",
+    "--test",
+    "portfolio_collection",
+    "--test",
+    "search_portfolio",
+    "--jobs",
+    "2",
+    "--target-dir",
+    "/private/tmp/rrrah-native-collection-target-20261014",
+    "--message-format=json"
+  ],
+  "plan": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-native-collection-harness-20261014.json",
+  "plan_sha256": "2b5e5ed78ee204d37f881a848bd3a6261c1722c628f0a95534ea4e8a702acfb8",
+  "producer_sha256": "2b650f0faf25ac974fae4244d998356a26bb69256a02193f83e52c93e7c030ec",
+  "rows": [],
+  "scope": "Exact two frozen integration test sources, LoFTR dependency enabled, standalone optimized Cargo harness. Existing build cache cloned for reuse only; source/runtime checks remain required. Not whole workspace qualification. Full selected tests use synthetic proposal providers; empty native adapter test checks lazy loading, not actual learned inference.",
+  "child_pid": 73722
+}

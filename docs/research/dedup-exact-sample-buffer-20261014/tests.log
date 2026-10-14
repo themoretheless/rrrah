@@ -1,0 +1,24 @@
+
+running 19 tests
+test interrupted_read_tests::interrupted_reads_observe_cancellation_before_retry ... ok
+test collision_tests::read_buffer_capacity_failure_is_explicit_and_retry_succeeds ... ok
+test cancelled_output_tests::partial_output_cancels_without_writing_remaining_bytes ... ok
+test cancelled_output_tests::interrupted_output_cancels_before_next_write_attempt ... ok
+test interrupted_read_tests::read_cancelled_before_first_attempt_does_not_touch_reader ... ok
+test interrupted_read_tests::short_reads_and_interruptions_preserve_content_and_eof_errors ... ok
+test cancelled_output_tests::healthy_short_interrupted_output_preserves_exact_range ... ok
+test cancelled_output_tests::zero_progress_and_output_errors_remain_typed_io_failures ... ok
+test collision_tests::verified_observations_detect_metadata_invisible_pruned_mutations ... ok
+test collision_tests::final_content_validation_rejects_change_even_when_metadata_matches ... ok
+test collision_tests::verified_prefix_binds_header_and_body_even_when_metadata_matches ... ok
+test observed_snapshot_policy_tests::replacement_after_initial_metadata_cannot_bypass_observed_size_limit ... ok
+test collision_tests::formerly_empty_entries_are_reopened_before_hash_or_equality ... ok
+test collision_tests::pair_comparison_rejects_last_checkpoint_mutations_on_both_outcomes ... ok
+test collision_tests::verified_prefix_policy_cancel_and_final_mutation_do_not_publish_headers ... ok
+test collision_tests::pair_comparison_confirms_bytes_and_refuses_digest_collision ... ok
+test collision_tests::colliding_samples_and_full_hashes_still_partition_by_bytes ... ok
+test collision_tests::pair_comparison_checks_policy_and_cancellation_at_every_checkpoint ... ok
+test cancellation_flag_tests::final_publication_observes_flag_without_reentering_caller ... ok
+
+test result: ok. 19 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.15s
+

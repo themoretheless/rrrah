@@ -26,6 +26,11 @@ class CollectionEvidence(unittest.TestCase):
         self.assertFalse(self.valid(log('63, 65')))
         self.assertFalse(self.valid(log(), full=False))
 
+    def test_exact_serial_libtest_heading_is_accepted(self):
+        prefix = 'test long_lived_large_collection_cache_preserves_swap_and_metal_frames ... '
+        self.assertTrue(self.valid(prefix + log()))
+        self.assertFalse(self.valid('test unrelated ... ' + log()))
+
     def test_serial_host_without_parallel_scratch(self):
         self.assertTrue(self.valid(log().replace('accelerated=150', 'accelerated=0')
                                    .replace('mid_batch_cancelled=150', 'mid_batch_cancelled=0')))

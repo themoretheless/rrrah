@@ -2,9 +2,9 @@
   "index": 325,
   "repository": "phiresky/dupegone",
   "commit": "8044570b22cc0e87b6b4302611a41e0a71bd3520",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "Complete pinned five-file source review with15original C++function/CLIcontrols; modern Boost link-only adapter, full platform/performance unqualified.",
   "decision": "reference",
-  "finding": "C++ SHA digest duplicate-file finder; no detected tests or byte confirmation shown by excerpt.",
+  "finding": "Actual CLI falsely duplicates unreadable distinct files;32bit size keys,256-value bucket hash and copied/stale caches reproduced. No production adoption.",
   "available_source_evidence": [
     {
       "path": "dupegone.cpp",
@@ -15,10 +15,28 @@
       "lines": 110,
       "source": true,
       "test": false
+    },
+    {
+      "path": ".gitignore",
+      "local": "03-gitignore",
+      "sha256": "d731597aaa53a0e5c6b4578934fc715bd61eb50868dbacc309bc67a2bbdc3388",
+      "truncated": false,
+      "lines": 1,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "Makefile",
+      "local": "04-Makefile",
+      "sha256": "664866e72c46973b4f80ae9fa081c6e715503580e7bf1693c522dddb22b506b1",
+      "truncated": false,
+      "lines": 11,
+      "source": false,
+      "test": false
     }
   ],
   "license_metadata": "GPL-3.0",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "Actual full GPLv3 read; no production copying.",
   "tests_detected": 0,
   "upstream_tests_run": false,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
@@ -44,5 +62,13 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "full_repository_review_complete": true,
+  "fully_read_files": 5,
+  "total_files": 5,
+  "whole_runtime_qualified": false,
+  "complete_source_review": "dupegone325-complete-source-review-20261014.json",
+  "complete_runtime_audit": "docs/research/dedup-dupegone325-controls-20261014.json",
+  "prior_registry_review": "dupegone325-prior-registry-20261014.json"
 }

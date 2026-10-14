@@ -2,9 +2,9 @@
   "index": 200,
   "repository": "OpenGene/dedup",
   "commit": "f8d48bc9fd9a65103c6058be46f098545d21303a",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "Complete pinned four-file source review and12bounded original comparison controls; legacy pysam/BAM runtime unqualified.",
   "decision": "reject-domain",
-  "finding": "cfDNA sequencing deduplication; biological read data.",
+  "finding": "Quality-weighted sequence similarity is nontransitive and already-duplicate intermediary can eliminate unmatched survivor. Domain rejected; no production adoption.",
   "available_source_evidence": [
     {
       "path": "dedup.py",
@@ -15,10 +15,19 @@
       "lines": 179,
       "source": true,
       "test": false
+    },
+    {
+      "path": ".gitignore",
+      "local": "03-gitignore",
+      "sha256": "9cde0277827d89b86382822f9ac4b8519f3db2cf535aab10e5fc931b3a4879f9",
+      "truncated": false,
+      "lines": 101,
+      "source": false,
+      "test": false
     }
   ],
   "license_metadata": "MIT",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "Full MIT license read; no production copying.",
   "tests_detected": 0,
   "upstream_tests_run": false,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
@@ -44,5 +53,13 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "full_repository_review_complete": true,
+  "fully_read_files": 4,
+  "total_files": 4,
+  "whole_runtime_qualified": false,
+  "complete_source_review": "opengene200-complete-source-review-20261014.json",
+  "complete_runtime_audit": "docs/research/dedup-opengene200-controls-20261014.json",
+  "prior_registry_review": "opengene200-prior-registry-20261014.json"
 }

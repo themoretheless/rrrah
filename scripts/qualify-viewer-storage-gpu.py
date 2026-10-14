@@ -17,7 +17,7 @@ def collection_evidence(text, seconds, full_hdr, passed, ignored):
     """Verify requested duration, complete frame counts and final accounting."""
     output = (4000, 3000) if full_hdr else (63, 65)
     seeds = re.findall(
-        r'^long-lived collection adapter: Metal .+; duration=(\d+)s; frames=8; payload=192000000; hdr_output=\[(\d+), (\d+)\]$',
+        r'^(?:test long_lived_large_collection_cache_preserves_swap_and_metal_frames \.\.\. )?long-lived collection adapter: Metal .+; duration=(\d+)s; frames=8; payload=192000000; hdr_output=\[(\d+), (\d+)\]$',
         text, re.MULTILINE)
     completed = re.findall(
         r'^long-lived collection complete: cycles=(\d+); elapsed=(\d+(?:\.\d+)?)s; reads=(\d+); writes=8; root=0; queue=0$',

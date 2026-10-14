@@ -2,6 +2,45 @@
 //! Candidate is test-only; production retains the full-distance matcher.
 use super::*;
 
+#[test]
+#[allow(clippy::cast_precision_loss)] // The generated integers contain at most 53 bits.
+fn unrolled_distance_blocks_preserve_scalar_bits_and_partial_lanes() {
+    let mut state = 173_u64;
+    let mut descriptor = || {
+        let mut values = [0.; 128];
+        for value in &mut values {
+            state = state.wrapping_mul(6_364_136_223_846_793_005).wrapping_add(1);
+            *value = (state >> 11) as f64 / (1_u64 << 53) as f64;
+        }
+        let norm = values.iter().map(|v| v * v).sum::<f64>().sqrt();
+        for value in &mut values {
+            *value /= norm;
+        }
+        GradientDescriptor(values)
+    };
+    for _ in 0..256 {
+        let a = descriptor();
+        let b: [GradientFeature; 4] = std::array::from_fn(|_| GradientFeature {
+            position: [0.; 2],
+            descriptor: descriptor(),
+        });
+        for count in 0..=4 {
+            let actual = distances_four(&a, &b[..count]);
+            for (lane, distance) in actual.iter().enumerate() {
+                let expected = if lane < count {
+                    a.0.iter()
+                        .zip(&b[lane].descriptor.0)
+                        .map(|(x, y)| (x - y) * (x - y))
+                        .sum::<f64>()
+                } else {
+                    0.
+                };
+                assert_eq!(distance.to_bits(), expected.to_bits());
+            }
+        }
+    }
+}
+
 fn exhaustive(
     left: &[GradientFeature],
     right: &[GradientFeature],

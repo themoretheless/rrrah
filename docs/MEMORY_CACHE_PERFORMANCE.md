@@ -531,3 +531,18 @@ scratch and final index/store return to zero. Source/comparison Vec allocations
 are outside accounting. This measures warm local-file reading, including API
 allocation/copy/verification overhead, not historical before/after or viewer
 presentation speed. Scoped reading is already used by streamed region/LOD paths.
+
+### 2026-10-14: experimental native AI/PDF group scratch
+
+The test-only spatial compositor reuses its existing one-frame scratch slot
+for general same-coordinate groups as well as fused single-source groups.
+Reset restores backdrop, coverage and knockout before every use; a different
+space releases the old frame before replacement. Source samples are unchanged.
+On VectorApple pixel (199,25), same-binary ABBA/BAAB replay medians were
+739.378 ms before and 324.941 ms after; managed-credit requests fell from
+316997 to 158525. All four adjacent pairs improved, with visible timing
+variation retained in the report. This measures pixel replay, excluding scene
+preparation, and establishes no production viewer/full-page speedup.
+Five original controls stayed exact; suite262passed/12ignored; nested fault,
+cancel and retry checks release all credit. See
+`research/ai-general-child-reuse-2026-10-14/report.json`.

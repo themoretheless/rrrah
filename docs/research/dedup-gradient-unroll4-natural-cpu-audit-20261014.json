@@ -1,0 +1,93 @@
+{
+  "status": "verified_eight_direction_natural_kernel_experiment_no_adoption",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-unroll4-natural-cpu-20261014.json": "8da40c2bfa662eb5262b3685bd598e20d71f861809b541c185fea2fd3ffa1e2b",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-gradient-unroll4-natural-cpu-20261014.py": "6c43782d489bd0527375c08fbad14ce571799593f9a8bad13a76c9458fd801f5"
+  },
+  "rows": [
+    {
+      "index": 0,
+      "label": "self_native",
+      "median_cpu_ratio": 0.9122962584446138,
+      "ratio_range": [
+        0.8805014649626514,
+        0.9852708153269913
+      ],
+      "bitwise_distance_pairs": 1048576
+    },
+    {
+      "index": 1,
+      "label": "self_native",
+      "median_cpu_ratio": 0.8963296138415245,
+      "ratio_range": [
+        0.7877892820934459,
+        1.01443074443091
+      ],
+      "bitwise_distance_pairs": 1048576
+    },
+    {
+      "index": 2,
+      "label": "table_true",
+      "median_cpu_ratio": 0.9186099937175926,
+      "ratio_range": [
+        0.8283778607679697,
+        1.012970168612203
+      ],
+      "bitwise_distance_pairs": 1048576
+    },
+    {
+      "index": 3,
+      "label": "table_true",
+      "median_cpu_ratio": 0.9021360979682707,
+      "ratio_range": [
+        0.7886721305167483,
+        0.9688745573669613
+      ],
+      "bitwise_distance_pairs": 1048576
+    },
+    {
+      "index": 4,
+      "label": "portrait_wrong",
+      "median_cpu_ratio": 0.9102619248790276,
+      "ratio_range": [
+        0.8004279483170281,
+        0.9478169830584765
+      ],
+      "bitwise_distance_pairs": 1048576
+    },
+    {
+      "index": 5,
+      "label": "portrait_wrong",
+      "median_cpu_ratio": 0.9092734972826635,
+      "ratio_range": [
+        0.7448655081146546,
+        0.9605795609046097
+      ],
+      "bitwise_distance_pairs": 1048576
+    },
+    {
+      "index": 6,
+      "label": "composite_square_wrong",
+      "median_cpu_ratio": 0.9045219138903717,
+      "ratio_range": [
+        0.8291397688034752,
+        1.0173177945156169
+      ],
+      "bitwise_distance_pairs": 1048576
+    },
+    {
+      "index": 7,
+      "label": "composite_square_wrong",
+      "median_cpu_ratio": 0.914246519093627,
+      "ratio_range": [
+        0.7620981215405409,
+        0.9562325857580158
+      ],
+      "bitwise_distance_pairs": 1048576
+    }
+  ],
+  "bitwise_distance_pairs": 8388608,
+  "unique_ordered_pairs": 7,
+  "scope": "Retained natural1024-feature banks, eight directions/seven unique ordered pairs, CPU kernel timing only. Exact all-pair distance bits checked separately. No fresh extraction, complete matcher/cancellation/native search or corpus qualification; production unchanged.",
+  "limits": "CPU includes process startup/feature loading/teardown. No statistical significance, independent fresh feature extraction, full matcher or whole native operation claim."
+}

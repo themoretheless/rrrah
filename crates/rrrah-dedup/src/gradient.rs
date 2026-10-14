@@ -759,16 +759,55 @@ fn distances_four(a: &GradientDescriptor, b: &[GradientFeature]) -> [f64; 4] {
     let b2 = &b[2.min(last)].descriptor.0;
     let b3 = &b[3.min(last)].descriptor.0;
     let (mut s0, mut s1, mut s2, mut s3) = (0., 0., 0., 0.);
-    for k in 0..128 {
-        let x = a.0[k];
-        let d0 = x - b0[k];
-        s0 += d0 * d0;
-        let d1 = x - b1[k];
-        s1 += d1 * d1;
-        let d2 = x - b2[k];
-        s2 += d2 * d2;
-        let d3 = x - b3[k];
-        s3 += d3 * d3;
+    for base in (0..128).step_by(4) {
+        {
+            let k = base + 0;
+            let x = a.0[k];
+            let d0 = x - b0[k];
+            s0 += d0 * d0;
+            let d1 = x - b1[k];
+            s1 += d1 * d1;
+            let d2 = x - b2[k];
+            s2 += d2 * d2;
+            let d3 = x - b3[k];
+            s3 += d3 * d3;
+        }
+        {
+            let k = base + 1;
+            let x = a.0[k];
+            let d0 = x - b0[k];
+            s0 += d0 * d0;
+            let d1 = x - b1[k];
+            s1 += d1 * d1;
+            let d2 = x - b2[k];
+            s2 += d2 * d2;
+            let d3 = x - b3[k];
+            s3 += d3 * d3;
+        }
+        {
+            let k = base + 2;
+            let x = a.0[k];
+            let d0 = x - b0[k];
+            s0 += d0 * d0;
+            let d1 = x - b1[k];
+            s1 += d1 * d1;
+            let d2 = x - b2[k];
+            s2 += d2 * d2;
+            let d3 = x - b3[k];
+            s3 += d3 * d3;
+        }
+        {
+            let k = base + 3;
+            let x = a.0[k];
+            let d0 = x - b0[k];
+            s0 += d0 * d0;
+            let d1 = x - b1[k];
+            s1 += d1 * d1;
+            let d2 = x - b2[k];
+            s2 += d2 * d2;
+            let d3 = x - b3[k];
+            s3 += d3 * d3;
+        }
     }
     [s0, s1, s2, s3]
 }

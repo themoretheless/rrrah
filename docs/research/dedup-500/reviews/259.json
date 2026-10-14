@@ -2,9 +2,9 @@
   "index": 259,
   "repository": "x-stp/deduplicatz",
   "commit": "2840c76c6a03615b7c7d7edf06eca54511db73fc",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "Complete three-file pinned source review, Git blob verification and eight bounded unchanged-function controls. Full Linux CLI unqualified.",
   "decision": "reference",
-  "finding": "C xxHash3 text/blob deduper; no tests detected, hash-only identity and memory claims unqualified.",
+  "finding": "Zero-hash sentinel, probe-limit loss, rehash loss, unterminated-line loss, long-line suffix and borrowed-buffer mutation reproduced; no production adoption.",
   "available_source_evidence": [
     {
       "path": "deduplicatz.c",
@@ -18,7 +18,7 @@
     }
   ],
   "license_metadata": "AGPL-3.0",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "Full AGPLv3 and source license header read; no production copying.",
   "tests_detected": 0,
   "upstream_tests_run": false,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
@@ -44,5 +44,13 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "full_repository_review_complete": true,
+  "fully_read_files": 3,
+  "total_files": 3,
+  "whole_runtime_qualified": false,
+  "complete_source_review": "deduplicatz-complete-source-review-20261014.json",
+  "complete_runtime_audit": "docs/research/dedup-deduplicatz-controls-20261014/audit.json",
+  "prior_registry_review": "deduplicatz-prior-registry-259-20261014.json"
 }

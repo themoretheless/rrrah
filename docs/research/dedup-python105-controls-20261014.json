@@ -1,0 +1,31 @@
+{
+  "status": "sixteen_original_function_controls_confirmed",
+  "count": 16,
+  "checks": [
+    "real_md5_matches_standard_hash",
+    "equal_content_copies_same_hash",
+    "hardlink_inode_comparison_true",
+    "equal_content_distinct_copies_inode_comparison_false",
+    "same_inode_different_devices_misidentified_as_same_file",
+    "changed_file_keeps_path_only_cache_hit",
+    "deleted_file_keeps_path_only_cache_hit",
+    "inode_dictionary_groups_different_devices",
+    "repr_cache_roundtrip",
+    "truncated_cache_raises_instead_of_retaining_valid_prefix",
+    "dictionary_array_conversion_returns_nested_lists",
+    "original_calculate_records_real_file",
+    "hash_failure_is_logged_and_swallowed",
+    "injected_hash_collision_groups_distinct_bytes_without_confirmation",
+    "old_hash_published_with_post_mutation_size",
+    "coordinated_membership_race_records_same_inode_twice"
+  ],
+  "repository": "sunhanaix/dedup_files",
+  "commit": "6aa92d34f28654b9b942b8822634ebca2670be1b",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/sunhanaix--dedup_files/01-LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/sunhanaix--dedup_files/00-README.md": "dbec936cfe0bd0e8f91588d81890e6cce754488faff5942cfe322323c662c177",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/sunhanaix--dedup_files/02-dedup_files.py": "ed11e2646a5c91fe48f828ddccc28372cf8a1ae167fd2891079ca63352dc268b",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/sunhanaix--dedup_files/03-util.py": "5590f58511c711dfba6dc56fb62704398d027f487f04699475638c13c8fd0ea9"
+  },
+  "scope": "Original function ASTs compiled unchanged; upstream module startup, registry, scan-all-directories, deletion/link replacement never executed. Real temporary files/MD5 plus explicit hash collision, cross-device stat and coordinated dictionary adapters. Not actual MD5 collision, Windows filesystem/platform qualification or probabilistic concurrency stress."
+}

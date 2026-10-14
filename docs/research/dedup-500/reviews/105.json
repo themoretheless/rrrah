@@ -2,9 +2,9 @@
   "index": 105,
   "repository": "sunhanaix/dedup_files",
   "commit": "6aa92d34f28654b9b942b8822634ebca2670be1b",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "Complete four-file pinned source review with16bounded original-function controls. Full destructive CLI/platform behavior unqualified.",
   "decision": "reference",
-  "finding": "Threaded file MD5 dictionaries explicitly assume no collisions; rrrah must add full byte confirmation.",
+  "finding": "Stale path-only cache, inode/device confusion, hash-stat mutation and coordinated membership race reproduced. No byte confirmation or production adoption.",
   "available_source_evidence": [
     {
       "path": "dedup_files.py",
@@ -28,7 +28,7 @@
     }
   ],
   "license_metadata": "Apache-2.0",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "Actual full Apache2.0 read; no production copying.",
   "tests_detected": 0,
   "upstream_tests_run": false,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
@@ -54,5 +54,13 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "full_repository_review_complete": true,
+  "fully_read_files": 4,
+  "total_files": 4,
+  "whole_runtime_qualified": false,
+  "complete_source_review": "python105-complete-source-review-20261014.json",
+  "complete_runtime_audit": "docs/research/dedup-python105-controls-20261014.json",
+  "prior_registry_review": "python105-prior-registry-20261014.json"
 }

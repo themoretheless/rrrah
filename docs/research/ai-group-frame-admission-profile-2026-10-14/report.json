@@ -1,0 +1,76 @@
+{
+  "scope": "Bounded opt-in admission-size profiling of test-only native AI compositor",
+  "pixel": [
+    199,
+    25
+  ],
+  "slot_limit": 64,
+  "distinct_sizes": 34,
+  "overflow": 0,
+  "route_admission_requests": 317003,
+  "size_counts": {
+    "1536": 1,
+    "1008": 1,
+    "768": 1,
+    "328": 7,
+    "3064": 3,
+    "208": 1,
+    "0": 7,
+    "2184": 1,
+    "720": 10,
+    "456": 1,
+    "314912": 1,
+    "3904": 1,
+    "1024": 1,
+    "216": 1,
+    "288": 1,
+    "312": 1,
+    "43168": 1,
+    "608": 1,
+    "3072": 1,
+    "316568": 1,
+    "1216": 1,
+    "6080": 1,
+    "2776": 1,
+    "512": 2,
+    "42472": 1,
+    "1576": 1,
+    "53720": 1,
+    "1344": 1,
+    "112": 1,
+    "107092": 1,
+    "144": 1,
+    "192": 79237,
+    "48": 158474,
+    "16": 79237
+  },
+  "frame_layout_bytes": {
+    "PaintFrame": 192,
+    "Pixel": 48,
+    "PreciseCoverage": 16
+  },
+  "matching_group_frame_requests": 316948,
+  "matching_group_frame_request_percent": 99.98265000646681,
+  "matching_frame_sets": 79237,
+  "matching_frame_cumulative_requested_bytes": 24088048,
+  "other_requests": 55,
+  "source_evidence": [
+    "native_frame.rs PaintFrame::admitted requests sizeofSelf",
+    "native_frame.rs Frame::admitted requests initial/current Pixel buffers and coverage",
+    "native_spatial.rs general Begin discards fused_child then admits a new child; End retains only fixed group slots"
+  ],
+  "controls": {
+    "native_pixel_identical": true,
+    "command_work_and_route_requests_unchanged": true,
+    "peak_bytes": 239197736,
+    "final_credit": 0
+  },
+  "limitations": [
+    "Request counts are not allocator malloc-event counts",
+    "Matching size pattern and source inspection identify the dominant construction path; no callsite-specific allocator hook added",
+    "Profile is diagnostic-only; its fixed metadata receives separate credit",
+    "Initial32slot run overflowed and is retained as incomplete evidence",
+    "No frame reuse optimization or speedup claim yet",
+    "Full AI fidelity, normal4M fullpage and100format goal remain open"
+  ]
+}

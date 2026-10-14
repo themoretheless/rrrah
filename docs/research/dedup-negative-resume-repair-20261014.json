@@ -1,0 +1,10 @@
+{
+  "status": "controller_repair_preserves_original74completed_cases",
+  "old_process_command_matches_before_resume": [],
+  "v1_report": "docs/research/dedup-consensus-current-negative-resume-20261014.json",
+  "v1_report_sha256": "387cd6821f6060da09bfce74f33e9d864513c9920eff5aa577b6534330ebe77b",
+  "reason": "Optional reused_control at plan229 would trip v1 assertion. Controller deliberately terminated before any new case completed; its finally block reaped owned process group. V2 executes this optional case freshly and records reused=False, preserving original policy arguments.",
+  "v2_producer": "scripts/resume-dedup-consensus-current-negative-v2-20261014.py",
+  "v2_producer_sha256": "36151cf114267211c36bf0f6d5cbeadbad0ab5330158e5c42574db582b20f30f",
+  "limits": "No new accuracy evidence yet. Original74complete reports unchanged; original frozen pre-cache binary is retained, not latest collection/default source."
+}

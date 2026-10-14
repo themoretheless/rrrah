@@ -1,0 +1,38 @@
+{
+  "status": "twenty_one_original_function_controls_with_real_pandas_confirmed",
+  "repository": "niqifan007/bitwarden_deduplicator",
+  "commit": "8b6f052ad32dcdc6a6f479b0d5c5e166b8d52ab4",
+  "count": 21,
+  "checks": [
+    "identical_selected_keys_collapse",
+    "different_text_passwords_remain_distinct",
+    "different_notes_discarded_by_subset_identity",
+    "different_folder_discarded_by_subset_identity",
+    "different_login_totp_discarded_by_subset_identity",
+    "numeric_password_strings_coerce_and_collapse",
+    "numeric_username_strings_coerce_and_collapse",
+    "literal_na_password_and_empty_collapse",
+    "full_uri_mode_retains_different_paths",
+    "domain_mode_collapses_different_paths",
+    "domain_mode_adds_export_column",
+    "domain_mode_collapses_different_schemes",
+    "domain_parser_retains_userinfo_and_port",
+    "schemeless_uri_returns_entire_original_path",
+    "domain_case_is_not_normalized",
+    "missing_columns_return_none_and_leave_stale_output",
+    "encoding_read_missing_input_raises_outside_read_handler",
+    "csv_parser_failure_is_swallowed_without_output",
+    "output_parent_failure_propagates",
+    "same_input_output_is_permitted_and_overwrites_source",
+    "output_uses_utf8_bom"
+  ],
+  "pandas_version": "2.2.3",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/niqifan007--bitwarden_deduplicator/03-gitignore": "13c95eb09431300f8ce21a3d23f4dbab528bb3953cf10df2bc85b5303ad1d16c",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/niqifan007--bitwarden_deduplicator/04-requirements.txt": "792f7a62dbfbbf298807a7871e24500a265c5a353d412b2e538ae17fca5255ae",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/niqifan007--bitwarden_deduplicator/01-LICENSE": "b2b1d9ddfbdc02e658d4b1f113b3fa5d68eeda78d1087c8aea1fdfb446f3c521",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/niqifan007--bitwarden_deduplicator/00-README.md": "cb254a0d559092323febc9c79d2f4fd5b2cc81a946b3b298765b8d9d1e5becb1",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/niqifan007--bitwarden_deduplicator/02-bitwarden_deduplicator.py": "99da1f7870918f4fd40d472e6c97918f96b1b9adb8be09ae91ccf847c418d80c"
+  },
+  "scope": "Unchanged original function ASTs and real pandas CSV input/output on synthetic temporary records only. Missing chardet dependency replaced by explicit UTF8 detection adapter; automatic encoding detection, complete CLI/interactive flows and real vault data not executed. No source adoption."
+}

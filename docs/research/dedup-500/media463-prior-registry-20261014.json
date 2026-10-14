@@ -1,0 +1,58 @@
+{
+  "index": 463,
+  "repository": "happy91512/MediaDeduplicationTool",
+  "commit": "1cefb405db27263eda5d94fa5ea3502fde690841",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "wrapper",
+  "finding": "Media utility calls imagehash.phash and samples video; no independent normalization or full temporal proof.",
+  "available_source_evidence": [
+    {
+      "path": "main.py",
+      "local": "02-main.py",
+      "url": "https://github.com/happy91512/MediaDeduplicationTool/blob/1cefb405db27263eda5d94fa5ea3502fde690841/main.py",
+      "sha256": "efeb2e776009a1562d7ea8e2f3f4e1b6c6867c061da6f7c0858fb3d186b03b13",
+      "truncated": false,
+      "lines": 81,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tool.py",
+      "local": "03-tool.py",
+      "url": "https://github.com/happy91512/MediaDeduplicationTool/blob/1cefb405db27263eda5d94fa5ea3502fde690841/tool.py",
+      "sha256": "21561dd3ce203b2eab21094fbe5a4917bbf02b296b1646ac8a823f0d2513da9e",
+      "truncated": false,
+      "lines": 95,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/happy91512/MediaDeduplicationTool/blob/1cefb405db27263eda5d94fa5ea3502fde690841/README.md",
+      "sha256": "f77350b5967565792642fbb304946c363072f8aa8e00074ded10a203e3b37048",
+      "truncated": false,
+      "lines": 80,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/happy91512/MediaDeduplicationTool/blob/1cefb405db27263eda5d94fa5ea3502fde690841/LICENSE",
+      "sha256": "f1aae5906c72d6826699c93a61dc66b741cea249a0b91216b142fd20cb0c97ad",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

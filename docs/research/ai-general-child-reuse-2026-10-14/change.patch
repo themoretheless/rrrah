@@ -1,0 +1,148 @@
+--- native_spatial-before.rs
++++ vendor/hayro/src/native_spatial.rs
+@@ -884,7 +884,8 @@
+     if point_override.is_some() {*remaining=remaining.checked_sub(regions.len())?;}
+     let mut execution_stack:Option<(Vec<Entry>,Credit)>=None;
+     let mut root_frame:Option<Box<PaintFrame>>=None;
+-    let mut fused_child:Option<Box<PaintFrame>>=None;
++    let mut reusable_child:Option<Box<PaintFrame>>=None;
++    let reuse_general_children=std::env::var_os("RRRAH_AI_DISABLE_GENERAL_CHILD_REUSE").is_none();
+     let mut last_route:Option<usize>=None;
+     let observe_moments=std::env::var_os("RRRAH_AI_FRAGMENT_MOMENTS").is_some();
+     let route_is_affine=std::cell::Cell::new(false);
+@@ -1233,7 +1234,7 @@
+                 if position+2<route.len() && matches!(commands[route[position+2]],SpatialCommand::End) {
+                     if let SpatialCommand::NativeSampledPaint {alpha_is_shape:source_ais,mode:source_mode,..}=&commands[route[position+1]] {
+                         let source=resolve_native(route[position+1],remaining)?;
+-                        let mut child=if let Some(mut cached)=fused_child.take() {
++                        let mut child=if let Some(mut cached)=reusable_child.take() {
+                             if cached.reset_single_pixel_child(&stack.last()?.0,*isolated,*knockout,cancelled)? {cached}
+                             else {drop(cached);stack.last_mut()?.0.child(*isolated,*knockout,cancelled,admit)?}
+                         } else {stack.last_mut()?.0.child(*isolated,*knockout,cancelled,admit)?};
+@@ -1244,7 +1245,7 @@
+                         }
+                         let mask=resolve_mask(active_mask,remaining)?;
+                         stack.last_mut()?.0.apply_retained_group_masked(&child,*opacity,*alpha_is_shape,Some(&[mask]),*mode,cancelled)?;
+-                        fused_child=Some(child);
++                        reusable_child=Some(child);
+                         position+=3;continue;
+                     }
+                 }
+@@ -1310,14 +1311,19 @@
+                 SpatialCommand::SetMask {..}|SpatialCommand::SetBudgetedMask {..}=>active_mask=Some(command_index),
+                 SpatialCommand::ClearMask=>active_mask=None,
+                 SpatialCommand::Begin {isolated,knockout,opacity,alpha_is_shape,mode}=>{
+-                    fused_child=None;
++                    if !reuse_general_children {reusable_child=None;}
+                     work_trace.hit(4);
+-                    let child=stack.last_mut()?.0.child(*isolated,*knockout,cancelled,admit)?;
++                    // Consume the same single scratch slot used by fused groups.
++                    // Reset all backdrop/coverage/knockout state before reuse.
++                    let child=if let Some(mut cached)=reusable_child.take() {
++                        if cached.reset_single_pixel_child(&stack.last()?.0,*isolated,*knockout,cancelled)? {cached}
++                        else {drop(cached);stack.last_mut()?.0.child(*isolated,*knockout,cancelled,admit)?}
++                    } else {stack.last_mut()?.0.child(*isolated,*knockout,cancelled,admit)?};
+                     stack.push((child,Some((*opacity,*alpha_is_shape,*mode,active_mask,position))));
+                     active_mask=None;
+                 },
+                 SpatialCommand::BeginInSpace {space:target,knockout,opacity,alpha_is_shape,mode}=>{
+-                    fused_child=None;
++                    reusable_child=None;
+                     work_trace.hit(4);
+                     let child=stack.last_mut()?.0.isolated_child_in_space(target,*knockout,cancelled,admit)?;
+                     stack.push((child,Some((*opacity,*alpha_is_shape,*mode,active_mask,position))));active_mask=None;
+@@ -1347,6 +1353,9 @@
+                     stack.last_mut()?.0.apply_retained_group_masked(&child,opacity,ais,Some(&[resolve_mask(mask,remaining)?]),mode,cancelled)?;
+                     if routes[route_index].groups[begin].end.is_some() {
+                         routes[route_index].groups[begin].frame=Some(child);
++                    } else if reuse_general_children {
++                        // Replace, never grow, the one-frame scratch slot.
++                        reusable_child=Some(child);
+                     }
+                     active_mask=mask;
+                 },
+@@ -3313,3 +3322,84 @@
+     let no_owner=SpatialCommand::NativeSampledPaint {cells:None,field:NativeField::AffineOwner,regions:&[0],sample:&sample,owners:&[],alpha_is_shape:false,mode:BlendMode::Normal};
+     assert!(matches!(opaque_error_route(&[no_owner],&[0]),OpaqueErrorRoute::Unsupported));
+ }
++
++
++#[test]
++fn reused_general_child_matches_fresh_point_frames_across_nested_variable_groups() {
++    use super::native_blend::Model;
++    use hayro_interpret::color::{Color,AlphaColor};
++    use std::sync::{Arc,atomic::{AtomicUsize,Ordering}};
++    struct Credit(Arc<AtomicUsize>,usize);
++    impl Drop for Credit {fn drop(&mut self){self.0.fetch_sub(self.1,Ordering::Relaxed);}}
++    let rgb=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
++    let mut paths=vec![kurbo::Rect::new(0.,0.,1.,1.).to_path(0.1)];
++    for i in 0..16 {paths.push(kurbo::Rect::new(i as f64/16.,0.,(i+1) as f64/16.,1.).to_path(0.1));}
++    let regions:Vec<_>=paths.iter().map(|p|(p,Fill::NonZero)).collect();
++    let first=|p:kurbo::Point,_:&dyn Fn()->bool,_:&mut usize,_:Option<usize>|Some(Some(NativeSpatialSample {
++        pixel:Pixel::from_native(Model::Rgb,&[p.x,0.2,0.6],0.4).unwrap(),space:rgb.color_space(),cell_key:None}));
++    let second=|p:kurbo::Point,_:&dyn Fn()->bool,_:&mut usize,_:Option<usize>|Some(if p.x<0.5 {Some(NativeSpatialSample {
++        pixel:Pixel::from_native(Model::Rgb,&[0.8,p.y*0.4+0.1,0.3],0.7).unwrap(),space:rgb.color_space(),cell_key:None})} else {None});
++    let mask=|p:kurbo::Point,_:&dyn Fn()->bool|Some(0.25+p.y*0.5);
++    fn make<'a>(sample:&'a NativeSpatialSampler<'a>)->SpatialCommand<'a> {
++        SpatialCommand::NativeSampledPaint {cells:None,field:NativeField::Unknown,regions:&[0],sample,owners:&[],alpha_is_shape:false,mode:BlendMode::Normal}
++    }
++    for isolated in [false,true] {for knockout in [false,true] {for masked in [false,true] {
++        for mode in [BlendMode::Normal,BlendMode::Multiply,BlendMode::Screen,BlendMode::HardLight] {
++            let mut commands=Vec::new();if masked {commands.push(SpatialCommand::SetMask {sample:&mask,sample_cost:1});}
++            commands.extend([SpatialCommand::Begin {isolated,knockout,opacity:0.6,alpha_is_shape:false,mode},make(&first),
++                SpatialCommand::Begin {isolated:!isolated,knockout:!knockout,opacity:0.7,alpha_is_shape:true,mode:BlendMode::HardLight},
++                make(&second),SpatialCommand::End,make(&first),SpatialCommand::End]);
++            let backdrop=Pixel::from_native(Model::Rgb,&[0.2,0.7,0.4],0.6).unwrap();
++            let used=Arc::new(AtomicUsize::new(0));let frames=std::cell::Cell::new(0usize);
++            let admit=|bytes| {used.fetch_add(bytes,Ordering::Relaxed);
++                if bytes==std::mem::size_of::<super::native_frame::PaintFrame>() {frames.set(frames.get()+1);}
++                Some(Box::new(Credit(used.clone(),bytes)) as Box<dyn std::any::Any+Send+Sync>)};
++            let actual=compose_grouped_polygon_pixel(&regions,&commands,rgb.color_space(),backdrop,0,0,1_000_000,1_000_000,&||false,&admit).unwrap();
++            let actual_frames=frames.get();assert_eq!(used.load(Ordering::Relaxed),0);frames.set(0);
++            // Each reference point owns a new stack and drops it before the
++            // next fragment; no inter-fragment child state can survive.
++            let expected=compose_cells(&regions,backdrop,0,0,1_000_000,&||false,&admit,None,None,None,None,None,None,
++                &mut |_,point,_,_|compose_grouped_polygon_point(&regions,&commands,rgb.color_space(),backdrop,point,1_000_000,1_000_000,&||false,&admit)).unwrap();
++            assert!(actual.same_storage(expected),"isolated={isolated} knockout={knockout} masked={masked} mode={mode:?}");
++            assert_eq!(used.load(Ordering::Relaxed),0);
++            assert!(actual_frames*2<frames.get(),"reused={actual_frames} fresh={}",frames.get());
++        }
++    }}}
++}
++
++
++#[test]
++fn reused_general_child_refusals_and_cancellations_release_nested_frames() {
++    use super::native_blend::Model;
++    use hayro_interpret::color::{Color,AlphaColor};
++    use std::sync::{Arc,atomic::{AtomicUsize,Ordering}};
++    struct Credit(Arc<AtomicUsize>,usize);
++    impl Drop for Credit {fn drop(&mut self){self.0.fetch_sub(self.1,Ordering::Relaxed);}}
++    let used=Arc::new(AtomicUsize::new(0));let requests=std::cell::Cell::new(0);let deny=std::cell::Cell::new(usize::MAX);
++    let admit=|bytes| {requests.set(requests.get()+1);if requests.get()==deny.get(){return None;}
++        used.fetch_add(bytes,Ordering::Relaxed);Some(Box::new(Credit(used.clone(),bytes)) as Box<dyn std::any::Any+Send+Sync>)};
++    let rgb=Color::from_rgba(AlphaColor::new([0.,0.,0.,1.]));
++    let backdrop=Pixel::from_native(Model::Rgb,&[0.;3],0.).unwrap();
++    let path=kurbo::Rect::new(0.,0.,1.,1.).to_path(0.1);let split=kurbo::Rect::new(0.,0.,0.5,1.).to_path(0.1);
++    let regions=[(&path,Fill::NonZero),(&split,Fill::NonZero)];
++    let run=|kind,work,cancelled:&dyn Fn()->bool| {
++        let sample=|p:kurbo::Point,_:&dyn Fn()->bool,_:&mut usize,_:Option<usize>| {
++            if kind==1 {return None;}if kind==2 {return Some(None);}
++            Some(Some(NativeSpatialSample {pixel:Pixel::from_native(Model::Rgb,&[p.x,0.7,0.4],0.4).unwrap(),space:rgb.color_space(),cell_key:None}))
++        };
++        let paint=SpatialCommand::NativeSampledPaint {cells:None,field:NativeField::Unknown,regions:&[0],sample:&sample,owners:&[],alpha_is_shape:false,mode:BlendMode::Normal};
++        let commands=[SpatialCommand::Begin {isolated:false,knockout:true,opacity:0.6,alpha_is_shape:false,mode:BlendMode::HardLight},paint,
++            SpatialCommand::Begin {isolated:true,knockout:false,opacity:0.7,alpha_is_shape:true,mode:BlendMode::Screen},paint,SpatialCommand::End,paint,SpatialCommand::End];
++        compose_grouped_polygon_pixel(&regions,&commands,rgb.color_space(),backdrop,0,0,100000,work,cancelled,&admit)
++    };
++    let polls=std::cell::Cell::new(0);let expected=run(0,100000,&||{polls.set(polls.get()+1);false}).unwrap();
++    let total=requests.get();assert_eq!(used.load(Ordering::Relaxed),0);
++    for stop in 1..=total {requests.set(0);deny.set(stop);assert!(run(0,100000,&||false).is_none());assert_eq!(used.load(Ordering::Relaxed),0);}
++    deny.set(usize::MAX);
++    for stop in 1..=polls.get() {let count=std::cell::Cell::new(0);
++        assert!(run(0,100000,&||{count.set(count.get()+1);count.get()==stop}).is_none());assert_eq!(used.load(Ordering::Relaxed),0);
++    }
++    assert!(run(0,0,&||false).is_none());assert!(run(1,100000,&||false).is_none());
++    assert_eq!(run(2,100000,&||false).unwrap().alpha(),0.);
++    assert!(run(0,100000,&||false).unwrap().same_storage(expected));assert_eq!(used.load(Ordering::Relaxed),0);
++}

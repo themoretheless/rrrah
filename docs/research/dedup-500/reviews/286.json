@@ -2,9 +2,9 @@
   "index": 286,
   "repository": "kfeldmann/cidrmerge",
   "commit": "8ed8025d594664fa5644dd9c6279ca8be5c7344d",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "Complete five-file pinned source review; unchanged CLI14named controls and64small independent IPv4oracle cases.",
   "decision": "reject-domain",
-  "finding": "CIDR range merging/adjacency; no byte or pixel content.",
+  "finding": "IPv4interval union domain rejected. Invalid octets accepted and emitted /0not accepted back; original sample and64valid oracle cases pass.",
   "available_source_evidence": [
     {
       "path": "cidrmerge",
@@ -15,13 +15,31 @@
       "lines": 262,
       "source": true,
       "test": false
+    },
+    {
+      "path": "pylintrc",
+      "local": "03-pylintrc",
+      "sha256": "348c93a50f05a93e84300e049dfa0c62381d069ad10a767e1b3ffa1c728aa1b1",
+      "truncated": false,
+      "lines": 575,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "test",
+      "local": "04-test",
+      "sha256": "60c6d0cbb226d53df433d49698c5849a3637211b2a332ed1898931b82d875b79",
+      "truncated": false,
+      "lines": 7,
+      "source": false,
+      "test": true
     }
   ],
   "license_metadata": "BSD-3-Clause",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "Actual full BSD3Clause and source header read; no production copying.",
   "tests_detected": 0,
   "upstream_tests_run": false,
-  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tests_inventory_scope": "Actual test file inspected: sample input only, no automated suite.",
   "tree_truncated": false,
   "available_readme_license_evidence": [
     {
@@ -44,5 +62,14 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "full_repository_review_complete": true,
+  "fully_read_files": 5,
+  "total_files": 5,
+  "whole_runtime_qualified": false,
+  "complete_source_review": "cidr286-complete-source-review-20261014.json",
+  "complete_runtime_audit": "docs/research/dedup-cidr286-controls-20261014.json",
+  "prior_registry_review": "cidr286-prior-registry-20261014.json",
+  "upstream_sample_executed": true
 }

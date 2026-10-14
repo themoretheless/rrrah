@@ -1,0 +1,37 @@
+{
+  "repository": "happy91512/MediaDeduplicationTool",
+  "index": 463,
+  "commit": "1cefb405db27263eda5d94fa5ea3502fde690841",
+  "scope": "All six files in untruncated pinned tree read; all Git blob SHA1 hashes verified; unchanged upstream modules executed with tqdm display adapter.",
+  "license": "MIT, copyright 2024 TAI-CYUAN CIOU; no source adopted into production",
+  "controls": "docs/research/dedup-media463-controls-20261014.json",
+  "decision": "Do not adopt implementation; transfer failure cases into library qualification requirements",
+  "findings": [
+    "Only fifth frame used for video; actual distinct MJPG videos collide.",
+    "Strict Hamming threshold; zero threshold excludes identical hashes.",
+    "Solid black and white images merge under default threshold.",
+    "Malformed image None hash raises TypeError when mixed with valid image unless include_errors.",
+    "Each deduplicate call truncates same CSV; image report lost on subsequent video call.",
+    "Copy by basename overwrites existing bytes; concurrent copy can race.",
+    "Extension glob misses uppercase and accepts names without dot; overlapping roots duplicate entries.",
+    "All work submitted eagerly; quadratic survivor scan; completion-order survivor selection.",
+    "README invocation names absent deduplicate.py; actual entry is main.py.",
+    "Pipfile unpinned dependencies, Python 3.9; runtime controls use current available Python 3.12 dependencies."
+  ],
+  "limitations": [
+    "Original CLI not executed.",
+    "No actual user media.",
+    "No upstream test suite in tree.",
+    "Registry aggregate counts not refreshed by this standalone artifact."
+  ],
+  "evidence_sha256": {
+    "docs/research/dedup-500/evidence/happy91512--MediaDeduplicationTool/01-LICENSE": "f1aae5906c72d6826699c93a61dc66b741cea249a0b91216b142fd20cb0c97ad",
+    "docs/research/dedup-500/evidence/happy91512--MediaDeduplicationTool/04-gitignore": "1674ac8ed7488af605be80c1f3a20bc1f4c2b47b8549346722948385ffc87e8c",
+    "docs/research/dedup-500/evidence/happy91512--MediaDeduplicationTool/05-Pipfile": "01a215d2cd82bcd60b01538ef4b7af8780c8d4cb9353a8fae7dd495f319c94ec",
+    "docs/research/dedup-500/evidence/happy91512--MediaDeduplicationTool/00-README.md": "f77350b5967565792642fbb304946c363072f8aa8e00074ded10a203e3b37048",
+    "docs/research/dedup-500/evidence/happy91512--MediaDeduplicationTool/manifest.json": "464a6a9803df5daa6d0193d21831619fdf071863e6b1edfc2843d85529dc8e07",
+    "docs/research/dedup-500/evidence/happy91512--MediaDeduplicationTool/02-main.py": "efeb2e776009a1562d7ea8e2f3f4e1b6c6867c061da6f7c0858fb3d186b03b13",
+    "docs/research/dedup-500/evidence/happy91512--MediaDeduplicationTool/03-tool.py": "21561dd3ce203b2eab21094fbe5a4917bbf02b296b1646ac8a823f0d2513da9e",
+    "docs/research/dedup-500/evidence/happy91512--MediaDeduplicationTool/tree.json": "774c331dea0ba72219df79a89c5f4fff6f05760bdcf8fa3003c22a9f7a29bdf7"
+  }
+}

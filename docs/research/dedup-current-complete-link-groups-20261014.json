@@ -1,0 +1,28 @@
+{
+  "status": "completed_pending_independent_inventory_audit",
+  "command": [
+    "rustc",
+    "+stable",
+    "--edition=2024",
+    "--test",
+    "-C",
+    "opt-level=3",
+    "/private/tmp/rrrah-gradient-unroll4-v7-source-20261014/crates/rrrah-dedup/tests/groups.rs",
+    "--extern",
+    "rrrah_dedup=/private/tmp/rrrah-gradient-unroll4-managed-benchmark-20261014/candidate/librrrah_dedup.rlib",
+    "-L",
+    "dependency=/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps",
+    "-o",
+    "/private/tmp/rrrah-current-complete-link-groups-20261014/groups-tests"
+  ],
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-unroll4-managed-benchmark-audit-20261014.json": "0f9835a1c589026a33479f3c34be202611db88988623500fbea6d42c26bd109a",
+    "/private/tmp/rrrah-gradient-unroll4-v7-source-20261014/crates/rrrah-dedup/tests/groups.rs": "37edc0479ec266fbe670d45fa6dbd82259a832781d777a8f824fe2dfb14c921a",
+    "/private/tmp/rrrah-gradient-unroll4-v7-source-20261014/crates/rrrah-dedup/src/groups.rs": "c5c5e0c1ba00a7ee1864caa8c484ff497bb9fa1236589c6ff38a1b8d05b6af03",
+    "/private/tmp/rrrah-gradient-unroll4-managed-benchmark-20261014/candidate/librrrah_dedup.rlib": "7e420d8b52f72a7b7e0e440f578c504f14a2a0da36ca12373bcfbcaf57488878",
+    "/private/tmp/rrrah-current-complete-link-groups-20261014/build.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/private/tmp/rrrah-current-complete-link-groups-20261014/tests.log": "a3cea75dcc0c2c17503862d69a273d919f5e2922ccfc42cbd4eae549ede0eca8",
+    "/private/tmp/rrrah-current-complete-link-groups-20261014/groups-tests": "f0271a41057266d38b9fa5c6ef6bd8407687156efcd142ab05635c26fca3f512"
+  },
+  "scope": "Original complete groups integration test source against exact retained V7optimized library. Six-node exhaustive graph oracle, cancellation and sparse-group controls. Caller accepted edges only; does not prove those edges establish file identity, native corpus precision, complete decoder/group publication or all platform resource bounds."
+}

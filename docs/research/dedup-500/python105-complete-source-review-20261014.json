@@ -1,0 +1,30 @@
+{
+  "status": "complete_four_file_source_review_with16bounded_original_function_controls",
+  "index": 105,
+  "repository": "sunhanaix/dedup_files",
+  "commit": "6aa92d34f28654b9b942b8822634ebca2670be1b",
+  "whole_repo_complete": true,
+  "whole_runtime_qualified": false,
+  "fully_read_files": [
+    "LICENSE",
+    "README.md",
+    "dedup_files.py",
+    "util.py"
+  ],
+  "license": "Full Apache2.0 text read; no production source adopted.",
+  "controls": "docs/research/dedup-python105-controls-20261014.json",
+  "controls_sha256": "a1286359da78db3f3f7af45b7ec3ef9a04d9ecd49f8cc71ee02fca9bdcbcc96f",
+  "findings": [
+    "Cache hits depend on path only, even after modification or deletion.",
+    "Inode grouping and comparison omit device; cross-device same-inode values collapse.",
+    "Hash and post-hash metadata can describe different contents; mutation control reproduces old digest plus new size.",
+    "Hash failure logged and swallowed; no typed caller failure or complete-success guard.",
+    "MD5 matches accepted without byte confirmation; injected collision merges distinct contents.",
+    "Concurrent inode membership check occurs outside inode lock; coordinated two-thread control admits same inode twice.",
+    "Malformed/truncated cache raises and loses valid-prefix loading.",
+    "Top-level module startup scans directories and may delete/hardlink files; never imported directly by controls.",
+    "Replacement removes original before link attempt, no rollback/source snapshot; not executed.",
+    "Unconditional winreg import and platform-specific filesystem probing prevent portable CLI qualification."
+  ],
+  "limits": "Original AST function bodies executed unchanged with standard MD5 and real temporary files plus explicit collision/stat/race adapters. Full CLI, Windows registry/filesystem calls, destructive replacement and probabilistic stress not qualified."
+}

@@ -2689,3 +2689,41 @@ fn consensus_collection_final_publication_rechecks_all_sources_weights_and_gener
     }
     Ok(())
 }
+
+#[cfg(feature = "loftr")]
+#[test]
+fn native_consensus_collection_empty_batch_never_loads_invalid_model() -> TestResult {
+    let dir = tempfile::tempdir()?;
+    let weights = dir.path().join("not-a-torch-model");
+    std::fs::write(&weights, b"intentionally invalid model; no pair needs inference")?;
+    let factors = factors();
+    let mut policy = consensus_collection(&factors);
+    policy.max_files = 0;
+    policy.max_pairs = 0;
+    let budget = MemoryBudget::new(128 * 1024 * 1024);
+    let report = rrrah_dedup::model_loftr::scan_loftr_native_bank_consensus_collection(
+        std::iter::empty(),
+        None,
+        &weights,
+        policy,
+        &budget,
+        || false,
+    )?;
+    assert!(report.file_ids().is_empty());
+    assert!(report.pairs().is_empty());
+    drop(report);
+    assert_eq!(budget.used(), 0);
+    assert!(matches!(
+        rrrah_dedup::model_loftr::scan_loftr_native_bank_consensus_collection(
+            std::iter::empty(),
+            None,
+            &weights,
+            policy,
+            &budget,
+            || true,
+        ),
+        Err(PortfolioCollectionError::Cancelled)
+    ));
+    assert_eq!(budget.used(), 0);
+    Ok(())
+}

@@ -909,6 +909,39 @@ pub fn scan_native_bank_consensus_collection_with(
     crate::collection::CollectionReport<crate::search_portfolio::NativeBankConsensusEvidence>,
     PortfolioCollectionError,
 > {
+    scan_native_bank_consensus_collection_directional(
+        files,
+        schedule,
+        weights,
+        policy,
+        budget,
+        |_, weights, left, right, budget, cancel| provider(weights, left, right, budget, cancel),
+        cancel,
+    )
+}
+
+// Preserve each direction's proposal cap for native model adapters. Public
+// generic providers keep their existing direction-independent signature.
+#[allow(clippy::too_many_arguments)]
+pub(crate) fn scan_native_bank_consensus_collection_directional(
+    files: impl IntoIterator<Item = (u64, DecodeRequest)>,
+    schedule: Option<&crate::pair_schedule::CompletePairSchedule>,
+    weights: &Path,
+    policy: NativeBankConsensusCollectionPolicy<'_>,
+    budget: &MemoryBudget,
+    mut provider: impl FnMut(
+        bool,
+        &Path,
+        &GrayModelInput,
+        &GrayModelInput,
+        &MemoryBudget,
+        &dyn Fn() -> bool,
+    ) -> Result<SharedBuffer<ScoredProposal>, ProposalProviderError>,
+    cancel: impl Fn() -> bool,
+) -> Result<
+    crate::collection::CollectionReport<crate::search_portfolio::NativeBankConsensusEvidence>,
+    PortfolioCollectionError,
+> {
     use crate::search_portfolio::{
         native_bank_direction_file_cap, required_native_bank_consensus_work,
         validate_native_bank_consensus_policy,
@@ -996,7 +1029,7 @@ pub fn scan_native_bank_consensus_collection_with(
         },
         budget,
         |left, right, cancel| {
-            crate::search_portfolio::search_native_bank_consensus_files_with(
+            crate::search_portfolio::search_native_bank_consensus_files_directional(
                 left,
                 right,
                 weights,

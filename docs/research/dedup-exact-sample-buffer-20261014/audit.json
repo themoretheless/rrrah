@@ -1,0 +1,24 @@
+{
+  "status": "verified_complete_exact_module_standalone_19_tests",
+  "passed": 19,
+  "failed": 0,
+  "ignored": 0,
+  "source_sha256": "878aa31f87245861604c116e050210b256f9d2186eb452d9cb372e3f822abba8",
+  "executable": "/private/tmp/rrrah-exact-sample-buffer-20261014/exact-tests",
+  "executable_sha256": "2106f19193ae43e518767911717ef7db59ae96afa7c755aebf7c4550bb228905",
+  "dependency_pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-exact-portfolio-20261011/debug/deps/libblake3-04d50b082794d02a.rlib": "fa7b0177c162a95566b34c3f72901ad12af2ed2e3ad80a486f35a4c68a65d9a1",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-exact-portfolio-20261011/debug/deps/libthiserror-1f2ca11ca2706be8.rlib": "a4bc045f06441d4730b1988bee770197e1f51f4b1600df8c028a668c27c77bf1",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-exact-portfolio-20261011/debug/deps/libtempfile-1b1dab88dff21e5d.rlib": "f176954e522a9da9c678a5292bdee28afdb9bf9c89af055e76ee4fecb0fc0422",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-exact-portfolio-20261011/debug/deps/liblibc-0a79900aa2799e6c.rlib": "b3e730a257abb46acab6283d05f1a1340e72bbb48682e09f3a237332f7f08c25"
+  },
+  "retained_evidence": {
+    "docs/research/dedup-exact-sample-buffer-20261014/command.json": "65f533042ad13760748952e8da4e32c801a058580cda0206f26c65528075c521",
+    "docs/research/dedup-exact-sample-buffer-20261014/tests.log": "78b04cf5339b04a8adbf271ca90416f6a6fb87c9c7a07a500310cc79b6685a85",
+    "docs/research/dedup-exact-sample-buffer-20261014/exact.rs": "878aa31f87245861604c116e050210b256f9d2186eb452d9cb372e3f822abba8",
+    "docs/research/dedup-exact-sample-buffer-20261014/build.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "compiler": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: aarch64-apple-darwin\nrelease: 1.98.1\nLLVM version: 22.1.8\n",
+  "change": "Sample hashing allocates 4096-byte read buffer instead of 65536. Full streaming hashing and byte verification keep 65536-byte buffers. No hashing offsets, read lengths or cancellation checkpoints changed.",
+  "limits": "All tests in unchanged exact module compiled directly with cached real dependencies. This is not whole-crate/workspace/platform qualification, native model testing, measured throughput improvement or a hard RSS guarantee."
+}

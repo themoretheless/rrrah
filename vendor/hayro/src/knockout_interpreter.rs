@@ -7187,6 +7187,10 @@ fn replay_spatial_scene_impl(
     #[derive(Default)]
     struct CombinedSourceSummary {failed:bool,points:usize,max_error:f64,gradient:[f64;2]}
     let combined_enabled=point.is_none() && std::env::var_os("RRRAH_AI_COMBINED_NATIVE_BOUND").is_some();
+    let _combined_credit=if combined_enabled {
+        Some(admit(size_of::<std::cell::RefCell<CombinedSourceSummary>>()
+            .checked_add(size_of::<std::cell::RefCell<Option<super::native_moments::OpaqueCandidateInputs>>>())?)?)
+    } else {None};
     let combined_source=std::cell::RefCell::new(CombinedSourceSummary::default());
     let candidate_inputs=std::cell::RefCell::new(None);
     struct PointEvidenceTracker<'a> {
@@ -7818,9 +7822,39 @@ fn real_ai_spatial_scene_problem_pixel_diagnostic() {
             }
         }
         let route_admissions=std::cell::Cell::new(0usize);
+        let profile_sizes=std::env::var_os("RRRAH_AI_TRACE_ADMISSION_SIZES").is_some();
+        let _profile_credit=profile_sizes.then(||admission(
+            std::mem::size_of::<std::cell::RefCell<[(usize,usize);64]>>()
+            +std::mem::size_of::<std::cell::Cell<usize>>()
+        ).expect("admission size profile credit"));
+        let admission_sizes=std::cell::RefCell::new([(0usize,0usize);64]);
+        let admission_overflow=std::cell::Cell::new(0usize);
         let mut diagnostic_remaining=diagnostic_work;
+        let pixel_started=std::time::Instant::now();
         let result=replay_spatial_scene_impl(&scene,&space,Pixel::from_native(Model::Cmyk,&[0.;4],0.).unwrap(),
-            x,y,None,&[],&[],&mut diagnostic_remaining,&||cancelled(),&|bytes|{route_admissions.set(route_admissions.get()+1);admission(bytes)});
+            x,y,None,&[],&[],&mut diagnostic_remaining,&||cancelled(),&|bytes|{
+                route_admissions.set(route_admissions.get()+1);
+                if profile_sizes {
+                    let mut rows=admission_sizes.borrow_mut();
+                    if let Some(row)=rows.iter_mut().find(|row|row.1>0 && row.0==bytes) {row.1+=1;}
+                    else if let Some(row)=rows.iter_mut().find(|row|row.1==0) {*row=(bytes,1);}
+                    else {admission_overflow.set(admission_overflow.get()+1);}
+                }
+                admission(bytes)
+            });
+        let pixel_elapsed=pixel_started.elapsed();
+        if std::env::var_os("RRRAH_AI_TRACE_PIXEL_TIMING").is_some() {
+            println!("REAL_AI_SPATIAL_PIXEL_TIMING pixel=({x},{y}) elapsed_ns={}",pixel_elapsed.as_nanos());
+        }
+        if profile_sizes {
+            let rows=admission_sizes.borrow();
+            assert_eq!(rows.iter().map(|row|row.1).sum::<usize>()+admission_overflow.get(),route_admissions.get());
+            println!("REAL_AI_FRAME_LAYOUT pixel={} coverage={} paint_frame={}",std::mem::size_of::<Pixel>(),std::mem::size_of::<super::PreciseCoverage>(),std::mem::size_of::<super::native_frame::PaintFrame>());
+            for &(bytes,count) in rows.iter().filter(|row|row.1>0) {
+                println!("REAL_AI_ADMISSION_SIZE pixel=({x},{y}) bytes={bytes} count={count}");
+            }
+            println!("REAL_AI_ADMISSION_OVERFLOW pixel=({x},{y}) count={}",admission_overflow.get());
+        }
         println!("REAL_AI_DIAGNOSTIC_WORK_USED pixel=({x},{y}) spent={} remaining={diagnostic_remaining}",diagnostic_work-diagnostic_remaining);
         println!("REAL_AI_SPATIAL_ROUTE_ADMISSIONS pixel=({x},{y}) count={}",route_admissions.get());
         let white_rgb=result.and_then(|p|super::native_frame::convert_group_pixel(p,&space,rgb.color_space()))

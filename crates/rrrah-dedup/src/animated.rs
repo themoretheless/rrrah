@@ -334,6 +334,26 @@ mod timeline_key_tests {
         assert_eq!(budget.used(), 0);
     }
     #[test]
+    fn large_reducible_adjacent_frame_durations_produce_a_timeline_key() {
+        let budget = MemoryBudget::new(4 * 1024 * 1024);
+        let mut animation = fixture("split.apng", AnimationKind::Apng, &budget);
+        assert!(
+            animation.frames[0]
+                .0
+                .same_selected_frame(&animation.frames[1].0, || false)
+                .unwrap()
+        );
+        for index in 0..2 {
+            animation.frames[index].1 = Duration::new(u64::MAX - 2, u64::MAX - 1).unwrap();
+        }
+        assert!(animation.same_timeline(&animation, || false).unwrap());
+        let key = animation.timeline_digest(|| false).unwrap();
+        assert_eq!(key, animation.timeline_digest(|| false).unwrap());
+        assert!(animation.timeline_digest(|| true).is_err());
+        drop(animation);
+        assert_eq!(budget.used(), 0);
+    }
+    #[test]
     fn zero_duration_timelines_ignore_pixels_but_retain_repetition() {
         let budget = MemoryBudget::new(4 * 1024 * 1024);
         let mut a = fixture("base.gif", AnimationKind::Gif, &budget);

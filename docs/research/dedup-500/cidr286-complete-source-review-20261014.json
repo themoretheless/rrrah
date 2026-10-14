@@ -1,0 +1,31 @@
+{
+  "status": "complete_five_file_source_review_with14_cli_controls64_valid_oracles",
+  "index": 286,
+  "repository": "kfeldmann/cidrmerge",
+  "commit": "8ed8025d594664fa5644dd9c6279ca8be5c7344d",
+  "whole_repo_complete": true,
+  "whole_runtime_qualified": false,
+  "fully_read_files": [
+    "README.md",
+    "cidrmerge",
+    "license.txt",
+    "pylintrc",
+    "test"
+  ],
+  "license": "Full BSD3Clause text and source header read; no production source adopted.",
+  "controls": "docs/research/dedup-cidr286-controls-20261014.json",
+  "controls_sha256": "eee36945c700acebf5175a38ecf38baf397145bf753589d83b884ec7e430f41a",
+  "control_producer": "scripts/check-dedup-cidr286-20261014.py",
+  "control_producer_sha256": "147e80b891a9a7659510613ff0ad460bae643e6239f047d5da21a10b26b53273",
+  "decision": "Reject network-interval union domain as file/image duplicate evidence; retain explicit validation/idempotence lessons.",
+  "findings": [
+    "Original CLI matches documented upstream sample and standard ipaddress collapse oracle on64small valid generated IPv4sets.",
+    "Octets above255and negative octets accepted/coerced; invalid top octet output remains invalid.",
+    "Merging two /1halves emits valid /0but input parser rejects /0, so output cannot roundtrip.",
+    "Late invalid input emits no partial output because all input validation precedes merging.",
+    "Parser executes twice per input even with DEBUGdisabled; source argument formatting repeats conversion.",
+    "Nested range comparisons and repeated sorting/deepcopy have no work/memory/cancellation cap.",
+    "The file named test is a seven-line sample input, not an automated test suite; prior path-name detection counted zero tests."
+  ],
+  "limits": "All five repository files read and Git blob hashes verified. Full unmodified CLI executed on Python3with textual stdin/stdout only; no network access. Small finite oracle coverage, no broad scalability or IPv6/library applicability. No production adoption."
+}

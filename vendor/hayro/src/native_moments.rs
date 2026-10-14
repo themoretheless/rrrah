@@ -146,7 +146,12 @@ pub(super) fn opaque_candidate_native_error(inputs:&OpaqueCandidateInputs,source
     let values=[source_error,gradient[0],gradient[1],inputs.variable_area_original,inputs.variable_area_candidate,
         inputs.weighted_centroid_error[0],inputs.weighted_centroid_error[1],inputs.total_area_error];
     if values.iter().any(|v|!v.is_finite() || *v<0.) || source_error>0.25
-        || inputs.arithmetic_native.iter().chain(inputs.original.max_component_abs.iter()).any(|v|!v.is_finite() || *v<0.) {return None;}
+        || inputs.arithmetic_native.iter().any(|v|!v.is_finite() || *v<0.) {return None;}
+    // The absolute opaque-tail allowance and area term below assume unit-
+    // bounded native components. Enforce that prerequisite on both streams;
+    // out-of-range fields retain the original compositor without a certificate.
+    if inputs.original.max_component_abs.iter().chain(inputs.candidate.max_component_abs.iter())
+        .any(|v|!v.is_finite() || !(0. ..=1.).contains(v)) {return None;}
     for interval in [inputs.original.alpha,inputs.candidate.alpha] {
         if interval.iter().any(|v|!v.is_finite()) || interval[0]>interval[1] {return None;}
     }
@@ -806,4 +811,81 @@ fn reference_input_padding_covers_upstream_product_residual() {
         assert!(rounded-bounds[0]>=(-residual).max(0.));
         assert!(bounds[1]-rounded>=residual.max(0.));
     }
+}
+
+
+#[cfg(test)]
+fn opaque_test_inputs()->OpaqueCandidateInputs {
+    let bounds=IntegralRoundingBounds {alpha:[0.5;2],components:[[0.25;2];4],
+        alpha_error:0.,component_error:[0.;4],max_component_abs:[1.;4]};
+    OpaqueCandidateInputs {original:bounds,candidate:bounds,arithmetic_native:[0.;4],
+        variable_area_original:0.25,variable_area_candidate:0.25,
+        weighted_centroid_error:[2f64.powi(-35),2f64.powi(-34)],total_area_error:2f64.powi(-30),
+        original_variable_points:1,candidate_variable_points:1}
+}
+
+#[test]
+fn opaque_combined_bound_encloses_independent_perturbed_quotients() {
+    // Form two integrals and divide them independently, rather than comparing
+    // the implementation to another evaluation of its error formula.
+    for alpha in [0.125,0.5,0.75] {for source_error in [0.,2f64.powi(-24),2f64.powi(-18)] {
+        for gradient in [[0.,0.],[4.,32.]] {for area_error in [0.,2f64.powi(-30)] {
+            for integral_sign in [-1.,1.] {for alpha_sign in [-1.,1.] {
+                let mut input=opaque_test_inputs();input.total_area_error=area_error;
+                let second_alpha=alpha+alpha_sign*area_error;
+                input.original.alpha=[alpha;2];input.candidate.alpha=[second_alpha;2];
+                let errors=opaque_candidate_native_error(&input,source_error,gradient,&mut 64,&||false).unwrap();
+                let perturbation=source_error*(input.variable_area_original+input.variable_area_candidate)
+                    +gradient[0]*input.weighted_centroid_error[0]+gradient[1]*input.weighted_centroid_error[1]+area_error;
+                for (channel,value) in [0.125,0.25,0.5,0.75].into_iter().enumerate() {
+                    let first_integral=alpha*value;let second_integral=first_integral+integral_sign*perturbation;
+                    let difference=(first_integral/alpha-second_integral/second_alpha).abs();
+                    assert!(difference<=errors[channel],"difference={difference} bound={}",errors[channel]);
+                }
+            }}
+        }}
+    }}
+}
+
+#[test]
+fn opaque_combined_bound_refuses_every_short_budget_and_cancellation_checkpoint() {
+    let input=opaque_test_inputs();let mut work=100;let polls=std::cell::Cell::new(0);
+    assert!(opaque_candidate_native_error(&input,1e-7,[4.,32.],&mut work,&||{polls.set(polls.get()+1);false}).is_some());
+    assert_eq!(100-work,64);
+    for budget in 0..64 {let mut remaining=budget;
+        assert!(opaque_candidate_native_error(&input,1e-7,[4.,32.],&mut remaining,&||false).is_none());
+        assert_eq!(remaining,budget);
+    }
+    for stop in 1..=polls.get() {let count=std::cell::Cell::new(0);
+        assert!(opaque_candidate_native_error(&input,1e-7,[4.,32.],&mut 64,&||{
+            count.set(count.get()+1);count.get()>=stop
+        }).is_none());
+    }
+}
+
+#[test]
+fn opaque_combined_bound_refuses_invalid_domains_and_overflow() {
+    let input=opaque_test_inputs();
+    for source in [-1.,f64::NAN,f64::INFINITY,0.25f64.next_up()] {
+        assert!(opaque_candidate_native_error(&input,source,[1.;2],&mut 64,&||false).is_none());
+    }
+    for gradient in [[-1.,0.],[0.,f64::NAN],[f64::INFINITY,0.]] {
+        assert!(opaque_candidate_native_error(&input,0.,gradient,&mut 64,&||false).is_none());
+    }
+    for index in 0..15 {let mut bad=input;
+        match index {
+            0=>bad.original.alpha=[0.,1.],1=>bad.candidate.alpha=[1.,0.],
+            2=>bad.original.alpha=[0.5,f64::INFINITY],3=>bad.candidate.alpha=[f64::NAN,1.],
+            4=>bad.variable_area_original=-1.,5=>bad.variable_area_candidate=f64::INFINITY,
+            6=>bad.weighted_centroid_error[0]=-1.,7=>bad.total_area_error=f64::NAN,
+            8=>bad.arithmetic_native[0]=-1.,9=>bad.arithmetic_native[1]=f64::INFINITY,
+            10=>bad.original.max_component_abs[0]=2.,11=>bad.candidate.max_component_abs[0]=2.,
+            12=>bad.candidate.max_component_abs[0]=f64::NAN,
+            13=>bad.original.alpha=[f64::from_bits(1);2],
+            _=>bad.weighted_centroid_error=[f64::MAX;2],
+        }
+        assert!(opaque_candidate_native_error(&bad,0.,[2.;2],&mut 64,&||false).is_none(),"case={index}");
+    }
+    let mut tiny=input;tiny.original.alpha=[1e-300;2];tiny.candidate.alpha=[1e-300;2];
+    assert!(opaque_candidate_native_error(&tiny,0.,[0.;2],&mut 64,&||false).is_some());
 }

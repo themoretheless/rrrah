@@ -1,0 +1,266 @@
+{
+  "status": "verified_complete_frozen_raster_library_inventory_two_disjoint_runs",
+  "passed": 59,
+  "failed": 0,
+  "ignored": 3,
+  "declared_tests": 62,
+  "records": [
+    {
+      "name": "gradient::batch_tests::alternating_matcher_timing",
+      "status": "ignored"
+    },
+    {
+      "name": "gradient::batch_tests::every_cancellation_checkpoint_and_work_refusal_matches_scalar",
+      "status": "passed"
+    },
+    {
+      "name": "gradient::batch_tests::four_lane_distances_are_bitwise_scalar_for_every_tail_length",
+      "status": "passed"
+    },
+    {
+      "name": "gradient::cache_tests::cache_capacity_and_overflow_keep_exhaustive_fallback_available",
+      "status": "passed"
+    },
+    {
+      "name": "gradient::cache_tests::cached_checkpoints_and_cancellation_match_recomputation_without_credit_leaks",
+      "status": "passed"
+    },
+    {
+      "name": "gradient::cache_tests::cached_matching_keeps_positive_negative_and_distinct_ties_under_both_budget_paths",
+      "status": "passed"
+    },
+    {
+      "name": "gradient::batch_tests::exact_matching_agrees_with_exhaustive_positive_negative_ties_and_spatial_chains",
+      "status": "passed"
+    },
+    {
+      "name": "gradient::cache_tests::linear_runner_dense_banks_do_not_allocate_optional_indices",
+      "status": "passed"
+    },
+    {
+      "name": "gradient::cache_tests::malformed_suffix_and_work_refusal_do_not_allocate_optional_cache",
+      "status": "passed"
+    },
+    {
+      "name": "gradient::cache_tests::managed_cache_releases_before_output_and_respects_ancestor_pressure",
+      "status": "passed"
+    },
+    {
+      "name": "gradient::matching_tests::alternating_matcher_timing",
+      "status": "ignored"
+    },
+    {
+      "name": "gradient::matching_tests::bounded_distance_preserves_order_and_strict_ties",
+      "status": "passed"
+    },
+    {
+      "name": "gradient::matching_tests::every_cancellation_checkpoint_and_work_refusal_matches_exhaustive",
+      "status": "passed"
+    },
+    {
+      "name": "gradient::matching_tests::exact_matching_agrees_with_exhaustive_positive_negative_ties_and_spatial_chains",
+      "status": "passed"
+    },
+    {
+      "name": "gradient::matching_tests::production_mutual_competitors_match_exhaustive_at_every_checkpoint",
+      "status": "passed"
+    },
+    {
+      "name": "gradient::matching_tests::unrolled_distance_blocks_preserve_scalar_bits_and_partial_lanes",
+      "status": "passed"
+    },
+    {
+      "name": "gradient::cache_tests::linear_runner_large_banks_preserve_results_checkpoints_and_budget_fallback",
+      "status": "passed"
+    },
+    {
+      "name": "cache::publication_tests::directory_sync_failure_reports_already_published_complete_cache",
+      "status": "passed"
+    },
+    {
+      "name": "exact::cancelled_output_tests::healthy_short_interrupted_output_preserves_exact_range",
+      "status": "passed"
+    },
+    {
+      "name": "exact::cancelled_output_tests::interrupted_output_cancels_before_next_write_attempt",
+      "status": "passed"
+    },
+    {
+      "name": "exact::cancelled_output_tests::partial_output_cancels_without_writing_remaining_bytes",
+      "status": "passed"
+    },
+    {
+      "name": "exact::cancelled_output_tests::zero_progress_and_output_errors_remain_typed_io_failures",
+      "status": "passed"
+    },
+    {
+      "name": "exact::cancellation_flag_tests::final_publication_observes_flag_without_reentering_caller",
+      "status": "passed"
+    },
+    {
+      "name": "exact::collision_tests::final_content_validation_rejects_change_even_when_metadata_matches",
+      "status": "passed"
+    },
+    {
+      "name": "exact::collision_tests::formerly_empty_entries_are_reopened_before_hash_or_equality",
+      "status": "passed"
+    },
+    {
+      "name": "exact::collision_tests::colliding_samples_and_full_hashes_still_partition_by_bytes",
+      "status": "passed"
+    },
+    {
+      "name": "exact::collision_tests::pair_comparison_checks_policy_and_cancellation_at_every_checkpoint",
+      "status": "passed"
+    },
+    {
+      "name": "exact::collision_tests::pair_comparison_rejects_last_checkpoint_mutations_on_both_outcomes",
+      "status": "passed"
+    },
+    {
+      "name": "exact::collision_tests::read_buffer_capacity_failure_is_explicit_and_retry_succeeds",
+      "status": "passed"
+    },
+    {
+      "name": "exact::collision_tests::pair_comparison_confirms_bytes_and_refuses_digest_collision",
+      "status": "passed"
+    },
+    {
+      "name": "exact::collision_tests::verified_prefix_binds_header_and_body_even_when_metadata_matches",
+      "status": "passed"
+    },
+    {
+      "name": "exact::collision_tests::verified_observations_detect_metadata_invisible_pruned_mutations",
+      "status": "passed"
+    },
+    {
+      "name": "exact::interrupted_read_tests::interrupted_reads_observe_cancellation_before_retry",
+      "status": "passed"
+    },
+    {
+      "name": "exact::interrupted_read_tests::read_cancelled_before_first_attempt_does_not_touch_reader",
+      "status": "passed"
+    },
+    {
+      "name": "exact::interrupted_read_tests::short_reads_and_interruptions_preserve_content_and_eof_errors",
+      "status": "passed"
+    },
+    {
+      "name": "exact::observed_snapshot_policy_tests::replacement_after_initial_metadata_cannot_bypass_observed_size_limit",
+      "status": "passed"
+    },
+    {
+      "name": "gradient_index::row_major_tests::row_major_index_build_latency_probe",
+      "status": "ignored"
+    },
+    {
+      "name": "exact::collision_tests::verified_prefix_policy_cancel_and_final_mutation_do_not_publish_headers",
+      "status": "passed"
+    },
+    {
+      "name": "gradient_scale::area_tests::footprint_average_removes_stripe_alias_and_matches_fractional_oracle",
+      "status": "passed"
+    },
+    {
+      "name": "gradient_scale::zero_candidate_tests::identity_validation_is_bitwise_owned_zero_radius_for_hdr_and_shapes",
+      "status": "passed"
+    },
+    {
+      "name": "gradient_scale::zero_candidate_tests::identity_validation_work_alpha_and_every_cancel_checkpoint_are_explicit",
+      "status": "passed"
+    },
+    {
+      "name": "local_index::owner_count_cancellation_tests::descriptor_pair_entry_cancellation_does_not_consume_input",
+      "status": "passed"
+    },
+    {
+      "name": "local_index::owner_count_cancellation_tests::legacy_owner_count_stops_when_iterator_requests_cancellation",
+      "status": "passed"
+    },
+    {
+      "name": "local_index::owner_count_cancellation_tests::legacy_owner_materialization_honors_cancellation",
+      "status": "passed"
+    },
+    {
+      "name": "model_projection::tests::extreme_finite_parameters_remain_bounded",
+      "status": "passed"
+    },
+    {
+      "name": "model_projection::tests::invalid_configuration_is_refused",
+      "status": "passed"
+    },
+    {
+      "name": "model_projection::tests::invisible_rgb_is_ignored_and_background_is_explicit",
+      "status": "passed"
+    },
+    {
+      "name": "model_projection::tests::neutral_reinhard_and_linear_alpha_compositing",
+      "status": "passed"
+    },
+    {
+      "name": "model_projection::tests::opaque_sdr_preserves_values_and_refuses_alpha_hdr",
+      "status": "passed"
+    },
+    {
+      "name": "model_projection::tests::projected_equality_can_hide_alpha_and_hdr_differences",
+      "status": "passed"
+    },
+    {
+      "name": "model_projection::tests::visible_nonfinite_channels_and_invalid_alpha_are_refused",
+      "status": "passed"
+    },
+    {
+      "name": "tests::collision_membership_keeps_arbitrary_order_and_pair_identity",
+      "status": "passed"
+    },
+    {
+      "name": "tests::empty_and_duplicate_fingerprints",
+      "status": "passed"
+    },
+    {
+      "name": "tests::indexed_search_matches_independent_exhaustive_scan",
+      "status": "passed"
+    },
+    {
+      "name": "tests::traversal_work_exhaustion_is_distinct_from_failure",
+      "status": "passed"
+    },
+    {
+      "name": "visual::distinct_variant_tests::repeated_complete_variants_preserve_all_ids_and_exact_metric",
+      "status": "passed"
+    },
+    {
+      "name": "warp::bounded_fit_tests::boundary_fit_matches_exhaustive_rectangle_and_beats_independent_clipping",
+      "status": "passed"
+    },
+    {
+      "name": "warp::encoded_signal_tests::extended_srgb_landmarks_match_independent_decimal_oracle_without_clipping",
+      "status": "passed"
+    },
+    {
+      "name": "warp::encoded_signal_tests::transfer_precedes_premultiplication_and_bilinear_sampling",
+      "status": "passed"
+    },
+    {
+      "name": "warp::regional_reuse_tests::reused_whole_evidence_preserves_regions_and_reduces_observed_work",
+      "status": "passed"
+    },
+    {
+      "name": "worker::group_quiescence_tests::quiescence_refuses_live_leader_and_live_descendant_after_leader_exit",
+      "status": "passed"
+    },
+    {
+      "name": "gradient_index::row_major_tests::row_major_preserves_axis_order_search_credit_and_every_cancellation_checkpoint",
+      "status": "passed"
+    }
+  ],
+  "executable": "/private/tmp/rrrah-gradient-unroll4-managed-qualified-20261014/gradient-tests",
+  "executable_sha256": "c6853e017373302df66df31c1017a356b5b69b90737892251b39253876ffe93f",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-unroll4-managed-focused-v2-audit-20261014.json": "56dd53622bd043f202f399bc74bd6ddefef77342c4af2611d693752ab289ea31",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-unroll4-raster-union-20261014/gradient.log": "cb51a21475e40a79ed77d317c38ed7b532420a1bc9805ad33ed56982bb820088",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-unroll4-raster-union-20261014/remaining.log": "2f4ae3bbe92c167b46cc1d975ff9a28fe3ad4cc0f319c09a8b6405cd940a95a5",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-unroll4-raster-union-20261014/inventory.txt": "315670779af161be86221972db61f85be801fd5ec07d208cb3954dfe4490d07f"
+  },
+  "scope": "Complete frozen rrrah-dedup source compiled directly with raster cfg and real cached rrrah-core/other dependencies. Execute gradient module tests only, including managed cache/runner and new scalar-bit test. Cargo build-script/default/full decoder/workspace qualification excluded. Dependency binaries pinned; not a claim they were rebuilt from this snapshot. No throughput measurement in this correctness gate. Two ignored manual timing tests and45non-gradient library tests not executed; no whole native operation or full workspace claim. The same executable was run first with gradient filter, then its disjoint complement. Inventory proves no omitted/duplicate test names. All62 declared tests addressed;59passed3explicitlyignored. This remains direct rustc/raster plus cached dependency qualification, not Cargo build-script, decode/native LoFTR, platform matrix, complete corpus or whole-operation timing."
+}

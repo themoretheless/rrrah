@@ -1,0 +1,41 @@
+{
+  "scope": "One-hour existing full-size Metal collection soak with early RSS monitoring and bounded owned scratch",
+  "status_at_snapshot": "running",
+  "hour_completed": false,
+  "live_state": "hour/state.json",
+  "tool_session_id": 65569,
+  "monitor_pid": 30503,
+  "child_pid": 30504,
+  "requested_test_seconds": 3600,
+  "preflight": {
+    "validator_tests_passed": 5,
+    "rss_guard_negative_control": "expected SIGTERM of owned dummy child; reaped; no false pass",
+    "monitor_signal_negative_control": "monitor SIGTERM reaps owned dummy child; no orphan",
+    "real_full_hdr_smoke": "8cycles; 30.225s test loop; exit0; same genuine log revalidated after exact serial libtest prefix fix",
+    "original_false_negative_state_preserved": true
+  },
+  "resource_bounds": {
+    "frames": 8,
+    "dimensions": [
+      4000,
+      3000
+    ],
+    "payload_bytes": 192000000,
+    "ram_entries": 1,
+    "ram_payload_limit": 192000000,
+    "root_managed_limit": 576000000,
+    "queue_limit": 192000000,
+    "swap_limit": 1537048576,
+    "rss_soft_guard_bytes": 12884901888,
+    "rss_consecutive_over_limit_samples": 3,
+    "rss_sample_interval_seconds": 5
+  },
+  "limitations": [
+    "Hour currently running; no long-duration pass yet",
+    "RSS sampled values are not a true peak guarantee; soft guard is not an OS hard cap",
+    "Expected GPU readback arrays/driver memory are outside managed root/queue accounting",
+    "Local disk; no injected IO delay",
+    "Eight large frames do not establish huge collection-count qualification",
+    "Same-renderer SDR/HDR transport; no physical calibration or NVIDIA qualification"
+  ]
+}

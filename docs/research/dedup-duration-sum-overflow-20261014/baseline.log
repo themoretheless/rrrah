@@ -1,0 +1,16 @@
+
+running 2 tests
+test duration_sum_tests::sum_retains_exact_time_and_refuses_unrepresentable_result ... ok
+test duration_sum_tests::large_shared_denominator_reduces_before_overflow ... FAILED
+
+failures:
+
+failures:
+    duration_sum_tests::large_shared_denominator_reduces_before_overflow
+
+test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+thread 'duration_sum_tests::large_shared_denominator_reduces_before_overflow' (7947514) panicked at /private/tmp/rrrah-duration-sum-audit-20261014/baseline.rs:81:38:
+called `Result::unwrap()` on an `Err` value: Timing
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace

@@ -1,0 +1,79 @@
+{
+  "status": "prepared_waiting_for_native_target_preservation",
+  "versions": {
+    "baseline": {
+      "source_manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-consensus-native-collection-v5-source-20261014.json",
+      "source_manifest_sha256": "9629d521863e26df607bd0f59d5a04a7285ecf7dc9b36c55d0bb55892b2c1ce4",
+      "harness": "/private/tmp/rrrah-unroll4-native-operation-20261014/baseline/harness",
+      "harness_pins": {
+        "Cargo.toml": "ae85a36b945381f8c4b1fad2ad935f2629d59b8d587ed7bfccaf41fab02c168f",
+        "Cargo.lock": "b0e5f5afd3bf24d55092ee763ea63204d297a11f64ed19e96d12a539b04158c2",
+        "src/native_policy.rs": "16ddc4d9e77bbadad4312d0a491cc3e1c759fc47b03550f7c6266688ce364a17",
+        "src/bin/native_bank_current_all_positives.rs": "4472c0735ac0cd5cfb3f3e872ed84616ff697ac7f423e5f0e43ce2e99aad6624"
+      }
+    },
+    "candidate": {
+      "source_manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-unroll4-v7-source-20261014.json",
+      "source_manifest_sha256": "475b71ae143469a9128b787730a98439c84995783ffbfb99f1726f8c91e3ed64",
+      "harness": "/private/tmp/rrrah-unroll4-native-operation-20261014/candidate/harness",
+      "harness_pins": {
+        "Cargo.toml": "c6d6edbabf2cc00b8524dd5aeca579eee7248dc42ec929071944b19976a9852c",
+        "Cargo.lock": "b0e5f5afd3bf24d55092ee763ea63204d297a11f64ed19e96d12a539b04158c2",
+        "src/native_policy.rs": "16ddc4d9e77bbadad4312d0a491cc3e1c759fc47b03550f7c6266688ce364a17",
+        "src/bin/native_bank_current_all_positives.rs": "4472c0735ac0cd5cfb3f3e872ed84616ff697ac7f423e5f0e43ce2e99aad6624"
+      }
+    }
+  },
+  "cases": [
+    {
+      "label": "self_native",
+      "left": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/212600.jpg",
+      "right": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/212600.jpg",
+      "max_side": 160,
+      "forward_tolerance": 2.0,
+      "reverse_tolerance": 2.0,
+      "force_model": false,
+      "diagonal_normalized": true,
+      "arguments": [
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/212600.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/212600.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+        "160",
+        "2.0",
+        "1000000",
+        "2.0",
+        "false"
+      ]
+    },
+    {
+      "label": "table_true",
+      "left": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/211901.jpg",
+      "right": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/211900.jpg",
+      "max_side": 640,
+      "forward_tolerance": 0.5,
+      "reverse_tolerance": 8.0,
+      "force_model": false,
+      "diagonal_normalized": true,
+      "arguments": [
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/211901.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/211900.jpg",
+        "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+        "640",
+        "0.5",
+        "1000000",
+        "8.0",
+        "false"
+      ]
+    }
+  ],
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-consensus-native-plan-20261013.json": "674ee06240ac7fbdc8785e0bbdc63c5625ff08c93ebb9ea34a1aa0e8dd3dfa27",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/212600.jpg": "1f0be0e87dc2e9d925b8745f448727f215e0f96c9f8ee637635cc7a630aca890",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors": "59e55bf0ecd047db9c513672d121a3ea677529ad448bdc3a359e92862c74ddd7",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/211901.jpg": "6c076f5642a9de92efb53cfe0734d7140a499fd44d08d2b1d93199c2bfc9bcd9",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/211900.jpg": "81faa5e0860359aa092a5b1e04de4130acd1168182bb5fdf55c7dd73af9fd8fe"
+  },
+  "target": "/private/tmp/rrrah-native-collection-target-20261014",
+  "required_first_audit": "docs/research/dedup-native-collection-focused-audit-20261014.json",
+  "scope": "Full atomic forward/reverse native/opposite/model-bank operation. Same two retained development controls and explicit policy, three alternating fresh-process pairs each. Version source difference only distance kernel and test source. Source/dependency/weights guards included. No universal speedup, learned-route forcing, default/UI/full-corpus/platform/RSS qualification."
+}

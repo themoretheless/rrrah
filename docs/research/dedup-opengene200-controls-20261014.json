@@ -1,0 +1,27 @@
+{
+  "status": "twelve_original_comparison_function_controls_confirmed",
+  "repository": "OpenGene/dedup",
+  "commit": "f8d48bc9fd9a65103c6058be46f098545d21303a",
+  "count": 12,
+  "checks": [
+    "identical_paired_sequences_equal",
+    "high_quality_mismatch_refused",
+    "later_low_quality_mismatch_accepted",
+    "low_quality_first_base_mismatch_still_refused",
+    "different_total_length_refused",
+    "quality_weighted_similarity_is_nontransitive",
+    "already_duplicate_middle_read_eliminates_unmatched_later_read",
+    "concatenation_discards_mate_boundaries",
+    "identical_sequences_skip_quality_shape_validation",
+    "different_sequences_with_missing_qualities_raise",
+    "orphan_forward_block_retained_without_comparison",
+    "higher_threshold_can_merge_high_quality_mismatch"
+  ],
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/OpenGene--dedup/03-gitignore": "9cde0277827d89b86382822f9ac4b8519f3db2cf535aab10e5fc931b3a4879f9",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/OpenGene--dedup/01-LICENSE": "be7cc8eea36045f2d027240b749f8d3e575b727e203d4eaf31cd8be2b11b1436",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/OpenGene--dedup/00-README.md": "c26fbd1eb438e358cd7c406f1ce6e9ab3a6038eb9a57da92add593865e8b41e6",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/OpenGene--dedup/02-dedup.py": "707e5845f127576ddaf9d97b6300138a176dc3aa6796ccbc30e87582d9c9e54b"
+  },
+  "scope": "Unchanged str_compare/block_compare function source, Python3 AST and standard array quality adapter. Legacy Python2 CLI, pysam/BAM reader/writer, real sequencing data, biological correctness and clinical use not executed or qualified. No production adoption."
+}

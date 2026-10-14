@@ -1,0 +1,27 @@
+{
+  "status": "complete_three_file_source_review_with_seven_bounded_shell_controls",
+  "index": 248,
+  "repository": "DRRDietrich/DeDup-Image",
+  "commit": "3ba76e268c2226fd1478083797a72f456ac761f6",
+  "whole_repo_complete": true,
+  "whole_runtime_qualified": false,
+  "fully_read_files": [
+    "LICENSE",
+    "README.md",
+    "dedup-img"
+  ],
+  "license": "Full GPLv3 license read; no production implementation adoption.",
+  "controls": "docs/research/dedup-shell-image248-controls-20261014.json",
+  "controls_sha256": "be62cba357622dcb562d4a731da0bc14a6e9d9023b0afc9a6fc75ce16ba849ab",
+  "findings": [
+    "Hashes exiftool metadata-stripped encoded output, not normalized pixels; no byte/pixel confirmation after SHA512 match.",
+    "find substitutes filename directly into bash command text; quote and command-substitution names execute harmless fixture marker commands.",
+    "Tab field extraction truncates paths containing tabs; newline IFS splits filename records.",
+    "Reverse sort uses textual size order and can keep9-byte entry before100-byte entry.",
+    "Deletes matching paths immediately; no dry run, source mutation snapshot or rollback.",
+    "No pipefail; metadata/read/pipeline failures can be silently filtered.",
+    "stat path expansion unquoted and rm lacks option terminator; full platform/deletion behavior unqualified.",
+    "No actual tests or build metadata in three-file tree."
+  ],
+  "limits": "All three pinned files read and Git blob hashes verified. Seven original fragment controls, full deletion pipeline deliberately not executed; no exiftool/GNU utility/actual image identity qualification."
+}

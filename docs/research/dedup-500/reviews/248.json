@@ -2,9 +2,9 @@
   "index": 248,
   "repository": "DRRDietrich/DeDup-Image",
   "commit": "3ba76e268c2226fd1478083797a72f456ac761f6",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "Complete three-file pinned source review and seven bounded original-shell fragment controls; full deletion pipeline unqualified.",
   "decision": "reference",
-  "finding": "Shell image file digest equality; no detected tests or visual evidence.",
+  "finding": "Metadata-stripped encoded hashes with immediate deletion; filename command injection, path delimiter loss and lexical keeper sort reproduced. No production adoption.",
   "available_source_evidence": [
     {
       "path": "dedup-img",
@@ -18,7 +18,7 @@
     }
   ],
   "license_metadata": "GPL-3.0",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "Full GPLv3 license read; no production copying.",
   "tests_detected": 0,
   "upstream_tests_run": false,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
@@ -44,5 +44,13 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "full_repository_review_complete": true,
+  "fully_read_files": 3,
+  "total_files": 3,
+  "whole_runtime_qualified": false,
+  "complete_source_review": "shell-image248-complete-review-20261014.json",
+  "complete_runtime_audit": "docs/research/dedup-shell-image248-controls-20261014.json",
+  "prior_registry_review": "shell-image248-prior-registry-20261014.json"
 }

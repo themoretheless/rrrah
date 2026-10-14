@@ -1,0 +1,22 @@
+{
+  "status": "passed",
+  "cases": 42101,
+  "seed": 173,
+  "valid": {
+    "add": 11990,
+    "subtract": 8444
+  },
+  "refused": {
+    "add": 30111,
+    "subtract": 33657
+  },
+  "source_sha256": "21822ea1fd317d6980395c5eacef993061042fbfb95ba38cfcbc33e1f8d3f6b7",
+  "oracle": "Python fractions.Fraction with arbitrary-precision integers; exact representability in nonnegative u64 rational duration",
+  "scope": "Original source Duration implementation compiled with minimal Timing error type. Addition, subtraction and ordering only; no decoder, whole crate or timeline integration claim.",
+  "pins": {
+    "docs/research/dedup-duration-fraction-oracle-20261014/results.txt": "b1dfcd2122bea54db9309fdaaf5419949ac3c4e3780e1b56ee81b861a951e86d",
+    "docs/research/dedup-duration-fraction-oracle-20261014/cases.txt": "561549f2f977c1bdf85d939286eb83a99c20c4947fd31395ba5809c7926f6157",
+    "docs/research/dedup-duration-fraction-oracle-20261014/source-arithmetic.rs": "5d803d6561ed96f37104cc853f44b7ebbec1d61704435808c22fc99f273dda32",
+    "docs/research/dedup-duration-fraction-oracle-20261014/build.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

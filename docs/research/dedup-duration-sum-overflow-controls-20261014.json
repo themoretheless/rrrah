@@ -1,0 +1,24 @@
+{
+  "status": "baseline_failure_fixed_in_extracted_original_duration_impl",
+  "root_source_sha256": "21822ea1fd317d6980395c5eacef993061042fbfb95ba38cfcbc33e1f8d3f6b7",
+  "results": {
+    "baseline": {
+      "returncode": 101,
+      "log": "/private/tmp/rrrah-duration-sum-audit-20261014/baseline.log",
+      "source_sha256": "483c9743958e1a2d622724bd3cd489dd0e2dedf0c13c3694eeba1d394669171d"
+    },
+    "fixed": {
+      "returncode": 0,
+      "log": "/private/tmp/rrrah-duration-sum-audit-20261014/fixed.log",
+      "source_sha256": "30d3e201502cd9bf4711da26d22e045b2e97cb0a3e4874707df64b1fc8d30468"
+    }
+  },
+  "scope": "Exact Duration definition/implementation and two source regression tests compiled with minimal Timing error type. No pixel/decoder/animation integration executed. Full crate qualification pending.",
+  "change": "Reduce denominator GCD before cross multiplication; preserves exact rational result and true overflow refusals.",
+  "retained_evidence_sha256": {
+    "docs/research/dedup-duration-sum-overflow-20261014/fixed.rs": "30d3e201502cd9bf4711da26d22e045b2e97cb0a3e4874707df64b1fc8d30468",
+    "docs/research/dedup-duration-sum-overflow-20261014/fixed.log": "fbd1598fa89c6740b6603bebf427c44786f5266c2eca55920ba9f8ffda5ff94c",
+    "docs/research/dedup-duration-sum-overflow-20261014/baseline.rs": "483c9743958e1a2d622724bd3cd489dd0e2dedf0c13c3694eeba1d394669171d",
+    "docs/research/dedup-duration-sum-overflow-20261014/baseline.log": "96fc4a9e6148ff6dba5f8799486724aff8fd01c8122599eec845d7be27e75ff3"
+  }
+}

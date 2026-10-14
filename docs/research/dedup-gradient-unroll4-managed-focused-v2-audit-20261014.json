@@ -1,0 +1,34 @@
+{
+  "status": "verified_frozen_unroll_candidate_managed_gradient_tests",
+  "passed": 15,
+  "failed": 0,
+  "ignored": 2,
+  "filtered": 45,
+  "tests": [
+    "gradient::batch_tests::every_cancellation_checkpoint_and_work_refusal_matches_scalar",
+    "gradient::batch_tests::four_lane_distances_are_bitwise_scalar_for_every_tail_length",
+    "gradient::cache_tests::cache_capacity_and_overflow_keep_exhaustive_fallback_available",
+    "gradient::cache_tests::cached_checkpoints_and_cancellation_match_recomputation_without_credit_leaks",
+    "gradient::cache_tests::cached_matching_keeps_positive_negative_and_distinct_ties_under_both_budget_paths",
+    "gradient::batch_tests::exact_matching_agrees_with_exhaustive_positive_negative_ties_and_spatial_chains",
+    "gradient::cache_tests::linear_runner_dense_banks_do_not_allocate_optional_indices",
+    "gradient::cache_tests::malformed_suffix_and_work_refusal_do_not_allocate_optional_cache",
+    "gradient::cache_tests::managed_cache_releases_before_output_and_respects_ancestor_pressure",
+    "gradient::matching_tests::bounded_distance_preserves_order_and_strict_ties",
+    "gradient::matching_tests::every_cancellation_checkpoint_and_work_refusal_matches_exhaustive",
+    "gradient::matching_tests::exact_matching_agrees_with_exhaustive_positive_negative_ties_and_spatial_chains",
+    "gradient::matching_tests::production_mutual_competitors_match_exhaustive_at_every_checkpoint",
+    "gradient::matching_tests::unrolled_distance_blocks_preserve_scalar_bits_and_partial_lanes",
+    "gradient::cache_tests::linear_runner_large_banks_preserve_results_checkpoints_and_budget_fallback"
+  ],
+  "executable": "/private/tmp/rrrah-gradient-unroll4-managed-qualified-20261014/gradient-tests",
+  "executable_sha256": "c6853e017373302df66df31c1017a356b5b69b90737892251b39253876ffe93f",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-unroll4-managed-focused-v2-20261014.json": "cee45481a35d3622bb3506d322be1f895e24c3c95321ae27a502891d58c12e1a",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-unroll4-v7-source-20261014.json": "475b71ae143469a9128b787730a98439c84995783ffbfb99f1726f8c91e3ed64",
+    "/private/tmp/rrrah-gradient-unroll4-managed-focused-v2-20261014/tests.log": "cb51a21475e40a79ed77d317c38ed7b532420a1bc9805ad33ed56982bb820088",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-gradient-unroll4-managed-focused-v2-20261014.py": "1116a00518fb3b5e7997da0e477bdcf71326a5f3f33b5e615fc4df286c17eedf"
+  },
+  "source": "/private/tmp/rrrah-gradient-unroll4-v7-source-20261014",
+  "scope": "Complete frozen rrrah-dedup source compiled directly with raster cfg and real cached rrrah-core/other dependencies. Execute gradient module tests only, including managed cache/runner and new scalar-bit test. Cargo build-script/default/full decoder/workspace qualification excluded. Dependency binaries pinned; not a claim they were rebuilt from this snapshot. No throughput measurement in this correctness gate. Two ignored manual timing tests and45non-gradient library tests not executed; no whole native operation or full workspace claim."
+}

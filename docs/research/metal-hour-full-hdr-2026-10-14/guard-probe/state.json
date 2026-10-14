@@ -1,0 +1,40 @@
+{
+  "status": "failed",
+  "monitor_pid": 25893,
+  "binary": "/private/tmp/rrrah-metal-soak-guard-fixture.py",
+  "command": [
+    "/private/tmp/rrrah-metal-soak-guard-fixture.py",
+    "long_lived_large_collection_cache_preserves_swap_and_metal_frames",
+    "--exact",
+    "--ignored",
+    "--nocapture",
+    "--test-threads=1"
+  ],
+  "binary_sha256": "a5e32fbd76918935f2492a1b4c2134bbdd9071a73b97e337eb8a69a5c5108d13",
+  "requested_seconds": 10,
+  "full_hdr_output": [
+    4000,
+    3000
+  ],
+  "frames": 8,
+  "managed_root_limit": 576000000,
+  "managed_queue_limit": 192000000,
+  "swap_limit": 1537048576,
+  "scratch": "/Users/themoretheless/Documents/Sources/rrrah/target/metal-hour-20261014/guard-tmp",
+  "rss_guard_bytes": 1048576,
+  "rss_guard_consecutive_samples": 3,
+  "sample_seconds": 0.05,
+  "started_utc": "2026-10-14T12:03:59.619946+00:00",
+  "rss_samples": 6,
+  "child_pid": 25906,
+  "last_sample": {
+    "elapsed_seconds": 0.7348600419999998,
+    "rss_bytes": 8781824
+  },
+  "elapsed_seconds": 0.7786062079999998,
+  "last_progress": {},
+  "stop_reason": "rss_guard",
+  "exit_code": -15,
+  "ended_utc": "2026-10-14T12:04:00.850418+00:00",
+  "workload_evidence_valid": false
+}
