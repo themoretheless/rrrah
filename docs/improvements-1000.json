@@ -26,7 +26,7 @@
     "crates/rrrah-app/src/drop_inspection.rs": "acf57758f2c8a3f0caef7ccf8c5a9775546c220198e634f2d4306da2ae269064",
     "crates/rrrah-app/src/filmstrip_ui.rs": "5ee679a7dc7735ace1eb0298cf5d8324763e5b68c2faae376ffdaba49c64b664",
     "crates/rrrah-app/src/gallery.rs": "815430b323b22827c59fdb036fa1f6c2296ecfcb08004974e596a60af0c3fc74",
-    "crates/rrrah-app/src/main.rs": "ce6bd62f7a93a54a680962ed9a03e0d050118aed492dd5d14f3efb1d6cd4f115",
+    "crates/rrrah-app/src/main.rs": "6f45ec60090563679b425f7176fe7a36eefa9361c89616ae357b9931af3cdad9",
     "crates/rrrah-app/src/model_swap.rs": "9f850258f51be832887fbb9c9df495c55577448b95e75109adfb18894c3854c2",
     "crates/rrrah-app/src/model_upload_worker.rs": "89caee0c3ebf86e14b82762b2fcaf2a01dee9853ccb812dbf177c800b3360e33",
     "crates/rrrah-app/src/pipeline_telemetry.rs": "0dca2b4418c0f8fc2e34778835f9fffd7071e69afee0add84f65f50309ad1059",
@@ -44,9 +44,9 @@
     "crates/rrrah-cache/src/raster_regions.rs": "573489dbf05915f33ca9cc0394ff9b71f3e32f6245aefaea116a4324046d2147",
     "crates/rrrah-cache/src/swap.rs": "ddf6136c142c5b5091e6705fd8c5556c1852765b8088f7f0aef5174ca1274cac",
     "crates/rrrah-core/src/color/dng_neutral.rs": "503c2449b30098cf792847a8fa29c505462ba09f93cdd56be3605704d902ce40",
-    "crates/rrrah-core/src/develop/ahd.rs": "aa6cb6586498c5f8d72037284e07d45e24c9377a73199e406c6bab7dcd75d86f",
-    "crates/rrrah-core/src/develop/demosaic.rs": "04d5ef604f97545257298b0a0102fcd12a772c5fb8e942801bc05bd8183f11c8",
-    "crates/rrrah-core/src/develop/mod.rs": "ff35c2cbe45b009a60f0963c4567f21fd1f59663180c71c94ab89fdb6d58b4cc",
+    "crates/rrrah-core/src/develop/ahd.rs": "43a0b191109f272377968cf32934a2a1a37330153817b7aa967ebae44fde6726",
+    "crates/rrrah-core/src/develop/demosaic.rs": "58d9eed979f93ad97c6b90d06ae1e3b5c310dd779cdc0c4ac9e8a0d93031b94f",
+    "crates/rrrah-core/src/develop/mod.rs": "86d6bfabaf426a176a89a75d79987c0ad552dc808570fea274d9ea5cd6302665",
     "crates/rrrah-core/src/develop/opcodes.rs": "2491e64134fe0ea9e583824c507148bd61725281bd382e91ff8a840137468003",
     "crates/rrrah-core/src/develop/xtrans.rs": "dba777fea38dc26bf574a36ea320b6802fcc0f9ce7f772a7c44347b96a352975",
     "crates/rrrah-core/src/frame.rs": "b7a39bb8623e2f5a20194f8d33cbaac9cede154aec0350279e211f4e55a8a7bf",
@@ -627,7 +627,7 @@
       "evidence": {
         "path": "crates/rrrah-app/src/main.rs",
         "symbol": "fn window_event(",
-        "line": 4945,
+        "line": 4958,
         "excerpt": "fn window_event(&mut self, event_loop: &ActiveEventLoop, id: WindowId, event: WindowEvent) {",
         "observation": "Roadmap требует versioned edit history; в просмотренном app/core нет undo/redo пользовательских правок. Нужен smoke-check актуального UI перед внедрением. Связанный roadmap: docs/EDITOR_100.md (| F70 |)."
       },
@@ -713,7 +713,7 @@
       "evidence": {
         "path": "crates/rrrah-app/src/main.rs",
         "symbol": "fn exiting(",
-        "line": 4739,
+        "line": 4746,
         "excerpt": "fn exiting(&mut self, _event_loop: &ActiveEventLoop) {",
         "observation": "Roadmap требует crash recovery/autosave journal; в app/core не найдены autosave или пользовательский журнал. Связанный roadmap: docs/EDITOR_100.md (| F98 |)."
       },
@@ -758,7 +758,7 @@
       "evidence": {
         "path": "crates/rrrah-app/src/main.rs",
         "symbol": "fn window_event(",
-        "line": 4945,
+        "line": 4958,
         "excerpt": "fn window_event(&mut self, event_loop: &ActiveEventLoop, id: WindowId, event: WindowEvent) {",
         "observation": "Roadmap требует accessibility; в app не найден accessibility bridge. Проверка screen reader необходима перед оценкой текущих ограничений. Связанный roadmap: docs/EDITOR_100.md (| F99 |)."
       },
@@ -801,7 +801,7 @@
       "evidence": {
         "path": "crates/rrrah-app/src/main.rs",
         "symbol": "fn render(",
-        "line": 5418,
+        "line": 5431,
         "excerpt": "fn render(&mut self) {",
         "observation": "Roadmap требует histogram/waveform/vectorscope; найденные gradient histograms относятся к dedup, а не к просмотру. Связанный roadmap: docs/EDITOR_100.md (| F93 |)."
       },
@@ -844,7 +844,7 @@
       "evidence": {
         "path": "crates/rrrah-app/src/main.rs",
         "symbol": "fn render(",
-        "line": 5418,
+        "line": 5431,
         "excerpt": "fn render(&mut self) {",
         "observation": "Roadmap требует before/after; поиск app не показал отдельного пользовательского режима сравнения правок. Связанный roadmap: docs/EDITOR_100.md (| F95 |)."
       },
@@ -973,7 +973,7 @@
       "evidence": {
         "path": "crates/rrrah-app/src/main.rs",
         "symbol": "render",
-        "line": 5461,
+        "line": 5474,
         "excerpt": "self.queue.submit([encoder.finish()]);",
         "observation": "Создание, передача или ожидание GPU-ресурсов может попадать на критический путь кадра.",
         "signal": "gpu"
@@ -1014,7 +1014,7 @@
       "evidence": {
         "path": "crates/rrrah-app/src/main.rs",
         "symbol": "about_to_wait",
-        "line": 4873,
+        "line": 4880,
         "excerpt": "gpu.upload_completions.poll(&gpu.device).unwrap_or_else(|error| {",
         "observation": "Создание, передача или ожидание GPU-ресурсов может попадать на критический путь кадра.",
         "signal": "gpu"
@@ -1362,7 +1362,7 @@
       "evidence": {
         "path": "crates/rrrah-core/src/develop/demosaic.rs",
         "symbol": "amaze",
-        "line": 1872,
+        "line": 1858,
         "excerpt": "for y in 0..bh {",
         "observation": "Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.",
         "signal": "loop"
@@ -2917,8 +2917,8 @@
       "evidence": {
         "path": "crates/rrrah-core/src/develop/ahd.rs",
         "symbol": "ahd",
-        "line": 89,
-        "excerpt": ".lock()",
+        "line": 110,
+        "excerpt": ".name(format!(\"rrrah-ahd-{worker_index}\"))",
         "observation": "Ожидание блокировки или работа внутри критической секции может увеличивать задержку конкурирующих запросов.",
         "signal": "lock"
       },
@@ -2933,7 +2933,15 @@
         "Синтетические корректные и повреждённые входы; для camera-specific результата нужен pinned оригинал и независимый oracle, никаких выводов о полном формате из одного fixture."
       ],
       "public_api": "Сохранить существующие сигнатуры, ошибки, формат данных и правила владения; изменение API оформлять отдельно после подтверждения необходимости.",
-      "id": "RR-0083"
+      "id": "RR-0083",
+      "baseline_evidence": {
+        "path": "crates/rrrah-core/src/develop/ahd.rs",
+        "symbol": "ahd",
+        "line": 89,
+        "excerpt": ".lock()",
+        "observation": "Ожидание блокировки или работа внутри критической секции может увеличивать задержку конкурирующих запросов.",
+        "signal": "lock"
+      }
     },
     {
       "title": "Сократить временные аллокации: hasselblad_entropy::decode_inner",
@@ -5508,7 +5516,7 @@
       "evidence": {
         "path": "crates/rrrah-core/src/develop/mod.rs",
         "symbol": "develop_rgbe",
-        "line": 806,
+        "line": 884,
         "excerpt": "let mut output = Vec::with_capacity((bytes / 4) as usize);",
         "observation": "Создание коллекции внутри операции может давать повторные аллокации и повышать пиковую память.",
         "signal": "alloc"
@@ -10732,7 +10740,7 @@
       "evidence": {
         "path": "crates/rrrah-core/src/develop/demosaic.rs",
         "symbol": "xtrans_markesteijn_3pass",
-        "line": 2623,
+        "line": 2609,
         "excerpt": "let sharp = xtrans_markesteijn_3pass(m, cancelled)?;",
         "observation": "Трансцендентная операция может повторяться для множества отсчётов с одинаковыми параметрами.",
         "signal": "math"
@@ -10852,7 +10860,7 @@
       "evidence": {
         "path": "crates/rrrah-app/src/main.rs",
         "symbol": "window_event",
-        "line": 5131,
+        "line": 5144,
         "excerpt": "let folder = self.strip.tiles[index].folder.clone();",
         "observation": "Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.",
         "signal": "copy"
@@ -10937,7 +10945,7 @@
       "evidence": {
         "path": "crates/rrrah-core/src/develop/demosaic.rs",
         "symbol": "xtrans_markesteijn",
-        "line": 2104,
+        "line": 2090,
         "excerpt": "pub(super) fn xtrans_markesteijn(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, DevelopError> {",
         "observation": "Трансцендентная операция может повторяться для множества отсчётов с одинаковыми параметрами.",
         "signal": "math"
@@ -11361,7 +11369,7 @@
       "evidence": {
         "path": "crates/rrrah-app/src/main.rs",
         "symbol": "update_view",
-        "line": 5696,
+        "line": 5709,
         "excerpt": "let token = GenerationToken::new(self.viewport_generation.clone(), identity);",
         "observation": "Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.",
         "signal": "copy"
@@ -11394,7 +11402,7 @@
       "evidence": {
         "path": "crates/rrrah-core/src/develop/demosaic.rs",
         "symbol": "lmmse",
-        "line": 1374,
+        "line": 1360,
         "excerpt": "for y in 0..bh {",
         "observation": "Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.",
         "signal": "loop"
@@ -11454,7 +11462,7 @@
       "evidence": {
         "path": "crates/rrrah-core/src/develop/demosaic.rs",
         "symbol": "vng",
-        "line": 1024,
+        "line": 1010,
         "excerpt": "for (x, px) in row.iter_mut().enumerate() {",
         "observation": "Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.",
         "signal": "loop"
@@ -11722,7 +11730,7 @@
       "evidence": {
         "path": "crates/rrrah-core/src/develop/demosaic.rs",
         "symbol": "igv",
-        "line": 1742,
+        "line": 1728,
         "excerpt": "+ (n1 - s1).powi(2)",
         "observation": "Трансцендентная операция может повторяться для множества отсчётов с одинаковыми параметрами.",
         "signal": "math"
@@ -11756,7 +11764,7 @@
       "evidence": {
         "path": "crates/rrrah-core/src/develop/demosaic.rs",
         "symbol": "dcb",
-        "line": 1553,
+        "line": 1539,
         "excerpt": "for y in 0..bh {",
         "observation": "Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.",
         "signal": "loop"
@@ -11894,7 +11902,7 @@
       "evidence": {
         "path": "crates/rrrah-core/src/develop/demosaic.rs",
         "symbol": "rcd",
-        "line": 1208,
+        "line": 1194,
         "excerpt": "for y in 0..bh {",
         "observation": "Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.",
         "signal": "loop"
@@ -12136,7 +12144,7 @@
       "evidence": {
         "path": "crates/rrrah-core/src/develop/demosaic.rs",
         "symbol": "hamilton_adams",
-        "line": 612,
+        "line": 598,
         "excerpt": "for y in 0..bh {",
         "observation": "Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.",
         "signal": "loop"
@@ -12248,7 +12256,7 @@
       "evidence": {
         "path": "crates/rrrah-core/src/develop/demosaic.rs",
         "symbol": "ppg",
-        "line": 905,
+        "line": 891,
         "excerpt": "for y in 0..bh {",
         "observation": "Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.",
         "signal": "loop"
@@ -12592,7 +12600,7 @@
       "evidence": {
         "path": "crates/rrrah-core/src/develop/demosaic.rs",
         "symbol": "smooth_hue",
-        "line": 381,
+        "line": 367,
         "excerpt": "for y in 0..bh {",
         "observation": "Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.",
         "signal": "loop"
@@ -12963,7 +12971,7 @@
       "evidence": {
         "path": "crates/rrrah-core/src/develop/demosaic.rs",
         "symbol": "laroche_prescott",
-        "line": 499,
+        "line": 485,
         "excerpt": "for y in 0..bh {",
         "observation": "Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.",
         "signal": "loop"
@@ -13126,7 +13134,7 @@
       "evidence": {
         "path": "crates/rrrah-app/src/main.rs",
         "symbol": "drain_thumbnails",
-        "line": 4475,
+        "line": 4482,
         "excerpt": "let Some(folder) = self.strip.tiles.get(ready.index).map(|tile| tile.folder.clone()) else {",
         "observation": "Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.",
         "signal": "copy"
@@ -13909,7 +13917,7 @@
       "evidence": {
         "path": "crates/rrrah-core/src/develop/demosaic.rs",
         "symbol": "malvar_he_cutler",
-        "line": 799,
+        "line": 785,
         "excerpt": "for (x, px) in row.iter_mut().enumerate() {",
         "observation": "Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.",
         "signal": "loop"
@@ -14229,7 +14237,7 @@
       "evidence": {
         "path": "crates/rrrah-core/src/develop/demosaic.rs",
         "symbol": "clustered_bayer",
-        "line": 2702,
+        "line": 2688,
         "excerpt": "for (x, out_g) in row.iter_mut().enumerate() {",
         "observation": "Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.",
         "signal": "loop"
@@ -14393,7 +14401,7 @@
       "evidence": {
         "path": "crates/rrrah-app/src/main.rs",
         "symbol": "resumed",
-        "line": 4774,
+        "line": 4781,
         "excerpt": "window.clone(),",
         "observation": "Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.",
         "signal": "copy"
@@ -14979,7 +14987,7 @@
       "evidence": {
         "path": "crates/rrrah-core/src/develop/demosaic.rs",
         "symbol": "suppress_chromatic_fringe",
-        "line": 3066,
+        "line": 3052,
         "excerpt": "let src = rgb.data.clone();",
         "observation": "Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.",
         "signal": "copy"
@@ -15687,7 +15695,7 @@
       "evidence": {
         "path": "crates/rrrah-core/src/develop/demosaic.rs",
         "symbol": "suppress_false_color",
-        "line": 3018,
+        "line": 3004,
         "excerpt": "dr.sort_unstable_by(|a, b| a.total_cmp(b));",
         "observation": "Полное упорядочивание может быть дороже отбора реально используемого результата.",
         "signal": "sort"
@@ -16228,7 +16236,7 @@
       "evidence": {
         "path": "crates/rrrah-core/src/develop/demosaic.rs",
         "symbol": "generic_cfa",
-        "line": 2740,
+        "line": 2726,
         "excerpt": "for (x, px) in row.iter_mut().enumerate() {",
         "observation": "Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.",
         "signal": "loop"
@@ -16392,7 +16400,7 @@
       "evidence": {
         "path": "crates/rrrah-core/src/develop/demosaic.rs",
         "symbol": "bilinear",
-        "line": 734,
+        "line": 720,
         "excerpt": "for (x, px) in row.iter_mut().enumerate() {",
         "observation": "Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.",
         "signal": "loop"
@@ -17237,7 +17245,7 @@
       "evidence": {
         "path": "crates/rrrah-app/src/main.rs",
         "symbol": "drain_folder_scan",
-        "line": 4398,
+        "line": 4405,
         "excerpt": "self.gallery_index = ready.paths.iter().position(|candidate| candidate == &self.path);",
         "observation": "Повторный поиск по коллекции может увеличивать число сравнений на больших входах.",
         "signal": "lookup"
@@ -17452,7 +17460,7 @@
       "evidence": {
         "path": "crates/rrrah-core/src/develop/demosaic.rs",
         "symbol": "dual_demosaic",
-        "line": 2036,
+        "line": 2022,
         "excerpt": "pub(super) fn dual_demosaic(",
         "observation": "Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.",
         "signal": "copy"
@@ -17694,7 +17702,7 @@
       "evidence": {
         "path": "crates/rrrah-app/src/main.rs",
         "symbol": "open_gallery_index",
-        "line": 4618,
+        "line": 4625,
         "excerpt": ".submit_request_with_prefetch(path.clone(), 0, None, true, neighbours)",
         "observation": "Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.",
         "signal": "copy"
@@ -18408,7 +18416,7 @@
       "evidence": {
         "path": "crates/rrrah-core/src/develop/demosaic.rs",
         "symbol": "suppress_cfa_impulse_noise",
-        "line": 2966,
+        "line": 2952,
         "excerpt": "slice.sort_unstable_by(|a, b| a.total_cmp(b));",
         "observation": "Полное упорядочивание может быть дороже отбора реально используемого результата.",
         "signal": "sort"
@@ -18847,7 +18855,7 @@
       "evidence": {
         "path": "crates/rrrah-app/src/main.rs",
         "symbol": "rebuild_hud",
-        "line": 5401,
+        "line": 5414,
         "excerpt": ".collect();",
         "observation": "Материализация итератора может создавать временную коллекцию перед следующим проходом.",
         "signal": "collect"
@@ -20839,7 +20847,7 @@
       "evidence": {
         "path": "crates/rrrah-core/src/develop/demosaic.rs",
         "symbol": "equilibrate_bayer_greens",
-        "line": 2899,
+        "line": 2885,
         "excerpt": "let src = samples.to_vec();",
         "observation": "Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.",
         "signal": "copy"
@@ -20873,7 +20881,7 @@
       "evidence": {
         "path": "crates/rrrah-core/src/develop/demosaic.rs",
         "symbol": "nearest",
-        "line": 329,
+        "line": 315,
         "excerpt": "for (x, px) in row.iter_mut().enumerate() {",
         "observation": "Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.",
         "signal": "loop"
@@ -21115,7 +21123,7 @@
       "evidence": {
         "path": "crates/rrrah-app/src/main.rs",
         "symbol": "adjust_scientific_window",
-        "line": 4682,
+        "line": 4689,
         "excerpt": ".submit_image_with_window(self.path.clone(), index, Some(window))",
         "observation": "Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.",
         "signal": "copy"
@@ -21148,7 +21156,7 @@
       "evidence": {
         "path": "crates/rrrah-app/src/main.rs",
         "symbol": "drain_dropped_paths",
-        "line": 4577,
+        "line": 4584,
         "excerpt": "self.gallery = vec![path.clone()];",
         "observation": "Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.",
         "signal": "copy"
@@ -21490,7 +21498,7 @@
       "evidence": {
         "path": "crates/rrrah-app/src/main.rs",
         "symbol": "navigate_image",
-        "line": 4653,
+        "line": 4660,
         "excerpt": ".submit_image_with_window(self.path.clone(), next, self.scalar_window)",
         "observation": "Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.",
         "signal": "copy"
@@ -21556,7 +21564,7 @@
       "evidence": {
         "path": "crates/rrrah-app/src/main.rs",
         "symbol": "select_viewer_surface",
-        "line": 12809,
+        "line": 12822,
         "excerpt": ".find(wgpu::TextureFormat::is_srgb)",
         "observation": "Повторный поиск по коллекции может увеличивать число сравнений на больших входах.",
         "signal": "lookup"
@@ -21589,7 +21597,7 @@
       "evidence": {
         "path": "crates/rrrah-core/src/develop/demosaic.rs",
         "symbol": "is_clustered_bayer",
-        "line": 2643,
+        "line": 2629,
         "excerpt": "for by in [0, cluster] {",
         "observation": "Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.",
         "signal": "loop"
@@ -24600,7 +24608,7 @@
       "evidence": {
         "path": "crates/rrrah-app/src/main.rs",
         "symbol": "submit_thumb_jobs",
-        "line": 4427,
+        "line": 4434,
         "excerpt": "source: tile.cover.clone(),",
         "observation": "Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.",
         "signal": "copy"
@@ -25932,7 +25940,7 @@
       "evidence": {
         "path": "crates/rrrah-app/src/main.rs",
         "symbol": "exiting",
-        "line": 4748,
+        "line": 4755,
         "excerpt": "while self.receiver.try_recv().is_ok() {}",
         "observation": "Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.",
         "signal": "loop"
@@ -25965,7 +25973,7 @@
       "evidence": {
         "path": "crates/rrrah-app/src/main.rs",
         "symbol": "parse_tone_curve",
-        "line": 12551,
+        "line": 12564,
         "excerpt": ".collect::<Result<Vec<_>>>()?;",
         "observation": "Материализация итератора может создавать временную коллекцию перед следующим проходом.",
         "signal": "collect"

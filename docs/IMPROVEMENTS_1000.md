@@ -101,7 +101,7 @@ API/совместимость: Существующие сигнатуры и �
 
 Приёмка: Два одновременно работающих потока имеют разные tid, B/E одного span принадлежат одной lane; старые JSONL записи читаются с дефолтным tid.
 
-API/совместимость: Добавить необязательный thread_id в сериализуемое событие; старые записи без поля сохраняют совместимость.
+API/совместимость: Добавить необязательный thread_id в сериализуемое событие; старые записи без поля сохраняют совместимость. Поле thread_id добавлено в публичный Rust TelemetryEvent: внешние struct literals должны инициализировать его (0 для legacy), это source-breaking изменение; при публикации требуется соответствующая версия. JSONL без thread_id/args читается с default.
 
 Зависимости: нет установленных. Условия: Синтетические входы и релевантные существующие регрессии; внешние оригиналы проверять на месте без копирования в реестр.
 
@@ -704,7 +704,7 @@ API/совместимость: Сохранить существующие си
 
 **улучшение · P1 · L · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:4945](../crates/rrrah-app/src/main.rs#L4945), `fn window_event(`. Roadmap требует versioned edit history; в просмотренном app/core нет undo/redo пользовательских правок. Нужен smoke-check актуального UI перед внедрением. Связанный roadmap: docs/EDITOR_100.md (| F70 |).
+Основание: [crates/rrrah-app/src/main.rs:4958](../crates/rrrah-app/src/main.rs#L4958), `fn window_event(`. Roadmap требует versioned edit history; в просмотренном app/core нет undo/redo пользовательских правок. Нужен smoke-check актуального UI перед внедрением. Связанный roadmap: docs/EDITOR_100.md (| F70 |).
 
 Участок: `fn window_event(&mut self, event_loop: &ActiveEventLoop, id: WindowId, event: WindowEvent) {`
 
@@ -729,7 +729,7 @@ API/совместимость: Новый native EditSession/command API; cache
 
 Участок: `fn run_viewer(`
 
-**Выполнение: partial (2026-10-14).** Атомарный XMP round-trip сохраняет неизвестный XML и другие страницы; source hash, bounded parser и конфликт digest защищают запись.
+**Выполнение: partial (2026-10-14).** Атомарный XMP round-trip сохраняет неизвестный XML и другие страницы; source hash, bounded parser и конфликт digest защищают запись. Перед записью проверяется полный hash исходника, в том числе при одинаковых длине/mtime; oversized и non-regular sidecar отклоняются.
 
 Осталось/границы: Конфликт возвращается ошибкой, диалог разрешения не реализован; внешний несотрудничающий writer может конкурировать с rename. [Отчёт](research/first30-2026-10-14/REPORT.md).
 
@@ -746,13 +746,13 @@ API/совместимость: Отдельная версионированн�
 
 **улучшение · P1 · L · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:4739](../crates/rrrah-app/src/main.rs#L4739), `fn exiting(`. Roadmap требует crash recovery/autosave journal; в app/core не найдены autosave или пользовательский журнал. Связанный roadmap: docs/EDITOR_100.md (| F98 |).
+Основание: [crates/rrrah-app/src/main.rs:4746](../crates/rrrah-app/src/main.rs#L4746), `fn exiting(`. Roadmap требует crash recovery/autosave journal; в app/core не найдены autosave или пользовательский журнал. Связанный roadmap: docs/EDITOR_100.md (| F98 |).
 
 Участок: `fn exiting(&mut self, _event_loop: &ActiveEventLoop) {`
 
 **Выполнение: partial (2026-10-14).** Checksummed bounded атомарный snapshot journal, проверка исходника/версии и восстановление последнего целого состояния подключены к viewer.
 
-Осталось/границы: Это snapshot состояния, не командный журнал; нужна kill-тестовая серия GUI и диалог выбора при изменившемся исходнике. [Отчёт](research/first30-2026-10-14/REPORT.md).
+Осталось/границы: Это snapshot состояния, не командный журнал; нужна kill-тестовая серия GUI и диалог выбора при изменившемся исходнике. Разные состояния XMP/journal сохраняются и блокируют правки до явного решения; длительное filesystem I/O при shutdown ещё требует отдельной проверки. [Отчёт](research/first30-2026-10-14/REPORT.md).
 
 Изменение: Поверх EditSession записывать ограниченный журнал команд с идентичностью исходника и контрольными суммами; восстанавливать только подтверждённый целый префикс после сбоя.
 
@@ -767,7 +767,7 @@ API/совместимость: Версионированный journal format,
 
 **улучшение · P1 · L · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:5418](../crates/rrrah-app/src/main.rs#L5418), `fn render(`. Roadmap требует histogram/waveform/vectorscope; найденные gradient histograms относятся к dedup, а не к просмотру. Связанный roadmap: docs/EDITOR_100.md (| F93 |).
+Основание: [crates/rrrah-app/src/main.rs:5431](../crates/rrrah-app/src/main.rs#L5431), `fn render(`. Roadmap требует histogram/waveform/vectorscope; найденные gradient histograms относятся к dedup, а не к просмотру. Связанный roadmap: docs/EDITOR_100.md (| F93 |).
 
 Участок: `fn render(&mut self) {`
 
@@ -788,7 +788,7 @@ API/совместимость: Отдельный HistogramRequest/Result с ge
 
 **улучшение · P1 · L · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:5418](../crates/rrrah-app/src/main.rs#L5418), `fn render(`. Roadmap требует before/after; поиск app не показал отдельного пользовательского режима сравнения правок. Связанный roadmap: docs/EDITOR_100.md (| F95 |).
+Основание: [crates/rrrah-app/src/main.rs:5431](../crates/rrrah-app/src/main.rs#L5431), `fn render(`. Roadmap требует before/after; поиск app не показал отдельного пользовательского режима сравнения правок. Связанный roadmap: docs/EDITOR_100.md (| F95 |).
 
 Участок: `fn render(&mut self) {`
 
@@ -812,7 +812,7 @@ API/совместимость: Viewer comparison state поверх EditSession
 
 **улучшение · P1 · L · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:4945](../crates/rrrah-app/src/main.rs#L4945), `fn window_event(`. Roadmap требует accessibility; в app не найден accessibility bridge. Проверка screen reader необходима перед оценкой текущих ограничений. Связанный roadmap: docs/EDITOR_100.md (| F99 |).
+Основание: [crates/rrrah-app/src/main.rs:4958](../crates/rrrah-app/src/main.rs#L4958), `fn window_event(`. Roadmap требует accessibility; в app не найден accessibility bridge. Проверка screen reader необходима перед оценкой текущих ограничений. Связанный roadmap: docs/EDITOR_100.md (| F99 |).
 
 Участок: `fn window_event(&mut self, event_loop: &ActiveEventLoop, id: WindowId, event: WindowEvent) {`
 
@@ -875,7 +875,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:5461](../crates/rrrah-app/src/main.rs#L5461), `render`. Создание, передача или ожидание GPU-ресурсов может попадать на критический путь кадра.
+Основание: [crates/rrrah-app/src/main.rs:5474](../crates/rrrah-app/src/main.rs#L5474), `render`. Создание, передача или ожидание GPU-ресурсов может попадать на критический путь кадра.
 
 Участок: `self.queue.submit([encoder.finish()]);`
 
@@ -896,7 +896,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:4873](../crates/rrrah-app/src/main.rs#L4873), `about_to_wait`. Создание, передача или ожидание GPU-ресурсов может попадать на критический путь кадра.
+Основание: [crates/rrrah-app/src/main.rs:4880](../crates/rrrah-app/src/main.rs#L4880), `about_to_wait`. Создание, передача или ожидание GPU-ресурсов может попадать на критический путь кадра.
 
 Участок: `gpu.upload_completions.poll(&gpu.device).unwrap_or_else(|error| {`
 
@@ -1422,7 +1422,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:5131](../crates/rrrah-app/src/main.rs#L5131), `window_event`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
+Основание: [crates/rrrah-app/src/main.rs:5144](../crates/rrrah-app/src/main.rs#L5144), `window_event`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
 
 Участок: `let folder = self.strip.tiles[index].folder.clone();`
 
@@ -1439,7 +1439,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:5696](../crates/rrrah-app/src/main.rs#L5696), `update_view`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
+Основание: [crates/rrrah-app/src/main.rs:5709](../crates/rrrah-app/src/main.rs#L5709), `update_view`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
 
 Участок: `let token = GenerationToken::new(self.viewport_generation.clone(), identity);`
 
@@ -1490,7 +1490,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:4475](../crates/rrrah-app/src/main.rs#L4475), `drain_thumbnails`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
+Основание: [crates/rrrah-app/src/main.rs:4482](../crates/rrrah-app/src/main.rs#L4482), `drain_thumbnails`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
 
 Участок: `let Some(folder) = self.strip.tiles.get(ready.index).map(|tile| tile.folder.clone()) else {`
 
@@ -1524,7 +1524,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:4774](../crates/rrrah-app/src/main.rs#L4774), `resumed`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
+Основание: [crates/rrrah-app/src/main.rs:4781](../crates/rrrah-app/src/main.rs#L4781), `resumed`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
 
 Участок: `window.clone(),`
 
@@ -1626,7 +1626,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:4398](../crates/rrrah-app/src/main.rs#L4398), `drain_folder_scan`. Повторный поиск по коллекции может увеличивать число сравнений на больших входах.
+Основание: [crates/rrrah-app/src/main.rs:4405](../crates/rrrah-app/src/main.rs#L4405), `drain_folder_scan`. Повторный поиск по коллекции может увеличивать число сравнений на больших входах.
 
 Участок: `self.gallery_index = ready.paths.iter().position(|candidate| candidate == &self.path);`
 
@@ -1643,7 +1643,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:4618](../crates/rrrah-app/src/main.rs#L4618), `open_gallery_index`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
+Основание: [crates/rrrah-app/src/main.rs:4625](../crates/rrrah-app/src/main.rs#L4625), `open_gallery_index`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
 
 Участок: `.submit_request_with_prefetch(path.clone(), 0, None, true, neighbours)`
 
@@ -1694,7 +1694,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:5401](../crates/rrrah-app/src/main.rs#L5401), `rebuild_hud`. Материализация итератора может создавать временную коллекцию перед следующим проходом.
+Основание: [crates/rrrah-app/src/main.rs:5414](../crates/rrrah-app/src/main.rs#L5414), `rebuild_hud`. Материализация итератора может создавать временную коллекцию перед следующим проходом.
 
 Участок: `.collect();`
 
@@ -1779,7 +1779,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:4682](../crates/rrrah-app/src/main.rs#L4682), `adjust_scientific_window`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
+Основание: [crates/rrrah-app/src/main.rs:4689](../crates/rrrah-app/src/main.rs#L4689), `adjust_scientific_window`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
 
 Участок: `.submit_image_with_window(self.path.clone(), index, Some(window))`
 
@@ -1796,7 +1796,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:4577](../crates/rrrah-app/src/main.rs#L4577), `drain_dropped_paths`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
+Основание: [crates/rrrah-app/src/main.rs:4584](../crates/rrrah-app/src/main.rs#L4584), `drain_dropped_paths`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
 
 Участок: `self.gallery = vec![path.clone()];`
 
@@ -1830,7 +1830,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:4653](../crates/rrrah-app/src/main.rs#L4653), `navigate_image`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
+Основание: [crates/rrrah-app/src/main.rs:4660](../crates/rrrah-app/src/main.rs#L4660), `navigate_image`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
 
 Участок: `.submit_image_with_window(self.path.clone(), next, self.scalar_window)`
 
@@ -1864,7 +1864,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:12809](../crates/rrrah-app/src/main.rs#L12809), `select_viewer_surface`. Повторный поиск по коллекции может увеличивать число сравнений на больших входах.
+Основание: [crates/rrrah-app/src/main.rs:12822](../crates/rrrah-app/src/main.rs#L12822), `select_viewer_surface`. Повторный поиск по коллекции может увеличивать число сравнений на больших входах.
 
 Участок: `.find(wgpu::TextureFormat::is_srgb)`
 
@@ -2017,7 +2017,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:4427](../crates/rrrah-app/src/main.rs#L4427), `submit_thumb_jobs`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
+Основание: [crates/rrrah-app/src/main.rs:4434](../crates/rrrah-app/src/main.rs#L4434), `submit_thumb_jobs`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
 
 Участок: `source: tile.cover.clone(),`
 
@@ -2153,7 +2153,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:4748](../crates/rrrah-app/src/main.rs#L4748), `exiting`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
+Основание: [crates/rrrah-app/src/main.rs:4755](../crates/rrrah-app/src/main.rs#L4755), `exiting`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
 
 Участок: `while self.receiver.try_recv().is_ok() {}`
 
@@ -2170,7 +2170,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:12551](../crates/rrrah-app/src/main.rs#L12551), `parse_tone_curve`. Материализация итератора может создавать временную коллекцию перед следующим проходом.
+Основание: [crates/rrrah-app/src/main.rs:12564](../crates/rrrah-app/src/main.rs#L12564), `parse_tone_curve`. Материализация итератора может создавать временную коллекцию перед следующим проходом.
 
 Участок: `.collect::<Result<Vec<_>>>()?;`
 
@@ -10982,7 +10982,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-core/src/develop/demosaic.rs:1872](../crates/rrrah-core/src/develop/demosaic.rs#L1872), `amaze`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
+Основание: [crates/rrrah-core/src/develop/demosaic.rs:1858](../crates/rrrah-core/src/develop/demosaic.rs#L1858), `amaze`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
 
 Участок: `for y in 0..bh {`
 
@@ -11088,9 +11088,9 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-core/src/develop/ahd.rs:89](../crates/rrrah-core/src/develop/ahd.rs#L89), `ahd`. Ожидание блокировки или работа внутри критической секции может увеличивать задержку конкурирующих запросов.
+Основание: [crates/rrrah-core/src/develop/ahd.rs:110](../crates/rrrah-core/src/develop/ahd.rs#L110), `ahd`. Ожидание блокировки или работа внутри критической секции может увеличивать задержку конкурирующих запросов.
 
-Участок: `.lock()`
+Участок: `.name(format!("rrrah-ahd-{worker_index}"))`
 
 Изменение: Измерить время ожидания и удержания при 1/2/4 конкурентных вызовах; вынести независимые вычисления из критической секции, если профиль подтверждает задержку. Сохранить воспроизводимый benchmark этого участка. Изменение production применять только после устойчивого выигрыша; при нулевом выигрыше закрыть гипотезу измеренным отчётом и оставить полезный benchmark.
 
@@ -11139,7 +11139,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-core/src/develop/mod.rs:806](../crates/rrrah-core/src/develop/mod.rs#L806), `develop_rgbe`. Создание коллекции внутри операции может давать повторные аллокации и повышать пиковую память.
+Основание: [crates/rrrah-core/src/develop/mod.rs:884](../crates/rrrah-core/src/develop/mod.rs#L884), `develop_rgbe`. Создание коллекции внутри операции может давать повторные аллокации и повышать пиковую память.
 
 Участок: `let mut output = Vec::with_capacity((bytes / 4) as usize);`
 
@@ -11173,7 +11173,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · L · требует воспроизведения**
 
-Основание: [crates/rrrah-core/src/develop/demosaic.rs:2623](../crates/rrrah-core/src/develop/demosaic.rs#L2623), `xtrans_markesteijn_3pass`. Трансцендентная операция может повторяться для множества отсчётов с одинаковыми параметрами.
+Основание: [crates/rrrah-core/src/develop/demosaic.rs:2609](../crates/rrrah-core/src/develop/demosaic.rs#L2609), `xtrans_markesteijn_3pass`. Трансцендентная операция может повторяться для множества отсчётов с одинаковыми параметрами.
 
 Участок: `let sharp = xtrans_markesteijn_3pass(m, cancelled)?;`
 
@@ -11207,7 +11207,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-core/src/develop/demosaic.rs:2104](../crates/rrrah-core/src/develop/demosaic.rs#L2104), `xtrans_markesteijn`. Трансцендентная операция может повторяться для множества отсчётов с одинаковыми параметрами.
+Основание: [crates/rrrah-core/src/develop/demosaic.rs:2090](../crates/rrrah-core/src/develop/demosaic.rs#L2090), `xtrans_markesteijn`. Трансцендентная операция может повторяться для множества отсчётов с одинаковыми параметрами.
 
 Участок: `pub(super) fn xtrans_markesteijn(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, DevelopError> {`
 
@@ -11224,7 +11224,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-core/src/develop/demosaic.rs:1374](../crates/rrrah-core/src/develop/demosaic.rs#L1374), `lmmse`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
+Основание: [crates/rrrah-core/src/develop/demosaic.rs:1360](../crates/rrrah-core/src/develop/demosaic.rs#L1360), `lmmse`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
 
 Участок: `for y in 0..bh {`
 
@@ -11241,7 +11241,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-core/src/develop/demosaic.rs:1024](../crates/rrrah-core/src/develop/demosaic.rs#L1024), `vng`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
+Основание: [crates/rrrah-core/src/develop/demosaic.rs:1010](../crates/rrrah-core/src/develop/demosaic.rs#L1010), `vng`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
 
 Участок: `for (x, px) in row.iter_mut().enumerate() {`
 
@@ -11258,7 +11258,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-core/src/develop/demosaic.rs:1742](../crates/rrrah-core/src/develop/demosaic.rs#L1742), `igv`. Трансцендентная операция может повторяться для множества отсчётов с одинаковыми параметрами.
+Основание: [crates/rrrah-core/src/develop/demosaic.rs:1728](../crates/rrrah-core/src/develop/demosaic.rs#L1728), `igv`. Трансцендентная операция может повторяться для множества отсчётов с одинаковыми параметрами.
 
 Участок: `+ (n1 - s1).powi(2)`
 
@@ -11275,7 +11275,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-core/src/develop/demosaic.rs:1553](../crates/rrrah-core/src/develop/demosaic.rs#L1553), `dcb`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
+Основание: [crates/rrrah-core/src/develop/demosaic.rs:1539](../crates/rrrah-core/src/develop/demosaic.rs#L1539), `dcb`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
 
 Участок: `for y in 0..bh {`
 
@@ -11292,7 +11292,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-core/src/develop/demosaic.rs:1208](../crates/rrrah-core/src/develop/demosaic.rs#L1208), `rcd`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
+Основание: [crates/rrrah-core/src/develop/demosaic.rs:1194](../crates/rrrah-core/src/develop/demosaic.rs#L1194), `rcd`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
 
 Участок: `for y in 0..bh {`
 
@@ -11326,7 +11326,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-core/src/develop/demosaic.rs:612](../crates/rrrah-core/src/develop/demosaic.rs#L612), `hamilton_adams`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
+Основание: [crates/rrrah-core/src/develop/demosaic.rs:598](../crates/rrrah-core/src/develop/demosaic.rs#L598), `hamilton_adams`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
 
 Участок: `for y in 0..bh {`
 
@@ -11343,7 +11343,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-core/src/develop/demosaic.rs:905](../crates/rrrah-core/src/develop/demosaic.rs#L905), `ppg`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
+Основание: [crates/rrrah-core/src/develop/demosaic.rs:891](../crates/rrrah-core/src/develop/demosaic.rs#L891), `ppg`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
 
 Участок: `for y in 0..bh {`
 
@@ -11377,7 +11377,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-core/src/develop/demosaic.rs:381](../crates/rrrah-core/src/develop/demosaic.rs#L381), `smooth_hue`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
+Основание: [crates/rrrah-core/src/develop/demosaic.rs:367](../crates/rrrah-core/src/develop/demosaic.rs#L367), `smooth_hue`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
 
 Участок: `for y in 0..bh {`
 
@@ -11394,7 +11394,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-core/src/develop/demosaic.rs:499](../crates/rrrah-core/src/develop/demosaic.rs#L499), `laroche_prescott`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
+Основание: [crates/rrrah-core/src/develop/demosaic.rs:485](../crates/rrrah-core/src/develop/demosaic.rs#L485), `laroche_prescott`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
 
 Участок: `for y in 0..bh {`
 
@@ -11428,7 +11428,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-core/src/develop/demosaic.rs:799](../crates/rrrah-core/src/develop/demosaic.rs#L799), `malvar_he_cutler`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
+Основание: [crates/rrrah-core/src/develop/demosaic.rs:785](../crates/rrrah-core/src/develop/demosaic.rs#L785), `malvar_he_cutler`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
 
 Участок: `for (x, px) in row.iter_mut().enumerate() {`
 
@@ -11445,7 +11445,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-core/src/develop/demosaic.rs:2702](../crates/rrrah-core/src/develop/demosaic.rs#L2702), `clustered_bayer`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
+Основание: [crates/rrrah-core/src/develop/demosaic.rs:2688](../crates/rrrah-core/src/develop/demosaic.rs#L2688), `clustered_bayer`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
 
 Участок: `for (x, out_g) in row.iter_mut().enumerate() {`
 
@@ -11462,7 +11462,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-core/src/develop/demosaic.rs:3066](../crates/rrrah-core/src/develop/demosaic.rs#L3066), `suppress_chromatic_fringe`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
+Основание: [crates/rrrah-core/src/develop/demosaic.rs:3052](../crates/rrrah-core/src/develop/demosaic.rs#L3052), `suppress_chromatic_fringe`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
 
 Участок: `let src = rgb.data.clone();`
 
@@ -11479,7 +11479,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-core/src/develop/demosaic.rs:3018](../crates/rrrah-core/src/develop/demosaic.rs#L3018), `suppress_false_color`. Полное упорядочивание может быть дороже отбора реально используемого результата.
+Основание: [crates/rrrah-core/src/develop/demosaic.rs:3004](../crates/rrrah-core/src/develop/demosaic.rs#L3004), `suppress_false_color`. Полное упорядочивание может быть дороже отбора реально используемого результата.
 
 Участок: `dr.sort_unstable_by(|a, b| a.total_cmp(b));`
 
@@ -11513,7 +11513,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-core/src/develop/demosaic.rs:2740](../crates/rrrah-core/src/develop/demosaic.rs#L2740), `generic_cfa`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
+Основание: [crates/rrrah-core/src/develop/demosaic.rs:2726](../crates/rrrah-core/src/develop/demosaic.rs#L2726), `generic_cfa`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
 
 Участок: `for (x, px) in row.iter_mut().enumerate() {`
 
@@ -11530,7 +11530,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-core/src/develop/demosaic.rs:734](../crates/rrrah-core/src/develop/demosaic.rs#L734), `bilinear`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
+Основание: [crates/rrrah-core/src/develop/demosaic.rs:720](../crates/rrrah-core/src/develop/demosaic.rs#L720), `bilinear`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
 
 Участок: `for (x, px) in row.iter_mut().enumerate() {`
 
@@ -11581,7 +11581,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-core/src/develop/demosaic.rs:2036](../crates/rrrah-core/src/develop/demosaic.rs#L2036), `dual_demosaic`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
+Основание: [crates/rrrah-core/src/develop/demosaic.rs:2022](../crates/rrrah-core/src/develop/demosaic.rs#L2022), `dual_demosaic`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
 
 Участок: `pub(super) fn dual_demosaic(`
 
@@ -11598,7 +11598,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-core/src/develop/demosaic.rs:2966](../crates/rrrah-core/src/develop/demosaic.rs#L2966), `suppress_cfa_impulse_noise`. Полное упорядочивание может быть дороже отбора реально используемого результата.
+Основание: [crates/rrrah-core/src/develop/demosaic.rs:2952](../crates/rrrah-core/src/develop/demosaic.rs#L2952), `suppress_cfa_impulse_noise`. Полное упорядочивание может быть дороже отбора реально используемого результата.
 
 Участок: `slice.sort_unstable_by(|a, b| a.total_cmp(b));`
 
@@ -11649,7 +11649,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-core/src/develop/demosaic.rs:2899](../crates/rrrah-core/src/develop/demosaic.rs#L2899), `equilibrate_bayer_greens`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
+Основание: [crates/rrrah-core/src/develop/demosaic.rs:2885](../crates/rrrah-core/src/develop/demosaic.rs#L2885), `equilibrate_bayer_greens`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
 
 Участок: `let src = samples.to_vec();`
 
@@ -11666,7 +11666,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-core/src/develop/demosaic.rs:329](../crates/rrrah-core/src/develop/demosaic.rs#L329), `nearest`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
+Основание: [crates/rrrah-core/src/develop/demosaic.rs:315](../crates/rrrah-core/src/develop/demosaic.rs#L315), `nearest`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
 
 Участок: `for (x, px) in row.iter_mut().enumerate() {`
 
@@ -11683,7 +11683,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-core/src/develop/demosaic.rs:2643](../crates/rrrah-core/src/develop/demosaic.rs#L2643), `is_clustered_bayer`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
+Основание: [crates/rrrah-core/src/develop/demosaic.rs:2629](../crates/rrrah-core/src/develop/demosaic.rs#L2629), `is_clustered_bayer`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
 
 Участок: `for by in [0, cluster] {`
 
