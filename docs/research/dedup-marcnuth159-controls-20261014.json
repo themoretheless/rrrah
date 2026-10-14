@@ -1,0 +1,217 @@
+{
+  "status": "passed_bounded_original_core_controls",
+  "repository": "Marcnuth/deduplication",
+  "commit": "c407cb11e5dd7f13360639dbd55efb4ffc2bd80c",
+  "original_tree_blobs": 12,
+  "source_pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/Marcnuth--deduplication/07-gitignore": "7386f6f7b3f82c662e019df20ae53a3eaf32334bfcec40c8e941261b7f5ddb7c",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/Marcnuth--deduplication/01-LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/Marcnuth--deduplication/00-README.md": "d50b0ed220651e124288ba67ca494cc4fcb4dd758f4faf338fc748a5e2363b39",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/Marcnuth--deduplication/04-__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/Marcnuth--deduplication/02-lsimhash.py": "04856e54b8a6f7103dd06af5402200f826a69f2f63a796cab89bb0f354152bdc",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/Marcnuth--deduplication/06-nlp.py": "77a03ce535dec7845791836e63d949ce017fdda41e0021c1764e178a93da8017",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/Marcnuth--deduplication/03-simhash.py": "ab8059c7b0f48fc243cb99df609f494ef36691c400a72188b434dff28e1f5ef5",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/Marcnuth--deduplication/08-requirements.txt": "9d67a29284b45330bf857c7f5d3aaa846d8a7686dce68a3e7a6d6255fa9fe0a7",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/Marcnuth--deduplication/09-setup.py": "432dd4c20d9117c228f37ff69eab8acef12ffe5c4168b080ea158fa9abfed43a",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/Marcnuth--deduplication/10-wiki_nlp.txt": "da58aaa14944447b3ee0a03545ef73581bdd03f9aa492c563465255348272330",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/Marcnuth--deduplication/11-test_nlp.py": "d2d158bd7307385930b79888707b733dcae5a1077f3008a7188a12f6a1cd731d",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/Marcnuth--deduplication/05-test_simhash.py": "61b4d70d164ffae6cb20f4d85d2710094450a47bbc926eefc026e10d718c1e7b"
+  },
+  "producer_sha256": "4d597fa8491e426d4b3a1a7a7fe1055b85e198b3afffb00e8264ab197258fd3f",
+  "runtime": {
+    "python": "3.12.14 (main, Aug 25 2026, 13:50:33) [Clang 22.1.3 ]",
+    "numpy": "2.2.6"
+  },
+  "unadapted_import": {
+    "type": "ModuleNotFoundError",
+    "module": "spacy"
+  },
+  "adapter": "Controlled whitespace Token/Pipeline spaCy fixture, no real spaCy/model execution or accuracy claim. Real NumPy/MD5/original modules unchanged. Original setup not executed.",
+  "controls": [
+    {
+      "name": "leading_zero_md5_padding_changes_majority",
+      "passed": true,
+      "details": {
+        "tokens": [
+          "token0",
+          "token1",
+          "token3"
+        ],
+        "original": "11111000010110011101011011000111111101011100110011100001111010110101110100100001001010110110001111010000011101001101000011000100",
+        "oracle": "01111000010110011101011011000111111101011100110011100001111010110101110100100001001010110110001111010000011101001101000011000100"
+      }
+    },
+    {
+      "name": "empty_tokens_are_all_zero",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "token_order_lost",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "uniform_repetition_lost",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "single_token_matches_full_md5_bits",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "generator_matches_list",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "unicode_is_utf8_deterministic",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "non_string_token_attribute_error",
+      "passed": true,
+      "details": {
+        "error_type": "AttributeError"
+      }
+    },
+    {
+      "name": "valid_blocks_1",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "valid_blocks_2",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "valid_blocks_4",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "valid_blocks_8",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "valid_blocks_16",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "valid_blocks_32",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "valid_blocks_64",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "valid_blocks_128",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "zero_blocks_zero_division",
+      "passed": true,
+      "details": {
+        "error_type": "ZeroDivisionError"
+      }
+    },
+    {
+      "name": "non_divisor_assertion",
+      "passed": true,
+      "details": {
+        "error_type": "AssertionError"
+      }
+    },
+    {
+      "name": "too_many_blocks_assertion",
+      "passed": true,
+      "details": {
+        "error_type": "AssertionError"
+      }
+    },
+    {
+      "name": "negative_block_width_value_error",
+      "passed": true,
+      "details": {
+        "error_type": "ValueError"
+      }
+    },
+    {
+      "name": "fractional_blocks_accepted_wrong_count",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "boolean_blocks_accepted",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "empty_and_removed_only_text_collide",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "controlled_filter_and_lemma",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "controlled_no_stopword_filter",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "controlled_no_lemmatization",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "language_model_reloaded_every_call",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "longest_only_ignores_changed_short_sentence",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "zero_longest_discards_entire_document",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "negative_longest_silently_slices",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "readme_function_import_is_module_not_callable",
+      "passed": true,
+      "details": {
+        "error_type": "TypeError"
+      }
+    }
+  ],
+  "original_demo_tests": [
+    "tests/test_nlp.py::test_main",
+    "tests/test_nlp.py::test_sentences",
+    "tests/test_simhash.py::test_main",
+    "tests/test_simhash.py::test_cmp"
+  ],
+  "original_tests_scope": "Four unchanged print-only demos executed with explicit controlled dependency adapter, original full20KiBtext fixture. No test assertions and no learned NLP qualification.",
+  "original_test_log": "/private/tmp/rrrah-marcnuth159-controls-20261014/original-demo-tests.log",
+  "original_test_log_sha256": "58bebd1bca3254602233628ef80c8eb01839319b3d16f798374db6e2faf6515a",
+  "scope": "Complete12blob original source/config/license/test/text fixture review; SimHash majority, validation, token/sentence information loss and per-call model loading controls. Not text semantic accuracy, file/pixel/native identity, model packaging/install, allplatform/format/resource or all500completion. No foreign production source adopted."
+}

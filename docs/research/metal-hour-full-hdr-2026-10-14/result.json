@@ -1,0 +1,59 @@
+{
+  "status": "passed",
+  "tool_session_terminal_exit_code": 0,
+  "native_test": {
+    "passed": 1,
+    "failed": 0,
+    "ignored": 0
+  },
+  "backend": "Metal",
+  "adapter": "Apple M4 Max",
+  "loop_seconds": 3601.065,
+  "cycles": 706,
+  "reads": 706,
+  "writes": 8,
+  "admitted_mid_batch_cancellations": 706,
+  "exact_full_sdr_frames": 706,
+  "exact_full_hdr_frames": 706,
+  "output_dimensions": [
+    4000,
+    3000
+  ],
+  "source_frames": 8,
+  "source_bytes_each": 192000000,
+  "original_float_bits_exact": true,
+  "final_root_bytes": 0,
+  "final_queue_bytes": 0,
+  "managed_root_limit_bytes": 576000000,
+  "managed_queue_limit_bytes": 192000000,
+  "swap_limit_bytes": 1537048576,
+  "rss": {
+    "samples": 719,
+    "first_elapsed_seconds": 0.005149125000000032,
+    "last_elapsed_seconds": 3637.541639917,
+    "maximum_sampled_bytes": 5481988096,
+    "median_sampled_bytes": 1922023424,
+    "last_sampled_bytes": 2491121664,
+    "soft_guard_bytes": 12884901888,
+    "guard_triggered": false
+  },
+  "source_drift": [],
+  "binary_sha256": "390b60f7769bea964eaa01b3912ad8c0861c5da8a2db09dc7b7df868482c1dd4",
+  "monitor_at_launch_sha256": "665f135cc9988dd3888a281e006dd692494070c0c06e1078487ef2d596b972d6",
+  "validator_at_completion_sha256": "a5af7d5800ae7fdcaf62f50ed22894d381ab2c895ea4191d0a4c57bc50ad584a",
+  "artifact_sha256": {
+    "test.log": "e17435c5c5ef33d80f5121b22425d2c6224a40dcbdb2d3c1b0e64f3688e9281c",
+    "rss.jsonl": "1907170a7d871f9ec1e1c0a22d8c04ab6f5bfef9dfe4d14914ff63a59d6fedf2",
+    "state.json": "c98e3297946edd5511d966738ba0d9b3818e5051ab3fcbbdfb66e6e6a4cb743d",
+    "sources.json": "85f89d32d6adc772cca0ce6f0fa252c2bf32c13b49d1d0c8aea6f465bdb40e71"
+  },
+  "limitations": [
+    "eight large authored frames, not100000 full-resolution images",
+    "local disk without injected delay; delayed IO hour separate",
+    "same-renderer frame transport, not independent color oracle or calibrated display",
+    "managed budgets exclude reference arrays, allocator bookkeeping and GPU driver memory",
+    "five-second RSS samples are not true peak measurement or leak proof",
+    "not NVIDIA or full100-format qualification"
+  ],
+  "note": "Original monitor last_progress trails final marker (704); authoritative native final log proves706 and3601.065s."
+}

@@ -1,0 +1,17 @@
+{
+  "status": "all_current_ordinary_metal_gpu_tests_passed",
+  "tool_session": 4202,
+  "backend": "metal",
+  "vendor": "any",
+  "gpu_optional": "0",
+  "scope": "every ordinary rrrah-gpu suite and doctests; ignored manual/corpus cases retained separately",
+  "driver": "scripts/qualify-viewer-storage-gpu.py",
+  "output": "ordinary",
+  "limitations": [
+    "not NVIDIA/CUDA hardware",
+    "not physical HDR display calibration",
+    "not all100-format fidelity",
+    "hour collection and delayed swap are separate runs"
+  ],
+  "result": "result.json"
+}

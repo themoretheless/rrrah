@@ -1,0 +1,161 @@
+{
+  "status": "execution_passed_policy_unchanged",
+  "native_exit_code": 0,
+  "samples": 128,
+  "adapter": "Apple M4 Max",
+  "backend": "Metal",
+  "comparisons": [
+    {
+      "dimensions": [
+        2048,
+        1536
+      ],
+      "completed_wall_median_ms": {
+        "current_default": 7.540850000000001,
+        "legacy_4096": 120.5877
+      },
+      "upload_enqueue_median_ms": {
+        "current_default": 3.5462,
+        "legacy_4096": 115.9081
+      },
+      "paired_current_over_legacy_median": 0.06849947565086073,
+      "paired_ratio_range": [
+        0.016236511911092488,
+        3.088723447528864
+      ],
+      "current_faster_pairs": 15,
+      "pairs": 16,
+      "identical_plans": false,
+      "plans": {
+        "current_default": {
+          "tile_size": "2048",
+          "tile_halo": "1",
+          "tile_count": "1",
+          "atlas_bytes": "8405000"
+        },
+        "legacy_4096": {
+          "tile_size": "4096",
+          "tile_halo": "1",
+          "tile_count": "1",
+          "atlas_bytes": "33587208"
+        }
+      }
+    },
+    {
+      "dimensions": [
+        4096,
+        3072
+      ],
+      "completed_wall_median_ms": {
+        "current_default": 38.696299999999994,
+        "legacy_4096": 49.489450000000005
+      },
+      "upload_enqueue_median_ms": {
+        "current_default": 27.1216,
+        "legacy_4096": 40.39855
+      },
+      "paired_current_over_legacy_median": 1.219497056437802,
+      "paired_ratio_range": [
+        0.08100314961473463,
+        13.564463978276388
+      ],
+      "current_faster_pairs": 7,
+      "pairs": 16,
+      "identical_plans": true,
+      "plans": {
+        "current_default": {
+          "tile_size": "4096",
+          "tile_halo": "1",
+          "tile_count": "1",
+          "atlas_bytes": "33587208"
+        },
+        "legacy_4096": {
+          "tile_size": "4096",
+          "tile_halo": "1",
+          "tile_count": "1",
+          "atlas_bytes": "33587208"
+        }
+      }
+    },
+    {
+      "dimensions": [
+        6240,
+        4160
+      ],
+      "completed_wall_median_ms": {
+        "current_default": 166.426,
+        "legacy_4096": 221.08145000000002
+      },
+      "upload_enqueue_median_ms": {
+        "current_default": 137.9156,
+        "legacy_4096": 194.2914
+      },
+      "paired_current_over_legacy_median": 0.5390991716667675,
+      "paired_ratio_range": [
+        0.2049897536291516,
+        2.901221340547323
+      ],
+      "current_faster_pairs": 12,
+      "pairs": 16,
+      "identical_plans": false,
+      "plans": {
+        "current_default": {
+          "tile_size": "1022",
+          "tile_halo": "1",
+          "tile_count": "35",
+          "atlas_bytes": "73400320"
+        },
+        "legacy_4096": {
+          "tile_size": "4096",
+          "tile_halo": "1",
+          "tile_count": "4",
+          "atlas_bytes": "134348832"
+        }
+      }
+    },
+    {
+      "dimensions": [
+        8192,
+        6144
+      ],
+      "completed_wall_median_ms": {
+        "current_default": 260.63375,
+        "legacy_4096": 294.70485
+      },
+      "upload_enqueue_median_ms": {
+        "current_default": 238.0291,
+        "legacy_4096": 237.736
+      },
+      "paired_current_over_legacy_median": 0.7041621710439824,
+      "paired_ratio_range": [
+        0.28253600027588305,
+        10.741515187289265
+      ],
+      "current_faster_pairs": 9,
+      "pairs": 16,
+      "identical_plans": false,
+      "plans": {
+        "current_default": {
+          "tile_size": "1022",
+          "tile_halo": "1",
+          "tile_count": "63",
+          "atlas_bytes": "132120576"
+        },
+        "legacy_4096": {
+          "tile_size": "4096",
+          "tile_halo": "1",
+          "tile_count": "4",
+          "atlas_bytes": "134348832"
+        }
+      }
+    }
+  ],
+  "log_sha256": "60c7966a74c8756a1cc87a09d26ea592345a782f2496d99099e29cc2c7f6284c",
+  "conclusion": "No production policy change: paired results and identical-plan control retained; concurrent load and wide paired variation prevent isolated performance claim.",
+  "limitations": [
+    "pipeline creation excluded",
+    "synthetic upload only, no decode/display fidelity claim",
+    "concurrent ordinary GPU suite and delayed IO soak",
+    "16 repetitions is not hardware-independent policy qualification"
+  ]
+}

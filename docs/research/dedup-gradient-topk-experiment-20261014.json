@@ -1,0 +1,25 @@
+{
+  "status": "synthetic_correctness_passed",
+  "returncode": 0,
+  "command": [
+    "rustc",
+    "+stable",
+    "--edition=2024",
+    "-C",
+    "opt-level=3",
+    "/private/tmp/rrrah-gradient-topk-experiment-20261014/experiment.rs",
+    "-o",
+    "/private/tmp/rrrah-gradient-topk-experiment-20261014/experiment"
+  ],
+  "pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-gradient-cache-root-before-20261013/gradient.rs": "700347c5d4439d572f3d004e61ccfb350733aeff9f2946171c1f9cd461c8be1a",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/experiment-dedup-gradient-distance-bounds-trace-v2-20261013.py": "004742f8e3dd0e11a6a50f75d3684f96dcb32772f42014ff2144ce7ccf8b8f52",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/experiment-dedup-gradient-topk-20261014.py": "3be5584c73cfe943dd921934fa040b9f14e3d12cdfe3b88d91f9683341db913c",
+    "/private/tmp/rrrah-gradient-topk-experiment-20261014/experiment.rs": "41956206e4907be26f9a843d94e0c704d8607fc2ef65de936f6de873bf3bbefb",
+    "/private/tmp/rrrah-gradient-topk-experiment-20261014/experiment": "4bfb0dba6d331ad8189ad2dee4e5a20cff0fb996d436a5f6782d38b7b6e0ed08",
+    "/private/tmp/rrrah-gradient-topk-experiment-20261014/build.log": "cd5c99cf7306f5715809d1b0a398ee5ff25b291f64e84440624d9f7a42720410",
+    "/private/tmp/rrrah-gradient-topk-experiment-20261014/results.jsonl": "4d9b852f116df960fb0a65319548f03f91e914d859b925df772bbcad75fe4467",
+    "/private/tmp/rrrah-gradient-topk-experiment-20261014/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "scope": "Standalone sorted exact top16 competitor retention with original second-pass fallback and cancellation checkpoints. Original pre-cache matcher as reference. Exact nearest table bits and correspondence/error/cancellation parity on164 synthetic cases. No managed allocation admission, performance proof, natural corpus, production adoption or whole-operation qualification."
+}

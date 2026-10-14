@@ -4,8 +4,16 @@ version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
+repository.workspace = true
 
 [dependencies]
+serde.workspace = true
+serde_json.workspace = true
+blake3.workspace = true
+tempfile.workspace = true
+roxmltree = "=0.21.1"
+accesskit = "=0.24.1"
+accesskit_winit = "=0.32.2"
 rrrah-swap = { path = "../rrrah-swap", version = "0.1.0" }
 anyhow.workspace = true
 clap.workspace = true
@@ -23,9 +31,7 @@ winit.workspace = true
 
 [dev-dependencies]
 bytemuck.workspace = true
-serde_json.workspace = true
 rrrah-cuda = { path = "../rrrah-cuda", version = "0.1.0" }
-tempfile.workspace = true
 
 [lints]
 workspace = true

@@ -15,7 +15,7 @@ use super::Rgb32f;
 use super::par_rows;
 use super::{DevelopError, Mosaic};
 
-const EPS: f32 = 1e-3;
+const EPS: f64 = 1e-3;
 
 /// Same-colour neighbour offsets for every pattern phase, in scan order (so sums run in the same
 /// order as a plain 2-D loop and interior pixels match border pixels bit for bit).
@@ -79,13 +79,13 @@ impl Offsets {
 
 /// Robust weighted mean of `vals` around their median.
 #[inline]
-fn robust_mean(vals: &[f32]) -> f32 {
-    let mut sorted = [0f32; 24];
+fn robust_mean(vals: &[f64]) -> f64 {
+    let mut sorted = [0f64; 24];
     let sorted = &mut sorted[..vals.len()];
     sorted.copy_from_slice(vals);
     sorted.sort_unstable_by(|a, b| a.total_cmp(b));
     let med = sorted[sorted.len() / 2];
-    let (mut s, mut ws) = (0.0f32, 0.0f32);
+    let (mut s, mut ws) = (0.0f64, 0.0f64);
     for &v in vals {
         let wt = 1.0 / (EPS + (v - med).abs());
         s += wt * v;
@@ -94,13 +94,13 @@ fn robust_mean(vals: &[f32]) -> f32 {
     s / ws
 }
 
-fn green(m: &Mosaic, off: &Offsets, cancelled: &impl Fn() -> bool) -> Result<Vec<f32>, DevelopError> {
+fn green(m: &Mosaic, off: &Offsets, cancelled: &impl Fn() -> bool) -> Result<Vec<f64>, DevelopError> {
     let (w, h) = (m.w, m.h);
-    let mut g = vec![0f32; w * h];
+    let mut g = vec![0f64; w * h];
     par_rows(&mut g, w, cancelled, |y, row| {
         let interior_y = y >= 2 && y + 2 < h;
         let yi = y as isize;
-        let mut vals: Vec<f32> = Vec::with_capacity(24);
+        let mut vals: Vec<f64> = Vec::with_capacity(24);
         for (x, o) in row.iter_mut().enumerate() {
             if interior_y && x >= 2 && x + 2 < w {
                 // fast path: precomputed offsets, no reflection
@@ -173,11 +173,11 @@ pub(crate) fn directional(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<R
                         px[c] = m.data[i];
                         continue;
                     }
-                    let (mut s, mut ws) = (0.0f32, 0.0f32);
+                    let (mut s, mut ws) = (0.0f64, 0.0f64);
                     for &(dx, dy) in &lists[li] {
                         let j = (i as isize + dy * w as isize + dx) as usize;
                         let gq = g[j];
-                        let d2 = (dx * dx + dy * dy) as f32;
+                        let d2 = (dx * dx + dy * dy) as f64;
                         let wt = 1.0 / (d2 * (EPS + (gq - gp).abs()));
                         s += wt * (m.data[j] - gq);
                         ws += wt;
@@ -195,14 +195,14 @@ pub(crate) fn directional(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<R
                     px[c] = m.get(x, yi);
                     continue;
                 }
-                let (mut s, mut ws) = (0.0f32, 0.0f32);
+                let (mut s, mut ws) = (0.0f64, 0.0f64);
                 for dy in -2isize..=2 {
                     for dx in -2isize..=2 {
                         if m.color(x + dx, yi + dy) as usize != c {
                             continue;
                         }
                         let gq = gg(x + dx, yi + dy);
-                        let d2 = (dx * dx + dy * dy) as f32;
+                        let d2 = (dx * dx + dy * dy) as f64;
                         let wt = 1.0 / (d2 * (EPS + (gq - gp).abs()));
                         s += wt * (m.get(x + dx, yi + dy) - gq);
                         ws += wt;

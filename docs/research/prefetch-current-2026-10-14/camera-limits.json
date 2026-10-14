@@ -1,0 +1,67 @@
+[
+  {
+    "test": "raw_prefetch_byte_limit_preserves_present_priority_neighbour",
+    "exit_code": 0,
+    "counts": [
+      [
+        "1",
+        "0",
+        "0"
+      ]
+    ],
+    "verified": true,
+    "log": "camera-limits-0.log"
+  },
+  {
+    "test": "raw_prefetch_count_limit_preserves_highest_priority_neighbour",
+    "exit_code": 0,
+    "counts": [
+      [
+        "1",
+        "0",
+        "0"
+      ]
+    ],
+    "verified": true,
+    "log": "camera-limits-1.log"
+  },
+  {
+    "test": "raw_prefetch_duplicate_source_does_not_consume_distinct_count_slot",
+    "exit_code": 0,
+    "counts": [
+      [
+        "1",
+        "0",
+        "0"
+      ]
+    ],
+    "verified": true,
+    "log": "camera-limits-2.log"
+  },
+  {
+    "test": "raw_prefetch_failed_nearest_does_not_consume_count_slot_in_either_direction",
+    "exit_code": 0,
+    "counts": [
+      [
+        "1",
+        "0",
+        "0"
+      ]
+    ],
+    "verified": true,
+    "log": "camera-limits-3.log"
+  },
+  {
+    "test": "raw_prefetch_respects_shared_budget_and_recovers_after_release",
+    "exit_code": 0,
+    "counts": [
+      [
+        "1",
+        "0",
+        "0"
+      ]
+    ],
+    "verified": true,
+    "log": "camera-limits-4.log"
+  }
+]

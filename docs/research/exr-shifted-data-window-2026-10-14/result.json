@@ -1,0 +1,90 @@
+{
+  "status": "cpu_ram_swap_metal_shifted_data_windows_validated",
+  "adapter": "Metal Apple M4 Max",
+  "new_fixture_cases": [
+    {
+      "fixture": "float-shifted-window-negative.exr",
+      "data_origin": [
+        -2,
+        -1
+      ],
+      "display_window": [
+        -3,
+        -2,
+        2,
+        2
+      ],
+      "sha256": "70fe9844ea7ea6e32020b79f9cae433bde4644c023b99809ab902507489b990b",
+      "sample_payload_unchanged": true
+    },
+    {
+      "fixture": "float-shifted-window-positive-crop.exr",
+      "data_origin": [
+        2,
+        1
+      ],
+      "display_window": [
+        3,
+        1,
+        5,
+        3
+      ],
+      "sha256": "f1f2957336bfe41abd9b954698d395a8cb9c1ca2f182d5b2464db6d938be0d4f",
+      "sample_payload_unchanged": true
+    },
+    {
+      "fixture": "float-shifted-window-translated.exr",
+      "data_origin": [
+        -7,
+        9
+      ],
+      "display_window": [
+        -7,
+        9,
+        -5,
+        10
+      ],
+      "sha256": "2239c8940dba59aa5ca09662e452919119ab90d15691943d1a62440aa61e7fd1",
+      "sample_payload_unchanged": true
+    }
+  ],
+  "all_exr_transport_cases": 11,
+  "decoder_suite": {
+    "passed": 1037,
+    "failed": 0,
+    "ignored": 73
+  },
+  "metal_suite": {
+    "passed": 24,
+    "failed": 0,
+    "ignored": 3
+  },
+  "checks": [
+    "coordinate oracle accounts for data origin independently of display origin",
+    "native and restored float bits exact",
+    "whole SDR/HDR frames exact",
+    "original pixel payload unchanged",
+    "source deleted before restore",
+    "managed pressure refusal and cancelled restore followed by retry",
+    "one write/read per case",
+    "root and queue credits zero after release"
+  ],
+  "source_sha256": {
+    "crates/rrrah-decode/src/raster.rs": "cebe3152c8eae7e5686850496407a236371d0e8b87e28ed3c9e29f79bdf8dbd7",
+    "crates/rrrah-app/tests/hdr_raster_swap.rs": "bd2bc186db9b289592e506f37b1705c72f1ca3393f2d92667b412b15dc76afee",
+    "scripts/generate-exr-shifted-window-fixtures.py": "702a61da17723302530a18503e1a51f3dea208e05897c6293d821dea7d9715d7",
+    "Cargo.lock": "fe92c1c439760c437ee6b60a5c62c4fc35b56dd941667fc12a9f935f9dfe3be1"
+  },
+  "logs_sha256": {
+    "decode-full.log": "955f1ad4934668ec91b7c82fc7e3415bcfc0e2a1bb2f2ff2c43dc708fd512c23",
+    "metal-build.log": "16331b84c756e8894256b2d04a57a379346efb4e17eb3923e70d9d12963460c3",
+    "metal-suite.log": "d45e99c771ca1da7e81cb1cf150c7ddc8061951006c082890268b54f08038f02"
+  },
+  "limitations": [
+    "small uncompressed single-part scanline fixtures",
+    "tiled/deep/multipart and extreme coordinate arithmetic not covered",
+    "not live window or physical HDR calibration evidence",
+    "NVIDIA deferred",
+    "ignored tests not counted as passes"
+  ]
+}

@@ -1,0 +1,21 @@
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+    Finished `test` profile [optimized + debuginfo] target(s) in 43.15s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_decode-3d841f18ff85d05c)
+
+running 1 test
+
+thread 'heif::tests::decoded_heif_pixel_aspect_survives_without_resampling_or_double_transforms' (9299412) panicked at crates/rrrah-decode/src/heif.rs:229:13:
+assertion `left == right` failed: alpha.heic
+  left: None
+ right: Some(2.0)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test heif::tests::decoded_heif_pixel_aspect_survives_without_resampling_or_double_transforms ... FAILED
+
+failures:
+
+failures:
+    heif::tests::decoded_heif_pixel_aspect_survives_without_resampling_or_double_transforms
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 1108 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p rrrah-decode --lib`

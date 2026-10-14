@@ -1,0 +1,21 @@
+{
+  "status": "both_empirical_m4_metal_hdr_extremes_passed_without_code_changes",
+  "passed": 2,
+  "failed": 0,
+  "ignored": 0,
+  "executions": [
+    {
+      "test": "hdr_exposure_saturates_to_finite_binary16_range",
+      "exit_code": 0,
+      "log": "hdr_exposure_saturates_to_finite_binary16_range.log",
+      "log_sha256": "ddd3be639c16dab78160d3e30d6afdc0fc621debd612d03b048aad6ff4abc883"
+    },
+    {
+      "test": "hdr_opposite_extreme_samples_interpolate_without_nan",
+      "exit_code": 0,
+      "log": "hdr_opposite_extreme_samples_interpolate_without_nan.log",
+      "log_sha256": "beeae760c59be86249b9a8b47c553dcc764c80ac725609fc6b7c5c521d29fd9a"
+    }
+  ],
+  "scope": "Metal M4 Max observations only; portable range contract unchanged"
+}

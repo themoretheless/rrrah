@@ -1,0 +1,12 @@
+
+running 1 test
+test full_f828_managed_rgbe_matches_cpu_reference ... full RGBE adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+full RGBE managed timing: binding=134217728; runs=3; min_ms=88.510; p50_ms=109.024; max_ms=128.084; includes validation/upload/execute/readback; excludes pipeline/source preparation
+full RGBE binding window: limit=134217728; dispatches=1; all channel values equal; GPU credit zero
+full RGBE managed timing: binding=1048576; runs=3; min_ms=104.479; p50_ms=189.885; max_ms=190.357; includes validation/upload/execute/readback; excludes pipeline/source preparation
+full RGBE binding window: limit=1048576; dispatches=130; all channel values equal; GPU credit zero
+full RGBE: 33,062,400 channel values equal; CPU/GPU final usage zero
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 6 filtered out; finished in 8.54s
+

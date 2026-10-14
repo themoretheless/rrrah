@@ -1,0 +1,507 @@
+--- root-baseline/gradient.rs
++++ isolated-firstpass16/gradient.rs
+@@ -53,7 +53,8 @@
+             let gy = sample(px, py + 1)? - sample(px, py - 1)?;
+             let (u, v) = (f64::from(col) - 8., f64::from(row) - 8.);
+             let magnitude = gx.hypot(gy) * (-(u * u + v * v) / 32.).exp();
+-            let direction = gy.atan2(gx).rem_euclid(std::f64::consts::TAU) * 36. / std::f64::consts::TAU;
++            let direction =
++                gy.atan2(gx).rem_euclid(std::f64::consts::TAU) * 36. / std::f64::consts::TAU;
+             let bin = direction.floor() as usize;
+             let fraction = direction - bin as f64;
+             histogram[bin % 36] += magnitude * (1. - fraction);
+@@ -64,8 +65,9 @@
+         if cancel() {
+             return Err(LocalError::Cancelled);
+         }
+-        histogram =
+-            std::array::from_fn(|i| (histogram[(i + 35) % 36] + histogram[i] + histogram[(i + 1) % 36]) / 3.);
++        histogram = std::array::from_fn(|i| {
++            (histogram[(i + 35) % 36] + histogram[i] + histogram[(i + 1) % 36]) / 3.
++        });
+     }
+     let best = (0..36)
+         .max_by(|&a, &b| histogram[a].total_cmp(&histogram[b]))
+@@ -212,7 +214,13 @@
+     max_total_samples: u64,
+     cancel: impl Fn() -> bool,
+ ) -> Result<Vec<GradientFeature>, LocalError> {
+-    extract_gradients_with_recipe(image, local, max_total_samples, GradientCellRecipe::Fixed, cancel)
++    extract_gradients_with_recipe(
++        image,
++        local,
++        max_total_samples,
++        GradientCellRecipe::Fixed,
++        cancel,
++    )
+ }
+ 
+ /// Spatial histogram recipe. Both sides of a match must use the same recipe;
+@@ -418,7 +426,9 @@
+         policy,
+         &cancel,
+         |view| extract_gradients_selected(view, policy.local, per_level, recipe, grid, &cancel),
+-        |feature, scale| feature.position = feature.position.map(|v| (v + 0.5) * f64::from(scale) - 0.5),
++        |feature, scale| {
++            feature.position = feature.position.map(|v| (v + 0.5) * f64::from(scale) - 0.5)
++        },
+     )
+ }
+ 
+@@ -460,7 +470,15 @@
+     budget: &rrrah_core::MemoryBudget,
+     cancel: impl Fn() -> bool,
+ ) -> Result<rrrah_core::SharedBuffer<GradientFeature>, LocalError> {
+-    extract_gradient_pyramid_selected_managed(image, policy, max_total_samples, recipe, None, budget, cancel)
++    extract_gradient_pyramid_selected_managed(
++        image,
++        policy,
++        max_total_samples,
++        recipe,
++        None,
++        budget,
++        cancel,
++    )
+ }
+ 
+ /// Managed spatial-gradient pyramid. Spatial occupancy scratch is admitted
+@@ -544,12 +562,18 @@
+             .and_then(|n| u64::try_from(n).ok())
+             .ok_or(LocalError::Budget)
+     };
+-    let retained_bytes = bytes(policy.max_total_features, std::mem::size_of::<GradientFeature>())?;
++    let retained_bytes = bytes(
++        policy.max_total_features,
++        std::mem::size_of::<GradientFeature>(),
++    )?;
+     let corners = bytes(
+         policy.local.max_candidates,
+         std::mem::size_of::<(f64, usize, usize)>(),
+     )?;
+-    let local = bytes(policy.local.max_features, std::mem::size_of::<GradientFeature>())?;
++    let local = bytes(
++        policy.local.max_features,
++        std::mem::size_of::<GradientFeature>(),
++    )?;
+     let detector = bytes(
+         policy.local.max_features,
+         std::mem::size_of::<crate::local::Feature>(),
+@@ -577,7 +601,7 @@
+ 
+ /// Mutual unique nearest descriptors with explicit squared-distance evidence.
+ /// Equal-distance ties reject. Distances use independent ordered accumulators
+-/// in blocks of at most four; every pair retains its cancellation checkpoint
++/// in first-pass blocks of at most sixteen; every pair retains its cancellation checkpoint
+ /// before the block arithmetic. Returned positions need independent geometry and
+ /// pixel confirmation. All allocations are fallible; no managed reservation.
+ ///
+@@ -607,7 +631,10 @@
+     competitor_radius: f64,
+     cancel: impl Fn() -> bool,
+ ) -> Result<Vec<crate::geometry::Correspondence>, LocalError> {
+-    if !competitor_radius.is_finite() || competitor_radius < 0. || !competitor_radius.powi(2).is_finite() {
++    if !competitor_radius.is_finite()
++        || competitor_radius < 0.
++        || !competitor_radius.powi(2).is_finite()
++    {
+         return Err(LocalError::Invalid);
+     }
+     match_gradients_selected(left, right, policy, Some(competitor_radius.powi(2)), cancel)
+@@ -624,7 +651,10 @@
+     budget: &rrrah_core::MemoryBudget,
+     cancel: impl Fn() -> bool,
+ ) -> Result<Vec<crate::geometry::Correspondence>, LocalError> {
+-    if !competitor_radius.is_finite() || competitor_radius < 0. || !competitor_radius.powi(2).is_finite() {
++    if !competitor_radius.is_finite()
++        || competitor_radius < 0.
++        || !competitor_radius.powi(2).is_finite()
++    {
+         return Err(LocalError::Invalid);
+     }
+     match_gradients_selected_with_scratch(
+@@ -718,10 +748,20 @@
+         .checked_mul(std::mem::size_of::<crate::geometry::Correspondence>())
+         .and_then(|v| u64::try_from(v).ok())
+         .ok_or(LocalError::Budget)?;
+-    let _scratch = budget.try_reserve(scratch).map_err(|_| LocalError::Budget)?;
+-    let retained = budget.try_reserve(retained).map_err(|_| LocalError::Budget)?;
+-    let output =
+-        match_gradients_distinct_locations_prepaid(left, right, policy, competitor_radius, budget, &cancel)?;
++    let _scratch = budget
++        .try_reserve(scratch)
++        .map_err(|_| LocalError::Budget)?;
++    let retained = budget
++        .try_reserve(retained)
++        .map_err(|_| LocalError::Budget)?;
++    let output = match_gradients_distinct_locations_prepaid(
++        left,
++        right,
++        policy,
++        competitor_radius,
++        budget,
++        &cancel,
++    )?;
+     if cancel() {
+         return Err(LocalError::Cancelled);
+     }
+@@ -812,6 +852,204 @@
+     [s0, s1, s2, s3]
+ }
+ 
++// Sixteen independent lanes preserve every per-pair addition order.
++// Partial blocks reuse the exact four-lane/scalar paths without padding work.
++fn distances_sixteen(a: &GradientDescriptor, b: &[GradientFeature]) -> [f64; 16] {
++    if b.len() < 16 {
++        let mut out = [0.; 16];
++        for (block, chunk) in b.chunks(4).enumerate() {
++            let v = distances_four(a, chunk);
++            out[block * 4..block * 4 + chunk.len()].copy_from_slice(&v[..chunk.len()]);
++        }
++        return out;
++    }
++    let b0 = &b[0].descriptor.0;
++    let b1 = &b[1].descriptor.0;
++    let b2 = &b[2].descriptor.0;
++    let b3 = &b[3].descriptor.0;
++    let b4 = &b[4].descriptor.0;
++    let b5 = &b[5].descriptor.0;
++    let b6 = &b[6].descriptor.0;
++    let b7 = &b[7].descriptor.0;
++    let b8 = &b[8].descriptor.0;
++    let b9 = &b[9].descriptor.0;
++    let b10 = &b[10].descriptor.0;
++    let b11 = &b[11].descriptor.0;
++    let b12 = &b[12].descriptor.0;
++    let b13 = &b[13].descriptor.0;
++    let b14 = &b[14].descriptor.0;
++    let b15 = &b[15].descriptor.0;
++    let (
++        mut s0,
++        mut s1,
++        mut s2,
++        mut s3,
++        mut s4,
++        mut s5,
++        mut s6,
++        mut s7,
++        mut s8,
++        mut s9,
++        mut s10,
++        mut s11,
++        mut s12,
++        mut s13,
++        mut s14,
++        mut s15,
++    ) = (
++        0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
++    );
++    for base in (0..128).step_by(4) {
++        {
++            let k = base + 0;
++            let x = a.0[k];
++            let d0 = x - b0[k];
++            s0 += d0 * d0;
++            let d1 = x - b1[k];
++            s1 += d1 * d1;
++            let d2 = x - b2[k];
++            s2 += d2 * d2;
++            let d3 = x - b3[k];
++            s3 += d3 * d3;
++            let d4 = x - b4[k];
++            s4 += d4 * d4;
++            let d5 = x - b5[k];
++            s5 += d5 * d5;
++            let d6 = x - b6[k];
++            s6 += d6 * d6;
++            let d7 = x - b7[k];
++            s7 += d7 * d7;
++            let d8 = x - b8[k];
++            s8 += d8 * d8;
++            let d9 = x - b9[k];
++            s9 += d9 * d9;
++            let d10 = x - b10[k];
++            s10 += d10 * d10;
++            let d11 = x - b11[k];
++            s11 += d11 * d11;
++            let d12 = x - b12[k];
++            s12 += d12 * d12;
++            let d13 = x - b13[k];
++            s13 += d13 * d13;
++            let d14 = x - b14[k];
++            s14 += d14 * d14;
++            let d15 = x - b15[k];
++            s15 += d15 * d15;
++        }
++        {
++            let k = base + 1;
++            let x = a.0[k];
++            let d0 = x - b0[k];
++            s0 += d0 * d0;
++            let d1 = x - b1[k];
++            s1 += d1 * d1;
++            let d2 = x - b2[k];
++            s2 += d2 * d2;
++            let d3 = x - b3[k];
++            s3 += d3 * d3;
++            let d4 = x - b4[k];
++            s4 += d4 * d4;
++            let d5 = x - b5[k];
++            s5 += d5 * d5;
++            let d6 = x - b6[k];
++            s6 += d6 * d6;
++            let d7 = x - b7[k];
++            s7 += d7 * d7;
++            let d8 = x - b8[k];
++            s8 += d8 * d8;
++            let d9 = x - b9[k];
++            s9 += d9 * d9;
++            let d10 = x - b10[k];
++            s10 += d10 * d10;
++            let d11 = x - b11[k];
++            s11 += d11 * d11;
++            let d12 = x - b12[k];
++            s12 += d12 * d12;
++            let d13 = x - b13[k];
++            s13 += d13 * d13;
++            let d14 = x - b14[k];
++            s14 += d14 * d14;
++            let d15 = x - b15[k];
++            s15 += d15 * d15;
++        }
++        {
++            let k = base + 2;
++            let x = a.0[k];
++            let d0 = x - b0[k];
++            s0 += d0 * d0;
++            let d1 = x - b1[k];
++            s1 += d1 * d1;
++            let d2 = x - b2[k];
++            s2 += d2 * d2;
++            let d3 = x - b3[k];
++            s3 += d3 * d3;
++            let d4 = x - b4[k];
++            s4 += d4 * d4;
++            let d5 = x - b5[k];
++            s5 += d5 * d5;
++            let d6 = x - b6[k];
++            s6 += d6 * d6;
++            let d7 = x - b7[k];
++            s7 += d7 * d7;
++            let d8 = x - b8[k];
++            s8 += d8 * d8;
++            let d9 = x - b9[k];
++            s9 += d9 * d9;
++            let d10 = x - b10[k];
++            s10 += d10 * d10;
++            let d11 = x - b11[k];
++            s11 += d11 * d11;
++            let d12 = x - b12[k];
++            s12 += d12 * d12;
++            let d13 = x - b13[k];
++            s13 += d13 * d13;
++            let d14 = x - b14[k];
++            s14 += d14 * d14;
++            let d15 = x - b15[k];
++            s15 += d15 * d15;
++        }
++        {
++            let k = base + 3;
++            let x = a.0[k];
++            let d0 = x - b0[k];
++            s0 += d0 * d0;
++            let d1 = x - b1[k];
++            s1 += d1 * d1;
++            let d2 = x - b2[k];
++            s2 += d2 * d2;
++            let d3 = x - b3[k];
++            s3 += d3 * d3;
++            let d4 = x - b4[k];
++            s4 += d4 * d4;
++            let d5 = x - b5[k];
++            s5 += d5 * d5;
++            let d6 = x - b6[k];
++            s6 += d6 * d6;
++            let d7 = x - b7[k];
++            s7 += d7 * d7;
++            let d8 = x - b8[k];
++            s8 += d8 * d8;
++            let d9 = x - b9[k];
++            s9 += d9 * d9;
++            let d10 = x - b10[k];
++            s10 += d10 * d10;
++            let d11 = x - b11[k];
++            s11 += d11 * d11;
++            let d12 = x - b12[k];
++            s12 += d12 * d12;
++            let d13 = x - b13[k];
++            s13 += d13 * d13;
++            let d14 = x - b14[k];
++            s14 += d14 * d14;
++            let d15 = x - b15[k];
++            s15 += d15 * d15;
++        }
++    }
++    [
++        s0, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15,
++    ]
++}
++
+ fn match_gradients_selected(
+     left: &[GradientFeature],
+     right: &[GradientFeature],
+@@ -836,8 +1074,9 @@
+     if !distinct {
+         return None;
+     }
+-    left.checked_mul(right)
+-        .filter(|&n| n >= 4096 && n <= MAX_DISTANCE_CACHE_BYTES as usize / std::mem::size_of::<f64>())
++    left.checked_mul(right).filter(|&n| {
++        n >= 4096 && n <= MAX_DISTANCE_CACHE_BYTES as usize / std::mem::size_of::<f64>()
++    })
+ }
+ 
+ fn match_gradients_selected_with_cache<C: std::ops::DerefMut<Target = [f64]>>(
+@@ -897,10 +1136,18 @@
+     }
+     let work = u64::try_from(left.len())
+         .ok()
+-        .and_then(|a| u64::try_from(right.len()).ok().and_then(|b| a.checked_mul(b)))
++        .and_then(|a| {
++            u64::try_from(right.len())
++                .ok()
++                .and_then(|b| a.checked_mul(b))
++        })
+         .ok_or(LocalError::Budget)?;
+     let work = work
+-        .checked_mul(if distinct_radius_squared.is_some() { 2 } else { 1 })
++        .checked_mul(if distinct_radius_squared.is_some() {
++            2
++        } else {
++            1
++        })
+         .ok_or(LocalError::Budget)?;
+     if work > policy.max_comparisons {
+         return Err(LocalError::Budget);
+@@ -941,8 +1188,9 @@
+     };
+     let mut forward = allocate(left.len())?;
+     let mut reverse = allocate(right.len())?;
+-    let mut distance_cache = distance_cache_pairs(left.len(), right.len(), distinct_radius_squared.is_some())
+-        .and_then(|pairs| make_cache(pairs).filter(|values| values.len() == pairs));
++    let mut distance_cache =
++        distance_cache_pairs(left.len(), right.len(), distinct_radius_squared.is_some())
++            .and_then(|pairs| make_cache(pairs).filter(|values| values.len() == pairs));
+     let contained = distinct_radius_squared.is_some_and(|radius| {
+         bounds
+             .iter()
+@@ -951,15 +1199,16 @@
+     let mut runners = runner_entries
+         .filter(|_| !contained)
+         .and_then(|entries| make_runners(entries).filter(|values| values.len() == entries));
+-    let update_runner = |best: &mut (f64, f64, usize), runner: &mut (usize, bool), distance: f64, index| {
+-        if distance < best.0 {
+-            runner.0 = best.2;
+-            *best = (distance, best.0, index);
+-        } else if distance < best.1 {
+-            best.1 = distance;
+-            runner.0 = index;
+-        }
+-    };
++    let update_runner =
++        |best: &mut (f64, f64, usize), runner: &mut (usize, bool), distance: f64, index| {
++            if distance < best.0 {
++                runner.0 = best.2;
++                *best = (distance, best.0, index);
++            } else if distance < best.1 {
++                best.1 = distance;
++                runner.0 = index;
++            }
++        };
+     let update = |best: &mut (f64, f64, usize), distance, index| {
+         if distance < best.0 {
+             *best = (distance, best.0, index);
+@@ -968,19 +1217,19 @@
+         }
+     };
+     for (i, a) in left.iter().enumerate() {
+-        for (block, chunk) in right.chunks(4).enumerate() {
++        for (block, chunk) in right.chunks(16).enumerate() {
+             for _ in chunk {
+                 if cancel() {
+                     return Err(LocalError::Cancelled);
+                 }
+             }
+-            let distances = distances_four(&a.descriptor, chunk);
++            let distances = distances_sixteen(&a.descriptor, chunk);
+             if let Some(cache) = distance_cache.as_mut() {
+-                let start = i * right.len() + block * 4;
++                let start = i * right.len() + block * 16;
+                 cache[start..start + chunk.len()].copy_from_slice(&distances[..chunk.len()]);
+             }
+             for (lane, _b) in chunk.iter().enumerate() {
+-                let j = block * 4 + lane;
++                let j = block * 16 + lane;
+ 
+                 let distance = distances[lane];
+                 if let Some(runners) = runners.as_mut() {
+@@ -1022,7 +1271,10 @@
+                 best.1 = f64::INFINITY;
+             }
+         }
+-        if runners.as_ref().is_some_and(|r| !r.iter().any(|runner| runner.1)) {
++        if runners
++            .as_ref()
++            .is_some_and(|r| !r.iter().any(|runner| runner.1))
++        {
+             runners = None;
+         }
+         for (i, a) in left.iter().enumerate() {
+@@ -1054,14 +1306,16 @@
+                     let distance = distances[lane];
+                     let nearest = right[forward[i].2].position;
+                     if !runners.as_ref().is_some_and(|r| r[i].1)
+-                        && (b.position[0] - nearest[0]).powi(2) + (b.position[1] - nearest[1]).powi(2)
++                        && (b.position[0] - nearest[0]).powi(2)
++                            + (b.position[1] - nearest[1]).powi(2)
+                             > radius
+                     {
+                         forward[i].1 = forward[i].1.min(distance);
+                     }
+                     let nearest = left[reverse[j].2].position;
+                     if !runners.as_ref().is_some_and(|r| r[left.len() + j].1)
+-                        && (a.position[0] - nearest[0]).powi(2) + (a.position[1] - nearest[1]).powi(2)
++                        && (a.position[0] - nearest[0]).powi(2)
++                            + (a.position[1] - nearest[1]).powi(2)
+                             > radius
+                     {
+                         reverse[j].1 = reverse[j].1.min(distance);
+@@ -1157,7 +1411,11 @@
+     interpolate: bool,
+     cancel: impl Fn() -> bool,
+ ) -> Result<Option<GradientDescriptor>, LocalError> {
+-    if !scale.is_finite() || scale <= 0. || !angle.is_finite() || position.iter().any(|v| !v.is_finite()) {
++    if !scale.is_finite()
++        || scale <= 0.
++        || !angle.is_finite()
++        || position.iter().any(|v| !v.is_finite())
++    {
+         return Err(LocalError::Invalid);
+     }
+     if max_samples < 256 {
+@@ -1205,10 +1463,13 @@
+             let (u, v) = (f64::from(col) - 7.5, f64::from(row) - 7.5);
+             let x = position[0] + scale * (u * cos - v * sin);
+             let y = position[1] + scale * (u * sin + v * cos);
+-            let gx = sample(x + scale * cos, y + scale * sin)? - sample(x - scale * cos, y - scale * sin)?;
+-            let gy = sample(x - scale * sin, y + scale * cos)? - sample(x + scale * sin, y - scale * cos)?;
++            let gx = sample(x + scale * cos, y + scale * sin)?
++                - sample(x - scale * cos, y - scale * sin)?;
++            let gy = sample(x - scale * sin, y + scale * cos)?
++                - sample(x + scale * sin, y - scale * cos)?;
+             let magnitude = gx.hypot(gy) * (-(u * u + v * v) / 128.).exp();
+-            let direction = gy.atan2(gx).rem_euclid(std::f64::consts::TAU) * 8. / std::f64::consts::TAU;
++            let direction =
++                gy.atan2(gx).rem_euclid(std::f64::consts::TAU) * 8. / std::f64::consts::TAU;
+             let bin = direction.floor() as usize;
+             let fraction = direction - bin as f64;
+             if interpolate {

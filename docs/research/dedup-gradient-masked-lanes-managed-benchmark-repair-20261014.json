@@ -1,0 +1,7 @@
+{
+  "status": "prior_run_retained_not_independently_raw_auditable",
+  "prior": "docs/research/dedup-gradient-masked-lanes-managed-benchmark-20261014.json",
+  "prior_sha256": "8215892cf036fa55d98971a222526daa74a2f071f3be7f6541fcfaa1996412f0",
+  "reason": "Benchmark child loaded its producer before the owner added per-call raw output retention; report-file absence did not prove the child had not loaded source. Raw stdout keys missing in all80rows. First auditor refused with KeyError stdout. Source pin may reflect edited file rather than bytes loaded by Python; prior report is not sufficient current qualification.",
+  "repair": "Fresh v2producer filename/folder/report, raw80stdout/stderr rows. Producer is not edited during execution. Retain prior artifacts and repeat bounded comparison; no production adoption based on prior ratios."
+}

@@ -1,0 +1,130 @@
+{
+  "status": "three_remaining_metal_controls_passed",
+  "passed": 3,
+  "failed": 0,
+  "ignored": 0,
+  "executions": [
+    {
+      "test": "full_f828_managed_rgbe_matches_cpu_reference",
+      "exit_code": 0,
+      "counts": [
+        [
+          "1",
+          "0",
+          "0"
+        ]
+      ],
+      "verified": true,
+      "log": "full_f828_managed_rgbe_matches_cpu_reference.log",
+      "log_sha256": "5178aa27bdd7fb112806b4a0c3929e1090ff6ed4071a4cc0210c0fc5cdc50de1"
+    },
+    {
+      "test": "pinned_native_ai_planes_survive_managed_metal_display",
+      "exit_code": 0,
+      "counts": [
+        [
+          "1",
+          "0",
+          "0"
+        ]
+      ],
+      "verified": true,
+      "log": "pinned_native_ai_planes_survive_managed_metal_display.log",
+      "log_sha256": "d7596315e3aca6f2917e1526466fe84482cc63e0d48008d776b4e75aa6f81b47"
+    },
+    {
+      "test": "raster_single_layer_gpu_timestamp_timing",
+      "exit_code": 0,
+      "counts": [
+        [
+          "1",
+          "0",
+          "0"
+        ]
+      ],
+      "verified": true,
+      "log": "raster_single_layer_gpu_timestamp_timing.log",
+      "log_sha256": "ee610d2812e9d49261f73d3118ad435f7b0d241c9a1b1a771fa8ab4190ea8474"
+    }
+  ],
+  "input_pins": {
+    "ai-native/ai-corpus/VectorApple.ai": {
+      "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/ai-corpus/VectorApple.ai",
+      "sha256": "c5fc34346629c3379cee6065c45b7de0b620be822604551d1463d8e691b03d06"
+    },
+    "ai-native/ai-corpus/one.ai": {
+      "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/ai-corpus/one.ai",
+      "sha256": "97786949c268233a446e1738fb9c2f941e4d109811bd2f972948cdb7a45d64b4"
+    },
+    "ai-native/ai-native-finer-current-20261011/VectorApple.ai-page-0.native.rgba": {
+      "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/ai-native-finer-current-20261011/VectorApple.ai-page-0.native.rgba",
+      "sha256": "ecbb6bcbf532cb70c0e35be8c9d655c3cb38ddd8cfd85288e6e3c4c544020efc"
+    },
+    "ai-native/ai-native-finer-current-20261011/one.ai-page-0.native.rgba": {
+      "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/ai-native-finer-current-20261011/one.ai-page-0.native.rgba",
+      "sha256": "4d4dc1019b440c5389a7ed8731db277513f63d501006a3d97fc6a861e78e76c8"
+    },
+    "ai-native/ai-native-finer-current-20261011/one.ai-page-1.native.rgba": {
+      "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/ai-native-finer-current-20261011/one.ai-page-1.native.rgba",
+      "sha256": "89db416a84fdc983853717f5fd73690c020e6feced867d1a3d4e02873f9d7e36"
+    },
+    "F828-sensor-oracle": {
+      "path": "/Users/themoretheless/Documents/Sources/rrrah/tests/fixtures/data/metal-recovery/rrrah-srf-refresh-20261008.u16le",
+      "sha256": "b3fc3d395950407a35d33392a97181fa51aac1afb0aa6b96d94a7eba00e95d42"
+    }
+  },
+  "f828_channel_values_equal": 33062400,
+  "gpu_timestamp_result": {
+    "median_gpu_ms": 0.35733349999999997,
+    "p95_gpu_ms": 1.316875,
+    "max_gpu_ms": 1.415084,
+    "warmups": 5,
+    "samples_gpu_ms": [
+      0.363542,
+      0.362375,
+      0.3615,
+      0.355166,
+      0.357875,
+      0.355333,
+      0.359583,
+      0.358459,
+      1.316875,
+      0.359625,
+      0.358875,
+      0.67675,
+      0.357125,
+      0.356833,
+      0.355708,
+      0.357291,
+      0.356625,
+      0.357667,
+      0.355791,
+      0.357292,
+      0.355833,
+      0.355375,
+      0.355375,
+      1.415084,
+      0.361792,
+      0.357375,
+      0.403125,
+      0.356834,
+      0.356917,
+      0.356917
+    ],
+    "source": [
+      4096,
+      4096
+    ],
+    "target": [
+      2048,
+      2048
+    ],
+    "target_format": "Rgba16Float"
+  },
+  "source_drift": [],
+  "limitations": [
+    "F828 authored four-plane gains, not as-shot camera color qualification",
+    "AI pinned replay planes transport, not fresh native AI rendering/fidelity qualification",
+    "GPU timestamps exclude decode/upload/window and are not whole-viewer performance"
+  ]
+}

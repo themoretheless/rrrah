@@ -1,0 +1,40 @@
+{
+  "status": "all_current_gpu_tests_executed_successfully_on_metal",
+  "ordinary_passed": 135,
+  "separately_executed_manual_passed": 13,
+  "total_unique_tests_passed": 148,
+  "failed": 0,
+  "remaining_skipped_cases_in_this_gpu_test_set": 0,
+  "backend": "Metal",
+  "adapter": "Apple M4 Max",
+  "manual_test_names": [
+    "full_f828_managed_rgbe_matches_cpu_reference",
+    "full_sensor_linear_exposure_chunked_readback",
+    "full_sensor_managed_exposure_budgets_and_checks_every_pixel",
+    "fusion_back_full_frame_developed_raw_matches_metal_display_transport",
+    "fusion_front_full_frame_developed_raw_matches_metal_display_transport",
+    "hdr_exposure_saturates_to_finite_binary16_range",
+    "hdr_opposite_extreme_samples_interpolate_without_nan",
+    "hero9_full_frame_developed_raw_matches_metal_display_transport",
+    "large_cancelled_upload_validation_and_admission_preserve_visible_texture",
+    "large_hdr_area_lod_preserves_all_output_samples_and_metal_frame",
+    "pinned_native_ai_planes_survive_managed_metal_display",
+    "qualified_sd10_linear_raster_full_frame_display_readback",
+    "raster_single_layer_gpu_timestamp_timing"
+  ],
+  "source_drift": [],
+  "evidence": {
+    "ordinary": "ordinary/report.json",
+    "full_sensor": "full-sensor/result.json",
+    "large_raster": "manual-large/result.json",
+    "camera": "camera-transport/result.json",
+    "f828_ai_timing": "manual-final/result.json",
+    "empirical_hdr": "../metal-hdr-finite-extremes-2026-10-14/result.json"
+  },
+  "limitations": [
+    "named current GPU test set, not full100-format fidelity or NVIDIA/CUDA hardware",
+    "AI/prepared camera transport does not establish independent geometry/color fidelity",
+    "physical luminance/color calibration separate",
+    "empirical HDR range behavior qualified only on this Metal device"
+  ]
+}

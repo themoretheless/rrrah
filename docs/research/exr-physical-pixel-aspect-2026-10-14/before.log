@@ -1,0 +1,21 @@
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+    Finished `test` profile [optimized + debuginfo] target(s) in 1m 11s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_decode-3d841f18ff85d05c)
+
+running 1 test
+
+thread 'raster::tests::exr_physical_pixel_aspect_reaches_display_preparation_without_changing_samples' (9097918) panicked at crates/rrrah-decode/src/raster.rs:1184:13:
+assertion `left == right` failed
+  left: None
+ right: Some(2.0)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test raster::tests::exr_physical_pixel_aspect_reaches_display_preparation_without_changing_samples ... FAILED
+
+failures:
+
+failures:
+    raster::tests::exr_physical_pixel_aspect_reaches_display_preparation_without_changing_samples
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 1105 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p rrrah-decode --lib`

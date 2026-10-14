@@ -1,0 +1,8 @@
+{
+  "status": "not_adopted",
+  "audit": "docs/research/dedup-gradient-topk-cpu-audit-20261014.json",
+  "audit_sha256": "baac16c247d6d77fe71e50d807871bc43dbc0bfef1ae90ba8e41fb1aadbe3ee2",
+  "reason": "Exact top16 reduces distance evaluations but regresses at least one measured natural CPU case by more than5percent. Synthetic clustered speedup does not outweigh measured natural regression. Production matcher remains unchanged.",
+  "next_step": "Evaluate skipping individual resolved reverse lanes in the second pass, with no candidate-list allocations or first-pass insertion overhead; compare against actual current unrolled kernel and retain fallback/callback/bitwise parity.",
+  "limits": "Reject this fixed top16 prototype for current adoption; do not infer every adaptive topK design is slower or universal significance from27CPU pairs."
+}

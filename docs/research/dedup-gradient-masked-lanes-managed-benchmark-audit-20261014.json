@@ -1,0 +1,65 @@
+{
+  "status": "verified_public_managed_matcher_version_comparison",
+  "rows": [
+    {
+      "case": "table_natural",
+      "extra_bytes": 0,
+      "matches": 3,
+      "peak_bytes": 81920,
+      "median_cpu_ratio": 0.9958461230481848,
+      "ratio_range": [
+        0.8988120140505951,
+        1.0847803048829991
+      ],
+      "expected": "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/table_natural-0-expected.txt",
+      "expected_sha256": "04bff284a6c89c87fdd1791c0957f470af8cc2a4bcc56fb75f464fa4b8c48556"
+    },
+    {
+      "case": "table_natural",
+      "extra_bytes": 16777216,
+      "matches": 3,
+      "peak_bytes": 8470528,
+      "median_cpu_ratio": 0.9950361860690677,
+      "ratio_range": [
+        0.9529164967076845,
+        1.0612599864390693
+      ],
+      "expected": "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/table_natural-16777216-expected.txt",
+      "expected_sha256": "b477decbc1ec5b0286a4cec179c8e683f42b7eb3a8223bea2a1fd0108f5b307b"
+    },
+    {
+      "case": "derived_large_self",
+      "extra_bytes": 0,
+      "matches": 511,
+      "peak_bytes": 122960,
+      "median_cpu_ratio": 1.0476063799026258,
+      "ratio_range": [
+        0.8766501920129429,
+        1.1708366725437036
+      ],
+      "expected": "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/derived_large_self-0-expected.txt",
+      "expected_sha256": "a9552eb5be43bd4e670b2b1777907c4bec52ed28e1d212746e8f2b9d2354d1bd"
+    },
+    {
+      "case": "derived_large_self",
+      "extra_bytes": 16777216,
+      "matches": 511,
+      "peak_bytes": 172144,
+      "median_cpu_ratio": 0.971690196282254,
+      "ratio_range": [
+        0.8688509641351301,
+        1.1177065767284964
+      ],
+      "expected": "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/derived_large_self-16777216-expected.txt",
+      "expected_sha256": "b2e7021d8f036c1ac44ef2e2e7768ef57199a5cb5236323a2bdda8f04314b560"
+    }
+  ],
+  "timed_fresh_processes": 80,
+  "warmup_pairs_per_group": 1,
+  "measured_pairs_per_group": 9,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-masked-lanes-managed-benchmark-v2-20261014.json": "acac95917dd98454b4eec15031460204b51d4ebe7dc058c5c707c06c60c67284",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-gradient-masked-lanes-managed-benchmark-v2-20261014.py": "3a771ee180bca777fdae377c43e14fcb072329d6839c397553e568bf7d03b0f7"
+  },
+  "scope": "Actual public managed distinct-location matcher, V7baseline versus isolated selective second-pass reverse-lane candidate, differing only in gradient.rs sparse-lane branch. Direct optimized rustc build with identical real cached dependencies, raster-only; no Cargo recipe/decode/native whole operation/platform/corpus claim. Natural table pair plus derived1537selfbank, with baseline-only or16MiBextra managed admission. Output coordinate bits and allocator peaks match across versions and both memory paths. Selective second-pass reverse-lane branch is the only source difference; shared kernel unchanged. This is component CPU including startup/input-load/output/teardown; not whole native search or universal performance evidence."
+}

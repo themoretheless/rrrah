@@ -1,0 +1,27 @@
+{
+  "status": "verified_isolated_actual_layout_firstpass16_raster_gate",
+  "report": "docs/research/dedup-gradient-lanes16-managed-20261014.json",
+  "report_sha256": "37b243369b0b007473c060e592467ca51740c4ca9a52b0917110059c1c0d8c1b",
+  "auditor_sha256": "2df7c5842451986234417082d3157abaf272121efdfd1424b6d9ef5cc71e4fd6",
+  "passed": 62,
+  "failed": 0,
+  "manual_ignored": 3,
+  "inventory_exact": true,
+  "first_pass_lanes": 16,
+  "second_pass_lanes": 4,
+  "second_pass_implementation_unchanged": true,
+  "changed_source_files": [
+    "crates/rrrah-dedup/src/gradient.rs",
+    "crates/rrrah-dedup/src/gradient_matching_tests.rs"
+  ],
+  "retained_artifacts": {
+    "docs/research/dedup-gradient-lanes16-managed-20261014/build.log": "8aac31e1317363c70d1558be8c054d1c55698059489ae0a078d877bdb9a5dbc1",
+    "docs/research/dedup-gradient-lanes16-managed-20261014/inventory.log": "6d8c20a88879aa8f249edf40d05e39fcf0bd0fa5098de8e5c0ea6731a75272f2",
+    "docs/research/dedup-gradient-lanes16-managed-20261014/tests.log": "bb364a3193cf161a54898be260734d2f8d6f0f09c0d738b12da0b3d435fc7e60",
+    "docs/research/dedup-gradient-lanes16-managed-20261014/gradient.rs": "a6e62bd202f41d1e3604a39976a3ac16e7164b926b42ae471b376ed4c59cba3e",
+    "docs/research/dedup-gradient-lanes16-managed-20261014/gradient_matching_tests.rs": "e212b572137ca8228a5521a06fe3b169e011a767d00464dad3b4b33906888be8",
+    "docs/research/dedup-gradient-lanes16-managed-20261014/gradient.patch": "1c4533d9e06638069727f0e8ed5c6b0db1caa0e6a88389ef94ebdc4ec6ed59ca"
+  },
+  "scope": "Isolated actual current-root dedup clone; first-pass16independent descriptor lanes only, second-pass4unchanged to preserve runner skip granularity/work. No new heap scratch or cache/admission policy changes. Actual GradientFeature includes position and descriptor,1040byte stride, unlike descriptor-only1024byte primitive benchmark stub. Existing complete raster unit suite plus256fixture16lane all-tail bit regression. Directrustc real cached deps, not Cargo/decode/native/workspace/currentcorpus/default/platform proof; working runtime kernel unchanged.",
+  "remaining": "No-optional-feature candidate unit gate, nearest-table/cache/cancellation parity and actual public API CPU comparisons on large natural/small/cache/fallback/runner paths. Primitive descriptor-only layout gains are not adoption evidence for actual1040byte features."
+}

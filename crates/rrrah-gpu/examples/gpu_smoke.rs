@@ -2,7 +2,9 @@
 //!
 //! This intentionally does not decode a RAW file. It validates adapter limits,
 //! bind-group/pipeline creation, array-tile upload, and render completion on a
-//! real backend. Use `WGPU_BACKEND=metal` (or `vulkan`, `dx12`) to pin a backend.
+//! real backend. Use `RRRAH_GPU_BACKEND=metal` (or `vulkan`, `dx12`) to pin a
+//! backend and `RRRAH_GPU_VENDOR=nvidia` to require NVIDIA hardware.
+//! `WGPU_BACKEND` remains a fallback when `RRRAH_GPU_BACKEND` is unset.
 //!
 //! Environment knobs (all optional; library defaults are unchanged):
 //! - `RRRAH_GPU_TILE_SIZE=<u32>` — interior tile edge for the normal mode.
@@ -28,7 +30,9 @@ use std::{sync::Arc, time::Instant};
 use rrrah_core::{
     CfaColor, CfaPattern, DecodedMosaic, LevelGrid, Orientation, Photometric, RawMetadata, WhiteLevel,
 };
-use rrrah_gpu::{GpuUploadTimings, RawRenderer, TilingOverrides, ViewParameters, plan_tiling};
+use rrrah_gpu::{
+    GpuBackend, GpuUploadTimings, GpuVendor, RawRenderer, TilingOverrides, ViewParameters, plan_tiling,
+};
 
 const RAW_SIZES: &[(u32, u32)] = &[(1024, 1024), (2048, 1536), (4096, 3072)];
 const VIEWPORTS: &[(u32, u32)] = &[(1280, 720), (2560, 1440), (3840, 2160)];
@@ -75,15 +79,35 @@ fn env_flag(name: &str) -> bool {
     matches!(std::env::var(name).ok().as_deref(), Some("1" | "true" | "yes"))
 }
 
+fn env_selection(name: &str, fallback: &str) -> Result<String, std::env::VarError> {
+    match std::env::var(name) {
+        Ok(value) => Ok(value),
+        Err(std::env::VarError::NotPresent) => Ok(fallback.to_owned()),
+        Err(error) => Err(error),
+    }
+}
+
 async fn run() -> Result<(), Box<dyn std::error::Error>> {
-    let instance = wgpu::Instance::new(wgpu::InstanceDescriptor::new_without_display_handle());
-    let adapter = instance
-        .request_adapter(&wgpu::RequestAdapterOptions {
-            power_preference: wgpu::PowerPreference::HighPerformance,
-            compatible_surface: None,
-            force_fallback_adapter: false,
-            apply_limit_buckets: false,
-        })
+    let backend = match std::env::var("RRRAH_GPU_BACKEND") {
+        Ok(value) => value,
+        Err(std::env::VarError::NotPresent) => env_selection("WGPU_BACKEND", "auto")?,
+        Err(error) => return Err(error.into()),
+    }
+    .parse::<GpuBackend>()?;
+    let vendor = env_selection("RRRAH_GPU_VENDOR", "any")?.parse::<GpuVendor>()?;
+    let mut descriptor = wgpu::InstanceDescriptor::new_without_display_handle();
+    backend.configure(&mut descriptor)?;
+    let instance = wgpu::Instance::new(descriptor);
+    let adapter = vendor
+        .request_adapter(
+            &instance,
+            &wgpu::RequestAdapterOptions {
+                power_preference: wgpu::PowerPreference::HighPerformance,
+                compatible_surface: None,
+                force_fallback_adapter: false,
+                apply_limit_buckets: false,
+            },
+        )
         .await?;
     let info = adapter.get_info();
     let limits = adapter.limits();

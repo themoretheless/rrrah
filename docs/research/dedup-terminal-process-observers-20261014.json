@@ -1,0 +1,63 @@
+{
+  "status": "passed_pending_audit",
+  "producer_pid": 91102,
+  "producer_sha256": "ba53eb125390286b3eded7bf282e345f1d79af6a886c36e982d58d506e675277",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-runner-terminal-binaries-20261014.json": "a38ae941667d5fa0d5f5fc7ea6fad3731eb8004ee6045f9d28180ae1a0f20688",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-collection_first-terminal-binaries-20261014.json": "5b5b4aed9bf2a956390398bf0336483d9c085b9d89ca498ef646bf4ef0a187d7"
+  },
+  "results": [
+    {
+      "label": "runner",
+      "target": "unittests src/lib.rs",
+      "command": [
+        "/private/tmp/rrrah-runner-terminal-binaries-20261014/rrrah_dedup-76646137647c9ff2",
+        "model_worker::tests::successful_worker_response_does_not_leave_background_process",
+        "--exact",
+        "--test-threads",
+        "2"
+      ],
+      "cwd": "/Users/themoretheless/.codex/tmp/rrrah-gradient-runner-source-20261014",
+      "expected": 1,
+      "executable_sha256": "b2ea13f5b491488a798adaf8adfd23cffeebd6fcdf21038ce9a93df2f1c99ba6",
+      "returncode": 0,
+      "log": "/private/tmp/rrrah-terminal-process-observers-20261014/0.log",
+      "log_sha256": "e9b616faf32bd32e8fa5b1056f727eecadad0887d43ed0e9b27548283c6fbacd"
+    },
+    {
+      "label": "runner",
+      "target": "tests/worker_group.rs",
+      "command": [
+        "/private/tmp/rrrah-runner-terminal-binaries-20261014/worker_group-b0a335ec3ebdc559",
+        "--test-threads",
+        "2"
+      ],
+      "cwd": "/Users/themoretheless/.codex/tmp/rrrah-gradient-runner-source-20261014",
+      "expected": 8,
+      "executable_sha256": "79e821460e68ea8bc8c94d59143c21d31892b30bb95696f2455e08b8e698eff1",
+      "returncode": 0,
+      "log": "/private/tmp/rrrah-terminal-process-observers-20261014/1.log",
+      "log_sha256": "825ef1f53458fd2f95533a9e754df5591f1fb9cd78e5d80e4190346ac93112cd"
+    },
+    {
+      "label": "collection_first",
+      "target": "unittests src/lib.rs",
+      "command": [
+        "/private/tmp/rrrah-collection_first-terminal-binaries-20261014/rrrah_dedup-76646137647c9ff2",
+        "model_worker::tests::successful_worker_response_does_not_leave_background_process",
+        "--exact",
+        "--test-threads",
+        "2"
+      ],
+      "cwd": "/private/tmp/rrrah-consensus-collection-source-20261014",
+      "expected": 1,
+      "executable_sha256": "8eaa5a0ab634e783d805763ffa57e233ef3b2a736c73ba7e54ccb636ae0f5600",
+      "returncode": 0,
+      "log": "/private/tmp/rrrah-terminal-process-observers-20261014/2.log",
+      "log_sha256": "576b3fdcbb9c1138b0be7274b35bb17ecac7bd1beeeb14795747463017fbec53"
+    }
+  ],
+  "scope": "Exact retained frozen source6runner and initial collection unit/integration binaries. Same tests, no weakening/skips; elevated launch solely to allow ps observation of their own synthetic descendants. Original sandbox failures retained. Not current root16/native/fullworkspace/platform qualification.",
+  "active_index": 2,
+  "child_pid": 91397
+}

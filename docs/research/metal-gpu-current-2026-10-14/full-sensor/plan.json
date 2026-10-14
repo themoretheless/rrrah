@@ -1,0 +1,19 @@
+{
+  "status": "two_current_full_sensor_metal_tests_passed",
+  "tool_session": 87371,
+  "binary_sha256": "cf2395bf819717307d6754993e02571465d316dfe8d3a9ec640704f1d519f16c",
+  "test_sources_sha256": {
+    "crates/rrrah-gpu/tests/compute_readback.rs": "f12c2ac18f0d67f8330e68caead4eef05cf0e84fec780060619ec6099e201a66",
+    "crates/rrrah-gpu/tests/common/mod.rs": "6a3c7203b3ea92b3a66d6530e0c0beb691b1efea8b8b6b021bb6bd20a6567924"
+  },
+  "backend": "metal",
+  "optional_gpu": "0",
+  "filter": "full_sensor",
+  "ignored_tests_requested": true,
+  "test_threads": 1,
+  "limitations": [
+    "authored full-sensor field, not camera demosaic/color oracle",
+    "managed budgets are not OS RSS limits"
+  ],
+  "result": "result.json"
+}

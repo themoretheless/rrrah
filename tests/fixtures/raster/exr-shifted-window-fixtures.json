@@ -1,0 +1,52 @@
+{
+  "source": "float-none-rec709-declared.exr",
+  "source_sha256": "237d1030caf9022f441458e8a90b718df4fe07f24e473b0bcf827d1b0ac9628e",
+  "producer": "metadata and scanline coordinate patch; no pixel decode/re-encode",
+  "cases": [
+    {
+      "fixture": "float-shifted-window-negative.exr",
+      "data_origin": [
+        -2,
+        -1
+      ],
+      "display_window": [
+        -3,
+        -2,
+        2,
+        2
+      ],
+      "sha256": "70fe9844ea7ea6e32020b79f9cae433bde4644c023b99809ab902507489b990b",
+      "sample_payload_unchanged": true
+    },
+    {
+      "fixture": "float-shifted-window-positive-crop.exr",
+      "data_origin": [
+        2,
+        1
+      ],
+      "display_window": [
+        3,
+        1,
+        5,
+        3
+      ],
+      "sha256": "f1f2957336bfe41abd9b954698d395a8cb9c1ca2f182d5b2464db6d938be0d4f",
+      "sample_payload_unchanged": true
+    },
+    {
+      "fixture": "float-shifted-window-translated.exr",
+      "data_origin": [
+        -7,
+        9
+      ],
+      "display_window": [
+        -7,
+        9,
+        -5,
+        10
+      ],
+      "sha256": "2239c8940dba59aa5ca09662e452919119ab90d15691943d1a62440aa61e7fd1",
+      "sample_payload_unchanged": true
+    }
+  ]
+}

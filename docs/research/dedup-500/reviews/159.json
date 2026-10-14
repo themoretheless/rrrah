@@ -2,9 +2,9 @@
   "index": 159,
   "repository": "Marcnuth/deduplication",
   "commit": "c407cb11e5dd7f13360639dbd55efb4ffc2bd80c",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "Complete12blob pinned source/config/license/test/text-fixture reading;31original core controls with real NumPy/MD5and explicit controlled spaCy adapter, quoted requirement parsing, four adapted print-only demos. No real learned NLP/model/runtime/platform or full500qualification.",
   "decision": "reference",
-  "finding": "Text long-sentence SimHash with MD5 features; README broad media claim not proved by selected code.",
+  "finding": "MD5leading-zero majority bug; empty/filtered and longest-sentence collisions; invalid quoted dependency and README module-call API;31bounded core controls, no production adoption.",
   "available_source_evidence": [
     {
       "path": "deduplication/lsimhash.py",
@@ -55,6 +55,56 @@
       "lines": 23,
       "source": true,
       "test": false
+    },
+    {
+      "path": ".gitignore",
+      "local": "07-gitignore",
+      "url": "https://github.com/Marcnuth/deduplication/blob/c407cb11e5dd7f13360639dbd55efb4ffc2bd80c/.gitignore",
+      "sha256": "7386f6f7b3f82c662e019df20ae53a3eaf32334bfcec40c8e941261b7f5ddb7c",
+      "truncated": false,
+      "lines": 7,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "requirements.txt",
+      "local": "08-requirements.txt",
+      "url": "https://github.com/Marcnuth/deduplication/blob/c407cb11e5dd7f13360639dbd55efb4ffc2bd80c/requirements.txt",
+      "sha256": "9d67a29284b45330bf857c7f5d3aaa846d8a7686dce68a3e7a6d6255fa9fe0a7",
+      "truncated": false,
+      "lines": 1,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "setup.py",
+      "local": "09-setup.py",
+      "url": "https://github.com/Marcnuth/deduplication/blob/c407cb11e5dd7f13360639dbd55efb4ffc2bd80c/setup.py",
+      "sha256": "432dd4c20d9117c228f37ff69eab8acef12ffe5c4168b080ea158fa9abfed43a",
+      "truncated": false,
+      "lines": 32,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/data/wiki_nlp.txt",
+      "local": "10-wiki_nlp.txt",
+      "url": "https://github.com/Marcnuth/deduplication/blob/c407cb11e5dd7f13360639dbd55efb4ffc2bd80c/tests/data/wiki_nlp.txt",
+      "sha256": "da58aaa14944447b3ee0a03545ef73581bdd03f9aa492c563465255348272330",
+      "truncated": false,
+      "lines": 122,
+      "source": false,
+      "test": true
+    },
+    {
+      "path": "tests/test_nlp.py",
+      "local": "11-test_nlp.py",
+      "url": "https://github.com/Marcnuth/deduplication/blob/c407cb11e5dd7f13360639dbd55efb4ffc2bd80c/tests/test_nlp.py",
+      "sha256": "d2d158bd7307385930b79888707b733dcae5a1077f3008a7188a12f6a1cd731d",
+      "truncated": false,
+      "lines": 18,
+      "source": true,
+      "test": true
     }
   ],
   "license_metadata": "Apache-2.0",
@@ -84,5 +134,12 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_review_complete": true,
+  "whole_repo_complete": true,
+  "whole_runtime_qualified": false,
+  "complete_source_review": "marcnuth159-complete-source-review-20261014.json",
+  "prior_registry_review": "marcnuth159-prior-registry-20261014.json",
+  "validated_original_demo_functions": 4,
+  "upstream_test_execution_scope": "Four original print-only demos executed with controlled dependency adapter, not unadapted upstream runtime qualification."
 }

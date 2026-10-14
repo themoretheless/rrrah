@@ -1,0 +1,31 @@
+{
+  "status": "two_current_full_sensor_metal_tests_passed",
+  "tool_terminal_exit_code": 0,
+  "passed": 2,
+  "failed": 0,
+  "ignored": 0,
+  "adapter": "Apple M4 Max",
+  "backend": "Metal",
+  "dimensions": [
+    6188,
+    4120
+  ],
+  "pixels": 25494560,
+  "dispatch_windows": 7,
+  "every_output_component_exact": true,
+  "pressure_cpu_and_gpu_refusal": true,
+  "admitted_cancellation_then_retry": true,
+  "gpu_peak_bytes": 1223738992,
+  "cpu_peak_bytes": 815825920,
+  "final_tracked_cpu_gpu_bytes": 0,
+  "managed_end_to_end_ms": 1448.733,
+  "test_seconds": 23.55,
+  "log_sha256": "37a006aa01c9bd8c3550c469cd9e55b4df68857f514ad3e801574b243b969941",
+  "binary_sha256": "cf2395bf819717307d6754993e02571465d316dfe8d3a9ec640704f1d519f16c",
+  "source_drift": [],
+  "limitations": [
+    "authored full-sensor linear field, not camera demosaic/color oracle",
+    "timings under concurrent system load, not isolated performance baseline",
+    "managed budgets exclude allocator/driver/OS memory"
+  ]
+}

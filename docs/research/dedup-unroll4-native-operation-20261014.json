@@ -1,10 +1,31 @@
 {
-  "status": "waiting_for_existing_native_gate",
+  "status": "stopped_on_failure",
   "producer_pid": 11385,
   "plan": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-unroll4-native-operation-plan-20261014.json",
   "plan_sha256": "35cd8f39b7bfb9e489f3db3b734148ff38cfab7032ecf7eecf650bb0c2cadb83",
   "producer_sha256": "b157715c58159b188e91cd55bcd7696ca94c36ffa61606229b52b7b41fb41930",
-  "builds": [],
+  "builds": [
+    {
+      "version": "baseline",
+      "executable": "/private/tmp/rrrah-unroll4-native-operation-20261014/baseline/probe",
+      "executable_sha256": "ce07520256286876148c069b4a68d9b90910e5ff6c03b0a1a8563e29c5b007cf",
+      "log": "/private/tmp/rrrah-unroll4-native-operation-20261014/baseline/build.log",
+      "log_sha256": "f5e272b3ff3b3f7a2a56b4f5fe289f3a64a818bba1f5fb82aa9e238047e4cdec"
+    },
+    {
+      "version": "candidate",
+      "executable": "/private/tmp/rrrah-unroll4-native-operation-20261014/candidate/probe",
+      "executable_sha256": "724be9e8dc8f70b83f3e9ce73ef577e4f59c53a78cc528e390faab1a23b96bcd",
+      "log": "/private/tmp/rrrah-unroll4-native-operation-20261014/candidate/build.log",
+      "log_sha256": "f0a9ee0c2d9e2fe6bd1a7029f6895dc2b5859ee33b99deed0b45a81e0f94b1a3"
+    }
+  ],
   "results": [],
-  "scope": "Full atomic forward/reverse native/opposite/model-bank operation. Same two retained development controls and explicit policy, three alternating fresh-process pairs each. Version source difference only distance kernel and test source. Source/dependency/weights guards included. No universal speedup, learned-route forcing, default/UI/full-corpus/platform/RSS qualification."
+  "scope": "Full atomic forward/reverse native/opposite/model-bank operation. Same two retained development controls and explicit policy, three alternating fresh-process pairs each. Version source difference only distance kernel and test source. Source/dependency/weights guards included. No universal speedup, learned-route forcing, default/UI/full-corpus/platform/RSS qualification.",
+  "first_audit_sha256": "81143cfd18647a54fceb6f5427352c9e0ca4d142d874188276450a1237e215f2",
+  "active_version": "baseline",
+  "child_pid": 90688,
+  "active_case": "self_native",
+  "active_pair": 0,
+  "error": "AssertionError(\"dyld[90689]: Library not loaded: @rpath/libtorch_cpu.dylib\\n  Referenced from: <090CE64E-5AD1-3CA6-A339-899E1E67DCE6> /private/tmp/rrrah-unroll4-native-operation-20261014/baseline/probe\\n  Reason: no LC_RPATH's found\\ntime: command terminated abnormally\\n        1.51 real         0.00 user         0.00 sys\\ntime: sysctl kern.clockrate: Operation not permitted\\n\")"
 }

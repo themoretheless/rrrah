@@ -1,0 +1,69 @@
+{
+  "status": "cpu_ram_swap_metal_display_window_validated",
+  "cases": [
+    [
+      -1,
+      -1,
+      3,
+      2
+    ],
+    [
+      1,
+      0,
+      2,
+      1
+    ],
+    [
+      -2,
+      1,
+      1,
+      3
+    ],
+    [
+      5,
+      5,
+      6,
+      6
+    ],
+    [
+      0,
+      0,
+      2,
+      1
+    ]
+  ],
+  "data_window": [
+    0,
+    0,
+    2,
+    1
+  ],
+  "fixture": "tests/fixtures/raster/float-none-rec709-declared.exr",
+  "oracle": "original native float samples selected by absolute pixel coordinates; transparent zero padding outside data window",
+  "coded_scanlines_unchanged": true,
+  "display_preparation_dimensions_preserved": true,
+  "managed_credits_zero_each_case": true,
+  "full_suite": {
+    "passed": 1037,
+    "failed": 0,
+    "ignored": 73
+  },
+  "source_sha256": {
+    "crates/rrrah-decode/src/raster.rs": "975023ebf8e249e482e5affe166b47d152c3dbd67689566397067f56a777e52d",
+    "crates/rrrah-decode/src/exr_color.rs": "18eef69329d5e5a2426dec1970e5bffff236458b555e5d7b7884ea6cdae8eca7",
+    "tests/fixtures/raster/float-none-rec709-declared.exr": "237d1030caf9022f441458e8a90b718df4fe07f24e473b0bcf827d1b0ac9628e",
+    "Cargo.lock": "fe92c1c439760c437ee6b60a5c62c4fc35b56dd941667fc12a9f935f9dfe3be1"
+  },
+  "logs_sha256": {
+    "full.log": "cf1e1651b9937a7ec2fd24899c59b9fef1362dfff2fe4ba455f6cf80149f87c8",
+    "focused.log": "420c87b84fe55c053bf21dd08c07188f6d45e1d1ac4b8d7d9e818d85a94f9e97"
+  },
+  "specification": "https://openexr.com/en/latest/TechnicalIntroduction.html",
+  "limitations": [
+    "single-part scanline fixture with display-only metadata changes",
+    "data-window origin changes, tiled, deep and multipart not covered",
+    "73 ignored tests not counted as passed",
+    "new window cases not live-window validation evidence"
+  ],
+  "metal_evidence": "metal/result.json"
+}

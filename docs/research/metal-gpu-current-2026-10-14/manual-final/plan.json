@@ -1,0 +1,20 @@
+{
+  "status": "three_remaining_metal_controls_passed",
+  "tests": [
+    "full_f828_managed_rgbe_matches_cpu_reference",
+    "pinned_native_ai_planes_survive_managed_metal_display",
+    "raster_single_layer_gpu_timestamp_timing"
+  ],
+  "backend": "metal",
+  "binary_sha256": {
+    "rgbe_compute_readback-5d310ff784bafb7a": "bacf0d88e539305962a8c80519726b82fb96a2d2455c97bd625925db4e9f7ce1",
+    "ai_native_transport-d29a9cb33d3c49e6": "21a470e6e45af40682e084984d2b26f2e8a16afc851792a24bcb2dbf9a1ec6b0",
+    "raster_timing-2961a7509b3bf11c": "bec536a9cd29352ce8ed531beacb111fb7a5c1a3d61bbe256dc02dfb7d2b3849"
+  },
+  "test_source_sha256": {
+    "crates/rrrah-gpu/tests/rgbe_compute_readback.rs": "56f9f4c457174bcd29c01f815ee9457ce1c646339ed83a19d41d321f1aa7ba87",
+    "crates/rrrah-gpu/tests/ai_native_transport.rs": "b898d95d59d758a700af3653c0366bb16322f7468092cd6cca8f5acc2b850963",
+    "crates/rrrah-gpu/tests/raster_timing.rs": "a6e85fd8d6e52b886f998ba5c90c069360b96fe8f1d8732592e316cda8b716f8"
+  },
+  "result": "result.json"
+}

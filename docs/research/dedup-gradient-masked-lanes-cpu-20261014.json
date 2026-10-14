@@ -1,0 +1,1088 @@
+{
+  "status": "complete_pending_audit",
+  "producer_pid": 48494,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-masked-lanes-stress-20261014.json": "1b6b5f02e30ab6394a5e7d7702469b9dc1f2e98a580f4aff75d3a9712572d100",
+    "/private/tmp/rrrah-gradient-masked-lanes-stress-20261014/stress.rs": "ec5d67bde3e85532b0cbdf861306a793aaaa08798d4ba8a91381986807429906",
+    "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu.rs": "88ba404bb50f9d658b106eb3a24c21723b7d13f27f2428dbf33f40dc555b6fd3",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/benchmark-dedup-gradient-masked-lanes-cpu-20261014.py": "cc6a860c5e798593d002b52e134ecc7c3f7adc38ceca5ab76760b2f0636e5c8f",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-unroll4-natural-cpu-20261014.json": "8da40c2bfa662eb5262b3685bd598e20d71f861809b541c185fea2fd3ffa1e2b",
+    "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu": "ab8db2dc644d38b2112eee13db35f5d9e8287d655970565ea32d739a9da5c0e6"
+  },
+  "feature_pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-00.bin": "a31c1a5ea8a6951da8a03499692b6a924b4f9e378e654286c8c3973d03c08235",
+    "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin": "15dc8754408411d57d144365e49db1690c72846853d43e77c2f116e98ba99c84",
+    "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-02.bin": "6fa2123680e1d001dc362c51b391bb103a328ea49eb8b303b3dace459c229df9",
+    "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-03.bin": "51e36010e102345e2c63430973c60ce37f217432cc881074ce03004bedcd13b5",
+    "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-04.bin": "70b7f021514afc128cb91a109523703a5af9bccaf143f9193034fef2caf071fd",
+    "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-05.bin": "20c548849f780188cab087c320325e932cd156f106c83d6caf5137a270a7dfed",
+    "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-06.bin": "f974924402e09d3bb90bf7c936ec53f10da8f39a9772c5b12576cc00eb1fbeec"
+  },
+  "cases": [
+    {
+      "label": "synthetic_clustered_self",
+      "inputs": []
+    },
+    {
+      "label": "natural_0",
+      "inputs": [
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin",
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin"
+      ]
+    },
+    {
+      "label": "natural_5",
+      "inputs": [
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-06.bin",
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-05.bin"
+      ]
+    }
+  ],
+  "results": [
+    {
+      "label": "synthetic_clustered_self",
+      "inputs": [],
+      "rows": [
+        {
+          "pair": 0,
+          "version": "runner",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "runner"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.11615299999999998,
+          "wall_seconds": 2.2356972090000005,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/synthetic_clustered_self-0-runner.stdout",
+          "stdout_sha256": "9951e225dcdc3b5ca70bcf1955ad0704740c4ee007f4713896bbe30d5de8fb2e",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/synthetic_clustered_self-0-runner.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 0,
+          "version": "masked",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "masked"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.11510000000000004,
+          "wall_seconds": 1.5364580419999996,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/synthetic_clustered_self-0-masked.stdout",
+          "stdout_sha256": "9951e225dcdc3b5ca70bcf1955ad0704740c4ee007f4713896bbe30d5de8fb2e",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/synthetic_clustered_self-0-masked.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 1,
+          "version": "masked",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "masked"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.10825500000000002,
+          "wall_seconds": 0.6523497079999991,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/synthetic_clustered_self-1-masked.stdout",
+          "stdout_sha256": "9951e225dcdc3b5ca70bcf1955ad0704740c4ee007f4713896bbe30d5de8fb2e",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/synthetic_clustered_self-1-masked.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 1,
+          "version": "runner",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "runner"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.10924700000000004,
+          "wall_seconds": 0.632663333,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/synthetic_clustered_self-1-runner.stdout",
+          "stdout_sha256": "9951e225dcdc3b5ca70bcf1955ad0704740c4ee007f4713896bbe30d5de8fb2e",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/synthetic_clustered_self-1-runner.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 2,
+          "version": "runner",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "runner"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.11616399999999996,
+          "wall_seconds": 1.251060625000001,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/synthetic_clustered_self-2-runner.stdout",
+          "stdout_sha256": "9951e225dcdc3b5ca70bcf1955ad0704740c4ee007f4713896bbe30d5de8fb2e",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/synthetic_clustered_self-2-runner.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 2,
+          "version": "masked",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "masked"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.11408100000000007,
+          "wall_seconds": 0.9874834579999998,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/synthetic_clustered_self-2-masked.stdout",
+          "stdout_sha256": "9951e225dcdc3b5ca70bcf1955ad0704740c4ee007f4713896bbe30d5de8fb2e",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/synthetic_clustered_self-2-masked.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 3,
+          "version": "masked",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "masked"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.1194729999999998,
+          "wall_seconds": 1.5693804160000013,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/synthetic_clustered_self-3-masked.stdout",
+          "stdout_sha256": "9951e225dcdc3b5ca70bcf1955ad0704740c4ee007f4713896bbe30d5de8fb2e",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/synthetic_clustered_self-3-masked.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 3,
+          "version": "runner",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "runner"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.11156900000000011,
+          "wall_seconds": 0.920729209000001,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/synthetic_clustered_self-3-runner.stdout",
+          "stdout_sha256": "9951e225dcdc3b5ca70bcf1955ad0704740c4ee007f4713896bbe30d5de8fb2e",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/synthetic_clustered_self-3-runner.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 4,
+          "version": "runner",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "runner"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.10919400000000018,
+          "wall_seconds": 0.41172183299999787,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/synthetic_clustered_self-4-runner.stdout",
+          "stdout_sha256": "9951e225dcdc3b5ca70bcf1955ad0704740c4ee007f4713896bbe30d5de8fb2e",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/synthetic_clustered_self-4-runner.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 4,
+          "version": "masked",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "masked"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.10975499999999977,
+          "wall_seconds": 0.43799716700000246,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/synthetic_clustered_self-4-masked.stdout",
+          "stdout_sha256": "9951e225dcdc3b5ca70bcf1955ad0704740c4ee007f4713896bbe30d5de8fb2e",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/synthetic_clustered_self-4-masked.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 5,
+          "version": "masked",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "masked"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.10879599999999984,
+          "wall_seconds": 0.22602441600000134,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/synthetic_clustered_self-5-masked.stdout",
+          "stdout_sha256": "9951e225dcdc3b5ca70bcf1955ad0704740c4ee007f4713896bbe30d5de8fb2e",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/synthetic_clustered_self-5-masked.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 5,
+          "version": "runner",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "runner"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.11964200000000028,
+          "wall_seconds": 0.9756743750000005,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/synthetic_clustered_self-5-runner.stdout",
+          "stdout_sha256": "9951e225dcdc3b5ca70bcf1955ad0704740c4ee007f4713896bbe30d5de8fb2e",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/synthetic_clustered_self-5-runner.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 6,
+          "version": "runner",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "runner"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.11594100000000021,
+          "wall_seconds": 1.6996522920000032,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/synthetic_clustered_self-6-runner.stdout",
+          "stdout_sha256": "9951e225dcdc3b5ca70bcf1955ad0704740c4ee007f4713896bbe30d5de8fb2e",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/synthetic_clustered_self-6-runner.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 6,
+          "version": "masked",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "masked"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.1192179999999998,
+          "wall_seconds": 1.5593162909999982,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/synthetic_clustered_self-6-masked.stdout",
+          "stdout_sha256": "9951e225dcdc3b5ca70bcf1955ad0704740c4ee007f4713896bbe30d5de8fb2e",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/synthetic_clustered_self-6-masked.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 7,
+          "version": "masked",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "masked"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.1107580000000003,
+          "wall_seconds": 0.7900360000000006,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/synthetic_clustered_self-7-masked.stdout",
+          "stdout_sha256": "9951e225dcdc3b5ca70bcf1955ad0704740c4ee007f4713896bbe30d5de8fb2e",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/synthetic_clustered_self-7-masked.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 7,
+          "version": "runner",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "runner"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.10884400000000002,
+          "wall_seconds": 0.4059462499999995,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/synthetic_clustered_self-7-runner.stdout",
+          "stdout_sha256": "9951e225dcdc3b5ca70bcf1955ad0704740c4ee007f4713896bbe30d5de8fb2e",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/synthetic_clustered_self-7-runner.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 8,
+          "version": "runner",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "runner"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.10773000000000019,
+          "wall_seconds": 0.26157683399999954,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/synthetic_clustered_self-8-runner.stdout",
+          "stdout_sha256": "9951e225dcdc3b5ca70bcf1955ad0704740c4ee007f4713896bbe30d5de8fb2e",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/synthetic_clustered_self-8-runner.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 8,
+          "version": "masked",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "masked"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.11681500000000006,
+          "wall_seconds": 1.1397368750000005,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/synthetic_clustered_self-8-masked.stdout",
+          "stdout_sha256": "9951e225dcdc3b5ca70bcf1955ad0704740c4ee007f4713896bbe30d5de8fb2e",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/synthetic_clustered_self-8-masked.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 9,
+          "version": "masked",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "masked"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.11518900000000015,
+          "wall_seconds": 1.1925384160000014,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/synthetic_clustered_self-9-masked.stdout",
+          "stdout_sha256": "9951e225dcdc3b5ca70bcf1955ad0704740c4ee007f4713896bbe30d5de8fb2e",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/synthetic_clustered_self-9-masked.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 9,
+          "version": "runner",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "runner"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.11792999999999981,
+          "wall_seconds": 1.446468375000002,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/synthetic_clustered_self-9-runner.stdout",
+          "stdout_sha256": "9951e225dcdc3b5ca70bcf1955ad0704740c4ee007f4713896bbe30d5de8fb2e",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/synthetic_clustered_self-9-runner.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "ratios": [
+        0.990919659121074,
+        0.9820684549430125,
+        1.0708440516630935,
+        1.0051376449255416,
+        0.9093462162116948,
+        1.028264375846332,
+        1.0175848002646015,
+        1.0843311983662847,
+        0.9767573984567145
+      ],
+      "median_cpu_ratio": 1.0051376449255416
+    },
+    {
+      "label": "natural_0",
+      "inputs": [
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin",
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin"
+      ],
+      "rows": [
+        {
+          "pair": 0,
+          "version": "runner",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "runner",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.2552509999999999,
+          "wall_seconds": 3.165654,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_0-0-runner.stdout",
+          "stdout_sha256": "206c22cccf63de05ec1f76c1da081c3ab97400d7e9bfb0d77c360f1fc727d889",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_0-0-runner.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 0,
+          "version": "masked",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "masked",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.2563879999999998,
+          "wall_seconds": 3.2149962090000024,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_0-0-masked.stdout",
+          "stdout_sha256": "206c22cccf63de05ec1f76c1da081c3ab97400d7e9bfb0d77c360f1fc727d889",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_0-0-masked.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 1,
+          "version": "masked",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "masked",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.25455300000000036,
+          "wall_seconds": 3.9045696250000006,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_0-1-masked.stdout",
+          "stdout_sha256": "206c22cccf63de05ec1f76c1da081c3ab97400d7e9bfb0d77c360f1fc727d889",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_0-1-masked.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 1,
+          "version": "runner",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "runner",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.24202399999999985,
+          "wall_seconds": 1.8197029589999971,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_0-1-runner.stdout",
+          "stdout_sha256": "206c22cccf63de05ec1f76c1da081c3ab97400d7e9bfb0d77c360f1fc727d889",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_0-1-runner.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 2,
+          "version": "runner",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "runner",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.25822699999999943,
+          "wall_seconds": 4.435170332999995,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_0-2-runner.stdout",
+          "stdout_sha256": "206c22cccf63de05ec1f76c1da081c3ab97400d7e9bfb0d77c360f1fc727d889",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_0-2-runner.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 2,
+          "version": "masked",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "masked",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.24010299999999918,
+          "wall_seconds": 2.112192125,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_0-2-masked.stdout",
+          "stdout_sha256": "206c22cccf63de05ec1f76c1da081c3ab97400d7e9bfb0d77c360f1fc727d889",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_0-2-masked.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 3,
+          "version": "masked",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "masked",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.24247400000000108,
+          "wall_seconds": 2.035351166000005,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_0-3-masked.stdout",
+          "stdout_sha256": "206c22cccf63de05ec1f76c1da081c3ab97400d7e9bfb0d77c360f1fc727d889",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_0-3-masked.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 3,
+          "version": "runner",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "runner",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.2581900000000003,
+          "wall_seconds": 3.7649927499999976,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_0-3-runner.stdout",
+          "stdout_sha256": "206c22cccf63de05ec1f76c1da081c3ab97400d7e9bfb0d77c360f1fc727d889",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_0-3-runner.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 4,
+          "version": "runner",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "runner",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.24101599999999962,
+          "wall_seconds": 1.9583801670000014,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_0-4-runner.stdout",
+          "stdout_sha256": "206c22cccf63de05ec1f76c1da081c3ab97400d7e9bfb0d77c360f1fc727d889",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_0-4-runner.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 4,
+          "version": "masked",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "masked",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.2470680000000003,
+          "wall_seconds": 1.9892477920000005,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_0-4-masked.stdout",
+          "stdout_sha256": "206c22cccf63de05ec1f76c1da081c3ab97400d7e9bfb0d77c360f1fc727d889",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_0-4-masked.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 5,
+          "version": "masked",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "masked",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.2567129999999999,
+          "wall_seconds": 3.680569708,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_0-5-masked.stdout",
+          "stdout_sha256": "206c22cccf63de05ec1f76c1da081c3ab97400d7e9bfb0d77c360f1fc727d889",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_0-5-masked.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 5,
+          "version": "runner",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "runner",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.2426910000000005,
+          "wall_seconds": 2.2620861250000033,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_0-5-runner.stdout",
+          "stdout_sha256": "206c22cccf63de05ec1f76c1da081c3ab97400d7e9bfb0d77c360f1fc727d889",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_0-5-runner.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 6,
+          "version": "runner",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "runner",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.2386709999999994,
+          "wall_seconds": 1.494094957999998,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_0-6-runner.stdout",
+          "stdout_sha256": "206c22cccf63de05ec1f76c1da081c3ab97400d7e9bfb0d77c360f1fc727d889",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_0-6-runner.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 6,
+          "version": "masked",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "masked",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.2438989999999998,
+          "wall_seconds": 2.624602667000005,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_0-6-masked.stdout",
+          "stdout_sha256": "206c22cccf63de05ec1f76c1da081c3ab97400d7e9bfb0d77c360f1fc727d889",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_0-6-masked.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 7,
+          "version": "masked",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "masked",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.23330200000000073,
+          "wall_seconds": 1.9960961250000082,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_0-7-masked.stdout",
+          "stdout_sha256": "206c22cccf63de05ec1f76c1da081c3ab97400d7e9bfb0d77c360f1fc727d889",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_0-7-masked.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 7,
+          "version": "runner",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "runner",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.24797699999999995,
+          "wall_seconds": 2.4925685420000008,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_0-7-runner.stdout",
+          "stdout_sha256": "206c22cccf63de05ec1f76c1da081c3ab97400d7e9bfb0d77c360f1fc727d889",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_0-7-runner.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 8,
+          "version": "runner",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "runner",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.24841800000000036,
+          "wall_seconds": 2.3770785420000067,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_0-8-runner.stdout",
+          "stdout_sha256": "206c22cccf63de05ec1f76c1da081c3ab97400d7e9bfb0d77c360f1fc727d889",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_0-8-runner.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 8,
+          "version": "masked",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "masked",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.25014600000000103,
+          "wall_seconds": 2.925260999999992,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_0-8-masked.stdout",
+          "stdout_sha256": "206c22cccf63de05ec1f76c1da081c3ab97400d7e9bfb0d77c360f1fc727d889",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_0-8-masked.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 9,
+          "version": "masked",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "masked",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.2544689999999994,
+          "wall_seconds": 2.901218416000006,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_0-9-masked.stdout",
+          "stdout_sha256": "206c22cccf63de05ec1f76c1da081c3ab97400d7e9bfb0d77c360f1fc727d889",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_0-9-masked.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 9,
+          "version": "runner",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "runner",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.2558439999999996,
+          "wall_seconds": 2.5543237499999947,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_0-9-runner.stdout",
+          "stdout_sha256": "206c22cccf63de05ec1f76c1da081c3ab97400d7e9bfb0d77c360f1fc727d889",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_0-9-runner.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "ratios": [
+        1.0517675932965347,
+        0.9298136910547685,
+        0.9391300979898555,
+        1.025110366116775,
+        1.0577771734427703,
+        1.021904630223196,
+        0.9408211245397791,
+        1.006956017679881,
+        0.9946256312440384
+      ],
+      "median_cpu_ratio": 1.006956017679881
+    },
+    {
+      "label": "natural_5",
+      "inputs": [
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-06.bin",
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-05.bin"
+      ],
+      "rows": [
+        {
+          "pair": 0,
+          "version": "runner",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "runner",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-06.bin",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-05.bin"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.26125900000000046,
+          "wall_seconds": 1.9881653340000014,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_5-0-runner.stdout",
+          "stdout_sha256": "3be62ce44dffa490f6016dbc70c81ecd84bac0c653c289f9135f81c1e3862406",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_5-0-runner.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 0,
+          "version": "masked",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "masked",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-06.bin",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-05.bin"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.26345599999999936,
+          "wall_seconds": 3.725252249999997,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_5-0-masked.stdout",
+          "stdout_sha256": "3be62ce44dffa490f6016dbc70c81ecd84bac0c653c289f9135f81c1e3862406",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_5-0-masked.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 1,
+          "version": "masked",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "masked",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-06.bin",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-05.bin"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.23258399999999968,
+          "wall_seconds": 1.3347507910000047,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_5-1-masked.stdout",
+          "stdout_sha256": "3be62ce44dffa490f6016dbc70c81ecd84bac0c653c289f9135f81c1e3862406",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_5-1-masked.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 1,
+          "version": "runner",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "runner",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-06.bin",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-05.bin"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.27355000000000174,
+          "wall_seconds": 3.1748536249999972,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_5-1-runner.stdout",
+          "stdout_sha256": "3be62ce44dffa490f6016dbc70c81ecd84bac0c653c289f9135f81c1e3862406",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_5-1-runner.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 2,
+          "version": "runner",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "runner",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-06.bin",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-05.bin"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.258346999999999,
+          "wall_seconds": 3.2003920420000043,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_5-2-runner.stdout",
+          "stdout_sha256": "3be62ce44dffa490f6016dbc70c81ecd84bac0c653c289f9135f81c1e3862406",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_5-2-runner.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 2,
+          "version": "masked",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "masked",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-06.bin",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-05.bin"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.23744600000000016,
+          "wall_seconds": 2.2748725000000007,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_5-2-masked.stdout",
+          "stdout_sha256": "3be62ce44dffa490f6016dbc70c81ecd84bac0c653c289f9135f81c1e3862406",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_5-2-masked.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 3,
+          "version": "masked",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "masked",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-06.bin",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-05.bin"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.2609890000000007,
+          "wall_seconds": 3.711473416000004,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_5-3-masked.stdout",
+          "stdout_sha256": "3be62ce44dffa490f6016dbc70c81ecd84bac0c653c289f9135f81c1e3862406",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_5-3-masked.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 3,
+          "version": "runner",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "runner",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-06.bin",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-05.bin"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.25486499999999934,
+          "wall_seconds": 1.9066158340000072,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_5-3-runner.stdout",
+          "stdout_sha256": "3be62ce44dffa490f6016dbc70c81ecd84bac0c653c289f9135f81c1e3862406",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_5-3-runner.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 4,
+          "version": "runner",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "runner",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-06.bin",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-05.bin"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.26138000000000017,
+          "wall_seconds": 3.396217667000002,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_5-4-runner.stdout",
+          "stdout_sha256": "3be62ce44dffa490f6016dbc70c81ecd84bac0c653c289f9135f81c1e3862406",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_5-4-runner.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 4,
+          "version": "masked",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "masked",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-06.bin",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-05.bin"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.2583749999999989,
+          "wall_seconds": 3.57888324999999,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_5-4-masked.stdout",
+          "stdout_sha256": "3be62ce44dffa490f6016dbc70c81ecd84bac0c653c289f9135f81c1e3862406",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_5-4-masked.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 5,
+          "version": "masked",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "masked",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-06.bin",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-05.bin"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.24371699999999985,
+          "wall_seconds": 2.0459379589999998,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_5-5-masked.stdout",
+          "stdout_sha256": "3be62ce44dffa490f6016dbc70c81ecd84bac0c653c289f9135f81c1e3862406",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_5-5-masked.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 5,
+          "version": "runner",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "runner",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-06.bin",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-05.bin"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.27016900000000044,
+          "wall_seconds": 4.7503409580000096,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_5-5-runner.stdout",
+          "stdout_sha256": "3be62ce44dffa490f6016dbc70c81ecd84bac0c653c289f9135f81c1e3862406",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_5-5-runner.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 6,
+          "version": "runner",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "runner",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-06.bin",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-05.bin"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.2524389999999993,
+          "wall_seconds": 2.255980750000006,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_5-6-runner.stdout",
+          "stdout_sha256": "3be62ce44dffa490f6016dbc70c81ecd84bac0c653c289f9135f81c1e3862406",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_5-6-runner.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 6,
+          "version": "masked",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "masked",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-06.bin",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-05.bin"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.2536259999999999,
+          "wall_seconds": 3.200922625000004,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_5-6-masked.stdout",
+          "stdout_sha256": "3be62ce44dffa490f6016dbc70c81ecd84bac0c653c289f9135f81c1e3862406",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_5-6-masked.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 7,
+          "version": "masked",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "masked",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-06.bin",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-05.bin"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.25859200000000004,
+          "wall_seconds": 4.948368082999991,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_5-7-masked.stdout",
+          "stdout_sha256": "3be62ce44dffa490f6016dbc70c81ecd84bac0c653c289f9135f81c1e3862406",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_5-7-masked.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 7,
+          "version": "runner",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "runner",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-06.bin",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-05.bin"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.24908999999999892,
+          "wall_seconds": 1.6290106250000065,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_5-7-runner.stdout",
+          "stdout_sha256": "3be62ce44dffa490f6016dbc70c81ecd84bac0c653c289f9135f81c1e3862406",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_5-7-runner.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 8,
+          "version": "runner",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "runner",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-06.bin",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-05.bin"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.2539779999999995,
+          "wall_seconds": 2.4358228750000137,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_5-8-runner.stdout",
+          "stdout_sha256": "3be62ce44dffa490f6016dbc70c81ecd84bac0c653c289f9135f81c1e3862406",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_5-8-runner.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 8,
+          "version": "masked",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "masked",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-06.bin",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-05.bin"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.23884699999999937,
+          "wall_seconds": 2.2017016249999983,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_5-8-masked.stdout",
+          "stdout_sha256": "3be62ce44dffa490f6016dbc70c81ecd84bac0c653c289f9135f81c1e3862406",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_5-8-masked.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 9,
+          "version": "masked",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "masked",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-06.bin",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-05.bin"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.2502360000000007,
+          "wall_seconds": 2.6651850830000114,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_5-9-masked.stdout",
+          "stdout_sha256": "3be62ce44dffa490f6016dbc70c81ecd84bac0c653c289f9135f81c1e3862406",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_5-9-masked.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 9,
+          "version": "runner",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/cpu",
+            "runner",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-06.bin",
+            "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-05.bin"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.27265799999999996,
+          "wall_seconds": 3.8416170419999958,
+          "stdout": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_5-9-runner.stdout",
+          "stdout_sha256": "3be62ce44dffa490f6016dbc70c81ecd84bac0c653c289f9135f81c1e3862406",
+          "stderr": "/private/tmp/rrrah-gradient-masked-lanes-cpu-20261014/natural_5-9-runner.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "ratios": [
+        0.8502430999817152,
+        0.9190971832457938,
+        1.0240284071959718,
+        0.9885033284872551,
+        0.9020909134652735,
+        1.0047021260581788,
+        1.0381468545505688,
+        0.9404239737300075,
+        0.9177651123385366
+      ],
+      "median_cpu_ratio": 0.9404239737300075
+    }
+  ],
+  "scope": "Standalone exact global runner-up versus selective second-pass lanes, both use pinned current unrolled kernel, four matcher repetitions per fresh process,10alternating pairs with first warmup excluded. Two retained natural1024feature directions plus artificial512clustered self bank. CPU includes startup/loading/printing. No managed cache, native whole-operation, allocation cap, universal speedup or production adoption claim.",
+  "child_pid": 49952,
+  "active_case": "natural_5",
+  "active_pair": 9,
+  "active_version": "runner"
+}

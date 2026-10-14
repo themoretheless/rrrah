@@ -1,0 +1,49 @@
+{
+  "status": "verified_single_frozen_runner_hard_negative_unknown",
+  "report": "docs/research/dedup-third-hard-negative-consensus-20261014.json",
+  "report_sha256": "d098bf2fb43ef802bbbe54a481257393628b3cf54fe8052a1f16561ec8e1a1e0",
+  "auditor_sha256": "c9f002faa6f27bf0832f39b6ef5d6b31680bcd99b5fdb0d2fb89d9abb8aa4ce6",
+  "source": "/Users/themoretheless/.codex/tmp/rrrah-gradient-runner-source-20261014",
+  "source_manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-runner-source-20261014.json",
+  "source_manifest_sha256": "07cf8dd36d6c33d0005eb9b74c4790bca7bf8ff37f21bdb1e977981021c1889e",
+  "case_index": 130,
+  "source_dimensions": [
+    930,
+    708
+  ],
+  "target_dimensions": [
+    2560,
+    1920
+  ],
+  "result": {
+    "forward_model_attempted": true,
+    "forward_support": true,
+    "managed_peak": 334746000,
+    "managed_used": 0,
+    "reverse_model_attempted": true,
+    "reverse_support": null,
+    "scope": "Actual operation-atomic two-direction CPU native/opposite/25bank consensus. Seed173 once per operation, two threads, source interpretation linear sRGB explicit. Development controls only; no universal precision/recall or hard RSS cap.",
+    "support": null
+  },
+  "overall_unknown": 1,
+  "confirmed_different_rejections": 0,
+  "false_positive_supports": 0,
+  "managed_peak_bytes": 334746000,
+  "managed_credit_released": true,
+  "observed_wall_seconds": 10894.723543959,
+  "raw_stdout": "docs/research/dedup-third-hard-negative-consensus-20261014/stdout.json",
+  "raw_stdout_sha256": "13fd194d0f725b4f6907e9b1b1aafe82469094da6c479b4ba107bc621d57f98d",
+  "runtime_after_pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libtorch_python.dylib": "cb1d5957b49b8f3c2e4b90de7b99aee835520875bce893b11eb7528a548744fa",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libtorch.dylib": "2178657b7eeffc0c0a989889ac3e2b2e3d216073b35f3a291ee89bd65c0fb406",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libtorch_global_deps.dylib": "6ff1aedff89150170f225ce821dc9355a9d5f9c80a6cc1bb761c8d209638c2c7",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libomp.dylib": "fe0670951c85401421f6cedc91971f28dc870bad4c1f0cfebe2b74dac421e5f0",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libtorch_cpu.dylib": "941f3e16a8e02b23b99bd2c8693caabaf8df859bfaa293f39a5d7dd8a8f5ca6e",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libc10.dylib": "f203c171b7a71c742ef4a84bde3af64465e545a4cc3ebfd7f245dca3ebe4e7cf",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libshm.dylib": "3a6fc248697b8809534e74d9e5fc784b385239d8c7aeef291c3968a73609f7d2"
+  },
+  "runtime_capture_limit": "Current post-run seven-dylib hashes match retained prior native plan; this producer did not separately capture seven runtime hashes at its own launch. Input/weights/source/probe pins are checked before/after.",
+  "historical_diagnostic": "docs/research/dedup-third-hard-negative-diagnostic-20261014.json",
+  "historical_diagnostic_sha256": "4bd5af20c1afbec3458631d9f8fc66148bfa241c90373ee0abf727256432480a",
+  "scope": "Single actual atomic two-direction native/opposite/model25bank operation on frozen source6linear-runner, common normalized negative130policy. Forward locally supports, reverseunknown, overallunknown; no false support here but no confirmed rejection. Historical fixed2wrong-to-query local35inlier support used different source/policy/tolerances; no isolated causal AND-fix attribution. Not current unroll/collection/testcfg-root source, full233negative campaign/default/wholefile/universalprecision/recall/platform or timing speedup proof. Keep separate from pre-cache74negative prefix."
+}

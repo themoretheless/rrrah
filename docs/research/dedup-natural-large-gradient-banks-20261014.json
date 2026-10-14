@@ -1,0 +1,48 @@
+{
+  "status": "terminal_build_failure",
+  "producer_pid": 60113,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/prepare-dedup-natural-large-gradient-banks-20261014.py": "0dc14f0e959e53d92b9fdd56e54d5302abb0e478751a8fde74d6e16b62aac141",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-unroll4-natural-cpu-20261014.json": "8da40c2bfa662eb5262b3685bd598e20d71f861809b541c185fea2fd3ffa1e2b",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-natural-bound-benchmark-plan-20261013.json": "2f36812cd75f95d856cd060a87f6119c02e31d8e2c9b57cdcfc1ef4289fd6a21",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-unroll4-managed-benchmark-20261014.json": "a3e3b84b2455022518fc7ac8c398cd0433e59536be4d5fc4871de1a2072a5ccd",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-unroll4-managed-focused-v2-20261014.json": "cee45481a35d3622bb3506d322be1f895e24c3c95321ae27a502891d58c12e1a",
+    "/private/tmp/rrrah-natural-large-gradient-banks-20261014/extract.rs": "4bdfc5b29e35648fa6697513e61d190b39eb0c39189153b43240937e89b995ed",
+    "/private/tmp/rrrah-gradient-unroll4-managed-benchmark-20261014/candidate/librrrah_dedup.rlib": "7e420d8b52f72a7b7e0e440f578c504f14a2a0da36ca12373bcfbcaf57488878"
+  },
+  "input_pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/211901.jpg": "6c076f5642a9de92efb53cfe0734d7140a499fd44d08d2b1d93199c2bfc9bcd9",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/211900.jpg": "81faa5e0860359aa092a5b1e04de4130acd1168182bb5fdf55c7dd73af9fd8fe"
+  },
+  "dependency_pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/librrrah_core-1093d06a30417cb5.rlib": "9e918b06d7ae7bf867ac04bc774062fc99d2b56704f083d763336cdd1bb45dbb",
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libblake3-5dbb3dfc2ce7d297.rlib": "1a90993f8c95cbbc51839449c8db08075277d5468e7d9fa2ae1b8838720083fe",
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libthiserror-1f2ca11ca2706be8.rlib": "a4bc045f06441d4730b1988bee770197e1f51f4b1600df8c028a668c27c77bf1",
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libtempfile-f6f2a369a6678518.rlib": "3c0a02859f18952acb6482a76d369ebac50a9c75f3b3b153fb3db5af15f2ea31",
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/liblibc-0a79900aa2799e6c.rlib": "b3e730a257abb46acab6283d05f1a1340e72bbb48682e09f3a237332f7f08c25",
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/librustix-d27a8f21409c30bb.rlib": "fd18f6de2a5fe606fe416658acb98f4d33ff174057722e30f3c14cb23e8060e3",
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/liblibproc-758dbaf49d4d459c.rlib": "6ce65607c893ada61e22fcbe8a1dabb4c04c74e7ab06309261c62f6b3b6fe88b",
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/liberrno-eb497f290fc228fe.rlib": "3d86b1f24f0098e7558b6caeaf6a877e3f8fec47d275b5bdc7bcea6821ac8362"
+  },
+  "command": [
+    "rustc",
+    "+stable",
+    "--edition=2024",
+    "-C",
+    "opt-level=3",
+    "/private/tmp/rrrah-natural-large-gradient-banks-20261014/extract.rs",
+    "--extern",
+    "rrrah_dedup=/private/tmp/rrrah-gradient-unroll4-managed-benchmark-20261014/candidate/librrrah_dedup.rlib",
+    "-L",
+    "dependency=/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps",
+    "-o",
+    "/private/tmp/rrrah-natural-large-gradient-banks-20261014/extract"
+  ],
+  "extractions": [],
+  "scope": "Two retained public table photographs, complete source hashes verified. Pillow EXIFtranspose/RGBA8 interpreted as sRGB, standard inverse transfer float32linear opaque pixels, native currentV7Rust gradient pyramid1024perlevel/3levels, first2048actual features; no synthetic repetition/padding. Primitive matcher fixture only, not native decoder/ICC/default/corpus/managed memory/RSS qualification.",
+  "child_pid": 60116,
+  "build_returncode": 1,
+  "error": "Owned session15022 terminal exit1. Diagnostic expected Vec<[f32;4]> but actual LinearRgbaView constructor requires flat &[f32]. No extraction or native source change.",
+  "build_log": "/private/tmp/rrrah-natural-large-gradient-banks-20261014/build.log",
+  "build_log_sha256": "3427be6f41877bafe77786d048d7309bbb9d155b56007f4329c74499f3bbf33b"
+}

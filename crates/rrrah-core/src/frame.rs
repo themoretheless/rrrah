@@ -150,6 +150,10 @@ impl LevelGrid {
         self.values.get(index).copied()
     }
 
+    pub fn at_f64(&self, row: u32, column: u32, component: u8) -> Option<f64> {
+        self.at(row, column, component).map(f64::from)
+    }
+
     pub fn bayer_quad(&self) -> Result<[f32; 4], FrameError> {
         self.validate()?;
         if self.values.len() == 1 {
@@ -178,6 +182,10 @@ impl LevelGrid {
         }
         Ok(quad)
     }
+
+    pub fn bayer_quad_f64(&self) -> Result<[f64; 4], FrameError> {
+        self.bayer_quad().map(|q| q.map(f64::from))
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -200,6 +208,10 @@ impl WhiteLevel {
             result[index] = *self.0.get(color as usize).unwrap_or(&self.0[0]);
         }
         Ok(result)
+    }
+
+    pub fn bayer_quad_f64(&self, cfa: &CfaPattern) -> Result<[f64; 4], FrameError> {
+        self.bayer_quad(cfa).map(|q| q.map(f64::from))
     }
 }
 
@@ -243,6 +255,20 @@ impl Orientation {
     /// decoder and by the WGSL viewport shader. Keeping it here gives CPU
     /// tile scheduling and GPU rendering one canonical transform to test.
     pub fn map_display_uv(self, uv: [f32; 2]) -> [f32; 2] {
+        let [u, v] = uv;
+        match self {
+            Self::HorizontalFlip => [1.0 - u, v],
+            Self::Rotate180 => [1.0 - u, 1.0 - v],
+            Self::VerticalFlip => [u, 1.0 - v],
+            Self::Transpose => [v, u],
+            Self::Rotate90 => [v, 1.0 - u],
+            Self::Transverse => [1.0 - v, 1.0 - u],
+            Self::Rotate270 => [1.0 - v, u],
+            Self::Normal | Self::Unknown => [u, v],
+        }
+    }
+
+    pub fn map_display_uv_f64(self, uv: [f64; 2]) -> [f64; 2] {
         let [u, v] = uv;
         match self {
             Self::HorizontalFlip => [1.0 - u, v],

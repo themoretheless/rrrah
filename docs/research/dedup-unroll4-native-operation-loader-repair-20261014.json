@@ -1,0 +1,11 @@
+{
+  "status": "terminal_loader_failure_repaired_reusing_binaries",
+  "failed_report": "docs/research/dedup-unroll4-native-operation-20261014.json",
+  "failed_report_sha256": "023ae48c811a30e8ab5858a7ae4ccd127534198b17a70cbea92262d1a7f6da24",
+  "failure": "Protected /usr/bin/time strips DYLD environment; baseline probe aborts before main with libtorch_cpu missing. Extended -lresource clock also reports sandbox sysctl denial.",
+  "repair": "Reused exact two successful build binaries, no rebuild/binary patch. Restore DYLD via explicit /usr/bin/env argv after /usr/bin/time, use default clock without -l. Wrapped native no-argument usage reaches main; clock control exits0.",
+  "resumed_report": "docs/research/dedup-unroll4-native-operation-loader-v2-20261014.json",
+  "loader_controls": "/private/tmp/rrrah-unroll4-native-operation-loader-v2-20261014/loader-controls.json",
+  "loader_controls_sha256": "b96042073b45bb6dda097269460aba1767ca71b719af561a893a111d7bd2f611",
+  "scope": "Only older V5vsV7dimension-unroll4comparison resumed. Current target-gated firstpass16still lacks native/wholeworkspace/corpus/decoder/defaultcollection/platform qualification."
+}

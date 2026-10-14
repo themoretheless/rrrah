@@ -1,0 +1,30 @@
+{
+  "status": "current_full_ordinary_native_compositor_suite_passed",
+  "tool_terminal_exit_code": 0,
+  "passed": 263,
+  "failed": 0,
+  "ignored": 12,
+  "new_hard_memory_regression_executed": true,
+  "duration_seconds": 44.97,
+  "ignored_tests": [
+    "test knockout_compositor::authored_curve_tile_translation_reproducer ... ignored, explicit backend translation diagnostic requires fresh report path",
+    "test knockout_compositor::interpreter_tests::actual_pdf_image_interpolation_oracle_dump ... ignored, requires fresh raster oracle diagnostic output directory",
+    "test knockout_compositor::interpreter_tests::external_authored_pdf_replay_diagnostic ... ignored, requires explicit authored PDF fixture directory and fresh diagnostic output path",
+    "test knockout_compositor::interpreter_tests::global_stroke_outline_transform_diagnostic ... ignored, explicit unadmitted stroke-outline oracle experiment; fresh report path required",
+    "test knockout_compositor::interpreter_tests::half_area_dash_outline_raster_diagnostic ... ignored, explicit independently authored half-area stroke raster diagnostic; fresh report path required",
+    "test knockout_compositor::interpreter_tests::native_gray_group_external_oracle_export ... ignored, exports authored native Gray-group PDF and RGB pixels for independent oracle",
+    "test knockout_compositor::interpreter_tests::native_solid_paint_preparation_benchmark ... ignored, diagnostic timing; no performance assertion under shared CPU load",
+    "test knockout_compositor::interpreter_tests::real_ai_compositor_capture_and_replay_diagnostic ... ignored, requires explicit real AI corpus and fresh diagnostic output directory",
+    "test knockout_compositor::interpreter_tests::real_ai_spatial_scene_problem_pixel_diagnostic ... ignored, requires explicit VectorApple corpus; diagnostic completion is reported separately",
+    "test knockout_compositor::interpreter_tests::repeated_and_disjoint_opaque_edges_compare_native_spatial_composition ... ignored, Diagnostic for correlated edge coverage; scalar replay is known incomplete",
+    "test knockout_compositor::interpreter_tests::spatial_tile_scene_reuse_benchmark ... ignored, explicit prototype benchmark with fresh report destination required",
+    "test knockout_compositor::interpreter_tests::stencil_opacity_external_oracle_dump ... ignored, requires fresh stencil oracle diagnostic output directory"
+  ],
+  "source_drift": [],
+  "log_sha256": "4ec13948f91669757d62af2a00379e1dc7283268d1f30b2d9139b781e01bae07",
+  "limitations": [
+    "experimental native AI/PDF compositor, not qualified production AI viewing",
+    "ignored manual real-file cases not counted as passes",
+    "independent AI geometry/color mismatches and normal4M work limit remain open"
+  ]
+}

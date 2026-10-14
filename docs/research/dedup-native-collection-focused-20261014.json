@@ -1,5 +1,5 @@
 {
-  "status": "building",
+  "status": "passed_pending_audit",
   "producer_pid": 73493,
   "command": [
     "cargo",
@@ -21,7 +21,31 @@
   "plan": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-native-collection-harness-20261014.json",
   "plan_sha256": "2b5e5ed78ee204d37f881a848bd3a6261c1722c628f0a95534ea4e8a702acfb8",
   "producer_sha256": "2b650f0faf25ac974fae4244d998356a26bb69256a02193f83e52c93e7c030ec",
-  "rows": [],
+  "rows": [
+    {
+      "target": "search_portfolio",
+      "returncode": 0,
+      "executable": "/private/tmp/rrrah-native-collection-focused-20261014/search_portfolio",
+      "executable_sha256": "c33078625b1e7d7665827fc98ec46cd241eb892a8c18f915f7efe49e2f796931",
+      "log": "/private/tmp/rrrah-native-collection-focused-20261014/search_portfolio.log",
+      "log_sha256": "1048a1c56f27954aa3167060be81514080e60bd5ee21766b01e30815bc20a893"
+    },
+    {
+      "target": "portfolio_collection",
+      "returncode": 0,
+      "executable": "/private/tmp/rrrah-native-collection-focused-20261014/portfolio_collection",
+      "executable_sha256": "a3f11233e27529e51e0fc8e73486722d082052a7b191c6644e6df5a57b35f5a0",
+      "log": "/private/tmp/rrrah-native-collection-focused-20261014/portfolio_collection.log",
+      "log_sha256": "48cac06b0a4986b2d770e342de21cd5fc65c978f75ae4823c6b3430f743decdb"
+    }
+  ],
   "scope": "Exact two frozen integration test sources, LoFTR dependency enabled, standalone optimized Cargo harness. Existing build cache cloned for reuse only; source/runtime checks remain required. Not whole workspace qualification. Full selected tests use synthetic proposal providers; empty native adapter test checks lazy loading, not actual learned inference.",
-  "child_pid": 73722
+  "child_pid": 73851,
+  "build_returncode": 0,
+  "target": "portfolio_collection",
+  "source_unchanged": true,
+  "build_pins": {
+    "/private/tmp/rrrah-native-collection-focused-20261014/build.log": "adc3ddf58031c516b0a8a3e272a9e85ca0d001554cdb11988924145f91563c4b",
+    "/private/tmp/rrrah-native-collection-focused-20261014/build.jsonl": "12c3ae07a94d1aa970eb425399d502fd79f443804bda3c6d512c3410161b4c88"
+  }
 }

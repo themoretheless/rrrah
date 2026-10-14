@@ -22,6 +22,333 @@ fn view() -> ViewParameters {
 }
 
 #[test]
+fn exr_physical_pixels_survive_ram_spill_pressure_retry_and_metal() {
+    let Some(gpu) = common::qualification_gpu() else {
+        return;
+    };
+    eprintln!("EXR physical swap adapter: {}", gpu.adapter_name());
+    let fixture = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .join("../../tests/fixtures/raster/float-none-rec709-declared.exr");
+    let bytes = std::fs::read(&fixture).unwrap();
+    let attribute = b"pixelAspectRatio\0float\0\x04\0\0\0";
+    let offset = bytes
+        .windows(attribute.len())
+        .position(|v| v == attribute)
+        .unwrap()
+        + attribute.len();
+    let reference = rrrah_decode::prepare_raster_for_display(
+        &rrrah_decode::decode_raster_file(&fixture).unwrap(),
+    )
+    .unwrap();
+    let parameters = ViewParameters { zoom: 1., ..view() };
+    let square = gpu.render_raster(&reference, parameters, [64, 64]);
+    let window_attribute = b"displayWindow\0box2i\0\x10\0\0\0";
+    let window_offset = bytes
+        .windows(window_attribute.len())
+        .position(|v| v == window_attribute)
+        .unwrap()
+        + window_attribute.len();
+    let cases = [2f32, 0.5, 1.]
+        .into_iter()
+        .map(|aspect| (aspect, None, [0i32, 0], None))
+        .chain(
+            [
+                [-1i32, -1, 3, 2],
+                [1, 0, 2, 1],
+                [-2, 1, 1, 3],
+                [5, 5, 6, 6],
+                [0, 0, 2, 1],
+            ]
+            .into_iter()
+            .map(|bounds| (1., Some(bounds), [0, 0], None)),
+        );
+    let cases = cases.chain([
+        (
+            1.,
+            Some([-3, -2, 2, 2]),
+            [-2, -1],
+            Some("float-shifted-window-negative.exr"),
+        ),
+        (
+            1.,
+            Some([3, 1, 5, 3]),
+            [2, 1],
+            Some("float-shifted-window-positive-crop.exr"),
+        ),
+        (
+            1.,
+            Some([-7, 9, -5, 10]),
+            [-7, 9],
+            Some("float-shifted-window-translated.exr"),
+        ),
+    ]);
+    for (aspect, bounds, origin, shifted_fixture) in cases {
+        let expected = if let Some(bounds) = bounds {
+            let width = (bounds[2] - bounds[0] + 1) as u32;
+            let height = (bounds[3] - bounds[1] + 1) as u32;
+            let RasterPixels::Rgba32Float(source) = reference.pixels() else {
+                panic!("EXR precision")
+            };
+            assert_eq!((reference.width(), reference.height()), (3, 2));
+            let mut pixels = vec![0f32; (width * height * 4) as usize];
+            for y in bounds[1]..=bounds[3] {
+                for x in bounds[0]..=bounds[2] {
+                    if (origin[0]..origin[0] + 3).contains(&x)
+                        && (origin[1]..origin[1] + 2).contains(&y)
+                    {
+                        let target = (((y - bounds[1]) as u32 * width + (x - bounds[0]) as u32) * 4)
+                            as usize;
+                        let original = (((y - origin[1]) * 3 + x - origin[0]) * 4) as usize;
+                        pixels[target..target + 4].copy_from_slice(&source[original..original + 4]);
+                    }
+                }
+            }
+            DecodedRaster::new(
+                width,
+                height,
+                RasterPixels::Rgba32Float(Arc::new(pixels).into()),
+                reference.color_space().clone(),
+            )
+            .unwrap()
+            .with_pixel_aspect(Some(aspect))
+            .unwrap()
+        } else {
+            reference.clone().with_pixel_aspect(Some(aspect)).unwrap()
+        };
+        let expected_sdr = gpu.render_raster(&expected, parameters, [64, 64]);
+        let expected_hdr = gpu.render_raster_half(&expected, parameters, [64, 64]);
+        if aspect != 1. {
+            assert_ne!(
+                expected_sdr.pixels, square.pixels,
+                "geometry control must distinguish square pixels"
+            );
+        }
+        let directory = tempfile::tempdir().unwrap();
+        let path = directory.path().join("physical.exr");
+        let mut encoded = if let Some(name) = shifted_fixture {
+            std::fs::read(fixture.with_file_name(name)).unwrap()
+        } else {
+            bytes.clone()
+        };
+        encoded[offset..offset + 4].copy_from_slice(&aspect.to_le_bytes());
+        if let Some(bounds) = bounds {
+            for (index, coordinate) in bounds.iter().enumerate() {
+                encoded[window_offset + index * 4..window_offset + index * 4 + 4]
+                    .copy_from_slice(&coordinate.to_le_bytes());
+            }
+        }
+        std::fs::write(&path, encoded).unwrap();
+        let root = rrrah_core::MemoryBudget::new(1024 * 1024);
+        let mut request = rrrah_decode::DecodeRequest::new(path.clone());
+        request.memory_budget = Some(root.clone());
+        let decoded = rrrah_decode::decode_raster(&request).unwrap();
+        let weight = decoded.capacity_bytes();
+        assert_eq!(root.used(), weight);
+        let queue = rrrah_core::MemoryBudget::new(weight);
+        let swap = rrrah_cache::RasterSwapCache::<u8>::new_with_budgets(
+            directory.path(),
+            rrrah_cache::ImageSwapConfig {
+                limits: rrrah_cache::CacheLimits {
+                    max_bytes: 65536,
+                    max_entries: Some(1),
+                    ttl: None,
+                },
+                queue_bytes: weight,
+                queue_count: 1,
+                restore_bytes: weight,
+            },
+            queue.clone(),
+            root.clone(),
+        )
+        .unwrap();
+        let limits = rrrah_cache::CacheLimits {
+            max_bytes: weight,
+            max_entries: Some(1),
+            ttl: None,
+        };
+        let mut ram = rrrah_cache::RasterRamCache::new(limits);
+        ram.enable_swap(swap);
+        assert!(ram.insert(1, decoded));
+        let pressure = root.try_reserve(root.limit() - root.used()).unwrap();
+        let resident = ram.get_background_with_cancel(&1, || false).unwrap();
+        assert_eq!(resident.pixel_aspect(), Some(aspect));
+        drop(resident);
+        drop(pressure);
+        assert!(ram.set_limits_and_spill(rrrah_cache::CacheLimits::bytes(0)));
+        ram.swap().unwrap().wait_idle().unwrap();
+        assert!(ram.is_empty());
+        assert_eq!((root.used(), queue.used()), (0, 0));
+        std::fs::remove_file(path).unwrap();
+        assert!(ram.set_limits(limits).unwrap().is_empty());
+        let pressure = root.try_reserve(root.limit()).unwrap();
+        assert!(ram.get_background_with_cancel(&1, || false).is_none());
+        drop(pressure);
+        assert!(ram.get_background_with_cancel(&1, || true).is_none());
+        assert_eq!(root.used(), 0);
+        let restored = ram.get_background_with_cancel(&1, || false).unwrap();
+        assert_eq!(restored.pixel_aspect(), Some(aspect));
+        assert_eq!(
+            (restored.width(), restored.height()),
+            (expected.width(), expected.height())
+        );
+        let (RasterPixels::Rgba32Float(actual), RasterPixels::Rgba32Float(golden)) =
+            (restored.pixels(), expected.pixels())
+        else {
+            panic!("EXR precision");
+        };
+        assert_eq!(actual.len(), golden.len());
+        assert!(
+            actual
+                .iter()
+                .zip(golden.iter())
+                .all(|(a, b)| a.to_bits() == b.to_bits())
+        );
+        let prepared =
+            rrrah_decode::prepare_raster_for_display_with_budget(&restored, Some(&root)).unwrap();
+        assert_eq!(
+            gpu.render_raster(&prepared, parameters, [64, 64]).pixels,
+            expected_sdr.pixels
+        );
+        assert_eq!(
+            gpu.render_raster_half(&prepared, parameters, [64, 64]),
+            expected_hdr
+        );
+        drop(prepared);
+        drop(restored);
+        assert!(ram.set_limits_and_spill(rrrah_cache::CacheLimits::bytes(0)));
+        ram.swap().unwrap().wait_idle().unwrap();
+        let stats = ram.swap().unwrap().stats();
+        assert_eq!(
+            (stats.writes, stats.reads, stats.errors, stats.queued_bytes),
+            (1, 1, 0, 0)
+        );
+        assert_eq!((root.used(), queue.used()), (0, 0));
+        eprintln!(
+            "EXR geometry swap: aspect={aspect}; bounds={bounds:?}; origin={origin:?}; source deleted; float bits and SDR/HDR exact; one write/read; root=0; queue=0"
+        );
+    }
+}
+
+#[test]
+fn heif_physical_pixels_survive_ram_spill_pressure_retry_and_metal() {
+    let Some(gpu) = common::qualification_gpu() else {
+        return;
+    };
+    eprintln!("HEIF physical swap adapter: {}", gpu.adapter_name());
+    let fixtures = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .join("../../tests/fixtures/raster");
+    for (original, physical) in [
+        ("alpha.heic", "heif-physical-alpha.heic"),
+        ("rotate90.heic", "heif-physical-rotate90.heic"),
+        ("mirror.heif", "heif-physical-mirror.heif"),
+    ] {
+        let reference = rrrah_decode::prepare_raster_for_display(
+            &rrrah_decode::decode_raster_file(&fixtures.join(original)).unwrap(),
+        ).unwrap();
+        let aspect = 2f32;
+        let parameters = ViewParameters { zoom: 1., ..view() };
+        let square = gpu.render_raster(&reference, parameters, [64, 64]);
+        let expected = reference.clone().with_pixel_aspect(Some(aspect)).unwrap();
+        let expected_sdr = gpu.render_raster(&expected, parameters, [64, 64]);
+        let expected_hdr = gpu.render_raster_half(&expected, parameters, [64, 64]);
+        if aspect != 1. {
+            assert_ne!(
+                expected_sdr.pixels, square.pixels,
+                "geometry control must distinguish square pixels"
+            );
+        }
+        let directory = tempfile::tempdir().unwrap();
+        let path = directory.path().join(physical);
+        std::fs::copy(fixtures.join(physical), &path).unwrap();
+        let root = rrrah_core::MemoryBudget::new(1024 * 1024);
+        let mut request = rrrah_decode::DecodeRequest::new(path.clone());
+        request.memory_budget = Some(root.clone());
+        let raw = rrrah_decode::decode_raster(&request).unwrap();
+        let decoded = rrrah_decode::prepare_raster_for_display_with_budget(&raw, Some(&root)).unwrap();
+        drop(raw);
+        let weight = decoded.capacity_bytes();
+        assert_eq!(root.used(), weight);
+        let queue = rrrah_core::MemoryBudget::new(weight);
+        let swap = rrrah_cache::RasterSwapCache::<u8>::new_with_budgets(
+            directory.path(),
+            rrrah_cache::ImageSwapConfig {
+                limits: rrrah_cache::CacheLimits {
+                    max_bytes: 65536,
+                    max_entries: Some(1),
+                    ttl: None,
+                },
+                queue_bytes: weight,
+                queue_count: 1,
+                restore_bytes: weight,
+            },
+            queue.clone(),
+            root.clone(),
+        )
+        .unwrap();
+        let limits = rrrah_cache::CacheLimits {
+            max_bytes: weight,
+            max_entries: Some(1),
+            ttl: None,
+        };
+        let mut ram = rrrah_cache::RasterRamCache::new(limits);
+        ram.enable_swap(swap);
+        assert!(ram.insert(1, decoded));
+        let pressure = root.try_reserve(root.limit() - root.used()).unwrap();
+        let resident = ram.get_background_with_cancel(&1, || false).unwrap();
+        assert_eq!(resident.pixel_aspect(), Some(aspect));
+        drop(resident);
+        drop(pressure);
+        assert!(ram.set_limits_and_spill(rrrah_cache::CacheLimits::bytes(0)));
+        ram.swap().unwrap().wait_idle().unwrap();
+        assert!(ram.is_empty());
+        assert_eq!((root.used(), queue.used()), (0, 0));
+        std::fs::remove_file(path).unwrap();
+        assert!(ram.set_limits(limits).unwrap().is_empty());
+        let pressure = root.try_reserve(root.limit()).unwrap();
+        assert!(ram.get_background_with_cancel(&1, || false).is_none());
+        drop(pressure);
+        assert!(ram.get_background_with_cancel(&1, || true).is_none());
+        assert_eq!(root.used(), 0);
+        let restored = ram.get_background_with_cancel(&1, || false).unwrap();
+        assert_eq!(restored.pixel_aspect(), Some(aspect));
+        let (RasterPixels::Rgba32Float(actual), RasterPixels::Rgba32Float(golden)) =
+            (restored.pixels(), expected.pixels())
+        else {
+            panic!("prepared HEIF precision");
+        };
+        assert_eq!(actual.len(), golden.len());
+        assert!(
+            actual
+                .iter()
+                .zip(golden.iter())
+                .all(|(a, b)| a.to_bits() == b.to_bits())
+        );
+        let prepared = rrrah_decode::prepare_raster_for_display_with_budget(&restored, Some(&root)).unwrap();
+        assert_eq!(
+            gpu.render_raster(&prepared, parameters, [64, 64]).pixels,
+            expected_sdr.pixels
+        );
+        assert_eq!(
+            gpu.render_raster_half(&prepared, parameters, [64, 64]),
+            expected_hdr
+        );
+        drop(prepared);
+        drop(restored);
+        assert!(ram.set_limits_and_spill(rrrah_cache::CacheLimits::bytes(0)));
+        ram.swap().unwrap().wait_idle().unwrap();
+        let stats = ram.swap().unwrap().stats();
+        assert_eq!(
+            (stats.writes, stats.reads, stats.errors, stats.queued_bytes),
+            (1, 1, 0, 0)
+        );
+        assert_eq!((root.used(), queue.used()), (0, 0));
+        eprintln!(
+            "HEIF physical swap: aspect={aspect}; source deleted; float bits and SDR/HDR exact; one write/read; root=0; queue=0"
+        );
+    }
+}
+
+#[test]
 fn profiled_png_and_archives_keep_color_through_swap_and_metal() {
     let Some(gpu) = common::qualification_gpu() else {
         return;

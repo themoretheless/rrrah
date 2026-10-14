@@ -1,0 +1,100 @@
+{
+  "scope": "Original resources and content, derived one-pixel page box experiment",
+  "oracle": "/opt/homebrew/Cellar/poppler/26.10.0/bin/pdftoppm",
+  "box": [
+    199,
+    219.5,
+    200,
+    220.5
+  ],
+  "runs": [
+    {
+      "mode": "crop-only",
+      "scale": 64,
+      "valid": false,
+      "exit_code": 99,
+      "stderr": "ICC profile \"/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/assets/CGATS001Compat-v2-micro.icc\" is not an input profile.\n",
+      "mean_rgb": null,
+      "ppm_sha256": null
+    },
+    {
+      "mode": "crop-only",
+      "scale": 128,
+      "valid": false,
+      "exit_code": 99,
+      "stderr": "ICC profile \"/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/assets/CGATS001Compat-v2-micro.icc\" is not an input profile.\n",
+      "mean_rgb": null,
+      "ppm_sha256": null
+    },
+    {
+      "mode": "crop-only",
+      "scale": 256,
+      "valid": false,
+      "exit_code": 99,
+      "stderr": "ICC profile \"/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/assets/CGATS001Compat-v2-micro.icc\" is not an input profile.\n",
+      "mean_rgb": null,
+      "ppm_sha256": null
+    },
+    {
+      "mode": "crop-only",
+      "scale": 512,
+      "valid": false,
+      "exit_code": 99,
+      "stderr": "ICC profile \"/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/assets/CGATS001Compat-v2-micro.icc\" is not an input profile.\n",
+      "mean_rgb": null,
+      "ppm_sha256": null
+    },
+    {
+      "mode": "media-and-crop",
+      "scale": 64,
+      "valid": false,
+      "exit_code": 99,
+      "stderr": "ICC profile \"/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/assets/CGATS001Compat-v2-micro.icc\" is not an input profile.\n",
+      "mean_rgb": null,
+      "ppm_sha256": null
+    },
+    {
+      "mode": "media-and-crop",
+      "scale": 128,
+      "valid": false,
+      "exit_code": 99,
+      "stderr": "ICC profile \"/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/assets/CGATS001Compat-v2-micro.icc\" is not an input profile.\n",
+      "mean_rgb": null,
+      "ppm_sha256": null
+    },
+    {
+      "mode": "media-and-crop",
+      "scale": 256,
+      "valid": false,
+      "exit_code": 99,
+      "stderr": "ICC profile \"/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/assets/CGATS001Compat-v2-micro.icc\" is not an input profile.\n",
+      "mean_rgb": null,
+      "ppm_sha256": null
+    },
+    {
+      "mode": "media-and-crop",
+      "scale": 512,
+      "valid": false,
+      "exit_code": 99,
+      "stderr": "ICC profile \"/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/assets/CGATS001Compat-v2-micro.icc\" is not an input profile.\n",
+      "mean_rgb": null,
+      "ppm_sha256": null
+    }
+  ],
+  "source_sha256": "c5fc34346629c3379cee6065c45b7de0b620be822604551d1463d8e691b03d06",
+  "profile_sha256": "73e1ba37d2bad5bab2a964f40a9eed96209666efc067c3322626214bbef234a0",
+  "oracle_sha256": "3bdab16e11c8d10b4fd9615231210125dbb195ae3ec2f22d641758242b159cb1",
+  "limitations": [
+    "derived page, not full-page fidelity",
+    "Poppler rendering is an independent comparator, not exact analytical area",
+    "changing MediaBox may affect page-dependent clipping and group behavior",
+    "no native renderer acceptance from this experiment"
+  ],
+  "terminal": true,
+  "crop-only-last-scale-delta": null,
+  "media-and-crop-last-scale-delta": null,
+  "derived_pdf_sha256": {
+    "crop-only.pdf": "c084dd96918692ae24dd55c0dad760d688d621f8d79758cf7ceee6c46fc71713",
+    "media-and-crop.pdf": "f68df355d9a42fe872b9357a888c13710e213def194352e852abba5e97146075"
+  }
+}

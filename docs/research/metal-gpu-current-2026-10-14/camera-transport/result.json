@@ -1,0 +1,113 @@
+{
+  "status": "four_current_pinned_camera_display_transports_passed",
+  "passed": 4,
+  "failed": 0,
+  "ignored": 0,
+  "cases": [
+    {
+      "name": "SD10",
+      "pixels": 3429971
+    },
+    {
+      "name": "HERO9",
+      "pixels": 23251968
+    },
+    {
+      "name": "Fusion-back",
+      "pixels": 9312000
+    },
+    {
+      "name": "Fusion-front",
+      "pixels": 9312000
+    }
+  ],
+  "maximum_rgb8_difference_each": 1,
+  "backend": "Metal",
+  "adapter": "Apple M4 Max",
+  "input_pins": [
+    {
+      "path": "tests/fixtures/data/metal-recovery/Fusion-back.rgba32fle",
+      "bytes": 148992000,
+      "sha256": "00d54286d47dab1e1a0e2d761e8f407e2dcdcdb0823e7ab91fd50f71e2a84df3"
+    },
+    {
+      "path": "tests/fixtures/data/metal-recovery/Fusion-front.rgba32fle",
+      "bytes": 148992000,
+      "sha256": "37871b3f2f5f9de0933a8e3b05edf4e00a1ca9503fd3fe581a94ee5a51f20fa5"
+    },
+    {
+      "path": "tests/fixtures/data/metal-recovery/HERO9.rgba32fle",
+      "bytes": 372031488,
+      "sha256": "5a13211dbf9c33a67125777d87bc85a950ac054ab051bfcfdf0175ec2475bb58"
+    },
+    {
+      "path": "tests/fixtures/data/metal-recovery/linear-srgb.ppm",
+      "bytes": 20579845,
+      "sha256": "00f64dc46ad86366f7da089c9ba37d4aec3462dd49595c2d2049ba0e0d0b68ff"
+    }
+  ],
+  "executions": [
+    {
+      "test": "qualified_sd10_linear_raster_full_frame_display_readback",
+      "exit_code": 0,
+      "counts": [
+        [
+          "1",
+          "0",
+          "0"
+        ]
+      ],
+      "verified": true,
+      "log": "qualified_sd10_linear_raster_full_frame_display_readback.log",
+      "log_sha256": "3257a30d10f7a4caf0651a449268226cb82224466d46e6c5d348af5f35b3b862"
+    },
+    {
+      "test": "hero9_full_frame_developed_raw_matches_metal_display_transport",
+      "exit_code": 0,
+      "counts": [
+        [
+          "1",
+          "0",
+          "0"
+        ]
+      ],
+      "verified": true,
+      "log": "hero9_full_frame_developed_raw_matches_metal_display_transport.log",
+      "log_sha256": "13c49d18ec6fa61a493cd324b032f1e0b083c14ca115cae8a949774eca33524f"
+    },
+    {
+      "test": "fusion_back_full_frame_developed_raw_matches_metal_display_transport",
+      "exit_code": 0,
+      "counts": [
+        [
+          "1",
+          "0",
+          "0"
+        ]
+      ],
+      "verified": true,
+      "log": "fusion_back_full_frame_developed_raw_matches_metal_display_transport.log",
+      "log_sha256": "e25f7c68ecb0a1d064f734cff6d54eb7c19e1b503b4f5d02bac8bbb9acd5ff22"
+    },
+    {
+      "test": "fusion_front_full_frame_developed_raw_matches_metal_display_transport",
+      "exit_code": 0,
+      "counts": [
+        [
+          "1",
+          "0",
+          "0"
+        ]
+      ],
+      "verified": true,
+      "log": "fusion_front_full_frame_developed_raw_matches_metal_display_transport.log",
+      "log_sha256": "c81abe09cec9f7225543d7f2d24df1598cd7b4d135a64c8a66e3f6a494eef0de"
+    }
+  ],
+  "source_drift": [],
+  "limitations": [
+    "prepared linear rasters, not fresh native camera decode/development qualification",
+    "full-frame SDR transport, not independent camera-color oracle",
+    "physical HDR presentation/calibration separate"
+  ]
+}

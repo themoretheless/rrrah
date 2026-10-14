@@ -1,0 +1,45 @@
+{
+  "status": "running",
+  "producer_pid": 20605,
+  "plan": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-unroll4-native-operation-plan-20261014.json",
+  "plan_sha256": "35cd8f39b7bfb9e489f3db3b734148ff38cfab7032ecf7eecf650bb0c2cadb83",
+  "producer_sha256": "130a2b0f4aee6c45671c31ab398bbaf0ac68f3910e226688948895292f575dfa",
+  "prior_failed_report": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-unroll4-native-operation-20261014.json",
+  "prior_failed_report_sha256": "023ae48c811a30e8ab5858a7ae4ccd127534198b17a70cbea92262d1a7f6da24",
+  "first_audit_sha256": "81143cfd18647a54fceb6f5427352c9e0ca4d142d874188276450a1237e215f2",
+  "runtime_before": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-unroll4-native-operation-runtime-before-20261014.json",
+  "runtime_before_sha256": "fb49247d4d8a3a37bb5abc5f0859767179e049ac06392659823b3ff0f284ca49",
+  "runtime_before_pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libtorch_python.dylib": "cb1d5957b49b8f3c2e4b90de7b99aee835520875bce893b11eb7528a548744fa",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libtorch.dylib": "2178657b7eeffc0c0a989889ac3e2b2e3d216073b35f3a291ee89bd65c0fb406",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libtorch_global_deps.dylib": "6ff1aedff89150170f225ce821dc9355a9d5f9c80a6cc1bb761c8d209638c2c7",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libomp.dylib": "fe0670951c85401421f6cedc91971f28dc870bad4c1f0cfebe2b74dac421e5f0",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libtorch_cpu.dylib": "941f3e16a8e02b23b99bd2c8693caabaf8df859bfaa293f39a5d7dd8a8f5ca6e",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libc10.dylib": "f203c171b7a71c742ef4a84bde3af64465e545a4cc3ebfd7f245dca3ebe4e7cf",
+    "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib/libshm.dylib": "3a6fc248697b8809534e74d9e5fc784b385239d8c7aeef291c3968a73609f7d2"
+  },
+  "loader_controls": "/private/tmp/rrrah-unroll4-native-operation-loader-v2-20261014/loader-controls.json",
+  "loader_controls_sha256": "b96042073b45bb6dda097269460aba1767ca71b719af561a893a111d7bd2f611",
+  "builds": [
+    {
+      "version": "baseline",
+      "executable_sha256": "ce07520256286876148c069b4a68d9b90910e5ff6c03b0a1a8563e29c5b007cf",
+      "log": "/private/tmp/rrrah-unroll4-native-operation-20261014/baseline/build.log",
+      "log_sha256": "f5e272b3ff3b3f7a2a56b4f5fe289f3a64a818bba1f5fb82aa9e238047e4cdec",
+      "executable": "/private/tmp/rrrah-unroll4-native-operation-loader-v2-20261014/baseline/probe"
+    },
+    {
+      "version": "candidate",
+      "executable_sha256": "724be9e8dc8f70b83f3e9ce73ef577e4f59c53a78cc528e390faab1a23b96bcd",
+      "log": "/private/tmp/rrrah-unroll4-native-operation-20261014/candidate/build.log",
+      "log_sha256": "f0a9ee0c2d9e2fe6bd1a7029f6895dc2b5859ee33b99deed0b45a81e0f94b1a3",
+      "executable": "/private/tmp/rrrah-unroll4-native-operation-loader-v2-20261014/candidate/probe"
+    }
+  ],
+  "results": [],
+  "scope": "Full atomic forward/reverse native/opposite/model-bank operation. Same two retained development controls and explicit policy, three alternating fresh-process pairs each. Version source difference only distance kernel and test source. Source/dependency/weights guards included. No universal speedup, learned-route forcing, default/UI/full-corpus/platform/RSS qualification. Reuses both successful binaries after terminal loader failure. /usr/bin/time default clock only, /usr/bin/env restores explicit DYLD after protected executable; no RSS sysctl or binary patch/rebuild. This is earlier V5vsV7dimensionunroll4, not current firstpass16qualification.",
+  "child_pid": 34289,
+  "active_case": "self_native",
+  "active_pair": 0,
+  "active_version": "baseline"
+}

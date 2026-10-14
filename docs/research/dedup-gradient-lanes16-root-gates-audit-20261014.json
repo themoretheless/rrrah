@@ -1,0 +1,35 @@
+{
+  "status": "verified_current_root_target_gated_firstpass16_unit_gates",
+  "rows": [
+    {
+      "mode": "no-features",
+      "passed": 45,
+      "failed": 0,
+      "manual_ignored": 2,
+      "report": "docs/research/dedup-gradient-lanes16-root-no-features-20261014.json",
+      "report_sha256": "2b629b98cfa5b4dfb54e6ebaeaa879174b159b4c80303951593e9426afb5873b",
+      "inventory_exact": true
+    },
+    {
+      "mode": "raster",
+      "passed": 62,
+      "failed": 0,
+      "manual_ignored": 3,
+      "report": "docs/research/dedup-gradient-lanes16-root-raster-20261014.json",
+      "report_sha256": "66e27369f8828cf9ea5636f90a832678150fd1245e03567d62d1b90f3968ed9d",
+      "inventory_exact": true
+    }
+  ],
+  "auditor_sha256": "ca352f389df0e3a2b7cc41a55131a6198a98c0477779dd41f87fd7a10bed1bdd",
+  "source_equivalence_audit": "docs/research/dedup-gradient-lanes16-root-code-audit-20261014.json",
+  "source_equivalence_audit_sha256": "bcc126e692b0c60f206871d5772c41cdf7923eaef4b11731d289b87035a48bed",
+  "retained_artifacts": {
+    "docs/research/dedup-gradient-lanes16-root-gates-20261014/no-features/build.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/research/dedup-gradient-lanes16-root-gates-20261014/no-features/inventory.log": "132c8946ae2d5bed9c8b77df581e788d18693b5b9d63ace8c7f7f30550723e64",
+    "docs/research/dedup-gradient-lanes16-root-gates-20261014/no-features/tests.log": "b1c49e75c4d23f8bad503985508931b55a61b127013d2bc9966fd25b07d71867",
+    "docs/research/dedup-gradient-lanes16-root-gates-20261014/raster/build.log": "567b6457403e186a2442b5034872a00b8ef248f0feddac9659feee6eb0f4e18f",
+    "docs/research/dedup-gradient-lanes16-root-gates-20261014/raster/inventory.log": "6d8c20a88879aa8f249edf40d05e39fcf0bd0fa5098de8e5c0ea6731a75272f2",
+    "docs/research/dedup-gradient-lanes16-root-gates-20261014/raster/tests.log": "6b9d0b4d6debf1a8493d10c40c5d882692f6c18122ee6d97be0d630289a39b73"
+  },
+  "scope": "Actual current root nooptional45pass2manualignored and raster62pass3manualignored, directrustc real pinned cached deps, exact inventory and root source pins. Firstpass16only on macOSaarch64, secondpass4; other runtime target source equals old4baseline after cfg expansion. No wholeCargo/decode/native/currentcorpus/UI/defaultcollection/allformats/allplatform/workspace completion proof."
+}

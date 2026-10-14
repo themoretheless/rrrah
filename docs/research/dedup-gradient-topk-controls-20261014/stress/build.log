@@ -1,0 +1,22 @@
+warning: function `baseline` is never used
+  --> /private/tmp/rrrah-gradient-topk-stress-20261014/stress.rs:40:4
+   |
+40 | fn baseline(
+   |    ^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `candidate` is never used
+   --> /private/tmp/rrrah-gradient-topk-stress-20261014/stress.rs:177:4
+    |
+177 | fn candidate(
+    |    ^^^^^^^^^
+
+warning: function `run_natural` is never used
+   --> /private/tmp/rrrah-gradient-topk-stress-20261014/stress.rs:682:4
+    |
+682 | fn run_natural(args:&[String],policy:GradientMatchPolicy){let a=read_dump(&args[0]);let b=read_dump(&args[1]);for radius in [None,S...
+    |    ^^^^^^^^^^^
+
+warning: 3 warnings emitted
+

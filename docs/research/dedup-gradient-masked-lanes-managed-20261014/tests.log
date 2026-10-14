@@ -1,0 +1,67 @@
+
+running 62 tests
+test cache::publication_tests::directory_sync_failure_reports_already_published_complete_cache ... ok
+test exact::cancelled_output_tests::healthy_short_interrupted_output_preserves_exact_range ... ok
+test exact::cancelled_output_tests::interrupted_output_cancels_before_next_write_attempt ... ok
+test exact::cancelled_output_tests::partial_output_cancels_without_writing_remaining_bytes ... ok
+test exact::cancelled_output_tests::zero_progress_and_output_errors_remain_typed_io_failures ... ok
+test exact::cancellation_flag_tests::final_publication_observes_flag_without_reentering_caller ... ok
+test exact::collision_tests::final_content_validation_rejects_change_even_when_metadata_matches ... ok
+test exact::collision_tests::formerly_empty_entries_are_reopened_before_hash_or_equality ... ok
+test exact::collision_tests::colliding_samples_and_full_hashes_still_partition_by_bytes ... ok
+test exact::collision_tests::pair_comparison_confirms_bytes_and_refuses_digest_collision ... ok
+test exact::collision_tests::pair_comparison_checks_policy_and_cancellation_at_every_checkpoint ... ok
+test exact::collision_tests::read_buffer_capacity_failure_is_explicit_and_retry_succeeds ... ok
+test exact::collision_tests::pair_comparison_rejects_last_checkpoint_mutations_on_both_outcomes ... ok
+test exact::collision_tests::verified_observations_detect_metadata_invisible_pruned_mutations ... ok
+test exact::collision_tests::verified_prefix_binds_header_and_body_even_when_metadata_matches ... ok
+test exact::interrupted_read_tests::interrupted_reads_observe_cancellation_before_retry ... ok
+test exact::interrupted_read_tests::read_cancelled_before_first_attempt_does_not_touch_reader ... ok
+test exact::interrupted_read_tests::short_reads_and_interruptions_preserve_content_and_eof_errors ... ok
+test exact::collision_tests::verified_prefix_policy_cancel_and_final_mutation_do_not_publish_headers ... ok
+test gradient::batch_tests::alternating_matcher_timing ... ignored, manual alternating exact matcher timing control
+test exact::observed_snapshot_policy_tests::replacement_after_initial_metadata_cannot_bypass_observed_size_limit ... ok
+test gradient::batch_tests::every_cancellation_checkpoint_and_work_refusal_matches_scalar ... ok
+test gradient::batch_tests::four_lane_distances_are_bitwise_scalar_for_every_tail_length ... ok
+test gradient::cache_tests::cache_capacity_and_overflow_keep_exhaustive_fallback_available ... ok
+test gradient::cache_tests::cached_checkpoints_and_cancellation_match_recomputation_without_credit_leaks ... ok
+test gradient::cache_tests::cached_matching_keeps_positive_negative_and_distinct_ties_under_both_budget_paths ... ok
+test gradient::batch_tests::exact_matching_agrees_with_exhaustive_positive_negative_ties_and_spatial_chains ... ok
+test gradient::cache_tests::linear_runner_dense_banks_do_not_allocate_optional_indices ... ok
+test gradient::cache_tests::malformed_suffix_and_work_refusal_do_not_allocate_optional_cache ... ok
+test gradient::cache_tests::managed_cache_releases_before_output_and_respects_ancestor_pressure ... ok
+test gradient::matching_tests::alternating_matcher_timing ... ignored, manual alternating exact matcher timing control
+test gradient::matching_tests::bounded_distance_preserves_order_and_strict_ties ... ok
+test gradient::matching_tests::every_cancellation_checkpoint_and_work_refusal_matches_exhaustive ... ok
+test gradient::matching_tests::exact_matching_agrees_with_exhaustive_positive_negative_ties_and_spatial_chains ... ok
+test gradient::matching_tests::production_mutual_competitors_match_exhaustive_at_every_checkpoint ... ok
+test gradient::matching_tests::unrolled_distance_blocks_preserve_scalar_bits_and_partial_lanes ... ok
+test gradient_index::row_major_tests::row_major_index_build_latency_probe ... ignored, explicit alternating index construction measurement
+test gradient_index::row_major_tests::row_major_preserves_axis_order_search_credit_and_every_cancellation_checkpoint ... ok
+test gradient_scale::area_tests::footprint_average_removes_stripe_alias_and_matches_fractional_oracle ... ok
+test gradient_scale::zero_candidate_tests::identity_validation_is_bitwise_owned_zero_radius_for_hdr_and_shapes ... ok
+test gradient_scale::zero_candidate_tests::identity_validation_work_alpha_and_every_cancel_checkpoint_are_explicit ... ok
+test local_index::owner_count_cancellation_tests::descriptor_pair_entry_cancellation_does_not_consume_input ... ok
+test local_index::owner_count_cancellation_tests::legacy_owner_count_stops_when_iterator_requests_cancellation ... ok
+test local_index::owner_count_cancellation_tests::legacy_owner_materialization_honors_cancellation ... ok
+test model_projection::tests::extreme_finite_parameters_remain_bounded ... ok
+test model_projection::tests::invalid_configuration_is_refused ... ok
+test model_projection::tests::invisible_rgb_is_ignored_and_background_is_explicit ... ok
+test model_projection::tests::neutral_reinhard_and_linear_alpha_compositing ... ok
+test model_projection::tests::opaque_sdr_preserves_values_and_refuses_alpha_hdr ... ok
+test model_projection::tests::projected_equality_can_hide_alpha_and_hdr_differences ... ok
+test model_projection::tests::visible_nonfinite_channels_and_invalid_alpha_are_refused ... ok
+test tests::collision_membership_keeps_arbitrary_order_and_pair_identity ... ok
+test tests::empty_and_duplicate_fingerprints ... ok
+test tests::indexed_search_matches_independent_exhaustive_scan ... ok
+test tests::traversal_work_exhaustion_is_distinct_from_failure ... ok
+test visual::distinct_variant_tests::repeated_complete_variants_preserve_all_ids_and_exact_metric ... ok
+test warp::bounded_fit_tests::boundary_fit_matches_exhaustive_rectangle_and_beats_independent_clipping ... ok
+test warp::encoded_signal_tests::extended_srgb_landmarks_match_independent_decimal_oracle_without_clipping ... ok
+test warp::encoded_signal_tests::transfer_precedes_premultiplication_and_bilinear_sampling ... ok
+test warp::regional_reuse_tests::reused_whole_evidence_preserves_regions_and_reduces_observed_work ... ok
+test worker::group_quiescence_tests::quiescence_refuses_live_leader_and_live_descendant_after_leader_exit ... ok
+test gradient::cache_tests::linear_runner_large_banks_preserve_results_checkpoints_and_budget_fallback ... ok
+
+test result: ok. 59 passed; 0 failed; 3 ignored; 0 measured; 0 filtered out; finished in 55.42s
+

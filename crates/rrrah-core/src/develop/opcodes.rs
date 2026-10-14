@@ -592,12 +592,12 @@ fn max_radius(cx: f64, cy: f64, w: f64, h: f64) -> f64 {
 #[allow(clippy::float_cmp)] // Bad-pixel markers are exact integer values in float storage.
 pub(super) fn apply_list(
     list: &[Opcode],
-    buf: &mut [f32],
+    buf: &mut [f64],
     w: usize,
     h: usize,
     cpp: usize,
     cfa: Option<&Cfa>,
-    scale: f32,
+    scale: f64,
 ) -> Result<(), super::DevelopError> {
     for op in list {
         match op {
@@ -606,15 +606,15 @@ pub(super) fn apply_list(
                 for (x, y, p) in area_iter(area, w, h, cpp) {
                     let v = &mut buf[(y * w + x) * cpp + p];
                     let idx = ((*v / scale * 65535.0).round().max(0.0) as usize).min(n - 1);
-                    *v = f32::from(table[idx]) / 65535.0 * scale;
+                    *v = f64::from(table[idx]) / 65535.0 * scale;
                 }
             }
             Opcode::MapPolynomial { area, coefficients } => {
                 for (x, y, p) in area_iter(area, w, h, cpp) {
                     let v = &mut buf[(y * w + x) * cpp + p];
-                    let t = f64::from(*v / scale);
+                    let t = *v / scale;
                     let r = coefficients.iter().rev().fold(0.0, |acc, &c| acc * t + c);
-                    *v = r as f32 * scale;
+                    *v = r * scale;
                 }
             }
             Opcode::GainMap {
@@ -629,7 +629,7 @@ pub(super) fn apply_list(
                 for (x, y, p) in area_iter(area, w, h, cpp) {
                     let rv = (y as f64 + 0.5) / h as f64;
                     let rh = (x as f64 + 0.5) / w as f64;
-                    let g = gain_at(
+                    let g = f64::from(gain_at(
                         *points_v,
                         *points_h,
                         *spacing,
@@ -639,7 +639,7 @@ pub(super) fn apply_list(
                         rv,
                         rh,
                         p - area.plane as usize,
-                    );
+                    ));
                     let value = &mut buf[(y * w + x) * cpp + p];
                     // DNG GainMap ProcessArea bounds the normalized result at 1.
                     *value = (*value * g).min(scale);
@@ -653,8 +653,8 @@ pub(super) fn apply_list(
                     } else {
                         (x - area.left as usize) / area.col_pitch as usize
                     };
-                    if let Some(d) = deltas.get(i) {
-                        buf[(y * w + x) * cpp + p] += d * scale;
+                    if let Some(&d) = deltas.get(i) {
+                        buf[(y * w + x) * cpp + p] += f64::from(d) * scale;
                     }
                 }
             }
@@ -666,8 +666,8 @@ pub(super) fn apply_list(
                     } else {
                         (x - area.left as usize) / area.col_pitch as usize
                     };
-                    if let Some(s) = scales.get(i) {
-                        buf[(y * w + x) * cpp + p] *= s;
+                    if let Some(&s) = scales.get(i) {
+                        buf[(y * w + x) * cpp + p] *= f64::from(s);
                     }
                 }
             }
@@ -679,13 +679,13 @@ pub(super) fn apply_list(
                         let r2 = ((x as f64 - cx).powi(2) + (y as f64 - cy).powi(2)) / (m * m);
                         let g = 1.0 + r2 * (k[0] + r2 * (k[1] + r2 * (k[2] + r2 * (k[3] + r2 * k[4]))));
                         for p in 0..cpp {
-                            buf[(y * w + x) * cpp + p] *= g as f32;
+                            buf[(y * w + x) * cpp + p] *= g;
                         }
                     }
                 }
             }
             Opcode::FixBadPixelsConstant { constant, .. } => {
-                let marker = *constant as f32;
+                let marker = f64::from(*constant);
                 let bad = (0..w * h)
                     .map(|i| cpp == 1 && buf[i] == marker)
                     .collect::<Vec<_>>();
@@ -718,7 +718,7 @@ pub(super) fn apply_list(
 
 /// Replace listed pixels with the mean of the nearest same-colour neighbours that are not themselves bad.
 fn fix_pixels(
-    buf: &mut [f32],
+    buf: &mut [f64],
     w: usize,
     h: usize,
     cpp: usize,
@@ -760,7 +760,7 @@ fn fix_pixels(
                 if bad[j] {
                     continue;
                 }
-                sum += f64::from(source[j * cpp + p]);
+                sum += source[j * cpp + p];
                 n += 1;
             }
             if n == 0 {
@@ -768,7 +768,7 @@ fn fix_pixels(
                     "bad pixel has no valid same-phase neighbours",
                 ));
             }
-            buf[i * cpp + p] = (sum / f64::from(n)) as f32;
+            buf[i * cpp + p] = sum / f64::from(n);
         }
     }
     Ok(())
@@ -821,7 +821,7 @@ pub(super) fn apply_list3_with_clipping(
             }
             Opcode::WarpFisheye { .. } | Opcode::TrimBounds { .. } | Opcode::Unknown { .. } => {}
             other => {
-                let mut flat: Vec<f32> = img.data.iter().flat_map(|p| *p).collect();
+                let mut flat: Vec<f64> = img.data.iter().flat_map(|p| *p).collect();
                 apply_list(std::slice::from_ref(other), &mut flat, w, h, 3, None, 1.0)?;
                 for (d, c) in img.data.iter_mut().zip(flat.as_chunks::<3>().0) {
                     *d = [c[0], c[1], c[2]];
@@ -1003,7 +1003,7 @@ fn apply_warp_rectilinear(
 
 #[inline]
 fn warp_row(
-    source: &[[f32; 3]],
+    source: &[[f64; 3]],
     source_clipped: Option<&[[bool; 3]]>,
     w: usize,
     h: usize,
@@ -1011,7 +1011,7 @@ fn warp_row(
     center: [f64; 2],
     pixel_aspect: f64,
     y: usize,
-    row_dest: &mut [[f32; 3]],
+    row_dest: &mut [[f64; 3]],
     mut row_dest_clipped: Option<&mut [[bool; 3]]>,
 ) -> Result<(), super::DevelopError> {
     if planes.len() == 1 {
@@ -1108,14 +1108,14 @@ mod gain_map_sdk_tests {
         assert_eq!(oracle.len(), sensor.len());
         let maps = super::parse_list(&std::fs::read(root.join("opcodes.bin")).unwrap()).unwrap();
         assert_eq!(maps.len(), 4);
-        let mut samples: Vec<f32> = sensor
+        let mut samples: Vec<f64> = sensor
             .chunks_exact(2)
-            .map(|b| f32::from(u16::from_le_bytes([b[0], b[1]])) / 16383.0)
+            .map(|b| f64::from(u16::from_le_bytes([b[0], b[1]])) / 16383.0)
             .collect();
         super::apply_list(&maps, &mut samples, 5568, 4176, 1, None, 1.0).unwrap();
-        let mut maximum = 0.0f32;
+        let mut maximum = 0.0f64;
         for (actual, encoded) in samples.iter().zip(oracle.chunks_exact(2)) {
-            let expected = f32::from(u16::from_le_bytes([encoded[0], encoded[1]])) / 65535.0;
+            let expected = f64::from(u16::from_le_bytes([encoded[0], encoded[1]])) / 65535.0;
             maximum = maximum.max((actual - expected).abs());
         }
         eprintln!("HERO9 stage2: 23251968 samples checked; maximum normalized error={maximum}");
@@ -1325,11 +1325,11 @@ static WARP_WEIGHTS: std::sync::LazyLock<[[f32; 16]; 1024]> = std::sync::LazyLoc
 /// Sample normalized RGB with the DNG 32-phase bicubic kernel and repeated edge pixels.
 #[cfg(test)]
 pub fn rectilinear_sample(
-    source: &[[f32; 3]],
+    source: &[[f64; 3]],
     extent: [usize; 2],
     point: [f64; 2],
     channel: usize,
-) -> Result<f32, super::DevelopError> {
+) -> Result<f64, super::DevelopError> {
     let [w, h] = extent;
     if w == 0
         || h == 0
@@ -1343,22 +1343,23 @@ pub fn rectilinear_sample(
     Ok(sample_footprint(source, indices, weights, channel))
 }
 
-fn sample_footprint(source: &[[f32; 3]], indices: [usize; 16], weights: &[f32; 16], channel: usize) -> f32 {
-    let mut total = 0.0_f32;
-    for (index, weight) in indices.into_iter().zip(weights) {
-        total += weight * source[index][channel];
+fn sample_footprint(source: &[[f64; 3]], indices: [usize; 16], weights: &[f32; 16], channel: usize) -> f64 {
+    let mut total = 0.0_f64;
+    for (index, &weight) in indices.into_iter().zip(weights) {
+        total += f64::from(weight) * source[index][channel];
     }
     total.clamp(0.0, 1.0)
 }
 
 #[inline]
-fn sample_footprint_rgb(source: &[[f32; 3]], indices: [usize; 16], weights: &[f32; 16]) -> [f32; 3] {
-    let mut total = [0.0_f32; 3];
+fn sample_footprint_rgb(source: &[[f64; 3]], indices: [usize; 16], weights: &[f32; 16]) -> [f64; 3] {
+    let mut total = [0.0_f64; 3];
     for (index, &weight) in indices.into_iter().zip(weights) {
+        let w = f64::from(weight);
         let s = source[index];
-        total[0] += weight * s[0];
-        total[1] += weight * s[1];
-        total[2] += weight * s[2];
+        total[0] += w * s[0];
+        total[1] += w * s[1];
+        total[2] += w * s[2];
     }
     [
         total[0].clamp(0.0, 1.0),
@@ -1477,16 +1478,16 @@ mod full_warp_sdk_tests {
 
     fn qualify(reference: &[u8], planes: Vec<[f64; 6]>, hdr: bool) {
         assert_eq!(reference.len(), 32 * 48 * 3 * 4);
-        let data: Vec<[f32; 3]> = (0..32)
+        let data: Vec<[f64; 3]> = (0..32)
             .flat_map(|y| {
                 (0..48).map(move |x| {
-                    std::array::from_fn(|c| (((x * 17 + y * 31 + c * 43) % 251) as f64 / 250.0) as f32)
+                    std::array::from_fn(|c| f64::from((((x * 17 + y * 31 + c * 43) % 251) as f64 / 250.0) as f32))
                 })
             })
             .collect();
         let data = if hdr {
             data.into_iter()
-                .map(|p: [f32; 3]| p.map(|v| v * 4.0 - 0.5))
+                .map(|p: [f64; 3]| p.map(|v| v * 4.0 - 0.5))
                 .collect()
         } else {
             data
@@ -1501,9 +1502,9 @@ mod full_warp_sdk_tests {
             center: [0.4, 0.6],
         };
         super::apply_list3(&[op], &mut image, &|| false).unwrap();
-        let mut maximum = 0.0f32;
+        let mut maximum = 0.0f64;
         for (actual, b) in image.data.iter().flatten().zip(reference.chunks_exact(4)) {
-            let expected = f32::from_le_bytes(b.try_into().unwrap());
+            let expected = f64::from(f32::from_le_bytes(b.try_into().unwrap()));
             maximum = maximum.max((actual - expected).abs());
         }
         assert!(maximum <= 1e-6, "full SDK warp maximum error {maximum}");
@@ -1554,8 +1555,8 @@ mod warp_timing_tests {
     #[test]
     #[ignore = "manual fixed-work warp sampling benchmark"]
     fn sampling_fixed_work_timing() {
-        let source: Vec<[f32; 3]> = (0..256 * 256)
-            .map(|i| [((i * 17) % 251) as f32 / 250.0; 3])
+        let source: Vec<[f64; 3]> = (0..256 * 256)
+            .map(|i| [((i * 17) % 251) as f64 / 250.0; 3])
             .collect();
         let mut checksum = 0.0f64;
         for run in 0..6 {
@@ -1566,15 +1567,13 @@ mod warp_timing_tests {
                     (i % 260) as f64 - 2.0 + 0.37,
                     ((i / 260) % 260) as f64 - 2.0 + 0.63,
                 ];
-                sum += f64::from(
-                    super::rectilinear_sample(
-                        std::hint::black_box(&source),
-                        [256, 256],
-                        std::hint::black_box(point),
-                        i % 3,
-                    )
-                    .unwrap(),
-                );
+                sum += super::rectilinear_sample(
+                    std::hint::black_box(&source),
+                    [256, 256],
+                    std::hint::black_box(point),
+                    i % 3,
+                )
+                .unwrap();
             }
             checksum = sum;
             eprintln!(
@@ -1591,10 +1590,10 @@ mod aspect_warp_sdk_tests {
     #[test]
     fn non_square_rgb_warp_matches_complete_sdk_image() {
         let reference = include_bytes!("../../../../tests/fixtures/dng/warp-aspect-sdk.f32le");
-        let source: Vec<[f32; 3]> = (0..32)
+        let source: Vec<[f64; 3]> = (0..32)
             .flat_map(|y| {
                 (0..48).map(move |x| {
-                    std::array::from_fn(|c| (((x * 17 + y * 31 + c * 43) % 251) as f64 / 250.0) as f32)
+                    std::array::from_fn(|c| f64::from((((x * 17 + y * 31 + c * 43) % 251) as f64 / 250.0) as f32))
                 })
             })
             .collect();
@@ -1627,9 +1626,9 @@ mod aspect_warp_sdk_tests {
         )
         .unwrap();
         for (actual, bytes) in image.data.iter().flatten().zip(reference.chunks_exact(4)) {
-            assert!((*actual - f32::from_le_bytes(bytes.try_into().unwrap())).abs() <= 1e-6);
+            assert!((*actual - f64::from(f32::from_le_bytes(bytes.try_into().unwrap()))).abs() <= 1e-6);
         }
-        let mut maximum = 0.0f32;
+        let mut maximum = 0.0f64;
         for y in 0..32 {
             for x in 0..48 {
                 for c in 0..3 {
@@ -1652,7 +1651,7 @@ mod aspect_warp_sdk_tests {
                     .unwrap();
                     let actual = super::rectilinear_sample(&source, [48, 32], point, c).unwrap();
                     let offset = ((y * 48 + x) * 3 + c) * 4;
-                    let expected = f32::from_le_bytes(reference[offset..offset + 4].try_into().unwrap());
+                    let expected = f64::from(f32::from_le_bytes(reference[offset..offset + 4].try_into().unwrap()));
                     maximum = maximum.max((actual - expected).abs());
                 }
             }

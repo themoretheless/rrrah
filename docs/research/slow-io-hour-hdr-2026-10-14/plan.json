@@ -1,0 +1,37 @@
+{
+  "status": "passed",
+  "tool_session": 25029,
+  "monitor_pid": 45978,
+  "child_pid": 45996,
+  "binary_sha256": "341c70968c4d4402419cf773d3b4c11789913f48593e942449ec41983f01e30f",
+  "requested_seconds": 3600,
+  "smoke": {
+    "status": "passed",
+    "cycles": 3,
+    "loop_seconds": 121.123,
+    "peak_sampled_rss_bytes": 69894144
+  },
+  "checks": [
+    "every float bit including negative zero and HDR",
+    "managed pressure refusal and retry",
+    "cancellation after admitted allocation and real read progress",
+    "physical disk count and byte bounds",
+    "final managed credits zero"
+  ],
+  "limits": {
+    "root_bytes": 134217728,
+    "queue_bytes": 67108864,
+    "swap_bytes": 134217856,
+    "swap_count": 2,
+    "io_delay_ms_per_call": 2,
+    "max_io_request_bytes": 65536,
+    "soft_rss_guard_bytes": 1073741824
+  },
+  "limitations": [
+    "artificially delayed local I/O, not physical slow disk",
+    "separate from concurrently running Metal test",
+    "managed budget pressure, not OS-wide memory pressure",
+    "hour remains pending until terminal native and workload evidence"
+  ],
+  "result": "result.json"
+}

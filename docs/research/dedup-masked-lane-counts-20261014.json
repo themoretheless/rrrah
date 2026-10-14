@@ -1,0 +1,102 @@
+{
+  "status": "complete_pending_audit",
+  "producer_pid": 67042,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/profile-dedup-masked-lane-counts-20261014.py": "204b98fcd763d5b0ba318148b6bae513d50de620d0fb220940351e5258d52b85",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-natural-large-gradient-banks-v2-20261014.json": "836bd9861646a67c9e626d74671a536e11c786d4e2e483e109cfa4a41dac669e",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-masked-lanes-stress-20261014.json": "1b6b5f02e30ab6394a5e7d7702469b9dc1f2e98a580f4aff75d3a9712572d100",
+    "/private/tmp/rrrah-gradient-masked-lanes-stress-20261014/stress.rs": "ec5d67bde3e85532b0cbdf861306a793aaaa08798d4ba8a91381986807429906",
+    "/private/tmp/rrrah-masked-lane-counts-20261014/counts.rs": "605eb40bb371d386943658f18ef4dde5eff125bbd96d50de1f104f9d0a360132",
+    "/private/tmp/rrrah-masked-lane-counts-20261014/counts": "a2c2d14a9c3f5922976083e0b4aff43abd63cf2a06a181677b549adec2deddf6"
+  },
+  "feature_pins": {
+    "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin": "375da52fb488b0549352f7c4f1f29eadfe46aed8da31465734f4d32856461b63",
+    "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin": "45ad7a8ba9215436744a6c5cdbf0ca61f39b2cfcaf85be425026953007fa33a4"
+  },
+  "results": [
+    {
+      "label": "forward",
+      "inputs": [
+        "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+        "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin"
+      ],
+      "value": {
+        "counts": [
+          1015808,
+          32768,
+          0,
+          0,
+          0,
+          0
+        ],
+        "left": 2048,
+        "right": 2048,
+        "matches": 10,
+        "callbacks": 8394754
+      },
+      "second_pass_distance_pairs_before": 131072,
+      "second_pass_distance_pairs_after": 32768,
+      "stdout": "/private/tmp/rrrah-masked-lane-counts-20261014/forward.json",
+      "stdout_sha256": "9a22873a777cc466a224a487a6346f5fd7b797b879a55fa10de108423d62c90d",
+      "stderr": "/private/tmp/rrrah-masked-lane-counts-20261014/forward.stderr",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "reverse",
+      "inputs": [
+        "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+        "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin"
+      ],
+      "value": {
+        "counts": [
+          1040384,
+          0,
+          0,
+          0,
+          0,
+          8192
+        ],
+        "left": 2048,
+        "right": 2048,
+        "matches": 10,
+        "callbacks": 8394754
+      },
+      "second_pass_distance_pairs_before": 32768,
+      "second_pass_distance_pairs_after": 32768,
+      "stdout": "/private/tmp/rrrah-masked-lane-counts-20261014/reverse.json",
+      "stdout_sha256": "7e3c5bef2f870e7d2224b914c2c372b1632414f7c98b0d30e3b9188a59e363b9",
+      "stderr": "/private/tmp/rrrah-masked-lane-counts-20261014/reverse.stderr",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "self",
+      "inputs": [
+        "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+        "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin"
+      ],
+      "value": {
+        "counts": [
+          1035294,
+          8168,
+          2042,
+          0,
+          0,
+          3072
+        ],
+        "left": 2048,
+        "right": 2048,
+        "matches": 2048,
+        "callbacks": 8394754
+      },
+      "second_pass_distance_pairs_before": 53128,
+      "second_pass_distance_pairs_after": 24540,
+      "stdout": "/private/tmp/rrrah-masked-lane-counts-20261014/self.json",
+      "stdout_sha256": "a357f03426e58ff12d60e705b90e76730a0a72234980f1a4af468a11c76098d4",
+      "stderr": "/private/tmp/rrrah-masked-lane-counts-20261014/self.stderr",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "scope": "Instrumented standalone existing global runner-up versus selective lanes, shared current unroll kernel and public matcher distance/ratio/radius. Genuine2048natural feature banks, forward/reverse/self. Counts second-pass masks0..4and unresolved-forward full blocks; exact correspondence/callback counts. Counts explain work distribution, not CPU/managed/native/default/corpus quality proof.",
+  "child_pid": 67241,
+  "active_case": "self"
+}

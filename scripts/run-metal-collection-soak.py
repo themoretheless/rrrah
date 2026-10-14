@@ -37,8 +37,8 @@ def progress(log, suite='metal'):
     with log.open('rb') as stream:
         stream.seek(max(0, log.stat().st_size - 4096))
         text = stream.read().decode('utf-8', errors='replace')
-    pattern = (r'long-lived collection cycles=(\d+); elapsed=([\d.]+)s' if suite == 'metal'
-               else r'large float delayed progress: cycles=(\d+); elapsed=([\d.]+)s')
+    pattern = (r'long-lived collection (?:complete: )?cycles=(\d+); elapsed=([\d.]+)s' if suite == 'metal'
+               else r'large float delayed (?:progress|swap): cycles=(\d+); (?:elapsed|seconds)=([\d.]+)')
     rows = re.findall(pattern, text)
     return {'cycles': int(rows[-1][0]), 'test_elapsed_seconds': float(rows[-1][1])} if rows else {}
 
@@ -142,12 +142,18 @@ def main():
                      elapsed_seconds=time.monotonic() - started,
                      ended_utc=datetime.now(timezone.utc).isoformat())
         text = (output / 'test.log').read_text(errors='replace') if (output / 'test.log').exists() else ''
+        if (output / 'test.log').exists():
+            state['last_progress'] = progress(output / 'test.log', args.suite)
         results = re.findall(r'test result: ok\. (\d+) passed; (\d+) failed; (\d+) ignored;', text)
-        validators = runpy.run_path(str(ROOT / 'scripts/qualify-viewer-storage-gpu.py'))
-        valid = (state['exit_code'] == 0 and not state.get('stop_reason')
-                 and results == [('1', '0', '0')]
-                 and (validators['collection_evidence'](text, args.seconds, True, 1, 0) if metal
-                      else validators['large_float_storage_evidence'](text, args.seconds)))
+        valid = False
+        try:
+            validators = runpy.run_path(str(ROOT / 'scripts/qualify-viewer-storage-gpu.py'))
+            valid = (state['exit_code'] == 0 and not state.get('stop_reason')
+                     and results == [('1', '0', '0')]
+                     and (validators['collection_evidence'](text, args.seconds, True, 1, 0) if metal
+                          else validators['large_float_storage_evidence'](text, args.seconds)))
+        except Exception as error:
+            state['validation_error'] = f'{type(error).__name__}: {error}'
         state.update(status='passed' if valid else 'failed', workload_evidence_valid=valid)
         save(output / 'state.json', state)
         print(json.dumps({'status': state['status'], 'exit_code': state['exit_code'],

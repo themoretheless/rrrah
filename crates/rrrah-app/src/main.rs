@@ -1697,7 +1697,7 @@ impl ForegroundLoader {
         prefetch_paths: Option<Vec<PathBuf>>,
     ) -> Result<u64> {
         let mut identity = ForegroundIdentity {
-            prefetch_paths: Arc::new(std::sync::Mutex::new(prefetch_paths.clone())),
+            prefetch_paths: Arc::new(std::sync::Mutex::new(None)),
             source: None,
             path: path.clone(),
             image_index,
@@ -1717,7 +1717,7 @@ impl ForegroundLoader {
                     *current
                         .prefetch_paths
                         .lock()
-                        .unwrap_or_else(std::sync::PoisonError::into_inner) = prefetch_paths.clone();
+                        .unwrap_or_else(std::sync::PoisonError::into_inner) = prefetch_paths;
                 }
                 if let Some(source) = current.source.as_ref() {
                     let mut duplicate = self

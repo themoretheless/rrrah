@@ -1,0 +1,37 @@
+{
+  "status": "cache_library_and_manual_large_source_passed",
+  "passed": 139,
+  "failed": 0,
+  "ignored": 1,
+  "source_drift": [],
+  "log_sha256": "8443abf8c3ecab2fd54b5b95e4f31765c9d8cb41a3410a5e0334db89fb8e52d2",
+  "skipped_lines": [
+    "test raster_regions::tests::large_source_above_full_restore_cap_streams_and_restores_small_native_crop ... ignored, manual 36MP float source above full-payload512MiB cap"
+  ],
+  "limitations": [
+    "ignored test is not counted as pass",
+    "separate hour/large collection and GPU/display evidence required"
+  ],
+  "total_passed": 140,
+  "manual_large_source": {
+    "passed": 1,
+    "failed": 0,
+    "ignored": 0,
+    "source_dimensions": [
+      6000,
+      6000
+    ],
+    "source_bytes": 576000000,
+    "source_released_before_restore": true,
+    "crop_dimensions": [
+      17,
+      11
+    ],
+    "crop_bytes": 2992,
+    "index_bytes": 281280,
+    "scratch_peak_bytes": 65536,
+    "streamed_lod_peak_bytes": 165072,
+    "log_sha256": "bc7e6d4861fd1f6c4a729b5e8345b30ddc04c465eb420172cbefb3acaeaa92b4"
+  },
+  "remaining_ignored_tests": 0
+}

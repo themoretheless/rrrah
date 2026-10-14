@@ -1,0 +1,73 @@
+{
+  "status": "complete_pending_audit",
+  "producer_pid": 60981,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/prepare-dedup-natural-large-gradient-banks-v2-20261014.py": "c24c268cee635a7d21c2be5035750a499ae1e5f552f679c969b6b92d0b7dcc4f",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-unroll4-natural-cpu-20261014.json": "8da40c2bfa662eb5262b3685bd598e20d71f861809b541c185fea2fd3ffa1e2b",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-natural-bound-benchmark-plan-20261013.json": "2f36812cd75f95d856cd060a87f6119c02e31d8e2c9b57cdcfc1ef4289fd6a21",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-unroll4-managed-benchmark-20261014.json": "a3e3b84b2455022518fc7ac8c398cd0433e59536be4d5fc4871de1a2072a5ccd",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-unroll4-managed-focused-v2-20261014.json": "cee45481a35d3622bb3506d322be1f895e24c3c95321ae27a502891d58c12e1a",
+    "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/extract.rs": "d73505466469b55cca17c349ee7d4672a7ce3b03a462d6ecb4b205a4927b008f",
+    "/private/tmp/rrrah-gradient-unroll4-managed-benchmark-20261014/candidate/librrrah_dedup.rlib": "7e420d8b52f72a7b7e0e440f578c504f14a2a0da36ca12373bcfbcaf57488878",
+    "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/extract": "9d7fff7bd105ecbfb995101f684e9a0597cd231241faa8601684f44df307b148"
+  },
+  "input_pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/211901.jpg": "6c076f5642a9de92efb53cfe0734d7140a499fd44d08d2b1d93199c2bfc9bcd9",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/211900.jpg": "81faa5e0860359aa092a5b1e04de4130acd1168182bb5fdf55c7dd73af9fd8fe"
+  },
+  "dependency_pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/librrrah_core-1093d06a30417cb5.rlib": "9e918b06d7ae7bf867ac04bc774062fc99d2b56704f083d763336cdd1bb45dbb",
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libblake3-5dbb3dfc2ce7d297.rlib": "1a90993f8c95cbbc51839449c8db08075277d5468e7d9fa2ae1b8838720083fe",
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libthiserror-1f2ca11ca2706be8.rlib": "a4bc045f06441d4730b1988bee770197e1f51f4b1600df8c028a668c27c77bf1",
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libtempfile-f6f2a369a6678518.rlib": "3c0a02859f18952acb6482a76d369ebac50a9c75f3b3b153fb3db5af15f2ea31",
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/liblibc-0a79900aa2799e6c.rlib": "b3e730a257abb46acab6283d05f1a1340e72bbb48682e09f3a237332f7f08c25",
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/librustix-d27a8f21409c30bb.rlib": "fd18f6de2a5fe606fe416658acb98f4d33ff174057722e30f3c14cb23e8060e3",
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/liblibproc-758dbaf49d4d459c.rlib": "6ce65607c893ada61e22fcbe8a1dabb4c04c74e7ab06309261c62f6b3b6fe88b",
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/liberrno-eb497f290fc228fe.rlib": "3d86b1f24f0098e7558b6caeaf6a877e3f8fec47d275b5bdc7bcea6821ac8362"
+  },
+  "command": [
+    "rustc",
+    "+stable",
+    "--edition=2024",
+    "-C",
+    "opt-level=3",
+    "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/extract.rs",
+    "--extern",
+    "rrrah_dedup=/private/tmp/rrrah-gradient-unroll4-managed-benchmark-20261014/candidate/librrrah_dedup.rlib",
+    "-L",
+    "dependency=/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps",
+    "-o",
+    "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/extract"
+  ],
+  "extractions": [
+    {
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/211901.jpg",
+      "input_has_icc": false,
+      "raw_pixels": "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/pixels-0.bin",
+      "raw_pixels_sha256": "7293e9b62fe5bc5501c029a3715a7b6227dc33272b374b4bd773959430a7905a",
+      "features": "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+      "features_sha256": "375da52fb488b0549352f7c4f1f29eadfe46aed8da31465734f4d32856461b63",
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/extract-0.stdout",
+      "stdout_sha256": "2cb0cd99bd8beebaef11ab17885bf35197734904f625837d380803df377f9169",
+      "stderr": "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/extract-0.stderr",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "input": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/211900.jpg",
+      "input_has_icc": false,
+      "raw_pixels": "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/pixels-1.bin",
+      "raw_pixels_sha256": "8538d5c7606993784dcc403aad4de439ca954ed5010c4fe0b020812b9707b719",
+      "features": "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+      "features_sha256": "45ad7a8ba9215436744a6c5cdbf0ca61f39b2cfcaf85be425026953007fa33a4",
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/extract-1.stdout",
+      "stdout_sha256": "ba7a414359537ea2a6992d2bed0af677561a909c4194f9278653455b49880d88",
+      "stderr": "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/extract-1.stderr",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "scope": "Two retained public table photographs, complete source hashes verified. Pillow EXIFtranspose/RGBA8 interpreted as sRGB, standard inverse transfer float32linear opaque pixels, native currentV7Rust gradient pyramid1024perlevel/3levels, first2048actual features; no synthetic repetition/padding. Primitive matcher fixture only, not native decoder/ICC/default/corpus/managed memory/RSS qualification.",
+  "child_pid": 61119,
+  "active_index": 1
+}

@@ -1,0 +1,55 @@
+{
+  "status": "verified_standalone_lane_distribution",
+  "report": "docs/research/dedup-masked-lane-counts-20261014.json",
+  "report_sha256": "bf7318c69c5768372c7e6fab6577faa8900c9a17bb2f820c204ae03fb8a9d02c",
+  "auditor_sha256": "59172526daf1193897193c08f9b105cdf9b2ddd1516ff2038dfc68dabaa1e2bf",
+  "rows": [
+    {
+      "label": "forward",
+      "mask_counts": [
+        1015808,
+        32768,
+        0,
+        0,
+        0,
+        0
+      ],
+      "first_pass_pairs": 4194304,
+      "second_pass_pairs_before": 131072,
+      "second_pass_pairs_after": 32768,
+      "total_distance_pair_reduction": 0.022727272727272728
+    },
+    {
+      "label": "reverse",
+      "mask_counts": [
+        1040384,
+        0,
+        0,
+        0,
+        0,
+        8192
+      ],
+      "first_pass_pairs": 4194304,
+      "second_pass_pairs_before": 32768,
+      "second_pass_pairs_after": 32768,
+      "total_distance_pair_reduction": 0.0
+    },
+    {
+      "label": "self",
+      "mask_counts": [
+        1035294,
+        8168,
+        2042,
+        0,
+        0,
+        3072
+      ],
+      "first_pass_pairs": 4194304,
+      "second_pass_pairs_before": 53128,
+      "second_pass_pairs_after": 24540,
+      "total_distance_pair_reduction": 0.006730655134679025
+    }
+  ],
+  "scope": "Instrumented standalone existing global runner-up versus selective lanes, shared current unroll kernel and public matcher distance/ratio/radius. Genuine2048natural feature banks, forward/reverse/self. Counts second-pass masks0..4and unresolved-forward full blocks; exact correspondence/callback counts. Counts explain work distribution, not CPU/managed/native/default/corpus quality proof.",
+  "interpretation": "Reverse case saves zero descriptor pairs, yet public CPU median differed. Removed-pair count alone cannot attribute timing changes; machine-code layout and shared-host variation require care. Forward saves only2.27percent total pairs and self0.67percent. No consistent whole-component gain proved."
+}

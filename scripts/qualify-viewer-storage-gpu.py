@@ -9,8 +9,45 @@ import sys
 from pathlib import Path
 import re
 import subprocess
+import signal
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def run_suite(command, stream, environment, timeout_seconds):
+    """Bound a complete cargo/test process tree; keep output in the suite log."""
+    options = ({'start_new_session': True} if os.name == 'posix' else
+               {'creationflags': subprocess.CREATE_NEW_PROCESS_GROUP})
+    process = subprocess.Popen(command, cwd=ROOT, stdout=stream,
+                               stderr=subprocess.STDOUT, env=environment, **options)
+    try:
+        return process.wait(timeout=timeout_seconds), False
+    except subprocess.TimeoutExpired:
+        if os.name == 'posix':
+            # Kill the entire group even if cargo exits before its test children.
+            try:
+                os.killpg(process.pid, signal.SIGTERM)
+            except ProcessLookupError:
+                pass
+            try:
+                process.wait(timeout=2)
+            except subprocess.TimeoutExpired:
+                pass
+            try:
+                os.killpg(process.pid, signal.SIGKILL)
+            except ProcessLookupError:
+                pass
+        else:
+            try:
+                subprocess.run(['taskkill', '/PID', str(process.pid), '/T', '/F'],
+                               stdout=stream, stderr=subprocess.STDOUT, timeout=10, check=False)
+            finally:
+                if process.poll() is None:
+                    process.kill()
+        process.wait(timeout=10)
+        print(f'Qualification timed out after {timeout_seconds}s; process tree terminated',
+              file=stream, flush=True)
+        return process.returncode, True
 
 
 def collection_evidence(text, seconds, full_hdr, passed, ignored):
@@ -246,14 +283,30 @@ def cache_ttl_evidence(text):
                for name in CACHE_TTL_TESTS)
 
 
+def hundred_thousand_storage_evidence(text):
+    """Require distinct-key churn and completed asynchronous resource cleanup."""
+    rows = re.findall(
+        r'^100k swap: seconds=(\d+(?:\.\d+)?) writes=100000 reads=100000 pressure_refusals=1000 root_peak=(\d+) queue_peak=(\d+) final=0$',
+        text, re.MULTILINE)
+    teardown = re.findall(
+        r'^(?:test hundred_thousand_distinct_rasters_keep_swap_index_and_memory_bounded \.\.\. )?100k swap asynchronous teardown: [^\n]+; physical files/bytes and root/queue=0$',
+        text, re.MULTILINE)
+    return (len(rows) == 1 and len(teardown) == 1
+            and float(rows[0][0]) > 0
+            and 0 < int(rows[0][1]) <= 128 * 1024
+            and 0 < int(rows[0][2]) <= 4096)
+
+
 def large_float_storage_evidence(text, minimum_seconds):
-    matches = re.findall(r'large float delayed swap: cycles=(\d+); seconds=([\d.]+);2048x2048;64MiB; every signed/HDR/negative-zero bit exact; full pressure and admitted cancellation after64KiB read each cycle; disk count2/bytes bounded; final=0', text)
+    matches = re.findall(r'^large float delayed swap: cycles=(\d+); seconds=(\d+(?:\.\d+)?);2048x2048;64MiB; every signed/HDR/negative-zero bit exact; full pressure and admitted cancellation after64KiB read each cycle; disk count2/bytes bounded; final=0$', text, re.MULTILINE)
     return (len(matches) == 1 and int(matches[0][0]) >= 3
             and float(matches[0][1]) >= minimum_seconds)
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--suite-timeout-seconds', type=float, default=14400,
+                        help='Hard limit per cargo/test process tree, including build (default: 4 hours)')
     parser.add_argument('--target-dir', type=Path, required=True)
     parser.add_argument('--output-dir', type=Path, required=True,
                         help='New directory; existing results are never overwritten')
@@ -331,6 +384,8 @@ def main():
     parser.add_argument('--ai-native-root', type=Path,
                         help='Run pinned native AI replay-plane Metal transport; production AI fidelity remains unqualified')
     args = parser.parse_args()
+    if not math.isfinite(args.suite_timeout_seconds) or args.suite_timeout_seconds <= 0:
+        parser.error('--suite-timeout-seconds must be finite and positive')
     if args.storage_soak_seconds and args.storage_soak_seconds < 10:
         parser.error('--storage-soak-seconds must be zero or at least 10')
     if not 0 <= args.metal_policy_cycles <= 10000:
@@ -656,17 +711,18 @@ def main():
         log = output / (name + '.log')
         print(f'Running {name}', flush=True)
         with log.open('w') as stream:
-            process = subprocess.run(command, cwd=ROOT, stdout=stream, stderr=subprocess.STDOUT, env=environment)
+            returncode, timed_out = run_suite(command, stream, environment, args.suite_timeout_seconds)
         text = log.read_text()
         totals = re.findall(r'test result: \w+\. (\d+) passed; (\d+) failed; (\d+) ignored;', text)
-        row = {'suite': name, 'command': command, 'exit_code': process.returncode,
+        row = {'suite': name, 'command': command, 'exit_code': returncode,
+               'timed_out': timed_out, 'timeout_seconds': args.suite_timeout_seconds,
                'passed': sum(int(t[0]) for t in totals),
                'failed': sum(int(t[1]) for t in totals),
                'ignored': sum(int(t[2]) for t in totals),
                'ignored_tests': [line for line in text.splitlines() if ' ... ignored' in line],
                'log': str(log),
                'log_sha256': hashlib.sha256(log.read_bytes()).hexdigest()}
-        row['verified_execution'] = (process.returncode == 0 and row['passed'] > 0
+        row['verified_execution'] = (not timed_out and returncode == 0 and row['passed'] > 0
                                      and row['failed'] == 0)
         if name in ('gpu-large-upload-cancel', 'gpu-selected-page-cancel'):
             verifier = (signed_upload_recovery_evidence if name == 'gpu-large-upload-cancel'
@@ -740,7 +796,7 @@ def main():
                 and
                 row['passed'] >= len(required_tests) and row['ignored'] == 0
                 and all(f'test {test} ...' in text for test in required_tests)
-                and 'writes=100000 reads=100000 pressure_refusals=1000' in text)
+                and hundred_thousand_storage_evidence(text))
             row['verified_execution'] = row['verified_execution'] and row['workload_evidence_valid']
         if name in ('gpu-swapped-viewport', 'gpu-swapped-source-navigation'):
             markers = (

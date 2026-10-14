@@ -1,0 +1,25 @@
+{
+  "status": "native_test_passed_measurement_wrapper_failed",
+  "tool_session": 36473,
+  "test": "hundred_thousand_distinct_rasters_keep_swap_index_and_memory_bounded",
+  "binary_sha256": "341c70968c4d4402419cf773d3b4c11789913f48593e942449ec41983f01e30f",
+  "source_drift_from_build_snapshot": [],
+  "distinct_keys": 100000,
+  "payload_bytes": 4,
+  "disk_count_limit": 17,
+  "disk_bytes_limit": 4096,
+  "managed_root_limit": 131072,
+  "managed_queue_limit": 4096,
+  "pressure_refusals_expected": 1000,
+  "limitations": [
+    "tiny payloads isolate key/index churn",
+    "no large-image throughput or GPU validation",
+    "OS peak RSS only if native time measurement succeeds"
+  ],
+  "child_pid": 47909,
+  "wrapper_pid": 47896,
+  "last_verified_os_state": "R",
+  "sampled_rss_bytes": 3080192,
+  "validator_tests_passed": 5,
+  "result": "result.json"
+}

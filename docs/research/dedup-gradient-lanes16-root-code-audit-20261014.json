@@ -1,0 +1,17 @@
+{
+  "status": "verified_target_selected_runtime_source_equivalence",
+  "auditor_sha256": "cb1085cd2745d9f2585273b88410cf2c9ffd374a49ea0f2e1bb7918a9e91172c",
+  "root_source": "crates/rrrah-dedup/src/gradient.rs",
+  "root_source_sha256": "77fdc18e635ae557c01ef78d1932f1c558bebd6a8d264cc8e1bf81cf088b889b",
+  "candidate_manifest": "docs/research/dedup-gradient-lanes16-managed-20261014.json",
+  "candidate_manifest_sha256": "37b243369b0b007473c060e592467ca51740c4ca9a52b0917110059c1c0d8c1b",
+  "mac_arm_matcher_equals_qualified_candidate_after_cfg_constant_expansion": true,
+  "other_target_matcher_equals_original_baseline_after_cfg_constant_expansion": true,
+  "four_lane_helper_unchanged": true,
+  "sixteen_lane_helper_equals_qualified_candidate_after_identity_expression_normalization": true,
+  "format_normalizations": [
+    "optional trailing comma in multi-element zero tuple",
+    "optional braces around the exact pure u64 work-expression closure"
+  ],
+  "scope": "Token/source equivalence on inspected cfg selections after explicit formatting normalizations, not emitted-machine-code equivalence or runtime performance on unmeasured targets. Actual current root default/raster tests remain independently required. No full native/workspace/corpus/defaultcollection/formats/platform completion claim."
+}

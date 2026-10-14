@@ -1,0 +1,39 @@
+{
+  "status": "verified_current_root_decode_free_unit_configurations",
+  "rows": [
+    {
+      "mode": "raster_without_decode",
+      "report": "docs/research/dedup-duration-default-gate-20261014.json",
+      "report_sha256": "daacd0aca067bdd6db8a88466b56554aeee0681c9b51d67b9f6d086d7b916dd6",
+      "passed": 61,
+      "failed": 0,
+      "manual_ignored": 3,
+      "exact_inventory": true
+    },
+    {
+      "mode": "no_optional_features",
+      "report": "docs/research/dedup-duration-no-features-gate-20261014.json",
+      "report_sha256": "a15fd761cc376643c649d220838ee0e38fd732143513bd21f6ef1f676437e2cf",
+      "passed": 44,
+      "failed": 0,
+      "manual_ignored": 2,
+      "exact_inventory": true
+    }
+  ],
+  "source": "crates/rrrah-dedup/src/sequence.rs",
+  "source_sha256": "49972d81af47e72fb42451e50c67bed7f3eec3dfbfdac896014c55b89f98c7eb",
+  "baseline_manifest": "docs/research/dedup-gradient-unroll4-v7-source-20261014.json",
+  "baseline_manifest_sha256": "475b71ae143469a9128b787730a98439c84995783ffbfb99f1726f8c91e3ed64",
+  "auditor_sha256": "bb593fe4b5b4a975549b9c447d9511f05478d144e3677b35e696c63733eac0b7",
+  "retained_artifacts": {
+    "docs/research/dedup-duration-decode-free-gates-20261014/raster_without_decode/build.log": "567b6457403e186a2442b5034872a00b8ef248f0feddac9659feee6eb0f4e18f",
+    "docs/research/dedup-duration-decode-free-gates-20261014/raster_without_decode/inventory.log": "7a775c432e66b3cf197ebf855bcadbcfeaaa781cbf4134c87324c382efa50200",
+    "docs/research/dedup-duration-decode-free-gates-20261014/raster_without_decode/tests.log": "d1714b1d9850e0c6e0e801f3541e16e35d8d1b4879273d40da5b8a530408cb25",
+    "docs/research/dedup-duration-decode-free-gates-20261014/no_optional_features/build.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/research/dedup-duration-decode-free-gates-20261014/no_optional_features/inventory.log": "f577573882c466647fd5207c28f3a654c02e9d292ed7749f7b917b2751a6adc6",
+    "docs/research/dedup-duration-decode-free-gates-20261014/no_optional_features/tests.log": "d7684413ac14dce9291b2b49a6046db86e288fc99056c757a50055c99777fe9e"
+  },
+  "production_implementation_body_unchanged": true,
+  "cfg_change": "checked_add compiled in tests or decode feature; duration regression module compiled in all test configurations. Non-test nondecode and decode production contents unchanged.",
+  "scope": "Actual current root dedup unit sources, nofeature44pass2manualignored and raster61pass3manualignored, directrustc with pinned real cached dependency binaries. Existing duration arithmetic overflow regression now exercised without decoder. Real animation timeline/decode/Cargo/fullworkspace/native/defaultcollection/platform/currentcorpus qualification remains separate."
+}

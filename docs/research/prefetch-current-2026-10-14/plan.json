@@ -1,0 +1,22 @@
+{
+  "status": "passed",
+  "tool_session": 51875,
+  "log": "/tmp/rrrah-prefetch-current-20261014.log",
+  "test": "gallery::tests::large_gallery_rapid_jumps_keep_only_latest_bounded_prefetch_command",
+  "gallery_entries": 100000,
+  "navigation_iterations": 10000,
+  "assertions": [
+    "new foreground discards pending old work",
+    "latest generation only",
+    "pending command count at most one",
+    "direction-dependent neighbour order and bounded window",
+    "selected source excluded"
+  ],
+  "sources": {
+    "crates/rrrah-app/src/gallery.rs": "5804f8e2fc60ce244346d5161009556f7c29dfdd45fa55d13b74fd37b48fa932",
+    "crates/rrrah-app/src/decode_gate.rs": "15bed01f5d7f6b04ba732c198b152b6da7f359f6bac08855ae74cc2c16d2fd23",
+    "Cargo.lock": "fe92c1c439760c437ee6b60a5c62c4fc35b56dd941667fc12a9f935f9dfe3be1"
+  },
+  "binary_sha256": "63dd92884dc6a1bb8cb8e3ddd872a887b3c7855e047158e82fcdd525f0ea5be4",
+  "result": "result.json"
+}

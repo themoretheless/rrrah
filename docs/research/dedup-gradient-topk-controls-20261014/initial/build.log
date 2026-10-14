@@ -1,0 +1,12 @@
+warning: unreachable statement
+   --> /private/tmp/rrrah-gradient-topk-experiment-20261014/experiment.rs:685:2
+    |
+684 |  return;
+    |  ------ any code following this expression is unreachable
+685 |  let args:Vec<_>=std::env::args().skip(1).collect();if args.len()==3{run_natural(&args,policy);return;}
+    |  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ unreachable statement
+    |
+    = note: `#[warn(unreachable_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: 1 warning emitted
+

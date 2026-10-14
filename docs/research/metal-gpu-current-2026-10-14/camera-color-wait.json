@@ -1,0 +1,30 @@
+{
+  "status": "live_pipeline_compilation_wait_not_terminal",
+  "sampled_child_pid": 58505,
+  "sample_duration_seconds": 1,
+  "observed": [
+    "ten named color test threads inside Metal render pipeline creation",
+    "Apple AGX fragment program variant creation",
+    "Metal compiler connection queue"
+  ],
+  "sample_sha256": "6146f2b216f6d18d6b3ad9b05af0b0665682d139bdb6c6bfaa990ebf9e8daa78",
+  "limitations": [
+    "one sampled interval is not proof of deadlock or eventual completion",
+    "not an isolated shader compilation benchmark",
+    "no child terminated or restarted"
+  ],
+  "compiler_observation": {
+    "pid": 58602,
+    "elapsed_wall_seconds": 290,
+    "cpu_seconds": 25.22,
+    "rss_bytes": 294338560,
+    "os_state": "R"
+  },
+  "source_inspection": {
+    "raw_shader_lines": 589,
+    "renderer": "RawRenderer::new",
+    "pipeline_cache": "None",
+    "shader_algorithm_selection": "uniform dynamic branches for six demosaic variants",
+    "interpretation": "pipeline compilation is live; concurrent system load prevents isolated first-frame latency claim"
+  }
+}

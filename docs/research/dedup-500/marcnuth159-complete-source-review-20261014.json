@@ -1,0 +1,142 @@
+{
+  "status": "complete12file_source_review_31core_controls_and_packaging_check",
+  "index": 159,
+  "repository": "Marcnuth/deduplication",
+  "commit": "c407cb11e5dd7f13360639dbd55efb4ffc2bd80c",
+  "whole_repo_complete": true,
+  "whole_runtime_qualified": false,
+  "fully_read_files": [
+    {
+      "path": ".gitignore",
+      "local": "07-gitignore",
+      "sha256": "7386f6f7b3f82c662e019df20ae53a3eaf32334bfcec40c8e941261b7f5ddb7c",
+      "git_blob_sha": "5a440916bd3f61fff8d04a31dd0c0d56fbf72eb0",
+      "bytes": 74,
+      "lines": 7
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "git_blob_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+      "bytes": 11357,
+      "lines": 201
+    },
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "sha256": "d50b0ed220651e124288ba67ca494cc4fcb4dd758f4faf338fc748a5e2363b39",
+      "git_blob_sha": "a6ca4d1ec312b5cb614559504f31ee7fbc04dc58",
+      "bytes": 865,
+      "lines": 47
+    },
+    {
+      "path": "deduplication/__init__.py",
+      "local": "04-__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob_sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0,
+      "lines": 0
+    },
+    {
+      "path": "deduplication/lsimhash.py",
+      "local": "02-lsimhash.py",
+      "sha256": "04856e54b8a6f7103dd06af5402200f826a69f2f63a796cab89bb0f354152bdc",
+      "git_blob_sha": "2cc6032af545939d6aa45cbd5f0a7a9bd8be71b9",
+      "bytes": 392,
+      "lines": 12
+    },
+    {
+      "path": "deduplication/nlp.py",
+      "local": "06-nlp.py",
+      "sha256": "77a03ce535dec7845791836e63d949ce017fdda41e0021c1764e178a93da8017",
+      "git_blob_sha": "ab99034efe5338c62bca5c91105f75beb617ad77",
+      "bytes": 863,
+      "lines": 23
+    },
+    {
+      "path": "deduplication/simhash.py",
+      "local": "03-simhash.py",
+      "sha256": "ab8059c7b0f48fc243cb99df609f494ef36691c400a72188b434dff28e1f5ef5",
+      "git_blob_sha": "e94d30f6c0e77beb68114d7ba5692eaa10696159",
+      "bytes": 901,
+      "lines": 32
+    },
+    {
+      "path": "requirements.txt",
+      "local": "08-requirements.txt",
+      "sha256": "9d67a29284b45330bf857c7f5d3aaa846d8a7686dce68a3e7a6d6255fa9fe0a7",
+      "git_blob_sha": "bf1b547a20c0bc30dc56337e1bd4fc6cd4766056",
+      "bytes": 14,
+      "lines": 1
+    },
+    {
+      "path": "setup.py",
+      "local": "09-setup.py",
+      "sha256": "432dd4c20d9117c228f37ff69eab8acef12ffe5c4168b080ea158fa9abfed43a",
+      "git_blob_sha": "6e7186320f0405996d3b8c4f7516290343ea64f7",
+      "bytes": 924,
+      "lines": 32
+    },
+    {
+      "path": "tests/data/wiki_nlp.txt",
+      "local": "10-wiki_nlp.txt",
+      "sha256": "da58aaa14944447b3ee0a03545ef73581bdd03f9aa492c563465255348272330",
+      "git_blob_sha": "c031ed1916b5ff9cd11b3b40d7d0f1a68b8b8a86",
+      "bytes": 20663,
+      "lines": 122
+    },
+    {
+      "path": "tests/test_nlp.py",
+      "local": "11-test_nlp.py",
+      "sha256": "d2d158bd7307385930b79888707b733dcae5a1077f3008a7188a12f6a1cd731d",
+      "git_blob_sha": "b044f71e055502d44bbc53c2b361346668948e12",
+      "bytes": 465,
+      "lines": 18
+    },
+    {
+      "path": "tests/test_simhash.py",
+      "local": "05-test_simhash.py",
+      "sha256": "61b4d70d164ffae6cb20f4d85d2710094450a47bbc926eefc026e10d718c1e7b",
+      "git_blob_sha": "b67fafcf42495a4fa6560d767936e8f9b6d7796e",
+      "bytes": 1057,
+      "lines": 21
+    }
+  ],
+  "license": "Full Apache2text read; no foreign source adopted.",
+  "controls": "docs/research/dedup-marcnuth159-controls-20261014.json",
+  "controls_sha256": "4a3341c2eb336c0a3ae03fdb2f9afccc15ddffb02731795f5bf782f9d861166f",
+  "control_producer": "scripts/check-dedup-marcnuth159-20261014.py",
+  "control_producer_sha256": "4d597fa8491e426d4b3a1a7a7fe1055b85e198b3afffb00e8264ab197258fd3f",
+  "auditor_sha256": "f5adb76c5ebb57ce727a6c21c9c8b142eb5519819759a4f467a15c1366edccb7",
+  "requirement_validation": {
+    "requirement": "spacy>='2.1.4'",
+    "error": {
+      "type": "InvalidRequirement",
+      "message": "Expected semicolon (after name with no version specifier) or end\n    spacy>='2.1.4'\n         ^"
+    },
+    "packaging_version": "26.3",
+    "runtime_python": "3.12.14 (main, Aug 25 2026, 13:50:33) [Clang 22.1.3 ]"
+  },
+  "original_demo_tests": [
+    "tests/test_nlp.py::test_main",
+    "tests/test_nlp.py::test_sentences",
+    "tests/test_simhash.py::test_main",
+    "tests/test_simhash.py::test_cmp"
+  ],
+  "retained_demo_log": "docs/research/dedup-marcnuth159-controls-20261014/original-demo-tests.log",
+  "retained_demo_log_sha256": "58bebd1bca3254602233628ef80c8eb01839319b3d16f798374db6e2faf6515a",
+  "decision": "Keep signed majority representation as conceptual reference only; reject this implementation for production exact/pixel/native identity or all-case dedup.",
+  "findings": [
+    "Leading zero MD5bits padded with neutral0rather than signed-1change actual128bit majority result versus independent fixed-width oracle.",
+    "Empty or entirely filtered text collapses to one all-zero fingerprint; bag order and uniform repetition are intentionally lost and cannot prove file identity.",
+    "Longest-sentence selection discards changed shorter sentences; zero/negative n_longest silently discards content.",
+    "Malformed block counts produce ZeroDivisionError, AssertionError or ValueError; fractional and boolean counts accepted with surprising output lengths.",
+    "Original README import calls modules as functions and raises TypeError on unchanged package API.",
+    "Original requirement spacy>='2.1.4' rejected by actual installed packaging.Requirement parser; no setup/install attempted.",
+    "Language model loaded on each tokenization and sentencizer call; no work/cancellation/memory or model-generation cache policy.",
+    "Four original test functions print output and contain no assertions; controlled fixture dependency allows execution but does not qualify real NLP/model accuracy.",
+    "No file scan, Hamming verification/publication, visual/image decoder or pixel identity implementation present. Prior registry broad-media README phrasing corrected: actual README discusses text documents."
+  ],
+  "limits": "All12original tree blobs stored/read/pinned, including20KiBfixture, complete source/test/config/license. Real NumPy/MD5core, controlled spaCy Token/Pipeline adapter; unadapted runtime import fails missing spaCy. No real spaCy/English model execution, dependency installation, semantic quality, platform/format/resource or all500completion claim."
+}

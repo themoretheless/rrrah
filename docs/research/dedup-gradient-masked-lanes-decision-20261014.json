@@ -1,0 +1,9 @@
+{
+  "status": "prototype_qualified_pending_managed_gate",
+  "audit": "docs/research/dedup-gradient-masked-lanes-cpu-audit-20261014.json",
+  "audit_sha256": "49895ee65ab16622e3a8d0ae07d89f5d96a3428f1454c5545784c6781db32a40",
+  "production_changed": false,
+  "reason": "Selective second-pass lanes require actual managed matcher integration, cancellation/admission and complete operation validation before adoption. Natural CPU regressions reject this prototype if present.",
+  "next_step": "Use measured ratios to choose rejection or a temporary isolated current managed-library integration with all existing regression tests and alternating public-API comparison.",
+  "limits": "Three bounded standalone cases, including one artificial clustered self bank; no universal, whole-operation or full-corpus speedup proof."
+}

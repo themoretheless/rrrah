@@ -1,0 +1,25 @@
+{
+  "status": "passed",
+  "tests": {
+    "float_workload_evidence": 9,
+    "metal_workload_evidence": 5,
+    "monitor_validator_exception": 1
+  },
+  "authentic_smoke_accepted": true,
+  "authentic_smoke_rejected_for_hour": true,
+  "changes": [
+    "strict whole-line float final marker and valid decimal duration",
+    "validator exceptions preserve terminal failed state instead of stale running"
+  ],
+  "source_sha256": {
+    "scripts/run-metal-collection-soak.py": "f6b5c1fed8c44760cbd8a491bda86b7a5f9624cf5cc36014bbdda7fc9f7e3d67",
+    "scripts/qualify-viewer-storage-gpu.py": "3f69a1aa04f65e01ce1cf3f9aeee442b12e396acde2d1f9e8d338baf71e2d734",
+    "scripts/test-large-float-storage-evidence.py": "043f2ddf8019ac037058c472c2df23fd8baa511f53e7cfa0544b747c03eb757d",
+    "scripts/test-soak-monitor-failure.py": "2f77ae9aa08c96f9bf46d49e1ace08032515e6d5654aaf52b09d0944adf5f1f2"
+  },
+  "limitations": [
+    "synthetic monitor child is failure-control evidence only",
+    "live monitors retain their loaded code; not restarted",
+    "live monitors load workload validator at completion; launch snapshot and revised validator hashes retained"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "status": "passed_bounded_raster_library_gate",
+  "report": "docs/research/dedup-gradient-masked-lanes-managed-20261014.json",
+  "report_sha256": "b060d81115452d383b7358a3309c6844fbf6151f03ad10da5b325e6c1161b120",
+  "auditor_sha256": "f8a6bd1f163f6d1e8d903b9ac7ff6e9413d9e3053a28ff2322c2ccfdcefdacf8",
+  "tests_passed": 59,
+  "tests_ignored": 3,
+  "inventory_exact": true,
+  "changed_source_files": [
+    "crates/rrrah-dedup/src/gradient.rs"
+  ],
+  "retained_artifacts": {
+    "docs/research/dedup-gradient-masked-lanes-managed-20261014/build.log": "58f83cf72c1142e858a7fd1173361f76bdf0e204ff5e5319568b486c149fd9e9",
+    "docs/research/dedup-gradient-masked-lanes-managed-20261014/inventory.log": "315670779af161be86221972db61f85be801fd5ec07d208cb3954dfe4490d07f",
+    "docs/research/dedup-gradient-masked-lanes-managed-20261014/tests.log": "0b6155febaee24049525080b811cc7bcd00b6b148a8d1ba60a3dee295f5de003",
+    "docs/research/dedup-gradient-masked-lanes-managed-20261014/gradient.rs": "07c082cab81d83a5906e7d01d29cbc42b373443cbaea13e9b4324c7a679adcb1",
+    "docs/research/dedup-gradient-masked-lanes-managed-20261014/gradient.patch": "a060f53699ed00be129edd07e45510db94fa3b972732d0a7976dc5f2a3d34ffb"
+  },
+  "scope": "Isolated V7rrrah-dedup clone differing only in second-pass sparse reverse lanes. Actual managed matcher/cache/runner with existing admitted memory; no extra heap arrays. Directrustc raster library against same pinned cached dependencies. Full raster unit inventory only, not Cargo/decode/native/workspace/default/fullcorpus/platform qualification; production checkout unchanged.",
+  "pending": "Actual public managed baseline-only/cache/linear headroom benchmark; native complete-operation/corpus/platform/default qualification remains separate. Production checkout gradient.rs unchanged."
+}

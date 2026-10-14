@@ -1,0 +1,141 @@
+{
+  "status": "passed_pending_audit",
+  "producer_pid": 43588,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-topk-experiment-20261014.json": "a9efd2b2f55c6e92d8ea29ebd0a7c3e2c055723bdc30ff8813fd924bd761b875",
+    "/private/tmp/rrrah-gradient-topk-experiment-20261014/experiment.rs": "41956206e4907be26f9a843d94e0c704d8607fc2ef65de936f6de873bf3bbefb",
+    "/private/tmp/rrrah-gradient-topk-stress-20261014/stress.rs": "6761c67e1458d3f9ba24092423a166c9f996310bb4a91a26dd9eb0291676a7e8",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/qualify-dedup-gradient-topk-stress-20261014.py": "3c01eb86fac7e3bbfaf138863cef9c97949c430b7223e19342c8398f2ad5dbc7",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-unroll4-natural-cpu-20261014.json": "8da40c2bfa662eb5262b3685bd598e20d71f861809b541c185fea2fd3ffa1e2b",
+    "/private/tmp/rrrah-gradient-topk-stress-20261014/stress": "155db1f8dc5f7f6518cbe644af8a1328787b960f617fc7e982e97d44281a6833"
+  },
+  "feature_pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-00.bin": "a31c1a5ea8a6951da8a03499692b6a924b4f9e378e654286c8c3973d03c08235",
+    "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin": "15dc8754408411d57d144365e49db1690c72846853d43e77c2f116e98ba99c84",
+    "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-02.bin": "6fa2123680e1d001dc362c51b391bb103a328ea49eb8b303b3dace459c229df9",
+    "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-03.bin": "51e36010e102345e2c63430973c60ce37f217432cc881074ce03004bedcd13b5",
+    "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-04.bin": "70b7f021514afc128cb91a109523703a5af9bccaf143f9193034fef2caf071fd",
+    "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-05.bin": "20c548849f780188cab087c320325e932cd156f106c83d6caf5137a270a7dfed",
+    "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-06.bin": "f974924402e09d3bb90bf7c936ec53f10da8f39a9772c5b12576cc00eb1fbeec"
+  },
+  "results": [
+    {
+      "label": "synthetic_stress",
+      "command": [
+        "/private/tmp/rrrah-gradient-topk-stress-20261014/stress"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-gradient-topk-stress-20261014/synthetic_stress.jsonl",
+      "stderr": "/private/tmp/rrrah-gradient-topk-stress-20261014/synthetic_stress.stderr",
+      "stdout_sha256": "11b6c196ba7842badd9dc4778ec9be59a0c264eb582bcc497664cf6d48209be7",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "natural_0",
+      "command": [
+        "/private/tmp/rrrah-gradient-topk-stress-20261014/stress",
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin",
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-gradient-topk-stress-20261014/natural_0.jsonl",
+      "stderr": "/private/tmp/rrrah-gradient-topk-stress-20261014/natural_0.stderr",
+      "stdout_sha256": "4af1ace45a766ddefc470c4a178e7cd8ef5b8314d8c2ce9145e144ae116ef984",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "natural_1",
+      "command": [
+        "/private/tmp/rrrah-gradient-topk-stress-20261014/stress",
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin",
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-gradient-topk-stress-20261014/natural_1.jsonl",
+      "stderr": "/private/tmp/rrrah-gradient-topk-stress-20261014/natural_1.stderr",
+      "stdout_sha256": "4af1ace45a766ddefc470c4a178e7cd8ef5b8314d8c2ce9145e144ae116ef984",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "natural_2",
+      "command": [
+        "/private/tmp/rrrah-gradient-topk-stress-20261014/stress",
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-04.bin",
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-00.bin"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-gradient-topk-stress-20261014/natural_2.jsonl",
+      "stderr": "/private/tmp/rrrah-gradient-topk-stress-20261014/natural_2.stderr",
+      "stdout_sha256": "4af1ace45a766ddefc470c4a178e7cd8ef5b8314d8c2ce9145e144ae116ef984",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "natural_3",
+      "command": [
+        "/private/tmp/rrrah-gradient-topk-stress-20261014/stress",
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-00.bin",
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-04.bin"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-gradient-topk-stress-20261014/natural_3.jsonl",
+      "stderr": "/private/tmp/rrrah-gradient-topk-stress-20261014/natural_3.stderr",
+      "stdout_sha256": "4af1ace45a766ddefc470c4a178e7cd8ef5b8314d8c2ce9145e144ae116ef984",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "natural_4",
+      "command": [
+        "/private/tmp/rrrah-gradient-topk-stress-20261014/stress",
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-05.bin",
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-06.bin"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-gradient-topk-stress-20261014/natural_4.jsonl",
+      "stderr": "/private/tmp/rrrah-gradient-topk-stress-20261014/natural_4.stderr",
+      "stdout_sha256": "4af1ace45a766ddefc470c4a178e7cd8ef5b8314d8c2ce9145e144ae116ef984",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "natural_5",
+      "command": [
+        "/private/tmp/rrrah-gradient-topk-stress-20261014/stress",
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-06.bin",
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-05.bin"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-gradient-topk-stress-20261014/natural_5.jsonl",
+      "stderr": "/private/tmp/rrrah-gradient-topk-stress-20261014/natural_5.stderr",
+      "stdout_sha256": "4af1ace45a766ddefc470c4a178e7cd8ef5b8314d8c2ce9145e144ae116ef984",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "natural_6",
+      "command": [
+        "/private/tmp/rrrah-gradient-topk-stress-20261014/stress",
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-03.bin",
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-02.bin"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-gradient-topk-stress-20261014/natural_6.jsonl",
+      "stderr": "/private/tmp/rrrah-gradient-topk-stress-20261014/natural_6.stderr",
+      "stdout_sha256": "4af1ace45a766ddefc470c4a178e7cd8ef5b8314d8c2ce9145e144ae116ef984",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "natural_7",
+      "command": [
+        "/private/tmp/rrrah-gradient-topk-stress-20261014/stress",
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-02.bin",
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-03.bin"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-gradient-topk-stress-20261014/natural_7.jsonl",
+      "stderr": "/private/tmp/rrrah-gradient-topk-stress-20261014/natural_7.stderr",
+      "stdout_sha256": "4af1ace45a766ddefc470c4a178e7cd8ef5b8314d8c2ce9145e144ae116ef984",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "scope": "Standalone exact top16 versus original pre-cache matcher.512seeded bank pairs with five modes/radii plus16exhaustive-callback tiny cases, then eight retained natural directions. Exact nearest table bits, correspondence, callback counts and cancellation outcomes. No production admission, default quality or whole-operation performance claim.",
+  "child_pid": 44574,
+  "active_case": "natural_7"
+}

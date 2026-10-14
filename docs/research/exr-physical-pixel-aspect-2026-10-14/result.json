@@ -1,0 +1,50 @@
+{
+  "status": "exr_physical_aspect_decoder_ram_swap_metal_validated",
+  "baseline_regression": "None instead of Some(2.0)",
+  "focused_final_passed": 8,
+  "full_decoder_library": {
+    "passed": 1035,
+    "failed": 0,
+    "ignored": 73
+  },
+  "production_library_check_exit_code": 0,
+  "ratios_verified": [
+    2.0,
+    0.5,
+    1.0
+  ],
+  "sample_dimensions_and_float_bits_unchanged": true,
+  "display_preparation_retains_aspect": true,
+  "invalid_file_geometry_releases_all_managed_memory": true,
+  "parse_rejects": [
+    "zero",
+    "negative",
+    "NaN",
+    "infinity",
+    "duplicate",
+    "wrong type",
+    "wrong length"
+  ],
+  "single_bounded_header_pass": true,
+  "cache_reuse_note": "Existing swap payload carries aspect; SwapStore creates fresh per-session directories. No persistent raster cache key revision required here.",
+  "source_sha256": {
+    "crates/rrrah-decode/src/exr_color.rs": "18eef69329d5e5a2426dec1970e5bffff236458b555e5d7b7884ea6cdae8eca7",
+    "crates/rrrah-decode/src/raster.rs": "700afc115ad2093c7312738832b3f0d0dad9d46602a93ca8ecfd9c21b3a16daf",
+    "Cargo.lock": "fe92c1c439760c437ee6b60a5c62c4fc35b56dd941667fc12a9f935f9dfe3be1"
+  },
+  "test_binary_sha256": "137a4009460c266eff17e3ab578afc8b6126e3febb7e95d099d6e559c97b7a48",
+  "artifact_sha256": {
+    "focused-final.log": "763b24f9beb067032b511907cb008d61dffcb004e6f7389f623a449af98683bb",
+    "focused-after.log": "104790f86c3aab6333e09fd36d61e8885751bc72b0857647b3697e5cbac01d61",
+    "production-check.log": "df858c9c9c72c1ad4b0bcd8e39504462d9c6eace5433912b3a473c3601047bc7",
+    "before.log": "378be7b90943ca350a58a288d37a538ccd4df7d93e4795f6e7bf8b047eade09b",
+    "full-decode.log": "0704058599700a798208e99404810060384c65be04841fe83acc82f80c477605"
+  },
+  "specification": "https://openexr.com/en/latest/TechnicalIntroduction.html#header",
+  "limitations": [
+    "Offscreen decoder/RAM/swap/Metal integration passed in follow-up; new live EXR window not exercised.",
+    "73manual/corpus tests excluded from ordinary CPU pass count",
+    "deep/multipart and overall100-format qualification still incomplete"
+  ],
+  "metal_validation": "metal/result.json"
+}

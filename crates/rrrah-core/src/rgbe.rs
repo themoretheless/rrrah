@@ -240,20 +240,23 @@ impl Calibration {
         sample: impl Fn(u32, u32) -> u16,
     ) -> Option<[f64; 3]> {
         let planes = interpolate_planes(self.quad, position, self.dimensions, |x, y| {
-            f64::from(self.normalize_site(x, y, sample(x, y)).unwrap())
+            self.normalize_site_f64(x, y, sample(x, y)).unwrap()
         })?;
         self.linear_rgb(planes)
     }
-    pub fn normalize_site(&self, x: u32, y: u32, value: u16) -> Option<f32> {
+    pub fn normalize_site_f64(&self, x: u32, y: u32, value: u16) -> Option<f64> {
         if x >= self.dimensions[0] || y >= self.dimensions[1] {
             return None;
         }
         let phase = ((y % 2) * 2 + x % 2) as usize;
-        let black = self.black.at(x, y)?;
-        Some(
-            (f32::from(value) - black).max(0.) / (self.white[phase] - black)
-                * self.gains[self.quad[phase] as usize],
-        )
+        let black = f64::from(self.black.at(x, y)?);
+        let white = f64::from(self.white[phase]);
+        let gain = f64::from(self.gains[self.quad[phase] as usize]);
+        Some((f64::from(value) - black).max(0.) / (white - black) * gain)
+    }
+    #[allow(clippy::cast_possible_truncation)]
+    pub fn normalize_site(&self, x: u32, y: u32, value: u16) -> Option<f32> {
+        self.normalize_site_f64(x, y, value).map(|v| v as f32)
     }
     pub fn normalize_managed(
         mosaic: &crate::DecodedMosaic,

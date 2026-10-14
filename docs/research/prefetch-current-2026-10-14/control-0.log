@@ -1,0 +1,16 @@
+
+running 11 tests
+test decode_gate::tests::cancelled_prefetch_waiter_returns_none_while_permit_is_busy ... ok
+test decode_gate::tests::dropping_current_ticket_unblocks_prefetch ... ok
+test decode_gate::tests::foreground_intent_is_nonblocking_and_invalidates_prefetch_generation ... ok
+test decode_gate::tests::foreground_jumps_a_waiting_prefetch_after_current_permit ... ok
+test decode_gate::tests::granted_prefetch_token_is_invalidated_before_foreground_waits ... ok
+test decode_gate::tests::newer_foreground_releases_obsolete_waiter_before_active_decode_finishes ... ok
+test decode_gate::tests::permits_serialize_foreground_and_prefetch_work ... ok
+test decode_gate::tests::prefetch_waits_for_idle_debounce ... ok
+test decode_gate::tests::production_prefetch_debounce_is_two_hundred_milliseconds ... ok
+test decode_gate::tests::superseded_ticket_does_not_clear_newer_foreground_priority ... ok
+test decode_gate::tests::viewport_token_cancels_prefetch_waiter_while_foreground_permit_is_live ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 272 filtered out; finished in 0.07s
+

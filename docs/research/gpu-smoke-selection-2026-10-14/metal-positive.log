@@ -1,0 +1,19 @@
+adapter="Apple M4 Max" backend=Metal vendor=0 device=0 max_texture_dimension_2d=16384 max_texture_array_layers=2048 max_buffer_size=4294967295
+gpu_smoke: counterbalanced upload A/B, 1 reps per variant
+kind,adapter_backend,adapter_name,raw_width,raw_height,variant,round,sequence,tile_size,tile_halo,tile_count,atlas_bytes,upload_total_ms,upload_total_p95_ms,enqueue_wall_ms,completed_wall_ms
+sample,Metal,"Apple M4 Max",2048,1536,current_default,1,1,2048,1,1,8405000,4.9227,,4.9247,6.2237
+sample,Metal,"Apple M4 Max",2048,1536,legacy_4096,1,2,4096,1,1,33587208,201.9472,,201.9487,206.3791
+summary,Metal,"Apple M4 Max",2048,1536,current_default,1,0,2048,1,1,8405000,4.9227,4.9227,4.9247,6.2237
+summary,Metal,"Apple M4 Max",2048,1536,legacy_4096,1,0,4096,1,1,33587208,201.9472,201.9472,201.9487,206.3791
+sample,Metal,"Apple M4 Max",4096,3072,current_default,1,1,4096,1,1,33587208,59.7580,,59.7603,63.8570
+sample,Metal,"Apple M4 Max",4096,3072,legacy_4096,1,2,4096,1,1,33587208,254.1882,,254.1906,259.1241
+summary,Metal,"Apple M4 Max",4096,3072,current_default,1,0,4096,1,1,33587208,59.7580,59.7580,59.7603,63.8570
+summary,Metal,"Apple M4 Max",4096,3072,legacy_4096,1,0,4096,1,1,33587208,254.1882,254.1882,254.1906,259.1241
+sample,Metal,"Apple M4 Max",6240,4160,current_default,1,1,1022,1,35,73400320,77.8496,,77.8532,85.7947
+sample,Metal,"Apple M4 Max",6240,4160,legacy_4096,1,2,4096,1,4,134348832,296.7078,,296.7090,307.3359
+summary,Metal,"Apple M4 Max",6240,4160,current_default,1,0,1022,1,35,73400320,77.8496,77.8496,77.8532,85.7947
+summary,Metal,"Apple M4 Max",6240,4160,legacy_4096,1,0,4096,1,4,134348832,296.7078,296.7078,296.7090,307.3359
+sample,Metal,"Apple M4 Max",8192,6144,current_default,1,1,1022,1,63,132120576,492.8787,,492.8821,650.6834
+sample,Metal,"Apple M4 Max",8192,6144,legacy_4096,1,2,4096,1,4,134348832,141.0954,,141.0971,192.1515
+summary,Metal,"Apple M4 Max",8192,6144,current_default,1,0,1022,1,63,132120576,492.8787,492.8787,492.8821,650.6834
+summary,Metal,"Apple M4 Max",8192,6144,legacy_4096,1,0,4096,1,4,134348832,141.0954,141.0954,141.0971,192.1515

@@ -33,7 +33,7 @@ impl Duration {
         (self.numerator, self.denominator)
     }
 
-    #[cfg(feature = "decode")]
+    #[cfg(any(test, feature = "decode"))]
     pub(crate) fn checked_add(self, other: Self) -> Result<Self, SequenceError> {
         // Cancel the denominator GCD before cross multiplication. The final
         // reduced duration can fit u64 even when the unreduced sum exceeds u128.
@@ -82,7 +82,7 @@ impl Duration {
     }
 }
 
-#[cfg(all(test, feature = "decode"))]
+#[cfg(test)]
 mod duration_sum_tests {
     use super::*;
 

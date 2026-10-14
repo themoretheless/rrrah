@@ -1,0 +1,56 @@
+{
+  "status": "passed",
+  "tool_terminal_exit_code": 0,
+  "native_test": {
+    "passed": 1,
+    "failed": 0,
+    "ignored": 0
+  },
+  "cycles": 94,
+  "loop_seconds": 3609.177,
+  "dimensions": [
+    2048,
+    2048
+  ],
+  "payload_bytes": 67108864,
+  "io_delay_ms_per_call": 2,
+  "maximum_io_request_bytes": 65536,
+  "all_original_float_bits_exact": true,
+  "pressure_refusal_and_retry_each_cycle": true,
+  "cancel_after_allocation_and_at_least_64KiB_read_each_cycle": true,
+  "completed_cycle_physical_disk_caps": {
+    "count": 2,
+    "bytes": 134217856
+  },
+  "root_limit_bytes": 134217728,
+  "queue_limit_bytes": 67108864,
+  "final_root_bytes": 0,
+  "final_queue_bytes": 0,
+  "rss": {
+    "samples": 712,
+    "maximum_sampled_bytes": 70254592,
+    "median_sampled_bytes": 70221824.0,
+    "last_sampled_bytes": 70254592,
+    "first_elapsed_seconds": 0.013970874999999827,
+    "last_elapsed_seconds": 3606.80066,
+    "soft_guard_bytes": 1073741824,
+    "guard_triggered": false
+  },
+  "binary_sha256": "341c70968c4d4402419cf773d3b4c11789913f48593e942449ec41983f01e30f",
+  "monitor_at_launch_sha256": "9e6053b88a359e6b9f54ba80649eb37841020a12e42f5630b70487f00552da5f",
+  "source_drift": [],
+  "artifact_sha256": {
+    "test.log": "53b7444890e070ca2dedfc06744c847cdd07953c1bb41ae58e9c5926624b3690",
+    "state.json": "6046a61fbfe78d5e147a02489afdc90f57b98257fec227acff9da6e071e558e7",
+    "rss.jsonl": "bdb7eb09ac4a7804762bbc4477716f5452db9ba4163a5ebdd65b3c61c4088b48",
+    "sources.json": "ae77b5350dfa0b56dcbe51e3d9c0e34c36c4c8a812ac544f2d6afe3d5f86ac41"
+  },
+  "limitations": [
+    "artificial delayed local file IO, not physical slow drive",
+    "managed pressure reservation, not OS-wide memory pressure",
+    "disk cap observations after completed writes, not continuous physical-disk measurement",
+    "RSS sampling is not true peak measurement or leak proof",
+    "separate from Metal hour, not a single combined GPU-plus-delayed-IO workload",
+    "not full100-format fidelity or NVIDIA qualification"
+  ]
+}

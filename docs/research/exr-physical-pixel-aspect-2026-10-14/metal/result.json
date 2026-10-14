@@ -1,0 +1,41 @@
+{
+  "status": "native_exr_ram_swap_metal_geometry_validated",
+  "targeted": {
+    "passed": 1,
+    "failed": 0,
+    "ignored": 0
+  },
+  "full_hdr_swap_harness": {
+    "passed": 23,
+    "failed": 0,
+    "ignored": 3
+  },
+  "backend": "Metal",
+  "adapter": "Apple M4 Max",
+  "aspects": [
+    2.0,
+    0.5,
+    1.0
+  ],
+  "ram_hit_under_full_managed_pressure": true,
+  "source_file_deleted_before_restore": true,
+  "restore_refuses_full_managed_pressure_then_retries": true,
+  "cancelled_lookup_retains_retryable_entry": true,
+  "every_float_bit_exact_after_restore": true,
+  "full_64x64_sdr_hdr_outputs_exact": true,
+  "non_square_reference_differs_from_square_control": true,
+  "writes_per_case": 1,
+  "successful_reads_per_case": 1,
+  "final_source_root_and_queue_bytes": 0,
+  "source_drift": [],
+  "log_sha256": {
+    "hdr-suite.log": "669bfd6d0e83c7f5e4ec6e851c955c2874183a1f17cba8cfe50137314bf786df",
+    "targeted.log": "761b09dc0c90109fc737093d79448bd8cf4feaf437130bd177b167c33a77bf07",
+    "build.log": "f90f8144a59d0b9a8eadc76cae8ee755f43b0b19410d57ba712ee20215dab1f2"
+  },
+  "limitations": [
+    "offscreen GPU transport/geometry, not live EXR window or calibrated display measurement",
+    "three manual/external HDR harness cases not executed here",
+    "not EXR deep/multipart or full100-format qualification"
+  ]
+}

@@ -1,0 +1,410 @@
+{
+  "status": "passed_pending_audit",
+  "producer_pid": 44432,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-topk-experiment-20261014.json": "a9efd2b2f55c6e92d8ea29ebd0a7c3e2c055723bdc30ff8813fd924bd761b875",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-runner-up-experiment-20261014.json": "21e4228f6aaff54d059315cdc7a0eae75583b9a455222c9cebfc2d5067e6bf22",
+    "/private/tmp/rrrah-gradient-topk-experiment-20261014/experiment.rs": "41956206e4907be26f9a843d94e0c704d8607fc2ef65de936f6de873bf3bbefb",
+    "/Users/themoretheless/.codex/tmp/rrrah-gradient-runner-up-experiment-20261014/experiment.rs": "5aeab0e8b5069bceaaeaa49848af17785f941d9f8fccc4866c76e13886e2a30c",
+    "/private/tmp/rrrah-gradient-topk-work-20261014/work.rs": "53290d5ac767125ad8081552fe33b6a9ad1b07335f049f769165f0597cc5172d",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/check-dedup-gradient-topk-work-20261014.py": "ac0d523a3fbd503cd511bd80296860891a510871d187847c5e53ac5cbb6416de",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-unroll4-natural-cpu-20261014.json": "8da40c2bfa662eb5262b3685bd598e20d71f861809b541c185fea2fd3ffa1e2b",
+    "/private/tmp/rrrah-gradient-topk-work-20261014/work": "da54b7436125f3298e72e90e0f44115415153d3a1ab5babbe5d2434b85d76baa"
+  },
+  "feature_pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-00.bin": "a31c1a5ea8a6951da8a03499692b6a924b4f9e378e654286c8c3973d03c08235",
+    "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin": "15dc8754408411d57d144365e49db1690c72846853d43e77c2f116e98ba99c84",
+    "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-02.bin": "6fa2123680e1d001dc362c51b391bb103a328ea49eb8b303b3dace459c229df9",
+    "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-03.bin": "51e36010e102345e2c63430973c60ce37f217432cc881074ce03004bedcd13b5",
+    "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-04.bin": "70b7f021514afc128cb91a109523703a5af9bccaf143f9193034fef2caf071fd",
+    "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-05.bin": "20c548849f780188cab087c320325e932cd156f106c83d6caf5137a270a7dfed",
+    "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-06.bin": "f974924402e09d3bb90bf7c936ec53f10da8f39a9772c5b12576cc00eb1fbeec"
+  },
+  "results": [
+    {
+      "label": "synthetic_clustered_self",
+      "inputs": [],
+      "command": [
+        "/private/tmp/rrrah-gradient-topk-work-20261014/work"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-gradient-topk-work-20261014/synthetic_clustered_self.jsonl",
+      "stdout_sha256": "46f66e4b6aa648698c81bea8c9a4d794c0d9b4b9ee7c23d3b927c1a947489c02",
+      "stderr": "/private/tmp/rrrah-gradient-topk-work-20261014/synthetic_clustered_self.stderr",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "rows": [
+        {
+          "version": 0,
+          "distance_pairs": 524288,
+          "callbacks": 525826,
+          "matches": 512,
+          "left": 512,
+          "right": 512
+        },
+        {
+          "version": 1,
+          "distance_pairs": 524288,
+          "callbacks": 525826,
+          "matches": 512,
+          "left": 512,
+          "right": 512
+        },
+        {
+          "version": 2,
+          "distance_pairs": 262144,
+          "callbacks": 525826,
+          "matches": 512,
+          "left": 512,
+          "right": 512
+        }
+      ]
+    },
+    {
+      "label": "natural_0",
+      "inputs": [
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin",
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin"
+      ],
+      "command": [
+        "/private/tmp/rrrah-gradient-topk-work-20261014/work",
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin",
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-gradient-topk-work-20261014/natural_0.jsonl",
+      "stdout_sha256": "8b0aed43e7bc955cd1710d59ae7457f6f15c24c0438164f0ae75f2a2c11ebc8e",
+      "stderr": "/private/tmp/rrrah-gradient-topk-work-20261014/natural_0.stderr",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "rows": [
+        {
+          "version": 0,
+          "distance_pairs": 2097152,
+          "callbacks": 2100226,
+          "matches": 1024,
+          "left": 1024,
+          "right": 1024
+        },
+        {
+          "version": 1,
+          "distance_pairs": 1131392,
+          "callbacks": 2100226,
+          "matches": 1024,
+          "left": 1024,
+          "right": 1024
+        },
+        {
+          "version": 2,
+          "distance_pairs": 1048576,
+          "callbacks": 2100226,
+          "matches": 1024,
+          "left": 1024,
+          "right": 1024
+        }
+      ]
+    },
+    {
+      "label": "natural_1",
+      "inputs": [
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin",
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin"
+      ],
+      "command": [
+        "/private/tmp/rrrah-gradient-topk-work-20261014/work",
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin",
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-01.bin"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-gradient-topk-work-20261014/natural_1.jsonl",
+      "stdout_sha256": "8b0aed43e7bc955cd1710d59ae7457f6f15c24c0438164f0ae75f2a2c11ebc8e",
+      "stderr": "/private/tmp/rrrah-gradient-topk-work-20261014/natural_1.stderr",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "rows": [
+        {
+          "version": 0,
+          "distance_pairs": 2097152,
+          "callbacks": 2100226,
+          "matches": 1024,
+          "left": 1024,
+          "right": 1024
+        },
+        {
+          "version": 1,
+          "distance_pairs": 1131392,
+          "callbacks": 2100226,
+          "matches": 1024,
+          "left": 1024,
+          "right": 1024
+        },
+        {
+          "version": 2,
+          "distance_pairs": 1048576,
+          "callbacks": 2100226,
+          "matches": 1024,
+          "left": 1024,
+          "right": 1024
+        }
+      ]
+    },
+    {
+      "label": "natural_2",
+      "inputs": [
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-04.bin",
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-00.bin"
+      ],
+      "command": [
+        "/private/tmp/rrrah-gradient-topk-work-20261014/work",
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-04.bin",
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-00.bin"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-gradient-topk-work-20261014/natural_2.jsonl",
+      "stdout_sha256": "6eacad5b282f2fa06c01ef9e7994313fddb1215a724434a2fca9477632bbaf0f",
+      "stderr": "/private/tmp/rrrah-gradient-topk-work-20261014/natural_2.stderr",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "rows": [
+        {
+          "version": 0,
+          "distance_pairs": 2097152,
+          "callbacks": 2100226,
+          "matches": 16,
+          "left": 1024,
+          "right": 1024
+        },
+        {
+          "version": 1,
+          "distance_pairs": 1082336,
+          "callbacks": 2100226,
+          "matches": 16,
+          "left": 1024,
+          "right": 1024
+        },
+        {
+          "version": 2,
+          "distance_pairs": 1048576,
+          "callbacks": 2100226,
+          "matches": 16,
+          "left": 1024,
+          "right": 1024
+        }
+      ]
+    },
+    {
+      "label": "natural_3",
+      "inputs": [
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-00.bin",
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-04.bin"
+      ],
+      "command": [
+        "/private/tmp/rrrah-gradient-topk-work-20261014/work",
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-00.bin",
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-04.bin"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-gradient-topk-work-20261014/natural_3.jsonl",
+      "stdout_sha256": "f258f3ef71315213cd00e4387cc6b9d68dba9f7b8f624278fec154036cc1d13b",
+      "stderr": "/private/tmp/rrrah-gradient-topk-work-20261014/natural_3.stderr",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "rows": [
+        {
+          "version": 0,
+          "distance_pairs": 2097152,
+          "callbacks": 2100226,
+          "matches": 16,
+          "left": 1024,
+          "right": 1024
+        },
+        {
+          "version": 1,
+          "distance_pairs": 1061852,
+          "callbacks": 2100226,
+          "matches": 16,
+          "left": 1024,
+          "right": 1024
+        },
+        {
+          "version": 2,
+          "distance_pairs": 1048576,
+          "callbacks": 2100226,
+          "matches": 16,
+          "left": 1024,
+          "right": 1024
+        }
+      ]
+    },
+    {
+      "label": "natural_4",
+      "inputs": [
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-05.bin",
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-06.bin"
+      ],
+      "command": [
+        "/private/tmp/rrrah-gradient-topk-work-20261014/work",
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-05.bin",
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-06.bin"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-gradient-topk-work-20261014/natural_4.jsonl",
+      "stdout_sha256": "33b81f6e5e5b2ab8ecd954974c7a834c413b26b915ec75c3984dc241e73f209b",
+      "stderr": "/private/tmp/rrrah-gradient-topk-work-20261014/natural_4.stderr",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "rows": [
+        {
+          "version": 0,
+          "distance_pairs": 2097152,
+          "callbacks": 2100226,
+          "matches": 9,
+          "left": 1024,
+          "right": 1024
+        },
+        {
+          "version": 1,
+          "distance_pairs": 1087488,
+          "callbacks": 2100226,
+          "matches": 9,
+          "left": 1024,
+          "right": 1024
+        },
+        {
+          "version": 2,
+          "distance_pairs": 1048576,
+          "callbacks": 2100226,
+          "matches": 9,
+          "left": 1024,
+          "right": 1024
+        }
+      ]
+    },
+    {
+      "label": "natural_5",
+      "inputs": [
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-06.bin",
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-05.bin"
+      ],
+      "command": [
+        "/private/tmp/rrrah-gradient-topk-work-20261014/work",
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-06.bin",
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-05.bin"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-gradient-topk-work-20261014/natural_5.jsonl",
+      "stdout_sha256": "3189b386503f918a7447a99fdf5a437178220f2774b06fd6ccaf861970f92885",
+      "stderr": "/private/tmp/rrrah-gradient-topk-work-20261014/natural_5.stderr",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "rows": [
+        {
+          "version": 0,
+          "distance_pairs": 2097152,
+          "callbacks": 2100226,
+          "matches": 9,
+          "left": 1024,
+          "right": 1024
+        },
+        {
+          "version": 1,
+          "distance_pairs": 1200128,
+          "callbacks": 2100226,
+          "matches": 9,
+          "left": 1024,
+          "right": 1024
+        },
+        {
+          "version": 2,
+          "distance_pairs": 1048576,
+          "callbacks": 2100226,
+          "matches": 9,
+          "left": 1024,
+          "right": 1024
+        }
+      ]
+    },
+    {
+      "label": "natural_6",
+      "inputs": [
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-03.bin",
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-02.bin"
+      ],
+      "command": [
+        "/private/tmp/rrrah-gradient-topk-work-20261014/work",
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-03.bin",
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-02.bin"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-gradient-topk-work-20261014/natural_6.jsonl",
+      "stdout_sha256": "a1cca19ca50a04ed250f63ea029230e73e93f74c00eb462a9970cb000dc6ef1a",
+      "stderr": "/private/tmp/rrrah-gradient-topk-work-20261014/natural_6.stderr",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "rows": [
+        {
+          "version": 0,
+          "distance_pairs": 2097152,
+          "callbacks": 2100226,
+          "matches": 32,
+          "left": 1024,
+          "right": 1024
+        },
+        {
+          "version": 1,
+          "distance_pairs": 1099680,
+          "callbacks": 2100226,
+          "matches": 32,
+          "left": 1024,
+          "right": 1024
+        },
+        {
+          "version": 2,
+          "distance_pairs": 1048576,
+          "callbacks": 2100226,
+          "matches": 32,
+          "left": 1024,
+          "right": 1024
+        }
+      ]
+    },
+    {
+      "label": "natural_7",
+      "inputs": [
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-02.bin",
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-03.bin"
+      ],
+      "command": [
+        "/private/tmp/rrrah-gradient-topk-work-20261014/work",
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-02.bin",
+        "/Users/themoretheless/.codex/tmp/rrrah-gradient-natural-bound-benchmark-20261013/features-03.bin"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-gradient-topk-work-20261014/natural_7.jsonl",
+      "stdout_sha256": "305d922f8b04882735bfd700cbfd86a44a24cf67a86e459c8a119f93729bce36",
+      "stderr": "/private/tmp/rrrah-gradient-topk-work-20261014/natural_7.stderr",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "rows": [
+        {
+          "version": 0,
+          "distance_pairs": 2097152,
+          "callbacks": 2100226,
+          "matches": 32,
+          "left": 1024,
+          "right": 1024
+        },
+        {
+          "version": 1,
+          "distance_pairs": 1068960,
+          "callbacks": 2100226,
+          "matches": 32,
+          "left": 1024,
+          "right": 1024
+        },
+        {
+          "version": 2,
+          "distance_pairs": 1048576,
+          "callbacks": 2100226,
+          "matches": 32,
+          "left": 1024,
+          "right": 1024
+        }
+      ]
+    }
+  ],
+  "scope": "Instrumented standalone original matcher, exact global runner-up and sorted top16, all with same original scalar kernel. Counts actual evaluated descriptor pairs including partial4blocks. One artificial512descriptor64clustersx8variants self bank and eight retained natural directions. Exact correspondence parity, top16 nearest bit parity, callbacks invariant. Counters are not CPU speedups; no production/managed/native/default/corpus claims.",
+  "child_pid": 44738,
+  "active_case": "natural_7"
+}

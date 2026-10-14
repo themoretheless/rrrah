@@ -1,0 +1,52 @@
+{
+  "status": "backend_vendor_selection_controls_passed",
+  "build_exit_code": 0,
+  "negative_parse_controls": 3,
+  "nvidia_required_control": {
+    "expected_exit_code": 2,
+    "hardware_fallback": false
+  },
+  "explicit_metal_control": {
+    "exit_code": 0,
+    "adapter": "Apple M4 Max",
+    "samples": 8,
+    "raw_dimensions": [
+      [
+        2048,
+        1536
+      ],
+      [
+        4096,
+        3072
+      ],
+      [
+        6240,
+        4160
+      ],
+      [
+        8192,
+        6144
+      ]
+    ],
+    "legacy_fallback_variable_deliberately_invalid": true,
+    "explicit_rrrah_selection_has_priority": true
+  },
+  "legacy_WGPU_BACKEND_fallback_retained": true,
+  "source_sha256": {
+    "example": "3c649cf3c31052b9de859635bb0d7b20c5a684d4449494c856ebcebab2571b0d",
+    "binary": "aa9b8124ac5fccbfb1b389bbf69822d95c15928c9d95afe8e9bfd05aaf90031e"
+  },
+  "log_sha256": {
+    "metal-positive.log": "daa8aa4aa3e702a34f6f0a008004a1d6e457a59c5384b4bbb10e082b5fdf436f",
+    "invalid-vendor.log": "9a40db7a0f881552d2a6bee019b04f89f7f455994eb73fd41ed77d075a938be5",
+    "nvidia-required.log": "0569be496fa85249e9907d0ab9b656c656fc7e3d840b416680404604ce494913",
+    "legacy-invalid-backend.log": "8284112becf7b03ff8623ca50cf873f735d85ea2e3e45ec13048e9a60049deb3",
+    "invalid-backend.log": "8284112becf7b03ff8623ca50cf873f735d85ea2e3e45ec13048e9a60049deb3",
+    "build.log": "e4261a4f2df25c97f7b1c72bd919c23e9f42e37ed36dccbdf0d2047085972070"
+  },
+  "limitations": [
+    "single-repetition run validates execution/selection only, not performance ranking",
+    "not NVIDIA/CUDA hardware success",
+    "library/shader implementation unchanged; active GPU suite source hashes unaffected"
+  ]
+}

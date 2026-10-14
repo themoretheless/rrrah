@@ -1,0 +1,61 @@
+{
+  "status": "passed",
+  "total_passed": 26,
+  "failed": 0,
+  "ignored_executions_in_accepted_runs": 0,
+  "rapid_navigation": {
+    "gallery_entries": 100000,
+    "iterations": 10000,
+    "pending_commands_max": 1,
+    "selected_not_prefetched": true
+  },
+  "foreground_controls_passed": 11,
+  "camera_controls_passed": 6,
+  "camera_fixtures": {
+    "tests/IMG_9043.CR3": "d06cbb10e84882cf130430bdc88ed2652c2622b96dea8d6a854c09e3bee37e59",
+    "tests/IMG_9074.CR3": "9c0d47cc2dd550eb6dc26c4ba2b2874b67f5c89e79dff5c472abf0ac6b2f6178",
+    "tests/fixtures/data/metal-recovery/F828.srf": "07739f94bcab0c7e198d418ac65172d0dce04bb84a7683ecffd0bfe4b32f6d79"
+  },
+  "source_sha256": {
+    "crates/rrrah-app/src/gallery.rs": "5804f8e2fc60ce244346d5161009556f7c29dfdd45fa55d13b74fd37b48fa932",
+    "crates/rrrah-app/src/decode_gate.rs": "15bed01f5d7f6b04ba732c198b152b6da7f359f6bac08855ae74cc2c16d2fd23",
+    "Cargo.lock": "fe92c1c439760c437ee6b60a5c62c4fc35b56dd941667fc12a9f935f9dfe3be1"
+  },
+  "binary_sha256": "63dd92884dc6a1bb8cb8e3ddd872a887b3c7855e047158e82fcdd525f0ea5be4",
+  "log_sha256": {
+    "rapid-jumps.log": "3cd1853baded11037e052fccdbe961424e27605822413f47a2ed1ca463473106",
+    "camera-limits-4.log": "d1e3186864c761d9358f5729fa646cae5eeffa2cf54d2e968334be4327b6bdf2",
+    "control-5.log": "0b852c5a98ff58f9ba4cb9a8faa0b0a5fd818f460af3b53316fe7fe6ba286d50",
+    "control-4.log": "92aa083fa500ff2112ca729064ec9459de174525fba345f02871c6c4645f7620",
+    "control-6.log": "241be698a4fca49576a1b481a48c899048bbc8d294d0795a258c5d39db682ef9",
+    "control-7.log": "79edef5947d500248106519f06d3806241c8cded81c803c45bd0404c24208400",
+    "camera-limits-2.log": "8778dff55b77477268a5297111204beafcb4465aa1833cd8c45923bad080f9b2",
+    "control-3.log": "1dd0409a0fbe54d6f75e914f92abf05e8ba6a69047ec4c3e99f8bb456f41e25e",
+    "control-2.log": "553014fa9620a6705fa142701ae7845c739e50e5c405873691ff3609732b8f7f",
+    "camera-limits-3.log": "cf336efcadd9d95236010bfb811be4f5475e3d47f1d4732c9f15b639a492d34d",
+    "camera-limits-1.log": "9453bddbf860b627bb8e056fcfa9862ce2c3564188edbcbfce527382bcedbf28",
+    "control-0.log": "9e0eec78414359ca828b779b4b4d95c703057c496f6afb73bc4932fbcf656671",
+    "control-1.log": "03ff9b5dc2227dabd62b4140fb1b12364df062ee719357a1448504600f9ee0b4",
+    "camera-limits-0.log": "ed9a61ef40d2a1880dcaa0ddd194408dd41c124644f43037c5227a99ba5b401f",
+    "srf-count.log": "ed331de3511697bd78073a157c6c1056ca419c925e4cafafd19f4a14ad21445a"
+  },
+  "excluded_attempt": {
+    "log": "limits-0.log",
+    "reason": "initial invocation omitted --ignored; zero passed, one ignored; explicitly rerun and passed"
+  },
+  "coverage": [
+    "configured previous/next counts and disabled side",
+    "forward/backward ordering and edges",
+    "bounded latest-only queue under rapid navigation",
+    "foreground priority and speculative cancellation",
+    "byte/count caps preserve highest-priority cached neighbour",
+    "missing/failed neighbour does not consume slot",
+    "duplicate content/path does not consume distinct slot",
+    "shared memory pressure refuses then recovers"
+  ],
+  "limitations": [
+    "separate CPU scheduler/native RAW tests, not GPU full-frame collection or physical HDR",
+    "not full100-format fidelity qualification",
+    "hour Metal and delayed-swap runs pending"
+  ]
+}

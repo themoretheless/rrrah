@@ -1,0 +1,78 @@
+{
+  "status": "heif_decoded_pixel_aspect_cpu_ram_swap_metal_validated",
+  "baseline_regression": "native decoded API2:1 became None in common raster",
+  "focused_passed": 8,
+  "full_library": {
+    "passed": 1036,
+    "failed": 0,
+    "ignored": 73
+  },
+  "production_library_check_exit_code": 0,
+  "native_library_version": "1.23.6",
+  "fixture_cases": [
+    {
+      "fixture": "heif-physical-alpha.heic",
+      "source": "alpha.heic",
+      "source_sha256": "f7a47e9f94eda34d30175d0cbc9af3bdc34baee54b708add52ca6a5bcb979ec4",
+      "sha256": "47dbc6f47f6d52a79ac48abc50c7d6511c0703ce46a277c097d334e283e5d09b",
+      "requested_spacing": [
+        2,
+        1
+      ],
+      "coded_media_unchanged": true,
+      "pixel_oracle": "alpha.heic.rgba"
+    },
+    {
+      "fixture": "heif-physical-rotate90.heic",
+      "source": "rotate90.heic",
+      "source_sha256": "4ff8223fe0a6db4756b1c3a920d447abdde27d261597649abf3b6291cfda27e7",
+      "sha256": "344ee76cab184873f07d91eb42f9dfeaa54825376b22fc31a4c1e34c09dbd00f",
+      "requested_spacing": [
+        2,
+        1
+      ],
+      "coded_media_unchanged": true,
+      "pixel_oracle": "rotate90.heic.rgba"
+    },
+    {
+      "fixture": "heif-physical-mirror.heif",
+      "source": "mirror.heif",
+      "source_sha256": "696ea5ec2657da236219c59e1a3701172c977925bb1af92194f740dfac4493f8",
+      "sha256": "d7fe7412b06a069ec94fa91095216a88ab6ff25976840fb0d65fcb4fa87d1332",
+      "requested_spacing": [
+        2,
+        1
+      ],
+      "coded_media_unchanged": true,
+      "pixel_oracle": "mirror.heif.rgba"
+    }
+  ],
+  "compressed_media_unchanged": true,
+  "decoded_samples_dimensions_color_unchanged": true,
+  "already_applied_rotation_mirror_not_repeated": true,
+  "display_preparation_retains_aspect": true,
+  "all_scoped_memory_released": true,
+  "source_sha256": {
+    "crates/rrrah-decode/src/heif.rs": "d2b29a3a18d4a7488d873bdafe328ce0e8c84a8c4dc1878105ed1eb5d57a91fe",
+    "scripts/generate-heif-physical-fixtures.py": "296e4f97d3f6d61c70582592ccd1c2ec5af599b9dbdbb33a45aef50ed0491f5b",
+    "Cargo.lock": "fe92c1c439760c437ee6b60a5c62c4fc35b56dd941667fc12a9f935f9dfe3be1"
+  },
+  "log_sha256": {
+    "focused-final.log": "75b46fe106b6eb634cfeb209add36c675742273ec748ec3744b347fe163157ec",
+    "focused-after.log": "f5bae4d33cf9b75f398a70c932a6b7169645dda46fcbb8530e6fc4ce4723f2f8",
+    "production-check.log": "403778dcbb6d4a328eb17b4af37d952556d05a624056458af69c44706cd7eaaf",
+    "before.log": "196d769f77c8eaa9dd01cd9ec62dee4e413e0e6075973592a73153dd13ec1597",
+    "full-decode.log": "4bbec652d2bdb4783bb77e2dc10ce8f7c85203acb8afb00d886a63c5cf797947"
+  },
+  "limitations": [
+    "metadata extraction follows decoded-image backend API",
+    "broad HEIF derived items and older backend versions not independently qualified",
+    "73manual/corpus decoder tests not counted as passed",
+    "new HEIF live-window coupling not exercised"
+  ],
+  "specification_references": {
+    "avif_square_pixel_constraint": "https://aomediacodec.github.io/av1-avif/",
+    "heif_descriptive_transform_properties": "https://nokiatech.github.io/heif/technical.html"
+  },
+  "metal_evidence": "metal/result.json"
+}

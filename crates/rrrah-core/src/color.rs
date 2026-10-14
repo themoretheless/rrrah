@@ -431,12 +431,67 @@ pub fn bradford_adaptation_f64(source_white: [f64; 3], destination_white: [f64; 
     ))
 }
 
-fn apply_3x3_f64(matrix: [[f64; 3]; 3], value: [f64; 3]) -> [f64; 3] {
+/// Apply a 3x3 matrix to an RGB/XYZ vector in 64-bit precision.
+pub fn apply_3x3_f64(matrix: [[f64; 3]; 3], value: [f64; 3]) -> [f64; 3] {
     [
         matrix[0][0] * value[0] + matrix[0][1] * value[1] + matrix[0][2] * value[2],
         matrix[1][0] * value[0] + matrix[1][1] * value[1] + matrix[1][2] * value[2],
         matrix[2][0] * value[0] + matrix[2][1] * value[1] + matrix[2][2] * value[2],
     ]
+}
+
+/// 64-bit scene-linear exposure in photographic stops.
+pub fn apply_exposure_f64(rgb: [f64; 3], stops: f64) -> [f64; 3] {
+    if !stops.is_finite() {
+        return rgb;
+    }
+    let gain = 2.0_f64.powf(stops);
+    rgb.map(|channel| channel * gain)
+}
+
+/// 64-bit counterpart of [`reconstruct_clipped_camera_highlight`].
+pub fn reconstruct_clipped_camera_highlight_f64(rgb: [f64; 3], sensor_clipped: bool) -> [f64; 3] {
+    let minimum = rgb.into_iter().fold(f64::INFINITY, f64::min);
+    if sensor_clipped && minimum >= 1.0 {
+        [minimum; 3]
+    } else {
+        rgb
+    }
+}
+
+/// 64-bit ACES fitted tone map for preview.
+pub fn aces_fitted_f64(value: f64) -> f64 {
+    if !value.is_finite() {
+        return 0.0;
+    }
+    let x = value.max(0.0);
+    (x * (2.51 * x + 0.03) / (x * (2.43 * x + 0.59) + 0.14)).clamp(0.0, 1.0)
+}
+
+/// 64-bit hue-preserving ACES tone map for a linear RGB triplet.
+pub fn aces_tone_map_rgb_f64(rgb: [f64; 3]) -> [f64; 3] {
+    if rgb.iter().any(|value| !value.is_finite()) {
+        return [0.0; 3];
+    }
+    let mut color = rgb;
+    let minimum = color.iter().copied().fold(f64::INFINITY, f64::min);
+    if minimum < 0.0 {
+        let luma = color[0] * f64::from(WB_LUMINANCE_WEIGHTS[0])
+            + color[1] * f64::from(WB_LUMINANCE_WEIGHTS[1])
+            + color[2] * f64::from(WB_LUMINANCE_WEIGHTS[2]);
+        if luma > 0.0 {
+            let desaturate = (-minimum / (luma - minimum)).clamp(0.0, 1.0);
+            color = color.map(|channel| channel + desaturate * (luma - channel));
+        } else {
+            color = color.map(|channel| channel.max(0.0));
+        }
+    }
+    let norm = color.iter().copied().fold(0.0_f64, f64::max);
+    if norm <= 0.0 {
+        return [0.0; 3];
+    }
+    let scale = aces_fitted_f64(norm) / norm;
+    color.map(|channel| channel * scale)
 }
 
 /// Converts xy chromaticity to an XYZ white point with Y = 1.

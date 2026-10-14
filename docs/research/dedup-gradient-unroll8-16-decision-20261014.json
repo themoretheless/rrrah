@@ -1,0 +1,7 @@
+{
+  "status": "not_adopted",
+  "audit": "docs/research/dedup-gradient-unroll8-16-cpu-audit-20261014.json",
+  "audit_sha256": "2dce89dcfb04dae31ede18c05df4b7de34f6b8d843aac81a22122c3ba85f1ead",
+  "reason": "Both wider loop variants preserve every tested distance bit but give no CPU benefit on the genuine large natural bank: median8ratio1.02587and16ratio1.07388versus current4. Retain current ordered unroll4. Function-pointer kernel scope and one bank are not universal performance proof.",
+  "production_kernel_changed": false
+}

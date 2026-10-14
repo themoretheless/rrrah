@@ -1,0 +1,38 @@
+{
+  "status": "passed",
+  "adapter": "Metal Apple M4 Max",
+  "focused_passed": 1,
+  "fixture_cases": 3,
+  "suite": {
+    "passed": 24,
+    "failed": 0,
+    "ignored": 3
+  },
+  "checks": [
+    "prepared float bits exact after disk restore",
+    "independent original fixture with manually assigned aspect as geometry reference",
+    "square pixel geometry negative control",
+    "SDR and HDR whole 64x64 frames exact",
+    "source deleted before restore",
+    "managed memory pressure refusal then retry",
+    "cancelled restore then retry",
+    "one disk write and read per case",
+    "source root and queue credits zero after teardown"
+  ],
+  "limitations": [
+    "small authored HEIF fixtures",
+    "prepared raster cache transport, not live viewer source validation",
+    "no physical display calibration or NVIDIA evidence",
+    "three manual/corpus tests ignored"
+  ],
+  "source_sha256": {
+    "crates/rrrah-app/tests/hdr_raster_swap.rs": "480f8679105fcff7fb9be0305bc34967219183f46ddff531d9b8a9b789cb1216",
+    "crates/rrrah-decode/src/heif.rs": "d2b29a3a18d4a7488d873bdafe328ce0e8c84a8c4dc1878105ed1eb5d57a91fe",
+    "Cargo.lock": "fe92c1c439760c437ee6b60a5c62c4fc35b56dd941667fc12a9f935f9dfe3be1"
+  },
+  "logs_sha256": {
+    "suite.log": "a9a5c8718d681c9e1fc97e0f7c0ddde75dad287338cd0103ba9d0d03b8e808ce",
+    "focused.log": "2deeed6934f3898ebe9a48f95cc7c8c32816e35e8568f571c0b5405fc66ec14d",
+    "build.log": "5243a3e86a255ee3d6cdeafabdd83ac554a092787a7a80c503281658e144926e"
+  }
+}

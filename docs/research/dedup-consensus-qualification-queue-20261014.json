@@ -1,6 +1,7 @@
 {
-  "status": "waiting_for_existing_first_variant",
+  "status": "stopped_on_failure",
   "producer_pid": 66017,
   "completed": [],
-  "scope": "Preserve each version binaries before shared Cargo target reuse; stop on any failed producer/audit. No native-feature inference qualification."
+  "scope": "Preserve each version binaries before shared Cargo target reuse; stop on any failed producer/audit. No native-feature inference qualification.",
+  "error": "AssertionError({'status': 'test_or_compile_failure', 'producer_pid': 31635, 'source': '/private/tmp/rrrah-consensus-collection-source-20261014', 'source_manifest': '/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-consensus-collection-source-20261014.json', 'source_manifest_sha256': '30c3822c7bc3ca50df9fa5e97175eaaf835001cb3bde20ebb724a12a963ee9d4', 'producer_sha256': 'c42a3a8373296e552a0674fc375daf2e1ee6d7865d524a8854ff031ecd92029b', 'command': ['cargo', '+stable', 'test', '-p', 'rrrah-dedup', '--features', 'decode', '--lib', '--test', 'search_portfolio', '--test', 'portfolio_collection', '--offline', '--locked', '--no-fail-fast', '--jobs', '2', '--target-dir', '/private/tmp/rrrah-consensus-collection-target-20261014'], 'log': '/private/tmp/rrrah-consensus-collection-focused-20261014.log', 'scope': 'Frozen consensus collection/shared pair-preflight source, library plus pair and collection integration targets. Rootselected four-crate/vendor/fixtures captured, including parallelAPNG/ICOdecoder changes, but not their complete own-suite/app qualification. Fake proposal providers in unit/integration fixtures are not actual learned inference.', 'child_pid': 31885, 'returncode': 101, 'log_sha256': '26d6d336a70ce4de3c238ed1c8be5613be904aa549b2cdaf9f96fba9500b3aaf', 'source_unchanged': True})"
 }

@@ -1,0 +1,26 @@
+{
+  "status": "retained_terminal_test_binaries",
+  "report": "docs/research/dedup-consensus-collection-focused-20261014.json",
+  "report_sha256": "4bda64bb4aabcdb89a2cec34fc40e30242b5143c8f7f074c28089b886da50b07",
+  "rows": [
+    {
+      "target": "unittests src/lib.rs",
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/rrrah_dedup-76646137647c9ff2",
+      "retained": "/private/tmp/rrrah-collection_first-terminal-binaries-20261014/rrrah_dedup-76646137647c9ff2",
+      "sha256": "8eaa5a0ab634e783d805763ffa57e233ef3b2a736c73ba7e54ccb636ae0f5600"
+    },
+    {
+      "target": "tests/portfolio_collection.rs",
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/portfolio_collection-e9eadcc2efbbde4c",
+      "retained": "/private/tmp/rrrah-collection_first-terminal-binaries-20261014/portfolio_collection-e9eadcc2efbbde4c",
+      "sha256": "051fec18e70e54bfb96871ee527f0052eb06ae8d6bd07089802c0479f4bab5c9"
+    },
+    {
+      "target": "tests/search_portfolio.rs",
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/search_portfolio-dc465169dd9968cc",
+      "retained": "/private/tmp/rrrah-collection_first-terminal-binaries-20261014/search_portfolio-dc465169dd9968cc",
+      "sha256": "97f97fd478b6cf491053f1969b44da75d8d2791d6a66aeab002fafabbb964a49"
+    }
+  ],
+  "scope": "Preserve binaries before any shared target reuse. Original test failures remain failures until exact permissioned checks are independently audited."
+}

@@ -22,14 +22,14 @@ const MARGIN: usize = 6;
 
 #[derive(Default)]
 struct AhdScratch {
-    mos: Vec<f32>,
+    mos: Vec<f64>,
     col: Vec<u8>,
-    gh: Vec<f32>,
-    gv: Vec<f32>,
-    rh: Vec<[f32; 3]>,
-    rv: Vec<[f32; 3]>,
-    lh: Vec<[f32; 3]>,
-    lv: Vec<[f32; 3]>,
+    gh: Vec<f64>,
+    gv: Vec<f64>,
+    rh: Vec<[f64; 3]>,
+    rv: Vec<[f64; 3]>,
+    lh: Vec<[f64; 3]>,
+    lv: Vec<[f64; 3]>,
     hh: Vec<u8>,
     hv: Vec<u8>,
 }
@@ -153,12 +153,12 @@ pub(crate) fn ahd(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, D
 
 /// Linear camera RGB (treated as sRGB/D65 primaries for the homogeneity metric only) → CIELab.
 #[inline]
-pub(super) fn lab(p: [f32; 3]) -> [f32; 3] {
+pub(super) fn lab(p: [f64; 3]) -> [f64; 3] {
     let x = (0.4124 * p[0] + 0.3576 * p[1] + 0.1805 * p[2]) / 0.95047;
     let y = 0.2126 * p[0] + 0.7152 * p[1] + 0.0722 * p[2];
     let z = (0.0193 * p[0] + 0.1192 * p[1] + 0.9505 * p[2]) / 1.088_83;
     #[inline]
-    fn f(t: f32) -> f32 {
+    fn f(t: f64) -> f64 {
         if t > 0.008856 {
             t.cbrt()
         } else {
@@ -170,7 +170,7 @@ pub(super) fn lab(p: [f32; 3]) -> [f32; 3] {
 }
 
 #[cfg(test)]
-pub(super) fn tile(m: &Mosaic, x0: usize, y0: usize, tw: usize, th: usize) -> Vec<[f32; 3]> {
+pub(super) fn tile(m: &Mosaic, x0: usize, y0: usize, tw: usize, th: usize) -> Vec<[f64; 3]> {
     let mut scratch = AhdScratch::default();
     let mut out = Vec::with_capacity(tw * th);
     tile_into(m, x0, y0, tw, th, &mut scratch, &mut out);
@@ -184,7 +184,7 @@ fn tile_into(
     tw: usize,
     th: usize,
     scratch: &mut AhdScratch,
-    out: &mut Vec<[f32; 3]>,
+    out: &mut Vec<[f64; 3]>,
 ) {
     let (bw, bh) = (tw + 2 * MARGIN, th + 2 * MARGIN);
     let n = bw * bh;
@@ -232,7 +232,7 @@ fn tile_into(
         }
     }
     // 2. full candidates
-    let complete = |g: &[f32], mos: &[f32], col: &[u8], rgb: &mut [[f32; 3]]| {
+    let complete = |g: &[f64], mos: &[f64], col: &[u8], rgb: &mut [[f64; 3]]| {
         for y in 0..bh as isize {
             for x in 0..bw as isize {
                 let i = cl(x, y);
@@ -263,8 +263,8 @@ fn tile_into(
         scratch.lh[i] = lab(scratch.rh[i]);
         scratch.lv[i] = lab(scratch.rv[i]);
     }
-    let dl = |a: &[f32; 3], b: &[f32; 3]| (a[0] - b[0]).abs();
-    let dc = |a: &[f32; 3], b: &[f32; 3]| (a[1] - b[1]).powi(2) + (a[2] - b[2]).powi(2);
+    let dl = |a: &[f64; 3], b: &[f64; 3]| (a[0] - b[0]).abs();
+    let dc = |a: &[f64; 3], b: &[f64; 3]| (a[1] - b[1]).powi(2) + (a[2] - b[2]).powi(2);
     for y in 1..bh as isize - 1 {
         for x in 1..bw as isize - 1 {
             let i = cl(x, y);

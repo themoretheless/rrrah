@@ -125,6 +125,12 @@ pub(crate) fn decode(bytes: &[u8], request: &DecodeRequest) -> Result<DecodedRas
     request.check_cancelled()?;
     let (width, height) = (image.width(), image.height());
     check_size(width, height, if high { 8 } else { 4 })?;
+    // Read the decoded-image property after libheif has applied its transforms.
+    let (spacing_h, spacing_v) = image.pixel_aspect_ratio();
+    if spacing_h == 0 || spacing_v == 0 {
+        return Err(invalid("invalid decoded pixel aspect ratio"));
+    }
+    let pixel_aspect = (f64::from(spacing_h) / f64::from(spacing_v)) as f32;
     let color = if let Some(profile) = image.color_profile_raw().or_else(|| handle.color_profile_raw()) {
         if profile.data.len() > 4 * 1024 * 1024 {
             return Err(invalid("ICC profile exceeds limit"));
@@ -209,12 +215,41 @@ pub(crate) fn decode(bytes: &[u8], request: &DecodeRequest) -> Result<DecodedRas
             Arc::new(out).into()
         })
     };
-    Ok(DecodedRaster::new(width, height, pixels, color)?)
+    Ok(DecodedRaster::new(width, height, pixels, color)?.with_pixel_aspect(Some(pixel_aspect))?)
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn decoded_heif_pixel_aspect_survives_without_resampling_or_double_transforms() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/raster");
+        for name in ["alpha.heic", "rotate90.heic", "mirror.heif"] {
+            let request = DecodeRequest::new(root.join(name));
+            let expected = decode(&std::fs::read(root.join(name)).unwrap(), &request).unwrap();
+            let budget = rrrah_core::MemoryBudget::new(1024 * 1024);
+            let mut request = DecodeRequest::new(root.join(format!("heif-physical-{name}")));
+            request.memory_budget = Some(budget.clone());
+            let actual = decode(&std::fs::read(&request.path).unwrap(), &request).unwrap();
+            assert_eq!(actual.pixel_aspect(), Some(2.0), "{name}");
+            assert_eq!(
+                (actual.width(), actual.height()),
+                (expected.width(), expected.height())
+            );
+            assert_eq!(actual.color_space(), expected.color_space());
+            match (actual.pixels(), expected.pixels()) {
+                (RasterPixels::Rgba8(a), RasterPixels::Rgba8(b)) => assert_eq!(&**a, &**b),
+                (RasterPixels::Rgba16(a), RasterPixels::Rgba16(b)) => assert_eq!(&**a, &**b),
+                _ => panic!("HEIF precision changed"),
+            }
+            let prepared = crate::prepare_raster_for_display_with_budget(&actual, Some(&budget)).unwrap();
+            assert_eq!(prepared.pixel_aspect(), Some(2.0));
+            drop(prepared);
+            drop(actual);
+            assert_eq!(budget.used(), 0);
+        }
+    }
+
     #[test]
     fn camera_output_cap_and_native_working_admission_are_separate() {
         check_size(6000, 4000, 8).unwrap();

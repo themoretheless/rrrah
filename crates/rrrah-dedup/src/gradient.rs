@@ -2,6 +2,14 @@
 //! primitive, not a SIFT detector or independently qualified copy decision.
 use crate::{linear::LinearRgbaView, local::LocalError};
 
+// Wider independent lanes are measured on Apple Silicon. Keep other targets
+// on the established four-lane path until separately qualified.
+const FIRST_PASS_LANES: usize = if cfg!(all(target_arch = "aarch64", target_os = "macos")) {
+    16
+} else {
+    4
+};
+
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct GradientDescriptor(pub [f64; 128]);
 
@@ -577,7 +585,8 @@ fn extract_gradient_pyramid_selected_managed(
 
 /// Mutual unique nearest descriptors with explicit squared-distance evidence.
 /// Equal-distance ties reject. Distances use independent ordered accumulators
-/// in blocks of at most four; every pair retains its cancellation checkpoint
+/// in first-pass blocks of at most sixteen on Apple Silicon and four on other
+/// targets; every pair retains its cancellation checkpoint
 /// before the block arithmetic. Returned positions need independent geometry and
 /// pixel confirmation. All allocations are fallible; no managed reservation.
 ///
@@ -812,6 +821,204 @@ fn distances_four(a: &GradientDescriptor, b: &[GradientFeature]) -> [f64; 4] {
     [s0, s1, s2, s3]
 }
 
+// Sixteen independent lanes preserve every per-pair addition order.
+// Partial blocks reuse the exact four-lane/scalar paths without padding work.
+#[cfg(any(test, all(target_arch = "aarch64", target_os = "macos")))]
+#[allow(clippy::too_many_lines)] // Explicit independent lanes preserve ordered f64 sums.
+fn distances_sixteen(a: &GradientDescriptor, b: &[GradientFeature]) -> [f64; 16] {
+    if b.len() < 16 {
+        let mut out = [0.; 16];
+        for (block, chunk) in b.chunks(4).enumerate() {
+            let v = distances_four(a, chunk);
+            out[block * 4..block * 4 + chunk.len()].copy_from_slice(&v[..chunk.len()]);
+        }
+        return out;
+    }
+    let b0 = &b[0].descriptor.0;
+    let b1 = &b[1].descriptor.0;
+    let b2 = &b[2].descriptor.0;
+    let b3 = &b[3].descriptor.0;
+    let b4 = &b[4].descriptor.0;
+    let b5 = &b[5].descriptor.0;
+    let b6 = &b[6].descriptor.0;
+    let b7 = &b[7].descriptor.0;
+    let b8 = &b[8].descriptor.0;
+    let b9 = &b[9].descriptor.0;
+    let b10 = &b[10].descriptor.0;
+    let b11 = &b[11].descriptor.0;
+    let b12 = &b[12].descriptor.0;
+    let b13 = &b[13].descriptor.0;
+    let b14 = &b[14].descriptor.0;
+    let b15 = &b[15].descriptor.0;
+    let (
+        mut s0,
+        mut s1,
+        mut s2,
+        mut s3,
+        mut s4,
+        mut s5,
+        mut s6,
+        mut s7,
+        mut s8,
+        mut s9,
+        mut s10,
+        mut s11,
+        mut s12,
+        mut s13,
+        mut s14,
+        mut s15,
+    ) = (0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.);
+    for base in (0..128).step_by(4) {
+        {
+            let k = base;
+            let x = a.0[k];
+            let d0 = x - b0[k];
+            s0 += d0 * d0;
+            let d1 = x - b1[k];
+            s1 += d1 * d1;
+            let d2 = x - b2[k];
+            s2 += d2 * d2;
+            let d3 = x - b3[k];
+            s3 += d3 * d3;
+            let d4 = x - b4[k];
+            s4 += d4 * d4;
+            let d5 = x - b5[k];
+            s5 += d5 * d5;
+            let d6 = x - b6[k];
+            s6 += d6 * d6;
+            let d7 = x - b7[k];
+            s7 += d7 * d7;
+            let d8 = x - b8[k];
+            s8 += d8 * d8;
+            let d9 = x - b9[k];
+            s9 += d9 * d9;
+            let d10 = x - b10[k];
+            s10 += d10 * d10;
+            let d11 = x - b11[k];
+            s11 += d11 * d11;
+            let d12 = x - b12[k];
+            s12 += d12 * d12;
+            let d13 = x - b13[k];
+            s13 += d13 * d13;
+            let d14 = x - b14[k];
+            s14 += d14 * d14;
+            let d15 = x - b15[k];
+            s15 += d15 * d15;
+        }
+        {
+            let k = base + 1;
+            let x = a.0[k];
+            let d0 = x - b0[k];
+            s0 += d0 * d0;
+            let d1 = x - b1[k];
+            s1 += d1 * d1;
+            let d2 = x - b2[k];
+            s2 += d2 * d2;
+            let d3 = x - b3[k];
+            s3 += d3 * d3;
+            let d4 = x - b4[k];
+            s4 += d4 * d4;
+            let d5 = x - b5[k];
+            s5 += d5 * d5;
+            let d6 = x - b6[k];
+            s6 += d6 * d6;
+            let d7 = x - b7[k];
+            s7 += d7 * d7;
+            let d8 = x - b8[k];
+            s8 += d8 * d8;
+            let d9 = x - b9[k];
+            s9 += d9 * d9;
+            let d10 = x - b10[k];
+            s10 += d10 * d10;
+            let d11 = x - b11[k];
+            s11 += d11 * d11;
+            let d12 = x - b12[k];
+            s12 += d12 * d12;
+            let d13 = x - b13[k];
+            s13 += d13 * d13;
+            let d14 = x - b14[k];
+            s14 += d14 * d14;
+            let d15 = x - b15[k];
+            s15 += d15 * d15;
+        }
+        {
+            let k = base + 2;
+            let x = a.0[k];
+            let d0 = x - b0[k];
+            s0 += d0 * d0;
+            let d1 = x - b1[k];
+            s1 += d1 * d1;
+            let d2 = x - b2[k];
+            s2 += d2 * d2;
+            let d3 = x - b3[k];
+            s3 += d3 * d3;
+            let d4 = x - b4[k];
+            s4 += d4 * d4;
+            let d5 = x - b5[k];
+            s5 += d5 * d5;
+            let d6 = x - b6[k];
+            s6 += d6 * d6;
+            let d7 = x - b7[k];
+            s7 += d7 * d7;
+            let d8 = x - b8[k];
+            s8 += d8 * d8;
+            let d9 = x - b9[k];
+            s9 += d9 * d9;
+            let d10 = x - b10[k];
+            s10 += d10 * d10;
+            let d11 = x - b11[k];
+            s11 += d11 * d11;
+            let d12 = x - b12[k];
+            s12 += d12 * d12;
+            let d13 = x - b13[k];
+            s13 += d13 * d13;
+            let d14 = x - b14[k];
+            s14 += d14 * d14;
+            let d15 = x - b15[k];
+            s15 += d15 * d15;
+        }
+        {
+            let k = base + 3;
+            let x = a.0[k];
+            let d0 = x - b0[k];
+            s0 += d0 * d0;
+            let d1 = x - b1[k];
+            s1 += d1 * d1;
+            let d2 = x - b2[k];
+            s2 += d2 * d2;
+            let d3 = x - b3[k];
+            s3 += d3 * d3;
+            let d4 = x - b4[k];
+            s4 += d4 * d4;
+            let d5 = x - b5[k];
+            s5 += d5 * d5;
+            let d6 = x - b6[k];
+            s6 += d6 * d6;
+            let d7 = x - b7[k];
+            s7 += d7 * d7;
+            let d8 = x - b8[k];
+            s8 += d8 * d8;
+            let d9 = x - b9[k];
+            s9 += d9 * d9;
+            let d10 = x - b10[k];
+            s10 += d10 * d10;
+            let d11 = x - b11[k];
+            s11 += d11 * d11;
+            let d12 = x - b12[k];
+            s12 += d12 * d12;
+            let d13 = x - b13[k];
+            s13 += d13 * d13;
+            let d14 = x - b14[k];
+            s14 += d14 * d14;
+            let d15 = x - b15[k];
+            s15 += d15 * d15;
+        }
+    }
+    [
+        s0, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15,
+    ]
+}
+
 fn match_gradients_selected(
     left: &[GradientFeature],
     right: &[GradientFeature],
@@ -968,19 +1175,22 @@ fn match_gradients_selected_with_scratch<
         }
     };
     for (i, a) in left.iter().enumerate() {
-        for (block, chunk) in right.chunks(4).enumerate() {
+        for (block, chunk) in right.chunks(FIRST_PASS_LANES).enumerate() {
             for _ in chunk {
                 if cancel() {
                     return Err(LocalError::Cancelled);
                 }
             }
+            #[cfg(all(target_arch = "aarch64", target_os = "macos"))]
+            let distances = distances_sixteen(&a.descriptor, chunk);
+            #[cfg(not(all(target_arch = "aarch64", target_os = "macos")))]
             let distances = distances_four(&a.descriptor, chunk);
             if let Some(cache) = distance_cache.as_mut() {
-                let start = i * right.len() + block * 4;
+                let start = i * right.len() + block * FIRST_PASS_LANES;
                 cache[start..start + chunk.len()].copy_from_slice(&distances[..chunk.len()]);
             }
             for (lane, _b) in chunk.iter().enumerate() {
-                let j = block * 4 + lane;
+                let j = block * FIRST_PASS_LANES + lane;
 
                 let distance = distances[lane];
                 if let Some(runners) = runners.as_mut() {

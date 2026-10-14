@@ -1,0 +1,13 @@
+{
+  "status": "heif_decoded_pixel_aspect_cpu_pipeline_validated",
+  "focused_passed": 8,
+  "native_library_version": "1.23.6",
+  "scope": "retain decoded-image pixel spacing after backend transforms; no sample resampling or manual second transform",
+  "fixture_producer": "scripts/generate-heif-physical-fixtures.py",
+  "limitations": [
+    "decoded backend metadata contract; broad derived-item/old-backend behavior not qualified",
+    "HEIF-specific change; AVIF remains normative square-pixel format",
+    "new HEIF cache/Metal coupling not yet run"
+  ],
+  "result": "result.json"
+}

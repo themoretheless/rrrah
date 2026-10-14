@@ -10,7 +10,7 @@ pub enum ThumbnailError {
     Develop,
 }
 // Bounded CPU RAW previews using the display color contract.
-use crate::{DecodedMosaic, Photometric, aces_tone_map_rgb, apply_3x3, camera_to_linear_srgb};
+use crate::{DecodedMosaic, Photometric, aces_tone_map_rgb_f64, apply_3x3_f64, camera_to_linear_srgb_precise};
 use std::sync::Mutex;
 use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
 
@@ -40,19 +40,19 @@ pub(crate) fn develop_with_cancel(
     let Some(cfa) = metadata.cfa.as_ref().and_then(|cfa| cfa.bayer_quad().ok()) else {
         return develop_xtrans_thumbnail(mosaic, edge, cancelled);
     };
-    let Ok(black) = metadata.black_level.bayer_quad() else {
+    let Ok(black) = metadata.black_level.bayer_quad_f64() else {
         return Vec::new();
     };
     let Ok(white) = metadata
         .white_level
-        .bayer_quad(metadata.cfa.as_ref().expect("validated CFA"))
+        .bayer_quad_f64(metadata.cfa.as_ref().expect("validated CFA"))
     else {
         return Vec::new();
     };
     if (0..4).any(|phase| white[phase] <= black[phase]) {
         return Vec::new();
     }
-    let Some(matrix) = camera_to_linear_srgb(metadata.xyz_to_camera) else {
+    let Ok(matrix) = camera_to_linear_srgb_precise(metadata.xyz_to_camera.map(|r| r.map(f64::from))) else {
         return Vec::new();
     };
     let (out_w, out_h) = dimensions(metadata.display_dimensions(), edge);
@@ -66,11 +66,12 @@ pub(crate) fn develop_with_cancel(
     let mut output = vec![0_u8; size];
     let crop = metadata.effective_crop();
     let first_green = usize::from(cfa[0] != 1);
+    let wb = metadata.white_balance.map(f64::from);
     let sensor_sample = |x: i64, y: i64| {
         let x = x.clamp(0, i64::from(metadata.width) - 1) as usize;
         let y = y.clamp(0, i64::from(metadata.height) - 1) as usize;
         let phase = (y % 2) * 2 + x % 2;
-        (f32::from(mosaic.pixels[y * metadata.width as usize + x]) - black[phase]).max(0.0)
+        (f64::from(mosaic.pixels[y * metadata.width as usize + x]) - black[phase]).max(0.0)
             / (white[phase] - black[phase])
     };
     let sample = |x: i64, y: i64| {
@@ -78,9 +79,9 @@ pub(crate) fn develop_with_cancel(
             + x.clamp(0, i64::from(metadata.width) - 1) % 2;
         let color = cfa[phase as usize] as usize;
         let gain = if color == 1 && phase as usize != first_green {
-            metadata.white_balance[3]
+            wb[3]
         } else {
-            metadata.white_balance[color]
+            wb[color]
         };
         sensor_sample(x, y) * gain
     };
@@ -201,32 +202,32 @@ fn render_thumbnail_row(
     crop: crate::Rect,
     out_w: u32,
     out_h: u32,
-    matrix: [[f32; 3]; 3],
-    sample: &impl Fn(i64, i64) -> f32,
-    sensor_sample: &impl Fn(i64, i64) -> f32,
+    matrix: [[f64; 3]; 3],
+    sample: &impl Fn(i64, i64) -> f64,
+    sensor_sample: &impl Fn(i64, i64) -> f64,
     y: u32,
     row_out: &mut [u8],
 ) {
     for x in 0..out_w {
         let uv = metadata
             .orientation
-            .map_display_uv([(x as f32 + 0.5) / out_w as f32, (y as f32 + 0.5) / out_h as f32]);
-        let sx = i64::from(crop.x) + (uv[0] * crop.width as f32).floor().min((crop.width - 1) as f32) as i64;
+            .map_display_uv_f64([(f64::from(x) + 0.5) / f64::from(out_w), (f64::from(y) + 0.5) / f64::from(out_h)]);
+        let sx = i64::from(crop.x) + (uv[0] * f64::from(crop.width)).floor().min(f64::from(crop.width - 1)) as i64;
         let sy =
-            i64::from(crop.y) + (uv[1] * crop.height as f32).floor().min((crop.height - 1) as f32) as i64;
+            i64::from(crop.y) + (uv[1] * f64::from(crop.height)).floor().min(f64::from(crop.height - 1)) as i64;
         let (axis_w, axis_h) = if metadata.orientation.swaps_dimensions() {
             (out_h, out_w)
         } else {
             (out_w, out_h)
         };
         let footprint = [
-            crop.width as f32 / axis_w as f32,
-            crop.height as f32 / axis_h as f32,
+            f64::from(crop.width) / f64::from(axis_w),
+            f64::from(crop.height) / f64::from(axis_h),
         ];
         let rgb = if footprint[0] >= 2.0 || footprint[1] >= 2.0 {
             let center = [
-                crop.x as f32 + uv[0] * crop.width as f32,
-                crop.y as f32 + uv[1] * crop.height as f32,
+                f64::from(crop.x) + uv[0] * f64::from(crop.width),
+                f64::from(crop.y) + uv[1] * f64::from(crop.height),
             ];
             area_camera_rgb(
                 cfa,
@@ -242,11 +243,11 @@ fn render_thumbnail_row(
         } else {
             developed_camera_rgb(cfa, sx, sy, sample, sensor_sample)
         };
-        let linear = aces_tone_map_rgb(apply_3x3(matrix, rgb));
+        let linear = aces_tone_map_rgb_f64(apply_3x3_f64(matrix, rgb));
         let x_usize = x as usize;
-        row_out[x_usize * 4] = srgb_byte(linear[0]);
-        row_out[x_usize * 4 + 1] = srgb_byte(linear[1]);
-        row_out[x_usize * 4 + 2] = srgb_byte(linear[2]);
+        row_out[x_usize * 4] = srgb_byte_f64(linear[0]);
+        row_out[x_usize * 4 + 1] = srgb_byte_f64(linear[1]);
+        row_out[x_usize * 4 + 2] = srgb_byte_f64(linear[2]);
         row_out[x_usize * 4 + 3] = 255;
     }
 }
@@ -267,7 +268,7 @@ pub(crate) fn dimensions((width, height): (u32, u32), edge: u32) -> (u32, u32) {
 }
 
 #[allow(clippy::cast_possible_truncation, clippy::cast_sign_loss)]
-fn srgb_byte(value: f32) -> u8 {
+fn srgb_byte_f64(value: f64) -> u8 {
     let encoded = if value <= 0.003_130_8 {
         12.92 * value
     } else {
@@ -276,18 +277,17 @@ fn srgb_byte(value: f32) -> u8 {
     (encoded.clamp(0.0, 1.0) * 255.0).round() as u8
 }
 
-#[allow(clippy::cast_possible_truncation)] // An average of finite f32 samples remains in their range.
-fn mean_four(values: [f32; 4]) -> f32 {
+fn mean_four(values: [f64; 4]) -> f64 {
     let sum = values[0] + values[1] + values[2] + values[3];
     if sum.is_finite() {
         sum * 0.25
     } else {
-        (values.into_iter().map(f64::from).sum::<f64>() * 0.25) as f32
+        values.into_iter().map(|v| v * 0.25).sum()
     }
 }
 
 #[allow(clippy::cast_sign_loss, clippy::cast_possible_truncation)]
-fn bilinear(cfa: [u32; 4], x: i64, y: i64, sample: impl Fn(i64, i64) -> f32) -> [f32; 3] {
+fn bilinear(cfa: [u32; 4], x: i64, y: i64, sample: impl Fn(i64, i64) -> f64) -> [f64; 3] {
     let center = sample(x, y);
     let north = sample(x, y - 1);
     let south = sample(x, y + 1);
@@ -325,12 +325,12 @@ mod numerical_tests {
     use super::*;
     #[test]
     fn bilinear_average_does_not_overflow_finite_hdr_samples() {
-        for value in [f32::MAX, -f32::MAX] {
+        for value in [f64::MAX, -f64::MAX] {
             for (x, y) in [(0, 0), (1, 0), (0, 1), (1, 1)] {
                 assert_eq!(bilinear([0, 1, 1, 2], x, y, |_, _| value), [value; 3]);
             }
         }
-        assert_eq!(mean_four([f32::MAX, f32::MAX, -f32::MAX, -f32::MAX]), 0.0);
+        assert_eq!(mean_four([f64::MAX, f64::MAX, -f64::MAX, -f64::MAX]), 0.0);
     }
 }
 
@@ -338,16 +338,16 @@ fn developed_camera_rgb(
     cfa: [u32; 4],
     x: i64,
     y: i64,
-    sample: impl Fn(i64, i64) -> f32,
-    sensor: impl Fn(i64, i64) -> f32,
-) -> [f32; 3] {
+    sample: impl Fn(i64, i64) -> f64,
+    sensor: impl Fn(i64, i64) -> f64,
+) -> [f64; 3] {
     let rgb = bilinear(cfa, x, y, sample);
     let quad_x = x - x % 2;
     let quad_y = y - y % 2;
     let clipped = [(0, 0), (1, 0), (0, 1), (1, 1)]
         .into_iter()
         .any(|(dx, dy)| sensor(quad_x + dx, quad_y + dy) >= 1.0);
-    crate::reconstruct_clipped_camera_highlight(rgb, clipped)
+    crate::reconstruct_clipped_camera_highlight_f64(rgb, clipped)
 }
 
 #[allow(
@@ -357,19 +357,19 @@ fn developed_camera_rgb(
 )]
 fn area_camera_rgb(
     cfa: [u32; 4],
-    bounds: [f32; 4],
-    sample: impl Fn(i64, i64) -> f32,
-    sensor: impl Fn(i64, i64) -> f32,
-) -> [f32; 3] {
+    bounds: [f64; 4],
+    sample: impl Fn(i64, i64) -> f64,
+    sensor: impl Fn(i64, i64) -> f64,
+) -> [f64; 3] {
     let start_x = (bounds[0].floor().max(0.0) as i64) / 2 * 2;
     let start_y = (bounds[1].floor().max(0.0) as i64) / 2 * 2;
     let mut sum = [0.0; 3];
     let mut total = 0.0;
     for y in (start_y..bounds[3].ceil() as i64).step_by(2) {
         for x in (start_x..bounds[2].ceil() as i64).step_by(2) {
-            let weight = ((x + 2) as f32).min(bounds[2]) - (x as f32).max(bounds[0]);
+            let weight = ((x + 2) as f64).min(bounds[2]) - (x as f64).max(bounds[0]);
             let weight =
-                weight.max(0.0) * (((y + 2) as f32).min(bounds[3]) - (y as f32).max(bounds[1])).max(0.0);
+                weight.max(0.0) * (((y + 2) as f64).min(bounds[3]) - (y as f64).max(bounds[1])).max(0.0);
             let mut rgb = [0.0; 3];
             let mut clipped = false;
             for (phase, (dx, dy)) in [(0, 0), (1, 0), (0, 1), (1, 1)].into_iter().enumerate() {
@@ -377,14 +377,14 @@ fn area_camera_rgb(
                 rgb[channel] += sample(x + dx, y + dy) * if channel == 1 { 0.5 } else { 1.0 };
                 clipped |= sensor(x + dx, y + dy) >= 1.0;
             }
-            let rgb = crate::reconstruct_clipped_camera_highlight(rgb, clipped);
+            let rgb = crate::reconstruct_clipped_camera_highlight_f64(rgb, clipped);
             for channel in 0..3 {
                 sum[channel] += rgb[channel] * weight;
             }
             total += weight;
         }
     }
-    sum.map(|value| value / total.max(f32::MIN_POSITIVE))
+    sum.map(|value| value / total.max(f64::MIN_POSITIVE))
 }
 
 /// Small X-Trans previews average linear camera samples by CFA color. They do
@@ -402,7 +402,7 @@ fn develop_xtrans_thumbnail(mosaic: &DecodedMosaic, edge: u32, cancelled: &dyn F
     if cfa.width != 6 || cfa.height != 6 || cfa.cells.iter().any(|c| *c as u8 > 2) {
         return Vec::new();
     }
-    let Some(matrix) = camera_to_linear_srgb(md.xyz_to_camera) else {
+    let Ok(matrix) = camera_to_linear_srgb_precise(md.xyz_to_camera.map(|r| r.map(f64::from))) else {
         return Vec::new();
     };
     let (w, h) = dimensions(md.display_dimensions(), edge);
@@ -549,7 +549,7 @@ fn render_xtrans_row(
     crop: crate::Rect,
     w: u32,
     h: u32,
-    matrix: [[f32; 3]; 3],
+    matrix: [[f64; 3]; 3],
     footprint: [f64; 2],
     y: u32,
     row_out: &mut [u8],
@@ -558,10 +558,10 @@ fn render_xtrans_row(
     for x in 0..w {
         let uv = md
             .orientation
-            .map_display_uv([(x as f32 + 0.5) / w as f32, (y as f32 + 0.5) / h as f32]);
+            .map_display_uv_f64([(f64::from(x) + 0.5) / f64::from(w), (f64::from(y) + 0.5) / f64::from(h)]);
         let center = [
-            f64::from(crop.x) + f64::from(uv[0]) * f64::from(crop.width),
-            f64::from(crop.y) + f64::from(uv[1]) * f64::from(crop.height),
+            f64::from(crop.x) + uv[0] * f64::from(crop.width),
+            f64::from(crop.y) + uv[1] * f64::from(crop.height),
         ];
         let bounds = [
             (center[0] - footprint[0] * 0.5).max(0.0),
@@ -576,21 +576,21 @@ fn render_xtrans_row(
                 let color = cfa.color_at(sy, sx).expect("validated CFA") as usize;
                 let weight = ((f64::from(sx) + 1.0).min(bounds[2]) - (f64::from(sx)).max(bounds[0])).max(0.0)
                     * ((f64::from(sy) + 1.0).min(bounds[3]) - (f64::from(sy)).max(bounds[1])).max(0.0);
-                let Some(black) = md.black_level.at(sy, sx, 0) else {
+                let Some(black) = md.black_level.at_f64(sy, sx, 0) else {
                     return false;
                 };
                 let white = match md.white_level.0.len() {
-                    1 => md.white_level.0[0],
-                    3 => md.white_level.0[color],
+                    1 => f64::from(md.white_level.0[0]),
+                    3 => f64::from(md.white_level.0[color]),
                     _ => return false,
                 };
                 if white <= black {
                     return false;
                 }
                 let sample = (f64::from(mosaic.pixels[sy as usize * md.width as usize + sx as usize])
-                    - f64::from(black))
+                    - black)
                 .max(0.0)
-                    / f64::from(white - black)
+                    / (white - black)
                     * f64::from(md.white_balance[color]);
                 sum[color] += sample * weight;
                 weights[color] += weight;
@@ -599,12 +599,12 @@ fn render_xtrans_row(
         if weights.iter().any(|v| *v <= 0.0) {
             return false;
         }
-        let rgb = std::array::from_fn(|c| (sum[c] / weights[c]) as f32);
-        let linear = aces_tone_map_rgb(apply_3x3(matrix, rgb));
+        let rgb = std::array::from_fn(|c| sum[c] / weights[c]);
+        let linear = aces_tone_map_rgb_f64(apply_3x3_f64(matrix, rgb));
         let x_usize = x as usize;
-        row_out[x_usize * 4] = srgb_byte(linear[0]);
-        row_out[x_usize * 4 + 1] = srgb_byte(linear[1]);
-        row_out[x_usize * 4 + 2] = srgb_byte(linear[2]);
+        row_out[x_usize * 4] = srgb_byte_f64(linear[0]);
+        row_out[x_usize * 4 + 1] = srgb_byte_f64(linear[1]);
+        row_out[x_usize * 4 + 2] = srgb_byte_f64(linear[2]);
         row_out[x_usize * 4 + 3] = 255;
     }
     true
@@ -773,10 +773,10 @@ fn render_rgbe_row(
     for x in 0..w {
         let uv = m
             .orientation
-            .map_display_uv([(x as f32 + 0.5) / w as f32, (y as f32 + 0.5) / h as f32]);
+            .map_display_uv_f64([(f64::from(x) + 0.5) / f64::from(w), (f64::from(y) + 0.5) / f64::from(h)]);
         let center = [
-            f64::from(crop.x) + f64::from(uv[0]) * f64::from(crop.width),
-            f64::from(crop.y) + f64::from(uv[1]) * f64::from(crop.height),
+            f64::from(crop.x) + uv[0] * f64::from(crop.width),
+            f64::from(crop.y) + uv[1] * f64::from(crop.height),
         ];
         let rgb = if footprint[0] >= 2. || footprint[1] >= 2. {
             let lower = [
@@ -800,10 +800,10 @@ fn render_rgbe_row(
                         let last_y = py + (m.height - 1 - py) / 2 * 2;
                         let xx = (sx + px).min(last_x);
                         let yy = (sy + py).min(last_y);
-                        let Some(normalized) = calibration.normalize_site(xx, yy, sample(xx, yy)) else {
+                        let Some(normalized) = calibration.normalize_site_f64(xx, yy, sample(xx, yy)) else {
                             return false;
                         };
-                        sum[channel as usize] += f64::from(normalized) * weight;
+                        sum[channel as usize] += normalized * weight;
                     }
                     total += weight;
                 }
@@ -821,15 +821,14 @@ fn render_rgbe_row(
         let Some(rgb) = rgb else {
             return false;
         };
-        let rgb = rgb.map(|v| v as f32);
         if rgb.iter().any(|v| !v.is_finite()) {
             return false;
         }
-        let aces = aces_tone_map_rgb(rgb);
+        let aces = aces_tone_map_rgb_f64(rgb);
         let x_usize = x as usize;
-        row_out[x_usize * 4] = srgb_byte(aces[0]);
-        row_out[x_usize * 4 + 1] = srgb_byte(aces[1]);
-        row_out[x_usize * 4 + 2] = srgb_byte(aces[2]);
+        row_out[x_usize * 4] = srgb_byte_f64(aces[0]);
+        row_out[x_usize * 4 + 1] = srgb_byte_f64(aces[1]);
+        row_out[x_usize * 4 + 2] = srgb_byte_f64(aces[2]);
         row_out[x_usize * 4 + 3] = 255;
     }
     true

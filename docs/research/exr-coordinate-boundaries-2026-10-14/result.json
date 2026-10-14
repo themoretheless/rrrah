@@ -1,0 +1,116 @@
+{
+  "status": "passed",
+  "cases": [
+    {
+      "bounds": [
+        1073741818,
+        0,
+        1073741820,
+        1
+      ],
+      "expected_valid": true,
+      "exit_code": 0,
+      "stdout": "linear_rgba32f 3x2\n",
+      "stderr": ""
+    },
+    {
+      "bounds": [
+        -1073741818,
+        0,
+        -1073741816,
+        1
+      ],
+      "expected_valid": true,
+      "exit_code": 0,
+      "stdout": "linear_rgba32f 3x2\n",
+      "stderr": ""
+    },
+    {
+      "bounds": [
+        2147483645,
+        0,
+        2147483647,
+        1
+      ],
+      "expected_valid": false,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Error: Codec(Decoding(DecodingError { format: Exact(OpenExr), underlying: Some(\"invalid: window size exceeding integer maximum\") }))\n"
+    },
+    {
+      "bounds": [
+        -2147483648,
+        0,
+        -2147483646,
+        1
+      ],
+      "expected_valid": false,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Error: Codec(Decoding(DecodingError { format: Exact(OpenExr), underlying: Some(\"invalid: window size exceeding integer maximum\") }))\n"
+    },
+    {
+      "bounds": [
+        0,
+        1073741818,
+        2,
+        1073741819
+      ],
+      "expected_valid": true,
+      "exit_code": 0,
+      "stdout": "linear_rgba32f 3x2\n",
+      "stderr": ""
+    },
+    {
+      "bounds": [
+        0,
+        -1073741818,
+        2,
+        -1073741817
+      ],
+      "expected_valid": true,
+      "exit_code": 0,
+      "stdout": "linear_rgba32f 3x2\n",
+      "stderr": ""
+    },
+    {
+      "bounds": [
+        0,
+        2147483645,
+        2,
+        2147483646
+      ],
+      "expected_valid": false,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Error: Codec(Decoding(DecodingError { format: Exact(OpenExr), underlying: Some(\"invalid: window size exceeding integer maximum\") }))\n"
+    },
+    {
+      "bounds": [
+        0,
+        -2147483648,
+        2,
+        -2147483647
+      ],
+      "expected_valid": false,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Error: Codec(Decoding(DecodingError { format: Exact(OpenExr), underlying: Some(\"invalid: window size exceeding integer maximum\") }))\n"
+    }
+  ],
+  "binary_sha256": "916b13008bbe5a5124724712b1503d51bb4822850e52017aa7fa7bf2c4c15a44",
+  "fixture_sha256": "237d1030caf9022f441458e8a90b718df4fe07f24e473b0bcf827d1b0ac9628e",
+  "limitations": [
+    "display-only metadata changes",
+    "no claim about all malformed EXR files",
+    "CPU public decode only, no GPU or live window"
+  ],
+  "source_sha256": {
+    "scripts/qualify-exr-coordinate-boundaries.py": "678edb4bd67bb2dfeb4accda9fb9fc3487f55b2a6f6eed6965a9b3081728222b",
+    "crates/rrrah-decode/examples/raster_fixture_dump.rs": "e74de46eb03efa1260c245df39e4d445cbf87f64186601db51b25f4204e43654",
+    "crates/rrrah-decode/src/raster.rs": "cebe3152c8eae7e5686850496407a236371d0e8b87e28ed3c9e29f79bdf8dbd7",
+    "Cargo.lock": "fe92c1c439760c437ee6b60a5c62c4fc35b56dd941667fc12a9f935f9dfe3be1"
+  },
+  "valid_case_managed_credit_release": "public dump --linear asserts zero after dropping source and prepared frame",
+  "invalid_case_memory_release": "not instrumented by this external probe"
+}

@@ -1,0 +1,29 @@
+{
+  "status": "native_test_passed_measurement_wrapper_failed",
+  "native_result": {
+    "passed": 1,
+    "failed": 0,
+    "ignored": 0
+  },
+  "workload_evidence_valid": true,
+  "duration_seconds": 207.285103292,
+  "writes": 100000,
+  "reads": 100000,
+  "pressure_refusals_then_retry": 1000,
+  "managed_root_peak_bytes": 131072,
+  "managed_queue_peak_bytes": 4,
+  "physical_disk_limit_bytes": 4096,
+  "physical_disk_limit_count": 17,
+  "teardown_ms": 3.34825,
+  "final_root_queue_physical_files_bytes": 0,
+  "wrapper_exit_code": 1,
+  "measurement_error": "time: sysctl kern.clockrate: Operation not permitted",
+  "peak_process_rss": "unavailable",
+  "log_sha256": "62885834918064d99636b7c00d0919f6e221e7d8ff9db5638a173f50a127668a",
+  "limitations": [
+    "tiny four-byte payloads isolate index/key churn",
+    "concurrent Metal and delayed IO load: elapsed time is not isolated benchmark",
+    "native test passed; measurement wrapper is not reported successful",
+    "not large-image collection throughput, OS memory pressure or full format qualification"
+  ]
+}

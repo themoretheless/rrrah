@@ -1,0 +1,23 @@
+{
+  "status": "completed_public_benchmark_pending_independent_audit",
+  "producer_pid": 53219,
+  "gate": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-masked-lanes-managed-20261014.json",
+  "producer_sha256": "308698e52c2d5f3a4ce3e6f38f7f6bd656c5b73e2c2cccfcd35c8b65b854eb81",
+  "steps": [
+    {
+      "script": "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-gradient-masked-lanes-managed-20261014.py",
+      "script_sha256": "f8a6bd1f163f6d1e8d903b9ac7ff6e9413d9e3053a28ff2322c2ccfdcefdacf8",
+      "returncode": 0,
+      "log": "/private/tmp/audit-dedup-gradient-masked-lanes-managed-20261014.py.queue.log"
+    },
+    {
+      "script": "/Users/themoretheless/Documents/Sources/rrrah/scripts/benchmark-dedup-gradient-masked-lanes-managed-20261014.py",
+      "script_sha256": "53dae06787c66a10a2986a15600f06887704deb47ffe8c527e519a655f921074",
+      "returncode": 0,
+      "log": "/private/tmp/benchmark-dedup-gradient-masked-lanes-managed-20261014.py.queue.log"
+    }
+  ],
+  "scope": "Does not start or restart the existing gate. After terminal pass, independently audit the complete raster inventory, then run one actual public managed API comparison. Production checkout unchanged.",
+  "liveness_observation": "Sandbox denies signal0; owner must poll original managed tool session70707. This is not a terminal observation and never triggers restart.",
+  "child_pid": 53497
+}

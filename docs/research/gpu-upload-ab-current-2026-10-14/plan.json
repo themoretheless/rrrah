@@ -1,0 +1,38 @@
+{
+  "status": "execution_passed_policy_unchanged",
+  "tool_session": 63810,
+  "backend": "metal",
+  "adapter": "Apple M4 Max",
+  "repetitions_per_variant_per_size": 16,
+  "counterbalance": "alternating AB/BA with two warmed rounds",
+  "variants": [
+    "current_default",
+    "legacy_4096"
+  ],
+  "sizes": [
+    [
+      2048,
+      1536
+    ],
+    [
+      4096,
+      3072
+    ],
+    [
+      6240,
+      4160
+    ],
+    [
+      8192,
+      6144
+    ]
+  ],
+  "metric": "upload enqueue and completed submission wall time; pipeline creation excluded",
+  "binary_sha256": "aa9b8124ac5fccbfb1b389bbf69822d95c15928c9d95afe8e9bfd05aaf90031e",
+  "limitations": [
+    "concurrent system load",
+    "synthetic sensor, no decode or independent pixel/color qualification",
+    "no production tiling change yet"
+  ],
+  "result": "result.json"
+}

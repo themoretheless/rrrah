@@ -19,7 +19,8 @@ mod xtrans;
 use crate::{CfaPattern, DecodedMosaic, DecodedRaster, MemoryBudget, RasterColorSpace, RasterPixels};
 pub use curve::MonotoneCurve;
 pub use demosaic::{
-    DemosaicAlgorithm, DemosaicConfig, demosaic_bayer_superpixel, demosaic_f32, demosaic_u16,
+    DemosaicAlgorithm, DemosaicConfig, demosaic_bayer_superpixel, demosaic_bayer_superpixel_f64,
+    demosaic_f32, demosaic_f64, demosaic_u16, demosaic_u16_f64,
 };
 pub use opcodes::{Area, Opcode, OpcodeLists, parse_list as parse_opcode_list};
 use thiserror::Error;
@@ -78,7 +79,7 @@ impl Default for DevelopOptions {
 pub(super) struct Rgb32f {
     width: usize,
     height: usize,
-    data: Vec<[f32; 3]>,
+    data: Vec<[f64; 3]>,
 }
 impl Rgb32f {
     fn new(width: usize, height: usize) -> Self {
@@ -102,7 +103,7 @@ impl Cfa {
 pub(super) struct Mosaic<'a> {
     w: usize,
     h: usize,
-    data: &'a [f32],
+    data: &'a [f64],
     cfa: &'a Cfa,
 }
 fn reflect(i: isize, n: usize) -> usize {
@@ -118,7 +119,7 @@ fn reflect(i: isize, n: usize) -> usize {
     }
 }
 impl Mosaic<'_> {
-    fn get(&self, x: isize, y: isize) -> f32 {
+    fn get(&self, x: isize, y: isize) -> f64 {
         self.data[reflect(y, self.h) * self.w + reflect(x, self.w)]
     }
     fn color(&self, x: isize, y: isize) -> u8 {
@@ -322,7 +323,7 @@ pub(super) fn quality_cfa(pattern: &CfaPattern, algo: DemosaicAlgorithm) -> Resu
 }
 
 fn compute_clipping_mask(
-    samples: &[f32],
+    samples: &[f64],
     w: usize,
     h: usize,
     cfa: &Cfa,
@@ -428,7 +429,7 @@ fn compute_clipping_mask(
 
 #[inline]
 fn compute_clipping_mask_row(
-    samples: &[f32],
+    samples: &[f64],
     w: usize,
     h: usize,
     cfa: &Cfa,
@@ -470,7 +471,7 @@ fn compute_clipping_mask_row(
 
 #[inline]
 fn compute_clipping_mask_pixel_reflected(
-    samples: &[f32],
+    samples: &[f64],
     w: usize,
     h: usize,
     cfa: &Cfa,
@@ -529,8 +530,8 @@ pub fn develop_raw(
     let cfa_pattern = md.cfa.as_ref().ok_or(DevelopError::Invalid("missing CFA"))?;
     let cfa = quality_cfa(cfa_pattern, options.demosaic)?;
     opcodes::validate_lists(lists)?;
-    let matrix = crate::camera_to_linear_srgb(md.xyz_to_camera)
-        .ok_or(DevelopError::Invalid("singular camera transform"))?;
+    let matrix = crate::camera_to_linear_srgb_precise(md.xyz_to_camera.map(|row| row.map(f64::from)))
+        .map_err(|_| DevelopError::Invalid("singular camera transform"))?;
     let (w, h) = (md.width as usize, md.height as usize);
     let n = w
         .checked_mul(h)
@@ -581,15 +582,7 @@ pub fn develop_raw(
             "opcode coordinate domains currently require full-sensor ActiveArea",
         ));
     }
-    // Peak full-resolution storage: samples (4), clipping (3), RGB (12),
-    // and output RGBA (16) = 35 bytes/sample. Other stages peak lower:
-    // X-Trans adds green (4); list3 adds flattened RGB (12) or a
-    // warp RGB copy (12) plus a clipping-mask copy (3); highlight
-    // reconstruction adds 13 bytes per coarse pyramid pixel. The sum of
-    // ceil-halved pyramid areas is bounded by n plus logarithmic edge terms,
-    // including one-dimensional sensors. The 8 MiB margin covers these terms,
-    // sequential 140x140 AHD tile buffers, and bounded CFA neighbour tables.
-    // Sensor input and caller-owned opcode metadata have separate ownership.
+    // Admission budget reservation contract.
     let bytes = (n as u64)
         .checked_mul(35)
         .and_then(|n| n.checked_add(8 * 1024 * 1024))
@@ -598,7 +591,7 @@ pub fn develop_raw(
     let output_bytes = u64::from(md.display_dimensions().0) * u64::from(md.display_dimensions().1) * 16;
     let scratch_credit = scratch_budget.try_reserve(bytes - output_bytes)?;
     let output_credit = scratch_budget.try_reserve(output_bytes)?;
-    let mut samples: Vec<f32> = mosaic.pixels.iter().map(|p| f32::from(*p)).collect();
+    let mut samples: Vec<f64> = mosaic.pixels.iter().map(|p| f64::from(*p)).collect();
     opcodes::apply_list(&lists.list1, &mut samples, w, h, 1, Some(&cfa), 65535.0)?;
     let quad = md.cfa.as_ref().and_then(|c| c.bayer_quad().ok());
     let first_green = quad.map(|q| usize::from(q[0] != 1));
@@ -608,24 +601,25 @@ pub fn develop_raw(
         }
         for x in 0..w {
             let c = (cfa.color_at(x, y) as usize).min(2);
-            let black = md
+            let black_f32 = md
                 .black_level
                 .at(y as u32, x as u32, 0)
                 .ok_or(DevelopError::Invalid("invalid black grid"))?;
-            let white = match md.white_level.0.len() {
+            let white_f32 = match md.white_level.0.len() {
                 1 => md.white_level.0[0],
                 3 => md.white_level.0[c],
                 4 if quad.is_some() => md.white_level.0[(y % 2) * 2 + x % 2],
                 _ => return Err(DevelopError::Invalid("unsupported white grid")),
             };
-            let range = white - black;
-            if !range.is_finite() || range <= 0. {
+            let range_f32 = white_f32 - black_f32;
+            let range = f64::from(white_f32) - f64::from(black_f32);
+            if !range_f32.is_finite() || !range.is_finite() || range <= 0. {
                 return Err(DevelopError::Invalid(
                     "white-minus-black range must be finite and positive",
                 ));
             }
-            let normalized = (samples[y * w + x] - black).max(0.0) / range;
-            if !normalized.is_finite() {
+            let normalized = (samples[y * w + x] - f64::from(black_f32)).max(0.0) / range;
+            if !normalized.is_finite() || !(normalized as f32).is_finite() {
                 return Err(DevelopError::Invalid("non-finite normalized sensor samples"));
             }
             samples[y * w + x] = normalized;
@@ -644,25 +638,40 @@ pub fn develop_raw(
     };
     opcodes::apply_list(&lists.list2, &mut samples, w, h, 1, Some(&cfa), 1.0)?;
     // Per-photosite WB, including G2, before demosaic. Do not clamp HDR.
+    let wb_f64 = md.white_balance.map(f64::from);
     for y in 0..h {
         for x in 0..w {
             let c = (cfa.color_at(x, y) as usize).min(3);
             let gain = if c == 1 && first_green.is_some_and(|g| g != (y % 2) * 2 + x % 2) {
-                md.white_balance[3]
+                wb_f64[3]
             } else {
-                md.white_balance[c]
+                wb_f64[c]
             };
             samples[y * w + x] *= gain;
         }
     }
-    if samples.iter().any(|p| !p.is_finite()) {
+    if samples.iter().any(|p| !p.is_finite() || !(*p as f32).is_finite()) {
         return Err(DevelopError::Invalid("non-finite corrected sensor samples"));
     }
     if options.impulse_threshold > 0.0 {
-        demosaic::suppress_cfa_impulse_noise(&mut samples, w, h, &cfa, options.impulse_threshold, cancelled)?;
+        demosaic::suppress_cfa_impulse_noise(
+            &mut samples,
+            w,
+            h,
+            &cfa,
+            f64::from(options.impulse_threshold),
+            cancelled,
+        )?;
     }
     if quad.is_some() && options.green_equilibration > 0.0 {
-        demosaic::equilibrate_bayer_greens(&mut samples, w, h, &cfa, options.green_equilibration, cancelled)?;
+        demosaic::equilibrate_bayer_greens(
+            &mut samples,
+            w,
+            h,
+            &cfa,
+            f64::from(options.green_equilibration),
+            cancelled,
+        )?;
     }
     let source = Mosaic {
         w,
@@ -673,7 +682,7 @@ pub fn develop_raw(
     let mut rgb = demosaic::dispatch_demosaic(
         &source,
         options.demosaic,
-        options.dual_contrast_threshold,
+        f64::from(options.dual_contrast_threshold),
         quad.is_some(),
         cancelled,
     )?;
@@ -689,7 +698,7 @@ pub fn develop_raw(
         return Err(DevelopError::Cancelled);
     }
     if !lists.list3.is_empty() {
-        let wb = [md.white_balance[0], md.white_balance[1], md.white_balance[2]];
+        let wb = [wb_f64[0], wb_f64[1], wb_f64[2]];
         for p in &mut rgb.data {
             for c in 0..3 {
                 p[c] /= wb[c];
@@ -716,9 +725,9 @@ pub fn develop_raw(
         highlight::reconstruct(
             &mut rgb,
             [
-                md.white_balance[0],
-                md.white_balance[1].min(md.white_balance[3]),
-                md.white_balance[2],
+                wb_f64[0],
+                wb_f64[1].min(wb_f64[3]),
+                wb_f64[2],
             ],
             0.999,
             &clipped,
@@ -741,11 +750,12 @@ pub fn develop_raw(
         for x in 0..ow {
             let uv = md
                 .orientation
-                .map_display_uv([(x as f32 + 0.5) / ow as f32, (y as f32 + 0.5) / oh as f32]);
-            let sx = crop.x + (uv[0] * crop.width as f32).floor().min((crop.width - 1) as f32) as u32;
-            let sy = crop.y + (uv[1] * crop.height as f32).floor().min((crop.height - 1) as f32) as u32;
-            let linear = crate::apply_3x3(matrix, rgb.data[sy as usize * w + sx as usize]);
-            if linear.iter().any(|p| !p.is_finite()) {
+                .map_display_uv_f64([(f64::from(x) + 0.5) / f64::from(ow), (f64::from(y) + 0.5) / f64::from(oh)]);
+            let sx = crop.x + (uv[0] * f64::from(crop.width)).floor().min(f64::from(crop.width - 1)) as u32;
+            let sy = crop.y + (uv[1] * f64::from(crop.height)).floor().min(f64::from(crop.height - 1)) as u32;
+            let linear64 = crate::apply_3x3_f64(matrix, rgb.data[sy as usize * w + sx as usize]);
+            let linear = linear64.map(|v| v as f32);
+            if linear64.iter().any(|p| !p.is_finite()) || linear.iter().any(|p| !p.is_finite()) {
                 return Err(DevelopError::Invalid("non-finite developed RGB"));
             }
             output.extend_from_slice(&[linear[0], linear[1], linear[2], 1.0]);
@@ -793,16 +803,16 @@ fn develop_rgbe(
         for x in 0..ow {
             let uv = md
                 .orientation
-                .map_display_uv([(x as f32 + 0.5) / ow as f32, (y as f32 + 0.5) / oh as f32]);
-            let sx = crop.x + (uv[0] * crop.width as f32).floor().min((crop.width - 1) as f32) as u32;
-            let sy = crop.y + (uv[1] * crop.height as f32).floor().min((crop.height - 1) as f32) as u32;
-            let rgb = calibration
+                .map_display_uv_f64([(f64::from(x) + 0.5) / f64::from(ow), (f64::from(y) + 0.5) / f64::from(oh)]);
+            let sx = crop.x + (uv[0] * f64::from(crop.width)).floor().min(f64::from(crop.width - 1)) as u32;
+            let sy = crop.y + (uv[1] * f64::from(crop.height)).floor().min(f64::from(crop.height - 1)) as u32;
+            let rgb64 = calibration
                 .reconstruct_linear_rgb([sx, sy], |px, py| {
                     mosaic.pixels[py as usize * md.width as usize + px as usize]
                 })
                 .ok_or(DevelopError::Invalid("non-finite RGBE reconstruction"))?;
-            let rgb = rgb.map(|v| v as f32);
-            if rgb.iter().any(|v| !v.is_finite()) {
+            let rgb = rgb64.map(|v| v as f32);
+            if rgb64.iter().any(|v| !v.is_finite()) || rgb.iter().any(|v| !v.is_finite()) {
                 return Err(DevelopError::Invalid("non-finite developed RGBE"));
             }
             output.extend_from_slice(&[rgb[0], rgb[1], rgb[2], 1.0]);
@@ -1400,7 +1410,7 @@ mod pipeline_tests {
         let data = (0..w * h)
             .map(|_| {
                 seed = seed.wrapping_mul(1664525).wrapping_add(1013904223);
-                (seed >> 8) as f32 / 16777216.0
+                f64::from(seed >> 8) / 16777216.0
             })
             .collect::<Vec<_>>();
         let m = Mosaic {
@@ -1416,7 +1426,7 @@ mod pipeline_tests {
                 .data
                 .iter()
                 .zip(&full)
-                .all(|(a, b)| a.map(f32::to_bits) == b.map(f32::to_bits))
+                .all(|(a, b)| a.map(f64::to_bits) == b.map(f64::to_bits))
         );
     }
 }

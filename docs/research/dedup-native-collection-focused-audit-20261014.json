@@ -1,0 +1,35 @@
+{
+  "status": "verified_frozen_native_collection_adapter_two_integration_targets",
+  "rows": [
+    {
+      "target": "search_portfolio",
+      "passed": 38,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-native-collection-focused-qualified-20261014/search_portfolio",
+      "executable_sha256": "c33078625b1e7d7665827fc98ec46cd241eb892a8c18f915f7efe49e2f796931",
+      "log": "/private/tmp/rrrah-native-collection-focused-20261014/search_portfolio.log",
+      "log_sha256": "1048a1c56f27954aa3167060be81514080e60bd5ee21766b01e30815bc20a893"
+    },
+    {
+      "target": "portfolio_collection",
+      "passed": 41,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-native-collection-focused-qualified-20261014/portfolio_collection",
+      "executable_sha256": "a3f11233e27529e51e0fc8e73486722d082052a7b191c6644e6df5a57b35f5a0",
+      "log": "/private/tmp/rrrah-native-collection-focused-20261014/portfolio_collection.log",
+      "log_sha256": "48cac06b0a4986b2d770e342de21cd5fc65c978f75ae4823c6b3430f743decdb"
+    }
+  ],
+  "passed": 79,
+  "failed": 0,
+  "ignored": 0,
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-native-collection-focused-20261014.json": "3df6ffe6353acea289f82f4357453c36a956402111cd90b8f7eabae21c08d5fc",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-native-collection-harness-20261014.json": "2b5e5ed78ee204d37f881a848bd3a6261c1722c628f0a95534ea4e8a702acfb8",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-consensus-native-collection-v5-source-20261014.json": "9629d521863e26df607bd0f59d5a04a7285ecf7dc9b36c55d0bb55892b2c1ce4",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-native-collection-focused-20261014.py": "cf8addcc8f17a004eacaa136736780d1f12665f8612ecbe1a789fa93bd782a42"
+  },
+  "scope": "Exact two frozen integration test sources, LoFTR dependency enabled, standalone optimized Cargo harness. Existing build cache cloned for reuse only; source/runtime checks remain required. Not whole workspace qualification. Full selected tests use synthetic proposal providers; empty native adapter test checks lazy loading, not actual learned inference. Native adapter compiled with actual LoFTR dependency; empty batch regression demonstrates invalid model is not loaded. Generic providers in remaining tests are synthetic; no learned multi-pair inference, directional-cap native inference, full corpus/default/UI/workspace qualification."
+}

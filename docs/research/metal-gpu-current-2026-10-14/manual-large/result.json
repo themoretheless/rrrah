@@ -1,0 +1,48 @@
+{
+  "status": "both_current_large_metal_controls_passed",
+  "passed": 2,
+  "failed": 0,
+  "ignored": 0,
+  "executions": [
+    {
+      "test": "large_cancelled_upload_validation_and_admission_preserve_visible_texture",
+      "exit_code": 0,
+      "counts": [
+        [
+          "1",
+          "0",
+          "0"
+        ]
+      ],
+      "verified": true,
+      "log": "large_cancelled_upload_validation_and_admission_preserve_visible_texture.log",
+      "log_sha256": "da283c81959e996db8346c74a772dd90278a21d34e97903d624ae8113f91d7d8"
+    },
+    {
+      "test": "large_hdr_area_lod_preserves_all_output_samples_and_metal_frame",
+      "exit_code": 0,
+      "counts": [
+        [
+          "1",
+          "0",
+          "0"
+        ]
+      ],
+      "verified": true,
+      "log": "large_hdr_area_lod_preserves_all_output_samples_and_metal_frame.log",
+      "log_sha256": "bba087acce54b576c025427cb1036f6300a32236e4313d49140067376f951c31"
+    }
+  ],
+  "signed_upload_workload_verified": true,
+  "large_lod_workload_verified": true,
+  "source_drift": [],
+  "coverage": [
+    "12MP192MB signed/HDR raster replacement cancellation checkpoints and GPU/queue pressure",
+    "previous frame exact on refusal; retry exact; final temporary GPU/queue credits zero",
+    "36MP576MB areaLOD; every1M output pixel exact and SDR/HDR frames exact"
+  ],
+  "limitations": [
+    "authored large sources and independent constant LOD reference",
+    "not independent camera color or physical display calibration"
+  ]
+}

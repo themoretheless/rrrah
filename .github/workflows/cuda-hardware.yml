@@ -1,0 +1,36 @@
+name: NVIDIA hardware qualification
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  cuda:
+    # Explicit opt-in runner; never substitute a hosted CPU or optional GPU.
+    runs-on: [self-hosted, linux, x64, nvidia]
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: themoretheless/.github/.github/actions/setup-rust@eb557370f9aae2547ddbbdce8bf2a8798e68dad2
+      - name: Record hardware and sources
+        run: |
+          mkdir -p hardware-report
+          nvidia-smi -q > hardware-report/nvidia.txt
+          rustc -Vv > hardware-report/rustc.txt
+          git rev-parse HEAD > hardware-report/commit.txt
+          sha256sum crates/rrrah-cuda/src/* > hardware-report/source-sha256.txt
+      - name: Require actual NVIDIA execution
+        shell: bash
+        run: |
+          set -o pipefail
+          cargo test --locked -p rrrah-cuda nvidia_full_output_boundaries_hdr_alpha_and_managed_limits -- --ignored --nocapture |& tee hardware-report/test.log
+          python3 - <<'PY'
+          from pathlib import Path
+          text = Path('hardware-report/test.log').read_text()
+          assert '1 passed; 0 failed; 0 ignored' in text, 'hardware execution was not established'
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cuda-hardware-${{ github.run_id }}
+          path: hardware-report/
+          if-no-files-found: error

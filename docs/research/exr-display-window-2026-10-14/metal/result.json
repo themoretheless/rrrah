@@ -1,0 +1,40 @@
+{
+  "status": "passed",
+  "adapter": "Metal Apple M4 Max",
+  "focused_test_passed": 1,
+  "aspect_cases": 3,
+  "window_cases": 5,
+  "suite": {
+    "passed": 24,
+    "failed": 0,
+    "ignored": 3
+  },
+  "checks": [
+    "coordinate-built reference using original samples",
+    "restored dimensions and float bits exact",
+    "whole 64x64 SDR/HDR frames exact",
+    "RAM hit under full managed pressure",
+    "spill and source deletion before restore",
+    "managed pressure and cancellation refusal then retry",
+    "one disk write/read per case",
+    "scoped source/queue credits zero after release"
+  ],
+  "limitations": [
+    "small single-part scanline fixture",
+    "unchanged data-window origin",
+    "new cases not live-window or physical HDR calibration evidence",
+    "three manual/corpus tests ignored",
+    "no NVIDIA evidence"
+  ],
+  "source_sha256": {
+    "crates/rrrah-app/tests/hdr_raster_swap.rs": "4333ebe66cc6361e36dd56c821790f2b58a4252d6d6f46c46655f7beff08dea1",
+    "crates/rrrah-decode/src/raster.rs": "975023ebf8e249e482e5affe166b47d152c3dbd67689566397067f56a777e52d",
+    "crates/rrrah-decode/src/exr_color.rs": "18eef69329d5e5a2426dec1970e5bffff236458b555e5d7b7884ea6cdae8eca7",
+    "Cargo.lock": "fe92c1c439760c437ee6b60a5c62c4fc35b56dd941667fc12a9f935f9dfe3be1"
+  },
+  "log_sha256": {
+    "suite.log": "760459ba6db07e4da65db6bf45d24291d196667372a90cfe253416080764ea1c",
+    "focused.log": "22dac6d2338593db338a4e59e53147ff14751e1c4a088c37368d568c910ada6c",
+    "build.log": "0ee3750201398d640f66dd674bcb035bbe3622af121a3bc4bcc977b551fcd48e"
+  }
+}

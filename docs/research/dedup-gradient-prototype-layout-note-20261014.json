@@ -1,0 +1,27 @@
+{
+  "status": "performance_scope_disclosed_integration_required",
+  "rows": [
+    {
+      "report": "docs/research/dedup-gradient-unroll8-16-cpu-20261014.json",
+      "report_sha256": "16c3848e8fbf353653e27bed05b3e5c050571f6499b3a365576e5eba24b533d0",
+      "source": "/private/tmp/rrrah-gradient-unroll8-16-cpu-20261014/experiment.rs",
+      "source_sha256": "7fa4ab4f60e2837c2f8d8939a1e17660ee94c91379203f5b2707a4b3963bb89b",
+      "prototype_type": "struct GradientFeature{descriptor:GradientDescriptor}",
+      "descriptor_only_stride_bytes": 1024
+    },
+    {
+      "report": "docs/research/dedup-gradient-lanes8-16-cpu-20261014.json",
+      "report_sha256": "3f65dbe06732b42548a7427d28afee8d2c46def557398b2ededcd080b0b0ed11",
+      "source": "/private/tmp/rrrah-gradient-lanes8-16-cpu-20261014/experiment.rs",
+      "source_sha256": "d2a16ffd91e551e3cd7a1e9b8e737050d87d55e28be1b3fc1c99ce0c02ef46ba",
+      "prototype_type": "struct GradientFeature{descriptor:GradientDescriptor}",
+      "descriptor_only_stride_bytes": 1024
+    }
+  ],
+  "actual_source": "crates/rrrah-dedup/src/gradient.rs",
+  "actual_source_sha256": "2c3df19384ddc5eb291234f103999caea03e26629906b7942e67957288ae661a",
+  "actual_type": "pub struct GradientFeature {\n    pub position: [f64; 2],\n    pub descriptor: GradientDescriptor,\n}",
+  "actual_feature_stride_bytes": 1040,
+  "consequence": "Synthetic primitive types omit unused positions and use1024byte stride; actual library positions+descriptor use1040byte stride. Numeric comparison uses genuine descriptor values, but primitive CPU ratios are not actual library layout performance. Reject/adopt decisions remain bounded; actual current-root isolated integration and public managed benchmarks are required. No producer was edited during execution; originals and measured ratios retained.",
+  "integration": "docs/research/dedup-gradient-lanes16-managed-20261014.json"
+}

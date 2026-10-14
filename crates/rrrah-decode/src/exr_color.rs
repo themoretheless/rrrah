@@ -1,4 +1,4 @@
-//! Explicit single-part OpenEXR color declarations. Missing metadata is unknown.
+//! Single-part OpenEXR color and physical-pixel declarations.
 //! https://openexr.com/en/latest/StandardAttributes.html
 use crate::RasterDecodeError;
 use rrrah_core::RasterColorSpace;
@@ -45,9 +45,20 @@ fn text<'a>(bytes: &'a [u8], at: &mut usize) -> Result<&'a [u8], RasterDecodeErr
     *at += end + 1;
     Ok(&tail[..end])
 }
-pub(crate) fn declaration(bytes: &[u8]) -> Result<Option<RasterColorSpace>, RasterDecodeError> {
+#[derive(Debug, Default)]
+pub(crate) struct Declaration {
+    pub(crate) color: Option<RasterColorSpace>,
+    pub(crate) pixel_aspect: Option<f32>,
+}
+
+#[cfg(test)]
+fn declaration(bytes: &[u8]) -> Result<Option<RasterColorSpace>, RasterDecodeError> {
+    metadata(bytes).map(|value| value.color)
+}
+
+pub(crate) fn metadata(bytes: &[u8]) -> Result<Declaration, RasterDecodeError> {
     if !bytes.starts_with(&[0x76, 0x2f, 0x31, 0x01]) {
-        return Ok(None);
+        return Ok(Declaration::default());
     }
     let version = u32::from_le_bytes(
         bytes
@@ -64,6 +75,7 @@ pub(crate) fn declaration(bytes: &[u8]) -> Result<Option<RasterColorSpace>, Rast
     let mut interop: Option<&[u8]> = None;
     let mut neutral: Option<Vec<f32>> = None;
     let mut aces = None;
+    let mut pixel_aspect = None;
     for _ in 0..4096 {
         if at > 1024 * 1024 {
             return Err(invalid("header limit"));
@@ -122,7 +134,7 @@ pub(crate) fn declaration(bytes: &[u8]) -> Result<Option<RasterColorSpace>, Rast
                     chroma.as_ref().map(|c| std::array::from_fn(|i| f64::from(c[i]))),
                 )
             };
-            return Ok(Some(match (known, xy, neutral) {
+            let color = Some(match (known, xy, neutral) {
                 (Some(_), Some(xy), Some(n)) => RasterColorSpace::LinearRgb(
                     rrrah_core::RgbChromaticities::new(xy)
                         .and_then(|c| c.with_adopted_neutral([f64::from(n[0]), f64::from(n[1])]))
@@ -130,7 +142,8 @@ pub(crate) fn declaration(bytes: &[u8]) -> Result<Option<RasterColorSpace>, Rast
                 ),
                 (Some(color), _, _) => color,
                 _ => RasterColorSpace::LinearRgbUnspecified,
-            }));
+            });
+            return Ok(Declaration { color, pixel_aspect });
         }
         let kind = text(bytes, &mut at)?;
         let len = u32::from_le_bytes(
@@ -148,6 +161,20 @@ pub(crate) fn declaration(bytes: &[u8]) -> Result<Option<RasterColorSpace>, Rast
         let data = bytes.get(at..end).ok_or_else(|| invalid("truncated value"))?;
         at = end;
         match name {
+            b"pixelAspectRatio" => {
+                if pixel_aspect.is_some() || kind != b"float" || len != 4 {
+                    return Err(RasterDecodeError::InvalidExrGeometry(
+                        "pixelAspectRatio type/length/duplicate",
+                    ));
+                }
+                let aspect = f32::from_le_bytes(data.try_into().unwrap());
+                if !aspect.is_finite() || aspect <= 0.0 {
+                    return Err(RasterDecodeError::InvalidExrGeometry(
+                        "pixelAspectRatio must be finite and positive",
+                    ));
+                }
+                pixel_aspect = Some(aspect);
+            }
             b"chromaticities" => {
                 if chroma.is_some() || kind != b"chromaticities" || len != 32 {
                     return Err(invalid("chromaticities type/length/duplicate"));
@@ -223,6 +250,54 @@ mod tests {
     }
     fn chroma() -> Vec<u8> {
         REC709.iter().flat_map(|v| v.to_le_bytes()).collect()
+    }
+    #[test]
+    fn pixel_aspect_is_independent_of_color_interpretation() {
+        for aspect in [0.5f32, 1.0, 2.0] {
+            for id in [b"lin_rec709_scene".as_slice(), b"unknown".as_slice()] {
+                let result = metadata(&header(&[
+                    ("pixelAspectRatio", "float", aspect.to_le_bytes().to_vec()),
+                    ("colorInteropID", "string", id.to_vec()),
+                ]))
+                .unwrap();
+                assert_eq!(result.pixel_aspect, Some(aspect));
+                assert_eq!(
+                    result.color,
+                    Some(if id == b"unknown" {
+                        RasterColorSpace::LinearRgbUnspecified
+                    } else {
+                        RasterColorSpace::LinearSrgb
+                    })
+                );
+            }
+        }
+    }
+
+    #[test]
+    fn invalid_pixel_aspect_is_refused_before_sample_decoding() {
+        for aspect in [0.0f32, -0.0, -1.0, f32::NAN, f32::INFINITY, f32::NEG_INFINITY] {
+            assert!(matches!(
+                metadata(&header(&[(
+                    "pixelAspectRatio",
+                    "float",
+                    aspect.to_le_bytes().to_vec()
+                ),])),
+                Err(RasterDecodeError::InvalidExrGeometry(_))
+            ));
+        }
+        for attrs in [
+            vec![("pixelAspectRatio", "double", 2f64.to_le_bytes().to_vec())],
+            vec![("pixelAspectRatio", "float", vec![0; 3])],
+            vec![
+                ("pixelAspectRatio", "float", 1f32.to_le_bytes().to_vec()),
+                ("pixelAspectRatio", "float", 2f32.to_le_bytes().to_vec()),
+            ],
+        ] {
+            assert!(matches!(
+                metadata(&header(&attrs)),
+                Err(RasterDecodeError::InvalidExrGeometry(_))
+            ));
+        }
     }
     #[test]
     fn explicit_declarations_and_conflicts() {

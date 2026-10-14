@@ -1,0 +1,2240 @@
+{
+  "status": "complete_pending_audit",
+  "producer_pid": 61999,
+  "cases": [
+    {
+      "label": "natural_table_forward",
+      "inputs": [
+        "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+        "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin"
+      ]
+    },
+    {
+      "label": "natural_table_reverse",
+      "inputs": [
+        "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+        "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin"
+      ]
+    },
+    {
+      "label": "natural_table_self",
+      "inputs": [
+        "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+        "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin"
+      ]
+    }
+  ],
+  "results": [
+    {
+      "label": "natural_table_forward",
+      "inputs": [
+        "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+        "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin"
+      ],
+      "extra_bytes": 0,
+      "matches": 10,
+      "peak_bytes": 163840,
+      "rows": [
+        {
+          "pair": 0,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.522057,
+          "wall_seconds": 6.605839832999999,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-0-0-baseline.stdout",
+          "stdout_sha256": "76bdd099200a56b2599279cb222fdd6a992d237e9df57bfa687a41e122404293",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-0-0-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 0,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.4971809999999999,
+          "wall_seconds": 5.910655875,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-0-0-candidate.stdout",
+          "stdout_sha256": "76bdd099200a56b2599279cb222fdd6a992d237e9df57bfa687a41e122404293",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-0-0-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 1,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.5016940000000001,
+          "wall_seconds": 5.531755208000002,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-0-1-candidate.stdout",
+          "stdout_sha256": "76bdd099200a56b2599279cb222fdd6a992d237e9df57bfa687a41e122404293",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-0-1-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 1,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.5020520000000002,
+          "wall_seconds": 4.769646417000001,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-0-1-baseline.stdout",
+          "stdout_sha256": "76bdd099200a56b2599279cb222fdd6a992d237e9df57bfa687a41e122404293",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-0-1-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 2,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.506113,
+          "wall_seconds": 5.638635333,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-0-2-baseline.stdout",
+          "stdout_sha256": "76bdd099200a56b2599279cb222fdd6a992d237e9df57bfa687a41e122404293",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-0-2-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 2,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.5045399999999998,
+          "wall_seconds": 6.6321646250000015,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-0-2-candidate.stdout",
+          "stdout_sha256": "76bdd099200a56b2599279cb222fdd6a992d237e9df57bfa687a41e122404293",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-0-2-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 3,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.5163870000000003,
+          "wall_seconds": 7.090264124999997,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-0-3-candidate.stdout",
+          "stdout_sha256": "76bdd099200a56b2599279cb222fdd6a992d237e9df57bfa687a41e122404293",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-0-3-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 3,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.47763,
+          "wall_seconds": 3.889244957999999,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-0-3-baseline.stdout",
+          "stdout_sha256": "76bdd099200a56b2599279cb222fdd6a992d237e9df57bfa687a41e122404293",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-0-3-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 4,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.5213569999999992,
+          "wall_seconds": 6.993011374999995,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-0-4-baseline.stdout",
+          "stdout_sha256": "76bdd099200a56b2599279cb222fdd6a992d237e9df57bfa687a41e122404293",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-0-4-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 4,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.5169380000000001,
+          "wall_seconds": 5.820132334,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-0-4-candidate.stdout",
+          "stdout_sha256": "76bdd099200a56b2599279cb222fdd6a992d237e9df57bfa687a41e122404293",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-0-4-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 5,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.5348699999999994,
+          "wall_seconds": 6.307446624999997,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-0-5-candidate.stdout",
+          "stdout_sha256": "76bdd099200a56b2599279cb222fdd6a992d237e9df57bfa687a41e122404293",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-0-5-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 5,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.5130100000000001,
+          "wall_seconds": 7.097573666000002,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-0-5-baseline.stdout",
+          "stdout_sha256": "76bdd099200a56b2599279cb222fdd6a992d237e9df57bfa687a41e122404293",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-0-5-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 6,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.5167640000000006,
+          "wall_seconds": 5.1494759579999965,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-0-6-baseline.stdout",
+          "stdout_sha256": "76bdd099200a56b2599279cb222fdd6a992d237e9df57bfa687a41e122404293",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-0-6-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 6,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.4855950000000004,
+          "wall_seconds": 5.172236749999996,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-0-6-candidate.stdout",
+          "stdout_sha256": "76bdd099200a56b2599279cb222fdd6a992d237e9df57bfa687a41e122404293",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-0-6-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 7,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.5383389999999997,
+          "wall_seconds": 6.0604453750000005,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-0-7-candidate.stdout",
+          "stdout_sha256": "76bdd099200a56b2599279cb222fdd6a992d237e9df57bfa687a41e122404293",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-0-7-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 7,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.5354370000000002,
+          "wall_seconds": 6.795445540999992,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-0-7-baseline.stdout",
+          "stdout_sha256": "76bdd099200a56b2599279cb222fdd6a992d237e9df57bfa687a41e122404293",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-0-7-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 8,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.5259199999999989,
+          "wall_seconds": 6.093535875000001,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-0-8-baseline.stdout",
+          "stdout_sha256": "76bdd099200a56b2599279cb222fdd6a992d237e9df57bfa687a41e122404293",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-0-8-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 8,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.5311400000000017,
+          "wall_seconds": 6.2278311249999945,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-0-8-candidate.stdout",
+          "stdout_sha256": "76bdd099200a56b2599279cb222fdd6a992d237e9df57bfa687a41e122404293",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-0-8-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 9,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.5148729999999987,
+          "wall_seconds": 5.768281165999994,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-0-9-candidate.stdout",
+          "stdout_sha256": "76bdd099200a56b2599279cb222fdd6a992d237e9df57bfa687a41e122404293",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-0-9-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 9,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.5058900000000011,
+          "wall_seconds": 5.068114832999996,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-0-9-baseline.stdout",
+          "stdout_sha256": "76bdd099200a56b2599279cb222fdd6a992d237e9df57bfa687a41e122404293",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-0-9-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "ratios": [
+        0.9992869264538333,
+        0.9968919984272282,
+        1.0811444004773576,
+        0.9915240420671458,
+        1.042611255141224,
+        0.9396842659318371,
+        1.005419871992409,
+        1.0099254639488948,
+        1.017756824606135
+      ],
+      "median_cpu_ratio": 1.005419871992409
+    },
+    {
+      "label": "natural_table_forward",
+      "inputs": [
+        "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+        "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin"
+      ],
+      "extra_bytes": 16777216,
+      "matches": 10,
+      "peak_bytes": 229376,
+      "rows": [
+        {
+          "pair": 0,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.26542300000000024,
+          "wall_seconds": 2.2352715419999925,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-16777216-0-baseline.stdout",
+          "stdout_sha256": "181fa9bebf579bad53ffba9177a6599aa85a973a66166d19105a0d1658d4a129",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-16777216-0-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 0,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.27527099999999916,
+          "wall_seconds": 3.19489762500001,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-16777216-0-candidate.stdout",
+          "stdout_sha256": "181fa9bebf579bad53ffba9177a6599aa85a973a66166d19105a0d1658d4a129",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-16777216-0-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 1,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.24995300000000092,
+          "wall_seconds": 2.1281316670000052,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-16777216-1-candidate.stdout",
+          "stdout_sha256": "181fa9bebf579bad53ffba9177a6599aa85a973a66166d19105a0d1658d4a129",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-16777216-1-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 1,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.26597099999999946,
+          "wall_seconds": 2.8981606249999885,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-16777216-1-baseline.stdout",
+          "stdout_sha256": "181fa9bebf579bad53ffba9177a6599aa85a973a66166d19105a0d1658d4a129",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-16777216-1-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 2,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.25708400000000203,
+          "wall_seconds": 2.035904333000019,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-16777216-2-baseline.stdout",
+          "stdout_sha256": "181fa9bebf579bad53ffba9177a6599aa85a973a66166d19105a0d1658d4a129",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-16777216-2-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 2,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.28397499999999865,
+          "wall_seconds": 2.886255250000005,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-16777216-2-candidate.stdout",
+          "stdout_sha256": "181fa9bebf579bad53ffba9177a6599aa85a973a66166d19105a0d1658d4a129",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-16777216-2-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 3,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.23755599999999977,
+          "wall_seconds": 1.80071537500001,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-16777216-3-candidate.stdout",
+          "stdout_sha256": "181fa9bebf579bad53ffba9177a6599aa85a973a66166d19105a0d1658d4a129",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-16777216-3-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 3,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.2864409999999995,
+          "wall_seconds": 3.598154292000004,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-16777216-3-baseline.stdout",
+          "stdout_sha256": "181fa9bebf579bad53ffba9177a6599aa85a973a66166d19105a0d1658d4a129",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-16777216-3-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 4,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.238267,
+          "wall_seconds": 2.3584909580000044,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-16777216-4-baseline.stdout",
+          "stdout_sha256": "181fa9bebf579bad53ffba9177a6599aa85a973a66166d19105a0d1658d4a129",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-16777216-4-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 4,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.26989799999999964,
+          "wall_seconds": 2.93993416699999,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-16777216-4-candidate.stdout",
+          "stdout_sha256": "181fa9bebf579bad53ffba9177a6599aa85a973a66166d19105a0d1658d4a129",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-16777216-4-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 5,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.23817500000000158,
+          "wall_seconds": 1.0243984580000074,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-16777216-5-candidate.stdout",
+          "stdout_sha256": "181fa9bebf579bad53ffba9177a6599aa85a973a66166d19105a0d1658d4a129",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-16777216-5-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 5,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.29329799999999995,
+          "wall_seconds": 3.818925458000024,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-16777216-5-baseline.stdout",
+          "stdout_sha256": "181fa9bebf579bad53ffba9177a6599aa85a973a66166d19105a0d1658d4a129",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-16777216-5-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 6,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.24882800000000016,
+          "wall_seconds": 1.438369750000021,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-16777216-6-baseline.stdout",
+          "stdout_sha256": "181fa9bebf579bad53ffba9177a6599aa85a973a66166d19105a0d1658d4a129",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-16777216-6-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 6,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.27520199999999917,
+          "wall_seconds": 3.6843199580000032,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-16777216-6-candidate.stdout",
+          "stdout_sha256": "181fa9bebf579bad53ffba9177a6599aa85a973a66166d19105a0d1658d4a129",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-16777216-6-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 7,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.25228700000000037,
+          "wall_seconds": 1.9769433749999905,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-16777216-7-candidate.stdout",
+          "stdout_sha256": "181fa9bebf579bad53ffba9177a6599aa85a973a66166d19105a0d1658d4a129",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-16777216-7-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 7,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.22629299999999974,
+          "wall_seconds": 0.9176898329999972,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-16777216-7-baseline.stdout",
+          "stdout_sha256": "181fa9bebf579bad53ffba9177a6599aa85a973a66166d19105a0d1658d4a129",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-16777216-7-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 8,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.23561900000000024,
+          "wall_seconds": 1.5567377910000175,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-16777216-8-baseline.stdout",
+          "stdout_sha256": "181fa9bebf579bad53ffba9177a6599aa85a973a66166d19105a0d1658d4a129",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-16777216-8-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 8,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.2515390000000013,
+          "wall_seconds": 2.1294002500000033,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-16777216-8-candidate.stdout",
+          "stdout_sha256": "181fa9bebf579bad53ffba9177a6599aa85a973a66166d19105a0d1658d4a129",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-16777216-8-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 9,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.2520629999999986,
+          "wall_seconds": 2.774759082999992,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-16777216-9-candidate.stdout",
+          "stdout_sha256": "181fa9bebf579bad53ffba9177a6599aa85a973a66166d19105a0d1658d4a129",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-16777216-9-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 9,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.23678500000000025,
+          "wall_seconds": 1.1663191250000011,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-16777216-9-baseline.stdout",
+          "stdout_sha256": "181fa9bebf579bad53ffba9177a6599aa85a973a66166d19105a0d1658d4a129",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_forward-16777216-9-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "ratios": [
+        0.9397753890461796,
+        1.1046000529009834,
+        0.8293365824026595,
+        1.1327544309535087,
+        0.8120580433552279,
+        1.1059928946903042,
+        1.1148687763209673,
+        1.0675667072689428,
+        1.064522668243336
+      ],
+      "median_cpu_ratio": 1.0675667072689428
+    },
+    {
+      "label": "natural_table_reverse",
+      "inputs": [
+        "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+        "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin"
+      ],
+      "extra_bytes": 0,
+      "matches": 10,
+      "peak_bytes": 163840,
+      "rows": [
+        {
+          "pair": 0,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.5057090000000014,
+          "wall_seconds": 4.287599540999992,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-0-0-baseline.stdout",
+          "stdout_sha256": "eb69976dd2a23d8b1ebad3a93d289bf1e9d4706179ca55637f30bf47c6190244",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-0-0-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 0,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.4970379999999983,
+          "wall_seconds": 4.396241541999984,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-0-0-candidate.stdout",
+          "stdout_sha256": "eb69976dd2a23d8b1ebad3a93d289bf1e9d4706179ca55637f30bf47c6190244",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-0-0-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 1,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.5182960000000028,
+          "wall_seconds": 4.201710082999995,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-0-1-candidate.stdout",
+          "stdout_sha256": "eb69976dd2a23d8b1ebad3a93d289bf1e9d4706179ca55637f30bf47c6190244",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-0-1-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 1,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.4986649999999969,
+          "wall_seconds": 4.580790874999991,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-0-1-baseline.stdout",
+          "stdout_sha256": "eb69976dd2a23d8b1ebad3a93d289bf1e9d4706179ca55637f30bf47c6190244",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-0-1-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 2,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.5092800000000022,
+          "wall_seconds": 6.449874334000015,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-0-2-baseline.stdout",
+          "stdout_sha256": "eb69976dd2a23d8b1ebad3a93d289bf1e9d4706179ca55637f30bf47c6190244",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-0-2-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 2,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.5077559999999978,
+          "wall_seconds": 4.3256464170000015,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-0-2-candidate.stdout",
+          "stdout_sha256": "eb69976dd2a23d8b1ebad3a93d289bf1e9d4706179ca55637f30bf47c6190244",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-0-2-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 3,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.4577480000000025,
+          "wall_seconds": 2.4638600839999754,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-0-3-candidate.stdout",
+          "stdout_sha256": "eb69976dd2a23d8b1ebad3a93d289bf1e9d4706179ca55637f30bf47c6190244",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-0-3-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 3,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.4860280000000007,
+          "wall_seconds": 4.2907114159999935,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-0-3-baseline.stdout",
+          "stdout_sha256": "eb69976dd2a23d8b1ebad3a93d289bf1e9d4706179ca55637f30bf47c6190244",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-0-3-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 4,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.5031919999999999,
+          "wall_seconds": 5.5302339590000145,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-0-4-baseline.stdout",
+          "stdout_sha256": "eb69976dd2a23d8b1ebad3a93d289bf1e9d4706179ca55637f30bf47c6190244",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-0-4-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 4,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.5070859999999973,
+          "wall_seconds": 5.780772958,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-0-4-candidate.stdout",
+          "stdout_sha256": "eb69976dd2a23d8b1ebad3a93d289bf1e9d4706179ca55637f30bf47c6190244",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-0-4-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 5,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.5094530000000025,
+          "wall_seconds": 5.947665041999983,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-0-5-candidate.stdout",
+          "stdout_sha256": "eb69976dd2a23d8b1ebad3a93d289bf1e9d4706179ca55637f30bf47c6190244",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-0-5-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 5,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.5206069999999992,
+          "wall_seconds": 7.312458957999979,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-0-5-baseline.stdout",
+          "stdout_sha256": "eb69976dd2a23d8b1ebad3a93d289bf1e9d4706179ca55637f30bf47c6190244",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-0-5-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 6,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.5224019999999991,
+          "wall_seconds": 6.764129125000011,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-0-6-baseline.stdout",
+          "stdout_sha256": "eb69976dd2a23d8b1ebad3a93d289bf1e9d4706179ca55637f30bf47c6190244",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-0-6-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 6,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.5095119999999997,
+          "wall_seconds": 7.465423958000002,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-0-6-candidate.stdout",
+          "stdout_sha256": "eb69976dd2a23d8b1ebad3a93d289bf1e9d4706179ca55637f30bf47c6190244",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-0-6-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 7,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.5162159999999996,
+          "wall_seconds": 6.740162832999999,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-0-7-candidate.stdout",
+          "stdout_sha256": "eb69976dd2a23d8b1ebad3a93d289bf1e9d4706179ca55637f30bf47c6190244",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-0-7-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 7,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.493196999999999,
+          "wall_seconds": 7.347605041999998,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-0-7-baseline.stdout",
+          "stdout_sha256": "eb69976dd2a23d8b1ebad3a93d289bf1e9d4706179ca55637f30bf47c6190244",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-0-7-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 8,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.47272899999999707,
+          "wall_seconds": 5.732208792000023,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-0-8-baseline.stdout",
+          "stdout_sha256": "eb69976dd2a23d8b1ebad3a93d289bf1e9d4706179ca55637f30bf47c6190244",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-0-8-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 8,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.5261610000000001,
+          "wall_seconds": 6.907725292000009,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-0-8-candidate.stdout",
+          "stdout_sha256": "eb69976dd2a23d8b1ebad3a93d289bf1e9d4706179ca55637f30bf47c6190244",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-0-8-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 9,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.5092300000000017,
+          "wall_seconds": 7.2339529170000105,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-0-9-candidate.stdout",
+          "stdout_sha256": "eb69976dd2a23d8b1ebad3a93d289bf1e9d4706179ca55637f30bf47c6190244",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-0-9-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 9,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.5119810000000001,
+          "wall_seconds": 7.069832666999957,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-0-9-baseline.stdout",
+          "stdout_sha256": "eb69976dd2a23d8b1ebad3a93d289bf1e9d4706179ca55637f30bf47c6190244",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-0-9-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "ratios": [
+        1.0393671101842037,
+        0.9970075400565418,
+        0.9418140518653284,
+        1.0077385967980361,
+        0.9785750095561591,
+        0.9753255155990991,
+        1.046673033290958,
+        1.1130288177793268,
+        0.9946267537271922
+      ],
+      "median_cpu_ratio": 0.9970075400565418
+    },
+    {
+      "label": "natural_table_reverse",
+      "inputs": [
+        "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+        "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin"
+      ],
+      "extra_bytes": 16777216,
+      "matches": 10,
+      "peak_bytes": 229376,
+      "rows": [
+        {
+          "pair": 0,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.2719469999999996,
+          "wall_seconds": 3.454506916000014,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-16777216-0-baseline.stdout",
+          "stdout_sha256": "5a3236c762bee6ccc1bc71b0d8b06f128c270c5eba24617987f7750ed86cd7ad",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-16777216-0-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 0,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.2774930000000002,
+          "wall_seconds": 3.3150187919999894,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-16777216-0-candidate.stdout",
+          "stdout_sha256": "5a3236c762bee6ccc1bc71b0d8b06f128c270c5eba24617987f7750ed86cd7ad",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-16777216-0-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 1,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.24743599999999688,
+          "wall_seconds": 2.197744250000028,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-16777216-1-candidate.stdout",
+          "stdout_sha256": "5a3236c762bee6ccc1bc71b0d8b06f128c270c5eba24617987f7750ed86cd7ad",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-16777216-1-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 1,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.29162900000000214,
+          "wall_seconds": 4.5870276669999726,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-16777216-1-baseline.stdout",
+          "stdout_sha256": "5a3236c762bee6ccc1bc71b0d8b06f128c270c5eba24617987f7750ed86cd7ad",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-16777216-1-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 2,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.2490110000000001,
+          "wall_seconds": 1.704492584000036,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-16777216-2-baseline.stdout",
+          "stdout_sha256": "5a3236c762bee6ccc1bc71b0d8b06f128c270c5eba24617987f7750ed86cd7ad",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-16777216-2-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 2,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.2935129999999999,
+          "wall_seconds": 4.185677708000014,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-16777216-2-candidate.stdout",
+          "stdout_sha256": "5a3236c762bee6ccc1bc71b0d8b06f128c270c5eba24617987f7750ed86cd7ad",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-16777216-2-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 3,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.2637219999999991,
+          "wall_seconds": 2.584875791999991,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-16777216-3-candidate.stdout",
+          "stdout_sha256": "5a3236c762bee6ccc1bc71b0d8b06f128c270c5eba24617987f7750ed86cd7ad",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-16777216-3-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 3,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.2788769999999998,
+          "wall_seconds": 3.1270942909999917,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-16777216-3-baseline.stdout",
+          "stdout_sha256": "5a3236c762bee6ccc1bc71b0d8b06f128c270c5eba24617987f7750ed86cd7ad",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-16777216-3-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 4,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.2754970000000001,
+          "wall_seconds": 4.530519374999983,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-16777216-4-baseline.stdout",
+          "stdout_sha256": "5a3236c762bee6ccc1bc71b0d8b06f128c270c5eba24617987f7750ed86cd7ad",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-16777216-4-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 4,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.2512020000000008,
+          "wall_seconds": 4.649399291000009,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-16777216-4-candidate.stdout",
+          "stdout_sha256": "5a3236c762bee6ccc1bc71b0d8b06f128c270c5eba24617987f7750ed86cd7ad",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-16777216-4-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 5,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.2632370000000004,
+          "wall_seconds": 3.117322207999962,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-16777216-5-candidate.stdout",
+          "stdout_sha256": "5a3236c762bee6ccc1bc71b0d8b06f128c270c5eba24617987f7750ed86cd7ad",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-16777216-5-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 5,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.25177999999999634,
+          "wall_seconds": 2.9478833750000035,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-16777216-5-baseline.stdout",
+          "stdout_sha256": "5a3236c762bee6ccc1bc71b0d8b06f128c270c5eba24617987f7750ed86cd7ad",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-16777216-5-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 6,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.289357000000001,
+          "wall_seconds": 4.677799290999985,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-16777216-6-baseline.stdout",
+          "stdout_sha256": "5a3236c762bee6ccc1bc71b0d8b06f128c270c5eba24617987f7750ed86cd7ad",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-16777216-6-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 6,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.2370869999999985,
+          "wall_seconds": 1.92592862500004,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-16777216-6-candidate.stdout",
+          "stdout_sha256": "5a3236c762bee6ccc1bc71b0d8b06f128c270c5eba24617987f7750ed86cd7ad",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-16777216-6-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 7,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.248031000000001,
+          "wall_seconds": 2.473239917000001,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-16777216-7-candidate.stdout",
+          "stdout_sha256": "5a3236c762bee6ccc1bc71b0d8b06f128c270c5eba24617987f7750ed86cd7ad",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-16777216-7-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 7,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.24193099999999745,
+          "wall_seconds": 2.296712458999991,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-16777216-7-baseline.stdout",
+          "stdout_sha256": "5a3236c762bee6ccc1bc71b0d8b06f128c270c5eba24617987f7750ed86cd7ad",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-16777216-7-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 8,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.26176800000000244,
+          "wall_seconds": 3.0940441660000033,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-16777216-8-baseline.stdout",
+          "stdout_sha256": "5a3236c762bee6ccc1bc71b0d8b06f128c270c5eba24617987f7750ed86cd7ad",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-16777216-8-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 8,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.2581150000000012,
+          "wall_seconds": 3.3063986249999857,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-16777216-8-candidate.stdout",
+          "stdout_sha256": "5a3236c762bee6ccc1bc71b0d8b06f128c270c5eba24617987f7750ed86cd7ad",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-16777216-8-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 9,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.25225300000000095,
+          "wall_seconds": 2.570562499999994,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-16777216-9-candidate.stdout",
+          "stdout_sha256": "5a3236c762bee6ccc1bc71b0d8b06f128c270c5eba24617987f7750ed86cd7ad",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-16777216-9-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 9,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.26915400000000167,
+          "wall_seconds": 4.814962457999968,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-16777216-9-baseline.stdout",
+          "stdout_sha256": "5a3236c762bee6ccc1bc71b0d8b06f128c270c5eba24617987f7750ed86cd7ad",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_reverse-16777216-9-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "ratios": [
+        0.8484615727516641,
+        1.178714996526257,
+        0.9456570459378123,
+        0.9118139217486968,
+        1.0455040114385743,
+        0.819358093980784,
+        1.0252138006291198,
+        0.986044894715927,
+        0.9372069521537832
+      ],
+      "median_cpu_ratio": 0.9456570459378123
+    },
+    {
+      "label": "natural_table_self",
+      "inputs": [
+        "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+        "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin"
+      ],
+      "extra_bytes": 0,
+      "matches": 2048,
+      "peak_bytes": 163840,
+      "rows": [
+        {
+          "pair": 0,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.5441819999999988,
+          "wall_seconds": 7.879615333999993,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-0-0-baseline.stdout",
+          "stdout_sha256": "990c98e42067dbe234ea3ae250fdc39ec0a4bdc6d530d6795d4f0ab2854ea6b1",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-0-0-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 0,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.5513109999999992,
+          "wall_seconds": 7.197967750000032,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-0-0-candidate.stdout",
+          "stdout_sha256": "990c98e42067dbe234ea3ae250fdc39ec0a4bdc6d530d6795d4f0ab2854ea6b1",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-0-0-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 1,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.5707829999999972,
+          "wall_seconds": 8.21695245899997,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-0-1-candidate.stdout",
+          "stdout_sha256": "990c98e42067dbe234ea3ae250fdc39ec0a4bdc6d530d6795d4f0ab2854ea6b1",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-0-1-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 1,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.5410749999999964,
+          "wall_seconds": 7.108652000000006,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-0-1-baseline.stdout",
+          "stdout_sha256": "990c98e42067dbe234ea3ae250fdc39ec0a4bdc6d530d6795d4f0ab2854ea6b1",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-0-1-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 2,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.5497270000000025,
+          "wall_seconds": 6.0099083329999985,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-0-2-baseline.stdout",
+          "stdout_sha256": "990c98e42067dbe234ea3ae250fdc39ec0a4bdc6d530d6795d4f0ab2854ea6b1",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-0-2-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 2,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.4637409999999986,
+          "wall_seconds": 2.951878834000013,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-0-2-candidate.stdout",
+          "stdout_sha256": "990c98e42067dbe234ea3ae250fdc39ec0a4bdc6d530d6795d4f0ab2854ea6b1",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-0-2-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 3,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.5046420000000038,
+          "wall_seconds": 4.095603874999995,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-0-3-candidate.stdout",
+          "stdout_sha256": "990c98e42067dbe234ea3ae250fdc39ec0a4bdc6d530d6795d4f0ab2854ea6b1",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-0-3-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 3,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.503538,
+          "wall_seconds": 5.081216208000001,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-0-3-baseline.stdout",
+          "stdout_sha256": "990c98e42067dbe234ea3ae250fdc39ec0a4bdc6d530d6795d4f0ab2854ea6b1",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-0-3-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 4,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.4981059999999946,
+          "wall_seconds": 5.671755541999971,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-0-4-baseline.stdout",
+          "stdout_sha256": "990c98e42067dbe234ea3ae250fdc39ec0a4bdc6d530d6795d4f0ab2854ea6b1",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-0-4-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 4,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.5202040000000048,
+          "wall_seconds": 6.080000041000005,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-0-4-candidate.stdout",
+          "stdout_sha256": "990c98e42067dbe234ea3ae250fdc39ec0a4bdc6d530d6795d4f0ab2854ea6b1",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-0-4-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 5,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.5412220000000005,
+          "wall_seconds": 6.034990457999982,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-0-5-candidate.stdout",
+          "stdout_sha256": "990c98e42067dbe234ea3ae250fdc39ec0a4bdc6d530d6795d4f0ab2854ea6b1",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-0-5-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 5,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.5292809999999966,
+          "wall_seconds": 5.996488165999949,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-0-5-baseline.stdout",
+          "stdout_sha256": "990c98e42067dbe234ea3ae250fdc39ec0a4bdc6d530d6795d4f0ab2854ea6b1",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-0-5-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 6,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.54054,
+          "wall_seconds": 6.049596665999957,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-0-6-baseline.stdout",
+          "stdout_sha256": "990c98e42067dbe234ea3ae250fdc39ec0a4bdc6d530d6795d4f0ab2854ea6b1",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-0-6-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 6,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.5373890000000057,
+          "wall_seconds": 7.615784292000001,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-0-6-candidate.stdout",
+          "stdout_sha256": "990c98e42067dbe234ea3ae250fdc39ec0a4bdc6d530d6795d4f0ab2854ea6b1",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-0-6-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 7,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.55396,
+          "wall_seconds": 6.888119042000028,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-0-7-candidate.stdout",
+          "stdout_sha256": "990c98e42067dbe234ea3ae250fdc39ec0a4bdc6d530d6795d4f0ab2854ea6b1",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-0-7-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 7,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.48897000000000235,
+          "wall_seconds": 4.583634958999994,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-0-7-baseline.stdout",
+          "stdout_sha256": "990c98e42067dbe234ea3ae250fdc39ec0a4bdc6d530d6795d4f0ab2854ea6b1",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-0-7-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 8,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.5416349999999974,
+          "wall_seconds": 6.711181041999964,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-0-8-baseline.stdout",
+          "stdout_sha256": "990c98e42067dbe234ea3ae250fdc39ec0a4bdc6d530d6795d4f0ab2854ea6b1",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-0-8-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 8,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.5602450000000052,
+          "wall_seconds": 7.192753874999994,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-0-8-candidate.stdout",
+          "stdout_sha256": "990c98e42067dbe234ea3ae250fdc39ec0a4bdc6d530d6795d4f0ab2854ea6b1",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-0-8-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 9,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.5705669999999994,
+          "wall_seconds": 7.186359833999973,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-0-9-candidate.stdout",
+          "stdout_sha256": "990c98e42067dbe234ea3ae250fdc39ec0a4bdc6d530d6795d4f0ab2854ea6b1",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-0-9-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 9,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "0"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.5473530000000095,
+          "wall_seconds": 7.369883582999989,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-0-9-baseline.stdout",
+          "stdout_sha256": "990c98e42067dbe234ea3ae250fdc39ec0a4bdc6d530d6795d4f0ab2854ea6b1",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-0-9-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "ratios": [
+        1.0549055121748387,
+        0.8435841790561434,
+        1.0021924859692888,
+        1.0443640510253047,
+        1.0225607947385302,
+        0.9941706441706546,
+        1.1329120395934256,
+        1.0343589317529478,
+        1.042411387166946
+      ],
+      "median_cpu_ratio": 1.0343589317529478
+    },
+    {
+      "label": "natural_table_self",
+      "inputs": [
+        "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+        "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin"
+      ],
+      "extra_bytes": 16777216,
+      "matches": 2048,
+      "peak_bytes": 229376,
+      "rows": [
+        {
+          "pair": 0,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.2767269999999975,
+          "wall_seconds": 3.511393917000021,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-16777216-0-baseline.stdout",
+          "stdout_sha256": "8439b45f08957c12995cb693131ab2d7ba44d4fd78d6013c80756360df046586",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-16777216-0-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 0,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.2830710000000005,
+          "wall_seconds": 2.4974675830000024,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-16777216-0-candidate.stdout",
+          "stdout_sha256": "8439b45f08957c12995cb693131ab2d7ba44d4fd78d6013c80756360df046586",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-16777216-0-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 1,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.24567899999999998,
+          "wall_seconds": 0.6101694999999836,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-16777216-1-candidate.stdout",
+          "stdout_sha256": "8439b45f08957c12995cb693131ab2d7ba44d4fd78d6013c80756360df046586",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-16777216-1-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 1,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.2893549999999965,
+          "wall_seconds": 1.7676971249999838,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-16777216-1-baseline.stdout",
+          "stdout_sha256": "8439b45f08957c12995cb693131ab2d7ba44d4fd78d6013c80756360df046586",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-16777216-1-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 2,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.30245500000000036,
+          "wall_seconds": 1.8442623329999606,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-16777216-2-baseline.stdout",
+          "stdout_sha256": "8439b45f08957c12995cb693131ab2d7ba44d4fd78d6013c80756360df046586",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-16777216-2-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 2,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.30623200000000295,
+          "wall_seconds": 1.8005429170000298,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-16777216-2-candidate.stdout",
+          "stdout_sha256": "8439b45f08957c12995cb693131ab2d7ba44d4fd78d6013c80756360df046586",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-16777216-2-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 3,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.2373200000000042,
+          "wall_seconds": 0.6441135830000349,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-16777216-3-candidate.stdout",
+          "stdout_sha256": "8439b45f08957c12995cb693131ab2d7ba44d4fd78d6013c80756360df046586",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-16777216-3-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 3,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.30835800000000035,
+          "wall_seconds": 2.617447458000015,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-16777216-3-baseline.stdout",
+          "stdout_sha256": "8439b45f08957c12995cb693131ab2d7ba44d4fd78d6013c80756360df046586",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-16777216-3-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 4,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.29603899999999905,
+          "wall_seconds": 2.2578715829999965,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-16777216-4-baseline.stdout",
+          "stdout_sha256": "8439b45f08957c12995cb693131ab2d7ba44d4fd78d6013c80756360df046586",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-16777216-4-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 4,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.24528399999999118,
+          "wall_seconds": 1.0610374999999976,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-16777216-4-candidate.stdout",
+          "stdout_sha256": "8439b45f08957c12995cb693131ab2d7ba44d4fd78d6013c80756360df046586",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-16777216-4-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 5,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.2812820000000016,
+          "wall_seconds": 1.7558696250000025,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-16777216-5-candidate.stdout",
+          "stdout_sha256": "8439b45f08957c12995cb693131ab2d7ba44d4fd78d6013c80756360df046586",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-16777216-5-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 5,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.3000609999999968,
+          "wall_seconds": 2.1567411249999964,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-16777216-5-baseline.stdout",
+          "stdout_sha256": "8439b45f08957c12995cb693131ab2d7ba44d4fd78d6013c80756360df046586",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-16777216-5-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 6,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.29674000000000045,
+          "wall_seconds": 1.722827417000019,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-16777216-6-baseline.stdout",
+          "stdout_sha256": "8439b45f08957c12995cb693131ab2d7ba44d4fd78d6013c80756360df046586",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-16777216-6-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 6,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.2653669999999986,
+          "wall_seconds": 0.8537464999999997,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-16777216-6-candidate.stdout",
+          "stdout_sha256": "8439b45f08957c12995cb693131ab2d7ba44d4fd78d6013c80756360df046586",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-16777216-6-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 7,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.2416940000000003,
+          "wall_seconds": 0.5685134160000302,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-16777216-7-candidate.stdout",
+          "stdout_sha256": "8439b45f08957c12995cb693131ab2d7ba44d4fd78d6013c80756360df046586",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-16777216-7-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 7,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.25242000000000475,
+          "wall_seconds": 1.1646089580000307,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-16777216-7-baseline.stdout",
+          "stdout_sha256": "8439b45f08957c12995cb693131ab2d7ba44d4fd78d6013c80756360df046586",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-16777216-7-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 8,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.24117999999999595,
+          "wall_seconds": 0.570386874999997,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-16777216-8-baseline.stdout",
+          "stdout_sha256": "8439b45f08957c12995cb693131ab2d7ba44d4fd78d6013c80756360df046586",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-16777216-8-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 8,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.3023209999999974,
+          "wall_seconds": 1.5645807910000258,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-16777216-8-candidate.stdout",
+          "stdout_sha256": "8439b45f08957c12995cb693131ab2d7ba44d4fd78d6013c80756360df046586",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-16777216-8-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 9,
+          "version": "candidate",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.26952500000000024,
+          "wall_seconds": 1.4031962919999614,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-16777216-9-candidate.stdout",
+          "stdout_sha256": "8439b45f08957c12995cb693131ab2d7ba44d4fd78d6013c80756360df046586",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-16777216-9-candidate.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "pair": 9,
+          "version": "baseline",
+          "command": [
+            "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin",
+            "16777216"
+          ],
+          "returncode": 0,
+          "cpu_seconds": 0.3149849999999965,
+          "wall_seconds": 2.451189958000043,
+          "stdout": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-16777216-9-baseline.stdout",
+          "stdout_sha256": "8439b45f08957c12995cb693131ab2d7ba44d4fd78d6013c80756360df046586",
+          "stderr": "/private/tmp/rrrah-masked-lanes-natural-large-20261014/natural_table_self-16777216-9-baseline.stderr",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "ratios": [
+        0.8490573862556479,
+        1.0124878081036934,
+        0.7696249164931798,
+        0.8285529947067514,
+        0.9374160587347392,
+        0.8942744490125974,
+        0.9575073290547331,
+        1.2535077535450803,
+        0.8556756670952688
+      ],
+      "median_cpu_ratio": 0.8942744490125974
+    }
+  ],
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/benchmark-dedup-masked-lanes-natural-large-20261014.py": "683ddf0e72af086aae5c952fd3fabece86773d6dd85c8ff5e14981a0abe82abc",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-masked-lanes-managed-benchmark-v2-20261014.json": "acac95917dd98454b4eec15031460204b51d4ebe7dc058c5c707c06c60c67284",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-natural-large-gradient-banks-v2-20261014.json": "836bd9861646a67c9e626d74671a536e11c786d4e2e483e109cfa4a41dac669e",
+    "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/baseline/probe": "c004cc024b135bacf855894f0e6eab8dbcbb9e91f9945a553d37680371bdc1b4",
+    "/private/tmp/rrrah-gradient-masked-lanes-managed-benchmark-v2-20261014/candidate/probe": "ee319f5e1fe221f4ac0db4ef058bde0d892f9636dceba2bec8911a1fefbaa951"
+  },
+  "dependency_pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/librrrah_core-1093d06a30417cb5.rlib": "9e918b06d7ae7bf867ac04bc774062fc99d2b56704f083d763336cdd1bb45dbb",
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libblake3-5dbb3dfc2ce7d297.rlib": "1a90993f8c95cbbc51839449c8db08075277d5468e7d9fa2ae1b8838720083fe",
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libthiserror-1f2ca11ca2706be8.rlib": "a4bc045f06441d4730b1988bee770197e1f51f4b1600df8c028a668c27c77bf1",
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libtempfile-f6f2a369a6678518.rlib": "3c0a02859f18952acb6482a76d369ebac50a9c75f3b3b153fb3db5af15f2ea31",
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/liblibc-0a79900aa2799e6c.rlib": "b3e730a257abb46acab6283d05f1a1340e72bbb48682e09f3a237332f7f08c25",
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/librustix-d27a8f21409c30bb.rlib": "fd18f6de2a5fe606fe416658acb98f4d33ff174057722e30f3c14cb23e8060e3",
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/liblibproc-758dbaf49d4d459c.rlib": "6ce65607c893ada61e22fcbe8a1dabb4c04c74e7ab06309261c62f6b3b6fe88b",
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/liberrno-eb497f290fc228fe.rlib": "3d86b1f24f0098e7558b6caeaf6a877e3f8fec47d275b5bdc7bcea6821ac8362"
+  },
+  "input_pins": {
+    "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-0.bin": "375da52fb488b0549352f7c4f1f29eadfe46aed8da31465734f4d32856461b63",
+    "/private/tmp/rrrah-natural-large-gradient-banks-v2-20261014/features-1.bin": "45ad7a8ba9215436744a6c5cdbf0ca61f39b2cfcaf85be425026953007fa33a4"
+  },
+  "scope": "Actual public managed V7baseline versus isolated selective-lane candidate, reuse exact pinned optimized binaries and dependencies. Two genuinely extracted large natural banks, no descriptor repetition/padding; forward/reverse/self with baseline-only or16MiBextra linear-runner headroom. Ten alternating fresh-process pairs/group, first warmup excluded. Exact coordinate bits/allocator peaks and zero-credit assertion in original probe; component CPU includes startup/load/output. Pillow explicit sRGBfixture prep, not native decoder/ICC/fulloperation/default/corpus/platform or universal speedup proof.",
+  "active_case": "natural_table_self",
+  "active_extra": 16777216,
+  "active_pair": 9,
+  "active_version": "baseline",
+  "child_pid": 66822
+}

@@ -1,0 +1,11 @@
+{
+  "status": "not_adopted_after_actual_large_natural_public_comparison",
+  "public_audit": "docs/research/dedup-masked-lanes-natural-large-audit-20261014.json",
+  "public_audit_sha256": "003db9eb76b22f7f09b2a2635a55f28484dd1da455d89258cd4316ef7ad23421",
+  "lane_audit": "docs/research/dedup-masked-lane-counts-audit-20261014.json",
+  "lane_audit_sha256": "bf2e1c6dcbccf0586c1a43ad87287e6ec38b1b7e5fc6b52987f92e48252b1e15",
+  "reason": "All coordinates/callbacks/memory gates pass, but genuine large natural forward medianCPUregresses6.76percent while reverse improves5.43percent and self10.57percent. Reverse removes zero distance pairs; timings are not a consistent algorithmic gain. Wide per-pair ranges and limited cases do not justify production adoption.",
+  "production_gradient_changed": false,
+  "remaining": "Existing native full-operation/unroll/corpus/default/platform/format/collection/resource gates remain active and incomplete.",
+  "next": "Evaluate ordered kernel unroll8/16against current4without added branch policy or heap; standalone bit parity plus fresh-process CPU gate running. Pure kernel results still require managed/native/whole-operation qualification before adoption."
+}

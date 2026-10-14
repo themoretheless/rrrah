@@ -1,0 +1,20 @@
+{
+  "status": "exr_physical_aspect_decoder_ram_swap_metal_validated",
+  "focus_passed": 8,
+  "full_library_passed": 1035,
+  "full_library_ignored": 73,
+  "changes": [
+    "single bounded EXR metadata pass retains pixelAspectRatio",
+    "common raster and display preparation preserve aspect without resampling",
+    "typed invalid EXR geometry errors before pixel decoding"
+  ],
+  "provenance": "fixture.json",
+  "limitations": [
+    "no new EXR live-window/GPU test in this run",
+    "deep/multipart and remaining full-format qualification unchanged",
+    "73manual/corpus tests not counted as passes"
+  ],
+  "production_library_check": "passed",
+  "result": "result.json",
+  "metal_validation": "metal/result.json"
+}

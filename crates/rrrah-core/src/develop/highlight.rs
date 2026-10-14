@@ -12,13 +12,13 @@
 use super::Rgb32f;
 
 /// Fill `values` (per-pixel vectors) where `valid` is false from valid neighbours, coarse to fine.
-fn fill_invalid(w: usize, h: usize, values: &mut [[f32; 3]], valid: &mut [bool]) {
+fn fill_invalid(w: usize, h: usize, values: &mut [[f64; 3]], valid: &mut [bool]) {
     if w == 0 || h == 0 || valid.iter().all(|&v| v) || !valid.iter().any(|&v| v) {
         return;
     }
     // Build a pyramid of weighted means, fill each level from the next coarser one.
     let (cw, ch) = (w.div_ceil(2), h.div_ceil(2));
-    let mut cv = vec![[0f32; 3]; cw * ch];
+    let mut cv = vec![[0f64; 3]; cw * ch];
     let mut cval = vec![false; cw * ch];
     {
         let (values, valid) = (&*values, &*valid);
@@ -49,9 +49,9 @@ fn fill_invalid(w: usize, h: usize, values: &mut [[f32; 3]], valid: &mut [bool])
 fn downsample(
     w: usize,
     h: usize,
-    cv: &mut [[f32; 3]],
+    cv: &mut [[f64; 3]],
     cval: &mut [bool],
-    at: impl Fn(usize) -> Option<[f32; 3]> + Sync,
+    at: impl Fn(usize) -> Option<[f64; 3]> + Sync,
 ) {
     let cw = w.div_ceil(2);
     cv.chunks_mut(cw)
@@ -59,7 +59,7 @@ fn downsample(
         .enumerate()
         .for_each(|(y, (vrow, okrow))| {
             for x in 0..cw {
-                let (mut s, mut n) = ([0f32; 3], 0);
+                let (mut s, mut n) = ([0f64; 3], 0);
                 for dy in 0..2 {
                     for dx in 0..2 {
                         let (sx, sy) = (2 * x + dx, 2 * y + dy);
@@ -75,7 +75,7 @@ fn downsample(
                     }
                 }
                 if n > 0 {
-                    vrow[x] = s.map(|v| v / n as f32);
+                    vrow[x] = s.map(|v| v / f64::from(n));
                     okrow[x] = true;
                 }
             }
@@ -83,14 +83,14 @@ fn downsample(
 }
 
 /// Bilinear sample of the `cw × ch` coarse level at fine pixel `(x, y)` (twice the resolution).
-fn upsample(cv: &[[f32; 3]], cw: usize, ch: usize, x: usize, y: usize) -> [f32; 3] {
-    let fx = ((x as f32 + 0.5) / 2.0 - 0.5).clamp(0.0, (cw - 1) as f32);
-    let fy = ((y as f32 + 0.5) / 2.0 - 0.5).clamp(0.0, (ch - 1) as f32);
+fn upsample(cv: &[[f64; 3]], cw: usize, ch: usize, x: usize, y: usize) -> [f64; 3] {
+    let fx = ((x as f64 + 0.5) / 2.0 - 0.5).clamp(0.0, (cw - 1) as f64);
+    let fy = ((y as f64 + 0.5) / 2.0 - 0.5).clamp(0.0, (ch - 1) as f64);
     let (x0, y0) = (fx.floor() as usize, fy.floor() as usize);
     let (x1, y1) = ((x0 + 1).min(cw - 1), (y0 + 1).min(ch - 1));
-    let (tx, ty) = (fx - x0 as f32, fy - y0 as f32);
+    let (tx, ty) = (fx - x0 as f64, fy - y0 as f64);
     let g = |xx: usize, yy: usize| cv[yy * cw + xx];
-    let mut v = [0f32; 3];
+    let mut v = [0f64; 3];
     for c in 0..3 {
         let top = g(x0, y0)[c] + (g(x1, y0)[c] - g(x0, y0)[c]) * tx;
         let bot = g(x0, y1)[c] + (g(x1, y1)[c] - g(x0, y1)[c]) * tx;
@@ -101,7 +101,7 @@ fn upsample(cv: &[[f32; 3]], cw: usize, ch: usize, x: usize, y: usize) -> [f32; 
 
 /// White-balanced chromaticity of an unclipped pixel (`None`: clipped or too dark to tell).
 #[inline]
-fn chroma_of(p: &[f32; 3], _wb: [f32; 3], clip: f32) -> Option<[f32; 3]> {
+fn chroma_of(p: &[f64; 3], _wb: [f64; 3], clip: f64) -> Option<[f64; 3]> {
     if p[0] >= clip || p[1] >= clip || p[2] >= clip {
         return None;
     }
@@ -118,7 +118,7 @@ fn chroma_of(p: &[f32; 3], _wb: [f32; 3], clip: f32) -> Option<[f32; 3]> {
 /// never valid at full resolution, so its chromaticity is always the bilinear sample of the
 /// half-resolution level: we start the pyramid there, straight from the image, and never build
 /// the full-resolution field (same result, a quarter of the memory and far less work).
-pub(super) fn reconstruct(img: &mut Rgb32f, wb: [f32; 3], clip: f32, clipped: &[[bool; 3]]) -> usize {
+pub(super) fn reconstruct(img: &mut Rgb32f, wb: [f64; 3], clip: f64, clipped: &[[bool; 3]]) -> usize {
     let (w, h) = (img.width, img.height);
     let count = clipped.iter().filter(|p| p.iter().any(|c| *c)).count();
     if count == 0 {
@@ -126,7 +126,7 @@ pub(super) fn reconstruct(img: &mut Rgb32f, wb: [f32; 3], clip: f32, clipped: &[
     }
     // chromaticity (white-balanced ratios to the channel sum) of unclipped pixels, at half resolution
     let (cw, ch) = (w.div_ceil(2), h.div_ceil(2));
-    let mut cv = vec![[1f32 / 3.0; 3]; cw * ch];
+    let mut cv = vec![[1f64 / 3.0; 3]; cw * ch];
     let mut cval = vec![false; cw * ch];
     {
         let data = &img.data;
@@ -134,7 +134,7 @@ pub(super) fn reconstruct(img: &mut Rgb32f, wb: [f32; 3], clip: f32, clipped: &[
             if clipped[i].iter().any(|c| *c) {
                 None
             } else {
-                chroma_of(&data[i], wb, f32::MAX)
+                chroma_of(&data[i], wb, f64::MAX)
             }
         });
     }
@@ -142,7 +142,7 @@ pub(super) fn reconstruct(img: &mut Rgb32f, wb: [f32; 3], clip: f32, clipped: &[
         fill_invalid(cw, ch, &mut cv, &mut cval);
     }
     let any_valid = cw * ch < w * h && cval.iter().any(|&v| v);
-    let max_level = wb.iter().copied().fold(0.0f32, f32::max) * clip;
+    let max_level = wb.iter().copied().fold(0.0f64, f64::max) * clip;
     img.data.chunks_mut(w).enumerate().for_each(|(y, row)| {
         for (x, px) in row.iter_mut().enumerate() {
             let p = *px;
@@ -153,11 +153,11 @@ pub(super) fn reconstruct(img: &mut Rgb32f, wb: [f32; 3], clip: f32, clipped: &[
             let r = if any_valid {
                 upsample(&cv, cw, ch, x, y)
             } else {
-                [1f32 / 3.0; 3]
+                [1f64 / 3.0; 3]
             };
             let q = p;
             // estimate the white-balanced channel sum from the unclipped channels
-            let (mut sum, mut k) = (0f32, 0usize);
+            let (mut sum, mut k) = (0f64, 0usize);
             for c in 0..3 {
                 if !cl[c] && r[c] > 1e-3 {
                     sum += q[c] / r[c];
@@ -166,10 +166,10 @@ pub(super) fn reconstruct(img: &mut Rgb32f, wb: [f32; 3], clip: f32, clipped: &[
             }
             let mut out = q;
             if k == 0 {
-                let v = q.iter().copied().fold(0.0f32, f32::max).max(max_level);
+                let v = q.iter().copied().fold(0.0f64, f64::max).max(max_level);
                 out = [v; 3];
             } else {
-                let sum = sum / k as f32;
+                let sum = sum / k as f64;
                 for c in 0..3 {
                     if cl[c] {
                         out[c] = q[c].max(sum * r[c]);

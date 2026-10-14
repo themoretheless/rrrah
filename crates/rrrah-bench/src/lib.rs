@@ -17,20 +17,27 @@ use std::{
     fs::{File, OpenOptions},
     io::{BufWriter, Write},
     path::Path,
-    sync::{Arc, Mutex, mpsc},
+    sync::{Arc, Mutex, mpsc, atomic::{AtomicU64, Ordering}},
     time::{Duration, Instant, SystemTime, UNIX_EPOCH},
 };
 
 use anyhow::{Context, Result};
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
+
+static NEXT_THREAD_ID: AtomicU64 = AtomicU64::new(1);
+thread_local! { static TRACE_THREAD_ID: u64 = NEXT_THREAD_ID.fetch_add(1, Ordering::Relaxed); }
+fn trace_thread_id() -> u64 { TRACE_THREAD_ID.with(|id| *id) }
 
 const SCHEMA: u32 = 1;
 
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TelemetryEvent {
     pub schema: u32,
     pub run_id: String,
     pub sequence: u64,
+    /// Process-local lane; old JSONL records without this field use lane zero.
+    #[serde(default)]
+    pub thread_id: u64,
     /// Monotonic nanoseconds since recorder creation.
     pub ts_ns: u128,
     pub kind: EventKind,
@@ -42,11 +49,11 @@ pub struct TelemetryEvent {
     pub value: Option<f64>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub unit: Option<String>,
-    #[serde(skip_serializing_if = "BTreeMap::is_empty")]
+    #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
     pub args: BTreeMap<String, String>,
 }
 
-#[derive(Debug, Clone, Copy, Serialize)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum EventKind {
     SpanBegin,
@@ -124,6 +131,7 @@ impl Telemetry {
             schema: SCHEMA,
             run_id: String::new(),
             sequence: 0,
+            thread_id: trace_thread_id(),
             ts_ns: 0,
             kind: EventKind::SpanBegin,
             name: name.clone(),
@@ -138,6 +146,7 @@ impl Telemetry {
             name,
             stage,
             started,
+            thread_id: trace_thread_id(),
             closed: false,
         }
     }
@@ -153,6 +162,7 @@ impl Telemetry {
             schema: SCHEMA,
             run_id: String::new(),
             sequence: 0,
+            thread_id: trace_thread_id(),
             ts_ns: 0,
             kind: EventKind::Counter,
             name: name.into(),
@@ -175,6 +185,7 @@ impl Telemetry {
             schema: SCHEMA,
             run_id: String::new(),
             sequence: 0,
+            thread_id: trace_thread_id(),
             ts_ns: 0,
             kind: EventKind::Gauge,
             name: name.into(),
@@ -237,6 +248,7 @@ pub struct SpanGuard {
     name: String,
     stage: String,
     started: Instant,
+    thread_id: u64,
     closed: bool,
 }
 
@@ -253,6 +265,7 @@ impl SpanGuard {
             schema: SCHEMA,
             run_id: String::new(),
             sequence: 0,
+            thread_id: self.thread_id,
             ts_ns: 0,
             kind: EventKind::SpanEnd,
             name: self.name.clone(),
@@ -301,9 +314,7 @@ fn chrome_event(event: &TelemetryEvent) -> ChromeEvent {
         ph: phase.into(),
         ts: event.ts_ns as f64 / 1_000.0,
         pid: std::process::id(),
-        // Stable numeric thread IDs are not portable on stable Rust; Chrome
-        // trace still remains useful with one process-wide lane.
-        tid: 0,
+        tid: event.thread_id,
         args,
     }
 }
@@ -330,6 +341,29 @@ pub fn default_run_id() -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn trace_lanes_are_distinct_and_moved_span_keeps_its_origin() {
+        let dir = tempfile::tempdir().unwrap();
+        let jsonl = dir.path().join("events.jsonl");
+        let trace = dir.path().join("trace.json");
+        {
+            let telemetry = Telemetry::new("threads", Some(&jsonl), Some(&trace)).unwrap();
+            let span = telemetry.span("moved", "test");
+            let other = telemetry.clone();
+            std::thread::spawn(move || {
+                other.counter("worker", "test", 1., "events");
+                span.finish();
+            }).join().unwrap();
+        }
+        let trace: serde_json::Value = serde_json::from_str(&std::fs::read_to_string(trace).unwrap()).unwrap();
+        assert_ne!(trace[0]["tid"], trace[1]["tid"]);
+        assert_eq!(trace[0]["tid"], trace[2]["tid"]);
+        let line = std::fs::read_to_string(jsonl).unwrap();
+        let mut old: serde_json::Value = serde_json::from_str(line.lines().next().unwrap()).unwrap();
+        old.as_object_mut().unwrap().remove("thread_id");
+        let old: TelemetryEvent = serde_json::from_value(old).unwrap();
+        assert_eq!(old.thread_id, 0);
+    }
     #[test]
     fn emits_jsonl_and_closes_trace() {
         let dir = tempfile::tempdir().expect("tempdir");

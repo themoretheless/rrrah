@@ -160,6 +160,8 @@ pub enum RasterDecodeError {
     InvalidPcx(&'static str),
     #[error("invalid or unsupported EXR color metadata: {0}")]
     InvalidExrColor(&'static str),
+    #[error("invalid EXR geometry metadata: {0}")]
+    InvalidExrGeometry(&'static str),
     #[error("invalid Radiance color metadata: {0}")]
     InvalidHdrColor(&'static str),
     #[error("invalid Farbfeld framing")]
@@ -633,7 +635,7 @@ fn decode_raster_bytes_inner(
         bytes[offset] &= 0x7f;
     }
     let png_color = crate::png_color::declaration(&bytes)?;
-    let exr_color = crate::exr_color::declaration(&bytes)?;
+    let exr_metadata = crate::exr_color::metadata(&bytes)?;
     let hdr_color = crate::hdr_color::declaration(&bytes)?;
     // QOI validates framing while decoding under the output reservation.
     if bytes.starts_with(b"qoif") {
@@ -791,13 +793,16 @@ fn decode_raster_bytes_inner(
     if let Some([x, y, width, height]) = clean_crop {
         image = image.crop_imm(x, y, width, height);
     }
-    let png_pixel_aspect = png_color.pixel_aspect.map(|aspect| {
-        if orientation.to_exif() >= 5 {
-            1.0 / aspect
-        } else {
-            aspect
-        }
-    });
+    let pixel_aspect = png_color
+        .pixel_aspect
+        .or(exr_metadata.pixel_aspect)
+        .map(|aspect| {
+            if orientation.to_exif() >= 5 {
+                1.0 / aspect
+            } else {
+                aspect
+            }
+        });
     image.apply_orientation(orientation);
     // HEIF transforms apply rotation (counterclockwise), then mirroring.
     image = match avif_properties.rotation {
@@ -822,7 +827,7 @@ fn decode_raster_bytes_inner(
                 png_color
                     .color
                     .or(avif_properties.color)
-                    .or(exr_color)
+                    .or(exr_metadata.color)
                     .or(hdr_color)
                     .unwrap_or(match format {
                         ImageFormat::Hdr => RasterColorSpace::LinearRgbUnspecified,
@@ -922,7 +927,7 @@ fn decode_raster_bytes_inner(
         }
     };
     Ok(DecodedRaster::new(width, height, pixels, color_space)?
-        .with_pixel_aspect(png_pixel_aspect)?
+        .with_pixel_aspect(pixel_aspect)?
         .with_hotspot(hotspot)?)
 }
 
@@ -1160,6 +1165,178 @@ mod tests {
 
     use super::*;
     use image::ImageEncoder;
+
+    #[test]
+    fn exr_display_window_crops_and_places_data_in_pixel_coordinates() {
+        let base = include_bytes!("../../../tests/fixtures/raster/float-none-rec709-declared.exr");
+        let attribute = b"displayWindow\0box2i\0\x10\0\0\0";
+        let offset = base
+            .windows(attribute.len())
+            .position(|v| v == attribute)
+            .unwrap()
+            + attribute.len();
+        let reference = decode_fixture("window-reference.exr", base).unwrap();
+        let RasterPixels::Rgba32Float(source) = reference.pixels() else {
+            panic!("EXR precision")
+        };
+        assert_eq!((reference.width(), reference.height()), (3, 2));
+        // Display-only changes retain scanlines. Shifted fixtures additionally update
+        // scanline Y coordinates, preserving every encoded channel sample.
+        let cases: [([i32; 2], [i32; 4], Option<&[u8]>); 8] = [
+            ([0, 0], [-1, -1, 3, 2], None),
+            ([0, 0], [1, 0, 2, 1], None),
+            ([0, 0], [-2, 1, 1, 3], None),
+            ([0, 0], [5, 5, 6, 6], None),
+            ([0, 0], [0, 0, 2, 1], None),
+            (
+                [-2, -1],
+                [-3, -2, 2, 2],
+                Some(include_bytes!(
+                    "../../../tests/fixtures/raster/float-shifted-window-negative.exr"
+                )),
+            ),
+            (
+                [2, 1],
+                [3, 1, 5, 3],
+                Some(include_bytes!(
+                    "../../../tests/fixtures/raster/float-shifted-window-positive-crop.exr"
+                )),
+            ),
+            (
+                [-7, 9],
+                [-7, 9, -5, 10],
+                Some(include_bytes!(
+                    "../../../tests/fixtures/raster/float-shifted-window-translated.exr"
+                )),
+            ),
+        ];
+        for (origin, bounds, fixture) in cases {
+            let mut bytes = fixture.unwrap_or(base).to_vec();
+            for (index, coordinate) in bounds.iter().enumerate() {
+                bytes[offset + index * 4..offset + index * 4 + 4]
+                    .copy_from_slice(&coordinate.to_le_bytes());
+            }
+            let path = std::env::temp_dir().join(format!(
+                "rrrah-exr-window-{}-{}.exr",
+                std::process::id(),
+                bounds[0]
+            ));
+            std::fs::write(&path, bytes).unwrap();
+            let budget = rrrah_core::MemoryBudget::new(1024 * 1024);
+            let mut request = crate::DecodeRequest::new(path.clone());
+            request.memory_budget = Some(budget.clone());
+            let result = decode_raster(&request);
+            std::fs::remove_file(path).unwrap();
+            let decoded = result.unwrap();
+            assert_eq!(
+                (decoded.width(), decoded.height()),
+                (
+                    (bounds[2] - bounds[0] + 1) as u32,
+                    (bounds[3] - bounds[1] + 1) as u32
+                )
+            );
+            let RasterPixels::Rgba32Float(actual) = decoded.pixels() else {
+                panic!("EXR precision")
+            };
+            for y in bounds[1]..=bounds[3] {
+                for x in bounds[0]..=bounds[2] {
+                    let destination = (((y - bounds[1]) as u32 * decoded.width()
+                        + (x - bounds[0]) as u32)
+                        * 4) as usize;
+                    let expected: &[f32] = if (origin[0]..origin[0] + 3).contains(&x)
+                        && (origin[1]..origin[1] + 2).contains(&y)
+                    {
+                        &source[(((y - origin[1]) * 3 + x - origin[0]) * 4) as usize
+                            ..(((y - origin[1]) * 3 + x - origin[0]) * 4 + 4) as usize]
+                    } else {
+                        &[0.; 4]
+                    };
+                    for channel in 0..4 {
+                        assert_eq!(
+                            actual[destination + channel].to_bits(),
+                            expected[channel].to_bits(),
+                            "bounds={bounds:?} at ({x},{y}) channel={channel}"
+                        );
+                    }
+                }
+            }
+            let prepared =
+                crate::prepare_raster_for_display_with_budget(&decoded, Some(&budget)).unwrap();
+            assert_eq!(
+                (prepared.width(), prepared.height()),
+                (decoded.width(), decoded.height())
+            );
+            drop(prepared);
+            drop(decoded);
+            assert_eq!(budget.used(), 0);
+        }
+    }
+
+    #[test]
+    fn exr_physical_pixel_aspect_reaches_display_preparation_without_changing_samples() {
+        let base = include_bytes!("../../../tests/fixtures/raster/float-none-rec709-declared.exr");
+        let attribute = b"pixelAspectRatio\0float\0\x04\0\0\0";
+        let offset = base
+            .windows(attribute.len())
+            .position(|v| v == attribute)
+            .unwrap()
+            + attribute.len();
+        let reference = decode_fixture("aspect-reference.exr", base).unwrap();
+        for aspect in [2.0f32, 0.5, 1.0] {
+            let mut bytes = base.to_vec();
+            bytes[offset..offset + 4].copy_from_slice(&aspect.to_le_bytes());
+            let path = std::env::temp_dir().join(format!(
+                "rrrah-exr-physical-{}-{}.exr",
+                std::process::id(),
+                aspect.to_bits()
+            ));
+            std::fs::write(&path, bytes).unwrap();
+            let budget = rrrah_core::MemoryBudget::new(1024 * 1024);
+            let mut request = crate::DecodeRequest::new(path.clone());
+            request.memory_budget = Some(budget.clone());
+            let result = decode_raster(&request);
+            std::fs::remove_file(path).unwrap();
+            let frame = result.unwrap();
+            assert_eq!(frame.pixel_aspect(), Some(aspect));
+            assert_eq!(
+                (frame.width(), frame.height()),
+                (reference.width(), reference.height())
+            );
+            let (RasterPixels::Rgba32Float(actual), RasterPixels::Rgba32Float(expected)) =
+                (frame.pixels(), reference.pixels())
+            else {
+                panic!("EXR precision");
+            };
+            assert!(
+                actual
+                    .iter()
+                    .zip(expected.iter())
+                    .all(|(a, b)| a.to_bits() == b.to_bits())
+            );
+            let prepared = crate::prepare_raster_for_display_with_budget(&frame, Some(&budget)).unwrap();
+            assert_eq!(prepared.pixel_aspect(), Some(aspect));
+            drop(prepared);
+            drop(frame);
+            assert_eq!(budget.used(), 0);
+        }
+        for aspect in [0.0f32, -1.0, f32::NAN, f32::INFINITY] {
+            let mut bytes = base.to_vec();
+            bytes[offset..offset + 4].copy_from_slice(&aspect.to_le_bytes());
+            let path = std::env::temp_dir().join(format!(
+                "rrrah-exr-invalid-aspect-{}-{}.exr",
+                std::process::id(),
+                aspect.to_bits()
+            ));
+            std::fs::write(&path, bytes).unwrap();
+            let budget = rrrah_core::MemoryBudget::new(1024 * 1024);
+            let mut request = crate::DecodeRequest::new(path.clone());
+            request.memory_budget = Some(budget.clone());
+            let result = decode_raster(&request);
+            std::fs::remove_file(path).unwrap();
+            assert!(matches!(result, Err(RasterDecodeError::InvalidExrGeometry(_))));
+            assert_eq!(budget.used(), 0);
+        }
+    }
 
     #[test]
     fn png_physical_pixel_aspect_reaches_common_raster_without_changing_samples() {
