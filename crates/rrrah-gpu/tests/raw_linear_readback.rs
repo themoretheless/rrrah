@@ -646,7 +646,9 @@ fn raw_renderer_5x5_gpu_demosaic_algorithms_auto_raise_tile_halo_and_preserve_li
         rrrah_gpu::GpuDemosaicAlgorithm::Directional,
     ] {
         let mut renderer = RawRenderer::new(&device, wgpu::TextureFormat::Rgba32Float);
-        renderer.set_output_mode(&queue, RawOutputMode::SceneLinear).unwrap();
+        renderer
+            .set_output_mode(&queue, RawOutputMode::SceneLinear)
+            .unwrap();
         renderer.set_demosaic_algorithm(&queue, alg);
         assert_eq!(renderer.demosaic_algorithm(), alg);
         // Use small 32x32 tiles so the center of the 64x64 frame sits right on a 4-tile boundary,
@@ -684,4 +686,3 @@ fn raw_renderer_5x5_gpu_demosaic_algorithms_auto_raise_tile_halo_and_preserve_li
         assert_eq!(actual[3], 1.0);
     }
 }
-

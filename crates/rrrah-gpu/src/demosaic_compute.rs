@@ -444,7 +444,8 @@ mod tests {
 
     fn test_device() -> Option<(wgpu::Device, wgpu::Queue)> {
         let instance = wgpu::Instance::default();
-        let adapter = pollster::block_on(instance.request_adapter(&wgpu::RequestAdapterOptions::default())).ok()?;
+        let adapter =
+            pollster::block_on(instance.request_adapter(&wgpu::RequestAdapterOptions::default())).ok()?;
         pollster::block_on(adapter.request_device(&wgpu::DeviceDescriptor::default())).ok()
     }
 
@@ -487,15 +488,7 @@ mod tests {
 
         for alg in GpuDemosaicAlgorithm::ALL {
             let out = compute
-                .execute_managed(
-                    &queue,
-                    &const_mosaic,
-                    [w, h],
-                    cfa,
-                    alg,
-                    &gpu_budget,
-                    &cpu_budget,
-                )
+                .execute_managed(&queue, &const_mosaic, [w, h], cfa, alg, &gpu_budget, &cpu_budget)
                 .expect("constant HDR demosaic must succeed");
             for y in 3..(h - 3) {
                 for x in 3..(w - 3) {
@@ -525,15 +518,7 @@ mod tests {
         }
         let mse = |alg: GpuDemosaicAlgorithm| -> f64 {
             let out = compute
-                .execute_managed(
-                    &queue,
-                    &stripe_mosaic,
-                    [w, h],
-                    cfa,
-                    alg,
-                    &gpu_budget,
-                    &cpu_budget,
-                )
+                .execute_managed(&queue, &stripe_mosaic, [w, h], cfa, alg, &gpu_budget, &cpu_budget)
                 .unwrap();
             let mut err = 0.0f64;
             let mut n = 0usize;
