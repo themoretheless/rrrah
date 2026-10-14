@@ -268,6 +268,43 @@ pub fn read_recovery(path: &Path, source: &SourceVersion, page: usize) -> Result
 mod tests {
     use super::*;
     #[test]
+    fn curve_values_round_trip_exactly_before_recovery_checksum_verification() {
+        let mut seed = 0x1234_5678_9abc_def0u64;
+        for _ in 0..1024 {
+            seed = seed.wrapping_mul(6_364_136_223_846_793_005).wrapping_add(1);
+            let x = f64::from_bits(0x3fe0_0000_0000_0000 | (seed & 0x000f_ffff_ffff_ffff));
+            if 1. - x < 1e-6 {
+                continue;
+            }
+            let state = EditState::default()
+                .with_curve(&[[0., 0.], [x, x], [1., 1.]])
+                .unwrap();
+            let encoded = serde_json::to_vec(&state).unwrap();
+            let restored: EditState = serde_json::from_slice(&encoded).unwrap();
+            assert_eq!(
+                restored.points()[1][0].to_bits(),
+                x.to_bits(),
+                "{x} must survive checksummed recovery"
+            );
+            assert_eq!(serde_json::to_vec(&restored).unwrap(), encoded);
+        }
+        // The first pre-fix failing value must also survive both persistence formats.
+        let x = f64::from_bits(4_607_175_173_822_920_608);
+        let state = EditState::default()
+            .with_curve(&[[0., 0.], [x, x], [1., 1.]])
+            .unwrap();
+        let dir = tempfile::tempdir().unwrap();
+        let source = dir.path().join("image.raw");
+        fs::write(&source, b"synthetic source").unwrap();
+        let version = source_version(&source).unwrap();
+        let journal = journal_path(dir.path(), &source, 0);
+        write_recovery(&journal, version.clone(), 0, state).unwrap();
+        assert_eq!(read_recovery(&journal, &version, 0).unwrap(), Some(state));
+        let sidecar = source.with_extension("xmp");
+        write_sidecar(&sidecar, 0, state, None).unwrap();
+        assert_eq!(read_sidecar(&sidecar, 0).unwrap().0, Some(state));
+    }
+    #[test]
     fn oversized_and_non_regular_sidecars_are_refused() {
         let dir = tempfile::tempdir().unwrap();
         assert!(read_sidecar(dir.path(), 0).is_err());

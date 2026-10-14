@@ -1,0 +1,68 @@
+{
+  "status": "complete5blob_static_source_review_domain_rejected",
+  "repository": "williamkray/maubot-welcome",
+  "commit": "391f49562e7891413f4badafef3c04e2a40fbffb",
+  "index": 327,
+  "whole_repo_complete": true,
+  "whole_runtime_qualified": false,
+  "fully_read_files": [
+    {
+      "path": "README.md",
+      "local": "docs/research/dedup-500/evidence/williamkray--maubot-welcome/00-README.md",
+      "sha256": "1c175379b7f61ccbc46e8b1aa227849cf79200246336be416198d2d3f02bea84",
+      "git_blob_sha1": "5b8331c66870d3c44d42af4c1021f391d6156eaf",
+      "bytes": 468,
+      "lines": 10
+    },
+    {
+      "path": "LICENSE.txt",
+      "local": "docs/research/dedup-500/evidence/williamkray--maubot-welcome/01-LICENSE.txt",
+      "sha256": "86424b7e8cdfc12b72db1a4e925fa94e4731d5968bd783a54d64b433fdc79131",
+      "git_blob_sha1": "506dcb0e11dfbfa881a4d396978f62a280927670",
+      "bytes": 1094,
+      "lines": 9
+    },
+    {
+      "path": "welcome.py",
+      "local": "docs/research/dedup-500/evidence/williamkray--maubot-welcome/02-welcome.py",
+      "sha256": "9e3caf3de89c0330ed9192d45c9c72abcb99a114663317693784b071c06a75b7",
+      "git_blob_sha1": "c83ec95746b8e7ccda686dabf459322d7a5fc2d9",
+      "bytes": 2060,
+      "lines": 49
+    },
+    {
+      "path": "base-config.yaml",
+      "local": "docs/research/dedup-500/evidence/williamkray--maubot-welcome/03-base-config.yaml",
+      "sha256": "3442c7b1684867b676b4fc8d2c073ffbac5d9b7deb38f90a72113b44f4a9fded",
+      "git_blob_sha1": "c8057a80fcc142dc21658f148a95217ff10abe1d",
+      "bytes": 828,
+      "lines": 21
+    },
+    {
+      "path": "maubot.yaml",
+      "local": "docs/research/dedup-500/evidence/williamkray--maubot-welcome/04-maubot.yaml",
+      "sha256": "d5b02997a0e49e50bf508031688d4e4f213ba25c3a6daa3cc177e900560b4728",
+      "git_blob_sha1": "500ed67999c784f9cb285399ee2963dc5cc0a570",
+      "bytes": 160,
+      "lines": 10
+    }
+  ],
+  "auditor_sha256": "c6ca1fa0a69ce809a3183c7c48fafbaa5326d845293576498d711a2fdc3db42f",
+  "syntax_parsed": true,
+  "executed_upstream_functions": 0,
+  "functions": [
+    "do_update",
+    "start",
+    "greet",
+    "get_config_class"
+  ],
+  "findings": [
+    "All implementation consists of config update, startup, join-event greeting and config-class selection. No file/image duplicate detection, hashing, byte comparison, candidate index, similarity or duplicate-removal algorithm. Search-domain falsepositive; original registry row retained.",
+    "Watched room filter and sync-state event exclusion; welcome notice followed by optional room-name lookup and notification. Source includes no replay/event-id deduplication or persistent ownership state; manifest databasefalse. No runtime claim.",
+    "Templates and HTML interpolation in message handlers, source name lookup and sends have no explicit local exception/rollback/cancellation handling. Runtime/security/membership-framework behavior unqualified; no adapters or handler execution needed for domain rejection.",
+    "MIT2023license text fullyread with placeholder copyright-holder wording; no source adopted. README deprecation statement read as captured-source statement, current upstream lifecycle not independently checked.",
+    "Maubot manifest modules/main_class/config inclusion checked; no dependency lock/tests/build pipeline in capturedtree."
+  ],
+  "decision": "reject-domain-after-full-source-review",
+  "scope": "All5captured blobs fullyread and matched Gitblob SHA1/size/SHA256. Python syntax and function/call inventory parsed without importing/executing upstream code. No bot/framework/client/network/account/room messages or notifications executed, no runtime qualification or implementation adoption. Captured commit-to-tree binding not independently fetched."
+}

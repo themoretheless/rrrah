@@ -1,0 +1,426 @@
+{
+  "status": "verified20unchanged_original_cli_synthetic_json_controls",
+  "repository": "bernadinm/protonpass-deduplicate-secrets",
+  "source_sha256": "867d62289ffc1d31e6ab88b4057dc0f40ce9a59a4bb1accb9e428c3677b2c35f",
+  "producer_sha256": "038019285e56e89de60caf3c33702deb4eff7a8e426000cc462c6fa47b04ccad",
+  "rows": [
+    {
+      "index": 0,
+      "name": "same-name-same-content",
+      "input": "/private/tmp/rrrah-proton212-controls-20261015/00-same-name-same-content/data.json",
+      "input_sha256": "529d9c6a241f5edb06c2e79c2609c80b5a119e74e3a5f5da6d1c8ee760aef873",
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-proton212-controls-20261015/00-same-name-same-content/stdout.log",
+      "stdout_sha256": "1fe737dae3aa619c9f9740791d97e62170a9e72df4402b5787284796e4e6a8cd",
+      "stderr": "/private/tmp/rrrah-proton212-controls-20261015/00-same-name-same-content/stderr.log",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "output": "/private/tmp/rrrah-proton212-controls-20261015/00-same-name-same-content/deduplicated_output.json",
+      "output_sha256": "a69b49f9b95bb3a9f35cf06f6e4b8a57db10d0cbf332a9296ad8a4a603605c34",
+      "ids": [
+        "a"
+      ],
+      "expected_ids": [
+        "a"
+      ],
+      "stats": {
+        "original_count": 2,
+        "deduplicated_count": 1,
+        "duplicate_count": 1
+      }
+    },
+    {
+      "index": 1,
+      "name": "same-name-distinct-content",
+      "input": "/private/tmp/rrrah-proton212-controls-20261015/01-same-name-distinct-content/data.json",
+      "input_sha256": "52aaeb2f5a0666ee2590bfcb594f43825d149e01c67e43babafc2e59888e9665",
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-proton212-controls-20261015/01-same-name-distinct-content/stdout.log",
+      "stdout_sha256": "1fe737dae3aa619c9f9740791d97e62170a9e72df4402b5787284796e4e6a8cd",
+      "stderr": "/private/tmp/rrrah-proton212-controls-20261015/01-same-name-distinct-content/stderr.log",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "output": "/private/tmp/rrrah-proton212-controls-20261015/01-same-name-distinct-content/deduplicated_output.json",
+      "output_sha256": "bd57b04cf1e04ce59ce83d86c50093075d8cba0090d37239c81e7cc250075dca",
+      "ids": [
+        "a"
+      ],
+      "expected_ids": [
+        "a"
+      ],
+      "stats": {
+        "original_count": 2,
+        "deduplicated_count": 1,
+        "duplicate_count": 1
+      }
+    },
+    {
+      "index": 2,
+      "name": "different-name-same-content",
+      "input": "/private/tmp/rrrah-proton212-controls-20261015/02-different-name-same-content/data.json",
+      "input_sha256": "0ccc5da91991553527cafa5cf754c5c4a53e0207039922c9fd8d248dcffbfdee",
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-proton212-controls-20261015/02-different-name-same-content/stdout.log",
+      "stdout_sha256": "2d23c5a80d07a4bf5abd7a15833a69ee3e88e103cd8a0e0911d09e3311851475",
+      "stderr": "/private/tmp/rrrah-proton212-controls-20261015/02-different-name-same-content/stderr.log",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "output": "/private/tmp/rrrah-proton212-controls-20261015/02-different-name-same-content/deduplicated_output.json",
+      "output_sha256": "5373cc60459bccfe9310665314ff091c8f9af1d4f41e65028e80d26af43d7e8f",
+      "ids": [
+        "a",
+        "b"
+      ],
+      "expected_ids": [
+        "a",
+        "b"
+      ],
+      "stats": {
+        "original_count": 2,
+        "deduplicated_count": 2,
+        "duplicate_count": 0
+      }
+    },
+    {
+      "index": 3,
+      "name": "cross-vault-name-collision",
+      "input": "/private/tmp/rrrah-proton212-controls-20261015/03-cross-vault-name-collision/data.json",
+      "input_sha256": "32743076d6fe0d8d1aa9f001fdc7233275870ec382da9614fde61b3f499abff9",
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-proton212-controls-20261015/03-cross-vault-name-collision/stdout.log",
+      "stdout_sha256": "1fe737dae3aa619c9f9740791d97e62170a9e72df4402b5787284796e4e6a8cd",
+      "stderr": "/private/tmp/rrrah-proton212-controls-20261015/03-cross-vault-name-collision/stderr.log",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "output": "/private/tmp/rrrah-proton212-controls-20261015/03-cross-vault-name-collision/deduplicated_output.json",
+      "output_sha256": "73b775c216f9b9fcac94fd22d574f8ac6ec6365f8ddd8786ecb8ef268c21aa0d",
+      "ids": [
+        "a"
+      ],
+      "expected_ids": [
+        "a"
+      ],
+      "stats": {
+        "original_count": 2,
+        "deduplicated_count": 1,
+        "duplicate_count": 1
+      }
+    },
+    {
+      "index": 4,
+      "name": "case-sensitive",
+      "input": "/private/tmp/rrrah-proton212-controls-20261015/04-case-sensitive/data.json",
+      "input_sha256": "1039e4d0f68e0d295dc2751612bd9d9115eadfdab161a70846433cb15efc862c",
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-proton212-controls-20261015/04-case-sensitive/stdout.log",
+      "stdout_sha256": "2d23c5a80d07a4bf5abd7a15833a69ee3e88e103cd8a0e0911d09e3311851475",
+      "stderr": "/private/tmp/rrrah-proton212-controls-20261015/04-case-sensitive/stderr.log",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "output": "/private/tmp/rrrah-proton212-controls-20261015/04-case-sensitive/deduplicated_output.json",
+      "output_sha256": "d60123bf18b87d609490bc8ecd6ab3324e884873425e5a920535dcf41efa3012",
+      "ids": [
+        "a",
+        "b"
+      ],
+      "expected_ids": [
+        "a",
+        "b"
+      ],
+      "stats": {
+        "original_count": 2,
+        "deduplicated_count": 2,
+        "duplicate_count": 0
+      }
+    },
+    {
+      "index": 5,
+      "name": "whitespace-sensitive",
+      "input": "/private/tmp/rrrah-proton212-controls-20261015/05-whitespace-sensitive/data.json",
+      "input_sha256": "ef007e1f29bda3596acc243be13d858812de3505c6616c92b514ae31c6ae77fe",
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-proton212-controls-20261015/05-whitespace-sensitive/stdout.log",
+      "stdout_sha256": "2d23c5a80d07a4bf5abd7a15833a69ee3e88e103cd8a0e0911d09e3311851475",
+      "stderr": "/private/tmp/rrrah-proton212-controls-20261015/05-whitespace-sensitive/stderr.log",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "output": "/private/tmp/rrrah-proton212-controls-20261015/05-whitespace-sensitive/deduplicated_output.json",
+      "output_sha256": "ef06c6daccd92805a165f33583a23a3c2005e33511e9972078a074d4c83df8a5",
+      "ids": [
+        "a",
+        "b"
+      ],
+      "expected_ids": [
+        "a",
+        "b"
+      ],
+      "stats": {
+        "original_count": 2,
+        "deduplicated_count": 2,
+        "duplicate_count": 0
+      }
+    },
+    {
+      "index": 6,
+      "name": "empty-name",
+      "input": "/private/tmp/rrrah-proton212-controls-20261015/06-empty-name/data.json",
+      "input_sha256": "7705a7ef319a881b332b8bf4cc5e1312cca0166bfb2daaf02ccf527acf492dd9",
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-proton212-controls-20261015/06-empty-name/stdout.log",
+      "stdout_sha256": "1fe737dae3aa619c9f9740791d97e62170a9e72df4402b5787284796e4e6a8cd",
+      "stderr": "/private/tmp/rrrah-proton212-controls-20261015/06-empty-name/stderr.log",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "output": "/private/tmp/rrrah-proton212-controls-20261015/06-empty-name/deduplicated_output.json",
+      "output_sha256": "dde44c000257f70c7d72c15d312fb048fcf81b24424c248a3bd5227c4c0910ea",
+      "ids": [
+        "a"
+      ],
+      "expected_ids": [
+        "a"
+      ],
+      "stats": {
+        "original_count": 2,
+        "deduplicated_count": 1,
+        "duplicate_count": 1
+      }
+    },
+    {
+      "index": 7,
+      "name": "null-name",
+      "input": "/private/tmp/rrrah-proton212-controls-20261015/07-null-name/data.json",
+      "input_sha256": "f8e47127f27351b3c03a284abc3893bf696bf65576366fbc40629bbb36522066",
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-proton212-controls-20261015/07-null-name/stdout.log",
+      "stdout_sha256": "1fe737dae3aa619c9f9740791d97e62170a9e72df4402b5787284796e4e6a8cd",
+      "stderr": "/private/tmp/rrrah-proton212-controls-20261015/07-null-name/stderr.log",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "output": "/private/tmp/rrrah-proton212-controls-20261015/07-null-name/deduplicated_output.json",
+      "output_sha256": "efe25d94aeabc60bb36c2988169ddebd55fa42190832e4d70b6473d7dcca43d7",
+      "ids": [
+        "a"
+      ],
+      "expected_ids": [
+        "a"
+      ],
+      "stats": {
+        "original_count": 2,
+        "deduplicated_count": 1,
+        "duplicate_count": 1
+      }
+    },
+    {
+      "index": 8,
+      "name": "numeric-bool-name-collision",
+      "input": "/private/tmp/rrrah-proton212-controls-20261015/08-numeric-bool-name-collision/data.json",
+      "input_sha256": "1e363839abb2608adac71a893b1e10621424fe8b330f5b0c2adf3d5812981429",
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-proton212-controls-20261015/08-numeric-bool-name-collision/stdout.log",
+      "stdout_sha256": "1fe737dae3aa619c9f9740791d97e62170a9e72df4402b5787284796e4e6a8cd",
+      "stderr": "/private/tmp/rrrah-proton212-controls-20261015/08-numeric-bool-name-collision/stderr.log",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "output": "/private/tmp/rrrah-proton212-controls-20261015/08-numeric-bool-name-collision/deduplicated_output.json",
+      "output_sha256": "25de8d2386f3a697f1bfe2839555f81189a0c60dc8be02053673edf9ff1bf5c5",
+      "ids": [
+        "a"
+      ],
+      "expected_ids": [
+        "a"
+      ],
+      "stats": {
+        "original_count": 2,
+        "deduplicated_count": 1,
+        "duplicate_count": 1
+      }
+    },
+    {
+      "index": 9,
+      "name": "first-order-retained",
+      "input": "/private/tmp/rrrah-proton212-controls-20261015/09-first-order-retained/data.json",
+      "input_sha256": "19b36d468ceac80a77110e0f789c272c80780843e9881ef9ddf09ad766830a65",
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-proton212-controls-20261015/09-first-order-retained/stdout.log",
+      "stdout_sha256": "c34f828a9455b19274923b53c1a831cd0e0ffd1755ae8801fc2b2db32e3f5b8d",
+      "stderr": "/private/tmp/rrrah-proton212-controls-20261015/09-first-order-retained/stderr.log",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "output": "/private/tmp/rrrah-proton212-controls-20261015/09-first-order-retained/deduplicated_output.json",
+      "output_sha256": "54a97ee377580a885ef47a92dedf7001e404c6677f168eef6601a612e80f15a2",
+      "ids": [
+        "a",
+        "b"
+      ],
+      "expected_ids": [
+        "a",
+        "b"
+      ],
+      "stats": {
+        "original_count": 3,
+        "deduplicated_count": 2,
+        "duplicate_count": 1
+      }
+    },
+    {
+      "index": 10,
+      "name": "missing-items",
+      "input": "/private/tmp/rrrah-proton212-controls-20261015/10-missing-items/data.json",
+      "input_sha256": "f7e37855c487d320ae8bbb6132e5c31546de38833e4b1a184efcf8c3480ad0dd",
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-proton212-controls-20261015/10-missing-items/stdout.log",
+      "stdout_sha256": "9976fbae746c963ee98816db2955a346c89358710bee2079eb818c0107c1471e",
+      "stderr": "/private/tmp/rrrah-proton212-controls-20261015/10-missing-items/stderr.log",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "output": "/private/tmp/rrrah-proton212-controls-20261015/10-missing-items/deduplicated_output.json",
+      "output_sha256": "12912ed21f329476cb83af3686ad8c03852e8142f5bbe486f165e72ab29d2c88",
+      "ids": [],
+      "expected_ids": [],
+      "stats": {
+        "original_count": 0,
+        "deduplicated_count": 0,
+        "duplicate_count": 0
+      }
+    },
+    {
+      "index": 11,
+      "name": "empty-items",
+      "input": "/private/tmp/rrrah-proton212-controls-20261015/11-empty-items/data.json",
+      "input_sha256": "6f4bfccd948d27e8e7f6f00a31a9960ca7c93223b2d24f77d527159eb7a850b0",
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-proton212-controls-20261015/11-empty-items/stdout.log",
+      "stdout_sha256": "9976fbae746c963ee98816db2955a346c89358710bee2079eb818c0107c1471e",
+      "stderr": "/private/tmp/rrrah-proton212-controls-20261015/11-empty-items/stderr.log",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "output": "/private/tmp/rrrah-proton212-controls-20261015/11-empty-items/deduplicated_output.json",
+      "output_sha256": "eca85d8e54faa1595e776a66261a9f0ec6f25feebd0b2ffade0a2ca8c80dc11a",
+      "ids": [],
+      "expected_ids": [],
+      "stats": {
+        "original_count": 0,
+        "deduplicated_count": 0,
+        "duplicate_count": 0
+      }
+    },
+    {
+      "index": 12,
+      "name": "overwrite-existing-output",
+      "input": "/private/tmp/rrrah-proton212-controls-20261015/12-overwrite-existing-output/data.json",
+      "input_sha256": "a7750dae909fffd7ab29d2b1321596be852e815edef54638251642fad2648948",
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-proton212-controls-20261015/12-overwrite-existing-output/stdout.log",
+      "stdout_sha256": "f4f14ada4f0356efc0409e57e6295f9c931d126cf73a909297a0bc0cf9db171c",
+      "stderr": "/private/tmp/rrrah-proton212-controls-20261015/12-overwrite-existing-output/stderr.log",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "output": "/private/tmp/rrrah-proton212-controls-20261015/12-overwrite-existing-output/deduplicated_output.json",
+      "output_sha256": "a69b49f9b95bb3a9f35cf06f6e4b8a57db10d0cbf332a9296ad8a4a603605c34",
+      "ids": [
+        "a"
+      ],
+      "expected_ids": [
+        "a"
+      ],
+      "stats": {
+        "original_count": 1,
+        "deduplicated_count": 1,
+        "duplicate_count": 0
+      }
+    },
+    {
+      "index": 13,
+      "name": "missing-name",
+      "input": "/private/tmp/rrrah-proton212-controls-20261015/13-missing-name/data.json",
+      "input_sha256": "539368da9e5847dc16c208175ddfdf581563daa2dff6d22def909f5aa9b629b1",
+      "returncode": 1,
+      "stdout": "/private/tmp/rrrah-proton212-controls-20261015/13-missing-name/stdout.log",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "/private/tmp/rrrah-proton212-controls-20261015/13-missing-name/stderr.log",
+      "stderr_sha256": "543a7482ab88b42e2329ccffb26e9d4622006951565c5787dde0557afb7efd63",
+      "output": "/private/tmp/rrrah-proton212-controls-20261015/13-missing-name/deduplicated_output.json",
+      "output_sha256": "ea4dfd0f266e3fe9b0279a756cd21d4dea34f4d7d7dedf1494a523295b9330af",
+      "expected_error": "KeyError",
+      "existing_output_preserved": true
+    },
+    {
+      "index": 14,
+      "name": "unhashable-name",
+      "input": "/private/tmp/rrrah-proton212-controls-20261015/14-unhashable-name/data.json",
+      "input_sha256": "993ce2cb342c9f41e92040c4cd945f5c6db133ad597775d48a00d6f73209d21e",
+      "returncode": 1,
+      "stdout": "/private/tmp/rrrah-proton212-controls-20261015/14-unhashable-name/stdout.log",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "/private/tmp/rrrah-proton212-controls-20261015/14-unhashable-name/stderr.log",
+      "stderr_sha256": "4b3c81a10c371011f401ac742a7a4c22e439089b1f8a6126daa5738a8ade04be",
+      "output": "/private/tmp/rrrah-proton212-controls-20261015/14-unhashable-name/deduplicated_output.json",
+      "output_sha256": "ea4dfd0f266e3fe9b0279a756cd21d4dea34f4d7d7dedf1494a523295b9330af",
+      "expected_error": "TypeError",
+      "existing_output_preserved": true
+    },
+    {
+      "index": 15,
+      "name": "top-level-list",
+      "input": "/private/tmp/rrrah-proton212-controls-20261015/15-top-level-list/data.json",
+      "input_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "returncode": 1,
+      "stdout": "/private/tmp/rrrah-proton212-controls-20261015/15-top-level-list/stdout.log",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "/private/tmp/rrrah-proton212-controls-20261015/15-top-level-list/stderr.log",
+      "stderr_sha256": "70b367da550c775aed4cc040f1dd822fea84b4767cdce6e4c54c448d6faf8175",
+      "output": "/private/tmp/rrrah-proton212-controls-20261015/15-top-level-list/deduplicated_output.json",
+      "output_sha256": "ea4dfd0f266e3fe9b0279a756cd21d4dea34f4d7d7dedf1494a523295b9330af",
+      "expected_error": "ValueError",
+      "existing_output_preserved": true
+    },
+    {
+      "index": 16,
+      "name": "no-vaults",
+      "input": "/private/tmp/rrrah-proton212-controls-20261015/16-no-vaults/data.json",
+      "input_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "returncode": 1,
+      "stdout": "/private/tmp/rrrah-proton212-controls-20261015/16-no-vaults/stdout.log",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "/private/tmp/rrrah-proton212-controls-20261015/16-no-vaults/stderr.log",
+      "stderr_sha256": "c4808b28e1b0538ae56296b562a119b792c89cdc3dfd13a663a70c174d3a18c5",
+      "output": "/private/tmp/rrrah-proton212-controls-20261015/16-no-vaults/deduplicated_output.json",
+      "output_sha256": "ea4dfd0f266e3fe9b0279a756cd21d4dea34f4d7d7dedf1494a523295b9330af",
+      "expected_error": "ValueError",
+      "existing_output_preserved": true
+    },
+    {
+      "index": 17,
+      "name": "empty-vaults",
+      "input": "/private/tmp/rrrah-proton212-controls-20261015/17-empty-vaults/data.json",
+      "input_sha256": "f52c796129a16dd732147af9904e82e47c1e3ebd3ef445a898ab975fa3b55b83",
+      "returncode": 1,
+      "stdout": "/private/tmp/rrrah-proton212-controls-20261015/17-empty-vaults/stdout.log",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "/private/tmp/rrrah-proton212-controls-20261015/17-empty-vaults/stderr.log",
+      "stderr_sha256": "c4808b28e1b0538ae56296b562a119b792c89cdc3dfd13a663a70c174d3a18c5",
+      "output": "/private/tmp/rrrah-proton212-controls-20261015/17-empty-vaults/deduplicated_output.json",
+      "output_sha256": "ea4dfd0f266e3fe9b0279a756cd21d4dea34f4d7d7dedf1494a523295b9330af",
+      "expected_error": "ValueError",
+      "existing_output_preserved": true
+    },
+    {
+      "index": 18,
+      "name": "vaults-not-map",
+      "input": "/private/tmp/rrrah-proton212-controls-20261015/18-vaults-not-map/data.json",
+      "input_sha256": "14fb7491ad16affd5436251fec0b38678a3e527f3e6fff74f9600c60a376dfac",
+      "returncode": 1,
+      "stdout": "/private/tmp/rrrah-proton212-controls-20261015/18-vaults-not-map/stdout.log",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "/private/tmp/rrrah-proton212-controls-20261015/18-vaults-not-map/stderr.log",
+      "stderr_sha256": "3299f260517f832f0b74329d6cd416c656e770c8edb62107de3eabb377f5f217",
+      "output": "/private/tmp/rrrah-proton212-controls-20261015/18-vaults-not-map/deduplicated_output.json",
+      "output_sha256": "ea4dfd0f266e3fe9b0279a756cd21d4dea34f4d7d7dedf1494a523295b9330af",
+      "expected_error": "AttributeError",
+      "existing_output_preserved": true
+    },
+    {
+      "index": 19,
+      "name": "items-not-list",
+      "input": "/private/tmp/rrrah-proton212-controls-20261015/19-items-not-list/data.json",
+      "input_sha256": "079058cdf4999940d88b6cff9cb853c33469e160648a597a9ef212bf942a1351",
+      "returncode": 1,
+      "stdout": "/private/tmp/rrrah-proton212-controls-20261015/19-items-not-list/stdout.log",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "/private/tmp/rrrah-proton212-controls-20261015/19-items-not-list/stderr.log",
+      "stderr_sha256": "5bb776eaa4c4dd9b40f05aca100584dfd0e4ee1b7a3d9662814594aa09bae6d4",
+      "output": "/private/tmp/rrrah-proton212-controls-20261015/19-items-not-list/deduplicated_output.json",
+      "output_sha256": "ea4dfd0f266e3fe9b0279a756cd21d4dea34f4d7d7dedf1494a523295b9330af",
+      "expected_error": "TypeError",
+      "existing_output_preserved": true
+    }
+  ],
+  "scope": "Whole unchanged original CLI with actual Pythonstdlib JSON/set/IO,20authored synthetic metadata records/cases only. Source/prodinput/output hashes and sourceunchanged guarded. Every case in fresh owned tempfolder; existing output overwritten on success, preserved on prewritevalidationfailure. No actual ProtonPass/vault/export/password/account/credential/network/zip/privatefile accessed. No API/import-back/platform/resource/performance or library adoption qualification."
+}

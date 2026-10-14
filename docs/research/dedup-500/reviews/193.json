@@ -2,9 +2,9 @@
   "index": 193,
   "repository": "ADScanPro/ad-audit-wordlist",
   "commit": "8da3d5f6fab1185390410746d60463df31ba1b4e",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All3pinned repository blobs fully read and Gitmatched; bash syntax and7actual awk normalization controls, not external rling/fullscript runtime qualification",
   "decision": "reject-domain",
-  "finding": "Password-audit wordlist builder; text list union/dedup.",
+  "finding": "Text-list orchestration only; original normalization verified on7authored byte fixtures, dedup delegated to external unpinned rling. No library adoption.",
   "available_source_evidence": [
     {
       "path": "build-ad-audit-wordlist.sh",
@@ -18,7 +18,7 @@
     }
   ],
   "license_metadata": "MIT",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "Full MIT license/source read; external input/tool rights and behavior not qualified",
   "tests_detected": 0,
   "upstream_tests_run": false,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
@@ -44,5 +44,9 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_review_complete": true,
+  "whole_runtime_qualified": false,
+  "complete_source_review": "docs/research/dedup-500/wordlist193-complete-source-review-20261014.json",
+  "normalization_audit": "docs/research/dedup-wordlist193-controls-audit-20261014.json"
 }

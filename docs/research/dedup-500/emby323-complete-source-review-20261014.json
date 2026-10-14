@@ -1,0 +1,67 @@
+{
+  "status": "complete5blob_source_review26adapted_original_JS_controls",
+  "repository": "imahmud1/emby-dupe-finder",
+  "commit": "3374935ef73c9e3b36b2624ce0c94da942f59950",
+  "index": 323,
+  "whole_repo_complete": true,
+  "whole_runtime_qualified": false,
+  "fully_read_files": [
+    {
+      "path": "README.md",
+      "local": "docs/research/dedup-500/evidence/imahmud1--emby-dupe-finder/00-README.md",
+      "sha256": "630e88554030ab20a683bb333fa1dde0e5f9afd4dfac14d8c167d97f63069efa",
+      "git_blob_sha1": "113beb6ef6dab2a86102446dd454c76eb37645fe",
+      "bytes": 2071,
+      "lines": 38
+    },
+    {
+      "path": "LICENSE",
+      "local": "docs/research/dedup-500/evidence/imahmud1--emby-dupe-finder/01-LICENSE",
+      "sha256": "0a4164559add2529b1e5be6abd234ec210b2ab27d31cd37d07fa18ac1e9c348d",
+      "git_blob_sha1": "1b86bfea023b1a3bde0c3c8fe14d42480cacc3a7",
+      "bytes": 1072,
+      "lines": 21
+    },
+    {
+      "path": "script.js",
+      "local": "docs/research/dedup-500/evidence/imahmud1--emby-dupe-finder/02-script.js",
+      "sha256": "4157b156ec2fc27c5c6fc132315f2356af62e311eff3bba20e1a6807c34f3a8e",
+      "git_blob_sha1": "be22692f0b194301b592cf63372fa3e2503cd9e8",
+      "bytes": 4590,
+      "lines": 126
+    },
+    {
+      "path": "index.html",
+      "local": "docs/research/dedup-500/evidence/imahmud1--emby-dupe-finder/03-index.html",
+      "sha256": "232b5626974763e0e3bde8fd1e39332846d1bcd74516c370ceaa6591f770ae0b",
+      "git_blob_sha1": "89475bb50bc81c3caec9fe9d02448dadad458290",
+      "bytes": 960,
+      "lines": 26
+    },
+    {
+      "path": "styles.css",
+      "local": "docs/research/dedup-500/evidence/imahmud1--emby-dupe-finder/04-styles.css",
+      "sha256": "b5e946a3a2d4d287d26dfac33d9db9eccae6de0e6db25c977812bde7cc6c7df2",
+      "git_blob_sha1": "0ccd87f77c4629c825620d7e9e96ce1aa8344695",
+      "bytes": 2832,
+      "lines": 166
+    }
+  ],
+  "controls": "docs/research/dedup-emby323-controls-20261014.json",
+  "controls_sha256": "b45f577ddfa811956e437247a836f5934bdbd6a4a66e65d8bcea1f39b3140fe3",
+  "control_source": "scripts/check-dedup-emby323-20261014.js",
+  "control_source_sha256": "04439ee76337a593ead70b78bd07aa859c104716e6615113885e6e56f4616dff",
+  "auditor_sha256": "ba58f52774708115f04032e73cdc9779fe48b7e7d347af9c5162545780b84d69",
+  "findings": [
+    "Metadata grouping only; no content/hash/visual/identity observation. Same path repeated counts as duplicate; different years of same name grouped, delimiter-colliding differentnames merge.",
+    "Case/Unicode differences miss matches; whitespace-only names accepted; numeric names throw; prototype property names throw because plain objects are used as maps.",
+    "Year-specific plus cross-year group overlap:3input movies yield5exported memberships and2groups, count is groups rather than duplicate movies.",
+    "Fake100record paginated response with one returnedItem causes exactly two overallrequests (libraries+movies), no pagination. Separate libraries never compared.",
+    "Missing URL scheme becomes plaintextHTTP; synthetic APIkey and libraryId interpolated in query without encoding. No real key/network used.",
+    "Unescaped library/error metadata inserted into innerHTML; ordinary apostrophe in library name breaks inlineonclick syntax. String/syntax controls only, no browser script execution or security exploit claim.",
+    "Networkrequests serial, no AbortController/timeout/ownership token/resource limit. Concurrent-use behavior unqualified.",
+    "Text export realBlob content verified with objectURL/click recorders, no browser download or filename safety qualification. HTML externalfont and CSS fullyread, no visual/runtime browser claim.",
+    "MIT2024license read. No upstreamtests/build/dependency manifest in capturedtree; reference only, no source adoption."
+  ],
+  "scope": "Whole original JS unchanged in Node vm; real grouping/async/render/download functions. Explicit minimal DOM, fake fetch responses, real Node Blob and objectURL/click recorders. No browser markup/event execution, real server/API/account/credentials/network, media reads, deletion or UI visual qualification. All inputs authored synthetic metadata; token fixture only. All5files fullyread and Gitblob SHA1/size/SHA256 matched.20metadata controls and6adapted request/render/export scenarios independentlychecked. Captured commit-to-tree binding not independently fetched."
+}

@@ -2,9 +2,9 @@
   "index": 310,
   "repository": "MrTransistorsChannel/SandDupe",
   "commit": "f964a80ea82cafc508fda4cd6be8402634131732",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All6pinned repository files fully read and Gitmatched; static game-domain source/descriptor review,0runtime executions",
   "decision": "reject-domain",
-  "finding": "Bukkit sand item duplication; game exploit domain.",
+  "finding": "Complete source confirms Minecraft gameplay item/entity client/plugin domain, no file/image/hash duplicate detection; no runtime/network/plugin/gameplay execution or adoption.",
   "available_source_evidence": [
     {
       "path": "src/ru/tulavcube/SandDupe/SandDupe.java",
@@ -15,10 +15,40 @@
       "lines": 74,
       "source": true,
       "test": false
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/bug_report.md",
+      "local": "03-bug_report.md",
+      "url": "https://github.com/MrTransistorsChannel/SandDupe/blob/f964a80ea82cafc508fda4cd6be8402634131732/.github/ISSUE_TEMPLATE/bug_report.md",
+      "sha256": "ffa8a72c76c6c7de87a0eb28f17e0ab99251406602f0437aa03c563f302adb59",
+      "truncated": false,
+      "lines": 29,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": ".gitignore",
+      "local": "04-gitignore",
+      "url": "https://github.com/MrTransistorsChannel/SandDupe/blob/f964a80ea82cafc508fda4cd6be8402634131732/.gitignore",
+      "sha256": "87cb33eb3a98e631ac87b61ffa193b705c37e341f818af2acda145a4fe6d90e1",
+      "truncated": false,
+      "lines": 3,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/plugin.yml",
+      "local": "05-plugin.yml",
+      "url": "https://github.com/MrTransistorsChannel/SandDupe/blob/f964a80ea82cafc508fda4cd6be8402634131732/src/plugin.yml",
+      "sha256": "2a61edf03bf29ccd1d7132904b723d31a3bf6a880269a7ccf43244e415a2e223",
+      "truncated": false,
+      "lines": 5,
+      "source": true,
+      "test": false
     }
   ],
   "license_metadata": "MIT",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "Full captured MIT2021license/source read; no source adoption",
   "tests_detected": 0,
   "upstream_tests_run": false,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
@@ -44,5 +74,8 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_review_complete": true,
+  "whole_runtime_qualified": false,
+  "complete_source_review": "docs/research/dedup-500/game310-complete-source-review-20261015.json"
 }

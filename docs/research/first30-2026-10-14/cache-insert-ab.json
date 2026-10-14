@@ -1,0 +1,73 @@
+{
+  "scope": "Actual RasterRamCache operation, PathBuf 512-byte component, 32 identities, 20000 puts per batch, one shared managed float raster; no navigation/RSS claim. Baseline is exact previous operation body; candidate was public insert during this experiment. Host also running compilation; no stable gain established.",
+  "warmups_per_mode": 3,
+  "pairs": [
+    {
+      "pair": 0,
+      "baseline_ns": 2922743709,
+      "candidate_ns": 3054351500,
+      "puts": 20000
+    },
+    {
+      "pair": 1,
+      "baseline_ns": 2790680000,
+      "candidate_ns": 2621729583,
+      "puts": 20000
+    },
+    {
+      "pair": 2,
+      "baseline_ns": 2483960000,
+      "candidate_ns": 2959166541,
+      "puts": 20000
+    },
+    {
+      "pair": 3,
+      "baseline_ns": 1937177750,
+      "candidate_ns": 3579857541,
+      "puts": 20000
+    },
+    {
+      "pair": 4,
+      "baseline_ns": 1766196000,
+      "candidate_ns": 2013042625,
+      "puts": 20000
+    },
+    {
+      "pair": 5,
+      "baseline_ns": 1808443625,
+      "candidate_ns": 2044981334,
+      "puts": 20000
+    },
+    {
+      "pair": 6,
+      "baseline_ns": 1668798083,
+      "candidate_ns": 2468654250,
+      "puts": 20000
+    },
+    {
+      "pair": 7,
+      "baseline_ns": 3263195375,
+      "candidate_ns": 2962830709,
+      "puts": 20000
+    },
+    {
+      "pair": 8,
+      "baseline_ns": 2467965417,
+      "candidate_ns": 2389212125,
+      "puts": 20000
+    },
+    {
+      "pair": 9,
+      "baseline_ns": 2218341417,
+      "candidate_ns": 2538464416,
+      "puts": 20000
+    }
+  ],
+  "median_baseline_over_candidate": 0.8808544687365387,
+  "candidate_wins": 3,
+  "adopted": false,
+  "reason": "No stable wall-time gain; production hunk reverted. One avoided K::clone, visible pin and last-owner credit verified independently.",
+  "baseline_source": "    pub fn insert(&mut self, key: K, raster: DecodedRaster) -> bool {\n        self.spill_expired();\n        let weight = raster.capacity_bytes();\n        let visible = self.visible.as_ref() == Some(&key);\n        let (admitted, evicted) = match self.entries.insert(key.clone(), raster, weight) {\n            Ok(victims) => (true, victims),\n            Err(_) => (false, Vec::new()),\n        };\n        if let Some(swap) = &self.swap {\n            for (key, frame) in evicted {\n                swap.enqueue(key, frame);\n            }\n        }\n        if !admitted {\n            return false;\n        }\n        if visible {\n            self.entries.pin(&key);\n        }\n        true\n    }",
+  "candidate_source": "    pub fn insert(&mut self, key: K, raster: DecodedRaster) -> bool {\n        self.spill_expired();\n        let weight = raster.capacity_bytes();\n        let visible = self.visible.as_ref() == Some(&key);\n        let (admitted, evicted) = match self.entries.insert(key, raster, weight) {\n            Ok(victims) => (true, victims),\n            Err(_) => (false, Vec::new()),\n        };\n        if let Some(swap) = &self.swap {\n            for (key, frame) in evicted {\n                swap.enqueue(key, frame);\n            }\n        }\n        if !admitted {\n            return false;\n        }\n        if visible && let Some(key) = self.visible.as_ref() {\n            self.entries.pin(key);\n        }\n        true\n    }",
+  "reproducer_note": "After rejection, candidate is retained as experimental_insert only under cfg(test); future probe compares private operation controls."
+}

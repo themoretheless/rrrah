@@ -1,5 +1,5 @@
 {
-  "status": "production_worker_cap_implemented_full_core_suite_queued",
+  "status": "current_full_core_correctness_suite_passed_optimized_followup_pending",
   "source": "crates/rrrah-core/src/develop/demosaic.rs",
   "source_sha256": "04d5ef604f97545257298b0a0102fcd12a772c5fb8e942801bc05bd8183f11c8",
   "policy": "algorithm-specific simultaneous tile payload fits existing 8 MiB worker allowance; frame-wide temporary accounting remains separate",
@@ -59,12 +59,17 @@
   "unoptimized_core_execution": {
     "session": 31466,
     "log": "/tmp/core-memory-unoptimized-tests-20261014.log",
-    "status": "compiling_rrrah_core",
+    "status": "terminal_pass",
     "purpose": "current native correctness tests; no performance evidence",
     "profile_overrides": {
       "test_opt_level": 0,
       "test_debug": 0
-    }
+    },
+    "exit_code": 0,
+    "passed": 140,
+    "failed": 0,
+    "ignored": 2,
+    "performance_evidence": false
   },
   "conditioned_dual_regression": "conditioned_dual_frames_are_admitted_before_sensor_copy: one-byte-short refusal before input-copy processing; execution pending",
   "green_plane_admission": "develop_raw includes full f64 green plane for clustered Bayer and directional X-Trans, including non-Bayer Auto, alongside sensor samples, RGB64 and optional mask",
@@ -98,5 +103,14 @@
     "passed": 1,
     "failed": 0,
     "log_sha256": "d49360d5bf5331deef1265b1dc99139dc3cd93e230c124b52c90caea2eb476e0"
-  }
+  },
+  "latest_typecheck": {
+    "exit_code": 0,
+    "log": "/tmp/core-memory-check-green-plane-20261014.log"
+  },
+  "validation_log_sha256": {
+    "full-core-worker-stage-after.log": "8c283389f6f60e5b7b4d0a0af318c8b23a4442543a6d7e458ad65f2ab19f53c7",
+    "current-typecheck.log": "fcac5bb78126cf1648c5e251853940a3d3f748df16a939799d3a5acec08a2ef1"
+  },
+  "source_drift_since_recorded_snapshot": []
 }

@@ -1,0 +1,41 @@
+{
+  "status": "quick_checks_passed_checkpoint_ready_not_goal_complete",
+  "checks": [
+    {
+      "command": [
+        "cargo",
+        "check",
+        "--locked",
+        "--offline",
+        "-p",
+        "rrrah",
+        "-p",
+        "rrrah-dedup"
+      ],
+      "exit_code": 0,
+      "observed_elapsed": "97m38s",
+      "scope": "Initial requested quick application/library check; includes build-lock waiting, not compiler benchmark or full tests."
+    },
+    {
+      "command": [
+        "cargo",
+        "check",
+        "--locked",
+        "--offline",
+        "-p",
+        "rrrah",
+        "-p",
+        "rrrah-dedup"
+      ],
+      "exit_code": 0,
+      "observed_elapsed": "6m34s",
+      "scope": "Fresh check after current application manifest updates; source coherence not independently pinned across concurrent work."
+    }
+  ],
+  "exact_tests_audit": "docs/research/dedup-root-exact-combined-audit-20261014.json",
+  "exact_tests_audit_sha256": "d7e9ae019e0e2c1f99e06bd29109e5f48b7006b6ebd245e173acb465b63f3919",
+  "exact_tests_passed": 52,
+  "source_drift_test_run": "docs/research/dedup-root-decode-drift-preserved-20261015.json",
+  "source_drift_test_count": 214,
+  "scope": "Checkpoint validation only. Normal cargo checks and52current exact tests pass;214selecteddecode tests passed but9sourcefiles drifted, so not currentRoot/frozenqualification. Diagnostic frozenV4 noLTO gate and legacynegative continuation remain separate. All12goal requirements remain incomplete; no fullworkspace/native/corpus/platform/release claim."
+}

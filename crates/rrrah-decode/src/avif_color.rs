@@ -51,6 +51,7 @@ fn number(b: &mut &[u8], n: usize) -> Result<u32, RasterDecodeError> {
 #[derive(Default)]
 pub(crate) struct Properties {
     pub bit_depth: Option<u8>,
+    pub premultiplied_alpha: bool,
     pub color: Option<RasterColorSpace>,
     pub rotation: u8,
     pub mirror: Option<u8>,
@@ -61,6 +62,47 @@ pub(crate) struct Properties {
 #[cfg(test)]
 fn declaration(bytes: &[u8]) -> Result<Option<RasterColorSpace>, RasterDecodeError> {
     Ok(properties(bytes)?.color)
+}
+
+// Resolve the selected primary's prem reference and its inverse auxl link.
+// Keep references borrowed/bounded; never scan compressed bytes for box tags.
+fn prem_target(data: &[u8], primary: u32) -> Result<Option<u32>, RasterDecodeError> {
+    let mut data = data;
+    let full = take(&mut data, 4)?;
+    if full[0] > 1 || full[1..] != [0; 3] {
+        return Err(invalid("unsupported item-reference version or flags"));
+    }
+    let width = if full[0] == 0 { 2 } else { 4 };
+    let mut target = None;
+    let mut auxiliary = Vec::new();
+    for (kind, mut body) in boxes(data)? {
+        let from = number(&mut body, width)?;
+        let count = number(&mut body, 2)?;
+        if kind == *b"prem" && from == primary && (count != 1 || target.is_some()) {
+            return Err(invalid("duplicate or ambiguous primary prem reference"));
+        }
+        for _ in 0..count {
+            let to = number(&mut body, width)?;
+            if kind == *b"prem" && from == primary {
+                target = Some(to);
+            }
+            if kind == *b"auxl" && to == primary {
+                if auxiliary.len() >= 65536 {
+                    return Err(invalid("too many auxiliary references"));
+                }
+                auxiliary.push(from);
+            }
+        }
+        if !body.is_empty() {
+            return Err(invalid("trailing item-reference bytes"));
+        }
+    }
+    if let Some(id) = target {
+        if id == primary || !auxiliary.contains(&id) {
+            return Err(invalid("prem target is not auxiliary to primary"));
+        }
+    }
+    Ok(target)
 }
 
 pub(crate) fn properties(bytes: &[u8]) -> Result<Properties, RasterDecodeError> {
@@ -80,6 +122,7 @@ pub(crate) fn properties(bytes: &[u8]) -> Result<Properties, RasterDecodeError> 
     let children = boxes(meta)?;
     let mut primary = None;
     let mut iprp = None;
+    let mut iref = None;
     for (kind, data) in children {
         match &kind {
             b"pitm" => {
@@ -97,6 +140,11 @@ pub(crate) fn properties(bytes: &[u8]) -> Result<Properties, RasterDecodeError> 
                     },
                 )?);
             }
+            b"iref" => {
+                if iref.replace(data).is_some() {
+                    return Err(invalid("duplicate item references"));
+                }
+            }
             b"iprp" => {
                 if iprp.replace(data).is_some() {
                     return Err(invalid("duplicate item properties"));
@@ -106,6 +154,7 @@ pub(crate) fn properties(bytes: &[u8]) -> Result<Properties, RasterDecodeError> 
         }
     }
     let primary = primary.ok_or_else(|| invalid("missing primary item"))?;
+    let alpha_target = iref.map(|data| prem_target(data, primary)).transpose()?.flatten();
     let iprp = iprp.ok_or_else(|| invalid("missing item properties"))?;
     let children = boxes(iprp)?;
     let mut properties = None;
@@ -122,35 +171,6 @@ pub(crate) fn properties(bytes: &[u8]) -> Result<Properties, RasterDecodeError> 
         }
     }
     let properties = properties.ok_or_else(|| invalid("missing property container"))?;
-    let mut selected = Vec::new();
-    for mut b in associations {
-        let full = take(&mut b, 4)?;
-        if full[0] > 1 || full[1] != 0 || full[2] != 0 || full[3] > 1 {
-            return Err(invalid("unsupported association version or flags"));
-        }
-        let entries = number(&mut b, 4)?;
-        if entries > 65536 {
-            return Err(invalid("too many item associations"));
-        }
-        for _ in 0..entries {
-            let id = number(&mut b, if full[0] == 0 { 2 } else { 4 })?;
-            let count = number(&mut b, 1)?;
-            for _ in 0..count {
-                let association_offset = b.as_ptr() as usize - bytes.as_ptr() as usize;
-                let index = number(&mut b, if full[3] & 1 == 0 { 1 } else { 2 })?
-                    & if full[3] & 1 == 0 { 127 } else { 32767 };
-                if index > properties.len() as u32 {
-                    return Err(invalid("property index outside container"));
-                }
-                if id == primary && index != 0 {
-                    selected.push((index as usize - 1, association_offset));
-                }
-            }
-        }
-        if !b.is_empty() {
-            return Err(invalid("trailing association bytes"));
-        }
-    }
     let mut handled_aperture_associations = Vec::new();
     let mut clean_aperture = None;
     let mut rotation = None;
@@ -159,7 +179,9 @@ pub(crate) fn properties(bytes: &[u8]) -> Result<Properties, RasterDecodeError> 
     let mut bit_depth = None;
     let mut pixel_aspect_seen = false;
     let mut icc = None;
-    for (index, association_offset) in selected {
+    // Apply selected properties as their associations are read. Retaining one
+    // tuple per reference amplifies malformed metadata into large work buffers.
+    let mut apply_primary = |index: usize, association_offset: usize| -> Result<(), RasterDecodeError> {
         let (kind, data) = properties[index];
         match &kind {
             b"pasp" => {
@@ -217,13 +239,13 @@ pub(crate) fn properties(bytes: &[u8]) -> Result<Properties, RasterDecodeError> 
             _ => {}
         }
         if &kind != b"colr" {
-            continue;
+            return Ok(());
         }
         if data.starts_with(b"prof") || data.starts_with(b"rICC") {
             if icc.replace(RasterColorSpace::Icc(data[4..].to_vec())).is_some() {
                 return Err(invalid("multiple primary ICC properties"));
             }
-            continue;
+            return Ok(());
         }
         if color.is_some() {
             return Err(invalid("multiple primary NCLX properties"));
@@ -249,8 +271,67 @@ pub(crate) fn properties(bytes: &[u8]) -> Result<Properties, RasterDecodeError> 
         } else {
             RasterColorSpace::Unspecified
         });
+        Ok(())
+    };
+    let mut alpha_properties = 0;
+    for mut b in associations {
+        let full = take(&mut b, 4)?;
+        if full[0] > 1 || full[1] != 0 || full[2] != 0 || full[3] > 1 {
+            return Err(invalid("unsupported association version or flags"));
+        }
+        let entries = number(&mut b, 4)?;
+        if entries > 65536 {
+            return Err(invalid("too many item associations"));
+        }
+        for _ in 0..entries {
+            let id = number(&mut b, if full[0] == 0 { 2 } else { 4 })?;
+            let count = number(&mut b, 1)?;
+            for _ in 0..count {
+                let association_offset = b.as_ptr() as usize - bytes.as_ptr() as usize;
+                let index = number(&mut b, if full[3] & 1 == 0 { 1 } else { 2 })?
+                    & if full[3] & 1 == 0 { 127 } else { 32767 };
+                if index > properties.len() as u32 {
+                    return Err(invalid("property index outside container"));
+                }
+                if Some(id) == alpha_target && index != 0 {
+                    let (kind, mut data) = properties[index as usize - 1];
+                    if kind == *b"auxC" {
+                        if take(&mut data, 4)? != [0; 4] {
+                            return Err(invalid("invalid alpha auxiliary property"));
+                        }
+                        let end = data
+                            .iter()
+                            .position(|b| *b == 0)
+                            .ok_or_else(|| invalid("unterminated auxiliary type"))?;
+                        if &data[..end] != b"urn:mpeg:mpegB:cicp:systems:auxiliary:alpha" {
+                            return Err(invalid("prem target auxiliary is not alpha"));
+                        }
+                        alpha_properties += 1;
+                        if alpha_properties > 1 {
+                            return Err(invalid("missing or duplicate prem alpha property"));
+                        }
+                    }
+                }
+                if id == primary && index != 0 {
+                    apply_primary(index as usize - 1, association_offset)?;
+                }
+            }
+        }
+        if !b.is_empty() {
+            return Err(invalid("trailing association bytes"));
+        }
     }
+    drop(apply_primary);
+    let premultiplied_alpha = if alpha_target.is_some() {
+        if alpha_properties != 1 {
+            return Err(invalid("missing or duplicate prem alpha property"));
+        }
+        true
+    } else {
+        false
+    };
     Ok(Properties {
+        premultiplied_alpha,
         bit_depth,
         color: icc.or(color),
         rotation: rotation.unwrap_or(0),
@@ -258,6 +339,74 @@ pub(crate) fn properties(bytes: &[u8]) -> Result<Properties, RasterDecodeError> 
         clean_aperture,
         handled_aperture_associations,
     })
+}
+
+// AV1's lossy color coding can overshoot alpha slightly; clamp the
+// recovered integer sample, as for ordinary bounded integer RGB conversion.
+fn unassociate(value: u64, alpha: u64, maximum: u64) -> u64 {
+    if alpha == 0 {
+        0
+    } else {
+        ((value * maximum + alpha / 2) / alpha).min(maximum)
+    }
+}
+
+pub(crate) fn unassociate_u8(
+    pixels: &mut [u8],
+    request: &crate::DecodeRequest,
+) -> Result<(), RasterDecodeError> {
+    let (pixels, rest) = pixels.as_chunks_mut::<4>();
+    if !rest.is_empty() {
+        return Err(invalid("incomplete associated RGBA pixel"));
+    }
+    for (index, pixel) in pixels.iter_mut().enumerate() {
+        if index % 4096 == 0 {
+            request.check_cancelled()?;
+        }
+        let alpha = u64::from(pixel[3]);
+        for value in &mut pixel[..3] {
+            *value = unassociate(u64::from(*value), alpha, 255) as u8;
+        }
+    }
+    Ok(())
+}
+pub(crate) fn unassociate_u16(
+    pixels: &mut [u16],
+    depth: u8,
+    request: &crate::DecodeRequest,
+) -> Result<(), RasterDecodeError> {
+    if !matches!(depth, 10 | 12) {
+        return Err(invalid("invalid associated coded depth"));
+    }
+    let shift = 16 - depth;
+    let mask = (1u16 << shift) - 1;
+    let maximum = (1u64 << depth) - 1;
+    let (pixels, rest) = pixels.as_chunks_mut::<4>();
+    if !rest.is_empty() {
+        return Err(invalid("incomplete associated RGBA pixel"));
+    }
+    for (index, pixel) in pixels.iter_mut().enumerate() {
+        if index % 4096 == 0 {
+            request.check_cancelled()?;
+        }
+        for (channel, value) in pixel.iter().enumerate() {
+            if !(channel == 3 && *value == u16::MAX) && value & mask != 0 {
+                return Err(invalid("codec samples disagree with associated coded depth"));
+            }
+        }
+        let alpha = if pixel[3] == u16::MAX {
+            maximum
+        } else {
+            u64::from(pixel[3] >> shift)
+        };
+        // Divide original codes before expansion. Expanding then dividing can
+        // amplify the expansion rounding error at small alpha.
+        for value in &mut pixel[..3] {
+            *value = unassociate(u64::from(*value >> shift), alpha, 65535) as u16;
+        }
+        pixel[3] = ((alpha * 65535 + maximum / 2) / maximum) as u16;
+    }
+    Ok(())
 }
 
 /// Exact pixel-aligned clean aperture; rational metadata is never rounded.
@@ -292,6 +441,201 @@ pub(crate) fn crop_rect(data: &[u8; 32], width: u32, height: u32) -> Result<[u32
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn streamed_associations_preserve_transform_order_and_essential_offsets_across_boxes() {
+        fn bx(tag: &[u8; 4], body: &[u8]) -> Vec<u8> {
+            let mut out = ((body.len() + 8) as u32).to_be_bytes().to_vec();
+            out.extend(tag);
+            out.extend(body);
+            out
+        }
+        let aperture: Vec<u8> = [4u32, 1, 2, 1, 0, 1, 0, 1]
+            .into_iter()
+            .flat_map(u32::to_be_bytes)
+            .collect();
+        let props = [
+            bx(b"av1C", &[0x81, 0, 0x40, 0]),
+            bx(b"pasp", &[0, 0, 0, 1, 0, 0, 0, 1]),
+            bx(b"clap", &aperture),
+            bx(b"irot", &[1]),
+            bx(b"imir", &[0]),
+        ]
+        .concat();
+        let group = |refs: &[u8]| {
+            let mut b = vec![0, 0, 0, 0, 0, 0, 0, 1, 0, 1, refs.len() as u8];
+            b.extend(refs);
+            bx(b"ipma", &b)
+        };
+        let build = |first: &[u8], second: &[u8]| {
+            let iprp = [bx(b"ipco", &props), group(first), group(second)].concat();
+            let meta = [vec![0; 4], bx(b"pitm", &[0, 0, 0, 0, 0, 1]), bx(b"iprp", &iprp)].concat();
+            [bx(b"ftyp", b"avif\0\0\0\0avif"), bx(b"meta", &meta)].concat()
+        };
+        let bytes = build(&[1, 2, 0x83], &[4, 5]);
+        let parsed = properties(&bytes).unwrap();
+        assert_eq!(parsed.bit_depth, Some(10));
+        assert_eq!(parsed.rotation, 1);
+        assert_eq!(parsed.mirror, Some(0));
+        assert!(parsed.clean_aperture.is_some());
+        assert_eq!(parsed.handled_aperture_associations.len(), 1);
+        assert_eq!(bytes[parsed.handled_aperture_associations[0]], 0x83);
+        assert!(properties(&build(&[4, 5], &[1, 2, 0x83])).is_err());
+    }
+
+    #[test]
+    fn selected_primary_prem_alpha_and_integer_conversion() {
+        let plain = include_bytes!("../../../tests/fixtures/raster/avif-alpha-icc.avif");
+        let prem = include_bytes!("../../../tests/fixtures/raster/avif-alpha-icc-prem.avif");
+        assert!(!properties(plain).unwrap().premultiplied_alpha);
+        assert!(properties(prem).unwrap().premultiplied_alpha);
+        for alpha in 0u64..=255 {
+            for value in 0u64..=255 {
+                let expected = if alpha == 0 {
+                    0
+                } else {
+                    (value as f64 * 255.0 / alpha as f64).round().min(255.0) as u64
+                };
+                assert_eq!(unassociate(value, alpha, 255), expected);
+            }
+        }
+        let request = crate::DecodeRequest::new("unused.avif");
+        let mut bytes = [17, 0, 18, 17, 9, 4, 2, 0];
+        unassociate_u8(&mut bytes, &request).unwrap();
+        assert_eq!(bytes, [255, 0, 255, 17, 0, 0, 0, 0]);
+        let mut words = [1 << 6, 2 << 6, 3 << 6, 10 << 6];
+        unassociate_u16(&mut words, 10, &request).unwrap();
+        assert_eq!(words, [6554, 13107, 19661, 641]);
+        let mut words = [1 << 4, 0, 2 << 4, 2 << 4];
+        unassociate_u16(&mut words, 12, &request).unwrap();
+        assert_eq!(words, [32768, 0, 65535, 32]);
+        assert!(unassociate_u8(&mut [1, 2, 3], &request).is_err());
+    }
+
+    #[test]
+    fn high_depth_prem_codes_match_direct_rational_normalization() {
+        let request = crate::DecodeRequest::new("unused.avif");
+        for depth in [10u8, 12] {
+            let maximum = (1u16 << depth) - 1;
+            let shift = 16 - depth;
+            let alphas: Vec<u16> = if depth == 10 {
+                (0..=maximum).collect()
+            } else {
+                vec![
+                    0, 1, 2, 3, 10, 127, 128, 255, 256, 511, 512, 1023, 1024, 2047, 2048, 4094, 4095,
+                ]
+            };
+            for alpha in alphas {
+                for code in 0..=maximum {
+                    let mut pixel = [code << shift, (maximum - code) << shift, 0, alpha << shift];
+                    unassociate_u16(&mut pixel, depth, &request).unwrap();
+                    for (actual, source) in [(pixel[0], code), (pixel[1], maximum - code)] {
+                        let expected = if alpha == 0 {
+                            0
+                        } else {
+                            (f64::from(source) * 65535.0 / f64::from(alpha))
+                                .round()
+                                .min(65535.0) as u16
+                        };
+                        assert_eq!(actual, expected, "depth={depth} alpha={alpha} code={source}");
+                    }
+                    assert_eq!(
+                        pixel[3],
+                        (f64::from(alpha) * 65535.0 / f64::from(maximum)).round() as u16
+                    );
+                }
+            }
+            let mut opaque = [1 << shift, 0, maximum << shift, u16::MAX];
+            unassociate_u16(&mut opaque, depth, &request).unwrap();
+            assert_eq!(opaque[3], u16::MAX);
+            assert_eq!(opaque[2], u16::MAX);
+            let mut invalid = [1, 0, 0, maximum << shift];
+            assert!(unassociate_u16(&mut invalid, depth, &request).is_err());
+        }
+    }
+
+    #[test]
+    fn prem_reference_requires_unique_selected_primary_auxiliary_link() {
+        let bx = |tag: &[u8; 4], from: u16, to: u16| {
+            let mut b = 14u32.to_be_bytes().to_vec();
+            b.extend(tag);
+            b.extend(from.to_be_bytes());
+            b.extend(1u16.to_be_bytes());
+            b.extend(to.to_be_bytes());
+            b
+        };
+        let prem = bx(b"prem", 1, 2);
+        let aux = bx(b"auxl", 2, 1);
+        let valid = [vec![0; 4], prem.clone(), aux.clone()].concat();
+        assert_eq!(prem_target(&valid, 1).unwrap(), Some(2));
+        assert!(prem_target(&[vec![0; 4], prem.clone()].concat(), 1).is_err());
+        assert!(prem_target(&[valid.clone(), prem].concat(), 1).is_err());
+        assert_eq!(
+            prem_target(&[vec![0; 4], bx(b"prem", 3, 2), aux].concat(), 1).unwrap(),
+            None
+        );
+        let mut truncated = valid;
+        truncated.pop();
+        assert!(prem_target(&truncated, 1).is_err());
+    }
+
+    #[test]
+    fn prem_reference_v1_and_selected_auxiliary_property_are_validated() {
+        fn bx(tag: &[u8; 4], data: &[u8]) -> Vec<u8> {
+            let mut out = ((data.len() + 8) as u32).to_be_bytes().to_vec();
+            out.extend(tag);
+            out.extend(data);
+            out
+        }
+        let reference = |tag: &[u8; 4], from: u32, to: u32| {
+            let mut body = from.to_be_bytes().to_vec();
+            body.extend(1u16.to_be_bytes());
+            body.extend(to.to_be_bytes());
+            bx(tag, &body)
+        };
+        let full = [
+            vec![1, 0, 0, 0],
+            reference(b"prem", 65537, 131074),
+            reference(b"auxl", 131074, 65537),
+        ]
+        .concat();
+        assert_eq!(prem_target(&full, 65537).unwrap(), Some(131074));
+        let mut flags = full.clone();
+        flags[3] = 1;
+        assert!(prem_target(&flags, 65537).is_err());
+        let mut version = full;
+        version[0] = 2;
+        assert!(prem_target(&version, 65537).is_err());
+        let build = |urn: &[u8], item: u16, association_count: u8| {
+            let mut aux = vec![0; 4];
+            aux.extend(urn);
+            aux.push(0);
+            let mut associations = vec![0, 0, 0, 0, 0, 0, 0, 1];
+            associations.extend(item.to_be_bytes());
+            associations.push(association_count);
+            associations.extend(std::iter::repeat_n(1, usize::from(association_count)));
+            let iprp = [bx(b"ipco", &bx(b"auxC", &aux)), bx(b"ipma", &associations)].concat();
+            let refs = [
+                vec![0; 4],
+                bx(b"prem", &[0, 1, 0, 1, 0, 2]),
+                bx(b"auxl", &[0, 2, 0, 1, 0, 1]),
+            ]
+            .concat();
+            let meta = [
+                vec![0; 4],
+                bx(b"pitm", &[0, 0, 0, 0, 0, 1]),
+                bx(b"iref", &refs),
+                bx(b"iprp", &iprp),
+            ]
+            .concat();
+            [bx(b"ftyp", b"avif\0\0\0\0avif"), bx(b"meta", &meta)].concat()
+        };
+        let alpha = b"urn:mpeg:mpegB:cicp:systems:auxiliary:alpha";
+        assert!(properties(&build(alpha, 2, 1)).unwrap().premultiplied_alpha);
+        assert!(properties(&build(alpha, 2, 2)).is_err());
+        assert!(properties(&build(alpha, 3, 1)).is_err());
+        assert!(properties(&build(b"unrecognized auxiliary", 2, 1)).is_err());
+    }
+
     use super::*;
     #[test]
     fn clean_aperture_and_orientation_match_independent_libavif_metadata() {

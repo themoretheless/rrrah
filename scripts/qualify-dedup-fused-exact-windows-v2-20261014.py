@@ -1,0 +1,14 @@
+#!/usr/bin/env python3
+"""Cross-check isolated fused exact module for Windows types; no target execution."""
+from pathlib import Path
+import hashlib,json,subprocess,shutil,os
+R=Path(__file__).resolve().parents[1];D=R/'docs/research';F=Path('/private/tmp/rrrah-fused-exact-windows-v2-20261014');F.mkdir(exist_ok=False);sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest();P=D/'dedup-fused-exact-short-circuit-v3-20261014.json';p=json.loads(P.read_text());src=Path(p['source'])/'src/exact.rs';assert sha(src)==p['source_sha256']['src/exact.rs'];shutil.copyfile(src,F/'exact.rs');assert sha(src)==sha(F/'exact.rs');h=F/'lib.rs';h.write_text('#[path="exact.rs"]pub mod exact;\n');win=R/'target/x86_64-pc-windows-gnu/debug/deps';host=R/'target/debug/deps';b=list(win.glob('libblake3-*.rmeta'));t=list(win.glob('libthiserror-*.rmeta'));u=list(win.glob('libwinapi_util-*.rmeta'));assert len(b)==len(t)==len(u)==1
+paths=list(win.glob('*.rmeta'))+list(host.glob('*.dylib'));deps={str(v):sha(v)for v in paths};artifact=F/'exact.rmeta';cmd=['rustc','+stable','--edition=2024','--crate-name','rrrah_dedup_exact_windows','--crate-type','lib','--emit','metadata','--target','x86_64-pc-windows-gnu',str(h),'-L','dependency='+str(win),'-L','dependency='+str(host),'--extern','blake3='+str(b[0]),'--extern','thiserror='+str(t[0]),'--extern','winapi_util='+str(u[0]),'-o',str(artifact)];O=D/'dedup-fused-exact-windows-v2-20261014.json';assert not O.exists();d=dict(status='checking',producer_pid=os.getpid(),producer_sha256=sha(__file__),source=str(F/'exact.rs'),source_sha256=sha(src),parent_manifest=str(P.relative_to(R)),parent_manifest_sha256=sha(P),dependency_pins=deps,harness=str(h),harness_sha256=sha(h),command=cmd,scope='Isolated actual fused-v3 exact production module WindowsGNU metadata/type check using real previously Cargo-built Windows dependencies and host derive macros. No linking/Windows execution, platform filesystem/mutation controls, testcode, fullcrate/Cargo/decode/native or wholeoperation performance proof. No Root adoption.')
+def save():
+ t=O.with_suffix('.tmp');t.write_text(json.dumps(d,indent=2)+'\n');t.replace(O)
+save();L=F/'rustc.log'
+with L.open('x')as log:
+ c=subprocess.Popen(cmd,cwd=R,stdout=log,stderr=subprocess.STDOUT);d['child_pid']=c.pid;save();rc=c.wait()
+changed=[k for k,v in deps.items()if not Path(k).exists()or sha(k)!=v];d.update(returncode=rc,log=str(L),log_sha256=sha(L),dependency_changes=changed,source_unchanged=sha(src)==d['source_sha256']and sha(F/'exact.rs')==d['source_sha256'],status='passed_pending_independent_audit'if rc==0 and not changed else'terminal_check_or_dependency_drift_failure')
+if artifact.exists():d.update(artifact=str(artifact),artifact_sha256=sha(artifact))
+save();assert rc==0 and not changed and d['source_unchanged'];print('Fused exact Windows metadata check passed, not executed')

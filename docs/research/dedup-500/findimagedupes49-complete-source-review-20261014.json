@@ -1,0 +1,67 @@
+{
+  "status": "complete5blob_source_review_bounded_original_helper_controls",
+  "repository": "jhnc/findimagedupes",
+  "commit": "c4920cce0735039b78cd9784e59dd21f0bd3a49a",
+  "index": 49,
+  "whole_repo_complete": true,
+  "whole_runtime_qualified": false,
+  "fully_read_files": [
+    {
+      "path": "README.md",
+      "local": "docs/research/dedup-500/evidence/jhnc--findimagedupes/00-README.md",
+      "sha256": "9e09140d13725b3e5178b918760dd2ed2cb293afd9839a45370ff634335cbd48",
+      "git_blob_sha1": "1d8ab285a9564d22d15d4d8164c7c7ef205f6a9f",
+      "bytes": 11815,
+      "lines": 373
+    },
+    {
+      "path": "COPYING",
+      "local": "docs/research/dedup-500/evidence/jhnc--findimagedupes/01-COPYING",
+      "sha256": "fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7",
+      "git_blob_sha1": "443254047416efc10bc53cb1adb5421680d5a647",
+      "bytes": 35068,
+      "lines": 676
+    },
+    {
+      "path": "findimagedupes",
+      "local": "docs/research/dedup-500/evidence/jhnc--findimagedupes/02-findimagedupes",
+      "sha256": "d42d68367c506ece1f9dd5da21a5b7575903473b8935aa4d0a6c5cc1700e3617",
+      "git_blob_sha1": "ece0f1e9b75e6e4b813b3b94b3ea56d124577557",
+      "bytes": 28464,
+      "lines": 1151
+    },
+    {
+      "path": "Makefile",
+      "local": "docs/research/dedup-500/evidence/jhnc--findimagedupes/03-Makefile",
+      "sha256": "37b232b381a5d9f60a844454c059e2eee078985c9c1d96ba7aaea558b557954f",
+      "git_blob_sha1": "e8f23dccc479a96dc09b9766845cb2af88701074",
+      "bytes": 657,
+      "lines": 32
+    },
+    {
+      "path": "patchver",
+      "local": "docs/research/dedup-500/evidence/jhnc--findimagedupes/04-patchver",
+      "sha256": "d3aa32df43e687dc99eb980f7f07b0c025fe91e231005f7c3e7e5e95caa9411d",
+      "git_blob_sha1": "f5701c92c7d98156dc35bf55b070f106b5437196",
+      "bytes": 84,
+      "lines": 4
+    }
+  ],
+  "controls": "docs/research/dedup-findimagedupes49-controls-20261014.json",
+  "controls_sha256": "62c14dbebd7d0fb3e63a936d6a22decbcfe496c8d726e9440e5e146868b6b449",
+  "auditor_sha256": "c8922d740fa1598382d1f56709ee5fea648f7ab20909476110fb7ddbd90ea042",
+  "findings": [
+    "lookup[0] is read before initialization: identical fingerprints match under compiler zero initialization but fail under pattern initialization; deterministic diagnostic of undefined behavior, not claim every production run fails",
+    "ASan confirms original memcpy reads beyond a synthetic one-byte fingerprint; no fingerprint length validation",
+    "Original Perl grouping merges chain edges into one3member group; pairwise equality is not proved",
+    "Threshold parser accepts fractional bit values by truncation and rejects uppercase B",
+    "Fingerprinting retains first frame only, forced aspect-ratio160x160, grayscale/blur/normalize/equalize/16x16/1bpp; no pixel identity, alpha/color/frame or crop/rephoto guarantee.",
+    "Cache keyed by canonical path and fingerprint only, no source stamp/content or decoder-version key; existing entries reused without freshness verification unless rescan. Documentation acknowledges GraphicsMagick version invalidates DB and concurrent-write/crash corruption.",
+    "Source null-input sanity check rejects read_input AND null unconditionally, not only when stdin is a terminal; documented piped -print0 example is contradicted by inspected control flow. Not whole CLI runtime tested.",
+    "Pair comparison is quadratic, early-out perchunk; lookup allocated/recomputed everycall and all matching triplets materialized before transitive grouping, no cancellation/resource policy.",
+    "MD5 is optional verbosity output only, not proof of byte equality or acceptance stage. No source copied into library.",
+    "Makefile clean/reallyclean discard checkout/untracked work; release helper edits source in place and invokes git. Read only, not executed.",
+    "README recursion note contradicts implemented -R; rescan claims prune but no explicit prune assignment found in inspected source."
+  ],
+  "scope": "Original C function unmodified; explicit minimal SV/HV/Inline-stack adapters replace Perl runtime, deterministic compiler stack-init modes expose uninitialized lookup. Scalar oracle24cases,13actual Perl threshold cases, original grouping helper1chain and script syntax only. No GraphicsMagick, fingerprint image pipeline, DB_File transaction, full CLI, upstream test suite, real/private media or universal performance proof. Generated shell is parsed only, not executed. No GPL source adopted in library. All5captured blobs fully read and independently matched full tree Gitblob SHA1/size and SHA256. Captured commit-to-tree binding not independently fetched; full repository source review is distinct from runtime qualification. GPLv3-or-later source; reference only, no library source adoption."
+}

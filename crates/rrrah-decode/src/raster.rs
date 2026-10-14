@@ -873,7 +873,11 @@ fn decode_raster_bytes_inner(
                 let depth = avif_properties.bit_depth.ok_or(RasterDecodeError::InvalidAvif(
                     "missing primary AV1 configuration",
                 ))?;
-                normalize_avif_u16(&mut pixels, depth, request)?;
+                if avif_properties.premultiplied_alpha {
+                    crate::avif_color::unassociate_u16(&mut pixels, depth, request)?;
+                } else {
+                    normalize_avif_u16(&mut pixels, depth, request)?;
+                }
             }
             if associated_tiff {
                 tiff_alpha::u16_pixels(&mut pixels, request)?;
@@ -920,6 +924,9 @@ fn decode_raster_bytes_inner(
         }
         _ => {
             let mut pixels = image.into_rgba8().into_raw();
+            if format == ImageFormat::Avif && avif_properties.premultiplied_alpha {
+                crate::avif_color::unassociate_u8(&mut pixels, request)?;
+            }
             if associated_tiff {
                 tiff_alpha::u8_pixels(&mut pixels, request)?;
             }
@@ -1167,9 +1174,108 @@ mod tests {
     use image::ImageEncoder;
 
     #[test]
+    fn avif_prem_alpha_is_unassociated_before_color_preparation() {
+        let fixtures = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/raster");
+        let plain = decode_raster_file(&fixtures.join("avif-alpha-icc.avif")).unwrap();
+        let prem = decode_raster_file(&fixtures.join("avif-alpha-icc-prem.avif")).unwrap();
+        assert_eq!(plain.color_space(), prem.color_space());
+        let (RasterPixels::Rgba8(a), RasterPixels::Rgba8(b)) = (plain.pixels(), prem.pixels()) else {
+            panic!("expected RGBA8");
+        };
+        assert_ne!(&a[..], &b[..]);
+        for (source, recovered) in a.chunks_exact(4).zip(b.chunks_exact(4)) {
+            assert_eq!(source[3], recovered[3]);
+            for channel in 0..3 {
+                let expected = if source[3] == 0 {
+                    0
+                } else {
+                    (f64::from(source[channel]) * 255.0 / f64::from(source[3]))
+                        .round()
+                        .min(255.0) as u8
+                };
+                assert_eq!(recovered[channel], expected);
+            }
+        }
+        let expected_bytes: Vec<u8> = a
+            .chunks_exact(4)
+            .flat_map(|pixel| {
+                let mut output = [0u8; 4];
+                output[3] = pixel[3];
+                for channel in 0..3 {
+                    output[channel] = if pixel[3] == 0 {
+                        0
+                    } else {
+                        (f64::from(pixel[channel]) * 255.0 / f64::from(pixel[3]))
+                            .round()
+                            .min(255.0) as u8
+                    };
+                }
+                output
+            })
+            .collect();
+        let expected = DecodedRaster::new(
+            plain.width(),
+            plain.height(),
+            RasterPixels::Rgba8(std::sync::Arc::new(expected_bytes).into()),
+            plain.color_space().clone(),
+        )
+        .unwrap();
+        let expected = crate::prepare_raster_for_display(&expected).unwrap();
+        let budget = rrrah_core::MemoryBudget::new(1024 * 1024);
+        let mut request = crate::DecodeRequest::new(fixtures.join("avif-alpha-icc-prem.avif"));
+        request.memory_budget = Some(budget.clone());
+        let managed = decode_raster(&request).unwrap();
+        let prepared = crate::prepare_raster_for_display_with_budget(&managed, Some(&budget)).unwrap();
+        let (RasterPixels::Rgba32Float(actual), RasterPixels::Rgba32Float(expected)) =
+            (prepared.pixels(), expected.pixels())
+        else {
+            panic!("linear preparation");
+        };
+        assert_eq!(actual.len(), expected.len());
+        assert!(
+            actual
+                .iter()
+                .zip(expected.iter())
+                .all(|(a, b)| a.to_bits() == b.to_bits())
+        );
+        drop(prepared);
+        drop(managed);
+        assert_eq!(budget.used(), 0);
+    }
+
+    #[test]
+    fn avif_prem_conversion_cancellation_preserves_input_and_releases_budget() {
+        use std::sync::{Arc, atomic::AtomicU64};
+        let budget = rrrah_core::MemoryBudget::new(1024 * 1024);
+        let mut request = crate::DecodeRequest::new(
+            std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+                .join("../../tests/fixtures/raster/avif-alpha-icc-prem.avif"),
+        );
+        request.memory_budget = Some(budget.clone());
+        request.cancellation = Some(crate::GenerationToken::new(Arc::new(AtomicU64::new(1)), 0));
+        let mut bytes = [17, 0, 18, 17];
+        assert!(matches!(
+            crate::avif_color::unassociate_u8(&mut bytes, &request),
+            Err(RasterDecodeError::Source(crate::DecodeError::Cancelled))
+        ));
+        assert_eq!(bytes, [17, 0, 18, 17]);
+        let mut words = [64, 128, 192, 640];
+        assert!(matches!(
+            crate::avif_color::unassociate_u16(&mut words, 10, &request),
+            Err(RasterDecodeError::Source(crate::DecodeError::Cancelled))
+        ));
+        assert_eq!(words, [64, 128, 192, 640]);
+        assert!(matches!(
+            decode_raster(&request),
+            Err(RasterDecodeError::Source(crate::DecodeError::Cancelled))
+        ));
+        assert_eq!(budget.used(), 0);
+    }
+
+    #[test]
     fn avif_square_pixel_property_preserves_samples_and_rejects_invalid_geometry() {
-        let fixtures = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-            .join("../../tests/fixtures/raster");
+        let fixtures =
+            std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/raster");
         let reference = decode_raster_file(&fixtures.join("avif-rgb.avif")).unwrap();
         let reference_prepared = crate::prepare_raster_for_display(&reference).unwrap();
         for (name, valid) in [
@@ -1272,8 +1378,7 @@ mod tests {
         for (origin, bounds, fixture) in cases {
             let mut bytes = fixture.unwrap_or(base).to_vec();
             for (index, coordinate) in bounds.iter().enumerate() {
-                bytes[offset + index * 4..offset + index * 4 + 4]
-                    .copy_from_slice(&coordinate.to_le_bytes());
+                bytes[offset + index * 4..offset + index * 4 + 4].copy_from_slice(&coordinate.to_le_bytes());
             }
             let path = std::env::temp_dir().join(format!(
                 "rrrah-exr-window-{}-{}.exr",
@@ -1299,9 +1404,8 @@ mod tests {
             };
             for y in bounds[1]..=bounds[3] {
                 for x in bounds[0]..=bounds[2] {
-                    let destination = (((y - bounds[1]) as u32 * decoded.width()
-                        + (x - bounds[0]) as u32)
-                        * 4) as usize;
+                    let destination =
+                        (((y - bounds[1]) as u32 * decoded.width() + (x - bounds[0]) as u32) * 4) as usize;
                     let expected: &[f32] = if (origin[0]..origin[0] + 3).contains(&x)
                         && (origin[1]..origin[1] + 2).contains(&y)
                     {
@@ -1319,8 +1423,7 @@ mod tests {
                     }
                 }
             }
-            let prepared =
-                crate::prepare_raster_for_display_with_budget(&decoded, Some(&budget)).unwrap();
+            let prepared = crate::prepare_raster_for_display_with_budget(&decoded, Some(&budget)).unwrap();
             assert_eq!(
                 (prepared.width(), prepared.height()),
                 (decoded.width(), decoded.height())

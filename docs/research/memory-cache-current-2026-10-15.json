@@ -1,0 +1,63 @@
+{
+  "status": "terminal_pass",
+  "session": 30761,
+  "log": "/tmp/memory-cache-current-20261015.log",
+  "scope": "current rrrah-memory and rrrah-cache ordinary library suites; ignored/manual tests excluded",
+  "reason": "four memory/cache source files differ from last coherent31-suite integration snapshot",
+  "source_sha256": {
+    "crates/rrrah-memory/src/policy.rs": "44f065c99819a937a03e34963eafb0fa145f91de5fcc11ccab6585be05868acb",
+    "crates/rrrah-memory/src/lib.rs": "512caf734608c1bd6053dca509dc10ca51b4472c380c6ac10ae07694c8e32fd6",
+    "crates/rrrah-memory/src/lease_cache.rs": "83b592e06d522e1f18400a3ae29203df170a44e51e3fc8c1eacae3e5623fd49c",
+    "Cargo.lock": "5cfaa6a40ba81a8fcb33d10b6e5c45dc33058fa3090ac909f2c04290fe15ce2d",
+    "crates/rrrah-cache/src/bench_support.rs": "66935a4a1f181abad5b6ed1cf07f53a14d2e069d67e5e23f3fa60de92cb61d9f",
+    "crates/rrrah-cache/src/key.rs": "ff52393c81139652cfcf88cc80e32ffa9268635dd955f8439d4a090b47b7a79b",
+    "crates/rrrah-cache/src/container_v1.rs": "f605513d3c46587ff45b6a315adc68faf33f34cafec9e7435324ed69d810a177",
+    "crates/rrrah-cache/src/swap.rs": "ddf6136c142c5b5091e6705fd8c5556c1852765b8088f7f0aef5174ca1274cac",
+    "crates/rrrah-cache/src/lib.rs": "fe4e0a0359c5aa2f3af5ce232e85deaef35a53fdf6ed45f6f06b5def947ba496",
+    "crates/rrrah-cache/src/raster_ram.rs": "bc9e541b646fea481f9c3fa509fe021b486ec2864add5495f6bf3adb08090528",
+    "crates/rrrah-cache/src/raster_regions.rs": "573489dbf05915f33ca9cc0394ff9b71f3e32f6245aefaea116a4324046d2147",
+    "crates/rrrah-cache/src/disk.rs": "a83335b01840d037af2f18195bebafd39d031ae92d9868b70cb9d99cf37e90d2",
+    "crates/rrrah-cache/src/ram.rs": "6c0083130c28d3d50b2847e4ff9ff021e84612eb79e1bd34953f00826473498e",
+    "crates/rrrah-cache/src/mosaic_object_v1.rs": "619c022ca4dd26838b84ab03173870f3de83ef81868a0f0270bd7b61c2827ceb",
+    "crates/rrrah-cache/src/raster_payload.rs": "3d7e642a677351fc743b0807c2b7586eafc75b17b810d346f85208aa10388803",
+    "crates/rrrah-cache/src/weighted_lru.rs": "f71381a82f2088bea059d42d3a84ec8e505066bcc38249f8dda835689d23dc59",
+    "crates/rrrah-cache/src/mosaic_payload_v1.rs": "d36fb07ff7ed3dd0262746ea36055cb94f3d0ec84c7779a5474c2511760f340a",
+    "crates/rrrah-swap/src/lib.rs": "771b108f0570172ad02c9a5c4f618f1598d7d09e6fb566877993cb41a63aa008",
+    "crates/rrrah-swap/src/segmented.rs": "2634b8afd650297b411d3c2584e9fa683139d453a9789273eee01d02df3012b1",
+    "crates/rrrah-core/src/edit.rs": "fecd6d9dc75ff8ad9c5cb20cb76d7d4ced65338bc80ed99b1c2039e5ce0fdf88",
+    "crates/rrrah-core/src/thumbnail.rs": "956cc94e113d6d9f5a7c4d80ac3ec47f157eab468e106644dd25c71e45f13634",
+    "crates/rrrah-core/src/histogram.rs": "0aff5c885cc59f73b8d74538d76797722edf91e4a0bffec97a68152d8bac4d07",
+    "crates/rrrah-core/src/color.rs": "c7fbbe98f4422f3932cfc5304615108464512f831f35ffce50152da37f4570f3",
+    "crates/rrrah-core/src/lib.rs": "f1a97a0e85bcf38cc2f12e7a0caf8a9746c2e1bca53520cdcb83a4fadf9a760a",
+    "crates/rrrah-core/src/raster_lod.rs": "1d476866e61504b8c022dc33ebc144558f764ff05f4adba53a1548f2d7f6b15c",
+    "crates/rrrah-core/src/rgbe.rs": "dbac4c054bc4bad646c6be4dcb173068bac8ef5dd2ed12e4d64032c75cbb3c86",
+    "crates/rrrah-core/src/recipe.rs": "995b7b821725d6c2f8aec31ceb99fb58e21ac29bf9bf53e47705586c21ace393",
+    "crates/rrrah-core/src/raster.rs": "c4c90bc0bc7ddb159f0bff682245ed0b32ca4895e936721815fface7ef44134f",
+    "crates/rrrah-core/src/frame.rs": "b7a39bb8623e2f5a20194f8d33cbaac9cede154aec0350279e211f4e55a8a7bf",
+    "crates/rrrah-core/src/geometry.rs": "c3ad95096a160749e50db70080d269a6c6062d6d7dd66e935f73f89dca7ba62d",
+    "crates/rrrah-core/src/develop/opcodes.rs": "2491e64134fe0ea9e583824c507148bd61725281bd382e91ff8a840137468003",
+    "crates/rrrah-core/src/develop/mod.rs": "86d6bfabaf426a176a89a75d79987c0ad552dc808570fea274d9ea5cd6302665",
+    "crates/rrrah-core/src/develop/highlight.rs": "e7888f1184dd818ce27e7c0e74aec1426943a263b85cd05f4b1b13b3e450a30b",
+    "crates/rrrah-core/src/develop/ahd.rs": "43a0b191109f272377968cf32934a2a1a37330153817b7aa967ebae44fde6726",
+    "crates/rrrah-core/src/develop/xtrans.rs": "dba777fea38dc26bf574a36ea320b6802fcc0f9ce7f772a7c44347b96a352975",
+    "crates/rrrah-core/src/develop/demosaic.rs": "58d9eed979f93ad97c6b90d06ae1e3b5c310dd779cdc0c4ac9e8a0d93031b94f",
+    "crates/rrrah-core/src/develop/curve.rs": "99c6aebbb68321ee207b436f703101269075c4d85d2327574f31292673b24a4e",
+    "crates/rrrah-core/src/color/linear_primaries.rs": "77436c26093a2c9e64b6d90c1831b77072cd6aa65c4c4811e86a8fc67a58b993",
+    "crates/rrrah-core/src/color/dng_neutral.rs": "503c2449b30098cf792847a8fa29c505462ba09f93cdd56be3605704d902ce40"
+  },
+  "exit_code": 0,
+  "suite_results": [
+    {
+      "passed": 140,
+      "failed": 0,
+      "ignored": 2
+    },
+    {
+      "passed": 40,
+      "failed": 0,
+      "ignored": 0
+    }
+  ],
+  "source_drift": [],
+  "log_sha256": "83b7796e0f7b886158e28698e553ca1fc973f65097e1a19672a5a87cecfb7804"
+}

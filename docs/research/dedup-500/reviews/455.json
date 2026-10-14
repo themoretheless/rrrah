@@ -2,9 +2,9 @@
   "index": 455,
   "repository": "alash3al/xmg",
   "commit": "2e2cff0ba8b7352f80facb2a1967b96497735832",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All6pinned repository files fully read and Gitmatched; static codeflow and explicit standard-transform algebra only, zero Go/upstream/server executions",
   "decision": "wrapper",
-  "finding": "Go hash/face microservice uses goimagehash; no independent algorithm beyond delegated upstream.",
+  "finding": "Delegated approximate hashes with linear DBscan; transform algebra9outputs/7unique/missingidentity, upload/temp/resource and CLI mismatches, conditional accumulated-buffer concern. No Go/dependency/runtime qualification or adoption.",
   "available_source_evidence": [
     {
       "path": "db.go",
@@ -35,10 +35,20 @@
       "lines": 96,
       "source": true,
       "test": false
+    },
+    {
+      "path": ".gitignore",
+      "local": "05-gitignore",
+      "url": "https://github.com/alash3al/xmg/blob/2e2cff0ba8b7352f80facb2a1967b96497735832/.gitignore",
+      "sha256": "96ad8970fda6ac4b3befd81fd1d4cf9d16aa465d83decc97c5c10d182a4620fc",
+      "truncated": false,
+      "lines": 1,
+      "source": true,
+      "test": false
     }
   ],
   "license_metadata": "Apache-2.0",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "Full Apache2license/source read; externaldependencies/runtime unqualified, no source adoption",
   "tests_detected": 0,
   "upstream_tests_run": false,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
@@ -64,5 +74,8 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_review_complete": true,
+  "whole_runtime_qualified": false,
+  "complete_source_review": "docs/research/dedup-500/xmg455-complete-source-review-20261014.json"
 }

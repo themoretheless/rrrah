@@ -1,0 +1,68 @@
+{
+  "status": "complete6blob_static_source_review_domain_rejected",
+  "index": 310,
+  "repository": "MrTransistorsChannel/SandDupe",
+  "commit": "f964a80ea82cafc508fda4cd6be8402634131732",
+  "whole_repo_complete": true,
+  "whole_runtime_qualified": false,
+  "fully_read_files": [
+    {
+      "path": "README.md",
+      "local": "docs/research/dedup-500/evidence/MrTransistorsChannel--SandDupe/00-README.md",
+      "sha256": "15f477612e94bd3c4e4ba2304b9fe7e769749bbe471f7acd1c75a56bf2fcc4b4",
+      "git_blob_sha1": "23270b0e20505392cdba2408271010fa016d3200",
+      "bytes": 483,
+      "lines": 4
+    },
+    {
+      "path": "LICENSE",
+      "local": "docs/research/dedup-500/evidence/MrTransistorsChannel--SandDupe/01-LICENSE",
+      "sha256": "3e037d4f1ba6becde2535f7ebff6655bc15c127214e7e7ce7ce9e7031e4e8732",
+      "git_blob_sha1": "d479e6b5473a29377854d339b4a740347369a6ca",
+      "bytes": 1070,
+      "lines": 21
+    },
+    {
+      "path": "src/ru/tulavcube/SandDupe/SandDupe.java",
+      "local": "docs/research/dedup-500/evidence/MrTransistorsChannel--SandDupe/02-SandDupe.java",
+      "sha256": "e3194de63f1783318b726ab8fb599f7c899894b2cefc3b1b3e8dd03dd0b8791a",
+      "git_blob_sha1": "0f99f3a4c63875bdea07fcb54cf4514d0a75e4b2",
+      "bytes": 2614,
+      "lines": 74
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/bug_report.md",
+      "local": "docs/research/dedup-500/evidence/MrTransistorsChannel--SandDupe/03-bug_report.md",
+      "sha256": "ffa8a72c76c6c7de87a0eb28f17e0ab99251406602f0437aa03c563f302adb59",
+      "git_blob_sha1": "6646326bd7a2c28c0676efd83a8918a5b268b0f2",
+      "bytes": 625,
+      "lines": 29
+    },
+    {
+      "path": ".gitignore",
+      "local": "docs/research/dedup-500/evidence/MrTransistorsChannel--SandDupe/04-gitignore",
+      "sha256": "87cb33eb3a98e631ac87b61ffa193b705c37e341f818af2acda145a4fe6d90e1",
+      "git_blob_sha1": "90ce3d851eb23ad941ca4cd63dd1547e71753bac",
+      "bytes": 25,
+      "lines": 3
+    },
+    {
+      "path": "src/plugin.yml",
+      "local": "docs/research/dedup-500/evidence/MrTransistorsChannel--SandDupe/05-plugin.yml",
+      "sha256": "2a61edf03bf29ccd1d7132904b723d31a3bf6a880269a7ccf43244e415a2e223",
+      "git_blob_sha1": "fdf982336fbb383582abd18c806f9062182bbf73",
+      "bytes": 103,
+      "lines": 5
+    }
+  ],
+  "auditor_sha256": "e257fe05dd71a8cacf3c9f58453787c8875ff82f6560dc8aeeeeba42e261f25a",
+  "upstream_functions_executed": 0,
+  "findings": [
+    "Full implementation is Bukkit/Paper gameplay entity event handling and adjacent-block selection, not file/image duplicate detection. No content hashing, filesystem scan, similarity index, stable observations or duplicate-publication algorithm.",
+    "Descriptor mainclass matches captured package/class, api-version1.17. External Bukkit/Paper runtime absent/unqualified; event semantics and gameplay behavior not executed.",
+    "Issue template, ignore rules, README and MIT2021license fullyread. No build/dependency lock or upstreamtests in capturedtree.",
+    "Domain search falsepositive retained in original500; no code adopted."
+  ],
+  "decision": "reject-domain-after-full-source-review",
+  "scope": "All captured repository blobs fullyread and Gitblob SHA1/size/SHA256 matched; static source/descriptor review only. No Java/plugin/framework/game/server/client/network/packet/privateinput execution, no dependency/platform/runtime qualification or codeadoption. External README assertions not treated as currentvalidated behavior. Captured commit-to-tree binding not independently fetched."
+}

@@ -1,0 +1,270 @@
+{
+  "status": "prem_subset_validated_prior_streaming_snapshot_current_metadata_followup_pending",
+  "primary_source": "https://aomediacodec.github.io/av1-avif/",
+  "container_parser": "mp4parse 0.17.0 exposes premultiplied_alpha from selected primary-to-alpha prem reference",
+  "codec": "image 0.25.10 AvifDecoder extracts primary/alpha planes but does not retain/use ctx.premultiplied_alpha",
+  "application": "avif_color properties have no prem alpha metadata; runtime comparison required before production correction",
+  "sources_sha256": {
+    "crates/rrrah-decode/src/avif_color.rs": "6498159d9527f19a741c5fb3ec8e26023e7ebd3f8dcb677a85bcf4d196382e9f",
+    "crates/rrrah-decode/src/raster.rs": "b6fee891cb694e39f2e477a49ddf18581f4f6b43a3e5db328475a585651f6531",
+    "/Users/themoretheless/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/image-0.25.10/src/codecs/avif/decoder.rs": "a9c1ae33ccb95265acdaa901fa1fc2affa2bd280d8c15fb73b21157794ba4699",
+    "/Users/themoretheless/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/mp4parse-0.17.0/src/lib.rs": "b45d3e3c3e2ede2f5d55c4625994dd09dca8f06f618344d478a6739181ef2e45"
+  },
+  "next_action": "Build pinned metadata-only prem fixture with repaired absolute extent offsets and preserved mdat; compare native decoded/prepared/composited samples to independent straight-alpha reference. Validate selected primary/alpha item graph rather than byte search.",
+  "limitations": [
+    "Bounded still-image alpha subset; not full AVIF sequence/grid/color conformance or complete100-format qualification",
+    "Real8/10-bit producer files plus authored ICC prem interpretation control;12-bit conversion arithmetic covered but no12-bit producer fixture",
+    "Offscreen Metal SDR/HDR readback, not physical HDR calibration or live-window verification for new prem cases",
+    "73 decoder and3 Metal ignored tests excluded; no NVIDIA hardware execution",
+    "No throughput improvement claim from unoptimized package correctness builds"
+  ],
+  "authored_fixture_manifest": "tests/fixtures/raster/avif-premultiplied-fixture.json",
+  "producer": "scripts/generate-avif-premultiplied-fixture.py",
+  "reproducibility": "two executions produced byte-identical fixture; all mdat bytes preserved",
+  "container_check": {
+    "session": 92713,
+    "log": "/tmp/rrrah-avif-prem-parser-check.log",
+    "status": "terminal_pass",
+    "purpose": "actual pinned container parser sees prem only in authored control and finds both coded items",
+    "exit_code": 0
+  },
+  "codec_baseline": {
+    "exit_code": 0,
+    "log": "avif-premultiplied-alpha-codec-baseline-2026-10-14.log",
+    "finding": "image 0.25.10 backend returns identical RGBA bytes for the two metadata-distinct controls; prem parser flag differs",
+    "scope": "actual backend execution, not yet corrected public application output or GPU compositing",
+    "log_sha256": "6da4fcf2c77ed05a888d1be21885bcd6b89dbc803d54435e40739db7892a52b0"
+  },
+  "production_change": true,
+  "fix": "Bounded primary prem/auxl/auxC graph validation; integer unassociation in place. 10/12-bit RGB division uses original left-aligned code values before final 16-bit expansion, avoiding amplified intermediate rounding.",
+  "validation": {
+    "typecheck_session": 35382,
+    "typecheck_log": "/tmp/avif-prem-check-20261014.log",
+    "tests_session": 73557,
+    "tests_log": "/tmp/avif-prem-tests-20261014.log",
+    "status": "waiting_for_existing_build_lock",
+    "metal_build_session": 75390,
+    "metal_build_log": "/tmp/avif-prem-metal-build-current-20261014.log",
+    "original_waiting_sessions_terminal_exit_code": 130,
+    "isolation_reason": "Live cargo PID67461 owns target/debug lock for rrrah-dedup feature-decode tests; only our waiting check/test/Metal build sessions cancelled",
+    "isolated_target": "target/avif-prem-validation-20261014",
+    "dependency_snapshot": "APFS clone via cp -cR of deps, .fingerprint and build; source target unchanged, no hardlinks or ordinary 74 GiB copy",
+    "clone_session": 32580,
+    "clone_observation": "session32580 confirmed live; cp PID4100 active at22.3percent CPU, no restart",
+    "clone_terminal_exit_code": 0,
+    "dependency_clone_entries": {
+      "deps": 191868,
+      "fingerprint": 2155,
+      "build": 188
+    },
+    "clone_note": "Root deps had two additional entries at final observation due concurrent build; Cargo will validate cloned fingerprints and rebuild missing/stale outputs",
+    "isolated_typecheck_session": 84247,
+    "isolated_typecheck_log": "/tmp/avif-prem-check-isolated-20261014.log",
+    "isolated_typecheck_observation": {
+      "session": 84247,
+      "pid": 40785,
+      "state": "live rustc metadata compilation for rrrah_decode; no build lock wait",
+      "observed_cpu_percent": 1.9,
+      "elapsed_at_observation": "05:18"
+    },
+    "compiler_sample": {
+      "session": 88577,
+      "pid": 40785,
+      "output": "/tmp/avif-prem-typecheck-sample-20261014.txt",
+      "status": "terminal_success",
+      "exit_code": 0,
+      "saved_output": "docs/research/avif-premultiplied-alpha-typecheck-sample-2026-10-14.txt",
+      "sha256": "5f85608a958185d3c84bf061809ecd7ad018a7f8baf3c18c5d3e153275562dd3",
+      "finding": "worker active in mir_borrowck / rustc_borrowck type checking; main waits for compiler worker join. This is compiler analysis, not a build-lock stall.",
+      "compiler_footprint_mb": 889.1
+    },
+    "isolated_typecheck_exit_code": 0,
+    "isolated_typecheck_saved_log": "docs/research/avif-premultiplied-alpha-full-typecheck-2026-10-14.log",
+    "isolated_typecheck_log_sha256": "c42c61627b133e80861cd196d83375e083c3d58a90dd75dc7e750394f850da0c",
+    "isolated_tests_session": 98471,
+    "isolated_tests_log": "/tmp/avif-prem-tests-isolated-20261014.log",
+    "isolated_tests_profile": "core and decode test packages opt-level=0/debug=0; dependencies retain default test profile; correctness only",
+    "isolated_metal_build_session": 98590,
+    "isolated_metal_build_log": "/tmp/avif-prem-metal-build-isolated-20261014.log",
+    "isolated_metal_build_scope": "current hdr_raster_swap integration test with six HEIF/AVIF cases including prem ICC AVIF; compilation queued behind our decode test",
+    "full_decode_followup": "after focused tests pass, execute same freshly compiled unit-test binary without filter; no extra rebuild required",
+    "isolated_tests_exit_code": 0,
+    "focused_tests": {
+      "passed": 22,
+      "failed": 0,
+      "ignored": 0,
+      "filtered_out": 1096
+    },
+    "decoder_test_binary": "target/avif-prem-validation-20261014/debug/deps/rrrah_decode-9bd398ccea4932bc",
+    "decoder_test_binary_sha256": "5bb99d93a5e0813f123c94bde7115c644e23c4b943470cf2aee652d4f0e5f117",
+    "full_decoder_session": 43702,
+    "full_decoder_log": "/tmp/avif-prem-full-decoder-20261014.log",
+    "full_decoder_status": "terminal_pass",
+    "full_decoder_exit_code": 0,
+    "full_decoder_result": {
+      "passed": 1045,
+      "failed": 0,
+      "ignored": 73,
+      "filtered_out": 0,
+      "runtime_seconds": 211.86,
+      "scope": "full ordinary current decoder unit-test binary, unoptimized correctness profile; not manual/externally ignored tests"
+    },
+    "metal_expected_cases": 8,
+    "new_public_fixture_target": "crates/rrrah-decode/tests/avif_prem_producer.rs",
+    "metal_source_changed_after_build_dispatch": "two real producer prem cases added; require all eight actual case logs before qualification",
+    "producer_public_session": 10858,
+    "producer_public_log": "/tmp/avif-prem-producer-public-20261015.log",
+    "producer_public_status": "terminal_pass",
+    "isolated_metal_build_exit_code": 0,
+    "metal_test_binary": "target/avif-prem-validation-20261014/debug/deps/hdr_raster_swap-924fbb79cca27a58",
+    "metal_test_binary_sha256": "e548a004e4a550db238ad0c5aa866a09fd577b6f1c89abc0edfe61bbbe36b403",
+    "first_metal_execution": {
+      "exit_code": 0,
+      "tests_passed": 1,
+      "actual_cases": [
+        "heif-physical-alpha.heic",
+        "heif-physical-rotate90.heic",
+        "heif-physical-mirror.heif",
+        "avif-pasp-square.avif",
+        "avif-pasp-square-essential.avif",
+        "avif-alpha-icc-prem.avif"
+      ],
+      "expected_cases": 8,
+      "scope": "six-case prior source snapshot; both new ravif producer cases absent, so not eight-case qualification",
+      "gpu": "Metal Apple M4 Max",
+      "float_and_sdr_hdr_exact": true,
+      "source_deleted_restore": true,
+      "one_write_read_each": true,
+      "final_root_queue_zero": true
+    },
+    "eight_case_rebuild_log": "/tmp/avif-prem-metal-build-eight-current-20261015.log",
+    "eight_case_rebuild_session": 93670,
+    "producer_public_result": {
+      "exit_code": 0,
+      "tests_passed": 1,
+      "encoded_cases": 4,
+      "integer_pixels_exact": true,
+      "prepared_f32_bits_exact": true,
+      "final_budget_zero": true
+    },
+    "eight_case_rebuild_exit_code": 0,
+    "metal_current_binary_sha256": "86c0b370ab2129a5a296cbbe045068a38bcd83cc35b812484c3327136c0b5ad3",
+    "metal_full_current": {
+      "exit_code": 0,
+      "passed": 24,
+      "failed": 0,
+      "ignored": 3,
+      "runtime_seconds": 42.25,
+      "actual_eight_cases": [
+        "heif-physical-alpha.heic",
+        "heif-physical-rotate90.heic",
+        "heif-physical-mirror.heif",
+        "avif-pasp-square.avif",
+        "avif-pasp-square-essential.avif",
+        "avif-alpha-icc-prem.avif",
+        "ravif-8bit-prem.avif",
+        "ravif-10bit-prem.avif"
+      ],
+      "eight_case_verifier_passed": true,
+      "adapter": "Metal Apple M4 Max",
+      "float_payload_and_full64x64_sdr_hdr_exact": true,
+      "source_deleted_restore": true,
+      "pressure_cancellation_retry": true,
+      "one_disk_write_read_each": true,
+      "root_and_queue_final_zero_each": true,
+      "log_sha256": "74fa763375c1f9908154cb2e164bb0048875c73aecbc1a46e24579c103a37746"
+    },
+    "source_drift_since_recorded_snapshot": [],
+    "large_hdr_followup_log": "/tmp/metal-12mp-full-hdr-after-avif-20261015.log",
+    "large_hdr_followup_scope": "current binary explicit manual4000x3000 RGBA32F swap and fullMetalRGBA16F attachment test, not counted as passed until terminal",
+    "large_hdr_followup_session": 22720,
+    "large_hdr_followup_result": {
+      "exit_code": 0,
+      "passed": 1,
+      "failed": 0,
+      "dimensions": [
+        4000,
+        3000
+      ],
+      "all_binary16_pixels_exact_after_swap": true,
+      "independent_bright_negative_exposure_oracle": true,
+      "constant_oracle_excludes_one_pixel_boundary_neighborhood": "whole before/after equality still includes boundary",
+      "final_root_queue_zero": true,
+      "runtime_seconds": 238.5,
+      "scope": "authored full-size float frame, real Metal offscreen attachment; not physical-display calibration",
+      "log_sha256": "8c25751be4eca769493be8026376ea93f6e31e30217b8b7aff493be6d6356eee"
+    },
+    "current_metadata_source_matches_validated_binary": false
+  },
+  "new_tests": [
+    "selected_primary_prem_alpha_and_integer_conversion",
+    "prem_reference_requires_unique_selected_primary_auxiliary_link",
+    "avif_prem_alpha_is_unassociated_before_color_preparation"
+  ],
+  "current_source_sha256": {
+    "crates/rrrah-decode/src/avif_color.rs": "0e4b322dd279b64f11e8513c0bf406d203bbfd34823c150fa95a5b5638240209",
+    "crates/rrrah-decode/src/raster.rs": "e9635a517ff4a0e87cf3061242786a8ccb46c43dd369ab248daeb17ab59ff731",
+    "crates/rrrah-decode/tests/avif_prem_producer.rs": "4bac02587a3ebaa6a27ec326ca6882ff2464f3ed3ce3436a990b91f04a7243a5",
+    "crates/rrrah-app/tests/hdr_raster_swap.rs": "4dd172a17ee5cd6b9f7d193c0203e329e70c83ea6ddad2deed90c4afad9bc938"
+  },
+  "module_validation": {
+    "exit_code": 0,
+    "passed": 13,
+    "failed": 0,
+    "ignored": 0,
+    "scope": "actual current avif_color module with pinned image/core dependencies; minimal DecodeRequest and error shell, so real cancellation/public routing/storage/GPU are not covered",
+    "log": "avif-premultiplied-alpha-module-tests-v3-2026-10-14.log",
+    "additional_scope": "iref v1 32-bit IDs, unsupported flags/version, selected alpha auxC required, duplicate/other-item/non-alpha auxiliary association refused",
+    "log_sha256": "46e9b569630b23df20cdea5e9a9d0a4f6b24284464623ed5547885d7ce567e00"
+  },
+  "public_pipeline_tests_added": [
+    "native RGBA vs floating arithmetic unassociation oracle",
+    "managed native decode then ICC/display preparation bitwise equals independently reconstructed straight-alpha control; final budget zero",
+    "pre-cancelled 8/10-bit conversion preserves source and native decode cancellation retains zero budget",
+    "sixth physical-pixel storage/Metal case: prem ICC AVIF vs independently unassociated source; existing full SDR/HDR, source deletion, spill, cancellation and pressure retry assertions"
+  ],
+  "metal_build_first_attempt": {
+    "exit_code": 101,
+    "reason": "wrong package selector rrrah-app; actual package is rrrah",
+    "log": "/tmp/avif-prem-metal-build-20261014.log",
+    "corrected": true
+  },
+  "high_depth_validation": {
+    "session": 41322,
+    "log": "/tmp/rrrah-avif-prem-module-tests-v3.log",
+    "status": "terminal_pass",
+    "coverage": "all 1024x1024 code/alpha pairs for 10-bit; all 4096 codes across 17 alpha boundaries for 12-bit; original-code direct rational oracle, fully opaque alpha sentinel and malformed left alignment",
+    "exit_code": 0
+  },
+  "independent_producer": {
+    "session": 95969,
+    "log": "/tmp/avif-prem-producer-20261014.log",
+    "manifest": "docs/research/avif-prem-producer-2026-10-14/Cargo.toml",
+    "encoder": "ravif =0.13.0, default features disabled, serial encoding",
+    "purpose": "authored 16x16 numeric RGBA inputs with eight alpha levels; real producer 8/10-bit straight and prem fixtures, RGB identity mode, quality100",
+    "status": "four independent producer fixtures pinned; repeated encoding byte-identical; v3 sidecar capture terminal pass",
+    "output_directory": "/private/tmp/avif-prem-producer-output-20261014",
+    "cargo_lock_sha256": "a1b19c85c4c8cde0f38d607b7471a917925afe57d6b842471b4413a5309948d0",
+    "checker": {
+      "source": "docs/research/avif-prem-producer-2026-10-14/check-produced.rs",
+      "build_session": 86538,
+      "scope": "actual independent mp4parse/image/dav1d plus current AVIF module, direct rational pixel oracle; no public routing/cache/Metal claim",
+      "status": "v2 build terminal success; execution awaits producer",
+      "build_exit_code": 0,
+      "binary_sha256": "7f6e982aba57796a2882a6833a80e15df877cba5a0c4aec8da4143e43770e554",
+      "binary": "/tmp/rrrah-avif-prem-producer-check-v2",
+      "additional_gate": "10-bit prem fixture must produce a nonzero difference from expansion-before-division; quantify avoided double-rounding error without changing production tolerance"
+    },
+    "encode_exit_code": 0,
+    "repeat_exit_code": 0,
+    "checker_v2_result": {
+      "exit_code": 0,
+      "maximum_avoided_double_rounding_delta_u16": 10,
+      "scope": "all256 pixels per encoded prem case at8/10bit; independent parser flags/depth and direct mathematical unassociation oracle; straight cases metadata/decode controls"
+    },
+    "fixture_manifest": "tests/fixtures/raster/ravif-prem-producer-fixtures.json",
+    "checker_v3_exit_code": 0,
+    "repeated_encoding_byte_exact": true
+  },
+  "post_validation_metadata_change": "stream selected AVIF property associations without retained per-reference vectors; see avif-association-working-set-2026-10-15/result.json"
+}

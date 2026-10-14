@@ -1,0 +1,17 @@
+{
+  "status": "adopted_root_public_exact_pair_api",
+  "source": "crates/rrrah-dedup/src/exact.rs",
+  "before_sha256": "7182a5aa6a26ebfccda8db82d3039a5288afcbb0786195969a351bdeb7e07a0f",
+  "after_sha256": "cad6f07ef1eb146c0bcc1ac8fce83d276592d871e6442dbeab696700983b20ae",
+  "baseline_sha256": "7182a5aa6a26ebfccda8db82d3039a5288afcbb0786195969a351bdeb7e07a0f",
+  "qualified_candidate_sha256": "36a17d58cd607d283e444f8ae5239cad141af8957d6d68c956a49662a50b690d",
+  "formatted_candidate_sha256": "cad6f07ef1eb146c0bcc1ac8fce83d276592d871e6442dbeab696700983b20ae",
+  "proofs": {
+    "docs/research/dedup-fused-exact-large-files-audit-20261014.json": "9f641d5faf803c24e2e1e5898ad9d3a1f36a131ed909e10af9ca9ef2febfc07c",
+    "docs/research/dedup-fused-exact-windows-v2-audit-20261014.json": "8e59b99438d940a0492289910984a7a5b8dd2c8385b2efd62ec8cd9cccb4ee7f",
+    "docs/research/dedup-fused-exact-opt3-v7-audit-20261014.json": "5c1acfee19e7c90ea78edbdd9784db9ccaffdf1c61ae26cef086079e0e0df518",
+    "docs/research/dedup-fused-exact-pair-stress-opt3-v7-audit-20261014.json": "8795795de30046828b58d378c360786b0a0b0adc5549d28aacdfaef52893ee0c"
+  },
+  "changes": "Initial full hashing and byte equality comparison merged into one paired streaming pass for equal-size files. Final callback-free full verification of both sources unchanged; different-size fullhash verification retained. Production Rust tokens from qualified candidate, formatting and descriptive comment only changed.",
+  "scope": "Public exact::compare_files API only; existing scanner/collection compare_observed paths unchanged, quadratic exhaustive collection IO remains open.23actual candidate exact/largefile tests, prior47unit semantic/stress controls, Windows production metadata typecheck and opt3warm-synthetic7case performance evidence. Not a new fullRoot Cargo/decode/workspace/currentnative/corpus/platformexecution/hardRSS or universal speed proof. Root decode gate began before adoption and has observed source drift; frozen snapshotv4 predates fused adoption."
+}

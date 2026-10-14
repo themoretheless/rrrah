@@ -2,9 +2,9 @@
   "index": 181,
   "repository": "repo-utils/npm-semver-dedupe",
   "commit": "19231e3faab122b5d1678d9c816df721a170be57",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All6pinned repository files fully read and Gitmatched;15whole-original-JS controls with explicit in-memory filesystem/parser/deletion adapters, not actual dependency/npm/runtime qualification",
   "decision": "reject-domain",
-  "finding": "Semver module dependency compatibility deduplication; no image algorithm.",
+  "finding": "Same-major destructive package removal disregards content/dependency ranges, collapses prerelease, parses linked subtrees before skip, scoped/malformed packages fail. Reference only, no adoption.",
   "available_source_evidence": [
     {
       "path": "bin/npm-semver-dedupe",
@@ -15,10 +15,40 @@
       "lines": 64,
       "source": true,
       "test": false
+    },
+    {
+      "path": ".gitignore",
+      "local": "03-gitignore",
+      "url": "https://github.com/repo-utils/npm-semver-dedupe/blob/19231e3faab122b5d1678d9c816df721a170be57/.gitignore",
+      "sha256": "22c8f36c0e48383234b6576e822481d805373f347afc4f3ad8ff1d56319298d5",
+      "truncated": false,
+      "lines": 7,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": ".travis.yml",
+      "local": "04-travis.yml",
+      "url": "https://github.com/repo-utils/npm-semver-dedupe/blob/19231e3faab122b5d1678d9c816df721a170be57/.travis.yml",
+      "sha256": "069a8665cba446a8b71b3acb26bd6717ea040bff4c8380e559db8579fd3ab46f",
+      "truncated": false,
+      "lines": 6,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "package.json",
+      "local": "05-package.json",
+      "url": "https://github.com/repo-utils/npm-semver-dedupe/blob/19231e3faab122b5d1678d9c816df721a170be57/package.json",
+      "sha256": "2bbf5d985d74455fd7a81264a4fb9f525036fc2f2384b1048549c59017dce6dc",
+      "truncated": false,
+      "lines": 28,
+      "source": true,
+      "test": false
     }
   ],
   "license_metadata": "MIT",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "Full MIT2014source license read; no implementation adoption",
   "tests_detected": 0,
   "upstream_tests_run": false,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
@@ -44,5 +74,8 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_review_complete": true,
+  "whole_runtime_qualified": false,
+  "complete_source_review": "docs/research/dedup-500/semver181-complete-source-review-20261014.json"
 }

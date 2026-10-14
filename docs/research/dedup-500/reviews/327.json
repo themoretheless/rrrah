@@ -2,9 +2,9 @@
   "index": 327,
   "repository": "williamkray/maubot-welcome",
   "commit": "391f49562e7891413f4badafef3c04e2a40fbffb",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All5pinned repository files fully read and Gitmatched; Python syntax/function inventory parsed only, no bot handler execution",
   "decision": "reject-domain",
-  "finding": "Room-join greeting plugin; super-duper wording false positive.",
+  "finding": "Full source confirms join greeting/notification bot only, no duplicate file/image algorithm. Domain rejected, no handler/network/message execution or source adoption.",
   "available_source_evidence": [
     {
       "path": "welcome.py",
@@ -15,10 +15,30 @@
       "lines": 49,
       "source": true,
       "test": false
+    },
+    {
+      "path": "base-config.yaml",
+      "local": "03-base-config.yaml",
+      "url": "https://github.com/williamkray/maubot-welcome/blob/391f49562e7891413f4badafef3c04e2a40fbffb/base-config.yaml",
+      "sha256": "3442c7b1684867b676b4fc8d2c073ffbac5d9b7deb38f90a72113b44f4a9fded",
+      "truncated": false,
+      "lines": 21,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "maubot.yaml",
+      "local": "04-maubot.yaml",
+      "url": "https://github.com/williamkray/maubot-welcome/blob/391f49562e7891413f4badafef3c04e2a40fbffb/maubot.yaml",
+      "sha256": "d5b02997a0e49e50bf508031688d4e4f213ba25c3a6daa3cc177e900560b4728",
+      "truncated": false,
+      "lines": 10,
+      "source": true,
+      "test": false
     }
   ],
   "license_metadata": "MIT",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "Full captured MIT2023license read, copyright-holder placeholder retained; no source adoption",
   "tests_detected": 0,
   "upstream_tests_run": false,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
@@ -44,5 +64,8 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_review_complete": true,
+  "whole_runtime_qualified": false,
+  "complete_source_review": "docs/research/dedup-500/welcome327-complete-source-review-20261014.json"
 }

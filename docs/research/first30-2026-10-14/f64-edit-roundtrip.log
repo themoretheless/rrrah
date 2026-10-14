@@ -1,0 +1,21 @@
+   Compiling rrrah-first30-harness v0.1.0 (/tmp/rrrah-first30-harness)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 13.32s
+     Running unittests src/lib.rs (/tmp/rrrah-first30-harness/target/debug/deps/rrrah_first30_harness-a78c1eeb74fb76a4)
+
+running 1 test
+
+thread 'edit_store::tests::curve_values_round_trip_exactly_before_recovery_checksum_verification' (16904826) panicked at /Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/edit_store.rs:284:13:
+assertion `left == right` failed: 0.9991956459614251 must survive checksummed recovery
+  left: 4607175173822920609
+ right: 4607175173822920608
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test edit_store::tests::curve_values_round_trip_exactly_before_recovery_checksum_verification ... FAILED
+
+failures:
+
+failures:
+    edit_store::tests::curve_values_round_trip_exactly_before_recovery_checksum_verification
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 11 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `--lib`

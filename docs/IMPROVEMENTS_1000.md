@@ -8,7 +8,7 @@
 
 Локации и текущие SHA обновлены после реализации первых 30. baseline_evidence/audit_source_sha256 сохраняют исходный аудит. Остальные 970 задач повторно не квалифицированы.
 
-verified: 2; blocked: 3; partial: 11; reviewed: 7; rejected: 4; measured_no_change: 3.
+verified: 2; blocked: 3; partial: 11; reviewed: 6; rejected: 5; measured_no_change: 3.
 
 [Результаты и ограничения](research/first30-2026-10-14/REPORT.md). Статус исходного основания и execution.status независимы. partial не означает выполнение всего acceptance. Остальные 970 задач не квалифицированы повторно.
 
@@ -49,7 +49,7 @@ verified: 2; blocked: 3; partial: 11; reviewed: 7; rejected: 4; measured_no_chan
 | [RR-0020](#rr-0020) | Сократить накладные расходы потокового ввода-вывода: lib::read_into | P1 | S | measured_no_change |
 | [RR-0021](#rr-0021) | Сократить накладные расходы потокового ввода-вывода: lib::write_chunks | P1 | S | measured_no_change |
 | [RR-0022](#rr-0022) | Сократить накладные расходы потокового ввода-вывода: segmented::write_segmented | P1 | S | measured_no_change |
-| [RR-0023](#rr-0023) | Сократить копирование и создание владельцев: raster_ram::insert | P2 | S | reviewed |
+| [RR-0023](#rr-0023) | Сократить копирование и создание владельцев: raster_ram::insert | P2 | S | rejected |
 | [RR-0024](#rr-0024) | Сократить временные аллокации: apng::decode | P1 | L | reviewed |
 | [RR-0025](#rr-0025) | Сократить работу основного прохода: raster::decode_raster | P2 | S | rejected |
 | [RR-0026](#rr-0026) | Сократить работу основного прохода: demosaic::amaze | P2 | M | rejected |
@@ -69,7 +69,7 @@ verified: 2; blocked: 3; partial: 11; reviewed: 7; rejected: 4; measured_no_chan
 
 Участок: `repository = "https://github.com/themoretheless/rrrah"`
 
-**Выполнение: verified (2026-10-14).** Исправлен repository workspace и наследование всех 10 пакетов; cargo metadata подтверждает URL.
+**Выполнение: verified (2026-10-15).** Исправлен repository workspace и наследование всех 10 пакетов; cargo metadata подтверждает URL.
 
 Осталось/границы: Критерий завершения проверен в указанной области. [Отчёт](research/first30-2026-10-14/REPORT.md).
 
@@ -93,7 +93,7 @@ API/совместимость: Существующие сигнатуры и �
 
 Участок: `tid: event.thread_id,`
 
-**Выполнение: verified (2026-10-14).** Потоки имеют отдельные trace lanes; перенесённый SpanGuard сохраняет исходный tid; старый JSONL читается.
+**Выполнение: verified (2026-10-15).** Потоки имеют отдельные trace lanes; перенесённый SpanGuard сохраняет исходный tid; старый JSONL читается.
 
 Осталось/границы: Критерий завершения проверен в указанной области. [Отчёт](research/first30-2026-10-14/REPORT.md).
 
@@ -219,7 +219,7 @@ API/совместимость: Сохранить существующие си
 
 Участок: `pub(crate) fn expose(`
 
-**Выполнение: blocked (2026-10-14).** Lifecycle CUDA просмотрен; непроверенное переиспользование context/module не внедрено.
+**Выполнение: blocked (2026-10-15).** Lifecycle CUDA просмотрен; непроверенное переиспользование context/module не внедрено.
 
 Осталось/границы: Нужен реальный NVIDIA CUDA на Linux/Windows и раздельные cold/warm замеры. [Отчёт](research/first30-2026-10-14/REPORT.md).
 
@@ -240,7 +240,7 @@ API/совместимость: Существующие сигнатуры и �
 
 Участок: `and fifteen measured frames follow existing timing conventions. CUDA device`
 
-**Выполнение: blocked (2026-10-14).** Независимый выбор устройств подтверждён кодом и README; selector без проверки двух GPU не внедрён.
+**Выполнение: blocked (2026-10-15).** Независимый выбор устройств подтверждён кодом и README; selector без проверки двух GPU не внедрён.
 
 Осталось/границы: Нужны NVIDIA и два GPU для сопоставления. [Отчёт](research/first30-2026-10-14/REPORT.md).
 
@@ -261,7 +261,7 @@ API/совместимость: Добавить необязательный se
 
 Участок: `fn nvidia_full_output_boundaries_hdr_alpha_and_managed_limits() {`
 
-**Выполнение: partial (2026-10-14).** Добавлен ручной self-hosted NVIDIA workflow с проверкой фактически выполненного теста и артефактами.
+**Выполнение: partial (2026-10-15).** Добавлен ручной self-hosted NVIDIA workflow с проверкой фактически выполненного теста и артефактами.
 
 Осталось/границы: Workflow не запускался на NVIDIA runner; аппаратный критерий не выполнен. [Отчёт](research/first30-2026-10-14/REPORT.md).
 
@@ -281,11 +281,11 @@ API/совместимость: Существующие сигнатуры и �
 
 **улучшение · P1 · L · требует воспроизведения**
 
-Основание: [crates/rrrah-app/tests/hdr_raster_swap.rs:648](../crates/rrrah-app/tests/hdr_raster_swap.rs#L648), `fn hdr_raster_swap_preserves_samples`. Существующий тест доказывает сохранение данных и offscreen Metal output; он не измеряет физическую яркость дисплея.
+Основание: [crates/rrrah-app/tests/hdr_raster_swap.rs:687](../crates/rrrah-app/tests/hdr_raster_swap.rs#L687), `fn hdr_raster_swap_preserves_samples`. Существующий тест доказывает сохранение данных и offscreen Metal output; он не измеряет физическую яркость дисплея.
 
 Участок: `fn hdr_raster_swap_preserves_samples_and_linear_metal_output() {`
 
-**Выполнение: blocked (2026-10-14).** Подготовлен протокол docs/PHYSICAL_HDR_QUALIFICATION.md с отрицательным SDR контролем.
+**Выполнение: blocked (2026-10-15).** Подготовлен протокол docs/PHYSICAL_HDR_QUALIFICATION.md с отрицательным SDR контролем.
 
 Осталось/границы: Нужны физический HDR тракт и измеритель яркости; Metal readback не заменяет измерения. [Отчёт](research/first30-2026-10-14/REPORT.md).
 
@@ -306,7 +306,7 @@ API/совместимость: Существующие сигнатуры и �
 
 Участок: `queue.write_buffer(&self.uniform, 0, bytemuck::bytes_of(&self.parameters));`
 
-**Выполнение: partial (2026-10-14).** Повторная запись неизменного view uniform пропускается по точным bits шести полей; Metal A/B: 10/10 пар в пользу изменения.
+**Выполнение: partial (2026-10-15).** Повторная запись неизменного view uniform пропускается по точным bits шести полей; Metal A/B: 10/10 пар в пользу изменения.
 
 Осталось/границы: Измерена операция 1000 повторов, не FPS; install_texture и новая геометрия сохраняют запись. [Отчёт](research/first30-2026-10-14/REPORT.md).
 
@@ -327,7 +327,7 @@ API/совместимость: Сохранить существующие си
 
 Участок: `let texture = device.create_texture(&wgpu::TextureDescriptor {`
 
-**Выполнение: reviewed (2026-10-14).** RAW atlas создаётся при загрузке нового изображения; tile scratch переиспользуется. Это не аллокация каждого кадра.
+**Выполнение: reviewed (2026-10-15).** RAW atlas создаётся при загрузке нового изображения; tile scratch переиспользуется. Это не аллокация каждого кадра.
 
 Осталось/границы: Pooling без доказательства GPU completion и budget ownership не внедрён; нужен upload профиль. [Отчёт](research/first30-2026-10-14/REPORT.md).
 
@@ -708,7 +708,7 @@ API/совместимость: Сохранить существующие си
 
 Участок: `fn window_event(&mut self, event_loop: &ActiveEventLoop, id: WindowId, event: WindowEvent) {`
 
-**Выполнение: partial (2026-10-14).** Внедрены bounded native EditSession, undo/redo, coalescing и изоляция документа/страницы; подключена экспозиция viewer.
+**Выполнение: partial (2026-10-15).** Внедрены bounded native EditSession, undo/redo, coalescing и изоляция документа/страницы; подключена экспозиция viewer.
 
 Осталось/границы: Графический редактор кривых отсутствует; native кривая проверена отдельно. [Отчёт](research/first30-2026-10-14/REPORT.md).
 
@@ -729,7 +729,7 @@ API/совместимость: Новый native EditSession/command API; cache
 
 Участок: `fn run_viewer(`
 
-**Выполнение: partial (2026-10-14).** Атомарный XMP round-trip сохраняет неизвестный XML и другие страницы; source hash, bounded parser и конфликт digest защищают запись. Перед записью проверяется полный hash исходника, в том числе при одинаковых длине/mtime; oversized и non-regular sidecar отклоняются.
+**Выполнение: partial (2026-10-15).** Атомарный XMP round-trip сохраняет неизвестный XML и другие страницы; source hash, bounded parser и конфликт digest защищают запись. Перед записью проверяется полный hash исходника, в том числе при одинаковых длине/mtime; oversized и non-regular sidecar отклоняются. Для f64 кривых явно включён serde_json/float_roundtrip: 1024 побитовых round-trip и запись XMP/journal проходят; до включения воспроизведён сдвиг на 1 ULP.
 
 Осталось/границы: Конфликт возвращается ошибкой, диалог разрешения не реализован; внешний несотрудничающий writer может конкурировать с rename. [Отчёт](research/first30-2026-10-14/REPORT.md).
 
@@ -750,9 +750,9 @@ API/совместимость: Отдельная версионированн�
 
 Участок: `fn exiting(&mut self, _event_loop: &ActiveEventLoop) {`
 
-**Выполнение: partial (2026-10-14).** Checksummed bounded атомарный snapshot journal, проверка исходника/версии и восстановление последнего целого состояния подключены к viewer.
+**Выполнение: partial (2026-10-15).** Checksummed bounded атомарный snapshot journal, проверка исходника/версии и восстановление последнего целого состояния подключены к viewer.
 
-Осталось/границы: Это snapshot состояния, не командный журнал; нужна kill-тестовая серия GUI и диалог выбора при изменившемся исходнике. Разные состояния XMP/journal сохраняются и блокируют правки до явного решения; длительное filesystem I/O при shutdown ещё требует отдельной проверки. [Отчёт](research/first30-2026-10-14/REPORT.md).
+Осталось/границы: Это snapshot состояния, не командный журнал; нужна kill-тестовая серия GUI и диалог выбора при изменившемся исходнике. Разные состояния XMP/journal сохраняются и блокируют правки до явного решения; длительное filesystem I/O при shutdown ещё требует отдельной проверки. Identity уже открытой in-memory сессии при замене файла по тому же пути ещё требует обновления; сохранение проверяет полный hash и отказывает при изменении. [Отчёт](research/first30-2026-10-14/REPORT.md).
 
 Изменение: Поверх EditSession записывать ограниченный журнал команд с идентичностью исходника и контрольными суммами; восстанавливать только подтверждённый целый префикс после сбоя.
 
@@ -771,7 +771,7 @@ API/совместимость: Версионированный journal format,
 
 Участок: `fn render(&mut self) {`
 
-**Выполнение: partial (2026-10-14).** Добавлена асинхронная bounded log HDR histogram для LinearSrgb float raster; аналитические bins и stale generation проверяются тестами.
+**Выполнение: partial (2026-10-15).** Добавлена асинхронная bounded log HDR histogram для LinearSrgb float raster; аналитические bins и stale generation проверяются тестами.
 
 Осталось/границы: Нет RAW GPU histogram, графического histogram plot и end-to-end p95/RAM квалификации. [Отчёт](research/first30-2026-10-14/REPORT.md).
 
@@ -792,9 +792,9 @@ API/совместимость: Отдельный HistogramRequest/Result с ge
 
 Участок: `fn render(&mut self) {`
 
-**Выполнение: partial (2026-10-14).** Удержание B и split C используют тот же texture/atlas; обе стороны совпали с SDR/HDR и RAW GPU readback эталонами на Metal.
+**Выполнение: partial (2026-10-15).** Удержание B и split C используют тот же texture/atlas; обе стороны совпали с SDR/HDR и RAW GPU readback эталонами на Metal.
 
-Осталось/границы: Live GUI, resize/focus и p95 ещё требуют проверки; CUA server timeout. [Отчёт](research/first30-2026-10-14/REPORT.md).
+Осталось/границы: Live GUI, resize/focus и p95 ещё требуют проверки; CUA server timeout. Финальный RAW-ретест остановлен после 1200 секунд ожидания create_render_pipeline/MetalCompiler; это не успешная проверка. Причина задержки не установлена; предыдущий RAW-readback сохранён отдельно. [Отчёт](research/first30-2026-10-14/REPORT.md).
 
 Изменение: Добавить удерживаемое действие before/after и разделяемый вид с общей геометрией viewport, одинаковым output transform и ограниченным дополнительным residency.
 
@@ -816,7 +816,7 @@ API/совместимость: Viewer comparison state поверх EditSession
 
 Участок: `fn window_event(&mut self, event_loop: &ActiveEventLoop, id: WindowId, event: WindowEvent) {`
 
-**Выполнение: partial (2026-10-14).** Добавлены AccessKit tree, семантика изображения/папки/состояния, Tab/ShiftTab и восемь действий.
+**Выполнение: partial (2026-10-15).** Добавлены AccessKit tree, семантика изображения/папки/состояния, Tab/ShiftTab и восемь действий.
 
 Осталось/границы: Реальный screen reader, контрастность и GUI фокус не квалифицированы: CUA server timeout. [Отчёт](research/first30-2026-10-14/REPORT.md).
 
@@ -837,7 +837,7 @@ API/совместимость: Семантическое дерево дост
 
 Участок: `.lock()`
 
-**Выполнение: partial (2026-10-14).** Убраны clone prefetch списка и лишнее первоначальное заполнение slot; два синтетических A/B прогона показывают выигрыш локальной операции.
+**Выполнение: partial (2026-10-15).** Убраны clone prefetch списка и лишнее первоначальное заполнение slot; два синтетических A/B прогона показывают выигрыш локальной операции.
 
 Осталось/границы: Это microbenchmark, не измерение открытия/навигации и не профиль конкуренции UI. [Отчёт](research/first30-2026-10-14/REPORT.md).
 
@@ -858,7 +858,7 @@ API/совместимость: Сохранить существующие си
 
 Участок: `.lock()`
 
-**Выполнение: reviewed (2026-10-14).** enqueue_foreground использует общий prefetch slot; перенос операций вне mutex без доказательства ordering не принят.
+**Выполнение: reviewed (2026-10-15).** enqueue_foreground использует общий prefetch slot; перенос операций вне mutex без доказательства ordering не принят.
 
 Осталось/границы: Нужен профиль реальной конкуренции и latency; подтверждённого изменения нет. [Отчёт](research/first30-2026-10-14/REPORT.md).
 
@@ -879,7 +879,7 @@ API/совместимость: Сохранить существующие си
 
 Участок: `self.queue.submit([encoder.finish()]);`
 
-**Выполнение: reviewed (2026-10-14).** Уточнено основание: render относится к TelemetryState, а не к отрисовке изображения. Изменение не принято.
+**Выполнение: reviewed (2026-10-15).** Уточнено основание: render относится к TelemetryState, а не к отрисовке изображения. Изменение не принято.
 
 Осталось/границы: Измерить стоимость панели телеметрии отдельно; image FPS из этого участка не следует. [Отчёт](research/first30-2026-10-14/REPORT.md).
 
@@ -900,7 +900,7 @@ API/совместимость: Сохранить существующие си
 
 Участок: `gpu.upload_completions.poll(&gpu.device).unwrap_or_else(|error| {`
 
-**Выполнение: reviewed (2026-10-14).** UploadCompletions.poll уже возвращает управление при pending==0; poll нужен для освобождения GPU lease.
+**Выполнение: reviewed (2026-10-15).** UploadCompletions.poll уже возвращает управление при pending==0; poll нужен для освобождения GPU lease.
 
 Осталось/границы: Нужен профиль активных загрузок; удалять обязательное обслуживание без доказательства нельзя. [Отчёт](research/first30-2026-10-14/REPORT.md).
 
@@ -921,7 +921,7 @@ API/совместимость: Сохранить существующие си
 
 Участок: `let mut slots = shared.slots.lock().unwrap();`
 
-**Выполнение: reviewed (2026-10-14).** Подготовка model upload выполняется вне mutex; destruction старых jobs связано с admission/ownership.
+**Выполнение: reviewed (2026-10-15).** Подготовка model upload выполняется вне mutex; destruction старых jobs связано с admission/ownership.
 
 Осталось/границы: Нужны paired contention measurements и проверка memory admission перед переносом destruction. [Отчёт](research/first30-2026-10-14/REPORT.md).
 
@@ -942,7 +942,7 @@ API/совместимость: Сохранить существующие си
 
 Участок: `.lock()`
 
-**Выполнение: rejected (2026-10-14).** try_take отпускает временный mutex guard до проверки отмены/деструкции результата; предположение о длительном удержании не подтверждено.
+**Выполнение: rejected (2026-10-15).** try_take отпускает временный mutex guard до проверки отмены/деструкции результата; предположение о длительном удержании не подтверждено.
 
 Осталось/границы: Ускорение не заявляется; production без изменений. [Отчёт](research/first30-2026-10-14/REPORT.md).
 
@@ -963,7 +963,7 @@ API/совместимость: Сохранить существующие си
 
 Участок: `let candidates = std::fs::read_dir(folder)`
 
-**Выполнение: partial (2026-10-14).** Обложка сначала фильтрует расширение, затем использует DirEntry.file_type без следования symlink; downstream identity validation сохранена.
+**Выполнение: partial (2026-10-15).** Обложка сначала фильтрует расширение, затем использует DirEntry.file_type без следования symlink; downstream identity validation сохранена.
 
 Осталось/границы: Два прогона каталогов 1000/10000 файлов подтверждают локальную операцию, не весь viewer/cold disk путь. [Отчёт](research/first30-2026-10-14/REPORT.md).
 
@@ -2296,7 +2296,7 @@ API/совместимость: Сохранить существующие си
 
 Участок: `file.read_exact(block)?;`
 
-**Выполнение: measured_no_change (2026-10-14).** read_into: снят warm временный FS baseline для 0/65539/16MiB, exact bytes и возврат кредитов проверены.
+**Выполнение: measured_no_change (2026-10-15).** read_into: снят warm временный FS baseline для 0/65539/16MiB, exact bytes и возврат кредитов проверены.
 
 Осталось/границы: Новый алгоритм не принят; cold disk/корпус не измерены. [Отчёт](research/first30-2026-10-14/REPORT.md).
 
@@ -2317,7 +2317,7 @@ API/совместимость: Сохранить существующие си
 
 Участок: `file.write_all(block)?;`
 
-**Выполнение: measured_no_change (2026-10-14).** write_chunks: сняты baseline времена и reader calls; границы scratch/admission сохранены.
+**Выполнение: measured_no_change (2026-10-15).** write_chunks: сняты baseline времена и reader calls; границы scratch/admission сохранены.
 
 Осталось/границы: Группировка без подтверждённого выигрыша не внедрялась; cold disk не измерен. [Отчёт](research/first30-2026-10-14/REPORT.md).
 
@@ -2338,7 +2338,7 @@ API/совместимость: Сохранить существующие си
 
 Участок: `reader.read_exact(&mut scratch[..length])?;`
 
-**Выполнение: measured_no_change (2026-10-14).** write_segmented: снят warm baseline и проверен exact round-trip; квоты после завершения равны нулю.
+**Выполнение: measured_no_change (2026-10-15).** write_segmented: снят warm baseline и проверен exact round-trip; квоты после завершения равны нулю.
 
 Осталось/границы: Нет квалифицированного альтернативного алгоритма или cold disk замера. [Отчёт](research/first30-2026-10-14/REPORT.md).
 
@@ -2498,9 +2498,9 @@ API/совместимость: Сохранить существующие си
 
 Участок: `let (admitted, evicted) = match self.entries.insert(key.clone(), raster, weight) {`
 
-**Выполнение: reviewed (2026-10-14).** RasterDisplayKey содержит PathBuf; гипотеза о копировании требует измерения. Clone не объявлен бесплатным и не удалён.
+**Выполнение: rejected (2026-10-15).** Реальный RasterRamCache A/B: одна копия K устранена, visible pin и last-owner credit сохранены; 3/10 выигрышей, median baseline/candidate 0.88085. Производственная правка откатана; вариант остался только в cfg(test) для воспроизведения.
 
-Осталось/границы: Нужны lifetime/admission проверки и paired allocation/latency profile. [Отчёт](research/first30-2026-10-14/REPORT.md).
+Осталось/границы: Ускорение и снижение RSS не подтверждены. Контроль — предыдущее тело операции; замер выполнялся при параллельной компиляции. Дальнейший профиль требует более тихой среды. [Отчёт](research/first30-2026-10-14/REPORT.md).
 
 Изменение: Установить тип копируемого значения и время жизни получателя; сравнить текущую передачу с заимствованием или переносом владения без изменения времени освобождения ресурса. Сохранить воспроизводимый benchmark этого участка. Изменение production применять только после устойчивого выигрыша; при нулевом выигрыше закрыть гипотезу измеренным отчётом и оставить полезный benchmark.
 
@@ -3151,7 +3151,7 @@ API/совместимость: Сохранить существующие си
 
 Участок: `let mut frames: Vec<Control<'_>> = Vec::new();`
 
-**Выполнение: reviewed (2026-10-14).** APNG ограничивает frames до 4096; динамический рост Vec замечен, но выгодный альтернативный путь не подтверждён.
+**Выполнение: reviewed (2026-10-15).** APNG ограничивает frames до 4096; динамический рост Vec замечен, но выгодный альтернативный путь не подтверждён.
 
 Осталось/границы: Нужны APNG timing/peak memory на многофреймовых входах; production без изменений. [Отчёт](research/first30-2026-10-14/REPORT.md).
 
@@ -3172,7 +3172,7 @@ API/совместимость: Сохранить существующие си
 
 Участок: `while used < prefix.len() {`
 
-**Выполнение: rejected (2026-10-14).** Header probe уже bounded stack 740 байт, цикл нужен для short/interrupted read; router переиспользует inspected probe.
+**Выполнение: rejected (2026-10-15).** Header probe уже bounded stack 740 байт, цикл нужен для short/interrupted read; router переиспользует inspected probe.
 
 Осталось/границы: Удаление framing loop/повторного probe без подтверждённого вызова отвергнуто; ускорение не заявляется. [Отчёт](research/first30-2026-10-14/REPORT.md).
 
@@ -3193,7 +3193,7 @@ API/совместимость: Сохранить существующие си
 
 Участок: `let mut objects = vec![None; handles];`
 
-**Выполнение: rejected (2026-10-14).** EMF object table уже создаётся одним vec![None; handles] при handles в 1..4096; предлагаемая предварительная аллокация присутствует.
+**Выполнение: rejected (2026-10-15).** EMF object table уже создаётся одним vec![None; handles] при handles в 1..4096; предлагаемая предварительная аллокация присутствует.
 
 Осталось/границы: Production без изменений; отдельная pooling гипотеза не доказана. [Отчёт](research/first30-2026-10-14/REPORT.md).
 
@@ -4553,7 +4553,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-decode/src/raster.rs:994](../crates/rrrah-decode/src/raster.rs#L994), `decode_farbfeld`. Создание коллекции внутри операции может давать повторные аллокации и повышать пиковую память.
+Основание: [crates/rrrah-decode/src/raster.rs:1001](../crates/rrrah-decode/src/raster.rs#L1001), `decode_farbfeld`. Создание коллекции внутри операции может давать повторные аллокации и повышать пиковую память.
 
 Участок: `let mut values = Vec::new();`
 
@@ -5420,7 +5420,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-decode/src/avif_color.rs:71](../crates/rrrah-decode/src/avif_color.rs#L71), `properties`. Материализация итератора может создавать временную коллекцию перед следующим проходом.
+Основание: [crates/rrrah-decode/src/avif_color.rs:113](../crates/rrrah-decode/src/avif_color.rs#L113), `properties`. Материализация итератора может создавать временную коллекцию перед следующим проходом.
 
 Участок: `let metas: Vec<_> = top.iter().filter(|(k, _)| k == b"meta").collect();`
 
@@ -9211,7 +9211,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-decode/src/raster.rs:949](../crates/rrrah-decode/src/raster.rs#L949), `normalize_avif_u16`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
+Основание: [crates/rrrah-decode/src/raster.rs:956](../crates/rrrah-decode/src/raster.rs#L956), `normalize_avif_u16`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
 
 Участок: `for (index, pixel) in pixels.chunks_exact_mut(4).enumerate() {`
 
@@ -10986,7 +10986,7 @@ API/совместимость: Сохранить существующие си
 
 Участок: `for y in 0..bh {`
 
-**Выполнение: rejected (2026-10-14).** Эксперимент AMaZE с прямыми interior offsets дал побайтово равный результат, median ratio 1.0642 и лишь 7/10 выигрышей; экспериментальная правка откатана.
+**Выполнение: rejected (2026-10-15).** Эксперимент AMaZE с прямыми interior offsets дал побайтово равный результат, median ratio 1.0642 и лишь 7/10 выигрышей; экспериментальная правка откатана.
 
 Осталось/границы: Не заявлять устойчивое ускорение. Существующий сторонний переход на f64 сохранён. [Отчёт](research/first30-2026-10-14/REPORT.md).
 
@@ -11775,7 +11775,7 @@ API/совместимость: Сохранить существующие си
 
 Участок: `help='Run pinned native AI replay-plane Metal transport; production AI fidelity remains unqualified')`
 
-**Выполнение: partial (2026-10-14).** Каждый suite получил deadline, POSIX process-group TERM/KILL и bounded cleanup; timeout никогда не verified.
+**Выполнение: partial (2026-10-15).** Каждый suite получил deadline, POSIX process-group TERM/KILL и bounded cleanup; timeout никогда не verified.
 
 Осталось/границы: POSIX parent/child и ошибка subprocess проверены; Windows taskkill ветка ещё не исполнена. [Отчёт](research/first30-2026-10-14/REPORT.md).
 
@@ -13733,7 +13733,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-dedup/src/exact.rs:417](../crates/rrrah-dedup/src/exact.rs#L417), `collect`. В участке есть обращение к файловой системе; частота повторных запросов и их вклад в задержку требуют измерения.
+Основание: [crates/rrrah-dedup/src/exact.rs:426](../crates/rrrah-dedup/src/exact.rs#L426), `collect`. В участке есть обращение к файловой системе; частота повторных запросов и их вклад в задержку требуют измерения.
 
 Участок: `let metadata = fs::metadata(&canonical)?;`
 
@@ -14379,7 +14379,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-dedup/src/exact.rs:946](../crates/rrrah-dedup/src/exact.rs#L946), `read_observed`. В участке есть обращение к файловой системе; частота повторных запросов и их вклад в задержку требуют измерения.
+Основание: [crates/rrrah-dedup/src/exact.rs:905](../crates/rrrah-dedup/src/exact.rs#L905), `read_observed`. В участке есть обращение к файловой системе; частота повторных запросов и их вклад в задержку требуют измерения.
 
 Участок: `let metadata = fs::metadata(path)?;`
 
@@ -14396,7 +14396,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-dedup/src/exact.rs:1006](../crates/rrrah-dedup/src/exact.rs#L1006), `copy_range`. В участке есть потоковые Read/Write/Seek операции. Они могут работать с памятью или файлом; тип backend и долю накладных расходов нужно установить по вызывающему контексту.
+Основание: [crates/rrrah-dedup/src/exact.rs:1115](../crates/rrrah-dedup/src/exact.rs#L1115), `copy_range`. В участке есть потоковые Read/Write/Seek операции. Они могут работать с памятью или файлом; тип backend и долю накладных расходов нужно установить по вызывающему контексту.
 
 Участок: `file.seek(SeekFrom::Start(offset))?;`
 
@@ -14549,7 +14549,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-dedup/src/exact.rs:201](../crates/rrrah-dedup/src/exact.rs#L201), `validate`. В участке есть обращение к файловой системе; частота повторных запросов и их вклад в задержку требуют измерения.
+Основание: [crates/rrrah-dedup/src/exact.rs:208](../crates/rrrah-dedup/src/exact.rs#L208), `validate`. В участке есть обращение к файловой системе; частота повторных запросов и их вклад в задержку требуют измерения.
 
 Участок: `let path_metadata = fs::metadata(&entry.path)?;`
 
@@ -14583,7 +14583,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-dedup/src/exact.rs:259](../crates/rrrah-dedup/src/exact.rs#L259), `allocate_read_buffer`. Создание коллекции внутри операции может давать повторные аллокации и повышать пиковую память.
+Основание: [crates/rrrah-dedup/src/exact.rs:266](../crates/rrrah-dedup/src/exact.rs#L266), `allocate_read_buffer`. Создание коллекции внутри операции может давать повторные аллокации и повышать пиковую память.
 
 Участок: `let mut bytes = Vec::new();`
 
@@ -16232,7 +16232,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-dedup/src/exact.rs:917](../crates/rrrah-dedup/src/exact.rs#L917), `read_verified_prefix`. Перенос последовательности может добавлять проход по памяти и перевыделение целевого буфера.
+Основание: [crates/rrrah-dedup/src/exact.rs:1018](../crates/rrrah-dedup/src/exact.rs#L1018), `read_verified_prefix`. Перенос последовательности может добавлять проход по памяти и перевыделение целевого буфера.
 
 Участок: `prefix.copy_from_slice(&buffer[..length]);`
 
@@ -16317,7 +16317,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-dedup/src/exact.rs:324](../crates/rrrah-dedup/src/exact.rs#L324), `equal`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
+Основание: [crates/rrrah-dedup/src/exact.rs:331](../crates/rrrah-dedup/src/exact.rs#L331), `equal`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
 
 Участок: `while remaining > 0 {`
 
@@ -16725,7 +16725,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-dedup/src/exact.rs:246](../crates/rrrah-dedup/src/exact.rs#L246), `write_all_cancelled`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
+Основание: [crates/rrrah-dedup/src/exact.rs:253](../crates/rrrah-dedup/src/exact.rs#L253), `write_all_cancelled`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
 
 Участок: `while !buffer.is_empty() {`
 
@@ -16759,7 +16759,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-dedup/src/exact.rs:1397](../crates/rrrah-dedup/src/exact.rs#L1397), `discover`. Полное упорядочивание может быть дороже отбора реально используемого результата.
+Основание: [crates/rrrah-dedup/src/exact.rs:1523](../crates/rrrah-dedup/src/exact.rs#L1523), `discover`. Полное упорядочивание может быть дороже отбора реально используемого результата.
 
 Участок: `report.issues.sort_by(|a, b| a.path.cmp(&b.path));`
 
@@ -16810,7 +16810,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-dedup/src/exact.rs:231](../crates/rrrah-dedup/src/exact.rs#L231), `read_exact_cancelled`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
+Основание: [crates/rrrah-dedup/src/exact.rs:238](../crates/rrrah-dedup/src/exact.rs#L238), `read_exact_cancelled`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
 
 Участок: `while !buffer.is_empty() {`
 

@@ -2,9 +2,9 @@
   "index": 488,
   "repository": "nikvoronin/we-aint-same",
   "commit": "4005039a78eff762a4512924e6f00faf777b29e7",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All6pinned repository files fully read and Gitmatched;16actual.NET8original-helper/LINQ controls with explicit scalarHamming distance adapter, not actual ImageHash1.3.6/wholeCLI/cache/media qualification",
   "decision": "reference",
-  "finding": "C# CLI precomputed-hash file; cache version/invalidation and equality policy need inspection.",
+  "finding": "Thresholdsimilarity used as GroupBy equality, constant hash: order-dependent groups and quadratic comparisons demonstrated under stated adapter. Cache lacks source/algorithm/version validation. No image/byte equality or adoption.",
   "available_source_evidence": [
     {
       "path": "Program.cs",
@@ -15,10 +15,40 @@
       "lines": 106,
       "source": true,
       "test": false
+    },
+    {
+      "path": ".gitignore",
+      "local": "03-gitignore",
+      "url": "https://github.com/nikvoronin/we-aint-same/blob/4005039a78eff762a4512924e6f00faf777b29e7/.gitignore",
+      "sha256": "6f13171c2c854ae2e807cdf3306ae7d1369a57e37d90024971f77009cdb0e874",
+      "truncated": false,
+      "lines": 450,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "WeAintSame.csproj",
+      "local": "04-WeAintSame.csproj",
+      "url": "https://github.com/nikvoronin/we-aint-same/blob/4005039a78eff762a4512924e6f00faf777b29e7/WeAintSame.csproj",
+      "sha256": "b9e18c6d444c09ecaad982d54e6ede47e93f6f7ab1a6d7eacd7c7df725453059",
+      "truncated": false,
+      "lines": 16,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "WeAintSame.sln",
+      "local": "05-WeAintSame.sln",
+      "url": "https://github.com/nikvoronin/we-aint-same/blob/4005039a78eff762a4512924e6f00faf777b29e7/WeAintSame.sln",
+      "sha256": "a0064d1950a5ed7d2e7eb662987eaf5b72f0324ddfc81d6ed3711cece0b351fe",
+      "truncated": false,
+      "lines": 25,
+      "source": true,
+      "test": false
     }
   ],
   "license_metadata": "MIT",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "Full MIT2022source license read; externalImageHash/ImageSharp runtime unqualified, no source adoption",
   "tests_detected": 0,
   "upstream_tests_run": false,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
@@ -44,5 +74,8 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_review_complete": true,
+  "whole_runtime_qualified": false,
+  "complete_source_review": "docs/research/dedup-500/weaintsame488-complete-source-review-20261014.json"
 }

@@ -2,11 +2,11 @@
   "index": 49,
   "repository": "jhnc/findimagedupes",
   "commit": "c4920cce0735039b78cd9784e59dd21f0bd3a49a",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All5pinned repository blobs fully read and Git-object matched; original C/Perl helpers executed with explicit synthetic adapters, not full CLI/image/DB qualification",
   "decision": "reference",
-  "finding": "Extensionless Perl implementation combines MD5 and image fingerprint stages; GPL reference, no tests detected.",
+  "finding": "Original C lookup[0] uninitialized and short-fingerprint heap overread reproduced; chain grouping is transitive, cache lacks freshness stamp. MD5 verbosity only. GPLv3-or-later reference, no adoption.",
   "license_metadata": "GPL-3.0",
-  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "license_scope": "Full GPLv3 text and source GPLv3-or-later notices read; source reference only, no library adoption",
   "tests_detected": 0,
   "upstream_tests_run": false,
   "available_source_evidence": [
@@ -17,6 +17,26 @@
       "sha256": "d42d68367c506ece1f9dd5da21a5b7575903473b8935aa4d0a6c5cc1700e3617",
       "truncated": false,
       "lines": 1151,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "Makefile",
+      "local": "03-Makefile",
+      "url": "https://github.com/jhnc/findimagedupes/blob/c4920cce0735039b78cd9784e59dd21f0bd3a49a/Makefile",
+      "sha256": "37b232b381a5d9f60a844454c059e2eee078985c9c1d96ba7aaea558b557954f",
+      "truncated": false,
+      "lines": 32,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "patchver",
+      "local": "04-patchver",
+      "url": "https://github.com/jhnc/findimagedupes/blob/c4920cce0735039b78cd9784e59dd21f0bd3a49a/patchver",
+      "sha256": "d3aa32df43e687dc99eb980f7f07b0c025fe91e231005f7c3e7e5e95caa9411d",
+      "truncated": false,
+      "lines": 4,
       "source": true,
       "test": false
     }
@@ -44,5 +64,8 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_review_complete": true,
+  "whole_runtime_qualified": false,
+  "complete_source_review": "docs/research/dedup-500/findimagedupes49-complete-source-review-20261014.json"
 }

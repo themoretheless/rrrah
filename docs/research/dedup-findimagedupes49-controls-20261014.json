@@ -1,0 +1,1247 @@
+{
+  "status": "verified_bounded_original_helper_controls",
+  "repository": "jhnc/findimagedupes",
+  "commit": "c4920cce0735039b78cd9784e59dd21f0bd3a49a",
+  "source_pins": {
+    "02-findimagedupes": "d42d68367c506ece1f9dd5da21a5b7575903473b8935aa4d0a6c5cc1700e3617",
+    "00-README.md": "9e09140d13725b3e5178b918760dd2ed2cb293afd9839a45370ff634335cbd48",
+    "01-COPYING": "fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7",
+    "manifest.json": "fea670fefe3c7bd9102ddc1fd9cfaee20975f0206f75b7f28ba6c332882ea5b3",
+    "03-Makefile": "37b232b381a5d9f60a844454c059e2eee078985c9c1d96ba7aaea558b557954f",
+    "04-patchver": "d3aa32df43e687dc99eb980f7f07b0c025fe91e231005f7c3e7e5e95caa9411d",
+    "tree.json": "6c3092befbefe897b361d2796c6655f316372c2d09385264df4014a45c6a801a"
+  },
+  "producer_sha256": "4dd9920285ee0ef5731940cc83bffcad967965f367ec6deb8a3f55f1561763d6",
+  "upstream_c_sha256": "42fb8fc88980ee31468dd4cd4710dca624946134845244a2e5aa901102bb2e06",
+  "adapter": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/adapter.c",
+  "adapter_sha256": "ed4f5675d73b34da554012d99d714d07252bec10cd2374970702be0bf0334c8f",
+  "binaries": {
+    "zero": {
+      "path": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero",
+      "sha256": "e3dfcfe7dfc7bbbff6d72a96a3885f803dbdadb33804ac12657ddbda4525592b"
+    },
+    "pattern": {
+      "path": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/pattern",
+      "sha256": "9102fd22d57e314a3fd76d7874dd0230c3f419e492f590a08ba4119a94548a2c"
+    },
+    "asan": {
+      "path": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/asan",
+      "sha256": "00c98ae5aea155c506660a18b6e6bd331c64569d30faa8e1023cb7f1e65181a9"
+    }
+  },
+  "records": [
+    {
+      "label": "build-zero",
+      "command": [
+        "clang",
+        "-O0",
+        "-ftrivial-auto-var-init=zero",
+        "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/adapter.c",
+        "-o",
+        "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/build-zero.stdout",
+      "stderr": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/build-zero.stderr",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "build-pattern",
+      "command": [
+        "clang",
+        "-O0",
+        "-ftrivial-auto-var-init=pattern",
+        "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/adapter.c",
+        "-o",
+        "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/pattern"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/build-pattern.stdout",
+      "stderr": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/build-pattern.stderr",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "build-asan",
+      "command": [
+        "clang",
+        "-O0",
+        "-ftrivial-auto-var-init=zero",
+        "-fsanitize=address",
+        "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/adapter.c",
+        "-o",
+        "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/asan"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/build-asan.stdout",
+      "stderr": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/build-asan.stderr",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "zero-00",
+      "command": [
+        "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero",
+        "0",
+        "0",
+        "0",
+        "0"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero-00.stdout",
+      "stderr": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero-00.stderr",
+      "stdout_sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "zero-01",
+      "command": [
+        "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero",
+        "1",
+        "0",
+        "1",
+        "1",
+        "fd4e1f11e9002658e747ca698331eeeeca094a1c1595d05273608ac0a43aea8d"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero-01.stdout",
+      "stderr": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero-01.stderr",
+      "stdout_sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "zero-02",
+      "command": [
+        "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero",
+        "2",
+        "0",
+        "25",
+        "0",
+        "bd94e3829212c8ce5a6fb70c17650baed780780b712d23c23a3266bc422fa346",
+        "bd94e3829212c8ce5a6fb70c17650baed780780b712d23c23a3266bc422fa346"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero-02.stdout",
+      "stderr": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero-02.stderr",
+      "stdout_sha256": "ba5111604090596f7ac8591f5b10954dfd10650877711f80d5c7990bff2c3367",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "zero-03",
+      "command": [
+        "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero",
+        "3",
+        "0",
+        "128",
+        "1",
+        "6c9715dbf0ea37e4c730419aab6a3449ae80c792a035065fe8986b6636a8cc07",
+        "4ecdad3f94f0f9b9622e532382de80181dd5596c0b6e9cbac68545602f959853",
+        "c6e2bfc5debdbd5bc41db4441df3c5a7ae020866d3bc3cf656c234f278426d9d"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero-03.stdout",
+      "stderr": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero-03.stderr",
+      "stdout_sha256": "6fb3f2802de930ce2a34098b7dc76bf22e06a2e47b75be34d6154b1cfaa29469",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "zero-04",
+      "command": [
+        "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero",
+        "0",
+        "1",
+        "255",
+        "0",
+        "5f1dcb9e6e0b650dc33448a974d1b069d0481ab0b991558be646fde8e0bd359d"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero-04.stdout",
+      "stderr": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero-04.stderr",
+      "stdout_sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "zero-05",
+      "command": [
+        "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero",
+        "1",
+        "1",
+        "256",
+        "1",
+        "875ccd34ed2852a6c4d835c50a34c2e86abcc8105ac82f9028fe48417488698a",
+        "e9bf8298ac9b63885c878551b72eb822308fd07ca34a01f0d09ee238ccb68053"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero-05.stdout",
+      "stderr": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero-05.stderr",
+      "stdout_sha256": "1acdcc9075d3b13cb3215ef270187ef8f482190db7e9bd76e74c931afa0cffc9",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "zero-06",
+      "command": [
+        "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero",
+        "2",
+        "1",
+        "0",
+        "0",
+        "fd535341cf8c22952b06ea6fe3b6ccf5eb9bae9c1db45d7d44be69b121fec1b3",
+        "fd535341cf8c22952b06ea6fe3b6ccf5eb9bae9c1db45d7d44be69b121fec1b3",
+        "eca2498c2088b2053e80d38af2d7b5e9ff4d13260c1dfb0285600733d500f8ec"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero-06.stdout",
+      "stderr": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero-06.stderr",
+      "stdout_sha256": "ba5111604090596f7ac8591f5b10954dfd10650877711f80d5c7990bff2c3367",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "zero-07",
+      "command": [
+        "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero",
+        "3",
+        "1",
+        "1",
+        "1",
+        "5d2ab31581788eda1bfb20f1ad7257f1679a1dd4043ab24d8aa81b10b32bbc0d",
+        "bb566ab1daa7d3b33e2ecd5f494fcbb1cfc7f8a97b73e70e039ce96f4aa7afda",
+        "84d5ed538308d3d7c913f412fdc1b8793e5863310a3ce6c2b9022a6deb5f3e4c",
+        "598a95b7c48f4a7b8c298d284f1de2425d2e937030616f57531473f7141ea61a"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero-07.stdout",
+      "stderr": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero-07.stderr",
+      "stdout_sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "zero-08",
+      "command": [
+        "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero",
+        "0",
+        "2",
+        "25",
+        "0",
+        "d494511a7ad800b7d6a73f6860c3797ec6fae0da8d16d4747e37a4a6bb533517",
+        "d494511a7ad800b7d6a73f6860c3797ec6fae0da8d16d4747e37a4a6bb533517"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero-08.stdout",
+      "stderr": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero-08.stderr",
+      "stdout_sha256": "ba5111604090596f7ac8591f5b10954dfd10650877711f80d5c7990bff2c3367",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "zero-09",
+      "command": [
+        "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero",
+        "1",
+        "2",
+        "128",
+        "1",
+        "e9933468d037d85689a158869004659014e10ddf087d6702f48b2eab306cbf2d",
+        "cdd83a5fc87a2b5cd08869e1ec21471a159e319d3a54c3d9b14e43b99ce2c51d",
+        "9eea932c05fcfe971a9b45432713d8c11407c698ca0378fc7f54bd6d6e3ecc14"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero-09.stdout",
+      "stderr": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero-09.stderr",
+      "stdout_sha256": "95b66bfc9d507a84920987b8b3e4d73367aaee621b74a86a841f8a21b3090ac3",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "zero-10",
+      "command": [
+        "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero",
+        "2",
+        "2",
+        "255",
+        "0",
+        "731b88412b047fc7c6b25bebbd1f2a5c95cd0af637263eb5d9fd23adb4e576ac",
+        "731b88412b047fc7c6b25bebbd1f2a5c95cd0af637263eb5d9fd23adb4e576ac",
+        "778ed590b96b8b762de32ae80a4aa1da6cb5449212a23021c77c69bd8bde21a9",
+        "787a7a60a04f9d9c5298d40614607341640eed82a1d26c1cdd5cfc575d029899"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero-10.stdout",
+      "stderr": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero-10.stderr",
+      "stdout_sha256": "931cdd8c1c5cca1bde1aa333c3cb95a41a16d489ac25713b5c3dc8e50100cd72",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "zero-11",
+      "command": [
+        "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero",
+        "3",
+        "2",
+        "256",
+        "1",
+        "f8e4dd90fdfd3250e4e818f9f6aa786c32b01bf3052b60f1765e23eab30105b9",
+        "e43a11a61794c984c157e686ad4735dbbcbeef89deb5d1baa73727eb79eec33c",
+        "509425022897f73925be8c08990f7052a60eed136f9ac07cd9f74b735c276e42",
+        "9dbbcefca437d2cf366ab2e6b25baccfe89f418f62b2e607fd61ccf325c9d069",
+        "257129b9ce1262b0682612d1fe820084a025314239629de259eee61dd8184570"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero-11.stdout",
+      "stderr": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero-11.stderr",
+      "stdout_sha256": "4e459e4069c4061ab452c720a03df6bee321c152f3612c2d1560be06650a5579",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "zero-12",
+      "command": [
+        "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero",
+        "0",
+        "0",
+        "0",
+        "0"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero-12.stdout",
+      "stderr": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero-12.stderr",
+      "stdout_sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "zero-13",
+      "command": [
+        "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero",
+        "1",
+        "0",
+        "1",
+        "1",
+        "61b7283835cb37d911071adbb976ae079be3afe19a58547ae5b29d97bc0186f5"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero-13.stdout",
+      "stderr": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero-13.stderr",
+      "stdout_sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "zero-14",
+      "command": [
+        "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero",
+        "2",
+        "0",
+        "25",
+        "0",
+        "d1b327275f53e04299aa8166d87cc02b5c9d2c45ab04ceef83d62995df500739",
+        "d1b327275f53e04299aa8166d87cc02b5c9d2c45ab04ceef83d62995df500739"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero-14.stdout",
+      "stderr": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero-14.stderr",
+      "stdout_sha256": "ba5111604090596f7ac8591f5b10954dfd10650877711f80d5c7990bff2c3367",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "zero-15",
+      "command": [
+        "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero",
+        "3",
+        "0",
+        "128",
+        "1",
+        "e8fa485b65db0aed2e0fd7360e96ca0b6b7f811d8933956d6b8a650a82ca85b3",
+        "14dfbe1ff04ef816044bc6eaa06d9516cb18e481c4d1d56d249d4bf7ccf53c33",
+        "851f888266ba3bb04a450a47feb19fef577efc4672f2f330977a2a7883587170"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero-15.stdout",
+      "stderr": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero-15.stderr",
+      "stdout_sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "zero-16",
+      "command": [
+        "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero",
+        "0",
+        "1",
+        "255",
+        "0",
+        "3f7811a43555ebe7056e4c4b28ef0350fd0707b90938b5df1f904a030116544d"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero-16.stdout",
+      "stderr": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero-16.stderr",
+      "stdout_sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "zero-17",
+      "command": [
+        "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero",
+        "1",
+        "1",
+        "256",
+        "1",
+        "f43b13ac090f27a9f3e04d33be7109d480242e206704a9a562801cd39db204b7",
+        "4eb65dc10fa940543043763af12dd11d11e1350934d8e01857470bbaeb7aa9f7"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero-17.stdout",
+      "stderr": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero-17.stderr",
+      "stdout_sha256": "ec6f9f2bc96f0718f6a291c46e686fe7fdbff9dfae142544b6d5b6c8d9ea8330",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "zero-18",
+      "command": [
+        "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero",
+        "2",
+        "1",
+        "0",
+        "0",
+        "473d6aeaf924ef56ffdfba1828d4289ea546fbf39e7cf76a572d45c5228f75a1",
+        "473d6aeaf924ef56ffdfba1828d4289ea546fbf39e7cf76a572d45c5228f75a1",
+        "ca327046ade9091529ca85f9daf130c7235ab0213f0e98ad71735d56756d26da"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero-18.stdout",
+      "stderr": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero-18.stderr",
+      "stdout_sha256": "ba5111604090596f7ac8591f5b10954dfd10650877711f80d5c7990bff2c3367",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "zero-19",
+      "command": [
+        "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero",
+        "3",
+        "1",
+        "1",
+        "1",
+        "7ad3e38ed405651ade6d08f00dae583826501b10705cb51894a09711bfdf5d78",
+        "ef9ba9155bd2d5b4fa08ab3edf796f3d4ece0d558c0a637facfa9d7719e67450",
+        "5457f25bc28391b427b89232bf1ad94fcef1178e23e0730edf2fc42d37201b7c",
+        "9035fc4a9a01e171c2ff6616e176e4cb48ba4d10627d50b543fc8974cc77973f"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero-19.stdout",
+      "stderr": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero-19.stderr",
+      "stdout_sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "zero-20",
+      "command": [
+        "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero",
+        "0",
+        "2",
+        "25",
+        "0",
+        "5f9e5d6be5506afb225575a4b29c65b766785cea2434ebbeafc0e6bed4f2a5c4",
+        "5f9e5d6be5506afb225575a4b29c65b766785cea2434ebbeafc0e6bed4f2a5c4"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero-20.stdout",
+      "stderr": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero-20.stderr",
+      "stdout_sha256": "ba5111604090596f7ac8591f5b10954dfd10650877711f80d5c7990bff2c3367",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "zero-21",
+      "command": [
+        "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero",
+        "1",
+        "2",
+        "128",
+        "1",
+        "8e38ea0289c54abf2c677448c92053b68b4076ec490dbc28dec0d6e62e4ff061",
+        "e462bf1fd1348794b213882f4a3311f6d025052ce96642dd054bcd540a829435",
+        "69de92eda6c79a01bedce45f95240755c7f3277c7029080bc08193e873a1b1e0"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero-21.stdout",
+      "stderr": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero-21.stderr",
+      "stdout_sha256": "5399c343f67279faae866fc5998f4260f0d8355086de7117796e7c1409e10775",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "zero-22",
+      "command": [
+        "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero",
+        "2",
+        "2",
+        "255",
+        "0",
+        "85e257c9c0af4b45fd13983a8f89419d9d6b07a3d60a2465f9f6194de852070b",
+        "85e257c9c0af4b45fd13983a8f89419d9d6b07a3d60a2465f9f6194de852070b",
+        "0e5bb3e4d1504d4c1f057a7ec1065771004fb11a66faf27878e0c1f72ef5cd8e",
+        "edf7980c0f63b131695ffee7c4e9326366ce0b6a14a2521edf6c12cc4628110f"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero-22.stdout",
+      "stderr": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero-22.stderr",
+      "stdout_sha256": "1fe7a75b396174d516866b6c7e1863e12516b11d277ea863fcfe76b959be57e4",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "zero-23",
+      "command": [
+        "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero",
+        "3",
+        "2",
+        "256",
+        "1",
+        "8faa94fbd53b249f61f5392e52ac3625779bb5f1bfc002bae706e30582f26289",
+        "22da6808de37da2acc624812bdbe264f22260255f6fd76ef50a2b485ede8f80e",
+        "74228036d1d269af02d1f3b942503c999a75af83489645a3aacc097f0bd158e7",
+        "5b0a7008ea10047c57fe30177d2f44475ffe98b46796ece96a5fd2d1ec590e8a",
+        "ca9720f8cb44d82e16e47f7ec1708364cbb2700bad917cfc4d563f793297bea1"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero-23.stdout",
+      "stderr": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero-23.stderr",
+      "stdout_sha256": "b3765bc8f994ad5b7dc23c82c994244b9214b26aa6ce89379e667d87309ed386",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "zero-identical",
+      "command": [
+        "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero",
+        "2",
+        "0",
+        "0",
+        "0",
+        "0000000000000000000000000000000000000000000000000000000000000000",
+        "0000000000000000000000000000000000000000000000000000000000000000"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero-identical.stdout",
+      "stderr": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/zero-identical.stderr",
+      "stdout_sha256": "ba5111604090596f7ac8591f5b10954dfd10650877711f80d5c7990bff2c3367",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "pattern-identical",
+      "command": [
+        "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/pattern",
+        "2",
+        "0",
+        "0",
+        "0",
+        "0000000000000000000000000000000000000000000000000000000000000000",
+        "0000000000000000000000000000000000000000000000000000000000000000"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/pattern-identical.stdout",
+      "stderr": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/pattern-identical.stderr",
+      "stdout_sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "asan-short-fingerprint",
+      "command": [
+        "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/asan",
+        "2",
+        "0",
+        "0",
+        "0",
+        "short"
+      ],
+      "returncode": -6,
+      "stdout": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/asan-short-fingerprint.stdout",
+      "stderr": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/asan-short-fingerprint.stderr",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "7aa9d180ed6796de7b61037944a6cb3daf0143a9676ca90f4cdd491772d13062"
+    },
+    {
+      "label": "threshold-00",
+      "command": [
+        "perl",
+        "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/threshold.pl",
+        "90%"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/threshold-00.stdout",
+      "stderr": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/threshold-00.stderr",
+      "stdout_sha256": "fd8722ea554a80006b542fa2b7bc0966e2e89ff726b434a468140299d5341c16",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "threshold-01",
+      "command": [
+        "perl",
+        "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/threshold.pl",
+        "100%"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/threshold-01.stdout",
+      "stderr": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/threshold-01.stderr",
+      "stdout_sha256": "0ccdb5a77ba5bf7687f2565a8ed97dfb9c1af45503c496fb646312239fab5101",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "threshold-02",
+      "command": [
+        "perl",
+        "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/threshold.pl",
+        "0%"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/threshold-02.stdout",
+      "stderr": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/threshold-02.stderr",
+      "stdout_sha256": "f30f9fe1c507dee3ec24a8c2bf9d55a96676672c553df640f798a85cddaf7955",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "threshold-03",
+      "command": [
+        "perl",
+        "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/threshold.pl",
+        "25b"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/threshold-03.stdout",
+      "stderr": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/threshold-03.stderr",
+      "stdout_sha256": "fd8722ea554a80006b542fa2b7bc0966e2e89ff726b434a468140299d5341c16",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "threshold-04",
+      "command": [
+        "perl",
+        "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/threshold.pl",
+        "256b"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/threshold-04.stdout",
+      "stderr": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/threshold-04.stderr",
+      "stdout_sha256": "f30f9fe1c507dee3ec24a8c2bf9d55a96676672c553df640f798a85cddaf7955",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "threshold-05",
+      "command": [
+        "perl",
+        "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/threshold.pl",
+        "0b"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/threshold-05.stdout",
+      "stderr": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/threshold-05.stderr",
+      "stdout_sha256": "0ccdb5a77ba5bf7687f2565a8ed97dfb9c1af45503c496fb646312239fab5101",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "threshold-06",
+      "command": [
+        "perl",
+        "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/threshold.pl",
+        "12.9b"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/threshold-06.stdout",
+      "stderr": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/threshold-06.stderr",
+      "stdout_sha256": "409f503e6c66e66048abac6fbc002a4c196158e9a0915629047ac76c00d65add",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "threshold-07",
+      "command": [
+        "perl",
+        "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/threshold.pl",
+        "90"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/threshold-07.stdout",
+      "stderr": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/threshold-07.stderr",
+      "stdout_sha256": "fd8722ea554a80006b542fa2b7bc0966e2e89ff726b434a468140299d5341c16",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "threshold-08",
+      "command": [
+        "perl",
+        "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/threshold.pl",
+        " 90% "
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/threshold-08.stdout",
+      "stderr": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/threshold-08.stderr",
+      "stdout_sha256": "fd8722ea554a80006b542fa2b7bc0966e2e89ff726b434a468140299d5341c16",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "threshold-09",
+      "command": [
+        "perl",
+        "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/threshold.pl",
+        "101%"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/threshold-09.stdout",
+      "stderr": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/threshold-09.stderr",
+      "stdout_sha256": "00f59c60bd810316dcd3f863a4d46bc75e92d31a61045d132b77c9dd46d7592b",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "threshold-10",
+      "command": [
+        "perl",
+        "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/threshold.pl",
+        "-1b"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/threshold-10.stdout",
+      "stderr": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/threshold-10.stderr",
+      "stdout_sha256": "3aebd7327cb0c84b85ce4dfd301187d864a30cd0980162ef877d9e78be39d47f",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "threshold-11",
+      "command": [
+        "perl",
+        "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/threshold.pl",
+        "NaN"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/threshold-11.stdout",
+      "stderr": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/threshold-11.stderr",
+      "stdout_sha256": "3aebd7327cb0c84b85ce4dfd301187d864a30cd0980162ef877d9e78be39d47f",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "threshold-12",
+      "command": [
+        "perl",
+        "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/threshold.pl",
+        "1B"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/threshold-12.stdout",
+      "stderr": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/threshold-12.stderr",
+      "stdout_sha256": "3aebd7327cb0c84b85ce4dfd301187d864a30cd0980162ef877d9e78be39d47f",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "chain-group",
+      "command": [
+        "perl",
+        "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/groups.pl",
+        "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/groups.sh"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/chain-group.stdout",
+      "stderr": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/chain-group.stderr",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "generated-script-syntax",
+      "command": [
+        "/bin/sh",
+        "-n",
+        "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/groups.sh"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/generated-script-syntax.stdout",
+      "stderr": "/private/tmp/rrrah-findimagedupes49-controls-v2-20261014/generated-script-syntax.stderr",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "scalar_cases": [
+    {
+      "index": 0,
+      "new": 0,
+      "old": 0,
+      "threshold": 0,
+      "limit": 0,
+      "expected": [],
+      "fingerprints": []
+    },
+    {
+      "index": 1,
+      "new": 1,
+      "old": 0,
+      "threshold": 1,
+      "limit": 1,
+      "expected": [],
+      "fingerprints": [
+        "fd4e1f11e9002658e747ca698331eeeeca094a1c1595d05273608ac0a43aea8d"
+      ]
+    },
+    {
+      "index": 2,
+      "new": 2,
+      "old": 0,
+      "threshold": 25,
+      "limit": 0,
+      "expected": [
+        0,
+        1,
+        0
+      ],
+      "fingerprints": [
+        "bd94e3829212c8ce5a6fb70c17650baed780780b712d23c23a3266bc422fa346",
+        "bd94e3829212c8ce5a6fb70c17650baed780780b712d23c23a3266bc422fa346"
+      ]
+    },
+    {
+      "index": 3,
+      "new": 3,
+      "old": 0,
+      "threshold": 128,
+      "limit": 1,
+      "expected": [
+        0,
+        1,
+        127
+      ],
+      "fingerprints": [
+        "6c9715dbf0ea37e4c730419aab6a3449ae80c792a035065fe8986b6636a8cc07",
+        "4ecdad3f94f0f9b9622e532382de80181dd5596c0b6e9cbac68545602f959853",
+        "c6e2bfc5debdbd5bc41db4441df3c5a7ae020866d3bc3cf656c234f278426d9d"
+      ]
+    },
+    {
+      "index": 4,
+      "new": 0,
+      "old": 1,
+      "threshold": 255,
+      "limit": 0,
+      "expected": [],
+      "fingerprints": [
+        "5f1dcb9e6e0b650dc33448a974d1b069d0481ab0b991558be646fde8e0bd359d"
+      ]
+    },
+    {
+      "index": 5,
+      "new": 1,
+      "old": 1,
+      "threshold": 256,
+      "limit": 1,
+      "expected": [
+        0,
+        1,
+        129
+      ],
+      "fingerprints": [
+        "875ccd34ed2852a6c4d835c50a34c2e86abcc8105ac82f9028fe48417488698a",
+        "e9bf8298ac9b63885c878551b72eb822308fd07ca34a01f0d09ee238ccb68053"
+      ]
+    },
+    {
+      "index": 6,
+      "new": 2,
+      "old": 1,
+      "threshold": 0,
+      "limit": 0,
+      "expected": [
+        0,
+        1,
+        0
+      ],
+      "fingerprints": [
+        "fd535341cf8c22952b06ea6fe3b6ccf5eb9bae9c1db45d7d44be69b121fec1b3",
+        "fd535341cf8c22952b06ea6fe3b6ccf5eb9bae9c1db45d7d44be69b121fec1b3",
+        "eca2498c2088b2053e80d38af2d7b5e9ff4d13260c1dfb0285600733d500f8ec"
+      ]
+    },
+    {
+      "index": 7,
+      "new": 3,
+      "old": 1,
+      "threshold": 1,
+      "limit": 1,
+      "expected": [],
+      "fingerprints": [
+        "5d2ab31581788eda1bfb20f1ad7257f1679a1dd4043ab24d8aa81b10b32bbc0d",
+        "bb566ab1daa7d3b33e2ecd5f494fcbb1cfc7f8a97b73e70e039ce96f4aa7afda",
+        "84d5ed538308d3d7c913f412fdc1b8793e5863310a3ce6c2b9022a6deb5f3e4c",
+        "598a95b7c48f4a7b8c298d284f1de2425d2e937030616f57531473f7141ea61a"
+      ]
+    },
+    {
+      "index": 8,
+      "new": 0,
+      "old": 2,
+      "threshold": 25,
+      "limit": 0,
+      "expected": [
+        0,
+        1,
+        0
+      ],
+      "fingerprints": [
+        "d494511a7ad800b7d6a73f6860c3797ec6fae0da8d16d4747e37a4a6bb533517",
+        "d494511a7ad800b7d6a73f6860c3797ec6fae0da8d16d4747e37a4a6bb533517"
+      ]
+    },
+    {
+      "index": 9,
+      "new": 1,
+      "old": 2,
+      "threshold": 128,
+      "limit": 1,
+      "expected": [
+        0,
+        1,
+        114
+      ],
+      "fingerprints": [
+        "e9933468d037d85689a158869004659014e10ddf087d6702f48b2eab306cbf2d",
+        "cdd83a5fc87a2b5cd08869e1ec21471a159e319d3a54c3d9b14e43b99ce2c51d",
+        "9eea932c05fcfe971a9b45432713d8c11407c698ca0378fc7f54bd6d6e3ecc14"
+      ]
+    },
+    {
+      "index": 10,
+      "new": 2,
+      "old": 2,
+      "threshold": 255,
+      "limit": 0,
+      "expected": [
+        0,
+        1,
+        0,
+        0,
+        2,
+        120,
+        0,
+        3,
+        139,
+        1,
+        2,
+        120,
+        1,
+        3,
+        139,
+        2,
+        3,
+        133
+      ],
+      "fingerprints": [
+        "731b88412b047fc7c6b25bebbd1f2a5c95cd0af637263eb5d9fd23adb4e576ac",
+        "731b88412b047fc7c6b25bebbd1f2a5c95cd0af637263eb5d9fd23adb4e576ac",
+        "778ed590b96b8b762de32ae80a4aa1da6cb5449212a23021c77c69bd8bde21a9",
+        "787a7a60a04f9d9c5298d40614607341640eed82a1d26c1cdd5cfc575d029899"
+      ]
+    },
+    {
+      "index": 11,
+      "new": 3,
+      "old": 2,
+      "threshold": 256,
+      "limit": 1,
+      "expected": [
+        0,
+        1,
+        146,
+        0,
+        2,
+        133,
+        0,
+        3,
+        136,
+        0,
+        4,
+        120,
+        1,
+        2,
+        121,
+        1,
+        3,
+        128,
+        1,
+        4,
+        140,
+        2,
+        3,
+        133,
+        2,
+        4,
+        129
+      ],
+      "fingerprints": [
+        "f8e4dd90fdfd3250e4e818f9f6aa786c32b01bf3052b60f1765e23eab30105b9",
+        "e43a11a61794c984c157e686ad4735dbbcbeef89deb5d1baa73727eb79eec33c",
+        "509425022897f73925be8c08990f7052a60eed136f9ac07cd9f74b735c276e42",
+        "9dbbcefca437d2cf366ab2e6b25baccfe89f418f62b2e607fd61ccf325c9d069",
+        "257129b9ce1262b0682612d1fe820084a025314239629de259eee61dd8184570"
+      ]
+    },
+    {
+      "index": 12,
+      "new": 0,
+      "old": 0,
+      "threshold": 0,
+      "limit": 0,
+      "expected": [],
+      "fingerprints": []
+    },
+    {
+      "index": 13,
+      "new": 1,
+      "old": 0,
+      "threshold": 1,
+      "limit": 1,
+      "expected": [],
+      "fingerprints": [
+        "61b7283835cb37d911071adbb976ae079be3afe19a58547ae5b29d97bc0186f5"
+      ]
+    },
+    {
+      "index": 14,
+      "new": 2,
+      "old": 0,
+      "threshold": 25,
+      "limit": 0,
+      "expected": [
+        0,
+        1,
+        0
+      ],
+      "fingerprints": [
+        "d1b327275f53e04299aa8166d87cc02b5c9d2c45ab04ceef83d62995df500739",
+        "d1b327275f53e04299aa8166d87cc02b5c9d2c45ab04ceef83d62995df500739"
+      ]
+    },
+    {
+      "index": 15,
+      "new": 3,
+      "old": 0,
+      "threshold": 128,
+      "limit": 1,
+      "expected": [],
+      "fingerprints": [
+        "e8fa485b65db0aed2e0fd7360e96ca0b6b7f811d8933956d6b8a650a82ca85b3",
+        "14dfbe1ff04ef816044bc6eaa06d9516cb18e481c4d1d56d249d4bf7ccf53c33",
+        "851f888266ba3bb04a450a47feb19fef577efc4672f2f330977a2a7883587170"
+      ]
+    },
+    {
+      "index": 16,
+      "new": 0,
+      "old": 1,
+      "threshold": 255,
+      "limit": 0,
+      "expected": [],
+      "fingerprints": [
+        "3f7811a43555ebe7056e4c4b28ef0350fd0707b90938b5df1f904a030116544d"
+      ]
+    },
+    {
+      "index": 17,
+      "new": 1,
+      "old": 1,
+      "threshold": 256,
+      "limit": 1,
+      "expected": [
+        0,
+        1,
+        131
+      ],
+      "fingerprints": [
+        "f43b13ac090f27a9f3e04d33be7109d480242e206704a9a562801cd39db204b7",
+        "4eb65dc10fa940543043763af12dd11d11e1350934d8e01857470bbaeb7aa9f7"
+      ]
+    },
+    {
+      "index": 18,
+      "new": 2,
+      "old": 1,
+      "threshold": 0,
+      "limit": 0,
+      "expected": [
+        0,
+        1,
+        0
+      ],
+      "fingerprints": [
+        "473d6aeaf924ef56ffdfba1828d4289ea546fbf39e7cf76a572d45c5228f75a1",
+        "473d6aeaf924ef56ffdfba1828d4289ea546fbf39e7cf76a572d45c5228f75a1",
+        "ca327046ade9091529ca85f9daf130c7235ab0213f0e98ad71735d56756d26da"
+      ]
+    },
+    {
+      "index": 19,
+      "new": 3,
+      "old": 1,
+      "threshold": 1,
+      "limit": 1,
+      "expected": [],
+      "fingerprints": [
+        "7ad3e38ed405651ade6d08f00dae583826501b10705cb51894a09711bfdf5d78",
+        "ef9ba9155bd2d5b4fa08ab3edf796f3d4ece0d558c0a637facfa9d7719e67450",
+        "5457f25bc28391b427b89232bf1ad94fcef1178e23e0730edf2fc42d37201b7c",
+        "9035fc4a9a01e171c2ff6616e176e4cb48ba4d10627d50b543fc8974cc77973f"
+      ]
+    },
+    {
+      "index": 20,
+      "new": 0,
+      "old": 2,
+      "threshold": 25,
+      "limit": 0,
+      "expected": [
+        0,
+        1,
+        0
+      ],
+      "fingerprints": [
+        "5f9e5d6be5506afb225575a4b29c65b766785cea2434ebbeafc0e6bed4f2a5c4",
+        "5f9e5d6be5506afb225575a4b29c65b766785cea2434ebbeafc0e6bed4f2a5c4"
+      ]
+    },
+    {
+      "index": 21,
+      "new": 1,
+      "old": 2,
+      "threshold": 128,
+      "limit": 1,
+      "expected": [
+        0,
+        2,
+        118
+      ],
+      "fingerprints": [
+        "8e38ea0289c54abf2c677448c92053b68b4076ec490dbc28dec0d6e62e4ff061",
+        "e462bf1fd1348794b213882f4a3311f6d025052ce96642dd054bcd540a829435",
+        "69de92eda6c79a01bedce45f95240755c7f3277c7029080bc08193e873a1b1e0"
+      ]
+    },
+    {
+      "index": 22,
+      "new": 2,
+      "old": 2,
+      "threshold": 255,
+      "limit": 0,
+      "expected": [
+        0,
+        1,
+        0,
+        0,
+        2,
+        124,
+        0,
+        3,
+        130,
+        1,
+        2,
+        124,
+        1,
+        3,
+        130,
+        2,
+        3,
+        130
+      ],
+      "fingerprints": [
+        "85e257c9c0af4b45fd13983a8f89419d9d6b07a3d60a2465f9f6194de852070b",
+        "85e257c9c0af4b45fd13983a8f89419d9d6b07a3d60a2465f9f6194de852070b",
+        "0e5bb3e4d1504d4c1f057a7ec1065771004fb11a66faf27878e0c1f72ef5cd8e",
+        "edf7980c0f63b131695ffee7c4e9326366ce0b6a14a2521edf6c12cc4628110f"
+      ]
+    },
+    {
+      "index": 23,
+      "new": 3,
+      "old": 2,
+      "threshold": 256,
+      "limit": 1,
+      "expected": [
+        0,
+        1,
+        136,
+        0,
+        2,
+        127,
+        0,
+        3,
+        122,
+        0,
+        4,
+        126,
+        1,
+        2,
+        153,
+        1,
+        3,
+        114,
+        1,
+        4,
+        132,
+        2,
+        3,
+        139,
+        2,
+        4,
+        129
+      ],
+      "fingerprints": [
+        "8faa94fbd53b249f61f5392e52ac3625779bb5f1bfc002bae706e30582f26289",
+        "22da6808de37da2acc624812bdbe264f22260255f6fd76ef50a2b485ede8f80e",
+        "74228036d1d269af02d1f3b942503c999a75af83489645a3aacc097f0bd158e7",
+        "5b0a7008ea10047c57fe30177d2f44475ffe98b46796ece96a5fd2d1ec590e8a",
+        "ca9720f8cb44d82e16e47f7ec1708364cbb2700bad917cfc4d563f793297bea1"
+      ]
+    }
+  ],
+  "threshold_cases": [
+    [
+      "90%",
+      25
+    ],
+    [
+      "100%",
+      0
+    ],
+    [
+      "0%",
+      256
+    ],
+    [
+      "25b",
+      25
+    ],
+    [
+      "256b",
+      256
+    ],
+    [
+      "0b",
+      0
+    ],
+    [
+      "12.9b",
+      12
+    ],
+    [
+      "90",
+      25
+    ],
+    [
+      " 90% ",
+      25
+    ],
+    [
+      "101%",
+      -2
+    ],
+    [
+      "-1b",
+      -1
+    ],
+    [
+      "NaN",
+      -1
+    ],
+    [
+      "1B",
+      -1
+    ]
+  ],
+  "findings": [
+    "lookup[0] is read before initialization: identical fingerprints match under compiler zero initialization but fail under pattern initialization; deterministic diagnostic of undefined behavior, not claim every production run fails",
+    "ASan confirms original memcpy reads beyond a synthetic one-byte fingerprint; no fingerprint length validation",
+    "Original Perl grouping merges chain edges into one3member group; pairwise equality is not proved",
+    "Threshold parser accepts fractional bit values by truncation and rejects uppercase B"
+  ],
+  "scope": "Original C function unmodified; explicit minimal SV/HV/Inline-stack adapters replace Perl runtime, deterministic compiler stack-init modes expose uninitialized lookup. Scalar oracle24cases,13actual Perl threshold cases, original grouping helper1chain and script syntax only. No GraphicsMagick, fingerprint image pipeline, DB_File transaction, full CLI, upstream test suite, real/private media or universal performance proof. Generated shell is parsed only, not executed. No GPL source adopted in library."
+}

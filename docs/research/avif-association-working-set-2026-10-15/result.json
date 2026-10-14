@@ -1,0 +1,30 @@
+{
+  "status": "streaming_fix_allocator_and14_module_tests_passed_public_followup_running",
+  "baseline_exit_code": 101,
+  "source_sha256_before": "0e4b322dd279b64f11e8513c0bf406d203bbfd34823c150fa95a5b5638240209",
+  "scope": "Rust allocation requested-capacity peak inside properties for metadata-only malformed-image control; no AV1 media, no OS RSS or public managed-budget measurement",
+  "input_associations": 522240,
+  "property_count": 1,
+  "guard_bytes": 65536,
+  "next_action": "stream selected primary and alpha properties in original association order instead of retaining per-association vectors",
+  "after_exit_code": 0,
+  "input_bytes": 528470,
+  "extra_rust_capacity_peak_before": 8388896,
+  "extra_rust_capacity_peak_after": 384,
+  "retained_extra_after": 0,
+  "source_sha256_after": "7b5fdd64f49141154d8be8a69acec821cf969bd5e2f0644b380027869afbccd4",
+  "module_tests_session": 87656,
+  "module_tests_log": "/tmp/rrrah-avif-streamed-module-tests-20261015.log",
+  "limitations": [
+    "metadata-only malformed-image control; not whole decode budget or OS RSS",
+    "existing public decode and Metal results precede this streaming change; native revalidation pending"
+  ],
+  "module_tests": {
+    "exit_code": 0,
+    "passed": 14,
+    "failed": 0,
+    "ignored": 0,
+    "scope": "current metadata/conversion module with minimal request/error shell; not native cancellation or public pipeline"
+  },
+  "public_followup_log": "/tmp/avif-streamed-public-producer-20261015.log"
+}

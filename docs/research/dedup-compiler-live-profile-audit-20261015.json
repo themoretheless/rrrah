@@ -1,0 +1,74 @@
+{
+  "status": "verified_owned_compiler_three_second_live_profile",
+  "pid": 70903,
+  "parent_cargo_pid": 67461,
+  "producer_pid": 67445,
+  "raw": "docs/research/dedup-compiler-live-profile-20261015/sample.txt",
+  "raw_sha256": "ec6fe9842ca5e2e9bdcd014a4a228ee58fa9468fed11cc08700a2637ee184224",
+  "auditor_sha256": "f8ae8d298f08d0ee26698fc2da9cfc98de7529d937f5c15b9543ac6cdfc154cd",
+  "sample_interval_ms": 5,
+  "requested_sample_seconds": 3,
+  "observed_time": "2026-10-15 00:15:23.877 +0400",
+  "physical_footprint_display": "4.0G",
+  "peak_physical_footprint_display": "14.5G",
+  "threads": [
+    {
+      "samples": 468,
+      "label": "15624865   DispatchQueue_1: com.apple.main-thread  (serial)"
+    },
+    {
+      "samples": 468,
+      "label": "15624867: ctrl-c"
+    },
+    {
+      "samples": 468,
+      "label": "15625963: rustc"
+    },
+    {
+      "samples": 468,
+      "label": "15625964"
+    },
+    {
+      "samples": 468,
+      "label": "15631064: coordinator"
+    },
+    {
+      "samples": 468,
+      "label": "15735540"
+    },
+    {
+      "samples": 468,
+      "label": "17186461: lto 41tiir11qtujsfbf0mijkb9dk"
+    },
+    {
+      "samples": 468,
+      "label": "17198929: lto b6wrab4n352xgx69k37cf9zy9"
+    }
+  ],
+  "compiler_mode_observed_by_owned_ps": {
+    "crate": "rrrah_dedup",
+    "test": true,
+    "features": [
+      "decode",
+      "default",
+      "raster"
+    ],
+    "opt_level": 1,
+    "debuginfo": 2,
+    "split_debuginfo": "unpacked"
+  },
+  "observed_compile_stages": [
+    "ThinLTO worker optimization/codegen",
+    "LLVM instruction combining",
+    "LLVM branch-probability analysis"
+  ],
+  "source_manifest_context": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-root-guard-latch-source-20261014.json",
+  "source_manifest_context_sha256": "ad4f78fbbfd5ed19e1e888fea6a49b29186916afa9633bf4d6819f96f378467f",
+  "findings": [
+    "Owned compiler is actively performing LLVM optimization/codegen; parent/other threads waiting on compiler work. No dead/stopped-job conclusion or restart.",
+    "Short sample includes ThinLTO and instruction combining/branch-probability passes. No complete-compile time attribution or source-function cause inferred.",
+    "Compiler physical-footprint peak is14.5G in raw macOS display, not RSS or library runtime memory. Current display4.0G. No relation to managed library512MiB budget asserted.",
+    "Observed test build uses opt-level1/debuginfo2. Future captured-source build-profile A/B should preserve complete test inventory and measure CPU/memory before changing default profiles."
+  ],
+  "scope": "Three-second sampling of confirmed owned live Rust compiler for mutableRoot decode-feature unit-test build. Original source manifest is context only; Root source drift already known and compiler AST cannot be treated as currentRoot source-coherent qualification. Sampler stack/process metadata only, no private media/raw memory/data. Physical-footprint strings not converted, not RSS/MemoryBudget. Thread waits excluded from any hypothetical CPU denominator; no CPU percentages, runtime speedup, wholecompile attribution or passing-tests claim."
+}

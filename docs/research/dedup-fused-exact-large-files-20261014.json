@@ -1,0 +1,56 @@
+{
+  "candidate_manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-fused-exact-short-circuit-v3-20261014.json",
+  "candidate_manifest_sha256": "c8e470125514415be7b58013c934b1d5633bd07f38eb5fbfc076dd5a69ee0780",
+  "candidate_source": "/private/tmp/rrrah-fused-exact-pair-20261014/candidate-v3/src/exact.rs",
+  "status": "passed_pending_independent_audit",
+  "producer_pid": 75259,
+  "source_pins": {
+    "/private/tmp/rrrah-fused-exact-pair-20261014/candidate-v3/src/exact.rs": "36a17d58cd607d283e444f8ae5239cad141af8957d6d68c956a49662a50b690d",
+    "/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup/tests/exact_large_files.rs": "9a57b742f8efd38d7761f17c5711733cb1229f20aff1bb81c78a3cc15e99df4e"
+  },
+  "dependency_pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libblake3-5dbb3dfc2ce7d297.rlib": "1a90993f8c95cbbc51839449c8db08075277d5468e7d9fa2ae1b8838720083fe",
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libthiserror-1f2ca11ca2706be8.rlib": "a4bc045f06441d4730b1988bee770197e1f51f4b1600df8c028a668c27c77bf1",
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libtempfile-f6f2a369a6678518.rlib": "3c0a02859f18952acb6482a76d369ebac50a9c75f3b3b153fb3db5af15f2ea31",
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/liblibc-0a79900aa2799e6c.rlib": "b3e730a257abb46acab6283d05f1a1340e72bbb48682e09f3a237332f7f08c25"
+  },
+  "producer_sha256": "504a3399a2a2b60b32c12c686254cf6f06bca8c09e50b76da51a340308470318",
+  "harness_sha256": "8851f5553a29ab0fd90aa251a7c150c21fb81fa50455835ad7d4ebaa8447408a",
+  "source": "/private/tmp/rrrah-fused-exact-large-files-20261014",
+  "command": [
+    "rustc",
+    "+stable",
+    "--edition=2024",
+    "--test",
+    "/private/tmp/rrrah-fused-exact-large-files-20261014/harness.rs",
+    "-C",
+    "opt-level=1",
+    "-L",
+    "dependency=/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps",
+    "-o",
+    "/private/tmp/rrrah-fused-exact-large-files-20261014/tests",
+    "--extern",
+    "blake3=/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libblake3-5dbb3dfc2ce7d297.rlib",
+    "--extern",
+    "thiserror=/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libthiserror-1f2ca11ca2706be8.rlib",
+    "--extern",
+    "tempfile=/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libtempfile-f6f2a369a6678518.rlib",
+    "--extern",
+    "libc=/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/liblibc-0a79900aa2799e6c.rlib"
+  ],
+  "scope": "Isolated fused-v3 exact module and current public large-file regression source; Root not adopted; directrustc real cached dependencies. 4GiB/1TiB sparse metadata/size admission and bounded early streaming cancellation only, not full multiGiB equality, physical IO, hard RSS, otherplatform or Cargo/workspace/decode proof. Existing exact-module unit controls also included. Temporary sparse files owned by tempfile and removed on completion, no corpus.",
+  "child_pid": 79454,
+  "build_returncode": 0,
+  "inventory_returncode": 0,
+  "tests_returncode": 0,
+  "passed": 23,
+  "ignored": 0,
+  "failed": 0,
+  "executable": "/private/tmp/rrrah-fused-exact-large-files-20261014/tests",
+  "executable_sha256": "c13f8f55fbda7e2b6f93c6743a88222ee6e2fbd89e72dfb9c554d11b06037ae6",
+  "output_pins": {
+    "/private/tmp/rrrah-fused-exact-large-files-20261014/tests.log": "edda790e561b829e9d9f86c432cb51ec45038db59020bc96f0b1161a85c02152",
+    "/private/tmp/rrrah-fused-exact-large-files-20261014/inventory.log": "e300a8359096dc29b1870997364693d33dcd7b089da6ee8f501b18954d52410c",
+    "/private/tmp/rrrah-fused-exact-large-files-20261014/build.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

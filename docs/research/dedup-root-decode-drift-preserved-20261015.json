@@ -1,0 +1,75 @@
+{
+  "status": "observed_complete_test_success_source_drift_not_source_qualification",
+  "producer_report": "docs/research/dedup-root-guard-latch-decode-20261014.json",
+  "producer_report_sha256": "618ee9eee52db4b4b8fcd2d312f93f519fbc19fa6440eb4b9609b6a7faf25556",
+  "preserver_sha256": "7ef85504016d405722c3e5619e72e5f19034ef309141087def0442e18f1f2996",
+  "passed": 214,
+  "failed": 0,
+  "ignored": 5,
+  "targets": 5,
+  "rows": [
+    {
+      "target": "unittests src/lib.rs",
+      "passed": 122,
+      "failed": 0,
+      "ignored": 5,
+      "executable": "/private/tmp/rrrah-root-decode-drift-preserved-20261015/rrrah_dedup-76646137647c9ff2",
+      "executable_sha256": "1bebada74f77467d7bca49d3ecd1c373e243bf1908b9fdbcd06a4dd988aed136",
+      "inventory": "docs/research/dedup-root-decode-drift-preserved-20261015/0-inventory.log",
+      "inventory_sha256": "8dcd08eb19ff905e79a166cc7fffa3d8322b08b137e797a2d130f8dc60b86ff0"
+    },
+    {
+      "target": "tests/animated.rs",
+      "passed": 7,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-root-decode-drift-preserved-20261015/animated-362e956458951f72",
+      "executable_sha256": "3b984acfe95095fc5923417db4afa43dc3830fc95ea60d4742706ef6594cd1cf",
+      "inventory": "docs/research/dedup-root-decode-drift-preserved-20261015/1-inventory.log",
+      "inventory_sha256": "9478234a58f62fa4f36675d9ac7f8265617ad339e273ee077126ffc10f78822e"
+    },
+    {
+      "target": "tests/portfolio_collection.rs",
+      "passed": 40,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-root-decode-drift-preserved-20261015/portfolio_collection-e9eadcc2efbbde4c",
+      "executable_sha256": "e44d4fb16695519d4fd4f35adeab6512e9bd9c250acdcf201be1fceb139e542e",
+      "inventory": "docs/research/dedup-root-decode-drift-preserved-20261015/2-inventory.log",
+      "inventory_sha256": "9d12fec82dce790ce0869e3a2e8475dfbd6b0ee15779c99abe7e480ddf1e4144"
+    },
+    {
+      "target": "tests/search_portfolio.rs",
+      "passed": 38,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-root-decode-drift-preserved-20261015/search_portfolio-dc465169dd9968cc",
+      "executable_sha256": "37a6cffe2c64a6863baadcb526b6450ba30dc6b9427f0b8d222cce07b93e1bce",
+      "inventory": "docs/research/dedup-root-decode-drift-preserved-20261015/3-inventory.log",
+      "inventory_sha256": "bbb1837a00fa446482176a7d4df1e07ede7d35834e8668e67f8e4107fc086b94"
+    },
+    {
+      "target": "tests/sequence.rs",
+      "passed": 7,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-root-decode-drift-preserved-20261015/sequence-e5f05cbe042d131e",
+      "executable_sha256": "934c0a6160656b8c18881d6cd543a3a44ae3f28ffea2f3d9de4749551b5c7364",
+      "inventory": "docs/research/dedup-root-decode-drift-preserved-20261015/4-inventory.log",
+      "inventory_sha256": "d1181c80bb268ccd5cc5db56acaf12b974d7b92412a70e1e6bc58e0ac7eccc99"
+    }
+  ],
+  "changed_sources": [
+    "crates/rrrah-dedup/src/exact.rs",
+    "crates/rrrah-core/examples/first30_demosaic_probe.rs",
+    "crates/rrrah-core/src/histogram.rs",
+    "crates/rrrah-core/src/develop/mod.rs",
+    "crates/rrrah-core/src/develop/highlight.rs",
+    "crates/rrrah-core/src/develop/ahd.rs",
+    "crates/rrrah-core/src/develop/demosaic.rs",
+    "crates/rrrah-decode/src/avif_color.rs",
+    "crates/rrrah-decode/src/raster.rs"
+  ],
+  "source_unchanged": false,
+  "scope": "Complete executed/listed test inventories and retained original binaries/log verified, but9sourcefiles changed during build. Compiler can resolve mixed revisions; not currentRoot or unchanged-source qualification. Original strict auditor correctly refused source qualification. StreamingSHA uses1MiB buffers. No rerun/restart or relabel as frozen test success."
+}

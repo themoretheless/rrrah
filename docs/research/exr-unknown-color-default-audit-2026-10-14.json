@@ -1,0 +1,11 @@
+{
+  "status": "current_primary_documentation_supports_unknown_color_fallback",
+  "checked_date": "2026-10-14",
+  "primary_source": "https://openexr.com/en/latest/TechnicalIntroduction.html#rgb-color",
+  "historical_source": "https://openexr.com/en/rb-3.1/TechnicalIntroduction.html",
+  "finding": "Current OpenEXR documentation says absence of colorInteropID does not imply linear Rec.709; older documentation recommended Rec.709 when chromaticities was absent. Do not apply historical default blindly.",
+  "source": "crates/rrrah-decode/src/exr_color.rs",
+  "source_sha256": "18eef69329d5e5a2426dec1970e5bffff236458b555e5d7b7884ea6cdae8eca7",
+  "production_change": false,
+  "scope": "Color-space identification fallback only; not full EXR conformance, calibration or unknown-color display qualification."
+}

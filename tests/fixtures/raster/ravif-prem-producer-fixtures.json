@@ -1,0 +1,103 @@
+{
+  "license": "CC0-1.0 authored numeric source and fixture data",
+  "producer": "ravif 0.13.0 / rav1e 0.8.1, RGB identity, quality100/alpha-quality100, speed10, one thread",
+  "producer_source": "docs/research/avif-prem-producer-2026-10-14/src/main.rs",
+  "cargo_lock_sha256": "a1b19c85c4c8cde0f38d607b7471a917925afe57d6b842471b4413a5309948d0",
+  "input": {
+    "dimensions": [
+      16,
+      16
+    ],
+    "source_precision": 8,
+    "alpha_levels": [
+      0,
+      1,
+      3,
+      10,
+      17,
+      64,
+      128,
+      255
+    ]
+  },
+  "encoded_depths": [
+    8,
+    10
+  ],
+  "modes": [
+    "straight",
+    "premultiplied"
+  ],
+  "repeated_encoding_byte_exact": true,
+  "color": "explicit sRGB declarations in all four native metadata reads",
+  "oracle": "image0.25.10/dav1d decoded coded RGBA; independent f64 direct rational unassociation, checked against current helper before capture; 10-bit native codes divided before final16-bit expansion",
+  "scope": "alpha/normalization semantics; not independent AV1 decoder conformance or12-bit producer coverage",
+  "maximum_avoided_double_rounding_delta_u16": 10,
+  "files": [
+    {
+      "file": "ravif-prem-source.rgba",
+      "bytes": 1024,
+      "sha256": "0efe3ae2564803c673c4d32f975217e421d4d48a5054be20c1f6a8bcc131d26f"
+    },
+    {
+      "file": "ravif-10bit-prem.avif",
+      "bytes": 1476,
+      "sha256": "a71ddc5735b7610152d05d80ea2d28ef5dfb68b50ea4a2aade170505cf6666e3"
+    },
+    {
+      "file": "ravif-10bit-prem.avif.coded-rgba16le",
+      "bytes": 2048,
+      "sha256": "4c3d9083519f7a985789b5695bfdd75fdb300f7e0c90bbbb28dcf2af0ba74e6b"
+    },
+    {
+      "file": "ravif-10bit-prem.avif.rgba16le",
+      "bytes": 2048,
+      "sha256": "febdbeb47ed0a5882f1efccb19c32a33ae4fd96f54ad42c0755020c96711d558"
+    },
+    {
+      "file": "ravif-10bit-straight.avif",
+      "bytes": 629,
+      "sha256": "719149bce5358403b53a0892cd779b1b645e29ac03bf5f54d1f66be89a9d718c"
+    },
+    {
+      "file": "ravif-10bit-straight.avif.coded-rgba16le",
+      "bytes": 2048,
+      "sha256": "88d19e68917614bcd3a8fb5705eaab9b994a7915fbf5898ebcb7063ec093fb8b"
+    },
+    {
+      "file": "ravif-10bit-straight.avif.rgba16le",
+      "bytes": 2048,
+      "sha256": "376edae2a4b790c3a7c96ff08812f31b125b455bee0faccd43fd503514756fb4"
+    },
+    {
+      "file": "ravif-8bit-prem.avif",
+      "bytes": 1244,
+      "sha256": "c06a17d2641ad61e06f8cc79dcd17102c4b7e349b058fd26cd299b68cc5629fa"
+    },
+    {
+      "file": "ravif-8bit-prem.avif.coded-rgba",
+      "bytes": 1024,
+      "sha256": "95ee7ad9967667ca125f52b180eeaaeecfbd5521e69705b63fcb026fe67bbca4"
+    },
+    {
+      "file": "ravif-8bit-prem.avif.rgba",
+      "bytes": 1024,
+      "sha256": "e921744eb5b202dc1f0001282a20db01ab9b303f26baf57db973a5e85f47ab61"
+    },
+    {
+      "file": "ravif-8bit-straight.avif",
+      "bytes": 579,
+      "sha256": "65deb29dec8767912b5c33b18b735cd68a8bb3bdb516ad99dea6a46edc4f4a23"
+    },
+    {
+      "file": "ravif-8bit-straight.avif.coded-rgba",
+      "bytes": 1024,
+      "sha256": "0efe3ae2564803c673c4d32f975217e421d4d48a5054be20c1f6a8bcc131d26f"
+    },
+    {
+      "file": "ravif-8bit-straight.avif.rgba",
+      "bytes": 1024,
+      "sha256": "0efe3ae2564803c673c4d32f975217e421d4d48a5054be20c1f6a8bcc131d26f"
+    }
+  ]
+}

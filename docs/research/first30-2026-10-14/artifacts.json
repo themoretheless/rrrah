@@ -1,10 +1,10 @@
 {
-  "note": "Capture at report preparation; running logs can change until final recapture. No private media stored.",
+  "note": "Hashes at capture time; log summaries in qualification.json establish which checks completed. No private source media stored.",
   "artifacts": [
     {
       "path": "docs/research/first30-2026-10-14/REPORT.md",
-      "bytes": 9156,
-      "sha256": "eb880cede36926a303acf5757e94ba2785bd0b7b7f8874507c6c69399dc708af"
+      "bytes": 15049,
+      "sha256": "2b3edc9f4e0508e215a200589585965d7e06418e856be06bad0c49fd1937720f"
     },
     {
       "path": "docs/research/first30-2026-10-14/amaze-ab.json",
@@ -22,9 +22,39 @@
       "sha256": "efde5638d6f56218264c3667ac7373c165d2d05b6b51d7f739adc36345723205"
     },
     {
+      "path": "docs/research/first30-2026-10-14/amaze-experiment.json",
+      "bytes": 5558,
+      "sha256": "0946bc7d41fc3b6d5a3b670d44e682464ad230cbce86f9d2023989c51cb628b4"
+    },
+    {
       "path": "docs/research/first30-2026-10-14/app-current-tests.log",
-      "bytes": 4889,
-      "sha256": "f1542c5760dd795d038b0536b7ddfb20dd431655890ea57dcb8906197fece1e3"
+      "bytes": 40487,
+      "sha256": "7b80325a2beef292fa6e7317fea127dba40d4970de6844f5f0175e555977331d"
+    },
+    {
+      "path": "docs/research/first30-2026-10-14/app-final-check.log",
+      "bytes": 839,
+      "sha256": "f0c7ebd7e6708678ba3fadd569cb0826423d7ac343140a4caf0cd349442b0592"
+    },
+    {
+      "path": "docs/research/first30-2026-10-14/app-final-tests.log",
+      "bytes": 32230,
+      "sha256": "ffa3086b5aac737100f1717f9f771fb719f6473b21b1945260f5334775805c21"
+    },
+    {
+      "path": "docs/research/first30-2026-10-14/cache-final-tests.log",
+      "bytes": 13432,
+      "sha256": "5a010ab684d801dc75dec441b2030477e78787ef6ac3f98693cd9a1adea2a0d4"
+    },
+    {
+      "path": "docs/research/first30-2026-10-14/cache-insert-ab.json",
+      "bytes": 3440,
+      "sha256": "6c85be74dc573a31381919064f5f0c3519ba3275f984fc26761222c6018bc57e"
+    },
+    {
+      "path": "docs/research/first30-2026-10-14/cache-insert-ab.log",
+      "bytes": 1275,
+      "sha256": "d243abfc15dd73911a97d2455e89ceda4ef83fee3453c62751d942dc7ec1f7e5"
     },
     {
       "path": "docs/research/first30-2026-10-14/clippy.log",
@@ -32,9 +62,14 @@
       "sha256": "923588741a8ff75ea506181e5365895629a4a5c08f8f303aa57378a91a5e96a6"
     },
     {
+      "path": "docs/research/first30-2026-10-14/components-clippy-final.log",
+      "bytes": 177,
+      "sha256": "7ceaeceac1aed0e53a3674e4ba34a333f64dae7a7ba87da75117038967d2926f"
+    },
+    {
       "path": "docs/research/first30-2026-10-14/components-final.log",
-      "bytes": 1329,
-      "sha256": "0c9ac290472f7de4db7525e69c0a56294b3e2015102b8fd3fa969da1cb54d0f6"
+      "bytes": 1633,
+      "sha256": "802bc3550185fb4142e3d3b098576dd7f558ed1ff32068ccc71d155e128be14d"
     },
     {
       "path": "docs/research/first30-2026-10-14/editor-current-tests.log",
@@ -45,6 +80,21 @@
       "path": "docs/research/first30-2026-10-14/editor-unit-tests.log",
       "bytes": 1227,
       "sha256": "e49a70b67c8b130d385aedbec54396ecdc87f317d02eb66d0122e795a6e627c1"
+    },
+    {
+      "path": "docs/research/first30-2026-10-14/f64-edit-roundtrip-before.log",
+      "bytes": 1240,
+      "sha256": "559e02d02da90a468a337cafe840c361c2fca483e8d18eb9890ba356443f6194"
+    },
+    {
+      "path": "docs/research/first30-2026-10-14/f64-edit-roundtrip-initial-harness.log",
+      "bytes": 1076,
+      "sha256": "aad2000a089f93fd8c88dd0ff94dfd27a83e9d14ffd75adb42ee921223f2e1e3"
+    },
+    {
+      "path": "docs/research/first30-2026-10-14/f64-edit-roundtrip.log",
+      "bytes": 1076,
+      "sha256": "aad2000a089f93fd8c88dd0ff94dfd27a83e9d14ffd75adb42ee921223f2e1e3"
     },
     {
       "path": "docs/research/first30-2026-10-14/live-workspace-check.log",
@@ -68,8 +118,8 @@
     },
     {
       "path": "docs/research/first30-2026-10-14/metal-regression-final.log",
-      "bytes": 54,
-      "sha256": "256920d31a6e3c8c7b7c6e25b6976dd361363b398cfdd33869c4affe88178eb2"
+      "bytes": 1279,
+      "sha256": "4b29368165eab5bd628dbda6b8a31959f951847ca3ff5ebad8772bef8cc65f13"
     },
     {
       "path": "docs/research/first30-2026-10-14/native-tests.log",
@@ -87,9 +137,29 @@
       "sha256": "c566d43e3cb476cc07479c7f59e4d10498074631511d4dbf0bf69eb8375dfa2e"
     },
     {
+      "path": "docs/research/first30-2026-10-14/qualification.json",
+      "bytes": 7954,
+      "sha256": "98283f515677fedc4b652686aeb98da01e0ad1c3e24ad0f42c15fe5cdf506f25"
+    },
+    {
+      "path": "docs/research/first30-2026-10-14/raw-metal-compiler-sample.txt",
+      "bytes": 76557,
+      "sha256": "1aeae1817d9cf264c1f02fac7c2a2178c1ab97ca759e300f5ebe4eedf48c31e2"
+    },
+    {
+      "path": "docs/research/first30-2026-10-14/raw-sample-command.log",
+      "bytes": 211,
+      "sha256": "df3337dc46e6aad33e77a58a9a8a8b41ff1b0b89d774ffbb347b079de6900318"
+    },
+    {
+      "path": "docs/research/first30-2026-10-14/raw-timeout.json",
+      "bytes": 672,
+      "sha256": "f5db2318bc320d0c319a4d76c14f9f764da1b347a89dd0e1d8ef5322da3a0b83"
+    },
+    {
       "path": "docs/research/first30-2026-10-14/registry-tests.log",
-      "bytes": 2,
-      "sha256": "5ec1f7e700f37c3d0b2981d04855fc34b94aaa15457b05ca571817442d228f81"
+      "bytes": 105,
+      "sha256": "24e128c70718646948d7efbedfe603f8954615f2cb0245df264bcdeb9381ce6d"
     },
     {
       "path": "docs/research/first30-2026-10-14/registry-validation.log",
@@ -100,6 +170,11 @@
       "path": "docs/research/first30-2026-10-14/swap-warm-baseline.json",
       "bytes": 4280,
       "sha256": "fb72d06d0a1b6161d50add39298717caef44f9a94a0ed8421bfb081c00cd81be"
+    },
+    {
+      "path": "docs/research/first30-2026-10-14/timeout-final.log",
+      "bytes": 100,
+      "sha256": "648bfad1bf98a6571a6c548a7df876cee0657acf016ded6cb2ec27aa12d79e4f"
     },
     {
       "path": "docs/research/first30-2026-10-14/timeout-tests.log",

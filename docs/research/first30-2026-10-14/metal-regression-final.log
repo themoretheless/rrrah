@@ -1,1 +1,21 @@
     Blocking waiting for file lock on build directory
+   Compiling rrrah-core v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-core)
+   Compiling rrrah-gpu v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-gpu)
+    Finished `test` profile [optimized + debuginfo] target(s) in 59m 51s
+     Running tests/raster_readback.rs (target/first30-aligned/debug/deps/raster_readback-96fa399a25885f6d)
+
+running 1 test
+split comparison adapter: Metal Apple M4 Max
+test split_comparison_reuses_resident_pixels_and_matches_both_reference_exposures ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 25 filtered out; finished in 12.60s
+
+     Running tests/raw_linear_readback.rs (target/first30-aligned/debug/deps/raw_linear_readback-9fd8b6185e48ed18)
+
+running 1 test
+RAW split comparison adapter: Metal Apple M4 Max
+test raw_split_comparison_matches_baseline_and_edit_without_another_atlas has been running for over 60 seconds
+error: test failed, to rerun pass `-p rrrah-gpu --test raw_linear_readback`
+
+Caused by:
+  process didn't exit successfully: `/Users/themoretheless/Documents/Sources/rrrah/target/first30-aligned/debug/deps/raw_linear_readback-9fd8b6185e48ed18 split_comparison --nocapture` (signal: 15, SIGTERM: termination signal)

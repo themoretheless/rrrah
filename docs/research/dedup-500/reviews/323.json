@@ -2,9 +2,9 @@
   "index": 323,
   "repository": "imahmud1/emby-dupe-finder",
   "commit": "3374935ef73c9e3b36b2624ce0c94da942f59950",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All5pinned files fully read and Gitmatched;26original-JS metadata/request/render/export controls with explicit DOM/fetch/URL adapters, not real server/browser/media qualification",
   "decision": "reject-domain",
-  "finding": "Emby library movie metadata query UI; independent visual hashing not established.",
+  "finding": "Metadata-only grouping counts repeatedpaths, crossyear and delimiter collisions; overlappinggroups, prototype-name errors, no pagination, raw DOM markup and malformed apostrophe handler. No content/visual equality or adoption.",
   "available_source_evidence": [
     {
       "path": "script.js",
@@ -38,7 +38,7 @@
     }
   ],
   "license_metadata": "MIT",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "Full MIT2024license/source read; no library adoption",
   "tests_detected": 0,
   "upstream_tests_run": false,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
@@ -64,5 +64,8 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_review_complete": true,
+  "whole_runtime_qualified": false,
+  "complete_source_review": "docs/research/dedup-500/emby323-complete-source-review-20261014.json"
 }

@@ -36,10 +36,9 @@ fn exr_physical_pixels_survive_ram_spill_pressure_retry_and_metal() {
         .position(|v| v == attribute)
         .unwrap()
         + attribute.len();
-    let reference = rrrah_decode::prepare_raster_for_display(
-        &rrrah_decode::decode_raster_file(&fixture).unwrap(),
-    )
-    .unwrap();
+    let reference =
+        rrrah_decode::prepare_raster_for_display(&rrrah_decode::decode_raster_file(&fixture).unwrap())
+            .unwrap();
     let parameters = ViewParameters { zoom: 1., ..view() };
     let square = gpu.render_raster(&reference, parameters, [64, 64]);
     let window_attribute = b"displayWindow\0box2i\0\x10\0\0\0";
@@ -93,11 +92,8 @@ fn exr_physical_pixels_survive_ram_spill_pressure_retry_and_metal() {
             let mut pixels = vec![0f32; (width * height * 4) as usize];
             for y in bounds[1]..=bounds[3] {
                 for x in bounds[0]..=bounds[2] {
-                    if (origin[0]..origin[0] + 3).contains(&x)
-                        && (origin[1]..origin[1] + 2).contains(&y)
-                    {
-                        let target = (((y - bounds[1]) as u32 * width + (x - bounds[0]) as u32) * 4)
-                            as usize;
+                    if (origin[0]..origin[0] + 3).contains(&x) && (origin[1]..origin[1] + 2).contains(&y) {
+                        let target = (((y - bounds[1]) as u32 * width + (x - bounds[0]) as u32) * 4) as usize;
                         let original = (((y - origin[1]) * 3 + x - origin[0]) * 4) as usize;
                         pixels[target..target + 4].copy_from_slice(&source[original..original + 4]);
                     }
@@ -203,8 +199,7 @@ fn exr_physical_pixels_survive_ram_spill_pressure_retry_and_metal() {
                 .zip(golden.iter())
                 .all(|(a, b)| a.to_bits() == b.to_bits())
         );
-        let prepared =
-            rrrah_decode::prepare_raster_for_display_with_budget(&restored, Some(&root)).unwrap();
+        let prepared = rrrah_decode::prepare_raster_for_display_with_budget(&restored, Some(&root)).unwrap();
         assert_eq!(
             gpu.render_raster(&prepared, parameters, [64, 64]).pixels,
             expected_sdr.pixels
@@ -235,19 +230,65 @@ fn heif_and_avif_physical_pixels_survive_ram_spill_pressure_retry_and_metal() {
         return;
     };
     eprintln!("HEIF/AVIF physical swap adapter: {}", gpu.adapter_name());
-    let fixtures =
-        std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/raster");
+    let fixtures = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/raster");
     for (original, physical, aspect) in [
         ("alpha.heic", "heif-physical-alpha.heic", Some(2.0)),
         ("rotate90.heic", "heif-physical-rotate90.heic", Some(2.0)),
         ("mirror.heif", "heif-physical-mirror.heif", Some(2.0)),
         ("avif-rgb.avif", "avif-pasp-square.avif", None),
         ("avif-rgb.avif", "avif-pasp-square-essential.avif", None),
+        ("avif-alpha-icc.avif", "avif-alpha-icc-prem.avif", None),
+        ("ravif-8bit-straight.avif", "ravif-8bit-prem.avif", None),
+        ("ravif-10bit-straight.avif", "ravif-10bit-prem.avif", None),
     ] {
-        let reference = rrrah_decode::prepare_raster_for_display(
-            &rrrah_decode::decode_raster_file(&fixtures.join(original)).unwrap(),
-        )
-        .unwrap();
+        let native_reference = rrrah_decode::decode_raster_file(&fixtures.join(original)).unwrap();
+        let native_reference = if physical.starts_with("ravif-") {
+            let pixels = if physical == "ravif-8bit-prem.avif" {
+                RasterPixels::Rgba8(
+                    Arc::new(std::fs::read(fixtures.join(format!("{physical}.rgba"))).unwrap()).into(),
+                )
+            } else {
+                let bytes = std::fs::read(fixtures.join(format!("{physical}.rgba16le"))).unwrap();
+                assert_eq!(bytes.len() % 2, 0);
+                let words = bytes
+                    .chunks_exact(2)
+                    .map(|v| u16::from_le_bytes([v[0], v[1]]))
+                    .collect::<Vec<_>>();
+                RasterPixels::Rgba16(Arc::new(words).into())
+            };
+            DecodedRaster::new(
+                native_reference.width(),
+                native_reference.height(),
+                pixels,
+                native_reference.color_space().clone(),
+            )
+            .unwrap()
+        } else if physical == "avif-alpha-icc-prem.avif" {
+            let RasterPixels::Rgba8(source) = native_reference.pixels() else {
+                panic!("RGBA8 control");
+            };
+            let mut straight = source.to_vec();
+            for pixel in straight.chunks_exact_mut(4) {
+                let alpha = f64::from(pixel[3]);
+                for value in &mut pixel[..3] {
+                    *value = if alpha == 0.0 {
+                        0
+                    } else {
+                        (f64::from(*value) * 255.0 / alpha).round().min(255.0) as u8
+                    };
+                }
+            }
+            DecodedRaster::new(
+                native_reference.width(),
+                native_reference.height(),
+                RasterPixels::Rgba8(Arc::new(straight).into()),
+                native_reference.color_space().clone(),
+            )
+            .unwrap()
+        } else {
+            native_reference
+        };
+        let reference = rrrah_decode::prepare_raster_for_display(&native_reference).unwrap();
         let parameters = ViewParameters { zoom: 1., ..view() };
         let square = gpu.render_raster(&reference, parameters, [64, 64]);
         let expected = reference.clone().with_pixel_aspect(aspect).unwrap();
@@ -266,8 +307,7 @@ fn heif_and_avif_physical_pixels_survive_ram_spill_pressure_retry_and_metal() {
         let mut request = rrrah_decode::DecodeRequest::new(path.clone());
         request.memory_budget = Some(root.clone());
         let raw = rrrah_decode::decode_raster(&request).unwrap();
-        let decoded =
-            rrrah_decode::prepare_raster_for_display_with_budget(&raw, Some(&root)).unwrap();
+        let decoded = rrrah_decode::prepare_raster_for_display_with_budget(&raw, Some(&root)).unwrap();
         drop(raw);
         let weight = decoded.capacity_bytes();
         assert_eq!(root.used(), weight);
@@ -326,8 +366,7 @@ fn heif_and_avif_physical_pixels_survive_ram_spill_pressure_retry_and_metal() {
                 .zip(golden.iter())
                 .all(|(a, b)| a.to_bits() == b.to_bits())
         );
-        let prepared =
-            rrrah_decode::prepare_raster_for_display_with_budget(&restored, Some(&root)).unwrap();
+        let prepared = rrrah_decode::prepare_raster_for_display_with_budget(&restored, Some(&root)).unwrap();
         assert_eq!(
             gpu.render_raster(&prepared, parameters, [64, 64]).pixels,
             expected_sdr.pixels

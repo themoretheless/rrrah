@@ -33,5 +33,11 @@ class ExecutionValidation(unittest.TestCase):
     def test_markdown_status_mismatch_is_refused(self):
         self.assertTrue(any('Markdown execution inconsistent' in e for e in self.errors_for(lambda x: x.update(status='pending'))))
 
+    def test_missing_first_task_execution_is_refused(self):
+        data = copy.deepcopy(self.data)
+        del data['tasks'][0]['execution']
+        errors, _ = validator.validate(data, self.markdown)
+        self.assertIn('first 30 tasks require execution metadata', errors)
+
 if __name__ == '__main__':
     unittest.main()

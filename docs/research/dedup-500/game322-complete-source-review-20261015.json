@@ -1,0 +1,61 @@
+{
+  "status": "complete5blob_static_source_review_domain_rejected",
+  "index": 322,
+  "repository": "DriftyDev/AutoJukeBoxDupe",
+  "commit": "0ad91f44de3b85afb5daf777dbc99f84e238f0ad",
+  "whole_repo_complete": true,
+  "whole_runtime_qualified": false,
+  "fully_read_files": [
+    {
+      "path": "README.md",
+      "local": "docs/research/dedup-500/evidence/DriftyDev--AutoJukeBoxDupe/00-README.md",
+      "sha256": "e7bdb57cc99ef26122ff7d13acb73cfe635f38f1aa20d1124a9b0f77d7a9291d",
+      "git_blob_sha1": "a972cead5775b5668f94810cd67a83ff5d73667a",
+      "bytes": 140,
+      "lines": 3
+    },
+    {
+      "path": "LICENSE",
+      "local": "docs/research/dedup-500/evidence/DriftyDev--AutoJukeBoxDupe/01-LICENSE",
+      "sha256": "fa281731ec3e939b930d098f3b31c1a003099d8b6d8b2751f55e34a1e1e9b23d",
+      "git_blob_sha1": "f32dafa6979f3ea7e6baad13dad04730d61102e5",
+      "bytes": 1066,
+      "lines": 21
+    },
+    {
+      "path": "AutoDuperModule.java",
+      "local": "docs/research/dedup-500/evidence/DriftyDev--AutoJukeBoxDupe/02-AutoDuperModule.java",
+      "sha256": "bdf2dfe8819b5a94929a2faf9fe2fc9035aa0bc465bfb6f1340ebdc4b93dd31d",
+      "git_blob_sha1": "c0aa73fe8fc2bb40b165b915443e4b702f7e2a04",
+      "bytes": 9502,
+      "lines": 237
+    },
+    {
+      "path": "src/main/java/me/drifty/ajdn/AutoJukeboxDupeNerf.java",
+      "local": "docs/research/dedup-500/evidence/DriftyDev--AutoJukeBoxDupe/03-AutoJukeboxDupeNerf.java",
+      "sha256": "4eb2ac6c4bb962dfc3194828a601b5e18a958159a5ce6751e4fda26cc77101e5",
+      "git_blob_sha1": "1f3245eee5a96a21b5c30fa71bbf955692dd55dc",
+      "bytes": 1007,
+      "lines": 31
+    },
+    {
+      "path": "src/main/resources/plugin.yml",
+      "local": "docs/research/dedup-500/evidence/DriftyDev--AutoJukeBoxDupe/04-plugin.yml",
+      "sha256": "22b8f3c11af4727b918c9bda06443ee30ee1fab79fafc0946eab721cec545078",
+      "git_blob_sha1": "4dd40df126f520e521cd09b3f93247839ea529a7",
+      "bytes": 140,
+      "lines": 7
+    }
+  ],
+  "auditor_sha256": "e257fe05dd71a8cacf3c9f58453787c8875ff82f6560dc8aeeeeba42e261f25a",
+  "upstream_functions_executed": 0,
+  "findings": [
+    "Client automation module and ProtocolLib/Bukkit packet plugin concern Minecraft gameplay items. No file/image/hash/content duplicate algorithm to transfer.",
+    "Plugin descriptor mainpackage ajdf differs from captured implementation package ajdn. Packet handler also references type/wrappedPacket without declarations in capturedsource; dependency inheritance/compiler behavior not validated, no actual compilation claim.",
+    "Client module references external framework/Minecraft APIs, omits frame path and contains fallthrough/state/timer logic; dependency/gameplay/runtime safety not qualified. No client/plugin/server or packet execution.",
+    "MIT2021license/README/descriptor and both Java files fullyread. No build/dependency lock or upstreamtests in capturedtree.",
+    "Domain falsepositive retained in original500; no source adopted or gameplay guidance produced."
+  ],
+  "decision": "reject-domain-after-full-source-review",
+  "scope": "All captured repository blobs fullyread and Gitblob SHA1/size/SHA256 matched; static source/descriptor review only. No Java/plugin/framework/game/server/client/network/packet/privateinput execution, no dependency/platform/runtime qualification or codeadoption. External README assertions not treated as currentvalidated behavior. Captured commit-to-tree binding not independently fetched."
+}

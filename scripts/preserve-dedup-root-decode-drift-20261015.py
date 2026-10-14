@@ -1,0 +1,13 @@
+#!/usr/bin/env python3
+from pathlib import Path
+import json,re,hashlib,subprocess,shutil
+R=Path(__file__).resolve().parents[1];D=R/'docs/research';P=D/'dedup-root-guard-latch-decode-20261014.json';p=json.loads(P.read_text())
+def sha(path):
+ h=hashlib.sha256()
+ with Path(path).open('rb')as f:
+  for b in iter(lambda:f.read(1024*1024),b''):h.update(b)
+ return h.hexdigest()
+assert p['returncode']==0 and not p['source_unchanged'];L=Path(p['log']);assert sha(L)==p['log_sha256'];s=L.read_text();sections=list(re.finditer(r'Running (.*?) \(([^\n]+)\)\n(.*?)(?=\n\s*Running |\Z)',s,re.S));assert len(sections)==5;F=Path('/private/tmp/rrrah-root-decode-drift-preserved-20261015');F.mkdir(exist_ok=False);K=D/'dedup-root-decode-drift-preserved-20261015';K.mkdir(exist_ok=False);shutil.copyfile(L,K/'cargo.log');rows=[]
+for i,v in enumerate(sections):
+ target,exe,body=v.groups();src=Path(exe);src=src if src.is_absolute()else R/src;dst=F/src.name;subprocess.run(['cp','-cp',str(src),str(dst)],check=True);assert sha(src)==sha(dst);listing=subprocess.run([str(dst),'--list'],capture_output=True,text=True,cwd=R);assert listing.returncode==0;names=set(re.findall(r'^(.+): test$',listing.stdout,re.M));executed=dict(re.findall(r'^test (.+) \.\.\. (ok|FAILED|ignored(?:,.*)?)$',body,re.M));summary=re.search(r'test result: ok\. (\d+) passed; (\d+) failed; (\d+) ignored;',body);assert summary and summary[2]=='0'and names==set(executed)and len(names)==int(summary[1])+int(summary[3]);q=K/f'{i}-inventory.log';q.write_text(listing.stdout+listing.stderr);rows.append(dict(target=target,passed=int(summary[1]),failed=0,ignored=int(summary[3]),executable=str(dst),executable_sha256=sha(dst),inventory=str(q.relative_to(R)),inventory_sha256=sha(q)))
+O=D/'dedup-root-decode-drift-preserved-20261015.json';assert not O.exists();O.write_text(json.dumps(dict(status='observed_complete_test_success_source_drift_not_source_qualification',producer_report=str(P.relative_to(R)),producer_report_sha256=sha(P),preserver_sha256=sha(__file__),passed=sum(v['passed']for v in rows),failed=0,ignored=sum(v['ignored']for v in rows),targets=5,rows=rows,changed_sources=p['changed_sources'],source_unchanged=False,scope='Complete executed/listed test inventories and retained original binaries/log verified, but9sourcefiles changed during build. Compiler can resolve mixed revisions; not currentRoot or unchanged-source qualification. Original strict auditor correctly refused source qualification. StreamingSHA uses1MiB buffers. No rerun/restart or relabel as frozen test success.'),indent=2)+'\n');print(sum(v['passed']for v in rows),'testresults preserved, source-drift qualification refused')

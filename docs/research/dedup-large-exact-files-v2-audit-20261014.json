@@ -1,0 +1,47 @@
+{
+  "status": "verified_exact_module_large_sparse_admission_and_cancellation",
+  "producer_report": "docs/research/dedup-large-exact-files-v2-20261014.json",
+  "producer_report_sha256": "433476bbb13cf7f612d942b95e6822bb6982a37dae15f86c8cb77fc83a459b91",
+  "auditor_sha256": "ec11fcd962f9ab862f4ba919db3c39f6be7d1da6e56778be6bdc68d31500f75d",
+  "passed": 22,
+  "failed": 0,
+  "ignored": 0,
+  "complete_inventory": [
+    "exact::cancellation_flag_tests::final_publication_observes_flag_without_reentering_caller",
+    "exact::cancelled_output_tests::healthy_short_interrupted_output_preserves_exact_range",
+    "exact::cancelled_output_tests::interrupted_output_cancels_before_next_write_attempt",
+    "exact::cancelled_output_tests::partial_output_cancels_without_writing_remaining_bytes",
+    "exact::cancelled_output_tests::zero_progress_and_output_errors_remain_typed_io_failures",
+    "exact::collision_tests::colliding_samples_and_full_hashes_still_partition_by_bytes",
+    "exact::collision_tests::final_content_validation_rejects_change_even_when_metadata_matches",
+    "exact::collision_tests::formerly_empty_entries_are_reopened_before_hash_or_equality",
+    "exact::collision_tests::pair_comparison_checks_policy_and_cancellation_at_every_checkpoint",
+    "exact::collision_tests::pair_comparison_confirms_bytes_and_refuses_digest_collision",
+    "exact::collision_tests::pair_comparison_rejects_last_checkpoint_mutations_on_both_outcomes",
+    "exact::collision_tests::read_buffer_capacity_failure_is_explicit_and_retry_succeeds",
+    "exact::collision_tests::verified_observations_detect_metadata_invisible_pruned_mutations",
+    "exact::collision_tests::verified_prefix_binds_header_and_body_even_when_metadata_matches",
+    "exact::collision_tests::verified_prefix_policy_cancel_and_final_mutation_do_not_publish_headers",
+    "exact::interrupted_read_tests::interrupted_reads_observe_cancellation_before_retry",
+    "exact::interrupted_read_tests::read_cancelled_before_first_attempt_does_not_touch_reader",
+    "exact::interrupted_read_tests::short_reads_and_interruptions_preserve_content_and_eof_errors",
+    "exact::observed_snapshot_policy_tests::replacement_after_initial_metadata_cannot_bypass_observed_size_limit",
+    "large_controls::large_file_discovery_keeps_u64_lengths_and_reports_limit_omissions",
+    "large_controls::large_logical_lengths_cannot_wrap_byte_admission",
+    "large_controls::large_sparse_reads_cancel_without_publishing_an_unread_group"
+  ],
+  "new_controls": [
+    "large_file_discovery_keeps_u64_lengths_and_reports_limit_omissions",
+    "large_logical_lengths_cannot_wrap_byte_admission",
+    "large_sparse_reads_cancel_without_publishing_an_unread_group"
+  ],
+  "logical_sizes": [
+    4294967295,
+    4294967296,
+    1099511627793
+  ],
+  "cancel_scan_max_read_bytes": 2097152,
+  "compare_cancel_callback": 12,
+  "scope": "Exact module and public API controls on current captured source; directrustc real cached dependencies. 4GiB/1TiB sparse metadata/size admission and bounded early streaming cancellation only, not full multiGiB equality, physical IO, hard RSS, otherplatform or Cargo/workspace/decode proof. Existing exact-module unit controls also included. Temporary sparse files owned by tempfile and removed on completion, no corpus.",
+  "initial_failure": "Initial harness include! made inner module documentation invalid; preserved terminal compile report. v2 only changes harness module inclusion, real source/test bodies unchanged."
+}

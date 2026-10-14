@@ -1,0 +1,11 @@
+[package]
+name = "rrrah-avif-prem-fixture-producer"
+version = "0.1.0"
+edition = "2024"
+publish = false
+[workspace]
+[dependencies]
+ravif = { version = "=0.13.0", default-features = false }
+[profile.dev]
+opt-level = 0
+debug = 0

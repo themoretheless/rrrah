@@ -1,0 +1,74 @@
+{
+  "status": "complete6blob_source_review15adapted_original_JS_controls",
+  "index": 181,
+  "repository": "repo-utils/npm-semver-dedupe",
+  "commit": "19231e3faab122b5d1678d9c816df721a170be57",
+  "whole_repo_complete": true,
+  "whole_runtime_qualified": false,
+  "fully_read_files": [
+    {
+      "path": ".gitignore",
+      "local": "docs/research/dedup-500/evidence/repo-utils--npm-semver-dedupe/03-gitignore",
+      "sha256": "22c8f36c0e48383234b6576e822481d805373f347afc4f3ad8ff1d56319298d5",
+      "git_blob_sha1": "226f465192833bd9d286b3acf770bfcdc8eb39c5",
+      "bytes": 46,
+      "lines": 7
+    },
+    {
+      "path": ".travis.yml",
+      "local": "docs/research/dedup-500/evidence/repo-utils--npm-semver-dedupe/04-travis.yml",
+      "sha256": "069a8665cba446a8b71b3acb26bd6717ea040bff4c8380e559db8579fd3ab46f",
+      "git_blob_sha1": "704b6aa46109d06c567ab9ee89fa60932eedfcf2",
+      "bytes": 155,
+      "lines": 6
+    },
+    {
+      "path": "LICENSE",
+      "local": "docs/research/dedup-500/evidence/repo-utils--npm-semver-dedupe/01-LICENSE",
+      "sha256": "965ef284f7f4c176842ec2e87fa13e79feed777d56d7a21a5a3b38f1bb6dc288",
+      "git_blob_sha1": "a7ae8ee9b8a30ef2a73ff5a7a80adc3b1a845cae",
+      "bytes": 1099,
+      "lines": 22
+    },
+    {
+      "path": "README.md",
+      "local": "docs/research/dedup-500/evidence/repo-utils--npm-semver-dedupe/00-README.md",
+      "sha256": "ff67fd179f29e9c1f677e7ac8a3d9c95c03588bba3dbe485041d8312607d8559",
+      "git_blob_sha1": "bf90591c24c1ba56b97a92b66d0a54d15f61b8cb",
+      "bytes": 2054,
+      "lines": 45
+    },
+    {
+      "path": "bin/npm-semver-dedupe",
+      "local": "docs/research/dedup-500/evidence/repo-utils--npm-semver-dedupe/02-npm-semver-dedupe",
+      "sha256": "b4d6f4e4823e9435c959a91496cdcda28ca71b7c650c36bf29267cf16dffc1b5",
+      "git_blob_sha1": "35dde7af3a008d8933a21732f9e3f6bd777b22df",
+      "bytes": 1668,
+      "lines": 64
+    },
+    {
+      "path": "package.json",
+      "local": "docs/research/dedup-500/evidence/repo-utils--npm-semver-dedupe/05-package.json",
+      "sha256": "2bbf5d985d74455fd7a81264a4fb9f525036fc2f2384b1048549c59017dce6dc",
+      "git_blob_sha1": "3ff99eecffbc2d6121a9a5a4860051c37d98eb71",
+      "bytes": 557,
+      "lines": 28
+    }
+  ],
+  "controls": "docs/research/dedup-semver181-controls-20261014.json",
+  "controls_sha256": "fada66c74eb2e0c8fb9150697ffb50dad28bc71681af41a99f60a85b07b7b413",
+  "control_source": "scripts/check-dedup-semver181-20261014.js",
+  "control_source_sha256": "faa9c99d03dc413153f7c4a2a6394091c809cee856871fb3d9b6c8005b448c9d",
+  "auditor_sha256": "0c8f60b3dba92ad339e41cbd51a3e9d67b9b35d7f489bc47c38b32ed06b29ae1",
+  "findings": [
+    "Same-major versions above0 are removed without consulting dependency ranges or file contents; newer nested1.9.0 is replaced by ancestor1.0.0. Not identity or API compatibility proof.",
+    "Version reconstructed from major/minor/patch discards prerelease information; version0.1.0-beta becomes indistinguishable from0.1.0 in original removal decision under explicit parser adapter. Real semver3 not executed.",
+    "Major0 minor/patch differences retained; exact major0 triples removed. Same-level sibling aliases are not deduplicated; repeated nested aliases removed by splice/i-- loop.",
+    "Symlink check happens after recursive parsing; linked subtree package files are already visited, then dedupe recursion skips linked node. No real filesystem link/cycle test.",
+    "Scoped @scope directory treated as a package with package.json, absent/invalid versions dereferenced asnull, malformed directory contents not handled; synthetic control errors retained.",
+    "Filesystem deletion is synchronous and immediate without planning, content confirmation, rollback, cancellation or resource limits; no deletion actually executed in controls.",
+    "Unpinned dependency ranges debug*, semver3,rimraf2 and no lockfile. Travis invokes npm run test-travis but package has no scripts and tree no upstream tests.",
+    "MIT2014 source license read. Different domain, reference only; no source adopted in duplicate file/image library."
+  ],
+  "scope": "Whole original CLI source unchanged under vm. Fully synthetic in-memory filesystem/package tree, numeric/prerelease-component parser adapter, deletion recorder and suppressed logger. No actual semver3/rimraf2/npm resolution, filesystem deletion, links, network, package installs or production input; not compatibility or full runtime qualification. All6captured files fully read and matched Gitblob SHA1/size/SHA256. Current installed semver/rimraf unavailable; controlled adapters explicitly retained, no dependency-runtime equivalence inferred. Captured commit-to-tree binding not independently fetched."
+}

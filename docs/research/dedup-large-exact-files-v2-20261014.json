@@ -1,0 +1,53 @@
+{
+  "status": "passed_pending_independent_audit",
+  "producer_pid": 5010,
+  "source_pins": {
+    "crates/rrrah-dedup/src/exact.rs": "7182a5aa6a26ebfccda8db82d3039a5288afcbb0786195969a351bdeb7e07a0f",
+    "crates/rrrah-dedup/tests/exact_large_files.rs": "9a57b742f8efd38d7761f17c5711733cb1229f20aff1bb81c78a3cc15e99df4e"
+  },
+  "dependency_pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libblake3-5dbb3dfc2ce7d297.rlib": "1a90993f8c95cbbc51839449c8db08075277d5468e7d9fa2ae1b8838720083fe",
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libthiserror-1f2ca11ca2706be8.rlib": "a4bc045f06441d4730b1988bee770197e1f51f4b1600df8c028a668c27c77bf1",
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libtempfile-f6f2a369a6678518.rlib": "3c0a02859f18952acb6482a76d369ebac50a9c75f3b3b153fb3db5af15f2ea31",
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/liblibc-0a79900aa2799e6c.rlib": "b3e730a257abb46acab6283d05f1a1340e72bbb48682e09f3a237332f7f08c25"
+  },
+  "producer_sha256": "fa14a18cacee8c3a49aa1e2ab7f2f8bd8da1a6bea29433f07402e0da58ddbbcc",
+  "harness_sha256": "8851f5553a29ab0fd90aa251a7c150c21fb81fa50455835ad7d4ebaa8447408a",
+  "source": "/private/tmp/rrrah-large-exact-files-v2-20261014",
+  "command": [
+    "rustc",
+    "+stable",
+    "--edition=2024",
+    "--test",
+    "/private/tmp/rrrah-large-exact-files-v2-20261014/harness.rs",
+    "-C",
+    "opt-level=1",
+    "-L",
+    "dependency=/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps",
+    "-o",
+    "/private/tmp/rrrah-large-exact-files-v2-20261014/tests",
+    "--extern",
+    "blake3=/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libblake3-5dbb3dfc2ce7d297.rlib",
+    "--extern",
+    "thiserror=/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libthiserror-1f2ca11ca2706be8.rlib",
+    "--extern",
+    "tempfile=/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libtempfile-f6f2a369a6678518.rlib",
+    "--extern",
+    "libc=/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/liblibc-0a79900aa2799e6c.rlib"
+  ],
+  "scope": "Exact module and public API controls on current captured source; directrustc real cached dependencies. 4GiB/1TiB sparse metadata/size admission and bounded early streaming cancellation only, not full multiGiB equality, physical IO, hard RSS, otherplatform or Cargo/workspace/decode proof. Existing exact-module unit controls also included. Temporary sparse files owned by tempfile and removed on completion, no corpus.",
+  "child_pid": 23533,
+  "build_returncode": 0,
+  "inventory_returncode": 0,
+  "tests_returncode": 0,
+  "passed": 22,
+  "ignored": 0,
+  "failed": 0,
+  "executable": "/private/tmp/rrrah-large-exact-files-v2-20261014/tests",
+  "executable_sha256": "bad7ac59c7513a33e5625a3aa174f5c4a75172a4aaff3bcf9415edf24a9761b7",
+  "output_pins": {
+    "/private/tmp/rrrah-large-exact-files-v2-20261014/tests.log": "61f2035e06db3a5c1daa812bcbbe284c8289c8e17c6bfe1bae978613f082900a",
+    "/private/tmp/rrrah-large-exact-files-v2-20261014/inventory.log": "541479bf10023f8f6fa72c47902a4830a6d33dad606998b008dde4e3a6378672",
+    "/private/tmp/rrrah-large-exact-files-v2-20261014/build.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

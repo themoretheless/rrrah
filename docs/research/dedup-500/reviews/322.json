@@ -2,9 +2,9 @@
   "index": 322,
   "repository": "DriftyDev/AutoJukeBoxDupe",
   "commit": "0ad91f44de3b85afb5daf777dbc99f84e238f0ad",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All5pinned repository files fully read and Gitmatched; static game-domain source/descriptor review,0runtime executions",
   "decision": "reject-domain",
-  "finding": "Minecraft jukebox item duplication mod; no media hash.",
+  "finding": "Complete source confirms Minecraft gameplay item/entity client/plugin domain, no file/image/hash duplicate detection; no runtime/network/plugin/gameplay execution or adoption.",
   "available_source_evidence": [
     {
       "path": "AutoDuperModule.java",
@@ -25,10 +25,20 @@
       "lines": 31,
       "source": true,
       "test": false
+    },
+    {
+      "path": "src/main/resources/plugin.yml",
+      "local": "04-plugin.yml",
+      "url": "https://github.com/DriftyDev/AutoJukeBoxDupe/blob/0ad91f44de3b85afb5daf777dbc99f84e238f0ad/src/main/resources/plugin.yml",
+      "sha256": "22b8f3c11af4727b918c9bda06443ee30ee1fab79fafc0946eab721cec545078",
+      "truncated": false,
+      "lines": 7,
+      "source": true,
+      "test": false
     }
   ],
   "license_metadata": "MIT",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "Full captured MIT2021license/source read; no source adoption",
   "tests_detected": 0,
   "upstream_tests_run": false,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
@@ -54,5 +64,8 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_review_complete": true,
+  "whole_runtime_qualified": false,
+  "complete_source_review": "docs/research/dedup-500/game322-complete-source-review-20261015.json"
 }

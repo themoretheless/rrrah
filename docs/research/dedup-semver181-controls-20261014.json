@@ -1,0 +1,176 @@
+{
+  "rows": [
+    {
+      "name": "same-major-different-bytes-and-range",
+      "deleted": [
+        "/fixture/node_modules/parent/node_modules/library"
+      ],
+      "package_reads": [
+        "/fixture",
+        "/fixture/node_modules/library",
+        "/fixture/node_modules/parent",
+        "/fixture/node_modules/parent/node_modules/library"
+      ],
+      "error": null
+    },
+    {
+      "name": "newer-child-replaced-by-older-top",
+      "deleted": [
+        "/fixture/node_modules/parent/node_modules/library"
+      ],
+      "package_reads": [
+        "/fixture",
+        "/fixture/node_modules/library",
+        "/fixture/node_modules/parent",
+        "/fixture/node_modules/parent/node_modules/library"
+      ],
+      "error": null
+    },
+    {
+      "name": "different-major",
+      "deleted": [],
+      "package_reads": [
+        "/fixture",
+        "/fixture/node_modules/library",
+        "/fixture/node_modules/parent",
+        "/fixture/node_modules/parent/node_modules/library"
+      ],
+      "error": null
+    },
+    {
+      "name": "zero-exact",
+      "deleted": [
+        "/fixture/node_modules/parent/node_modules/library"
+      ],
+      "package_reads": [
+        "/fixture",
+        "/fixture/node_modules/library",
+        "/fixture/node_modules/parent",
+        "/fixture/node_modules/parent/node_modules/library"
+      ],
+      "error": null
+    },
+    {
+      "name": "zero-different-minor",
+      "deleted": [],
+      "package_reads": [
+        "/fixture",
+        "/fixture/node_modules/library",
+        "/fixture/node_modules/parent",
+        "/fixture/node_modules/parent/node_modules/library"
+      ],
+      "error": null
+    },
+    {
+      "name": "zero-different-patch",
+      "deleted": [],
+      "package_reads": [
+        "/fixture",
+        "/fixture/node_modules/library",
+        "/fixture/node_modules/parent",
+        "/fixture/node_modules/parent/node_modules/library"
+      ],
+      "error": null
+    },
+    {
+      "name": "zero-prerelease-collapsed",
+      "deleted": [
+        "/fixture/node_modules/parent/node_modules/library"
+      ],
+      "package_reads": [
+        "/fixture",
+        "/fixture/node_modules/library",
+        "/fixture/node_modules/parent",
+        "/fixture/node_modules/parent/node_modules/library"
+      ],
+      "error": null
+    },
+    {
+      "name": "different-names",
+      "deleted": [],
+      "package_reads": [
+        "/fixture",
+        "/fixture/node_modules/library",
+        "/fixture/node_modules/parent",
+        "/fixture/node_modules/parent/node_modules/library"
+      ],
+      "error": null
+    },
+    {
+      "name": "linked-subtree-read-before-skip",
+      "deleted": [],
+      "package_reads": [
+        "/fixture",
+        "/fixture/node_modules/library",
+        "/fixture/node_modules/parent",
+        "/fixture/node_modules/parent/node_modules/library"
+      ],
+      "error": null
+    },
+    {
+      "name": "two-child-duplicates",
+      "deleted": [
+        "/fixture/node_modules/parent/node_modules/library",
+        "/fixture/node_modules/parent/node_modules/alias"
+      ],
+      "package_reads": [
+        "/fixture",
+        "/fixture/node_modules/library",
+        "/fixture/node_modules/parent",
+        "/fixture/node_modules/parent/node_modules/library",
+        "/fixture/node_modules/parent/node_modules/alias"
+      ],
+      "error": null
+    },
+    {
+      "name": "invalid-version",
+      "deleted": [],
+      "package_reads": [
+        "/fixture",
+        "/fixture/node_modules/library",
+        "/fixture/node_modules/parent",
+        "/fixture/node_modules/parent/node_modules/library"
+      ],
+      "error": "TypeError: Cannot read properties of null (reading 'major')"
+    },
+    {
+      "name": "missing-version",
+      "deleted": [],
+      "package_reads": [
+        "/fixture",
+        "/fixture/node_modules/library",
+        "/fixture/node_modules/parent",
+        "/fixture/node_modules/parent/node_modules/library"
+      ],
+      "error": "TypeError: Cannot read properties of null (reading 'major')"
+    },
+    {
+      "name": "scoped-folder-not-package",
+      "deleted": [],
+      "package_reads": [
+        "/fixture",
+        "/fixture/node_modules/@scope"
+      ],
+      "error": "Error: missing fixture package: /fixture/node_modules/@scope"
+    },
+    {
+      "name": "hidden-directory-skipped",
+      "deleted": [],
+      "package_reads": [
+        "/fixture"
+      ],
+      "error": null
+    },
+    {
+      "name": "same-level-duplicate-not-removed",
+      "deleted": [],
+      "package_reads": [
+        "/fixture",
+        "/fixture/node_modules/first",
+        "/fixture/node_modules/alias"
+      ],
+      "error": null
+    }
+  ],
+  "scope": "Whole original CLI source unchanged under vm. Fully synthetic in-memory filesystem/package tree, numeric/prerelease-component parser adapter, deletion recorder and suppressed logger. No actual semver3/rimraf2/npm resolution, filesystem deletion, links, network, package installs or production input; not compatibility or full runtime qualification."
+}

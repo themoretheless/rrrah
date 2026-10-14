@@ -1,0 +1,72 @@
+{
+  "status": "complete6blob_source_review16adapted_dotnet_helper_controls",
+  "index": 488,
+  "repository": "nikvoronin/we-aint-same",
+  "commit": "4005039a78eff762a4512924e6f00faf777b29e7",
+  "whole_repo_complete": true,
+  "whole_runtime_qualified": false,
+  "fully_read_files": [
+    {
+      "path": "README.md",
+      "local": "docs/research/dedup-500/evidence/nikvoronin--we-aint-same/00-README.md",
+      "sha256": "211b77c7de5416b59ca8d5f0416ea2a869918405716d1ece51df3a6da39afa33",
+      "git_blob_sha1": "fac07081c9242067567eaf2708a0089a5e39caee",
+      "bytes": 2009,
+      "lines": 68
+    },
+    {
+      "path": "LICENSE",
+      "local": "docs/research/dedup-500/evidence/nikvoronin--we-aint-same/01-LICENSE",
+      "sha256": "89fb4441f0b32d1a59bd72050e7d736131116f698930dfe2f13f180f8be77b7c",
+      "git_blob_sha1": "0057edfb48d9c9ccd7b1f172530c1a8113b48a00",
+      "bytes": 1072,
+      "lines": 21
+    },
+    {
+      "path": "Program.cs",
+      "local": "docs/research/dedup-500/evidence/nikvoronin--we-aint-same/02-Program.cs",
+      "sha256": "f941bb744c04e5f9d5127aa703e2977135321222745b0732e4ab9a333e345b78",
+      "git_blob_sha1": "0e450a8dfea70a186660b3f11ab24fb366af356f",
+      "bytes": 3136,
+      "lines": 106
+    },
+    {
+      "path": ".gitignore",
+      "local": "docs/research/dedup-500/evidence/nikvoronin--we-aint-same/03-gitignore",
+      "sha256": "6f13171c2c854ae2e807cdf3306ae7d1369a57e37d90024971f77009cdb0e874",
+      "git_blob_sha1": "835d13e133fc225379ee2d501bd2d0590f1c9796",
+      "bytes": 7410,
+      "lines": 450
+    },
+    {
+      "path": "WeAintSame.csproj",
+      "local": "docs/research/dedup-500/evidence/nikvoronin--we-aint-same/04-WeAintSame.csproj",
+      "sha256": "b9e18c6d444c09ecaad982d54e6ede47e93f6f7ab1a6d7eacd7c7df725453059",
+      "git_blob_sha1": "215cfef98d8e4c6b3b072e222b76b6a017ab9657",
+      "bytes": 407,
+      "lines": 16
+    },
+    {
+      "path": "WeAintSame.sln",
+      "local": "docs/research/dedup-500/evidence/nikvoronin--we-aint-same/05-WeAintSame.sln",
+      "sha256": "a0064d1950a5ed7d2e7eb662987eaf5b72f0324ddfc81d6ed3711cece0b351fe",
+      "git_blob_sha1": "7278ba401f7f13e0386900002894b4c36cfc0aaa",
+      "bytes": 1100,
+      "lines": 25
+    }
+  ],
+  "controls": "docs/research/dedup-weaintsame488-controls-20261014.json",
+  "controls_sha256": "35614d0ef214935ed91141f59770fe4631811e64ed57ae894b9491781d2c95aa",
+  "auditor_sha256": "45c78bf4a832ab2645fb8695f60507efb31d2ab9ad3f844df773f6d6f5d0e657",
+  "findings": [
+    "Original comparer uses similarity threshold as IEqualityComparer and constant0hash. Under explicit64bit Hamming adapter relation is nontransitive; actual .NET GroupBy gives1or2groups depending on six inputpermutations, and central-first group contains nonsimilar endpoints. Not an allpairs guarantee.",
+    "Actual .NET GroupBy distinct controls16/32/64/128 perform n(n-1)/2original Equals calls under scalar distance adapter; no real image/perceptualhash/wholeoperation throughput claim.",
+    "Helperthreshold100/NaN rejects selfequality; original CLI uses fixed90, not configurablethreshold. MinSim starts200 and MaxSim0 until anactualcomparison, soempty/singleton range not meaningful.",
+    "hashs.json existence bypasses all image reads and enumeration; cache includes only paths and64bit hashes, no file identity/size/stamp/content/algorithm/dependency version. Null/malformed/stale entries unchecked. Sourceflow finding, original CLI/cache not executed.",
+    "Recursive .jpg enumeration plus external PerceptualHash only, no full byte confirmation or publication/source-ownership/resource/cancellation boundary. No alias distinction or cross-format/frame qualification.",
+    "Cache serialized directly using File.OpenWrite without atomic staging/locking or explicittruncate; race with preexistingfile can retain trailingbytes. No concurrency/failure injection here.",
+    "Project targetsnet8.0, package ImageHash1.3.6; no lock or upstream tests in capturedtree. Actual dependency unavailable; standalone helper harness uses installedSDK8 with empty package sources, no package download/private MyPictures traversal.",
+    "MIT2022source license fullyread, external dependency/assets unqualified, no source adopted. README sample image and performance assertions remain external/unverified, not currentbenchmark evidence."
+  ],
+  "scope": "Original ImageInfo/ImageHashComparer helper bodies unchanged, compiled with installed actual .NET8SDK and real LINQ GroupBy. Explicit scalar64bit-Hamming percentage adapter replaces unavailable ImageHash1.3.6 dependency. No whole original CLI/MyPictures traversal/cache/media/private input/network or actual ImageSharp/perceptual hash execution. Grouping findings conditional on stated adapter; not ImageHash API/runtime qualification. All6repository blobs fullyread and Gitblob SHA1/size/SHA256 matched; original helper text, actual binary and outputs independently pinned. Captured commit-to-tree binding not independently fetched."
+}

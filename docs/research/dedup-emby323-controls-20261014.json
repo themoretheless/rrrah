@@ -1,0 +1,437 @@
+{
+  "rows": [
+    {
+      "name": "empty",
+      "input": [],
+      "result": {},
+      "error": null
+    },
+    {
+      "name": "single",
+      "input": [
+        {
+          "Name": "Alpha",
+          "ProductionYear": 2020,
+          "Path": "a"
+        }
+      ],
+      "result": {},
+      "error": null
+    },
+    {
+      "name": "same-name-year-distinct-content-not-read",
+      "input": [
+        {
+          "Name": "Alpha",
+          "ProductionYear": 2020,
+          "Path": "different-a"
+        },
+        {
+          "Name": "Alpha",
+          "ProductionYear": 2020,
+          "Path": "different-b"
+        }
+      ],
+      "result": {
+        "Alpha_2020": [
+          {
+            "path": "different-a",
+            "year": 2020
+          },
+          {
+            "path": "different-b",
+            "year": 2020
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "name": "different-years-grouped",
+      "input": [
+        {
+          "Name": "Alpha",
+          "ProductionYear": 2020,
+          "Path": "a"
+        },
+        {
+          "Name": "Alpha",
+          "ProductionYear": 2021,
+          "Path": "b"
+        }
+      ],
+      "result": {
+        "Alpha": [
+          {
+            "path": "a",
+            "year": 2020
+          },
+          {
+            "path": "b",
+            "year": 2021
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "name": "case-sensitive-miss",
+      "input": [
+        {
+          "Name": "Alpha",
+          "ProductionYear": 2020,
+          "Path": "a"
+        },
+        {
+          "Name": "alpha",
+          "ProductionYear": 2020,
+          "Path": "b"
+        }
+      ],
+      "result": {},
+      "error": null
+    },
+    {
+      "name": "outer-whitespace-normalized",
+      "input": [
+        {
+          "Name": " Alpha ",
+          "ProductionYear": 2020,
+          "Path": "a"
+        },
+        {
+          "Name": "Alpha",
+          "ProductionYear": 2020,
+          "Path": "b"
+        }
+      ],
+      "result": {
+        "Alpha_2020": [
+          {
+            "path": "a",
+            "year": 2020
+          },
+          {
+            "path": "b",
+            "year": 2020
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "name": "missing-years",
+      "input": [
+        {
+          "Name": "Alpha",
+          "Path": "a"
+        },
+        {
+          "Name": "Alpha",
+          "Path": "b"
+        }
+      ],
+      "result": {
+        "Alpha": [
+          {
+            "path": "a"
+          },
+          {
+            "path": "b"
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "name": "same-path-counted-twice",
+      "input": [
+        {
+          "Name": "Alpha",
+          "ProductionYear": 2020,
+          "Path": "same"
+        },
+        {
+          "Name": "Alpha",
+          "ProductionYear": 2020,
+          "Path": "same"
+        }
+      ],
+      "result": {
+        "Alpha_2020": [
+          {
+            "path": "same",
+            "year": 2020
+          },
+          {
+            "path": "same",
+            "year": 2020
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "name": "overlapping-year-and-name-groups",
+      "input": [
+        {
+          "Name": "Alpha",
+          "ProductionYear": 2020,
+          "Path": "a"
+        },
+        {
+          "Name": "Alpha",
+          "ProductionYear": 2020,
+          "Path": "b"
+        },
+        {
+          "Name": "Alpha",
+          "ProductionYear": 2021,
+          "Path": "c"
+        }
+      ],
+      "result": {
+        "Alpha_2020": [
+          {
+            "path": "a",
+            "year": 2020
+          },
+          {
+            "path": "b",
+            "year": 2020
+          }
+        ],
+        "Alpha": [
+          {
+            "path": "a",
+            "year": 2020
+          },
+          {
+            "path": "b",
+            "year": 2020
+          },
+          {
+            "path": "c",
+            "year": 2021
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "name": "delimiter-collision",
+      "input": [
+        {
+          "Name": "Alpha_2020",
+          "Path": "a"
+        },
+        {
+          "Name": "Alpha",
+          "ProductionYear": 2020,
+          "Path": "b"
+        }
+      ],
+      "result": {
+        "Alpha_2020": [
+          {
+            "path": "a"
+          },
+          {
+            "path": "b",
+            "year": 2020
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "name": "prototype-name-__proto__",
+      "input": [
+        {
+          "Name": "__proto__",
+          "Path": "a"
+        }
+      ],
+      "result": null,
+      "error": "TypeError: duplicates[key].push is not a function"
+    },
+    {
+      "name": "prototype-name-constructor",
+      "input": [
+        {
+          "Name": "constructor",
+          "Path": "a"
+        }
+      ],
+      "result": null,
+      "error": "TypeError: duplicates[key].push is not a function"
+    },
+    {
+      "name": "prototype-name-toString",
+      "input": [
+        {
+          "Name": "toString",
+          "Path": "a"
+        }
+      ],
+      "result": null,
+      "error": "TypeError: duplicates[key].push is not a function"
+    },
+    {
+      "name": "prototype-name-valueOf",
+      "input": [
+        {
+          "Name": "valueOf",
+          "Path": "a"
+        }
+      ],
+      "result": null,
+      "error": "TypeError: duplicates[key].push is not a function"
+    },
+    {
+      "name": "prototype-name-hasOwnProperty",
+      "input": [
+        {
+          "Name": "hasOwnProperty",
+          "Path": "a"
+        }
+      ],
+      "result": null,
+      "error": "TypeError: duplicates[key].push is not a function"
+    },
+    {
+      "name": "numeric-name",
+      "input": [
+        {
+          "Name": 7,
+          "ProductionYear": 2020,
+          "Path": "a"
+        }
+      ],
+      "result": null,
+      "error": "TypeError: name.trim is not a function"
+    },
+    {
+      "name": "blank-after-trim",
+      "input": [
+        {
+          "Name": " ",
+          "ProductionYear": 2020,
+          "Path": "a"
+        },
+        {
+          "Name": " ",
+          "ProductionYear": 2020,
+          "Path": "b"
+        }
+      ],
+      "result": {
+        "_2020": [
+          {
+            "path": "a",
+            "year": 2020
+          },
+          {
+            "path": "b",
+            "year": 2020
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "name": "undefined-path",
+      "input": [
+        {
+          "Name": "Alpha",
+          "ProductionYear": 2020
+        },
+        {
+          "Name": "Alpha",
+          "ProductionYear": 2020
+        }
+      ],
+      "result": {
+        "Alpha_2020": [
+          {
+            "year": 2020
+          },
+          {
+            "year": 2020
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "name": "missing-name-skipped",
+      "input": [
+        {
+          "ProductionYear": 2020,
+          "Path": "a"
+        },
+        {
+          "Name": "",
+          "ProductionYear": 2020,
+          "Path": "b"
+        }
+      ],
+      "result": {},
+      "error": null
+    },
+    {
+      "name": "unicode-normalization-miss",
+      "input": [
+        {
+          "Name": "é",
+          "ProductionYear": 2020,
+          "Path": "a"
+        },
+        {
+          "Name": "é",
+          "ProductionYear": 2020,
+          "Path": "b"
+        }
+      ],
+      "result": {},
+      "error": null
+    }
+  ],
+  "network": [
+    {
+      "name": "default-http-raw-query-key-no-pagination",
+      "requests": [
+        "http://fixture.invalid/emby/Library/VirtualFolders?api_key=fixture&StartIndex=1",
+        "http://fixture.invalid/emby/Items?Recursive=true&ParentId=fixture-id&IncludeItemTypes=Movie&Fields=Path,ProductionYear&api_key=fixture&StartIndex=1"
+      ],
+      "display": "<p>No duplicates found in any library.</p>",
+      "total_record_count": 100
+    },
+    {
+      "name": "library-http-error",
+      "display": "<p>Error: Failed to fetch libraries</p>"
+    },
+    {
+      "name": "raw-error-markup",
+      "display": "<p>Error: <b>fixture error</b></p>"
+    },
+    {
+      "name": "apostrophe-library-inline-handler",
+      "html": "\n            <h3>O'Reilly</h3>\n            <p>Total duplicate movies: 1</p>\n            <button onclick=\"downloadDuplicates('O'Reilly', {&quot;Alpha&quot;:[{&quot;path&quot;:&quot;fixture-a&quot;,&quot;year&quot;:2020},{&quot;path&quot;:&quot;fixture-b&quot;,&quot;year&quot;:2020}]})\">Download List</button>\n        ",
+      "syntax_error": "SyntaxError: missing ) after argument list"
+    },
+    {
+      "name": "raw-library-markup",
+      "html": "\n            <h3><b>fixture title</b></h3>\n            <p>Total duplicate movies: 1</p>\n            <button onclick=\"downloadDuplicates('<b>fixture title</b>', {&quot;Alpha&quot;:[]})\">Download List</button>\n        "
+    },
+    {
+      "name": "synthetic-download-text",
+      "content": "Duplicates in library: fixture-library\n\nDuplicate found: Alpha\n  - fixture-a (2020)\n  - fixture-b (2021)\n\n",
+      "record": {
+        "name": "fixture-library_duplicates.txt",
+        "href": "blob:synthetic"
+      }
+    }
+  ],
+  "scope": "Whole original JS unchanged in Node vm; real grouping/async/render/download functions. Explicit minimal DOM, fake fetch responses, real Node Blob and objectURL/click recorders. No browser markup/event execution, real server/API/account/credentials/network, media reads, deletion or UI visual qualification. All inputs authored synthetic metadata; token fixture only."
+}

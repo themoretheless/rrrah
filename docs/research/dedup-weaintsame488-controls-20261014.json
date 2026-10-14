@@ -1,0 +1,181 @@
+{
+  "status": "passed_pending_independent_audit",
+  "producer_pid": 78047,
+  "producer_sha256": "f336cb0beb89ca672f3cde9ddca4c44ea3b2b6a19c022278635fb7027b5d181b",
+  "source_sha256": "f941bb744c04e5f9d5127aa703e2977135321222745b0732e4ab9a333e345b78",
+  "helper_sha256": "4f5561b4814ee8cc3abb082e8b32f1010846985f7ab1a9f5047497332acb471c",
+  "harness": "/private/tmp/rrrah-weaintsame488-20261014/Program.cs",
+  "harness_sha256": "eccda24737b5baa971738ccae0753d6bbc7cf4fbda417b9f63d755182833e636",
+  "source": "/private/tmp/rrrah-weaintsame488-20261014",
+  "scope": "Original ImageInfo/ImageHashComparer helper bodies unchanged, compiled with installed actual .NET8SDK and real LINQ GroupBy. Explicit scalar64bit-Hamming percentage adapter replaces unavailable ImageHash1.3.6 dependency. No whole original CLI/MyPictures traversal/cache/media/private input/network or actual ImageSharp/perceptual hash execution. Grouping findings conditional on stated adapter; not ImageHash API/runtime qualification.",
+  "child_pid": 79498,
+  "restore_returncode": 0,
+  "build_returncode": 0,
+  "controls_returncode": 0,
+  "rows": [
+    {
+      "name": "nontransitive",
+      "ab": true,
+      "bc": true,
+      "ac": false
+    },
+    {
+      "name": "permutation",
+      "input": [
+        0,
+        63,
+        4095
+      ],
+      "groups": [
+        [
+          0,
+          63
+        ],
+        [
+          4095
+        ]
+      ]
+    },
+    {
+      "name": "permutation",
+      "input": [
+        0,
+        4095,
+        63
+      ],
+      "groups": [
+        [
+          0
+        ],
+        [
+          4095,
+          63
+        ]
+      ]
+    },
+    {
+      "name": "permutation",
+      "input": [
+        63,
+        0,
+        4095
+      ],
+      "groups": [
+        [
+          63,
+          0,
+          4095
+        ]
+      ]
+    },
+    {
+      "name": "permutation",
+      "input": [
+        63,
+        4095,
+        0
+      ],
+      "groups": [
+        [
+          63,
+          4095,
+          0
+        ]
+      ]
+    },
+    {
+      "name": "permutation",
+      "input": [
+        4095,
+        0,
+        63
+      ],
+      "groups": [
+        [
+          4095
+        ],
+        [
+          0,
+          63
+        ]
+      ]
+    },
+    {
+      "name": "permutation",
+      "input": [
+        4095,
+        63,
+        0
+      ],
+      "groups": [
+        [
+          4095,
+          63
+        ],
+        [
+          0
+        ]
+      ]
+    },
+    {
+      "name": "threshold-self",
+      "threshold": "90",
+      "identical": true
+    },
+    {
+      "name": "threshold-self",
+      "threshold": "100",
+      "identical": false
+    },
+    {
+      "name": "threshold-self",
+      "threshold": "-1",
+      "identical": true
+    },
+    {
+      "name": "threshold-self",
+      "threshold": "NaN",
+      "identical": false
+    },
+    {
+      "name": "unique-scaling",
+      "n": 16,
+      "groups": 16,
+      "calls": 120,
+      "expected": 120
+    },
+    {
+      "name": "unique-scaling",
+      "n": 32,
+      "groups": 32,
+      "calls": 496,
+      "expected": 496
+    },
+    {
+      "name": "unique-scaling",
+      "n": 64,
+      "groups": 64,
+      "calls": 2016,
+      "expected": 2016
+    },
+    {
+      "name": "unique-scaling",
+      "n": 128,
+      "groups": 128,
+      "calls": 8128,
+      "expected": 8128
+    },
+    {
+      "name": "no-comparison-range",
+      "minimum": 200,
+      "maximum": 0
+    }
+  ],
+  "output_pins": {
+    "/private/tmp/rrrah-weaintsame488-20261014/controls.log": "2b669da3952331a843d87082f927df047b6164bd28fff365dc800cf1c904fedf",
+    "/private/tmp/rrrah-weaintsame488-20261014/restore.log": "90e9117adcb27a0a7c66ebff483246b36135855f244c1d66017a73f369488995",
+    "/private/tmp/rrrah-weaintsame488-20261014/build.log": "115826aa14d4ac854ba4c12fa132d9a0322483e90572b9e6eb78f9211296419d"
+  },
+  "executable": "/private/tmp/rrrah-weaintsame488-20261014/bin/Release/net8.0/Controls.dll",
+  "executable_sha256": "d027a8d829ef4892dda813a4f5d3257d1d882e8fc6826ca8d9651f66f0d1124a"
+}

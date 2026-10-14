@@ -1,0 +1,94 @@
+{
+  "status": "complete3blob_source_review7normalization_controls",
+  "repository": "ADScanPro/ad-audit-wordlist",
+  "commit": "8da3d5f6fab1185390410746d60463df31ba1b4e",
+  "index": 193,
+  "whole_repo_complete": true,
+  "whole_runtime_qualified": false,
+  "fully_read_files": [
+    {
+      "path": "README.md",
+      "local": "docs/research/dedup-500/evidence/ADScanPro--ad-audit-wordlist/00-README.md",
+      "sha256": "06569119f13d3613696e7ef4b937db4a37ce6c7d02550e8f72a4d47f3feb2b32",
+      "git_blob_sha1": "93b87fb864e3189edfc231aba933e0cc40433b26",
+      "bytes": 4106
+    },
+    {
+      "path": "LICENSE",
+      "local": "docs/research/dedup-500/evidence/ADScanPro--ad-audit-wordlist/01-LICENSE",
+      "sha256": "e7828d42f2f56fab58162d211f8d4cbd57f8cad6e8bc54e529c77b537d8f662c",
+      "git_blob_sha1": "4c83e372bcc3da7a216003c6f1086badc874c569",
+      "bytes": 1066
+    },
+    {
+      "path": "build-ad-audit-wordlist.sh",
+      "local": "docs/research/dedup-500/evidence/ADScanPro--ad-audit-wordlist/02-build-ad-audit-wordlist.sh",
+      "sha256": "664d27416323b02871fd0a0fa133f74ce91cfc738ccef4e7507fd682135ac489",
+      "git_blob_sha1": "6db8411eb1e2092647095c64203853f126942708",
+      "bytes": 2140
+    }
+  ],
+  "producer_sha256": "b232c3342325bc9245d5860ad60835eee31ec6085b02b30a2bac737e720482d3",
+  "syntax_returncode": 0,
+  "original_awk_expression": "{ sub(/\\r$/,\"\"); print }",
+  "controls": [
+    {
+      "index": 0,
+      "input_hex": "",
+      "output_hex": "",
+      "expected_hex": "",
+      "returncode": 0
+    },
+    {
+      "index": 1,
+      "input_hex": "616c7068610d0a626574610d0a",
+      "output_hex": "616c7068610a626574610a",
+      "expected_hex": "616c7068610a626574610a",
+      "returncode": 0
+    },
+    {
+      "index": 2,
+      "input_hex": "616c706861",
+      "output_hex": "616c7068610a",
+      "expected_hex": "616c7068610a",
+      "returncode": 0
+    },
+    {
+      "index": 3,
+      "input_hex": "616c7068610d626574610a",
+      "output_hex": "616c7068610d626574610a",
+      "expected_hex": "616c7068610d626574610a",
+      "returncode": 0
+    },
+    {
+      "index": 4,
+      "input_hex": "2020616c70686120200a616c7068610a616c7068610a",
+      "output_hex": "2020616c70686120200a616c7068610a616c7068610a",
+      "expected_hex": "2020616c70686120200a616c7068610a616c7068610a",
+      "returncode": 0
+    },
+    {
+      "index": 5,
+      "input_hex": "0d0a0a",
+      "output_hex": "0a0a",
+      "expected_hex": "0a0a",
+      "returncode": 0
+    },
+    {
+      "index": 6,
+      "input_hex": "ff0d0a",
+      "output_hex": "ff0a",
+      "expected_hex": "ff0a",
+      "returncode": 0
+    }
+  ],
+  "findings": [
+    "Repository is orchestration of external line-list dedup, no image/file-content duplicate algorithm or rling implementation. Domain rejected for library feature adoption.",
+    "Original awk normalization strips one trailing CR, adds missing final LF, keeps embedded CR, whitespace, blank lines, duplicate lines and arbitrary bytes under C locale. Seven authored synthetic token controls, not external lists.",
+    "Two normalized inputs concatenated primary first. Stable dedup delegated entirely to external unpinned rling on PATH; byte-exact/order-preserving claims not runtime validated here.",
+    "Network archive revision URL pinned, archive digest not verified; curl omits --fail, no input prerequisite check before download, no temporary staging/atomic publish, fixed output paths and no concurrent-run lock.",
+    "set-euo-pipefail stops many command failures but does not prevent partial/truncated merged outputs. xz -dk retains archive and existing output can refuse rerun. Missing primary leaves download/extraction side effects before awk failure. Source-flow findings, no whole-script execution.",
+    "MIT source license read; separate input-content and external tool rights/behavior not qualified. No production source adoption."
+  ],
+  "scope": "All3captured blobs fully read and Gitblob SHA1/size/SHA256 matched; bash -n syntax and7original awk-expression controls only. Fullscript, downloads, external rling, account/credential data, external lists and security workflows never executed. No upstream tests present in captured tree. Captured commit-to-tree binding not independently fetched."
+}

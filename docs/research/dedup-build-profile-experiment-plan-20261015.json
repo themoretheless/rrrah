@@ -1,0 +1,19 @@
+{
+  "status": "planned_not_executed",
+  "trigger_audit": "docs/research/dedup-compiler-live-profile-audit-20261015.json",
+  "trigger_audit_sha256": "9c3faf8db5905680ce3bf310b1c28ae411ed0b99e48980b5fe3d875572e78dbe",
+  "objective": "Reduce cost of complete selected decode test qualification without omitting tests or claiming release/runtime parity from a diagnostic profile",
+  "requirements": [
+    "Use one immutable source/dependency/toolchain/fixture snapshot for both profiles; source drift refuses comparison.",
+    "Keep exact same five decoded-feature test targets and complete per-binary inventory; no testname filters or renamed success scope.",
+    "Compare declared development/test build profile with diagnostic same-crate LTO disabled; do not change repository default/release profiles based on sample alone.",
+    "Capture raw child CPU/user/system before and after, walltime and per-compiler physicalfootprint separately from library runtime RSS/MemoryBudget.",
+    "First validate a pilot pair, then alternating fresh-process pairs with identical cache policy if feasible; preserve all failures and compiler outputs.",
+    "Avoid duplicate/restarted current jobs. Start controlled comparison after existing owned gates complete and resources are available.",
+    "Require complete test inventory/results equality and final source/dependency hashes before retaining any build-profile change.",
+    "No compiler-profile result establishes model quality, runtime speedup, fullRoot source parity, hardRSS or all12goal completion."
+  ],
+  "baseline": "Snapshot declared development/test profile",
+  "candidate": "Diagnostic compiler profile only; same-crate LTO disabled, all test targets preserved",
+  "scope": "Future captured-source build-performance experiment only. Not executed, no speed/memory reduction claimed. Existing currentRoot compiler remains live; known Root source drift means its partial elapsed/CPU sample is not a same-source A/B baseline."
+}

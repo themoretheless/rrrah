@@ -2,9 +2,9 @@
   "index": 212,
   "repository": "bernadinm/protonpass-deduplicate-secrets",
   "commit": "0b1ea5629d808a0871712dc7f4628e4c39cc2c46",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All4pinned repository files fully read and Gitmatched;20actual unchangedCLI controls on authored synthetic JSON, no actual vault/account/import-back qualification",
   "decision": "reject-domain",
-  "finding": "ProtonPass secret JSON record dedup; no image scanner.",
+  "finding": "Global name-only record dedup loses differentcontent/crossvault entries, accepts null/empty and numeric-bool collisions, unchecked schema errors and output overwrite. No actual secrets/account/network access or code adoption.",
   "available_source_evidence": [
     {
       "path": "dedupe.py",
@@ -15,10 +15,20 @@
       "lines": 45,
       "source": true,
       "test": false
+    },
+    {
+      "path": ".gitignore",
+      "local": "03-gitignore",
+      "url": "https://github.com/bernadinm/protonpass-deduplicate-secrets/blob/0b1ea5629d808a0871712dc7f4628e4c39cc2c46/.gitignore",
+      "sha256": "5e2c671ddc9e301dafc241ad1a7c07aa85a91fef560a17721b41977b9eddba17",
+      "truncated": false,
+      "lines": 160,
+      "source": true,
+      "test": false
     }
   ],
   "license_metadata": "AGPL-3.0",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "Full AGPL3license/source read, no implementation adoption",
   "tests_detected": 0,
   "upstream_tests_run": false,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
@@ -44,5 +54,8 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_review_complete": true,
+  "whole_runtime_qualified": false,
+  "complete_source_review": "docs/research/dedup-500/proton212-complete-source-review-20261015.json"
 }

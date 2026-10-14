@@ -1,0 +1,54 @@
+{
+  "status": "complete4blob_source_review20original_cli_synthetic_json_controls",
+  "index": 212,
+  "repository": "bernadinm/protonpass-deduplicate-secrets",
+  "commit": "0b1ea5629d808a0871712dc7f4628e4c39cc2c46",
+  "whole_repo_complete": true,
+  "whole_runtime_qualified": false,
+  "fully_read_files": [
+    {
+      "path": "README.md",
+      "local": "docs/research/dedup-500/evidence/bernadinm--protonpass-deduplicate-secrets/00-README.md",
+      "sha256": "cf4a4cb506b73ead27dfc2d145a271e176b8c0c5234f3c0c216a28caa5483ee6",
+      "git_blob_sha1": "222908aff026833d361a03e0e595d6d744149635",
+      "bytes": 1889,
+      "lines": 32
+    },
+    {
+      "path": "LICENSE",
+      "local": "docs/research/dedup-500/evidence/bernadinm--protonpass-deduplicate-secrets/01-LICENSE",
+      "sha256": "8486a10c4393cee1c25392769ddd3b2d6c242d6ec7928e1414efff7dfb2f07ef",
+      "git_blob_sha1": "0ad25db4bd1d86c452db3f9602ccdbe172438f52",
+      "bytes": 34523,
+      "lines": 661
+    },
+    {
+      "path": "dedupe.py",
+      "local": "docs/research/dedup-500/evidence/bernadinm--protonpass-deduplicate-secrets/02-dedupe.py",
+      "sha256": "867d62289ffc1d31e6ab88b4057dc0f40ce9a59a4bb1accb9e428c3677b2c35f",
+      "git_blob_sha1": "98df5c5ab70f7df9a03b366c758c4299babce053",
+      "bytes": 1463,
+      "lines": 45
+    },
+    {
+      "path": ".gitignore",
+      "local": "docs/research/dedup-500/evidence/bernadinm--protonpass-deduplicate-secrets/03-gitignore",
+      "sha256": "5e2c671ddc9e301dafc241ad1a7c07aa85a91fef560a17721b41977b9eddba17",
+      "git_blob_sha1": "68bc17f9ff2104a9d7b6777058bb4c343ca72609",
+      "bytes": 3078,
+      "lines": 160
+    }
+  ],
+  "controls": "docs/research/dedup-proton212-controls-20261015.json",
+  "controls_sha256": "6365c7d5442e7427a2637e4900cd6aaf15463df7c181a2ec5a87d73a4080b055",
+  "auditor_sha256": "80cd33da9d556458249d6aee3c4b991384f7baddb9c475e164b77c6f5d932d4d",
+  "findings": [
+    "Global set keyed only by item metadata name across allvaults. Same-name differentcontent records and differentvault records discarded; firstseen wins regardless of other fields. Synthetic data loss confirmed, no actualvault input.",
+    "Differentnames with samecontent retained; case/whitespace remain significant. Empty/null names accepted and deduplicated; numeric1 and booleantrue collide via actualPython set semantics.",
+    "Missing/unhashable names, top-level/empty/wrongtype vault containers and wrongtype items fail with unchecked exceptions. Existing output preserved on tested prewritevalidationerrors.",
+    "Success unconditionally truncates/overwrites existing fixed output file; import has unguarded top-level execution on relative data.json. Inputs unchanged in all20CLIcontrols. No atomic output staging, rollback, exception translation or resource/cancellation policy.",
+    "Whole JSON is loaded and mutated in memory; scope/grouping source identity/content is not validated. No file/image/pixel duplicate algorithm, no account/import-back/ZIP implementation.",
+    "README/source/license fullyread, AGPL3text. No upstreamtests/dependency manifest in capturedtree, standardPython only. No source adopted."
+  ],
+  "scope": "Whole unchanged original CLI with actual Pythonstdlib JSON/set/IO,20authored synthetic metadata records/cases only. Source/prodinput/output hashes and sourceunchanged guarded. Every case in fresh owned tempfolder; existing output overwritten on success, preserved on prewritevalidationfailure. No actual ProtonPass/vault/export/password/account/credential/network/zip/privatefile accessed. No API/import-back/platform/resource/performance or library adoption qualification. All4captured blobs fullyread and Gitblob SHA1/size/SHA256 matched;20actual unchangedCLI outputs/inputs/stats/error/sentinel hashes independently checked. Captured commit-to-tree binding not independently fetched."
+}

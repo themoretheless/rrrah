@@ -1,0 +1,126 @@
+{
+  "scope": "First 30 task execution; a snapshot of the shared dirty workspace, not all 1000 audited again. Source hashes are report-time hashes, not a claim of immutable concurrent builds.",
+  "git_head": "dc90476cbcffd7672f60b5e3bf3f610301094973",
+  "source_sha256": {
+    "crates/rrrah-cache/src/raster_ram.rs": "bc9e541b646fea481f9c3fa509fe021b486ec2864add5495f6bf3adb08090528",
+    "Cargo.toml": "5ca0ce3b36b9132a7198b38dff612ee2889c1e341117359299dd2c6d6c9ea96c",
+    "Cargo.lock": "5cfaa6a40ba81a8fcb33d10b6e5c45dc33058fa3090ac909f2c04290fe15ce2d",
+    ".github/workflows/cuda-hardware.yml": "c005ef8562f6b4edf325fc1a2a146b2127994145eaea20a194c41993ab887021",
+    "crates/rrrah-core/src/edit.rs": "fecd6d9dc75ff8ad9c5cb20cb76d7d4ced65338bc80ed99b1c2039e5ce0fdf88",
+    "crates/rrrah-core/src/histogram.rs": "0aff5c885cc59f73b8d74538d76797722edf91e4a0bffec97a68152d8bac4d07",
+    "crates/rrrah-core/src/lib.rs": "f1a97a0e85bcf38cc2f12e7a0caf8a9746c2e1bca53520cdcb83a4fadf9a760a",
+    "crates/rrrah-app/Cargo.toml": "0197be58422751b07608ad64f3a9ee7398889777bb4d2df0ba8aee906f75b87a",
+    "crates/rrrah-app/src/main.rs": "6f45ec60090563679b425f7176fe7a36eefa9361c89616ae357b9931af3cdad9",
+    "crates/rrrah-app/src/editor.rs": "1baae8057938eb3263766f04f35fe472488a150bd346b23e887b46667595f230",
+    "crates/rrrah-app/src/edit_store.rs": "dbc23b31684068779557deeb313fd24254da69f484ada3d0acc3a790c783e0e6",
+    "crates/rrrah-app/src/accessibility.rs": "5ae3d22cc9b3796afbd53635198738de6dc7a9c8909381426568bb6c6fcddd98",
+    "crates/rrrah-app/src/histogram_worker.rs": "3129c69a40950ef4ab61ca6d829a7e2e634786d2e8a4a9767622ad21f36ef5fa",
+    "crates/rrrah-app/src/gallery.rs": "815430b323b22827c59fdb036fa1f6c2296ecfcb08004974e596a60af0c3fc74",
+    "crates/rrrah-bench/src/lib.rs": "1a90165154386d0b23c95fd503d68854aecb4448fa920e05d0c9eef2bc02f72e",
+    "crates/rrrah-gpu/src/lib.rs": "6501d50e933fca49a0ab70a717b5b15d15ab118e65cb52e02ed613ee171efaf3",
+    "crates/rrrah-gpu/src/raster.rs": "68e26242fd82e87ff8e6e9499c943c8b0629fa565b4936ab8a8765ab191c22d9",
+    "crates/rrrah-gpu/shaders/raw_view.wgsl": "6d00e1bde7101a4e206366a501337942aa6904a0888de8d3d22f619c5a1b7211",
+    "crates/rrrah-gpu/shaders/raster_view.wgsl": "414f85077d755245e6b7631f4bf9d9683b790a50e0cc9f0f17569b2e8fa0aec4",
+    "crates/rrrah-gpu/tests/raster_readback.rs": "70b60bbe03dae8bbe6824c41774a08a91e652aa4a669983ca28126f96f06da26",
+    "crates/rrrah-gpu/tests/raw_linear_readback.rs": "aebc8f3719fe3f010bcbbd3bab58bfbb1673dd85191bfe017a38749cf727fa14",
+    "scripts/qualify-viewer-storage-gpu.py": "a567872a6803a3420c90eeda9e8cec63a97a9978f03b156b2af4aaa14683ef4e",
+    "scripts/test-viewer-suite-timeout.py": "c6319153442ff91514af80f8801bad03ab6794f92712bef9f852a3848079f73b",
+    "scripts/validate-improvements-1000.py": "0492740dc8b5efee08c851499d37b6d755e78712dee7a0f70568088d098ebb47",
+    "scripts/refresh-improvements-1000.py": "0c8990da325efd24fe964b4873f0b13bc0837d41898d3d17c8283eae57eaf8a9",
+    "scripts/test-improvements-1000.py": "00056d7c4770809228669d28645ffdeb5fe81cd30c424619d2b4dd03c3e91625"
+  },
+  "test_summaries": {
+    "native-tests.log": [
+      "test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+      "test result: ok. 5 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.01s",
+      "test result: ok. 40 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.02s",
+      "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.11s",
+      "test result: ok. 16 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.03s",
+      "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s",
+      "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.10s",
+      "test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.23s",
+      "test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+      "test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+      "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+      "test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s"
+    ],
+    "components-final.log": [
+      "test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.93s",
+      "test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+    ],
+    "components-clippy-final.log": [
+      "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 24.90s"
+    ],
+    "cache-final-tests.log": [
+      "test result: ok. 140 passed; 0 failed; 2 ignored; 0 measured; 0 filtered out; finished in 2.61s"
+    ],
+    "app-current-tests.log": [
+      "test result: ok. 229 passed; 0 failed; 62 ignored; 0 measured; 0 filtered out; finished in 8.49s"
+    ],
+    "app-final-tests.log": [
+      "test result: ok. 230 passed; 0 failed; 62 ignored; 0 measured; 0 filtered out; finished in 5.82s"
+    ],
+    "app-final-check.log": [
+      "    Finished `dev` profile [optimized + debuginfo] target(s) in 7m 51s"
+    ],
+    "metal-regression-final.log": [
+      "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 25 filtered out; finished in 12.60s"
+    ],
+    "metal-comparison-current.log": [
+      "test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 57 filtered out; finished in 0.00s",
+      "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 25 filtered out; finished in 1.17s",
+      "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 6 filtered out; finished in 79.91s"
+    ],
+    "registry-validation.log": [
+      "OK: 1000 tasks, 30 initial tasks, source links, fields, dependencies, Markdown parity; 0 snapshot warnings"
+    ],
+    "registry-tests.log": [
+      "Ran 5 tests in 143.413s",
+      "OK"
+    ],
+    "timeout-final.log": [
+      "Ran 2 tests in 0.584s",
+      "OK"
+    ]
+  },
+  "unqualified": [
+    "NVIDIA CUDA context/session reuse and adapter matching",
+    "NVIDIA self-hosted workflow execution",
+    "Physical HDR luminance meter qualification",
+    "Live GUI/keyboard/screen-reader smoke: CUA error -10005 timeoutReached",
+    "Windows process-tree timeout branch",
+    "End-to-end navigation/FPS and cold disk performance",
+    "Full workspace Clippy: existing warning gate failed"
+  ],
+  "execution_summary": {
+    "verified": 2,
+    "blocked": 3,
+    "partial": 11,
+    "reviewed": 6,
+    "rejected": 5,
+    "measured_no_change": 3
+  },
+  "all_first_30_completed": false,
+  "gate_status": {
+    "final_app": "passed: 230, 62 ignored",
+    "cache_after_revert": "passed: 140, 2 ignored",
+    "components": "passed: 12, exact serde_json 1.0.151 with float_roundtrip",
+    "metal_repeat": "raster passed; RAW timed out during Metal pipeline compilation",
+    "raw_timeout": {
+      "pid": 77022,
+      "command": "/Users/themoretheless/Documents/Sources/rrrah/target/first30-aligned/debug/deps/raw_linear_readback-9fd8b6185e48ed18 split_comparison --nocapture",
+      "deadline_seconds": 1200,
+      "observed_elapsed_seconds": 1212,
+      "timed_out": true,
+      "verified_execution": false,
+      "termination": "SIGTERM to own synthetic test process only",
+      "stack_evidence": "raw-metal-compiler-sample.txt",
+      "observed_stage": "Metal create_render_pipeline / MTLCompiler waiting for compileFunction reply",
+      "note": "Earlier RAW readback passed; this rerun did not complete. Compiler delay cause is not established; no GPU service or unrelated process signalled."
+    },
+    "gui_screen_reader": "unqualified: CUA timeout",
+    "nvidia": "unqualified",
+    "physical_hdr": "unqualified",
+    "workspace_clippy": "failed existing warning gate; isolated component gate recorded separately"
+  }
+}

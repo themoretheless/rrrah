@@ -1,0 +1,68 @@
+{
+  "index": 455,
+  "repository": "alash3al/xmg",
+  "commit": "2e2cff0ba8b7352f80facb2a1967b96497735832",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "wrapper",
+  "finding": "Go hash/face microservice uses goimagehash; no independent algorithm beyond delegated upstream.",
+  "available_source_evidence": [
+    {
+      "path": "db.go",
+      "local": "02-db.go",
+      "url": "https://github.com/alash3al/xmg/blob/2e2cff0ba8b7352f80facb2a1967b96497735832/db.go",
+      "sha256": "5dbcf60c61caf79c77352a4d9af04fa7c208a2b9df1d5f0bc9453593bcd8e2c5",
+      "truncated": false,
+      "lines": 64,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "helpers.go",
+      "local": "03-helpers.go",
+      "url": "https://github.com/alash3al/xmg/blob/2e2cff0ba8b7352f80facb2a1967b96497735832/helpers.go",
+      "sha256": "5f80d26e02fd9e8f5c9bf3a3457d92a32716d9c5978f7f0871d38b743e4aa720",
+      "truncated": false,
+      "lines": 73,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "main.go",
+      "local": "04-main.go",
+      "url": "https://github.com/alash3al/xmg/blob/2e2cff0ba8b7352f80facb2a1967b96497735832/main.go",
+      "sha256": "a2506121f32ad41551c1e923e9c18539f5d01811547fd4f01c72568a8944d219",
+      "truncated": false,
+      "lines": 96,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "Apache-2.0",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/alash3al/xmg/blob/2e2cff0ba8b7352f80facb2a1967b96497735832/README.md",
+      "sha256": "2958d4edebcadb0dcb4475a1b880945291177d36a9c719d3525d95a75e0bac82",
+      "truncated": false,
+      "lines": 20,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/alash3al/xmg/blob/2e2cff0ba8b7352f80facb2a1967b96497735832/LICENSE",
+      "sha256": "43070e2d4e532684de521b885f385d0841030efa2b1a20bafb76133a5e1379c1",
+      "truncated": false,
+      "lines": 201,
+      "source": false,
+      "test": false
+    }
+  ]
+}

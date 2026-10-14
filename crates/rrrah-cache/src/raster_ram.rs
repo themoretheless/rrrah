@@ -213,6 +213,183 @@ mod tests {
         )
         .unwrap()
     }
+
+    // RR-0023 control: the pre-change production operation, not an alternative cache.
+    fn baseline_insert<K: Clone + Eq + Hash + Send + 'static>(
+        cache: &mut RasterRamCache<K>,
+        key: K,
+        raster: DecodedRaster,
+    ) -> bool {
+        cache.spill_expired();
+        let weight = raster.capacity_bytes();
+        let visible = cache.visible.as_ref() == Some(&key);
+        let (admitted, evicted) = match cache.entries.insert(key.clone(), raster, weight) {
+            Ok(victims) => (true, victims),
+            Err(_) => (false, Vec::new()),
+        };
+        if let Some(swap) = &cache.swap {
+            for (key, frame) in evicted {
+                swap.enqueue(key, frame);
+            }
+        }
+        if !admitted {
+            return false;
+        }
+        if visible {
+            cache.entries.pin(&key);
+        }
+        true
+    }
+    // RR-0023 rejected performance hypothesis: retained only for reproducible experiments.
+    fn experimental_insert<K: Clone + Eq + Hash + Send + 'static>(
+        cache: &mut RasterRamCache<K>,
+        key: K,
+        raster: DecodedRaster,
+    ) -> bool {
+        cache.spill_expired();
+        let weight = raster.capacity_bytes();
+        let visible = cache.visible.as_ref() == Some(&key);
+        let (admitted, evicted) = match cache.entries.insert(key, raster, weight) {
+            Ok(victims) => (true, victims),
+            Err(_) => (false, Vec::new()),
+        };
+        if let Some(swap) = &cache.swap {
+            for (key, frame) in evicted {
+                swap.enqueue(key, frame);
+            }
+        }
+        if !admitted {
+            return false;
+        }
+        if visible && let Some(key) = cache.visible.as_ref() {
+            cache.entries.pin(key);
+        }
+        true
+    }
+    #[test]
+    fn experimental_move_key_keeps_visible_pin_and_last_owner_credit() {
+        use std::sync::atomic::{AtomicUsize, Ordering};
+        #[derive(Debug)]
+        struct Key(u64, Arc<AtomicUsize>);
+        impl Clone for Key {
+            fn clone(&self) -> Self {
+                self.1.fetch_add(1, Ordering::Relaxed);
+                Self(self.0, Arc::clone(&self.1))
+            }
+        }
+        impl PartialEq for Key {
+            fn eq(&self, other: &Self) -> bool {
+                self.0 == other.0
+            }
+        }
+        impl Eq for Key {}
+        impl Hash for Key {
+            fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
+                self.0.hash(state);
+            }
+        }
+        for visible in [false, true] {
+            let budget = rrrah_core::MemoryBudget::new(16);
+            let frame = raster().try_manage_pixels(&budget).unwrap();
+            let old_clones = Arc::new(AtomicUsize::new(0));
+            let new_clones = Arc::new(AtomicUsize::new(0));
+            let mut baseline = RasterRamCache::new(CacheLimits::bytes(32));
+            let mut candidate = RasterRamCache::new(CacheLimits::bytes(32));
+            if visible {
+                baseline.mark_visible(Key(1, old_clones.clone()));
+                candidate.mark_visible(Key(1, new_clones.clone()));
+            }
+            assert!(baseline_insert(
+                &mut baseline,
+                Key(1, old_clones.clone()),
+                frame.clone()
+            ));
+            assert!(experimental_insert(
+                &mut candidate,
+                Key(1, new_clones.clone()),
+                frame.clone()
+            ));
+            assert_eq!(
+                old_clones.load(Ordering::Relaxed),
+                new_clones.load(Ordering::Relaxed) + 1
+            );
+            for id in [2, 3] {
+                assert!(baseline_insert(
+                    &mut baseline,
+                    Key(id, old_clones.clone()),
+                    frame.clone()
+                ));
+                assert!(experimental_insert(
+                    &mut candidate,
+                    Key(id, new_clones.clone()),
+                    frame.clone()
+                ));
+            }
+            assert_eq!(baseline.get(&Key(1, old_clones)).is_some(), visible);
+            assert_eq!(candidate.get(&Key(1, new_clones)).is_some(), visible);
+            assert_eq!(baseline.resident_bytes(), candidate.resident_bytes());
+            drop(baseline);
+            drop(candidate);
+            assert_eq!(budget.used(), 16);
+            drop(frame);
+            assert_eq!(budget.used(), 0);
+        }
+    }
+    #[test]
+    #[ignore = "manual paired actual RasterRamCache operation probe for RR-0023"]
+    fn path_key_insert_ab_probe() {
+        use std::{hint::black_box, path::PathBuf, time::Instant};
+        const COUNT: usize = 20_000;
+        fn batch(candidate: bool) -> u128 {
+            let budget = rrrah_core::MemoryBudget::new(16);
+            let frame = raster().try_manage_pixels(&budget).unwrap();
+            let keys: Vec<PathBuf> = (0..COUNT)
+                .map(|i| PathBuf::from(format!("/{:02}/{}", i % 32, "a".repeat(512))))
+                .collect();
+            let mut cache = RasterRamCache::new(CacheLimits::bytes(128));
+            let now = Instant::now();
+            for key in keys {
+                let admitted = if candidate {
+                    experimental_insert(black_box(&mut cache), black_box(key), black_box(frame.clone()))
+                } else {
+                    baseline_insert(black_box(&mut cache), black_box(key), black_box(frame.clone()))
+                };
+                assert!(admitted);
+            }
+            let ns = now.elapsed().as_nanos();
+            let last = PathBuf::from(format!("/{:02}/{}", (COUNT - 1) % 32, "a".repeat(512)));
+            let restored = cache.get(&last).unwrap();
+            assert_eq!(cache.len(), 8);
+            assert_eq!(cache.resident_bytes(), 128);
+            let (RasterPixels::Rgba32Float(actual), RasterPixels::Rgba32Float(expected)) =
+                (restored.pixels(), frame.pixels())
+            else {
+                panic!("float raster expected")
+            };
+            assert!(actual.ptr_eq(expected));
+            drop(restored);
+            drop(cache);
+            assert_eq!(budget.used(), 16); // Last external owner retains the shared allocation.
+            drop(frame);
+            assert_eq!(budget.used(), 0);
+            ns
+        }
+        for _ in 0..3 {
+            batch(false);
+            batch(true);
+        }
+        for pair in 0..10 {
+            let (baseline_ns, candidate_ns) = if pair % 2 == 0 {
+                (batch(false), batch(true))
+            } else {
+                let candidate = batch(true);
+                (batch(false), candidate)
+            };
+            eprintln!(
+                "RR0023_AB {{\"pair\":{pair},\"baseline_ns\":{baseline_ns},\"candidate_ns\":{candidate_ns},\"puts\":{COUNT}}}"
+            );
+        }
+    }
     #[test]
     fn cancellation_after_ram_hit_does_not_return_a_stale_owner() {
         let root = rrrah_core::MemoryBudget::new(64);
