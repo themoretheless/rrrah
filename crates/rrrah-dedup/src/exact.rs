@@ -968,6 +968,7 @@ fn read_compared_pair(
     ))
 }
 
+#[cfg(any(feature = "decode", test))]
 pub(crate) fn compare_observed(
     first: &ContentSnapshot,
     second: &ContentSnapshot,
@@ -977,6 +978,7 @@ pub(crate) fn compare_observed(
 }
 
 /// The bool in an error identifies the left (true) or right (false) source.
+#[cfg(any(feature = "decode", test))]
 pub(crate) fn compare_observed_tagged(
     first: &ContentSnapshot,
     second: &ContentSnapshot,

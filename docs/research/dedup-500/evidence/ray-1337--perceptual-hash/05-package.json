@@ -1,0 +1,53 @@
+{
+	"name": "perceptual-hash",
+	"version": "0.1.1",
+	"description": "Generate content-based image hashes on Node.js.",
+	"license": "MIT",
+	"main": "./index.ts",
+	"types": "./index.d.ts",
+	"homepage": "https://github.com/ray-1337/perceptual-hash#readme",
+	"exports": {
+		".": {
+			"types": "./index.d.ts",
+			"require": "./index.ts"
+		}
+	},
+	"repository": "ray-1337/perceptual-hash",
+	"ava": {
+		"extensions": [
+			"ts"
+		],
+		"environmentVariables": {
+			"TS_NODE_LOG_ERROR": "true"
+		},
+		"require": [
+			"ts-node/register"
+		]
+	},
+	"author": {
+		"name": "Hizkia Ray",
+		"email": "personal@13373333.one",
+		"url": "https://13373333.one"
+	},
+	"engines": {
+		"node": ">=14"
+	},
+	"scripts": {
+		"test": "ava test.ts"
+	},
+	"keywords": [
+		"hash",
+		"hashing",
+		"perceptual"
+	],
+	"dependencies": {
+		"@canvas/image": "^1.0.1",
+		"blockhash-core": "^0.1.0"
+	},
+	"devDependencies": {
+		"ava": "^5.2.0",
+		"ts-node": "^10.9.1",
+		"typescript": "^5.0.4",
+		"undici": "^5.21.2"
+	}
+}

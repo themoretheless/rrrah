@@ -1,0 +1,14 @@
+const fs=require('fs'),vm=require('vm'),assert=require('assert'),crypto=require('crypto');
+const root=process.cwd(),dir='docs/research/dedup-500/evidence/ray-1337--perceptual-hash/';
+const original=fs.readFileSync(dir+'03-index.ts','utf8');
+let body=original.replace('import { bmvbhash } from "blockhash-core";','').replace('import { imageFromBuffer, getImageData } from "@canvas/image";','').replace('export async function generateHash(buffer: Uint8Array, bits?: number)','async function generateHash(buffer, bits)');
+assert(!body.includes('import ')&&!body.includes('export '));
+let calls=[],mode='normal',logged=0;
+const context={Uint8Array,console:{error(){logged++;}},imageFromBuffer:async b=>{calls.push(['decode',b.length]);if(mode==='decode-error')throw Error('synthetic');return b;},getImageData:b=>mode==='no-data'?null:{width:2,height:1,data:b},bmvbhash:(data,bits)=>{calls.push(['hash',bits]);if(mode==='hash-error')throw Error('synthetic');return 'synthetic-hash';}};
+vm.createContext(context);vm.runInContext(body+'\nthis.generateHash=generateHash;',context);
+(async()=>{let rows=[];const input=new Uint8Array([1,2,3,4]);
+for(const [label,bits,expected] of [['default',undefined,8],['zero',0,8],['NaN',NaN,8],['negative4',-4,-4],['negative8',-8,-8],['four',4,4],['eight',8,8],['large',4000000,4000000],['string4','4','4']]){calls=[];assert.equal(await context.generateHash(input,bits),'synthetic-hash');assert.equal(calls[1][1],expected);rows.push({label,hash_argument:String(calls[1][1])});}
+for(const bits of [1,3,4.5,Infinity,-Infinity]){calls=[];assert.equal(await context.generateHash(input,bits),null);assert.equal(calls.length,0);rows.push({label:'rejected-'+bits});}
+calls=[];assert.equal(await context.generateHash(null),null);assert.equal(calls.length,0);rows.push({label:'missing-buffer'});
+for(const m of ['decode-error','hash-error','no-data']){mode=m;assert.equal(await context.generateHash(input),null);rows.push({label:m});}mode='normal';calls=[];assert.equal(await context.generateHash(new Uint8Array()),'synthetic-hash');rows.push({label:'empty-buffer-delegated'});
+const sha=p=>crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex');const out='docs/research/dedup-500/perceptual469-wrapper-controls-20261015.json';assert(!fs.existsSync(out));fs.writeFileSync(out,JSON.stringify({status:'passed_original_wrapper_with_explicit_dependency_adapters',controls:rows.length,rows,source_sha256:sha(dir+'03-index.ts'),producer_sha256:sha(__filename),adaptation:'Original wrapper body unchanged; only two imports removed and TypeScript export/parameter annotations erased. Explicit synthetic decoder/pixel/hash adapters, no actual dependencies.',scope:'Wrapper admission/error/delegation behavior only. No actual blockhash-core/@canvas/image, image decoding/hash quality, package loading, network, upstream AVA test or performance qualification.'},null,2)+'\n');console.log(rows.length+' wrapper controls passed');})();

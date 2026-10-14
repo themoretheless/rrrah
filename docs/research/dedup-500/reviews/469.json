@@ -2,9 +2,9 @@
   "index": 469,
   "repository": "ray-1337/perceptual-hash",
   "commit": "698bb5900aae4e62d00a65c53e4ad93188d717cd",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All8pinned blobs fully read and Gitmatched;19original-wrapper controls with explicit dependency adapters, actual dependencies unqualified",
   "decision": "reference",
-  "finding": "TS content-based image hash API and tests; wrapper/preprocessing details need deeper qualification.",
+  "finding": "External decoder/blockhash wrapper; negative/huge/string bits delegated, errors collapsed to null; upstream test lacks hash assertion.19adapted controls, no source adoption.",
   "available_source_evidence": [
     {
       "path": "index.d.ts",
@@ -35,6 +35,36 @@
       "lines": 13,
       "source": true,
       "test": true
+    },
+    {
+      "path": "package.json",
+      "local": "05-package.json",
+      "url": "https://github.com/ray-1337/perceptual-hash/blob/698bb5900aae4e62d00a65c53e4ad93188d717cd/package.json",
+      "sha256": "064890aaaea56c6f5c43a79f5fe1e13e484e4268926c2bebeec4e5eabaee6cd5",
+      "truncated": false,
+      "lines": 53,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": ".gitignore",
+      "local": "06-gitignore",
+      "url": "https://github.com/ray-1337/perceptual-hash/blob/698bb5900aae4e62d00a65c53e4ad93188d717cd/.gitignore",
+      "sha256": "7c6057afe83d9da0c889169925ffdca9bc8fc5f2702bf8c3ead0cd6b5b0c6c45",
+      "truncated": false,
+      "lines": 4,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tsconfig.json",
+      "local": "07-tsconfig.json",
+      "url": "https://github.com/ray-1337/perceptual-hash/blob/698bb5900aae4e62d00a65c53e4ad93188d717cd/tsconfig.json",
+      "sha256": "681c4c05bb48372a7f0f881d4f84d848767fb94b0174106664289515e79c467f",
+      "truncated": false,
+      "lines": 18,
+      "source": true,
+      "test": false
     }
   ],
   "license_metadata": "MIT",
@@ -64,5 +94,8 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_review_complete": true,
+  "whole_runtime_qualified": false,
+  "complete_source_review": "docs/research/dedup-500/perceptual469-complete-source-review-v2-20261015.json"
 }

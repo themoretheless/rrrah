@@ -26,4 +26,4 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
       - name: Native Windows exact search, physical aliases and replacement
-        run: cargo test -p rrrah-dedup --no-default-features --lib --test exact_files --locked
+        run: cargo test -p rrrah-dedup --no-default-features --lib --test exact_files --test exact_large_files --locked

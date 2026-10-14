@@ -2,7 +2,7 @@
   "index": 473,
   "repository": "anton-matosov/PerceHash",
   "commit": "121760f836c6670626785d7b4e57672e5cb448b3",
-  "review_scope": "complete pinned3file source review; all text fully read and Git blobs verified",
+  "review_scope": "All3pinned repository blobs fully read and Gitmatched; README/license/ignore only,0implementation files",
   "decision": "reject-no-source",
   "finding": "Full3file review confirms no implementation, package, tests or fixtures; no code adoption.",
   "available_source_evidence": [],
@@ -32,8 +32,21 @@
       "lines": 191,
       "source": false,
       "test": false
+    },
+    {
+      "path": ".gitignore",
+      "local": "02-gitignore",
+      "url": "https://github.com/anton-matosov/PerceHash/blob/121760f836c6670626785d7b4e57672e5cb448b3/.gitignore",
+      "sha256": "6e3a992a9fc5374369bf885108070d72cc54dc418eb359af0e910be426d00aa5",
+      "truncated": false,
+      "lines": 13,
+      "source": false,
+      "test": false
     }
   ],
   "complete_source_review": "docs/research/dedup-500/percehash-complete-source-review-20261012.json",
-  "complete_source_audit": "docs/research/dedup-500/percehash-complete-source-audit-20261012.json"
+  "complete_source_audit": "docs/research/dedup-500/percehash-complete-source-audit-20261012.json",
+  "full_repository_review_complete": true,
+  "whole_runtime_qualified": false,
+  "supplemental_complete_source_review": "docs/research/dedup-500/noimplementation473-complete-source-review-20261015.json"
 }

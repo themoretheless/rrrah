@@ -6,7 +6,29 @@ use rrrah_dedup::exact::{
 use std::{cell::Cell, fs::File};
 
 fn sparse(path: &std::path::Path, bytes: u64) {
-    File::create(path).unwrap().set_len(bytes).unwrap();
+    let file = File::create(path).unwrap();
+    #[cfg(windows)]
+    {
+        // Mark the empty owned fixture before extending its logical length.
+        drop(file);
+        let executable =
+            std::path::PathBuf::from(std::env::var_os("SystemRoot").expect("Windows SystemRoot"))
+                .join("System32/fsutil.exe");
+        let output = std::process::Command::new(executable)
+            .args(["sparse", "setflag"])
+            .arg(path)
+            .output()
+            .expect("mark owned fixture sparse");
+        assert!(output.status.success(), "sparse marking failed: {output:?}");
+        std::fs::OpenOptions::new()
+            .write(true)
+            .open(path)
+            .unwrap()
+            .set_len(bytes)
+            .unwrap();
+    }
+    #[cfg(not(windows))]
+    file.set_len(bytes).unwrap();
     assert_eq!(std::fs::metadata(path).unwrap().len(), bytes);
 }
 

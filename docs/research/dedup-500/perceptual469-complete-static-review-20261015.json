@@ -1,0 +1,75 @@
+{
+  "index": 469,
+  "repository": "ray-1337/perceptual-hash",
+  "commit": "698bb5900aae4e62d00a65c53e4ad93188d717cd",
+  "status": "complete8blob_static_review_runtime_pending",
+  "whole_repo_complete": true,
+  "whole_runtime_qualified": false,
+  "fully_read_files": [
+    {
+      "path": "README.md",
+      "local": "docs/research/dedup-500/evidence/ray-1337--perceptual-hash/00-README.md",
+      "sha256": "bc5dd96cd9e8e21bec7e6062d74a1746d7c3f04aee54a6c5bc420773561e2fcc",
+      "git_blob_sha1": "d4721dc1e7f4a04fa38ef04d5416d41e2fd81597",
+      "bytes": 460
+    },
+    {
+      "path": "LICENSE",
+      "local": "docs/research/dedup-500/evidence/ray-1337--perceptual-hash/01-LICENSE",
+      "sha256": "4906c4572efdd2b2430987fc8190c79ad4566578e365ea32f869334b707b889e",
+      "git_blob_sha1": "7b91e4dae20f3b026bd6b531060ca6280bfadffb",
+      "bytes": 1065
+    },
+    {
+      "path": "index.d.ts",
+      "local": "docs/research/dedup-500/evidence/ray-1337--perceptual-hash/02-index.d.ts",
+      "sha256": "8ee96fa49a9c13d53b4c122a4ab7cd88973060626958373b4294a580e97df770",
+      "git_blob_sha1": "6608740e22b6dfeecbcba4e55e938c85a987296e",
+      "bytes": 96
+    },
+    {
+      "path": "index.ts",
+      "local": "docs/research/dedup-500/evidence/ray-1337--perceptual-hash/03-index.ts",
+      "sha256": "0add75255154841882ccddbbbc78da4a1ca5470709eb7a71d565211fed3c1e7c",
+      "git_blob_sha1": "add511a7cf9ca7d903c3c606b4206e974e017890",
+      "bytes": 693
+    },
+    {
+      "path": "test.ts",
+      "local": "docs/research/dedup-500/evidence/ray-1337--perceptual-hash/04-test.ts",
+      "sha256": "d21fdd3f428246010158a958cdad0b2371fd30892fb6a4b6f0418da13dbfe280",
+      "git_blob_sha1": "afdb5cb6c6841599b038203a9858f4f99985917b",
+      "bytes": 454
+    },
+    {
+      "path": "package.json",
+      "local": "docs/research/dedup-500/evidence/ray-1337--perceptual-hash/05-package.json",
+      "sha256": "064890aaaea56c6f5c43a79f5fe1e13e484e4268926c2bebeec4e5eabaee6cd5",
+      "git_blob_sha1": "5495134477dbd75c269c5bb9c0769d7d80061019",
+      "bytes": 974
+    },
+    {
+      "path": ".gitignore",
+      "local": "docs/research/dedup-500/evidence/ray-1337--perceptual-hash/06-gitignore",
+      "sha256": "7c6057afe83d9da0c889169925ffdca9bc8fc5f2702bf8c3ead0cd6b5b0c6c45",
+      "git_blob_sha1": "12a73c666930ca4ab7005ccafcf9a1b980c4d10c",
+      "bytes": 53
+    },
+    {
+      "path": "tsconfig.json",
+      "local": "docs/research/dedup-500/evidence/ray-1337--perceptual-hash/07-tsconfig.json",
+      "sha256": "681c4c05bb48372a7f0f881d4f84d848767fb94b0174106664289515e79c467f",
+      "git_blob_sha1": "451f8b6478e05dc4eebf37425940876f6f5418c2",
+      "bytes": 424
+    }
+  ],
+  "findings": [
+    "Wrapper delegates decoded pixels and hashing to @canvas/image and blockhash-core; no independent image decoder or hash implementation.",
+    "bits uses truthiness fallback to8 and modulo4 only, without positive/finite/integer/range admission. Negative multiples and Infinity are not rejected by the range check; downstream behavior unqualified.",
+    "All decode/hash exceptions are logged then collapsed to null; no structured error distinction, cancellation/resource admission, cache/group/identity API.",
+    "Only upstream test performs remote image request and passes result as t.pass title, without asserting non-null or an expected hash; it is not executed here.",
+    "Package points main/require to TypeScript source; runtime loader and installed dependency compatibility unqualified. tsconfig files contains index.d.ts.",
+    "MIT license fully read; no source adoption."
+  ],
+  "scope": "All8captured blobs fully read and Gitblob SHA1/size verified. Static source/package/test review only,0upstream executions, no image download or network/account access. Runtime/dependency/pixel/hash behavior remains unqualified; no commit-to-tree binding refresh."
+}

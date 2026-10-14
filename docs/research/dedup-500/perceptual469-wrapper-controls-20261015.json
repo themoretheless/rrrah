@@ -1,0 +1,76 @@
+{
+  "status": "passed_original_wrapper_with_explicit_dependency_adapters",
+  "controls": 19,
+  "rows": [
+    {
+      "label": "default",
+      "hash_argument": "8"
+    },
+    {
+      "label": "zero",
+      "hash_argument": "8"
+    },
+    {
+      "label": "NaN",
+      "hash_argument": "8"
+    },
+    {
+      "label": "negative4",
+      "hash_argument": "-4"
+    },
+    {
+      "label": "negative8",
+      "hash_argument": "-8"
+    },
+    {
+      "label": "four",
+      "hash_argument": "4"
+    },
+    {
+      "label": "eight",
+      "hash_argument": "8"
+    },
+    {
+      "label": "large",
+      "hash_argument": "4000000"
+    },
+    {
+      "label": "string4",
+      "hash_argument": "4"
+    },
+    {
+      "label": "rejected-1"
+    },
+    {
+      "label": "rejected-3"
+    },
+    {
+      "label": "rejected-4.5"
+    },
+    {
+      "label": "rejected-Infinity"
+    },
+    {
+      "label": "rejected--Infinity"
+    },
+    {
+      "label": "missing-buffer"
+    },
+    {
+      "label": "decode-error"
+    },
+    {
+      "label": "hash-error"
+    },
+    {
+      "label": "no-data"
+    },
+    {
+      "label": "empty-buffer-delegated"
+    }
+  ],
+  "source_sha256": "0add75255154841882ccddbbbc78da4a1ca5470709eb7a71d565211fed3c1e7c",
+  "producer_sha256": "9d78273f732fa03a7f650e9b21ab51a020da169a763de41d472fad56c5ce8832",
+  "adaptation": "Original wrapper body unchanged; only two imports removed and TypeScript export/parameter annotations erased. Explicit synthetic decoder/pixel/hash adapters, no actual dependencies.",
+  "scope": "Wrapper admission/error/delegation behavior only. No actual blockhash-core/@canvas/image, image decoding/hash quality, package loading, network, upstream AVA test or performance qualification."
+}
