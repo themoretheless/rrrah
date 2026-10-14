@@ -1,0 +1,34 @@
+{
+  "status": "planned_not_dispatched",
+  "baseline": "dedup-committed-build-source-415443172-20261015.json",
+  "candidate": "dedup-resvg048-full-candidate-lock-audit-20261015.json",
+  "command": [
+    "cargo",
+    "test",
+    "--locked",
+    "--offline",
+    "-p",
+    "rrrah-decode",
+    "-p",
+    "rrrah-dedup",
+    "--features",
+    "rrrah-dedup/decode",
+    "--lib",
+    "--tests",
+    "--no-fail-fast",
+    "--jobs",
+    "2",
+    "--config",
+    "profile.test.lto=\"off\""
+  ],
+  "prerequisites": [
+    "Existing snapshotV4decodegate terminal, independentinventory audit and retainedbinary copies complete before sharedtarget reuse",
+    "Baseline3377file and candidate2changedfile manifests still match",
+    "Run complete baseline combineddecode/dedup lib+allintegration targets, preserve logs/binaries/inventories and optionalcorpus skips",
+    "Run candidate identicalcommand without pruning/filters after baseline success, compare wholeinventory/outcomes and sourcepins",
+    "Do not rewrite pixel/fontgoldens merely to accept backend differences; investigate any outputdelta against authored/spec oracle",
+    "Retain source mutation/cancel/memorybudget/ownerpublication and customSVG external/image/color refusal controls",
+    "MSRV/platform/advisory/Root currentintegration remain separate required gates"
+  ],
+  "scope": "Full combined selectedpackages testplan for immutable committed415source andSVG0.48variant; no execution or fullgoalcompletion claim. Root activeAVIF remains outside this experiment; no format/feature/quality coverage removed."
+}

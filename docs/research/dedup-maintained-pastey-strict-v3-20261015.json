@@ -1,0 +1,86 @@
+{
+  "status": "passed_pending_independent_audit",
+  "producer_pid": 24322,
+  "producer_sha256": "e342e20ac4de92b5549c4ba8ce3bccd131babfbbf55d0374e86af4c59254603c",
+  "source_manifest_sha256": "ad87012d61dde69dc2688cedf6846c113da23eba00e8e332621a97c4c7d96d0c",
+  "toolchain": {
+    "rustc": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: aarch64-apple-darwin\nrelease: 1.98.1\nLLVM version: 22.1.8\n",
+    "cargo": "cargo 1.98.1 (797e8a9bc 2026-08-05)\n"
+  },
+  "lock_sha256": "0d2b149f628d5ead891ba6ccc4ffd07e2d8fd0c36cab0e8fdd1eb840c55b33c5",
+  "rows": [
+    {
+      "label": "macos",
+      "command": [
+        "cargo",
+        "+stable",
+        "check",
+        "--locked",
+        "--offline",
+        "--manifest-path",
+        "/private/tmp/rrrah-maintained-pastey-strict-v2-20261015/Cargo.toml",
+        "--workspace",
+        "--lib",
+        "--jobs",
+        "1",
+        "--config",
+        "profile.dev.debug=0"
+      ],
+      "returncode": 0,
+      "log": "/private/tmp/rrrah-maintained-pastey-strict-v2-20261015/macos-strict-v3.log",
+      "log_sha256": "8316390e2bc3b9951206bdcb6933aa9edc8054af4154772dfd53e655d8a4baa0"
+    },
+    {
+      "label": "windows-gnu",
+      "command": [
+        "cargo",
+        "+stable",
+        "check",
+        "--locked",
+        "--offline",
+        "--manifest-path",
+        "/private/tmp/rrrah-maintained-pastey-strict-v2-20261015/Cargo.toml",
+        "--workspace",
+        "--lib",
+        "--jobs",
+        "1",
+        "--config",
+        "profile.dev.debug=0",
+        "--target",
+        "x86_64-pc-windows-gnu"
+      ],
+      "returncode": 0,
+      "log": "/private/tmp/rrrah-maintained-pastey-strict-v2-20261015/windows-gnu-strict-v3.log",
+      "log_sha256": "aefc8a2214ebbee244bfc7e1ed61e3f1b849c476bf146166502712aaac8afcbb"
+    },
+    {
+      "label": "macos-tests",
+      "command": [
+        "cargo",
+        "+stable",
+        "test",
+        "--locked",
+        "--offline",
+        "--manifest-path",
+        "/private/tmp/rrrah-maintained-pastey-strict-v2-20261015/Cargo.toml",
+        "--workspace",
+        "--lib",
+        "--jobs",
+        "1",
+        "--config",
+        "profile.dev.debug=0",
+        "--no-fail-fast",
+        "--config",
+        "profile.test.opt-level=0",
+        "--config",
+        "profile.test.debug=0"
+      ],
+      "returncode": 0,
+      "log": "/private/tmp/rrrah-maintained-pastey-strict-v2-20261015/macos-tests-strict-v3.log",
+      "log_sha256": "0e1a7171861c4458b074be4ab54432078aaca417c02feb0603ad2c68860d5166"
+    }
+  ],
+  "scope": "Isolated original pulp0.22.3/texture2ddecoder0.1.2 default-feature production library strict -Dwarnings checks, hostMacARM and WindowsGNU crossmetadata.3compiler-suggested explicit returnlifetimes plus pastey alias/globalisolatedpulp patch; no feature removal. Includes unchanged upstream default host library test targets under stable1.98.1 with strict warnings. No Windows linking/execution, Rootintegration, wholecodec/EXR/MSRV1.92/runtime/performance or overalladvisory qualification.",
+  "active": null,
+  "source_changes": []
+}

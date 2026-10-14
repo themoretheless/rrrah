@@ -1,0 +1,11 @@
+{
+  "status": "terminal2pass1failure_wrong_bc1_alpha_api",
+  "source": "/private/tmp/rrrah-maintained-pastey-candidate-20261015/controls/src/lib.rs",
+  "source_sha256": "0c499abfa6d24e23ed0e2bee84a1fc56acc206841ee86d1b91f83ba18d98dd7f",
+  "log": "/private/tmp/rrrah-maintained-pastey-candidate-20261015/controls/test.log",
+  "log_sha256": "4ae8f3e68fe4f5e2f33e69eb92c3e85155d03995911114fd83a3fe9168d3468b",
+  "finding": "Authored transparent oracle called RGB decode_bc1 rather than explicit decode_bc1a. Upstream source _decode_bc1_block(use_alpha=false/true) explains alpha255/0 output; not a pastey change or Root DDS bug. Original failure and harness retained.",
+  "corrected_source": "/private/tmp/rrrah-maintained-pastey-candidate-20261015/controls-v2/src/lib.rs",
+  "corrected_source_sha256": "d99ca1ae1c0482ace9f033caf1ffbd5260ca2a6d3bcec990a906beebdf78e731",
+  "scope": "v2changes one transparent-case call to BC1a and adds independent RGB opaque-case control. Original3case scope retained; correction not yet executed."
+}

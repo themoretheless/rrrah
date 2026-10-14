@@ -1,0 +1,72 @@
+{
+  "status": "terminal_windows-gnu_check_failure",
+  "producer_pid": 21871,
+  "producer_sha256": "c9cfd1ffb8fc7a5636d45da73558d2078fbdd9229f4cf9b022336ae1504f1cd4",
+  "source_manifest_sha256": "ad87012d61dde69dc2688cedf6846c113da23eba00e8e332621a97c4c7d96d0c",
+  "lock_sha256": "0d2b149f628d5ead891ba6ccc4ffd07e2d8fd0c36cab0e8fdd1eb840c55b33c5",
+  "rows": [
+    {
+      "label": "macos",
+      "command": [
+        "cargo",
+        "check",
+        "--locked",
+        "--offline",
+        "--manifest-path",
+        "/private/tmp/rrrah-maintained-pastey-strict-v2-20261015/Cargo.toml",
+        "--workspace",
+        "--lib",
+        "--jobs",
+        "1",
+        "--config",
+        "profile.dev.debug=0"
+      ],
+      "returncode": 0,
+      "log": "/private/tmp/rrrah-maintained-pastey-strict-v2-20261015/macos-strict-check.log",
+      "log_sha256": "8a39b6b69c67fafd3a8cd78341ce9c57f4250579ba84cb2c67e1f8a262396e55"
+    },
+    {
+      "label": "windows-gnu",
+      "command": [
+        "cargo",
+        "check",
+        "--locked",
+        "--offline",
+        "--manifest-path",
+        "/private/tmp/rrrah-maintained-pastey-strict-v2-20261015/Cargo.toml",
+        "--workspace",
+        "--lib",
+        "--jobs",
+        "1",
+        "--config",
+        "profile.dev.debug=0",
+        "--target",
+        "x86_64-pc-windows-gnu"
+      ],
+      "returncode": 101,
+      "log": "/private/tmp/rrrah-maintained-pastey-strict-v2-20261015/windows-gnu-strict-check.log",
+      "log_sha256": "1e0cf4f78b6829484b79c86a2447cc5b8abf31ffb120cb3fd9d5a4a30f0eacf0"
+    }
+  ],
+  "scope": "Isolated original pulp0.22.3/texture2ddecoder0.1.2 default-feature production library strict -Dwarnings checks, hostMacARM and WindowsGNU crossmetadata.3compiler-suggested explicit returnlifetimes plus pastey alias/globalisolatedpulp patch; no feature removal. No Windows linking/execution, upstreamtest rerun for lifetimecandidate, Rootintegration, wholecodec/EXR/MSRV1.92/runtime/performance or overalladvisory qualification.",
+  "active": {
+    "label": "windows-gnu",
+    "command": [
+      "cargo",
+      "check",
+      "--locked",
+      "--offline",
+      "--manifest-path",
+      "/private/tmp/rrrah-maintained-pastey-strict-v2-20261015/Cargo.toml",
+      "--workspace",
+      "--lib",
+      "--jobs",
+      "1",
+      "--config",
+      "profile.dev.debug=0",
+      "--target",
+      "x86_64-pc-windows-gnu"
+    ],
+    "child_pid": 22107
+  }
+}

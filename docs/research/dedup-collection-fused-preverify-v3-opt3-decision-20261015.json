@@ -1,0 +1,218 @@
+{
+  "status": "not_adopted_negative_branch_regression",
+  "audit": "docs/research/dedup-collection-fused-preverify-v3-opt3-benchmark-audit-20261015.json",
+  "audit_sha256": "9eb5a626a2f2d97aafcfab33e965af653302e98f045e78d86e42fc6d8cb0eeea",
+  "results": [
+    {
+      "case": "empty2",
+      "paired_ratios": [
+        0.9791128116740526,
+        1.2105893336761198,
+        0.8550301229396501,
+        0.8914805838626797,
+        0.9042182766338457,
+        0.7604591146113203,
+        0.7421531007491496
+      ],
+      "median_ratio": 0.8914805838626797,
+      "paired_cpu_ratios": [
+        0.9205791722167622,
+        1.1446998159335373,
+        0.8545268447258778,
+        0.8879120570430674,
+        0.8440024790927817,
+        0.760597514109125,
+        0.7431109177307799
+      ],
+      "median_cpu_ratio": 0.8545268447258778
+    },
+    {
+      "case": "empty8",
+      "paired_ratios": [
+        0.6934660259828357,
+        0.7006826374059355,
+        0.6986194852334024,
+        0.6542921275330664,
+        0.9698926990425826,
+        0.751904252521692,
+        0.6077327220453842
+      ],
+      "median_ratio": 0.6986194852334024,
+      "paired_cpu_ratios": [
+        0.6929020832668563,
+        0.6976587483550392,
+        0.7078180399812175,
+        0.6637728021123147,
+        0.9306928036598541,
+        0.7542591273379053,
+        0.6123564785009957
+      ],
+      "median_cpu_ratio": 0.6976587483550392
+    },
+    {
+      "case": "64k8",
+      "paired_ratios": [
+        1.2059919157858539,
+        0.866843940758924,
+        0.6525817331190473,
+        0.7760846786491254,
+        0.6717011233969844,
+        0.7352257119053094,
+        0.8642977147490154
+      ],
+      "median_ratio": 0.7760846786491254,
+      "paired_cpu_ratios": [
+        0.9510439776541452,
+        0.8662595511217259,
+        0.6734429011031245,
+        0.7778310852749003,
+        0.675562596629188,
+        0.7373871013988172,
+        0.8674372537646549
+      ],
+      "median_cpu_ratio": 0.7778310852749003
+    },
+    {
+      "case": "64k24",
+      "paired_ratios": [
+        1.0928235627301341,
+        1.0126386075554632,
+        0.8379918217301819,
+        1.0600550864577505,
+        0.7938889677536978,
+        0.5969478624686796,
+        0.8020649025136337
+      ],
+      "median_ratio": 0.8379918217301819,
+      "paired_cpu_ratios": [
+        1.0876563515453364,
+        1.0071704195116715,
+        0.8240051342722073,
+        1.0478226018753694,
+        0.7958709445579799,
+        0.5935396125613458,
+        0.8041484917176996
+      ],
+      "median_cpu_ratio": 0.8240051342722073
+    },
+    {
+      "case": "2m8",
+      "paired_ratios": [
+        1.1335928314266615,
+        1.1692171465750714,
+        0.9634730749681644,
+        1.1771855121422539,
+        0.9622579996262043,
+        0.9702303010144273,
+        0.9572151570325788
+      ],
+      "median_ratio": 0.9702303010144273,
+      "paired_cpu_ratios": [
+        1.1284410737646497,
+        1.1504123572595475,
+        0.9637012895418695,
+        1.1417231271377017,
+        0.9633164022115237,
+        0.9700856815166288,
+        0.9569500728792698
+      ],
+      "median_cpu_ratio": 0.9700856815166288
+    },
+    {
+      "case": "early8",
+      "paired_ratios": [
+        0.956868135815176,
+        1.0156506612971028,
+        1.0803583694606833,
+        1.0310521701457238,
+        1.2500168104863738,
+        1.025186719317308,
+        1.3030381390435686
+      ],
+      "median_ratio": 1.0310521701457238,
+      "paired_cpu_ratios": [
+        0.9563064891225265,
+        1.0163237559024512,
+        1.0797256705946636,
+        1.0298884977762857,
+        1.255075567432407,
+        1.0260833522486268,
+        1.294679563665981
+      ],
+      "median_cpu_ratio": 1.0298884977762857
+    },
+    {
+      "case": "late8",
+      "paired_ratios": [
+        1.005704754933191,
+        0.9945491089211825,
+        1.0076978958894771,
+        0.9355578390267373,
+        0.9633208880043669,
+        0.7746627355447505,
+        0.9866511777368269
+      ],
+      "median_ratio": 0.9866511777368269,
+      "paired_cpu_ratios": [
+        1.005049927204405,
+        0.9946920085951205,
+        1.0075647379312789,
+        0.9333384634458186,
+        0.9610018217323508,
+        0.7758048632988832,
+        0.9861024174739774
+      ],
+      "median_cpu_ratio": 0.9861024174739774
+    },
+    {
+      "case": "sizes8",
+      "paired_ratios": [
+        1.1646017083910987,
+        1.152124345031902,
+        1.037934696432187,
+        1.2185136628316473,
+        1.0038857481891412,
+        0.9895820498225821,
+        1.2617226200804312
+      ],
+      "median_ratio": 1.152124345031902,
+      "paired_cpu_ratios": [
+        1.1642406520181408,
+        1.1500872551929766,
+        1.0356188992178201,
+        1.218131599777686,
+        1.0034865070208565,
+        0.9897019861961703,
+        1.2603708425861102
+      ],
+      "median_cpu_ratio": 1.1500872551929766
+    },
+    {
+      "case": "mixed8",
+      "paired_ratios": [
+        0.9382783370811244,
+        0.7635518491813732,
+        0.9843593902822646,
+        1.1917935005110782,
+        0.9523523368214927,
+        1.1722971789681302,
+        0.9984446727341211
+      ],
+      "median_ratio": 0.9843593902822646,
+      "paired_cpu_ratios": [
+        0.9370190189627137,
+        0.7661639965281734,
+        0.9022300417858077,
+        1.1621139231680915,
+        0.9522520298589265,
+        1.1701344475519664,
+        0.998141337707715
+      ],
+      "median_cpu_ratio": 0.9522520298589265
+    }
+  ],
+  "decision": "Keep production collection unchanged; equal cases improve but sizes8medianwall1.152 andCPU1.150 prevent broad no-regression acceptance. All9cases retained.",
+  "next_candidate": "Dispatch fused path only for matching original bytecounts/digests; retain original verify+compare path for different digests/sizes. Repeat complete56control inventory and all9paired benchmarks; no safety check/inputcase removed.",
+  "audit_harness_correction": "Firstaudit attempt referenced previousv2producer script and correctly refused mismatchedSHA. Corrected toactualv3producer,126data rows unchanged.",
+  "scope": "Alternating AB/BA freshprocess samebinary opt3synthetic guardedpair loop, original5cases plus4negative/mixed cases, warm OS cache expected. Includes capture/initial/prepair/bytecompare/postpair/postloop/callbackfree final validation. ChildCPUdelta includes whole freshprocess setup/harness/tempcleanup, while Rustwalltimer excludes initial filecreation. No actual collection/provider/decode, Cargo release/LTO, cold deviceIO, hardRSS, Windows or wholelibrary speedup proof. Independent roworder/input/output/count/hash/ratio checks. Concurrent compiler/campaign activity may affect walltiming; no statistical significance claim or production adoption from this diagnostic alone."
+}

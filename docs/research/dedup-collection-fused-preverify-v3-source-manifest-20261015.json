@@ -1,0 +1,20 @@
+{
+  "status": "prepared_not_compiled",
+  "candidate_source": "docs/research/dedup-collection-fused-preverify-v3-source-20261015.rs",
+  "candidate_sha256": "3a92adfe4e9703d4cd7612150d305945cf8bcb8c1455d52dcd5f4983e04376bd",
+  "parts": {
+    "docs/research/dedup-collection-fused-preverify-v1-source-20261015.rs": "7b4df1dcc157ec3bd992bb8b70f97c5dec1365d2e7dbfda3eb2713287ec09663",
+    "docs/research/dedup-collection-fused-preverify-mutation-controls-v2-20261015.rs": "033720047c4f11f4c53aa071d7cbd1ffa3eda515adc4bd4d0b5539e809523f3f",
+    "docs/research/dedup-collection-fused-preverify-benchmark-v3-20261015.rs": "15f544c19b54c4f82160f39cba07f0bde00e7e2bcd3cf29aff119d06f8d44565"
+  },
+  "planned_profile": "opt3 correctness gate then expanded alternating benchmark; launch after existing full decode compiler completes",
+  "content_cases": [
+    "equal",
+    "early",
+    "late",
+    "sizes",
+    "mixed"
+  ],
+  "oracle": "Independent original bytes matrix and expected matchcount constructed before timing, every actual pair outcome checked against it",
+  "scope": "Authored synthetic benchmark expansion only, no execution or measured benefit. Original5cases must be retained alongside newnegative/mixed cases; no production adoption."
+}

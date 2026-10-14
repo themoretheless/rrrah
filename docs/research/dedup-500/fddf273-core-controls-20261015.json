@@ -1,0 +1,48 @@
+{
+  "status": "passed6bounded_core_controls_bugs_reproduced",
+  "producer_pid": 34131,
+  "producer_sha256": "81cd2f3759bb060b48909366b13bcf207b4483a95824f177bf1dbf76d908206f",
+  "source_sha256": "3a9bb01febce9e1fed6e142a36a81ec39c1ef7c447c0999c2fb2c46ba911e33c",
+  "controls_sha256": "54b4ff17d3ab3b7dbb6ee19ef11233eb8ec6ebb8cb7eb328b9a2a8c9bb76159c",
+  "harness": "/private/tmp/rrrah-fddf273-core-20261015/harness.rs",
+  "harness_sha256": "19c53b20425c9f4829b5db9fb7f861fabec9e739902e616fda9ca6ab84db8e28",
+  "unchanged_excerpt_sha256": "cf4720207f11e5d1a05c8b1c0f05aea5406dba071ac99567e299ff9b17036ae6",
+  "excerpt_source_lines": [
+    51,
+    166
+  ],
+  "command": [
+    "rustc",
+    "+stable",
+    "--edition=2018",
+    "--test",
+    "/private/tmp/rrrah-fddf273-core-20261015/harness.rs",
+    "-C",
+    "opt-level=0",
+    "-o",
+    "/private/tmp/rrrah-fddf273-core-20261015/tests"
+  ],
+  "scope": "Unchanged Candidate/FastCandidate/SlowCandidate/compare_files_inner/compare_files excerpt with real stdFile IO plus explicit ScriptedCandidate adapter for legal shortread/error traces. No fddf CLI/hash/walker/threadpool/legacydependency/platform/performance qualification. Authored mutation cases simulate a late comparison stage after identical setup; owned synthetic tempfiles only. Passing bug controls reproduce incorrect output, not upstream correctness or code adoption.",
+  "child_pid": 34151,
+  "build_returncode": 0,
+  "inventory_returncode": 0,
+  "tests_returncode": 0,
+  "passed": 6,
+  "failed": 0,
+  "ignored": 0,
+  "executable": "/private/tmp/rrrah-fddf273-core-20261015/tests",
+  "executable_sha256": "a43a9f18ba760ea01629c1b5a6d1289d87938b2de6d7a931faad7780bd388919",
+  "complete_inventory": [
+    "controls::all_reader_errors_publish_no_groups",
+    "controls::error_then_eof_can_publish_singleton_as_duplicate_group",
+    "controls::healthy_real_files_partition_by_bytes_at_every_block_edge",
+    "controls::permitted_short_read_framing_misses_identical_logical_bytes",
+    "controls::real_growth_after_equal_setup_returns_no_group",
+    "controls::real_truncate_after_equal_setup_publishes_false_group_fast_and_slow"
+  ],
+  "output_pins": {
+    "/private/tmp/rrrah-fddf273-core-20261015/tests.log": "345094a4c679a5883d1b32c523f6577320d1a30d3d3140e1b17660b7c5423ed4",
+    "/private/tmp/rrrah-fddf273-core-20261015/inventory.log": "df4156c553e732fefc54c7042e30bfbeeecc33f3bb05b25a12eb73d23817369c",
+    "/private/tmp/rrrah-fddf273-core-20261015/build.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

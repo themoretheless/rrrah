@@ -1481,7 +1481,9 @@ mod full_warp_sdk_tests {
         let data: Vec<[f64; 3]> = (0..32)
             .flat_map(|y| {
                 (0..48).map(move |x| {
-                    std::array::from_fn(|c| f64::from((((x * 17 + y * 31 + c * 43) % 251) as f64 / 250.0) as f32))
+                    std::array::from_fn(|c| {
+                        f64::from((((x * 17 + y * 31 + c * 43) % 251) as f64 / 250.0) as f32)
+                    })
                 })
             })
             .collect();
@@ -1593,7 +1595,9 @@ mod aspect_warp_sdk_tests {
         let source: Vec<[f64; 3]> = (0..32)
             .flat_map(|y| {
                 (0..48).map(move |x| {
-                    std::array::from_fn(|c| f64::from((((x * 17 + y * 31 + c * 43) % 251) as f64 / 250.0) as f32))
+                    std::array::from_fn(|c| {
+                        f64::from((((x * 17 + y * 31 + c * 43) % 251) as f64 / 250.0) as f32)
+                    })
                 })
             })
             .collect();
@@ -1651,7 +1655,9 @@ mod aspect_warp_sdk_tests {
                     .unwrap();
                     let actual = super::rectilinear_sample(&source, [48, 32], point, c).unwrap();
                     let offset = ((y * 48 + x) * 3 + c) * 4;
-                    let expected = f64::from(f32::from_le_bytes(reference[offset..offset + 4].try_into().unwrap()));
+                    let expected = f64::from(f32::from_le_bytes(
+                        reference[offset..offset + 4].try_into().unwrap(),
+                    ));
                     maximum = maximum.max((actual - expected).abs());
                 }
             }

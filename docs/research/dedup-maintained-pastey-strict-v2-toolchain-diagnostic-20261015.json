@@ -1,0 +1,10 @@
+{
+  "status": "terminal_default_toolchain_missing_windows_std_corrected_by_explicit_stable",
+  "original_report": "docs/research/dedup-maintained-pastey-strict-v2-20261015.json",
+  "original_report_sha256": "88a4fe799d1430103ebe3a99a3fba3c979b53c0caf00c46ace73f70dff3baef1",
+  "observed_root_toolchain": "stable1.98.1, aarch64mac/wasm32/WindowsGNU targets installed",
+  "observed_temporary_default": "nightly1.101.0, WindowsGNUcore missing",
+  "cause": "BareCargo run from temporarydirectory did not inherit project rust-toolchain.toml. Previous hostcheck success is defaultnightly only, not projectstable proof. Prior upstream6tests also used bareCargo temporarycwd and had no toolchain pin; exacthistorical rustcversion not independently recorded.",
+  "correction": "Newv3producer explicitly uses cargo+stable/rustc+stable, records version, repeats host/Windowschecks and unchanged original defaultlibrary tests under strictwarnings. No toolchain update or targetinstall.",
+  "scope": "Environment/toolchain diagnostic, not candidate source failure or Windows runtime/platform qualification."
+}

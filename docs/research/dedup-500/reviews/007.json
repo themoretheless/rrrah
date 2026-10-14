@@ -2,9 +2,9 @@
   "index": 7,
   "repository": "tomnomnom/anew",
   "commit": "d67d68db0d56469fdea7505c5a9209c0a465effa",
-  "review_scope": "Existing prior full/partial source-review artifacts linked after current pin verification; original limits retained. This reconciliation is not a new full-source reading or new runtime execution, except the explicit blockhash-js runtime refresh.",
+  "review_scope": "All6pinned blobs fully read and Gitmatched; release-script syntax only, Go runtime unavailable",
   "decision": "reject-domain",
-  "finding": "Line-set insertion deduplicates text lines, not files or visual images.",
+  "finding": "Exact line-set dedup, optional whitespace normalization; scanner/write/close errors unchecked, unbounded map and no concurrent writer lock. Static review only, no code adoption.",
   "license_metadata": "MIT",
   "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
   "tests_detected": 0,
@@ -17,6 +17,36 @@
       "sha256": "df1f97a0d6430328bce94ec9256592d9c1691394e0677f5aae6f0e9a66b700ec",
       "truncated": false,
       "lines": 78,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": ".gitignore",
+      "local": "03-gitignore",
+      "url": "https://github.com/tomnomnom/anew/blob/d67d68db0d56469fdea7505c5a9209c0a465effa/.gitignore",
+      "sha256": "08b2ccd64161f0de6c024bd895a143a220de049d2984e54c323daa0af45f2bb4",
+      "truncated": false,
+      "lines": 1,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "go.mod",
+      "local": "04-go.mod",
+      "url": "https://github.com/tomnomnom/anew/blob/d67d68db0d56469fdea7505c5a9209c0a465effa/go.mod",
+      "sha256": "2f644c8557c08926bb1c6fcd56982d92be38529e032a1c382c6a4c2a67d27740",
+      "truncated": false,
+      "lines": 3,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "script/release",
+      "local": "05-release",
+      "url": "https://github.com/tomnomnom/anew/blob/d67d68db0d56469fdea7505c5a9209c0a465effa/script/release",
+      "sha256": "80e3ecc61930dac28555ca3c6105caf682b86f72b955c7931c50b9d016fb3a01",
+      "truncated": false,
+      "lines": 63,
       "source": true,
       "test": false
     }
@@ -61,5 +91,8 @@
     }
   ],
   "artifact_pin_reconciliation_audit": "unlinked-reviews-pin-audit-20261013.json",
-  "prior_registry_review": "prior-registry-007-unlinked-reconciliation-20261013.json"
+  "prior_registry_review": "prior-registry-007-unlinked-reconciliation-20261013.json",
+  "full_repository_review_complete": true,
+  "whole_runtime_qualified": false,
+  "complete_source_review": "docs/research/dedup-500/anew7-complete-static-review-20261015.json"
 }

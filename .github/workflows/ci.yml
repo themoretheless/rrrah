@@ -23,6 +23,7 @@ jobs:
       - run: cargo metadata --locked --format-version 1 >/dev/null
       - name: Install image decoder libraries
         run: sudo apt-get update && sudo apt-get install -y libdav1d-dev libheif-dev libde265-dev libclang-dev pkg-config zlib1g-dev
+      - uses: ./.github/actions/setup-libtorch
       - run: cargo check --workspace --all-targets --all-features --locked
       - run: cargo clippy --workspace --all-targets --all-features --locked -- -D warnings
       - run: cargo test --workspace --all-targets --all-features --locked
@@ -40,6 +41,7 @@ jobs:
           rust-toolchain: 1.92.0
       - name: Install image decoder libraries
         run: sudo apt-get update && sudo apt-get install -y libdav1d-dev libheif-dev libde265-dev libclang-dev pkg-config zlib1g-dev
+      - uses: ./.github/actions/setup-libtorch
       - run: cargo check --workspace --all-targets --all-features --locked
       - run: cargo test --workspace --all-targets --all-features --locked
         env: { RRRAH_GPU_OPTIONAL: "1" }

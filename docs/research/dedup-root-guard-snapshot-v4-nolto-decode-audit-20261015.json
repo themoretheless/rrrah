@@ -1,0 +1,80 @@
+{
+  "status": "verified_frozen_snapshot_v4_guard_five_decode_targets_nolto_diagnostic_profile",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-root-guard-snapshot-v4-nolto-decode-20261015.json": "e57639c006e94af29c2fce674778615744a2d0a676fe3e9e8776bff570b64621",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-root-guard-snapshot-v4-nolto-source-20261015.json": "1224358e05579ea53a17e5a140a927029c8272ae4d9b3d31f785b00c67945b2d",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-guard-latch-pipeline-audit-20261014.json": "f895bcd39ea2572f8b15d7630b45944690222f266a8d67f66ab470defbe1af3e",
+    "/private/tmp/rrrah-root-guard-snapshot-v4-nolto-decode-20261015/cargo.log": "ab63be257d8c5b679b9bcb82b976bb110874183fb17f6774ee7d23b46b7456c6",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-root-guard-snapshot-v4-nolto-decode-20261015.py": "d0da5ead70e4352748dd9305d1d483ec520203aed7e587a32e881e3e6cf1de33"
+  },
+  "passed": 214,
+  "failed": 0,
+  "ignored": 5,
+  "targets": 5,
+  "rows": [
+    {
+      "target": "unittests src/lib.rs",
+      "passed": 122,
+      "failed": 0,
+      "ignored": 5,
+      "executable": "/private/tmp/rrrah-root-guard-snapshot-v4-nolto-decode-qualified-20261015/rrrah_dedup-5cc1a792979c4572",
+      "executable_sha256": "ace17506dca6c6dd967df3931b6b599ed928f871d3018b0079ed92eecaa304ba",
+      "inventory": "docs/research/dedup-root-guard-snapshot-v4-nolto-decode-20261015/0-list.log",
+      "inventory_sha256": "8dcd08eb19ff905e79a166cc7fffa3d8322b08b137e797a2d130f8dc60b86ff0",
+      "baseline_inventory_retained": true,
+      "added_tests": [
+        "gradient::matching_tests::sixteen_descriptor_lanes_preserve_scalar_bits_and_every_tail",
+        "gradient::matching_tests::unrolled_distance_blocks_preserve_scalar_bits_and_partial_lanes"
+      ]
+    },
+    {
+      "target": "tests/animated.rs",
+      "passed": 7,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-root-guard-snapshot-v4-nolto-decode-qualified-20261015/animated-a235621798f8f1bc",
+      "executable_sha256": "7ef7bba156071845d0776858e42e55f89eec64669151d8999e062cc8ac886280",
+      "inventory": "docs/research/dedup-root-guard-snapshot-v4-nolto-decode-20261015/1-list.log",
+      "inventory_sha256": "9478234a58f62fa4f36675d9ac7f8265617ad339e273ee077126ffc10f78822e",
+      "baseline_inventory_retained": true,
+      "added_tests": []
+    },
+    {
+      "target": "tests/portfolio_collection.rs",
+      "passed": 40,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-root-guard-snapshot-v4-nolto-decode-qualified-20261015/portfolio_collection-b3be9d8f37d8219d",
+      "executable_sha256": "95f9f2d7cbcbff7808bfe3cf05a7a7fa16ab5d7e7f5f10a6bd00b82de827913b",
+      "inventory": "docs/research/dedup-root-guard-snapshot-v4-nolto-decode-20261015/2-list.log",
+      "inventory_sha256": "9d12fec82dce790ce0869e3a2e8475dfbd6b0ee15779c99abe7e480ddf1e4144",
+      "baseline_inventory_retained": true,
+      "added_tests": []
+    },
+    {
+      "target": "tests/search_portfolio.rs",
+      "passed": 38,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-root-guard-snapshot-v4-nolto-decode-qualified-20261015/search_portfolio-d3ee0c7ee6c6744f",
+      "executable_sha256": "1e2976a8af7f770c0e940f0882486d987e806d8e456e32d0147d1d0f9b1db223",
+      "inventory": "docs/research/dedup-root-guard-snapshot-v4-nolto-decode-20261015/3-list.log",
+      "inventory_sha256": "bbb1837a00fa446482176a7d4df1e07ede7d35834e8668e67f8e4107fc086b94",
+      "baseline_inventory_retained": true,
+      "added_tests": []
+    },
+    {
+      "target": "tests/sequence.rs",
+      "passed": 7,
+      "failed": 0,
+      "ignored": 0,
+      "executable": "/private/tmp/rrrah-root-guard-snapshot-v4-nolto-decode-qualified-20261015/sequence-bfb9693f15583720",
+      "executable_sha256": "64d8030f9fe7b74cc55b2868ebfa3f8bda978d5fec570d42b3987ad706f096e8",
+      "inventory": "docs/research/dedup-root-guard-snapshot-v4-nolto-decode-20261015/4-list.log",
+      "inventory_sha256": "d1181c80bb268ccd5cc5db56acaf12b974d7b92412a70e1e6bc58e0ac7eccc99",
+      "baseline_inventory_retained": true,
+      "added_tests": []
+    }
+  ],
+  "scope": "Diagnostic no-LTO test profile, all5targets retained. Not default/release-profile or measured speedup proof. Immutable snapshot v4 one true-only cancellationlatch store adoption; not claimed latest mutable Root. Capture manifest pinned and all captured source hashes checked before launch; source guard equals qualified isolated source modulo line formatting. Actual currentMac16kernel plus decode/core dependencies, five selected library/integration targets. No wholeworkspace/allfeatures/nativeLoFTR/corpus/platformruntime/hardRSS or universalperformance claim. Completecandidate testname inventories match executedresults and retain everyisolatedbaseline test; source/core/decoder/vendor/fixture pins unchanged. Selected5targets only, no fullRootdecode integrationmatrix."
+}

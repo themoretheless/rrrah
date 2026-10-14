@@ -1,0 +1,33 @@
+{
+  "status": "verified_original_default_library_targets_6pulp_0texturetests",
+  "producer_report": "docs/research/dedup-maintained-pastey-upstream-v2-20261015.json",
+  "producer_report_sha256": "a310f31b4022eb1015c8b578cfe0c0ad75c6e7d0caa414020d4f5108408ca0ec",
+  "auditor_sha256": "0fd9379f3734fd807f525fcf8ba9982f6ba575607bf6726d534c2d8c12da1604",
+  "passed": 6,
+  "failed": 0,
+  "ignored": 0,
+  "rows": [
+    {
+      "executable": "/private/tmp/rrrah-maintained-pastey-candidate-20261015/target/debug/build/pulp/354b1c01e7ceb285/out/pulp-354b1c01e7ceb285",
+      "executable_sha256": "a8b762126119f5d0079aab096347dc6d7b5ecfba148d8883914cb710392ed73a",
+      "passed": 6,
+      "ignored": 0,
+      "complete_inventory": [
+        "aarch64::tests::test_cplx32_mul",
+        "aarch64::tests::test_cplx64_mul",
+        "aarch64::tests::test_interleave",
+        "aarch64::tests::test_mul_add",
+        "aarch64::tests::test_negate_mul_add",
+        "aarch64::tests::test_rotate"
+      ]
+    },
+    {
+      "executable": "/private/tmp/rrrah-maintained-pastey-candidate-20261015/target/debug/build/texture2ddecoder/c8024fc860e3e40f/out/texture2ddecoder-c8024fc860e3e40f",
+      "executable_sha256": "42d772a4463a8053aafb4d64d15faab100c8b536e6c7cddc38b534f67c148a54",
+      "passed": 0,
+      "ignored": 0,
+      "complete_inventory": []
+    }
+  ],
+  "scope": "Original default-feature library test targets for isolated pulp0.22.3 andtexture2ddecoder0.1.2 with only manifest paste->pastey0.2.3 alias changes. No test bodies removed or filtered. macARM opt0semantic gate, no Rootintegration/EXR/fullcodec/x86/Windows/performance qualification. A zero-test target must not count as decoded-format runtime coverage. Completeexecutedname inventories match fresh binaries; source/manifests/lock unchanged. texture target has0tests and3existing lifetimewarnings, so4separate BC1authored controls remain bounded supplemental evidence. Test-only image dependency still brings original registry pulp/paste; production candidate alias is not proof of globally removed paste dependency."
+}

@@ -1,0 +1,21 @@
+{
+  "status": "native_windows_terminal_failure_portable_fixture_mismatch",
+  "run_id": 38640355651,
+  "job_id": 116113984838,
+  "commit": "8dd8c947d",
+  "url": "https://github.com/themoretheless/rrrah/actions/runs/38640355651",
+  "log": "docs/research/dedup-windows-native-run-38640355651-committed-log-v2-20261015.log",
+  "log_sha256": "1f883f6aac3055131f0b2dd1d792d52fdfa17cdb30e2e20249293415ccd8369e",
+  "unit_passed": 45,
+  "unit_ignored": 2,
+  "exact_integration_passed": 22,
+  "exact_integration_failed": 1,
+  "failed_test": "exact_content_partitions_ignore_extensions_and_check_unsampled_bytes",
+  "large_file_target_executed": false,
+  "finding": "Expected extensionless paths had trailing dot from format family-{family}.{suffix}; Windows actual directory entries omit trailing dot. Assertion failed on path spellings while all3authored content families present. New fixture uses PathBuf::with_extension empty suffix, preserving all sizes/families/extensions/order/verified checks. Windows runtime fix not yet qualified.",
+  "followup": "Use no-fail-fast so exact_large_files runs even when earlier integration target fails. Current local opt0 full52semantic gate launched; subsequent WindowsCIrequired.",
+  "scope": "Actual WindowsMSVC stable1.99.0 native unit/integration evidence for committed8dd. No full library/decode/native collection/corpus/performance qualification. Largefile Windows runtime not tested because Cargo stopped after integration failure.",
+  "previous_audit": "docs/research/dedup-windows-native-run-38640355651-audit-20261015.json",
+  "previous_audit_sha256": "4a295594c7c0748f8f4a16809115e407a598db40aceb8ccf6836231dcdf171a1",
+  "encoding_correction": "Original local CRLF tool response normalized by Git core.autocrlf=input. New LF copy is byte-identical to committed415443172log, with corrected portable SHA256. Previous raw-response pin retained as historical local evidence; no test finding changed."
+}

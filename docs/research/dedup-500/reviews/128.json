@@ -2,9 +2,9 @@
   "index": 128,
   "repository": "DustinWehr/minimal-bitwarden-dedup",
   "commit": "8fbf050a15b5861e0f836ba3d36f2ffa71960f78",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All8pinned blobs fully read and Gitmatched;2unchanged upstream tests plus14synthetic controls, no real vault/schema/importback qualification",
   "decision": "reject-domain",
-  "finding": "Bitwarden JSON item identities; tests exercise vault records, not image/file comparison.",
+  "finding": "JSON serialization identity depends on key order/id position; Python-O bypasses encrypted assert.2upstream14synthetic controls, no source adoption.",
   "available_source_evidence": [
     {
       "path": "bitwarden_dedup.py",
@@ -25,6 +25,46 @@
       "lines": 28,
       "source": true,
       "test": false
+    },
+    {
+      "path": ".gitignore",
+      "local": "04-gitignore",
+      "url": "https://github.com/DustinWehr/minimal-bitwarden-dedup/blob/8fbf050a15b5861e0f836ba3d36f2ffa71960f78/.gitignore",
+      "sha256": "7df69b0a8df4de51aa5750f952790b19a5c95b400a7ed5a2b03553467bebff52",
+      "truncated": false,
+      "lines": 1,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "test_resources/expected_deduped.json",
+      "local": "05-expected_deduped.json",
+      "url": "https://github.com/DustinWehr/minimal-bitwarden-dedup/blob/8fbf050a15b5861e0f836ba3d36f2ffa71960f78/test_resources/expected_deduped.json",
+      "sha256": "e7a70f389c260b73d8f1d8b56c3988735de3562a2ade95662b8b896ace4d646a",
+      "truncated": false,
+      "lines": 14,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "test_resources/fake_bitwarden_export.json",
+      "local": "06-fake_bitwarden_export.json",
+      "url": "https://github.com/DustinWehr/minimal-bitwarden-dedup/blob/8fbf050a15b5861e0f836ba3d36f2ffa71960f78/test_resources/fake_bitwarden_export.json",
+      "sha256": "0ed534d27b88bf8a072fb63fd5ab6ee18856f54beafe5ff4d415b6a4c119b0d9",
+      "truncated": false,
+      "lines": 19,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "test_resources/fake_bitwarden_export2.json",
+      "local": "07-fake_bitwarden_export2.json",
+      "url": "https://github.com/DustinWehr/minimal-bitwarden-dedup/blob/8fbf050a15b5861e0f836ba3d36f2ffa71960f78/test_resources/fake_bitwarden_export2.json",
+      "sha256": "1ec8921e9aae17fd37ccab5c9552b7e6e4b8a4e935a73bc77e53bb591773fe74",
+      "truncated": false,
+      "lines": 37,
+      "source": true,
+      "test": true
     }
   ],
   "license_metadata": "MIT",
@@ -54,5 +94,8 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_review_complete": true,
+  "whole_runtime_qualified": false,
+  "complete_source_review": "docs/research/dedup-500/bitwarden128-complete-source-review-20261015.json"
 }

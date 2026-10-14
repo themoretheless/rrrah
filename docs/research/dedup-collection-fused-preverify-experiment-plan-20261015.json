@@ -1,0 +1,30 @@
+{
+  "status": "planned_not_implemented_or_benchmarked",
+  "source_pins": {
+    "crates/rrrah-dedup/src/collection.rs": "01fae3fc3aab108e6a2f941a96cdda8b4b64d6e5413e7f2950d75daf8685e550",
+    "crates/rrrah-dedup/src/exact.rs": "c76a9df974554fdbbe2569225cc136be90c40defb21f9349d18350f6203dacd5"
+  },
+  "baseline_scope": "Successful all-exact collection, n equal-sized byte-identical regular files, no visual activation, no mutation/cancellation/read failure. Static source-derived full-file read counts; not measured device IO or performance.",
+  "baseline_full_file_reads": "4*n + 6*(n*(n-1)/2)",
+  "derivation": {
+    "capture": "n",
+    "initial_verification": "n",
+    "per_pair_preverification": "2",
+    "per_pair_byte_compare": "2",
+    "per_pair_postverification": "2",
+    "post_loop": "n",
+    "callback_free_publication": "n"
+  },
+  "candidate": "Fuse per-pair preverification of both original snapshot digests with full byte comparison in one paired streaming pass. Retain all post-pair, post-loop and callback-free final source/dependency/model guards. Do not use digest-only equality or transitive evidence.",
+  "required_gates": [
+    "Independent current exact collision/byte-boundary/mutation/cancellation tests, all original integration names retained",
+    "Collection all-pair completeness, sorted unique IDs, tagged source failure identity, identical and different digest branches",
+    "Mutation during any user callback and metadata-preserving rewrite; stale original digest must fail even when rewritten pair equals",
+    "Cancellation sticky through source/generation/provider/owner publication, no callback after final boundary",
+    "All-exact never reads model/decode dependencies; visual activation guards idle files and weights unchanged",
+    "Same-source alternating paired measurements over n/size distributions with real source validation, output equality and resource observations; no optimization acceptance from static count alone",
+    "Current full decode gate on immutable candidate snapshot, preserve earlier drifted/failed reports"
+  ],
+  "expected_read_model_if_correct": "4*n + 4*(n*(n-1)/2) for all-exact only; theoretical count reduction, not measured speedup",
+  "completion_proven": false
+}

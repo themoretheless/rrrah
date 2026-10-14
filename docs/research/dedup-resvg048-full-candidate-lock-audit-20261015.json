@@ -1,0 +1,19 @@
+{
+  "status": "verified_two_file_isolated_svg_migration_lock",
+  "baseline_manifest": "docs/research/dedup-committed-build-source-415443172-20261015.json",
+  "baseline_manifest_sha256": "72356f2a99f6f6a4b266aa149f6f109ee4d26c4998bcba46f32c1fe05fe73cca",
+  "source": "/private/tmp/rrrah-resvg048-full-candidate-415443172-20261015",
+  "changed_files": [
+    "Cargo.lock",
+    "crates/rrrah-decode/Cargo.toml"
+  ],
+  "changed_file_sha256": {
+    "Cargo.lock": "236c78ad76f442fb4cc5c5ee8886f7ed6b10c6a65e0e7d62ae60f56079cdf83d",
+    "crates/rrrah-decode/Cargo.toml": "fa50a320cdad13d47ae163011fbe3f6494a95ff29aeef3da05ad6dd86ad2bcda"
+  },
+  "removed_packages": [
+    "rustybuzz",
+    "ttf-parser"
+  ],
+  "scope": "Whole committedbuild snapshot compared tobaseline, exactlydecodeCargo.toml andCargo.lock differ. Offline resvg0.48.1 resolution removes both unmaintained fontpackages while retaining text/systemfont/rasterimage features. No Root manifest/lock updates or actual fullcrate/runtime/pixel/font/memory/cancel/MSRV/advisory gate qualification yet."
+}

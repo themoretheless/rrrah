@@ -1,0 +1,77 @@
+{
+  "index": 128,
+  "repository": "DustinWehr/minimal-bitwarden-dedup",
+  "commit": "8fbf050a15b5861e0f836ba3d36f2ffa71960f78",
+  "status": "complete8blob_review_2upstream14synthetic_controls",
+  "whole_repo_complete": true,
+  "whole_runtime_qualified": false,
+  "fully_read_files": [
+    {
+      "path": "README.md",
+      "local": "docs/research/dedup-500/evidence/DustinWehr--minimal-bitwarden-dedup/00-README.md",
+      "sha256": "d051beefd5d5be647b008b15342a96eca918c643618433191015e6ac985e8665",
+      "git_blob_sha1": "db32bd52c11ad84dfa82bc46770fad8a5bc04466",
+      "bytes": 1820
+    },
+    {
+      "path": "LICENSE",
+      "local": "docs/research/dedup-500/evidence/DustinWehr--minimal-bitwarden-dedup/01-LICENSE",
+      "sha256": "93d733c5abb327f0903b16bdcecef4844b765ea143e9bd745abee6e0731a8a39",
+      "git_blob_sha1": "47591794554c61713ebc40091b71662cd33e8bf3",
+      "bytes": 1068
+    },
+    {
+      "path": "bitwarden_dedup.py",
+      "local": "docs/research/dedup-500/evidence/DustinWehr--minimal-bitwarden-dedup/02-bitwarden_dedup.py",
+      "sha256": "6bb1c6f32f2fea5f5b81d4ad48a82df06397433e2739234606351a41edcbc558",
+      "git_blob_sha1": "01b8d8452961bfe6fd4d8c8fc506302ef7fe2f75",
+      "bytes": 2090
+    },
+    {
+      "path": "runtests.py",
+      "local": "docs/research/dedup-500/evidence/DustinWehr--minimal-bitwarden-dedup/03-runtests.py",
+      "sha256": "e24c9530b014cf8554ad89ea6d971f1b64369038e31becd52add63ce4eb3caa0",
+      "git_blob_sha1": "1d3404f92d9a70eb352130f8bd8c8ba52be2dc7f",
+      "bytes": 979
+    },
+    {
+      "path": ".gitignore",
+      "local": "docs/research/dedup-500/evidence/DustinWehr--minimal-bitwarden-dedup/04-gitignore",
+      "sha256": "7df69b0a8df4de51aa5750f952790b19a5c95b400a7ed5a2b03553467bebff52",
+      "git_blob_sha1": "ba0430d26c996e7f078385407f959c96c271087c",
+      "bytes": 12
+    },
+    {
+      "path": "test_resources/expected_deduped.json",
+      "local": "docs/research/dedup-500/evidence/DustinWehr--minimal-bitwarden-dedup/05-expected_deduped.json",
+      "sha256": "e7a70f389c260b73d8f1d8b56c3988735de3562a2ade95662b8b896ace4d646a",
+      "git_blob_sha1": "8c0e62661d325263eb2036f811fbf33872fbbc84",
+      "bytes": 181
+    },
+    {
+      "path": "test_resources/fake_bitwarden_export.json",
+      "local": "docs/research/dedup-500/evidence/DustinWehr--minimal-bitwarden-dedup/06-fake_bitwarden_export.json",
+      "sha256": "0ed534d27b88bf8a072fb63fd5ab6ee18856f54beafe5ff4d415b6a4c119b0d9",
+      "git_blob_sha1": "76229071979191ebad5ed4c72221033a260de066",
+      "bytes": 239
+    },
+    {
+      "path": "test_resources/fake_bitwarden_export2.json",
+      "local": "docs/research/dedup-500/evidence/DustinWehr--minimal-bitwarden-dedup/07-fake_bitwarden_export2.json",
+      "sha256": "1ec8921e9aae17fd37ccab5c9552b7e6e4b8a4e935a73bc77e53bb591773fe74",
+      "git_blob_sha1": "1bfd43f4ebdef666156bb8d1cd15270fe21f6f90",
+      "bytes": 678
+    }
+  ],
+  "runtime_control_review": "docs/research/dedup-500/bitwarden128-runtime-controls-20261015.json",
+  "runtime_control_sha256": "d9a9325b42aa9efff596c7fee61659465df5a55d273c906fd4b59f4c3ec7d3c2",
+  "findings": [
+    "Exact ordered JSON serialization of entire item with id replaced by empty string; ignores id only, not a file/image identity implementation.",
+    "Top-level/nested key ordering and position of id cause false negatives for otherwise equal JSON objects; reproduced. Integer1/float1.0 and whitespace differences retained, explicit representation scope.",
+    "Encrypted admission uses assert; Python-O removes check, reproduced on synthetic empty encrypted fixture. Numeric encrypted0 also accepted; schema validation incomplete.",
+    "Missing id and null items throw unstructured exceptions, wholeinput/map retained; output ordinary truncate/write without atomic publication, mutation guards/resource/cancel limits.",
+    "Both unchanged upstream tests passed using public fake fixtures;14synthetic controls reproduce admission/representation behavior. No real vault/account/importback/decryption/secret access or destructive README workflow executed.",
+    "README names run_tests.py while captured runner is runtests.py. MIT license fully read; no source adoption."
+  ],
+  "scope": "All8captured blobs fully read and Gitblob SHA1/size matched. Original module and2upstream tests executed in owned temp on publicfake/authored synthetic JSON only;14additional controls. No actual Bitwarden/schema/importback/platform/performance qualification or commit-to-tree refresh."
+}

@@ -1,0 +1,24 @@
+{
+  "status": "formatter_output_equivalence_and_locked_metadata",
+  "rows": [
+    {
+      "path": "crates/rrrah-dedup/src/exact.rs",
+      "before_sha256": "c76a9df974554fdbbe2569225cc136be90c40defb21f9349d18350f6203dacd5",
+      "after_sha256": "a21991fc03d304a3ddf1fd3eb2d3a4e0266b612f643ce3a604a4bb3e677268e5"
+    },
+    {
+      "path": "crates/rrrah-dedup/tests/exact_files.rs",
+      "before_sha256": "a35dec12057baa1f0ac147a13101a091de1e18294df8386c769ea0d6d897f466",
+      "after_sha256": "23a8274ee225a1a9955907f03b061ce90ddf3d6b1fedb2f589ad8bf50be2c79e"
+    },
+    {
+      "path": "crates/rrrah-gpu/tests/common/mod.rs",
+      "before_sha256": "bd5af15dab1731fda408e533c58f98e84b179fdcf42eecc05b54046387bf6828",
+      "after_sha256": "6a3c7203b3ea92b3a66d6530e0c0beb691b1efea8b8b6b021bb6bd20a6567924"
+    }
+  ],
+  "metadata_sha256": "243104666dc08ba98063b4da38c173ba9e4374d5370e8f815c4be0e87b2c1d5c",
+  "manifest_sha256": "53a0ac80b00a8bade816a881b090eba8531a9b02eb0bc3e9c0cdae349ce82723",
+  "changes": "Exactly3local path dependencies now specify matching package versions; sourceformat equals rustfmt output of untouched capturedbaseline for3files. No advisory ignores or dependency version upgrades.",
+  "remaining": "OverallCIstill requires LibTorch setup and resolution of3unmaintained dependencies; subsequent fullCIrequired."
+}

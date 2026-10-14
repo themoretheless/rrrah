@@ -2,9 +2,9 @@
   "index": 273,
   "repository": "birkenfeld/fddf",
   "commit": "324197747ed5ac4b8286956378ee6b5682c5df5b",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All7pinned blobs fullyread and Gitmatched, commit-tree binding verified;6unchanged comparison-core controls, fullCLI/dependencies unqualified",
   "decision": "reference",
-  "finding": "Small Rust data-file dupe finder with per-path error handler; no detected tests, collision confirmation unproved.",
+  "finding": "Original comparison core produces falsegroups after actual truncate in2/99/100candidate branches; shortread/error adapter defects also reproduced. No production adoption.",
   "available_source_evidence": [
     {
       "path": "src/main.rs",
@@ -13,6 +13,36 @@
       "sha256": "3a9bb01febce9e1fed6e142a36a81ec39c1ef7c447c0999c2fb2c46ba911e33c",
       "truncated": false,
       "lines": 396,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": ".gitignore",
+      "local": "04-gitignore",
+      "url": "https://github.com/birkenfeld/fddf/blob/324197747ed5ac4b8286956378ee6b5682c5df5b/.gitignore",
+      "sha256": "1ef9c846e4e5922b78dd32b3ecccda2965c254f5d30b14a996cb613d49603ab6",
+      "truncated": false,
+      "lines": 2,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "Cargo.toml",
+      "local": "05-Cargo.toml",
+      "url": "https://github.com/birkenfeld/fddf/blob/324197747ed5ac4b8286956378ee6b5682c5df5b/Cargo.toml",
+      "sha256": "19c79095e22d9d00721eab6a26d05918a80c5cf60b36cee3a9b6cbf305684610",
+      "truncated": false,
+      "lines": 23,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "Cargo.lock",
+      "local": "06-Cargo.lock",
+      "url": "https://github.com/birkenfeld/fddf/blob/324197747ed5ac4b8286956378ee6b5682c5df5b/Cargo.lock",
+      "sha256": "3eb829f9da07f04ca33a26fa0fb09e17ec0a25f7956800f05ade1f5874bca09b",
+      "truncated": false,
+      "lines": 423,
       "source": true,
       "test": false
     }
@@ -54,5 +84,8 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_review_complete": true,
+  "whole_runtime_qualified": false,
+  "complete_source_review": "docs/research/dedup-500/fddf273-complete-source-review-20261015.json"
 }

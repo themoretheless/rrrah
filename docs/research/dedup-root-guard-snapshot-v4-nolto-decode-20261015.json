@@ -1,7 +1,7 @@
 {
   "capture_manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-root-guard-snapshot-v4-20261014.json",
   "capture_manifest_sha256": "09bca613f200b4f731923442698765ff83491b760ce3b4c00cc92e816e76bb46",
-  "status": "running",
+  "status": "passed_pending_inventory_audit",
   "producer_pid": 58511,
   "producer_sha256": "1154d203b45033fe4b232fc79a5e057b63c3dc576d15966171e56e99d1a87f9f",
   "source": "/private/tmp/rrrah-root-guard-snapshot-v4-20261014",
@@ -38,5 +38,20 @@
   "profile_override": "profile.test.lto=\"off\"",
   "profile_reference": "https://doc.rust-lang.org/cargo/reference/profiles.html#lto",
   "scope": "Diagnostic no-LTO test profile, all5targets retained. Not default/release-profile or measured speedup proof. Immutable snapshot v4 one true-only cancellationlatch store adoption; not claimed latest mutable Root. Capture manifest pinned and all captured source hashes checked before launch; source guard equals qualified isolated source modulo line formatting. Actual currentMac16kernel plus decode/core dependencies, five selected library/integration targets. No wholeworkspace/allfeatures/nativeLoFTR/corpus/platformruntime/hardRSS or universalperformance claim.",
-  "child_pid": 58803
+  "child_pid": 58803,
+  "child_cpu_before": {
+    "user": 0.0,
+    "system": 0.0
+  },
+  "child_cpu_after": {
+    "user": 3253.465974,
+    "system": 186.120495
+  },
+  "wall_seconds": 6534.381980665999,
+  "child_maxrss_raw_after": 16884613120,
+  "child_cpu_scope": "Whole Cargo/build/tests child subtree, not phase attribution; maxrss rawDarwin metric not physicalfootprint or MemoryBudget",
+  "returncode": 0,
+  "log_sha256": "ab63be257d8c5b679b9bcb82b976bb110874183fb17f6774ee7d23b46b7456c6",
+  "source_unchanged": true,
+  "changed_sources": []
 }

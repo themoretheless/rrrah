@@ -1,0 +1,23 @@
+[package]
+name = "fddf"
+version = "1.7.0"
+authors = ["Georg Brandl <georg@python.org>"]
+description = "Fast, parallelized duplicate file finder."
+repository = "https://github.com/birkenfeld/fddf"
+keywords = ["duplicate", "dupes"]
+license = "MIT/Apache-2.0"
+edition = "2018"
+
+[profile.release]
+lto = true
+
+[dependencies]
+structopt = "0.3.26"
+walkdir = "2.3.2"
+scoped_threadpool = "0.1.9"
+num_cpus = "1.13.1"
+blake3 = "0.3.8"
+fnv = "1.0.7"
+unbytify = "0.2.0"
+regex = "1.5.6"
+glob = "0.3.0"

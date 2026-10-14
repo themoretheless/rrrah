@@ -1,0 +1,73 @@
+{
+  "index": 273,
+  "repository": "birkenfeld/fddf",
+  "commit": "324197747ed5ac4b8286956378ee6b5682c5df5b",
+  "status": "complete7blob_review_6unchanged_core_controls",
+  "whole_repo_complete": true,
+  "whole_runtime_qualified": false,
+  "fully_read_files": [
+    {
+      "path": "README.md",
+      "local": "docs/research/dedup-500/evidence/birkenfeld--fddf/00-README.md",
+      "sha256": "5320dcfe11c1032226bb03ced066aae80aa020eb10fe430f402dc22f1d71e424",
+      "git_blob_sha1": "6c4db4c442a74bc0837f50f8370e30fb28bde8ef",
+      "bytes": 1015
+    },
+    {
+      "path": "LICENSE-APACHE",
+      "local": "docs/research/dedup-500/evidence/birkenfeld--fddf/01-LICENSE-APACHE",
+      "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+      "git_blob_sha1": "16fe87b06e802f094b3fbb0894b137bca2b16ef1",
+      "bytes": 10847
+    },
+    {
+      "path": "LICENSE-MIT",
+      "local": "docs/research/dedup-500/evidence/birkenfeld--fddf/02-LICENSE-MIT",
+      "sha256": "6485b8ed310d3f0340bf1ad1f47645069ce4069dcc6bb46c7d5c6faf41de1fdb",
+      "git_blob_sha1": "39d4bdb5acd313c1a92dbeaa1c379aaf0596a315",
+      "bytes": 1071
+    },
+    {
+      "path": "src/main.rs",
+      "local": "docs/research/dedup-500/evidence/birkenfeld--fddf/03-main.rs",
+      "sha256": "3a9bb01febce9e1fed6e142a36a81ec39c1ef7c447c0999c2fb2c46ba911e33c",
+      "git_blob_sha1": "c148b5cf8c35043d86a401102480f3b95fb215fb",
+      "bytes": 13920
+    },
+    {
+      "path": ".gitignore",
+      "local": "docs/research/dedup-500/evidence/birkenfeld--fddf/04-gitignore",
+      "sha256": "1ef9c846e4e5922b78dd32b3ecccda2965c254f5d30b14a996cb613d49603ab6",
+      "git_blob_sha1": "324c57f7ddc8eb75127670990db579b1e4870f43",
+      "bytes": 19
+    },
+    {
+      "path": "Cargo.toml",
+      "local": "docs/research/dedup-500/evidence/birkenfeld--fddf/05-Cargo.toml",
+      "sha256": "19c79095e22d9d00721eab6a26d05918a80c5cf60b36cee3a9b6cbf305684610",
+      "git_blob_sha1": "32580d42f9449582209457aac2e5395b0fb4644e",
+      "bytes": 488
+    },
+    {
+      "path": "Cargo.lock",
+      "local": "docs/research/dedup-500/evidence/birkenfeld--fddf/06-Cargo.lock",
+      "sha256": "3eb829f9da07f04ca33a26fa0fb09e17ec0a25f7956800f05ade1f5874bca09b",
+      "git_blob_sha1": "e2f1359df890972a6405ec601af5c242f4797c22",
+      "bytes": 11173
+    }
+  ],
+  "commit_tree_binding": "docs/research/dedup-500/evidence/birkenfeld--fddf/commit-tree-binding-20261015.json",
+  "commit_tree_binding_sha256": "6f15e9393c7586f9b3d930dc60e14a1134339d209cb5cf684d367453eb3bf38b",
+  "core_controls_review": "docs/research/dedup-500/fddf273-core-controls-20261015.json",
+  "core_controls_sha256": "286df99dde7aa1beb16985dd475f306e4465273d95e13bbab683e8ff3661ed37",
+  "findings": [
+    "Size buckets, sparse4KiB/100KiB Blake3sample hashes and representative block partitions; byte comparison follows hashing. Fixed100candidate threshold switches retained handles to reopen-per-block, with4KiBbuffer per candidate. No performance measurements or code adoption.",
+    "Actual unchanged comparison core publishes byte-different files after lastcandidate is truncated between equal setup and comparison, for2/99/100members. BothFast/Slow branches reproduced on owned regularfiles; fullCLI/hash/walker stage not executed.",
+    "Explicit legalshortread adapter reproduces false-negative identical logicalbytes; readererror+EOF adapter reproduces singleton duplicategroup. Originalcore sourcebody unchanged; ScriptedCandidate adapter is not a real OS/FS qualification.",
+    "No final length/identity/time/fullcontent revalidation or cancellation/work/memory admission. Slowposition usize and repeated pathopens raise32bit/changing-path concerns, not runtimequalified here.",
+    "Unixinode ownership filter runs before hidden/name filtering; an excluded hardlink can consume a physicalID before an includedalias. NonUnix check_inode always accepts, so physicalalias semantics lack Windows identitycheck. Static only, no actual walker/platform test.",
+    "Output Path.display is lossy for nonUTF8paths; singleline whitespace ambiguity unless NULoption. Collector channels/maps unbounded, errors log/drop paths; structured completeness/unknown/source failure contract absent.",
+    "BothMIT/Apache2license files fullyread. Captured lock pins legacy dependencies but fullCLI/upstreamdependency build not executed; no native decoder/image/visual/runtime/performance proof."
+  ],
+  "scope": "All7tracked captured blobs fullyread and Gitblob SHA1/size matched; remoteimmutable commit-to-tree binding independently fetched and matched.6bounded unchanged-core controls executed, real ownedFiles plus explicit shortread/error adapter. No fullCLI/threadpool/hash/legacydependency/Windows/32bit or global correctness qualification; no production adoption."
+}

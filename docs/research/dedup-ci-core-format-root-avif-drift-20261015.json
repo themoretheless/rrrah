@@ -1,0 +1,22 @@
+{
+  "status": "core3format_changes_verified_global_check_has_active_avif_diffs",
+  "baseline_source": "/private/tmp/rrrah-core-ci-format-baseline-20261015",
+  "changed_core_paths": [
+    "src/thumbnail.rs",
+    "src/lib.rs",
+    "src/develop/opcodes.rs"
+  ],
+  "before_pins": {
+    "src/thumbnail.rs": "956cc94e113d6d9f5a7c4d80ac3ec47f157eab468e106644dd25c71e45f13634",
+    "src/lib.rs": "f1a97a0e85bcf38cc2f12e7a0caf8a9746c2e1bca53520cdcb83a4fadf9a760a",
+    "src/develop/opcodes.rs": "2491e64134fe0ea9e583824c507148bd61725281bd382e91ff8a840137468003"
+  },
+  "after_pins": {
+    "src/thumbnail.rs": "201f30c53a6b7b24dbe86c1b788612b3d335f565489fce2c2926c2eb4cbd5b67",
+    "src/lib.rs": "2d012f9799faaefbab389774ca60da3c9b90dae4208dc6c16c572d97aea9bd59",
+    "src/develop/opcodes.rs": "30cfc7220f496709916e5cc21c18986b01781cf9db860058957452d3fafaa5b8"
+  },
+  "log": "/private/tmp/rrrah-full-fmt-check-20261015.log",
+  "log_sha256": "379b455c214ec7e04365b56a83ef43e7e80fc9e6a4f4b443f7cfd95988b559f2",
+  "scope": "Exactly3corefiles changed throughrustfmt; wholecurrentworkspace formatter reports ongoing uncommittedAVIF raster changes. No globalformat success or activeAVIF modifications by this task. Proposedcommittedtree formatcheck required before push."
+}

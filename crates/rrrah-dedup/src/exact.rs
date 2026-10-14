@@ -147,10 +147,7 @@ impl Stamp {
             let _ = canonical;
             let information = winapi_util::file::information(file)?;
             Ok(Self {
-                identity: Identity::Windows(
-                    information.volume_serial_number(),
-                    information.file_index(),
-                ),
+                identity: Identity::Windows(information.volume_serial_number(), information.file_index()),
                 bytes: metadata.len(),
                 modified: metadata.modified().ok(),
             })
@@ -182,11 +179,7 @@ impl From<io::Error> for Failure {
 }
 
 fn check(cancel: &impl Fn() -> bool) -> Result<(), Failure> {
-    if cancel() {
-        Err(Failure::Cancelled)
-    } else {
-        Ok(())
-    }
+    if cancel() { Err(Failure::Cancelled) } else { Ok(()) }
 }
 
 fn open(entry: &Entry) -> Result<File, Failure> {
@@ -331,10 +324,8 @@ fn equal(
     while remaining > 0 {
         check(cancel).map_err(|failure| (false, failure))?;
         let count = usize::try_from(remaining.min(BLOCK as u64)).expect("block fits usize");
-        read_exact_cancelled(&mut a, &mut ab[..count], cancel)
-            .map_err(|failure| (true, failure))?;
-        read_exact_cancelled(&mut b, &mut bb[..count], cancel)
-            .map_err(|failure| (false, failure))?;
+        read_exact_cancelled(&mut a, &mut ab[..count], cancel).map_err(|failure| (true, failure))?;
+        read_exact_cancelled(&mut b, &mut bb[..count], cancel).map_err(|failure| (false, failure))?;
         *bytes_read += (count as u64) * 2;
         if ab[..count] != bb[..count] {
             identical = false;
@@ -432,9 +423,7 @@ fn collect(
                 let mut children = BTreeSet::new();
                 for child in fs::read_dir(&canonical)? {
                     check(cancel)?;
-                    if visited
-                        .saturating_add(stack.len())
-                        .saturating_add(children.len())
+                    if visited.saturating_add(stack.len()).saturating_add(children.len())
                         >= options.max_entries
                     {
                         issue(report, &path, IssueKind::Limit);
@@ -519,20 +508,11 @@ pub fn scan_with_cancel_flag(roots: &[PathBuf], options: &Options, cancel: &Atom
 
 /// Fully observed exact scan with the same cancellation contract as
 /// [`scan_with_cancel_flag`]. No user callback runs during publication.
-pub fn scan_verified_with_cancel_flag(
-    roots: &[PathBuf],
-    options: &Options,
-    cancel: &AtomicBool,
-) -> Report {
+pub fn scan_verified_with_cancel_flag(roots: &[PathBuf], options: &Options, cancel: &AtomicBool) -> Report {
     scan_flagged(roots, options, cancel, true)
 }
 
-fn scan_flagged(
-    roots: &[PathBuf],
-    options: &Options,
-    cancel: &AtomicBool,
-    verify_all: bool,
-) -> Report {
+fn scan_flagged(roots: &[PathBuf], options: &Options, cancel: &AtomicBool, verify_all: bool) -> Report {
     let mut report = scan_observed(
         roots,
         options,
@@ -592,10 +572,7 @@ fn scan_observed(
         let mut samples: BTreeMap<[u8; 32], Vec<usize>> = BTreeMap::new();
         for index in candidates {
             match hash(&entries[index], true, &cancel, &mut report.bytes_read) {
-                Ok(digest) => samples
-                    .entry(digest_identity(digest))
-                    .or_default()
-                    .push(index),
+                Ok(digest) => samples.entry(digest_identity(digest)).or_default().push(index),
                 Err(failure) => record(&mut report, &entries[index].path, failure),
             }
             if report.cancelled {
@@ -694,13 +671,8 @@ fn scan_observed(
         // A later callback can mutate a member already validated above or in
         // an earlier group. Publication owns this last pass: no caller code
         // runs after an observation is checked.
-        let publication_observations = if verify_all {
-            &baseline
-        } else {
-            &observed_content
-        };
-        let publication_stopped =
-            || publication_cancel.is_some_and(|flag| flag.load(Ordering::Acquire));
+        let publication_observations = if verify_all { &baseline } else { &observed_content };
+        let publication_stopped = || publication_cancel.is_some_and(|flag| flag.load(Ordering::Acquire));
         validate_observations(
             &entries,
             publication_observations,
@@ -878,8 +850,7 @@ pub fn compare_files(
         stopped.set(value);
         value
     };
-    let result: Result<_, SnapshotError> =
-        (|| read_compared_pair(left, right, max_file_bytes, &cancelled))();
+    let result: Result<_, SnapshotError> = (|| read_compared_pair(left, right, max_file_bytes, &cancelled))();
     // No caller callback after this point: it could mutate either source after
     // that source had already passed its final validation.
     if cancelled() {
@@ -1034,11 +1005,7 @@ impl ContentSnapshot {
     ///
     /// # Errors
     /// Returns source, policy, mutation and cancellation errors.
-    pub fn read(
-        path: &Path,
-        max_bytes: u64,
-        cancel: impl Fn() -> bool,
-    ) -> Result<Self, SnapshotError> {
+    pub fn read(path: &Path, max_bytes: u64, cancel: impl Fn() -> bool) -> Result<Self, SnapshotError> {
         Self::read_observed(path, max_bytes, cancel, Stamp::new)
     }
 
@@ -1075,11 +1042,7 @@ impl ContentSnapshot {
     ///
     /// # Errors
     /// Rejects prefixes above 64 KiB, short reads, mutation and cancellation.
-    pub fn read_prefix(
-        &self,
-        length: usize,
-        cancel: impl Fn() -> bool,
-    ) -> Result<Vec<u8>, SnapshotError> {
+    pub fn read_prefix(&self, length: usize, cancel: impl Fn() -> bool) -> Result<Vec<u8>, SnapshotError> {
         check(&cancel)?;
         if length > BLOCK {
             return Err(SnapshotError::Policy);
@@ -1119,8 +1082,7 @@ impl ContentSnapshot {
         let mut buffer = allocate_read_buffer(BLOCK)?;
         while remaining != 0 {
             check(&cancel)?;
-            let length =
-                usize::try_from(remaining.min(BLOCK as u64)).map_err(|_| SnapshotError::Policy)?;
+            let length = usize::try_from(remaining.min(BLOCK as u64)).map_err(|_| SnapshotError::Policy)?;
             read_exact_cancelled(&mut file, &mut buffer[..length], &cancel)?;
             write_all_cancelled(&mut output, &buffer[..length], &cancel)?;
             remaining -= length as u64;
@@ -1407,19 +1369,12 @@ mod collision_tests {
                 let middle = data.len() / 2;
                 data[middle] ^= 8;
                 fs::write(&entry.path, data).unwrap();
-                entry.stamp =
-                    Stamp::new(&fs::metadata(&entry.path).unwrap(), &entry.canonical).unwrap();
+                entry.stamp = Stamp::new(&fs::metadata(&entry.path).unwrap(), &entry.canonical).unwrap();
             }
         }
         let sample_index = entries.iter().position(|e| e.path == paths[1]).unwrap();
         assert_eq!(
-            hash(
-                &entries[sample_index],
-                true,
-                &|| false,
-                &mut report.bytes_read
-            )
-            .unwrap(),
+            hash(&entries[sample_index], true, &|| false, &mut report.bytes_read).unwrap(),
             samples[sample_index]
         );
         validate_observations(&entries, &baseline, &|| false, &mut report);
@@ -1440,24 +1395,15 @@ mod collision_tests {
         let observed = entries
             .iter()
             .enumerate()
-            .map(|(i, entry)| {
-                (
-                    i,
-                    hash(entry, false, &|| false, &mut report.bytes_read).unwrap(),
-                )
-            })
+            .map(|(i, entry)| (i, hash(entry, false, &|| false, &mut report.bytes_read).unwrap()))
             .collect::<BTreeMap<_, _>>();
         fs::write(&entries[0].path, b"modified").unwrap();
         // Inject metadata-indistinguishable observation without depending on
         // filesystem timestamp resolution or an ability to reset Unix ctime.
-        entries[0].stamp = Stamp::new(
-            &fs::metadata(&entries[0].path).unwrap(),
-            &entries[0].canonical,
-        )
-        .unwrap();
+        entries[0].stamp =
+            Stamp::new(&fs::metadata(&entries[0].path).unwrap(), &entries[0].canonical).unwrap();
         assert!(open(&entries[0]).is_ok());
-        let survivors =
-            surviving_members(&entries, vec![0, 1, 2], &observed, &|| false, &mut report);
+        let survivors = surviving_members(&entries, vec![0, 1, 2], &observed, &|| false, &mut report);
         assert_eq!(survivors, [1, 2]);
         assert_eq!(report.issues.len(), 1);
         assert_eq!(report.issues[0].path, entries[0].path);
@@ -1558,11 +1504,7 @@ mod observed_snapshot_policy_tests {
             },
         );
         assert!(matches!(result, Err(SnapshotError::Policy)));
-        assert_eq!(
-            callbacks.get(),
-            1,
-            "no hashing callback after admission refusal"
-        );
+        assert_eq!(callbacks.get(), 1, "no hashing callback after admission refusal");
         let retry = ContentSnapshot::read(&path, 16, || false).unwrap();
         assert_eq!(retry.byte_count(), 16);
         retry.verify(|| false).unwrap();
@@ -1719,10 +1661,7 @@ mod cancelled_output_tests {
     #[test]
     fn zero_progress_and_output_errors_remain_typed_io_failures() {
         let (_root, snapshot) = snapshot();
-        for (mode, expected) in [
-            (3, io::ErrorKind::WriteZero),
-            (4, io::ErrorKind::BrokenPipe),
-        ] {
+        for (mode, expected) in [(3, io::ErrorKind::WriteZero), (4, io::ErrorKind::BrokenPipe)] {
             let calls = Cell::new(0);
             let bytes = RefCell::new(Vec::new());
             let writer = Writer {

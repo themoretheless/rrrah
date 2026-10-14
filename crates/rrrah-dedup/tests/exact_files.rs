@@ -10,7 +10,10 @@ fn exact_content_partitions_ignore_extensions_and_check_unsampled_bytes() {
         let bytes = vec![37_u8; size];
         let mut copies = Vec::new();
         for suffix in ["jpg", "PNG", "bin", ""] {
-            let path = root.path().join(format!("family-{family}")).with_extension(suffix);
+            let path = root
+                .path()
+                .join(format!("family-{family}"))
+                .with_extension(suffix);
             fs::write(&path, &bytes).unwrap();
             copies.push(path);
         }

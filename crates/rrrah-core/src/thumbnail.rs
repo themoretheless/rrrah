@@ -10,7 +10,9 @@ pub enum ThumbnailError {
     Develop,
 }
 // Bounded CPU RAW previews using the display color contract.
-use crate::{DecodedMosaic, Photometric, aces_tone_map_rgb_f64, apply_3x3_f64, camera_to_linear_srgb_precise};
+use crate::{
+    DecodedMosaic, Photometric, aces_tone_map_rgb_f64, apply_3x3_f64, camera_to_linear_srgb_precise,
+};
 use std::sync::Mutex;
 use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
 
@@ -209,12 +211,18 @@ fn render_thumbnail_row(
     row_out: &mut [u8],
 ) {
     for x in 0..out_w {
-        let uv = metadata
-            .orientation
-            .map_display_uv_f64([(f64::from(x) + 0.5) / f64::from(out_w), (f64::from(y) + 0.5) / f64::from(out_h)]);
-        let sx = i64::from(crop.x) + (uv[0] * f64::from(crop.width)).floor().min(f64::from(crop.width - 1)) as i64;
-        let sy =
-            i64::from(crop.y) + (uv[1] * f64::from(crop.height)).floor().min(f64::from(crop.height - 1)) as i64;
+        let uv = metadata.orientation.map_display_uv_f64([
+            (f64::from(x) + 0.5) / f64::from(out_w),
+            (f64::from(y) + 0.5) / f64::from(out_h),
+        ]);
+        let sx = i64::from(crop.x)
+            + (uv[0] * f64::from(crop.width))
+                .floor()
+                .min(f64::from(crop.width - 1)) as i64;
+        let sy = i64::from(crop.y)
+            + (uv[1] * f64::from(crop.height))
+                .floor()
+                .min(f64::from(crop.height - 1)) as i64;
         let (axis_w, axis_h) = if metadata.orientation.swaps_dimensions() {
             (out_h, out_w)
         } else {
@@ -556,9 +564,10 @@ fn render_xtrans_row(
 ) -> bool {
     let md = &mosaic.metadata;
     for x in 0..w {
-        let uv = md
-            .orientation
-            .map_display_uv_f64([(f64::from(x) + 0.5) / f64::from(w), (f64::from(y) + 0.5) / f64::from(h)]);
+        let uv = md.orientation.map_display_uv_f64([
+            (f64::from(x) + 0.5) / f64::from(w),
+            (f64::from(y) + 0.5) / f64::from(h),
+        ]);
         let center = [
             f64::from(crop.x) + uv[0] * f64::from(crop.width),
             f64::from(crop.y) + uv[1] * f64::from(crop.height),
@@ -589,7 +598,7 @@ fn render_xtrans_row(
                 }
                 let sample = (f64::from(mosaic.pixels[sy as usize * md.width as usize + sx as usize])
                     - black)
-                .max(0.0)
+                    .max(0.0)
                     / (white - black)
                     * f64::from(md.white_balance[color]);
                 sum[color] += sample * weight;
@@ -771,9 +780,10 @@ fn render_rgbe_row(
     let m = &mosaic.metadata;
     let sample = |x: u32, y: u32| mosaic.pixels[(y as usize) * m.width as usize + x as usize];
     for x in 0..w {
-        let uv = m
-            .orientation
-            .map_display_uv_f64([(f64::from(x) + 0.5) / f64::from(w), (f64::from(y) + 0.5) / f64::from(h)]);
+        let uv = m.orientation.map_display_uv_f64([
+            (f64::from(x) + 0.5) / f64::from(w),
+            (f64::from(y) + 0.5) / f64::from(h),
+        ]);
         let center = [
             f64::from(crop.x) + uv[0] * f64::from(crop.width),
             f64::from(crop.y) + uv[1] * f64::from(crop.height),

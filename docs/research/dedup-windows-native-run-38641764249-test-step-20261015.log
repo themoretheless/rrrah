@@ -1,0 +1,107 @@
+2026-10-14T21:39:35.5943728Z ##[group]Run cargo test -p rrrah-dedup --no-default-features --lib --test exact_files --test exact_large_files --locked --no-fail-fast
+2026-10-14T21:39:35.5944778Z [36;1mcargo test -p rrrah-dedup --no-default-features --lib --test exact_files --test exact_large_files --locked --no-fail-fast[0m
+2026-10-14T21:39:35.6547466Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-10-14T21:39:35.6547927Z env:
+2026-10-14T21:39:35.6548164Z   CARGO_TERM_COLOR: always
+2026-10-14T21:39:35.6548446Z   RUSTFLAGS: -Dwarnings
+2026-10-14T21:39:35.6548733Z   CARGO_HOME: C:\Users\runneradmin\.cargo
+2026-10-14T21:39:35.6549056Z   CARGO_INCREMENTAL: 0
+2026-10-14T21:39:35.6549304Z   CACHE_ON_FAILURE: false
+2026-10-14T21:39:35.6549563Z ##[endgroup]
+2026-10-14T21:39:36.1261441Z [1m[92m    Updating[0m crates.io index
+2026-10-14T21:39:37.6122944Z [1m[92m   Compiling[0m blake3 v1.8.5
+2026-10-14T21:39:37.6128651Z [1m[92m   Compiling[0m arrayref v0.3.9
+2026-10-14T21:39:43.2287759Z [1m[92m   Compiling[0m rrrah-dedup v0.1.0 (D:\a\rrrah\rrrah\crates\rrrah-dedup)
+2026-10-14T21:40:28.7247729Z [1m[92m    Finished[0m `test` profile [optimized + debuginfo] target(s) in 52.67s
+2026-10-14T21:40:28.7808954Z [1m[92m     Running[0m unittests src\lib.rs (target\debug\deps\rrrah_dedup-365f43147f2474be.exe)
+2026-10-14T21:40:28.7917508Z 
+2026-10-14T21:40:28.7917852Z running 47 tests
+2026-10-14T21:40:28.8081964Z test exact::cancelled_output_tests::interrupted_output_cancels_before_next_write_attempt ... ok
+2026-10-14T21:40:28.8085003Z test exact::cancelled_output_tests::healthy_short_interrupted_output_preserves_exact_range ... ok
+2026-10-14T21:40:28.8180842Z test exact::cancelled_output_tests::zero_progress_and_output_errors_remain_typed_io_failures ... ok
+2026-10-14T21:40:28.8182466Z test exact::cancelled_output_tests::partial_output_cancels_without_writing_remaining_bytes ... ok
+2026-10-14T21:40:28.8205820Z test cache::publication_tests::directory_sync_failure_reports_already_published_complete_cache ... ok
+2026-10-14T21:40:28.8275544Z test exact::collision_tests::final_content_validation_rejects_change_even_when_metadata_matches ... ok
+2026-10-14T21:40:28.8484546Z test exact::collision_tests::formerly_empty_entries_are_reopened_before_hash_or_equality ... ok
+2026-10-14T21:40:28.8531047Z test exact::cancellation_flag_tests::final_publication_observes_flag_without_reentering_caller ... ok
+2026-10-14T21:40:28.8591228Z test exact::collision_tests::pair_comparison_checks_policy_and_cancellation_at_every_checkpoint ... ok
+2026-10-14T21:40:28.8595563Z test exact::collision_tests::read_buffer_capacity_failure_is_explicit_and_retry_succeeds ... ok
+2026-10-14T21:40:28.8714197Z test exact::collision_tests::verified_observations_detect_metadata_invisible_pruned_mutations ... ok
+2026-10-14T21:40:28.8748436Z test exact::collision_tests::pair_comparison_confirms_bytes_and_refuses_digest_collision ... ok
+2026-10-14T21:40:28.8797594Z test exact::collision_tests::verified_prefix_binds_header_and_body_even_when_metadata_matches ... ok
+2026-10-14T21:40:28.8807558Z test exact::collision_tests::pair_comparison_rejects_last_checkpoint_mutations_on_both_outcomes ... ok
+2026-10-14T21:40:28.8812634Z test exact::interrupted_read_tests::interrupted_reads_observe_cancellation_before_retry ... ok
+2026-10-14T21:40:28.8817669Z test exact::interrupted_read_tests::read_cancelled_before_first_attempt_does_not_touch_reader ... ok
+2026-10-14T21:40:28.8822198Z test exact::interrupted_read_tests::short_reads_and_interruptions_preserve_content_and_eof_errors ... ok
+2026-10-14T21:40:28.8868566Z test exact::observed_snapshot_policy_tests::replacement_after_initial_metadata_cannot_bypass_observed_size_limit ... ok
+2026-10-14T21:40:28.8870061Z test gradient::batch_tests::alternating_matcher_timing ... ignored, manual alternating exact matcher timing control
+2026-10-14T21:40:28.8883498Z test gradient::batch_tests::every_cancellation_checkpoint_and_work_refusal_matches_scalar ... ok
+2026-10-14T21:40:28.8912285Z test exact::collision_tests::verified_prefix_policy_cancel_and_final_mutation_do_not_publish_headers ... ok
+2026-10-14T21:40:28.8923051Z test gradient::batch_tests::four_lane_distances_are_bitwise_scalar_for_every_tail_length ... ok
+2026-10-14T21:40:28.8925147Z test gradient::matching_tests::alternating_matcher_timing ... ignored, manual alternating exact matcher timing control
+2026-10-14T21:40:28.8936541Z test gradient::matching_tests::bounded_distance_preserves_order_and_strict_ties ... ok
+2026-10-14T21:40:28.8949354Z test gradient::matching_tests::every_cancellation_checkpoint_and_work_refusal_matches_exhaustive ... ok
+2026-10-14T21:40:28.9033920Z test exact::collision_tests::colliding_samples_and_full_hashes_still_partition_by_bytes ... ok
+2026-10-14T21:40:29.0564456Z test exact::fused_pair_controls::fused_pair_matches_independent_bytes_across_block_edges_and_mismatch_positions ... ok
+2026-10-14T21:40:29.0662625Z test gradient::matching_tests::exact_matching_agrees_with_exhaustive_positive_negative_ties_and_spatial_chains ... ok
+2026-10-14T21:40:29.0673871Z test gradient::matching_tests::sixteen_descriptor_lanes_preserve_scalar_bits_and_every_tail ... ok
+2026-10-14T21:40:29.0678505Z test gradient_scale::area_tests::footprint_average_removes_stripe_alias_and_matches_fractional_oracle ... ok
+2026-10-14T21:40:29.0679825Z test gradient::batch_tests::exact_matching_agrees_with_exhaustive_positive_negative_ties_and_spatial_chains ... ok
+2026-10-14T21:40:29.0682544Z test local_index::owner_count_cancellation_tests::descriptor_pair_entry_cancellation_does_not_consume_input ... ok
+2026-10-14T21:40:29.0683872Z test gradient::matching_tests::unrolled_distance_blocks_preserve_scalar_bits_and_partial_lanes ... ok
+2026-10-14T21:40:29.0685218Z test local_index::owner_count_cancellation_tests::legacy_owner_count_stops_when_iterator_requests_cancellation ... ok
+2026-10-14T21:40:29.0688280Z test local_index::owner_count_cancellation_tests::legacy_owner_materialization_honors_cancellation ... ok
+2026-10-14T21:40:29.0689520Z test sequence::duration_sum_tests::large_shared_denominator_reduces_before_overflow ... ok
+2026-10-14T21:40:29.0691138Z test sequence::duration_sum_tests::sum_retains_exact_time_and_refuses_unrepresentable_result ... ok
+2026-10-14T21:40:29.0694390Z test tests::empty_and_duplicate_fingerprints ... ok
+2026-10-14T21:40:29.0699035Z test tests::traversal_work_exhaustion_is_distinct_from_failure ... ok
+2026-10-14T21:40:29.0704015Z test visual::distinct_variant_tests::repeated_complete_variants_preserve_all_ids_and_exact_metric ... ok
+2026-10-14T21:40:29.0705073Z test tests::collision_membership_keeps_arbitrary_order_and_pair_identity ... ok
+2026-10-14T21:40:29.0709083Z test warp::encoded_signal_tests::extended_srgb_landmarks_match_independent_decimal_oracle_without_clipping ... ok
+2026-10-14T21:40:29.0713078Z test warp::encoded_signal_tests::transfer_precedes_premultiplication_and_bilinear_sampling ... ok
+2026-10-14T21:40:29.0719517Z test warp::bounded_fit_tests::boundary_fit_matches_exhaustive_rectangle_and_beats_independent_clipping ... ok
+2026-10-14T21:40:29.0808037Z test tests::indexed_search_matches_independent_exhaustive_scan ... ok
+2026-10-14T21:40:29.0845981Z test warp::regional_reuse_tests::reused_whole_evidence_preserves_regions_and_reduces_observed_work ... ok
+2026-10-14T21:40:30.4650000Z test gradient::matching_tests::production_mutual_competitors_match_exhaustive_at_every_checkpoint ... ok
+2026-10-14T21:40:30.4650762Z 
+2026-10-14T21:40:30.4651154Z test result: ok. 45 passed; 0 failed; 2 ignored; 0 measured; 0 filtered out; finished in 1.67s
+2026-10-14T21:40:30.4651776Z 
+2026-10-14T21:40:30.4676692Z [1m[92m     Running[0m tests\exact_files.rs (target\debug\deps\exact_files-f97600c9b6dedb8a.exe)
+2026-10-14T21:40:30.4781455Z 
+2026-10-14T21:40:30.4781637Z running 23 tests
+2026-10-14T21:40:30.4888656Z test cancellation_during_full_hash_is_bounded ... ok
+2026-10-14T21:40:30.4999685Z test duplicate_root_admission_retains_boundary_and_fresh_retry ... ok
+2026-10-14T21:40:30.5010186Z test copies_empty_files_and_equal_size_negatives ... ok
+2026-10-14T21:40:30.5021362Z test excess_root_admission_refuses_before_missing_source_io ... ok
+2026-10-14T21:40:30.5211524Z test atomic_cancel_exact_apis_preserve_groups_refuse_pre_cancel_and_allow_retry ... ok
+2026-10-14T21:40:30.5334645Z test missing_input_and_overlap_do_not_lose_valid_results ... ok
+2026-10-14T21:40:30.7457883Z test exact_content_partitions_ignore_extensions_and_check_unsampled_bytes ... ok
+2026-10-14T21:40:30.7698065Z test ordinary_scan_final_callback_cannot_publish_a_changed_earlier_member ... ok
+2026-10-14T21:40:30.7834068Z test physical_hardlinks_are_aliases_while_copied_bytes_are_separate_files ... ok
+2026-10-14T21:40:30.8047486Z test reordered_middle_blocks_with_identical_sampled_edges_are_not_copies ... ok
+2026-10-14T21:40:30.8277762Z test repeated_exact_scan_rejects_stale_equality_after_rewrite_and_growth ... ok
+2026-10-14T21:40:30.8344663Z test restored_modified_time_does_not_hide_same_length_snapshot_edit ... ok
+2026-10-14T21:40:30.8502669Z test root_admission_cancels_before_io_at_each_preparation_checkpoint ... ok
+2026-10-14T21:40:30.8557113Z test same_bytes_and_modified_time_do_not_hide_physical_file_replacement ... ok
+2026-10-14T21:40:30.8612316Z test same_length_mutation_during_sample_is_detected ... ok
+2026-10-14T21:40:30.8687248Z test same_samples_different_middle_are_not_duplicates ... ok
+2026-10-14T21:40:30.8716700Z test size_depth_and_entry_limits_are_visible ... ok
+2026-10-14T21:40:31.0500722Z test late_exact_source_failures_preserve_healthy_members_and_other_groups ... ok
+2026-10-14T21:40:31.0787347Z test verified_scan_final_callback_cannot_publish_a_changed_earlier_member ... ok
+2026-10-14T21:40:31.0997053Z test verified_scan_preserves_groups_and_observes_every_admitted_file ... ok
+2026-10-14T21:40:31.8778545Z test verified_scan_discards_groups_for_one_shot_cancel_at_every_checkpoint ... ok
+2026-10-14T21:40:32.3769744Z test nested_overlapping_roots_match_the_full_authored_partition ... ok
+2026-10-14T21:40:34.6447721Z test changing_any_member_does_not_hide_healthy_duplicates ... ok
+2026-10-14T21:40:34.6448311Z 
+2026-10-14T21:40:34.6448754Z test result: ok. 23 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.17s
+2026-10-14T21:40:34.6449385Z 
+2026-10-14T21:40:34.6468442Z [1m[92m     Running[0m tests\exact_large_files.rs (target\debug\deps\exact_large_files-4ab7f3b4655a6287.exe)
+2026-10-14T21:40:34.6573909Z 
+2026-10-14T21:40:34.6574103Z running 3 tests
+2026-10-14T21:40:34.7118272Z test large_sparse_reads_cancel_without_publishing_an_unread_group ... ok
+2026-10-14T21:40:34.7174795Z test large_file_discovery_keeps_u64_lengths_and_reports_limit_omissions ... ok
+2026-10-14T21:40:34.7414611Z test large_logical_lengths_cannot_wrap_byte_admission ... ok
+2026-10-14T21:40:34.7414902Z 
+2026-10-14T21:40:34.7415188Z test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+2026-10-14T21:40:34.7415526Z 
+2026-10-14T21:40:34.8753663Z 

@@ -1,0 +1,61 @@
+{
+  "index": 7,
+  "repository": "tomnomnom/anew",
+  "commit": "d67d68db0d56469fdea7505c5a9209c0a465effa",
+  "status": "complete6blob_static_review_runtime_unqualified",
+  "whole_repo_complete": true,
+  "whole_runtime_qualified": false,
+  "fully_read_files": [
+    {
+      "path": "README.mkd",
+      "local": "docs/research/dedup-500/evidence/tomnomnom--anew/00-README.mkd",
+      "sha256": "e6e4d9f7c02eb44285bd37aa0389b052511041b59368e36411ce3305abbb8ae3",
+      "git_blob_sha1": "5e3bb14987f61ed032421c4ed7419d6934b593e7",
+      "bytes": 1222
+    },
+    {
+      "path": "LICENSE",
+      "local": "docs/research/dedup-500/evidence/tomnomnom--anew/01-LICENSE",
+      "sha256": "af212a1c50839119d19aaa40f90e628c934271db502f6f17301273761d16115b",
+      "git_blob_sha1": "5e58e590d99de11a4043e646b43fb1c37eff8cfa",
+      "bytes": 1067
+    },
+    {
+      "path": "main.go",
+      "local": "docs/research/dedup-500/evidence/tomnomnom--anew/02-main.go",
+      "sha256": "df1f97a0d6430328bce94ec9256592d9c1691394e0677f5aae6f0e9a66b700ec",
+      "git_blob_sha1": "58d2049b943f5fc07ab29bf9a5d8951b64742262",
+      "bytes": 1487
+    },
+    {
+      "path": ".gitignore",
+      "local": "docs/research/dedup-500/evidence/tomnomnom--anew/03-gitignore",
+      "sha256": "08b2ccd64161f0de6c024bd895a143a220de049d2984e54c323daa0af45f2bb4",
+      "git_blob_sha1": "9236e3348e88fb4327329b159b9628415c90c46c",
+      "bytes": 5
+    },
+    {
+      "path": "go.mod",
+      "local": "docs/research/dedup-500/evidence/tomnomnom--anew/04-go.mod",
+      "sha256": "2f644c8557c08926bb1c6fcd56982d92be38529e032a1c382c6a4c2a67d27740",
+      "git_blob_sha1": "9198addf0ddd329c432eed3f6175357240aa64ff",
+      "bytes": 42
+    },
+    {
+      "path": "script/release",
+      "local": "docs/research/dedup-500/evidence/tomnomnom--anew/05-release",
+      "sha256": "80e3ecc61930dac28555ca3c6105caf682b86f72b955c7931c50b9d016fb3a01",
+      "git_blob_sha1": "719fe3a5770925058a1925cd4922b24c8222f69e",
+      "bytes": 1271
+    }
+  ],
+  "findings": [
+    "Exact text-line dedup with in-memory map, preserves new input order; optional TrimSpace changes identity. Not file/pixel/perceptual equality.",
+    "File and stdin bufio.Scanner loops never inspect sc.Err; Scanner buffer not enlarged/configured. Possible silent truncation or IO failure remains unexecuted runtime concern.",
+    "Existing-file open errors silently ignored; write/close errors unchecked, no atomic transaction or writer lock. Concurrent writers may race after initial snapshot.",
+    "Whole existing line set retained without resource/cancellation limits; no persisted fresh index/cache.",
+    "Release script invokes go test but no test files in capturedtree; build/archive results unchecked before GitHub release command. Script only syntaxchecked, never executed.",
+    "MIT license fully read; no code adoption."
+  ],
+  "scope": "All6captured blobs fully read, Gitblob SHA1/size matched; bash syntax only for release script. Go unavailable onPATH; no upstream Go compilation/execution, release/network/filesystem mutation or performance claim. Static failure concerns distinguished from reproduced runtime behavior; commit/tree binding not refreshed."
+}

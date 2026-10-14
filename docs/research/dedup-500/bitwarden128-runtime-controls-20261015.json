@@ -1,0 +1,87 @@
+{
+  "status": "passed2upstream_tests_and14synthetic_controls",
+  "upstream_tests": 2,
+  "synthetic_controls": 14,
+  "rows": [
+    {
+      "label": "different-ids-same-data",
+      "retained": 1,
+      "error": null
+    },
+    {
+      "label": "same-id-different-data",
+      "retained": 2,
+      "error": null
+    },
+    {
+      "label": "top-level-order",
+      "retained": 2,
+      "error": null
+    },
+    {
+      "label": "id-key-position",
+      "retained": 2,
+      "error": null
+    },
+    {
+      "label": "nested-order",
+      "retained": 2,
+      "error": null
+    },
+    {
+      "label": "whitespace",
+      "retained": 2,
+      "error": null
+    },
+    {
+      "label": "integer-float",
+      "retained": 2,
+      "error": null
+    },
+    {
+      "label": "missing-id",
+      "retained": null,
+      "error": "KeyError"
+    },
+    {
+      "label": "encrypted-refused",
+      "retained": null,
+      "error": "AssertionError"
+    },
+    {
+      "label": "empty",
+      "retained": 0,
+      "error": null
+    },
+    {
+      "label": "null-items",
+      "retained": null,
+      "error": "TypeError"
+    },
+    {
+      "label": "numeric-zero-encrypted",
+      "retained": 0,
+      "error": null
+    },
+    {
+      "label": "encrypted-optimized-fixture",
+      "retained": null,
+      "error": "AssertionError"
+    },
+    {
+      "label": "optimized-python-bypasses-encrypted-assert",
+      "retained": 0
+    }
+  ],
+  "source_pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/DustinWehr--minimal-bitwarden-dedup/02-bitwarden_dedup.py": "6bb1c6f32f2fea5f5b81d4ad48a82df06397433e2739234606351a41edcbc558",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/DustinWehr--minimal-bitwarden-dedup/03-runtests.py": "e24c9530b014cf8554ad89ea6d971f1b64369038e31becd52add63ce4eb3caa0",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/DustinWehr--minimal-bitwarden-dedup/05-expected_deduped.json": "e7a70f389c260b73d8f1d8b56c3988735de3562a2ade95662b8b896ace4d646a",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/DustinWehr--minimal-bitwarden-dedup/06-fake_bitwarden_export.json": "0ed534d27b88bf8a072fb63fd5ab6ee18856f54beafe5ff4d415b6a4c119b0d9",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/DustinWehr--minimal-bitwarden-dedup/07-fake_bitwarden_export2.json": "1ec8921e9aae17fd37ccab5c9552b7e6e4b8a4e935a73bc77e53bb591773fe74"
+  },
+  "producer_sha256": "3b0b5bc279e50373d3ce98cc39f94b0ad83f1e7c1e6bc346d85af2786718c68b",
+  "upstream_log": "/private/tmp/rrrah-bitwarden128-20261015/upstream.log",
+  "upstream_log_sha256": "043ec93038aef1bf4ef16ec437f699efd68153e19807dec690a276307d5bb002",
+  "scope": "Unchanged original module and2upstream unit tests on captured public fake JSON fixtures plus authored synthetic JSON controls, original module imported with unchanged function body. Python-O control demonstrates assert admission bypass. Owned temporary files only; no real vault/account/credentials/network/decryption/importback, RAMdisk/system changes or source adoption."
+}

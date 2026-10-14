@@ -1,0 +1,36 @@
+{
+  "status": "verified_stable_strict_host_windows_checks_and6originaltests",
+  "producer_report": "docs/research/dedup-maintained-pastey-strict-v3-20261015.json",
+  "producer_report_sha256": "9f540c64574b47a4c618a359ac8f842cd74423b25a07ce4596a2012b1e9f73fd",
+  "auditor_sha256": "533c481959d68899cd6055c77f1ac663bce01dbd4a2c99b19caabf1612bb1268",
+  "toolchain": {
+    "rustc": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: aarch64-apple-darwin\nrelease: 1.98.1\nLLVM version: 22.1.8\n",
+    "cargo": "cargo 1.98.1 (797e8a9bc 2026-08-05)\n"
+  },
+  "passed": 6,
+  "failed": 0,
+  "ignored": 0,
+  "rows": [
+    {
+      "executable": "/private/tmp/rrrah-maintained-pastey-strict-v2-20261015/target/debug/deps/pulp-e95d63947bfffb94",
+      "executable_sha256": "889d7af86d7236a1f4bf238e3708c2a22ddbd3bd37587eb8688fd3b41cdf4c1e",
+      "passed": 6,
+      "complete_inventory": [
+        "aarch64::tests::test_cplx32_mul",
+        "aarch64::tests::test_cplx64_mul",
+        "aarch64::tests::test_interleave",
+        "aarch64::tests::test_mul_add",
+        "aarch64::tests::test_negate_mul_add",
+        "aarch64::tests::test_rotate"
+      ]
+    },
+    {
+      "executable": "/private/tmp/rrrah-maintained-pastey-strict-v2-20261015/target/debug/deps/texture2ddecoder-9fb5866b38c3fea5",
+      "executable_sha256": "8065589cfd6dc5cd406a5a73670a4a3923723b5306efce8ad879a3a4145890c5",
+      "passed": 0,
+      "complete_inventory": []
+    }
+  ],
+  "removed_package": "paste",
+  "scope": "Actual pinned stable1.98.1 strict -Dwarnings hostMacARM and WindowsGNU production metadata checks plus complete unchanged6pulp/0texture defaultunit inventories.3explicit lifetimeannotations and manifest/globalisolatedpulp alias changes checked; allsources/lock/logs/binaries pinned. No feature/test removal. Windows linking/execution, othercodec/EXR pixel tests, MSRV1.92, Root integration, performance and actual cargo-deny advisory gate remain unqualified."
+}
