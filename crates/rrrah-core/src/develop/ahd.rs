@@ -20,6 +20,20 @@ use super::{DevelopError, Mosaic};
 const TILE: usize = 128;
 const MARGIN: usize = 6;
 
+#[derive(Default)]
+struct AhdScratch {
+    mos: Vec<f32>,
+    col: Vec<u8>,
+    gh: Vec<f32>,
+    gv: Vec<f32>,
+    rh: Vec<[f32; 3]>,
+    rv: Vec<[f32; 3]>,
+    lh: Vec<[f32; 3]>,
+    lv: Vec<[f32; 3]>,
+    hh: Vec<u8>,
+    hv: Vec<u8>,
+}
+
 pub(crate) fn ahd(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, DevelopError> {
     let (w, h) = (m.w, m.h);
     let mut out = Rgb32f::new(w, h);
@@ -33,13 +47,15 @@ pub(crate) fn ahd(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, D
         .max(1);
 
     if workers <= 1 {
+        let mut scratch = AhdScratch::default();
+        let mut px = Vec::with_capacity(TILE * TILE);
         for y0 in (0..h).step_by(TILE) {
             for x0 in (0..w).step_by(TILE) {
                 if cancelled() {
                     return Err(DevelopError::Cancelled);
                 }
                 let (tw, th) = (TILE.min(w - x0), TILE.min(h - y0));
-                let px = tile(m, x0, y0, tw, th);
+                tile_into(m, x0, y0, tw, th, &mut scratch, &mut px);
                 for y in 0..th {
                     out.data[(y0 + y) * w + x0..(y0 + y) * w + x0 + tw]
                         .copy_from_slice(&px[y * tw..(y + 1) * tw]);
@@ -58,29 +74,33 @@ pub(crate) fn ahd(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, D
             .map(|chunk| Mutex::new(Some(chunk)))
             .collect();
 
-        let do_work = || loop {
-            if is_cancelled.load(Ordering::Relaxed) {
-                break;
-            }
-            let band_idx = next.fetch_add(1, Ordering::Relaxed);
-            if band_idx >= num_bands {
-                break;
-            }
-            let band = slots[band_idx]
-                .lock()
-                .expect("unit slot lock is never poisoned")
-                .take()
-                .expect("each band is claimed exactly once");
-            let y0 = band_idx * TILE;
-            let th = TILE.min(h - y0);
-            for x0 in (0..w).step_by(TILE) {
+        let do_work = || {
+            let mut scratch = AhdScratch::default();
+            let mut px = Vec::with_capacity(TILE * TILE);
+            loop {
                 if is_cancelled.load(Ordering::Relaxed) {
                     break;
                 }
-                let tw = TILE.min(w - x0);
-                let px = tile(m, x0, y0, tw, th);
-                for y in 0..th {
-                    band[y * w + x0..y * w + x0 + tw].copy_from_slice(&px[y * tw..(y + 1) * tw]);
+                let band_idx = next.fetch_add(1, Ordering::Relaxed);
+                if band_idx >= num_bands {
+                    break;
+                }
+                let band = slots[band_idx]
+                    .lock()
+                    .expect("unit slot lock is never poisoned")
+                    .take()
+                    .expect("each band is claimed exactly once");
+                let y0 = band_idx * TILE;
+                let th = TILE.min(h - y0);
+                for x0 in (0..w).step_by(TILE) {
+                    if is_cancelled.load(Ordering::Relaxed) {
+                        break;
+                    }
+                    let tw = TILE.min(w - x0);
+                    tile_into(m, x0, y0, tw, th, &mut scratch, &mut px);
+                    for y in 0..th {
+                        band[y * w + x0..y * w + x0 + tw].copy_from_slice(&px[y * tw..(y + 1) * tw]);
+                    }
                 }
             }
         };
@@ -92,6 +112,8 @@ pub(crate) fn ahd(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, D
                     .name(format!("rrrah-ahd-{worker_index}"))
                     .spawn_scoped(scope, shared_worker);
             }
+            let mut scratch = AhdScratch::default();
+            let mut px = Vec::with_capacity(TILE * TILE);
             loop {
                 if cancelled() {
                     is_cancelled.store(true, Ordering::Relaxed);
@@ -114,7 +136,7 @@ pub(crate) fn ahd(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, D
                         break;
                     }
                     let tw = TILE.min(w - x0);
-                    let px = tile(m, x0, y0, tw, th);
+                    tile_into(m, x0, y0, tw, th, &mut scratch, &mut px);
                     for y in 0..th {
                         band[y * w + x0..y * w + x0 + tw].copy_from_slice(&px[y * tw..(y + 1) * tw]);
                     }
@@ -131,7 +153,7 @@ pub(crate) fn ahd(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, D
 
 /// Linear camera RGB (treated as sRGB/D65 primaries for the homogeneity metric only) → CIELab.
 #[inline]
-fn lab(p: [f32; 3]) -> [f32; 3] {
+pub(super) fn lab(p: [f32; 3]) -> [f32; 3] {
     let x = (0.4124 * p[0] + 0.3576 * p[1] + 0.1805 * p[2]) / 0.95047;
     let y = 0.2126 * p[0] + 0.7152 * p[1] + 0.0722 * p[2];
     let z = (0.0193 * p[0] + 0.1192 * p[1] + 0.9505 * p[2]) / 1.088_83;
@@ -147,44 +169,70 @@ fn lab(p: [f32; 3]) -> [f32; 3] {
     [116.0 * fy - 16.0, 500.0 * (fx - fy), 200.0 * (fy - fz)]
 }
 
+#[cfg(test)]
 pub(super) fn tile(m: &Mosaic, x0: usize, y0: usize, tw: usize, th: usize) -> Vec<[f32; 3]> {
+    let mut scratch = AhdScratch::default();
+    let mut out = Vec::with_capacity(tw * th);
+    tile_into(m, x0, y0, tw, th, &mut scratch, &mut out);
+    out
+}
+
+fn tile_into(
+    m: &Mosaic,
+    x0: usize,
+    y0: usize,
+    tw: usize,
+    th: usize,
+    scratch: &mut AhdScratch,
+    out: &mut Vec<[f32; 3]>,
+) {
     let (bw, bh) = (tw + 2 * MARGIN, th + 2 * MARGIN);
     let n = bw * bh;
     let (ox, oy) = (x0 as isize - MARGIN as isize, y0 as isize - MARGIN as isize);
-    let mut mos = vec![0f32; n];
-    let mut col = vec![0u8; n];
+    scratch.mos.resize(n, 0.0);
+    scratch.col.resize(n, 0);
+    scratch.gh.resize(n, 0.0);
+    scratch.gv.resize(n, 0.0);
+    scratch.rh.resize(n, [0.0; 3]);
+    scratch.rv.resize(n, [0.0; 3]);
+    scratch.lh.resize(n, [0.0; 3]);
+    scratch.lv.resize(n, [0.0; 3]);
+    scratch.hh.clear();
+    scratch.hh.resize(n, 0);
+    scratch.hv.clear();
+    scratch.hv.resize(n, 0);
+
     for y in 0..bh {
         for x in 0..bw {
-            mos[y * bw + x] = m.get(ox + x as isize, oy + y as isize);
-            col[y * bw + x] = m.color(ox + x as isize, oy + y as isize);
+            scratch.mos[y * bw + x] = m.get(ox + x as isize, oy + y as isize);
+            scratch.col[y * bw + x] = m.color(ox + x as isize, oy + y as isize);
         }
     }
     let cl = |x: isize, y: isize| -> usize {
         y.clamp(0, bh as isize - 1) as usize * bw + x.clamp(0, bw as isize - 1) as usize
     };
     // 1. directional greens
-    let mut gh = vec![0f32; n];
-    let mut gv = vec![0f32; n];
     for y in 0..bh as isize {
         for x in 0..bw as isize {
             let i = cl(x, y);
-            let c = mos[i];
-            if col[i] == 1 {
-                gh[i] = c;
-                gv[i] = c;
+            let c = scratch.mos[i];
+            if scratch.col[i] == 1 {
+                scratch.gh[i] = c;
+                scratch.gv[i] = c;
                 continue;
             }
-            let (l, r) = (mos[cl(x - 1, y)], mos[cl(x + 1, y)]);
-            let est = l.midpoint(r) + (2.0 * c - mos[cl(x - 2, y)] - mos[cl(x + 2, y)]) * 0.25;
-            gh[i] = est.clamp(l.min(r), l.max(r));
-            let (u, d) = (mos[cl(x, y - 1)], mos[cl(x, y + 1)]);
-            let est = u.midpoint(d) + (2.0 * c - mos[cl(x, y - 2)] - mos[cl(x, y + 2)]) * 0.25;
-            gv[i] = est.clamp(u.min(d), u.max(d));
+            let (l, r) = (scratch.mos[cl(x - 1, y)], scratch.mos[cl(x + 1, y)]);
+            let est =
+                l.midpoint(r) + (2.0 * c - scratch.mos[cl(x - 2, y)] - scratch.mos[cl(x + 2, y)]) * 0.25;
+            scratch.gh[i] = est.clamp(l.min(r), l.max(r));
+            let (u, d) = (scratch.mos[cl(x, y - 1)], scratch.mos[cl(x, y + 1)]);
+            let est =
+                u.midpoint(d) + (2.0 * c - scratch.mos[cl(x, y - 2)] - scratch.mos[cl(x, y + 2)]) * 0.25;
+            scratch.gv[i] = est.clamp(u.min(d), u.max(d));
         }
     }
     // 2. full candidates
-    let complete = |g: &[f32]| -> Vec<[f32; 3]> {
-        let mut rgb = vec![[0f32; 3]; n];
+    let complete = |g: &[f32], mos: &[f32], col: &[u8], rgb: &mut [[f32; 3]]| {
         for y in 0..bh as isize {
             for x in 0..bw as isize {
                 let i = cl(x, y);
@@ -207,66 +255,67 @@ pub(super) fn tile(m: &Mosaic, x0: usize, y0: usize, tw: usize, th: usize) -> Ve
                 }
             }
         }
-        rgb
     };
-    let rh = complete(&gh);
-    let rv = complete(&gv);
+    complete(&scratch.gh, &scratch.mos, &scratch.col, &mut scratch.rh);
+    complete(&scratch.gv, &scratch.mos, &scratch.col, &mut scratch.rv);
     // 3. Lab + homogeneity
-    let lh: Vec<[f32; 3]> = rh.iter().map(|&p| lab(p)).collect();
-    let lv: Vec<[f32; 3]> = rv.iter().map(|&p| lab(p)).collect();
+    for i in 0..n {
+        scratch.lh[i] = lab(scratch.rh[i]);
+        scratch.lv[i] = lab(scratch.rv[i]);
+    }
     let dl = |a: &[f32; 3], b: &[f32; 3]| (a[0] - b[0]).abs();
     let dc = |a: &[f32; 3], b: &[f32; 3]| (a[1] - b[1]).powi(2) + (a[2] - b[2]).powi(2);
-    let mut hh = vec![0u8; n];
-    let mut hv = vec![0u8; n];
     for y in 1..bh as isize - 1 {
         for x in 1..bw as isize - 1 {
             let i = cl(x, y);
             let (l, r, u, d) = (cl(x - 1, y), cl(x + 1, y), cl(x, y - 1), cl(x, y + 1));
-            let eps_l = dl(&lh[i], &lh[l])
-                .max(dl(&lh[i], &lh[r]))
-                .min(dl(&lv[i], &lv[u]).max(dl(&lv[i], &lv[d])));
-            let eps_c = dc(&lh[i], &lh[l])
-                .max(dc(&lh[i], &lh[r]))
-                .min(dc(&lv[i], &lv[u]).max(dc(&lv[i], &lv[d])));
+            let eps_l = dl(&scratch.lh[i], &scratch.lh[l])
+                .max(dl(&scratch.lh[i], &scratch.lh[r]))
+                .min(dl(&scratch.lv[i], &scratch.lv[u]).max(dl(&scratch.lv[i], &scratch.lv[d])));
+            let eps_c = dc(&scratch.lh[i], &scratch.lh[l])
+                .max(dc(&scratch.lh[i], &scratch.lh[r]))
+                .min(dc(&scratch.lv[i], &scratch.lv[u]).max(dc(&scratch.lv[i], &scratch.lv[d])));
             let mut ch = 0;
             let mut cv = 0;
             for j in [l, r, u, d] {
-                if dl(&lh[i], &lh[j]) <= eps_l && dc(&lh[i], &lh[j]) <= eps_c {
+                if dl(&scratch.lh[i], &scratch.lh[j]) <= eps_l && dc(&scratch.lh[i], &scratch.lh[j]) <= eps_c
+                {
                     ch += 1;
                 }
-                if dl(&lv[i], &lv[j]) <= eps_l && dc(&lv[i], &lv[j]) <= eps_c {
+                if dl(&scratch.lv[i], &scratch.lv[j]) <= eps_l && dc(&scratch.lv[i], &scratch.lv[j]) <= eps_c
+                {
                     cv += 1;
                 }
             }
-            hh[i] = ch;
-            hv[i] = cv;
+            scratch.hh[i] = ch;
+            scratch.hv[i] = cv;
         }
     }
     // 4. choose
-    let mut out = Vec::with_capacity(tw * th);
+    out.clear();
+    out.reserve(tw * th);
     for y in MARGIN..MARGIN + th {
         for x in MARGIN..MARGIN + tw {
             let (mut sh, mut sv) = (0u32, 0u32);
             for dy in -1isize..=1 {
                 for dx in -1isize..=1 {
                     let j = cl(x as isize + dx, y as isize + dy);
-                    sh += u32::from(hh[j]);
-                    sv += u32::from(hv[j]);
+                    sh += u32::from(scratch.hh[j]);
+                    sv += u32::from(scratch.hv[j]);
                 }
             }
             let i = y * bw + x;
             out.push(if sh > sv {
-                rh[i]
+                scratch.rh[i]
             } else if sv > sh {
-                rv[i]
+                scratch.rv[i]
             } else {
                 [
-                    rh[i][0].midpoint(rv[i][0]),
-                    rh[i][1].midpoint(rv[i][1]),
-                    rh[i][2].midpoint(rv[i][2]),
+                    scratch.rh[i][0].midpoint(scratch.rv[i][0]),
+                    scratch.rh[i][1].midpoint(scratch.rv[i][1]),
+                    scratch.rh[i][2].midpoint(scratch.rv[i][2]),
                 ]
             });
         }
     }
-    out
 }

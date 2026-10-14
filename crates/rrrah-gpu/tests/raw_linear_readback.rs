@@ -624,3 +624,64 @@ fn signed_rgbe_hdr_saturation_preserves_float32_and_both_half_limits() {
         }
     }
 }
+
+#[test]
+fn raw_renderer_5x5_gpu_demosaic_algorithms_auto_raise_tile_halo_and_preserve_linear_hdr() {
+    let instance = common::headless_instance();
+    let adapter = pollster::block_on(common::request_adapter(&instance, &Default::default())).unwrap();
+    let (device, queue) =
+        pollster::block_on(adapter.request_device(&wgpu::DeviceDescriptor::default())).unwrap();
+    let inverse = rrrah_core::invert_3x3(rrrah_core::SRGB_TO_XYZ_D65).unwrap();
+    let source = common::profiled_pattern_mosaic(
+        64,
+        64,
+        1000.,
+        [2., 1., 0.5, 1.],
+        [inverse[0], inverse[1], inverse[2], [0.; 3]],
+        |_, _| 3000,
+    );
+    for alg in [
+        rrrah_gpu::GpuDemosaicAlgorithm::Bilinear,
+        rrrah_gpu::GpuDemosaicAlgorithm::MalvarHeCutler,
+        rrrah_gpu::GpuDemosaicAlgorithm::Directional,
+    ] {
+        let mut renderer = RawRenderer::new(&device, wgpu::TextureFormat::Rgba32Float);
+        renderer.set_output_mode(&queue, RawOutputMode::SceneLinear).unwrap();
+        renderer.set_demosaic_algorithm(&queue, alg);
+        assert_eq!(renderer.demosaic_algorithm(), alg);
+        // Use small 32x32 tiles so the center of the 64x64 frame sits right on a 4-tile boundary,
+        // exercising the automatic tile_halo >= 2 elevation for 5x5 GPU demosaic shaders.
+        renderer
+            .upload_mosaic_with_tiling(
+                &device,
+                &queue,
+                &source,
+                rrrah_gpu::TilingOverrides {
+                    tile_size: Some(32),
+                    tile_halo: None,
+                },
+            )
+            .unwrap();
+        renderer.update_view(
+            &queue,
+            ViewParameters {
+                viewport: [64., 64.],
+                zoom: 2.,
+                exposure_stops: 1.,
+                ..Default::default()
+            },
+        );
+        let actual = read_center(&device, &queue, &renderer, wgpu::TextureFormat::Rgba32Float);
+        let expected = [12.0f32, 6.0, 3.0];
+        for c in 0..3 {
+            assert!(
+                (actual[c] - expected[c]).abs() <= 5e-5,
+                "{alg:?} channel {c}: actual={} expected={}",
+                actual[c],
+                expected[c]
+            );
+        }
+        assert_eq!(actual[3], 1.0);
+    }
+}
+

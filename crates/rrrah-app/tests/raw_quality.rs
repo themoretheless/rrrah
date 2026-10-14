@@ -157,3 +157,94 @@ fn required_unknown_opcodes_and_bad_curves_fail_explicitly() {
         assert!(error.contains(expected), "expected {expected:?}, got {error:?}");
     }
 }
+
+#[test]
+fn explicit_demosaic_algorithms_and_false_color_passes_work_via_cli() {
+    let dir = tempfile::tempdir().unwrap();
+    let bayer_path = dir.path().join("bayer.dng");
+    let xtrans_path = dir.path().join("xtrans.dng");
+    std::fs::write(&bayer_path, dng(false, false)).unwrap();
+    std::fs::write(&xtrans_path, dng(true, false)).unwrap();
+    let cache = dir.path().join("cache");
+
+    for (alg, expected_name) in [
+        ("nearest", "nearest"),
+        ("bilinear", "bilinear"),
+        ("smooth-hue", "smooth-hue"),
+        ("laroche-prescott", "laroche-prescott"),
+        ("hamilton-adams", "hamilton-adams"),
+        ("mhc", "mhc"),
+        ("ppg", "ppg"),
+        ("vng", "vng"),
+        ("rcd", "rcd"),
+        ("ahd", "ahd"),
+        ("lmmse", "lmmse"),
+        ("dcb", "dcb"),
+        ("igv", "igv"),
+        ("amaze", "amaze"),
+        ("amaze-vng", "amaze-vng"),
+        ("amaze-lmmse", "amaze-lmmse"),
+        ("rcd-vng", "rcd-vng"),
+        ("rcd-lmmse", "rcd-lmmse"),
+        ("dcb-vng", "dcb-vng"),
+        ("generic", "generic"),
+    ] {
+        let out = inspect(
+            &bayer_path,
+            &cache,
+            &["--demosaic", alg, "--false-color-passes", "2"],
+        );
+        assert!(out.contains("quality_raw: 12x12"), "{alg}: {out}");
+        assert!(out.contains(&format!("demosaic={expected_name}")), "{alg}: {out}");
+        assert!(out.contains("false_color_passes=2"), "{alg}: {out}");
+    }
+
+    for (alg, expected_name) in [
+        ("xtrans-directional", "xtrans-directional"),
+        ("xtrans-markesteijn", "xtrans-markesteijn"),
+        ("xtrans-markesteijn3-pass", "xtrans-markesteijn-3pass"),
+        ("xtrans-dual", "xtrans-dual"),
+        ("generic", "generic"),
+    ] {
+        let out = inspect(
+            &xtrans_path,
+            &cache,
+            &["--demosaic", alg, "--false-color-passes", "1"],
+        );
+        assert!(out.contains("quality_raw: 12x12"), "{alg}: {out}");
+        assert!(out.contains(&format!("demosaic={expected_name}")), "{alg}: {out}");
+        assert!(out.contains("false_color_passes=1"), "{alg}: {out}");
+    }
+
+    // Verify conditioning CLI flags (--dual-contrast-threshold, --green-equilibration, --impulse-threshold, --defringe)
+    let conditioned = inspect(
+        &bayer_path,
+        &cache,
+        &[
+            "--demosaic",
+            "amaze-vng",
+            "--dual-contrast-threshold",
+            "0.05",
+            "--green-equilibration",
+            "0.25",
+            "--impulse-threshold",
+            "3.0",
+            "--defringe",
+            "--false-color-passes",
+            "1",
+        ],
+    );
+    assert!(conditioned.contains("quality_raw: 12x12"), "{conditioned}");
+    assert!(conditioned.contains("demosaic=amaze-vng"), "{conditioned}");
+
+    // Incompatible algorithm (e.g. X-Trans Markesteijn on 2x2 Bayer) must fail explicitly
+    let bad = Command::new(env!("CARGO_BIN_EXE_rrrah"))
+        .args(["--inspect", "--no-cache", "--demosaic", "xtrans-markesteijn"])
+        .arg(&bayer_path)
+        .output()
+        .unwrap();
+    assert!(!bad.status.success());
+}
+
+
+

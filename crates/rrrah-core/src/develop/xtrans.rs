@@ -94,13 +94,10 @@ fn robust_mean(vals: &[f32]) -> f32 {
     s / ws
 }
 
-fn green(m: &Mosaic, off: &Offsets, cancelled: &impl Fn() -> bool) -> Vec<f32> {
+fn green(m: &Mosaic, off: &Offsets, cancelled: &impl Fn() -> bool) -> Result<Vec<f32>, DevelopError> {
     let (w, h) = (m.w, m.h);
     let mut g = vec![0f32; w * h];
-    par_rows(&mut g, w, |y, row| {
-        if cancelled() {
-            return;
-        }
+    par_rows(&mut g, w, cancelled, |y, row| {
         let interior_y = y >= 2 && y + 2 < h;
         let yi = y as isize;
         let mut vals: Vec<f32> = Vec::with_capacity(24);
@@ -151,20 +148,17 @@ fn green(m: &Mosaic, off: &Offsets, cancelled: &impl Fn() -> bool) -> Vec<f32> {
             }
             *o = robust_mean(&vals);
         }
-    });
-    g
+    })?;
+    Ok(g)
 }
 
 pub(crate) fn directional(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, DevelopError> {
     let (w, h) = (m.w, m.h);
     let off = Offsets::new(m);
-    let g = green(m, &off, cancelled);
+    let g = green(m, &off, cancelled)?;
     let gg = |x: isize, y: isize| g[super::reflect(y, h) * w + super::reflect(x, w)];
     let mut out = Rgb32f::new(w, h);
-    par_rows(&mut out.data, w, |y, row| {
-        if cancelled() {
-            return;
-        }
+    par_rows(&mut out.data, w, cancelled, |y, row| {
         let interior_y = y >= 2 && y + 2 < h;
         let yi = y as isize;
         for (x, px) in row.iter_mut().enumerate() {
@@ -217,9 +211,6 @@ pub(crate) fn directional(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<R
                 px[c] = if ws > 0.0 { gp + s / ws } else { gp };
             }
         }
-    });
-    if cancelled() {
-        return Err(DevelopError::Cancelled);
-    }
+    })?;
     Ok(out)
 }

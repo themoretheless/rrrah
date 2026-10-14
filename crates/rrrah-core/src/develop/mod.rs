@@ -12,11 +12,15 @@
 )]
 mod ahd;
 mod curve;
+pub mod demosaic;
 mod highlight;
 mod opcodes;
 mod xtrans;
 use crate::{CfaPattern, DecodedMosaic, DecodedRaster, MemoryBudget, RasterColorSpace, RasterPixels};
 pub use curve::MonotoneCurve;
+pub use demosaic::{
+    DemosaicAlgorithm, DemosaicConfig, demosaic_bayer_superpixel, demosaic_f32, demosaic_u16,
+};
 pub use opcodes::{Area, Opcode, OpcodeLists, parse_list as parse_opcode_list};
 use thiserror::Error;
 
@@ -41,17 +45,37 @@ pub struct DevelopOptions {
     /// Display-space luminance curve, evaluated by the renderer after exposure
     /// and tone mapping. `develop_raw` retains scene-linear output.
     pub curve: MonotoneCurve,
+    /// Demosaicing algorithm used for CFA reconstruction. Defaults to [`DemosaicAlgorithm::Auto`].
+    pub demosaic: DemosaicAlgorithm,
+    /// Contrast threshold (`0.0..=1.0`) for dual demosaicing modes (`AmazeVng`, `AmazeLmmse`,
+    /// `RcdVng`, `RcdLmmse`, `DcbVng`, `XTransDual`). Defaults to `0.04`.
+    pub dual_contrast_threshold: f32,
+    /// Post-demosaic median colour-difference refinement passes (0..=4) to suppress
+    /// false colour and zippering while preserving exact measured CFA samples.
+    pub false_color_passes: u8,
+    /// Pre-demosaic Bayer G1/G2 green equilibration strength (`0.0..=1.0`). Defaults to `0.0`.
+    pub green_equilibration: f32,
+    /// Pre-demosaic CFA impulse / hot-pixel outlier threshold (`0.0` disables). Defaults to `0.0`.
+    pub impulse_threshold: f32,
+    /// Post-demosaic high-contrast chromatic fringe suppression. Defaults to `false`.
+    pub suppress_fringe: bool,
 }
 impl Default for DevelopOptions {
     fn default() -> Self {
         Self {
             recover_highlights: true,
             curve: MonotoneCurve::identity(),
+            demosaic: DemosaicAlgorithm::Auto,
+            dual_contrast_threshold: 0.04,
+            false_color_passes: 0,
+            green_equilibration: 0.0,
+            impulse_threshold: 0.0,
+            suppress_fringe: false,
         }
     }
 }
 #[derive(Debug)]
-struct Rgb32f {
+pub(super) struct Rgb32f {
     width: usize,
     height: usize,
     data: Vec<[f32; 3]>,
@@ -65,7 +89,7 @@ impl Rgb32f {
         }
     }
 }
-struct Cfa {
+pub(super) struct Cfa {
     width: usize,
     height: usize,
     cells: Vec<u8>,
@@ -75,7 +99,7 @@ impl Cfa {
         self.cells[y % self.height * self.width + x % self.width]
     }
 }
-struct Mosaic<'a> {
+pub(super) struct Mosaic<'a> {
     w: usize,
     h: usize,
     data: &'a [f32],
@@ -101,32 +125,200 @@ impl Mosaic<'_> {
         self.cfa.color_at(reflect(x, self.w), reflect(y, self.h))
     }
 }
-fn par_rows<T>(data: &mut [T], width: usize, mut f: impl FnMut(usize, &mut [T])) {
-    for (y, row) in data.chunks_mut(width).enumerate() {
-        f(y, row);
+fn par_rows<T: Send>(
+    data: &mut [T],
+    width: usize,
+    cancelled: &impl Fn() -> bool,
+    f: impl Fn(usize, &mut [T]) + Sync,
+) -> Result<(), DevelopError> {
+    if width == 0 || data.is_empty() {
+        return Ok(());
     }
+    let height = data.len() / width;
+    let chunk_rows = 32;
+    let num_chunks = height.div_ceil(chunk_rows);
+    let workers = std::thread::available_parallelism()
+        .map_or(1, usize::from)
+        .min(num_chunks)
+        .max(1);
+
+    if workers <= 1 {
+        for (y, row) in data.chunks_mut(width).enumerate() {
+            if cancelled() {
+                return Err(DevelopError::Cancelled);
+            }
+            f(y, row);
+        }
+        return Ok(());
+    }
+
+    use std::sync::Mutex;
+    use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
+
+    let is_cancelled = AtomicBool::new(false);
+    let next = AtomicUsize::new(0);
+    let slots: Vec<_> = data
+        .chunks_mut(chunk_rows * width)
+        .map(|chunk| Mutex::new(Some(chunk)))
+        .collect();
+    let f_ref = &f;
+
+    let do_work = || loop {
+        if is_cancelled.load(Ordering::Relaxed) {
+            break;
+        }
+        let idx = next.fetch_add(1, Ordering::Relaxed);
+        if idx >= slots.len() {
+            break;
+        }
+        let chunk = slots[idx]
+            .lock()
+            .expect("slot lock never poisoned")
+            .take()
+            .expect("each chunk claimed once");
+        let start_y = idx * chunk_rows;
+        for (row_in_chunk, row) in chunk.chunks_mut(width).enumerate() {
+            if is_cancelled.load(Ordering::Relaxed) {
+                break;
+            }
+            f_ref(start_y + row_in_chunk, row);
+        }
+    };
+
+    std::thread::scope(|scope| {
+        let shared_worker = &do_work;
+        for worker_index in 1..workers {
+            let _ = std::thread::Builder::new()
+                .name(format!("rrrah-row-{worker_index}"))
+                .spawn_scoped(scope, shared_worker);
+        }
+        loop {
+            if cancelled() {
+                is_cancelled.store(true, Ordering::Relaxed);
+                break;
+            }
+            let idx = next.fetch_add(1, Ordering::Relaxed);
+            if idx >= slots.len() {
+                break;
+            }
+            let chunk = slots[idx]
+                .lock()
+                .expect("slot lock never poisoned")
+                .take()
+                .expect("each chunk claimed once");
+            let start_y = idx * chunk_rows;
+            for (row_in_chunk, row) in chunk.chunks_mut(width).enumerate() {
+                if cancelled() {
+                    is_cancelled.store(true, Ordering::Relaxed);
+                    break;
+                }
+                f_ref(start_y + row_in_chunk, row);
+            }
+        }
+    });
+
+    if is_cancelled.load(Ordering::Relaxed) || cancelled() {
+        return Err(DevelopError::Cancelled);
+    }
+    Ok(())
 }
-fn quality_cfa(pattern: &CfaPattern) -> Result<Cfa, DevelopError> {
+fn is_valid_xtrans_6x6(pattern: &CfaPattern) -> bool {
+    pattern.width == 6
+        && pattern.height == 6
+        && pattern.cells.len() == 36
+        && pattern.cells.iter().all(|c| (*c as u8) <= 2)
+        && [0, 1, 2]
+            .into_iter()
+            .zip([8, 20, 8])
+            .all(|(c, n)| pattern.cells.iter().filter(|p| **p as u8 == c).count() == n)
+}
+pub(super) fn quality_cfa(pattern: &CfaPattern, algo: DemosaicAlgorithm) -> Result<Cfa, DevelopError> {
     pattern.validate()?;
-    let bayer = pattern.bayer_quad().is_ok();
-    if !bayer
-        && (pattern.width != 6
-            || pattern.height != 6
-            || pattern.cells.iter().any(|c| *c as u8 > 2)
-            || [0, 1, 2]
-                .into_iter()
-                .zip([8, 20, 8])
-                .any(|(c, n)| pattern.cells.iter().filter(|p| **p as u8 == c).count() != n))
-    {
-        return Err(DevelopError::Invalid(
-            "quality development requires RGB Bayer or 6x6 X-Trans",
-        ));
-    }
-    Ok(Cfa {
+    let cfa = Cfa {
         width: pattern.width as usize,
         height: pattern.height as usize,
         cells: pattern.cells.iter().map(|c| *c as u8).collect(),
-    })
+    };
+    let bayer = pattern.bayer_quad().is_ok();
+    let xtrans = is_valid_xtrans_6x6(pattern);
+    let quad_bayer = demosaic::is_quad_bayer(&cfa);
+    let nona_bayer = demosaic::is_nona_bayer(&cfa);
+    let hexadeca_bayer = demosaic::is_hexadeca_bayer(&cfa);
+    let known_cells = cfa.cells.iter().all(|&c| c <= 7);
+
+    match algo {
+        DemosaicAlgorithm::Auto => {
+            if !bayer && !xtrans && !quad_bayer && !nona_bayer && !hexadeca_bayer {
+                return Err(DevelopError::Invalid(
+                    "quality development requires RGB Bayer, Clustered Bayer (Quad/Nona/Hexadeca), or 6x6 X-Trans (or DemosaicAlgorithm::GenericCfa)",
+                ));
+            }
+        }
+        DemosaicAlgorithm::Nearest
+        | DemosaicAlgorithm::Bilinear
+        | DemosaicAlgorithm::SmoothHue
+        | DemosaicAlgorithm::LarochePrescott
+        | DemosaicAlgorithm::HamiltonAdams
+        | DemosaicAlgorithm::MalvarHeCutler
+        | DemosaicAlgorithm::Ppg
+        | DemosaicAlgorithm::Vng
+        | DemosaicAlgorithm::Rcd
+        | DemosaicAlgorithm::Ahd
+        | DemosaicAlgorithm::Lmmse
+        | DemosaicAlgorithm::Dcb
+        | DemosaicAlgorithm::Igv
+        | DemosaicAlgorithm::Amaze
+        | DemosaicAlgorithm::AmazeVng
+        | DemosaicAlgorithm::AmazeLmmse
+        | DemosaicAlgorithm::RcdVng
+        | DemosaicAlgorithm::RcdLmmse
+        | DemosaicAlgorithm::DcbVng => {
+            if !bayer {
+                return Err(DevelopError::Invalid(
+                    "selected Bayer demosaic algorithm requires a 2x2 RGB Bayer CFA",
+                ));
+            }
+        }
+        DemosaicAlgorithm::XTransDirectional
+        | DemosaicAlgorithm::XTransMarkesteijn
+        | DemosaicAlgorithm::XTransMarkesteijn3Pass
+        | DemosaicAlgorithm::XTransDual => {
+            if !xtrans {
+                return Err(DevelopError::Invalid(
+                    "selected X-Trans demosaic algorithm requires a 6x6 RGB X-Trans CFA",
+                ));
+            }
+        }
+        DemosaicAlgorithm::QuadBayer => {
+            if !quad_bayer {
+                return Err(DevelopError::Invalid(
+                    "QuadBayer demosaic algorithm requires a 4x4 Quad Bayer CFA",
+                ));
+            }
+        }
+        DemosaicAlgorithm::NonaBayer => {
+            if !nona_bayer {
+                return Err(DevelopError::Invalid(
+                    "NonaBayer demosaic algorithm requires a 6x6 Nona Bayer (3x3 sub-cluster) CFA",
+                ));
+            }
+        }
+        DemosaicAlgorithm::HexadecaBayer => {
+            if !hexadeca_bayer {
+                return Err(DevelopError::Invalid(
+                    "HexadecaBayer demosaic algorithm requires an 8x8 Hexadeca Bayer (4x4 sub-cluster) CFA",
+                ));
+            }
+        }
+        DemosaicAlgorithm::GenericCfa => {
+            if !known_cells {
+                return Err(DevelopError::Invalid(
+                    "GenericCfa demosaic algorithm requires known CFA colour planes",
+                ));
+            }
+        }
+    }
+    Ok(cfa)
 }
 
 fn compute_clipping_mask(
@@ -329,7 +521,13 @@ pub fn develop_raw(
     if md.cfa.as_ref().is_some_and(|cfa| cfa.rgbe_quad().is_ok()) {
         return develop_rgbe(mosaic, lists, budget, cancelled);
     }
-    let cfa = quality_cfa(md.cfa.as_ref().ok_or(DevelopError::Invalid("missing CFA"))?)?;
+    if options.false_color_passes > 4 {
+        return Err(DevelopError::Invalid(
+            "false_color_passes must be between 0 and 4",
+        ));
+    }
+    let cfa_pattern = md.cfa.as_ref().ok_or(DevelopError::Invalid("missing CFA"))?;
+    let cfa = quality_cfa(cfa_pattern, options.demosaic)?;
     opcodes::validate_lists(lists)?;
     let matrix = crate::camera_to_linear_srgb(md.xyz_to_camera)
         .ok_or(DevelopError::Invalid("singular camera transform"))?;
@@ -409,7 +607,7 @@ pub fn develop_raw(
             return Err(DevelopError::Cancelled);
         }
         for x in 0..w {
-            let c = cfa.color_at(x, y) as usize;
+            let c = (cfa.color_at(x, y) as usize).min(2);
             let black = md
                 .black_level
                 .at(y as u32, x as u32, 0)
@@ -448,7 +646,7 @@ pub fn develop_raw(
     // Per-photosite WB, including G2, before demosaic. Do not clamp HDR.
     for y in 0..h {
         for x in 0..w {
-            let c = cfa.color_at(x, y) as usize;
+            let c = (cfa.color_at(x, y) as usize).min(3);
             let gain = if c == 1 && first_green.is_some_and(|g| g != (y % 2) * 2 + x % 2) {
                 md.white_balance[3]
             } else {
@@ -460,17 +658,45 @@ pub fn develop_raw(
     if samples.iter().any(|p| !p.is_finite()) {
         return Err(DevelopError::Invalid("non-finite corrected sensor samples"));
     }
+    if options.impulse_threshold > 0.0 {
+        demosaic::suppress_cfa_impulse_noise(
+            &mut samples,
+            w,
+            h,
+            &cfa,
+            options.impulse_threshold,
+            cancelled,
+        )?;
+    }
+    if quad.is_some() && options.green_equilibration > 0.0 {
+        demosaic::equilibrate_bayer_greens(
+            &mut samples,
+            w,
+            h,
+            &cfa,
+            options.green_equilibration,
+            cancelled,
+        )?;
+    }
     let source = Mosaic {
         w,
         h,
         data: &samples,
         cfa: &cfa,
     };
-    let mut rgb = if quad.is_some() {
-        ahd::ahd(&source, cancelled)?
-    } else {
-        xtrans::directional(&source, cancelled)?
-    };
+    let mut rgb = demosaic::dispatch_demosaic(
+        &source,
+        options.demosaic,
+        options.dual_contrast_threshold,
+        quad.is_some(),
+        cancelled,
+    )?;
+    if options.false_color_passes > 0 {
+        demosaic::suppress_false_color(&mut rgb, &source, options.false_color_passes, cancelled)?;
+    }
+    if options.suppress_fringe {
+        demosaic::suppress_chromatic_fringe(&mut rgb, &source, cancelled)?;
+    }
     // Corrected sensor samples are no longer needed after demosaicing.
     drop(samples);
     if cancelled() {

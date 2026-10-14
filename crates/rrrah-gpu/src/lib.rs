@@ -30,6 +30,10 @@ mod backend;
 pub use backend::{BackendError, GpuBackend, GpuVendor};
 mod compute;
 pub use compute::{ExposureError, LinearExposureCompute, ResidentExposure};
+mod demosaic_compute;
+pub use demosaic_compute::{
+    BayerDemosaicCompute, BayerDemosaicError, GpuDemosaicAlgorithm, ResidentBayerDemosaic,
+};
 mod model;
 pub use model::{ModelRenderer, ModelUploadError, ModelUploadPreparer, PreparedModelUpload};
 
@@ -1586,6 +1590,10 @@ impl RawRenderer {
         let validate = validate_started.elapsed();
 
         let atlas_plan_started = Instant::now();
+        let mut tiling = tiling;
+        if tiling.tile_halo.is_none() {
+            tiling.tile_halo = Some(DEFAULT_TILE_HALO.max(self.demosaic_algorithm().min_tile_halo()));
+        }
         let plan = plan_tiling(
             metadata.width,
             metadata.height,
@@ -1821,6 +1829,27 @@ impl RawRenderer {
         };
         queue.write_buffer(&self.uniform_buffer, 0, bytemuck::bytes_of(&self.parameters));
         Ok(())
+    }
+
+    /// Select the GPU fragment-shader demosaicing algorithm.
+    ///
+    /// Note: `MalvarHeCutler` and `Directional` require a 5×5 neighborhood (`tile_halo >= 2`).
+    /// Calling `set_demosaic_algorithm` before `upload_mosaic` automatically raises the default
+    /// `tile_halo` to `algorithm.min_tile_halo()`; if a mosaic is already resident with a smaller
+    /// `tile_halo`, the shader safely falls back to `Bilinear` until the mosaic is re-uploaded
+    /// with sufficient halo.
+    pub fn set_demosaic_algorithm(&mut self, queue: &wgpu::Queue, algorithm: GpuDemosaicAlgorithm) {
+        self.parameters.algorithm = algorithm.shader_code();
+        queue.write_buffer(&self.uniform_buffer, 0, bytemuck::bytes_of(&self.parameters));
+    }
+
+    #[must_use]
+    pub const fn demosaic_algorithm(&self) -> GpuDemosaicAlgorithm {
+        match self.parameters.algorithm {
+            1 => GpuDemosaicAlgorithm::MalvarHeCutler,
+            2 => GpuDemosaicAlgorithm::Directional,
+            _ => GpuDemosaicAlgorithm::Bilinear,
+        }
     }
 
     pub fn update_view(&mut self, queue: &wgpu::Queue, view: ViewParameters) {

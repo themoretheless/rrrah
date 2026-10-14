@@ -210,6 +210,131 @@ fn parse_hlg_gamma(value: &str) -> Result<f32, String> {
     Ok(gamma)
 }
 
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, clap::ValueEnum)]
+enum DemosaicAlgorithmChoice {
+    #[default]
+    Auto,
+    Nearest,
+    Bilinear,
+    SmoothHue,
+    LarochePrescott,
+    HamiltonAdams,
+    #[value(alias = "mhc")]
+    MalvarHeCutler,
+    Ppg,
+    Vng,
+    Rcd,
+    Ahd,
+    Lmmse,
+    Dcb,
+    Igv,
+    Amaze,
+    AmazeVng,
+    AmazeLmmse,
+    RcdVng,
+    RcdLmmse,
+    DcbVng,
+    XtransDirectional,
+    XtransMarkesteijn,
+    XtransMarkesteijn3Pass,
+    XtransDual,
+    QuadBayer,
+    NonaBayer,
+    HexadecaBayer,
+    #[value(alias = "generic")]
+    GenericCfa,
+}
+
+impl From<DemosaicAlgorithmChoice> for rrrah_core::develop::DemosaicAlgorithm {
+    fn from(choice: DemosaicAlgorithmChoice) -> Self {
+        match choice {
+            DemosaicAlgorithmChoice::Auto => Self::Auto,
+            DemosaicAlgorithmChoice::Nearest => Self::Nearest,
+            DemosaicAlgorithmChoice::Bilinear => Self::Bilinear,
+            DemosaicAlgorithmChoice::SmoothHue => Self::SmoothHue,
+            DemosaicAlgorithmChoice::LarochePrescott => Self::LarochePrescott,
+            DemosaicAlgorithmChoice::HamiltonAdams => Self::HamiltonAdams,
+            DemosaicAlgorithmChoice::MalvarHeCutler => Self::MalvarHeCutler,
+            DemosaicAlgorithmChoice::Ppg => Self::Ppg,
+            DemosaicAlgorithmChoice::Vng => Self::Vng,
+            DemosaicAlgorithmChoice::Rcd => Self::Rcd,
+            DemosaicAlgorithmChoice::Ahd => Self::Ahd,
+            DemosaicAlgorithmChoice::Lmmse => Self::Lmmse,
+            DemosaicAlgorithmChoice::Dcb => Self::Dcb,
+            DemosaicAlgorithmChoice::Igv => Self::Igv,
+            DemosaicAlgorithmChoice::Amaze => Self::Amaze,
+            DemosaicAlgorithmChoice::AmazeVng => Self::AmazeVng,
+            DemosaicAlgorithmChoice::AmazeLmmse => Self::AmazeLmmse,
+            DemosaicAlgorithmChoice::RcdVng => Self::RcdVng,
+            DemosaicAlgorithmChoice::RcdLmmse => Self::RcdLmmse,
+            DemosaicAlgorithmChoice::DcbVng => Self::DcbVng,
+            DemosaicAlgorithmChoice::XtransDirectional => Self::XTransDirectional,
+            DemosaicAlgorithmChoice::XtransMarkesteijn => Self::XTransMarkesteijn,
+            DemosaicAlgorithmChoice::XtransMarkesteijn3Pass => Self::XTransMarkesteijn3Pass,
+            DemosaicAlgorithmChoice::XtransDual => Self::XTransDual,
+            DemosaicAlgorithmChoice::QuadBayer => Self::QuadBayer,
+            DemosaicAlgorithmChoice::NonaBayer => Self::NonaBayer,
+            DemosaicAlgorithmChoice::HexadecaBayer => Self::HexadecaBayer,
+            DemosaicAlgorithmChoice::GenericCfa => Self::GenericCfa,
+        }
+    }
+}
+
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, clap::ValueEnum)]
+enum GpuDemosaicAlgorithmChoice {
+    #[default]
+    Bilinear,
+    SmoothHue,
+    #[value(alias = "mhc")]
+    MalvarHeCutler,
+    Directional,
+    Vng,
+    Rcd,
+}
+
+impl From<GpuDemosaicAlgorithmChoice> for rrrah_gpu::GpuDemosaicAlgorithm {
+    fn from(choice: GpuDemosaicAlgorithmChoice) -> Self {
+        match choice {
+            GpuDemosaicAlgorithmChoice::Bilinear => Self::Bilinear,
+            GpuDemosaicAlgorithmChoice::SmoothHue => Self::SmoothHue,
+            GpuDemosaicAlgorithmChoice::MalvarHeCutler => Self::MalvarHeCutler,
+            GpuDemosaicAlgorithmChoice::Directional => Self::Directional,
+            GpuDemosaicAlgorithmChoice::Vng => Self::Vng,
+            GpuDemosaicAlgorithmChoice::Rcd => Self::Rcd,
+        }
+    }
+}
+
+fn parse_false_color_passes(value: &str) -> Result<u8, String> {
+    let passes: u8 = value
+        .parse()
+        .map_err(|_| "Expected false-color pass count 0..=4".to_owned())?;
+    if passes > 4 {
+        return Err("False-color pass count must be between 0 and 4".to_owned());
+    }
+    Ok(passes)
+}
+
+fn parse_unit_float(value: &str) -> Result<f32, String> {
+    let v: f32 = value
+        .parse()
+        .map_err(|_| "Expected a floating-point number in 0.0..=1.0".to_owned())?;
+    if !v.is_finite() || !(0.0..=1.0).contains(&v) {
+        return Err("Value must be finite and between 0.0 and 1.0".to_owned());
+    }
+    Ok(v)
+}
+
+fn parse_nonnegative_float(value: &str) -> Result<f32, String> {
+    let v: f32 = value
+        .parse()
+        .map_err(|_| "Expected a non-negative floating-point number".to_owned())?;
+    if !v.is_finite() || v < 0.0 {
+        return Err("Value must be finite and non-negative".to_owned());
+    }
+    Ok(v)
+}
+
 #[derive(Debug, Parser)]
 #[command(name = "rrrah", about = "Native RAW and raster image viewer")]
 struct Cli {
@@ -253,6 +378,27 @@ struct Cli {
     /// Develop RAW on the CPU with AHD/X-Trans and spatial highlight recovery.
     #[arg(long)]
     raw_quality: bool,
+    /// Select CPU demosaicing algorithm (implies --raw-quality).
+    #[arg(long, value_enum)]
+    demosaic: Option<DemosaicAlgorithmChoice>,
+    /// Contrast threshold (0.0..=1.0) for dual demosaicing algorithms (implies --raw-quality).
+    #[arg(long, value_parser = parse_unit_float)]
+    dual_contrast_threshold: Option<f32>,
+    /// Median colour-difference false-colour suppression passes (0..=4; >0 implies --raw-quality).
+    #[arg(long, value_parser = parse_false_color_passes)]
+    false_color_passes: Option<u8>,
+    /// Pre-demosaic Bayer G1/G2 green equilibration strength (0.0..=1.0; >0 implies --raw-quality).
+    #[arg(long, value_parser = parse_unit_float)]
+    green_equilibration: Option<f32>,
+    /// Pre-demosaic CFA impulse / hot-pixel outlier threshold (>0 implies --raw-quality).
+    #[arg(long, value_parser = parse_nonnegative_float)]
+    impulse_threshold: Option<f32>,
+    /// Post-demosaic high-contrast chromatic fringe suppression (implies --raw-quality).
+    #[arg(long)]
+    defringe: bool,
+    /// Select GPU fragment/compute demosaicing algorithm for fast 2x2 Bayer preview.
+    #[arg(long, value_enum, default_value = "bilinear")]
+    gpu_demosaic: GpuDemosaicAlgorithmChoice,
     /// Disable spatial highlight recovery in the quality path.
     #[arg(long)]
     no_highlight_recovery: bool,
@@ -500,7 +646,16 @@ fn main() -> Result<()> {
     env_logger::init();
     let cli = Cli::parse();
     let raster_interpretation = cli.raster_interpretation();
-    let development = if cli.raw_quality || cli.tone_curve.is_some() || cli.no_highlight_recovery {
+    let development = if cli.raw_quality
+        || cli.demosaic.is_some()
+        || cli.dual_contrast_threshold.is_some()
+        || cli.false_color_passes.is_some()
+        || cli.green_equilibration.is_some()
+        || cli.impulse_threshold.is_some()
+        || cli.defringe
+        || cli.tone_curve.is_some()
+        || cli.no_highlight_recovery
+    {
         let curve = match &cli.tone_curve {
             Some(points) => parse_tone_curve(points)?,
             None => rrrah_core::develop::MonotoneCurve::identity(),
@@ -508,6 +663,12 @@ fn main() -> Result<()> {
         Some(rrrah_core::develop::DevelopOptions {
             recover_highlights: !cli.no_highlight_recovery,
             curve,
+            demosaic: cli.demosaic.map_or(rrrah_core::develop::DemosaicAlgorithm::Auto, Into::into),
+            dual_contrast_threshold: cli.dual_contrast_threshold.unwrap_or(0.04),
+            false_color_passes: cli.false_color_passes.unwrap_or(0),
+            green_equilibration: cli.green_equilibration.unwrap_or(0.0),
+            impulse_threshold: cli.impulse_threshold.unwrap_or(0.0),
+            suppress_fringe: cli.defringe,
         })
     } else {
         None
@@ -596,6 +757,7 @@ fn main() -> Result<()> {
             filmstrip_gpu_budget,
             cli.gpu_backend,
             cli.gpu_vendor,
+            cli.gpu_demosaic.into(),
             development,
         )
     }
@@ -872,6 +1034,7 @@ fn run_viewer(
     filmstrip_gpu_budget: Option<rrrah_core::MemoryBudget>,
     gpu_backend: rrrah_gpu::GpuBackend,
     gpu_vendor: rrrah_gpu::GpuVendor,
+    gpu_demosaic: rrrah_gpu::GpuDemosaicAlgorithm,
     development: Option<rrrah_core::develop::DevelopOptions>,
 ) -> Result<()> {
     let (sender, receiver) = unbounded();
@@ -932,6 +1095,7 @@ fn run_viewer(
         filmstrip_gpu_budget,
         gpu_backend,
         gpu_vendor,
+        gpu_demosaic,
         untagged_color,
     );
     let model_proxy = proxy.clone();
@@ -3284,6 +3448,7 @@ struct App {
     filmstrip_gpu_budget: Option<rrrah_core::MemoryBudget>,
     gpu_backend: rrrah_gpu::GpuBackend,
     gpu_vendor: rrrah_gpu::GpuVendor,
+    gpu_demosaic: rrrah_gpu::GpuDemosaicAlgorithm,
     upload_memory_budget: Option<rrrah_core::MemoryBudget>,
     telemetry_window: Option<Arc<Window>>,
     telemetry: Option<TelemetryState>,
@@ -3326,6 +3491,7 @@ impl App {
         filmstrip_gpu_budget: Option<rrrah_core::MemoryBudget>,
         gpu_backend: rrrah_gpu::GpuBackend,
         gpu_vendor: rrrah_gpu::GpuVendor,
+        gpu_demosaic: rrrah_gpu::GpuDemosaicAlgorithm,
         untagged_color: RasterInterpretation,
     ) -> Self {
         let thumbnail_prefetcher = gallery::Prefetcher::new_with_cancel(
@@ -3386,6 +3552,7 @@ impl App {
             filmstrip_gpu_budget,
             gpu_backend,
             gpu_vendor,
+            gpu_demosaic,
             upload_memory_budget: managed_budget,
             telemetry_window: None,
             telemetry: None,
@@ -4411,6 +4578,7 @@ impl ApplicationHandler<WakeEvent> for App {
         self.view.viewport = [gpu.size.width as f32, gpu.size.height as f32];
         self.window = Some(window.clone());
         let mut gpu = gpu;
+        gpu.renderer.set_demosaic_algorithm(&gpu.queue, self.gpu_demosaic);
         gpu.viewport_worker = self.raster_lod_worker.with_same_waker();
         gpu.storage_worker = self.raster_lod_worker.with_same_waker();
         self.gpu = Some(gpu);
@@ -7115,6 +7283,7 @@ mod foreground_loader_tests {
             None,
             rrrah_gpu::GpuBackend::Auto,
             rrrah_gpu::GpuVendor::Any,
+            rrrah_gpu::GpuDemosaicAlgorithm::Bilinear,
             UntaggedColor::Strict.into(),
         );
         app.drop_inspector = inspector;
@@ -12177,9 +12346,11 @@ fn inspect_development(
         prepare_quality_raw(mosaic, request, settings).map_err(anyhow::Error::msg)?
     {
         println!(
-            "quality_raw: {}x{}, scene-linear RGBA32F, highlight_recovery={}, develop={:.2?}, display_curve_points={}",
+            "quality_raw: {}x{}, scene-linear RGBA32F, demosaic={}, false_color_passes={}, highlight_recovery={}, develop={:.2?}, display_curve_points={}",
             raster.width(),
             raster.height(),
+            options.demosaic.as_str(),
+            options.false_color_passes,
             options.recover_highlights,
             started.elapsed(),
             options.curve.points().len()
