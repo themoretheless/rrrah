@@ -250,8 +250,7 @@ fn run_tiled_bayer<S: Default>(
                     let tw = TILE.min(w - x0);
                     tile_ref(m, x0, y0, tw, th, &mut scratch, &mut px[..tw * th]);
                     for y in 0..th {
-                        band[y * w + x0..y * w + x0 + tw]
-                            .copy_from_slice(&px[y * tw..(y + 1) * tw]);
+                        band[y * w + x0..y * w + x0 + tw].copy_from_slice(&px[y * tw..(y + 1) * tw]);
                     }
                 }
             }
@@ -290,8 +289,7 @@ fn run_tiled_bayer<S: Default>(
                     let tw = TILE.min(w - x0);
                     tile_ref(m, x0, y0, tw, th, &mut scratch, &mut px[..tw * th]);
                     for y in 0..th {
-                        band[y * w + x0..y * w + x0 + tw]
-                            .copy_from_slice(&px[y * tw..(y + 1) * tw]);
+                        band[y * w + x0..y * w + x0 + tw].copy_from_slice(&px[y * tw..(y + 1) * tw]);
                     }
                 }
             }
@@ -384,9 +382,7 @@ pub(super) fn smooth_hue(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rg
                     };
                 }
             }
-            let ratio = |idx: usize| -> f32 {
-                (scratch.mos[idx] + 1e-3) / (scratch.g[idx].max(0.0) + 1e-3)
-            };
+            let ratio = |idx: usize| -> f32 { (scratch.mos[idx] + 1e-3) / (scratch.g[idx].max(0.0) + 1e-3) };
             let from_ratio = |gp: f32, r_avg: f32, lo: f32, hi: f32| -> f32 {
                 ((gp.max(0.0) + 1e-3) * r_avg - 1e-3).clamp(lo, hi)
             };
@@ -460,10 +456,7 @@ pub(super) fn smooth_hue(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rg
 ///
 /// Uses second-order chromatic Laplacian classifiers `|2*C - C_w2 - C_e2|` vs `|2*C - C_n2 - C_s2|`
 /// to interpolate Green along edges and then completes Red and Blue via bilinear colour differences.
-pub(super) fn laroche_prescott(
-    m: &Mosaic,
-    cancelled: &impl Fn() -> bool,
-) -> Result<Rgb32f, DevelopError> {
+pub(super) fn laroche_prescott(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, DevelopError> {
     #[derive(Default)]
     struct LpScratch {
         mos: Vec<f32>,
@@ -471,112 +464,107 @@ pub(super) fn laroche_prescott(
         g: Vec<f32>,
     }
     const MARGIN: usize = 3;
-    run_tiled_bayer(
-        m,
-        cancelled,
-        |m, x0, y0, tw, th, scratch: &mut LpScratch, out| {
-            let (bw, bh) = (tw + 2 * MARGIN, th + 2 * MARGIN);
-            let n = bw * bh;
-            scratch.mos.resize(n, 0.0);
-            scratch.col.resize(n, 0);
-            scratch.g.resize(n, 0.0);
+    run_tiled_bayer(m, cancelled, |m, x0, y0, tw, th, scratch: &mut LpScratch, out| {
+        let (bw, bh) = (tw + 2 * MARGIN, th + 2 * MARGIN);
+        let n = bw * bh;
+        scratch.mos.resize(n, 0.0);
+        scratch.col.resize(n, 0);
+        scratch.g.resize(n, 0.0);
 
-            let (ox, oy) = (x0 as isize - MARGIN as isize, y0 as isize - MARGIN as isize);
-            for y in 0..bh {
-                for x in 0..bw {
-                    let idx = y * bw + x;
-                    scratch.mos[idx] = m.get(ox + x as isize, oy + y as isize);
-                    scratch.col[idx] = m.color(ox + x as isize, oy + y as isize);
-                }
+        let (ox, oy) = (x0 as isize - MARGIN as isize, y0 as isize - MARGIN as isize);
+        for y in 0..bh {
+            for x in 0..bw {
+                let idx = y * bw + x;
+                scratch.mos[idx] = m.get(ox + x as isize, oy + y as isize);
+                scratch.col[idx] = m.color(ox + x as isize, oy + y as isize);
             }
-            let cl = |x: isize, y: isize| -> usize {
-                y.clamp(0, bh as isize - 1) as usize * bw + x.clamp(0, bw as isize - 1) as usize
-            };
-            for y in 2..bh as isize - 2 {
-                for x in 2..bw as isize - 2 {
-                    let i = cl(x, y);
-                    let c = scratch.mos[i];
-                    if scratch.col[i] == 1 {
-                        scratch.g[i] = c;
-                        continue;
+        }
+        let cl = |x: isize, y: isize| -> usize {
+            y.clamp(0, bh as isize - 1) as usize * bw + x.clamp(0, bw as isize - 1) as usize
+        };
+        for y in 2..bh as isize - 2 {
+            for x in 2..bw as isize - 2 {
+                let i = cl(x, y);
+                let c = scratch.mos[i];
+                if scratch.col[i] == 1 {
+                    scratch.g[i] = c;
+                    continue;
+                }
+                let w1 = scratch.mos[cl(x - 1, y)];
+                let e1 = scratch.mos[cl(x + 1, y)];
+                let n1 = scratch.mos[cl(x, y - 1)];
+                let s1 = scratch.mos[cl(x, y + 1)];
+                let w2 = scratch.mos[cl(x - 2, y)];
+                let e2 = scratch.mos[cl(x + 2, y)];
+                let n2 = scratch.mos[cl(x, y - 2)];
+                let s2 = scratch.mos[cl(x, y + 2)];
+                let alpha = (2.0 * c - w2 - e2).abs();
+                let beta = (2.0 * c - n2 - s2).abs();
+                scratch.g[i] = if alpha < beta {
+                    0.5 * (w1 + e1)
+                } else if beta < alpha {
+                    0.5 * (n1 + s1)
+                } else {
+                    0.25 * (w1 + e1 + n1 + s1)
+                };
+            }
+        }
+        for y in 0..th {
+            let by = (y + MARGIN) as isize;
+            for x in 0..tw {
+                let bx = (x + MARGIN) as isize;
+                let i = cl(bx, by);
+                let c = scratch.mos[i];
+                let gp = scratch.g[i];
+                let nw = cl(bx - 1, by - 1);
+                let ne = cl(bx + 1, by - 1);
+                let sw = cl(bx - 1, by + 1);
+                let se = cl(bx + 1, by + 1);
+                let w1 = cl(bx - 1, by);
+                let e1 = cl(bx + 1, by);
+                let n1 = cl(bx, by - 1);
+                let s1 = cl(bx, by + 1);
+                out[y * tw + x] = match scratch.col[i] {
+                    0 => {
+                        let b_est = gp
+                            + 0.25
+                                * ((scratch.mos[nw] - scratch.g[nw])
+                                    + (scratch.mos[ne] - scratch.g[ne])
+                                    + (scratch.mos[sw] - scratch.g[sw])
+                                    + (scratch.mos[se] - scratch.g[se]));
+                        [c, gp, b_est]
                     }
-                    let w1 = scratch.mos[cl(x - 1, y)];
-                    let e1 = scratch.mos[cl(x + 1, y)];
-                    let n1 = scratch.mos[cl(x, y - 1)];
-                    let s1 = scratch.mos[cl(x, y + 1)];
-                    let w2 = scratch.mos[cl(x - 2, y)];
-                    let e2 = scratch.mos[cl(x + 2, y)];
-                    let n2 = scratch.mos[cl(x, y - 2)];
-                    let s2 = scratch.mos[cl(x, y + 2)];
-                    let alpha = (2.0 * c - w2 - e2).abs();
-                    let beta = (2.0 * c - n2 - s2).abs();
-                    scratch.g[i] = if alpha < beta {
-                        0.5 * (w1 + e1)
-                    } else if beta < alpha {
-                        0.5 * (n1 + s1)
-                    } else {
-                        0.25 * (w1 + e1 + n1 + s1)
-                    };
-                }
+                    2 => {
+                        let r_est = gp
+                            + 0.25
+                                * ((scratch.mos[nw] - scratch.g[nw])
+                                    + (scratch.mos[ne] - scratch.g[ne])
+                                    + (scratch.mos[sw] - scratch.g[sw])
+                                    + (scratch.mos[se] - scratch.g[se]));
+                        [r_est, gp, c]
+                    }
+                    _ => {
+                        let ch =
+                            c + 0.5 * ((scratch.mos[w1] - scratch.g[w1]) + (scratch.mos[e1] - scratch.g[e1]));
+                        let cv =
+                            c + 0.5 * ((scratch.mos[n1] - scratch.g[n1]) + (scratch.mos[s1] - scratch.g[s1]));
+                        if scratch.col[e1] == 0 {
+                            [ch, c, cv]
+                        } else {
+                            [cv, c, ch]
+                        }
+                    }
+                };
             }
-            for y in 0..th {
-                let by = (y + MARGIN) as isize;
-                for x in 0..tw {
-                    let bx = (x + MARGIN) as isize;
-                    let i = cl(bx, by);
-                    let c = scratch.mos[i];
-                    let gp = scratch.g[i];
-                    let nw = cl(bx - 1, by - 1);
-                    let ne = cl(bx + 1, by - 1);
-                    let sw = cl(bx - 1, by + 1);
-                    let se = cl(bx + 1, by + 1);
-                    let w1 = cl(bx - 1, by);
-                    let e1 = cl(bx + 1, by);
-                    let n1 = cl(bx, by - 1);
-                    let s1 = cl(bx, by + 1);
-                    out[y * tw + x] = match scratch.col[i] {
-                        0 => {
-                            let b_est = gp
-                                + 0.25
-                                    * ((scratch.mos[nw] - scratch.g[nw])
-                                        + (scratch.mos[ne] - scratch.g[ne])
-                                        + (scratch.mos[sw] - scratch.g[sw])
-                                        + (scratch.mos[se] - scratch.g[se]));
-                            [c, gp, b_est]
-                        }
-                        2 => {
-                            let r_est = gp
-                                + 0.25
-                                    * ((scratch.mos[nw] - scratch.g[nw])
-                                        + (scratch.mos[ne] - scratch.g[ne])
-                                        + (scratch.mos[sw] - scratch.g[sw])
-                                        + (scratch.mos[se] - scratch.g[se]));
-                            [r_est, gp, c]
-                        }
-                        _ => {
-                            let ch = c + 0.5 * ((scratch.mos[w1] - scratch.g[w1]) + (scratch.mos[e1] - scratch.g[e1]));
-                            let cv = c + 0.5 * ((scratch.mos[n1] - scratch.g[n1]) + (scratch.mos[s1] - scratch.g[s1]));
-                            if scratch.col[e1] == 0 {
-                                [ch, c, cv]
-                            } else {
-                                [cv, c, ch]
-                            }
-                        }
-                    };
-                }
-            }
-        },
-    )
+        }
+    })
 }
 
 /// Hamilton–Adams (1997) directional Laplacian-corrected demosaicing for 2×2 RGB Bayer.
 ///
 /// Combines first-order colour gradients and second-order cross-channel Laplacians along
 /// horizontal, vertical, and both diagonal axes with local neighbour clamping.
-pub(super) fn hamilton_adams(
-    m: &Mosaic,
-    cancelled: &impl Fn() -> bool,
-) -> Result<Rgb32f, DevelopError> {
+pub(super) fn hamilton_adams(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, DevelopError> {
     #[derive(Default)]
     struct HaScratch {
         mos: Vec<f32>,
@@ -584,119 +572,123 @@ pub(super) fn hamilton_adams(
         g: Vec<f32>,
     }
     const MARGIN: usize = 3;
-    run_tiled_bayer(
-        m,
-        cancelled,
-        |m, x0, y0, tw, th, scratch: &mut HaScratch, out| {
-            let (bw, bh) = (tw + 2 * MARGIN, th + 2 * MARGIN);
-            let n = bw * bh;
-            scratch.mos.resize(n, 0.0);
-            scratch.col.resize(n, 0);
-            scratch.g.resize(n, 0.0);
+    run_tiled_bayer(m, cancelled, |m, x0, y0, tw, th, scratch: &mut HaScratch, out| {
+        let (bw, bh) = (tw + 2 * MARGIN, th + 2 * MARGIN);
+        let n = bw * bh;
+        scratch.mos.resize(n, 0.0);
+        scratch.col.resize(n, 0);
+        scratch.g.resize(n, 0.0);
 
-            let (ox, oy) = (x0 as isize - MARGIN as isize, y0 as isize - MARGIN as isize);
-            for y in 0..bh {
-                for x in 0..bw {
-                    let idx = y * bw + x;
-                    scratch.mos[idx] = m.get(ox + x as isize, oy + y as isize);
-                    scratch.col[idx] = m.color(ox + x as isize, oy + y as isize);
-                }
+        let (ox, oy) = (x0 as isize - MARGIN as isize, y0 as isize - MARGIN as isize);
+        for y in 0..bh {
+            for x in 0..bw {
+                let idx = y * bw + x;
+                scratch.mos[idx] = m.get(ox + x as isize, oy + y as isize);
+                scratch.col[idx] = m.color(ox + x as isize, oy + y as isize);
             }
-            let cl = |x: isize, y: isize| -> usize {
-                y.clamp(0, bh as isize - 1) as usize * bw + x.clamp(0, bw as isize - 1) as usize
-            };
-            for y in 2..bh as isize - 2 {
-                for x in 2..bw as isize - 2 {
-                    let i = cl(x, y);
-                    let c = scratch.mos[i];
-                    if scratch.col[i] == 1 {
-                        scratch.g[i] = c;
-                        continue;
+        }
+        let cl = |x: isize, y: isize| -> usize {
+            y.clamp(0, bh as isize - 1) as usize * bw + x.clamp(0, bw as isize - 1) as usize
+        };
+        for y in 2..bh as isize - 2 {
+            for x in 2..bw as isize - 2 {
+                let i = cl(x, y);
+                let c = scratch.mos[i];
+                if scratch.col[i] == 1 {
+                    scratch.g[i] = c;
+                    continue;
+                }
+                let w1 = scratch.mos[cl(x - 1, y)];
+                let e1 = scratch.mos[cl(x + 1, y)];
+                let n1 = scratch.mos[cl(x, y - 1)];
+                let s1 = scratch.mos[cl(x, y + 1)];
+                let w2 = scratch.mos[cl(x - 2, y)];
+                let e2 = scratch.mos[cl(x + 2, y)];
+                let n2 = scratch.mos[cl(x, y - 2)];
+                let s2 = scratch.mos[cl(x, y + 2)];
+                let grad_h = (w1 - e1).abs() + (2.0 * c - w2 - e2).abs();
+                let grad_v = (n1 - s1).abs() + (2.0 * c - n2 - s2).abs();
+                let gh = (0.5 * (w1 + e1) + 0.25 * (2.0 * c - w2 - e2)).clamp(w1.min(e1), w1.max(e1));
+                let gv = (0.5 * (n1 + s1) + 0.25 * (2.0 * c - n2 - s2)).clamp(n1.min(s1), n1.max(s1));
+                scratch.g[i] = if grad_h < grad_v {
+                    gh
+                } else if grad_v < grad_h {
+                    gv
+                } else {
+                    0.5 * (gh + gv)
+                };
+            }
+        }
+        for y in 0..th {
+            let by = (y + MARGIN) as isize;
+            for x in 0..tw {
+                let bx = (x + MARGIN) as isize;
+                let i = cl(bx, by);
+                let c = scratch.mos[i];
+                let gp = scratch.g[i];
+                let nw = cl(bx - 1, by - 1);
+                let ne = cl(bx + 1, by - 1);
+                let sw = cl(bx - 1, by + 1);
+                let se = cl(bx + 1, by + 1);
+                let w1 = cl(bx - 1, by);
+                let e1 = cl(bx + 1, by);
+                let n1 = cl(bx, by - 1);
+                let s1 = cl(bx, by + 1);
+                out[y * tw + x] = match scratch.col[i] {
+                    0 | 2 => {
+                        let d_nw = scratch.mos[nw] - scratch.g[nw];
+                        let d_se = scratch.mos[se] - scratch.g[se];
+                        let d_ne = scratch.mos[ne] - scratch.g[ne];
+                        let d_sw = scratch.mos[sw] - scratch.g[sw];
+                        let g_nw_se = (scratch.mos[nw] - scratch.mos[se]).abs()
+                            + (2.0 * gp - scratch.g[nw] - scratch.g[se]).abs();
+                        let g_ne_sw = (scratch.mos[ne] - scratch.mos[sw]).abs()
+                            + (2.0 * gp - scratch.g[ne] - scratch.g[sw]).abs();
+                        let opp_min = scratch.mos[nw]
+                            .min(scratch.mos[ne])
+                            .min(scratch.mos[sw])
+                            .min(scratch.mos[se]);
+                        let opp_max = scratch.mos[nw]
+                            .max(scratch.mos[ne])
+                            .max(scratch.mos[sw])
+                            .max(scratch.mos[se]);
+                        let opp = if g_nw_se < g_ne_sw {
+                            gp + 0.5 * (d_nw + d_se)
+                        } else if g_ne_sw < g_nw_se {
+                            gp + 0.5 * (d_ne + d_sw)
+                        } else {
+                            gp + 0.25 * (d_nw + d_se + d_ne + d_sw)
+                        }
+                        .clamp(opp_min, opp_max);
+                        if scratch.col[i] == 0 {
+                            [c, gp, opp]
+                        } else {
+                            [opp, gp, c]
+                        }
                     }
-                    let w1 = scratch.mos[cl(x - 1, y)];
-                    let e1 = scratch.mos[cl(x + 1, y)];
-                    let n1 = scratch.mos[cl(x, y - 1)];
-                    let s1 = scratch.mos[cl(x, y + 1)];
-                    let w2 = scratch.mos[cl(x - 2, y)];
-                    let e2 = scratch.mos[cl(x + 2, y)];
-                    let n2 = scratch.mos[cl(x, y - 2)];
-                    let s2 = scratch.mos[cl(x, y + 2)];
-                    let grad_h = (w1 - e1).abs() + (2.0 * c - w2 - e2).abs();
-                    let grad_v = (n1 - s1).abs() + (2.0 * c - n2 - s2).abs();
-                    let gh = (0.5 * (w1 + e1) + 0.25 * (2.0 * c - w2 - e2)).clamp(w1.min(e1), w1.max(e1));
-                    let gv = (0.5 * (n1 + s1) + 0.25 * (2.0 * c - n2 - s2)).clamp(n1.min(s1), n1.max(s1));
-                    scratch.g[i] = if grad_h < grad_v {
-                        gh
-                    } else if grad_v < grad_h {
-                        gv
-                    } else {
-                        0.5 * (gh + gv)
-                    };
-                }
-            }
-            for y in 0..th {
-                let by = (y + MARGIN) as isize;
-                for x in 0..tw {
-                    let bx = (x + MARGIN) as isize;
-                    let i = cl(bx, by);
-                    let c = scratch.mos[i];
-                    let gp = scratch.g[i];
-                    let nw = cl(bx - 1, by - 1);
-                    let ne = cl(bx + 1, by - 1);
-                    let sw = cl(bx - 1, by + 1);
-                    let se = cl(bx + 1, by + 1);
-                    let w1 = cl(bx - 1, by);
-                    let e1 = cl(bx + 1, by);
-                    let n1 = cl(bx, by - 1);
-                    let s1 = cl(bx, by + 1);
-                    out[y * tw + x] = match scratch.col[i] {
-                        0 | 2 => {
-                            let d_nw = scratch.mos[nw] - scratch.g[nw];
-                            let d_se = scratch.mos[se] - scratch.g[se];
-                            let d_ne = scratch.mos[ne] - scratch.g[ne];
-                            let d_sw = scratch.mos[sw] - scratch.g[sw];
-                            let g_nw_se = (scratch.mos[nw] - scratch.mos[se]).abs()
-                                + (2.0 * gp - scratch.g[nw] - scratch.g[se]).abs();
-                            let g_ne_sw = (scratch.mos[ne] - scratch.mos[sw]).abs()
-                                + (2.0 * gp - scratch.g[ne] - scratch.g[sw]).abs();
-                            let opp_min = scratch.mos[nw]
-                                .min(scratch.mos[ne])
-                                .min(scratch.mos[sw])
-                                .min(scratch.mos[se]);
-                            let opp_max = scratch.mos[nw]
-                                .max(scratch.mos[ne])
-                                .max(scratch.mos[sw])
-                                .max(scratch.mos[se]);
-                            let opp = if g_nw_se < g_ne_sw {
-                                gp + 0.5 * (d_nw + d_se)
-                            } else if g_ne_sw < g_nw_se {
-                                gp + 0.5 * (d_ne + d_sw)
-                            } else {
-                                gp + 0.25 * (d_nw + d_se + d_ne + d_sw)
-                            }
-                            .clamp(opp_min, opp_max);
-                            if scratch.col[i] == 0 {
-                                [c, gp, opp]
-                            } else {
-                                [opp, gp, c]
-                            }
+                    _ => {
+                        let ch = (c + 0.5
+                            * ((scratch.mos[w1] - scratch.g[w1]) + (scratch.mos[e1] - scratch.g[e1])))
+                            .clamp(
+                                scratch.mos[w1].min(scratch.mos[e1]),
+                                scratch.mos[w1].max(scratch.mos[e1]),
+                            );
+                        let cv = (c + 0.5
+                            * ((scratch.mos[n1] - scratch.g[n1]) + (scratch.mos[s1] - scratch.g[s1])))
+                            .clamp(
+                                scratch.mos[n1].min(scratch.mos[s1]),
+                                scratch.mos[n1].max(scratch.mos[s1]),
+                            );
+                        if scratch.col[e1] == 0 {
+                            [ch, c, cv]
+                        } else {
+                            [cv, c, ch]
                         }
-                        _ => {
-                            let ch = (c + 0.5 * ((scratch.mos[w1] - scratch.g[w1]) + (scratch.mos[e1] - scratch.g[e1])))
-                                .clamp(scratch.mos[w1].min(scratch.mos[e1]), scratch.mos[w1].max(scratch.mos[e1]));
-                            let cv = (c + 0.5 * ((scratch.mos[n1] - scratch.g[n1]) + (scratch.mos[s1] - scratch.g[s1])))
-                                .clamp(scratch.mos[n1].min(scratch.mos[s1]), scratch.mos[n1].max(scratch.mos[s1]));
-                            if scratch.col[e1] == 0 {
-                                [ch, c, cv]
-                            } else {
-                                [cv, c, ch]
-                            }
-                        }
-                    };
-                }
+                    }
+                };
             }
-        },
-    )
+        }
+    })
 }
 
 /// Fast 3×3 bilinear demosaicing for 2×2 RGB Bayer mosaics.
@@ -712,37 +704,36 @@ pub(super) fn bilinear(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb3
         let interior_y = y >= 1 && y + 1 < h;
         for (x, px) in row.iter_mut().enumerate() {
             let xi = x as isize;
-            let (c, n, s, wst, est, nw, ne, sw, se, own, h_color) =
-                if interior_y && x >= 1 && x + 1 < w {
-                    let i = y * w + x;
-                    (
-                        m.data[i],
-                        m.data[i - w],
-                        m.data[i + w],
-                        m.data[i - 1],
-                        m.data[i + 1],
-                        m.data[i - w - 1],
-                        m.data[i - w + 1],
-                        m.data[i + w - 1],
-                        m.data[i + w + 1],
-                        m.cfa.color_at(x, y),
-                        m.cfa.color_at(x + 1, y),
-                    )
-                } else {
-                    (
-                        m.get(xi, yi),
-                        m.get(xi, yi - 1),
-                        m.get(xi, yi + 1),
-                        m.get(xi - 1, yi),
-                        m.get(xi + 1, yi),
-                        m.get(xi - 1, yi - 1),
-                        m.get(xi + 1, yi - 1),
-                        m.get(xi - 1, yi + 1),
-                        m.get(xi + 1, yi + 1),
-                        m.color(xi, yi),
-                        m.cfa.color_at((x + 1) % m.cfa.width, y % m.cfa.height),
-                    )
-                };
+            let (c, n, s, wst, est, nw, ne, sw, se, own, h_color) = if interior_y && x >= 1 && x + 1 < w {
+                let i = y * w + x;
+                (
+                    m.data[i],
+                    m.data[i - w],
+                    m.data[i + w],
+                    m.data[i - 1],
+                    m.data[i + 1],
+                    m.data[i - w - 1],
+                    m.data[i - w + 1],
+                    m.data[i + w - 1],
+                    m.data[i + w + 1],
+                    m.cfa.color_at(x, y),
+                    m.cfa.color_at(x + 1, y),
+                )
+            } else {
+                (
+                    m.get(xi, yi),
+                    m.get(xi, yi - 1),
+                    m.get(xi, yi + 1),
+                    m.get(xi - 1, yi),
+                    m.get(xi + 1, yi),
+                    m.get(xi - 1, yi - 1),
+                    m.get(xi + 1, yi - 1),
+                    m.get(xi - 1, yi + 1),
+                    m.get(xi + 1, yi + 1),
+                    m.color(xi, yi),
+                    m.cfa.color_at((x + 1) % m.cfa.width, y % m.cfa.height),
+                )
+            };
             let axial = 0.25 * (n + s + wst + est);
             let diag = 0.25 * (nw + ne + sw + se);
             *px = match own {
@@ -751,11 +742,7 @@ pub(super) fn bilinear(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb3
                 _ => {
                     let lr = 0.5 * (wst + est);
                     let ud = 0.5 * (n + s);
-                    if h_color == 0 {
-                        [lr, c, ud]
-                    } else {
-                        [ud, c, lr]
-                    }
+                    if h_color == 0 { [lr, c, ud] } else { [ud, c, lr] }
                 }
             };
         }
@@ -771,10 +758,7 @@ pub(super) fn bilinear(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb3
 /// The filter weights sum to 1.0 on the target colour and 0.0 on the cross-channel Laplacian
 /// correction terms, so constant colour fields are reproduced accurately while high-frequency
 /// luminance gradients are transferred across channels.
-pub(super) fn malvar_he_cutler(
-    m: &Mosaic,
-    cancelled: &impl Fn() -> bool,
-) -> Result<Rgb32f, DevelopError> {
+pub(super) fn malvar_he_cutler(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, DevelopError> {
     let (w, h) = (m.w, m.h);
     let mut out = Rgb32f::new(w, h);
     if w == 0 || h == 0 {
@@ -822,8 +806,7 @@ pub(super) fn malvar_he_cutler(
                     // Opposite RB at RB: (2*(NW+NE+SW+SE) + 1.5*(4*C - N2 - S2 - W2 - E2)) / 8
                     let opp_min = nw.min(ne).min(sw).min(se);
                     let opp_max = nw.max(ne).max(sw).max(se);
-                    let opp_est =
-                        0.25 * (nw + ne + sw + se) + 0.1875 * (4.0 * c - (n2 + s2 + w2 + e2));
+                    let opp_est = 0.25 * (nw + ne + sw + se) + 0.1875 * (4.0 * c - (n2 + s2 + w2 + e2));
                     let opp = clamp_support(opp_est, opp_min, opp_max);
 
                     if own == 0 {
@@ -838,16 +821,14 @@ pub(super) fn malvar_he_cutler(
                     let h_min = w1.min(e1);
                     let h_max = w1.max(e1);
                     let h_est = 0.5 * (w1 + e1)
-                        + 0.125
-                            * (5.0 * c - (nw + ne + sw + se) - (w2 + e2) + 0.5 * (n2 + s2));
+                        + 0.125 * (5.0 * c - (nw + ne + sw + se) - (w2 + e2) + 0.5 * (n2 + s2));
                     let ch_val = clamp_support(h_est, h_min, h_max);
 
                     // Vertical interpolation: (4*(N1+S1) + 5*C - (NW+NE+SW+SE) - N2 - S2 + 0.5*(W2+E2)) / 8
                     let v_min = n1.min(s1);
                     let v_max = n1.max(s1);
                     let v_est = 0.5 * (n1 + s1)
-                        + 0.125
-                            * (5.0 * c - (nw + ne + sw + se) - (n2 + s2) + 0.5 * (w2 + e2));
+                        + 0.125 * (5.0 * c - (nw + ne + sw + se) - (n2 + s2) + 0.5 * (w2 + e2));
                     let cv_val = clamp_support(v_est, v_min, v_max);
 
                     let h_color = m.cfa.color_at((x + 1) % m.cfa.width, y % m.cfa.height);
@@ -970,10 +951,8 @@ pub(super) fn ppg(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, D
                         let g_ne = scratch.g[cl(bx + 1, by - 1)];
                         let g_sw = scratch.g[cl(bx - 1, by + 1)];
 
-                        let grad_nw_se =
-                            (c_nw - c_se).abs() + (2.0 * gp - g_nw - g_se).abs();
-                        let grad_ne_sw =
-                            (c_ne - c_sw).abs() + (2.0 * gp - g_ne - g_sw).abs();
+                        let grad_nw_se = (c_nw - c_se).abs() + (2.0 * gp - g_nw - g_se).abs();
+                        let grad_ne_sw = (c_ne - c_sw).abs() + (2.0 * gp - g_ne - g_sw).abs();
 
                         p[2 - own] = if grad_nw_se < grad_ne_sw {
                             gp + 0.5 * (d(-1, -1) + d(1, 1))
@@ -1077,10 +1056,26 @@ pub(super) fn vng(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, D
                 if own == 1 {
                     // Green center: h_color is at E/W, v_color is at N/S
                     let (g_est, h_est, v_est) = match dir {
-                        0 => (0.5 * (c_val + s[0][2]), 0.5 * (s[2][1] + s[2][3] + s[0][1] + s[0][3]) * 0.5, s[1][2]),
-                        1 => (0.5 * (c_val + s[2][4]), s[2][3], 0.5 * (s[1][2] + s[3][2] + s[1][4] + s[3][4]) * 0.5),
-                        2 => (0.5 * (c_val + s[4][2]), 0.5 * (s[2][1] + s[2][3] + s[4][1] + s[4][3]) * 0.5, s[3][2]),
-                        3 => (0.5 * (c_val + s[2][0]), s[2][1], 0.5 * (s[1][2] + s[3][2] + s[1][0] + s[3][0]) * 0.5),
+                        0 => (
+                            0.5 * (c_val + s[0][2]),
+                            0.5 * (s[2][1] + s[2][3] + s[0][1] + s[0][3]) * 0.5,
+                            s[1][2],
+                        ),
+                        1 => (
+                            0.5 * (c_val + s[2][4]),
+                            s[2][3],
+                            0.5 * (s[1][2] + s[3][2] + s[1][4] + s[3][4]) * 0.5,
+                        ),
+                        2 => (
+                            0.5 * (c_val + s[4][2]),
+                            0.5 * (s[2][1] + s[2][3] + s[4][1] + s[4][3]) * 0.5,
+                            s[3][2],
+                        ),
+                        3 => (
+                            0.5 * (c_val + s[2][0]),
+                            s[2][1],
+                            0.5 * (s[1][2] + s[3][2] + s[1][0] + s[3][0]) * 0.5,
+                        ),
                         4 => (s[1][3], s[2][3], s[1][2]),
                         5 => (s[3][3], s[2][3], s[3][2]),
                         6 => (s[1][1], s[2][1], s[1][2]),
@@ -1341,10 +1336,10 @@ pub(super) fn lmmse(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f,
                     let c = scratch.mos[i];
                     let (l, r) = (scratch.mos[cl(x - 1, y)], scratch.mos[cl(x + 1, y)]);
                     let (u, d) = (scratch.mos[cl(x, y - 1)], scratch.mos[cl(x, y + 1)]);
-                    let est_h =
-                        l.midpoint(r) + (2.0 * c - scratch.mos[cl(x - 2, y)] - scratch.mos[cl(x + 2, y)]) * 0.25;
-                    let est_v =
-                        u.midpoint(d) + (2.0 * c - scratch.mos[cl(x, y - 2)] - scratch.mos[cl(x, y + 2)]) * 0.25;
+                    let est_h = l.midpoint(r)
+                        + (2.0 * c - scratch.mos[cl(x - 2, y)] - scratch.mos[cl(x + 2, y)]) * 0.25;
+                    let est_v = u.midpoint(d)
+                        + (2.0 * c - scratch.mos[cl(x, y - 2)] - scratch.mos[cl(x, y + 2)]) * 0.25;
                     if scratch.col[i] == 1 {
                         scratch.dh[i] = c - est_h;
                         scratch.dv[i] = c - est_v;
@@ -1522,8 +1517,10 @@ pub(super) fn dcb(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, D
                     let e2 = scratch.mos[cl(x + 2, y)];
                     let n2 = scratch.mos[cl(x, y - 2)];
                     let s2 = scratch.mos[cl(x, y + 2)];
-                    scratch.gh[i] = (0.5 * (w1 + e1) + 0.25 * (2.0 * c - w2 - e2)).clamp(w1.min(e1), w1.max(e1));
-                    scratch.gv[i] = (0.5 * (n1 + s1) + 0.25 * (2.0 * c - n2 - s2)).clamp(n1.min(s1), n1.max(s1));
+                    scratch.gh[i] =
+                        (0.5 * (w1 + e1) + 0.25 * (2.0 * c - w2 - e2)).clamp(w1.min(e1), w1.max(e1));
+                    scratch.gv[i] =
+                        (0.5 * (n1 + s1) + 0.25 * (2.0 * c - n2 - s2)).clamp(n1.min(s1), n1.max(s1));
                 }
             }
 
@@ -1536,10 +1533,12 @@ pub(super) fn dcb(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, D
                         continue;
                     }
                     let c = scratch.mos[i];
-                    let dh = (c - scratch.gh[i] - (scratch.mos[cl(x - 2, y)] - scratch.gh[cl(x - 2, y)])).abs()
+                    let dh = (c - scratch.gh[i] - (scratch.mos[cl(x - 2, y)] - scratch.gh[cl(x - 2, y)]))
+                        .abs()
                         + (c - scratch.gh[i] - (scratch.mos[cl(x + 2, y)] - scratch.gh[cl(x + 2, y)])).abs()
                         + (scratch.gh[cl(x - 1, y)] - scratch.gh[cl(x + 1, y)]).abs();
-                    let dv = (c - scratch.gv[i] - (scratch.mos[cl(x, y - 2)] - scratch.gv[cl(x, y - 2)])).abs()
+                    let dv = (c - scratch.gv[i] - (scratch.mos[cl(x, y - 2)] - scratch.gv[cl(x, y - 2)]))
+                        .abs()
                         + (c - scratch.gv[i] - (scratch.mos[cl(x, y + 2)] - scratch.gv[cl(x, y + 2)])).abs()
                         + (scratch.gv[cl(x, y - 1)] - scratch.gv[cl(x, y + 1)]).abs();
                     let wh = 1.0 / (EPS + dh * dh);
@@ -1596,8 +1595,12 @@ pub(super) fn dcb(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, D
                     let e1 = cl(bx + 1, by);
                     let n1 = cl(bx, by - 1);
                     let s1 = cl(bx, by + 1);
-                    p[ch] = gp + 0.5 * ((scratch.rgb[w1][ch] - scratch.g[w1]) + (scratch.rgb[e1][ch] - scratch.g[e1]));
-                    p[cv] = gp + 0.5 * ((scratch.rgb[n1][cv] - scratch.g[n1]) + (scratch.rgb[s1][cv] - scratch.g[s1]));
+                    p[ch] = gp
+                        + 0.5
+                            * ((scratch.rgb[w1][ch] - scratch.g[w1]) + (scratch.rgb[e1][ch] - scratch.g[e1]));
+                    p[cv] = gp
+                        + 0.5
+                            * ((scratch.rgb[n1][cv] - scratch.g[n1]) + (scratch.rgb[s1][cv] - scratch.g[s1]));
                     out[y * tw + x] = p;
                 }
             }
@@ -1689,7 +1692,8 @@ pub(super) fn igv(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, D
                     let we = 1.0 / ve;
                     let g_min = n1.min(s1).min(w1).min(e1);
                     let g_max = n1.max(s1).max(w1).max(e1);
-                    scratch.g[i] = ((wn * gn + ws * gs + ww * gw + we * ge) / (wn + ws + ww + we)).clamp(g_min, g_max);
+                    scratch.g[i] =
+                        ((wn * gn + ws * gs + ww * gw + we * ge) / (wn + ws + ww + we)).clamp(g_min, g_max);
                 }
             }
 
@@ -1711,8 +1715,10 @@ pub(super) fn igv(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, D
                     let d_se = scratch.mos[se] - scratch.g[se];
                     let d_ne = scratch.mos[ne] - scratch.g[ne];
                     let d_sw = scratch.mos[sw] - scratch.g[sw];
-                    let w1 = 1.0 / (EPS + (d_nw - d_se).powi(2) + (scratch.mos[nw] - scratch.mos[se]).powi(2));
-                    let w2 = 1.0 / (EPS + (d_ne - d_sw).powi(2) + (scratch.mos[ne] - scratch.mos[sw]).powi(2));
+                    let w1 =
+                        1.0 / (EPS + (d_nw - d_se).powi(2) + (scratch.mos[nw] - scratch.mos[se]).powi(2));
+                    let w2 =
+                        1.0 / (EPS + (d_ne - d_sw).powi(2) + (scratch.mos[ne] - scratch.mos[sw]).powi(2));
                     let mut p = [0.0f32; 3];
                     p[own] = scratch.mos[i];
                     p[1] = gp;
@@ -1741,8 +1747,12 @@ pub(super) fn igv(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, D
                     let e1 = cl(bx + 1, by);
                     let n1 = cl(bx, by - 1);
                     let s1 = cl(bx, by + 1);
-                    p[ch] = gp + 0.5 * ((scratch.rgb[w1][ch] - scratch.g[w1]) + (scratch.rgb[e1][ch] - scratch.g[e1]));
-                    p[cv] = gp + 0.5 * ((scratch.rgb[n1][cv] - scratch.g[n1]) + (scratch.rgb[s1][cv] - scratch.g[s1]));
+                    p[ch] = gp
+                        + 0.5
+                            * ((scratch.rgb[w1][ch] - scratch.g[w1]) + (scratch.rgb[e1][ch] - scratch.g[e1]));
+                    p[cv] = gp
+                        + 0.5
+                            * ((scratch.rgb[n1][cv] - scratch.g[n1]) + (scratch.rgb[s1][cv] - scratch.g[s1]));
                     out[y * tw + x] = p;
                 }
             }
@@ -1815,11 +1825,9 @@ pub(super) fn amaze(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f,
                     let n3 = scratch.mos[cl(x, y - 3)];
                     let s3 = scratch.mos[cl(x, y + 3)];
 
-                    let gh = (0.5 * (w1 + e1) + 0.25 * (2.0 * c - w2 - e2)
-                        - 0.0625 * (w1 - w3 + e1 - e3))
+                    let gh = (0.5 * (w1 + e1) + 0.25 * (2.0 * c - w2 - e2) - 0.0625 * (w1 - w3 + e1 - e3))
                         .clamp(w1.min(e1), w1.max(e1));
-                    let gv = (0.5 * (n1 + s1) + 0.25 * (2.0 * c - n2 - s2)
-                        - 0.0625 * (n1 - n3 + s1 - s3))
+                    let gv = (0.5 * (n1 + s1) + 0.25 * (2.0 * c - n2 - s2) - 0.0625 * (n1 - n3 + s1 - s3))
                         .clamp(n1.min(s1), n1.max(s1));
                     scratch.dg_h[i] = gh - c;
                     scratch.dg_v[i] = gv - c;
@@ -1902,7 +1910,8 @@ pub(super) fn amaze(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f,
                     let mut p = [0.0f32; 3];
                     p[own] = scratch.mos[i];
                     p[1] = gp;
-                    p[opp] = gp + (w_nwse * 0.5 * (d_nw + d_se) + w_nesw * 0.5 * (d_ne + d_sw)) / (w_nwse + w_nesw);
+                    p[opp] = gp
+                        + (w_nwse * 0.5 * (d_nw + d_se) + w_nesw * 0.5 * (d_ne + d_sw)) / (w_nwse + w_nesw);
                     scratch.rgb[i] = p;
                 }
             }
@@ -1927,8 +1936,12 @@ pub(super) fn amaze(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f,
                     let e1 = cl(bx + 1, by);
                     let n1 = cl(bx, by - 1);
                     let s1 = cl(bx, by + 1);
-                    p[ch] = gp + 0.5 * ((scratch.rgb[w1][ch] - scratch.g[w1]) + (scratch.rgb[e1][ch] - scratch.g[e1]));
-                    p[cv] = gp + 0.5 * ((scratch.rgb[n1][cv] - scratch.g[n1]) + (scratch.rgb[s1][cv] - scratch.g[s1]));
+                    p[ch] = gp
+                        + 0.5
+                            * ((scratch.rgb[w1][ch] - scratch.g[w1]) + (scratch.rgb[e1][ch] - scratch.g[e1]));
+                    p[cv] = gp
+                        + 0.5
+                            * ((scratch.rgb[n1][cv] - scratch.g[n1]) + (scratch.rgb[s1][cv] - scratch.g[s1]));
                     out[y * tw + x] = p;
                 }
             }
@@ -2002,10 +2015,7 @@ pub(super) fn dual_demosaic(
 /// green neighbour horizontally or vertically and diagonal greens within the 3×3 ring), completes
 /// red and blue for each candidate using edge-weighted colour differences, measures CIELab homogeneity
 /// across a 3×3 window, and selects the most homogeneous direction.
-pub(super) fn xtrans_markesteijn(
-    m: &Mosaic,
-    cancelled: &impl Fn() -> bool,
-) -> Result<Rgb32f, DevelopError> {
+pub(super) fn xtrans_markesteijn(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, DevelopError> {
     #[derive(Default)]
     struct XTransScratch {
         mos: Vec<f32>,
@@ -2786,12 +2796,8 @@ pub(super) fn equilibrate_bayer_greens(
             let g0 = get(xi, yi);
             // 4 diagonal opposite-phase green neighbours vs 4 same-phase green neighbours at distance 2
             let opp_avg = 0.25
-                * (get(xi - 1, yi - 1)
-                    + get(xi + 1, yi - 1)
-                    + get(xi - 1, yi + 1)
-                    + get(xi + 1, yi + 1));
-            let same_avg =
-                0.25 * (get(xi - 2, yi) + get(xi + 2, yi) + get(xi, yi - 2) + get(xi, yi + 2));
+                * (get(xi - 1, yi - 1) + get(xi + 1, yi - 1) + get(xi - 1, yi + 1) + get(xi + 1, yi + 1));
+            let same_avg = 0.25 * (get(xi - 2, yi) + get(xi + 2, yi) + get(xi, yi - 2) + get(xi, yi + 2));
             let diff = opp_avg - 0.5 * (g0 + same_avg);
             let local_grad = (get(xi - 1, yi - 1) - get(xi + 1, yi + 1)).abs()
                 + (get(xi + 1, yi - 1) - get(xi - 1, yi + 1)).abs();
@@ -3122,7 +3128,7 @@ pub fn demosaic_f32(
     samples: &[f32],
     width: u32,
     height: u32,
-    cfa_pattern: & crate::CfaPattern,
+    cfa_pattern: &crate::CfaPattern,
     config: &DemosaicConfig,
     budget: Option<&crate::MemoryBudget>,
     cancelled: &impl Fn() -> bool,
@@ -3222,15 +3228,7 @@ pub fn demosaic_u16(
         .iter()
         .map(|&s| ((f32::from(s) - black_level).max(0.0)) * inv)
         .collect();
-    demosaic_f32(
-        &normalized,
-        width,
-        height,
-        cfa_pattern,
-        config,
-        budget,
-        cancelled,
-    )
+    demosaic_f32(&normalized, width, height, cfa_pattern, config, budget, cancelled)
 }
 
 /// Exact half-resolution 2×2 Bayer superpixel extractor (no spatial interpolation).
@@ -3253,7 +3251,10 @@ pub fn demosaic_bayer_superpixel(
         .bayer_quad()
         .map_err(|_| DevelopError::Invalid("superpixel demosaic requires a 2x2 RGB Bayer CFA"))?;
     let (w, h) = (width as usize, height as usize);
-    if samples.len() != w.checked_mul(h).ok_or(DevelopError::Invalid("dimension overflow"))? {
+    if samples.len()
+        != w.checked_mul(h)
+            .ok_or(DevelopError::Invalid("dimension overflow"))?
+    {
         return Err(DevelopError::Invalid("sensor sample count mismatch"));
     }
     let (ow, oh) = (w / 2, h / 2);
@@ -3293,13 +3294,12 @@ pub fn demosaic_bayer_superpixel(
     Ok((ow as u32, oh as u32, out_credit.try_adopt(out)?.into()))
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::*;
     use crate::{
-        CfaColor, CfaPattern, DecodedMosaic, LevelGrid, MemoryBudget, Orientation, Photometric,
-        RasterPixels, RawMetadata, WhiteLevel,
+        CfaColor, CfaPattern, DecodedMosaic, LevelGrid, MemoryBudget, Orientation, Photometric, RasterPixels,
+        RawMetadata, WhiteLevel,
         develop::{DevelopOptions, OpcodeLists, develop_raw},
     };
 
@@ -3589,13 +3589,34 @@ mod tests {
         let mse_amaze = mse(&amaze(&m, &|| false).unwrap());
         assert!(mse_lp < mse_bil, "LP ({mse_lp}) should beat bilinear ({mse_bil})");
         assert!(mse_ha < mse_bil, "HA ({mse_ha}) should beat bilinear ({mse_bil})");
-        assert!(mse_mhc < mse_bil, "MHC ({mse_mhc}) should beat bilinear ({mse_bil})");
-        assert!(mse_ppg < mse_bil, "PPG ({mse_ppg}) should beat bilinear ({mse_bil})");
-        assert!(mse_rcd < mse_bil, "RCD ({mse_rcd}) should beat bilinear ({mse_bil})");
-        assert!(mse_lmmse < mse_bil, "LMMSE ({mse_lmmse}) should beat bilinear ({mse_bil})");
-        assert!(mse_dcb < mse_bil, "DCB ({mse_dcb}) should beat bilinear ({mse_bil})");
-        assert!(mse_igv < mse_bil, "IGV ({mse_igv}) should beat bilinear ({mse_bil})");
-        assert!(mse_amaze < mse_bil, "AMaZE ({mse_amaze}) should beat bilinear ({mse_bil})");
+        assert!(
+            mse_mhc < mse_bil,
+            "MHC ({mse_mhc}) should beat bilinear ({mse_bil})"
+        );
+        assert!(
+            mse_ppg < mse_bil,
+            "PPG ({mse_ppg}) should beat bilinear ({mse_bil})"
+        );
+        assert!(
+            mse_rcd < mse_bil,
+            "RCD ({mse_rcd}) should beat bilinear ({mse_bil})"
+        );
+        assert!(
+            mse_lmmse < mse_bil,
+            "LMMSE ({mse_lmmse}) should beat bilinear ({mse_bil})"
+        );
+        assert!(
+            mse_dcb < mse_bil,
+            "DCB ({mse_dcb}) should beat bilinear ({mse_bil})"
+        );
+        assert!(
+            mse_igv < mse_bil,
+            "IGV ({mse_igv}) should beat bilinear ({mse_bil})"
+        );
+        assert!(
+            mse_amaze < mse_bil,
+            "AMaZE ({mse_amaze}) should beat bilinear ({mse_bil})"
+        );
     }
 
     #[test]
@@ -3660,8 +3681,7 @@ mod tests {
         assert_eq!(budget.used(), 0);
 
         let (sw, sh, super_rgb) =
-            demosaic_bayer_superpixel(&samples[..], w, h, &cfa_pat, Some(&budget), &|| false)
-                .unwrap();
+            demosaic_bayer_superpixel(&samples[..], w, h, &cfa_pat, Some(&budget), &|| false).unwrap();
         assert_eq!((sw, sh), (w / 2, h / 2));
         assert_eq!(super_rgb.len(), (sw * sh) as usize);
         drop(super_rgb);
@@ -3766,8 +3786,8 @@ mod tests {
                 suppress_fringe: true,
                 ..Default::default()
             };
-            let raster = develop_raw(&mosaic, &opts, &OpcodeLists::default(), Some(&budget), &|| false)
-                .unwrap();
+            let raster =
+                develop_raw(&mosaic, &opts, &OpcodeLists::default(), Some(&budget), &|| false).unwrap();
             let RasterPixels::Rgba32Float(px) = raster.pixels() else {
                 panic!()
             };
@@ -3803,5 +3823,3 @@ mod tests {
         }
     }
 }
-
-

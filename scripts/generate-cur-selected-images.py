@@ -4,7 +4,7 @@ from pathlib import Path
 from PIL import Image
 import PIL
 import io,struct,json,hashlib
-root=Path(__file__).resolve().parents[1]/'tests/fixtures/data'
+root=Path(__file__).resolve().parents[1]/'tests/fixtures/raster'
 entries=[(2,2,[255,0,0,128],[0,1]),(2,2,[0,255,0,64],[1,0]),(1,1,[0,0,255,255],[0,0])]
 streams=[]
 for width,height,pixel,_ in entries:

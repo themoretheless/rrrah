@@ -1,5 +1,7 @@
 # Dependency update, security and MSRV audit
 
+> Update 2026-10-14: workspace and CI now declare Rust 1.92 because the locked Hayro family requires it. The Rust 1.89 statements below describe the historical 2026-07-21 audit. Current validation is recorded in `research/msrv-1.92-2026-10-14/report.json`.
+
 **Audit date:** 2026-07-21  
 **Workspace:** `rrrah`  
 **Rust toolchain observed on the audit host:** `cargo 1.96.0`, `rustc 1.96.0`  

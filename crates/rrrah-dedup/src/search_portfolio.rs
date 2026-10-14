@@ -1416,40 +1416,11 @@ pub(crate) fn search_native_bank_consensus_files_directional(
     ) -> Result<SharedBuffer<ScoredProposal>, ProposalProviderError>,
     cancel: impl Fn() -> bool,
 ) -> Result<NativeBankConsensusEvidence, SearchPortfolioError> {
-    let file_cap = |p: NativeBankDirectionPolicy<'_>| {
-        p.search
-            .primary
-            .native
-            .search
-            .search
-            .search
-            .search
-            .gradient
-            .search
-            .local
-            .decode
-            .max_file_bytes
-            .min(
-                p.search
-                    .opposite
-                    .search
-                    .search
-                    .search
-                    .search
-                    .search
-                    .gradient
-                    .search
-                    .local
-                    .decode
-                    .max_file_bytes,
-            )
-            .min(p.search.primary.model.decode.max_file_bytes)
-    };
     guarded_pair(
         left,
         right,
         weights,
-        file_cap(forward).min(file_cap(reverse)),
+        native_bank_direction_file_cap(forward).min(native_bank_direction_file_cap(reverse)),
         forward
             .search
             .primary
@@ -1457,48 +1428,14 @@ pub(crate) fn search_native_bank_consensus_files_directional(
             .max_model_bytes
             .min(reverse.search.primary.model.max_model_bytes),
         |cancel| {
-            let required = required_native_bank_consensus_work(forward, reverse)?;
-            if [
-                (required.point_checks, work.point_checks),
-                (required.selection_checks, work.selection_checks),
-                (required.rank_sites, work.rank_sites),
-                (required.pixel_reads, work.pixel_reads),
-                (required.geometry_hypotheses, work.geometry_hypotheses),
-                (required.model_input_reads, work.model_input_reads),
-            ]
-            .iter()
-            .any(|(required, limit)| required > limit)
-                || forward
-                    .maximum_projection_checks
-                    .checked_add(reverse.maximum_projection_checks)
-                    .is_none_or(|sum| sum > maximum_projection_checks)
-            {
-                return Err(SearchPortfolioError::Work);
-            }
-            for p in [forward, reverse] {
-                let bytes = validate_model_bank_recovery_policy(
-                    p.search,
-                    p.banks,
-                    p.model_work,
-                    p.radii,
-                    p.factors,
-                    budget,
-                    cancel,
-                )?;
-                crate::anchor_rank_file::validate_joint_opposite_projection_policy(
-                    p.search.opposite,
-                    p.maximum_projection_checks,
-                    &cancel,
-                )?;
-                // Check each sequential reservation before IO; do not retain
-                // duplicate credit while the inner cascade reserves its storage.
-                drop(
-                    budget
-                        .try_reserve(bytes)
-                        .map_err(|_| AnchorRankFileError::Rank(LocalRankError::Budget))?,
-                );
-            }
-            Ok(())
+            validate_native_bank_consensus_policy(
+                forward,
+                reverse,
+                work,
+                maximum_projection_checks,
+                budget,
+                cancel,
+            )
         },
         |context| {
             let mut run =
@@ -1531,4 +1468,86 @@ pub(crate) fn search_native_bank_consensus_files_directional(
         },
         cancel,
     )
+}
+
+pub(crate) fn native_bank_direction_file_cap(p: NativeBankDirectionPolicy<'_>) -> u64 {
+    p.search
+        .primary
+        .native
+        .search
+        .search
+        .search
+        .search
+        .gradient
+        .search
+        .local
+        .decode
+        .max_file_bytes
+        .min(
+            p.search
+                .opposite
+                .search
+                .search
+                .search
+                .search
+                .search
+                .gradient
+                .search
+                .local
+                .decode
+                .max_file_bytes,
+        )
+        .min(p.search.primary.model.decode.max_file_bytes)
+}
+
+pub(crate) fn validate_native_bank_consensus_policy(
+    forward: NativeBankDirectionPolicy<'_>,
+    reverse: NativeBankDirectionPolicy<'_>,
+    work: PortfolioWorkLimits,
+    maximum_projection_checks: u64,
+    budget: &MemoryBudget,
+    cancel: &dyn Fn() -> bool,
+) -> Result<(), SearchPortfolioError> {
+    let required = required_native_bank_consensus_work(forward, reverse)?;
+    if [
+        (required.point_checks, work.point_checks),
+        (required.selection_checks, work.selection_checks),
+        (required.rank_sites, work.rank_sites),
+        (required.pixel_reads, work.pixel_reads),
+        (required.geometry_hypotheses, work.geometry_hypotheses),
+        (required.model_input_reads, work.model_input_reads),
+    ]
+    .iter()
+    .any(|(required, limit)| required > limit)
+        || forward
+            .maximum_projection_checks
+            .checked_add(reverse.maximum_projection_checks)
+            .is_none_or(|sum| sum > maximum_projection_checks)
+    {
+        return Err(SearchPortfolioError::Work);
+    }
+    for p in [forward, reverse] {
+        let bytes = validate_model_bank_recovery_policy(
+            p.search,
+            p.banks,
+            p.model_work,
+            p.radii,
+            p.factors,
+            budget,
+            cancel,
+        )?;
+        crate::anchor_rank_file::validate_joint_opposite_projection_policy(
+            p.search.opposite,
+            p.maximum_projection_checks,
+            &cancel,
+        )?;
+        // Check each sequential reservation before IO; do not retain
+        // duplicate credit while the inner cascade reserves its storage.
+        drop(
+            budget
+                .try_reserve(bytes)
+                .map_err(|_| AnchorRankFileError::Rank(LocalRankError::Budget))?,
+        );
+    }
+    Ok(())
 }

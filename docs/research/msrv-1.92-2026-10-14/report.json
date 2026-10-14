@@ -1,0 +1,20 @@
+{
+  "scope": "Declared MSRV aligned with locked Hayro dependencies and checked using actual Rust 1.92.0 on aarch64-apple-darwin",
+  "command": "cargo +1.92.0 check --workspace --lib --bins --locked --offline --jobs 4 --target-dir target/msrv-1.92-20261014",
+  "exit_code": 0,
+  "all_features_metadata_packages": 530,
+  "dependencies_requiring_1_92": [
+    "hayro 0.7.1",
+    "hayro-interpret 0.7.0",
+    "hayro-syntax 0.7.2"
+  ],
+  "declared_dependency_above_1_92": false,
+  "workspace_check_log_sha256": "c8a34a7642d887f559ab2b556e24ae094c4fabed2c503b6f219e775e5481cdcf",
+  "limitations": [
+    "Mac default-feature libraries and binaries only",
+    "All-feature metadata is not all-feature compilation",
+    "Tests/examples/benchmarks and Linux/Windows MSRV are not checked here",
+    "Strict warnings/clippy and remaining CI failures are not closed",
+    "Shared worktree contains concurrent work; this is a compiler compatibility check of observed sources, not a release qualification"
+  ]
+}

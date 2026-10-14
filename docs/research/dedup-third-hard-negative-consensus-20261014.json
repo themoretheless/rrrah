@@ -1,0 +1,58 @@
+{
+  "status": "running",
+  "producer_pid": 21492,
+  "source": "/Users/themoretheless/.codex/tmp/rrrah-gradient-runner-source-20261014",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-runner-native-probe-20261014.json": "886a6fe507ded28f51980ee5286a7a228e38c279a22d841dd5955fb3cc0f72e3",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-gradient-runner-source-20261014.json": "07cf8dd36d6c33d0005eb9b74c4790bca7bf8ff37f21bdb1e977981021c1889e",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-consensus-current-negative-plan-20261013.json": "6af5adf1853808cf42370aece9fe231db119751238f3ef6755cf6663b3ccd848",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/run-dedup-third-hard-negative-consensus-20261014.py": "1935e9ac4213bec500333e4bc8c445cba90718e48e422dd624a2b88968fb914c",
+    "/Users/themoretheless/.codex/tmp/rrrah-runner-native-probe-20261014/probe": "4d659a397f6483f0ff3a8413c51bd4406462b0d06aaa00020f42ba90c9041a78",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/205801.jpg": "4db3d0bbd72d89412f5fb45cf7ab0f6952dd54cf980cc093396a691f856ae4ee",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/207800.jpg": "a59a7b0996c4696a4fbbd1b20928e12309556b6630d644702c48e63e223fc226",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors": "59e55bf0ecd047db9c513672d121a3ea677529ad448bdc3a359e92862c74ddd7"
+  },
+  "case": {
+    "left": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/205801.jpg",
+    "right": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/207800.jpg",
+    "label": "copydays_nearest_wrong",
+    "expected": "different",
+    "groundtruth": "publisher_excluded_wrong_origin",
+    "origin": "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/205800.jpg",
+    "priority_rank": 130,
+    "index": 130,
+    "source_dimensions": [
+      930,
+      708
+    ],
+    "target_dimensions": [
+      2560,
+      1920
+    ],
+    "source_tolerance": 0.7305188652594812,
+    "reverse_source_tolerance": 5.475560167195949,
+    "arguments": [
+      "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/205801.jpg",
+      "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/207800.jpg",
+      "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+      "640",
+      "0.7305188652594812",
+      "1000000",
+      "5.475560167195949",
+      "false"
+    ]
+  },
+  "command": [
+    "/Users/themoretheless/.codex/tmp/rrrah-runner-native-probe-20261014/probe",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-strong-all/205801.jpg",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/original-resolution-negative-200201/207800.jpg",
+    "/Users/themoretheless/.codex/tmp/rrrah-dedup-copydays/learned-matching-models/loftr-outdoor-native-20261010.safetensors",
+    "640",
+    "0.7305188652594812",
+    "1000000",
+    "5.475560167195949",
+    "false"
+  ],
+  "scope": "Latest frozen runner atomic consensus, exact common-policy negative130arguments. Two different published origin photos of same amphitheater; visually inspected directly, no media copy. Historical wrong-to-query fixed2model support had35inliers on small ruin-wall region; reciprocalhistoricaldirection unknown. New normalized tolerances differ, so no isolated AND-fix attribution. Not universal precision or whole-file identity.",
+  "child_pid": 22550
+}

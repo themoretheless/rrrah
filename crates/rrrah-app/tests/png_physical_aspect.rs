@@ -160,7 +160,7 @@ fn apng_sixteen_bit_precision_matches_authored_linear_metal_reference() {
     let gpu = common::qualification_gpu().expect("actual GPU required");
     eprintln!("APNG precision adapter: {}", gpu.adapter_name());
     let path = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-        .join("../../tests/fixtures/data/apng-16bit-precision.png");
+        .join("../../tests/fixtures/raster/apng-16bit-precision.png");
     let root = MemoryBudget::new(1024 * 1024);
     for (index, samples) in [[257u16, 12345, 32769, 65534], [258, 12346, 32770, 65533]]
         .into_iter()

@@ -3,7 +3,7 @@
 from pathlib import Path
 from PIL import Image
 import struct,io,json,hashlib
-root=Path(__file__).resolve().parents[1]/'tests/fixtures/data'
+root=Path(__file__).resolve().parents[1]/'tests/fixtures/raster'
 colors=[(255,0,0),(0,255,0),(0,0,255),(255,255,0)]
 for depth in [1,4,8,16,24,32]:
     w,h=9,3;rgba=bytearray();rows=[];masks=[]

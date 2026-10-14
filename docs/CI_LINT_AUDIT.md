@@ -1,5 +1,7 @@
 # CI, lint и toolchain audit
 
+> Update 2026-10-14: workspace and CI now declare Rust 1.92 because the locked Hayro family requires it. The Rust 1.89 statements below describe the historical 2026-07-21 audit. Current validation is recorded in `research/msrv-1.92-2026-10-14/report.json`.
+
 **Дата:** 2026-07-21  
 **Область:** workspace `rrrah`, workflow `.github/workflows/ci.yml`,
 `rust-toolchain.toml`, `Cargo.toml`, Python benchmark schema tests и dependency

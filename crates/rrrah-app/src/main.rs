@@ -663,7 +663,9 @@ fn main() -> Result<()> {
         Some(rrrah_core::develop::DevelopOptions {
             recover_highlights: !cli.no_highlight_recovery,
             curve,
-            demosaic: cli.demosaic.map_or(rrrah_core::develop::DemosaicAlgorithm::Auto, Into::into),
+            demosaic: cli
+                .demosaic
+                .map_or(rrrah_core::develop::DemosaicAlgorithm::Auto, Into::into),
             dual_contrast_threshold: cli.dual_contrast_threshold.unwrap_or(0.04),
             false_color_passes: cli.false_color_passes.unwrap_or(0),
             green_equilibration: cli.green_equilibration.unwrap_or(0.0),
@@ -1659,9 +1661,11 @@ impl ForegroundLoader {
             .map(|_| ())
     }
 
+    #[cfg(test)]
     fn submit(&self, path: PathBuf) -> Result<u64> {
         self.submit_image(path, 0)
     }
+    #[cfg(test)]
     fn submit_image(&self, path: PathBuf, image_index: usize) -> Result<u64> {
         self.submit_image_with_window(path, image_index, None)
     }
@@ -10655,7 +10659,7 @@ mod raster_swap_viewer_tests {
         let generation = Arc::new(AtomicU64::new(1));
         let mut request = DecodeRequest::new(
             PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-                .join("../../tests/fixtures/data/ico-selected-images.ico"),
+                .join("../../tests/fixtures/raster/ico-selected-images.ico"),
         );
         // The source provides a stable key only; these authored transport payloads
         // deliberately avoid decoder work in the blocked foreground-gate scenario.
@@ -10801,7 +10805,7 @@ mod raster_swap_viewer_tests {
         );
         let mut request = DecodeRequest::new(
             PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-                .join("../../tests/fixtures/data")
+                .join("../../tests/fixtures/raster")
                 .join(name),
         );
         request.memory_budget = Some(root.clone());

@@ -614,7 +614,7 @@ mod tests {
     fn packed_grayscale_and_palette_frames_preserve_samples_and_transparency() {
         let cases: [(&[u8], [[u8; 4]; 4]); 3] = [
             (
-                include_bytes!("../../../tests/fixtures/data/apng-1bit-packed.png"),
+                include_bytes!("../../../tests/fixtures/raster/apng-1bit-packed.png"),
                 [
                     [0, 0, 0, 255],
                     [255, 255, 255, 255],
@@ -623,7 +623,7 @@ mod tests {
                 ],
             ),
             (
-                include_bytes!("../../../tests/fixtures/data/apng-2bit-packed.png"),
+                include_bytes!("../../../tests/fixtures/raster/apng-2bit-packed.png"),
                 [
                     [255, 0, 0, 0],
                     [0, 255, 0, 64],
@@ -632,7 +632,7 @@ mod tests {
                 ],
             ),
             (
-                include_bytes!("../../../tests/fixtures/data/apng-4bit-packed.png"),
+                include_bytes!("../../../tests/fixtures/raster/apng-4bit-packed.png"),
                 [
                     [0, 0, 0, 255],
                     [85, 85, 85, 255],
@@ -677,7 +677,7 @@ mod tests {
     }
     #[test]
     fn sixteen_bit_selected_frames_keep_low_bits_and_alpha() {
-        let bytes = include_bytes!("../../../tests/fixtures/data/apng-16bit-precision.png");
+        let bytes = include_bytes!("../../../tests/fixtures/raster/apng-16bit-precision.png");
         let root = rrrah_core::MemoryBudget::new(4096);
         let mut request = DecodeRequest::new("precision.apng");
         request.memory_budget = Some(root.clone());

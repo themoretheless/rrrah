@@ -1,0 +1,35 @@
+
+running 5 tests
+test patterned_cursor_dib_pixels_survive_swap_and_metal ... 
+thread 'patterned_cursor_dib_pixels_survive_swap_and_metal' (7750167) panicked at crates/rrrah-app/tests/../../rrrah-gpu/tests/common/mod.rs:106:10:
+valid RRRAH_GPU_VENDOR: UnknownVendor("apple")
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+FAILED
+test selected_cursor_images_keep_matching_hotspots_and_metal_frames ... 
+thread 'selected_cursor_images_keep_matching_hotspots_and_metal_frames' (7750168) panicked at crates/rrrah-app/tests/../../rrrah-gpu/tests/common/mod.rs:106:10:
+valid RRRAH_GPU_VENDOR: UnknownVendor("apple")
+FAILED
+test selected_dib_cursor_images_keep_masks_hotspots_and_metal_frames ... 
+thread 'selected_dib_cursor_images_keep_masks_hotspots_and_metal_frames' (7750169) panicked at crates/rrrah-app/tests/../../rrrah-gpu/tests/common/mod.rs:106:10:
+valid RRRAH_GPU_VENDOR: UnknownVendor("apple")
+FAILED
+test selected_ico_images_keep_quality_order_alpha_and_metal_frames ... 
+thread 'selected_ico_images_keep_quality_order_alpha_and_metal_frames' (7750170) panicked at crates/rrrah-app/tests/../../rrrah-gpu/tests/common/mod.rs:106:10:
+valid RRRAH_GPU_VENDOR: UnknownVendor("apple")
+FAILED
+test selected_indexed_and_bgra_cursor_images_keep_masks_and_metal_frames ... 
+thread 'selected_indexed_and_bgra_cursor_images_keep_masks_and_metal_frames' (7750171) panicked at crates/rrrah-app/tests/../../rrrah-gpu/tests/common/mod.rs:106:10:
+valid RRRAH_GPU_VENDOR: UnknownVendor("apple")
+FAILED
+
+failures:
+
+failures:
+    patterned_cursor_dib_pixels_survive_swap_and_metal
+    selected_cursor_images_keep_matching_hotspots_and_metal_frames
+    selected_dib_cursor_images_keep_masks_hotspots_and_metal_frames
+    selected_ico_images_keep_quality_order_alpha_and_metal_frames
+    selected_indexed_and_bgra_cursor_images_keep_masks_and_metal_frames
+
+test result: FAILED. 0 passed; 5 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

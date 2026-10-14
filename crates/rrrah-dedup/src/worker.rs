@@ -59,6 +59,9 @@ pub struct WorkerOutput {
 struct OwnedChild {
     child: Child,
     reaped: bool,
+    // Group supervision is available only on Linux/macOS; other targets
+    // retain the common single-child guard without reading this marker.
+    #[cfg_attr(not(any(target_os = "linux", target_os = "macos")), allow(dead_code))]
     scope: WorkerScope,
 }
 #[derive(Clone, Copy, PartialEq, Eq)]

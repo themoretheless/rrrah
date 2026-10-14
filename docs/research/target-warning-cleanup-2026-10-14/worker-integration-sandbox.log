@@ -1,0 +1,69 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+    Finished `test` profile [optimized + debuginfo] target(s) in 54.84s
+     Running tests/worker.rs (target/strict-worker-20261014/debug/deps/worker-98870c3b511f6488)
+
+running 7 tests
+test worker_fixture ... ok
+test invalid_policy_input_and_initial_cancellation_never_spawn ... ok
+test binary_input_and_output_survive_private_stdio_files ... ok
+test nonzero_exit_preserves_bounded_binary_diagnostics ... ok
+test stdout_and_stderr_floods_stop_without_pipe_deadlock ... ok
+test live_cancellation_terminates_and_reaps_then_a_retry_succeeds ... ok
+test deadline_terminates_and_reaps_a_blocking_worker ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+
+     Running tests/worker_group.rs (target/strict-worker-20261014/debug/deps/worker_group-e3bfc234704a19a5)
+
+running 8 tests
+test group_fixture ... ok
+test group_initial_refusals_do_not_spawn ... ok
+test group_normal_and_failed_leader_exit_stop_descendants ... FAILED
+test group_capture_limit_stops_descendant ... FAILED
+test group_cancel_stops_live_descendant_and_retry_succeeds ... FAILED
+test group_callback_panic_still_stops_descendant ... FAILED
+test group_fast_empty_exit_keeps_status_and_diagnostics ... ok
+test group_deadline_stops_live_descendant ... FAILED
+
+failures:
+
+---- group_normal_and_failed_leader_exit_stop_descendants stdout ----
+
+thread 'group_normal_and_failed_leader_exit_stop_descendants' (7679319) panicked at crates/rrrah-dedup/tests/worker_group.rs:80:14:
+called `Result::unwrap()` on an `Err` value: Os { code: 1, kind: PermissionDenied, message: "Operation not permitted" }
+
+---- group_capture_limit_stops_descendant stdout ----
+
+thread 'group_capture_limit_stops_descendant' (7679314) panicked at crates/rrrah-dedup/tests/worker_group.rs:80:14:
+called `Result::unwrap()` on an `Err` value: Os { code: 1, kind: PermissionDenied, message: "Operation not permitted" }
+
+---- group_cancel_stops_live_descendant_and_retry_succeeds stdout ----
+
+thread 'group_cancel_stops_live_descendant_and_retry_succeeds' (7679313) panicked at crates/rrrah-dedup/tests/worker_group.rs:80:14:
+called `Result::unwrap()` on an `Err` value: Os { code: 1, kind: PermissionDenied, message: "Operation not permitted" }
+
+---- group_callback_panic_still_stops_descendant stdout ----
+
+thread 'group_callback_panic_still_stops_descendant' (7679312) panicked at crates/rrrah-dedup/tests/worker_group.rs:150:13:
+injected callback panic
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+thread 'group_callback_panic_still_stops_descendant' (7679312) panicked at crates/rrrah-dedup/tests/worker_group.rs:80:14:
+called `Result::unwrap()` on an `Err` value: Os { code: 1, kind: PermissionDenied, message: "Operation not permitted" }
+
+---- group_deadline_stops_live_descendant stdout ----
+
+thread 'group_deadline_stops_live_descendant' (7679315) panicked at crates/rrrah-dedup/tests/worker_group.rs:80:14:
+called `Result::unwrap()` on an `Err` value: Os { code: 1, kind: PermissionDenied, message: "Operation not permitted" }
+
+
+failures:
+    group_callback_panic_still_stops_descendant
+    group_cancel_stops_live_descendant_and_retry_succeeds
+    group_capture_limit_stops_descendant
+    group_deadline_stops_live_descendant
+    group_normal_and_failed_leader_exit_stop_descendants
+
+test result: FAILED. 3 passed; 5 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.52s
+
+error: test failed, to rerun pass `-p rrrah-dedup --test worker_group`

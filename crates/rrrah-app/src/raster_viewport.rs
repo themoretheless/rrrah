@@ -393,6 +393,7 @@ impl ResidentSource {
         Self::install_with_cancel(renderer, device, queue, source, view, curve, lod_budget, || false)
     }
 
+    #[cfg(test)]
     pub(crate) fn install_with_cancel<F: FnMut() -> bool>(
         renderer: &mut RasterRenderer,
         device: &wgpu::Device,
@@ -480,6 +481,7 @@ impl ResidentSource {
         Ok(Some(state))
     }
 
+    #[cfg(test)]
     pub(crate) fn refresh(
         &mut self,
         renderer: &mut RasterRenderer,
@@ -500,6 +502,7 @@ impl ResidentSource {
         self.refresh_inner(renderer, device, queue, view, || false, false)
     }
 
+    #[cfg(test)]
     pub(crate) fn refresh_with_cancel<F: FnMut() -> bool>(
         &mut self,
         renderer: &mut RasterRenderer,

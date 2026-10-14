@@ -1,0 +1,38 @@
+{
+  "scope": "Remove known application/test dead-code warnings without changing production worker or raster behavior",
+  "changes": [
+    "Test-only ForegroundLoader submit wrappers cfg(test)",
+    "Test-only ResidentSource install/refresh wrappers cfg(test)",
+    "Unused shared LodWorker API permitted only at the partial integration module boundary",
+    "Worker scope marker dead-code permitted only on targets lacking process-group support"
+  ],
+  "checks": {
+    "app_binary_and_swapped_region_target": "passed with no warnings",
+    "app_tests_configuration": "passed with no warnings",
+    "strict_worker_quiescence": {
+      "passed": 1,
+      "rustflags": "-Dwarnings"
+    },
+    "strict_worker_single_process": {
+      "passed": 7,
+      "rustflags": "-Dwarnings"
+    },
+    "strict_worker_group": {
+      "passed": 8,
+      "rustflags": "-Dwarnings",
+      "execution": "same compiled binary repeated outside sandbox after ps PermissionDenied"
+    }
+  },
+  "source_sha256": {
+    "crates/rrrah-app/src/main.rs": "41c3110dbcfb414705bbfc16722e6eebba15f1b4db9e10160427305356ce8bd6",
+    "crates/rrrah-app/src/raster_viewport.rs": "ccd4e291e6a03c67634a1e30bda6dbb7fc8b8edb148388a8d8b0980b1544a44f",
+    "crates/rrrah-app/tests/swapped_region_metal.rs": "b973f492e8ef22a100237a7aeb30c0d35da719dfc2010dff4cfe24e564e59a53",
+    "crates/rrrah-dedup/src/worker.rs": "78a29255712c99272fd53e7468299fc0770ad48f68fc3f0165e0a74e6847cc51"
+  },
+  "limitations": [
+    "Native Windows/Linux not executed",
+    "No full strict workspace/clippy/CI pass claimed",
+    "GPU tests compiled; GPU execution not repeated",
+    "Initial sandbox group run failed five assertions because ps launch was forbidden; original log retained"
+  ]
+}

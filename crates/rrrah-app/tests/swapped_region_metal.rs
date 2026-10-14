@@ -2,6 +2,8 @@
 mod common;
 // Shared worker tests use the same explicit GPU fixture as the application units.
 use common as navigation_metal_readback;
+// This integration target exercises a subset of the shared worker API.
+#[allow(dead_code)]
 #[path = "../src/raster_lod_worker.rs"]
 mod raster_lod_worker;
 use rrrah_core::{DecodedRaster, MemoryBudget, RasterColorSpace, RasterPixels};

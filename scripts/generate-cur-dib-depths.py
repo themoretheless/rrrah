@@ -3,7 +3,7 @@
 from pathlib import Path
 from PIL import Image
 import io,struct,json,hashlib
-root=Path(__file__).resolve().parents[1]/'tests/fixtures/data'
+root=Path(__file__).resolve().parents[1]/'tests/fixtures/raster'
 for depth in [1,4,8,16,32]:
     entries=[(2,2,[255,0,0,128 if depth==32 else 255],[0,1]),(2,2,[0,255,0,64 if depth==32 else 255],[1,0]),(1,1,[0,0,255,255 if depth==32 else 0],[0,0])]
     streams=[]

@@ -1,0 +1,31 @@
+{
+  "scope": "Checkout-contained authored TIFF per-page ICC and app selected-page cache/prefetch qualification",
+  "fixture": "tests/fixtures/raster/tiff-distinct-page-profiles.tif",
+  "exact_reproduced_files": 3,
+  "producer": "Pillow12.3.0/LittleCMS2.19",
+  "profiles": [
+    "sRGB",
+    "linear gamma1/sRGB primaries",
+    "sRGB"
+  ],
+  "gpu": "Metal Apple M4 Max",
+  "checks": {
+    "independent_oracle": "18 RGB8 components within1 of LittleCMS relative colorimetric oracle",
+    "icc_precedence": "Assumptions for untagged input do not override embedded ICC",
+    "reverse_swap": "Prepared float bits and SDR/HDR frames exact; final credits0",
+    "loader_cpu": "passed",
+    "loader_metal": "passed; selected page keys, managed pressure RAM hit, nonzeroTTL, stale requests refuse before swap/decode, backward2/forward1 restores while decoder blocked"
+  },
+  "tests_passed": 3,
+  "gpu_tests": 2,
+  "binary_sha256": {
+    "target/debug/deps/rrrah-0b4921b829754900": "b5bece39f2a13137ec2470a5d974eba284cc03fd94553f255ac5e30360a6df91",
+    "target/debug/deps/tiff_pages_metal-eadba2d113823818": "b20ebb03fb75257786f22014c7d356c7b4d0664c00f5f352cb2c4562a6186e71"
+  },
+  "limitations": [
+    "Bounded three-page authored fixture; not full TIFF ICC/color qualification",
+    "Offscreen Metal readback, not physical HDR calibration",
+    "Other TIFF variants and external corpora retain separate qualification requirements",
+    "FullCI,100format and NVIDIA/CUDA completion not claimed"
+  ]
+}

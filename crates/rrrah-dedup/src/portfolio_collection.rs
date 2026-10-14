@@ -868,3 +868,149 @@ pub fn scan_native_bank_recovery_collection_with(
         cancel,
     )
 }
+
+/// Both directional cascades for each canonical unordered pair. Limits admit
+/// every complete cascade before input iteration, even if an early stage supports.
+#[derive(Debug, Clone, Copy)]
+pub struct NativeBankConsensusCollectionPolicy<'a> {
+    pub forward: crate::search_portfolio::NativeBankDirectionPolicy<'a>,
+    pub reverse: crate::search_portfolio::NativeBankDirectionPolicy<'a>,
+    pub max_files: usize,
+    pub max_pairs: usize,
+    pub work: PortfolioWorkLimits,
+    pub bank_work: ModelBankCollectionWorkLimits,
+    /// Sum of both directional opposite-projection caps over all admitted pairs.
+    pub maximum_projection_checks: u64,
+}
+
+/// Publish compact two-direction outcomes under the collection's source,
+/// dependency, weights and generation guards. Unknown directions remain unknown;
+/// failures discard the entire report. Complete scheduling changes order only.
+/// Evidence is local visual support, nontransitive and not whole-file identity.
+/// # Errors
+/// Invalid directional policies, cumulative overflow/refusal, input/schedule
+/// limits, source/model/provider errors or cancellation prevent publication.
+#[allow(clippy::too_many_arguments)]
+pub fn scan_native_bank_consensus_collection_with(
+    files: impl IntoIterator<Item = (u64, DecodeRequest)>,
+    schedule: Option<&crate::pair_schedule::CompletePairSchedule>,
+    weights: &Path,
+    policy: NativeBankConsensusCollectionPolicy<'_>,
+    budget: &MemoryBudget,
+    mut provider: impl FnMut(
+        &Path,
+        &GrayModelInput,
+        &GrayModelInput,
+        &MemoryBudget,
+        &dyn Fn() -> bool,
+    ) -> Result<SharedBuffer<ScoredProposal>, ProposalProviderError>,
+    cancel: impl Fn() -> bool,
+) -> Result<
+    crate::collection::CollectionReport<crate::search_portfolio::NativeBankConsensusEvidence>,
+    PortfolioCollectionError,
+> {
+    use crate::search_portfolio::{
+        native_bank_direction_file_cap, required_native_bank_consensus_work,
+        validate_native_bank_consensus_policy,
+    };
+    let pair_projection = || {
+        policy
+            .forward
+            .maximum_projection_checks
+            .checked_add(policy.reverse.maximum_projection_checks)
+            .ok_or(SearchPortfolioError::Work)
+    };
+    scan_guarded_collection_ordered(
+        files,
+        weights,
+        |cancel| {
+            let pair_work = required_native_bank_consensus_work(policy.forward, policy.reverse)
+                .map_err(EngineError::Policy)?;
+            let projections = pair_projection().map_err(EngineError::Policy)?;
+            validate_native_bank_consensus_policy(
+                policy.forward,
+                policy.reverse,
+                pair_work,
+                projections,
+                budget,
+                cancel,
+            )
+            .map_err(EngineError::Policy)?;
+            let count = u64::try_from(policy.max_pairs).map_err(|_| EngineError::Work)?;
+            let sum = |a: u64, b: u64| a.checked_add(b).ok_or(EngineError::Work);
+            // These stages have per-direction caps rather than fields in
+            // PortfolioWorkLimits. Still check their full implicit collection
+            // bound, so oversized caps cannot silently overflow across pairs.
+            for per_pair in [
+                sum(
+                    policy.forward.model_work.proposal_ranking_checks,
+                    policy.reverse.model_work.proposal_ranking_checks,
+                )?,
+                sum(
+                    policy.forward.model_work.proposal_separation_checks,
+                    policy.reverse.model_work.proposal_separation_checks,
+                )?,
+            ] {
+                per_pair.checked_mul(count).ok_or(EngineError::Work)?;
+            }
+            for (pair, total) in [
+                (pair_work.point_checks, policy.work.point_checks),
+                (pair_work.selection_checks, policy.work.selection_checks),
+                (pair_work.rank_sites, policy.work.rank_sites),
+                (pair_work.pixel_reads, policy.work.pixel_reads),
+                (pair_work.geometry_hypotheses, policy.work.geometry_hypotheses),
+                (pair_work.model_input_reads, policy.work.model_input_reads),
+                (projections, policy.maximum_projection_checks),
+                (
+                    sum(
+                        policy.forward.banks.maximum_total_projection_checks,
+                        policy.reverse.banks.maximum_total_projection_checks,
+                    )?,
+                    policy.bank_work.projection_checks,
+                ),
+                (
+                    sum(
+                        policy.forward.banks.maximum_total_separation_checks,
+                        policy.reverse.banks.maximum_total_separation_checks,
+                    )?,
+                    policy.bank_work.separation_checks,
+                ),
+            ] {
+                if pair.checked_mul(count).is_none_or(|required| required > total) {
+                    return Err(EngineError::Work);
+                }
+            }
+            Ok(CollectionSettings {
+                max_files: policy.max_files,
+                max_pairs: policy.max_pairs,
+                max_model_bytes: policy
+                    .forward
+                    .search
+                    .primary
+                    .model
+                    .max_model_bytes
+                    .min(policy.reverse.search.primary.model.max_model_bytes),
+                max_file_bytes: native_bank_direction_file_cap(policy.forward)
+                    .min(native_bank_direction_file_cap(policy.reverse)),
+            })
+        },
+        budget,
+        |left, right, cancel| {
+            crate::search_portfolio::search_native_bank_consensus_files_with(
+                left,
+                right,
+                weights,
+                policy.forward,
+                policy.reverse,
+                required_native_bank_consensus_work(policy.forward, policy.reverse)?,
+                pair_projection()?,
+                budget,
+                &mut provider,
+                cancel,
+            )
+        },
+        schedule,
+        cancel,
+    )
+    .map_err(PortfolioCollectionError::from)
+}

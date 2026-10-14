@@ -1,0 +1,49 @@
+{
+  "scope": "Restore checkout-contained compile-time APNG/ICO/CUR regressions without changing fixture bytes or decoder behavior",
+  "files": {
+    "apng-1bit-packed.png": {
+      "bytes": 202,
+      "sha256": "c9d1c78b576f73f66aa2aabba5ee21a4e1e18aeb45c5ddb6096cd57e7a31aaf6"
+    },
+    "apng-2bit-packed.png": {
+      "bytes": 242,
+      "sha256": "59f05a795e5d1c98077f28a2e260d593fc4d3e620a25bf0050ba9c1a53bbec1c"
+    },
+    "apng-4bit-packed.png": {
+      "bytes": 204,
+      "sha256": "d99ed608e230df542d8bdbee6c63480731b34768c72994ad70521b220a82d069"
+    },
+    "apng-16bit-precision.png": {
+      "bytes": 216,
+      "sha256": "d744a6194981d1c01ab64aac72a56251756f04d723972fb6d0021a5517d4f175"
+    },
+    "ico-selected-images.ico": {
+      "bytes": 281,
+      "sha256": "a2f6821f7584b9c9125b6b7f4e6cc27c3af56eb37b27b1b71c5bc0437230dfe6"
+    },
+    "cur-selected-images.cur": {
+      "bytes": 280,
+      "sha256": "335d23953f576d98e0ae81a79d22eaadfc97047f4a208915973067a040dde11d"
+    }
+  },
+  "apng": {
+    "passed": 10,
+    "ignored": 1
+  },
+  "ico_cur": {
+    "passed": 4,
+    "ignored": 0
+  },
+  "literal_include_audit": "No literal compile-time inputs outside Git or the newly added authored raster fixtures",
+  "checks": [
+    "Python generator syntax valid",
+    "Fixture manifest lengths and hashes exact",
+    "Focused source diff whitespace check passed"
+  ],
+  "limitations": [
+    "Full clean-checkout CI not rerun",
+    "Other workspace formatting failures remain",
+    "Metal selected-icon tests not rerun",
+    "MSRV and other CI failures remain"
+  ]
+}

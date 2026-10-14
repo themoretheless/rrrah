@@ -9,7 +9,7 @@ import zlib
 import json
 import hashlib
 
-root = Path(__file__).resolve().parents[1] / 'tests/fixtures/data'
+root = Path(__file__).resolve().parents[1] / 'tests/fixtures/raster'
 srgb = bytearray(ImageCms.ImageCmsProfile(ImageCms.createProfile('sRGB')).tobytes())
 struct.pack_into('>6H', srgb, 24, 2026, 1, 1, 0, 0, 0)
 srgb[84:100] = bytes(16)

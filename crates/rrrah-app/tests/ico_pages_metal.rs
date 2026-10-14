@@ -69,7 +69,7 @@ fn qualify_selected_images(cursor: bool, depth: u16) {
         .unwrap(),
     );
     let path = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-        .join("../../tests/fixtures/data")
+        .join("../../tests/fixtures/raster")
         .join(if depth == 24 {
             "cur-selected-dib.cur".to_owned()
         } else if dib {
@@ -220,7 +220,7 @@ fn patterned_cursor_dib_pixels_survive_swap_and_metal() {
     use std::{sync::Arc, time::Duration};
     let gpu = common::qualification_gpu().expect("actual GPU required");
     eprintln!("CUR patterned adapter: {}", gpu.adapter_name());
-    let fixtures = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/data");
+    let fixtures = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/raster");
     for depth in [1, 4, 8, 16, 24, 32] {
         let root = MemoryBudget::new(1024 * 1024);
         let queue = MemoryBudget::new(4096);

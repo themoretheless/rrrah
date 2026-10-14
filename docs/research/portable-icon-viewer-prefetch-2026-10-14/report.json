@@ -1,0 +1,23 @@
+{
+  "scope": "App loader selected-icon cache/TTL/prefetch now uses checkout-contained raster fixtures",
+  "cpu_tests_passed": 1,
+  "metal_tests_passed": 1,
+  "adapter": "Metal Apple M4 Max",
+  "sources": [
+    "ico-selected-images.ico",
+    "cur-selected-images.cur",
+    "cur-selected-dib.cur"
+  ],
+  "checks": [
+    "Three obsolete requests refuse before swap/decode; zero reads and shared credit",
+    "Backward2 [1,0], forward1 [2] restored while decoder blocked",
+    "Pressure RAM hits, nonzero TTL, selected cache keys, payload/hotspot preserved",
+    "SDR/HDR exact and final credits zero"
+  ],
+  "binary_sha256": "f7d7b1c1d7df7eb845be375cdd320ea2b53901c4f625eba3d4a67335e0b10554",
+  "limitations": [
+    "Offscreen GPU frames; no physical HDR calibration",
+    "Helper TIFF branch still uses ignored local corpus",
+    "No all-format, fullCI, NVIDIA/CUDA or hours-long pressure qualification claim"
+  ]
+}

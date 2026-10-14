@@ -1,0 +1,28 @@
+
+running 7 tests
+test raster_lod_worker::tests::generation_changed_after_publication_releases_output_before_consumption ... ok
+test raster_lod_worker::tests::navigation_discards_delayed_old_swap_and_presents_only_new_hdr_source ... ignored, actual Metal navigation while old swapped region worker is delayed
+test raster_lod_worker::tests::pending_requests_coalesce_without_blocking_and_only_latest_result_owns_output ... ok
+test raster_lod_worker::tests::stale_persisted_source_releases_disk_index_and_input_before_consumption ... ok
+test raster_lod_worker::tests::stale_submission_preserves_current_completed_level_and_revision ... ok
+test raster_lod_worker::tests::swapped_regions_coalesce_drop_stale_output_and_retry_memory_pressure ... ok
+test swapped_packed_regions_render_exactly_after_full_source_release ... swapped region adapter: Metal Apple M4 Max
+swapped region exact: aspect=0.5; corner=[0.0, 0.0]; rect=[58, 58, 84, 44]; SDR/HDR; all credits=0
+swapped region exact: aspect=0.5; corner=[-1.0, -1.0]; rect=[117, 117, 83, 43]; SDR/HDR; all credits=0
+swapped region exact: aspect=0.5; corner=[1.0, 1.0]; rect=[0, 0, 83, 43]; SDR/HDR; all credits=0
+swapped region exact: aspect=0.5; corner=[-1.0, 1.0]; rect=[117, 0, 83, 43]; SDR/HDR; all credits=0
+swapped region exact: aspect=0.5; corner=[1.0, -1.0]; rect=[0, 117, 83, 43]; SDR/HDR; all credits=0
+swapped region exact: aspect=1; corner=[0.0, 0.0]; rect=[72, 52, 56, 56]; SDR/HDR; all credits=0
+swapped region exact: aspect=1; corner=[-1.0, -1.0]; rect=[148, 107, 52, 53]; SDR/HDR; all credits=0
+swapped region exact: aspect=1; corner=[1.0, 1.0]; rect=[0, 0, 52, 53]; SDR/HDR; all credits=0
+swapped region exact: aspect=1; corner=[-1.0, 1.0]; rect=[148, 0, 52, 53]; SDR/HDR; all credits=0
+swapped region exact: aspect=1; corner=[1.0, -1.0]; rect=[0, 107, 52, 53]; SDR/HDR; all credits=0
+swapped region exact: aspect=2; corner=[0.0, 0.0]; rect=[72, 27, 56, 106]; SDR/HDR; all credits=0
+swapped region exact: aspect=2; corner=[-1.0, -1.0]; rect=[148, 57, 52, 103]; SDR/HDR; all credits=0
+swapped region exact: aspect=2; corner=[1.0, 1.0]; rect=[0, 0, 52, 103]; SDR/HDR; all credits=0
+swapped region exact: aspect=2; corner=[-1.0, 1.0]; rect=[148, 0, 52, 103]; SDR/HDR; all credits=0
+swapped region exact: aspect=2; corner=[1.0, -1.0]; rect=[0, 57, 52, 103]; SDR/HDR; all credits=0
+ok
+
+test result: ok. 6 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 14.68s
+

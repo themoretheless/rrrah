@@ -659,24 +659,10 @@ pub fn develop_raw(
         return Err(DevelopError::Invalid("non-finite corrected sensor samples"));
     }
     if options.impulse_threshold > 0.0 {
-        demosaic::suppress_cfa_impulse_noise(
-            &mut samples,
-            w,
-            h,
-            &cfa,
-            options.impulse_threshold,
-            cancelled,
-        )?;
+        demosaic::suppress_cfa_impulse_noise(&mut samples, w, h, &cfa, options.impulse_threshold, cancelled)?;
     }
     if quad.is_some() && options.green_equilibration > 0.0 {
-        demosaic::equilibrate_bayer_greens(
-            &mut samples,
-            w,
-            h,
-            &cfa,
-            options.green_equilibration,
-            cancelled,
-        )?;
+        demosaic::equilibrate_bayer_greens(&mut samples, w, h, &cfa, options.green_equilibration, cancelled)?;
     }
     let source = Mosaic {
         w,

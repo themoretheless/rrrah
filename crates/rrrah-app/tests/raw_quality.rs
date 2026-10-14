@@ -245,6 +245,3 @@ fn explicit_demosaic_algorithms_and_false_color_passes_work_via_cli() {
         .unwrap();
     assert!(!bad.status.success());
 }
-
-
-

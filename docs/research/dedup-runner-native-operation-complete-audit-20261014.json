@@ -1,0 +1,156 @@
+{
+  "status": "verified_complete_two_control_whole_operation_version_comparison",
+  "pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-runner-native-operation-benchmark-20261014.json": "c0d8f88ce3412d2ba052a4e84a2f75467484964cee8ed1f2325f1f1b1f35c4ed",
+    "/Users/themoretheless/Documents/Sources/rrrah/scripts/audit-dedup-runner-native-operation-complete-20261014.py": "3b893b2ad68936c804d8b513c8c7586b483fdf24534f05a8010dac95ee0b0120"
+  },
+  "rows": [
+    {
+      "case": "self_native",
+      "pair": 0,
+      "version": "baseline",
+      "wall_ns": 157851785500,
+      "cpu_seconds": 120.636105,
+      "managed_peak": 271162112
+    },
+    {
+      "case": "self_native",
+      "pair": 0,
+      "version": "runner",
+      "wall_ns": 127308105542,
+      "cpu_seconds": 110.195329,
+      "managed_peak": 271162112
+    },
+    {
+      "case": "self_native",
+      "pair": 1,
+      "version": "runner",
+      "wall_ns": 134140792666,
+      "cpu_seconds": 112.16142899999997,
+      "managed_peak": 271162112
+    },
+    {
+      "case": "self_native",
+      "pair": 1,
+      "version": "baseline",
+      "wall_ns": 153954648458,
+      "cpu_seconds": 118.58976900000005,
+      "managed_peak": 271162112
+    },
+    {
+      "case": "self_native",
+      "pair": 2,
+      "version": "baseline",
+      "wall_ns": 121639123416,
+      "cpu_seconds": 113.03856199999991,
+      "managed_peak": 271162112
+    },
+    {
+      "case": "self_native",
+      "pair": 2,
+      "version": "runner",
+      "wall_ns": 142878527125,
+      "cpu_seconds": 111.61688600000004,
+      "managed_peak": 271162112
+    },
+    {
+      "case": "table_true",
+      "pair": 0,
+      "version": "baseline",
+      "wall_ns": 383099030625,
+      "cpu_seconds": 293.54975399999995,
+      "managed_peak": 329062128
+    },
+    {
+      "case": "table_true",
+      "pair": 0,
+      "version": "runner",
+      "wall_ns": 249800564584,
+      "cpu_seconds": 211.80010299999995,
+      "managed_peak": 329062128
+    },
+    {
+      "case": "table_true",
+      "pair": 1,
+      "version": "runner",
+      "wall_ns": 264289721208,
+      "cpu_seconds": 212.4046490000001,
+      "managed_peak": 329062128
+    },
+    {
+      "case": "table_true",
+      "pair": 1,
+      "version": "baseline",
+      "wall_ns": 343250164625,
+      "cpu_seconds": 258.7906020000001,
+      "managed_peak": 329062128
+    },
+    {
+      "case": "table_true",
+      "pair": 2,
+      "version": "baseline",
+      "wall_ns": 122205699500,
+      "cpu_seconds": 122.00566899999994,
+      "managed_peak": 329062128
+    },
+    {
+      "case": "table_true",
+      "pair": 2,
+      "version": "runner",
+      "wall_ns": 95251514667,
+      "cpu_seconds": 94.73722000000001,
+      "managed_peak": 329062128
+    }
+  ],
+  "pairs": [
+    {
+      "case": "self_native",
+      "pair": 0,
+      "wall_ratio": 0.8065040578334162,
+      "cpu_ratio": 0.9134523118099677
+    },
+    {
+      "case": "self_native",
+      "pair": 1,
+      "wall_ratio": 0.8713006980272806,
+      "cpu_ratio": 0.9457934689121448
+    },
+    {
+      "case": "self_native",
+      "pair": 2,
+      "wall_ratio": 1.174609970152138,
+      "cpu_ratio": 0.9874230884147316
+    },
+    {
+      "case": "table_true",
+      "pair": 0,
+      "wall_ratio": 0.6520521969905989,
+      "cpu_ratio": 0.7215134746800026
+    },
+    {
+      "case": "table_true",
+      "pair": 1,
+      "wall_ratio": 0.7699624019022275,
+      "cpu_ratio": 0.8207587422359334
+    },
+    {
+      "case": "table_true",
+      "pair": 2,
+      "wall_ratio": 0.7794359433047556,
+      "cpu_ratio": 0.7764985084422598
+    }
+  ],
+  "summary": {
+    "self_native": {
+      "pairs": 3,
+      "median_cpu_ratio": 0.9457934689121448,
+      "median_wall_ratio": 0.8713006980272806
+    },
+    "table_true": {
+      "pairs": 3,
+      "median_cpu_ratio": 0.7764985084422598,
+      "median_wall_ratio": 0.7699624019022275
+    }
+  },
+  "scope": "Whole fresh-process native atomic consensus baseline-source versus latest linear-runner-source comparison including startup, decode and both directions. Two controls, three alternating pairs each. Source versions also include formatting drift; this is version comparison, not isolated linear-runner causal proof. Host shared with test/corpus jobs; child process user+system CPU also recorded to reduce wall contention bias; still a small control sample. All12fresh-process operations supported both directions without learned fallback and released managed credit. Only these2controls qualify whole-operation version comparison. Not fullnative positive/negative corpus, universal speedup, cross-version intermediate point-bit equality, hardRSS or isolated single-change causality."
+}

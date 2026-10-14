@@ -8,9 +8,7 @@ pub use rrrah_memory::{BufferError, MemoryBudget, MutableBuffer, PixelBuffer, Re
 
 mod color;
 pub mod develop;
-pub use develop::{
-    DemosaicAlgorithm, DemosaicConfig, demosaic_bayer_superpixel, demosaic_f32, demosaic_u16,
-};
+pub use develop::{DemosaicAlgorithm, DemosaicConfig, demosaic_bayer_superpixel, demosaic_f32, demosaic_u16};
 mod frame;
 mod geometry;
 mod raster;

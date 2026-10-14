@@ -1,0 +1,19 @@
+{
+  "scope": "Make all ICO/CUR Metal qualification fixtures checkout-contained",
+  "copied_files": 30,
+  "copied_bytes": 12046,
+  "binary_reproduction_matches": 18,
+  "producer_runtime": "Bundled Python with Pillow12.3.0",
+  "metadata_and_oracle_manifest": "tests/fixtures/raster/cur-dib-regressions.json",
+  "checks": [
+    "All files byte-identical to previously Metal-qualified ignored corpus",
+    "Three generators reproduce all12CUR+6RGBA files exactly in separate temporary root",
+    "ICO/CUR Metal test target compiles with raster-only fixture paths",
+    "Focused diff whitespace check passes"
+  ],
+  "limitations": [
+    "GPU suite was not rerun after this path-only change; prior run is separately archived in metal-icon-swap-current-2026-10-14",
+    "Historical/external corpus tools still retain ignored-path references",
+    "No universal CUR variant, physicalHDR or100format completion claim"
+  ]
+}

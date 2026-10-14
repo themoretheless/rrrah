@@ -1,0 +1,43 @@
+{
+  "scope": "Current offscreen Metal selected-icon and swapped-raster lifecycle qualification",
+  "backend": "metal",
+  "vendor_filter": "any",
+  "adapter": "Metal Apple M4 Max",
+  "gpu_optional": "0",
+  "checks": {
+    "ico_cur": {
+      "passed": 5,
+      "variants": "PNG ICO/CUR, DIB depth1/4/8/16/24/32, mixed packed masks and alpha",
+      "tracked_fixtures": "PNG ICO/CUR selected images",
+      "local_ignored_corpus": "DIB CUR variants and RGBA oracles"
+    },
+    "packed_region_target": {
+      "passed": 6,
+      "regions": 15,
+      "aspects": [
+        0.5,
+        1,
+        2
+      ],
+      "corners": 5,
+      "gpu_checks": "SDR/HDR exact after full source release, upload refusal/cancellation, final credit zero"
+    },
+    "delayed_navigation": {
+      "passed": 1,
+      "checks": "Old delayed result discarded; old file/index released; only new HDR source renders; final credit zero"
+    }
+  },
+  "total_tests_passed": 12,
+  "gpu_tests": 7,
+  "worker_unit_tests": 5,
+  "binary_sha256": {
+    "target/debug/deps/ico_pages_metal-26b0611293066b5b": "39bf7c60e9dab7e2ab9a748cb0de8ad9eb6f48bf251b0a92389b881cd30e4633",
+    "target/debug/deps/swapped_region_metal-ada668171286d115": "b7acc1d6998a815746e6cadafb66df202fc19c18925c98507e9d830502d95217"
+  },
+  "limitations": [
+    "Offscreen readback, not physical HDR calibration/presentation",
+    "DIB fixtures still depend on ignored local corpus",
+    "No universal 100-format or NVIDIA/CUDA claim",
+    "First invocation rejected unsupported vendor=apple before GPU execution; corrected invocation passed"
+  ]
+}

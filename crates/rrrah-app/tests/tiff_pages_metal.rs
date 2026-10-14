@@ -368,7 +368,7 @@ fn distinct_tiff_page_profiles_keep_selected_color_through_swap() {
     let gpu = common::qualification_gpu().expect("actual GPU required");
     eprintln!("TIFF page ICC adapter: {}", gpu.adapter_name());
     let path = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-        .join("../../tests/fixtures/data/tiff-distinct-page-profiles.tif");
+        .join("../../tests/fixtures/raster/tiff-distinct-page-profiles.tif");
     let root = MemoryBudget::new(65536);
     let queue = MemoryBudget::new(4096);
     let directory = tempfile::tempdir().unwrap();

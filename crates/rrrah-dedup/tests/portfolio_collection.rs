@@ -2455,3 +2455,237 @@ fn native_bank_collection_final_publication_rechecks_every_file_after_last_callb
     }
     Ok(())
 }
+
+fn consensus_collection<'a>(
+    factors: &'a [f64],
+) -> rrrah_dedup::portfolio_collection::NativeBankConsensusCollectionPolicy<'a> {
+    let (mut p, banks, w, total, cap) = bank_recovery_collection();
+    p.search.opposite.search = p.search.primary.native;
+    let direction = rrrah_dedup::search_portfolio::NativeBankDirectionPolicy {
+        search: p.search,
+        banks,
+        model_work: w,
+        radii: &[2, 6],
+        maximum_projection_checks: cap,
+        factors,
+    };
+    let pair =
+        rrrah_dedup::search_portfolio::required_native_bank_consensus_work(direction, direction).unwrap();
+    rrrah_dedup::portfolio_collection::NativeBankConsensusCollectionPolicy {
+        forward: direction,
+        reverse: direction,
+        max_files: 3,
+        max_pairs: 3,
+        work: work(pair, 3),
+        bank_work: ModelBankCollectionWorkLimits {
+            projection_checks: 2 * total.projection_checks,
+            separation_checks: 2 * total.separation_checks,
+        },
+        maximum_projection_checks: 6 * cap,
+    }
+}
+
+#[test]
+fn consensus_collection_all_directional_and_cumulative_admission_precedes_iterator() {
+    use rrrah_dedup::portfolio_collection::scan_native_bank_consensus_collection_with as scan;
+    let b = MemoryBudget::new(128 * 1024 * 1024);
+    let factors = factors();
+    for case in 0..9 {
+        let mut p = consensus_collection(&factors);
+        match case {
+            0 => p.work.pixel_reads -= 1,
+            1 => p.bank_work.projection_checks -= 1,
+            2 => p.bank_work.separation_checks -= 1,
+            3 => p.maximum_projection_checks -= 1,
+            4 => p.reverse.radii = &[],
+            5 => p.reverse.factors = &[],
+            6 => p.max_pairs = usize::MAX,
+            7 => p.forward.model_work.proposal_ranking_checks = u64::MAX,
+            _ => p.forward.model_work.proposal_separation_checks = u64::MAX,
+        }
+        let files = std::iter::from_fn(|| -> Option<(u64, DecodeRequest)> {
+            panic!("input before full consensus admission")
+        });
+        assert!(
+            scan(files, None, std::path::Path::new("missing"), p, &b, fake, || {
+                false
+            })
+            .is_err()
+        );
+        assert_eq!(b.used(), 0);
+    }
+}
+
+#[test]
+fn consensus_collection_both_directions_publish_canonical_scheduled_records() -> TestResult {
+    use rrrah_dedup::portfolio_collection::scan_native_bank_consensus_collection_with as scan;
+    let dir = tempfile::tempdir()?;
+    let (files, weights) = three(dir.path())?;
+    let b = MemoryBudget::new(128 * 1024 * 1024);
+    let factors = factors();
+    let schedule =
+        rrrah_dedup::pair_schedule::CompletePairSchedule::new(&[u64::MAX, 0, 7], &[], 3, 3, 0, &b, || false)?;
+    for scheduled in [None, Some(&schedule)] {
+        let calls = Cell::new(0);
+        let report = scan(
+            files.clone(),
+            scheduled,
+            &weights,
+            consensus_collection(&factors),
+            &b,
+            |a, l, r, b, c| {
+                calls.set(calls.get() + 1);
+                fake(a, l, r, b, c)
+            },
+            || false,
+        )?;
+        assert_eq!(report.file_ids(), &[0, 7, u64::MAX]);
+        assert_eq!(
+            report
+                .pairs()
+                .iter()
+                .map(|p| (p.left, p.right))
+                .collect::<Vec<_>>(),
+            vec![(0, 7), (0, u64::MAX), (7, u64::MAX)]
+        );
+        assert!(report.pairs().iter().all(|p| p.evidence.supported() == Some(true)
+            && p.evidence.forward.model_attempted
+            && p.evidence.reverse.model_attempted));
+        assert_eq!(calls.get(), 150);
+        drop(report);
+    }
+    drop(schedule);
+    assert_eq!(b.used(), 0);
+    Ok(())
+}
+
+#[test]
+fn consensus_collection_unknown_runs_reverse_and_late_fatal_discards_batch() -> TestResult {
+    use rrrah_dedup::portfolio_collection::scan_native_bank_consensus_collection_with as scan;
+    for failure in [false, true] {
+        let dir = tempfile::tempdir()?;
+        let (files, weights) = three(dir.path())?;
+        let b = MemoryBudget::new(128 * 1024 * 1024);
+        let factors = factors();
+        let calls = Cell::new(0);
+        let result = scan(
+            files,
+            None,
+            &weights,
+            consensus_collection(&factors),
+            &b,
+            |_, _, _, b, _| {
+                calls.set(calls.get() + 1);
+                if failure && calls.get() == 51 {
+                    return Err(std::io::Error::other("fatal after complete unknown pair").into());
+                }
+                Ok(b.try_buffer(
+                    0,
+                    rrrah_dedup::proposals::ScoredProposal {
+                        source: [0.; 2],
+                        target: [0.; 2],
+                        confidence: 0.,
+                    },
+                )?
+                .freeze())
+            },
+            || false,
+        );
+        if failure {
+            assert!(matches!(result, Err(PortfolioCollectionError::Pair { .. })));
+            assert_eq!(calls.get(), 51);
+        } else {
+            let report = result?;
+            assert_eq!(calls.get(), 150);
+            assert!(report.pairs().iter().all(|p| p.evidence.supported().is_none()
+                && p.evidence.forward.model_attempted
+                && p.evidence.reverse.model_attempted));
+            drop(report);
+        }
+        assert_eq!(b.used(), 0);
+    }
+    Ok(())
+}
+
+#[test]
+fn consensus_collection_final_publication_rechecks_all_sources_weights_and_generation() -> TestResult {
+    use rrrah_dedup::portfolio_collection::scan_native_bank_consensus_collection_with as scan;
+    for changed in 0..5 {
+        let dir = tempfile::tempdir()?;
+        let (mut files, weights) = three(dir.path())?;
+        let generation = Arc::new(AtomicU64::new(1));
+        files[2].1.cancellation = Some(rrrah_decode::GenerationToken::new(generation.clone(), 1));
+        let b = MemoryBudget::new(128 * 1024 * 1024);
+        let factors = factors();
+        let empty = |_: &std::path::Path,
+                     _: &rrrah_dedup::model_input::GrayModelInput,
+                     _: &rrrah_dedup::model_input::GrayModelInput,
+                     b: &MemoryBudget,
+                     _: &dyn Fn() -> bool|
+         -> Result<_, rrrah_dedup::model_compare::ProposalProviderError> {
+            Ok(b.try_buffer(
+                0,
+                rrrah_dedup::proposals::ScoredProposal {
+                    source: [0.; 2],
+                    target: [0.; 2],
+                    confidence: 0.,
+                },
+            )?
+            .freeze())
+        };
+        let checkpoints = Cell::new(0);
+        let baseline = scan(
+            files.clone(),
+            None,
+            &weights,
+            consensus_collection(&factors),
+            &b,
+            empty,
+            || {
+                checkpoints.set(checkpoints.get() + 1);
+                false
+            },
+        )?;
+        drop(baseline);
+        assert_eq!(b.used(), 0);
+        let last = checkpoints.get();
+        checkpoints.set(0);
+        let result = scan(
+            files.clone(),
+            None,
+            &weights,
+            consensus_collection(&factors),
+            &b,
+            empty,
+            || {
+                checkpoints.set(checkpoints.get() + 1);
+                if checkpoints.get() == last {
+                    match changed {
+                        0..=2 => {
+                            std::fs::write(&files[changed].1.path, b"changed at final publication").unwrap()
+                        }
+                        3 => std::fs::write(&weights, b"changed weights at final publication").unwrap(),
+                        _ => generation.store(2, Ordering::Release),
+                    }
+                }
+                false
+            },
+        );
+        match changed {
+            0..=2 => assert!(
+                matches!(result,Err(PortfolioCollectionError::Source{id,..}) if id==files[changed].0),
+                "{result:?}"
+            ),
+            3 => assert!(
+                matches!(result, Err(PortfolioCollectionError::ModelSource(_))),
+                "{result:?}"
+            ),
+            _ => assert!(
+                matches!(result, Err(PortfolioCollectionError::Cancelled)),
+                "{result:?}"
+            ),
+        }
+        assert_eq!(b.used(), 0);
+    }
+    Ok(())
+}

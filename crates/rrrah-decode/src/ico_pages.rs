@@ -83,7 +83,7 @@ mod tests {
     use super::*;
     #[test]
     fn quality_order_keeps_best_default_and_selected_samples_metadata() {
-        let mut bytes = include_bytes!("../../../tests/fixtures/data/ico-selected-images.ico").to_vec();
+        let mut bytes = include_bytes!("../../../tests/fixtures/raster/ico-selected-images.ico").to_vec();
         let original = bytes.clone();
         let root = rrrah_core::MemoryBudget::new(65536);
         let mut request = DecodeRequest::new("icons.ico");
@@ -112,7 +112,7 @@ mod tests {
     }
     #[test]
     fn malformed_directory_and_failed_output_admission_preserve_input() {
-        let original = include_bytes!("../../../tests/fixtures/data/ico-selected-images.ico");
+        let original = include_bytes!("../../../tests/fixtures/raster/ico-selected-images.ico");
         let mut request = DecodeRequest::new("icons.ico");
         request.image_index = 1;
         for bytes in [original[..21].to_vec(), {
@@ -143,7 +143,7 @@ mod cursor_selection_tests {
     use super::*;
     #[test]
     fn selected_cursor_hotspot_matches_pixels_and_default_tie_rule() {
-        let original = include_bytes!("../../../tests/fixtures/data/cur-selected-images.cur");
+        let original = include_bytes!("../../../tests/fixtures/raster/cur-selected-images.cur");
         let mut normalized = original.to_vec();
         assert_eq!(
             crate::cursor::normalize(&mut normalized, true).unwrap(),
@@ -181,7 +181,7 @@ mod cursor_selection_tests {
     }
     #[test]
     fn cursor_invalid_hotspot_refuses_without_mutation_or_credit() {
-        let mut bytes = include_bytes!("../../../tests/fixtures/data/cur-selected-images.cur").to_vec();
+        let mut bytes = include_bytes!("../../../tests/fixtures/raster/cur-selected-images.cur").to_vec();
         bytes[10..12].copy_from_slice(&2u16.to_le_bytes());
         let original = bytes.clone();
         let root = rrrah_core::MemoryBudget::new(65536);
