@@ -1,0 +1,49 @@
+{
+  "path": "simhash/simhash.cpp",
+  "bytes": 185177,
+  "lines": 4574,
+  "sha256": "f972393636a424e2f0440f61529b0f2b7e5f6a0f8a1022e9a70a5a1fb6f5e747",
+  "git_blob": "130190085e930ec7c0fb6e18f8aa3e423f6c8498",
+  "fully_read": true,
+  "ranges": [
+    {
+      "first": 1,
+      "last": 110,
+      "sha256": "ccc0f034e9d338c2c354353ba8f958cfd9aebd2f9eb39f95f261f4929ae2dff9"
+    },
+    {
+      "first": 111,
+      "last": 900,
+      "sha256": "64f8bec07821a55c00c187543c11dfe37095d9923dcdb6752b69a3660e3f5bc7"
+    },
+    {
+      "first": 901,
+      "last": 1800,
+      "sha256": "f2f3b422d0a1bd12824fb2474551a40114463828a21f1da5dd1bba3441c77a29"
+    },
+    {
+      "first": 1801,
+      "last": 2700,
+      "sha256": "13e22f3dd9ba6dce334d1cb16e85ee768f75846dd6c07418fc321c2fdac3c93a"
+    },
+    {
+      "first": 2701,
+      "last": 3600,
+      "sha256": "15366359e558bf63241721884e63e2241ec4eca80f0560b3576f5c59b6e6ea12"
+    },
+    {
+      "first": 3601,
+      "last": 4574,
+      "sha256": "baea4c8d86dd7eb0b1c5d11d233b0eda27f0c49669ea6330b08d6e5f181440f4"
+    }
+  ],
+  "truncation_recovery": "Initial3601-4574tooloutput lostcentral2053tokens in outeroutput. Re-read3900-4250untruncated, coveringgap. Allotherchunks untruncated.",
+  "observations": [
+    "Cython0.24.1 generated wrapper includes Python2/3 compatibility, refcount/GC/function closures, imports, integer conversions, tracebacks andcodecache.",
+    "find_all line1249 calls Simhash::find_all without try/catch; vectorassign line1258 has separate exceptiontranslation. Native modern rebuilt wrapper similarly aborts on C++invalid_argument, but oldfallbackruntime unqualified.",
+    "unordered_set conversion loses identical fingerprints, while Pythonargument vector retains original callerdata.",
+    "Default-encoding helper allocatesstrlenbytes thenstrcpy in conditional code; actual compile macrosDEFAULT_STRING_ENCODING_IS_DEFAULT0 exclude it. Staticconditional observation only, no reachable defectclaim.",
+    "Generatedunsigned_hash uses sameMD5first8bigendian logic as current.pyx, whose localdigestbinding/comments addlines. No old/newbinaryparity claim."
+  ],
+  "scope": "Complete static read, not successful originalgeneratedfallbackbuild or oldPython/runtime/platform qualification."
+}

@@ -1,0 +1,128 @@
+{
+  "status": "verified_complete_parent_and_pinned_core_source_review",
+  "whole_repo_complete": true,
+  "whole_implementation_complete": true,
+  "repository": "seomoz/simhash-py",
+  "commit": "cb966253b5ad7a056b3bc9a5d24a4c9ca8153fb8",
+  "tree": "f053f298aaf1617fa64cf51d3f9f8382a8c5c7ee",
+  "parent_blobs": 19,
+  "parent_trees_including_root": 3,
+  "gitlinks": 1,
+  "core_repository": "seomoz/simhash-cpp",
+  "core_commit": "e7aacb1642f406ff0815cf402e909d2002473812",
+  "core_tree": "f70cefc94a876d0fb41fa4ca991765200b335e96",
+  "core_blobs": 15,
+  "core_trees_including_root": 5,
+  "text_blobs_fully_read": 34,
+  "tracked_media": 0,
+  "original_generated_wrapper_lines": 4574,
+  "native_original_tests": 14,
+  "native_original_test_runs": 2,
+  "native_python_controls": 13,
+  "native_python_control_runs": 2,
+  "native_cli_controls": 15,
+  "native_cli_control_runs": 2,
+  "wrapper_observations": [
+    "Cython0.24.1 generated wrapper includes Python2/3 compatibility, refcount/GC/function closures, imports, integer conversions, tracebacks andcodecache.",
+    "find_all line1249 calls Simhash::find_all without try/catch; vectorassign line1258 has separate exceptiontranslation. Native modern rebuilt wrapper similarly aborts on C++invalid_argument, but oldfallbackruntime unqualified.",
+    "unordered_set conversion loses identical fingerprints, while Pythonargument vector retains original callerdata.",
+    "Default-encoding helper allocatesstrlenbytes thenstrcpy in conditional code; actual compile macrosDEFAULT_STRING_ENCODING_IS_DEFAULT0 exclude it. Staticconditional observation only, no reachable defectclaim.",
+    "Generatedunsigned_hash uses sameMD5first8bigendian logic as current.pyx, whose localdigestbinding/comments addlines. No old/newbinaryparity claim."
+  ],
+  "cli_observations": [
+    {
+      "control": "actual_native_stdin_stdout_pairs",
+      "native_endian": true,
+      "pairs": 4
+    },
+    {
+      "control": "identical_hash_occurrences_coalesced",
+      "input_occurrences": 2,
+      "pairs": 0
+    },
+    {
+      "control": "empty_binary_input_succeeds",
+      "returncode": 0
+    },
+    {
+      "control": "partial_trailing_record_silently_ignored",
+      "pairs": 1,
+      "returncode": 0,
+      "trailing_bytes": 1
+    },
+    {
+      "control": "partial_trailing_record_silently_ignored",
+      "pairs": 1,
+      "returncode": 0,
+      "trailing_bytes": 2
+    },
+    {
+      "control": "partial_trailing_record_silently_ignored",
+      "pairs": 1,
+      "returncode": 0,
+      "trailing_bytes": 3
+    },
+    {
+      "control": "partial_trailing_record_silently_ignored",
+      "pairs": 1,
+      "returncode": 0,
+      "trailing_bytes": 4
+    },
+    {
+      "control": "partial_trailing_record_silently_ignored",
+      "pairs": 1,
+      "returncode": 0,
+      "trailing_bytes": 5
+    },
+    {
+      "control": "partial_trailing_record_silently_ignored",
+      "pairs": 1,
+      "returncode": 0,
+      "trailing_bytes": 6
+    },
+    {
+      "control": "partial_trailing_record_silently_ignored",
+      "pairs": 1,
+      "returncode": 0,
+      "trailing_bytes": 7
+    },
+    {
+      "bytes": 7,
+      "control": "only_partial_record_silently_empty_success",
+      "returncode": 0
+    },
+    {
+      "control": "cli_rejects_zero_distance",
+      "returncode": 3,
+      "scope": "CLI policy; library supports radius0"
+    },
+    {
+      "control": "excessive_blocks_abort_cli",
+      "returncode": -6,
+      "stderr": "Reading hashes from stdin.\nComputing matches...\nlibc++abi: terminating due to uncaught exception of type std::invalid_argument: Number of blocks must not exceed 64\n"
+    },
+    {
+      "control": "missing_input_returns_error",
+      "returncode": 7
+    },
+    {
+      "control": "unopenable_output_returns_error",
+      "returncode": 8
+    }
+  ],
+  "evidence_pins": {
+    "docs/research/dedup-500/sim18-selected-native-review-20261016.json": "6317f3aef4bc54f166d509cfed1cda6df5936c4e769e4b5f383bc2a13dc62880",
+    "docs/research/dedup-500/sim18-generated-wrapper-read-receipt-20261016.json": "a722b4bdc6b2689398413925fa9466e814363843b969187412c7ae6ba81ec9c6",
+    "docs/research/dedup-500/sim18-cli-run1-20261016.json": "dd2ef5051b027fe4e2098d9ef6aa25e18fda08d0fcf5c03b942320fa9247f714",
+    "docs/research/dedup-500/sim18-cli-run2-20261016.json": "dd2ef5051b027fe4e2098d9ef6aa25e18fda08d0fcf5c03b942320fa9247f714",
+    "docs/research/dedup-500/sim18-core-cli-build-20261016.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "scripts/qualify-sim18-native-cli-20261016.py": "4b1d0e0e3ceb007a9bdc53b0814e91166e4d1e2955a8e4a4c230405d0e39eb95"
+  },
+  "auditor_sha256": "523bf2e71f091997580c1a4c7a64d7c63e1b129383afd44fd5cd0865487403df",
+  "limits": [
+    "Full static trackedsource/gitlinkcore review; modernCython3.3directclangnativeexecution afterpreservedoriginalsetupfailures. Original2016Python/Cython/build/generatedfallback/gtest/platform qualification not implied.",
+    "All14originalPython testmethods unchanged andrun, C++gtest11cases onlyread; one ChooseTooManycase hascommentedassertion.",
+    "Permutation batch preservesdistincthashpairs only, budget/collision-documentidentity/largecorpus/physicalIO/RSS/performance remain unqualified.",
+    "No algorithm adoption or confirmedspeedup; full500/libraryobjective remains incomplete."
+  ]
+}
