@@ -1,0 +1,33 @@
+/Users/themoretheless/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/setuptools/_distutils/dist.py:318: UserWarning: Unknown distribution option: 'tests_require'
+  warnings.warn(msg)
+/Users/themoretheless/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/setuptools/dist.py:599: SetuptoolsDeprecationWarning: Invalid dash-separated key 'description-file' in 'metadata' (setup.cfg), please use the underscore name 'description_file' instead.
+!!
+
+        ********************************************************************************
+        Usage of dash-separated 'description-file' will not be supported in future
+        versions. Please use the underscore name 'description_file' instead.
+        (Affected: simhash-py).
+
+        Available configuration options are listed in:
+        https://setuptools.pypa.io/en/latest/userguide/declarative_config.html
+
+        This deprecation is overdue, please update your project and remove deprecated
+        calls to avoid build errors in the future.
+
+        See https://github.com/pypa/setuptools/discussions/5011 for details.
+        ********************************************************************************
+
+!!
+  opt = self._enforce_underscore(opt, section)
+Building from Cython
+simhash/simhash.cpp:4592:64: error: non-const lvalue reference to type 'std::unordered_set<hash_t>' (aka 'unordered_set<unsigned long long>') cannot bind to a temporary of type '__libcpp_remove_reference_t<std::unordered_set<unsigned long long, std::hash<unsigned long long>, std::equal_to<unsigned long long>, std::allocator<unsigned long long>> &>' (aka 'std::unordered_set<unsigned long long>')
+ 4592 |   __pyx_v_results_set = ((Simhash::matches_t)Simhash::find_all(__PYX_STD_MOVE_IF_SUPPORTED(__pyx_t_1), __pyx_t_2, __pyx_t_3));
+      |                                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+simhash/simhash.cpp:2468:42: note: expanded from macro '__PYX_STD_MOVE_IF_SUPPORTED'
+ 2468 |   #define __PYX_STD_MOVE_IF_SUPPORTED(x) std::move(x)
+      |                                          ^~~~~~~~~~~~
+simhash/simhash-cpp/include/simhash.h:61:52: note: passing argument to parameter 'hashes' here
+   61 |     matches_t find_all(std::unordered_set<hash_t>& hashes,
+      |                                                    ^
+1 error generated.
+error: Command '['clang++', '-fno-strict-overflow', '-Wsign-compare', '-Wunreachable-code', '-DNDEBUG', '-g', '-O3', '-Wall', '-O3', '-arch', 'arm64', '-mmacosx-version-min=11.0', '-Wno-nullability-completeness', '-Wno-expansion-to-defined', '-Wno-undef-prefix', '-fPIC', '-Isimhash/simhash-cpp/include', '-I/Users/themoretheless/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/include/python3.12', '-c', 'simhash/simhash.cpp', '-o', 'build/temp.macosx-11.0-arm64-cpython-312/simhash/simhash.o', '-std=c++11']' returned non-zero exit status 1.

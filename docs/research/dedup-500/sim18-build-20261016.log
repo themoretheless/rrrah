@@ -1,0 +1,103 @@
+/Users/themoretheless/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/setuptools/_distutils/dist.py:318: UserWarning: Unknown distribution option: 'tests_require'
+  warnings.warn(msg)
+/Users/themoretheless/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/setuptools/dist.py:599: SetuptoolsDeprecationWarning: Invalid dash-separated key 'description-file' in 'metadata' (setup.cfg), please use the underscore name 'description_file' instead.
+!!
+
+        ********************************************************************************
+        Usage of dash-separated 'description-file' will not be supported in future
+        versions. Please use the underscore name 'description_file' instead.
+        (Affected: simhash-py).
+
+        Available configuration options are listed in:
+        https://setuptools.pypa.io/en/latest/userguide/declarative_config.html
+
+        This deprecation is overdue, please update your project and remove deprecated
+        calls to avoid build errors in the future.
+
+        See https://github.com/pypa/setuptools/discussions/5011 for details.
+        ********************************************************************************
+
+!!
+  opt = self._enforce_underscore(opt, section)
+
+Error compiling Cython file:
+------------------------------------------------------------
+...
+import hashlib
+import struct
+
+from simhash cimport compute as c_compute
+^
+------------------------------------------------------------
+simhash/simhash.pyx:4:0: 'simhash/compute.pxd' not found
+
+Error compiling Cython file:
+------------------------------------------------------------
+...
+import hashlib
+import struct
+
+from simhash cimport compute as c_compute
+from simhash cimport find_all as c_find_all
+^
+------------------------------------------------------------
+simhash/simhash.pyx:5:0: 'simhash/find_all.pxd' not found
+warning: simhash/simhash.pyx:15:0: Overriding a c(p)def method with a def method. This can lead to different methods being called depending on the call context. Consider using a cpdef method for both.
+warning: simhash/simhash.pyx:19:0: Overriding a c(p)def method with a def method. This can lead to different methods being called depending on the call context. Consider using a cpdef method for both.
+
+Error compiling Cython file:
+------------------------------------------------------------
+...
+    # Unpacks the binary bytes in digest into a Python integer
+    return struct.unpack('>Q', digest)[0] & 0xFFFFFFFFFFFFFFFF
+
+def compute(hashes):
+    '''Compute the simhash of a vector of hashes.'''
+    return c_compute(hashes)
+           ^
+------------------------------------------------------------
+simhash/simhash.pyx:17:11: 'c_compute' is not a constant, variable or function identifier
+
+Error compiling Cython file:
+------------------------------------------------------------
+...
+    Find the set of all matches within the provided vector of hashes.
+
+    The provided hashes are manipulated in place, but upon completion are
+    restored to their original state.
+    '''
+    cdef matches_t results_set = c_find_all(hashes, number_of_blocks, different_bits)
+                                 ^
+------------------------------------------------------------
+simhash/simhash.pyx:26:33: 'c_find_all' is not a constant, variable or function identifier
+Building from Cython
+Compiling simhash/simhash.pyx because it changed.
+[1/1] Cythonizing simhash/simhash.pyx
+Traceback (most recent call last):
+  File "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/sim18-20261016/build-source/setup.py", line 37, in <module>
+    setup(
+  File "/Users/themoretheless/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/setuptools/_distutils/core.py", line 168, in setup
+    return run_commands(dist)
+           ^^^^^^^^^^^^^^^^^^
+  File "/Users/themoretheless/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/setuptools/_distutils/core.py", line 184, in run_commands
+    dist.run_commands()
+  File "/Users/themoretheless/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/setuptools/_distutils/dist.py", line 1028, in run_commands
+    self.run_command(cmd)
+  File "/Users/themoretheless/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/setuptools/dist.py", line 1106, in run_command
+    super().run_command(command)
+  File "/Users/themoretheless/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/setuptools/_distutils/dist.py", line 1047, in run_command
+    cmd_obj.run()
+  File "/Users/themoretheless/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/setuptools/_distutils/command/build_ext.py", line 382, in run
+    self.build_extensions()
+  File "/Users/themoretheless/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/setuptools/_distutils/command/build_ext.py", line 498, in build_extensions
+    self._build_extensions_serial()
+  File "/Users/themoretheless/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/setuptools/_distutils/command/build_ext.py", line 524, in _build_extensions_serial
+    self.build_extension(ext)
+  File "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/sim18-20261016/deps/Cython/Distutils/build_ext.py", line 135, in build_extension
+    new_ext = cythonize(
+              ^^^^^^^^^^
+  File "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/sim18-20261016/deps/Cython/Build/Dependencies.py", line 1153, in cythonize
+    cythonize_one(*args)
+  File "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/sim18-20261016/deps/Cython/Build/Dependencies.py", line 1264, in cythonize_one
+    raise CompileError(None, pyx_file)
+Cython.Compiler.Errors.CompileError: simhash/simhash.pyx
