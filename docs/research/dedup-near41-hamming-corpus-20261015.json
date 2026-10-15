@@ -1,0 +1,57 @@
+{
+  "status": "passed_twice_actual_hamming_core_with_independent_fullscan",
+  "source_pins": {
+    "crates/rrrah-dedup/src/lib.rs": "3b7cc56d50784ebf7b52b2ebbba68aacbbc1428eabd1fa1cd913e9703dfe99c1",
+    "crates/rrrah-dedup/src/local.rs": "c89c2b0841078177077704e4ab89123215f815dc2bfe8d1e435999ed1ea4ad3c",
+    "crates/rrrah-dedup/tests/hamming_image_corpus.rs": "ef86175d732e0e8550ecde614f9ef6820723f22b419671d7418ade6ccfd308d2",
+    "crates/rrrah-dedup/tests/fixtures/near41-phash64.txt": "b186ed6bd930c712fa38c66b6b78e36b8fd30dd6e8660c60c1bffb08faf9cc2c",
+    "docs/research/dedup-500/near41-visual-corpus-prepared-20261015.json": "fa67f3828d3c5307ce910df060a8cf95d5b8f555dd5fbc4d45ff8262890b3a18",
+    "scripts/qualify-dedup-near41-hamming-corpus-20261015.py": "5e2b1f907dadecf17a02d69fe0af747d9c5fdd03bdbc4970be00f2099c29c47a"
+  },
+  "dependency_pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libthiserror-1f2ca11ca2706be8.rlib": "a4bc045f06441d4730b1988bee770197e1f51f4b1600df8c028a668c27c77bf1"
+  },
+  "compiler": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: aarch64-apple-darwin\nrelease: 1.98.1\nLLVM version: 22.1.8\n",
+  "command": [
+    "rustc",
+    "+stable",
+    "--edition=2024",
+    "--test",
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/near41-hamming-corpus-20261015/harness.rs",
+    "-C",
+    "opt-level=1",
+    "-L",
+    "dependency=/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps",
+    "--extern",
+    "thiserror=/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libthiserror-1f2ca11ca2706be8.rlib",
+    "-o",
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/near41-hamming-corpus-20261015/tests"
+  ],
+  "binary": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/near41-hamming-corpus-20261015/tests",
+  "binary_sha256": "324e7ee6023149435f4e1e236d5941134c29abb394ae65fce3fb3a97d2ca955a",
+  "harness": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/near41-hamming-corpus-20261015/harness.rs",
+  "harness_sha256": "7c0fdc36cc5ee8d6ceb0bbbf99ac9e92c3ed2da10cb58a2cf9fda3ebc6a085f9",
+  "logs": {
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/near41-hamming-corpus-20261015/build.log": "443fbc51f296ad08ce8ffdd061a5e1ba3a55beb79367a782209ccac2128aff79",
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/near41-hamming-corpus-20261015/inventory.log": "aa4dc4a580e498e27caf2577f5e5220d365fc490e0f24dea304ebe5cdec3977a",
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/near41-hamming-corpus-20261015/run1.log": "8c26f2b66f5cd71155b1407aa71caaf83c52d39b2d9255144029464914729004",
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/near41-hamming-corpus-20261015/run2.log": "16bba459dd91c9a9063124584565125c2884699b5e884b6d0940376a146037ad"
+  },
+  "corpus_paths": 540,
+  "insertion_orders": 3,
+  "radii": [
+    0,
+    1,
+    4,
+    8,
+    16,
+    32,
+    64,
+    65
+  ],
+  "complete_queries_per_run": 12960,
+  "result_budget_refusals_per_run": 12960,
+  "hamming8_directed_edges": 2902,
+  "observed_missing_edges": 0,
+  "scope": "Actual unchanged HammingIndex/Candidate/errors plus unchanged LocalError/reserve_slot selected definitions from current Root. Actual new integration body compiled unchanged through standalone rustc alias. All540real publicimagephash records/full independent XORpopcount oracle,3orders,exactsorted IDs/distances,duplicateinsertion and refusalinsteadpartialresults. No full Cargo/library/decode/pixel/visualgroundtruth/platform/performance or production change."
+}
