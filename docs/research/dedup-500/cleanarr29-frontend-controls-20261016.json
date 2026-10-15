@@ -1,0 +1,220 @@
+{
+  "status": "verified_complete_original_state_helper_modules_13controls_twice",
+  "whole_repo_complete": false,
+  "producer_sha256": "eb552c2ac2262c76c9e668cdfdfcc08dd0cf806deb273db48238e67e99e58ec1",
+  "runs": [
+    [
+      {
+        "case": "ignored_filtered",
+        "observed": [
+          "a"
+        ]
+      },
+      {
+        "case": "ignored_included",
+        "observed": [
+          "a",
+          "b"
+        ]
+      },
+      {
+        "case": "ignore_state_after_api_success",
+        "observed": [
+          "a",
+          "b"
+        ]
+      },
+      {
+        "case": "unignore_state_after_api_success",
+        "observed": [
+          "b"
+        ]
+      },
+      {
+        "case": "initial_page_error_caught",
+        "observed": {
+          "loading": false,
+          "failed": true,
+          "error": "owned first failure"
+        }
+      },
+      {
+        "case": "later_page_error_unhandled_and_loading_stuck",
+        "observed": {
+          "loading": true,
+          "failed": false,
+          "pages": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "unhandled": 1
+        }
+      },
+      {
+        "case": "empty_page_finishes_valid_batch",
+        "observed": {
+          "loading": false,
+          "keys": [
+            "a"
+          ]
+        }
+      },
+      {
+        "case": "older_request_overwrites_newer_result",
+        "observed": [
+          "old"
+        ]
+      },
+      {
+        "case": "empty_parts_reduce_throws",
+        "observed": true
+      },
+      {
+        "case": "petabyte_size_undefined_unit",
+        "observed": "1.0 undefined"
+      },
+      {
+        "case": "known_size_controls",
+        "observed": [
+          "1.0 KB",
+          5
+        ]
+      },
+      {
+        "case": "delete_error_preserves_selected_media",
+        "observed": {
+          "rejected": true,
+          "length": 1,
+          "size": 5
+        }
+      },
+      {
+        "case": "size_request_outer_promise_stays_pending",
+        "observed": {
+          "settled": false,
+          "unhandled": 1
+        }
+      }
+    ],
+    [
+      {
+        "case": "ignored_filtered",
+        "observed": [
+          "a"
+        ]
+      },
+      {
+        "case": "ignored_included",
+        "observed": [
+          "a",
+          "b"
+        ]
+      },
+      {
+        "case": "ignore_state_after_api_success",
+        "observed": [
+          "a",
+          "b"
+        ]
+      },
+      {
+        "case": "unignore_state_after_api_success",
+        "observed": [
+          "b"
+        ]
+      },
+      {
+        "case": "initial_page_error_caught",
+        "observed": {
+          "loading": false,
+          "failed": true,
+          "error": "owned first failure"
+        }
+      },
+      {
+        "case": "later_page_error_unhandled_and_loading_stuck",
+        "observed": {
+          "loading": true,
+          "failed": false,
+          "pages": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "unhandled": 1
+        }
+      },
+      {
+        "case": "empty_page_finishes_valid_batch",
+        "observed": {
+          "loading": false,
+          "keys": [
+            "a"
+          ]
+        }
+      },
+      {
+        "case": "older_request_overwrites_newer_result",
+        "observed": [
+          "old"
+        ]
+      },
+      {
+        "case": "empty_parts_reduce_throws",
+        "observed": true
+      },
+      {
+        "case": "petabyte_size_undefined_unit",
+        "observed": "1.0 undefined"
+      },
+      {
+        "case": "known_size_controls",
+        "observed": [
+          "1.0 KB",
+          5
+        ]
+      },
+      {
+        "case": "delete_error_preserves_selected_media",
+        "observed": {
+          "rejected": true,
+          "length": 1,
+          "size": 5
+        }
+      },
+      {
+        "case": "size_request_outer_promise_stays_pending",
+        "observed": {
+          "settled": false,
+          "unhandled": 1
+        }
+      }
+    ]
+  ],
+  "source_pins": {
+    ".dedup-work/cleanarr29-20261016/source/frontend/src/stores/ContentStore.ts": "e61a4ccdbe0b19c64e8bc2abab9aaec892e1c525a6688beb6d6360e8b9c1536c",
+    ".dedup-work/cleanarr29-20261016/source/frontend/src/stores/MediaStore.ts": "41ea3af7ccda1ab548ec33a56ea384c9f25389f032db8521f9a4d4759750e044",
+    ".dedup-work/cleanarr29-20261016/source/frontend/src/stores/ServerInfoStore.ts": "42492e06b6be631f3b9f92975d5520b9e94559adb63ad19c62b43b7931d092d9",
+    ".dedup-work/cleanarr29-20261016/source/frontend/src/util/index.ts": "4faa1672cb83c075f060c538a221a3bf05fd440e845bf0e429a1ade29d860851"
+  },
+  "dependency_versions": {
+    "typescript": "3.8.3",
+    "mobx": "5.15.7",
+    "react": "16.14.0"
+  },
+  "tool_pins": {
+    ".dedup-work/cleanarr29-20261016/node-tools/node_modules/typescript/lib/typescript.js": "383b462c9c95c505cfbd9bd4f31f6ca4d91ac506c0e2b1f81d5e35015c81e89d",
+    ".dedup-work/cleanarr29-20261016/node-tools/node_modules/mobx/lib/mobx.js": "9fd864ffd66c864d2f6bf63d126d127fd6d34e10a95fb6180047156e7f7c76d5",
+    ".dedup-work/cleanarr29-20261016/node-tools/node_modules/react/index.js": "a216c390bf956cbb906c66d29fdb2e2ad6999464a5ca83e476533a6f25ad0ef3",
+    ".dedup-work/cleanarr29-20261016/node-tools/node_modules/react/cjs/react.development.js": "5a56d14711ea41bd4a276e4c1f203a06e654620c0634782d4b854d4b094060d6"
+  },
+  "scope": "Complete unchanged originalContentStore/MediaStore/ServerInfoStore/util TS modules transpiled withlockexactTypeScript3.8.3 andrealMobX5.15.7/React16.14.0. CommonJS/ES5/legacydecorators, fake API promise transport only; no sourcebodyextraction or codeadapters.13controls twice; realNodePromise events including explicitlycaughtunhandledRejection diagnostics. No Reactcomponent/DOM/browser/fullCRA/upstreamtest execution.",
+  "limits": [
+    "API network neverinvoked, no Plex/delete/fileoperation",
+    "NodeVM state/helper runtime, not browserUI/upstreamApp.test orfullstrictTypeScriptsemanticbuild",
+    "NativeMath/Promise/observable outcomes only; no performance/adoption claim"
+  ]
+}

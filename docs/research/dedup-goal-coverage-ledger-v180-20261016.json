@@ -1,0 +1,2341 @@
+{
+  "status": "incomplete",
+  "objective": "\u0443\u0441\u043a\u043e\u0440\u0435\u043d\u0438\u0435 \u0438 \u043e\u043f\u0442\u0438\u043c\u0438\u0437\u0430\u0446\u0438\u044f, \u0431\u0438\u0431\u043b\u0438\u043e\u0442\u0435\u043a\u0430 \u043f\u043e\u043a\u0440\u044b\u0432\u0430\u0435\u0442 \u0432\u0441\u0435 \u043a\u0435\u0439\u0441\u044b",
+  "scope": "Original exact plus visual library,500-source review, positive/negative quality, formats/platforms, mutation/cancellation/cache, resources and scale; no reduction to implemented subset",
+  "requirements": [
+    {
+      "requirement": "exact_identity",
+      "status": "partial_verified",
+      "evidence": "docs/research/dedup-exact-full-controls-audit-20261013.json",
+      "evidence_sha256": "b225dc14380262264eed36b1abb096b7ee61fff6794d437621d028d55884d79b",
+      "remaining_or_scope": "Targeted exact controls plus complete frozen initial-consensus991test inventory. Other-platform/huge-file qualification remains missing; full gate predates two native-wrapper/helper file changes.",
+      "latest_supplementary_evidence": "docs/research/dedup-exact-sample-buffer-20261014/audit.json",
+      "latest_supplementary_scope": "Candidate exactmodule19tests and identical-report whole-scan benchmark retained. Smaller scratch reverted; original exact identity evidence remains authoritative. Platform/huge-file/fullworkspace scope still open.",
+      "latest_current_no_feature_evidence": "docs/research/dedup-current-no-features-complete-v2-audit-20261014.json",
+      "latest_current_no_feature_scope": "Historical264passed2manualignored nofeature gate predates true-latch/fused/currentcore source revisions. Preserved old qualified snapshot only; not latest mutableRoot qualification.",
+      "latest_large_file_evidence": "docs/research/dedup-large-exact-files-v2-audit-20261014.json",
+      "latest_large_file_scope": "22exact-module tests passed, including3public API regressions for4GiB/1TiB sparse lengths, policy/discovery and boundedstream cancellation. Does not qualify fullmultiGiB equality, physicaldeviceIO/hardRSS/platform/Cargo/fullworkspace scope.",
+      "latest_fused_root_adoption": "docs/research/dedup-fused-exact-root-adoption-audit-20261014.json",
+      "latest_fused_root_scope": "Root public exact pair API matches qualified candidate modulo formatting/comment.23actual candidate exact/largefile tests, prior47unit/stress and Windows metadata check retained. No fullRoot Cargo/platformexecution/corpus/currentnative/hardRSS or exhaustivecollection scale claim.",
+      "latest_current_exact_integration_evidence": "docs/research/dedup-root-exact-combined-audit-20261014.json",
+      "latest_current_exact_integration_scope": "Current Root post-fused-adoption exact module plus complete exact_files integration and large-file controls; directrustc real cached dependencies. 4GiB/1TiB sparse metadata/size admission and bounded early streaming cancellation only, not full multiGiB equality, physical IO, hard RSS, otherplatform or Cargo/workspace/decode proof. Existing exact-module unit controls also included. Temporary sparse files owned by tempfile and removed on completion, no corpus. Complete current exact_files testbody/source and29testname inventory matches retained earlier Cargo-qualified integration target;20current exact-module and3large-file tests also executed without filter. No wholelibrary/decode/workspace/currentnative/corpus/platformexecution qualification.",
+      "latest_windows_strict_fix": "docs/research/dedup-exact-windows-strict-after-v2-20261015.json",
+      "latest_windows_strict_scope": "Strict isolated current exact module WindowsGNU metadata check passes; no Windows linking/runtime/fullcrate proof. Windows sparse fixture setup and CI inclusion edited, runtime pending.",
+      "latest_current_cargo_gate": "docs/research/dedup-current-cargo-exact-v1-audit-20261015.json",
+      "latest_current_cargo_scope": "Historical78pass2manualbenchignored actual nofeature Cargo gate before formatter-only changes. Proposedformat overlay validated separately; not a new currentRoot/decode/platform/fullworkspace runtime gate.",
+      "latest_native_windows_exact_evidence": "docs/research/dedup-windows-native-run-38641764249-audit-20261015.json",
+      "latest_native_windows_exact_scope": "Actual WindowsMSVC strict -Dwarnings nofeature Cargo lib/exact_files/exact_large_files complete native runs at committed415443172.71passed2manualbenchignored; all3largefile tests executed, including u64size admission/discovery and bounded cancellation. 4GiB/1TiB sparse logical lengths only, not fullmultiGiB equality/physicalIO/hardRSS, wholelibrary/decode/collection/corpus/performance proof. Remote binary artifacts not fetched or independently --list enumerated; declared execution count/result/names/0filtered log and successful job checked.",
+      "latest_full_large_stream_evidence": "docs/research/dedup-full-4gib-exact-v1-audit-20261015.json",
+      "latest_full_large_stream_sha256": "c06d4e221b3e133c496b06aba5fd67ffabe0ec5ac51eeac692b400efe4ebac41",
+      "latest_full_large_stream_scope": "Current exact module standalone real cached dependencies on MacARM, actual full public compare_files streaming of two owned sparse synthetic files each4GiB+64KiB. Equal case and one late byte difference beyond4GiB. No physical-device IO throughput, hard RSS, Windows/Linux or collection/decode/fullworkspace proof; timing diagnostic only under concurrent compilation.",
+      "latest_read_failure_gate": "docs/research/dedup-exact-read-offsets-audit-20261015.json",
+      "latest_read_failure_gate_sha256": "dc6d0a497f5b3af79fd5f59f96481cf9165e3177bd9bb3fc644f881e4c076372",
+      "latest_read_failure_scope": "53 current exact module/full exact_files and three prior synthetic large-file controls pass,0ignored0filtered, fresh binary inventory matched;192offset/type read failures included. Actual real cached dependencies unchanged. Not full Cargo/library/decode/platform/corpus/performance qualification.",
+      "latest_durable_root_exact": {
+        "path": "docs/research/dedup-durable-root-exact-v2-audit-20261015.json",
+        "sha256": "2119d862e274d1235b5b4961cd9b91cea3baa49c8756b9f07e7aca612369a69b",
+        "scope": "Fresh54currentexactmodule/full29exact_files/3sparse/new1sameinode-size-restoredmtime regression tests, realcacheddeps/directrustc. Complete53priorinventoryretainedbyteunchanged3sources; new4sizes compare_files bothdirections/scan/verifiedscan rejectstalecontent andpreservehealthycopy. No fullCargo/decode/platform/physicalIO/RSS/speedup proof."
+      },
+      "latest_source32_large_regression": {
+        "path": "docs/research/dedup-root-source32-large-controls-audit-20261016.json",
+        "sha256": "33120c4541403a1d8c8a25a20d98af19cfe8b63c9ff1a150e33d124bed68a78f",
+        "scope": "Whole unchanged currentexact.rs publiccompare_files actualcacheddeps rejects sameowned2MiB/4GiB/4GiB+64KiB distinctfixtures bothorders,6calls. No dataadapters/moduleextraction. No wholeCargo/decode/currentcollection/platform/physicalIO/hardRSS/performance/adoption proof."
+      }
+    },
+    {
+      "requirement": "pixel_publication",
+      "status": "partial_verified",
+      "evidence": "docs/research/dedup-indexed-publication-audit-20261013.json",
+      "evidence_sha256": "1c433387774356a315422af53a4671bd7f865d9f9cd9ead47b67fead3d26dbda",
+      "remaining_or_scope": "Targeted publication/collision controls plus foreign four-PNG exact pipeline crosscheck and full991frozen inventory. Other-platform/all-format/frame matrix remains open.",
+      "latest_flat_pixel_oracle": "docs/research/dedup-flat256-pixel-controls-20261015.json",
+      "latest_flat_pixel_oracle_sha256": "d5680b0b07285ba9b6acf79b6f27c8dfca71056373f017e7868bc1d54e87e535",
+      "latest_all_hash_bits_cache": "docs/research/dedup-cache-all2048bits-controls-20261015.json",
+      "latest_all_hash_bits_cache_sha256": "6b1c5f9788d4038d6e80de92642b4c202effba4cef0ebaa319af8ccf788b566d",
+      "latest_cache_corruption_gate": "docs/research/dedup-cache-corruption-all-bits-audit-20261015.json",
+      "latest_cache_corruption_gate_sha256": "e9608c6e92b5ac32bbfb4e38e7c08b046552bf3a64e6865db0a8371d50701480",
+      "latest_cache_corruption_scope": "10complete current cache integrations pass0ignored0filtered;3264single-bit corruption cases and2048existing hash-bit wire oracles. Zero budget/refused insertion/value ownership and existing atomic/process controls verified against unchanged qualified actual cache/pixels selected library. Not fresh full Cargo/decode/platform/corpus/performance/hardRSS.",
+      "latest_durable_cache_gate": {
+        "path": "docs/research/dedup-durable-cache-v2-audit-20261016.json",
+        "sha256": "fc6262be5b6769f48e1a178ce5f4a2887455f98a594ef1bb8ab4d4b918880a85",
+        "passed": 10,
+        "failed": 0,
+        "scope": "Freshcompleteunchanged10cacheintegrationtests withstrictdirectrustc/cache+pixels/selectedlocalhelpers/realdeps; freshbinaryinventory, durablebinary/log/sourcepins retained. PriorTMPbinarymissing, at-time audit preserved. Recipe/content/frameidentity, ownedvalues,budget,3264corruptionbits/2048wirebits,atomic/cancel/concurrentprocess/crashpublication. No fullCargo/decode/platform/hardRSS/performanceproof."
+      }
+    },
+    {
+      "requirement": "verified_group_scaling",
+      "status": "partial_verified",
+      "evidence": "docs/research/dedup-verified-group-scaling-audit-20261013.json",
+      "evidence_sha256": "6f6722d6ba849466548969863e022bd8a2050f6e043fcf7711523387417e561a",
+      "remaining_or_scope": "8/32/64/2561MiB files; does not prove million-file scalability or hard memory cap",
+      "latest_supplementary_evidence": "docs/research/dedup-current-complete-link-groups-audit-20261014.json",
+      "latest_supplementary_scope": "Five existing tests on pinned V7library: finite exhaustive graph oracle and sparse16384entry controls. Million-file scalability/hardRSS still unverified."
+    },
+    {
+      "requirement": "exhaustive_pair_scaling",
+      "status": "open",
+      "evidence": "docs/research/dedup-exact-collection-scaling-audit-20261013.json",
+      "evidence_sha256": "844d44cbc00d67b2b50d274c45b44d327fc3108e22ec4f998014fc3a72fd1d26",
+      "remaining_or_scope": "Quadratic repeated full reads remain; previously rejected cache not readopted",
+      "latest_ownerless_engine_decision": "docs/research/dedup-ownerless-actual-engine-decision-20261015.json",
+      "latest_ownerless_engine_decision_sha256": "281757db9f0ae723165f642e12a04c14a1ab89ecb0a11e6c401aa0ec867383f3",
+      "latest_ownerless_engine_scope": "25selected-module tests and378actual-engine paired processes verified, original pairs/provider counts/checkpoints/managed release preserved. No consistent end-to-end speedup under concurrent compilation; optimization not adopted. Quadratic work/repeated IO and full-library/platform/scaling gates remain open.",
+      "latest_registration_profile": "docs/research/dedup-five-collection-live-profile-20261015.json",
+      "latest_registration_profile_sha256": "6646cc86de8bca1a002ab01ccdff896727c6a1071545003b8702c7b5f5c88a54",
+      "latest_channel_reuse_decision": "docs/research/dedup-encoded-channel-reuse-decision-20261015.json",
+      "latest_channel_reuse_decision_sha256": "a899ab53ef13bd695f96ff2e489c8f676667c8b18bd947ab5e0a5c2c774ebe72",
+      "latest_zero_weight_decision": "docs/research/dedup-zero-weight-warp-decision-20261015.json",
+      "latest_zero_weight_decision_sha256": "318a30f62f4f7894a6cddaf53f39de53cfc91b299d7b94f7b146d4043c7ce716",
+      "latest_actual_replay_warp_profile": "docs/research/dedup-five-collection-replay-live-profile-20261015.json",
+      "latest_actual_replay_warp_profile_sha256": "9297710283b864cc4076e5982851fc27c9cdc475a9dfb9c52aff4de79d7571c6",
+      "latest_actual_replay_warp_profile_scope": "Actualowned retainedfive_collection binary, activefive_search_collection test,2sec1ms liveprofile. Frozen testgate code/source/binary pins,1477sampleintervals/thread; warp/refine/interpolate/premultipliedextendedsRGB path,440powleafobservations. Notreleaseopt3/currentRoot/quality orwholeworkflow speedup. No inclusive/overlapping countsum orhardRSSclaim; priorrejectedoptimizations remainrejected.",
+      "latest_frozen_baseline_complete_replay_audit": "docs/research/dedup-common-fixed-baseline-replay-audit-v3-20261015.json",
+      "latest_frozen_baseline_complete_replay_audit_sha256": "662c548bba4504269f9566b73b31afbe61b7b1aa534ec8b04fbbda000b3c4fec",
+      "latest_frozen_baseline_complete_replay_scope": "All162retained lib/integration targets and3378frozen sourcepins independentlyaudited afterownedcache-release/ownTMPDIR recovery:2066pass0fail86originalignored,no filters orpruning. Sameoriginalmachinecode/nativeworkerobserveroverlay, complete fresh--list matched. Priorfull9failureENOSPCresult preservedfailed. Not latestRoot aftercache/trace/crate-extraction, native458/currentcorpus/platform/allformats/opt3/performance proof.",
+      "latest_durable_full_baseline": {
+        "receipt": "docs/research/dedup-durable-baseline-terminal-receipt-v5-20261015.json",
+        "receipt_sha256": "8dfd9555ea226016c53aa4663f9081f4b5d90355d9732567e54b43087a097535",
+        "audit": "docs/research/dedup-durable-baseline-audit-v5-20261015.json",
+        "audit_sha256": "2af08e45c2da609def4994f8b01f2f19c5de0353b577847c75e1c1d790cdcb3b",
+        "passed": 2066,
+        "failed": 0,
+        "original_ignored": 86,
+        "targets": 162,
+        "scope": "Freshcompleteunfilteredlegacy3378source/default+decode lib/integrationbaseline, raw162binaries/inventories/source/logavailableandreverified. No currentmutableRoot/completecandidate/opt3benchmark/platform/allformats/corpus/physicalIO/RSS/speedup proof."
+      }
+    },
+    {
+      "requirement": "worker_control",
+      "status": "partial_verified",
+      "evidence": "docs/research/dedup-model-worker-group-fixed-v2-audit-20261013.json",
+      "evidence_sha256": "e334b227b023c0e1f85869bb6ae4e7693652727f92a3f2bddb4d0f496653e4ce",
+      "remaining_or_scope": "Mac focused125, Linux default55 and Windows default compile-only evidence retained; full initial-consensus991 inventory passes. Actual group-parent native self and corrected atomic learned self controls pass. Hard RSS/disk/scheduling, escaped groups, descendant reaping beyond owned child, persistent workers and broader platform execution remain open.",
+      "previous_evidence": "docs/research/dedup-model-worker-decode-parent-audit-20261013.json",
+      "previous_evidence_sha256": "0571dae364957635717d6c693b391c80fbadf1e20896bec17eb11fab8e44eca2",
+      "previous_focused_evidence": "docs/research/dedup-worker-group-focused-audit-20261013.json",
+      "latest_current_no_feature_evidence": "docs/research/dedup-current-no-features-complete-v2-audit-20261014.json",
+      "latest_current_no_feature_scope": "Historical264passed2manualignored nofeature gate predates true-latch/fused/currentcore source revisions. Preserved old qualified snapshot only; not latest mutableRoot qualification.",
+      "latest_native_observer": "docs/research/dedup-worker-native-observer-v2-20261015.json",
+      "latest_native_observer_sha256": "2771dbead2d8b6f0c7dfaf789980d9dfee6f9ad6456de12e9cefa7cf90867ebd",
+      "latest_unit_metadata": "docs/research/dedup-worker-current-unit-metadata-20261015.json",
+      "latest_unit_metadata_sha256": "a4ae9edf66176ec90be7f322bb7f458700c5df48a51a27f7b184eeb7425d86e1",
+      "latest_native_observer_scope": "14whole worker-module tests pass on MacARM, including live/reaped child and Linux proc-stat pure parser; whole current unit metadata passes with cached real dependencies. No Linux process runtime/current full all-target gate/hard resources qualification.",
+      "latest_response_io_controls": "docs/research/dedup-worker-response-io-controls-20261015.json",
+      "latest_response_io_controls_sha256": "a212be1b67986092ddbb761bf41ef754c19503653db88c9f10da64947545c148",
+      "latest_group_native_observer": "docs/research/dedup-worker-group-native-observer-20261015.json",
+      "latest_group_native_observer_sha256": "74e61316c0e39e48c846f9f9750855a7c7449edd11806f9b8fa1fb4458e03526",
+      "latest_frozen_complete_gate_failure": "docs/research/dedup-common-worker-fixed-baseline-audit-v2-20261015.json",
+      "latest_frozen_complete_gate_failure_sha256": "5637e54910ad6cf7a0d39d98dc2d4d7cb0cbbcbf937014ad73f4a1ad9c4a86e1",
+      "latest_frozen_complete_gate_failure_scope": "Complete162targets/3378source snapshot:2057pass9fail86ignored. Native worker observers now pass;6explicitENOSPC plus3raster missing-entry/issue assertions keep fullgate failed. Original failure preserved. All162retained machine-code targets replaying after owned incremental cache release; live report not immutable evidence or passing gate. Not latest Root after concurrent crate extraction.",
+      "latest_frozen_baseline_complete_replay_audit": "docs/research/dedup-common-fixed-baseline-replay-audit-v3-20261015.json",
+      "latest_frozen_baseline_complete_replay_audit_sha256": "662c548bba4504269f9566b73b31afbe61b7b1aa534ec8b04fbbda000b3c4fec",
+      "latest_frozen_baseline_complete_replay_scope": "All162retained lib/integration targets and3378frozen sourcepins independentlyaudited afterownedcache-release/ownTMPDIR recovery:2066pass0fail86originalignored,no filters orpruning. Sameoriginalmachinecode/nativeworkerobserveroverlay, complete fresh--list matched. Priorfull9failureENOSPCresult preservedfailed. Not latestRoot aftercache/trace/crate-extraction, native458/currentcorpus/platform/allformats/opt3/performance proof.",
+      "latest_full_candidate_resume_audit": "docs/research/dedup-common-candidate-v3-interruption-audit-v2-20261015.json",
+      "latest_full_candidate_resume_audit_sha256": "2e74d7a3cd939a2b1aff8e8725ada4759db1703aaa108b70ed1fba12c0fff978",
+      "latest_full_candidate_resume_scope": "IncompleteV3preserved, samefull162targetv4 gate resumedsource3378 andguardsverified. Setup/processobservation only, no passingcandidate/latestRoot/wholeplatform/resource/performance qualification.",
+      "latest_durable_full_baseline": {
+        "receipt": "docs/research/dedup-durable-baseline-terminal-receipt-v5-20261015.json",
+        "receipt_sha256": "8dfd9555ea226016c53aa4663f9081f4b5d90355d9732567e54b43087a097535",
+        "audit": "docs/research/dedup-durable-baseline-audit-v5-20261015.json",
+        "audit_sha256": "2af08e45c2da609def4994f8b01f2f19c5de0353b577847c75e1c1d790cdcb3b",
+        "passed": 2066,
+        "failed": 0,
+        "original_ignored": 86,
+        "targets": 162,
+        "scope": "Freshcompleteunfilteredlegacy3378source/default+decode lib/integrationbaseline, raw162binaries/inventories/source/logavailableandreverified. No currentmutableRoot/completecandidate/opt3benchmark/platform/allformats/corpus/physicalIO/RSS/speedup proof."
+      }
+    },
+    {
+      "requirement": "negative_quality",
+      "status": "open_confirmed_false_acceptances",
+      "evidence": "docs/research/dedup-latest-native-false-controls-audit-20261013.json",
+      "evidence_sha256": "da2ac6b425a9f10be142e9cc342089cfe24b826cccf4a4b3dbb7dab1d5bec368",
+      "remaining_or_scope": "Frozen pre-cache atomic campaign independently audited96/233:96 unknown,0 false acceptance,0 execution failure. Unknowns are not rejections; full233/currentRoot/true-negative precision unqualified.",
+      "latest_prefix_evidence": "docs/research/dedup-consensus-current-negative-resume-v3-prefix-0096-audit-20261014.json",
+      "latest_prefix_sha256": "f9e6fd5133f932ff9e10611c7170ad37bbfb7f7de85ca10b2a0b17b9269c7b30",
+      "latest_diagnostics_investigation": "docs/research/dedup-consensus-diagnostics-investigation-20261015.json",
+      "latest_diagnostics_investigation_sha256": "7f039b939ec6827f170b853613bd291239511428f0632cdba63ef68c2f23e053",
+      "latest_diagnostics_scope": "Current consensus discards existing model-bank geometry/pixel counters; historical96 unknowns cannot be stage-attributed retroactively. Candidate summary576pure semantic controls pass, but fullunit metadata failed missing Cargo env/dependency linkage. Root restored unchanged. Additive traced-result API and fresh propagation/Cargo/native qualification required; no new negative precision or production adoption claim.",
+      "latest_additive_trace_candidate": "docs/research/dedup-consensus-additive-trace-controls-20261015.json",
+      "latest_additive_trace_candidate_sha256": "3c05b8bb1728aedea20db2e4469be48b79ad8af98a52304bcbb326e4daf3ba1c",
+      "latest_additive_trace_scope": "Root unchanged. Isolated additive trace preserves old public API/type definitions;2helper runtime tests576combinations pass;240byte Copy/no-drop result on MacARM. Shared guard-body source comparison verified; full conversion/guarded runtime/type/Cargo/model/corpus gates pending.9of10old direct dependency hashes match; changed core prevents treating old shared build chain as qualified.",
+      "latest_additive_trace_production_metadata": "docs/research/dedup-consensus-additive-trace-production-metadata-20261015.json",
+      "latest_additive_trace_production_metadata_sha256": "72bc03b573b9fb73c922f6508e5cfb9e2240dbb3b2e16de0e4f226236e354c4e",
+      "latest_additive_trace_production_scope": "Complete captured current production library candidate metadata passes strict warnings with freshly matched frozen baseline core/decode deps. Old API unchanged, Root untouched. Not machinecode/runtime/native/Cargo/decoder parity or candidate recipe qualification.",
+      "latest_active_trace_gate": "docs/research/dedup-additive-trace-runtime-20261015.json",
+      "latest_active_trace_scope": "Session38797 terminal0; complete40test target independently verified twice, Root adopted. Full actual native traced wrapper/current corpus and negative precision still open.",
+      "latest_trace_root_adoption": "docs/research/dedup-additive-trace-root-adoption-20261015.json",
+      "latest_trace_root_adoption_sha256": "e6fdda5b643fa0b06bd3be90803e6a9debafd76e2d441b02c1bd203a5ae209ee",
+      "latest_trace_root_scope": "Root additive trace API adopted from actual candidate machine code: full40portfolio integration tests pass0ignored0filtered;38old target names plus original36-combination helper and new trace guard/error/counter regression independently verified. Existing API and guarded body preserved. Production module matches qualified source; tests only formatted. Frozen baseline Core/decode deps and reused typecheck recipe env, not fresh current Root all-target Cargo/platform/LoFTR/corpus/recipe/performance proof. Native campaign fixed binary still old;96unknowns cannot gain counters retroactively."
+    },
+    {
+      "requirement": "source_review500",
+      "status": "open",
+      "evidence": "docs/research/dedup-500/registry-coverage-audit-v126-20261016.json",
+      "evidence_sha256": "3a0c25d69523fd19087bc160acd7b5eaa38e5745d2ddf387ef658185db1382d4",
+      "remaining_or_scope": "123/500 full-source declarations verified in registry;377 stillrequirefullreview. Tree/evidence acquisition and detailed-reference count are not full review.",
+      "latest_registry_inventory": "docs/research/dedup-500/registry-coverage-audit-v126-20261016.json",
+      "latest_registry_scope": "500unique,3067selectedpins,138detailedreferences,122fullsource declarations. Source27wrapper1-8500of21808read;19native+10buffer+6recipe/ownershipcontrols twice. Partialwrappernotcountedfull.",
+      "latest_complete_tree_audit": "docs/research/dedup-four-complete-source-tree-audit-v2-20261015.json",
+      "latest_complete_tree_audit_sha256": "07d3e52ca7964ba85a3f5738a3fa736f1a6b4b198110b7ab0467919ffe3c5cff",
+      "latest_complete_tree_scope": "All54tracked blobs and21canonical Git tree objects checked for69/147/184/442;four missing-blob controls rejected. Archive completeness not all-runtime/quality or automated understanding.",
+      "latest_registry_tool_optimization": "docs/research/dedup-registry-manifest-single-load-20261015.json",
+      "latest_registry_tool_optimization_sha256": "74098302dd73f4a5ccab8c2a76b147afcd93eae1cb47ef6959450fe0fd613839",
+      "latest_sharp77_source": "docs/research/sharp77-complete-source-review-20261015.json",
+      "latest_sharp77_source_sha256": "00c515b9ccec806a072d83580d324efb2579b2657a1227f1926fc243f4fc5456",
+      "latest_sharp77_tree_audit": "docs/research/dedup-sharp77-complete-source-tree-audit-20261015.json",
+      "latest_sharp77_tree_audit_sha256": "4a9ecc61b7d9ef0c4ed14c06cdf60c1bf1de0915206c8c3f72808390eb9255aa",
+      "latest_snip96_source": "docs/research/snip96-complete-source-review-20261015.json",
+      "latest_snip96_source_sha256": "c2f21220d4d323ec8bce3b42451b6b24eb95187714cca29967642679d83cb616",
+      "latest_snip96_tree_audit": "docs/research/dedup-snip96-complete-source-tree-audit-v2-20261015.json",
+      "latest_snip96_tree_audit_sha256": "c97f598c35243fd5b8995d6f7789836214c3db1c84e778b20a859a5f26879754",
+      "latest_dupim493_partial_source": "docs/research/dupim493-available-source-and-opaque-component-review-20261015.json",
+      "latest_dupim493_partial_source_sha256": "eacf547870ee68d75eaf58c2c4e935c01385f9252c9a8af718d3c243229b6830",
+      "latest_dupim493_partial_scope": "Full availabletext7files read; bundledSisIO LinuxELFx86_64 archive pinned and inventoried with selected disassembly, notcomplete semantic/source review. Fullrepositoryflagfalse; originalCMakefailsversionpolicy, compatibilityflag reachesmissingOpenCV. No actualpHash/OpenCV/logger/wholeCLI/runtimeimagequality/adoption proof.",
+      "latest_pile167_source": "docs/research/pile167-complete-source-review-20261015.json",
+      "latest_pile167_source_sha256": "6b5e3405aee4cee6b47e7ac40277ac530e2466261458ba5adc9a7bb8b6732742",
+      "latest_pile167_archive_audit": "docs/research/dedup-pile167-complete-source-tree-audit-20261015.json",
+      "latest_pile167_archive_audit_sha256": "fa54445af5bc1bfe6d7b2f2dc385ed96a38180673bd5d7b25e53fd9fde204851",
+      "latest_deduplify177_source": "docs/research/deduplify177-complete-source-review-20261015.json",
+      "latest_deduplify177_source_sha256": "6cddd395e393635380c9af079c9518521ac48a04bb8e2863387a50734b636787",
+      "latest_deduplify177_archive_audit": "docs/research/dedup-deduplify177-complete-source-tree-audit-20261015.json",
+      "latest_deduplify177_archive_audit_sha256": "9dd27a74090d2870e20f8f5a61dd0f4adb26e7d33cc13a3a930fa2b2e0d70a5d",
+      "latest_flipper155_source": "docs/research/flipper155-complete-source-review-20261015.json",
+      "latest_flipper155_source_sha256": "80b93368123a7e78b67bb02eec850095a1711a2736befdd398e7a99e5f09eba5",
+      "latest_flipper155_archive_audit": "docs/research/dedup-flipper155-complete-source-tree-audit-20261015.json",
+      "latest_flipper155_archive_audit_sha256": "c62be3fc8f129a4c5afaa5f925755e1e855bba2499420325c159d299d973fa8b",
+      "latest_exper384_source": "docs/research/exper384-complete-source-review-20261015.json",
+      "latest_exper384_source_sha256": "568bc77b0763028709774c03e46d603f777c3a8ba8b5e6110ff478912eda3b0f",
+      "latest_exper384_archive_audit": "docs/research/dedup-exper384-complete-source-tree-audit-20261015.json",
+      "latest_exper384_archive_audit_sha256": "2b53553c8ef775cc1c4e54071fd0ded0fb46ef67c9de6ffab82199dcfbd038d4",
+      "latest_scene380_source": "docs/research/scene380-complete-source-review-20261015.json",
+      "latest_scene380_source_sha256": "afcc5fccbc5603a7218661677e58ba1e6f56e0e7a21fd9f27e3e0cc6294b49bb",
+      "latest_scene380_archive_audit": "docs/research/dedup-scene380-complete-source-tree-audit-20261015.json",
+      "latest_scene380_archive_audit_sha256": "7d7bc41d823edfd128eec409dd2cddd6b1b0b0637cc6f519a3415068509dec80",
+      "latest_go26_source": "docs/research/go26-complete-source-review-20261015.json",
+      "latest_go26_source_sha256": "304c665f835b2107446d16eaf93ba28287b98d6150532af143d97cef6053cb21",
+      "latest_string176_source": "docs/research/string176-complete-source-review-20261015.json",
+      "latest_string176_source_sha256": "93baeaf80786252a7bc7655eb1aaca8d1a27bac853ffb117ab1f5ce5565e23a0",
+      "latest_go26_string176_archive_audit": "docs/research/dedup-go26-string176-complete-source-tree-audit-20261015.json",
+      "latest_go26_string176_archive_audit_sha256": "cecd6d43bc5e2e32a402624c43b30c072834f3326597ac6682c851b06c4c8aac",
+      "latest_text260_source": "docs/research/text260-complete-source-review-20261015.json",
+      "latest_text260_source_sha256": "2207451d4d6b4ded80fcfeffb422ed66b5f5cd2d29a73396dfe6bdceef7376f9",
+      "latest_text260_archive_audit": "docs/research/dedup-text260-complete-source-tree-audit-20261015.json",
+      "latest_text260_archive_audit_sha256": "852448be31967181e4c9b20da6492fa538468ca1a9e30853c3f651600ad37913",
+      "latest_image53_source": "docs/research/image53-complete-source-review-20261015.json",
+      "latest_image53_source_sha256": "6d991d46c6cd68ddea80bf9fec68943527d787326c3eb7bc2b42366ba4228c94",
+      "latest_image53_archive_audit": "docs/research/dedup-image53-complete-source-tree-audit-20261015.json",
+      "latest_image53_archive_audit_sha256": "7dc7d455964cd080388be206926a6280b6bb7171b4d6d85480daf79eac08663a",
+      "latest_image53_root_crosswalk": "docs/research/image53-current-root-bounded-contract-crosswalk-20261015.json",
+      "latest_image53_root_crosswalk_sha256": "8d6a6cfaee44338876f7ce449a8e59d4085f074684a536aa0f90621dd55e2986",
+      "latest_code33_source": "docs/research/code33-complete-source-review-20261015.json",
+      "latest_code33_source_sha256": "9e0f282cc3b5789af785572bc3e81493a4367ed5f41002d80c8e5c75b8abb66c",
+      "latest_code33_archive_audit": "docs/research/dedup-code33-complete-source-tree-audit-20261015.json",
+      "latest_code33_archive_audit_sha256": "91729a6a188b0bcf2a48b6aee6246263fae97f27f923dc8bf08ff49d977ffdd4",
+      "latest_lsh27_complete_review": {
+        "path": "docs/research/dedup-500/lsh27-complete-source-review-20261016.json",
+        "sha256": "22c85b815bfa7dd32718d84636a2e5e91076d146f00890e29ad0d451ddea2b5a",
+        "whole_repo_complete": true,
+        "scope": "All13blobs/4trees/allsource including21808generatedlines and35notebookcells/twoembeddedplots reviewed;108unchangedtests and35nativecontrols eachtwice onregeneratedCython3.3extension. Oldpregeneratedbuildfails; nooldbinaryparity/performance/adoption."
+      },
+      "latest_registry_coverage": {
+        "evidence": "docs/research/dedup-500/registry-coverage-audit-v130-20261016.json",
+        "sha256": "8785216cdc9d3a6413a85e310acd8f883a283b78d4a87b2ab1ad6a1acc2cec47",
+        "entries": 500,
+        "stored_evidence_pins_checked": 3067,
+        "entries_with_detailed_references": 139,
+        "full_source_declarations": 123,
+        "remaining": 377,
+        "scope": "Source60fullnative98suite/8CLIcontrols and42of97filereview, stillpartialrepository.123full/377remaining unchanged."
+      },
+      "latest_dupe60_selected_review": {
+        "path": "docs/research/dedup-500/dupe60-selected-fingerprint-audit-20261016.json",
+        "sha256": "f885a6677d7059a01001001545d89fccdec1464b440f54ef1fbf51490acaa70f",
+        "whole_repo_complete": false
+      },
+      "latest_dupe60_selected_index_review": {
+        "path": "docs/research/dedup-500/dupe60-selected-index-audit-20261016.json",
+        "sha256": "2827b47d490812e6ed3774834e3a7234c8e3672af64c943a08ce56a2ef387f62",
+        "whole_repo_complete": false,
+        "passed_per_run": 23,
+        "runs": 2,
+        "scope": "15originaltests+8controls onwhole4unchangedmodules withdataadapters/realRayon/exactrustc-hash; cullingandcomponentgrouping recall/safetylimits reproduced. No wholeCargo/CLI/dependencylockparity/performance/currentRoot/adoption."
+      },
+      "latest_dupe60_whole_native_review": {
+        "path": "docs/research/dedup-500/dupe60-whole-native-partial-source-review-20261016.json",
+        "sha256": "91746a8d278bca6f11e6bf18510a40859b1f30aa1025961442152ee18a65bf72",
+        "whole_repo_complete": false,
+        "whole_production_rust_implementation_read": true,
+        "original_tests": 98,
+        "original_suite_runs": 2,
+        "actual_cli_controls": 8,
+        "actual_cli_runs": 2,
+        "fully_read_files": 42,
+        "tracked_files": 97
+      }
+    },
+    {
+      "requirement": "combined_decode",
+      "status": "partial_verified",
+      "evidence": "docs/research/dedup-vendor-recipe-full-decode-audit-20261013.json",
+      "evidence_sha256": "521508154610fbf7085b1db6bff70f78b00400f98df40db84bfc9cb52d5709f8",
+      "remaining_or_scope": "Full frozen cache-v3 predecessor996pass6ignored154targets verified. Current runner178selected4targets pass, complete runner gate being prepared. Parallel RootAPNG/ICO/app drift unqualified by these snapshots. No latestRoot/allfeatures/platform/formats proof.",
+      "latest_current_no_feature_evidence": "docs/research/dedup-current-no-features-complete-v2-audit-20261014.json",
+      "latest_current_no_feature_scope": "Historical264passed2manualignored nofeature gate predates true-latch/fused/currentcore source revisions. Preserved old qualified snapshot only; not latest mutableRoot qualification.",
+      "latest_frozen_v4_gate": "docs/research/dedup-root-guard-snapshot-v4-nolto-decode-audit-20261015.json",
+      "latest_frozen_v4_scope": "214pass5manualignored across5selected decode targets, source unchanged and binaries retained; noLTOdiagnostic profile on capturedv4, not latestRoot/currentalltargets or released/defaultprofile qualification.",
+      "latest_projected_integration_runtime": "docs/research/dedup-projected-integration-cached-library-audit-20261015.json",
+      "latest_projected_integration_runtime_sha256": "e8f34480f1e751c0aa1d17221a6d52e374d63288a7c3c3ef8ac52974cd0039f0",
+      "latest_projected_integration_scope": "Complete current projected_portfolio integration file25pass1manualignored against explicitly pinned cachedlibraries, includes12missing-source scenarios and6recoveries. Cached production library is not a freshcurrentRoot/fullalltargets rebuild. Fullimmutable415combined baseline remainslive.",
+      "latest_frozen_baseline_failure": "docs/research/dedup-baseline-worker-observer-sandbox-failure-20261015.json",
+      "latest_frozen_baseline_failure_sha256": "34d7ed4ca70879904350f72e182cedffaf31924ab257e940558909aea027a2d8",
+      "latest_complete_frozen_attempt": {
+        "audit": "docs/research/dedup-complete-collection-terminal-audit-20261015.json",
+        "sha256": "96f34ddbbb2004a962e75fd8a1bb95f1f34bebc84ad04f4a3e88a4b36b81a1c3",
+        "passed": 2056,
+        "failed": 6,
+        "ignored": 86,
+        "targets": 162,
+        "scope": "Frozen415alltargets complete, notpassing.6externalpsobservations denied. No originalfailure promotedtopass."
+      },
+      "latest_active_full_gate": "docs/research/dedup-common-worker-fixed-baseline-gate-v2-20261015.json",
+      "latest_active_full_gate_scope": "Actualsession66251live; immutable2testfileoverlay baseline compiling, all162targets retained. No terminalresult/currentRoot/newcache/sourceintegration qualification yet.",
+      "latest_portfolio_diagnostic_profile": "docs/research/dedup-trace-portfolio-live-profile-20261015.json",
+      "latest_portfolio_diagnostic_profile_sha256": "f006c86495db8e0ea8d972cd9a4707a3818f781dd9f55b2ff30223ca88d9fb3e",
+      "latest_portfolio_profile_scope": "Actual owned candidate integration process99033 sampled2seconds while full40test target remainslive. Candidate library/test opt0; descriptor/gradient/linear sampling paths observed. Not release opt3 profile, entire operation timing, physicalIO, native inference, hardRSS or speedup/scaling proof. Root unchanged; optimized profiling waits for gates and quiescence.",
+      "latest_trace_root_adoption": "docs/research/dedup-additive-trace-root-adoption-20261015.json",
+      "latest_trace_root_adoption_sha256": "e6fdda5b643fa0b06bd3be90803e6a9debafd76e2d441b02c1bd203a5ae209ee",
+      "latest_trace_root_scope": "Root additive trace API adopted from actual candidate machine code: full40portfolio integration tests pass0ignored0filtered;38old target names plus original36-combination helper and new trace guard/error/counter regression independently verified. Existing API and guarded body preserved. Production module matches qualified source; tests only formatted. Frozen baseline Core/decode deps and reused typecheck recipe env, not fresh current Root all-target Cargo/platform/LoFTR/corpus/recipe/performance proof. Native campaign fixed binary still old;96unknowns cannot gain counters retroactively.",
+      "latest_frozen_complete_gate_failure": "docs/research/dedup-common-worker-fixed-baseline-audit-v2-20261015.json",
+      "latest_frozen_complete_gate_failure_sha256": "5637e54910ad6cf7a0d39d98dc2d4d7cb0cbbcbf937014ad73f4a1ad9c4a86e1",
+      "latest_frozen_complete_gate_failure_scope": "Complete162targets/3378source snapshot:2057pass9fail86ignored. Native worker observers now pass;6explicitENOSPC plus3raster missing-entry/issue assertions keep fullgate failed. Original failure preserved. All162retained machine-code targets replaying after owned incremental cache release; live report not immutable evidence or passing gate. Not latest Root after concurrent crate extraction.",
+      "latest_frozen_baseline_complete_replay_audit": "docs/research/dedup-common-fixed-baseline-replay-audit-v3-20261015.json",
+      "latest_frozen_baseline_complete_replay_audit_sha256": "662c548bba4504269f9566b73b31afbe61b7b1aa534ec8b04fbbda000b3c4fec",
+      "latest_frozen_baseline_complete_replay_scope": "All162retained lib/integration targets and3378frozen sourcepins independentlyaudited afterownedcache-release/ownTMPDIR recovery:2066pass0fail86originalignored,no filters orpruning. Sameoriginalmachinecode/nativeworkerobserveroverlay, complete fresh--list matched. Priorfull9failureENOSPCresult preservedfailed. Not latestRoot aftercache/trace/crate-extraction, native458/currentcorpus/platform/allformats/opt3/performance proof.",
+      "latest_full_candidate_resume_audit": "docs/research/dedup-common-candidate-v3-interruption-audit-v2-20261015.json",
+      "latest_full_candidate_resume_audit_sha256": "2e74d7a3cd939a2b1aff8e8725ada4759db1703aaa108b70ed1fba12c0fff978",
+      "latest_full_candidate_resume_scope": "IncompleteV3preserved, samefull162targetv4 gate resumedsource3378 andguardsverified. Setup/processobservation only, no passingcandidate/latestRoot/wholeplatform/resource/performance qualification."
+    },
+    {
+      "requirement": "native458",
+      "status": "verified_fixed_old_snapshot_not_current_parity",
+      "evidence": "docs/research/dedup-current-native-bank-complete-audit-20261013.json",
+      "evidence_sha256": "95d298aa5c74a3c255770781ddd5fbab10677b5582aa531646407d8b756e6533",
+      "remaining_or_scope": "Historical458directions and later full229atomic positivepairs verified on their respective older frozen sources. Current linear runner only small synthetic/actual self controls; full latest-source native corpus parity missing."
+    },
+    {
+      "requirement": "formats_and_platforms",
+      "status": "open",
+      "evidence": "docs/DUPLICATE_LIBRARY_CONTRACT.md",
+      "evidence_sha256": "7473d42472a0ceccdcedf82ec7ddf68853b9e824069caac74d2e1a124f891ddf",
+      "remaining_or_scope": "Frozen Mac default+decode991 inventory and actual native controls. Linux default worker55 and Windows default compile-only retained. Full latest-source formats/frames/IO/platform/feature matrix remains unproven.",
+      "latest_fused_candidate_windows_check": "docs/research/dedup-fused-exact-windows-v2-audit-20261014.json",
+      "latest_fused_candidate_windows_scope": "Isolated actual fused-v3 exact production module WindowsGNU metadata/type check using real previously Cargo-built Windows dependencies and host derive macros. No linking/Windows execution, platform filesystem/mutation controls, testcode, fullcrate/Cargo/decode/native or wholeoperation performance proof. No Root adoption.",
+      "latest_windows_strict_fix": "docs/research/dedup-exact-windows-strict-after-v2-20261015.json",
+      "latest_windows_strict_scope": "Strict isolated current exact module WindowsGNU metadata check passes; no Windows linking/runtime/fullcrate proof. Windows sparse fixture setup and CI inclusion edited, runtime pending.",
+      "native_windows_scope": "Committed415443172 actual WindowsMSVC strict nofeature71pass2manualignored, including all3largefile tests. FullmultiGiB comparison/allformats/decode/Linux/otherplatform qualification remains open.",
+      "latest_native_windows_exact_evidence": "docs/research/dedup-windows-native-run-38641764249-audit-20261015.json",
+      "latest_native_windows_exact_scope": "Actual WindowsMSVC strict -Dwarnings nofeature Cargo lib/exact_files/exact_large_files complete native runs at committed415443172.71passed2manualbenchignored; all3largefile tests executed, including u64size admission/discovery and bounded cancellation. 4GiB/1TiB sparse logical lengths only, not fullmultiGiB equality/physicalIO/hardRSS, wholelibrary/decode/collection/corpus/performance proof. Remote binary artifacts not fetched or independently --list enumerated; declared execution count/result/names/0filtered log and successful job checked.",
+      "latest_general_ci_state": "NativeWindows71pass2manualignored at415; overallCIfailed onformatter/missingLibTorch/wildcards+unmaintaineddeps. Proposed7fileformat/manifest correction passes fullworkspacefmt, LibTorch setup syntaxchecked. SVG/pastey migrations isolated, not Rootadopted or fullCIqualified."
+    },
+    {
+      "requirement": "visual_publication",
+      "status": "partial_verified",
+      "evidence": "docs/research/dedup-visual-publication-audit-20261013.json",
+      "evidence_sha256": "58495988ec7e17c78cf9cf229a4843ab73866823f48d4491af8caf110e3d2a35",
+      "remaining_or_scope": "Targeted publication60tests/8targets included in frozen991 inventory. Latest-root/platform/all specialized wrapper matrix missing; new consensus not yet routed through collection/publication defaults.",
+      "latest_flat_file_publication": "docs/research/dedup-flat-file-publication-cached-library-20261015.json",
+      "latest_flat_file_publication_sha256": "29ea5745dfc4ca0442939083b61296c10e13eb8a2497f2226bae5ffcdac881f5"
+    },
+    {
+      "requirement": "local_publication",
+      "status": "partial_verified",
+      "evidence": "docs/research/dedup-local-mixed-publication-audit-20261013.json",
+      "evidence_sha256": "314e0c92a339a40bbb8526e67baf2127c57a8bed57c35100145c18d50e97aa4d",
+      "remaining_or_scope": "Targeted20tests and frozen991 inventory. Every specialized wrapper/current native consensus collection/publication route still unqualified.",
+      "latest_general_ci_state": "NativeWindows71pass2manualignored at415; overallCIfailed onformatter/missingLibTorch/wildcards+unmaintaineddeps. Proposed7fileformat/manifest correction passes fullworkspacefmt, LibTorch setup syntaxchecked. SVG/pastey migrations isolated, not Rootadopted or fullCIqualified."
+    }
+  ],
+  "completion_proven": false,
+  "previous_ledger": "docs/research/dedup-goal-coverage-ledger-v179-20261016.json",
+  "hash_scope": "Evidence hashes captured at this audit; mutable producer reports may later change.",
+  "previous_ledger_sha256": "a3dfbf82fd6fc7fec8f23e9e327d2fae02654cc6097d8895a51d3274ad764d9b",
+  "new_additive_geometry_evidence": {
+    "component_partition_audit": "docs/research/dedup-bank-partition-audit-20261013.json",
+    "fixed_split_geometry_audit": "docs/research/dedup-geometry-validation-fit-audit-v2-20261013.json",
+    "bank_geometry_audit": "docs/research/dedup-bank-geometry-v2-audit-20261013.json",
+    "scope": "Focused source snapshots only; no acceptance fix or current full458 preservation."
+  },
+  "current_full_gate": "docs/research/dedup-consensus-complete-decode-20261013.json",
+  "latest_quality_diagnostics": {
+    "docs/research/dedup-competitive-rank-v2-audit-20261013.json": "ff9318b357a876d7c753b4af0befcffe54546110973879784e68ea58ad96b27b",
+    "docs/research/dedup-competitive-rank-diagnostic-audit-20261013.json": "779cf9254a2d14541ad72f8a0244f937a35805ec914d45a099c7ff3255a3e0cd",
+    "docs/research/dedup-local-deformation-diagnostic-audit-20261013.json": "0332bbfc3fa1fa0e2c09bbb09cbdb109e6d99588e8a850ac4538e33f2f4eff7a",
+    "docs/research/dedup-local-deformation-outer-diagnostic-audit-20261013.json": "660547afb0f5857c50f1f30f3a6d1c6c3be6a8ab0a9c5b1e16c51c9043a1b113",
+    "docs/research/dedup-copydays-nearest-wrong-native-prefix-0007-audit-20261013.json": "dbc8a4030a5bc7f18a5aa11e6149e44cf6f66ed16b1c37ace43f01193dee9d89",
+    "docs/research/dedup-500/registry-coverage-audit-v5-20261013.json": "1d339b9be396f53ffe267d296dd7a8c938aad85464b05ee15e81cd6975ff1b65"
+  },
+  "quality_conclusion": "Opt-in atomic two-direction consensus implemented. All229common-policy positives independently verified on pre-cache frozen source. Negative corpus incomplete; unknown is not rejection. Collection/default integration and general precision remain unproven.",
+  "current_full_gate_excludes_competitive_rank": false,
+  "latest_full_gate": {
+    "audit": "docs/research/dedup-gradient-cache-v3-complete-audit-v2-20261014.json",
+    "audit_sha256": "0e11e208bdc2033a72c885e88bdf7e9f179bedc57f84af4c9916f4b787d387aa",
+    "passed": 996,
+    "failed": 0,
+    "ignored": 6,
+    "targets": 154,
+    "scope": "Full declared library and integration test inventory for frozen cache-v3 default+decode source on macOS ARM64. Includes optional isolated16MiBcache and native consensus helper. Not LoFTR inference/full corpus/allformats/platforms/scaling or whole-operation speedup."
+  },
+  "deformation_replay": {
+    "audit": "docs/research/dedup-mesh-deformation-replay-audit-20261013.json",
+    "audit_sha256": "964cf7fc3d43d3993707c3e0288bf3206f0c30e48bffcbc04c54a5e6d80efb8c",
+    "acceptance_fix_proven": false
+  },
+  "latest_source500": {
+    "evidence": "docs/research/dedup-500/registry-coverage-audit-v130-20261016.json",
+    "sha256": "8785216cdc9d3a6413a85e310acd8f883a283b78d4a87b2ab1ad6a1acc2cec47",
+    "entries": 500,
+    "stored_evidence_pins_checked": 3067,
+    "entries_with_detailed_references": 139,
+    "full_source_declarations": 123,
+    "remaining": 377,
+    "scope": "Source60fullnative98suite/8CLIcontrols and42of97filereview, stillpartialrepository.123full/377remaining unchanged."
+  },
+  "vendor_recipe_focused_audit": "docs/research/dedup-vendor-recipe-focused-audit-20261013.json",
+  "competitive_grid_diagnostic": "docs/research/dedup-grid-fence-competitive-audit-20261013.json",
+  "aligned_sscd_diagnostic_audit": "docs/research/dedup-aligned-sscd-diagnostic-audit-20261013.json",
+  "latest_hard_negative_prefix_audit": {
+    "path": "docs/research/dedup-copydays-nearest-wrong-native-resume-prefix-0264-audit-20261013.json",
+    "sha256": "408b4b9c22b5d71685aea6c22e126ca6377802ee18373d44c2614fdedb42c481",
+    "completed": 264,
+    "false_acceptance": 3,
+    "inconclusive": 261
+  },
+  "worker_windows_compile_audit": "docs/research/dedup-worker-group-v2-windows-check-audit-20261013.json",
+  "worker_linux_audit": "docs/research/dedup-worker-group-v2-linux-audit-20261013.json",
+  "worker_native_parent_audit": "docs/research/dedup-model-worker-group-native-parent-audit-20261013.json",
+  "worker_failed_v1_audit": "docs/research/dedup-model-worker-group-fixed-failure-audit-20261013.json",
+  "worker_group_complete_decode_audit": {
+    "path": "docs/research/dedup-worker-group-complete-decode-audit-20261013.json",
+    "sha256": "3f8536f8ab3f8662a408d8e76a1400e1feeb71d2b492beac69d5230f4e495848",
+    "passed": 988,
+    "failed": 0,
+    "ignored": 6,
+    "targets": 154
+  },
+  "current_diagonal_controls_audit": {
+    "path": "docs/research/dedup-current-diagonal-consensus-controls-audit-20261013.json",
+    "sha256": "76fdb820d5ef7a7468e8e70e258a586e68888bc482867caecf2c01a92a489ef5"
+  },
+  "native_foreign_pixel_crosscheck_audit": {
+    "path": "docs/research/dedup-image-find-native-crosscheck-audit-20261013.json",
+    "sha256": "69094a5577c3d34a2b9a742c3933a33d3cfff4fdb201f32fc3bd83494a4a3799"
+  },
+  "native_bank_consensus_api": {
+    "status": "implemented_opt_in_positive_corpus_verified_default_integration_open",
+    "implementation": "docs/research/dedup-native-bank-consensus-implementation-20261013.json",
+    "gate": "docs/research/dedup-consensus-complete-decode-20261013.json"
+  },
+  "second_hard_negative_diagnostic": "docs/research/dedup-second-hard-negative-diagnostic-20261013.json",
+  "native_consensus_adapter": {
+    "report": "docs/research/dedup-native-bank-consensus-native-adapter-20261013.json",
+    "sha256": "d83efff4b78a43a71a7ba791441c96c69c5289c75aaeefb10073a46d4e734748"
+  },
+  "actual_atomic_natural_controls_audit": {
+    "path": "docs/research/dedup-consensus-native-v2-execution-prefix-0005-audit-20261013.json",
+    "sha256": "3a7db9ec89f2ee37681250b743b22308b06c3a812c43df728bdc04f2f9853aaa"
+  },
+  "native_gradient_profile": {
+    "path": "docs/research/dedup-consensus-native-gradient-profile-20261013.json",
+    "sha256": "86210ef7646f409f0b781c0c4914d1c68b7f56f1b93b7532b1ab8f38277aefdc"
+  },
+  "current_full_gate_matches_latest_native_source": false,
+  "performance_experiments": {
+    "path": "docs/research/dedup-gradient-performance-experiments-audit-20261013.json",
+    "sha256": "22a7d26c21e38091f5e7e783e2639b7d5926579398b083e21f575b907eef19d2",
+    "adopted": false,
+    "scope": "Earlier rejected bound approaches only; later exact admitted cache is separately implemented and benchmarked."
+  },
+  "current_atomic_corpus_campaigns": {
+    "positive": "docs/research/dedup-consensus-current-positive-20261013.json",
+    "negative": "docs/research/dedup-consensus-current-negative-20261013.json",
+    "required": [
+      229,
+      233
+    ],
+    "scope": "229positive pairs independently verified, on pre-cache snapshot;233negative campaign incomplete. Not latestcache/fullcollection proof.",
+    "positive_complete_audit": "docs/research/dedup-consensus-current-positive-prefix-0229-audit-20261013.json",
+    "negative_prefix_audit": {
+      "path": "docs/research/dedup-consensus-current-negative-prefix-0074-audit-20261013.json",
+      "sha256": "1c0ebd69a3aadaa5fbb346314de99964d56307b03e764bd435a5ee0134c06a08",
+      "completed": 74,
+      "false_acceptance": 0,
+      "inconclusive": 74,
+      "scope": "Frozen pre-cache atomic common-policy source; unknowns not rejections."
+    }
+  },
+  "managed_cache": {
+    "source": "docs/research/dedup-gradient-cache-v3-source-20261013.json",
+    "component_benchmark_audit": "docs/research/dedup-managed-cache-benchmark-audit-20261014.json",
+    "focused_decode_audit": "docs/research/dedup-gradient-cache-v3-decode-audit-20261013.json",
+    "focused_default_audit": "docs/research/dedup-gradient-cache-v3-default-audit-20261013.json",
+    "complete_gate": "docs/research/dedup-gradient-cache-v3-complete-decode-20261013.json",
+    "whole_search_speedup_proven": false,
+    "uncached_version_comparison_audits": [
+      "docs/research/dedup-managed-version-benchmark-audit-20261014.json",
+      "docs/research/dedup-managed-large-version-benchmark-audit-20261014.json"
+    ]
+  },
+  "current_evidence_pins": {
+    "docs/research/dedup-gradient-cache-v3-source-20261013.json": "a709940c45b6948e340a496140dd44f28ae9894640209f0fd493ccb44e95738a",
+    "docs/research/dedup-managed-cache-benchmark-audit-20261014.json": "e43dcf80819ac2fd3596d8261e2f1adbbe963edf0dc58b81a3270b789f27ea12",
+    "docs/research/dedup-gradient-cache-v3-decode-audit-20261013.json": "6fb91f38badd5f1bbfcbe7e9719656d6a0aa06e3f30148ffbfa64ec5f40c305f",
+    "docs/research/dedup-gradient-cache-v3-default-audit-20261013.json": "2ba9ca8b9b6500bf47f290248f0511eefccd9914163dbbb99db1457cbb684a81",
+    "docs/research/dedup-gradient-cache-v3-complete-decode-20261013.json": "5a53090f207d9df5829ae97214a2c84d047966b71f0f902e8050b051c82c2977"
+  },
+  "linear_runner_optimization": {
+    "implementation": "docs/research/dedup-gradient-runner-implementation-20261014.json",
+    "implementation_sha256": "2c401ad6f02c329699dc3cb88d7f1b0d4bea2e65180f8e308ae37937e93256a8",
+    "raster_passed": 58,
+    "raster_failed": 0,
+    "raster_ignored": 3,
+    "managed_component_ratio": 0.5152242980695797,
+    "whole_search_speedup_proven": false,
+    "latest_source_full_gate_proven": false,
+    "native_build": {
+      "path": "docs/research/dedup-runner-native-probe-20261014.json",
+      "status": "built_pending_execution_at_build_report",
+      "operation_campaign": "docs/research/dedup-runner-native-operation-benchmark-20261014.json",
+      "scope": "Runtime campaign running; no whole-operation speedup proof."
+    },
+    "first_operation_prefix": {
+      "path": "docs/research/dedup-runner-native-operation-prefix-0003-audit-20261014.json",
+      "sha256": "03b971d6b7d622c706b608517feb61a682cc4f2b2a39e2307c9872250f23c393",
+      "scope": "First completed self-control pair CPUratio0.91345,wall0.80650,semantics unchanged and credit released. Onecase only, not universal whole-search proof."
+    },
+    "self_operation_control": {
+      "audit": "docs/research/dedup-runner-native-operation-prefix-0006-audit-20261014.json",
+      "audit_sha256": "9ddc30516fa15332eac8bdf5299651d932d9d49c9a92587dff6b3e333e70eb1a",
+      "paired_measurements": 3,
+      "median_cpu_ratio": 0.9457934689121448,
+      "cpu_ratios": [
+        0.9134523118099677,
+        0.9457934689121448,
+        0.9874230884147316
+      ],
+      "scope": "One selfcontrol,3freshprocesspairs; semantics samebothdirections, no learned inference, credit released. Wall timings vary including1.175slowdown. Not table640/negative/wholecorpus or universal speedup proof."
+    },
+    "decode_focused": {
+      "audit": "docs/research/dedup-gradient-runner-decode-audit-20261014.json",
+      "sha256": "5282d648c8e290bd99f7528ceab71bb261b143e47ee24f6b55444cc8618a92bf",
+      "passed": 178,
+      "failed": 0,
+      "ignored": 5,
+      "targets": 4
+    },
+    "complete_operation_audit": "docs/research/dedup-runner-native-operation-complete-audit-20261014.json",
+    "measured_control_cpu_ratio": {
+      "self_native": 0.9457934689121448,
+      "table_true": 0.7764985084422598
+    },
+    "complete_gate": "docs/research/dedup-gradient-runner-complete-decode-20261014.json"
+  },
+  "root_parallel_drift_observed": [
+    "crates/rrrah-decode/src/apng.rs",
+    "crates/rrrah-decode/src/ico_pages.rs",
+    "crates/rrrah-app/src/main.rs"
+  ],
+  "root_drift_scope": "Parallel work preserved, not included in frozen runner or cache-v3 audits. No whole-latest-root claim.",
+  "third_hard_negative_diagnostic": "docs/research/dedup-third-hard-negative-diagnostic-20261014.json",
+  "third_hard_negative_current_runner_control": "docs/research/dedup-third-hard-negative-consensus-20261014.json",
+  "native_bank_consensus_collection": {
+    "implementation": "docs/research/dedup-consensus-native-collection-implementation-20261014.json",
+    "status": "frozen_v5_native_feature79selected_integration_tests_passed",
+    "default_adopted": false,
+    "native_backend_adapter": true,
+    "native_focused_audit": "docs/research/dedup-native-collection-focused-audit-20261014.json",
+    "native_focused_tests": 79,
+    "scope": "Real LoFTR adapter compiles and empty lazy-load regression passes; other providers synthetic. Learned multi-pair inference/directional-cap actual inference, fullcorpus/default/workspace remain open."
+  },
+  "latest_change_evidence_pins": {
+    "docs/research/dedup-500/registry-coverage-audit-v25-20261014.json": "a7d9722e355f83e2e1967043d4f0d0f40192598d63ddf5a8c15e5cf396a910f4",
+    "docs/research/dedup-gradient-unroll4-v7-source-20261014.json": "475b71ae143469a9128b787730a98439c84995783ffbfb99f1726f8c91e3ed64",
+    "docs/research/dedup-gradient-unroll4-raster-union-audit-20261014.json": "6ed54ba2a31b97eb71bab05f0bb747fd7b396676ab9ae5b74cc99eac704390c0",
+    "docs/research/dedup-gradient-unroll4-natural-cpu-audit-20261014.json": "8e4a39a2962d009f49898f86b82b4e8640e932b4f5905301ef871b4084be1df6",
+    "docs/research/dedup-gradient-unroll4-matcher-20261014.json": "771dd10d7f5649f9cebff17f26375e37706ffd97f03559f26efea6f4e4f45aa9",
+    "docs/research/dedup-negative-controller-stopped-observation-20261014.json": "8b597078330f5d41450a987b92cd930fda2c3a163b0642d90aa705ff6baee7c9",
+    "docs/research/dedup-negative-resume-repair-20261014.json": "ff12045f470cc0475c1a1cc220b726dcbbb2a0b8bcf93fe86528760e7b989052",
+    "docs/research/dedup-500/registry-coverage-audit-v29-20261014.json": "4755178931c81fb54fe079ea2c7d9839db7bd19fa8cb79e136be426c890c3a12",
+    "docs/research/dedup-gradient-topk-controls-audit-20261014.json": "380e2a39b85c636151d6da3b44bc771a2f45a5e90ffb1a2590d97e61e8cf3d80",
+    "docs/research/dedup-gradient-topk-cpu-audit-20261014.json": "baac16c247d6d77fe71e50d807871bc43dbc0bfef1ae90ba8e41fb1aadbe3ee2",
+    "docs/research/dedup-gradient-topk-decision-20261014.json": "38918227f653a0a4a7d8eb27322049ce082d86cfbf75d96cae6a754405ab1ca5",
+    "docs/research/dedup-gradient-unroll4-managed-benchmark-audit-20261014.json": "0f9835a1c589026a33479f3c34be202611db88988623500fbea6d42c26bd109a",
+    "docs/research/dedup-current-complete-link-groups-audit-20261014.json": "cbd025e0faecadea8367ca5a1d4fc5354b6e0fa1215e5bc11dd94225ef88a4b7",
+    "docs/research/dedup-gradient-masked-lanes-stress-audit-20261014.json": "a36cc05e23ce3d48d082048b1db9e0df39a5f799ec27efad5a83493369f798d4",
+    "docs/research/dedup-gradient-masked-lanes-cpu-audit-20261014.json": "49895ee65ab16622e3a8d0ae07d89f5d96a3428f1454c5545784c6781db32a40",
+    "docs/research/dedup-gradient-masked-lanes-decision-20261014.json": "cc8a0202508c8b78ab45b58e2daf2e33691a45aef2569c3b71c722c4d7a656ab",
+    "docs/research/dedup-gradient-masked-lanes-managed-audit-20261014.json": "55232db4be3b70a1e9945e753d610b8ae770d2da7f1f26be5f673e4f482451ba",
+    "docs/research/dedup-500/registry-coverage-audit-v30-20261014.json": "f17ba56d3c69da669b150e971d2bd5c096d0526dbb9d16ff617e7d5ba9ea9024",
+    "docs/research/dedup-500/git-object-integrity-audit-20261014.json": "7cda2803af7c36f17f6d8ee8cf879bc5a90c27f0c8dc54f4eeb4e0bc063cc2fe",
+    "docs/research/dedup-500/marcnuth159-complete-source-review-20261014.json": "a4078235af9fb247de1d69fdd64775de198b3630c60944c608417a29590e0e4a",
+    "docs/research/dedup-gradient-masked-lanes-managed-benchmark-v2-audit-20261014.json": "5320e09d6c0e4f0757ceff758698fdc03c47df88445c6887acdb4d6c7b880162",
+    "docs/research/dedup-natural-large-gradient-banks-v2-audit-20261014.json": "3e2eec315ca41714c61702b5159674ccabdbd2884f79d6c9baecbdca35dd0b18",
+    "docs/research/dedup-masked-lanes-natural-large-audit-20261014.json": "003db9eb76b22f7f09b2a2635a55f28484dd1da455d89258cd4316ef7ad23421",
+    "docs/research/dedup-masked-lane-counts-audit-20261014.json": "bf2e1c6dcbccf0586c1a43ad87287e6ec38b1b7e5fc6b52987f92e48252b1e15",
+    "docs/research/dedup-gradient-masked-lanes-decision-v2-20261014.json": "e718c6c621167e9fb09776971ce9900325687a3a041d5e5d826026656d3c7130",
+    "docs/research/dedup-gradient-unroll8-16-cpu-audit-20261014.json": "2dce89dcfb04dae31ede18c05df4b7de34f6b8d843aac81a22122c3ba85f1ead",
+    "docs/research/dedup-gradient-unroll8-16-decision-20261014.json": "b82f4644f1cf99cc4477dd125d318322b0b4dfa615463817f4036adc0b0725bf",
+    "docs/research/dedup-duration-decode-free-gates-audit-20261014.json": "91b3cc5587b8792b5fee424207ea1dd3544f08c7c02ed50c33733de1ca38187c",
+    "docs/research/dedup-native-collection-focused-audit-20261014.json": "81143cfd18647a54fceb6f5427352c9e0ca4d142d874188276450a1237e215f2",
+    "docs/research/dedup-third-hard-negative-consensus-audit-20261014.json": "ae7db095ad56b7b642428c6ae91e0a4d74d1d058f54f5d8111b27eeb4072ef2a",
+    "docs/research/dedup-gradient-lanes8-16-cpu-audit-20261014.json": "778798bba1dd0c6b62fc5ac9c81969e79e3b55a0526595e437ecc7a09ed8db78",
+    "docs/research/dedup-gradient-prototype-layout-note-20261014.json": "f91623e81b545288a66cee63dcabf73dd618f1b1be99eb7dfd3ea324db3186c2",
+    "docs/research/dedup-gradient-lanes16-managed-audit-20261014.json": "d7e551899ae01b5b177553667e4dce03dfb12d3e462639ab6fbc2aedcf0ad0fe",
+    "docs/research/dedup-gradient-lanes16-public-audit-20261014.json": "5cc421270678def51f8653da47f0828c19f8231e4f14a00c49ea95a31ed48c55",
+    "docs/research/dedup-gradient-lanes16-root-code-audit-20261014.json": "bcc126e692b0c60f206871d5772c41cdf7923eaef4b11731d289b87035a48bed",
+    "docs/research/dedup-gradient-lanes16-root-gates-audit-20261014.json": "134f9050be177badfa2cf7f7707d01854b3258fb1c006f36f7e844066a412231",
+    "docs/research/dedup-gradient-lanes16-root-adoption-20261014.json": "22d8b120b7d342c576294e8e32df68e7b54998ff5e7744b5c281c791c0bdbc4d",
+    "docs/research/dedup-gradient-lanes16-adopted-source-20261014.json": "9d96889ec30edef0873a60cd25e7f028a8557360902e4aafb2571d7410a7ae3c",
+    "docs/research/dedup-unroll4-native-operation-loader-repair-20261014.json": "83841e71b33e75c24624a8b001e25254cb565ade536900815b04717976a09a88",
+    "docs/research/dedup-terminal-process-observers-20261014.json": "9297b418301fea9ea1e8a3c8b9956f6e11b7d38ae2e034b8dff12e8f5e820e24",
+    "docs/research/dedup-consensus-current-negative-resume-v2-prefix-0075-audit-20261014.json": "32ca02173a6cd8630902758e38da1e8d3d0336e6d319b1df84b5a417f72e5c54",
+    "scripts/resume-dedup-consensus-current-negative-v3-20261014.py": "5a7e75e7afc4e562fdb70ca94e5067a9021534c3d8bc0746ef9f1a321fa5e809",
+    "scripts/run-dedup-consensus-qualification-queue-v2-20261014.py": "84ece807779f153b0ebc4ca931e83b462b6996a49589685e5e9c81512df7cb72",
+    "docs/research/dedup-runner-split-gate-audit-20261014.json": "edcdc78deaef9dee1e14cca5974e66cd10913f80b3ad6a94bf6ae73892d543a6",
+    "docs/research/dedup-collection_first-split-gate-audit-20261014.json": "6955022363c81e736c73bf5c982faec98fb9f42e6b59ae227495632febe8d972",
+    "docs/research/dedup-500/registry-coverage-audit-v31-20261014.json": "deb1179044658639395bb22776713a022810d63e683d9a88c434a4031df87a5a",
+    "docs/research/dedup-500/retinahash499-complete-source-review-20261014.json": "ef882a12314357aac87ea851224c32b9ba279980d107b08b42f0f30d306c6e3e",
+    "docs/research/dedup-retinahash499-controls-20261014.json": "5ffbdca5300ef0355402001c946b376f548069e5ab43f5e5a174b73dfa3bb4d9",
+    "scripts/audit-dedup-consensus-current-negative-resume-v3-prefix-20261014.py": "9873a26cc146a239a3b8a49f82367c2b06dca5c3f7b6f04b1ec6495c5784377f",
+    "docs/research/dedup-alpha-projection-current-20261014.json": "22a667139d190b2c90b040ad812aee8b229360e5575b33f1c76c56c2c03d58be",
+    "docs/research/dedup-alpha-projection-current-source-20261014.json": "39244c3945eee1978b93f08d872ad3fc8ad8277f891e69fc8f0b6f2cebcc5f6e",
+    "docs/research/dedup-500/registry-coverage-audit-v32-20261014.json": "4919d7bb7e9e0e0ae61008f45283a38ef8c211a32c4a7057c28e55eebae479df",
+    "docs/research/dedup-500/env222-complete-source-review-20261014.json": "86b3fac530b359c526f44d7cb41034bc0b9f606d41aca2651f6faf1247332029",
+    "docs/research/dedup-env222-controls-20261014.json": "f78f4f563bcfcfd7c2b26019100c50f1d6d69590acb4d1f8ec3382b050aa5d6c",
+    "docs/research/dedup-current-no-features-complete-source-20261014.json": "334e829086d66800f2c3fba07f9e8f91f2f303454924faeeb06adb68e3d6c584",
+    "scripts/run-dedup-current-no-features-complete-20261014.py": "684c34a8c5681329bbc9ac38c82cb904b5d7e03a6baa7d99156a7e15d76bda5e",
+    "scripts/audit-dedup-current-no-features-complete-20261014.py": "dc8caf0a4faf0b953fe735d0c30f906ef105cc2df50227e97fe4f994bb39d9d7",
+    "docs/research/dedup-500/registry-coverage-audit-v33-20261014.json": "1e520912c3412e54d3d7fcb0e866abb408d7b7a8553181ce7458e107079841a9",
+    "docs/research/dedup-500/duplicate59-complete-source-review-20261014.json": "fc270fcf03432d12127eaa94d6bae81c39b073ae3c789ed5cafd732c04abdec2",
+    "scripts/check-dedup-duplicate59-20261014.py": "238570925c6f7c39ce24f9e78bcaa2c000ffe9fe1671b72c4a3b7765a1b0b48d",
+    "scripts/check-dedup-duplicate59-20261014.js": "4c50233dd4c37edc605c78aa0dab357dd5dae90f4dd16444f6b798c95d4f198a",
+    "docs/research/dedup-fused-exact-pair-experiment-20261014.json": "48c61f358a7f370d6b7489ea967ad36e455a49246023c79ff4ebaeb5d428502f",
+    "scripts/prepare-dedup-fused-exact-pair-20261014.py": "abb5fad9dcdb2eca4e1b716c6fdbdcf63d28e7a9db74493c9a2d0f9f0fc5e2ef",
+    "scripts/run-dedup-fused-exact-pair-controls-v2-20261014.py": "3039bf792ef194a6f5fc424e012670a7cdff86e0a04f3b9162564cde55499452",
+    "docs/research/dedup-fused-exact-pair-controls-v2-audit-20261014.json": "12da98eca0c36677ff6f3411f6e423b9f21abc6cb4d53760cbcc2f7f03664e1c",
+    "scripts/benchmark-dedup-fused-exact-pair-20261014.py": "736dfc5c8466086332466e4f7f431738519b042bba6aaba2f6dbb40c98997a7c",
+    "scripts/run-dedup-fused-exact-benchmark-queue-20261014.py": "8f8accec34c5917ed13056b5a737947543b9bc26ae04b2e2f4d52e1d1c1eb4bd",
+    "docs/research/dedup-fused-exact-pair-benchmark-audit-20261014.json": "fed13dc4d7b0875dfbcd728aff5def3c02bed87e994a5bc9ab22a85d84df773f",
+    "docs/research/dedup-gradient-distinct-feature-guard-20261014.json": "d1f489dd4e505563b823e7278bad1e48cb16c89268577f2a1c0653c7790c89b6",
+    "docs/research/dedup-gradient-distinct-raster-guard-20261014.json": "82d758f7051fdd19413b9ad410fb3e11937bcb60d5391720921aabf186446e6f",
+    "docs/research/dedup-current-no-features-complete-20261014.json": "8d3518c74f618e1ac57d5ec80697ef02bdf2127f992dba11625846a4714f324b",
+    "crates/rrrah-dedup/tests/gradient_distinct_locations.rs": "bbd79c3797045cbc0247acf7b919965ff7d034914944ea12b0acd492cc6a887b",
+    "docs/research/dedup-fused-exact-pair-controls-v3-audit-20261014.json": "01ada37afccddc5f023388f36b861762a745d5b4bb9ccdc132f9285c4318c21e",
+    "docs/research/dedup-fused-exact-short-circuit-v3-20261014.json": "c8e470125514415be7b58013c934b1d5633bd07f38eb5fbfc076dd5a69ee0780",
+    "scripts/benchmark-dedup-fused-exact-pair-v3-20261014.py": "0758b3ede9421441803aebb32dc2ca2bbe5bd7751afa4e818ed2d46647d1c784",
+    "scripts/audit-dedup-fused-exact-benchmark-v3-20261014.py": "84324759e0baf0b0cb4ac09f43c892dbef76cd216fd0d451cc4d6250beb603f6",
+    "docs/research/dedup-current-no-features-complete-v2-audit-20261014.json": "358580c9d92af1389bb4c01a17a171168104994c32a33d4461b51ec35ab0bc12",
+    "docs/research/dedup-current-no-features-complete-v2-source-20261014.json": "af7fa27fe1bb2fb8acbab1548faa1e849bd021048ab05881e9a8a1ee046be760",
+    "docs/research/dedup-fused-exact-pair-benchmark-v3-audit-20261014.json": "fb7d8103c7169b1c60ab97414fd34bd93a1235845f59f91c28218373f6d8fcfd",
+    "scripts/benchmark-dedup-fused-exact-pair-long-v4-20261014.py": "2cc927e0dbfc1d23a372d5f748d19a66fb7f1495abd9fda8a658beca7aacafd2",
+    "scripts/audit-dedup-fused-exact-long-v4-20261014.py": "42e057f74fd870fcbef461610a142a610a8c5e7150ff80bc721dbff4905a54f5",
+    "docs/research/dedup-fused-exact-pair-long-v4-audit-20261014.json": "4079690de136770e5bcab15d35c2e6a0abd05eecf03659b2263fc061d5f9f155",
+    "docs/research/dedup-fused-exact-pair-stress-v6-audit-20261014.json": "0102aec382c7cae649aaec3550d6f24ed9af3ecec530d4a0064f3e4318f2430d",
+    "docs/research/dedup-consensus-collection-v3-focused-audit-20261014.json": "0f7f01506684269a19bac260cc540f6aba157b8e48b75c6b57e4638e35b70f6a",
+    "docs/research/dedup-fused-exact-truncation-oracle-20261014.json": "888784870a9043ba2cc2d69e5ef1f37ca61d0f5a50d9a5ee3f3548cc0d620b52",
+    "docs/research/dedup-fused-exact-pair-stress-opt3-v7-audit-20261014.json": "8795795de30046828b58d378c360786b0a0b0adc5549d28aacdfaef52893ee0c",
+    "docs/research/dedup-consensus-current-negative-resume-v3-prefix-0075-audit-20261014.json": "5615f2570f18faf9b6efd46178cde72c29103ce00b89ffb64274763b0dc15a03",
+    "scripts/benchmark-dedup-fused-exact-opt3-v7-20261014.py": "3353b19706abc6410fe95b4ed67e38e3596eefe59a99866eefb1fca96f265348",
+    "scripts/audit-dedup-fused-exact-opt3-v7-benchmark-20261014.py": "4be35be1072523751917087ff5a7262a8802ac181461d8e51841d6809dd65395",
+    "docs/research/dedup-fused-exact-opt3-v7-audit-20261014.json": "5c1acfee19e7c90ea78edbdd9784db9ccaffdf1c61ae26cef086079e0e0df518",
+    "docs/research/dedup-unroll4-native-operation-loader-v2-audit-20261014.json": "b60dd2527a163bb139004c2570dffba73e73cda8e91d6b7af972777424f28d2b",
+    "docs/research/dedup-negative-live-profile-v1-audit-20261014.json": "afa33b8ab31d29fe31c958e85e1d28809489ecd3c02bb251117faa1502c73ecb",
+    "docs/research/dedup-500/registry-coverage-audit-v34-20261014.json": "687b53a3c3aedc12b05dc8db6cc8c28b5258e2a77d246e5155677a9b1a6d4fe3",
+    "docs/research/dedup-500/bitwarden178-complete-source-review-20261014.json": "63b95ffbea216f726493562b8f19b9678160f18778274cdc3b3d36dcc1dbc924",
+    "docs/research/dedup-consensus-duration-v4-focused-audit-20261014.json": "9d2a31bb552324dd527b1f17507c434bb3dfbb19f182af38bbb894c757899f85",
+    "scripts/audit-dedup-consensus-duration-v4-focused-20261014.py": "12e266c6678b39bce8fdc311cefd0eef27ab46582bb5ff8794b9ed8a9868e9b6",
+    "scripts/run-dedup-consensus-native-collection-v5-focused-20261014.py": "c2701377bee62a62dff57d2924905ebd8979cf25b521e53c76a5b1026bab7317",
+    "scripts/run-dedup-consensus-qualification-queue-v3-20261014.py": "45b8ab2e89343d9059f4b9acf996a58b28dbeac0637a2e1a7c307161a436bba5",
+    "docs/research/dedup-guard-latch-audit-20261014.json": "ff3373ca86b227ecdda8316013c551bf48f403b01f4045ca323de3c92ee9d392",
+    "docs/research/dedup-consensus-native-collection-v5-focused-audit-20261014.json": "f9c7515fcc4131f471382eada8474e8f5149d8fafbb25f62906102a4455eb9bb",
+    "docs/research/dedup-guard-latch-pipeline-source-20261014.json": "c5c6b038d7283317b96e91bae4252728964abdbd86844f1b23f9f8ac1d666d36",
+    "scripts/run-dedup-guard-latch-pipeline-20261014.py": "9855f455684c4b72f77d5bab17ff186041dfa21bd30422536ea87253fac35a3e",
+    "scripts/audit-dedup-guard-latch-pipeline-20261014.py": "2e1574f9364aed0ab614cbb4ae20acc8a964ced86f9b0a53ed8881906d9ee105",
+    "docs/research/dedup-guard-latch-pipeline-audit-20261014.json": "f895bcd39ea2572f8b15d7630b45944690222f266a8d67f66ab470defbe1af3e",
+    "docs/research/dedup-root-guard-latch-adoption-20261014.json": "479c2feeb412d4411d365448ace8ee5d951aac31c2c075e8fb5238ccea292db1",
+    "docs/research/dedup-current-windows-check-20261014.json": "1d3fb8e7d23d7aa309a9e443f5e8f7628e1b44c279db2e20b39d03434c84efad",
+    "docs/research/dedup-consensus-current-negative-resume-v3-prefix-0078-audit-20261014.json": "13f271648527bd5ad011f18e9aed104ed257066d1390eafd6fff1fb890c340f8",
+    "docs/research/dedup-current-windows-artifacts-preserved-20261014.json": "a655d5373e9b7c80170719841d7cc3c83d327fd7396fa53f4bb879154b69fb36",
+    "crates/rrrah-dedup/src/guarded_pair.rs": "729eb0c145e20b53a2aa88007159d698d7dc86fc00c257d714079f73fdb93b6d"
+  },
+  "pending_current_versions": {
+    "native_collection_v5": "Frozen native-feature two-target79tests passed/audited; executables preserved before unroll full-operation target reuse. Generic decode v3/v4/v5queue still waits firstvariant; no real learned multi-pair inference qualification.",
+    "duration_fix": "42101arithmetic oracle controls retained; actual root nofeature44/raster61unit gates include two overflow tests after cfg-only change. Real animation timeline and full decode integration remain pending in frozen v4/v5queue.",
+    "exact_sample_buffer": "Candidate reverted after complete identical-report benchmark medianratio1.1580. Currentexactsource matches baseline; retained candidate19tests are not currentchangedsource qualification.",
+    "root_workspace": "Current root dedup45nooptional/62raster directunit gates pass; other-actor app/cache/vendor changes preserved. WholeCargo/decode/native/currentcorpus/allformat/allplatform/defaultcollection/currentworkspace qualification remains open."
+  },
+  "rejected_sample_buffer_experiment": {
+    "decision": "docs/research/dedup-exact-sample-buffer-decision-20261014.json",
+    "decision_sha256": "ed69f1e64037ecfdeb80abb5b909de573d9fecf01b579f35b231ef2f0c56ee04"
+  },
+  "ordered_distance_unroll": {
+    "source_manifest": "docs/research/dedup-gradient-unroll4-v7-source-20261014.json",
+    "managed_correctness_audit": "docs/research/dedup-gradient-unroll4-raster-union-audit-20261014.json",
+    "natural_kernel_cpu_audit": "docs/research/dedup-gradient-unroll4-natural-cpu-audit-20261014.json",
+    "matcher_parity": "docs/research/dedup-gradient-unroll4-matcher-20261014.json",
+    "scope": "Ordered dimensionunroll4retained in four- and sixteen-descriptor kernels. Earlier V7dimension-unroll evidence is frozen baseline history; current Mac firstpass16public/component/root-unit evidence is separate. No newRoot whole-native/fullcorpus/default/platform qualification.",
+    "managed_public_benchmark": "docs/research/dedup-gradient-unroll4-managed-benchmark-audit-20261014.json",
+    "native_operation_gate": "docs/research/dedup-unroll4-native-operation-loader-v2-20261014.json",
+    "native_operation_state": "Older V5vsV7dimension-unroll4successfully built, first launch failed before main due stripped DYLD; repaired explicit env/default clock and reused binaries. Paired operations running, not newRootfirstpass16qualification."
+  },
+  "negative_campaign_continuation": {
+    "original_v2_status": "terminal_runtime_failure",
+    "audit": "docs/research/dedup-consensus-current-negative-resume-v2-prefix-0075-audit-20261014.json",
+    "counts": {
+      "inconclusive_negative": 74,
+      "execution_failed": 1,
+      "false_acceptance": 0
+    },
+    "diagnosis": "case74 produced complete unknown result with zero managed credit, but time -l failed sysctl kern.clockrate; wrapper returncode1 preserved as failure, not a verified negative",
+    "fresh_retry": "docs/research/dedup-consensus-current-negative-resume-v3-20261014.json",
+    "fresh_retry_status": "running_case75_after_successful_fresh74",
+    "measurement_scope": "drop time -l only, preserve exact binary and recipe; no RSS measurement claim",
+    "latest_prefix_audit": "docs/research/dedup-consensus-current-negative-resume-v3-prefix-0078-audit-20261014.json",
+    "latest_prefix_audit_sha256": "13f271648527bd5ad011f18e9aed104ed257066d1390eafd6fff1fb890c340f8",
+    "latest_prefix_counts": {
+      "inconclusive_negative": 78,
+      "execution_failed": 0,
+      "false_acceptance": 0
+    },
+    "scope": "Frozenprecache233negativeplan,78unknownpairs, not true-negative/Root16/currentguard quality proof. Originalfailedwrapperreport retained."
+  },
+  "latest_experiment": {
+    "status": "runtime_optimization_adopted_bounded_gates_passed",
+    "scope": "Firstpass16MacARMonly after actual-layout public managed and current-root unit gates. Original exact+visual500source/formats/platforms/quality/resources/scaling/default/publication12requirements retained and incomplete; no reduction to achieved subset."
+  },
+  "completion": false,
+  "selective_second_pass_lanes": {
+    "status": "not_adopted_after_genuine_large_natural_public_api_gate",
+    "controls": "docs/research/dedup-gradient-masked-lanes-stress-audit-20261014.json",
+    "cpu": "docs/research/dedup-gradient-masked-lanes-cpu-audit-20261014.json",
+    "decision": "docs/research/dedup-gradient-masked-lanes-decision-v2-20261014.json",
+    "median_cpu_ratios": {
+      "synthetic_clustered_self": 1.0051376449255416,
+      "natural_self": 1.006956017679881,
+      "natural_pair": 0.9404239737300075
+    },
+    "managed_gate": "docs/research/dedup-gradient-masked-lanes-managed-20261014.json",
+    "managed_public_benchmark_script": "scripts/benchmark-dedup-gradient-masked-lanes-managed-20261014.py",
+    "production_changed": false,
+    "scope": "Correctness/memory preserved, but natural forward CPUmedian regresses6.76percent. No production adoption. Original first comparison raw retention race preserved and repaired by fresh immutable v2producer.",
+    "managed_gate_audit": "docs/research/dedup-gradient-masked-lanes-managed-audit-20261014.json",
+    "managed_library_tests_passed": 59,
+    "managed_library_manual_tests_ignored": 3,
+    "managed_public_benchmark": "docs/research/dedup-gradient-masked-lanes-managed-benchmark-v2-20261014.json",
+    "qualification_queue": "docs/research/dedup-gradient-masked-lanes-qualification-queue-v2-20261014.json",
+    "large_natural_audit": "docs/research/dedup-masked-lanes-natural-large-audit-20261014.json"
+  },
+  "wider_kernel_loops": {
+    "status": "not_adopted",
+    "audit": "docs/research/dedup-gradient-unroll8-16-cpu-audit-20261014.json",
+    "ratios": {
+      "unroll8": 1.0258698459909021,
+      "unroll16": 1.0738775779644922
+    },
+    "scope": "Bounded exact kernel bit parity and balanced18measured groups; retain current4. No universal or actual native wholeoperation proof."
+  },
+  "duration_decode_free_regressions": {
+    "status": "verified_current_root_unit_configs",
+    "audit": "docs/research/dedup-duration-decode-free-gates-audit-20261014.json",
+    "passed_no_optional_features": 44,
+    "passed_raster_without_decode": 61,
+    "production_body_unchanged": true,
+    "scope": "Only test cfgs changed. Real animation/decode/Cargo/workspace/platform/native corpus gate remains separate."
+  },
+  "previous_goal_turn_classification": "progress:b9e3b7ac completedsource32/128registry andRoot6largecomparisoncontrols; currentturn completedsource34all31blobs/9trees/256lockrecords/5PNGs,8purecontrols2profiles twice32passes,registry129/500. V6actualtimingstoppedafter16rows/17logs onnewcompiler, independentlyaudited; freshsame126processv7prepared, quietwindow requested withoutstoppingothers.",
+  "third_hard_negative_current_runner_audit": "docs/research/dedup-third-hard-negative-consensus-audit-20261014.json",
+  "independent_descriptor_lane_experiment": {
+    "status": "adopted_firstpass16_mac_arm_only_actual_root_unit_gates_passed",
+    "report": "docs/research/dedup-gradient-lanes8-16-cpu-20261014.json",
+    "producer": "scripts/experiment-dedup-gradient-lanes8-16-cpu-20261014.py",
+    "scope": "Root firstpass16MacARMonly, secondpass4unchanged, other runtime targets4. Actual public managed component3.8\u201310.4percentless CPU on nontrivial tested groups, tinywithin1percent. Root45/62unit inventories with2/3manualignored directrustc/cacheddeps. WholeCargo/decode/native/currentcorpus/defaultcollection/allformats/allplatform/workspace remain open.",
+    "primitive_audit": "docs/research/dedup-gradient-lanes8-16-cpu-audit-20261014.json",
+    "layout_limit": "docs/research/dedup-gradient-prototype-layout-note-20261014.json",
+    "actual_managed_public_audit": "docs/research/dedup-gradient-lanes16-public-audit-20261014.json",
+    "root_adoption": "docs/research/dedup-gradient-lanes16-root-adoption-20261014.json",
+    "root_gate_audit": "docs/research/dedup-gradient-lanes16-root-gates-audit-20261014.json",
+    "retained_root_sources": "docs/research/dedup-gradient-lanes16-adopted-source-20261014.json"
+  },
+  "latest_root_dedup_source_delta": [
+    "gradient.rs:firstpass target tuning16MacARM/4others and exact16lane helper",
+    "gradient_matching_tests.rs:scalar-bit all16tails regression",
+    "sequence.rs:decode-free duration regression test guards only"
+  ],
+  "terminal_gate_requalification": {
+    "status": "verified_frozen_complete_inventories_split_permissioned_runs",
+    "runner": {
+      "audit": "docs/research/dedup-runner-split-gate-audit-20261014.json",
+      "targets": 154,
+      "passed": 998,
+      "ignored": 6
+    },
+    "collection_first": {
+      "audit": "docs/research/dedup-collection_first-split-gate-audit-20261014.json",
+      "targets": 3,
+      "passed": 194,
+      "ignored": 5
+    },
+    "scope": "Original full declared test inventory retained, all original passed/ignored results plus exact same binary permission-only process-observation reruns. Original failures are preserved in raw reports, not rewritten as a pristine one-shot pass. Frozen source6runner default+decode154targets or initial collection variant3targets only; not current root16, later v3/v4/v5collection, native learned corpus/default/UI/platform/workspace proof.",
+    "original_reports_preserved": true
+  },
+  "collection_qualification_queue_v2": "docs/research/dedup-consensus-qualification-queue-v2-20261014.json",
+  "latest_pixel_regression": {
+    "report": "docs/research/dedup-alpha-projection-current-20261014.json",
+    "report_sha256": "22a667139d190b2c90b040ad812aee8b229360e5575b33f1c76c56c2c03d58be",
+    "passed": 7,
+    "scope": "Current root no-default pixel integration gate only. Exact hiddenRGB canonicalization, complete fingerprint equality and independently expected white-projection64bits. Not native/decode/core/allformats/fullsuite proof.",
+    "production_algorithm_changed": false
+  },
+  "current_root_no_features_complete_gate": {
+    "evidence": "docs/research/dedup-current-cargo-exact-v2-audit-20261015.json",
+    "sha256": "d220067648766d2affb8a90b5ad71d7bb8e68d5a33dcc27f12a24ae1bb224fd5",
+    "passed": 79,
+    "ignored": 2,
+    "scope": "Actual current Cargo nofeature lib/exact_files/exact_large_files; test LTO explicitly off. No decode/fullworkspace/Windows/release/performance qualification. All dedup Rust files and manifests/config pinned before and after, dependency artifacts not separately pinned. All3complete executed inventories match fresh retained binary listings.79pass2manualbenchignored. No allintegrationtargets/fullworkspace/Windows/decode or performance proof.",
+    "source_note": "79passed2ignored before latest cfgdecode/raster test-only warning corrections in gradient_index/managed_metric. Original execution/sourcepins retained; no assertion that older report pins match latestRoot after these edits."
+  },
+  "latest_verified_wait": {
+    "sessions": [
+      99473,
+      9365,
+      82828,
+      43617,
+      62180
+    ],
+    "evidence": "Allfive session handles returned running; permissioned ps of only own producers children confirmed active rustc processes for bothCargo gates and running native probes for negative74 and baseline/candidate fullnative comparison. No restarted live job.",
+    "scope": "Observation of live computation only, not completed test/performance evidence."
+  },
+  "fused_exact_pair_experiment": {
+    "manifest": "docs/research/dedup-fused-exact-pair-experiment-20261014.json",
+    "manifest_sha256": "48c61f358a7f370d6b7489ea967ad36e455a49246023c79ff4ebaeb5d428502f",
+    "first_gate": "docs/research/dedup-fused-exact-pair-controls-20261014.json",
+    "first_gate_status": "terminal_compile_failure_missing_included_synthetic_transfer_fixture",
+    "repaired_gate": "docs/research/dedup-fused-exact-pair-controls-v2-20261014.json",
+    "repaired_gate_status": "46unit_controls_independently_verified",
+    "root_adopted": false,
+    "scope": "Isolated current-root public compare_files firstpass fuses full hashes with streaming bytes, retains final callbackfree fullverification; original collection/exact_observed and root source untouched. Correctness/mutation/cancellation/performance/admission gates pending. Different-size path still fullyhashes bothsources. Potential1pass saved on identicalpairs is a hypothesis, not speedup/IO measurement.",
+    "unit_audit": "docs/research/dedup-fused-exact-pair-controls-v2-audit-20261014.json",
+    "unit_audit_sha256": "12da98eca0c36677ff6f3411f6e423b9f21abc6cb4d53760cbcc2f7f03664e1c",
+    "benchmark": "docs/research/dedup-fused-exact-pair-benchmark-20261014.json",
+    "benchmark_queue": "docs/research/dedup-fused-exact-benchmark-queue-20261014.json",
+    "benchmark_status": "126fresh_reports_185760calls_independently_audited_mixed",
+    "performance_claim": false,
+    "benchmark_audit": "docs/research/dedup-fused-exact-pair-benchmark-audit-20261014.json",
+    "benchmark_audit_sha256": "fed13dc4d7b0875dfbcd728aff5def3c02bed87e994a5bc9ab22a85d84df773f",
+    "summary": [
+      {
+        "case": "empty",
+        "median_candidate_cpu_ratio": 0.6946212690911289,
+        "paired_ratios": [
+          0.7152521393420351,
+          0.7343216321112956,
+          0.6802721028180174,
+          0.713662068282345,
+          0.6835182101474971,
+          0.6610340459055506,
+          0.7057243280347605,
+          0.6357196286355423
+        ]
+      },
+      {
+        "case": "tiny",
+        "median_candidate_cpu_ratio": 0.7251882523349322,
+        "paired_ratios": [
+          0.7265732379115598,
+          0.7533410524815172,
+          0.7432263067705653,
+          0.7347812193118266,
+          0.7161766619929129,
+          0.6493040088296927,
+          0.6814389440579273,
+          0.7238032667583046
+        ]
+      },
+      {
+        "case": "block",
+        "median_candidate_cpu_ratio": 0.8061379811950322,
+        "paired_ratios": [
+          0.669227321397427,
+          0.7384586063831002,
+          0.7746505223456421,
+          0.8684406607106845,
+          0.8560513965848325,
+          0.8376254400444224,
+          0.9360883843047445,
+          0.7480952166268667
+        ]
+      },
+      {
+        "case": "large_same",
+        "median_candidate_cpu_ratio": 0.9360350567649969,
+        "paired_ratios": [
+          0.9706390184782603,
+          0.9285904822876726,
+          0.9039805452450914,
+          0.9648165717899657,
+          0.9377866614317242,
+          0.907442993137047,
+          0.9964287375028202,
+          0.9342834520982695
+        ]
+      },
+      {
+        "case": "large_early_different",
+        "median_candidate_cpu_ratio": 1.0290733687782683,
+        "paired_ratios": [
+          1.010278033996588,
+          1.0442710225091767,
+          1.021668803027576,
+          1.0364779345289605,
+          1.0784771656434773,
+          0.9353488818504984,
+          1.0392726145579967,
+          0.9815931987417231
+        ]
+      },
+      {
+        "case": "large_late_different",
+        "median_candidate_cpu_ratio": 1.029198205634997,
+        "paired_ratios": [
+          0.999087877598992,
+          1.0318506973585175,
+          1.0287065731527494,
+          1.0335316772970602,
+          1.0089815541206302,
+          1.0599245746186563,
+          0.9472180667191287,
+          1.029689838117245
+        ]
+      },
+      {
+        "case": "large_size_different",
+        "median_candidate_cpu_ratio": 1.0034362720409968,
+        "paired_ratios": [
+          0.9895291909177465,
+          1.017343353164247,
+          0.9565269299033878,
+          0.9855836849507414,
+          1.1101673564873376,
+          0.9207584129506323,
+          1.040575301635265,
+          1.1256467801259324
+        ]
+      }
+    ],
+    "decision": "Mixedresults: positive cases faster,2MiBdifferentcases~2.9percentCPUslower; no universalfastpath adoption. No exhaustivecollectionIO solution claimed."
+  },
+  "fused_exact_short_circuit_v3": {
+    "manifest": "docs/research/dedup-fused-exact-short-circuit-v3-20261014.json",
+    "manifest_sha256": "c8e470125514415be7b58013c934b1d5633bd07f38eb5fbfc076dd5a69ee0780",
+    "unit_audit": "docs/research/dedup-fused-exact-pair-controls-v3-audit-20261014.json",
+    "unit_audit_sha256": "01ada37afccddc5f023388f36b861762a745d5b4bb9ccdc132f9285c4318c21e",
+    "passed": 46,
+    "ignored": 2,
+    "root_adopted": true,
+    "only_delta": "Boolean shortcircuit stops redundant byte memcmp after first mismatch. Fullreads/hash/lateverification unchanged.",
+    "benchmark": "docs/research/dedup-fused-exact-pair-benchmark-v3-20261014.json",
+    "benchmark_status": "126freshreports185760calls_independently_audited",
+    "independent_benchmark_audit_queue": "docs/research/dedup-fused-exact-v3-audit-queue-20261014.json",
+    "measurement_change": "Retain raw RUSAGE_CHILDREN user/system before/after snapshots for independent CPUdelta reconstruction.",
+    "scope": "Isolatedpublicexactpair only, no root/collection/native/decode/platform/allcase adoption claim.",
+    "benchmark_audit": "docs/research/dedup-fused-exact-pair-benchmark-v3-audit-20261014.json",
+    "benchmark_audit_sha256": "fb7d8103c7169b1c60ab97414fd34bd93a1235845f59f91c28218373f6d8fcfd",
+    "summary": [
+      {
+        "case": "empty",
+        "median_candidate_cpu_ratio": 0.7116144600714709,
+        "paired_ratios": [
+          0.6902503153441463,
+          0.7286144372046773,
+          0.6714510884876912,
+          0.7754599170263591,
+          0.7412820203363832,
+          0.6734531835205975,
+          0.6946144829382644,
+          0.7420284000597157
+        ]
+      },
+      {
+        "case": "tiny",
+        "median_candidate_cpu_ratio": 0.6961190147379958,
+        "paired_ratios": [
+          0.6828000371527112,
+          0.7009211535639106,
+          0.6910830287269377,
+          0.7724311464909898,
+          0.6947484140187578,
+          0.6758059826466042,
+          0.6974896154572338,
+          0.7543581269533568
+        ]
+      },
+      {
+        "case": "block",
+        "median_candidate_cpu_ratio": 0.8167439429139808,
+        "paired_ratios": [
+          0.7653707092799527,
+          0.8469375491148096,
+          0.8402516734677349,
+          0.844663108426183,
+          0.820708345511109,
+          0.8127795403168525,
+          0.7569216456296588,
+          0.7846351808607364
+        ]
+      },
+      {
+        "case": "large_same",
+        "median_candidate_cpu_ratio": 0.9419854378971313,
+        "paired_ratios": [
+          0.953927443778603,
+          0.9161414790997209,
+          1.0183147222189688,
+          0.9763022191320384,
+          0.8922350036712772,
+          0.9795796003550187,
+          0.9191466595331149,
+          0.9300434320156596
+        ]
+      },
+      {
+        "case": "large_early_different",
+        "median_candidate_cpu_ratio": 1.0121255969987772,
+        "paired_ratios": [
+          0.9924844189173565,
+          0.9583044921806535,
+          1.0338891014327105,
+          1.0019904845131868,
+          1.0222607094843679,
+          1.0307726444620038,
+          1.0425759902847684,
+          0.9925058657358792
+        ]
+      },
+      {
+        "case": "large_late_different",
+        "median_candidate_cpu_ratio": 0.9775740369282616,
+        "paired_ratios": [
+          0.9131481361004241,
+          0.8873949404792756,
+          0.9842413835953179,
+          1.0219136677057623,
+          0.9799531372039152,
+          1.0007799964342328,
+          0.975194936652608,
+          0.945238302692235
+        ]
+      },
+      {
+        "case": "large_size_different",
+        "median_candidate_cpu_ratio": 1.0297062950278741,
+        "paired_ratios": [
+          1.036917504469576,
+          0.9761566691423961,
+          1.04098943067773,
+          1.0304497720518997,
+          1.0308584232508724,
+          0.9840910837606368,
+          1.0289628180038486,
+          0.9896298626403486
+        ]
+      }
+    ],
+    "decision": "Identical64KiB/2MiB gains persist; early/late different nearparity, differentsize~1.8percentCPUregression. Still opt1/mac/syntheticpublicpairs; optimizedrelease/profile/sizegrid/platform/corpus and defaultadoption not proven.",
+    "long_repeat": "docs/research/dedup-fused-exact-pair-long-v4-20261014.json",
+    "long_repeat_status": "90freshreports92160APIcalls_audited",
+    "long_audit": "docs/research/dedup-fused-exact-pair-long-v4-audit-20261014.json",
+    "long_audit_sha256": "4079690de136770e5bcab15d35c2e6a0abd05eecf03659b2263fc061d5f9f155",
+    "long_summary": [
+      {
+        "case": "block",
+        "median_candidate_cpu_ratio": 0.8109270749896011,
+        "paired_ratios": [
+          0.8052360985246236,
+          0.8166180514545788,
+          0.8241960905045879,
+          0.8216897119381064,
+          0.8454695793006566,
+          0.8045491437265264,
+          0.7828238869911629,
+          0.8008046588932611
+        ]
+      },
+      {
+        "case": "large_same",
+        "median_candidate_cpu_ratio": 0.9451262584682671,
+        "paired_ratios": [
+          0.9185934132275609,
+          0.9385140073081599,
+          0.9724993299364717,
+          0.9191334925078135,
+          0.9614699085584044,
+          0.9517385096283744,
+          0.9370148290567529,
+          0.963028240290256
+        ]
+      },
+      {
+        "case": "large_early_different",
+        "median_candidate_cpu_ratio": 1.0007706700148935,
+        "paired_ratios": [
+          0.9738642254914477,
+          1.00199319139929,
+          1.0010205005573758,
+          0.9879173183388013,
+          1.0005208394724112,
+          0.9838453981960104,
+          1.0191893209903289,
+          1.0280105657222152
+        ]
+      },
+      {
+        "case": "large_late_different",
+        "median_candidate_cpu_ratio": 1.005556119115374,
+        "paired_ratios": [
+          1.018400005293275,
+          1.0079076998953493,
+          1.0032045383353987,
+          0.9802869562462188,
+          0.9988461962205775,
+          1.0137193827960187,
+          0.9926521128585819,
+          1.0150518403833253
+        ]
+      },
+      {
+        "case": "large_size_different",
+        "median_candidate_cpu_ratio": 1.0183596895563443,
+        "paired_ratios": [
+          0.9657807600795886,
+          0.9755857273203977,
+          1.0141892223688318,
+          1.0356792436000413,
+          1.0225301567438567,
+          1.042396746407397,
+          1.0282408055611316,
+          0.9815211373693614
+        ]
+      }
+    ],
+    "stress_audit": "docs/research/dedup-fused-exact-pair-stress-v6-audit-20261014.json",
+    "stress_audit_sha256": "0102aec382c7cae649aaec3550d6f24ed9af3ecec530d4a0064f3e4318f2430d",
+    "stress_passed": 47,
+    "stress_ignored": 2,
+    "root_adoption_audit": "docs/research/dedup-fused-exact-root-adoption-audit-20261014.json"
+  },
+  "fused_persistent_mutation_oracle": {
+    "original_failed_gate": "docs/research/dedup-fused-exact-pair-stress-v5-20261014.json",
+    "original_failure": "Truncation refused via IoUnexpectedEof, overstricttest demandedChanged. ExistingoriginalAPIcallback sweep confirmed2UnexpectedEof refusals among21callbacks.",
+    "oracle_evidence": "docs/research/dedup-fused-exact-truncation-oracle-20261014.json",
+    "corrected_scope": "For overwrite/replacement requireChanged; fortruncation additionallyallowIoUnexpectedEof. Successfulboolresults remainforbidden afterpersistentmutation postbothobservations.",
+    "runtime_body_unchanged_from_benchmarked_v3": true
+  },
+  "collection_qualification_v3": {
+    "audit": "docs/research/dedup-consensus-collection-v3-focused-audit-20261014.json",
+    "audit_sha256": "0f7f01506684269a19bac260cc540f6aba157b8e48b75c6b57e4638e35b70f6a",
+    "passed": 195,
+    "ignored": 5,
+    "targets": 3,
+    "scope": "Frozen v3consensus collection/shared pair-preflight plus implicit NN proposal-cap overflow checks, library plus pair and collection integration targets. Rootselected four-crate/vendor/fixtures captured, including parallelAPNG/ICOdecoder changes, but not their complete own-suite/app qualification. Fake proposal providers in unit/integration fixtures are not actual learned inference. Finalvariant includes9admissioncases and5final-publication mutations; generic synthetic providers only. Source/binaries retained; no complete latestRoot/app/native-inference/corpus qualification.",
+    "next_stage": "run-dedup-consensus-duration-v4-focused-20261014.py",
+    "next_stage_status": "running"
+  },
+  "fused_exact_optimized_v7": {
+    "unit_audit": "docs/research/dedup-fused-exact-pair-stress-opt3-v7-audit-20261014.json",
+    "unit_audit_sha256": "8795795de30046828b58d378c360786b0a0b0adc5549d28aacdfaef52893ee0c",
+    "passed": 47,
+    "manual_ignored": 2,
+    "benchmark": "docs/research/dedup-fused-exact-opt3-v7-20261014.json",
+    "benchmark_status": "126freshreports272160calls_independently_audited",
+    "benchmark_audit_queue": "docs/research/dedup-fused-exact-opt3-v7-audit-queue-20261014.json",
+    "profile_scope": "Directrustc opt-level3 for baseline/candidate/probe, realcacheddependencies; not Cargo release/LTO/fullworkspace proof. All7cases, longerlargecase256calls/block4096calls, alternatingfreshprocesses, rawRUSAGEbeforeafter. No rootadoption.",
+    "benchmark_audit": "docs/research/dedup-fused-exact-opt3-v7-audit-20261014.json",
+    "benchmark_audit_sha256": "5c1acfee19e7c90ea78edbdd9784db9ccaffdf1c61ae26cef086079e0e0df518",
+    "summary": [
+      {
+        "case": "empty",
+        "median_candidate_cpu_ratio": 0.6947065527798861,
+        "paired_ratios": [
+          0.6632465417956948,
+          0.6982863363416061,
+          0.7243470415986356,
+          0.7109164160126638,
+          0.6911267692181662,
+          0.6758762886597922,
+          0.7028351235087825,
+          0.6895146633105567
+        ]
+      },
+      {
+        "case": "tiny",
+        "median_candidate_cpu_ratio": 0.6703674982249948,
+        "paired_ratios": [
+          0.7057556177614943,
+          0.6417257484557799,
+          0.6461982931758714,
+          0.6701424853910275,
+          0.7001060702425322,
+          0.6705925110589619,
+          0.6205390828911105,
+          0.7104361342614801
+        ]
+      },
+      {
+        "case": "block",
+        "median_candidate_cpu_ratio": 0.8226500459555706,
+        "paired_ratios": [
+          0.8033038811686258,
+          0.831404231770226,
+          0.8263459416480594,
+          0.8189541502630817,
+          0.7995894623276425,
+          0.7692318268238628,
+          0.8263647561696921,
+          0.8355731587600043
+        ]
+      },
+      {
+        "case": "large_same",
+        "median_candidate_cpu_ratio": 0.9578464457937539,
+        "paired_ratios": [
+          0.9562723975338284,
+          0.9589136180125871,
+          0.9567981030209769,
+          0.9473053791646092,
+          0.9545218339962053,
+          0.9592438875817395,
+          0.9588947885665309,
+          0.962730266886753
+        ]
+      },
+      {
+        "case": "large_early_different",
+        "median_candidate_cpu_ratio": 0.9968452141782673,
+        "paired_ratios": [
+          1.0037643828419525,
+          1.0020819332448714,
+          0.9916084951116633,
+          1.0076948162499897,
+          0.9800577018030143,
+          0.9579303955973211,
+          0.9322649360565008,
+          1.0189593971078446
+        ]
+      },
+      {
+        "case": "large_late_different",
+        "median_candidate_cpu_ratio": 1.0064178888002013,
+        "paired_ratios": [
+          0.9918406169743538,
+          0.967445705621225,
+          1.0089832179323506,
+          1.0288832055394699,
+          1.0038525596680519,
+          1.0170804568243452,
+          1.011593079647883,
+          0.9624613382138391
+        ]
+      },
+      {
+        "case": "large_size_different",
+        "median_candidate_cpu_ratio": 1.006504314730805,
+        "paired_ratios": [
+          0.9605214249081224,
+          0.9810619024625847,
+          1.0122439553330256,
+          1.0203313639043456,
+          0.9633470423304128,
+          1.0059544835641272,
+          1.0109221326799742,
+          1.0070541458974827
+        ]
+      }
+    ],
+    "root_adopted": false,
+    "scope": "Opt3directrustc semantic/property gates and7syntheticwarmcase CPUperformance; not fullCargo release/LTO/platform/coldIO/collection/defaultadoption."
+  },
+  "ordered_distance_unroll_native_full_operation": {
+    "audit": "docs/research/dedup-unroll4-native-operation-loader-v2-audit-20261014.json",
+    "audit_sha256": "b60dd2527a163bb139004c2570dffba73e73cda8e91d6b7af972777424f28d2b",
+    "scope": "Full atomic forward/reverse native/opposite/model-bank operation. Same two retained development controls and explicit policy, three alternating fresh-process pairs each. Version source difference only distance kernel and test source. Source/dependency/weights guards included. No universal speedup, learned-route forcing, default/UI/full-corpus/platform/RSS qualification. Reuses both successful binaries after terminal loader failure. /usr/bin/time default clock only, /usr/bin/env restores explicit DYLD after protected executable; no RSS sysctl or binary patch/rebuild. This is earlier V5vsV7dimensionunroll4, not current firstpass16qualification. All twelve full-operation outputs agree; source/harness/executable/inputs and seven shared runtime libraries rechecked. CPU crosschecked against time user+sys. Development positives only; no whole-corpus, default/UI, universal speedup or library completion claim.",
+    "results": [],
+    "actual_summary": [
+      {
+        "case": "self_native",
+        "cpu_ratios": [
+          0.9673596840480905,
+          1.2579509792128776,
+          1.4134964970350525
+        ],
+        "median_cpu_ratio": 1.2579509792128776,
+        "model_attempted": [
+          false,
+          false
+        ]
+      },
+      {
+        "case": "table_true",
+        "cpu_ratios": [
+          0.9454423256505957,
+          1.0821590146861821,
+          1.0051524396578497
+        ],
+        "median_cpu_ratio": 1.0051524396578497,
+        "model_attempted": [
+          false,
+          false
+        ]
+      }
+    ],
+    "conclusion": "All12outputs agree, but3pairedcontrols do not establish wholeoperation speedup. Self shows largevariable CPUregression, table nearflat. EarlierV5vsV7dimensionunroll4 only, not currentfirstpass16. Bothcontrols avoided learnedmodel, not learnedroute timing."
+  },
+  "live_negative_profile": {
+    "audit": "docs/research/dedup-negative-live-profile-v1-audit-20261014.json",
+    "audit_sha256": "afa33b8ab31d29fe31c958e85e1d28809489ecd3c02bb251117faa1502c73ecb",
+    "active_index": 76,
+    "main_samples": 480,
+    "distance_top_samples": 237,
+    "nested_guard_top_samples": 173,
+    "physical_footprint_display": "643.4M",
+    "peak_physical_footprint_display": "1.1G",
+    "scope": "Three-second5ms sampling of confirmed own running frozen pre-cache negative probe. No new corpus execution or job restart, no whole-operation profile/speedup/Root16/model-completion claim. Mainthread samplecounts only; waitingthreads excluded from denominator. This snapshot implicates gradient distances and nested cancellation callbacks, not neuralmodelcompute in the sampledinterval. Physicalfootprint is macOS sampler metric, not RSS or MemoryBudget;Observed physicalfootprint displays exceed the managedbudget scale and do not establish a hard512MiBwholeprocesscap. No wholeoperation CPUpercentage or speedup inferred.",
+    "next_investigation": "Profile currentnative16pipeline and nestedcancellation guardcost without removing logicalcallback/owner checks; provider/wholeprocessmemory admission stillopen."
+  },
+  "duration_v4_qualification": {
+    "audit": "docs/research/dedup-consensus-duration-v4-focused-audit-20261014.json",
+    "audit_sha256": "9d2a31bb552324dd527b1f17507c434bb3dfbb19f182af38bbb894c757899f85",
+    "passed": 212,
+    "ignored": 5,
+    "targets": 5,
+    "scope": "Frozen final collection v3 plus duration arithmetic fix and real animation timeline-key regression; library, pair, collection, animation and sequence targets. Other sources inherited frozen v3 capture, not current workspace parity. Fake proposal providers are not actual learned inference. Includes actual animation timeline-key and duration arithmetic regressions, plus collection final-publication guards. Native inference not enabled; no whole workspace or corpus qualification.",
+    "auditor_first_failure": "Outputpreservation path accidentally matchedv3; existingv3directory assertion stopped before overwrite. Uniquev4/v5paths fixed, v5logpath also madeunique before itslaunch. Actualv4testproducer passed initially, not rerun.",
+    "next_queue": "docs/research/dedup-consensus-qualification-queue-v3-20261014.json",
+    "next_status": "running_remaining_generic_v5decode_stage"
+  },
+  "guard_latch_experiment": {
+    "diagnostic_audit": "docs/research/dedup-guard-latch-audit-20261014.json",
+    "diagnostic_audit_sha256": "ff3373ca86b227ecdda8316013c551bf48f403b01f4045ca323de3c92ee9d392",
+    "processes": 72,
+    "user_callback_calls": 900000000,
+    "controls_per_variant": 272,
+    "summary": [
+      {
+        "case": "depth1-owners1",
+        "median_cpu_ratio": 1.0078451649635867,
+        "ratios": [
+          0.9662182195537732,
+          1.022933383093859,
+          0.890518693162681,
+          1.0345395051570108,
+          0.9012143539364167,
+          0.9927569468333144,
+          1.0432579258898842,
+          1.0419735503560543
+        ]
+      },
+      {
+        "case": "depth3-owners0",
+        "median_cpu_ratio": 0.9456788095368184,
+        "ratios": [
+          0.8273210191264254,
+          0.9864578631202462,
+          0.9342762063227946,
+          0.939843612581352,
+          0.9252691889755974,
+          0.9515140064922848,
+          1.0130171931786431,
+          0.9534807788145899
+        ]
+      },
+      {
+        "case": "depth3-owners1",
+        "median_cpu_ratio": 0.8325225206015212,
+        "ratios": [
+          0.8230259619895407,
+          0.8149663999652583,
+          0.9205240607276463,
+          0.8382960890690986,
+          0.8762839279511753,
+          0.8178305440095538,
+          0.826748952133944,
+          0.8880068882545848
+        ]
+      },
+      {
+        "case": "depth3-owners2",
+        "median_cpu_ratio": 0.9616985043939181,
+        "ratios": [
+          0.9751114818897878,
+          0.9739714192081144,
+          0.9441634084404793,
+          1.00995796220761,
+          0.9930709590769335,
+          0.9494255895797218,
+          0.8890820130007189,
+          0.9047415472017127
+        ]
+      }
+    ],
+    "scope": "Diagnostic only: exact currentguard cancellation expression and originalGenerationToken implementation, controlledRequest adapter containing only cancellation field, dynFn one/three-layer chain, realAtomicU64 owners. Inline helper removes harness-onlycall; no actual DecodeRequest layout, IO/sourceguards, core/decoder/nativepipeline or wholeoperation/RSS qualification. Only false-latch stores changed; no usercallback or ownercheck omitted. Root not modified. CPUdeltas/order/rawoutputs independently recomputed. Sharedrequest-adapter microbenchmark only; no descriptor/body-layout/fullsource/neuralroute or wholeoperation speedup proof.",
+    "pipeline_source_manifest": "docs/research/dedup-guard-latch-pipeline-source-20261014.json",
+    "pipeline_source_manifest_sha256": "c5c6b038d7283317b96e91bae4252728964abdbd86844f1b23f9f8ac1d666d36",
+    "pipeline_report": "docs/research/dedup-guard-latch-pipeline-20261014.json",
+    "pipeline_status": "212passed0failed5ignored5actual_decode_targets_verified",
+    "root_adopted": true,
+    "only_delta": "Skip false privateCellstore, preserve exactpredicate/rootcallbackcalls/allownerchecks/stickytrue state.",
+    "pipeline_audit": "docs/research/dedup-guard-latch-pipeline-audit-20261014.json",
+    "pipeline_audit_sha256": "f895bcd39ea2572f8b15d7630b45944690222f266a8d67f66ab470defbe1af3e",
+    "root_adoption": "docs/research/dedup-root-guard-latch-adoption-20261014.json",
+    "root_adoption_sha256": "479c2feeb412d4411d365448ace8ee5d951aac31c2c075e8fb5238ccea292db1",
+    "root_selected_decode_gate": "docs/research/dedup-root-guard-latch-decode-20261014.json",
+    "root_selected_decode_gate_status": "running",
+    "performance_scope": "No wholeoperation17percent claim; diagnostic nestedowners microbenchmark only. All logicalcallbacks/ownerchecks retained."
+  },
+  "collection_qualification_v5": {
+    "audit": "docs/research/dedup-consensus-native-collection-v5-focused-audit-20261014.json",
+    "audit_sha256": "f9c7515fcc4131f471382eada8474e8f5149d8fafbb25f62906102a4455eb9bb",
+    "passed": 212,
+    "ignored": 5,
+    "targets": 5,
+    "scope": "Frozen v5 collection directional core plus duration fix, five decode-feature targets. Native LoFTR adapter is feature-disabled in this run and remains unqualified; generic callback compatibility and real animation regression checked. No whole workspace or corpus claim. Includes actual animation timeline-key and duration arithmetic regressions, plus collection final-publication guards. Native inference not enabled; no whole workspace or corpus qualification.",
+    "queue_status": "completed_selected_frozen_decode_stages",
+    "native_scope": "Nativeadapter feature-disabled in thisgenericdecode run; separate earlier79nativefeature tests and12model-avoiding developmentoperations not full learnedcorpus/default/currentRoot parity."
+  },
+  "latest_windows_check": {
+    "report": "docs/research/dedup-current-windows-check-20261014.json",
+    "report_sha256": "1d3fb8e7d23d7aa309a9e443f5e8f7628e1b44c279db2e20b39d03434c84efad",
+    "artifacts_preserved": "docs/research/dedup-current-windows-artifacts-preserved-20261014.json",
+    "scope": "CurrentSource beforeguardadoption WindowsGNU nofeature library cargocheck, no execution/link/decode. Artifacts preserved beforeRoot source/buildcontext revision; not postadoptionfullWindows proof."
+  },
+  "source_drift_requalification": {
+    "snapshot_v3": "docs/research/dedup-root-guard-snapshot-v3-20261014.json",
+    "snapshot_v3_sha256": "4d95830174f2b3e84fb04c843771e7f582a7e068e7131663ef935586991f87b5",
+    "observed_changed_source": "crates/rrrah-core/src/develop/mod.rs",
+    "scope": "Snapshot v3 refused current Root qualification after full-source validation found drift. Original Root decode process confirmed live by polling its session; not restarted. Snapshot v4 capture underway; no success inferred. Earlier no-feature and Windows gates predate guard adoption and current core revisions.",
+    "snapshot_v4": {
+      "report": "docs/research/dedup-root-guard-snapshot-v4-20261014.json",
+      "sha256": "09bca613f200b4f731923442698765ff83491b760ce3b4c00cc92e816e76bb46",
+      "files": 3837,
+      "status": "stable_snapshot_captured",
+      "scope": "Copy hashes twice matched Root at capture; not an OSatomic snapshot or later Root parity. New test producer refuses launch before original Root gate terminal. Original gate confirmed live, no duplicate test launched.",
+      "queue": {
+        "report": "docs/research/dedup-root-guard-snapshot-v4-queue-20261014.json",
+        "observed_status": "waiting_existing_root_gate",
+        "scope": "Queue handle confirmed live. Waits originalRootgate producer/child; no restart. Preparedproducer/auditor pathcollision and priorreport reference corrected before dispatch; unique output directories retain originalresults."
+      }
+    }
+  },
+  "latest_negative_prefix80": {
+    "audit": "docs/research/dedup-consensus-current-negative-resume-v3-prefix-0080-audit-20261014.json",
+    "sha256": "c8fd63b8be7c2218c3c8022a3924db5b089eac70f6c8c11dc1430dc37d32ea45",
+    "completed": 80,
+    "unknown": 80,
+    "false_acceptances": 0,
+    "execution_failures": 0,
+    "scope": "Frozen pre-cache continuation only; unknown is not true negative. Full233/currentRoot/default quality remains open."
+  },
+  "findimagedupes49_source_review": {
+    "report": "docs/research/dedup-500/findimagedupes49-complete-source-review-20261014.json",
+    "sha256": "2153de4a13f21ab32fb100edc5b24d0d4755c49b33d8243565678ad9e22adda8",
+    "scope": "5fullblobs read and Gitsha1/size matched;24scalar13threshold2initstate1ASan1group1syntax bounded controls on actual helpers, explicit adapters. Full image/DB/CLI runtime unqualified, no source adoption."
+  },
+  "large_exact_file_controls": {
+    "test_source": "crates/rrrah-dedup/tests/exact_large_files.rs",
+    "test_source_sha256": "9a57b742f8efd38d7761f17c5711733cb1229f20aff1bb81c78a3cc15e99df4e",
+    "report": "docs/research/dedup-large-exact-files-v2-20261014.json",
+    "observed_status": "verified_exact_module_large_sparse_admission_and_cancellation",
+    "scope": "Exact module and public API controls on current captured source; directrustc real cached dependencies. 4GiB/1TiB sparse metadata/size admission and bounded early streaming cancellation only, not full multiGiB equality, physical IO, hard RSS, otherplatform or Cargo/workspace/decode proof. Existing exact-module unit controls also included. Temporary sparse files owned by tempfile and removed on completion, no corpus.",
+    "live_build_observation": {
+      "producer_pid": 5010,
+      "rustc_pid": 5111,
+      "elapsed_display": "03:44",
+      "cpu_time_display": "0:18.69",
+      "cpu_percent_display": 3.8,
+      "state": "R",
+      "scope": "ps observation of owned producer/compiler plus same tool session live, not a stalled/terminal conclusion or speed measurement. Build not restarted."
+    },
+    "audit": "docs/research/dedup-large-exact-files-v2-audit-20261014.json",
+    "audit_sha256": "22ce5b9d6c43e362786ae76ec18eca84a2a4ad67b841cf18ad9d5f15278aa543",
+    "passed": 22,
+    "failed": 0,
+    "ignored": 0
+  },
+  "wordlist193_review": {
+    "audit": "docs/research/dedup-wordlist193-controls-audit-20261014.json",
+    "sha256": "97afc1d5fee6905ca66aece177e072397c874510bfc602de77b420f10130f304",
+    "scope": "All3repositoryblobs fullyread and Gitsha1/size pinned.7originalawk normalization controls and bash syntax only. No external rling/fullscript/network/account/inputcorpus execution or source adoption."
+  },
+  "semver181_review": {
+    "report": "docs/research/dedup-500/semver181-complete-source-review-20261014.json",
+    "sha256": "b62ca36f389683f3cb9f5e57b1539e0137b26d2cb85fc5474eae9c9c8c5a4f9d",
+    "scope": "All6files fullyread/pinned againstGitsha1/size,15original-source JS controls under explicit syntheticFS/parser/delete adapters; actual dependenciesunavailable, no deletes, sourceadoption or runtimecompatibility claim."
+  },
+  "emby323_review": {
+    "report": "docs/research/dedup-500/emby323-complete-source-review-20261014.json",
+    "sha256": "e3e7157f35fc89c722b8e953fdc076cf412f7061fb7137317d3b398ca88dff69",
+    "scope": "All5files fullyread/pinned againstGitsha1/size,26original-JS controls under explicit DOM/fetch/URL adapters. Metadata/crossyear/delimiter/repeatedpath/overlap/prototype/pagination/rendering defects, no real server/browser/media/identity or source adoption claim."
+  },
+  "welcome327_review": {
+    "report": "docs/research/dedup-500/welcome327-complete-source-review-20261014.json",
+    "sha256": "9ec41690ff44a208343fa68ed0699a8b9e2775edaa5abd60888593e9c57233fe",
+    "scope": "5fullyread/Gitmatched blobs; static Python syntax/function inventory only. Room greeting domain falsepositive, no runtime/handler/message execution or adoption."
+  },
+  "fused_candidate_windows": {
+    "audit": "docs/research/dedup-fused-exact-windows-v2-audit-20261014.json",
+    "sha256": "8e59b99438d940a0492289910984a7a5b8dd2c8385b2efd62ec8cd9cccb4ee7f",
+    "status": "verified_isolated_fused_exact_windows_metadata_type_check",
+    "scope": "Isolated actual fused-v3 exact production module WindowsGNU metadata/type check using real previously Cargo-built Windows dependencies and host derive macros. No linking/Windows execution, platform filesystem/mutation controls, testcode, fullcrate/Cargo/decode/native or wholeoperation performance proof. No Root adoption.",
+    "root_adopted": false
+  },
+  "weaintsame488_review": {
+    "report": "docs/research/dedup-500/weaintsame488-complete-source-review-20261014.json",
+    "sha256": "6e10543e6d47b4d45b62b80a8fe5f72a6149282c5fb7949bf32d43a711b0eb1d",
+    "scope": "6fullblobs Gitmatched,16actual.NEToriginal-helper/LINQ controls under explicit scalarHamming adapter. No actual externalimagehash/privateMyPictures/media/cache/wholeCLI qualification or code adoption."
+  },
+  "latest_fused_root_adoption": {
+    "audit": "docs/research/dedup-fused-exact-root-adoption-audit-20261014.json",
+    "sha256": "174462735819ad29b0ce9042d61255bf3986bdf50f213049d6eeec54e25ade22",
+    "status": "verified_root_exact_api_adoption_from_qualified_candidate",
+    "root_adopted": true,
+    "scope": "Public exact::compare_files API only; existing scanner/collection compare_observed paths unchanged, quadratic exhaustive collection IO remains open.23actual candidate exact/largefile tests, prior47unit semantic/stress controls, Windows production metadata typecheck and opt3warm-synthetic7case performance evidence. Not a new fullRoot Cargo/decode/workspace/currentnative/corpus/platformexecution/hardRSS or universal speed proof. Root decode gate began before adoption and has observed source drift; frozen snapshotv4 predates fused adoption."
+  },
+  "latest_fused_large_file_controls": {
+    "audit": "docs/research/dedup-fused-exact-large-files-audit-20261014.json",
+    "sha256": "9f641d5faf803c24e2e1e5898ad9d3a1f36a131ed909e10af9ca9ef2febfc07c",
+    "passed": 23,
+    "scope": "Isolated fused-v3 exact module and current public large-file regression source; Root not adopted; directrustc real cached dependencies. 4GiB/1TiB sparse metadata/size admission and bounded early streaming cancellation only, not full multiGiB equality, physical IO, hard RSS, otherplatform or Cargo/workspace/decode proof. Existing exact-module unit controls also included. Temporary sparse files owned by tempfile and removed on completion, no corpus."
+  },
+  "xmg455_source_review": {
+    "report": "docs/research/dedup-500/xmg455-complete-source-review-20261014.json",
+    "sha256": "0cca8cf9745d824a1f78b62daf99f296505c1797bb9a457197dd11090271a1f7",
+    "scope": "6fullblobs Gitmatched, static flow and explicit standardtransform algebra only; buffer concern conditional on unavailabledependencies. No upstream/Go/server/upload/runtime/codeadoption."
+  },
+  "current_post_fused_exact_combined_gate": {
+    "report": "docs/research/dedup-root-exact-combined-20261014.json",
+    "observed_status": "verified_current_root_post_fused_exact_module_and_complete_exact_integrations",
+    "scope": "Current Root post-fused-adoption exact module plus complete exact_files integration and large-file controls; directrustc real cached dependencies. 4GiB/1TiB sparse metadata/size admission and bounded early streaming cancellation only, not full multiGiB equality, physical IO, hard RSS, otherplatform or Cargo/workspace/decode proof. Existing exact-module unit controls also included. Temporary sparse files owned by tempfile and removed on completion, no corpus. Complete current exact_files testbody/source and29testname inventory matches retained earlier Cargo-qualified integration target;20current exact-module and3large-file tests also executed without filter. No wholelibrary/decode/workspace/currentnative/corpus/platformexecution qualification.",
+    "audit": "docs/research/dedup-root-exact-combined-audit-20261014.json",
+    "audit_sha256": "d7e9ae019e0e2c1f99e06bd29109e5f48b7006b6ebd245e173acb465b63f3919",
+    "passed": 52,
+    "failed": 0,
+    "ignored": 0
+  },
+  "proton212_review": {
+    "report": "docs/research/dedup-500/proton212-complete-source-review-20261015.json",
+    "sha256": "ca49dadfeba80b0b93cf7cf52005ad6691ab46fdf6d3ff315e06d94e51f2e093",
+    "scope": "4fullblobs/20unchangedCLI authoredJSON controls, no actualvault/account/credentials/importback/network or sourceadoption."
+  },
+  "test_build_compiler_diagnostic": {
+    "audit": "docs/research/dedup-compiler-live-profile-audit-20261015.json",
+    "audit_sha256": "9c3faf8db5905680ce3bf310b1c28ae411ed0b99e48980b5fe3d875572e78dbe",
+    "scope": "Three-second sampling of confirmed owned live Rust compiler for mutableRoot decode-feature unit-test build. Original source manifest is context only; Root source drift already known and compiler AST cannot be treated as currentRoot source-coherent qualification. Sampler stack/process metadata only, no private media/raw memory/data. Physical-footprint strings not converted, not RSS/MemoryBudget. Thread waits excluded from any hypothetical CPU denominator; no CPU percentages, runtime speedup, wholecompile attribution or passing-tests claim.",
+    "planned_comparison": "docs/research/dedup-build-profile-experiment-plan-20261015.json",
+    "plan_sha256": "beb9ad24a76f668d38fd82a377478fb302e6a3439c9a4bc38a0d2cccbf5c8d12",
+    "runtime_memory_claim": false,
+    "default_profile_changed": false
+  },
+  "mutable_root_decode_terminal": {
+    "audit": "docs/research/dedup-root-decode-drift-preserved-20261015.json",
+    "sha256": "1a2b78564e5d084aaefea83ba1c2f7590889b5de11517f5f4ec1728b4766eb9d",
+    "passed": 214,
+    "ignored": 5,
+    "source_unchanged": false,
+    "scope": "Complete executed/listed test inventories and retained original binaries/log verified, but9sourcefiles changed during build. Compiler can resolve mixed revisions; not currentRoot or unchanged-source qualification. Original strict auditor correctly refused source qualification. StreamingSHA uses1MiB buffers. No rerun/restart or relabel as frozen test success."
+  },
+  "frozen_v4_queue_failure": {
+    "report": "docs/research/dedup-root-guard-snapshot-v4-queue-20261014.json",
+    "scope": "Terminal process-observation race beforedispatch, no frozen testproducer started; original failure preserved. Distinct noLTO diagnostic producer launched after actualRootgate terminal."
+  },
+  "frozen_v4_diagnostic_profile_gate": {
+    "producer": "scripts/run-dedup-root-guard-snapshot-v4-nolto-decode-20261015.py",
+    "scope": "New immutable-source5target correctness/profile diagnostic, no source or targetselection changes. Not default/release/runtime-speedup/currentRoot fullqualification."
+  },
+  "checkpoint_validation": {
+    "report": "docs/research/dedup-push-checkpoint-validation-20261015.json",
+    "sha256": "e8603e956ec23adc59509e9cab02d58ae649e7277dc8a21e1e0b736c43fae066",
+    "goal_complete": false
+  },
+  "source500_registry_v44": {
+    "path": "docs/research/dedup-500/registry-coverage-audit-v44-20261015.json",
+    "sha256": "dd8ec9c7cf46c7ac5e9f4f69ff2575263eea53438b25cd6cfe6c9f2329b5a8ed",
+    "entries": 500,
+    "stored_pins": 2978,
+    "full_review_declarations": 48,
+    "scope": "Registry declarations and static evidence pins only; all500complete reviews not proven."
+  },
+  "windows_strict_fix": {
+    "path": "docs/research/dedup-exact-windows-strict-after-v2-20261015.json",
+    "sha256": "a35df88578723f7846198a29af0f91ac87acb7ccbf11fae07f95465400feee62",
+    "scope": "Strict isolated current exact module WindowsGNU metadata check passes; no Windows linking/runtime/fullcrate proof. Windows sparse fixture setup and CI inclusion edited, runtime pending."
+  },
+  "latest_source500_registry": {
+    "path": "docs/research/dedup-500/registry-coverage-audit-v45-20261015.json",
+    "sha256": "b10398b6123c592a4155294441dc0d4d65b88f9ab048d4c511aa12b93ae4e138",
+    "scope": "Registry files, stored excerpt hashes and detailed reference existence/content pins verified. Flags and review statuses are declarations, not proof of full source/runtime/platform coverage. Older full-repository and newer selected-review scopes can conflict; keep explicit rather than infer completion. V45 adds original469full8blob review and19originalwrapper controls with explicit synthetic dependency adapters; no actual image/dependency/hash quality or source adoption. Earlier Infinity inference corrected against executed controls, prior artifact retained. V44 adds complete3blob static reviews for309 and473, no implementation;309wrong-domain and473placeholder exclusions. No runtime/external README links or binary execution. Existing473review retained as earlier evidence. V43 adds original310SandDupe full6blob and322AutoJukeBox full5blob static source/descriptor reviews, Minecraft gameplay domain excluded,0runtime/network/plugin/gameplay executions and no code adoption. V42 adds original212ProtonPass full4blob review/20unchangedCLI authoredJSON controls, no actual vault/account/importback/network or adoption. Globalname loss/schema/collision/overwrite failures confirmed. V41 adds original455xmg full6blob static review plus explicit standardtransform algebra only; dependency/buffer/load semantics conditional, no Go/upstream/server/runtime or code adoption. V40 adds original488we-aint-same full6blob source review,16actual.NET8original-helper/LINQ controls with explicit scalarHamming distance adapter; no actualImageHash/media/wholeCLI/cache execution or code adoption. V39 adds original327welcome full5blob static source review, syntax/function inventory only; greetingbot domain falsepositive, no runtime/network/handler/message execution or source adoption. V38 adds original323emby-dupe-finder full5blob source review,26original-JS metadata/request/render/export controls with explicit DOM/fetch/URL adapters; no real browser/server/media/equality qualification or source adoption. V37 adds original181npm-semver-dedupe full6blob source review,15whole-original-JS controls with explicit in-memory filesystem/parser/deletion adapters; no actual semver3/rimraf2/npm/deletion qualification or source adoption. V36 adds original193wordlist full3blob source review,7original awk byte-normalization controls plus bash syntax; external rling algorithm/fullscript/network/runtime unqualified, no source adoption. V35 adds original49findimagedupes full5blob source review,24scalar13threshold2initstate1ASan1group1syntax bounded controls; uninitialized lookup,shortfingerprintoverread,transitivegrouping,pathcachefreshness defects; no actual GraphicsMagick/DB/CLI qualification or adoption. V34 adds original178Bitwarden complete3blob review and18originalmodule syntheticexport controls, no realvault/credentials/account/API. Lossykeys/URIcollision/multiURIduplicate misses/danglingfolders confirmed; noadoption. V33 added original59Duplicate-to-All complete3blob review and6originalJS scenarios with explicit syntheticPhotoshopadapter. Layercreation only, no detection; stalepreviouslayer/partialedits reproduced. No actualAdobequalification. V32 added original222env-dedup complete5blob review and36pureChelper controls. No environment hooks/preload/threads/Linux or failure-path runtime qualification. V31 added original499RetinaHash complete14blob review and28realNumPy controls, independentSciPyDCT/scalarresize oracles, alpha/crop/degeneratehash/CLI defects. No foreignsource adoption. V30 added original159Marcnuth complete12file review,31realNumPy/MD5core controls with explicit controlled spaCy adapter, actual malformed requirement parse and four adapted print-only demos. Leading-zero majority defect and lossy/empty representations retained; no real spaCy/model/semantic/file or pixel identity qualification. No production adoption. Prior artifacts preserved. Supplemental SSCD research is outside the original500 and does not replace any entry."
+  },
+  "current_windows_fixed_exact_gate": {
+    "path": "docs/research/dedup-root-exact-windows-fix-audit-20261015.json",
+    "sha256": "b75a04223fd0f354266c0c7740ed7e71361fb31c82b0a8a707cd245c8217eb25",
+    "scope": "Current Root exact module after Windows cfg and sparse fixture fixes plus complete exact_files integration and large-file controls; directrustc real cached dependencies. 4GiB/1TiB sparse metadata/size admission and bounded early streaming cancellation only, not full multiGiB equality, physical IO, hard RSS, otherplatform or Cargo/workspace/decode proof. Existing exact-module unit controls also included. Temporary sparse files owned by tempfile and removed on completion, no corpus. Complete current exact_files testbody/source and29testname inventory matches retained earlier Cargo-qualified integration target;20current exact-module and3large-file tests also executed without filter. No wholelibrary/decode/workspace/currentnative/corpus/platformexecution qualification."
+  },
+  "current_windows_testcode_gate": {
+    "path": "docs/research/dedup-exact-windows-tests-strict-v1-audit-20261015.json",
+    "sha256": "ed7a22e454fcd398c2e0c62f832572d2d06771546d8a31bdd329aa457e1bf406",
+    "scope": "Current exact module and complete exact_files/exact_large_files testcode typechecked for WindowsGNU with -Dwarnings and real cached dependencies. Source/copies/dependency/harness/log/artifact pins independently checked. No linking, Windows execution, fsutil privilege/filesystem behavior, wholecrate/decode or performance proof."
+  },
+  "current_cargo_exact_gate": {
+    "path": "docs/research/dedup-current-cargo-exact-v1-audit-20261015.json",
+    "sha256": "a6b88db70da0a1f8f83cc46ee1ec3c14c8f0141a51a145d44872dd6022053700",
+    "status": "verified_current_no_feature_cargo_exact_three_targets",
+    "scope": "Historical scoped78pass2manualignored gate with unchangedsource at execution; formatter-only changes followed. Originalreport preserved, not relabeled latestRoot runtime qualification."
+  },
+  "portable_filename_fix_gate": {
+    "path": "docs/research/dedup-root-exact-windows-filename-v1-audit-20261015.json",
+    "sha256": "db99f13f13ca1a51c8a26b76b51df388c26887269152899bbb60f473d5f86b24",
+    "status": "verified_current_root_portable_filename_fix_complete_exact_tests",
+    "scope": "Current Root exact module after portable extensionless fixture fix; opt0 semantic gate, not performance proof plus complete exact_files integration and large-file controls; directrustc real cached dependencies. 4GiB/1TiB sparse metadata/size admission and bounded early streaming cancellation only, not full multiGiB equality, physical IO, hard RSS, otherplatform or Cargo/workspace/decode proof. Existing exact-module unit controls also included. Temporary sparse files owned by tempfile and removed on completion, no corpus. Complete current exact_files testbody/source and29testname inventory matches retained earlier Cargo-qualified integration target;20current exact-module and3large-file tests also executed without filter. No wholelibrary/decode/workspace/currentnative/corpus/platformexecution qualification."
+  },
+  "native_windows_terminal_failure": {
+    "path": "docs/research/dedup-windows-native-run-38640355651-audit-v2-20261015.json",
+    "sha256": "1dff902df60e9ff1e1552bb8fc96478a5140da0efca1b4f471297589cf6ed5dc",
+    "status": "native_windows_terminal_failure_portable_fixture_mismatch",
+    "scope": "Actual WindowsMSVC stable1.99.0 native unit/integration evidence for committed8dd. No full library/decode/native collection/corpus/performance qualification. Largefile Windows runtime not tested because Cargo stopped after integration failure."
+  },
+  "frozen_collection_candidate_gate": {
+    "path": "docs/research/dedup-collection-fused-preverify-v2-frozen-audit-20261015.json",
+    "sha256": "fde0bb4eced49229176c112d05d9323947be18d0134e9d83acee89b0d56ad6af",
+    "status": "verified_frozen_candidate56tests_root_fixture_drift_preserved",
+    "scope": "All52prior exact controls plus4candidate controls passed on frozen MacARM source;1manual benchmark ignored. Original integrationcopy bound to8dd source; dependencies/source/harness/outputs/executable verified. Not unchanged-currentRoot, production collection integration, Windows or performance qualification."
+  },
+  "latest_original500_registry": "docs/research/dedup-500/registry-coverage-audit-v137-20261016.json",
+  "collection_fused_benchmark_state": "70process diagnostic complete and independently audited; mixed/noisy,64k8medianregression. Candidate not adopted. Expandedv3same-byte-oracle/negative/mixed benchmark prepared, opt3correctness gate and measurements pending.",
+  "latest_native_windows_exact": {
+    "path": "docs/research/dedup-windows-native-run-38641764249-audit-20261015.json",
+    "sha256": "bd457e7c3445ac0ac086156bc0d04505b4562dd79f4e14f10fd06db60cd89782",
+    "passed": 71,
+    "failed": 0,
+    "ignored": 2,
+    "scope": "Actual WindowsMSVC strict -Dwarnings nofeature Cargo lib/exact_files/exact_large_files complete native runs at committed415443172.71passed2manualbenchignored; all3largefile tests executed, including u64size admission/discovery and bounded cancellation. 4GiB/1TiB sparse logical lengths only, not fullmultiGiB equality/physicalIO/hardRSS, wholelibrary/decode/collection/corpus/performance proof. Remote binary artifacts not fetched or independently --list enumerated; declared execution count/result/names/0filtered log and successful job checked."
+  },
+  "collection_fused_preverify_decision": {
+    "status": "v3_not_adopted",
+    "evidence": "docs/research/dedup-collection-fused-preverify-v3-opt3-decision-20261015.json",
+    "scope": "126freshprocess diagnostic revealed unequal-size regression in prior callback-specialization protocol. V4 aligns opaque callback types and keeps all nine cases."
+  },
+  "proposed_ci_format_gate": {
+    "path": "docs/research/dedup-ci-proposed-source-format-audit-20261015.json",
+    "sha256": "abcaaacaef56752131a27123857c0e489e82da9bb5ccf9db11105c6eb19d8067",
+    "status": "verified_proposed_commit_fullworkspace_format",
+    "scope": "Actual cargo fmt --manifest-path proposedCargo.toml --all -- --check completed successfully. Full committed415443172buildcopy plus exactly7planned formatter/localdependency manifest corrections; overlay/currentRoot/capturedcopy SHA256matched and allotherbaseline files unchanged. ActiveAVIFchanges are outside proposedcommit. No fullRootworkingtreeformat pass, compilation/test/advisory/MSRV or overallCIpass."
+  },
+  "general_ci_failures": {
+    "path": "docs/research/dedup-general-ci-38641764154-failures-20261015.json",
+    "sha256": "8406e06b5613da4e3c9d6c0ee82d5fa950bc511e4b11e362511e31de96f4351d",
+    "status": "terminal_general_ci_failures_not_windows_failure",
+    "scope": "Authoritative actual CI job failures at recorded commit. Missing LibTorch prevents MSRV allfeatures build; formatter stops checks before compilation/tests; dependency gate refuses wildcard paths and unmaintained packages. Local fixes in progress, no policy bypass or overall CI pass."
+  },
+  "libtorch_setup_static": {
+    "path": "docs/research/dedup-ci-libtorch-setup-static-audit-20261015.json",
+    "sha256": "db425db6df31d47c5f978584f179f19505e1a8e3d9bbe3a9c86a55c99f78bd9e",
+    "status": "yaml_shell_python_syntax_and_required_version_verified",
+    "scope": "Composite/action workflow YAML parsed, all embedded shell syntax checked, embedded Python AST parsed, expected version bound to actual cached torch-sys0.23source. Setup precedes allfeatures builds in checks/MSRV without removing any command. No Linux dependency download/setup/LibTorch linking/MSRV/runtime or overallCIpass yet."
+  },
+  "svg_api_migration_probe": {
+    "path": "docs/research/dedup-resvg048-api-probe-result-20261015.json",
+    "sha256": "899d325098347e8aebca068a4a3b7a1aa6697e15d75f8940e800161cdd8fc0df",
+    "status": "passed_isolated_resvg048_api_check",
+    "scope": "Actual current font snapshot/identity implementation extracted unchanged; isolated authored resolver/parse/render API probe forresvg0.48.1. No Root manifest/lock changes, decoding/raster/memory/cancellation behavior or SVG/pixel/font runtime qualification. Actual offline Cargo check completed forresvg0.48.1 and unchanged copied font snapshot/identity body plus authored resolver/parser/render APIprobe. No function execution, Root SVGdecoder integration/pixel/font/memory/cancellation/MSRV1.92runtime or allformat qualification."
+  },
+  "svg_full_candidate_lock": {
+    "path": "docs/research/dedup-resvg048-full-candidate-lock-audit-20261015.json",
+    "sha256": "91bbc5a706411465cc3cd9773b1c76f0803d8ce4de16b113acbba517be4cd139",
+    "status": "verified_two_file_isolated_svg_migration_lock",
+    "scope": "Whole committedbuild snapshot compared tobaseline, exactlydecodeCargo.toml andCargo.lock differ. Offline resvg0.48.1 resolution removes both unmaintained fontpackages while retaining text/systemfont/rasterimage features. No Root manifest/lock updates or actual fullcrate/runtime/pixel/font/memory/cancel/MSRV/advisory gate qualification yet."
+  },
+  "pastey_original_tests": {
+    "path": "docs/research/dedup-maintained-pastey-upstream-v2-audit-20261015.json",
+    "sha256": "3d1005e1578ca6a8ca21896baa3a386812a8f0562eec01169c1ab70487a9cfff",
+    "status": "verified_original_default_library_targets_6pulp_0texturetests",
+    "scope": "Original default-feature library test targets for isolated pulp0.22.3 andtexture2ddecoder0.1.2 with only manifest paste->pastey0.2.3 alias changes. No test bodies removed or filtered. macARM opt0semantic gate, no Rootintegration/EXR/fullcodec/x86/Windows/performance qualification. A zero-test target must not count as decoded-format runtime coverage. Completeexecutedname inventories match fresh binaries; source/manifests/lock unchanged. texture target has0tests and3existing lifetimewarnings, so4separate BC1authored controls remain bounded supplemental evidence. Test-only image dependency still brings original registry pulp/paste; production candidate alias is not proof of globally removed paste dependency."
+  },
+  "pastey_bc1_controls": {
+    "path": "docs/research/dedup-pastey-codec-oracle-v2-audit-20261015.json",
+    "sha256": "b8b8a9d72090c8d425dbfcbc5ff05790d778cdec3f256ef5b8c8d2e66b9027d9",
+    "status": "verified4actual_texture_controls_with_pastey_alias",
+    "scope": "Actual unchanged texture2ddecoder0.1.2 source with manifest-only paste->pastey0.2.3 alias;4authored BC1RGB/BC1a alpha/interpolation/partialblock controls passed, fresh binaryinventory matches executions. Initial wrongBC1alpha API failure retained; separate v2first command failed beforebuild because lockfile not copied, log retained. Non-strict gate reports3existing lifetime-syntax warnings; no wholecodec/EXR/pulp/x86/Windows/Rootintegration/performance qualification."
+  },
+  "full_svg_migration_plan": {
+    "path": "docs/research/dedup-svg-full-migration-qualification-plan-20261015.json",
+    "sha256": "d2d7bf3e44a811efd8b6b80f257093331319856e6e615bc827a1b665a575563b",
+    "status": "planned_not_dispatched",
+    "scope": "Full combined selectedpackages testplan for immutable committed415source andSVG0.48variant; no execution or fullgoalcompletion claim. Root activeAVIF remains outside this experiment; no format/feature/quality coverage removed."
+  },
+  "frozen_v4_decode_gate": {
+    "path": "docs/research/dedup-root-guard-snapshot-v4-nolto-decode-audit-20261015.json",
+    "sha256": "98c7fb89bc467a2f4fd6fb925acce53e7916b5c6567dc1550205fe9f914eaef1",
+    "status": "verified_frozen_snapshot_v4_guard_five_decode_targets_nolto_diagnostic_profile",
+    "scope": "Diagnostic no-LTO test profile, all5targets retained. Not default/release-profile or measured speedup proof. Immutable snapshot v4 one true-only cancellationlatch store adoption; not claimed latest mutable Root. Capture manifest pinned and all captured source hashes checked before launch; source guard equals qualified isolated source modulo line formatting. Actual currentMac16kernel plus decode/core dependencies, five selected library/integration targets. No wholeworkspace/allfeatures/nativeLoFTR/corpus/platformruntime/hardRSS or universalperformance claim. Completecandidate testname inventories match executedresults and retain everyisolatedbaseline test; source/core/decoder/vendor/fixture pins unchanged. Selected5targets only, no fullRootdecode integrationmatrix."
+  },
+  "stable_strict_pastey_gate": {
+    "path": "docs/research/dedup-maintained-pastey-strict-v3-audit-20261015.json",
+    "sha256": "338f5d49e68ded66db9705fbf0c3913eb7f9166f6c74c4d5c2aa4007fc752786",
+    "status": "verified_stable_strict_host_windows_checks_and6originaltests",
+    "scope": "Actual pinned stable1.98.1 strict -Dwarnings hostMacARM and WindowsGNU production metadata checks plus complete unchanged6pulp/0texture defaultunit inventories.3explicit lifetimeannotations and manifest/globalisolatedpulp alias changes checked; allsources/lock/logs/binaries pinned. No feature/test removal. Windows linking/execution, othercodec/EXR pixel tests, MSRV1.92, Root integration, performance and actual cargo-deny advisory gate remain unqualified."
+  },
+  "fddf273_review": {
+    "path": "docs/research/dedup-500/fddf273-complete-source-review-20261015.json",
+    "sha256": "2ea25f09a86b6da5bb4b7644284c15f38773cbfb028a7b87627b3dc2c01096eb",
+    "status": "complete7blob_review_6unchanged_core_controls",
+    "scope": "All7tracked captured blobs fullyread and Gitblob SHA1/size matched; remoteimmutable commit-to-tree binding independently fetched and matched.6bounded unchanged-core controls executed, real ownedFiles plus explicit shortread/error adapter. No fullCLI/threadpool/hash/legacydependency/Windows/32bit or global correctness qualification; no production adoption."
+  },
+  "selective_collection_preverify_v4": {
+    "status": "58passed126benchmarkprocesses_no_adoption_mixed_regression",
+    "evidence": "docs/research/dedup-collection-fused-preverify-v4-decision-20261015.json",
+    "sha256": "ae8bedeb7fd55bdb778a106f79bd536908339db06e1093faec6e4898a67e483b"
+  },
+  "full_combined_baseline_v1": {
+    "status": "terminal_snapshot_selection_failure",
+    "audit": "docs/research/dedup-complete-collection-baseline-v1-failure-audit-20261015.json",
+    "sha256": "1885b7769f029dc21571144477704d48e6404382933922b11221e7f0891c7d5a"
+  },
+  "actual_collection_engine_benchmark": {
+    "source": "docs/research/dedup-actual-collection-benchmark-v1-20261015.rs",
+    "status": "authored_not_compiled_not_executed",
+    "scope": "Actual private collectionengine plus synthetic provider, not realvisual quality; preserves allninefamilies"
+  },
+  "gradient_index_debug_warning": {
+    "evidence": "docs/research/dedup-gradient-index-debug-v2-audit-20261015.json",
+    "sha256": "18b30bfd1c431d2b1d7d34a87849ace0dd5ce7661474a7020f7fe228d3460303",
+    "status": "real_module_strictmetadata_beforefailure_afterpass",
+    "scope": "Actual unchanged current gradient_index module with onlyderiveDebug change, reexported real cached gradient/local types and actual rrrah_core SharedBuffer/MemoryBudget. Strictwarnings standalone metadata compile succeeds after fix, fails before. No mocks, no runtime/performance/fullRoot Cargo/wholeworkspace qualification."
+  },
+  "full_combined_baseline_v2": {
+    "report": "docs/research/dedup-complete-collection-baseline-v2-20261015.json",
+    "source_static_include_audit": "docs/research/dedup-committed-build-source-v2-static-includes-audit-20261015.json",
+    "sha256": "a6613f8f4d30bc0a6b2f74308e606aa75713e7810cda7374accfd2e16193ae0d",
+    "scope": "Same immutable415commit plus omitted65byte required lock; all selected package lib/integration tests retained. No currentRoot/runtime completion claim."
+  },
+  "full_large_stream": {
+    "evidence": "docs/research/dedup-full-4gib-exact-v1-audit-20261015.json",
+    "sha256": "c06d4e221b3e133c496b06aba5fd67ffabe0ec5ac51eeac692b400efe4ebac41",
+    "scope": "Current exact module standalone real cached dependencies on MacARM, actual full public compare_files streaming of two owned sparse synthetic files each4GiB+64KiB. Equal case and one late byte difference beyond4GiB. No physical-device IO throughput, hard RSS, Windows/Linux or collection/decode/fullworkspace proof; timing diagnostic only under concurrent compilation."
+  },
+  "imagededup_selected_bktree_runtime": {
+    "evidence": "docs/research/dedup-500/imagededup2-bktree-selected-runtime-v3-20261015.json",
+    "sha256": "30e1db0206f32a1d57eeefd999b033a3e5bfad95da9688d58b7aa08ba7a3c803",
+    "scope": "Selected complete138line BKTree module and167line testmodule read; hamming method only selected. No full idealo repository review, image decode/hash quality, numpy/CNN/multiprocessing/package execution, wholeRoot retrieval qualification or production code reuse.",
+    "full_repository_review": false,
+    "production_code_adopted": false
+  },
+  "current_hamming_exhaustive_regression": {
+    "source": "crates/rrrah-dedup/src/lib.rs",
+    "source_sha256": "3b7cc56d50784ebf7b52b2ebbba68aacbbc1428eabd1fa1cd913e9703dfe99c1",
+    "status": "passed_with_complete_current_no_feature_3target_gate",
+    "queries": 33280,
+    "domain": "All256byte patterns in low and highbyte of u64 with distinct IDs, including fingerprint collisions; all65radii0through64; independent fullscan oracle",
+    "report": "docs/research/dedup-current-cargo-exact-v2-20261015.json",
+    "audit": "docs/research/dedup-current-cargo-exact-v2-audit-20261015.json"
+  },
+  "latest_negative_prefix85": {
+    "evidence": "docs/research/dedup-consensus-current-negative-resume-v3-prefix-0085-audit-20261014.json",
+    "sha256": "8017c66ae0ed305811e211869e6322b7f3fc783c3d929be6968551b3e50e743c",
+    "completed": 85,
+    "required": 233,
+    "false_acceptance": 0,
+    "inconclusive_negative": 85,
+    "execution_failed": 0,
+    "scope": "Pinned old20261013 native consensus executable, not latestRoot/managedcache/preverify/guards. All85 are unknown, not explicit negative rejections or true-negative proof. Original233case corpus preserved and ongoing."
+  },
+  "actual_collection_engine_metadata": {
+    "report": "docs/research/dedup-actual-collection-metadata-v1-20261015.json",
+    "status": "entire_candidate_cfgtest_metadata_passed_not_runtime"
+  },
+  "current_strict_decode_test_metadata": {
+    "report": "docs/research/dedup-current-strict-test-metadata-v1-20261015.json",
+    "sha256": "7e1c02da238782d3d8b32173889f0e8807daf4439532a2068db8e66f1840d246",
+    "scope": "Current whole dedup library cfgtest with decode/raster enabled, strictwarnings plus missing-debug lint, directrustc metadata against real cached baseline core/decoder deps. No link/testexecution/fullCargo dependencyresolution/recipeidentity/allfeatures/MSRV/fullworkspace/platform qualification.",
+    "source_changes": []
+  },
+  "full_candidate_collection_gate": {
+    "status": "prepared_not_dispatched_waiting_live_fullbaseline",
+    "script_pins": {
+      "scripts/qualify-dedup-complete-collection-candidate-v1-20261015.py": "6620d37866ab35bf4fca8039dab71ca0581501157b231ab4222cbe938dcbd8bc",
+      "scripts/audit-dedup-complete-collection-candidate-v1-20261015.py": "ed2c2e37e59f4f3e67a5c1b9a327e0a27e0c439866ce409f0b3fb304cc11c3c5"
+    },
+    "scope": "Same full decoder+dedup lib/allintegration Cargo command as baseline. Cannot dispatch before successful independent baseline audit. Each original target and eachoriginal test must remain; added selective tests/manualbench recorded separately. No runtime or adoption claim."
+  },
+  "imagededup_metrics_selected_review": {
+    "evidence": "docs/research/dedup-500/imagededup2-metrics-selected-runtime-v1-20261015.json",
+    "sha256": "1c5975def911a9419a8f9adf270537e38a33a7e6977a90d58cfb3a0f83c92b62",
+    "scope": "Entire143line metricsmodule read and executed byte-for-byte using actual numpy, no adapters or dependency imports removed. Authored synthetic filename lists only. Not full repository review, upstream metrics test suite, visual quality/data corpus qualification, currentRoot pipeline metrics or production reuse.",
+    "full_repository_review": false,
+    "production_adopted": false,
+    "metric_transfer_decision": "Do not reuse as independent complete quality oracle; retrieved-relevance ideal denominator and uncheckedduplicate IDs require independent validation. No observed imports/calls in current dedup Python qualification scripts."
+  },
+  "javaphash379_review": {
+    "report": "docs/research/dedup-500/javaphash379-complete-static-review-20261015.json",
+    "sha256": "f814a0a583aa544deb1bbcd96d7350345ff6f0f8e73d9b6b72f76e8b4bbe246a",
+    "scope": "Complete11blob static review only; noJava compiler/runtime, image quality or production adoption. MITdeclared but READMEupstreamderivation must be independently resolved before source reuse."
+  },
+  "legacy_source_review_reconciliation": {
+    "evidence": "docs/research/dedup-500/legacy-three-source-review-reconciliation-20261015.json",
+    "sha256": "7c650d38d12b70ca74b0276bb0a5ad2ed4b0478d78c270c42076754d17aa5190",
+    "new_full_reviews": 0,
+    "scope": "Existing original100/123/471 already counted by full_repository_read flag. Additional full_repository_review_complete alias and current provenance/control checks do not add to53. Newlystored2gitignorepins and selected original2runtime references improve evidence retention, not runtime coverage."
+  },
+  "xray308_review": {
+    "evidence": "docs/research/dedup-500/xray308-complete-source-review-20261015.json",
+    "sha256": "54a562ffeabc7bff56f52ab51c87e3d37f2138dd63e2de77ff7d1732029aecbc",
+    "scope": "All8blobs reviewed,409originalcorecontrols explicitQtvectorcontainers/scalarHamming adapters. No realQt/pHash/FFmpeg/media/IO/CLI/performance or productionadoption. Rootsequence completeordinal guard documented separately, no equivalence claim."
+  },
+  "jpillora115_review": {
+    "evidence": "docs/research/dedup-500/jpillora115-complete-static-review-20261015.json",
+    "sha256": "51eeb1a2378f66937ba436c99c301eced16760ca058509421bdb73819057b411",
+    "scope": "Full14blob static source/config/example/lock/license reading only. HashIO/splitindex/channelclose/merge/sourceguard risks not Go-runtime reproduced. No deletion/rename/install/network/release or productionadoption."
+  },
+  "ownerless_guard_candidate": {
+    "decision": "docs/research/dedup-ownerless-guard-v2-decision-20261015.json",
+    "sha256": "86383974a83da1dcf4574d3c3c63fb9a313bc59c19122f27d794d7259fc489fe",
+    "scope": "Component correctness and timing plus entirecandidate testmetadata only. Two168process protocols retained separately, v1print-only producer failure documented, v2prebuild dependencyname and v1wholecandidate missingimport failures retained. No production optimization/performance/globalcompletion claim."
+  },
+  "container_private_callback_erasure": {
+    "evidence": "docs/research/dedup-container-cancel-erasure-v1-audit-20261015.json",
+    "sha256": "f3a9ddedfea7df638a1ac4863fce5631ff4c62fde860d7986d1c8a58baf0266e",
+    "status": "candidate_metadata_and_exact_delta_verified_not_adopted",
+    "scope": "Reverse only1private signature and4borrowcalls reconstructs exactbaseline file bytes. All3378snapshotfile pins checked, originalfunctionbody/guards/callbackpositions retained, wholelibrarycfgtest metadata succeeds. No execution/compiler speedup/runtimeperformance/Root adoption proof."
+  },
+  "container_compile_profile": {
+    "evidence": "docs/research/dedup-container-baseline-rustc-profile-20261015.json",
+    "sha256": "3ca63ca20f935ea601f1fbc62f95a284d9fb06723808bfa1e6f46d92224d21ee",
+    "scope": "Three-second snapshot of owned baseline containerintegration rustc, not test/libraryruntime. Reported physicalfootprint is compiler memory, not library hardRSS. LLVMmachine-code/debugvariable work observed; no claim that private callbackmonomorphization is sole bottleneck or alltime proportion. Original fullbaseline remains live and unmodified; erasurecandidate requires fullsame gates and measuredcomparison."
+  },
+  "baseline_container_early_retention": {
+    "evidence": "docs/research/dedup-baseline-container-early-retention-20261015.json",
+    "sha256": "a0e45e21cb6ace20c6f4922da293f31e178fd076d1bc1e4531611a958425553a",
+    "scope": "Fresh container executable from observed owned baseline compiler retained with inventory. Original immutable3378source manifest rechecked. Inventory only, not executed tests, compiler speedup, currentRoot or complete goal proof."
+  },
+  "reflected_geometry_test_warning_fix": {
+    "evidence": "docs/research/dedup-reflected-test-warning-v1-20261015.json",
+    "sha256": "046d8bff11c7afce5769145f0e5cb0eacd465d0b0f4d30633a5b5dac2cbaae1e",
+    "scope": "Complete current reflected-geometry integration source typechecks against actual cached baseline library/core/decoder types with decode/raster and strict warnings. Original frozen415source reproduces non-snake-case failure; local matrix variable rename passes. No execution, pixel/geometry quality, Cargo resolver or full currentRoot CI proof."
+  },
+  "model_comparison_test_copy_drop_cleanup": {
+    "evidence": "docs/research/dedup-model-compare-test-warning-v1-20261015.json",
+    "sha256": "725191f8dd660d6237b66b41ff24c4b8159df5cb3b82b4a22088332b09d04eca",
+    "scope": "Complete current model-comparison integration source typechecks against actual cached baseline library/core/decoder types with decode/raster and strict warnings. Original frozen415source reproduces dropping-Copy lint failure; intentional ignored baseline-result bindings pass, with same function calls/callbacks/assertions. No execution, model comparison quality, Cargo resolver or full currentRoot CI proof."
+  },
+  "current_dedup_complete_decode_target_metadata": {
+    "evidence": "docs/research/dedup-current-test-metadata-v2-audit-20261015.json",
+    "sha256": "c2b001cfb82b857998947e80f69cae39f22882aed48e9d18ed7ca8fb33e8cced",
+    "scope": "147 prior successful production-library/unit/integration metadata checks retained; only nine changed warning-failing integrations rerun. All other source/manifests/dependency pins unchanged, same current production metadata and strict compiler flags. Matching decode/raster targets only; no execution, Clippy, actual current decoder/Core Cargo rebuild, allfeatures, workspace, platform or performance proof. Shared captured legacy fixture data retained with narrow expected-dead-code annotations.",
+    "runtime_tests_passed_claim": false
+  },
+  "region_grid_test_import_cleanup": {
+    "evidence": "docs/research/dedup-region-grid-test-warning-v1-20261015.json",
+    "sha256": "f2d9d439e27ec69373e873784563eeb219c9ed4f8c92ac5453e4998697a650b4",
+    "scope": "Complete current region-grid integration source typechecks against actual cached baseline library/core/decoder types with decode/raster and strict warnings. Original frozen415source reproduces unused-import failures; removal of only two unused imports passes, with all test bodies unchanged. No execution, pixel/geometry quality, Cargo resolver or full currentRoot CI proof."
+  },
+  "latest_verified_changes": {
+    "docs/research/dedup-ownerless-actual-engine-audit-20261015.json": "0f10977458a349ff1a36f4513b2054caac3bc073b1f7cab3fb446f906b19b0c1",
+    "docs/research/dedup-ownerless-actual-engine-benchmark-audit-20261015.json": "0242508fa1824eae6d11c9ef7ae1320b290ab9b171fd675ff5b5305d662ff5c3",
+    "docs/research/dedup-ownerless-actual-engine-decision-20261015.json": "281757db9f0ae723165f642e12a04c14a1ab89ecb0a11e6c401aa0ec867383f3",
+    "docs/research/dedup-500/jpillora115-native-independent-audit-20261015.json": "da18c6f0dcdfbe12a9526c24cddb209db1c3e722f221045dbabbc499d92e6396",
+    "docs/research/dedup-500/imgsim365-native-controls-audit-20261015.json": "10ce2f82e22d2717bbf93bfa508a0db38f2337fc4b3286b871395e08ea44ca8b",
+    "docs/research/dedup-500/imgsim365-complete-source-review-20261015.json": "6272891d7d2a43477b3b252c7b720c2323aadd644bb660a6a23655a537d2c2f0",
+    "docs/research/dedup-500/ishanjain449-runtime-repeat-audit-20261015.json": "b3a02cef6c9e4b77ba8cd7fbebdc96189ee5a876ce4dfb046309770f8c4f2e74",
+    "docs/research/dedup-500/legacy483-source-review-reconciliation-20261015.json": "047246052eb00c04e455632062fb0ccae949f829786de269f84df1597b5ba174"
+  },
+  "latest_verified_changes_scope": "Actualengine ownerpresence variant25selected-module tests/378paired processes verified but notadopted. Original115wholeGo6safe controls/8linkedmodule sums;365all15source/assetblobs,4original+6authoredGo functions,512grids/512distancepairs with lockedresize.449retainedGo8controls replayed,14oldresizecachefiles missing explicitlynotrevalidated.483all17publicfixtures visuallyinspected, oldmockcontrols notrealSharp. Fullsource declarations64/500; no globalgoalcompletion.",
+  "live_gate_status_at_update": {
+    "full_combined_baseline": {
+      "session_id": 13850,
+      "producer_pid": 67358,
+      "child_pid": 67374,
+      "status": "running_confirmed_by_session_poll"
+    },
+    "negative_campaign": {
+      "session_id": 43617,
+      "status": "running_confirmed_by_session_poll",
+      "observed_completed": 92,
+      "required": 233,
+      "latest_independently_audited_prefix": 90
+    },
+    "scope": "Observation only; mutable live reports are not pinned terminal results."
+  },
+  "duplo19_full_review": {
+    "docs/research/dedup-500/duplo19-complete-source-review-20261015.json": "0534f979dc67c1affed91d3fb4ce27ad74ed5ca937010900497787b923245f30",
+    "docs/research/dedup-500/duplo19-native-independent-audit-20261015.json": "ac2336c329f0dac8052fb7d2cafbc9bae055a592a0e38fa19119c15aeac4988c"
+  },
+  "full_baseline_observation": {
+    "session_id": 13850,
+    "producer_pid": 67358,
+    "cargo_pid": 67374,
+    "phase": "executing_test_targets",
+    "finished_build_line": "Finished `test` profile [optimized + debuginfo] target(s) in 202m 41s",
+    "scope": "Session poll confirmed running. Runtime log contains Running targets and completed-target results; not a terminal whole-gate result."
+  },
+  "latest_save_format_check": {
+    "command": [
+      "cargo",
+      "fmt",
+      "--all",
+      "--",
+      "--check"
+    ],
+    "returncode": 1,
+    "private_log_sha256": "88d3a905a86c3a399696112c44e0cccb54f9b5b08c137c74f5f1e81b5cdc6586",
+    "observed_files": [
+      "/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/gpu_recovery_probe.rs",
+      "/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app/src/main.rs",
+      "/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode/src/raster.rs",
+      "/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-gpu/src/demosaic_compute.rs",
+      "/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-gpu/src/lib.rs",
+      "/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-gpu/tests/raster_timing.rs"
+    ],
+    "scope": "Observed formatter failure in active workspace; no activeviewer/GPU/decoder source changed or staged by this goal."
+  },
+  "latest_optimization_decision_scope": "Two registration candidates rejected/notadopted: equal-channel reuse regresses color6to13percent; zero-weight tap skipping no consistent gain. Actual geometry matrices and callback counts equal in56paired fresh processes each. Concurrent test timing diagnostic; no global performance proof.",
+  "latest_full_baseline_observation": "Originalsession13850terminal101;162binariesretainedandfreshinventoriesaudited2056pass6fail86ignored. Newfixedbaseline session66251confirmedlive; candidateguardrefuses untilfullbaselineauditpasses.",
+  "latest_registry_audit_correction": "v65/v66 used narrower reference discovery; retained as history. v67 explicitly preserves all v64detailed reference paths and checks current pins; authority v67. No source review count inferred from reference count.",
+  "latest_cache_optimization": {
+    "docs/research/dedup-cache-stack-record-root-adoption-20261015.json": "7faabfd9af21e81b4152be8b8d3d6be7f443ba1a80f3e75490c3bcb89b0b01c3",
+    "docs/research/dedup-cache-stack-performance-scope-20261015.json": "6aa7c0ff7f6e048ceaa2f06306675eecc05e74b13c040466df98189573939788",
+    "docs/research/dedup-cache-stack-current-unit-metadata-20261015.json": "9bbaa82b60b17563412cad625e8c33570c307f22a6da57c99e7371977858b3be"
+  },
+  "latest_cache_scope": "Root612a103a removes360byte perrecordheapalloc,9cachemodule/integration tests pass incl816writefailures, wholeunit metadata passes. Serializer only9to12percent diagnostic gain;42actualatomic-saveprocesses no consistent benefit. Not globalperformance or fullcurrentRoot runtime.",
+  "latest_added_regressions_scope": "8pixeltests include65536graypairs withzero-distance-uninformative/exactidentity distinction.2visualpublicationtests againstcachedoldfull library include4syntheticBMP cold/warmcache andseparateexactgroups.15selectedworkermodule tests include114responseIOscenarios. No freshwholeRootdecoder/library/platform/runtime proof.",
+  "latest_four_source_reviews": {
+    "docs/research/beeftornado69-complete-source-review-20261015.json": "66827554540334094ef73e45e98417a9b83af5a1436e529a760f5bdc72df278e",
+    "docs/research/eduardo147-complete-source-review-20261015.json": "3819d223948fa90fe446ae53b80f7ea57bc0800c3339abd0c571a2b30827fe3e",
+    "docs/research/zyocum184-complete-source-review-20261015.json": "005a82f10b5de14a0abf7ac4257e1c3b0edf1b319a1648649d81c6e82b2ef054",
+    "docs/research/yuvraj442-complete-source-review-20261015.json": "22328f9bc08b6e04bfcabfda6b73284b39fb743d1b388771d7581cc982ea2f74"
+  },
+  "latest_source_review_optimization_scope": "Foreign concepts crosschecked: current Root already preserves all IDs for equal hashes, clamps Hamming radius, byte-confirms exact hash candidates, and has snapshot/cancellation guards. No foreign production code adopted; no current library speedup inferred from source review. Existing frozen full baseline/candidate gate remains required before opt3 collection benchmark. Root concurrent crate extraction not qualified by this frozen snapshot.",
+  "latest_common_complete_failure_and_recovery": {
+    "docs/research/dedup-common-worker-fixed-baseline-gate-v2-20261015.json": "f142b6ebe374380fa7ce68c2384cc0eaa4682b0eb06612f124b2b1e412458d6c",
+    "docs/research/dedup-common-worker-fixed-baseline-audit-v2-20261015.json": "5637e54910ad6cf7a0d39d98dc2d4d7cb0cbbcbf937014ad73f4a1ad9c4a86e1",
+    "docs/research/dedup-owned-incremental-cache-release-20261015.json": "f11c59d8fdc2496b1a25c869c3f025c51427c38245d134f7a8bfb85534f95772",
+    "docs/research/dedup-common-fixed-enospc-recovery-20261015/diagnosis.json": "2b595835483f10805ac7e27f26f1517ddba9e554c43458be4eb2dffb65da60bf"
+  },
+  "latest_full_replay_live_report": "docs/research/dedup-common-fixed-baseline-replay-v3-20261015.json",
+  "latest_replay_scope": "All162 retained complete original optlevel executables, nofilters/pruning, source/binary pin validation, own TMPDIR. Candidate and benchmark dispatch verified refuse pending audited baseline. Candidatev3 disables only incremental compiler cache to prevent diskgrowth; correctness qualification, not matched-codegen timing. No new production optimization adopted.",
+  "latest_source_slice_artifacts": {
+    "docs/research/snip96-complete-source-review-20261015.json": "c2f21220d4d323ec8bce3b42451b6b24eb95187714cca29967642679d83cb616",
+    "docs/research/snip96-public-readme-images-20261015.json": "05c7260e77d1f561c0856ca74ab5813f14023fada9420d8fd1e94ee329d83365",
+    "docs/research/snip96-adapter-controls-20261015/result.json": "98a8a0db2294e498e65f2291e636ac6ee7052d1ae288646ab2684253d80b73fa",
+    "docs/research/dupim493-available-source-and-opaque-component-review-20261015.json": "eacf547870ee68d75eaf58c2c4e935c01385f9252c9a8af718d3c243229b6830",
+    "docs/research/dupim493-adapter-controls-20261015/result.json": "e4da1120a926b34e9bc0981836c5b6a6afc1fbbc15a2692c166b4be27c01b0e1",
+    "docs/research/dedup-snip96-complete-source-tree-audit-v2-20261015.json": "c97f598c35243fd5b8995d6f7789836214c3db1c84e778b20a859a5f26879754",
+    "docs/research/dedup-dupim493-partial-source-archive-audit-v2-20261015.json": "4a0c0eb68dacb351fb7ad8322e2445fdb2012f36be1471632762a122307a8738"
+  },
+  "latest_source_slice_optimization_scope": "No foreign production code adopted. Compact embedding/approximate retrieval remains candidate-generation only; native independentconfirmation and stableID/source guards retained. SNIP maskalignment bugs andDupIm hashbucket candidate loss documented. Full162baseline replay continues; no freshpassing alltarget gate or newwholelibrary speedup claim. Fullcandidate correctness and separate opt3paired benchmark stillrequired.",
+  "latest_pile167_artifacts": {
+    "docs/research/pile167-complete-source-review-20261015.json": "6b5e3405aee4cee6b47e7ac40277ac530e2466261458ba5adc9a7bb8b6732742",
+    "docs/research/pile167-native-adapter-controls-20261015/result.json": "204523babb79b0e8d034b1f0926a80066dee90f1c8b475ac95e0a42b572fe5c7",
+    "docs/research/pile167-native-adapter-controls-20261015/mock-stream-lifetime-control.json": "5b559e086c5f04c7522674687800fcc56207d37abbd05898cc1089252b1c3a82",
+    "docs/research/dedup-pile167-complete-source-tree-audit-20261015.json": "fa54445af5bc1bfe6d7b2f2dc385ed96a38180673bd5d7b25e53fd9fde204851"
+  },
+  "latest_pile167_scope": "Text-only reference: actual native owned IO/mmap/pickle/signal helpers and bounded adapters expose EOF truncation, brokenpublicgenerator, badtuplecharacterstatistics, staleLSHreuse and incompletewrite/signalrestore. No foreignproductioncodeadoption or newlibraryperformance claim. Complete frozen162target baseline replay stillrequired before candidate andopt3benchmark; allcurrentRoot/corpus/format/platform/scale requirements retained.",
+  "latest_deduplify177_artifacts": {
+    "docs/research/deduplify177-complete-source-review-20261015.json": "6cddd395e393635380c9af079c9518521ac48a04bb8e2863387a50734b636787",
+    "docs/research/deduplify177-native-controls-20261015/result.json": "f0191510aceb63593778ab04d484955d361e4de7e8299f1ee8b3d03bd5cd086b",
+    "docs/research/dedup-deduplify177-complete-source-tree-audit-20261015.json": "9dd27a74090d2870e20f8f5a61dd0f4adb26e7d33cc13a3a930fa2b2e0d70a5d",
+    "docs/research/dedup-five-collection-replay-live-profile-20261015.json": "9297710283b864cc4076e5982851fc27c9cdc475a9dfb9c52aff4de79d7571c6"
+  },
+  "latest_deduplify177_scope": "Actualoriginal7test suite and9nativecontrols twice with realpackagecode/TinyDB/JMESPath. Stalecatalog/pathalias/restartbasename/extensionbinding/asyncdeleteerror/boundedread/invalidworkercatalogloss/nativeemptydir cases documented. V1oraclecanonicalpatherror preserved andcorrectedonlyexpectedpath.resolve. No foreignproductionadoption ornewwholelibraryspeedup; full162baseline+candidate gates stillrequired before opt3benchmark; source/platform/nativecorpus/format/all12remaining requirements retained.",
+  "latest_flipper155_artifacts": {
+    "docs/research/flipper155-complete-source-review-20261015.json": "80b93368123a7e78b67bb02eec850095a1711a2736befdd398e7a99e5f09eba5",
+    "docs/research/flipper155-native-controls-20261015/result.json": "5a90b4a1e479571686fb178e8b59cea664e4742125b7ba687b49b4abe967847a",
+    "docs/research/flipper155-native-controls-20261015/native-directory-unlink-control.json": "a40943d4f2177f0fbf26de5b2455c95c5e9d7c1f6448ddc15ad9d930871a3ba3",
+    "docs/research/dedup-flipper155-complete-source-tree-audit-20261015.json": "c62be3fc8f129a4c5afaa5f925755e1e855bba2499420325c159d299d973fa8b"
+  },
+  "latest_flipper155_scope": "StdlibfileIO/referenceonly. Alltrackedsource/samples/screenshot reviewed;10authored nativecontrols twice, onefullCLI case perrun onownedpublicfixtures. NativeMacEPERM directoryunlinkoracle correction retained withindependentprobe; originalcode unchanged. No foreignproductionadoption orlibraryspeedup; fullfrozen162baseline replay andcompletecandidate gate stillpending beforeopt3benchmark. All12remainingrequirements includingcurrentRoot/corpus/platform/format/scale/source500 preserved.",
+  "latest_exper384_artifacts": {
+    "docs/research/exper384-complete-source-review-20261015.json": "568bc77b0763028709774c03e46d603f777c3a8ba8b5e6110ff478912eda3b0f",
+    "docs/research/exper384-hash-adapter-controls-20261015/result.json": "5815ded8d1dce7f9378c22371dbcb3ae4498ea7a1e1c98aa31692cd8c43c2445",
+    "docs/research/exper384-distance-table-static-controls-20261015.json": "974473a5aad0fb84d0f61678bf16b07883e60bfa958a04bc5f24edfe1392263c",
+    "docs/research/dedup-exper384-complete-source-tree-audit-20261015.json": "2b53553c8ef775cc1c4e54071fd0ded0fb46ef67c9de6ffab82199dcfbd038d4"
+  },
+  "latest_full_replay_terminal_report": "docs/research/dedup-common-fixed-baseline-replay-v3-20261015.json",
+  "latest_full_replay_terminal_report_sha256": "48bb58eabf3649255ac2ed324094f4eea5acfe6a08fe7265cbf2b54db74acacc",
+  "latest_guarded_candidate_live_report": "docs/research/dedup-durable-candidate-gate-v5-20261015.json",
+  "latest_guarded_candidate_scope": "LiveV5candidate confirmed21:59:15UTC all3PIDcommands/parentsmatch;135targetheaders/228059logbytes. Continueoriginalprocess, no restart.162targetcompleteaudit/opt3benchmark/performance notyetadmitted.",
+  "latest_owned_cache_release": "docs/research/dedup-owned-parent-incremental-cache-release-20261015.json",
+  "latest_owned_cache_release_sha256": "741a52932b563abb7f66728483fdf39e52eda5550f80632d1aab6730fc17ebff",
+  "latest_scene380_scope": "Complete source read and selected-body counterexamples only; no foreign production adoption or whole-library speedup. Frozen candidate full gate still running; no candidate admission/performance proof.",
+  "latest_two_source_scope": "26 earlier samecommit review reconciled/archived, new CRC32/report short-write controls;176 fullread/adapted originalProgram checks. No foreignproductionadoption or wholelibraryspeedup. Candidate fullgate handle16305 confirmedlive, no benchmarkadmission/performance proof.",
+  "latest_text260_scope": "Complete all14sourceblobs/4trees,17native originalmodule controls twice. Normalizedidentity distinctfrombyteidentity, stale/repeatedappend, ownedoutputlostinsidecleanedshards, oversizedblock/empty/excessiveprefix/wc/UTF8/parameter controls. No foreignproductionadoption/libraryspeedup.",
+  "previous_owned_cache_release": "docs/research/dedup-owned-two-incremental-cache-release-20261015.json",
+  "previous_owned_cache_release_sha256": "c5253d9b4341b34cf2fc7992177ff20de7eb445cc4712e3b24a4560f808437e6",
+  "latest_owned_cache_release_audit": "docs/research/dedup-owned-parent-incremental-cache-release-audit-20261015.json",
+  "latest_owned_cache_release_audit_sha256": "8a41150725642353baaf1471e9597e87b0d3db6bc58f7a884e8ea59e341ea3d7",
+  "latest_owned_cache_scope": "Ownedparent incrementalcache only underexclusiveCargo targetlock.216537files111487914045logicalbytes; free8.38GB->88.04GB observedconcurrently. Preservedsiblingmetadata and3protectedbinaries independentlyverified. Freedspace not libraryspeedup. Initialmissingownershipref preflight stoppedbeforelock/mutation, retained; correctedreference checked.",
+  "latest_image53_scope": "Complete8sourceblobs2trees,15native originalmodule controls twice. LostManagerread-modify-write members/repeatedrootsolefileunlink/minmaxignored/flatfalsepositiveunlink/recursiveinputmutation/preunlinkchangedfile/firstframeandalpha cases. Explicitadapters declared; no foreignproductionadoption/libraryspeedup. CurrentRootexact/pixel4sourcefiles matchpreviousbounded53exact+8pixel gatepins; existingbinary/dependency/loghashes revalidated, notnewruntime/fullcollection/frame/destructivequalification.",
+  "latest_candidate_live_observation": "V4startcontext verifiedproducer12162/Cargo12175 matchingcommandsandparent; freshtarget/source processscan all3matches innewtree,zero unmatchedcurrentwriters. EarlierV3no-descendants phrase clarifiedascurrentPPIDtreeonly, notretroactiveorphanproof. Observationshistorical; futurestate mustrevalidatePID/report/log. Mutablev4gate report excludedfromcommits/no fixedhash.",
+  "latest_code33_scope": "Complete12sourceblobs3trees/READMEvisual;16scoped controls twice. Identical2docs score0 vs100 with3rd; valid21.41score/fail20/reportignore30 incorrectlySUCCESS; invalidparseSUCCESS andnonJSONerrors; canonicalalias/relativeignore/boolean/standardconsolewrapper/modelTMPoverwrite/Markdownprematurecap cases. No foreignproductionadoption/speedup; analyzercandidate semantics notexactidentity/calibratedprobability.",
+  "latest_candidate_v3_interruption_and_v4_resume": {
+    "interruption": {
+      "path": "docs/research/dedup-common-candidate-v3-interruption-20261015/result.json",
+      "sha256": "08342bd746fe98c45d5545f8caedbe8475ab28cd0defad277585ce651e6a7f67"
+    },
+    "independent_audit": {
+      "path": "docs/research/dedup-common-candidate-v3-interruption-audit-v2-20261015.json",
+      "sha256": "2e74d7a3cd939a2b1aff8e8725ada4759db1703aaa108b70ed1fba12c0fff978"
+    },
+    "launch": {
+      "path": "docs/research/dedup-common-candidate-v4-detached-launch-20261015.json",
+      "sha256": "8761d137395b0af4095fe14fada0a9f924c91414ae7c784d75d4fad89e0a1456"
+    },
+    "start_context": {
+      "path": "docs/research/dedup-common-candidate-v3-interruption-20261015/v4-start-context.json",
+      "sha256": "53237f997ff684859fedc7bb595bd30663456b3de494f9fb73425ee7a5ff9b46"
+    },
+    "current_target_process_scan": {
+      "path": "docs/research/dedup-common-candidate-v3-interruption-20261015/v4-target-process-scan.json",
+      "sha256": "d29671b2388141bef777837b64a4736ac7d3f0df72becd24e6dfc693e4297b5b"
+    }
+  },
+  "latest_collection_benchmark_admission": {
+    "script": "scripts/check-dedup-durable-benchmark-admission-v5-20261015.py",
+    "scope": "Rejects absent/incomplete fresh pair. Both162target gates plus raw artifact hashes required; opt3 samebinary benchmark preparation and quiescence still needed."
+  },
+  "latest_durable_pair_recovery_v5": {
+    "audit": "docs/research/dedup-durable-pair-v5-20261015/reconstruction-audit.json",
+    "audit_sha256": "62d56b49ea22c4a71ff8633d10cdb4170e418e7fc251f61942f8b622052ad9a3",
+    "source_files_per_variant": 3378,
+    "status": "byte_exact_recovered_fresh_full_pair_pending",
+    "coordinator": "docs/research/dedup-durable-pair-coordinator-v5-20261015.json",
+    "scope": "V4 stopped; six TMP paths missing and all162 historical passing baseline retained binaries unavailable. Cause and terminal code unknown. Historical baseline certificate preserved as at-time evidence. Fresh full162target baseline+audit followed by candidate+audit in ignored durableworkspace; no fresh passing gate or speedup claim."
+  },
+  "latest_django136_scope": "22blobs4trees fully read and verified,10 explicit ORM adapter controls twice; no installed Django/actual database/upstream suite execution, no production adoption or speedup.",
+  "latest_clone111_review": {
+    "path": "docs/research/dedup-500/clone111-complete-source-review-20261015.json",
+    "sha256": "a7d852cf75f0cd1d129110ac5ac3d2a4489a581bb1f26c0e15310d32357639af",
+    "scope": "Two13-control wholemodule native MacAPFS runs, actual clonefile and processpool with real pinned dependencies, owned4KiB files plus explicitly injected faults. No reclaimed-space/wholelibrary/performance/platform/hugefile claim. Source-only Root exact crosswalk, no newproduction edit."
+  },
+  "latest_phash417_review": {
+    "path": "docs/research/dedup-500/phash417-complete-source-review-20261015.json",
+    "sha256": "c091c3f2f52651ac9ebd998d8c2c8e3c6409c3ecaaf518dd078342d3eeb201ec",
+    "scope": "Average-hash versus DCT contract distinguished from full source, resize/intensity/bit-order and input-lifecycle findings static only; absent Java runtime recorded. No library/performance/runtime claim."
+  },
+  "latest_fast78_review": {
+    "path": "docs/research/dedup-500/fast78-complete-source-review-20261015.json",
+    "sha256": "bfb3953caa52f282d04c8e711425d26b02a35397eaa030b6d0dce6b71dfed890",
+    "scope": "Two16-control explicit Python2-to3 wholemodule compatibility runs; final prefix-only pass false positive, exact rejection, assert-only deletion guard, stale target deletion. No nativePython2/package/wholelibrary/performance claim. CurrentRoot existing guards crosswalk static only."
+  },
+  "latest_estimate157_review": {
+    "path": "docs/research/dedup-500/estimate157-complete-source-review-20261015.json",
+    "sha256": "378d44e12c22948b099cc2e75d5738392ea523c5ac93c7a45a675f1ae64cf11e",
+    "scope": "Two12-case native full estimator/helper runs plus33LZ4roundtrip/split oracles each. ActualfullCLI signedbyte index-1 and17thfile palette ASan OOB, finalchunk uninitializedcompression diagnostic. No CDC/codecproductionadoption or measured library speedup."
+  },
+  "latest_discord437_review": {
+    "path": "docs/research/dedup-500/discord437-complete-source-review-20261015.json",
+    "sha256": "62a865187e19a123cd5fd0c02966e710c625490e8945f7e58ebc251e36c0ab92",
+    "scope": "Two16-case selected unchanged localfunction runs with realdHash/Pillow/numpy/async IO. Six explicit two-reader schedules show lostupdate; localwritefault shows oldDBtruncation. No botimport/token/env/network/API/messagehandlers/deployment or libraryperformance qualification."
+  },
+  "latest_phashin475_review": {
+    "path": "docs/research/dedup-500/phashin475-complete-source-review-20261015.json",
+    "sha256": "35206c0e53610dce7ec64b5ba3bbbdcd11b638578f97fef9d96917ba8d6b9e15",
+    "scope": "Two12-case unchangedwholeindex nativeNodeVM explicit Express/WebDriver/clock/timer/response adapters. Priorimplementation-only review completedbywholelock read. No installed dependency/browser/server/network/API/actual capture/performance qualification, no active duplicate algorithm to adopt."
+  },
+  "latest_ron101_review": {
+    "path": "docs/research/dedup-500/ron101-complete-source-review-20261015.json",
+    "sha256": "5760381202744a3ae17c97766b8e5417d9e35972baa7fa89bca4d49a60b6753e",
+    "scope": "Two actualwholeJSbinding runs:47originalexceptions/96sourcegrids/705SHAoracles/60window schedules andtablegeneration. Overlapmutatesunconsumedinput; C++addon/originalfullrandomsuite/platform/throughput unqualified. No source copied into production or speedup claim."
+  },
+  "latest_video211_partial_review": {
+    "path": "docs/research/dedup-500/video211-text-source-controls-review-20261015.json",
+    "sha256": "0caadfad87d1fcd6611b4868b2d28e4022d2fa0497bbc2621097367504794b79",
+    "scope": "Two14-case selectedunchangedPythoncontrol runs; actualbatchslice repeats5000records, cache/name andtemporalpolicyregressions. Sixtextblobscomplete; seventhELFsemantic/correspondencepartial, cannotclaimfullrepository. No libraryspeedup/fullpipeline/framequality/Pascal/nativebinary/runtime proof."
+  },
+  "latest_x9133_review": {
+    "path": "docs/research/dedup-500/x9133-complete-source-review-20261015.json",
+    "sha256": "c7b1ef9ce5ff5ee9f40f8742c2d81aa45f3e7a6902f7175f266e90220c64ee1b",
+    "scope": "Alltrackedsource read, selected10shellcontrols twice; no root/storageCLI/externaldependencies or performance claim. Durablepair stillbaseline compilation as last observed; no admission."
+  },
+  "latest_peri16_review": {
+    "path": "docs/research/dedup-500/peri16-complete-source-review-20261015.json",
+    "sha256": "be8be26d0f0f13ea37841eba494b36552345afbbb470801edbbd3f0a80715cd6",
+    "scope": "Multistage hash and DB/referencecontracts, originalnative tests plus explicitfailure/mutation controls. No foreign production adoption/currentRoot performance or wholecase closure. All12 requirements retained."
+  },
+  "latest_ded23_review": {
+    "path": "docs/research/dedup-500/ded23-complete-source-review-20261015.json",
+    "sha256": "d4747ccabc57d24a3c301fb88360818ed92ac2673446ee52b88130c53b49a60c",
+    "scope": "9original+2priorcontrols freshreplay,7newactualCLIcontrols twice. Strict permutationfalsegroup/allcopiesandchangedfiledelete/invalidindex/minimum qualifiedonownedfixtures. No foreign adoption/speedup/fullplatformclaim."
+  },
+  "latest_durable_root_exact": {
+    "path": "docs/research/dedup-durable-root-exact-v2-audit-20261015.json",
+    "sha256": "2119d862e274d1235b5b4961cd9b91cea3baa49c8756b9f07e7aca612369a69b",
+    "scope": "Fresh54currentexactmodule/full29exact_files/3sparse/new1sameinode-size-restoredmtime regression tests, realcacheddeps/directrustc. Complete53priorinventoryretainedbyteunchanged3sources; new4sizes compare_files bothdirections/scan/verifiedscan rejectstalecontent andpreservehealthycopy. No fullCargo/decode/platform/physicalIO/RSS/speedup proof."
+  },
+  "latest_swift40_review": {
+    "path": "docs/research/dedup-500/swift40-complete-source-review-20261015.json",
+    "sha256": "93969a4d728445a6e3e79a4242c461554c958cc8a149b308aa0a9b6486222e16",
+    "scope": "Native documentednamecontract/cancellationstillpublishes/retrysilentlydrops/pathfiltercontrols. No productionadoption/speedup/fullAppKit or Rootlibrary qualification. Fresh53exactscope retained; full162pair baseline stillcompiling atlastobservation."
+  },
+  "latest_near41_partial_review": {
+    "path": "docs/research/dedup-500/near41-partial-source-native-review-20261015.json",
+    "sha256": "d9a54c82c97002c3169ff31662ad5292e510749c8b9abaad6cf4c721a31754ee",
+    "scope": "12selectednativecontrols twice,256numericvshammingoracles, radiuscap/tieanchor/greedychain/modernAPI/backupIOfaults. RealnativeKDTree/scipyquery withexplicitkeywordshim onlywheredeclared;5text/540imagesstillunreviewed. No productionadoption/speedup/fullsourceclaim."
+  },
+  "latest_durable_pair_progress_scope": "At2026-10-15T20:49:51UTC coordinator76697/producer91917/Cargo91930 alive command/parent matched,candidate0targetheaders compiling,log15033bytes versus11331at20:42:03. Samehandle retained, neverrestarted. Fullcandidateaudit/opt3samebinarybenchmark pending; no speedup.",
+  "latest_near41_complete_review": {
+    "path": "docs/research/dedup-500/near41-complete-source-review-20261015.json",
+    "sha256": "59c0c94d38694c9cde257a93f1d9ce79fd951ff546b51a216e4112004e0561ab",
+    "scope": "500unique,3067selectedpins,126detailedrefs,111fullsource declarations. Source41all594blobs/17trees/49text/545images covered;12nativecontrols twice and540image diagnostic verified. No originalupstreamsuite or calibratedvisualquality/speedup claim."
+  },
+  "latest_scope45_review": {
+    "path": "docs/research/dedup-500/scope45-complete-source-review-20261015.json",
+    "sha256": "fa39916030b2885dde2c446936782266a396418e4d1a2251e8b8ad098d37f225",
+    "scope": "500unique,3067pins,127detailedrefs,112fullsource declarations. Source45all21textblobs/5treesread; ten upstreamtestmethods readnotrun, PHPabsent. Eloquent queryscope reuse unrelatedtocontentmatching; originalentry retainedandrejectedaftercompleteinspection."
+  },
+  "latest_current_hamming_corpus": {
+    "audit": "docs/research/dedup-near41-hamming-corpus-audit-20261015.json",
+    "audit_sha256": "278b213ed48d6ffb7beab31096e2480970cf2bea32985337b77b6f59453aa6a3",
+    "source_test": "crates/rrrah-dedup/tests/hamming_image_corpus.rs",
+    "scope": "Two actualunchanged selectedRootHammingcore native runs,540publicimagehashes,12960completeoraclequeries and12960budgetrefusalqueries perrun,3insertionorders8radii. All2902Hamming8directededges retrieved; exactsortedIDs/distances/collisionidentity retained. No fullCargo/visualquality/performance/adoption claim."
+  },
+  "latest_link54_review": {
+    "path": "docs/research/dedup-500/link54-complete-source-review-20261015.json",
+    "sha256": "f24a08b6b84ddd625454c0379a2034d5f164e84f636c3a0fb0907f1f55a5a830",
+    "scope": "500unique,3067selectedpins,128detailedrefs,113fullsource declarations. Source54all25blobs8trees:24textread, exact GPLblob priorfullread verified, logo viewed.19originaltestbodies with1IOfixturepathadapter plus12nativecontrols twice; no CLI/config/watchdog/Docker/platform/performance proof."
+  },
+  "latest_tada51_review": {
+    "path": "docs/research/dedup-500/tada51-complete-source-review-20261015.json",
+    "sha256": "08b50165e0f58bc037b7bc2e09d3c75545efd0f5904f8991ab9d3106f9085768",
+    "scope": "500unique,3067selectedpins,129detailedrefs,114fullsource declarations. Source51all12textblobs6treesread including3968lineyarnlock/minifiedUMD.29nativeNodeVMcontrols twice explicitDOM/timer/observeradapters, no nativebrowser/Webpack rebuild/performance."
+  },
+  "latest_dep66_review": {
+    "path": "docs/research/dedup-500/dep66-complete-source-review-20261015.json",
+    "sha256": "e699ef904f26c498fe5562ae4bd88a92eaaa26dd6a8e09f869d4098e965d6d36",
+    "scope": "500unique,3067selectedpins,130detailedrefs,115fullsource declarations. Source66all25blobs5trees/23textand2imagesreviewed;19selectednativecontrols twice, fullMacimportfailurepreserved, explicitshortread/rewrite/tuplefixtures. No originalPythonenvironment/fullpipeline/platform/performance/adoption claim."
+  },
+  "latest_sweep63_review": {
+    "path": "docs/research/dedup-500/sweep63-complete-source-review-20261015.json",
+    "sha256": "48785906ad7d3f5f33b91cb0de1c3bffcb8b37bee59e35f414eb1f40632aa856",
+    "scope": "500unique,3067selectedpins,131detailedrefs,116fullsource declarations. Source63all56text/11treesread; original90tests88pass2culturefail then90passwithproductinvariantenv,16wholeassemblycontrols twice andoriginal4fixtureCLI demo pass. No nativepublish/otherplatform/scale/performanceadoption proof."
+  },
+  "latest_durable_full_baseline": {
+    "receipt": "docs/research/dedup-durable-baseline-terminal-receipt-v5-20261015.json",
+    "receipt_sha256": "8dfd9555ea226016c53aa4663f9081f4b5d90355d9732567e54b43087a097535",
+    "audit": "docs/research/dedup-durable-baseline-audit-v5-20261015.json",
+    "audit_sha256": "2af08e45c2da609def4994f8b01f2f19c5de0353b577847c75e1c1d790cdcb3b",
+    "passed": 2066,
+    "failed": 0,
+    "original_ignored": 86,
+    "targets": 162,
+    "scope": "Freshcompleteunfilteredlegacy3378source/default+decode lib/integrationbaseline, raw162binaries/inventories/source/logavailableandreverified. No currentmutableRoot/completecandidate/opt3benchmark/platform/allformats/corpus/physicalIO/RSS/speedup proof."
+  },
+  "latest_images62_review": {
+    "path": "docs/research/dedup-500/images62-complete-source-review-20261015.json",
+    "sha256": "89229d7d6876313f0d96d49d706d0e6275f30a3d4d373b469cbb0600e72ed5e0",
+    "scope": "500 unique entries,3067 selected evidence pins,132 detailed references,117 full-source declarations;383 remain. Source62 all15 blobs/3 trees reviewed including6 viewed images, two original tests and13 native controls twice. Modern isolated dependencies; original2019environment/fullquality/scale/speedup remain unqualified."
+  },
+  "latest_current_pixel_sequence": {
+    "path": "docs/research/dedup-current-pixel-sequence-audit-20261016.json",
+    "sha256": "54e8a94c76e6982492afd5ced38f334ded15413bb316ac825cfe32d7953915fb",
+    "passed": 21,
+    "scope": "Whole unchanged current pixels/linear/sequence modules and three existing test files, real dependencies/directrustc. No container decode/fullCargo/otherplatform/quality/performance proof."
+  },
+  "latest_image37_partial_review": {
+    "path": "docs/research/dedup-500/image37-selected-source-review-20261016.json",
+    "sha256": "5eade32942101505a6bf72b3e8d555a76bdb88929918fbdbbf62fdb54bbd9428",
+    "whole_repo_complete": false
+  },
+  "latest_image37_complete_review": {
+    "path": "docs/research/dedup-500/image37-complete-source-review-20261016.json",
+    "sha256": "0c871533d5a213957b33de09e7e4f42781d0b42c588104a940fac4ffb5386459",
+    "whole_repo_complete": true
+  },
+  "latest_sim18_selected_review": {
+    "path": "docs/research/dedup-500/sim18-selected-native-review-20261016.json",
+    "sha256": "6317f3aef4bc54f166d509cfed1cda6df5936c4e769e4b5f383bc2a13dc62880",
+    "whole_repo_complete": false
+  },
+  "latest_sim18_complete_review": {
+    "path": "docs/research/dedup-500/sim18-complete-source-review-20261016.json",
+    "sha256": "5bb89c10edb012672de7bac155faf00ca78b0db1c10164ff64ff74f247c130df",
+    "whole_repo_complete": true
+  },
+  "latest_dif14_complete_review": {
+    "path": "docs/research/dedup-500/dif14-complete-source-review-20261016.json",
+    "sha256": "a35681f2d1e2d7004273ae149071ab21ca12eb96949c939e8a1597650fac9761",
+    "whole_repo_complete": true
+  },
+  "latest_durable_actual_benchmark_preparation": {
+    "path": "docs/research/dedup-durable-actual-benchmark-v5-preparation-audit-20261016.json",
+    "sha256": "8c2ac00590a56cbefc94946ce9015165e536537b0831194ef1de599714e57fe6",
+    "status": "prepared_only_not_compiled_or_timed",
+    "scope": "Samefrozen3378sourcecandidate alreadycontainsactualcollectionengine test-onlyABswitch. Originalexactprefix retained; plannedopt3libtestcompile afterbothcomplete162gates, ninefamilies7pairedrounds126freshprocesses withfullreport/byteoracle/provider/credit assertions, compilerprofile/debug/overflow checks, noobservedbuildprocesses before/afterrows, rawlog/ratioaudit. Admissionpreflights currentlyrefusebuild/timing becausecandidatecompleteauditmissing. No speedup/adoption claim."
+  },
+  "latest_video21_selected_review": {
+    "path": "docs/research/dedup-500/video21-selected-native-review-20261016.json",
+    "sha256": "b80b2ad9196bcdb288db7387146e3059a32667ccba73656c6449f6ab97e4f0fa",
+    "whole_repo_complete": false
+  },
+  "latest_video21_complete_review": {
+    "path": "docs/research/dedup-500/video21-complete-source-review-20261016.json",
+    "sha256": "df1ec68dde3649b5588b74b3bc9f88d0af9279e08056e960f1f7c7f25c4fc99f",
+    "whole_repo_complete": true
+  },
+  "current_turn_progress": "Cleanarr29 complete54blob/12tree source/media review, structured1470lockrecords,19backend+13frontend scenarios eachtwice. Registry130of500full,370remain. Opt3v7 admission stillwaitingforobservedcargo/rustc; no timings launched, no speedup/adoption. All12requirements remain incomplete.",
+  "latest_plex24_complete_review": {
+    "path": "docs/research/dedup-500/plex24-complete-source-review-20261016.json",
+    "sha256": "3aa002df6713598f2b0ff4b4af2e90b1fa8b3466d8e4616db480285606177231",
+    "whole_repo_complete": true
+  },
+  "latest_lsh27_selected_review": {
+    "path": "docs/research/dedup-500/lsh27-selected-native-review-v3-20261016.json",
+    "sha256": "70eb1429e6b7fb8b2f5ec291f95bf6f7c7a4ae6037b819a53a77ee7a6967436f",
+    "whole_repo_complete": false
+  },
+  "latest_durable_cache_gate": {
+    "path": "docs/research/dedup-durable-cache-v2-audit-20261016.json",
+    "sha256": "fc6262be5b6769f48e1a178ce5f4a2887455f98a594ef1bb8ab4d4b918880a85",
+    "passed": 10,
+    "failed": 0
+  },
+  "latest_lsh27_complete_review": {
+    "path": "docs/research/dedup-500/lsh27-complete-source-review-20261016.json",
+    "sha256": "22c85b815bfa7dd32718d84636a2e5e91076d146f00890e29ad0d451ddea2b5a",
+    "whole_repo_complete": true,
+    "scope": "All13blobs/4trees/allsource including21808generatedlines and35notebookcells/twoembeddedplots reviewed;108unchangedtests and35nativecontrols eachtwice onregeneratedCython3.3extension. Oldpregeneratedbuildfails; nooldbinaryparity/performance/adoption."
+  },
+  "latest_dupe60_selected_review": {
+    "path": "docs/research/dedup-500/dupe60-selected-fingerprint-audit-20261016.json",
+    "sha256": "f885a6677d7059a01001001545d89fccdec1464b440f54ef1fbf51490acaa70f",
+    "whole_repo_complete": false
+  },
+  "latest_dupe60_selected_index_review": {
+    "path": "docs/research/dedup-500/dupe60-selected-index-audit-20261016.json",
+    "sha256": "2827b47d490812e6ed3774834e3a7234c8e3672af64c943a08ce56a2ef387f62",
+    "whole_repo_complete": false,
+    "passed_per_run": 23,
+    "runs": 2,
+    "scope": "15originaltests+8controls onwhole4unchangedmodules withdataadapters/realRayon/exactrustc-hash; cullingandcomponentgrouping recall/safetylimits reproduced. No wholeCargo/CLI/dependencylockparity/performance/currentRoot/adoption."
+  },
+  "latest_dupe60_whole_native_review": {
+    "path": "docs/research/dedup-500/dupe60-whole-native-partial-source-review-20261016.json",
+    "sha256": "91746a8d278bca6f11e6bf18510a40859b1f30aa1025961442152ee18a65bf72",
+    "whole_repo_complete": false,
+    "whole_production_rust_implementation_read": true,
+    "original_tests": 98,
+    "original_suite_runs": 2,
+    "actual_cli_controls": 8,
+    "actual_cli_runs": 2,
+    "fully_read_files": 42,
+    "tracked_files": 97
+  },
+  "latest_completed_source60": {
+    "path": "docs/research/dedup-500/dupe60-complete-source-review-20261016.json",
+    "sha256": "1633c995d862fdc831ec5d6d0da8a360c50562796e5435892f4f366789440630",
+    "full_source_count": 124,
+    "remaining": 376
+  },
+  "latest_durable_candidate_gate": {
+    "path": "docs/research/dedup-durable-candidate-audit-v5-20261015.json",
+    "sha256": "d45f4d9b06ebd7f938ef69aa19a8982eeda331b71e8e5c7ea2c64e3af459a8e5",
+    "passed": 2072,
+    "failed": 0,
+    "ignored": 87,
+    "targets": 162,
+    "scope": "Frozen3378file legacy pair, not latest mutableRoot. Opt3 build in progress, no timing or adoption."
+  },
+  "latest_completed_source74": {
+    "path": "docs/research/dedup-500/uniquify74-complete-source-review-20261016.json",
+    "sha256": "8c43dbb8a95c528d0fa78276908658cfc643a9b1b3576e372b4514d6d447a9a8",
+    "full_source_count": 125,
+    "remaining": 375,
+    "scope": "Pinned repository source complete; fake transport AST controls, no deployed Telegram service/network/userdata/dependency-source/linked-external-assets qualification."
+  },
+  "latest_opt3_build_observation": {
+    "path": "docs/research/dedup-durable-opt3-build-observation-v5-20261016.json",
+    "sha256": "e700903a71c7815ed6096170e729b9db8aa103192d9b07f328603d11ef3c1973",
+    "scope": "Producer87411/Cargo87426/rustc88197 live parentage verified2026-10-15T22:15:22UTC, no terminal buildreport/timing/adoption yet."
+  },
+  "latest_opt3_build": {
+    "path": "docs/research/dedup-durable-actual-benchmark-v5-build-20261016.json",
+    "sha256": "25d32bc4c9fd1e511032601c891591d59830988b99046c769db03e5956505b78",
+    "scope": "Frozencandidateopt3 debugassertions/overflowchecks retained; binary and compilerJSON/inventory pinned. No completeopt3libtest rerun or speedup claim."
+  },
+  "latest_opt3_correctness_controls": {
+    "path": "docs/research/dedup-durable-opt3-engine-controls-v5-audit-20261016.json",
+    "sha256": "a4ac5934cd65c3a657eb51d632f309feceb3fb5b21c9ad72451108348c7ad45a",
+    "scope": "9families,bothbranches twice,36freshprocesses oneoperationeach. Complete pair byteoracle andbudgetrelease asserted; syntheticprovider, not actualimagequality. Concurrentcompilers preclude timingqualification."
+  },
+  "latest_actual_engine_timing_admission": {
+    "status": "waiting_for_observed_build_processes",
+    "timed": false,
+    "observed_build_processes": [
+      {
+        "pid": 19744,
+        "executable": "cargo"
+      },
+      {
+        "pid": 19759,
+        "executable": "rustc"
+      }
+    ],
+    "scope": "Freshv7 check-only after full gate/binary/protocol pins revalidated. No compiler stopped; priorv5/v6 timing remains unqualified."
+  },
+  "latest_completed_source25": {
+    "path": "docs/research/dedup-500/rabbit25-complete-source-review-20261016.json",
+    "sha256": "853b257e3a19676a5c55ed2ab0b77b4a054e6bcf2e788074c65175fe12542dce",
+    "full_source_count": 126,
+    "remaining": 374,
+    "scope": "Complete23UTF8blobs/7canonicaltrees; no Erlang/Elixir/RabbitMQ runtime qualification. Findings static only, not reproduced service defects."
+  },
+  "latest_actual_engine_timing_attempt": {
+    "path": "docs/research/dedup-durable-actual-engine-v6-interference-audit-20261016.json",
+    "sha256": "c6c7308d45641e589f0d05c7c6dd3c50cdd6e18d2e4ab245a2a1518c590b8efd",
+    "status": "terminal_unqualified",
+    "retained_rows": 16,
+    "retained_logs": 17,
+    "speedup_qualified": false,
+    "scope": "Anewcompiler observed after17thsample. Entirev6timingattempt unqualified, no ratios/adoption inferred orpartialmixing. Noownedchildleftalive."
+  },
+  "latest_completed_source35": {
+    "path": "docs/research/dedup-500/vidupe35-complete-source-review-20261016.json",
+    "sha256": "ad9911c20f043bbf29baefcfa66cb483cbc6f1f008b8f2fe665757dec585ec8d",
+    "full_source_count": 127,
+    "remaining": 373,
+    "scope": "All19blobsource/media/UIreview; nativewholeDb.cpp/Db.h + unchangedcleanupbody/12controls twice with realQt6SQLite andmetadata-onlyVideoadapter/ownedTMPDIR. NofullQt5/OpenCV/FFmpegapp/SSIM/decode/platform/performance/adoption qualification."
+  },
+  "latest_completed_source32": {
+    "path": "docs/research/dedup-500/dedup32-complete-source-review-20261016.json",
+    "sha256": "1cfada6636d7cabb76336fb84e1dcdd15006730cbf8fbce545d1f55de5a4dc02",
+    "full_source_count": 128,
+    "remaining": 372,
+    "scope": "All31blobs/5canonicaltrees/mediaread; all7productionCmodules unchanged compiled/directcc, actualnativeMac APIs.10module and5wholeCLIcontrols twice. WholeCLI t0 wrongclone distinct4GiB+64KiBsparsefiles reproduced, notupstreamCheck/strictmake/otherplatform/nativeparallel/performance proof."
+  },
+  "latest_root_source32_large_regression": {
+    "path": "docs/research/dedup-root-source32-large-controls-audit-20261016.json",
+    "sha256": "33120c4541403a1d8c8a25a20d98af19cfe8b63c9ff1a150e33d124bed68a78f",
+    "scope": "Whole unchanged currentexact.rs publiccompare_files actualcacheddeps rejects sameowned2MiB/4GiB/4GiB+64KiB distinctfixtures bothorders,6calls. No dataadapters/moduleextraction. No wholeCargo/decode/currentcollection/platform/physicalIO/hardRSS/performance/adoption proof."
+  },
+  "latest_completed_source34": {
+    "path": "docs/research/dedup-500/fclones34-complete-source-review-20261016.json",
+    "sha256": "d6b9b3d9ce1f88cdfab8d0614c35f26412112e7b594532b0318d3956d2555353",
+    "full_source_count": 129,
+    "remaining": 371,
+    "scope": "31pinnedblobs/9trees,allsource/media plus256lockmetadata structuredreview. Selectedpurebyte/progressbodies8controls2profiles twice32passes,minimalProgressTrackertraitadapter. NoGTKGUI/dependencyfclones/destructiveaction/upstreamsuite/platform/performance/adoption qualification."
+  },
+  "latest_completed_source29": {
+    "path": "docs/research/dedup-500/cleanarr29-complete-source-review-20261016.json",
+    "sha256": "5b802cd7a51b9a4e4b19bfa47f24bcd8d45db8a80064689091f6d022c4dd9497",
+    "full_source_count": 130,
+    "remaining": 370,
+    "scope": "Complete54blob/12tree source review,85GIFframes6contact sheets+3nativekeyframes/listing/all3ICO sizes;1470structuredlockrecords,64selectednativecontrols withdeclaredtransportadapters. No upstream/fullUI/livePlex/security/performance/adoption proof."
+  }
+}

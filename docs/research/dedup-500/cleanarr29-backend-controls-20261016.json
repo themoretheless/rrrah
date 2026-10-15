@@ -1,0 +1,552 @@
+{
+  "status": "verified_original_backend_19controls_twice_owned_plex_adapters",
+  "whole_repo_complete": false,
+  "producer_sha256": "dafe98efec9d9e008de50aead0a0f203a4bd76781c0cce5f148b1472d6b10394",
+  "runs": [
+    [
+      {
+        "case": "short_movie_and_episode_samples_all_skipped",
+        "observed": []
+      },
+      {
+        "case": "show_section_dispatched_as_movie",
+        "observed": [
+          "movie"
+        ]
+      },
+      {
+        "case": "page3_search_arguments",
+        "observed": {
+          "duplicate": true,
+          "libtype": "episode",
+          "container_start": 4,
+          "limit": 6
+        }
+      },
+      {
+        "case": "unsupported_section_uses_dict_empty",
+        "observed": {}
+      },
+      {
+        "case": "native_tinydb_two_library_fields_retained",
+        "observed": {
+          "Movies": 10,
+          "TV": 20
+        }
+      },
+      {
+        "case": "existing_fake_media_deleted_and_bytes_counted",
+        "observed": {
+          "calls": [
+            7
+          ],
+          "size": 60
+        }
+      },
+      {
+        "case": "missing_media_no_effect",
+        "observed": {
+          "calls": [
+            7
+          ],
+          "size": 60
+        }
+      },
+      {
+        "case": "missing_media_http_still_success",
+        "observed": {
+          "status": 200,
+          "json": {
+            "success": true
+          },
+          "calls": [
+            7
+          ]
+        }
+      },
+      {
+        "case": "delete_error_http500_counter_retained",
+        "observed": {
+          "status": 500,
+          "size": 60,
+          "calls": [
+            7
+          ]
+        }
+      },
+      {
+        "case": "missing_request_fields_become500",
+        "observed": 500
+      },
+      {
+        "case": "invalid_page_becomes500",
+        "observed": 500
+      },
+      {
+        "case": "sample_endpoint_returns_empty",
+        "observed": {
+          "status": 200,
+          "json": []
+        }
+      },
+      {
+        "case": "proxy_passes_arbitrary_supplied_url_to_fake_transport",
+        "observed": {
+          "status": 200,
+          "body": "OWNED_PROXY_BYTES",
+          "url": "https://owned.invalid/arbitrary-path"
+        }
+      },
+      {
+        "case": "static_parent_path_reads_owned_sibling",
+        "observed": {
+          "status": 200,
+          "body": "OWNED_OUTSIDE_STATIC_SENTINEL"
+        }
+      },
+      {
+        "case": "spa_fallback_index",
+        "observed": {
+          "status": 200,
+          "body": "OWNED_INDEX"
+        }
+      },
+      {
+        "case": "native_ignore_duplicates_stored",
+        "observed": 2
+      },
+      {
+        "case": "unignore_removes_all_same_key",
+        "observed": null
+      },
+      {
+        "case": "server_info_original_route",
+        "observed": {
+          "name": "Owned fixture",
+          "url": "https://owned.invalid/web/index.html"
+        }
+      },
+      {
+        "case": "fetch_attribute_exception_swallowed",
+        "observed": null
+      }
+    ],
+    [
+      {
+        "case": "short_movie_and_episode_samples_all_skipped",
+        "observed": []
+      },
+      {
+        "case": "show_section_dispatched_as_movie",
+        "observed": [
+          "movie"
+        ]
+      },
+      {
+        "case": "page3_search_arguments",
+        "observed": {
+          "duplicate": true,
+          "libtype": "episode",
+          "container_start": 4,
+          "limit": 6
+        }
+      },
+      {
+        "case": "unsupported_section_uses_dict_empty",
+        "observed": {}
+      },
+      {
+        "case": "native_tinydb_two_library_fields_retained",
+        "observed": {
+          "Movies": 10,
+          "TV": 20
+        }
+      },
+      {
+        "case": "existing_fake_media_deleted_and_bytes_counted",
+        "observed": {
+          "calls": [
+            7
+          ],
+          "size": 60
+        }
+      },
+      {
+        "case": "missing_media_no_effect",
+        "observed": {
+          "calls": [
+            7
+          ],
+          "size": 60
+        }
+      },
+      {
+        "case": "missing_media_http_still_success",
+        "observed": {
+          "status": 200,
+          "json": {
+            "success": true
+          },
+          "calls": [
+            7
+          ]
+        }
+      },
+      {
+        "case": "delete_error_http500_counter_retained",
+        "observed": {
+          "status": 500,
+          "size": 60,
+          "calls": [
+            7
+          ]
+        }
+      },
+      {
+        "case": "missing_request_fields_become500",
+        "observed": 500
+      },
+      {
+        "case": "invalid_page_becomes500",
+        "observed": 500
+      },
+      {
+        "case": "sample_endpoint_returns_empty",
+        "observed": {
+          "status": 200,
+          "json": []
+        }
+      },
+      {
+        "case": "proxy_passes_arbitrary_supplied_url_to_fake_transport",
+        "observed": {
+          "status": 200,
+          "body": "OWNED_PROXY_BYTES",
+          "url": "https://owned.invalid/arbitrary-path"
+        }
+      },
+      {
+        "case": "static_parent_path_reads_owned_sibling",
+        "observed": {
+          "status": 200,
+          "body": "OWNED_OUTSIDE_STATIC_SENTINEL"
+        }
+      },
+      {
+        "case": "spa_fallback_index",
+        "observed": {
+          "status": 200,
+          "body": "OWNED_INDEX"
+        }
+      },
+      {
+        "case": "native_ignore_duplicates_stored",
+        "observed": 2
+      },
+      {
+        "case": "unignore_removes_all_same_key",
+        "observed": null
+      },
+      {
+        "case": "server_info_original_route",
+        "observed": {
+          "name": "Owned fixture",
+          "url": "https://owned.invalid/web/index.html"
+        }
+      },
+      {
+        "case": "fetch_attribute_exception_swallowed",
+        "observed": null
+      }
+    ]
+  ],
+  "source_pins": {
+    ".dedup-work/cleanarr29-20261016/source/backend/database.py": "c85034353f41e04d45e9a90d93f7e01f45fc5f252aaaed6e4bc747b334a3a302",
+    ".dedup-work/cleanarr29-20261016/source/backend/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    ".dedup-work/cleanarr29-20261016/source/backend/logger.py": "d3e031d53c21cfa3ec67eae90cc7b53a15a50f9270b04ea1617935f102959e2a",
+    ".dedup-work/cleanarr29-20261016/source/backend/cli.py": "ab36bb4ea207ad56b3e0d64fd862ba70cf89521c9411a73a63c69d48bba19f95",
+    ".dedup-work/cleanarr29-20261016/source/backend/utils.py": "6dd79caad7826e01bf1839fc72c130b4b226d4886006143dc4ce6782ca4d579f",
+    ".dedup-work/cleanarr29-20261016/source/backend/plexwrapper.py": "9c3e0a98c8114075325e7b04f731fb8edb8c04e2f62108088cc5fa46e67390ee",
+    ".dedup-work/cleanarr29-20261016/source/backend/main.py": "7cb6aa5cb0edcceff6da0f9e34ea306488780b96974b22916d15d7936a3c7067",
+    ".dedup-work/cleanarr29-20261016/source/backend/benchmarks.py": "f875dd1a178c7bb2c18fbb1d4a7d6e961881e765c2d2d23aab06d2181499b99c"
+  },
+  "requirement_versions": {
+    "certifi": "2023.7.22",
+    "chardet": "3.0.4",
+    "Click": "8.1.3",
+    "Flask": "3.0.0",
+    "Flask-Cors": "3.0.9",
+    "idna": "2.8",
+    "itsdangerous": "2.1.2",
+    "Jinja2": "3.1.2",
+    "MarkupSafe": "2.1.1",
+    "PlexAPI": "4.15.5",
+    "requests": "2.31.0",
+    "six": "1.14.0",
+    "tinydb": "4.7.0",
+    "tqdm": "4.42.0",
+    "urllib3": "1.26.18",
+    "websocket-client": "0.57.0",
+    "Werkzeug": "3.0.1",
+    "python-dotenv": "1.0.0",
+    "pytest-benchmark": "4.0.0"
+  },
+  "loaded_dependency_file_pins": {
+    ".dedup-work/cleanarr29-20261016/python-deps/urllib3/packages/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    ".dedup-work/cleanarr29-20261016/python-deps/urllib3/packages/six.py": "6fd2ccd30057bfb13b4ab6c28c09b8c3037e86b1fe88dc6fd7c2e058d30c28fa",
+    ".dedup-work/cleanarr29-20261016/python-deps/urllib3/exceptions.py": "d0c9e7a372874cd7d745f63beb7f0db9f38f9146fa9973a6f8baa3fb8c76c3c0",
+    ".dedup-work/cleanarr29-20261016/python-deps/urllib3/_version.py": "72e26f9d2ad6c57198810dfe651a0f330f3ea9a379b69c3bd639c7d6dd7a74b0",
+    ".dedup-work/cleanarr29-20261016/python-deps/urllib3/_collections.py": "a72012249856ef074ea6a263f50240f05c8645fafc13cb94521a94be1174ef6f",
+    ".dedup-work/cleanarr29-20261016/python-deps/urllib3/contrib/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    ".dedup-work/cleanarr29-20261016/python-deps/urllib3/contrib/_appengine_environ.py": "6c36f2384856d8228b25c42a00a032ac41cdf9a925b321c52aaeaf17c645b269",
+    ".dedup-work/cleanarr29-20261016/python-deps/urllib3/util/wait.py": "7ce5f4fdf6a8cc6d8fee25688d0a04d666f277078dc93726fa15c47c5ad3b4b2",
+    ".dedup-work/cleanarr29-20261016/python-deps/urllib3/util/connection.py": "e4bc760753d6dbd2b1067d93d3190dd420604416b780654904aa10a11a201159",
+    ".dedup-work/cleanarr29-20261016/python-deps/urllib3/util/request.py": "7d688069af29c1d2cb22aa132c1c420b67b879df349aecca5377b71d6593cc54",
+    ".dedup-work/cleanarr29-20261016/python-deps/urllib3/util/response.py": "189a60dc4822f6a6895d1c01879c2ff8c36e4566a7e4122ee34a117a8c563f6f",
+    ".dedup-work/cleanarr29-20261016/python-deps/urllib3/util/retry.py": "67a5847f9d7c7933973f98ebe50490f60a892340d562ddd7b3710a9d86939aeb",
+    ".dedup-work/cleanarr29-20261016/python-deps/urllib3/util/url.py": "90cc4bd64d1df9a426fe2643c3fccc9a7c98ca3ac803f0dbb0ccb7726dd5e793",
+    ".dedup-work/cleanarr29-20261016/python-deps/urllib3/util/ssltransport.py": "340faee6b313ac3143142f10cd129410a306d39eb584e0f8a814ebdd9e29bfa1",
+    ".dedup-work/cleanarr29-20261016/python-deps/urllib3/util/ssl_.py": "734b188920badbbdabeae3e4c50a68e6b60f3fd402d5e47aa08ef4d38818a99a",
+    ".dedup-work/cleanarr29-20261016/python-deps/urllib3/util/timeout.py": "730ab874c93cee624748192d2b59a2609fbce46fb74f74664f6d2fed2142a67a",
+    ".dedup-work/cleanarr29-20261016/python-deps/urllib3/util/__init__.py": "2449929a6aaa2f26b0f0fe75814226661f06c20f62d7349ef83a2a022b67da77",
+    ".dedup-work/cleanarr29-20261016/python-deps/urllib3/util/proxy.py": "cd4bcf3c226ba7a74e17437818055b39c97aa3ee2e5ca4ab1a24e492be6f512e",
+    ".dedup-work/cleanarr29-20261016/python-deps/urllib3/util/ssl_match_hostname.py": "22be1c65512398093c8140081d64a2ef0b4e3bcdd4098001636c450f5425fd60",
+    ".dedup-work/cleanarr29-20261016/python-deps/urllib3/connection.py": "f7693db5dff2e0f1224c88cdb9f0946b5373301dc9df0d0b11dca89188179d6f",
+    ".dedup-work/cleanarr29-20261016/python-deps/urllib3/fields.py": "92f2c30a0fc9987d652e3514118fc52d2f14858ee106f0cfb951136d8f2676b3",
+    ".dedup-work/cleanarr29-20261016/python-deps/urllib3/filepost.py": "e5bfeaaa04475652fbb8bb5d018073061f861e653901f255b7fd8dd174b73de6",
+    ".dedup-work/cleanarr29-20261016/python-deps/urllib3/request.py": "61358536bed023087b1355bd75d7bd2ccefbbf65564c9e55efc5ee4d3c3b0f50",
+    ".dedup-work/cleanarr29-20261016/python-deps/urllib3/response.py": "50f80b9a71e3e33ef56671fc8af60eca77004e27d33b0f4542e914a839dc9027",
+    ".dedup-work/cleanarr29-20261016/python-deps/urllib3/util/queue.py": "9d1817f3f797fbf564bf1a17d3de905a8cfc3ecd101d4004c482c263fecf9dc3",
+    ".dedup-work/cleanarr29-20261016/python-deps/urllib3/connectionpool.py": "05eeaaeb9491f656a88a483e87f8e673fa7c396b449b082afce9bf5ed8a0fb63",
+    ".dedup-work/cleanarr29-20261016/python-deps/urllib3/poolmanager.py": "696ca15d1b4d3b82549c249556a29329077c1174ef526d5537da60b366dc38da",
+    ".dedup-work/cleanarr29-20261016/python-deps/urllib3/__init__.py": "8972dc6222724a7d0635b58e3990c30298012f52603f8e0467c8b5efad12f0c7",
+    ".dedup-work/cleanarr29-20261016/python-deps/chardet/compat.py": "3ca4f31e449bb5b1c3a92f4fcae8cc6d7ef8ab56bc98ca5e4130d5b10859311c",
+    ".dedup-work/cleanarr29-20261016/python-deps/chardet/enums.py": "0229b075bf5ab357492996853541f63a158854155de9990927f58ae6c358f1c5",
+    ".dedup-work/cleanarr29-20261016/python-deps/chardet/charsetprober.py": "2929b0244ae3ca9ca3d1b459982e45e5e33b73c61080b6088d95e29ed64db2d8",
+    ".dedup-work/cleanarr29-20261016/python-deps/chardet/charsetgroupprober.py": "e9b0eef1822246e49c5f871af4881bd14ebd4c0d8f1975c37a3e82738ffd90ee",
+    ".dedup-work/cleanarr29-20261016/python-deps/chardet/codingstatemachine.py": "558a7fe9ccb2922e6c1e05c34999d75b8ab5a1e94773772ef40c904d7eeeba0f",
+    ".dedup-work/cleanarr29-20261016/python-deps/chardet/escsm.py": "46e5e580dbd32036ab9ddbe594d0a4e56641229742c50d2471df4402ec5487ce",
+    ".dedup-work/cleanarr29-20261016/python-deps/chardet/escprober.py": "924caa560d58c370c8380309d9b765c9081415086e1c05bc7541ac913a0d5927",
+    ".dedup-work/cleanarr29-20261016/python-deps/chardet/latin1prober.py": "4b6228391845937f451053a54855ad815c9b4623fa87b0652e574755c94d914f",
+    ".dedup-work/cleanarr29-20261016/python-deps/chardet/mbcssm.py": "498df6c15205dc7cdc8d8dc1684b29cbd99eb5b3522b120807444a3e7eed8e92",
+    ".dedup-work/cleanarr29-20261016/python-deps/chardet/utf8prober.py": "21d0fcbf7cd63ac07c38b8b23e2fb2fdfab08a9445c55f4d73578a04b4ae204c",
+    ".dedup-work/cleanarr29-20261016/python-deps/chardet/mbcharsetprober.py": "011f797851fdbeea927ef2d064df8be628de6b6e4d3810a85eac3cb393bdc4b4",
+    ".dedup-work/cleanarr29-20261016/python-deps/chardet/euctwfreq.py": "368d56c9db853a00795484d403b3cbc82e6825137347231b07168a235975e8c0",
+    ".dedup-work/cleanarr29-20261016/python-deps/chardet/euckrfreq.py": "fbb19d9af8167b3e3e78ee12b97a5aeed0620e2e6f45743c5af74503355a49fa",
+    ".dedup-work/cleanarr29-20261016/python-deps/chardet/gb2312freq.py": "257f25b3078a2e69c2c2693c507110b0b824affacffe411bbe2bc2e2a3ceae57",
+    ".dedup-work/cleanarr29-20261016/python-deps/chardet/big5freq.py": "0ffccae46cb3a15b117acd0790b2738a5b45417d1b2822ceac57bdff10ef3bff",
+    ".dedup-work/cleanarr29-20261016/python-deps/chardet/jisfreq.py": "be9989bf606ed09f209cc5513c730579f4d1be8fe16b59abc8b8a0f0207080e8",
+    ".dedup-work/cleanarr29-20261016/python-deps/chardet/chardistribution.py": "df0a164bad8aac6a282b2ab3e334129e315b2696ba57b834d9d68089b4f0725f",
+    ".dedup-work/cleanarr29-20261016/python-deps/chardet/jpcntx.py": "3d894da915104fc2ccddc4f91661c63f48a2b1c1654d6103f763002ef06e9e0a",
+    ".dedup-work/cleanarr29-20261016/python-deps/chardet/sjisprober.py": "208b7e9598f4589a8ae2b9946732993f8189944f0a504b45615b98f7a7a4e4c4",
+    ".dedup-work/cleanarr29-20261016/python-deps/chardet/eucjpprober.py": "883f09769d084918e08e254dedfd1ef3119e409e46336a1e675740f276d2794c",
+    ".dedup-work/cleanarr29-20261016/python-deps/chardet/gb2312prober.py": "806bc85a2f568438c4fb14171ef348cab9cbbc46cc01883251267ae4751fca5c",
+    ".dedup-work/cleanarr29-20261016/python-deps/chardet/euckrprober.py": "32a14c4d05f15b81dbcc8a59f652831c1dc637c48fe328877a74e67fc83f3f16",
+    ".dedup-work/cleanarr29-20261016/python-deps/chardet/cp949prober.py": "4d9e37e105fccf306c9d4bcbffcc26e004154d9d9992a10440bfe5370f5ff68c",
+    ".dedup-work/cleanarr29-20261016/python-deps/chardet/big5prober.py": "901c476dd7ad0693deef1ae56fe7bdf748a8b7ae20fde1922dddf6941eff8773",
+    ".dedup-work/cleanarr29-20261016/python-deps/chardet/euctwprober.py": "d77a7a10fe3245ac6a9cfe221edc47389e91db3c47ab5fe6f214d18f3559f797",
+    ".dedup-work/cleanarr29-20261016/python-deps/chardet/mbcsgroupprober.py": "87a4d19e762ad8ec46d56743e493b2c5c755a67edd1b4abebc1f275abe666e1e",
+    ".dedup-work/cleanarr29-20261016/python-deps/chardet/sbcharsetprober.py": "2c34a90a5743085958c149069300f6a05c4b94f5885974f4f5a907ff63e263be",
+    ".dedup-work/cleanarr29-20261016/python-deps/chardet/langcyrillicmodel.py": "2ce0da8efb1eb47f3bc980c340a0360942d7507f3bb48db6ddd85f8e1f59c7d7",
+    ".dedup-work/cleanarr29-20261016/python-deps/chardet/langgreekmodel.py": "f18016edb53c6304896a9d2420949b3ccc35044ab31a35b3a9ca9fd168142800",
+    ".dedup-work/cleanarr29-20261016/python-deps/chardet/langbulgarianmodel.py": "d47a904bd3dbb678f5c508318ad24cbf0f17ea42abe4ea1c90d09959f110acf1",
+    ".dedup-work/cleanarr29-20261016/python-deps/chardet/langthaimodel.py": "f25d35ef71aefd6e86f26c6640e4c417896cd98744ec5c567f74244b11065c94",
+    ".dedup-work/cleanarr29-20261016/python-deps/chardet/langhebrewmodel.py": "2529ea984e44eb6b432d33d3bcba50b20e6038c3b83db75646f57b02f91cd070",
+    ".dedup-work/cleanarr29-20261016/python-deps/chardet/hebrewprober.py": "737499f8aee1bf2cc663a251019c4983027fb144bd93459892f318d34601605a",
+    ".dedup-work/cleanarr29-20261016/python-deps/chardet/langturkishmodel.py": "5b6d9e44d26ca88eae5807f05d22955969c27ab62aac8f1d6504e6fccd254459",
+    ".dedup-work/cleanarr29-20261016/python-deps/chardet/sbcsgroupprober.py": "d48a6b70207f935a9f9a7c460ba3016f110b94aa83dec716e92f1823075ec970",
+    ".dedup-work/cleanarr29-20261016/python-deps/chardet/universaldetector.py": "a8bd35ef8952644e38d9e076d679e4b53f7f55c0327b4ee5685594794ae3b6d6",
+    ".dedup-work/cleanarr29-20261016/python-deps/chardet/version.py": "b29dc1d3c9ab0d707ea5fdcaf5fa89ff37831ce08b0bc46b9e04320c56a9ffb8",
+    ".dedup-work/cleanarr29-20261016/python-deps/chardet/__init__.py": "62c3f9c1096c1c9d9ab85d516497f2a624ab080eff6d08919b7112fcd23bebe6",
+    ".dedup-work/cleanarr29-20261016/python-deps/requests/compat.py": "cb19ed54e4841c632b9fb14daffdf61046a6d5934074f45d484d77ff2687cd39",
+    ".dedup-work/cleanarr29-20261016/python-deps/requests/exceptions.py": "0e1bde1417255634d1c6145db95a4ef866cc60c203da09a374b7cd12a36923f5",
+    ".dedup-work/cleanarr29-20261016/python-deps/charset_normalizer/constant.py": "b49d4ea5dbc4598665bc66f651caf81564cc1cca4f21a0e45d9491bd5833771b",
+    ".dedup-work/cleanarr29-20261016/python-deps/charset_normalizer/utils.py": "119ec0e7fb286ef4c8c58585b1f5ee56c9f6261c31c33addd3cb20105d05ae71",
+    ".dedup-work/cleanarr29-20261016/python-deps/charset_normalizer/md.cpython-312-darwin.so": "cd79f238f6b9ae576f19d49eee8ae48af8ef536b881a1b7c4689b0d06681f655",
+    ".dedup-work/cleanarr29-20261016/python-deps/charset_normalizer/cd.cpython-312-darwin.so": "d38c3dff8e119637ff6d41466ec09d079dcce1ad93c705503d003673d68ba48b",
+    ".dedup-work/cleanarr29-20261016/python-deps/charset_normalizer/models.py": "f8350cead0964f25fc4d477ee0355a6005ce07f7311c686b45a4b66bf38e406b",
+    ".dedup-work/cleanarr29-20261016/python-deps/charset_normalizer/api.py": "55455aa5898f169c803379b698a9fdf808d94002312b238968abb870fc427f81",
+    ".dedup-work/cleanarr29-20261016/python-deps/charset_normalizer/legacy.py": "6e091d12fb9b4c238f94c28ecee10d5c73226ab877e956866d1bd64a522bd4a0",
+    ".dedup-work/cleanarr29-20261016/python-deps/charset_normalizer/version.py": "793b9181127b1e37a817ec597c6e6d970bd1130cac7654af99ba2cbda4a9cf57",
+    ".dedup-work/cleanarr29-20261016/python-deps/charset_normalizer/__init__.py": "997c6fda6b13aee46c685bb1f96e6ee0d37c06702ac4cc38bfb30acce0f1f5b6",
+    ".dedup-work/cleanarr29-20261016/python-deps/idna/package_data.py": "908cde28a5c4a2e5cb478b2bab07fd437ceff8d7df2923b3e5a4833890113c1d",
+    ".dedup-work/cleanarr29-20261016/python-deps/idna/idnadata.py": "1d768f170ebf600274aa9a4008fbb460b0142ed46cdd0a2f44cfc20991c6758d",
+    ".dedup-work/cleanarr29-20261016/python-deps/idna/intranges.py": "4d8d65a7164841610fead36a8d9905039860a0c58e8f53819a7506f22853f3b1",
+    ".dedup-work/cleanarr29-20261016/python-deps/idna/core.py": "24309967f3cb112a888046d4f263f2a04b9f5b0a0e888ab2800d7bf906487b7b",
+    ".dedup-work/cleanarr29-20261016/python-deps/idna/__init__.py": "f4db7bc69c9eb770e63ab3d41a8a03740c261d966ed6a500cb611a27dde41a24",
+    ".dedup-work/cleanarr29-20261016/python-deps/requests/packages.py": "0d782ff852487336484e6bf4bc40408568f85bee4218220dfe4b2f811d7b0efb",
+    ".dedup-work/cleanarr29-20261016/python-deps/certifi/core.py": "9617b0cf4cc56f66f850bb10bab1259a5a18c10a1e7235b33ea63aecff13ee23",
+    ".dedup-work/cleanarr29-20261016/python-deps/certifi/__init__.py": "2ff8fe774918b80fcccc0dbfda1ada175a2f7fa293e834eab91755de9690c0e9",
+    ".dedup-work/cleanarr29-20261016/python-deps/requests/certs.py": "67d49be35d009efea35054f2b2cd23145854eb1b2df1cb442ea7f2f04bf6de0c",
+    ".dedup-work/cleanarr29-20261016/python-deps/requests/__version__.py": "b2c237133b7b3dac6090e5b8e4686dc0f51c968fd23bfca0b489b803be0839fc",
+    ".dedup-work/cleanarr29-20261016/python-deps/requests/_internal_utils.py": "9cc4329abe21b37d93a95a3901b0ab99c24486f3d487bc57965bb2ab0b252e24",
+    ".dedup-work/cleanarr29-20261016/python-deps/requests/cookies.py": "903de43447028fe9b16ed7f97c9b12693f3a786a046290f75f4092829ce5ec13",
+    ".dedup-work/cleanarr29-20261016/python-deps/requests/structures.py": "f886e6855cf4e92fb968f499b94b6167afba0fd5ce8d1b935c739a6d8d38d573",
+    ".dedup-work/cleanarr29-20261016/python-deps/requests/utils.py": "eacc765f7708540f018163a0f28771172fbf95b5831444d4f072387d4e119aac",
+    ".dedup-work/cleanarr29-20261016/python-deps/requests/auth.py": "87e1cb955c7d8fcaca57985f480c9c3f60293928254f3efb474b73eea09b6c41",
+    ".dedup-work/cleanarr29-20261016/python-deps/requests/hooks.py": "0a2bb2b221c0dfd57951f702057148c7cdc8ac3a6ec1f37d45c4d482fdbc7ed4",
+    ".dedup-work/cleanarr29-20261016/python-deps/requests/status_codes.py": "16f1e64f9b87fbfba29ad473e611fd5426eded557e35e8b627dba96de8fa8fc8",
+    ".dedup-work/cleanarr29-20261016/python-deps/requests/models.py": "f8394a8b4a2bf2014033a573bada1b5efbc15bfdb0ac9b8e17935f9dd4c875d0",
+    ".dedup-work/cleanarr29-20261016/python-deps/requests/adapters.py": "bff1668d4e4a67bea4f98b6d4a1658079469ac8ce184bf18df3816f69e1e050f",
+    ".dedup-work/cleanarr29-20261016/python-deps/requests/sessions.py": "f8bbd3ceb3ed7ad493ad1ddbbb1bb85e176032b2452c1d6ae43ecffbe2f65e1c",
+    ".dedup-work/cleanarr29-20261016/python-deps/requests/api.py": "abad71717ab8b668889abbdc4952d36c5c82883d85f8bffe8562866f3e32f2f8",
+    ".dedup-work/cleanarr29-20261016/python-deps/requests/__init__.py": "2ef98a863233f261da297b610b632fe72919d5df76be8c9fde826977e56e0228",
+    ".dedup-work/cleanarr29-20261016/python-deps/plexapi/exceptions.py": "ef3902be822a2ee132c64fea068b490f97f4820edf1e6d9ddc9644d6d3910866",
+    ".dedup-work/cleanarr29-20261016/python-deps/tqdm/utils.py": "478960e000a63fbf793544a3458a6b74314f3c1ce2cb95f4579610e0cf70ec68",
+    ".dedup-work/cleanarr29-20261016/python-deps/tqdm/_monitor.py": "42cde8884ab54d1f642dbbc1daa11fac770db748a53b651bfb4f386d5d27d86b",
+    ".dedup-work/cleanarr29-20261016/python-deps/tqdm/std.py": "9712396ebfd2e2909694298c7ab628b3cf99a87495bb1127d4c1d46153d270df",
+    ".dedup-work/cleanarr29-20261016/python-deps/tqdm/gui.py": "41ccf966d39f8a81558b4fd44a0003e894297fa716b145d64d71037b32d15244",
+    ".dedup-work/cleanarr29-20261016/python-deps/tqdm/_tqdm_pandas.py": "e118d2a736c72e07ee44b2503db0dff7f2d3f9fff475bda068007a9ce2787580",
+    ".dedup-work/cleanarr29-20261016/python-deps/tqdm/_version.py": "4800c0af3d5cdb73dcb3fcf2122f13703564123f291e7081f4bfcbc47c4913cb",
+    ".dedup-work/cleanarr29-20261016/python-deps/tqdm/cli.py": "49a003c251e562c7b889353c3fcaa95146c10fbd4d82b726546753ad233ca325",
+    ".dedup-work/cleanarr29-20261016/python-deps/tqdm/__init__.py": "a9954de853af31949ccdf12e0e5f243c887d603de582129bbc1caebf937246fd",
+    ".dedup-work/cleanarr29-20261016/python-deps/plexapi/utils.py": "ee591ed6f594e6ec499a4af0152bd8dcc0260f5564b6eeceff7b558887e371b0",
+    ".dedup-work/cleanarr29-20261016/python-deps/plexapi/config.py": "d648866aaf83a2807dcf2e4abcc2e5b3afc5c88c8f217c1d761d338dc9a90fe5",
+    ".dedup-work/cleanarr29-20261016/python-deps/plexapi/const.py": "23f4bca351d42002e3fa0b790518b154c3574c907afb8fea4574b7c390803798",
+    ".dedup-work/cleanarr29-20261016/python-deps/plexapi/__init__.py": "aeccbabaf77104feb8cb8bf9942e322d33f7979558dd2f91b24f2b13f8033c83",
+    ".dedup-work/cleanarr29-20261016/python-deps/plexapi/base.py": "29c7c21e1cb25624998d3b0a759a6307e25dff56c6b26e6fe877c15407067f08",
+    ".dedup-work/cleanarr29-20261016/python-deps/plexapi/settings.py": "decb918c7b095017911bad565cba6398dc684e24452c931cb9965bce46832bf4",
+    ".dedup-work/cleanarr29-20261016/python-deps/plexapi/media.py": "b36fa95560eb02d5739920870c1165397ccc5cf847ac297655bd91db1fac947b",
+    ".dedup-work/cleanarr29-20261016/python-deps/plexapi/alert.py": "a52008c2dcec3a76366fdef5dfb746ffc6193a9481c66289fe4473d28670e630",
+    ".dedup-work/cleanarr29-20261016/python-deps/plexapi/playqueue.py": "314f1f64cc9335364e209b8f90d4865e28c3006780b805408aeaed1b3545c46d",
+    ".dedup-work/cleanarr29-20261016/python-deps/plexapi/client.py": "778c3d6a5f273cd9dbea412a46b257d47202f3db2aba410569f487ba589dabac",
+    ".dedup-work/cleanarr29-20261016/python-deps/plexapi/mixins.py": "89acb66ab95a5dea33e34ca50fa734c325610ead6333d119b43d7f357537b9a5",
+    ".dedup-work/cleanarr29-20261016/python-deps/plexapi/library.py": "a82c3da47ea2434b6f71f4f91867e0c8d2666246b7c4c7f590b562fa25a1bb67",
+    ".dedup-work/cleanarr29-20261016/python-deps/plexapi/collection.py": "05f625d6516935300834fd1ebf60c2fc0964b6a804b85664cbdd7af64d247b25",
+    ".dedup-work/cleanarr29-20261016/python-deps/plexapi/playlist.py": "01537dde61596daa6806137f46c9ee4f0557a372c318d6849c390d4b25279c23",
+    ".dedup-work/cleanarr29-20261016/python-deps/plexapi/audio.py": "48d589b56d02428497df41612cd7878dbbc4303a272a19a72e102a744a7056d9",
+    ".dedup-work/cleanarr29-20261016/python-deps/plexapi/video.py": "02ae54d3185e3bbccf799df43eb574c4a0abfb3536c45bf28abf3f817e1e61b4",
+    ".dedup-work/cleanarr29-20261016/python-deps/plexapi/photo.py": "cad6c725a95a7dd2e47910541b86fe61350da23c6ecf70cc51b19425f62f31fa",
+    ".dedup-work/cleanarr29-20261016/python-deps/plexapi/server.py": "5cfb0621c62956fb967d1610daac60631a0ab4b0779f0f48c3c57bb450ab0e24",
+    ".dedup-work/cleanarr29-20261016/python-deps/tinydb/utils.py": "42c7771f2d739bdb811985781a22d33f2f9aef0a1e3fb87da1631ed2b400e140",
+    ".dedup-work/cleanarr29-20261016/python-deps/tinydb/queries.py": "78136a20dc54e2fba323ec0099d58439759aa80960244ef14a6496c755f971c4",
+    ".dedup-work/cleanarr29-20261016/python-deps/tinydb/storages.py": "94356d7b3089b63826424b361a879c6ad0bf1f190ec7c4d7d2253d4511cfbbc9",
+    ".dedup-work/cleanarr29-20261016/python-deps/tinydb/table.py": "a76e2f47672c97fcd3e372aae8743d031f1311ca428cf7d5c82358c491d844c6",
+    ".dedup-work/cleanarr29-20261016/python-deps/tinydb/database.py": "ad4e8a0312d48ea187b104935e49d17d53665a2a3d43af78a19c2fd60753e4f7",
+    ".dedup-work/cleanarr29-20261016/python-deps/tinydb/version.py": "1b7d9dd945465f3bca1263467054e9e35dcf29674a1647235d2bf1debd9d49e4",
+    ".dedup-work/cleanarr29-20261016/python-deps/tinydb/__init__.py": "85e24b65854b349dad30882e57d03f6e0f3b5fb8d2108d6723b2490702884081",
+    ".dedup-work/cleanarr29-20261016/python-deps/werkzeug/_internal.py": "695cffa8f3af405a6fa8168429d56e0819c93de9289389a25e6b39c48338334e",
+    ".dedup-work/cleanarr29-20261016/python-deps/markupsafe/_speedups.cpython-312-darwin.so": "8061796e8a29c3d326635000998e43d3213a6e370c50dd5bcbd63b416ba0cca3",
+    ".dedup-work/cleanarr29-20261016/python-deps/markupsafe/__init__.py": "c5f69442428d45375859ee879e72761e382e1664be0bfd07ea0f3e43d5407e44",
+    ".dedup-work/cleanarr29-20261016/python-deps/werkzeug/exceptions.py": "77a54dcc671580b6b32297f0443f2937f777c8024dca78010c5be55d06d1fb7f",
+    ".dedup-work/cleanarr29-20261016/python-deps/werkzeug/datastructures/mixins.py": "f8841243bd1438c425aad244232ca1a6539de286da4ce7f31af91af9cba70ad3",
+    ".dedup-work/cleanarr29-20261016/python-deps/werkzeug/sansio/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    ".dedup-work/cleanarr29-20261016/python-deps/werkzeug/sansio/http.py": "1192102523ba7107cb03f029558f9b2eb55ae76c7f7210b01587b0db97828110",
+    ".dedup-work/cleanarr29-20261016/python-deps/werkzeug/http.py": "a030a9a48fb4ecf1ec004d936b17f7c05316a772d83a3b7554ed84333fe70988",
+    ".dedup-work/cleanarr29-20261016/python-deps/werkzeug/datastructures/structures.py": "fdb8407f469d124e96536bb2f23766bb114c4c572e0a5635a7b8d0fb7c185e3e",
+    ".dedup-work/cleanarr29-20261016/python-deps/werkzeug/datastructures/accept.py": "0ae0af040c4dcdbb784146f5eeb1fdf3abef395194445523a340d7d8f432ff22",
+    ".dedup-work/cleanarr29-20261016/python-deps/werkzeug/datastructures/auth.py": "f17e57cad1833f4d3c2658f5d74b7c1b9876f67b700328cc1f432af4f8d6eabb",
+    ".dedup-work/cleanarr29-20261016/python-deps/werkzeug/datastructures/cache_control.py": "453522a597afe74b3ed53027dab60666bcad9bfe88388c5077aedf911e5b345d",
+    ".dedup-work/cleanarr29-20261016/python-deps/werkzeug/datastructures/csp.py": "0c03803b6eba2cad0929bbe51bcd1b6e40207eb36c9d4f47068cfe15d21835da",
+    ".dedup-work/cleanarr29-20261016/python-deps/werkzeug/datastructures/etag.py": "26cc88fb25dac85fa142edba3321736c714866c690ea8763dd164efe317efdc7",
+    ".dedup-work/cleanarr29-20261016/python-deps/werkzeug/datastructures/file_storage.py": "78f78cb6beb9b3fd7fb2e9d732ffd204e885a1fe425f905ea58bf9fd6d7a7d99",
+    ".dedup-work/cleanarr29-20261016/python-deps/werkzeug/datastructures/headers.py": "f7bf8ff8b833b5eaf1130c4b6d0b01106899a423805f367b7c4c575dde2e1fea",
+    ".dedup-work/cleanarr29-20261016/python-deps/werkzeug/datastructures/range.py": "2574833ec786ee21f9822269dd1d529d00bf4aa429eb7e0cf08bfa413b1b4f13",
+    ".dedup-work/cleanarr29-20261016/python-deps/werkzeug/datastructures/__init__.py": "cb305d393f4374ade7ada346e3da40ddb56cbed3cf2f1dbeb7637c666b8077dc",
+    ".dedup-work/cleanarr29-20261016/python-deps/werkzeug/urls.py": "eebbe78539a327d5ff55524ed5a323f55fb20f33885698069cb58b47456120fc",
+    ".dedup-work/cleanarr29-20261016/python-deps/werkzeug/serving.py": "c23c3b4ccbc2407cf19875c3acd19061eb4fe206114db2d1a345d18572015024",
+    ".dedup-work/cleanarr29-20261016/python-deps/werkzeug/sansio/multipart.py": "bbf5cbb3af2dbcfd803bbd3862ae73660ed9374037dd241a65f404e3482c76ea",
+    ".dedup-work/cleanarr29-20261016/python-deps/werkzeug/security.py": "e6db60222559c4db5b3fb1daa3568299c2f49cfb6036de94c8f0e368f02bd5a5",
+    ".dedup-work/cleanarr29-20261016/python-deps/werkzeug/sansio/utils.py": "2d8826acdef2af4e190d59397e53dc5092e8d6b0e74f3845d38387dfeba30964",
+    ".dedup-work/cleanarr29-20261016/python-deps/werkzeug/wsgi.py": "3fb8c1d15a46e97ea68a27ace2e93b6609bb3559b8633f116ba227af9abf14cb",
+    ".dedup-work/cleanarr29-20261016/python-deps/werkzeug/utils.py": "0d890eb5f0d1fd6737ae8dffa5e45ea3d2a4502fbaca13afcf6eff3d401c91b0",
+    ".dedup-work/cleanarr29-20261016/python-deps/werkzeug/formparser.py": "b0210ad21e2533b678519f11398b9742973474d4ec4a8efe00193dfee1e00456",
+    ".dedup-work/cleanarr29-20261016/python-deps/werkzeug/user_agent.py": "95294b60a09c6f30944a46dd0283bcccf936511fbc31d9fa8aefe20369183c10",
+    ".dedup-work/cleanarr29-20261016/python-deps/werkzeug/sansio/request.py": "63e43bcd0193a67dd7398fb7ffaf1d60f814715f6eba148d23d23d6b0da7d0b0",
+    ".dedup-work/cleanarr29-20261016/python-deps/werkzeug/wrappers/request.py": "988511184cae1ab621b4b277ae83e7f3e87296256e45b488970c85b1f0c7b954",
+    ".dedup-work/cleanarr29-20261016/python-deps/werkzeug/sansio/response.py": "0aead2e47a8f251b7fbc2b14b8861ad84386722516f0652421576929a73a6d8a",
+    ".dedup-work/cleanarr29-20261016/python-deps/werkzeug/wrappers/response.py": "6a2128577a47ba07dcc3ed525e343c6f6b7655e1a50e22860bcf1f65b68a5cf6",
+    ".dedup-work/cleanarr29-20261016/python-deps/werkzeug/wrappers/__init__.py": "906c8aeeb3ae777a82c6597f8c5c96d7961aac9863d71b5d7f7a1cc7d661781f",
+    ".dedup-work/cleanarr29-20261016/python-deps/werkzeug/test.py": "69a53590fd494f1d1141144a3c7ea1f4d88eeb0aa0f3d00fb2bf65a38e1f94fc",
+    ".dedup-work/cleanarr29-20261016/python-deps/werkzeug/__init__.py": "1d7fcf498e44dafb55943dd1e186e5c014428e0ee3dd3966dcb0126d8a8e4a45",
+    ".dedup-work/cleanarr29-20261016/python-deps/werkzeug/local.py": "25ac20c1aed0ee8ac4c6dcb356585b87ee26196837bfaddbb29214e4d9e5f835",
+    ".dedup-work/cleanarr29-20261016/python-deps/flask/globals.py": "5dd419992b4198f22cf2df77b63c7aa4eec19b78286c068e3569057141da19ab",
+    ".dedup-work/cleanarr29-20261016/python-deps/flask/json/provider.py": "5412922bbe6ddceb13bd9dcdd7407716cbbbf8d7697eb198725e35828409deaf",
+    ".dedup-work/cleanarr29-20261016/python-deps/flask/json/__init__.py": "a5db69a0ad9bd1bd6eed2c5bc777de33b55686c236d25d72180bdb616c5ac6f7",
+    ".dedup-work/cleanarr29-20261016/python-deps/click/_compat.py": "2481cb62cec9cf3e0a4fdb7e76ce28e230732e39f00a22502aababfb98b008a2",
+    ".dedup-work/cleanarr29-20261016/python-deps/click/globals.py": "4cffaa33cf124f373b7f5dbb877e530ffbfddb41607ce0f6130cea034a04f175",
+    ".dedup-work/cleanarr29-20261016/python-deps/click/utils.py": "df70fa13ba681ff9eb281fb1afe5320c45e7c4e702890ab1b912edaea795bfaa",
+    ".dedup-work/cleanarr29-20261016/python-deps/click/exceptions.py": "ee00da2c6b8564178237063d11132c176f99dd1f45bead3d65ce886522a3b1ea",
+    ".dedup-work/cleanarr29-20261016/python-deps/click/types.py": "ac46f56994902aaddc8823268e91b652f6bdbe4e3df1744bed386b70ad8646cb",
+    ".dedup-work/cleanarr29-20261016/python-deps/click/parser.py": "70012dd6e411f20ab7f92f72b2a6d553e7dd01936f8a5c70e11789fd3d4e40c9",
+    ".dedup-work/cleanarr29-20261016/python-deps/click/formatting.py": "16b7f4fb95b7dfe968c98fe2f6aaf05d1f3e4939d6de6e60bf2c4b554772c729",
+    ".dedup-work/cleanarr29-20261016/python-deps/click/termui.py": "00205054ebc50934aab43e5544478201d46d94777e22695af8bb5ee3049f3230",
+    ".dedup-work/cleanarr29-20261016/python-deps/click/core.py": "9b3f3b6d810acc8a0d6046b9e8114088e267bedd58d0bfa2ef00f8fd979c89e1",
+    ".dedup-work/cleanarr29-20261016/python-deps/click/decorators.py": "ca8df3bf38149b9abb8790978f257aab787f3c902251a7a6d7bf335f07565052",
+    ".dedup-work/cleanarr29-20261016/python-deps/click/__init__.py": "ad004bbadaa0fb3ea6f273b38af21f8a00e7fde9a28c1fdd2aff4167614d8b9b",
+    ".dedup-work/cleanarr29-20261016/python-deps/werkzeug/routing/converters.py": "9c458e6807de6563c932779e822f757b42f5321b87ee19b22a8c46349e90296f",
+    ".dedup-work/cleanarr29-20261016/python-deps/werkzeug/routing/exceptions.py": "c866790142fe6ee1e9faf2bc0096d9d1b2c86d27248755328862a0460e198da0",
+    ".dedup-work/cleanarr29-20261016/python-deps/werkzeug/routing/rules.py": "17c4b5b175c6d9067398ea8128c5a3a503c136a16998834304b9f462ed05c821",
+    ".dedup-work/cleanarr29-20261016/python-deps/werkzeug/routing/matcher.py": "1723c6e398aa4755f0c45ba37a34aa7cd10a57b2206d1dad77b269fa87120126",
+    ".dedup-work/cleanarr29-20261016/python-deps/werkzeug/routing/map.py": "6a0f99aacb87f0fbd65a514ede6c14348144177b7a25e2f0c6f2cff3593baa3d",
+    ".dedup-work/cleanarr29-20261016/python-deps/werkzeug/routing/__init__.py": "1e9bda858ed6c242dd5780aadc1b1cdc6aea3689f8bbab7cfaf85b6fd139a34d",
+    ".dedup-work/cleanarr29-20261016/python-deps/blinker/_utilities.py": "d09ede7975d3531d08bdff1ab1fa71d32715929d04a9faa78f5d7bc769985fd1",
+    ".dedup-work/cleanarr29-20261016/python-deps/blinker/base.py": "4290eebd75dcc09178f65501707e418924f8e91cfdc121bb556fe9ecdff4dbb3",
+    ".dedup-work/cleanarr29-20261016/python-deps/blinker/__init__.py": "23611d66aa72e0bca35f5ec79f5cb32465828de2da55a3f3b0c80790b7e3fdc4",
+    ".dedup-work/cleanarr29-20261016/python-deps/flask/signals.py": "57b94c530c3b0aa809d93854067d4f89ab59b506a73b2b7b399a6ed86648fb7e",
+    ".dedup-work/cleanarr29-20261016/python-deps/flask/helpers.py": "ca7128301edf745e58d4ffa78313236436567eb2784adfbd386659b13714c31f",
+    ".dedup-work/cleanarr29-20261016/python-deps/flask/cli.py": "3c3c1909f3da822e465336fe0fa74437bcb6d205a25408377a3467c4128d1cf0",
+    ".dedup-work/cleanarr29-20261016/python-deps/flask/typing.py": "da91a5852699a895493a887e41d1fedb4415ce5dabfb32d7c8ff28b577c20ace",
+    ".dedup-work/cleanarr29-20261016/python-deps/flask/ctx.py": "c76906cd45ed3f35728b66122ab53f3d5d40bedc539a1da245dae22514d23c63",
+    ".dedup-work/cleanarr29-20261016/python-deps/flask/config.py": "619499fb1a458f5896d41d4a8f5883869739b3ba479dc9688912ea5e1b14ec7b",
+    ".dedup-work/cleanarr29-20261016/python-deps/flask/logging.py": "55c749816e00c66e65ffeeef5cb4234532f479c91a324b3b61afc76a80e6d308",
+    ".dedup-work/cleanarr29-20261016/python-deps/jinja2/bccache.py": "9a1cf9c6d2f109c1d101ae7a6b33a1a612007b5f6ed707b4a2389f34c0a50e2a",
+    ".dedup-work/cleanarr29-20261016/python-deps/jinja2/utils.py": "bbd8d7112c469fc01364d5689709a48d456ee1203eb4b815d16ecf7127cf7dd4",
+    ".dedup-work/cleanarr29-20261016/python-deps/jinja2/nodes.py": "8b7e063d10197b15cc4fa6f0b9fe52132bdd992f9b442cbd28c8f03793baa639",
+    ".dedup-work/cleanarr29-20261016/python-deps/jinja2/exceptions.py": "8a81de1eb5b009635a5d7d629c798755b96f73885a3bb017b230a9dc67d6bf1d",
+    ".dedup-work/cleanarr29-20261016/python-deps/jinja2/visitor.py": "307d780bacaadb81bf295b56ce3c1a23b5a0d783c2248625596d64a64c586a4d",
+    ".dedup-work/cleanarr29-20261016/python-deps/jinja2/idtracking.py": "19f36669d8abe280c02d5c739f70cbf582278490ebebd79b5de036ca07ee0860",
+    ".dedup-work/cleanarr29-20261016/python-deps/jinja2/optimizer.py": "b4790cc17c5f6646df0352a62dcaa604c49acfb44b22fbc8b6b25c3e85d3c83f",
+    ".dedup-work/cleanarr29-20261016/python-deps/jinja2/compiler.py": "1acf8df13849ece58ae3eade2a83bc5a1d595f3f79315a6104a3557fbe6a06bf",
+    ".dedup-work/cleanarr29-20261016/python-deps/jinja2/async_utils.py": "74795b4de6b114fb40390118386621fcf1dc0d3d2bb0369424014397fd17b538",
+    ".dedup-work/cleanarr29-20261016/python-deps/jinja2/runtime.py": "e42983e418db109c5288335314178a09aabca94e1a603dafeaad8496ec84c66b",
+    ".dedup-work/cleanarr29-20261016/python-deps/jinja2/filters.py": "f63b3557e876465c96f742212e20462ccd94fa4e920b2d85e015143200772bd4",
+    ".dedup-work/cleanarr29-20261016/python-deps/jinja2/tests.py": "026e59e8b99faf65da1ff9e921f249f0c757b56b1b2e33142d926e953023df41",
+    ".dedup-work/cleanarr29-20261016/python-deps/jinja2/defaults.py": "6e805c4b0efc87e969db461b697489b2a900236b8dfe60ff4ed0b27697aae705",
+    ".dedup-work/cleanarr29-20261016/python-deps/jinja2/_identifier.py": "ff361cb4d2b346a964fe6bab4cd973ae3bb514524bed56bf223aaa77b8a2da55",
+    ".dedup-work/cleanarr29-20261016/python-deps/jinja2/lexer.py": "0d6da75fdce4fba316a7ae584766eaaa3d31a82bcbb43faef4d593f009c54714",
+    ".dedup-work/cleanarr29-20261016/python-deps/jinja2/parser.py": "9c777e0c51db8b282f7da3ed9bdadc4172428591bb0cfb167e212ca9fc0a7ab6",
+    ".dedup-work/cleanarr29-20261016/python-deps/jinja2/environment.py": "eae1c871ced96e5a8e31dc7fb9834aa919e7c00174fe7cdbc9e30ff4516dba1e",
+    ".dedup-work/cleanarr29-20261016/python-deps/jinja2/loaders.py": "05fa6d7ef4d5a4295477e95e3241dccddc8f358173a7f9fb3ca389f7c8b21ce8",
+    ".dedup-work/cleanarr29-20261016/python-deps/jinja2/__init__.py": "f2f19db83f32b70803e860d2aa961cda6dda53e4fb3ca38075dbd55e01abfc5b",
+    ".dedup-work/cleanarr29-20261016/python-deps/flask/templating.py": "12d2fc084e73d9a79f751d48f9359854d834712b9706acff96f38629e82092d9",
+    ".dedup-work/cleanarr29-20261016/python-deps/flask/sansio/scaffold.py": "f82bacd1c552e0f98ba1fe2a2ef7e3490ce4e002ac2ea3d1e8b069bfa00bc376",
+    ".dedup-work/cleanarr29-20261016/python-deps/flask/sansio/app.py": "9d958214c396f2a2bde4293d52f0f3c6fb3042bf9ca0b26120569afce5686c27",
+    ".dedup-work/cleanarr29-20261016/python-deps/itsdangerous/exc.py": "545c663f694ca12245ab134ccd6a27aacdf944e208e3e7ef0817c6d2fd5391bb",
+    ".dedup-work/cleanarr29-20261016/python-deps/itsdangerous/encoding.py": "a6087ceac9c70bbe9d3cb3429cf96b8d1e526982ff33c1fe81646288b35b8425",
+    ".dedup-work/cleanarr29-20261016/python-deps/itsdangerous/signer.py": "4141f4897d229fe393a6d3005ca539cd633098e0979f57ec0ecb9b5e219d14de",
+    ".dedup-work/cleanarr29-20261016/python-deps/itsdangerous/serializer.py": "ce0675f94ef4e631c3a6deb6c7fa662c976bc842833406ede54909b6791c092c",
+    ".dedup-work/cleanarr29-20261016/python-deps/itsdangerous/timed.py": "e420562ddb38366f3eddb1550bc471373163c7a3d2c23721f30b99e5cc1c1c52",
+    ".dedup-work/cleanarr29-20261016/python-deps/itsdangerous/_json.py": "c0886cffbfbf5d9a259b2afe26f28d8b2fcb80071f7af611d2a84255d948860f",
+    ".dedup-work/cleanarr29-20261016/python-deps/itsdangerous/url_safe.py": "e5b0b88d228e8d6351916ac5b1e89f5955d49c79cf83038b44e8e23b06fe79ea",
+    ".dedup-work/cleanarr29-20261016/python-deps/itsdangerous/__init__.py": "9f89a4ca3948567db7a60b20088c3430928f75c1c87adc9e4697b9170b27f2a8",
+    ".dedup-work/cleanarr29-20261016/python-deps/flask/json/tag.py": "8a16fb416acd12bd180b7283e13a2565b7ed8123c2b8b93b140bcae3d86e602d",
+    ".dedup-work/cleanarr29-20261016/python-deps/flask/sessions.py": "ac51f640a5c6db87446b390a1b1007a94a40521ff7d210c7add761558800718d",
+    ".dedup-work/cleanarr29-20261016/python-deps/flask/wrappers.py": "3e1329ded78add29c4988768839f5c3bf0c7899f41b67d2a2351227eb4ddc0ff",
+    ".dedup-work/cleanarr29-20261016/python-deps/flask/app.py": "be852473dc64f41d37f40855ad4db5183a6c43ac2aaebf8da1ba8bc7c7d445f4",
+    ".dedup-work/cleanarr29-20261016/python-deps/flask/sansio/blueprints.py": "71ab24548d597f798ce66b1ebcae7eb56cb756a5ff03c9a5074286372471e7fd",
+    ".dedup-work/cleanarr29-20261016/python-deps/flask/blueprints.py": "ccef1b2cef57cb56950fdd9b0e6ce286eb635445dff317436957e2cbb73ef829",
+    ".dedup-work/cleanarr29-20261016/python-deps/flask/__init__.py": "eb132a7550341484365352956865f79733427573f3a073da6b486f40235c7d29",
+    ".dedup-work/cleanarr29-20261016/python-deps/six.py": "43a5af1176750c6100480a370863422642afdad3f2f3191298af951c4f4f6080",
+    ".dedup-work/cleanarr29-20261016/python-deps/flask_cors/core.py": "37a74455ee5d7df6904f0efd31cf08bc4793cef63f62c28288e675949fcfc8d9",
+    ".dedup-work/cleanarr29-20261016/python-deps/flask_cors/decorator.py": "8a2c23522d2555e0a6e0e2491d8e42beece3da710d6d49ecdc8abacea297bacb",
+    ".dedup-work/cleanarr29-20261016/python-deps/flask_cors/extension.py": "e4fbcd54b83a1ac47a6d64b48b3071ef7ee464cc34bdfdc351850d7520dc06d0",
+    ".dedup-work/cleanarr29-20261016/python-deps/flask_cors/version.py": "1a0ce55c42dd1d39130145ea2e7080185af61349f08e304f7bedd1c5f4a497a7",
+    ".dedup-work/cleanarr29-20261016/python-deps/flask_cors/__init__.py": "a09131c1f47bc94dc702c990fc47cbe8aa0b2b7ceadc9f47b044fdafee7ab1f3",
+    ".dedup-work/cleanarr29-20261016/python-deps/click/testing.py": "a6da4c620458edd55f1375038248306b2bbd78fc3df2c408dc3ef3657882a63e",
+    ".dedup-work/cleanarr29-20261016/python-deps/flask/testing.py": "87b0229e082b3201b32a50cdeba55f074263596e19d54fce0fa1728ea04d8983"
+  },
+  "scope": "Whole unchangedoriginalplexwrapper/database/main/utils/logger modules imported withall19exactrequirementversions. NativeFlask3.0/TinyDB4.7/testclient andoriginalclass methods/routes executed. FakeexternalPlextransport/media.delete only,in-memoryfakeproxyHTTP; originalsconstructor bypassed, originalmedia_to_dict temporarily replaced onlyforTVdispatchcontrol. Session.request forbidden before sourceimports. OwnedCONFIG_DIR/static/siblingfixtures andownPlexconfigpath; no usercredentials/config read orlivePlex/HTTP/message/delete operation.",
+  "findings": [
+    "SampleTYPE predicate alwaysskips movies/episodes;showsectiondispatchesmovie serializer",
+    "Missingmedia deleteendpoint returnssuccess despite no deletion; exceptionerror500counterpreserved",
+    "Invalidpage/missingfields500;proxyarbitraryURLpassed tofakeget, nooutboundrequest",
+    "Flasktestclient parentpath readsowned siblingstaticfile; notdeployedwebserver/externaldata proof",
+    "TinyDB preserves2libraryfields; duplicateignore inserts2rows,unignore removesboth; fetchattribute errorsbecomeNone"
+  ],
+  "limits": [
+    "FullReactUI/build/upstreamtests/actualPlexAPI network/productionpermissions/concurrency/performance notqualified",
+    "Onlypositiveerror/boundarycontrols onfakeexternalservice; notcontent/visualduplicateaccuracy oradoption",
+    "Originalbenchmarks notexecuted/no dotenvloaded, realmedia neveraccessed/deleted"
+  ]
+}

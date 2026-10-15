@@ -1,0 +1,54 @@
+{
+  "status": "verified_complete_source_media_review_and_selected_native_controls",
+  "whole_repo_complete": true,
+  "whole_implementation_complete": true,
+  "repository": "se1exin/Cleanarr",
+  "commit": "44b86cad82fcf9b937e015d048d80d6c43fbcabd",
+  "blobs": 54,
+  "canonical_trees": 12,
+  "acquisition": "docs/research/dedup-500/cleanarr29-fetched-source-pins-20261016.json",
+  "acquisition_sha256": "325e16671e00427cc532dfad40457f2d81aa16abf0bf1e21a3d1af53460dac98",
+  "auditor_sha256": "1168e067a11ad8ccde59f578684bb2bf20d8371a4001a9ac088c1690cfa0a43a",
+  "controls": [
+    {
+      "path": "docs/research/dedup-500/cleanarr29-backend-controls-20261016.json",
+      "sha256": "cbdfe242f5c825c6bfc15e9c78b90237a7acb84e1b3b18928696845ec7658f60",
+      "scenarios": 19,
+      "runs": 2,
+      "scope": "Whole unchangedoriginalplexwrapper/database/main/utils/logger modules imported withall19exactrequirementversions. NativeFlask3.0/TinyDB4.7/testclient andoriginalclass methods/routes executed. FakeexternalPlextransport/media.delete only,in-memoryfakeproxyHTTP; originalsconstructor bypassed, originalmedia_to_dict temporarily replaced onlyforTVdispatchcontrol. Session.request forbidden before sourceimports. OwnedCONFIG_DIR/static/siblingfixtures andownPlexconfigpath; no usercredentials/config read orlivePlex/HTTP/message/delete operation.",
+      "limits": [
+        "FullReactUI/build/upstreamtests/actualPlexAPI network/productionpermissions/concurrency/performance notqualified",
+        "Onlypositiveerror/boundarycontrols onfakeexternalservice; notcontent/visualduplicateaccuracy oradoption",
+        "Originalbenchmarks notexecuted/no dotenvloaded, realmedia neveraccessed/deleted"
+      ]
+    },
+    {
+      "path": "docs/research/dedup-500/cleanarr29-frontend-controls-20261016.json",
+      "sha256": "c4e43b168fd63962c038455aaafaa80523b2e66eaa94c432b4985d3df413085a",
+      "scenarios": 13,
+      "runs": 2,
+      "scope": "Complete unchanged originalContentStore/MediaStore/ServerInfoStore/util TS modules transpiled withlockexactTypeScript3.8.3 andrealMobX5.15.7/React16.14.0. CommonJS/ES5/legacydecorators, fake API promise transport only; no sourcebodyextraction or codeadapters.13controls twice; realNodePromise events including explicitlycaughtunhandledRejection diagnostics. No Reactcomponent/DOM/browser/fullCRA/upstreamtest execution.",
+      "limits": [
+        "API network neverinvoked, no Plex/delete/fileoperation",
+        "NodeVM state/helper runtime, not browserUI/upstreamApp.test orfullstrictTypeScriptsemanticbuild",
+        "NativeMath/Promise/observable outcomes only; no performance/adoption claim"
+      ]
+    }
+  ],
+  "media_scope": "All85 GIF frames viewed on6contact sheets; native-resolution frames0/42/84 and listingPNG viewed; all3ICO sizes viewed. Published GIF depicts older UI, not current UI runtime. Frame pixels independently rehashed.",
+  "lock_scope": "All1470 unique resolution/version records and4012dependency references structurally reviewed; full inventory projection read in batches. No dependency-source or security audit.",
+  "license": "MIT LICENSE.md fully read; no production code copied",
+  "upstream_tests_run": false,
+  "full_service_or_browser_run": false,
+  "findings": [
+    "Native backend: sample TYPE predicate always excludes movies and episodes; show dispatch uses movie serializer; nonexistent media deletion reports success.",
+    "Native Flask testclient reads owned sibling through parent path; proxy forwards supplied URL to fake HTTP transport. No deployed server or external data access proof.",
+    "Native state modules: later-page errors leave loading true and an unhandled rejection; stale requests overwrite newer state; size request outer promise remains pending.",
+    "Native helpers: empty parts reduce throws; petabyte unit becomes undefined. Positive controls preserve selected media on delete error and preserve both TinyDB library fields."
+  ],
+  "decision": "Reject as portable comparer; retain review lessons for explicit deletion outcomes, cancellation/request generations, pagination failures and size boundaries. No adoption or speed claim.",
+  "limits": [
+    "External Plex/media objects and HTTP API transports replaced with owned fixtures; no real Plex, credentials, user media, deletion or network operations.",
+    "Complete pinned repository reading does not qualify dependencies, full React UI, upstream suites, platforms, permissions, visual accuracy or performance."
+  ]
+}
