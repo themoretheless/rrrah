@@ -1,0 +1,133 @@
+{
+  "status": "verified_selected_whole_module_native_controls",
+  "whole_repo_complete": false,
+  "repository": "Rafaelpta/dupehound",
+  "commit": "35ea7c3743a8fb2205aaef973e67b1c6c5e41474",
+  "fully_read_files": [
+    "src/fingerprint.rs",
+    "src/config.rs",
+    "src/score.rs",
+    "src/index.rs",
+    "src/cluster.rs",
+    "src/normalize.rs",
+    "src/cli.rs",
+    "src/main.rs",
+    "src/style.rs",
+    "src/walk.rs",
+    "Cargo.toml",
+    "LICENSE"
+  ],
+  "partially_read_files": {
+    "src/extract.rs": [
+      [
+        1,
+        95
+      ]
+    ]
+  },
+  "executed_modules": [
+    "fingerprint",
+    "index",
+    "cluster",
+    "score"
+  ],
+  "original_tests": 15,
+  "additional_controls": 8,
+  "passed_per_run": 23,
+  "runs": 2,
+  "harness_source": "mod config {#![allow(dead_code)] pub const KGRAM:usize=10;pub const WINDOW:usize=8;#[derive(Clone, Copy, PartialEq, Eq)]\npub enum TestPolicy {\n    /// Scan test files, flag them, exclude test-only clusters from the score.\n    FlagOnly,\n    /// Treat test files like any other code.\n    Include,\n    /// Don't scan test files at all.\n    Skip,\n}\n\n}\nmod lang {#[derive(Clone,Copy,PartialEq,Eq,Hash)]pub enum Lang{Typescript,Rust}}\nmod extract{#![allow(dead_code)] use crate::lang::Lang;#[derive(Clone)]\npub struct FunctionUnit {\n    pub file: u32,\n    pub lang: Lang,\n    pub name: String,\n    /// 1-based, spanning the whole function node (for reporting).\n    pub start_line: u32,\n    pub end_line: u32,\n    /// Byte range of the whole function node (for --explain output).\n    pub start_byte: u32,\n    pub end_byte: u32,\n    /// Significant lines in the body.\n    pub sig_lines: u32,\n    /// Sorted, distinct winnowing fingerprints of the body.\n    pub fingerprints: Vec<u64>,\n    pub is_test: bool,\n    /// A method whose name is shared with its near-duplicate siblings by\n    /// construction, so the sharing is required rather than accidental and\n    /// the cluster can't be merged away: a Rust method inside an `impl\n    /// Trait for Type` block (every impl of the same trait shares the\n    /// method name \u2014 `from`, `fmt`, ...), a Clojure `defmethod` dispatch\n    /// branch (every branch of the same multimethod shares its name), or a\n    /// Java method annotated `@Override` (every implementation of the same\n    /// interface/superclass method shares its name and is required by the\n    /// contract, e.g. `equals`/`hashCode`/`toString`).\n    pub is_trait_impl_method: bool,\n}\n\n}\n#[path=\"/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupe60-20261016/source/src/fingerprint.rs\"] mod fingerprint;\n#[path=\"/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupe60-20261016/source/src/index.rs\"] mod index;\n#[path=\"/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupe60-20261016/source/src/cluster.rs\"] mod cluster;\n#[path=\"/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupe60-20261016/source/src/score.rs\"] mod score;\n\n#[cfg(test)]mod controls {\nuse super::{extract::FunctionUnit,lang::Lang,index::*,cluster::*,score::*,config::TestPolicy};\nfn unit(i:u32,fp:Vec<u64>)->FunctionUnit{FunctionUnit{file:i,lang:Lang::Typescript,name:\"f\".into(),start_line:1,end_line:10,start_byte:0,end_byte:100,sig_lines:10,fingerprints:fp,is_test:false,is_trait_impl_method:false}}\n#[test]fn hundred_identical_functions_keep_all4950pairs(){let mut f=(0..100).map(|i|unit(i,vec![1,2,3])).collect::<Vec<_>>();assert_eq!(find_pairs(&mut f,0.8,3).len(),4950);assert!(f.iter().all(|x|x.fingerprints==[1,2,3]));}\n#[test]fn hundred_one_identical_functions_lose_all5050pairs(){let mut f=(0..101).map(|i|unit(i,vec![1,2,3])).collect::<Vec<_>>();assert_eq!(similarity(&f[0],&f[1]),1.0);assert!(find_pairs(&mut f,0.8,3).is_empty());assert!(f.iter().all(|x|x.fingerprints.is_empty()));assert_eq!(similarity(&f[0],&f[1]),0.0);}\n#[test]fn connected_cluster_can_contain_below_threshold_member(){let mut f=vec![unit(0,vec![1,2]),unit(1,vec![1,2,3]),unit(2,vec![2,3])];let p=find_pairs(&mut f,0.6,1);assert_eq!(p.len(),2);let c=build_clusters(&f,&p);assert_eq!(c.len(),1);assert!(c[0].members.iter().any(|m|m.similarity<0.6));assert_eq!(c[0].deletable_lines,20);}\n#[test]fn min_shared_can_drop_identical_short_sets(){let mut f=vec![unit(0,vec![1]),unit(1,vec![1])];assert_eq!(similarity(&f[0],&f[1]),1.0);assert!(find_pairs(&mut f,0.8,3).is_empty());}\n#[test]fn zero_threshold_does_not_enumerate_disjoint_pairs(){let mut f=vec![unit(0,vec![1]),unit(1,vec![2])];assert!(find_pairs(&mut f,0.0,0).is_empty());}\n#[test]fn nan_threshold_filters_every_pair(){let mut f=vec![unit(0,vec![1,2,3]),unit(1,vec![1,2,3])];assert!(find_pairs(&mut f,f64::NAN,3).is_empty());}\n#[test]fn language_scope_suppresses_cross_language_pair(){let mut f=vec![unit(0,vec![1,2,3]),unit(1,vec![1,2,3])];f[1].lang=Lang::Rust;assert!(find_pairs(&mut f,0.8,3).is_empty());}\n#[test]fn scoring_is_not_capped_for_arbitrary_supplied_cluster(){let c=Cluster{members:vec![],deletable_lines:200,test_only:false,trait_impl_only:false};let s=slop_score(&[c],100,TestPolicy::Include);assert_eq!(s.percent,200.0);assert_eq!(s.grade,'F');assert_eq!(s.deletable_lines,200);}\n}\n",
+  "commands": [
+    [
+      "rustc",
+      "+stable",
+      "--edition=2021",
+      "--crate-type=rlib",
+      "--crate-name",
+      "rustc_hash",
+      "--cfg",
+      "feature=\"std\"",
+      "/Users/themoretheless/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rustc-hash-2.1.2/src/lib.rs",
+      "-o",
+      "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupe60-20261016/librustc_hash_2_1_2.rlib"
+    ],
+    [
+      "rustc",
+      "+stable",
+      "--edition=2021",
+      "--test",
+      "-Dwarnings",
+      "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupe60-20261016/index-harness.rs",
+      "--crate-name",
+      "dupe60_index_locked_hash",
+      "-L",
+      "dependency=/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps",
+      "--extern",
+      "rayon=/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/librayon-8652a6f7ea891649.rlib",
+      "--extern",
+      "rustc_hash=/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupe60-20261016/librustc_hash_2_1_2.rlib",
+      "-o",
+      "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dupe60-20261016/index-tests-locked-hash"
+    ]
+  ],
+  "rustc_version": "rustc 1.98.1 (48a229cea 2026-09-01)",
+  "dependencies": {
+    "rayon": "1.12.0 realcachedrlib",
+    "rustc-hash": "2.1.2 rebuiltfromchecksumverifiedoriginalregistrycrate withdefaultstdfeature"
+  },
+  "adapter_scope": "Verbatim FunctionUnit struct and TestPolicy enum, exactKGRAM10/WINDOW8 constants; minimal2variantLang enum, noparser/CLI/configconstructor. Wholefourupstreammodules unchanged. Dataadapterdead_code allowanceonly; upstreammodules strict-Dwarnings.",
+  "observations": [
+    "100identical3fingerprint functions produce4950pairs;101identicalfunctions haveall3commonfingerprints culled andproduce0pairs although5050exactsetpairs existed beforeculling. Actualfind_pairs mutatesoriginalfingerprintsets andsimilaritydrops1to0. Intentionalboilerplatefilter losesduplicate recall, no adoption.",
+    "Connected-component cluster on A=[1,2], B=[1,2,3], C=[2,3], threshold0.6 formsonecluster containing a memberwithrepresentativesimilarity1/3 belowthreshold. Componentgrouping policy is not complete-link equality/deletionsafety.",
+    "min_shared3 canexcludeidenticalone-elementfingerprintsets despiteJaccard1; threshold0withmin_shared0 stilldoesnot enumerate disjointpairs. Publicfind-all wording broaderthanactualprefilter, originalCLIdefaultpolicies distinct.",
+    "NaNthreshold silentlyfilters allotherwisequalifyingpairs. Configclampsfinitevalues butNaNCLI reachability notexecuted.",
+    "Cross-language identicalsets intentionallynotmatched; documentedpolicy.",
+    "Arbitrarysuppliedcluster deletable200/total100 scores200percent; no wholepipelineovercountclaim becauseinvaliddataadmission notqualified."
+  ],
+  "evidence_pins": {
+    ".dedup-work/dupe60-20261016/source/src/fingerprint.rs": "e4f1545281d810b7b04eaff02dc43622052a42b2c0f29dff4cabc6ed98d0944b",
+    ".dedup-work/dupe60-20261016/source/src/config.rs": "acdcb7fa4d12ea37a3036351b0860dadbb599e3673c87218e3fbb5ad7dca20dc",
+    ".dedup-work/dupe60-20261016/source/src/score.rs": "315c80cea2dca3c90c6b1c4b23ba49706c58f85aff85753b26ad28b326a21e66",
+    ".dedup-work/dupe60-20261016/source/src/index.rs": "a0a76c00f7492a26c06f969c1a8dcb34287875400bac506078044df6901cf50f",
+    ".dedup-work/dupe60-20261016/source/src/cluster.rs": "6119946b1cbf9023d5831339cf18041e793fd55063f51c074fb8d999de8b288d",
+    ".dedup-work/dupe60-20261016/source/src/normalize.rs": "a9921ab36b8988bd6443f60d2750f10740daa3f50692c366d7c2a8d32b2fabd1",
+    ".dedup-work/dupe60-20261016/source/src/cli.rs": "bd5263b8d69a9aa5283eb4b44d243ada4fba2321cab86be77f07c38f07330164",
+    ".dedup-work/dupe60-20261016/source/src/main.rs": "624edbdeb3cf4feb96fcd4bbce9afa5d4bc2ceb982b5e964354150a952d156f7",
+    ".dedup-work/dupe60-20261016/source/src/style.rs": "71923db6ee7ab08ce9f718231583df134c6232ca92f59da04b8514849c9dffa1",
+    ".dedup-work/dupe60-20261016/source/src/walk.rs": "2d5a245558f7c9761c7fc5ddf1cff2b0a1efc5a2edeb06573b4dc0d130c4c72c",
+    ".dedup-work/dupe60-20261016/source/Cargo.toml": "928f64f1f82a98970aaf8d5d7b3af9e8ad8e91f2060afe3d1ff9fb7d66be3769",
+    ".dedup-work/dupe60-20261016/source/LICENSE": "28ede1e7bf2097f76b17f52e306f13730da02b3ba529cf7711b3bd026a1a29d7",
+    ".dedup-work/dupe60-20261016/source/src/extract.rs": "869f983b3dadebca34094bf27042f28173e3aa5cc0e70cad799029321f5dfaa1",
+    ".dedup-work/dupe60-20261016/index-harness.rs": "0c8586440da8e32f340fef739938ecd2e8cba3ef0a245fa861d038f793d85ee5",
+    ".dedup-work/dupe60-20261016/librustc_hash_2_1_2.rlib": "e56784df892cb69775653d8459a39ec6731b49b698126910dfdcae2db52a2f3d",
+    ".dedup-work/dupe60-20261016/index-tests-locked-hash": "46cef058a42239c78320578b2f8a501a90787fabfdfaa65547587a72ba77ff7b",
+    ".dedup-work/20261015-common-v5/target/debug/deps/librayon-8652a6f7ea891649.rlib": "345998b4cb5eda6281804e41168a4dff5836de3baf22f83df7f1870cd60d354a",
+    "/Users/themoretheless/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/rustc-hash-2.1.2.crate": "94300abf3f1ae2e2b8ffb7b58043de3d399c73fa6f4b73826402a5c457614dbe",
+    "/Users/themoretheless/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rustc-hash-2.1.2/src/lib.rs": "59a4b66a26275ca202f834cb7bc2feda135136533f0e8599af97d2563d15f72f",
+    "/Users/themoretheless/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rustc-hash-2.1.2/Cargo.toml": "2db71897d3dc8cbd86f28507c3929a37b1d0a1e436037e40f935b647ee51e802",
+    ".dedup-work/dupe60-20261016/index-locked-inventory.log": "2926a859869b29d7d933be3ffee41f36f59739c75c1c60f11c5e1df2a0bda815",
+    ".dedup-work/dupe60-20261016/index-locked-build1.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    ".dedup-work/dupe60-20261016/index-locked-build2.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    ".dedup-work/dupe60-20261016/index-locked-run1.log": "0ee30d15cf6eb9c99f47a0132c019a2dfd02d4ac7552fafc8a9da55692e41216",
+    ".dedup-work/dupe60-20261016/index-locked-run2.log": "0ee30d15cf6eb9c99f47a0132c019a2dfd02d4ac7552fafc8a9da55692e41216",
+    "docs/research/dedup-500/dupe60-fetched-source-pins-20261016.json": "bf8f8e8112f77bf754addd57fa23a9a076d4c9fde279a55a24a8b0ac692fc5b4",
+    "/Users/themoretheless/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rustc-hash-2.1.2/.cargo_vcs_info.json": "18714b27c324e1100a99a311c0104619f4c000aa44070928d72c8cd3e3ec8090",
+    "/Users/themoretheless/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rustc-hash-2.1.2/.github/workflows/rust.yml": "ff0288f89c97203b725441e9d9717fa0c049f1cebb2bcbb556981bfa8be10029",
+    "/Users/themoretheless/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rustc-hash-2.1.2/.gitignore": "59bcdcff558f4f15177734ef9bf5dc3cbe0c7701c0de3d302056b92888daeb8d",
+    "/Users/themoretheless/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rustc-hash-2.1.2/CHANGELOG.md": "99bb0a76f5f4d89142295597be863b253a74276955ea9c669c49eef05828284a",
+    "/Users/themoretheless/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rustc-hash-2.1.2/CODE_OF_CONDUCT.md": "3e77f5476805b69467641b2c682aa2355344395056939089182cd901c56dce63",
+    "/Users/themoretheless/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rustc-hash-2.1.2/Cargo.lock": "a121372b7ec1431a3bce191d29046a17c49102fd3f5540e959df19ffab4ddb0b",
+    "/Users/themoretheless/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rustc-hash-2.1.2/Cargo.toml.orig": "921bad999d97d293ab4a01163dfb9add86f20b4e1716cb32596da3795b8bcdb6",
+    "/Users/themoretheless/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rustc-hash-2.1.2/LICENSE-APACHE": "95bd3988beee069fa2848f648dab43cc6e0b2add2ad6bcb17360caf749802bcc",
+    "/Users/themoretheless/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rustc-hash-2.1.2/LICENSE-MIT": "30fefc3a7d6a0041541858293bcbea2dde4caa4c0a5802f996a7f7e8c0085652",
+    "/Users/themoretheless/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rustc-hash-2.1.2/README.md": "ccd7a15a2e2021dbbfd5b7f99a10666a64ac50f8d5d6926a858efdde724fb424",
+    "/Users/themoretheless/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rustc-hash-2.1.2/src/random_state.rs": "39063b702c38dc93b7a9039f19f4acfdc539acf1604584a87eeb43cca149ca7e",
+    "/Users/themoretheless/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rustc-hash-2.1.2/src/seeded_state.rs": "530ba6e25d766231cc7540f968d3e41c5af5a38d936542b407010b9d35746fd8"
+  },
+  "producer_sha256": "63de3d051bd984485bb3bb2517a0e9f9e869c2053b62296f8829c88e539bd32f",
+  "limits": [
+    "Only12of97trackedfiles fullyread;78remainingUTF8files and7binaryassets stillrequire review. Partialextract95lines is notcompletefile.",
+    "15originaltests onlyin4selectedmodules; no fullCargo/CLI/parser/integration/runtime qualification.",
+    "Earliercachedrustc-hash1.1.0 native23tests pass twice retainedseparately;2.1.3 binarybuiltbutnotrun. Authoritativehere exactlocked2.1.2 native23tests twice. Rayontransitivedependencylockparity notproven.",
+    "No benchmark/speedup/currentRoot/quality/millionfile/platform/productionadoption claim."
+  ]
+}

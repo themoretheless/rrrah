@@ -1,0 +1,46 @@
+{
+  "status": "verified_selected_whole_module_native_evidence",
+  "whole_repo_complete": false,
+  "review": "docs/research/dedup-500/dupe60-selected-index-review-20261016.json",
+  "review_sha256": "02e807e4537095f7777fea53bb8c6970d504f879928a42469b98133d30aacee6",
+  "producer_sha256": "63de3d051bd984485bb3bb2517a0e9f9e869c2053b62296f8829c88e539bd32f",
+  "auditor_sha256": "388c28a33941638e50fc0046ef5bc45b0c8e205d28f9a881370dd73cf962ede8",
+  "source_blobs": 97,
+  "fully_read_files": [
+    "src/fingerprint.rs",
+    "src/config.rs",
+    "src/score.rs",
+    "src/index.rs",
+    "src/cluster.rs",
+    "src/normalize.rs",
+    "src/cli.rs",
+    "src/main.rs",
+    "src/style.rs",
+    "src/walk.rs",
+    "Cargo.toml",
+    "LICENSE"
+  ],
+  "original_tests": 15,
+  "additional_controls": 8,
+  "passed_per_run": 23,
+  "runs": 2,
+  "observations": [
+    "100identical3fingerprint functions produce4950pairs;101identicalfunctions haveall3commonfingerprints culled andproduce0pairs although5050exactsetpairs existed beforeculling. Actualfind_pairs mutatesoriginalfingerprintsets andsimilaritydrops1to0. Intentionalboilerplatefilter losesduplicate recall, no adoption.",
+    "Connected-component cluster on A=[1,2], B=[1,2,3], C=[2,3], threshold0.6 formsonecluster containing a memberwithrepresentativesimilarity1/3 belowthreshold. Componentgrouping policy is not complete-link equality/deletionsafety.",
+    "min_shared3 canexcludeidenticalone-elementfingerprintsets despiteJaccard1; threshold0withmin_shared0 stilldoesnot enumerate disjointpairs. Publicfind-all wording broaderthanactualprefilter, originalCLIdefaultpolicies distinct.",
+    "NaNthreshold silentlyfilters allotherwisequalifyingpairs. Configclampsfinitevalues butNaNCLI reachability notexecuted.",
+    "Cross-language identicalsets intentionallynotmatched; documentedpolicy.",
+    "Arbitrarysuppliedcluster deletable200/total100 scores200percent; no wholepipelineovercountclaim becauseinvaliddataadmission notqualified."
+  ],
+  "dependencies": {
+    "rayon": "1.12.0 realcachedrlib",
+    "rustc-hash": "2.1.2 rebuiltfromchecksumverifiedoriginalregistrycrate withdefaultstdfeature"
+  },
+  "adapter_scope": "Verbatim FunctionUnit struct and TestPolicy enum, exactKGRAM10/WINDOW8 constants; minimal2variantLang enum, noparser/CLI/configconstructor. Wholefourupstreammodules unchanged. Dataadapterdead_code allowanceonly; upstreammodules strict-Dwarnings.",
+  "limits": [
+    "Only12of97trackedfiles fullyread;78remainingUTF8files and7binaryassets stillrequire review. Partialextract95lines is notcompletefile.",
+    "15originaltests onlyin4selectedmodules; no fullCargo/CLI/parser/integration/runtime qualification.",
+    "Earliercachedrustc-hash1.1.0 native23tests pass twice retainedseparately;2.1.3 binarybuiltbutnotrun. Authoritativehere exactlocked2.1.2 native23tests twice. Rayontransitivedependencylockparity notproven.",
+    "No benchmark/speedup/currentRoot/quality/millionfile/platform/productionadoption claim."
+  ]
+}
