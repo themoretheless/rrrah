@@ -2,9 +2,9 @@
   "index": 136,
   "repository": "mighty-justice/django-super-deduper",
   "commit": "a070e3fb10d0796d45d464618b72562203fc4d4c",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All22trackedblobs4trees fully read, including original tests/config/license; ten explicit unchanged-class ORM-adapter controls twice. Actual Django/database/upstream suite unexecuted.",
   "decision": "reject-domain",
-  "finding": "Django model-instance merging; database entities rather than image content.",
+  "finding": "Record merging: deletion before failed save, m2m remove-before-add failure, partial alias progress, eager disabled-debug serialization; no image library source adoption.",
   "available_source_evidence": [
     {
       "path": "django_super_deduper/__init__.py",
@@ -74,5 +74,7 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/dedup-500/django136-complete-source-review-20261015.json"
 }

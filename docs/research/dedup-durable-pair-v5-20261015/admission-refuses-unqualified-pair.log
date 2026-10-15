@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/Users/themoretheless/Documents/Sources/rrrah/scripts/check-dedup-durable-benchmark-admission-v5-20261015.py", line 6, in <module>
+    audit=D/f'dedup-durable-{variant}-audit-v5-20261015.json';assert audit.is_file(),f'{variant} complete durable audited gate not ready';a=json.loads(audit.read_text());assert a['gate_passed'] and a['failed']==0 and len(a['targets'])==162 and a['manifest_sha256']==h(manifest);assert h(R/'scripts/audit-dedup-durable-pair-v5-20261015.py')==a['auditor_sha256'];report=D/f'dedup-durable-{variant}-gate-v5-20261015.json';assert h(report)==a['producer_report_sha256'];d=json.loads(report.read_text());assert h(d['cargo_log'])==d['cargo_log_sha256']
+                                                                     ~~~~~~~~~~~~~^^
+AssertionError: baseline complete durable audited gate not ready

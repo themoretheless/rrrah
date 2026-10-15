@@ -1,0 +1,6 @@
+PASS empty fields fill and alias kept by default
+PASS nonempty primary value wins
+PASS self guard
+PASS alias deleted before failing primary save without rollback
+PASS later invalid alias leaves earlier mutation
+PASS serialization evaluated even with debug logger disabled

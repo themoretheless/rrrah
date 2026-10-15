@@ -1,0 +1,11 @@
+PASS empty fields fill and alias kept by default
+PASS nonempty primary value wins
+PASS self guard
+PASS alias deleted before failing primary save without rollback
+PASS later invalid alias leaves earlier mutation
+PASS serialization evaluated even with debug logger disabled
+PASS m2m remove precedes failed add and audit append
+PASS o2o alias detached before failed primary save
+PASS default nonnullable uniqueness conflict deletes child and restores audit pk
+PASS raise validation option prevents child deletion but leaves memory reference changed
+{"passed": 10, "failed": 0, "scope": "Explicit in-memory ORM adapter of unchanged class AST; no Django, actual SQL transactions, concurrency, installed package or upstream suite qualification."}

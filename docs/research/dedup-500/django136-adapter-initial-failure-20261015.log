@@ -1,0 +1,18 @@
+PASS empty fields fill and alias kept by default
+PASS nonempty primary value wins
+PASS self guard
+PASS alias deleted before failing primary save without rollback
+PASS later invalid alias leaves earlier mutation
+PASS serialization evaluated even with debug logger disabled
+Traceback (most recent call last):
+  File "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/django136-adapter-controls-20261015.py", line 61, in <module>
+    check('m2m remove precedes failed add and audit append',m2m_partial)
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/django136-adapter-controls-20261015.py", line 29, in check
+    def check(name,fn):fn();passed.append(name);print('PASS',name)
+                       ~~^^
+  File "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/django136-adapter-controls-20261015.py", line 58, in m2m_partial
+    try:m._handle_m2m_related_field(field,a);assert False
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "unchanged-upstream-class", line 105, in _handle_m2m_related_field
+AttributeError: 'Obj' object has no attribute '_meta'
