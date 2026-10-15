@@ -1,0 +1,11 @@
+/Users/themoretheless/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/setuptools/_distutils/dist.py:318: UserWarning: Unknown distribution option: 'tests_require'
+  warnings.warn(msg)
+running build_ext
+building 'lsh.cMinhash' extension
+clang++ -fno-strict-overflow -Wsign-compare -Wunreachable-code -DNDEBUG -g -O3 -Wall -O3 -arch arm64 -mmacosx-version-min=11.0 -Wno-nullability-completeness -Wno-expansion-to-defined -Wno-undef-prefix -fPIC -I/Users/themoretheless/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/numpy/_core/include -I/Users/themoretheless/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/include/python3.12 -c lsh/MurmurHash3.cpp -o build/temp.macosx-11.0-arm64-cpython-312/lsh/MurmurHash3.o
+clang++ -fno-strict-overflow -Wsign-compare -Wunreachable-code -DNDEBUG -g -O3 -Wall -O3 -arch arm64 -mmacosx-version-min=11.0 -Wno-nullability-completeness -Wno-expansion-to-defined -Wno-undef-prefix -fPIC -I/Users/themoretheless/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/numpy/_core/include -I/Users/themoretheless/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/include/python3.12 -c lsh/cMinhash.cpp -o build/temp.macosx-11.0-arm64-cpython-312/lsh/cMinhash.o
+lsh/cMinhash.cpp:69:12: fatal error: 'longintrepr.h' file not found
+   69 |   #include "longintrepr.h"
+      |            ^~~~~~~~~~~~~~~
+1 error generated.
+error: Command '['clang++', '-fno-strict-overflow', '-Wsign-compare', '-Wunreachable-code', '-DNDEBUG', '-g', '-O3', '-Wall', '-O3', '-arch', 'arm64', '-mmacosx-version-min=11.0', '-Wno-nullability-completeness', '-Wno-expansion-to-defined', '-Wno-undef-prefix', '-fPIC', '-I/Users/themoretheless/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/numpy/_core/include', '-I/Users/themoretheless/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/include/python3.12', '-c', 'lsh/cMinhash.cpp', '-o', 'build/temp.macosx-11.0-arm64-cpython-312/lsh/cMinhash.o']' returned non-zero exit status 1.

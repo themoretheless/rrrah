@@ -1,0 +1,167 @@
+{
+  "scope": "Unchanged fullcache/minhash classes andCython.pyx/Murmur implementation actuallyexecute throughCython3.3regenerated nativeextension onPython3.12/NumPy2.3.5. Buildcopysetup onlyUSE_CYTHONFalse->True andgeneratedcpp replaced. OriginalCython0.24.1cpp failslongintrepr.h; no oldbinaryparity/defaultbuild/platform/performance/productionadoption proof.",
+  "controls": [
+    {
+      "control": "disjoint_array_fingerprints_report_similarity1",
+      "result": 1.0
+    },
+    {
+      "control": "unequal_lengths_broadcast_error",
+      "result": {
+        "error": "ValueError",
+        "message": "operands could not be broadcast together with shapes (4,) (3,) "
+      }
+    },
+    {
+      "control": "mixed_string_array_error",
+      "result": {
+        "error": "TypeError",
+        "message": "unhashable type: 'numpy.ndarray'"
+      }
+    },
+    {
+      "control": "distinct_short_documents_share_all_sentinel_hashes",
+      "result": [
+        9223372036854775807,
+        9223372036854775807,
+        9223372036854775807,
+        9223372036854775807
+      ]
+    },
+    {
+      "control": "whole_cache_false_candidate_for_short_strings",
+      "result": [
+        1
+      ]
+    },
+    {
+      "control": "cached_fingerprint_mutable_alias",
+      "result": true
+    },
+    {
+      "control": "caller_mutation_corrupts_remove_index",
+      "result": {
+        "error": "KeyError",
+        "message": "1"
+      }
+    },
+    {
+      "control": "reinsert_id_leaves_old_band_membership_and_false_filtered_pair",
+      "result": [
+        [
+          1,
+          2
+        ]
+      ]
+    },
+    {
+      "control": "removed_reinserted_id_still_in_old_bins",
+      "result": {
+        "error": "KeyError",
+        "message": "1"
+      }
+    },
+    {
+      "control": "clear_retains_fingerprint_and_breaks_remove",
+      "result": {
+        "error": "KeyError",
+        "message": "1"
+      }
+    },
+    {
+      "control": "zero_bands_unvalidated",
+      "result": {
+        "error": "ZeroDivisionError",
+        "message": "integer modulo by zero"
+      }
+    },
+    {
+      "control": "negative_bands_delayed_error_after_id_stored",
+      "result": {
+        "error": {
+          "error": "ValueError",
+          "message": "number sections must be larger than 0."
+        },
+        "stored_ids": [
+          1
+        ]
+      }
+    },
+    {
+      "control": "zero_seeds_all_collide_then_jaccard_zero_division",
+      "result": {
+        "error": "ZeroDivisionError",
+        "message": "division by zero"
+      }
+    },
+    {
+      "control": "threshold1_excludes_identical_strict_policy",
+      "result": true
+    },
+    {
+      "control": "nan_threshold_silently_filters_everything",
+      "result": true
+    },
+    {
+      "control": "documented_randomstate_instance_rejected",
+      "result": {
+        "error": "TypeError",
+        "message": "Cannot cast scalar from dtype('O') to dtype('int64') according to the rule 'safe'"
+      }
+    },
+    {
+      "control": "fingerprint_length_not_checked_against_recipe",
+      "result": 1
+    },
+    {
+      "control": "single_shingle_unsigned_murmur_minimum_oracle",
+      "result": [
+        {
+          "bits": 32,
+          "comparisons": 1024,
+          "mismatches": 509,
+          "first": {
+            "text_hex": "4162636465666768",
+            "seed": 1,
+            "actual": 4294967295,
+            "unsigned_minimum": 702725686
+          }
+        },
+        {
+          "bits": 64,
+          "comparisons": 1024,
+          "mismatches": 520,
+          "first": {
+            "text_hex": "4162636465666768",
+            "seed": 3,
+            "actual": 9223372036854775807,
+            "unsigned_minimum": 14221722785652634936
+          }
+        }
+      ]
+    },
+    {
+      "control": "long64_complete_shingle_unsigned_oracle",
+      "result": {
+        "seeds": 32,
+        "shingles": 39,
+        "all_equal": true
+      }
+    }
+  ],
+  "source_pins": {
+    "lsh/cache.py": "5a3785361a37929a97071512759c0fa9213ca3150644d190b428239b37197232",
+    "lsh/minhash.py": "bbabcd32818ed1e8e8db96d44f03bec8a9ece43eefcd81f7dccab8ba724ae4a1",
+    "lsh/cMinhash.pyx": "948f34abeaf16e874ef984dc2c3b6363994dc66a197c2bc57e260fd44447ebc0",
+    "lsh/MurmurHash3.cpp": "30f121ed155ebf336af398aabb7d8d157afdfafc8d981e7b48d2a1ceb4b63e4e",
+    "lsh/MurmurHash3.h": "9af2003e3885c841fa0ac08cb5d5f31541ee9d793f8a9c4a4f771f43fb0d6f41",
+    "lsh/test/test_cache.py": "c71e88aa2a3dc6a956121f4a7468002ef6aaa67ca91ed5b7ab4e475cf9211a5b"
+  },
+  "native_extension": {
+    ".dedup-work/lsh27-20261016/modern-build/lsh/cMinhash.cpython-312-darwin.so": "6afa0b5031bdfb2b368c1a3873c445bc4ee2cec810fa3ff7765517e38eb98580"
+  },
+  "oracle_binary_sha256": "863c61330f375d486c36283b14656c2e9d9d25a1123c7b801420fc2958d47f90",
+  "oracle_wrapper_sha256": "4794f72ec28634a47e265fed5a26a74309d8c9ab4d936f091ee117d7cdba95f3",
+  "producer_sha256": "be2feb82c2a3ee7cd82c14daad604dc092d81cbb510ff7c98bef48e30c7f62c1",
+  "numpy_version": "2.3.5"
+}

@@ -1,0 +1,15 @@
+Compiling lsh/cMinhash.pyx because it changed.
+[1/1] Cythonizing lsh/cMinhash.pyx
+/Users/themoretheless/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/setuptools/_distutils/dist.py:318: UserWarning: Unknown distribution option: 'tests_require'
+  warnings.warn(msg)
+running build_ext
+building 'lsh.cMinhash' extension
+clang++ -fno-strict-overflow -Wsign-compare -Wunreachable-code -DNDEBUG -g -O3 -Wall -O3 -arch arm64 -mmacosx-version-min=11.0 -Wno-nullability-completeness -Wno-expansion-to-defined -Wno-undef-prefix -fPIC -Ilsh -I/Users/themoretheless/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/numpy/_core/include -I/Users/themoretheless/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/include/python3.12 -c lsh/MurmurHash3.cpp -o build/temp.macosx-11.0-arm64-cpython-312/lsh/MurmurHash3.o
+clang++ -fno-strict-overflow -Wsign-compare -Wunreachable-code -DNDEBUG -g -O3 -Wall -O3 -arch arm64 -mmacosx-version-min=11.0 -Wno-nullability-completeness -Wno-expansion-to-defined -Wno-undef-prefix -fPIC -Ilsh -I/Users/themoretheless/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/numpy/_core/include -I/Users/themoretheless/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/include/python3.12 -c lsh/cMinhash.cpp -o build/temp.macosx-11.0-arm64-cpython-312/lsh/cMinhash.o
+lsh/cMinhash.cpp:25979:50: warning: code will never be executed [-Wunreachable-code]
+ 25979 |     if (unlikely(__Pyx_PyUnicode_READY(s1) < 0)) goto bad;
+       |                                                  ^~~~~~~~
+1 warning generated.
+clang++ -fno-strict-overflow -Wsign-compare -Wunreachable-code -DNDEBUG -g -O3 -Wall -O3 -arch arm64 -mmacosx-version-min=11.0 -Wno-nullability-completeness -Wno-expansion-to-defined -Wno-undef-prefix -fPIC -bundle -undefined dynamic_lookup -arch arm64 -mmacosx-version-min=11.0 -Wl,-headerpad,40 build/temp.macosx-11.0-arm64-cpython-312/lsh/MurmurHash3.o build/temp.macosx-11.0-arm64-cpython-312/lsh/cMinhash.o -L/install/lib -o build/lib.macosx-11.0-arm64-cpython-312/lsh/cMinhash.cpython-312-darwin.so
+ld: warning: search path '/install/lib' not found
+copying build/lib.macosx-11.0-arm64-cpython-312/lsh/cMinhash.cpython-312-darwin.so -> lsh
