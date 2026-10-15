@@ -1,0 +1,165 @@
+{
+  "repository": "platisd/duplicate-code-detection-tool",
+  "commit": "f0413b1571a98b653f617a59fec0097001e18c0e",
+  "tree": "edfff52c472f5a70630239ae3a157e02caf798e1",
+  "status": "complete_source_read_visual_example_native_analyzer_scoped_runner_controls",
+  "whole_repository_complete": true,
+  "license": "MIT rootLICENSE read; no foreignproductionadoption",
+  "scope": "All12trackedtextblobs/3trees read andpinned: completeanalyzer/CLI/ASTnormalizer/CSV, wholeGitHubactionrunner/entrypoint, workflow/actionmetadata/Docker/precommit/setup/requirements/README/ignore/license. OneexternalREADMEPNG screenshot viewed687x612 andpinned. Otherexternaldocs/tutorial/gists/PRcommentexamples notfollowed; no externalremoteoperation ordependencysemanticfullaudit.",
+  "blobs": [
+    {
+      "path": ".github/workflows/duplicate-code-detection.yml",
+      "mode": "100644",
+      "git_blob": "986924010f4714c41460a49771569384c9901c73",
+      "bytes": 505,
+      "sha256": "152fd49249b8c68080fa1e8ed48fc57be34adc2e4f50f98662d6299396562343"
+    },
+    {
+      "path": ".gitignore",
+      "mode": "100644",
+      "git_blob": "722d5e71d93ca0aa0db6fd22452e46be5604a84d",
+      "bytes": 8,
+      "sha256": "38c8ca0920aa7432679ec67fade3bdcee6df3f0852a233025bc71904450df4ee"
+    },
+    {
+      "path": ".pre-commit-hooks.yaml",
+      "mode": "100644",
+      "git_blob": "14a4ea04aa714a68f03cd35163dd8cb2b4a3064f",
+      "bytes": 204,
+      "sha256": "4d78ee3223acdc72da729726ad0dc3b0ac3e1b470a9acdf5305a17423a2dd668"
+    },
+    {
+      "path": "Dockerfile",
+      "mode": "100644",
+      "git_blob": "f77c8616975083b83412e7b097ab08fe479416e2",
+      "bytes": 363,
+      "sha256": "b29acbbba09b98ed2fea5cc8c92807f2524c9bc527602b81b8dd5dfdf36869be"
+    },
+    {
+      "path": "LICENSE",
+      "mode": "100644",
+      "git_blob": "0fc73b04095351fe70b337ca31e447158ab9f883",
+      "bytes": 1072,
+      "sha256": "4008b95e6fa4de6f315e967e7f3ce76700171114db18997d95aed76df406d542"
+    },
+    {
+      "path": "README.md",
+      "mode": "100644",
+      "git_blob": "b2ffcb94fd6e0169808999819847b529b7147cfc",
+      "bytes": 6954,
+      "sha256": "3d6b2ef10dec12e8ebcbcce7e1584a98fb8ac9faba6e5b5d7cc9dce52b827d0e"
+    },
+    {
+      "path": "action.yml",
+      "mode": "100644",
+      "git_blob": "40fb84c39e66c75e162b63ce29fee7de2935b172",
+      "bytes": 2023,
+      "sha256": "1a82e21899374fdfa93ebc35b116d96e377a3a3735bcb15f66c7157afa717383"
+    },
+    {
+      "path": "duplicate_code_detection.py",
+      "mode": "100755",
+      "git_blob": "715139ecf7ee511c1ddb76a8d93e76db92b63e4c",
+      "bytes": 15090,
+      "sha256": "b5f887df4aeeb9a6e01e3a2ccb465a747ee3dd49f78e0679a5c4c0308c027063"
+    },
+    {
+      "path": "entrypoint.sh",
+      "mode": "100755",
+      "git_blob": "a0d3f6463fec351e0390e571af1e4e0a0ac95d3b",
+      "bytes": 808,
+      "sha256": "2a45abfbaf57a8921f17ea524494a121ac2953ed4f58f90c172b568dc7fbe2ea"
+    },
+    {
+      "path": "requirements.txt",
+      "mode": "100644",
+      "git_blob": "4b66a61ac7907335208821b5eeb2d90ff284a4da",
+      "bytes": 34,
+      "sha256": "870fd6363cba0a9cfc1f9a23f7585da27089651f7815824e09e613d0cdeb450b"
+    },
+    {
+      "path": "run_action.py",
+      "mode": "100755",
+      "git_blob": "ea3b175eb6e82945a181ad241c5598eb705d694e",
+      "bytes": 7551,
+      "sha256": "7b9c9ae44611175b6b8bfc1b9cf26ddaa548ab789bf55763fdc7503abe615053"
+    },
+    {
+      "path": "setup.py",
+      "mode": "100644",
+      "git_blob": "2ca647c1ec7c4ee0c5ca198ac4cd605ea9e2f193",
+      "bytes": 517,
+      "sha256": "f098c96f3103754df3b5c2d860064b9a86c73656bfdfc28f4a63b9cd951bc3aa"
+    }
+  ],
+  "tree_objects_verified": 3,
+  "pin_sha256": "bdf8f233f4b575f35736767849e04257aa8b140f68960983e8ac69397f6f14c6",
+  "controls": "docs/research/code33-native-controls-20261015/result.json",
+  "controls_sha256": "8c64a28f666429efc4fa8541e793b74c157fad2c455b52434a4f66c3e0188180",
+  "visuals": "docs/research/code33-readme-visual-review-20261015.json",
+  "visuals_sha256": "4048e6ae928575f8cb0ae04beb7c9cbe17d33f40a18c5522b980f700ebe8f363",
+  "findings": [
+    {
+      "kind": "native_unchanged_full_analyzer_realGensim_NLTK_astor",
+      "finding": "Identicaltwo-filecorpus scores0.0 andreturnsSUCCESS; samepair withthirdunrelateddoc scores100.0 andfails50threshold. Corpus-dependentTFIDF andbag-order invariancearecandidate/clonesimilarity semantics, notexactidentity orcalibratedprobability."
+    },
+    {
+      "kind": "native_unchanged_full_analyzer_realGensim_NLTK_astor",
+      "finding": "Validfail20/ignore30 policy: nativepair21.41 passesindependentDF/log2oracle, initiallyfails20. Settingdisplayignore30 hidespair andreturnsSUCCESS{}; reportfilter incorrectlybypassesfailpolicy."
+    },
+    {
+      "kind": "native_unchanged_full_analyzer_realGensim_NLTK_astor",
+      "finding": "BothinvalidPythoninputs underonly_code logERROR andreturnSUCCESS{}, contaminatingJSONoutput. Normalizer ondocstring-onlyfunction emitsdef f(): withnoPass andfailsindependentASTparse."
+    },
+    {
+      "kind": "native_unchanged_full_analyzer_realGensim_NLTK_astor",
+      "finding": "Samephysicalfile relative+absolute aliases passminimum2inputadmission thenOrderedDictcollapses1fileandreturnsSUCCESS{}. Relativeignorepath missesabsolutesource; matchingabsoluteignoreworks."
+    },
+    {
+      "kind": "native_unchanged_full_analyzer_realGensim_NLTK_astor",
+      "finding": "--json False is truthy boolparseandemitsJSON. OriginalstandaloneCLI exits0 onSUCCESS; explicitstandardconsoleentrypointwrapper sys.exit(main()) exits1 forreturnedtuple. Installedsetuppackage notbuilt/executed."
+    },
+    {
+      "kind": "native_unchanged_full_analyzer_realGensim_NLTK_astor",
+      "finding": "Fixedmodelprefix creates/overwritesownedexistingTMP/.0. No uniquelyownedtemporarymodelnamespace. No crossjobconcurrentmix demonstrated."
+    },
+    {
+      "kind": "native_unchanged_full_analyzer_realGensim_NLTK_astor",
+      "finding": "NativeCSVwithLoC containsbothdirected100percentpairsandcorrect1linecount. UppercasePY/hpp excludedbyCLIdefault whileActiondefaulthppdiffers."
+    },
+    {
+      "kind": "selected_original_runner_helper_native",
+      "finding": "Markdowncounteraddsaccumulatedtotal eachrow andtruncates1000inputrows to78 at1741actualcharacters, despite65000declaredcap. No remoteAPIcharlimit proof."
+    },
+    {
+      "kind": "selected_original_runner_helper_native",
+      "finding": "Markdownlinks/summary/filecells insertspaces/#/HTML/pipes unescaped; literaloutput verified, no renderedbrowser/attack/remote operation executed."
+    },
+    {
+      "kind": "selected_original_runner_main_explicit_preHTTP_analyzerStop_adapter",
+      "finding": "EnvironmentINPUT_ONLY_CODE=false reachesanalyzerasTrue via bool(nonemptystring). Originalselectedrunnerfunction executesuntilcaptureadapterraisesbeforeHTTP/tokenreads/messagewrites. No actualAction/requests/Git/commentupdate executed."
+    },
+    {
+      "kind": "source_only",
+      "finding": "Allsourcecontents/tokenlists/TFIDF retained andallpairsqueried; repeatedtokenization andreadlinesLoC forreportedpairs. No cancellation/deadline/globalmemory/admission orperformance measurement."
+    },
+    {
+      "kind": "source_only",
+      "finding": "Actionentrypointeval/gitclone/fetch/checkout andtokenURL notexecuted. requests GET/PATCH/POST lackexplicitdeadline/pagination/statusvalidation onGET; matchingprefixwithoutauthorcheck. No APIintegration/security exploit claim."
+    },
+    {
+      "kind": "source_only",
+      "finding": "Action writesmessage.md andcreates/updatescomments, notexecuted; displaytextcalledprobability withoutcalibration. Unlockeddependencies/Python3.7Docker/punkt differfrom3.12diagnosticcohort/punkt_tab; no assertionthatoriginalDockerbroken."
+    },
+    {
+      "kind": "source_only",
+      "finding": "No originalautomatedtest suite tracked; self-actionworkflow isanalysis/remoteintegration config, notverifiedunit/runtimecheck."
+    }
+  ],
+  "limits": [
+    "16authoredchecks twice:13native unchangedanalyzer/normalizer/CLI/helper +2pureASTselectedrunnerformathelpers +1selectedrunnermain capturedflag withstrictstopbeforeHTTP. No model/tokenizer mock; realfixedGensim4.3.3/NumPy1.26.4/SciPy1.12.0/NLTK3.9.1/astor0.8.1/Python3.12.14 andfourEnglishtexttables.",
+    "Publicsyntheticownedsourcefiles/models only; controlledexistingTMPmarker overwritteninsideownedroot. No user/privatecodeinput, tokenread, HTTPmessage/Git/action/comment/publishing execution.",
+    "ExternalREADMEexample screenshot viewedforformat only; no modelquality/corpus/scale/resource/platform/performance orfullpackage/build/release/adoption proof. Nativeconsolewrapperexplicit, not actualinstalledentrypoint qualification.",
+    "Complete source read not wholeobjective completion; frozencombined candidate gate stillpending, no libraryspeedup claim."
+  ]
+}

@@ -1,0 +1,99 @@
+{
+  "status": "passed16_scoped_native_analyzer_runner_controls",
+  "cases": 16,
+  "case_names": [
+    "identical_pair_zero",
+    "corpus_adds_score",
+    "token_order_ignored",
+    "filter_hides_failure",
+    "invalid_python_success",
+    "stripped_empty_body_invalid",
+    "canonical_alias_admission",
+    "relative_ignore_misses_absolute",
+    "json_false_true",
+    "console_exit_contract",
+    "model_overwrites_fixed_name",
+    "csv_directed_pairs_loc",
+    "markdown_premature_limit",
+    "markdown_unescaped",
+    "action_false_true",
+    "extension_case_admission"
+  ],
+  "observations": {
+    "identical_two_docs_score": 0.0,
+    "same_pair_with_third_document_score": 100.0,
+    "filter": {
+      "score": 21.41,
+      "fail_threshold": 20,
+      "ignore_threshold": 30,
+      "filtered_exit": "SUCCESS"
+    },
+    "console_exit": {
+      "original_standalone": 0,
+      "explicit_standard_entrypoint_wrapper": 1,
+      "scope": "Actualmain, explicitstandardconsolewrapper; no installedsetuptoolspackage test"
+    },
+    "model_path": {
+      "owned_existing_dot0_overwritten": true
+    },
+    "markdown": {
+      "input_rows": 1000,
+      "output_rows": 78,
+      "output_chars": 1741,
+      "declared_max": 65000
+    },
+    "action_false": {
+      "input": "false",
+      "analyzer_only_code": true,
+      "scope": "ASToriginalrunner main, explicitanalyzerstop beforeHTTP/tokenreads/messagewrites; noGitHubAction execution"
+    }
+  },
+  "python": "3.12.14",
+  "gensim": "4.3.3",
+  "numpy": "1.26.4",
+  "scipy": "1.12.0",
+  "nltk": "3.9.1",
+  "source_sha256": {
+    "duplicate_code_detection.py": "b5f887df4aeeb9a6e01e3a2ccb465a747ee3dd49f78e0679a5c4c0308c027063",
+    "run_action.py": "7b9c9ae44611175b6b8bfc1b9cf26ddaa548ab789bf55763fdc7503abe615053"
+  },
+  "scope": "13 actualanalyzer/normalizer/CLI/helper controls;2 selectedpure runnerhelpers;1 ASTselectedrunnermain explicitstopadapter beforeHTTP. Real Gensim/NLTK/astor/NumPy/SciPy/EnglishPunkt tables, owned modelTMP/1thread resource settings. No HTTP/Git/remotecomments/actions/installedpackage/release/corpus/platform/scale/performance/adoption proof.",
+  "repeats": 2,
+  "artifacts": [
+    {
+      "path": "docs/research/code33-native-controls-20261015/dependency-install.log",
+      "sha256": "eef5366aab5d924f121959cf7a4c5eddbe854f11f194a62865d09ab493631bb4"
+    },
+    {
+      "path": "docs/research/code33-native-controls-20261015/dependency-pins.json",
+      "sha256": "530e0eeee3c61ad83d748f66de162613d377dcc2a5f70da707acaa212b649d37"
+    },
+    {
+      "path": "docs/research/code33-native-controls-20261015/nltk-data-pins.json",
+      "sha256": "6226aea79033bd9371027c9abf97a1080d56d9b619e3ba560abab869a9cb00eb"
+    },
+    {
+      "path": "docs/research/code33-native-controls-20261015/pin_dependencies.py",
+      "sha256": "ae02d45966df4534ca4510dd5e18c64b4bb2f5fd7c32999046cf10901c3aeed8"
+    },
+    {
+      "path": "docs/research/code33-native-controls-20261015/replay.log",
+      "sha256": "e6b84c42989dc0187eaa4b8eacceb45d6b6bc58361c335f3fbe1dfe2307cbcdb"
+    },
+    {
+      "path": "docs/research/code33-native-controls-20261015/review.py",
+      "sha256": "072eb18a629844d885a23db71741bfe0a2d5a0d136520803eeca3f8580aa948e"
+    },
+    {
+      "path": "docs/research/code33-native-controls-20261015/run.log",
+      "sha256": "e6b84c42989dc0187eaa4b8eacceb45d6b6bc58361c335f3fbe1dfe2307cbcdb"
+    }
+  ],
+  "source_blobs_unchanged_after_runs": true,
+  "scoped_counts": {
+    "actual_analyzer_normalizer_CLI_helpers": 13,
+    "pure_selected_runner_helpers": 2,
+    "selected_runner_flag_capture_before_HTTP": 1
+  },
+  "dependency_scope": "10isolatedfixedwheel dependencies and4EnglishPunkt texttables; unpinnedupstreamminimumrequirements, not originalDockerPython3.7/installedpackage/dev/remoteAction qualification. OwnedTMPand1thread resourceenvironment, no modelbackend/tokenizeradapter."
+}
