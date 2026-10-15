@@ -1,0 +1,60 @@
+{
+  "status": "passed_selected_original_body_controls",
+  "cases": 12,
+  "case_names": [
+    "65536_hamming_byte_pair_oracles",
+    "sequence_hash_loses_temporal_order",
+    "sequence_hash_loses_repetition_count",
+    "longest_common_prefix_overreturns_first_string",
+    "scene_segmentation_drops_uncut_full_sequence",
+    "scene_segmentation_omits_trailing_scene",
+    "sliding_zero_step_repeats_same_window_bounded_islice",
+    "bollinger_short_signal_yields_lag_then_index_error",
+    "empty_mseq_index_error",
+    "empty_merge_and_compress_index_errors",
+    "resolution_parser_valid_input_type_error",
+    "positive_interval_and_search_controls"
+  ],
+  "python": "3.12.14",
+  "numpy": "2.3.5",
+  "scope": "AST-selected original function bodies, real NumPy; no skimage/skvideo/sklearn/FFmpeg/Docker or actual video decode/quality/pipeline execution",
+  "source_sha256": {
+    "docs/research/dedup-500/evidence/VieVie31--scene_detection/full-source/LICENSE": "3881227400de1e5a304a9e75ceafcc902d183b85546772d01b406724e0b59fe3",
+    "docs/research/dedup-500/evidence/VieVie31--scene_detection/full-source/Dockerfile": "b9a3a60b2158bc2874b38624b7afdb547e9f16a117c34d92846573531ac993e9",
+    "docs/research/dedup-500/evidence/VieVie31--scene_detection/full-source/README.md": "530aae25f0e356b8cdb2b13af58f0b2497f684b9f22f14f479e139be46f5bf5f",
+    "docs/research/dedup-500/evidence/VieVie31--scene_detection/full-source/.dockerignore": "42644809a10d86efac16e8201e0b4fb3fc487ec0b3c5aa7f9e011dc5f6b7e086",
+    "docs/research/dedup-500/evidence/VieVie31--scene_detection/full-source/.gitignore": "7da48fa66821949041c48e51c0f043a44f6568857831a9b71338d374f1da5c07",
+    "docs/research/dedup-500/evidence/VieVie31--scene_detection/full-source/scd": "598c50a7fb218e3d65a17da59839582052b5aaf259a3d22487545c3f8e4442f7",
+    "docs/research/dedup-500/evidence/VieVie31--scene_detection/full-source/cache/.gitkeep": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/research/dedup-500/evidence/VieVie31--scene_detection/full-source/videos/.gitkeep": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/research/dedup-500/evidence/VieVie31--scene_detection/full-source/src/functions.py": "6e3a6ce48a2c79670c86d4332aaf564a9271e5e9e6dcebee58daf5eba1f73851",
+    "docs/research/dedup-500/evidence/VieVie31--scene_detection/full-source/src/benchmark_cseq_mseq.py": "428b834b25cbc6126c9044f80ee8d2d0351af643aef9514a4b70b6c4de89b31f",
+    "docs/research/dedup-500/evidence/VieVie31--scene_detection/full-source/src/main.sh": "27274913670c0cfff7a1870857c6027461e9ed44b5fa4f10311653d20baaba02",
+    "docs/research/dedup-500/evidence/VieVie31--scene_detection/full-source/src/phash.py": "88eacfdc2a15a7e17dfaaaa1f34b46ce6da73af15d147be7b7c6cbc84b46f3a1",
+    "docs/research/dedup-500/evidence/VieVie31--scene_detection/full-source/src/main.py": "5c93718c2b09ea9ae4950351d4d1e37ee6ea06ab48c9697b8fda776bd2f1ac2c"
+  },
+  "repeats": 2,
+  "artifacts": [
+    {
+      "path": "docs/research/scene380-selected-native-controls-20261015/replay.log",
+      "sha256": "3b28e1e7856cbd0eff76c383adbedc7f3038e145131d0ef2bac0cb063cc5c554"
+    },
+    {
+      "path": "docs/research/scene380-selected-native-controls-20261015/review-v1.py",
+      "sha256": "d3fe8de37e4699cf1e5cad267f0d006ad25aa3048a5beeaaa0f0bb590d981e44"
+    },
+    {
+      "path": "docs/research/scene380-selected-native-controls-20261015/review.py",
+      "sha256": "bdd244274c7d765aa53771a76a9437393442cd20b7032e8f9084d7c9b9008802"
+    },
+    {
+      "path": "docs/research/scene380-selected-native-controls-20261015/run-v1.log",
+      "sha256": "dc4b34bd7081035faef25f8db99e625437c94c1fb33e7c2ed0c35c7035f7ea83"
+    },
+    {
+      "path": "docs/research/scene380-selected-native-controls-20261015/run.log",
+      "sha256": "3b28e1e7856cbd0eff76c383adbedc7f3038e145131d0ef2bac0cb063cc5c554"
+    }
+  ],
+  "harness_correction": "V1 mistakenly expected clean generator termination after lag yields. Original raises IndexError on short signal; V1 source/log retained and V2 asserts five false yields followed by original IndexError. No upstream source edited."
+}

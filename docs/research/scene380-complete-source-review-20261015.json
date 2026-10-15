@@ -1,0 +1,165 @@
+{
+  "repository": "VieVie31/scene_detection",
+  "commit": "d213c4e93a84071758cc465d69e4727a69680e30",
+  "tree": "4e1332676737a448a92a3c7b1641067f7bfaee7c",
+  "status": "complete_source_read_selected_original_body_controls_twice",
+  "whole_repository_complete": true,
+  "license": "MIT",
+  "scope": "All13 tracked text blobs and4trees: all Python algorithms/abstracthash/main/benchmark, both shell/container launchers, Dockerfile,README,license,ignorefiles andtwoempty placeholders. No tracked media or README media references; external Docker website excluded.",
+  "blobs": [
+    {
+      "path": ".dockerignore",
+      "mode": "100644",
+      "git_blob": "8f567bb1dfa88d3caf1ef8af363166fdf24ce278",
+      "bytes": 56,
+      "sha256": "42644809a10d86efac16e8201e0b4fb3fc487ec0b3c5aa7f9e011dc5f6b7e086"
+    },
+    {
+      "path": ".gitignore",
+      "mode": "100644",
+      "git_blob": "96a14f69c1e110136ed49dfb7320f40499ed89a4",
+      "bytes": 2454,
+      "sha256": "7da48fa66821949041c48e51c0f043a44f6568857831a9b71338d374f1da5c07"
+    },
+    {
+      "path": "Dockerfile",
+      "mode": "100644",
+      "git_blob": "c20e254da5482a1aa6a86807b004b422a3743042",
+      "bytes": 967,
+      "sha256": "b9a3a60b2158bc2874b38624b7afdb547e9f16a117c34d92846573531ac993e9"
+    },
+    {
+      "path": "LICENSE",
+      "mode": "100644",
+      "git_blob": "59d96c49b63af95672bc729a4a01394a576e9a64",
+      "bytes": 1088,
+      "sha256": "3881227400de1e5a304a9e75ceafcc902d183b85546772d01b406724e0b59fe3"
+    },
+    {
+      "path": "README.md",
+      "mode": "100644",
+      "git_blob": "d12c869e89583a4a3519f4f543401674d4cc3c98",
+      "bytes": 1193,
+      "sha256": "530aae25f0e356b8cdb2b13af58f0b2497f684b9f22f14f479e139be46f5bf5f"
+    },
+    {
+      "path": "cache/.gitkeep",
+      "mode": "100644",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "scd",
+      "mode": "100755",
+      "git_blob": "1b868a8538b433dca1c2e51c9fddb09495761b3b",
+      "bytes": 2738,
+      "sha256": "598c50a7fb218e3d65a17da59839582052b5aaf259a3d22487545c3f8e4442f7"
+    },
+    {
+      "path": "src/benchmark_cseq_mseq.py",
+      "mode": "100644",
+      "git_blob": "54f50197a6fbd3b68c6d0a0448e0914633ded5b1",
+      "bytes": 3349,
+      "sha256": "428b834b25cbc6126c9044f80ee8d2d0351af643aef9514a4b70b6c4de89b31f"
+    },
+    {
+      "path": "src/functions.py",
+      "mode": "100644",
+      "git_blob": "d9d742334ac90d58b2d2af83bee569e72dc910be",
+      "bytes": 17381,
+      "sha256": "6e3a6ce48a2c79670c86d4332aaf564a9271e5e9e6dcebee58daf5eba1f73851"
+    },
+    {
+      "path": "src/main.py",
+      "mode": "100644",
+      "git_blob": "c5ffac83d10b0d1c15035bed7d4dba6445ab1f17",
+      "bytes": 8179,
+      "sha256": "5c93718c2b09ea9ae4950351d4d1e37ee6ea06ab48c9697b8fda776bd2f1ac2c"
+    },
+    {
+      "path": "src/main.sh",
+      "mode": "100755",
+      "git_blob": "0f13c54f2a834068cccc9f3e1bd153f62b32743c",
+      "bytes": 2314,
+      "sha256": "27274913670c0cfff7a1870857c6027461e9ed44b5fa4f10311653d20baaba02"
+    },
+    {
+      "path": "src/phash.py",
+      "mode": "100644",
+      "git_blob": "40719aa66569d3dd0776ef75ebfd427c151f1068",
+      "bytes": 1093,
+      "sha256": "88eacfdc2a15a7e17dfaaaa1f34b46ce6da73af15d147be7b7c6cbc84b46f3a1"
+    },
+    {
+      "path": "videos/.gitkeep",
+      "mode": "100644",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "tree_objects_verified": 4,
+  "pin_sha256": "86d61a16163c39f7e731bbd8f705b57739397497a1e20b960e982d79e100cc7e",
+  "controls": "docs/research/scene380-selected-native-controls-20261015/result.json",
+  "controls_sha256": "556743fcd46761cce5715b041997bbe1ab6eaf8fd7966f29488f56855f08f390",
+  "findings": [
+    {
+      "kind": "native_selected_original_body",
+      "finding": "Sequencehash identical under temporal reorder and repetition, so cannot certify video identity."
+    },
+    {
+      "kind": "native_selected_original_body",
+      "finding": "Scene segmentation drops entire no-cut sequence and trailing scene after last cut."
+    },
+    {
+      "kind": "native_selected_original_body",
+      "finding": "Longest common prefix abc/ab returns abc."
+    },
+    {
+      "kind": "native_selected_original_body",
+      "finding": "Zero sliding step repeats forever; control consumes only three yields. Short Bollinger input yields lag false values then IndexError."
+    },
+    {
+      "kind": "native_selected_original_body",
+      "finding": "Empty mseq/merge/compress crash; resolution parser valid8x8 raises TypeError, though CLI currently uses str rather than this parser."
+    },
+    {
+      "kind": "native_selected_original_body",
+      "finding": "All65536bytepair Hamming oracles and bounded positive interval/search/hash controls pass."
+    },
+    {
+      "kind": "source_only",
+      "finding": "Main retains all frames before segmentation and allocates square scene distance matrix; no streaming/RSS/scale measurement."
+    },
+    {
+      "kind": "source_only",
+      "finding": "Cache ID uses filename+resolution+FPS without source bytes/mtime/freshness/backend recipe; shell accepts any existing output without completed atomic publication."
+    },
+    {
+      "kind": "source_only",
+      "finding": "CLI embeds unvalidated resolution inside shell command; no injection or Docker/shell side effects executed. Launcher ignores system command exit status."
+    },
+    {
+      "kind": "source_only",
+      "finding": "Main uses eval on metadata timebase, assumes nb_frames, nonempty generics, mutates tuple scenes on adjacent merge, and uses sampled frame indexes in VLC time output without explicit FPS conversion. No original pipeline execution."
+    },
+    {
+      "kind": "source_only",
+      "finding": "Hash is mean-threshold average hash, not DCTpHash; constant frames collapse. Flat dynamic normalization divides by zero. Pixel/color/alpha/frame/backend policy unqualified."
+    },
+    {
+      "kind": "source_only",
+      "finding": "Benchmark random generator unseeded; CSV reports sequence length for insertion/std columns; cannot be performance/quality evidence."
+    },
+    {
+      "kind": "source_only",
+      "finding": "mseq uses consumed filter iterators across DFS roots and potentially expensive path exploration; suffix storage/quadratic histogram/front-pop algorithms have scaling risks, not measured speed claims."
+    }
+  ],
+  "limits": [
+    "No upstream automated suite declared; benchmark is random exploratory script, not executed.",
+    "AST-selected unchanged bodies with real NumPy2.3.5/Python3.12, not upstreamPython3.5/fullmodule imports. No skimage/skvideo/sklearn/FFmpeg/Docker/video corpus/original CLI runtime or quality/performance/platform proof.",
+    "No foreign production code adopted. Findings supply counterexamples and resource/cache requirements; no library speedup claimed."
+  ]
+}

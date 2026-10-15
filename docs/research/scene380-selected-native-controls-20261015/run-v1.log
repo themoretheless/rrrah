@@ -1,0 +1,18 @@
+PASS 65536_hamming_byte_pair_oracles
+PASS sequence_hash_loses_temporal_order
+PASS sequence_hash_loses_repetition_count
+PASS longest_common_prefix_overreturns_first_string
+PASS scene_segmentation_drops_uncut_full_sequence
+PASS scene_segmentation_omits_trailing_scene
+PASS sliding_zero_step_repeats_same_window_bounded_islice
+Traceback (most recent call last):
+  File "/Users/themoretheless/Documents/Sources/rrrah/docs/research/scene380-selected-native-controls-20261015/review.py", line 29, in <module>
+    check('bollinger_short_signal_yields_lag_rows',lambda:equal(list(ns['bollinger'](np.array([1.,2.]),5)),[False]*5))
+  File "/Users/themoretheless/Documents/Sources/rrrah/docs/research/scene380-selected-native-controls-20261015/review.py", line 16, in check
+    fn();rows.append(name);print('PASS',name)
+    ^^^^
+  File "/Users/themoretheless/Documents/Sources/rrrah/docs/research/scene380-selected-native-controls-20261015/review.py", line 29, in <lambda>
+    check('bollinger_short_signal_yields_lag_rows',lambda:equal(list(ns['bollinger'](np.array([1.,2.]),5)),[False]*5))
+                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "upstream-functions", line 34, in bollinger
+IndexError: index 4 is out of bounds for axis 0 with size 2
