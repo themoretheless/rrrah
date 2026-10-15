@@ -1,0 +1,66 @@
+{
+  "status": "complete_source_read_native_upstream_and_scoped_controls",
+  "repository": "anishathalye/periscope",
+  "index": 16,
+  "commit": "a279bfd38e6ff8f4730e52fc670d8e24b98eda7a",
+  "root_tree": "526663ceccdf85bf7e2b819d941123248bd62dbb",
+  "whole_repo_complete": true,
+  "full_repository_read": true,
+  "tracked_blobs": 62,
+  "tracked_trees_including_root": 11,
+  "all_git_blob_and_tree_hashes_verified": true,
+  "all_tracked_text_read": true,
+  "license": "GPL3; sameblob f288702d2fa16d3cdf0035b15a9fcbc552cd88e7 as fullread133; no code adopted",
+  "native_runtime": "go version go1.27.2 darwin/arm64",
+  "go_binary_sha256": "516c1fbb53b5f8f4852f0c3c379d45bcff53a1032e5cd1a9ca1738f03ba07cb1",
+  "real_dependencies_verified": "all modules verified",
+  "dependency_scope": "Actual SQLite CGO/afero/Blake2b and remaining pinned modules; module bytehash validation, not full dependency source audit",
+  "counts": {
+    "upstream-run1": 154,
+    "controls-run2": 9,
+    "controls-run3": 9
+  },
+  "logs": {
+    "docs/research/dedup-500/peri16-upstream-run1-20261015.jsonl": "5e5c0641b718f00bb806ed0e1ae6711616eeb5fbdef100f598fa66bf60ec3d10",
+    "docs/research/dedup-500/peri16-controls-run2-20261015.jsonl": "53cdb2ed1e9044f25563bea32c356d1fc173dbb6b32f778635f706b8dbcf4db3",
+    "docs/research/dedup-500/peri16-controls-run3-20261015.jsonl": "cee94d65bbaa510bf9460da5184611d26dacc10b8cee084d2c1154142358fca9"
+  },
+  "controls": "docs/research/dedup-500/peri16-authored-controls-20261015.go",
+  "reading_scope": "All62tracked source/config/CI/docs/lock/test/license blobs complete. README external animateddemo sampled in browser: scan349/349,summary230tracked115duplicates817MB and later deletion/listing, not an independent performance or all-frame audit. No tracked image/media assets.",
+  "findings": [
+    {
+      "status": "native_original_and_authored_tests",
+      "finding": "Size -> keyed8byte4096prefix -> fullBlake2b pipeline; original late-tail/overlap/size/symlink/hardlink/rollback tests pass. Fresh removal hashing refuses stale unequal keeper."
+    },
+    {
+      "status": "native_explicit_afero_fault_schedule",
+      "finding": "Mutation of victim at Remove deletes newly unique content; keeper disappearance at Remove leaves both paths absent. Explicit deterministic mutation hook, not observed ambient OS race."
+    },
+    {
+      "status": "native_explicit_afero_failure",
+      "finding": "Denied root Open after successful Stat makes Scan return success and clear prior two catalogue rows while both files remain."
+    },
+    {
+      "status": "native_short_read_wrapper",
+      "finding": "hashPartial uses one Read, so1byte shortread changes prefix digest for same bytes; fullhash reads through EOF and agrees."
+    },
+    {
+      "status": "native_original_logic",
+      "finding": "Root containment joins extra slash and refuses copy; empty Forget argument panics; report ignores writer error while JSONexport reports it; incremental outside scan keeps stalefullhash."
+    },
+    {
+      "status": "static_only",
+      "finding": "Database paths assume Unix root; nonpositive thread count yields worker queue with no consumers; report buffering and size bucketing unbounded; channel producer errors logged rather than surfaced."
+    }
+  ],
+  "harness_corrections": [
+    "Initial launch redirection outside workspace rejected before Goexecution; corrected cwd",
+    "V1 authored test compilefailed because herror.Interface variable reused for standard error; preserved exactfailedharness/log; v2onlylocal readErr binding corrected, production unchanged"
+  ],
+  "limits": [
+    "MacARM native upstream154tests once and9authoredcontrols twice; no Linux/Windows/currentRoot/wholelibrary performance qualification",
+    "Mostly upstream and authored afero in-memory fixtures with realSQLite/hashing; hardlink control uses actualownedOSfiles",
+    "No root/private user catalogue/bootstrap/network API or destructive external data actions",
+    "No source production adoption or speedup claim; current full durable baseline+candidate stillrequired"
+  ]
+}

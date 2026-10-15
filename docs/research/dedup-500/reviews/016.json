@@ -2,13 +2,13 @@
   "index": 16,
   "repository": "anishathalye/periscope",
   "commit": "a279bfd38e6ff8f4730e52fc670d8e24b98eda7a",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "Complete62trackedtextblobs/alltrees;154nativeoriginaltests once,9authoredcontrols twice with explicit localfaults",
   "decision": "reference",
-  "finding": "Persistent file scan/hash operations with directory/completion tests; GPL and Go preclude direct Rust reuse.",
+  "finding": "Multistagehash+SQLite catalogue; fresh removal guard positive, stale scan/error erasure/shortread/TOCTOU faults qualified. GPL reference, no code adoption.",
   "license_metadata": "GPL-3.0",
   "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
   "tests_detected": 16,
-  "upstream_tests_run": false,
+  "upstream_tests_run": true,
   "available_source_evidence": [
     {
       "path": "cmd/psc/hash.go",
@@ -74,5 +74,8 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/dedup-500/peri16-complete-source-review-20261015.json",
+  "upstream_test_count_validated": 154
 }
