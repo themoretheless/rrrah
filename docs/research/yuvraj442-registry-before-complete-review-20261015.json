@@ -1,0 +1,78 @@
+{
+  "index": 442,
+  "repository": "yuvraj0028/image-similarity",
+  "commit": "5bda10cd3fbaab4fb99b72274a9212005edb2afe",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Java multiple hash types with BKTree exact Hamming distances; no detected tests, retrieval completeness needs exhaustive oracle.",
+  "available_source_evidence": [
+    {
+      "path": "src/main/java/io/github/yuvraj0028/bktree/BKTree.java",
+      "local": "02-BKTree.java",
+      "url": "https://github.com/yuvraj0028/image-similarity/blob/5bda10cd3fbaab4fb99b72274a9212005edb2afe/src/main/java/io/github/yuvraj0028/bktree/BKTree.java",
+      "sha256": "d8adcdd6f07b02ea827512092834b258265375c936de7ee7ea1428c55b4999ed",
+      "truncated": false,
+      "lines": 125,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/main/java/io/github/yuvraj0028/models/HashType.java",
+      "local": "03-HashType.java",
+      "url": "https://github.com/yuvraj0028/image-similarity/blob/5bda10cd3fbaab4fb99b72274a9212005edb2afe/src/main/java/io/github/yuvraj0028/models/HashType.java",
+      "sha256": "6ff602589ae249131734dccf692e8f4e8d0f36efeec26bee268eff53775f5ebd",
+      "truncated": false,
+      "lines": 16,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/main/java/io/github/yuvraj0028/service/ImageSimilarityService.java",
+      "local": "04-ImageSimilarityService.java",
+      "url": "https://github.com/yuvraj0028/image-similarity/blob/5bda10cd3fbaab4fb99b72274a9212005edb2afe/src/main/java/io/github/yuvraj0028/service/ImageSimilarityService.java",
+      "sha256": "4269bad50ef2aebbf5aa1de262a32e08bb6129bdbf1155992c9d1e8d7a772434",
+      "truncated": false,
+      "lines": 168,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/main/java/io/github/yuvraj0028/utils/HashUtils.java",
+      "local": "05-HashUtils.java",
+      "url": "https://github.com/yuvraj0028/image-similarity/blob/5bda10cd3fbaab4fb99b72274a9212005edb2afe/src/main/java/io/github/yuvraj0028/utils/HashUtils.java",
+      "sha256": "784ac4dee6ca0a4acc0c5a15540baa1e0d8056ef80435614bc1e9325c51db3a4",
+      "truncated": false,
+      "lines": 183,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "Apache-2.0",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/yuvraj0028/image-similarity/blob/5bda10cd3fbaab4fb99b72274a9212005edb2afe/README.md",
+      "sha256": "8817d5f35cb20efef99c49ec05d88a75b6c99f11c34835182fc58fdb9e05c789",
+      "truncated": false,
+      "lines": 167,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/yuvraj0028/image-similarity/blob/5bda10cd3fbaab4fb99b72274a9212005edb2afe/LICENSE",
+      "sha256": "4bf5d92e16df797fda46ad07acc02960b3f28d779350bf428616ee582616e9f5",
+      "truncated": false,
+      "lines": 201,
+      "source": false,
+      "test": false
+    }
+  ]
+}

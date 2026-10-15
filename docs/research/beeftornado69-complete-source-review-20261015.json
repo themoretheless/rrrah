@@ -1,0 +1,161 @@
+{
+  "repository": "beeftornado/duplicate-image-finder",
+  "commit": "7a7f84e80d66f91197d2b5f04c2e087e663c7fd2",
+  "tree": "8b3c5b56aa14296646340db3c96f5da0d6534915",
+  "status": "complete_source_read_bounded_adapter_controls",
+  "whole_repository_complete": true,
+  "scope": "All14 tracked blobs read including implementation, license, README, setup/build and configuration.",
+  "license": "MIT",
+  "blobs": [
+    {
+      "path": ".gitignore",
+      "mode": "100644",
+      "git_blob": "f975d9f926414e4a28fd4e3b8a89948b0db2a494",
+      "bytes": 708,
+      "sha256": "1ce425c79c47415af3615fdaa2c89341a731024eb5f0a6c4b04d119ed3ebb30a"
+    },
+    {
+      "path": "LICENSE",
+      "mode": "100644",
+      "git_blob": "a9ec2ea12347899b505b623029d269e3f51f1cd6",
+      "bytes": 1073,
+      "sha256": "0212d2ffa181db6ec48e7d6d5a712d750e0da189a46a635a71241f377dde02f3"
+    },
+    {
+      "path": "README.md",
+      "mode": "100644",
+      "git_blob": "355011782d30b51ba60f87bfaef1ec927153aa67",
+      "bytes": 5304,
+      "sha256": "9d5d0ccf0a936c114ba791316bbeeb178868e338700095ce8e9efa44781dc92d"
+    },
+    {
+      "path": "duplicateimagefinder/__init__.py",
+      "mode": "100644",
+      "git_blob": "3e7b102ae6fd33b2398cd4b679f8134dad72f6e4",
+      "bytes": 427,
+      "sha256": "2060a0b47d066671a0c582c5c089d46c1e30ac47819446837c4f282ed51e0f41"
+    },
+    {
+      "path": "duplicateimagefinder/app.py",
+      "mode": "100755",
+      "git_blob": "568cea72470b0ecc88f9e46dbdef9af0c175dcb1",
+      "bytes": 11583,
+      "sha256": "621123647eec0fa54e54ba2631dff6980f8d082cc2f0328418bb9ace3a822fce"
+    },
+    {
+      "path": "duplicateimagefinder/enums.py",
+      "mode": "100644",
+      "git_blob": "5bb58b344b95ffe87d2b241f5cd20cdac1eefa60",
+      "bytes": 513,
+      "sha256": "453e6e2c4671d7baca5ff9ad3ac4499110587ae76d7e59f96c08309980470011"
+    },
+    {
+      "path": "duplicateimagefinder/output_formats/__init__.py",
+      "mode": "100644",
+      "git_blob": "4920b0500c961bc6a044a2bd77eba2df966b9036",
+      "bytes": 272,
+      "sha256": "9ab890042a61f08f536429c31b195b3ca55428f4de79a194a02cc9560e981edf"
+    },
+    {
+      "path": "duplicateimagefinder/output_formats/base.py",
+      "mode": "100644",
+      "git_blob": "9bde3623074e7c0ed035eca691d0995c9d5346e8",
+      "bytes": 360,
+      "sha256": "7045f440e78251b15fb5854c749416014d60326e9e986565c579511fc9800def"
+    },
+    {
+      "path": "duplicateimagefinder/output_formats/human.py",
+      "mode": "100644",
+      "git_blob": "e905afb00889fd313919994044fb26fa27a968bf",
+      "bytes": 621,
+      "sha256": "a35b95b5139b1d46acedbcae5aa9c761e4ce00cd4a668ad9fd66d8912bee61ff"
+    },
+    {
+      "path": "duplicateimagefinder/output_formats/jsono.py",
+      "mode": "100644",
+      "git_blob": "e9a927633d8698144280e5fb3d8ef11f400e8ee2",
+      "bytes": 643,
+      "sha256": "855c3fbc2d90049e16bed7f6b89a864f10c38fa1671c7301771f98895715c901"
+    },
+    {
+      "path": "duplicateimagefinder/utils.py",
+      "mode": "100644",
+      "git_blob": "08d97c2acf559c8daea6f5d624439b6a0638539d",
+      "bytes": 2853,
+      "sha256": "1259a04470e8c0df07f7ad7189107203e5fd333e4402cfe816a6d94ec5b9bb4d"
+    },
+    {
+      "path": "ez_setup.py",
+      "mode": "100644",
+      "git_blob": "63a0942642077fd29965d7e27302dc76da486813",
+      "bytes": 10475,
+      "sha256": "ea2434e20018643f12b7605db9d9cad6f2d6315f8a65a58dbc252ba01c40beb7"
+    },
+    {
+      "path": "requirements.txt",
+      "mode": "100644",
+      "git_blob": "7d1e0773b5925f0a694afe69f3d3d8b9c99ba8c8",
+      "bytes": 49,
+      "sha256": "cf36168778dae078252b395965148a1eda66a408f6950236c57f48797ba4de02"
+    },
+    {
+      "path": "setup.py",
+      "mode": "100644",
+      "git_blob": "42f5e08475747899a1036ea90e744390ef16ed01",
+      "bytes": 761,
+      "sha256": "72f5365ca11664704c697981b8b82a823b6d40c032ca7552db4ecf3a880b112e"
+    }
+  ],
+  "tree_objects_verified": 3,
+  "pin_artifact": "docs/research/beeftornado69-commit-tree-pin-20261015.json",
+  "pin_sha256": "fef8c1e1313213defd0f61d18ed71c09eebf09428500ceac879fa3b393a69f40",
+  "findings": [
+    {
+      "kind": "adapter_runtime",
+      "finding": "8x9 pixels produce72 hash bits, but sum is divided by64 and similarity uses64. Black is all72bits, white zero; Hamming72 maps to Python2 integer score -13. No calibrated confidence claim."
+    },
+    {
+      "kind": "adapter_runtime",
+      "finding": "Truthful nonzero memory cache hit skips source existence and mutation checks. Persistent record with future created timestamp is accepted for changed non-image bytes."
+    },
+    {
+      "kind": "adapter_runtime",
+      "finding": "Nonempty JSON formatter emits trailing comma and cannot be parsed; empty list emits valid JSON."
+    },
+    {
+      "kind": "source_only",
+      "finding": "Zero hashes are treated as absent during pair comparison, dropping valid computed zero signatures."
+    },
+    {
+      "kind": "source_only",
+      "finding": "All file pairs scanned quadratically; per-pair hash accesses may stat and fetch persistent records. Pair results and async result list unbounded by explicit budgets."
+    },
+    {
+      "kind": "source_only",
+      "finding": "Worker readiness observed without get(), so hash exceptions are not collected as typed per-file errors. Callback stat/save failures lack recovery guards."
+    },
+    {
+      "kind": "source_only",
+      "finding": "Directory separation uses startswith string prefix rather than path containment. Nested/overlapping roots can suppress eligible pairs or duplicate discovered paths."
+    },
+    {
+      "kind": "source_only",
+      "finding": "No EXIF orientation normalization, frame policy, pixel confirmation or low-information guard; strict greater-than confidence100 cannot return any match."
+    },
+    {
+      "kind": "source_only",
+      "finding": "Lock acquire/release lacks finally on several IO paths. Photos-library choice is raw string then choice-1. Setup entrypoint calls main without CLI globals initialization."
+    },
+    {
+      "kind": "source_only",
+      "finding": "Bundled ez_setup may download/install setuptools; read in full but never executed. No upstream tests or tracked media in tree."
+    }
+  ],
+  "controls": "docs/research/beeftornado69-adapter-controls-20261015/result.json",
+  "limits": [
+    "Full tracked source/license/configuration read, all Git blobs and canonical tree objects verified; no tracked images/GIF/video.",
+    "Reference concepts only; no foreign production code adopted.",
+    "Static review is not complete runtime, cross-platform, image-quality or scale qualification.",
+    "Selected converted methods only, explicit storage adapter and real modern Pillow;8 authored controls twice. Original Python2/BlitzDB/pool/CLI not executed."
+  ]
+}

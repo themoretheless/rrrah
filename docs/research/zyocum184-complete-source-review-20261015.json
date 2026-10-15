@@ -1,0 +1,123 @@
+{
+  "repository": "zyocum/dedup",
+  "commit": "cfe73dd5b369356f5e685a752f8bcf7e26b8f45d",
+  "tree": "fdc46e163d661269341097d7672325a1aaa37944",
+  "status": "complete_source_read_eight_authored_controls_pass_twice",
+  "whole_repository_complete": true,
+  "license": "MIT",
+  "scope": "All8 tracked text blobs read, including all scripts/config/license/README and web templates/CSS where present.",
+  "blobs": [
+    {
+      "path": ".gitignore",
+      "mode": "100644",
+      "git_blob": "894a44cc066a027465cd26d634948d56d13af9af",
+      "bytes": 1203,
+      "sha256": "a2ebfecdb6c1b58267fbe97e6e2ac02c2b963df7673fc1047270f0f0cff16732"
+    },
+    {
+      "path": "LICENSE",
+      "mode": "100644",
+      "git_blob": "b69c27e179b501348aa255c6406c588da6a53d93",
+      "bytes": 1070,
+      "sha256": "9087e1d893d4f3254f0073732a0234ac0ecc57de1a7f2acd54b27d2549703241"
+    },
+    {
+      "path": "README.md",
+      "mode": "100644",
+      "git_blob": "9adfc0d3d99a611777570cd57db5fedf94e0a773",
+      "bytes": 11049,
+      "sha256": "513806bc455bfee81922a6d553b7f90f2c56e0d72ed0dc40d0d062a17d9cfe2e"
+    },
+    {
+      "path": "dedup.py",
+      "mode": "100755",
+      "git_blob": "872917ac1620dadf6b68ccdcc79482b5df52c770",
+      "bytes": 8504,
+      "sha256": "0bb5c702445ad48b3d27194b2941493fb904087d582fc0d498910f82d8c1feca"
+    },
+    {
+      "path": "dedup_pairwise.py",
+      "mode": "100755",
+      "git_blob": "77fb4f54a46164975c9dda175f126ad55309171d",
+      "bytes": 3637,
+      "sha256": "efd4c52065fe8229ff14f175d53ccdf2b271faa806d599a53cfbb62e9fbc79ee"
+    },
+    {
+      "path": "list_equivalence_classes.py",
+      "mode": "100755",
+      "git_blob": "531bdd26dfecc1ad2b488a9bda7812d6323b658a",
+      "bytes": 2306,
+      "sha256": "8f84e786cfb912cdf77ad84f2277ed10058b2ddbe6cc2e07b57a4c681825a91e"
+    },
+    {
+      "path": "matching_substrings.py",
+      "mode": "100755",
+      "git_blob": "211df4393e763c23beaea150cc881ae6f3ad216c",
+      "bytes": 3914,
+      "sha256": "f0f67c4ca2a8fc6b2a4d6e789e9b1b0d7f128dac0202ff025b9348edc266264e"
+    },
+    {
+      "path": "requirements.txt",
+      "mode": "100644",
+      "git_blob": "7e01b88f6c7a32ca4b300b42603fac2090f5b24b",
+      "bytes": 29,
+      "sha256": "01d4caf05c3cc5118e1992d2a2876bd64d95c8b57574f81a5ad713d0ac4d5865"
+    }
+  ],
+  "tree_objects_verified": 1,
+  "pin_artifact": "docs/research/zyocum184-commit-tree-pin-20261015.json",
+  "pin_sha256": "1464c9194aaf33d181c46993cbf45e2be2539b974fef15afa3e3f68b8f938abf",
+  "findings": [
+    {
+      "kind": "selected_original_runtime",
+      "finding": "pairs consumes document iterator in first sorted pass; later rotations see exhausted iterator. Synthetic4precomputed hashes produce3pairs for iterator and strictly more for reusable list. main supplies load generator, so rotating retrieval loses subsequent-pass candidates."
+    },
+    {
+      "kind": "selected_original_runtime",
+      "finding": "Window larger than number of documents yields no ngrams and drops all candidate pairs, even identical synthetic hashes."
+    },
+    {
+      "kind": "selected_original_runtime",
+      "finding": "Bridge a-b,c-d,b-c leaves2overlapping equivalence classes rather than merged1class. Similarity relation is also not generally transitive; no exact identity claim."
+    },
+    {
+      "kind": "selected_original_runtime",
+      "finding": "SequenceMatcher default autojunk hides200-character common repetitive substring when differing prefix prevents initial seed; autojunkFalse independent oracle finds200."
+    },
+    {
+      "kind": "selected_original_runtime",
+      "finding": "Threshold0 includes zero-length sentinel; pairwise diff of two empty strings raisesZeroDivisionError."
+    },
+    {
+      "kind": "selected_original_runtime",
+      "finding": "6400independent8bit rotate oracles and all128single-bit simdiff controls pass. No actual CityHash evaluation."
+    },
+    {
+      "kind": "source_only",
+      "finding": "simhash with n>text length has no features and returns0; ADM.load ignores normalization_form. simdiff loops everybit though Python int.bit_count could optimize supported runtimes; no production adoption."
+    },
+    {
+      "kind": "source_only",
+      "finding": "Rotating both fixed-width fingerprints does not change Hamming distance; repeated scoring redundant but rotation changes adjacency only. Approximate candidate completeness/quality not proven by README timings."
+    },
+    {
+      "kind": "source_only",
+      "finding": "dedup_pairwise output loop misspells uniuqe then references undefined unique, followed by attempted join of Text objects. Text approximate eq with filename hash violates equality/hash consistency."
+    },
+    {
+      "kind": "source_only",
+      "finding": "Read entire text documents, filename list and candidate dictionary in memory, no cancellation/file snapshot/max resource caps. combinations count uses factorial true division susceptible to precision/overflow, not run on large inputs."
+    },
+    {
+      "kind": "source_only",
+      "finding": "README timing/screenshots are text terminal transcripts, not current runtime proof. All8tracked text files read, no tracked fixtures/media/tests/CI."
+    }
+  ],
+  "controls": "docs/research/zyocum184-selected-controls-20261015/result.json",
+  "controls_sha256": "0c3cf9d91426a4f587c23f2044e77c9e8b95ac979d87796958ca14336e75ba3b",
+  "limits": [
+    "Original selected functions extracted via AST without body changes. CityHash backend unavailable and never called; all fingerprints synthetic/precomputed, placeholder raises if called. No CityHash/complete main hashing/CLI/backend or text-retrieval quality proof.",
+    "Original stdlib matching-substring/equivalence functions run on owned data. No upstream tests exist in pinned tree.",
+    "Reference concepts only; no foreign production code adopted. Fullsource read not whole runtime/backend/platform/security/scale/quality qualification."
+  ]
+}

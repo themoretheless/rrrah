@@ -2,7 +2,7 @@
   "index": 184,
   "repository": "zyocum/dedup",
   "commit": "cfe73dd5b369356f5e685a752f8bcf7e26b8f45d",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All8 tracked text blobs read; canonical Git blob/tree verification;8 authored controls twice with explicit execution limits.",
   "decision": "reference",
   "finding": "Text n-gram and matching-substring candidates; local-overlap idea only, not raster comparison.",
   "available_source_evidence": [
@@ -64,5 +64,7 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/zyocum184-complete-source-review-20261015.json"
 }

@@ -1,0 +1,18 @@
+{% extends 'dirinfo.html' %}
+
+{% block application %}
+  <section role="application">
+    <section class="box table">
+      <header>Same as "{{ name }}"</header>
+      <table class="list">
+        <tbody>
+          {% for filename in files %}
+            <tr>
+              <td>{{ filename }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+  </section>
+{% endblock %}

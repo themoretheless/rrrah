@@ -1,0 +1,68 @@
+{
+  "index": 184,
+  "repository": "zyocum/dedup",
+  "commit": "cfe73dd5b369356f5e685a752f8bcf7e26b8f45d",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Text n-gram and matching-substring candidates; local-overlap idea only, not raster comparison.",
+  "available_source_evidence": [
+    {
+      "path": "dedup.py",
+      "local": "02-dedup.py",
+      "url": "https://github.com/zyocum/dedup/blob/cfe73dd5b369356f5e685a752f8bcf7e26b8f45d/dedup.py",
+      "sha256": "0bb5c702445ad48b3d27194b2941493fb904087d582fc0d498910f82d8c1feca",
+      "truncated": false,
+      "lines": 293,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "dedup_pairwise.py",
+      "local": "03-dedup_pairwise.py",
+      "url": "https://github.com/zyocum/dedup/blob/cfe73dd5b369356f5e685a752f8bcf7e26b8f45d/dedup_pairwise.py",
+      "sha256": "efd4c52065fe8229ff14f175d53ccdf2b271faa806d599a53cfbb62e9fbc79ee",
+      "truncated": false,
+      "lines": 123,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "matching_substrings.py",
+      "local": "04-matching_substrings.py",
+      "url": "https://github.com/zyocum/dedup/blob/cfe73dd5b369356f5e685a752f8bcf7e26b8f45d/matching_substrings.py",
+      "sha256": "f0f67c4ca2a8fc6b2a4d6e789e9b1b0d7f128dac0202ff025b9348edc266264e",
+      "truncated": false,
+      "lines": 155,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/zyocum/dedup/blob/cfe73dd5b369356f5e685a752f8bcf7e26b8f45d/README.md",
+      "sha256": "513806bc455bfee81922a6d553b7f90f2c56e0d72ed0dc40d0d062a17d9cfe2e",
+      "truncated": false,
+      "lines": 258,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/zyocum/dedup/blob/cfe73dd5b369356f5e685a752f8bcf7e26b8f45d/LICENSE",
+      "sha256": "9087e1d893d4f3254f0073732a0234ac0ecc57de1a7f2acd54b27d2549703241",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

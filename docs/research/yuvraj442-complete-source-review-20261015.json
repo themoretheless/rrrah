@@ -1,0 +1,132 @@
+{
+  "repository": "yuvraj0028/image-similarity",
+  "commit": "5bda10cd3fbaab4fb99b72274a9212005edb2afe",
+  "tree": "0f41894cbfb4f1311ed95f0efd1ac052647c0ec5",
+  "status": "complete_source_read_runtime_unavailable",
+  "whole_repository_complete": true,
+  "scope": "All11 tracked blobs read including implementation, license, README, setup/build and configuration.",
+  "license": "Apache-2.0",
+  "blobs": [
+    {
+      "path": ".gitattributes",
+      "mode": "100644",
+      "git_blob": "f91f64602e6c6d892d70d71f4fc7a1bd943e23f3",
+      "bytes": 278,
+      "sha256": "ca40924bbe3db74fe4f39c9b32500ca5a15e7bc1cff355033fe859702e5dbb97"
+    },
+    {
+      "path": ".gitignore",
+      "mode": "100644",
+      "git_blob": "c3308f940a448f799697838407edf8d176ea88f9",
+      "bytes": 225,
+      "sha256": "02c1726f01f1255dfdd385090b7ea138071cb65aaa6bee51382bd638c37eae2c"
+    },
+    {
+      "path": "LICENSE",
+      "mode": "100644",
+      "git_blob": "7b1707f2ef7a30335ad1b0fda0adb2f5b0abddbd",
+      "bytes": 11342,
+      "sha256": "4bf5d92e16df797fda46ad07acc02960b3f28d779350bf428616ee582616e9f5"
+    },
+    {
+      "path": "README.md",
+      "mode": "100644",
+      "git_blob": "a147aa360b863a6a574393f626406b75259c50cb",
+      "bytes": 4865,
+      "sha256": "8817d5f35cb20efef99c49ec05d88a75b6c99f11c34835182fc58fdb9e05c789"
+    },
+    {
+      "path": "pom.xml",
+      "mode": "100644",
+      "git_blob": "84c3ea67172fef66399f4743a8c8c70d95136fc9",
+      "bytes": 3951,
+      "sha256": "b47f7da054ab291580632c6dead00d4be260b36521cd95f128ea5177ee7bf9c3"
+    },
+    {
+      "path": "src/main/java/io/github/yuvraj0028/bktree/BKTree.java",
+      "mode": "100644",
+      "git_blob": "ede442c616b5a3fb6fe40c4232ade946a998f302",
+      "bytes": 5170,
+      "sha256": "d8adcdd6f07b02ea827512092834b258265375c936de7ee7ea1428c55b4999ed"
+    },
+    {
+      "path": "src/main/java/io/github/yuvraj0028/models/HashType.java",
+      "mode": "100644",
+      "git_blob": "1fbb397749e868e3ebcd12aa4baf77c7fd7be770",
+      "bytes": 334,
+      "sha256": "6ff602589ae249131734dccf692e8f4e8d0f36efeec26bee268eff53775f5ebd"
+    },
+    {
+      "path": "src/main/java/io/github/yuvraj0028/service/ImageSimilarityService.java",
+      "mode": "100644",
+      "git_blob": "3b186f4a757a1b1c9c2afa02da3364b7e6a2192e",
+      "bytes": 6353,
+      "sha256": "4269bad50ef2aebbf5aa1de262a32e08bb6129bdbf1155992c9d1e8d7a772434"
+    },
+    {
+      "path": "src/main/java/io/github/yuvraj0028/utils/Hamming.java",
+      "mode": "100644",
+      "git_blob": "fec4430b38a9f70804ac6c06e98bec9f26b30f7d",
+      "bytes": 749,
+      "sha256": "d0c20a6c9732dc9b2e49476728a987ce6684713d4565b81224d678d9dae2563b"
+    },
+    {
+      "path": "src/main/java/io/github/yuvraj0028/utils/HashUtils.java",
+      "mode": "100644",
+      "git_blob": "4b8804484650175de7210b7a788a604a26052da1",
+      "bytes": 6940,
+      "sha256": "784ac4dee6ca0a4acc0c5a15540baa1e0d8056ef80435614bc1e9325c51db3a4"
+    },
+    {
+      "path": "src/main/java/io/github/yuvraj0028/utils/ImageUtils.java",
+      "mode": "100644",
+      "git_blob": "7324104d3bae4be24c9ecea3eb574137855edb92",
+      "bytes": 3196,
+      "sha256": "e3532286c804851050904f206e4c49dfe9193d4f6c2c67ff8602c596c9d01de9"
+    }
+  ],
+  "tree_objects_verified": 11,
+  "pin_artifact": "docs/research/yuvraj442-commit-tree-pin-20261015.json",
+  "pin_sha256": "cc559028ab8a4d6b6806ea887c45653ff84356f0d769b3728ac9bbc1a3a4bade",
+  "findings": [
+    {
+      "kind": "source_only",
+      "finding": "Hash->single filename map overwrites prior same-hash filename, while BKTree inserts another same-value node. Search can repeat latest filename and lose earlier files; clearTreeCache rebuild collapses duplicate hash nodes, changing result multiplicity."
+    },
+    {
+      "kind": "source_only",
+      "finding": "Only basename stored, losing directory identity. No source snapshot/freshness validation, byte/pixel confirmation or low-information gate."
+    },
+    {
+      "kind": "source_only",
+      "finding": "Duplicate hash insertion follows distance0 child chain. Repeated identical hashes cost quadratic insertion and linear-depth node storage; README unconditional O(log n)/million-scale claim unproven."
+    },
+    {
+      "kind": "source_only",
+      "finding": "BKTree search uses int hi=distance+maxDistance without validation; maxDistance=Integer.MAX_VALUE may overflow and prune matches. Negative radius accepted without explicit policy error."
+    },
+    {
+      "kind": "source_only",
+      "finding": "pHash comment says exclude DC but code includes dct[0][0]. applyDCT calculates all1024 coefficients with nested32x32 sums and repeated cos evaluations although only64 coefficients are used. Candidate lesson: bounded precomputation/selected coefficients needs bitwise+paired performance qualification before adoption."
+    },
+    {
+      "kind": "source_only",
+      "finding": "ImageIO.read may return null for unsupported bytes; immediately dereferenced. No image-dimension/decode budget, frame/EXIF policy or cancellation; graphics allocations and maps unbounded by explicit resource policy."
+    },
+    {
+      "kind": "source_only",
+      "finding": "Mutable service maps/tree are not synchronized; no concurrent ownership contract. Query-file comment claims self exclusion but no exclusion implemented."
+    },
+    {
+      "kind": "source_only",
+      "finding": "Only Java standard library production sources; no upstream test files, tracked media or CI in commit. Maven publish/sign plugins read but not executed."
+    }
+  ],
+  "controls": null,
+  "limits": [
+    "Full tracked source/license/configuration read, all Git blobs and canonical tree objects verified; no tracked images/GIF/video.",
+    "Reference concepts only; no foreign production code adopted.",
+    "Static review is not complete runtime, cross-platform, image-quality or scale qualification.",
+    "/usr/bin/java and /usr/bin/javac report no installed Java Runtime. No Java execution, compilation, Maven, image-hash oracle or BKTree runtime claims."
+  ]
+}

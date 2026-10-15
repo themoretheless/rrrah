@@ -1,0 +1,30 @@
+{
+  "status": "eight_authored_controls_pass_twice",
+  "tests": 8,
+  "original_tests_run": 0,
+  "python": "3.9.6 (default, Aug 25 2026, 21:26:21) \n[Clang 21.0.0 (clang-2100.3.34.2)]",
+  "platform": "macOS-26.7.2-arm64-arm-64bit",
+  "sqlite": "3.51.0",
+  "command": [
+    "/Library/Developer/CommandLineTools/usr/bin/python3",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/eduardo147-native-controls-20261015/review_test.py"
+  ],
+  "artifacts": [
+    {
+      "path": "docs/research/eduardo147-native-controls-20261015/replay.log",
+      "sha256": "c2ce8288540aa0c6febed21adf8b4fc1d428fd6338b779c0f3428df384164ed0"
+    },
+    {
+      "path": "docs/research/eduardo147-native-controls-20261015/review_test.py",
+      "sha256": "69caaddf25b78c1ddfa6d0bcd90c9d82cc620e0488948876aa28e6179ee10224"
+    },
+    {
+      "path": "docs/research/eduardo147-native-controls-20261015/run.log",
+      "sha256": "d51b97690ff76bf391546daa1a05de7c4ad9c85d4b573c25e2ac2044fdf5cd78"
+    }
+  ],
+  "limits": [
+    "Original full core module loaded without modifications. Import-only expanduser redirect confines cache to owned temporary directory; per-test CACHE_DIR points to owned temporary paths. Real Python3.9 file IO and SQLite.",
+    "Digest collision and unlink failure explicitly injected; no cryptographic collision or real permission failure claimed. No external/private files, network, listener, deletion CLI or Flask runtime."
+  ]
+}

@@ -1,0 +1,13 @@
+/Users/themoretheless/Documents/Sources/rrrah/docs/research/beeftornado69-adapter-controls-20261015/review_test.py:6: DeprecationWarning: lib2to3 package is deprecated and may not be able to parse Python 3.10+
+  from lib2to3.refactor import RefactoringTool, get_fixers_from_package
+Traceback (most recent call last):
+  File "/Users/themoretheless/Documents/Sources/rrrah/docs/research/beeftornado69-adapter-controls-20261015/review_test.py", line 12, in <module>
+    parsed=ast.parse(converted)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/Users/themoretheless/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/ast.py", line 52, in parse
+    return compile(source, filename, mode, flags,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<unknown>", line 112
+    avhash = reduce(lambda x, (y, z): x | (z << y),
+                              ^^^^^^
+SyntaxError: Lambda expression parameters cannot be parenthesized

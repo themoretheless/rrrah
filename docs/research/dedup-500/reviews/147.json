@@ -2,7 +2,7 @@
   "index": 147,
   "repository": "eduardoklosowski/deduplicated",
   "commit": "44a594b009be2a9705b3ddef80348d8dfe0f19fb",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All21 tracked text blobs read; canonical Git blob/tree verification;8 authored controls twice with explicit execution limits.",
   "decision": "reference",
   "finding": "SHA1 file digest CLI/web wrapper; verify full reads and byte confirmation before adopting.",
   "available_source_evidence": [
@@ -74,5 +74,7 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/eduardo147-complete-source-review-20261015.json"
 }
