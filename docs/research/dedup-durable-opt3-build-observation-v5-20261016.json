@@ -1,0 +1,37 @@
+{
+  "status": "verified_owned_build_live",
+  "observed_at_utc": "2026-10-15T22:15:22.277774+00:00",
+  "rows": [
+    {
+      "pid": 87411,
+      "parent": 5850,
+      "elapsed": "06:08",
+      "executable": "/opt/homebrew/Cellar/python@3.15/3.15.0/Frameworks/Python.framework/Versions/3.15/Resources/Python.app/Contents/MacOS/Python"
+    },
+    {
+      "pid": 87426,
+      "parent": 87411,
+      "elapsed": "06:05",
+      "executable": "/Users/themoretheless/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo"
+    },
+    {
+      "pid": 88197,
+      "parent": 87426,
+      "elapsed": "05:11",
+      "executable": "/Users/themoretheless/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rustc"
+    }
+  ],
+  "logs_at_observation": {
+    ".dedup-work/20261015-common-v5/artifacts/actual-benchmark-v5/cargo-json.log": {
+      "sha256": "3878bed132fba94c1877abae10b8e682b3f4eee3c6d226732f26fb983f305ccf",
+      "bytes": 289988
+    },
+    ".dedup-work/20261015-common-v5/artifacts/actual-benchmark-v5/cargo-stderr.log": {
+      "sha256": "2e1487c3c8231638b54119040172a434593a492949f724681c7417f99afbbfb4",
+      "bytes": 973
+    }
+  },
+  "protocol_sha256": "8c79ef83a7aa598f7806cd4895ccd62d1405a642f8fbf9a695ba8db34f4ddf39",
+  "inspector_sha256": "891e7eb5a710bf8cb34da44cf37f7d525c5b5e0321e986209987c7973c7444d0",
+  "scope": "Specific existing producer/cargo/rustc PID parentage and producer command verified now. Missing historical rustc alone not terminal. No restart/timing/adoption."
+}

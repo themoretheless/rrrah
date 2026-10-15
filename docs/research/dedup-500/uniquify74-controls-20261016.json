@@ -1,0 +1,281 @@
+{
+  "status": "verified_scoped_original_handler_controls",
+  "whole_repo_complete": false,
+  "runs": 2,
+  "controls_per_run": 9,
+  "controls": [
+    [
+      {
+        "case": "same_document_id_deletes_second",
+        "attempts": [
+          2
+        ],
+        "deleted": [
+          2
+        ],
+        "visits": 2,
+        "reports_deleted_one": true,
+        "final_success": true,
+        "state": {
+          "chat": {},
+          "purge_status": {},
+          "main_delay": {}
+        }
+      },
+      {
+        "case": "cross_media_type_shared_id",
+        "attempts": [
+          2
+        ],
+        "deleted": [
+          2
+        ],
+        "visits": 2,
+        "reports_deleted_one": true,
+        "final_success": true,
+        "state": {
+          "chat": {},
+          "purge_status": {},
+          "main_delay": {}
+        }
+      },
+      {
+        "case": "different_ids_no_byte_comparison",
+        "attempts": [],
+        "deleted": [],
+        "visits": 2,
+        "reports_deleted_one": false,
+        "final_success": false,
+        "state": {
+          "chat": {},
+          "purge_status": {},
+          "main_delay": {}
+        }
+      },
+      {
+        "case": "photos_are_unsupported",
+        "attempts": [],
+        "deleted": [],
+        "visits": 2,
+        "reports_deleted_one": false,
+        "final_success": false,
+        "state": {
+          "chat": {},
+          "purge_status": {},
+          "main_delay": {}
+        }
+      },
+      {
+        "case": "generic_delete_failure_still_claims_success",
+        "attempts": [
+          2
+        ],
+        "deleted": [],
+        "visits": 2,
+        "reports_deleted_one": true,
+        "final_success": true,
+        "state": {
+          "chat": {},
+          "purge_status": {},
+          "main_delay": {}
+        }
+      },
+      {
+        "case": "floodwait_not_retried_still_claims_success",
+        "attempts": [
+          2
+        ],
+        "deleted": [],
+        "visits": 2,
+        "reports_deleted_one": true,
+        "final_success": true,
+        "state": {
+          "chat": {},
+          "purge_status": {},
+          "main_delay": {}
+        }
+      },
+      {
+        "case": "cancel_before_second_message",
+        "attempts": [],
+        "deleted": [],
+        "visits": 2,
+        "reports_deleted_one": false,
+        "final_success": false,
+        "state": {
+          "chat": {},
+          "purge_status": {},
+          "main_delay": {}
+        }
+      },
+      {
+        "case": "unconfigured_purge_leaves_status",
+        "attempts": [],
+        "deleted": [],
+        "visits": 0,
+        "reports_deleted_one": false,
+        "final_success": false,
+        "state": {
+          "chat": {},
+          "purge_status": {
+            "1": 1
+          },
+          "main_delay": {}
+        }
+      },
+      {
+        "case": "unauthorized_configuration_refused",
+        "chat": {}
+      }
+    ],
+    [
+      {
+        "case": "same_document_id_deletes_second",
+        "attempts": [
+          2
+        ],
+        "deleted": [
+          2
+        ],
+        "visits": 2,
+        "reports_deleted_one": true,
+        "final_success": true,
+        "state": {
+          "chat": {},
+          "purge_status": {},
+          "main_delay": {}
+        }
+      },
+      {
+        "case": "cross_media_type_shared_id",
+        "attempts": [
+          2
+        ],
+        "deleted": [
+          2
+        ],
+        "visits": 2,
+        "reports_deleted_one": true,
+        "final_success": true,
+        "state": {
+          "chat": {},
+          "purge_status": {},
+          "main_delay": {}
+        }
+      },
+      {
+        "case": "different_ids_no_byte_comparison",
+        "attempts": [],
+        "deleted": [],
+        "visits": 2,
+        "reports_deleted_one": false,
+        "final_success": false,
+        "state": {
+          "chat": {},
+          "purge_status": {},
+          "main_delay": {}
+        }
+      },
+      {
+        "case": "photos_are_unsupported",
+        "attempts": [],
+        "deleted": [],
+        "visits": 2,
+        "reports_deleted_one": false,
+        "final_success": false,
+        "state": {
+          "chat": {},
+          "purge_status": {},
+          "main_delay": {}
+        }
+      },
+      {
+        "case": "generic_delete_failure_still_claims_success",
+        "attempts": [
+          2
+        ],
+        "deleted": [],
+        "visits": 2,
+        "reports_deleted_one": true,
+        "final_success": true,
+        "state": {
+          "chat": {},
+          "purge_status": {},
+          "main_delay": {}
+        }
+      },
+      {
+        "case": "floodwait_not_retried_still_claims_success",
+        "attempts": [
+          2
+        ],
+        "deleted": [],
+        "visits": 2,
+        "reports_deleted_one": true,
+        "final_success": true,
+        "state": {
+          "chat": {},
+          "purge_status": {},
+          "main_delay": {}
+        }
+      },
+      {
+        "case": "cancel_before_second_message",
+        "attempts": [],
+        "deleted": [],
+        "visits": 2,
+        "reports_deleted_one": false,
+        "final_success": false,
+        "state": {
+          "chat": {},
+          "purge_status": {},
+          "main_delay": {}
+        }
+      },
+      {
+        "case": "unconfigured_purge_leaves_status",
+        "attempts": [],
+        "deleted": [],
+        "visits": 0,
+        "reports_deleted_one": false,
+        "final_success": false,
+        "state": {
+          "chat": {},
+          "purge_status": {
+            "1": 1
+          },
+          "main_delay": {}
+        }
+      },
+      {
+        "case": "unauthorized_configuration_refused",
+        "chat": {}
+      }
+    ]
+  ],
+  "producer_sha256": "bdaa116d103a2aaa2f2a4a529a267acbb2438367d71317feadfb319d67bc5464",
+  "source_pins": {
+    ".dedup-work/uniquify74-20261016/source/user.py": "50ac3461fd7a45d54f13cdb341520b8e0b4b9d7520c2f4b440863172d96fb507",
+    ".dedup-work/uniquify74-20261016/source/sample_config.py": "787b676bba6b3dcda3a4f080fd524611901278b19f5932581380bfaca9a81b53",
+    ".dedup-work/uniquify74-20261016/source/LICENSE": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+    ".dedup-work/uniquify74-20261016/source/requirements.txt": "142cbf9b97f5aacdc3023d1a6ee1992f870187a9b29d0627b5288a5035c4a672",
+    ".dedup-work/uniquify74-20261016/source/app.json": "02c7f58420e94f842b12ef9d8e9dd035b920931294bde759ed8bbfc1381a746b",
+    ".dedup-work/uniquify74-20261016/source/presets.py": "f24409d97838a010868ab382a89df31a80d281938ee1a447350d3382838f075f",
+    ".dedup-work/uniquify74-20261016/source/runtime.txt": "26eec96d692b3e614cfdc5128827e60ea13c490fec6a7648089eaa9d97b54a5d",
+    ".dedup-work/uniquify74-20261016/source/README.md": "fc63e2642d2328e7027224e983be67d734273a496d75c71ca3063c123fb49eb2",
+    ".dedup-work/uniquify74-20261016/source/bot.py": "cb705cc230802151ee21391134c4e7afc3d87c604d503d437885212ddf3f2b48",
+    ".dedup-work/uniquify74-20261016/source/.gitignore": "5962ac83cbf7b09f1e5d9c4c46a2bbf518e3d3304399063b070f1984bc9f5270",
+    ".dedup-work/uniquify74-20261016/source/Procfile": "779f389331c639795f02f088c613431da01a893e9fb69ee5b02db7abd3bf40a3",
+    ".dedup-work/uniquify74-20261016/source/main.py": "aa32c2329a005683d423ea4398a18f8217ac10f579155da9b2c9056677aeeb3d",
+    ".dedup-work/uniquify74-20261016/source/plugins/call_back.py": "1dd933a6fc10b55fa1e84b5f64d30e379b92ce01f9540c18c6c2811c0a9b390a",
+    ".dedup-work/uniquify74-20261016/source/plugins/commands.py": "4a78cf6875fb27fec726c4ef6526d8ea9065af42fca8e0218a9c95ec15999195",
+    ".dedup-work/uniquify74-20261016/source/support/buttons.py": "992492c9babf116e6728d0210bef1395f749b7267ed889028620c2723cb386b0"
+  },
+  "adapters": "All4 original async command handler AST bodies compiled unchanged; decorators/imports omitted, original Presets executed. Fake in-memory message/user/exception/config/async sleep; no Pyrogram import, network, user session, real message or deletion. Python current interpreter, not upstream Python3.9/Pyrogram1.4.8 runtime.",
+  "limits": [
+    "No upstream tests exist in pinned tree",
+    "Shared cross-type ID synthetic only; distinct IDs no comparison demonstrated without asserting actual byte equality",
+    "Deletion failure report is reproduced only against fake API exceptions, not live Telegram",
+    "No portable byte/image duplicate engine, no production code copied or adopted"
+  ]
+}

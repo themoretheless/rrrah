@@ -1,0 +1,29 @@
+{
+  "status": "verified_complete_pinned_source_review_and_scoped_controls",
+  "whole_repo_complete": true,
+  "whole_implementation_complete": true,
+  "repository": "m4mallu/uniquify",
+  "commit": "38aaf637fc07b75a8edc55a4eeba73efd20bd692",
+  "blobs": 15,
+  "canonical_trees": 3,
+  "acquisition": "docs/research/dedup-500/uniquify74-fetched-source-pins-20261016.json",
+  "acquisition_sha256": "dc1274eacec6efe5c5e59ce3419c470a4dc5f3455681d8627185e3ba7c615e15",
+  "controls": "docs/research/dedup-500/uniquify74-controls-20261016.json",
+  "controls_sha256": "101418276789982a1ac6fdac2719a13f9f0d994440f076a6d5b9d84f0e5b25b4",
+  "auditor_sha256": "f0e0ae8928853b3b7494e7a6edaac44d2a5b34f71b98298dd674dfc8832b38a8",
+  "license": "GPLv3 text fully read, no implementation copied",
+  "findings": [
+    "Dedup based on Telegram file_unique_id via growing list; no byte/image/video comparison, photo unsupported",
+    "Delete exceptions and FloodWait are swallowed; counter advances and final success can falsely claim deletion;9 handler controls twice reproduce local branches",
+    "Cancellation before next message works in owned synthetic control; missing configured chat leaves purge_status entry",
+    "Configuration authorization refusal reproduced; purge has no own authorization check, but ordinary configuration branch guards chat assignment. No live exploit claim",
+    "One get_messages API fetch per history message and linear growing-list lookup; performance cost inferred statically, not measured",
+    "No pinned upstream tests; Python3.9.13/Pyrogram1.4.8 service not deployed"
+  ],
+  "decision": "reject-domain; preserve counter/error/cancellation lessons, no portable content duplicate engine",
+  "limits": [
+    "All original repository source reviewed; linked external visual assets/services and third-party dependency sources outside pinned tree not reviewed",
+    "AST-handler tests use fake transport and exceptions, no Telegram messages sent or deleted, no credentials/session strings accessed",
+    "No full service/deployment/platform/performance qualification or production adoption"
+  ]
+}

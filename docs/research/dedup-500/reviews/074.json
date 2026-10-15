@@ -2,9 +2,9 @@
   "index": 74,
   "repository": "m4mallu/uniquify",
   "commit": "38aaf637fc07b75a8edc55a4eeba73efd20bd692",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All15 pinned UTF8 repository blobs and3canonical trees; entire source/docs/license/config reviewed. No bundled media. External linked media/services outside pinned tree not reviewed.",
   "decision": "reject-domain",
-  "finding": "Telegram bot deduplication is chat-media integration; selected entrypoints do not expose a portable visual engine.",
+  "finding": "Telegram file_unique_id list dedup only; exception/FloodWait deletion failure advances counter and reports success; local handler controls reproduce, no real Telegram operations or portable content engine.",
   "license_metadata": "GPL-3.0",
   "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
   "tests_detected": 0,
@@ -64,5 +64,8 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/dedup-500/uniquify74-complete-source-review-20261016.json",
+  "upstream_test_scope": "No upstream tests in pinned tree;9 scoped unchanged AST handler controls twice against in-memory Telegram/exception/config/sleep adapters, not full Pyrogram service."
 }
