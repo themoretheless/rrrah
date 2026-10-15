@@ -1,0 +1,38 @@
+{
+  "status": "root_adopted_from_qualified_complete_portfolio_candidate",
+  "runtime_audit": "docs/research/dedup-additive-trace-runtime-audit-20261015.json",
+  "runtime_audit_sha256": "1d262b7a874f03202c126a7ee042d3ab2a8d2fcbfffd7cef133c6b1b002517a4",
+  "passed": 40,
+  "failed": 0,
+  "ignored": 0,
+  "old_root_pins": {
+    "production": "52508852209d876dc728fe56e4de37ceaef5b0ff99e0ac5d5f36d6a0dba4746b",
+    "integration": "294dffccf43d95a6c6ad633d10eebd979e6a68c5b3073358d754be6a09574295"
+  },
+  "root_pins": {
+    "crates/rrrah-dedup/src/search_portfolio.rs": "76ee01ea638dedb51be4576e802a3a7b1e110b27db10cb5e6be8f4e7cc0c668c",
+    "crates/rrrah-dedup/tests/search_portfolio.rs": "cfdf9457ecf3d60b12b177fff25cfed53be95320c746f823dc689ad80ea1515d"
+  },
+  "qualified_source_plan_sha256": "f95d3d071e442ae7bc5eaf04b15b3237edaa58e94b7e99183c468cb183d61e2f",
+  "compiled_integration_sha256": "52acc469682b889078dd866150cc0b72a38a5774e7623a2307a5bcb6ecffdd56",
+  "formatted_qualified_integration_sha256": "cfdf9457ecf3d60b12b177fff25cfed53be95320c746f823dc689ad80ea1515d",
+  "compatibility": "Existing public function/type definitions preserved; additive traced API returns compact direction counters without correspondence buffers. Original guarded body shared, only result construction changed.",
+  "scope": "Exactly one production module and one complete integration target adopted; all other captured dedup production modules unchanged.40 complete original-plus-added portfolio tests executed with actual candidate machine code and pinned frozen baseline core/decode deps. Production metadata and strict warnings passed; integration formatting only after qualification.",
+  "limits": [
+    "No improved matching thresholds, negative precision, corpus recall or measured speedup claim",
+    "Not fresh current Root Core/decoder/Cargo/all-feature/platform/native model qualification",
+    "Running paired collection gate remains independent; full objective and all12requirements remain open"
+  ],
+  "retained_runtime_audit": "docs/research/dedup-additive-trace-runtime-audit-v2-20261015.json",
+  "retained_runtime_audit_sha256": "184594a409cf063ef2758f36163024dcdbee0607f9ecc45cd238ce5cdf6585c6",
+  "retained_evidence_pins": {
+    "docs/research/dedup-additive-trace-runtime-reproducer-20261015/original-portfolio-integration.rs": "294dffccf43d95a6c6ad633d10eebd979e6a68c5b3073358d754be6a09574295",
+    "docs/research/dedup-additive-trace-runtime-reproducer-20261015/plan.json": "f95d3d071e442ae7bc5eaf04b15b3237edaa58e94b7e99183c468cb183d61e2f",
+    "docs/research/dedup-additive-trace-runtime-reproducer-20261015/integration-inventory.log": "0afacc40b49a353c9bd11b620a2ad4b04b781cdb5d18cd073ec0062db6c6c6e7",
+    "docs/research/dedup-additive-trace-runtime-reproducer-20261015/formatted-integration.rs": "cfdf9457ecf3d60b12b177fff25cfed53be95320c746f823dc689ad80ea1515d",
+    "docs/research/dedup-additive-trace-runtime-reproducer-20261015/search_portfolio-integration.rs": "52acc469682b889078dd866150cc0b72a38a5774e7623a2307a5bcb6ecffdd56",
+    "docs/research/dedup-additive-trace-runtime-reproducer-20261015/library-build.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/research/dedup-additive-trace-runtime-reproducer-20261015/integration-run.log": "f3973837a4133e37f87b04afadc4d02915ea21297332541e45a03f3da3c7086b",
+    "docs/research/dedup-additive-trace-runtime-reproducer-20261015/integration-build.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

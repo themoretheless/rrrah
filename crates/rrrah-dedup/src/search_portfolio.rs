@@ -1337,6 +1337,50 @@ impl NativeBankConsensusEvidence {
     }
 }
 
+/// Compact stage attribution; counters describe bounded candidates, never a negative verdict.
+#[derive(Clone, Copy, Debug)]
+pub struct NativeBankRecoveryTrace {
+    pub support: Option<bool>,
+    pub model_attempted: bool,
+    pub native_miss: Option<SearchStageMiss>,
+    pub opposite_insufficient: Option<bool>,
+    pub model_attempts: Option<usize>,
+    pub model_diagnostics: Option<crate::model_banks::ModelBankDiagnostics>,
+}
+impl From<&NativeBankRecoveryEvidence> for NativeBankRecoveryTrace {
+    fn from(evidence: &NativeBankRecoveryEvidence) -> Self {
+        Self {
+            support: evidence.supported(),
+            model_attempted: evidence.model_attempted(),
+            native_miss: evidence.native_miss,
+            opposite_insufficient: evidence.opposite_insufficient,
+            model_attempts: evidence.model_search.map(|search| search.attempts),
+            model_diagnostics: evidence.model_search.map(|search| search.diagnostics),
+        }
+    }
+}
+/// Both compact traces share the existing operation-atomic observation lifetime.
+#[derive(Clone, Copy, Debug)]
+pub struct NativeBankConsensusTraceEvidence {
+    pub forward: NativeBankRecoveryTrace,
+    pub reverse: NativeBankRecoveryTrace,
+}
+impl NativeBankConsensusTraceEvidence {
+    pub fn summary(&self) -> NativeBankConsensusEvidence {
+        let summarize = |trace: NativeBankRecoveryTrace| NativeBankDirectionSummary {
+            support: trace.support,
+            model_attempted: trace.model_attempted,
+        };
+        NativeBankConsensusEvidence {
+            forward: summarize(self.forward),
+            reverse: summarize(self.reverse),
+        }
+    }
+    pub fn supported(&self) -> Option<bool> {
+        self.summary().supported()
+    }
+}
+
 /// Checked cumulative work for both complete cascades, including skipped stages.
 pub fn required_native_bank_consensus_work(
     forward: NativeBankDirectionPolicy<'_>,
@@ -1394,10 +1438,84 @@ pub fn search_native_bank_consensus_files_with(
     )
 }
 
+/// Opt-in AND confirmation, separate from existing OR/fallback APIs. All work,
+/// projection caps and both directional policies are admitted before file IO.
+/// Each cascade retains its own limits; `work` and `maximum_projection_checks`
+/// additionally bound the sum across directions. Execution errors remain errors.
+/// The same provider runs sequentially; each request keeps its interpretation.
+/// Reservations are sequential and results compact, not a hard process RSS cap.
+#[allow(clippy::too_many_arguments)]
+pub fn search_native_bank_consensus_files_with_trace(
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    weights: &Path,
+    forward: NativeBankDirectionPolicy<'_>,
+    reverse: NativeBankDirectionPolicy<'_>,
+    work: PortfolioWorkLimits,
+    maximum_projection_checks: u64,
+    budget: &MemoryBudget,
+    mut provider: impl FnMut(
+        &Path,
+        &GrayModelInput,
+        &GrayModelInput,
+        &MemoryBudget,
+        &dyn Fn() -> bool,
+    ) -> Result<SharedBuffer<ScoredProposal>, ProposalProviderError>,
+    cancel: impl Fn() -> bool,
+) -> Result<NativeBankConsensusTraceEvidence, SearchPortfolioError> {
+    search_native_bank_consensus_files_directional_traced(
+        left,
+        right,
+        weights,
+        forward,
+        reverse,
+        work,
+        maximum_projection_checks,
+        budget,
+        |_, weights, left, right, budget, cancel| provider(weights, left, right, budget, cancel),
+        cancel,
+    )
+}
+
 // Direction is explicit internally so native inference respects independent
 // proposal caps while sharing one lazily loaded model across the operation.
 #[allow(clippy::too_many_arguments)]
 pub(crate) fn search_native_bank_consensus_files_directional(
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    weights: &Path,
+    forward: NativeBankDirectionPolicy<'_>,
+    reverse: NativeBankDirectionPolicy<'_>,
+    work: PortfolioWorkLimits,
+    maximum_projection_checks: u64,
+    budget: &MemoryBudget,
+    provider: impl FnMut(
+        bool,
+        &Path,
+        &GrayModelInput,
+        &GrayModelInput,
+        &MemoryBudget,
+        &dyn Fn() -> bool,
+    ) -> Result<SharedBuffer<ScoredProposal>, ProposalProviderError>,
+    cancel: impl Fn() -> bool,
+) -> Result<NativeBankConsensusEvidence, SearchPortfolioError> {
+    search_native_bank_consensus_files_directional_traced(
+        left,
+        right,
+        weights,
+        forward,
+        reverse,
+        work,
+        maximum_projection_checks,
+        budget,
+        provider,
+        cancel,
+    )
+    .map(|trace| trace.summary())
+}
+
+#[allow(clippy::too_many_arguments)]
+pub(crate) fn search_native_bank_consensus_files_directional_traced(
     left: &DecodeRequest,
     right: &DecodeRequest,
     weights: &Path,
@@ -1415,7 +1533,7 @@ pub(crate) fn search_native_bank_consensus_files_directional(
         &dyn Fn() -> bool,
     ) -> Result<SharedBuffer<ScoredProposal>, ProposalProviderError>,
     cancel: impl Fn() -> bool,
-) -> Result<NativeBankConsensusEvidence, SearchPortfolioError> {
+) -> Result<NativeBankConsensusTraceEvidence, SearchPortfolioError> {
     guarded_pair(
         left,
         right,
@@ -1456,15 +1574,12 @@ pub(crate) fn search_native_bank_consensus_files_directional(
                         },
                         context.cancel,
                     )?;
-                    Ok::<_, SearchPortfolioError>(NativeBankDirectionSummary {
-                        support: evidence.supported(),
-                        model_attempted: evidence.model_attempted(),
-                    })
+                    Ok::<_, SearchPortfolioError>(NativeBankRecoveryTrace::from(&evidence))
                 };
             let forward = run(left, right, forward, true)?;
             context.verify()?;
             let reverse = run(right, left, reverse, false)?;
-            Ok(NativeBankConsensusEvidence { forward, reverse })
+            Ok(NativeBankConsensusTraceEvidence { forward, reverse })
         },
         cancel,
     )

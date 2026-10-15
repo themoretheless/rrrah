@@ -2475,3 +2475,97 @@ fn consensus_unknown_runs_reverse_and_provider_failure_stays_error() -> TestResu
     }
     Ok(())
 }
+
+#[test]
+fn traced_consensus_preserves_counters_errors_and_source_guards() -> TestResult {
+    let dir = tempfile::tempdir()?;
+    let (r, w) = model_fixture::fixture(dir.path());
+    let b = MemoryBudget::new(128 * 1024 * 1024);
+    let mut p = recovery_policy();
+    native_miss(&mut p.primary);
+    p.opposite.search = p.primary.native;
+    let (p, banks, model_work, cap) = bank_recovery_setup(p);
+    let factors = factors();
+    let direction = NativeBankDirectionPolicy {
+        search: p,
+        banks,
+        model_work,
+        radii: &[2, 6],
+        maximum_projection_checks: cap,
+        factors: &factors,
+    };
+    let work = required_native_bank_consensus_work(direction, direction)?;
+    let original_weights = std::fs::read(&w)?;
+    for mode in 0..5 {
+        let calls = Cell::new(0);
+        let stop = Cell::new(false);
+        let result = rrrah_dedup::search_portfolio::search_native_bank_consensus_files_with_trace(
+            &r[0],
+            &r[1],
+            &w,
+            direction,
+            direction,
+            work,
+            2 * cap,
+            &b,
+            |a, l, r, b, c| {
+                calls.set(calls.get() + 1);
+                if calls.get() == 26 {
+                    if mode == 1 {
+                        return Err(std::io::Error::other("reverse provider failed").into());
+                    }
+                    if mode == 3 {
+                        std::fs::write(&w, b"changed during reverse").unwrap();
+                    }
+                    if mode == 4 {
+                        stop.set(true);
+                    }
+                }
+                if mode >= 2 && calls.get() <= 25 {
+                    model_fixture::proposals(b)
+                } else {
+                    empty_provider(a, l, r, b, c)
+                }
+            },
+            || stop.get(),
+        );
+        match mode {
+            1 => {
+                assert!(result.is_err());
+                assert_eq!(calls.get(), 26);
+            }
+            3 => {
+                assert!(
+                    matches!(
+                        result,
+                        Err(SearchPortfolioError::ModelTiles(
+                            rrrah_dedup::model_tiles::ModelTileError::Comparison(
+                                rrrah_dedup::model_compare::ModelComparisonError::ModelSource(_)
+                            )
+                        ))
+                    ),
+                    "{result:?}"
+                );
+                std::fs::write(&w, &original_weights)?;
+            }
+            4 => assert!(matches!(result, Err(SearchPortfolioError::Cancelled))),
+            _ => {
+                let trace = result?;
+                assert_eq!(trace.forward.model_attempts, Some(25));
+                assert_eq!(trace.reverse.model_attempts, Some(25));
+                assert!(trace.forward.model_diagnostics.is_some());
+                assert_eq!(
+                    trace.reverse.model_diagnostics,
+                    Some(rrrah_dedup::model_banks::ModelBankDiagnostics::default())
+                );
+                let e = trace.summary();
+                assert_eq!(e.supported(), None);
+                assert_eq!(e.forward.support, if mode == 2 { Some(true) } else { None });
+                assert_eq!(e.reverse.support, None);
+                assert_eq!(calls.get(), 50);
+            }
+        }
+        assert_eq!(b.used(), 0);
+    }
+    Ok(())
+}

@@ -2,7 +2,7 @@
   "index": 201,
   "repository": "Shopify/dedup",
   "commit": "4fdec9b106658bc89558c1cbb00b332817924e00",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All20 tracked text blobs read: MIT license, Ruby/C implementation, all tests, benchmark, setup/gemspec and CI/release workflow. Fresh immutable GitHub commit/tree and canonical Git object reconstruction verified. No tracked visual media.",
   "decision": "reject-domain",
   "finding": "Ruby frozen-string interning/dedup; memory runtime utility.",
   "available_source_evidence": [
@@ -60,7 +60,7 @@
   "license_metadata": "MIT",
   "license_scope": "screening metadata; nested licenses require checking before copying",
   "tests_detected": 2,
-  "upstream_tests_run": false,
+  "upstream_tests_run": true,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
   "tree_truncated": false,
   "available_readme_license_evidence": [
@@ -84,5 +84,7 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/shopify201-complete-source-review-20261015.json"
 }

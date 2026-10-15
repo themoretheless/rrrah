@@ -1,0 +1,21 @@
+[
+  {
+    "command": [
+      "/usr/bin/ruby",
+      "-I",
+      "test",
+      "test/dedup_test.rb"
+    ],
+    "returncode": 0,
+    "log": "original-replay.log"
+  },
+  {
+    "command": [
+      "/usr/bin/ruby",
+      "-Ilib",
+      "review_test.rb"
+    ],
+    "returncode": 1,
+    "log": "review-replay.log"
+  }
+]
