@@ -1,0 +1,245 @@
+{
+  "status": "complete_pinned_source_and_visual_asset_review_scoped_native_controls",
+  "repository": "umbertogriffo/fast-near-duplicate-image-search",
+  "index": 41,
+  "commit": "bba6f78954180611a236dc1fc26042072e44961d",
+  "root_tree": "5dcc93a1890f19d70d47098366aa9e71d31ab4ff",
+  "whole_repo_complete": true,
+  "full_repository_read": true,
+  "tracked_blobs": 594,
+  "tracked_trees": 17,
+  "all_object_hashes_verified": true,
+  "text_blobs": 49,
+  "fully_read_text": [
+    ".gitattributes",
+    ".gitignore",
+    "LICENSE",
+    "MANIFEST.in",
+    "Makefile",
+    "README.md",
+    "datasets/caltech_101_rand_resize/out.csv",
+    "delete.sh",
+    "docs/INSTALL.md",
+    "docs/PublishingOnTestPyPI.md",
+    "docs/Tests.md",
+    "docs/Todo.md",
+    "install.sh",
+    "installdev.sh",
+    "requirements.txt",
+    "search.sh",
+    "setup.cfg",
+    "setup.py",
+    "src/deduplication/__init__.py",
+    "src/deduplication/__main__.py",
+    "src/deduplication/_version.py",
+    "src/deduplication/commands/__init__.py",
+    "src/deduplication/commands/delete.py",
+    "src/deduplication/commands/helpers.py",
+    "src/deduplication/commands/search.py",
+    "src/deduplication/commands/show.py",
+    "src/deduplication/dataset/ImageToHash.py",
+    "src/deduplication/dataset/__init__.py",
+    "src/deduplication/duplicatefinder/KDTreeFinder.py",
+    "src/deduplication/duplicatefinder/NearDuplicateImageFinder.py",
+    "src/deduplication/duplicatefinder/__init__.py",
+    "src/deduplication/duplicatefinder/cKDTreeFinder.py",
+    "src/deduplication/experiments/__init__.py",
+    "src/deduplication/experiments/compare.py",
+    "src/deduplication/experiments/gather.py",
+    "src/deduplication/experiments/index.py",
+    "src/deduplication/experiments/search.py",
+    "src/deduplication/tests/__init__.py",
+    "src/deduplication/tests/conftest.py",
+    "src/deduplication/tests/test_delete.py",
+    "src/deduplication/tests/test_search.py",
+    "src/deduplication/utils/CommandLine.py",
+    "src/deduplication/utils/FileSystem.py",
+    "src/deduplication/utils/ImgUtils.py",
+    "src/deduplication/utils/PlotUtils.py",
+    "src/deduplication/utils/__init__.py",
+    "src/deduplication/utils/dict_function.py",
+    "uninstall.sh",
+    "versioneer.py"
+  ],
+  "text_read_remaining": [],
+  "binary_images": 545,
+  "viewed_images": [
+    "docs/images/delete.png",
+    "docs/images/phase.png",
+    "docs/images/phash.png",
+    "docs/images/resized_cluster.png",
+    "docs/images/search.png"
+  ],
+  "unviewed_dataset_images": 0,
+  "source_archive_substitution": "GitHubexport-subst changed _version.py18466->18514bytes; extractedcopyrejectedbeforecompletemanifest. ExactoriginalGitblob fetched/verified andstored separately; all594blobs nowmatchtree.",
+  "native_controls": 12,
+  "runs": 2,
+  "logs": {
+    "docs/research/dedup-500/near41-native-controls-run1-20261015.log": "49c12cb2126f1efb61ffd822e8ffd69ccb003464d63c40c7557fd6863a9049f9",
+    "docs/research/dedup-500/near41-native-controls-run1-20261015.stderr.log": "efe80dd26ff22a070940110f1aaf73649bef9a7daa94e8d284fac9f576ae42df",
+    "docs/research/dedup-500/near41-native-controls-run2-20261015.log": "75ffc04513a31e3facc15e72d454210a74be24af538018d6718a215a562a408f",
+    "docs/research/dedup-500/near41-native-controls-run2-20261015.stderr.log": "72d26cd105c84d32ce827d500b48a4292ec42d7c27bbd56677220abcd4f83700"
+  },
+  "observations": {
+    "equal_ties": {
+      "keep": [
+        "image-0"
+      ],
+      "remove": [
+        "image-1"
+      ],
+      "represented": 2,
+      "rows": 4
+    },
+    "modern_pandas_error": "'DataFrame' object has no attribute 'append'",
+    "modern_scipy_error": "Unexpected keyword argument {'n_jobs': 1}",
+    "nibble_numeric_vs_bit_hamming": {
+      "comparison_scope": "Hamming oracle versus documented numeric nibble Manhattan metric, not visual groundtruth",
+      "false_positive_directed_edges": 14,
+      "missing_directed_edges": 48,
+      "pairs": 256,
+      "threshold": 1
+    },
+    "top_k_radius": {
+      "k": 2,
+      "radius_neighbors": 5,
+      "returned": 1
+    }
+  },
+  "dependency_pins": "docs/research/dedup-500/near41-installed-dependency-pins-20261015.json",
+  "dependency_pins_sha256": "fd816000028ab6fae81133bfd43676a094b0513d2f2c3956beea5887f7ca0a32",
+  "script": "scripts/qualify-near41-native-controls-20261015.py",
+  "script_sha256": "948511cccecde1c1d3d13e2e89ac2acbc911277198e13be57bbde7f0661e0165",
+  "adapters": [
+    "Original selected whole classes/functions; top-level bootstrap/imports bypassed",
+    "Two cKDTree compatibility controls rename n_jobs to workers only; actual native SciPy metric/query unchanged",
+    "One explicit shutil.copy IOError, all other helper fileIO actualownedfixtures"
+  ],
+  "scope": "All49textblobs read, all545image paths visually covered via507unique originalimages and38 byte-identical aliases. Native12controls twice and540-image diagnostic; original2019 environment/upstreamsuite/fullCLI/multiprocessing/platform/visualgroundtruth/performance remain unqualified. No production adoption or speedup.",
+  "findings": [
+    "Topk includes selfandcanmissotherradiusmatches; equalhashfirstneighboranchor loses2of4rows withk2.",
+    "Greedy chain removesrowwithoutretainedneighborwithindistance threshold.",
+    "NumerichexManhattan differsfrombitHamming:256directednibblepairs/14extra48missingedgesatthreshold1; nativeKDTreecorrectforitsownnumericmetric.",
+    "OriginalcKDTree n_jobs incompatiblewithmodernSciPy; explicitkeyword-onlyshim reveals _find p1 vs _find_all p2 mismatchforEuclidean andk1squeezedshapeerror.",
+    "OriginalPandasappendcallfails modernPandas; realdhashflatdifferentpixelscanagree, noidentity proof.",
+    "ExplicitcopyIOfailure swallowedbyoriginalbackuphelper, thennewlyownedoriginaldeleted; no externaldata actions.",
+    "On all540upstreamdatasetimages, k5 numericManhattan<=40 retrieves1429of2902directed Hamming<=8edges;334querieshaveomissions. Explicit differing metric/radius policies, not a measured visual-quality score.",
+    "Datasetout.csv is generationcount metadata, not pairgroundtruth. Package __init__ prints and rewrites sys.path; modern Versioneer compatibility unexecuted."
+  ],
+  "limits": [
+    "Modern dependencies differ from original2019requirements; incompatibilities reported rather than upstreamsuite pass",
+    "Synthetic hash vectors compare radius/metric/graph contracts, not calibrated visual quality",
+    "No multiprocessing/CLI/upstreamtestdataset campaign/bootstrap/fullrepository review or performance claim",
+    "No production adoption"
+  ],
+  "remaining": [
+    "Original dependency/upstream suite/full CLI/multiprocessing/platform qualification",
+    "Calibrated positive/negative visual pair truth; Hamming radius is only a hash-space oracle",
+    "Root production adoption and measured whole-library speedup remain separate gates"
+  ],
+  "visual_coverage": {
+    "dataset_paths": 540,
+    "unique_dataset_blobs_viewed": 502,
+    "byte_identical_alias_paths": 38,
+    "tracked_docs_images_viewed": 5,
+    "contact_sheets_viewed": 13,
+    "receipt": "docs/research/dedup-500/near41-visual-view-receipt-20261015.json"
+  },
+  "versioneer_template": {
+    "lines": [
+      421,
+      941
+    ],
+    "exactly_equals_fully_read_version_file": true,
+    "method": "AST literal interpolation only; no versioneer execution"
+  },
+  "prior_partial_review": "docs/research/dedup-500/near41-partial-source-native-review-20261015.json",
+  "corpus_diagnostic": {
+    "hash": "original ImageToHash.img_hash -> real ImageHashphash,64bits",
+    "index": "original KDTreeFinder wholeclass -> real sklearnKDTree",
+    "dataset_adapter": "ExplicitDataFrameconstruction fromoriginalimg_hash; originalsequentialbuilder modernPandasappendfailure notpatched",
+    "query_k": 5,
+    "numeric_manhattan_threshold": 40,
+    "comparison_hamming_radius": 8,
+    "directed_hamming_radius_edges": 2902,
+    "retrieved_directed_hamming_radius_edges": 1429,
+    "queries_with_omissions": 334,
+    "examples": [
+      {
+        "query": "datasets/caltech_101_rand_resize/020f816e-0f23-4c14-a8e7-dde8afbc573e.jpg",
+        "within_hamming8": 6,
+        "retrieved_hamming8": 4,
+        "example_missing": "datasets/caltech_101_rand_resize/79ad92e7-5d60-429a-8af6-f8f98e1effa8.jpg"
+      },
+      {
+        "query": "datasets/caltech_101_rand_resize/028b5707-20f3-4628-85e3-5f25de8b694f.jpg",
+        "within_hamming8": 6,
+        "retrieved_hamming8": 4,
+        "example_missing": "datasets/caltech_101_rand_resize/42971f9c-4047-498e-b277-531732ee555e.jpg"
+      },
+      {
+        "query": "datasets/caltech_101_rand_resize/0474d720-7d81-49a9-8756-c20561675232.jpg",
+        "within_hamming8": 6,
+        "retrieved_hamming8": 4,
+        "example_missing": "datasets/caltech_101_rand_resize/834dc70c-d377-4f9e-ab32-4f53bac15ea4.jpg"
+      },
+      {
+        "query": "datasets/caltech_101_rand_resize/0ad3c3a4-23c4-4efe-a86a-b20a1f53e94e.jpg",
+        "within_hamming8": 8,
+        "retrieved_hamming8": 5,
+        "example_missing": "datasets/caltech_101_rand_resize/22e6f6b4-e3e4-4853-8560-ad7012ad5ef3.jpg"
+      },
+      {
+        "query": "datasets/caltech_101_rand_resize/1e8cc2f7-187a-45cb-bd3b-f5bc2b63fc10.jpg",
+        "within_hamming8": 7,
+        "retrieved_hamming8": 4,
+        "example_missing": "datasets/caltech_101_rand_resize/619e0b4f-e0a8-4009-be90-140db2484b09.jpg"
+      },
+      {
+        "query": "datasets/caltech_101_rand_resize/2242aee2-4eaa-4079-8542-077592c1a1e1.jpg",
+        "within_hamming8": 6,
+        "retrieved_hamming8": 4,
+        "example_missing": "datasets/caltech_101_rand_resize/834dc70c-d377-4f9e-ab32-4f53bac15ea4.jpg"
+      },
+      {
+        "query": "datasets/caltech_101_rand_resize/22e6f6b4-e3e4-4853-8560-ad7012ad5ef3.jpg",
+        "within_hamming8": 8,
+        "retrieved_hamming8": 5,
+        "example_missing": "datasets/caltech_101_rand_resize/0ad3c3a4-23c4-4efe-a86a-b20a1f53e94e.jpg"
+      },
+      {
+        "query": "datasets/caltech_101_rand_resize/24f53ebd-67e8-405d-8c1d-d4b4c239f358.jpg",
+        "within_hamming8": 7,
+        "retrieved_hamming8": 4,
+        "example_missing": "datasets/caltech_101_rand_resize/619e0b4f-e0a8-4009-be90-140db2484b09.jpg"
+      },
+      {
+        "query": "datasets/caltech_101_rand_resize/2538cfa2-8553-43b9-a8ac-26cc6caa7825.jpg",
+        "within_hamming8": 6,
+        "retrieved_hamming8": 4,
+        "example_missing": "datasets/caltech_101_rand_resize/834dc70c-d377-4f9e-ab32-4f53bac15ea4.jpg"
+      },
+      {
+        "query": "datasets/caltech_101_rand_resize/29a4cf24-627a-4b35-b5e5-3b2d3c9dc128.jpg",
+        "within_hamming8": 6,
+        "retrieved_hamming8": 4,
+        "example_missing": "datasets/caltech_101_rand_resize/834dc70c-d377-4f9e-ab32-4f53bac15ea4.jpg"
+      }
+    ],
+    "scope": "Algorithmic candidate recall relative explicitHammingradius, notimagegroundtruth/visualduplicates or fair units-equivalent metric comparison. No performance or originalupstreamsuite claim."
+  },
+  "independent_verification": {
+    "all_git_blobs": 594,
+    "all_git_trees": 17,
+    "installed_dependency_payloads": 5152,
+    "pixel_and_phash_recomputed": 540,
+    "native_kdtree_requery": true
+  },
+  "evidence_pins": {
+    "docs/research/dedup-500/near41-full-file-pins-20261015.json": "cb45c6565b7d984054ee9ded64adf57e871b957b36683ce97949ac50975a62f2",
+    "docs/research/dedup-500/near41-upstream-tree-20261015.json": "2a77838532fc9e31f3dad5fac4f3400d03a8d32bed0b80e1bc0689467656c7e2",
+    "docs/research/dedup-500/near41-visual-corpus-prepared-20261015.json": "fa67f3828d3c5307ce910df060a8cf95d5b8f555dd5fbc4d45ff8262890b3a18",
+    "docs/research/dedup-500/near41-visual-view-receipt-20261015.json": "2a6fd619729c6d6803dc6b111c57a2cfad4214a61132bc026b74cd95856ac9b9",
+    "scripts/audit-near41-complete-source-20261015.py": "352e548aa604eb21399c53f55e04d0aacdd7ad0c1d110a777ff9590510b7a60d"
+  }
+}

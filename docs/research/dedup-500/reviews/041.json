@@ -2,11 +2,11 @@
   "index": 41,
   "repository": "umbertogriffo/fast-near-duplicate-image-search",
   "commit": "bba6f78954180611a236dc1fc26042072e44961d",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "Complete pinned49text/545image source and asset review;12scopednativecontrols twice and540image candidate diagnostic. Original upstream suite and calibrated visual-quality/performance unqualified.",
   "decision": "reference",
-  "finding": "Multiple image hashes with KDTree candidate search and experiments; establish metric/recall before considering index substitution.",
+  "finding": "Reference only: metric mismatch, self-inclusive topk radius omissions, greedy retention and backup-before-delete safety findings; no index substitution without recall/quality gates.",
   "license_metadata": "Apache-2.0",
-  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "license_scope": "Full tracked Apache2 LICENSE read; Versioneer CC0/publicdomain declarations read. No source copied into production.",
   "tests_detected": 4,
   "upstream_tests_run": false,
   "available_source_evidence": [
@@ -89,5 +89,7 @@
     {
       "audit": "docs/research/dedup-500/near41-partial-source-native-review-20261015.json"
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/dedup-500/near41-complete-source-review-20261015.json"
 }
