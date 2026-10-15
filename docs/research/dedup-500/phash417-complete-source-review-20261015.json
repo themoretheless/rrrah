@@ -1,0 +1,90 @@
+{
+  "repository": "VieVie31/phash64",
+  "commit": "744c64418a0bf3367a95ce85a6fee6a8ce8bd6b9",
+  "tree": "62c309edc58b56c84621689967f60ba020378078",
+  "status": "complete_static_source_and_three_visuals_read_runtime_unqualified",
+  "whole_repository_complete": true,
+  "license": "MIT LICENSE fully read, no source adopted",
+  "blobs": [
+    {
+      "path": ".classpath",
+      "git_blob": "3bd5aabe1605cda2bb72a0a7f43a84bc35dcd8aa",
+      "bytes": 789,
+      "sha256": "e48b68e8c7f38f08cbcfb897188c9aae59688d6e906d54b83c018bf34716c0c8"
+    },
+    {
+      "path": ".gitignore",
+      "git_blob": "a5844e047c9b4bb2777fbe54f95203f25a164b74",
+      "bytes": 26,
+      "sha256": "361f17750124edf16e67baf094e64165b1b70f8efee62c5f4b101d81801ec77f"
+    },
+    {
+      "path": ".project",
+      "git_blob": "9697c6ef43c685e459b750e1ac83b2fd963bb600",
+      "bytes": 366,
+      "sha256": "252aa388b14097adc7e0689b7d9d202d5b5dcab0d00520d1458a94956f44df83"
+    },
+    {
+      "path": "LICENSE",
+      "git_blob": "59d96c49b63af95672bc729a4a01394a576e9a64",
+      "bytes": 1088,
+      "sha256": "3881227400de1e5a304a9e75ceafcc902d183b85546772d01b406724e0b59fe3"
+    },
+    {
+      "path": "res/a.jpg",
+      "git_blob": "dcad57e5f0b5422b2e6bed3defd34f211eea14dc",
+      "bytes": 1499513,
+      "sha256": "259485e3ccd771a823487c24abbfe73b71e5b50dd94e4fddd2ecd066fa9eae3b"
+    },
+    {
+      "path": "res/b.jpg",
+      "git_blob": "b3525b7e548735e0958215486acba66099b65ff2",
+      "bytes": 1452358,
+      "sha256": "83f52857a5af0d3b61bcbbd2cfb21e8d2eaa76b67132264a2e2f90e7d11972b7"
+    },
+    {
+      "path": "res/c.jpg",
+      "git_blob": "21ece8ab643c7ee4b47b648440103838a34d2ec6",
+      "bytes": 574941,
+      "sha256": "221c4ae33d8c3f317e0bc7c9a91fced6606ae16b88c3d4a5dd7e2da18c2bf871"
+    },
+    {
+      "path": "src/edu/orissermaroix/phash64/PHash64.java",
+      "git_blob": "412ed595af3d4fdfb250b1d527296a58c532fd4a",
+      "bytes": 3364,
+      "sha256": "dd4f1443cedd715d900aae154e259d3c43a22ae9fd7a2776185c95f40a687e05"
+    }
+  ],
+  "scope": "All8tracked blobs and6trees including root read and independently reconstructed; complete125line Java implementation/CLI/demo, Eclipse classpath/project, gitignore/license; all3 JPEG fixtures visually inspected. No README or upstream automated tests. External Wikipedia/Javacv jar references not semantic dependency audit.",
+  "visuals": [
+    {
+      "path": "res/a.jpg",
+      "observation": "Coastal island with tower, foreground vegetation; broad view."
+    },
+    {
+      "path": "res/b.jpg",
+      "observation": "Same island/tower view with changed framing and foreground, nearby viewpoint."
+    },
+    {
+      "path": "res/c.jpg",
+      "observation": "Different rocky cliff/sea view with pale strata and blue water."
+    }
+  ],
+  "static_findings": [
+    "Algorithm is8x8 average RGB intensity threshold with integer mean, no DCT despite class pHash name.",
+    "Samples indexed i*8+j from getRGB(i,j), x-major bit ordering; portability requires explicit orientation/resizer/intensity contract.",
+    "ImageIO.read(new FileInputStream(path)) stream not explicitly closed; no try-with-resources; not independently runtime leak measured.",
+    "No explicit null guard for unsupported ImageIO payload; downstream getScaledInstance dereferences result.",
+    "Resized BufferedImage created using source image type; type/custom/palette/alpha effects unqualified. Color(int) omits alpha channel in final intensity.",
+    "Hash is signed long with strict >average bit threshold; constant-tone grids analytically allzero, not exact identity proof.",
+    "CLI catches missing argument ArrayIndexOutOfBoundsException and prints usage; unknown command has no explicit error branch.",
+    "Hamming uses unsigned shift, so negative-long XOR loop terminates."
+  ],
+  "runtime": {
+    "executed": false,
+    "java_home_returncode": 1,
+    "observation_sha256": "23531437063d4675e9d6b7036fbf4e19978f0e25a90279babf75c40d496d637f",
+    "scope": "System Java Runtime unavailable and no owned JDK found by targeted search. No Java compilation, demo outputs, image hash values, decoder/resizer behavior or runtime failure claims."
+  },
+  "application": "Do not mix average-hash and DCT pHash wire identities. Existing exact/pixel verification remains necessary; fixture labels and visual proximity are not measured ranking accuracy. No production change or speedup claim."
+}

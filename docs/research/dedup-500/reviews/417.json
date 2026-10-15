@@ -2,9 +2,9 @@
   "index": 417,
   "repository": "VieVie31/phash64",
   "commit": "744c64418a0bf3367a95ce85a6fee6a8ce8bd6b9",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All8trackedblobs/6trees including root fully read and3JPEG fixtures viewed; source algorithm is average hash, runtime unexecuted because JDK unavailable.",
   "decision": "reference",
-  "finding": "Single Java pHash64 implementation; no detected tests, normalization and DC treatment unqualified.",
+  "finding": "8x8 RGB arithmetic average hash with x-major ordering/strict integer threshold; no DCT. Unclosed explicit stream and missing unsupported-image guard visible in source, runtime behavior not qualified.",
   "available_source_evidence": [
     {
       "path": "src/edu/orissermaroix/phash64/PHash64.java",
@@ -34,5 +34,7 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/dedup-500/phash417-complete-source-review-20261015.json"
 }
