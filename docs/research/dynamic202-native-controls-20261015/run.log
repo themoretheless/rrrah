@@ -1,0 +1,31 @@
+original_callbacks=6 original_assertions=18 tap_adapter=true
+PASS different_dependencies_share_first_exports
+node:assert:150
+  throw new AssertionError(obj);
+  ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
++ actual - expected
+
++ '/private/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/dynamic202-review-zJktEc/components/root1/a/bc'
+- '/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/dynamic202-review-zJktEc/components/root1/a/bc'
+
+    at /private/tmp/rrrah-dynamic202-native-20261015/review.js:47:88
+    at check (/private/tmp/rrrah-dynamic202-native-20261015/review.js:32:8)
+    at Object.<anonymous> (/private/tmp/rrrah-dynamic202-native-20261015/review.js:43:3)
+    at Module._compile (node:internal/modules/cjs/loader:1781:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1913:10)
+    at Module.load (node:internal/modules/cjs/loader:1505:32)
+    at Module._load (node:internal/modules/cjs/loader:1309:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:254:19)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)
+    at node:internal/main/run_main_module:36:49 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: '/private/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/dynamic202-review-zJktEc/components/root1/a/bc',
+  expected: '/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/dynamic202-review-zJktEc/components/root1/a/bc',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v22.23.3

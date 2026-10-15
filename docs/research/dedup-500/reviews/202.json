@@ -2,7 +2,7 @@
   "index": 202,
   "repository": "thlorenz/dynamic-dedupe",
   "commit": "d9d4b196c46ea3e5ac3d16ed08ca407eea603841",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All17 tracked UTF-8 blobs read and Git-pinned, MIT license, all source/examples/test fixtures, package metadata. No tracked media. No external README links inspected.",
   "decision": "reject-domain",
   "finding": "Node require/module dedup via MD5 package hashing; dependency graph behavior.",
   "available_source_evidence": [
@@ -74,5 +74,8 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/dynamic202-complete-source-review-20261015.json",
+  "selected_original_callbacks_run_with_adapter": true
 }

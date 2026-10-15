@@ -1,0 +1,39 @@
+{
+  "status": "isolated_additive_candidate_helper_tests_passed_not_adopted",
+  "new_api": "search_native_bank_consensus_files_with_trace",
+  "compatibility": "Old public function and old summary/consensus type definitions byte-identical. Old internal entry point delegates to shared traced implementation then projects original summary. Public field additions avoided.",
+  "guard_source_check": "Original guarded_pair body text identical modulo whitespace and only two result-construction substitutions. No thresholds/work/source guards/search order changed. This is source comparison, not execution.",
+  "checks": {
+    "rustc_strict_returncode": 0,
+    "runtime_tests_passed": 2,
+    "combination_controls": 576,
+    "trace_bytes_mac_arm64": 240,
+    "needs_drop": false,
+    "scope": "Actual source-extracted compact types and new summary projection; From recovery conversion and full guarded entry points not typechecked/executed. No decoder, actual model, source mutation, cancellation, resource-release, Cargo or full native corpus qualification."
+  },
+  "candidate_pins": {
+    "docs/research/dedup-consensus-additive-trace-candidate-20261015/command.json": "a20236a027c39d9f3603e54f7f732ec3f3077e61f407204d25977325436d8316",
+    "docs/research/dedup-consensus-additive-trace-candidate-20261015/compile.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/research/dedup-consensus-additive-trace-candidate-20261015/diagnostics.rs": "c37eb4f383198589def2c82f59de96b581cb79c395368c217974d968e96afde3",
+    "docs/research/dedup-consensus-additive-trace-candidate-20261015/harness.rs": "e074beff572207bbe2cb5a8c6b5bc4e99bdba0957e653770a3a3196b33330a25",
+    "docs/research/dedup-consensus-additive-trace-candidate-20261015/run.log": "c23aafb047d09e6384da3a0bd662c534ef1b8c1e6850a245ab9a95bd91dfad40",
+    "docs/research/dedup-consensus-additive-trace-candidate-20261015/search_portfolio.rs": "76ee01ea638dedb51be4576e802a3a7b1e110b27db10cb5e6be8f4e7cc0c668c",
+    "docs/research/dedup-consensus-additive-trace-candidate-20261015/source-pin.json": "c1606e99dde64515e4ed17af8c6becf5afa57f02c9c3835c623a508eb4245d5a",
+    "docs/research/dedup-consensus-additive-trace-candidate-20261015/types.rs": "aa77fa3aec64dba4f7e073dda108edd1e3af1b20858b3463afbd3c1800a594e6"
+  },
+  "root_source_sha256": "52508852209d876dc728fe56e4de37ceaef5b0ff99e0ac5d5f36d6a0dba4746b",
+  "binary": "/private/tmp/rrrah-consensus-additive-trace-types-20261015/tests",
+  "binary_sha256": "bf90fdbdb88d0e77282022249f53d1b18288237467a500615bfe9b7bcc1d8d37",
+  "required_before_adoption": [
+    "Fresh complete library build with matching full dependency chain",
+    "Actual recovery-to-trace and both-direction propagation with empty/accepted providers",
+    "Existing APIs equivalent outputs and provider counts",
+    "Cancellation/mutation/budget-release integration gates",
+    "Actual native model wrapper/diagnostic output and current corpus qualification"
+  ],
+  "limits": [
+    "Root untouched; historical96 cases cannot be retroactively attributed",
+    "240-byte result layout is platform-specific, not a hard process-memory cap",
+    "This is observability work, not improved matching precision/recall or measured speedup"
+  ]
+}

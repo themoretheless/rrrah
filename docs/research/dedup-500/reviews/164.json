@@ -2,7 +2,7 @@
   "index": 164,
   "repository": "nishanths/dedupimport",
   "commit": "d51e321f8e9ee0d5d6f7ae047e9a640d94f92d6b",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All53 tracked text blobs read and pinned, including BSD3 license, all fixtures/goldens/errors, complete AST and scope logic, CLI and CI. No tracked visual media; external badges/docs/playground links not inspected.",
   "decision": "reject-domain",
   "finding": "Go AST import rewriting; compiler-source utility.",
   "available_source_evidence": [
@@ -50,7 +50,7 @@
   "license_metadata": "BSD-3-Clause",
   "license_scope": "screening metadata; nested licenses require checking before copying",
   "tests_detected": 1,
-  "upstream_tests_run": false,
+  "upstream_tests_run": true,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
   "tree_truncated": false,
   "available_readme_license_evidence": [
@@ -74,5 +74,7 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/dedupimport164-complete-source-review-20261015.json"
 }

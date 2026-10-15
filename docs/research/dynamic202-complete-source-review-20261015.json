@@ -1,0 +1,161 @@
+{
+  "repository": "thlorenz/dynamic-dedupe",
+  "commit": "d9d4b196c46ea3e5ac3d16ed08ca407eea603841",
+  "status": "complete_source_read_with_original_callbacks_and_selected_real_node_controls",
+  "whole_repository_complete": true,
+  "scope": "All17 tracked UTF-8 blobs read and Git-pinned, MIT license, all source/examples/test fixtures, package metadata. No tracked media. No external README links inspected.",
+  "blobs": [
+    {
+      "path": ".gitignore",
+      "git_blob": "a72b52ebe897796e4a289cf95ff6270e04637aad",
+      "bytes": 97,
+      "sha256": "d11ca7319245e37c399ba3a881caf35ab073d95bf755351df4ec899077173ba3"
+    },
+    {
+      "path": ".jshintrc",
+      "git_blob": "11e67b73667c3c9617370e866ecc81a1a97482e7",
+      "bytes": 197,
+      "sha256": "eddbf59bc25da8e495ed7b384c6682d4f36cd963d144c2d9555f63d8ef90c878"
+    },
+    {
+      "path": "LICENSE",
+      "git_blob": "41702c5043478f994b93a4eb5edf5ec3db9ec1fd",
+      "bytes": 1078,
+      "sha256": "1fa6ee8bb95a81ae3d73a5bd074a3ac380ffec13697051063ca1a601921b91db"
+    },
+    {
+      "path": "README.md",
+      "git_blob": "cb7325c05a510136443b23d378d46abe0ccb212d",
+      "bytes": 2633,
+      "sha256": "5ae759c396acf535f6530fe8d4422007f2c58475c3b7d98d2fb6b7085c0cb47c"
+    },
+    {
+      "path": "example/deduped.js",
+      "git_blob": "a7c7562f91f7b3c892bbb9d4a9fc68f13bdd00db",
+      "bytes": 225,
+      "sha256": "53714d26d554f72bc2dd66a3548c518548b77bc51731d899ab937619896e80a0"
+    },
+    {
+      "path": "example/not-deduped.js",
+      "git_blob": "194b7d531ea91ca2a953367234f51695af9806e6",
+      "bytes": 176,
+      "sha256": "c27aaf2ed628b34a5b1107ae933b757f99e40d4f19ae2961ae0541a2ee1e8f84"
+    },
+    {
+      "path": "example/pack1/common/dep-uno/foo.js",
+      "git_blob": "09ef8f27f7cd6cd3309bab29282c62a59809d121",
+      "bytes": 108,
+      "sha256": "d5cd03b1133b687ec4f035de929ee965825cdc7b949d3ef7f78add2db9e345a4"
+    },
+    {
+      "path": "example/pack2/common/dep-uno/foo.js",
+      "git_blob": "09ef8f27f7cd6cd3309bab29282c62a59809d121",
+      "bytes": 108,
+      "sha256": "d5cd03b1133b687ec4f035de929ee965825cdc7b949d3ef7f78add2db9e345a4"
+    },
+    {
+      "path": "index.js",
+      "git_blob": "46c77b59c5102e70d78b7e1e33006019c5fc04b6",
+      "bytes": 2112,
+      "sha256": "a31d8fd10759a37cbad42795ae17952a2920663a281a7863e2dd3e9a67ca59bb"
+    },
+    {
+      "path": "package.json",
+      "git_blob": "5964320d4c8c32a7e102d62658b391e7ca9e7c88",
+      "bytes": 1165,
+      "sha256": "9ed561a0767b7ef8d15e12e0feee1efc6f6c71dc79ffa8189ed9397a56483109"
+    },
+    {
+      "path": "test/dedupe.js",
+      "git_blob": "754f3e5ac9a7d4d588fd4fe51c6b4708123dcc8d",
+      "bytes": 3204,
+      "sha256": "213948235903ef38200166a3b5f3737ac9156ba37a29544e6e39af91aa4755a2"
+    },
+    {
+      "path": "test/fixtures/count.js",
+      "git_blob": "2eee8230987aa541199c50afd785fad3daa87d93",
+      "bytes": 31,
+      "sha256": "8e2cae83275f391bca92678848506c95c1f7f971168dcb51d7e0157638f9c290"
+    },
+    {
+      "path": "test/fixtures/pack1/common/dep-dos/foo.js",
+      "git_blob": "f4dfd554d794039c2ca8e42f6404191cdb247b8c",
+      "bytes": 99,
+      "sha256": "96ecc7edf220dcd9974c5b4ad810629bc8818e73f8f3a77ff871c36c593bb826"
+    },
+    {
+      "path": "test/fixtures/pack1/common/dep-uno/bar.js",
+      "git_blob": "f4dfd554d794039c2ca8e42f6404191cdb247b8c",
+      "bytes": 99,
+      "sha256": "96ecc7edf220dcd9974c5b4ad810629bc8818e73f8f3a77ff871c36c593bb826"
+    },
+    {
+      "path": "test/fixtures/pack1/common/dep-uno/foo.js",
+      "git_blob": "f4dfd554d794039c2ca8e42f6404191cdb247b8c",
+      "bytes": 99,
+      "sha256": "96ecc7edf220dcd9974c5b4ad810629bc8818e73f8f3a77ff871c36c593bb826"
+    },
+    {
+      "path": "test/fixtures/pack2/common/dep-uno/bar.js",
+      "git_blob": "f4dfd554d794039c2ca8e42f6404191cdb247b8c",
+      "bytes": 99,
+      "sha256": "96ecc7edf220dcd9974c5b4ad810629bc8818e73f8f3a77ff871c36c593bb826"
+    },
+    {
+      "path": "test/fixtures/pack2/common/dep-uno/foo.js",
+      "git_blob": "f4dfd554d794039c2ca8e42f6404191cdb247b8c",
+      "bytes": 99,
+      "sha256": "96ecc7edf220dcd9974c5b4ad810629bc8818e73f8f3a77ff871c36c593bb826"
+    }
+  ],
+  "runtime": {
+    "node": "22.23.3",
+    "command": "/opt/homebrew/opt/node@22/bin/node review.js",
+    "returncode": 0,
+    "original_callbacks": 6,
+    "original_assertions": 18,
+    "tap": "Explicit synchronous adapter implements only test/equal/end; original tap0.4.x/nave and historical Node0.8/0.10 not run. Original test source unchanged.",
+    "authored_controls": 5,
+    "fresh_process_replay_returncode": 0,
+    "actual_dependency": "xtend4.0.2 original immutable.js; no xtend mock or source modification; upstream ^4.0.0 has no lock",
+    "dependency_tarball_sha256": "bd22a01d43c799be7bb53dfa9e775b132045e39525e51efb977528a00041ba48",
+    "npm_integrity_verified": "sha512-LKYU1iAXJXUgAXn9URjiu+MWhyUXHsvfp7mcuYm9dSUKK0/CjtrUwFAxD82/mCWbtLsGjFIad0wIsod4zrTAEQ==",
+    "dependency_pins": {
+      "/private/tmp/rrrah-dynamic202-native-20261015/xtend-extracted/package/test.js": "4a7a6d3aade85095607c4aa3bd99f74fa6adaa69058d156677ad7756955e80f6",
+      "/private/tmp/rrrah-dynamic202-native-20261015/xtend-extracted/package/LICENSE": "82e67379203d5794e7c44549847d8d64ae6904591381682360470898bd306821",
+      "/private/tmp/rrrah-dynamic202-native-20261015/xtend-extracted/package/immutable.js": "04986f168b8f16f4f25237d0608cdf57b6ca14f100fed62c0295bda2559ab24b",
+      "/private/tmp/rrrah-dynamic202-native-20261015/xtend-extracted/package/.jshintrc": "da3531289454b9a256c622c1a74771440d4f0e57092262902cefbc6830ec3a7c",
+      "/private/tmp/rrrah-dynamic202-native-20261015/xtend-extracted/package/README.md": "fe5fb4d83470799709c32207fc1fff3e522070b2c625a9818f191125406cd360",
+      "/private/tmp/rrrah-dynamic202-native-20261015/xtend-extracted/package/package.json": "b02ffef8cda96c5c3ee00a00390e63f608362c2ddfb3ed754e181d013a45d48a",
+      "/private/tmp/rrrah-dynamic202-native-20261015/xtend-extracted/package/mutable.js": "71a38649c77408217483f81f55daee1d6646d6c670e3d034a4482cb3453886e9"
+    },
+    "pins": {
+      "docs/research/dynamic202-native-controls-20261015/run-v2.log": "497c03bb1bd1e6f756d5e936f1a9ea9df549c5f44a9a079e15dc17798de29b59",
+      "docs/research/dynamic202-native-controls-20261015/review-v1.js": "32afa5dd50fa8adf5754b0485c5cdf190a045dcaa75aa9170a823c9cda834fdb",
+      "docs/research/dynamic202-native-controls-20261015/review.js": "73ed57ad75d3b33395e63c410ffff652d9d1281f6500be30b21fb575f6d7156f",
+      "docs/research/dynamic202-native-controls-20261015/run.log": "cd6f105b814f04ea19a98914c38143d33f3520f558de9fa7abaf7fe279a179b0",
+      "docs/research/dynamic202-native-controls-20261015/xtend-pack.json": "7ff5668302538e580d1e0945b4b9f69ad58729014135d50652333b03d909df18",
+      "docs/research/dynamic202-native-controls-20261015/replay-v2.log": "497c03bb1bd1e6f756d5e936f1a9ea9df549c5f44a9a079e15dc17798de29b59",
+      "docs/research/dynamic202-native-controls-20261015/xtend-pack.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "docs/research/dynamic202-native-controls-20261015/replay.log": "fcb2e798c46bdc34cd2407d2845590f89583c949e3b6dc4689dc83baa97f4e08"
+    },
+    "historical_failures": [
+      "Initial local xtend resolution failed; default configured registry returned404. Explicit public npmjs registry pack succeeded with ignore-scripts. No npm install scripts executed.",
+      "Initial authored canonical-path assertion failed after original18 assertions and first authored case passed; Node resolved /var through /private/var. Both failed run/replay and v1 harness retained. Corrected only authored oracle to fs.realpathSync; original source unchanged."
+    ]
+  },
+  "findings": [
+    "Real Node module loader: identical foo source with distinct local helper modules shares first context exports; second dependency is not consulted.",
+    "Real Node: directory suffix concatenation a/bc equals ab/c, causing deterministic input-key collision even without an MD5 collision.",
+    "Real Node: deactivate restores module-load-time extension snapshot and discards a third-party hook installed later.",
+    "Real Node: reset clears only dynamic registry; Node require.cache remains populated. This agrees with documented registry reset, not full cache invalidation.",
+    "Real Node: failed module load followed by corrected owned fixture retries successfully; failure not added to dedupe registry.",
+    "Static MD5 over UTF8 source+directory string+filename; no final bytes/dependency closure/environment/package-version confirmation. Registry unbounded and global extension hook; synchronous whole-file reads, no cancellation."
+  ],
+  "decision": "reject for exact-file identity; retain unambiguous component encoding, context/dependency identity and hook ownership requirements; no upstream code adopted",
+  "limits": [
+    "Original TAP framework, old Node platform matrix, symlink/npm-link scenarios, arbitrary application behavior and performance not qualified",
+    "No natural MD5 collision generated; observed directory collision is key-input ambiguity",
+    "Only original public fixtures and owned synthetic temp JS modules executed; hooks restored and temp fixtures removed; no external account/network runtime operations"
+  ]
+}

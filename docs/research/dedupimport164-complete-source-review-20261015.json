@@ -1,0 +1,409 @@
+{
+  "repository": "nishanths/dedupimport",
+  "commit": "d51e321f8e9ee0d5d6f7ae047e9a640d94f92d6b",
+  "status": "complete_source_read_and_complete_original_test_inventory_with_four_native_controls",
+  "whole_repository_complete": true,
+  "scope": "All53 tracked text blobs read and pinned, including BSD3 license, all fixtures/goldens/errors, complete AST and scope logic, CLI and CI. No tracked visual media; external badges/docs/playground links not inspected.",
+  "blobs": [
+    {
+      "path": ".gitignore",
+      "git_blob": "2d3ea204d12af1549343156307a891de149844c5",
+      "bytes": 22,
+      "sha256": "44bcca39ba8c60133a62484d1953bdd101b60ea389ccdc987e434f8c9c56f1a2"
+    },
+    {
+      "path": ".travis.yml",
+      "git_blob": "8680f235891c0bee494f5d16de0bf78cd1d77f6f",
+      "bytes": 99,
+      "sha256": "0c5d9a365d4246a95ce19b4085f2eebf1750bb393752a85b12983e5d9b58e9b1"
+    },
+    {
+      "path": "LICENSE",
+      "git_blob": "9462123150acc68eb8c4ef59402722ae24e9a7f0",
+      "bytes": 1519,
+      "sha256": "5d155b7d8e181c834eb98437066be4471a6d2058544bd284fd2e9280d8971841"
+    },
+    {
+      "path": "README.md",
+      "git_blob": "12e77114c30b2f59ebcaebc27a3510edf2fe2ed1",
+      "bytes": 844,
+      "sha256": "52ef331ac092d0786404256404ac55af1a5bc1e4e262c3cb77967c0d380a3de4"
+    },
+    {
+      "path": "main.go",
+      "git_blob": "ad3e6af937a61e9c655e312940b591cff4c5f7bf",
+      "bytes": 26177,
+      "sha256": "bf13bebc660708b623b4e8802b4839ae1635721d16781e4eda4b40f7b935ad3d"
+    },
+    {
+      "path": "main_test.go",
+      "git_blob": "cccd035384984268f26d11689e94b04521684045",
+      "bytes": 3685,
+      "sha256": "08d76d3bcc981baf11845ca955295b56a96cf8999b66a7cfb28fd206a867715a"
+    },
+    {
+      "path": "scope.go",
+      "git_blob": "b206dcd16d9e5cb7219e8b8333ab555761971a99",
+      "bytes": 6685,
+      "sha256": "30bcabbff5e4ee555c2a21959ee9c00d929f563900f979249cb319ce361936c4"
+    },
+    {
+      "path": "testdata/cannot.err",
+      "git_blob": "8d27edea34a97b5d47593d5ea1e75d49934d450b",
+      "bytes": 110,
+      "sha256": "d433fc33b5c80ef39354dfa3e473a9fd858c97e363e96ae9ffb1a333d551f996"
+    },
+    {
+      "path": "testdata/cannot.go",
+      "git_blob": "ae033f52f6b24c0ea68827fcf276ea129eec197f",
+      "bytes": 185,
+      "sha256": "f955b834ca710ebbbdc408aeaf206a266995ab77a4364715cdf30f47c5dc2185"
+    },
+    {
+      "path": "testdata/comment.go",
+      "git_blob": "7379cf3d324f7f943fb1547a99ad492304963914",
+      "bytes": 172,
+      "sha256": "d2111fec8804a9dc60f9fefd3566975a6e75525698254071a569671b317642a2"
+    },
+    {
+      "path": "testdata/comment.out",
+      "git_blob": "58bc2d53de08862adbd87847aa4173e9fd4f8aff",
+      "bytes": 115,
+      "sha256": "5a78e9ab09437fb0942303cee92da17152b24e0bd0b5902a3500b2d9c1d7edc3"
+    },
+    {
+      "path": "testdata/dotimport.go",
+      "git_blob": "4de5a7c10a43a5e8cf12eafde4fec9e424722052",
+      "bytes": 267,
+      "sha256": "a68d968b870fb6238777b3387cf604d2d7b7647445bbf8e5990a6a77882ae83d"
+    },
+    {
+      "path": "testdata/dotimport.out",
+      "git_blob": "2e093a13261e8d074e6af70d2f4c759f0bfeecae",
+      "bytes": 265,
+      "sha256": "9174d1a66f2e8bca5bedce341a8a75ec432286f584a55fdb703d1e468fb0cc70"
+    },
+    {
+      "path": "testdata/example.go",
+      "git_blob": "200d51c0431897350e0bb7b3097ea17502fa49ee",
+      "bytes": 126,
+      "sha256": "d5ee29efbab44f5717d039b9f8e643d529eace153b7c2217a5849c661d546048"
+    },
+    {
+      "path": "testdata/example.out",
+      "git_blob": "5628982fbabb183208666547637b3d662e1bfd6a",
+      "bytes": 108,
+      "sha256": "881473db0e5c8eb1e42634743c8a35143b87e16e24b570142ba3e0fbe02386de"
+    },
+    {
+      "path": "testdata/first1.go",
+      "git_blob": "5c5590a8643ec8ec39ebce6b73147efecce57f3b",
+      "bytes": 95,
+      "sha256": "ddba29ef6305ad593307c537aa3fac3d05af90267675e632b30ab53cc22ece26"
+    },
+    {
+      "path": "testdata/first1.out",
+      "git_blob": "5c2ff91e222f52ce65848ae4095d3da1cfc14de1",
+      "bytes": 74,
+      "sha256": "50ec91117869b3c9f543667a9c83936423eeecd215b1b4586120bdda875f2854"
+    },
+    {
+      "path": "testdata/first2.go",
+      "git_blob": "26eecadcc5fd78faa06a42731589db8ce56d2a17",
+      "bytes": 95,
+      "sha256": "1c0724ddc9786deb5e2cadf8e7cd4d80b050d34d30f596e777e2f1b365b79aef"
+    },
+    {
+      "path": "testdata/first2.out",
+      "git_blob": "fef28f8a35cec8bfc3a011745aa935d5486faaa0",
+      "bytes": 72,
+      "sha256": "04baa6e0c1718cd856fb86f2ebb25a246cd7ca08f4ac326b04c6eec3b3affde0"
+    },
+    {
+      "path": "testdata/import-only.go",
+      "git_blob": "779abc7fe6d7a25278e79588b04604bb63a1080c",
+      "bytes": 639,
+      "sha256": "7d9c8dca42e80aed2d23372470a9d5818891b9b968fc6cfe887e279424ea2066"
+    },
+    {
+      "path": "testdata/import-only.out",
+      "git_blob": "9c40bcd40485e0aa79306ff63c8e474c5e45fbec",
+      "bytes": 605,
+      "sha256": "2e67b4a4dc041f7d8288c07c4c473d9a5c4421e1676b5410a48966d1013f96ea"
+    },
+    {
+      "path": "testdata/invalid-ident.err",
+      "git_blob": "15e1350168606f3296c9b32482fd645e73f082f2",
+      "bytes": 272,
+      "sha256": "cc361a1dc9b01e09c594856d0e8e029e26f6510f0b78b045a20fd1e45fd6106b"
+    },
+    {
+      "path": "testdata/invalid-ident.go",
+      "git_blob": "79f36b850b20af6b77533f6d5f7cd656441fddc0",
+      "bytes": 108,
+      "sha256": "c5b860bc6fb32148b916945f0c1ebca40b4db6d98effd73295e0d046bc050dbd"
+    },
+    {
+      "path": "testdata/misc.go",
+      "git_blob": "fc49c83b04094a6624b25ae6b9feb795458592b8",
+      "bytes": 394,
+      "sha256": "ca6c7fa8808b3f2635f571ebdc210dd49bcdad1c6ebc26aace1f4bdb28e1e4e6"
+    },
+    {
+      "path": "testdata/misc.out",
+      "git_blob": "919d108a2b25d31f13bb5b80c3b98ae78f78f750",
+      "bytes": 334,
+      "sha256": "64f97f99fc9fb9935f2c9895a9f3624dd4bebf5e8a2e63b43471b1745dfaab70"
+    },
+    {
+      "path": "testdata/named.go",
+      "git_blob": "8885e9c141839776f85cdcbbee240a5b8ffe4162",
+      "bytes": 92,
+      "sha256": "be268ba55872bb7a22c1e5105f17594b5231f2af0c881adb9adb0e03858eb765"
+    },
+    {
+      "path": "testdata/named.out",
+      "git_blob": "b88cec4f796fd5ad2452433392fd18f5bccba2b0",
+      "bytes": 56,
+      "sha256": "bcce9e1f7438a6d240df58b0113e03e37f03f6f7babf945969dd53d26d357a11"
+    },
+    {
+      "path": "testdata/packagename.go",
+      "git_blob": "c42bbbf4729e313258e72d49cf7636ed3b347a42",
+      "bytes": 391,
+      "sha256": "f17acb362ccf624bd973dc2494d07aa3ab80837dbcaa4ecbe5aa609c05578e19"
+    },
+    {
+      "path": "testdata/packagename.out",
+      "git_blob": "b7e5e543467827be6c305c52c7392e844cc06ee7",
+      "bytes": 261,
+      "sha256": "2bef5e7516f91405bb98a49e4ae36e7223c47b0b2b719f3b4ddb51e565fa599a"
+    },
+    {
+      "path": "testdata/packagename_v2.go",
+      "git_blob": "4ad6fe4a244b67f6cf5374dc98d5d257e0d1a45a",
+      "bytes": 392,
+      "sha256": "769b5dea23265e4614bf7103fcfc3ac7b403cccec4f75ad3a5655847f9a17140"
+    },
+    {
+      "path": "testdata/packagename_v2.out",
+      "git_blob": "b92043677e9fdce3b65a5c9ed085d0e89d877098",
+      "bytes": 261,
+      "sha256": "5f1265803d3cebcde73a8d6dc68248ed484b42bea43d38528ae321925c2efde1"
+    },
+    {
+      "path": "testdata/plenty-imports.go",
+      "git_blob": "1ece44575010c8a2068964fc48af9ee987b29a55",
+      "bytes": 440,
+      "sha256": "2bcb31d4797f4a68fc3fcaf7e2531c5ae49315d7e646aba4d182f864af9c1c87"
+    },
+    {
+      "path": "testdata/plenty-imports.out",
+      "git_blob": "98f04d4188a40f391e2747b47bdba5b464ce12b8",
+      "bytes": 136,
+      "sha256": "ea97cb590d898939c40ebabd867ee63b2c9b4eaa8a2e7f2ef3c881d3f0d3cab6"
+    },
+    {
+      "path": "testdata/removed-comments.go",
+      "git_blob": "9da46bc8427b94532648ac8980df7338a319339a",
+      "bytes": 220,
+      "sha256": "93734a85c7ad97ea813220cc99c9b1480dece66c99d496730f9c45c2b3589bb5"
+    },
+    {
+      "path": "testdata/removed-comments.out",
+      "git_blob": "1ad43b0ff4e135fc99a0b1558f999d6c21384fb0",
+      "bytes": 81,
+      "sha256": "aeef2c25f7226b73863ebf6d1142afd33f2cbc52cebd725c86cf98759bd82996"
+    },
+    {
+      "path": "testdata/samename.go",
+      "git_blob": "ac3fc949e7229cbbeae1e20cb4752dc7047c8fc8",
+      "bytes": 217,
+      "sha256": "18ae3befc8684fa1da61cf4dbf2e0b5401451af020f90010641e499552abda55"
+    },
+    {
+      "path": "testdata/samename.out",
+      "git_blob": "f065b44454084899099c0db2e3db4f589e81bd0e",
+      "bytes": 199,
+      "sha256": "c3dc5fff79d24dcad8f51de841dcee0991e0f7bac99e10bdd486fb620cb45b88"
+    },
+    {
+      "path": "testdata/scope1.err",
+      "git_blob": "1a90e793e48835f385aeb1e32e585a7d6b62bcf0",
+      "bytes": 447,
+      "sha256": "243bf956faca0b4ebabe6e0e4aa65069f4067a9919008bc25a719a2ff21839db"
+    },
+    {
+      "path": "testdata/scope1.go",
+      "git_blob": "40402f2eace05a5aa42c3f4292e8e2f0e5e3524b",
+      "bytes": 567,
+      "sha256": "112c937c23108bc7f871b8045f92eec0ae3045fdcfcddeda49cd9df512f75fb8"
+    },
+    {
+      "path": "testdata/scope2.go",
+      "git_blob": "964618b5087c115c6e9584b6e15b5e028644488a",
+      "bytes": 111,
+      "sha256": "69cdb988ab1aec510187e65c34a49d2cb3ae162eced7822cdce9433c92f7ef5c"
+    },
+    {
+      "path": "testdata/scope2.out",
+      "git_blob": "3613aee52e1c84adaced53477c0a95ea1f417238",
+      "bytes": 104,
+      "sha256": "3acd63bd3560318de2622f63a89bc1fdda352fe9c148f74343b08e0df0adb472"
+    },
+    {
+      "path": "testdata/scopeafter1.go",
+      "git_blob": "2fb9bc8eb2837e1eb543afef66ef40612be2a2ed",
+      "bytes": 444,
+      "sha256": "735a50c093b0b76bef47e48044f0f2802a37c6ffdf21b6e5979712a71c7d31f2"
+    },
+    {
+      "path": "testdata/scopeafter1.out",
+      "git_blob": "84202316fe26f60839ff021a6b4975912779d3ed",
+      "bytes": 437,
+      "sha256": "90fbb636e915c91a0a6b7753bbfbea4164c4ced0c0ff43b5d4c9ce133d940ad9"
+    },
+    {
+      "path": "testdata/scopeafter2.go",
+      "git_blob": "b936b0732b90db4ee9b70bdb54e63f0aa062ce21",
+      "bytes": 286,
+      "sha256": "75f5ce21c8e9cb12674a72ec5fc88ebae6aab5ce5d3715fbceb3ca1feab17c37"
+    },
+    {
+      "path": "testdata/scopeafter2.out",
+      "git_blob": "b9d693cf52d1bfff4e1b31cb86a0ae607b17c170",
+      "bytes": 279,
+      "sha256": "3805433f8830f591acb6bfb4fcc95ab728307a8fe8cd07ae52288a12cb3b7fb1"
+    },
+    {
+      "path": "testdata/shortvar.err",
+      "git_blob": "f37cc58543a6845f7d21693b49c017ba33b6fe51",
+      "bytes": 112,
+      "sha256": "1522fc097b2cf8f16530f98e9ecb4aba7e87f6062c62600ea878b0af9c41694b"
+    },
+    {
+      "path": "testdata/shortvar.go",
+      "git_blob": "90b36528358797e5dbc2be7626572fdb879c879d",
+      "bytes": 106,
+      "sha256": "cec8f712ee8cb505aa3ed93b0e4c2f66c606f4f44db81e809b05672a66148374"
+    },
+    {
+      "path": "testdata/space-all1.go",
+      "git_blob": "bc2785dc70c432635988483343291eb212d90bd7",
+      "bytes": 508,
+      "sha256": "e5c2a28a81eb9f8e7fd21da264509fcaa8cdc15f65cab1ead8f6d692922ec632"
+    },
+    {
+      "path": "testdata/space-all1.out",
+      "git_blob": "a6dd2fa01fc74a5b360e11dd5980bc886634bc9e",
+      "bytes": 191,
+      "sha256": "910f88fbfde8baa2e0e5e68e58eac378ebfebc7e2283378c57edf92e92e91633"
+    },
+    {
+      "path": "testdata/space-all2.go",
+      "git_blob": "fd39e4d8380a3efe46ea06da13c73813b12445ab",
+      "bytes": 616,
+      "sha256": "89ccf9b927f4cd6e429a276b0e47c3a7270cbda6189e18f62996941c86bb0d13"
+    },
+    {
+      "path": "testdata/space-all2.out",
+      "git_blob": "e446241c109169ba63a6f9b7f76681eed7a2fa94",
+      "bytes": 226,
+      "sha256": "67845b8da67c3544b7f9ddd514e0b91f02fbeda8ccb3de1a09c9ca7b0a66f0ac"
+    },
+    {
+      "path": "testdata/space.go",
+      "git_blob": "567f815f1206122ac34fec996437a550a0e3b970",
+      "bytes": 69,
+      "sha256": "0a398b6230b9815830cd858741b04935fa77ccbb00f8a8a5d0db1db20d56495c"
+    },
+    {
+      "path": "testdata/space.out",
+      "git_blob": "cdcdba7134b0c3123b5b54af19641fc9d4315f57",
+      "bytes": 53,
+      "sha256": "c5d90043ef668d45a8364ebd2005795b52b16b2b105da4f3a444d4c161c61799"
+    }
+  ],
+  "runtime": {
+    "go": "1.27.2",
+    "command": "GOTOOLCHAIN=local GOMAXPROCS=2 GOPROXY=off go test -count=1 -v ./...",
+    "returncode": 0,
+    "upstream_top_level_tests": 2,
+    "upstream_subtests": 31,
+    "authored_top_level_tests": 4,
+    "all_pass_names": [
+      "TestAll",
+      "TestAll/testdata/cannot.go",
+      "TestAll/testdata/example.go",
+      "TestAll/testdata/named.go",
+      "TestAll/testdata/comment.go",
+      "TestAll/testdata/first1.go",
+      "TestAll/testdata/first2.go",
+      "TestAll/testdata/removed-comments.go",
+      "TestAll/testdata/plenty-imports.go",
+      "TestAll/testdata/dotimport.go",
+      "TestAll/testdata/space.go",
+      "TestAll/testdata/space-all1.go",
+      "TestAll/testdata/space-all2.go",
+      "TestAll/testdata/samename.go",
+      "TestAll/testdata/packagename.go",
+      "TestAll/testdata/scope1.go",
+      "TestAll/testdata/scope2.go",
+      "TestAll/testdata/misc.go",
+      "TestAll/testdata/invalid-ident.go",
+      "TestAll/testdata/import-only.go",
+      "TestAll/testdata/scopeafter1.go",
+      "TestAll/testdata/scopeafter2.go",
+      "TestAll/testdata/shortvar.go",
+      "TestGuessPackageName",
+      "TestGuessPackageName/github.com/foo/bar",
+      "TestGuessPackageName/github.com/foo/bar/v2",
+      "TestGuessPackageName/github.com/foo/go-bar/v2",
+      "TestGuessPackageName/github.com/foo/bar-go/v2",
+      "TestGuessPackageName/gopkg.in/yaml.v2",
+      "TestGuessPackageName/gopkg.in/go-yaml.v2",
+      "TestGuessPackageName/gopkg.in/yaml-go.v2",
+      "TestGuessPackageName/github.com/nishanths/go-xkcd",
+      "TestGuessPackageName/github.com/nishanths/lyft-go",
+      "TestReviewOutputFailureIsIgnored",
+      "TestReviewShortWriteIsIgnored",
+      "TestReviewMappingInitializationIsLost",
+      "TestReviewLiteralNormalizationAndFirstSurvivor"
+    ],
+    "top_level_inventory": [
+      "TestAll",
+      "TestGuessPackageName",
+      "TestReviewOutputFailureIsIgnored",
+      "TestReviewShortWriteIsIgnored",
+      "TestReviewMappingInitializationIsLost",
+      "TestReviewLiteralNormalizationAndFirstSurvivor"
+    ],
+    "fresh_retained_binary_replay_returncode": 0,
+    "binary": "/private/tmp/rrrah-dedupimport164-native-20261015/review.test",
+    "binary_sha256": "6f1ccddb9ab13bdb5c235fd073b915bddc0f245573028cc05172312b4c4f3172",
+    "generated_module": "review164;go1.27;no external dependencies; upstream has no module or lock",
+    "pins": {
+      "docs/research/dedupimport164-native-controls-20261015/go.mod": "ace31c5d1add5422adae871ed05cfdc539089237bd2fa696a23df3486ac916d1",
+      "docs/research/dedupimport164-native-controls-20261015/run.log": "8301af9af03252046ddc6791d82cdc9c2ee12d968803aa355982971554ec4168",
+      "docs/research/dedupimport164-native-controls-20261015/inventory.txt": "0366378c8149e4ef3ef3b6473aef96ae6adaa59fdc1424b9c9f346a63161f0a1",
+      "docs/research/dedupimport164-native-controls-20261015/replay.log": "44f2b7b49963106e80c4073f89d35297f110f9a3c7e0a2b320f990202852ecd1",
+      "docs/research/dedupimport164-native-controls-20261015/review_test.go": "bbfc07bd7ca2ed270d306d6a9b8ef784abed2bcd456a05c1590d9f63d358bd46"
+    }
+  },
+  "findings": [
+    "Actual writeOutput returns nil after writer error; successful short writes also accepted without retry. Both confirmed with synthetic writers.",
+    "Actual MultiFlag.Set value receiver loses initialization of a nil map; preinitialized map retains mutations. Default -m state starts nil.",
+    "Actual markDuplicates normalizes raw and quoted import path literals and preserves first spec under first strategy; original AST pointers verified.",
+    "Explicit survivor strategies unnamed/named/comment/first, skipping dot and side-effect imports, provide useful source-level policy reference; not file-content duplicate identity.",
+    "Scope rewriting rejects many shadowing cases; source comments acknowledge cross-file/package scope limitations; no Go type-checker or arbitrary semantic equivalence proof.",
+    "Static overwrite uses backup then truncating WriteFile, not atomic replacement or file/directory synchronization; rollback Rename result ignored.",
+    "Original TestAll does not register packagename_v2.go fixture; fixture and golden fully read but not executed.",
+    "No cancellation/hard byte cap; whole source and AST buffered. Directory walk and package-name lookup are local; no network requested."
+  ],
+  "decision": "reject-domain; retain explicit survivor-policy and error propagation requirements; no upstream code adopted",
+  "limits": [
+    "No overwrite/diff CLI, source-file deletion, external diff process or arbitrary project rewrite executed",
+    "Synthetic/helper and all upstream registered tests only; no full modern Go syntax/semantic/platform/corpus/performance qualification",
+    "Original goldens/source unchanged; no failure hidden or ignored"
+  ]
+}

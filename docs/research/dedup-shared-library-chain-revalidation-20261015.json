@@ -1,0 +1,71 @@
+{
+  "status": "confirmed_one_changed_direct_dependency",
+  "reference_report": "docs/research/dedup-projected-integration-cached-library-20261015.json",
+  "reference_sha256": "938527c9c95ead36db69fcc0e63e2dc56a374f0d1c7c0c21677aac1dd60e53ef",
+  "matching": 9,
+  "checked": 10,
+  "rows": [
+    {
+      "path": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/libblake3-919ad277b78b89ac.rlib",
+      "expected": "99059ef8ac95665547c29653c9637d6c599ec1ad13841120b40de37dec645e06",
+      "actual": "99059ef8ac95665547c29653c9637d6c599ec1ad13841120b40de37dec645e06",
+      "matches": true
+    },
+    {
+      "path": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/liberrno-498bb0922c144057.rlib",
+      "expected": "0589297e97f56b680819847e94c0e62d1e168055c089736c4ca139295977ccbd",
+      "actual": "0589297e97f56b680819847e94c0e62d1e168055c089736c4ca139295977ccbd",
+      "matches": true
+    },
+    {
+      "path": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/liblibc-b019f3744f8ef3b1.rlib",
+      "expected": "a6890287decd51ae7ddce92ecdb51bc4626220b9500a54ed1643108f1e782d60",
+      "actual": "a6890287decd51ae7ddce92ecdb51bc4626220b9500a54ed1643108f1e782d60",
+      "matches": true
+    },
+    {
+      "path": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/liblibproc-3a75726e17f60735.rlib",
+      "expected": "2a5a9f86a3f877c0a0d48051b80c570d15d0b9a47ff5fe193e60b692cebb44db",
+      "actual": "2a5a9f86a3f877c0a0d48051b80c570d15d0b9a47ff5fe193e60b692cebb44db",
+      "matches": true
+    },
+    {
+      "path": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/librrrah_core-350525ae69d3249f.rlib",
+      "expected": "42b67ca4027dcd8b826cebc4dfbebc257a4be0ce1a87864b73e0b5d100509cc9",
+      "actual": "fee9b57392fa1fc6360abd185c2c8c0a3120e9aa00c548a12456bc375e9afa1b",
+      "matches": false
+    },
+    {
+      "path": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/librrrah_decode-3affc33d380d9f4c.rlib",
+      "expected": "7fc3e6385b794fb7e2a4fdc1f47f822e28547afa923a5abce741a120f3c26ea1",
+      "actual": "7fc3e6385b794fb7e2a4fdc1f47f822e28547afa923a5abce741a120f3c26ea1",
+      "matches": true
+    },
+    {
+      "path": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/librustix-3cf27bad75aace96.rlib",
+      "expected": "db09f089e49ac3968297d23343e865c938f934b6815f00eee2922a4c021c83a8",
+      "actual": "db09f089e49ac3968297d23343e865c938f934b6815f00eee2922a4c021c83a8",
+      "matches": true
+    },
+    {
+      "path": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/libtempfile-c83029f54bb75712.rlib",
+      "expected": "0ea049d8d11e83a2fe17deb74ffbde3cb5813d6f8ac7cb1164340c401861b065",
+      "actual": "0ea049d8d11e83a2fe17deb74ffbde3cb5813d6f8ac7cb1164340c401861b065",
+      "matches": true
+    },
+    {
+      "path": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/libthiserror-8b0acd18862397b0.rlib",
+      "expected": "1ac4d1f74c3e4d4de0e62050002e8debb129969ce680724f6c6687c878573941",
+      "actual": "1ac4d1f74c3e4d4de0e62050002e8debb129969ce680724f6c6687c878573941",
+      "matches": true
+    },
+    {
+      "path": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/librrrah_dedup-004a9eeaafb57be4.rlib",
+      "expected": "0df58a3d72b4e3f4212923153aaadb10e8e04ec28cc647712c0d3a5692dc6852",
+      "actual": "0df58a3d72b4e3f4212923153aaadb10e8e04ec28cc647712c0d3a5692dc6852",
+      "matches": true
+    }
+  ],
+  "consequence": "Historical rrrah_decode and rrrah_dedup rlibs must not be combined with replaced core library. Old successful binary runs remain historical; new direct metadata/runtime builds need complete matching dependency chain or fresh Cargo rebuild.",
+  "scope": "Current direct dependency hash observation, not exhaustive transitive audit. No cached files modified. Live full Cargo baseline continues."
+}

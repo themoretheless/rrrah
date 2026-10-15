@@ -1,0 +1,75 @@
+=== RUN   TestAll
+=== RUN   TestAll/testdata/cannot.go
+=== RUN   TestAll/testdata/example.go
+=== RUN   TestAll/testdata/named.go
+=== RUN   TestAll/testdata/comment.go
+=== RUN   TestAll/testdata/first1.go
+=== RUN   TestAll/testdata/first2.go
+=== RUN   TestAll/testdata/removed-comments.go
+=== RUN   TestAll/testdata/plenty-imports.go
+=== RUN   TestAll/testdata/dotimport.go
+=== RUN   TestAll/testdata/space.go
+=== RUN   TestAll/testdata/space-all1.go
+=== RUN   TestAll/testdata/space-all2.go
+=== RUN   TestAll/testdata/samename.go
+=== RUN   TestAll/testdata/packagename.go
+=== RUN   TestAll/testdata/scope1.go
+=== RUN   TestAll/testdata/scope2.go
+=== RUN   TestAll/testdata/misc.go
+=== RUN   TestAll/testdata/invalid-ident.go
+=== RUN   TestAll/testdata/import-only.go
+=== RUN   TestAll/testdata/scopeafter1.go
+=== RUN   TestAll/testdata/scopeafter2.go
+=== RUN   TestAll/testdata/shortvar.go
+--- PASS: TestAll (0.20s)
+    --- PASS: TestAll/testdata/cannot.go (0.00s)
+    --- PASS: TestAll/testdata/example.go (0.00s)
+    --- PASS: TestAll/testdata/named.go (0.01s)
+    --- PASS: TestAll/testdata/comment.go (0.00s)
+    --- PASS: TestAll/testdata/first1.go (0.00s)
+    --- PASS: TestAll/testdata/first2.go (0.00s)
+    --- PASS: TestAll/testdata/removed-comments.go (0.02s)
+    --- PASS: TestAll/testdata/plenty-imports.go (0.07s)
+    --- PASS: TestAll/testdata/dotimport.go (0.00s)
+    --- PASS: TestAll/testdata/space.go (0.00s)
+    --- PASS: TestAll/testdata/space-all1.go (0.03s)
+    --- PASS: TestAll/testdata/space-all2.go (0.03s)
+    --- PASS: TestAll/testdata/samename.go (0.00s)
+    --- PASS: TestAll/testdata/packagename.go (0.00s)
+    --- PASS: TestAll/testdata/scope1.go (0.02s)
+    --- PASS: TestAll/testdata/scope2.go (0.00s)
+    --- PASS: TestAll/testdata/misc.go (0.00s)
+    --- PASS: TestAll/testdata/invalid-ident.go (0.00s)
+    --- PASS: TestAll/testdata/import-only.go (0.00s)
+    --- PASS: TestAll/testdata/scopeafter1.go (0.00s)
+    --- PASS: TestAll/testdata/scopeafter2.go (0.01s)
+    --- PASS: TestAll/testdata/shortvar.go (0.00s)
+=== RUN   TestGuessPackageName
+=== RUN   TestGuessPackageName/github.com/foo/bar
+=== RUN   TestGuessPackageName/github.com/foo/bar/v2
+=== RUN   TestGuessPackageName/github.com/foo/go-bar/v2
+=== RUN   TestGuessPackageName/github.com/foo/bar-go/v2
+=== RUN   TestGuessPackageName/gopkg.in/yaml.v2
+=== RUN   TestGuessPackageName/gopkg.in/go-yaml.v2
+=== RUN   TestGuessPackageName/gopkg.in/yaml-go.v2
+=== RUN   TestGuessPackageName/github.com/nishanths/go-xkcd
+=== RUN   TestGuessPackageName/github.com/nishanths/lyft-go
+--- PASS: TestGuessPackageName (0.00s)
+    --- PASS: TestGuessPackageName/github.com/foo/bar (0.00s)
+    --- PASS: TestGuessPackageName/github.com/foo/bar/v2 (0.00s)
+    --- PASS: TestGuessPackageName/github.com/foo/go-bar/v2 (0.00s)
+    --- PASS: TestGuessPackageName/github.com/foo/bar-go/v2 (0.00s)
+    --- PASS: TestGuessPackageName/gopkg.in/yaml.v2 (0.00s)
+    --- PASS: TestGuessPackageName/gopkg.in/go-yaml.v2 (0.00s)
+    --- PASS: TestGuessPackageName/gopkg.in/yaml-go.v2 (0.00s)
+    --- PASS: TestGuessPackageName/github.com/nishanths/go-xkcd (0.00s)
+    --- PASS: TestGuessPackageName/github.com/nishanths/lyft-go (0.00s)
+=== RUN   TestReviewOutputFailureIsIgnored
+--- PASS: TestReviewOutputFailureIsIgnored (0.00s)
+=== RUN   TestReviewShortWriteIsIgnored
+--- PASS: TestReviewShortWriteIsIgnored (0.00s)
+=== RUN   TestReviewMappingInitializationIsLost
+--- PASS: TestReviewMappingInitializationIsLost (0.00s)
+=== RUN   TestReviewLiteralNormalizationAndFirstSurvivor
+--- PASS: TestReviewLiteralNormalizationAndFirstSurvivor (0.00s)
+PASS
