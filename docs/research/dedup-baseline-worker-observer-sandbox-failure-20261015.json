@@ -1,0 +1,10 @@
+{
+  "status": "recorded_failure_in_live_complete_baseline",
+  "snapshot": "415443172-v2",
+  "unit_summary": "122passed1failed5ignored",
+  "failure_section": "\n\nthread 'model_worker::tests::successful_worker_response_does_not_leave_background_process' (25633836) panicked at crates/rrrah-dedup/src/model_worker.rs:406:18:\ncalled `Result::unwrap()` on an `Err` value: Os { code: 1, kind: PermissionDenied, message: \"Operation not permitted\" }\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n",
+  "failed_statement": "Command::new(\"ps\").output().unwrap()",
+  "root_fix_evidence": "docs/research/dedup-worker-native-observer-20261015.json",
+  "root_fix_sha256": "b7e5d9f11f04c128f0bda53ff0df24794f5b0f48c9442b58049faeba172e90fc",
+  "scope": "Original frozen baseline source and live all-target process untouched. Unit failure is denied external observer launch after response/budget assertions, not evidence that worker cleanup failed. Full baseline command still running under no-fail-fast and will retain originalfailure; selected13current module checks do not turn whole gate green."
+}

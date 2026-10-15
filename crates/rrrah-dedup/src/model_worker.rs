@@ -378,6 +378,63 @@ pub fn serve_loftr_worker_once(
 mod tests {
     use super::*;
     use std::time::Duration;
+    fn linux_stat_running(stat: &str) -> io::Result<bool> {
+        let state = stat
+            .rsplit_once(") ")
+            .and_then(|(_, fields)| fields.as_bytes().first())
+            .ok_or_else(|| io::Error::other("malformed owned process status"))?;
+        Ok(*state != b'Z')
+    }
+    #[test]
+    fn linux_stat_parser_preserves_command_parentheses_and_rejects_missing_state() {
+        for (stat, running) in [
+            ("42 (child worker) S 1 2", true),
+            ("42 (child worker) Z 1 2", false),
+            ("42 (name) Z inside) S 1 2", true),
+            ("42 (name) S inside) Z 1 2", false),
+        ] {
+            assert_eq!(linux_stat_running(stat).unwrap(), running, "{stat}");
+        }
+        for stat in ["", "42 child S 1 2", "42 (child) "] {
+            assert!(linux_stat_running(stat).is_err(), "{stat}");
+        }
+    }
+    #[cfg(any(target_os = "linux", target_os = "macos"))]
+    fn owned_pid_running(pid: rustix::process::Pid) -> io::Result<bool> {
+        #[cfg(target_os = "macos")]
+        {
+            use libproc::{bsd_info::BSDInfo, proc_pid::pidinfo};
+            match pidinfo::<BSDInfo>(pid.as_raw_nonzero().get(), 0) {
+                Ok(info) => Ok(info.pbi_status != libc::SZOMB),
+                Err(error) => match rustix::process::getpgid(Some(pid)) {
+                    Err(rustix::io::Errno::SRCH) => Ok(false),
+                    _ => Err(io::Error::other(error)),
+                },
+            }
+        }
+        #[cfg(target_os = "linux")]
+        {
+            match std::fs::read_to_string(format!("/proc/{}/stat", pid.as_raw_nonzero())) {
+                Ok(stat) => linux_stat_running(&stat),
+                Err(error) if error.kind() == io::ErrorKind::NotFound => Ok(false),
+                Err(error) => Err(error),
+            }
+        }
+    }
+    #[cfg(any(target_os = "linux", target_os = "macos"))]
+    #[test]
+    fn native_owned_pid_observation_detects_live_and_reaped_worker() {
+        let mut child = Command::new("/bin/sleep").arg("10").spawn().unwrap();
+        let pid = rustix::process::Pid::from_raw(i32::try_from(child.id()).unwrap()).unwrap();
+        let live = owned_pid_running(pid);
+        child.kill().unwrap();
+        child.wait().unwrap();
+        assert!(live.unwrap(), "live owned worker was not observed");
+        assert!(
+            !owned_pid_running(pid).unwrap(),
+            "reaped owned worker remains live"
+        );
+    }
     #[cfg(any(target_os = "linux", target_os = "macos"))]
     #[test]
     fn successful_worker_response_does_not_leave_background_process() {
@@ -398,19 +455,15 @@ mod tests {
         drop(result);
         assert_eq!(budget.used(), before);
         let pid = std::fs::read_to_string(pid_file).unwrap();
+        let pid = rustix::process::Pid::from_raw(pid.trim().parse().unwrap()).unwrap();
         let until = std::time::Instant::now() + Duration::from_millis(500);
         loop {
-            let output = Command::new("ps")
-                .args(["-o", "stat=", "-p", &pid])
-                .output()
-                .unwrap();
-            let state = String::from_utf8(output.stdout).unwrap();
-            if state.trim().is_empty() || state.trim_start().starts_with('Z') {
+            if !owned_pid_running(pid).unwrap() {
                 break;
             }
             assert!(
                 std::time::Instant::now() < until,
-                "successful model worker left descendant running: {state}"
+                "successful model worker left descendant running: {pid:?}"
             );
             std::thread::sleep(Duration::from_millis(5));
         }
