@@ -1,0 +1,78 @@
+{
+  "status": "partial_source_selected_runtime_verified",
+  "repository": "markusressel/py-image-dedup",
+  "commit": "7ca5386d16171c2403e8e23c51cc3744d84bb705",
+  "root_tree": "51d4b68ebda23b7714347f6b35006ac5d7c47743",
+  "whole_repo_complete": false,
+  "fetched_text_blobs": 48,
+  "unreviewed_images": 12,
+  "fully_read_files": [
+    "py_image_dedup/library/deduplicator.py",
+    "py_image_dedup/library/deduplication_result.py",
+    "py_image_dedup/library/processing_manager.py",
+    "py_image_dedup/library/__init__.py",
+    "py_image_dedup/util/__init__.py",
+    "py_image_dedup/util/file.py",
+    "py_image_dedup/util/image.py",
+    "py_image_dedup/persistence/metadata_key.py",
+    "pyproject.toml",
+    "tests/test_file_extension.py",
+    "tests/test_select_images_to_delete.py"
+  ],
+  "native_controls": [
+    {
+      "actual_outside_deleted": false,
+      "adapter": "explicit two-response storage; no real Elasticsearch/image matching",
+      "control": "second_query_escapes_allowed_root",
+      "outside_marked": true
+    },
+    {
+      "control": "post_match_rewrite_deleted",
+      "remaining": false
+    },
+    {
+      "control": "last_copy_deleted_after_keeper_removed",
+      "remaining_copies": 0
+    },
+    {
+      "control": "dry_run_preserves_bytes_and_storage",
+      "preserved": true
+    },
+    {
+      "control": "missing_file_removes_storage_entry",
+      "removed_entries": 1
+    },
+    {
+      "control": "native_filecmp_cached_equality_deletes_changed_source",
+      "same_size_and_restored_mtime": true,
+      "source_removed": true,
+      "target_original": true
+    },
+    {
+      "accepted": true,
+      "control": "case_insensitive_extension"
+    },
+    {
+      "control": "documented_none_extension_filter_raises",
+      "exception": "AttributeError"
+    },
+    {
+      "control": "counter_exclusions_use_cwd_basename_instead_of_walk_root",
+      "excluded_file_counted": true
+    },
+    {
+      "control": "empty_second_search_not_guarded",
+      "exception": "IndexError"
+    }
+  ],
+  "runs": 2,
+  "evidence_pins": {
+    "docs/research/dedup-500/image37-fetched-source-pins-20261016.json": "e53f0ebcae25f93f19c988be5625bc2a3329df4e6000e0c0ee2d55779d1b1539",
+    "docs/research/dedup-500/image37-selected-native-run1-20261016.json": "df5643631ad4ef8f4ccb95af4a85d293b2b4e9dcf30f3b841fd5ab49d054d91d",
+    "docs/research/dedup-500/image37-selected-native-run2-20261016.json": "df5643631ad4ef8f4ccb95af4a85d293b2b4e9dcf30f3b841fd5ab49d054d91d",
+    "scripts/qualify-image37-selected-controls-20261016.py": "933137c7c973aff23c3f18a577d2f981eebc9a051cc781ded3de02e4284bc5d8"
+  },
+  "preparation_correction": "First control harness expected excluded-file counter1 but existing preserved b.png also counted. Both initial runs stopped at assertion; corrected fixture oracle to2, upstream unchanged; final two complete10control runs agree.",
+  "scope": "Selected unchanged AST method bodies; no original suite/full package/image signature/Elasticsearch/daemon/dependency/platform/quality/performance qualification. All file actions on owned temporary fixtures; explicit storage/config/progress/metric bindings. Remaining text and all12images still require review.",
+  "adoption": "No upstream code copied into production; AGPLv3+ package. Findings inform independent contracts only."
+}
