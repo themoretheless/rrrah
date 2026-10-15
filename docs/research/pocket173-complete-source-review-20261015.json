@@ -1,0 +1,132 @@
+{
+  "repository": "kevinpollet/pocket-deduper",
+  "commit": "66946a71d090bff489a61c393078c1ccb7e0f095",
+  "tree": "923c6cd5c698b6b13aeecf47d6606754b8ae0978",
+  "status": "complete_pinned_source_read_with_selected_native_controls",
+  "whole_repository_complete": true,
+  "scope": "All 15 tracked UTF-8 files read, including MIT license, workflow and empty go.sum. No tracked media. Native controls cover actual unmodified deduper; all three original packages compile. No original tests exist.",
+  "blobs": [
+    {
+      "path": ".github/workflows/build.yml",
+      "git_blob": "9262490f3626a13c0eead6432c294d9a53328743",
+      "bytes": 699,
+      "sha256": "4b36fd810219dbf0f51f9482a46118d8317e15bd5850cb23f2fc9f6d75b12c84"
+    },
+    {
+      "path": ".gitignore",
+      "git_blob": "674689b5a8c92c2160318665399f01ab08607d07",
+      "bytes": 23,
+      "sha256": "01a3fd4fa8df15126385e09f0df8528c86904678af070ad4f4bb5ef01967477e"
+    },
+    {
+      "path": ".golangci.yml",
+      "git_blob": "504433406aa75362b81b4ca89fe5f70944955376",
+      "bytes": 503,
+      "sha256": "ba17e44d9ca06f5337e3ee3a4e26f4ce88e4ea50478d24568cf798abb39277a0"
+    },
+    {
+      "path": "CODE_OF_CONDUCT.md",
+      "git_blob": "f52f39d1a955709c2d2bf979bb681e668a5bb89d",
+      "bytes": 3372,
+      "sha256": "78c84f2ad90c9a540c00fb8b288c1905b437c0f5145d1cee1af8e01831cad392"
+    },
+    {
+      "path": "LICENSE",
+      "git_blob": "a444dc277d3108eaaea84f8c0be0275a0ec442cf",
+      "bytes": 1093,
+      "sha256": "c6d053ffb28190bc5f8515c1df3a9e55d8ede0cf1993564dbb35756e83dd7593"
+    },
+    {
+      "path": "Makefile",
+      "git_blob": "975c3a2ebd45853bfa2a73809f68dc0a5ff4e0af",
+      "bytes": 275,
+      "sha256": "4db3c90f14b0959077c53dc93bbaaa416e73815ad9c5eba1b2e937029b269606"
+    },
+    {
+      "path": "README.md",
+      "git_blob": "b34673db27cc21fd05c5e3c7a5f0e0c2b33ff606",
+      "bytes": 1369,
+      "sha256": "bb7f722fe4d9a3845ba0615e5c7242f0bba747112f8ff4ca3e6e7109c7e12458"
+    },
+    {
+      "path": "client/auth.go",
+      "git_blob": "7eb9441ccd4aef5f0cc346a20eb9e57089069c76",
+      "bytes": 3384,
+      "sha256": "85388a4bd82d5038885810e3b331db8c5f1a729a5c9b616103d73bd94a01ae33"
+    },
+    {
+      "path": "client/client.go",
+      "git_blob": "1836eea5c8b4308d0c6a220491740d57bc19d37c",
+      "bytes": 1023,
+      "sha256": "fb00dd23c992a024af0e8d7142c55f824cd3d41e15bce1c28e61be6ef3c32119"
+    },
+    {
+      "path": "client/get.go",
+      "git_blob": "7097c49460240d2f57841aa0e96a2b54b925e98a",
+      "bytes": 2971,
+      "sha256": "1c9ee654d39d03e3d42531c8dd2fa6a472cc9c14218b939356641f21e4deebd0"
+    },
+    {
+      "path": "client/send.go",
+      "git_blob": "a2d606d7b92366ae182f2706ad341828336f57fb",
+      "bytes": 1879,
+      "sha256": "85390ff89452e9b1702916be64dea3aff72a01f626863d13ef8aaadef2e3ff4d"
+    },
+    {
+      "path": "deduper/deduper.go",
+      "git_blob": "0f9374d9a0b84a97676f0444e44270d3f36af213",
+      "bytes": 468,
+      "sha256": "b4210cb3d33c6cc553bfd398dd32e36223e7032ed71d7093b91098ae25d819d6"
+    },
+    {
+      "path": "go.mod",
+      "git_blob": "f73dc1046548a5ec5d3e64d687aef347072403bb",
+      "bytes": 54,
+      "sha256": "10d3ed268f639ae59394a1f94135c8c9ebfdda8f811ca547c3cb292f27b5acef"
+    },
+    {
+      "path": "go.sum",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pocket-deduper.go",
+      "git_blob": "f316ed8208e88073fec12e1cac8bc6ef20637403",
+      "bytes": 1780,
+      "sha256": "b34ac4687134c688cafbd3537d773fbfcad7b3fbad427c39e0dad992ded0d82d"
+    }
+  ],
+  "runtime": {
+    "go": "1.27.2",
+    "command": "GOTOOLCHAIN=local GOMAXPROCS=2 GOPROXY=off go test -count=1 -v ./...",
+    "cwd": "/private/tmp/rrrah-pocket173-native-20261015",
+    "returncode": 0,
+    "authored_tests_passed": 4,
+    "original_tests": 0,
+    "network_or_account_calls": false,
+    "evidence": [
+      {
+        "path": "docs/research/pocket173-native-controls-20261015/review_test.go",
+        "sha256": "58fd26c5ad71623d81920d7c88ed9c0036689d71cffe7c0d021d12ba65c14e09"
+      },
+      {
+        "path": "docs/research/pocket173-native-controls-20261015/run.log",
+        "sha256": "a84db2c619c3f60aa87cc8b7ad81bc9f62cb2ffc73ebdd326b437102f535b104"
+      }
+    ]
+  },
+  "findings": [
+    "Different GivenURL values with empty ResolvedURL collapse into one duplicate group; confirmed by actual helper.",
+    "Identity uses exact ResolvedURL string only; case and trailing slash are distinct.",
+    "Map traversal provides no explicit survivor preference; favorites and item IDs are ignored. 1000 repeated controls assert membership and duplicate count, not probabilistic nondeterminism.",
+    "Static CLI: dry-run defaults false; send response Status, ActionResults and ActionErrors are ignored; success is printed even for dry-run. No CLI, authorization or Send execution was performed.",
+    "Static resource boundary: full response and all actions are materialized; no byte cap, explicit pagination loop, source generation validation or final content comparison."
+  ],
+  "decision": "reject-domain; retain empty-identity and explicit survivor-policy requirements; no upstream code adopted",
+  "limits": [
+    "No actual Pocket API, OAuth, account, HTTP listener, deletion or full CLI executed",
+    "No performance measurement or complete API/backend qualification",
+    "Full source read is not runtime coverage of all code paths"
+  ]
+}

@@ -1,0 +1,151 @@
+{
+  "repository": "rubenv/dupefinder",
+  "commit": "f56b753f0f7e909113870fb5b0b1b757fb55475d",
+  "status": "complete_pinned_source_read_and_nine_native_tests",
+  "whole_repository_complete": true,
+  "scope": "All17 tracked UTF-8 blobs including four tiny text fixtures, original tests, CLI, docs, MIT license and CI read; no tracked visual media. External badge images/blog not reviewed.",
+  "blobs": [
+    {
+      "path": ".gitignore",
+      "git_blob": "a01ee289f9a3c65287845c5138783d4f3b24a443",
+      "bytes": 7,
+      "sha256": "29521e7db2e0fd81ad0ce8335e4e2114a7d9b334f2451136fd91de37d49bfe8d"
+    },
+    {
+      "path": ".godocdown.md",
+      "git_blob": "0ab0df1f605f90b6a43319a6409d7637400e8e5a",
+      "bytes": 2067,
+      "sha256": "d6582d63df84389943c96db08770051b69307816bec84e17c8277cc8fc29f552"
+    },
+    {
+      "path": ".travis.yml",
+      "git_blob": "4f2ee4d9733890ec7e7fc5348fe33ac145cfd332",
+      "bytes": 13,
+      "sha256": "2626000e5243f3a2296da4278f7347ce6f575cf6175cc9c986085e6591aab8a6"
+    },
+    {
+      "path": "LICENSE",
+      "git_blob": "1d456681f4dc65aec0166868ab57a361390d1718",
+      "bytes": 1084,
+      "sha256": "6bbce494f26937ce64ad09d89be51cc1abc91cd4fb166dfee90240f155064456"
+    },
+    {
+      "path": "README.md",
+      "git_blob": "6e0b0552a9aa353c057ecbd2ff53b5daa100bf36",
+      "bytes": 2906,
+      "sha256": "5c0f4034aba8f18320448250add5a48ba639b132b3e1ff5d11c64c0e5010f333"
+    },
+    {
+      "path": "bin/dupefinder/main.go",
+      "git_blob": "236fbe4b18d412b85d5f68739317f46466f609df",
+      "bytes": 1829,
+      "sha256": "05a4afd1194d388db6c7082ee43da964f3fa5b5fc06d9481163f23d68fff27e6"
+    },
+    {
+      "path": "catalog_test.go",
+      "git_blob": "45f0c6fd71e38825f12b70166d763a037f364ea5",
+      "bytes": 721,
+      "sha256": "d03e33e958c7abe78c1d6a50851299e556bfa26345c4fdd5edf122c0d73726bf"
+    },
+    {
+      "path": "detect_test.go",
+      "git_blob": "fe56b91babe13e050b19f732bb2847f7f1f35631",
+      "bytes": 220,
+      "sha256": "41e55b74891cfb5f2dc45c7f7d6e4a82d8944040f544bf098af32c19524357d8"
+    },
+    {
+      "path": "doc.go",
+      "git_blob": "2c95329bd2f351777ab5799793f39e8849fb9f6b",
+      "bytes": 161,
+      "sha256": "805b16e9172c97004e8a7df37a209643330d0df94a70d60e054fb85969c1cd31"
+    },
+    {
+      "path": "dupefinder.go",
+      "git_blob": "c5266bedbc95905a4a32d80615cfbb6421daacf3",
+      "bytes": 5021,
+      "sha256": "419d13f08fad82af36b26bc016c10633fac01e681e8611554be042608d1401d9"
+    },
+    {
+      "path": "fixtures/a/c/bla.txt",
+      "git_blob": "a7f8d9e5dcf3a68fdd2bfb727cde12029875260b",
+      "bytes": 4,
+      "sha256": "00e3261a6e0d79c329445acd540fb2b07187a0dcf6017065c8814010283ac67f"
+    },
+    {
+      "path": "fixtures/a/hello.txt",
+      "git_blob": "ce013625030ba8dba906f756967f9e9ca394464a",
+      "bytes": 6,
+      "sha256": "5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03"
+    },
+    {
+      "path": "fixtures/b/hello.txt",
+      "git_blob": "ce013625030ba8dba906f756967f9e9ca394464a",
+      "bytes": 6,
+      "sha256": "5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03"
+    },
+    {
+      "path": "fixtures/hello.txt",
+      "git_blob": "ce013625030ba8dba906f756967f9e9ca394464a",
+      "bytes": 6,
+      "sha256": "5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03"
+    },
+    {
+      "path": "generate_test.go",
+      "git_blob": "e72cfbc3dbfcbfc6eb87f55eb4469070ccf1e089",
+      "bytes": 692,
+      "sha256": "bd0552067e9748c7386d20bd8eac6e569e3648285b2067efa80c8a9194fa5c41"
+    },
+    {
+      "path": "go.mod",
+      "git_blob": "11640124f6722febe63d12832143553ca3cc66a2",
+      "bytes": 47,
+      "sha256": "17c9a534ad8c7a44928ebc4410aaac3dd0d997cff97bbb8a3899cc8cd7104516"
+    },
+    {
+      "path": "init_test.go",
+      "git_blob": "94537c61664573c2215197ca65dbeaff9564902e",
+      "bytes": 208,
+      "sha256": "0c9c009c630e1943f25c3076edcada3ef0d342fca389d31939696f9a072fdab2"
+    }
+  ],
+  "runtime": {
+    "go": "1.27.2",
+    "command": "GOTOOLCHAIN=local GOMAXPROCS=2 GOPROXY=off go test -count=1 -v ./...",
+    "returncode": 0,
+    "original_tests_passed": 4,
+    "authored_tests_passed": 5,
+    "retained_binary": "/private/tmp/rrrah-rubenv329-native-20261015/review.test",
+    "binary_sha256": "8019595039876c099d180b63b61d07498390ab432008841ec77c740bf5c44a7d",
+    "fresh_binary_replay_returncode": 0,
+    "inventory": [
+      "TestCatalogParse",
+      "TestDetectFolders",
+      "TestGenerateFolders",
+      "TestGenerateFinds",
+      "TestReviewUnterminatedCatalog",
+      "TestReviewDuplicateHashOverwrites",
+      "TestReviewHashNotValidated",
+      "TestReviewReaderErrorPropagates",
+      "TestReviewWorkerWaitsForErrorReceiver"
+    ],
+    "pins": {
+      "docs/research/rubenv329-native-controls-20261015/run.log": "f23559ecaf087c72bf1dfdc0912b3cd77ade4a6c05da2b3522e19dce254c2cc0",
+      "docs/research/rubenv329-native-controls-20261015/inventory.txt": "7e496b4a93ee8f8aeaabc136ffb334d009038e1a7ae78874bcf6b99388a9dfac",
+      "docs/research/rubenv329-native-controls-20261015/replay.log": "a87fd167146d6acbeda19363f411b03e4fb21b6b02d3c39c239406704979c7b6",
+      "docs/research/rubenv329-native-controls-20261015/review_test.go": "2735d83a1ad50623ae8b70f582a6e829a4205c44c8223145dc55aae70d8935dd"
+    }
+  },
+  "findings": [
+    "Native worker control: missing file leaves hashFiles waiting on unbuffered errs; it does not finish during100ms observation, then terminates once test receives error. Test drains channels and joins worker. Main Generate/Detect statically wait for entries closure before reading errs, creating circular wait on this error path. Full public API timeout not executed.",
+    "Parser accepts arbitrary non-SHA256 strings, duplicate hash overwrites original path, unterminated final record accepted; reader errors propagated. All confirmed by actual original helper.",
+    "Static Detect trusts catalog digest without reopening catalog reference or final byte comparison; only current candidate Stat checked before optional Remove. No deletion executed.",
+    "Static Generate truncates catalog directly; no atomic temporary publication, fsync, close-error propagation or cancellation. Early output failures can abandon producers blocked on channels.",
+    "No hard byte/RSS cap: entire catalog map and each directory listing materialized; workers scale with NumCPU; no context cancellation or file-generation guard."
+  ],
+  "decision": "reference only; retain error-channel shutdown and atomic publication requirements; no upstream code adopted",
+  "limits": [
+    "Native controls on MacARM only; no Linux/Windows/full filesystem matrix",
+    "No CLI or deletion execution; no user files; only original public text fixtures and owned synthetic temporary paths",
+    "No natural SHA256 collision, huge corpus benchmark or hard RSS proof"
+  ]
+}

@@ -2,7 +2,7 @@
   "index": 173,
   "repository": "kevinpollet/pocket-deduper",
   "commit": "66946a71d090bff489a61c393078c1ccb7e0f095",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All 15 tracked UTF-8 files read, including MIT license, workflow and empty go.sum. No tracked media. Native controls cover actual unmodified deduper; all three original packages compile. No original tests exist.",
   "decision": "reject-domain",
   "finding": "Pocket list URL deduplication; remote bookmark identities.",
   "available_source_evidence": [
@@ -64,5 +64,10 @@
       "source": false,
       "test": false
     }
+  ],
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/pocket173-complete-source-review-20261015.json",
+  "selected_runtime_reviews": [
+    "docs/research/pocket173-client-synthetic-transport-20261015.json"
   ]
 }

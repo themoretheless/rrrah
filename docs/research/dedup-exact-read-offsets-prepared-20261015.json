@@ -1,0 +1,39 @@
+{
+  "status": "prepared_and_launched_not_yet_qualified",
+  "session_id": 52710,
+  "source": "/private/tmp/rrrah-exact-read-offsets-20261015",
+  "command": [
+    "rustc",
+    "+stable",
+    "--edition=2024",
+    "--test",
+    "/private/tmp/rrrah-exact-read-offsets-20261015/harness.rs",
+    "-C",
+    "opt-level=1",
+    "-L",
+    "dependency=/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps",
+    "-o",
+    "/private/tmp/rrrah-exact-read-offsets-20261015/tests",
+    "--extern",
+    "blake3=/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libblake3-5dbb3dfc2ce7d297.rlib",
+    "--extern",
+    "thiserror=/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libthiserror-1f2ca11ca2706be8.rlib",
+    "--extern",
+    "tempfile=/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libtempfile-f6f2a369a6678518.rlib",
+    "--extern",
+    "libc=/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/liblibc-0a79900aa2799e6c.rlib"
+  ],
+  "pins": {
+    "/private/tmp/rrrah-exact-read-offsets-20261015/exact.rs": "40e5ef25e7d51a314ba993f1b9237f04a45fae7a16781982933d201435c5930d",
+    "/private/tmp/rrrah-exact-read-offsets-20261015/integration.rs": "23a8274ee225a1a9955907f03b061ce90ddf3d6b1fedb2f589ad8bf50be2c79e",
+    "/private/tmp/rrrah-exact-read-offsets-20261015/controls.rs": "9a57b742f8efd38d7761f17c5711733cb1229f20aff1bb81c78a3cc15e99df4e",
+    "/private/tmp/rrrah-exact-read-offsets-20261015/harness.rs": "092a59df2a8ef2a10f6222248917edec8c2bd8fb093c8df5745314bbdbb11960",
+    "/private/tmp/rrrah-exact-read-offsets-20261015/command.json": "61ac06e9cfcebd8f8aa7242e4596d388ac7b6d4e000e00d6e66864ace18c80c4"
+  },
+  "root_source_pins": {
+    "crates/rrrah-dedup/src/exact.rs": "40e5ef25e7d51a314ba993f1b9237f04a45fae7a16781982933d201435c5930d",
+    "crates/rrrah-dedup/tests/exact_files.rs": "23a8274ee225a1a9955907f03b061ce90ddf3d6b1fedb2f589ad8bf50be2c79e"
+  },
+  "new_controls": 192,
+  "scope": "Full current exact production module plus complete current exact_files integration and prior three synthetic large-file controls compiled with real cached dependencies. No Cargo/fullcrate/decode/platform/corpus or optimization result claim. Build/test process currently live; no passing claim."
+}

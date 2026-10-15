@@ -1515,6 +1515,47 @@ mod observed_snapshot_policy_tests {
 mod interrupted_read_tests {
     use super::*;
     use std::cell::Cell;
+    #[test]
+    fn every_partial_read_failure_preserves_typed_error_and_unread_tail() {
+        struct FailingReader {
+            offset: usize,
+            fail_at: usize,
+            kind: io::ErrorKind,
+        }
+        impl Read for FailingReader {
+            fn read(&mut self, buffer: &mut [u8]) -> io::Result<usize> {
+                if self.offset == self.fail_at {
+                    return Err(self.kind.into());
+                }
+                buffer[0] = self.offset as u8;
+                self.offset += 1;
+                Ok(1)
+            }
+        }
+        for fail_at in 0..64 {
+            for kind in [
+                io::ErrorKind::PermissionDenied,
+                io::ErrorKind::BrokenPipe,
+                io::ErrorKind::UnexpectedEof,
+            ] {
+                let mut reader = FailingReader {
+                    offset: 0,
+                    fail_at,
+                    kind,
+                };
+                let mut buffer = [255; 64];
+                assert!(matches!(
+                    read_exact_cancelled(&mut reader, &mut buffer, &|| false),
+                    Err(Failure::Io(error)) if error.kind() == kind
+                ));
+                assert_eq!(reader.offset, fail_at);
+                for (index, value) in buffer[..fail_at].iter().enumerate() {
+                    assert_eq!(*value, index as u8);
+                }
+                assert!(buffer[fail_at..].iter().all(|value| *value == 255));
+            }
+        }
+    }
     struct InterruptedReader<'a> {
         calls: &'a Cell<usize>,
     }

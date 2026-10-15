@@ -1,0 +1,25 @@
+{
+  "status": "verified_six_authored_tests",
+  "repository": "kevinpollet/pocket-deduper",
+  "commit": "66946a71d090bff489a61c393078c1ccb7e0f095",
+  "source_review": "docs/research/pocket173-complete-source-review-20261015.json",
+  "source_review_sha256": "154dd42855966ca7ad0c02688229bab9c5cc118840d9ab7db45b311384948612",
+  "command": "GOTOOLCHAIN=local GOMAXPROCS=2 GOPROXY=off go test -count=1 -v ./...",
+  "returncode": 0,
+  "tests_passed": 6,
+  "findings": [
+    "Actual Send returns nil error for HTTP200 with status0, false action result and synthetic action error; CLI statically ignores all returned application fields.",
+    "Actual Get returns nil error for HTTP200 with status0 and empty list; CLI statically treats empty list as no duplicates."
+  ],
+  "pins": {
+    "docs/research/pocket173-native-controls-20261015/run-v2.log": "1a28c224b24eb4aca83b0495e029f79407559b824033b2655bd911507fa02b13",
+    "docs/research/pocket173-native-controls-20261015/run.log": "a84db2c619c3f60aa87cc8b7ad81bc9f62cb2ffc73ebdd326b437102f535b104",
+    "docs/research/pocket173-native-controls-20261015/client_review_test.go": "90d4ee78548183e8592098068e443d0a7ceaaf49c761459743c40e8db9f235fb",
+    "docs/research/pocket173-native-controls-20261015/review_test.go": "58fd26c5ad71623d81920d7c88ed9c0036689d71cffe7c0d021d12ba65c14e09"
+  },
+  "limits": [
+    "Custom in-memory RoundTripper; no network, listener, authorization, account, deletion or CLI execution",
+    "No upstream source changes; synthetic responses prove client behavior only; server protocol validity not asserted",
+    "Four duplicate-helper tests rerun alongside two client tests"
+  ]
+}
