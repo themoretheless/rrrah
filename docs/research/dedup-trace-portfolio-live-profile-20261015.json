@@ -1,0 +1,68 @@
+{
+  "status": "verified_live_candidate_portfolio_profile_diagnostic_only",
+  "process": 99033,
+  "parent_process": 97698,
+  "sampling_command": [
+    "sample",
+    "99033",
+    "2",
+    "-file",
+    "/private/tmp/rrrah-trace-portfolio-sample-20261015.txt"
+  ],
+  "sampling_returncode": 0,
+  "raw_profile": "docs/research/dedup-trace-portfolio-live-profile-20261015/sample.txt",
+  "raw_profile_sha256": "9526d13c56e2e268a3ad39e403e9dd15bf246462acf03b2661a7f5fdefc2c96e",
+  "binary": "/private/tmp/rrrah-additive-trace-full-production-metadata-20261015/integration-tests",
+  "binary_sha256": "f510e20471332f9648fed98963e5185eac9323cc7aa792b616590021e9412d37",
+  "library_sha256": "181dfc32eb6db2bdd244aef849539eb2f105e780f03947145c0df46f148f9644",
+  "captured_source_plan_sha256": "f95d3d071e442ae7bc5eaf04b15b3237edaa58e94b7e99183c468cb183d61e2f",
+  "profile": "Candidate production and integration opt-level0, debug assertions; not shipping opt3. Real portfolio tests use owned synthetic fixtures/providers; no native model inference timing.",
+  "selected_flat_stack_rows": [
+    "_RINvNtCs8Mbv00yxnRz_4core5array18try_from_fn_erasedINtNtNtB4_3ops9try_trait17NeverShortCircuitmEQINtNtB2_5drain5DrainfNCINvMBQ_BN_10wrap_mut_1fNCNvNtCsg6pZpif2FYB_11rrrah_dedup6linear9canonical0E0EEB2n_  (in integration-tests)        170",
+    "_RINvNtCsg6pZpif2FYB_11rrrah_dedup5local11descriptorsRRRRNCINvNtB4_10local_scan29candidate_union_files_managedRNCINvNtB4_16anchor_rank_file42search_anchor_rank_geometry_files_selectedRNCINvB1P_44search_anchor_rank_reflection_fallback_filesRRDINtNtNtCs8Mbv00yxnRz_4core3ops8function2FnuEp6OutputbEL_E0E0E0EB4_  (in integration-tests)        119",
+    "_RNCNvNtCsg6pZpif2FYB_11rrrah_dedup6linear9canonical0B5_  (in integration-tests)        87",
+    "_RNvXs0_NtNtCs8Mbv00yxnRz_4core5array5drainQINtB5_5DrainfNCINvMNtNtB9_3ops9try_traitINtBY_17NeverShortCircuitmE10wrap_mut_1fNCNvNtCsg6pZpif2FYB_11rrrah_dedup6linear9canonical0E0EINtNtB10_8function5FnMutTjEE8call_mutB23_  (in integration-tests)        77",
+    "_RINvMsm_NtCs8Mbv00yxnRz_4core5arrayAfj4_7try_mapINtNtNtB8_3ops9try_trait17NeverShortCircuitmENCINvMBN_BK_10wrap_mut_1fNCNvNtCsg6pZpif2FYB_11rrrah_dedup6linear9canonical0E0EB1Y_  (in integration-tests)        76",
+    "_RINvNtCs8Mbv00yxnRz_4core5array18try_from_fn_erasedINtNtNtB4_3ops9try_trait17NeverShortCircuitdEQINtNtB2_5drain5DrainmNCINvMBQ_BN_10wrap_mut_1mNCNCINvNtCsg6pZpif2FYB_11rrrah_dedup8gradient23describe_gradient_cellsRRRNCINvNtB2q_10local_scan29candidate_union_files_managedRNCINvNtB2q_16anchor_rank_file42search_anchor_rank_geometry_files_selectedRNCINvB4q_44search_anchor_rank_reflection_fallback_filesRRDINtNtBS_8function2FnuEp6OutputbEL_E0E0E0Es_00E0EEB2q_  (in integration-tests)        75",
+    "_RNvXs0_NtNtCs8Mbv00yxnRz_4core5array5drainQINtB5_5DrainmNCINvMNtNtB9_3ops9try_traitINtBY_17NeverShortCircuitdE10wrap_mut_1mNCNCINvNtCsg6pZpif2FYB_11rrrah_dedup8gradient23describe_gradient_cellsRRRNCINvNtB26_10local_scan29candidate_union_files_managedRNCINvNtB26_16anchor_rank_file42search_anchor_rank_geometry_files_selectedRNCINvB46_44search_anchor_rank_reflection_fallback_filesRRDINtNtB10_8function2FnuEp6OutputbEL_E0E0E0Es_00E0EINtB6c_5FnMutTjEE8call_mutB26_  (in integration-tests)        67",
+    "_RNCINvNtCsg6pZpif2FYB_11rrrah_dedup8gradient23describe_gradient_cellsRRRNCINvNtB6_10local_scan29candidate_union_files_managedRNCINvNtB6_16anchor_rank_file42search_anchor_rank_geometry_files_selectedRNCINvB25_44search_anchor_rank_reflection_fallback_filesRRDINtNtNtCs8Mbv00yxnRz_4core3ops8function2FnuEp6OutputbEL_E0E0E0Es_0B6_  (in integration-tests)        60",
+    "_RINvNtCsg6pZpif2FYB_11rrrah_dedup8gradient23describe_gradient_cellsRRRNCINvNtB4_10local_scan29candidate_union_files_managedRNCINvNtB4_16anchor_rank_file42search_anchor_rank_geometry_files_selectedRNCINvB23_44search_anchor_rank_reflection_fallback_filesRRDINtNtNtCs8Mbv00yxnRz_4core3ops8function2FnuEp6OutputbEL_E0E0E0EB4_  (in integration-tests)        47",
+    "_RNvXs1_NtNtCs8Mbv00yxnRz_4core5array5drainINtB5_5DrainmNCINvMNtNtB9_3ops9try_traitINtBX_17NeverShortCircuitdE10wrap_mut_1mNCNCINvNtCsg6pZpif2FYB_11rrrah_dedup8gradient23describe_gradient_cellsRRRNCINvNtB25_10local_scan29candidate_union_files_managedRNCINvNtB25_16anchor_rank_file42search_anchor_rank_geometry_files_selectedRNCINvB45_44search_anchor_rank_reflection_fallback_filesRRDINtNtBZ_8function2FnuEp6OutputbEL_E0E0E0Es_00E0ENtNtBZ_4drop4Drop4dropB25_  (in integration-tests)        41",
+    "_RNvXs1_NtNtCs8Mbv00yxnRz_4core5array5drainINtB5_5DrainfNCINvMNtNtB9_3ops9try_traitINtBX_17NeverShortCircuitmE10wrap_mut_1fNCNvNtCsg6pZpif2FYB_11rrrah_dedup6linear9canonical0E0ENtNtBZ_4drop4Drop4dropB22_  (in integration-tests)        24",
+    "_RNCINvNtCsg6pZpif2FYB_11rrrah_dedup5local11descriptorsRRRRNCINvNtB6_10local_scan29candidate_union_files_managedRNCINvNtB6_16anchor_rank_file42search_anchor_rank_geometry_files_selectedRNCINvB1R_44search_anchor_rank_reflection_fallback_filesRRDINtNtNtCs8Mbv00yxnRz_4core3ops8function2FnuEp6OutputbEL_E0E0E0E0B6_  (in integration-tests)        23",
+    "_RINvMsm_NtCs8Mbv00yxnRz_4core5arrayAmj4_7try_mapINtNtNtB8_3ops9try_trait17NeverShortCircuitdENCINvMBN_BK_10wrap_mut_1mNCNCINvNtCsg6pZpif2FYB_11rrrah_dedup8gradient23describe_gradient_cellsRRRNCINvNtB21_10local_scan29candidate_union_files_managedRNCINvNtB21_16anchor_rank_file42search_anchor_rank_geometry_files_selectedRNCINvB41_44search_anchor_rank_reflection_fallback_filesRRDINtNtBP_8function2FnuEp6OutputbEL_E0E0E0Es_00E0EB21_  (in integration-tests)        19",
+    "_RINvNtCs8Mbv00yxnRz_4core5array11try_from_fnINtNtNtB4_3ops9try_trait17NeverShortCircuitdEKj4_QINtNtB2_5drain5DrainmNCINvMBJ_BG_10wrap_mut_1mNCNCINvNtCsg6pZpif2FYB_11rrrah_dedup8gradient23describe_gradient_cellsRRRNCINvNtB2n_10local_scan29candidate_union_files_managedRNCINvNtB2n_16anchor_rank_file42search_anchor_rank_geometry_files_selectedRNCINvB4n_44search_anchor_rank_reflection_fallback_filesRRDINtNtBL_8function2FnuEp6OutputbEL_E0E0E0Es_00E0EEB2n_  (in integration-tests)        15",
+    "_RINvNtCs8Mbv00yxnRz_4core5array11try_from_fnINtNtNtB4_3ops9try_trait17NeverShortCircuitmEKj4_QINtNtB2_5drain5DrainfNCINvMBJ_BG_10wrap_mut_1fNCNvNtCsg6pZpif2FYB_11rrrah_dedup6linear9canonical0E0EEB2k_  (in integration-tests)        11",
+    "_RNCINvMNtNtCs8Mbv00yxnRz_4core3ops9try_traitINtB5_17NeverShortCircuitdE10wrap_mut_1mNCNCINvNtCsg6pZpif2FYB_11rrrah_dedup8gradient23describe_gradient_cellsRRRNCINvNtB1t_10local_scan29candidate_union_files_managedRNCINvNtB1t_16anchor_rank_file42search_anchor_rank_geometry_files_selectedRNCINvB3t_44search_anchor_rank_reflection_fallback_filesRRDINtNtB7_8function2FnuEp6OutputbEL_E0E0E0Es_00E0B1t_  (in integration-tests)        11",
+    "_RINvMNtCs8Mbv00yxnRz_4core6optionINtB3_6OptionRAfj4_E3mapAmBL_NvNtCsg6pZpif2FYB_11rrrah_dedup6linear9canonicalEB12_  (in integration-tests)        8",
+    "_RNCNCINvNtCsg6pZpif2FYB_11rrrah_dedup8gradient23describe_gradient_cellsRRRNCINvNtB8_10local_scan29candidate_union_files_managedRNCINvNtB8_16anchor_rank_file42search_anchor_rank_geometry_files_selectedRNCINvB27_44search_anchor_rank_reflection_fallback_filesRRDINtNtNtCs8Mbv00yxnRz_4core3ops8function2FnuEp6OutputbEL_E0E0E0Es_00B8_  (in integration-tests)        8",
+    "_RINvNtCsg6pZpif2FYB_11rrrah_dedup14gradient_scale11sample_areaRNCINvNtB4_10local_scan29candidate_union_files_managedRNCINvNtB4_16anchor_rank_file42search_anchor_rank_geometry_files_selectedRNCINvB1W_44search_anchor_rank_reflection_fallback_filesRRDINtNtNtCs8Mbv00yxnRz_4core3ops8function2FnuEp6OutputbEL_E0E0E0EB4_  (in integration-tests)        7",
+    "_RINvNtCs8Mbv00yxnRz_4core3ptr9drop_glueINtNtNtB4_5array5drain5DrainfNCINvMNtNtB4_3ops9try_traitINtB1a_17NeverShortCircuitmE10wrap_mut_1fNCNvNtCsg6pZpif2FYB_11rrrah_dedup6linear9canonical0E0EEB2g_  (in integration-tests)        6",
+    "_RINvNtCs8Mbv00yxnRz_4core5array11try_from_fnINtNtNtB4_3ops9try_trait17NeverShortCircuitfEKj4_QINtNtB2_5drain5DraindNCINvMBJ_BG_10wrap_mut_1dNCINvNtCsg6pZpif2FYB_11rrrah_dedup14gradient_scale11sample_areaRNCINvNtB2l_10local_scan29candidate_union_files_managedRNCINvNtB2l_16anchor_rank_file42search_anchor_rank_geometry_files_selectedRNCINvB4e_44search_anchor_rank_reflection_fallback_filesRRDINtNtBL_8function2FnuEp6OutputbEL_E0E0E0E0E0EEB2l_  (in integration-tests)        6",
+    "_RNvYNvNtCsg6pZpif2FYB_11rrrah_dedup6linear9canonicalINtNtNtCs8Mbv00yxnRz_4core3ops8function6FnOnceTRAfj4_EE9call_onceB6_  (in integration-tests)        6"
+  ],
+  "observed_active_paths": [
+    "local descriptor extraction",
+    "gradient cell description",
+    "gradient scale/area sampling",
+    "linear pixel canonicalization through array/iterator operations"
+  ],
+  "source_pins": {
+    "src/linear.rs": "9ba055f4a73063eed2d757e47cbd6d0b1b53b9f1fed6c1cbd777d3106141e059",
+    "src/local.rs": "c89c2b0841078177077704e4ab89123215f815dc2bfe8d1e435999ed1ea4ad3c",
+    "src/gradient.rs": "77fdc18e635ae557c01ef78d1932f1c558bebd6a8d264cc8e1bf81cf088b889b",
+    "src/gradient_scale.rs": "be8b45366fd905ea68d8e1f7ae0efae5056af4a99b9e66c725cbc1aba5e3ce56"
+  },
+  "next_required_before_optimization": [
+    "Finish and independently audit complete40test trace target and complete paired collection gates",
+    "Reproduce same workloads and original thresholds in optimized build after competing owned heavy work stops",
+    "Profile opt3 to establish which operations remain costly",
+    "Only then compare a candidate with bitwise/semantic guards and alternating paired measurements"
+  ],
+  "limits": [
+    "Two-second sampling snapshot, not total runtime distribution, throughput benchmark or release speedup proof",
+    "Parent main-thread wait is not an algorithm hotspot; inclusive and flat sample counts are not added together",
+    "No hard RSS/memory-cap claim from sample physical-footprint counters",
+    "Root production unchanged; prior rejected optimizations remain rejected"
+  ]
+}

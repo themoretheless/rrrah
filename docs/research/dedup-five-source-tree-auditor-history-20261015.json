@@ -1,0 +1,12 @@
+{
+  "status": "original_failure_preserved_then_full_git_tree_checks_passed",
+  "failed_version": "docs/research/dedup-five-source-tree-auditor-controls-20261015/failed-v1.py",
+  "failed_version_sha256": "fe35eb7cc7e75a7c1c2d16947016aceac91289118f4065db8ca4ff3e97e97c75",
+  "returncode": 1,
+  "error": "AssertionError: .github",
+  "cause": "Parent-path normalization incorrectly removed leading dot from .github. Corrected only parent == dot to root; source evidence unchanged.",
+  "successful_audit": "docs/research/dedup-five-complete-source-tree-audit-20261015.json",
+  "successful_audit_sha256": "1dd0eec30235276dc86fe4f2b1d4bb2ba15c2341bde1493e05479e854977344c",
+  "controls": "Known empty Git tree object and five missing-blob mutations rejected; omission assertion kept outside caught reconstruction failures.",
+  "limits": "Git object/archive completeness only, not runtime or source-understanding proof."
+}

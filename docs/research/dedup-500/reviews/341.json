@@ -2,9 +2,9 @@
   "index": 341,
   "repository": "cynipe/domo",
   "commit": "9e96438014110d8731f6f406599897610d310832",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All12tracked text blobs fully read, including license, all implementation/configuration/assets/templates present. Fresh GitHub immutable commit-to-tree pin and canonical Git object reconstruction verified. External images/services/links not part of tracked inventory were not inspected.",
   "decision": "reject-domain",
-  "finding": "Jenkins CLI; super-duper wording false positive.",
+  "finding": "Pinned tree is a12file Jenkins command client, not a duplicate-search implementation. All CLI/core/gemspec/version/source/license files read.",
   "available_source_evidence": [
     {
       "path": "lib/domo.rb",
@@ -64,5 +64,7 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/source341-complete-domain-review-20261015.json"
 }

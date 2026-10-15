@@ -1,0 +1,20 @@
+{
+  "status": "verified_single_manifest_load_with_identical_complete_inventory",
+  "before_script": "scripts/audit-dedup-500-registry-coverage-v78-20261015.py",
+  "before_script_sha256": "cfbca7a3d517ea8bbf9a2d3f977173bf36e736c8b4b1cf8d1afe108784b35eea",
+  "after_script": "scripts/audit-dedup-500-registry-coverage-v79-20261015.py",
+  "after_script_sha256": "864555065326e773004dcac36a2c6d714436d9b5f3b5fc22aa40c83f9405d59d",
+  "historical_manifest_reads_observed_after": 1,
+  "before_reads_source_derived": 500,
+  "reports_identical_bytes": true,
+  "report_sha256": "86927117620f7e904722730f94f87f6ccbc602fe05e8403dc3520b3a3b1a691b",
+  "entries": 500,
+  "stored_selected_pins": 3067,
+  "full_source_declarations": 78,
+  "detailed_reference_entries": 94,
+  "limits": [
+    "Audit-tool improvement only; not faster duplicate-search library or physical disk IO claim",
+    "No timing comparison under concurrent builds; before500reads follows unconditional per-entry source loop, after1read independently instrumented",
+    "All inventory/reference/pin checks retained; no reduced scope"
+  ]
+}

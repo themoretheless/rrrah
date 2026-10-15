@@ -2,7 +2,7 @@
   "index": 255,
   "repository": "joealcorn/celery-dedupe",
   "commit": "307329a412638e1024fb3dd59381459e9f255303",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All15 tracked text blobs read, including MIT LICENCE, all code/tests/config/README/CI. No tracked media; external README badge not inspected. Fresh immutable GitHub commit-to-tree pin and canonical tree reconstruction verified.",
   "decision": "reference",
   "finding": "Celery task-argument MD5 and Redis coalescing; useful repeated-work suppression, not content proof.",
   "available_source_evidence": [
@@ -104,5 +104,7 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/celery255-complete-source-review-20261015.json"
 }

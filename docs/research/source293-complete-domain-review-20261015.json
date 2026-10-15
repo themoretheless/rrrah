@@ -1,0 +1,117 @@
+{
+  "repository": "velveteer/inextinguishable",
+  "commit": "174096c16353b0659dd05db4fc1975be6ba0a958",
+  "status": "complete_source_read_syntax_checks_only_domain_rejected",
+  "whole_repository_complete": true,
+  "scope": "All11tracked text blobs fully read, including license, all implementation/configuration/assets/templates present. Fresh GitHub immutable commit-to-tree pin and canonical Git object reconstruction verified. External images/services/links not part of tracked inventory were not inspected.",
+  "tree": "0a9de2982f536e6516025ccf7cbe210adc0ee103",
+  "tree_objects_verified": 5,
+  "blobs": [
+    {
+      "path": "LICENSE",
+      "mode": "100644",
+      "git_blob": "53292c14bc9b111a9b6bb41d940712e02606f8a6",
+      "bytes": 1055,
+      "sha256": "99adf1e8208730372e194c2f25c07c5857dd3ca5679039a46a13910d815f329f"
+    },
+    {
+      "path": "README.md",
+      "mode": "100644",
+      "git_blob": "e0367c9e3f1c7d86923ee2d3837975d92fea6b47",
+      "bytes": 559,
+      "sha256": "585daa94a8c84795b400e62b6a1fc8dce4f33bb1e9e8b3c3fcfe24327b49e195"
+    },
+    {
+      "path": "assets/css/app.css",
+      "mode": "100644",
+      "git_blob": "a52d0729e469ac9b81a033eca7a85415653da9ed",
+      "bytes": 772,
+      "sha256": "459c5c775363179e82fa492bab88658d4b9ed766093c77546eb4b18201a1008a"
+    },
+    {
+      "path": "assets/js/scripts.js",
+      "mode": "100644",
+      "git_blob": "5b8349337aaaac2be2c0a1e20c0976e922bfd306",
+      "bytes": 1094,
+      "sha256": "b4a26f52fa77b404956a5600b9a219595505a28bd955b6ce36e716f3b55e138e"
+    },
+    {
+      "path": "default.hbs",
+      "mode": "100644",
+      "git_blob": "4cda6c784cd220a42859904965a4772d6fb14721",
+      "bytes": 2202,
+      "sha256": "c89d1d690103b90e5fb2b473a6c4cb5b337956222c2fe641f461fab85618ec4a"
+    },
+    {
+      "path": "index.hbs",
+      "mode": "100644",
+      "git_blob": "e08cb6547e9f24989df8d25a89231a6c5a9dd534",
+      "bytes": 943,
+      "sha256": "bc51398604ccc3dc523f5fbc08cf79573c255c0c394f31b2962b8f2b0b523cb1"
+    },
+    {
+      "path": "package.json",
+      "mode": "100644",
+      "git_blob": "5b4f6cbf76066b316b8af6602c5a44965a29e643",
+      "bytes": 55,
+      "sha256": "743f61785b36aa9cf55c0c1500d179ba83e39fca217417174e9c081b2346e7a7"
+    },
+    {
+      "path": "partials/loop.hbs",
+      "mode": "100644",
+      "git_blob": "5f181e60eaf61ee2ac6aa7addde314727293a226",
+      "bytes": 563,
+      "sha256": "fed8cbb8cf1a0abc76c63fa9bbe5ac065d006d90695e9543ee3890560d1b86ad"
+    },
+    {
+      "path": "partials/navigation.hbs",
+      "mode": "100644",
+      "git_blob": "be377d569e231f84cd0a6e0fed1cbc4c326c7afc",
+      "bytes": 618,
+      "sha256": "344d1b1944c9f1c081d7fb189ac02ce9292991e67d8d7ea12342d2a092f4a574"
+    },
+    {
+      "path": "partials/pagination.hbs",
+      "mode": "100644",
+      "git_blob": "edc618c1e039659861164b253a2edb51981aa1e1",
+      "bytes": 426,
+      "sha256": "ad638f71305119f6087dc009631268b05ea041e6d65ae947dffd27a6a1ca7d44"
+    },
+    {
+      "path": "post.hbs",
+      "mode": "100644",
+      "git_blob": "7ba3e00435b5ce7143b7b004a40793ca01434187",
+      "bytes": 1742,
+      "sha256": "6e20af7aaf402239996f14757a598f0704f2ab18517c86ce147ba6ebff7426ef"
+    }
+  ],
+  "commit_pins_sha256": "e52fcfccaaa322c56a22fa71a1248cd81b2f0220641c248f5fd31b19f561115a",
+  "tree_checker_sha256": "4bf9d42465733b75eadb95c1a6d61cc244220eac7b4a72b513def26c479211db",
+  "checks_artifact": "docs/research/dedup-three-small-syntax-checks-20261015.json",
+  "checks_artifact_sha256": "2c4b28c3ef0a722d590b639aaa249c65b282abdf3f690f80db2c549f3ed7b5f6",
+  "checks": [
+    {
+      "index": 293,
+      "kind": "JS syntax only",
+      "command": [
+        "/opt/homebrew/opt/node@22/bin/node",
+        "--check",
+        "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/velveteer--inextinguishable/full-source/assets/js/scripts.js"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "findings": [
+    "Pinned tree is an11file Ghost blog theme: Handlebars layouts/partials, CSS, one JS behavior file and metadata; no duplicate-search implementation or tests.",
+    "Tracked CSS/JS and all templates read; favicon/logo/cover references are dynamic or missing tracked assets. No tracked binary visual media.",
+    "Runtime dependencies include external Tachyons, highlight.js, fonts, jQuery and optional Disqus; source read and JS syntax check do not qualify browser/Ghost rendering, responsive behavior or current remote resources."
+  ],
+  "decision": "reject-domain; no duplicate-library code adopted",
+  "runtime_limits": [
+    "Syntax/XML parsing only; no actual application/backend/network/CLI/build/deployment/deletion execution",
+    "No upstream test files exist in pinned tree; no upstream suite or matching-quality/performance claim",
+    "Complete source inspection and archive identity do not prove library suitability or full application/platform functionality"
+  ]
+}

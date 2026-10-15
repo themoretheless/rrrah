@@ -2,9 +2,9 @@
   "index": 229,
   "repository": "objectionary/dedup",
   "commit": "bc33344393673f61846c23e92e71aa860822bd66",
-  "review_scope": "pinned README, license metadata and complete file-tree inventory; no recognized algorithm source in this commit",
+  "review_scope": "All8tracked text blobs fully read, including license, all implementation/configuration/assets/templates present. Fresh GitHub immutable commit-to-tree pin and canonical Git object reconstruction verified. External images/services/links not part of tracked inventory were not inspected.",
   "decision": "reject-domain",
-  "finding": "Pinned tree contains Maven/configuration scaffold, README and license, with no algorithm implementation; EO description does not establish code coverage.",
+  "finding": "Pinned tree contains only8metadata/configuration/license/README/POM blobs; no Java/EO/XMIR implementation or test files.",
   "available_source_evidence": [],
   "license_metadata": "MIT",
   "license_scope": "screening metadata; nested licenses require checking before copying",
@@ -33,5 +33,7 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/source229-complete-domain-review-20261015.json"
 }

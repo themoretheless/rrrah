@@ -1,0 +1,90 @@
+{
+  "repository": "objectionary/dedup",
+  "commit": "bc33344393673f61846c23e92e71aa860822bd66",
+  "status": "complete_source_read_syntax_checks_only_domain_rejected",
+  "whole_repository_complete": true,
+  "scope": "All8tracked text blobs fully read, including license, all implementation/configuration/assets/templates present. Fresh GitHub immutable commit-to-tree pin and canonical Git object reconstruction verified. External images/services/links not part of tracked inventory were not inspected.",
+  "tree": "27169df027dd78a6fdd2c9ed948c23d468a92be5",
+  "tree_objects_verified": 1,
+  "blobs": [
+    {
+      "path": ".0pdd.yml",
+      "mode": "100644",
+      "git_blob": "246f5bc851897699ffbbc2334a57857eb50d3dad",
+      "bytes": 54,
+      "sha256": "0fe04df3497f3273278fc07cfc45583770eb3874330c25fee943873aa08402b2"
+    },
+    {
+      "path": ".gitattributes",
+      "mode": "100644",
+      "git_blob": "3908207cfcb132db66c9ea64059aea2241f4dae1",
+      "bytes": 243,
+      "sha256": "87a65ab7e827d15ece05bf735643b8c86889c016771fe156bbbca910afb6da2b"
+    },
+    {
+      "path": ".gitignore",
+      "mode": "100644",
+      "git_blob": "8cc226890858a99e1e00386fd56ec9c3b7fe86c4",
+      "bytes": 74,
+      "sha256": "aeb34755d27f1d137f496fc0e7190490ac3fe96292d87525e87c5ed889525b2d"
+    },
+    {
+      "path": ".pdd",
+      "mode": "100644",
+      "git_blob": "d58891569aff3dd6dbc807795582bcce1c32e1c8",
+      "bytes": 107,
+      "sha256": "3b57574ab4707b398adc9cba2c636d5dacbc0410a24877de807c7dfdce60fca5"
+    },
+    {
+      "path": ".rultor.yml",
+      "mode": "100644",
+      "git_blob": "5fc14ceb02aa049920da578de982eb5f00c16098",
+      "bytes": 1304,
+      "sha256": "9999a8516cf1b686bb8b580c5f450dd1417d600f448257ca25b02482e9b48b64"
+    },
+    {
+      "path": "LICENSE.txt",
+      "mode": "100644",
+      "git_blob": "0df1f586c20f47cd36bf69ac55ac0d0a575ba36c",
+      "bytes": 1080,
+      "sha256": "f5158be0936754e3728ba36de1972c683980486342e3a05f34d1486a495193b9"
+    },
+    {
+      "path": "README.md",
+      "mode": "100644",
+      "git_blob": "a4883f2617c74c4e65c55fdf96a0662ae0f3be6b",
+      "bytes": 2147,
+      "sha256": "7c9ad49a1afe97fa7c5e046c8a0766447b8b55af876b6223b5f51750bab234f2"
+    },
+    {
+      "path": "pom.xml",
+      "mode": "100644",
+      "git_blob": "0b1c8230318ad37abe092cfd7efa208a7b38b73b",
+      "bytes": 4020,
+      "sha256": "c1c2b885bb1008e3507ed14562168443b97af7ca335385d81d516d5a82afccff"
+    }
+  ],
+  "commit_pins_sha256": "e52fcfccaaa322c56a22fa71a1248cd81b2f0220641c248f5fd31b19f561115a",
+  "tree_checker_sha256": "4bf9d42465733b75eadb95c1a6d61cc244220eac7b4a72b513def26c479211db",
+  "checks_artifact": "docs/research/dedup-three-small-syntax-checks-20261015.json",
+  "checks_artifact_sha256": "2c4b28c3ef0a722d590b639aaa249c65b282abdf3f690f80db2c549f3ed7b5f6",
+  "checks": [
+    {
+      "index": 229,
+      "kind": "local XML parse only",
+      "returncode": 0
+    }
+  ],
+  "findings": [
+    "Pinned tree contains only8metadata/configuration/license/README/POM blobs; no Java/EO/XMIR implementation or test files.",
+    "README describes semantic deduplication of EO/XMIR objects; no actual algorithm is available at pinned commit.",
+    "Release automation references absent src/main/eo and src/test/eo directories, external signing assets, deployment and destructive Git operations; none executed.",
+    "POM declares Java/Maven project and JUnit test dependencies, but metadata/dependency declarations are not implementation or passing tests."
+  ],
+  "decision": "reject-domain; no duplicate-library code adopted",
+  "runtime_limits": [
+    "Syntax/XML parsing only; no actual application/backend/network/CLI/build/deployment/deletion execution",
+    "No upstream test files exist in pinned tree; no upstream suite or matching-quality/performance claim",
+    "Complete source inspection and archive identity do not prove library suitability or full application/platform functionality"
+  ]
+}
