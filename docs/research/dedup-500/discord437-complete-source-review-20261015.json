@@ -1,0 +1,68 @@
+{
+  "repository": "AlgorithMikely/DiscordDuplicateImageDetector",
+  "commit": "599cdf25f1b5ecf9b809b9f4968e8ae0ec2c0f55",
+  "tree": "3547816804c2691b5393ee5a7e56ff4468b195ff",
+  "status": "complete_static_source_read_with_real_local_hash_io_async_controls",
+  "whole_repository_complete": true,
+  "license": "GPL3 rootLICENSE all674lines read; no foreign production code adopted",
+  "blobs": [
+    {
+      "path": ".env.example",
+      "git_blob": "0113956edb67e9b5efdb818119f8f5cb781761d0",
+      "sha256": "77abc7640426283ab02873e85f640ccb8834badae4118f61c63ce94c669f7552",
+      "bytes": 45
+    },
+    {
+      "path": "LICENSE",
+      "git_blob": "f288702d2fa16d3cdf0035b15a9fcbc552cd88e7",
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "bytes": 35149
+    },
+    {
+      "path": "README.md",
+      "git_blob": "df7fabfa0d8eb7c90072fcf2d89e7705b02c9981",
+      "sha256": "1d9e7ba8d786814d57e3c940b72e2e646a3a74ac59c20dd6ec04b70c0896f6fa",
+      "bytes": 8702
+    },
+    {
+      "path": "discord_duplicate_bot_v1.py",
+      "git_blob": "b1e08f3c3ff27c0f28c0f087740ee504569c76c5",
+      "sha256": "8ee862d0b237b6c7c63a793ec21627880070ea161ea44d26923fb876643b7f6a",
+      "bytes": 40901
+    },
+    {
+      "path": "requirements.txt",
+      "git_blob": "9073de78bde558e07684bc7aeb96c441385059d5",
+      "sha256": "639efe7737d43f95ee9d91ab1ddbb05e368b6e2d2794cde7577b485edc740706",
+      "bytes": 106
+    }
+  ],
+  "scope": "All5tracked text blobs/root fully read:815line wholebot/config/commands/localhash/IO, README, GPLlicense, placeholder.env.example and requirements. No trackedtests/media; external Discord setup links not followed. Source static review includes all handlers; runtime selected15undecorated localfunctions only.",
+  "runtime": {
+    "controls_per_run": 16,
+    "runs": 2,
+    "logs": [
+      {
+        "path": "docs/research/dedup-500/discord437-local-controls-run1-20261015.log",
+        "sha256": "683e2de7fa946979298488c838fea4371ad06c1befa1f0d6d98e6438daa2700f"
+      },
+      {
+        "path": "docs/research/dedup-500/discord437-local-controls-run2-20261015.log",
+        "sha256": "683e2de7fa946979298488c838fea4371ad06c1befa1f0d6d98e6438daa2700f"
+      }
+    ],
+    "dependency_pins": "docs/research/dedup-500/discord437-dependency-pins-20261015.json",
+    "dependency_pins_sha256": "76990aa83c969c70c55dd867f5a85cb5ab1713520f665db50197e3a19a762203",
+    "scope": "Selected unchanged15AST functions, actualPillow12.3/ImageHash4.3.2/NumPy2.3.5, actualasync executor and localfilelocks. Explicit two-reader checkpoint barrier, three schedules/run; injected JSONwrite failure. No upstream module import, dotenv/env/token read, Discord SDK/decorators/network/login/API/messages, deployed bot or ranking/performance/corpus qualification."
+  },
+  "findings": [
+    "Separate per-guild load/save locks do not make read-modify-write atomic: both readers see0, two saves returnTrue, final1record in3schedules/run.",
+    "Loaded strings false for delete/react coerced via bool toTrue. Initial hash_size coercion exception leaves laterfields unvalidated. Negativehashsize and huge threshold admitted.",
+    "Allinvalid channel allowlist becomesNone/allchannels. One malformedguild config causes load_main_config outerexception to reset allconfigs.",
+    "save_hashes_sync opens w before dump; injected failure returnsFalse after truncating old ownedDB. MalformedJSON loads as empty.",
+    "256flatgray images all dHash0; unequalblack/white candidate distance0. Alpha-only and later-GIF-frame differences unobserved by selecteddHash.",
+    "Changinghashsize silently drops incompatible priorhash comparisons; server/channel scope switching lacksmigration (README documents this limitation).",
+    "Oldhashformat preserves unknownownerNone; missingmessage channel identity means report jumpURL may use currentchannel inserverscope (staticonly, no messagehandler execution)."
+  ],
+  "optimization_decision": "Localexecutor offload is useful but does not establish concurrency safety. Require single-owner transaction/update merge, atomicreplace cachepersistence, typedconfiguration/schema binding, exact/pixel confirmation and explicit frame policy. Library already distinguishes candidates from verified identity. No productionadoption or measuredspeedup."
+}

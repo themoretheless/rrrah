@@ -1,0 +1,48 @@
+{
+  "index": 437,
+  "repository": "AlgorithMikely/DiscordDuplicateImageDetector",
+  "commit": "599cdf25f1b5ecf9b809b9f4968e8ae0ec2c0f55",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "wrapper",
+  "finding": "Discord bot calls imagehash.dhash; retrieval/cache integration, no independent hash implementation.",
+  "available_source_evidence": [
+    {
+      "path": "discord_duplicate_bot_v1.py",
+      "local": "02-discord_duplicate_bot_v1.py",
+      "url": "https://github.com/AlgorithMikely/DiscordDuplicateImageDetector/blob/599cdf25f1b5ecf9b809b9f4968e8ae0ec2c0f55/discord_duplicate_bot_v1.py",
+      "sha256": "8ee862d0b237b6c7c63a793ec21627880070ea161ea44d26923fb876643b7f6a",
+      "truncated": false,
+      "lines": 815,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "GPL-3.0",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/AlgorithMikely/DiscordDuplicateImageDetector/blob/599cdf25f1b5ecf9b809b9f4968e8ae0ec2c0f55/README.md",
+      "sha256": "1d9e7ba8d786814d57e3c940b72e2e646a3a74ac59c20dd6ec04b70c0896f6fa",
+      "truncated": false,
+      "lines": 138,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/AlgorithMikely/DiscordDuplicateImageDetector/blob/599cdf25f1b5ecf9b809b9f4968e8ae0ec2c0f55/LICENSE",
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "truncated": false,
+      "lines": 674,
+      "source": false,
+      "test": false
+    }
+  ]
+}

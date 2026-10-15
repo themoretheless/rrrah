@@ -1,0 +1,17 @@
+PASS safe default delete flag and fixed hash schema
+PASS string false becomes true in file configuration
+PASS loaded config hash and threshold numeric ranges unbounded
+PASS entirely invalid allowed channel list becomes all channels
+PASS first coercion error leaves later values unvalidated
+PASS 256flat grays share dHash and blackwhite is zero-distance candidate
+PASS alpha-only difference omitted by hash conversion
+PASS different later GIF frames share first-frame hash
+PASS malformed image returns None
+PASS hash-size change silently ignores old incompatible hashes
+PASS old format match owner remains unknown
+PASS server to channel scope switch does not migrate old entries
+PASS damaged JSON treated as empty hash database
+PASS save failure truncates old database without rollback
+PASS one malformed guild resets entire loaded configuration
+PASS three actual async executor schedules lose one locked read-modify-write update
+{"passed": 16, "failed": 0, "scope": "15unchanged selected local function ASTs, realPillow/ImageHash/numpy and actual async thread executor/file locks. No Discord import/decorators/token/env/network/API, no messages sent. Filewrite fault and explicit two-reader barrier identified; no wholebot deployment/runtime/performance/corpus proof."}
