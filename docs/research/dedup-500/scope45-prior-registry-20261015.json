@@ -1,0 +1,78 @@
+{
+  "index": 45,
+  "repository": "protonemedia/laravel-eloquent-scope-as-select",
+  "commit": "51694685f5a07ad38b71307670a08b01fc2860e5",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reject-domain",
+  "finding": "Laravel query-scope reuse; eliminating repeated query code is unrelated to content matching.",
+  "license_metadata": "MIT",
+  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "tests_detected": 6,
+  "upstream_tests_run": false,
+  "available_source_evidence": [
+    {
+      "path": "src/NegativeNullableBooleanCaster.php",
+      "local": "02-NegativeNullableBooleanCaster.php",
+      "url": "https://github.com/protonemedia/laravel-eloquent-scope-as-select/blob/51694685f5a07ad38b71307670a08b01fc2860e5/src/NegativeNullableBooleanCaster.php",
+      "sha256": "89a4ec43343035d3548f96369b5ddbf2d7ac842fbafb341c40c651d6fd73a0c6",
+      "truncated": false,
+      "lines": 36,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/NullableBooleanCaster.php",
+      "local": "03-NullableBooleanCaster.php",
+      "url": "https://github.com/protonemedia/laravel-eloquent-scope-as-select/blob/51694685f5a07ad38b71307670a08b01fc2860e5/src/NullableBooleanCaster.php",
+      "sha256": "96d900c79999fe2f7bfd093a47c2dacf8602cbc176d3b05e92899b2532ba7323",
+      "truncated": false,
+      "lines": 36,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/ScopeAsSelect.php",
+      "local": "04-ScopeAsSelect.php",
+      "url": "https://github.com/protonemedia/laravel-eloquent-scope-as-select/blob/51694685f5a07ad38b71307670a08b01fc2860e5/src/ScopeAsSelect.php",
+      "sha256": "90c9b43710bdb2add8aad7c6732c04326b65b0cd69b001694acdf56f70b5794c",
+      "truncated": false,
+      "lines": 92,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "tests/Comment.php",
+      "local": "05-Comment.php",
+      "url": "https://github.com/protonemedia/laravel-eloquent-scope-as-select/blob/51694685f5a07ad38b71307670a08b01fc2860e5/tests/Comment.php",
+      "sha256": "ba951ed622a70d40d4517f2b5495144ae22ee2338d38a38c750d4b3279b56ac2",
+      "truncated": false,
+      "lines": 13,
+      "source": true,
+      "test": true
+    }
+  ],
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/protonemedia/laravel-eloquent-scope-as-select/blob/51694685f5a07ad38b71307670a08b01fc2860e5/README.md",
+      "sha256": "8c0743d871730391f15871a765f42f924a8053ec9c685d4790c4c189b3a03860",
+      "truncated": false,
+      "lines": 301,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE.md",
+      "local": "01-LICENSE.md",
+      "url": "https://github.com/protonemedia/laravel-eloquent-scope-as-select/blob/51694685f5a07ad38b71307670a08b01fc2860e5/LICENSE.md",
+      "sha256": "21ba410e90ca3190594da36baca0706b52d518f30d698ac0263195904d4368ec",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}

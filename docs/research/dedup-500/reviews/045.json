@@ -2,11 +2,11 @@
   "index": 45,
   "repository": "protonemedia/laravel-eloquent-scope-as-select",
   "commit": "51694685f5a07ad38b71307670a08b01fc2860e5",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All21trackedtextblobs/5Gittrees fully read and verified. Ten upstreamtestmethods read, no PHP runtime/test execution.",
   "decision": "reject-domain",
-  "finding": "Laravel query-scope reuse; eliminating repeated query code is unrelated to content matching.",
+  "finding": "All three productionclasses implement Eloquent query-scope normalization, correlated SELECT1 LIMIT1 aliases and boolean casts. No file/image hashes, distance metric, candidate index, content matcher, duplicate deletion or dedup pipeline.",
   "license_metadata": "MIT",
-  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "license_scope": "Entire pinned MIT LICENSE.md read; no production code adoption.",
   "tests_detected": 6,
   "upstream_tests_run": false,
   "available_source_evidence": [
@@ -74,5 +74,7 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/dedup-500/scope45-complete-source-review-20261015.json"
 }
