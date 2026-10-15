@@ -1,0 +1,506 @@
+{
+  "status": "verified_original_make_build_17_cli_scenarios_and4_hash_controls_twice",
+  "producer_sha256": "e15edd0614d207fa571ef785900f02bfe0567cd5c2040bf2453dbaff493150a4",
+  "source_pins": {
+    ".dedup-work/samblaster31-20261016/source/Makefile": "a02090652d6def53723fef2855cf68e71f7e496c78889874b02948163f562e28",
+    ".dedup-work/samblaster31-20261016/source/sbhash.h": "db1387443b89a21de55403749fe42634a537d17e909847dadbec8a0bb9234a4c",
+    ".dedup-work/samblaster31-20261016/source/sbhash.cpp": "74fa2845c98d0e4fe6635ad0e69642d33acb74644b1e13249c018539b3921eca",
+    ".dedup-work/samblaster31-20261016/source/samblaster.cpp": "e1b85dba49dc1a0b4d75854aea433a918dd16a55f16b80fc5e232aed8e449bba"
+  },
+  "binary_pins": {
+    ".dedup-work/samblaster31-20261016/source/samblaster": "64de134644451a4ec7c84323f59e56f681712e3a16fb36c00482ec7e7a507ed4",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/hash-controls": "1e7ee587a6c984c200aa17ae4e58a083c87b3cf9455d0a4e1aab840c4c7e7842"
+  },
+  "build_log": ".dedup-work/samblaster31-20261016/native-controls-v3/build.log",
+  "hash_control_source": ".dedup-work/samblaster31-20261016/native-controls-v3/hash-controls.cpp",
+  "runs": [
+    [
+      {
+        "case": "mark_pair",
+        "exit_code": 0,
+        "flags": [
+          99,
+          147,
+          1123,
+          1171
+        ],
+        "stdout_sha256": "d10af1f7f44892a26c82ab6d563428ba21990e45c36ac4339d438d1e8d5fb07a",
+        "stdin": ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case0.stdin",
+        "stderr": ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case0.stderr"
+      },
+      {
+        "case": "remove_pair",
+        "exit_code": 0,
+        "flags": [
+          99,
+          147
+        ],
+        "stdout_sha256": "0b424927cfb09d1903913c5ac2cb0f0b064208f3c6b035f5da0d6a3e56a9e18e",
+        "stdin": ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case1.stdin",
+        "stderr": ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case1.stderr"
+      },
+      {
+        "case": "accept_marks",
+        "exit_code": 0,
+        "flags": [
+          99,
+          147,
+          99,
+          147
+        ],
+        "stdout_sha256": "2720f2712219460041b821e9f305396e4ae8b37689d9f63da4e326a32ef05222",
+        "stdin": ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case2.stdin",
+        "stderr": ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case2.stderr"
+      },
+      {
+        "case": "sequence_bytes_do_not_define_identity",
+        "exit_code": 0,
+        "flags": [
+          99,
+          147,
+          1123,
+          1171
+        ],
+        "stdout_sha256": "ad92cd88e35aa69e85e3b0e5a9d3c669294b0df6878c468be9052d538a44a056",
+        "stdin": ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case3.stdin",
+        "stderr": ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case3.stderr"
+      },
+      {
+        "case": "different_coordinates_distinct",
+        "exit_code": 0,
+        "flags": [
+          99,
+          147,
+          99,
+          147
+        ],
+        "stdout_sha256": "e42442aecca996d79ce88c70519292be51d27e2550a11f644a712a0995a5e7a3",
+        "stdin": ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case4.stdin",
+        "stderr": ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case4.stderr"
+      },
+      {
+        "case": "read_groups_not_in_signature",
+        "exit_code": 0,
+        "flags": [
+          99,
+          147,
+          1123,
+          1171
+        ],
+        "stdout_sha256": "958426c8ef303b110d095cab6b3cafc7b5226dc73b8385f5142b66747b11169a",
+        "stdin": ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case5.stdin",
+        "stderr": ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case5.stderr"
+      },
+      {
+        "case": "quality_does_not_choose_survivor",
+        "exit_code": 0,
+        "flags": [
+          99,
+          147,
+          1123,
+          1171
+        ],
+        "stdout_sha256": "c417431ab3582cf7e31cf754d9ac2f9045c7ed211d8130b979303f4cd635af76",
+        "stdin": ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case6.stdin",
+        "stderr": ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case6.stderr"
+      },
+      {
+        "case": "singletons_reverse_normalized",
+        "exit_code": 0,
+        "flags": [
+          0,
+          1040
+        ],
+        "stdout_sha256": "a83f235efd3463b6fb7cab524240387d3e2d6b1cfdf5ea3de264d056a0120e29",
+        "stdin": ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case7.stdin",
+        "stderr": ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case7.stderr"
+      },
+      {
+        "case": "missing_header",
+        "exit_code": 1,
+        "flags": [],
+        "stdout_sha256": "f03cbe3f80f5cc80c869a638d9f95351f08c1a74fc624bc04e04876fe0bbbaf4",
+        "stdin": ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case8.stdin",
+        "stderr": ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case8.stderr"
+      },
+      {
+        "case": "empty_input",
+        "exit_code": 1,
+        "flags": [],
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdin": ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case9.stdin",
+        "stderr": ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case9.stderr"
+      },
+      {
+        "case": "missing_option_value",
+        "exit_code": 1,
+        "flags": [],
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdin": ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case10.stdin",
+        "stderr": ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case10.stderr"
+      },
+      {
+        "case": "invalid_option_value",
+        "exit_code": 1,
+        "flags": [],
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdin": ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case11.stdin",
+        "stderr": ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case11.stderr"
+      },
+      {
+        "case": "trailing_integer_junk_accepted",
+        "exit_code": 0,
+        "flags": [
+          99,
+          147,
+          1123,
+          1171
+        ],
+        "stdout_sha256": "d10af1f7f44892a26c82ab6d563428ba21990e45c36ac4339d438d1e8d5fb07a",
+        "stdin": ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case12.stdin",
+        "stderr": ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case12.stderr"
+      },
+      {
+        "case": "negative_maxlength_not_validated",
+        "exit_code": 0,
+        "flags": [],
+        "stdout_sha256": "fdac4421e0b365fae97b540d2a3ebd95525767e3bccb83b1f46f2bd81107e4cb",
+        "stdin": ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case13.stdin",
+        "stderr": ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case13.stderr"
+      },
+      {
+        "case": "no_final_newline_last_quality_truncated",
+        "exit_code": 0,
+        "flags": [
+          0
+        ],
+        "stdout_sha256": "a39fcfde1555850daae073043d142e6e790ab1493c07ef2cebd9ecb3cbffa773",
+        "stdin": ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case14.stdin",
+        "stderr": ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case14.stderr"
+      },
+      {
+        "case": "add_mate_tags_missing_optional_fields_crashes",
+        "exit_code": -11,
+        "flags": [],
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdin": ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case15.stdin",
+        "stderr": ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case15.stderr"
+      },
+      {
+        "case": "add_mate_tags",
+        "exit_code": 0,
+        "flags": [
+          99,
+          147
+        ],
+        "stdout_sha256": "bf60986abb6c49319b83f76968c6082759267197081bb1925b0ad9232dd9f9cb",
+        "stdin": ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case16.stdin",
+        "stderr": ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case16.stderr"
+      }
+    ],
+    [
+      {
+        "case": "mark_pair",
+        "exit_code": 0,
+        "flags": [
+          99,
+          147,
+          1123,
+          1171
+        ],
+        "stdout_sha256": "d10af1f7f44892a26c82ab6d563428ba21990e45c36ac4339d438d1e8d5fb07a",
+        "stdin": ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case0.stdin",
+        "stderr": ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case0.stderr"
+      },
+      {
+        "case": "remove_pair",
+        "exit_code": 0,
+        "flags": [
+          99,
+          147
+        ],
+        "stdout_sha256": "0b424927cfb09d1903913c5ac2cb0f0b064208f3c6b035f5da0d6a3e56a9e18e",
+        "stdin": ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case1.stdin",
+        "stderr": ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case1.stderr"
+      },
+      {
+        "case": "accept_marks",
+        "exit_code": 0,
+        "flags": [
+          99,
+          147,
+          99,
+          147
+        ],
+        "stdout_sha256": "2720f2712219460041b821e9f305396e4ae8b37689d9f63da4e326a32ef05222",
+        "stdin": ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case2.stdin",
+        "stderr": ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case2.stderr"
+      },
+      {
+        "case": "sequence_bytes_do_not_define_identity",
+        "exit_code": 0,
+        "flags": [
+          99,
+          147,
+          1123,
+          1171
+        ],
+        "stdout_sha256": "ad92cd88e35aa69e85e3b0e5a9d3c669294b0df6878c468be9052d538a44a056",
+        "stdin": ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case3.stdin",
+        "stderr": ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case3.stderr"
+      },
+      {
+        "case": "different_coordinates_distinct",
+        "exit_code": 0,
+        "flags": [
+          99,
+          147,
+          99,
+          147
+        ],
+        "stdout_sha256": "e42442aecca996d79ce88c70519292be51d27e2550a11f644a712a0995a5e7a3",
+        "stdin": ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case4.stdin",
+        "stderr": ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case4.stderr"
+      },
+      {
+        "case": "read_groups_not_in_signature",
+        "exit_code": 0,
+        "flags": [
+          99,
+          147,
+          1123,
+          1171
+        ],
+        "stdout_sha256": "958426c8ef303b110d095cab6b3cafc7b5226dc73b8385f5142b66747b11169a",
+        "stdin": ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case5.stdin",
+        "stderr": ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case5.stderr"
+      },
+      {
+        "case": "quality_does_not_choose_survivor",
+        "exit_code": 0,
+        "flags": [
+          99,
+          147,
+          1123,
+          1171
+        ],
+        "stdout_sha256": "c417431ab3582cf7e31cf754d9ac2f9045c7ed211d8130b979303f4cd635af76",
+        "stdin": ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case6.stdin",
+        "stderr": ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case6.stderr"
+      },
+      {
+        "case": "singletons_reverse_normalized",
+        "exit_code": 0,
+        "flags": [
+          0,
+          1040
+        ],
+        "stdout_sha256": "a83f235efd3463b6fb7cab524240387d3e2d6b1cfdf5ea3de264d056a0120e29",
+        "stdin": ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case7.stdin",
+        "stderr": ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case7.stderr"
+      },
+      {
+        "case": "missing_header",
+        "exit_code": 1,
+        "flags": [],
+        "stdout_sha256": "f03cbe3f80f5cc80c869a638d9f95351f08c1a74fc624bc04e04876fe0bbbaf4",
+        "stdin": ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case8.stdin",
+        "stderr": ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case8.stderr"
+      },
+      {
+        "case": "empty_input",
+        "exit_code": 1,
+        "flags": [],
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdin": ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case9.stdin",
+        "stderr": ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case9.stderr"
+      },
+      {
+        "case": "missing_option_value",
+        "exit_code": 1,
+        "flags": [],
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdin": ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case10.stdin",
+        "stderr": ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case10.stderr"
+      },
+      {
+        "case": "invalid_option_value",
+        "exit_code": 1,
+        "flags": [],
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdin": ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case11.stdin",
+        "stderr": ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case11.stderr"
+      },
+      {
+        "case": "trailing_integer_junk_accepted",
+        "exit_code": 0,
+        "flags": [
+          99,
+          147,
+          1123,
+          1171
+        ],
+        "stdout_sha256": "d10af1f7f44892a26c82ab6d563428ba21990e45c36ac4339d438d1e8d5fb07a",
+        "stdin": ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case12.stdin",
+        "stderr": ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case12.stderr"
+      },
+      {
+        "case": "negative_maxlength_not_validated",
+        "exit_code": 0,
+        "flags": [],
+        "stdout_sha256": "fdac4421e0b365fae97b540d2a3ebd95525767e3bccb83b1f46f2bd81107e4cb",
+        "stdin": ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case13.stdin",
+        "stderr": ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case13.stderr"
+      },
+      {
+        "case": "no_final_newline_last_quality_truncated",
+        "exit_code": 0,
+        "flags": [
+          0
+        ],
+        "stdout_sha256": "a39fcfde1555850daae073043d142e6e790ab1493c07ef2cebd9ecb3cbffa773",
+        "stdin": ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case14.stdin",
+        "stderr": ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case14.stderr"
+      },
+      {
+        "case": "add_mate_tags_missing_optional_fields_crashes",
+        "exit_code": -11,
+        "flags": [],
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdin": ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case15.stdin",
+        "stderr": ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case15.stderr"
+      },
+      {
+        "case": "add_mate_tags",
+        "exit_code": 0,
+        "flags": [
+          99,
+          147
+        ],
+        "stdout_sha256": "bf60986abb6c49319b83f76968c6082759267197081bb1925b0ad9232dd9f9cb",
+        "stdin": ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case16.stdin",
+        "stderr": ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case16.stderr"
+      }
+    ]
+  ],
+  "artifact_pins": {
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case7.stdin": "7fcf7f295cd49e1dda17e548d0047f508d6c9ab3ec06ee22e93b14e599cb5e55",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case4.stdout": "e42442aecca996d79ce88c70519292be51d27e2550a11f644a712a0995a5e7a3",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case2.stderr": "7fa4fcfe0384250d12577eb85423a2c95c97781ed958703c519de3fdfdc1b64e",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case8.stdin": "9f050e6000e2d7609b3386597c2163cefe4f2ce07422e95124cb88de1186937e",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case15.stderr": "5ab21e20a1bf90d7524c686253f0e160958ec8e473ec684a09e215dc85cb58b2",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case14.stdout": "a39fcfde1555850daae073043d142e6e790ab1493c07ef2cebd9ecb3cbffa773",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case8.stdout": "f03cbe3f80f5cc80c869a638d9f95351f08c1a74fc624bc04e04876fe0bbbaf4",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case0.stderr": "d21a0ccebfd30179f2d9f6b1bcc5c401c3615528a122c35a800091dbd4f462f5",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case6.stdout": "c417431ab3582cf7e31cf754d9ac2f9045c7ed211d8130b979303f4cd635af76",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case11.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case10.stderr": "9efc436cd77a1af1386e4c96e701abbeb6b34f67c9474ac7b66455f9f9e78be8",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case5.stdin": "6a13303be2ebb365174435219c01f0f1614bd1f2db8579f361a39567aa76fe2d",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case4.stdout": "e42442aecca996d79ce88c70519292be51d27e2550a11f644a712a0995a5e7a3",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case13.stdout": "fdac4421e0b365fae97b540d2a3ebd95525767e3bccb83b1f46f2bd81107e4cb",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case12.stderr": "d21a0ccebfd30179f2d9f6b1bcc5c401c3615528a122c35a800091dbd4f462f5",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case8.stdout": "f03cbe3f80f5cc80c869a638d9f95351f08c1a74fc624bc04e04876fe0bbbaf4",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case1.stdin": "699e37ef921cf4cc6f7f223f28252dfc3119831e64aef7b73a1b1be7444df245",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case2.stderr": "7fa4fcfe0384250d12577eb85423a2c95c97781ed958703c519de3fdfdc1b64e",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case0.stderr": "d21a0ccebfd30179f2d9f6b1bcc5c401c3615528a122c35a800091dbd4f462f5",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case3.stdin": "435947af4fac86a491f5a50991c516de9759e0e290d471a75e4f309e2e09af7a",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case16.stdout": "bf60986abb6c49319b83f76968c6082759267197081bb1925b0ad9232dd9f9cb",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case6.stdout": "c417431ab3582cf7e31cf754d9ac2f9045c7ed211d8130b979303f4cd635af76",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case6.stderr": "d21a0ccebfd30179f2d9f6b1bcc5c401c3615528a122c35a800091dbd4f462f5",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case4.stdin": "106140717b6bd4364a54d4aa9f09e569f8ecc91dcff0888d6b655608f2080c9b",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case16.stderr": "c407de867cc6cf2356c8552271be05f022d1b56ea386cad7b68e160c2cc5b6d7",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case0.stdout": "d10af1f7f44892a26c82ab6d563428ba21990e45c36ac4339d438d1e8d5fb07a",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case8.stderr": "5fc835bf3380e31323bf14ea03407f8412edccb6c218eaa212fc9f48a2e6a386",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case2.stdout": "2720f2712219460041b821e9f305396e4ae8b37689d9f63da4e326a32ef05222",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case6.stdin": "fd91e2001c0908d07894fc373ba927db0aba0d2409db4c80682246ca97d8b2c7",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case13.stderr": "08ac9a0c96c4aba93ffcdae923a56f14d2a4ae971e0fbd6391df5397620276e8",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case12.stdout": "d10af1f7f44892a26c82ab6d563428ba21990e45c36ac4339d438d1e8d5fb07a",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case4.stderr": "7fa4fcfe0384250d12577eb85423a2c95c97781ed958703c519de3fdfdc1b64e",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case9.stdin": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case11.stderr": "6e869322a2ee321c8735afdf8ac9fa0e245db49ddeb4f2e49aa644394297d2f8",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case10.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case6.stderr": "d21a0ccebfd30179f2d9f6b1bcc5c401c3615528a122c35a800091dbd4f462f5",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case0.stdout": "d10af1f7f44892a26c82ab6d563428ba21990e45c36ac4339d438d1e8d5fb07a",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case2.stdin": "699e37ef921cf4cc6f7f223f28252dfc3119831e64aef7b73a1b1be7444df245",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case0.stdin": "699e37ef921cf4cc6f7f223f28252dfc3119831e64aef7b73a1b1be7444df245",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case15.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case14.stderr": "c407de867cc6cf2356c8552271be05f022d1b56ea386cad7b68e160c2cc5b6d7",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case2.stdout": "2720f2712219460041b821e9f305396e4ae8b37689d9f63da4e326a32ef05222",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case8.stderr": "5fc835bf3380e31323bf14ea03407f8412edccb6c218eaa212fc9f48a2e6a386",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/hash-run0.stdout": "ed45c75740ae2b496198a0c0e86fca703ae594172d8d57c0f854005015fd4b0b",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case4.stderr": "7fa4fcfe0384250d12577eb85423a2c95c97781ed958703c519de3fdfdc1b64e",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case3.stdin": "435947af4fac86a491f5a50991c516de9759e0e290d471a75e4f309e2e09af7a",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case15.stdin": "b0c379620c4b4fd09c1cf0239d6f594f2042dfb88b07d0a4c9fa23983e47eb3f",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case13.stdin": "2a6a6ff650763d6a7923db65db5e1447f72164e1f6ba03aa85bc30bcc0534c18",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case1.stderr": "9d577b05b0cf5d7990fb8ad973639f635d6882dbb7af65df90fbb2a3daecb7a4",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case11.stderr": "6e869322a2ee321c8735afdf8ac9fa0e245db49ddeb4f2e49aa644394297d2f8",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case10.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case7.stdout": "a83f235efd3463b6fb7cab524240387d3e2d6b1cfdf5ea3de264d056a0120e29",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case5.stdout": "958426c8ef303b110d095cab6b3cafc7b5226dc73b8385f5142b66747b11169a",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case9.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case11.stdin": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case15.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case14.stderr": "c407de867cc6cf2356c8552271be05f022d1b56ea386cad7b68e160c2cc5b6d7",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case3.stderr": "d21a0ccebfd30179f2d9f6b1bcc5c401c3615528a122c35a800091dbd4f462f5",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case1.stdin": "699e37ef921cf4cc6f7f223f28252dfc3119831e64aef7b73a1b1be7444df245",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/hash-controls.cpp": "d7d1acbd1e29677ac5e8fca7b596cd0a503e98c9cf15564fd0aecf1fcb880b66",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case16.stderr": "c407de867cc6cf2356c8552271be05f022d1b56ea386cad7b68e160c2cc5b6d7",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case1.stderr": "9d577b05b0cf5d7990fb8ad973639f635d6882dbb7af65df90fbb2a3daecb7a4",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case13.stdin": "2a6a6ff650763d6a7923db65db5e1447f72164e1f6ba03aa85bc30bcc0534c18",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case7.stdout": "a83f235efd3463b6fb7cab524240387d3e2d6b1cfdf5ea3de264d056a0120e29",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case5.stdin": "6a13303be2ebb365174435219c01f0f1614bd1f2db8579f361a39567aa76fe2d",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case15.stdin": "b0c379620c4b4fd09c1cf0239d6f594f2042dfb88b07d0a4c9fa23983e47eb3f",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/hash-build.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case8.stdin": "9f050e6000e2d7609b3386597c2163cefe4f2ce07422e95124cb88de1186937e",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case13.stderr": "08ac9a0c96c4aba93ffcdae923a56f14d2a4ae971e0fbd6391df5397620276e8",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case12.stdout": "d10af1f7f44892a26c82ab6d563428ba21990e45c36ac4339d438d1e8d5fb07a",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case5.stdout": "958426c8ef303b110d095cab6b3cafc7b5226dc73b8385f5142b66747b11169a",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case7.stdin": "7fcf7f295cd49e1dda17e548d0047f508d6c9ab3ec06ee22e93b14e599cb5e55",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case3.stderr": "d21a0ccebfd30179f2d9f6b1bcc5c401c3615528a122c35a800091dbd4f462f5",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case11.stdin": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case9.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case10.stdin": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case3.stdout": "ad92cd88e35aa69e85e3b0e5a9d3c669294b0df6878c468be9052d538a44a056",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case9.stderr": "1bb7b3fa88d39c7635112ddc3141a58171190ae9c0ba9effa748c9ef13390912",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case0.stdin": "699e37ef921cf4cc6f7f223f28252dfc3119831e64aef7b73a1b1be7444df245",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case5.stderr": "d21a0ccebfd30179f2d9f6b1bcc5c401c3615528a122c35a800091dbd4f462f5",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case13.stdout": "fdac4421e0b365fae97b540d2a3ebd95525767e3bccb83b1f46f2bd81107e4cb",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case12.stderr": "d21a0ccebfd30179f2d9f6b1bcc5c401c3615528a122c35a800091dbd4f462f5",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case16.stdin": "e91b29ce418390f0d4da97e6c825849755af51ea91c43a7031c06687c99e1d66",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case7.stderr": "d21a0ccebfd30179f2d9f6b1bcc5c401c3615528a122c35a800091dbd4f462f5",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case14.stdin": "f33e06175642207af816794a104331e0746a9d2dafeac29fb6db7dea36bb0807",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case1.stdout": "0b424927cfb09d1903913c5ac2cb0f0b064208f3c6b035f5da0d6a3e56a9e18e",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case16.stdout": "bf60986abb6c49319b83f76968c6082759267197081bb1925b0ad9232dd9f9cb",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case2.stdin": "699e37ef921cf4cc6f7f223f28252dfc3119831e64aef7b73a1b1be7444df245",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case12.stdin": "699e37ef921cf4cc6f7f223f28252dfc3119831e64aef7b73a1b1be7444df245",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/hash-run1.stdout": "ed45c75740ae2b496198a0c0e86fca703ae594172d8d57c0f854005015fd4b0b",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case9.stdin": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case9.stderr": "1bb7b3fa88d39c7635112ddc3141a58171190ae9c0ba9effa748c9ef13390912",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case3.stdout": "ad92cd88e35aa69e85e3b0e5a9d3c669294b0df6878c468be9052d538a44a056",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case15.stderr": "5ab21e20a1bf90d7524c686253f0e160958ec8e473ec684a09e215dc85cb58b2",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case14.stdout": "a39fcfde1555850daae073043d142e6e790ab1493c07ef2cebd9ecb3cbffa773",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case16.stdin": "e91b29ce418390f0d4da97e6c825849755af51ea91c43a7031c06687c99e1d66",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case5.stderr": "d21a0ccebfd30179f2d9f6b1bcc5c401c3615528a122c35a800091dbd4f462f5",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case10.stdin": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case6.stdin": "fd91e2001c0908d07894fc373ba927db0aba0d2409db4c80682246ca97d8b2c7",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case4.stdin": "106140717b6bd4364a54d4aa9f09e569f8ecc91dcff0888d6b655608f2080c9b",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case12.stdin": "699e37ef921cf4cc6f7f223f28252dfc3119831e64aef7b73a1b1be7444df245",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case14.stdin": "f33e06175642207af816794a104331e0746a9d2dafeac29fb6db7dea36bb0807",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case7.stderr": "d21a0ccebfd30179f2d9f6b1bcc5c401c3615528a122c35a800091dbd4f462f5",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case11.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run0-case10.stderr": "9efc436cd77a1af1386e4c96e701abbeb6b34f67c9474ac7b66455f9f9e78be8",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/build.log": "9bf39e13d851988b3a1226070386bfa9cfea130d4fb74bc5ac4d9c9b6a8a098e",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/hash-controls": "1e7ee587a6c984c200aa17ae4e58a083c87b3cf9455d0a4e1aab840c4c7e7842",
+    ".dedup-work/samblaster31-20261016/native-controls-v3/run1-case1.stdout": "0b424927cfb09d1903913c5ac2cb0f0b064208f3c6b035f5da0d6a3e56a9e18e"
+  },
+  "scope": "Whole originalMakefile/O3 build and unchanged samblaster CLI; complete unchanged sbhash.cpp/h linked into owned assertion harness with fatalError-only adapter.17CLI scenarios+4hash controls eachtwice. No upstream test suite exists in pinned tree.",
+  "findings": [
+    "Top-bit keys alias in generic hash module; actual production signatures use bounded27bit bin offsets, so this is outside intended key domain, not proof of biological false matches.",
+    "addMateTags with no optional fields crashes in native CLI; adding existing NM tag is positive control. No final newline truncates final quality byte; integer suffix junk accepted; negative maxReadLength accepted on header-only input.",
+    "Sequence bytes/quality/RG tags deliberately absent from signature; first record survives regardless of quality. These are declared domain limitations, not file-content identity."
+  ],
+  "limits": [
+    "Synthetic owned SAM only, no actual sequencing dataset or comparative precision/performance/resource campaign.",
+    "No production code copied; no claim of portable arbitrary64bit key safety or thread-safe global slab reuse."
+  ]
+}

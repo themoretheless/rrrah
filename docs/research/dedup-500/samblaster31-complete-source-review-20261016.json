@@ -1,0 +1,37 @@
+{
+  "status": "verified_complete_pinned_source_pdf_and_native_controls",
+  "whole_repo_complete": true,
+  "whole_implementation_complete": true,
+  "repository": "GregoryFaust/samblaster",
+  "commit": "b642639117eafedc760d8b84c0d2c4872b0da084",
+  "blobs": 7,
+  "canonical_trees": 1,
+  "acquisition": "docs/research/dedup-500/samblaster31-fetched-source-pins-20261016.json",
+  "acquisition_sha256": "815bb9b1da15f50300703fab792f076f990c69ba49e637360aafee84399263cb",
+  "auditor_sha256": "20eec253c111c860f0f9003595c4fe39d9a4969a07d611feb6f76270cf274461",
+  "controls": "docs/research/dedup-500/samblaster31-native-controls-20261016.json",
+  "controls_sha256": "35f13813ce140718cffa734217c00aa02f4c6d22477ee5401373cb728c65001d",
+  "media_scope": "Both supplemental PDF pages rendered and viewed, whole extracted text/table read. Native biological benchmark claims are historic author results, not reproduced here. No other binary media in pinned tree.",
+  "license": "MIT LICENSE.txt fully read; no production code copied. PDF bears separate authors2014 supplemental copyright.",
+  "native_scope": "Whole originalMakefile/O3 build and unchanged samblaster CLI; complete unchanged sbhash.cpp/h linked into owned assertion harness with fatalError-only adapter.17CLI scenarios+4hash controls eachtwice. No upstream test suite exists in pinned tree.",
+  "upstream_tests_run": false,
+  "original_build_passed": true,
+  "sanitizer_scope": {
+    "tagless_exit": -6,
+    "tagged_exit": 0,
+    "scope": "ASAN+UBSAN complete original CLI; one crashing tagless fixture and positive existing optional tag fixture, not full sanitizer suite"
+  },
+  "findings": [
+    "Top-bit keys alias in generic hash module; actual production signatures use bounded27bit bin offsets, so this is outside intended key domain, not proof of biological false matches.",
+    "addMateTags with no optional fields crashes in native CLI; adding existing NM tag is positive control. No final newline truncates final quality byte; integer suffix junk accepted; negative maxReadLength accepted on header-only input.",
+    "Sequence bytes/quality/RG tags deliberately absent from signature; first record survives regardless of quality. These are declared domain limitations, not file-content identity.",
+    "Global slab allocator and freeHashTableNodes do not reset global lists; not a reusable thread-safe library lifecycle. Static finding, repeat teardown not tested.",
+    "Signature index space grows quadratically with genome bins; oversized parameter/contig integer arithmetic and memory admission not comprehensively qualified. Static only."
+  ],
+  "decision": "Reject biological signature equivalence as file/image identity. Reference streaming and collision-node slab layout only with explicit key-domain/lifecycle contracts; no production adoption or speed claim.",
+  "limits": [
+    "Synthetic owned SAM only, no actual sequencing dataset or comparative precision/performance/resource campaign.",
+    "No production code copied; no claim of portable arbitrary64bit key safety or thread-safe global slab reuse.",
+    "ASAN+UBSAN verifies tagless crash and tagged positive control only; not complete sanitizer suite. Native current-root quality/formats/platform/performance scope remains open."
+  ]
+}
