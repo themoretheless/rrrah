@@ -1,0 +1,91 @@
+{
+  "status": "passed",
+  "controls": 10,
+  "source_sha256": "6fd1b2864d5ea84bde983e4191657e784b4360890432268b69fde47ea6d7185c",
+  "selected_unchanged_functions": [
+    "fStrTrim",
+    "fStrNormalize",
+    "fstrAppend",
+    "fNormalizePath_byref"
+  ],
+  "selected_body_sha256": "ded91079477dcd8a1c27ce18bcea1e481a4cc69a74b8b45d1a0010c3771597cd",
+  "bash": "GNU bash, version 3.2.57(1)-release (arm64-apple-darwin25)",
+  "rows": [
+    {
+      "name": "ordinary_append",
+      "returncode": 0,
+      "stdout": "old:new",
+      "stderr": "",
+      "expected": "old:new"
+    },
+    {
+      "name": "normalize_whitespace",
+      "returncode": 0,
+      "stdout": "a b c\n",
+      "stderr": "",
+      "expected": "a b c\n"
+    },
+    {
+      "name": "root_path_lost",
+      "returncode": 0,
+      "stdout": "<>",
+      "stderr": "",
+      "expected": "<>"
+    },
+    {
+      "name": "path_spaces_removed",
+      "returncode": 0,
+      "stdout": "/dir/file",
+      "stderr": "",
+      "expected": "/dir/file"
+    },
+    {
+      "name": "backslash_path_changed",
+      "returncode": 0,
+      "stdout": "a/b",
+      "stderr": "",
+      "expected": "a/b"
+    },
+    {
+      "name": "trim_leaks_previous_global",
+      "returncode": 0,
+      "stdout": "first",
+      "stderr": "",
+      "expected": "first"
+    },
+    {
+      "name": "append_evaluates_data",
+      "returncode": 0,
+      "stdout": "evaluated:tail",
+      "stderr": "",
+      "expected": "evaluated:tail"
+    },
+    {
+      "name": "path_evaluates_data",
+      "returncode": 0,
+      "stdout": "evaluated",
+      "stderr": "",
+      "expected": "evaluated"
+    },
+    {
+      "name": "unquoted_output_option_split",
+      "returncode": 0,
+      "stdout": "3\n-o\ncsv:/owned/log\ndir/out.csv\n",
+      "stderr": "",
+      "expected": "3\n-o\ncsv:/owned/log\ndir/out.csv\n"
+    },
+    {
+      "name": "pipeline_masks_child_failure",
+      "returncode": 0,
+      "stdout": "survived",
+      "stderr": "",
+      "expected": "survived"
+    }
+  ],
+  "limits": [
+    "No whole CLI, root, rmlint, ZFS, Btrfs, XFS or generated recopy execution",
+    "Last two checks reproduce source operators with inert values, not complete fMain",
+    "Bash3 helper/syntax checks do not qualify Bash4 lowercase expansion or Linux storage tooling",
+    "No production adoption or performance measurement"
+  ]
+}
