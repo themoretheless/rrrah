@@ -1,0 +1,78 @@
+{
+  "index": 384,
+  "repository": "kemonomachi/experhash",
+  "commit": "98f3d803c60a82517ae3d376adffc9750ee0a531",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Elixir/C++ aHash/dHash implementation and expected hash data; wrapper/license and preprocessing need independent verification.",
+  "available_source_evidence": [
+    {
+      "path": "cpp/src/experhash_port.cpp",
+      "local": "02-experhash_port.cpp",
+      "url": "https://github.com/kemonomachi/experhash/blob/98f3d803c60a82517ae3d376adffc9750ee0a531/cpp/src/experhash_port.cpp",
+      "sha256": "3d510c11f4b7384667e94a1bf56f200700606536bd3ac0d0f58856c460900c0c",
+      "truncated": false,
+      "lines": 113,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "cpp/src/hash.cpp",
+      "local": "03-hash.cpp",
+      "url": "https://github.com/kemonomachi/experhash/blob/98f3d803c60a82517ae3d376adffc9750ee0a531/cpp/src/hash.cpp",
+      "sha256": "6e4c29c4d63deb2caf3e2a772b78973ba48b8570345c4264dbba08619980f8d5",
+      "truncated": false,
+      "lines": 109,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "cpp/src/hash.h",
+      "local": "04-hash.h",
+      "url": "https://github.com/kemonomachi/experhash/blob/98f3d803c60a82517ae3d376adffc9750ee0a531/cpp/src/hash.h",
+      "sha256": "9f57ffb19f4b053969d36e63ec6d1f72709f0a6442772cff239e82f068d8f6df",
+      "truncated": false,
+      "lines": 20,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "test/image/expected_hashes",
+      "local": "05-expected_hashes",
+      "url": "https://github.com/kemonomachi/experhash/blob/98f3d803c60a82517ae3d376adffc9750ee0a531/test/image/expected_hashes",
+      "sha256": "a1af9b984ef22f0af6f069ed189bacf6795d1e61e2f1999193dbb806138a18f1",
+      "truncated": false,
+      "lines": 25,
+      "source": true,
+      "test": true
+    }
+  ],
+  "license_metadata": "WTFPL",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 1,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/kemonomachi/experhash/blob/98f3d803c60a82517ae3d376adffc9750ee0a531/README.md",
+      "sha256": "4c8d87929a6b5bb2910edff71f8ba57cc626f42868f8d3bc8355e3131bfbd229",
+      "truncated": false,
+      "lines": 78,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/kemonomachi/experhash/blob/98f3d803c60a82517ae3d376adffc9750ee0a531/LICENSE",
+      "sha256": "0356258391e190dc1d44ea01565cfe627fe44e27dad693a0a54c2483a7b223e5",
+      "truncated": false,
+      "lines": 14,
+      "source": false,
+      "test": false
+    }
+  ]
+}

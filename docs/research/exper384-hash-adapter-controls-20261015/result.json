@@ -1,0 +1,156 @@
+{
+  "status": "native_original_hash_width64_ubsan_failures_preserved_width8_16_32_oracles_pass_twice",
+  "original_tests_run": 0,
+  "native_cases_per_run": 12,
+  "native_passed_per_run": 9,
+  "native_failed_per_run": 3,
+  "repeats": 2,
+  "binary": "/private/tmp/rrrah-exper384-hash-adapter-20261015/review",
+  "binary_sha256": "f12b3d6ef4f032f0f3439f64b13769e82fc899f8d27ea92eb93c79bccbb9c1e2",
+  "original_hash_cpp_sha256": "6e4c29c4d63deb2caf3e2a772b78973ba48b8570345c4264dbba08619980f8d5",
+  "original_hash_header_sha256": "9f57ffb19f4b053969d36e63ec6d1f72709f0a6442772cff239e82f068d8f6df",
+  "compile_command": [
+    "clang++",
+    "-std=c++11",
+    "-O1",
+    "-g",
+    "-fsanitize=undefined",
+    "-fno-sanitize-recover=undefined",
+    "-I/private/tmp/rrrah-exper384-hash-adapter-20261015",
+    "/private/tmp/rrrah-exper384-hash-adapter-20261015/hash.cpp",
+    "/private/tmp/rrrah-exper384-hash-adapter-20261015/review.cpp",
+    "-o",
+    "/private/tmp/rrrah-exper384-hash-adapter-20261015/review"
+  ],
+  "platform": "macOS-26.7.2-arm64-arm-64bit",
+  "verified_rows": "docs/research/exper384-hash-adapter-controls-20261015/verified-results.json",
+  "verified_rows_sha256": "da623e01cb8a750b522704e092a1cc38e0cf7f2fd93d97d20e637ac553ff176c",
+  "artifacts": [
+    {
+      "path": "docs/research/exper384-hash-adapter-controls-20261015/Magick++.h",
+      "sha256": "ed64af98081079d74afd6cab2de825c9465f7667e117b38bb880c8b6b61c1cc9"
+    },
+    {
+      "path": "docs/research/exper384-hash-adapter-controls-20261015/build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/research/exper384-hash-adapter-controls-20261015/observed-results.json",
+      "sha256": "ab6e84a43734c8ae8a4e2c75ddbbe556bedbb36a93a627e89c9c30f383c49b35"
+    },
+    {
+      "path": "docs/research/exper384-hash-adapter-controls-20261015/replay-a-16.log",
+      "sha256": "098ebe382c70e7f3984ca1c7e8cfd7655c0e518cec242042bfa3b549aa8696cf"
+    },
+    {
+      "path": "docs/research/exper384-hash-adapter-controls-20261015/replay-a-32.log",
+      "sha256": "6a4e87fc6a042440d3891fc5919826c04a941a3eca164bdd920c1899793131b4"
+    },
+    {
+      "path": "docs/research/exper384-hash-adapter-controls-20261015/replay-a-64.log",
+      "sha256": "77884cac1c6198c7e0dd885265157b61e4df7ce91997e285852a7287a5445165"
+    },
+    {
+      "path": "docs/research/exper384-hash-adapter-controls-20261015/replay-a-8.log",
+      "sha256": "ca3abefac920003982ad51a3f1d30eb26bd16c53749f5871c0eb29d87e79778d"
+    },
+    {
+      "path": "docs/research/exper384-hash-adapter-controls-20261015/replay-d-16.log",
+      "sha256": "27c9baa2db142de6176f3d8e043ba0e678effaa7055dbbd790a733ae706fed3f"
+    },
+    {
+      "path": "docs/research/exper384-hash-adapter-controls-20261015/replay-d-32.log",
+      "sha256": "ac75756e0e566fc31d5d79f7ebb33ddb98a2c8f2521bcbb30de9e780921ab061"
+    },
+    {
+      "path": "docs/research/exper384-hash-adapter-controls-20261015/replay-d-64.log",
+      "sha256": "7793808d7aa334d023916271d016659504d0cd4af21be04715170884caecd1ff"
+    },
+    {
+      "path": "docs/research/exper384-hash-adapter-controls-20261015/replay-d-8.log",
+      "sha256": "53ab2066792b9e2458aa5b14f67b9355758ac917f1f58daa846862b3431fcc65"
+    },
+    {
+      "path": "docs/research/exper384-hash-adapter-controls-20261015/replay-dd-16.log",
+      "sha256": "3eb66859e2f4844a60b0b8d75270e1ccc9b70d1e9a436ea091003f7980eb77ab"
+    },
+    {
+      "path": "docs/research/exper384-hash-adapter-controls-20261015/replay-dd-32.log",
+      "sha256": "baa415b6c361e6baeea35c87460c6ce38962cb67538fb363fc81ebdacde6b5d8"
+    },
+    {
+      "path": "docs/research/exper384-hash-adapter-controls-20261015/replay-dd-64.log",
+      "sha256": "7214d37f43282347b0f768b9b6a3d9b29bad9743ea77e02827a59ed60836bafa"
+    },
+    {
+      "path": "docs/research/exper384-hash-adapter-controls-20261015/replay-dd-8.log",
+      "sha256": "dffe620169af2346d9eaf5c6eeda6ed13f62999e6781c5d38ae74f78f29a99b7"
+    },
+    {
+      "path": "docs/research/exper384-hash-adapter-controls-20261015/review.cpp",
+      "sha256": "3a00df074e496b1c4d92750ac44c5fe47175b22e3c03ac01c30bb166cee8598d"
+    },
+    {
+      "path": "docs/research/exper384-hash-adapter-controls-20261015/run-a-16.log",
+      "sha256": "098ebe382c70e7f3984ca1c7e8cfd7655c0e518cec242042bfa3b549aa8696cf"
+    },
+    {
+      "path": "docs/research/exper384-hash-adapter-controls-20261015/run-a-32.log",
+      "sha256": "6a4e87fc6a042440d3891fc5919826c04a941a3eca164bdd920c1899793131b4"
+    },
+    {
+      "path": "docs/research/exper384-hash-adapter-controls-20261015/run-a-64.log",
+      "sha256": "77884cac1c6198c7e0dd885265157b61e4df7ce91997e285852a7287a5445165"
+    },
+    {
+      "path": "docs/research/exper384-hash-adapter-controls-20261015/run-a-8.log",
+      "sha256": "ca3abefac920003982ad51a3f1d30eb26bd16c53749f5871c0eb29d87e79778d"
+    },
+    {
+      "path": "docs/research/exper384-hash-adapter-controls-20261015/run-d-16.log",
+      "sha256": "27c9baa2db142de6176f3d8e043ba0e678effaa7055dbbd790a733ae706fed3f"
+    },
+    {
+      "path": "docs/research/exper384-hash-adapter-controls-20261015/run-d-32.log",
+      "sha256": "ac75756e0e566fc31d5d79f7ebb33ddb98a2c8f2521bcbb30de9e780921ab061"
+    },
+    {
+      "path": "docs/research/exper384-hash-adapter-controls-20261015/run-d-64.log",
+      "sha256": "7793808d7aa334d023916271d016659504d0cd4af21be04715170884caecd1ff"
+    },
+    {
+      "path": "docs/research/exper384-hash-adapter-controls-20261015/run-d-8.log",
+      "sha256": "53ab2066792b9e2458aa5b14f67b9355758ac917f1f58daa846862b3431fcc65"
+    },
+    {
+      "path": "docs/research/exper384-hash-adapter-controls-20261015/run-dd-16.log",
+      "sha256": "3eb66859e2f4844a60b0b8d75270e1ccc9b70d1e9a436ea091003f7980eb77ab"
+    },
+    {
+      "path": "docs/research/exper384-hash-adapter-controls-20261015/run-dd-32.log",
+      "sha256": "baa415b6c361e6baeea35c87460c6ce38962cb67538fb363fc81ebdacde6b5d8"
+    },
+    {
+      "path": "docs/research/exper384-hash-adapter-controls-20261015/run-dd-64.log",
+      "sha256": "7214d37f43282347b0f768b9b6a3d9b29bad9743ea77e02827a59ed60836bafa"
+    },
+    {
+      "path": "docs/research/exper384-hash-adapter-controls-20261015/run-dd-8.log",
+      "sha256": "dffe620169af2346d9eaf5c6eeda6ed13f62999e6781c5d38ae74f78f29a99b7"
+    },
+    {
+      "path": "docs/research/exper384-hash-adapter-controls-20261015/source-pins.json",
+      "sha256": "2fb795dfc1b33f9138efc21d0bc5c02e5793e4e324c71efee4bed6bdadeb21b3"
+    },
+    {
+      "path": "docs/research/exper384-hash-adapter-controls-20261015/verified-results.json",
+      "sha256": "da623e01cb8a750b522704e092a1cc38e0cf7f2fd93d97d20e637ac553ff176c"
+    }
+  ],
+  "limits": [
+    "Originalhash.cpp/header compiledbyteidentically, includingall12template instantiations. ExplicitMagick++pixelIOadapter supplies boundedgraymatrices; no realfiledecode/resize/grayscale/alpha orimagehashgolden/originalpipeline execution.",
+    "Each64bitrow variant originallyabortsunderUBSan withshift63overint32; notchanged togreen, no sourcefix/adoption. Width8/16/32 independentintegeroracles pass,includingblack/whiteflat aHash0; thisdoesnotvalidateallimagequality/platform/bitpacking cases.",
+    "Elixir/ErlangEI/Magick++absent, nooriginal16ExUnitcases/port/decoder/encoder/serialization/concurrency/deadline/platform/runtimebackend orperformance proof.",
+    "CompilerprofileO1/sanitizerdiagnostic only; no releaseopt3/wholelibrary speedup orhardRSS claim."
+  ]
+}
