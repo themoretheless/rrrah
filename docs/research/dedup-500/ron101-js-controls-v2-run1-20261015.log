@@ -1,0 +1,11 @@
+PASS all originaldeduplicate exception fixtures against actualJSbinding
+PASS table generator256deterministic entries match bothlanguage constants
+PASS 96deterministic buffer grids preserve source and hash every chunk
+PASS nonzero offsets preserve surrounding target sentinels
+PASS flags0 retains remainder and finalflag consumes exactlyonce
+PASS flags0 requires bufferlargerthan maximum
+PASS source-target alias accepted and mutates yet-unconsumedinput
+PASS callback deferred while outputalreadywritten synchronously
+PASS targetSize supports31bitmaximumwithout allocatingtarget
+PASS 60bufferwindow schedules equal complete one-shotchunkmanifest
+{"passed":10,"failed":0,"originalExceptionCases":47,"streamWindowSchedules":60,"independentChunkSHA256Oracles":705,"scope":"Unchanged whole Javascript binding, realnativeNode crypto/buffers/eventloop. All originalexception fixtures selected from test.js;96authoredsourcegrids. Original100randomfullJS+nativeaddon suite, C++addon ABI/threadpool/sharedmemory race/platform/performance unqualified."}

@@ -2,9 +2,9 @@
   "index": 101,
   "repository": "ronomon/deduplication",
   "commit": "30b4800d151cb8c9ad99deb58e9aa2eca51baf6e",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All12trackedblobs/root fully read. WholeactualJSbinding controls twice:47original exceptioncases,705independentchunkSHAoracles,60streamwindows,256tableentries; C++addon/fulloriginal100randomsuite not executed.",
   "decision": "reference",
-  "finding": "Content-dependent chunking for buffers with SHA256 reference/fuzz tests; storage deduplication, not visual identity.",
+  "finding": "Correctfinitechunkstream partition/length/hash control scope; source-target overlap mutatesfutureinput, nativeintegerboundaryparity staticonly. Streamingresidual reuse reference; no newproductionadoption/throughput claim.",
   "available_source_evidence": [
     {
       "path": "binding.js",
@@ -84,5 +84,7 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/dedup-500/ron101-complete-source-review-20261015.json"
 }

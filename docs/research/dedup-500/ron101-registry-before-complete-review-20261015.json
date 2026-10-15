@@ -1,0 +1,88 @@
+{
+  "index": 101,
+  "repository": "ronomon/deduplication",
+  "commit": "30b4800d151cb8c9ad99deb58e9aa2eca51baf6e",
+  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "decision": "reference",
+  "finding": "Content-dependent chunking for buffers with SHA256 reference/fuzz tests; storage deduplication, not visual identity.",
+  "available_source_evidence": [
+    {
+      "path": "binding.js",
+      "local": "02-binding.js",
+      "url": "https://github.com/ronomon/deduplication/blob/30b4800d151cb8c9ad99deb58e9aa2eca51baf6e/binding.js",
+      "sha256": "660adfecb620a298c16ff79b7e8392b43f7b75a61213a015f91591fd292b1be1",
+      "truncated": false,
+      "lines": 262,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "demo.js",
+      "local": "03-demo.js",
+      "url": "https://github.com/ronomon/deduplication/blob/30b4800d151cb8c9ad99deb58e9aa2eca51baf6e/demo.js",
+      "sha256": "fb6dd61d5b2e762516b56dc5451a8b0d7d5ffbd33262d2f3787295c10dd66623",
+      "truncated": false,
+      "lines": 85,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "table.js",
+      "local": "04-table.js",
+      "url": "https://github.com/ronomon/deduplication/blob/30b4800d151cb8c9ad99deb58e9aa2eca51baf6e/table.js",
+      "sha256": "23822b7b66974bd7ee3373988a21fe3a0ec7cbd0fa32d548e79da7fda7e7b627",
+      "truncated": false,
+      "lines": 82,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "test.js",
+      "local": "05-test.js",
+      "url": "https://github.com/ronomon/deduplication/blob/30b4800d151cb8c9ad99deb58e9aa2eca51baf6e/test.js",
+      "sha256": "5d3e4a800c8cd57b982dc95b4c70a4c24fba2cae03088fd615aa77e6876625cb",
+      "truncated": false,
+      "lines": 613,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "benchmark.js",
+      "local": "06-benchmark.js",
+      "url": "https://github.com/ronomon/deduplication/blob/30b4800d151cb8c9ad99deb58e9aa2eca51baf6e/benchmark.js",
+      "sha256": "3f8d6b413e01d689be5a12ca4c563648d021e56a478ce87447fa540283494dad",
+      "truncated": false,
+      "lines": 174,
+      "source": true,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 1,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/ronomon/deduplication/blob/30b4800d151cb8c9ad99deb58e9aa2eca51baf6e/README.md",
+      "sha256": "31ba150fc83d321745fd9166341ef5ed84a952d655ba5ccd8eff1055663d70ae",
+      "truncated": false,
+      "lines": 214,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/ronomon/deduplication/blob/30b4800d151cb8c9ad99deb58e9aa2eca51baf6e/LICENSE",
+      "sha256": "38d391cdc4d003f6597ae568e89f2aaff36bf29b26e8d076e90db3cdf99fd312",
+      "truncated": false,
+      "lines": 21,
+      "source": false,
+      "test": false
+    }
+  ]
+}
