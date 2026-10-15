@@ -1,0 +1,30 @@
+{
+  "status": "verified_complete_pinned_source_screenshot_and36_selected_native_controls",
+  "whole_repo_complete": true,
+  "whole_implementation_complete": true,
+  "repository": "braver/SideBarTools",
+  "commit": "81d91896629a5dbe8fd76f67412d0ed16c550130",
+  "blobs": 13,
+  "canonical_trees": 3,
+  "acquisition": "docs/research/dedup-500/sidebar55-fetched-source-pins-20261016.json",
+  "acquisition_sha256": "883885a997dbf1e054bec1b2b91b652449de91fc831c38cc1b6014e201695199",
+  "auditor_sha256": "fb8aaec4bac61d56007da2750434451f51ba0dd41c77fb8ac4aeb6b8348862d9",
+  "controls": "docs/research/dedup-500/sidebar55-native-controls-20261016.json",
+  "controls_sha256": "6d43e5196f811a5cb004874e89d2847d2095f5b9128362d7444dcaf4964e1822",
+  "media_scope": "Whole tracked screenshot.png viewed1158x810; README links same screenshot. External donation badge not fetched; no other tracked binary assets/videos.",
+  "license": "MIT LICENSE fully read; no production code copied.",
+  "upstream_tests_run": false,
+  "native_scope": "Complete unchanged SideBar.py imported with explicit fakeSublime/SublimePlugin window/view/settings/clipboard adapters. Original copy/move/create/path/settings/listener/compare bodies executed, real Python os/shutil/filesystem onownedfixtures. ExternalPopen replaced by argv recorder; delete_file delegated only, no actual delete. Threads/input-panels/liveSublimeUI notexecuted.18controls twice.",
+  "findings": [
+    "Nativeownedfilesystem: duplicate and move overwrite existing file without own confirmation; duplicate existing directory errors and preserves contents.",
+    "Nativeownedfilesystem: moving directory into existing directory succeeds into basename child, but original retarget body points open view to missing container/child path.",
+    "Nativepath/body: stringprefix accepts sibling root-extra; mixed selection omits outside paths; create failure still opens missing path; missing projectdata listener raises.",
+    "UIadapter controls: missing activeview discards default setting; compare enable/visible differ for3paths; externalcommand receives first2argv; delete delegates promptTrue."
+  ],
+  "decision": "Reject as duplicate detector: file operations wrapper and external compare launcher. Retain destination/overwrite and directory-retarget boundary lessons only; no adoption or speed claim.",
+  "limits": [
+    "No liveSublime/plugin-host/thread-affinity/input-panel/upstreamsuite/platform/performance or production adoption proof.",
+    "No actual external diff process or delete command; all copy/move/overwrite operations confined to owned testfolder.",
+    "This wrapper duplicates files and delegates compare; it provides no image/content duplicate detector."
+  ]
+}

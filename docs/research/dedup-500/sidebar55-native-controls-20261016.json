@@ -1,0 +1,257 @@
+{
+  "status": "verified_complete_original_module_18controls_twice_owned_files",
+  "producer_sha256": "a2773b1466552938a607e7bd4855116468a96561671784ea235d8231e626f336",
+  "source_pins": {
+    ".dedup-work/sidebar55-20261016/source/SideBar.py": "e9790e3ad07479f7744b314f413cc1d7413416ae0a5225183234a7821a172696"
+  },
+  "runs": [
+    [
+      {
+        "case": "duplicate_overwrites_existing_file",
+        "observed": [
+          "SOURCE",
+          "SOURCE",
+          true
+        ]
+      },
+      {
+        "case": "duplicate_existing_directory_errors_preserves_destination",
+        "observed": [
+          "RETAIN",
+          false,
+          true
+        ]
+      },
+      {
+        "case": "duplicate_dereferences_owned_symlink",
+        "observed": [
+          "SOURCE",
+          false
+        ]
+      },
+      {
+        "case": "relative_path_uses_string_prefix_boundary",
+        "observed": "../root-extra/file.txt"
+      },
+      {
+        "case": "mixed_selection_drops_outside_path",
+        "observed": "in.txt"
+      },
+      {
+        "case": "no_roots_preserves_basenames",
+        "observed": "in.txt\noutside.txt"
+      },
+      {
+        "case": "move_overwrites_existing_file",
+        "observed": [
+          false,
+          "MOVED",
+          true
+        ]
+      },
+      {
+        "case": "move_into_existing_directory_retargets_wrong_path",
+        "observed": [
+          true,
+          true,
+          false
+        ]
+      },
+      {
+        "case": "new_file_created",
+        "observed": [
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "case": "new_existing_file_preserved",
+        "observed": "KEEP"
+      },
+      {
+        "case": "failed_create_still_opens_nonexistent_path",
+        "observed": [
+          false,
+          true,
+          true
+        ]
+      },
+      {
+        "case": "missing_active_view_discards_default_setting",
+        "observed": null
+      },
+      {
+        "case": "compare_visibility_and_enable_disagree_three_paths",
+        "observed": [
+          false,
+          true
+        ]
+      },
+      {
+        "case": "external_compare_argv_first_two_only",
+        "observed": [
+          [
+            "owned-diff",
+            "<src>",
+            "<dst>"
+          ]
+        ]
+      },
+      {
+        "case": "delete_delegates_with_prompt",
+        "observed": [
+          "delete_file",
+          {
+            "files": [
+              "<src>"
+            ],
+            "prompt": true
+          }
+        ]
+      },
+      {
+        "case": "missing_project_data_listener_raises",
+        "observed": true
+      },
+      {
+        "case": "make_dirs_existing_returns_false",
+        "observed": false
+      },
+      {
+        "case": "create_existing_directory_reports_failure",
+        "observed": true
+      }
+    ],
+    [
+      {
+        "case": "duplicate_overwrites_existing_file",
+        "observed": [
+          "SOURCE",
+          "SOURCE",
+          true
+        ]
+      },
+      {
+        "case": "duplicate_existing_directory_errors_preserves_destination",
+        "observed": [
+          "RETAIN",
+          false,
+          true
+        ]
+      },
+      {
+        "case": "duplicate_dereferences_owned_symlink",
+        "observed": [
+          "SOURCE",
+          false
+        ]
+      },
+      {
+        "case": "relative_path_uses_string_prefix_boundary",
+        "observed": "../root-extra/file.txt"
+      },
+      {
+        "case": "mixed_selection_drops_outside_path",
+        "observed": "in.txt"
+      },
+      {
+        "case": "no_roots_preserves_basenames",
+        "observed": "in.txt\noutside.txt"
+      },
+      {
+        "case": "move_overwrites_existing_file",
+        "observed": [
+          false,
+          "MOVED",
+          true
+        ]
+      },
+      {
+        "case": "move_into_existing_directory_retargets_wrong_path",
+        "observed": [
+          true,
+          true,
+          false
+        ]
+      },
+      {
+        "case": "new_file_created",
+        "observed": [
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "case": "new_existing_file_preserved",
+        "observed": "KEEP"
+      },
+      {
+        "case": "failed_create_still_opens_nonexistent_path",
+        "observed": [
+          false,
+          true,
+          true
+        ]
+      },
+      {
+        "case": "missing_active_view_discards_default_setting",
+        "observed": null
+      },
+      {
+        "case": "compare_visibility_and_enable_disagree_three_paths",
+        "observed": [
+          false,
+          true
+        ]
+      },
+      {
+        "case": "external_compare_argv_first_two_only",
+        "observed": [
+          [
+            "owned-diff",
+            "<src>",
+            "<dst>"
+          ]
+        ]
+      },
+      {
+        "case": "delete_delegates_with_prompt",
+        "observed": [
+          "delete_file",
+          {
+            "files": [
+              "<src>"
+            ],
+            "prompt": true
+          }
+        ]
+      },
+      {
+        "case": "missing_project_data_listener_raises",
+        "observed": true
+      },
+      {
+        "case": "make_dirs_existing_returns_false",
+        "observed": false
+      },
+      {
+        "case": "create_existing_directory_reports_failure",
+        "observed": true
+      }
+    ]
+  ],
+  "scope": "Complete unchanged SideBar.py imported with explicit fakeSublime/SublimePlugin window/view/settings/clipboard adapters. Original copy/move/create/path/settings/listener/compare bodies executed, real Python os/shutil/filesystem onownedfixtures. ExternalPopen replaced by argv recorder; delete_file delegated only, no actual delete. Threads/input-panels/liveSublimeUI notexecuted.18controls twice.",
+  "findings": [
+    "Nativeownedfilesystem: duplicate and move overwrite existing file without own confirmation; duplicate existing directory errors and preserves contents.",
+    "Nativeownedfilesystem: moving directory into existing directory succeeds into basename child, but original retarget body points open view to missing container/child path.",
+    "Nativepath/body: stringprefix accepts sibling root-extra; mixed selection omits outside paths; create failure still opens missing path; missing projectdata listener raises.",
+    "UIadapter controls: missing activeview discards default setting; compare enable/visible differ for3paths; externalcommand receives first2argv; delete delegates promptTrue."
+  ],
+  "limits": [
+    "No liveSublime/plugin-host/thread-affinity/input-panel/upstreamsuite/platform/performance or production adoption proof.",
+    "No actual external diff process or delete command; all copy/move/overwrite operations confined to owned testfolder.",
+    "This wrapper duplicates files and delegates compare; it provides no image/content duplicate detector."
+  ]
+}
