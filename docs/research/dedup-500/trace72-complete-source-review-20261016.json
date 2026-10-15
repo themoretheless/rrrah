@@ -1,0 +1,29 @@
+{
+  "status": "verified_complete_pinned_source_and_38_native_controls",
+  "whole_repo_complete": true,
+  "whole_implementation_complete": true,
+  "repository": "ultralytics/source-trace",
+  "commit": "843f8907baf511491b54abd701209126e936d04f",
+  "blobs": 15,
+  "canonical_trees": 6,
+  "acquisition": "docs/research/dedup-500/trace72-fetched-source-pins-20261016.json",
+  "acquisition_sha256": "7856b687f1e5aae1dcbdd6faab27f4493d0e7ae1bb3917c42ed0047a1ef9229d",
+  "auditor_sha256": "783ef2b7c5edfe58a3573b3b5a5a90fbd745bbef077698f78f2027c7593a622a",
+  "controls": "docs/research/dedup-500/trace72-native-controls-20261016.json",
+  "controls_sha256": "e835a064a632d7d23071d5feddc7aa12ee1a8c45620e0273a94286acb665b7b0",
+  "media_scope": "No tracked binary assets/videos. External marketing logos/social icons/contributor banner and dynamic badges not fetched; no claim of reviewing linked external sites or repositories.",
+  "license": "Complete AGPL3 LICENSE read; no production code copied.",
+  "upstream_tests_run": false,
+  "native_scope": "Complete unchanged run_repo/init modules, actual Python filesystem/set/statistics and GitPython3.1.46 cloning only own local Git repositories. No API/body adapters, no remote network clone, config global/system disabled in own process.19scenarios twice.",
+  "findings": [
+    "Case-insensitive literal lines and comments treated as matches; repeats collapse per filepair andmultiply across files. Destination suffix notchecked; ignored prefixes suppress real identifiers.",
+    "All UTF8 nonblacklisted file types and hidden .git files scanned; owned symlink follows sibling outside scan root.",
+    "Existing clonedirectory notvalidated/refreshed; failed clone leaves directory then futurecalls silently reuse it. Custom comparisons print hardcoded repositorylabels."
+  ],
+  "decision": "Reject line-copy statistics as exact/image identity. Reference explicit pair-vs-line count contracts and snapshot freshness; no production adoption or speed claim.",
+  "limits": [
+    "No upstream tests in pinned tree; no real remoteGit repositories, history/provenance/attribution, dependency-source/security, performance or production adoption qualification.",
+    "Line intersection is not file-byte/image identity or semantic code-copy evidence. Case/whitespace normalization deliberately part of algorithm.",
+    "Complete pinned source review excludes thirdpartyGitPython/dependency-source and linked external marketing assets."
+  ]
+}
