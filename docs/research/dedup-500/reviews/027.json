@@ -2,11 +2,11 @@
   "index": 27,
   "repository": "mattilyra/LSH",
   "commit": "a57069bfb70f4b620d47931f81966b5a73c1b480",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All13trackedblobs and4canonicaltrees verified; allplain source includingcomplete21808line generatedCythonCPP reviewed, repeatedsource-locationcomments deduplicatedonly14501-18000. Notebook35cells andboth embeddedPNGplots reviewed. Native108unchangedtests and35additionalcontrols twice underregeneratedCython3.3wrapper; originalpregeneratedbuildfails, nooldbinaryparity.",
   "decision": "reference",
-  "finding": "Text MinHash/LSH and MurmurHash; candidate retrieval architecture only, generated Cython source needs the original pyx reviewed.",
+  "finding": "Candidate architecture reference only: signed/clipped MinHash minima, incorrect NumPy-array Jaccard, stale cache/bin lifecycle and recipe/ownership counterexamples reproduced in regenerated native runtime. No production adoption, image quality or measured speedup claim.",
   "license_metadata": "MIT",
-  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "license_scope": "Tracked MIT LICENSE fully read; no code copied. Murmur source retained original public-domain notice. Dependencies and external paper/corpus not qualified.",
   "tests_detected": 1,
   "upstream_tests_run": true,
   "available_source_evidence": [
@@ -88,9 +88,12 @@
   "selected_runtime_reviews": [
     "docs/research/dedup-500/lsh27-selected-native-review-20261016.json",
     "docs/research/dedup-500/lsh27-selected-native-review-v2-20261016.json",
-    "docs/research/dedup-500/lsh27-selected-native-review-v3-20261016.json"
+    "docs/research/dedup-500/lsh27-selected-native-review-v3-20261016.json",
+    "docs/research/dedup-500/lsh27-selected-native-review-v4-20261016.json"
   ],
   "selected_original_suite_tests_run": 108,
   "selected_original_suite_runs": 2,
-  "upstream_test_scope": "Complete unchanged tracked108pytestcases twice onCython3.3regeneratednativeextension; originaldefaultpregeneratedCPPbuildfailsPython3.12, nooldbinaryparity."
+  "upstream_test_scope": "Complete unchanged tracked108pytestcases twice onCython3.3regeneratednativeextension; originaldefaultpregeneratedCPPbuildfailsPython3.12, nooldbinaryparity.",
+  "full_repository_review_complete": true,
+  "complete_source_review": "docs/research/dedup-500/lsh27-complete-source-review-20261016.json"
 }
