@@ -1,0 +1,16 @@
+  DupeSweep -> /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/sweep63-20261015/source/src/DupeSweep/bin/Release/net10.0/dsweep.dll
+  DupeSweep.Tests -> /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/sweep63-20261015/source/tests/DupeSweep.Tests/bin/Release/net10.0/DupeSweep.Tests.dll
+Test run for /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/sweep63-20261015/source/tests/DupeSweep.Tests/bin/Release/net10.0/DupeSweep.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+System.Net.Sockets.SocketException (13): Permission denied
+   at System.Net.Sockets.Socket.UpdateStatusAfterSocketErrorAndThrowException(SocketError error, Boolean disconnectOnFailure, String callerName)
+   at System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   at System.Net.Sockets.Socket.Bind(EndPoint localEP)
+   at System.Net.Sockets.TcpListener.Start(Int32 backlog)
+   at Microsoft.VisualStudio.TestPlatform.CommunicationUtilities.SocketServer.Start(String endPoint) in /_/src/vstest/src/Microsoft.TestPlatform.CommunicationUtilities/SocketServer.cs:line 65
+   at Microsoft.VisualStudio.TestPlatform.CommunicationUtilities.TestRequestSender.InitializeCommunication() in /_/src/vstest/src/Microsoft.TestPlatform.CommunicationUtilities/TestRequestSender.cs:line 168
+   at Microsoft.VisualStudio.TestPlatform.CrossPlatEngine.Client.ProxyOperationManager.SetupChannel(IEnumerable`1 sources, String runSettings) in /_/src/vstest/src/Microsoft.TestPlatform.CrossPlatEngine/Client/ProxyOperationManager.cs:line 207
+   at Microsoft.VisualStudio.TestPlatform.CrossPlatEngine.Client.ProxyExecutionManager.InitializeTestRun(TestRunCriteria testRunCriteria, IInternalTestRunEventsHandler eventHandler) in /_/src/vstest/src/Microsoft.TestPlatform.CrossPlatEngine/Client/ProxyExecutionManager.cs:line 184
+Results File: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/sweep63-20261015/artifacts/upstream.trx
+
+Test Run Aborted.

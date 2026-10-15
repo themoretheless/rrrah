@@ -1,0 +1,29 @@
+Test run for /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/sweep63-20261015/source/tests/DupeSweep.Tests/bin/Release/net10.0/DupeSweep.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:00.12]     DupeSweep.Tests.FormatTests.Duration_UsesSecondsUnderOneMinute [FAIL]
+  Failed DupeSweep.Tests.FormatTests.Duration_UsesSecondsUnderOneMinute [4 ms]
+  Error Message:
+   Assert.Equal() Failure: Strings differ
+            ↓ (pos 1)
+Expected: "2.5s"
+Actual:   "2,5s"
+            ↑ (pos 1)
+  Stack Trace:
+     at DupeSweep.Tests.FormatTests.Duration_UsesSecondsUnderOneMinute() in /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/sweep63-20261015/source/tests/DupeSweep.Tests/FormatTests.cs:line 26
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:00.12]     DupeSweep.Tests.FormatTests.Bytes_FormatsHumanReadable(bytes: 1536, expected: "1.5 KB") [FAIL]
+  Failed DupeSweep.Tests.FormatTests.Bytes_FormatsHumanReadable(bytes: 1536, expected: "1.5 KB") [< 1 ms]
+  Error Message:
+   Assert.Equal() Failure: Strings differ
+            ↓ (pos 1)
+Expected: "1.5 KB"
+Actual:   "1,5 KB"
+            ↑ (pos 1)
+  Stack Trace:
+     at DupeSweep.Tests.FormatTests.Bytes_FormatsHumanReadable(Int64 bytes, String expected) in /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/sweep63-20261015/source/tests/DupeSweep.Tests/FormatTests.cs:line 14
+   at InvokeStub_FormatTests.Bytes_FormatsHumanReadable(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+Results File: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/sweep63-20261015/artifacts/upstream-native.trx
+
+Failed!  - Failed:     2, Passed:    88, Skipped:     0, Total:    90, Duration: 59 ms - DupeSweep.Tests.dll (net10.0)

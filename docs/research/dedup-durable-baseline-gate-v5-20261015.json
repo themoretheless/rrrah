@@ -1,0 +1,1345 @@
+{
+  "status": "terminal_pending_inventory_audit",
+  "variant": "baseline",
+  "producer_pid": 76698,
+  "producer_sha256": "2d0a9e52fcd434f306e1293dda2ffc4575aa38e071638ec78c4be4029f87655b",
+  "manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-durable-source-pair-v5-prepared-20261015.json",
+  "manifest_sha256": "9080ccb72e554a9b59359c0bcfc8b881f977e16804e4058ccc62b195001b1f08",
+  "source": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/baseline",
+  "command": [
+    "cargo",
+    "+stable",
+    "test",
+    "--locked",
+    "--offline",
+    "-p",
+    "rrrah-decode",
+    "-p",
+    "rrrah-dedup",
+    "--features",
+    "rrrah-dedup/decode",
+    "--lib",
+    "--tests",
+    "--no-fail-fast",
+    "--jobs",
+    "2",
+    "--config",
+    "profile.test.lto=\"off\"",
+    "--config",
+    "profile.test.package.rrrah-dedup.debug=0",
+    "--config",
+    "profile.test.package.rrrah-decode.debug=0",
+    "--target-dir",
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target"
+  ],
+  "environment_overrides": {
+    "TMPDIR": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/tmp/baseline",
+    "CARGO_INCREMENTAL": "0",
+    "GIT_CEILING_DIRECTORIES": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "compiler": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: aarch64-apple-darwin\nrelease: 1.98.1\nLLVM version: 22.1.8\n",
+  "retained_binaries": [
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/rrrah_decode-b2fefeee3b0dba8c",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-0-rrrah_decode-b2fefeee3b0dba8c",
+      "sha256": "c89ab62db2cc0206874a7929c2426f3cbbaa77a1417be84db8079d7571744665",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-0.log",
+      "inventory_sha256": "4d901ad9f0bf5f6b96ade87bfad21ef7d0c4864e6f91b09ab345b7d105ac50e6",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/avif_prem_producer-b6bbd8ad7c505e4e",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-1-avif_prem_producer-b6bbd8ad7c505e4e",
+      "sha256": "7452e0160f16a419953254946bbd2e1197fcfb8fdf51e8416780e71a8324fe02",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-1.log",
+      "inventory_sha256": "442b638e86471a0f2d42a608684aea80f8d5a427d429b62589fe49289abf1e71",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/bay_sensor_oracle-3b80c34d3913054c",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-2-bay_sensor_oracle-3b80c34d3913054c",
+      "sha256": "ca67fff2bd2a021949c8c17dbe56b26430a910314ac0247e1096a4471f39ef7e",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-2.log",
+      "inventory_sha256": "690733a14a888d3f43456c555ccaaaa1f91ecaa102a14b69df19b0cbb6074450",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/gpr_color_oracle-ead8015f5dc0184a",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-3-gpr_color_oracle-ead8015f5dc0184a",
+      "sha256": "4804ce228d42bd661efd837e84df9b7140189de80740628f2e9f8c07554516de",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-3.log",
+      "inventory_sha256": "63d2ae2abbf8b801347703a1a4525558794653cedd8846b5867e0333f01cb4f2",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/gpr_highlight_support-95d067791ab49305",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-4-gpr_highlight_support-95d067791ab49305",
+      "sha256": "7b658454b64d744eb13ad2c3d723350ca28897ac79c90f89f88dd10b603da52b",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-4.log",
+      "inventory_sha256": "323f89eb0f17a922be690df3079860e44ac8a8c46ad89cb6869a0150dbc9a0d7",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/pdf_knockout-87ff3c7571de861f",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-5-pdf_knockout-87ff3c7571de861f",
+      "sha256": "86235f95d63bd1c0dea0b9672ea55d92ce6997005c23932e6001c1940160d85d",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-5.log",
+      "inventory_sha256": "ba3eb99cd3188ad8746800bb5ab78fe6096569324cb694eb8c15b2009f9f7043",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/qoi_reference_corpus-32562c09af06685c",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-6-qoi_reference_corpus-32562c09af06685c",
+      "sha256": "c1904ea727fb81a3f3ab3b5e6f64f68f454a4693769cb254f9ac0cc1d0c2ec79",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-6.log",
+      "inventory_sha256": "67155c75b07426dcd680b3b7999b4360eb62eb0c0d96fe1e176e5bccb8665496",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/rrrah_dedup-b19d81542d760535",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-7-rrrah_dedup-b19d81542d760535",
+      "sha256": "ed450d07c0535a8cb2730adddd188435eb18a2e645760e7138d86cb5fc51f850",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-7.log",
+      "inventory_sha256": "6ec237a5a187413e37a21e35dc9d122537e545981e3aecff061ed07bae315dbc",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/affine_candidate_search-4cf8d884900160f5",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-8-affine_candidate_search-4cf8d884900160f5",
+      "sha256": "fb3b474b7ede8dcc8b0522e14a49ec59c09b70b596215632736512002eb3ffa6",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-8.log",
+      "inventory_sha256": "630fc7de2d29465c8f68b970b453bbf3aba1e4ca97b232d649eab174ea7a2060",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/affine_color-320023f30fec0787",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-9-affine_color-320023f30fec0787",
+      "sha256": "57b053aa489e824b9c94dad0372710b5bb99581570d8b95ae95177f77cab61d3",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-9.log",
+      "inventory_sha256": "ced1af97a46b929a95e9298d43544cbb9401b7fc2eae9843d5a0d14b2e6ffd8a",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/affine_color_heldout_negative-2a5112188d18faad",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-10-affine_color_heldout_negative-2a5112188d18faad",
+      "sha256": "e367e8c3ed7e447eef5803d815cfcd5ec3d964fed08759f6e10bc17f0a997db1",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-10.log",
+      "inventory_sha256": "32de5106242f494d4fd354ac01a33207a559464e7ab716c60366e537e3947c9a",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/affine_region-abbe499b0e6bb554",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-11-affine_region-abbe499b0e6bb554",
+      "sha256": "4b628a7b2bbf1577717e3ac797383788667767c160182ace17fcee29766b463d",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-11.log",
+      "inventory_sha256": "4b7dc7223064d43fead1de2b8dc8513a0267c5b141bbfd3006c07eea248e0bce",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/affine_region_file-b434ec5d47e49935",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-12-affine_region_file-b434ec5d47e49935",
+      "sha256": "0897662d79b36b75a7aba9e9e7fcfb57efb8a755f8e78687cf54043e767d00d6",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-12.log",
+      "inventory_sha256": "ba96abb4ef70e4caa11c4b51a8537eb7b735e6fc838ddd1764809fff57249dcd",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/affine_region_grid-16931294b01ede6e",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-13-affine_region_grid-16931294b01ede6e",
+      "sha256": "3642b24b0cdd0a1c6bcefc712aa5d06736427f55329f1bc0935b1e85c26aaade",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-13.log",
+      "inventory_sha256": "1c6b86e971dda3dc90b3cd79d41454b9267942ff029b0672f947f3fb871610c1",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/affine_region_input_contract-b59c087448a2df69",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-14-affine_region_input_contract-b59c087448a2df69",
+      "sha256": "6206e8d42540621f3a37c26375c76aaca00303c9048eb4baab6f3652884f7464",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-14.log",
+      "inventory_sha256": "d3aca7c328c881c96dd77e3b45527f090e79f052e448ea4c49a4a62fb3f3904f",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/anchor_candidate_search-c9ae7770f1fe1776",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-15-anchor_candidate_search-c9ae7770f1fe1776",
+      "sha256": "6f29bf75e589085b485a91ec89a40a311bb4beaa6eabdda760ccfdbfe5fc45e0",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-15.log",
+      "inventory_sha256": "8045832a0a51d5564e073b6915355f0f8ff7ef5ce89db5e23f8ccc02813acfd5",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/anchor_collection-2d71873c829f7aca",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-16-anchor_collection-2d71873c829f7aca",
+      "sha256": "9b2f444a26e0372c6cc2be4e7856b2cf9ee0b5c571d358ab3d4adf4a76d1635e",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-16.log",
+      "inventory_sha256": "e43a042eecded55bda05365545093ead45a2344b6cf3aebea34515d157f7be46",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/anchor_collection_preflight-dc9e23b186fb3037",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-17-anchor_collection_preflight-dc9e23b186fb3037",
+      "sha256": "beb7ce5d81a72dc55ba102c1aafe98285b8150dfd881f0bf5cf565c5aee3cb9d",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-17.log",
+      "inventory_sha256": "99815581e93de5f0fda22e553ffd8dcb75bea9e4655905204928cd81ca10ac4c",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/anchor_collection_scaled-60e28d11b5e5b381",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-18-anchor_collection_scaled-60e28d11b5e5b381",
+      "sha256": "b350cf0d128c8369ee5a0a7109d4841437bb6313effc7415e4688eb5242ca56e",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-18.log",
+      "inventory_sha256": "f41594b3a0b11b5be1c399677e9794f4811f78998e73dd2fa5afe94c552da750",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/anchor_fallback_collection-90ff18c367db079e",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-19-anchor_fallback_collection-90ff18c367db079e",
+      "sha256": "d2f88ad1713c9f2a7f768eeedf117e5ef3b14786b590455f4328ab993ee98273",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-19.log",
+      "inventory_sha256": "7715e5cc989bcac66f6716cc7cedafecb027de22e4d6b472e6c025210adaafd1",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/anchor_fallback_collection_lifecycle-363783e9825a07ec",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-20-anchor_fallback_collection_lifecycle-363783e9825a07ec",
+      "sha256": "a67a214c5a098c0a48b755833fe685f1d37a4c368ebbaa13d2857dfb75cf66df",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-20.log",
+      "inventory_sha256": "78c5a1a943bd2ec2a24842a859c4d6c785542484eccd230d3f8b367c01935e01",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/anchor_fallback_collection_preflight-47cec14030e2fb3c",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-21-anchor_fallback_collection_preflight-47cec14030e2fb3c",
+      "sha256": "a03c606cab9f4a4b3e0b45f1c075156f4fdaa4fd4da5f3f40d7c2d191500f626",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-21.log",
+      "inventory_sha256": "a0397c0dd874640d5d8feb319a573621c5cd3c935cc51777160cb43aab2602e9",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/anchor_fallback_search-1ab73099506aec93",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-22-anchor_fallback_search-1ab73099506aec93",
+      "sha256": "05b5068fa63c1b9d927ccdbf9775ede31d57167d20d23ad0ae6dde069330d1b0",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-22.log",
+      "inventory_sha256": "faf548b34cfa1749a0a56efc28ab5b89c2cfad5b2a33994818f0962bd16bb077",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/anchor_file_search_preflight-de02b99864377012",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-23-anchor_file_search_preflight-de02b99864377012",
+      "sha256": "2200e165f2ce5ce8864fd018a8e77ca19d877ee987a4b3b661c3285401a0adcb",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-23.log",
+      "inventory_sha256": "568276b5426d33a63772546f9960ba413e86f631426a5f72791d29df05176d2e",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/anchor_geometry_collection-2e7ac82e5a7d40a0",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-24-anchor_geometry_collection-2e7ac82e5a7d40a0",
+      "sha256": "be962aeee2bac6c3f91d09e6add5ced5bb924bf85bfb36aae02f666f890b32dc",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-24.log",
+      "inventory_sha256": "397d46393969f1d99b0a0b4fa57a7a76c5a80e70713695802eec888d78e26696",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/anchor_geometry_collection_lifecycle-b4893457b7c59eac",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-25-anchor_geometry_collection_lifecycle-b4893457b7c59eac",
+      "sha256": "e1af04ab968aeb9b3695bc6743a85e12d57b496d986809632282724eeb5abb14",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-25.log",
+      "inventory_sha256": "211cf191a7b02a28ab5c5b424385726df07d874ca54ca754255328167f04636a",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/anchor_geometry_collection_preflight-e372205f3f0922e7",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-26-anchor_geometry_collection_preflight-e372205f3f0922e7",
+      "sha256": "990d2ed168ac144e1c042ca77439c406ebaf1d94baedd08b1185432f0c46deb2",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-26.log",
+      "inventory_sha256": "3fcfa5013c4978a785712c6670c94e31df50bda4f5833b2e4191bc7e11eb31bc",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/anchor_geometry_rank_fallback-d1074c8351fc335a",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-27-anchor_geometry_rank_fallback-d1074c8351fc335a",
+      "sha256": "0f1aa360d26b3a411c0e07407152967215e23fa3f79bca4cce8868e2e122031e",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-27.log",
+      "inventory_sha256": "b83e6a9fc0340847101595f11fa70ae6afcdb2c964fb2a703fc2b2316e5b44db",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/anchor_geometry_search-b837ee2245d0457a",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-28-anchor_geometry_search-b837ee2245d0457a",
+      "sha256": "6da28badf4642ac93cc16501b3176da127edfa333b87eb5cb890254b5eeb4144",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-28.log",
+      "inventory_sha256": "77368abfa2c82a6ce8c359abdea5dfd9f4438f31e6d9da66e09eccf9504f0cbf",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/anchor_geometry_smoothing-b86c9e5021e94b99",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-29-anchor_geometry_smoothing-b86c9e5021e94b99",
+      "sha256": "d8b328d7dc40294913e6872f5061cfe8720d7af4a9dd0a87c770aaecf8e3406d",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-29.log",
+      "inventory_sha256": "f7abc35c5ed33082950b30f99d9d3830dcfdaadd5dadf89309608d7122dee418",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/anchor_rank-8d47969bc6f83431",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-30-anchor_rank-8d47969bc6f83431",
+      "sha256": "5003b5b7165d8f1ee392b4d803e02cb3ee8ac45176772293ed6dd739fc73ed78",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-30.log",
+      "inventory_sha256": "e95665b4f31064964c69579d1177d56f48360e192a08612603fb191d57107f62",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/anchor_rank_driven_collection-55a96404918270c5",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-31-anchor_rank_driven_collection-55a96404918270c5",
+      "sha256": "75779f7496c9184c1a6531a5570cfcdcd0c3bd8788e504583578c963a3cbec3e",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-31.log",
+      "inventory_sha256": "706975216c32534835df9234f5eaa365aba866d057b4e202318e64ed8d320146",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/anchor_rank_driven_collection_lifecycle-bcd4d9cd16c0c6e6",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-32-anchor_rank_driven_collection_lifecycle-bcd4d9cd16c0c6e6",
+      "sha256": "2b61604ff304c67d7de21b6ec694a75f267711a821451d029d64b6909d4d0629",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-32.log",
+      "inventory_sha256": "aa035adaa6a50514ab78337c95acc9b944c1cf08c1c9bb706cc486c62e2d3d91",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/anchor_rank_driven_collection_preflight-1a3464214f43f71e",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-33-anchor_rank_driven_collection_preflight-1a3464214f43f71e",
+      "sha256": "13032d7aca93b99f2f2a2152981675bc6875b6d43ca0615e4b24b499592e0c1e",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-33.log",
+      "inventory_sha256": "3be9f8a418216cdc5bea9aa4d7a38938a1aa6682dde242aa8428376a6ac828bb",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/anchor_rank_file-34e4d2401eff8e85",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-34-anchor_rank_file-34e4d2401eff8e85",
+      "sha256": "846571f0f244666d13ee191b2679e01c76bc4fd45629d69c96ee455680af72f7",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-34.log",
+      "inventory_sha256": "81ccdad0a8595a71845703bb77365848571524ca9f63a56229962d49250c922f",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/anchor_reflected_geometry-dde545ad67ca1737",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-35-anchor_reflected_geometry-dde545ad67ca1737",
+      "sha256": "b3eb5186a18f7d15d99a16c7c25205804578cccf5cb2d5d85e6a5981107dd976",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-35.log",
+      "inventory_sha256": "bbb6f580892e91fc584203e36c33288916f08f7a213a926d1908a07896489328",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/anchor_reflection_collection-feaf9cda8c46ae33",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-36-anchor_reflection_collection-feaf9cda8c46ae33",
+      "sha256": "b6103bee46fe2f2aba3e7218d4f92cedc96961b67d1562ffaa25b1b376609da1",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-36.log",
+      "inventory_sha256": "213954762c14382608f75895e683788a2db67d307f976c5c218a795fcc712373",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/anchor_reflection_collection_cancel-8cdc80be85b9ed81",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-37-anchor_reflection_collection_cancel-8cdc80be85b9ed81",
+      "sha256": "fc007f1a2d54d2daed9d145824544d5c82ce831c15447d02e0703c0c743cbe51",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-37.log",
+      "inventory_sha256": "c2f9db10851d425fe4e30eea6c1a3628e069c3a686fd993dbc13e8c9232eb96b",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/anchor_reflection_collection_lifecycle-5e2e090bdd59bc8b",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-38-anchor_reflection_collection_lifecycle-5e2e090bdd59bc8b",
+      "sha256": "7c430491cc023e7e9849f8eb04c7e647e94e033d796d1b9cf1b4158b7594aa3d",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-38.log",
+      "inventory_sha256": "eb6dab240dc5b48d558a53db0c9aa0b641990e4df371a3af15e7505b78bf645a",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/anchor_reflection_collection_tokens-11250ef7e5449e41",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-39-anchor_reflection_collection_tokens-11250ef7e5449e41",
+      "sha256": "17797720d73a5fd67d7f843eb9717e1bd648cde3a9846dea018d307fe2ee925c",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-39.log",
+      "inventory_sha256": "826342afe71a7e184e3e3023bc5831144e4b26249928726372a6b2e441c7a5de",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/anchor_reflection_fallback-92e7c4f910c36f48",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-40-anchor_reflection_fallback-92e7c4f910c36f48",
+      "sha256": "2e6e748b765b3e638438365194fd89f80dafd49929d8e2be8cf7694453f5d1dc",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-40.log",
+      "inventory_sha256": "a42fca377b79cd5603a0c5e0fe62c6b6f4ff5b6759269ffe635cd54d920d4e25",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/animated-d6b9dc1fca5eb61b",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-41-animated-d6b9dc1fca5eb61b",
+      "sha256": "82b7f27d257b98173f44ced1a9e3e61721918251082e8f67af9b62bbbe294aaf",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-41.log",
+      "inventory_sha256": "9478234a58f62fa4f36675d9ac7f8265617ad339e273ee077126ffc10f78822e",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/bank_geometry-4d6b0b7009eedeed",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-42-bank_geometry-4d6b0b7009eedeed",
+      "sha256": "50fd7d36050043a47f110b1186f15e4368b899cf7adb6c656f606d2277f90edc",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-42.log",
+      "inventory_sha256": "caf9a20f79564c9c9f35bb49911b57a49b8fa52cfaa2e5804ec0c7f2dfac4556",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/bank_partition-cf6650626ad6cba1",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-43-bank_partition-cf6650626ad6cba1",
+      "sha256": "6fb15aefc2fb097e1fb3d9c81bf52b5645ae99755807754ed67b042b5fc92ced",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-43.log",
+      "inventory_sha256": "910dadf4136e49c83716489cfcf02029315f258203df3466fd4476d6573d78f4",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/build_context-ec137d2d461072db",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-44-build_context-ec137d2d461072db",
+      "sha256": "83fa56b16be6e011e72b103575bc7268abd3788cffeaa145c95266852ba1c471",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-44.log",
+      "inventory_sha256": "d35aac534dd08a1d45da6f1d43c047a8a99cc79547e65a291f835594ba909a79",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/cache-806a0517af62cca5",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-45-cache-806a0517af62cca5",
+      "sha256": "2aeafcd88fa5910aa2ec56366a755b6f8dd750c93da9631bff51df8075bd82a4",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-45.log",
+      "inventory_sha256": "42e279ed721b061d3b5d8a226bbaaeb8434e4ccc0e6be2f8249590a0fd13c215",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/cache_interpretation-3085e5a7ee6341ba",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-46-cache_interpretation-3085e5a7ee6341ba",
+      "sha256": "fdfddffbe634007721fbefe34c80d486596ab7364d9b638110ccf8246d52204a",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-46.log",
+      "inventory_sha256": "5c72195ba27c298cecf6574d3c8051b92221f43f71a250e6db25281131d74ab3",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/cache_rla_interpretation-c4f2bc3fc497a083",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-47-cache_rla_interpretation-c4f2bc3fc497a083",
+      "sha256": "a42a2d29e0a772d47bad641adb2f7acc0a9e4d1a2709225a993d71865d52322f",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-47.log",
+      "inventory_sha256": "bd7a0a8b2e12bc3dc629b27f0496b4a0216c45293fe1dc1a631600694cfa2f73",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/candidate_geometry_only-d651b782a2971212",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-48-candidate_geometry_only-d651b782a2971212",
+      "sha256": "8e984be3039f96392a5706b748f598c6d3ded34c477ead3c9c8f810fd706542f",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-48.log",
+      "inventory_sha256": "c451a5ad401d6777e3e2e04d75984b9ae86f9bea9e425f5b949379893bc71c12",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/candidate_reflected_geometry-f54f6f21b3124241",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-49-candidate_reflected_geometry-f54f6f21b3124241",
+      "sha256": "d6b476185276c29d11e185416c1e0f2b59571763328850e47dac461a5613ca15",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-49.log",
+      "inventory_sha256": "e8a64460ff046a1ed518765955a0c57fc06b22e3390c73789be493e582e2a2f5",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/candidate_union_files-0ce5de296a16dd42",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-50-candidate_union_files-0ce5de296a16dd42",
+      "sha256": "425df8d0e19ce83fc4a094e7123fded00b846c0e112ce917ce93dced501bd451",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-50.log",
+      "inventory_sha256": "192c53ed75da046e1d6d0b2604a97c3c52adb119fd79d24ffa17d917fe214c34",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/competitive_rank-385c9513b9c9d4d8",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-51-competitive_rank-385c9513b9c9d4d8",
+      "sha256": "45491e1f7c26cc7d1c006cb88c4478d2d4fef9f1aeb4c8b60c2158d18e4514bc",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-51.log",
+      "inventory_sha256": "ac620523f1268508a4af2b66dc87fb71c0ed4c059e704b38d938aedbe677f1b6",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/container-c248972297e65b82",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-52-container-c248972297e65b82",
+      "sha256": "2b393f0e6ec33026ec5cf013ef4ddf7134bb292f4200af370117c498fa1c8ea8",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-52.log",
+      "inventory_sha256": "419b807ec60ede5d106fdf05448e96626177a50c88c48d2a21e3e6f5888a194b",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/content_snapshot-bdc9f914384cacf4",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-53-content_snapshot-bdc9f914384cacf4",
+      "sha256": "629f895e404710dc693becc05609584cad05d485eb64e47792dc106b8b733bee",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-53.log",
+      "inventory_sha256": "fcb7ee716c4c8aca51ff507dce8e1356275587fcdb6431283f43200b65e2e6c9",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/correspondence_union-378694a9f2aa7a09",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-54-correspondence_union-378694a9f2aa7a09",
+      "sha256": "f6a6535a59d886c37f265d03cade47c9313954845deffe673c41156c0216061b",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-54.log",
+      "inventory_sha256": "fe3963be7cd64a7fc17ea932390d1ed2d78142379c4fecf2cb0d177c3d31ccd8",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/crop-a27f4599fd24c697",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-55-crop-a27f4599fd24c697",
+      "sha256": "6caf3681ad713ca1850093461c21367620bb296e963b25c6feacaed10e782318",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-55.log",
+      "inventory_sha256": "56b27445b875ea379544d4bfdbb5e29a349114c32e24162480356b72f96a20ee",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/decode-1640c50bec350829",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-56-decode-1640c50bec350829",
+      "sha256": "7f1b58d5d6f9427f497f5b74c446da0c2a57a5f1d8cd50d73d69679dc9e7ea9c",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-56.log",
+      "inventory_sha256": "0ac1bcc38994a32f160f7cda20fddaa656db5f0ee41991514c6fb508205a2367",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/diagonal_proposals-34e534abe2588df8",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-57-diagonal_proposals-34e534abe2588df8",
+      "sha256": "b54ca437ceb6a66a5e8c0acbfb89eeb389efd2e24d4ca8709cf88eae3adfc582",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-57.log",
+      "inventory_sha256": "858286269612b26a6edabfdbddc7c0ba82489dcd55d71f294279014da3bdd93c",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/encoded_srgb-c54b622fca929266",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-58-encoded_srgb-c54b622fca929266",
+      "sha256": "2bc0432202aa60624c1345c5648c2632b1415cdf1501fa51553cea31ac803fdc",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-58.log",
+      "inventory_sha256": "9813600081978abf9828aa6b05edcb4828a1b6c66c10e41dd5a945a7e9dce71b",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/exact_files-160002dfd494336a",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-59-exact_files-160002dfd494336a",
+      "sha256": "3bb24a5a3039bdbe74447f2dde89bfb71053d5c08aeb02652cedf356232fd42d",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-59.log",
+      "inventory_sha256": "8507f75fe18dfa1796342f62b24a631366ea4aa91c744d3f07a18bf72b02c7e1",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/exact_large_files-d38feaa2d9891182",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-60-exact_large_files-d38feaa2d9891182",
+      "sha256": "e63f17b34ccf281d3c322c720219e9cde8a4c957834c73f7be78b7046022825c",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-60.log",
+      "inventory_sha256": "a0ffcd4b2aed77bd124a125ac0719fbee3544f7af1a52be66507ef22430cc773",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/exposure-cb50879472fe2b34",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-61-exposure-cb50879472fe2b34",
+      "sha256": "a7076ae96e15852f0537bbaa98613f7eaa9b6ea74a0773a77b8e5f739f6bc8a0",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-61.log",
+      "inventory_sha256": "bde405a4211094b37ae4fc895d69522d627772acb757ec1dfc60a5709035a6ea",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/exposure_files-df2484db75ea5f80",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-62-exposure_files-df2484db75ea5f80",
+      "sha256": "0ed6f877123adfb9b071a6eb1f8483a2ff37e4e133750560d7a972b619466ba8",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-62.log",
+      "inventory_sha256": "3e0473ff47ee52979c0d4b51d14d1f36468bdb4ba823a86835f084a91afdbdc8",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/filtered-ee9e7deb6ec70cfb",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-63-filtered-ee9e7deb6ec70cfb",
+      "sha256": "6623812ec0011ef30a5cfd974420b35ee96a22564ae16c72145817a449b13c4b",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-63.log",
+      "inventory_sha256": "34359568ab5f3d9d4dc0769d608cd3547b93a9057a2e21f4f6812a57e37bd0d3",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/five_collection-d10afd56d34af5de",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-64-five_collection-d10afd56d34af5de",
+      "sha256": "66d9ccd80e592ce5d3470b4dd77f5d959415b11df9454d667c19dfc8e2acb73c",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-64.log",
+      "inventory_sha256": "352dcd63e055ad3bd3eefec10490ecb021faf54b552ed69ec846a15ede0907aa",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/five_gradient_region_lifecycle-8c0b3ffa7ce27a1d",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-65-five_gradient_region_lifecycle-8c0b3ffa7ce27a1d",
+      "sha256": "7bf655deb2f71d2bda261d7a5e2a2908bde4fe3c0d3e1577761d9889813ba0ec",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-65.log",
+      "inventory_sha256": "e478706cde54908ff38cab42bde1c213c4d912674a69d42ec7d3936678db6773",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/five_lifecycle-a9974edf3ff8b7c8",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-66-five_lifecycle-a9974edf3ff8b7c8",
+      "sha256": "7cbd520c23689cad21b05880d67ecc3429b4d240d04b294c4ad5e70152153b74",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-66.log",
+      "inventory_sha256": "8a92238d14cbf24b34837de0300453b4fa38b9571a6ffe1f3ad90cb864704af5",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/five_region_admission-5e888e9f114ee692",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-67-five_region_admission-5e888e9f114ee692",
+      "sha256": "ccecb1b2a9595b162990dd2667eb07a790623e763af73d56e91272784f40c42d",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-67.log",
+      "inventory_sha256": "abb7fea7433ec8b75202648080add26703b72c156c3ffbedf2ced447e16265da",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/five_region_lifecycle-7f845089a8d98629",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-68-five_region_lifecycle-7f845089a8d98629",
+      "sha256": "1e9ddcfa328d26dd516d25ea3ae6f2cc445b496c5a8bdb8264bc7876f0d3bcde",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-68.log",
+      "inventory_sha256": "7876b3d84b3c93398691e636dbc3cc727517aed52f825386afe541efecde5f15",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/geometry-06a65a99829d06f4",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-69-geometry-06a65a99829d06f4",
+      "sha256": "0e31d51b499a15452a85fc4118bd686f6e804d22593af848f109dfd1a47a9ed6",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-69.log",
+      "inventory_sha256": "7ad8ecd082edf03f51360ed3f563b96a1679a5cb5b826ba5bdbd82d9e6d40796",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/geometry_validation-d1eef326d925783a",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-70-geometry_validation-d1eef326d925783a",
+      "sha256": "0f3356c2df02df798f817609ec2c4cef3d028febcdccfede1c5de963d8206cf9",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-70.log",
+      "inventory_sha256": "7d38ced099bdaead4a47c5675d8ed74bf03b252e7235ff61b732ce8110022ccb",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/gradient-b9ffe9a77b4ada47",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-71-gradient-b9ffe9a77b4ada47",
+      "sha256": "4655929f4e8cca973bad734847ebbf680c331b8448ff46b099b1d82133b9cc56",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-71.log",
+      "inventory_sha256": "23d90b92f42d12073b60c0fb5fe4fc4c1b4a485c578e33f62d92e1d88fe202d5",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/gradient_candidate_smoothing-88f04f9e5a0495f9",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-72-gradient_candidate_smoothing-88f04f9e5a0495f9",
+      "sha256": "2fed96ed6e533a89624d8e987966ab09a2f9a3f00f7109aa610af461440385b6",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-72.log",
+      "inventory_sha256": "099d486640e614ef1ee5426d6f320397c7d49f7c0a2e3fa10a91bc2674448d94",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/gradient_collection-381f3215f96cf2ae",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-73-gradient_collection-381f3215f96cf2ae",
+      "sha256": "7ac14457ddaae83ec96685d1dbe7edacfb1d407b799f1d38f196e4caf8c967fb",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-73.log",
+      "inventory_sha256": "20415f0e65b4753cf111dd29c362b0241f975d013f20ca55903cd98e2928a9a4",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/gradient_distinct_locations-107739f68ae14bc4",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-74-gradient_distinct_locations-107739f68ae14bc4",
+      "sha256": "42f31ad7705305b8f68b068f7a62d63ab0a833a422c3374abaa95a7051189180",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-74.log",
+      "inventory_sha256": "e4e9828cb6270f69322994cbbc4f13a54c309bd428ded91c01d26ea0dadd13e8",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/gradient_empty-f4188e7f359832dd",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-75-gradient_empty-f4188e7f359832dd",
+      "sha256": "f7fb24f5d3c2b231de77423a98646356410e1b23b95f30abe4fabc490d6cac52",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-75.log",
+      "inventory_sha256": "b6b162b377be05ed7959240835b2d61e5a890026ce1aa314f1fb3db0352e351a",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/gradient_index-fd138cb3db711c4a",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-76-gradient_index-fd138cb3db711c4a",
+      "sha256": "a8222b28fb13825d4a64ab6ba55582fc201291bdb5bf5c8506d0ed979865c5b6",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-76.log",
+      "inventory_sha256": "145117dc9190a4019f9742d2f8845a8716a34371978c7c6ee4259b9b1aa33620",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/gradient_index_reflection-5f6b5b0056265c40",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-77-gradient_index_reflection-5f6b5b0056265c40",
+      "sha256": "b478abb6a32b6f6b879ad1e51d4eefcae182f6f5065f3f969cf99432c25e0fdf",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-77.log",
+      "inventory_sha256": "8b74be3fb72b84656017662333efd7a1242897ac8d47661423d4bba2884cfcbc",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/gradient_interpolated-29c77a42d812b2ed",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-78-gradient_interpolated-29c77a42d812b2ed",
+      "sha256": "6c2cdd3ce27463fcf7030ba593eba9c50bff88218e576e57cbb39476ddb8dd77",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-78.log",
+      "inventory_sha256": "ee324eeb4001875266a794b432f99ae22b6c1d1d14732374ef90c75937fda0fa",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/gradient_reflection-3a5f791be74cee24",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-79-gradient_reflection-3a5f791be74cee24",
+      "sha256": "6e78f9b8e892a2783e0541f49900df90472e904f504d696bf67896473824301f",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-79.log",
+      "inventory_sha256": "fe0b6acca1016c50c038d6efb4015defe2c9b6f066f7b5364b021f18020eb378",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/gradient_scale-4d5e722aae9dda07",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-80-gradient_scale-4d5e722aae9dda07",
+      "sha256": "92036e4698d0b9eb26c6bee23cfdc18d84352d046f77b9aaa691073389cbff7e",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-80.log",
+      "inventory_sha256": "dbaa893679508901cdc2dbff7135b409198fea347d15e4b838e36dd129eb211a",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/gradient_scale_files-b8d52e5e7eb60643",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-81-gradient_scale_files-b8d52e5e7eb60643",
+      "sha256": "7dca7031419d19d48b86c0a76deacfe6df35e6bab11e748f3a4880100b48cc9a",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-81.log",
+      "inventory_sha256": "6fa3e79613d35be5776187e2275ed1a70058bf82a7050883d4d30b47d4ed5e6e",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/groups-1845ae2c95e5ff7b",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-82-groups-1845ae2c95e5ff7b",
+      "sha256": "91e6a0f8bc4598e7766136b9222fbf3e59f37fdfdfa36afc4fc91705c9b2ebe0",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-82.log",
+      "inventory_sha256": "ccdaf77cbd09bd2a168fc985ffa8a46e731d9278bb9cf246f50055c1683781ad",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/icc_oracle-e8d718a1070f2928",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-83-icc_oracle-e8d718a1070f2928",
+      "sha256": "034b0d8dc997249916b468cd9edc7be6c03f611796b7b8e4ea674f58b51e6292",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-83.log",
+      "inventory_sha256": "c9051efe73a3ee96c4295473db29e84703f28fdf50db63d0dda0d6989f67b9a9",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/information-547d1ab149bf1a5e",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-84-information-547d1ab149bf1a5e",
+      "sha256": "cd90c1f47627c95340bead53b3b5bdc974c0f0a0bb0effecef30d1845a9bcb08",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-84.log",
+      "inventory_sha256": "e01fbaf30094edf47c11fdbd20a64d84b3ce7be92cffb383ad6d4ff193acb6c3",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/joint_projective-062491613d049b7d",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-85-joint_projective-062491613d049b7d",
+      "sha256": "1829e745c85cdff5cdf53ddd0e60f0f0a5df8f18ed772e28423199dd49af97d1",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-85.log",
+      "inventory_sha256": "73996d44b5db7c4b5d538dc56af6c550e84611a1f75165137d39d316f71a37b9",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/joint_witnesses-5bac7400aa390a3a",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-86-joint_witnesses-5bac7400aa390a3a",
+      "sha256": "a5c756dce28614042bfd52bb4052f49642c3e01b7783c06ab4feaf5b657991cc",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-86.log",
+      "inventory_sha256": "d77c15e9de8a65c7d2ea16d238cafd96bc67ccf81fc8a40add8c0cf924ea99c6",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/jpeg_orientation-c4eea455d71eb035",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-87-jpeg_orientation-c4eea455d71eb035",
+      "sha256": "977275654d5532bc7216d8f5776dd52214bc3a437610d71f6eac438b38b8e64e",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-87.log",
+      "inventory_sha256": "d3a24d7589346085c5b0ae5652e844c7d7dcec74f05195d333e35a6b11352d12",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/linear-9ac2468cd4b8356a",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-88-linear-9ac2468cd4b8356a",
+      "sha256": "453042d63d27018df2a62c54bbdfbfd18ad19ef554ae7b5207f36789c430e187",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-88.log",
+      "inventory_sha256": "91a7d6760cf027045f8983d8f3fcfae022412a246b17696a1904df11d01fd7e7",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/local-7104daed363acf57",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-89-local-7104daed363acf57",
+      "sha256": "deb59801c5d5e96e585f5d0cf1f37e309d480d1fdfe0fcb0bb5dafc3652fd235",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-89.log",
+      "inventory_sha256": "aac00c68ef9b3e75db7e335b4d61239af6a7e517975b957a58f54d9bf32d6ccd",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/local_collection-f8d17953bd080f23",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-90-local_collection-f8d17953bd080f23",
+      "sha256": "3d35680979569ad8f316616626961dec427316944cd4fa932b2023ae195e453e",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-90.log",
+      "inventory_sha256": "9b9a4016d574efb47254df959e218cebf2758a51296d848494bc121c58342fd9",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/local_index-bce0c0f7b7ffea73",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-91-local_index-bce0c0f7b7ffea73",
+      "sha256": "ab70f594ae866ae302a7a2add242bb0bbb86b310324fb74ae7e8d7a32e1660bd",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-91.log",
+      "inventory_sha256": "9a0d24c830ce00c53cfe6344579c4d198418c5ff99065d0beaad1816a2aee9c4",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/local_rank-f74647d43d7cfb68",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-92-local_rank-f74647d43d7cfb68",
+      "sha256": "ac506ff087094a1a31aa969713c8bac3ed4e23890fb07a1874b52e0c8780ec52",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-92.log",
+      "inventory_sha256": "ca9c88cbd11fddf441c4bc3d70beaa422249a0d1872f4587ddd4e8d17f011e75",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/local_rank_cached-3c228ef2a3f85e33",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-93-local_rank_cached-3c228ef2a3f85e33",
+      "sha256": "025d5a0eaa1edee01031096c35c3596fdce74b4e769cb6117108364d857c79ec",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-93.log",
+      "inventory_sha256": "7607c349463295e53cde2684df4192ff72f942a633b09fb6f447c5923d90d4d4",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/local_scan-f873285dfb367d0e",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-94-local_scan-f873285dfb367d0e",
+      "sha256": "cf29af7a3842f49616f9a730e7224baf46621af28871281b59e95071e772743a",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-94.log",
+      "inventory_sha256": "13bb88a0302d9ecf0a81e4930ff772289228465f317f2a056d1b368f6be79da5",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/managed_evidence-93c78fcb08daa067",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-95-managed_evidence-93c78fcb08daa067",
+      "sha256": "aa042d53c6c7638ee82ab83c23de4cacb6d0cc3bd60aff98f378511979435af3",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-95.log",
+      "inventory_sha256": "cb78a7ed4361a30eb3f0afb71adeb9bfca6cefa262f0370c1f759d819f655367",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/mesh_deformation-2306761ec914ce2a",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-96-mesh_deformation-2306761ec914ce2a",
+      "sha256": "d67cb200acd30907266fa0304f47d520786bb32066fdc89e6b10f633fe8d7daa",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-96.log",
+      "inventory_sha256": "791e7cd04325bed8f040a78b9e8e46f39ed04a02a21a244dad2d121c910203be",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/mesh_grid-726c622e83e77d94",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-97-mesh_grid-726c622e83e77d94",
+      "sha256": "95af0a0599da23d58a4c215d894c881b1a5623bbee8f57f9fe6c83a9b406eda6",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-97.log",
+      "inventory_sha256": "b1a3ab70d3563a49a33bc6d09071b064dbc270330e2d4a1f4fa59ebf24c920e2",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/mesh_landmark_admission-2eecaa3157f1792b",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-98-mesh_landmark_admission-2eecaa3157f1792b",
+      "sha256": "f22d6db28ae34999043297fb1793c39800109559171081f03bf157e7f332a4d2",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-98.log",
+      "inventory_sha256": "b3cd204be2d937ef0155f9fa1f8d75a6f32ed6a00aaf2ce7d0233b64422f52f2",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/mesh_rank-459a12b12ee699da",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-99-mesh_rank-459a12b12ee699da",
+      "sha256": "d5ca13eb3f8947226987b143a64d4fd8a71d6a94b36b22d897a6d41c4a224a49",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-99.log",
+      "inventory_sha256": "f81c5069f2248f9d2604faf557dbaec5ba8b9f3569bb96b4c5d71e954e4b8fa4",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/mesh_rank_regions-b12055afd5b48384",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-100-mesh_rank_regions-b12055afd5b48384",
+      "sha256": "706344c67311242260effd02dc87b16d42c43c0c20ba0ecc2860962700d0d3ee",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-100.log",
+      "inventory_sha256": "6d09642d6b1a56c517c34e19ef83536d34c68f8d78742a8444b8046755006d8f",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/mesh_refine-2b5a2056827921e3",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-101-mesh_refine-2b5a2056827921e3",
+      "sha256": "47de5e351c8f9085ce884876202b71fadd1dfa122976d7ea157ddf704e55a8e5",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-101.log",
+      "inventory_sha256": "97a2c545862066274e9f31cf0bba554eab95e0d65e5b35487667e631c267b78e",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/model_compare-648e2b68b4baeef1",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-102-model_compare-648e2b68b4baeef1",
+      "sha256": "de2129eb9769595cc3bd6b06677a5dd1c90154daf5c36a83ece92e749d08a809",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-102.log",
+      "inventory_sha256": "07a67d5952b84c40e9606ae92202d2ca4f8b6051d847e7b8ddcc90e23a3a25c1",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/model_input-34195da60522af8e",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-103-model_input-34195da60522af8e",
+      "sha256": "99c13767aa0bdbda2fe4084a14a0df8c09b707a6c707d1a3de097574370e0795",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-103.log",
+      "inventory_sha256": "a0f3cc14e9c2c1ad05dca56b86cae8fb98ea4665b555d58fca78cde757a9ce2f",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/model_input_file-01e6f2843a7cad99",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-104-model_input_file-01e6f2843a7cad99",
+      "sha256": "fcbc4198ea96f1c198da9fac1e4e3cc0e27861a5b63a062e10897e707d336be9",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-104.log",
+      "inventory_sha256": "da6a7244f9f2aafcfc5b661146d203a8acb592263d9a0ddca8e89d0b041d5ba5",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/model_projected_compare-d0912024fa8eb28d",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-105-model_projected_compare-d0912024fa8eb28d",
+      "sha256": "495ed0043f75460a691e4c2b42dc9dcf23da4bae881f5d2fe04efac621632136",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-105.log",
+      "inventory_sha256": "dc42ed0376d34418e981c6fc681ac04e95b91b5921680d9c950efb871bcc1528",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/model_projected_tiles-97d587858e32527f",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-106-model_projected_tiles-97d587858e32527f",
+      "sha256": "72b4077adaca3d3557460fdb2c09121cffe59085e3832cffd89401837b6c08ad",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-106.log",
+      "inventory_sha256": "3c073a8e8b21fb174134541597d87703f6b0b1752531bdc703715a9937b1c215",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/model_tiles-a983e6f4e3bb1810",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-107-model_tiles-a983e6f4e3bb1810",
+      "sha256": "e24691b799312479bddc69e40c64cd83c4a849a5a4217318ef2a1971a63b0435",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-107.log",
+      "inventory_sha256": "d9d82541032124bc9cecbefad5f41902e4cf4624d088929be85e2895c3b15817",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/native_anchor_recovery-cf8b241b7af61803",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-108-native_anchor_recovery-cf8b241b7af61803",
+      "sha256": "e911ea1297b219b1800be739a48ce874fa3d98d5358925aa6d2120c4833fd511",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-108.log",
+      "inventory_sha256": "889c5f9b82a65adeb45f334ae2f9a94942302060f1677c2cf0e72b1b76d07d2d",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/native_pixel_domain-a85257f5257c108e",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-109-native_pixel_domain-a85257f5257c108e",
+      "sha256": "8836b2c057ca134ed44fa14d8d1c936c9e8b03a30cd36a41073877de5924a787",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-109.log",
+      "inventory_sha256": "b0e352a196be34a61b084d31936f1b43fbdce18869082dbcc170021a49add1d4",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/opposite_native-a3eb0ba084545818",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-110-opposite_native-a3eb0ba084545818",
+      "sha256": "37f735f2a0a44303e10e6d524c311ca2d8b0fb4aa04e1f8597078dbce4797c70",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-110.log",
+      "inventory_sha256": "3e04d634804e8210aaa908094dff65732c67011e626143b01c00e041f59540ee",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/ordinal-06ce939b347429ed",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-111-ordinal-06ce939b347429ed",
+      "sha256": "b30a3cc41e433951dd68c3fa1308d0b625e5da3c515b3272efcd7d3883c98537",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-111.log",
+      "inventory_sha256": "f30827318ca65fbdf5b33675d401c88b4c5248262d9f0d585b3399a5875cb6ea",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/oriented-87ab45e3b4e15bdb",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-112-oriented-87ab45e3b4e15bdb",
+      "sha256": "641413c4eb46897ab09bc18b68ac643d66102b335edb961c8e6fe9a3e7230844",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-112.log",
+      "inventory_sha256": "62de29825846fbf0e1ad36fad816b4a6dd423e684f324ea6b6aba5b009e366f3",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/pages-d58f7643b583161b",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-113-pages-d58f7643b583161b",
+      "sha256": "24cc3d459f0b671d4df0220c37e6a1597724c03161c0df8b756e5f36897fbebd",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-113.log",
+      "inventory_sha256": "f9fd15e5a3a866ed9b64e5791287212a799909e68ec4e14dd60612c67a453bdb",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/pair_schedule-b36a67ba76f1b468",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-114-pair_schedule-b36a67ba76f1b468",
+      "sha256": "bf1a5e9d0ef5abb0af77c6f720a0e5c08252463d71a79802dd4c82cc44a5e93b",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-114.log",
+      "inventory_sha256": "00a3d47f3e09dbfa6441d0cb45707feaaae5755815b25aa34841d609ed88249d",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/palette_mutation-ef823d35a3cda8aa",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-115-palette_mutation-ef823d35a3cda8aa",
+      "sha256": "de4566c6ed35463679605e07857ac5a485f0778e6d0ac63952d42edc1827914a",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-115.log",
+      "inventory_sha256": "25484b4874e91585b3caf9937efd41c5a71fc3753c40f6044700a3f9a051cd4d",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/palette_transparency-ed56a4eda286e43d",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-116-palette_transparency-ed56a4eda286e43d",
+      "sha256": "09f038b9de195cca46fa20ebf1767b228f1f34a992b594d436298d1e42763241",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-116.log",
+      "inventory_sha256": "4862ac6b6550c5379642d178a77698e31d933521b7d457982368ce6a9fea7450",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/periodic_capture-30d51c130d7f980f",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-117-periodic_capture-30d51c130d7f980f",
+      "sha256": "fa3b455190351f736270ab3f0a829f69b74a344e76ba7956b5999273cad69f42",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-117.log",
+      "inventory_sha256": "c0b32e1807d4c0d878bfe32f7ff4998757c728f93e3ad900aab8e27b2c6e1d55",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/photo_collages-f2c7005ae09ddf94",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-118-photo_collages-f2c7005ae09ddf94",
+      "sha256": "52bb17d304374e770c23a68cfdc18c36a3c1589d927e10d71391155c0562f915",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-118.log",
+      "inventory_sha256": "7cad292ea8aea1a879a7b81b1e818b68ba6b626614e81c422c3ed3cffb8270f0",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/photo_files-b22dcb6f3743f1f4",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-119-photo_files-b22dcb6f3743f1f4",
+      "sha256": "10e082c1848295e7a895cd24465ff7ca64da9f290c7cdc2f1657d6fea654511d",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-119.log",
+      "inventory_sha256": "cd11d8c3a71e23817443b60356f9c2184949737a7e454e438f19f7542b1546db",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/photo_jpeg_oracle-0850f0fe23d3d4d1",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-120-photo_jpeg_oracle-0850f0fe23d3d4d1",
+      "sha256": "abbad25a3346e812985870c0646864a39bcac75e64a6147ee340c1537386b86e",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-120.log",
+      "inventory_sha256": "74cf7f3d8fc08955a521c2711f435520783d570fcca87023d61c20fc15c42f2c",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/photometric-37cd2febd8f1a574",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-121-photometric-37cd2febd8f1a574",
+      "sha256": "e287301f139d17f1cca057f993ecca1f1043ee765dc99162f41a626279058dca",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-121.log",
+      "inventory_sha256": "f422d6a1a24d01d6d2a49f1118886a20ae571b01657ea97966c7fe063fc31066",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/photos_heldout-3b50e1d815062749",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-122-photos_heldout-3b50e1d815062749",
+      "sha256": "7e843abfef460ee449da27b4f05b4660d246e6ce9de8618d2564746993ea1619",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-122.log",
+      "inventory_sha256": "1c643d90ab09cf98f7c744671a525eab0c62df862c6911e26b3422cfb0844991",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/piecewise_local_rank-d69a11ce76f89097",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-123-piecewise_local_rank-d69a11ce76f89097",
+      "sha256": "bd5bac209ba7556c7c622f3361bb6a93e8b6098e510a8d3e0fe34794424efd5b",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-123.log",
+      "inventory_sha256": "7927e88d8ba3f9dac84242c47d70d6a9cac565c986e1034cb5f6aa35bf490a24",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/piecewise_warp-17aef8f49f07db07",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-124-piecewise_warp-17aef8f49f07db07",
+      "sha256": "d35927193d64fab7f41ac703a043f2535e83791ed8bd3c35ca2f9bd0f3d3d146",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-124.log",
+      "inventory_sha256": "62afd2ee1f39f0e66b737574925298fa2862d4514d0875d495826b5660179001",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/pixel_search-b011bcec4eca2d23",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-125-pixel_search-b011bcec4eca2d23",
+      "sha256": "1b585323d5cf44b4b01988fdc9edd2c66363b14d2d18a3d7230d57ee3fe1ec40",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-125.log",
+      "inventory_sha256": "8d8f0856dfe14c5bc6a93f4888fd77636b396b445efc9c161ab0cf866d7ffd7c",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/pixels-5188f20cd6a73306",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-126-pixels-5188f20cd6a73306",
+      "sha256": "d21299610a6872edd8f4cf837092480b5fd5e5690faac71625b847f7958326eb",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-126.log",
+      "inventory_sha256": "a348db14b052af59d3abb3d79425d63f3a47d60e90badee214b9e6c157eef411",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/portfolio_collection-7e545d99598a304e",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-127-portfolio_collection-7e545d99598a304e",
+      "sha256": "882e3aa3f6843aeceea1dc70f4176b7663f2ec650eaf2234b9e6be5255d05d41",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-127.log",
+      "inventory_sha256": "9d12fec82dce790ce0869e3a2e8475dfbd6b0ee15779c99abe7e480ddf1e4144",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/presentation_digest-564b60e718d3641a",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-128-presentation_digest-564b60e718d3641a",
+      "sha256": "fbaab05225e31553bc5269ad670f67af21cb4f1f6190ded9c4b3d0f0e8a02088",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-128.log",
+      "inventory_sha256": "cc383f39ffb0531b7d0c18f708c392abe5239033f394ef24c8e3afa791af611d",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/presentation_kind-69602e497f859a1f",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-129-presentation_kind-69602e497f859a1f",
+      "sha256": "b03abe05ba227100dce3d8c309d193c97edbd2a61637c177cf7d1dbb04ae8f84",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-129.log",
+      "inventory_sha256": "85a01fa83e22861591e3106d90b6d03c0d992f4cbb87fcae2b54696bae6f648e",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/projected_collection-d1b025b1e2c42ffe",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-130-projected_collection-d1b025b1e2c42ffe",
+      "sha256": "36d617dfa408cc499393fbce6e232c0497980e33eaeedb640db5a3a90ff12a54",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-130.log",
+      "inventory_sha256": "8aea96f9da64529cfe0d27af291733e9ce05535bac171a0d763bd53ed2d5b1a4",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/projected_portfolio-29807ee7158e53a1",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-131-projected_portfolio-29807ee7158e53a1",
+      "sha256": "5593c079de1cef35e5201875f7c7c7e1f22d94c2f34935477cba02b4862a209a",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-131.log",
+      "inventory_sha256": "3c5b896dc621cb63fef3fe563a1af82fa1794a8f65aca9fc8cb462213a450a54",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/projective_domains-d3b40cae0800aa43",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-132-projective_domains-d3b40cae0800aa43",
+      "sha256": "9de63ce7474c15ea6940234fe06c8c722c067ec94b09a9aaabfd2eefaca044a8",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-132.log",
+      "inventory_sha256": "fe1a40f1b130aab2b94e9552b31a5ad90a92e3bb276c97ce8754b59798e2354e",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/projective_exhaustive_domains-9da1b83bc9ddd2bb",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-133-projective_exhaustive_domains-9da1b83bc9ddd2bb",
+      "sha256": "e2fdc382c3dfeb1b2775dbad543e581597c98ceb578acec99477fb1a5ae52980",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-133.log",
+      "inventory_sha256": "32fd305a881c6f64c29e86eb1adc7982000987c9ba483c712576949b7806c31e",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/projective_files-d03aad7644e00826",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-134-projective_files-d03aad7644e00826",
+      "sha256": "70df2c0b3d7cda9afe37e13f56ca2ee2667f4a77795026bfc34d26c53a45e224",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-134.log",
+      "inventory_sha256": "56b9afa3ee4e7f4bc745d5793fed03e30059f77a42c1060185964732301d4c12",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/projective_geometry-4501aa593ad65672",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-135-projective_geometry-4501aa593ad65672",
+      "sha256": "70c657ad7171eb1a8a62c9241332bb3490f20f69f8460627c2b4bf881abecf7a",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-135.log",
+      "inventory_sha256": "f1f3c41190eff6e324a8d725635363d8f04c07b8f1fd2aabc84eb3f5884cc244",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/projective_grid-ceac009e607536b7",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-136-projective_grid-ceac009e607536b7",
+      "sha256": "ab5e024eb02bab7e33c3c3b79810370cb60fd4f72b1f06179311ff585f13150d",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-136.log",
+      "inventory_sha256": "68d3c52361d03b7ff8685587ec63a957815b2307ae4c999942babe3f9e10e121",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/projective_pruning-432c96e154a41fb2",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-137-projective_pruning-432c96e154a41fb2",
+      "sha256": "f7d1d7de8d514680ba69966cad1c7095463717677252be92f284968507f0e9e4",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-137.log",
+      "inventory_sha256": "9289fb919d1418b2babbe53f4650c4f18302f4070f98ac00699c1396782aa74f",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/proposals-1eea4285421f4538",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-138-proposals-1eea4285421f4538",
+      "sha256": "d34f960daf978abc41cb85368c615012f7e673a4406de397e7746c31e8d2b8cb",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-138.log",
+      "inventory_sha256": "0e3af15faa987d517af57d37f14210797ec4065759f3c5333025ad3c02d5dc09",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/pyramid-daebf48bcdf2c1eb",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-139-pyramid-daebf48bcdf2c1eb",
+      "sha256": "f30c31296991d12d678e5bb417f5ebecd46974808965c290c70eb1cb1b1d05f0",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-139.log",
+      "inventory_sha256": "0b24f6d30b0fe26783f7ccb3e543645f71aa06aa95d9a4ce74a6ec4885dd8eee",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/rank_region-c3c0c590681a0068",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-140-rank_region-c3c0c590681a0068",
+      "sha256": "caf50a04fe08be8461903d82bea90dfe72a40cf85082be81f815258d77e3ce75",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-140.log",
+      "inventory_sha256": "8b5d9431689f82522ab13e7afcfa15147ae35cb40612ec8996f2fa547fd6c2b3",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/raster-b95a837a7cc9e724",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-141-raster-b95a837a7cc9e724",
+      "sha256": "a7a65796f5d8f97efafdbf1ebcb0728f3cc5e491b9543f29d9435d015d252124",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-141.log",
+      "inventory_sha256": "9d801743fed7a4bd2efa58d3e1fb12c731ef0e3afbb9958a5101471d40dab121",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/raster_equality-efcb2ad95967be70",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-142-raster_equality-efcb2ad95967be70",
+      "sha256": "40e4fb36cd21412496b41d3e96c8b029d4f28bf0e8bccde8d9d590d3d65612b3",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-142.log",
+      "inventory_sha256": "4bb4394e6cd7c5b764dba70fc378001df44421330b6fd32c0a1ad07115c66709",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/raw_selected-ba0da5c045b45ea3",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-143-raw_selected-ba0da5c045b45ea3",
+      "sha256": "0f8d8eae95ea01135becc76e117b9bc1af7a70cd28e27bcf924e959875f87495",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-143.log",
+      "inventory_sha256": "2bfd9138d354e53cd51359320b1d9b2ea59bdb9ee44477844481639f4998c7c3",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/region_footprint-092d2206dd5fc8ec",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-144-region_footprint-092d2206dd5fc8ec",
+      "sha256": "9f67427ad692eab84ff02e5eaeb692d3b25d02654c36c6c2fb0402278876987c",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-144.log",
+      "inventory_sha256": "10cf46bb54f22f9c2fd2e419b5bee7936be7dadf0a3edc048c45304b01befa9c",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/region_grid-c43aef05b9aa3c50",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-145-region_grid-c43aef05b9aa3c50",
+      "sha256": "a41861ec826120bf0a333dde0a560a368a7826bc3221c6c4c3b6eb6ca64ab7ad",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-145.log",
+      "inventory_sha256": "c185f61b436252e2f330ac5854f57f1c68ac6c52731b7a41b7808e2c1b81ee9d",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/region_grid_files-f4fdaffd2344f1d3",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-146-region_grid_files-f4fdaffd2344f1d3",
+      "sha256": "d3002d19fc03e4a4e686fe0bea99b9d6a55e8c90638b147ae4645f9e7ad7b588",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-146.log",
+      "inventory_sha256": "26ec68d0c882e87123f36ea1300a068e9cc6c800193629747bd10c54dc99ce53",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/region_transform-ca8ee4be1f989674",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-147-region_transform-ca8ee4be1f989674",
+      "sha256": "f23c3de607b7c288ad993997a623cb9611bd7f9b12d99fcebc8ec6ab5a1939b4",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-147.log",
+      "inventory_sha256": "bd79dab0f66935940aa8901320c3c21cd428c9e57c92784e00f8d582daef62b8",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/scan-1d61d76616211320",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-148-scan-1d61d76616211320",
+      "sha256": "a8ac0ae01ce20826c42971d6b765288cf8fe86a70ebddbbea01af996e84ad40a",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-148.log",
+      "inventory_sha256": "0bc9fd0dae63ffead46d0decf03e241d7327a5e8a6824bd10cf01ec24e6d9227",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/scan_cancellation_checkpoints-278bc90659387725",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-149-scan_cancellation_checkpoints-278bc90659387725",
+      "sha256": "3b7f24287e72e4a5d93ea60e43461ab762ea305f619e5711a39c9935c90eff65",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-149.log",
+      "inventory_sha256": "66b989eb47e0f62ee4aaeb6f8fa0e04b8c42ff41040f358959ff849aa677dffd",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/scan_group_publication-9bb534f7460b2121",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-150-scan_group_publication-9bb534f7460b2121",
+      "sha256": "0f4e70d5547358a185652cba52fed2734c55f3eb9b7719057456badbbcade447",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-150.log",
+      "inventory_sha256": "526fc5254964352e593746eb01f91445f8dbadcab055eda48a7f316c791e479e",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/scan_retry-832ada6c8c86475a",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-151-scan_retry-832ada6c8c86475a",
+      "sha256": "f614ef932e9ab7f68371adf226e9a44b3e64a848d4ea6515b4b0089b65c7f3de",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-151.log",
+      "inventory_sha256": "d16e128c8cd69d836579c0d5040404a156e398bda6bc6448f91bddb4a1eb453a",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/search_portfolio-f5ab31192be15042",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-152-search_portfolio-f5ab31192be15042",
+      "sha256": "6696075e839a5abcf76465788317cc43912fafccc5c3228b00ce36af6656553e",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-152.log",
+      "inventory_sha256": "bbb1837a00fa446482176a7d4df1e07ede7d35834e8668e67f8e4107fc086b94",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/sequence-d3c969db6bdfb4b5",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-153-sequence-d3c969db6bdfb4b5",
+      "sha256": "d83e202e472c2fdfc19de5c765a0430570033b71f494d3f2103c14266c586d23",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-153.log",
+      "inventory_sha256": "d1181c80bb268ccd5cc5db56acaf12b974d7b92412a70e1e6bc58e0ac7eccc99",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/spatial-7538868c92c73aad",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-154-spatial-7538868c92c73aad",
+      "sha256": "293a6313c6772adc3c8384cca8f6898261c3ebdebf27f3845336611d881c6d8e",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-154.log",
+      "inventory_sha256": "727e642599a153c685abd906fd1152fac3aecb41801d31a00159d4650d5f4d14",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/triangulation-fc66c6286da5f935",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-155-triangulation-fc66c6286da5f935",
+      "sha256": "08f64133ebbce7f273f70be3c52f2a6173fd9d8589d125fa9a5e1e8d6029343b",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-155.log",
+      "inventory_sha256": "6d7ba9fb36d4678a5989e90923f7ad74e0cfd977d41a98610332036d34a65fdd",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/visual-f0039d3048a95d0e",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-156-visual-f0039d3048a95d0e",
+      "sha256": "ee473abda5c208bd01089abebbed8273d27de3e26241a62cacff0a2397470db2",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-156.log",
+      "inventory_sha256": "1188c54382851fde35c6b25ec7c72342b7acc2b14e80506d9b8e6bdf0f3b1d7d",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/visual_publication-e0f58093110ca595",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-157-visual_publication-e0f58093110ca595",
+      "sha256": "fdad6bf1942a18f4dabf96e49009d06e3841dd61f055b3c4ffa2215426d3a993",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-157.log",
+      "inventory_sha256": "0234e51ead9940a230f5c49a93233378dc85f9b47a31a0edce88f321dbe80b0e",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/wal_dependency-b2940eded7d00c79",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-158-wal_dependency-b2940eded7d00c79",
+      "sha256": "91fd3b9512d8715e32145e42e8c6d3cdad9c26234047e0cb21dd3092b8c44c27",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-158.log",
+      "inventory_sha256": "74247d2f024fc39448ec02d7010bcdb1fbd112f80e11c029e6c72375f0872840",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/warp-428e88463675f862",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-159-warp-428e88463675f862",
+      "sha256": "b141e0661c367a8d9414a49eda02388dd65b9defdbf502fe0d0e26be5af5b1d5",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-159.log",
+      "inventory_sha256": "f69932c377b8a206a4c2447433e72e31d4efa3b972fbe4714e9b1a011787dfb6",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/worker-b2a63e01f0dd4469",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-160-worker-b2a63e01f0dd4469",
+      "sha256": "ff7543d7f5d92fc4e46ee0c28e553d704cb37ec8c307b7086a9508eaf6a67a56",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-160.log",
+      "inventory_sha256": "1c851e7222b51cadb52dc34ccf89cf9a90fa464ceade458e9f5f32d9477b16f5",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target/debug/deps/worker_group-4822a717088a53d2",
+      "copy": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/binary-161-worker_group-4822a717088a53d2",
+      "sha256": "0e8fe2b59e2be2d52e6ae19ca0d901a7289da3e8981d6f1e8590d03c25fb0cec",
+      "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/inventory-161.log",
+      "inventory_sha256": "f142fcd2850e60fd36f05b720255652c98709e01c26d00b8c199ce0997097000",
+      "inventory_returncode": 0
+    }
+  ],
+  "scope": "Freshcomplete162lib/integrationtarget gate onexactlegacy3378sourcebytes, originalprofile/assertions/default+decode, nofilters/pruning. Workspace durable source/TMP/cache/artifacts, Gitceiling isolatesouterworkingGitmetadata. Controller/compiler recorded; notlatestRoot/allformats/platform/nativecorpus/benchmark/performance proof.",
+  "child_pid": 76700,
+  "returncode": 0,
+  "cargo_log": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/baseline/cargo.log",
+  "cargo_log_sha256": "047ce00f0df335baae857edbfaffb3473746dfc0d47d8a833e49a712054a911e"
+}

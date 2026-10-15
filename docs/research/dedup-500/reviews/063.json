@@ -2,13 +2,13 @@
   "index": 63,
   "repository": "amasen02/dupesweep",
   "commit": "1a9edc1aac0874c494b29c2b5a37d43b6bd6bfe0",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
-  "decision": "shortlist",
-  "finding": "Staged file-size/hash funnel, SHA256 async cancellation and file-scanner resolver injection; MIT reference for reproducible traversal tests.",
+  "review_scope": "All56trackedtextblobs/11trees fullyread. Full90originaltests executed:defaulthost88pass2culturefails, same90passwithproductinvariantenv.16wholeassemblycontrols twice plusunchangedoriginalCLI demo. No otherplatform/release/performanceadoption proof.",
+  "decision": "reference",
+  "finding": "Reference architecture/journal only: strongprefixfunnel andpartialrestore tests, but no byteconfirmation orfinalcontent/keeperrevalidation beforeapply; payloadintegrity notcheckedonrestore.",
   "license_metadata": "MIT",
-  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "license_scope": "Entire pinned MIT LICENSE read; no production source copied.",
   "tests_detected": 11,
-  "upstream_tests_run": false,
+  "upstream_tests_run": true,
   "available_source_evidence": [
     {
       "path": "src/DupeSweep/DuplicateFinder.cs",
@@ -74,5 +74,7 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/dedup-500/sweep63-complete-source-review-20261015.json"
 }

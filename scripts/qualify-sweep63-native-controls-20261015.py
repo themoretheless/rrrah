@@ -1,0 +1,16 @@
+"""Run actual complete unchanged production assembly with controlled owned filesystem fixtures."""
+from pathlib import Path
+import hashlib,json,subprocess,os
+R=Path(__file__).resolve().parents[1];D=R/'docs/research/dedup-500';W=R/'.dedup-work/sweep63-20261015';S=W/'source';h=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()
+rows=json.loads((D/'sweep63-full-file-pins-20261015.json').read_text());pins={r['path']:h(S/r['path']) for r in rows};assert len(rows)==56
+for r in rows:assert (S/r['path']).read_bytes()==r['content'].encode()
+assert (W/'controls/Program.cs').read_bytes()==(D/'sweep63-native-controls-20261015.cs').read_bytes()
+compiler=subprocess.check_output(['dotnet','--version'],cwd=W,text=True).strip();assert compiler=='10.0.402'
+artifacts=[p for p in (W/'controls/bin/Release/net10.0').iterdir() if p.suffix in ['.dll','.json']];artifacts+=[W/'global.json',W/'controls/Probe.csproj',W/'controls/Program.cs'];binaries={str(p):h(p) for p in artifacts};assert artifacts
+commands=[];logs={};runs=[]
+for i in [1,2]:
+ fixture=W/f'native-run{i}';fixture.mkdir(exist_ok=False);out=D/f'sweep63-native-run{i}-20261015.log';err=D/f'sweep63-native-run{i}-20261015.stderr.log';assert not out.exists() and not err.exists();env=os.environ.copy();env.update(TMPDIR=str(W/'tmp'),DOTNET_CLI_TELEMETRY_OPTOUT='1');cmd=['dotnet',str(W/'controls/bin/Release/net10.0/Probe.dll'),str(fixture)]
+ with out.open('x') as stdout,err.open('x') as stderr:subprocess.run(cmd,cwd=W,env=env,stdout=stdout,stderr=stderr,check=True,timeout=45)
+ result=json.loads(out.read_text().splitlines()[-1]);assert result['status']=='passed' and result['controls']==16;assert [s[5:] for s in out.read_text().splitlines() if s.startswith('PASS ')]==result['cases'];runs.append(result);commands.append(cmd);logs[str(out.relative_to(R))]=h(out);logs[str(err.relative_to(R))]=h(err)
+assert runs[0]['cases']==runs[1]['cases'] and runs[0]['observations']==runs[1]['observations'];assert all(h(S/p)==sha for p,sha in pins.items());assert all(h(p)==sha for p,sha in binaries.items())
+report=D/'sweep63-native-controls-20261015.json';assert not report.exists();report.write_text(json.dumps({'status':'passed_twice_whole_original_production_assembly','source_pins':pins,'binary_and_build_pins':binaries,'SDK':compiler,'runtime':runs[0]['runtime'],'commands':commands,'controls':16,'runs':2,'cases':runs[0]['cases'],'observations':runs[0]['observations'],'logs':logs,'producer':'scripts/qualify-sweep63-native-controls-20261015.py','producer_sha256':h(Path(__file__)),'authored_control_source':'docs/research/dedup-500/sweep63-native-controls-20261015.cs','authored_control_source_sha256':h(D/'sweep63-native-controls-20261015.cs'),'scope':runs[0]['scope'],'limits':['Originalsourceall56blobsunchanged. Testprobe is separateproject referencingactualcompleteoriginalExeassembly.','ExplicitshortreadStream andbeforecallrewrite/keeperremoval, actualprivateapplyviareflection; noambientrace/wholeCLIinterleavings claim.','ActualMacOSnativehardlink anddirectorysymlinkcycle, notWindows/Linux/platformmatrix or reclaimedphysicalspace/performance.','No sourceadoption ornewlibraryspeedup.']},indent=2)+'\n');print('16controls twice through actualcompleteproductionassembly; sourcepins unchanged')
