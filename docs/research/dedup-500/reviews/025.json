@@ -2,9 +2,9 @@
   "index": 25,
   "repository": "noxdafox/rabbitmq-message-deduplication",
   "commit": "88e548356699f7f17d3144723956eaddf1e6a9c8",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All23 pinned UTF8 blobs,7canonical trees: complete implementation/cache/queue/exchange/policy,6testfiles,docs/license/build/config. No bundled media. Runtime tests not executed.",
   "decision": "reject-domain",
-  "finding": "RabbitMQ exchange-message routing and policy deduplication; not local image/file content.",
+  "finding": "Header-key Mnesia dedup with explicit TTL/cache eviction andqueue acknowledgement lifecycle; no portable media similarity. Static cache-name alias, numeric-string validation, error handling and policy state observations remain runtime-unqualified.",
   "license_metadata": "MPL-2.0",
   "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
   "tests_detected": 2,
@@ -74,5 +74,8 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/dedup-500/rabbit25-complete-source-review-20261016.json",
+  "upstream_test_scope": "All6testfiles read,18ExUnit declarations and14CommonTest cases inventoried; no execution. Erlang/Elixir absent onPATH, RabbitMQ service/dependency tree not provisioned."
 }
