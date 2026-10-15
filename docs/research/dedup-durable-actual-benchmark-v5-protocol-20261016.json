@@ -1,0 +1,123 @@
+{
+  "status": "prepared_only_not_compiled_or_timed",
+  "manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-durable-source-pair-v5-prepared-20261015.json",
+  "manifest_sha256": "9080ccb72e554a9b59359c0bcfc8b881f977e16804e4058ccc62b195001b1f08",
+  "source": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/candidate",
+  "work": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/actual-benchmark-v5",
+  "build_command": [
+    "cargo",
+    "+stable",
+    "test",
+    "--locked",
+    "--offline",
+    "-p",
+    "rrrah-dedup",
+    "--features",
+    "decode",
+    "--lib",
+    "--no-run",
+    "--message-format=json",
+    "--jobs",
+    "2",
+    "--config",
+    "profile.test.lto=\"off\"",
+    "--config",
+    "profile.test.package.rrrah-dedup.opt-level=3",
+    "--config",
+    "profile.test.package.rrrah-dedup.debug=0",
+    "--config",
+    "profile.test.package.rrrah-decode.debug=0",
+    "--target-dir",
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target"
+  ],
+  "compiler_profile_required": {
+    "opt_level": "3",
+    "debuginfo": 0,
+    "debug_assertions": true,
+    "overflow_checks": true,
+    "test": true
+  },
+  "test_name": "collection::actual_collection_benchmark::complete_guarded_engine",
+  "cases": [
+    {
+      "label": "empty2",
+      "files": 2,
+      "bytes": 0,
+      "iterations": 1000,
+      "content": "equal"
+    },
+    {
+      "label": "empty8",
+      "files": 8,
+      "bytes": 0,
+      "iterations": 200,
+      "content": "equal"
+    },
+    {
+      "label": "64k8",
+      "files": 8,
+      "bytes": 65536,
+      "iterations": 50,
+      "content": "equal"
+    },
+    {
+      "label": "64k24",
+      "files": 24,
+      "bytes": 65536,
+      "iterations": 5,
+      "content": "equal"
+    },
+    {
+      "label": "2m8",
+      "files": 8,
+      "bytes": 2097152,
+      "iterations": 3,
+      "content": "equal"
+    },
+    {
+      "label": "early8",
+      "files": 8,
+      "bytes": 65536,
+      "iterations": 50,
+      "content": "early"
+    },
+    {
+      "label": "late8",
+      "files": 8,
+      "bytes": 65536,
+      "iterations": 50,
+      "content": "late"
+    },
+    {
+      "label": "sizes8",
+      "files": 8,
+      "bytes": 65536,
+      "iterations": 50,
+      "content": "sizes"
+    },
+    {
+      "label": "mixed8",
+      "files": 8,
+      "bytes": 65536,
+      "iterations": 50,
+      "content": "mixed"
+    }
+  ],
+  "rounds": 7,
+  "fresh_processes": 126,
+  "gate_admission": "scripts/check-dedup-durable-benchmark-admission-v5-20261015.py",
+  "gate_admission_sha256": "498a086389a53ae60c9e157f7e72f88b47d1654dfeed7343d818631de83d1329",
+  "candidate_collection_sha256": "94807b98fdc72e64047ee67c201d8110f249428a82e95f3d84ce6c4dddab8381",
+  "baseline_exact_prefix_retained": true,
+  "producer_sha256": "5471ce1e1bbb7857082210eb080bb0ba07ec739138445459bf14500cb0e829cc",
+  "protocol": [
+    "Both full unfiltered162target audits must pass and allsource/binary/log evidence remain bytevalid before build or timing.",
+    "Singleopt3binary, test-only threadlocal flag set beforetimedloop; baseline retainsoriginal leftverify/rightverify/identical andoriginalexactprefix; candidate selectivefusiononlybeforevisualactivation.",
+    "Both invokeactual scan_guarded_exact_collection completecapture/pairs/provider/postpair/postloop/finalpublication checks and reportownership/creditrelease; immutable syntheticbyteoracle provider, noimagequality claim.",
+    "Nineoriginal families, seven alternatingAB/BA pairedrounds,126freshprocesses; Rustelapsed excludesinputfilecreation butincludeswholeengine; childCPU includesfreshprocess setup/cleanup.",
+    "Every output must retain completepaircount, byteoracleevidence, expectedvisualprovidercalls andzero remainingmemorycredits; differentcheckpointcounts are diagnostic.",
+    "Timing requires no observedcompiler/buildprocesses before/aftereachrow; abortonobservedinterference. Thisis not exclusivehostisolation/coldphysicalIO/hardRSS/platform/librarywideperformance proof.",
+    "Report pairedwall/CPU ratios, retainrawlogs/binary/source pins. Never automaticallyadopt productioncode from timing."
+  ],
+  "scope": "Concrete nextstage prepared while fullcandidategate compiles; no correctnessgate bypass, optimizedbuild/timing/execution/speedup/adoption claim."
+}

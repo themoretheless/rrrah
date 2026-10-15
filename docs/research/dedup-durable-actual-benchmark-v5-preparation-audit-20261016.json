@@ -1,0 +1,34 @@
+{
+  "status": "verified_prepared_protocol_and_pending_gate_preflight_only",
+  "protocol": "docs/research/dedup-durable-actual-benchmark-v5-protocol-20261016.json",
+  "protocol_sha256": "8c79ef83a7aa598f7806cd4895ccd62d1405a642f8fbf9a695ba8db34f4ddf39",
+  "script_pins": {
+    "scripts/prepare-dedup-durable-actual-benchmark-v5-20261016.py": "5471ce1e1bbb7857082210eb080bb0ba07ec739138445459bf14500cb0e829cc",
+    "scripts/build-dedup-durable-actual-benchmark-v5-20261016.py": "35610e9f4a22c8149b2065f823e39f0430827be8fbdbdcf9d8466b6a6287fb74",
+    "scripts/benchmark-dedup-durable-actual-engine-v5-20261016.py": "0ef465d319d48558e06e0550847d9aa65a8295aef39d05f61278265c557abb57",
+    "scripts/audit-dedup-durable-actual-engine-v5-benchmark-20261016.py": "893a33816bc2dd57acafd390859c7df7585a92ae62efd0ab44e111e3e3c7e8d3"
+  },
+  "preflights": [
+    {
+      "script": "build-dedup-durable-actual-benchmark-v5-20261016.py",
+      "result": {
+        "status": "waiting_for_complete_durable_correctness",
+        "missing_variant_audits": [
+          "candidate"
+        ],
+        "compiled": false,
+        "timed": false
+      }
+    },
+    {
+      "script": "benchmark-dedup-durable-actual-engine-v5-20261016.py",
+      "result": {
+        "status": "waiting_for_full_correctness_and_opt3_build",
+        "timed": false
+      }
+    }
+  ],
+  "files_written_by_build_or_timing": false,
+  "preparation_correction": "Firstprepareassertion expectedbaselineinline self/otherverify. Actualbaseline verifies i/j via verify_file beforeidentical; inspectedpinnedcaller andcorrectedvalidator toactualorderedsequence. Frozen sources unchanged.",
+  "scope": "3378sourcepins pervariant verified inpreparation, originalexactprefix retained, ninefamilies126freshprocessdesign, mandatoryfullgateadmission/opt3compilerprofile/assertions/overflowchecks, actualengine outputs/credits/visualcalls, ABBA/order/rawlog audits prepared. No optimizedcompile/timing/result/speedup/adoption evidence yet; candidatefullgate pending."
+}
