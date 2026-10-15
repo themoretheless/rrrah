@@ -1,0 +1,62 @@
+{
+  "status": "verified_complete_unchanged_suffix_module_exhaustive_small_byte_oracles",
+  "whole_repo_complete": false,
+  "producer_sha256": "c3fa6e611fa175e81406cc3bb7eff565a41d3a92b5f8d9795ebe7aa141e0ea58",
+  "source": ".dedup-work/text85-20261016/source/src/table.rs",
+  "source_sha256": "111c63385ab217db8bbe346854b03491aef317b824a71b1195d2aa56dd74cb06",
+  "runs": [
+    {
+      "checked_overflow": true,
+      "run": 0,
+      "texts": 3280,
+      "queries": 403440,
+      "stdout_sha256": "2f39dd72981104346240ccb0dc4f4fad26cfd71e0e540b54b77360f761784a86"
+    },
+    {
+      "checked_overflow": true,
+      "run": 1,
+      "texts": 3280,
+      "queries": 403440,
+      "stdout_sha256": "2f39dd72981104346240ccb0dc4f4fad26cfd71e0e540b54b77360f761784a86"
+    },
+    {
+      "checked_overflow": false,
+      "run": 0,
+      "texts": 3280,
+      "queries": 403440,
+      "stdout_sha256": "2f39dd72981104346240ccb0dc4f4fad26cfd71e0e540b54b77360f761784a86"
+    },
+    {
+      "checked_overflow": false,
+      "run": 1,
+      "texts": 3280,
+      "queries": 403440,
+      "stdout_sha256": "2f39dd72981104346240ccb0dc4f4fad26cfd71e0e540b54b77360f761784a86"
+    }
+  ],
+  "artifact_pins": {
+    ".dedup-work/text85-20261016/suffix-controls/checked-build.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    ".dedup-work/text85-20261016/suffix-controls/unchecked-run1.stdout": "2f39dd72981104346240ccb0dc4f4fad26cfd71e0e540b54b77360f761784a86",
+    ".dedup-work/text85-20261016/suffix-controls/checked-run1.stderr": "3469f29a79cba7a9f1f7a7a0030c1e3b46400b3096603e13643887d24460163a",
+    ".dedup-work/text85-20261016/suffix-controls/checked-run1.stdout": "2f39dd72981104346240ccb0dc4f4fad26cfd71e0e540b54b77360f761784a86",
+    ".dedup-work/text85-20261016/suffix-controls/unchecked-run1.stderr": "3ae2c79667d692ef1cdcc849e8a4eb29585a7b094a85bef269ad83371b82de6f",
+    ".dedup-work/text85-20261016/suffix-controls/unchecked": "2fddc57036b9377a1f2c699efc5e9f881b60efcddcfd5a74ee12e8c38b6b4c44",
+    ".dedup-work/text85-20261016/suffix-controls/controls.rs": "b5bcac3975f36d1f96dc9aa2354941c574afb53b5a2363322447d974a612874b",
+    ".dedup-work/text85-20261016/suffix-controls/checked-run0.stderr": "be80e2d5164048defe4839954685dfa30d9c26a5c532d3abe9851986e6648ac0",
+    ".dedup-work/text85-20261016/suffix-controls/unchecked-run0.stdout": "2f39dd72981104346240ccb0dc4f4fad26cfd71e0e540b54b77360f761784a86",
+    ".dedup-work/text85-20261016/suffix-controls/unchecked-run0.stderr": "f963d8c31d57b8201a1cb8533828fa10ea7b245089d02e7f28e0c124741272ed",
+    ".dedup-work/text85-20261016/suffix-controls/checked": "2448e882b9d6b4babeeba1f9c24a02fd5d5728384cde32a40c8bb7fa0222c910",
+    ".dedup-work/text85-20261016/suffix-controls/checked-run0.stdout": "2f39dd72981104346240ccb0dc4f4fad26cfd71e0e540b54b77360f761784a86",
+    ".dedup-work/text85-20261016/suffix-controls/unchecked-build.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "scope": "Whole unchanged original940line table.rs included via Rust pathattribute, no adapters/dependencies/extracted bodies. NativeRust1.98.1,opt3,overflowchecked/unchecked eachtwice. Exhaustive3symbol byte texts lengths0..7, allqueries0..4 plus2absent queries; independentbyte-slice sorted suffix/LCP/occurrence oracles, originalnaive parity andinto_parts roundtrip.",
+  "findings": [
+    "All3280boundedtexts and403440queries perrun satisfy suffixconstruction/order,LCP,contains/positions/oracle; emptyquery deliberatelyreturnsno matches.",
+    "from_parts checks lengthonly; invalid99index accepted then suffix_bytes panics, matching explicitlydocumented uncheckedinvariant.",
+    "Documentation still describes32bit/4byte indices andUTF8 restrictions whileimplementation u64/bytebased. LCPimplementation isquadratic andallocates unusedinversevector. Static performance concern, no timing/adoption."
+  ],
+  "limits": [
+    "Onlywhole suffixmodule; mainCLI readthroughline260 only, otherprojectfiles notyetread, no fullsource countincrease.",
+    "No fullCargo/upstreamsuite/diskstream/chunkmerge/trainingdataset/hugefile/physicalIO/hardRSS/platform/performance or productionadoption qualification."
+  ]
+}

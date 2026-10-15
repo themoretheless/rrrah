@@ -1,0 +1,27 @@
+{
+  "status": "verified_partial_source_complete_suffix_module_native_oracles",
+  "whole_repo_complete": false,
+  "whole_implementation_complete": false,
+  "repository": "google-research/deduplicate-text-datasets",
+  "commit": "4e9888ac3f95dc4f6169867a04c4c19df02dafe3",
+  "acquisition": "docs/research/dedup-500/text85-fetched-source-pins-20261016.json",
+  "acquisition_sha256": "3e9e89355f0a21c31783e0276291bae855868e1663c1516f4ffca5a6ff45c5f1",
+  "controls": "docs/research/dedup-500/text85-suffix-controls-20261016.json",
+  "controls_sha256": "85bd531f3021b8772cb11523b6f362905f473d748b5cce7ffb9409cb7d36cede",
+  "auditor_sha256": "9294db44e6c462665ef3137a0d43b6e17064f55edce31ab3c4419cf06e5ada8f",
+  "compiler_observed": "rustc 1.98.1 (48a229cea 2026-09-01)",
+  "runs": 4,
+  "texts_per_run": 3280,
+  "queries_per_run": 403440,
+  "total_queries": 1613760,
+  "read_scope": "Whole940line src/table.rs andCargo.toml; main.rs1..260 only. No trackedbinaryassets intree, externalREADME/media notyetreviewed.",
+  "findings": [
+    "All3280boundedtexts and403440queries perrun satisfy suffixconstruction/order,LCP,contains/positions/oracle; emptyquery deliberatelyreturnsno matches.",
+    "from_parts checks lengthonly; invalid99index accepted then suffix_bytes panics, matching explicitlydocumented uncheckedinvariant.",
+    "Documentation still describes32bit/4byte indices andUTF8 restrictions whileimplementation u64/bytebased. LCPimplementation isquadratic andallocates unusedinversevector. Static performance concern, no timing/adoption."
+  ],
+  "limits": [
+    "Onlywhole suffixmodule; mainCLI readthroughline260 only, otherprojectfiles notyetread, no fullsource countincrease.",
+    "No fullCargo/upstreamsuite/diskstream/chunkmerge/trainingdataset/hugefile/physicalIO/hardRSS/platform/performance or productionadoption qualification."
+  ]
+}
