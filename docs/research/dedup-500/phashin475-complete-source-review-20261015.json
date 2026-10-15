@@ -1,0 +1,110 @@
+{
+  "repository": "aaronshaf/phashin",
+  "commit": "c1cb04727239439e09c151cbea40dbf050f348c9",
+  "tree": "25f8d30147a2d51a29bd652018381d818e2b064f",
+  "status": "complete_static_source_and_lock_read_with_explicit_callback_controls",
+  "whole_repository_complete": true,
+  "license": "MIT rootLICENSE fully read; no production source adopted",
+  "blobs": [
+    {
+      "path": ".dockerignore",
+      "mode": "100644",
+      "git_blob": "93f13619916123cf5434dab2ffcc8263c7420af1",
+      "bytes": 27,
+      "sha256": "7c12a77f46e042412273b579d497f70d7ba24c3892a295b393a06c84fc4921c3"
+    },
+    {
+      "path": ".gitignore",
+      "mode": "100644",
+      "git_blob": "0d764f74bc5483cd9a7a33bb7531b7bdee20e300",
+      "bytes": 113,
+      "sha256": "399863e61e1aa01e58b742fc37af14bfb4c94c849ee004cee6c6c4210d061fbb"
+    },
+    {
+      "path": "Dockerfile",
+      "mode": "100644",
+      "git_blob": "eaf55ec668c43f3f157d575a7fec9f9fc4111470",
+      "bytes": 497,
+      "sha256": "dbb1176bce0ccb3a8dd52b47add274fd7c9871611477d797a322ea5ef67eeedc"
+    },
+    {
+      "path": "LICENSE",
+      "mode": "100644",
+      "git_blob": "b29c2683c321d84a7004d9785abb14104f8bda8d",
+      "bytes": 1074,
+      "sha256": "04f9d31058eb0af55ef94fac56cdab0190ed9cd7390db5d9551a9667343bc4a4"
+    },
+    {
+      "path": "README.md",
+      "mode": "100644",
+      "git_blob": "78f4b84a0b9ce080d9363150922b6545a761fb9b",
+      "bytes": 143,
+      "sha256": "02027351e312a59d38a9bde5f4be61fffe2ade8aa3ab16b18e26b4d963eebe5d"
+    },
+    {
+      "path": "docker-compose.yml",
+      "mode": "100644",
+      "git_blob": "93f9d2cea38ca4413caaa7374cd58e60eb931f34",
+      "bytes": 378,
+      "sha256": "0bc252a4113797d36ba2e127e03b3b5aaf08e24a32e6073bd1db13c816429fd8"
+    },
+    {
+      "path": "index.js",
+      "mode": "100644",
+      "git_blob": "04c07daced17d6cb83a2fd130a4dcc9470cbaccd",
+      "bytes": 2509,
+      "sha256": "3293b438a22bffbd90da51fb2fb63ca74d1f84c51f0af7443b0f270bf9d1cd14"
+    },
+    {
+      "path": "package.json",
+      "mode": "100644",
+      "git_blob": "b39696345c678aeeeabbbed3054f8a36c97bc379",
+      "bytes": 338,
+      "sha256": "77f8edf33efd4da627fb11cda7c692ab9b10bb46d24a5eab2f004db74886bae8"
+    },
+    {
+      "path": "test.js",
+      "mode": "100644",
+      "git_blob": "ccf936a9e75288d21b1baccad73dc955c0ac4f3f",
+      "bytes": 180,
+      "sha256": "679845e50ac72cf592b8b577e081d95763b9e9585a4af61d6baf68944ea382e0"
+    },
+    {
+      "path": "yarn.lock",
+      "mode": "100644",
+      "git_blob": "75adfa68e42f15abc76e82c5fef5fec8478e9106",
+      "bytes": 42237,
+      "sha256": "0f2706e8daedd49164a843a4e2d78d610459e76baef8a09c120ef6d9484d44cf"
+    }
+  ],
+  "source_archive": "docs/research/dedup-500/phashin475-full-source-20261015.json",
+  "source_archive_sha256": "98fe5ac4a316037ee62877e088a2c9a00cde3592e2d3e4a70753836b7a2a8111",
+  "scope": "All10tracked text blobs/root fully read, including entire yarn.lock now read (previous review only inventory/phash entry), whole index/testJS, Docker/compose/package/README/license/ignores. No trackedmedia. Lockread does not mean transitive npm package source audits or dependency installation.",
+  "runtime": {
+    "controls_per_run": 12,
+    "runs": 2,
+    "node": "v22.23.3",
+    "logs": [
+      {
+        "path": "docs/research/dedup-500/phashin475-local-controls-run1-20261015.log",
+        "sha256": "8b1fd9d00b47b481134cb855c3bdda2777d6ebdc81ed94f419288e6afaafc629"
+      },
+      {
+        "path": "docs/research/dedup-500/phashin475-local-controls-run2-20261015.log",
+        "sha256": "8b1fd9d00b47b481134cb855c3bdda2777d6ebdc81ed94f419288e6afaafc629"
+      }
+    ],
+    "scope": "Unchanged wholeindex.js executed in nativeNode VM with explicit require/Express/WebDriver/callbackscheduler/filesystem/clock/timer/response adapters. No socket/server/browser/navigation/request sent, npm dependencies installed, actualWebDriver thenable scheduling or response stream/capture qualification."
+  },
+  "findings": [
+    "Active service captures screenshots only, commented pHash require and no comparator call. Manualtest prints hash/error withoutassertion and references untrackedfixture; phash onlyappearsinlock notpackagedependencies.",
+    "saveScreenshot callback returnsundefined despite browser operation returnvalue. ActualWebDriver promise assimilation unqualified; nativecallback return proof only.",
+    "Registered catch(next) has no explicitend/cleanup; errorhandler forwarded synthetic error with0endcalls.",
+    "Polling timeout checked beforefileexistence; at15001ms reports500 eveniffileexists. Fixed25secdelete callback independentofresponse completion.",
+    "Response dispatch callsbrowserend immediately; actualbrowser/stream correctness not qualified.",
+    "Truthy nonstringURL forwarded, eachrequestallocatesnewbrowser with no admissioncap in service code; threeexplicitrequests allocate3adapter sessions.",
+    "Docker npm install uses onlypackage manifest beforeCOPYlock; locknotadmittedbybuild. EXPOSE8080 butcode/defaultcompose3000."
+  ],
+  "optimization_decision": "Not a duplicate algorithm candidate. For resource handling use awaited ownership, guaranteedteardown and completion-bound cleanup; existingread-only searchscope unchanged. No production adoption, newhashimplementation or measuredspeedup.",
+  "prior_review": "docs/research/dedup-500/phashin-source-review-audit-20261013.json"
+}

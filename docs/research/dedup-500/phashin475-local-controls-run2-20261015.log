@@ -1,0 +1,13 @@
+PASS GET missingURL400 before browser allocation
+PASS POST missingURL400 before browser allocation
+PASS GET target URL forwarded unchanged to browser adapter
+PASS POST truthy object URL forwarded without type validation
+PASS screenshot save callback discards operation result
+PASS timeout sends500 and closes browser after15000ms
+PASS deadline branch wins even when screenshot already exists
+PASS successful dispatch closes browser before response transfer completes
+PASS fixed25000ms cleanup may delete path during active transfer
+PASS registered chain error handler forwards error with no explicit browser teardown
+PASS three requests allocate three independent unbounded browser sessions
+PASS whole module requires no active phash comparator
+{"passed":12,"failed":0,"scope":"Unchanged whole index.js VM; explicit Express/WebDriver/browser chain scheduling/filesystem/clock/timer/response adapters. Native callback body/control-flow proof only, no actual WebDriver thenable promise integration, browser screenshot, response stream, network/server/dependency/install/performance qualification."}
