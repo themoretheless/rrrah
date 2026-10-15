@@ -2,7 +2,7 @@
   "index": 375,
   "repository": "Rayraegah/dhash",
   "commit": "930957107023a91fcefe01016ee371eeb9e8f5b1",
-  "review_scope": "All5 pinned text files read and Git-blob verified; whole original module executed with actualPillow11.3.0 in8 synthetic controls; no upstreamtests exist.",
+  "review_scope": "Complete5blob source review revalidated with fresh immutablecommit binding; existing8actualPillow controls retain unchanged historical pins. No fresh runtime/general precision/platform or adoption qualification.",
   "decision": "candidate-hash-only-no-equality-oracle",
   "finding": "Verified flat/alpha collisions, low-bit row order, unbounded and negative hash strings. Candidate-only; no duplicate classification or code adoption.",
   "available_source_evidence": [
@@ -14,6 +14,26 @@
       "truncated": false,
       "lines": 90,
       "source": true,
+      "test": false
+    },
+    {
+      "path": ".editorconfig",
+      "local": "03-editorconfig",
+      "url": "https://github.com/Rayraegah/dhash/blob/930957107023a91fcefe01016ee371eeb9e8f5b1/.editorconfig",
+      "sha256": "b25578e06575094adc073dcfd001504b7311ada971d63e359c30c5faf699a96b",
+      "truncated": false,
+      "lines": 9,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": ".gitignore",
+      "local": "04-gitignore",
+      "url": "https://github.com/Rayraegah/dhash/blob/930957107023a91fcefe01016ee371eeb9e8f5b1/.gitignore",
+      "sha256": "b25bb3c628a334c26c3d92aed4a01ce8a0f3d7572a3c8da1500871bb700e572b",
+      "truncated": false,
+      "lines": 151,
+      "source": false,
       "test": false
     }
   ],
@@ -45,5 +65,7 @@
       "test": false
     }
   ],
-  "complete_source_review": "rayraegah-dhash-complete-source-review-20261013.json"
+  "complete_source_review": "rayraegah-dhash-complete-source-review-20261013.json",
+  "full_repository_review_complete": true,
+  "source_review_reconciliation": "docs/research/dedup-500/rayraegah375-source-review-reconciliation-20261015.json"
 }

@@ -2,13 +2,13 @@
   "index": 19,
   "repository": "rivo/duplo",
   "commit": "751e882e6b8362459858d419208845cd200b7cde",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
-  "decision": "shortlist",
-  "finding": "Go Haar coefficients, 128-bit row/column dHash and histogram distance offer complementary visual evidence; test corpus exists.",
+  "review_scope": "All12textblobs fullyread and3embeddedpublicJPEGs visuallyinspected; size/GitblobSHA1/SHA256 and freshcommit/tree binding checked. Original12Go testfunctions/1example plus7authored controls pass in actualduplo/haar/selectedresize891127, retained2binary inventories checked. Separate generatedmodule dependency not upstreamlocked. No generalimage-quality/scalability/resource/platform or adoption proof.",
+  "decision": "reference",
+  "finding": "All12blobs/3embeddedJPEGs reviewed;20actualGo cases confirm dHash orderloss, histogram channeloverlap,49149flat references and non-atomic/unvalidated decoding. Haar candidate reference only; no adoption.",
   "license_metadata": "MIT",
   "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
   "tests_detected": 2,
-  "upstream_tests_run": false,
+  "upstream_tests_run": true,
   "available_source_evidence": [
     {
       "path": "hash.go",
@@ -49,6 +49,66 @@
       "lines": 458,
       "source": true,
       "test": true
+    },
+    {
+      "path": ".github/FUNDING.yml",
+      "local": "06-github--FUNDING.yml",
+      "url": "https://github.com/rivo/duplo/blob/751e882e6b8362459858d419208845cd200b7cde/.github/FUNDING.yml",
+      "sha256": "94bd8a100656cd2cc920a6ab04815d983270e922c017c842b725d7ec0c300d3e",
+      "truncated": false,
+      "lines": 1,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "doc.go",
+      "local": "07-doc.go",
+      "url": "https://github.com/rivo/duplo/blob/751e882e6b8362459858d419208845cd200b7cde/doc.go",
+      "sha256": "5c2b6c7882f662f19c0d289ec4d8d95bbffebcaf5bb20035d766f46b03110a82",
+      "truncated": false,
+      "lines": 13,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "haar/haar.go",
+      "local": "08-haar--haar.go",
+      "url": "https://github.com/rivo/duplo/blob/751e882e6b8362459858d419208845cd200b7cde/haar/haar.go",
+      "sha256": "d616d1a97f5be0ca0144cc1b678bd4097ab9e1f47795137d58e02ebb9af6b91b",
+      "truncated": false,
+      "lines": 138,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "haar/haar_test.go",
+      "local": "09-haar--haar_test.go",
+      "url": "https://github.com/rivo/duplo/blob/751e882e6b8362459858d419208845cd200b7cde/haar/haar_test.go",
+      "sha256": "0eaabc96f825d18449177b6609222b989fac1f37a7f5e9b45ef167028aedd82b",
+      "truncated": false,
+      "lines": 154,
+      "source": true,
+      "test": true
+    },
+    {
+      "path": "hamming.go",
+      "local": "10-hamming.go",
+      "url": "https://github.com/rivo/duplo/blob/751e882e6b8362459858d419208845cd200b7cde/hamming.go",
+      "sha256": "3fded48762b3d112f0da2cb0cf0b797487fa7e168a1d2626c22ef2f250436e19",
+      "truncated": false,
+      "lines": 23,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "store.go",
+      "local": "11-store.go",
+      "url": "https://github.com/rivo/duplo/blob/751e882e6b8362459858d419208845cd200b7cde/store.go",
+      "sha256": "11e25e667e125140587576ad60b89014f966288f1847602dc37ea671838aeb3c",
+      "truncated": false,
+      "lines": 497,
+      "source": true,
+      "test": false
     }
   ],
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
@@ -74,5 +134,12 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_review_complete": true,
+  "complete_source_review": "docs/research/dedup-500/duplo19-complete-source-review-20261015.json",
+  "runtime_audit": "docs/research/dedup-500/duplo19-native-controls-audit-20261015.json",
+  "upstream_test_functions": 12,
+  "upstream_examples": 1,
+  "authored_test_functions": 7,
+  "runtime_independent_audit": "docs/research/dedup-500/duplo19-native-independent-audit-20261015.json"
 }

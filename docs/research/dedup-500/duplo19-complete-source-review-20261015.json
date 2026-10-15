@@ -1,0 +1,21 @@
+{
+  "status": "complete12blob_source_review20_actual_go_cases",
+  "repository": "rivo/duplo",
+  "commit": "751e882e6b8362459858d419208845cd200b7cde",
+  "whole_repo_complete": true,
+  "scope": "All12textblobs fullyread and3embeddedpublicJPEGs visuallyinspected; size/GitblobSHA1/SHA256 and freshcommit/tree binding checked. Original12Go testfunctions/1example plus7authored controls pass in actualduplo/haar/selectedresize891127, retained2binary inventories checked. Separate generatedmodule dependency not upstreamlocked. No generalimage-quality/scalability/resource/platform or adoption proof.",
+  "source_manifest": "docs/research/dedup-500/duplo19-complete-source-20261015.json",
+  "runtime_audit": "docs/research/dedup-500/duplo19-native-controls-audit-20261015.json",
+  "runtime_audit_sha256": "b93324ba14d960ff7e87c520515a6eb8556fed18d83b59038ee05ba16434290b",
+  "findings": [
+    "dHash increments bit positions only when bit is set: shifted derivative patterns produce identical packed-eight-ones vector; ordinal arrangement lost. Actual8x8Gray inputs and realresize.",
+    "Uint8 chroma addition wraps before averaging; first chroma comparison cannot set its highbit. ActualconstantYCbCr input confirms allzero chromabits.",
+    "Histogram shifts chroma into low32bits, overlapping luminance. ActualYCbCr control gives bits8/12/29 instead of distinct8/44/61, high32bits unused.",
+    "Flat-image zero thresholds retain allzero coefficients: exactly49149bucket references per image despite TopCoefs40. Query allocates/scans all historicalcandidate slots, deletion retains slots by documenteddesign. No throughput/largecorpus benchmark.",
+    "Negative serialized length panics; truncateddecode replaces candidate slice before error but retains oldIDmap, corrupting preexistingstore state; unknownfutureversion999 accepted as currentformat. Benignsmall authoredmemory payloads only; no hugeallocation/fuzz/security-completion claim.",
+    "Haar and sparse signed-coefficient candidate retrieval are useful reference architecture, but zero-feature handling, auxiliary bitencoding, bounded/atomic loading and final pixel/file confirmation require independent implementation and qualification.",
+    "Originaltests exercise embeddedJPEG lookup, deletion/exchange/IDs/gob, basicHaar arithmetic and oneexample. Allpassed with selectedbackend; no original module/lock/fixtures on disk, broadprecision/resource/worker/sourceguard contracts absent.",
+    "MIT2015OliverRivo notice preserved, no foreign productioncode or assets adopted."
+  ],
+  "decision": "haar_candidate_reference_only_do_not_adopt_auxiliary_hash_or_unbounded_store"
+}

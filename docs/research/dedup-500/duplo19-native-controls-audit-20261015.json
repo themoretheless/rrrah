@@ -1,0 +1,60 @@
+{
+  "status": "verified_all_original_tests_example_and7_actual_go_counterexample_controls",
+  "source_manifest_sha256": "78895d5803c2e3f9cbc8d20977dd9c00ee4d94e78cd90d6a6e80fd7ac0987778",
+  "authored_test_sha256": "847f765007656d408a23221483a45d36ba648b57c683f99cb611f76e0b7d51ab",
+  "compiler_sha256": "516c1fbb53b5f8f4852f0c3c379d45bcff53a1032e5cd1a9ca1738f03ba07cb1",
+  "records": [
+    {
+      "target": "duplo",
+      "executable": "/private/tmp/rrrah-duplo19-native-20261015/duplo.test",
+      "executable_sha256": "7af817391f5f33d32c2def41e1bd174356b3463861b4f7bc85d5e12b9d689c19",
+      "fresh_inventory": [
+        "TestQuickSelect",
+        "TestAddBasic",
+        "TestQuery",
+        "TestDelete",
+        "TestIDs",
+        "TestExchange",
+        "TestGob",
+        "TestDHashDiscardsOrdinalArrangement",
+        "TestDHashChromaFirstBitsLostToUint8Averaging",
+        "TestHistogramChannelsOverlapInsteadOfOccupying64Bits",
+        "TestFlatImagePopulates49149BucketsDespiteTop40",
+        "TestNegativeSerializedCandidateLengthPanics",
+        "TestFailedDecodeLeavesExistingStoreInconsistent",
+        "TestFutureSerializationVersionAcceptedWithoutValidation",
+        "Example"
+      ],
+      "passed": 15,
+      "log_sha256": "0ad42b9214f716f77142574d467877a9c303a5cc491186093c97529aa60f7e10"
+    },
+    {
+      "target": "haar",
+      "executable": "/private/tmp/rrrah-duplo19-native-20261015/haar.test",
+      "executable_sha256": "ca81e9a400b8d38eda33a692771ec88ad2d54de4411fa99d4373fae928f0391c",
+      "fresh_inventory": [
+        "TestCoef",
+        "TestColorConversion",
+        "TestSingleRow",
+        "TestSingleColumn",
+        "TestMatrix4x4"
+      ],
+      "passed": 5,
+      "log_sha256": "983570d2c4691f98256d1a7e1f597ce6c7e66533e669a8f84ddd6bee5ea3525c"
+    }
+  ],
+  "original_test_functions": 12,
+  "original_examples": 1,
+  "authored_test_functions": 7,
+  "total_passed": 20,
+  "module_verification": "all modules verified",
+  "selected_dependency": {
+    "module": "github.com/nfnt/resize",
+    "version": "v0.0.0-20160724205520-891127d8d1b5",
+    "checksum": "h1:BvoENQQU+fZ9uukda/RzCAL/191HHwJA5b13R6diVlY="
+  },
+  "generated_module_sha256": "bb88031a2d1d7536d6e72eb6a4fa142f543e4059d4803b5df75d545a084e4faa",
+  "generated_sum_sha256": "ad2bdbc6535a6da2a5db9e0d911786d6fd5907794486149c6e6f3e58f7829d9c",
+  "first_authored_harness_failure": "Go vet rejected redundant OR in one authored assertion, before root-package test execution. Original source unchanged; first harness and log retained, repaired authored assertion only. Final count1run and both fresh retainedbinaries passed all20cases.",
+  "scope": "All12original textblobs unchanged; embedded3JPEGs decoded with actual GoJPEG/resize and visuallyinspected. Original12testfunctions/1example and7authored controls executed across actualduplo/haar packages, no testfilters or backend adapters. Original has no module/dependencylock; generated wrapper selects exactresize891127, not an originalupstream pin. No new hash/index adopted; no generalprecision/corpus/performance/platform/hardresource or complete serialization-security proof."
+}

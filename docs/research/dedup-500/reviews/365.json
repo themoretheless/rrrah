@@ -2,9 +2,9 @@
   "index": 365,
   "repository": "Nr90/imgsim",
   "commit": "5caa057144b0230beaffbf4d8e6fd8c914f7a50b",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All14text files fullyread and1publicgopherPNG visuallyinspected; all15Gitblobs size/SHA1/SHA256 verified with fresh immutablecommit/tree binding. Four unchanged upstreamGo testfunctions/sixsubcases and6authored functions passed with actuallockednfntresize891127,512independent pixelgrids/512Hammingpairs. Separate generatedmodule wrapper; no original source edits, broad imagequality/platform/resource or adoption qualification.",
   "decision": "reference",
-  "finding": "Go average/difference hash with tests; global candidates only, no crop verification.",
+  "finding": "All15blobs reviewed;4original+6authored Go tests pass with lockedresize. Flat-color/dimension collisions, negative-origin content loss and nilpanics confirmed; candidatehash only, no adoption.",
   "available_source_evidence": [
     {
       "path": "ahash.go",
@@ -45,12 +45,111 @@
       "lines": 71,
       "source": true,
       "test": true
+    },
+    {
+      "path": ".gitignore",
+      "local": "06-gitignore",
+      "url": "https://github.com/Nr90/imgsim/blob/5caa057144b0230beaffbf4d8e6fd8c914f7a50b/.gitignore",
+      "sha256": "e15b1b0e0f10012abb6f06891455da689a7a4ff323b70ce46144d8611b7d4d8a",
+      "truncated": false,
+      "lines": 1,
+      "source": false,
+      "test": false,
+      "binary": false
+    },
+    {
+      "path": "Gopkg.lock",
+      "local": "07-Gopkg.lock",
+      "url": "https://github.com/Nr90/imgsim/blob/5caa057144b0230beaffbf4d8e6fd8c914f7a50b/Gopkg.lock",
+      "sha256": "f9d3c4d69ff7773ff4128e44b038cb6e0a0f11234622be658ff0626a12fe03b4",
+      "truncated": false,
+      "lines": 15,
+      "source": false,
+      "test": false,
+      "binary": false
+    },
+    {
+      "path": "Gopkg.toml",
+      "local": "08-Gopkg.toml",
+      "url": "https://github.com/Nr90/imgsim/blob/5caa057144b0230beaffbf4d8e6fd8c914f7a50b/Gopkg.toml",
+      "sha256": "e5c034be644d1e751ca028283f6e0a660b5bd0aa3c6569d32f4dc042b4942410",
+      "truncated": false,
+      "lines": 34,
+      "source": false,
+      "test": false,
+      "binary": false
+    },
+    {
+      "path": "assets/README",
+      "local": "09-assets--README",
+      "url": "https://github.com/Nr90/imgsim/blob/5caa057144b0230beaffbf4d8e6fd8c914f7a50b/assets/README",
+      "sha256": "e99b851a6e7cd9e5d9a15dad672891360ad990dc7b63e120b21e90941118d6e1",
+      "truncated": false,
+      "lines": 3,
+      "source": false,
+      "test": false,
+      "binary": false
+    },
+    {
+      "path": "assets/gopher.png",
+      "local": "14-gopher.png",
+      "url": "https://github.com/Nr90/imgsim/blob/5caa057144b0230beaffbf4d8e6fd8c914f7a50b/assets/gopher.png",
+      "sha256": "355147a42877e326f7bd4caddaceb7ece2c2060d5046880ac78d409d0c72d83a",
+      "truncated": false,
+      "lines": null,
+      "source": false,
+      "test": false,
+      "binary": true
+    },
+    {
+      "path": "dhash_test.go",
+      "local": "10-dhash_test.go",
+      "url": "https://github.com/Nr90/imgsim/blob/5caa057144b0230beaffbf4d8e6fd8c914f7a50b/dhash_test.go",
+      "sha256": "5c55a1701ed8de7d2f20e69f2df264cd9bbb8c898cbc3ed7d4d876b58f80ec3f",
+      "truncated": false,
+      "lines": 38,
+      "source": true,
+      "test": true,
+      "binary": false
+    },
+    {
+      "path": "doc.go",
+      "local": "11-doc.go",
+      "url": "https://github.com/Nr90/imgsim/blob/5caa057144b0230beaffbf4d8e6fd8c914f7a50b/doc.go",
+      "sha256": "a732f4afd67e33a8a250f56cb6cb50d7b2ab87b88cb7109b1ceb2be35b455aaf",
+      "truncated": false,
+      "lines": 8,
+      "source": true,
+      "test": false,
+      "binary": false
+    },
+    {
+      "path": "grayscale.go",
+      "local": "12-grayscale.go",
+      "url": "https://github.com/Nr90/imgsim/blob/5caa057144b0230beaffbf4d8e6fd8c914f7a50b/grayscale.go",
+      "sha256": "a77f250a064133cb266c14ab23185b16139fb81b386c0fb7b69c6edbc8bc081e",
+      "truncated": false,
+      "lines": 18,
+      "source": true,
+      "test": false,
+      "binary": false
+    },
+    {
+      "path": "hash_test.go",
+      "local": "13-hash_test.go",
+      "url": "https://github.com/Nr90/imgsim/blob/5caa057144b0230beaffbf4d8e6fd8c914f7a50b/hash_test.go",
+      "sha256": "a987a28954402a542f9b5cbae307715c373f527255f15f09ac80d95d53381f0a",
+      "truncated": false,
+      "lines": 25,
+      "source": true,
+      "test": true,
+      "binary": false
     }
   ],
   "license_metadata": "MIT",
   "license_scope": "screening metadata; nested licenses require checking before copying",
   "tests_detected": 3,
-  "upstream_tests_run": false,
+  "upstream_tests_run": true,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
   "tree_truncated": false,
   "available_readme_license_evidence": [
@@ -74,5 +173,11 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_review_complete": true,
+  "complete_source_review": "docs/research/dedup-500/imgsim365-complete-source-review-20261015.json",
+  "runtime_audit": "docs/research/dedup-500/imgsim365-native-controls-audit-20261015.json",
+  "upstream_test_functions": 4,
+  "authored_test_functions": 6,
+  "runtime_independent_audit": "docs/research/dedup-500/imgsim365-native-independent-audit-20261015.json"
 }

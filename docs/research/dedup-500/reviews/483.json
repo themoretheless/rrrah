@@ -2,7 +2,7 @@
   "index": 483,
   "repository": "cryptoquick/sharp-blockhash",
   "commit": "3d0bfee9d116bf3a682ba97561dc6acfa06172f7",
-  "review_scope": "All6 pinned text files fully reviewed; all17 binary fixtures downloaded and Git-blob verified, not pixel reviewed. Six unmodified-wrapper controls with explicit mock dependencies; no realSharp/upstream tests.",
+  "review_scope": "All6text/17image blobs verified against full pinned Git tree and freshcommit/tree binding; alltext reread and all17singleframe publicfixtures visually inspected in labeled contact sheet. Historical6mockwrapper control/source/harness pins unchanged, no freshmock execution or realSharp/backend/upstreamMocha/perceptualquality/platform qualification.",
   "decision": "reject-wrapper-lifecycle-adoption",
   "finding": "Wrapper lifecycle bugs: absent no-input initialization, callbacks lost or ignored, duplicate stream inference. Six mocked controls; no code adoption.",
   "available_source_evidence": [
@@ -25,6 +25,26 @@
       "lines": 83,
       "source": true,
       "test": true
+    },
+    {
+      "path": ".gitignore",
+      "local": "complete-gitignore",
+      "url": "https://github.com/cryptoquick/sharp-blockhash/blob/3d0bfee9d116bf3a682ba97561dc6acfa06172f7/.gitignore",
+      "sha256": "67e8911fad44adb874c1b087f0d9a2a04af5159f3f9172e799a407ef204c2cc0",
+      "truncated": false,
+      "lines": 37,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "package.json",
+      "local": "complete-package.json",
+      "url": "https://github.com/cryptoquick/sharp-blockhash/blob/3d0bfee9d116bf3a682ba97561dc6acfa06172f7/package.json",
+      "sha256": "c96f6f3736b7fd7169445097615d67dd24fa3edb84e47ac0906ce1d8eea77b54",
+      "truncated": false,
+      "lines": 42,
+      "source": false,
+      "test": false
     }
   ],
   "license_metadata": "MIT",
@@ -55,5 +75,7 @@
       "test": false
     }
   ],
-  "complete_source_review": "sharp-blockhash-complete-source-review-20261013.json"
+  "complete_source_review": "sharp-blockhash-complete-source-review-20261013.json",
+  "full_repository_review_complete": true,
+  "source_review_reconciliation": "docs/research/dedup-500/legacy483-source-review-reconciliation-20261015.json"
 }

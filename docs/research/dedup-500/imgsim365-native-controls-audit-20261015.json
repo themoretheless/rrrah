@@ -1,0 +1,41 @@
+{
+  "status": "verified4original_and6authored_go_test_functions",
+  "source_manifest_sha256": "ffed02fce27005672c999afc3d3d1452a22069e1d116c172dc9a1cffed789b13",
+  "test_sha256": "22b31e840cb304fe9a34f328c6ff26366fa9b4e9148ec792f33cabf406e61dc6",
+  "executable_sha256": "a72da219880037918f1423e8b61cba40e156952617c42a6c6c3867bab61fc70b",
+  "compiler_sha256": "516c1fbb53b5f8f4852f0c3c379d45bcff53a1032e5cd1a9ca1738f03ba07cb1",
+  "fresh_inventory": [
+    "TestAverageHash",
+    "Test_mean",
+    "TestDifferenceHash",
+    "TestDistance",
+    "TestIndependentAverageOracle256Grids",
+    "TestIndependentDifferenceOracle256Grids",
+    "TestDistinctFlatColorsAndDimensionsCollide",
+    "TestNegativeOriginLosesPixelContent",
+    "TestDistanceAndFormatting512IndependentPairs",
+    "TestNilInputPanicsRatherThanTypedRefusal"
+  ],
+  "original_test_functions": [
+    "TestAverageHash",
+    "TestDifferenceHash",
+    "TestDistance",
+    "Test_mean"
+  ],
+  "passed_top_level": 10,
+  "original_subcases": 6,
+  "independent_pixel_grids": 512,
+  "independent_distance_pairs": 512,
+  "module_verification": "all modules verified",
+  "compiled_dependency": {
+    "module": "github.com/nfnt/resize",
+    "version": "v0.0.0-20160724205520-891127d8d1b5",
+    "checksum": "h1:BvoENQQU+fZ9uukda/RzCAL/191HHwJA5b13R6diVlY="
+  },
+  "generated_module_sha256": "bcb364d94df11c70fb0fa9b62af60678413226fd5c42f5c996a8b2a75790316a",
+  "generated_sum_sha256": "ad2bdbc6535a6da2a5db9e0d911786d6fd5907794486149c6e6f3e58f7829d9c",
+  "successful_log_sha256": "b599c101c5aa4bddd8bbfa84fdf43b88f7f707757a3e61a979e095b503a63d6c",
+  "initial_failure_log_sha256": "9eedd902806d5cc22a7dbba8444e128727082fce76b7b9ee13fb194abf44a68b",
+  "initial_failure": "Binary first invoked from repositoryRoot rather than fixtureworkingdirectory; originaltests could not open assets/gopher.png and panicked after logging errors. Source/binary unchanged, rerun from isolated source directory passed all10top-level tests.",
+  "scope": "All15original source/fixture blobs byte unchanged. GeneratedGo module selects exact lockedresize891127 revision, actual Go1.27.2 standardPNG decoding and realresize, no adapters. Single original publicPNG visually inspected; authored synthetic Graygrids/flat/negativeorigin/nil inputs. Original6subcases retained, independent512grids and512Hammingpairs. No fullimage-format/crop/general precision/scale/resource/platform/backend source review or production adoption proof."
+}

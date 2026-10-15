@@ -2,9 +2,9 @@
   "index": 115,
   "repository": "jpillora/dedup",
   "commit": "1b1e53a4ac8af7d1ba30b83c3e16b0ba3c5f322c",
-  "review_scope": "All14regulartext source/config/example/lock/license blobs fullyread, each rawsize/GitblobSHA1/SHA256 verified and freshlybound to immutablecommit tree. Static findings only. No Go compile, originalCLI/helper/worker/race-detector/API/dependency/platform/runtime qualification. Only public7/8byte examples copied as sourceevidence, no actual file deletion/merge/network/install/release or productioncode adoption.",
+  "review_scope": "All14source blobs staticallyreviewed, augmented by6whole-original-Go authored controls with actualMD5/SHA1/SHA256/filesystem/one-workerqueue and original locked8dependencies. Keep/Dryrun only, no CLI Main/deletion/moves/multiworker race/platform/generalidentity/adoption qualification.",
   "decision": "reference",
-  "finding": "Full14blob static review: hashIO errors ignored, separateindex lookupinsert, possible doublechannelclose and merge/sourceguard gaps. Go notfound onPATH; no runtime/destructiveoperation/sourceadoption qualification.",
+  "finding": "Full14blob source review plus6actualGo controls: originalhashFile ignores actualdirectoryreaderror and returns emptyfiledigest; safe one-worker keep-mode and3hashalgorithms checked. No deletion/moves or adoption.",
   "available_source_evidence": [
     {
       "path": "main.go",
@@ -156,5 +156,9 @@
     }
   ],
   "full_repository_review_complete": true,
-  "complete_source_review": "docs/research/dedup-500/jpillora115-complete-static-review-20261015.json"
+  "complete_source_review": "docs/research/dedup-500/jpillora115-complete-static-review-20261015.json",
+  "runtime_audit": "docs/research/dedup-500/jpillora115-native-controls-audit-20261015.json",
+  "runtime_executed": true,
+  "authored_controls_passed": 6,
+  "runtime_independent_audit": "docs/research/dedup-500/jpillora115-native-independent-audit-20261015.json"
 }

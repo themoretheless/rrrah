@@ -1,0 +1,23 @@
+=== RUN   TestRrrahIdenticalPercentageExceeds100
+    rrrah_test.go:4: requested1 identical percentage200
+    rrrah_test.go:4: requested2 identical percentage100
+    rrrah_test.go:4: requested64 identical percentage112.5
+    rrrah_test.go:4: requested128 identical percentage100
+    rrrah_test.go:4: requested512 identical percentage100
+--- PASS: TestRrrahIdenticalPercentageExceeds100 (0.00s)
+=== RUN   TestRrrahZeroLengthReturnsNaNWithoutError
+--- PASS: TestRrrahZeroLengthReturnsNaNWithoutError (0.00s)
+=== RUN   TestRrrahUnsupportedExtensionPanics
+--- PASS: TestRrrahUnsupportedExtensionPanics (0.00s)
+=== RUN   TestRrrahSecondOpenFailureRetainsFirstDescriptors
+    rrrah_test.go:7: second-open failures retain20extra descriptors with GCdisabled
+--- PASS: TestRrrahSecondOpenFailureRetainsFirstDescriptors (0.00s)
+=== RUN   TestRrrahMismatchedHashLengthPanics
+--- PASS: TestRrrahMismatchedHashLengthPanics (0.00s)
+=== RUN   TestRrrahTranslatedBoundsChangeHashLength
+--- PASS: TestRrrahTranslatedBoundsChangeHashLength (0.00s)
+=== RUN   TestRrrahIndependentRowColumnOracle100Grids
+--- PASS: TestRrrahIndependentRowColumnOracle100Grids (0.00s)
+=== RUN   TestRrrahDistinctUniformPixelsReported100
+--- PASS: TestRrrahDistinctUniformPixelsReported100 (0.00s)
+PASS

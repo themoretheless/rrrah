@@ -2,7 +2,7 @@
   "index": 477,
   "repository": "cbulock/ahash",
   "commit": "b92ced669d73a628e5f3d62672eec0a0e4f30433",
-  "review_scope": "complete pinned4file source review; all text fully read and Git blobs verified; PHP/GD not executed",
+  "review_scope": "Complete4blob static source review reread and revalidated with fresh immutablecommit/tree binding and unchanged historical audit pins. No PHP/GD execution, quality/platform or sourceadoption qualification.",
   "decision": "reject-uninitialized-image-dispatch",
   "finding": "Full4file review: undefined image metadata prevents initialized decoder dispatch; no runtime or adoption.",
   "available_source_evidence": [
@@ -14,6 +14,16 @@
       "truncated": false,
       "lines": 64,
       "source": true,
+      "test": false
+    },
+    {
+      "path": "composer.json",
+      "local": "03-composer.json",
+      "url": "https://github.com/cbulock/ahash/blob/b92ced669d73a628e5f3d62672eec0a0e4f30433/composer.json",
+      "sha256": "593049518bd083179395ebface845dcaa84925a31647c554e596e0c20fd52638",
+      "truncated": false,
+      "lines": 24,
+      "source": false,
       "test": false
     }
   ],
@@ -46,5 +56,7 @@
     }
   ],
   "complete_source_review": "docs/research/dedup-500/ahash-complete-source-review-20261013.json",
-  "complete_source_audit": "docs/research/dedup-500/ahash-complete-source-audit-20261013.json"
+  "complete_source_audit": "docs/research/dedup-500/ahash-complete-source-audit-20261013.json",
+  "full_repository_review_complete": true,
+  "source_review_reconciliation": "docs/research/dedup-500/ahash477-source-review-reconciliation-20261015.json"
 }

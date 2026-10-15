@@ -1,0 +1,77 @@
+{
+  "status": "passed6_whole_original_go_program_authored_controls",
+  "prepared_manifest_sha256": "ac55cddaf89918776b5cdb852a7186faa4be3544c9b965d7794509064052b4cc",
+  "source_pins": {
+    "main.go": "3a0c40799e6fa919f4d1e0bcf2dad82e9b596c43c4b4c3e42349d4fbbd3266da",
+    "go.mod": "16e2d1b0644d6b526302d302635cd7502d9bbaf7e854e0c7d8628365d9e29ab0",
+    "go.sum": "a6b209082939f49c04336439a5044a3bff486facdf941209435dc8d79d2fb2bf"
+  },
+  "test_sha256": "c8939a580e6c6de721b43e7d09fe661f4bf870797e49d72c179b05fce5b66911",
+  "compiler_sha256": "516c1fbb53b5f8f4852f0c3c379d45bcff53a1032e5cd1a9ca1738f03ba07cb1",
+  "compiler_version": "go version go1.27.2 darwin/arm64",
+  "executable": "/private/tmp/rrrah-jpillora115-native-20261015/controls.test",
+  "executable_sha256": "c17b24f5581355ea1331683bfb9dd8d3fe08014b0aaf30dc9fc62e54f7776267",
+  "fresh_inventory": [
+    "TestOriginalHashFileMatchesThreeStandardAlgorithms",
+    "TestOriginalHashFileIgnoresActualDirectoryReadError",
+    "TestOriginalScanIndexesDistinctContentsWithoutMutation",
+    "TestOriginalScanDuplicatesRemainPresentInKeepMode",
+    "TestOriginalScanHiddenAndNestedAdmission",
+    "TestOriginalQueueSingleWorkerConsumesEveryEnqueuedPath"
+  ],
+  "passed": [
+    "TestOriginalHashFileMatchesThreeStandardAlgorithms",
+    "TestOriginalHashFileIgnoresActualDirectoryReadError",
+    "TestOriginalScanIndexesDistinctContentsWithoutMutation",
+    "TestOriginalScanDuplicatesRemainPresentInKeepMode",
+    "TestOriginalScanHiddenAndNestedAdmission",
+    "TestOriginalQueueSingleWorkerConsumesEveryEnqueuedPath"
+  ],
+  "log_sha256": "82c13d0fdc908da8a557ec920d7235e68c1fdd9cd06db34fc336896b59a5263e",
+  "module_verification": "all modules verified",
+  "compiled_modules": [
+    {
+      "module": "github.com/hashicorp/errwrap",
+      "version": "v1.1.0",
+      "checksum": "h1:OxrOeh75EUXMY8TBjag2fzXGZ40LB6IKw45YeGUDY2I="
+    },
+    {
+      "module": "github.com/hashicorp/go-multierror",
+      "version": "v1.1.1",
+      "checksum": "h1:H5DkEtf6CXdFp0N0Em5UCwQpXMWke8IA0+lD48awMYo="
+    },
+    {
+      "module": "github.com/jpillora/ansi",
+      "version": "v1.0.3",
+      "checksum": "h1:nn4Jzti0EmRfDxm7JtEs5LzCbNwd5sv+0aE+LdS9/ZQ="
+    },
+    {
+      "module": "github.com/jpillora/opts",
+      "version": "v1.2.3",
+      "checksum": "h1:Q0YuOM7y0BlunHJ7laR1TUxkUA7xW8A2rciuZ70xs8g="
+    },
+    {
+      "module": "github.com/posener/complete",
+      "version": "v1.2.3",
+      "checksum": "h1:NP0eAhjcjImqslEwo/1hq7gpajME0fTLTezBKDqfXqo="
+    },
+    {
+      "module": "golang.org/x/crypto",
+      "version": "v0.14.0",
+      "checksum": "h1:wBqGXzWJW6m1XrIKlAH0Hs1JJ7+9KBwnIO8v66Q9cHc="
+    },
+    {
+      "module": "golang.org/x/sys",
+      "version": "v0.14.0",
+      "checksum": "h1:Vz7Qs629MkJkGyHxUlRHizWJRG2j8fbQKjELVSNhy7Q="
+    },
+    {
+      "module": "golang.org/x/term",
+      "version": "v0.13.0",
+      "checksum": "h1:bb+I9cTfFazGW51MZqBVmZy7+JEJMouUHTUSKVQLBek="
+    }
+  ],
+  "build_info": "/private/tmp/rrrah-jpillora115-native-20261015/controls.test: go1.27.2\n\tpath\tgithub.com/jpillora/dedup.test\n\tmod\tgithub.com/jpillora/dedup\t(devel)\t\n\tdep\tgithub.com/hashicorp/errwrap\tv1.1.0\th1:OxrOeh75EUXMY8TBjag2fzXGZ40LB6IKw45YeGUDY2I=\n\tdep\tgithub.com/hashicorp/go-multierror\tv1.1.1\th1:H5DkEtf6CXdFp0N0Em5UCwQpXMWke8IA0+lD48awMYo=\n\tdep\tgithub.com/jpillora/ansi\tv1.0.3\th1:nn4Jzti0EmRfDxm7JtEs5LzCbNwd5sv+0aE+LdS9/ZQ=\n\tdep\tgithub.com/jpillora/opts\tv1.2.3\th1:Q0YuOM7y0BlunHJ7laR1TUxkUA7xW8A2rciuZ70xs8g=\n\tdep\tgithub.com/posener/complete\tv1.2.3\th1:NP0eAhjcjImqslEwo/1hq7gpajME0fTLTezBKDqfXqo=\n\tdep\tgolang.org/x/crypto\tv0.14.0\th1:wBqGXzWJW6m1XrIKlAH0Hs1JJ7+9KBwnIO8v66Q9cHc=\n\tdep\tgolang.org/x/sys\tv0.14.0\th1:Vz7Qs629MkJkGyHxUlRHizWJRG2j8fbQKjELVSNhy7Q=\n\tdep\tgolang.org/x/term\tv0.13.0\th1:bb+I9cTfFazGW51MZqBVmZy7+JEJMouUHTUSKVQLBek=\n\tbuild\t-buildmode=exe\n\tbuild\t-compiler=gc\n\tbuild\tDefaultGODEBUG=containermaxprocs=0,cryptocustomrand=1,decoratemappings=0,gotestjsonbuildtext=1,httpcookiemaxnum=0,httplaxcontentlength=1,httpmuxgo121=1,httpservecontentkeepheaders=1,httpservecontentmaxranges=1,multipathtcp=0,randseednop=0,rsa1024min=0,tlsmlkem=0,tlssecpmlkem=0,tlssha1=1,tracebacklabels=0,updatemaxprocs=0,urlmaxqueryparams=0,urlstrictcolons=0,winreadlinkvolume=0,winsymlink=0,x509negativeserial=1,x509rsacrt=0,x509sha256skid=0,x509sslcertoverrideplatform=0,x509usepolicies=0\n\tbuild\tCGO_ENABLED=1\n\tbuild\tCGO_CFLAGS=\n\tbuild\tCGO_CPPFLAGS=\n\tbuild\tCGO_CXXFLAGS=\n\tbuild\tCGO_LDFLAGS=\n\tbuild\tGOARCH=arm64\n\tbuild\tGOOS=darwin\n\tbuild\tGOARM64=v8.0\n",
+  "verification_limit": "Initial offline verification needed historicalerrwrap1.0.0metadata; isolated metadata fetch completed and final offline Go modverify passes. Full go list -m all still requires additional unusedgraphmetadata; not claimed. Actual8linkedmodules independently read from binarybuildinfo and matched unchangedoriginalgo.sum.",
+  "scope": "Whole original main.go and originalgo.mod/sum byte unchanged;6authored actual filesystem/hash/queue/keep-mode tests. Original CLI Main notcalled, Keep=true/Merge=false/Dryrun=true for scan cases; no actual deletion/moves or private input. Real multiworker race/hash collision/source mutation/platform/performance/general identity proof remains separate. Actual original main.go compiled unchanged using originalgo.mod/sum with lockedpublicdependencies downloaded only to owned temporarycache. Actual directory read error gives same hash as validemptyfile because originalhelper ignores io.Copyerror; CLI normal scan skips directories, so helper-error evidence does not prove wholeCLI falsepositive. Dependency sources not fullyreviewed; no multiworker race detector/release/crossplatform/generalaccuracy or Rootadoption claim."
+}

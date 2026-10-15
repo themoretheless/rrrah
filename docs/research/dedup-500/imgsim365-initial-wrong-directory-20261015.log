@@ -1,0 +1,26 @@
+=== RUN   TestAverageHash
+    ahash_test.go:14: failed to open image: open assets/gopher.png: no such file or directory
+    ahash_test.go:18: failed to decode image: invalid argument
+=== RUN   TestAverageHash/gopher_image
+--- FAIL: TestAverageHash (0.00s)
+    --- FAIL: TestAverageHash/gopher_image (0.00s)
+panic: runtime error: invalid memory address or nil pointer dereference [recovered, repanicked]
+[signal SIGSEGV: segmentation violation code=0x2 addr=0x20 pc=0x104f5b924]
+
+goroutine 19 [running]:
+testing.tRunner.func1.2({0x1050de148, 0x105119560})
+	/Users/themoretheless/.codex/tmp/rrrah-go-1.27.2-20261012/go/src/testing/testing.go:2125 +0x1a0
+testing.tRunner.func1()
+	/Users/themoretheless/.codex/tmp/rrrah-go-1.27.2-20261012/go/src/testing/testing.go:2128 +0x2c8
+panic({0x1050de148?, 0x105119560?})
+	/Users/themoretheless/.codex/tmp/rrrah-go-1.27.2-20261012/go/src/runtime/panic.go:859 +0x120
+github.com/nfnt/resize.Resize(0x8, 0x8, {0x0, 0x0}, 0x0)
+	/private/tmp/rrrah-imgsim365-native-20261015/modules/github.com/nfnt/resize@v0.0.0-20160724205520-891127d8d1b5/resize.go:82 +0x34
+github.com/Nr90/imgsim.AverageHash({0x0?, 0x0?})
+	/private/tmp/rrrah-imgsim365-native-20261015/ahash.go:12 +0x38
+github.com/Nr90/imgsim.TestAverageHash.func1(0xaa3bda5c488)
+	/private/tmp/rrrah-imgsim365-native-20261015/ahash_test.go:33 +0x2c
+testing.tRunner(0xaa3bda5c488, 0xaa3bda1a490)
+	/Users/themoretheless/.codex/tmp/rrrah-go-1.27.2-20261012/go/src/testing/testing.go:2195 +0xc4
+created by testing.(*T).Run in goroutine 18
+	/Users/themoretheless/.codex/tmp/rrrah-go-1.27.2-20261012/go/src/testing/testing.go:2260 +0x3b8

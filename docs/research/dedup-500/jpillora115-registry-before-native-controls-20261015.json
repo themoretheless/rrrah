@@ -1,0 +1,160 @@
+{
+  "index": 115,
+  "repository": "jpillora/dedup",
+  "commit": "1b1e53a4ac8af7d1ba30b83c3e16b0ba3c5f322c",
+  "review_scope": "All14regulartext source/config/example/lock/license blobs fullyread, each rawsize/GitblobSHA1/SHA256 verified and freshlybound to immutablecommit tree. Static findings only. No Go compile, originalCLI/helper/worker/race-detector/API/dependency/platform/runtime qualification. Only public7/8byte examples copied as sourceevidence, no actual file deletion/merge/network/install/release or productioncode adoption.",
+  "decision": "reference",
+  "finding": "Full14blob static review: hashIO errors ignored, separateindex lookupinsert, possible doublechannelclose and merge/sourceguard gaps. Go notfound onPATH; no runtime/destructiveoperation/sourceadoption qualification.",
+  "available_source_evidence": [
+    {
+      "path": "main.go",
+      "local": "02-main.go",
+      "url": "https://github.com/jpillora/dedup/blob/1b1e53a4ac8af7d1ba30b83c3e16b0ba3c5f322c/main.go",
+      "sha256": "3a0c40799e6fa919f4d1e0bcf2dad82e9b596c43c4b4c3e42349d4fbbd3266da",
+      "truncated": false,
+      "lines": 398,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": ".github/Dockerfile",
+      "local": "03-Dockerfile",
+      "url": "https://github.com/jpillora/dedup/blob/1b1e53a4ac8af7d1ba30b83c3e16b0ba3c5f322c/.github/Dockerfile",
+      "sha256": "9473431ccf910e5c88ea0badc7174a2b1a705cdfa608449acb20463ec573fac4",
+      "truncated": false,
+      "lines": 16,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": ".github/goreleaser.yml",
+      "local": "04-goreleaser.yml",
+      "url": "https://github.com/jpillora/dedup/blob/1b1e53a4ac8af7d1ba30b83c3e16b0ba3c5f322c/.github/goreleaser.yml",
+      "sha256": "222a59f2d58c9c2be84e5a52b6eb9337c665777b4516045a65d4a796147bdedd",
+      "truncated": false,
+      "lines": 39,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "local": "05-ci.yml",
+      "url": "https://github.com/jpillora/dedup/blob/1b1e53a4ac8af7d1ba30b83c3e16b0ba3c5f322c/.github/workflows/ci.yml",
+      "sha256": "6f705dc545731002df6c161ef700af22743eeb1c0c49b8bf4b6ba145bfc8b40a",
+      "truncated": false,
+      "lines": 87,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": ".gitignore",
+      "local": "06-gitignore",
+      "url": "https://github.com/jpillora/dedup/blob/1b1e53a4ac8af7d1ba30b83c3e16b0ba3c5f322c/.gitignore",
+      "sha256": "cb568f716e3315bcebfc75bbc274b56577c2734ec3da6729ffac15919f416240",
+      "truncated": false,
+      "lines": 24,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "example/bar/bar.txt",
+      "local": "07-bar.txt",
+      "url": "https://github.com/jpillora/dedup/blob/1b1e53a4ac8af7d1ba30b83c3e16b0ba3c5f322c/example/bar/bar.txt",
+      "sha256": "08bd2d247cc7aa38b8c4b7fd20ee7edad0b593c3debce92f595c9d016da40bae",
+      "truncated": false,
+      "lines": 1,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "example/bar/foo-copy.txt",
+      "local": "08-foo-copy.txt",
+      "url": "https://github.com/jpillora/dedup/blob/1b1e53a4ac8af7d1ba30b83c3e16b0ba3c5f322c/example/bar/foo-copy.txt",
+      "sha256": "ddab29ff2c393ee52855d21a240eb05f775df88e3ce347df759f0c4b80356c35",
+      "truncated": false,
+      "lines": 1,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "example/bar/foo.txt",
+      "local": "09-bar-foo.txt",
+      "url": "https://github.com/jpillora/dedup/blob/1b1e53a4ac8af7d1ba30b83c3e16b0ba3c5f322c/example/bar/foo.txt",
+      "sha256": "ddab29ff2c393ee52855d21a240eb05f775df88e3ce347df759f0c4b80356c35",
+      "truncated": false,
+      "lines": 1,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "example/foo/bazz.txt",
+      "local": "10-bazz.txt",
+      "url": "https://github.com/jpillora/dedup/blob/1b1e53a4ac8af7d1ba30b83c3e16b0ba3c5f322c/example/foo/bazz.txt",
+      "sha256": "5b6b82e8c1a8780b4ee0f29b76f2a75365a390a01eb09ffd465029b791f2040e",
+      "truncated": false,
+      "lines": 1,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "example/foo/foo.txt",
+      "local": "11-foo-foo.txt",
+      "url": "https://github.com/jpillora/dedup/blob/1b1e53a4ac8af7d1ba30b83c3e16b0ba3c5f322c/example/foo/foo.txt",
+      "sha256": "ddab29ff2c393ee52855d21a240eb05f775df88e3ce347df759f0c4b80356c35",
+      "truncated": false,
+      "lines": 1,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "go.mod",
+      "local": "12-go.mod",
+      "url": "https://github.com/jpillora/dedup/blob/1b1e53a4ac8af7d1ba30b83c3e16b0ba3c5f322c/go.mod",
+      "sha256": "16e2d1b0644d6b526302d302635cd7502d9bbaf7e854e0c7d8628365d9e29ab0",
+      "truncated": false,
+      "lines": 17,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "go.sum",
+      "local": "13-go.sum",
+      "url": "https://github.com/jpillora/dedup/blob/1b1e53a4ac8af7d1ba30b83c3e16b0ba3c5f322c/go.sum",
+      "sha256": "a6b209082939f49c04336439a5044a3bff486facdf941209435dc8d79d2fb2bf",
+      "truncated": false,
+      "lines": 41,
+      "source": false,
+      "test": false
+    }
+  ],
+  "license_metadata": "MIT",
+  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "tests_detected": 0,
+  "upstream_tests_run": false,
+  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tree_truncated": false,
+  "available_readme_license_evidence": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "url": "https://github.com/jpillora/dedup/blob/1b1e53a4ac8af7d1ba30b83c3e16b0ba3c5f322c/README.md",
+      "sha256": "347cddd216d56ed63f4843b90f592bba3fa3decb8a51d521ccc5c070d6d88c72",
+      "truncated": false,
+      "lines": 120,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "url": "https://github.com/jpillora/dedup/blob/1b1e53a4ac8af7d1ba30b83c3e16b0ba3c5f322c/LICENSE",
+      "sha256": "048b252033c0c357931c3fd0619b978b05a3e51700b55d61cb1cedddaf997f89",
+      "truncated": false,
+      "lines": 22,
+      "source": false,
+      "test": false
+    }
+  ],
+  "full_repository_review_complete": true,
+  "complete_source_review": "docs/research/dedup-500/jpillora115-complete-static-review-20261015.json"
+}
