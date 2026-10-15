@@ -1,0 +1,54 @@
+{
+  "status": "compiled_opt3_not_timed",
+  "protocol": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-durable-actual-benchmark-v5-protocol-20261016.json",
+  "protocol_sha256": "8c79ef83a7aa598f7806cd4895ccd62d1405a642f8fbf9a695ba8db34f4ddf39",
+  "producer_sha256": "35610e9f4a22c8149b2065f823e39f0430827be8fbdbdcf9d8466b6a6287fb74",
+  "manifest_sha256": "9080ccb72e554a9b59359c0bcfc8b881f977e16804e4058ccc62b195001b1f08",
+  "command": [
+    "cargo",
+    "+stable",
+    "test",
+    "--locked",
+    "--offline",
+    "-p",
+    "rrrah-dedup",
+    "--features",
+    "decode",
+    "--lib",
+    "--no-run",
+    "--message-format=json",
+    "--jobs",
+    "2",
+    "--config",
+    "profile.test.lto=\"off\"",
+    "--config",
+    "profile.test.package.rrrah-dedup.opt-level=3",
+    "--config",
+    "profile.test.package.rrrah-dedup.debug=0",
+    "--config",
+    "profile.test.package.rrrah-decode.debug=0",
+    "--target-dir",
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/target"
+  ],
+  "profile": {
+    "opt_level": "3",
+    "debuginfo": 0,
+    "debug_assertions": true,
+    "overflow_checks": true,
+    "test": true
+  },
+  "compiler": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: aarch64-apple-darwin\nrelease: 1.98.1\nLLVM version: 22.1.8\n",
+  "binary": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/actual-benchmark-v5/engine-opt3",
+  "binary_sha256": "5e33e30afb9f3efce378291f14f107eee5be85d853ea40b468361daf22b1cf90",
+  "inventory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/actual-benchmark-v5/inventory.log",
+  "inventory_sha256": "bd8549728a76d708c58846afd63afd61aaac5f9c12312d705cec0119d06e2c55",
+  "logs": {
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/actual-benchmark-v5/cargo-json.log": "6235d7deeace742fd4fc1d5c86627c792dff5071418137f936bf5a8a48f10c10",
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/20261015-common-v5/artifacts/actual-benchmark-v5/cargo-stderr.log": "54ffd6508f3748c0707355a8ea048518ca5394646c705db9b1902af78cbc58f1"
+  },
+  "full_gate_pins": {
+    "baseline": "2af08e45c2da609def4994f8b01f2f19c5de0353b577847c75e1c1d790cdcb3b",
+    "candidate": "d45f4d9b06ebd7f938ef69aa19a8982eeda331b71e8e5c7ea2c64e3af459a8e5"
+  },
+  "scope": "Both full162target correctnessaudits admitted, samefrozen3378sourcecandidate opt3libtestbinary withactualenginebenchmark retained. Completeopt3librarytests not rerun here; no timing/speedup/productionadoption."
+}
