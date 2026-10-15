@@ -1,0 +1,33 @@
+{
+  "status": "verified_complete_pinned_source_lock_metadata_banner_and36_boundary_controls",
+  "whole_repo_complete": true,
+  "whole_implementation_complete": true,
+  "repository": "gkamradt/SemanticDeduplicator",
+  "commit": "868399b68bc33e92c94f84b31c852d5866964235",
+  "blobs": 9,
+  "canonical_trees": 4,
+  "acquisition": "docs/research/dedup-500/semantic97-fetched-source-pins-20261016.json",
+  "acquisition_sha256": "1afef227d993f544b7d66b9013f7e65769e430ad99ab65cafded09de3c65cb1a",
+  "auditor_sha256": "c8c2a4d3b7292d4c5ff71ac9d00d4a94b496938c58366d1ab524d7148d308e38",
+  "controls": "docs/research/dedup-500/semantic97-native-controls-20261016.json",
+  "controls_sha256": "7207044b370bb339b4ed1943c7d32d694287853b4e079757ad0cdcb9047722d3",
+  "media_scope": "No tracked binary assets. ExternalREADME algorithmexample banner viewedfull1616x706. Exampleusesadd_items absentfromcurrentAPI; staticdoc mismatch. No videos.",
+  "license": "MIT LICENSE fully read; no production code copied.",
+  "lock_scope": "23package records/versions/dependencies/extras and445distributionhash syntax structurally reviewed; not dependency-source/artifactdownload/Poetrycontenthash or originalenv verification.",
+  "upstream_tests_run": false,
+  "upstream_test_scope": "All7originaltests fullyread; require actualmodel/API semantics andcredentials, so notexecuted or replaced withfake semantic claims.",
+  "native_scope": "Complete unchanged originalmain/utils/init modules imported, realruntimeNumPy numerical operations. Explicit fakeOpenAI SDKtransport/error API and no-opdotenv adapter inserted before imports; ownliteral APIkeys only. DeterministicLLM/embedding outputs andrecordedsleep replace remote services/waits.18boundarycontrols twice; no upstreamsemantic APItests run.",
+  "findings": [
+    "Unbounded integerLLMscore200accepted2.0; decimalstringraises. Zero/nan vectors andnanthreshold silently exclude candidates; incompatible embedding shape raises.",
+    "Same-name candidates: deletion finds byname andremoves firstdifferentvector object instead of selectedsecond object.",
+    "Embedding failure after rename leaves changedname witholdvector; formatteddict returnsmutable provenance alias.",
+    "Constructor overwrites globalSDKkey; retryhandlesServiceUnavailable3attempts with1.5/3sec sleeps, othererror policies notqualified.",
+    "Cosine prefilter scores everyexisting item thensequentialremoteLLM perthresholdcandidate, no budget/cancel/batch/index. Static complexity/resource observation, notperformance measurement."
+  ],
+  "decision": "Reference two-stage candidate verification concept, reject textLLM semantic consolidation as image/file identity. Preserve provenance/objectidentity and atomicembedding update lessons; no adoption/speedclaim.",
+  "limits": [
+    "NumPy runtime version differsfromlocked1.25.2; originalPython3.9/fullPoetryenvironment/OpenAI0.27.10 SDK/dotenv/fullnetwork/upstream7semantic tests notqualified.",
+    "Fake remoteoutputs prove mechanics/boundaries only, not semantic accuracy/embedding model quality/cost/performance/platforms.",
+    "No realcredentials/user.env loaded, no network/API calls, no productioncodecopy/adoption."
+  ]
+}
