@@ -7,7 +7,13 @@ members = [
     "crates/rrrah-cache",
     "crates/rrrah-memory",
     "crates/rrrah-swap",
+    "crates/rrrah-color",
+    "crates/rrrah-demosaic",
+    "crates/rrrah-develop",
     "crates/rrrah-core",
+    "crates/rrrah-raw",
+    "crates/rrrah-mesh",
+    "crates/rrrah-vector",
     "crates/rrrah-cuda",
     "crates/rrrah-decode",
     "crates/rrrah-gpu",
@@ -68,6 +74,8 @@ lto = "thin"
 strip = "symbols"
 
 [patch.crates-io]
+wgpu-hal = { path = "vendor/wgpu-hal" }
+image = { path = "vendor/image" }
 hayro = { path = "vendor/hayro" }
 moxcms = { path = "vendor/moxcms" }
 hayro-interpret = { path = "vendor/hayro-interpret" }

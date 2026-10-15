@@ -2793,15 +2793,7 @@ mod file_input_tests {
     }
 }
 
-/// Explicit display interpretation; RPF has no universally inferred RGB profile
-/// or alpha association. Channel indices address color and matte banks separately.
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
-pub struct RpfRasterInterpretation {
-    pub rgb: [u16; 3],
-    pub matte: Option<u16>,
-    pub alpha_mode: crate::RlaAlphaMode,
-    pub color_space: rrrah_core::RasterColorSpace,
-}
+pub use rrrah_raw::RpfRasterInterpretation;
 
 #[derive(Debug)]
 pub enum RpfRasterReadError {

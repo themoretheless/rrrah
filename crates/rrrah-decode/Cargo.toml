@@ -7,7 +7,6 @@ license.workspace = true
 repository.workspace = true
 
 [dependencies]
-hayro = "=0.7.1"
 zune-jpeg = "=0.5.15"
 zune-core = "=0.5.3"
 basis-universal = "=0.3.1"
@@ -18,12 +17,13 @@ flate2 = { version = "=1.1.10", default-features = false, features = ["zlib-rs"]
 jpeg2k = { version = "=0.10.1", default-features = false, features = ["openjpeg-sys", "strict-mode"] }
 jxl-oxide = { version = "=0.12.6", default-features = false, features = ["image"] }
 zip = { version = "=6.0.0", default-features = false, features = ["deflate-flate2-zlib-rs"] }
-data-url = "=0.3.2"
-resvg = { version = "=0.45.1", default-features = false, features = ["text", "system-fonts", "raster-images"] }
 moxcms = { version = "=0.8.1", default-features = false, features = ["extended_range"] }
 image = { version = "0.25.9", default-features = false, features = ["avif-native", "bmp", "exr", "ff", "gif", "hdr", "ico", "jpeg", "png", "pnm", "qoi", "tga", "tiff", "webp"] }
 blake3.workspace = true
 rrrah-core = { path = "../rrrah-core", version = "0.1.0" }
+rrrah-raw = { path = "../rrrah-raw", version = "0.1.0" }
+rrrah-mesh = { path = "../rrrah-mesh", version = "0.1.0" }
+rrrah-vector = { path = "../rrrah-vector", version = "0.1.0" }
 thiserror.workspace = true
 
 libheif-rs = { version = "=3.0.0", default-features = false, features = ["v1_17"] }
@@ -31,7 +31,6 @@ libheif-rs = { version = "=3.0.0", default-features = false, features = ["v1_17"
 astcenc-sys = "=0.2.0"
 
 [dev-dependencies]
-kurbo = "=0.13.1"
 rrrah-swap = { path = "../rrrah-swap", version = "0.1.0" }
 moxcms = { version = "=0.8.1", default-features = false, features = ["options", "extended_range"] }
 serde_json.workspace = true

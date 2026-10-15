@@ -93,7 +93,7 @@ pub(crate) fn decode(bytes: &[u8], request: &DecodeRequest) -> Result<DecodedRas
     }
     let stack = read_entry(&mut archive, "stack.xml", 4 * 1024 * 1024, request)?;
     let stack = std::str::from_utf8(&stack).map_err(invalid)?;
-    let doc = resvg::usvg::roxmltree::Document::parse(stack).map_err(invalid)?;
+    let doc = rrrah_vector::roxmltree::Document::parse(stack).map_err(invalid)?;
     let image = doc.root_element();
     if image.tag_name().name() != "image" {
         return Err(invalid("stack root is not image"));

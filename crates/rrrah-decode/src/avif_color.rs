@@ -4,9 +4,20 @@ use rrrah_core::RasterColorSpace;
 fn invalid(s: &'static str) -> RasterDecodeError {
     RasterDecodeError::InvalidAvif(s)
 }
-fn boxes(mut b: &[u8]) -> Result<Vec<([u8; 4], &[u8])>, RasterDecodeError> {
+type ContainerBox<'a> = ([u8; 4], &'a [u8]);
+#[cfg(test)]
+fn boxes(b: &[u8]) -> Result<Vec<ContainerBox<'_>>, RasterDecodeError> {
+    boxes_with_check(b, &|| Ok(()))
+}
+fn boxes_with_check<'a>(
+    mut b: &'a [u8],
+    check: &dyn Fn() -> Result<(), RasterDecodeError>,
+) -> Result<Vec<ContainerBox<'a>>, RasterDecodeError> {
     let mut out = Vec::new();
     while !b.is_empty() {
+        if out.len() % 4096 == 0 {
+            check()?;
+        }
         if b.len() < 8 {
             return Err(invalid("truncated box header"));
         }
@@ -53,6 +64,7 @@ pub(crate) struct Properties {
     pub bit_depth: Option<u8>,
     pub premultiplied_alpha: bool,
     pub color: Option<RasterColorSpace>,
+    pub _icc_reservation: Option<rrrah_core::Reservation>,
     pub rotation: u8,
     pub mirror: Option<u8>,
     pub clean_aperture: Option<[u8; 32]>,
@@ -66,7 +78,15 @@ fn declaration(bytes: &[u8]) -> Result<Option<RasterColorSpace>, RasterDecodeErr
 
 // Resolve the selected primary's prem reference and its inverse auxl link.
 // Keep references borrowed/bounded; never scan compressed bytes for box tags.
+#[cfg(test)]
 fn prem_target(data: &[u8], primary: u32) -> Result<Option<u32>, RasterDecodeError> {
+    prem_target_with_check(data, primary, &|| Ok(()))
+}
+fn prem_target_with_check(
+    data: &[u8],
+    primary: u32,
+    check: &dyn Fn() -> Result<(), RasterDecodeError>,
+) -> Result<Option<u32>, RasterDecodeError> {
     let mut data = data;
     let full = take(&mut data, 4)?;
     if full[0] > 1 || full[1..] != [0; 3] {
@@ -74,42 +94,68 @@ fn prem_target(data: &[u8], primary: u32) -> Result<Option<u32>, RasterDecodeErr
     }
     let width = if full[0] == 0 { 2 } else { 4 };
     let mut target = None;
-    let mut auxiliary = Vec::new();
-    for (kind, mut body) in boxes(data)? {
+    let items = boxes_with_check(data, check)?;
+    // Resolve prem first so auxl can precede it without retaining one item ID
+    // per auxiliary target. The second pass validates every reference body.
+    for (index, &(kind, mut body)) in items.iter().enumerate() {
+        if index.is_multiple_of(4096) {
+            check()?;
+        }
         let from = number(&mut body, width)?;
         let count = number(&mut body, 2)?;
-        if kind == *b"prem" && from == primary && (count != 1 || target.is_some()) {
-            return Err(invalid("duplicate or ambiguous primary prem reference"));
-        }
-        for _ in 0..count {
-            let to = number(&mut body, width)?;
-            if kind == *b"prem" && from == primary {
-                target = Some(to);
+        if kind == *b"prem" && from == primary {
+            if count != 1 || target.is_some() {
+                return Err(invalid("duplicate or ambiguous primary prem reference"));
             }
-            if kind == *b"auxl" && to == primary {
-                if auxiliary.len() >= 65536 {
-                    return Err(invalid("too many auxiliary references"));
-                }
-                auxiliary.push(from);
+            target = Some(number(&mut body, width)?);
+        }
+    }
+    let mut auxiliary_link = false;
+    let mut references = 0usize;
+    for (kind, mut body) in items {
+        let from = number(&mut body, width)?;
+        let count = number(&mut body, 2)?;
+        for _ in 0..count {
+            if references.is_multiple_of(4096) {
+                check()?;
+            }
+            references += 1;
+            let to = number(&mut body, width)?;
+            if kind == *b"auxl" && to == primary && Some(from) == target {
+                auxiliary_link = true;
             }
         }
         if !body.is_empty() {
             return Err(invalid("trailing item-reference bytes"));
         }
     }
-    if let Some(id) = target {
-        if id == primary || !auxiliary.contains(&id) {
-            return Err(invalid("prem target is not auxiliary to primary"));
-        }
+    if target.is_some_and(|id| id == primary || !auxiliary_link) {
+        return Err(invalid("prem target is not auxiliary to primary"));
     }
     Ok(target)
 }
 
+#[cfg(test)]
 pub(crate) fn properties(bytes: &[u8]) -> Result<Properties, RasterDecodeError> {
+    properties_with_check(bytes, &|| Ok(()))
+}
+#[cfg(test)]
+pub(crate) fn properties_with_check(
+    bytes: &[u8],
+    check: &dyn Fn() -> Result<(), RasterDecodeError>,
+) -> Result<Properties, RasterDecodeError> {
+    properties_with_budget(bytes, check, None)
+}
+pub(crate) fn properties_with_budget(
+    bytes: &[u8],
+    check: &dyn Fn() -> Result<(), RasterDecodeError>,
+    budget: Option<&rrrah_core::MemoryBudget>,
+) -> Result<Properties, RasterDecodeError> {
+    check()?;
     if image::guess_format(bytes).ok() != Some(image::ImageFormat::Avif) {
         return Ok(Properties::default());
     }
-    let top = boxes(bytes)?;
+    let top = boxes_with_check(bytes, check)?;
     let metas: Vec<_> = top.iter().filter(|(k, _)| k == b"meta").collect();
     if metas.len() != 1 {
         return Err(invalid("missing or duplicate meta box"));
@@ -119,7 +165,7 @@ pub(crate) fn properties(bytes: &[u8]) -> Result<Properties, RasterDecodeError> 
     if full != [0; 4] {
         return Err(invalid("unsupported meta version"));
     }
-    let children = boxes(meta)?;
+    let children = boxes_with_check(meta, check)?;
     let mut primary = None;
     let mut iprp = None;
     let mut iref = None;
@@ -145,24 +191,25 @@ pub(crate) fn properties(bytes: &[u8]) -> Result<Properties, RasterDecodeError> 
                     return Err(invalid("duplicate item references"));
                 }
             }
-            b"iprp" => {
-                if iprp.replace(data).is_some() {
-                    return Err(invalid("duplicate item properties"));
-                }
+            b"iprp" if iprp.replace(data).is_some() => {
+                return Err(invalid("duplicate item properties"));
             }
             _ => {}
         }
     }
     let primary = primary.ok_or_else(|| invalid("missing primary item"))?;
-    let alpha_target = iref.map(|data| prem_target(data, primary)).transpose()?.flatten();
+    let alpha_target = iref
+        .map(|data| prem_target_with_check(data, primary, check))
+        .transpose()?
+        .flatten();
     let iprp = iprp.ok_or_else(|| invalid("missing item properties"))?;
-    let children = boxes(iprp)?;
+    let children = boxes_with_check(iprp, check)?;
     let mut properties = None;
     let mut associations = Vec::new();
     for (kind, data) in children {
         match &kind {
             b"ipco" => {
-                if properties.replace(boxes(data)?).is_some() {
+                if properties.replace(boxes_with_check(data, check)?).is_some() {
                     return Err(invalid("duplicate property container"));
                 }
             }
@@ -179,6 +226,7 @@ pub(crate) fn properties(bytes: &[u8]) -> Result<Properties, RasterDecodeError> 
     let mut bit_depth = None;
     let mut pixel_aspect_seen = false;
     let mut icc = None;
+    let mut icc_reservation = None;
     // Apply selected properties as their associations are read. Retaining one
     // tuple per reference amplifies malformed metadata into large work buffers.
     let mut apply_primary = |index: usize, association_offset: usize| -> Result<(), RasterDecodeError> {
@@ -242,9 +290,15 @@ pub(crate) fn properties(bytes: &[u8]) -> Result<Properties, RasterDecodeError> 
             return Ok(());
         }
         if data.starts_with(b"prof") || data.starts_with(b"rICC") {
-            if icc.replace(RasterColorSpace::Icc(data[4..].to_vec())).is_some() {
+            check()?;
+            if icc.is_some() {
                 return Err(invalid("multiple primary ICC properties"));
             }
+            icc_reservation = budget
+                .map(|budget| budget.try_reserve((data.len() - 4) as u64))
+                .transpose()
+                .map_err(|error| RasterDecodeError::Source(crate::DecodeError::Memory(error)))?;
+            icc = Some(RasterColorSpace::Icc(data[4..].to_vec()));
             return Ok(());
         }
         if color.is_some() {
@@ -274,7 +328,9 @@ pub(crate) fn properties(bytes: &[u8]) -> Result<Properties, RasterDecodeError> 
         Ok(())
     };
     let mut alpha_properties = 0;
+    let mut reference_count = 0usize;
     for mut b in associations {
+        check()?;
         let full = take(&mut b, 4)?;
         if full[0] > 1 || full[1] != 0 || full[2] != 0 || full[3] > 1 {
             return Err(invalid("unsupported association version or flags"));
@@ -283,10 +339,17 @@ pub(crate) fn properties(bytes: &[u8]) -> Result<Properties, RasterDecodeError> 
         if entries > 65536 {
             return Err(invalid("too many item associations"));
         }
-        for _ in 0..entries {
+        for entry in 0..entries {
+            if entry % 1024 == 0 {
+                check()?;
+            }
             let id = number(&mut b, if full[0] == 0 { 2 } else { 4 })?;
             let count = number(&mut b, 1)?;
             for _ in 0..count {
+                if reference_count.is_multiple_of(4096) {
+                    check()?;
+                }
+                reference_count += 1;
                 let association_offset = b.as_ptr() as usize - bytes.as_ptr() as usize;
                 let index = number(&mut b, if full[3] & 1 == 0 { 1 } else { 2 })?
                     & if full[3] & 1 == 0 { 127 } else { 32767 };
@@ -321,7 +384,6 @@ pub(crate) fn properties(bytes: &[u8]) -> Result<Properties, RasterDecodeError> 
             return Err(invalid("trailing association bytes"));
         }
     }
-    drop(apply_primary);
     let premultiplied_alpha = if alpha_target.is_some() {
         if alpha_properties != 1 {
             return Err(invalid("missing or duplicate prem alpha property"));
@@ -330,10 +392,12 @@ pub(crate) fn properties(bytes: &[u8]) -> Result<Properties, RasterDecodeError> 
     } else {
         false
     };
+    check()?;
     Ok(Properties {
         premultiplied_alpha,
         bit_depth,
         color: icc.or(color),
+        _icc_reservation: icc_reservation,
         rotation: rotation.unwrap_or(0),
         mirror,
         clean_aperture,
@@ -344,11 +408,10 @@ pub(crate) fn properties(bytes: &[u8]) -> Result<Properties, RasterDecodeError> 
 // AV1's lossy color coding can overshoot alpha slightly; clamp the
 // recovered integer sample, as for ordinary bounded integer RGB conversion.
 fn unassociate(value: u64, alpha: u64, maximum: u64) -> u64 {
-    if alpha == 0 {
-        0
-    } else {
-        ((value * maximum + alpha / 2) / alpha).min(maximum)
-    }
+    (value * maximum + alpha / 2)
+        .checked_div(alpha)
+        .unwrap_or(0)
+        .min(maximum)
 }
 
 pub(crate) fn unassociate_u8(
@@ -441,6 +504,48 @@ pub(crate) fn crop_rect(data: &[u8; 32], width: u32, height: u32) -> Result<[u32
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn block_and_reference_walks_cancel_midstream_and_retry() {
+        use std::cell::Cell;
+        let calls = Cell::new(0usize);
+        let cancel = || {
+            calls.set(calls.get() + 1);
+            if calls.get() == 2 {
+                Err(invalid("cancel control"))
+            } else {
+                Ok(())
+            }
+        };
+        let blocks = [0, 0, 0, 8, b'z', b'z', b'z', b'z'].repeat(5000);
+        assert!(boxes_with_check(&blocks, &cancel).is_err());
+        assert_eq!(calls.get(), 2);
+        assert_eq!(boxes_with_check(&blocks, &|| Ok(())).unwrap().len(), 5000);
+        fn bx(tag: &[u8; 4], body: &[u8]) -> Vec<u8> {
+            let mut b = ((body.len() + 8) as u32).to_be_bytes().to_vec();
+            b.extend(tag);
+            b.extend(body);
+            b
+        }
+        let mut aux = vec![0, 2];
+        aux.extend(20000u16.to_be_bytes());
+        for _ in 0..20000 {
+            aux.extend(1u16.to_be_bytes());
+        }
+        let refs = [vec![0; 4], bx(b"auxl", &aux), bx(b"prem", &[0, 1, 0, 1, 0, 2])].concat();
+        calls.set(0);
+        let cancel = || {
+            calls.set(calls.get() + 1);
+            if calls.get() == 3 {
+                Err(invalid("cancel control"))
+            } else {
+                Ok(())
+            }
+        };
+        assert!(prem_target_with_check(&refs, 1, &cancel).is_err());
+        assert_eq!(calls.get(), 3);
+        assert_eq!(prem_target_with_check(&refs, 1, &|| Ok(())).unwrap(), Some(2));
+    }
+
     #[test]
     fn streamed_associations_preserve_transform_order_and_essential_offsets_across_boxes() {
         fn bx(tag: &[u8; 4], body: &[u8]) -> Vec<u8> {
@@ -551,6 +656,51 @@ mod tests {
             let mut invalid = [1, 0, 0, maximum << shift];
             assert!(unassociate_u16(&mut invalid, depth, &request).is_err());
         }
+    }
+
+    #[test]
+    fn icc_copy_reserves_before_allocation_and_releases_on_cancel() {
+        let bytes = include_bytes!("../../../tests/fixtures/raster/avif-alpha-icc-prem.avif");
+        let short = rrrah_core::MemoryBudget::new(587);
+        assert!(matches!(
+            properties_with_budget(bytes, &|| Ok(()), Some(&short)),
+            Err(RasterDecodeError::Source(crate::DecodeError::Memory(_)))
+        ));
+        assert_eq!(short.used(), 0);
+        let root = rrrah_core::MemoryBudget::new(588);
+        let parsed = properties_with_budget(bytes, &|| Ok(()), Some(&root)).unwrap();
+        assert!(matches!(&parsed.color, Some(RasterColorSpace::Icc(v)) if v.len() == 588));
+        assert_eq!(root.used(), 588);
+        drop(parsed);
+        assert_eq!(root.used(), 0);
+        let cancel = || {
+            if root.used() != 0 {
+                Err(invalid("cancel after ICC copy"))
+            } else {
+                Ok(())
+            }
+        };
+        assert!(properties_with_budget(bytes, &cancel, Some(&root)).is_err());
+        assert_eq!(root.used(), 0);
+        let retried = properties_with_budget(bytes, &|| Ok(()), Some(&root)).unwrap();
+        assert_eq!(root.used(), 588);
+        drop(retried);
+        assert_eq!(root.used(), 0);
+    }
+
+    #[test]
+    fn repeated_auxiliary_targets_do_not_require_per_reference_storage() {
+        let mut aux = (8u32 + 4 + 40000 * 2).to_be_bytes().to_vec();
+        aux.extend(b"auxl");
+        aux.extend(2u16.to_be_bytes());
+        aux.extend(40000u16.to_be_bytes());
+        for _ in 0..40000 {
+            aux.extend(1u16.to_be_bytes());
+        }
+        let prem = [0, 0, 0, 14, b'p', b'r', b'e', b'm', 0, 1, 0, 1, 0, 2];
+        // The primary prem reference may follow auxiliary references.
+        let refs = [vec![0; 4], aux.clone(), aux, prem.to_vec()].concat();
+        assert_eq!(prem_target(&refs, 1).unwrap(), Some(2));
     }
 
     #[test]

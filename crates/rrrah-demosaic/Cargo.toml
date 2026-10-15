@@ -1,0 +1,15 @@
+[package]
+name = "rrrah-demosaic"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+rrrah-memory = { path = "../rrrah-memory", version = "0.1.0" }
+serde.workspace = true
+thiserror.workspace = true
+
+[lints]
+workspace = true

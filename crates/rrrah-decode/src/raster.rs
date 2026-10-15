@@ -180,6 +180,27 @@ pub enum RasterDecodeError {
     InvalidPngPhysicalDimensions,
 }
 
+impl From<rrrah_vector::VectorDecodeError> for RasterDecodeError {
+    fn from(error: rrrah_vector::VectorDecodeError) -> Self {
+        match error {
+            rrrah_vector::VectorDecodeError::Eps(e) => Self::Eps(e),
+            rrrah_vector::VectorDecodeError::InvalidPict(e) => Self::InvalidPict(e),
+            rrrah_vector::VectorDecodeError::InvalidPdf(e) => Self::InvalidPdf(e),
+            rrrah_vector::VectorDecodeError::InvalidEmf(e) => Self::InvalidEmf(e),
+            rrrah_vector::VectorDecodeError::InvalidWmf(e) => Self::InvalidWmf(e),
+            rrrah_vector::VectorDecodeError::Source(e) => Self::Source(e),
+            rrrah_vector::VectorDecodeError::Codec(e) => Self::Codec(e),
+            rrrah_vector::VectorDecodeError::Frame(e) => Self::Frame(e),
+            rrrah_vector::VectorDecodeError::OutputTooLarge => Self::OutputTooLarge,
+            rrrah_vector::VectorDecodeError::InvalidSvg(e) => Self::InvalidSvg(e),
+            rrrah_vector::VectorDecodeError::InvalidPngColor(e) => Self::InvalidPngColor(e),
+            rrrah_vector::VectorDecodeError::InvalidPngPhysicalDimensions => {
+                Self::InvalidPngPhysicalDimensions
+            }
+        }
+    }
+}
+
 /// Decode the first raster image, retaining sample precision and straight
 /// alpha. ICC samples remain in their embedded color space. No tone mapping
 /// or color conversion is performed here.
@@ -494,7 +515,7 @@ fn decode_raster_bytes_inner(
         return crate::ktx::decode(&bytes, request);
     }
     if crate::pdf::has_magic(&bytes) {
-        return crate::pdf::decode(&bytes, request);
+        return Ok(crate::pdf::decode(&bytes, request)?);
     }
     if crate::basis::has_magic(&bytes) {
         return crate::basis::decode(&bytes, request);
@@ -515,7 +536,7 @@ fn decode_raster_bytes_inner(
         return crate::sti::decode(&bytes, request);
     }
     if crate::emf::has_magic(&bytes) {
-        return crate::emf::decode(&bytes, request);
+        return Ok(crate::emf::decode(&bytes, request)?);
     }
     if bytes.starts_with(b"FOVb") {
         request.check_cancelled()?;
@@ -537,10 +558,10 @@ fn decode_raster_bytes_inner(
             .extension()
             .is_some_and(|e| e.eq_ignore_ascii_case("pict") || e.eq_ignore_ascii_case("pct"))
     {
-        return crate::pict::decode(&bytes, request);
+        return Ok(crate::pict::decode(&bytes, request)?);
     }
     if crate::wmf::has_magic(&bytes) {
-        return crate::wmf::decode(&bytes, request);
+        return Ok(crate::wmf::decode(&bytes, request)?);
     }
     if crate::apng::has_animation(&bytes) {
         return crate::apng::decode(&bytes, request).map(|image| image.raster);
@@ -614,7 +635,7 @@ fn decode_raster_bytes_inner(
         .is_some_and(|e| e.eq_ignore_ascii_case("svg"))
         && image::guess_format(&bytes).is_err()
     {
-        return crate::svg::decode(&bytes, request);
+        return Ok(crate::svg::decode(&bytes, request)?);
     }
     let hotspot = crate::cursor::normalize(
         &mut bytes,
@@ -627,7 +648,11 @@ fn decode_raster_bytes_inner(
     if bytes.starts_with(b"/* XPM */") || bytes.starts_with(b"! XPM2") {
         return crate::xpm::decode(&bytes, request);
     }
-    let avif_properties = crate::avif_color::properties(&bytes)?;
+    let avif_properties = crate::avif_color::properties_with_budget(
+        &bytes,
+        &|| request.check_cancelled().map_err(RasterDecodeError::from),
+        request.memory_budget.as_ref(),
+    )?;
     // The container codec rejects essential clap despite our own handling.
     // Clear only already parsed primary clap associations in the borrowed copy;
     // the source and all unknown essential properties remain untouched.
@@ -700,6 +725,9 @@ fn decode_raster_bytes_inner(
     // image's format guesser recognizes classic TIFF only. Admit BigTIFF from
     // its explicit header; the TIFF decoder validates offsets and sample data.
     let big_tiff = bytes.starts_with(b"II+\0\x08\0\0\0") || bytes.starts_with(b"MM\0+\0\x08\0\0");
+    // Metadata routing may take time after the initial request check. In AVIF,
+    // constructing the decoder already runs AV1, so check before entering it.
+    request.check_cancelled()?;
     let mut reader = ImageReader::new(Cursor::new(&*bytes))
         .with_guessed_format()
         .map_err(|source| DecodeError::Io {
@@ -729,14 +757,30 @@ fn decode_raster_bytes_inner(
     // images can therefore lose a larger ICC tag via its swallowed limits error.
     // Read metadata under the TIFF decoder's bounded defaults before applying
     // pixel limits; retain those limits for actual image decoding.
+    request.check_cancelled()?;
     let (mut decoder, tiff_profile): (Box<dyn ImageDecoder + '_>, _) = if format == ImageFormat::Tiff {
         let mut decoder = image::codecs::tiff::TiffDecoder::new(reader.into_inner())?;
         let profile = decoder.icc_profile()?;
         decoder.set_limits(limits)?;
         (Box::new(decoder), Some(profile))
+    } else if format == ImageFormat::Avif {
+        // RGBA8 is the smallest supported AVIF output. This area cap preserves
+        // every frame that could fit MAX_RASTER_BYTES while rejecting excessive
+        // coded dimensions inside dav1d before primary/alpha picture allocation.
+        // Higher-depth output admission and complete codec scratch are separate.
+        let maximum_pixels = (MAX_RASTER_BYTES / 4) as u32;
+        let mut decoder = image::codecs::avif::AvifDecoder::new_with_pixel_limit(
+            reader.into_inner(),
+            maximum_pixels,
+        )?;
+        decoder.set_limits(limits)?;
+        (Box::new(decoder), None)
     } else {
         (Box::new(reader.into_decoder()?), None)
     };
+    // Constructors can do substantial work without a cancellation hook. Do not
+    // continue with conversion or reserve more output for a superseded request.
+    request.check_cancelled()?;
     let associated_tiff = format == ImageFormat::Tiff && tiff_alpha::associated(bytes, request)?;
     if associated_tiff
         && !matches!(
@@ -776,6 +820,13 @@ fn decode_raster_bytes_inner(
         .map_err(DecodeError::Memory)?;
     let profile = match tiff_profile {
         Some(profile) => profile,
+        // The selected AVIF primary ICC is already owned and admitted by our
+        // metadata parser. image's getter would clone its internal ICC again.
+        None if format == ImageFormat::Avif
+            && matches!(&avif_properties.color, Some(RasterColorSpace::Icc(_))) =>
+        {
+            None
+        }
         None => decoder.icc_profile()?,
     };
     let orientation = decoder.orientation()?;
@@ -1174,6 +1225,41 @@ mod tests {
     use image::ImageEncoder;
 
     #[test]
+    fn avif_mixed_coded_alpha_depth_refuses_before_pixel_conversion() {
+        for bytes in [
+            include_bytes!("../../../tests/fixtures/raster/avif-mixed-primary8-alpha10.avif").as_slice(),
+            include_bytes!("../../../tests/fixtures/raster/avif-mixed-primary10-alpha8.avif").as_slice(),
+        ] {
+            for limit in [0, 256] {
+                let error = match image::codecs::avif::AvifDecoder::new_with_pixel_limit(
+                    Cursor::new(bytes), limit,
+                ) {
+                    Ok(_) => panic!("mixed coded alpha depth accepted"),
+                    Err(error) => error,
+                };
+                assert!(error.to_string().contains("alpha bit depth differs"));
+            }
+        }
+    }
+
+    #[test]
+    fn avif_backend_pixel_limit_rejects_coded_frames_and_retries() {
+        for bytes in [
+            include_bytes!("../../../tests/fixtures/raster/ravif-8bit-prem.avif").as_slice(),
+            include_bytes!("../../../tests/fixtures/raster/ravif-10bit-prem.avif").as_slice(),
+        ] {
+            assert!(image::codecs::avif::AvifDecoder::new_with_pixel_limit(
+                Cursor::new(bytes), 255
+            ).is_err());
+            let decoder = image::codecs::avif::AvifDecoder::new_with_pixel_limit(
+                Cursor::new(bytes), 256
+            ).unwrap();
+            assert_eq!(decoder.dimensions(), (16, 16));
+            assert!(DynamicImage::from_decoder(decoder).is_ok());
+        }
+    }
+
+    #[test]
     fn avif_prem_alpha_is_unassociated_before_color_preparation() {
         let fixtures = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/raster");
         let plain = decode_raster_file(&fixtures.join("avif-alpha-icc.avif")).unwrap();
@@ -1241,6 +1327,58 @@ mod tests {
         drop(prepared);
         drop(managed);
         assert_eq!(budget.used(), 0);
+    }
+
+    #[test]
+    fn avif_metadata_generation_cancels_during_associations_and_retries() {
+        use std::{
+            cell::Cell,
+            sync::{
+                Arc,
+                atomic::{AtomicU64, Ordering},
+            },
+        };
+        fn bx(tag: &[u8; 4], body: &[u8]) -> Vec<u8> {
+            let mut b = ((body.len() + 8) as u32).to_be_bytes().to_vec();
+            b.extend(tag);
+            b.extend(body);
+            b
+        }
+        let mut assoc = vec![0; 4];
+        assoc.extend(2048u32.to_be_bytes());
+        for _ in 0..2048 {
+            assoc.extend(1u16.to_be_bytes());
+            assoc.push(255);
+            assoc.extend(std::iter::repeat_n(1, 255));
+        }
+        let iprp = [bx(b"ipco", &bx(b"zzzz", &[])), bx(b"ipma", &assoc)].concat();
+        let meta = [vec![0; 4], bx(b"pitm", &[0, 0, 0, 0, 0, 1]), bx(b"iprp", &iprp)].concat();
+        let bytes = [bx(b"ftyp", b"avif\0\0\0\0avif"), bx(b"meta", &meta)].concat();
+        let epoch = Arc::new(AtomicU64::new(0));
+        let mut request = crate::DecodeRequest::new("metadata-control.avif");
+        request.cancellation = Some(crate::GenerationToken::new(Arc::clone(&epoch), 0));
+        let calls = Cell::new(0usize);
+        let result = crate::avif_color::properties_with_check(&bytes, &|| {
+            calls.set(calls.get() + 1);
+            if calls.get() == 20 {
+                epoch.store(1, Ordering::Release);
+            }
+            request.check_cancelled().map_err(RasterDecodeError::from)
+        });
+        assert!(matches!(
+            result,
+            Err(RasterDecodeError::Source(crate::DecodeError::Cancelled))
+        ));
+        assert_eq!(calls.get(), 20);
+        request.cancellation = Some(crate::GenerationToken::new(epoch, 1));
+        calls.set(0);
+        let result = crate::avif_color::properties_with_check(&bytes, &|| {
+            calls.set(calls.get() + 1);
+            request.check_cancelled().map_err(RasterDecodeError::from)
+        })
+        .unwrap();
+        assert!(calls.get() > 20);
+        assert!(result.bit_depth.is_none());
     }
 
     #[test]

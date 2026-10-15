@@ -1980,8 +1980,6 @@ dependencies = [
 [[package]]
 name = "image"
 version = "0.25.10"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "85ab80394333c02fe689eaf900ab500fbd0c2213da414687ebf995a65d5a6104"
 dependencies = [
  "bytemuck",
  "byteorder-lite",
@@ -3869,12 +3867,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "rrrah-color"
+version = "0.1.0"
+dependencies = [
+ "thiserror 2.0.19",
+]
+
+[[package]]
 name = "rrrah-core"
 version = "0.1.0"
 dependencies = [
+ "rrrah-color",
+ "rrrah-demosaic",
+ "rrrah-develop",
  "rrrah-memory",
- "serde",
- "thiserror 2.0.19",
 ]
 
 [[package]]
@@ -3895,19 +3901,18 @@ dependencies = [
  "blake3",
  "charls",
  "criterion",
- "data-url",
  "flate2",
- "hayro",
  "image",
  "jpeg2k",
  "jpegxr",
  "jxl-oxide",
- "kurbo 0.13.1",
  "libheif-rs",
  "moxcms",
- "resvg",
  "rrrah-core",
+ "rrrah-mesh",
+ "rrrah-raw",
  "rrrah-swap",
+ "rrrah-vector",
  "serde_json",
  "texture2ddecoder",
  "thiserror 2.0.19",
@@ -3935,6 +3940,26 @@ dependencies = [
 ]
 
 [[package]]
+name = "rrrah-demosaic"
+version = "0.1.0"
+dependencies = [
+ "rrrah-memory",
+ "serde",
+ "thiserror 2.0.19",
+]
+
+[[package]]
+name = "rrrah-develop"
+version = "0.1.0"
+dependencies = [
+ "rrrah-color",
+ "rrrah-demosaic",
+ "rrrah-memory",
+ "serde",
+ "thiserror 2.0.19",
+]
+
+[[package]]
 name = "rrrah-gpu"
 version = "0.1.0"
 dependencies = [
@@ -3943,6 +3968,7 @@ dependencies = [
  "naga",
  "pollster",
  "rrrah-core",
+ "rrrah-decode",
  "thiserror 2.0.19",
  "wgpu",
 ]
@@ -3952,6 +3978,27 @@ name = "rrrah-memory"
 version = "0.1.0"
 
 [[package]]
+name = "rrrah-mesh"
+version = "0.1.0"
+dependencies = [
+ "rrrah-core",
+ "rrrah-raw",
+ "rrrah-swap",
+ "thiserror 2.0.19",
+]
+
+[[package]]
+name = "rrrah-raw"
+version = "0.1.0"
+dependencies = [
+ "blake3",
+ "rrrah-core",
+ "serde_json",
+ "thiserror 2.0.19",
+ "zip 6.0.0",
+]
+
+[[package]]
 name = "rrrah-swap"
 version = "0.1.0"
 dependencies = [
@@ -3959,6 +4006,23 @@ dependencies = [
  "rayon",
  "rrrah-memory",
  "tempfile",
+ "thiserror 2.0.19",
+]
+
+[[package]]
+name = "rrrah-vector"
+version = "0.1.0"
+dependencies = [
+ "blake3",
+ "data-url",
+ "hayro",
+ "image",
+ "kurbo 0.13.1",
+ "moxcms",
+ "resvg",
+ "rrrah-core",
+ "rrrah-raw",
+ "serde_json",
  "thiserror 2.0.19",
 ]
 
@@ -5162,8 +5226,6 @@ dependencies = [
 [[package]]
 name = "wgpu-hal"
 version = "30.0.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cf765132d8d5f50e192e7880464890c13f4e7457aafe8e5466e8174586e9f101"
 dependencies = [
  "android_system_properties",
  "arrayvec",

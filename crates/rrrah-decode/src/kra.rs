@@ -44,9 +44,9 @@ pub(crate) fn decode(bytes: &[u8], request: &DecodeRequest) -> Result<DecodedRas
         4 * 1024 * 1024,
     )?;
     let xml = std::str::from_utf8(&xml).map_err(bad)?;
-    let doc = resvg::usvg::roxmltree::Document::parse_with_options(
+    let doc = rrrah_vector::roxmltree::Document::parse_with_options(
         xml,
-        resvg::usvg::roxmltree::ParsingOptions {
+        rrrah_vector::roxmltree::ParsingOptions {
             allow_dtd: true,
             nodes_limit: 100000,
         },

@@ -33,23 +33,7 @@ fn plane(encoded: &[u8], width: usize) -> Result<(Vec<u8>, usize), RasterDecodeE
     }
     Ok((out, at))
 }
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum RlaAlphaMode {
-    Straight,
-    Premultiplied,
-}
-/// Explicit producer color interpretation; float storage alone does not declare linear light.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum RlaColorSpace {
-    Srgb,
-    LinearSrgb,
-}
-/// Float RLA records have producer-dependent byte order; never infer it from values.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum RlaFloatByteOrder {
-    Little,
-    Big,
-}
+pub use rrrah_raw::{RlaAlphaMode, RlaColorSpace, RlaFloatByteOrder};
 /// Decode float32 gray/RGB RLA with explicit producer byte order, alpha and color.
 pub fn decode_rla_float_with_interpretation(
     request: &DecodeRequest,

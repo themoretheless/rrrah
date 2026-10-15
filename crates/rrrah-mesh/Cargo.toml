@@ -1,0 +1,18 @@
+[package]
+name = "rrrah-mesh"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+rrrah-core = { path = "../rrrah-core", version = "0.1.0" }
+rrrah-raw = { path = "../rrrah-raw", version = "0.1.0" }
+thiserror.workspace = true
+
+[dev-dependencies]
+rrrah-swap = { path = "../rrrah-swap", version = "0.1.0" }
+
+[lints]
+workspace = true

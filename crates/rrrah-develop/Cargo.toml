@@ -1,0 +1,17 @@
+[package]
+name = "rrrah-develop"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+rrrah-color = { path = "../rrrah-color", version = "0.1.0" }
+rrrah-demosaic = { path = "../rrrah-demosaic", version = "0.1.0" }
+rrrah-memory = { path = "../rrrah-memory", version = "0.1.0" }
+serde.workspace = true
+thiserror.workspace = true
+
+[lints]
+workspace = true
