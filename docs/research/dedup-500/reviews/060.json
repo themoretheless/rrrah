@@ -2,7 +2,7 @@
   "index": 60,
   "repository": "Rafaelpta/dupehound",
   "commit": "35ea7c3743a8fb2205aaef973e67b1c6c5e41474",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All97 pinned repository blobs reviewed:90 UTF8 files including structured Cargo.lock/SVG,4 PNG images,3 fonts plus embedded SVG font; complete original native tests and scoped controls.",
   "decision": "reference",
   "finding": "Rust k-gram winnowing and sorted-set Jaccard useful for local-evidence concepts; algorithms target source code.",
   "license_metadata": "MIT",
@@ -80,6 +80,8 @@
     "docs/research/dedup-500/dupe60-selected-index-audit-20261016.json",
     "docs/research/dedup-500/dupe60-whole-native-partial-source-review-20261016.json"
   ],
-  "selected_runtime_scope": "42of97files fullyread: all21Rustproductionfiles/16languagequeries/all3integrationtestfiles/Cargo.toml/LICENSE. Complete98originaltests twice plus8actualCLIcontrols twice; historylanguagecache contamination,comment-basedRusttestmisclassification,maxsnapshot1panic,customhistoryexcludeignored,NaN/culling reproduced.48plainfiles and7binaryassets remain. No fullrepositoryflag/performance/adoption.",
-  "upstream_test_scope": "Completeunchanged98originalCargo/default-cardtests across4targets twice,0ignored0filtered. IsolatedCargo.tomlworkspaceboundaryonly; all97buildsourcepinsmatchoriginalexceptdeclaredboundary. No parser/dataadapters inthisrun."
+  "selected_runtime_scope": "Complete98 unchanged original tests twice,8 actual CLI controls twice,original synthetic benchmark CI twice and5 mapping/policy controls twice. Published paid-agent/VSCode runs not reproduced; no production adoption or performance claim.",
+  "upstream_test_scope": "Completeunchanged98originalCargo/default-cardtests across4targets twice,0ignored0filtered. IsolatedCargo.tomlworkspaceboundaryonly; all97buildsourcepinsmatchoriginalexceptdeclaredboundary. No parser/dataadapters inthisrun.",
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/dedup-500/dupe60-complete-source-review-20261016.json"
 }

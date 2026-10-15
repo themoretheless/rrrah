@@ -1,0 +1,46 @@
+{
+  "status": "verified_original_free_ci_tier_and_scoped_mapping_controls",
+  "whole_repo_complete": false,
+  "repository": "Rafaelpta/dupehound",
+  "original_ci_runs": 2,
+  "original_ci_dupehound_processes_per_run": 2,
+  "controls": {
+    "outside_labelled_universe_predictions_ignored": {
+      "tp": 1,
+      "fp": 0,
+      "precision": 1.0
+    },
+    "unlabelled_host_member_mapping": null,
+    "same_basename_and_name_collapses_two_directories": {
+      "index_entries": 1,
+      "first_path_maps_to": "second"
+    },
+    "empty_predictions_determinism_policy": 1.0,
+    "negative_cost_record_increases_budget_invalid_input_only": {
+      "remaining": 3.0
+    },
+    "original_free_ci_gate": "passed"
+  },
+  "control_runs": 2,
+  "producer_sha256": "45b5071d2309ad744910e75312b45e2c3c57e8b2cd92501b06ba9462aff2afbf",
+  "evidence_pins": {
+    ".dedup-work/dupe60-20261016/source/benchmarks/harness/budget.py": "d82ed6533c980e44458c8cdbffedd2f9976cc776bd37d44f41c3aefe44e7ef11",
+    ".dedup-work/dupe60-20261016/source/benchmarks/harness/ci_check.py": "d9f49892e6470eb11cff210bfbf64f0bd587b47f5f77fcada3fff9615c209284",
+    ".dedup-work/dupe60-20261016/source/benchmarks/harness/paths.py": "d140f8079c977551e9b1769bc9a298850dd863d2591a6367418ab22cabb790ae",
+    ".dedup-work/dupe60-20261016/source/benchmarks/harness/score.py": "5920ee48bc6e93e5cd8da23f1ac36cbf7dc3ef6b78adcb1b4cc5fc7276b2f054",
+    ".dedup-work/dupe60-20261016/source/benchmarks/harness/systems/dupehound.py": "5ceec734c2d2aa8a94f13282de1289cd83c143c03ababed734186578fc06b26a",
+    ".dedup-work/dupe60-20261016/source/benchmarks/harness/plant.py": "f279c80e2146fa320932b81a703b88860c1a0fad547d63a255264f5bff759ccc",
+    ".dedup-work/dupe60-20261016/source/benchmarks/harness/donors.py": "f6b660f3a5bd7058526c1f76ceb482784d93cabce37884462b937cf6361cbaf3",
+    ".dedup-work/dupe60-20261016/source/benchmarks/harness/donors_ts.py": "fbda1a275c81d8af3d632933c0a1a5630c29289a7b44236a6d476a5f2fc0f6e0",
+    ".dedup-work/dupe60-20261016/bench-controls-run1/ci.log": "de4ac6dafea6b36b19c76aeb3a43fa2f9ed4e8b87af4e03b5d3662cf14a3d761",
+    ".dedup-work/dupe60-20261016/bench-controls-run2/ci.log": "de4ac6dafea6b36b19c76aeb3a43fa2f9ed4e8b87af4e03b5d3662cf14a3d761",
+    "docs/research/dedup-500/dupe60-fetched-source-pins-20261016.json": "bf8f8e8112f77bf754addd57fa23a9a076d4c9fde279a55a24a8b0ac692fc5b4",
+    ".dedup-work/dupe60-20261016/cargo-target/debug/dupehound": "eb695adf5bd28ac15b4a68f59a9f9ce064dd3bac53e91f3d523d4f92e6e141f8"
+  },
+  "scope": "OriginalunchangedPythonbenchmarkmodules imported withoutadapters; actualdefault-carddebugCargoCLI onownedseed7syntheticPythoncorpus. No donorfunction bodies executed, no paidagents/externalrepositories/providerrequests.",
+  "limits": [
+    "PassingoriginalfreeCIprecision onlycoverslabelledsyntheticpairuniverse. Hostpairs withoutgroundtruth IDs ignoredbyoriginaladapter/scorer; no globalhostprecision proof.",
+    "Basenamecollision observed onsyntheticmetadata, notclaimit occurredinpublishedunique-basenamecorpus. Negativecost invalid-inputcontrol doesnotproveactualprovideroverspend.",
+    "No opt3timing/performancecomparison/platform/currentRoot/productionadoption/fullrepository claim."
+  ]
+}
