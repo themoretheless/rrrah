@@ -1,0 +1,14 @@
+PASS actual clone replacement and copy-on-write independence
+PASS dry run preserves inode and reports potential logical bytes
+PASS changed duplicate overwritten without revalidation, verification succeeds
+PASS changed original overwrites duplicate before hash mismatch, no rollback
+PASS existing fixed temp marker deleted even when clone fails
+PASS source-only xattr survives alongside destination attributes
+PASS xattr restoration failure silently reported as success
+PASS post-replace parent timestamp failure reports error after mutation
+PASS scan minimum size and symlink exclusion
+PASS direct API missing root returns empty success
+PASS actual process pool progressive hashing positive plus unequal negative
+PASS second find without scan retains stale hashes after unreadable file
+PASS actual CLI missing root is rejected
+{"passed": 13, "failed": 0, "scope": "Whole upstream module, actual MacAPFS clonefile and hash/processpool dependencies; explicit fault injections identified. Tiny synthetic files only; no physical storage savings/largefiles/platform/performance qualification."}

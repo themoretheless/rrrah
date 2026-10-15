@@ -2,9 +2,9 @@
   "index": 111,
   "repository": "ranvel/clonefile-dedup",
   "commit": "f066ad4eb56479f0d68c85a5e0f8da360a6d0caa",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All6trackedblobs/root tree fully read including README PNG viewed;13wholemodule native MacAPFS controls twice with pinned real dependencies. No platform/scale/performance qualification.",
   "decision": "reference",
-  "finding": "APFS clonefile with xxh3 or SHA256 hashing; disk-space clone operations are separate from read-only duplicate evidence.",
+  "finding": "Unsafe stale file replacement, stale cached hashes on repeat, fixed temp clobber and metadata errors; progressive hashing reference only, no production copy or speedup.",
   "available_source_evidence": [
     {
       "path": "clonefile-dedup.py",
@@ -44,5 +44,7 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/dedup-500/clone111-complete-source-review-20261015.json"
 }
