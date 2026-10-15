@@ -1,0 +1,105 @@
+{
+  "status": "verified_selected8controls_two_profiles_twice",
+  "whole_repo_complete": false,
+  "producer_sha256": "ae3492ae54988699fdca6ac50af092ecb587ff3ebd52ba838b533351813f3f3f",
+  "source_pins": {
+    ".dedup-work/fclones34-20261016/source/fclones-gui/src/bytes_entry.rs": "9fe366952feaf06a6a756794910a5c4a4d0a745f4217b56190013b8efc972c27",
+    ".dedup-work/fclones34-20261016/source/fclones-gui/src/progress.rs": "c69987992d6ee1a55b46d916c682bc630fa1997a08fb11074718b2502e1f79c1",
+    ".dedup-work/fclones34-20261016/selected-controls/numeric.rs": "b68ac2ed35b74d7b52ae8f053458e63f53fe0203e1f943e0a9b793800d029286",
+    ".dedup-work/fclones34-20261016/selected-controls/progress.rs": "24383d564f19ad33f6aca28c9f2ba20191dbae65704f114a807af6c2dfbc884f",
+    ".dedup-work/fclones34-20261016/selected-controls/harness.rs": "e1aeccfa02a30574d1b5d7f9991819624250e238857d5aaa5b206da97c3e4b1a",
+    ".dedup-work/fclones34-20261016/selected-controls/checked-build.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    ".dedup-work/fclones34-20261016/selected-controls/checked-inventory.log": "4b0afaed8aaad5f5557340b1feb260772d2ca60619f08f9344022881d27216bb",
+    ".dedup-work/fclones34-20261016/selected-controls/checked-run1.log": "d3c526e8e5cb01e3ed299c4ec053c1877ec563ca24eaa81f9cd86aac3e22b424",
+    ".dedup-work/fclones34-20261016/selected-controls/checked-run2.log": "d3c526e8e5cb01e3ed299c4ec053c1877ec563ca24eaa81f9cd86aac3e22b424",
+    ".dedup-work/fclones34-20261016/selected-controls/unchecked-build.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    ".dedup-work/fclones34-20261016/selected-controls/unchecked-inventory.log": "4b0afaed8aaad5f5557340b1feb260772d2ca60619f08f9344022881d27216bb",
+    ".dedup-work/fclones34-20261016/selected-controls/unchecked-run1.log": "d3c526e8e5cb01e3ed299c4ec053c1877ec563ca24eaa81f9cd86aac3e22b424",
+    ".dedup-work/fclones34-20261016/selected-controls/unchecked-run2.log": "d3c526e8e5cb01e3ed299c4ec053c1877ec563ca24eaa81f9cd86aac3e22b424"
+  },
+  "runs": [
+    {
+      "profile": "checked",
+      "repeat": 1,
+      "tests": [
+        "grid_is_quantized",
+        "known_decimal_powers",
+        "known_progress_fraction",
+        "maximum_u64_overflow_policy",
+        "progress_is_not_clamped",
+        "unknown_progress",
+        "zero_and_one",
+        "zero_length_progress_is_nan"
+      ],
+      "log": ".dedup-work/fclones34-20261016/selected-controls/checked-run1.log",
+      "log_sha256": "d3c526e8e5cb01e3ed299c4ec053c1877ec563ca24eaa81f9cd86aac3e22b424",
+      "binary": ".dedup-work/fclones34-20261016/selected-controls/checked",
+      "binary_sha256": "30f0713f6d438210e8fb8a8c4533b47af1ed949d8879e12c2903645691c90940"
+    },
+    {
+      "profile": "checked",
+      "repeat": 2,
+      "tests": [
+        "grid_is_quantized",
+        "known_decimal_powers",
+        "known_progress_fraction",
+        "maximum_u64_overflow_policy",
+        "progress_is_not_clamped",
+        "unknown_progress",
+        "zero_and_one",
+        "zero_length_progress_is_nan"
+      ],
+      "log": ".dedup-work/fclones34-20261016/selected-controls/checked-run2.log",
+      "log_sha256": "d3c526e8e5cb01e3ed299c4ec053c1877ec563ca24eaa81f9cd86aac3e22b424",
+      "binary": ".dedup-work/fclones34-20261016/selected-controls/checked",
+      "binary_sha256": "30f0713f6d438210e8fb8a8c4533b47af1ed949d8879e12c2903645691c90940"
+    },
+    {
+      "profile": "unchecked",
+      "repeat": 1,
+      "tests": [
+        "grid_is_quantized",
+        "known_decimal_powers",
+        "known_progress_fraction",
+        "maximum_u64_overflow_policy",
+        "progress_is_not_clamped",
+        "unknown_progress",
+        "zero_and_one",
+        "zero_length_progress_is_nan"
+      ],
+      "log": ".dedup-work/fclones34-20261016/selected-controls/unchecked-run1.log",
+      "log_sha256": "d3c526e8e5cb01e3ed299c4ec053c1877ec563ca24eaa81f9cd86aac3e22b424",
+      "binary": ".dedup-work/fclones34-20261016/selected-controls/unchecked",
+      "binary_sha256": "83e09702c1485ba736f8295937b965bdcbeae6f1b27648228d0377d37ce87ea5"
+    },
+    {
+      "profile": "unchecked",
+      "repeat": 2,
+      "tests": [
+        "grid_is_quantized",
+        "known_decimal_powers",
+        "known_progress_fraction",
+        "maximum_u64_overflow_policy",
+        "progress_is_not_clamped",
+        "unknown_progress",
+        "zero_and_one",
+        "zero_length_progress_is_nan"
+      ],
+      "log": ".dedup-work/fclones34-20261016/selected-controls/unchecked-run2.log",
+      "log_sha256": "d3c526e8e5cb01e3ed299c4ec053c1877ec563ca24eaa81f9cd86aac3e22b424",
+      "binary": ".dedup-work/fclones34-20261016/selected-controls/unchecked",
+      "binary_sha256": "83e09702c1485ba736f8295937b965bdcbeae6f1b27648228d0377d37ce87ea5"
+    }
+  ],
+  "scope": "Verbatim complete3purebytefunctions andProgressBarstruct/3implblocks extracted unchanged. RealstdAtomicU64/floatmath, minimalProgressTracker trait-signature adapter replaces externalfclones trait only.8selectedcontrols checked/uncheckedarithmeticopt3 profiles eachtwice. No GTK/widget/delegate/corefclones/nativeUI/upstreamsuite/fullservice proof.",
+  "findings": [
+    "Helper bytes_to_scale(u64MAX) panicswithoverflowchecks, negativeinfinitywithout; validGUIcallback reachability nottested",
+    "Bytes scale is quantized,999and1000 maptosamegrid andback1000; widgetbidirectional-binding effects notexecuted",
+    "Zero-lengthprogress yieldsNaN; progress11/10 yields1.1, unknownNone andnormal.5 behaveasexpected; no GTKrender ofinvalidfraction tested"
+  ],
+  "limits": [
+    "No userfile deletion/move/link performed, noGUIopened",
+    "Fullapplication build unavailable via currentpkgconfig GTK4/libadwaita; depsource outsidepinnedrepository not reviewed",
+    "No originalcodecopied into production or performance/adoption claim"
+  ]
+}

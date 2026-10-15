@@ -1,0 +1,41 @@
+{
+  "status": "verified_terminal_attempt_unqualified_due_observed_compiler",
+  "report": "docs/research/dedup-durable-actual-engine-v6-benchmark-20261016.json",
+  "report_sha256": "c2d413ee9b4df43102243dc8d5ac034bd6d671e6218210e31f3331c8b75233b9",
+  "auditor_sha256": "043b32e1597f8dbd4d9e9bf759848915b37b50ec26d150d44fdb183114962194",
+  "retained_rows": 16,
+  "retained_logs": {
+    ".dedup-work/20261015-common-v5/artifacts/actual-benchmark-v5/timing-v6/empty2-0-baseline.log": "c09d1fb969ddebfc79453e4fc1b26df94024d90ce54980eea0301b1be800a6cf",
+    ".dedup-work/20261015-common-v5/artifacts/actual-benchmark-v5/timing-v6/empty2-0-candidate.log": "cbddd0911ff75f1392759972f911e7236f36c1f1719c0ed09158ca1aeeb28b60",
+    ".dedup-work/20261015-common-v5/artifacts/actual-benchmark-v5/timing-v6/empty2-1-baseline.log": "7b32d419d672f276e42372cf501b4b1794e2ce5b770a24fc2ff6411bf859b079",
+    ".dedup-work/20261015-common-v5/artifacts/actual-benchmark-v5/timing-v6/empty2-1-candidate.log": "41dda5e823f86ad5ede8a5089a1fe4b84e6992786e47b2bfd18e103b7619ffd6",
+    ".dedup-work/20261015-common-v5/artifacts/actual-benchmark-v5/timing-v6/empty2-2-baseline.log": "b5dcf18295521810e9cb9d119cd6c7122d3ef76e1068dcf38e9c937e373cf1f9",
+    ".dedup-work/20261015-common-v5/artifacts/actual-benchmark-v5/timing-v6/empty2-2-candidate.log": "f9e7509b5ee52aea7552527ed5ae149fa61c549ccb666a3c457191219651b8f0",
+    ".dedup-work/20261015-common-v5/artifacts/actual-benchmark-v5/timing-v6/empty2-3-baseline.log": "9647a4062311410b87c63f73ba0e96a5e48426e703b2a9f01fe987da3d377e93",
+    ".dedup-work/20261015-common-v5/artifacts/actual-benchmark-v5/timing-v6/empty2-3-candidate.log": "f0d17a597ca38d7faa7affc35bb8a79d046b414f796fa7030e5e10491465b6d9",
+    ".dedup-work/20261015-common-v5/artifacts/actual-benchmark-v5/timing-v6/empty2-4-baseline.log": "55f2d8ad982e92ac8efe9073de6690599fad803d242d004fa25647fb04fdb314",
+    ".dedup-work/20261015-common-v5/artifacts/actual-benchmark-v5/timing-v6/empty2-4-candidate.log": "12a3b8a1a9c1256ebeeab3b19817f4ef071b247e58fa60ba7c13d31bacbb43fb",
+    ".dedup-work/20261015-common-v5/artifacts/actual-benchmark-v5/timing-v6/empty2-5-baseline.log": "9df5c636b13e45d31b10a7fd955acfc0fd31adaa5ddc2788e32afc38f20a50c0",
+    ".dedup-work/20261015-common-v5/artifacts/actual-benchmark-v5/timing-v6/empty2-5-candidate.log": "aeba5eebe89a4559746dce3e13866d3ff909edc61fe0de5c258e0a0fc8f028d9",
+    ".dedup-work/20261015-common-v5/artifacts/actual-benchmark-v5/timing-v6/empty2-6-baseline.log": "4f002c7a7c1366ba635520d053f3d82a991cdd95fe92e1c7c62c2b9808f95a92",
+    ".dedup-work/20261015-common-v5/artifacts/actual-benchmark-v5/timing-v6/empty2-6-candidate.log": "ab214d5c0b07b935bc2bd62c1455757dc750989c47ad787214b45c455497a756",
+    ".dedup-work/20261015-common-v5/artifacts/actual-benchmark-v5/timing-v6/empty8-0-baseline.log": "2685d2e548cdc5046c1def1f05ed42180bc4151486319fe90bfb8f4fc2661467",
+    ".dedup-work/20261015-common-v5/artifacts/actual-benchmark-v5/timing-v6/empty8-0-candidate.log": "a02861f1314264bde3277e070424b4dd84553a189ecd1ca517315d26bd4fe299",
+    ".dedup-work/20261015-common-v5/artifacts/actual-benchmark-v5/timing-v6/empty8-1-candidate.log": "e775652396d7a29d31f021ef4db42f5811259deeca90bee0339b8e71c0379451"
+  },
+  "excluded_interfered_sample": ".dedup-work/20261015-common-v5/artifacts/actual-benchmark-v5/timing-v6/empty8-1-candidate.log",
+  "observed_compilers": [
+    {
+      "pid": 9472,
+      "parent_pid": 5850,
+      "executable": "/Users/themoretheless/.rustup/toolchains/nightly-2026-09-16-aarch64-apple-darwin/bin/cargo"
+    },
+    {
+      "pid": 9475,
+      "parent_pid": 9472,
+      "executable": "/Users/themoretheless/.rustup/toolchains/nightly-2026-09-16-aarch64-apple-darwin/bin/rustc"
+    }
+  ],
+  "speedup_qualified": false,
+  "scope": "All retained sample outcomes and ordered prefix verified, plus excluded last native passing sample. Entire timing attempt unqualified due observed concurrent compiler after sample. No ratios/adoption inferred, no selective mixing into next attempt. Frozen gates/36opt3correctness controls unaffected."
+}

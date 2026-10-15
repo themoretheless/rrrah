@@ -1,0 +1,61 @@
+{
+  "status": "verified_complete_source_media_review_and_selected_pure_controls",
+  "whole_repo_complete": true,
+  "whole_implementation_complete": true,
+  "repository": "pkolaczk/fclones-gui",
+  "commit": "f70e70ea43ea4c6858780307df112922ab550332",
+  "blobs": 31,
+  "canonical_trees": 9,
+  "lock_packages_structurally_reviewed": 256,
+  "acquisition": "docs/research/dedup-500/fclones34-fetched-source-pins-20261016.json",
+  "acquisition_sha256": "d5644c281f7d2a25579cb29b2cd5a96281ca0d52373bc05663cf79af271e685f",
+  "auditor_sha256": "5890e7fd7abcae374502bc87a0d1a02423dfbd948ccde6d98a0f1a46c08389e1",
+  "controls": "docs/research/dedup-500/fclones34-numeric-progress-controls-20261016.json",
+  "controls_sha256": "a432e279c05ff99189efb1e6354f640c7078cfb67fd87ac697ecb8a152b62cc3",
+  "media_scope": "All5PNGs:2fullscreenshots and256pxicon viewed,2duplicate screenshot files verifiedbyteidentical. No videos/animations in pinnedtree.",
+  "license": "MIT LICENSE fullyread, no productioncodecopy",
+  "full_gui_build_or_run": false,
+  "gui_availability_log": {
+    "path": ".dedup-work/fclones34-20261016/gui-runtime-availability.log",
+    "sha256": "874ceffb1e234072c71e0e5a5c10469c1a1108922bab7fdef81de894f7d2c5fe"
+  },
+  "upstream_tests_run": false,
+  "selected_runtime_scope": "Verbatim complete3purebytefunctions andProgressBarstruct/3implblocks extracted unchanged. RealstdAtomicU64/floatmath, minimalProgressTracker trait-signature adapter replaces externalfclones trait only.8selectedcontrols checked/uncheckedarithmeticopt3 profiles eachtwice. No GTK/widget/delegate/corefclones/nativeUI/upstreamsuite/fullservice proof. Native Rust test harness unwinds panics; actual GUI release panic=abort not executed.",
+  "findings": [
+    {
+      "qualification": "Nativepurehelper controls, notGTK widget",
+      "finding": "u64MAX bytehelper additionoverflows checkedprofile, negativeinfinity unchecked;999/1000 quantize tosamegrid.8controls bothprofiles twice; validwidgetreachability nottested."
+    },
+    {
+      "qualification": "Nativeoriginalprogress bodies, notGTK widget",
+      "finding": "len0 producesNaN, count11/len10 produces1.1; knownnormal/unknown controls pass. ExternalProgressTracker replaced by minimaltraitsignature only."
+    },
+    {
+      "qualification": "Static frontend only",
+      "finding": "Input min_rf spinner updatesmodel butgroup_config omits it, so no explicitmatch-count setting ispassed to engine."
+    },
+    {
+      "qualification": "Static frontend only",
+      "finding": "AbortSearch onlyclearsduplicate view; no cancelmessage/token ispassed toGroupWorker. GroupWorker errorbranchdoesnotHideprogress;LogAdapter::log discards allmessages."
+    },
+    {
+      "qualification": "Static frontend only",
+      "finding": "Removal UI statsdecrement onlyinside expandedchildrenmodel branch, so collapsedgroup RemoveFiles canretainstale total/selected counts."
+    },
+    {
+      "qualification": "Static frontend only",
+      "finding": "FileItem property lendeclaredParamSpecUInt whilevaluefromFileLen u64; runtimeGObject typecheck nottested."
+    },
+    {
+      "qualification": "Static/delegatedengine scope",
+      "finding": "Selection tries tokeep atleastone file/group; commands execute anderror/stale-source safety delegated toexternalfclones0.32.1, not qualified by reading GUI wrapper. No realdeletion/move/link command executed."
+    }
+  ],
+  "decision": "Reference virtualization/batched256groupdelivery and descendinggroupremoval, keep-candidate selectionconcepts; avoid claiming UIcancel/errors/quantityboundaries qualified. No adoption.",
+  "limits": [
+    "CompletepinnedGUI source/media review, notfullthirdpartyfclones/GTK/dependency-source review",
+    "GTK4/libadwaita missingvia currentpkgconfig; no fullGUIcompile/runtime, actualwidgetevents, destructiveaction/cancellation/service/platform/performance qualification",
+    "Pureselectedbody tests withdeclaredtraitadapter do notprove GUIreachability orproductionpanicpolicy",
+    "No userfiles accessed/deleted/moved/linked and no productioncodecopied"
+  ]
+}
