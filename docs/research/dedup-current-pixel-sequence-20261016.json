@@ -1,0 +1,73 @@
+{
+  "status": "fresh_passed_complete_current_pixel_linear_sequence_scope",
+  "passed": 21,
+  "failed": 0,
+  "ignored": 0,
+  "filtered": 0,
+  "inventory": [
+    "linear_controls::hdr_and_sub_byte_differences_are_retained",
+    "linear_controls::hdr_fingerprints_keep_highlight_structure_without_quantization",
+    "linear_controls::invalid_samples_budget_and_cancel_are_explicit",
+    "linear_controls::invisible_rgb_and_signed_zero_are_canonical",
+    "pixels_controls::all_opaque_gray_levels_collide_only_as_uninformative_candidates",
+    "pixels_controls::gradient_has_independently_known_difference_bits",
+    "pixels_controls::identical_and_transparent_pixel_equality_observe_late_cancellation",
+    "pixels_controls::identical_pixels_honor_each_block_and_final_cancellation_checkpoint",
+    "pixels_controls::invisible_rgb_is_canonical_but_visible_pixels_are_exact",
+    "pixels_controls::transparent_texture_is_canonical_and_alpha_gradient_survives_white_projection",
+    "pixels_controls::uniform_hash_collision_is_not_informative",
+    "pixels_controls::validates_layout_budget_and_cancellation",
+    "sequence::duration_sum_tests::large_shared_denominator_reduces_before_overflow",
+    "sequence::duration_sum_tests::sum_retains_exact_time_and_refuses_unrepresentable_result",
+    "sequence_controls::admission_cancel_at_every_checkpoint_returns_no_partial_sequence_and_retry_succeeds",
+    "sequence_controls::animation_requires_timing_and_compares_repetitions",
+    "sequence_controls::complete_coverage_is_required",
+    "sequence_controls::equivalent_timelines_ignore_frame_splits_but_keep_time_and_pixels",
+    "sequence_controls::first_frame_match_does_not_hide_changed_last_frame",
+    "sequence_controls::rational_extremes_fail_explicitly_without_wrapping",
+    "sequence_controls::timeline_comparison_matches_independent_discrete_presentation_oracle"
+  ],
+  "source_pins": {
+    "crates/rrrah-dedup/src/pixels.rs": "89b074f4bf205a42e51e4406090c43705c3ab4fa8a4b4494afd27e705bc2dfc1",
+    "crates/rrrah-dedup/tests/pixels.rs": "463d56af46a7a3eadc4bd1e19986c47f18804e93f4ecf7ea189e3e0a2dc773ec",
+    "crates/rrrah-dedup/src/linear.rs": "9ba055f4a73063eed2d757e47cbd6d0b1b53b9f1fed6c1cbd777d3106141e059",
+    "crates/rrrah-dedup/tests/linear.rs": "5d65b2dcc57ce18d826b8d567373ca57fc2d31d0e1f0d1b32ca2e5a9f97e8812",
+    "crates/rrrah-dedup/src/sequence.rs": "49972d81af47e72fb42451e50c67bed7f3eec3dfbfdac896014c55b89f98c7eb",
+    "crates/rrrah-dedup/tests/sequence.rs": "a95d7c8269cef17b82b6305982822210975ef667009145c8dbc44a18cd2ae5ed",
+    "crates/rrrah-dedup/src/local.rs": "c89c2b0841078177077704e4ab89123215f815dc2bfe8d1e435999ed1ea4ad3c"
+  },
+  "dependency_pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libblake3-5dbb3dfc2ce7d297.rlib": "1a90993f8c95cbbc51839449c8db08075277d5468e7d9fa2ae1b8838720083fe",
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libthiserror-1f2ca11ca2706be8.rlib": "a4bc045f06441d4730b1988bee770197e1f51f4b1600df8c028a668c27c77bf1"
+  },
+  "compiler": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: aarch64-apple-darwin\nrelease: 1.98.1\nLLVM version: 22.1.8\n",
+  "command": [
+    "rustc",
+    "+stable",
+    "--edition=2024",
+    "--test",
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/current-pixel-sequence-20261016/harness.rs",
+    "-C",
+    "opt-level=1",
+    "-L",
+    "dependency=/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps",
+    "-o",
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/current-pixel-sequence-20261016/tests",
+    "--extern",
+    "blake3=/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libblake3-5dbb3dfc2ce7d297.rlib",
+    "--extern",
+    "thiserror=/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libthiserror-1f2ca11ca2706be8.rlib"
+  ],
+  "binary": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/current-pixel-sequence-20261016/tests",
+  "binary_sha256": "e212a4c31843ab0c179f2e3c0896706de2b4d45ceee6553d98412ce79ea728df",
+  "harness": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/current-pixel-sequence-20261016/harness.rs",
+  "harness_sha256": "581d13c78a84b729e245ab82fedc8515aea7d892294c39fc3730cb34dc8a6bf5",
+  "logs": {
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/current-pixel-sequence-20261016/build.log": "3145f238cb851428fc6fb0022f8061da9ca06d69be58720c818c41df130faa63",
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/current-pixel-sequence-20261016/inventory.log": "079dbf4b4db1846132511877e5c8b9160c2199cba00736d9ba3ef2c03a2b99eb",
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/current-pixel-sequence-20261016/tests.log": "5ebc97a4c986d1907c30a190c29d64e4a022f0878c7d1c51049f0a5391e42820"
+  },
+  "producer": "scripts/qualify-dedup-current-pixel-sequence-20261016.py",
+  "producer_sha256": "1cd347b2eb7415fc1bc37a9cbad08619831a38093370e804ded88969fe3f6a50",
+  "scope": "Whole unchanged currentpixels/linear/sequence modules andallthreewholeexistingintegrationfiles; unchangedselectedLocalError/reserve_slot helper definitions only. Allnativeinventory executed withrealcachedBLAKE3/thiserror dependencies, nofilters/ignoredtests/newmirroredtests. Coversalpha/transparentRGB/flat256/hashcandidatepolicy, completeframecoverage/rationaldurations/timelineoracles/cancellation/HDR. No imagecontainerdecode/actualSIFTalgorithm/wholeCargo/fullcrate/platform/visualquality/throughput proof."
+}

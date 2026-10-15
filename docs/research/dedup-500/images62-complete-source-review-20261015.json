@@ -1,0 +1,141 @@
+{
+  "status": "complete_pinned_source_and_visual_review_whole_module_native_SIFT_controls",
+  "observed_at_utc": "2026-10-15T20:09:18.083042+00:00",
+  "index": 62,
+  "repository": "magamig/duplicate-images-finder",
+  "commit": "0c661d5ff1661d6d3e352064883609c6d82345ca",
+  "root_tree": "d4ccbbd33a22ba5f075b464f1bc539f231f8a9aa",
+  "whole_repo_complete": true,
+  "full_repository_read": true,
+  "blobs": 15,
+  "trees": 3,
+  "all_git_objects_verified": true,
+  "fully_read_text": [
+    ".gitignore",
+    ".travis.yml",
+    "LICENSE.md",
+    "README.md",
+    "docs/index.html",
+    "docs/main.html",
+    "main.py",
+    "requirements.txt",
+    "tests.py"
+  ],
+  "visual_receipt": "docs/research/dedup-500/images62-visual-view-receipt-20261015.json",
+  "visual_receipt_sha256": "70bf56de485dd3922351007e5f8d14150a0d4dc41757ebab56d1a056ff4be08e",
+  "license": "EntireMIT LICENSE.md read; no production sourceadoption.",
+  "native": {
+    "original_tests": 2,
+    "controls": 13,
+    "runs": 2,
+    "cases": [
+      "CLI_options_do_not_update_matching_globals",
+      "native_featureless_identical_images_are_missed",
+      "unreadable_image_admitted_then_SIFT_raises",
+      "strict_match_threshold_requires51_not50",
+      "single_train_descriptor_cannot_satisfy_native_k2",
+      "many_to_one_descriptor_matches_and_input_order_change_acceptance",
+      "three_real_identical_images_repeat_delete_path_and_abort",
+      "opaque_vs_transparent_png_is_marked_duplicate",
+      "different_second_GIF_frames_are_ignored_and_pair_marked_duplicate",
+      "actual_delete_removes_post_match_unique_rewrite",
+      "missing_delete_path_aborts_before_later_entries",
+      "collection_is_nonrecursive",
+      "near_match_is_not_exact_pixel_identity"
+    ],
+    "observations": {
+      "CLI_options_do_not_update_matching_globals": {
+        "parsed": [
+          100000,
+          0.99
+        ],
+        "actual_globals": [
+          50,
+          0.3
+        ]
+      },
+      "native_featureless_identical_images_are_missed": "Twoidenticaldecodedpixelimages, noSIFTfeatures/no duplicate reported",
+      "unreadable_image_admitted_then_SIFT_raises": "error",
+      "strict_match_threshold_requires51_not50": {
+        "output": {
+          "50": [],
+          "51": [
+            "0"
+          ]
+        },
+        "adapter": "Explicitdescriptorfixture, actualnativeFLANN andunchangedthresholdlogic"
+      },
+      "single_train_descriptor_cannot_satisfy_native_k2": "error",
+      "many_to_one_descriptor_matches_and_input_order_change_acceptance": {
+        "forward": [
+          "many"
+        ],
+        "reverse": [],
+        "scope": "Syntheticdescriptorstate; native manytoone/asymmetricpolicy, not imagegroundtruth"
+      },
+      "three_real_identical_images_repeat_delete_path_and_abort": {
+        "duplicate_count": 3,
+        "unique_delete_paths": 2,
+        "remaining_files": 2,
+        "exception": "FileNotFoundError"
+      },
+      "opaque_vs_transparent_png_is_marked_duplicate": {
+        "different_alpha": true,
+        "grayscale_equal": true,
+        "duplicate_reported": true
+      },
+      "different_second_GIF_frames_are_ignored_and_pair_marked_duplicate": "ActualnativeGIFframe0decode; secondframesblackvswhite ignored",
+      "actual_delete_removes_post_match_unique_rewrite": "Explicitpostmatchrewrite removed byactualdelete; newlyownedimageonly",
+      "missing_delete_path_aborts_before_later_entries": "FileNotFoundError",
+      "collection_is_nonrecursive": "Originalnonrecursivepathpolicy, not a claimedbug",
+      "near_match_is_not_exact_pixel_identity": "DifferentRGBpixels stillnearimage match; candidate similarity doesnotprove byte/pixelidentity"
+    },
+    "logs": {
+      "docs/research/dedup-500/images62-native-run1-20261015.log": "7555af9f6ef7d307bc5c9a357dfbf2366e5b827aa9efeb2ced1fa1a745091cf5",
+      "docs/research/dedup-500/images62-native-run1-20261015.stderr.log": "ba756eba9234d001d2c3fc4960f776b15b346b70c0845c5d49e93f836933c59a",
+      "docs/research/dedup-500/images62-native-run2-20261015.log": "2e5e4d24432471cbf70c0bfb57f94cb9a1722848ddc43be59d2399ce46908b00",
+      "docs/research/dedup-500/images62-native-run2-20261015.stderr.log": "e9f2eea403fc99cf3cd6fb5763de75a394efafd027c534cd16b9bec8d8d26931"
+    },
+    "versions": {
+      "opencv-python-headless": "4.12.0.88",
+      "numpy": "2.2.6",
+      "Pillow": "12.3.0"
+    },
+    "adapters": [
+      "Entireunchangedmainmodule imported; entire2originaltestbodies unchanged, cwdoriginalsource.",
+      "Modernopencv-python-headless4.12/numpy2.2.6 actualSIFT/FLANN/decoder backend; declared2019opencv4.4twoGUIwheels notinstalled. Explicitheadlessmodernenvironment, no sourcepatch.",
+      "NativeRNGseed123/OpenCVthreads1 forreproducibility; explicitdescriptorfixtures onlythreshold/direction/k2 controls. OthercontrolsactualSIFT onownedPNG/GIF/RGBAorupstreamJPEG.",
+      "Deletiononlynewlyownedfixtures; explicitpostmatchrewrite, nooriginal/publicimage/source/userdatadeletion."
+    ],
+    "script": "scripts/qualify-images62-native-controls-20261015.py",
+    "script_sha256": "9e0a6d07d40f1f5db62ec41c57a44eecdaf569d7f5eeee6add386cca3d01c57b",
+    "dependency_pins": "docs/research/dedup-500/images62-installed-dependency-pins-20261015.json",
+    "dependency_pins_sha256": "681185685e2f262caaede5bdb605a2448a88c05ded0fdbf4f00910a7abf7b09f"
+  },
+  "decision": "reference",
+  "findings": [
+    "Actualwholemodule usesSIFT/FLANN rawratio-test count andlowerresolutionselection; no mutualone-to-one/geometricverification orpixel/contentidentityconfirmation.",
+    "Both2unchangedoriginaltests pass twice on4originalpublicJPEGimages withmodernnativebackend. Fourphoto testcorpus isnotlargequalitymatrix.",
+    "NativeRGBAopaquevsfullytransparent PNGs withsameRGB markduplicate becauseGrayscaleread ignoresalpha. TwoGIFs withidenticalfirst/noiseframe butdifferentblack/whitesecondframes markduplicate; nativebackend onlyreadsframe0.",
+    "Identicalfeatureless images getnoSIFTdescriptors andarenotreportedduplicate. Unreadableimage admittedasNone thenSIFTerror; singletrainingdescriptor cannotfulfillk2.",
+    "ThreeactualidenticalnoisePNGs produce3pairwise deleteentries withonly2uniquepaths; seconddeleteofsamepath raisesFileNotFoundError afterfirstfilegone, leaves2copies. Newlyownedfixtures only.",
+    "Actualdelete removesexplicitpostmatchuniqueimage rewrite withoutrevalidation. Missingpath abortsremainingdeletions.",
+    "CLImin_matches/features_distance options parsedintolocals andneverupdateglobals50/0.3. Strictthresholdrequires51 ratherthan50. Explicitsyntheticdescriptors demonstrate many-to-one/asymmetricacceptance, notpixelgroundtruth.",
+    "Pairenumeration is n(n-1)/2, notfactorialclaimedindocstring. Descriptorsearchworkadditional; no benchmarkclaim. HTMLgenerateddocs useolderxfeatures2d.SIFT_create whileactualmain usescv.SIFT_create."
+  ],
+  "limits": [
+    "No calibratedlargepositive/negative visualquality/platform/original2019environment/performance qualification.",
+    "READMEexternalbranding/papers/badges notusedasruntimeevidence. No downloadedpaper/GUInativeclaim.",
+    "No Rootproductionadoption ornewlibraryspeedup.",
+    "All9text/6staticimage blobs reviewed, no othertrackedmedia. Fullmodernmodule/nativefunctions executed; original2019opencv4.4environment/GUI/platform/dependencyfullsourceunqualified.",
+    "NativeGIF/alpha falsepositives aredeterministicownedfixtures, not calibrationofallvisualcases. No RootdecodedGIF/alpharouteclaimfromforeigncontrols.",
+    "ExistingRootpixel/sequence regressions requalifiedseparately; no foreignalgorithmadoption orspeedup."
+  ],
+  "evidence_pins": {
+    "docs/research/dedup-500/images62-full-text-pins-20261015.json": "915b56312397944b30055606f7be81902b5a269e8e168c0eed44382931508999",
+    "docs/research/dedup-500/images62-upstream-tree-20261015.json": "50872255853ad212a70c487d091c3b9acc86127b1bd4a92b85c01b1cc692048b",
+    "docs/research/dedup-500/images62-visual-view-receipt-20261015.json": "70bf56de485dd3922351007e5f8d14150a0d4dc41757ebab56d1a056ff4be08e",
+    "docs/research/dedup-500/images62-installed-dependency-pins-20261015.json": "681185685e2f262caaede5bdb605a2448a88c05ded0fdbf4f00910a7abf7b09f",
+    "scripts/audit-images62-complete-source-20261015.py": "ae8c2ba1cb28cf80c0c647480587e7e485eb673ee24b953e6b0931a55d208ed5"
+  }
+}
