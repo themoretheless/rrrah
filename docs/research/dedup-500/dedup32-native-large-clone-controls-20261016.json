@@ -1,0 +1,254 @@
+{
+  "status": "verified_original_native_modules_10controls_twice",
+  "whole_repo_complete": false,
+  "repository": "ttkb-oss/dedup",
+  "producer_sha256": "f60c5096423950228dfd154012abba60d77e6ee4be5552f5cc0ce8449ba4a301",
+  "rows": [
+    {
+      "repeat": 1,
+      "case": "2m",
+      "size": 2097152,
+      "changed_offset": 1048699,
+      "different_bytes": [
+        "58",
+        "59"
+      ],
+      "native_digests": [
+        "21f42daeb327bfe6c6afb78f5897cb3558eac05ca5b2df00cdc017a9c6c44ece",
+        "2e83866b7b66dd9fcd71a88f6047d06fb8b75a535d37ea383015d09b92e89217"
+      ],
+      "prefix_length_used_by_32bit_API": 2097152,
+      "prefix_sha256_oracle": null,
+      "allocated_bytes": [
+        2097152,
+        2097152
+      ],
+      "log": ".dedup-work/dedup32-20261016/native-controls/1-2m.log",
+      "log_sha256": "b3aa06d179962503091aba0ff381cd49fa72f1c1d13c390335ac8e8344614570"
+    },
+    {
+      "repeat": 1,
+      "case": "4g",
+      "size": 4294967296,
+      "changed_offset": 2147483771,
+      "different_bytes": [
+        "58",
+        "59"
+      ],
+      "native_digests": [
+        "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      ],
+      "prefix_length_used_by_32bit_API": 0,
+      "prefix_sha256_oracle": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "allocated_bytes": [
+        49152,
+        49152
+      ],
+      "log": ".dedup-work/dedup32-20261016/native-controls/1-4g.log",
+      "log_sha256": "89a5154a610ae1346fed334d2be2003f68df126adfbadc67eb4e8caac9920668"
+    },
+    {
+      "repeat": 1,
+      "case": "4g64k",
+      "size": 4295032832,
+      "changed_offset": 2147516539,
+      "different_bytes": [
+        "58",
+        "59"
+      ],
+      "native_digests": [
+        "5d0d7a7c1c03b7c0822e121c96387bb3c5c4fce1ea67ecc939ead88e078bdcc0",
+        "5d0d7a7c1c03b7c0822e121c96387bb3c5c4fce1ea67ecc939ead88e078bdcc0"
+      ],
+      "prefix_length_used_by_32bit_API": 65536,
+      "prefix_sha256_oracle": "5d0d7a7c1c03b7c0822e121c96387bb3c5c4fce1ea67ecc939ead88e078bdcc0",
+      "allocated_bytes": [
+        49152,
+        49152
+      ],
+      "log": ".dedup-work/dedup32-20261016/native-controls/1-4g64k.log",
+      "log_sha256": "0a7ff3d3aabae5c5eab58eb5e113e8075067c197cc4b25d32e0446334d1f2d60"
+    },
+    {
+      "repeat": 1,
+      "case": "clone_equal_metadata_copy_on_write",
+      "log": ".dedup-work/dedup32-20261016/native-controls/1-clone_equal.log",
+      "log_sha256": "2924c62a1d471bdc9fe6308d106e3c8454d2c7667134e1d0e2d629730591e816"
+    },
+    {
+      "repeat": 1,
+      "case": "clone_missing_source_preserves_target",
+      "log": ".dedup-work/dedup32-20261016/native-controls/1-clone_missing.log",
+      "log_sha256": "8a4a433271d92c1ea0b02621703106fa1e5056dc7360a4b1192dffd8eb4a24e6"
+    },
+    {
+      "repeat": 1,
+      "case": "clone_existing_staging_preserved",
+      "log": ".dedup-work/dedup32-20261016/native-controls/1-clone_staging.log",
+      "log_sha256": "7518a0889afee995eeda90fda35061fb3fb44825d031e3735a0ebc01c626875f"
+    },
+    {
+      "repeat": 1,
+      "case": "zero_source_clone_refuses_preserves_target",
+      "log": ".dedup-work/dedup32-20261016/native-controls/1-clone_zero.log",
+      "log_sha256": "6890f3ddb23afd202503090748c68e22123351d9fb994d79248f71a528a3e47f"
+    },
+    {
+      "repeat": 1,
+      "case": "direct_link_missing_source_loses_target",
+      "log": ".dedup-work/dedup32-20261016/native-controls/1-link_missing.log",
+      "log_sha256": "4e156adc85164d114f7d88a9f2290bc73d2a4d834a1826b74ddd1d6d48b1f7d6"
+    },
+    {
+      "repeat": 1,
+      "case": "direct_link_success_shared_inode",
+      "log": ".dedup-work/dedup32-20261016/native-controls/1-link_equal.log",
+      "log_sha256": "2924c62a1d471bdc9fe6308d106e3c8454d2c7667134e1d0e2d629730591e816"
+    },
+    {
+      "repeat": 1,
+      "case": "direct_symlink_relative_success",
+      "log": ".dedup-work/dedup32-20261016/native-controls/1-symlink_equal.log",
+      "log_sha256": "2924c62a1d471bdc9fe6308d106e3c8454d2c7667134e1d0e2d629730591e816"
+    },
+    {
+      "repeat": 2,
+      "case": "2m",
+      "size": 2097152,
+      "changed_offset": 1048699,
+      "different_bytes": [
+        "58",
+        "59"
+      ],
+      "native_digests": [
+        "21f42daeb327bfe6c6afb78f5897cb3558eac05ca5b2df00cdc017a9c6c44ece",
+        "2e83866b7b66dd9fcd71a88f6047d06fb8b75a535d37ea383015d09b92e89217"
+      ],
+      "prefix_length_used_by_32bit_API": 2097152,
+      "prefix_sha256_oracle": null,
+      "allocated_bytes": [
+        2097152,
+        2097152
+      ],
+      "log": ".dedup-work/dedup32-20261016/native-controls/2-2m.log",
+      "log_sha256": "b3aa06d179962503091aba0ff381cd49fa72f1c1d13c390335ac8e8344614570"
+    },
+    {
+      "repeat": 2,
+      "case": "4g",
+      "size": 4294967296,
+      "changed_offset": 2147483771,
+      "different_bytes": [
+        "58",
+        "59"
+      ],
+      "native_digests": [
+        "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      ],
+      "prefix_length_used_by_32bit_API": 0,
+      "prefix_sha256_oracle": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "allocated_bytes": [
+        49152,
+        49152
+      ],
+      "log": ".dedup-work/dedup32-20261016/native-controls/2-4g.log",
+      "log_sha256": "89a5154a610ae1346fed334d2be2003f68df126adfbadc67eb4e8caac9920668"
+    },
+    {
+      "repeat": 2,
+      "case": "4g64k",
+      "size": 4295032832,
+      "changed_offset": 2147516539,
+      "different_bytes": [
+        "58",
+        "59"
+      ],
+      "native_digests": [
+        "5d0d7a7c1c03b7c0822e121c96387bb3c5c4fce1ea67ecc939ead88e078bdcc0",
+        "5d0d7a7c1c03b7c0822e121c96387bb3c5c4fce1ea67ecc939ead88e078bdcc0"
+      ],
+      "prefix_length_used_by_32bit_API": 65536,
+      "prefix_sha256_oracle": "5d0d7a7c1c03b7c0822e121c96387bb3c5c4fce1ea67ecc939ead88e078bdcc0",
+      "allocated_bytes": [
+        49152,
+        49152
+      ],
+      "log": ".dedup-work/dedup32-20261016/native-controls/2-4g64k.log",
+      "log_sha256": "0a7ff3d3aabae5c5eab58eb5e113e8075067c197cc4b25d32e0446334d1f2d60"
+    },
+    {
+      "repeat": 2,
+      "case": "clone_equal_metadata_copy_on_write",
+      "log": ".dedup-work/dedup32-20261016/native-controls/2-clone_equal.log",
+      "log_sha256": "2924c62a1d471bdc9fe6308d106e3c8454d2c7667134e1d0e2d629730591e816"
+    },
+    {
+      "repeat": 2,
+      "case": "clone_missing_source_preserves_target",
+      "log": ".dedup-work/dedup32-20261016/native-controls/2-clone_missing.log",
+      "log_sha256": "8a4a433271d92c1ea0b02621703106fa1e5056dc7360a4b1192dffd8eb4a24e6"
+    },
+    {
+      "repeat": 2,
+      "case": "clone_existing_staging_preserved",
+      "log": ".dedup-work/dedup32-20261016/native-controls/2-clone_staging.log",
+      "log_sha256": "c3f74ba9a2f4ce5b9bc9c0d713ba3cf73cf3571507be6176b7cc19aeaa18ea39"
+    },
+    {
+      "repeat": 2,
+      "case": "zero_source_clone_refuses_preserves_target",
+      "log": ".dedup-work/dedup32-20261016/native-controls/2-clone_zero.log",
+      "log_sha256": "6890f3ddb23afd202503090748c68e22123351d9fb994d79248f71a528a3e47f"
+    },
+    {
+      "repeat": 2,
+      "case": "direct_link_missing_source_loses_target",
+      "log": ".dedup-work/dedup32-20261016/native-controls/2-link_missing.log",
+      "log_sha256": "4e156adc85164d114f7d88a9f2290bc73d2a4d834a1826b74ddd1d6d48b1f7d6"
+    },
+    {
+      "repeat": 2,
+      "case": "direct_link_success_shared_inode",
+      "log": ".dedup-work/dedup32-20261016/native-controls/2-link_equal.log",
+      "log_sha256": "2924c62a1d471bdc9fe6308d106e3c8454d2c7667134e1d0e2d629730591e816"
+    },
+    {
+      "repeat": 2,
+      "case": "direct_symlink_relative_success",
+      "log": ".dedup-work/dedup32-20261016/native-controls/2-symlink_equal.log",
+      "log_sha256": "2924c62a1d471bdc9fe6308d106e3c8454d2c7667134e1d0e2d629730591e816"
+    }
+  ],
+  "source_pins": {
+    ".dedup-work/dedup32-20261016/source/map.c": "696f2f73892ef43fa3fa85050d83c5ed14dee58355242cc6a805c95b215fde2f",
+    ".dedup-work/dedup32-20261016/source/map.h": "64ff24369356a7347fb3527b2b341619b776a786a1cb9ece9f9299dc477d3645",
+    ".dedup-work/dedup32-20261016/source/alist.c": "9b3a5e7dbde2d966baa8821f15d6b8e4b7b4960d8186ee0d2aad1de582608c9c",
+    ".dedup-work/dedup32-20261016/source/alist.h": "07a3e03902228604033f45b5698b2686b8bfaf354f1f2242bba132fee9ade671",
+    ".dedup-work/dedup32-20261016/source/clone.c": "6abbb22d4ba36ee52f97240f345be5d4ccf08f56d542c169cdea6407d4844e54",
+    ".dedup-work/dedup32-20261016/source/clone.h": "e138e37400b7946edc8f30b2d595afa624b9c7ddab2aaef4277909a1c3203582",
+    ".dedup-work/dedup32-20261016/source/attr.h": "d5f75c059975c0d123bda500d53e253010e1f4d76a2055a8d3bafc5fb9ba761d",
+    ".dedup-work/dedup32-20261016/native-controls/main.c": "fc09c723fb7f073fa52c1e37e165e3d52352a7f5a847f312410b6a34ebe27aed",
+    ".dedup-work/dedup32-20261016/native-controls/controls": "b1b43a01e1a7b17f8c0869b3d48ec46857b5d7adb98cb408804483b7157a2d2f",
+    ".dedup-work/dedup32-20261016/native-controls/build.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "command": [
+    "cc",
+    "-std=gnu2x",
+    "-O2",
+    "-I/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dedup32-20261016/source",
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dedup32-20261016/native-controls/main.c",
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dedup32-20261016/source/map.c",
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dedup32-20261016/source/alist.c",
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dedup32-20261016/source/clone.c",
+    "-o",
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dedup32-20261016/native-controls/controls"
+  ],
+  "scope": "Entire unchanged originalmap/alist/clone C modules linked against actual macOS CommonCrypto/rbtree/clonefile/copyfile/libc. No data or syscall adapters.10controls twice; native digest uses32bitCC_LONG truncation at4GiB and4GiB+64KiB on sparse distinct-byte files. Small2MiB differingdigest control. Actualtinyclone metadata/COW/failures/hardlink/symlink onowned fixtures only. Not wholeCLI/upstreamsuite/profile/snapshotrace/nativeotherplatform/RSS/physicalIO/performance/adoption qualification.",
+  "limits": [
+    "Largefiles sparse, hashes match independently computed truncated prefix; a differing byte proves files unequal without full4GiBhash/IO/RSS claim",
+    "Directlink missing-source loss tests invalid/disappeared source at module API, not wholeCLI reproduction",
+    "Original make strictprofile/upstreamChecksuite not run; no production code copied, no userfiles touched"
+  ]
+}

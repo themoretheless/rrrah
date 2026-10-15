@@ -1,0 +1,77 @@
+{
+  "status": "verified_current_exact_rejects_source32_large_false_duplicates",
+  "producer_sha256": "d9bb08a81947b4d92f3bebf7c577213a0609dce95491d4bc87af2075bd3496d1",
+  "source": "crates/rrrah-dedup/src/exact.rs",
+  "source_sha256": "40e5ef25e7d51a314ba993f1b9237f04a45fae7a16781982933d201435c5930d",
+  "dependencies": {
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libblake3-5dbb3dfc2ce7d297.rlib": "1a90993f8c95cbbc51839449c8db08075277d5468e7d9fa2ae1b8838720083fe",
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libthiserror-1f2ca11ca2706be8.rlib": "a4bc045f06441d4730b1988bee770197e1f51f4b1600df8c028a668c27c77bf1",
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libtempfile-f6f2a369a6678518.rlib": "3c0a02859f18952acb6482a76d369ebac50a9c75f3b3b153fb3db5af15f2ea31",
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/liblibc-0a79900aa2799e6c.rlib": "b3e730a257abb46acab6283d05f1a1340e72bbb48682e09f3a237332f7f08c25"
+  },
+  "binary": ".dedup-work/root-source32-large-v2-20261016/probe",
+  "binary_sha256": "e1647b5ac9fc4e7d0ec039ec1913484b169be76a37c64076077ba37076a7d1f9",
+  "harness": ".dedup-work/root-source32-large-v2-20261016/main.rs",
+  "harness_sha256": "c8ad2a87a2f868832077778e5326077e59abc520c96c2b93d75bb656e8dfa5a8",
+  "build_log": ".dedup-work/root-source32-large-v2-20261016/build.log",
+  "build_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "command": [
+    "rustc",
+    "+stable",
+    "--edition=2024",
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/root-source32-large-v2-20261016/main.rs",
+    "-C",
+    "opt-level=3",
+    "-L",
+    "dependency=/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps",
+    "-o",
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/root-source32-large-v2-20261016/probe",
+    "--extern",
+    "blake3=/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libblake3-5dbb3dfc2ce7d297.rlib",
+    "--extern",
+    "thiserror=/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libthiserror-1f2ca11ca2706be8.rlib",
+    "--extern",
+    "tempfile=/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libtempfile-f6f2a369a6678518.rlib",
+    "--extern",
+    "libc=/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/liblibc-0a79900aa2799e6c.rlib"
+  ],
+  "rows": [
+    {
+      "case": "2m",
+      "size": 2097152,
+      "different_offset": 1048699,
+      "inputs": [
+        ".dedup-work/dedup32-20261016/native-controls/run1/2m/a",
+        ".dedup-work/dedup32-20261016/native-controls/run1/2m/b"
+      ],
+      "both_orders_rejected": true,
+      "log": ".dedup-work/root-source32-large-v2-20261016/2m.log",
+      "log_sha256": "e86a8bd4630a323df28d537ac1bec4df31d24d6930f9614d0f4ae16dacd6e702"
+    },
+    {
+      "case": "4g",
+      "size": 4294967296,
+      "different_offset": 2147483771,
+      "inputs": [
+        ".dedup-work/dedup32-20261016/native-controls/run1/4g/a",
+        ".dedup-work/dedup32-20261016/native-controls/run1/4g/b"
+      ],
+      "both_orders_rejected": true,
+      "log": ".dedup-work/root-source32-large-v2-20261016/4g.log",
+      "log_sha256": "b73e065867b9958c7ab6ee62065a6d65f997026cffaff76ff3dc90361ab3c9fa"
+    },
+    {
+      "case": "4g64k",
+      "size": 4295032832,
+      "different_offset": 2147516539,
+      "inputs": [
+        ".dedup-work/dedup32-20261016/native-controls/run1/4g64k/a",
+        ".dedup-work/dedup32-20261016/native-controls/run1/4g64k/b"
+      ],
+      "both_orders_rejected": true,
+      "log": ".dedup-work/root-source32-large-v2-20261016/4g64k.log",
+      "log_sha256": "93fcf4b7d915c36fa7154a98fb58a77fc49b37848b848fcc7623ff95d30e001e"
+    }
+  ],
+  "scope": "Whole unchanged currentexact.rs directrustc/actualcacheddeps; publiccompare_files correctlyrejects sameownedsource32distinct2MiB/4GiB/4GiB+64KiB sparsefixtures bothorders,6actualcalls. IndependentdifferingbyteX/Y checked. Noadapters/extraction ofmodulebody. Not wholeCargo/decode/currentcollection/platform/physicalIO/hardRSS/performance proof."
+}

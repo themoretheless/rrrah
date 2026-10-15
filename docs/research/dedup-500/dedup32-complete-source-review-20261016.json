@@ -1,0 +1,52 @@
+{
+  "status": "verified_complete_source_media_review_and_actual_native_cli_largefile_failure",
+  "whole_repo_complete": true,
+  "whole_implementation_complete": true,
+  "repository": "ttkb-oss/dedup",
+  "commit": "a8e82b5aa7c14fbad203b8018cb440dc0560917a",
+  "blobs": 31,
+  "canonical_trees": 5,
+  "acquisition": "docs/research/dedup-500/dedup32-fetched-source-pins-20261016.json",
+  "acquisition_sha256": "068a632fe229302fb4698e6df94dd4f6fd6a016425cd2fb5171369ae2dda149c",
+  "auditor_sha256": "79419433fe64aeeec8378dbee54fb2d392537081676c70290dc4b9bd599dcd8f",
+  "native_reports": {
+    "docs/research/dedup-500/dedup32-native-large-clone-controls-20261016.json": "4f40189188cc0396628bf16dc67d08a336e33a3e7f459ebdef8439257305eabc",
+    "docs/research/dedup-500/dedup32-whole-cli-controls-20261016.json": "13526a65cbb714e30e44629de157f13e6acb76fc54d077a620f0f501995f062b"
+  },
+  "upstream_tests_run": false,
+  "upstream_test_scope": "Alltestsource/Makefile read; Check dependency absent frompkgconfig, originalsuite notrun. NoHFSimage mounts/globalVolumes/ACL/immutability fixtures executed. OriginalwholeCLI andselectednativecontrols instead.",
+  "license": "BSD2clause LICENSE and every file notice read; no productioncodecopy",
+  "findings": [
+    {
+      "qualification": "ActualCommonCrypto native module10controls twice andactualwholeCLI5controls twice",
+      "finding": "size_t filelength passed to CC_SHA256_Update CC_LONG32bit truncates modulo4GiB. Native4GiB digestempty and4GiB+64KiB digestfirst64KiB despite differingmiddlebyte. ActualwholeCLI misclassifiesdistinctfiles and overwritesonewithclone on owned4GiB+64KiBsparsefixtures twice. 2MiBdistinctcontrol correct."
+    },
+    {
+      "qualification": "Originalnativeclone module twice",
+      "finding": "Successfultinyclone preservesdestinationmode andCOW, missingclone-source/stagingcollision/zeroclone preservetarget. DirecthardlinkAPI missing-source unlinks target before failure; notwholeCLI disappearing-source reproduction."
+    },
+    {
+      "qualification": "Static/documented only",
+      "finding": "README explicitly discloses mutable-source clone races and no filelocking. No concurrent file mutation exploited inthisrun."
+    },
+    {
+      "qualification": "Static only",
+      "finding": "Duplicate grouping uses SHA256digest without byte-equality fallback; duplicate tree keyed only digest, notdevice. Cross-volume and cryptographiccollision consequences untested."
+    },
+    {
+      "qualification": "Static only",
+      "finding": "Errorpaths leak openFILE/fd/mmap resources; may_share_blocks usesORmask ratherthanAND; alistzero-capacity growth cannotadvance; no runtimequalification ofthese branches."
+    },
+    {
+      "qualification": "Static only",
+      "finding": "CLIthread_count uint8 andatoi allowwrapping/invalidtext; stagingprefixskip inspects fullpath prefixratherthan basename; no boundary/runtimeconcurrency qualification."
+    }
+  ],
+  "decision": "Reference staged clone/metadata/source-selection concepts only; do notadopt truncatedhash or destructiveerrorhandling. Correctness mustprecede speed.",
+  "limits": [
+    "Full31blobsource/media review declaration backed bypins, notinferred fromfetch",
+    "ActualMacARM/APFS nativeAPI andwholeCLI t0controls; noLinux/FreeBSD/Windows/nativeparallel/strictoriginalmake/ASAN/completeupstreamsuite qualification",
+    "Sparse logicalfiles with independentlychecked differingbytes/truncatedprefix, not full4GiBphysicalIO/hardRSS/performance evidence",
+    "Allfiles mutated belonged toownedfixtures; no userfiles or volumes touched, no productionadoption/speedup claim"
+  ]
+}

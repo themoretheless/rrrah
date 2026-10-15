@@ -2,9 +2,9 @@
   "index": 32,
   "repository": "ttkb-oss/dedup",
   "commit": "a8e82b5aa7c14fbad203b8018cb440dc0560917a",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All31pinnedblobs/5canonicaltrees:30UTF8files fullyread, originalbanner viewed. All7productionC modules compileunchanged, actualnativeCLI andselectedmodulecontrols.",
   "decision": "reference",
-  "finding": "C duplicate finder and filesystem clone operations; SHA256 list stage visible, confirmation and clone safety require deeper review.",
+  "finding": "NativeCC_LONG32bit truncates sizes >=4GiB; wholeunchangedCLI actuallywronglyclonesdistinct4GiB+64KiB ownedsparsefiles twice. Directlink failure canlose target. Rootcurrentexact publiccomparison independently rejects same3distinctfixtures bothorders. No productioncodecopy/adoption.",
   "license_metadata": "BSD-2-Clause",
   "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
   "tests_detected": 7,
@@ -84,5 +84,11 @@
       "source": false,
       "test": false
     }
+  ],
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/dedup-500/dedup32-complete-source-review-20261016.json",
+  "upstream_test_scope": "Allupstreamtestsource/Makefile read. Check dependency absent frompkgconfig; no originalmake/strictprofile/Check/HFSdiskimage/ACLsuite run. Native10modulecontrols and5wholeCLIcontrols each twice, actualMacAPIs/noadapters.",
+  "linked_review_artifacts": [
+    "docs/research/dedup-root-source32-large-controls-audit-20261016.json"
   ]
 }

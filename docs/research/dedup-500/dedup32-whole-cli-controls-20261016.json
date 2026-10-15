@@ -1,0 +1,267 @@
+{
+  "status": "verified_whole_original_cli_5controls_twice",
+  "whole_repo_complete": false,
+  "producer_sha256": "72b26b72c79d3c58641afb246a36385175564bd15f95be650c9435e25fe9a028",
+  "source_pins": {
+    ".dedup-work/dedup32-20261016/source/alist.c": "9b3a5e7dbde2d966baa8821f15d6b8e4b7b4960d8186ee0d2aad1de582608c9c",
+    ".dedup-work/dedup32-20261016/source/clone.c": "6abbb22d4ba36ee52f97240f345be5d4ccf08f56d542c169cdea6407d4844e54",
+    ".dedup-work/dedup32-20261016/source/dedup.c": "e974dae8013919540b8f0f46563d9a79b50b9d4998f8e1f4a44b2cfd36674590",
+    ".dedup-work/dedup32-20261016/source/map.c": "696f2f73892ef43fa3fa85050d83c5ed14dee58355242cc6a805c95b215fde2f",
+    ".dedup-work/dedup32-20261016/source/progress.c": "6e70e8c392f9f7f4a22130c2d0c417f02e07653e59bccf3778e2825088592dcc",
+    ".dedup-work/dedup32-20261016/source/queue.c": "b7f4aef8925d843b7be88f446e2013076bb0a1c583ef852491eb6033931f3ab4",
+    ".dedup-work/dedup32-20261016/source/utils.c": "9cf3edaaf9805c24389ce5c3b73d15f6e5683f27a5980c110c751ad94b7d0503",
+    ".dedup-work/dedup32-20261016/source/alist.h": "07a3e03902228604033f45b5698b2686b8bfaf354f1f2242bba132fee9ade671",
+    ".dedup-work/dedup32-20261016/source/attr.h": "d5f75c059975c0d123bda500d53e253010e1f4d76a2055a8d3bafc5fb9ba761d",
+    ".dedup-work/dedup32-20261016/source/clone.h": "e138e37400b7946edc8f30b2d595afa624b9c7ddab2aaef4277909a1c3203582",
+    ".dedup-work/dedup32-20261016/source/map.h": "64ff24369356a7347fb3527b2b341619b776a786a1cb9ece9f9299dc477d3645",
+    ".dedup-work/dedup32-20261016/source/progress.h": "8acdbd0f74dc8bf35869f8032a751e8c9b77a446d50f33a605d7f93b57aa29f6",
+    ".dedup-work/dedup32-20261016/source/queue.h": "9a71a29c04bfda23ff65d1b12b8596d6cea5e70b874cc77090906127adf25ae5",
+    ".dedup-work/dedup32-20261016/source/utils.h": "5690b4754491a9114d08c727a424a2436e22e7f249518d1441286de6faca807e",
+    ".dedup-work/dedup32-20261016/whole-cli/dedup": "0f938ed2a6e933524820dfaffb7b5bb05e23bb4679f7e93b0835ed1ffad6e83b",
+    ".dedup-work/dedup32-20261016/whole-cli/build.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "command": [
+    "cc",
+    "-std=gnu2x",
+    "-O2",
+    "-pthread",
+    "-DVERSION=\"0.0.6\"",
+    "-DBUILD_DATE=\"qualification\"",
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dedup32-20261016/source/dedup.c",
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dedup32-20261016/source/alist.c",
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dedup32-20261016/source/clone.c",
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dedup32-20261016/source/map.c",
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dedup32-20261016/source/progress.c",
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dedup32-20261016/source/queue.c",
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dedup32-20261016/source/utils.c",
+    "-o",
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dedup32-20261016/whole-cli/dedup"
+  ],
+  "compiler": "Apple clang version 21.0.0 (clang-2100.3.34.2)\nTarget: arm64-apple-darwin25.6.0\nThread model: posix\nInstalledDir: /Library/Developer/CommandLineTools/usr/bin\n",
+  "rows": [
+    {
+      "repeat": 1,
+      "case": "2m-distinct",
+      "command": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dedup32-20261016/whole-cli/dedup",
+        "-t0",
+        "-P",
+        "-n",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dedup32-20261016/whole-cli/run1-2m-distinct"
+      ],
+      "file_size": 2097152,
+      "different_byte_offset": 1048699,
+      "different_bytes": [
+        "58",
+        "59"
+      ],
+      "metrics": {
+        "duplicates found": 0,
+        "bytes saved": 0,
+        "already saved": 0
+      },
+      "dry_run_metadata_unchanged": true,
+      "log": ".dedup-work/dedup32-20261016/whole-cli/run1-2m-distinct.log",
+      "log_sha256": "653268b8f12d3301392e07eb5a62a2b65c444bf406258ba71b06756af023bacd"
+    },
+    {
+      "repeat": 1,
+      "case": "4g-distinct",
+      "command": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dedup32-20261016/whole-cli/dedup",
+        "-t0",
+        "-P",
+        "-n",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dedup32-20261016/whole-cli/run1-4g-distinct"
+      ],
+      "file_size": 4294967296,
+      "different_byte_offset": 2147483771,
+      "different_bytes": [
+        "58",
+        "59"
+      ],
+      "metrics": {
+        "duplicates found": 1,
+        "bytes saved": 4294967296,
+        "already saved": 0
+      },
+      "dry_run_metadata_unchanged": true,
+      "log": ".dedup-work/dedup32-20261016/whole-cli/run1-4g-distinct.log",
+      "log_sha256": "754ef5681fc143b6feede84e0dfc7bfa37f289ba9602804c1927163779a31971"
+    },
+    {
+      "repeat": 1,
+      "case": "4g64k-distinct",
+      "command": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dedup32-20261016/whole-cli/dedup",
+        "-t0",
+        "-P",
+        "-n",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dedup32-20261016/whole-cli/run1-4g64k-distinct"
+      ],
+      "file_size": 4295032832,
+      "different_byte_offset": 2147516539,
+      "different_bytes": [
+        "58",
+        "59"
+      ],
+      "metrics": {
+        "duplicates found": 1,
+        "bytes saved": 4295032832,
+        "already saved": 0
+      },
+      "dry_run_metadata_unchanged": true,
+      "log": ".dedup-work/dedup32-20261016/whole-cli/run1-4g64k-distinct.log",
+      "log_sha256": "f0787d0299385d81ac5073fe6e34e01ca8c61c625e45a49e0b7e45873b5cf095"
+    },
+    {
+      "repeat": 1,
+      "case": "tiny-exact-real-clone",
+      "command": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dedup32-20261016/whole-cli/dedup",
+        "-t0",
+        "-P",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dedup32-20261016/whole-cli/run1-tiny-equal"
+      ],
+      "log": ".dedup-work/dedup32-20261016/whole-cli/run1-tiny-equal.log",
+      "log_sha256": "aaaac8539e77074d8e9f96ab47db0f1370b49f8089e3e6ef724389709f1fcbbb"
+    },
+    {
+      "repeat": 1,
+      "case": "4g64k-distinct-actual-wrong-clone",
+      "command": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dedup32-20261016/whole-cli/dedup",
+        "-t0",
+        "-P",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dedup32-20261016/whole-cli/run1-4g64k-live"
+      ],
+      "file_size": 4295032832,
+      "different_byte_offset": 2147483771,
+      "before_distinct_bytes": [
+        "58",
+        "59"
+      ],
+      "after_equal_bytes": [
+        "58",
+        "58"
+      ],
+      "log": ".dedup-work/dedup32-20261016/whole-cli/run1-4g64k-live.log",
+      "log_sha256": "63d6a58300947183152b16a55696414b7a78b586594c4726b042d3922a4db372"
+    },
+    {
+      "repeat": 2,
+      "case": "2m-distinct",
+      "command": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dedup32-20261016/whole-cli/dedup",
+        "-t0",
+        "-P",
+        "-n",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dedup32-20261016/whole-cli/run2-2m-distinct"
+      ],
+      "file_size": 2097152,
+      "different_byte_offset": 1048699,
+      "different_bytes": [
+        "58",
+        "59"
+      ],
+      "metrics": {
+        "duplicates found": 0,
+        "bytes saved": 0,
+        "already saved": 0
+      },
+      "dry_run_metadata_unchanged": true,
+      "log": ".dedup-work/dedup32-20261016/whole-cli/run2-2m-distinct.log",
+      "log_sha256": "653268b8f12d3301392e07eb5a62a2b65c444bf406258ba71b06756af023bacd"
+    },
+    {
+      "repeat": 2,
+      "case": "4g-distinct",
+      "command": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dedup32-20261016/whole-cli/dedup",
+        "-t0",
+        "-P",
+        "-n",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dedup32-20261016/whole-cli/run2-4g-distinct"
+      ],
+      "file_size": 4294967296,
+      "different_byte_offset": 2147483771,
+      "different_bytes": [
+        "58",
+        "59"
+      ],
+      "metrics": {
+        "duplicates found": 1,
+        "bytes saved": 4294967296,
+        "already saved": 0
+      },
+      "dry_run_metadata_unchanged": true,
+      "log": ".dedup-work/dedup32-20261016/whole-cli/run2-4g-distinct.log",
+      "log_sha256": "5ece771d9b5b287ff6c18515d090ba342a272ff6905bd5f6d888f92173c93d1e"
+    },
+    {
+      "repeat": 2,
+      "case": "4g64k-distinct",
+      "command": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dedup32-20261016/whole-cli/dedup",
+        "-t0",
+        "-P",
+        "-n",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dedup32-20261016/whole-cli/run2-4g64k-distinct"
+      ],
+      "file_size": 4295032832,
+      "different_byte_offset": 2147516539,
+      "different_bytes": [
+        "58",
+        "59"
+      ],
+      "metrics": {
+        "duplicates found": 1,
+        "bytes saved": 4295032832,
+        "already saved": 0
+      },
+      "dry_run_metadata_unchanged": true,
+      "log": ".dedup-work/dedup32-20261016/whole-cli/run2-4g64k-distinct.log",
+      "log_sha256": "9854d351e72043d23683e55a1a4b781d8f611b15e2d7bd1c58e87d86721bd1e9"
+    },
+    {
+      "repeat": 2,
+      "case": "tiny-exact-real-clone",
+      "command": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dedup32-20261016/whole-cli/dedup",
+        "-t0",
+        "-P",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dedup32-20261016/whole-cli/run2-tiny-equal"
+      ],
+      "log": ".dedup-work/dedup32-20261016/whole-cli/run2-tiny-equal.log",
+      "log_sha256": "94348bedfdb113b46e2d25ded99112fe628f681a4048e5f28e33915712e30594"
+    },
+    {
+      "repeat": 2,
+      "case": "4g64k-distinct-actual-wrong-clone",
+      "command": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dedup32-20261016/whole-cli/dedup",
+        "-t0",
+        "-P",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dedup32-20261016/whole-cli/run2-4g64k-live"
+      ],
+      "file_size": 4295032832,
+      "different_byte_offset": 2147483771,
+      "before_distinct_bytes": [
+        "58",
+        "59"
+      ],
+      "after_equal_bytes": [
+        "58",
+        "58"
+      ],
+      "log": ".dedup-work/dedup32-20261016/whole-cli/run2-4g64k-live.log",
+      "log_sha256": "a451bbb53b2f730b94b31208d7ffb1522c231f038a9c518cca0ac3e81cf75259"
+    }
+  ],
+  "scope": "All7unchangedproductionCmodules/headers compile and actual nativeCLI executed witht0. CommonCrypto/rbtree/clonefile/copyfile actualDarwinAPIs.3dryrun distinctsizes plusactualtinyclone andactualwrongreplacement ofdistinct4GiB+64KiBsparsefiles, twice. Allwrites/clones ownedsynthetic fixtures. No call/data adapters, no actualuserfiles.",
+  "limits": [
+    "Originalmake/Check/ASAN/strictprofile not executed; no HFSdiskimage mounts, ACL/immutability/fullupstreamtestsuite/parallelworkers/otherplatform proof",
+    "Sparse logicalsizes, differing-byte oracle only; no full4GiB physicalIO/RSS/performance qualification",
+    "No productioncodecopied or adoption; this is competitor correctness evidence, not our library speedup"
+  ]
+}
