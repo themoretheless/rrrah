@@ -2,9 +2,9 @@
   "index": 176,
   "repository": "cshung/StringDedupAnalyzer",
   "commit": "30cdd082d7cba0fac54332689af5bf383ecca1ba",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All11 tracked text blobs fully read and pinned, includingBOMCSharp/solution/project,MIT+thirdparty notices,README/data collection/contribution/code ofconduct,all6CSVdata rows/ignore. No tracked images or linked contentmedia. External design/dotnet/ClrMD/contributionlinks excluded.",
   "decision": "reject-domain",
-  "finding": "Memory-dump analysis of runtime string interning; no filesystem/image duplicate engine.",
+  "finding": "Complete pinned source read and scoped native controls; allbackend/quality/platform/performance limits retained.",
   "available_source_evidence": [
     {
       "path": "src/StringDedupAnalyzer/Program.cs",
@@ -44,5 +44,7 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/string176-complete-source-review-20261015.json"
 }

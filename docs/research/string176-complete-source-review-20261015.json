@@ -1,0 +1,127 @@
+{
+  "repository": "cshung/StringDedupAnalyzer",
+  "commit": "30cdd082d7cba0fac54332689af5bf383ecca1ba",
+  "tree": "15f48744e5a2bb39e4b4bf9480bd8e492ab55372",
+  "status": "complete_source_read_scoped_native_controls",
+  "whole_repository_complete": true,
+  "license": "MIT root andClrMD thirdparty notice read",
+  "scope": "All11 tracked text blobs fully read and pinned, includingBOMCSharp/solution/project,MIT+thirdparty notices,README/data collection/contribution/code ofconduct,all6CSVdata rows/ignore. No tracked images or linked contentmedia. External design/dotnet/ClrMD/contributionlinks excluded.",
+  "blobs": [
+    {
+      "path": ".gitignore",
+      "mode": "100644",
+      "git_blob": "f677870d0c686b51c35067f74dd8d95107633026",
+      "bytes": 11,
+      "sha256": "1c7e7543e72607dd1a99b217ac6a63c71d6d01fe0fdd6cafefd53d072433abe6"
+    },
+    {
+      "path": "CODE-OF-CONDUCT.md",
+      "mode": "100644",
+      "git_blob": "0fd65e978f79bfdc669be4e49d35e9ebf99c46ca",
+      "bytes": 258,
+      "sha256": "811c5279d15519ffe122e808702a525e6e592088a244cfe7c002bf8fa102dec3"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "mode": "100644",
+      "git_blob": "4f2fd927ed3d0496e68d0b4289b274838dd44bb9",
+      "bytes": 2239,
+      "sha256": "3f100bc45e016f28f63543d2a1c10b8165af25a55c2348ee667ac6d3a2237d41"
+    },
+    {
+      "path": "DataCollection.md",
+      "mode": "100644",
+      "git_blob": "958d08a8679a67589e065ec88e321c2677fc6ff9",
+      "bytes": 3733,
+      "sha256": "688814a3fbc3e5d5907ac1ba69522f5625f1fd36f6ccf8b70579a5f218b14d4a"
+    },
+    {
+      "path": "LICENSE",
+      "mode": "100644",
+      "git_blob": "85727b9a4c5f164a68efe79f8092b147672f5c23",
+      "bytes": 1053,
+      "sha256": "227965c6f64cc5d07f56a6362bdb6b9179bc0de1957b2342cb0997ca0dd27f9d"
+    },
+    {
+      "path": "README.md",
+      "mode": "100644",
+      "git_blob": "5be19aaa00b5a2ba28a29c5fb461c403d1a066bf",
+      "bytes": 1577,
+      "sha256": "a6f899439843484d43992edc0e32fd7d3fc60c1aacccf37dd07dc98a730fbccf"
+    },
+    {
+      "path": "THIRD-PARTY-NOTICES.TXT",
+      "mode": "100644",
+      "git_blob": "e88806c3903599ca0d6beb0e57709860d65eef1b",
+      "bytes": 1214,
+      "sha256": "590601684f42635e67faa78d72bce398ca1a5e2d110489ca946c8fa7536a5a39"
+    },
+    {
+      "path": "data.csv",
+      "mode": "100644",
+      "git_blob": "12bb1d44bdaaf0c63f6fd6af640c80cf6aba13fc",
+      "bytes": 715,
+      "sha256": "ff8849b3aed0d30c501fb7a72606fa1541b4dfd87c48da793ac8ec7b1b7bf0b4"
+    },
+    {
+      "path": "src/StringDedupAnalyzer.sln",
+      "mode": "100644",
+      "git_blob": "f1b50e555d04578f3a52d0095b3c3234940f0ac0",
+      "bytes": 1138,
+      "sha256": "3e2efd4f8ffd42ce70969951a548b5b5a508cf35223e166ae35fc565c5aa37c5"
+    },
+    {
+      "path": "src/StringDedupAnalyzer/Program.cs",
+      "mode": "100644",
+      "git_blob": "1c1e5469121da297f3e265a0741dafab9ca85909",
+      "bytes": 7199,
+      "sha256": "b6129730348fa67a8c3a426774464320202cd1d06dd03584d9566a4529a94126"
+    },
+    {
+      "path": "src/StringDedupAnalyzer/StringDedupAnalyzer.csproj",
+      "mode": "100644",
+      "git_blob": "59c708e8530c7ceac8df1565b076879e89846ad0",
+      "bytes": 297,
+      "sha256": "56a904dd7c9ebb2b9c02165be283d2b55787e9d30f6a951982d3b6937fa0bc99"
+    }
+  ],
+  "tree_objects_verified": 3,
+  "pin_sha256": "779bf198e2aed6addc26d07aca379486f011932b074874a6fc3e776ec9309acb",
+  "controls": "docs/research/string176-adapter-controls-20261015/result.json",
+  "controls_sha256": "37e2c246eeb36b12849fc13d031deb132a0b4c732400f3f7a880208a873224a5",
+  "findings": [
+    {
+      "kind": "native_original_program_with_explicit_adapter",
+      "finding": "ActualMacOS branch refuses dump analysis with PlatformNotSupportedException beforeloader; missingargument printsusage."
+    },
+    {
+      "kind": "native_original_program_with_explicit_adapter",
+      "finding": "Model2distinct equal15char strings:30duplicatebytes1count. Same secondobject referenced3times:90duplicatebytes3count despite only30bytes unique duplicate allocation. Referencework anduniqueobject savings are different metrics. Author explicitly documents upperbound, not promised exact reclaimablebytes."
+    },
+    {
+      "kind": "native_original_program_with_explicit_adapter",
+      "finding": "Repeatedreferences tofirstphysicalobject countwork butnotduplicates;generation1 and unmappedreferences excluded. EmptyClrVersions causes uncaught ArgumentOutOfRangeException."
+    },
+    {
+      "kind": "source_only",
+      "finding": "Tool collectsstatistics only; it doesnotdeduplicate/modifyGC heap orfiles. Allstringsbuffered in dictionary and AsString(int.MaxValue) repeated; no memory/time/cancelbudget."
+    },
+    {
+      "kind": "source_only",
+      "finding": "OnlyGen2 objects andGen2 references considered; firstCLRruntime chosen, no explicit validation oftruncateddump/unknownType/corruption/backendexceptions. Generation null meansunmappedsegment, not reachability/liveness proof."
+    },
+    {
+      "kind": "source_only",
+      "finding": "CSV is historical external statistics, not correctness corpus; scan/dup reference metrics may exceeduniqueobjectcount/size. No fresh physicalsavings/profile claim."
+    },
+    {
+      "kind": "source_only",
+      "finding": "netcoreapp3.1 and prereleaseClrMD2.0.0-beta.20174.2 withoutlock; originalbuild/backend/DAC/platform pipeline unqualified."
+    }
+  ],
+  "limits": [
+    "No originalautomatedtests; CONTRIBUTING explicitly saysmanualonly. Native.NET8 diagnostic compilation ofunchangedProgram.cs with explicit adapters, not actualClrMD/DAC/netcore3.1 orWindows/Linux runtime qualification.",
+    "No memorydump/privateprocess collection, externalDAC/download, corpus/GCmutation/reclamation orperformance/memorycap verification.",
+    "No foreign production code adopted. Referenceidentity/cardinality counterexample preserved withoriginalupperboundsemantics."
+  ]
+}

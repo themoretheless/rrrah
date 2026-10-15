@@ -1,0 +1,201 @@
+{
+  "status": "passed_complete_original_inventory_and8_authored_top_level_controls",
+  "original_top_level_cases": 5,
+  "authored_top_level_cases": 8,
+  "top_level_cases": 13,
+  "including_subtests": 19,
+  "repeats": 2,
+  "rows": [
+    {
+      "log": "with-crc-run",
+      "passed": 19,
+      "top_level_passed": 13,
+      "case_names": [
+        "TestConfig",
+        "TestFindDuplicates",
+        "TestFormats",
+        "TestGetDigest",
+        "TestNonThoroughVsNot",
+        "TestReviewAllReportFormatsAcceptShortWrites",
+        "TestReviewAllReportFormatsAcceptShortWrites/csv",
+        "TestReviewAllReportFormatsAcceptShortWrites/json",
+        "TestReviewAllReportFormatsAcceptShortWrites/text",
+        "TestReviewAllReportFormatsPropagateWriteErrors",
+        "TestReviewAllReportFormatsPropagateWriteErrors/csv",
+        "TestReviewAllReportFormatsPropagateWriteErrors/json",
+        "TestReviewAllReportFormatsPropagateWriteErrors/text",
+        "TestReviewFullSmallCRC32CollisionPublishesUnequalFiles",
+        "TestReviewTextReportMutatesStoredPathOrder",
+        "TestRrrahCrossExtensionMissAndSameExtensionPositive",
+        "TestRrrahHardlinkIsCountedAsRedundantCopy",
+        "TestRrrahMissingRootReturnsNoError",
+        "TestRrrahUnsampledDifferenceIsFalseDuplicateOnlyInFastMode"
+      ]
+    },
+    {
+      "log": "with-crc-replay",
+      "passed": 19,
+      "top_level_passed": 13,
+      "case_names": [
+        "TestConfig",
+        "TestFindDuplicates",
+        "TestFormats",
+        "TestGetDigest",
+        "TestNonThoroughVsNot",
+        "TestReviewAllReportFormatsAcceptShortWrites",
+        "TestReviewAllReportFormatsAcceptShortWrites/csv",
+        "TestReviewAllReportFormatsAcceptShortWrites/json",
+        "TestReviewAllReportFormatsAcceptShortWrites/text",
+        "TestReviewAllReportFormatsPropagateWriteErrors",
+        "TestReviewAllReportFormatsPropagateWriteErrors/csv",
+        "TestReviewAllReportFormatsPropagateWriteErrors/json",
+        "TestReviewAllReportFormatsPropagateWriteErrors/text",
+        "TestReviewFullSmallCRC32CollisionPublishesUnequalFiles",
+        "TestReviewTextReportMutatesStoredPathOrder",
+        "TestRrrahCrossExtensionMissAndSameExtensionPositive",
+        "TestRrrahHardlinkIsCountedAsRedundantCopy",
+        "TestRrrahMissingRootReturnsNoError",
+        "TestRrrahUnsampledDifferenceIsFalseDuplicateOnlyInFastMode"
+      ]
+    }
+  ],
+  "retained_binaries": "docs/research/go26-native-controls-20261015/retained-binaries.json",
+  "retained_binaries_sha256": "fca8f94f30a0c63029c244967d53d6a72481aa400fe6ecbf99ceef4cfb0ca2f9",
+  "source_sha256": {
+    "docs/research/dedup-500/evidence/m-manu--go-find-duplicates/full-source/.dockerignore": "da51414e066d76710ed10e921eeac4dd4c40ec8cdec47088d7a97461e3855bc6",
+    "docs/research/dedup-500/evidence/m-manu--go-find-duplicates/full-source/.github/workflows/build-and-test.yml": "c055dd56ecb92b704da6724c96961a7e9a51b907bab3d7a8ad463333e564e2aa",
+    "docs/research/dedup-500/evidence/m-manu--go-find-duplicates/full-source/.gitignore": "c5b62cd9e70272fc63ef9305fa0e05fd3bf2d2eba338703fe3a8ca0020f42cd2",
+    "docs/research/dedup-500/evidence/m-manu--go-find-duplicates/full-source/Dockerfile": "2830dc7f188a4e47efc7f85c44c673c2405ad3c464fa6f0f5b946ddf5ec5b7e4",
+    "docs/research/dedup-500/evidence/m-manu--go-find-duplicates/full-source/LICENSE": "43070e2d4e532684de521b885f385d0841030efa2b1a20bafb76133a5e1379c1",
+    "docs/research/dedup-500/evidence/m-manu--go-find-duplicates/full-source/README.md": "8f0e39d9f85004e410cb966c37b3b8f926011973c431e12fc43487dc80eddedd",
+    "docs/research/dedup-500/evidence/m-manu--go-find-duplicates/full-source/bytesutil/human_readable_size.go": "a1c8ab807763d4649d48e1d14a0b1d6b1f5345958f77078d5d301d91ba0cf961",
+    "docs/research/dedup-500/evidence/m-manu--go-find-duplicates/full-source/bytesutil/human_readable_size_test.go": "58d7eaa74f65b63a14fe171484bf88efdcb8df920227264065ddbdbf1f237299",
+    "docs/research/dedup-500/evidence/m-manu--go-find-duplicates/full-source/default_exclusions.txt": "f7a7e6269f2318aa8052e4f6f2446dff1ae180b90c779881b451840e23355eff",
+    "docs/research/dedup-500/evidence/m-manu--go-find-duplicates/full-source/entity/digest_to_files.go": "9092f8f0975e69ccf69c5bb2acd75a5a49ab6ff22970084b76c70c8ec12a729a",
+    "docs/research/dedup-500/evidence/m-manu--go-find-duplicates/full-source/entity/file_digest.go": "8ce3c1c7d320d82a8aca6898245c7f10f13c39ce18222004c9af2ada3e15b64d",
+    "docs/research/dedup-500/evidence/m-manu--go-find-duplicates/full-source/entity/file_ext_and_size.go": "28baf51088e53ed4c41b4206fdbe3fedd6db180eb0624c8c5c92347744c5ac8e",
+    "docs/research/dedup-500/evidence/m-manu--go-find-duplicates/full-source/entity/file_meta.go": "6fd7eaa5ee50d7f7efd48f035500765d4b7e6af3a4723e00989015805372ae9e",
+    "docs/research/dedup-500/evidence/m-manu--go-find-duplicates/full-source/entity/output_mode.go": "af62b85d1322d64e6ed67115d0829892d20878a85fed329c46421f0348cf8b71",
+    "docs/research/dedup-500/evidence/m-manu--go-find-duplicates/full-source/fmte/fmt_english.go": "744e8d49d7028be75c2614da6212cd5362224c6d314b06119e7d50e14c19f961",
+    "docs/research/dedup-500/evidence/m-manu--go-find-duplicates/full-source/go.mod": "9622fd5a35b2855df0a5a9c13bfa3179a8480c0fda3199c4391bc443f4f8d4a2",
+    "docs/research/dedup-500/evidence/m-manu--go-find-duplicates/full-source/go.sum": "adb04de73b38b69095d1b056a46314a153d295b8cf4e0fb517756ec28280db7c",
+    "docs/research/dedup-500/evidence/m-manu--go-find-duplicates/full-source/main.go": "c7d728b65da10fdf7bef773c9d3f53473bf8ad2c3b1a37225058f1ee598f9449",
+    "docs/research/dedup-500/evidence/m-manu--go-find-duplicates/full-source/report.go": "c49ea516dfb1564707885ee69201c672be9dcc4986bbb5c0ca854509e0bc5e6e",
+    "docs/research/dedup-500/evidence/m-manu--go-find-duplicates/full-source/service/dir_scanner.go": "118b171ed61859d526063de8de80f1e0b5d70d84ccae1dc4f148f23b17a3e965",
+    "docs/research/dedup-500/evidence/m-manu--go-find-duplicates/full-source/service/file_hash.go": "eda8c4a8b5a65c7dc53db8141b26dd73398a7c613fd0bcee80ebc746838b8033",
+    "docs/research/dedup-500/evidence/m-manu--go-find-duplicates/full-source/service/file_hash_test.go": "67964bc6bd4faf2a358cfa5b5067faf520a55e69d5d034a0147bdbbb51872559",
+    "docs/research/dedup-500/evidence/m-manu--go-find-duplicates/full-source/service/find_duplicates.go": "03563a7fff179340489e855a93df9d75ad182ac94ecb16876e1f6f5456df03d6",
+    "docs/research/dedup-500/evidence/m-manu--go-find-duplicates/full-source/service/find_duplicates_test.go": "a2332bf7136ba76507343d64dab95eb570e0df755cd64111b14afebb144d5589",
+    "docs/research/dedup-500/evidence/m-manu--go-find-duplicates/full-source/utils/utils.go": "e061e5bc75b3958bcf7ce4fc1f8f69ba089de1c332a1a9833be860571164eff4"
+  },
+  "artifacts": [
+    {
+      "path": "docs/research/go26-native-controls-20261015/bytesutil-binary-replay.log",
+      "sha256": "297753387ec90d1e44ea9ec6cf8c52cc8bc7c9c9203b1f9c901159f8c773d1f2"
+    },
+    {
+      "path": "docs/research/go26-native-controls-20261015/bytesutil-inventory.log",
+      "sha256": "24db87a1796bcd9173af6c498ae7601fb552531898acc84d7c8f4e884e9ef260"
+    },
+    {
+      "path": "docs/research/go26-native-controls-20261015/compile-bytesutil.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/research/go26-native-controls-20261015/compile-main.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/research/go26-native-controls-20261015/compile-service.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/research/go26-native-controls-20261015/crc32-collision-oracle.json",
+      "sha256": "135dc1f2922cc2cce8b89a624997e868b2d08fde689eefc3dfc18d9f647b97a5"
+    },
+    {
+      "path": "docs/research/go26-native-controls-20261015/crc_review_test.go",
+      "sha256": "fae994c4309e7dfb38ead3bf74d312f9b869a18cf57ee642e0b61cb10da913a7"
+    },
+    {
+      "path": "docs/research/go26-native-controls-20261015/default-cache-preflight.jsonl",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/research/go26-native-controls-20261015/default-cache-preflight.stderr",
+      "sha256": "75c1b0dfef424994f0459a401e26cb37568ad4680836e627237322cd8f3c9eb8"
+    },
+    {
+      "path": "docs/research/go26-native-controls-20261015/main-binary-replay.log",
+      "sha256": "cdb9728b15529911962131a2c41a9f5e4f35ef0f0955f77309ac22e116904b39"
+    },
+    {
+      "path": "docs/research/go26-native-controls-20261015/main-inventory.log",
+      "sha256": "59565fe0cee74a8a5a010448906c8a6bc384b71443a8d5da7a13d6c19de501e0"
+    },
+    {
+      "path": "docs/research/go26-native-controls-20261015/module-verify.log",
+      "sha256": "7e54dfb066ede8074473dfe2c51fca7785602e3b002b5bc786658a8ef42ec262"
+    },
+    {
+      "path": "docs/research/go26-native-controls-20261015/network-preflight.jsonl",
+      "sha256": "579867081d248874da0b54ffa84770170a969ef70f499d174c433e16517b6aa7"
+    },
+    {
+      "path": "docs/research/go26-native-controls-20261015/network-preflight.stderr",
+      "sha256": "e6678a6ab712e98efa58c2f97fa8da350ac9e1b61c7fa0fdf227a75d67f40251"
+    },
+    {
+      "path": "docs/research/go26-native-controls-20261015/prior_service_controls_test.go",
+      "sha256": "9ed1ac76d7cb0b08b60664b40f4f883688e890caf9a6f53cdecbfc0b5c2593a7"
+    },
+    {
+      "path": "docs/research/go26-native-controls-20261015/report_review_test.go",
+      "sha256": "85699f0916907ba08c24efc8d7b9793c341a7eccb0b19e274764bafd6466fd90"
+    },
+    {
+      "path": "docs/research/go26-native-controls-20261015/retain-v1.py",
+      "sha256": "663c66eaf0f3f1963794f63433bb910b159572901957955e9c84164368330be8"
+    },
+    {
+      "path": "docs/research/go26-native-controls-20261015/retained-binaries.json",
+      "sha256": "fca8f94f30a0c63029c244967d53d6a72481aa400fe6ecbf99ceef4cfb0ca2f9"
+    },
+    {
+      "path": "docs/research/go26-native-controls-20261015/run.jsonl",
+      "sha256": "a2cf1aaf46bbef8836e23732ed76e01efb00008d842319048f69df02e99e9aa4"
+    },
+    {
+      "path": "docs/research/go26-native-controls-20261015/run.stderr",
+      "sha256": "6a78a92ce02fb7a5b6a3b5f0c61dc9928c3173e449868f8fd364c43bebc3238b"
+    },
+    {
+      "path": "docs/research/go26-native-controls-20261015/service-binary-replay.log",
+      "sha256": "564816477d2018da905649b9a3d857730fb3e901a6d5cdc045346e1964641eab"
+    },
+    {
+      "path": "docs/research/go26-native-controls-20261015/service-inventory.log",
+      "sha256": "12866ceccc6e68d7f179089b9eae5f2766867e7e8003bb21283fd70534f0c7ec"
+    },
+    {
+      "path": "docs/research/go26-native-controls-20261015/with-crc-replay.jsonl",
+      "sha256": "2dfa55eaf286a2dcd319722960261b2eca1580e66da18309c55b53d6c807e386"
+    },
+    {
+      "path": "docs/research/go26-native-controls-20261015/with-crc-replay.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/research/go26-native-controls-20261015/with-crc-run.jsonl",
+      "sha256": "42c49dc6f9bf5a827e250836f150d8cb99a9c7f69652b050cc395e443b5a69df"
+    },
+    {
+      "path": "docs/research/go26-native-controls-20261015/with-crc-run.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/research/go26-native-controls-20261015/wrong-cwd-preflight.log",
+      "sha256": "08c4bd65b3e44a06c2377ca4bad0b12891764604c52d1aab6b409baa895a080e"
+    }
+  ]
+}

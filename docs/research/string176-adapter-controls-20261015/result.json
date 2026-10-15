@@ -1,0 +1,100 @@
+{
+  "status": "passed_originalProgram_nativePlatform_and_explicitClrMD_platform_adapter_controls",
+  "original_program_sha256": "b6129730348fa67a8c3a426774464320202cd1d06dd03584d9566a4529a94126",
+  "native_platform_cases": 2,
+  "explicit_windows_ClrMD_adapter_cases": 7,
+  "repeats": 2,
+  "sdk": "8.0.426",
+  "target": "net8.0",
+  "original_target": "netcoreapp3.1",
+  "binaries": [
+    {
+      "path": "/private/tmp/rrrah-string176-native-binary-20261015/Controls.deps.json",
+      "sha256": "7f039f8326cc456fd984959b12f1dbf9713d1a7dba2a9f29576476fd13317ca7"
+    },
+    {
+      "path": "/private/tmp/rrrah-string176-native-binary-20261015/Controls.dll",
+      "sha256": "a78f7a2a0b077c65951add0bba04414617ceedba90008c6bec9c99e7ab494ae9"
+    },
+    {
+      "path": "/private/tmp/rrrah-string176-native-binary-20261015/Controls.pdb",
+      "sha256": "a99acde9951ae109d36047d9322c5831b3bcfb113a92f76de22390fb59e79e41"
+    },
+    {
+      "path": "/private/tmp/rrrah-string176-native-binary-20261015/Controls.runtimeconfig.json",
+      "sha256": "97c9700542b659150b230c3578b29530fd76ab01ec66a92cd16945e0245713df"
+    },
+    {
+      "path": "/private/tmp/rrrah-string176-windows-adapter-binary-20261015/Controls.deps.json",
+      "sha256": "7f039f8326cc456fd984959b12f1dbf9713d1a7dba2a9f29576476fd13317ca7"
+    },
+    {
+      "path": "/private/tmp/rrrah-string176-windows-adapter-binary-20261015/Controls.dll",
+      "sha256": "e35bbf6ed4ec2d8aa7fb521332bb4ac6ff0962f8a21eb10b6bd986af5f94294e"
+    },
+    {
+      "path": "/private/tmp/rrrah-string176-windows-adapter-binary-20261015/Controls.pdb",
+      "sha256": "ff935fe7bcdc8c009f8f39940303a8703d130a025668eea222a0a7ae50101563"
+    },
+    {
+      "path": "/private/tmp/rrrah-string176-windows-adapter-binary-20261015/Controls.runtimeconfig.json",
+      "sha256": "97c9700542b659150b230c3578b29530fd76ab01ec66a92cd16945e0245713df"
+    }
+  ],
+  "adapters": "ClrMD heap/runtime/segments/objects and Windows-platform selector for model cohort. Separate realMac platform cohort uses original RuntimeInformation; no actualdump/file/backend/process access.",
+  "source_sha256": {
+    "docs/research/dedup-500/evidence/cshung--StringDedupAnalyzer/full-source/.gitignore": "1c7e7543e72607dd1a99b217ac6a63c71d6d01fe0fdd6cafefd53d072433abe6",
+    "docs/research/dedup-500/evidence/cshung--StringDedupAnalyzer/full-source/CODE-OF-CONDUCT.md": "811c5279d15519ffe122e808702a525e6e592088a244cfe7c002bf8fa102dec3",
+    "docs/research/dedup-500/evidence/cshung--StringDedupAnalyzer/full-source/CONTRIBUTING.md": "3f100bc45e016f28f63543d2a1c10b8165af25a55c2348ee667ac6d3a2237d41",
+    "docs/research/dedup-500/evidence/cshung--StringDedupAnalyzer/full-source/DataCollection.md": "688814a3fbc3e5d5907ac1ba69522f5625f1fd36f6ccf8b70579a5f218b14d4a",
+    "docs/research/dedup-500/evidence/cshung--StringDedupAnalyzer/full-source/LICENSE": "227965c6f64cc5d07f56a6362bdb6b9179bc0de1957b2342cb0997ca0dd27f9d",
+    "docs/research/dedup-500/evidence/cshung--StringDedupAnalyzer/full-source/README.md": "a6f899439843484d43992edc0e32fd7d3fc60c1aacccf37dd07dc98a730fbccf",
+    "docs/research/dedup-500/evidence/cshung--StringDedupAnalyzer/full-source/THIRD-PARTY-NOTICES.TXT": "590601684f42635e67faa78d72bce398ca1a5e2d110489ca946c8fa7536a5a39",
+    "docs/research/dedup-500/evidence/cshung--StringDedupAnalyzer/full-source/data.csv": "ff8849b3aed0d30c501fb7a72606fa1541b4dfd87c48da793ac8ec7b1b7bf0b4",
+    "docs/research/dedup-500/evidence/cshung--StringDedupAnalyzer/full-source/src/StringDedupAnalyzer.sln": "3e2efd4f8ffd42ce70969951a548b5b5a508cf35223e166ae35fc565c5aa37c5",
+    "docs/research/dedup-500/evidence/cshung--StringDedupAnalyzer/full-source/src/StringDedupAnalyzer/Program.cs": "b6129730348fa67a8c3a426774464320202cd1d06dd03584d9566a4529a94126",
+    "docs/research/dedup-500/evidence/cshung--StringDedupAnalyzer/full-source/src/StringDedupAnalyzer/StringDedupAnalyzer.csproj": "56a904dd7c9ebb2b9c02165be283d2b55787e9d30f6a951982d3b6937fa0bc99"
+  },
+  "artifacts": [
+    {
+      "path": "docs/research/string176-adapter-controls-20261015/Adapter.cs",
+      "sha256": "760499a8c23d512f8e8680f503c38c54df00906efb2a0fb4af37236893d54d3b"
+    },
+    {
+      "path": "docs/research/string176-adapter-controls-20261015/Controls.csproj",
+      "sha256": "4547d31a839e059b7eac20bee95f414ddd0e7848d48c20f18fa2fd336ddd722a"
+    },
+    {
+      "path": "docs/research/string176-adapter-controls-20261015/NuGet.Config",
+      "sha256": "9508cae5f76364f56e80eb97cb16493977243cf38e5cca6284e3d74f83b20a2c"
+    },
+    {
+      "path": "docs/research/string176-adapter-controls-20261015/build-native-platform.log",
+      "sha256": "e7067b2932736a31ac5b66f08b31363e38dee6bf0e83075d383edc8081a52d12"
+    },
+    {
+      "path": "docs/research/string176-adapter-controls-20261015/build-windows-adapter.log",
+      "sha256": "e336194905c0590f8ec26d08481c13d8bfa8b4891f4f2e6027b4031754cd8849"
+    },
+    {
+      "path": "docs/research/string176-adapter-controls-20261015/global.json",
+      "sha256": "6698ac780f3012e9310cbc516a7075c83b4a37982aa2b390f61c6c8961c2daa1"
+    },
+    {
+      "path": "docs/research/string176-adapter-controls-20261015/native-platform-replay.log",
+      "sha256": "c8a10837212c97febba31f68be095ade86e185376debdaf022adf35655f6013c"
+    },
+    {
+      "path": "docs/research/string176-adapter-controls-20261015/native-platform-run.log",
+      "sha256": "c8a10837212c97febba31f68be095ade86e185376debdaf022adf35655f6013c"
+    },
+    {
+      "path": "docs/research/string176-adapter-controls-20261015/windows-adapter-replay.log",
+      "sha256": "de0db78f3000e658cbcbc3ad9769b083c876e5c5e6ce3e46190c618211de02c8"
+    },
+    {
+      "path": "docs/research/string176-adapter-controls-20261015/windows-adapter-run.log",
+      "sha256": "de0db78f3000e658cbcbc3ad9769b083c876e5c5e6ce3e46190c618211de02c8"
+    }
+  ]
+}
