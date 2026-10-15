@@ -1,0 +1,30 @@
+{
+  "status": "verified_complete_pinned_source_icon_and44_native_tests_controls",
+  "whole_repo_complete": true,
+  "whole_implementation_complete": true,
+  "repository": "mrmlnc/vscode-duplicate",
+  "commit": "d1c083c66de6a25ef308b47e64fae13bea6f23ec",
+  "blobs": 21,
+  "canonical_trees": 7,
+  "acquisition": "docs/research/dedup-500/vscode80-fetched-source-pins-20261016.json",
+  "acquisition_sha256": "c0dc48da075020b90192ce32c0cf33e53972cbff8d01c8a75536c3176b1049b3",
+  "auditor_sha256": "4917c9b1608c5e2d4e337c7b003ca1a89e245ccf83c6f073434b9b6a9ea853df",
+  "controls": "docs/research/dedup-500/vscode80-native-controls-20261016.json",
+  "controls_sha256": "53a3842613018150bec13175e4d3d5e10612944990985b08f00f67855688dd06",
+  "media_scope": "Only trackedbinary icon.png128x129 viewedfull. No tracked screenshots/videos; READMEexternaldonationbadge notfetched.",
+  "license": "MIT LICENSE fully read; no production code copied.",
+  "upstream_tests_run": true,
+  "upstream_test_scope": "All8originalMocha pathspec tests twice usingwholeTStranspileModule/actualMocha5.0.5 andnativepath, Statsadapter asoriginaltest. No npmtest fullstrictbuild/Node7/VSCodehost qualification.",
+  "native_scope": "Whole unchanged original TS extension/filepaths/prompt modules transpiled TypeScript2.8.4; real fs-extra5.0.0/lodash4.1.2/nativefilesystem. Original8test Mocha5.0.5 spec twice.14wholecommand scenarios twice, fakeVSCode window/workspace/commands UIonly. All copy/overwrite confinedownedfixtures. No bodyextraction/algorithmadapters.",
+  "findings": [
+    "Confirmed overwrite prompt denies/preserves and accepts/copies. Directory overwrite merges and retains destination-only children.",
+    "Missing source stat rejection escapescatch; openTextDocument rejection also escapescatch after copy succeeds because openFile promise returned withoutawait.",
+    "Parent-relative destination allowed; absolute-looking input path.join stays under source directory. Dotfile default input dropsleadingdot. These are path/prompt contracts, not duplicate detection."
+  ],
+  "decision": "Reject file-copy command as duplicate detector. Retain confirmation, partial-success/error-boundary and directorymerge semantics lessons; no adoption orspeedclaim.",
+  "limits": [
+    "No liveVSCode extensionhost/UI/Node7/originalstrictsemanticbuild/lint/package/release/platform/performance qualification.",
+    "OriginalMocha spec usesnativepath andmockStatsisFile aswritten; onlyadditionalcommandcontrols userealfilesystem andfakeVSCode.",
+    "No userfiles, externalmessages/network or productioncodecopy/adoption."
+  ]
+}

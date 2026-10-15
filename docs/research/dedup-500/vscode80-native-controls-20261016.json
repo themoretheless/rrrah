@@ -1,0 +1,364 @@
+{
+  "status": "verified_8_original_mocha_tests_and14_native_controls_twice",
+  "producer_sha256": "b6a9b82140f32e74710f3d2ba8ac3c912677fa17e76020b4a7a2a0a69de23bb4",
+  "source_pins": {
+    ".dedup-work/vscode80-20261016/source/src/extension.ts": "164499a961b6a6c98cd913e684d529bfd742aa9cca40ac0a83e066ada6df1961",
+    ".dedup-work/vscode80-20261016/source/src/managers/filepaths.ts": "57eec7fc71159392ff7420d00ad85e4898d6cc892faf9facbd32d9b564873bac",
+    ".dedup-work/vscode80-20261016/source/src/utils/prompt.ts": "f9a94a35b4da2019447d43d26207976efd9a44f1613e4c4e28fbceb99baa69cf",
+    ".dedup-work/vscode80-20261016/source/src/managers/filepaths.spec.ts": "4f60d5b55028e96345dac518167e2c6262fbdf14bd5cc61660f04dfbcb29b207"
+  },
+  "loaded_dependency_file_pins": {
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/typescript/lib/typescript.js": "720e1ad1fd717078d56642cdba0e8b9e78f95bde5e6cb42b8cfeef7b9a9f9edf",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/mocha/index.js": "6dec56fc03aa76cabd4843f11620cf14f5edb185f0dcbb1762b248fd3d495b66",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/mocha/lib/mocha.js": "20c4535f173ba7b4662adda38ddf95feb35a6d0468776f15bb59be74e586abe6",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/escape-string-regexp/index.js": "02f3a564251a4aef9084ee33489aa4a6bbd6466c676998bd223af2c05ac8ef07",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/mocha/lib/reporters/index.js": "e811bab630760c5956ad6ed613ec1bf4269575679d4d3ed5ad8d43ecf8bfec64",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/mocha/lib/reporters/base.js": "155ccd326ab07980111aa9a397d2db4df42bd0823bc3d0b630d6cbf7d5817ba7",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/diff/lib/index.js": "e16badc3809323cfa41833f41f5b6406bca33200d7085447af5486228015034c",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/diff/lib/diff/base.js": "8c79735a71934cddfffd311eca8dcd52b482cdf6554b46b7e9064cba55ca5aea",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/diff/lib/diff/character.js": "3d9ef759e08df4488e6916699dc4434021b378d736b067324dd64d81b1cedac6",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/diff/lib/diff/word.js": "2b48dbd44f26f81896ad78bacb9bf8f21f9ff6d130d12e6bc3457921041fe762",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/diff/lib/util/params.js": "537f1a6fa8cb4dd6e7f20c9da242395d4c014819e38ac45a4c3bde14c4255060",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/diff/lib/diff/line.js": "2ec651ea3ef20fb9195c01395abfc37d56878d586b3541d98c791b0983926c6e",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/diff/lib/diff/sentence.js": "3801eb1687b3559f19ba2b38528af385e6fe4b28912df6264907b630ef3f2cae",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/diff/lib/diff/css.js": "20ca6e8b2afa2a52d30374e12b9c6d16b8de221624c7399a48ef2092d7a9b127",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/diff/lib/diff/json.js": "76e3a09e85598a89b398436769c57817878ff5add8427d397542016e6c912782",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/diff/lib/diff/array.js": "6667608039cca2e2c5436c13dd82396becd55e6b6ac8c70abffc7bc5ba90b1c7",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/diff/lib/patch/apply.js": "3989deb11f2501ff4d6c54ca123cf6566aa30bf219b730f0518a4292d507169d",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/diff/lib/patch/parse.js": "d091b71b36425da9a4289531cf87fcc8beead38894caf30e2ba70414a7863bd9",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/diff/lib/util/distance-iterator.js": "052ddab21a6a28e490b6d4ed34a8b29d5a7330b0f8a3bc5819442e7454a32c24",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/diff/lib/patch/merge.js": "19fa14c429548078fe4e35303d2ac470e373db432c03584dd64793c2979f896f",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/diff/lib/patch/create.js": "60c1bd1d755f09bbcd37cf53293f91ee79f200f429002ad28cb087ae598591e8",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/diff/lib/util/array.js": "48c9d22b768cc209377f36fb49ba6943109d3e49fa388a5003623333a9cf0d25",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/diff/lib/convert/dmp.js": "4a05bc6b4352700962d9ae0c4b9a06667ce95b2e3aa118b2380dc088c551169b",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/diff/lib/convert/xml.js": "4ad431bb72848effcab74486c382b85540df8046d4394afca02f953262767223",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/mocha/lib/ms.js": "317008002d035000784b6eeff688c053c930362458d22ce144dffd62b768dcdc",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/mocha/lib/utils.js": "5c42ef46290ebd06b3a79bd7e841deaeca87f6b3c15a2b7acdc03f172e1fe63e",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/debug/src/index.js": "27a340bb23865b2eee705d7fdc000538ad2664564bfd2148f30cc5921ceb722e",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/debug/src/node.js": "23a1f983515544cdb386e1c17605ec4717399ac95c1be9d8f1cb5b2c116a1494",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/debug/src/debug.js": "c2df5319cf8768d1bb64f99f74e7dc14188a9455b20509b9a8c4bd126a2b5e4e",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/ms/index.js": "4bd92209cb9dacf3e3773e725acb7aaec43ea9e78540324e4d0f73e5ce9adef7",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/supports-color/index.js": "4e94ba6fcfe7b38738789c9edb7af906bab7ec7a13caf6128b2fa6a5f1ad38a5",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/has-flag/index.js": "71ee1e14127fe4e4d69f311a12e8427000c99d6b1f5d40a310ac4e5f7af91695",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/glob/glob.js": "e3f3d1fd54aa24133a3d518ae7eaf26d5cbc1b9496389e18dd24ba63ea763ed3",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/fs.realpath/index.js": "2e334ba43cd4852f7a3ed68159029167c05d7fa6af536e6ef177eb868ccd1bb8",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/fs.realpath/old.js": "07245a82717f9bfa2a63b9784284a1b7fc43ff5fcb4af2a94bce5f83611d4a2f",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/minimatch/minimatch.js": "746849f267c4868a53729225bd85c7dccd387712136fb305fcc0a3eadd4a3d9d",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/brace-expansion/index.js": "c53b4fab560940391af6889ac8fafe67629ec645ca536dd7f10d266713e969bf",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/concat-map/index.js": "091b65d778337599d0140b35d53c038603d1732d27c33bfe39e03871a96926b2",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/balanced-match/index.js": "06e4d0037715251cb3be2b2db063662f555b3538d9e30a9c517a54374d941cbc",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/inherits/inherits.js": "bb380f32bef5feb18678f0f45f88073fed5d7a0069a309132cb2080cd553d5c7",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/path-is-absolute/index.js": "4eb1119c3eeccc4d8e8841b77d062abaf4572b332801f5b16175bc3311b5d8f1",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/glob/sync.js": "f04c04e9e40ea1ada97a1e414ad26d871faa0778e3b1fb0d5fc66ec6acbc243f",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/glob/common.js": "e9a5f37878266f441069556ea411a60d658bdfb16aa99d3b29b53fd639a5aa3a",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/inflight/inflight.js": "e33ea098a91d2c41be886fbbcecacb9799fe183d8a446f138a4786cb3d809802",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/wrappy/wrappy.js": "153453c4d84a3c2f13589c37055a7daff61d48475dcce554f7eedad15fc7b3e5",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/once/once.js": "3db73e347ecbdbafdf8d0db85145c877e133f5372e767360ef90c09f70ac5103",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/he/he.js": "4180559f4d7397b4d7c8993d7e5caf8a23eb3e31970baf225086f7b30232e28d",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/mocha/lib/reporters/dot.js": "ff9b9d395abf2f5fd99465de57bcc3f3df0cbebe155449fb751851184cc0e12e",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/mocha/lib/reporters/doc.js": "100eb478c00e9ff8d84f3c453f97dcca7b5e390bc4403f7024d953bb04c374a6",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/mocha/lib/reporters/tap.js": "969af92b4528ccc1457c0c8eca98a85f66e7e13325534d821a639cf25ffeddbf",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/mocha/lib/reporters/json.js": "97efbe84749a658f141a303a4ed84a24fd8b157258fb4c3d81ff2b2eaad9193f",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/mocha/lib/reporters/html.js": "90bb53085bdddcaa863f7360fa2e4f8edf54720108d55d5cb07e3e7a9e2c79ba",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/mocha/lib/browser/progress.js": "3fc92e5f198ff66742f74b81330c4c3dfe280d0c600d9e2896185d854617e466",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/mocha/lib/reporters/list.js": "6788ef996be6c5198ab732f0db023dd5627bb7fa28e1b39b8ad70e5bbdf39487",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/mocha/lib/reporters/min.js": "29705c1dd1709b2af89f7f5cc52ee4c6e37197981afb6bfe28587dab53975f8e",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/mocha/lib/reporters/spec.js": "a556f47410968250a7166b0a05ae2921880a90d900f34b53246b782f14a081c7",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/mocha/lib/reporters/nyan.js": "bf94ca4d627f08bf5c9f365458fe3658eb7b7945472e050f38e34d2a378269f3",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/mocha/lib/reporters/xunit.js": "da2e0e6f729c478cfc382a0daf20684da21d60c89acbd10e1aa2a8950b1fb74b",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/mkdirp/index.js": "6e4f5d6d26baf194cf4bbb4d82110046ed6215205b412c57a7b5097dc1623eac",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/mocha/lib/reporters/markdown.js": "7ab7b59752793fbae16e9ba78288f7dd6d7a6530ac7276686bf2844b783b8f4c",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/mocha/lib/reporters/progress.js": "16e8c6a00bd387aa821082837924f585d68cbb71b0c136445638f582092f0eae",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/mocha/lib/reporters/landing.js": "f81d009231c46bd661c0d161d58d124426006110d6626e0a8e8d4b8219a1bf42",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/mocha/lib/reporters/json-stream.js": "12156328d41fd7e6e7f404d39113b3a53751a3a8b35cd73faa342f127de16b3c",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/mocha/lib/interfaces/index.js": "e372695ab2dd6c7b8c105475a460d72e7c1d8233d3b3ca19b7ca74f4c52ab320",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/mocha/lib/interfaces/bdd.js": "8c721d2b5ef289aaf6d2c0d535eeb762bbbf0f6831ba6ac72b158874d6a181cc",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/mocha/lib/test.js": "6b5a74dba9e480336c60b9e82ffc53520c5376163562af90405ed2de06e6acc8",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/mocha/lib/runnable.js": "83fb805706ea2ec8c0a82ffcda1331031f66410f3c98cae20a7495403cbe5552",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/mocha/lib/pending.js": "bc1827fa29e51b79605ce8e4f6ec6aacdba18e8561ba8a85d37af97af0464990",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/mocha/lib/interfaces/tdd.js": "c919b708e60e39720b5c86c6acdff860edf2846eeef5a462c20ddffdeaa5ee86",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/mocha/lib/interfaces/qunit.js": "3a066f35f92f21b87fa5dcbd14fc23546461324029c2052e02173b049298ba1f",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/mocha/lib/interfaces/exports.js": "de75f025f0801c2179bf17fa3195971b8984d081c31dc72c57d06b7ac792920e",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/mocha/lib/suite.js": "42246894c69bd32add6531ab5c0f064f00eb421ecbf7f38965bdc5ecd9c18a7e",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/mocha/lib/hook.js": "519991a9f4569aba8ecee1fb02d463429f29a9973883cc7ee06360316077f3eb",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/mocha/lib/context.js": "bfc8ea6fb9ad4f3c6fc292c9775882fdf3db282377404e5365623a866ebf61bd",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/mocha/lib/runner.js": "94e0ae59b04c6a50dfc1070e93bbcbf6e5d100a76d0d6b72bae1d74ffa1888c2",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/fs-extra/lib/index.js": "82ab0bc424e76eb1d857f8c998eabb1b66c125e3193c6905baa943230d88c6ae",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/fs-extra/lib/util/assign.js": "8448b9673d9723731866ebf6e88776e2086abec73d538f67a98876c6f69eac08",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/fs-extra/lib/fs/index.js": "7aa1d130502945a5967e2f0ab4a47a17689558342b5f1c4bd237e45863133468",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/universalify/index.js": "d3411ff41b782d91b9cf61daf5a36fa9f2a0383da19be846aa4463f00226e929",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/graceful-fs/graceful-fs.js": "7da35669b6b6b0e4aafee31674c033f2cebb0c8f9ae010f709dcc185d3f17786",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/graceful-fs/polyfills.js": "66ea1687ed5edf39d67296d26edccc8da695d9a869303a78d0e580cd770aca27",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/graceful-fs/legacy-streams.js": "60a6a7ecf7c3e55a3ffaae13433b6cff388b7205bba6daf393c863f77a949e36",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/graceful-fs/clone.js": "7258eca52e65d69845759503f9fdd66c252f40e5eafb76db5d481172e31ac9ed",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/fs-extra/lib/copy/index.js": "94fa1467b46eebfec580edffc1e4bb34aef251243ec24f58c80d443939b1dbb8",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/fs-extra/lib/copy/copy.js": "39201a6c08e20d546cf472b9098629a87d7e256fbfb9c0983c1ae334dadb8c40",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/fs-extra/lib/mkdirs/index.js": "bbffb8d9b32cf4fc9b81ffdbefd9f675be5d33724bce6612e9db1d50c9ca848c",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/fs-extra/lib/mkdirs/mkdirs.js": "f1e959fdf83c06a9434df900f81c4372c5948a486de9c398ef5e1667dc4c67df",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/fs-extra/lib/mkdirs/win32.js": "a58409301aa73ea6e2ed07dc1278638efec23066f20d16f295ddcd1d1805a61c",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/fs-extra/lib/mkdirs/mkdirs-sync.js": "b31f41bf0878ad8bb556e65d085ab0a3b0f13815ec2db88957d785765902e80e",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/fs-extra/lib/path-exists/index.js": "5ce096c95daec0259817248921b39a9e0df4d342db171138ccb62440cc7a0cbe",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/fs-extra/lib/util/utimes.js": "35541d309c85b8b6f0dab9dbc5f93d7f7a3db30fa41718655a9cb4bb5932fc93",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/fs-extra/lib/copy-sync/index.js": "360b7c95ad351f0e7650735a4b4dcda0d5dbed434837a8e08a6fb8d94d2e6b51",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/fs-extra/lib/copy-sync/copy-sync.js": "ca55432299c12a25a98297a78df2da933088f52c0e266c9c7c2e4ecb66afc9cc",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/fs-extra/lib/remove/index.js": "dff95c5640a0b4b769290126940a7683e0e6d29ec591df63b7296712f81d9c56",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/fs-extra/lib/remove/rimraf.js": "c3d050119ef93e5343f3333eca9b2c4d425e8475bece5dc753f9377474699c1a",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/fs-extra/lib/json/index.js": "984c3badc1522a11a7ea91df9f4f31b4e4faf7d18f489d496d06449d361c3fd1",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/fs-extra/lib/json/jsonfile.js": "857ad5cc1569d6455e53ed4be618d836257a0fce5d4db3bcda49c5510ea4b26a",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/jsonfile/index.js": "9f1f688b8dcf497badda859b9ab1ef28af8428a006271c68483fc830ca4a21d4",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/fs-extra/lib/json/output-json.js": "95d5328ff48a993a442dd537e362f5bc19ec60cd205683d3f401cc561d59615f",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/fs-extra/lib/json/output-json-sync.js": "f8388235c1188eb35cdb7790829009207931f983933fedd7812ae2138f9124e3",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/fs-extra/lib/move/index.js": "fc754fcc08efefd2ddfc20fce23364f86783f5c84d13ee9b418095f7bad7de47",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/fs-extra/lib/move-sync/index.js": "7b3802576cfc150524945443583c8d10f778ee5093625782248be9d1b530944b",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/fs-extra/lib/util/buffer.js": "77aafad91ef51ff48e4a52a31a9aaccb12290da0e5ea9d4de26c3d8840fcea86",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/fs-extra/lib/empty/index.js": "46e30a0f4b8833c6343e68959ec7cb407584e7cc4c7f251d91949a567031227d",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/fs-extra/lib/ensure/index.js": "6c8e1d92d85d04c25c1a076b1270e26dfaa36583ba95d6d5b7874f3b1700cead",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/fs-extra/lib/ensure/file.js": "a55ad2781fce21f8318603b68b8bdc9595e696ae840022fe006be21ad58412ff",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/fs-extra/lib/ensure/link.js": "b3b32d4dc9e6df34155dcb9f8fbdef95ae8469114f0efeaa2e7161556e7e09e0",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/fs-extra/lib/ensure/symlink.js": "73877592460c91b00587ae5977fc556986a3b2cdaf6df937201de1fcb1d8b350",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/fs-extra/lib/ensure/symlink-paths.js": "4d722a3483bdb4d072fa997ad54f33eab96b4fb7c38231ff0f7e492ae70c9453",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/fs-extra/lib/ensure/symlink-type.js": "9cc0b6884cf394e8bebd149fae5ce82124ec8d19552c570b9873f46ad2b9856d",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/fs-extra/lib/output/index.js": "98b32626a3617fe4d952ca66d882e36b9cea195bac44696aff267fc9450c3f13",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/lodash.escaperegexp/index.js": "584de6ec78e35344eaef8291338a671f223ec225c4df4220b6f91d8f0c004d8d",
+    ".dedup-work/vscode80-20261016/node-tools/node_modules/mocha/lib/interfaces/common.js": "c22b13aa893d5a276e71cf8a49369bac25940f56b7c6f015a975807a3c8283fc"
+  },
+  "dependency_versions": {
+    "typescript": "2.8.4",
+    "mocha": "5.0.5",
+    "fs-extra": "5.0.0",
+    "lodash.escaperegexp": "4.1.2"
+  },
+  "runs": [
+    {
+      "upstream": {
+        "result": {
+          "failures": 0,
+          "tests": 8,
+          "passes": 8
+        },
+        "passed": [
+          "Managers → Filepaths .buildFilepath should build path to file",
+          "Managers → Filepaths .buildFilepath should build path to directory",
+          "Managers → Filepaths .buildFilepath should add original extension for new path of non-dot file",
+          "Managers → Filepaths .buildFilepath should not add original extension for new path of non-dot file",
+          "Managers → Filepaths .buildFilepath should add original extension for new path of dot file",
+          "Managers → Filepaths .buildFilepath should not add original extension for new path of dot file",
+          "Managers → Filepaths .buildFilepath should not add original extension for new path of dot file with !!ext marker",
+          "Managers → Filepaths .buildFilepath should add original extension for new path of dot file with &&ext marker"
+        ]
+      },
+      "controls": [
+        {
+          "case": "copy_and_open",
+          "observed": [
+            "SOURCE",
+            1
+          ]
+        },
+        {
+          "case": "cancel_no_copy",
+          "observed": [
+            0,
+            0
+          ]
+        },
+        {
+          "case": "overwrite_denied_preserves",
+          "observed": [
+            "KEEP",
+            1
+          ]
+        },
+        {
+          "case": "overwrite_confirmed",
+          "observed": [
+            "SOURCE",
+            1
+          ]
+        },
+        {
+          "case": "directory_overwrite_merges_retains_old",
+          "observed": [
+            "NEW",
+            "OLD",
+            0
+          ]
+        },
+        {
+          "case": "source_stat_failure_escapes_error_handler",
+          "observed": [
+            true,
+            0
+          ]
+        },
+        {
+          "case": "no_editor_returns_without_prompt",
+          "observed": 0
+        },
+        {
+          "case": "active_editor_fallback",
+          "observed": "SOURCE"
+        },
+        {
+          "case": "same_path_refused",
+          "observed": [
+            1,
+            0
+          ]
+        },
+        {
+          "case": "copy_failure_caught",
+          "observed": [
+            1,
+            0,
+            "BLOCK"
+          ]
+        },
+        {
+          "case": "open_rejection_escapes_catch_after_copy",
+          "observed": [
+            true,
+            0,
+            "SOURCE"
+          ]
+        },
+        {
+          "case": "parent_destination_allowed",
+          "observed": "SOURCE"
+        },
+        {
+          "case": "absolute_name_joined_beneath_source_dir",
+          "observed": [
+            true,
+            true
+          ]
+        },
+        {
+          "case": "dotfile_default_prompt_loses_leading_dot",
+          "observed": "-copy.env"
+        }
+      ]
+    },
+    {
+      "upstream": {
+        "result": {
+          "failures": 0,
+          "tests": 8,
+          "passes": 8
+        },
+        "passed": [
+          "Managers → Filepaths .buildFilepath should build path to file",
+          "Managers → Filepaths .buildFilepath should build path to directory",
+          "Managers → Filepaths .buildFilepath should add original extension for new path of non-dot file",
+          "Managers → Filepaths .buildFilepath should not add original extension for new path of non-dot file",
+          "Managers → Filepaths .buildFilepath should add original extension for new path of dot file",
+          "Managers → Filepaths .buildFilepath should not add original extension for new path of dot file",
+          "Managers → Filepaths .buildFilepath should not add original extension for new path of dot file with !!ext marker",
+          "Managers → Filepaths .buildFilepath should add original extension for new path of dot file with &&ext marker"
+        ]
+      },
+      "controls": [
+        {
+          "case": "copy_and_open",
+          "observed": [
+            "SOURCE",
+            1
+          ]
+        },
+        {
+          "case": "cancel_no_copy",
+          "observed": [
+            0,
+            0
+          ]
+        },
+        {
+          "case": "overwrite_denied_preserves",
+          "observed": [
+            "KEEP",
+            1
+          ]
+        },
+        {
+          "case": "overwrite_confirmed",
+          "observed": [
+            "SOURCE",
+            1
+          ]
+        },
+        {
+          "case": "directory_overwrite_merges_retains_old",
+          "observed": [
+            "NEW",
+            "OLD",
+            0
+          ]
+        },
+        {
+          "case": "source_stat_failure_escapes_error_handler",
+          "observed": [
+            true,
+            0
+          ]
+        },
+        {
+          "case": "no_editor_returns_without_prompt",
+          "observed": 0
+        },
+        {
+          "case": "active_editor_fallback",
+          "observed": "SOURCE"
+        },
+        {
+          "case": "same_path_refused",
+          "observed": [
+            1,
+            0
+          ]
+        },
+        {
+          "case": "copy_failure_caught",
+          "observed": [
+            1,
+            0,
+            "BLOCK"
+          ]
+        },
+        {
+          "case": "open_rejection_escapes_catch_after_copy",
+          "observed": [
+            true,
+            0,
+            "SOURCE"
+          ]
+        },
+        {
+          "case": "parent_destination_allowed",
+          "observed": "SOURCE"
+        },
+        {
+          "case": "absolute_name_joined_beneath_source_dir",
+          "observed": [
+            true,
+            true
+          ]
+        },
+        {
+          "case": "dotfile_default_prompt_loses_leading_dot",
+          "observed": "-copy.env"
+        }
+      ]
+    }
+  ],
+  "scope": "Whole unchanged original TS extension/filepaths/prompt modules transpiled TypeScript2.8.4; real fs-extra5.0.0/lodash4.1.2/nativefilesystem. Original8test Mocha5.0.5 spec twice.14wholecommand scenarios twice, fakeVSCode window/workspace/commands UIonly. All copy/overwrite confinedownedfixtures. No bodyextraction/algorithmadapters.",
+  "findings": [
+    "Confirmed overwrite prompt denies/preserves and accepts/copies. Directory overwrite merges and retains destination-only children.",
+    "Missing source stat rejection escapescatch; openTextDocument rejection also escapescatch after copy succeeds because openFile promise returned withoutawait.",
+    "Parent-relative destination allowed; absolute-looking input path.join stays under source directory. Dotfile default input dropsleadingdot. These are path/prompt contracts, not duplicate detection."
+  ],
+  "limits": [
+    "No liveVSCode extensionhost/UI/Node7/originalstrictsemanticbuild/lint/package/release/platform/performance qualification.",
+    "OriginalMocha spec usesnativepath andmockStatsisFile aswritten; onlyadditionalcommandcontrols userealfilesystem andfakeVSCode.",
+    "No userfiles, externalmessages/network or productioncodecopy/adoption."
+  ]
+}

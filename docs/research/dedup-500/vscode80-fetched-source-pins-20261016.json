@@ -1,0 +1,232 @@
+{
+  "repository": "mrmlnc/vscode-duplicate",
+  "commit": "d1c083c66de6a25ef308b47e64fae13bea6f23ec",
+  "canonical_trees": {
+    "": "b2a43c933e577f0f769e30e36861f8d84918c49c",
+    ".github": "07f8d9503c0ddefad3629058dad1c19a67519037",
+    ".vscode": "50ec4a9214aa6cc4c8adaa25561bd74c08c20357",
+    "src": "6bf393857d42831e237dcda1c83a4363ca98d472",
+    "src/managers": "98ec866b8c5aaca3870a32b50de09e1886aeb934",
+    "src/types": "613bb896985af7545d771da9c3ea7a90e2259968",
+    "src/utils": "e4eaf742e8993b7a39dcb034c4976991e1ad1403"
+  },
+  "blobs": [
+    {
+      "path": ".editorconfig",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6b68779c1ecd5a3199ecdc3083f740cb0ca59aa0",
+      "size": 245,
+      "url": "https://api.github.com/repos/mrmlnc/vscode-duplicate/git/blobs/6b68779c1ecd5a3199ecdc3083f740cb0ca59aa0",
+      "sha256": "e4c29e73c658553a9249e75b456beb248141d492ae75d4ba6f108e7ed4303dfd",
+      "text_content": "root = true\n\n[*]\ncharset = utf-8\nend_of_line = lf\ninsert_final_newline = true\nindent_style = tab\nindent_size = 4\ntrim_trailing_whitespace = true\n\n[{.travis.yml,appveyor.yml,npm-shrinkwrap.json,package.json}]\nindent_style = space\nindent_size = 2\n"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "deadb183e40fd8a5038c79fde5f4ff88aade9ede",
+      "size": 203,
+      "url": "https://api.github.com/repos/mrmlnc/vscode-duplicate/git/blobs/deadb183e40fd8a5038c79fde5f4ff88aade9ede",
+      "sha256": "c860a618c3d13a971f2a3470e1f2b274fc2e5d510955befd513bbc2cbb748746",
+      "text_content": "### Environment\n\n  * VSCode Version: ...\n  * OS Version: ...\n\n### Actual behavior\n\n...\n\n### Expected behavior\n\n...\n\n### Steps to reproduce\n\n...\n\n### Settings\n\n```js\n// Paste your configuration here.\n```\n"
+    },
+    {
+      "path": ".github/PULL_REQUEST_TEMPLATE.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e37ec226fed1becab5706e7571354a8327061a27",
+      "size": 107,
+      "url": "https://api.github.com/repos/mrmlnc/vscode-duplicate/git/blobs/e37ec226fed1becab5706e7571354a8327061a27",
+      "sha256": "1fc9559f7e615485e05bb877846d39087de25fe3fb01627b0508cbbc083e3bfb",
+      "text_content": "### What is the purpose of this pull request?\n\n...\n\n### What changes did you make? (Give an overview)\n\n...\n"
+    },
+    {
+      "path": ".gitignore",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "757b2315ad6dbe603fce37d74c035fd0bb79d487",
+      "size": 187,
+      "url": "https://api.github.com/repos/mrmlnc/vscode-duplicate/git/blobs/757b2315ad6dbe603fce37d74c035fd0bb79d487",
+      "sha256": "3fcdf864cc8c696a1e29d7190775e950fa078a764b2f453de55ae958a5460b10",
+      "text_content": "# Logs\nlogs/\n*.log\nnpm-debug.log*\n\n# IDE & editors\n.idea\n.vscode\n\n# Dependency directory\nnode_modules/\n\n# Compiled and tempory files\n.tmp/\nout/\n\n# Other files\npackage-lock.json\nyarn.lock\n"
+    },
+    {
+      "path": ".travis.yml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "32f498b83749863d2d932aa3a7b36420d28204ba",
+      "size": 74,
+      "url": "https://api.github.com/repos/mrmlnc/vscode-duplicate/git/blobs/32f498b83749863d2d932aa3a7b36420d28204ba",
+      "sha256": "036e2e37422202dfa960d21297e444f2fef3a351a9f3e2ecece0d11aba1a7869",
+      "text_content": "sudo: false\nlanguage: node_js\nnode_js:\n  - '7'\n\nscript:\n  - npm run build\n"
+    },
+    {
+      "path": ".vscode/launch.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a4b3adcd67833215ee98e29357f248733a7b5c4c",
+      "size": 313,
+      "url": "https://api.github.com/repos/mrmlnc/vscode-duplicate/git/blobs/a4b3adcd67833215ee98e29357f248733a7b5c4c",
+      "sha256": "ae1cd1702d205bc7245bba390b7174f3e1badd473090355c6dc4c31424fc4beb",
+      "text_content": "{\n\t\"version\": \"0.1.0\",\n\t\"configurations\": [\n\t\t{\n\t\t\t\"name\": \"Launch Extension\",\n\t\t\t\"type\": \"extensionHost\",\n\t\t\t\"request\": \"launch\",\n\t\t\t\"runtimeExecutable\": \"${execPath}\",\n\t\t\t\"args\": [\n\t\t\t\t\"--extensionDevelopmentPath=${workspaceRoot}\"\n\t\t\t],\n\t\t\t\"stopOnEntry\": false,\n\t\t\t\"outFiles\": [\"${workspaceRoot}/out\"]\n\t\t}\n\t]\n}\n"
+    },
+    {
+      "path": ".vscodeignore",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b153aa175c428a7d6cac4318b5b1579abde80b61",
+      "size": 121,
+      "url": "https://api.github.com/repos/mrmlnc/vscode-duplicate/git/blobs/b153aa175c428a7d6cac4318b5b1579abde80b61",
+      "sha256": "a49be75846eb17e31d5a551f76ce3f462074a6ced64d5e323990c130afde5063",
+      "text_content": "out/**/*.d.ts\n.editorconfig\n.gitignore\npackage-lock.json\nyarn.lock\ntsconfig.json\ntslint.json\n.travis.yml\n\n.vscode\nsrc/**\n"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7173d2b7e3ff5b3952899f194437d6738283b9f3",
+      "size": 262,
+      "url": "https://api.github.com/repos/mrmlnc/vscode-duplicate/git/blobs/7173d2b7e3ff5b3952899f194437d6738283b9f3",
+      "sha256": "6bef400fedc02c61a8219076f2ef5100487ee269a191e32ad724205211b93b28",
+      "text_content": "We use [GitHub's Releases feature](https://github.com/blog/1547-release-your-software) for changelogs.\n\nSee [the Releases section of our GitHub project](https://github.com/mrmlnc/vscode-duplicate/releases) for changelogs for each release version of this plugin.\n"
+    },
+    {
+      "path": "CODE-OF-CONDUCT.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "efccb43f5fbc6ebc44e0a292506df88d5558f61f",
+      "size": 3197,
+      "url": "https://api.github.com/repos/mrmlnc/vscode-duplicate/git/blobs/efccb43f5fbc6ebc44e0a292506df88d5558f61f",
+      "sha256": "93f8929737fcb730246e8366fdba6af56a7a80d0e834b57d479a460c7a76097c",
+      "text_content": "# Contributor Covenant Code of Conduct\n\n## Our Pledge\n\nIn the interest of fostering an open and welcoming environment, we as\ncontributors and maintainers pledge to making participation in our project and\nour community a harassment-free experience for everyone, regardless of age, body\nsize, disability, ethnicity, gender identity and expression, level of experience,\nnationality, personal appearance, race, religion, or sexual identity and\norientation.\n\n## Our Standards\n\nExamples of behavior that contributes to creating a positive environment\ninclude:\n\n* Using welcoming and inclusive language\n* Being respectful of differing viewpoints and experiences\n* Gracefully accepting constructive criticism\n* Focusing on what is best for the community\n* Showing empathy towards other community members\n\nExamples of unacceptable behavior by participants include:\n\n* The use of sexualized language or imagery and unwelcome sexual attention or\n  advances\n* Trolling, insulting/derogatory comments, and personal or political attacks\n* Public or private harassment\n* Publishing others' private information, such as a physical or electronic\n  address, without explicit permission\n* Other conduct which could reasonably be considered inappropriate in a\n  professional setting\n\n## Our Responsibilities\n\nProject maintainers are responsible for clarifying the standards of acceptable\nbehavior and are expected to take appropriate and fair corrective action in\nresponse to any instances of unacceptable behavior.\n\nProject maintainers have the right and responsibility to remove, edit, or\nreject comments, commits, code, wiki edits, issues, and other contributions\nthat are not aligned to this Code of Conduct, or to ban temporarily or\npermanently any contributor for other behaviors that they deem inappropriate,\nthreatening, offensive, or harmful.\n\n## Scope\n\nThis Code of Conduct applies both within project spaces and in public spaces\nwhen an individual is representing the project or its community. Examples of\nrepresenting a project or community include using an official project e-mail\naddress, posting via an official social media account, or acting as an appointed\nrepresentative at an online or offline event. Representation of a project may be\nfurther defined and clarified by project maintainers.\n\n## Enforcement\n\nInstances of abusive, harassing, or otherwise unacceptable behavior may be\nreported by contacting the project team at dmalinochkin@rambler.ru. All\ncomplaints will be reviewed and investigated and will result in a response that\nis deemed necessary and appropriate to the circumstances. The project team is\nobligated to maintain confidentiality with regard to the reporter of an incident.\nFurther details of specific enforcement policies may be posted separately.\n\nProject maintainers who do not follow or enforce the Code of Conduct in good\nfaith may face temporary or permanent repercussions as determined by other\nmembers of the project's leadership.\n\n## Attribution\n\nThis Code of Conduct is adapted from the [Contributor Covenant][homepage], version 1.4,\navailable at https://www.contributor-covenant.org/version/1/4/code-of-conduct.html\n\n[homepage]: https://www.contributor-covenant.org\n"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cf1bf21c4cbcfc19f3b157b17535ee8b5ff44443",
+      "size": 1810,
+      "url": "https://api.github.com/repos/mrmlnc/vscode-duplicate/git/blobs/cf1bf21c4cbcfc19f3b157b17535ee8b5ff44443",
+      "sha256": "453d6ecad55c69e75b12ae78f02a3b8983a34d3aedbe53d8024119901110bb3f",
+      "text_content": "# Contributing to my package\n\nWelcome, and thank you for your interest in contributing to **vscode-duplicate**!\n\nPlease note that this project is released with a [Contributor Code of Conduct](CODE-OF-CONDUCT.md). By participating in this project you agree to abide by its terms.\n\n## Contribution Guidelines\n\nThere are a couple of ways you can contribute to this repo:\n\n  * **Ideas, feature requests and bugs**: We are open to all ideas and we want to get rid of bugs! Use the [Issues section](https://github.com/mrmlnc/vscode-duplicate/issues) to either report a new issue, provide your ideas or contribute to existing threads.\n  * **Documentation**: Found a typo or strangely worded sentences? Submit a PR!\n  * **Code**: Contribute bug fixes, features or design changes.\n\n### Creating an Issue\n\nBefore you create a new Issue:\n\n  * Check the [Issues](https://github.com/mrmlnc/vscode-duplicate/issues) on Github to ensure one doesn't already exist.\n  * Clearly describe the issue, including the steps to reproduce the issue.\n\n### Making Changes\n\n#### Getting Started\n\n  * Install [Node.js](https://nodejs.org/en/).\n  * Fork the project and clone the fork repo. ([how to create fork?](https://help.github.com/articles/fork-a-repo/#fork-an-example-repository)).\n  * Create a topic branch from the master branch.\n  * Run `yarn` or `npm install` to install the application dependencies.\n\n#### Setup\n\n1. Start watching:\n\n```\n$ npm run watch\n```\n\n2. Make changes:\n\n```\n$ code .\n```\n\n3. Run tests:\n\n```\n$ npm t\n```\n\n4. Test your version of the extension:\n\nPress <kbd>F5</kbd> in the editor and then test extension commands and functions.\n\n#### Commit\n\nKeep git commit messages clear and appropriate. You can use [Angular guide](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#-git-commit-guidelines).\n"
+    },
+    {
+      "path": "LICENSE",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "65a999460170355f6383b8f122da09e66e485165",
+      "size": 1079,
+      "url": "https://api.github.com/repos/mrmlnc/vscode-duplicate/git/blobs/65a999460170355f6383b8f122da09e66e485165",
+      "sha256": "9363d160bf41d46d83901a5d24fc3fe2094c2afc17b4a2378914b273977ee2de",
+      "text_content": "The MIT License (MIT)\n\nCopyright (c) Denis Malinochkin\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.\n"
+    },
+    {
+      "path": "README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "58ab4497d95efaca35d272b3bae47cd3287394a8",
+      "size": 2044,
+      "url": "https://api.github.com/repos/mrmlnc/vscode-duplicate/git/blobs/58ab4497d95efaca35d272b3bae47cd3287394a8",
+      "sha256": "e818f42baea133b9eaf95bf8ad122f6b807c96e348b64b200e73a44d3c7d4f11",
+      "text_content": "# vscode-duplicate\n\n> Ability to duplicate files and directories in VS Code.\n\n## Donate\n\nIf you want to thank me, or promote your Issue.\n\n[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/mrmlnc)\n\n> Sorry, but I have work and support for plugins and modules requires some time after work. I will be glad of your support or PR's.\n\n## Install\n\n  * Press <kbd>F1</kbd> and `select Extensions: Install Extensions`.\n  * Search for and select `duplicate`.\n\nSee the [extension installation guide](https://code.visualstudio.com/docs/editor/extension-gallery) for details.\n\n## Usage\n\nThe first option:\n\n  1. Hover on a file or directory name in explorer.\n  2. Right-click and select `Duplicate file`.\n  3. Enter the new path for the duplicate.\n\nThe second option:\n\n  1. Open the file.\n  2. Press `F1` and select `Duplicate file`.\n  3. Enter the new path for the duplicate.\n\n## About file extension\n\n> :warning: If you do not specify a new extension, the previous **will be saved**.\n\nBut you can use two special characters:\n\n  * `!!ext` \u2013 don't preserve original extension.\n  * `&&ext` \u2013 preserve original extension (available with `duplicate.keepOriginalExtension` option).\n\nFor example:\n\n  * `nameOfFile!!ext` \u2013 create filepath without original extension\n  * `nameOfFile&&ext` \u2013 create filepath with original extension\n\n## Supported settings\n\n#### duplicate.openFileAfterCopy\n\n  * Type: `Boolean`\n  * Default: `true`\n\nAutomatically open newly copied files.\n\n#### duplicate.keepOriginalExtension\n\n  * Type: `Boolean`\n  * Default: `true`\n\nKeep original extension if it not specified.\n\n## Keyboard shortcuts\n\nTo change keyboard shortcuts, create a new rule in `File -> Preferences -> Keyboard Shortcuts`:\n\n```json\n{\n  \"key\": \"ctrl+shift+d\",\n  \"command\": \"duplicate.execute\"\n}\n```\n\n## Changelog\n\nSee the [Releases section of our GitHub project](https://github.com/mrmlnc/vscode-duplicate/releases) for changelogs for each release version.\n\n## License\n\nThis software is released under the terms of the MIT license.\n"
+    },
+    {
+      "path": "icon.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "12b4c2574637d016410b548e29642e7eaef8d553",
+      "size": 440,
+      "url": "https://api.github.com/repos/mrmlnc/vscode-duplicate/git/blobs/12b4c2574637d016410b548e29642e7eaef8d553",
+      "sha256": "329c2caa1ea1519d86c54b12235f1a54ba53e32261ff23c4a712fd983333532f",
+      "dimensions": [
+        128,
+        129
+      ]
+    },
+    {
+      "path": "package.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3e3f40a59daa4e0a46e1ccf63f6d13d693610330",
+      "size": 2290,
+      "url": "https://api.github.com/repos/mrmlnc/vscode-duplicate/git/blobs/3e3f40a59daa4e0a46e1ccf63f6d13d693610330",
+      "sha256": "cfb10219af7151b1313b95bde9eed52ac7783be3c52a029f0ee868a81593fb7d",
+      "text_content": "{\n  \"name\": \"vscode-duplicate\",\n  \"displayName\": \"Duplicate action\",\n  \"description\": \"Ability to duplicate files in VS Code\",\n  \"version\": \"1.2.1\",\n  \"publisher\": \"mrmlnc\",\n  \"license\": \"MIT\",\n  \"engines\": {\n    \"vscode\": \"^1.13.0\"\n  },\n  \"icon\": \"icon.png\",\n  \"homepage\": \"https://github.com/mrmlnc/vscode-duplicate/blob/master/README.md\",\n  \"repository\": {\n    \"type\": \"git\",\n    \"url\": \"https://github.com/mrmlnc/vscode-duplicate\"\n  },\n  \"keywords\": [\n    \"duplicate\",\n    \"copy\",\n    \"file\",\n    \"directory\"\n  ],\n  \"categories\": [\n    \"Other\"\n  ],\n  \"activationEvents\": [\n    \"onCommand:duplicate.execute\"\n  ],\n  \"main\": \"./out/extension.js\",\n  \"contributes\": {\n    \"commands\": [\n      {\n        \"command\": \"duplicate.execute\",\n        \"title\": \"Duplicate file or directory\"\n      }\n    ],\n    \"menus\": {\n      \"explorer/context\": [\n        {\n          \"command\": \"duplicate.execute\"\n        }\n      ],\n      \"editor/title/context\": [\n        {\n          \"command\": \"duplicate.execute\"\n        }\n      ]\n    },\n    \"configuration\": {\n      \"type\": \"object\",\n      \"title\": \"Duplicate Action Configuration\",\n      \"properties\": {\n        \"duplicate.openFileAfterCopy\": {\n          \"type\": \"boolean\",\n          \"default\": true,\n          \"description\": \"Automatically open newly copied files\"\n        },\n        \"duplicate.keepOriginalExtension\": {\n          \"type\": \"boolean\",\n          \"default\": true,\n          \"description\": \"Keep original extension if it not specified\"\n        }\n      }\n    }\n  },\n  \"devDependencies\": {\n    \"@types/fs-extra\": \"5.0.1\",\n    \"@types/lodash.escaperegexp\": \"^4.1.3\",\n    \"@types/mocha\": \"^5.0.0\",\n    \"@types/node\": \"^9.6.2\",\n    \"mocha\": \"^5.0.5\",\n    \"tslint\": \"^5.9.1\",\n    \"tslint-config-mrmlnc\": \"^1.0.0\",\n    \"typescript\": \"^2.8.1\",\n    \"vscode\": \"^1.1.14\"\n  },\n  \"dependencies\": {\n    \"fs-extra\": \"^5.0.0\",\n    \"lodash.escaperegexp\": \"^4.1.2\"\n  },\n  \"scripts\": {\n    \"postinstall\": \"node ./node_modules/vscode/bin/install\",\n    \"clean\": \"rimraf out\",\n    \"lint\": \"tslint \\\"src/**/*.ts\\\" -p . -t stylish\",\n    \"compile\": \"tsc\",\n    \"test\": \"mocha \\\"out/**/*.spec.js\\\" -s 0\",\n    \"build\": \"npm run clean && npm run lint && npm run compile && npm test\",\n    \"watch\": \"npm run clean && npm run lint & npm run compile -- --sourceMap --watch\"\n  }\n}\n"
+    },
+    {
+      "path": "src/extension.ts",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "379a8d6a3118f6f6f7f0e9f9b3640c4f4b7cff85",
+      "size": 2458,
+      "url": "https://api.github.com/repos/mrmlnc/vscode-duplicate/git/blobs/379a8d6a3118f6f6f7f0e9f9b3640c4f4b7cff85",
+      "sha256": "164499a961b6a6c98cd913e684d529bfd742aa9cca40ac0a83e066ada6df1961",
+      "text_content": "import * as fs from 'fs-extra';\nimport * as path from 'path';\n\nimport escapeRegExp = require('lodash.escaperegexp');\nimport * as vscode from 'vscode';\n\nimport * as filepaths from './managers/filepaths';\nimport * as promptUtils from './utils/prompt';\n\nimport { IPluginSettings } from './types';\n\n/**\n * Open file after duplicate action.\n */\nasync function openFile(filepath: string): Promise<vscode.TextEditor> {\n\tconst document = await (vscode.workspace.openTextDocument(filepath) as Promise<vscode.TextDocument>);\n\n\treturn vscode.window.showTextDocument(document);\n}\n\n/**\n * Duplicate action.\n */\nasync function duplicator(uri: vscode.Uri, settings: IPluginSettings): Promise<vscode.TextEditor | undefined> {\n\tconst oldPath = uri.fsPath;\n\tconst oldPathParsed = path.parse(oldPath);\n\tconst oldPathStats = await fs.stat(oldPath);\n\n\t// Get a new name for the resource\n\tconst newName = await promptUtils.name(oldPathParsed.name);\n\tif (!newName) {\n\t\treturn;\n\t}\n\n\t// Get the new full path\n\tconst newPath = filepaths.buildFilepath(oldPathParsed, oldPathStats, newName, settings);\n\n\t// If a user tries to copy a file on the same path\n\tif (uri.fsPath === newPath) {\n\t\tvscode.window.showErrorMessage('You can\\'t copy a file or directory on the same path.');\n\n\t\treturn;\n\t}\n\n\t// Check if the current path exists\n\tconst newPathExists = await fs.pathExists(newPath);\n\tif (newPathExists) {\n\t\tconst userAnswer = await promptUtils.overwrite(newPath);\n\t\tif (!userAnswer) {\n\t\t\treturn;\n\t\t}\n\t}\n\n\ttry {\n\t\tawait fs.copy(uri.fsPath, newPath);\n\n\t\tif (settings.openFileAfterCopy && oldPathStats.isFile()) {\n\t\t\treturn openFile(newPath);\n\t\t}\n\t} catch (err) {\n\t\tconst errMsgRegExp = new RegExp(escapeRegExp(oldPathParsed.dir), 'g');\n\t\tconst errMsg = err.message\n\t\t\t.replace(errMsgRegExp, '')\n\t\t\t.replace(/[\\\\|\\/]/g, '')\n\t\t\t.replace(/`|'/g, '**');\n\n\t\tvscode.window.showErrorMessage(`Error: ${errMsg}`);\n\t}\n\n\treturn;\n}\n\nexport function activate(context: vscode.ExtensionContext): void {\n\tconst command = vscode.commands.registerCommand('duplicate.execute', (uri: vscode.TextDocument | vscode.Uri) => {\n\t\tconst settings = vscode.workspace.getConfiguration().get('duplicate') as IPluginSettings;\n\n\t\tif (!uri || !(<vscode.Uri>uri).fsPath) {\n\t\t\tconst editor = vscode.window.activeTextEditor;\n\t\t\tif (!editor) {\n\t\t\t\treturn;\n\t\t\t}\n\n\t\t\treturn duplicator(<vscode.Uri>editor.document.uri, settings);\n\t\t}\n\n\t\treturn duplicator(<vscode.Uri>uri, settings);\n\t});\n\n\tcontext.subscriptions.push(command);\n}\n"
+    },
+    {
+      "path": "src/managers/filepaths.spec.ts",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "415aa16005709bde3720b27d5a5156b519b95a76",
+      "size": 2486,
+      "url": "https://api.github.com/repos/mrmlnc/vscode-duplicate/git/blobs/415aa16005709bde3720b27d5a5156b519b95a76",
+      "sha256": "4f60d5b55028e96345dac518167e2c6262fbdf14bd5cc61660f04dfbcb29b207",
+      "text_content": "import * as assert from 'assert';\nimport * as path from 'path';\n\nimport * as manager from './filepaths';\n\nfunction getBuildedFilepath(oldName: string, newName: string, isFile: boolean, keep: boolean): string {\n\tconst oldPath = path.parse(`/Users/name/Documents/${oldName}`);\n\n\treturn manager.buildFilepath(\n\t\toldPath,\n\t\t{ isFile: () => isFile } as any, /* tslint:disable-line no-any */\n\t\tnewName,\n\t\t{ keepOriginalExtension: keep, openFileAfterCopy: false }\n\t);\n}\n\ndescribe('Managers \u2192 Filepaths', () => {\n\tdescribe('.buildFilepath', () => {\n\t\tit('should build path to file', () => {\n\t\t\tconst expected = '/Users/name/Documents/test.ts';\n\n\t\t\tconst actual = getBuildedFilepath('test.js', 'test.ts', true, true);\n\n\t\t\tassert.equal(actual, expected);\n\t\t});\n\n\t\tit('should build path to directory', () => {\n\t\t\tconst expected = '/Users/name/Documents/test-copy';\n\n\t\t\tconst actual = getBuildedFilepath('test', 'test-copy', false, true);\n\n\t\t\tassert.equal(actual, expected);\n\t\t});\n\n\t\tit('should add original extension for new path of non-dot file', () => {\n\t\t\tconst expected = '/Users/name/Documents/test.js';\n\n\t\t\tconst actual = getBuildedFilepath('test.js', 'test', true, true);\n\n\t\t\tassert.equal(actual, expected);\n\t\t});\n\n\t\tit('should not add original extension for new path of non-dot file', () => {\n\t\t\tconst expected = '/Users/name/Documents/test';\n\n\t\t\tconst actual = getBuildedFilepath('test.js', 'test', false, true);\n\n\t\t\tassert.equal(actual, expected);\n\t\t});\n\n\t\tit('should add original extension for new path of dot file', () => {\n\t\t\tconst expected = '/Users/name/Documents/.env.sample';\n\n\t\t\tconst actual = getBuildedFilepath('.env.sample', '.env', true, true);\n\n\t\t\tassert.equal(actual, expected);\n\t\t});\n\n\t\tit('should not add original extension for new path of dot file', () => {\n\t\t\tconst expected = '/Users/name/Documents/.env';\n\n\t\t\tconst actual = getBuildedFilepath('.env.sample', '.env', true, false);\n\n\t\t\tassert.equal(actual, expected);\n\t\t});\n\n\t\tit('should not add original extension for new path of dot file with !!ext marker', () => {\n\t\t\tconst expected = '/Users/name/Documents/.env';\n\n\t\t\tconst actual = getBuildedFilepath('.env.sample', '.env!!ext', true, true);\n\n\t\t\tassert.equal(actual, expected);\n\t\t});\n\n\t\tit('should add original extension for new path of dot file with &&ext marker', () => {\n\t\t\tconst expected = '/Users/name/Documents/.env.sample';\n\n\t\t\tconst actual = getBuildedFilepath('.env.sample', '.env&&ext', true, false);\n\n\t\t\tassert.equal(actual, expected);\n\t\t});\n\t});\n});\n"
+    },
+    {
+      "path": "src/managers/filepaths.ts",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "61a15f724eb8534f5b8e2bcf1becedcc7e8f6755",
+      "size": 764,
+      "url": "https://api.github.com/repos/mrmlnc/vscode-duplicate/git/blobs/61a15f724eb8534f5b8e2bcf1becedcc7e8f6755",
+      "sha256": "57eec7fc71159392ff7420d00ad85e4898d6cc892faf9facbd32d9b564873bac",
+      "text_content": "import * as fs from 'fs';\nimport * as path from 'path';\n\nimport { IPluginSettings } from '../types';\n\nexport function buildFilepath(oldPath: path.ParsedPath, oldStat: fs.Stats, newName: string, settings: IPluginSettings): string {\n\tconst newPath = path.parse(newName);\n\n\t// Check ability to add original extension\n\tconst needAddExtension = (settings.keepOriginalExtension && !newName.endsWith('!!ext')) || newName.endsWith('&&ext');\n\n\t// Clean the new name from special characters\n\tlet newStripedName = newName.replace(/(!!|&&)ext$/, '');\n\n\t// The new path has no extension and we must save original extension\n\tif (oldStat.isFile() && newPath.ext === '' && needAddExtension) {\n\t\tnewStripedName += oldPath.ext;\n\t}\n\n\treturn path.join(oldPath.dir, newStripedName);\n}\n"
+    },
+    {
+      "path": "src/types/index.ts",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e3bf0db6e6469612236d71d7100aa43f47399bff",
+      "size": 99,
+      "url": "https://api.github.com/repos/mrmlnc/vscode-duplicate/git/blobs/e3bf0db6e6469612236d71d7100aa43f47399bff",
+      "sha256": "ab5e42e16b3faaabb7213f4888fa4e1bf16b1b313ec8884afd49b1f05355c4ea",
+      "text_content": "export interface IPluginSettings {\n\topenFileAfterCopy: boolean;\n\tkeepOriginalExtension: boolean;\n}\n"
+    },
+    {
+      "path": "src/utils/prompt.ts",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2ec98ba4ed091dd6cd6e382ba23d8a6bddc9b6d2",
+      "size": 680,
+      "url": "https://api.github.com/repos/mrmlnc/vscode-duplicate/git/blobs/2ec98ba4ed091dd6cd6e382ba23d8a6bddc9b6d2",
+      "sha256": "f9a94a35b4da2019447d43d26207976efd9a44f1613e4c4e28fbceb99baa69cf",
+      "text_content": "import * as vscode from 'vscode';\n\nexport function name(filename: string): Promise<string | undefined> {\n\treturn vscode.window.showInputBox({\n\t\tplaceHolder: 'Enter the new path for the duplicate.',\n\t\tvalue: filename.split('.').map((el, i) => i === 0 ? `${el}-copy` : el).join('.')\n\t}) as Promise<string | undefined>;\n}\n\nexport function overwrite(filepath: string): Promise<vscode.MessageItem | undefined> {\n\tconst message = `The path **${filepath}** alredy exists. Do you want to overwrite the existing path?`;\n\tconst action = {\n\t\ttitle: 'OK',\n\t\tisCloseAffordance: false\n\t};\n\n\treturn vscode.window.showWarningMessage(message, action) as Promise<vscode.MessageItem | undefined>;\n}\n"
+    },
+    {
+      "path": "tsconfig.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "538a137c9b2c59b71565d757f2c256545d37dd68",
+      "size": 719,
+      "url": "https://api.github.com/repos/mrmlnc/vscode-duplicate/git/blobs/538a137c9b2c59b71565d757f2c256545d37dd68",
+      "sha256": "e73f48edb1613f10c598d53497561f3b5658b2c1d177ff339d00f083c56678c2",
+      "text_content": "{\n\t\"compilerOptions\": {\n\t\t\"target\": \"es5\",\n\t\t\"module\": \"commonjs\",\n\t\t\"moduleResolution\": \"node\",\n\t\t\"lib\": [\n\t\t\t\"es2015\"\n\t\t],\n\n\t\t\"rootDir\": \"src\",\n\t\t\"outDir\": \"out\",\n\n\t\t\"strict\": true,\n\t\t\"alwaysStrict\": true,\n\t\t\"strictFunctionTypes\": true,\n\t\t\"strictNullChecks\": true,\n\t\t\"strictPropertyInitialization\": true,\n\n\t\t\"forceConsistentCasingInFileNames\": true,\n\t\t\"noImplicitAny\": true,\n\t\t\"noImplicitReturns\": true,\n\t\t\"noImplicitThis\": true,\n\t\t\"noFallthroughCasesInSwitch\": true,\n\t\t\"noUnusedLocals\": true,\n\t\t\"noUnusedParameters\": true,\n\n\t\t\"emitDecoratorMetadata\": true,\n\t\t\"experimentalDecorators\": true,\n\t\t\"downlevelIteration\": true,\n\t\t\"declaration\": true,\n\n\t\t\"pretty\": true\n\t},\n\t\"include\": [\n\t\t\"typings/**/*\",\n\t\t\"src/**/*\"\n\t]\n}\n"
+    },
+    {
+      "path": "tslint.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c4f165565a456cf9a85152ac74861fde3755499d",
+      "size": 157,
+      "url": "https://api.github.com/repos/mrmlnc/vscode-duplicate/git/blobs/c4f165565a456cf9a85152ac74861fde3755499d",
+      "sha256": "1b34965d6ae1c39fa44f3bccd50ee65e87961a723c5f81d14a8fd7b447e33e8e",
+      "text_content": "{\n\t\"extends\": [\"tslint-config-mrmlnc\"],\n\t\"rules\": {\n\t\t\"no-require-imports\": false,\n\t\t\"match-default-export-name\": false,\n\t\t\"max-file-line-count\": false\n\t}\n}\n"
+    }
+  ],
+  "native_log": {
+    "path": ".dedup-work/vscode80-20261016/native-run.log",
+    "sha256": "42e22cf651d96c31583fa02ca02234a6e99af21e02e0b8db703eb780e723e617"
+  }
+}
