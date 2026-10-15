@@ -1,0 +1,32 @@
+{
+  "status": "ten_authored_selected_native_and_adapter_controls_pass_twice",
+  "tests": 10,
+  "original_tests_run": 0,
+  "python": "3.12.14 (main, Aug 25 2026, 13:50:33) [Clang 22.1.3 ]",
+  "numpy": "2.3.5",
+  "pandas": "2.2.3",
+  "platform": "macOS-26.7.2-arm64-arm-64bit",
+  "command": [
+    "/Users/themoretheless/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/snip96-adapter-controls-20261015/review_test.py"
+  ],
+  "artifacts": [
+    {
+      "path": "docs/research/snip96-adapter-controls-20261015/replay.log",
+      "sha256": "bc3d56c79225c0b4fa849e3c058c845c2b90111e0d78eca2ceda53729a0fca18"
+    },
+    {
+      "path": "docs/research/snip96-adapter-controls-20261015/review_test.py",
+      "sha256": "f7db76f92155bae883e0ff17b16efd12d0a549180d181fea9b737b7eb8907a6c"
+    },
+    {
+      "path": "docs/research/snip96-adapter-controls-20261015/run.log",
+      "sha256": "8929d8efd571c1cbcec77235257a02a99bd2700356a3ad8cc1fbd91c914542b7"
+    }
+  ],
+  "limits": [
+    "Original helper module imported byte-identically. Original selected function bodies extracted unchanged by AST. Torch no_grad decorator omitted only for controlled batch-body test; explicit Tensor/from_numpy/cuda/cpu adapter, no Torch or GPU execution.",
+    "Real NumPy/Pandas, owned NPY/filesystem operations. Requests and Parquet IO replaced by explicit in-memory request/owned DataFrame read/write spies; no network, real Parquet parsing or downloaded dataset/model.",
+    "Review runtimeNumPy2.3.5/Pandas2.2.3 outside upstream declaredNumPy<2/Pandas<2; not original dependency-cohort qualification. Torch/FAISS-GPU/requests/fastparquet unavailable in review Python environment. No complete CLI/Fire/package-build/CI/backend/scale/model-quality claim."
+  ]
+}

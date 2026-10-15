@@ -1,0 +1,129 @@
+{
+  "repository": "nishantHolla/DupIm",
+  "commit": "5442f8e16dfac85397961caa90dde9b49efb1faf",
+  "tree": "f64471c6e41aa6987bbfa97eda61d7b5b408603f",
+  "status": "all_available_text_source_read_opaque_component_remains_unqualified",
+  "whole_repository_complete": false,
+  "whole_implementation_complete": false,
+  "available_text_source_complete": true,
+  "license_metadata": "MIT repository license; bundled SisIO binary provenance/source/license not independently established",
+  "scope": "All7tracked text blobs read;8th tracked blob is31,600byte staticarchive, Gitblobverified and archive/member/ELFx86_64 symbol/section metadata inspected. Full disassembly captured, selected constructor/logging paths inspected; no fullmachine-code semantics/source audit claim.",
+  "blobs": [
+    {
+      "path": ".gitignore",
+      "mode": "100644",
+      "git_blob": "fccc5cd4aa19740a0518d6237f4220d95e423e2b",
+      "bytes": 55,
+      "sha256": "7babc0479d7f071fceee84043c262095f158b02baa332fa362498ab299655478"
+    },
+    {
+      "path": "CMakeLists.txt",
+      "mode": "100644",
+      "git_blob": "97792894cb88e400deac42d33415cef3a71e9af6",
+      "bytes": 427,
+      "sha256": "032ff723bc2537aa7e40706dc5c1a2920a15a81b1df3c29bb02c5df09b5f2020"
+    },
+    {
+      "path": "LICENSE",
+      "mode": "100644",
+      "git_blob": "0185d80c0dffa733788d4ba99fc10d81dc6c1d8c",
+      "bytes": 1070,
+      "sha256": "5f3bf230605e4d978a0593746e52028178de09591796f78a35adec8dfe7cdff0"
+    },
+    {
+      "path": "README.md",
+      "mode": "100644",
+      "git_blob": "e7b360d2e6f23a93ed09bb1d58cd52995fb1be97",
+      "bytes": 1778,
+      "sha256": "b19a50677c93cbfafe2e8788136d6c1a21319ac903aca91c826c9bc600903662"
+    },
+    {
+      "path": "src/include/sisIO.hpp",
+      "mode": "100644",
+      "git_blob": "cffae45dee0aed50eb20b8a8bbda32515f82653e",
+      "bytes": 1161,
+      "sha256": "b45ee37ca317c69548fdb8b5cc096fedae4d54d2824df65bd3607a1c26adec4d"
+    },
+    {
+      "path": "src/lib/libsisIO.a",
+      "mode": "100644",
+      "git_blob": "37b7a39b40a5339837f4dd06cdf3992ace041e8a",
+      "bytes": 31600,
+      "sha256": "8923d4c328d3c66b04e7152e35e979e6f3e86945ca5257812212b15f12a838a3"
+    },
+    {
+      "path": "src/main.cpp",
+      "mode": "100644",
+      "git_blob": "a98787d5015a11a7760fbd9a0a00986edde65358",
+      "bytes": 5070,
+      "sha256": "2ad8123223f883fd1571420a1a180f87e6b63cd2eac06444eb3798e36bff9899"
+    },
+    {
+      "path": "src/submain.cpp",
+      "mode": "100644",
+      "git_blob": "cdca8eff39689497002d6dacd231d9e5e9f94030",
+      "bytes": 2660,
+      "sha256": "88dc8e4082958d923ef484731e5962a7b393dee3c0d408124aae4813f790f17a"
+    }
+  ],
+  "tree_objects_verified": 4,
+  "pin_sha256": "06f85fdda796c3b0bf2445b27bad7fb61ddae7cee533e55a7a1ea82d7bf35892",
+  "controls": "docs/research/dupim493-adapter-controls-20261015/result.json",
+  "controls_sha256": "e4da1120a926b34e9bc0981836c5b6a6afc1fbbc15a2692c166b4be27c01b0e1",
+  "binary_inspection": [
+    {
+      "path": "docs/research/dupim493-binary-inspection-20261015/disassembly.log",
+      "sha256": "62f6b6a6f4621c820c1bc4042488d256e7c18010d4c49bca0258f88fc2546cfe"
+    },
+    {
+      "path": "docs/research/dupim493-binary-inspection-20261015/inventory.log",
+      "sha256": "02cf2e2eaf49c068a5424ce56a12b30caeabd30347c5e6971cb9f457ef05f4fd"
+    }
+  ],
+  "findings": [
+    {
+      "kind": "native_original_control_flow_with_explicit_imaging_log_adapters",
+      "finding": "hash->singlepath overwrite loses candidate pairs:3same synthetic signatures yield2pairs and1mapentry, not all3pairs. No realimage/hashcollision quality claim."
+    },
+    {
+      "kind": "native_original_control_flow_with_explicit_imaging_log_adapters",
+      "finding": "jpg extension includesdot but convert/compute comparesdotlessjpg/jpeg, so actual conversion branch alwayschosen foradmittedJPEG. Adapter confirmsdecode+encodecalls; realOpenCV/JPEGloss not tested."
+    },
+    {
+      "kind": "native_original_control_flow",
+      "finding": "Uppercase.JPG omitted, .webp admitted, .gif omitted. Exact nativefilesystem suffix policy; no formatdecoder support proof."
+    },
+    {
+      "kind": "native_original_control_flow_with_hash_adapter",
+      "finding": "distance15 excluded atthreshold15, includedat16. Hashproviderfailure with initializedknownhash stillstored/published; originalreturncode ignored, but realprovider may leaveuninitializedimageHash, not executed."
+    },
+    {
+      "kind": "native_original_filesystem_with_conversion_adapter",
+      "finding": "Fixed./Dupim.temp.jpg overwritten by convert and existingownedfile removedbycleanup without creationownership proof. No concurrentrace or userfile deletion executed."
+    },
+    {
+      "kind": "native_original_argument_control_flow",
+      "finding": "stoi huge threshold throwsout_of_range through invalid_argument-onlyhandler; negative-1 accepted onownedemptydir. No actualCLI process termination claim."
+    },
+    {
+      "kind": "source_only",
+      "finding": "Main exhaustive scanquadratic inuniquehashes; approximatehash0 loggedasFoundduplicates without pixel/byte confirmation. Globaltemp/output/log names, no cancellation/source mutation/resource/exposure/frame/transform/lowinformation guards."
+    },
+    {
+      "kind": "source_only",
+      "finding": "Unusedsubmain thresholddefaults tostaticzero whenomitted, exacthashduplicatescontinue beforefurther similarity comparisons; outputfiles opened/truncated beforetargetvalidation. Not compiled or run."
+    },
+    {
+      "kind": "opaque_binary_metadata_only",
+      "finding": "Bundledar has one sisIO.cpp.o ELF64x86_64 member, GNUC++std::__cxx11 linkage. Not a MacARM linkablelibrary, originalSisIO.cpp absent. Loggerimplementation cannotbe qualified fromprovidedsource; selected disassembly notsource reconstruction."
+    }
+  ],
+  "remaining": [
+    "Full SisIO component implementation/source/provenance audit missing; do not increment full_repository_read counter.",
+    "Original OpenCV/pHash/SisIO link/build/runtime, dependencylicenses, actualimage/quality/frames/platform/concurrency/performance qualification missing."
+  ],
+  "limits": [
+    "No foreign production code adopted. Allstored blobs pinned, but full repository/implementation read remains explicitlyfalse.",
+    "Static binary metadata/disassembly capture does not prove complete semantic review. No assets/private media/network application execution."
+  ]
+}
