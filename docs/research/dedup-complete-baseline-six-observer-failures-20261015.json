@@ -1,0 +1,23 @@
+{
+  "status": "complete_frozen_baseline_failed_six_external_observer_launches",
+  "audit": "docs/research/dedup-complete-collection-terminal-audit-20261015.json",
+  "audit_sha256": "96f34ddbbb2004a962e75fd8a1bb95f1f34bebc84ad04f4a3e88a4b36b81a1c3",
+  "passed": 2056,
+  "failed": 6,
+  "ignored": 86,
+  "targets": 162,
+  "failures": [
+    "model_worker::tests::successful_worker_response_does_not_leave_background_process",
+    "group_callback_panic_still_stops_descendant",
+    "group_cancel_stops_live_descendant_and_retry_succeeds",
+    "group_capture_limit_stops_descendant",
+    "group_deadline_stops_live_descendant",
+    "group_normal_and_failed_leader_exit_stop_descendants"
+  ],
+  "shared_failure": "Originalsandboxdenies Command::new(\"ps\").output in oneunit modelworker and5worker_group tests. Originalresponse/status/cleanupassertions precede deniedobserver; notproofthat productioncleanup failed.",
+  "current_focused_fixes": {
+    "model_worker": "docs/research/dedup-worker-response-io-controls-20261015.json",
+    "worker_group": "docs/research/dedup-worker-group-native-observer-20261015.json"
+  },
+  "scope": "Original415snapshotalltargets preserved;6failed/86ignored are not promotedtopass. Focusedcurrent15worker+9group tests verifyfix within limitedscope only. Preparedv1fixedpair lacks groupobserveroverlay andrunnerassertsonly1knownfailure; remainsineligiblefordispatch. Need newimmutablecommon2testfileoverlay pair andfullgates."
+}

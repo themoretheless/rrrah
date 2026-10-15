@@ -1,0 +1,1334 @@
+{
+  "status": "terminal_failure",
+  "producer_pid": 67358,
+  "producer_sha256": "d01b20485768129dd9a9ba369a9e654d084b643bdcc38fae68a8fb583d95eae6",
+  "source_manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-committed-build-source-415443172-v2-20261015.json",
+  "source_manifest_sha256": "12a1804241720cdcb2fcf5e598d846d194bebff9e873a50c1e2ee76518704680",
+  "source": "/private/tmp/rrrah-committed-build-source-415443172-v2-20261015",
+  "command": [
+    "cargo",
+    "+stable",
+    "test",
+    "--locked",
+    "--offline",
+    "-p",
+    "rrrah-decode",
+    "-p",
+    "rrrah-dedup",
+    "--features",
+    "rrrah-dedup/decode",
+    "--lib",
+    "--tests",
+    "--no-fail-fast",
+    "--jobs",
+    "2",
+    "--config",
+    "profile.test.lto=\"off\"",
+    "--target-dir",
+    "/private/tmp/rrrah-consensus-collection-target-20261014"
+  ],
+  "compiler": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: aarch64-apple-darwin\nrelease: 1.98.1\nLLVM version: 22.1.8\n",
+  "scope": "All lib and integration targets of both decoder and dedup packages on immutable415baseline, decode enabled; no filters or target pruning. Diagnostic noLTO, MacARM only, not allfeatures/MSRV/platform/current Root proof.",
+  "child_pid": 67374,
+  "returncode": 101,
+  "cargo_log": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/cargo.log",
+  "cargo_log_sha256": "6d3239ac5ca5bb5189ea378cec88ea94e3483d1b7ee8e4fd7ed6248f8cffcc48",
+  "retained_binaries": [
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/rrrah_decode-debc4a1c50103505",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-0-rrrah_decode-debc4a1c50103505",
+      "sha256": "6a612f36cfffa81ed7a8b1ba93d23d43769d8396df5c20028fbfd6b510e145f3",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-0.log",
+      "inventory_sha256": "4d901ad9f0bf5f6b96ade87bfad21ef7d0c4864e6f91b09ab345b7d105ac50e6",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/avif_prem_producer-0179c40398efe4f4",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-1-avif_prem_producer-0179c40398efe4f4",
+      "sha256": "c6c362fc09732a2a81030409b2d2f9b5f9170dbd975c19f5f0d317c206c1f2ed",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-1.log",
+      "inventory_sha256": "442b638e86471a0f2d42a608684aea80f8d5a427d429b62589fe49289abf1e71",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/bay_sensor_oracle-36ecf0ed092b9cbb",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-2-bay_sensor_oracle-36ecf0ed092b9cbb",
+      "sha256": "539a46521c9b60fe6e4d1be1f06874bd40c1bcbfa788677def0faf6ddf2745ff",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-2.log",
+      "inventory_sha256": "690733a14a888d3f43456c555ccaaaa1f91ecaa102a14b69df19b0cbb6074450",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/gpr_color_oracle-5237c0a9e5665b99",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-3-gpr_color_oracle-5237c0a9e5665b99",
+      "sha256": "c5d13f3ab8c3426e998fa6a3864bf80675b93df763ec1c9675ad09232ee4eb30",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-3.log",
+      "inventory_sha256": "63d2ae2abbf8b801347703a1a4525558794653cedd8846b5867e0333f01cb4f2",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/gpr_highlight_support-84f6d2c7bff03734",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-4-gpr_highlight_support-84f6d2c7bff03734",
+      "sha256": "0b619f6866d11f38b4fc8d910b06d8ad186cd64e09ad63ce232bca6af4ffd4e2",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-4.log",
+      "inventory_sha256": "323f89eb0f17a922be690df3079860e44ac8a8c46ad89cb6869a0150dbc9a0d7",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/pdf_knockout-805b72baa4ef9a5f",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-5-pdf_knockout-805b72baa4ef9a5f",
+      "sha256": "1c785ad89e2d4d5f44d31d20300a15dd4e69fd1431374b29d3dcdd346d5b415b",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-5.log",
+      "inventory_sha256": "ba3eb99cd3188ad8746800bb5ab78fe6096569324cb694eb8c15b2009f9f7043",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/qoi_reference_corpus-0c9064fc45c678b4",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-6-qoi_reference_corpus-0c9064fc45c678b4",
+      "sha256": "5263c382b58c3b08b4b97395ffc242e3f9f22fc5d369fc10d8af0b93734c4f58",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-6.log",
+      "inventory_sha256": "67155c75b07426dcd680b3b7999b4360eb62eb0c0d96fe1e176e5bccb8665496",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/rrrah_dedup-7a7019f0f191d056",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-7-rrrah_dedup-7a7019f0f191d056",
+      "sha256": "b83321606f5b0960cbf295acfa5e5fbb632488a33728acba56bbdd0a7dfc5c97",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-7.log",
+      "inventory_sha256": "4d4bd9da7dae0736e975bb3c14077f0c64e3e3a88ee491e558cb6611b09284f5",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/affine_candidate_search-c4801f7806df130a",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-8-affine_candidate_search-c4801f7806df130a",
+      "sha256": "999f743c0521b7babdd43bfaffb0188e1955deee892f383ef742046e37853a24",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-8.log",
+      "inventory_sha256": "630fc7de2d29465c8f68b970b453bbf3aba1e4ca97b232d649eab174ea7a2060",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/affine_color-bb2eb611bd83c75f",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-9-affine_color-bb2eb611bd83c75f",
+      "sha256": "f87ca2f5347aaeb80206a0640bfdc223f7444919ffe099fb9b8f9e24fdc31905",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-9.log",
+      "inventory_sha256": "ced1af97a46b929a95e9298d43544cbb9401b7fc2eae9843d5a0d14b2e6ffd8a",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/affine_color_heldout_negative-c6ef3e8734f11d01",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-10-affine_color_heldout_negative-c6ef3e8734f11d01",
+      "sha256": "a7735521938c74c851a3fad7d1388c0eaada6bc057f51b321df152aca2b038a3",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-10.log",
+      "inventory_sha256": "32de5106242f494d4fd354ac01a33207a559464e7ab716c60366e537e3947c9a",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/affine_region-0be9804ffa77fbd9",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-11-affine_region-0be9804ffa77fbd9",
+      "sha256": "a2928fb2d53f782d7c0ebade31fd0d2603e4ee222802082f833bb221cfe5d36d",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-11.log",
+      "inventory_sha256": "4b7dc7223064d43fead1de2b8dc8513a0267c5b141bbfd3006c07eea248e0bce",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/affine_region_file-2c3c38439eba990d",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-12-affine_region_file-2c3c38439eba990d",
+      "sha256": "ef1816e09c5393195ada3d04e7e95087dff7c53ae0e0a1608d074fcf5e0ed814",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-12.log",
+      "inventory_sha256": "ba96abb4ef70e4caa11c4b51a8537eb7b735e6fc838ddd1764809fff57249dcd",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/affine_region_grid-9fcc774ebb5a72cf",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-13-affine_region_grid-9fcc774ebb5a72cf",
+      "sha256": "4ae4c950820a71a06c5041cb92553e2800014b06e0db7154b6637dd8b8ba41fc",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-13.log",
+      "inventory_sha256": "1c6b86e971dda3dc90b3cd79d41454b9267942ff029b0672f947f3fb871610c1",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/affine_region_input_contract-72d4484e034ffddb",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-14-affine_region_input_contract-72d4484e034ffddb",
+      "sha256": "204be15a46754d588a33a1dd0c9c4f048fa1c188d48bc04f4875c07a93c32096",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-14.log",
+      "inventory_sha256": "d3aca7c328c881c96dd77e3b45527f090e79f052e448ea4c49a4a62fb3f3904f",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/anchor_candidate_search-18e4a4fe9bbda317",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-15-anchor_candidate_search-18e4a4fe9bbda317",
+      "sha256": "c916311bba4acde072e634421009923acaf44c3cd58289bea0b145fe87aca47d",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-15.log",
+      "inventory_sha256": "8045832a0a51d5564e073b6915355f0f8ff7ef5ce89db5e23f8ccc02813acfd5",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/anchor_collection-aa0eb55dddf068bc",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-16-anchor_collection-aa0eb55dddf068bc",
+      "sha256": "99926dbf2d42856fa670d65c70530effef141542640f5a44337cd2f3f6dbcfdc",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-16.log",
+      "inventory_sha256": "e43a042eecded55bda05365545093ead45a2344b6cf3aebea34515d157f7be46",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/anchor_collection_preflight-09e4d8a09e42b4f3",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-17-anchor_collection_preflight-09e4d8a09e42b4f3",
+      "sha256": "659c174e1fd04608f499ac039d033b7cf1a5da00942aed1736eb3751b3f8c05e",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-17.log",
+      "inventory_sha256": "99815581e93de5f0fda22e553ffd8dcb75bea9e4655905204928cd81ca10ac4c",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/anchor_collection_scaled-6c7a2bd7846168c9",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-18-anchor_collection_scaled-6c7a2bd7846168c9",
+      "sha256": "1b3f71f8c23d9856456a18997f501c0747602b07ef3bfa703d20b6fa0ab469b0",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-18.log",
+      "inventory_sha256": "f41594b3a0b11b5be1c399677e9794f4811f78998e73dd2fa5afe94c552da750",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/anchor_fallback_collection-58994344da1694da",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-19-anchor_fallback_collection-58994344da1694da",
+      "sha256": "0c190f65a2a264ea2ffc1ec13522128bae76af56366504f1dd854f76a28e7552",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-19.log",
+      "inventory_sha256": "7715e5cc989bcac66f6716cc7cedafecb027de22e4d6b472e6c025210adaafd1",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/anchor_fallback_collection_lifecycle-a5543c82c8f9d6af",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-20-anchor_fallback_collection_lifecycle-a5543c82c8f9d6af",
+      "sha256": "fb7bacdb65ed03669b6d7200c2e99f753784e092d94aba0383cc7d944d60c3f2",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-20.log",
+      "inventory_sha256": "78c5a1a943bd2ec2a24842a859c4d6c785542484eccd230d3f8b367c01935e01",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/anchor_fallback_collection_preflight-91261a279f7a2f3c",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-21-anchor_fallback_collection_preflight-91261a279f7a2f3c",
+      "sha256": "6f91550c5fb2d88978101beb369031960422ca2d0a83393ce39bd425cb592faf",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-21.log",
+      "inventory_sha256": "a0397c0dd874640d5d8feb319a573621c5cd3c935cc51777160cb43aab2602e9",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/anchor_fallback_search-61a896573a00cb9a",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-22-anchor_fallback_search-61a896573a00cb9a",
+      "sha256": "3525f29747dbb02f57abe0a2ae9c79125b3d51e44a7cd6e7fb43ca5e240d130b",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-22.log",
+      "inventory_sha256": "faf548b34cfa1749a0a56efc28ab5b89c2cfad5b2a33994818f0962bd16bb077",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/anchor_file_search_preflight-cc1506b8374e32b6",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-23-anchor_file_search_preflight-cc1506b8374e32b6",
+      "sha256": "ca1231b48e0c53a3aafc04d41cd2da396796e9cae153db2df1643cc39f9beead",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-23.log",
+      "inventory_sha256": "568276b5426d33a63772546f9960ba413e86f631426a5f72791d29df05176d2e",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/anchor_geometry_collection-a2e2a05b7c72b79d",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-24-anchor_geometry_collection-a2e2a05b7c72b79d",
+      "sha256": "918eb3f018b4ac6693605e1688f584d18c1af6ea835df3d47bb3c7fd91ec84fe",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-24.log",
+      "inventory_sha256": "397d46393969f1d99b0a0b4fa57a7a76c5a80e70713695802eec888d78e26696",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/anchor_geometry_collection_lifecycle-bfefda32bbe3d047",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-25-anchor_geometry_collection_lifecycle-bfefda32bbe3d047",
+      "sha256": "aaa4651d442ecdefde1cee890f0d980bb0b3122aabecadfe4190ea30efa9a92c",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-25.log",
+      "inventory_sha256": "211cf191a7b02a28ab5c5b424385726df07d874ca54ca754255328167f04636a",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/anchor_geometry_collection_preflight-c5b68177be146865",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-26-anchor_geometry_collection_preflight-c5b68177be146865",
+      "sha256": "7c97c75260e3069429cb5dd9f49c0c655b7b7c902cef16f170f8d232de40f4e1",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-26.log",
+      "inventory_sha256": "3fcfa5013c4978a785712c6670c94e31df50bda4f5833b2e4191bc7e11eb31bc",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/anchor_geometry_rank_fallback-bd966390f7e15c9c",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-27-anchor_geometry_rank_fallback-bd966390f7e15c9c",
+      "sha256": "64d2d4c0ae026da23adda063b167b088953c0b795e21fcb447d2f8656ed8d5f4",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-27.log",
+      "inventory_sha256": "b83e6a9fc0340847101595f11fa70ae6afcdb2c964fb2a703fc2b2316e5b44db",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/anchor_geometry_search-63f06d0082bce6c4",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-28-anchor_geometry_search-63f06d0082bce6c4",
+      "sha256": "8b37d37f8e341e02694170f8158426f07f55f17e068700dabf609ca15c5b176d",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-28.log",
+      "inventory_sha256": "77368abfa2c82a6ce8c359abdea5dfd9f4438f31e6d9da66e09eccf9504f0cbf",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/anchor_geometry_smoothing-4178cdb7569ed89e",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-29-anchor_geometry_smoothing-4178cdb7569ed89e",
+      "sha256": "d7b0637308d0cf1d22ffe1c27617cbcb5706456cb26e3ba35c36229a71535829",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-29.log",
+      "inventory_sha256": "f7abc35c5ed33082950b30f99d9d3830dcfdaadd5dadf89309608d7122dee418",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/anchor_rank-a2abd1e16a11880a",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-30-anchor_rank-a2abd1e16a11880a",
+      "sha256": "3bde757a4f7bdfc6ce1947268920a9b3df40ba0fd5a97e024083b15657b27c34",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-30.log",
+      "inventory_sha256": "e95665b4f31064964c69579d1177d56f48360e192a08612603fb191d57107f62",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/anchor_rank_driven_collection-f4cee3b77cdb039a",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-31-anchor_rank_driven_collection-f4cee3b77cdb039a",
+      "sha256": "edc2a2f068ae24e804a9fb401396a543a8ba28323fb5d9dc2429d7351ef503b8",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-31.log",
+      "inventory_sha256": "706975216c32534835df9234f5eaa365aba866d057b4e202318e64ed8d320146",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/anchor_rank_driven_collection_lifecycle-9609d50b7d10fb10",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-32-anchor_rank_driven_collection_lifecycle-9609d50b7d10fb10",
+      "sha256": "bd921731d49eec3feae914ad0e8dd73c3001d985d7ccbac833e157d4ebffe1d0",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-32.log",
+      "inventory_sha256": "aa035adaa6a50514ab78337c95acc9b944c1cf08c1c9bb706cc486c62e2d3d91",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/anchor_rank_driven_collection_preflight-c0c5d9a38ce1291a",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-33-anchor_rank_driven_collection_preflight-c0c5d9a38ce1291a",
+      "sha256": "8b8200341ba8d9ae9a99ee0ef1e59728c3331017364b49947972d73be345e6a9",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-33.log",
+      "inventory_sha256": "3be9f8a418216cdc5bea9aa4d7a38938a1aa6682dde242aa8428376a6ac828bb",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/anchor_rank_file-4431e96d65793d08",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-34-anchor_rank_file-4431e96d65793d08",
+      "sha256": "8b48e0e91fce92daf9ec8b1dfe20d4e75e7eaccb8cc1c0c44001b8ca0f4987b8",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-34.log",
+      "inventory_sha256": "81ccdad0a8595a71845703bb77365848571524ca9f63a56229962d49250c922f",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/anchor_reflected_geometry-c9c1c1935de3b8d7",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-35-anchor_reflected_geometry-c9c1c1935de3b8d7",
+      "sha256": "680b389b9aa852c7c1e0d903696a28f0f75bbacfec1c02be5cf161146c10a4c2",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-35.log",
+      "inventory_sha256": "bbb6f580892e91fc584203e36c33288916f08f7a213a926d1908a07896489328",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/anchor_reflection_collection-bc71f886b86b7300",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-36-anchor_reflection_collection-bc71f886b86b7300",
+      "sha256": "89b9b51e6a848aca86a4cc401565b00a94baf0ee7e7e7ba1ffebaf2bf2661c3c",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-36.log",
+      "inventory_sha256": "213954762c14382608f75895e683788a2db67d307f976c5c218a795fcc712373",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/anchor_reflection_collection_cancel-f7c355bbf9783b34",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-37-anchor_reflection_collection_cancel-f7c355bbf9783b34",
+      "sha256": "8d31540f09f1ac1a80354048df28c4e720be2e2eaee0355740bb9902cf88fb57",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-37.log",
+      "inventory_sha256": "c2f9db10851d425fe4e30eea6c1a3628e069c3a686fd993dbc13e8c9232eb96b",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/anchor_reflection_collection_lifecycle-378dc2a7e5f12fd5",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-38-anchor_reflection_collection_lifecycle-378dc2a7e5f12fd5",
+      "sha256": "02908c0c294a3c6c5fd209608a63625ac6a5d0270a096c005322193fefec8350",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-38.log",
+      "inventory_sha256": "eb6dab240dc5b48d558a53db0c9aa0b641990e4df371a3af15e7505b78bf645a",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/anchor_reflection_collection_tokens-c1dd7294497b73b4",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-39-anchor_reflection_collection_tokens-c1dd7294497b73b4",
+      "sha256": "ab065f5554ddbb57c74002008cc522b1a3ee1177ca7847d7aa8c4872d55a9b44",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-39.log",
+      "inventory_sha256": "826342afe71a7e184e3e3023bc5831144e4b26249928726372a6b2e441c7a5de",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/anchor_reflection_fallback-4d5655f11758cca5",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-40-anchor_reflection_fallback-4d5655f11758cca5",
+      "sha256": "ab46b6a7dc2c8331e11a0787bddb6676ce331d00fb60e1d19f9325a6e1d52d8b",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-40.log",
+      "inventory_sha256": "a42fca377b79cd5603a0c5e0fe62c6b6f4ff5b6759269ffe635cd54d920d4e25",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/animated-a714b4bc5e777441",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-41-animated-a714b4bc5e777441",
+      "sha256": "62d75f69ed5e1a231a692243b94a1edbb6130eb3247b0dbc547c9db6486b3f03",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-41.log",
+      "inventory_sha256": "9478234a58f62fa4f36675d9ac7f8265617ad339e273ee077126ffc10f78822e",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/bank_geometry-f5f62c862d0c96e2",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-42-bank_geometry-f5f62c862d0c96e2",
+      "sha256": "bcf0eb60ea3c821ca23cda8c6755b26ecda07573b10d53bdee1f779df90756d0",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-42.log",
+      "inventory_sha256": "caf9a20f79564c9c9f35bb49911b57a49b8fa52cfaa2e5804ec0c7f2dfac4556",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/bank_partition-029dead1c32b8b67",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-43-bank_partition-029dead1c32b8b67",
+      "sha256": "383f1e5ac09d9d3ebaf55cab192bb2cd0fe76fa800fa709edc27ada52e15a2f1",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-43.log",
+      "inventory_sha256": "910dadf4136e49c83716489cfcf02029315f258203df3466fd4476d6573d78f4",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/build_context-5cb330fbef306d20",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-44-build_context-5cb330fbef306d20",
+      "sha256": "57240cfe1bfcb6e7423a1560d2c52010f7cfd2f1d4716f0117360b6bf9ed3845",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-44.log",
+      "inventory_sha256": "d35aac534dd08a1d45da6f1d43c047a8a99cc79547e65a291f835594ba909a79",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/cache-eaa043aebc9b0ab1",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-45-cache-eaa043aebc9b0ab1",
+      "sha256": "5760b7fa4b4f67edbff2f0227deafa326e7139045216aac89b80e6e604bc36fc",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-45.log",
+      "inventory_sha256": "42e279ed721b061d3b5d8a226bbaaeb8434e4ccc0e6be2f8249590a0fd13c215",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/cache_interpretation-b1ec67777d4bbee2",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-46-cache_interpretation-b1ec67777d4bbee2",
+      "sha256": "f2dd2797a9e809b4c2bc05888f16cc7a5b33ccb4dcd33c605b6c319fa0fac3df",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-46.log",
+      "inventory_sha256": "5c72195ba27c298cecf6574d3c8051b92221f43f71a250e6db25281131d74ab3",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/cache_rla_interpretation-754da881033cb6af",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-47-cache_rla_interpretation-754da881033cb6af",
+      "sha256": "9843dd15095c830354d6aa627610d6cc0a6e10e145df5962ed4c0442f5e10817",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-47.log",
+      "inventory_sha256": "bd7a0a8b2e12bc3dc629b27f0496b4a0216c45293fe1dc1a631600694cfa2f73",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/candidate_geometry_only-2a079882265c7b1f",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-48-candidate_geometry_only-2a079882265c7b1f",
+      "sha256": "4c5c091cedcdf6415a8f76f8b60ac4eeaac7cdf1f2fc5a78a5bff879b7547898",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-48.log",
+      "inventory_sha256": "c451a5ad401d6777e3e2e04d75984b9ae86f9bea9e425f5b949379893bc71c12",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/candidate_reflected_geometry-6814d2e0cd8111c6",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-49-candidate_reflected_geometry-6814d2e0cd8111c6",
+      "sha256": "c5b9f3e3c6e866a72d9b6a6f71440b8d9a9778a6b2b1dbdd83a81102b6d226ce",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-49.log",
+      "inventory_sha256": "e8a64460ff046a1ed518765955a0c57fc06b22e3390c73789be493e582e2a2f5",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/candidate_union_files-57b989af4516dfbd",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-50-candidate_union_files-57b989af4516dfbd",
+      "sha256": "033b0a226ffae2c9c1e89d360d03a2e8c43d9acf881b591232b7ad2368b93b80",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-50.log",
+      "inventory_sha256": "192c53ed75da046e1d6d0b2604a97c3c52adb119fd79d24ffa17d917fe214c34",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/competitive_rank-584146f820116062",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-51-competitive_rank-584146f820116062",
+      "sha256": "712732a81f3589a3d5ec97b4982ea2572d393dceb099c64f02afd1d044da31a1",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-51.log",
+      "inventory_sha256": "ac620523f1268508a4af2b66dc87fb71c0ed4c059e704b38d938aedbe677f1b6",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/container-90d886dde946edca",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-52-container-90d886dde946edca",
+      "sha256": "c4906a37424d33920338d884852a56f68d2a764fb6e9aebe69cf6813fc5d1038",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-52.log",
+      "inventory_sha256": "419b807ec60ede5d106fdf05448e96626177a50c88c48d2a21e3e6f5888a194b",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/content_snapshot-106ace1a101f629b",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-53-content_snapshot-106ace1a101f629b",
+      "sha256": "3c2ee62e38b2db3753fd74446ec2a97e9ffdad5cfdd8355c77eef69544ce134a",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-53.log",
+      "inventory_sha256": "fcb7ee716c4c8aca51ff507dce8e1356275587fcdb6431283f43200b65e2e6c9",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/correspondence_union-3332b7255e186123",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-54-correspondence_union-3332b7255e186123",
+      "sha256": "de997e39641f59d93561cdc3a3e9b1a845bb7e0357ced0324e9bc74543923fd3",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-54.log",
+      "inventory_sha256": "fe3963be7cd64a7fc17ea932390d1ed2d78142379c4fecf2cb0d177c3d31ccd8",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/crop-5b7bcf07e99abae1",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-55-crop-5b7bcf07e99abae1",
+      "sha256": "62bd95c3aa29d567ebb77aa310166348d2e5cd7f933bcf12bebe822595af88d1",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-55.log",
+      "inventory_sha256": "56b27445b875ea379544d4bfdbb5e29a349114c32e24162480356b72f96a20ee",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/decode-b2b643a77475b702",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-56-decode-b2b643a77475b702",
+      "sha256": "448c0034028690432f77faa64833ad916cc02540e261f0479a753e59f5b70973",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-56.log",
+      "inventory_sha256": "0ac1bcc38994a32f160f7cda20fddaa656db5f0ee41991514c6fb508205a2367",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/diagonal_proposals-6f911f7420350d43",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-57-diagonal_proposals-6f911f7420350d43",
+      "sha256": "d5f6955376577c7b89d6b231e604bab8208b612c61f2b20d798efc493ec916ad",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-57.log",
+      "inventory_sha256": "858286269612b26a6edabfdbddc7c0ba82489dcd55d71f294279014da3bdd93c",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/encoded_srgb-88a4476ca4797b18",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-58-encoded_srgb-88a4476ca4797b18",
+      "sha256": "71c198086b714a5acd2eddfb1d5d72815f53c29ad7d6117174c9d254b25ecd78",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-58.log",
+      "inventory_sha256": "9813600081978abf9828aa6b05edcb4828a1b6c66c10e41dd5a945a7e9dce71b",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/exact_files-785298a0e6bcc56a",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-59-exact_files-785298a0e6bcc56a",
+      "sha256": "b60ab41254913c60428a468b84d1c59c4b488db1e8bf61b8803d17651257f1ad",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-59.log",
+      "inventory_sha256": "8507f75fe18dfa1796342f62b24a631366ea4aa91c744d3f07a18bf72b02c7e1",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/exact_large_files-aeee049381b40859",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-60-exact_large_files-aeee049381b40859",
+      "sha256": "7f604fd4a777d32810de757c476d6cb329c5c831878210d9c3a5ba980fdb7546",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-60.log",
+      "inventory_sha256": "a0ffcd4b2aed77bd124a125ac0719fbee3544f7af1a52be66507ef22430cc773",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/exposure-88a50e8c12f30195",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-61-exposure-88a50e8c12f30195",
+      "sha256": "1b47a1a11d6379816654e88e2c658aec5e56698cdb4ec3c6a129c760773ae38d",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-61.log",
+      "inventory_sha256": "bde405a4211094b37ae4fc895d69522d627772acb757ec1dfc60a5709035a6ea",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/exposure_files-770ede427c8a9f25",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-62-exposure_files-770ede427c8a9f25",
+      "sha256": "3e1f69328779b185efec2a895d592b4d1129026c63f58601af0142c747668022",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-62.log",
+      "inventory_sha256": "3e0473ff47ee52979c0d4b51d14d1f36468bdb4ba823a86835f084a91afdbdc8",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/filtered-7ba5c0758f9fc7e4",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-63-filtered-7ba5c0758f9fc7e4",
+      "sha256": "cee404632052e64ab563190c5e1f1c685973cd66a13bc76c6ccc378a293584b0",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-63.log",
+      "inventory_sha256": "34359568ab5f3d9d4dc0769d608cd3547b93a9057a2e21f4f6812a57e37bd0d3",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/five_collection-a18a7d6cb6c18d5a",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-64-five_collection-a18a7d6cb6c18d5a",
+      "sha256": "43657ece6f399754e0b5bd67ca2e3378563974a01c1fdb9b70fab1eac712373a",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-64.log",
+      "inventory_sha256": "352dcd63e055ad3bd3eefec10490ecb021faf54b552ed69ec846a15ede0907aa",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/five_gradient_region_lifecycle-89174dcac8e2a023",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-65-five_gradient_region_lifecycle-89174dcac8e2a023",
+      "sha256": "a4eb519ffcc4203091b37c002501345cc970cb17f5fc01eb04c306e844463200",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-65.log",
+      "inventory_sha256": "e478706cde54908ff38cab42bde1c213c4d912674a69d42ec7d3936678db6773",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/five_lifecycle-aa22cab7d864e5dc",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-66-five_lifecycle-aa22cab7d864e5dc",
+      "sha256": "fe2e8403e3f0ccea0a0b2a7097ab2498a7dd78316ad1f04d606f00e03cc38c74",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-66.log",
+      "inventory_sha256": "8a92238d14cbf24b34837de0300453b4fa38b9571a6ffe1f3ad90cb864704af5",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/five_region_admission-6dc805515062ac48",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-67-five_region_admission-6dc805515062ac48",
+      "sha256": "36c3263841abe5e92f69ef115caffec1e5bbd04fb30913dad4d01e506d71c4d4",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-67.log",
+      "inventory_sha256": "abb7fea7433ec8b75202648080add26703b72c156c3ffbedf2ced447e16265da",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/five_region_lifecycle-de951cc1f6eadb52",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-68-five_region_lifecycle-de951cc1f6eadb52",
+      "sha256": "760eec45e1693d97d2d94c4ffdd0d6009955a1aab6d587a0cc9dc6b29b7d94dd",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-68.log",
+      "inventory_sha256": "7876b3d84b3c93398691e636dbc3cc727517aed52f825386afe541efecde5f15",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/geometry-39a2d7f9b7ce884a",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-69-geometry-39a2d7f9b7ce884a",
+      "sha256": "285ca9046b3d2d53d98603139c26792a965533e003f7e3ae79dc8efa560d4f0b",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-69.log",
+      "inventory_sha256": "7ad8ecd082edf03f51360ed3f563b96a1679a5cb5b826ba5bdbd82d9e6d40796",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/geometry_validation-16a9d564b0875d58",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-70-geometry_validation-16a9d564b0875d58",
+      "sha256": "11bef35fa49988a0062a98779e869f0471ea782248fbd3a6a567ed987decee06",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-70.log",
+      "inventory_sha256": "7d38ced099bdaead4a47c5675d8ed74bf03b252e7235ff61b732ce8110022ccb",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/gradient-e11ef8b4b3f0e4c7",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-71-gradient-e11ef8b4b3f0e4c7",
+      "sha256": "cd87baa5e65ae02171f25fbdae35a59084613ae061364fe88571906cb0dc8b28",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-71.log",
+      "inventory_sha256": "23d90b92f42d12073b60c0fb5fe4fc4c1b4a485c578e33f62d92e1d88fe202d5",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/gradient_candidate_smoothing-96dce7bba3cb0b7f",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-72-gradient_candidate_smoothing-96dce7bba3cb0b7f",
+      "sha256": "9f5fe073f51fc916d08ccb60a7e5f59ccc2952527514881e720ad9b6e406dc15",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-72.log",
+      "inventory_sha256": "099d486640e614ef1ee5426d6f320397c7d49f7c0a2e3fa10a91bc2674448d94",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/gradient_collection-9f7eb2b0ef57f959",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-73-gradient_collection-9f7eb2b0ef57f959",
+      "sha256": "0babcb1680dfbc618a9ce6ac5bcc9212704f0d3e7ccd7bfc601bbb71090aa27c",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-73.log",
+      "inventory_sha256": "20415f0e65b4753cf111dd29c362b0241f975d013f20ca55903cd98e2928a9a4",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/gradient_distinct_locations-346b97fc3f39bb8b",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-74-gradient_distinct_locations-346b97fc3f39bb8b",
+      "sha256": "35a1efff030e0d51bcf0386935a29b672fc6d57246ea1be77c7165a682ffca8a",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-74.log",
+      "inventory_sha256": "e4e9828cb6270f69322994cbbc4f13a54c309bd428ded91c01d26ea0dadd13e8",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/gradient_empty-29c12ba5d421ecb7",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-75-gradient_empty-29c12ba5d421ecb7",
+      "sha256": "883d205439b2ff4f91ee5ff8da48a2e356acd5efbf6af430c5d9293f6553f213",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-75.log",
+      "inventory_sha256": "b6b162b377be05ed7959240835b2d61e5a890026ce1aa314f1fb3db0352e351a",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/gradient_index-67806361e21ff5c3",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-76-gradient_index-67806361e21ff5c3",
+      "sha256": "7d8d60a6717c036f19aeb9fc407a8417e157ab718b543780b7699ce76732adce",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-76.log",
+      "inventory_sha256": "145117dc9190a4019f9742d2f8845a8716a34371978c7c6ee4259b9b1aa33620",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/gradient_index_reflection-050c614dd043be5a",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-77-gradient_index_reflection-050c614dd043be5a",
+      "sha256": "6e1b32acbfa319e9b481ad023851817f0df65542332977eb24a63d4be14fd411",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-77.log",
+      "inventory_sha256": "8b74be3fb72b84656017662333efd7a1242897ac8d47661423d4bba2884cfcbc",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/gradient_interpolated-9c76b4e2f35eea1e",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-78-gradient_interpolated-9c76b4e2f35eea1e",
+      "sha256": "08eb96869a167c1a31f462d39ebb6dec961963058f688365e1372bf20f21ab54",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-78.log",
+      "inventory_sha256": "ee324eeb4001875266a794b432f99ae22b6c1d1d14732374ef90c75937fda0fa",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/gradient_reflection-d1c2ec7c3ac06278",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-79-gradient_reflection-d1c2ec7c3ac06278",
+      "sha256": "dd179381e4b6c16f54813b9af7441f1734dd43c33f16195c5bba683fdb6100fd",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-79.log",
+      "inventory_sha256": "fe0b6acca1016c50c038d6efb4015defe2c9b6f066f7b5364b021f18020eb378",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/gradient_scale-04d66970c0107544",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-80-gradient_scale-04d66970c0107544",
+      "sha256": "9c24342d7932216af3295b249feb0e6d91fb90aa8e487e05e30bdb1344466c9c",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-80.log",
+      "inventory_sha256": "dbaa893679508901cdc2dbff7135b409198fea347d15e4b838e36dd129eb211a",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/gradient_scale_files-ff7e93498d874ad0",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-81-gradient_scale_files-ff7e93498d874ad0",
+      "sha256": "0dd4967903155abf66d47ca45c1080409fa92316c29a80592764edc63a1b10ed",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-81.log",
+      "inventory_sha256": "6fa3e79613d35be5776187e2275ed1a70058bf82a7050883d4d30b47d4ed5e6e",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/groups-6f360f936252f79f",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-82-groups-6f360f936252f79f",
+      "sha256": "069844bc68e770bf44bf6f31110ca2b0131310ed7601fbfcc0038814cd72578a",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-82.log",
+      "inventory_sha256": "ccdaf77cbd09bd2a168fc985ffa8a46e731d9278bb9cf246f50055c1683781ad",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/icc_oracle-12290ed93c2ff199",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-83-icc_oracle-12290ed93c2ff199",
+      "sha256": "e30f715942c570797cd349d421b696abf353629a71af02c0f70758d794c6d098",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-83.log",
+      "inventory_sha256": "c9051efe73a3ee96c4295473db29e84703f28fdf50db63d0dda0d6989f67b9a9",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/information-cea19b42ef43183b",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-84-information-cea19b42ef43183b",
+      "sha256": "68e82cefbfa176f2f49cf84df62a9d0c16b32897d19821fa4a5749ed6de59483",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-84.log",
+      "inventory_sha256": "e01fbaf30094edf47c11fdbd20a64d84b3ce7be92cffb383ad6d4ff193acb6c3",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/joint_projective-eae86d776047379d",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-85-joint_projective-eae86d776047379d",
+      "sha256": "740ca750d644fb81d0d7d51339b0f67f95d7b92ee41a989278400146b97b62ff",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-85.log",
+      "inventory_sha256": "73996d44b5db7c4b5d538dc56af6c550e84611a1f75165137d39d316f71a37b9",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/joint_witnesses-b8e8002707f9f250",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-86-joint_witnesses-b8e8002707f9f250",
+      "sha256": "8731174d629e6ff73c320d899956b13a265c68191f1a37226474e7dcc13f8cf5",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-86.log",
+      "inventory_sha256": "d77c15e9de8a65c7d2ea16d238cafd96bc67ccf81fc8a40add8c0cf924ea99c6",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/jpeg_orientation-739ffa56f51a6933",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-87-jpeg_orientation-739ffa56f51a6933",
+      "sha256": "a97aa3de5137c21a8b559c0df12f05ea6646c48f214f552e71c8ab7e606024cb",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-87.log",
+      "inventory_sha256": "d3a24d7589346085c5b0ae5652e844c7d7dcec74f05195d333e35a6b11352d12",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/linear-d232f51a7ca5e2e8",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-88-linear-d232f51a7ca5e2e8",
+      "sha256": "ce5f823d7832330111afccbbb8e20258217a11b55fbcb960288a733186075a0a",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-88.log",
+      "inventory_sha256": "91a7d6760cf027045f8983d8f3fcfae022412a246b17696a1904df11d01fd7e7",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/local-bb5efe1f5eb1c932",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-89-local-bb5efe1f5eb1c932",
+      "sha256": "0e0b54dd00b01c0bc9669079c8dd47d354f5152a943152020ae293d924b606dd",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-89.log",
+      "inventory_sha256": "aac00c68ef9b3e75db7e335b4d61239af6a7e517975b957a58f54d9bf32d6ccd",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/local_collection-e726ac1d8ab06bae",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-90-local_collection-e726ac1d8ab06bae",
+      "sha256": "b6a9e62334f76d6b4807bc8a6245ac8cd03ab2e32ff4cb646a858dc7bd178924",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-90.log",
+      "inventory_sha256": "9b9a4016d574efb47254df959e218cebf2758a51296d848494bc121c58342fd9",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/local_index-adacef806ae068d0",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-91-local_index-adacef806ae068d0",
+      "sha256": "917d4dac5bf2a871a8325d9153952fc85360855190764fedb8f821e0c91ac9a1",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-91.log",
+      "inventory_sha256": "9a0d24c830ce00c53cfe6344579c4d198418c5ff99065d0beaad1816a2aee9c4",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/local_rank-4cb96aec50efc3c0",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-92-local_rank-4cb96aec50efc3c0",
+      "sha256": "ac50b7c4ffe171a418656d2c0937f105c35f964578a5d748d67188a369021cba",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-92.log",
+      "inventory_sha256": "ca9c88cbd11fddf441c4bc3d70beaa422249a0d1872f4587ddd4e8d17f011e75",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/local_rank_cached-61751fc926f34af7",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-93-local_rank_cached-61751fc926f34af7",
+      "sha256": "a2334d8b2570aa22ccefd12c7c91bf0e6458919a572764e520e9ec857465a600",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-93.log",
+      "inventory_sha256": "7607c349463295e53cde2684df4192ff72f942a633b09fb6f447c5923d90d4d4",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/local_scan-74d5e129f5f7bddb",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-94-local_scan-74d5e129f5f7bddb",
+      "sha256": "a42c8676d6c370a84e7b48835b81ce03cded8ff12916b76b25b95ba0c99db307",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-94.log",
+      "inventory_sha256": "13bb88a0302d9ecf0a81e4930ff772289228465f317f2a056d1b368f6be79da5",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/managed_evidence-66cfccb0311c3ef2",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-95-managed_evidence-66cfccb0311c3ef2",
+      "sha256": "42137c47191bf176a1f4e2aab6f26407672485b9efedfb00173febc4d804c6c6",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-95.log",
+      "inventory_sha256": "cb78a7ed4361a30eb3f0afb71adeb9bfca6cefa262f0370c1f759d819f655367",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/mesh_deformation-e28af43fd5ae1b81",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-96-mesh_deformation-e28af43fd5ae1b81",
+      "sha256": "29d1116d10a146a4b0e8f1895f60a23704e08ff5b15f0e9f3a81e7ca56737600",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-96.log",
+      "inventory_sha256": "791e7cd04325bed8f040a78b9e8e46f39ed04a02a21a244dad2d121c910203be",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/mesh_grid-95ab613e277f881b",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-97-mesh_grid-95ab613e277f881b",
+      "sha256": "a345c714fa6cb9b679a44b280f4288bea2a4758a761a760df48b05b7532515e1",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-97.log",
+      "inventory_sha256": "b1a3ab70d3563a49a33bc6d09071b064dbc270330e2d4a1f4fa59ebf24c920e2",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/mesh_landmark_admission-3f0afa4b91a2c950",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-98-mesh_landmark_admission-3f0afa4b91a2c950",
+      "sha256": "76d2dff22c5012fcdccab92cff210ab66454b3dbd465e71c2c27a26bd0b41df9",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-98.log",
+      "inventory_sha256": "b3cd204be2d937ef0155f9fa1f8d75a6f32ed6a00aaf2ce7d0233b64422f52f2",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/mesh_rank-1913b82c1a88a32f",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-99-mesh_rank-1913b82c1a88a32f",
+      "sha256": "8d5ffba4716d007a79fceb11111e5e6822cd8654ac5b1db573296957ca385430",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-99.log",
+      "inventory_sha256": "f81c5069f2248f9d2604faf557dbaec5ba8b9f3569bb96b4c5d71e954e4b8fa4",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/mesh_rank_regions-06cf9536dfee07a2",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-100-mesh_rank_regions-06cf9536dfee07a2",
+      "sha256": "1135b6129cba033ab5e61b413f66329a1ae87a24dad1d65e25d7551c773c93d7",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-100.log",
+      "inventory_sha256": "6d09642d6b1a56c517c34e19ef83536d34c68f8d78742a8444b8046755006d8f",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/mesh_refine-698ed3ffd5fa6558",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-101-mesh_refine-698ed3ffd5fa6558",
+      "sha256": "d44b6dc78cd2c3892cd3bd3ab3df11e907f471842db187859a7b427d09493ff4",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-101.log",
+      "inventory_sha256": "97a2c545862066274e9f31cf0bba554eab95e0d65e5b35487667e631c267b78e",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/model_compare-e02f4ba9d5f7df3f",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-102-model_compare-e02f4ba9d5f7df3f",
+      "sha256": "3df618c4890b7072cfa1fc16cc8826daa0a5596a9b93a3e37114ac05aa896868",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-102.log",
+      "inventory_sha256": "07a67d5952b84c40e9606ae92202d2ca4f8b6051d847e7b8ddcc90e23a3a25c1",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/model_input-dec68ebd93c4b7b0",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-103-model_input-dec68ebd93c4b7b0",
+      "sha256": "9bc8731a146e5c2c7f7dac4b94939666d617a809cd3b92da9d02c6cc69fde4cb",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-103.log",
+      "inventory_sha256": "a0f3cc14e9c2c1ad05dca56b86cae8fb98ea4665b555d58fca78cde757a9ce2f",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/model_input_file-46c2ab8ef426e1b5",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-104-model_input_file-46c2ab8ef426e1b5",
+      "sha256": "6f7ca50d73e549d6f4552902493a4a6288796fa6d89f126b85ee6a84b9587039",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-104.log",
+      "inventory_sha256": "da6a7244f9f2aafcfc5b661146d203a8acb592263d9a0ddca8e89d0b041d5ba5",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/model_projected_compare-f78d76ff57870412",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-105-model_projected_compare-f78d76ff57870412",
+      "sha256": "66a1b1043c0190946f98aac1ed84da628b5a0100faefe8516de809e9bd45ccdc",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-105.log",
+      "inventory_sha256": "dc42ed0376d34418e981c6fc681ac04e95b91b5921680d9c950efb871bcc1528",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/model_projected_tiles-3f4d7b775fd8da3e",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-106-model_projected_tiles-3f4d7b775fd8da3e",
+      "sha256": "8c3a0bc7528e375696e56753d872820dfb9a33e92140aec9e32cef6a424a6ecb",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-106.log",
+      "inventory_sha256": "3c073a8e8b21fb174134541597d87703f6b0b1752531bdc703715a9937b1c215",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/model_tiles-d166dac4414bd416",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-107-model_tiles-d166dac4414bd416",
+      "sha256": "c72e648fe0b75ff2b39508c2d0e6a7bc80a2b92e5d0da475c05aef3b3156d73a",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-107.log",
+      "inventory_sha256": "d9d82541032124bc9cecbefad5f41902e4cf4624d088929be85e2895c3b15817",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/native_anchor_recovery-9a5884eb5d8bca1e",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-108-native_anchor_recovery-9a5884eb5d8bca1e",
+      "sha256": "dbcf9b1714e75dc4474815d5c5b1eaad08cdfc8b9ae528abace2933951f0442c",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-108.log",
+      "inventory_sha256": "889c5f9b82a65adeb45f334ae2f9a94942302060f1677c2cf0e72b1b76d07d2d",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/native_pixel_domain-8b5d98f1258b391e",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-109-native_pixel_domain-8b5d98f1258b391e",
+      "sha256": "5717cc278ca662dcd4d283a13108fcae5075fd3e41136d4ee5a74ef40804c685",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-109.log",
+      "inventory_sha256": "b0e352a196be34a61b084d31936f1b43fbdce18869082dbcc170021a49add1d4",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/opposite_native-063a1d4f3bd41941",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-110-opposite_native-063a1d4f3bd41941",
+      "sha256": "7de5d89f2a4eb50d25166669b713c5c84fa71ebdae55b09aa44bbeb556308544",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-110.log",
+      "inventory_sha256": "3e04d634804e8210aaa908094dff65732c67011e626143b01c00e041f59540ee",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/ordinal-391d464ffecaae00",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-111-ordinal-391d464ffecaae00",
+      "sha256": "e3f17ecaa77d67b70cc24dd5b8574d5b78c421228dbced23f69ddf5a9ee36269",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-111.log",
+      "inventory_sha256": "f30827318ca65fbdf5b33675d401c88b4c5248262d9f0d585b3399a5875cb6ea",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/oriented-db5d93a3be352220",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-112-oriented-db5d93a3be352220",
+      "sha256": "2e5dbb7affdcd13d6b7314c4312df1de47307d12707b9a05567898bc550e742c",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-112.log",
+      "inventory_sha256": "62de29825846fbf0e1ad36fad816b4a6dd423e684f324ea6b6aba5b009e366f3",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/pages-9956035d841d6ee8",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-113-pages-9956035d841d6ee8",
+      "sha256": "8e599ade99d964f09fe57c7da1fec0d0fc3571c6e9184c81ee2c82adc3f99ce9",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-113.log",
+      "inventory_sha256": "f9fd15e5a3a866ed9b64e5791287212a799909e68ec4e14dd60612c67a453bdb",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/pair_schedule-45868c3fa1f1e705",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-114-pair_schedule-45868c3fa1f1e705",
+      "sha256": "4861c3e6aceda5811d2c9e6d19ed923c84543babd5b6c4991b7d7e18c7d2c0b4",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-114.log",
+      "inventory_sha256": "00a3d47f3e09dbfa6441d0cb45707feaaae5755815b25aa34841d609ed88249d",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/palette_mutation-2b32b305b76b80b4",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-115-palette_mutation-2b32b305b76b80b4",
+      "sha256": "ec5273be6623c402c372e07621475cd6b2d11b66173e0d0b5d969407ba936fe1",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-115.log",
+      "inventory_sha256": "25484b4874e91585b3caf9937efd41c5a71fc3753c40f6044700a3f9a051cd4d",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/palette_transparency-725be8bc56aa4fa7",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-116-palette_transparency-725be8bc56aa4fa7",
+      "sha256": "cab59dad6827b34584a84cfc3d4a4ab3e0400911b103b66dc657ec7bd5dc2362",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-116.log",
+      "inventory_sha256": "4862ac6b6550c5379642d178a77698e31d933521b7d457982368ce6a9fea7450",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/periodic_capture-28758a01306a9b25",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-117-periodic_capture-28758a01306a9b25",
+      "sha256": "6087136d6929a4e2ef3bbfc812c7f6ad3f32317bad39ae2228408de742498195",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-117.log",
+      "inventory_sha256": "c0b32e1807d4c0d878bfe32f7ff4998757c728f93e3ad900aab8e27b2c6e1d55",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/photo_collages-d5384200a3bbe890",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-118-photo_collages-d5384200a3bbe890",
+      "sha256": "f656abdd16b9c33fbf996e1d0a314fe4843fe9a989433bd07b3f6b3b59bd1be2",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-118.log",
+      "inventory_sha256": "7cad292ea8aea1a879a7b81b1e818b68ba6b626614e81c422c3ed3cffb8270f0",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/photo_files-94bd8c6571c1a0f3",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-119-photo_files-94bd8c6571c1a0f3",
+      "sha256": "fe8d737139daf233d5724be8d41b900ca6b22bf1e299c5d566b07698c6aef014",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-119.log",
+      "inventory_sha256": "cd11d8c3a71e23817443b60356f9c2184949737a7e454e438f19f7542b1546db",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/photo_jpeg_oracle-7df6d2dd57d88547",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-120-photo_jpeg_oracle-7df6d2dd57d88547",
+      "sha256": "042d73d77eef8169dfb26b460b096b48530c054cb78ba2c45dd226c2e4a07b9c",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-120.log",
+      "inventory_sha256": "74cf7f3d8fc08955a521c2711f435520783d570fcca87023d61c20fc15c42f2c",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/photometric-387e177b7c531a7e",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-121-photometric-387e177b7c531a7e",
+      "sha256": "826199953b2a7cb6cc4b8b6e1904855dd1907f8a5744b4e9217d58c95856f570",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-121.log",
+      "inventory_sha256": "f422d6a1a24d01d6d2a49f1118886a20ae571b01657ea97966c7fe063fc31066",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/photos_heldout-2e4f9dd4818bdeaf",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-122-photos_heldout-2e4f9dd4818bdeaf",
+      "sha256": "c8cd1e233b0acd29e3a1207030be5522e58cb27b202a5c7a455b00e0a13143ff",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-122.log",
+      "inventory_sha256": "1c643d90ab09cf98f7c744671a525eab0c62df862c6911e26b3422cfb0844991",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/piecewise_local_rank-e249bfead58abb1b",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-123-piecewise_local_rank-e249bfead58abb1b",
+      "sha256": "93dd0e0a80dec6e5ada51ccdc354159302973ceb053eec3f5847e41629b11e0a",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-123.log",
+      "inventory_sha256": "7927e88d8ba3f9dac84242c47d70d6a9cac565c986e1034cb5f6aa35bf490a24",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/piecewise_warp-16af127f2170d947",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-124-piecewise_warp-16af127f2170d947",
+      "sha256": "56e14efd18a4e6a0db7b8d04213289680d56880e839feb6f3b146cda9ff62a39",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-124.log",
+      "inventory_sha256": "62afd2ee1f39f0e66b737574925298fa2862d4514d0875d495826b5660179001",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/pixel_search-a11246c1d6b298b4",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-125-pixel_search-a11246c1d6b298b4",
+      "sha256": "a84aa98599c8b4aa2b95506cc04bb7acca679b166b362f2dfa8f78cf5147010a",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-125.log",
+      "inventory_sha256": "8d8f0856dfe14c5bc6a93f4888fd77636b396b445efc9c161ab0cf866d7ffd7c",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/pixels-8ac6e39149591713",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-126-pixels-8ac6e39149591713",
+      "sha256": "c22a25aa4102bea4a0a016ba0feacd40a904085bc10929279051518a68a9cb15",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-126.log",
+      "inventory_sha256": "a348db14b052af59d3abb3d79425d63f3a47d60e90badee214b9e6c157eef411",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/portfolio_collection-a2637c30f00b7eb9",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-127-portfolio_collection-a2637c30f00b7eb9",
+      "sha256": "d8df93548d893138f4c3f9b74e367073ea7b004e1ac0db2645f3b52a2639c206",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-127.log",
+      "inventory_sha256": "9d12fec82dce790ce0869e3a2e8475dfbd6b0ee15779c99abe7e480ddf1e4144",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/presentation_digest-ff95d3b1510b293d",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-128-presentation_digest-ff95d3b1510b293d",
+      "sha256": "81751e2fad6511f4520565b2c785e2b4c47fd4ab342086d7a82e77c598860a5b",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-128.log",
+      "inventory_sha256": "cc383f39ffb0531b7d0c18f708c392abe5239033f394ef24c8e3afa791af611d",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/presentation_kind-e419d5e44ff24356",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-129-presentation_kind-e419d5e44ff24356",
+      "sha256": "03c200883df7cd3287b908dde8152fe3b15320ea169f331bf0e3d95391921fc3",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-129.log",
+      "inventory_sha256": "85a01fa83e22861591e3106d90b6d03c0d992f4cbb87fcae2b54696bae6f648e",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/projected_collection-846adeec239a8bc7",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-130-projected_collection-846adeec239a8bc7",
+      "sha256": "581ade7c22baa2f5afb0c91f1fe593e21bf2bf9a5690aab0b9d14026e17c09a6",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-130.log",
+      "inventory_sha256": "8aea96f9da64529cfe0d27af291733e9ce05535bac171a0d763bd53ed2d5b1a4",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/projected_portfolio-1a946406128122db",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-131-projected_portfolio-1a946406128122db",
+      "sha256": "2a54d201886e2f7baf9cb1c074ff8c5fe81af9a6121baa6a3a7db30c9fb2c455",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-131.log",
+      "inventory_sha256": "3c5b896dc621cb63fef3fe563a1af82fa1794a8f65aca9fc8cb462213a450a54",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/projective_domains-42f9017c86d3a1fe",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-132-projective_domains-42f9017c86d3a1fe",
+      "sha256": "9efdc4fad4a54fc134c9a97a708e77d13f1835391c2ae9eb3bcd42442dfb6946",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-132.log",
+      "inventory_sha256": "fe1a40f1b130aab2b94e9552b31a5ad90a92e3bb276c97ce8754b59798e2354e",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/projective_exhaustive_domains-7e2e5df61940e494",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-133-projective_exhaustive_domains-7e2e5df61940e494",
+      "sha256": "88a506b336b383d05987e15ed998cee53cf1aabf03f8fcafc122eae07f8e5c5c",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-133.log",
+      "inventory_sha256": "32fd305a881c6f64c29e86eb1adc7982000987c9ba483c712576949b7806c31e",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/projective_files-7d5766f0fb334b0c",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-134-projective_files-7d5766f0fb334b0c",
+      "sha256": "8179eda8e8ad6bcc7630579bb003287d101036f1ff5d9d28a90e79d6879fbcb3",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-134.log",
+      "inventory_sha256": "56b9afa3ee4e7f4bc745d5793fed03e30059f77a42c1060185964732301d4c12",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/projective_geometry-14f5514608d0a26e",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-135-projective_geometry-14f5514608d0a26e",
+      "sha256": "70f288fdacc6ab92c1bcc55e75adc81bc9f2ddaa22b5ea5d2ce236c010688a24",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-135.log",
+      "inventory_sha256": "f1f3c41190eff6e324a8d725635363d8f04c07b8f1fd2aabc84eb3f5884cc244",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/projective_grid-d23a123107c2faeb",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-136-projective_grid-d23a123107c2faeb",
+      "sha256": "cf7f3569d62241898db51bf972aaf5909e043ed3987634b98744d35c3a9c73f2",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-136.log",
+      "inventory_sha256": "68d3c52361d03b7ff8685587ec63a957815b2307ae4c999942babe3f9e10e121",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/projective_pruning-2d17122728d5589b",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-137-projective_pruning-2d17122728d5589b",
+      "sha256": "2f32328b37906b4275fa5cf09ddd18412ebb8537fd5bd6639bfc27553942c5cf",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-137.log",
+      "inventory_sha256": "9289fb919d1418b2babbe53f4650c4f18302f4070f98ac00699c1396782aa74f",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/proposals-20c0251ad27d6d79",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-138-proposals-20c0251ad27d6d79",
+      "sha256": "b156403dde43b8896875ddd683f8d841ee74e911352fb5e243317ade7143d1a6",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-138.log",
+      "inventory_sha256": "0e3af15faa987d517af57d37f14210797ec4065759f3c5333025ad3c02d5dc09",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/pyramid-71d67b67ff4f0837",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-139-pyramid-71d67b67ff4f0837",
+      "sha256": "23e2d07326f2923572563a8e526fd2d54ae462123d06fae4774b26699151beae",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-139.log",
+      "inventory_sha256": "0b24f6d30b0fe26783f7ccb3e543645f71aa06aa95d9a4ce74a6ec4885dd8eee",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/rank_region-9d69fdb5f5581b28",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-140-rank_region-9d69fdb5f5581b28",
+      "sha256": "9e0ef62acc073f16110f900e5621d315f8e66a9d24a2cb556898a2c21b3c941c",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-140.log",
+      "inventory_sha256": "8b5d9431689f82522ab13e7afcfa15147ae35cb40612ec8996f2fa547fd6c2b3",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/raster-35eeccd626004447",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-141-raster-35eeccd626004447",
+      "sha256": "3d5f54f25796c9da5bab2120e2b9694f1476e85e19226703ef0451ec211698b3",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-141.log",
+      "inventory_sha256": "9d801743fed7a4bd2efa58d3e1fb12c731ef0e3afbb9958a5101471d40dab121",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/raster_equality-7a3684cc6729c268",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-142-raster_equality-7a3684cc6729c268",
+      "sha256": "2f36f47481f2ff50419a000fb0f96ed825a0651ca11a467764a8c2a068bb6dde",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-142.log",
+      "inventory_sha256": "4bb4394e6cd7c5b764dba70fc378001df44421330b6fd32c0a1ad07115c66709",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/raw_selected-702be6377a9b1882",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-143-raw_selected-702be6377a9b1882",
+      "sha256": "402da2884720b5d669b5e0394ad745ace0444252a62f9c77ad6aed7a8eaf8c8c",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-143.log",
+      "inventory_sha256": "2bfd9138d354e53cd51359320b1d9b2ea59bdb9ee44477844481639f4998c7c3",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/region_footprint-12bf78e9542c551f",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-144-region_footprint-12bf78e9542c551f",
+      "sha256": "64904bac823add449adbaaff2cb5d7d5c75b1f892aa50ff37b28bb232eccd7c3",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-144.log",
+      "inventory_sha256": "10cf46bb54f22f9c2fd2e419b5bee7936be7dadf0a3edc048c45304b01befa9c",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/region_grid-6eb354032fde3adc",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-145-region_grid-6eb354032fde3adc",
+      "sha256": "35226bc9bc32e8c45aaebac14e3f58388320e7a7ae94555ea243d327eee9da23",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-145.log",
+      "inventory_sha256": "c185f61b436252e2f330ac5854f57f1c68ac6c52731b7a41b7808e2c1b81ee9d",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/region_grid_files-87a21edd92168dc4",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-146-region_grid_files-87a21edd92168dc4",
+      "sha256": "aa417c82a12aae63f82af7c5ed54e262459a0254e4c813db7ac170cd01ad9676",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-146.log",
+      "inventory_sha256": "26ec68d0c882e87123f36ea1300a068e9cc6c800193629747bd10c54dc99ce53",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/region_transform-00ec0a7b5133b4b7",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-147-region_transform-00ec0a7b5133b4b7",
+      "sha256": "1ca479fafda91e38f8c444240d845292eba3d1c4be7fc659e61c73588d6a41ae",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-147.log",
+      "inventory_sha256": "bd79dab0f66935940aa8901320c3c21cd428c9e57c92784e00f8d582daef62b8",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/scan-5d7e97981c49a901",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-148-scan-5d7e97981c49a901",
+      "sha256": "59e97f7681f6abe22bda97c44f4d9fd37ed250c7add0114c178bd0f55c67fc56",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-148.log",
+      "inventory_sha256": "0bc9fd0dae63ffead46d0decf03e241d7327a5e8a6824bd10cf01ec24e6d9227",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/scan_cancellation_checkpoints-a36f3cefbbafd41e",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-149-scan_cancellation_checkpoints-a36f3cefbbafd41e",
+      "sha256": "840592833f3a64c4c4b2721f4ce85872618ae5758e5a9829bc7208307f9d1cbf",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-149.log",
+      "inventory_sha256": "66b989eb47e0f62ee4aaeb6f8fa0e04b8c42ff41040f358959ff849aa677dffd",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/scan_group_publication-8f0692fde3805949",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-150-scan_group_publication-8f0692fde3805949",
+      "sha256": "4f0d581fca86f92a45f5e692962ef6cb58fb8702ed5fd489cda20a9c4f13c209",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-150.log",
+      "inventory_sha256": "526fc5254964352e593746eb01f91445f8dbadcab055eda48a7f316c791e479e",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/scan_retry-36792876c0cb6a6d",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-151-scan_retry-36792876c0cb6a6d",
+      "sha256": "b3134e4810bc83a3d75c4708483fb768e6cd97be0a38beb4c9431bc4c4dbbdf7",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-151.log",
+      "inventory_sha256": "d16e128c8cd69d836579c0d5040404a156e398bda6bc6448f91bddb4a1eb453a",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/search_portfolio-7afde99fb5dccaad",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-152-search_portfolio-7afde99fb5dccaad",
+      "sha256": "2e4133c8f5e8b714c264b014b628cc4b1c448f3a4ab2a722b0e083324ff26f93",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-152.log",
+      "inventory_sha256": "bbb1837a00fa446482176a7d4df1e07ede7d35834e8668e67f8e4107fc086b94",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/sequence-219ddf0cea821d62",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-153-sequence-219ddf0cea821d62",
+      "sha256": "bb131d4e71f07d9b5a979f43c141eca17b65ef916768f6fcab3114d809e73efe",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-153.log",
+      "inventory_sha256": "d1181c80bb268ccd5cc5db56acaf12b974d7b92412a70e1e6bc58e0ac7eccc99",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/spatial-992ce7e5edcd1cd6",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-154-spatial-992ce7e5edcd1cd6",
+      "sha256": "37489125e96a4deb722ae623ed1e631939758ad927f202155124cc232201e9dd",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-154.log",
+      "inventory_sha256": "727e642599a153c685abd906fd1152fac3aecb41801d31a00159d4650d5f4d14",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/triangulation-d1bf603cf1ba9ac4",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-155-triangulation-d1bf603cf1ba9ac4",
+      "sha256": "bdc178dbb0b0668d367c3fc588376d09fa38e1d483dbb77654215dbd00d434c2",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-155.log",
+      "inventory_sha256": "6d7ba9fb36d4678a5989e90923f7ad74e0cfd977d41a98610332036d34a65fdd",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/visual-47680c13288c5c8d",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-156-visual-47680c13288c5c8d",
+      "sha256": "c87fc20959bdeee6369d715eba791cb22dea20fd41109feb563630b2420499fb",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-156.log",
+      "inventory_sha256": "1188c54382851fde35c6b25ec7c72342b7acc2b14e80506d9b8e6bdf0f3b1d7d",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/visual_publication-0d3dd0c72f420022",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-157-visual_publication-0d3dd0c72f420022",
+      "sha256": "99f1ef918279fef50c7d40eaaf76e1a061ec276cea38c1fbbfb394df3278784d",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-157.log",
+      "inventory_sha256": "0234e51ead9940a230f5c49a93233378dc85f9b47a31a0edce88f321dbe80b0e",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/wal_dependency-103e5c6134113a7f",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-158-wal_dependency-103e5c6134113a7f",
+      "sha256": "52d3a249cac9860a6a86d220522726622cbd0986c110f13e80ce81eb52b5941f",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-158.log",
+      "inventory_sha256": "74247d2f024fc39448ec02d7010bcdb1fbd112f80e11c029e6c72375f0872840",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/warp-2ec6ffeb8e11ec2b",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-159-warp-2ec6ffeb8e11ec2b",
+      "sha256": "500c4a9cc03600a2a43368d138c8da373db622676ef2ba919ddf6ebda4ab041d",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-159.log",
+      "inventory_sha256": "f69932c377b8a206a4c2447433e72e31d4efa3b972fbe4714e9b1a011787dfb6",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/worker-21343554a9571959",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-160-worker-21343554a9571959",
+      "sha256": "a041a05a1e335059db7744f17e3ccb6c474bf8624f0cc8cdda7ac881c0b40d56",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-160.log",
+      "inventory_sha256": "1c851e7222b51cadb52dc34ccf89cf9a90fa464ceade458e9f5f32d9477b16f5",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/worker_group-11e95dfa3aaa25fb",
+      "copy": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/binary-161-worker_group-11e95dfa3aaa25fb",
+      "sha256": "e25f4769671fa2450db5bd0cf3df8d5bb56196aa30c1d38eed7a28082498a350",
+      "inventory": "/private/tmp/rrrah-complete-collection-baseline-v2-20261015/inventory-161.log",
+      "inventory_sha256": "2060f63e931e6367932ff3489fba569bec67814c2fd56dd1a6892e070f7f16b9",
+      "inventory_returncode": 0
+    }
+  ]
+}

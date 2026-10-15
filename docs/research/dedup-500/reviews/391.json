@@ -2,9 +2,9 @@
   "index": 391,
   "repository": "umahmood/perceptive",
   "commit": "f317dc40448e418e0b76937da896b631a527b8cb",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All14trackedblobs/8text+6visuallyinspectedJPEGs. Actualdependencies run5originaltests:3pass2fail;6authoredtests/65536Hammingoracles pass. No goldenchanges/adoption.",
   "decision": "reference",
-  "finding": "Go hash library with invalid-hash error/test; doc false-positive claims not independently demonstrated.",
+  "finding": "Nilfirsterror overwritten, empty/flatimagezero hashes andtypednilpanic confirmed; originalahashgoldens mismatch selectedunpinneddependencyversions.",
   "available_source_evidence": [
     {
       "path": "doc.go",
@@ -74,5 +74,8 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/perceptive391-complete-source-review-20261015.json",
+  "complete_runtime_audit": "docs/research/perceptive391-pyrovski467-native-independent-audit-20261015.json"
 }

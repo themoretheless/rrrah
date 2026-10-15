@@ -4,6 +4,36 @@ use rrrah_dedup::{
 };
 
 #[test]
+fn cache_preserves_every_bit_of_all_transform_hash_channels() {
+    let key = CacheKey {
+        content: [0; 32],
+        recipe: [0; 32],
+        frame_index: 0,
+    };
+    for position in 0..2048 {
+        let mut fingerprint = Fingerprint {
+            variants: [[0; 4]; 8],
+            mean_linear_rgb: [0.; 3],
+            luminance_stddev: 0.,
+        };
+        let variant = position / 256;
+        let channel = (position / 64) % 4;
+        let bit = position % 64;
+        fingerprint.variants[variant][channel] = 1_u64 << bit;
+        let mut cache = FingerprintCache::default();
+        cache.insert(key, fingerprint.clone(), 1).unwrap();
+        let mut bytes = Vec::new();
+        cache.write(&mut bytes, || false).unwrap();
+        // Independent wire oracle: 16-byte header, 72-byte key, then 256 hash bytes.
+        let mut expected = [0_u8; 256];
+        expected[position / 8] = 1_u8 << (position % 8);
+        assert_eq!(&bytes[88..344], &expected, "hash bit {position}");
+        let restored = FingerprintCache::read(bytes.as_slice(), 1, || false).unwrap();
+        assert_eq!(restored.get(&key), Some(&fingerprint), "hash bit {position}");
+    }
+}
+
+#[test]
 fn roundtrip_requires_content_recipe_and_frame_identity() {
     let key = CacheKey {
         content: [1; 32],

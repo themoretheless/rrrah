@@ -1,0 +1,29 @@
+{
+  "status": "verified_complete9worker_group_tests_native_process_observer",
+  "source": "crates/rrrah-dedup/tests/worker_group.rs",
+  "source_sha256": "83019d9c3129029d1af7a1e8ff0a43f90eb72753ecada8e115a1e79a84b644bb",
+  "production_worker_sha256": "78a29255712c99272fd53e7468299fc0770ad48f68fc3f0165e0a74e6847cc51",
+  "complete_inventory": [
+    "group_callback_panic_still_stops_descendant",
+    "group_cancel_stops_live_descendant_and_retry_succeeds",
+    "group_capture_limit_stops_descendant",
+    "group_deadline_stops_live_descendant",
+    "group_fast_empty_exit_keeps_status_and_diagnostics",
+    "group_fixture",
+    "group_initial_refusals_do_not_spawn",
+    "group_normal_and_failed_leader_exit_stop_descendants",
+    "group_observer_detects_live_and_reaped_child"
+  ],
+  "pins": {
+    "/private/tmp/rrrah-worker-group-native-observer-20261015/worker_group.rs": "83019d9c3129029d1af7a1e8ff0a43f90eb72753ecada8e115a1e79a84b644bb",
+    "/private/tmp/rrrah-worker-group-native-observer-20261015/run.log": "323bc279096f8c7e091535610d69a56f3b25aea07f0011b7ece0dc227e85998b",
+    "/private/tmp/rrrah-worker-group-native-observer-20261015/library-compile.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/private/tmp/rrrah-worker-group-native-observer-20261015/lib.rs": "ef788443d7fdc472cb3e1924ea2434f216fbc519a8ca9272eef6bfaaf612f288",
+    "/private/tmp/rrrah-worker-group-native-observer-20261015/tests": "1a4de7524e50b40f16adea796342967613df3eaadc2b5d84a09926e78703cefb",
+    "/private/tmp/rrrah-worker-group-native-observer-20261015/worker.rs": "78a29255712c99272fd53e7468299fc0770ad48f68fc3f0165e0a74e6847cc51",
+    "/private/tmp/rrrah-worker-group-native-observer-20261015/librrrah_dedup.rlib": "f2773e51f55a10909a9e5b673d8bcaae326419f52714d7b8e88beb0023951769",
+    "/private/tmp/rrrah-worker-group-native-observer-20261015/compile.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/private/tmp/rrrah-worker-group-native-observer-20261015/command.json": "0d354e07ec202e8b53636d733e0171f0c9cd201febc548c66bcb7c81ae593349"
+  },
+  "scope": "Whole current originalworker.rs compiled into selectedmodulelibrary with realcacheddependencies; wholecurrentworker_group integrationfile9tests execute underoriginalsandbox MacARM strictwarnings. Externalps removed, nativepidinfo/getpgid observesownedPID; positive live/reapedchild guard added. Deadline/cancel/outputlimits/panic/retry/heartbeatconditions unchanged. Linux native observation runtime and fullfreshCargo/currentRoot/platform/hardresources unqualified."
+}

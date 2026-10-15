@@ -2,9 +2,9 @@
   "index": 467,
   "repository": "pyrovski/phash",
   "commit": "12f7cb31bdbdd98a72969c0861b08ce100f1c8e3",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All7trackedblobs,5text+2visuallyinspectedJPEGs;4nativeunpackhelpertests/98oracles. ActualOpenCV/SQLite/backend/CLI unqualified; noadoption.",
   "decision": "reference",
-  "finding": "Go perceptual hash package/CLI; GPL and no detected tests, algorithm backend needs inspection.",
+  "finding": "Onlyfirst128ofsupplied256hashbits retained; arbitrarylengths accepted. Sourceworker/SQL/retry/resource flaws retained with runtime limits.",
   "available_source_evidence": [
     {
       "path": "phash.go",
@@ -54,5 +54,8 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/pyrovski467-complete-source-review-20261015.json",
+  "complete_runtime_audit": "docs/research/perceptive391-pyrovski467-native-independent-audit-20261015.json"
 }

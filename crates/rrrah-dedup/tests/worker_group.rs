@@ -64,25 +64,60 @@ fn group_fixture() {
         _ => panic!("invalid fixture"),
     }
 }
+fn owned_pid_running(pid: rustix::process::Pid) -> std::io::Result<bool> {
+    #[cfg(target_os = "macos")]
+    {
+        use libproc::{bsd_info::BSDInfo, proc_pid::pidinfo};
+        match pidinfo::<BSDInfo>(pid.as_raw_nonzero().get(), 0) {
+            Ok(info) => Ok(info.pbi_status != libc::SZOMB),
+            Err(error) => match rustix::process::getpgid(Some(pid)) {
+                Err(rustix::io::Errno::SRCH) => Ok(false),
+                _ => Err(std::io::Error::other(error)),
+            },
+        }
+    }
+    #[cfg(target_os = "linux")]
+    {
+        match std::fs::read_to_string(format!("/proc/{}/stat", pid.as_raw_nonzero())) {
+            Ok(stat) => {
+                let state = stat
+                    .rsplit_once(") ")
+                    .and_then(|(_, fields)| fields.as_bytes().first())
+                    .ok_or_else(|| std::io::Error::other("malformed owned process status"))?;
+                Ok(*state != b'Z')
+            }
+            Err(error) if error.kind() == std::io::ErrorKind::NotFound => Ok(false),
+            Err(error) => Err(error),
+        }
+    }
+}
+
+#[test]
+fn group_observer_detects_live_and_reaped_child() {
+    let mut child = Command::new("/bin/sleep").arg("10").spawn().unwrap();
+    let pid = rustix::process::Pid::from_raw(i32::try_from(child.id()).unwrap()).unwrap();
+    let live = owned_pid_running(pid);
+    child.kill().unwrap();
+    child.wait().unwrap();
+    assert!(live.unwrap());
+    assert!(!owned_pid_running(pid).unwrap());
+}
+
 fn assert_leaf_stopped(dir: &Path) {
     assert!(dir.join("ready").exists());
     let pid: i32 = std::fs::read_to_string(dir.join("leaf"))
         .unwrap()
         .parse()
         .unwrap();
+    let pid = rustix::process::Pid::from_raw(pid).unwrap();
     // A grandchild cannot be waited on by this process. Accept a non-running
     // zombie awaiting its OS parent, but never a live process retaining handles.
     let until = Instant::now() + Duration::from_secs(2);
     loop {
-        let out = Command::new("ps")
-            .args(["-o", "stat=", "-p", &pid.to_string()])
-            .output()
-            .unwrap();
-        let state = String::from_utf8(out.stdout).unwrap();
-        if state.trim().is_empty() || state.trim_start().starts_with('Z') {
+        if !owned_pid_running(pid).unwrap() {
             break;
         }
-        assert!(Instant::now() < until, "leaf still running: {state}");
+        assert!(Instant::now() < until, "leaf still running: {pid:?}");
         std::thread::sleep(Duration::from_millis(5));
     }
     let before = std::fs::read(dir.join("heartbeat")).unwrap();

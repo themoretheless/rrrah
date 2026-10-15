@@ -1,0 +1,78 @@
+{
+  "status": "verified13passes_and2preserved_upstream_failures",
+  "auditor_sha256": "2eaeb1089462022e7fdfed8db66131394f1e88dd8b233ae8332be47e22eb648c",
+  "source_reports": {
+    "391": "52ae41b7bfccd5c8010bd849cc3448a21f0d4614dae93a47b340255084e50818",
+    "467": "c71767debd6dbbf85af834912a0187b4de0339c59f1b97f17e2a9e17329feb59"
+  },
+  "results": [
+    {
+      "binary": "/private/tmp/rrrah-perceptive391-native-20261015/authored.test",
+      "sha256": "e20b0ee40772fa5d2f91ddedb921409fc2af7c004ec09c01419c630a09d5c83d",
+      "cwd": "/private/tmp/rrrah-perceptive391-native-20261015",
+      "complete_inventory": [
+        "TestEmptyImageProducesZeroHash",
+        "TestFlatBlackWhiteCompareAsZero",
+        "TestHammingMatches65536ScalarInputs",
+        "TestImageOriginDoesNotChangeHash",
+        "TestNilFirstErrorIsOverwritten",
+        "TestTypedNilImagePanics"
+      ],
+      "passed": [
+        "TestEmptyImageProducesZeroHash",
+        "TestFlatBlackWhiteCompareAsZero",
+        "TestHammingMatches65536ScalarInputs",
+        "TestImageOriginDoesNotChangeHash",
+        "TestNilFirstErrorIsOverwritten",
+        "TestTypedNilImagePanics"
+      ],
+      "failed": [],
+      "returncode": 0,
+      "log": "=== RUN   TestNilFirstErrorIsOverwritten\n--- PASS: TestNilFirstErrorIsOverwritten (0.00s)\n=== RUN   TestFlatBlackWhiteCompareAsZero\n--- PASS: TestFlatBlackWhiteCompareAsZero (0.00s)\n=== RUN   TestEmptyImageProducesZeroHash\n--- PASS: TestEmptyImageProducesZeroHash (0.00s)\n=== RUN   TestTypedNilImagePanics\n--- PASS: TestTypedNilImagePanics (0.00s)\n=== RUN   TestImageOriginDoesNotChangeHash\n--- PASS: TestImageOriginDoesNotChangeHash (0.00s)\n=== RUN   TestHammingMatches65536ScalarInputs\n--- PASS: TestHammingMatches65536ScalarInputs (0.00s)\nPASS\n"
+    },
+    {
+      "binary": "/private/tmp/rrrah-perceptive391-native-20261015/upstream.test",
+      "sha256": "da78ce2495ac586c5d19bff7c64325dda8718ccce9ae49d42ced966ffc4ee26e",
+      "cwd": "/private/tmp/rrrah-perceptive391-native-20261015/perceptive_test",
+      "complete_inventory": [
+        "TestAhash",
+        "TestCompareImagesWithAverageHash",
+        "TestCompareImagesWithDifferenceHash",
+        "TestDhash",
+        "TestHammingDistance"
+      ],
+      "passed": [
+        "TestCompareImagesWithDifferenceHash",
+        "TestDhash",
+        "TestHammingDistance"
+      ],
+      "failed": [
+        "TestAhash",
+        "TestCompareImagesWithAverageHash"
+      ],
+      "returncode": 1,
+      "log": "=== RUN   TestCompareImagesWithAverageHash\n    perceptive_test.go:76: CompareImages: distance got 26 want 27\n--- FAIL: TestCompareImagesWithAverageHash (0.01s)\n=== RUN   TestCompareImagesWithDifferenceHash\n--- PASS: TestCompareImagesWithDifferenceHash (0.00s)\n=== RUN   TestAhash\n    perceptive_test.go:106: Ahash: got 3492678383517052928 want 4069139135820476416\n--- FAIL: TestAhash (0.02s)\n=== RUN   TestDhash\n--- PASS: TestDhash (0.02s)\n=== RUN   TestHammingDistance\n--- PASS: TestHammingDistance (0.00s)\nFAIL\n"
+    },
+    {
+      "binary": "/private/tmp/rrrah-pyrovski467-unpack-20261015/controls.test",
+      "sha256": "426012ff45caa4a12700989d9d881eeb4a64174b23b860ff4fc4ae4a4cd5d12b",
+      "cwd": "/private/tmp/rrrah-pyrovski467-unpack-20261015",
+      "complete_inventory": [
+        "TestArbitraryLengthsAreSilentlyAccepted",
+        "TestEveryRetainedByteChangesKey",
+        "TestKnownBigEndianWords",
+        "TestTrailingHalfOfHashIsDiscarded"
+      ],
+      "passed": [
+        "TestArbitraryLengthsAreSilentlyAccepted",
+        "TestEveryRetainedByteChangesKey",
+        "TestKnownBigEndianWords",
+        "TestTrailingHalfOfHashIsDiscarded"
+      ],
+      "failed": [],
+      "returncode": 0,
+      "log": "=== RUN   TestTrailingHalfOfHashIsDiscarded\n--- PASS: TestTrailingHalfOfHashIsDiscarded (0.00s)\n=== RUN   TestEveryRetainedByteChangesKey\n--- PASS: TestEveryRetainedByteChangesKey (0.00s)\n=== RUN   TestArbitraryLengthsAreSilentlyAccepted\n--- PASS: TestArbitraryLengthsAreSilentlyAccepted (0.00s)\n=== RUN   TestKnownBigEndianWords\n--- PASS: TestKnownBigEndianWords (0.00s)\nPASS\n"
+    }
+  ],
+  "scope": "Actual391 dependency binaries and selected467 unpack helper. Fifteen named cases fully accounted; two failed original391goldens retained. No original391package green claim, no467OpenCV/SQLite execution, no globalquality/platform/adoption qualification."
+}

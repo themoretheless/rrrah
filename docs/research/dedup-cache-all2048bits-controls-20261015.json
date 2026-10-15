@@ -1,0 +1,30 @@
+{
+  "status": "verified_complete8cacheintegrationtests_and2048independent_wire_bit_oracles",
+  "source": "crates/rrrah-dedup/tests/cache.rs",
+  "source_sha256": "08da4b7f092c9f985c06aece8c921d24b7eac6a7ed03b84ed1062d119c1f1614",
+  "production_cache_sha256": "96823610880af2047e33032491bc6455c5b6a54690255dffc1826c70972f6e02",
+  "complete_test_inventory": [
+    "atomic_replacement_and_cancel_preserve_previous_cache",
+    "cache_preserves_every_bit_of_all_transform_hash_channels",
+    "cache_publication_child",
+    "concurrent_process_writers_publish_only_complete_single_writer_caches",
+    "disk_persistence_is_deterministic_and_rejects_invalid_values",
+    "process_exit_during_temp_write_preserves_previous_publication_and_retry",
+    "roundtrip_requires_content_recipe_and_frame_identity",
+    "unwritable_parent_refuses_before_publication_and_preserves_retry"
+  ],
+  "bits": 2048,
+  "channels_per_transform": 4,
+  "transforms": 8,
+  "wire_oracle": "16header+72key bytes precede256hash bytes; each onehot bit predicted directly atbyte88+position/8, independent of writer packing loop.",
+  "pins": {
+    "/private/tmp/rrrah-cache-all-bits-20261015/run.log": "394c52028a7dc20372c8e691f59b92118e724540be95f7218236de68cbc6898f",
+    "/private/tmp/rrrah-cache-all-bits-20261015/tests": "1e677110061ca9e342140d4f864a953bd646235ed5b39e7d1a5acec5bf31f253",
+    "/private/tmp/rrrah-cache-all-bits-20261015/cache-integration.rs": "08da4b7f092c9f985c06aece8c921d24b7eac6a7ed03b84ed1062d119c1f1614",
+    "/private/tmp/rrrah-cache-all-bits-20261015/compile.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/private/tmp/rrrah-cache-all-bits-20261015/command.json": "2f69a5f785ba7cd89b59393cdd35f5cbe278fade8736ba28c26aea145c1a8806"
+  },
+  "library": "/private/tmp/rrrah-cache-stack-record-20261015/librrrah_dedup.rlib",
+  "library_sha256": "f10b3be9e8fb146936a70602e5874fd49f1018887bf27ef27def1933fc389ee5",
+  "scope": "Whole current8test cacheintegrationtarget with qualifiedactualstackcache+pixels selected library and cached realdeps, MacARM. Currentproductioncache equals formatted qualifiedcandidate. No fullcurrentCargo/decoder/platform/cachemigration/globalperformance proof."
+}
