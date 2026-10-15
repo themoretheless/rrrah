@@ -1,0 +1,13 @@
+
+running 2 tests
+test processor::rrrah_block_order_controls::original_full_hash_ignores_block_order_for_five_seeds ... seed=0 full_hash=f844f2dc180ad074ba061f3b901bd728 unequal_bytes=true
+seed=1 full_hash=6e857367e2adb6586b306cc724a37cac unequal_bytes=true
+seed=-1 full_hash=a848e734058e75635baa731c1fae10ee unequal_bytes=true
+seed=300 full_hash=74427ce7c8db0138e8981f56449567aa unequal_bytes=true
+seed=9223372036854775807 full_hash=f6822fde3bc218937841dd50bcaaab57 unequal_bytes=true
+ok
+test processor::rrrah_block_order_controls::original_strict_pipeline_groups_reordered_nonduplicate_with_true_copies ... strict=true groups=1 grouped_files=3 byte_oracle_true_copies=2
+ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 9 filtered out; finished in 0.01s
+

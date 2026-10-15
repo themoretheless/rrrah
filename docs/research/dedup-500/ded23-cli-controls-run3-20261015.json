@@ -1,0 +1,59 @@
+{
+  "status": "passed",
+  "controls": 7,
+  "binary": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/ded23-20261015/target/debug/deduplicator",
+  "binary_sha256": "12773182215e86fc2dc1be536e7af7d4bd470b7017d064d2b88765e4dcb2e5c9",
+  "fixture_root": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/ded23-20261015/cli-fixtures-1792089938760274000",
+  "rows": [
+    {
+      "name": "whole_strict_cli_groups_reordered_unequal_bytes",
+      "returncode": 0,
+      "stdout": "\n\u001b[33md2fab691f5d3d068c4c97c16b725b86d\u001b[0m\n\u251c\u2500\tc.bin                                                                                                                             \t    40.0 KiB\t2026-10-15 18:45:38\n\u251c\u2500\ta.bin                                                                                                                             \t    40.0 KiB\t2026-10-15 18:45:38\n\u2514\u2500\tb.bin                                                                                                                             \t    40.0 KiB\t2026-10-15 18:45:38\n\n",
+      "stderr": ""
+    },
+    {
+      "name": "interactive_all_indices_removes_all_copies",
+      "returncode": 0,
+      "stdout": "\nDuplicate Set 1 of 1\n\n index | filename    | size         | updated_at \n-------+-------------+--------------+---------------------\n 0     | a.bin       |         12 B | 2026-10-15 18:45:38 \n 1     | b.bin       |         12 B | 2026-10-15 18:45:38 \n\nEnter the indices of the files you want to delete.\nYou can enter multiple files using commas to seperate file indices.\nexample: 1,2\n\n> \u001b[2J\u001b[1;1H\nThe following files will be deleted:\n0: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/ded23-20261015/cli-fixtures-1792089938760274000/all-delete/a.bin\n1: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/ded23-20261015/cli-fixtures-1792089938760274000/all-delete/b.bin\n\nconfirm? [y/N]: DELETED: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/ded23-20261015/cli-fixtures-1792089938760274000/all-delete/a.bin\nDELETED: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/ded23-20261015/cli-fixtures-1792089938760274000/all-delete/b.bin\n",
+      "stderr": ""
+    },
+    {
+      "name": "invalid_index_defaults_zero_and_deletes",
+      "returncode": 0,
+      "stdout": "\nDuplicate Set 1 of 1\n\n index | filename    | size         | updated_at \n-------+-------------+--------------+---------------------\n 0     | a.bin       |         12 B | 2026-10-15 18:45:38 \n 1     | b.bin       |         12 B | 2026-10-15 18:45:38 \n\nEnter the indices of the files you want to delete.\nYou can enter multiple files using commas to seperate file indices.\nexample: 1,2\n\n> \u001b[2J\u001b[1;1H\nThe following files will be deleted:\n0: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/ded23-20261015/cli-fixtures-1792089938760274000/invalid-index/a.bin\n\nconfirm? [y/N]: DELETED: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/ded23-20261015/cli-fixtures-1792089938760274000/invalid-index/a.bin\n",
+      "stderr": ""
+    },
+    {
+      "name": "whole_cli_accepts_hardlink_set_and_deletes_all_names",
+      "returncode": 0,
+      "stdout": "\nDuplicate Set 1 of 1\n\n index | filename    | size         | updated_at \n-------+-------------+--------------+---------------------\n 0     | b.bin       |         12 B | 2026-10-15 18:45:38 \n 1     | a.bin       |         12 B | 2026-10-15 18:45:38 \n\nEnter the indices of the files you want to delete.\nYou can enter multiple files using commas to seperate file indices.\nexample: 1,2\n\n> \u001b[2J\u001b[1;1H\nThe following files will be deleted:\n0: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/ded23-20261015/cli-fixtures-1792089938760274000/hardlinks/b.bin\n1: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/ded23-20261015/cli-fixtures-1792089938760274000/hardlinks/a.bin\n\nconfirm? [y/N]: DELETED: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/ded23-20261015/cli-fixtures-1792089938760274000/hardlinks/b.bin\nDELETED: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/ded23-20261015/cli-fixtures-1792089938760274000/hardlinks/a.bin\n",
+      "stderr": ""
+    },
+    {
+      "name": "invalid_minimum_silently_admits_zero_length",
+      "returncode": 0,
+      "stdout": "\n\u001b[33m                               0\u001b[0m\n\u251c\u2500\tb.bin                                                                                                                          \t         0 B\t2026-10-15 18:45:38\n\u2514\u2500\ta.bin                                                                                                                          \t         0 B\t2026-10-15 18:45:38\n\n",
+      "stderr": ""
+    },
+    {
+      "name": "default_minimum_excludes_empty_files",
+      "returncode": 0,
+      "stdout": "\nNo duplicates found matching your search criteria.\n",
+      "stderr": ""
+    },
+    {
+      "name": "unique_content_written_after_hash_deleted_by_whole_cli",
+      "returncode": 0,
+      "stdout": "\nDuplicate Set 1 of 1\n\n index | filename    | size         | updated_at \n-------+-------------+--------------+---------------------\n 0     | b.bin       |         12 B | 2026-10-15 18:45:38 \n 1     | a.bin       |         12 B | 2026-10-15 18:45:38 \n\nEnter the indices of the files you want to delete.\nYou can enter multiple files using commas to seperate file indices.\nexample: 1,2\n\n> \u001b[2J\u001b[1;1H\nThe following files will be deleted:\n0: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/ded23-20261015/cli-fixtures-1792089938760274000/changed-after-prompt/b.bin\n\nconfirm? [y/N]: DELETED: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/ded23-20261015/cli-fixtures-1792089938760274000/changed-after-prompt/b.bin\n",
+      "stderr": "",
+      "selected_victim": "b.bin",
+      "mutation_point": "after original first instruction prompt, before entering0andconfirmingy"
+    }
+  ],
+  "limits": [
+    "All deletions confined to newly authored synthetic fixtures",
+    "Actualwhole upstream CLI/Server/Interactive execution on MacARM, twoRayonthreads; no speed measurement",
+    "Prompt mutation explicitly scheduled, not ambient race or platform guarantee",
+    "Allcopy deletion reflects missing guard; original program accepts user choices, not productionlibrary operation"
+  ]
+}
