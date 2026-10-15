@@ -2,9 +2,9 @@
   "index": 78,
   "repository": "ssokolow/fastdupes",
   "commit": "0334545885445834307c075a445fba9fe6f0c9e7",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All12trackedtextblobs2trees fully read; sixteen wholemodule explicit Python2-to3 compatibility controls twice. NativePython2/package/Sphinx/platform/performance not qualified.",
   "decision": "reference",
-  "finding": "Streaming SHA1 file hash with optional length limit; useful bounded-I/O structure, GPL and no detected tests.",
+  "finding": "Default final hashing repeats16KiBprefix and groups unequal tails; exactmode rejects. Invalid keep0 solely blocked by removable assert, stale deletion, hardlink counting and excess excluded traversal reproduced in explicit compatibility scope. No production code adopted.",
   "license_metadata": "GPL-2.0",
   "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
   "tests_detected": 0,
@@ -54,5 +54,7 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/dedup-500/fast78-complete-source-review-20261015.json"
 }

@@ -1,0 +1,19 @@
+/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/fast78-compat-controls-v2-20261015.py:5: DeprecationWarning: lib2to3 package is deprecated and may not be able to parse Python 3.10+
+  from lib2to3.refactor import RefactoringTool,get_fixers_from_package
+PASS default final hash is same16KiB prefix, unequal tails falsely grouped
+PASS exact mode rejects unequal tails after same header
+PASS exact mode identical positive
+PASS same path repeated does not self duplicate
+PASS hardlink aliases counted as duplicate files
+PASS mutating ignored directory list traverses one excluded subtree but files still filtered
+PASS explicit symlink root realpath becomes admitted target
+PASS invalid numeric keeper0 proposes deleting every item
+PASS normal assertion blocks all-delete invalid keeper
+PASS optimized translation removes safety assertion and deletes both owned files
+PASS changed target after discovery deleted without revalidation
+PASS prefix false positive can delete distinct tail file
+PASS explicit limit0 hashes full content,16KiB hashes prefix
+PASS zero chunk hashes empty payload despite nonempty input
+PASS short read counts requested bytes and stops before advertised limit
+PASS missing directory silently empty result
+{"passed": 16, "failed": 0, "scope": "Whole module lib2to3 syntax translation, explicit Py2 byte/file EOF adapter. Native Python2, installed console wrapper and package/documentation build not executed. Optimized assertion removal control explicitly compile(optimize=2); only owned tiny files. No library performance/coverage qualification."}

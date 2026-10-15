@@ -1,0 +1,17 @@
+/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/fast78-compat-controls-20261015.py:5: DeprecationWarning: lib2to3 package is deprecated and may not be able to parse Python 3.10+
+  from lib2to3.refactor import RefactoringTool,get_fixers_from_package
+PASS default final hash is same16KiB prefix, unequal tails falsely grouped
+PASS exact mode rejects unequal tails after same header
+PASS exact mode identical positive
+PASS same path repeated does not self duplicate
+PASS hardlink aliases counted as duplicate files
+Traceback (most recent call last):
+  File "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/fast78-compat-controls-20261015.py", line 41, in <module>
+    check('mutating ignored directory list skips adjacent exclusion',ignores)
+  File "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/fast78-compat-controls-20261015.py", line 19, in check
+    with tempfile.TemporaryDirectory(dir=W) as p,contextlib.redirect_stdout(io.StringIO()):fn(Path(p))
+                                                                                           ^^^^^^^^^^^
+  File "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/fast78-compat-controls-20261015.py", line 40, in ignores
+    paths=m.getPaths([str(p)],ignores=[str(p/'skip*')]);assert len(paths)==1 and 'skip' in paths[0]
+                                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
