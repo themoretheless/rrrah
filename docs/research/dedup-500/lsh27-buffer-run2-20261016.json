@@ -1,0 +1,87 @@
+{
+  "controls": [
+    {
+      "control": "strided_seed_buffer_preserves_recipe",
+      "value": [
+        61688639331962394,
+        725761756232858749,
+        471743662065293734,
+        226818516733857787
+      ]
+    },
+    {
+      "control": "reversed_seed_buffer_preserves_recipe",
+      "value": [
+        495063677557608842,
+        226818516733857787,
+        348912666712536490,
+        471743662065293734,
+        712091780039731503,
+        725761756232858749,
+        796421900910779353,
+        61688639331962394
+      ]
+    },
+    {
+      "control": "readonly_seed_buffer",
+      "value": [
+        61688639331962394,
+        796421900910779353,
+        725761756232858749,
+        712091780039731503,
+        471743662065293734,
+        348912666712536490,
+        226818516733857787,
+        495063677557608842
+      ]
+    },
+    {
+      "control": "big_endian_seed_buffer_refused",
+      "error": "ValueError",
+      "message": "Big-endian buffer not supported on little-endian compiler"
+    },
+    {
+      "control": "uint64_seed_buffer_refused",
+      "error": "ValueError",
+      "message": "Buffer dtype mismatch, expected 'uint32_t' but got 'unsigned long'"
+    },
+    {
+      "control": "two_dimensional_seed_buffer_refused",
+      "error": "ValueError",
+      "message": "Buffer has wrong number of dimensions (expected 1, got 2)"
+    },
+    {
+      "control": "none_seed_buffer_refused",
+      "error": "TypeError",
+      "message": "Argument 'seeds' has incorrect type (expected numpy.ndarray, got NoneType)"
+    },
+    {
+      "control": "memoryview_seed_buffer_refused",
+      "error": "TypeError",
+      "message": "Argument 'seeds' has incorrect type (expected numpy.ndarray, got memoryview)"
+    },
+    {
+      "control": "zero_ngram_accepted_text_independent_fingerprint",
+      "value": [
+        5923233443502236113,
+        3050602482433115043,
+        1315391791127925564,
+        9223372036854775807,
+        7090970091870254568,
+        3539466420763816349,
+        9223372036854775807,
+        1178028318445077211
+      ]
+    },
+    {
+      "control": "empty_seed_buffer_returns_empty",
+      "value": []
+    }
+  ],
+  "runs_scope": "Actual unchanged .pyx via previouslybuiltCython3.3extension; safeowned buffers only, no malformedlength/negative-ngram pointer access, no oldCython0.24.1binaryparity/platform/performance claim.",
+  "producer_sha256": "55451d0e00f76607abf0aee9ee8a68e2e13c0f6361b1ff6d0ef7b7fb2c771e9a",
+  "source_sha256": "948f34abeaf16e874ef984dc2c3b6363994dc66a197c2bc57e260fd44447ebc0",
+  "native_extensions": {
+    ".dedup-work/lsh27-20261016/modern-build/lsh/cMinhash.cpython-312-darwin.so": "6afa0b5031bdfb2b368c1a3873c445bc4ee2cec810fa3ff7765517e38eb98580"
+  }
+}

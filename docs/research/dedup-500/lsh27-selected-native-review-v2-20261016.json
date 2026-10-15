@@ -1,0 +1,306 @@
+{
+  "status": "verified_native_controls_and_upstream_suite_with_partial_generated_source_review",
+  "whole_repo_complete": false,
+  "whole_implementation_complete": false,
+  "repository": "mattilyra/LSH",
+  "commit": "a57069bfb70f4b620d47931f81966b5a73c1b480",
+  "tree": "fc1f9732d0e6256326b7076363f8fcbf0657ddde",
+  "acquired_blobs": 13,
+  "verified_trees": 4,
+  "fully_read_plain_text_files": [
+    ".gitignore",
+    "LICENSE",
+    "README.md",
+    "lsh/MurmurHash3.cpp",
+    "lsh/MurmurHash3.h",
+    "lsh/__init__.py",
+    "lsh/cMinhash.pyx",
+    "lsh/cache.py",
+    "lsh/minhash.py",
+    "lsh/test/test_cache.py",
+    "setup.py"
+  ],
+  "notebook_scope": "All35cell sources/plain outputs/metadata read; twoembeddedPNGplots decodedandviewed. Initialoutertext outputtruncatedcell13/14, bothrereaduntruncated. Base64interpretedthroughdecodedimages; originalnotebooknotexecuted andRCV1notdownloaded.",
+  "generated_source_read_ranges": [
+    [
+      1,
+      5200
+    ]
+  ],
+  "buffer_controls": 10,
+  "buffer_control_runs": 2,
+  "buffer_observations": [
+    {
+      "control": "strided_seed_buffer_preserves_recipe",
+      "value": [
+        61688639331962394,
+        725761756232858749,
+        471743662065293734,
+        226818516733857787
+      ]
+    },
+    {
+      "control": "reversed_seed_buffer_preserves_recipe",
+      "value": [
+        495063677557608842,
+        226818516733857787,
+        348912666712536490,
+        471743662065293734,
+        712091780039731503,
+        725761756232858749,
+        796421900910779353,
+        61688639331962394
+      ]
+    },
+    {
+      "control": "readonly_seed_buffer",
+      "value": [
+        61688639331962394,
+        796421900910779353,
+        725761756232858749,
+        712091780039731503,
+        471743662065293734,
+        348912666712536490,
+        226818516733857787,
+        495063677557608842
+      ]
+    },
+    {
+      "control": "big_endian_seed_buffer_refused",
+      "error": "ValueError",
+      "message": "Big-endian buffer not supported on little-endian compiler"
+    },
+    {
+      "control": "uint64_seed_buffer_refused",
+      "error": "ValueError",
+      "message": "Buffer dtype mismatch, expected 'uint32_t' but got 'unsigned long'"
+    },
+    {
+      "control": "two_dimensional_seed_buffer_refused",
+      "error": "ValueError",
+      "message": "Buffer has wrong number of dimensions (expected 1, got 2)"
+    },
+    {
+      "control": "none_seed_buffer_refused",
+      "error": "TypeError",
+      "message": "Argument 'seeds' has incorrect type (expected numpy.ndarray, got NoneType)"
+    },
+    {
+      "control": "memoryview_seed_buffer_refused",
+      "error": "TypeError",
+      "message": "Argument 'seeds' has incorrect type (expected numpy.ndarray, got memoryview)"
+    },
+    {
+      "control": "zero_ngram_accepted_text_independent_fingerprint",
+      "value": [
+        5923233443502236113,
+        3050602482433115043,
+        1315391791127925564,
+        9223372036854775807,
+        7090970091870254568,
+        3539466420763816349,
+        9223372036854775807,
+        1178028318445077211
+      ]
+    },
+    {
+      "control": "empty_seed_buffer_returns_empty",
+      "value": []
+    }
+  ],
+  "generated_source_observations": [
+    "Python2/3 compatibility/type/refcount/exception andatomic declarations read; NumPybufferformat/endian/strides/structuredtype helpers read throughline5200. Prefix1201-2015outeroutputtruncated;1650-1780rereaduntruncated tocovergap.",
+    "Conditionaldefaultencoding malloc(strlen) followedbystrcpy lacks extraNULbyte, but__PYX_DEFAULT_STRING_ENCODING_IS_DEFAULT=0 here. Inactivebranch observation, not reproducedactive defect.",
+    "OriginalNumPybufferallocator conditionalcopyshape andstructuredformatmalloc branches have no nullchecks beforewrites; reachability/allocationfailure notexecuted, no activefailure claim."
+  ],
+  "generated_source_total_lines": 21808,
+  "remaining_scope": "Original815800byte Cython0.24.1generatedwrapper: lines5201-end stillrequirefullread. Do not countfullrepository.",
+  "original_tests": 108,
+  "original_suite_runs": 2,
+  "original_suite_scope": "Complete unchanged trackedpytestfile underPython3.12/NumPy2.3.5/Cython3.3regenerated nativeextension. Originaldefault pregeneratedCPP buildfails; no originalPython3.5/Cython0.24.1binaryparity.",
+  "native_controls": 19,
+  "native_control_runs": 2,
+  "native_scope": "Unchanged fullcache/minhash classes andCython.pyx/Murmur implementation actuallyexecute throughCython3.3regenerated nativeextension onPython3.12/NumPy2.3.5. Buildcopysetup onlyUSE_CYTHONFalse->True andgeneratedcpp replaced. OriginalCython0.24.1cpp failslongintrepr.h; no oldbinaryparity/defaultbuild/platform/performance/productionadoption proof.",
+  "native_observations": [
+    {
+      "control": "disjoint_array_fingerprints_report_similarity1",
+      "result": 1.0
+    },
+    {
+      "control": "unequal_lengths_broadcast_error",
+      "result": {
+        "error": "ValueError",
+        "message": "operands could not be broadcast together with shapes (4,) (3,) "
+      }
+    },
+    {
+      "control": "mixed_string_array_error",
+      "result": {
+        "error": "TypeError",
+        "message": "unhashable type: 'numpy.ndarray'"
+      }
+    },
+    {
+      "control": "distinct_short_documents_share_all_sentinel_hashes",
+      "result": [
+        9223372036854775807,
+        9223372036854775807,
+        9223372036854775807,
+        9223372036854775807
+      ]
+    },
+    {
+      "control": "whole_cache_false_candidate_for_short_strings",
+      "result": [
+        1
+      ]
+    },
+    {
+      "control": "cached_fingerprint_mutable_alias",
+      "result": true
+    },
+    {
+      "control": "caller_mutation_corrupts_remove_index",
+      "result": {
+        "error": "KeyError",
+        "message": "1"
+      }
+    },
+    {
+      "control": "reinsert_id_leaves_old_band_membership_and_false_filtered_pair",
+      "result": [
+        [
+          1,
+          2
+        ]
+      ]
+    },
+    {
+      "control": "removed_reinserted_id_still_in_old_bins",
+      "result": {
+        "error": "KeyError",
+        "message": "1"
+      }
+    },
+    {
+      "control": "clear_retains_fingerprint_and_breaks_remove",
+      "result": {
+        "error": "KeyError",
+        "message": "1"
+      }
+    },
+    {
+      "control": "zero_bands_unvalidated",
+      "result": {
+        "error": "ZeroDivisionError",
+        "message": "integer modulo by zero"
+      }
+    },
+    {
+      "control": "negative_bands_delayed_error_after_id_stored",
+      "result": {
+        "error": {
+          "error": "ValueError",
+          "message": "number sections must be larger than 0."
+        },
+        "stored_ids": [
+          1
+        ]
+      }
+    },
+    {
+      "control": "zero_seeds_all_collide_then_jaccard_zero_division",
+      "result": {
+        "error": "ZeroDivisionError",
+        "message": "division by zero"
+      }
+    },
+    {
+      "control": "threshold1_excludes_identical_strict_policy",
+      "result": true
+    },
+    {
+      "control": "nan_threshold_silently_filters_everything",
+      "result": true
+    },
+    {
+      "control": "documented_randomstate_instance_rejected",
+      "result": {
+        "error": "TypeError",
+        "message": "Cannot cast scalar from dtype('O') to dtype('int64') according to the rule 'safe'"
+      }
+    },
+    {
+      "control": "fingerprint_length_not_checked_against_recipe",
+      "result": 1
+    },
+    {
+      "control": "single_shingle_unsigned_murmur_minimum_oracle",
+      "result": [
+        {
+          "bits": 32,
+          "comparisons": 1024,
+          "mismatches": 509,
+          "first": {
+            "text_hex": "4162636465666768",
+            "seed": 1,
+            "actual": 4294967295,
+            "unsigned_minimum": 702725686
+          }
+        },
+        {
+          "bits": 64,
+          "comparisons": 1024,
+          "mismatches": 520,
+          "first": {
+            "text_hex": "4162636465666768",
+            "seed": 3,
+            "actual": 9223372036854775807,
+            "unsigned_minimum": 14221722785652634936
+          }
+        }
+      ]
+    },
+    {
+      "control": "long64_complete_shingle_unsigned_oracle",
+      "result": {
+        "seeds": 32,
+        "shingles": 39,
+        "all_equal": true
+      }
+    }
+  ],
+  "evidence_pins": {
+    "docs/research/dedup-500/lsh27-fetched-source-pins-20261016.json": "055a4379878a5371de0a45cc967b1af72d4da4bc2392892ce0d01c964b7479e0",
+    "docs/research/dedup-500/lsh27-notebook-visual-review-20261016.json": "142314190d61da2eaf17851deb2d023dbbefa8a2c2b3be582a5afc5bcbd24cb1",
+    "scripts/qualify-lsh27-native-controls-20261016.py": "be2feb82c2a3ee7cd82c14daad604dc092d81cbb510ff7c98bef48e30c7f62c1",
+    "docs/research/dedup-500/lsh27-native-run1-20261016.json": "934ba4b7867ddad7ae3ae4d9b14fd87863a8aa89379c28e049a0e6836b87bed1",
+    "docs/research/dedup-500/lsh27-native-run2-20261016.json": "934ba4b7867ddad7ae3ae4d9b14fd87863a8aa89379c28e049a0e6836b87bed1",
+    "docs/research/dedup-500/lsh27-original-build-20261016.log": "229b866c80950d11333812335b4da150cd8cd73ba158cf4ed8a8249dfdf49fe6",
+    "docs/research/dedup-500/lsh27-upstream-tests-run1-20261016.log": "de0df12f4bb9af3119df5dac18d968a2d3d2fdb15d7c34c2f1b9fd373c0ad29e",
+    "docs/research/dedup-500/lsh27-upstream-tests-run2-20261016.log": "57ba52998bb3b0076fb2a6bc19d67ccc12017b5e7b182b1b76a8584d678ca70b",
+    "docs/research/dedup-500/lsh27-modern-build-20261016.log": "4aa0d02a186c047bb019d3f8823a6c7fba86e2d8cf3900a18f1770f594c33971",
+    "scripts/qualify-lsh27-buffer-controls-20261016.py": "55451d0e00f76607abf0aee9ee8a68e2e13c0f6361b1ff6d0ef7b7fb2c771e9a",
+    "docs/research/dedup-500/lsh27-buffer-run1-20261016.json": "7b46fc1d03a1656f1d3153b4d294c5bbed64494d2abfd9df3cc4aeb280ee8347",
+    "docs/research/dedup-500/lsh27-buffer-run2-20261016.json": "7b46fc1d03a1656f1d3153b4d294c5bbed64494d2abfd9df3cc4aeb280ee8347"
+  },
+  "installed_runtime": {
+    "python": "3.12.14",
+    "numpy": "2.3.5",
+    "Cython": "3.3.0",
+    "pytest": "9.1.1"
+  },
+  "generated_cpp_sha256": "70c29799f372b38a3744ac465b192e64d0ce95533a714a264ff283cb522b4d63",
+  "native_extension": {
+    ".dedup-work/lsh27-20261016/modern-build/lsh/cMinhash.cpython-312-darwin.so": "6afa0b5031bdfb2b368c1a3873c445bc4ee2cec810fa3ff7765517e38eb98580"
+  },
+  "oracle_binary_sha256": "863c61330f375d486c36283b14656c2e9d9d25a1123c7b801420fc2958d47f90",
+  "oracle_wrapper_sha256": "4794f72ec28634a47e265fed5a26a74309d8c9ab4d936f091ee117d7cdba95f3",
+  "auditor_sha256": "dfe2fad8797dedb31eb93c0736263432dd3ca234c474cbc63e1ce28f20ac5601",
+  "limits": [
+    "No fullrepositoryflag untilremaininggeneratedwrapper read. Sourcearchive/treecompleteness is notreading.",
+    "Murmuroracle recomputesunsignedminima withsameoriginalprimitiveviaindependentloop; no independentMurmurimplementation/oldbinaryparity claim.",
+    "No READMEexternalpaper/RCV1corpus/dependency-source/platform/quality/performance/productionadoption claim.",
+    "Passing108originaltests does not cover19additionalfailures/policies; retained unchangednative source and observedcounterexamples."
+  ]
+}
