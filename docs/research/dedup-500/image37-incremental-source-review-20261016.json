@@ -1,0 +1,71 @@
+{
+  "status": "verified_incremental_source_and_native_controls",
+  "whole_repo_complete": false,
+  "whole_implementation_read": true,
+  "repository": "markusressel/py-image-dedup",
+  "commit": "7ca5386d16171c2403e8e23c51cc3744d84bb705",
+  "tree": "51d4b68ebda23b7714347f6b35006ac5d7c47743",
+  "verified_trees": 14,
+  "verified_text_blobs": 48,
+  "text_read_scope": "All47 non-lock text blobs fully read; generated poetry.lock completely parsed, all36 package metadata/dependency/marker/extra/source records inspected, all archive file/hash entries structurally validated. No dependency source audit, wheel install, or literal hash-line interpretation claim.",
+  "lock_packages": 36,
+  "lock_distribution_entries": 475,
+  "new_controls": [
+    {
+      "control": "same_size_restored_mtime_skips_changed_actual_image",
+      "pixels_changed": true,
+      "writes": 1
+    },
+    {
+      "control": "mtime_change_refreshes_metadata",
+      "writes": 2
+    },
+    {
+      "control": "model_version_change_refreshes",
+      "writes": 3
+    },
+    {
+      "control": "unreadable_image_metadata_returns_zero_and_empty",
+      "pixel_count": 0
+    },
+    {
+      "control": "zero_total_progress_increment_raises",
+      "exception": "ZeroDivisionError"
+    },
+    {
+      "control": "nonzero_progress_and_reset",
+      "passed": true
+    },
+    {
+      "accepted": true,
+      "adapter": "event object only; no watcher",
+      "control": "watch_regex_accepts_sibling_prefix"
+    },
+    {
+      "accepted": true,
+      "control": "watch_regex_extension_dot_is_wildcard"
+    },
+    {
+      "accepted": false,
+      "control": "directory_event_filtered"
+    }
+  ],
+  "new_controls_runs": 2,
+  "original_test_bodies": 11,
+  "original_bodies_runs": 2,
+  "original_test_setup": "Explicit fixture-only TestBase replaces database constructor; whole original test/helper bodies, selected unchanged production sort/selection/file-extension implementation. No original full-package/environment/service run.",
+  "pillow_payloads_verified": 141,
+  "evidence_pins": {
+    "docs/research/dedup-500/image37-fetched-source-pins-20261016.json": "e53f0ebcae25f93f19c988be5625bc2a3329df4e6000e0c0ee2d55779d1b1539",
+    "scripts/qualify-image37-metadata-progress-20261016.py": "2f63429f494e4b74179f284c4f4f5b74ad314cd349f4ee2d5f239574b53e2617",
+    "scripts/qualify-image37-original-test-bodies-20261016.py": "109d5dd852d2ca2b4ca187b595f95a7d3ed7dfaefb8eac9a2fa02be0273fd6f1",
+    "scripts/qualify-image37-selected-controls-20261016.py": "933137c7c973aff23c3f18a577d2f981eebc9a051cc781ded3de02e4284bc5d8",
+    "docs/research/dedup-500/images62-installed-dependency-pins-20261015.json": "681185685e2f262caaede5bdb605a2448a88c05ded0fdbf4f00910a7abf7b09f",
+    "docs/research/dedup-500/image37-metadata-native-run1-20261016.json": "d55ef36ef6978b727e0487fc2f24daf8561df65ef43dfad3c95bbf4edd70982c",
+    "docs/research/dedup-500/image37-metadata-native-run2-20261016.json": "d55ef36ef6978b727e0487fc2f24daf8561df65ef43dfad3c95bbf4edd70982c",
+    "docs/research/dedup-500/image37-original-bodies-run1-20261016.log": "99d14432a19261e9930c6c19dd2dd1933253676aeb192bd0278199af4188e21f",
+    "docs/research/dedup-500/image37-original-bodies-run2-20261016.log": "ecf44ef487f6bb0090046abab14203ca8f08c06076d74d5a4f755a7656607d99"
+  },
+  "auditor_sha256": "41fdc7668673401c53a6c1f22e11d19a58b19eba0132435f0c4fe7bd8259ee64",
+  "remaining": "All12trackedimages await completeddownload/Gitblobverification/visualinspection. Real image-match/Elasticsearch/CLI/daemon/watchdog/config/Docker/platform/scale/quality/performance remain unqualified. Full original500 count unchanged117."
+}

@@ -1,0 +1,41 @@
+{
+  "status": "verified_complete_tracked_source_review_with_scoped_native_controls",
+  "whole_repo_complete": true,
+  "whole_implementation_complete": true,
+  "repository": "markusressel/py-image-dedup",
+  "commit": "7ca5386d16171c2403e8e23c51cc3744d84bb705",
+  "tree": "51d4b68ebda23b7714347f6b35006ac5d7c47743",
+  "blobs": 60,
+  "text_blobs": 48,
+  "image_blobs": 12,
+  "trees": 14,
+  "text_review_scope": "All47 non-lock text blobs fully read; generated poetry.lock completely parsed, all36 package metadata/dependency/marker/extra/source records inspected, all archive file/hash entries structurally validated. No dependency source audit, wheel install, or literal hash-line interpretation claim.",
+  "tracked_images_actually_viewed": 12,
+  "selected_native_controls": 19,
+  "native_control_runs": 2,
+  "original_test_bodies": 11,
+  "original_test_body_runs": 2,
+  "full_upstream_environment_suite_run": false,
+  "original_test_setup": "Explicit fixture-only TestBase replaces database constructor; whole original test/helper bodies, selected unchanged production sort/selection/file-extension implementation. No original full-package/environment/service run.",
+  "findings": [
+    "Second quality-reference requery is not root-filtered, reproduced via explicit storage responses.",
+    "Selected deletion/move bodies lack fresh content/keeper validation; owned postmatch rewrite and removedkeeper lose data.",
+    "Actual stdlib filecmp cache can delete changed same-size/restored-mtime source in selected move body.",
+    "Actual Pillow image metadata cache skips changed same-size/restored-mtime BMP.",
+    "Zero-total progress increment raises; watcher regex matches sibling prefixes and unescaped extension dots.",
+    "Counter exclusion evaluates basename at cwd, None extension filter fails, empty second-query selection raises."
+  ],
+  "evidence_pins": {
+    "docs/research/dedup-500/image37-incremental-source-review-20261016.json": "fe25c41dd6e9fe77e7183c3650b359efa008430f0351eaf78eacca02f508723a",
+    "docs/research/dedup-500/image37-visual-view-receipt-20261016.json": "d346bde7e714562655e38bfb876d200a80704ef939301d663c8db1f6a4166914",
+    "docs/research/dedup-500/image37-selected-native-run1-20261016.json": "df5643631ad4ef8f4ccb95af4a85d293b2b4e9dcf30f3b841fd5ab49d054d91d",
+    "docs/research/dedup-500/image37-selected-native-run2-20261016.json": "df5643631ad4ef8f4ccb95af4a85d293b2b4e9dcf30f3b841fd5ab49d054d91d"
+  },
+  "auditor_sha256": "9fb58f248b96a2d7f4400740a03e02eadfb39000aa2d5c8ef7632560bb32438d",
+  "limits": [
+    "All tracked repository files inspected; generated lock metadata completely parsed/inspected with structural archive validation, not independent36dependency source review.",
+    "Real Elasticsearch/image-match signature/config/watchdog/daemon/fullCLI/Docker/install/platform/quality/scale/performance unqualified; explicit adapters retained.",
+    "README GPL prose conflicts with tracked AGPLv3 LICENSE/package metadata; no source adopted into production.",
+    "No broad speedup or completion of500repositories/library objective claim."
+  ]
+}
