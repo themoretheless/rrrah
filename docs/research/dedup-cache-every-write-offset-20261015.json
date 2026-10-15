@@ -1,0 +1,26 @@
+{
+  "status": "verified_complete_cache_embedded_tests_with_all_write_offsets",
+  "passed": 2,
+  "failed": 0,
+  "ignored": 0,
+  "serialized_bytes": 408,
+  "injected_failure_controls": 816,
+  "successful_short_write_controls": 4,
+  "failure_modes": [
+    "BrokenPipe",
+    "WriteZero"
+  ],
+  "production_prefix_unchanged": true,
+  "source": "crates/rrrah-dedup/src/cache.rs",
+  "source_sha256": "dded97bb4e927887d0567b07aaf9a68d9521a3dcf7e3841fb76ea58ebd37fccc",
+  "pins": {
+    "/private/tmp/rrrah-cache-write-failures-20261015/cache.rs": "dded97bb4e927887d0567b07aaf9a68d9521a3dcf7e3841fb76ea58ebd37fccc",
+    "/private/tmp/rrrah-cache-write-failures-20261015/run.log": "1fe88ec5505f1003b56dc33b69bb7ef92bf9d67e49350a4b3a40a0c23612fc7f",
+    "/private/tmp/rrrah-cache-write-failures-20261015/pixels.rs": "89b074f4bf205a42e51e4406090c43705c3ab4fa8a4b4494afd27e705bc2dfc1",
+    "/private/tmp/rrrah-cache-write-failures-20261015/tests": "e290bdaee09afe3d6aa8b38a3e394bdf25eb2ced335294be2abde3454f9f88b6",
+    "/private/tmp/rrrah-cache-write-failures-20261015/compile.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/private/tmp/rrrah-cache-write-failures-20261015/command.json": "5db656b1e7915d5781ea96e845aac4d31fdb2ffe0042d4c9c4cacba22d431c7a",
+    "/private/tmp/rrrah-cache-write-failures-20261015/probe.rs": "e0e2e6a93c820f467f0df1f6332bc0f31f5f8ebebc728e6facadd6b2ac42993d"
+  },
+  "scope": "Complete current cache.rs/pixels.rs modules with real cached blake3/thiserror/tempfile, strict warnings MacARM. Every failure offset in one408byte cache preserves only exact prefix, returns correct error and cannot load truncated stream. Four successful chunks roundtrip. Existing directory-sync publication error test also runs. Not fullcurrentCargo/decoder/platform/fsflush fault injection qualification."
+}

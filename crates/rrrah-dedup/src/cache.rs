@@ -155,17 +155,22 @@ impl FingerprintCache {
             if cancel() {
                 return Err(CacheError::Cancelled);
             }
-            let mut record = Vec::with_capacity(RECORD_BYTES);
-            record.extend_from_slice(&key.content);
-            record.extend_from_slice(&key.recipe);
-            record.extend_from_slice(&key.frame_index.to_le_bytes());
+            let mut record = [0_u8; RECORD_BYTES];
+            let mut offset = 0;
+            let mut append = |bytes: &[u8]| {
+                record[offset..offset + bytes.len()].copy_from_slice(bytes);
+                offset += bytes.len();
+            };
+            append(&key.content);
+            append(&key.recipe);
+            append(&key.frame_index.to_le_bytes());
             for variant in fp.variants {
                 for value in variant {
-                    record.extend_from_slice(&value.to_le_bytes());
+                    append(&value.to_le_bytes());
                 }
             }
             for value in fp.mean_linear_rgb.into_iter().chain([fp.luminance_stddev]) {
-                record.extend_from_slice(&value.to_bits().to_le_bytes());
+                append(&value.to_bits().to_le_bytes());
             }
             output.write_all(&record)?;
             hash.update(&record);
@@ -263,6 +268,85 @@ fn word(bytes: &[u8]) -> Result<u64, CacheError> {
 #[cfg(test)]
 mod publication_tests {
     use super::*;
+
+    #[test]
+    fn every_stream_write_failure_is_reported_and_short_writes_preserve_bytes() {
+        #[derive(Debug)]
+        struct Writer {
+            bytes: Vec<u8>,
+            limit: usize,
+            chunk: usize,
+            zero_on_limit: bool,
+        }
+        impl Write for Writer {
+            fn write(&mut self, input: &[u8]) -> std::io::Result<usize> {
+                if self.bytes.len() == self.limit {
+                    return if self.zero_on_limit {
+                        Ok(0)
+                    } else {
+                        Err(std::io::Error::new(
+                            std::io::ErrorKind::BrokenPipe,
+                            "controlled write failure",
+                        ))
+                    };
+                }
+                let count = input.len().min(self.chunk).min(self.limit - self.bytes.len());
+                self.bytes.extend_from_slice(&input[..count]);
+                Ok(count)
+            }
+            fn flush(&mut self) -> std::io::Result<()> {
+                Ok(())
+            }
+        }
+        let mut cache = FingerprintCache::default();
+        cache
+            .insert(
+                CacheKey {
+                    content: [1; 32],
+                    recipe: [2; 32],
+                    frame_index: 3,
+                },
+                Fingerprint {
+                    variants: [[123; 4]; 8],
+                    mean_linear_rgb: [0.1, 0.2, 0.3],
+                    luminance_stddev: 0.4,
+                },
+                1,
+            )
+            .unwrap();
+        let mut expected = Vec::new();
+        cache.write(&mut expected, || false).unwrap();
+        for zero_on_limit in [false, true] {
+            for limit in 0..expected.len() {
+                let mut writer = Writer {
+                    bytes: Vec::new(),
+                    limit,
+                    chunk: 7,
+                    zero_on_limit,
+                };
+                let result = cache.write(&mut writer, || false);
+                let kind = if zero_on_limit {
+                    std::io::ErrorKind::WriteZero
+                } else {
+                    std::io::ErrorKind::BrokenPipe
+                };
+                assert!(matches!(result, Err(CacheError::Io(error)) if error.kind() == kind));
+                assert_eq!(writer.bytes, expected[..limit]);
+                assert!(FingerprintCache::read(writer.bytes.as_slice(), 1, || false).is_err());
+            }
+        }
+        for chunk in [1, 7, 359, 4096] {
+            let mut writer = Writer {
+                bytes: Vec::new(),
+                limit: expected.len(),
+                chunk,
+                zero_on_limit: false,
+            };
+            cache.write(&mut writer, || false).unwrap();
+            assert_eq!(writer.bytes, expected);
+            FingerprintCache::read(writer.bytes.as_slice(), 1, || false).unwrap();
+        }
+    }
 
     #[test]
     fn directory_sync_failure_reports_already_published_complete_cache() {

@@ -1,0 +1,31 @@
+--- a/crates/rrrah-dedup/src/cache.rs
++++ b/crates/rrrah-dedup/src/cache.rs
+@@ -155,17 +155,22 @@
+             if cancel() {
+                 return Err(CacheError::Cancelled);
+             }
+-            let mut record = Vec::with_capacity(RECORD_BYTES);
+-            record.extend_from_slice(&key.content);
+-            record.extend_from_slice(&key.recipe);
+-            record.extend_from_slice(&key.frame_index.to_le_bytes());
++            let mut record = [0_u8; RECORD_BYTES];
++            let mut offset = 0;
++            let mut append = |bytes: &[u8]| {
++                record[offset..offset + bytes.len()].copy_from_slice(bytes);
++                offset += bytes.len();
++            };
++            append(&key.content);
++            append(&key.recipe);
++            append(&key.frame_index.to_le_bytes());
+             for variant in fp.variants {
+                 for value in variant {
+-                    record.extend_from_slice(&value.to_le_bytes());
++                    append(&value.to_le_bytes());
+                 }
+             }
+             for value in fp.mean_linear_rgb.into_iter().chain([fp.luminance_stddev]) {
+-                record.extend_from_slice(&value.to_bits().to_le_bytes());
++                append(&value.to_bits().to_le_bytes());
+             }
+             output.write_all(&record)?;
+             hash.update(&record);

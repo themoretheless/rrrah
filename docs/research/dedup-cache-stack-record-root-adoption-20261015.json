@@ -1,0 +1,30 @@
+{
+  "status": "root_adopted_fixed360byte_record_after_module_and_integration_gates",
+  "source": "crates/rrrah-dedup/src/cache.rs",
+  "source_sha256": "96823610880af2047e33032491bc6455c5b6a54690255dffc1826c70972f6e02",
+  "formatted_candidate_sha256": "96823610880af2047e33032491bc6455c5b6a54690255dffc1826c70972f6e02",
+  "benchmark": "docs/research/dedup-cache-stack-record-experiment-20261015.json",
+  "benchmark_sha256": "94e6a0559da8edd10d6557274cd4b3f7d1412964cabf84c8afab86654d36957d",
+  "complete_integration_inventory": [
+    "atomic_replacement_and_cancel_preserve_previous_cache",
+    "cache_publication_child",
+    "concurrent_process_writers_publish_only_complete_single_writer_caches",
+    "disk_persistence_is_deterministic_and_rejects_invalid_values",
+    "process_exit_during_temp_write_preserves_previous_publication_and_retry",
+    "roundtrip_requires_content_recipe_and_frame_identity",
+    "unwritable_parent_refuses_before_publication_and_preserves_retry"
+  ],
+  "integration_source_sha256": "c05d2a88ef543e5338df546717ba4dc520bc9c8a11da7e009e9d3231b5abbac1",
+  "integration_binary_sha256": "20b8c435f09d176edfc9687c2e2ae48797a8a9e30e60de33a81004d35eb4ed60",
+  "integration_log_sha256": "affa39d0777d51307406c1953d7454fab132304d7c8d87a206ce807f9ecb1159",
+  "module_tests": 2,
+  "integration_tests": 7,
+  "injected_write_failures": 816,
+  "short_write_controls": 4,
+  "production_change": "Per-record Vec allocation replaced with fixed360byte stack array; identical append order and output/checksum/cancellation behavior.",
+  "limits": [
+    "Local serialization benchmark9to12percent diagnostic gain, not global search speedup",
+    "Complete selected cache integration target with actual current cache+pixels and cached real dependencies; not full fresh Cargo/workspace/decode/platform test",
+    "Existing save_atomic flush/sync/publication untouched;360bytes stack now replaces record Vec heap allocation, no dynamic cache added"
+  ]
+}
