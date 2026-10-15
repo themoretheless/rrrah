@@ -1,0 +1,30 @@
+{
+  "status": "verified_complete_pinned_source_media_and136_native_script_executions",
+  "whole_repo_complete": true,
+  "whole_implementation_complete": true,
+  "repository": "shevchenkoartem/lastfm-smart-deduper",
+  "commit": "c846928fc9123dd9e331123819018e640b502529",
+  "blobs": 9,
+  "canonical_trees": 4,
+  "acquisition": "docs/research/dedup-500/lastfm56-fetched-source-pins-20261016.json",
+  "acquisition_sha256": "bc753416793ae14e8c292d1129489f8530cdb455caaad483fb65ad01c9a8cdd9",
+  "auditor_sha256": "1040ffd67b2ff345d745cf8b629d95c1fb5de0e0c66724f7aa8affdcaa1fdab3",
+  "controls": "docs/research/dedup-500/lastfm56-native-controls-20261016.json",
+  "controls_sha256": "7e5a018df1d5b9e95a21490469eb0aaa072f42771d66ee3a81d2d231dbd46c52",
+  "media_scope": "PSD stored mergedpreview1280x640 viewed; all9rasterlayer previews oncontact sheet,metadata11nodes incl2groups andtype text reviewed; embeddedPNG1116x1304 viewedfull; externalREADMEbanner viewed. All layer pixels/embeddedpayload rehashed. No Photoshop recomposition/effect/font-engine execution claim. No videos.",
+  "license": "Complete MIT LICENSE read; no production code copied.",
+  "upstream_tests_run": false,
+  "native_scope": "Four whole unchanged IIFEs executed in fresh actualjsdom26.1DOM/NodeVM per fixture; nativeDate/DOM/click events. Ownedsynthetic rows and deletionclick recorder only; no actualLast.fm/network/browseraccount.17scenarios each4variants twice=136 executions.8author documented whiteboxcases verified primary/balancedpublished parity.",
+  "findings": [
+    "Concatenated song-title/artist key aliases distinct title/artist tuples.",
+    "Temporalnearby unrelated song can promote previously uncertain duplicate before sameSongcheck; reproduced author7 and8 contrast. This is explicit heuristic, not exactidentity proof.",
+    "Missing menu buttons makes uncertain modes throw; missingdelete target throws onforced click. Forced state trusts click without remote acknowledgement.",
+    "Invaliddates silently miss duplicates; distance5 falls outside4rowcache;15min inclusive,16 excluded;safe mode made noautomaticclicks acrossallfixtures."
+  ],
+  "decision": "Reject scrobble/title/time heuristic as exact/image identity. Retain tuple-key boundaries, uncertain-candidate/action-acknowledgment and explicit manual-choice lessons; no adoption orspeedclaim.",
+  "limits": [
+    "Nativejsdom is not actual browser/liveLast.fmDOM/API/authorization/delete success, precision/recall orperformance qualification.",
+    "README percentageaccuracy claims notmeasured here. Selectedscript body execution doesnot prove universal correctness or safeautomaticdeletion.",
+    "No production code copied oroptimizationadoption."
+  ]
+}

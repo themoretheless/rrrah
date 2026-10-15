@@ -1,0 +1,280 @@
+{
+  "repository": "shevchenkoartem/lastfm-smart-deduper",
+  "commit": "c846928fc9123dd9e331123819018e640b502529",
+  "canonical_trees": {
+    "": "1e924b51e3b4a6e797389996878946d62313b3ff",
+    "other": "a7fedecf59fcda30e08e6552b9cef19c7d9e8748",
+    "other/compressed-js": "1db75231b9fda84ae8dd339b8dc70903cc9d9648",
+    "other/media": "afde25bc48e12781c78027856f3ecb92bdb70135"
+  },
+  "blobs": [
+    {
+      "path": "LICENSE",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fbfae180a2743092bcca95c952c5704b41fcfb7b",
+      "size": 1072,
+      "url": "https://api.github.com/repos/shevchenkoartem/lastfm-smart-deduper/git/blobs/fbfae180a2743092bcca95c952c5704b41fcfb7b",
+      "sha256": "01c2a6bb94876f45578d6c4fffe896e7a9f50de6cb6ff458c681cd6782168041",
+      "text_content": "MIT License\n\nCopyright (c) 2019 shevchenkoartem\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.\n"
+    },
+    {
+      "path": "README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5d89f9e0c2a188dd073a1fdaab9eb88da9e5dd78",
+      "size": 5806,
+      "url": "https://api.github.com/repos/shevchenkoartem/lastfm-smart-deduper/git/blobs/5d89f9e0c2a188dd073a1fdaab9eb88da9e5dd78",
+      "sha256": "9f8e416ed0a91e41be2f361f24d5b742b7e99485e2dd8c66104d097221bdf684",
+      "text_content": "![Last.fm Smart Deduper](https://repository-images.githubusercontent.com/226846544/220b3880-1acd-11ea-9894-d310454be9ae)\n\nThis script allows you to remove duplicates from your [Last.fm](https://www.last.fm/) scrobbles library. Why is this tool better than other similar ones?  Because it's *smart*: it can handle not only the situation when the same song was scrobbled multiple times in a row but also more complicated cases e.g., when duplicates were added a bit later (it's a common situation if you're using Spotify and Last.fm and have mistakenly set up scrobbling on both sides. Also, it has 3 modes: from absolutely safe (allowing you to make all the choices by yourself) to independent silent mode.\n\n## How To Use\n* Log into your Last.fm account and go to your `Scrobbles Library` (`https://www.last.fm/user/%USERNAME%/library`)\n* Go to the page with duplicated scrobbles you want to remove\n* Copy-paste the [script](https://github.com/shevchenkoartem/lastfm-smart-deduper/blob/master/other/compressed-js/compressed-mode1-balanced.js) (use mouse triple-click to select all the line) into the browser's console (`F12` for Chrome) and press `Enter` to run it\n* Some duplicates will be deleted automatically (trust the script!), some of them will be given to you for making the right decision\u2014to delete or not to delete (that is the question \u00a9). Anyway, all the duplicates will be marked by an appropriate color.\n* Press the Delete button displayed near the scrobbles you want to delete (don't press the button if you do not).\n* Refresh the page. Voil\u00e0! Duplicates have been disappeared! :+1:\n* Run the script again if needed (just press `Up` and `Enter` in the console to run the script once again).\n* Go to the next problematic page and do the same.\n\n## Script modes\n\nYou can run the script using 3 different modes depending on how accurate results you want to get or how much time you're ready to spend.\n\nMODE code | Name | Accuracy | How it works\n-- | -- | -- | --\n0 | [silent](https://github.com/shevchenkoartem/lastfm-smart-deduper/blob/master/other/compressed-js/compressed-mode0-silent.js) | >95% | All the found duplicates (even uncertain) will be deleted immediately. Use this mode only if you want to go the most comfortable way of deduplication, and you don't need very high accuracy. | \n1 | [**balanced***](https://github.com/shevchenkoartem/lastfm-smart-deduper/blob/master/other/compressed-js/compressed-mode1-balanced.js) | >99% | The duplicates, which unmistakably are duplicates, will be deleted immediately. All the uncertain cases will be marked with the Delete button so that you can make the right decision.\n2 | [safe](https://github.com/shevchenkoartem/lastfm-smart-deduper/blob/master/other/compressed-js/compressed-mode2-safe.js) | 100% | For the most watchful :eyes: users\u2014you'll always be given a choice. If you have enough time and healthy nerves, use it.\n\n\\* *recommended*\n\n## Create a bookmark for your convenience\n\nBookmarking is much more convenient than using a console, so it worth creating a bookmark once you've chosen the most suitable mode for you.\n\n* Right-click your browser's `Bookmarks Bar` and choose `Add Page...`\n* Name the bookmark (e.g., \"Last.fm Dedupe\")\n* Paste the chosen script you want to use into the `URL` field (make sure it begins with `javascript:`).\n* Click `Save`\n\n## Advices\n\n* Zoom out the page so that you can see more scrobbles on a screen.\n* Start running the script from the last problem page (e.g., 5th) and move page by page to the 1st one.\n* After you've finished, please do the same procedure once again to catch some rare cases when duplicates were on different pages or between them were too many other duplicates, which prevented identifying the problem from the first time.\n* When using balanced or safe mode and it's hard to make the right decision, remember about *GDBN (Good Die in a Bad Neighborhood)* rule (it's used in [chip manufacturing](http://yieldwerx.com/pat-gdbn-outlier-detection-moving-beyond-automotive/))\u2014based on the premise that defects tend to cluster (sometimes it's better to remove even a good die that is surrounded by a cluster of failing dice). So if you have a page with a lot of duplicates, but some one is uncertain\u2014most likely, it is also a duplicate.\n\n## Fine-tuning (advanced)\n\nThe script has a few parameters which define its behavior. You can fine-tune it by changing the following constants at the beginning of the [script](https://github.com/shevchenkoartem/lastfm-smart-deduper/blob/master/lastfm-smart-deduper.js):\n\nParameter name | Default value | Meaning\n-- | -- | --\nMODE | 1 | Read [Script modes](https://github.com/shevchenkoartem/lastfm-smart-deduper#script-modes) section\nCACHE_MAX_SIZE | 4 | If the positional distance (including) between two scrobbles is greater, they will not be considered as duplicates. Set it to 2 if you want to clean-up only neighboring duplicates (this way the script would work like the other ones you can find on the Internet)\nMAX_DIFF_MINS | 15 | If the time difference (in minutes) between two scrobbles is greater, they will not be considered as duplicates. Try to analyze your cases and set this parameter appropriately.\nMIN_SCROBBLE_TIME_MINS | 1 | If the time difference (in minutes) between the same songs is less, they will be undoubtedly considered as duplicates. If you're a grindcore (as well as other genres with a lot of \"micro songs\") lover, it's recommended to set it to 0.\nSAME_NEIGHBOURS_ARE_ALWAYS_DUPLICATES | FALSE | The script is smart enough to distinguish the cases when you were playing some song repeatedly (such duplicates are treated as uncertain). Set it to TRUE if you want such duplicates to be always treated as certain duplicates (this way, the script would work like the other ones you can find on the Internet).\n"
+    },
+    {
+      "path": "lastfm-smart-deduper.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4cc1926e928dd53c412a1c1923def6f3a941118a",
+      "size": 5711,
+      "url": "https://api.github.com/repos/shevchenkoartem/lastfm-smart-deduper/git/blobs/4cc1926e928dd53c412a1c1923def6f3a941118a",
+      "sha256": "b9b712a7c67007494346012d1c37e550f76af67678c57862ddd4322f4de19282",
+      "text_content": "(function() {                   // the whole script function\n\n///---------- You can fine-tune the script here: ------------\n\nconst MODE = 1;                 // in which way to delete duplicates:\n    // : 0 - silent mode (always uses forced deletion); use this mode only if you don't need 100% accuracy\n    // : 1 - balanced mode (uses forced deletion in obvious cases, otherwise gives you a choice)\n    // : 2 - absolutely safe mode (always gives you a choice)\nconst CACHE_MAX_SIZE = 4;       // if the positional distance is greater - not a duplicate\nconst MAX_DIFF_MINS = 15;       // if the time difference is greater (in minutes) - not a duplicate\nconst MIN_SCROBBLE_TIME_MINS = 1; // if the time difference between same songs is less (in minutes) - it's a duplicate\nconst SAME_NEIGHBOURS_ARE_ALWAYS_DUPLICATES = false;\n\n///----------------------------------------------------------\n\nconst cache = [];\nconst DELETE_BUTTON_TEXT = 'Delete';\n\nfunction createExtraDeleteButton(deleteFunc) {\n    const btn = document.createElement('button');\n    btn.innerText = DELETE_BUTTON_TEXT;\n    btn.onclick = deleteFunc;\n    btn.style.background = '#D92323'; // red\n    btn.style.color = 'white';\n    btn.style.padding = '5px';\n    return btn;\n}\n\nfunction createCacheObj(songId, scrobbleDate, deleteBtn, row) {\n    return { \n        songId: songId,\n        date: scrobbleDate,\n        isDuplicate: false, \n        isForcedDeleted: false,     // if a duplicate has been deleted silently\n        isRemainedOriginal: false,  // the original for which a duplicate has been found\n        extraDeleteButton: null,    // additional button for convenience -- when you have to make a decision\n        get hasFinalState() { return this.isForcedDeleted || this.isRemainedOriginal; },\n        deleteMe: function(forced) {\n            this.isDuplicate = true;\n            row.style.background = '#F2CDCF'; // light red\n\n            if (MODE === 2 || MODE === 1 && !forced) { // giving a choice:\n                const rowButtons = row.querySelectorAll('button');\n                const lastButton = rowButtons[rowButtons.length - 1];\n\n                if (lastButton.innerText !== DELETE_BUTTON_TEXT) { // if Delete button is not yet added\n                    this.extraDeleteButton = createExtraDeleteButton(function() { \n                        deleteBtn.click(); \n                    });\n                    row.appendChild(this.extraDeleteButton);\n                }\n            } else { // forced deletion:\n                (function() { deleteBtn.click(); })();\n                this.isForcedDeleted = true;\n\n                if (this.extraDeleteButton != null) { \n                    row.removeChild(this.extraDeleteButton); \n                    this.extraDeleteButton = null;\n                }\n            }\n        },\n        forcedDeleteIfDuplicated: function() {\n            if (this.isDuplicate && !this.isForcedDeleted) {\n                this.deleteMe(true);\n            }\n        },\n        remainMe: function() { \n            row.style.background = '#DDFFD9'; // light green\n            this.isRemainedOriginal = true; \n        }\n    };\n}\n\nfunction addToCache(cacheObj) {\n    cache.push(cacheObj); \n    if (cache.length > CACHE_MAX_SIZE) {\n        cache.shift();\n    }\n}\n\nfunction processCache() {\n    for (let i = 0; i < cache.length - 1; ++i) {\n        const current = cache[i];\n\n        for (let j = i + 1; j < cache.length; ++j) { // comparing current with all the rest elements in the cache:\n            const laterOne = cache[j];\n\n            if (current.hasFinalState && laterOne.hasFinalState) { continue; }\n\n            const diffMins = Math.abs(laterOne.date - current.date)/1000/60; // time difference between the scrobbles (minutes)\n            const isInsignificantTimeDiff = diffMins <= MIN_SCROBBLE_TIME_MINS;\n\n            if (isInsignificantTimeDiff) {\n                // if it was questionable before - it's time for forced deletion now (as datetime is almost the same):\n                current.forcedDeleteIfDuplicated();\n                laterOne.forcedDeleteIfDuplicated();\n            }\n            \n            const sameSongs = current.songId === laterOne.songId;\n            const areNeighbours = j === i + 1;\n            const shortTimeAgo = diffMins <= MAX_DIFF_MINS;\n\n            if (sameSongs && (shortTimeAgo || areNeighbours && SAME_NEIGHBOURS_ARE_ALWAYS_DUPLICATES)) {\n                // duplicate found!\n                if (!laterOne.isForcedDeleted && (!laterOne.isDuplicate || isInsignificantTimeDiff)) {\n                    laterOne.deleteMe(isInsignificantTimeDiff);\n                }\n                if (!current.isRemainedOriginal && !current.isDuplicate) { current.remainMe(); }\n            }\n        }\n    }\n}\n\n///---------- Script logic: ------------\n\nconst chartRows = document.querySelectorAll('.chartlist-row'); // scrobbles rows\n\nfor (let i = chartRows.length - 1; i >= 0; --i) { // from earlier to later\n    const row = chartRows[i];\n\n    const songName = row.querySelector('.chartlist-name').querySelector('a').innerText;\n    const artistName = row.querySelector('.chartlist-artist').querySelector('a').innerText;\n    const songId = songName + ' - ' + artistName;\n\n    const scrobbleDateTitle = row.querySelector('.chartlist-timestamp').querySelector('span').getAttribute('title');\n    const scrobbleDate = new Date(scrobbleDateTitle.replace('pm', ' pm').replace('am', ' am'));\n\n    const deleteBtn = row.querySelector('.more-item--delete');\n\n    const cacheObj = createCacheObj(songId, scrobbleDate, deleteBtn, row);\n    addToCache(cacheObj);\n    \n    if (cache.length === CACHE_MAX_SIZE || i === 0) { // to work with full cache\n        processCache();\n    }\n}\n\n})(); // the end\n"
+    },
+    {
+      "path": "other/compressed-js/compressed-mode0-silent.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4da38dd0a8b94dee48078735145f4ac98d74de20",
+      "size": 1568,
+      "url": "https://api.github.com/repos/shevchenkoartem/lastfm-smart-deduper/git/blobs/4da38dd0a8b94dee48078735145f4ac98d74de20",
+      "sha256": "9c2b7b488bc271157c2723986b81fefb017dfd72c381931293fdef857ef7b9c6",
+      "text_content": "javascript:(function(){function a(a,b,c,d){return{songId:a,date:b,isDuplicate:!1,isForcedDeleted:!1,isRemainedOriginal:!1,extraDeleteButton:null,get hasFinalState(){return this.isForcedDeleted||this.isRemainedOriginal},deleteMe:function(){this.isDuplicate=!0,d.style.background=\"#F2CDCF\";(function(){c.click()})(),this.isForcedDeleted=!0,null!=this.extraDeleteButton&&(d.removeChild(this.extraDeleteButton),this.extraDeleteButton=null)},forcedDeleteIfDuplicated:function(){this.isDuplicate&&!this.isForcedDeleted&&this.deleteMe(!0)},remainMe:function(){d.style.background=\"#DDFFD9\",this.isRemainedOriginal=!0}}}function b(a){h.push(a),h.length>d&&h.shift()}function c(){for(let a=0;a<h.length-1;++a){const b=h[a];for(let c=a+1;c<h.length;++c){const d=h[c];if(b.hasFinalState&&d.hasFinalState)continue;const i=Math.abs(d.date-b.date)/1e3/60,j=i<=f;j&&(b.forcedDeleteIfDuplicated(),d.forcedDeleteIfDuplicated());const k=b.songId===d.songId,l=c===a+1;k&&(i<=e||l&&g)&&(!d.isForcedDeleted&&(!d.isDuplicate||j)&&d.deleteMe(j),!b.isRemainedOriginal&&!b.isDuplicate&&b.remainMe())}}}const d=4,e=15,f=1,g=!1,h=[],j=document.querySelectorAll(\".chartlist-row\");for(let e=j.length-1;0<=e;--e){const f=j[e],g=f.querySelector(\".chartlist-name\").querySelector(\"a\").innerText,i=f.querySelector(\".chartlist-artist\").querySelector(\"a\").innerText,k=f.querySelector(\".chartlist-timestamp\").querySelector(\"span\").getAttribute(\"title\"),l=new Date(k.replace(\"pm\",\" pm\").replace(\"am\",\" am\")),m=f.querySelector(\".more-item--delete\"),n=a(g+\" - \"+i,l,m,f);b(n),(h.length===d||0===e)&&c()}})();\n"
+    },
+    {
+      "path": "other/compressed-js/compressed-mode1-balanced.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "abcea95a4081041069822f7d619670e7b7e7ddff",
+      "size": 1912,
+      "url": "https://api.github.com/repos/shevchenkoartem/lastfm-smart-deduper/git/blobs/abcea95a4081041069822f7d619670e7b7e7ddff",
+      "sha256": "0a247a7044549c16aa713b3164ddddd7dc8cf4c881c6e5120c4e0bf08b38a289",
+      "text_content": "javascript:(function(){function a(a){const b=document.createElement(\"button\");return b.innerText=l,b.onclick=a,b.style.background=\"#D92323\",b.style.color=\"white\",b.style.padding=\"5px\",b}function b(b,c,d,e){return{songId:b,date:c,isDuplicate:!1,isForcedDeleted:!1,isRemainedOriginal:!1,extraDeleteButton:null,get hasFinalState(){return this.isForcedDeleted||this.isRemainedOriginal},deleteMe:function(b){if(this.isDuplicate=!0,e.style.background=\"#F2CDCF\",!b){const b=e.querySelectorAll(\"button\"),c=b[b.length-1];c.innerText!==l&&(this.extraDeleteButton=a(function(){d.click()}),e.appendChild(this.extraDeleteButton))}else(function(){d.click()})(),this.isForcedDeleted=!0,null!=this.extraDeleteButton&&(e.removeChild(this.extraDeleteButton),this.extraDeleteButton=null)},forcedDeleteIfDuplicated:function(){this.isDuplicate&&!this.isForcedDeleted&&this.deleteMe(!0)},remainMe:function(){e.style.background=\"#DDFFD9\",this.isRemainedOriginal=!0}}}function c(a){k.push(a),k.length>e&&k.shift()}function d(){for(let a=0;a<k.length-1;++a){const b=k[a];for(let c=a+1;c<k.length;++c){const d=k[c];if(b.hasFinalState&&d.hasFinalState)continue;const e=Math.abs(d.date-b.date)/1e3/60,i=e<=g;i&&(b.forcedDeleteIfDuplicated(),d.forcedDeleteIfDuplicated());const j=b.songId===d.songId,l=c===a+1;j&&(e<=f||l&&h)&&(!d.isForcedDeleted&&(!d.isDuplicate||i)&&d.deleteMe(i),!b.isRemainedOriginal&&!b.isDuplicate&&b.remainMe())}}}const e=4,f=15,g=1,h=!1,k=[],l=\"Delete\",m=document.querySelectorAll(\".chartlist-row\");for(let a=m.length-1;0<=a;--a){const f=m[a],g=f.querySelector(\".chartlist-name\").querySelector(\"a\").innerText,h=f.querySelector(\".chartlist-artist\").querySelector(\"a\").innerText,i=f.querySelector(\".chartlist-timestamp\").querySelector(\"span\").getAttribute(\"title\"),j=new Date(i.replace(\"pm\",\" pm\").replace(\"am\",\" am\")),l=f.querySelector(\".more-item--delete\"),n=b(g+\" - \"+h,j,l,f);c(n),(k.length===e||0===a)&&d()}})();\n"
+    },
+    {
+      "path": "other/compressed-js/compressed-mode2-safe.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fac0eea445ff533f4aa22a2e3983d3c33e9d53fe",
+      "size": 1754,
+      "url": "https://api.github.com/repos/shevchenkoartem/lastfm-smart-deduper/git/blobs/fac0eea445ff533f4aa22a2e3983d3c33e9d53fe",
+      "sha256": "a507155c47adb14b1f6aa25cc5261d26f065f7d3f7c195e0dbfc0f1a60cac977",
+      "text_content": "javascript:(function(){function a(a){const b=document.createElement(\"button\");return b.innerText=l,b.onclick=a,b.style.background=\"#D92323\",b.style.color=\"white\",b.style.padding=\"5px\",b}function b(b,c,d,e){return{songId:b,date:c,isDuplicate:!1,isForcedDeleted:!1,isRemainedOriginal:!1,extraDeleteButton:null,get hasFinalState(){return this.isForcedDeleted||this.isRemainedOriginal},deleteMe:function(){this.isDuplicate=!0,e.style.background=\"#F2CDCF\";{const b=e.querySelectorAll(\"button\"),c=b[b.length-1];c.innerText!==l&&(this.extraDeleteButton=a(function(){d.click()}),e.appendChild(this.extraDeleteButton))}},forcedDeleteIfDuplicated:function(){this.isDuplicate&&!this.isForcedDeleted&&this.deleteMe(!0)},remainMe:function(){e.style.background=\"#DDFFD9\",this.isRemainedOriginal=!0}}}function c(a){k.push(a),k.length>e&&k.shift()}function d(){for(let a=0;a<k.length-1;++a){const b=k[a];for(let c=a+1;c<k.length;++c){const d=k[c];if(b.hasFinalState&&d.hasFinalState)continue;const e=Math.abs(d.date-b.date)/1e3/60,i=e<=g;i&&(b.forcedDeleteIfDuplicated(),d.forcedDeleteIfDuplicated());const j=b.songId===d.songId,l=c===a+1;j&&(e<=f||l&&h)&&(!d.isForcedDeleted&&(!d.isDuplicate||i)&&d.deleteMe(i),!b.isRemainedOriginal&&!b.isDuplicate&&b.remainMe())}}}const e=4,f=15,g=1,h=!1,k=[],l=\"Delete\",m=document.querySelectorAll(\".chartlist-row\");for(let a=m.length-1;0<=a;--a){const f=m[a],g=f.querySelector(\".chartlist-name\").querySelector(\"a\").innerText,h=f.querySelector(\".chartlist-artist\").querySelector(\"a\").innerText,i=f.querySelector(\".chartlist-timestamp\").querySelector(\"span\").getAttribute(\"title\"),j=new Date(i.replace(\"pm\",\" pm\").replace(\"am\",\" am\")),l=f.querySelector(\".more-item--delete\"),n=b(g+\" - \"+h,j,l,f);c(n),(k.length===e||0===a)&&d()}})();\n"
+    },
+    {
+      "path": "other/compressed-js/how-to.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "015969f6d1fb159cbdcea6d88568e82b1cb1b142",
+      "size": 134,
+      "url": "https://api.github.com/repos/shevchenkoartem/lastfm-smart-deduper/git/blobs/015969f6d1fb159cbdcea6d88568e82b1cb1b142",
+      "sha256": "6a51f96f1ea36bc8185615fdc14a691586176334efc8781a0d2204c08f39af33",
+      "text_content": "Use [JSCompress](https://jscompress.com/) as a compression tool.\nDon't forget about updating these files after the script is changed!\n"
+    },
+    {
+      "path": "other/media/lastfm-smart-deduper.psd",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "558f1adb77b0f9ce934d7ef5b53eb75feb3c26f4",
+      "size": 3272817,
+      "url": "https://api.github.com/repos/shevchenkoartem/lastfm-smart-deduper/git/blobs/558f1adb77b0f9ce934d7ef5b53eb75feb3c26f4",
+      "sha256": "6b8442f765fc868da67976c0ed229bfa6e36e178dc848965163b2f372d97de0c"
+    },
+    {
+      "path": "other/test-cases.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2f9c296157629917d651e62bdf15cdb283d0dfa6",
+      "size": 801,
+      "url": "https://api.github.com/repos/shevchenkoartem/lastfm-smart-deduper/git/blobs/2f9c296157629917d651e62bdf15cdb283d0dfa6",
+      "sha256": "48db00e0e4a2cf50f1ae5166edb41b5f150861bb912fb6bb5b2b821744bd50fb",
+      "text_content": "### Some specific cases for white-box testing\n\nsong | time | action\n----- | ----- | ------\na | 10:00 | remain\na | 10:00 | del!\na | 10:00 | del!\n\nsong | time | action\n----- | ----- | ------\na | 09:55 | remain\na | 09:55 | del!\na | 10:00 | del?\n\nsong | time | action\n----- | ----- | ------\na | 09:55 |\nb | 09:55 | remain\nb | 10:00 | del?\n\nsong | time | action\n----- | ----- | ------\na | 10:00 | remain\nb | 10:00 |\na | 10:00 | del!\n\nsong | time | action\n----- | ----- | ------\na | 09:51 | remain\nb | 09:55 |\na | 10:00 | del?\n\nsong | time | action\n----- | ----- | ------\na | 09:55 | remain\nb | 10:00 | \na | 10:00 | del!\n\nsong | time | action\n----- | ----- | ------\na | 09:55 | remain\na | 10:00 | del!\nb | 10:00 |\n\nsong | time | action\n----- | ----- | ------\na | 09:55 | remain\na | 10:00 | del?\nb | 10:05 |\n"
+    }
+  ],
+  "media_review_pins": {
+    ".dedup-work/lastfm56-20261016/media-review/embedded-smart-object.bin": "6faa7702663fe2a3b365c8e227646c66b281f1f59d06816d082027dc6ef0c63f",
+    ".dedup-work/lastfm56-20261016/media-review/layer-0.png": "bc756625f4efa90c5456e3589b641754a25fd7f61c25b3b4c96033480afbe7f7",
+    ".dedup-work/lastfm56-20261016/media-review/layer-3.png": "8a680f71da29ff106e328d22a3a902de99e173133273d61b7dd586d5608c9d82",
+    ".dedup-work/lastfm56-20261016/media-review/layer-2.png": "83aaf8049cb53fd30304aa2d76ee660f058bc7ab3032907c1558917aecf8b096",
+    ".dedup-work/lastfm56-20261016/media-review/composite.png": "3d6fd40db2ab34126262194a4cc95f01617420f1ff84973b117d309a7f0fa1c1",
+    ".dedup-work/lastfm56-20261016/media-review/layer-6.png": "073adfb612f3e1f59e6ed1ab0705edeaa618211d3053f4915b35faa48dad300d",
+    ".dedup-work/lastfm56-20261016/media-review/layer-7.png": "dc76fb42fad225ba06501edad5045789a017fa5a24fb783db167af25c7900a53",
+    ".dedup-work/lastfm56-20261016/media-review/layer-5.png": "1998a6d9f02909516b841d84c3ca98ebd82fdeafc9ef96b7cbba2c6495839616",
+    ".dedup-work/lastfm56-20261016/media-review/embedded-smart-object.png": "5d45c5f86917c39eb45eda4e7175f79aa807afb7a28a682e51734df741558867",
+    ".dedup-work/lastfm56-20261016/media-review/layer-4.png": "826492dba512890cd5b1bc9891589f7dbd72f4d0e4048b0654727bb11f1fddd4",
+    ".dedup-work/lastfm56-20261016/media-review/layer-10.png": "5b3767027152e2f848e30a6edbae618a6ea410eb01da972d37a2405fd34e5f09",
+    ".dedup-work/lastfm56-20261016/media-review/layer-9.png": "63a1077fc7e6899a4896472f048ff1c5f13d7c7ed5cb8c6570d17f514849d056",
+    ".dedup-work/lastfm56-20261016/media-review/all-layer-sheet.png": "a2fce331c9c7edf6332d069dd3a7bd146e4ddc37020d4fac0cbf4229d011377a",
+    ".dedup-work/lastfm56-20261016/media-review/layers.json": "6465387608532457960653d7a45a0ba8e2227d29ebfd22ecffc28bc4bdf95b51",
+    ".dedup-work/lastfm56-20261016/readme-banner.png": "c2c629c7e2958a69dacfbc264e06fc0f8eb94ea87372156c81d1a5f1bda13960"
+  },
+  "psd_layers": {
+    "size": [
+      1280,
+      640
+    ],
+    "layers": [
+      {
+        "index": 0,
+        "name": "Template",
+        "kind": "pixel",
+        "bbox": [
+          0,
+          0,
+          1280,
+          640
+        ],
+        "visible": true,
+        "opacity": 255,
+        "pixel_sha256": "846015ef622c6263085f8808ca7f075ab4acfd0987164c0a746dbfe4a0e3bc6b"
+      },
+      {
+        "index": 1,
+        "name": "Background",
+        "kind": "group",
+        "bbox": [
+          0,
+          0,
+          1280,
+          640
+        ],
+        "visible": true,
+        "opacity": 255
+      },
+      {
+        "index": 2,
+        "name": "White",
+        "kind": "pixel",
+        "bbox": [
+          0,
+          0,
+          1280,
+          640
+        ],
+        "visible": true,
+        "opacity": 255,
+        "pixel_sha256": "b5d922650049c1adaca309e6cc5abf3afb30a2507b3b475be15ca6b34039e98c"
+      },
+      {
+        "index": 3,
+        "name": "Yellow",
+        "kind": "pixel",
+        "bbox": [
+          0,
+          0,
+          1280,
+          640
+        ],
+        "visible": true,
+        "opacity": 255,
+        "pixel_sha256": "444f9b892bc3f62ed9adf69a4d856ebab2261625d1dd467666dac180d6c26816"
+      },
+      {
+        "index": 4,
+        "name": "Blue",
+        "kind": "pixel",
+        "bbox": [
+          0,
+          0,
+          1280,
+          640
+        ],
+        "visible": true,
+        "opacity": 255,
+        "pixel_sha256": "827ff8c7564681cfc151b35df8db0d5a7178e38db592f849b8272eb810dccec1"
+      },
+      {
+        "index": 5,
+        "name": "Green",
+        "kind": "pixel",
+        "bbox": [
+          0,
+          0,
+          1280,
+          640
+        ],
+        "visible": true,
+        "opacity": 255,
+        "pixel_sha256": "77473dced33ada9257fbaee5b4e335de6ed99766f20bc5b461f8b790c7201829"
+      },
+      {
+        "index": 6,
+        "name": "Light Red",
+        "kind": "pixel",
+        "bbox": [
+          0,
+          0,
+          1268,
+          640
+        ],
+        "visible": true,
+        "opacity": 255,
+        "pixel_sha256": "f9aa74f94e2e0f2e6a0a1701e389a1bf8e78135c92cd51e99626756a49b45800"
+      },
+      {
+        "index": 7,
+        "name": "Screenshot",
+        "kind": "smartobject",
+        "bbox": [
+          654,
+          0,
+          1202,
+          640
+        ],
+        "visible": true,
+        "opacity": 255,
+        "pixel_sha256": "c1f38d1691a9555b27f1e6b232a83375c47135a8b47de46ad6e455dddb193d8b"
+      },
+      {
+        "index": 8,
+        "name": "Text",
+        "kind": "group",
+        "bbox": [
+          105,
+          119,
+          556,
+          493
+        ],
+        "visible": true,
+        "opacity": 255
+      },
+      {
+        "index": 9,
+        "name": "Last.fm Logo",
+        "kind": "pixel",
+        "bbox": [
+          157,
+          119,
+          500,
+          206
+        ],
+        "visible": true,
+        "opacity": 255,
+        "pixel_sha256": "d7a2e187bb6d318e577556f5c76bd291aacbdb61e5ef267b7362b9cf743eff70"
+      },
+      {
+        "index": 10,
+        "name": "smart deduper",
+        "kind": "type",
+        "bbox": [
+          105,
+          256,
+          556,
+          493
+        ],
+        "visible": true,
+        "opacity": 255,
+        "pixel_sha256": "48bf065a8906fafbaabb168d324b511f55e1bc8ee96c56f0c5d8326d891104cc",
+        "text": "smart\rdeduper"
+      }
+    ]
+  },
+  "readme_image_url": "https://repository-images.githubusercontent.com/226846544/220b3880-1acd-11ea-9894-d310454be9ae"
+}
