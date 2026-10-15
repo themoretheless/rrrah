@@ -1,0 +1,26 @@
+{
+  "status": "prepared_not_compiled_not_adopted",
+  "producer_sha256": "d5a291b8cdc45c366334c8cc789829eb5289ba289f52eaca73f58e67bc856fe5",
+  "source": "/private/tmp/rrrah-ownerless-collection-full-v2-20261015",
+  "baseline_manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-committed-build-source-415443172-v2-20261015.json",
+  "baseline_manifest_sha256": "12a1804241720cdcb2fcf5e598d846d194bebff9e873a50c1e2ee76518704680",
+  "guard_controls_sha256": "e4ed53ba7f8b2642bd8713be43df59e2620727c1dfd78fdf17bb232461ccd701",
+  "benchmark_harness_sha256": "3e72d8bc1e8a127ba511a417a572880a45a251cbbf3962d311a15f3d91975f82",
+  "changed": [
+    {
+      "path": "crates/rrrah-dedup/src/collection.rs",
+      "baseline_sha256": "01fae3fc3aab108e6a2f941a96cdda8b4b64d6e5413e7f2950d75daf8685e550",
+      "candidate_sha256": "ffcc46691b258a24ebd19f2d7d6e4fa7cf6edd50841937f64eaf9fcff30e8473"
+    }
+  ],
+  "unchanged_files": 3377,
+  "guard_invariants": [
+    "Presence checked once after requests sort; requests thereafter immutably borrowed",
+    "None ownerfields yield empty slice, Some fields preserve complete request slice",
+    "Original stopped and owners_stopped functions unchanged",
+    "Usercallback, sticky cancellation, final callbackfree publication checks retained",
+    "No sourceverification/compare/schedule/model/credit/admission changes",
+    "Test-only benchmark branch selected once, excluded from production; defaulttest selects candidate"
+  ],
+  "scope": "Ownerpresence-only candidate on immutable415baseline, separate from fusedpreverification. All sourcefiles retained, fullcombined decoder/dedup lib/allintegration gate required. Samebinary actualengine benchmark prepared for all9datafamilies x3ownerkinds; no runtime/performance/Root adoption claim."
+}

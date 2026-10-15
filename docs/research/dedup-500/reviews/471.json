@@ -2,7 +2,7 @@
   "index": 471,
   "repository": "Mikerah/perceptual-hashes-benchmark",
   "commit": "ccbdbca27731635bac97d3da797549230d40966c",
-  "review_scope": "complete pinned4file source review and6mocked-dependency language controls; no actual Sharp/image benchmark qualification",
+  "review_scope": "Prior complete pinned-source review reconciled against all current retained Gitblob bytes and fresh immutablecommit/tree binding; not a new source reading or new runtime execution. Unchanged pinned JS module, explicit mocked Sharp/mean/iterator adapters. Six observed language/control-flow behaviors; no actual image decode, Sharp API, dependency or benchmark qualification. No adoption.",
   "decision": "reference",
   "finding": "Full4file review:3empty algorithms, aHash no return, global boolean-word string, bitSt ReferenceError swallowed.6mock-adapter controls; no real image benchmark or adoption.",
   "available_source_evidence": [
@@ -14,6 +14,16 @@
       "truncated": false,
       "lines": 37,
       "source": true,
+      "test": false
+    },
+    {
+      "path": ".gitignore",
+      "local": "03-gitignore",
+      "url": "https://github.com/Mikerah/perceptual-hashes-benchmark/blob/ccbdbca27731635bac97d3da797549230d40966c/.gitignore",
+      "sha256": "4d543c33deebd0bf72554a02c2f286cb48a134a4fa2a8c754a31d9fdeeab910a",
+      "truncated": false,
+      "lines": 104,
+      "source": false,
       "test": false
     }
   ],
@@ -50,5 +60,9 @@
   "reviewed_files": 4,
   "complete_source_review": "perceptual-hashes-benchmark-complete-source-review-20261012.json",
   "complete_runtime_audit": "perceptual-hashes-benchmark-complete-runtime-audit-20261012.json",
-  "runtime_controls_passed": 6
+  "runtime_controls_passed": 6,
+  "full_repository_review_complete": true,
+  "prior_complete_source_review": "docs/research/dedup-500/perceptual-hashes-benchmark-complete-source-review-20261012.json",
+  "prior_runtime_audit": "docs/research/dedup-500/perceptual-hashes-benchmark-complete-runtime-audit-20261012.json",
+  "source_review_reconciliation": "docs/research/dedup-500/legacy-three-source-review-reconciliation-20261015.json"
 }

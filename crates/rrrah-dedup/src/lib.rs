@@ -482,6 +482,32 @@ mod tests {
     }
 
     #[test]
+    fn every_byte_pattern_in_low_and_high_bits_matches_full_scan_at_every_radius() {
+        let values: Vec<u64> = (0..=255_u64).flat_map(|byte| [byte, byte << 56]).collect();
+        let mut index = HammingIndex::new();
+        for (id, &value) in values.iter().enumerate() {
+            index.insert(id as u64, value);
+        }
+        for &query in &values {
+            for radius in 0..=64 {
+                let mut expected: Vec<_> = values
+                    .iter()
+                    .enumerate()
+                    .filter_map(|(id, &value)| {
+                        let distance = (query ^ value).count_ones();
+                        (distance <= radius).then_some(Candidate {
+                            id: id as u64,
+                            distance,
+                        })
+                    })
+                    .collect();
+                expected.sort_unstable_by_key(|candidate| (candidate.distance, candidate.id));
+                assert_eq!(index.search(query, radius), expected);
+            }
+        }
+    }
+
+    #[test]
     fn indexed_search_matches_independent_exhaustive_scan() {
         let mut values = vec![0, u64::MAX, 1, 2, 3, 0];
         let mut seed = 0x1234_5678_9abc_def0_u64;

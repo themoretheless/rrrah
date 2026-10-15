@@ -1,0 +1,22 @@
+{
+  "status": "correctness_verified_benchmark_running_not_adopted",
+  "baseline_commit": "415443172180ef2838716eac4afbdd1cf588e879",
+  "compiler": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: aarch64-apple-darwin\nrelease: 1.98.1\nLLVM version: 22.1.8\n",
+  "correctness_audit": "docs/research/dedup-collection-fused-preverify-v4-opt3-audit-20261015.json",
+  "passed": 58,
+  "ignored_manual_benchmark": 1,
+  "protocol_changes": [
+    "Both branches call wrappers accepting the same dyn Fn cancellation callback",
+    "Opaque callback increments Cell on every timed cancellable checkpoint",
+    "Selective branch fuses only equal original byte counts and digests",
+    "Independent byte vector oracle retained for all pairs in all nine cases",
+    "Callback-free final publication verification retained"
+  ],
+  "source_archive_sha256": "2b13e1351365cbf6573274ee070dd6a478946be7c56300f1850526e43a66845f",
+  "limitations": [
+    "Research-only exact snapshot loop, no production collection or provider integration",
+    "Different callback specialization from v3 means ratios not directly comparable",
+    "No release LTO, cold device IO, hard RSS, Linux or Windows runtime qualification"
+  ],
+  "adoption": false
+}

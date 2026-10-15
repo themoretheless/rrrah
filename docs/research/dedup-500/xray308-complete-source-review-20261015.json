@@ -1,0 +1,55 @@
+{
+  "status": "complete8blob_static_review_with409adapted_core_controls",
+  "whole_repo_complete": true,
+  "repository": "muesli/xray",
+  "commit": "b55c21c6fc7e00c18576461a8e08dd6c9891aba4",
+  "source_manifest": "docs/research/dedup-500/xray308-complete-source-20261015.json",
+  "source_manifest_sha256": "41b6a7b5b2c448a97c4e91d4b472cc359fad06a93874e773362d33d2c58438c1",
+  "fully_read_files": [
+    ".gitignore",
+    "ChangeLog",
+    "LICENSE",
+    "README.md",
+    "admin/arch/xray-git/PKGBUILD",
+    "admin/arch/xray/PKGBUILD",
+    "src/xray.cpp",
+    "xray.pro"
+  ],
+  "license": "MIT code and LICENSE read; externalQt/pHash/FFmpeg not vendored or qualified",
+  "core_controls": "docs/research/dedup-500/xray308-core-controls-20261015.json",
+  "core_controls_sha256": "befd3f390785ed253d53f7be71582c1a538715f755a83e254fbba1b1a39ccb36",
+  "upstream_tests_present": false,
+  "adopted": false,
+  "findings": [
+    {
+      "kind": "executed_original_core_with_adapters",
+      "detail": "Default distance16 accepts15 and excludes16; distance0 excludes identicalhashes. One currentframe versus5same priorhashes counts5matches;5versus5counts25. This is crossproduct evidence, not distinct matchedframe coverage; it can exceed current framecount."
+    },
+    {
+      "kind": "executed_original_core_with_adapters",
+      "detail": "Selfmatches skipped.200deterministic random/collision multimap cases agree with independent pairwise scalaroracle and retainqueryhashes. Controls confirm implementation behavior, not duplicate quality or actualQtsemantics."
+    },
+    {
+      "kind": "static",
+      "detail": "Both ffprobe and eachffmpeg child have60second wait, but exitstatus/output validation absent after successfulwait. Shared snapdirectory reused, failedpHash inputs leftundeleted; earlier frames can survive subsequent failed snapshots. No actualprocess execution done."
+    },
+    {
+      "kind": "static",
+      "detail": "sha1Sum reads wholefile intoQByteArray and returns empty onopenfailure; exactlabel compares returnedbytearrays without typedIOstatus or byteconfirmation. Twofailedopens can therefore compareequal under otherconditions; no actualQtIO runtimecontrol."
+    },
+    {
+      "kind": "static",
+      "detail": "timeToString discards hours through minutes%60; publicframe/distance integers unvalidated; duration sampling truncatesseconds and uses fewsnapshots rather than completevideo coverage."
+    },
+    {
+      "kind": "static",
+      "detail": "No source mutation/dependency guards, ownergeneration cancellation, boundedindex/pair budget or atomic resultpublication. Repeated keys()/values() materializations occur inside scanloops; no measured runtime/performanceclaim."
+    },
+    {
+      "kind": "static",
+      "detail": "Case-sensitive extensionwhitelist skips uppercase names; recursive directory walk omits symlinks/hiddenpaths. QTemporaryDir validity unchecked. No format/platform fullcoverage."
+    }
+  ],
+  "transfer_decision": "Do not adopt aggregation/classification orwholefile SHA1path. Keep distinctframe coverage, typedIO/refusal and bounded streaming separate from sampledperceptual candidates.",
+  "scope": "All8upstream regulartext blobs fullyread and immutablecommit/tree/blob sizes/SHA1/SHA256 verified. Original2corefunction bodies compiledunchanged under explicit authoredQt-shapedvector multimap andscalarpopcount adapters,409checks. No realQt/pHash/FFmpeg/ffprobe/media decode/fullCLI/packaging/quarantine/deletion or performance qualification. Packaging scripts read only, no network/build/install/READMEcommands executed."
+}

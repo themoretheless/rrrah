@@ -1,0 +1,10 @@
+#!/usr/bin/env python3
+from pathlib import Path
+import json,subprocess,hashlib,os
+R=Path(__file__).resolve().parents[1];D=R/'docs/research';sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest();A=D/'dedup-actual-collection-metadata-v1-20261015.json';a=json.loads(A.read_text());assert a['returncode']==0;Q=Path('/private/tmp/rrrah-current-strict-test-metadata-v1-20261015');Q.mkdir(exist_ok=False);O=D/'dedup-current-strict-test-metadata-v1-20261015.json';assert not O.exists();cmd=a['command'].copy();cmd[cmd.index('-o')+1]=str(Q/'tests.rmeta');cmd+=['-Dwarnings'];pins={str(p.relative_to(R)):sha(p)for p in (R/'crates/rrrah-dedup').rglob('*.rs')};pins.update({str(p.relative_to(R)):sha(p)for p in [R/'Cargo.toml',R/'Cargo.lock',R/'crates/rrrah-dedup/Cargo.toml',R/'.cargo/config.toml']});assert all(sha(k)==h for k,h in a['dependency_pins'].items());env=os.environ.copy();env.update(CARGO_MANIFEST_DIR=str(R/'crates/rrrah-dedup'),RRRAH_BUILT_RECIPE_ID=a['recipe']);d=dict(status='running',producer_pid=os.getpid(),producer_sha256=sha(__file__),prior_metadata_report_sha256=sha(A),source_pins=pins,dependency_pins=a['dependency_pins'],command=cmd,scope='Current whole dedup library cfgtest with decode/raster enabled, strictwarnings plus missing-debug lint, directrustc metadata against real cached baseline core/decoder deps. No link/testexecution/fullCargo dependencyresolution/recipeidentity/allfeatures/MSRV/fullworkspace/platform qualification.')
+def save():
+ t=O.with_suffix('.tmp');t.write_text(json.dumps(d,indent=2)+'\n');t.replace(O)
+log=Q/'compile.log'
+with log.open('x')as out:
+ child=subprocess.Popen(cmd,cwd=R,env=env,stdout=out,stderr=subprocess.STDOUT);d['child_pid']=child.pid;save();rc=child.wait()
+changed=[p for p,h in pins.items()if sha(R/p)!=h];assert all(sha(k)==h for k,h in a['dependency_pins'].items());d.update(status='strict_metadata_passed'if rc==0 and not changed else'terminal_failure_or_drift',returncode=rc,source_changes=changed,log=str(log),log_sha256=sha(log));save();print('Current full dedup cfgtest strictmetadata',rc,'sourcechanges',changed);raise SystemExit(rc or bool(changed))

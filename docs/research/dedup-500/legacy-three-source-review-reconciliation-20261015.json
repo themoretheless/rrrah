@@ -1,0 +1,136 @@
+{
+  "status": "verified_prior_source_reviews_reconciled_not_new_runtime",
+  "producer_sha256": "9635c2463139acdad529dcf8a344921348cf8e93d204c8a7d1e4f0183571190b",
+  "fresh_bindings_sha256": "f79e6079f9cb1ad0d70d015cedd2057fbdb5ce7c6bc85325c566e37a9330546b",
+  "entries": [
+    {
+      "index": 100,
+      "repository": "mk-fg/image-deduplication-tool",
+      "commit": "b78cef579284f33b59959800b7037277c27648f1",
+      "tree": "51abe253f7f491f745d0afadc7d66c219e0f179d",
+      "prior_registry_sha256": "9dd584ff749a439b16ac0d611d6c9dc0d4259bf54e3691face5f98a2f72a7c2f",
+      "manifest": "docs/research/dedup-500/image-deduplication-tool-full-source-20261012.json",
+      "manifest_sha256": "e7e725522d615b9001e25fc556ca75f24028a2a8585a4ca4149831b7033ce3c0",
+      "prior_review": "docs/research/dedup-500/image-deduplication-tool-complete-source-review-20261012.json",
+      "prior_review_sha256": "a6382a1d48cf56cd27041e84603aed0d0a56b0dfef89802b1021acd7f39a8f55",
+      "prior_runtime_audit": "docs/research/dedup-500/image-deduplication-tool-complete-runtime-audit-20261012.json",
+      "prior_runtime_audit_sha256": "e0385b0036b83925027cc9f198e7177c65c1d2cac00eb8606ab335f271c7db56",
+      "runtime_pin_drift": [],
+      "prior_runtime_scope": "Bounded path-cache, enumeration and CLI behavior with original function bodies and adapters. No exact Python2/libpHash environment, image-hash precision, asynchronous child lifecycle or feh/delete qualification. No adoption.",
+      "files": [
+        {
+          "path": ".gitignore",
+          "source": "/Users/themoretheless/.codex/tmp/rrrah-image-deduplication-tool-source-20261012/.gitignore",
+          "sha256": "15111b4ca3129ec6d92345f743fd07bb890b89ee8a0a52e667c64ebc56a9bf52",
+          "git_blob_sha1": "f3b938aec30bb0e0aaa724d4e2aaf9130845745a",
+          "bytes": 6
+        },
+        {
+          "path": "COPYING",
+          "source": "/Users/themoretheless/.codex/tmp/rrrah-image-deduplication-tool-source-20261012/COPYING",
+          "sha256": "dc1342cc1cb49e24c1c9e8a495acc9625ce2e04146c116279af0ab0949cd829c",
+          "git_blob_sha1": "4d74262d2ce746ea352c1ac91841654d16b1a70e",
+          "bytes": 491
+        },
+        {
+          "path": "README.md",
+          "source": "/Users/themoretheless/.codex/tmp/rrrah-image-deduplication-tool-source-20261012/README.md",
+          "sha256": "ce824d0da1ff70f92130368f36245aeb66622fb0b93345d717ba97cebfd80262",
+          "git_blob_sha1": "20a3e7a0eb69ef09d1705daa9e28e0bc06d8bee9",
+          "bytes": 7238
+        },
+        {
+          "path": "image_matcher.py",
+          "source": "/Users/themoretheless/.codex/tmp/rrrah-image-deduplication-tool-source-20261012/image_matcher.py",
+          "sha256": "cd71ed9961b5295a0f388dca0534c67d28feda7c5b2eb7595def8c652168c611",
+          "git_blob_sha1": "4ac17effb19630111266b00511f0c67813cb5264",
+          "bytes": 7135
+        }
+      ]
+    },
+    {
+      "index": 123,
+      "repository": "alexander-marquardt/deduplicate-elasticsearch",
+      "commit": "b352e7c16796eb1e2f7836c3b5263b478a220f22",
+      "tree": "52ad4a2f273b51e3f61d42d84d99c1889bbf44f3",
+      "prior_registry_sha256": "48e9220ff485d92e793b04088c48faa7264bccf907cd2a0be7cdea3084d9530d",
+      "manifest": "docs/research/dedup-500/deduplicate-elasticsearch-full-source-20261012.json",
+      "manifest_sha256": "66c0775acd47c595f24484c2a08590bb6e1f554e704a9c87bcbf154f182d5799",
+      "prior_review": "docs/research/dedup-500/deduplicate-elasticsearch-complete-source-review-20261012.json",
+      "prior_review_sha256": "6374d5fde886e76a8c28fb6fe59cd3e54a24a4a6d9472c69540ba5f434fc76a8",
+      "prior_runtime_audit": "docs/research/dedup-500/deduplicate-elasticsearch-complete-runtime-audit-20261012.json",
+      "prior_runtime_audit_sha256": "3cbfa4dba543e09e0a56bc5c54ce9ca7669547868f75bc2b8024bbc4e2957a49",
+      "runtime_pin_drift": [],
+      "prior_runtime_scope": "Original key grouping only: structural key collisions and repeated-id behavior. No Elasticsearch/scan/mget/delete, external server or full module qualification; source does not implement equality confirmation or DELETE.",
+      "files": [
+        {
+          "path": "LICENSE",
+          "source": "/Users/themoretheless/.codex/tmp/rrrah-deduplicate-elasticsearch-source-20261012/LICENSE",
+          "sha256": "a5c2035fa58c038d280da0c965876724dd74569bce4627e76450984c5f9e989a",
+          "git_blob_sha1": "24ef8c1b865c54b77b8ebe2e7a756c6517aba4fc",
+          "bytes": 1076
+        },
+        {
+          "path": "README.md",
+          "source": "/Users/themoretheless/.codex/tmp/rrrah-deduplicate-elasticsearch-source-20261012/README.md",
+          "sha256": "e777e3101f8b531ad2c0a627460f6d6950f208543362c0a89e66d7c593bda613",
+          "git_blob_sha1": "8911ada6890a888a30e238b31b4fd40f251cbb80",
+          "bytes": 383
+        },
+        {
+          "path": "deduplicate-elaticsearch.py",
+          "source": "/Users/themoretheless/.codex/tmp/rrrah-deduplicate-elasticsearch-source-20261012/deduplicate-elaticsearch.py",
+          "sha256": "add8072aa04a49f35f02ac1f75c2b10b485aedd7a9b5706919db78e6916e0ab3",
+          "git_blob_sha1": "566ff240a3767062dc4f1b94c7b19cb129b4ac89",
+          "bytes": 2401
+        }
+      ]
+    },
+    {
+      "index": 471,
+      "repository": "Mikerah/perceptual-hashes-benchmark",
+      "commit": "ccbdbca27731635bac97d3da797549230d40966c",
+      "tree": "c1916d8e852a4a6b725aaca7ddf46002271dea7e",
+      "prior_registry_sha256": "76151c7d5fa828e32a84a984eeb02d16a5f6e37adda531585414cf515123123b",
+      "manifest": "docs/research/dedup-500/perceptual-hashes-benchmark-full-source-20261012.json",
+      "manifest_sha256": "0124f675db13caaa527cc9047c3e1dacd56ae69abada10c353db6de84e9f7fd0",
+      "prior_review": "docs/research/dedup-500/perceptual-hashes-benchmark-complete-source-review-20261012.json",
+      "prior_review_sha256": "d882406963f1dfeae67fa0c5d754ad0762b1a4bb132cd7c02f0b62a1d97cefb6",
+      "prior_runtime_audit": "docs/research/dedup-500/perceptual-hashes-benchmark-complete-runtime-audit-20261012.json",
+      "prior_runtime_audit_sha256": "47359ebe9319fa14f66671a2ae54c7626e1fa3f92130edc582c62933ec738c12",
+      "runtime_pin_drift": [],
+      "prior_runtime_scope": "Unchanged pinned JS module, explicit mocked Sharp/mean/iterator adapters. Six observed language/control-flow behaviors; no actual image decode, Sharp API, dependency or benchmark qualification. No adoption.",
+      "files": [
+        {
+          "path": ".gitignore",
+          "source": "/Users/themoretheless/.codex/tmp/rrrah-perceptual-hashes-benchmark-source-20261012/.gitignore",
+          "sha256": "4d543c33deebd0bf72554a02c2f286cb48a134a4fa2a8c754a31d9fdeeab910a",
+          "git_blob_sha1": "67045665db202cf951f839a5f3e73efdcfd45021",
+          "bytes": 1610
+        },
+        {
+          "path": "LICENSE",
+          "source": "/Users/themoretheless/.codex/tmp/rrrah-perceptual-hashes-benchmark-source-20261012/LICENSE",
+          "sha256": "8e76b23ae5255d4704e83197b87ced287472d9310c058ff1d0d3cf71dec8764a",
+          "git_blob_sha1": "1021b2c1d690253705b65d0e05e9acf9af506631",
+          "bytes": 1064
+        },
+        {
+          "path": "README.md",
+          "source": "/Users/themoretheless/.codex/tmp/rrrah-perceptual-hashes-benchmark-source-20261012/README.md",
+          "sha256": "a7e0c2e6ed3034588186617852e4ddf6d6405c75ada8aa761eb15a4d9e8d2d29",
+          "git_blob_sha1": "6327cc65500a90b4913f19710c9bb19df0aececd",
+          "bytes": 29
+        },
+        {
+          "path": "index.js",
+          "source": "/Users/themoretheless/.codex/tmp/rrrah-perceptual-hashes-benchmark-source-20261012/index.js",
+          "sha256": "fe74e9706a02e64817aac5120cae64319e4fbe37ba4d323cfa4838e9962d0454",
+          "git_blob_sha1": "4151920bddcc511f449ca35ba215b0a243ea41a6",
+          "bytes": 793
+        }
+      ]
+    }
+  ],
+  "scope": "Three prior fullsource readings and bounded adapter controls linked back to original500registry after current fulltree/source/hash checks. Original review findings/limits retained. Runtime audit pin drift listed explicitly; no reruns, server/media/deletion operations, new source adoption or all500completion claim."
+}

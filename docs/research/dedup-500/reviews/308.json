@@ -2,9 +2,9 @@
   "index": 308,
   "repository": "muesli/xray",
   "commit": "b55c21c6fc7e00c18576461a8e08dd6c9891aba4",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All8upstream regulartext blobs fullyread and immutablecommit/tree/blob sizes/SHA1/SHA256 verified. Original2corefunction bodies compiledunchanged under explicit authoredQt-shapedvector multimap andscalarpopcount adapters,409checks. No realQt/pHash/FFmpeg/ffprobe/media decode/fullCLI/packaging/quarantine/deletion or performance qualification. Packaging scripts read only, no network/build/install/READMEcommands executed.",
   "decision": "reference",
-  "finding": "C++ media perceptual hash/frame Hamming threshold; selected fixed threshold lacks qualified negative corpus.",
+  "finding": "Complete8blob review and409originalcore checks with scalarQt/pHash adapters: repeatedframe hashes overcount5x5as25, strictdistance boundary and wholefileSHA1/IO/sourceguard gaps. No realmedia/Qt/process/CLI or sourceadoption qualification.",
   "available_source_evidence": [
     {
       "path": "src/xray.cpp",
@@ -14,6 +14,56 @@
       "truncated": false,
       "lines": 365,
       "source": true,
+      "test": false
+    },
+    {
+      "path": ".gitignore",
+      "local": "03-gitignore",
+      "url": "https://github.com/muesli/xray/blob/b55c21c6fc7e00c18576461a8e08dd6c9891aba4/.gitignore",
+      "sha256": "21f347dd5f59d94fd1f9d86b9436d45fcec43bf3cd8eedef89e72925405e924d",
+      "truncated": false,
+      "lines": 31,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "ChangeLog",
+      "local": "04-ChangeLog",
+      "url": "https://github.com/muesli/xray/blob/b55c21c6fc7e00c18576461a8e08dd6c9891aba4/ChangeLog",
+      "sha256": "18f52ecaeb30475704ac12750def80918888ab6fe7983022f73cab7c4f6a1a9f",
+      "truncated": false,
+      "lines": 10,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "admin/arch/xray-git/PKGBUILD",
+      "local": "05-PKGBUILD-git",
+      "url": "https://github.com/muesli/xray/blob/b55c21c6fc7e00c18576461a8e08dd6c9891aba4/admin/arch/xray-git/PKGBUILD",
+      "sha256": "86bdc7f1e8b8b0e422ca7de464683524f2cb8e7ff2c0da6ea72b5238e028ff7b",
+      "truncated": false,
+      "lines": 31,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "admin/arch/xray/PKGBUILD",
+      "local": "06-PKGBUILD",
+      "url": "https://github.com/muesli/xray/blob/b55c21c6fc7e00c18576461a8e08dd6c9891aba4/admin/arch/xray/PKGBUILD",
+      "sha256": "deca6876ddb484c5b1336c8c7b37875de1d73ddd033c45693d747f6fa7d6df12",
+      "truncated": false,
+      "lines": 25,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "xray.pro",
+      "local": "07-xray.pro",
+      "url": "https://github.com/muesli/xray/blob/b55c21c6fc7e00c18576461a8e08dd6c9891aba4/xray.pro",
+      "sha256": "896bac635a45a781775cdfb4fd917a6505aca633f80307b3e42efb4178f6edd9",
+      "truncated": false,
+      "lines": 15,
+      "source": false,
       "test": false
     }
   ],
@@ -44,5 +94,8 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_review_complete": true,
+  "complete_source_review": "docs/research/dedup-500/xray308-complete-source-review-20261015.json",
+  "core_runtime_audit": "docs/research/dedup-500/xray308-core-controls-20261015.json"
 }

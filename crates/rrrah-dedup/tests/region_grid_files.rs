@@ -5,7 +5,7 @@ use rrrah_dedup::{
     animated::AnimationBudget,
     geometry::GeometryPolicy,
     local::{LocalPolicy, MatchPolicy},
-    local_scan::{LocalFilePolicy, compare_local_files_projective},
+    local_scan::LocalFilePolicy,
     warp::WarpPolicy,
 };
 fn policy() -> LocalFilePolicy {
@@ -45,10 +45,7 @@ fn policy() -> LocalFilePolicy {
 fn automatic_region_grid_matches_declared_regions_and_lifecycle() {
     use rrrah_dedup::{
         geometry::ProjectiveSamplingPolicy,
-        local_scan::{
-            LocalFileError, ProjectivePyramidPhotometricFilePolicy,
-            compare_local_files_projective_pyramid_photometric,
-        },
+        local_scan::{LocalFileError, ProjectivePyramidPhotometricFilePolicy},
         warp::{ColorFilterPolicy, FilterColorSpace, FilterPolicy, PhotometricFitMode, PhotometricPolicy},
     };
     use std::cell::Cell;

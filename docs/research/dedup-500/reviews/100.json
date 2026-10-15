@@ -2,7 +2,7 @@
   "index": 100,
   "repository": "mk-fg/image-deduplication-tool",
   "commit": "b78cef579284f33b59959800b7037277c27648f1",
-  "review_scope": "complete pinned4file review with8serial Python3/hash-adapter controls; Python2/libpHash/async/feh unqualified",
+  "review_scope": "Prior complete pinned-source review reconciled against all current retained Gitblob bytes and fresh immutablecommit/tree binding; not a new source reading or new runtime execution. Bounded path-cache, enumeration and CLI behavior with original function bodies and adapters. No exact Python2/libpHash environment, image-hash precision, asynchronous child lifecycle or feh/delete qualification. No adoption.",
   "decision": "reference",
   "finding": "Full4file review: stale path cache/failed-hash no retry, direct-file input ignored, top-n exceeds limit.8serial adapted controls. Async deadline/RSS absent and exceptional cleanup unreaped per static source. No adoption.",
   "license_metadata": "WTFPL",
@@ -18,6 +18,16 @@
       "truncated": false,
       "lines": 200,
       "source": true,
+      "test": false
+    },
+    {
+      "path": ".gitignore",
+      "local": "03-gitignore",
+      "url": "https://github.com/mk-fg/image-deduplication-tool/blob/b78cef579284f33b59959800b7037277c27648f1/.gitignore",
+      "sha256": "15111b4ca3129ec6d92345f743fd07bb890b89ee8a0a52e667c64ebc56a9bf52",
+      "truncated": false,
+      "lines": 1,
+      "source": false,
       "test": false
     }
   ],
@@ -50,5 +60,9 @@
   "reviewed_files": 4,
   "complete_source_review": "image-deduplication-tool-complete-source-review-20261012.json",
   "complete_runtime_audit": "image-deduplication-tool-complete-runtime-audit-20261012.json",
-  "runtime_controls_passed": 8
+  "runtime_controls_passed": 8,
+  "full_repository_review_complete": true,
+  "prior_complete_source_review": "docs/research/dedup-500/image-deduplication-tool-complete-source-review-20261012.json",
+  "prior_runtime_audit": "docs/research/dedup-500/image-deduplication-tool-complete-runtime-audit-20261012.json",
+  "source_review_reconciliation": "docs/research/dedup-500/legacy-three-source-review-reconciliation-20261015.json"
 }

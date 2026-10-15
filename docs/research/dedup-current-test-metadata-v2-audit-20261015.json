@@ -1,0 +1,17 @@
+{
+  "status": "verified156_strict_metadata_targets_not_runtime",
+  "producer_report": "docs/research/dedup-current-test-metadata-v2-20261015.json",
+  "producer_report_sha256": "219a93eaa31e8336edf6d7e1c302979639d5f2562356573983bdc343e78b5fcf",
+  "auditor_sha256": "3ddf346e4f13f177bd1803439e8d87a8863c62edb3941fd2eb9bc36234ca29b7",
+  "accounted_targets": 156,
+  "retained_successes": 147,
+  "rerun_successes": 9,
+  "source_changes_during_checks": [],
+  "historical_fixture_pins": {
+    "crates/rrrah-dedup/tests/fixtures/joint-geometry-204100.bits.rs": "dc7d959391fb4dbd3c6405b1f38610f17368ee3b6b251cfcf1cebde4ccbe1901",
+    "crates/rrrah-dedup/tests/fixtures/joint-geometry-211900.bits.rs": "24e872135357046370bb7ea1a922e86bce1cc3479d78524a1fb115b9f338caa5"
+  },
+  "declared_test_functions_preserved_in_changed_sources": true,
+  "required_feature_skips": [],
+  "scope": "147 prior successful production-library/unit/integration metadata checks retained; only nine changed warning-failing integrations rerun. All other source/manifests/dependency pins unchanged, same current production metadata and strict compiler flags. Matching decode/raster targets only; no execution, Clippy, actual current decoder/Core Cargo rebuild, allfeatures, workspace, platform or performance proof. Shared captured legacy fixture data retained with narrow expected-dead-code annotations."
+}

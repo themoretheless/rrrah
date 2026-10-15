@@ -145,12 +145,16 @@ fn seeded_identity_noise_and_outliers_match_unpruned_bits_and_exercise_dominance
         "reference comparisons must actually exercise dominated candidates"
     );
 }
+// Shared captures retain legacy outputs; this regression compares the full reference directly.
+#[expect(dead_code)]
 mod data_204100 {
     include!("fixtures/joint-geometry-204100.bits.rs");
     pub fn raw() -> Vec<[f64; 4]> {
         POINTS.iter().map(|p| p.map(f64::from_bits)).collect()
     }
 }
+// Shared captures retain legacy outputs; this regression compares the full reference directly.
+#[expect(dead_code)]
 mod data_211900 {
     include!("fixtures/joint-geometry-211900.bits.rs");
     pub fn raw() -> Vec<[f64; 4]> {

@@ -1,0 +1,53 @@
+{
+  "status": "complete_static_review_runtime_unqualified",
+  "whole_repo_complete": true,
+  "index": 379,
+  "repository": "RobotTeam/JavaPhash",
+  "commit": "db587d50559621d3fcf7f9aae11adf67264c4380",
+  "source_manifest": "docs/research/dedup-500/javaphash379-complete-source-20261015.json",
+  "source_manifest_sha256": "bae659b9484b1369d0ea2959a83a65fbc723589cf872c9799ffdd2748d5131d4",
+  "all_upstream_blobs_read": 11,
+  "java_source_files": 6,
+  "upstream_tests_present": false,
+  "compiler_runtime_execution": false,
+  "java_runtime_diagnostic": "java_home -V returned1: Unable to locate a Java Runtime. No install attempted.",
+  "algorithm": "Inplace recursive Gaussian-like blur,180angle Radon projections, perangle variance normalization,40DCT coefficients quantized0..255, maximum cyclic Pearson correlation. This is not a64bit Hamming digest or an identity proof.",
+  "static_findings": [
+    {
+      "area": "image buffer size/equality",
+      "finding": "CImage(String) allocates grayscale data[width*height] but sets size=width*height*numComponents. equals iterates other.size; an equal successful3component image can exceed both grayscale buffers.",
+      "status": "source-derived not executed"
+    },
+    {
+      "area": "image format/error admission",
+      "finding": "ImageIO.read null not checked; only IOException caught and printed, leaving partial object. Nonbyte image layouts refused, only onecomponent orTYPE_3BYTE_BGR handled; alpha/RGBint layouts lack uniform typed support. Products use uncheckedint arithmetic and allocation has no explicit creditlimit.",
+      "status": "source-derived not executed"
+    },
+    {
+      "area": "mutation",
+      "finding": "_ph_image_digest invokes img.blur in place. Repeated digest/compare operations reuse modified bytes, no immutable snapshot or source validation.",
+      "status": "source-derived not executed"
+    },
+    {
+      "area": "degenerate features",
+      "finding": "Variance normalization and DCT minmax division have no finite/zero guard. Correlation denominator can be zero; max starts0 and no typed unknown/refusal distinguishes invalid or constant digest.",
+      "status": "source-derived not executed"
+    },
+    {
+      "area": "public projection count",
+      "finding": "Public N is unvalidated while tangent table is fixed180entries and array dimensions/products use N; invalidcounts can fail or change angular semantics.",
+      "status": "source-derived not executed"
+    },
+    {
+      "area": "lifecycle/resources",
+      "finding": "No cancellation, model/source generations, memory/admission bounds, cache validation or guarded atomic publication. Main uses hardcodedWindows paths and does not print returned similarity.",
+      "status": "all source read, no runtime claim"
+    }
+  ],
+  "license": {
+    "declared": "MIT, Tommy Lee2018, completeLICENSE read",
+    "provenance_limit": "README claims100percent derived from C++pHash. This declaration alone does not establish upstream derivation rights; provenance must be checked before copying. No upstream license assertion made."
+  },
+  "decision": "Reference only, no productioncode or metric adoption",
+  "scope": "All11upstream blobs read and Gitblob-size/SHA1/SHA256 checked with fresh immutablecommit/tree binding. Static findings only; no Java compile, runtime/images, quality, performance or algorithm equivalence qualification. No assets or tests are present in pinned tree. Does not complete original500 review objective."
+}

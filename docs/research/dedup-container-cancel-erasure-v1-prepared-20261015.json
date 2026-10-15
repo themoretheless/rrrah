@@ -1,0 +1,16 @@
+{
+  "status": "prepared_not_compiled_not_adopted",
+  "producer_sha256": "2c7494e8035c53e4ea7fc25fd4218884357b84b66db53fc1b449e1a06072815d",
+  "source": "/private/tmp/rrrah-container-cancel-erasure-v1-20261015",
+  "baseline_manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-committed-build-source-415443172-v2-20261015.json",
+  "baseline_manifest_sha256": "12a1804241720cdcb2fcf5e598d846d194bebff9e873a50c1e2ee76518704680",
+  "changed": [
+    {
+      "path": "crates/rrrah-dedup/src/container.rs",
+      "baseline_sha256": "8cb92c3e63f1cd8047282c33fd050787986d9a9b352a5f5e5d9b2ea5e080253a",
+      "candidate_sha256": "521cb07d9835c0b8fa9de16893f70729833637169d21f84b4794f6fb8eff8c1b"
+    }
+  ],
+  "unchanged_files": 3377,
+  "scope": "Only private prepare_presentation callbackparameter erased toborrowed dynFn; four existing byvalueclosure callsites nowborrow, alreadyborrowedcallsite unchanged. Functionbody and source/decode/budget/callback/publication guards unchanged. Fullsame baseline package/target gates and runtime/performance/compiler measurements required; longcurrent baseline container codegen motivates hypothesis only, not rootcause or speedup proof."
+}

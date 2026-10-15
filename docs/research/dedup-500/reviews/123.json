@@ -2,7 +2,7 @@
   "index": 123,
   "repository": "alexander-marquardt/deduplicate-elasticsearch",
   "commit": "b352e7c16796eb1e2f7836c3b5263b478a220f22",
-  "review_scope": "complete pinned3file source review with8original-key-function controls; no external Elasticsearch/fullmodule execution",
+  "review_scope": "Prior complete pinned-source review reconciled against all current retained Gitblob bytes and fresh immutablecommit/tree binding; not a new source reading or new runtime execution. Original key grouping only: structural key collisions and repeated-id behavior. No Elasticsearch/scan/mget/delete, external server or full module qualification; source does not implement equality confirmation or DELETE.",
   "decision": "reference",
   "finding": "Full3file review: field boundary/type collisions before MD5 and repeated-ID retention.8original-key controls. Equality/DELETE remains TODO; no server call or adoption.",
   "available_source_evidence": [
@@ -50,5 +50,9 @@
   "reviewed_files": 3,
   "complete_source_review": "deduplicate-elasticsearch-complete-source-review-20261012.json",
   "complete_runtime_audit": "deduplicate-elasticsearch-complete-runtime-audit-20261012.json",
-  "runtime_controls_passed": 8
+  "runtime_controls_passed": 8,
+  "full_repository_review_complete": true,
+  "prior_complete_source_review": "docs/research/dedup-500/deduplicate-elasticsearch-complete-source-review-20261012.json",
+  "prior_runtime_audit": "docs/research/dedup-500/deduplicate-elasticsearch-complete-runtime-audit-20261012.json",
+  "source_review_reconciliation": "docs/research/dedup-500/legacy-three-source-review-reconciliation-20261015.json"
 }

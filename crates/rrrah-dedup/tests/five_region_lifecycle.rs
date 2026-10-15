@@ -46,7 +46,7 @@ fn joined_regions_cancel_mutation_and_retry_are_atomic() {
     use rrrah_dedup::{
         geometry::ProjectiveSamplingPolicy,
         local_scan::{
-            LocalFileError, ProjectiveComplementaryFilePolicy, ProjectivePortfolioFilePolicy,
+            ProjectiveComplementaryFilePolicy, ProjectivePortfolioFilePolicy,
             ProjectivePyramidPhotometricFilePolicy,
         },
         warp::{

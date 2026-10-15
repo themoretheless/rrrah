@@ -116,8 +116,6 @@ fn geometry_collection_policies_refuse_before_file_iteration() {
     use rrrah_dedup::{
         anchor_rank::AnchorRankPolicy, local_rank::LocalRankPolicy, rank_region::RankRegionPolicy,
     };
-    let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/rotation");
-    let a = rrrah_decode::DecodeRequest::new(root.join("base.png"));
     let budget = rrrah_core::MemoryBudget::new(64 * 1024 * 1024);
     let p = AnchorRankPolicy {
         local: LocalRankPolicy {

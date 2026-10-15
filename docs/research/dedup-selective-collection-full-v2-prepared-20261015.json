@@ -1,0 +1,28 @@
+{
+  "status": "prepared_not_compiled_not_adopted",
+  "baseline_manifest": "docs/research/dedup-committed-build-source-415443172-v2-20261015.json",
+  "baseline_manifest_sha256": "12a1804241720cdcb2fcf5e598d846d194bebff9e873a50c1e2ee76518704680",
+  "candidate": "/private/tmp/rrrah-selective-collection-full-v2-20261015",
+  "candidate_archive_sha256": "2b13e1351365cbf6573274ee070dd6a478946be7c56300f1850526e43a66845f",
+  "changed": [
+    {
+      "path": "crates/rrrah-dedup/src/collection.rs",
+      "baseline_sha256": "01fae3fc3aab108e6a2f941a96cdda8b4b64d6e5413e7f2950d75daf8685e550",
+      "candidate_sha256": "1ebff1eca9272fcd77e30e8bda320c51914880792a59ba9666217c86000245fe"
+    },
+    {
+      "path": "crates/rrrah-dedup/src/exact.rs",
+      "baseline_sha256": "c76a9df974554fdbbe2569225cc136be90c40defb21f9349d18350f6203dacd5",
+      "candidate_sha256": "245e4d73b295215b1ba627f29c1378ec1770f495c31643fcb0cf4cdc1c842905"
+    }
+  ],
+  "unchanged_files": 3376,
+  "guard_invariants": [
+    "Default nonexact observation retains original leftverify/rightverify/identical order",
+    "Exact fusion only before both visual dependency snapshots activate",
+    "Activated visual dependency guards preserve prior order",
+    "All postpair/postloop/callbackfree publication guards unchanged",
+    "No pair schedule, evidence factory, model loading or budget changes"
+  ],
+  "scope": "Immutable full workspace candidate for actual collection integration testing. Preparation and source accounting only; not a passing compile/runtime/performance or current mutable Root claim."
+}

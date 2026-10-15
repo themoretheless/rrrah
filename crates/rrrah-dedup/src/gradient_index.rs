@@ -14,6 +14,7 @@ pub struct GradientCandidate {
 /// Borrows immutable caller-owned descriptors; only the ordering buffer is reserved here.
 /// A sorted coordinate provides a necessary lower bound, followed by full128-bin distance.
 /// No approximate projection, ambiguity rejection or duplicate identity is implied.
+#[derive(Debug)]
 pub struct GradientDescriptorIndex<'a> {
     entries: &'a [(u64, GradientDescriptor)],
     order: SharedBuffer<usize>,
@@ -564,7 +565,7 @@ mod row_major_tests {
                     *v = match family {
                         1 => 1.,
                         2 => f64::from(dim == i % 128),
-                        _ => ((seed >> 32) as u32 as f64 + 1.),
+                        _ => (seed >> 32) as u32 as f64 + 1.,
                     };
                 }
                 let norm = values.iter().map(|v| v * v).sum::<f64>().sqrt();

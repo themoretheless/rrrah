@@ -132,11 +132,11 @@ fn reflected_geometry_recovers_original_coordinate_mirror_and_refuses_before_io(
     .unwrap();
     let geometry = e.geometry.as_ref().expect("mirrored geometry missing");
     assert!(e.correspondences.len() >= 10);
-    let H = geometry.transform.matrix;
-    let determinant = H[0][0] * (H[1][1] * H[2][2] - H[1][2] * H[2][1])
-        - H[0][1] * (H[1][0] * H[2][2] - H[1][2] * H[2][0])
-        + H[0][2] * (H[1][0] * H[2][1] - H[1][1] * H[2][0]);
-    assert!(determinant < 0., "reflection expected: {H:?}");
+    let h = geometry.transform.matrix;
+    let determinant = h[0][0] * (h[1][1] * h[2][2] - h[1][2] * h[2][1])
+        - h[0][1] * (h[1][0] * h[2][2] - h[1][2] * h[2][0])
+        + h[0][2] * (h[1][0] * h[2][1] - h[1][1] * h[2][0]);
+    assert!(determinant < 0., "reflection expected: {h:?}");
     for p in e.correspondences.iter() {
         assert!((0. ..160.).contains(&p.source[0]) && (0. ..160.).contains(&p.target[0]));
     }

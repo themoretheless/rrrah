@@ -1,0 +1,25 @@
+{
+  "status": "owned_live_compiler_3second_profile_captured",
+  "rustc_pid": 76495,
+  "parent_cargo_pid": 67374,
+  "crate_from_observed_owned_command": "container",
+  "sample_command": [
+    "sample",
+    "76495",
+    "3",
+    "1",
+    "-file",
+    "/private/tmp/rrrah-container-baseline-rustc-profile-20261015.txt"
+  ],
+  "raw_profile": "docs/research/dedup-container-baseline-rustc-profile-20261015.txt",
+  "raw_profile_sha256": "02650caab505692e666c6a9f6b008ed239a6af02858fa0f0b58861968bb63e54",
+  "physical_footprint_reported": "5.1G",
+  "peak_physical_footprint_reported": "23.1G",
+  "observed_backend_frames": [
+    "LiveDebugValuesLegacy::runOnMachineFunction",
+    "VarLocBasedLDV::ExtendRanges",
+    "SelectionDAG",
+    "RegisterCoalescer"
+  ],
+  "scope": "Three-second snapshot of owned baseline containerintegration rustc, not test/libraryruntime. Reported physicalfootprint is compiler memory, not library hardRSS. LLVMmachine-code/debugvariable work observed; no claim that private callbackmonomorphization is sole bottleneck or alltime proportion. Original fullbaseline remains live and unmodified; erasurecandidate requires fullsame gates and measuredcomparison."
+}

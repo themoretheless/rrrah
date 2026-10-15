@@ -214,8 +214,9 @@ mod tests {
                     })
                     .collect();
                 expected.sort_unstable_by_key(|v| (v.distance, v.id));
+                let mut remaining = usize::MAX;
                 let actual = index
-                    .search(query, radius, entries.len(), &mut usize::MAX, &budget, || false)
+                    .search(query, radius, entries.len(), &mut remaining, &budget, || false)
                     .unwrap()
                     .unwrap();
                 assert_eq!(&*actual, expected.as_slice());
@@ -233,13 +234,15 @@ mod tests {
                 .is_none()
         );
         assert_eq!(budget.used(), retained);
+        let mut remaining = usize::MAX;
         assert!(matches!(
-            index.search(0, 64, 0, &mut usize::MAX, &budget, || false),
+            index.search(0, 64, 0, &mut remaining, &budget, || false),
             Err(IndexError::Budget)
         ));
         assert_eq!(budget.used(), retained);
+        let mut remaining = usize::MAX;
         assert!(matches!(
-            index.search(0, 64, 96, &mut usize::MAX, &budget, || true),
+            index.search(0, 64, 96, &mut remaining, &budget, || true),
             Err(IndexError::Cancelled)
         ));
         assert_eq!(budget.used(), retained);

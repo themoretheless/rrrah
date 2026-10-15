@@ -1,0 +1,261 @@
+{
+  "status": "verified_selected_unchanged_metrics_with_real_numpy",
+  "repository": "idealo/imagededup",
+  "commit": "f0534a6ec10c02379c627696fbd486841068631c",
+  "source": "docs/research/dedup-500/evidence/idealo--imagededup/03-information_retrieval.py",
+  "source_sha256": "1b21a177211c3884a8debab173794f7d861d03655dbe813d5a1cd6d0c31dff04",
+  "producer_sha256": "7e7cdedba0195618d0d388fc0768dbf2743210c7ecc23e7588e613e249bb248b",
+  "python": "3.12.14 (main, Aug 25 2026, 13:50:33) [Clang 22.1.3 ]",
+  "numpy_version": "2.3.5",
+  "ordinary_oracle_checks": [
+    {
+      "metric": "avg_prec",
+      "truth": [],
+      "retrieved": [],
+      "actual": 1.0,
+      "expected": 1.0
+    },
+    {
+      "metric": "avg_prec",
+      "truth": [],
+      "retrieved": [
+        "x"
+      ],
+      "actual": 0.0,
+      "expected": 0.0
+    },
+    {
+      "metric": "avg_prec",
+      "truth": [
+        "a"
+      ],
+      "retrieved": [],
+      "actual": 0.0,
+      "expected": 0.0
+    },
+    {
+      "metric": "avg_prec",
+      "truth": [
+        "a"
+      ],
+      "retrieved": [
+        "x"
+      ],
+      "actual": 0.0,
+      "expected": 0.0
+    },
+    {
+      "metric": "avg_prec",
+      "truth": [
+        "a"
+      ],
+      "retrieved": [
+        "a"
+      ],
+      "actual": 1.0,
+      "expected": 1.0
+    },
+    {
+      "metric": "ndcg",
+      "truth": [],
+      "retrieved": [],
+      "actual": 1.0,
+      "expected": 1.0
+    },
+    {
+      "metric": "ndcg",
+      "truth": [],
+      "retrieved": [
+        "x"
+      ],
+      "actual": 0.0,
+      "expected": 0.0
+    },
+    {
+      "metric": "ndcg",
+      "truth": [
+        "a"
+      ],
+      "retrieved": [],
+      "actual": 0.0,
+      "expected": 0.0
+    },
+    {
+      "metric": "ndcg",
+      "truth": [
+        "a"
+      ],
+      "retrieved": [
+        "x"
+      ],
+      "actual": 0.0,
+      "expected": 0.0
+    },
+    {
+      "metric": "ndcg",
+      "truth": [
+        "a"
+      ],
+      "retrieved": [
+        "a"
+      ],
+      "actual": 1.0,
+      "expected": 1.0
+    },
+    {
+      "metric": "jaccard_similarity",
+      "truth": [],
+      "retrieved": [],
+      "actual": 1.0,
+      "expected": 1.0
+    },
+    {
+      "metric": "jaccard_similarity",
+      "truth": [],
+      "retrieved": [
+        "x"
+      ],
+      "actual": 0.0,
+      "expected": 0.0
+    },
+    {
+      "metric": "jaccard_similarity",
+      "truth": [
+        "a"
+      ],
+      "retrieved": [],
+      "actual": 0.0,
+      "expected": 0.0
+    },
+    {
+      "metric": "jaccard_similarity",
+      "truth": [
+        "a"
+      ],
+      "retrieved": [
+        "x"
+      ],
+      "actual": 0.0,
+      "expected": 0.0
+    },
+    {
+      "metric": "jaccard_similarity",
+      "truth": [
+        "a"
+      ],
+      "retrieved": [
+        "a"
+      ],
+      "actual": 1.0,
+      "expected": 1.0
+    },
+    {
+      "metric": "three_distinct_results",
+      "retrieved": [
+        "a",
+        "b",
+        "x"
+      ],
+      "average_precision": 1.0,
+      "ndcg": 1.0,
+      "jaccard": 0.6666666666666666
+    },
+    {
+      "metric": "three_distinct_results",
+      "retrieved": [
+        "a",
+        "x",
+        "b"
+      ],
+      "average_precision": 0.8333333333333333,
+      "ndcg": 0.9197207891481876,
+      "jaccard": 0.6666666666666666
+    },
+    {
+      "metric": "three_distinct_results",
+      "retrieved": [
+        "b",
+        "a",
+        "x"
+      ],
+      "average_precision": 1.0,
+      "ndcg": 1.0,
+      "jaccard": 0.6666666666666666
+    },
+    {
+      "metric": "three_distinct_results",
+      "retrieved": [
+        "b",
+        "x",
+        "a"
+      ],
+      "average_precision": 0.8333333333333333,
+      "ndcg": 0.9197207891481876,
+      "jaccard": 0.6666666666666666
+    },
+    {
+      "metric": "three_distinct_results",
+      "retrieved": [
+        "x",
+        "a",
+        "b"
+      ],
+      "average_precision": 0.5833333333333333,
+      "ndcg": 0.6934264036172708,
+      "jaccard": 0.6666666666666666
+    },
+    {
+      "metric": "three_distinct_results",
+      "retrieved": [
+        "x",
+        "b",
+        "a"
+      ],
+      "average_precision": 0.5833333333333333,
+      "ndcg": 0.6934264036172708,
+      "jaccard": 0.6666666666666666
+    }
+  ],
+  "negative_controls": {
+    "missing_relevant_in_retrieved_depth": {
+      "truth": [
+        "a",
+        "b"
+      ],
+      "retrieved": [
+        "a",
+        "x"
+      ],
+      "observed_ndcg": 1.0,
+      "standard_binary_ndcg_at_2": 0.6131471927654584,
+      "reason": "Upstream ideal denominator sorts only retrieved relevance, so omitted relevant item does not contribute to idealgain"
+    },
+    "repeated_identifier": {
+      "truth": [
+        "a"
+      ],
+      "retrieved": [
+        "a",
+        "a"
+      ],
+      "observed_average_precision": 2.0,
+      "observed_jaccard": 1.0
+    },
+    "exceptions": {
+      "default_none": "AttributeError",
+      "missing_query": "KeyError",
+      "unknown_metric": "KeyError"
+    },
+    "empty_groundtruth_mean": "NaN",
+    "empty_warnings": [
+      "Mean of empty slice.",
+      "invalid value encountered in scalar divide"
+    ]
+  },
+  "scope": "Entire143line metricsmodule read and executed byte-for-byte using actual numpy, no adapters or dependency imports removed. Authored synthetic filename lists only. Not full repository review, upstream metrics test suite, visual quality/data corpus qualification, currentRoot pipeline metrics or production reuse.",
+  "implications": [
+    "Validate distinct result identifiers and complete query domains before external ranking evaluation",
+    "Use independent idealranking at intendeddepth when comparing missed-positive quality",
+    "Do not report empty-query NaN as success or use ranking metrics to assert pixel identity"
+  ]
+}

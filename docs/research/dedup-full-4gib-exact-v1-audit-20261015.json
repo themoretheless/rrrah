@@ -1,0 +1,18 @@
+{
+  "status": "verified_full_large_stream_equal_and_late_difference",
+  "producer_report": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-full-4gib-exact-v1-20261015.json",
+  "producer_report_sha256": "5a1d61c1b66fdce683f82de8a781bfcb1ae57bee1d570d4525939b1ce442cd8e",
+  "auditor_sha256": "3385ef91b643ff3f9e849a9db76ef82a5fed8edec13caa3060317fc54c30d0a2",
+  "source_sha256": "a21991fc03d304a3ddf1fd3eb2d3a4e0266b612f643ce3a604a4bb3e677268e5",
+  "logical_bytes_per_file": 4295032832,
+  "equal_case": true,
+  "last_byte_difference_correctly_rejected": true,
+  "observed_checkpoints": 393230,
+  "allocated_bytes_both_files": 163840,
+  "scope": "Current exact module standalone real cached dependencies on MacARM, actual full public compare_files streaming of two owned sparse synthetic files each4GiB+64KiB. Equal case and one late byte difference beyond4GiB. No physical-device IO throughput, hard RSS, Windows/Linux or collection/decode/fullworkspace proof; timing diagnostic only under concurrent compilation.",
+  "limitations": [
+    "Sparse logical read, not physical multiGiB storage IO",
+    "No hardRSS observation or broader platform coverage",
+    "Two deterministic fullstream cases complement prior cancellation/mutation tests, not all largefile failure cases"
+  ]
+}

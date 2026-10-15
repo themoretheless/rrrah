@@ -46,7 +46,7 @@ fn joined_cumulative_caps_refuse_before_source_io() {
     use rrrah_dedup::{
         geometry::ProjectiveSamplingPolicy,
         local_scan::{
-            LocalFileError, ProjectiveComplementaryFilePolicy, ProjectivePortfolioFilePolicy,
+            ProjectiveComplementaryFilePolicy, ProjectivePortfolioFilePolicy,
             ProjectivePyramidPhotometricFilePolicy,
         },
         warp::{
@@ -55,15 +55,6 @@ fn joined_cumulative_caps_refuse_before_source_io() {
             ProjectiveRegistrationTrustPolicy,
         },
     };
-    use std::{cell::Cell, io::Write};
-    let source = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/photos-heldout");
-    let dir = tempfile::tempdir().unwrap();
-    let a_path = dir.path().join("a.png");
-    let b_path = dir.path().join("b.png");
-    std::fs::copy(source.join("2414-base.png"), &a_path).unwrap();
-    std::fs::copy(&a_path, &b_path).unwrap();
-    let a = DecodeRequest::new(&a_path);
-    let b = DecodeRequest::new(&b_path);
     let mut local = policy();
     local.extract.max_features = 128;
     local.matching.max_comparisons = 128 * 128;
@@ -142,7 +133,6 @@ fn joined_cumulative_caps_refuse_before_source_io() {
         max_total_hypotheses: 4096,
         max_total_sample_pairs: 144_000_000,
     };
-    let budget = MemoryBudget::new(64 * 1024 * 1024);
 
     use rrrah_dedup::{gradient::GradientMatchPolicy, local_scan::*};
     let q = ProjectiveComplementaryFilterPortfolioPolicy {
@@ -186,16 +176,8 @@ fn joined_cumulative_caps_refuse_before_source_io() {
     };
 
     use rrrah_dedup::{
-        local_collection::{
-            ProjectiveFiveSearchCollectionPolicy, scan_projective_local_collection_five_searches,
-        },
-        local_index::FileFeatureBudgets,
+        local_collection::ProjectiveFiveSearchCollectionPolicy, local_index::FileFeatureBudgets,
     };
-    let mut files = vec![
-        (1, a.clone()),
-        (2, b.clone()),
-        (3, DecodeRequest::new(source.join("5495-base.png"))),
-    ];
     let config = ProjectiveFiveSearchCollectionPolicy {
         search: five,
         budgets: FileFeatureBudgets {

@@ -1,0 +1,145 @@
+{
+  "status": "verified_before_failure_after_strict_metadata_success",
+  "producer_sha256": "d50a9acd004981f1c31053de26f3d34cf4d0bbdc486dccfac2dc52f4b02ca0df",
+  "source": "crates/rrrah-dedup/src/gradient_index.rs",
+  "source_sha256": "4f417e6e0da64e886fe43ac83fb02afa40aefd47472b6f443b1761c465c1d653",
+  "compiler": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: aarch64-apple-darwin\nrelease: 1.98.1\nLLVM version: 22.1.8\n",
+  "attempts": [
+    {
+      "command": [
+        "rustc",
+        "+stable",
+        "--edition=2024",
+        "--crate-type",
+        "lib",
+        "--emit=metadata",
+        "-Dwarnings",
+        "-Wmissing-debug-implementations",
+        "-L",
+        "dependency=/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps",
+        "--extern",
+        "rrrah_dedup=/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/librrrah_dedup-3d341f4af6cb77a1.rlib",
+        "--extern",
+        "rrrah_core=/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/librrrah_core-350525ae69d3249f.rlib",
+        "/private/tmp/rrrah-gradient-index-debug-v2-20261015/harness.rs",
+        "-o",
+        "/private/tmp/rrrah-gradient-index-debug-v2-20261015/qualified.rmeta"
+      ],
+      "returncode": 1,
+      "log": "/private/tmp/rrrah-gradient-index-debug-v2-20261015/attempt-0.log",
+      "sha256": "0a27f7077f122f4bc91544879a38b4b59a62ff9b5eed424ec33b7d013cf1c0db"
+    },
+    {
+      "command": [
+        "rustc",
+        "+stable",
+        "--edition=2024",
+        "--crate-type",
+        "lib",
+        "--emit=metadata",
+        "-Dwarnings",
+        "-Wmissing-debug-implementations",
+        "-L",
+        "dependency=/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps",
+        "--extern",
+        "rrrah_dedup=/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/librrrah_dedup-3d341f4af6cb77a1.rlib",
+        "--extern",
+        "rrrah_core=/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/librrrah_core-1d807924c9349843.rlib",
+        "/private/tmp/rrrah-gradient-index-debug-v2-20261015/harness.rs",
+        "-o",
+        "/private/tmp/rrrah-gradient-index-debug-v2-20261015/qualified.rmeta"
+      ],
+      "returncode": 1,
+      "log": "/private/tmp/rrrah-gradient-index-debug-v2-20261015/attempt-1.log",
+      "sha256": "49501364090eb465d0362becaa55f27341aecc9261e64a083252ad1619fdd5f4"
+    },
+    {
+      "command": [
+        "rustc",
+        "+stable",
+        "--edition=2024",
+        "--crate-type",
+        "lib",
+        "--emit=metadata",
+        "-Dwarnings",
+        "-Wmissing-debug-implementations",
+        "-L",
+        "dependency=/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps",
+        "--extern",
+        "rrrah_dedup=/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/librrrah_dedup-3d341f4af6cb77a1.rlib",
+        "--extern",
+        "rrrah_core=/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/librrrah_core-1093d06a30417cb5.rlib",
+        "/private/tmp/rrrah-gradient-index-debug-v2-20261015/harness.rs",
+        "-o",
+        "/private/tmp/rrrah-gradient-index-debug-v2-20261015/qualified.rmeta"
+      ],
+      "returncode": 1,
+      "log": "/private/tmp/rrrah-gradient-index-debug-v2-20261015/attempt-2.log",
+      "sha256": "0a27f7077f122f4bc91544879a38b4b59a62ff9b5eed424ec33b7d013cf1c0db"
+    },
+    {
+      "command": [
+        "rustc",
+        "+stable",
+        "--edition=2024",
+        "--crate-type",
+        "lib",
+        "--emit=metadata",
+        "-Dwarnings",
+        "-Wmissing-debug-implementations",
+        "-L",
+        "dependency=/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps",
+        "--extern",
+        "rrrah_dedup=/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/librrrah_dedup-3d341f4af6cb77a1.rlib",
+        "--extern",
+        "rrrah_core=/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/librrrah_core-5510a096c7f2fba1.rlib",
+        "/private/tmp/rrrah-gradient-index-debug-v2-20261015/harness.rs",
+        "-o",
+        "/private/tmp/rrrah-gradient-index-debug-v2-20261015/qualified.rmeta"
+      ],
+      "returncode": 1,
+      "log": "/private/tmp/rrrah-gradient-index-debug-v2-20261015/attempt-3.log",
+      "sha256": "49501364090eb465d0362becaa55f27341aecc9261e64a083252ad1619fdd5f4"
+    },
+    {
+      "command": [
+        "rustc",
+        "+stable",
+        "--edition=2024",
+        "--crate-type",
+        "lib",
+        "--emit=metadata",
+        "-Dwarnings",
+        "-Wmissing-debug-implementations",
+        "-L",
+        "dependency=/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps",
+        "--extern",
+        "rrrah_dedup=/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/librrrah_dedup-5b4eaf1fdca1ac2b.rlib",
+        "--extern",
+        "rrrah_core=/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/librrrah_core-350525ae69d3249f.rlib",
+        "/private/tmp/rrrah-gradient-index-debug-v2-20261015/harness.rs",
+        "-o",
+        "/private/tmp/rrrah-gradient-index-debug-v2-20261015/qualified.rmeta"
+      ],
+      "returncode": 0,
+      "log": "/private/tmp/rrrah-gradient-index-debug-v2-20261015/attempt-4.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "dependency_pins": {
+    "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/librrrah_dedup-5b4eaf1fdca1ac2b.rlib": "cbc6addabccac66afdd2adc91ab5f9768b896cdaeeffc84cb324befb25b17b9c",
+    "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/librrrah_core-350525ae69d3249f.rlib": "bc88e2fc63796fcfbe72f0028f40322e381181a4798e5184946e91ed2fb83f8a"
+  },
+  "before_returncode": 1,
+  "after_returncode": 0,
+  "log_pins": {
+    "/private/tmp/rrrah-gradient-index-debug-v2-20261015/attempt-4.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/private/tmp/rrrah-gradient-index-debug-v2-20261015/attempt-0.log": "0a27f7077f122f4bc91544879a38b4b59a62ff9b5eed424ec33b7d013cf1c0db",
+    "/private/tmp/rrrah-gradient-index-debug-v2-20261015/attempt-1.log": "49501364090eb465d0362becaa55f27341aecc9261e64a083252ad1619fdd5f4",
+    "/private/tmp/rrrah-gradient-index-debug-v2-20261015/attempt-3.log": "49501364090eb465d0362becaa55f27341aecc9261e64a083252ad1619fdd5f4",
+    "/private/tmp/rrrah-gradient-index-debug-v2-20261015/attempt-2.log": "0a27f7077f122f4bc91544879a38b4b59a62ff9b5eed424ec33b7d013cf1c0db",
+    "/private/tmp/rrrah-gradient-index-debug-v2-20261015/before.log": "fced6215969eb81b55832567a53be8d7e4a332462ac3379fb004ac1b2d2e0ae8",
+    "/private/tmp/rrrah-gradient-index-debug-v2-20261015/after.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "scope": "Actual unchanged current gradient_index module with onlyderiveDebug change, reexported real cached gradient/local types and actual rrrah_core SharedBuffer/MemoryBudget. Strictwarnings standalone metadata compile succeeds after fix, fails before. No mocks, no runtime/performance/fullRoot Cargo/wholeworkspace qualification."
+}

@@ -2,9 +2,9 @@
   "index": 379,
   "repository": "RobotTeam/JavaPhash",
   "commit": "db587d50559621d3fcf7f9aae11adf67264c4380",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All11upstream textblobs fully read and immutablecommit/tree/blob hashes checked. Static review only; Java runtime unavailable, no compile/runtime/image/quality qualification.",
   "decision": "reference",
-  "finding": "Java classic pHash and image/digest types; no detected tests, algorithm normalization not proven.",
+  "finding": "Full11blob static review: in-placeblur, unchecked degenerate normalization and RGB size/equality mismatch; no typed lifecycle/resource guards. Java runtime unavailable; reference only, no source adoption.",
   "available_source_evidence": [
     {
       "path": "src/com/tommy/algorithm/Phash.java",
@@ -33,6 +33,66 @@
       "sha256": "31a25ecacb3359d41b48be4fef7c595d0c3148d5309a9eb2c7c13711cdcf0a1e",
       "truncated": false,
       "lines": 7,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": ".classpath",
+      "local": "08-classpath",
+      "url": "https://github.com/RobotTeam/JavaPhash/blob/db587d50559621d3fcf7f9aae11adf67264c4380/.classpath",
+      "sha256": "04df358523a3351ef4dfe1f56434b13caf2a4094eaf015035da999c65f0c35be",
+      "truncated": false,
+      "lines": 6,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": ".gitignore",
+      "local": "09-gitignore",
+      "url": "https://github.com/RobotTeam/JavaPhash/blob/db587d50559621d3fcf7f9aae11adf67264c4380/.gitignore",
+      "sha256": "75239e14b9b4e435c851935847313e39be6f69015f7c00dd5a107675d23942d0",
+      "truncated": false,
+      "lines": 22,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": ".project",
+      "local": "10-project",
+      "url": "https://github.com/RobotTeam/JavaPhash/blob/db587d50559621d3fcf7f9aae11adf67264c4380/.project",
+      "sha256": "ce0dad6174b4c7ccd907edc2d1d1d45f369e17573ee07f2814ab96e7cac086ca",
+      "truncated": false,
+      "lines": 17,
+      "source": false,
+      "test": false
+    },
+    {
+      "path": "src/com/tommy/data/Features.java",
+      "local": "05-Features.java",
+      "url": "https://github.com/RobotTeam/JavaPhash/blob/db587d50559621d3fcf7f9aae11adf67264c4380/src/com/tommy/data/Features.java",
+      "sha256": "9ad9610ea85bbd33275fccf2ff486c750c1be0ca79b200a1397290192f1d5a8d",
+      "truncated": false,
+      "lines": 6,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/com/tommy/data/Projections.java",
+      "local": "06-Projections.java",
+      "url": "https://github.com/RobotTeam/JavaPhash/blob/db587d50559621d3fcf7f9aae11adf67264c4380/src/com/tommy/data/Projections.java",
+      "sha256": "f605f61d4f96e5e2da5480b6e5925521d4dc43c634fdb8f136968b0c529f6e36",
+      "truncated": false,
+      "lines": 9,
+      "source": true,
+      "test": false
+    },
+    {
+      "path": "src/com/tommy/main/Main.java",
+      "local": "07-Main.java",
+      "url": "https://github.com/RobotTeam/JavaPhash/blob/db587d50559621d3fcf7f9aae11adf67264c4380/src/com/tommy/main/Main.java",
+      "sha256": "9e983a77df03b2531368e4e5dbaac1e6e1a8e9796eed6a3693467773f371048c",
+      "truncated": false,
+      "lines": 15,
       "source": true,
       "test": false
     }
@@ -64,5 +124,7 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_review_complete": true,
+  "complete_source_review": "docs/research/dedup-500/javaphash379-complete-static-review-20261015.json"
 }

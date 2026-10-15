@@ -1,0 +1,12 @@
+{
+  "status": "source_fix_format_checked_not_yet_current_compile_qualified",
+  "source": "crates/rrrah-dedup/src/gradient_index.rs",
+  "sha256": "4f417e6e0da64e886fe43ac83fb02afa40aefd47472b6f443b1761c465c1d653",
+  "trigger": "Live immutable415 combined compile emits missing-debug-implementations warning for public GradientDescriptorIndex",
+  "change": "derive(Debug), no index lookup, ordering, distance or memory budget behavior changes",
+  "checked": [
+    "rustfmt edition2024 --check passed",
+    "git diff --check for changed source passed"
+  ],
+  "remaining": "Current-source compile with real crate types and strictwarnings; full baseline runs immutable415 and therefore cannot qualify this newer source"
+}

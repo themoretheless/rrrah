@@ -45,15 +45,8 @@ fn policy() -> LocalFilePolicy {
 fn gradient_collection_matches_direct_pairs_and_atomic_admission() {
     use rrrah_dedup::{
         geometry::ProjectiveSamplingPolicy,
-        local_scan::{
-            LocalFileError, ProjectiveComplementaryFilePolicy, ProjectivePortfolioFilePolicy,
-            ProjectivePyramidPhotometricFilePolicy,
-        },
-        warp::{
-            ColorFilterPolicy, FilterColorSpace, FilterPolicy, PhotometricFitMode, PhotometricPolicy,
-            ProjectiveRegistrationPolicy, ProjectiveRegistrationPortfolioPolicy,
-            ProjectiveRegistrationTrustPolicy,
-        },
+        local_scan::ProjectivePyramidPhotometricFilePolicy,
+        warp::{ColorFilterPolicy, FilterColorSpace, FilterPolicy, PhotometricFitMode, PhotometricPolicy},
     };
     use rrrah_dedup::{
         gradient::{GradientCellRecipe, GradientMatchPolicy},

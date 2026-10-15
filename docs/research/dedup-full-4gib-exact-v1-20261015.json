@@ -1,0 +1,52 @@
+{
+  "status": "passed_pending_independent_audit",
+  "producer_pid": 69180,
+  "producer_sha256": "a385b71fb1f64fe1f10c67d14e18baab6911f0b7ca01efa77dc08ff6bf6e3596",
+  "source_sha256": "a21991fc03d304a3ddf1fd3eb2d3a4e0266b612f643ce3a604a4bb3e677268e5",
+  "harness_sha256": "586be2e54bf7f66f1071fc3cb786017104370f69a45911ae001c673fbaf20461",
+  "dependency_pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libblake3-5dbb3dfc2ce7d297.rlib": "1a90993f8c95cbbc51839449c8db08075277d5468e7d9fa2ae1b8838720083fe",
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libthiserror-1f2ca11ca2706be8.rlib": "a4bc045f06441d4730b1988bee770197e1f51f4b1600df8c028a668c27c77bf1",
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libtempfile-f6f2a369a6678518.rlib": "3c0a02859f18952acb6482a76d369ebac50a9c75f3b3b153fb3db5af15f2ea31",
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/liblibc-0a79900aa2799e6c.rlib": "b3e730a257abb46acab6283d05f1a1340e72bbb48682e09f3a237332f7f08c25"
+  },
+  "command": [
+    "rustc",
+    "+stable",
+    "--edition=2024",
+    "/private/tmp/rrrah-full-4gib-exact-v1-20261015/probe.rs",
+    "-C",
+    "opt-level=3",
+    "-L",
+    "dependency=/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps",
+    "-o",
+    "/private/tmp/rrrah-full-4gib-exact-v1-20261015/probe",
+    "--extern",
+    "blake3=/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libblake3-5dbb3dfc2ce7d297.rlib",
+    "--extern",
+    "thiserror=/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libthiserror-1f2ca11ca2706be8.rlib",
+    "--extern",
+    "tempfile=/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libtempfile-f6f2a369a6678518.rlib",
+    "--extern",
+    "libc=/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/liblibc-0a79900aa2799e6c.rlib"
+  ],
+  "compiler": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: aarch64-apple-darwin\nrelease: 1.98.1\nLLVM version: 22.1.8\n",
+  "scope": "Current exact module standalone real cached dependencies on MacARM, actual full public compare_files streaming of two owned sparse synthetic files each4GiB+64KiB. Equal case and one late byte difference beyond4GiB. No physical-device IO throughput, hard RSS, Windows/Linux or collection/decode/fullworkspace proof; timing diagnostic only under concurrent compilation.",
+  "child_pid": 69189,
+  "build_returncode": 0,
+  "run_returncode": 0,
+  "results": {
+    "LENGTH": "4295032832",
+    "EQUAL": "true",
+    "LATE_DIFFERENT": "false",
+    "CHECKPOINTS": "393230",
+    "EQUAL_NS": "18005174375",
+    "DIFFERENT_NS": "19321681833",
+    "ALLOCATED_512_BLOCKS": "320"
+  },
+  "executable_sha256": "4b0a17bebb6a8da7e0384f0622df301306945e624ada128ff075f267288b1271",
+  "log_pins": {
+    "/private/tmp/rrrah-full-4gib-exact-v1-20261015/run.log": "9a5b1a6a44321949000810fa71c82676b00c3b1b40a9752b5b2ab2b0d365e7ee",
+    "/private/tmp/rrrah-full-4gib-exact-v1-20261015/build.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

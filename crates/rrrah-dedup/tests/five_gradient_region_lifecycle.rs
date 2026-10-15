@@ -46,7 +46,7 @@ fn gradient_region_phase_cancellation_and_source_guard() {
     use rrrah_dedup::{
         geometry::ProjectiveSamplingPolicy,
         local_scan::{
-            LocalFileError, ProjectiveComplementaryFilePolicy, ProjectivePortfolioFilePolicy,
+            ProjectiveComplementaryFilePolicy, ProjectivePortfolioFilePolicy,
             ProjectivePyramidPhotometricFilePolicy,
         },
         warp::{
@@ -186,10 +186,7 @@ fn gradient_region_phase_cancellation_and_source_guard() {
     };
 
     use rrrah_dedup::{
-        local_collection::{
-            ProjectiveFiveSearchCollectionPolicy, scan_projective_local_collection_five_searches,
-        },
-        local_index::FileFeatureBudgets,
+        local_collection::ProjectiveFiveSearchCollectionPolicy, local_index::FileFeatureBudgets,
     };
     let mut files = vec![
         (1, a.clone()),

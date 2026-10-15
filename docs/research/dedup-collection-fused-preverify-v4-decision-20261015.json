@@ -1,0 +1,55 @@
+{
+  "status": "not_adopted_pending_actual_collection_qualification",
+  "audit": "docs/research/dedup-collection-fused-preverify-v4-opt3-benchmark-audit-20261015.json",
+  "audit_sha256": "472f1400a43aa6209895aac6c9c27cec440d3b90e0b6be6a9f827e894dbdd622",
+  "results": [
+    {
+      "case": "empty2",
+      "wall_ratio": 0.8869228415334179,
+      "cpu_ratio": 0.8866353969633453
+    },
+    {
+      "case": "empty8",
+      "wall_ratio": 0.6679615204721262,
+      "cpu_ratio": 0.6972691054365527
+    },
+    {
+      "case": "64k8",
+      "wall_ratio": 0.8085458601053592,
+      "cpu_ratio": 0.824738745525685
+    },
+    {
+      "case": "64k24",
+      "wall_ratio": 0.7331515236872744,
+      "cpu_ratio": 0.7338493419138974
+    },
+    {
+      "case": "2m8",
+      "wall_ratio": 0.8470447767693802,
+      "cpu_ratio": 0.9847014648512086
+    },
+    {
+      "case": "early8",
+      "wall_ratio": 0.9788460012385056,
+      "cpu_ratio": 1.0039617317696852
+    },
+    {
+      "case": "late8",
+      "wall_ratio": 0.8794138384754652,
+      "cpu_ratio": 0.9945306711383285
+    },
+    {
+      "case": "sizes8",
+      "wall_ratio": 0.9241250397436472,
+      "cpu_ratio": 0.927471276537031
+    },
+    {
+      "case": "mixed8",
+      "wall_ratio": 1.1038836640939904,
+      "cpu_ratio": 1.058533319776463
+    }
+  ],
+  "reason": "Equal-case medians improve, but mixedcase medianwall1.1039 andCPU1.0585 regress; broad paired variation prevents asserting general speedup. Actual collection integration and complete decode/dedup baseline still unqualified.",
+  "next_gate": "Complete baseline decoder and dedup lib plus all integration targets, then identical candidate gate with source/inventory retention; production remains unchanged",
+  "adopted": false
+}

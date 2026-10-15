@@ -1,0 +1,69 @@
+{
+  "status": "complete14blob_static_review_runtime_unqualified",
+  "whole_repo_complete": true,
+  "repository": "jpillora/dedup",
+  "commit": "1b1e53a4ac8af7d1ba30b83c3e16b0ba3c5f322c",
+  "producer_sha256": "db77e1025dfefd57062e27b3cd5b1d9ad30a88c71469234e7477ac516864ed10",
+  "source_manifest": "docs/research/dedup-500/jpillora115-complete-source-20261015.json",
+  "source_manifest_sha256": "1d3f33773d3b8e12fd9bff131765b4e2d325e8d9485999d2a9afa97a1b4316cf",
+  "fully_read_files": [
+    ".github/Dockerfile",
+    ".github/goreleaser.yml",
+    ".github/workflows/ci.yml",
+    ".gitignore",
+    "LICENSE",
+    "README.md",
+    "example/bar/bar.txt",
+    "example/bar/foo-copy.txt",
+    "example/bar/foo.txt",
+    "example/foo/bazz.txt",
+    "example/foo/foo.txt",
+    "go.mod",
+    "go.sum",
+    "main.go"
+  ],
+  "license": "MIT LICENSE and README text read",
+  "upstream_tests_present": false,
+  "ci_scope": "Jobnamed Build&Test executes go build only, no tests detected in pinnedtree",
+  "runtime_executed": false,
+  "toolchain_scope": "command -v go returned1 in currentenvironment; no install/release/Docker/READMEcommands executed",
+  "findings": [
+    {
+      "area": "hash IO/identity",
+      "status": "source-derived not runtime reproduced",
+      "detail": "hashFile discards io.Copy bytecount/error and closeerror. Hashsum alone authorizes duplicate classification/deletion, with no byteconfirmation or pre/postsource validation. MD5default, optionalSHA1/SHA256 does not repair missingIO/source/byte guards."
+    },
+    {
+      "area": "index race",
+      "status": "source-derived validinterleaving, no Go execution",
+      "detail": "Lookup and insertion use separate mutexsections. Twoequal files can both observe missinghash then bothinsert and neitherduplicates branch runs. Race-detector memory safety alone would not repair logical check-then-insert race."
+    },
+    {
+      "area": "queue closure",
+      "status": "source-derived possibleinterleaving, no Go execution",
+      "detail": "Worker increments atomiccount then separatelyreloads count/total and closes channel whenequal. Twofinal workers can bothobserve equal finalcounts and bothclose samechannel. The unused queue.close method guard isnot invoked bythis path."
+    },
+    {
+      "area": "worker/resources",
+      "status": "source-derived not runtime reproduced",
+      "detail": "No Workerspositive validation. Zero/negativeworkers create noconsumers while waitgroup iszero. Directoryenqueues spawn a goroutine each, holding discoveredpath slices; globalindex and recursion have no admissionlimits, deadline, cancellation or sourcelifecycle ownership."
+    },
+    {
+      "area": "filesystem admission",
+      "status": "source-derived not runtime reproduced",
+      "detail": "os.Stat followslinks, including directorylinks duringrecursive scan; no canonicalinode visitedset. Hiddenfilename skip occurs after directorybranch, so hiddendirectories can betraversed. Trimming terminalseparator turns Unixroot / intoemptystring."
+    },
+    {
+      "area": "merge/publication",
+      "status": "source-derived not runtime reproduced",
+      "detail": "Index stores originalpath before rename and never updatesit. DestinationStat then Rename isnot exclusive nameclaim; concurrentunique files withsamebasename can race for destination. No rollback/atomicbatch or finalrevalidation before destructive operations."
+    },
+    {
+      "area": "logging",
+      "status": "source-derived not runtime reproduced",
+      "detail": "Global lastReport string read/written from workers without synchronization, whereas counters areatomic. No actual-race-detector result claimed."
+    }
+  ],
+  "transfer_decision": "Reference only: keep streaminghash idea but do not adopt hash-only destructiveidentity, splitlookupinsert, channelclosure or mergepublication. Existing Rust boundedstream/byteconfirmation/sourceguards remain authoritative.",
+  "scope": "All14regulartext source/config/example/lock/license blobs fullyread, each rawsize/GitblobSHA1/SHA256 verified and freshlybound to immutablecommit tree. Static findings only. No Go compile, originalCLI/helper/worker/race-detector/API/dependency/platform/runtime qualification. Only public7/8byte examples copied as sourceevidence, no actual file deletion/merge/network/install/release or productioncode adoption."
+}

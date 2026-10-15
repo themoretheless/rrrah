@@ -1,0 +1,31 @@
+{
+  "status": "prepared_not_compiled_not_executed",
+  "source": "/private/tmp/rrrah-actual-collection-benchmark-v1-20261015",
+  "baseline_manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-committed-build-source-415443172-v2-20261015.json",
+  "baseline_manifest_sha256": "12a1804241720cdcb2fcf5e598d846d194bebff9e873a50c1e2ee76518704680",
+  "integration_candidate_manifest_sha256": "2779ce4532e0c3f88f28699c384d55a1ea93f7d113138cde23e281bf9bb178e7",
+  "benchmark_source_sha256": "3e72d8bc1e8a127ba511a417a572880a45a251cbbf3962d311a15f3d91975f82",
+  "changed": [
+    {
+      "path": "crates/rrrah-dedup/src/collection.rs",
+      "baseline_sha256": "01fae3fc3aab108e6a2f941a96cdda8b4b64d6e5413e7f2950d75daf8685e550",
+      "candidate_sha256": "94807b98fdc72e64047ee67c201d8110f249428a82e95f3d84ce6c4dddab8381"
+    },
+    {
+      "path": "crates/rrrah-dedup/src/exact.rs",
+      "baseline_sha256": "c76a9df974554fdbbe2569225cc136be90c40defb21f9349d18350f6203dacd5",
+      "candidate_sha256": "245e4d73b295215b1ba627f29c1378ec1770f495c31643fcb0cf4cdc1c842905"
+    }
+  ],
+  "unchanged_files": 3376,
+  "protocol": [
+    "Single binary two variants selected by threadlocal flag set once before timed loop",
+    "Both variants incur same test-only flag lookup; production build excludes flag completely",
+    "Baseline executes original leftverify/rightverify/identical order",
+    "Candidate fuses only before visual dependency activation",
+    "Actual scan_guarded_exact_collection captures all files, owns complete report and invokes original postpair/postloop/publication guards",
+    "Provider is synthetic original-byte oracle; no visual algorithm performance or quality claim",
+    "All originalnine families retained; negative modifications at payload offset54 keep dependency header valid"
+  ],
+  "required_before_dispatch": "Finish and audit full baseline; run complete candidate library/integration gates; opt3 benchmark only after other owned heavy builds stop. Check completepair outputs, provider counts and memory credit release."
+}

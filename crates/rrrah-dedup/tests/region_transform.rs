@@ -5,7 +5,7 @@ use rrrah_dedup::{
     animated::AnimationBudget,
     geometry::GeometryPolicy,
     local::{LocalPolicy, MatchPolicy},
-    local_scan::{LocalFilePolicy, compare_local_files_projective},
+    local_scan::LocalFilePolicy,
     warp::WarpPolicy,
 };
 fn policy() -> LocalFilePolicy {
@@ -45,10 +45,7 @@ fn policy() -> LocalFilePolicy {
 fn supplied_model_regions_require_pixels_and_cancel_atomically() {
     use rrrah_dedup::{
         geometry::ProjectiveSamplingPolicy,
-        local_scan::{
-            LocalFileError, ProjectivePyramidPhotometricFilePolicy,
-            compare_local_files_projective_pyramid_photometric,
-        },
+        local_scan::{LocalFileError, ProjectivePyramidPhotometricFilePolicy},
         warp::{ColorFilterPolicy, FilterColorSpace, FilterPolicy, PhotometricFitMode, PhotometricPolicy},
     };
     use std::cell::Cell;
@@ -224,9 +221,7 @@ fn supplied_model_regions_require_pixels_and_cancel_atomically() {
             .unwrap();
     assert!(!negative.iter().any(|r| r.accepted_region));
     drop(negative);
-    drop(unrelated_view);
     drop(unrelated);
-    drop(view);
     drop(image);
     drop(direct);
     assert_eq!(budget.used(), 0);

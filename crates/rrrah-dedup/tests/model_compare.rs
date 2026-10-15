@@ -141,21 +141,19 @@ fn final_caller_checkpoint_cannot_publish_a_model_result_after_source_or_weight_
     let (r, w) = fixture(dir.path());
     let budget = MemoryBudget::new(8 * 1024 * 1024);
     let calls = Cell::new(0);
-    drop(
-        compare_model_files_with(
-            &r[0],
-            &r[1],
-            &w,
-            policy(),
-            &budget,
-            |_, _, _, b, _| proposals(b),
-            || {
-                calls.set(calls.get() + 1);
-                false
-            },
-        )
-        .unwrap(),
-    );
+    let _ = compare_model_files_with(
+        &r[0],
+        &r[1],
+        &w,
+        policy(),
+        &budget,
+        |_, _, _, b, _| proposals(b),
+        || {
+            calls.set(calls.get() + 1);
+            false
+        },
+    )
+    .unwrap();
     let last = calls.get();
     for path in [&r[0].path, &r[1].path, &w] {
         let original = std::fs::read(path).unwrap();
@@ -859,24 +857,22 @@ fn joint_final_caller_checkpoint_cannot_publish_a_model_result_after_source_or_w
     let (r, w) = fixture(dir.path());
     let budget = MemoryBudget::new(8 * 1024 * 1024);
     let calls = Cell::new(0);
-    drop(
-        compare_model_joint_files_with(
-            &r[0],
-            &r[1],
-            &w,
-            rrrah_dedup::model_compare::JointModelComparisonPolicy {
-                comparison: policy(),
-                maximum_projection_checks: 2 * 16 * 65,
-            },
-            &budget,
-            |_, _, _, b, _| proposals(b),
-            || {
-                calls.set(calls.get() + 1);
-                false
-            },
-        )
-        .unwrap(),
-    );
+    let _ = compare_model_joint_files_with(
+        &r[0],
+        &r[1],
+        &w,
+        rrrah_dedup::model_compare::JointModelComparisonPolicy {
+            comparison: policy(),
+            maximum_projection_checks: 2 * 16 * 65,
+        },
+        &budget,
+        |_, _, _, b, _| proposals(b),
+        || {
+            calls.set(calls.get() + 1);
+            false
+        },
+    )
+    .unwrap();
     let last = calls.get();
     for path in [&r[0].path, &r[1].path, &w] {
         let original = std::fs::read(path).unwrap();

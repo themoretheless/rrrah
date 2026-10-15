@@ -46,7 +46,7 @@ fn five_search_collection_matches_direct_and_source_lifecycle() {
     use rrrah_dedup::{
         geometry::ProjectiveSamplingPolicy,
         local_scan::{
-            LocalFileError, ProjectiveComplementaryFilePolicy, ProjectivePortfolioFilePolicy,
+            ProjectiveComplementaryFilePolicy, ProjectivePortfolioFilePolicy,
             ProjectivePyramidPhotometricFilePolicy,
         },
         warp::{

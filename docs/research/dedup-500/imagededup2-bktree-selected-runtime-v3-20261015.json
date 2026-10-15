@@ -1,0 +1,54 @@
+{
+  "status": "verified_selected_source_controls_not_full_repository",
+  "repository": "idealo/imagededup",
+  "commit": "f0534a6ec10c02379c627696fbd486841068631c",
+  "producer_sha256": "8cdc90885f2baefb9cd0a5973b9540568f1577285ee8af509d7e007a8eef2f96",
+  "source_pins": {
+    "docs/research/dedup-500/evidence/idealo--imagededup/02-hashing.py": "5a2a1d0eff0d1aa40ec0c6b58b15966c701521b7c7a0fb199bd7a01e33b137d8",
+    "docs/research/dedup-500/evidence/idealo--imagededup/04-bktree.py": "f43e9555c74f28c436d20dbe21b0b72adc2d7963df22d7869d07e789a93411e4",
+    "docs/research/dedup-500/evidence/idealo--imagededup/05-test_bktree.py": "9491a26ed9e1943f560ccadc70d0264a0bb86a8d6e84b1b280dbcbc03564547a"
+  },
+  "upstream_test_bodies_passed": [
+    "test_bktreenode_correct_initialization",
+    "test_construct_tree",
+    "test_get_next_candidates_invalid",
+    "test_get_next_candidates_valid",
+    "test_insert_tree",
+    "test_insert_tree_check_distance",
+    "test_insert_tree_collision",
+    "test_insert_tree_different_nodes",
+    "test_search",
+    "test_search_correctness",
+    "test_search_dist",
+    "test_search_zero_tolerance",
+    "test_tolerance_affects_retrievals"
+  ],
+  "upstream_test_count": 13,
+  "exhaustive_queries": 2304,
+  "exhaustive_domain": "All256eightbit patterns encoded fixed64bit hex, all radii0through8; every query compared against independent Python exact xor binary populationcount fullscan",
+  "equal_hash_zero_radius_result_count": 32,
+  "negative_controls": {
+    "empty_mapping": "IndexError",
+    "equal_hash_chain_recursion": "RecursionError",
+    "python_recursion_limit": 1000,
+    "oversized65bit_hashes_accepted_but_suffix_bit_lost": {
+      "left": "0x10000000000000001",
+      "right": "0x8000000000000000",
+      "observed": 0,
+      "independent_expected": 3
+    }
+  },
+  "adapters": [
+    "Original BKTree and BkTreeNode module executed byte-for-byte",
+    "Original Hashing.hamming_distance AST method executed unchanged; np.sum adapter is Python builtin sum for boolean list, not numpy/package qualification",
+    "Only two imagededup package imports removed from upstream test AST; all test bodies and OrderedDict import unchanged"
+  ],
+  "scope": "Selected complete138line BKTree module and167line testmodule read; hamming method only selected. No full idealo repository review, image decode/hash quality, numpy/CNN/multiprocessing/package execution, wholeRoot retrieval qualification or production code reuse.",
+  "findings": [
+    "Exact candidate completeness holds on exhaustivelytested fixed64bit domain",
+    "Empty direct BKTree input raises IndexError",
+    "Identical hashes form recursive zero-distance chain and exceed default Python recursion depth",
+    "Tolerance materializes2r+1integer list per visited node; static unbounded allocation risk, no huge allocation attempted",
+    "Hamming publicmethod does not reject >64bit inputs and zip can lose suffixbits; intended64bit domain remains separately tested"
+  ]
+}

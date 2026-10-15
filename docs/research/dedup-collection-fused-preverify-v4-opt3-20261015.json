@@ -1,0 +1,60 @@
+{
+  "adoption_audit": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-fused-exact-root-adoption-audit-20261014.json",
+  "adoption_audit_sha256": "174462735819ad29b0ce9042d61255bf3986bdf50f213049d6eeec54e25ade22",
+  "status": "passed_pending_independent_audit",
+  "producer_pid": 61361,
+  "source_pins": {
+    "crates/rrrah-dedup/src/exact.rs": "a21991fc03d304a3ddf1fd3eb2d3a4e0266b612f643ce3a604a4bb3e677268e5",
+    "crates/rrrah-dedup/tests/exact_large_files.rs": "4751b1dd4784e455111ec47af62d7135998a50f4edc84fa9e40e1e56c4b4ae6a",
+    "crates/rrrah-dedup/tests/exact_files.rs": "23a8274ee225a1a9955907f03b061ce90ddf3d6b1fedb2f589ad8bf50be2c79e"
+  },
+  "baseline_commit": "415443172180ef2838716eac4afbdd1cf588e879",
+  "baseline_exact_sha256": "c76a9df974554fdbbe2569225cc136be90c40defb21f9349d18350f6203dacd5",
+  "candidate_source_pin": "2b13e1351365cbf6573274ee070dd6a478946be7c56300f1850526e43a66845f",
+  "candidate_archive": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-collection-fused-preverify-v4-source-20261015.rs",
+  "dependency_pins": {
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libblake3-5dbb3dfc2ce7d297.rlib": "1a90993f8c95cbbc51839449c8db08075277d5468e7d9fa2ae1b8838720083fe",
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libthiserror-1f2ca11ca2706be8.rlib": "a4bc045f06441d4730b1988bee770197e1f51f4b1600df8c028a668c27c77bf1",
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libtempfile-f6f2a369a6678518.rlib": "3c0a02859f18952acb6482a76d369ebac50a9c75f3b3b153fb3db5af15f2ea31",
+    "/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/liblibc-0a79900aa2799e6c.rlib": "b3e730a257abb46acab6283d05f1a1340e72bbb48682e09f3a237332f7f08c25"
+  },
+  "producer_sha256": "f5f00d080efba9c6c6bace7c28ed9be58d77bc63075b1b4717447521315a5e98",
+  "harness_sha256": "092a59df2a8ef2a10f6222248917edec8c2bd8fb093c8df5745314bbdbb11960",
+  "source": "/private/tmp/rrrah-collection-fused-preverify-v4-opt3-20261015",
+  "command": [
+    "rustc",
+    "+stable",
+    "--edition=2024",
+    "--test",
+    "/private/tmp/rrrah-collection-fused-preverify-v4-opt3-20261015/harness.rs",
+    "-C",
+    "opt-level=3",
+    "-L",
+    "dependency=/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps",
+    "-o",
+    "/private/tmp/rrrah-collection-fused-preverify-v4-opt3-20261015/tests",
+    "--extern",
+    "blake3=/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libblake3-5dbb3dfc2ce7d297.rlib",
+    "--extern",
+    "thiserror=/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libthiserror-1f2ca11ca2706be8.rlib",
+    "--extern",
+    "tempfile=/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libtempfile-f6f2a369a6678518.rlib",
+    "--extern",
+    "libc=/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/liblibc-0a79900aa2799e6c.rlib"
+  ],
+  "scope": "Isolated opt3candidate from committed415exactmodule with selective fusion and aligned opaque dynamic callback benchmark; current integration fixture copies, no Root adoption or collection integration plus complete exact_files integration and large-file controls; directrustc real cached dependencies. 4GiB/1TiB sparse metadata/size admission and bounded early streaming cancellation only, not full multiGiB equality, physical IO, hard RSS, otherplatform or Cargo/workspace/decode proof. Existing exact-module unit controls also included. Temporary sparse files owned by tempfile and removed on completion, no corpus.",
+  "child_pid": 61845,
+  "build_returncode": 0,
+  "inventory_returncode": 0,
+  "tests_returncode": 0,
+  "passed": 58,
+  "ignored": 1,
+  "failed": 0,
+  "executable": "/private/tmp/rrrah-collection-fused-preverify-v4-opt3-20261015/tests",
+  "executable_sha256": "6272f1b695b72376a4178b9c4e20b5fd47035c5d7b93c56eab6b225c8e621a59",
+  "output_pins": {
+    "/private/tmp/rrrah-collection-fused-preverify-v4-opt3-20261015/tests.log": "09126fe1389e0d961a7f847ee73d5c62c5243c818ba9d03cd48f993ed67464a6",
+    "/private/tmp/rrrah-collection-fused-preverify-v4-opt3-20261015/inventory.log": "dd52588ad995671f15a46b016dae43fc36086d8451168d31fe76f84e4cfbfb13",
+    "/private/tmp/rrrah-collection-fused-preverify-v4-opt3-20261015/build.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}
