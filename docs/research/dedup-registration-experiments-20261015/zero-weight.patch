@@ -1,0 +1,50 @@
+--- a/crates/rrrah-dedup/src/warp.rs
++++ b/crates/rrrah-dedup/src/warp.rs
+@@ -272,6 +272,9 @@
+         (x, (y + 1).min(height - 1), (1.0 - dx) * dy),
+         ((x + 1).min(width - 1), (y + 1).min(height - 1), dx * dy),
+     ] {
++        if weight == 0.0 {
++            continue;
++        }
+         for (out, value) in result
+             .iter_mut()
+             .zip(premultiplied_in_space(image, sx, sy, space)?)
+@@ -2276,3 +2279,37 @@
+         );
+     }
+ }
++
++#[cfg(test)] mod zero_weight_controls {use super::*;
++fn reference(
++    image: &LinearRgbaView<'_>,
++    p: [f64; 2],
++    space: FilterColorSpace,
++) -> Option<[f64; 4]> {
++    let (width, height) = image.dimensions();
++    if p[0] < 0.0 || p[1] < 0.0 || p[0] > f64::from(width - 1) || p[1] > f64::from(height - 1) {
++        return None;
++    }
++    let x = p[0].floor() as u32;
++    let y = p[1].floor() as u32;
++    let dx = p[0] - f64::from(x);
++    let dy = p[1] - f64::from(y);
++    let mut result = [0.0; 4];
++    for (sx, sy, weight) in [
++        (x, y, (1.0 - dx) * (1.0 - dy)),
++        ((x + 1).min(width - 1), y, dx * (1.0 - dy)),
++        (x, (y + 1).min(height - 1), (1.0 - dx) * dy),
++        ((x + 1).min(width - 1), (y + 1).min(height - 1), dx * dy),
++    ] {
++        for (out, value) in result
++            .iter_mut()
++            .zip(premultiplied_in_space(image, sx, sy, space)?)
++        {
++            *out += value * weight;
++        }
++    }
++    Some(result)
++}
++
++#[test] fn bitwise_grid_and_edge_oracle(){let mut checked=0;for family in 0..4 {let mut pixels=Vec::new();for i in 0..35 {let r=(i as f32-17.)/3.;pixels.extend([r,-r,r*0.7,if family==0{0.}else if family==1{0.5}else{1.}]);}let image=LinearRgbaView::new(7,5,&pixels,35,||false).unwrap();for yi in 0..49 {for xi in 0..73 {let p=[xi as f64/12.,yi as f64/12.];for space in [FilterColorSpace::LinearSrgb,FilterColorSpace::EncodedSrgb]{assert_eq!(reference(&image,p,space).map(|p|p.map(f64::to_bits)),interpolate_in_space(&image,p,space).map(|p|p.map(f64::to_bits)),"{family} {p:?}");checked+=1;}}}}assert_eq!(checked,28616);}
++}

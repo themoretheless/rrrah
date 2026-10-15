@@ -1,0 +1,96 @@
+{
+  "status": "all11text_blobs_read_six_original_tests_and_four_authored_controls_passed",
+  "repository": "tonalfitness/deduper",
+  "commit": "862d626705ba2828702986086932d42c918e2a4e",
+  "tree": "917605bba7cd04a24ab0fe36f4c8af968cc3188e",
+  "fresh_commit_tree_binding_verified": true,
+  "source_files": [
+    {
+      "path": ".gitignore",
+      "local": "docs/research/dedup-500/evidence/tonalfitness--deduper/06-gitignore",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "LICENSE",
+      "local": "docs/research/dedup-500/evidence/tonalfitness--deduper/01-LICENSE",
+      "sha256": "4018e673479fd80ab596d81d7851056f102aebd74624393b84a791e54a8b10d1",
+      "git_blob": "002f54eece0c3d2a7d3b2068a30c92c90b5e3d8d"
+    },
+    {
+      "path": "README.md",
+      "local": "docs/research/dedup-500/evidence/tonalfitness--deduper/00-README.md",
+      "sha256": "239005d2245db21a683332939213b46e362528d3b453dcfcf7d9e844646ce1f9",
+      "git_blob": "a172737c24497e5265c6ae8fa6fad9d5ef3fe9e8"
+    },
+    {
+      "path": "deduper.go",
+      "local": "docs/research/dedup-500/evidence/tonalfitness--deduper/02-deduper.go",
+      "sha256": "86b704266ca1d6cb5f715395e206c03fddf383da1ec323d50d66c0882156c8bf",
+      "git_blob": "a22b9f5447af7febb97098a2d1215934abdff764"
+    },
+    {
+      "path": "deduper_go1/README.md",
+      "local": "docs/research/dedup-500/evidence/tonalfitness--deduper/07-go1-README.md",
+      "sha256": "00b5c822e2990367a974c6ab7fcfa4631c2ea4e634e6286b670b2ca349234f56",
+      "git_blob": "d7439af3db6f85fcc5aeb71bb4a0821f90c65748"
+    },
+    {
+      "path": "deduper_go1/deduper.go",
+      "local": "docs/research/dedup-500/evidence/tonalfitness--deduper/03-deduper.go",
+      "sha256": "b180f73d76f3d6d4479f942c1f08a4e8108425a7174b03767905e74c186d4fc8",
+      "git_blob": "392178103c6a35f63c8eaecd88c2ac479aa0670e"
+    },
+    {
+      "path": "deduper_go1/deduper_test.go",
+      "local": "docs/research/dedup-500/evidence/tonalfitness--deduper/08-go1-test.go",
+      "sha256": "dc019300ababc55daccce5faf437542a2cb6e8b7d94ec8b7df0354ce6acb319f",
+      "git_blob": "85eab62421d5af8f7a9263ced8ca497b33148957"
+    },
+    {
+      "path": "deduper_go1/example/main.go",
+      "local": "docs/research/dedup-500/evidence/tonalfitness--deduper/05-main.go",
+      "sha256": "82ab2fcacc42594c9810e73e94f83b74ffc615e0d4b7ad6fc49dbfe8e38a1312",
+      "git_blob": "81f044265fd769fab4f57ae3904c6b763d186259"
+    },
+    {
+      "path": "deduper_test.go",
+      "local": "docs/research/dedup-500/evidence/tonalfitness--deduper/04-deduper_test.go",
+      "sha256": "d62c3fdca22d3483a324b558cfc7af8cd071eaf8250a94df064cc01fc597a5cf",
+      "git_blob": "a5095c24f68d010b062d41604a32a01a8f6247f4"
+    },
+    {
+      "path": "example/main.go",
+      "local": "docs/research/dedup-500/evidence/tonalfitness--deduper/09-example.go",
+      "sha256": "705bde7c21b6069974750765ed0bca9492d82b2283549ed75826bdc0d3080eda",
+      "git_blob": "9f5e5f5be50b7a15f0d6c49269827962da2a7f30"
+    },
+    {
+      "path": "go.mod",
+      "local": "docs/research/dedup-500/evidence/tonalfitness--deduper/10-go.mod",
+      "sha256": "b40bd700b4c2b569c623d69dc19890a8c5eb33e553905c139e1fc43aaf820390",
+      "git_blob": "71560c5d52022a541a22076c00184525ce3bbf6d"
+    }
+  ],
+  "original_sources_and_go_mod_unchanged": true,
+  "license": "MIT",
+  "native_runtime": "Go1.27.2 MacARM, actual sync channels and worker goroutines, no external dependencies",
+  "upstream_test_functions": 6,
+  "authored_controls": 4,
+  "logs": {
+    "/private/tmp/rrrah-deduper256-native-20261015/upstream-wrong-cwd.log": "08c4bd65b3e44a06c2377ca4bad0b12891764604c52d1aab6b409baa895a080e",
+    "/private/tmp/rrrah-deduper256-native-20261015/upstream.log": "fa33175c9a83054bf9f59e70953ffed8c1e4dfa06904a3a255af5042cdb7db36",
+    "/private/tmp/rrrah-deduper256-native-20261015/controls.log": "8ba4df28ca1d0c517521149a7e0185ee0f9ca38546d9108d2eabc47055ad40ce"
+  },
+  "findings": [
+    "Concurrent identical keys share first result even if payloads differ; key must encompass semantics.",
+    "Mutable key strands original waiter: queue uses old key, completion recomputes changed key. Deterministic original helper control, not live whole-service deadlock test.",
+    "Uncomparable key panics in map operation.",
+    "Error fanout clears inflight entry; successful values optionally cached without source freshness/TTL in broker.",
+    "Worker count not validated; zero workers may strand requests, negative channel size panics (source observation only).",
+    "Shutdown returns after signal rather than joining; Get concurrent with channel closure may panic; documented panic contract.",
+    "Fixed worker count bounds concurrent computation but waiter list, arbitrary payload/cache sizes and blocked caller goroutines not byte-budgeted; no per-request cancellation."
+  ],
+  "decision": "Reference only: single-owner broker and per-key inflight fanout may inform owned scheduling, but source/policy/version identity, cancellation, cache freshness and resource admission require native library design. No code adopted.",
+  "scope": "Full11blob original repository read, six original tests in two implementation packages executed, two examples compiled only, four authored tests use unchanged private broker methods. No race detector, scheduling proof, hard-memory limit, service/network, Windows/Linux or file/image duplicate quality claim. First wrong-cwd launch failed before testing and is retained."
+}

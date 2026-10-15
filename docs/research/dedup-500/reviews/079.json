@@ -2,9 +2,9 @@
   "index": 79,
   "repository": "ScriptTiger/Hosts-BL",
   "commit": "bc0ab8a3838c5d67d892c248d4ee9d7d0ecfcee9",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All ten pinned text blobs fully read; five native authored tests plus four synthetic actual CLI controls; limits in detailed report.",
   "decision": "reject-domain",
-  "finding": "Hosts blacklist line/domain compression and maphash; no file/image comparison.",
+  "finding": "Domain blacklist tool: hash-only dedupe, case/tab differences and silent oversized-line truncation verified. No file/image comparator or adoption.",
   "license_metadata": "MIT",
   "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
   "tests_detected": 0,
@@ -64,5 +64,9 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/hosts79-complete-source-review-20261015.json",
+  "complete_source_review_sha256": "8c5c29dfd69dc458a51a2921a7dd8621ae288ed2e36f57a3e674c6935e1bf516",
+  "complete_runtime_audit": "docs/research/hosts79-native-independent-audit-20261015.json"
 }

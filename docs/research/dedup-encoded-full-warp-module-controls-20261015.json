@@ -1,0 +1,57 @@
+{
+  "status": "verified_complete_embedded_module_tests_for_baseline_and_candidate",
+  "variants": [
+    {
+      "variant": "baseline",
+      "complete_tests": [
+        "warp::bounded_fit_tests::boundary_fit_matches_exhaustive_rectangle_and_beats_independent_clipping",
+        "warp::encoded_signal_tests::extended_srgb_landmarks_match_independent_decimal_oracle_without_clipping",
+        "warp::encoded_signal_tests::transfer_precedes_premultiplication_and_bilinear_sampling",
+        "warp::regional_reuse_tests::reused_whole_evidence_preserves_regions_and_reduces_observed_work"
+      ],
+      "pins": {
+        "/private/tmp/rrrah-encoded-full-warp-20261015/baseline/test-binary": "7561af473688e37139d307e1877eb9523fa997d3302b5a6b8d5f96d348a925bc",
+        "/private/tmp/rrrah-encoded-full-warp-20261015/baseline/run.log": "203fa3239329f3e85b629844a98fb36c419d91686b0a354556730535d50aade4",
+        "/private/tmp/rrrah-encoded-full-warp-20261015/baseline/compile.log": "68d88a82a19a1929d522402fb95f09856d71283df6bf59a90ce9d76ca20e1dda",
+        "/private/tmp/rrrah-encoded-full-warp-20261015/baseline/command.json": "e8aa188cb7774f6fa4d4bd9fc5e370c38767deda40fcc3c6627d694cefd1a87a",
+        "/private/tmp/rrrah-encoded-full-warp-20261015/baseline/compile-v2.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "/private/tmp/rrrah-encoded-full-warp-20261015/baseline/tests/fixtures/encoded-srgb/transfer.tsv": "6cbc667db7d84312a3a01fb5214011bde82e626180db12903d145951b7400a5c",
+        "/private/tmp/rrrah-encoded-full-warp-20261015/baseline/src/linear.rs": "9ba055f4a73063eed2d757e47cbd6d0b1b53b9f1fed6c1cbd777d3106141e059",
+        "/private/tmp/rrrah-encoded-full-warp-20261015/baseline/src/lib.rs": "7c19625582e72762564abfd894897b5f46df40c14ba7f45070e47945c6ad00c2",
+        "/private/tmp/rrrah-encoded-full-warp-20261015/baseline/src/pixels.rs": "89b074f4bf205a42e51e4406090c43705c3ab4fa8a4b4494afd27e705bc2dfc1",
+        "/private/tmp/rrrah-encoded-full-warp-20261015/baseline/src/geometry.rs": "ccbbeb779159d340cc56e6d5d967a03ac0e848c81935300662b614a693a97d94",
+        "/private/tmp/rrrah-encoded-full-warp-20261015/baseline/src/warp.rs": "1dee5d40b8fa2e4e4b9afb2f8899c64083f404686de6e08da476467c0ed57991"
+      }
+    },
+    {
+      "variant": "candidate",
+      "complete_tests": [
+        "warp::bounded_fit_tests::boundary_fit_matches_exhaustive_rectangle_and_beats_independent_clipping",
+        "warp::encoded_signal_tests::extended_srgb_landmarks_match_independent_decimal_oracle_without_clipping",
+        "warp::encoded_signal_tests::transfer_precedes_premultiplication_and_bilinear_sampling",
+        "warp::regional_reuse_tests::reused_whole_evidence_preserves_regions_and_reduces_observed_work"
+      ],
+      "pins": {
+        "/private/tmp/rrrah-encoded-full-warp-20261015/candidate/test-binary": "632f79cbf5ac73f25765093a18c04898138d268c5a0bd578d0e70fc86caebb16",
+        "/private/tmp/rrrah-encoded-full-warp-20261015/candidate/run.log": "203fa3239329f3e85b629844a98fb36c419d91686b0a354556730535d50aade4",
+        "/private/tmp/rrrah-encoded-full-warp-20261015/candidate/command.json": "af0d372593a497a49149409e35741302a81c265d55852d36e7b0a7077758e8c5",
+        "/private/tmp/rrrah-encoded-full-warp-20261015/candidate/compile-v2.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "/private/tmp/rrrah-encoded-full-warp-20261015/candidate/tests/fixtures/encoded-srgb/transfer.tsv": "6cbc667db7d84312a3a01fb5214011bde82e626180db12903d145951b7400a5c",
+        "/private/tmp/rrrah-encoded-full-warp-20261015/candidate/src/linear.rs": "9ba055f4a73063eed2d757e47cbd6d0b1b53b9f1fed6c1cbd777d3106141e059",
+        "/private/tmp/rrrah-encoded-full-warp-20261015/candidate/src/lib.rs": "7c19625582e72762564abfd894897b5f46df40c14ba7f45070e47945c6ad00c2",
+        "/private/tmp/rrrah-encoded-full-warp-20261015/candidate/src/pixels.rs": "89b074f4bf205a42e51e4406090c43705c3ab4fa8a4b4494afd27e705bc2dfc1",
+        "/private/tmp/rrrah-encoded-full-warp-20261015/candidate/src/geometry.rs": "ccbbeb779159d340cc56e6d5d967a03ac0e848c81935300662b614a693a97d94",
+        "/private/tmp/rrrah-encoded-full-warp-20261015/candidate/src/warp.rs": "b7a98dc021d5f57dea9240a8915732f4a7c91c2765bc755e3f941e1fc55f4b32"
+      }
+    }
+  ],
+  "passed_per_variant": 4,
+  "whole_original_modules": [
+    "warp.rs",
+    "linear.rs",
+    "pixels.rs",
+    "geometry.rs"
+  ],
+  "only_candidate_change": "Encoded RGB transfer reuse for bit-equal channels",
+  "scope": "All four original embedded tests from complete four-module composition executed on MacARM with actual cached blake3/thiserror; no fake view/type/geometry/IO. Other library modules/integration tests/full registration benchmark not executed. No production adoption. Initial output-path directory conflict retained as compile.log; corrected path compile-v2.log passes strict warnings."
+}

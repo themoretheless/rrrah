@@ -1,0 +1,33 @@
+{
+  "status": "verified_ten_retained_binary_replays_and_race_instrumented_tests",
+  "producer_report_sha256": "973b32b21e331f307a54f3fd0f8d450354166ecfe100216823d4fb66660b118f",
+  "auditor_sha256": "9fbee40d38e74c6d42993462b7cbd70a74605b09c1a93b03de40b2aa8be34e40",
+  "targets": [
+    {
+      "binary": "/private/tmp/rrrah-deduper256-native-20261015/root.test",
+      "sha256": "9e75a4514d47e76eaf8ccb9b11f1092eb89d182318d41291826318f83822263d",
+      "inventory": [
+        "TestDedupe",
+        "TestErrorFanoutClearsInflight",
+        "TestMutableKeyLosesOriginalWaiter",
+        "TestSameKeyDifferentPayloadSharesFirstResult",
+        "TestShutdown",
+        "TestUncomparableKeyPanics",
+        "TestUniq"
+      ],
+      "log": "=== RUN   TestSameKeyDifferentPayloadSharesFirstResult\n--- PASS: TestSameKeyDifferentPayloadSharesFirstResult (0.00s)\n=== RUN   TestMutableKeyLosesOriginalWaiter\n--- PASS: TestMutableKeyLosesOriginalWaiter (0.00s)\n=== RUN   TestUncomparableKeyPanics\n--- PASS: TestUncomparableKeyPanics (0.00s)\n=== RUN   TestErrorFanoutClearsInflight\n--- PASS: TestErrorFanoutClearsInflight (0.00s)\n=== RUN   TestDedupe\n--- PASS: TestDedupe (0.10s)\n=== RUN   TestUniq\n--- PASS: TestUniq (0.51s)\n=== RUN   TestShutdown\n--- PASS: TestShutdown (0.30s)\nPASS\n"
+    },
+    {
+      "binary": "/private/tmp/rrrah-deduper256-native-20261015/go1.test",
+      "sha256": "bee3b28bdd19a6052e1e4fdcd0ef240d8cf55365732d2396041f04753b9fe33a",
+      "inventory": [
+        "TestDedupe",
+        "TestShutdown",
+        "TestUniq"
+      ],
+      "log": "=== RUN   TestDedupe\n--- PASS: TestDedupe (0.10s)\n=== RUN   TestUniq\n--- PASS: TestUniq (0.51s)\n=== RUN   TestShutdown\n--- PASS: TestShutdown (0.30s)\nPASS\n"
+    }
+  ],
+  "race_log_sha256": "98d0620ee621a4da902693cbaf4259f37b234314bc810228c52dd8407bc24052",
+  "scope": "Actual unchanged original Go implementations, all six upstream tests and four authored helper controls. Race detector observed no race in this execution; not proof of all schedules, cancellation, bounded memory or production adoption."
+}

@@ -1,0 +1,16 @@
+{
+  "status": "not_adopted_no_consistent_registration_gain",
+  "evidence": "docs/research/dedup-zero-weight-warp-controls-20261015.json",
+  "evidence_sha256": "725ae5e338254a69097aa19ce286e9cb03d3e48f0a295ffb4527a370baa471ad",
+  "ratios": {
+    "gray-radius0": 1.0823878629535466,
+    "gray-radius1": 0.976368530242738,
+    "color-radius0": 1.0029923676410741,
+    "color-radius1": 1.0203859047263628
+  },
+  "correctness": "28616 bit-identical grid samples, all5module tests,56matching registration results and callback counts",
+  "production_changed": false,
+  "reason": "Observed ratios0.976to1.082 under concurrent work do not establish consistent improvement. Branch executed for every interpolation tap; trial coordinates usually noninteger.",
+  "next_direction": "Avoid speculative inner-loop branches; investigate invariant target-side encoded samples shared across registration trials with explicit memory admission and fallback.",
+  "scope": "Not a release/end-to-end speed claim; original complete baseline still active."
+}

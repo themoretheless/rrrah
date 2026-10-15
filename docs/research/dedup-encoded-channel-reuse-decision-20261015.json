@@ -1,0 +1,15 @@
+{
+  "status": "rejected_unconditional_production_adoption",
+  "benchmark": "docs/research/dedup-encoded-full-registration-benchmark-20261015.json",
+  "benchmark_sha256": "91d8786fb01100f9b459b91b37889ab33fc3311d60855cff02be8dbd1fbad25c",
+  "ratios": {
+    "gray-radius0": 0.4516408751334045,
+    "gray-radius1": 0.534313467996962,
+    "color-radius0": 1.0604918031641275,
+    "color-radius1": 1.130239185541019
+  },
+  "reason": "Color registration regresses6to13percent despite gray improvement. Equality branches executed per converted pixel; no universal benefit.",
+  "production_changed": false,
+  "possible_followup": "Only reconsider with explicitly validated immutable grayscale classification and measured admission cost; retain exact encoded RGB/alpha semantics, cancellation and resource ownership. Classification overhead and whole decode/collection path unmeasured.",
+  "scope": "Diagnostic synthetic registration benchmark, not statistically controlled release or end-to-end image comparison result."
+}

@@ -1,0 +1,37 @@
+{
+  "status": "observed_live_cpu_bound_registration_not_terminal_test_result",
+  "pid": 10151,
+  "parent_cargo_pid": 67374,
+  "profile": "/private/tmp/rrrah-five-collection-sample-20261015.txt",
+  "profile_sha256": "fb7dcf4fbe8d255720cc47b4b889956f16bc52e934fe82860994c8b3b3a44226",
+  "sampling_seconds": 2,
+  "sampling_interval_ms": 10,
+  "observed_cpu_percent": 97.0,
+  "observed_elapsed": "10:14",
+  "observed_cpu_time": "9:11.59",
+  "active_test": "five_search_collection_matches_direct_and_source_lifecycle",
+  "observed_test_stage": "five_collection.rs:505 bidirectional gradient regions",
+  "hot_path": [
+    "scan_projective_local_collection_five_bidirectional_gradient_regions",
+    "verify_projective_portfolio_views",
+    "refine_projective_pixels_selected",
+    "sample_pair_mapped",
+    "interpolate_in_space",
+    "premultiplied_in_space"
+  ],
+  "source_pins": {
+    "crates/rrrah-dedup/src/warp.rs": "1dee5d40b8fa2e4e4b9afb2f8899c64083f404686de6e08da476467c0ed57991",
+    "crates/rrrah-dedup/src/linear.rs": "9ba055f4a73063eed2d757e47cbd6d0b1b53b9f1fed6c1cbd777d3106141e059",
+    "crates/rrrah-dedup/tests/five_collection.rs": "57e287e689193a9feb1ff1974cf6c1c98d0796b15a2074f0cc40963764d12233"
+  },
+  "candidate_direction": "Evaluate reuse of immutable encoded premultiplied samples during repeated registration scores. Requires explicit existing MemoryBudget admission or allocation-free bounded reuse; never unaccounted full-image cache.",
+  "required_invariants": [
+    "Bit-identical floating operation order and extended negative/HDR sRGB transfer",
+    "Invisible RGB and signed zero canonicalization",
+    "Unchanged callback sequence, latched cancellation and final publication guards",
+    "Unchanged cumulative work admission and source generation checks",
+    "Existing memory credit accounting and no retained allocations after error"
+  ],
+  "decision": "No production change. Profile identifies a candidate hot path; paired end-to-end correctness/performance proof required before adoption.",
+  "scope": "One short sample of active immutable415 baseline MacARM opt1 diagnostic test. Not release throughput, hang proof for all code, whole-run memory bound or completed test result."
+}

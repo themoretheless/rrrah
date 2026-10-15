@@ -1,0 +1,190 @@
+{
+  "status": "isolated_helper_correctness_and_microbenchmark_only",
+  "bitwise_controls": 400006,
+  "rows": [
+    {
+      "family": "equal",
+      "round": 0,
+      "baseline": {
+        "ns": 54652458,
+        "checksum": "4698267447643997061"
+      },
+      "candidate": {
+        "ns": 22033000,
+        "checksum": "4698267447643997061"
+      }
+    },
+    {
+      "family": "equal",
+      "round": 1,
+      "candidate": {
+        "ns": 21434750,
+        "checksum": "4698267447643997061"
+      },
+      "baseline": {
+        "ns": 67244625,
+        "checksum": "4698267447643997061"
+      }
+    },
+    {
+      "family": "equal",
+      "round": 2,
+      "baseline": {
+        "ns": 55451917,
+        "checksum": "4698267447643997061"
+      },
+      "candidate": {
+        "ns": 21925208,
+        "checksum": "4698267447643997061"
+      }
+    },
+    {
+      "family": "equal",
+      "round": 3,
+      "candidate": {
+        "ns": 22299000,
+        "checksum": "4698267447643997061"
+      },
+      "baseline": {
+        "ns": 54748542,
+        "checksum": "4698267447643997061"
+      }
+    },
+    {
+      "family": "equal",
+      "round": 4,
+      "baseline": {
+        "ns": 51736875,
+        "checksum": "4698267447643997061"
+      },
+      "candidate": {
+        "ns": 24447541,
+        "checksum": "4698267447643997061"
+      }
+    },
+    {
+      "family": "equal",
+      "round": 5,
+      "candidate": {
+        "ns": 22148333,
+        "checksum": "4698267447643997061"
+      },
+      "baseline": {
+        "ns": 65795166,
+        "checksum": "4698267447643997061"
+      }
+    },
+    {
+      "family": "equal",
+      "round": 6,
+      "baseline": {
+        "ns": 77304542,
+        "checksum": "4698267447643997061"
+      },
+      "candidate": {
+        "ns": 39597750,
+        "checksum": "4698267447643997061"
+      }
+    },
+    {
+      "family": "different",
+      "round": 0,
+      "baseline": {
+        "ns": 65599166,
+        "checksum": "4698267447643997061"
+      },
+      "candidate": {
+        "ns": 78783875,
+        "checksum": "4698267447643997061"
+      }
+    },
+    {
+      "family": "different",
+      "round": 1,
+      "candidate": {
+        "ns": 62484416,
+        "checksum": "4698267447643997061"
+      },
+      "baseline": {
+        "ns": 75855667,
+        "checksum": "4698267447643997061"
+      }
+    },
+    {
+      "family": "different",
+      "round": 2,
+      "baseline": {
+        "ns": 77048792,
+        "checksum": "4698267447643997061"
+      },
+      "candidate": {
+        "ns": 70007583,
+        "checksum": "4698267447643997061"
+      }
+    },
+    {
+      "family": "different",
+      "round": 3,
+      "candidate": {
+        "ns": 59447500,
+        "checksum": "4698267447643997061"
+      },
+      "baseline": {
+        "ns": 56990167,
+        "checksum": "4698267447643997061"
+      }
+    },
+    {
+      "family": "different",
+      "round": 4,
+      "baseline": {
+        "ns": 59538334,
+        "checksum": "4698267447643997061"
+      },
+      "candidate": {
+        "ns": 77780125,
+        "checksum": "4698267447643997061"
+      }
+    },
+    {
+      "family": "different",
+      "round": 5,
+      "candidate": {
+        "ns": 60297875,
+        "checksum": "4698267447643997061"
+      },
+      "baseline": {
+        "ns": 54624041,
+        "checksum": "4698267447643997061"
+      }
+    },
+    {
+      "family": "different",
+      "round": 6,
+      "baseline": {
+        "ns": 58124625,
+        "checksum": "4698267447643997061"
+      },
+      "candidate": {
+        "ns": 54761042,
+        "checksum": "4698267447643997061"
+      }
+    }
+  ],
+  "median_candidate_over_baseline": {
+    "equal": 0.4031474668531834,
+    "different": 1.04311854359016
+  },
+  "pins": {
+    "/private/tmp/rrrah-encoded-equal-channels-20261015/bench": "6a6e5310177369b77e7dda115b89e679bc753eafc1f20664d0ea28efa354e7b7",
+    "/private/tmp/rrrah-encoded-equal-channels-20261015/source.json": "0f3990eb4431ea4e2b68007973a4a16ada308549c8dd268485efaeee21c73213",
+    "/private/tmp/rrrah-encoded-equal-channels-20261015/encode.rs": "3e17343cbebca8447dda296ade464a61c3024741e4b73786aa86b75d1e794d91",
+    "/private/tmp/rrrah-encoded-equal-channels-20261015/baseline.rs": "aee8854ac5acfa99b854201d21bc17ddff2d205d678848e0cf015e460114763d",
+    "/private/tmp/rrrah-encoded-equal-channels-20261015/candidate.rs": "6dd32c94056d2509dfb7528f40254f0cb6a4b6d15dbef79b22cc3a667783c973",
+    "/private/tmp/rrrah-encoded-equal-channels-20261015/probe.rs": "de24ea074c5a98722ccc0aa1f6364235edabd5a086916d90eb033072beaade4a",
+    "/private/tmp/rrrah-encoded-equal-channels-20261015/bench.rs": "a6ba294cb4bbc2fe7a1a0a287e31c2c1f9daf3be8945f9b6c68dd9759165d454",
+    "/private/tmp/rrrah-encoded-equal-channels-20261015/probe": "33d3d1a8d47e21b09f963ad9fe8d70230686c6f6b08bca30b0227699f74c5a89",
+    "/private/tmp/rrrah-encoded-equal-channels-20261015/view.rs": "6c9ec86a003406adc964c858548a0adec4e522d387509d6c65d451c9c2df377d"
+  },
+  "scope": "Selected unchanged original helper and canonical pixel accessor, explicit source-view layout adapter. Synthetic finite HDR/negative channels, transparent NaNs/signed zeros; standalone opt3 MacARM. Microbenchmark under concurrent full test, not whole registration/end-to-end proof. No production adoption."
+}

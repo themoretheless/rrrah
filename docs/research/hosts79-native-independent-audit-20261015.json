@@ -1,0 +1,16 @@
+{
+  "status": "verified_five_complete_native_tests_and_four_cli_replays",
+  "producer_report_sha256": "8c5c29dfd69dc458a51a2921a7dd8621ae288ed2e36f57a3e674c6935e1bf516",
+  "auditor_sha256": "a6e7010742cf6c1caf27413ac68bdc40cc98c35d1f51d0d12a969c9a9dac999a",
+  "test_binary_sha256": "466975ce0866e6846ac33dd0e0e1ac0a0e072b6628e801b47c6672ec861b0712",
+  "complete_test_inventory": [
+    "TestByteReverseDoesNotPreserveUTF8",
+    "TestInjectedHashCollisionIsDiscarded",
+    "TestScannerRejectsOversizedLine",
+    "TestScrubPreservesCaseAndRejectsTabs",
+    "TestStableMultiwordDuplicateKeepsFirst"
+  ],
+  "test_log": "=== RUN   TestInjectedHashCollisionIsDiscarded\n--- PASS: TestInjectedHashCollisionIsDiscarded (0.00s)\n=== RUN   TestStableMultiwordDuplicateKeepsFirst\n--- PASS: TestStableMultiwordDuplicateKeepsFirst (0.00s)\n=== RUN   TestScrubPreservesCaseAndRejectsTabs\n--- PASS: TestScrubPreservesCaseAndRejectsTabs (0.00s)\n=== RUN   TestScannerRejectsOversizedLine\n--- PASS: TestScannerRejectsOversizedLine (0.00s)\n=== RUN   TestByteReverseDoesNotPreserveUTF8\n--- PASS: TestByteReverseDoesNotPreserveUTF8 (0.00s)\nPASS\n",
+  "cli_controls": 4,
+  "scope": "Original unchanged Go source; synthetic data and injected hash collision. No natural collision, image/file identity, scaling or other-platform proof."
+}

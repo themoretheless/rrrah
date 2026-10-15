@@ -1,0 +1,21 @@
+{
+  "status": "rejected_experiments_reproducible_source_deltas",
+  "baseline_module_pins": {
+    "crates/rrrah-dedup/src/warp.rs": "1dee5d40b8fa2e4e4b9afb2f8899c64083f404686de6e08da476467c0ed57991",
+    "crates/rrrah-dedup/src/linear.rs": "9ba055f4a73063eed2d757e47cbd6d0b1b53b9f1fed6c1cbd777d3106141e059",
+    "crates/rrrah-dedup/src/pixels.rs": "89b074f4bf205a42e51e4406090c43705c3ab4fa8a4b4494afd27e705bc2dfc1",
+    "crates/rrrah-dedup/src/geometry.rs": "ccbbeb779159d340cc56e6d5d967a03ac0e848c81935300662b614a693a97d94"
+  },
+  "files": {
+    "registration-bench.rs": "93002fc869a6bca98021cfc751dd8a3d4f9e0dec4b204584aad3747ff21893cc",
+    "helper-baseline.rs": "aee8854ac5acfa99b854201d21bc17ddff2d205d678848e0cf015e460114763d",
+    "helper-candidate.rs": "6dd32c94056d2509dfb7528f40254f0cb6a4b6d15dbef79b22cc3a667783c973",
+    "helper-probe.rs": "de24ea074c5a98722ccc0aa1f6364235edabd5a086916d90eb033072beaade4a",
+    "equal-channel.patch": "bda43f9d16d4004fed6f763d11d493ef4673a513e55a062d19c3355593acd892",
+    "helper-bench.rs": "a6ba294cb4bbc2fe7a1a0a287e31c2c1f9daf3be8945f9b6c68dd9759165d454",
+    "zero-weight.patch": "57b88958cd1f2beeac24166d2774574608535dc09e4acd1b9e6c7c4742175b26",
+    "helper-encode.rs": "3e17343cbebca8447dda296ade464a61c3024741e4b73786aa86b75d1e794d91",
+    "helper-view.rs": "6c9ec86a003406adc964c858548a0adec4e522d387509d6c65d451c9c2df377d"
+  },
+  "scope": "Diagnostic experiments only, no production adoption. Apply each independent delta to source pins; registration harness belongs alongside four unchanged module files. Zero-weight delta includes authored grid oracle. Helper harness uses explicitly selected canonical view code. Existing reports retain exact compiler commands, dependency pins and results."
+}

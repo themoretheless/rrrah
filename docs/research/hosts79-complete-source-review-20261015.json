@@ -1,0 +1,154 @@
+{
+  "status": "complete_source_read_with_nine_native_controls",
+  "repository": "ScriptTiger/Hosts-BL",
+  "commit": "bc0ab8a3838c5d67d892c248d4ee9d7d0ecfcee9",
+  "tree": "6b16338973872c0607d4711bf00967b4e37effe1",
+  "fresh_commit_tree_binding_verified": true,
+  "source_files": [
+    {
+      "path": ".gitattributes",
+      "local": "docs/research/dedup-500/evidence/ScriptTiger--Hosts-BL/05-gitattributes",
+      "sha256": "1a1dbe176bc233b499d35a57db7513f2941c99ab9759f177830c9149be99005b",
+      "git_blob": "dfe0770424b2a19faf507a501ebfc23be8f54e7b"
+    },
+    {
+      "path": ".gitignore",
+      "local": "docs/research/dedup-500/evidence/ScriptTiger--Hosts-BL/06-gitignore",
+      "sha256": "1d214d07a587f23ffe38e874f2a6cbd9fe13121c5f959641e9fc70922332f809",
+      "git_blob": "621119532081df4dd4282bb5c0f0a810d36be482"
+    },
+    {
+      "path": "Build.cmd",
+      "local": "docs/research/dedup-500/evidence/ScriptTiger--Hosts-BL/07-Build.cmd",
+      "sha256": "cb05492284e359b4ddd1c10a8e43fc66b24e844577714c36a47f7ce7b9243197",
+      "git_blob": "e5d64c8f1b1dcde4c78354ae12316aa89e0d3fdf"
+    },
+    {
+      "path": "Build.sh",
+      "local": "docs/research/dedup-500/evidence/ScriptTiger--Hosts-BL/02-Build.sh",
+      "sha256": "8a99870110e73c1d10e8f0f2974f1175f3fb709ae8a1a32f3009a042ac13031e",
+      "git_blob": "28c5123257bd3e1c00e68b0ed11dc7f5066fd91e"
+    },
+    {
+      "path": "LICENSE",
+      "local": "docs/research/dedup-500/evidence/ScriptTiger--Hosts-BL/01-LICENSE",
+      "sha256": "0208cc8fd56442bc96d2a48f725ffd0abfea67b376163274938d3de39df734c8",
+      "git_blob": "438ea5036241d67c0b1d3c0d5f3182ecbcb0b339"
+    },
+    {
+      "path": "README.md",
+      "local": "docs/research/dedup-500/evidence/ScriptTiger--Hosts-BL/00-README.md",
+      "sha256": "4555bd97deb38dbd94c583dd17d911ef23209f59c30ec91812d08c888da8f0eb",
+      "git_blob": "f3c6d98ef25dc715f9afb59ff024a60b8b0fd8fb"
+    },
+    {
+      "path": "go.mod",
+      "local": "docs/research/dedup-500/evidence/ScriptTiger--Hosts-BL/08-go.mod",
+      "sha256": "116306dbdb230fda012c3de2f40df5b85b3a75348f3449b48c57a510e9d5fe6d",
+      "git_blob": "6bd0de5a06b7eeef9ccb32af9bbbcbf8bd42f9a7"
+    },
+    {
+      "path": "hosts-bl.go",
+      "local": "docs/research/dedup-500/evidence/ScriptTiger--Hosts-BL/03-hosts-bl.go",
+      "sha256": "724b6209c27eec1da4e2a46b5b136e452f623b3d971ba7b9478ffe5d560b9f9a",
+      "git_blob": "37f38f19cc9ea0024a16f6546b0b0f00d6a0c9ad"
+    },
+    {
+      "path": "include_other.go",
+      "local": "docs/research/dedup-500/evidence/ScriptTiger--Hosts-BL/04-include_other.go",
+      "sha256": "bfcee065c301775fef801b53fd466797299be348c279df3bcbca1ed8bbd9e0a7",
+      "git_blob": "7bd0b7c97ae60dcad51ba2630b75b05fde7f75dc"
+    },
+    {
+      "path": "include_windows.go",
+      "local": "docs/research/dedup-500/evidence/ScriptTiger--Hosts-BL/09-include_windows.go",
+      "sha256": "21ff7fe4044086ac3876904bc418b40daf3c15d9905e1a3dae1c59eba81e880a",
+      "git_blob": "241a6e0a2df2bcde1d6917c78f07d473bf7dcbb7"
+    }
+  ],
+  "license": "MIT",
+  "native_controls": [
+    {
+      "name": "duplicates",
+      "command": [
+        "/private/tmp/rrrah-hosts79-native-20261015/hosts-bl",
+        "-from_blackhole",
+        "0.0.0.0",
+        "-f",
+        "fqdn",
+        "/private/tmp/rrrah-hosts79-native-20261015/duplicates.hosts",
+        "/private/tmp/rrrah-hosts79-native-20261015/duplicates.out"
+      ],
+      "returncode": 0,
+      "input_sha256": "179c4a26066f7e199c7496de5c9d03099f25586e90a72c8ecd2565a1f9e89708",
+      "output_sha256": "170ea1b118b24ab33755a7edecae7e833b1539e451471994c06e36a23ce0ae93",
+      "output": "a.test\nb.test\n"
+    },
+    {
+      "name": "case",
+      "command": [
+        "/private/tmp/rrrah-hosts79-native-20261015/hosts-bl",
+        "-from_blackhole",
+        "0.0.0.0",
+        "-f",
+        "fqdn",
+        "/private/tmp/rrrah-hosts79-native-20261015/case.hosts",
+        "/private/tmp/rrrah-hosts79-native-20261015/case.out"
+      ],
+      "returncode": 0,
+      "input_sha256": "b63cfd7ff40d1077dfa2d7cbb055431fc8e27ca109903091906caea161be2f4c",
+      "output_sha256": "0a6332f3f93cf53aefb2e782eed5b893d18e999ce13a8daca91f4f3c8c957868",
+      "output": "EXAMPLE.test\nexample.test\n"
+    },
+    {
+      "name": "tab",
+      "command": [
+        "/private/tmp/rrrah-hosts79-native-20261015/hosts-bl",
+        "-from_blackhole",
+        "0.0.0.0",
+        "-f",
+        "fqdn",
+        "/private/tmp/rrrah-hosts79-native-20261015/tab.hosts",
+        "/private/tmp/rrrah-hosts79-native-20261015/tab.out"
+      ],
+      "returncode": 0,
+      "input_sha256": "a3de9c1aa6539eec41b37e3e36bc18ddd383bb89011715e3f9220823ca204635",
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "output": ""
+    },
+    {
+      "name": "long",
+      "command": [
+        "/private/tmp/rrrah-hosts79-native-20261015/hosts-bl",
+        "-from_blackhole",
+        "0.0.0.0",
+        "-f",
+        "fqdn",
+        "/private/tmp/rrrah-hosts79-native-20261015/long.hosts",
+        "/private/tmp/rrrah-hosts79-native-20261015/long.out"
+      ],
+      "returncode": 0,
+      "input_sha256": "a12b0ff07aa36af333557d8162a11763dadfa6638767f822953e4997ecfcd1f4",
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "output": ""
+    }
+  ],
+  "authored_module_controls": 5,
+  "upstream_tests": 0,
+  "original_production_sources_unchanged": true,
+  "build_scope": "Explicit original Go filenames; original module main causes go test ./... import failure retained in test.log. No module or production patch, no external dependencies.",
+  "logs": {
+    "/private/tmp/rrrah-hosts79-native-20261015/test.log": "3ee5a7e10a74efd6199b6152b263deabf7d37f91fdfcd2443b7b8030a84cbd6e",
+    "/private/tmp/rrrah-hosts79-native-20261015/test-v2.log": "8d96f7c761a6b877bdaedef369aedf8f9e2f744e8efbd60846e1ad3ec08f4ba3"
+  },
+  "executable_sha256": "a0ef5b34828f0a12a8b6200fd4696bf5969ce6f995eb8fd64f0e757cffecb2a4",
+  "findings": [
+    "Hash-equal records removed without string confirmation; synthetic injected collision only, not observed natural collision.",
+    "Case-sensitive domains retained separately; tab-separated hosts rejected.",
+    "Original CLI silently succeeds with empty output on oversized scanner token and drops following valid lines.",
+    "Whole input indexed and sorted; reducible formats add suffixarray and extra passes; no bounded memory or cancellation.",
+    "Output created before scanning; scanner errors, writer errors, seek errors ignored; no atomic publication."
+  ],
+  "adoption": "No code adopted; reject domain-specific hash-only identity for exact file library.",
+  "scope": "All ten pinned text blobs read, git blob sizes and identities verified. Five authored original-source tests and four actual CLI synthetic controls on MacARM. No Windows/Linux runtime, natural collision, broad performance or image/file identity proof."
+}

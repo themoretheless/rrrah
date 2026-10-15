@@ -2,9 +2,9 @@
   "index": 256,
   "repository": "tonalfitness/deduper",
   "commit": "862d626705ba2828702986086932d42c918e2a4e",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All11pinned text blobs fully read; six original native Go tests and four authored broker controls pass; examples compile only, limits retained.",
   "decision": "reference",
-  "finding": "Fixed worker pool suppresses duplicate expensive requests; possible fingerprint scheduling model, no visual algorithm.",
+  "finding": "Fixed worker broker coalesces same keys; mutable keys strand waiters, payload differences hidden by key, no byte budget or per-request cancellation. Reference only, no source adoption.",
   "available_source_evidence": [
     {
       "path": "deduper.go",
@@ -74,5 +74,8 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/deduper256-complete-source-review-20261015.json",
+  "complete_runtime_audit": "docs/research/deduper256-native-independent-audit-20261015.json"
 }
