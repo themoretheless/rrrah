@@ -1,0 +1,56 @@
+{
+  "status": "failed_complete_gate_preserved_recovery_all_target_replay_dispatched",
+  "failed_report_sha256": "f142b6ebe374380fa7ce68c2384cc0eaa4682b0eb06612f124b2b1e412458d6c",
+  "failed_audit_sha256": "5637e54910ad6cf7a0d39d98dc2d4d7cb0cbbcbf937014ad73f4a1ad9c4a86e1",
+  "passed": 2057,
+  "failed": 9,
+  "ignored": 86,
+  "targets": 162,
+  "failures": [
+    "associated_tiff_alpha_matches_independent_straight_png",
+    "cross_encoding_batch_confirms_every_pair_and_rejects_single_pixel_edits",
+    "independent_lossless_encodings_preserve_pixels_alpha_and_one_code_negatives",
+    "indexed_alpha_encodings_ignore_hidden_rgb_and_separate_visible_edits",
+    "indexed_cross_encoding_collection_preserves_all_equal_pairs_and_one_pixel_negative",
+    "malformed_associated_alpha_refuses_releases_memory_and_retries",
+    "untagged_policy_is_explicit_cached_and_does_not_override_declared_linear_color",
+    "sensor_cache_revalidates_changed_mosaic_with_restored_size_and_mtime",
+    "sensor_dng_development_preserves_copy_and_changed_mosaic_evidence"
+  ],
+  "explicit_enospc_failures": 6,
+  "other_assertion_failures_pending_replay": 3,
+  "cache_release": "docs/research/dedup-owned-incremental-cache-release-20261015.json",
+  "cache_release_sha256": "f11c59d8fdc2496b1a25c869c3f025c51427c38245d134f7a8bfb85534f95772",
+  "replay_report": "docs/research/dedup-common-fixed-baseline-replay-v3-20261015.json",
+  "prepared_scripts": {
+    "scripts/replay-dedup-common-fixed-baseline-all-targets-v3-20261015.py": "ab96dbb1c49ef01167274b08d9feb0a9691b03a0533b0044e1105b1570c34d5a",
+    "scripts/audit-dedup-common-fixed-baseline-replay-v3-20261015.py": "e6909db2350194785fbefd457283c739c96a9246b286b4fda291003d5073d5a2",
+    "scripts/qualify-dedup-common-worker-fixed-candidate-v3-20261015.py": "d44fd0404429d41f510a93773adf554ab5cd75797575150fa61ace87b436651f",
+    "scripts/audit-dedup-common-worker-fixed-candidate-v3-20261015.py": "7ecb4af96ec38df64bfc2cf474533bff49689bde142abc4104ae0b262b05aba4",
+    "scripts/check-dedup-actual-collection-benchmark-admission-v2-20261015.py": "3a82a6d1b9951392acfea717bd7ce4bed4eb34d0558ec29ecaf83b058d15be37"
+  },
+  "artifacts": [
+    {
+      "path": "docs/research/dedup-common-fixed-enospc-recovery-20261015/benchmark-refuses-pending-full-replay.log",
+      "sha256": "a0c45dfd23f59d52c03595450ec2327d5579613579455f57c20693cc0e9b877b"
+    },
+    {
+      "path": "docs/research/dedup-common-fixed-enospc-recovery-20261015/candidate-v2-refuses-failed-baseline.log",
+      "sha256": "dbc81b881b244c103ba8e9c1379253dd9e802332fc4f92329832b55cd88f2971"
+    },
+    {
+      "path": "docs/research/dedup-common-fixed-enospc-recovery-20261015/candidate-v3-refuses-pending-full-replay.log",
+      "sha256": "a6ba475c29f5feedac52858f59a2ddbe0c1c4c9b813e7449220101378d91855d"
+    },
+    {
+      "path": "docs/research/dedup-common-fixed-enospc-recovery-20261015/failed-cargo.log",
+      "sha256": "b9defd8a790b8e7b97477390a83116748868590bde1ea3e46f849a1d58425ed7"
+    }
+  ],
+  "limits": [
+    "Failed full Cargo execution remains2057pass9fail86ignored162targets. Four raster and two raw failures explicitly report ENOSPC; three raster assertions omit entries/issues, cause not independently settled until replay.",
+    "Native worker observer tests now pass but this does not make complete gate pass. No test expectations or source changed in recovery.",
+    "All162 source-pinned retained binaries re-executed under owned TMPDIR; live report excluded from commits. No candidate dispatched or speed benchmark admitted.",
+    "Candidatev3 uses unchanged prepared source pair, original optimization levels/assertions; incremental compilation disabled solely to avoid rebuildable diskcache growth. Correctness gate, not matched compiler timing. Future opt3 benchmark still needs complete passing baseline+candidate gates and no competing owned heavy jobs."
+  ]
+}

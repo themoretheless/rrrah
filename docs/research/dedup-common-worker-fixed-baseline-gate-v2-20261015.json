@@ -1,0 +1,1339 @@
+{
+  "status": "terminal_failure",
+  "variant": "baseline",
+  "producer_pid": 52036,
+  "producer_sha256": "1bfd878fcaedd4e4d5be37d6de8fa35bbab68021ff9bbc1a1a8498e9e1e3712c",
+  "manifest": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-common-worker-fixed-collection-pair-v2-prepared-20261015.json",
+  "manifest_sha256": "60e3adc6c4b7fc109ccb9edf83fec8797f8eb812f14214b8c723737e43ac6115",
+  "original_terminal_audit_sha256": "96f34ddbbb2004a962e75fd8a1bb95f1f34bebc84ad04f4a3e88a4b36b81a1c3",
+  "source": "/private/tmp/rrrah-common-worker-fixed-collection-pair-v2-20261015/baseline",
+  "command": [
+    "cargo",
+    "+stable",
+    "test",
+    "--locked",
+    "--offline",
+    "-p",
+    "rrrah-decode",
+    "-p",
+    "rrrah-dedup",
+    "--features",
+    "rrrah-dedup/decode",
+    "--lib",
+    "--tests",
+    "--no-fail-fast",
+    "--jobs",
+    "2",
+    "--config",
+    "profile.test.lto=\"off\"",
+    "--config",
+    "profile.test.package.rrrah-dedup.debug=0",
+    "--config",
+    "profile.test.package.rrrah-decode.debug=0",
+    "--target-dir",
+    "/private/tmp/rrrah-consensus-collection-target-20261014"
+  ],
+  "scope": "Complete lib/integration targets of both frozen packages, decode enabled, no filters or pruning. Shared test-only worker overlay. Original optlevels/assertions retained; only these two packages omit debug symbols equally, noLTO diagnostic MacARM. Not latest mutable Root/allformats/platform proof.",
+  "child_pid": 52048,
+  "returncode": 101,
+  "cargo_log": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/cargo.log",
+  "cargo_log_sha256": "b9defd8a790b8e7b97477390a83116748868590bde1ea3e46f849a1d58425ed7",
+  "retained_binaries": [
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/rrrah_decode-3b55b99b6959bc02",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-0-rrrah_decode-3b55b99b6959bc02",
+      "sha256": "a5a369f1496912595ce4cd5d6de1c4409e53ad53737b4337d83e67fa5919a6bf",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-0.log",
+      "inventory_sha256": "4d901ad9f0bf5f6b96ade87bfad21ef7d0c4864e6f91b09ab345b7d105ac50e6",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/avif_prem_producer-ef1ee24b89169973",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-1-avif_prem_producer-ef1ee24b89169973",
+      "sha256": "c03b1ebf9a4afa876ecae437d65658441bb956a9f19e6fdeeeac5844bc64202c",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-1.log",
+      "inventory_sha256": "442b638e86471a0f2d42a608684aea80f8d5a427d429b62589fe49289abf1e71",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/bay_sensor_oracle-6f8f214e49f1cb03",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-2-bay_sensor_oracle-6f8f214e49f1cb03",
+      "sha256": "7966de4f821678443e037ee70c507baa0e947b624a18688b46a81349b10c7ff3",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-2.log",
+      "inventory_sha256": "690733a14a888d3f43456c555ccaaaa1f91ecaa102a14b69df19b0cbb6074450",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/gpr_color_oracle-284e3b1aa3469030",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-3-gpr_color_oracle-284e3b1aa3469030",
+      "sha256": "1b5687e362955cdf5a959b70cdca9f42e2b8647df668a4f0756711bd5f7663ea",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-3.log",
+      "inventory_sha256": "63d2ae2abbf8b801347703a1a4525558794653cedd8846b5867e0333f01cb4f2",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/gpr_highlight_support-7b942d435531e1a9",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-4-gpr_highlight_support-7b942d435531e1a9",
+      "sha256": "904040f2477882dbff832341ec86948c8beb651a952c5317eda73fed122739b9",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-4.log",
+      "inventory_sha256": "323f89eb0f17a922be690df3079860e44ac8a8c46ad89cb6869a0150dbc9a0d7",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/pdf_knockout-51339073cabe2f7e",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-5-pdf_knockout-51339073cabe2f7e",
+      "sha256": "97bc641a208284462257f3c9ac9c1f0421447debd83bf0d235505082a7d122bb",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-5.log",
+      "inventory_sha256": "ba3eb99cd3188ad8746800bb5ab78fe6096569324cb694eb8c15b2009f9f7043",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/qoi_reference_corpus-6613f4c0e558fd1f",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-6-qoi_reference_corpus-6613f4c0e558fd1f",
+      "sha256": "18ab33b0cb90ab5d0f6e04d086126e9212d970ab9657c01b630b05b24dd8f144",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-6.log",
+      "inventory_sha256": "67155c75b07426dcd680b3b7999b4360eb62eb0c0d96fe1e176e5bccb8665496",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/rrrah_dedup-2c8adc3757e1f902",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-7-rrrah_dedup-2c8adc3757e1f902",
+      "sha256": "3fffa1f9915000e501320685adb2ba3744db7b1cf502753975bb6538c538fada",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-7.log",
+      "inventory_sha256": "6ec237a5a187413e37a21e35dc9d122537e545981e3aecff061ed07bae315dbc",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/affine_candidate_search-55c309c067f58e84",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-8-affine_candidate_search-55c309c067f58e84",
+      "sha256": "f8fabd2584b210350e283c4b20123ce3821fca0117ef6afa40549d961118d532",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-8.log",
+      "inventory_sha256": "630fc7de2d29465c8f68b970b453bbf3aba1e4ca97b232d649eab174ea7a2060",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/affine_color-47f8acd6dc014ed7",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-9-affine_color-47f8acd6dc014ed7",
+      "sha256": "3405cb1218b976a736c36125e11a703f423040209ea88a8cf174c77d69b0a5ab",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-9.log",
+      "inventory_sha256": "ced1af97a46b929a95e9298d43544cbb9401b7fc2eae9843d5a0d14b2e6ffd8a",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/affine_color_heldout_negative-36a78e01a9665c73",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-10-affine_color_heldout_negative-36a78e01a9665c73",
+      "sha256": "9d27b5db65a70318bfe316c71c5aa61a942cedf29d1118a16038c56e8f8bc0b1",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-10.log",
+      "inventory_sha256": "32de5106242f494d4fd354ac01a33207a559464e7ab716c60366e537e3947c9a",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/affine_region-45ec8abc728a322c",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-11-affine_region-45ec8abc728a322c",
+      "sha256": "e1d723c5632357609af406f659d43893d9c0553515bde388cba22040e5486ea6",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-11.log",
+      "inventory_sha256": "4b7dc7223064d43fead1de2b8dc8513a0267c5b141bbfd3006c07eea248e0bce",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/affine_region_file-c0600e58359a9340",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-12-affine_region_file-c0600e58359a9340",
+      "sha256": "fe49165650f422ea3be16a0cca0ce100c639a4e96fa8778df04c2df0f44ef4ac",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-12.log",
+      "inventory_sha256": "ba96abb4ef70e4caa11c4b51a8537eb7b735e6fc838ddd1764809fff57249dcd",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/affine_region_grid-18927ffe34164051",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-13-affine_region_grid-18927ffe34164051",
+      "sha256": "8bc10aaae935735d5fcb6bcd7cabe621050d9c55278076e366ffd6b49125824d",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-13.log",
+      "inventory_sha256": "1c6b86e971dda3dc90b3cd79d41454b9267942ff029b0672f947f3fb871610c1",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/affine_region_input_contract-69647efa4927450f",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-14-affine_region_input_contract-69647efa4927450f",
+      "sha256": "0d6c6d9470c99096c0bde30b5fc96c9956a0a81aac14855caafa69d9b6f16092",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-14.log",
+      "inventory_sha256": "d3aca7c328c881c96dd77e3b45527f090e79f052e448ea4c49a4a62fb3f3904f",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/anchor_candidate_search-c1efc22d4d4dba7c",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-15-anchor_candidate_search-c1efc22d4d4dba7c",
+      "sha256": "70b7244ad8335d636273e094863dc9d15399d8f1b59be317c41a99d03d160b02",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-15.log",
+      "inventory_sha256": "8045832a0a51d5564e073b6915355f0f8ff7ef5ce89db5e23f8ccc02813acfd5",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/anchor_collection-86fc3a35385926a1",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-16-anchor_collection-86fc3a35385926a1",
+      "sha256": "f6e9e2b22d7ec15440a0f9517d7f116e7f3eb49a098ce74fab9b2072a6af6fbc",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-16.log",
+      "inventory_sha256": "e43a042eecded55bda05365545093ead45a2344b6cf3aebea34515d157f7be46",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/anchor_collection_preflight-f6fc144e7a0fe424",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-17-anchor_collection_preflight-f6fc144e7a0fe424",
+      "sha256": "2e1e45413d46b274f83a75c1138ff56ec987cafd8b47c428eee7e50e4f7ae8c4",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-17.log",
+      "inventory_sha256": "99815581e93de5f0fda22e553ffd8dcb75bea9e4655905204928cd81ca10ac4c",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/anchor_collection_scaled-5340cfc8d401d508",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-18-anchor_collection_scaled-5340cfc8d401d508",
+      "sha256": "119de4afd30bfd9d19a0b77e1434aac96635cb71db70a057b894b6c8483f715e",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-18.log",
+      "inventory_sha256": "f41594b3a0b11b5be1c399677e9794f4811f78998e73dd2fa5afe94c552da750",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/anchor_fallback_collection-1d04da17c2c13333",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-19-anchor_fallback_collection-1d04da17c2c13333",
+      "sha256": "df6d8fced8b0d1ab40c40de12ce146787bb313e0997cca13d5a2639ce109b2b5",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-19.log",
+      "inventory_sha256": "7715e5cc989bcac66f6716cc7cedafecb027de22e4d6b472e6c025210adaafd1",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/anchor_fallback_collection_lifecycle-a7bf0d086f9e7855",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-20-anchor_fallback_collection_lifecycle-a7bf0d086f9e7855",
+      "sha256": "046b10e5b6a2a22a73a7db38a79a170cafd92f7a2cad8871e23ec329cdda5b39",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-20.log",
+      "inventory_sha256": "78c5a1a943bd2ec2a24842a859c4d6c785542484eccd230d3f8b367c01935e01",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/anchor_fallback_collection_preflight-6b9dbfb35b5095c8",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-21-anchor_fallback_collection_preflight-6b9dbfb35b5095c8",
+      "sha256": "4de520ad84dad250aee5d21328a6fb33505cbbc2bdc04726b27439b076e25665",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-21.log",
+      "inventory_sha256": "a0397c0dd874640d5d8feb319a573621c5cd3c935cc51777160cb43aab2602e9",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/anchor_fallback_search-97edaf5649084c5e",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-22-anchor_fallback_search-97edaf5649084c5e",
+      "sha256": "7a6890dc5c2880d759b6dbf4a92132de8e6c5c4b9656472681755bb1a2dd6336",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-22.log",
+      "inventory_sha256": "faf548b34cfa1749a0a56efc28ab5b89c2cfad5b2a33994818f0962bd16bb077",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/anchor_file_search_preflight-7233ee1c78fe8dc4",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-23-anchor_file_search_preflight-7233ee1c78fe8dc4",
+      "sha256": "fbdcfcd7c04abcb9f55d6c9517373800578242f9ef8e0b127d410f7ccdc94db5",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-23.log",
+      "inventory_sha256": "568276b5426d33a63772546f9960ba413e86f631426a5f72791d29df05176d2e",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/anchor_geometry_collection-cb9f68b5d8c08a5c",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-24-anchor_geometry_collection-cb9f68b5d8c08a5c",
+      "sha256": "073ed2a10151711dfd86e393bc5002a20074a5ffcdf32762bcc9e9a878f42623",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-24.log",
+      "inventory_sha256": "397d46393969f1d99b0a0b4fa57a7a76c5a80e70713695802eec888d78e26696",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/anchor_geometry_collection_lifecycle-3f382bdf5fae5f79",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-25-anchor_geometry_collection_lifecycle-3f382bdf5fae5f79",
+      "sha256": "89c2456be27459904691b79c8667e71133d6d41a659437b9d43dfeae620ebcb5",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-25.log",
+      "inventory_sha256": "211cf191a7b02a28ab5c5b424385726df07d874ca54ca754255328167f04636a",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/anchor_geometry_collection_preflight-4781a5409cd48877",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-26-anchor_geometry_collection_preflight-4781a5409cd48877",
+      "sha256": "425bfe89dd93dd51232f97d91bfbad5929496d3a21611f6e59f7a17688838bcb",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-26.log",
+      "inventory_sha256": "3fcfa5013c4978a785712c6670c94e31df50bda4f5833b2e4191bc7e11eb31bc",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/anchor_geometry_rank_fallback-8501ccb9695e0f4b",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-27-anchor_geometry_rank_fallback-8501ccb9695e0f4b",
+      "sha256": "ca1420dfcab68224a21b8996c2297d33a98371a3186f72cb4de8ed9038162908",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-27.log",
+      "inventory_sha256": "b83e6a9fc0340847101595f11fa70ae6afcdb2c964fb2a703fc2b2316e5b44db",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/anchor_geometry_search-cea370d9c57e86f8",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-28-anchor_geometry_search-cea370d9c57e86f8",
+      "sha256": "bfd53735e61863d8305b09a5e0210d92376e06151fe6d05d57e9a021ed11ef6d",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-28.log",
+      "inventory_sha256": "77368abfa2c82a6ce8c359abdea5dfd9f4438f31e6d9da66e09eccf9504f0cbf",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/anchor_geometry_smoothing-b6704a2af5a8b64d",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-29-anchor_geometry_smoothing-b6704a2af5a8b64d",
+      "sha256": "fc50bae10741e67aaa4cb881a0eebe573543f6e0c8e160f200ac6a8c7b7dc30d",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-29.log",
+      "inventory_sha256": "f7abc35c5ed33082950b30f99d9d3830dcfdaadd5dadf89309608d7122dee418",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/anchor_rank-65a5f1ad56bbd177",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-30-anchor_rank-65a5f1ad56bbd177",
+      "sha256": "92c409d57646f61460b714e3f9a39c2428765e4b08460de90855f581c5c8e38e",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-30.log",
+      "inventory_sha256": "e95665b4f31064964c69579d1177d56f48360e192a08612603fb191d57107f62",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/anchor_rank_driven_collection-fdca2bd1b2931428",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-31-anchor_rank_driven_collection-fdca2bd1b2931428",
+      "sha256": "1fab20af28ed38cb61918bae8da1e14a5621511b415bbbfdca430a6c53222109",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-31.log",
+      "inventory_sha256": "706975216c32534835df9234f5eaa365aba866d057b4e202318e64ed8d320146",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/anchor_rank_driven_collection_lifecycle-e1c261bdc0782b22",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-32-anchor_rank_driven_collection_lifecycle-e1c261bdc0782b22",
+      "sha256": "d5fc064204467d7315a5f47539a695327227cdf4e760cb0f5ff73871d9306e28",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-32.log",
+      "inventory_sha256": "aa035adaa6a50514ab78337c95acc9b944c1cf08c1c9bb706cc486c62e2d3d91",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/anchor_rank_driven_collection_preflight-4ff906523358db01",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-33-anchor_rank_driven_collection_preflight-4ff906523358db01",
+      "sha256": "cf0178dce696947b11e99222ee25f434b3209002f7c5d0ad96389f39128d5994",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-33.log",
+      "inventory_sha256": "3be9f8a418216cdc5bea9aa4d7a38938a1aa6682dde242aa8428376a6ac828bb",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/anchor_rank_file-1c88561f7d63e59f",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-34-anchor_rank_file-1c88561f7d63e59f",
+      "sha256": "612ed2b4d216428d76be980369fe2150bc30e4270d0b29991d3a0e7d66508a51",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-34.log",
+      "inventory_sha256": "81ccdad0a8595a71845703bb77365848571524ca9f63a56229962d49250c922f",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/anchor_reflected_geometry-a20971b181fee259",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-35-anchor_reflected_geometry-a20971b181fee259",
+      "sha256": "98d7abc89391238d244180a3bf433eefaf3e657d0058a41953659eab389b1c6b",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-35.log",
+      "inventory_sha256": "bbb6f580892e91fc584203e36c33288916f08f7a213a926d1908a07896489328",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/anchor_reflection_collection-5ea41002c80b41da",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-36-anchor_reflection_collection-5ea41002c80b41da",
+      "sha256": "81f826ba4debc8e7d90340c279362329353124692f6357463e21effad8f3abd8",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-36.log",
+      "inventory_sha256": "213954762c14382608f75895e683788a2db67d307f976c5c218a795fcc712373",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/anchor_reflection_collection_cancel-5d3f836860f44265",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-37-anchor_reflection_collection_cancel-5d3f836860f44265",
+      "sha256": "170010e3258d356929ddde40a1946b6cb3dc897770c649690f2785d0b3aeddb5",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-37.log",
+      "inventory_sha256": "c2f9db10851d425fe4e30eea6c1a3628e069c3a686fd993dbc13e8c9232eb96b",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/anchor_reflection_collection_lifecycle-23690663f8a98c54",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-38-anchor_reflection_collection_lifecycle-23690663f8a98c54",
+      "sha256": "84c657141578584fa7343cc8dd11a0bdf4764e267e66035e8551f15414d2f798",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-38.log",
+      "inventory_sha256": "eb6dab240dc5b48d558a53db0c9aa0b641990e4df371a3af15e7505b78bf645a",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/anchor_reflection_collection_tokens-83581f0420f58bcd",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-39-anchor_reflection_collection_tokens-83581f0420f58bcd",
+      "sha256": "367353f84569a436c3205a5f707b965819c01aa19f4fb9fdac667c9e85154a73",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-39.log",
+      "inventory_sha256": "826342afe71a7e184e3e3023bc5831144e4b26249928726372a6b2e441c7a5de",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/anchor_reflection_fallback-e1f872920d5d31c4",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-40-anchor_reflection_fallback-e1f872920d5d31c4",
+      "sha256": "ebe03a435dc986c29b5eedc33f61394a5106f716b90e0ef74ba7da0da8815ba5",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-40.log",
+      "inventory_sha256": "a42fca377b79cd5603a0c5e0fe62c6b6f4ff5b6759269ffe635cd54d920d4e25",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/animated-e04aa7f76ec4dc14",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-41-animated-e04aa7f76ec4dc14",
+      "sha256": "80aa5a2c30f1dd1a35adb04c716ac6cb3cf8f089bde3e9c3cc8731f4e3e1b796",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-41.log",
+      "inventory_sha256": "9478234a58f62fa4f36675d9ac7f8265617ad339e273ee077126ffc10f78822e",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/bank_geometry-0df933ad27710bd0",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-42-bank_geometry-0df933ad27710bd0",
+      "sha256": "ed2f8600d242666eb94a7977470b7849ac3db64b201bcc27f878a30d5b0f244c",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-42.log",
+      "inventory_sha256": "caf9a20f79564c9c9f35bb49911b57a49b8fa52cfaa2e5804ec0c7f2dfac4556",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/bank_partition-27993b3cd2c3288b",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-43-bank_partition-27993b3cd2c3288b",
+      "sha256": "cb5e2f439355ac08bdbfb5d4e2086ca0e962fe7b93c6a687109d65181af2a5db",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-43.log",
+      "inventory_sha256": "910dadf4136e49c83716489cfcf02029315f258203df3466fd4476d6573d78f4",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/build_context-b612e548f0962feb",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-44-build_context-b612e548f0962feb",
+      "sha256": "b7186f20e2227cabf4da4216acb50a66855773f4a99e56b9d81287f0bfaab189",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-44.log",
+      "inventory_sha256": "d35aac534dd08a1d45da6f1d43c047a8a99cc79547e65a291f835594ba909a79",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/cache-9c892d843819221e",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-45-cache-9c892d843819221e",
+      "sha256": "aaadc7b3b437b60ac6ced0aff3145b7a12750872955fa1b049546acf1717063f",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-45.log",
+      "inventory_sha256": "42e279ed721b061d3b5d8a226bbaaeb8434e4ccc0e6be2f8249590a0fd13c215",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/cache_interpretation-351dad75bc9279c5",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-46-cache_interpretation-351dad75bc9279c5",
+      "sha256": "1a3cd9684c3cc539a2c888f358f3ac60c52dcc8938be165ded7f88cc01e7293c",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-46.log",
+      "inventory_sha256": "5c72195ba27c298cecf6574d3c8051b92221f43f71a250e6db25281131d74ab3",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/cache_rla_interpretation-a4edcc40305edbf2",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-47-cache_rla_interpretation-a4edcc40305edbf2",
+      "sha256": "c5c19247286978a1371016b6be88660041ac5a7c9585e3979812014be8ce1cb2",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-47.log",
+      "inventory_sha256": "bd7a0a8b2e12bc3dc629b27f0496b4a0216c45293fe1dc1a631600694cfa2f73",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/candidate_geometry_only-7648b8861e6b0876",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-48-candidate_geometry_only-7648b8861e6b0876",
+      "sha256": "03adcf8496dc3440e6c40b7f08606ccd277a58fbfc3bcca47e05fe48a9637109",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-48.log",
+      "inventory_sha256": "c451a5ad401d6777e3e2e04d75984b9ae86f9bea9e425f5b949379893bc71c12",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/candidate_reflected_geometry-ea0a811cc1b248c2",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-49-candidate_reflected_geometry-ea0a811cc1b248c2",
+      "sha256": "e082e5e0ac51790b02715252c9d329a0bc1d733efdc535ca120e13f970959598",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-49.log",
+      "inventory_sha256": "e8a64460ff046a1ed518765955a0c57fc06b22e3390c73789be493e582e2a2f5",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/candidate_union_files-aba6369bbe4043ab",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-50-candidate_union_files-aba6369bbe4043ab",
+      "sha256": "855fbb14236c05f149ccc81ffea9210d27444f39296bc71e05d23ee2de3ea726",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-50.log",
+      "inventory_sha256": "192c53ed75da046e1d6d0b2604a97c3c52adb119fd79d24ffa17d917fe214c34",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/competitive_rank-51d07e86a52867a3",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-51-competitive_rank-51d07e86a52867a3",
+      "sha256": "6847d2ae665c4c5c6a1f8db104ab926a5f4a6b904b2a08092065b49999842170",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-51.log",
+      "inventory_sha256": "ac620523f1268508a4af2b66dc87fb71c0ed4c059e704b38d938aedbe677f1b6",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/container-60177ae9be050862",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-52-container-60177ae9be050862",
+      "sha256": "f416a7d3fd98089cc4e9946991e6797bbf9ecc79793068e3ad74c9e3cf5dc52f",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-52.log",
+      "inventory_sha256": "419b807ec60ede5d106fdf05448e96626177a50c88c48d2a21e3e6f5888a194b",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/content_snapshot-1b3a690ed7fc6ced",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-53-content_snapshot-1b3a690ed7fc6ced",
+      "sha256": "d88186e1bfd5faf6c54c532d3ea7d3750a80f578a61d3f189086d65de239653a",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-53.log",
+      "inventory_sha256": "fcb7ee716c4c8aca51ff507dce8e1356275587fcdb6431283f43200b65e2e6c9",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/correspondence_union-e0fe23850abc8cd1",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-54-correspondence_union-e0fe23850abc8cd1",
+      "sha256": "7f3caeee00e054739199d68c5aaaecded8bd8aa15a9e3a6f5734245ddc283782",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-54.log",
+      "inventory_sha256": "fe3963be7cd64a7fc17ea932390d1ed2d78142379c4fecf2cb0d177c3d31ccd8",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/crop-e88a935bafb2e3b1",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-55-crop-e88a935bafb2e3b1",
+      "sha256": "de9b09361062a3ac1cb388d3306a632231ebb8d4e3b5a5179b7bc3147f338a4f",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-55.log",
+      "inventory_sha256": "56b27445b875ea379544d4bfdbb5e29a349114c32e24162480356b72f96a20ee",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/decode-6c5bb5ae0d4180b3",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-56-decode-6c5bb5ae0d4180b3",
+      "sha256": "66806cb4a0849b552cc915ff58a1b2efc5fa52544d3e42c4d46aaaecaa5e6b67",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-56.log",
+      "inventory_sha256": "0ac1bcc38994a32f160f7cda20fddaa656db5f0ee41991514c6fb508205a2367",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/diagonal_proposals-a58012e1dfeb118e",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-57-diagonal_proposals-a58012e1dfeb118e",
+      "sha256": "ac87c7a49d4d1291069ec00f143427cfb3d809228c92e2836092d1f3e916de28",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-57.log",
+      "inventory_sha256": "858286269612b26a6edabfdbddc7c0ba82489dcd55d71f294279014da3bdd93c",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/encoded_srgb-697f3f0b54e9142f",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-58-encoded_srgb-697f3f0b54e9142f",
+      "sha256": "5d4d8fba520a86927b23f00fbad3c5652e9d6cac33dae75a47447fa0cac639cd",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-58.log",
+      "inventory_sha256": "9813600081978abf9828aa6b05edcb4828a1b6c66c10e41dd5a945a7e9dce71b",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/exact_files-35418f51daa1e6d5",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-59-exact_files-35418f51daa1e6d5",
+      "sha256": "a8dd3ce22a279f3ccb3aa3893cf271085ae583155dc48580e2908a6207c39b40",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-59.log",
+      "inventory_sha256": "8507f75fe18dfa1796342f62b24a631366ea4aa91c744d3f07a18bf72b02c7e1",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/exact_large_files-38cdc66a26391afb",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-60-exact_large_files-38cdc66a26391afb",
+      "sha256": "dd81950fdf7cb5006e0cd9bfe7239af360bd76bcd6f5cc6f6c2bfaeb81c69be5",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-60.log",
+      "inventory_sha256": "a0ffcd4b2aed77bd124a125ac0719fbee3544f7af1a52be66507ef22430cc773",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/exposure-d62d4f8fce3bd052",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-61-exposure-d62d4f8fce3bd052",
+      "sha256": "e20e2500a7c583c8410e8b6330af566cb34d0124cc4bb53794090c9d5842d5fa",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-61.log",
+      "inventory_sha256": "bde405a4211094b37ae4fc895d69522d627772acb757ec1dfc60a5709035a6ea",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/exposure_files-ca497b4c20c107d2",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-62-exposure_files-ca497b4c20c107d2",
+      "sha256": "c5ddfbd54b35f643655bfcc068ded4c90990ad6326686c0cbefcb5371188e5e6",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-62.log",
+      "inventory_sha256": "3e0473ff47ee52979c0d4b51d14d1f36468bdb4ba823a86835f084a91afdbdc8",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/filtered-15b447500382399a",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-63-filtered-15b447500382399a",
+      "sha256": "d78dfcbb111e350a5b24e24d4b36d5c959c62d5260813a2a157d366738216fd8",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-63.log",
+      "inventory_sha256": "34359568ab5f3d9d4dc0769d608cd3547b93a9057a2e21f4f6812a57e37bd0d3",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/five_collection-503e5d3ec7cb33e0",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-64-five_collection-503e5d3ec7cb33e0",
+      "sha256": "0a81646959ca00f424f503c6ac7555be5ea794d929f9850186fbecefb732bbf9",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-64.log",
+      "inventory_sha256": "352dcd63e055ad3bd3eefec10490ecb021faf54b552ed69ec846a15ede0907aa",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/five_gradient_region_lifecycle-c9caff3ddbc1c08f",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-65-five_gradient_region_lifecycle-c9caff3ddbc1c08f",
+      "sha256": "b3c8333599a45cc0940702810b944560567250ea4ee6133d23414ffea8756264",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-65.log",
+      "inventory_sha256": "e478706cde54908ff38cab42bde1c213c4d912674a69d42ec7d3936678db6773",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/five_lifecycle-334cbd731c4e42ec",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-66-five_lifecycle-334cbd731c4e42ec",
+      "sha256": "009d5550e6fc34fc544b81348bf8e9a929e9aa6fc8496a6785b97181e4de2531",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-66.log",
+      "inventory_sha256": "8a92238d14cbf24b34837de0300453b4fa38b9571a6ffe1f3ad90cb864704af5",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/five_region_admission-b1dcae56adad27a0",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-67-five_region_admission-b1dcae56adad27a0",
+      "sha256": "0a3eef81e365deddb3f23816dc25d071b5897f47d6b2035376803d8e7b47a8b4",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-67.log",
+      "inventory_sha256": "abb7fea7433ec8b75202648080add26703b72c156c3ffbedf2ced447e16265da",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/five_region_lifecycle-8e96d540e83f7ee9",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-68-five_region_lifecycle-8e96d540e83f7ee9",
+      "sha256": "c686351f71f761f01217bf34e61d2bf0690a42e05d3cd2838ac9e40466b2597e",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-68.log",
+      "inventory_sha256": "7876b3d84b3c93398691e636dbc3cc727517aed52f825386afe541efecde5f15",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/geometry-c3f1c1c82ebdee45",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-69-geometry-c3f1c1c82ebdee45",
+      "sha256": "094aa122149e6b8358f9c410c3134cd20c2733ca28827f8a0811b1908c2e68bf",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-69.log",
+      "inventory_sha256": "7ad8ecd082edf03f51360ed3f563b96a1679a5cb5b826ba5bdbd82d9e6d40796",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/geometry_validation-887bf830c78e4787",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-70-geometry_validation-887bf830c78e4787",
+      "sha256": "4f652baaba3ad860dc31d2ff2d14bdbd967ef48010c394aee530c1f79a65ed99",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-70.log",
+      "inventory_sha256": "7d38ced099bdaead4a47c5675d8ed74bf03b252e7235ff61b732ce8110022ccb",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/gradient-aa4aefb65158b742",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-71-gradient-aa4aefb65158b742",
+      "sha256": "def071d798426b67effadecb70f352e4155865f3728ce3ca210de21e74636742",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-71.log",
+      "inventory_sha256": "23d90b92f42d12073b60c0fb5fe4fc4c1b4a485c578e33f62d92e1d88fe202d5",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/gradient_candidate_smoothing-5492bbcd8ca181f5",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-72-gradient_candidate_smoothing-5492bbcd8ca181f5",
+      "sha256": "708153f3353114172711f7b01c53eff04912371000f136ce1166a5d3cce5f37c",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-72.log",
+      "inventory_sha256": "099d486640e614ef1ee5426d6f320397c7d49f7c0a2e3fa10a91bc2674448d94",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/gradient_collection-14509b1085e71c47",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-73-gradient_collection-14509b1085e71c47",
+      "sha256": "96ef2784c879213c4d71f7230652e94815208beb86ce7ec036812524be926ad0",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-73.log",
+      "inventory_sha256": "20415f0e65b4753cf111dd29c362b0241f975d013f20ca55903cd98e2928a9a4",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/gradient_distinct_locations-ea1b41c8faa76356",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-74-gradient_distinct_locations-ea1b41c8faa76356",
+      "sha256": "c9744bf31b68462283aa1614f2618c1bbd8f27473f765129aea51164112e5c5d",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-74.log",
+      "inventory_sha256": "e4e9828cb6270f69322994cbbc4f13a54c309bd428ded91c01d26ea0dadd13e8",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/gradient_empty-f5e98f7b3f29dbab",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-75-gradient_empty-f5e98f7b3f29dbab",
+      "sha256": "e03fee751a1a237ccffa08f652d308dfa3f3c0a0d726c5f7df7fe5acea39e976",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-75.log",
+      "inventory_sha256": "b6b162b377be05ed7959240835b2d61e5a890026ce1aa314f1fb3db0352e351a",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/gradient_index-4308e8bd2be2db3b",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-76-gradient_index-4308e8bd2be2db3b",
+      "sha256": "bdf7c0d4b7bd29e1c77177f3bbb82be1c1d38973ca2d0d894d8efe043a6816d0",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-76.log",
+      "inventory_sha256": "145117dc9190a4019f9742d2f8845a8716a34371978c7c6ee4259b9b1aa33620",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/gradient_index_reflection-f8f11dc5e08bc57d",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-77-gradient_index_reflection-f8f11dc5e08bc57d",
+      "sha256": "da576d133ba81b0b7c5b91ca3634289e6d3332a8e2419d61c892fcd999fc3c53",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-77.log",
+      "inventory_sha256": "8b74be3fb72b84656017662333efd7a1242897ac8d47661423d4bba2884cfcbc",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/gradient_interpolated-f7933abffcd6e536",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-78-gradient_interpolated-f7933abffcd6e536",
+      "sha256": "c3409e75e4ae6649ea141d5a5a3b312feb6d1481b99fc97576c5b01f5dc69241",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-78.log",
+      "inventory_sha256": "ee324eeb4001875266a794b432f99ae22b6c1d1d14732374ef90c75937fda0fa",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/gradient_reflection-9ec82c39290d8ae8",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-79-gradient_reflection-9ec82c39290d8ae8",
+      "sha256": "5bdfd171a9380d11bae5cdf2f826aadac179459d590f43b613c157d83e9cb12a",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-79.log",
+      "inventory_sha256": "fe0b6acca1016c50c038d6efb4015defe2c9b6f066f7b5364b021f18020eb378",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/gradient_scale-19cd0c098425f123",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-80-gradient_scale-19cd0c098425f123",
+      "sha256": "2dcace469907344abea3a225974cc9b8f2f6897c683e84f00fe7556684401dbe",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-80.log",
+      "inventory_sha256": "dbaa893679508901cdc2dbff7135b409198fea347d15e4b838e36dd129eb211a",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/gradient_scale_files-43d181abbf581723",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-81-gradient_scale_files-43d181abbf581723",
+      "sha256": "cce9986ab06e804814175d728ad96c8596e95ed0b7e50c95d4fe1e1c523637d3",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-81.log",
+      "inventory_sha256": "6fa3e79613d35be5776187e2275ed1a70058bf82a7050883d4d30b47d4ed5e6e",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/groups-1bd8623d86fdf8a3",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-82-groups-1bd8623d86fdf8a3",
+      "sha256": "da75c29e41a0a06fbb78c43be5711a9f39f6551754ec6551b3301db85720aadd",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-82.log",
+      "inventory_sha256": "ccdaf77cbd09bd2a168fc985ffa8a46e731d9278bb9cf246f50055c1683781ad",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/icc_oracle-ba70db6e48852226",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-83-icc_oracle-ba70db6e48852226",
+      "sha256": "399879742221f0078fcb7176ab589f702a4109aa65afce32f023576d604c8bd1",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-83.log",
+      "inventory_sha256": "c9051efe73a3ee96c4295473db29e84703f28fdf50db63d0dda0d6989f67b9a9",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/information-38546082b130d383",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-84-information-38546082b130d383",
+      "sha256": "dfcc6d7848712ff6779f658f9cb14a726174202e7d87a1e93bb37756d60f6a82",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-84.log",
+      "inventory_sha256": "e01fbaf30094edf47c11fdbd20a64d84b3ce7be92cffb383ad6d4ff193acb6c3",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/joint_projective-4e2a89414c04ec7b",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-85-joint_projective-4e2a89414c04ec7b",
+      "sha256": "4c7aa260181a3f989172c20c772660a59dd01ac8b614300eeeee5ec85a249e53",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-85.log",
+      "inventory_sha256": "73996d44b5db7c4b5d538dc56af6c550e84611a1f75165137d39d316f71a37b9",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/joint_witnesses-f5bf713996dc8c1d",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-86-joint_witnesses-f5bf713996dc8c1d",
+      "sha256": "af1ab19aa95a9ffdaa0c65f95e674b5052143c265a911243390eddbafb3fcc9a",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-86.log",
+      "inventory_sha256": "d77c15e9de8a65c7d2ea16d238cafd96bc67ccf81fc8a40add8c0cf924ea99c6",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/jpeg_orientation-581d8c6a55b9239b",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-87-jpeg_orientation-581d8c6a55b9239b",
+      "sha256": "13eb8975b5e79fbbae8b57c848e95287428fea5cd28546e4085af29db7ca8cb5",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-87.log",
+      "inventory_sha256": "d3a24d7589346085c5b0ae5652e844c7d7dcec74f05195d333e35a6b11352d12",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/linear-37985deeef067487",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-88-linear-37985deeef067487",
+      "sha256": "220043f7a384f4368bbe00319fca81659b52d54a75db6589067c175e6bb75683",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-88.log",
+      "inventory_sha256": "91a7d6760cf027045f8983d8f3fcfae022412a246b17696a1904df11d01fd7e7",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/local-839d48de64b8a749",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-89-local-839d48de64b8a749",
+      "sha256": "39c2612db77e356153c5058635d845ecef11647660efd0427a15a4d4cb6f9f5f",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-89.log",
+      "inventory_sha256": "aac00c68ef9b3e75db7e335b4d61239af6a7e517975b957a58f54d9bf32d6ccd",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/local_collection-77ddb199f0318df1",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-90-local_collection-77ddb199f0318df1",
+      "sha256": "e163440f822920ae409e5a3de2a3bb384912115f30c0cb6ff9353727ab743020",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-90.log",
+      "inventory_sha256": "9b9a4016d574efb47254df959e218cebf2758a51296d848494bc121c58342fd9",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/local_index-78a6a46af0158293",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-91-local_index-78a6a46af0158293",
+      "sha256": "ad4991230d18eed75072d04cdbe0d8cf54dc0ddee2706db4e40462b48083d7a3",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-91.log",
+      "inventory_sha256": "9a0d24c830ce00c53cfe6344579c4d198418c5ff99065d0beaad1816a2aee9c4",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/local_rank-380e914ed753ba45",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-92-local_rank-380e914ed753ba45",
+      "sha256": "9cec65314983c0ff24d4fa8f286ca267f68ff57b4d5481084be9dfe506413f90",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-92.log",
+      "inventory_sha256": "ca9c88cbd11fddf441c4bc3d70beaa422249a0d1872f4587ddd4e8d17f011e75",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/local_rank_cached-0ebcb63c7e04abb1",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-93-local_rank_cached-0ebcb63c7e04abb1",
+      "sha256": "d8c0b603413bcb6b576fd2e6d6cd8538952271dc4119531993e85e6b838a711d",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-93.log",
+      "inventory_sha256": "7607c349463295e53cde2684df4192ff72f942a633b09fb6f447c5923d90d4d4",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/local_scan-c2c593dba638e9ab",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-94-local_scan-c2c593dba638e9ab",
+      "sha256": "5041cfdce3d3366c029492125c3a204915a6f974604450843384cd970512333b",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-94.log",
+      "inventory_sha256": "13bb88a0302d9ecf0a81e4930ff772289228465f317f2a056d1b368f6be79da5",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/managed_evidence-59a4aa544fec2b47",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-95-managed_evidence-59a4aa544fec2b47",
+      "sha256": "ac67b8ee6d933f919db4e3a79208a602e9e67ec3fe62ef0bcfee4af0320e3f7b",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-95.log",
+      "inventory_sha256": "cb78a7ed4361a30eb3f0afb71adeb9bfca6cefa262f0370c1f759d819f655367",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/mesh_deformation-674c63eee0f8e000",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-96-mesh_deformation-674c63eee0f8e000",
+      "sha256": "0caa917372068bd1c0399eeedc7a4cacabc9e22bbaf619e2647d708eb868a508",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-96.log",
+      "inventory_sha256": "791e7cd04325bed8f040a78b9e8e46f39ed04a02a21a244dad2d121c910203be",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/mesh_grid-d41c9f188e26a476",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-97-mesh_grid-d41c9f188e26a476",
+      "sha256": "b6c918015136bc38527e844fa102042db985c9b2fa06adeaa11586a47aff303d",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-97.log",
+      "inventory_sha256": "b1a3ab70d3563a49a33bc6d09071b064dbc270330e2d4a1f4fa59ebf24c920e2",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/mesh_landmark_admission-529fdcf7abe818ac",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-98-mesh_landmark_admission-529fdcf7abe818ac",
+      "sha256": "0db73936897bc26781e54a2816e90f4b3ac44805fdf1f79607096cb04ee945da",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-98.log",
+      "inventory_sha256": "b3cd204be2d937ef0155f9fa1f8d75a6f32ed6a00aaf2ce7d0233b64422f52f2",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/mesh_rank-ad71b505f02379eb",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-99-mesh_rank-ad71b505f02379eb",
+      "sha256": "824867bb80241ef92b86013b74b7eea273120406f51204f62d11b2c1acf9c712",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-99.log",
+      "inventory_sha256": "f81c5069f2248f9d2604faf557dbaec5ba8b9f3569bb96b4c5d71e954e4b8fa4",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/mesh_rank_regions-fb9eda2e2fd4c457",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-100-mesh_rank_regions-fb9eda2e2fd4c457",
+      "sha256": "e3476f9e761ccd570c86e171c37b0f41d12a85fb0bf2f7338095f4412575ddc0",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-100.log",
+      "inventory_sha256": "6d09642d6b1a56c517c34e19ef83536d34c68f8d78742a8444b8046755006d8f",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/mesh_refine-5cab9682b47bda83",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-101-mesh_refine-5cab9682b47bda83",
+      "sha256": "3dbcd1e27711b2d178a20d1d55294ff0bec92b3ae477ed14b5f50acd21618ac4",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-101.log",
+      "inventory_sha256": "97a2c545862066274e9f31cf0bba554eab95e0d65e5b35487667e631c267b78e",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/model_compare-5886bd735213c5b6",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-102-model_compare-5886bd735213c5b6",
+      "sha256": "d5c6cb9f7c24c38457d516b9545f8bd4f28d19490c5c4c44bf04446a95ace5e6",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-102.log",
+      "inventory_sha256": "07a67d5952b84c40e9606ae92202d2ca4f8b6051d847e7b8ddcc90e23a3a25c1",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/model_input-4e94f6e720470e40",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-103-model_input-4e94f6e720470e40",
+      "sha256": "a52563217e2712cb040eb07d26d6da59a654247ec252ea55e5e70bdbbf93267a",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-103.log",
+      "inventory_sha256": "a0f3cc14e9c2c1ad05dca56b86cae8fb98ea4665b555d58fca78cde757a9ce2f",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/model_input_file-e623cf9d8fc99934",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-104-model_input_file-e623cf9d8fc99934",
+      "sha256": "635677864cbcd5e36c87d465ca4d9a8363d53033b9406c64c231686ceaeac205",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-104.log",
+      "inventory_sha256": "da6a7244f9f2aafcfc5b661146d203a8acb592263d9a0ddca8e89d0b041d5ba5",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/model_projected_compare-725d3aa2514fad2e",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-105-model_projected_compare-725d3aa2514fad2e",
+      "sha256": "9c48be805be62e5b997b2bebe8e0f06385b8fd3236fff17ed07e87d930247157",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-105.log",
+      "inventory_sha256": "dc42ed0376d34418e981c6fc681ac04e95b91b5921680d9c950efb871bcc1528",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/model_projected_tiles-85ac0e6e4b8e3e13",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-106-model_projected_tiles-85ac0e6e4b8e3e13",
+      "sha256": "41b4c84a316fac9126028bbbbc5b3b7c68b574dd07b26e74369283b1b73c0196",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-106.log",
+      "inventory_sha256": "3c073a8e8b21fb174134541597d87703f6b0b1752531bdc703715a9937b1c215",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/model_tiles-120badcddd787269",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-107-model_tiles-120badcddd787269",
+      "sha256": "02a2f67ee03b4b553c376922e66ac6da028e375a6d3d29fd3a822a64b8cd80fc",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-107.log",
+      "inventory_sha256": "d9d82541032124bc9cecbefad5f41902e4cf4624d088929be85e2895c3b15817",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/native_anchor_recovery-e5eefa55be33eb89",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-108-native_anchor_recovery-e5eefa55be33eb89",
+      "sha256": "0b4f70b84c3fb13ca9fefd4967e76dc3c14c1271b68609c1274daa1de441a334",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-108.log",
+      "inventory_sha256": "889c5f9b82a65adeb45f334ae2f9a94942302060f1677c2cf0e72b1b76d07d2d",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/native_pixel_domain-14387490871cc14c",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-109-native_pixel_domain-14387490871cc14c",
+      "sha256": "5fa0cba8d575d23e2f1ac27a888b4b21a34544aa09eaba4a555a7a8b029d6a59",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-109.log",
+      "inventory_sha256": "b0e352a196be34a61b084d31936f1b43fbdce18869082dbcc170021a49add1d4",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/opposite_native-c9f03e5d9d2d1ac3",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-110-opposite_native-c9f03e5d9d2d1ac3",
+      "sha256": "b065a55f3d13580f033f4e4e257b910ae58899e86a2beca0c14bbb2c63aded5b",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-110.log",
+      "inventory_sha256": "3e04d634804e8210aaa908094dff65732c67011e626143b01c00e041f59540ee",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/ordinal-6788b4f4e938f36e",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-111-ordinal-6788b4f4e938f36e",
+      "sha256": "c5120104d7d81362129e01aa4b8c4a46ba40ea2dd8fb89a84a3d8cd487aab153",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-111.log",
+      "inventory_sha256": "f30827318ca65fbdf5b33675d401c88b4c5248262d9f0d585b3399a5875cb6ea",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/oriented-e1f787de600f69df",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-112-oriented-e1f787de600f69df",
+      "sha256": "bc30f544b922211e8da896e94c7473f02f68a030646611081b649923effda4a8",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-112.log",
+      "inventory_sha256": "62de29825846fbf0e1ad36fad816b4a6dd423e684f324ea6b6aba5b009e366f3",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/pages-53c9d810a56c43b0",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-113-pages-53c9d810a56c43b0",
+      "sha256": "52b0301f684603758ea7c583fbe9715bca139a35d410df74cd0646f33b509a16",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-113.log",
+      "inventory_sha256": "f9fd15e5a3a866ed9b64e5791287212a799909e68ec4e14dd60612c67a453bdb",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/pair_schedule-d773bc2f7df0391b",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-114-pair_schedule-d773bc2f7df0391b",
+      "sha256": "5aa090a2d7717eeea85afd065d0d20598dddcdf81aa9ec7861d4b717eca4d941",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-114.log",
+      "inventory_sha256": "00a3d47f3e09dbfa6441d0cb45707feaaae5755815b25aa34841d609ed88249d",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/palette_mutation-56526ff6f5a3fa39",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-115-palette_mutation-56526ff6f5a3fa39",
+      "sha256": "768714e798a201df7477b863099559ffd44d63d833a0cdb7731510c563c4c381",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-115.log",
+      "inventory_sha256": "25484b4874e91585b3caf9937efd41c5a71fc3753c40f6044700a3f9a051cd4d",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/palette_transparency-27149a092c2f40d4",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-116-palette_transparency-27149a092c2f40d4",
+      "sha256": "ad8f0f8fe775d8897f3a3db7b6291488f50a744ce26dfe52c64978f4b158545a",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-116.log",
+      "inventory_sha256": "4862ac6b6550c5379642d178a77698e31d933521b7d457982368ce6a9fea7450",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/periodic_capture-29581e0586fc9194",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-117-periodic_capture-29581e0586fc9194",
+      "sha256": "61ce7bcff691f8ad08c531b29479be8b42550bc67534e08edfe6224d3fdba5ca",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-117.log",
+      "inventory_sha256": "c0b32e1807d4c0d878bfe32f7ff4998757c728f93e3ad900aab8e27b2c6e1d55",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/photo_collages-48a61084042df848",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-118-photo_collages-48a61084042df848",
+      "sha256": "2ff3c9efe66fc0c411800947b9e33c04aada0ff8bac6d2fa5d0d7cf8f442334a",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-118.log",
+      "inventory_sha256": "7cad292ea8aea1a879a7b81b1e818b68ba6b626614e81c422c3ed3cffb8270f0",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/photo_files-7c21a73c9ed792c8",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-119-photo_files-7c21a73c9ed792c8",
+      "sha256": "bf028b60da9f0f65d7fa997682011550f75511c8ed016678f1a3ef8dfc330ad2",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-119.log",
+      "inventory_sha256": "cd11d8c3a71e23817443b60356f9c2184949737a7e454e438f19f7542b1546db",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/photo_jpeg_oracle-d951963a0b391b02",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-120-photo_jpeg_oracle-d951963a0b391b02",
+      "sha256": "49695119f036c892c59a89a90ffce8b3951c6c269afcb2da8eb0683fa3d6e3d3",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-120.log",
+      "inventory_sha256": "74cf7f3d8fc08955a521c2711f435520783d570fcca87023d61c20fc15c42f2c",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/photometric-ff7afc3632c9e3a8",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-121-photometric-ff7afc3632c9e3a8",
+      "sha256": "d812e8635748d6d9e1717354dcf899e20b2142ca85c7f07e3fd727555a267513",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-121.log",
+      "inventory_sha256": "f422d6a1a24d01d6d2a49f1118886a20ae571b01657ea97966c7fe063fc31066",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/photos_heldout-d8df73087a6d494b",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-122-photos_heldout-d8df73087a6d494b",
+      "sha256": "a09f8301b0133671eda58a6af328c5f4737a093b7dda77e4c5b89200ba82271b",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-122.log",
+      "inventory_sha256": "1c643d90ab09cf98f7c744671a525eab0c62df862c6911e26b3422cfb0844991",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/piecewise_local_rank-7d91b93c7a7d263f",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-123-piecewise_local_rank-7d91b93c7a7d263f",
+      "sha256": "fa4511f1d5efc0726d9facf29710c85fb55fd6e400b1e70a156162967c5ba582",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-123.log",
+      "inventory_sha256": "7927e88d8ba3f9dac84242c47d70d6a9cac565c986e1034cb5f6aa35bf490a24",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/piecewise_warp-0622d62391ca22ad",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-124-piecewise_warp-0622d62391ca22ad",
+      "sha256": "b782f232bbddb9a78db20f9bd16aad271d75fafddef1a1a239ae18b8f6b7a745",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-124.log",
+      "inventory_sha256": "62afd2ee1f39f0e66b737574925298fa2862d4514d0875d495826b5660179001",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/pixel_search-935aa5aa072dcc03",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-125-pixel_search-935aa5aa072dcc03",
+      "sha256": "7727e3b58141f026d48e376e3159234ebf9b89b51a2125e2ed7247768e2b5f7d",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-125.log",
+      "inventory_sha256": "8d8f0856dfe14c5bc6a93f4888fd77636b396b445efc9c161ab0cf866d7ffd7c",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/pixels-7885e8a80a21782c",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-126-pixels-7885e8a80a21782c",
+      "sha256": "3967972e532189654d510c7c7dedf1c1698b9fbc3cda2f24db148d7df3a85854",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-126.log",
+      "inventory_sha256": "a348db14b052af59d3abb3d79425d63f3a47d60e90badee214b9e6c157eef411",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/portfolio_collection-46ea1b2a54e26061",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-127-portfolio_collection-46ea1b2a54e26061",
+      "sha256": "6ce50a78f8a535d8b72f333bf9dce1cb6aeaec13c33a0c53d034bcffe3444964",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-127.log",
+      "inventory_sha256": "9d12fec82dce790ce0869e3a2e8475dfbd6b0ee15779c99abe7e480ddf1e4144",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/presentation_digest-9bfed55a01bba556",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-128-presentation_digest-9bfed55a01bba556",
+      "sha256": "d5af95880f4515e303fc70030d2855d2f06a24a6705ca9186b560fc71126bf99",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-128.log",
+      "inventory_sha256": "cc383f39ffb0531b7d0c18f708c392abe5239033f394ef24c8e3afa791af611d",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/presentation_kind-c951011c6a97ee0c",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-129-presentation_kind-c951011c6a97ee0c",
+      "sha256": "1d6cf8bbcb5d4489d9d1fe8fcf613bc59023584c76d8d280401d3949c867b993",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-129.log",
+      "inventory_sha256": "85a01fa83e22861591e3106d90b6d03c0d992f4cbb87fcae2b54696bae6f648e",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/projected_collection-d6a1c5c5d8bd482e",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-130-projected_collection-d6a1c5c5d8bd482e",
+      "sha256": "23ebfba36691c6e78dc204816b77acacd9cb89fc976c2095aa90733016458c15",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-130.log",
+      "inventory_sha256": "8aea96f9da64529cfe0d27af291733e9ce05535bac171a0d763bd53ed2d5b1a4",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/projected_portfolio-672a7f4f48247679",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-131-projected_portfolio-672a7f4f48247679",
+      "sha256": "b23d2c8ad15df7b9caa80e591fa00fef9af01be3aa5ccecc446cc6015f10d2eb",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-131.log",
+      "inventory_sha256": "3c5b896dc621cb63fef3fe563a1af82fa1794a8f65aca9fc8cb462213a450a54",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/projective_domains-f74ae66f7f639756",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-132-projective_domains-f74ae66f7f639756",
+      "sha256": "d59bbaea84a1dfdb0b10eb6f54ddd6b701742bd7aa3fbd301847fca66ce616f6",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-132.log",
+      "inventory_sha256": "fe1a40f1b130aab2b94e9552b31a5ad90a92e3bb276c97ce8754b59798e2354e",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/projective_exhaustive_domains-b5dd581e2da46f9e",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-133-projective_exhaustive_domains-b5dd581e2da46f9e",
+      "sha256": "c9fd2bce4fcbff891e28f9e2a5e2a789efa088c796ff18787e16492df34fb42a",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-133.log",
+      "inventory_sha256": "32fd305a881c6f64c29e86eb1adc7982000987c9ba483c712576949b7806c31e",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/projective_files-17fa2b0f8f2fe257",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-134-projective_files-17fa2b0f8f2fe257",
+      "sha256": "7fad6298f5cec2d4463c268ee55e00bc7b7735f131b52b94a41c79ede9c0d069",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-134.log",
+      "inventory_sha256": "56b9afa3ee4e7f4bc745d5793fed03e30059f77a42c1060185964732301d4c12",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/projective_geometry-78a7d1438c83aa53",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-135-projective_geometry-78a7d1438c83aa53",
+      "sha256": "3521799d46162a8d8ad9a92862c485ee6d48f42d07c3b36f5673a1a595f9e044",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-135.log",
+      "inventory_sha256": "f1f3c41190eff6e324a8d725635363d8f04c07b8f1fd2aabc84eb3f5884cc244",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/projective_grid-d20b4c99a607eeff",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-136-projective_grid-d20b4c99a607eeff",
+      "sha256": "8f4cbbb5a4fb5ca2255ce14b7d161b3c9e74ba9a34668f917ade759965858c13",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-136.log",
+      "inventory_sha256": "68d3c52361d03b7ff8685587ec63a957815b2307ae4c999942babe3f9e10e121",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/projective_pruning-9592433d40629a8f",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-137-projective_pruning-9592433d40629a8f",
+      "sha256": "226cdd3d1c1781ad92cb8fc6f5eb5b230cec08a87f24c945005d14c96d6bed68",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-137.log",
+      "inventory_sha256": "9289fb919d1418b2babbe53f4650c4f18302f4070f98ac00699c1396782aa74f",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/proposals-00926cf7e5e1e30e",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-138-proposals-00926cf7e5e1e30e",
+      "sha256": "bf2963e9938ffe811541bdc9c94fdaad3aa62574f89583bf6e288bd60eaf8bb7",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-138.log",
+      "inventory_sha256": "0e3af15faa987d517af57d37f14210797ec4065759f3c5333025ad3c02d5dc09",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/pyramid-c2728ab5d084bfb9",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-139-pyramid-c2728ab5d084bfb9",
+      "sha256": "fbf3c111e9a7dbfc0451196b50a4ffa0973e417e9628591c8d06181c39c70c2c",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-139.log",
+      "inventory_sha256": "0b24f6d30b0fe26783f7ccb3e543645f71aa06aa95d9a4ce74a6ec4885dd8eee",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/rank_region-13cc2180aca1aa44",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-140-rank_region-13cc2180aca1aa44",
+      "sha256": "5542fde9a3f138d481d4608f78445b0aae7c57111eac1da31b4db03a5a4e00f3",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-140.log",
+      "inventory_sha256": "8b5d9431689f82522ab13e7afcfa15147ae35cb40612ec8996f2fa547fd6c2b3",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/raster-8cf0d736eb6f3a51",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-141-raster-8cf0d736eb6f3a51",
+      "sha256": "4244016c221d7c91fb2ba5bfff86555cc49aaef6ed951ee8f572a91e5b9a6817",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-141.log",
+      "inventory_sha256": "9d801743fed7a4bd2efa58d3e1fb12c731ef0e3afbb9958a5101471d40dab121",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/raster_equality-1700c41dfdebcb8c",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-142-raster_equality-1700c41dfdebcb8c",
+      "sha256": "7f45d3737bcce3833cbe9eac04cb614e912261a2277e44694907aa34ada66089",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-142.log",
+      "inventory_sha256": "4bb4394e6cd7c5b764dba70fc378001df44421330b6fd32c0a1ad07115c66709",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/raw_selected-e807ad0115d835d8",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-143-raw_selected-e807ad0115d835d8",
+      "sha256": "f9f823071c9a95f3f49cfabfca824005dd564521b265dcf09e6337d21643a301",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-143.log",
+      "inventory_sha256": "2bfd9138d354e53cd51359320b1d9b2ea59bdb9ee44477844481639f4998c7c3",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/region_footprint-670af61345aab44b",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-144-region_footprint-670af61345aab44b",
+      "sha256": "9a66a32ba06bd0d200985b04d57f97ab45a619ca0e24b05f079fa2e53876d59a",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-144.log",
+      "inventory_sha256": "10cf46bb54f22f9c2fd2e419b5bee7936be7dadf0a3edc048c45304b01befa9c",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/region_grid-6f04d12ea87c4de2",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-145-region_grid-6f04d12ea87c4de2",
+      "sha256": "cbaf7b222f93b476157021b326c04284d5342d44243585817718c61837037e41",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-145.log",
+      "inventory_sha256": "c185f61b436252e2f330ac5854f57f1c68ac6c52731b7a41b7808e2c1b81ee9d",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/region_grid_files-b2770bafbafcf9b6",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-146-region_grid_files-b2770bafbafcf9b6",
+      "sha256": "3b716922d090b438e0ad9bbf8405af88f2d3654c2e9ea6813dd64b3bdeabfc80",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-146.log",
+      "inventory_sha256": "26ec68d0c882e87123f36ea1300a068e9cc6c800193629747bd10c54dc99ce53",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/region_transform-888b9faa24809bb5",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-147-region_transform-888b9faa24809bb5",
+      "sha256": "ee0b96f8c3917c85008264151ed64dcd2665c7df03a84fe7332493b11f6d4d45",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-147.log",
+      "inventory_sha256": "bd79dab0f66935940aa8901320c3c21cd428c9e57c92784e00f8d582daef62b8",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/scan-7efa3cfea0564fc4",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-148-scan-7efa3cfea0564fc4",
+      "sha256": "7e95d3f016be0a09b654b9949a8ccce57c316dd912dbf7268f9961ab23a5165b",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-148.log",
+      "inventory_sha256": "0bc9fd0dae63ffead46d0decf03e241d7327a5e8a6824bd10cf01ec24e6d9227",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/scan_cancellation_checkpoints-5b8f4226c4e2fb08",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-149-scan_cancellation_checkpoints-5b8f4226c4e2fb08",
+      "sha256": "36b31c66eb132fbab24fdd475d49e252762de896b29889bfaf8b9daeae52d991",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-149.log",
+      "inventory_sha256": "66b989eb47e0f62ee4aaeb6f8fa0e04b8c42ff41040f358959ff849aa677dffd",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/scan_group_publication-51ffdb5f766c1c53",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-150-scan_group_publication-51ffdb5f766c1c53",
+      "sha256": "8335afee43c0d5bf3c278ab7afc9f03ea4a7256527cd4ee18d0c839be6c982ac",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-150.log",
+      "inventory_sha256": "526fc5254964352e593746eb01f91445f8dbadcab055eda48a7f316c791e479e",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/scan_retry-740f6485448f29d2",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-151-scan_retry-740f6485448f29d2",
+      "sha256": "565ed4479df3a5646025451f4ce4b976842a46194f69ec267dde186d702a081c",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-151.log",
+      "inventory_sha256": "d16e128c8cd69d836579c0d5040404a156e398bda6bc6448f91bddb4a1eb453a",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/search_portfolio-799265346edaf226",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-152-search_portfolio-799265346edaf226",
+      "sha256": "1c12a037beb090355cd9c77f2be11c2f8d71b4cf028d17256ca0fe288d9efa5b",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-152.log",
+      "inventory_sha256": "bbb1837a00fa446482176a7d4df1e07ede7d35834e8668e67f8e4107fc086b94",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/sequence-3328302b48d4c0d3",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-153-sequence-3328302b48d4c0d3",
+      "sha256": "f35dadde40b63afe0e1ebb9105042de404dd9d17acd4e8f2f48f473d2f3d16c5",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-153.log",
+      "inventory_sha256": "d1181c80bb268ccd5cc5db56acaf12b974d7b92412a70e1e6bc58e0ac7eccc99",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/spatial-98747655b8f2bc41",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-154-spatial-98747655b8f2bc41",
+      "sha256": "b43c9ea7fe236431eef5022d71b7d99b253c38f97cf7388885c22aa5072e1a2f",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-154.log",
+      "inventory_sha256": "727e642599a153c685abd906fd1152fac3aecb41801d31a00159d4650d5f4d14",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/triangulation-7e8bff8fcefda48d",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-155-triangulation-7e8bff8fcefda48d",
+      "sha256": "50d17a5a8111b2911fcb92df1d8513c5dd5645a4cea376d57e30f21794ad411f",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-155.log",
+      "inventory_sha256": "6d7ba9fb36d4678a5989e90923f7ad74e0cfd977d41a98610332036d34a65fdd",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/visual-eb0331b6e2ec9c85",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-156-visual-eb0331b6e2ec9c85",
+      "sha256": "801323f76fbe3ff71eff60eef77872ba4885e6d94f4f1ab3e0ae753447ff5cc1",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-156.log",
+      "inventory_sha256": "1188c54382851fde35c6b25ec7c72342b7acc2b14e80506d9b8e6bdf0f3b1d7d",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/visual_publication-7bed691265355e47",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-157-visual_publication-7bed691265355e47",
+      "sha256": "968add9e965d9c00884f2b99f263cb44576ab5028558308f2dd821c009c01cdf",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-157.log",
+      "inventory_sha256": "0234e51ead9940a230f5c49a93233378dc85f9b47a31a0edce88f321dbe80b0e",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/wal_dependency-159ad0e5d70b5319",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-158-wal_dependency-159ad0e5d70b5319",
+      "sha256": "ab6a957d145214e032f6a83861ead76678cd257e85d1b635f4fb92e79b10d6aa",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-158.log",
+      "inventory_sha256": "74247d2f024fc39448ec02d7010bcdb1fbd112f80e11c029e6c72375f0872840",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/warp-dfacb935c0fa65af",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-159-warp-dfacb935c0fa65af",
+      "sha256": "30881602b2eec27c3c5f2a00361143866a474bf47c6f93d476de965e1d3190da",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-159.log",
+      "inventory_sha256": "f69932c377b8a206a4c2447433e72e31d4efa3b972fbe4714e9b1a011787dfb6",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/worker-4777eda4f9980292",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-160-worker-4777eda4f9980292",
+      "sha256": "e6a7a6079e84cbcb1bb67ee097ed518d296b4ae80aab6e65446b700a28dc2ac6",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-160.log",
+      "inventory_sha256": "1c851e7222b51cadb52dc34ccf89cf9a90fa464ceade458e9f5f32d9477b16f5",
+      "inventory_returncode": 0
+    },
+    {
+      "original": "/private/tmp/rrrah-consensus-collection-target-20261014/debug/deps/worker_group-2bf50536594c2586",
+      "copy": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/binary-161-worker_group-2bf50536594c2586",
+      "sha256": "65b4f2d1532fd899afcfa18b83d3db5362831c6de132b859a28a0307f1b6bfab",
+      "inventory": "/private/tmp/rrrah-common-worker-fixed-baseline-gate-v2-20261015/inventory-161.log",
+      "inventory_sha256": "f142fcd2850e60fd36f05b720255652c98709e01c26d00b8c199ce0997097000",
+      "inventory_returncode": 0
+    }
+  ]
+}

@@ -1,0 +1,97 @@
+{
+  "status": "eight_native_authored_controls_pass_twice",
+  "sdk": "8.0.426",
+  "sdk_pin_sha256": "7d07dd84959e563a70a1f315f003c8a2e73ba8e88e06c5255a1fd13048e5b214",
+  "target_framework": "net8.0",
+  "runtime_rollforward_config": "/private/tmp/rrrah-sharp77-native-20261015/bin/Release/net8.0/Review.runtimeconfig.json",
+  "runtime_config_sha256": "97c9700542b659150b230c3578b29530fd76ab01ec66a92cd16945e0245713df",
+  "original_source_files": 10,
+  "original_tests_run": 0,
+  "binary": "/private/tmp/rrrah-sharp77-native-20261015/bin/Release/net8.0/Review.dll",
+  "binary_sha256": "59dd406ea9f20d5ae034102e0be1dde9a7ecebdeb506eaecdcc813d015394c11",
+  "commands": [
+    [
+      "dotnet",
+      "build",
+      "Review.csproj",
+      "--configuration",
+      "Release",
+      "--configfile",
+      "NuGet.Config"
+    ],
+    [
+      "dotnet",
+      "/private/tmp/rrrah-sharp77-native-20261015/bin/Release/net8.0/Review.dll"
+    ]
+  ],
+  "environment_overrides": {
+    "DOTNET_CLI_HOME": "/private/tmp/rrrah-sharp77-native-20261015/cli-home",
+    "DOTNET_CLI_TELEMETRY_OPTOUT": "1",
+    "DOTNET_SKIP_FIRST_TIME_EXPERIENCE": "1",
+    "DOTNET_ADD_GLOBAL_TOOLS_TO_PATH": "0"
+  },
+  "artifacts": [
+    {
+      "path": "docs/research/sharp77-native-controls-20261015/NuGet.Config",
+      "sha256": "9508cae5f76364f56e80eb97cb16493977243cf38e5cca6284e3d74f83b20a2c"
+    },
+    {
+      "path": "docs/research/sharp77-native-controls-20261015/Review.cs",
+      "sha256": "6a377949104629bc02678fd3c9a52bf3002b786d1cf37c495d97546e1026621d"
+    },
+    {
+      "path": "docs/research/sharp77-native-controls-20261015/Review.csproj",
+      "sha256": "e8c2661e55ca5f08ae6d2fb21ab1d7225c88ff0687653321748b31650cb02171"
+    },
+    {
+      "path": "docs/research/sharp77-native-controls-20261015/Review.deps.json",
+      "sha256": "ac0548f061c86a9d5f12b51778a4443cc4447607d5217ea6ac73e3eb91afe0c2"
+    },
+    {
+      "path": "docs/research/sharp77-native-controls-20261015/Review.runtimeconfig.json",
+      "sha256": "97c9700542b659150b230c3578b29530fd76ab01ec66a92cd16945e0245713df"
+    },
+    {
+      "path": "docs/research/sharp77-native-controls-20261015/build-v2.log",
+      "sha256": "f56a512caf5b0a916f3a71211a5c8a6ed5efc83871c98217a85398731a31fb12"
+    },
+    {
+      "path": "docs/research/sharp77-native-controls-20261015/build-v3.log",
+      "sha256": "d69c219fdcaf7f47a35d2f3f24c86ba29b5c13d7207c24bc7a82667e99424bcf"
+    },
+    {
+      "path": "docs/research/sharp77-native-controls-20261015/build.log",
+      "sha256": "6c3a580b25864a100170665059f8ead7efdb034da38721ffb5913c286ff177d2"
+    },
+    {
+      "path": "docs/research/sharp77-native-controls-20261015/compiled-source-pins.json",
+      "sha256": "e0dfc8a85a0564950cc72355dbe696af41c9758e0ad6993308a73ca968c2abc4"
+    },
+    {
+      "path": "docs/research/sharp77-native-controls-20261015/failed-build-v1.log",
+      "sha256": "6c3a580b25864a100170665059f8ead7efdb034da38721ffb5913c286ff177d2"
+    },
+    {
+      "path": "docs/research/sharp77-native-controls-20261015/global.json",
+      "sha256": "7d07dd84959e563a70a1f315f003c8a2e73ba8e88e06c5255a1fd13048e5b214"
+    },
+    {
+      "path": "docs/research/sharp77-native-controls-20261015/installed-runtimes.log",
+      "sha256": "18523699624abc1740e384aa4327c0c5f82f7f940fe4004a98c237b3eb6f26a2"
+    },
+    {
+      "path": "docs/research/sharp77-native-controls-20261015/replay.log",
+      "sha256": "4c1683462516d3be0a6515edf7f4fd9e7ff640e2cf7471ca134f396a5e4231f7"
+    },
+    {
+      "path": "docs/research/sharp77-native-controls-20261015/run.log",
+      "sha256": "4c1683462516d3be0a6515edf7f4fd9e7ff640e2cf7471ca134f396a5e4231f7"
+    }
+  ],
+  "limits": [
+    "All10 original Infrastructure/Logic/Model C# source files compiled byte-identically in generated SDK8/net8 harness. Original legacy .NETFramework4.7.2 project, Runner and AssemblyInfo not compiled/run. No upstream tests detected in tree.",
+    "Real owned file IO/MD5/parallel original methods, no hash stub, no original/private media or deletion CLI. Counterexamples tested deterministically, no MD5 collision attack.",
+    "Original source CRLF/BOM preserved. First preparation failed due wrong working directory; initial project-not-found log retained. Second build refused default user .dotnet sentinel; corrected by owned DOTNET_CLI_HOME only.",
+    "Three original obsolete MD5 provider warnings retained, not a warnings-as-errors pass. No broad concurrency stress, mutation race injection, hard RSS, huge-file, Windows or performance evidence."
+  ]
+}
