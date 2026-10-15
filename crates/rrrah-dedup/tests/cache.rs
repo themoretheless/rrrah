@@ -4,6 +4,78 @@ use rrrah_dedup::{
 };
 
 #[test]
+fn every_serialized_bit_corruption_is_rejected() {
+    let key = CacheKey {
+        content: [1; 32],
+        recipe: [2; 32],
+        frame_index: 3,
+    };
+    let fp = Fingerprint {
+        variants: [[123; 4]; 8],
+        mean_linear_rgb: [0.1, 0.2, 0.3],
+        luminance_stddev: 0.4,
+    };
+    let mut cache = FingerprintCache::default();
+    cache.insert(key, fp.clone(), 1).unwrap();
+    let mut bytes = Vec::new();
+    cache.write(&mut bytes, || false).unwrap();
+    assert_eq!(bytes.len(), 408);
+    for position in 0..bytes.len() * 8 {
+        bytes[position / 8] ^= 1 << (position % 8);
+        assert!(
+            FingerprintCache::read(bytes.as_slice(), 1, || false).is_err(),
+            "corrupt bit {position}"
+        );
+        bytes[position / 8] ^= 1 << (position % 8);
+    }
+    assert_eq!(
+        FingerprintCache::read(bytes.as_slice(), 1, || false)
+            .unwrap()
+            .get(&key),
+        Some(&fp)
+    );
+}
+
+#[test]
+fn zero_budget_and_owned_values_preserve_previous_entry() {
+    use rrrah_dedup::cache::CacheError;
+    let key = CacheKey {
+        content: [1; 32],
+        recipe: [2; 32],
+        frame_index: 3,
+    };
+    let mut fp = Fingerprint {
+        variants: [[123; 4]; 8],
+        mean_linear_rgb: [0.1, 0.2, 0.3],
+        luminance_stddev: 0.4,
+    };
+    let original = fp.clone();
+    let mut cache = FingerprintCache::default();
+    assert!(matches!(
+        cache.insert(key, fp.clone(), 0),
+        Err(CacheError::Budget)
+    ));
+    assert!(cache.get(&key).is_none());
+    cache.insert(key, fp.clone(), 1).unwrap();
+    fp.variants[0][0] ^= 1;
+    assert_eq!(cache.get(&key), Some(&original));
+    assert!(matches!(
+        cache.insert(
+            CacheKey {
+                frame_index: 4,
+                ..key
+            },
+            fp.clone(),
+            1
+        ),
+        Err(CacheError::Budget)
+    ));
+    assert_eq!(cache.get(&key), Some(&original));
+    cache.insert(key, fp.clone(), 1).unwrap();
+    assert_eq!(cache.get(&key), Some(&fp));
+}
+
+#[test]
 fn cache_preserves_every_bit_of_all_transform_hash_channels() {
     let key = CacheKey {
         content: [0; 32],

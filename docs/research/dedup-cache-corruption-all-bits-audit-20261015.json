@@ -1,0 +1,39 @@
+{
+  "status": "verified_complete_ten_cache_integration_tests",
+  "passed": 10,
+  "failed": 0,
+  "ignored": 0,
+  "filtered": 0,
+  "corruption_oracles": 3264,
+  "existing_wire_bit_oracles": 2048,
+  "inventory": [
+    "atomic_replacement_and_cancel_preserve_previous_cache",
+    "cache_preserves_every_bit_of_all_transform_hash_channels",
+    "cache_publication_child",
+    "concurrent_process_writers_publish_only_complete_single_writer_caches",
+    "disk_persistence_is_deterministic_and_rejects_invalid_values",
+    "every_serialized_bit_corruption_is_rejected",
+    "process_exit_during_temp_write_preserves_previous_publication_and_retry",
+    "roundtrip_requires_content_recipe_and_frame_identity",
+    "unwritable_parent_refuses_before_publication_and_preserves_retry",
+    "zero_budget_and_owned_values_preserve_previous_entry"
+  ],
+  "prepared_sha256": "b29a3702d4a08ad91821af5354947cd76a6ff4bd007abdcefcb8054cf5daee49",
+  "auditor_sha256": "8270b2fd6c41d34c084fc4b20bdb9c2924bfad1335488bfc11a935756ac533a8",
+  "binary": "/private/tmp/rrrah-cache-corruption-all-bits-20261015/tests",
+  "binary_sha256": "49dd5f242cd7f85aa3e73d5207fe342ea3be2c2a2b46b7f63386c84d143bd7f3",
+  "library": "/private/tmp/rrrah-cache-stack-record-20261015/librrrah_dedup.rlib",
+  "library_sha256": "f10b3be9e8fb146936a70602e5874fd49f1018887bf27ef27def1933fc389ee5",
+  "root_source_pins": {
+    "crates/rrrah-dedup/src/cache.rs": "96823610880af2047e33032491bc6455c5b6a54690255dffc1826c70972f6e02",
+    "crates/rrrah-dedup/tests/cache.rs": "277ca6e0603b4d3bb0bea0c49921b196efcde92655084fec1f9b3ce49fa85339"
+  },
+  "retained_evidence_pins": {
+    "docs/research/dedup-cache-corruption-all-bits-reproducer-20261015/run.log": "3e144c62bc9b9ab4dbcc06d1718933fa9ddc8f96c0031b3e3754fb849d54e005",
+    "docs/research/dedup-cache-corruption-all-bits-reproducer-20261015/cache-integration.rs": "277ca6e0603b4d3bb0bea0c49921b196efcde92655084fec1f9b3ce49fa85339",
+    "docs/research/dedup-cache-corruption-all-bits-reproducer-20261015/compile.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/research/dedup-cache-corruption-all-bits-reproducer-20261015/command.json": "b51851593fab679e3b842e369ff294a0cd4cca1ea43b52fccc0d935a309241b7",
+    "docs/research/dedup-cache-corruption-all-bits-reproducer-20261015/inventory.log": "888cbf3b6e25f7c1c762774a968102c936684d5c9cd23f91188d7cc0e1aa8470"
+  },
+  "scope": "Current complete cache integration target against unchanged previously qualified actual stack-cache/pixels selected library and real cached dependencies on MacARM. Includes atomic publication and process controls. No fresh full Cargo/library/decoder/platform/corpus/performance or hard-memory-limit qualification."
+}

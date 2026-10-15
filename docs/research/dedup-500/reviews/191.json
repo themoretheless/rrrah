@@ -2,7 +2,7 @@
   "index": 191,
   "repository": "juntaki/bucketsync",
   "commit": "6bb0f7c2d237bd6c3ec5a4e749cfbcbdaf8d2887",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All17 tracked blobs read, including MIT license, FUSE/S3/CLI code and three tiny text fixtures; no tracked visual media. Symlink blob archived as literal target text, not recreated or followed.",
   "decision": "reference",
   "finding": "S3-backed FUSE cache/encryption; storage architecture only, selected SHA256 is in crypto helper.",
   "available_source_evidence": [
@@ -64,5 +64,7 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_read": true,
+  "complete_source_review": "docs/research/bucketsync191-complete-source-review-20261015.json"
 }

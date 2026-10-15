@@ -1,0 +1,41 @@
+{
+  "status": "launched_not_yet_qualified",
+  "session_id": 99037,
+  "source": "/private/tmp/rrrah-cache-corruption-all-bits-20261015",
+  "command": [
+    "rustc",
+    "+stable",
+    "--edition=2024",
+    "--test",
+    "-Dwarnings",
+    "-C",
+    "opt-level=1",
+    "/private/tmp/rrrah-cache-corruption-all-bits-20261015/cache-integration.rs",
+    "-L",
+    "dependency=/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps",
+    "-L",
+    "native=/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/build/blake3-2890bc462595d454/out",
+    "-o",
+    "/private/tmp/rrrah-cache-corruption-all-bits-20261015/tests",
+    "--extern",
+    "blake3=/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libblake3-5dbb3dfc2ce7d297.rlib",
+    "--extern",
+    "thiserror=/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libthiserror-1f2ca11ca2706be8.rlib",
+    "--extern",
+    "tempfile=/Users/themoretheless/.codex/tmp/rrrah-worker-group-target-20261013/debug/deps/libtempfile-f6f2a369a6678518.rlib",
+    "--extern",
+    "rrrah_dedup=/private/tmp/rrrah-cache-stack-record-20261015/librrrah_dedup.rlib"
+  ],
+  "source_sha256": "277ca6e0603b4d3bb0bea0c49921b196efcde92655084fec1f9b3ce49fa85339",
+  "root_test_sha256": "277ca6e0603b4d3bb0bea0c49921b196efcde92655084fec1f9b3ce49fa85339",
+  "production_cache_sha256": "96823610880af2047e33032491bc6455c5b6a54690255dffc1826c70972f6e02",
+  "previous_qualified_library_report": "docs/research/dedup-cache-all2048bits-controls-20261015.json",
+  "previous_report_sha256": "6b1c5f9788d4038d6e80de92642b4c202effba4cef0ebaa319af8ccf788b566d",
+  "library": "/private/tmp/rrrah-cache-stack-record-20261015/librrrah_dedup.rlib",
+  "library_sha256": "f10b3be9e8fb146936a70602e5874fd49f1018887bf27ef27def1933fc389ee5",
+  "new_controls": {
+    "one_bit_corruptions": 3264,
+    "zero_capacity_owned_value_and_failed_insertion_preservation": true
+  },
+  "scope": "Complete current10test cache integration target with previously qualified actual stack-cache/pixels selected library; unchanged production cache pin verified. No full current Cargo, decoder, platform or performance claim; compilation/tests still pending."
+}
