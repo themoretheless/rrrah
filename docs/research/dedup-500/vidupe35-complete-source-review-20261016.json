@@ -1,0 +1,60 @@
+{
+  "status": "verified_complete_pinned_source_media_review_and_selected_native_controls",
+  "whole_repo_complete": true,
+  "whole_implementation_complete": true,
+  "repository": "kristiankoskimaki/vidupe",
+  "commit": "d576d8a3786bba5bd02e208f09dbab3489b5bb7f",
+  "source_blobs": 19,
+  "canonical_trees": 1,
+  "acquisition": "docs/research/dedup-500/vidupe35-fetched-source-pins-20261016.json",
+  "acquisition_sha256": "4ac82e96f9d3e58b670d6c7f3ba4c9ba463fb4d1d84b92dd8deabaacbbecc441",
+  "auditor_sha256": "ed63cf1e1f441789add33e75b954fd8f90d54f37d78e722707e756204384ff73",
+  "controls": "docs/research/dedup-500/vidupe35-native-db-controls-20261016.json",
+  "controls_sha256": "59b3bb6b7a4ecfa5b3c148fcedc26b06b1fd46e7cf5f429c24b3a805731aba4d",
+  "media_visually_reviewed": {
+    ".dedup-work/vidupe35-20261016/icon.png": "b45aaabc06d2369997032dac0e4f50d6659379453cf406e39d3946abb1670272",
+    ".dedup-work/vidupe35-20261016/readme-main.jpg": "6180b8620ce7022134ea992f872bdd218e1a161a483e3b7d1713ab35493e0e35",
+    ".dedup-work/vidupe35-20261016/readme-comparison.jpg": "40a3f8cffa058a5d0587af6db588692f43edcd63fd58da016ee9458bdfb2382e"
+  },
+  "visual_scope": "All original ICO pixels16x16 and both author-published linked JPGscreenshots viewed; both currentUIXML forms entirely structurally read. Historicalscreens show1.21, pinnedsource1.211; no currentwholeappGUI runtime claim.",
+  "license": "Full GPLv3 exactlicense matched alreadyreadUniquify bytes; ssim.cpp claims modified MIT upstream algorithm, referenced external dependency license not requalified. No production source copied.",
+  "runtime_scope": "Entire unchanged Db.cpp/Db.h, actual Qt6.12/SQLite. Video adapter contains only original metadata fields, no OpenCV/video/QRunnable signals. Complete unchanged deleteTemporaryFiles body extracted to minimal class, TMPDIR exact-owned path asserted before operation; only owned synthetic directories/files touched.12controls twice including guards/native-driver check, not full application/testsuite/Qt5/runtime/performance proof.",
+  "upstream_tests_run": false,
+  "test_inventory": "No upstream testfiles in19blob tree;12selectednativecontrols twice instead, not upstreamsuite.",
+  "findings": [
+    {
+      "qualification": "nativeQt6/SQLite controls twice",
+      "finding": "Basename/mtime keys alias different directories; stale metadata/capture reused; same-size restoredmtime invalidates no key; Latin1 Unicode-name aliases; unescaped SQL quote loses metadata writes."
+    },
+    {
+      "qualification": "nativeQt6 control twice, only ownedTMPDIR",
+      "finding": "Original cleanup QString.compare==1 selects unrelated W-prefix syntheticdirectory; actualQt5/platformbehaviour not tested."
+    },
+    {
+      "qualification": "static only, OpenCV not linked or executed",
+      "finding": "SSIM block means sample Range(k,k+blocksize)/Range(l,l+blocksize) while variance/covariance use multiplied block origins m/n; blocksize16singleblock unaffected by origin mismatch. Smaller blocks require native numerical reproduction."
+    },
+    {
+      "qualification": "static only",
+      "finding": "RGB888 QImage bytes passed asBGR for grayscale conversion; CutEnds accepts either endpoint and sparse samples do not prove complete video timeline equivalence."
+    },
+    {
+      "qualification": "static only",
+      "finding": "Filename swaps ignore all three rename results and then update UI/model paths; shared Video::_prefs and Comparison backgroundreport mutablematching fields need concurrency qualification."
+    },
+    {
+      "qualification": "static portability/build scope",
+      "finding": "Qt5/OpenCV3.4.7WindowsDLL assumptions and Qt5QProcess commandstring APIs; no fullQt6app build, FFmpegdecode/nativeSSIM/Windows execution."
+    }
+  ],
+  "failed_fixture_attempt": {
+    "log": ".dedup-work/vidupe35-20261016/native-db/run1/run.log",
+    "sha256": "850715897e474afb8498a37af0d792c8772e24c4fde2cb8fa59ca2086b31d5a2",
+    "scope": "First owned fixture did not flush writes before setting mtime and stale-control assertion failed. Corrected harness flushes beforetimestamp; v2freshbuild/2freshfullruns pass. No upstreamsource modified."
+  },
+  "limits": [
+    "Fullsource/media review is a human declaration with bytes verified, not inferred from download",
+    "Selected Qt6/SQLite runtime uses Video metadata adapter; no fullvideo pipeline/OpenCV/FFmpeg/app/Qt5/platform/performance/adoption qualification",
+    "No usermedia/tempfiles touched, no deletion or rename outside owned fixtures"
+  ]
+}
