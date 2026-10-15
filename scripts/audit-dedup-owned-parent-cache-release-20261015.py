@@ -1,0 +1,11 @@
+"""Independently verify exact owned cache absence, references and protected binaries."""
+from pathlib import Path
+import json,hashlib,fcntl
+R=Path(__file__).resolve().parents[1];D=R/'docs/research';h=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest();P=D/'dedup-owned-parent-incremental-cache-release-20261015.json';d=json.loads(P.read_text());cache=Path(d['path']);assert str(cache)=='/Users/themoretheless/.codex/tmp/rrrah-dedup-exact-portfolio-20261011/debug/incremental';assert d['status']=='released_owned_rebuildable_incremental_only' and d['exclusive_cargo_lock_acquired'] and d['preserved_siblings'] and d['protected_binaries_unchanged'];assert not cache.exists();producer=R/'scripts/release-dedup-owned-parent-incremental-cache-20261015.py';assert h(producer)==d['producer_sha256']
+for p in d['ownership_references']:assert h(R/p['path'])==p['sha256'] and 'rrrah-dedup-exact-portfolio-20261011' in (R/p['path']).read_text()
+for p in d['protected_binaries']:assert h(p['path'])==p['sha256']
+lock=(cache.parent/'.cargo-lock').open('rb');fcntl.flock(lock.fileno(),fcntl.LOCK_EX|fcntl.LOCK_NB)
+try:
+ inv={p.name:dict(mode=p.lstat().st_mode,bytes=p.lstat().st_size,mtime_ns=p.lstat().st_mtime_ns) for p in cache.parent.iterdir() if p.name not in ['incremental','.cargo-lock']};assert hashlib.sha256(json.dumps(inv,sort_keys=True).encode()).hexdigest()==d['preserved_sibling_inventory_sha256'];assert not cache.exists()
+finally:fcntl.flock(lock.fileno(),fcntl.LOCK_UN);lock.close()
+assert d['files']==216537 and d['logical_bytes']==111487914045 and d['after_free_bytes']>d['before_free_bytes'];out=D/'dedup-owned-parent-incremental-cache-release-audit-20261015.json';assert not out.exists();out.write_text(json.dumps(dict(status='verified_owned_incremental_only_release',report_sha256=h(P),producer_sha256=h(producer),auditor_sha256=h(__file__),protected_binary_count=len(d['protected_binaries']),fresh_sibling_metadata_matches=True,freed_free_space_delta_bytes=d['after_free_bytes']-d['before_free_bytes'],limits=['Free space is concurrent system observation, not guaranteed owned byte accounting or library speedup. Incremental cache is rebuildable; originalbinary/deps/build/source/evidence retained.']),indent=2)+'\n');print('ownedcache absence, siblingmetadata and protectedbinaries verified')

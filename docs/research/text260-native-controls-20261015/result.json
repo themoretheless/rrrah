@@ -1,0 +1,73 @@
+{
+  "status": "passed17_native_original_module_controls",
+  "cases": 17,
+  "case_names": [
+    "positive",
+    "unicode_collision",
+    "merge_append",
+    "repeated_task",
+    "stale_shard",
+    "output_overlap",
+    "oversized_block",
+    "no_matches",
+    "excessive_prefix",
+    "space_filename",
+    "invalid_worker",
+    "sort_rejected",
+    "callable_collision",
+    "lax_sizes",
+    "cli",
+    "directory_child",
+    "bad_utf8"
+  ],
+  "python": "3.12.14",
+  "tqdm": "4.67.3",
+  "wheel": "/private/tmp/rrrah-text260-native-20261015/tqdm-4.67.3-py3-none-any.whl",
+  "wheel_sha256": "ee1e4c0e59148062281c49d80b25b67771a127c85fc9676d3be5f243206826bf",
+  "source_sha256": {
+    "text_dedup/__init__.py": "eb0b6b661057b2958b73f723d56b7354b0db43391fdb1a7438fa0d1f8be27971",
+    "text_dedup/about.py": "ad9058103b958437938fd340fd211cb861e731c9088e52250898198cdff1a90a",
+    "text_dedup/encoder.py": "b41abad6a119357a73da3e898c636478d7e0b9b6257a3d3f933940422f8e412a",
+    "text_dedup/cli.py": "0c5a14af1354e8f0288a9b4e599c334abee0683c50f66c850497a6156de8739c"
+  },
+  "scope": "Real Python3.12/locked tqdm4.67.3/Pool1/wc/owned filesystem/CLI subprocess; constant callablehash via supported API is explicit collision-sensitivity control, not real SHA1collision. No foreigncode adoption/performance/scale/platform claim.",
+  "repeats": 2,
+  "artifacts": [
+    {
+      "path": "docs/research/text260-native-controls-20261015/native-wc-platform-probe.json",
+      "sha256": "e427901b47d5b3e3c4d648175048f8c0ba442909e0f6e6547caadc1cceb8d285"
+    },
+    {
+      "path": "docs/research/text260-native-controls-20261015/replay.log",
+      "sha256": "ff01300348452b22d2b0b11db7309677df12e24d7f2a472f41a50f62c8f2cd24"
+    },
+    {
+      "path": "docs/research/text260-native-controls-20261015/review-v1.py",
+      "sha256": "36aded8775598a3940b8c856e21e004c3186291a7d15a6b7f64788c9abaf61e4"
+    },
+    {
+      "path": "docs/research/text260-native-controls-20261015/review-v2.py",
+      "sha256": "51de924c91ef04ff760e203df4cee3ddb4f2d371f268bd6cca5c8edaa6b37fe3"
+    },
+    {
+      "path": "docs/research/text260-native-controls-20261015/review.py",
+      "sha256": "2979edb93f0bc34afbb59a7f2a7e4d181a1fca321f8a23ac3917a4dba3622d0e"
+    },
+    {
+      "path": "docs/research/text260-native-controls-20261015/run-v1.log",
+      "sha256": "bb5d1d3b75490020939b9ed6b990b1de0091beddb94955eb81a92b73f6865a83"
+    },
+    {
+      "path": "docs/research/text260-native-controls-20261015/run-v2.log",
+      "sha256": "cdf3b6831f872778bd9d032176bb7ab55e669102f25c51fd912a665416847d57"
+    },
+    {
+      "path": "docs/research/text260-native-controls-20261015/run.log",
+      "sha256": "816eeb5b90c52dfd9a34b9baf279ce449d527808e3858fb7519065a0c869f13c"
+    }
+  ],
+  "harness_corrections": [
+    "V1 expected space-containing input to fail IndexError; actualMacwc prints0total afterfailedunquotedpaths andoriginalmodule stillprocessesfile. V1source/log preserved; independent nativewc probe recordsquotedargumentpositive/unquotedfailure/directoryfailure; V2 checks actualwrongcount andsuccessful encoding. Directorycase corrected fromIsADirectoryError tooriginalpre-openIndexError provedbywc emptyoutput.",
+    "V2 expected2mbjunk toparseas2MiB, butk injunk selectsfirstkbranch andoriginalValueError. V2source/log retained; V3 assertsoriginalValueError plus2mbzzz accepted andnegativeint accepted. No upstream code/desiredbehavior adjusted."
+  ]
+}

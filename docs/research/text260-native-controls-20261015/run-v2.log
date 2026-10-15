@@ -1,0 +1,79 @@
+Encode files:   0%|          | 0/1 [00:00<?, ?it/s]
+Encoding:   0%|          | 0/3 [00:00<?, ?it/s][A
+Encoding:  67%|██████▋   | 2/3 [00:00<00:00,  5.63it/s][A
+                                                       [AEncode files: 100%|██████████| 1/1 [00:00<00:00,  1.32it/s]Encode files: 100%|██████████| 1/1 [00:00<00:00,  1.32it/s]
+Merge:   0%|          | 0/2 [00:00<?, ?it/s]Merge: 100%|██████████| 2/2 [00:00<00:00, 4228.13it/s]
+acquired 66.6667% deduplicated texts
+PASS positive
+Merge:   0%|          | 0/1 [00:00<?, ?it/s]Merge: 100%|██████████| 1/1 [00:00<00:00, 2272.10it/s]
+acquired 50.0% deduplicated texts
+PASS unicode_collision
+Merge:   0%|          | 0/1 [00:00<?, ?it/s]Merge: 100%|██████████| 1/1 [00:00<00:00, 4975.45it/s]
+acquired 50.0% deduplicated texts
+Merge:   0%|          | 0/1 [00:00<?, ?it/s]Merge: 100%|██████████| 1/1 [00:00<00:00, 8701.88it/s]
+acquired 50.0% deduplicated texts
+PASS merge_append
+Encode files:   0%|          | 0/1 [00:00<?, ?it/s]
+Encoding:   0%|          | 0/2 [00:00<?, ?it/s][A
+Encoding: 100%|██████████| 2/2 [00:00<00:00,  7.27it/s][A
+                                                       [AEncode files: 100%|██████████| 1/1 [00:00<00:00,  3.45it/s]Encode files: 100%|██████████| 1/1 [00:00<00:00,  3.44it/s]
+Merge:   0%|          | 0/1 [00:00<?, ?it/s]Merge: 100%|██████████| 1/1 [00:00<00:00, 907.47it/s]
+acquired 50.0% deduplicated texts
+Encode files:   0%|          | 0/1 [00:00<?, ?it/s]
+Encoding:   0%|          | 0/2 [00:00<?, ?it/s][A
+Encoding: 100%|██████████| 2/2 [00:00<00:00,  6.49it/s][A
+                                                       [AEncode files: 100%|██████████| 1/1 [00:00<00:00,  2.98it/s]Encode files: 100%|██████████| 1/1 [00:00<00:00,  2.98it/s]
+Merge:   0%|          | 0/1 [00:00<?, ?it/s]Merge: 100%|██████████| 1/1 [00:00<00:00, 4675.92it/s]
+acquired 25.0% deduplicated texts
+PASS repeated_task
+Encode files:   0%|          | 0/1 [00:00<?, ?it/s]
+Encoding:   0%|          | 0/1 [00:00<?, ?it/s][A
+                                               [AEncode files: 100%|██████████| 1/1 [00:00<00:00,  2.66it/s]Encode files: 100%|██████████| 1/1 [00:00<00:00,  2.63it/s]
+Merge:   0%|          | 0/2 [00:00<?, ?it/s]Merge: 100%|██████████| 2/2 [00:00<00:00, 2853.27it/s]
+acquired 100.0% deduplicated texts
+PASS stale_shard
+Encode files:   0%|          | 0/1 [00:00<?, ?it/s]
+Encoding:   0%|          | 0/1 [00:00<?, ?it/s][A
+                                               [AEncode files: 100%|██████████| 1/1 [00:00<00:00,  2.54it/s]Encode files: 100%|██████████| 1/1 [00:00<00:00,  2.53it/s]
+Merge:   0%|          | 0/1 [00:00<?, ?it/s]Merge: 100%|██████████| 1/1 [00:00<00:00, 2462.89it/s]
+acquired 100.0% deduplicated texts
+PASS output_overlap
+Merge:   0%|          | 0/1 [00:00<?, ?it/s]Merge: 100%|██████████| 1/1 [00:00<00:00, 2537.39it/s]
+acquired 100.0% deduplicated texts
+PASS oversized_block
+Encode files: 0it [00:00, ?it/s]Encode files: 0it [00:00, ?it/s]
+Merge: 0it [00:00, ?it/s]Merge: 0it [00:00, ?it/s]
+PASS no_matches
+Encode files:   0%|          | 0/1 [00:00<?, ?it/s]
+Encoding:   0%|          | 0/1 [00:00<?, ?it/s][A
+                                               [AEncode files: 100%|██████████| 1/1 [00:00<00:00,  2.75it/s]Encode files: 100%|██████████| 1/1 [00:00<00:00,  2.74it/s]
+Merge: 0it [00:00, ?it/s]Merge: 0it [00:00, ?it/s]
+PASS excessive_prefix
+wc: /private/tmp/rrrah-text260-owned-__p53t41/gap: open: No such file or directory
+wc: long.txt: open: No such file or directory
+Encoding: 0it [00:00, ?it/s]                            PASS space_filename
+Encode files:   0%|          | 0/1 [00:00<?, ?it/s]Encode files:   0%|          | 0/1 [00:00<?, ?it/s]
+PASS invalid_worker
+PASS sort_rejected
+Merge:   0%|          | 0/1 [00:00<?, ?it/s]Merge: 100%|██████████| 1/1 [00:00<00:00, 4253.86it/s]
+acquired 50.0% deduplicated texts
+PASS callable_collision
+Traceback (most recent call last):
+  File "/private/tmp/rrrah-text260-native-20261015/text_dedup/encoder.py", line 256, in humanized_to_number
+    max_block_size = int(max_block_size)
+                     ^^^^^^^^^^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: '2mbjunk'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/themoretheless/Documents/Sources/rrrah/docs/research/text260-native-controls-20261015/review.py", line 55, in <module>
+    with tempfile.TemporaryDirectory(prefix='rrrah-text260-owned-',dir='/private/tmp') as tmp:f(Path(tmp))
+                                                                                              ^^^^^^^^^^^^
+  File "/Users/themoretheless/Documents/Sources/rrrah/docs/research/text260-native-controls-20261015/review.py", line 45, in lax_sizes
+    def lax_sizes(d):equal([e.humanized_to_number(x) for x in [-1,'2mbjunk','1.5kb'] ],[-1,2097152,1536])
+                            ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/rrrah-text260-native-20261015/text_dedup/encoder.py", line 261, in humanized_to_number
+    max_block_size = int(float(max_block_size.split("k")[0]) * (1024))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: could not convert string to float: '2mbjun'

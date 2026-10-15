@@ -1,0 +1,63 @@
+Encode files:   0%|          | 0/1 [00:00<?, ?it/s]
+Encoding:   0%|          | 0/3 [00:00<?, ?it/s][A
+Encoding:  67%|██████▋   | 2/3 [00:00<00:00,  2.20it/s][A
+                                                       [AEncode files: 100%|██████████| 1/1 [00:01<00:00,  1.70s/it]Encode files: 100%|██████████| 1/1 [00:01<00:00,  1.70s/it]
+Merge:   0%|          | 0/2 [00:00<?, ?it/s]Merge: 100%|██████████| 2/2 [00:00<00:00, 5236.33it/s]
+acquired 66.6667% deduplicated texts
+PASS positive
+Merge:   0%|          | 0/1 [00:00<?, ?it/s]Merge: 100%|██████████| 1/1 [00:00<00:00, 1218.21it/s]
+acquired 50.0% deduplicated texts
+PASS unicode_collision
+Merge:   0%|          | 0/1 [00:00<?, ?it/s]Merge: 100%|██████████| 1/1 [00:00<00:00, 1388.38it/s]
+acquired 50.0% deduplicated texts
+Merge:   0%|          | 0/1 [00:00<?, ?it/s]Merge: 100%|██████████| 1/1 [00:00<00:00, 1604.55it/s]
+acquired 50.0% deduplicated texts
+PASS merge_append
+Encode files:   0%|          | 0/1 [00:00<?, ?it/s]
+Encoding:   0%|          | 0/2 [00:00<?, ?it/s][A
+Encoding: 100%|██████████| 2/2 [00:00<00:00,  2.41it/s][A
+                                                       [AEncode files: 100%|██████████| 1/1 [00:00<00:00,  1.18it/s]Encode files: 100%|██████████| 1/1 [00:00<00:00,  1.18it/s]
+Merge:   0%|          | 0/1 [00:00<?, ?it/s]Merge: 100%|██████████| 1/1 [00:00<00:00, 2639.59it/s]
+acquired 50.0% deduplicated texts
+Encode files:   0%|          | 0/1 [00:00<?, ?it/s]
+Encoding:   0%|          | 0/2 [00:00<?, ?it/s][A
+Encoding: 100%|██████████| 2/2 [00:00<00:00,  2.01it/s][A
+                                                       [AEncode files: 100%|██████████| 1/1 [00:01<00:00,  1.01s/it]Encode files: 100%|██████████| 1/1 [00:01<00:00,  1.02s/it]
+Merge:   0%|          | 0/1 [00:00<?, ?it/s]Merge: 100%|██████████| 1/1 [00:00<00:00, 4236.67it/s]
+acquired 25.0% deduplicated texts
+PASS repeated_task
+Encode files:   0%|          | 0/1 [00:00<?, ?it/s]
+Encoding:   0%|          | 0/1 [00:00<?, ?it/s][A
+                                               [AEncode files: 100%|██████████| 1/1 [00:00<00:00,  1.17it/s]Encode files: 100%|██████████| 1/1 [00:00<00:00,  1.17it/s]
+Merge:   0%|          | 0/2 [00:00<?, ?it/s]Merge: 100%|██████████| 2/2 [00:00<00:00, 4891.32it/s]
+acquired 100.0% deduplicated texts
+PASS stale_shard
+Encode files:   0%|          | 0/1 [00:00<?, ?it/s]
+Encoding:   0%|          | 0/1 [00:00<?, ?it/s][A
+                                               [AEncode files: 100%|██████████| 1/1 [00:00<00:00,  1.09it/s]Encode files: 100%|██████████| 1/1 [00:00<00:00,  1.09it/s]
+Merge:   0%|          | 0/1 [00:00<?, ?it/s]Merge: 100%|██████████| 1/1 [00:00<00:00, 4236.67it/s]
+acquired 100.0% deduplicated texts
+PASS output_overlap
+Merge:   0%|          | 0/1 [00:00<?, ?it/s]Merge: 100%|██████████| 1/1 [00:00<00:00, 4144.57it/s]
+acquired 100.0% deduplicated texts
+PASS oversized_block
+Encode files: 0it [00:00, ?it/s]Encode files: 0it [00:00, ?it/s]
+Merge: 0it [00:00, ?it/s]Merge: 0it [00:00, ?it/s]
+PASS no_matches
+Encode files:   0%|          | 0/1 [00:00<?, ?it/s]
+Encoding:   0%|          | 0/1 [00:00<?, ?it/s][A
+                                               [AEncode files: 100%|██████████| 1/1 [00:00<00:00,  1.23it/s]Encode files: 100%|██████████| 1/1 [00:00<00:00,  1.23it/s]
+Merge: 0it [00:00, ?it/s]Merge: 0it [00:00, ?it/s]
+PASS excessive_prefix
+wc: /private/tmp/rrrah-text260-owned-r_w985ow/gap: open: No such file or directory
+wc: long.txt: open: No such file or directory
+Encoding: 0it [00:00, ?it/s]                            Traceback (most recent call last):
+  File "/Users/themoretheless/Documents/Sources/rrrah/docs/research/text260-native-controls-20261015/review.py", line 56, in <module>
+    with tempfile.TemporaryDirectory(prefix='rrrah-text260-owned-',dir='/private/tmp') as tmp:f(Path(tmp))
+                                                                                              ^^^^^^^^^^^^
+  File "/Users/themoretheless/Documents/Sources/rrrah/docs/research/text260-native-controls-20261015/review.py", line 38, in space_filename
+    p=d/'gap long.txt';p.write_text('Alpha\n');raises(IndexError,lambda:e.encode_a_file(str(p),str(d/'shards'),2,1,e.Encoder('sha1',e.Normalizer()),2))
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/themoretheless/Documents/Sources/rrrah/docs/research/text260-native-controls-20261015/review.py", line 13, in raises
+    raise AssertionError('expected '+kind.__name__)
+AssertionError: expected IndexError

@@ -1,0 +1,33 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/wc",
+      "-l",
+      "OWNED/gap long.txt"
+    ],
+    "returncode": 0,
+    "stdout": "       1 OWNED/gap long.txt\n",
+    "stderr": ""
+  },
+  {
+    "arguments": [
+      "/usr/bin/wc",
+      "-l",
+      "OWNED/gap",
+      "long.txt"
+    ],
+    "returncode": 1,
+    "stdout": "       0 total\n",
+    "stderr": "wc: OWNED/gap: open: No such file or directory\nwc: long.txt: open: No such file or directory\n"
+  },
+  {
+    "arguments": [
+      "/usr/bin/wc",
+      "-l",
+      "OWNED/child"
+    ],
+    "returncode": 1,
+    "stdout": "",
+    "stderr": "wc: OWNED/child: read: Is a directory\n"
+  }
+]
