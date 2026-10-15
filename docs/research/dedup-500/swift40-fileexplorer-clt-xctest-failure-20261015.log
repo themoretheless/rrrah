@@ -1,0 +1,33 @@
+warning: /Users/themoretheless/Library/org.swift.swiftpm/configuration is not accessible or not writable, disabling user-level cache features.
+warning: /Users/themoretheless/Library/org.swift.swiftpm/security is not accessible or not writable, disabling user-level cache features.
+Building for debugging...
+[Planning deferred tasks]
+[28 / 52]
+[29 / 53] FileExplorer
+[36 / 114]
+[42 / 114]
+[44 / 114]
+[48 / 114]
+[49 / 114]
+[52 / 114]
+[55 / 114]
+[57 / 114]
+[59 / 114]
+[60 / 114]
+[63 / 114]
+[64 / 114]
+[69 / 114]
+[71 / 114]
+[72 / 114]
+[75 / 114]
+[77 / 114]
+[79 / 114]
+[81 / 114]
+[84 / 114] FileExplorer
+[94 / 114] FileExplorerTests-product
+/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/swift40-20261015/source/FileExplorer/Package.swift: FileExplorer: ld: warning: search path '/Library/Developer/CommandLineTools/Developer/Library/Frameworks' not found
+error: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/swift40-20261015/source/FileExplorer/Tests/FileExplorerTests/FileExplorerTests.swift:7:8 unable to resolve module dependency: 'XCTest'
+error: SwiftDriver FileExplorerTests normal arm64 com.apple.xcode.tools.swift.compiler failed with a nonzero exit code. Command line:     cd /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/swift40-20261015/source
+    builtin-SwiftDriver -- /Library/Developer/CommandLineTools/usr/bin/swiftc -parse-as-library -module-name FileExplorerTests -Onone @/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/swift40-20261015/build-fileexplorer/out/Intermediates.noindex/FileExplorer.build/Debug/FileExplorerTests-p.build/Objects-normal/arm64/FileExplorerTests.SwiftFileList -DSWIFT_PACKAGE -DDEBUG -DXcode -plugin-path /Library/Developer/CommandLineTools/usr/lib/swift/host/plugins/testing -enable-experimental-feature DebugDescriptionMacro -sdk /Library/Developer/CommandLineTools/SDKs/MacOSX27.0.sdk -target arm64-apple-macos12.0 -g -module-cache-path /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/swift40-20261015/build-fileexplorer/out/ModuleCache.noindex -Xfrontend -serialize-debugging-options -disable-sandbox -enable-testing -index-store-path /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/swift40-20261015/build-fileexplorer/out -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/swift40-20261015/build-fileexplorer/out/Products/Debug -Isystem /Library/Developer/CommandLineTools/Developer/usr/lib -F /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/swift40-20261015/build-fileexplorer/out/Products/Debug/PackageFrameworks -F /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/swift40-20261015/build-fileexplorer/out/Products/Debug -F /Library/Developer/CommandLineTools/Library/Developer/Frameworks -F /Library/Developer/CommandLineTools/Developer/Library/Frameworks -c -j16 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/swift40-20261015/build-fileexplorer/out/SDKStatCaches.noindex/macosx27.0-26A425-1aa54e4a50e311dbd51de5aafe7eca3dffd68ff603bdaacc80b00cb8898de72d.sdkstatcache -output-file-map /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/swift40-20261015/build-fileexplorer/out/Intermediates.noindex/FileExplorer.build/Debug/FileExplorerTests-p.build/Objects-normal/arm64/FileExplorerTests-OutputFileMap.json -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/swift40-20261015/build-fileexplorer/out/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/swift40-20261015/build-fileexplorer/out/ModuleCache.noindex -sdk-module-cache-path /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/swift40-20261015/build-fileexplorer/out/SDKExplicitPrecompiledModules -emit-dependencies -emit-module -emit-module-path /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/swift40-20261015/build-fileexplorer/out/Intermediates.noindex/FileExplorer.build/Debug/FileExplorerTests-p.build/Objects-normal/arm64/FileExplorerTests.swiftmodule -serialize-diagnostics -dependency-scan-serialize-diagnostics-path /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/swift40-20261015/build-fileexplorer/out/Intermediates.noindex/FileExplorer.build/Debug/FileExplorerTests-p.build/Objects-normal/arm64/FileExplorerTests-dependency-scan.dia -validate-clang-modules-once -clang-build-session-file /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/swift40-20261015/build-fileexplorer/out/ModuleCache.noindex/Session.modulevalidation -Xcc -fmodules-prune-interval\=86400 -Xcc -fmodules-prune-after\=345600 -emit-const-values -const-gather-protocols-list /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/swift40-20261015/build-fileexplorer/out/Intermediates.noindex/FileExplorer.build/Debug/FileExplorerTests-p.build/Objects-normal/arm64/FileExplorerTests_const_extract_protocols.json -Xcc -I/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/swift40-20261015/build-fileexplorer/out/Products/Debug/include -Xcc -I/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/swift40-20261015/build-fileexplorer/out/Intermediates.noindex/FileExplorer.build/Debug/FileExplorerTests-p.build/DerivedSources-normal/arm64 -Xcc -I/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/swift40-20261015/build-fileexplorer/out/Intermediates.noindex/FileExplorer.build/Debug/FileExplorerTests-p.build/DerivedSources/arm64 -Xcc -I/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/swift40-20261015/build-fileexplorer/out/Intermediates.noindex/FileExplorer.build/Debug/FileExplorerTests-p.build/DerivedSources -Xcc -DSWIFT_PACKAGE -Xcc -DDEBUG\=1 -working-directory /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/swift40-20261015/source -experimental-emit-module-separately -disable-cmo
+error: Build failed
+error: fatalError

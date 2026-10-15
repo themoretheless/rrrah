@@ -1,0 +1,15 @@
+docs/research/dedup-500/swift40-native-controls-20261015.swift:41:71: error: call can throw, but it is executed in a non-throwing autoclosure
+39 |         FileExplorer().findDuplicatedFile(at: root) { r in diskResult = try! r.get(); done.signal() }
+40 |         precondition(done.wait(timeout: .now() + 5) == .success)
+41 |         precondition(Set(diskResult) == Set([x,y])); precondition(try Data(contentsOf: x) != Data(contentsOf: y))
+   |                                                                       `- error: call can throw, but it is executed in a non-throwing autoclosure
+42 |         cases.append("real_disk_same_name_unequal_size_and_bytes_grouped_name_contract")
+43 | 
+
+docs/research/dedup-500/swift40-native-controls-20261015.swift:41:94: error: call can throw, but it is executed in a non-throwing autoclosure
+39 |         FileExplorer().findDuplicatedFile(at: root) { r in diskResult = try! r.get(); done.signal() }
+40 |         precondition(done.wait(timeout: .now() + 5) == .success)
+41 |         precondition(Set(diskResult) == Set([x,y])); precondition(try Data(contentsOf: x) != Data(contentsOf: y))
+   |                                                                                              `- error: call can throw, but it is executed in a non-throwing autoclosure
+42 |         cases.append("real_disk_same_name_unequal_size_and_bytes_grouped_name_contract")
+43 | 

@@ -1,0 +1,98 @@
+{
+  "status": "complete_tracked_source_assets_read_native_packages_qualified",
+  "repository": "powerwolf543/DuplicateFinder",
+  "index": 40,
+  "commit": "2fd830d28cf483a892b4d4d6c942b1cbc240772f",
+  "root_tree": "52077e97e9353310b9757959bf5099ad652235b4",
+  "whole_repo_complete": true,
+  "full_repository_read": true,
+  "tracked_blobs": 65,
+  "tracked_text_blobs": 54,
+  "tracked_trees": 39,
+  "all_git_blob_tree_hashes_reconstructed": true,
+  "reading_scope": "AlltrackedSwift/modules/tests/docs/license/config/Xcodeschemes/project/639line completeStoryboard/localizations read. SelectDirectoryViewController byteidentical obsoletecopy notincludedinPBXSources.",
+  "visual_review": {
+    "pngs": 10,
+    "unique_pngs_viewed": 7,
+    "duplicated_pngs_verified_by_sameblob": 3,
+    "pdfs": 1,
+    "pdf_pages": 1,
+    "pdf_render": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/swift40-20261015/wolf-logo.png",
+    "render_sha256": "b31ee293adac9bd4fb55a89414f8855f2bddf4fff94c2fd630402ccfb25735c0",
+    "description": "All7uniqueappiconresolutions andsinglevectorlogo page renderedandviewed. ExternalREADMEfull956x571static screenshot viewedinbrowser; settings/exclusions/searchpreference, no nativeGUIclaim."
+  },
+  "license": "MIT; no foreigncodeadoption",
+  "upstream_test_inventory": {
+    "FileExplorer": [
+      "testFindDuplicatedFile",
+      "testFindDuplicatedFileWithExcludedFile",
+      "testFindDuplicatedFileWithExcludedPath",
+      "testGroupListByName",
+      "testInitialier",
+      "testNotFileURL",
+      "testURLIsDirectory",
+      "testURLIsExcludedFile",
+      "testURLIsExcludedPath",
+      "testURLIsSystemFile",
+      "testGetFileName",
+      "testGetFileNameWithoutExtension"
+    ],
+    "Utils": [
+      "testRetrieveData",
+      "testRetrieveDefaultValue",
+      "testStoreData"
+    ]
+  },
+  "upstream_tests_passed": 15,
+  "native_controls": {
+    "controls_per_run": 8,
+    "runs": 2,
+    "source": "docs/research/dedup-500/swift40-native-controls-20261015.swift",
+    "source_sha256": "7f92aeac89e520b15b0aa91db36d2b18ef66c5eea11f629ee79ed33c07d1c4bd",
+    "binary": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/swift40-20261015/native-controls",
+    "binary_sha256": "7b6eb45a1bf349b4b37398665d0af13f2b4e282552908b74e768ee64b49e6952",
+    "compiler": "Apple Swift version 6.4 (swiftlang-6.4.0.34.1 clang-2100.3.34.1)\nTarget: arm64-apple-macosx26.0\n",
+    "scope": "AllunchangedFileExplorer production Swift compiledtogetherwithauthoredmain, nativeFoundationdisk andexplicititeratorfaults; no code overlays or replacement algorithms."
+  },
+  "logs": {
+    "docs/research/dedup-500/swift40-fileexplorer-upstream-20261015.log": "17d88953ea83ff27b4f9aeca81de03970db582b030954535957a34c2c9269773",
+    "docs/research/dedup-500/swift40-utils-upstream-20261015.log": "ff41eb5c9b5aef5421153abd769a185b640e1691a39c79dc9abc6b081e8d2246",
+    "docs/research/dedup-500/swift40-fileexplorer-clt-xctest-failure-20261015.log": "834736696897c13ad0f04fde5e4369881aa09b18fa51b6f0e618b01adb798370",
+    "docs/research/dedup-500/swift40-utils-clt-xctest-failure-20261015.log": "a817a04d091a6912ce3e4562c2066c94831338db7df9d8e44696cca855a9d4de",
+    "docs/research/dedup-500/swift40-native-controls-run1-20261015.json": "d26c792661c08805a357758dabc42aa46bcef587d607d12d87eb56bc000b2655",
+    "docs/research/dedup-500/swift40-native-controls-run2-20261015.json": "d26c792661c08805a357758dabc42aa46bcef587d607d12d87eb56bc000b2655"
+  },
+  "findings": [
+    {
+      "status": "documented_contract_native_confirmed",
+      "finding": "Onlynamesgrouped; actualdiskunequalcontentsandlengths withsamebasename bothreported. Notcontentidentity/visualsimilarity."
+    },
+    {
+      "status": "native_explicit_blocked_iterator_schedule",
+      "finding": "stopSearch setsfinishbutdoesnotinterruptiterator; successpublishedafterstop andallpathsread."
+    },
+    {
+      "status": "native_original_logic",
+      "finding": "Finished/stopped instance silentlyreturnswithoutcallbackonnewrequest. Exclusionaftergroup canleaveonepath; rawURLprefixwithoutdirectoryslash excludesneighbor; filevalidatortrustsURLflagnotstat."
+    },
+    {
+      "status": "static_only",
+      "finding": "Initialidlecheckandasyncstateassignment notatomic forconcurrentcalls; callbackthread/UI main.sync andnegativeclickedRow unguarded. No actualGUIrace/crashproof."
+    },
+    {
+      "status": "static_only",
+      "finding": "Storage silentlydefaultsdecodefailure/dropsencodefailure; preference setterpersistsevenwhenpreference disabled. No actualuserdefaults accessed."
+    }
+  ],
+  "transfer_decision": "Namegrouping can be a discovery aid only; keepcontentproof separate. Cancellationmustinterruptworkandrefusepublication, repeatedrequestsneedexplicitcompletion. No duplicate implementation to adopt.",
+  "corrections": [
+    "AuthoredV1swiftmain usedthrowingDatareadinsidepreconditionautoclosure; preservedsource/log; v2readsdataoutsideassertonly, upstreamunchanged",
+    "DefaultCLTSwift6.4 builtpackagesbutcouldnotresolveXCTest; environment-only DEVELOPER_DIR fullinstalledXcode-betaSwift6.3.2 succeeds all15tests; globalxcode-selectunchanged."
+  ],
+  "limits": [
+    "FullAppKitapplication/storyboardlaunch/build andGUI interactions notexecuted; originalpackageXCTest15only",
+    "No TSAN/concurrentusercampaign/hugefilesystem/throughput/platform/currentRootlibraryproof",
+    "Allnativefilesystemfixtures newlyowned; no userfiles/UserDefaults/Finder selection/networkactions",
+    "No productionadoption orspeedup claim"
+  ]
+}

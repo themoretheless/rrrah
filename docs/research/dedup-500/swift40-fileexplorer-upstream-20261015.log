@@ -1,0 +1,72 @@
+2026-10-15 22:52:48.624 xcodebuild[55487:869322]  DVTFilePathFSEvents: Failed to start fs event stream.
+2026-10-15 22:52:48.793 xcodebuild[55487:869319] [MT] DVTDeveloperPaths: Failed to get length of DARWIN_USER_CACHE_DIR from confstr(3), error = Error Domain=NSPOSIXErrorDomain Code=5 "Input/output error". Using NSCachesDirectory instead.
+2026-10-15 22:52:49.181 xcodebuild[55501:869413]  DVTFilePathFSEvents: Failed to start fs event stream.
+2026-10-15 22:52:49.335 xcodebuild[55501:869412] [MT] DVTDeveloperPaths: Failed to get length of DARWIN_USER_CACHE_DIR from confstr(3), error = Error Domain=NSPOSIXErrorDomain Code=5 "Input/output error". Using NSCachesDirectory instead.
+warning: /Users/themoretheless/Library/org.swift.swiftpm/configuration is not accessible or not writable, disabling user-level cache features.
+warning: /Users/themoretheless/Library/org.swift.swiftpm/security is not accessible or not writable, disabling user-level cache features.
+Building for debugging...
+[0/7] /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/swift40-20261015/build-fileexplorer-xcode/arm64-apple-macosx/debug/FileExplorerPackageTests.derived/runner.swift
+[1/7] Write sources
+[4/7] Write swift-version-39B54973F684ADAB.txt
+[6/12] Compiling FileExplorer ExcludedInfo.swift
+[7/12] Compiling FileExplorer FileExplorer.swift
+[8/12] Compiling FileExplorer FileExplorerError.swift
+[9/12] Compiling FileExplorer DiskPathIterator.swift
+[10/12] Emitting module FileExplorer
+[11/16] Compiling FileExplorer PathIterator.swift
+[12/16] Compiling FileExplorer PathValidator.swift
+[13/16] Compiling FileExplorer SystemFile.swift
+[14/16] Compiling FileExplorer URL+fileName.swift
+[15/19] Compiling FileExplorerTests FileExplorerTests.swift
+[16/19] Compiling FileExplorerTests MockPathIterator.swift
+[17/19] Emitting module FileExplorerTests
+[18/21] Compiling FileExplorerTests PathValidatorTests.swift
+[19/21] Compiling FileExplorerTests URL+fileNameTests.swift
+[20/23] Emitting module FileExplorerPackageTests
+[21/23] Compiling FileExplorerPackageTests runner.swift
+[21/23] Write Objects.LinkFileList
+[22/23] Linking FileExplorerPackageTests
+Build complete! (10.79s)
+Test Suite 'All tests' started at 2026-10-15 22:53:07.258.
+Test Suite 'FileExplorerPackageTests.xctest' started at 2026-10-15 22:53:07.265.
+Test Suite 'FileExplorerTests' started at 2026-10-15 22:53:07.265.
+Test Case '-[FileExplorerTests.FileExplorerTests testFindDuplicatedFile]' started.
+Test Case '-[FileExplorerTests.FileExplorerTests testFindDuplicatedFile]' passed (0.002 seconds).
+Test Case '-[FileExplorerTests.FileExplorerTests testFindDuplicatedFileWithExcludedFile]' started.
+Test Case '-[FileExplorerTests.FileExplorerTests testFindDuplicatedFileWithExcludedFile]' passed (0.000 seconds).
+Test Case '-[FileExplorerTests.FileExplorerTests testFindDuplicatedFileWithExcludedPath]' started.
+Test Case '-[FileExplorerTests.FileExplorerTests testFindDuplicatedFileWithExcludedPath]' passed (0.000 seconds).
+Test Case '-[FileExplorerTests.FileExplorerTests testGroupListByName]' started.
+Test Case '-[FileExplorerTests.FileExplorerTests testGroupListByName]' passed (0.000 seconds).
+Test Suite 'FileExplorerTests' passed at 2026-10-15 22:53:07.267.
+	 Executed 4 tests, with 0 failures (0 unexpected) in 0.002 (0.002) seconds
+Test Suite 'PathValidatorTests' started at 2026-10-15 22:53:07.267.
+Test Case '-[FileExplorerTests.PathValidatorTests testInitialier]' started.
+Test Case '-[FileExplorerTests.PathValidatorTests testInitialier]' passed (0.000 seconds).
+Test Case '-[FileExplorerTests.PathValidatorTests testNotFileURL]' started.
+Test Case '-[FileExplorerTests.PathValidatorTests testNotFileURL]' passed (0.000 seconds).
+Test Case '-[FileExplorerTests.PathValidatorTests testURLIsDirectory]' started.
+Test Case '-[FileExplorerTests.PathValidatorTests testURLIsDirectory]' passed (0.000 seconds).
+Test Case '-[FileExplorerTests.PathValidatorTests testURLIsExcludedFile]' started.
+Test Case '-[FileExplorerTests.PathValidatorTests testURLIsExcludedFile]' passed (0.000 seconds).
+Test Case '-[FileExplorerTests.PathValidatorTests testURLIsExcludedPath]' started.
+Test Case '-[FileExplorerTests.PathValidatorTests testURLIsExcludedPath]' passed (0.000 seconds).
+Test Case '-[FileExplorerTests.PathValidatorTests testURLIsSystemFile]' started.
+Test Case '-[FileExplorerTests.PathValidatorTests testURLIsSystemFile]' passed (0.000 seconds).
+Test Suite 'PathValidatorTests' passed at 2026-10-15 22:53:07.268.
+	 Executed 6 tests, with 0 failures (0 unexpected) in 0.001 (0.001) seconds
+Test Suite 'URL_fileNameTests' started at 2026-10-15 22:53:07.268.
+Test Case '-[FileExplorerTests.URL_fileNameTests testGetFileName]' started.
+Test Case '-[FileExplorerTests.URL_fileNameTests testGetFileName]' passed (0.000 seconds).
+Test Case '-[FileExplorerTests.URL_fileNameTests testGetFileNameWithoutExtension]' started.
+Test Case '-[FileExplorerTests.URL_fileNameTests testGetFileNameWithoutExtension]' passed (0.000 seconds).
+Test Suite 'URL_fileNameTests' passed at 2026-10-15 22:53:07.268.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'FileExplorerPackageTests.xctest' passed at 2026-10-15 22:53:07.268.
+	 Executed 12 tests, with 0 failures (0 unexpected) in 0.003 (0.004) seconds
+Test Suite 'All tests' passed at 2026-10-15 22:53:07.268.
+	 Executed 12 tests, with 0 failures (0 unexpected) in 0.003 (0.010) seconds
+◇ Test run started.
+↳ Testing Library Version: 1900
+↳ Target Platform: arm64e-apple-macos14.0
+✔ Test run with 0 tests in 0 suites passed after 0.001 seconds.
