@@ -1,0 +1,184 @@
+{
+  "status": "verified_complete_tracked_source_and_visual_review_with_selected_native_runtime",
+  "whole_repo_complete": true,
+  "whole_implementation_complete": true,
+  "repository": "akamhy/videohash",
+  "commit": "e407bb0b26de625a846c2700072efccd9eb44e9a",
+  "tree": "d653f4c53a48627db31021179258277898157b7f",
+  "blobs": 44,
+  "trees_including_root": 8,
+  "text_blobs_including_svg": 40,
+  "plain_text_blobs": 38,
+  "svg_assets": 2,
+  "png_assets": 3,
+  "video_assets": 1,
+  "video_frames_visually_covered": 3120,
+  "text_scope": "All38plain tracked text files fullyread; bothSVG pathgeometry and attributes inspected and nativeQuickLookrenders viewed; all3PNGlogos viewed. All3120video frames represented on49actuallyviewed160x90contact sheets. External README linked media/wiki/dependency source outside tracked tree not reviewed.",
+  "visual_assets": [
+    {
+      "source": ".dedup-work/video21-20261016/source/assets/logo/logo-banner.png",
+      "source_sha256": "575d59136009942f91b9ad91e096cecf79bbd4379f97a1d03aea176e6de4e3ea",
+      "preview": ".dedup-work/video21-20261016/source/assets/logo/logo-banner.png",
+      "preview_sha256": "575d59136009942f91b9ad91e096cecf79bbd4379f97a1d03aea176e6de4e3ea",
+      "dimensions": [
+        2338,
+        398
+      ],
+      "rgba_sha256": "a2c39d8c60c72ca5ca4d1e69acaced5b51dc681e7342697330fa790dffca03a3",
+      "actually_viewed": true
+    },
+    {
+      "source": ".dedup-work/video21-20261016/source/assets/logo/logo-big.png",
+      "source_sha256": "14d102fa0d092b0b8a5d2c3a4e30b8ba7d03df301aebd00670322fb5a1a79c74",
+      "preview": ".dedup-work/video21-20261016/source/assets/logo/logo-big.png",
+      "preview_sha256": "14d102fa0d092b0b8a5d2c3a4e30b8ba7d03df301aebd00670322fb5a1a79c74",
+      "dimensions": [
+        1655,
+        793
+      ],
+      "rgba_sha256": "a8188ccb06ec39cb5c7fdeb0743dbf20946ef669e86062f6ffea2134dcb664d5",
+      "actually_viewed": true
+    },
+    {
+      "source": ".dedup-work/video21-20261016/source/assets/logo/logo-small.png",
+      "source_sha256": "c2b628d49468fcc1fb860e6d5553278a6e5c3f4db56888fa1478a756634c8d56",
+      "preview": ".dedup-work/video21-20261016/source/assets/logo/logo-small.png",
+      "preview_sha256": "c2b628d49468fcc1fb860e6d5553278a6e5c3f4db56888fa1478a756634c8d56",
+      "dimensions": [
+        414,
+        199
+      ],
+      "rgba_sha256": "b7df53eab8c14aaf71528670d5de182f0634af48ffa406a18e88aac9951411b8",
+      "actually_viewed": true
+    },
+    {
+      "source": ".dedup-work/video21-20261016/source/assets/logo/logo-optimized.svg",
+      "source_sha256": "27859598e0c223b3993ebd8fede8ce7e6220e625fa4d0364aba8dc54ba11b28d",
+      "preview": ".dedup-work/video21-20261016/logo-previews/logo-optimized.svg.png",
+      "preview_sha256": "2a5f4c9971d9fd13c575462c743cac46836f830a73a61bb82ddbe4e325c0ef18",
+      "dimensions": [
+        828,
+        828
+      ],
+      "rgba_sha256": "09fb731dc82a4000049db1b7ffc60e67c03ca6c44cfca56e1faf456f90949a36",
+      "actually_viewed": true
+    },
+    {
+      "source": ".dedup-work/video21-20261016/source/assets/logo/logo-source.svg",
+      "source_sha256": "106732314453fe7ce930673c0c1a957fa75390f94bdf0192e940899a34f715ca",
+      "preview": ".dedup-work/video21-20261016/logo-previews/logo-source.svg.png",
+      "preview_sha256": "5f3372085cb15c8e591c673bcf160d7591cb313b3d50a4f93bf74da659e84b67",
+      "dimensions": [
+        828,
+        828
+      ],
+      "rgba_sha256": "215d73f0018c8014ab6a4221654df9f71c208497a3537b1cc7a0567b8ba244fe",
+      "actually_viewed": true
+    }
+  ],
+  "original_local_test_functions": 3,
+  "original_local_test_runs": 2,
+  "native_controls": 17,
+  "native_control_runs": 2,
+  "original_upstream_suite_run": false,
+  "native_observations": [
+    {
+      "control": "actual_duration_matches_independent_ffprobe",
+      "decoded_frames": 3120,
+      "ffprobe_seconds": 52.079,
+      "native_seconds": 52.08
+    },
+    {
+      "control": "whole_native_pipeline_fails_modern_unpinned_pillow",
+      "exception": "AttributeError: ANTIALIAS",
+      "pillow_version": "12.3.0"
+    },
+    {
+      "control": "native_extractor_samples_video_not_complete_frame_coverage",
+      "default_rate": 1,
+      "sampled_frames": 54,
+      "source_frames": 3120
+    },
+    {
+      "control": "existing_directory_without_trailing_separator_rejected",
+      "exception": "StoragePathDoesNotExist"
+    },
+    {
+      "control": "failed_decode_accepted_when_output_dir_already_nonempty",
+      "existing_files": 1,
+      "generated_frames": 0
+    },
+    {
+      "control": "actual_space_path_double_quoting_fails",
+      "exception": "FFmpegFailedToExtractFrames"
+    },
+    {
+      "control": "missing_duration_regex_leaves_uninitialized_variable",
+      "exception": "UnboundLocalError"
+    },
+    {
+      "control": "empty_bitlists_uninitialized_distance",
+      "exception": "UnboundLocalError"
+    },
+    {
+      "control": "nonbinary_list_values_accepted",
+      "nonbinary_value": 2,
+      "reported_distance": 64
+    },
+    {
+      "control": "nonbinary_bitstring_digits_accepted",
+      "nonbinary_value": 2,
+      "reported_distance": 64
+    },
+    {
+      "control": "hex_conversion_padding_is_not_maximum_width",
+      "requested_bits": 64,
+      "returned_bits": 65
+    },
+    {
+      "accepted_bits": 10,
+      "actual_percent": 15.625,
+      "configured_percent": 15,
+      "control": "similarity_rounds_up_percentage_threshold"
+    },
+    {
+      "control": "list_helper_requires_trailing_separator",
+      "missing_separator_produces_nonexistent_path": true
+    },
+    {
+      "actual_tiles": 1,
+      "control": "small_nondivisible_grid_yields_one_tile_and_disables_pixel_limit",
+      "global_limit_disabled": true,
+      "limit_restored_by_control": true,
+      "requested_tiles": 64
+    },
+    {
+      "adapter": "Pillow ANTIALIAS name bound temporarily to real Resampling.LANCZOS; source unchanged; default failure retained",
+      "canvas_pixels": 800,
+      "control": "thumbnail_never_upscales_into_larger_collage_cells",
+      "nonblack_pixels": 8
+    },
+    {
+      "control": "default_layout_cleanup_stays_in_owned_generated_parent",
+      "outside_preserved": true
+    },
+    {
+      "control": "explicit_storage_cleanup_preserves_sibling",
+      "sibling_preserved": true
+    }
+  ],
+  "runtime_scope": "Whole unchanged upstream modules and3original localtestfunctions executed, actualFFmpeg/libVP9 publicownedasset/reference only. FullVideoHash reachesmodernPillowANTIALIAS failure retained. One declaredLANCZOSnamecompatibility adapter onlyforselectedcollagecontrol; no fullhash/remoteYouTube/downloader/originalenvironment/fullupstreamsuite/platform/visualquality/RSS/performance/adoption proof. Videoall3120frames andotherassets stillawaitfullvisual review.",
+  "evidence_pins": {
+    "docs/research/dedup-500/video21-fetched-source-pins-20261016.json": "096fab1d537db72f540edde84b029040a121938d6105b5fe2bc2b7ee8f11245d",
+    "docs/research/dedup-500/video21-selected-native-review-20261016.json": "b80b2ad9196bcdb288db7387146e3059a32667ccba73656c6449f6ab97e4f0fa",
+    "docs/research/dedup-500/video21-complete-video-view-receipt-20261016.json": "508f453269c734e49f1703224631e3010899fbffbe5a1b95264dd6c825820bb9"
+  },
+  "auditor_sha256": "40ecc0845cf7ba5e9ac4867058d3ab18b15b1adf81cae4b810161b5d281001d1",
+  "limits": [
+    "ModernunversionedPillow12.3missingANTIALIAS stopsfullhashpipeline after54sampledframes from3120sourceframes; original failure retained.",
+    "Selectedcollagecontrol temporarilybindsoldname torealLANCZOS, explicitlyadaptednotdefaultenvironmentfix/fullhashproof.",
+    "FFmpegonlyforeignreference/publicassetinspection, no productiondependencyadoption.",
+    "No remoteYouTube/downloader/full5functionupstreamsuite/wholevideoquality/platform/physicalIO/RSS/performance/speedup claim.",
+    "Fullsourcecoverage does not imply fullupstream remote test suite/decoder/visualquality/platform/performance qualification. No productioncode adoption or speedup claim."
+  ]
+}
