@@ -1,0 +1,226 @@
+{
+  "status": "verified_complete_tracked_source_and_visual_review_with_selected_native_controls",
+  "whole_repo_complete": true,
+  "whole_implementation_complete": true,
+  "repository": "l3uddz/plex_dupefinder",
+  "commit": "61e63c8b36e869c5f57f8859a7399c05f097ebeb",
+  "tree": "cad1b7c7801ef547208b95f8a953fd022c43df33",
+  "blobs": 17,
+  "trees_including_root": 4,
+  "plain_text_blobs": 15,
+  "svg_assets": 1,
+  "gif_assets": 1,
+  "visual_frames": 71,
+  "scope": "All15plaintrackedtext files fullyread including full GPLv3 andoriginalmain/config/shell bodies. SVG geometry/style inspected andnativepreview viewed. EveryGIFframe viewed on8uncropped640widecontact sheets, nativeframes36and71 additionallyviewed forlegibility. ExternalREADMElinked screenshots/asciinema andthirdpartydependency sources outside trackedtree notreviewed.",
+  "native_controls": 21,
+  "native_runs": 2,
+  "native_scope": "Unchanged selected AST function bodies and original main block; synthetic Plex metadata/HTTP response recorder, display-only tabulate and no-op sleep, owned config/log files. No original package import, real Plex/HTTP, shell deletion, upstream suite, quality/performance/platform claim.",
+  "native_observations": [
+    {
+      "control": "skip_list_case_sensitive_substring",
+      "result": true
+    },
+    {
+      "control": "empty_skip_pattern_matches_every_path",
+      "result": true
+    },
+    {
+      "control": "duration_wraps_at24hours",
+      "result": "01:00:00"
+    },
+    {
+      "control": "audio_channels_sum_tracks_and_parts",
+      "result": {
+        "id": 1,
+        "video_bitrate": 0,
+        "audio_codec": "Unknown",
+        "audio_channels": 24,
+        "video_codec": "Unknown",
+        "video_resolution": "Unknown",
+        "video_width": 0,
+        "video_height": 0,
+        "video_duration": 0,
+        "file": [
+          "/a",
+          "/a"
+        ],
+        "multipart": true,
+        "file_size": 200
+      }
+    },
+    {
+      "control": "missing_parts_not_guarded",
+      "result": {
+        "error": "AttributeError",
+        "message": "'types.SimpleNamespace' object has no attribute 'parts'"
+      }
+    },
+    {
+      "control": "filename_score_accumulates_per_part",
+      "result": 14
+    },
+    {
+      "control": "invalid_score_value",
+      "result": {
+        "error": "ValueError",
+        "message": "invalid literal for int() with base 10: 'not-an-int'"
+      }
+    },
+    {
+      "control": "prefilled_config_shares_nested_dict",
+      "result": true
+    },
+    {
+      "control": "config_auto_delete_y",
+      "result": false
+    },
+    {
+      "control": "config_auto_delete_bad-y",
+      "result": true
+    },
+    {
+      "control": "same_title_overwrites_earlier_item",
+      "result": {
+        "result": {
+          "value": null
+        },
+        "http_delete_calls": [
+          {
+            "url": "http://synthetic.invalid/library/metadata/2/media/4",
+            "kwargs": {
+              "headers": {
+                "X-Plex-Token": "synthetic"
+              }
+            }
+          }
+        ],
+        "stdout": "\n       _                 _                   __ _           _\n _ __ | | _____  __   __| |_   _ _ __   ___ / _(_)_ __   __| | ___ _ __\n| '_ \\| |/ _ \\ \\/ /  / _` | | | | '_ \\ / _ \\ |_| | '_ \\ / _` |/ _ \\ '__|\n| |_) | |  __/>  <  | (_| | |_| | |_) |  __/  _| | | | | (_| |  __/ |\n| .__/|_|\\___/_/\\_\\  \\__,_|\\__,_| .__/ \\___|_| |_|_| |_|\\__,_|\\___|_|\n|_|                             |_|\n\n#########################################################################\n# Author:   l3uddz                                                      #\n# URL:      https://github.com/l3uddz/plex_dupefinder                   #\n# --                                                                    #\n#         Part of the Cloudbox project: https://cloudbox.works          #\n#########################################################################\n#                   GNU General Public License v3.0                     #\n#########################################################################\n\nInitialized\nFinding dupes...\nFound 2 dupes for section 'Movies'\n\nDetermining best media item to keep for 'same' ...\n\tKeeping  : 3 - ['/keep']\n\tRemoving : 4 - ['/protected/victim']\n\t\tDeleted media item: 4\n"
+      }
+    },
+    {
+      "control": "manual_mode_does_not_apply_skip_list",
+      "result": {
+        "result": {
+          "value": null
+        },
+        "http_delete_calls": [
+          {
+            "url": "http://synthetic.invalid/library/metadata/1/media/2",
+            "kwargs": {
+              "headers": {
+                "X-Plex-Token": "synthetic"
+              }
+            }
+          }
+        ],
+        "stdout": "\n       _                 _                   __ _           _\n _ __ | | _____  __   __| |_   _ _ __   ___ / _(_)_ __   __| | ___ _ __\n| '_ \\| |/ _ \\ \\/ /  / _` | | | | '_ \\ / _ \\ |_| | '_ \\ / _` |/ _ \\ '__|\n| |_) | |  __/>  <  | (_| | |_| | |_) |  __/  _| | | | | (_| |  __/ |\n| .__/|_|\\___/_/\\_\\  \\__,_|\\__,_| .__/ \\___|_| |_|_| |_|\\__,_|\\___|_|\n|_|                             |_|\n\n#########################################################################\n# Author:   l3uddz                                                      #\n# URL:      https://github.com/l3uddz/plex_dupefinder                   #\n# --                                                                    #\n#         Part of the Cloudbox project: https://cloudbox.works          #\n#########################################################################\n#                   GNU General Public License v3.0                     #\n#########################################################################\n\nInitialized\nFinding dupes...\nFound 1 dupes for section 'Movies'\n\nWhich media item do you wish to keep for 'manual' ?\n\ndisplay-only adapter\n\tKeeping  : 1\n\tRemoving : 2\n\t\tDeleted media item: 2\n"
+      }
+    },
+    {
+      "control": "automatic_mode_applies_skip_list",
+      "result": {
+        "result": {
+          "value": null
+        },
+        "http_delete_calls": [],
+        "stdout": "\n       _                 _                   __ _           _\n _ __ | | _____  __   __| |_   _ _ __   ___ / _(_)_ __   __| | ___ _ __\n| '_ \\| |/ _ \\ \\/ /  / _` | | | | '_ \\ / _ \\ |_| | '_ \\ / _` |/ _ \\ '__|\n| |_) | |  __/>  <  | (_| | |_| | |_) |  __/  _| | | | | (_| |  __/ |\n| .__/|_|\\___/_/\\_\\  \\__,_|\\__,_| .__/ \\___|_| |_|_| |_|\\__,_|\\___|_|\n|_|                             |_|\n\n#########################################################################\n# Author:   l3uddz                                                      #\n# URL:      https://github.com/l3uddz/plex_dupefinder                   #\n# --                                                                    #\n#         Part of the Cloudbox project: https://cloudbox.works          #\n#########################################################################\n#                   GNU General Public License v3.0                     #\n#########################################################################\n\nInitialized\nFinding dupes...\nFound 1 dupes for section 'Movies'\n\nDetermining best media item to keep for 'automatic' ...\n\tKeeping  : 1 - ['/keep']\n\tRemoving : 2 - ['/protected/victim']\n\tSkipping removal of this item as there is a match in SKIP_LIST\n"
+      }
+    },
+    {
+      "control": "manual_non_numeric_response_aborts",
+      "result": {
+        "result": {
+          "error": "ValueError",
+          "message": "invalid literal for int() with base 10: 'invalid'"
+        },
+        "http_delete_calls": [],
+        "stdout": "\n       _                 _                   __ _           _\n _ __ | | _____  __   __| |_   _ _ __   ___ / _(_)_ __   __| | ___ _ __\n| '_ \\| |/ _ \\ \\/ /  / _` | | | | '_ \\ / _ \\ |_| | '_ \\ / _` |/ _ \\ '__|\n| |_) | |  __/>  <  | (_| | |_| | |_) |  __/  _| | | | | (_| |  __/ |\n| .__/|_|\\___/_/\\_\\  \\__,_|\\__,_| .__/ \\___|_| |_|_| |_|\\__,_|\\___|_|\n|_|                             |_|\n\n#########################################################################\n# Author:   l3uddz                                                      #\n# URL:      https://github.com/l3uddz/plex_dupefinder                   #\n# --                                                                    #\n#         Part of the Cloudbox project: https://cloudbox.works          #\n#########################################################################\n#                   GNU General Public License v3.0                     #\n#########################################################################\n\nInitialized\nFinding dupes...\nFound 1 dupes for section 'Movies'\n\nWhich media item do you wish to keep for 'manual' ?\n\ndisplay-only adapter\n"
+      }
+    },
+    {
+      "control": "manual_zero_skips",
+      "result": {
+        "result": {
+          "value": null
+        },
+        "http_delete_calls": [],
+        "stdout": "\n       _                 _                   __ _           _\n _ __ | | _____  __   __| |_   _ _ __   ___ / _(_)_ __   __| | ___ _ __\n| '_ \\| |/ _ \\ \\/ /  / _` | | | | '_ \\ / _ \\ |_| | '_ \\ / _` |/ _ \\ '__|\n| |_) | |  __/>  <  | (_| | |_| | |_) |  __/  _| | | | | (_| |  __/ |\n| .__/|_|\\___/_/\\_\\  \\__,_|\\__,_| .__/ \\___|_| |_|_| |_|\\__,_|\\___|_|\n|_|                             |_|\n\n#########################################################################\n# Author:   l3uddz                                                      #\n# URL:      https://github.com/l3uddz/plex_dupefinder                   #\n# --                                                                    #\n#         Part of the Cloudbox project: https://cloudbox.works          #\n#########################################################################\n#                   GNU General Public License v3.0                     #\n#########################################################################\n\nInitialized\nFinding dupes...\nFound 1 dupes for section 'Movies'\n\nWhich media item do you wish to keep for 'manual' ?\n\ndisplay-only adapter\nSkipping deletion(s) for 'manual'\n"
+      }
+    },
+    {
+      "control": "manual_s_skips",
+      "result": {
+        "result": {
+          "value": null
+        },
+        "http_delete_calls": [],
+        "stdout": "\n       _                 _                   __ _           _\n _ __ | | _____  __   __| |_   _ _ __   ___ / _(_)_ __   __| | ___ _ __\n| '_ \\| |/ _ \\ \\/ /  / _` | | | | '_ \\ / _ \\ |_| | '_ \\ / _` |/ _ \\ '__|\n| |_) | |  __/>  <  | (_| | |_| | |_) |  __/  _| | | | | (_| |  __/ |\n| .__/|_|\\___/_/\\_\\  \\__,_|\\__,_| .__/ \\___|_| |_|_| |_|\\__,_|\\___|_|\n|_|                             |_|\n\n#########################################################################\n# Author:   l3uddz                                                      #\n# URL:      https://github.com/l3uddz/plex_dupefinder                   #\n# --                                                                    #\n#         Part of the Cloudbox project: https://cloudbox.works          #\n#########################################################################\n#                   GNU General Public License v3.0                     #\n#########################################################################\n\nInitialized\nFinding dupes...\nFound 1 dupes for section 'Movies'\n\nWhich media item do you wish to keep for 'manual' ?\n\ndisplay-only adapter\nSkipping deletion(s) for 'manual'\n"
+      }
+    },
+    {
+      "control": "zero_keeper_id_is_falsy_no_delete",
+      "result": {
+        "result": {
+          "value": null
+        },
+        "http_delete_calls": [],
+        "stdout": "\n       _                 _                   __ _           _\n _ __ | | _____  __   __| |_   _ _ __   ___ / _(_)_ __   __| | ___ _ __\n| '_ \\| |/ _ \\ \\/ /  / _` | | | | '_ \\ / _ \\ |_| | '_ \\ / _` |/ _ \\ '__|\n| |_) | |  __/>  <  | (_| | |_| | |_) |  __/  _| | | | | (_| |  __/ |\n| .__/|_|\\___/_/\\_\\  \\__,_|\\__,_| .__/ \\___|_| |_|_| |_|\\__,_|\\___|_|\n|_|                             |_|\n\n#########################################################################\n# Author:   l3uddz                                                      #\n# URL:      https://github.com/l3uddz/plex_dupefinder                   #\n# --                                                                    #\n#         Part of the Cloudbox project: https://cloudbox.works          #\n#########################################################################\n#                   GNU General Public License v3.0                     #\n#########################################################################\n\nInitialized\nFinding dupes...\nFound 1 dupes for section 'Movies'\n\nDetermining best media item to keep for 'zero-id' ...\nUnable to determine best media item to keep for %r zero-id\n"
+      }
+    },
+    {
+      "control": "all_negative_scores_no_keeper",
+      "result": {
+        "result": {
+          "value": null
+        },
+        "http_delete_calls": [],
+        "stdout": "\n       _                 _                   __ _           _\n _ __ | | _____  __   __| |_   _ _ __   ___ / _(_)_ __   __| | ___ _ __\n| '_ \\| |/ _ \\ \\/ /  / _` | | | | '_ \\ / _ \\ |_| | '_ \\ / _` |/ _ \\ '__|\n| |_) | |  __/>  <  | (_| | |_| | |_) |  __/  _| | | | | (_| |  __/ |\n| .__/|_|\\___/_/\\_\\  \\__,_|\\__,_| .__/ \\___|_| |_|_| |_|\\__,_|\\___|_|\n|_|                             |_|\n\n#########################################################################\n# Author:   l3uddz                                                      #\n# URL:      https://github.com/l3uddz/plex_dupefinder                   #\n# --                                                                    #\n#         Part of the Cloudbox project: https://cloudbox.works          #\n#########################################################################\n#                   GNU General Public License v3.0                     #\n#########################################################################\n\nInitialized\nFinding dupes...\nFound 1 dupes for section 'Movies'\n\nDetermining best media item to keep for 'negative' ...\nUnable to determine best media item to keep for %r negative\n"
+      }
+    },
+    {
+      "control": "path_only_identical_strings_admitted",
+      "result": 1
+    },
+    {
+      "control": "path_only_empty_locations",
+      "result": {
+        "retained_items": 1
+      }
+    },
+    {
+      "control": "delete_absolute_url_and_no_timeout_status500_returns",
+      "result": [
+        {
+          "args": [
+            "https://synthetic.invalid/library/metadata/5/media/8"
+          ],
+          "kwargs": {
+            "headers": {
+              "X-Plex-Token": "synthetic"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "original_upstream_suite_run": false,
+  "original_tests_tracked": 0,
+  "evidence_pins": {
+    "docs/research/dedup-500/plex24-fetched-source-pins-20261016.json": "8c3fc083ecabe2df9954bf03b2de9385d40f4c18226366a5022e3e4860299e2d",
+    "docs/research/dedup-500/plex24-visual-view-receipt-20261016.json": "02d302527f32ec65c88864befe5a14b87791ad1012e6cb306add4c1973eec715",
+    "scripts/qualify-plex24-selected-controls-20261016.py": "d59de0ef30fa623bc227380437efd3c5143555573d9eee3fad45704c0f5ad3f3",
+    "docs/research/dedup-500/plex24-selected-run1-20261016.json": "e3c4de92694ebd8448d9e6839a4e30c53a2a4e7ba2619002f57cc7eb81812c76",
+    "docs/research/dedup-500/plex24-selected-run2-20261016.json": "e3c4de92694ebd8448d9e6839a4e30c53a2a4e7ba2619002f57cc7eb81812c76"
+  },
+  "auditor_sha256": "1c7111b27987a3044b83a6b5fe2db7010fbf5fc2d4ffcf689d85a68258ba8694",
+  "decision": "Referenceonly; metadata-scoring andremoteAPIdeletion are not exact/visual proof. No upstreamcodeadopted.",
+  "preparation_corrections": [
+    "Connector contentsendpoint returned rawtext ratherthanJSON; initialJSONparse failed before save. Refetchedrawtext andverified allGitblobs.",
+    "Firstselectedmain harness copied namespace while functions retained originalglobals, raisingmissingplex; corrected harnesssharedglobals, then21controls twice identical. Upstreamsource unchanged."
+  ],
+  "limits": [
+    "Wholeoriginalpackage notimported: selectedoriginalAST bodies/main execute with explicit syntheticPlex/HTTP/UI/time adapters. Not realPlexAPI/requests/tabulate qualification.",
+    "No HTTP requests, accounts, credentials, userfiles oractualdeletion used. Shellscript read butnot executed.",
+    "No speedup, performance, fullformat/visualquality, platform or productionadoption claim."
+  ]
+}
